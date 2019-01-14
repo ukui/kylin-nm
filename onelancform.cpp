@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "onelancform.h"
 #include "ui_onelancform.h"
 #include "mainwindow.h"
@@ -8,14 +26,16 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 {
     ui->setupUi(this);
 
-    ui->btnConf->setText("设置");
-    ui->btnConn->setText("连接");
-    ui->btnDisConn->setText("断开连接");
+    ui->btnConf->setText(tr("Config"));//"设置"
+    ui->btnConn->setText(tr("Connect"));//"连接"
+    ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"
 
     ui->wbg->hide();
     ui->btnConf->hide();
     ui->btnConn->hide();
     ui->btnDisConn->hide();
+
+    ui->lbConned->setAlignment(Qt::AlignRight);
 
     ui->wbg->setStyleSheet("#wbg{background-color:#3593b5;}");
     ui->lbName->setStyleSheet("QLabel{font-size:13px;color:#ffffff;}");

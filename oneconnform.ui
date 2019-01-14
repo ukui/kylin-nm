@@ -91,9 +91,9 @@
   <widget class="QLabel" name="lbConned">
    <property name="geometry">
     <rect>
-     <x>225</x>
+     <x>180</x>
      <y>19</y>
-     <width>55</width>
+     <width>90</width>
      <height>20</height>
     </rect>
    </property>

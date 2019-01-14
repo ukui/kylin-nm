@@ -33,7 +33,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>无线网络</string>
+      <string/>
      </property>
     </widget>
     <widget class="QPushButton" name="btnNetList">
@@ -46,7 +46,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>有线网络</string>
+      <string/>
      </property>
     </widget>
    </widget>
@@ -81,7 +81,7 @@
      <rect>
       <x>40</x>
       <y>412</y>
-      <width>50</width>
+      <width>55</width>
       <height>18</height>
      </rect>
     </property>
@@ -146,7 +146,7 @@
      <rect>
       <x>132</x>
       <y>412</y>
-      <width>50</width>
+      <width>55</width>
       <height>18</height>
      </rect>
     </property>
@@ -211,7 +211,7 @@
      <rect>
       <x>227</x>
       <y>440</y>
-      <width>55</width>
+      <width>70</width>
       <height>18</height>
      </rect>
     </property>

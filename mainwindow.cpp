@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "oneconnform.h"
@@ -99,9 +117,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lbBtnConfT2->setStyleSheet("QLabel{font-size:12px;font-weight:100;color:#ffffff;}");
     ui->lbBtnConfBG->setStyleSheet(btnOffQss);
 
-    ui->lbBtnNetT2->setText("网络");
+    ui->lbBtnNetT2->setText(tr("Network"));//"网络"
     ui->lbBtnWifiT2->setText("Wifi");
-    ui->lbBtnConfT2->setText("高级设置");
+    ui->lbBtnConfT2->setText(tr("Advanced"));//"高级设置"
+
+    ui->btnNetList->setText(tr("Ethernet"));//"有线网络"
+    ui->btnWifiList->setText(tr("Wifi"));//"无线网络"
 
     createTrayIcon();
 
@@ -275,26 +296,26 @@ void MainWindow::getIface(){
     if(iface->lstate == 0 || iface->lstate == 1){
         ui->lbLanImg->setStyleSheet("QLabel{background-image:url(:/res/x/network-line.png);}");
         ui->lbBtnNetBG->setStyleSheet(btnOnQss);
-        ui->lbBtnNetT1->setText("已开启");
+        ui->lbBtnNetT1->setText(tr("Enabled"));//"已开启"
 
         if(iface->wstate == 0 || iface->wstate == 1){
             ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
             ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
-            ui->lbBtnWifiT1->setText("已开启");
+            ui->lbBtnWifiT1->setText(tr("Enabled"));//"已开启"
         }else{
             ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-offline.png);}");
             ui->lbBtnWifiBG->setStyleSheet(btnOffQss);
-            ui->lbBtnWifiT1->setText("已关闭");
+            ui->lbBtnWifiT1->setText(tr("Disabled"));//"已关闭"
         }
 
     }else{
         ui->lbLanImg->setStyleSheet("QLabel{background-image:url(:/res/x/network-offline.png);}");
         ui->lbBtnNetBG->setStyleSheet(btnOffQss);
-        ui->lbBtnNetT1->setText("已关闭");
+        ui->lbBtnNetT1->setText(tr("Disabled"));//"已关闭"
 
         ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-offline.png);}");
         ui->lbBtnWifiBG->setStyleSheet(btnOffQss);
-        ui->lbBtnWifiT1->setText("已关闭");
+        ui->lbBtnWifiT1->setText(tr("Disabled"));//"已关闭"
     }
 
     // 初始化网络列表
@@ -309,6 +330,8 @@ void MainWindow::getIface(){
             ui->btnNetList->setStyleSheet("#btnNetList{font-size:12px;color:white;border:1px solid rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.5);background:transparent;background-color:rgba(255,255,255,0.1);}");
             ui->btnWifiList->setStyleSheet("#btnWifiList{font-size:12px;color:white;border:1px solid rgba(255,255,255,0.1);background:transparent;background-color:rgba(0,0,0,0.2);}"
                                           "#btnWifiList:Pressed{border:1px solid rgba(255,255,255,0.5);background:transparent;background-color:rgba(255,255,255,0.1);}");
+        }else{
+            disNetDone();
         }
     }
 }
@@ -390,9 +413,9 @@ void MainWindow::getLanListDone(QStringList slist){
     // 当前连接的lan
     OneLancForm *ccf = new OneLancForm(lanListWidget, this, confForm, ksnm);
     if(actLanName == "--"){
-        ccf->setName("当前未连接任何 以太网");
+        ccf->setName(tr("Not connected"));//"当前未连接任何 以太网"
         ccf->setIcon(false);
-        ccf->setConnedString("未连接");
+        ccf->setConnedString(tr("Disconnected"));//"未连接"
         ccf->setBandWidth("--");
         ccf->setShowPoint(true);
     }
@@ -402,7 +425,7 @@ void MainWindow::getLanListDone(QStringList slist){
 
     // 可用lan列表
     lbLanList = new QLabel(lanListWidget);
-    lbLanList->setText("可用网络列表");
+    lbLanList->setText(tr("Ethernet Networks"));//"可用网络列表"
     lbLanList->resize(260, 46);
     lbLanList->move(12, 68);
     lbLanList->setStyleSheet("QLabel{font-size:12px;color:white;}");
@@ -428,7 +451,7 @@ void MainWindow::getLanListDone(QStringList slist){
                 ccf->setIcon(true);
                 ccf->setBandWidth(bandWidth);
                 ccf->setShowPoint(true);
-                ccf->setConnedString("已连接");
+                ccf->setConnedString(tr("Connected"));//"已连接"
             }else{
                 lanListWidget->resize(314, lanListWidget->height() + 60);
 
@@ -473,11 +496,11 @@ void MainWindow::getWifiListDone(QStringList slist){
     // 当前连接的wifi
     OneConnForm *ccf = new OneConnForm(wifiListWidget, this, confForm, ksnm);
     if(actWifiName == "--"){
-        ccf->setName("当前未连接任何 Wifi");
+        ccf->setName(tr("Not connected"));//"当前未连接任何 Wifi"
         ccf->setSafe("--");
         ccf->setSignal("0");
         ccf->setSafeString("--");
-        ccf->setConnedString("未连接");
+        ccf->setConnedString(tr("Disconnected"));//"未连接"
     }
     ccf->setAct(true);
     ccf->move(0, 8);
@@ -485,7 +508,7 @@ void MainWindow::getWifiListDone(QStringList slist){
 
     // 可用wifi列表
     lbWifiList = new QLabel(wifiListWidget);
-    lbWifiList->setText("可用网络列表");
+    lbWifiList->setText(tr("Wifi Networks"));//"可用网络列表"
     lbWifiList->resize(260, 46);
     lbWifiList->move(12, 68);
     lbWifiList->setStyleSheet("QLabel{font-size:12px;color:white;}");
@@ -527,7 +550,7 @@ void MainWindow::getWifiListDone(QStringList slist){
                 ccf->setSafe(wsecu);
                 ccf->setRate(wrate);
                 ccf->setSignal(wsignal);
-                ccf->setConnedString("已连接");
+                ccf->setConnedString(tr("Connected"));//"已连接"
             }else{
                 wifiListWidget->resize(314, wifiListWidget->height() + 60);
 
@@ -607,12 +630,52 @@ void MainWindow::on_btnWifi_clicked()
     }
 }
 
-void MainWindow::on_btnNetList_clicked()
+void MainWindow::on_btnNetList_clicked(int flag)
 {
-    this->startLoading();
+    // 强行设置为打开
+    if(flag == 1){
+        this->startLoading();
+        this->ksnm->execGetLanList();
+        this->scrollAreal->show();
+        this->scrollAreaw->hide();
+        on_btnNetList_pressed();
+        return;
+    }
+
+    if(checkLanOn()){
+        this->startLoading();
+        this->ksnm->execGetLanList();
+    }else{
+        // 清空lan列表
+        lanListWidget = new QWidget(scrollAreal);
+        lanListWidget->resize(314, 8 + 60 + 46 + 51);
+        scrollAreal->setWidget(lanListWidget);
+
+        // 当前连接的lan
+        OneLancForm *ccf = new OneLancForm(lanListWidget, this, confForm, ksnm);
+        ccf->setName(tr("Not connected"));//"当前未连接任何 以太网"
+        ccf->setIcon(false);
+        ccf->setConnedString(tr("Disconnected"));//"未连接"
+        ccf->setBandWidth("--");
+        ccf->setShowPoint(true);
+        ccf->setAct(true);
+        ccf->move(0, 8);
+        ccf->show();
+
+        // 可用lan列表
+        lbLanList = new QLabel(lanListWidget);
+        lbLanList->setText(tr("Ethernet Networks"));//"可用网络列表"
+        lbLanList->resize(260, 46);
+        lbLanList->move(12, 68);
+        lbLanList->setStyleSheet("QLabel{font-size:12px;color:white;}");
+        lbLanList->show();
+
+        this->lanListWidget->show();
+        this->wifiListWidget->hide();
+    }
     this->scrollAreal->show();
     this->scrollAreaw->hide();
-    this->ksnm->execGetLanList();
+    on_btnNetList_pressed();
 }
 
 void MainWindow::on_btnWifiList_clicked()
@@ -628,17 +691,19 @@ void MainWindow::on_btnWifiList_clicked()
 
         // 当前连接的wifi
         OneConnForm *ccf = new OneConnForm(wifiListWidget, this, confForm, ksnm);
-        ccf->setName("当前未连接任何 Wifi");
+        ccf->setName(tr("Not connected"));//"当前未连接任何 Wifi"
         ccf->setSafe("--");
         ccf->setSignal("0");
+        ccf->setRate("0");
         ccf->setSafeString("--");
-        ccf->setConnedString("未连接");
+        ccf->setConnedString(tr("Disconnected"));//"未连接"
         ccf->setAct(true);
+        ccf->setShowPoint(true);
         ccf->move(0, 8);
         ccf->show();
 
         lbWifiList = new QLabel(wifiListWidget);
-        lbWifiList->setText("可用网络列表");
+        lbWifiList->setText(tr("Wifi Networks"));//"可用网络列表"
         lbWifiList->resize(260, 46);
         lbWifiList->move(12, 68);
         lbWifiList->setStyleSheet("QLabel{font-size:12px;color:white;}");
@@ -656,12 +721,14 @@ void MainWindow::on_btnWifiList_clicked()
 void MainWindow::connLanDone(int connFlag){
     if(connFlag == 0){
         this->ksnm->execGetLanList();
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '连接 以太网 成功' -t 3800";
+        QString txt(tr("Conn Ethernet Success"));
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         system(cmd.toUtf8().data());
     }
 
     if(connFlag == 1){
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '连接 以太网 失败...' -t 3800";
+        QString txt(tr("Conn Ethernet Fail"));
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         system(cmd.toUtf8().data());
     }
 
@@ -672,7 +739,8 @@ void MainWindow::connLanDone(int connFlag){
 void MainWindow::connDone(int connFlag){
     if(connFlag == 0){
         this->ksnm->execGetWifiList();
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '连接 Wifi 成功' -t 3800";
+        QString txt(tr("Conn Wifi Success"));
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         system(cmd.toUtf8().data());
     }
 }
@@ -802,44 +870,59 @@ void MainWindow::enNetDone(){
 
     ui->lbLanImg->setStyleSheet("QLabel{background-image:url(:/res/x/network-line.png);}");
     ui->lbBtnNetBG->setStyleSheet(btnOnQss);
-    ui->lbBtnNetT1->setText("已开启");
+    ui->lbBtnNetT1->setText(tr("Enabled"));//"已开启"
 
     // 打开网络开关时如果Wifi开关是打开的，设置其样式
     if(checkWlOn()){
         ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
         ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
-        ui->lbBtnWifiT1->setText("已开启");
+        ui->lbBtnWifiT1->setText(tr("Enabled"));//"已开启"
     }
 
     this->stopLoading();
 
-    on_btnNetList_clicked();
+    on_btnNetList_clicked(1);
 }
 
 void MainWindow::disNetDone(){
-    QList<OneLancForm *> lanList = lanListWidget->findChildren<OneLancForm *>();
-    for(int i = 0; i < lanList.size(); i ++){
-        OneLancForm *ocf = lanList.at(i);
-        if(ocf->isActive == true){
-            ocf->setSelected(false);
-            ocf->setName("当前未连接任何 以太网");
-            ocf->setIcon(false);
-            ocf->setConnedString("未连接");
-            ocf->setBandWidth("--");
-            disconnect(ocf, SIGNAL(selectedOneLanForm(QString)), this, SLOT(oneLanFormSelected(QString)));
-        }else{
-            ocf->deleteLater();
-        }
-    }
+    // 清空lan列表
+    lanListWidget = new QWidget(scrollAreal);
+    lanListWidget->resize(314, 8 + 60 + 46 + 51);
+    scrollAreal->setWidget(lanListWidget);
+
+    // 当前连接的lan
+    OneLancForm *ccf = new OneLancForm(lanListWidget, this, confForm, ksnm);
+    ccf->setName(tr("Not connected"));//"当前未连接任何 以太网"
+    ccf->setIcon(false);
+    ccf->setConnedString(tr("Disconnected"));//"未连接"
+    ccf->setBandWidth("--");
+    ccf->setShowPoint(true);
+    ccf->setAct(true);
+    ccf->move(0, 8);
+    ccf->show();
+
+    // 可用lan列表
+    lbLanList = new QLabel(lanListWidget);
+    lbLanList->setText(tr("Ethernet Networks"));//"可用网络列表"
+    lbLanList->resize(260, 46);
     lbLanList->move(12, 68);
+    lbLanList->setStyleSheet("QLabel{font-size:12px;color:white;}");
+    lbLanList->show();
 
     ui->lbLanImg->setStyleSheet("QLabel{background-image:url(:/res/x/network-offline.png);}");
     ui->lbBtnNetBG->setStyleSheet(btnOffQss);
-    ui->lbBtnNetT1->setText("已关闭");
+    ui->lbBtnNetT1->setText(tr("Disabled"));//"已关闭"
 
     ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-offline.png);}");
     ui->lbBtnWifiBG->setStyleSheet(btnOffQss);
-    ui->lbBtnWifiT1->setText("已关闭");
+    ui->lbBtnWifiT1->setText(tr("Disabled"));//"已关闭"
+
+    this->lanListWidget->show();
+    this->wifiListWidget->hide();
+    this->scrollAreal->show();
+    this->scrollAreaw->hide();
+
+    on_btnNetList_pressed();
 
     this->stopLoading();
 }
@@ -847,7 +930,7 @@ void MainWindow::disNetDone(){
 void MainWindow::enWifiDone(){
     ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
     ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
-    ui->lbBtnWifiT1->setText("已开启");
+    ui->lbBtnWifiT1->setText(tr("Enabled"));//"已开启"
 
     this->stopLoading();
 
@@ -860,11 +943,11 @@ void MainWindow::disWifiDone(){
         OneConnForm *ocf = wifiList.at(i);
         if(ocf->isActive == true){
             ocf->setSelected(false);
-            ocf->setName("当前未连接任何 Wifi");
+            ocf->setName(tr("Not connected"));//"当前未连接任何 Wifi"
             ocf->setSafe("--");
             ocf->setSignal("0");
             ocf->setSafeString("--");
-            ocf->setConnedString("未连接");
+            ocf->setConnedString(tr("Disconnected"));//"未连接"
             ocf->setShowPoint(false);
             disconnect(ocf, SIGNAL(selectedOneWifiForm(QString)), this, SLOT(oneWifiFormSelected(QString)));
         }else{
@@ -875,7 +958,12 @@ void MainWindow::disWifiDone(){
 
     ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-offline.png);}");
     ui->lbBtnWifiBG->setStyleSheet(btnOffQss);
-    ui->lbBtnWifiT1->setText("已关闭");
+    ui->lbBtnWifiT1->setText(tr("Disabled"));//"已关闭"
+
+    this->lanListWidget->hide();
+    this->wifiListWidget->show();
+    this->scrollAreal->hide();
+    this->scrollAreaw->show();
 
     this->stopLoading();
 }

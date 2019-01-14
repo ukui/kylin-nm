@@ -64,3 +64,5 @@ FORMS += \
 
 RESOURCES += \
     nmqrc.qrc
+
+TRANSLATIONS = res/kylin-nm_zh_CN.ts

@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "confform.h"
 #include "ui_confform.h"
 #include "kylin-network-interface.h"
@@ -13,17 +31,19 @@ ConfForm::ConfForm(QWidget *parent) :
 
     this->setWindowFlags(Qt::FramelessWindowHint);
 
-    ui->lbName->hide();
-    ui->lbTxt1->setText("编辑IP设置：");
-    ui->lbTxt2->setText("IP地址：");
-    ui->lbTxt3->setText("子网掩码：");
-    ui->lbTxt4->setText("默认网关：");
-    ui->lbTxt5->setText("首选DNS：");
-    ui->lbTxt6->setText("备选DNS：");
+    this->setWindowTitle(tr("edit network"));//"网络设置"
 
-    ui->lbTitle->setText("网络设置");
-    ui->cbType->addItem("Auto(DHCP)");
-    ui->cbType->addItem("Manual");
+    ui->lbName->hide();
+    ui->lbTxt1->setText(tr("Method: "));//"编辑IP设置："
+    ui->lbTxt2->setText(tr("Address: "));//"IP地址："
+    ui->lbTxt3->setText(tr("Netmask: "));//"子网掩码："
+    ui->lbTxt4->setText(tr("Gateway: "));//"默认网关："
+    ui->lbTxt5->setText(tr("DNS 1: "));//"首选DNS："
+    ui->lbTxt6->setText(tr("DNS 2: "));//"备选DNS："
+
+    ui->lbTitle->setText(tr("Edit Conn"));//"网络设置"
+    ui->cbType->addItem(tr("Auto(DHCP)"));//"自动(DHCP)"
+    ui->cbType->addItem(tr("Manual"));//"手动"
 
     connect(ui->cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(cbTypeChanged(int)));
 
@@ -31,8 +51,8 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->cbMask->addItem("255.255.0.0");
     ui->cbMask->addItem("255.0.0.0");
 
-    ui->btnCancel->setText("取消");
-    ui->btnOk->setText("确定");
+    ui->btnCancel->setText(tr("Cancel"));//"取消"
+    ui->btnOk->setText(tr("Save"));//"确定"
 
     ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid #297a97;background-color:#ffffff;}");
     ui->lbIcon->setStyleSheet("QLabel{background-image:url(:/res/s/setting.png)}");
@@ -164,7 +184,8 @@ void ConfForm::on_btnOk_clicked()
         QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + ui->lbName->text() + "'";
         system(cmd.toUtf8().data());
 
-        cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '新的设置已生效' -t 3800";
+        QString txt(tr("New settings already effective"));
+        cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         system(cmd.toUtf8().data());
     }
 }

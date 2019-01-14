@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "oneconnform.h"
 #include "ui_oneconnform.h"
 #include "mainwindow.h"
@@ -10,11 +28,11 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 {
     ui->setupUi(this);
 
-    ui->lbPassword->setText("输入密码:");
-    ui->btnConf->setText("设置");
-    ui->btnConn->setText("连接");
-    ui->btnConnPWD->setText("连接");
-    ui->btnDisConn->setText("断开连接");
+    ui->lbPassword->setText(tr("Input password"));//"输入密码:"
+    ui->btnConf->setText(tr("Config"));//"设置"
+    ui->btnConn->setText(tr("Connect"));//"连接"
+    ui->btnConnPWD->setText(tr("Connect"));//"连接"
+    ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"
     ui->lePassword->setEchoMode(QLineEdit::Password);
 
     ui->wbg->hide();
@@ -24,6 +42,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConn->hide();
     ui->btnDisConn->hide();
     ui->btnConnPWD->hide();
+
+    ui->lbConned->setAlignment(Qt::AlignRight);
 
     ui->wbg->setStyleSheet("#wbg{background-color:#3593b5;}");
     ui->lbName->setStyleSheet("QLabel{font-size:13px;color:#ffffff;}");
@@ -150,15 +170,16 @@ void OneConnForm::setName(QString name){
 void OneConnForm::setSafe(QString safe){
     if(safe == "--"){
         this->isSafe = false;
-        ui->lbSafe->setText("开放");
+        ui->lbSafe->setText(tr("Public"));//"开放"
     }else{
         this->isSafe = true;
-        ui->lbSafe->setText("安全");
+        ui->lbSafe->setText(tr("Safe"));//"安全"
     }
 }
 
 void OneConnForm::setRate(QString rate){
-    this->setToolTip("<span style=\"font-size:13px;border:0px;background-color:#3593b5;color:white;\">&nbsp; 速率: " + rate + " &nbsp;</span>");
+    QString txt(tr("Rate"));//"速率"
+    this->setToolTip("<span style=\"font-size:13px;border:0px;background-color:#3593b5;color:white;\">&nbsp; " + txt + ": " + rate + " &nbsp;</span>");
     QString rateStr = rate.split(" ").at(0);
     int rateNum = rateStr.toInt();
     if(rateNum >= 180){
@@ -315,8 +336,9 @@ void OneConnForm::slotConnDone(int connFlag){
         ui->btnDisConn->hide();
     }
     // 使用配置文件连接失败，需要删除该配置文件
+    QString txt(tr("Conn Wifi Failed"));//"连接 Wifi 失败"
     if(connFlag == 1){
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '连接 Wifi 失败...' -t 3800";
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
         system(cmd.toUtf8().data());
     }
 

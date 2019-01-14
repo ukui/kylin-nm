@@ -61,5 +61,6 @@
         <file>res/s/rescan/10.png</file>
         <file>res/s/rescan/11.png</file>
         <file>res/s/rescan/12.png</file>
+        <file>res/kylin-nm_zh_CN.qm</file>
     </qresource>
 </RCC>

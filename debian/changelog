@@ -1,5 +1,5 @@
 kylin-nm (1.0.0-1) unstable; urgency=medium
 
-  * Initial release.
+  * Initial release. (Closes: #919549)
 
- -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 17 Jan 2019 14:30:38 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 17 Jan 2019 15:49:40 +0800

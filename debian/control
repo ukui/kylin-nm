@@ -2,12 +2,11 @@ Source: kylin-nm
 Section: utils
 Priority: optional
 Maintainer: Kylin Team <team+kylin@tracker.debian.org>
-XSBC-Original-Maintainer: Kylin Developers <ukui@kylinos.cn>
-Uploaders: shine <shenghuang@ubuntukylin.com>,
-           handsome_feng <jianfengli@ubuntukylin.com>
-Build-Depends: debhelper (>= 11),
+Uploaders: handsome_feng <jianfengli@ubuntukylin.com>
+Build-Depends: debhelper (>= 12),
+               qtbase5-dev,
                libqt5x11extras5-dev (>= 5.11.1-2),
-Standards-Version: 4.2.1
+Standards-Version: 4.3.0
 Homepage: https://github.com/ukui/kylin-nm
 Vcs-Git: https://github.com/ukui/kylin-nm.git
 Vcs-Browser: https://github.com/ukui/kylin-nm

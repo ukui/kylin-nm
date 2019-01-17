@@ -1,4 +1,4 @@
-kylin-nm (1.0.1-0ubuntu1) disco; urgency=medium
+kylin-nm (1.0.1~2019) unstable; urgency=medium
 
   * Fix some interactive and logic bugs.
   * Internationalization zh_CN.

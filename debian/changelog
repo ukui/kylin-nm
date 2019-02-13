@@ -3,10 +3,10 @@ kylin-nm (1.0.1-0ubuntu1) disco; urgency=medium
   * Fix some interactive and logic bugs.
   * Internationalization zh_CN.
 
- -- shine <shenghuang@ubuntukylin.com>  Mon, 14 Jan 2019 10:30:43 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 13 Feb 2019 14:33:46 +0800
 
-kylin-nm (1.0.0-0ubuntu1) disco; urgency=medium
+kylin-nm (1.0.0-1) unstable; urgency=medium
 
-  * Initial release.
+  * Initial release. (Closes: #919549)
 
- -- shine <shenghuang@ubuntukylin.com>  Sat, 29 Dec 2018 11:46:19 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 17 Jan 2019 15:49:40 +0800

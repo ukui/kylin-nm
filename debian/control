@@ -2,12 +2,13 @@ Source: kylin-nm
 Section: utils
 Priority: optional
 Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-XSBC-Original-Maintainer: Kylin Developers <ukui@kylinos.cn>
+XSBC-Original-Maintainer: Kylin Team <team+kylin@tracker.debian.org>
 Uploaders: shine <shenghuang@ubuntukylin.com>,
            handsome_feng <jianfengli@ubuntukylin.com>
-Build-Depends: debhelper (>= 11),
+Build-Depends: debhelper (>= 12),
+               qtbase5-dev,
                libqt5x11extras5-dev (>= 5.11.1-2),
-Standards-Version: 4.2.1
+Standards-Version: 4.3.0
 Homepage: https://github.com/ukui/kylin-nm
 Vcs-Git: https://github.com/ukui/kylin-nm.git
 Vcs-Browser: https://github.com/ukui/kylin-nm
@@ -16,6 +17,7 @@ Package: kylin-nm
 Architecture: any
 Depends: libqt5x11extras5 (>= 5.11.1-2),
          network-manager (>=1.12.4),
+         ${shlibs:Depends},
          ${misc:Depends}
 Description: Gui Applet tool for display and edit network simply
  Kylin NM is a Applet tool for managing network settings simply.

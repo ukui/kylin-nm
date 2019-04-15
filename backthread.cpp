@@ -55,7 +55,7 @@ IFace* BackThread::execGetIface(){
                 if(istateStr == "unmanaged"){
                     iface->lstate = 2;
                 }
-                if(istateStr == "disconnected"){
+                if(istateStr == "disconnected" || istateStr == "unavailable"){
                     iface->lstate = 1;
                 }
                 if(istateStr == "connected"){
@@ -94,7 +94,7 @@ void BackThread::execDisNet(){
 }
 
 void BackThread::execEnWifi(){
-    system("nmcli radio wifi on;sleep 5");
+    system("nmcli radio wifi on;sleep 6");
     emit enWifiDone();
     emit btFinish();
 }

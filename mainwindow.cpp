@@ -30,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    checkSingle();
+
     // 如果使用Qt::Popup 任务栏不显示且保留X事件如XCB_FOCUS_OUT, 但如果indicator点击鼠标右键触发，XCB_FOCUS_OUT事件依然会失效
     // 如果使用Qt::ToolTip, Qt::Tool + Qt::WindowStaysOnTopHint, Qt::X11BypassWindowManagerHint等flag则会导致X事件失效
 //    this->setWindowFlags(Qt::Popup);
@@ -138,6 +140,18 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::checkSingle(){
+    int fd = open("/tmp/kylin-nm-lock", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+    if (fd < 0) {
+        exit(1);
+    }
+
+    if (lockf(fd, F_TLOCK, 0)) {
+        qDebug()<<"can't lock single file, exit.";
+        exit(0);
+    }
 }
 
 bool MainWindow::nativeEvent(const QByteArray &eventType, void *message, long *result){

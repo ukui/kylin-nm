@@ -32,6 +32,10 @@
 #include <QDebug>
 #include <QString>
 
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
 #include <xcb/xcb.h>
 
 #include "ksimplenm.h"
@@ -64,6 +68,7 @@ public:
     QList<QIcon> loadIcons;
 
 private:
+    void checkSingle();
     void getActiveInfo();
     void getIface();
     void createTrayIcon();

@@ -1,10 +1,8 @@
 Source: kylin-nm
 Section: utils
 Priority: optional
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-XSBC-Original-Maintainer: Kylin Team <team+kylin@tracker.debian.org>
-Uploaders: shine <shenghuang@ubuntukylin.com>,
-           handsome_feng <jianfengli@ubuntukylin.com>
+Maintainer: Kylin Team <team+kylin@tracker.debian.org>
+Uploaders: handsome_feng <jianfengli@ubuntukylin.com>
 Build-Depends: debhelper (>= 12),
                qtbase5-dev,
                libqt5x11extras5-dev (>= 5.11.1-2),

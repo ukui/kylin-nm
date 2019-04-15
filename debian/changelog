@@ -1,15 +1,10 @@
 kylin-nm (1.0.2-0ubuntu1) disco; urgency=medium
 
-  * Fix bugs #1823843 #1823844 #1823845.
+  * Fix the wrong connection status. (LP: #1823843)
+  * Fix that unable to close after turned on the network. (LP: #1823844)
+  * Implement singleton pattern. (LP: #1823845)
 
- -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 15 Apr 2019 11:12:31 +0800
-
-kylin-nm (1.0.1-0ubuntu1) disco; urgency=medium
-
-  * Fix some interactive and logic bugs.
-  * Internationalization zh_CN.
-
- -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 13 Feb 2019 14:33:46 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 15 Apr 2019 14:51:29 +0800
 
 kylin-nm (1.0.0-1) unstable; urgency=medium
 

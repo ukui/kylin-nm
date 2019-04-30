@@ -1,10 +1,12 @@
-kylin-nm (1.0.2-0ubuntu1) disco; urgency=medium
+kylin-nm (1.0.2-0ubuntu1) eoan; urgency=medium
 
-  * Fix the wrong connection status. (LP: #1823843)
-  * Fix that unable to close after turned on the network. (LP: #1823844)
-  * Implement singleton pattern. (LP: #1823845)
+  * Bug-fix only:
+    - Fix the wrong connection status. (LP: #1823843)
+    - Fix that unable to close after turned on the network.
+      (LP: #1823844)
+    - Implement singleton pattern. (LP: #1823845)
 
- -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 15 Apr 2019 14:51:29 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 16 Apr 2019 21:16:36 +0800
 
 kylin-nm (1.0.0-1) unstable; urgency=medium
 

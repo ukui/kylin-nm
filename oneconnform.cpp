@@ -19,6 +19,7 @@
 #include "oneconnform.h"
 #include "ui_oneconnform.h"
 #include "mainwindow.h"
+#include "dlgconnhidwifi.h"
 
 extern int currentActWifiSignalLv;
 
@@ -33,6 +34,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConn->setText(tr("Connect"));//"连接"
     ui->btnConnPWD->setText(tr("Connect"));//"连接"
     ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"
+    ui->btnHideConn->setText(tr("Connect"));//"连接"
     ui->lePassword->setEchoMode(QLineEdit::Password);
 
     ui->wbg->hide();
@@ -42,6 +44,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConn->hide();
     ui->btnDisConn->hide();
     ui->btnConnPWD->hide();
+    ui->btnHideConn->hide();
 
     ui->lbConned->setAlignment(Qt::AlignRight);
 
@@ -61,6 +64,9 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
                                "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
                                "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
     ui->btnDisConn->setStyleSheet("QPushButton{border:0px;background-color:rgba(0,0,0,0.4);color:white;font-size:12px;}"
+                               "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
+                               "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
+    ui->btnHideConn->setStyleSheet("QPushButton{border:0px;background-color:rgba(0,0,0,0.4);color:white;font-size:12px;}"
                                "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
                                "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
 
@@ -104,8 +110,10 @@ void OneConnForm::setSelected(bool isSelected){
         ui->wbg->show();
 //        ui->btnConf->show();
         if(isActive){
+            ui->btnHideConn->hide();
             ui->btnDisConn->show();
         }else{
+            ui->btnHideConn->hide();
             ui->btnConn->show();
         }
 
@@ -123,6 +131,7 @@ void OneConnForm::setSelected(bool isSelected){
 
         ui->btnConn->hide();
         ui->btnDisConn->hide();
+        ui->btnHideConn->hide();
 
         ui->lbPassword->hide();
         ui->lePassword->hide();
@@ -135,6 +144,49 @@ void OneConnForm::setSelected(bool isSelected){
 
         this->isSelected = false;
     }
+}
+// 是否选中连接隐藏Wifi小窗口
+void OneConnForm::setHideSelected(bool isSelected){
+    if(isSelected){
+        resize(314, 111);
+        ui->wbg->show();
+
+        ui->btnConf->hide();
+        ui->btnConn->hide();
+        ui->btnDisConn->hide();
+        ui->btnHideConn->show();
+
+        ui->lbPassword->hide();
+        ui->lePassword->hide();
+        ui->btnConnPWD->hide();
+
+        ui->lbName->show();
+        ui->lbSafe->show();
+        ui->lbSignal->show();
+        ui->lbPoint->hide();
+
+        this->isSelected = true;
+    } else {
+        resize(314, 60);
+        ui->wbg->hide();
+
+        ui->btnConf->hide();
+        ui->btnConn->hide();
+        ui->btnDisConn->hide();
+        ui->btnHideConn->hide();
+
+        ui->lbPassword->hide();
+        ui->lePassword->hide();
+        ui->btnConnPWD->hide();
+
+        ui->lbName->show();
+        ui->lbSafe->show();
+        ui->lbSignal->show();
+        ui->lbPoint->hide();
+
+        this->isSelected = false;
+    }
+
 }
 
 void OneConnForm::setConnedString(QString str){
@@ -165,6 +217,16 @@ void OneConnForm::slotConnWifiPWD(){
 void OneConnForm::setName(QString name){
     ui->lbName->setText(name);
     wifiName = name;
+}
+void OneConnForm::setSpecialName(QString name)
+{
+    ui->lbName->setText(tr("Connect to Hidden Wi-Fi Network")); //连接到隐藏的 Wi-Fi 网络
+    wifiName = name;
+}
+
+QString OneConnForm::getName()
+{
+    return ui->lbName->text();
 }
 
 void OneConnForm::setSafe(QString safe){
@@ -316,6 +378,14 @@ void OneConnForm::on_btnConnPWD_clicked()
     connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnDone(int)));
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     t->start();
+}
+
+void OneConnForm::on_btnHideConn_clicked()
+{
+    QApplication::setQuitOnLastWindowClosed(false);
+    DlgConnHidWifi *connHidWifi = new DlgConnHidWifi(0, mw);
+    connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+    connHidWifi->show();
 }
 
 // Wifi连接结果，0成功 1失败 2没有配置文件

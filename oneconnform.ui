@@ -163,6 +163,19 @@
     <string/>
    </property>
   </widget>
+  <widget class="QPushButton" name="btnHideConn">
+   <property name="geometry">
+    <rect>
+     <x>162</x>
+     <y>70</y>
+     <width>129</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <zorder>wbg</zorder>
   <zorder>lbName</zorder>
   <zorder>btnConf</zorder>
@@ -175,6 +188,7 @@
   <zorder>btnDisConn</zorder>
   <zorder>lbPassword</zorder>
   <zorder>btnConnPWD</zorder>
+  <zorder>btnHideConn</zorder>
  </widget>
  <resources/>
  <connections/>

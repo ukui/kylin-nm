@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <QScreen>
 #include <QThread>
+#include <QDialog>
 
 #include "confform.h"
 #include "kylin-network-interface.h"
@@ -44,10 +45,13 @@ public:
 
     void setSignal(QString lv);
     void setName(QString name);
+    void setSpecialName(QString name);
+    QString getName();
     void setSafe(QString safe);
     void setRate(QString rate);
 
     void setSelected(bool isSelected);
+    void setHideSelected(bool isSelected);
     void setAct(bool isAct);
 
     void setSafeString(QString str);
@@ -82,6 +86,8 @@ private slots:
     void slotConnDone(int connFlag);
 
     void on_btnConnPWD_clicked();
+
+    void on_btnHideConn_clicked();
 
 private:
     Ui::OneConnForm *ui;

@@ -44,7 +44,17 @@ SOURCES += \
         kylin-network-interface.c \
     backthread.cpp \
     onelancform.cpp \
-    loadingdiv.cpp
+    loadingdiv.cpp \
+    dlgconnhidwifi.cpp \
+    dlgconnhidwifisecfast.cpp \
+    dlgconnhidwifisectunneltls.cpp \
+    dlgconnhidwifisecpeap.cpp \
+    dlgconnhidwifisectls.cpp \
+    dlgconnhidwifisecleap.cpp \
+    dlgconnhidwifisecpwd.cpp \
+    dlgconnhidwifiwep.cpp \
+    dlgconnhidwifileap.cpp \
+    dlgconnhidwifiwpa.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -54,13 +64,34 @@ HEADERS += \
         kylin-network-interface.h \
     backthread.h \
     onelancform.h \
-    loadingdiv.h
+    loadingdiv.h \
+    dlgconnhidwifi.h \
+    dlgconnhidwifisecfast.h \
+    dlgconnhidwifisectunneltls.h \
+    dlgconnhidwifisecpeap.h \
+    dlgconnhidwifisectls.h \
+    dlgconnhidwifisecleap.h \
+    dlgconnhidwifisecpwd.h \
+    dlgconnhidwifiwep.h \
+    dlgconnhidwifileap.h \
+    dlgconnhidwifiwpa.h \
+    kylinheadfile.h
 
 FORMS += \
         mainwindow.ui \
         oneconnform.ui \
         confform.ui \
-    onelancform.ui
+    onelancform.ui \
+    dlgconnhidwifi.ui \
+    dlgconnhidwifisecfast.ui \
+    dlgconnhidwifisectunneltls.ui \
+    dlgconnhidwifisecpeap.ui \
+    dlgconnhidwifisectls.ui \
+    dlgconnhidwifisecleap.ui \
+    dlgconnhidwifisecpwd.ui \
+    dlgconnhidwifiwep.ui \
+    dlgconnhidwifileap.ui \
+    dlgconnhidwifiwpa.ui
 
 RESOURCES += \
     nmqrc.qrc

@@ -1,3 +1,14 @@
+kylin-nm (1.0.3-0ubuntu1) eoan; urgency=medium
+
+  * Bug-fix:
+    - Fix the bug which can connect wired network without linking net cable
+    - Fix that unable update kylin-nm connect state after pluging in or out net cable
+    - Fix the wrong state of btnWifiList when change the usable state of Wi-Fi
+  * Update the display of Wi-Fi list timely by inserting a new Wi-Fi or delete a not exist Wi-Fi  
+  * Add function to connect hidden wifi
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 11 Sep 2019 10:51:40 +0800
+
 kylin-nm (1.0.2-0ubuntu1) eoan; urgency=medium
 
   * Bug-fix only:

@@ -26,11 +26,13 @@
 #include <QDesktopWidget>
 #include <QScrollBar>
 #include <QScrollArea>
+#include <QPushButton>
 #include <QScreen>
 #include <QMenu>
 #include <QAction>
 #include <QDebug>
 #include <QString>
+#include <QTimer>
 
 #include <fcntl.h>
 #include <sys/types.h>
@@ -100,11 +102,29 @@ private:
     // 以太网卡和无线网卡名称
     QString lname, wname;
 
+    //当前ScrollArea中选中的网络名称
+    QString currSelNetName = "";
+
     // 主界面按钮底色
     QString btnOffQss, btnOnQss;
 
+    //上一次获取wifi列表
+    QStringList lastSlist;
+
+    //循环检测网络连接状态
     QTimer *iconTimer;
+    QTimer *check_isLanConnect;
+    QTimer *check_isWifiConnect;
+    QTimer *check_isNetOn;
+
+    //按钮点击状态
+    int isByClickConnect = 0;
+    int is_btnNetList_clicked = 1;
+    int is_btnWifiList_clicked = 0;
+    int is_NetLineReady = 1;
+
     int currentIconIndex;
+    int updateFlag = 0;
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
@@ -117,6 +137,8 @@ private slots:
 
     void getLanListDone(QStringList slist);
     void getWifiListDone(QStringList slist);
+    void loadWifiListDone(QStringList slist);
+    void updateWifiListDone(QStringList slist);
 
     void on_btnAdvConf_clicked();
     void on_btnNetList_pressed();
@@ -124,10 +146,14 @@ private slots:
 
     void oneLanFormSelected(QString lanName);
     void oneWifiFormSelected(QString wifiName);
+    void oneHideFormSelected(QString wifiName);
     void activeLanDisconn();
     void activeWifiDisconn();
     void on_btnAdvConf_pressed();
     void on_btnAdvConf_released();
+    void on_isLanConnect();
+    void on_isWifiConnect();
+    void on_isNetOn();
 
     // 后台回调
     void enNetDone();

@@ -106,20 +106,18 @@ void BackThread::execDisWifi(){
 }
 
 void BackThread::execConnLan(QString connName){
-    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' > /tmp/kylin-nm-btoutput";
-    system(cmd.toUtf8().data());
-
-    QFile file("/tmp/kylin-nm-btoutput");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    QFile sys_carrier("/sys/class/net/enp3s0/carrier");
+    if(!sys_carrier.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug()<<"Can't open the file!"<<endl;
+        qDebug()<<"Can't open the system file carrier!"<<endl;
     }
-    QString line = file.readLine();
-    file.close();
-
-    if(line.indexOf("successfully") != -1){
+    QString sys_line = sys_carrier.readLine();
+    sys_carrier.close();
+    if(sys_line.indexOf("1") != -1){
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
+        system(cmd.toUtf8().data());
         emit connDone(0);
-    }else{
+    } else {
         emit connDone(1);
     }
 
@@ -127,7 +125,8 @@ void BackThread::execConnLan(QString connName){
 }
 
 void BackThread::execConnWifi(QString connName){
-    QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + connName + "'";
+//    QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + connName + "'";
+    QString cmd = "/home/chenlelin/kylin-nm/kylin-nm/connup.sh '" + connName + "'";
     system(cmd.toUtf8().data());
 
     QFile file("/tmp/kylin-nm-btoutput_");
@@ -150,7 +149,6 @@ void BackThread::execConnWifi(QString connName){
 }
 
 void BackThread::execConnWifiPWD(QString connName, QString password){
-    qDebug()<<"once";
     QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > /tmp/kylin-nm-btoutput";
     system(cmd.toUtf8().data());
 

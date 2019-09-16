@@ -17,6 +17,7 @@
  */
 
 #include "mainwindow.h"
+#include "dlgconnhidwifi.h"
 #include <QTranslator>
 #include <QLocale>
 #include <QApplication>

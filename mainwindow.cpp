@@ -180,8 +180,8 @@ void MainWindow::createTrayIcon()
     trayIcon->setContextMenu(trayIconMenu);
 
     // 初始化托盘所有Icon
-    QString iconDir = "/usr/share/icons/ukui-icon-theme/16x16/panel/";
-    iconLanOnline = QIcon(iconDir + "nm-device-wired.png");
+    QString iconDir = "/usr/share/icons/ukui-icon-theme/48x48/status/";
+    iconLanOnline = QIcon(iconDir + "nm-device-wire.png");
     iconLanOffline = QIcon(iconDir + "nm-no-connection.png");
     iconWifiFull = QIcon(iconDir + "nm-signal-100.png");
     iconWifiHigh = QIcon(iconDir + "nm-signal-75.png");

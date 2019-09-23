@@ -1,3 +1,10 @@
+kylin-nm (1.0.4-0ubuntu1) eoan; urgency=medium
+
+  * Bug-fix:
+    - Fix the bug which can not show correct icon size when change the height of taskbar
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 23 Sep 2019 16:51:40 +0800
+
 kylin-nm (1.0.3-0ubuntu1) eoan; urgency=medium
 
   * Bug-fix:

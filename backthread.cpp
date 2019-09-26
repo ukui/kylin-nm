@@ -17,7 +17,9 @@
  */
 
 #include "backthread.h"
+
 #include <QFile>
+#include <QRegExp>
 
 BackThread::BackThread(QObject *parent) : QObject(parent){
 }
@@ -108,12 +110,15 @@ void BackThread::execDisWifi(){
 void BackThread::execConnLan(QString connName){
     QString net_card = "ifconfig>/tmp/kylin-nm-ifconfig";
     system(net_card.toUtf8().data());
+
     QFile file("/tmp/kylin-nm-ifconfig");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug()<<"Can't open the file kylin-nm-ifconfig!"<<endl;
     }
+
     QString txt = file.readLine();
     QString strType = txt.mid(0, 6);
+
     QString carrierPath ="/sys/class/net/" + strType + "/carrier";
     QFile sys_carrier(carrierPath);
     if(!sys_carrier.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -134,7 +139,8 @@ void BackThread::execConnLan(QString connName){
 }
 
 void BackThread::execConnWifi(QString connName){
-    QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + connName + "'";
+//    QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + connName + "'";
+    QString cmd = "/home/chenlelin/kylin-nm/kylin-nm/connup.sh '" + connName + "'";
     system(cmd.toUtf8().data());
 
     QFile file("/tmp/kylin-nm-btoutput_");

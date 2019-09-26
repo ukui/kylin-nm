@@ -1,3 +1,23 @@
+kylin-nm (1.0.8-0ubuntu1) eoan; urgency=medium
+
+  * Change a sentence in backthread.cpp, this sentence is wrong in 1.0.8-0ubuntu1
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 17:11:40 +0800
+
+kylin-nm (1.0.7-0ubuntu1) eoan; urgency=medium
+
+  * Bug-fix:
+    - Fix the bug which kylin-nm window-state can not update after pluging in or out wireless network adapter
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 16:51:40 +0800
+
+kylin-nm (1.0.6-0ubuntu1) eoan; urgency=medium
+
+    * Use ukui-icon-theme to set the tray icon of kylin-nm
+    * Can not open the function of wifi without wireless network adapter
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 24 Sep 2019 12:51:40 +0800
+
 kylin-nm (1.0.5-0ubuntu1) eoan; urgency=medium
 
     * Change the method to get the path of carrier file

@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<<<<<<< HEAD
-<!-- Written by QtCreator 4.6.2, 2019-09-24T13:06:38. -->
-=======
-<!-- Written by QtCreator 4.6.2, 2019-09-23T17:00:02. -->
->>>>>>> b43f78de198252c1f54a06af74b0f347f757ec1d
+<!-- Written by QtCreator 4.6.2, 2019-09-26T17:22:10. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
-  <value type="QByteArray">{d24ee5cf-e33b-4ac0-b3ff-aa81cafc226a}</value>
+  <value type="QByteArray">{871a7e44-b0ca-4f6c-adc5-39582f458132}</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -65,7 +61,7 @@
   <valuemap type="QVariantMap">
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">桌面</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">桌面</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{3b9e90dd-8b5f-4932-ae85-9f4afd675bbc}</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{efe0a144-059c-4715-871b-4801b9a8c8f6}</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>

@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 kylin-nm (1.0.8-0ubuntu1) eoan; urgency=medium
 
   * Change a sentence in backthread.cpp, this sentence is wrong in 1.0.8-0ubuntu1
 
  -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 17:11:40 +0800
 
+=======
+<<<<<<< HEAD
+>>>>>>> 0dba7561c8feee9f728396f4a556ce3ae4ddbfce
 kylin-nm (1.0.7-0ubuntu1) eoan; urgency=medium
 
   * Bug-fix:
@@ -11,6 +15,11 @@ kylin-nm (1.0.7-0ubuntu1) eoan; urgency=medium
 
  -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 16:51:40 +0800
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> f394204a0029c50a72582ef39f3437ef9b0e3089
+>>>>>>> 0dba7561c8feee9f728396f4a556ce3ae4ddbfce
 kylin-nm (1.0.6-0ubuntu1) eoan; urgency=medium
 
     * Use ukui-icon-theme to set the tray icon of kylin-nm

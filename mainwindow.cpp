@@ -180,6 +180,21 @@ void MainWindow::createTrayIcon()
     trayIcon->setContextMenu(trayIconMenu);
 
     // 初始化托盘所有Icon
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+//    QString iconDir = "/usr/share/icons/ukui-icon-theme/48x48/status/";
+//    iconLanOnline = QIcon(iconDir + "nm-device-wire.png");
+//    iconLanOffline = QIcon(iconDir + "nm-no-connection.png");
+//    iconWifiFull = QIcon(iconDir + "nm-signal-100.png");
+//    iconWifiHigh = QIcon(iconDir + "nm-signal-75.png");
+//    iconWifiMedium = QIcon(iconDir + "nm-signal-50.png");
+//    iconWifiLow = QIcon(iconDir + "nm-signal-25.png");
+//    iconConnecting = QIcon(iconDir + ".png");
+
+>>>>>>> f394204a0029c50a72582ef39f3437ef9b0e3089
+>>>>>>> 0dba7561c8feee9f728396f4a556ce3ae4ddbfce
     iconLanOnline = QIcon::fromTheme("nm-device-wired");
     iconLanOffline = QIcon::fromTheme("nm-no-connection");
     iconWifiFull = QIcon::fromTheme("nm-signal-100");
@@ -1414,6 +1429,10 @@ void MainWindow::disWifiDone(){
 
 void MainWindow::keepDisWifiState()
 {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 0dba7561c8feee9f728396f4a556ce3ae4ddbfce
     if(this->is_btnNetList_clicked == 1) {
         ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-offline.png);}");
         ui->lbBtnWifiBG->setStyleSheet(btnOffQss);
@@ -1449,4 +1468,39 @@ void MainWindow::keepDisWifiState()
 
         this->stopLoading();
     }
+<<<<<<< HEAD
+=======
+=======
+    QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
+    for(int i = 0; i < wifiList.size(); i ++){
+        OneConnForm *ocf = wifiList.at(i);
+        if(ocf->isActive == true){
+            ocf->setSelected(false);
+            ocf->setName(tr("Not connected"));//"当前未连接任何 Wifi"
+            ocf->setSafe("--");
+            ocf->setSignal("0");
+            ocf->setSafeString("--");
+            ocf->setConnedString(tr("Disconnected"));//"未连接"
+            ocf->setShowPoint(false);
+            disconnect(ocf, SIGNAL(selectedOneWifiForm(QString)), this, SLOT(oneWifiFormSelected(QString)));
+        }else{
+            ocf->deleteLater();
+        }
+    }
+    lbWifiList->move(12, 68);
+
+    ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-offline.png);}");
+    ui->lbBtnWifiBG->setStyleSheet(btnOffQss);
+    ui->lbBtnWifiT1->setText(tr("Disabled"));//"已关闭"
+
+    this->lanListWidget->hide();
+    this->wifiListWidget->show();
+    this->scrollAreal->hide();
+    this->scrollAreaw->show();
+
+    on_btnWifiList_clicked();
+
+    this->stopLoading();
+>>>>>>> f394204a0029c50a72582ef39f3437ef9b0e3089
+>>>>>>> 0dba7561c8feee9f728396f4a556ce3ae4ddbfce
 }

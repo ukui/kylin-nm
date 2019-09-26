@@ -139,7 +139,8 @@ void BackThread::execConnLan(QString connName){
 }
 
 void BackThread::execConnWifi(QString connName){
-    QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + connName + "'";
+//    QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + connName + "'";
+    QString cmd = "/home/chenlelin/kylin-nm/kylin-nm/connup.sh '" + connName + "'";
     system(cmd.toUtf8().data());
 
     QFile file("/tmp/kylin-nm-btoutput_");

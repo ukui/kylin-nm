@@ -30,6 +30,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    QIcon::setThemeName("ukui-icon-theme");
+
     // 国际化
     QString locale = QLocale::system().name();
     QTranslator trans_global;

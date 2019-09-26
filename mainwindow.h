@@ -160,6 +160,7 @@ private slots:
     void disNetDone();
     void enWifiDone();
     void disWifiDone();
+    void keepDisWifiState();
     void connLanDone(int connFlag);
     void connDone(int connFlag);
 

@@ -1,64 +1,12 @@
-kylin-nm (1.0.10-0ubuntu1) eoan; urgency=medium
+kylin-nm (1.0.3-1) unstable; urgency=medium
 
-  * upgrade
+  * New upstream release:
+    - Fix that the connect state doesn't update after net cable plug in or
+      out. (LP: #1831818)
+    - Add the function to connect to hidden wireless network. (LP: #1829807)
+  * Debian/control: Bump standards vertion to 4.4.0.
 
- -- chenlelin <chenlelin@kylinos.cn>  Thu, 26 Sep 2019 18:31:40 +0800
-
-kylin-nm (1.0.9-0ubuntu1) eoan; urgency=medium
-
-  * reUpload
-
- -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 17:31:40 +0800
-
-kylin-nm (1.0.8-0ubuntu1) eoan; urgency=medium
-
-  * Change a sentence in backthread.cpp, this sentence is wrong in 1.0.7-0ubuntu1
-
- -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 17:11:40 +0800
-
-kylin-nm (1.0.8-0ubuntu1) eoan; urgency=medium
-
-  * Change a sentence in backthread.cpp, this sentence is wrong in 1.0.8-0ubuntu1
-
- -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 17:11:40 +0800
-
-kylin-nm (1.0.7-0ubuntu1) eoan; urgency=medium
-
-  * Bug-fix:
-    - Fix the bug which kylin-nm window-state can not update after pluging in or out wireless network adapter
-
- -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 16:51:40 +0800
-
-kylin-nm (1.0.6-0ubuntu1) eoan; urgency=medium
-
-    * Use ukui-icon-theme to set the tray icon of kylin-nm
-    * Can not open the function of wifi without wireless network adapter
-
- -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 24 Sep 2019 12:51:40 +0800
-
-kylin-nm (1.0.5-0ubuntu1) eoan; urgency=medium
-
-    * Change the method to get the path of carrier file
-
- -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 24 Sep 2019 12:51:40 +0800
-
-kylin-nm (1.0.4-0ubuntu1) eoan; urgency=medium
-
-  * Bug-fix:
-    - Fix the bug which can not show correct icon size when change the height of taskbar
-
- -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 23 Sep 2019 16:51:40 +0800
-
-kylin-nm (1.0.3-0ubuntu1) eoan; urgency=medium
-
-  * Bug-fix:
-    - Fix the bug which can connect wired network without linking net cable
-    - Fix that unable update kylin-nm connect state after pluging in or out net cable
-    - Fix the wrong state of btnWifiList when change the usable state of Wi-Fi
-  * Update the display of Wi-Fi list timely by inserting a new Wi-Fi or delete a not exist Wi-Fi  
-  * Add function to connect hidden wifi
-
- -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 11 Sep 2019 10:51:40 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 19:28:24 +0800
 
 kylin-nm (1.0.2-0ubuntu1) eoan; urgency=medium
 

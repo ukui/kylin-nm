@@ -16,6 +16,12 @@ kylin-nm (1.0.8-0ubuntu1) eoan; urgency=medium
 
  -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 17:11:40 +0800
 
+kylin-nm (1.0.8-0ubuntu1) eoan; urgency=medium
+
+  * Change a sentence in backthread.cpp, this sentence is wrong in 1.0.8-0ubuntu1
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 17:11:40 +0800
+
 kylin-nm (1.0.7-0ubuntu1) eoan; urgency=medium
 
   * Bug-fix:

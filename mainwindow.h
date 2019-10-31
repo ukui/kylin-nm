@@ -122,6 +122,7 @@ private:
     int is_btnNetList_clicked = 1;
     int is_btnWifiList_clicked = 0;
     int is_NetLineReady = 1;
+    int is_exec_func = 1;
 
     int currentIconIndex;
     int updateFlag = 0;

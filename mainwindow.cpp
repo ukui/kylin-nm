@@ -981,7 +981,17 @@ void MainWindow::on_isLanConnect()
     }
 
     if (iface->wstate == 2) {
-        keepDisWifiState(); //无线网卡被拔出后
+        keepDisWifiState();
+        is_exec_func = 1;
+    } else {
+        //only execute once
+        if (is_exec_func == 1) {
+            ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
+            ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
+            ui->lbBtnWifiT1->setText(tr("Enabled"));
+            on_btnWifiList_clicked();
+            is_exec_func = 0;
+        }
     }
 }
 
@@ -1037,7 +1047,17 @@ void MainWindow::on_isNetOn()
     }
 
     if (iface->wstate == 2) {
-        keepDisWifiState(); //无线网卡被拔出后
+        keepDisWifiState();
+        is_exec_func = 1;
+    } else {
+        //only execute once
+        if (is_exec_func == 1) {
+            ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
+            ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
+            ui->lbBtnWifiT1->setText(tr("Enabled"));
+            on_btnWifiList_clicked();
+            is_exec_func = 0;
+        }
     }
 }
 
@@ -1097,7 +1117,17 @@ void MainWindow::on_isWifiConnect()
     }
 
     if (iface->wstate == 2) {
-        keepDisWifiState(); //无线网卡被拔出后
+        keepDisWifiState();
+        is_exec_func = 1;
+    } else {
+        //only execute once
+        if (is_exec_func == 1) {
+            ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
+            ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
+            ui->lbBtnWifiT1->setText(tr("Enabled"));
+            on_btnWifiList_clicked();
+            is_exec_func = 0;
+        }
     }
 }
 

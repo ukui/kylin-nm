@@ -1,0 +1,25 @@
+kylin-nm (1.0.3-1) unstable; urgency=medium
+
+  * New upstream release:
+    - Fix that the connect state doesn't update after net cable plug in or
+      out. (LP: #1831818)
+    - Add the function to connect to hidden wireless network. (LP: #1829807)
+  * Debian/control: Bump standards vertion to 4.4.0.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 26 Sep 2019 19:28:24 +0800
+
+kylin-nm (1.0.2-0ubuntu1) eoan; urgency=medium
+
+  * Bug-fix only:
+    - Fix the wrong connection status. (LP: #1823843)
+    - Fix that unable to close after turned on the network.
+      (LP: #1823844)
+    - Implement singleton pattern. (LP: #1823845)
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 16 Apr 2019 21:16:36 +0800
+
+kylin-nm (1.0.0-1) unstable; urgency=medium
+
+  * Initial release. (Closes: #919549)
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 17 Jan 2019 15:49:40 +0800

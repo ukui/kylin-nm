@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Kylin NM
+Name[zh_CN]=麒麟网络设置工具
+Name[zh_HK]=麒麟網路設置工具
+Name[zh_TW]=麒麟網路設置工具
+Comment=Beautiful Network Config Applet
+Comment[zh_CN]=麒麟网络设置工具，提供查看和简单设置功能，拥有美观的界面和舒适的操作.
+Keywords=applet;nm;network;network-manager;
+Exec=/usr/bin/kylin-nm
+StartupNotify=false
+Terminal=false
+Type=Application

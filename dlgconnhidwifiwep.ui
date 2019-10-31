@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DlgConnHidWifiWep</class>
+ <widget class="QDialog" name="DlgConnHidWifiWep">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>432</width>
+    <height>471</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Connect to Hidden Wi-Fi Network</string>
+  </property>
+  <widget class="QLabel" name="lbKey">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>246</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbWEPindex">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>291</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbAuth">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>336</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cbxSecurity">
+   <property name="geometry">
+    <rect>
+     <x>175</x>
+     <y>195</y>
+     <width>182</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QComboBox QAbstractItemView {
+	outline: 0; 
+	border: 1px solid #000000;
+	border-color: rgba(0, 0, 0,25%);
+	selection-color: rgb(0, 0, 0);
+	background-color: #F1F3F3;
+}</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnConnect">
+   <property name="geometry">
+    <rect>
+     <x>315</x>
+     <y>425</y>
+     <width>90</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cbxAuth">
+   <property name="geometry">
+    <rect>
+     <x>175</x>
+     <y>330</y>
+     <width>182</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QComboBox QAbstractItemView {
+	outline: 0; 
+	border: 1px solid #000000;
+	border-color: rgba(0, 0, 0,25%);
+	selection-color: rgb(0, 0, 0);
+	background-color: #F1F3F3;
+}</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbConn">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>60</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cbxWEPindex">
+   <property name="geometry">
+    <rect>
+     <x>175</x>
+     <y>285</y>
+     <width>182</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QComboBox QAbstractItemView {
+	outline: 0; 
+	border: 1px solid #000000;
+	border-color: rgba(0, 0, 0,25%);
+	selection-color: rgb(0, 0, 0);
+	background-color: #F1F3F3;
+}</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnCancel">
+   <property name="geometry">
+    <rect>
+     <x>215</x>
+     <y>425</y>
+     <width>90</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBoxPwd">
+   <property name="geometry">
+    <rect>
+     <x>332</x>
+     <y>252</y>
+     <width>18</width>
+     <height>9</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbNetName">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>156</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="leKey">
+   <property name="geometry">
+    <rect>
+     <x>175</x>
+     <y>240</y>
+     <width>182</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="leNetName">
+   <property name="geometry">
+    <rect>
+     <x>175</x>
+     <y>150</y>
+     <width>182</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbSecurity">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>201</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cbxConn">
+   <property name="geometry">
+    <rect>
+     <x>175</x>
+     <y>55</y>
+     <width>182</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QComboBox QAbstractItemView {
+	outline: 0; 
+	border: 1px solid #000000;
+	border-color: rgba(0, 0, 0,25%);
+	selection-color: rgb(0, 0, 0);
+	background-color: #F1F3F3;
+}</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbBoder">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>432</width>
+     <height>471</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbUpback">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>432</width>
+     <height>116</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbBottomback">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>411</y>
+     <width>432</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbLeftup">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>120</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbLeftupIcon">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbLeftupTitle">
+   <property name="geometry">
+    <rect>
+     <x>34</x>
+     <y>6</y>
+     <width>80</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <zorder>lbBottomback</zorder>
+  <zorder>lbUpback</zorder>
+  <zorder>lbBoder</zorder>
+  <zorder>leKey</zorder>
+  <zorder>lbKey</zorder>
+  <zorder>lbWEPindex</zorder>
+  <zorder>lbAuth</zorder>
+  <zorder>cbxSecurity</zorder>
+  <zorder>btnConnect</zorder>
+  <zorder>cbxAuth</zorder>
+  <zorder>lbConn</zorder>
+  <zorder>cbxWEPindex</zorder>
+  <zorder>btnCancel</zorder>
+  <zorder>checkBoxPwd</zorder>
+  <zorder>lbNetName</zorder>
+  <zorder>leNetName</zorder>
+  <zorder>lbSecurity</zorder>
+  <zorder>cbxConn</zorder>
+  <zorder>lbLeftup</zorder>
+  <zorder>lbLeftupIcon</zorder>
+  <zorder>lbLeftupTitle</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

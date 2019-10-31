@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>316</width>
+    <height>467</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>kylin-nm</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QWidget" name="wdgHead" native="true">
+    <property name="geometry">
+     <rect>
+      <x>1</x>
+      <y>1</y>
+      <width>314</width>
+      <height>38</height>
+     </rect>
+    </property>
+    <widget class="QPushButton" name="btnWifiList">
+     <property name="geometry">
+      <rect>
+       <x>158</x>
+       <y>8</y>
+       <width>90</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnNetList">
+     <property name="geometry">
+      <rect>
+       <x>67</x>
+       <y>8</y>
+       <width>90</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="lbBtnNetBG">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>403</y>
+      <width>90</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbLanImg">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>410</y>
+      <width>22</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBtnNetT1">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>412</y>
+      <width>55</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBtnNetT2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>440</y>
+      <width>55</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnNet">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>403</y>
+      <width>90</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBtnWifiBG">
+    <property name="geometry">
+     <rect>
+      <x>98</x>
+      <y>403</y>
+      <width>90</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbWifiImg">
+    <property name="geometry">
+     <rect>
+      <x>103</x>
+      <y>410</y>
+      <width>22</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBtnWifiT1">
+    <property name="geometry">
+     <rect>
+      <x>132</x>
+      <y>412</y>
+      <width>55</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBtnWifiT2">
+    <property name="geometry">
+     <rect>
+      <x>103</x>
+      <y>440</y>
+      <width>55</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnWifi">
+    <property name="geometry">
+     <rect>
+      <x>98</x>
+      <y>403</y>
+      <width>90</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBtnConfBG">
+    <property name="geometry">
+     <rect>
+      <x>222</x>
+      <y>403</y>
+      <width>90</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbConfImg">
+    <property name="geometry">
+     <rect>
+      <x>227</x>
+      <y>410</y>
+      <width>22</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBtnConfT2">
+    <property name="geometry">
+     <rect>
+      <x>227</x>
+      <y>440</y>
+      <width>70</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnAdvConf">
+    <property name="geometry">
+     <rect>
+      <x>222</x>
+      <y>403</y>
+      <width>90</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

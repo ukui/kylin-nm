@@ -69,6 +69,14 @@ public:
     QIcon iconConnecting;
     QList<QIcon> loadIcons;
 
+    //状态设置,0为假，1为真
+    int is_by_click_connect = 0; //是否是通过点击连接按钮进行的连接
+    int is_btnNetList_clicked = 1; //是否处于有线网界面
+    int is_btnWifiList_clicked = 0; //是否处于无线网界面
+    int is_wired_line_ready = 1; //主机是否连接网线
+    int is_exec_on_btnWifiList_clicked = 1; //是否要执行on_btnWifiList_clicked()
+    int is_on_btnConn_clicked = 0;//是否已经点击连接wifi按钮
+
 private:
     void checkSingle();
     void getActiveInfo();
@@ -84,6 +92,7 @@ private:
 
     LoadingDiv *loading;
 
+    QDesktopWidget desktop;
     KSimpleNM *ksnm;
     ConfForm *confForm;
     QWidget *lanListWidget;
@@ -116,13 +125,6 @@ private:
     QTimer *check_isLanConnect;
     QTimer *check_isWifiConnect;
     QTimer *check_isNetOn;
-
-    //按钮点击状态,0为假，1为真
-    int isByClickConnect = 0;
-    int is_btnNetList_clicked = 1;
-    int is_btnWifiList_clicked = 0;
-    int is_NetLineReady = 1;
-    int is_exec_func = 1;
 
     int currentIconIndex;
     int updateFlag = 0;
@@ -160,6 +162,7 @@ private slots:
     void enNetDone();
     void disNetDone();
     void enWifiDone();
+    void launchLanDone();
     void disWifiDone();
     void keepDisWifiState();
     void connLanDone(int connFlag);

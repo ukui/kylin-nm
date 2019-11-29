@@ -36,10 +36,10 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"
     ui->btnHideConn->setText(tr("Connect"));//"连接"
     ui->lePassword->setEchoMode(QLineEdit::Password);
-
     ui->wbg->hide();
     ui->lbPassword->hide();
     ui->lePassword->hide();
+    ui->checkBoxPwd->hide();
     ui->btnConf->hide();
     ui->btnConn->hide();
     ui->btnDisConn->hide();
@@ -54,6 +54,9 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lbSafe->setStyleSheet("QLabel{font-size:13px;color:#aaaaaa;}");
     ui->lbConned->setStyleSheet("QLabel{font-size:13px;color:#ffffff;}");
     ui->lePassword->setStyleSheet("QLineEdit{border: 1px solid #cccccc;background-color:#ffffff;}");
+    ui->checkBoxPwd->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
+                                   "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
+                                   "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
     ui->btnConf->setStyleSheet("QPushButton{border:0px;background-color:rgba(0,0,0,0.4);color:white;font-size:12px;}"
                                "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
                                "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
@@ -76,6 +79,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 
     this->isSelected = false;
     this->isActive = false;
+
+    connect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
 }
 
 OneConnForm::~OneConnForm()
@@ -135,6 +140,7 @@ void OneConnForm::setSelected(bool isSelected){
 
         ui->lbPassword->hide();
         ui->lePassword->hide();
+        ui->checkBoxPwd->hide();
         ui->btnConnPWD->hide();
 
         ui->lbName->show();
@@ -158,6 +164,7 @@ void OneConnForm::setHideSelected(bool isSelected){
 
         ui->lbPassword->hide();
         ui->lePassword->hide();
+        ui->checkBoxPwd->hide();
         ui->btnConnPWD->hide();
 
         ui->lbName->show();
@@ -177,6 +184,7 @@ void OneConnForm::setHideSelected(bool isSelected){
 
         ui->lbPassword->hide();
         ui->lePassword->hide();
+        ui->checkBoxPwd->hide();
         ui->btnConnPWD->hide();
 
         ui->lbName->show();
@@ -203,15 +211,6 @@ void OneConnForm::setShowPoint(bool flag){
     }else{
         ui->lbPoint->hide();
     }
-}
-
-void OneConnForm::slotConnWifi(){
-    mw->startLoading();
-    emit sigConnWifi(ui->lbName->text());
-}
-void OneConnForm::slotConnWifiPWD(){
-    mw->startLoading();
-    emit sigConnWifiPWD(ui->lbName->text(), ui->lePassword->text());
 }
 
 void OneConnForm::setName(QString name){
@@ -299,6 +298,16 @@ void OneConnForm::setSignal(QString lv){
     }
 }
 
+void OneConnForm::slotConnWifi(){
+    mw->startLoading();
+    emit sigConnWifi(ui->lbName->text());
+}
+void OneConnForm::slotConnWifiPWD(){
+    mw->startLoading();
+    emit sigConnWifiPWD(ui->lbName->text(), ui->lePassword->text());
+}
+
+//点击后设置wifi网络
 void OneConnForm::on_btnConf_clicked()
 {
     QPoint pos = QCursor::pos();
@@ -343,6 +352,7 @@ void OneConnForm::on_btnConf_clicked()
     cf->raise();
 }
 
+//点击后断开wifi网络
 void OneConnForm::on_btnDisConn_clicked()
 {
     kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
@@ -352,8 +362,10 @@ void OneConnForm::on_btnDisConn_clicked()
     emit disconnActiveWifi();
 }
 
+//无需密码的wifi连接
 void OneConnForm::on_btnConn_clicked()
 {
+    mw->is_on_btnConn_clicked = 1;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);
@@ -366,6 +378,7 @@ void OneConnForm::on_btnConn_clicked()
     t->start();
 }
 
+//需要密码的wifi连接
 void OneConnForm::on_btnConnPWD_clicked()
 {
     QThread *t = new QThread();
@@ -380,6 +393,7 @@ void OneConnForm::on_btnConnPWD_clicked()
     t->start();
 }
 
+//点击后弹出连接隐藏wifi网络窗口
 void OneConnForm::on_btnHideConn_clicked()
 {
     QApplication::setQuitOnLastWindowClosed(false);
@@ -395,6 +409,7 @@ void OneConnForm::slotConnDone(int connFlag){
     if(connFlag == 2){
         ui->lbPassword->show();
         ui->lePassword->show();
+        ui->checkBoxPwd->show();
         ui->btnConnPWD->show();
 
         ui->lbName->hide();
@@ -416,4 +431,13 @@ void OneConnForm::slotConnDone(int connFlag){
     currentActWifiSignalLv = signalLv;
 
     mw->stopLoading();
+}
+
+void OneConnForm::on_checkBoxPwd_stateChanged(int arg1)
+{
+    if (arg1 == 0) {
+        ui->lePassword ->setEchoMode(QLineEdit::Password);
+    } else {
+        ui->lePassword->setEchoMode(QLineEdit::Normal);
+    }
 }

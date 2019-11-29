@@ -176,6 +176,19 @@
     <string/>
    </property>
   </widget>
+  <widget class="QCheckBox" name="checkBoxPwd">
+   <property name="geometry">
+    <rect>
+     <x>264</x>
+     <y>30</y>
+     <width>18</width>
+     <height>9</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <zorder>wbg</zorder>
   <zorder>lbName</zorder>
   <zorder>btnConf</zorder>
@@ -189,6 +202,7 @@
   <zorder>lbPassword</zorder>
   <zorder>btnConnPWD</zorder>
   <zorder>btnHideConn</zorder>
+  <zorder>checkBoxPwd</zorder>
  </widget>
  <resources/>
  <connections/>

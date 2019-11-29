@@ -32,11 +32,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     checkSingle();
 
-    // 如果使用Qt::Popup 任务栏不显示且保留X事件如XCB_FOCUS_OUT, 但如果indicator点击鼠标右键触发，XCB_FOCUS_OUT事件依然会失效
-    // 如果使用Qt::ToolTip, Qt::Tool + Qt::WindowStaysOnTopHint, Qt::X11BypassWindowManagerHint等flag则会导致X事件失效
-//    this->setWindowFlags(Qt::Popup);
+//    如果使用Qt::Popup 任务栏不显示且保留X事件如XCB_FOCUS_OUT, 但如果indicator点击鼠标右键触发，XCB_FOCUS_OUT事件依然会失效
+//    如果使用Qt::ToolTip, Qt::Tool + Qt::WindowStaysOnTopHint, Qt::X11BypassWindowManagerHint等flag则会导致X事件失效
+    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Popup);
 //    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
-    this->setWindowFlags(Qt::FramelessWindowHint);
+//    this->setWindowFlags(Qt::FramelessWindowHint);
 
     this->setWindowOpacity(0.95);
 
@@ -143,7 +143,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::checkSingle(){
+void MainWindow::checkSingle()
+{
     int fd = open("/tmp/kylin-nm-lock", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
     if (fd < 0) {
         exit(1);
@@ -155,7 +156,8 @@ void MainWindow::checkSingle(){
     }
 }
 
-bool MainWindow::nativeEvent(const QByteArray &eventType, void *message, long *result){
+bool MainWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
+{
     Q_UNUSED(result);
 
     if(eventType != "xcb_generic_event_t"){
@@ -177,6 +179,7 @@ void MainWindow::createTrayIcon()
 {
     trayIconMenu = new QMenu(this);
     trayIcon = new QSystemTrayIcon(this);
+    trayIcon->setToolTip(QString(tr("kylin-nm")));
     trayIcon->setContextMenu(trayIconMenu);
 
     // 初始化托盘所有Icon
@@ -206,7 +209,8 @@ void MainWindow::createTrayIcon()
     setTrayIcon(iconLanOnline);
 }
 
-void MainWindow::iconStep(){
+void MainWindow::iconStep()
+{
     if(currentIconIndex < 0){
         currentIconIndex = 11;
     }
@@ -227,19 +231,22 @@ void MainWindow::setTrayLoading(bool isLoading){
     }
 }
 
-void MainWindow::startLoading(){
+void MainWindow::startLoading()
+{
     loading->startLoading();
     setTrayLoading(true);
 }
 
-void MainWindow::stopLoading(){
+void MainWindow::stopLoading()
+{
     loading->stopLoading();
     setTrayLoading(false);
     getActiveInfo();
 }
 
 // 获取当前连接的网络和状态并设置图标
-void MainWindow::getActiveInfo(){
+void MainWindow::getActiveInfo()
+{
     QString actLanName = "--";
     QString actWifiName = "--";
 
@@ -294,7 +301,8 @@ void MainWindow::getActiveInfo(){
 }
 
 // 初始化网络
-void MainWindow::getIface(){
+void MainWindow::getIface()
+{
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
@@ -365,38 +373,63 @@ void MainWindow::getIface(){
 
 void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    moveBottomRight();
-    if(this->isHidden()){
-        this->showNormal();
-    }else{
-        this->hide();
+    //    switch (reason) {
+    //    case QSystemTrayIcon::Trigger:
+    //    case QSystemTrayIcon::DoubleClick:
+    //    case QSystemTrayIcon::MiddleClick:
+    //        break;
+    //    }
+
+    switch(reason){
+    case QSystemTrayIcon::Trigger:
+    case QSystemTrayIcon::MiddleClick:
+        //这里右键点击托盘图标无效
+        moveBottomRight();
+        if(this->isHidden()){
+            this->showNormal();
+        }else{
+            this->hide();
+        }
+        break;
+    default:
+        break;
+
     }
-//    switch (reason) {
-//    case QSystemTrayIcon::Trigger:
-//    case QSystemTrayIcon::DoubleClick:
-//    case QSystemTrayIcon::MiddleClick:
-//        break;
-//    }
 }
 
 void MainWindow::moveBottomRight()
 {
-    QPoint pos = QCursor::pos();
-    QRect primaryGeometry;
-    for (QScreen *screen : qApp->screens()) {
-        if (screen->geometry().contains(pos)) {
-            primaryGeometry = screen->geometry();
-        }
+    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+    QRect screenGeometry = qApp->primaryScreen()->geometry();
+
+    QDesktopWidget* pDesktopWidget = QApplication::desktop();
+//    int nScreenCount = QApplication::desktop()->screenCount();
+//    QRect deskRect = pDesktopWidget->availableGeometry();//可用区域
+    QRect screenRect = pDesktopWidget->screenGeometry();//屏幕区域
+
+//    qDebug()<<"screenRect.x(): "<<screenRect.x()<<"   screenRect.height(): "<<screenRect.height();
+//    qDebug()<<"availableGeometry.y(): "<<availableGeometry.y()<<"   availableGeometry.height(): "<<availableGeometry.height();
+    if (screenRect.height() != availableGeometry.height()) {
+        this->move(availableGeometry.x() + availableGeometry.width() - this->width(), availableGeometry.height() - this->height());
+    }else {
+        this->move(availableGeometry.x() + availableGeometry.width() - this->width(), availableGeometry.height() - this->height() - 40);
     }
 
-    if (primaryGeometry.isEmpty()) {
-        primaryGeometry = qApp->primaryScreen()->geometry();
-    }
-
-    this->move(primaryGeometry.x() + primaryGeometry.width() - this->width(), primaryGeometry.height() - this->height());
+//    QPoint pos = QCursor::pos();
+//    QRect primaryGeometry;
+//    for (QScreen *screen : qApp->screens()) {
+//        if (screen->geometry().contains(pos)) {
+//            primaryGeometry = screen->geometry();
+//        }
+//    }
+//    if (primaryGeometry.isEmpty()) {
+//        primaryGeometry = qApp->primaryScreen()->geometry();
+//    }
+//    this->move(primaryGeometry.x() + primaryGeometry.width() - this->width(), primaryGeometry.height() - this->height());
 }
 
-bool MainWindow::checkLanOn(){
+bool MainWindow::checkLanOn()
+{
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
@@ -407,7 +440,8 @@ bool MainWindow::checkLanOn(){
     }
 }
 
-bool MainWindow::checkWlOn(){
+bool MainWindow::checkWlOn()
+{
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
@@ -419,7 +453,8 @@ bool MainWindow::checkWlOn(){
 }
 
 // 获取lan列表回调
-void MainWindow::getLanListDone(QStringList slist){
+void MainWindow::getLanListDone(QStringList slist)
+{
     // 清空lan列表
     lanListWidget = new QWidget(scrollAreal);
     lanListWidget->resize(314, 8 + 60 + 46 + 51);
@@ -495,13 +530,16 @@ void MainWindow::getLanListDone(QStringList slist){
 
     this->lanListWidget->show();
     this->wifiListWidget->hide();
+
     this->stopLoading();
 }
 
 // 获取wifi列表回调
-void MainWindow::getWifiListDone(QStringList slist){
+void MainWindow::getWifiListDone(QStringList slist)
+{
     if (updateFlag == 0){
         loadWifiListDone(slist);
+        this->stopLoading();
     } else {
         updateWifiListDone(slist);
         updateFlag = 0;
@@ -510,7 +548,8 @@ void MainWindow::getWifiListDone(QStringList slist){
 }
 
 // 加载wifi列表
-void MainWindow::loadWifiListDone(QStringList slist){
+void MainWindow::loadWifiListDone(QStringList slist)
+{
     // 清空wifi列表
     wifiListWidget = new QWidget(scrollAreaw);
     wifiListWidget->resize(314, 8 + 60 + 46 + 51);
@@ -617,7 +656,7 @@ void MainWindow::loadWifiListDone(QStringList slist){
 
     this->lanListWidget->hide();
     this->wifiListWidget->show();
-    this->stopLoading();
+//    this->stopLoading();
 }
 
 // 更新wifi列表
@@ -633,6 +672,12 @@ void MainWindow::updateWifiListDone(QStringList slist)
             break;
         }
         index ++;
+    }
+
+    QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
+    if (wifiList.size() <= 1){
+        loadWifiListDone(slist); //通常为关闭wifi开关再打开 或是 拔出无线网卡后再插入的情况
+        return;
     }
 
     //获取表头信息
@@ -654,7 +699,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
             QString line = slist.at(j);
             QString wname = line.mid(indexName).trimmed();
 
-            if (lastWname == wname){break;} //到slist最后一个都没找到
+            if (lastWname == wname){break;} //在slist最后之前找到了lastWname，则停止
             if (j == slist.size()-1){
                 qDebug()<<"will delete a wifi named "<<lastWname;
                 QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
@@ -703,9 +748,8 @@ void MainWindow::updateWifiListDone(QStringList slist)
             QString line = lastSlist.at(j);
             QString lastWname = line.mid(lastIndexName).trimmed();
 
-            if (lastWname == wname){break;}
-            //到lastSlist最后一个都没找到
-            if (j == lastSlist.size()-1){
+            if (lastWname == wname){break;} //上一次的wifi列表已经有名为wname的wifi，则停止
+            if (j == lastSlist.size()-1){ //到lastSlist最后一个都没找到，执行下面流程
                 qDebug()<<"will insert a wifi named "<<wname;
                 QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
                 int n = wifiList.size();
@@ -793,7 +837,6 @@ void MainWindow::on_btnWifi_clicked()
                 connect(bt, SIGNAL(disWifiDone()), this, SLOT(disWifiDone()));
                 connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
                 t->start();
-
             }else{
                 QThread *t = new QThread();
                 BackThread *bt = new BackThread();
@@ -801,21 +844,33 @@ void MainWindow::on_btnWifi_clicked()
                 connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
                 connect(t, SIGNAL(started()), bt, SLOT(execEnWifi()));
                 connect(bt, SIGNAL(enWifiDone()), this, SLOT(enWifiDone()));
+                connect(bt, SIGNAL(launchLanDone()), this, SLOT(launchLanDone()));
                 connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
                 t->start();
             }
+        }else{
+            if(!checkWlOn()){
+                QString txt(tr("keep wired network switch is on before turning on wireless switch"));
+                QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
+                system(cmd.toUtf8().data());
 
-            this->startLoading();
+                QThread *t = new QThread();
+                BackThread *bt = new BackThread();
+                bt->moveToThread(t);
+                connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+                connect(t, SIGNAL(started()), bt, SLOT(execEnWifi()));
+                connect(bt, SIGNAL(enWifiDone()), this, SLOT(enWifiDone()));
+                connect(bt, SIGNAL(launchLanDone()), this, SLOT(launchLanDone()));
+                connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
+                t->start();
+            }
         }
+        this->startLoading();
     } else {
-        QThread *t = new QThread();
-        BackThread *bt = new BackThread();
-        bt->moveToThread(t);
-        connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
-        connect(t, SIGNAL(started()), bt, SLOT(execDisWifi()));
-        connect(bt, SIGNAL(disWifiDone()), this, SLOT(keepDisWifiState()));
-        connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
-        t->start();
+        QString txt(tr("please insert the wireless network adapter"));
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
+        system(cmd.toUtf8().data());
+        keepDisWifiState();
     }
 }
 
@@ -913,11 +968,11 @@ void MainWindow::on_btnWifiList_clicked()
     on_btnWifiList_pressed();
 }
 
-// Lan连接结果，0点击连接成功 1失败 3开机直连成功
+// Lan连接结果，0点击连接成功 1失败 3开机启动网络工具时已经连接
 void MainWindow::connLanDone(int connFlag){
     if(connFlag == 0){
-        this->is_NetLineReady = 1;
-        this->isByClickConnect = 1;
+        this->is_wired_line_ready = 1;
+        this->is_by_click_connect = 1;
         this->ksnm->execGetLanList();
         QString txt(tr("Conn Ethernet Success"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
@@ -930,14 +985,14 @@ void MainWindow::connLanDone(int connFlag){
     }
 
     if(connFlag == 1){
-        this->is_NetLineReady = 0; //without net line connect to computer
+        this->is_wired_line_ready = 0; //without net line connect to computer
         QString txt(tr("Conn Ethernet Fail"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         system(cmd.toUtf8().data());
     }
 
     if(connFlag == 3){
-        this->is_NetLineReady = 1;
+        this->is_wired_line_ready = 1;
         check_isLanConnect = new QTimer(this);
         check_isLanConnect->setTimerType(Qt::PreciseTimer);
         QObject::connect(check_isLanConnect, SIGNAL(timeout()), this, SLOT(on_isLanConnect()));
@@ -960,7 +1015,7 @@ void MainWindow::on_isLanConnect()
         if(this->is_btnWifiList_clicked== 1) {
             this->ksnm->execGetWifiList();
         }
-        this->isByClickConnect = 0;
+        this->is_by_click_connect = 0;
         check_isLanConnect->stop();
 
         if (iface->wstate != 0){
@@ -980,17 +1035,18 @@ void MainWindow::on_isLanConnect()
         }
     }
 
-    if (iface->wstate == 2) {
+    if (iface->wstate == 2 && this->is_on_btnConn_clicked == 0) {
+        //点击wifi连接按钮时，可能iface->wstate == 2，设置is_on_btnConn_clicked参数
+        //用来阻止keepDisWifiState()执行，另外两处同理
         keepDisWifiState();
-        is_exec_func = 1;
+        is_exec_on_btnWifiList_clicked = 1;
     } else {
-        //only execute once
-        if (is_exec_func == 1) {
+        //出无线网卡再插入需要执行一次
+        if (is_exec_on_btnWifiList_clicked == 1) {
             ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
             ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
             ui->lbBtnWifiT1->setText(tr("Enabled"));
-            on_btnWifiList_clicked();
-            is_exec_func = 0;
+            is_exec_on_btnWifiList_clicked = 0;
         }
     }
 }
@@ -1000,7 +1056,7 @@ void MainWindow::on_isNetOn()
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
-    if (iface->lstate == 0 && this->isByClickConnect == 0 && this->is_NetLineReady == 1){
+    if (iface->lstate == 0 && this->is_by_click_connect == 0 && this->is_wired_line_ready == 1){
         qDebug()<<"注意：有线网络已经重新连接";
         if(this->is_btnNetList_clicked == 1) {
             this->ksnm->execGetLanList();
@@ -1015,10 +1071,10 @@ void MainWindow::on_isNetOn()
         check_isLanConnect->setTimerType(Qt::PreciseTimer);
         QObject::connect(check_isLanConnect, SIGNAL(timeout()), this, SLOT(on_isLanConnect()));
         check_isLanConnect->start(4000);
-    } else if (iface->lstate == 0 && this->isByClickConnect == 1){
+    } else if (iface->lstate == 0 && this->is_by_click_connect == 1){
         qDebug()<<"注意：有线网络已经重新连接";
         check_isNetOn->stop();
-    } else if (iface->wstate == 0 && this->isByClickConnect == 0){
+    } else if (iface->wstate == 0 && this->is_by_click_connect == 0){
         qDebug()<<"注意：Wifi网络已经重新连接";
         if(this->is_btnNetList_clicked == 1) {
             this->ksnm->execGetLanList();
@@ -1033,7 +1089,7 @@ void MainWindow::on_isNetOn()
         check_isWifiConnect->setTimerType(Qt::PreciseTimer);
         QObject::connect(check_isWifiConnect, SIGNAL(timeout()), this, SLOT(on_isWifiConnect()));
         check_isWifiConnect->start(4000);
-    } else if (iface->wstate == 0 && this->isByClickConnect == 1){
+    } else if (iface->wstate == 0 && this->is_by_click_connect == 1){
         qDebug()<<"注意：Wifi网络已经重新连接";
         check_isNetOn->stop();
     } else if (iface->wstate != 2) {
@@ -1046,26 +1102,26 @@ void MainWindow::on_isNetOn()
         }
     }
 
-    if (iface->wstate == 2) {
+    if (iface->wstate == 2 && this->is_on_btnConn_clicked == 0) {
         keepDisWifiState();
-        is_exec_func = 1;
+        is_exec_on_btnWifiList_clicked = 1;
     } else {
-        //only execute once
-        if (is_exec_func == 1) {
+        //拔出无线网卡再插入需要执行一次
+        if (is_exec_on_btnWifiList_clicked == 1) {
             ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
             ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
             ui->lbBtnWifiT1->setText(tr("Enabled"));
-            on_btnWifiList_clicked();
-            is_exec_func = 0;
+            is_exec_on_btnWifiList_clicked = 0;
         }
     }
 }
 
-// Wifi连接结果，0点击连接成功 1失败 2没有配置文件 3开机直连成功
-void MainWindow::connDone(int connFlag){
+// Wifi连接结果，0点击连接成功 1失败 2没有配置文件 3开机启动网络工具时已经连接
+void MainWindow::connDone(int connFlag)
+{
     if(connFlag == 0){
-        qDebug()<<"Wifi connected successfully";
-        this->isByClickConnect = 1;
+        this->is_on_btnConn_clicked = 0;
+        this->is_by_click_connect = 1;
         this->ksnm->execGetWifiList();
         QString txt(tr("Conn Wifi Success"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
@@ -1096,7 +1152,7 @@ void MainWindow::on_isWifiConnect()
         if(this->is_btnWifiList_clicked== 1) {
             this->ksnm->execGetWifiList();
         }
-        this->isByClickConnect = 0;
+        this->is_by_click_connect = 0;
         check_isWifiConnect->stop();
 
         if (iface->lstate != 0){
@@ -1116,17 +1172,16 @@ void MainWindow::on_isWifiConnect()
         }
     }
 
-    if (iface->wstate == 2) {
+    if (iface->wstate == 2 && this->is_on_btnConn_clicked ==0) {
         keepDisWifiState();
-        is_exec_func = 1;
+        is_exec_on_btnWifiList_clicked = 1;
     } else {
-        //only execute once
-        if (is_exec_func == 1) {
+        //拔出无线网卡再插入需要执行一次
+        if (is_exec_on_btnWifiList_clicked == 1) {
             ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
             ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
             ui->lbBtnWifiT1->setText(tr("Enabled"));
-            on_btnWifiList_clicked();
-            is_exec_func = 0;
+            is_exec_on_btnWifiList_clicked = 0;
         }
     }
 }
@@ -1150,7 +1205,8 @@ void MainWindow::on_btnWifiList_pressed()
                                   "#btnNetList:Pressed{border:1px solid rgba(255,255,255,0.5);background:transparent;background-color:rgba(255,255,255,0.1);}");
 }
 
-void MainWindow::oneLanFormSelected(QString lanName){
+void MainWindow::oneLanFormSelected(QString lanName)
+{
     QList<OneLancForm *> lanList = lanListWidget->findChildren<OneLancForm *>();
 
     // 所有元素回到原位
@@ -1204,7 +1260,8 @@ void MainWindow::oneLanFormSelected(QString lanName){
 
 }
 
-void MainWindow::oneWifiFormSelected(QString wifiName){
+void MainWindow::oneWifiFormSelected(QString wifiName)
+{
     QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
 
     // 所有元素回到原位
@@ -1231,11 +1288,11 @@ void MainWindow::oneWifiFormSelected(QString wifiName){
                 ocf->setSelected(false);
             }
         }
-
         currSelNetName = "";
     } else {
-        // 设置选中，放大缩小所有选项卡
+        // 设置选中，放大或缩小所有选项卡
         int selectY = 0;
+        int selectWidgetY = 0;
         for(int i = 0;i < wifiList.size(); i ++){
             OneConnForm *ocf = wifiList.at(i);
             if(ocf->wifiName == wifiName){
@@ -1245,12 +1302,27 @@ void MainWindow::oneWifiFormSelected(QString wifiName){
                     ocf->setSelected(true);
                 }
                 selectY = ocf->y();
+                selectWidgetY = wifiListWidget->y();
             }else{
                 if (ocf->wifiName == hideWiFiConn){
                     ocf->setHideSelected(false);
                 }else{
                     ocf->setSelected(false);
                 }
+            }
+        }
+        // wifi界面可见部分最下的一个wifi被选中，有近一半被挡住,所有元素上移51或60
+        if (selectY + selectWidgetY == 294){
+            wifiListWidget->move(wifiListWidget->x(), wifiListWidget->y()-51);
+            if (selectY == 294){
+                QScrollBar *pScrollBar = scrollAreaw->verticalScrollBar();
+                pScrollBar->setSliderPosition(51);
+            }
+        }else if(selectY + selectWidgetY == 303){
+            wifiListWidget->move(wifiListWidget->x(), wifiListWidget->y()-60);
+            if (selectY == 294){
+                QScrollBar *pScrollBar = scrollAreaw->verticalScrollBar();
+                pScrollBar->setSliderPosition(60);
             }
         }
 
@@ -1270,7 +1342,8 @@ void MainWindow::oneWifiFormSelected(QString wifiName){
 
 }
 
-void MainWindow::oneHideFormSelected(QString wifiName){
+void MainWindow::oneHideFormSelected(QString wifiName)
+{
     QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
 
     // 所有元素回到原位
@@ -1314,13 +1387,15 @@ void MainWindow::oneHideFormSelected(QString wifiName){
     }
 }
 
-void MainWindow::activeLanDisconn(){
+void MainWindow::activeLanDisconn()
+{
     this->startLoading();
     this->ksnm->execGetLanList();
     currSelNetName = "";
 }
 
-void MainWindow::activeWifiDisconn(){
+void MainWindow::activeWifiDisconn()
+{
     this->startLoading();
     this->ksnm->execGetWifiList();
     currSelNetName = "";
@@ -1336,7 +1411,8 @@ void MainWindow::on_btnAdvConf_released()
     ui->lbBtnConfBG->setStyleSheet(btnOffQss);
 }
 
-void MainWindow::enNetDone(){
+void MainWindow::enNetDone()
+{
     BackThread *bt = new BackThread();
     bandWidth = bt->execChkLanWidth(lname);
 
@@ -1356,7 +1432,8 @@ void MainWindow::enNetDone(){
     on_btnNetList_clicked(1);
 }
 
-void MainWindow::disNetDone(){
+void MainWindow::disNetDone()
+{
     // 清空lan列表
     lanListWidget = new QWidget(scrollAreal);
     lanListWidget->resize(314, 8 + 60 + 46 + 51);
@@ -1399,7 +1476,15 @@ void MainWindow::disNetDone(){
     this->stopLoading();
 }
 
-void MainWindow::enWifiDone(){
+void MainWindow::launchLanDone()
+{
+    ui->lbLanImg->setStyleSheet("QLabel{background-image:url(:/res/x/network-line.png);}");
+    ui->lbBtnNetBG->setStyleSheet(btnOnQss);
+    ui->lbBtnNetT1->setText(tr("Enabled"));//"已开启"
+}
+
+void MainWindow::enWifiDone()
+{
     ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
     ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
     ui->lbBtnWifiT1->setText(tr("Enabled"));//"已开启"
@@ -1409,7 +1494,9 @@ void MainWindow::enWifiDone(){
     on_btnWifiList_clicked();
 }
 
-void MainWindow::disWifiDone(){
+void MainWindow::disWifiDone()
+{
+    wifiListWidget->resize(314, 8 + 60 + 46 + 51);
     QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
     for(int i = 0; i < wifiList.size(); i ++){
         OneConnForm *ocf = wifiList.at(i);
@@ -1450,6 +1537,7 @@ void MainWindow::keepDisWifiState()
         ui->lbBtnWifiT1->setText(tr("Disabled"));//"已关闭"
     }
     if(this->is_btnWifiList_clicked== 1) {
+        wifiListWidget->resize(314, 8 + 60 + 46 + 51);
         QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
         for(int i = 0; i < wifiList.size(); i ++){
             OneConnForm *ocf = wifiList.at(i);
@@ -1477,6 +1565,6 @@ void MainWindow::keepDisWifiState()
         this->scrollAreal->hide();
         this->scrollAreaw->show();
 
-        this->stopLoading();
+//        this->stopLoading();
     }
 }

@@ -96,7 +96,11 @@ void BackThread::execDisNet(){
 }
 
 void BackThread::execEnWifi(){
-    system("nmcli radio wifi on;sleep 6");
+    if (execGetIface()->lstate == 2){
+        system("nmcli networking on;sleep 1");
+        emit launchLanDone();
+    }
+    system("nmcli radio wifi on;sleep 5");
     emit enWifiDone();
     emit btFinish();
 }

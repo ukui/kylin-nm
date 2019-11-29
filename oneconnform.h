@@ -89,6 +89,8 @@ private slots:
 
     void on_btnHideConn_clicked();
 
+    void on_checkBoxPwd_stateChanged(int arg1);
+
 private:
     Ui::OneConnForm *ui;
     MainWindow *mw;

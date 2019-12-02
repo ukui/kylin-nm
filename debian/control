@@ -3,10 +3,11 @@ Section: utils
 Priority: optional
 Maintainer: Kylin Team <team+kylin@tracker.debian.org>
 Uploaders: handsome_feng <jianfengli@ubuntukylin.com>
-Build-Depends: debhelper (>= 12),
+Build-Depends: debhelper-compat (= 12),
                qtbase5-dev,
                libqt5x11extras5-dev (>= 5.11.1-2),
-Standards-Version: 4.4.0
+Standards-Version: 4.4.1
+Rules-Requires-Root: no
 Homepage: https://github.com/ukui/kylin-nm
 Vcs-Git: https://github.com/ukui/kylin-nm.git
 Vcs-Browser: https://github.com/ukui/kylin-nm

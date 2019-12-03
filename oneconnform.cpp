@@ -81,6 +81,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     this->isActive = false;
 
     connect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
+    ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与登录按钮绑定在一起
+    ui->btnHideConn->setShortcut(Qt::Key_Return);
 }
 
 OneConnForm::~OneConnForm()

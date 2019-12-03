@@ -23,6 +23,9 @@
 #include <QScreen>
 #include <QThread>
 #include <QDialog>
+#include <QLineEdit>
+#include <QShortcut>
+#include <QKeyEvent>
 
 #include "confform.h"
 #include "kylin-network-interface.h"

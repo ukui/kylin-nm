@@ -1,8 +1,13 @@
 kylin-nm (1.0.4-1) unstable; urgency=medium
 
   * New upstream release.
+  * debian/control:
+    - Bump standards-version to 4.4.1. No changes needed.
+  * debian/{compat,control}:
+    - Use debhelper-compat notation. Bump to DH compat level
+      version 12.
 
- -- handsome_feng <jianfengli@ubuntukylin.com>  Thu, 31 Oct 2019 15:48:34 +0800
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 02 Dec 2019 09:48:37 +0800
 
 kylin-nm (1.0.3-1) unstable; urgency=medium
 

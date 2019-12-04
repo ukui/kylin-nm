@@ -133,7 +133,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ksnm, SIGNAL(getLanListFinished(QStringList)), this, SLOT(getLanListDone(QStringList)));
     connect(ksnm, SIGNAL(getWifiListFinished(QStringList)), this, SLOT(getWifiListDone(QStringList)));
 
-    getIface();// 初始化网络
+    initTimer(); //初始化定时器
+    changeTimerState();//初始化定时器
+    getIface(); //初始化网络
 
     trayIcon->show();
 }
@@ -300,6 +302,39 @@ void MainWindow::getActiveInfo()
     }
 }
 
+// 初始化定时器
+void MainWindow::initTimer()
+{
+    check_isLanConnect = new QTimer(this);
+    check_isLanConnect->setTimerType(Qt::PreciseTimer);
+    QObject::connect(check_isLanConnect, SIGNAL(timeout()), this, SLOT(on_isLanConnect()));
+    check_isLanConnect->start(2000);
+
+    check_isWifiConnect = new QTimer(this);
+    check_isWifiConnect->setTimerType(Qt::PreciseTimer);
+    QObject::connect(check_isWifiConnect, SIGNAL(timeout()), this, SLOT(on_isWifiConnect()));
+    check_isWifiConnect->start(2000);
+
+    check_isNetOn = new QTimer(this);
+    check_isNetOn->setTimerType(Qt::PreciseTimer);
+    QObject::connect(check_isNetOn, SIGNAL(timeout()), this, SLOT(on_isNetOn()));
+    check_isNetOn->start(2000);
+}
+void MainWindow::changeTimerState()
+{
+    if (check_isLanConnect->isActive()){
+        check_isLanConnect->stop();
+    }
+
+    if (check_isNetOn->isActive()){
+        check_isNetOn->stop();
+    }
+
+    if (check_isWifiConnect->isActive()){
+        check_isWifiConnect->stop();
+    }
+}
+
 // 初始化网络
 void MainWindow::getIface()
 {
@@ -347,10 +382,8 @@ void MainWindow::getIface()
             connLanDone(3);
         } else if(iface->wstate == 1 && (iface->lstate == 1)) {
             qDebug()<<"启动软件,即将循环检测 Lan或Wifi 是否开启";
-            check_isNetOn = new QTimer(this);
-            check_isNetOn->setTimerType(Qt::PreciseTimer);
-            QObject::connect(check_isNetOn, SIGNAL(timeout()), this, SLOT(on_isNetOn()));
-            check_isNetOn->start(3000);
+            changeTimerState();
+            check_isNetOn->start(4000);
         }
         on_btnWifiList_clicked();
         ui->btnWifiList->setStyleSheet("#btnWifiList{font-size:12px;color:white;border:1px solid rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.5);background:transparent;background-color:rgba(255,255,255,0.1);}");
@@ -978,9 +1011,7 @@ void MainWindow::connLanDone(int connFlag){
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         system(cmd.toUtf8().data());
 
-        check_isLanConnect = new QTimer(this);
-        check_isLanConnect->setTimerType(Qt::PreciseTimer);
-        QObject::connect(check_isLanConnect, SIGNAL(timeout()), this, SLOT(on_isLanConnect()));
+        changeTimerState();
         check_isLanConnect->start(4000);
     }
 
@@ -993,9 +1024,7 @@ void MainWindow::connLanDone(int connFlag){
 
     if(connFlag == 3){
         this->is_wired_line_ready = 1;
-        check_isLanConnect = new QTimer(this);
-        check_isLanConnect->setTimerType(Qt::PreciseTimer);
-        QObject::connect(check_isLanConnect, SIGNAL(timeout()), this, SLOT(on_isLanConnect()));
+        changeTimerState();
         check_isLanConnect->start(4000);
     }
 
@@ -1020,9 +1049,7 @@ void MainWindow::on_isLanConnect()
 
         if (iface->wstate != 0){
             qDebug()<<"即将检测是否重新开启 Lan或Wifi";
-            check_isNetOn = new QTimer(this);
-            check_isNetOn->setTimerType(Qt::PreciseTimer);
-            QObject::connect(check_isNetOn, SIGNAL(timeout()), this, SLOT(on_isNetOn()));
+            changeTimerState();
             check_isNetOn->start(4000);
         }
     } else if (iface->wstate != 2) {
@@ -1039,14 +1066,14 @@ void MainWindow::on_isLanConnect()
         //点击wifi连接按钮时，可能iface->wstate == 2，设置is_on_btnConn_clicked参数
         //用来阻止keepDisWifiState()执行，另外两处同理
         keepDisWifiState();
-        is_exec_on_btnWifiList_clicked = 1;
+        is_keep_wifi_turn_on_state = 1;
     } else {
         //出无线网卡再插入需要执行一次
-        if (is_exec_on_btnWifiList_clicked == 1) {
+        if (is_keep_wifi_turn_on_state == 1) {
             ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
             ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
             ui->lbBtnWifiT1->setText(tr("Enabled"));
-            is_exec_on_btnWifiList_clicked = 0;
+            is_keep_wifi_turn_on_state = 0;
         }
     }
 }
@@ -1067,9 +1094,7 @@ void MainWindow::on_isNetOn()
         check_isNetOn->stop();
 
         qDebug()<<"即将重新检测 Lan 是否断开";
-        check_isLanConnect = new QTimer(this);
-        check_isLanConnect->setTimerType(Qt::PreciseTimer);
-        QObject::connect(check_isLanConnect, SIGNAL(timeout()), this, SLOT(on_isLanConnect()));
+        changeTimerState();
         check_isLanConnect->start(4000);
     } else if (iface->lstate == 0 && this->is_by_click_connect == 1){
         qDebug()<<"注意：有线网络已经重新连接";
@@ -1085,9 +1110,7 @@ void MainWindow::on_isNetOn()
         check_isNetOn->stop();
 
         qDebug()<<"即将重新检测 Wifi 是否断开";
-        check_isWifiConnect = new QTimer(this);
-        check_isWifiConnect->setTimerType(Qt::PreciseTimer);
-        QObject::connect(check_isWifiConnect, SIGNAL(timeout()), this, SLOT(on_isWifiConnect()));
+        changeTimerState();
         check_isWifiConnect->start(4000);
     } else if (iface->wstate == 0 && this->is_by_click_connect == 1){
         qDebug()<<"注意：Wifi网络已经重新连接";
@@ -1104,14 +1127,14 @@ void MainWindow::on_isNetOn()
 
     if (iface->wstate == 2 && this->is_on_btnConn_clicked == 0) {
         keepDisWifiState();
-        is_exec_on_btnWifiList_clicked = 1;
+        is_keep_wifi_turn_on_state = 1;
     } else {
         //拔出无线网卡再插入需要执行一次
-        if (is_exec_on_btnWifiList_clicked == 1) {
+        if (is_keep_wifi_turn_on_state == 1) {
             ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
             ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
             ui->lbBtnWifiT1->setText(tr("Enabled"));
-            is_exec_on_btnWifiList_clicked = 0;
+            is_keep_wifi_turn_on_state = 0;
         }
     }
 }
@@ -1127,14 +1150,10 @@ void MainWindow::connDone(int connFlag)
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         system(cmd.toUtf8().data());
 
-        check_isWifiConnect = new QTimer(this);
-        check_isWifiConnect->setTimerType(Qt::PreciseTimer);
-        QObject::connect(check_isWifiConnect, SIGNAL(timeout()), this, SLOT(on_isWifiConnect()));
+        changeTimerState();
         check_isWifiConnect->start(4000);
     } else if (connFlag == 3) {
-        check_isWifiConnect = new QTimer(this);
-        check_isWifiConnect->setTimerType(Qt::PreciseTimer);
-        QObject::connect(check_isWifiConnect, SIGNAL(timeout()), this, SLOT(on_isWifiConnect()));
+        changeTimerState();
         check_isWifiConnect->start(4000);
     }
 }
@@ -1157,9 +1176,7 @@ void MainWindow::on_isWifiConnect()
 
         if (iface->lstate != 0){
             qDebug()<<"即将检测是否重新开启 Lan或Wifi";
-            check_isNetOn = new QTimer(this);
-            check_isNetOn->setTimerType(Qt::PreciseTimer);
-            QObject::connect(check_isNetOn, SIGNAL(timeout()), this, SLOT(on_isNetOn()));
+            changeTimerState();
             check_isNetOn->start(4000);
         }
     } else if (iface->wstate != 2){
@@ -1174,14 +1191,14 @@ void MainWindow::on_isWifiConnect()
 
     if (iface->wstate == 2 && this->is_on_btnConn_clicked ==0) {
         keepDisWifiState();
-        is_exec_on_btnWifiList_clicked = 1;
+        is_keep_wifi_turn_on_state = 1;
     } else {
         //拔出无线网卡再插入需要执行一次
-        if (is_exec_on_btnWifiList_clicked == 1) {
+        if (is_keep_wifi_turn_on_state == 1) {
             ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
             ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
             ui->lbBtnWifiT1->setText(tr("Enabled"));
-            is_exec_on_btnWifiList_clicked = 0;
+            is_keep_wifi_turn_on_state = 0;
         }
     }
 }

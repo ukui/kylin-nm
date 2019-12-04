@@ -64,6 +64,10 @@ public:
 
     void setTrayIcon(QIcon icon);
     void setTrayLoading(bool isLoading);
+
+    void initTimer();
+    void changeTimerState();
+
     QIcon iconLanOnline, iconLanOffline;
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
     QIcon iconConnecting;
@@ -74,7 +78,7 @@ public:
     int is_btnNetList_clicked = 1; //是否处于有线网界面
     int is_btnWifiList_clicked = 0; //是否处于无线网界面
     int is_wired_line_ready = 1; //主机是否连接网线
-    int is_exec_on_btnWifiList_clicked = 1; //是否要执行on_btnWifiList_clicked()
+    int is_keep_wifi_turn_on_state = 1; //是否要执行wifi开关变为打开样式
     int is_on_btnConn_clicked = 0;//是否已经点击连接wifi按钮
 
 private:

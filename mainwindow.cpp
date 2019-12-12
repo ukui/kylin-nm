@@ -143,6 +143,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     initTimer(); //初始化定时器
     changeTimerState();//初始化定时器
+    checkIsWirelessDeviceOn(); //检测无线网卡是否插入
     getIface(); //初始化网络
 
     trayIcon->show();
@@ -346,6 +347,11 @@ void MainWindow::changeTimerState()
 //检测无线网卡与网线是否准备好，以及相应的处理
 void MainWindow::checkWirelessDeviceState(/*QDBusObjectPath path*/)
 {
+    checkIsWirelessDeviceOn();
+    on_btnWifi_clicked();
+}
+void MainWindow::checkIsWirelessDeviceOn()
+{
     QString wlan_card = "iwconfig>/tmp/kylin-nm-iwconfig";
     system(wlan_card.toUtf8().data());
 
@@ -361,8 +367,6 @@ void MainWindow::checkWirelessDeviceState(/*QDBusObjectPath path*/)
     }else{
         is_wireless_adapter_ready = 0;
     }
-
-    on_btnWifi_clicked();
 }
 
 // 初始化网络

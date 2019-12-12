@@ -132,6 +132,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
     connect(ksnm, SIGNAL(getLanListFinished(QStringList)), this, SLOT(getLanListDone(QStringList)));
     connect(ksnm, SIGNAL(getWifiListFinished(QStringList)), this, SLOT(getWifiListDone(QStringList)));
+    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                         QString("/org/freedesktop/NetworkManager"),
+                                         QString("org.freedesktop.NetworkManager"),
+                                         QString("DeviceAdded"), this, SLOT(checkWirelessDeviceState(/*QDBusObjectPath*/)) );
+    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                         QString("/org/freedesktop/NetworkManager"),
+                                         QString("org.freedesktop.NetworkManager"),
+                                         QString("DeviceRemoved"), this, SLOT(checkWirelessDeviceState(/*QDBusObjectPath*/)) );
 
     initTimer(); //初始化定时器
     changeTimerState();//初始化定时器
@@ -333,6 +341,28 @@ void MainWindow::changeTimerState()
     if (check_isWifiConnect->isActive()){
         check_isWifiConnect->stop();
     }
+}
+
+//检测无线网卡与网线是否准备好，以及相应的处理
+void MainWindow::checkWirelessDeviceState(/*QDBusObjectPath path*/)
+{
+    QString wlan_card = "iwconfig>/tmp/kylin-nm-iwconfig";
+    system(wlan_card.toUtf8().data());
+
+    QFile file("/tmp/kylin-nm-iwconfig");
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug()<<"Can't open the file kylin-nm-iwconfig!"<<endl;
+    }
+    QString txt = file.readAll();
+    file.close();
+
+    if(txt.indexOf("IEEE 802.11") != -1){
+        is_wireless_adapter_ready = 1;
+    }else{
+        is_wireless_adapter_ready = 0;
+    }
+
+    on_btnWifi_clicked();
 }
 
 // 初始化网络
@@ -847,19 +877,9 @@ void MainWindow::on_btnNet_clicked()
 
 void MainWindow::on_btnWifi_clicked()
 {
-    QString wlan_card = "iwconfig>/tmp/kylin-nm-iwconfig";
-    system(wlan_card.toUtf8().data());
-
-    QFile file("/tmp/kylin-nm-iwconfig");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug()<<"Can't open the file kylin-nm-iwconfig!"<<endl;
-    }
-    QString txt = file.readAll();
-    file.close();
-
     //当连接上无线网卡时才能打开wifi开关
-    if(txt.indexOf("IEEE 802.11") != -1){
-        // 网络开关关闭时，点击Wifi开关无效
+    if(is_wireless_adapter_ready == 1){
+        // 网络开关关闭时，点击Wifi开关时，程序先打开有线开关
         if(checkLanOn()){
             if(checkWlOn()){
                 QThread *t = new QThread();
@@ -1023,6 +1043,7 @@ void MainWindow::connLanDone(int connFlag){
     }
 
     if(connFlag == 3){
+        qDebug()<<"启动软件,Lan已经开启，即将循环检测是否断开";
         this->is_wired_line_ready = 1;
         changeTimerState();
         check_isLanConnect->start(4000);
@@ -1061,21 +1082,6 @@ void MainWindow::on_isLanConnect()
             count_loop = 0;
         }
     }
-
-    if (iface->wstate == 2 && this->is_on_btnConn_clicked == 0) {
-        //点击wifi连接按钮时，可能iface->wstate == 2，设置is_on_btnConn_clicked参数
-        //用来阻止keepDisWifiState()执行，另外两处同理
-        keepDisWifiState();
-        is_keep_wifi_turn_on_state = 1;
-    } else {
-        //出无线网卡再插入需要执行一次
-        if (is_keep_wifi_turn_on_state == 1) {
-            ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
-            ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
-            ui->lbBtnWifiT1->setText(tr("Enabled"));
-            is_keep_wifi_turn_on_state = 0;
-        }
-    }
 }
 
 void MainWindow::on_isNetOn()
@@ -1097,8 +1103,9 @@ void MainWindow::on_isNetOn()
         changeTimerState();
         check_isLanConnect->start(4000);
     } else if (iface->lstate == 0 && this->is_by_click_connect == 1){
-        qDebug()<<"注意：有线网络已经重新连接";
+        qDebug()<<"注意：有线网络已经点击连接";
         check_isNetOn->stop();
+        qDebug()<<"即将重新检测 Lan 是否断开";
     } else if (iface->wstate == 0 && this->is_by_click_connect == 0){
         qDebug()<<"注意：Wifi网络已经重新连接";
         if(this->is_btnNetList_clicked == 1) {
@@ -1113,8 +1120,9 @@ void MainWindow::on_isNetOn()
         changeTimerState();
         check_isWifiConnect->start(4000);
     } else if (iface->wstate == 0 && this->is_by_click_connect == 1){
-        qDebug()<<"注意：Wifi网络已经重新连接";
+        qDebug()<<"注意：Wifi网络已经点击连接";
         check_isNetOn->stop();
+        qDebug()<<"即将重新检测 Wifi 是否断开";
     } else if (iface->wstate != 2) {
         count_loop += 1;
         if (count_loop >= 2 && this->is_btnWifiList_clicked == 1){
@@ -1124,26 +1132,12 @@ void MainWindow::on_isNetOn()
             count_loop = 0;
         }
     }
-
-    if (iface->wstate == 2 && this->is_on_btnConn_clicked == 0) {
-        keepDisWifiState();
-        is_keep_wifi_turn_on_state = 1;
-    } else {
-        //拔出无线网卡再插入需要执行一次
-        if (is_keep_wifi_turn_on_state == 1) {
-            ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
-            ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
-            ui->lbBtnWifiT1->setText(tr("Enabled"));
-            is_keep_wifi_turn_on_state = 0;
-        }
-    }
 }
 
 // Wifi连接结果，0点击连接成功 1失败 2没有配置文件 3开机启动网络工具时已经连接
 void MainWindow::connDone(int connFlag)
 {
     if(connFlag == 0){
-        this->is_on_btnConn_clicked = 0;
         this->is_by_click_connect = 1;
         this->ksnm->execGetWifiList();
         QString txt(tr("Conn Wifi Success"));
@@ -1153,6 +1147,7 @@ void MainWindow::connDone(int connFlag)
         changeTimerState();
         check_isWifiConnect->start(4000);
     } else if (connFlag == 3) {
+        qDebug()<<"启动软件,Wifi已经开启，即将循环检测是否断开";
         changeTimerState();
         check_isWifiConnect->start(4000);
     }
@@ -1186,19 +1181,6 @@ void MainWindow::on_isWifiConnect()
             updateFlag = 1;
             this->ksnm->execGetWifiList();
             count_loop = 0;
-        }
-    }
-
-    if (iface->wstate == 2 && this->is_on_btnConn_clicked ==0) {
-        keepDisWifiState();
-        is_keep_wifi_turn_on_state = 1;
-    } else {
-        //拔出无线网卡再插入需要执行一次
-        if (is_keep_wifi_turn_on_state == 1) {
-            ui->lbWifiImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-line.png);}");
-            ui->lbBtnWifiBG->setStyleSheet(btnOnQss);
-            ui->lbBtnWifiT1->setText(tr("Enabled"));
-            is_keep_wifi_turn_on_state = 0;
         }
     }
 }

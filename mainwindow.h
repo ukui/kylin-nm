@@ -33,11 +33,17 @@
 #include <QDebug>
 #include <QString>
 #include <QTimer>
+#include <QtDBus/QDBusConnection>
+#include <QtDBus/QDBusMessage>
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusObjectPath>
+#include <QDBusObjectPath>
 
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <QVariant>
 #include <xcb/xcb.h>
 
 #include "ksimplenm.h"
@@ -78,8 +84,11 @@ public:
     int is_btnNetList_clicked = 1; //是否处于有线网界面
     int is_btnWifiList_clicked = 0; //是否处于无线网界面
     int is_wired_line_ready = 1; //主机是否连接网线
+    int is_wireless_adapter_ready = 1; //主机是否插入无线网卡
     int is_keep_wifi_turn_on_state = 1; //是否要执行wifi开关变为打开样式
-    int is_on_btnConn_clicked = 0;//是否已经点击连接wifi按钮
+
+public slots:
+    void checkWirelessDeviceState(/*QDBusObjectPath path*/);
 
 private:
     void checkSingle();

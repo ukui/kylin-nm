@@ -367,7 +367,6 @@ void OneConnForm::on_btnDisConn_clicked()
 //无需密码的wifi连接
 void OneConnForm::on_btnConn_clicked()
 {
-    mw->is_on_btnConn_clicked = 1;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);

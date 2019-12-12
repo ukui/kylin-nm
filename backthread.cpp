@@ -124,9 +124,7 @@ void BackThread::execConnLan(QString connName){
     QString strType;
     int i = 0;
     while(1){
-        if (txt[i] == ":"){
-            break;
-        }
+        if (txt[i] == ":"){ break; }
         strType += txt[i];
         i += 1;
     }

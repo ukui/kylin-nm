@@ -96,4 +96,5 @@ FORMS += \
 RESOURCES += \
     nmqrc.qrc
 
-TRANSLATIONS = res/kylin-nm_zh_CN.ts
+TRANSLATIONS = translations/kylin-nm_zh_CN.ts \
+               translations/kylin-nm_bo.ts

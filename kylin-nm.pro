@@ -10,15 +10,16 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = kylin-nm
 
+#CONFIG += link_pkgconfig
+#PKGCONFIG += libnm glib-2.0 gio-2.0 dbus-glib-1
+
+
 target.path = /usr/bin
 target.source += $$TARGET
-shells.path = /usr/share/kylin-nm/shell/
-shells.files = connup.sh
 desktop.path = /etc/xdg/autostart/
 desktop.files = kylin-nm.desktop
 
 INSTALLS += target \
-    shells \
     desktop
 
 TEMPLATE = app
@@ -45,16 +46,17 @@ SOURCES += \
     backthread.cpp \
     onelancform.cpp \
     loadingdiv.cpp \
-    dlgconnhidwifi.cpp \
-    dlgconnhidwifisecfast.cpp \
-    dlgconnhidwifisectunneltls.cpp \
-    dlgconnhidwifisecpeap.cpp \
-    dlgconnhidwifisectls.cpp \
-    dlgconnhidwifisecleap.cpp \
-    dlgconnhidwifisecpwd.cpp \
-    dlgconnhidwifiwep.cpp \
-    dlgconnhidwifileap.cpp \
-    dlgconnhidwifiwpa.cpp
+    wireless-security/dlgconnhidwifi.cpp \
+    wireless-security/dlgconnhidwifisecfast.cpp \
+    wireless-security/dlgconnhidwifisectunneltls.cpp \
+    wireless-security/dlgconnhidwifisecpeap.cpp \
+    wireless-security/dlgconnhidwifisectls.cpp \
+    wireless-security/dlgconnhidwifisecleap.cpp \
+    wireless-security/dlgconnhidwifisecpwd.cpp \
+    wireless-security/dlgconnhidwifiwep.cpp \
+    wireless-security/dlgconnhidwifileap.cpp \
+    wireless-security/dlgconnhidwifiwpa.cpp \
+    kylin-dbus-interface.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -65,33 +67,34 @@ HEADERS += \
     backthread.h \
     onelancform.h \
     loadingdiv.h \
-    dlgconnhidwifi.h \
-    dlgconnhidwifisecfast.h \
-    dlgconnhidwifisectunneltls.h \
-    dlgconnhidwifisecpeap.h \
-    dlgconnhidwifisectls.h \
-    dlgconnhidwifisecleap.h \
-    dlgconnhidwifisecpwd.h \
-    dlgconnhidwifiwep.h \
-    dlgconnhidwifileap.h \
-    dlgconnhidwifiwpa.h \
-    kylinheadfile.h
+    wireless-security/dlgconnhidwifi.h \
+    wireless-security/dlgconnhidwifisecfast.h \
+    wireless-security/dlgconnhidwifisectunneltls.h \
+    wireless-security/dlgconnhidwifisecpeap.h \
+    wireless-security/dlgconnhidwifisectls.h \
+    wireless-security/dlgconnhidwifisecleap.h \
+    wireless-security/dlgconnhidwifisecpwd.h \
+    wireless-security/dlgconnhidwifiwep.h \
+    wireless-security/dlgconnhidwifileap.h \
+    wireless-security/dlgconnhidwifiwpa.h \
+    wireless-security/kylinheadfile.h \
+    kylin-dbus-interface.h
 
 FORMS += \
         mainwindow.ui \
         oneconnform.ui \
         confform.ui \
     onelancform.ui \
-    dlgconnhidwifi.ui \
-    dlgconnhidwifisecfast.ui \
-    dlgconnhidwifisectunneltls.ui \
-    dlgconnhidwifisecpeap.ui \
-    dlgconnhidwifisectls.ui \
-    dlgconnhidwifisecleap.ui \
-    dlgconnhidwifisecpwd.ui \
-    dlgconnhidwifiwep.ui \
-    dlgconnhidwifileap.ui \
-    dlgconnhidwifiwpa.ui
+    wireless-security/dlgconnhidwifi.ui \
+    wireless-security/dlgconnhidwifisecfast.ui \
+    wireless-security/dlgconnhidwifisectunneltls.ui \
+    wireless-security/dlgconnhidwifisecpeap.ui \
+    wireless-security/dlgconnhidwifisectls.ui \
+    wireless-security/dlgconnhidwifisecleap.ui \
+    wireless-security/dlgconnhidwifisecpwd.ui \
+    wireless-security/dlgconnhidwifiwep.ui \
+    wireless-security/dlgconnhidwifileap.ui \
+    wireless-security/dlgconnhidwifiwpa.ui
 
 RESOURCES += \
     nmqrc.qrc

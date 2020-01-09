@@ -179,8 +179,8 @@
   <widget class="QCheckBox" name="checkBoxPwd">
    <property name="geometry">
     <rect>
-     <x>264</x>
-     <y>30</y>
+     <x>260</x>
+     <y>31</y>
      <width>18</width>
      <height>9</height>
     </rect>
@@ -195,13 +195,13 @@
   <zorder>btnConn</zorder>
   <zorder>lbSignal</zorder>
   <zorder>lbSafe</zorder>
-  <zorder>lePassword</zorder>
   <zorder>lbConned</zorder>
   <zorder>lbPoint</zorder>
   <zorder>btnDisConn</zorder>
   <zorder>lbPassword</zorder>
   <zorder>btnConnPWD</zorder>
   <zorder>btnHideConn</zorder>
+  <zorder>lePassword</zorder>
   <zorder>checkBoxPwd</zorder>
  </widget>
  <resources/>

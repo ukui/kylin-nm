@@ -310,7 +310,6 @@ activecon *kylin_network_get_activecon_info()
     activelist[count].dev=NULL;
 
     return activelist;
-
 }
 
 //创建新的以太网连接

@@ -18,24 +18,33 @@
 
 #include "ksimplenm.h"
 #include <stdio.h>
+#include <unistd.h>
+#include <QThread>
 #define MAX_LEN 2048
 #define MAX_PATH 1024
 
 KSimpleNM::KSimpleNM(QObject *parent) : QObject(parent)
 {
-    runShellProcess =new QProcess(this);
+    runShellProcess = new QProcess(this);
 
     connect(runShellProcess, &QProcess::readyRead, this, &KSimpleNM::readProcess);
     connect(runShellProcess, SIGNAL(finished(int)), this, SLOT(finishedProcess(int)));
 }
 
 void KSimpleNM::execGetLanList(){
+    if (isExecutingGetWifiList){
+        syslog(LOG_DEBUG, "It is running getting wifi list when getting lan list");
+        qDebug()<<"debug: it is running getting wifi list when getting lan list";
+        isUseOldLanSlist = true;
+    }
+    isExecutingGetLanList = true;
     shellOutput = "";
     type = 0;
     runShellProcess->start("nmcli -f type,device,name connection show");
 }
 
 void KSimpleNM::execGetWifiList(){
+    isExecutingGetWifiList = true;
     shellOutput = "";
     type = 1;
     runShellProcess->start("nmcli -f signal,rate,security,ssid device wifi");
@@ -50,7 +59,9 @@ void KSimpleNM::finishedProcess(int msg){
     QStringList slist = shellOutput.split("\n");
     if(type == 0){
         emit getLanListFinished(slist);
+        isExecutingGetLanList = false;
     }else{
         emit getWifiListFinished(slist);
+        isExecutingGetWifiList = false;
     }
 }

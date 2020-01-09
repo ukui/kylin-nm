@@ -1,0 +1,13 @@
+Package: kylin-nm-dbgsym
+Package-Type: ddeb
+Source: kylin-nm
+Version: 1.0.4-1
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Kylin Team <team+kylin@tracker.debian.org>
+Installed-Size: 2144
+Depends: kylin-nm (= 1.0.4-1)
+Section: debug
+Priority: optional
+Description: debug symbols for kylin-nm
+Build-Ids: 18c1694c9d87adc92ebb3d79a081909857f60aff

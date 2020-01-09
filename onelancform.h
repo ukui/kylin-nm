@@ -64,7 +64,7 @@ signals:
     void sigConnLan(QString);
 
 protected:
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 private slots:
     void on_btnConf_clicked();

@@ -18,10 +18,22 @@
 
 #include "backthread.h"
 
+#include <unistd.h>
+
 #include <QFile>
 #include <QRegExp>
 
 BackThread::BackThread(QObject *parent) : QObject(parent){
+    cmd = new QProcess(this);
+    connect(cmd , SIGNAL(readyReadStandardOutput()) , this , SLOT(on_readoutput()));
+    connect(cmd , SIGNAL(readyReadStandardError()) , this , SLOT(on_readerror()));
+    cmd->start("bash");
+    cmd->waitForStarted();
+}
+
+BackThread::~BackThread()
+{
+    cmd->close();
 }
 
 IFace* BackThread::execGetIface(){
@@ -32,7 +44,8 @@ IFace* BackThread::execGetIface(){
     QFile file("/tmp/kylin-nm-iface");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug()<<"Can't open the file!"<<endl;
+        syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-iface!");
+        qDebug()<<"Can't open the file /tmp/kylin-nm-iface!"<<endl;
     }
     QString txt = file.readAll();
     QStringList txtList = txt.split("\n");
@@ -84,60 +97,87 @@ IFace* BackThread::execGetIface(){
 }
 
 void BackThread::execEnNet(){
-    system("nmcli networking on;sleep 5");
-    emit enNetDone();
-    emit btFinish();
+    system("nmcli networking on");
+    while(1){
+        if (execGetIface()->lstate != 2){
+            sleep(3);
+            emit enNetDone();
+            emit btFinish();
+            break;
+        }
+        sleep(1);
+    }
 }
 
 void BackThread::execDisNet(){
-    system("nmcli networking off;sleep 3");
-    emit disNetDone();
-    emit btFinish();
+    if (execGetIface()->wstate != 2){
+        system("nmcli radio wifi off");
+        while(1){
+            if (execGetIface()->wstate == 2){
+                emit disWifiDone();
+                emit btFinish();
+                break;
+            }
+            sleep(1);
+        }
+    }
+    system("nmcli networking off");
+    while(1){
+        if (execGetIface()->lstate == 2){
+            emit disNetDone();
+            emit btFinish();
+            break;
+        }
+        sleep(1);
+    }
 }
 
 void BackThread::execEnWifi(){
     if (execGetIface()->lstate == 2){
-        system("nmcli networking on;sleep 3");
-        emit launchLanDone();
+        system("nmcli networking on");
+        while(1){
+            if (execGetIface()->lstate != 2){
+                emit launchLanDone();
+                break;
+            }
+            sleep(1);
+        }
     }
-    system("nmcli radio wifi on;sleep 6");
-    emit enWifiDone();
-    emit btFinish();
+    system("nmcli radio wifi on");
+    while(1){
+        if (execGetIface()->wstate != 2){
+            KylinDBus objKyDbus;
+            while(1){
+                if (objKyDbus.getAccessPointsNumber() > 0){
+                    emit enWifiDone();
+                    emit btFinish();
+                    break;
+                }
+                sleep(2);
+            }
+            break;
+        }
+        sleep(1);
+    }
 }
 
 void BackThread::execDisWifi(){
-    system("nmcli radio wifi off;sleep 3");
-    emit disWifiDone();
-    emit btFinish();
+    system("nmcli radio wifi off");
+    while(1){
+        if (execGetIface()->wstate == 2){
+            emit disWifiDone();
+            emit btFinish();
+            break;
+        }
+        sleep(1);
+    }
 }
 
 void BackThread::execConnLan(QString connName){
-    QString net_card = "ifconfig>/tmp/kylin-nm-ifconfig";
-    system(net_card.toUtf8().data());
+    lanDelete(); //连接前先断开已经连接的有线网
 
-    QFile file("/tmp/kylin-nm-ifconfig");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug()<<"Can't open the file kylin-nm-ifconfig!"<<endl;
-    }
-
-    QString txt = file.readLine();
-    QString strType;
-    int i = 0;
-    while(1){
-        if (txt[i] == ":"){ break; }
-        strType += txt[i];
-        i += 1;
-    }
-
-    QString carrierPath ="/sys/class/net/" + strType + "/carrier";
-    QFile sys_carrier(carrierPath);
-    if(!sys_carrier.open(QIODevice::ReadOnly | QIODevice::Text)){
-        qDebug()<<"Can't open the file carrier in documentary"<<strType <<endl;
-    }
-
-    QString sys_line = sys_carrier.readLine();
-    sys_carrier.close();
-    if(sys_line.indexOf("1") != -1){
+    KylinDBus objKyDbus;
+    if(objKyDbus.isWiredCableOn){
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
         system(cmd.toUtf8().data());
         emit connDone(0);
@@ -148,21 +188,48 @@ void BackThread::execConnLan(QString connName){
     emit btFinish();
 }
 
-void BackThread::execConnWifi(QString connName){
-    QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + connName + "'";
+void BackThread::execConnWifiPWD(QString connName, QString password){
+    wifiDelete(); //连接前先断开已经连接的wifi
+
+    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > /tmp/kylin-nm-btoutput";
     system(cmd.toUtf8().data());
 
-    QFile file("/tmp/kylin-nm-btoutput_");
+    QFile file("/tmp/kylin-nm-btoutput");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug()<<"Can't open the file!"<<endl;
+        syslog(LOG_DEBUG, "Can't open the file /tmp/kylin-nm-btoutput !");
+        qDebug()<<"Can't open the file /tmp/kylin-nm-btoutput !"<<endl;
     }
     QString line = file.readLine();
     file.close();
 
     if(line.indexOf("successfully") != -1){
         emit connDone(0);
-    }else if(line.indexOf("unknown") != -1){
+    }else{
+        QString txt(tr("Confirm your Wi-Fi password"));
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+        system(cmd.toUtf8().data());
+        emit connDone(1);
+    }
+
+    emit btFinish();
+}
+
+void BackThread::execConnWifi(QString connName){
+    wifiDelete(); //连接前先断开已经连接的wifi
+
+    QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'\n";
+    cmd->write(cmdStr.toUtf8().data());
+}
+
+void BackThread::on_readoutput()
+{
+    QString str = cmd->readAllStandardOutput();
+    cmd->close();
+    qDebug()<<"on_readoutput:  "<< str;
+    if(str.indexOf("successfully") != -1){
+        emit connDone(0);
+    }else if(str.indexOf("unknown") != -1){
         emit connDone(2);
     }else{
         emit connDone(1);
@@ -171,20 +238,15 @@ void BackThread::execConnWifi(QString connName){
     emit btFinish();
 }
 
-void BackThread::execConnWifiPWD(QString connName, QString password){
-    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > /tmp/kylin-nm-btoutput";
-    system(cmd.toUtf8().data());
-
-    QFile file("/tmp/kylin-nm-btoutput");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug()<<"Can't open the file!"<<endl;
-    }
-    QString line = file.readLine();
-    file.close();
-
-    if(line.indexOf("successfully") != -1){
+void BackThread::on_readerror()
+{
+    QString str = cmd->readAllStandardError();
+    cmd->close();
+    qDebug()<<"on_readerror: "<< str;
+    if(str.indexOf("successfully") != -1){
         emit connDone(0);
+    }else if(str.indexOf("unknown") != -1){
+        emit connDone(2);
     }else{
         emit connDone(1);
     }
@@ -199,7 +261,8 @@ QString BackThread::getConnProp(QString connName){
     QFile file("/tmp/kylin-nm-connprop");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug()<<"Can't open the file!"<<endl;
+        syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-connprop!");
+        qDebug()<<"Can't open the file /tmp/kylin-nm-connprop!"<<endl;
     }
 
     QString txt = file.readAll();
@@ -251,7 +314,8 @@ bool BackThread::execChkWifiExist(QString connName){
     QFile file("/tmp/kylin-nm-chkwifiexist");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug()<<"Can't open the file!"<<endl;
+        syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-chkwifiexist!");
+        qDebug()<<"Can't open the file /tmp/kylin-nm-chkwifiexist!"<<endl;
     }
     QString line = file.readLine();
     file.close();
@@ -270,7 +334,8 @@ QString BackThread::execChkLanWidth(QString ethName){
     QFile file("/tmp/kylin-nm-bandwidth");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug()<<"Can't open the file!"<<endl;
+        syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-bandwidth!");
+        qDebug()<<"Can't open the file /tmp/kylin-nm-bandwidth!"<<endl;
     }
     QString line = file.readLine();
     file.close();
@@ -282,5 +347,65 @@ QString BackThread::execChkLanWidth(QString ethName){
 
     QString rtn = params.at(1);
     return rtn.trimmed();
+}
 
+void BackThread::redundantNetDeleted()
+{
+    sleep(1);
+    wifiDelete();
+
+    emit disFinish();
+    emit ttFinish();
+}
+
+void BackThread::wifiDelete()
+{
+    QString strSlist;
+    system("nmcli connection show -active>/tmp/kylin-nm-connshow");
+    QFile file("/tmp/kylin-nm-connshow");
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-connshow!");
+        qDebug()<<"Can't open the file /tmp/kylin-nm-connshow!";
+    }
+
+    QString txt = file.readAll();
+    QStringList txtLine = txt.split("\n");
+    file.close();
+    foreach (QString line, txtLine) {
+        if(line.indexOf("wifi") != -1){
+            QStringList subLine = line.split(" ");
+            if (subLine[1].size() == 1){
+                strSlist =  subLine[0]+ " " + subLine[1];
+            }else {
+                strSlist =  subLine[0];
+            }
+            kylin_network_set_con_down(strSlist.toUtf8().data());
+        }
+    } //end foreach
+}
+
+void BackThread::lanDelete()
+{
+    QString strSlist;
+    system("nmcli connection show -active>/tmp/kylin-nm-connshow");
+    QFile file("/tmp/kylin-nm-connshow");
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        syslog(LOG_DEBUG, "Can't open the file /tmp/kylin-nm-connshow!");
+        qDebug()<<"Can't open the file /tmp/kylin-nm-connshow!";
+    }
+
+    QString txt = file.readAll();
+    QStringList txtLine = txt.split("\n");
+    file.close();
+    foreach (QString line, txtLine) {
+        if(line.indexOf("ethernet") != -1){
+            QStringList subLine = line.split(" ");
+            if (subLine[1].size() == 1){
+                strSlist =  subLine[0]+ " " + subLine[1];
+            }else {
+                strSlist =  subLine[0];
+            }
+            kylin_network_set_con_down(strSlist.toUtf8().data());
+        }
+    } //end foreach
 }

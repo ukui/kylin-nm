@@ -20,6 +20,8 @@
 #include "ui_onelancform.h"
 #include "mainwindow.h"
 
+#include <time.h>
+
 OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *confForm, KSimpleNM *ksnm) :
     QWidget(parent),
     ui(new Ui::OneLancForm)
@@ -57,6 +59,8 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 
     this->isSelected = false;
     this->isActive = false;
+
+    srand((unsigned)time(NULL));
 }
 
 OneLancForm::~OneLancForm()
@@ -64,7 +68,7 @@ OneLancForm::~OneLancForm()
     delete ui;
 }
 
-void OneLancForm::mouseReleaseEvent(QMouseEvent *){
+void OneLancForm::mousePressEvent(QMouseEvent *){
     emit selectedOneLanForm(lanName);
 }
 
@@ -134,6 +138,7 @@ void OneLancForm::setBandWidth(QString bandWidth){
         if(bandWidth != ""){
             QString rateStr = bandWidth.mid(0, bandWidth.indexOf("Mb"));
             int rateNum = rateStr.toInt();
+
             if(rateNum >= 1000){
                 ui->lbPoint->setStyleSheet("QLabel{background:url(:/res/s/pgood.png);}");
             }

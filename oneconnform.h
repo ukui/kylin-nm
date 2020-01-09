@@ -75,18 +75,17 @@ signals:
     void sigConnWifiPWD(QString, QString);
 
 protected:
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 private slots:
     void on_btnConf_clicked();
-    void on_btnConn_clicked();
 
+    void on_btnConn_clicked();
     void on_btnDisConn_clicked();
 
     void slotConnWifi();
     void slotConnWifiPWD();
-
-    void slotConnDone(int connFlag);
+    void slotConnWifiResult(int connFlag);
 
     void on_btnConnPWD_clicked();
 

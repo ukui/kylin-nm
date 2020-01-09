@@ -19,8 +19,17 @@
 #ifndef BACKTHREAD_H
 #define BACKTHREAD_H
 
+#include "kylin-dbus-interface.h"
+#include "kylin-network-interface.h"
+
+#include <sys/syslog.h>
 #include <QObject>
 #include <QDebug>
+#include <QTimer>
+#include <QProcess>
+#include <QDBusInterface>
+#include <QDBusMessage>
+#include <QDBusArgument>
 
 class IFace{
 public:
@@ -35,11 +44,13 @@ class BackThread : public QObject
     Q_OBJECT
 public:
     explicit BackThread(QObject *parent = nullptr);
+    ~BackThread();
 
     IFace* execGetIface();
     QString getConnProp(QString connName);
     bool execChkWifiExist(QString connName);
     QString execChkLanWidth(QString ethName);
+    QProcess *cmd;
 
 signals:
     void enNetDone();
@@ -51,6 +62,8 @@ signals:
     void connDone(int connFlag);
 
     void btFinish();
+    void disFinish();
+    void ttFinish();
 
 public slots:
     void execEnNet();
@@ -60,6 +73,11 @@ public slots:
     void execConnLan(QString connName);
     void execConnWifi(QString connName);
     void execConnWifiPWD(QString connName, QString password);
+    void redundantNetDeleted();
+    void lanDelete();
+    void wifiDelete();
+    void on_readoutput();
+    void on_readerror();
 };
 
 #endif // BACKTHREAD_H

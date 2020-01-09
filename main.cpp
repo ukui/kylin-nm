@@ -17,26 +17,35 @@
  */
 
 #include "mainwindow.h"
-#include "dlgconnhidwifi.h"
+#include "ksimplenm.h"
+#include "kylin-network-interface.h"
+#include "wireless-security/dlgconnhidwifi.h"
+
 #include <QTranslator>
 #include <QLocale>
 #include <QApplication>
 #include <QDebug>
 
-#include "ksimplenm.h"
-#include "kylin-network-interface.h"
+#define LOG_IDENT "ukui_kylin_nm"
+
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    openlog(LOG_IDENT, LOG_NDELAY | LOG_NOWAIT | LOG_PID, LOG_USER);
+
+    syslog(LOG_DEBUG, "Kylin Network Manager Is Already Launched");
+
+    syslog(LOG_DEBUG, "Using the icon theme named 'ukui-icon-theme-default'");
     QIcon::setThemeName("ukui-icon-theme-default");
 
     // 国际化
     QString locale = QLocale::system().name();
     QTranslator trans_global;
     if(locale == "zh_CN"){
-        trans_global.load(":/res/kylin-nm_zh_CN.qm");
+        trans_global.load(":/translations/kylin-nm_zh_CN.qm");
+        //trans_global.load(":/translations/kylin-nm_bo.qm");
         a.installTranslator(&trans_global);
     }
 

@@ -61,13 +61,13 @@
         <file>res/s/rescan/10.png</file>
         <file>res/s/rescan/11.png</file>
         <file>res/s/rescan/12.png</file>
-        <file>res/kylin-nm_zh_CN.qm</file>
-        <file>res/wifi.png</file>
         <file>res/h/add-hide-wifi.png</file>
         <file>res/h/add-hide-wifi.svg</file>
         <file>res/h/hide-pwd.png</file>
         <file>res/h/right-pwd.png</file>
         <file>res/h/show-pwd.png</file>
         <file>res/h/no-pwd-wifi.png</file>
+        <file>translations/kylin-nm_bo.qm</file>
+        <file>translations/kylin-nm_zh_CN.qm</file>
     </qresource>
 </RCC>

@@ -19,6 +19,7 @@
 #ifndef KSIMPLENM_H
 #define KSIMPLENM_H
 
+#include <sys/syslog.h>
 #include <QObject>
 #include <QProcess>
 #include <QDebug>
@@ -32,6 +33,9 @@ public:
     QProcess *runShellProcess;
     QString shellOutput;
     int type;
+    bool isExecutingGetLanList = false;
+    bool isExecutingGetWifiList = false;
+    bool isUseOldLanSlist = false;
 
     void execGetLanList();
     void execGetWifiList();

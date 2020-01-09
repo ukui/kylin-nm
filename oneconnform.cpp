@@ -19,7 +19,7 @@
 #include "oneconnform.h"
 #include "ui_oneconnform.h"
 #include "mainwindow.h"
-#include "dlgconnhidwifi.h"
+#include "wireless-security/dlgconnhidwifi.h"
 
 extern int currentActWifiSignalLv;
 
@@ -90,7 +90,7 @@ OneConnForm::~OneConnForm()
     delete ui;
 }
 
-void OneConnForm::mouseReleaseEvent(QMouseEvent *){
+void OneConnForm::mousePressEvent(QMouseEvent *){
     emit selectedOneWifiForm(wifiName);
 }
 
@@ -128,6 +128,8 @@ void OneConnForm::setSelected(bool isSelected){
 
     }else{
         resize(314, 60);
+        ui->lePassword->setText("");
+
         ui->wbg->hide();
 
         if(isActive){
@@ -357,24 +359,24 @@ void OneConnForm::on_btnConf_clicked()
 //点击后断开wifi网络
 void OneConnForm::on_btnDisConn_clicked()
 {
+    mw->is_stop_check_net_state = 1;
     kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
-
     disconnect(this, SIGNAL(selectedOneWifiForm(QString)), mw, SLOT(oneWifiFormSelected(QString)));
-
     emit disconnActiveWifi();
 }
 
 //无需密码的wifi连接
 void OneConnForm::on_btnConn_clicked()
 {
+    mw->is_stop_check_net_state = 1;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);
     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
     connect(t, SIGNAL(started()), this, SLOT(slotConnWifi()));
     connect(this, SIGNAL(sigConnWifi(QString)), bt, SLOT(execConnWifi(QString)));
-    connect(bt, SIGNAL(connDone(int)), mw, SLOT(connDone(int)));
-    connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnDone(int)));
+    connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
+    connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     t->start();
 }
@@ -382,14 +384,15 @@ void OneConnForm::on_btnConn_clicked()
 //需要密码的wifi连接
 void OneConnForm::on_btnConnPWD_clicked()
 {
+    mw->is_stop_check_net_state = 1;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);
     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
     connect(t, SIGNAL(started()), this, SLOT(slotConnWifiPWD()));
     connect(this, SIGNAL(sigConnWifiPWD(QString, QString)), bt, SLOT(execConnWifiPWD(QString, QString)));
-    connect(bt, SIGNAL(connDone(int)), mw, SLOT(connDone(int)));
-    connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnDone(int)));
+    connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
+    connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     t->start();
 }
@@ -404,10 +407,11 @@ void OneConnForm::on_btnHideConn_clicked()
 }
 
 // Wifi连接结果，0成功 1失败 2没有配置文件
-void OneConnForm::slotConnDone(int connFlag){
-    qDebug()<<"slot conn done: "<<connFlag;
-    // 无此wifi配置，需要输入密码创建配置文件尝试连接
+void OneConnForm::slotConnWifiResult(int connFlag){
+    qDebug()<<"Function slotConnWifiResult receives a number: "<<connFlag;
+
     if(connFlag == 2){
+        // 无此wifi配置，需要输入密码创建配置文件尝试连接
         ui->lbPassword->show();
         ui->lePassword->show();
         ui->checkBoxPwd->show();
@@ -421,9 +425,11 @@ void OneConnForm::slotConnDone(int connFlag){
         ui->btnConn->hide();
         ui->btnDisConn->hide();
     }
-    // 使用配置文件连接失败，需要删除该配置文件
-    QString txt(tr("Conn Wifi Failed"));//"连接 Wifi 失败"
+
     if(connFlag == 1){
+        // 使用配置文件连接失败，需要删除该配置文件
+        QString txt(tr("Conn Wifi Failed"));//"连接 Wifi 失败"
+        syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", ui->lbName->text().toUtf8().data());
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
         system(cmd.toUtf8().data());
     }
@@ -434,6 +440,7 @@ void OneConnForm::slotConnDone(int connFlag){
     mw->stopLoading();
 }
 
+//设置密码隐藏或可见
 void OneConnForm::on_checkBoxPwd_stateChanged(int arg1)
 {
     if (arg1 == 0) {

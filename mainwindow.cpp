@@ -1071,11 +1071,19 @@ void MainWindow::on_btnNetList_clicked(int flag)
         this->startLoading();
         this->ksnm->execGetLanList();
     } else {
-        syslog(LOG_DEBUG, "btnNetList is clicked, but the return value of checkLanOn() is false");
-        qDebug()<<"debug: btnNetList is clicked, but the return value of checkLanOn() is false";
+        QString strSlist;
+        system("nmcli connection show -active>/tmp/kylin-nm-connshow");
+        QFile file("/tmp/kylin-nm-connshow");
+        if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+            syslog(LOG_DEBUG, "Can't open the file /tmp/kylin-nm-connshow!");
+            qDebug()<<"Can't open the file /tmp/kylin-nm-connshow!";
+        }
+        QString txt = file.readAll();
+        if (txt.indexOf("ethernet") != -1){
+            QString txt(tr("Abnormal connection exist, program will delete it"));//仍然有连接异常的有线网络，断开异常连接的网络
+            QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+            system(cmd.toUtf8().data());
 
-        //if (objKyDBus->getLanConnState() == 0){
-        if (true){
             BackThread *btn_bt = new BackThread();
             btn_bt->lanDelete();
             sleep(1);
@@ -1083,6 +1091,9 @@ void MainWindow::on_btnNetList_clicked(int flag)
             sleep(1);
             btn_bt->lanDelete();
             btn_bt->deleteLater();
+
+            on_btnNetList_clicked(0);
+            return;
         }
 
         // 清空lan列表

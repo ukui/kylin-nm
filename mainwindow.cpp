@@ -372,7 +372,7 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
     this->startLoading();
     if (flag){
         syslog(LOG_DEBUG,"wired physical cable is already plug in");
-        wiredCableUpTimer->start(4000);
+        wiredCableUpTimer->start(2000);
     } else{
         syslog(LOG_DEBUG,"wired physical cable is already plug out");
         wiredCableDownTimer->start(6000);
@@ -396,6 +396,21 @@ void MainWindow::onCarrierUpHandle()
 void MainWindow::onCarrierDownHandle()
 {
     wiredCableDownTimer->stop();
+    this->stopLoading();
+    on_btnNetList_clicked(0);
+    is_stop_check_net_state = 0;
+}
+void MainWindow::onDeleteLan()
+{
+    deleteLanTimer->stop();
+    BackThread *btn_bt = new BackThread();
+    btn_bt->lanDelete();
+    sleep(1);
+    btn_bt->lanDelete();
+    sleep(1);
+    btn_bt->lanDelete();
+    btn_bt->deleteLater();
+
     this->stopLoading();
     on_btnNetList_clicked(0);
     is_stop_check_net_state = 0;
@@ -551,6 +566,10 @@ void MainWindow::initNetwork()
     wiredCableDownTimer = new QTimer(this);
     wiredCableDownTimer->setTimerType(Qt::PreciseTimer);
     QObject::connect(wiredCableDownTimer, SIGNAL(timeout()), this, SLOT(onCarrierDownHandle()));
+    //定时处理异常网络
+    deleteLanTimer = new QTimer(this);
+    deleteLanTimer->setTimerType(Qt::PreciseTimer);
+    QObject::connect(deleteLanTimer, SIGNAL(timeout()), this, SLOT(onDeleteLan()));
 }
 
 void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -1084,15 +1103,9 @@ void MainWindow::on_btnNetList_clicked(int flag)
             QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
             system(cmd.toUtf8().data());
 
-            BackThread *btn_bt = new BackThread();
-            btn_bt->lanDelete();
-            sleep(1);
-            btn_bt->lanDelete();
-            sleep(1);
-            btn_bt->lanDelete();
-            btn_bt->deleteLater();
-
-            on_btnNetList_clicked(0);
+            is_stop_check_net_state = 1;
+            this->startLoading();
+            deleteLanTimer->start(1000);
             return;
         }
 

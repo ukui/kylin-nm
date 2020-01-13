@@ -98,6 +98,7 @@ public slots:
     void onPhysicalCarrierChanged(bool flag);
     void onCarrierUpHandle();
     void onCarrierDownHandle();
+    void onDeleteLan();
     void onWirelessDeviceAdded(QDBusObjectPath objPath);
     void onWirelessDeviceRemoved(QDBusObjectPath objPath);
     void getLanBandWidth();
@@ -152,6 +153,7 @@ private:
     QTimer *iconTimer;
     QTimer *wiredCableUpTimer;
     QTimer *wiredCableDownTimer;
+    QTimer *deleteLanTimer;
     QTimer *checkWifiListChanged;
     QTimer *checkIfLanConnect;
     QTimer *checkIfWifiConnect;

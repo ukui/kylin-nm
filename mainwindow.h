@@ -30,6 +30,9 @@
 #include <QScreen>
 #include <QMenu>
 #include <QAction>
+#include <QWidgetAction>
+#include <QHBoxLayout>
+#include <QPainter>
 #include <QDebug>
 #include <QString>
 #include <QTimer>
@@ -49,6 +52,7 @@
 
 #include "ksimplenm.h"
 #include "loadingdiv.h"
+#include "networkspeed.h"
 #include "kylin-dbus-interface.h"
 #include "kylin-network-interface.h"
 
@@ -77,12 +81,15 @@ public:
     void changeTimerState();
     void checkIsWirelessDeviceOn();
 
+    void init_widget_action(QWidget *wid, QString iconstr, QString textstr);
+
     QIcon iconLanOnline, iconLanOffline;
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
     QIcon iconConnecting;
     QList<QIcon> loadIcons;
     QString mwBandWidth;
     KylinDBus *objKyDBus;
+    NetworkSpeed *objNetSpeed;
 
     //状态设置,0为假，1为真
     int is_update_wifi_list = 0; //是否是update wifi列表，而不是load wifi列表
@@ -93,6 +100,10 @@ public:
     int is_wireless_adapter_ready = 1; //主机是否插入无线网卡
     int is_keep_wifi_turn_on_state = 1; //是否要执行wifi开关变为打开样式
     int is_stop_check_net_state = 0; //是否要在进行其他操作时停止检查网络状态
+    int is_fly_mode_on = 0; //是否打开飞行模式
+    int is_hot_sopt_on = 0; //是否已经打开热点
+
+    QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
 
 public slots:
     void onPhysicalCarrierChanged(bool flag);
@@ -103,12 +114,20 @@ public slots:
     void onWirelessDeviceRemoved(QDBusObjectPath objPath);
     void getLanBandWidth();
 
+    void oneLanFormSelected(QString lanName);
+    void oneTopLanFormSelected(QString lanName);
+    void oneWifiFormSelected(QString wifiName);
+    void oneTopWifiFormSelected(QString wifiName);
+
+    void on_btnHotspot_clicked();
+    void on_btnHotspotState();
+
 private:
     void checkSingle();
     void getActiveInfo();
     void initNetwork();
     void createTrayIcon();
-    void moveBottomRight();
+    void handleIconClicked();
     bool checkLanOn();
     bool checkWlOn();
     void getLanList();
@@ -122,32 +141,32 @@ private:
     QDesktopWidget desktop;
     KSimpleNM *ksnm;
     ConfForm *confForm;
+    QWidget *topLanListWidget;
+    QWidget *topWifiListWidget;
     QWidget *lanListWidget;
     QWidget *wifiListWidget;
     QWidget *optWifiWidget;
 
+    QLabel *lbLoadDown;
+    QLabel *lbLoadUp;
+
     QScrollArea *scrollAreal, *scrollAreaw;
-    QLabel *lbLanList, *lbWifiList;
+    QLabel *lbTopLanList, *lbTopWifiList, *lbLanList, *lbWifiList;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
+    QWidgetAction *mShowWindow;
+    QWidgetAction *mAdvConf;
+    QWidget *wid;
+    QWidget *wid_new;
 
-    QAction *m_miniSizeAction;
-    QAction *m_quitAction;
+    QString lname, wname; // 以太网卡和无线网卡名称
 
-    // 以太网卡和无线网卡名称
-    QString lname, wname;
+    QString btnOffQss, btnOnQss, btnBgOffQss, btnBgOnQss; // 主界面按钮底色
 
-    //当前ScrollArea中选中的网络名称
-    QString currSelNetName = "";
+    QStringList oldLanSlist; //上一次获取Lan列表
 
-    // 主界面按钮底色
-    QString btnOffQss, btnOnQss;
-
-    //上一次获取Lan列表
-    QStringList oldLanSlist;
-    //上一次获取wifi列表
-    QStringList oldWifiSlist;
+    QStringList oldWifiSlist; //上一次获取wifi列表
 
     //循环检测网络连接状态
     QTimer *iconTimer;
@@ -158,11 +177,19 @@ private:
     QTimer *checkIfLanConnect;
     QTimer *checkIfWifiConnect;
     QTimer *checkIfNetworkOn;
+    QTimer *setNetSpeed;
 
     int currentIconIndex;
+    int activeWifiSignalLv;
+
+    long int start_rcv_rates = 0;	//保存开始时的流量计数
+    long int end_rcv_rates = 0;	//保存结束时的流量计数
+    long int start_tx_rates = 0;   //保存开始时的流量计数
+    long int end_tx_rates = 0; //保存结束时的流量计数
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
+
     bool nativeEvent(const QByteArray &eventType, void *message, long *result);
 
     void on_btnNet_clicked();
@@ -175,12 +202,11 @@ private slots:
     void loadWifiListDone(QStringList slist);
     void updateWifiListDone(QStringList slist);
 
+    void on_showWindowAction();
     void on_btnAdvConf_clicked();
     void on_btnNetList_pressed();
     void on_btnWifiList_pressed();
 
-    void oneLanFormSelected(QString lanName);
-    void oneWifiFormSelected(QString wifiName);
     void activeLanDisconn();
     void activeWifiDisconn();
     void activeStartLoading();
@@ -188,6 +214,7 @@ private slots:
     void on_btnAdvConf_pressed();
     void on_btnAdvConf_released();
     void on_checkWifiListChanged();
+    void on_setNetSpeed();
     void on_isLanConnect();
     void on_isWifiConnect();
     void on_isNetOn();
@@ -203,6 +230,8 @@ private slots:
     void connWifiDone(int connFlag);
 
     void iconStep();
+    void on_btnFlyMode_clicked();
+
 signals:
     void deleteRedundantNet();
 };

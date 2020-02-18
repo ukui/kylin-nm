@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <QScreen>
 #include <QThread>
+#include <QEvent>
 
 #include "confform.h"
 #include "kylin-network-interface.h"
@@ -44,16 +45,17 @@ public:
 
     void setName(QString name);
     void setIcon(bool isOn);
-    void setBandWidth(QString bandWidth);
+    void setLanInfo(QString str1, QString str2, QString str3, QString str4);
 
     void setSelected(bool isSelected);
+    void setTopItem(bool isSelected);
     void setAct(bool isAct);
 
-    void setConnedString(QString str);
-    void setShowPoint(bool flag);
+    void setConnedString(bool showLable, QString str);
 
     bool isSelected;
     bool isActive;
+    bool isConnected;
     QString lanName;
 
 signals:
@@ -65,11 +67,11 @@ signals:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);
 
 private slots:
-    void on_btnConf_clicked();
     void on_btnConn_clicked();
-
+    void on_btnConnSub_clicked();
     void on_btnDisConn_clicked();
 
     void slotConnLan();

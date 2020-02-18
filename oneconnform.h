@@ -46,24 +46,24 @@ public:
     explicit OneConnForm(QWidget *parent = 0, MainWindow *mw = 0, ConfForm *confForm = 0, KSimpleNM *ksnm = 0);
     ~OneConnForm();
 
-    void setSignal(QString lv);
+    void setSignal(QString lv, QString secu);
     void setName(QString name);
     void setSpecialName(QString name);
     QString getName();
-    void setSafe(QString safe);
     void setRate(QString rate);
+    void setWifiInfo(QString str1, QString str2, QString str3);
 
     void setSelected(bool isSelected);
-    void setHideSelected(bool isSelected);
+    void setHideItem(bool isHideItem, bool isShowHideBtn);
+    void setTopItem(bool isSelected);
     void setAct(bool isAct);
 
-    void setSafeString(QString str);
-    void setConnedString(QString str);
-    void setShowPoint(bool flag);
+    void setConnedString(bool showLable, QString str, QString str1);
 
     QString wifiName;
     bool isSelected;
     bool isActive;
+    bool isConnected;
     int signalLv;
 
 signals:
@@ -76,10 +76,9 @@ signals:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);
 
 private slots:
-    void on_btnConf_clicked();
-
     void on_btnConn_clicked();
     void on_btnDisConn_clicked();
 
@@ -93,12 +92,16 @@ private slots:
 
     void on_checkBoxPwd_stateChanged(int arg1);
 
+    void on_lePassword_textEdited(const QString &arg1);
+
+    void on_btnConnSub_clicked();
+
 private:
     Ui::OneConnForm *ui;
     MainWindow *mw;
     ConfForm *cf;
     KSimpleNM *ks;
-    bool isSafe;
+    bool hasPwd;
 };
 
 #endif // ONECONNFORM_H

@@ -195,8 +195,7 @@ void BackThread::execConnWifiPWD(QString connName, QString password){
     system(cmd.toUtf8().data());
 
     QFile file("/tmp/kylin-nm-btoutput");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         syslog(LOG_DEBUG, "Can't open the file /tmp/kylin-nm-btoutput !");
         qDebug()<<"Can't open the file /tmp/kylin-nm-btoutput !"<<endl;
     }

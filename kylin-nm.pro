@@ -12,6 +12,7 @@ TARGET = kylin-nm
 
 #CONFIG += link_pkgconfig
 #PKGCONFIG += libnm glib-2.0 gio-2.0 dbus-glib-1
+#PKGCONFIG += Qt5Svg
 
 
 target.path = /usr/bin
@@ -56,7 +57,9 @@ SOURCES += \
     wireless-security/dlgconnhidwifiwep.cpp \
     wireless-security/dlgconnhidwifileap.cpp \
     wireless-security/dlgconnhidwifiwpa.cpp \
-    kylin-dbus-interface.cpp
+    kylin-dbus-interface.cpp \
+    hot-spot/dlghotspotcreate.cpp \
+    networkspeed.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -78,7 +81,9 @@ HEADERS += \
     wireless-security/dlgconnhidwifileap.h \
     wireless-security/dlgconnhidwifiwpa.h \
     wireless-security/kylinheadfile.h \
-    kylin-dbus-interface.h
+    kylin-dbus-interface.h \
+    hot-spot/dlghotspotcreate.h \
+    networkspeed.h
 
 FORMS += \
         mainwindow.ui \
@@ -94,7 +99,8 @@ FORMS += \
     wireless-security/dlgconnhidwifisecpwd.ui \
     wireless-security/dlgconnhidwifiwep.ui \
     wireless-security/dlgconnhidwifileap.ui \
-    wireless-security/dlgconnhidwifiwpa.ui
+    wireless-security/dlgconnhidwifiwpa.ui \
+    hot-spot/dlghotspotcreate.ui
 
 RESOURCES += \
     nmqrc.qrc

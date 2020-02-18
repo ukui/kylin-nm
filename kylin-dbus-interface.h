@@ -32,12 +32,24 @@ public:
     bool isWiredCableOn = false;
     bool isWirelessCardOn = false;
 
+    QString dbusLanCardName;
+    QString dbusLanIpv4 = "";
+    QString dbusLanIpv6 = "";
+    QString dbusLanMac = "";
+    QString dbusWiFiCardName;
+    QString dbusWifiMac = "";
 
 public slots:
     void onLanPropertyChanged(QVariantMap qvm);
     void onWifiPropertyChanged(QVariantMap qvm);
     void onAccessPointAdded(QDBusObjectPath objPath);
     void getPhysicalCarrierState(int n);
+    void getLanHwAddressState();
+    void getWiredCardName();
+    void getWirelessCardName();
+    void getLanIp(QString netName);
+    void getWifiMac(QString netName, int num);
+    void getActWifiMac(QString netName);
     void slot_timeout();
 
 private:

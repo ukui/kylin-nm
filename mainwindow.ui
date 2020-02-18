@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>316</width>
-    <height>467</height>
+    <width>480</width>
+    <height>515</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,83 +19,18 @@
      <rect>
       <x>1</x>
       <y>1</y>
-      <width>314</width>
-      <height>38</height>
+      <width>41</width>
+      <height>513</height>
      </rect>
     </property>
-    <widget class="QPushButton" name="btnWifiList">
-     <property name="geometry">
-      <rect>
-       <x>158</x>
-       <y>8</y>
-       <width>90</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btnNetList">
-     <property name="geometry">
-      <rect>
-       <x>67</x>
-       <y>8</y>
-       <width>90</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
    </widget>
    <widget class="QLabel" name="lbBtnNetBG">
     <property name="geometry">
      <rect>
-      <x>4</x>
-      <y>403</y>
-      <width>90</width>
-      <height>60</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbLanImg">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>410</y>
-      <width>22</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbBtnNetT1">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>412</y>
-      <width>55</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbBtnNetT2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>440</y>
-      <width>55</width>
-      <height>18</height>
+      <x>1</x>
+      <y>200</y>
+      <width>37</width>
+      <height>37</height>
      </rect>
     </property>
     <property name="text">
@@ -105,10 +40,10 @@
    <widget class="QPushButton" name="btnNet">
     <property name="geometry">
      <rect>
-      <x>4</x>
-      <y>403</y>
-      <width>90</width>
-      <height>60</height>
+      <x>2</x>
+      <y>200</y>
+      <width>37</width>
+      <height>37</height>
      </rect>
     </property>
     <property name="text">
@@ -118,49 +53,10 @@
    <widget class="QLabel" name="lbBtnWifiBG">
     <property name="geometry">
      <rect>
-      <x>98</x>
-      <y>403</y>
-      <width>90</width>
-      <height>60</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbWifiImg">
-    <property name="geometry">
-     <rect>
-      <x>103</x>
-      <y>410</y>
-      <width>22</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbBtnWifiT1">
-    <property name="geometry">
-     <rect>
-      <x>132</x>
-      <y>412</y>
-      <width>55</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbBtnWifiT2">
-    <property name="geometry">
-     <rect>
-      <x>103</x>
-      <y>440</y>
-      <width>55</width>
-      <height>18</height>
+      <x>410</x>
+      <y>20</y>
+      <width>50</width>
+      <height>24</height>
      </rect>
     </property>
     <property name="text">
@@ -170,10 +66,10 @@
    <widget class="QPushButton" name="btnWifi">
     <property name="geometry">
      <rect>
-      <x>98</x>
-      <y>403</y>
-      <width>90</width>
-      <height>60</height>
+      <x>410</x>
+      <y>20</y>
+      <width>50</width>
+      <height>24</height>
      </rect>
     </property>
     <property name="text">
@@ -183,36 +79,23 @@
    <widget class="QLabel" name="lbBtnConfBG">
     <property name="geometry">
      <rect>
-      <x>222</x>
-      <y>403</y>
-      <width>90</width>
-      <height>60</height>
+      <x>2</x>
+      <y>460</y>
+      <width>37</width>
+      <height>37</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="lbConfImg">
+   <widget class="QLabel" name="lbBtnConfImg">
     <property name="geometry">
      <rect>
-      <x>227</x>
-      <y>410</y>
+      <x>10</x>
+      <y>468</y>
       <width>22</width>
       <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbBtnConfT2">
-    <property name="geometry">
-     <rect>
-      <x>227</x>
-      <y>440</y>
-      <width>70</width>
-      <height>18</height>
      </rect>
     </property>
     <property name="text">
@@ -222,16 +105,254 @@
    <widget class="QPushButton" name="btnAdvConf">
     <property name="geometry">
      <rect>
-      <x>222</x>
-      <y>403</y>
-      <width>90</width>
-      <height>60</height>
+      <x>2</x>
+      <y>460</y>
+      <width>37</width>
+      <height>37</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnHotspot">
+    <property name="geometry">
+     <rect>
+      <x>2</x>
+      <y>348</y>
+      <width>37</width>
+      <height>37</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnFlyMode">
+    <property name="geometry">
+     <rect>
+      <x>2</x>
+      <y>395</y>
+      <width>37</width>
+      <height>37</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbNetwork">
+    <property name="geometry">
+     <rect>
+      <x>61</x>
+      <y>22</y>
+      <width>80</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbBtnWifiBall">
+    <property name="geometry">
+     <rect>
+      <x>438</x>
+      <y>22</y>
+      <width>20</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbHotImg">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>359</y>
+      <width>19</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbFlyImg">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>405</y>
+      <width>19</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbNetListBG">
+    <property name="geometry">
+     <rect>
+      <x>2</x>
+      <y>10</y>
+      <width>37</width>
+      <height>37</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbWifiListBG">
+    <property name="geometry">
+     <rect>
+      <x>1</x>
+      <y>57</y>
+      <width>37</width>
+      <height>37</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbNetListImg">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>19</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbWifiListImg">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>67</y>
+      <width>19</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbHotBG">
+    <property name="geometry">
+     <rect>
+      <x>2</x>
+      <y>348</y>
+      <width>37</width>
+      <height>37</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbFlyBG">
+    <property name="geometry">
+     <rect>
+      <x>2</x>
+      <y>395</y>
+      <width>37</width>
+      <height>37</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnNetList">
+    <property name="geometry">
+     <rect>
+      <x>2</x>
+      <y>10</y>
+      <width>37</width>
+      <height>37</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnWifiList">
+    <property name="geometry">
+     <rect>
+      <x>2</x>
+      <y>57</y>
+      <width>37</width>
+      <height>37</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>2</x>
+      <y>442</y>
+      <width>35</width>
+      <height>1</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255,0.06);</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>41</x>
+      <y>0</y>
+      <width>1</width>
+      <height>515</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255,0.06);</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <zorder>wdgHead</zorder>
+   <zorder>lbFlyBG</zorder>
+   <zorder>lbHotBG</zorder>
+   <zorder>lbFlyImg</zorder>
+   <zorder>lbHotImg</zorder>
+   <zorder>lbBtnNetBG</zorder>
+   <zorder>btnNet</zorder>
+   <zorder>lbBtnWifiBG</zorder>
+   <zorder>lbBtnConfBG</zorder>
+   <zorder>lbBtnConfImg</zorder>
+   <zorder>btnAdvConf</zorder>
+   <zorder>btnHotspot</zorder>
+   <zorder>btnFlyMode</zorder>
+   <zorder>lbBtnWifiBall</zorder>
+   <zorder>btnWifi</zorder>
+   <zorder>lbNetListBG</zorder>
+   <zorder>lbWifiListBG</zorder>
+   <zorder>lbWifiListImg</zorder>
+   <zorder>lbNetListImg</zorder>
+   <zorder>btnNetList</zorder>
+   <zorder>btnWifiList</zorder>
+   <zorder>lbNetwork</zorder>
+   <zorder>line</zorder>
+   <zorder>line_2</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

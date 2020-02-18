@@ -28,30 +28,47 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 {
     ui->setupUi(this);
 
-    ui->btnConf->setText(tr("Config"));//"设置"
+    ui->btnConnSub->setText(tr("Config"));//"设置"
     ui->btnConn->setText(tr("Connect"));//"连接"
     ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"
 
+    ui->lbConned->setAlignment(Qt::AlignLeft);
+    ui->lbLoadUp->setAlignment(Qt::AlignLeft);
+    ui->lbLoadDown->setAlignment(Qt::AlignLeft);
+
+    ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+    ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0);}");
+                             //"#wbg_2:Hover{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+    ui->lbName->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.91);}");
+    ui->lbConned->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    ui->lbLoadUp->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    ui->lbLoadDown->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    ui->btnConnSub->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
+                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
+    ui->btnConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
+                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
+    ui->btnDisConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
+                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
+                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
+    ui->lbLoadDownImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-down.png);}");
+    ui->lbLoadUpImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-up.png);}");
+
+    ui->btnConnSub->setFocusPolicy(Qt::NoFocus);
+    ui->btnConn->setFocusPolicy(Qt::NoFocus);
+    ui->btnDisConn->setFocusPolicy(Qt::NoFocus);
+
     ui->wbg->hide();
-    ui->btnConf->hide();
+    ui->wbg_2->show();
+    ui->lbName->show();
+    ui->btnConnSub->hide();
     ui->btnConn->hide();
     ui->btnDisConn->hide();
-
-    ui->lbConned->setAlignment(Qt::AlignRight);
-
-    ui->wbg->setStyleSheet("#wbg{background-color:#3593b5;}");
-    ui->lbName->setStyleSheet("QLabel{font-size:13px;color:#ffffff;}");
-    ui->lbBandWidth->setStyleSheet("QLabel{font-size:12px;color:#aaaaaa;}");
-    ui->lbConned->setStyleSheet("QLabel{font-size:13px;color:#ffffff;}");
-    ui->btnConf->setStyleSheet("QPushButton{border:0px;background-color:rgba(0,0,0,0.4);color:white;font-size:12px;}"
-                               "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
-                               "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
-    ui->btnConn->setStyleSheet("QPushButton{border:0px;background-color:rgba(0,0,0,0.4);color:white;font-size:12px;}"
-                               "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
-                               "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
-    ui->btnDisConn->setStyleSheet("QPushButton{border:0px;background-color:rgba(0,0,0,0.4);color:white;font-size:12px;}"
-                               "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
-                               "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
+    ui->line->show();
+    ui->lbLoadDownImg->hide();
+    ui->lbLoadUpImg->hide();
 
     this->mw = mainWindow;
     this->cf = confForm;
@@ -59,6 +76,12 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 
     this->isSelected = false;
     this->isActive = false;
+
+    ui->wbg_2->setAttribute(Qt::WA_Hover,true);//开启悬停事件
+    ui->wbg_2->installEventFilter(this);       //安装事件过滤器
+    ui->btnConn->setAttribute(Qt::WA_Hover,true);//开启悬停事件
+    ui->btnConn->installEventFilter(this);       //安装事件过滤器
+
 
     srand((unsigned)time(NULL));
 }
@@ -72,44 +95,107 @@ void OneLancForm::mousePressEvent(QMouseEvent *){
     emit selectedOneLanForm(lanName);
 }
 
+//事件过滤器
+bool OneLancForm::eventFilter(QObject *obj, QEvent *event)
+{
+    if(obj == ui->wbg_2) {
+        if(event->type() == QEvent::HoverEnter) {
+            ui->btnConn->show();
+            ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+            return true;
+        } else if(event->type() == QEvent::HoverLeave){
+            ui->btnConn->hide();
+            ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0);}");
+            return true;
+        }
+    }
+
+    if(obj == ui->btnConn) {
+        if(event->type() == QEvent::HoverEnter) {
+            ui->wbg_2->hide();
+            ui->btnConn->show();
+            return true;
+        } else if(event->type() == QEvent::HoverLeave){
+            ui->wbg_2->show();
+            return true;
+        }
+    }
+
+    return QWidget::eventFilter(obj,event);
+}
+
 // 是否当前连接的网络，字体设置不同
 void OneLancForm::setAct(bool isAct){
     if(isAct){
         ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->show();
-        ui->btnConf->show();
+        ui->btnConnSub->hide();
     }else{
-        ui->lbName->setStyleSheet("QLabel{font-size:12px;color:#ffffff;}");
+        ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->hide();
-        ui->btnConf->hide();
+        ui->btnConnSub->hide();
     }
     isActive = isAct;
 }
 
 // 是否选中
-void OneLancForm::setSelected(bool isSelected){
+void OneLancForm::setSelected(bool isSelected)
+{
     if(isSelected){
-        resize(314, 111);
+        resize(422, 168);
         ui->wbg->show();
-        ui->btnConf->show();
-        if(isActive){
-            ui->btnDisConn->show();
-        }else{
-            ui->btnConn->show();
-        }
+        ui->wbg_2->hide();
+        ui->line->hide();
+        ui->btnConn->show();
+        ui->btnConnSub->show();
 
         this->isSelected = true;
-
     }else{
-        resize(314, 60);
+        resize(422, 60);
         ui->wbg->hide();
-        ui->btnConf->hide();
+        ui->wbg_2->show();
+        ui->line->show();
         ui->btnConn->hide();
-        ui->btnDisConn->hide();
-        ui->lbName->show();
+        ui->btnConnSub->hide();
 
         this->isSelected = false;
     }
+
+    ui->btnDisConn->hide();
+}
+
+void OneLancForm::setTopItem(bool isSelected)
+{
+    if(isSelected){
+        resize(422, 168);
+        ui->wbg->show();
+        ui->btnConnSub->hide();
+        this->isSelected = true;
+    }else{
+        resize(422, 60);
+        ui->wbg->hide();
+        ui->btnConnSub->hide();
+        this->isSelected = false;
+    }
+    if (isConnected){
+//        ui->lbLoadUp->setText("0Kb/s");
+//        ui->lbLoadDown->setText("0Kb/s");
+        ui->lbLoadUp->hide();
+        ui->lbLoadDown->hide();
+        ui->btnDisConn->show();
+    } else {
+//        ui->lbLoadUp->setText("0Kb/s");
+//        ui->lbLoadDown->setText("0Kb/s");
+        ui->lbLoadUp->hide();
+        ui->lbLoadDown->hide();
+        ui->btnDisConn->hide();
+    }
+
+    ui->btnConn->hide();
+    ui->wbg_2->hide();
+    ui->line->hide();
+    ui->lbLoadUpImg->show();
+    ui->lbLoadDownImg->show();
 }
 
 void OneLancForm::setName(QString name){
@@ -117,91 +203,40 @@ void OneLancForm::setName(QString name){
     lanName = name;
 }
 
-void OneLancForm::setConnedString(QString str){
-    ui->lbConned->setText(str);
+void OneLancForm::setConnedString(bool showLable, QString str){
+    if (!showLable){
+        ui->lbConned->hide();
+        ui->lbName->move(63, 18);
+    }else{
+        ui->lbConned->setText(str);
+    }
+}
+
+void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString str4)
+{
+    QString str = "IPv4地址：" + str1 + "\nIPv6地址：" + str2 + "\n带宽：" + str3 + " \n物理地址(MAC)：" + str4;
+    ui->lbInfo->setText(str);
 }
 
 void OneLancForm::setIcon(bool isOn){
     if(isOn){
-        ui->lbIcon->setStyleSheet("QLabel{background:url(:/res/s/network-line.png);}");
+        ui->lbIcon->setStyleSheet("QLabel{background:url(:/res/l/network-online.png);}");
     }else{
-        ui->lbIcon->setStyleSheet("QLabel{background:url(:/res/s/network-offline.png);}");
+        ui->lbIcon->setStyleSheet("QLabel{background:url(:/res/l/network-offline.png);}");
     }
 }
 
-void OneLancForm::setBandWidth(QString bandWidth){
-    ui->lbBandWidth->setText(bandWidth);
-
-    if(bandWidth == "--"){
-        ui->lbPoint->setStyleSheet("QLabel{background:url(:/res/s/pbad.png);}");
-    }else{
-        if(bandWidth != ""){
-            QString rateStr = bandWidth.mid(0, bandWidth.indexOf("Mb"));
-            int rateNum = rateStr.toInt();
-
-            if(rateNum >= 1000){
-                ui->lbPoint->setStyleSheet("QLabel{background:url(:/res/s/pgood.png);}");
-            }
-            if(rateNum >= 100 && rateNum < 1000){
-                ui->lbPoint->setStyleSheet("QLabel{background:url(:/res/s/pnormal.png);}");
-            }
-            if(rateNum < 100){
-                ui->lbPoint->setStyleSheet("QLabel{background:url(:/res/s/pbad.png);}");
-            }
-        }
-    }
-}
-
-void OneLancForm::setShowPoint(bool flag){
-    if(flag){
-        ui->lbPoint->show();
-    }else{
-        ui->lbPoint->hide();
-    }
-}
-
-void OneLancForm::on_btnConf_clicked()
+void OneLancForm::on_btnConnSub_clicked()
 {
-    QPoint pos = QCursor::pos();
-    QRect primaryGeometry;
-    for (QScreen *screen : qApp->screens()) {
-        if (screen->geometry().contains(pos)) {
-            primaryGeometry = screen->geometry();
-        }
-    }
-
-    if (primaryGeometry.isEmpty()) {
-        primaryGeometry = qApp->primaryScreen()->geometry();
-    }
-
+    QThread *t = new QThread();
     BackThread *bt = new BackThread();
-    QString connProp = bt->getConnProp(ui->lbName->text());
-    QStringList propList = connProp.split("|");
-    QString v4method, addr, mask, gateway, dns;
-    foreach (QString line, propList) {
-        if(line.startsWith("method:")){
-            v4method = line.split(":").at(1);
-        }
-        if(line.startsWith("addr:")){
-            addr = line.split(":").at(1);
-        }
-        if(line.startsWith("mask:")){
-            mask = line.split(":").at(1);
-        }
-        if(line.startsWith("gateway:")){
-            gateway= line.split(":").at(1);
-        }
-        if(line.startsWith("dns:")){
-            dns = line.split(":").at(1);
-        }
-    }
-//    qDebug()<<v4method<<addr<<mask<<gateway<<dns;
-
-    cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive);
-
-    cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
-    cf->show();
-    cf->raise();
+    bt->moveToThread(t);
+    connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+    connect(t, SIGNAL(started()), this, SLOT(slotConnLan()));
+    connect(this, SIGNAL(sigConnLan(QString)), bt, SLOT(execConnLan(QString)));
+    connect(bt, SIGNAL(connDone(int)), mw, SLOT(connLanDone(int)));
+    connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
+    t->start();
 }
 
 void OneLancForm::slotConnLan(){

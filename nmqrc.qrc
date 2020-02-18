@@ -69,5 +69,27 @@
         <file>res/h/no-pwd-wifi.png</file>
         <file>translations/kylin-nm_bo.qm</file>
         <file>translations/kylin-nm_zh_CN.qm</file>
+        <file>res/x/fly-mode-off.svg</file>
+        <file>res/x/fly-mode-on.svg</file>
+        <file>res/x/hot-spot-off.svg</file>
+        <file>res/x/hot-spot-on.svg</file>
+        <file>res/x/net-list-bg.svg</file>
+        <file>res/x/wifi-list-bg.svg</file>
+        <file>res/x/load-down.png</file>
+        <file>res/x/load-up.png</file>
+        <file>res/l/network-offline.png</file>
+        <file>res/l/network-offline.svg</file>
+        <file>res/l/network-online.png</file>
+        <file>res/l/network-online.svg</file>
+        <file>res/w/wifi-full.png</file>
+        <file>res/w/wifi-full-pwd.png</file>
+        <file>res/w/wifi-high.png</file>
+        <file>res/w/wifi-high-pwd.png</file>
+        <file>res/w/wifi-low.png</file>
+        <file>res/w/wifi-low-pwd.png</file>
+        <file>res/w/wifi-medium.png</file>
+        <file>res/w/wifi-medium-pwd.png</file>
+        <file>res/w/wifi-none.png</file>
+        <file>res/w/wifi-none-pwd.png</file>
     </qresource>
 </RCC>

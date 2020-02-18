@@ -29,49 +29,72 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 {
     ui->setupUi(this);
 
-    ui->lbPassword->setText(tr("Input password"));//"输入密码:"
-    ui->btnConf->setText(tr("Config"));//"设置"
+    ui->btnConnSub->setText(tr("Config"));//"设置"
     ui->btnConn->setText(tr("Connect"));//"连接"
     ui->btnConnPWD->setText(tr("Connect"));//"连接"
     ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"
     ui->btnHideConn->setText(tr("Connect"));//"连接"
+
+    ui->lbConned->setAlignment(Qt::AlignLeft);
+    ui->lbLoadUp->setAlignment(Qt::AlignLeft);
+    ui->lbLoadDown->setAlignment(Qt::AlignLeft);
     ui->lePassword->setEchoMode(QLineEdit::Password);
-    ui->wbg->hide();
-    ui->lbPassword->hide();
+    ui->btnConnPWD->setEnabled(false);
+
+    ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0);}");
+                             // "#wbg:Hover{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+    ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+    ui->wbg_3->setStyleSheet("#wbg_3{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+    ui->lbName->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.91);}");
+    ui->lbConned->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    ui->lbLoadUp->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    ui->lbLoadDown->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    ui->lePassword->setStyleSheet("QLineEdit{border:2px solid rgba(28, 47, 146, 1);border-radius:4px;"
+                                  "background:rgba(0,0,0,0.2);color:rgba(255,255,255,0.35);font-size:14px;}");
+    ui->checkBoxPwd->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
+                                   "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
+                                   "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
+    ui->btnConnSub->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
+                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
+    ui->btnConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
+                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
+    ui->btnConnPWD->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
+                                  "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                                  "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
+    ui->btnDisConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
+                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
+                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
+    ui->btnHideConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
+                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
+    ui->lbLoadDownImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-down.png);}");
+    ui->lbLoadUpImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-up.png);}");
+
+    ui->checkBoxPwd->setFocusPolicy(Qt::NoFocus);
+    ui->btnConnSub->setFocusPolicy(Qt::NoFocus);
+    ui->btnConn->setFocusPolicy(Qt::NoFocus);
+    ui->btnConnPWD->setFocusPolicy(Qt::NoFocus);
+    ui->btnDisConn->setFocusPolicy(Qt::NoFocus);
+    ui->btnHideConn->setFocusPolicy(Qt::NoFocus);
+
+    ui->wbg->show();
+    ui->wbg_2->hide();
+    ui->wbg_3->hide();
+    ui->lbName->show();
+    ui->lbInfo->hide();
     ui->lePassword->hide();
     ui->checkBoxPwd->hide();
-    ui->btnConf->hide();
+    ui->btnConnSub->hide();
     ui->btnConn->hide();
     ui->btnDisConn->hide();
     ui->btnConnPWD->hide();
     ui->btnHideConn->hide();
-
-    ui->lbConned->setAlignment(Qt::AlignRight);
-
-    ui->wbg->setStyleSheet("#wbg{background-color:#3593b5;}");
-    ui->lbName->setStyleSheet("QLabel{font-size:13px;color:#ffffff;}");
-    ui->lbPassword->setStyleSheet("QLabel{font-size:13px;color:#ffffff;}");
-    ui->lbSafe->setStyleSheet("QLabel{font-size:13px;color:#aaaaaa;}");
-    ui->lbConned->setStyleSheet("QLabel{font-size:13px;color:#ffffff;}");
-    ui->lePassword->setStyleSheet("QLineEdit{border: 1px solid #cccccc;background-color:#ffffff;}");
-    ui->checkBoxPwd->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
-                                   "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
-                                   "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
-    ui->btnConf->setStyleSheet("QPushButton{border:0px;background-color:rgba(0,0,0,0.4);color:white;font-size:12px;}"
-                               "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
-                               "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
-    ui->btnConn->setStyleSheet("QPushButton{border:0px;background-color:rgba(0,0,0,0.4);color:white;font-size:12px;}"
-                               "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
-                               "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
-    ui->btnConnPWD->setStyleSheet("QPushButton{border:0px;background-color:rgba(0,0,0,0.4);color:white;font-size:12px;}"
-                               "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
-                               "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
-    ui->btnDisConn->setStyleSheet("QPushButton{border:0px;background-color:rgba(0,0,0,0.4);color:white;font-size:12px;}"
-                               "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
-                               "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
-    ui->btnHideConn->setStyleSheet("QPushButton{border:0px;background-color:rgba(0,0,0,0.4);color:white;font-size:12px;}"
-                               "QPushButton:Hover{border:1px solid rgba(255,255,255,0.2);background-color:rgba(0,0,0,0.2);}"
-                               "QPushButton:Pressed{background-color:rgba(0,0,0,0.6);}");
+    ui->line->show();
+    ui->lbLoadDownImg->hide();
+    ui->lbLoadUpImg->hide();
 
     this->mw = mainWindow;
     this->cf = confForm;
@@ -80,9 +103,14 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     this->isSelected = false;
     this->isActive = false;
 
+    ui->wbg->setAttribute(Qt::WA_Hover,true);//开启悬停事件
+    ui->wbg->installEventFilter(this);       //安装事件过滤器
+    ui->btnConn->setAttribute(Qt::WA_Hover,true);//开启悬停事件
+    ui->btnConn->installEventFilter(this);       //安装事件过滤器
+
     connect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
     ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与登录按钮绑定在一起
-    ui->btnHideConn->setShortcut(Qt::Key_Return);
+//    ui->btnHideConn->setShortcut(Qt::Key_Return);
 }
 
 OneConnForm::~OneConnForm()
@@ -94,126 +122,151 @@ void OneConnForm::mousePressEvent(QMouseEvent *){
     emit selectedOneWifiForm(wifiName);
 }
 
+//事件过滤器
+bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
+{
+    if(obj == ui->wbg) {
+        if(event->type() == QEvent::HoverEnter) {
+            ui->btnConn->show();
+            ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+            return true;
+        } else if(event->type() == QEvent::HoverLeave){
+            ui->btnConn->hide();
+            ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0);}");
+            return true;
+        }
+    }
+
+    if(obj == ui->btnConn) {
+        if(event->type() == QEvent::HoverEnter) {
+            ui->wbg->hide();
+            ui->btnConn->show();
+            return true;
+        } else if(event->type() == QEvent::HoverLeave){
+            ui->wbg->show();
+            return true;
+        }
+    }
+
+    return QWidget::eventFilter(obj,event);
+}
+
 // 是否当前连接的网络，字体设置不同
 void OneConnForm::setAct(bool isAct){
     if(isAct){
         ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
-        ui->lbSafe->setStyleSheet("QLabel{font-size:14px;color:#aaaaaa;}");
         ui->lbConned->show();
-        ui->btnConf->show();
     }else{
-        ui->lbName->setStyleSheet("QLabel{font-size:12px;color:#ffffff;}");
-        ui->lbSafe->setStyleSheet("QLabel{font-size:12px;color:#aaaaaa;}");
+        ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->hide();
-        ui->btnConf->hide();
     }
     isActive = isAct;
 }
 
-// 是否选中
+//点击窗口最上面的item时
+void OneConnForm::setTopItem(bool isSelected){
+    if(isSelected){
+        resize(422, 148);
+        ui->wbg_3->show();
+        ui->lbInfo->show();
+
+        this->isSelected = true;
+    }else{
+        resize(422, 60);
+        ui->lePassword->setText("");
+        ui->wbg_3->hide();
+        ui->lbInfo->hide();
+
+        this->isSelected = false;
+    }
+
+    ui->wbg->hide();
+    ui->wbg_2->hide();
+    ui->lbSignal->show();
+    ui->lePassword->hide();
+    ui->checkBoxPwd->hide();
+    ui->line->hide();
+    ui->btnConn->hide();
+    ui->btnConnPWD->hide();
+    ui->btnHideConn->hide();
+    ui->lbLoadUpImg->show();
+    ui->lbLoadDownImg->show();
+    if (isConnected){
+        // ui->lbLoadUp->setText("0Kb/s");
+        // ui->lbLoadDown->setText("0Kb/s");
+        ui->lbLoadUp->hide();
+        ui->lbLoadDown->hide();
+        ui->btnDisConn->show();
+    }else{
+        // ui->lbLoadUp->setText("0Kb/s");
+        // ui->lbLoadDown->setText("0Kb/s");
+        ui->lbLoadUp->hide();
+        ui->lbLoadDown->hide();
+        ui->btnDisConn->hide();
+    }
+}
+// 点击窗口下面的item时
 void OneConnForm::setSelected(bool isSelected){
     if(isSelected){
-        resize(314, 111);
-        ui->wbg->show();
-//        ui->btnConf->show();
-        if(isActive){
-            ui->btnHideConn->hide();
-            ui->btnDisConn->show();
-        }else{
-            ui->btnHideConn->hide();
-            ui->btnConn->show();
-        }
+        resize(422, 148);
+        ui->line->hide();
+        ui->wbg->hide();
+        ui->wbg_2->hide();
+        ui->wbg_3->show();
+        ui->lbInfo->show();
+        ui->btnConn->show();
+        ui->btnConnSub->show();
 
         this->isSelected = true;
-
     }else{
-        resize(314, 60);
+        resize(422, 60);
         ui->lePassword->setText("");
 
-        ui->wbg->hide();
-
-        if(isActive){
-            ui->btnConf->show();
-        }else{
-            ui->btnConf->hide();
-        }
-
-        ui->btnConn->hide();
-        ui->btnDisConn->hide();
-        ui->btnHideConn->hide();
-
-        ui->lbPassword->hide();
-        ui->lePassword->hide();
-        ui->checkBoxPwd->hide();
-        ui->btnConnPWD->hide();
-
-        ui->lbName->show();
-        ui->lbSafe->show();
-        ui->lbSignal->show();
-        ui->lbPoint->show();
-
-        this->isSelected = false;
-    }
-}
-// 是否选中连接隐藏Wifi小窗口
-void OneConnForm::setHideSelected(bool isSelected){
-    if(isSelected){
-        resize(314, 111);
+        ui->line->show();
         ui->wbg->show();
-
-        ui->btnConf->hide();
+        ui->wbg_2->hide();
+        ui->wbg_3->hide();
+        ui->lbInfo->hide();
         ui->btnConn->hide();
-        ui->btnDisConn->hide();
-        ui->btnHideConn->show();
-
-        ui->lbPassword->hide();
-        ui->lePassword->hide();
-        ui->checkBoxPwd->hide();
-        ui->btnConnPWD->hide();
-
-        ui->lbName->show();
-        ui->lbSafe->show();
-        ui->lbSignal->show();
-        ui->lbPoint->hide();
-
-        this->isSelected = true;
-    } else {
-        resize(314, 60);
-        ui->wbg->hide();
-
-        ui->btnConf->hide();
-        ui->btnConn->hide();
-        ui->btnDisConn->hide();
-        ui->btnHideConn->hide();
-
-        ui->lbPassword->hide();
-        ui->lePassword->hide();
-        ui->checkBoxPwd->hide();
-        ui->btnConnPWD->hide();
-
-        ui->lbName->show();
-        ui->lbSafe->show();
-        ui->lbSignal->show();
-        ui->lbPoint->hide();
+        ui->btnConnSub->hide();
 
         this->isSelected = false;
     }
 
+    ui->lePassword->hide();
+    ui->checkBoxPwd->hide();
+    ui->btnConnPWD->hide();
+
+    ui->lbSignal->show();
+    ui->btnDisConn->hide();
+    ui->btnHideConn->hide();
+}
+// 点击连接隐藏wifi的item时
+void OneConnForm::setHideItem(bool isHideItem, bool isShowHideBtn){
+    if (isHideItem){
+        ui->lbName->move(14, 20);
+        ui->wbg->hide();
+        ui->btnConn->hide();
+    } else {
+        ui->lbName->move(62, 8);
+        ui->wbg->show();
+        ui->btnConn->show();
+    }
+
+    if (isShowHideBtn){
+        ui->btnHideConn->show();
+    } else{
+        ui->btnHideConn->hide();
+    }
 }
 
-void OneConnForm::setConnedString(QString str){
-    ui->lbConned->setText(str);
-}
-
-void OneConnForm::setSafeString(QString str){
-    ui->lbSafe->setText(str);
-}
-
-void OneConnForm::setShowPoint(bool flag){
-    if(flag){
-        ui->lbPoint->show();
+void OneConnForm::setConnedString(bool showLable, QString str, QString str1){
+    if (!showLable){
+        ui->lbConned->setText(str1);
+        ui->lbConned->hide();
+        ui->lbName->move(63, 18);
     }else{
-        ui->lbPoint->hide();
+        ui->lbConned->setText(str);
     }
 }
 
@@ -232,77 +285,71 @@ QString OneConnForm::getName()
     return ui->lbName->text();
 }
 
-void OneConnForm::setSafe(QString safe){
-    if(safe == "--"){
-        this->isSafe = false;
-        ui->lbSafe->setText(tr("Public"));//"开放"
-    }else{
-        this->isSafe = true;
-        ui->lbSafe->setText(tr("Safe"));//"安全"
-    }
-}
-
 void OneConnForm::setRate(QString rate){
     QString txt(tr("Rate"));//"速率"
     this->setToolTip("<span style=\"font-size:13px;border:0px;background-color:#3593b5;color:white;\">&nbsp; " + txt + ": " + rate + " &nbsp;</span>");
     QString rateStr = rate.split(" ").at(0);
     int rateNum = rateStr.toInt();
-    if(rateNum >= 180){
-        ui->lbPoint->setStyleSheet("QLabel{background:url(:/res/s/pgood.png);}");
-    }
-    if(rateNum >= 100 && rateNum < 180){
-        ui->lbPoint->setStyleSheet("QLabel{background:url(:/res/s/pnormal.png);}");
-    }
-    if(rateNum <100){
-        ui->lbPoint->setStyleSheet("QLabel{background:url(:/res/s/pbad.png);}");
-    }
 }
 
-void OneConnForm::setSignal(QString lv){
+void OneConnForm::setSignal(QString lv, QString secu){
     int signal = lv.toInt();
+    if (secu == "--" || secu == ""){
+        hasPwd = false;
+    }else{
+        hasPwd = true;
+    }
+
     if(signal > 75){
-        if(this->isSafe){
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/s/wifi-full-secure.png);}");
+        if(hasPwd){
+            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-full-pwd.png);}");
         }else{
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/s/wifi-full.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-full.png);}");
         }
         signalLv = 1;
     }
     if(signal > 55 && signal <= 75){
-        if(this->isSafe){
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/s/wifi-high-secure.png);}");
+        if(hasPwd){
+            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-high-pwd.png);}");
         }else{
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/s/wifi-high.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-high.png);}");
         }
         signalLv = 2;
     }
     if(signal > 35 && signal <= 55){
-        if(this->isSafe){
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/s/wifi-medium-secure.png);}");
+        if(hasPwd){
+            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-medium-pwd.png);}");
         }else{
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/s/wifi-medium.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-medium.png);}");
         }
         signalLv = 3;
     }
     if(signal > 15 && signal <= 35){
-        if(this->isSafe){
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/s/wifi-low-secure.png);}");
+        if(hasPwd){
+            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-low-pwd.png);}");
         }else{
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/s/wifi-low.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-low.png);}");
         }
         signalLv = 4;
     }
     if(signal <= 15){
-        if(this->isSafe){
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/s/wifi-none-secure.png);}");
+        if(hasPwd){
+            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-none-pwd.png);}");
         }else{
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/s/wifi-none.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-none.png);}");
         }
         signalLv = 4;
     }
 }
 
-void OneConnForm::slotConnWifi(){
+void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3)
+{
+    QString str = "Wi-Fi安全性：" + str1 + "\n信号强度：" + str2 + "%\n物理地址(MAC)：" + str3;
+    ui->lbInfo->setText(str);
+}
+
+void OneConnForm::slotConnWifi()
+{
     mw->startLoading();
     emit sigConnWifi(ui->lbName->text());
 }
@@ -311,55 +358,31 @@ void OneConnForm::slotConnWifiPWD(){
     emit sigConnWifiPWD(ui->lbName->text(), ui->lePassword->text());
 }
 
-//点击后设置wifi网络
-void OneConnForm::on_btnConf_clicked()
+void OneConnForm::on_btnConnSub_clicked()
 {
-    QPoint pos = QCursor::pos();
-    QRect primaryGeometry;
-    for (QScreen *screen : qApp->screens()) {
-        if (screen->geometry().contains(pos)) {
-            primaryGeometry = screen->geometry();
-        }
+    if (ui->lbConned->text() == "--" || ui->lbConned->text() == " "){
+        on_btnConnPWD_clicked();
+        return;
     }
 
-    if (primaryGeometry.isEmpty()) {
-        primaryGeometry = qApp->primaryScreen()->geometry();
-    }
-
+    mw->is_stop_check_net_state = 1;
+    QThread *t = new QThread();
     BackThread *bt = new BackThread();
-    QString connProp = bt->getConnProp(ui->lbName->text());
-    QStringList propList = connProp.split("|");
-    QString v4method, addr, mask, gateway, dns;
-    foreach (QString line, propList) {
-        if(line.startsWith("method:")){
-            v4method = line.split(":").at(1);
-        }
-        if(line.startsWith("addr:")){
-            addr = line.split(":").at(1);
-        }
-        if(line.startsWith("mask:")){
-            mask = line.split(":").at(1);
-        }
-        if(line.startsWith("gateway:")){
-            gateway= line.split(":").at(1);
-        }
-        if(line.startsWith("dns:")){
-            dns = line.split(":").at(1);
-        }
-    }
-//    qDebug()<<v4method<<addr<<mask<<gateway<<dns;
-
-    cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive);
-
-    cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
-    cf->show();
-    cf->raise();
+    bt->moveToThread(t);
+    connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+    connect(t, SIGNAL(started()), this, SLOT(slotConnWifi()));
+    connect(this, SIGNAL(sigConnWifi(QString)), bt, SLOT(execConnWifi(QString)));
+    connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
+    connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
+    connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
+    t->start();
 }
 
 //点击后断开wifi网络
 void OneConnForm::on_btnDisConn_clicked()
 {
     mw->is_stop_check_net_state = 1;
+    mw->on_btnHotspotState();
     kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
     disconnect(this, SIGNAL(selectedOneWifiForm(QString)), mw, SLOT(oneWifiFormSelected(QString)));
     emit disconnActiveWifi();
@@ -368,6 +391,11 @@ void OneConnForm::on_btnDisConn_clicked()
 //无需密码的wifi连接
 void OneConnForm::on_btnConn_clicked()
 {
+    if (ui->lbConned->text() == "--" || ui->lbConned->text() == " "){
+        on_btnConnPWD_clicked();
+        return;
+    }
+
     mw->is_stop_check_net_state = 1;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
@@ -406,24 +434,59 @@ void OneConnForm::on_btnHideConn_clicked()
     connHidWifi->show();
 }
 
+//设置密码隐藏或可见
+void OneConnForm::on_checkBoxPwd_stateChanged(int arg1)
+{
+    if (arg1 == 0) {
+        ui->lePassword ->setEchoMode(QLineEdit::Password);
+    } else {
+        ui->lePassword->setEchoMode(QLineEdit::Normal);
+    }
+}
+
+void OneConnForm::on_lePassword_textEdited(const QString &arg1)
+{
+    if (ui->lePassword->text().size() < 5){
+        ui->lePassword->setStyleSheet("QLineEdit{border:2px solid rgba(28, 47, 146, 1);border-radius:4px;"
+                                      "background:rgba(0,0,0,0.2);color:rgba(255,255,255,0.35);font-size:14px;}");
+        ui->btnConnPWD->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
+                                      "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(0,0,0,0.2);}"
+                                      "QPushButton:Pressed{border-radius:4px;background-color:rgba(0,0,0,0.6);}");
+        ui->btnConnPWD->setEnabled(false);
+    } else {
+        ui->lePassword->setStyleSheet("QLineEdit{border:2px solid rgba(28, 47, 146, 1);border-radius:4px;"
+                                      "background:rgba(0,0,0,0.2);color:rgba(255,255,255,1);font-size:14px;}");
+        ui->btnConnPWD->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
+                                      "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                                      "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
+        ui->btnConnPWD->setEnabled(true);
+    }
+}
+
 // Wifi连接结果，0成功 1失败 2没有配置文件
 void OneConnForm::slotConnWifiResult(int connFlag){
     qDebug()<<"Function slotConnWifiResult receives a number: "<<connFlag;
 
     if(connFlag == 2){
-        // 无此wifi配置，需要输入密码创建配置文件尝试连接
-        ui->lbPassword->show();
+        mw->currSelNetName = "";
+        emit selectedOneWifiForm(ui->lbName->text());
+
+        resize(422, 118);
+        ui->wbg->hide();
+        ui->wbg_2->show();
+        ui->wbg_3->hide();
+        ui->lbInfo->hide();
+        ui->btnHideConn->hide();
+        ui->btnDisConn->hide();
+        ui->btnConn->hide();
+        ui->btnConnSub->hide();
+        ui->lbInfo->hide();
+
         ui->lePassword->show();
         ui->checkBoxPwd->show();
         ui->btnConnPWD->show();
 
-        ui->lbName->hide();
-        ui->lbSafe->hide();
-        ui->lbSignal->hide();
-        ui->lbPoint->hide();
-        ui->btnConf->hide();
-        ui->btnConn->hide();
-        ui->btnDisConn->hide();
+        this->isSelected = true;
     }
 
     if(connFlag == 1){
@@ -437,15 +500,7 @@ void OneConnForm::slotConnWifiResult(int connFlag){
     // 设置全局变量，当前连接Wifi的信号强度
     currentActWifiSignalLv = signalLv;
 
-    mw->stopLoading();
-}
-
-//设置密码隐藏或可见
-void OneConnForm::on_checkBoxPwd_stateChanged(int arg1)
-{
-    if (arg1 == 0) {
-        ui->lePassword ->setEchoMode(QLineEdit::Password);
-    } else {
-        ui->lePassword->setEchoMode(QLineEdit::Normal);
+    if (connFlag != 0){
+        mw->stopLoading();
     }
 }

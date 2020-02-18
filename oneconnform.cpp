@@ -29,7 +29,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 {
     ui->setupUi(this);
 
-    ui->btnConnSub->setText(tr("Config"));//"设置"
+    ui->btnConnSub->setText(tr("Connect"));//"设置"
     ui->btnConn->setText(tr("Connect"));//"连接"
     ui->btnConnPWD->setText(tr("Connect"));//"连接"
     ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"

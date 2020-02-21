@@ -77,7 +77,14 @@ private slots:
 
     void slotConnLan();
 
+    void waitAnimStep();
+    void startWaiting(bool isConn);
+    void stopWaiting();
+
 private:
+    QTimer *waitTimer;
+    int waitPage;
+
     Ui::OneLancForm *ui;
     MainWindow *mw;
     ConfForm *cf;

@@ -1494,6 +1494,9 @@ void MainWindow::on_setNetSpeed()
 }
 
 void MainWindow::connLanDone(int connFlag){
+    //停止加载动画
+    emit this->waitLanStop();
+
     // Lan连接结果，0点击连接成功 1失败 3开机启动网络工具时已经连接
     if(connFlag == 0){
         syslog(LOG_DEBUG, "Wired net already connected by clicking button");
@@ -1892,7 +1895,8 @@ void MainWindow::activeLanDisconn()
 {
     syslog(LOG_DEBUG, "Wired net is disconnected");
     currSelNetName = "";
-    this->startLoading();
+    //this->startLoading();
+    emit this->waitLanStop();
     this->ksnm->execGetLanList();
 }
 
@@ -1912,12 +1916,12 @@ void MainWindow::activeStartLoading()
 {
     syslog(LOG_DEBUG, "Wi-Fi is disconnected");
     currSelNetName = "";
-    this->startLoading();
+    //this->startLoading();
     emit this->deleteRedundantNet();
 }
-
 void MainWindow::activeGetWifiList()
 {
+    emit this->waitWifiStop();
     this->ksnm->execGetWifiList();
 }
 

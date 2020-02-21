@@ -55,6 +55,8 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
     ui->lbLoadDownImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-down.png);}");
     ui->lbLoadUpImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-up.png);}");
+    ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
+    ui->lbWaitingIcon->setStyleSheet("QLabel{border:0px;background-color:transparent;}");
 
     ui->btnConnSub->setFocusPolicy(Qt::NoFocus);
     ui->btnConn->setFocusPolicy(Qt::NoFocus);
@@ -69,6 +71,8 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->line->show();
     ui->lbLoadDownImg->hide();
     ui->lbLoadUpImg->hide();
+    ui->lbWaiting->hide();
+    ui->lbWaitingIcon->hide();
 
     this->mw = mainWindow;
     this->cf = confForm;
@@ -82,6 +86,10 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConn->setAttribute(Qt::WA_Hover,true);//开启悬停事件
     ui->btnConn->installEventFilter(this);       //安装事件过滤器
 
+    this->waitTimer = new QTimer(this);
+    connect(waitTimer, SIGNAL(timeout()), this, SLOT(waitAnimStep()));
+
+    connect(mw, SIGNAL(waitLanStop()), this, SLOT(stopWaiting()));
 
     srand((unsigned)time(NULL));
 }
@@ -235,26 +243,16 @@ void OneLancForm::setLine(bool isShow)
     }
 }
 
-void OneLancForm::on_btnConnSub_clicked()
-{
-    QThread *t = new QThread();
-    BackThread *bt = new BackThread();
-    bt->moveToThread(t);
-    connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
-    connect(t, SIGNAL(started()), this, SLOT(slotConnLan()));
-    connect(this, SIGNAL(sigConnLan(QString)), bt, SLOT(execConnLan(QString)));
-    connect(bt, SIGNAL(connDone(int)), mw, SLOT(connLanDone(int)));
-    connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
-    t->start();
-}
-
 void OneLancForm::slotConnLan(){
-    mw->startLoading();
+    //mw->startLoading();
+    this->startWaiting(true);
     emit sigConnLan(ui->lbName->text());
 }
 
 void OneLancForm::on_btnDisConn_clicked()
 {
+    this->startWaiting(false);
+
     kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
 
     disconnect(this, SIGNAL(selectedOneLanForm(QString)), mw, SLOT(oneLanFormSelected(QString)));
@@ -273,4 +271,53 @@ void OneLancForm::on_btnConn_clicked()
     connect(bt, SIGNAL(connDone(int)), mw, SLOT(connLanDone(int)));
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     t->start();
+}
+
+void OneLancForm::on_btnConnSub_clicked()
+{
+    QThread *t = new QThread();
+    BackThread *bt = new BackThread();
+    bt->moveToThread(t);
+    connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+    connect(t, SIGNAL(started()), this, SLOT(slotConnLan()));
+    connect(this, SIGNAL(sigConnLan(QString)), bt, SLOT(execConnLan(QString)));
+    connect(bt, SIGNAL(connDone(int)), mw, SLOT(connLanDone(int)));
+    connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
+    t->start();
+}
+
+void OneLancForm::waitAnimStep(){
+    QString qpmQss = "QLabel{background-image:url(':/res/s/conning-a/";
+    qpmQss.append(QString::number(this->waitPage));
+    qpmQss.append(".png');}");
+    ui->lbWaitingIcon->setStyleSheet(qpmQss);
+
+    this->waitPage --;
+
+    if(this->waitPage < 1){
+        this->waitPage = 8;
+    }
+}
+
+void OneLancForm::startWaiting(bool isConn){
+    if (isConn){
+        ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
+    }else{
+        ui->btnDisConn->hide();
+        ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
+    }
+    this->waitPage = 8;
+    this->waitTimer->start(150);
+    ui->lbWaiting->show();
+    ui->lbWaitingIcon->show();
+
+    mw->setTrayLoading(true);
+}
+
+void OneLancForm::stopWaiting(){
+    this->waitTimer->stop();
+    ui->lbWaiting->hide();
+    ui->lbWaitingIcon->hide();
+
+    mw->setTrayLoading(false);
 }

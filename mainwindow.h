@@ -237,6 +237,9 @@ private slots:
     void on_btnAddNet_clicked();
 signals:
     void deleteRedundantNet();
+
+    void waitWifiStop();
+    void waitLanStop();
 };
 
 #endif // MAINWINDOW_H

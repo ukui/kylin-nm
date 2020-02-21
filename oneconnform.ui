@@ -251,6 +251,32 @@
     <string/>
    </property>
   </widget>
+  <widget class="QLabel" name="lbWaiting">
+   <property name="geometry">
+    <rect>
+     <x>316</x>
+     <y>14</y>
+     <width>100</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbWaitingIcon">
+   <property name="geometry">
+    <rect>
+     <x>356</x>
+     <y>20</y>
+     <width>20</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <zorder>lbLoadUp</zorder>
   <zorder>lbLoadDown</zorder>
   <zorder>wbg_3</zorder>
@@ -267,6 +293,8 @@
   <zorder>btnConnPWD</zorder>
   <zorder>btnDisConn</zorder>
   <zorder>btnHideConn</zorder>
+  <zorder>lbWaiting</zorder>
+  <zorder>lbWaitingIcon</zorder>
  </widget>
  <resources/>
  <connections/>

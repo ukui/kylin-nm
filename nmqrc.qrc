@@ -91,5 +91,13 @@
         <file>res/w/wifi-medium-pwd.png</file>
         <file>res/w/wifi-none.png</file>
         <file>res/w/wifi-none-pwd.png</file>
+        <file>res/s/conning-a/1.png</file>
+        <file>res/s/conning-a/2.png</file>
+        <file>res/s/conning-a/3.png</file>
+        <file>res/s/conning-a/4.png</file>
+        <file>res/s/conning-a/5.png</file>
+        <file>res/s/conning-a/6.png</file>
+        <file>res/s/conning-a/7.png</file>
+        <file>res/s/conning-a/8.png</file>
     </qresource>
 </RCC>

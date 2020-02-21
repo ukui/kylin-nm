@@ -87,6 +87,7 @@ DlgConnHidWifiSecTls::DlgConnHidWifiSecTls(int type, QWidget *parent) :
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
     ui->lineUp->setStyleSheet("background:rgba(255,255,255,0.08);");
     ui->lineDown->setStyleSheet("background:rgba(255,255,255,0.08);");
+    ui->checkBoxCA->setFocusPolicy(Qt::NoFocus);
 
     ui->lbLeftupTitle->setText(tr("Add hidden Wi-Fi")); //加入隐藏Wi-Fi
     ui->lbConn->setText(tr("Connection")); //连接设置:

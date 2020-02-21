@@ -97,7 +97,15 @@ private slots:
 
     void on_btnConnSub_clicked();
 
+    void waitAnimStep();
+    void startWaiting(bool isConn);
+    void stopWaiting();
+
 private:
+    QTimer *waitTimer;
+    int waitPage;
+    bool isWaiting = false;
+
     Ui::OneConnForm *ui;
     MainWindow *mw;
     ConfForm *cf;

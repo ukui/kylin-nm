@@ -292,6 +292,15 @@ void OneConnForm::setRate(QString rate){
     int rateNum = rateStr.toInt();
 }
 
+void OneConnForm::setLine(bool isShow)
+{
+    if(isShow){
+        ui->line->show();
+    }else{
+        ui->line->hide();
+    }
+}
+
 void OneConnForm::setSignal(QString lv, QString secu){
     int signal = lv.toInt();
     if (secu == "--" || secu == ""){

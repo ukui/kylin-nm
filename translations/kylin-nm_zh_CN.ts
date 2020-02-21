@@ -80,67 +80,67 @@
 <context>
     <name>DlgConnHidWifi</name>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="59"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="55"/>
         <source>Add hidden Wi-Fi</source>
         <translation>加入隐藏Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="60"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="56"/>
         <source>Connection</source>
         <translation>连接设置:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="61"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="57"/>
         <source>Network name</source>
         <translation>网络名称:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="62"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="58"/>
         <source>Wi-Fi security</source>
         <translation>Wi-Fi 安全性:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="63"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="59"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="64"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="60"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="66"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="62"/>
         <source>C_reate…</source>
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="84"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="80"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="85"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="81"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation>WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="86"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="82"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation>WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="87"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="83"/>
         <source>WEP 128-bit Passphrase</source>
         <translation>WEP 128 位密码句</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="89"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="85"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation>动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="90"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="86"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation>WPA 及 WPA2 企业</translation>
     </message>
@@ -158,77 +158,77 @@
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="49"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="45"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">加入隐藏Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="50"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="46"/>
         <source>Connection</source>
         <translation type="unfinished">连接设置:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="51"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="47"/>
         <source>Network name</source>
         <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="52"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="48"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi 安全性:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="53"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="49"/>
         <source>Username</source>
         <translation>用户名:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="54"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="50"/>
         <source>Password</source>
         <translation>密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="55"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="51"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="56"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="52"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="58"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="54"/>
         <source>C_reate…</source>
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="75"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="71"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="76"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="72"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="77"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="73"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="78"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="74"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128 位密码句</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="80"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="76"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="81"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="77"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 企业</translation>
     </message>
@@ -241,128 +241,128 @@
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="51"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="47"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">加入隐藏Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="52"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="48"/>
         <source>Connection</source>
         <translation type="unfinished">连接设置:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="53"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="49"/>
         <source>Network name</source>
         <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="54"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="50"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi 安全性:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="55"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="51"/>
         <source>Authentication</source>
         <translation>认证:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="56"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="52"/>
         <source>Anonymous identity</source>
         <translation>匿名身份:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="57"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="53"/>
         <source>Allow automatic PAC pro_visioning</source>
         <translation>自动PAC配置:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="58"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="54"/>
         <source>PAC file</source>
         <translation>PAC文件:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="59"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="55"/>
         <source>Inner authentication</source>
         <translation>内部认证:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="60"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="56"/>
         <source>Username</source>
         <translation type="unfinished">用户名:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="61"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="57"/>
         <source>Password</source>
         <translation type="unfinished">密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="62"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="58"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="63"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="59"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="65"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="61"/>
         <source>C_reate…</source>
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="82"/>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="112"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="78"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="108"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="83"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="79"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="84"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="80"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="85"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="81"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128 位密码句</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="87"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="83"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="88"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="84"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 企业</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="100"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="96"/>
         <source>Tunneled TLS</source>
         <translation>隧道 TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="101"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="97"/>
         <source>Protected EAP (PEAP)</source>
         <translation>受保护的 EAP</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="107"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="103"/>
         <source>Anonymous</source>
         <translation>匿名</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="108"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="104"/>
         <source>Authenticated</source>
         <translation>已认证</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="109"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="105"/>
         <source>Both</source>
         <translation>两者兼用</translation>
     </message>
@@ -375,92 +375,92 @@
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="51"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="47"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">加入隐藏Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="52"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="48"/>
         <source>Connection</source>
         <translation type="unfinished">连接设置:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="53"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="49"/>
         <source>Network name</source>
         <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="54"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="50"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi 安全性:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="55"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="51"/>
         <source>Authentication</source>
         <translation type="unfinished">认证:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="56"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="52"/>
         <source>Username</source>
         <translation type="unfinished">用户名:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="57"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="53"/>
         <source>Password</source>
         <translation type="unfinished">密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="58"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="54"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="59"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="55"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="61"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="57"/>
         <source>C_reate…</source>
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="78"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="74"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="79"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="75"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="80"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="76"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="81"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="77"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128 位密码句</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="83"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="79"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="84"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="80"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 企业</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="96"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="92"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">隧道 TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="97"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="93"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">受保护的 EAP</translation>
     </message>
@@ -473,143 +473,143 @@
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="54"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="50"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">加入隐藏Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="55"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="51"/>
         <source>Connection</source>
         <translation type="unfinished">连接设置:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="56"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="52"/>
         <source>Network name</source>
         <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="57"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="53"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi 安全性:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="58"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="54"/>
         <source>Authentication</source>
         <translation type="unfinished">认证:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="59"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="55"/>
         <source>Anonymous identity</source>
         <translation type="unfinished">匿名身份:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="60"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="56"/>
         <source>Domain</source>
         <translation>域名:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="61"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="57"/>
         <source>CA certificate</source>
         <translation>CA 证书:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="62"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="58"/>
         <source>CA certificate password</source>
         <translation>CA 证书密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="63"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="59"/>
         <source>No CA certificate is required</source>
         <translation>不需要CA证书</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="64"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="60"/>
         <source>PEAP version</source>
         <translation>PEAP版本:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="65"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="61"/>
         <source>Inner authentication</source>
         <translation type="unfinished">内部认证:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="66"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="62"/>
         <source>Username</source>
         <translation type="unfinished">用户名:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="67"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="63"/>
         <source>Password</source>
         <translation type="unfinished">密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="68"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="64"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="69"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="65"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="88"/>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="111"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="84"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="107"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="89"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="85"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="90"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="86"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="91"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="87"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128 位密码句</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="93"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="89"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="94"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="90"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 企业</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="106"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="102"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">隧道 TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="107"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="103"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">受保护的 EAP</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="112"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="108"/>
         <source>Choose from file</source>
         <translation>从文件选择...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="115"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="111"/>
         <source>Automatic</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="116"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="112"/>
         <source>Version 0</source>
         <translation>版本 0</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="117"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="113"/>
         <source>Version 1</source>
         <translation>版本 1</translation>
     </message>
@@ -622,92 +622,92 @@
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="51"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="47"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">加入隐藏Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="52"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="48"/>
         <source>Connection</source>
         <translation type="unfinished">连接设置:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="53"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="49"/>
         <source>Network name</source>
         <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="54"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="50"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi 安全性:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="55"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="51"/>
         <source>Authentication</source>
         <translation type="unfinished">认证:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="56"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="52"/>
         <source>Username</source>
         <translation type="unfinished">用户名:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="57"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="53"/>
         <source>Password</source>
         <translation type="unfinished">密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="58"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="54"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="59"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="55"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="61"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="57"/>
         <source>C_reate…</source>
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="78"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="74"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="79"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="75"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="80"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="76"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="81"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="77"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128 位密码句</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="83"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="79"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="84"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="80"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 企业</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="96"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="92"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">隧道 TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="97"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="93"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">受保护的 EAP</translation>
     </message>
@@ -720,137 +720,137 @@
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="50"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="46"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">加入隐藏Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="51"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="47"/>
         <source>Connection</source>
         <translation type="unfinished">连接设置:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="52"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="48"/>
         <source>Network name</source>
         <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="53"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="49"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi 安全性:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="54"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="50"/>
         <source>Authentication</source>
         <translation type="unfinished">认证:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="55"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="51"/>
         <source>Identity</source>
         <translation>身份:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="56"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="52"/>
         <source>Domain</source>
         <translation type="unfinished">域名:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="57"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="53"/>
         <source>CA certificate</source>
         <translation type="unfinished">CA 证书:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="58"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="54"/>
         <source>CA certificate password</source>
         <translation type="unfinished">CA 证书密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="59"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="55"/>
         <source>No CA certificate is required</source>
         <translation>不需要CA证书</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="60"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="56"/>
         <source>User certificate</source>
         <translation>用户证书:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="61"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="57"/>
         <source>User certificate password</source>
         <translation>用户证书密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="62"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="58"/>
         <source>User private key</source>
         <translation>用户私钥:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="63"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="59"/>
         <source>User key password</source>
         <translation>用户密钥密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="64"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="60"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="65"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="61"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="67"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="63"/>
         <source>C_reate…</source>
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="84"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="80"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="103"/>
         <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="107"/>
         <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="111"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="115"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="85"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="81"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="86"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="82"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="87"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="83"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128 位密码句</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="89"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="85"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="90"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="86"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 企业</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="102"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="98"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">隧道 TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="103"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="99"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">受保护的 EAP</translation>
     </message>
     <message>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="104"/>
         <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="108"/>
         <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="112"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="116"/>
         <source>Choose from file</source>
         <translation type="unfinished">从文件选择...</translation>
     </message>
@@ -863,128 +863,128 @@
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="54"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="50"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">加入隐藏Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="55"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="51"/>
         <source>Connection</source>
         <translation type="unfinished">连接设置:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="56"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="52"/>
         <source>Network name</source>
         <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="57"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="53"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi 安全性:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="58"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="54"/>
         <source>Authentication</source>
         <translation type="unfinished">认证:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="59"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="55"/>
         <source>Anonymous identity</source>
         <translation type="unfinished">匿名身份:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="60"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="56"/>
         <source>Domain</source>
         <translation type="unfinished">域名:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="61"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="57"/>
         <source>CA certificate</source>
         <translation type="unfinished">CA 证书:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="62"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="58"/>
         <source>CA certificate password</source>
         <translation type="unfinished">CA 证书密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="63"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="59"/>
         <source>No CA certificate is required</source>
         <translation>不需要CA证书</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="64"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="60"/>
         <source>Inner authentication</source>
         <translation type="unfinished">内部认证:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="65"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="61"/>
         <source>Username</source>
         <translation type="unfinished">用户名:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="66"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="62"/>
         <source>Password</source>
         <translation type="unfinished">密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="67"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="63"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="68"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="64"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="70"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="66"/>
         <source>C_reate…</source>
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="87"/>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="110"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="83"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="106"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="88"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="84"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="89"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="85"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="90"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="86"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128 位密码句</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="92"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="88"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="93"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="89"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 企业</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="105"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="101"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">隧道 TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="106"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="102"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">受保护的 EAP</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="111"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="107"/>
         <source>Choose from file</source>
         <translation type="unfinished">从文件选择...</translation>
     </message>
@@ -997,97 +997,97 @@
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="50"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="46"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">加入隐藏Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="51"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="47"/>
         <source>Connection</source>
         <translation type="unfinished">连接设置:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="52"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="48"/>
         <source>Network name</source>
         <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="53"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="49"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi 安全性:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="54"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="50"/>
         <source>Key</source>
         <translation>密钥</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="55"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="51"/>
         <source>WEP index</source>
         <translation>WEP 检索</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="56"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="52"/>
         <source>Authentication</source>
         <translation type="unfinished">认证:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="57"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="53"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="58"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="54"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="60"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="56"/>
         <source>C_reate…</source>
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="77"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="73"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="78"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="74"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="79"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="75"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="80"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="76"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128 位密码句</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="82"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="78"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="83"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="79"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 企业</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="91"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="87"/>
         <source>1(default)</source>
         <translation>1(默认)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="97"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="93"/>
         <source>Open System</source>
         <translation>开放式系统</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="98"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="94"/>
         <source>Shared Key</source>
         <translation>共享密钥</translation>
     </message>
@@ -1100,72 +1100,72 @@
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="54"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="50"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">加入隐藏Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="55"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="51"/>
         <source>Connection</source>
         <translation type="unfinished">连接设置:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="56"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="52"/>
         <source>Network name</source>
         <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="57"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="53"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi 安全性:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="58"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="54"/>
         <source>Password</source>
         <translation type="unfinished">密码:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="59"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="55"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="60"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="56"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="62"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="58"/>
         <source>C_reate…</source>
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="80"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="76"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="81"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="77"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="82"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="78"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="83"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="79"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128 位密码句</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="85"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="81"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="86"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="82"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 企业</translation>
     </message>
@@ -1173,47 +1173,47 @@
 <context>
     <name>DlgHotspotCreate</name>
     <message>
-        <location filename="../dlghotspotcreate.ui" line="14"/>
+        <location filename="../hot-spot/dlghotspotcreate.ui" line="14"/>
         <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dlghotspotcreate.cpp" line="26"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="27"/>
         <source>Create Hotspot</source>
         <translation type="unfinished">创建个人热点</translation>
     </message>
     <message>
-        <location filename="../dlghotspotcreate.cpp" line="27"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="28"/>
         <source>Network name</source>
         <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
-        <location filename="../dlghotspotcreate.cpp" line="28"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="29"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi 安全性:</translation>
     </message>
     <message>
-        <location filename="../dlghotspotcreate.cpp" line="29"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="30"/>
         <source>Password</source>
         <translation type="unfinished">密码:</translation>
     </message>
     <message>
-        <location filename="../dlghotspotcreate.cpp" line="30"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="31"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../dlghotspotcreate.cpp" line="31"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="32"/>
         <source>Ok</source>
         <translation type="unfinished">确定</translation>
     </message>
     <message>
-        <location filename="../dlghotspotcreate.cpp" line="34"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="35"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../dlghotspotcreate.cpp" line="35"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="36"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
@@ -1222,7 +1222,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
-        <location filename="../mainwindow.cpp" line="238"/>
+        <location filename="../mainwindow.cpp" line="282"/>
         <source>kylin-nm</source>
         <translation>网络工具</translation>
     </message>
@@ -1231,18 +1231,22 @@
         <translation type="vanished">网络</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="174"/>
-        <location filename="../mainwindow.cpp" line="255"/>
+        <location filename="../mainwindow.cpp" line="213"/>
+        <location filename="../mainwindow.cpp" line="299"/>
         <source>Advanced</source>
         <translation>高级设置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="141"/>
+        <location filename="../mainwindow.cpp" line="164"/>
         <source>Ethernet</source>
         <translation>有线网络</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="147"/>
+        <source>Connect Hide Network</source>
+        <translation type="vanished">加入网络</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="171"/>
         <source>Wifi</source>
         <translation>无线网络</translation>
     </message>
@@ -1255,85 +1259,90 @@
         <translation type="vanished">已关闭</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="162"/>
+        <location filename="../mainwindow.cpp" line="189"/>
         <source>HotSpot</source>
         <translation>个人热点</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="168"/>
+        <location filename="../mainwindow.cpp" line="201"/>
         <source>FlyMode</source>
         <translation>飞行模式</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="254"/>
+        <location filename="../mainwindow.cpp" line="298"/>
         <source>Show MainWindow</source>
         <translation>显示网络连接界面</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="823"/>
-        <location filename="../mainwindow.cpp" line="932"/>
-        <location filename="../mainwindow.cpp" line="1310"/>
-        <location filename="../mainwindow.cpp" line="1364"/>
-        <location filename="../mainwindow.cpp" line="1869"/>
-        <location filename="../mainwindow.cpp" line="1928"/>
-        <location filename="../mainwindow.cpp" line="1977"/>
+        <location filename="../mainwindow.cpp" line="883"/>
+        <location filename="../mainwindow.cpp" line="1011"/>
+        <location filename="../mainwindow.cpp" line="1370"/>
+        <location filename="../mainwindow.cpp" line="1434"/>
+        <location filename="../mainwindow.cpp" line="1976"/>
+        <location filename="../mainwindow.cpp" line="2037"/>
+        <location filename="../mainwindow.cpp" line="2087"/>
         <source>Not connected</source>
         <translation>当前未连接任何网络</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="825"/>
-        <location filename="../mainwindow.cpp" line="867"/>
-        <location filename="../mainwindow.cpp" line="934"/>
-        <location filename="../mainwindow.cpp" line="1005"/>
-        <location filename="../mainwindow.cpp" line="1119"/>
-        <location filename="../mainwindow.cpp" line="1312"/>
-        <location filename="../mainwindow.cpp" line="1367"/>
-        <location filename="../mainwindow.cpp" line="1871"/>
-        <location filename="../mainwindow.cpp" line="1930"/>
-        <location filename="../mainwindow.cpp" line="1979"/>
+        <location filename="../mainwindow.cpp" line="885"/>
+        <location filename="../mainwindow.cpp" line="928"/>
+        <location filename="../mainwindow.cpp" line="929"/>
+        <location filename="../mainwindow.cpp" line="1014"/>
+        <location filename="../mainwindow.cpp" line="1073"/>
+        <location filename="../mainwindow.cpp" line="1189"/>
+        <location filename="../mainwindow.cpp" line="1372"/>
+        <location filename="../mainwindow.cpp" line="1437"/>
+        <location filename="../mainwindow.cpp" line="1978"/>
+        <location filename="../mainwindow.cpp" line="2039"/>
+        <location filename="../mainwindow.cpp" line="2089"/>
         <source>Disconnected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="61"/>
-        <location filename="../mainwindow.cpp" line="797"/>
-        <location filename="../mainwindow.cpp" line="1296"/>
-        <location filename="../mainwindow.cpp" line="1855"/>
+        <location filename="../mainwindow.cpp" line="62"/>
+        <location filename="../mainwindow.cpp" line="857"/>
+        <location filename="../mainwindow.cpp" line="1356"/>
+        <location filename="../mainwindow.cpp" line="1962"/>
         <source>Ethernet Networks</source>
-        <translation>可用网络列表</translation>
+        <translation>可用有线网络列表</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="854"/>
-        <location filename="../mainwindow.cpp" line="990"/>
+        <location filename="../mainwindow.cpp" line="87"/>
+        <location filename="../mainwindow.cpp" line="982"/>
+        <location filename="../mainwindow.cpp" line="1418"/>
+        <source>Add Hide Network</source>
+        <translation>加入网络</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="915"/>
+        <location filename="../mainwindow.cpp" line="1056"/>
         <source>Connected</source>
         <translation>已连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="71"/>
-        <location filename="../mainwindow.cpp" line="906"/>
-        <location filename="../mainwindow.cpp" line="1350"/>
+        <location filename="../mainwindow.cpp" line="79"/>
+        <location filename="../mainwindow.cpp" line="974"/>
+        <location filename="../mainwindow.cpp" line="1410"/>
         <source>Wifi Networks</source>
-        <translation>可用网络列表</translation>
+        <translation>可用无线网络列表</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="866"/>
-        <location filename="../mainwindow.cpp" line="1004"/>
-        <location filename="../mainwindow.cpp" line="1118"/>
         <source>None</source>
-        <translation>无</translation>
+        <translation type="vanished">无</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1206"/>
+        <location filename="../mainwindow.cpp" line="1266"/>
         <source>keep wired network switch is on before turning on wireless switch</source>
         <translation>打开无线网开关前保持有线网开关打开</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1226"/>
+        <location filename="../mainwindow.cpp" line="1286"/>
         <source>please insert the wireless network adapter</source>
         <translation>请先插入无线网卡</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1280"/>
+        <location filename="../mainwindow.cpp" line="1340"/>
         <source>Abnormal connection exist, program will delete it</source>
         <translation>正在断开异常连接的网络</translation>
     </message>
@@ -1346,17 +1355,17 @@
         <translation type="vanished">正在更新 Wi-Fi列表</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1410"/>
+        <location filename="../mainwindow.cpp" line="1505"/>
         <source>Conn Ethernet Success</source>
         <translation>连接有线网络成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1421"/>
+        <location filename="../mainwindow.cpp" line="1516"/>
         <source>Conn Ethernet Fail</source>
         <translation>连接有线网络失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1541"/>
+        <location filename="../mainwindow.cpp" line="1636"/>
         <source>Conn Wifi Success</source>
         <translation>连接无线网络成功</translation>
     </message>
@@ -1373,11 +1382,11 @@
         <translation type="vanished">输入密码</translation>
     </message>
     <message>
-        <location filename="../oneconnform.cpp" line="32"/>
         <source>Config</source>
-        <translation>设置</translation>
+        <translation type="vanished">设置</translation>
     </message>
     <message>
+        <location filename="../oneconnform.cpp" line="32"/>
         <location filename="../oneconnform.cpp" line="33"/>
         <location filename="../oneconnform.cpp" line="34"/>
         <location filename="../oneconnform.cpp" line="36"/>
@@ -1390,7 +1399,7 @@
         <translation>断开</translation>
     </message>
     <message>
-        <location filename="../oneconnform.cpp" line="269"/>
+        <location filename="../oneconnform.cpp" line="279"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
@@ -1403,12 +1412,12 @@
         <translation type="vanished">安全</translation>
     </message>
     <message>
-        <location filename="../oneconnform.cpp" line="279"/>
+        <location filename="../oneconnform.cpp" line="289"/>
         <source>Rate</source>
         <translation>速率</translation>
     </message>
     <message>
-        <location filename="../oneconnform.cpp" line="479"/>
+        <location filename="../oneconnform.cpp" line="503"/>
         <source>Conn Wifi Failed</source>
         <translation>连接无线网络失败</translation>
     </message>
@@ -1421,11 +1430,11 @@
         <translation>--</translation>
     </message>
     <message>
-        <location filename="../onelancform.cpp" line="31"/>
         <source>Config</source>
-        <translation>设置</translation>
+        <translation type="vanished">设置</translation>
     </message>
     <message>
+        <location filename="../onelancform.cpp" line="31"/>
         <location filename="../onelancform.cpp" line="32"/>
         <source>Connect</source>
         <translation>连接</translation>

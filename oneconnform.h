@@ -51,6 +51,7 @@ public:
     void setSpecialName(QString name);
     QString getName();
     void setRate(QString rate);
+    void setLine(bool isShow);
     void setWifiInfo(QString str1, QString str2, QString str3);
 
     void setSelected(bool isSelected);

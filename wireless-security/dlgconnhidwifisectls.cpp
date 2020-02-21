@@ -28,24 +28,65 @@ DlgConnHidWifiSecTls::DlgConnHidWifiSecTls(int type, QWidget *parent) :
     ui->setupUi(this);
 
     this->setWindowFlags(Qt::FramelessWindowHint);
-    this->setStyleSheet("background-color:white;");
+    this->setStyleSheet("border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);");
 
-    ui->lbBoder->setStyleSheet("QLabel{background-color:transparent;border:1px solid #297a97;}");
-    ui->lbUpback->setStyleSheet("QLabel{background-color:#f5f6f7;}");
-    ui->lbBottomback->setStyleSheet("QLabel{background-color:#f5f6f7;}");
-    ui->lbLeftup->setStyleSheet("QLabel{background-color:#266ab5;}");
-    ui->lbLeftupIcon->setStyleSheet("QLabel{background-image:url(:/res/h/add-hide-wifi.png);background-color:transparent;}");
-    ui->lbLeftupTitle->setStyleSheet("QLabel{font-size:12px;color:#ffffff;background-color:transparent;}");
-    ui->lbConn->setStyleSheet("QLabel{background-color:transparent;}");
-    ui->btnCancel->setStyleSheet("QPushButton{border:1px solid #aaaaaa;background-color:#f5f5f5;}"
-                                 "QPushButton:Hover{border:2px solid #629ee8;background-color:#eeeeee;}"
-                                 "QPushButton:Pressed{border:1px solid #aaaaaa;background-color:#d8d8d8;}");
-    ui->btnConnect->setStyleSheet("QPushButton{border:1px solid #aaaaaa;background-color:#f5f5f5;}"
-                                 "QPushButton:Hover{border:2px solid #629ee8;background-color:#eeeeee;}"
-                                 "QPushButton:Pressed{border:1px solid #aaaaaa;background-color:#d8d8d8;}");
+    ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
+    ui->lbBoder->hide();
+    ui->lbLeftupTitle->setStyleSheet("QLabel{font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbConn->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbNetName->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbSecurity->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbAuth->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbIdentity->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbDomain->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbCA->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbCaPwd->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->checkBoxCA->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbUserCertify->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbUserCertifyPwd->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbUserPriKey->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbUserKeyPwd->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+
+    ui->cbxConn->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,1);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
+                              "QComboBox::drop-down{border:0;width:30px;}"
+                              "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}");
+    ui->leNetName->setStyleSheet("QLineEdit{color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
+    ui->cbxSecurity->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,1);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
+                              "QComboBox::drop-down{border:0;width:30px;}"
+                              "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}");
+    ui->cbxAuth->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,1);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
+                              "QComboBox::drop-down{border:0;width:30px;}"
+                              "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}");
+    ui->leIdentity->setStyleSheet("QLineEdit{color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
+    ui->leDomain->setStyleSheet("QLineEdit{color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
+    ui->cbxCA->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,1);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
+                              "QComboBox::drop-down{border:0;width:30px;}"
+                              "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}");
+    ui->leCaPwd->setStyleSheet("QLineEdit{color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
     ui->checkBoxPwd->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
                                    "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
                                    "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
+    ui->checkBoxCA->setStyleSheet("QCheckBox{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->cbxUserCertify->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,1);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
+                              "QComboBox::drop-down{border:0;width:30px;}"
+                              "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}");
+    ui->leUserCertifyPwd->setStyleSheet("QLineEdit{color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
+    ui->cbxUserPriKey->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,1);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
+                              "QComboBox::drop-down{border:0;width:30px;}"
+                              "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}");
+    ui->leUserKeyPwd->setStyleSheet("QLineEdit{color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
+    ui->checkBoxPwdSec->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
+                                   "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
+                                   "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
+
+    ui->btnCancel->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
+                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
+                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
+    ui->btnConnect->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
+                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
+    ui->lineUp->setStyleSheet("background:rgba(255,255,255,0.08);");
+    ui->lineDown->setStyleSheet("background:rgba(255,255,255,0.08);");
 
     ui->lbLeftupTitle->setText(tr("Add hidden Wi-Fi")); //加入隐藏Wi-Fi
     ui->lbConn->setText(tr("Connection")); //连接设置:

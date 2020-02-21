@@ -97,13 +97,7 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">QComboBox QAbstractItemView {
-	outline: 0; 
-	border: 1px solid #000000;
-	border-color: rgba(0, 0, 0,25%);
-	selection-color: rgb(0, 0, 0);
-	background-color: #F1F3F3;
-}</string>
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QLineEdit" name="lePassword">
@@ -172,13 +166,7 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">QComboBox QAbstractItemView {
-	outline: 0; 
-	border: 1px solid #000000;
-	border-color: rgba(0, 0, 0,25%);
-	selection-color: rgb(0, 0, 0);
-	background-color: #F1F3F3;
-}</string>
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QLabel" name="lbPassword">
@@ -203,7 +191,7 @@
    <property name="geometry">
     <rect>
      <x>315</x>
-     <y>605</y>
+     <y>600</y>
      <width>90</width>
      <height>30</height>
     </rect>
@@ -232,13 +220,7 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">QComboBox QAbstractItemView {
-	outline: 0; 
-	border: 1px solid #000000;
-	border-color: rgba(0, 0, 0,25%);
-	selection-color: rgb(0, 0, 0);
-	background-color: #F1F3F3;
-}</string>
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QLabel" name="lbAuth">
@@ -281,7 +263,7 @@
    <property name="geometry">
     <rect>
      <x>215</x>
-     <y>605</y>
+     <y>600</y>
      <width>90</width>
      <height>30</height>
     </rect>
@@ -333,7 +315,7 @@
     <rect>
      <x>76</x>
      <y>336</y>
-     <width>95</width>
+     <width>100</width>
      <height>25</height>
     </rect>
    </property>
@@ -361,13 +343,7 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">QComboBox QAbstractItemView {
-	outline: 0; 
-	border: 1px solid #000000;
-	border-color: rgba(0, 0, 0,25%);
-	selection-color: rgb(0, 0, 0);
-	background-color: #F1F3F3;
-}</string>
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QLabel" name="lbPCAfile">
@@ -436,22 +412,16 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">QComboBox QAbstractItemView {
-	outline: 0; 
-	border: 1px solid #000000;
-	border-color: rgba(0, 0, 0,25%);
-	selection-color: rgb(0, 0, 0);
-	background-color: #F1F3F3;
-}</string>
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QLabel" name="lbLeftupTitle">
    <property name="geometry">
     <rect>
-     <x>34</x>
-     <y>6</y>
-     <width>80</width>
-     <height>20</height>
+     <x>30</x>
+     <y>15</y>
+     <width>140</width>
+     <height>22</height>
     </rect>
    </property>
    <property name="font">
@@ -463,73 +433,45 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="lbLeftupIcon">
-   <property name="geometry">
-    <rect>
-     <x>9</x>
-     <y>9</y>
-     <width>16</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
   <widget class="QLabel" name="lbBoder">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>432</width>
-     <height>651</height>
+     <height>650</height>
     </rect>
    </property>
    <property name="text">
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="lbUpback">
+  <widget class="Line" name="lineUp">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>432</width>
-     <height>116</height>
+     <x>10</x>
+     <y>120</y>
+     <width>412</width>
+     <height>1</height>
     </rect>
    </property>
-   <property name="text">
-    <string/>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QLabel" name="lbLeftup">
+  <widget class="Line" name="lineDown">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>120</width>
-     <height>32</height>
+     <x>10</x>
+     <y>570</y>
+     <width>412</width>
+     <height>1</height>
     </rect>
    </property>
-   <property name="text">
-    <string/>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QLabel" name="lbBottomback">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>591</y>
-     <width>432</width>
-     <height>60</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <zorder>lbBottomback</zorder>
-  <zorder>lbUpback</zorder>
   <zorder>lbBoder</zorder>
   <zorder>lbNetName</zorder>
   <zorder>leNetName</zorder>
@@ -554,9 +496,9 @@
   <zorder>lbInnerAuth</zorder>
   <zorder>cbxInnerAuth</zorder>
   <zorder>checkBoxPwd</zorder>
-  <zorder>lbLeftup</zorder>
-  <zorder>lbLeftupIcon</zorder>
   <zorder>lbLeftupTitle</zorder>
+  <zorder>lineUp</zorder>
+  <zorder>lineDown</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -18,6 +18,9 @@
 
 #include "kylin-dbus-interface.h"
 #include "mainwindow.h"
+#include <QTextCodec>
+#include <vector>
+#include <QByteArray>
 
 
 KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
@@ -188,6 +191,39 @@ void KylinDBus::getWifiMac(QString netName, int num)
 {
     dbusWifiMac = "";
 
+//    //将wifi名转为utf-8 十进制形式
+//    std::vector<int> vec;
+//    int len_encoded;
+//    int len_netName = netName.size();
+//    for (int i=0;i<len_netName;i++){
+//        QTextCodec *utf8 = QTextCodec::codecForName("utf-8");
+//        QByteArray encoded = utf8->fromUnicode(netName.at(i)).toHex();
+//        len_encoded = encoded.size();
+//        qDebug()<<"debug: 11"<<QString::number(len_encoded);
+
+//        if (len_encoded == 2){
+//            QString str;
+//            str.append(encoded.at(0));
+//            str.append(encoded.at(1));
+//            bool ok;
+//            QString hex = str;
+//            int dec = hex.toInt(&ok, 16);
+//            vec.push_back(dec);
+//        } else if (len_encoded == 6){
+//            for (int j=0;j<3;j++){
+//                QString str = "";
+//                str.append(encoded.at(j*2));
+//                str.append(encoded.at(j*2 + 1));
+//                bool ok;
+//                QString hex = str;
+//                int dec = hex.toInt(&ok, 16);
+//                vec.push_back(dec);
+//            }
+
+//        }
+//        len_encoded = 0;
+//    }
+
     QDBusInterface interface( "org.freedesktop.NetworkManager",
                               wirelessPath.path(),
                               "org.freedesktop.NetworkManager.Device.Wireless",
@@ -195,9 +231,17 @@ void KylinDBus::getWifiMac(QString netName, int num)
 
     QDBusReply<QList<QDBusObjectPath>> reply = interface.call("GetAllAccessPoints");
     QList<QDBusObjectPath> objPaths = reply.value();
-    int n = 0;
+
     foreach (QDBusObjectPath objPath, objPaths){
-        if (n == num){
+        QDBusInterface ssid_interface( "org.freedesktop.NetworkManager",
+                                  objPath.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+
+        QDBusReply<QVariant> ssid_replys = ssid_interface.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Ssid");
+        QString str_name = ssid_replys.value().toString();
+
+        if (str_name == netName){
             QDBusInterface path_interface( "org.freedesktop.NetworkManager",
                                       objPath.path(),
                                       "org.freedesktop.DBus.Properties",
@@ -206,7 +250,6 @@ void KylinDBus::getWifiMac(QString netName, int num)
             QDBusReply<QVariant> path_reply = path_interface.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "HwAddress");
             dbusWifiMac = path_reply.value().toString();
         }
-        n += 1;
     }
 }
 

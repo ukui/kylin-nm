@@ -82,20 +82,14 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">QComboBox QAbstractItemView {
-	outline: 0; 
-	border: 1px solid #000000;
-	border-color: rgba(0, 0, 0,25%);
-	selection-color: rgb(0, 0, 0);
-	background-color: #F1F3F3;
-}</string>
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QPushButton" name="btnConnect">
    <property name="geometry">
     <rect>
      <x>315</x>
-     <y>425</y>
+     <y>420</y>
      <width>90</width>
      <height>30</height>
     </rect>
@@ -124,13 +118,7 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">QComboBox QAbstractItemView {
-	outline: 0; 
-	border: 1px solid #000000;
-	border-color: rgba(0, 0, 0,25%);
-	selection-color: rgb(0, 0, 0);
-	background-color: #F1F3F3;
-}</string>
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QLabel" name="lbConn">
@@ -169,20 +157,14 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">QComboBox QAbstractItemView {
-	outline: 0; 
-	border: 1px solid #000000;
-	border-color: rgba(0, 0, 0,25%);
-	selection-color: rgb(0, 0, 0);
-	background-color: #F1F3F3;
-}</string>
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QPushButton" name="btnCancel">
    <property name="geometry">
     <rect>
      <x>215</x>
-     <y>425</y>
+     <y>420</y>
      <width>90</width>
      <height>30</height>
     </rect>
@@ -298,13 +280,7 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">QComboBox QAbstractItemView {
-	outline: 0; 
-	border: 1px solid #000000;
-	border-color: rgba(0, 0, 0,25%);
-	selection-color: rgb(0, 0, 0);
-	background-color: #F1F3F3;
-}</string>
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QLabel" name="lbBoder">
@@ -313,59 +289,7 @@
      <x>0</x>
      <y>0</y>
      <width>432</width>
-     <height>471</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbUpback">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>432</width>
-     <height>116</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbBottomback">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>411</y>
-     <width>432</width>
-     <height>60</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbLeftup">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>120</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbLeftupIcon">
-   <property name="geometry">
-    <rect>
-     <x>9</x>
-     <y>9</y>
-     <width>16</width>
-     <height>16</height>
+     <height>465</height>
     </rect>
    </property>
    <property name="text">
@@ -375,18 +299,42 @@
   <widget class="QLabel" name="lbLeftupTitle">
    <property name="geometry">
     <rect>
-     <x>34</x>
-     <y>6</y>
-     <width>80</width>
-     <height>20</height>
+     <x>30</x>
+     <y>15</y>
+     <width>140</width>
+     <height>22</height>
     </rect>
    </property>
    <property name="text">
     <string/>
    </property>
   </widget>
-  <zorder>lbBottomback</zorder>
-  <zorder>lbUpback</zorder>
+  <widget class="Line" name="lineUp">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>120</y>
+     <width>412</width>
+     <height>1</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="lineDown">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>390</y>
+     <width>412</width>
+     <height>1</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
   <zorder>lbBoder</zorder>
   <zorder>leKey</zorder>
   <zorder>lbKey</zorder>
@@ -403,9 +351,9 @@
   <zorder>leNetName</zorder>
   <zorder>lbSecurity</zorder>
   <zorder>cbxConn</zorder>
-  <zorder>lbLeftup</zorder>
-  <zorder>lbLeftupIcon</zorder>
   <zorder>lbLeftupTitle</zorder>
+  <zorder>lineUp</zorder>
+  <zorder>lineDown</zorder>
  </widget>
  <resources/>
  <connections/>

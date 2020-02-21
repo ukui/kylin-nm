@@ -152,6 +152,8 @@ private:
 
     QScrollArea *scrollAreal, *scrollAreaw;
     QLabel *lbTopLanList, *lbTopWifiList, *lbLanList, *lbWifiList;
+    QLabel *lbBb;
+    QPushButton *btnAddNet;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
@@ -232,6 +234,7 @@ private slots:
     void iconStep();
     void on_btnFlyMode_clicked();
 
+    void on_btnAddNet_clicked();
 signals:
     void deleteRedundantNet();
 };

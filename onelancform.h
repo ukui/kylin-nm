@@ -45,6 +45,7 @@ public:
 
     void setName(QString name);
     void setIcon(bool isOn);
+    void setLine(bool isShow);
     void setLanInfo(QString str1, QString str2, QString str3, QString str4);
 
     void setSelected(bool isSelected);

@@ -226,6 +226,15 @@ void OneLancForm::setIcon(bool isOn){
     }
 }
 
+void OneLancForm::setLine(bool isShow)
+{
+    if(isShow){
+        ui->line->show();
+    }else{
+        ui->line->hide();
+    }
+}
+
 void OneLancForm::on_btnConnSub_clicked()
 {
     QThread *t = new QThread();

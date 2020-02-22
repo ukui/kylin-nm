@@ -33,13 +33,13 @@ DlgConnHidWifiSecLeap::DlgConnHidWifiSecLeap(int type, QWidget *parent) :
 
     ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
     ui->lbBoder->hide();
-    ui->lbLeftupTitle->setStyleSheet("QLabel{font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbConn->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbNetName->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbSecurity->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbAuth->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbUserName->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbPassword->setStyleSheet("QLabel{color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbLeftupTitle->setStyleSheet("QLabel{border:0px;font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbConn->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbNetName->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbSecurity->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbAuth->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbUserName->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbPassword->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
 
     ui->cbxConn->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,1);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
                               "QComboBox::drop-down{border:0;width:30px;}"

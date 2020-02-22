@@ -41,6 +41,12 @@ MainWindow::MainWindow(QWidget *parent) :
 //    this->setWindowFlags(Qt::FramelessWindowHint);
 
     this->setWindowOpacity(0.95);
+    this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
+    this->setWindowFlags(Qt::FramelessWindowHint);   //设置无边框窗口
+    //this->setStyleSheet("QWidget{border-top-left-radius:6px;border-top-right-radius:6px;}");
+    this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
+
+    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255, 255, 255, 0.05);border-radius:6px;background:rgba(19,19,20,0.95);}");
 
     lname = "-1";
     wname = "-1";
@@ -114,9 +120,10 @@ MainWindow::MainWindow(QWidget *parent) :
     btnBgOffQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(255,255,255,0.2)}";
     btnBgOnQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(61,107,229,1);}";
 
-    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid #626c6e;background-color:#151a1e;}");
+    //ui->centralWidget->setStyleSheet("#centralWidget{border:0px solid #626c6e;border-radius:6px;background-color:#151a1e;}");
 
     ui->wdgHead->setStyleSheet("#wdgHead{background:rgba(14,19,22,0.75);}");
+    ui->wdgHead->hide();
 
     ui->lbNetwork->setStyleSheet("QLabel{font-size:20px;color:rgba(255,255,255,0.97);}");
     ui->lbNetwork->show();
@@ -708,18 +715,6 @@ void MainWindow::getLanBandWidth()
 // 初始化网络
 void MainWindow::initNetwork()
 {
-    BackThread *m_bt = new BackThread();
-    IFace *m_iface = m_bt->execGetIface();
-    qDebug()<<"lstate ="<<m_iface->lstate<<"    wstate ="<<m_iface->wstate ;
-    syslog(LOG_DEBUG, "state of switch:   lstate =%d    wstate =%d", m_iface->lstate, m_iface->wstate);
-    m_bt->lanDelete();
-    sleep(1);
-    m_bt->lanDelete();
-    sleep(1);
-    m_bt->lanDelete();
-    delete m_iface;
-    m_bt->deleteLater();
-
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
@@ -733,19 +728,11 @@ void MainWindow::initNetwork()
     // 开关状态
     qDebug()<<"lstate ="<<iface->lstate<<"    wstate ="<<iface->wstate ;
     syslog(LOG_DEBUG, "state of switch:   lstate =%d    wstate =%d", iface->lstate, iface->wstate);
-    if(iface->lstate == 0 || iface->lstate == 1){
-        ui->lbBtnNetBG->setStyleSheet(btnOnQss);
-
-        if(iface->wstate == 0 || iface->wstate == 1){
-            ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
-            ui->lbBtnWifiBall->move(438, 22);
-        }else{
-            ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-            ui->lbBtnWifiBall->move(412, 22);
-        }
+    ui->lbBtnNetBG->setStyleSheet(btnOnQss);
+    if(iface->wstate == 0 || iface->wstate == 1){
+        ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
+        ui->lbBtnWifiBall->move(438, 22);
     }else{
-        ui->lbBtnNetBG->setStyleSheet(btnOffQss);
-
         ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
         ui->lbBtnWifiBall->move(412, 22);
     }
@@ -769,7 +756,7 @@ void MainWindow::initNetwork()
         ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
         ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
 
-    }else{
+    } else {
         if(iface->lstate != 2){
             if (iface->lstate == 0) {
                 connLanDone(3);
@@ -784,16 +771,34 @@ void MainWindow::initNetwork()
             ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
             ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
         }else {
-            disNetDone();
+            BackThread *m_bt = new BackThread();
+            IFace *m_iface = m_bt->execGetIface();
+            qDebug()<<"lstate ="<<m_iface->lstate<<"    wstate ="<<m_iface->wstate ;
+
+            m_bt->lanDelete();
+            sleep(1);
+            m_bt->lanDelete();
+            sleep(1);
+            m_bt->lanDelete();
+            delete m_iface;
+            m_bt->deleteLater();
+
+            system("nmcli networking on");
+
+            on_btnNetList_clicked();
+
+            ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
+            ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
+
+            //disNetDone();
         }
     }
 
-    //循环检测wifi列表的变化
+    //循环检测wifi列表的变化，可用于更新wifi列表
     checkWifiListChanged = new QTimer(this);
     checkWifiListChanged->setTimerType(Qt::PreciseTimer);
     QObject::connect(checkWifiListChanged, SIGNAL(timeout()), this, SLOT(on_checkWifiListChanged()));
     checkWifiListChanged->start(7000);
-
     //网线插入时定时执行
     wiredCableUpTimer = new QTimer(this);
     wiredCableUpTimer->setTimerType(Qt::PreciseTimer);
@@ -802,11 +807,11 @@ void MainWindow::initNetwork()
     wiredCableDownTimer = new QTimer(this);
     wiredCableDownTimer->setTimerType(Qt::PreciseTimer);
     QObject::connect(wiredCableDownTimer, SIGNAL(timeout()), this, SLOT(onCarrierDownHandle()));
-    //定时处理异常网络
+    //定时处理异常网络，即当点击Lan列表按钮时，若lstate=2，但任然有有线网连接的情况
     deleteLanTimer = new QTimer(this);
     deleteLanTimer->setTimerType(Qt::PreciseTimer);
     QObject::connect(deleteLanTimer, SIGNAL(timeout()), this, SLOT(onDeleteLan()));
-
+    //定时获取网速
     setNetSpeed = new QTimer(this);
     setNetSpeed->setTimerType(Qt::PreciseTimer);
     QObject::connect(setNetSpeed, SIGNAL(timeout()), this, SLOT(on_setNetSpeed()));
@@ -1957,6 +1962,17 @@ void MainWindow::enNetDone()
 
 void MainWindow::disNetDone()
 {
+    this->is_btnNetList_clicked = 1;
+    this->is_btnWifiList_clicked = 0;
+
+    ui->lbNetListBG->setStyleSheet(btnOnQss);
+    ui->lbWifiListBG->setStyleSheet(btnOffQss);
+
+    ui->lbNetwork->setText("有线网络");
+    ui->btnWifi->hide();
+    ui->lbBtnWifiBG->hide();
+    ui->lbBtnWifiBall->hide();
+
     // 清空top列表
     delete topLanListWidget;
     topLanListWidget = new QWidget(ui->centralWidget);
@@ -1980,8 +1996,10 @@ void MainWindow::disNetDone()
     ccf->setName(tr("Not connected"));//"当前未连接任何 以太网"
     ccf->setIcon(false);
     ccf->setConnedString(1, tr("Disconnected"));//"未连接"
+    ccf->isConnected = false;
+    ccf->setTopItem(false);
     ccf->setAct(true);
-    ccf->move(0, 8);
+    ccf->move(0, 0);
     ccf->show();
 
     ui->lbBtnNetBG->setStyleSheet(btnOffQss);

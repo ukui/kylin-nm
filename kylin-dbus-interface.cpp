@@ -160,30 +160,31 @@ void KylinDBus::getLanIp(QString netName)
                                   "org.freedesktop.NetworkManager.Settings.Connection",
                                   QDBusConnection::systemBus());
         QDBusMessage reply = m_interface.call("GetSettings");
+
         const QDBusArgument &dbusArg = reply.arguments().at( 0 ).value<QDBusArgument>();
         //DBus type : a{sa{sv}}, a map with a key of QString, which maps to another map of QString,QVariant
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg >> map;
 
-        //方法一
         for (int i =0;i<2;i++){
             if(map.values().at(1).values().at(i).toString() == netName){
+                //方法一
+//                for(QString key : map.keys() ){
+//                    QMap<QString,QVariant> innerMap = map.value(key);
+//                    qDebug() << "Key: " << key;
+//                    if (key == "ipv4") {
+//                        for (QString inner_key : innerMap.keys()){
+//                            qDebug() << "       " <<  inner_key << ":" << innerMap.value(inner_key);
+//                        }
+//                    }
+//                }
+
+                //方法二
                 dbusLanIpv4 = map.values().at(2).values().at(4).toString();
                 dbusLanIpv6 = map.values().at(3).values().at(5).toString();
                 break;
             }
         }
-
-//        //方法二,仅供参考，暂不能用
-//        for(QString key : map.keys() ){
-//            QMap<QString,QVariant> innerMap = map.value(key);
-//            qDebug() << "Key: " << key;
-//            if (key == "ipv4") {
-//                for (QString inner_key : innerMap.keys()){
-//                    qDebug() << "       " <<  inner_key << ":" << innerMap.value(inner_key);
-//                }
-//            }
-//        }
     }
 }
 

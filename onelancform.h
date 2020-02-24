@@ -48,7 +48,7 @@ public:
     void setLine(bool isShow);
     void setLanInfo(QString str1, QString str2, QString str3, QString str4);
 
-    void setSelected(bool isSelected);
+    void setSelected(bool isSelected, bool isCurrName);
     void setTopItem(bool isSelected);
     void setAct(bool isAct);
 

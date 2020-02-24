@@ -147,14 +147,14 @@ void OneLancForm::setAct(bool isAct){
 }
 
 // 是否选中
-void OneLancForm::setSelected(bool isSelected)
+void OneLancForm::setSelected(bool isSelected, bool isCurrName)
 {
     if(isSelected){
         resize(422, 168);
         ui->wbg->show();
         ui->wbg_2->hide();
         ui->line->hide();
-        ui->btnConn->show();
+        ui->btnConn->hide();
         ui->btnConnSub->show();
 
         this->isSelected = true;
@@ -163,7 +163,11 @@ void OneLancForm::setSelected(bool isSelected)
         ui->wbg->hide();
         ui->wbg_2->show();
         ui->line->show();
-        ui->btnConn->hide();
+        if(isCurrName){
+            ui->btnConn->show();
+        }else{
+            ui->btnConn->hide();
+        }
         ui->btnConnSub->hide();
 
         this->isSelected = false;
@@ -222,6 +226,14 @@ void OneLancForm::setConnedString(bool showLable, QString str){
 
 void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString str4)
 {
+    if (str1 == "" || str1 == "auto"){
+        str1 = tr("Auto");
+    }
+
+    if (str2 == "" || str2 == "auto"){
+        str2 = tr("Auto");
+    }
+
     QString str = "IPv4地址：" + str1 + "\nIPv6地址：" + str2 + "\n带宽：" + str3 + " \n物理地址(MAC)：" + str4;
     ui->lbInfo->setText(str);
 }

@@ -54,7 +54,7 @@ public:
     void setLine(bool isShow);
     void setWifiInfo(QString str1, QString str2, QString str3);
 
-    void setSelected(bool isSelected);
+    void setSelected(bool isSelected, bool isCurrName);
     void setHideItem(bool isHideItem, bool isShowHideBtn);
     void setTopItem(bool isSelected);
     void setAct(bool isAct);

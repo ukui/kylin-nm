@@ -219,7 +219,7 @@ void OneConnForm::setTopItem(bool isSelected){
     }
 }
 // 点击窗口下面的item时
-void OneConnForm::setSelected(bool isSelected){
+void OneConnForm::setSelected(bool isSelected, bool isCurrName){
     if(isSelected){
         resize(422, 148);
         ui->line->hide();
@@ -227,23 +227,28 @@ void OneConnForm::setSelected(bool isSelected){
         ui->wbg_2->hide();
         ui->wbg_3->show();
         ui->lbInfo->show();
-        ui->btnConn->show();
+        ui->btnConn->hide();
         ui->btnConnSub->show();
 
         this->isSelected = true;
     }else{
         resize(422, 60);
-        ui->lePassword->setText(tr(""));//"连接"
+        ui->lePassword->setText(tr(""));
         ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;"
                                       "background:rgba(0,0,0,0.2);color:rgba(255,255,255,0.35);font-size:14px;}");
-        ui->lePassword->setEchoMode(QLineEdit::Normal);
+        ui->lePassword->setEchoMode(QLineEdit::Password);
+        ui->checkBoxPwd->setChecked(false);
 
         ui->line->show();
         ui->wbg->show();
         ui->wbg_2->hide();
         ui->wbg_3->hide();
         ui->lbInfo->hide();
-        ui->btnConn->hide();
+        if (isCurrName){
+            ui->btnConn->show();
+        }else{
+            ui->btnConn->hide();
+        }
         ui->btnConnSub->hide();
 
         this->isSelected = false;

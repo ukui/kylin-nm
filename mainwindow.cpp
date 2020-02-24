@@ -728,6 +728,8 @@ void MainWindow::initNetwork()
     // 开关状态
     qDebug()<<"lstate ="<<iface->lstate<<"    wstate ="<<iface->wstate ;
     syslog(LOG_DEBUG, "state of switch:   lstate =%d    wstate =%d", iface->lstate, iface->wstate);
+
+    qDebug()<<"begin setting zhe lbBtnWifiBG and lbBtnWifiBall" ;
     ui->lbBtnNetBG->setStyleSheet(btnOnQss);
     if(iface->wstate == 0 || iface->wstate == 1){
         ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
@@ -736,9 +738,11 @@ void MainWindow::initNetwork()
         ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
         ui->lbBtnWifiBall->move(412, 22);
     }
+    qDebug()<<"after setting zhe lbBtnWifiBG and lbBtnWifiBall" ;
 
     // 初始化网络列表
     if(iface->wstate != 2){
+        qDebug()<<"begin handing the process when wstate != 2" ;
         if (iface->wstate == 0){
             connWifiDone(3);
         }else{
@@ -756,8 +760,10 @@ void MainWindow::initNetwork()
         ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
         ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
 
+        qDebug()<<"after handing the process when wstate != 2" ;
     } else {
         if(iface->lstate != 2){
+            qDebug()<<"begin handing the process when wstate == 2 and lstate != 2" ;
             if (iface->lstate == 0) {
                 connLanDone(3);
             } else{
@@ -766,14 +772,19 @@ void MainWindow::initNetwork()
                 //changeTimerState();
                 //checkIfNetworkOn->start(8000);
             }
+
+            qDebug()<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             on_btnNetList_clicked();
+            qDebug()<<"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 
             ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
             ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
+            qDebug()<<"after handing the process when wstate == 2 and lstate != 2" ;
         }else {
+            qDebug()<<"begin handing the process when wstate == 2 and lstate == 2" ;
             BackThread *m_bt = new BackThread();
             IFace *m_iface = m_bt->execGetIface();
-            qDebug()<<"lstate ="<<m_iface->lstate<<"    wstate ="<<m_iface->wstate ;
+            qDebug()<<"m_lstate ="<<m_iface->lstate<<"    m_wstate ="<<m_iface->wstate ;
 
             m_bt->lanDelete();
             sleep(1);
@@ -790,10 +801,12 @@ void MainWindow::initNetwork()
             ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
             ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
 
+            qDebug()<<"after handing the process when wstate == 2 and lstate == 2" ;
             //disNetDone();
         }
     }
 
+    qDebug()<<"begin setting zhe timer" ;
     //循环检测wifi列表的变化，可用于更新wifi列表
     checkWifiListChanged = new QTimer(this);
     checkWifiListChanged->setTimerType(Qt::PreciseTimer);
@@ -816,6 +829,8 @@ void MainWindow::initNetwork()
     setNetSpeed->setTimerType(Qt::PreciseTimer);
     QObject::connect(setNetSpeed, SIGNAL(timeout()), this, SLOT(on_setNetSpeed()));
     setNetSpeed->start(3000);
+
+    qDebug()<<"after setting zhe timer" ;
 }
 
 bool MainWindow::checkLanOn()
@@ -940,10 +955,10 @@ void MainWindow::getLanListDone(QStringList slist)
         }
     }
 
-    QList<OneLancForm *> itemList = lanListWidget->findChildren<OneLancForm *>();
-    int n = itemList.size();
-    OneLancForm *lastItem = itemList.at(n-1);
-    lastItem->setLine(false);
+//    QList<OneLancForm *> itemList = lanListWidget->findChildren<OneLancForm *>();
+//    int n = itemList.size();
+//    OneLancForm *lastItem = itemList.at(n-1);
+//    lastItem->setLine(false);
 
     this->lanListWidget->show();
     this->topLanListWidget->show();
@@ -1087,10 +1102,10 @@ void MainWindow::loadWifiListDone(QStringList slist)
         }
     }
 
-    QList<OneConnForm *> itemList = wifiListWidget->findChildren<OneConnForm *>();
-    int n = itemList.size();
-    OneConnForm *lastItem = itemList.at(n-1);
-    lastItem->setLine(false);
+//    QList<OneConnForm *> itemList = wifiListWidget->findChildren<OneConnForm *>();
+//    int n = itemList.size();
+//    OneConnForm *lastItem = itemList.at(n-1);
+//    lastItem->setLine(false);
 
     this->lanListWidget->hide();
     this->topLanListWidget->hide();
@@ -1736,23 +1751,27 @@ void MainWindow::oneLanFormSelected(QString lanName)
 
     //是否与上一次选中同一个网络框
     if (currSelNetName == lanName){
-        // 设置选中，缩小所有选项卡
+        // 缩小所有选项卡
         for(int i = 0;i < lanList.size(); i ++){
             OneLancForm *ocf = lanList.at(i);
-            ocf->setSelected(false);
+            if(ocf->lanName == lanName){
+                ocf->setSelected(false, true);
+            }else{
+                ocf->setSelected(false, false);
+            }
         }
 
         currSelNetName = "";
     } else {
-        // 设置选中，放大缩小所有选项卡
+        // 选中的选项卡放大，其他选项卡缩小
         int selectY = 0;
         for(int i = 0;i < lanList.size(); i ++){
             OneLancForm *ocf = lanList.at(i);
             if(ocf->lanName == lanName){
-                ocf->setSelected(true);
+                ocf->setSelected(true, false);
                 selectY = ocf->y();
             }else{
-                ocf->setSelected(false);
+                ocf->setSelected(false, false);
             }
         }
 
@@ -1767,10 +1786,10 @@ void MainWindow::oneLanFormSelected(QString lanName)
         currSelNetName = lanName;
     }
 
-    QList<OneLancForm *> itemList = lanListWidget->findChildren<OneLancForm *>();
-    int n = itemList.size();
-    OneLancForm *lastItem = itemList.at(n-1);
-    lastItem->setLine(false);
+//    QList<OneLancForm *> itemList = lanListWidget->findChildren<OneLancForm *>();
+//    int n = itemList.size();
+//    OneLancForm *lastItem = itemList.at(n-1);
+//    lastItem->setLine(false);
 
 }
 void MainWindow::oneTopLanFormSelected(QString lanName)
@@ -1821,11 +1840,20 @@ void MainWindow::oneWifiFormSelected(QString wifiName)
         // 置选中，缩小所有选项卡
         for(int i = 0;i < wifiList.size(); i ++){
             OneConnForm *ocf = wifiList.at(i);
-            if (ocf->wifiName == hideWiFiConn){
-                ocf->setHideItem(true, true);
-            }else{
-                ocf->setSelected(false);
+            if(ocf->wifiName == wifiName){
+                if (ocf->wifiName == hideWiFiConn){
+                    ocf->setHideItem(true, true);
+                }else{
+                    ocf->setSelected(false, true);
+                }
+            } else{
+                if (ocf->wifiName == hideWiFiConn){
+                    ocf->setHideItem(true, true);
+                }else{
+                    ocf->setSelected(false, false);
+                }
             }
+
         }
         currSelNetName = "";
     } else {
@@ -1838,14 +1866,14 @@ void MainWindow::oneWifiFormSelected(QString wifiName)
                 if (ocf->wifiName == hideWiFiConn){
                     ocf->setHideItem(true, true);
                 }else{
-                    ocf->setSelected(true);
+                    ocf->setSelected(true, false);
                 }
                 selectY = ocf->y();
             }else{
                 if (ocf->wifiName == hideWiFiConn){
                     ocf->setHideItem(true, true);
                 }else{
-                    ocf->setSelected(false);
+                    ocf->setSelected(false, false);
                 }
             }
         }
@@ -1861,10 +1889,10 @@ void MainWindow::oneWifiFormSelected(QString wifiName)
         currSelNetName = wifiName;
     }
 
-    QList<OneConnForm *> itemList = wifiListWidget->findChildren<OneConnForm *>();
-    int n = itemList.size();
-    OneConnForm *lastItem = itemList.at(n-1);
-    lastItem->setLine(false);
+//    QList<OneConnForm *> itemList = wifiListWidget->findChildren<OneConnForm *>();
+//    int n = itemList.size();
+//    OneConnForm *lastItem = itemList.at(n-1);
+//    lastItem->setLine(false);
 
 }
 void MainWindow::oneTopWifiFormSelected(QString wifiName)
@@ -2055,7 +2083,7 @@ void MainWindow::disWifiDone()
     for(int i = 0; i < wifiList.size(); i ++){
         OneConnForm *ocf = wifiList.at(i);
         if(ocf->isActive == true){
-            ocf->setSelected(false);
+            ocf->setSelected(false, false);
             ocf->setName(tr("Not connected"));//"当前未连接任何 Wifi"
             ocf->setSignal("0", "--");
             ocf->setConnedString(1, tr("Disconnected"), "");//"未连接"
@@ -2105,7 +2133,7 @@ void MainWindow::keepDisWifiState()
         for(int i = 0; i < wifiList.size(); i ++){
             OneConnForm *ocf = wifiList.at(i);
             if(ocf->isActive == true){
-                ocf->setSelected(false);
+                ocf->setSelected(false, false);
                 ocf->setName(tr("Not connected"));//"当前未连接任何 Wifi"
                 ocf->setSignal("0", "--");
                 ocf->setConnedString(1, tr("Disconnected"), "");//"未连接"

@@ -10,6 +10,11 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = kylin-nm
 TEMPLATE = app
+LANGUAGE = C++
+
+CONFIG += c++14
+CONFIG += qt warn_on
+CONFIG += release
 #CONFIG += link_pkgconfig
 #PKGCONFIG += libnm glib-2.0 gio-2.0 dbus-glib-1
 #PKGCONFIG += Qt5Svg

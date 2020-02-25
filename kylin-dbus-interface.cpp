@@ -283,12 +283,28 @@ void KylinDBus::getActWifiMac(QString netName)
         const QDBusArgument &dbusArg = reply.arguments().at( 0 ).value<QDBusArgument>();
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg >> map;
-        if (map.values().at(0).values().size() >= 5){
-            if(map.values().at(2).values().at(0).toString() == netName){
-                dbusWifiMac = map.values().at(0).values().at(3).toString();
+
+        for(QString key : map.keys() ){
+            QMap<QString,QVariant> innerMap = map.value(key);
+            if (key == "connection"){
+                for (QString inner_key : innerMap.keys()){
+                    if (inner_key == "id"){
+                        if (netName == innerMap.value(inner_key).toString()){
+
+                            for (QString subkey : map.keys()){
+                                QMap<QString,QVariant> subMap = map.value(subkey);
+                                if (subkey == "802-11-wireless"){
+                                    dbusWifiMac = subMap.value("seen-bssids").toString();
+                                }
+                            } //end for (QString subkey : map.keys())
+
+                        }
+                    }
+                }
             }
         }
-    }
+
+    } // end foreach (QDBusObjectPath objNet, m_objNets)
 }
 
 int KylinDBus::getAccessPointsNumber()

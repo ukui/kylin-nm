@@ -159,8 +159,8 @@ private:
     QMenu *trayIconMenu;
     QWidgetAction *mShowWindow;
     QWidgetAction *mAdvConf;
-    QWidget *wid;
-    QWidget *wid_new;
+    QWidget *widShowWindow;
+    QWidget *widAdvConf;
 
     QString lname, wname; // 以太网卡和无线网卡名称
 

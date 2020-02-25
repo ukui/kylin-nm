@@ -61,6 +61,8 @@ public:
 
     void setConnedString(bool showLable, QString str, QString str1);
 
+    void setLePassword();
+
     QString wifiName;
     bool isSelected;
     bool isActive;

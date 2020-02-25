@@ -289,29 +289,30 @@ void MainWindow::createTrayIcon()
     trayIcon->setToolTip(QString(tr("kylin-nm")));
 
     trayIconMenu = new QMenu(this);
-    trayIconMenu->addSeparator();
-    trayIconMenu->setStyleSheet("QMenu {height: 88px;width: 250px;"
-                                "background-color: rgba(19,19,20,0.95);"
+    trayIconMenu->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
+    trayIconMenu->setStyleSheet("QMenu {background-color: rgba(19,19,20,0.95);"
                                     "border:1px solid rgba(255, 255, 255, 0.05);"
-                                    "padding: 6px 0px;"
+                                    "padding: 6px 1px;"
                                     "border-radius: 6px;}"
                                 "QMenu::item {font-size: 14px;color: #ffffff;"
-                                              "height: 36px;width: 250px;}"
-                                "QMenu::separator{height:1px;background-color:rgba(19,19,20,0);margin-top:1px;margin-bottom:2px;}");
+                                              "height: 36px;width: 248px;}"
+                                "QMenu::separator{height:1px;background-color:rgba(19,19,20,0);"
+                                        "margin-top:1px;margin-bottom:2px;}");
 
     mShowWindow = new QWidgetAction(trayIconMenu);
     mAdvConf = new QWidgetAction(trayIconMenu);
 
-    wid = new QWidget();
-    wid_new = new QWidget();
+    widShowWindow = new QWidget();
+    widAdvConf = new QWidget();
 
-    mShowWindow->setDefaultWidget(wid);
-    mAdvConf->setDefaultWidget(wid_new);
+    mShowWindow->setDefaultWidget(widShowWindow);
+    mAdvConf->setDefaultWidget(widAdvConf);
 
-    init_widget_action(wid, "", tr("Show MainWindow"));
-    init_widget_action(wid_new, ":/res/x/setup.png", tr("Advanced"));
+    init_widget_action(widShowWindow, "", tr("Show MainWindow"));
+    init_widget_action(widAdvConf, ":/res/x/setup.png", tr("Advanced"));
 
     trayIconMenu->addAction(mShowWindow);
+    trayIconMenu->addSeparator();
     trayIconMenu->addAction(mAdvConf);
     trayIcon->setContextMenu(trayIconMenu);
 
@@ -394,18 +395,40 @@ void MainWindow::handleIconClicked()
     QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
     QRect screenGeometry = qApp->primaryScreen()->geometry();
 
-    QDesktopWidget* pDesktopWidget = QApplication::desktop();
-//    int nScreenCount = QApplication::desktop()->screenCount();
-//    QRect deskRect = pDesktopWidget->availableGeometry();//可用区域
-    QRect screenRect = pDesktopWidget->screenGeometry();//屏幕区域
+    //QDesktopWidget* pDesktopWidget = QApplication::desktop();
+    //int nScreenCount = QApplication::desktop()->screenCount();
+    //QRect deskRect = pDesktopWidget->availableGeometry();//可用区域
+    //QRect screenRect = pDesktopWidget->screenGeometry();//屏幕区域
 
-//    qDebug()<<"screenRect.x(): "<<screenRect.x()<<"   screenRect.height(): "<<screenRect.height();
-//    qDebug()<<"availableGeometry.y(): "<<availableGeometry.y()<<"   availableGeometry.height(): "<<availableGeometry.height();
-    if (screenRect.height() != availableGeometry.height()) {
-        this->move(availableGeometry.x() + availableGeometry.width() - this->width(), availableGeometry.height() - this->height());
-    }else {
-        this->move(availableGeometry.x() + availableGeometry.width() - this->width(), availableGeometry.height() - this->height() - 40);
+    //qDebug()<<"                                                  ";
+    //qDebug()<<"trayIcon:"<<trayIcon->geometry();
+    //qDebug()<<"screenGeometry: "<<screenGeometry;
+    //qDebug()<<"availableGeometry: "<<availableGeometry;
+
+    if (screenGeometry.width() == availableGeometry.width()){
+        if (trayIcon->geometry().y() > availableGeometry.height()/2){
+            //任务栏在下侧
+            if (screenGeometry.height() != availableGeometry.height()) {
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width(), availableGeometry.height() - this->height());
+            }else {
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width(), availableGeometry.height() - this->height() - 40);
+            }
+        }else{
+            //任务栏在上侧
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenGeometry.height() - availableGeometry.height());
+        }
     }
+    if (screenGeometry.height() == availableGeometry.height()){
+        if (trayIcon->geometry().x() > availableGeometry.width()/2){
+            //任务栏在右侧
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenGeometry.height() - this->height());
+        } else {
+            //任务栏在左侧
+            this->move(screenGeometry.width() - availableGeometry.width(), screenGeometry.height() - this->height());
+        }
+    }
+
+
 
 //    QPoint pos = QCursor::pos();
 //    QRect primaryGeometry;

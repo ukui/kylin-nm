@@ -1,4 +1,5 @@
 #include "networkspeed.h"
+#include <stdio.h>
 
 NetworkSpeed::NetworkSpeed(QObject *parent) :QObject(parent)
 {
@@ -9,10 +10,10 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
 {
     FILE * net_dev_file; //文件指针
     char buffer[1024]; //文件中的内容暂存在字符缓冲区里
-    size_t bytes_read; //实际读取的内容大小
+    //size_t bytes_read; //实际读取的内容大小
     char * match; //用以保存所匹配字符串及之后的内容
     int counter = 0;
-    int i = 0;
+    //int i = 0;
     char tmp_value[128];
 
     if((NULL == netname)||(NULL == save_rate)||(NULL == tx_rate)){
@@ -39,7 +40,7 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
             memset(tmp_value,0,sizeof(tmp_value));
             sscanf(match,"%s ",tmp_value);
             match = match + strlen(tmp_value);
-            for(i=0;i<strlen(buffer);i++){
+            for(size_t i=0;i<strlen(buffer);i++){
                 if(0x20 == *match){
                     match ++;
                 } else{

@@ -4,6 +4,9 @@ kylin-nm (1.2.0-1) unstable; urgency=medium
   * debian/control:
     - Bump standards-version to 4.5.0.
 
+  [ lixiang ]
+  * update kylin-nm.pro and rules.
+
  -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 25 Feb 2020 14:12:29 +0800
 
 kylin-nm (1.0.4-1) unstable; urgency=medium

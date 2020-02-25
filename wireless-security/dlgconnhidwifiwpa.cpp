@@ -23,6 +23,7 @@
 #include "backthread.h"
 #include "mainwindow.h"
 #include <unistd.h>
+#include <stdlib.h>
 
 DlgConnHidWifiWpa::DlgConnHidWifiWpa(int type, MainWindow *mainWindow, QWidget *parent) :
     isUsed(type),

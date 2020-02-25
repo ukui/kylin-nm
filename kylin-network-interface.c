@@ -21,6 +21,7 @@
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <linux/route.h>
 #include <netinet/ether.h>
 #include <net/ethernet.h>

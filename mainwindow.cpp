@@ -96,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent) :
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
     btnAddNet->setFocusPolicy(Qt::NoFocus);
     btnAddNet->show();
-    connect(btnAddNet,SIGNAL(clicked()),this,SLOT(on_btnAddNet_clicked()));
+    connect(btnAddNet,SIGNAL(clicked()),this,SLOT(onBtnAddNetClicked()));
 
     scrollAreal = new QScrollArea(ui->centralWidget);
     scrollAreal->move(41, 158);
@@ -1034,7 +1034,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
     btnAddNet->setFocusPolicy(Qt::NoFocus);
     btnAddNet->show();
-    connect(btnAddNet,SIGNAL(clicked()),this,SLOT(on_btnAddNet_clicked()));
+    connect(btnAddNet,SIGNAL(clicked()),this,SLOT(onBtnAddNetClicked()));
 
     // 清空wifi列表
     wifiListWidget = new QWidget(scrollAreaw);
@@ -1476,7 +1476,7 @@ void MainWindow::on_btnWifiList_clicked()
                                    "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
         btnAddNet->setFocusPolicy(Qt::NoFocus);
         btnAddNet->show();
-        connect(btnAddNet,SIGNAL(clicked()),this,SLOT(on_btnAddNet_clicked()));
+        connect(btnAddNet,SIGNAL(clicked()),this,SLOT(onBtnAddNetClicked()));
 
         // 清空wifi列表
         wifiListWidget = new QWidget(scrollAreaw);
@@ -2265,7 +2265,7 @@ void MainWindow::on_btnHotspotState()
     is_hot_sopt_on = 0;
 }
 
-void MainWindow::on_btnAddNet_clicked()
+void MainWindow::onBtnAddNetClicked()
 {
     QApplication::setQuitOnLastWindowClosed(false);
     DlgConnHidWifi *connHidWifi = new DlgConnHidWifi(0, this);

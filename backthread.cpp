@@ -19,6 +19,7 @@
 #include "backthread.h"
 
 #include <unistd.h>
+#include <stdlib.h>
 
 #include <QFile>
 #include <QRegExp>

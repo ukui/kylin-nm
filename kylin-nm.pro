@@ -9,7 +9,7 @@ QT       += core gui x11extras dbus
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = kylin-nm
-
+TEMPLATE = app
 #CONFIG += link_pkgconfig
 #PKGCONFIG += libnm glib-2.0 gio-2.0 dbus-glib-1
 #PKGCONFIG += Qt5Svg
@@ -23,8 +23,6 @@ desktop.files = kylin-nm.desktop
 INSTALLS += target \
     desktop
 
-TEMPLATE = app
-
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -35,6 +33,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+QMAKE_CPPFLAGS *= $(shell dpkg-buildflags --get CPPFLAGS)
+QMAKE_CFLAGS   *= $(shell dpkg-buildflags --get CFLAGS)
+QMAKE_CXXFLAGS *= $(shell dpkg-buildflags --get CXXFLAGS)
+QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 
 
 SOURCES += \
@@ -104,6 +107,12 @@ FORMS += \
 
 RESOURCES += \
     nmqrc.qrc
+
+unix {
+    UI_DIR = .ui
+    MOC_DIR = .moc
+    OBJECTS_DIR = .obj
+}
 
 TRANSLATIONS = translations/kylin-nm_zh_CN.ts \
                translations/kylin-nm_bo.ts

@@ -21,6 +21,9 @@
 #include "kylin-network-interface.h"
 #include "backthread.h"
 
+#include <unistd.h>
+#include <stdlib.h>
+
 extern QString llname, lwname;
 
 ConfForm::ConfForm(QWidget *parent) :

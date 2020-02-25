@@ -3,10 +3,15 @@ Section: utils
 Priority: optional
 Maintainer: Kylin Team <team+kylin@tracker.debian.org>
 Uploaders: handsome_feng <jianfengli@ubuntukylin.com>
-Build-Depends: debhelper-compat (= 12),
+Build-Depends: debhelper-compat (>= 12),
                qtbase5-dev,
+               qt5-qmake,
+               qtchooser,
+               qtscript5-dev,
+               qttools5-dev-tools,
+               qtbase5-dev-tools,
                libnotify-bin,
-               libqt5x11extras5-dev (>= 5.11.1-2),
+               libqt5x11extras5-dev,
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: https://github.com/ukui/kylin-nm
@@ -15,8 +20,7 @@ Vcs-Browser: https://github.com/ukui/kylin-nm
 
 Package: kylin-nm
 Architecture: any
-Depends: libqt5x11extras5 (>= 5.11.1-2),
-         network-manager (>=1.12.4),
+Depends: network-manager (>=1.12.4),
          libnotify-bin,
          ${shlibs:Depends},
          ${misc:Depends}

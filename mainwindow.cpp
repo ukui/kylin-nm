@@ -40,13 +40,13 @@ MainWindow::MainWindow(QWidget *parent) :
 //    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
 //    this->setWindowFlags(Qt::FramelessWindowHint);
 
-    this->setWindowOpacity(0.95);
+    //this->setWindowOpacity(0.95);
     this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
     this->setWindowFlags(Qt::FramelessWindowHint);   //设置无边框窗口
     //this->setStyleSheet("QWidget{border-top-left-radius:6px;border-top-right-radius:6px;}");
     this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
 
-    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255, 255, 255, 0.05);border-radius:6px;background:rgba(19,19,20,0.95);}");
+    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255, 255, 255, 0.05);border-radius:6px;background:rgba(19,19,20,0.97);}");
 
     lname = "-1";
     wname = "-1";
@@ -289,10 +289,16 @@ void MainWindow::createTrayIcon()
     trayIcon->setToolTip(QString(tr("kylin-nm")));
 
     trayIconMenu = new QMenu(this);
-    trayIconMenu->setStyleSheet("QMenu {background-color: rgba(8,10,12,90%);"
-                                    "border: 1px solid #626c6e;"
-                                    "border-radius: 2px;"
-                                    "padding: 4px 2px 4px 2px;}");
+    trayIconMenu->addSeparator();
+    trayIconMenu->setStyleSheet("QMenu {height: 88px;width: 250px;"
+                                "background-color: rgba(19,19,20,0.95);"
+                                    "border:1px solid rgba(255, 255, 255, 0.05);"
+                                    "padding: 6px 0px;"
+                                    "border-radius: 6px;}"
+                                "QMenu::item {font-size: 14px;color: #ffffff;"
+                                              "height: 36px;width: 250px;}"
+                                "QMenu::separator{height:1px;background-color:rgba(19,19,20,0);margin-top:1px;margin-bottom:2px;}");
+
     mShowWindow = new QWidgetAction(trayIconMenu);
     mAdvConf = new QWidgetAction(trayIconMenu);
 
@@ -422,20 +428,20 @@ void MainWindow::on_showWindowAction()
 
 void MainWindow::init_widget_action(QWidget *wid, QString iconstr, QString textstr)
 {
-    QString style="QWidget{background:transparent;border:0px;}\
+    QString style="QWidget{background:transparent;border:0px;border-radius: 0px;}\
     QWidget:hover{background-color:#34bed8ef;}\
     QWidget:pressed{background-color:#3abed8ef;}";
 
     QHBoxLayout* layout=new QHBoxLayout(wid);
     wid->setLayout(layout);
-    wid->setFixedSize(250, 42);
+    wid->setFixedSize(248, 36);
     wid->setStyleSheet(style);
     wid->setFocusPolicy(Qt::NoFocus);
 
     if(!iconstr.isEmpty()) {
         QLabel* labelicon=new QLabel(wid);
         labelicon->setFixedSize(16, 16);
-        labelicon->move(10, 14);
+        labelicon->move(10, 12);
         QPixmap *pixmap = new QPixmap(":/res/x/setup.png");
         pixmap->scaled(labelicon->size(), Qt::KeepAspectRatio);
         labelicon->setScaledContents(true);
@@ -773,9 +779,7 @@ void MainWindow::initNetwork()
                 //checkIfNetworkOn->start(8000);
             }
 
-            qDebug()<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             on_btnNetList_clicked();
-            qDebug()<<"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 
             ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
             ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
@@ -955,10 +959,12 @@ void MainWindow::getLanListDone(QStringList slist)
         }
     }
 
-//    QList<OneLancForm *> itemList = lanListWidget->findChildren<OneLancForm *>();
-//    int n = itemList.size();
-//    OneLancForm *lastItem = itemList.at(n-1);
-//    lastItem->setLine(false);
+    QList<OneLancForm *> itemList = lanListWidget->findChildren<OneLancForm *>();
+    int n = itemList.size();
+    if (n >= 1){
+        OneLancForm *lastItem = itemList.at(n-1);
+        lastItem->setLine(false);
+    }
 
     this->lanListWidget->show();
     this->topLanListWidget->show();
@@ -1102,10 +1108,12 @@ void MainWindow::loadWifiListDone(QStringList slist)
         }
     }
 
-//    QList<OneConnForm *> itemList = wifiListWidget->findChildren<OneConnForm *>();
-//    int n = itemList.size();
-//    OneConnForm *lastItem = itemList.at(n-1);
-//    lastItem->setLine(false);
+    QList<OneConnForm *> itemList = wifiListWidget->findChildren<OneConnForm *>();
+    int n = itemList.size();
+    if (n >= 1){
+        OneConnForm *lastItem = itemList.at(n-1);
+        lastItem->setLine(false);
+    }
 
     this->lanListWidget->hide();
     this->topLanListWidget->hide();
@@ -1194,8 +1202,12 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 qDebug()<<"Will add a Wi-Fi, it's name is: "<<wname;
                 QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
                 int n = wifiList.size();
-                OneConnForm *lastOcf = wifiList.at(n-1);
-                lastOcf->setLine(true);
+                int posY = 0;
+                if (n >= 1){
+                    OneConnForm *lastOcf = wifiList.at(n-1);
+                    lastOcf->setLine(true);
+                    posY = lastOcf->y()+60;
+                }
 
                 wifiListWidget->resize(440, wifiListWidget->height() + 60);
                 OneConnForm *addItem = new OneConnForm(wifiListWidget, this, confForm, ksnm);
@@ -1207,7 +1219,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 objKyDBus->getWifiMac(wname, i-1);
                 addItem->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
                 addItem->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"
-                addItem->move(0, lastOcf->y()+60);
+                addItem->move(0, posY);
                 addItem->show();
 
                 count += 1;
@@ -1786,10 +1798,12 @@ void MainWindow::oneLanFormSelected(QString lanName)
         currSelNetName = lanName;
     }
 
-//    QList<OneLancForm *> itemList = lanListWidget->findChildren<OneLancForm *>();
-//    int n = itemList.size();
-//    OneLancForm *lastItem = itemList.at(n-1);
-//    lastItem->setLine(false);
+    QList<OneLancForm *> itemList = lanListWidget->findChildren<OneLancForm *>();
+    int n = itemList.size();
+    if(n >= 1){
+        OneLancForm *lastItem = itemList.at(n-1);
+        lastItem->setLine(false);
+    }
 
 }
 void MainWindow::oneTopLanFormSelected(QString lanName)
@@ -1889,11 +1903,12 @@ void MainWindow::oneWifiFormSelected(QString wifiName)
         currSelNetName = wifiName;
     }
 
-//    QList<OneConnForm *> itemList = wifiListWidget->findChildren<OneConnForm *>();
-//    int n = itemList.size();
-//    OneConnForm *lastItem = itemList.at(n-1);
-//    lastItem->setLine(false);
-
+    QList<OneConnForm *> itemList = wifiListWidget->findChildren<OneConnForm *>();
+    int n = itemList.size();
+    if (n >= 1){
+        OneConnForm *lastItem = itemList.at(n-1);
+        lastItem->setLine(false);
+    }
 }
 void MainWindow::oneTopWifiFormSelected(QString wifiName)
 {

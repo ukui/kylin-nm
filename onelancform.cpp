@@ -227,11 +227,11 @@ void OneLancForm::setConnedString(bool showLable, QString str){
 void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString str4)
 {
     if (str1 == "" || str1 == "auto"){
-        str1 = tr("Auto");
+        str1 = tr("no configuration");
     }
 
     if (str2 == "" || str2 == "auto"){
-        str2 = tr("Auto");
+        str2 = tr("no configuration");
     }
 
     QString str = "IPv4地址：" + str1 + "\nIPv6地址：" + str2 + "\n带宽：" + str3 + " \n物理地址(MAC)：" + str4;

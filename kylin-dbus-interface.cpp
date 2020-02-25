@@ -105,8 +105,8 @@ void KylinDBus::getPhysicalCarrierState(int n)
     } else if (reply.value().toString() == "false"){
         isWiredCableOn = false;
     } else {
-        syslog(LOG_ERR, "Error occured when get the property 'Carrier' of Wired");
-        qDebug()<<"Error occured when get the property 'Carrier' of Wired";
+        syslog(LOG_ERR, "Error occurred when get the property 'Carrier' of Wired");
+        qDebug()<<"Error occurred when get the property 'Carrier' of Wired";
     }
 
     if (n == 1){ this->mw->onPhysicalCarrierChanged(isWiredCableOn);}

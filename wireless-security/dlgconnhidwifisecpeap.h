@@ -16,6 +16,9 @@ public:
     explicit DlgConnHidWifiSecPeap(int type, QWidget *parent = 0);
     ~DlgConnHidWifiSecPeap();
 
+protected:
+    void paintEvent(QPaintEvent *event);
+
 public slots:
     void changeDialogSecu();
     void changeDialogAuth();

@@ -72,10 +72,10 @@ MainWindow::MainWindow(QWidget *parent) :
     lbTopLanList->show();
 
     lbLoadDown = new QLabel(ui->centralWidget);
-    lbLoadDown->move(41 + 132, 52 + 31);
+    lbLoadDown->move(41 + 132, 52 + 32);
     lbLoadDown->resize(65, 20);
     lbLoadUp = new QLabel(ui->centralWidget);
-    lbLoadUp->move(41 + 207, 52 + 31);
+    lbLoadUp->move(41 + 215, 52 + 32);
     lbLoadUp->resize(65, 20);
 
     topWifiListWidget = new QWidget(ui->centralWidget);
@@ -244,6 +244,8 @@ MainWindow::MainWindow(QWidget *parent) :
     initNetwork(); //初始化网络
 
     trayIcon->show();
+
+    connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClicked);
 }
 
 MainWindow::~MainWindow()
@@ -669,14 +671,14 @@ void MainWindow::onCarrierUpHandle()
     up_bt->deleteLater();
 
     this->stopLoading();
-    on_btnNetList_clicked(1);
+    onBtnNetListClicked(1);
     is_stop_check_net_state = 0;
 }
 void MainWindow::onCarrierDownHandle()
 {
     wiredCableDownTimer->stop();
     this->stopLoading();
-    on_btnNetList_clicked(0);
+    onBtnNetListClicked(0);
     is_stop_check_net_state = 0;
 }
 void MainWindow::onDeleteLan()
@@ -691,7 +693,7 @@ void MainWindow::onDeleteLan()
     btn_bt->deleteLater();
 
     this->stopLoading();
-    on_btnNetList_clicked(0);
+    onBtnNetListClicked(0);
     is_stop_check_net_state = 0;
 }
 
@@ -758,7 +760,6 @@ void MainWindow::initNetwork()
     qDebug()<<"lstate ="<<iface->lstate<<"    wstate ="<<iface->wstate ;
     syslog(LOG_DEBUG, "state of switch:   lstate =%d    wstate =%d", iface->lstate, iface->wstate);
 
-    qDebug()<<"begin setting zhe lbBtnWifiBG and lbBtnWifiBall" ;
     ui->lbBtnNetBG->setStyleSheet(btnOnQss);
     if(iface->wstate == 0 || iface->wstate == 1){
         ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
@@ -767,11 +768,9 @@ void MainWindow::initNetwork()
         ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
         ui->lbBtnWifiBall->move(412, 22);
     }
-    qDebug()<<"after setting zhe lbBtnWifiBG and lbBtnWifiBall" ;
 
     // 初始化网络列表
     if(iface->wstate != 2){
-        qDebug()<<"begin handing the process when wstate != 2" ;
         if (iface->wstate == 0){
             connWifiDone(3);
         }else{
@@ -788,11 +787,8 @@ void MainWindow::initNetwork()
 
         ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
         ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
-
-        qDebug()<<"after handing the process when wstate != 2" ;
     } else {
         if(iface->lstate != 2){
-            qDebug()<<"begin handing the process when wstate == 2 and lstate != 2" ;
             if (iface->lstate == 0) {
                 connLanDone(3);
             } else{
@@ -802,13 +798,11 @@ void MainWindow::initNetwork()
                 //checkIfNetworkOn->start(8000);
             }
 
-            on_btnNetList_clicked();
+            onBtnNetListClicked();
 
             ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
             ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
-            qDebug()<<"after handing the process when wstate == 2 and lstate != 2" ;
         }else {
-            qDebug()<<"begin handing the process when wstate == 2 and lstate == 2" ;
             BackThread *m_bt = new BackThread();
             IFace *m_iface = m_bt->execGetIface();
             qDebug()<<"m_lstate ="<<m_iface->lstate<<"    m_wstate ="<<m_iface->wstate ;
@@ -823,17 +817,15 @@ void MainWindow::initNetwork()
 
             system("nmcli networking on");
 
-            on_btnNetList_clicked();
+            onBtnNetListClicked();
 
             ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
             ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
 
-            qDebug()<<"after handing the process when wstate == 2 and lstate == 2" ;
             //disNetDone();
         }
     }
 
-    qDebug()<<"begin setting zhe timer" ;
     //循环检测wifi列表的变化，可用于更新wifi列表
     checkWifiListChanged = new QTimer(this);
     checkWifiListChanged->setTimerType(Qt::PreciseTimer);
@@ -856,8 +848,6 @@ void MainWindow::initNetwork()
     setNetSpeed->setTimerType(Qt::PreciseTimer);
     QObject::connect(setNetSpeed, SIGNAL(timeout()), this, SLOT(on_setNetSpeed()));
     setNetSpeed->start(3000);
-
-    qDebug()<<"after setting zhe timer" ;
 }
 
 bool MainWindow::checkLanOn()
@@ -1119,7 +1109,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->setSignal(wsignal, wsecu);
                 objKyDBus->getWifiMac(wname, i-1);
                 ocf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
-                ocf->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"
+                ocf->setConnedString(0, tr("Disconnected"), wsecu);
                 ocf->move(0, j * 60);
                 ocf->show();
 
@@ -1345,7 +1335,7 @@ void MainWindow::on_btnWifi_clicked()
     }
 }
 
-void MainWindow::on_btnNetList_clicked(int flag)
+void MainWindow::onBtnNetListClicked(int flag)
 {
 //    if (this->ksnm->isExecutingGetWifiList ){
 //        qDebug()<<"executing update Wifi list now, try again";
@@ -2019,7 +2009,7 @@ void MainWindow::enNetDone()
         ui->lbBtnWifiBall->move(438, 22);
     }
 
-    on_btnNetList_clicked(1);
+    onBtnNetListClicked(1);
     is_stop_check_net_state = 0;
 
     qDebug()<<"debug: already turn on the switch of lan network";

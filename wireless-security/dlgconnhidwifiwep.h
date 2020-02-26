@@ -16,6 +16,9 @@ public:
     explicit DlgConnHidWifiWep(int type, QWidget *parent = 0);
     ~DlgConnHidWifiWep();
 
+protected:
+    void paintEvent(QPaintEvent *event);
+
 public slots:
     void changeDialog();
 

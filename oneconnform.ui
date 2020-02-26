@@ -193,7 +193,7 @@
    <property name="geometry">
     <rect>
      <x>115</x>
-     <y>33</y>
+     <y>35</y>
      <width>16</width>
      <height>16</height>
     </rect>
@@ -205,8 +205,8 @@
   <widget class="QLabel" name="lbLoadUpImg">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>33</y>
+     <x>198</x>
+     <y>35</y>
      <width>16</width>
      <height>16</height>
     </rect>
@@ -229,7 +229,7 @@
    <property name="geometry">
     <rect>
      <x>132</x>
-     <y>31</y>
+     <y>32</y>
      <width>65</width>
      <height>20</height>
     </rect>
@@ -241,8 +241,8 @@
   <widget class="QLabel" name="lbLoadUp">
    <property name="geometry">
     <rect>
-     <x>207</x>
-     <y>31</y>
+     <x>215</x>
+     <y>32</y>
      <width>65</width>
      <height>20</height>
     </rect>

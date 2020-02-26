@@ -16,6 +16,9 @@ public:
     explicit DlgConnHidWifiSecPwd(int type, QWidget *parent = 0);
     ~DlgConnHidWifiSecPwd();
 
+protected:
+    void paintEvent(QPaintEvent *event);
+
 public slots:
     void changeDialogSecu();
     void changeDialogAuth();

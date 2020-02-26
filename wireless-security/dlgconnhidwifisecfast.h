@@ -16,6 +16,9 @@ public:
     explicit DlgConnHidWifiSecFast(int type, QWidget *parent = 0);
     ~DlgConnHidWifiSecFast();
 
+protected:
+    void paintEvent(QPaintEvent *event);
+
 public slots:
     void changeDialogSecu();
     void changeDialogAuth();

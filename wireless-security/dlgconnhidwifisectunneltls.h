@@ -16,6 +16,9 @@ public:
     explicit DlgConnHidWifiSecTunnelTLS(int type, QWidget *parent = 0);
     ~DlgConnHidWifiSecTunnelTLS();
 
+protected:
+    void paintEvent(QPaintEvent *event);
+
 public slots:
     void changeDialogSecu();
     void changeDialogAuth();

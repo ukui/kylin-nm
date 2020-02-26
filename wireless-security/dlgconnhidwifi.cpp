@@ -34,8 +34,9 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
     ui->setupUi(this);
 
     this->setWindowFlags(Qt::FramelessWindowHint);
-
-    this->setStyleSheet("border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);");
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    //需要添加 void paintEvent(QPaintEvent *event) 函数
+    this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
 
     ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
     ui->lbBoder->hide();
@@ -128,12 +129,10 @@ void DlgConnHidWifi::mousePressEvent(QMouseEvent *event){
 }
 void DlgConnHidWifi::mouseReleaseEvent(QMouseEvent *event){
     this->isPress = false;
-    this->setWindowOpacity(1);
 }
 void DlgConnHidWifi::mouseMoveEvent(QMouseEvent *event){
     if(this->isPress){
         this->move(this->winPos - (this->dragPos - event->globalPos()));
-        this->setWindowOpacity(0.9);
         event->accept();
     }
 }
@@ -286,4 +285,13 @@ void DlgConnHidWifi::emitSignal()
     emit reSetWifiList();
     mw->stopLoading();
     emit this->stopSignal();
+}
+
+void DlgConnHidWifi::paintEvent(QPaintEvent *event)
+{
+    QStyleOption opt;
+       opt.init(this);
+       QPainter p(this);
+       style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+       QWidget::paintEvent(event);
 }

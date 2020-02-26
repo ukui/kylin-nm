@@ -28,7 +28,9 @@ DlgConnHidWifiSecTls::DlgConnHidWifiSecTls(int type, QWidget *parent) :
     ui->setupUi(this);
 
     this->setWindowFlags(Qt::FramelessWindowHint);
-    this->setStyleSheet("border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);");
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    //需要添加 void paintEvent(QPaintEvent *event) 函数
+    this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
 
     ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
     ui->lbBoder->hide();
@@ -177,6 +179,24 @@ DlgConnHidWifiSecTls::DlgConnHidWifiSecTls(int type, QWidget *parent) :
 DlgConnHidWifiSecTls::~DlgConnHidWifiSecTls()
 {
     delete ui;
+}
+
+void DlgConnHidWifiSecTls::mousePressEvent(QMouseEvent *event){
+    if(event->button() == Qt::LeftButton){
+        this->isPress = true;
+        this->winPos = this->pos();
+        this->dragPos = event->globalPos();
+        event->accept();
+    }
+}
+void DlgConnHidWifiSecTls::mouseReleaseEvent(QMouseEvent *event){
+    this->isPress = false;
+}
+void DlgConnHidWifiSecTls::mouseMoveEvent(QMouseEvent *event){
+    if(this->isPress){
+        this->move(this->winPos - (this->dragPos - event->globalPos()));
+        event->accept();
+    }
 }
 
 void DlgConnHidWifiSecTls::changeDialogSecu()
@@ -597,4 +617,13 @@ void DlgConnHidWifiSecTls::on_leUserKeyPwd_textEdited(const QString &arg1)
             }
         }
     }
+}
+
+void DlgConnHidWifiSecTls::paintEvent(QPaintEvent *event)
+{
+    QStyleOption opt;
+       opt.init(this);
+       QPainter p(this);
+       style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+       QWidget::paintEvent(event);
 }

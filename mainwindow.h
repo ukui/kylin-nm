@@ -105,8 +105,6 @@ public:
 
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
 
-    void on_btnNetList_clicked(int flag=0);
-
 public slots:
     void onPhysicalCarrierChanged(bool flag);
     void onCarrierUpHandle();
@@ -199,6 +197,7 @@ private slots:
     void on_btnNet_clicked();
     void on_btnWifi_clicked();
     void on_btnWifiList_clicked();
+    void onBtnNetListClicked(int flag=0);
 
     void getLanListDone(QStringList slist);
     void getWifiListDone(QStringList slist);

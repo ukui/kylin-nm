@@ -42,11 +42,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //this->setWindowOpacity(0.95);
     this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
-    this->setWindowFlags(Qt::FramelessWindowHint);   //设置无边框窗口
     //this->setStyleSheet("QWidget{border-top-left-radius:6px;border-top-right-radius:6px;}");
     this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
+    this->setStyleSheet("QToolTip{background:rgba(26,26,26,0.95);"
+                        "font: 14px;"
+                        "color:rgba(255,255,255,1);"
+                        "border-radius: 2px;"
+                        "border:1px solid rgba(255,255,255,0.45);"
+                        "padding: 0px 5px;"
+                        "outline:none;}");
 
-    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255, 255, 255, 0.05);border-radius:6px;background:rgba(19,19,20,0.97);}");
+    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.97);}");
 
     lname = "-1";
     wname = "-1";
@@ -166,25 +172,21 @@ MainWindow::MainWindow(QWidget *parent) :
                                                     "QScrollBar::add-line:vertical{border:0px solid;height:0px}"
                                                     "QScrollBar::down-arrow:vertical{height:0px;}");
 
-    ui->btnNetList->setStyleSheet("QPushButton{border:none;}");
     ui->btnNetList->setFocusPolicy(Qt::NoFocus);
     QString txtEthernet(tr("Ethernet"));
-    ui->btnNetList->setToolTip("<span style=\"font-size:13px;border:0px;background-color:#3593b5;color:white;\">&nbsp; " + txtEthernet + " &nbsp;</span>");
+    ui->btnNetList->setToolTip(txtEthernet);
     ui->lbNetListBG->setStyleSheet(btnOffQss);
     ui->lbNetListImg->setStyleSheet("QLabel{background-image:url(:/res/x/net-list-bg.svg);}");
 
-    ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
     ui->btnWifiList->setFocusPolicy(Qt::NoFocus);
     QString txtWifi(tr("Wifi"));
-    ui->btnWifiList->setToolTip("<span style=\"font-size:13px;border:0px;background-color:#3593b5;color:white;\">&nbsp; " + txtWifi + " &nbsp;</span>");
+    ui->btnWifiList->setToolTip(txtWifi);
     ui->lbWifiListBG->setStyleSheet(btnOffQss);
     ui->lbWifiListImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-list-bg.svg);}");
 
-    ui->btnNet->setStyleSheet("QPushButton{border:none;}");
     ui->btnNet->hide();
     ui->lbBtnNetBG->hide();
 
-    ui->btnWifi->setStyleSheet("QPushButton{border:none;}");
     ui->btnWifi->setFocusPolicy(Qt::NoFocus);
     ui->lbBtnWifiBall->setStyleSheet("QLabel{min-width: 16px; min-height: 16px;max-width:16px; max-height: 16px;"
                                      "border-radius: 8px;  border:1px solid white;background:white;}");
@@ -194,7 +196,7 @@ MainWindow::MainWindow(QWidget *parent) :
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
     ui->btnHotspot->setFocusPolicy(Qt::NoFocus);
     QString txtHotSpot(tr("HotSpot"));
-    ui->btnHotspot->setToolTip("<span style=\"font-size:13px;border:0px;background-color:#3593b5;color:white;\">&nbsp; " + txtHotSpot + " &nbsp;</span>");
+    ui->btnHotspot->setToolTip(txtHotSpot);
     ui->btnHotspot->hide();
     ui->lbHotImg->hide();
     ui->lbHotImg->setStyleSheet("QLabel{background-image:url(:/res/x/hot-spot-off.svg);}");
@@ -206,7 +208,7 @@ MainWindow::MainWindow(QWidget *parent) :
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
     ui->btnFlyMode->setFocusPolicy(Qt::NoFocus);
     QString txtFlyMode(tr("FlyMode"));
-    ui->btnFlyMode->setToolTip("<span style=\"font-size:13px;border:0px;background-color:#3593b5;color:white;\">&nbsp; " + txtFlyMode + " &nbsp;</span>");
+    ui->btnFlyMode->setToolTip(txtFlyMode);
     ui->btnFlyMode->hide();
     ui->lbFlyImg->hide();
     ui->lbFlyImg->setStyleSheet("QLabel{background-image:url(:/res/x/fly-mode-off.svg);}");
@@ -218,7 +220,7 @@ MainWindow::MainWindow(QWidget *parent) :
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
     ui->btnAdvConf->setFocusPolicy(Qt::NoFocus);
     QString txtAdvanced(tr("Advanced"));
-    ui->btnAdvConf->setToolTip("<span style=\"font-size:13px;border:0px;background-color:#3593b5;color:white;\">&nbsp; " + txtAdvanced + " &nbsp;</span>");
+    ui->btnAdvConf->setToolTip(txtAdvanced);
     ui->lbBtnConfImg->setStyleSheet("QLabel{background-image:url(:/res/x/setup.png);}");
     ui->lbBtnConfBG->hide();
     ui->lbBtnConfBG->setStyleSheet(btnOffQss);

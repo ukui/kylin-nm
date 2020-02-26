@@ -1234,7 +1234,7 @@
         <location filename="../mainwindow.cpp" line="220"/>
         <location filename="../mainwindow.cpp" line="312"/>
         <source>Advanced</source>
-        <translation>高级设置</translation>
+        <translation>网络配置</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="171"/>

@@ -29,6 +29,13 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 {
     ui->setupUi(this);
 
+    this->setStyleSheet("QToolTip{background:rgba(26,26,26,0.95);"
+                        "font: 14px;"
+                        "color:rgba(255,255,255,1);"
+                        "border-radius: 2px;"
+                        "border:1px solid rgba(255,255,255,0.45);"
+                        "outline:none;}");
+
     ui->btnConnSub->setText(tr("Connect"));//"设置"
     ui->btnConn->setText(tr("Connect"));//"连接"
     ui->btnConnPWD->setText(tr("Connect"));//"连接"
@@ -111,9 +118,9 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 
     ui->wbg->setAttribute(Qt::WA_Hover,true);//开启悬停事件
     ui->wbg->installEventFilter(this);       //安装事件过滤器
-    ui->btnConn->setAttribute(Qt::WA_Hover,true);//开启悬停事件
-    ui->btnConn->installEventFilter(this);       //安装事件过滤器
-    ui->lePassword->setAttribute(Qt::WA_Hover,true);//开启悬停事件
+    ui->btnConn->setAttribute(Qt::WA_Hover,true);
+    ui->btnConn->installEventFilter(this);
+    ui->lePassword->setAttribute(Qt::WA_Hover,true);
     ui->lePassword->installEventFilter(this);
 
     connect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
@@ -162,7 +169,6 @@ bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
 
     if(obj == ui->lePassword){
         if(event->type() == QEvent::MouseButtonPress){
-            qDebug() << "hello world";
             this->setLePassword();
         }else{
             return false;
@@ -186,7 +192,6 @@ void OneConnForm::setAct(bool isAct){
 
 void OneConnForm::setLePassword()
 {
-    qDebug()<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     if(ui->lePassword->text() == "Input Password..."  || ui->lePassword->text() == "输入密码..."){
         ui->lePassword->setText(tr(""));
         ui->lePassword->setEchoMode(QLineEdit::Password);
@@ -330,7 +335,8 @@ QString OneConnForm::getName()
 
 void OneConnForm::setRate(QString rate){
     QString txt(tr("Rate"));//"速率"
-    this->setToolTip("<span style=\"font-size:13px;border:0px;background-color:#3593b5;color:white;\">&nbsp; " + txt + ": " + rate + " &nbsp;</span>");
+    //this->setToolTip("<span style=\"font-size:14px;border:none;background-color:#3593b5;color:white;\">&nbsp; " + txt + ": " + rate + " &nbsp;</span>");
+    //this->setToolTip(txt + ":" + rate);
     QString rateStr = rate.split(" ").at(0);
     int rateNum = rateStr.toInt();
 }

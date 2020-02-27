@@ -116,10 +116,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     this->isSelected = false;
     this->isActive = false;
 
-    ui->wbg->setAttribute(Qt::WA_Hover,true);//开启悬停事件
-    ui->wbg->installEventFilter(this);       //安装事件过滤器
-    ui->btnConn->setAttribute(Qt::WA_Hover,true);
-    ui->btnConn->installEventFilter(this);
+    this->setAttribute(Qt::WA_Hover,true);
+    this->installEventFilter(this);
     ui->lePassword->setAttribute(Qt::WA_Hover,true);
     ui->lePassword->installEventFilter(this);
 
@@ -138,31 +136,30 @@ OneConnForm::~OneConnForm()
 }
 
 void OneConnForm::mousePressEvent(QMouseEvent *){
-    emit selectedOneWifiForm(wifiName);
+    emit selectedOneWifiForm(wifiName,88);
 }
 
 //事件过滤器
 bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
 {
-    if(obj == ui->wbg) {
+    if (obj == this){
         if(event->type() == QEvent::HoverEnter) {
-            ui->btnConn->show();
-            ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+            if (this->isTopItem){
+                qDebug()<<"hover enter the top item of the window";
+            }else{
+                if (this->isSelected){
+                    qDebug()<<"will not show btnConn and wbg";
+                } else {
+                    ui->btnConn->show();
+                    ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+                    ui->wbg->show();
+                }
+            }
             return true;
         } else if(event->type() == QEvent::HoverLeave){
             ui->btnConn->hide();
             ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0);}");
-            return true;
-        }
-    }
-
-    if(obj == ui->btnConn) {
-        if(event->type() == QEvent::HoverEnter) {
             ui->wbg->hide();
-            ui->btnConn->show();
-            return true;
-        } else if(event->type() == QEvent::HoverLeave){
-            ui->wbg->show();
             return true;
         }
     }
@@ -244,12 +241,14 @@ void OneConnForm::setTopItem(bool isSelected){
         ui->lbLoadDown->hide();
         ui->btnDisConn->hide();
     }
+
+    this->isTopItem = true;
 }
 // 点击窗口下面的item时
 void OneConnForm::setSelected(bool isSelected, bool isCurrName){
     if(isSelected){
         resize(422, 148);
-        ui->line->hide();
+        ui->line->move(0, 146);
         ui->wbg->hide();
         ui->wbg_2->hide();
         ui->wbg_3->show();
@@ -266,7 +265,7 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName){
         ui->lePassword->setEchoMode(QLineEdit::Normal);
         ui->checkBoxPwd->setChecked(true);
 
-        ui->line->show();
+        ui->line->move(0, 58);
         ui->wbg->show();
         ui->wbg_2->hide();
         ui->wbg_3->hide();
@@ -288,6 +287,8 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName){
     ui->lbSignal->show();
     ui->btnDisConn->hide();
     ui->btnHideConn->hide();
+
+    this->isTopItem = false;
 }
 // 点击连接隐藏wifi的item时
 void OneConnForm::setHideItem(bool isHideItem, bool isShowHideBtn){
@@ -427,7 +428,7 @@ void OneConnForm::on_btnDisConn_clicked()
     mw->is_stop_check_net_state = 1;
     mw->on_btnHotspotState();
     kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
-    disconnect(this, SIGNAL(selectedOneWifiForm(QString)), mw, SLOT(oneWifiFormSelected(QString)));
+    disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneWifiFormSelected(QString,int)));
     emit disconnActiveWifi();
 }
 
@@ -536,7 +537,7 @@ void OneConnForm::slotConnWifiResult(int connFlag){
 
     if(connFlag == 2){
         mw->currSelNetName = "";
-        emit selectedOneWifiForm(ui->lbName->text());
+        emit selectedOneWifiForm(ui->lbName->text(),58);
 
         resize(422, 118);
         ui->wbg->hide();
@@ -548,6 +549,7 @@ void OneConnForm::slotConnWifiResult(int connFlag){
         ui->btnConn->hide();
         ui->btnConnSub->hide();
         ui->lbInfo->hide();
+        ui->line->move(0, 116);
 
         ui->lePassword->show();
         ui->checkBoxPwd->show();
@@ -609,4 +611,5 @@ void OneConnForm::stopWaiting(){
     ui->lbWaitingIcon->hide();
 
     mw->setTrayLoading(false);
+    mw->getActiveInfo();
 }

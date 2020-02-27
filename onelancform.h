@@ -55,6 +55,7 @@ public:
     void setConnedString(bool showLable, QString str);
 
     bool isSelected;
+    bool isTopItem;
     bool isActive;
     bool isConnected;
     QString lanName;

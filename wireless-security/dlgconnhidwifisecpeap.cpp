@@ -65,7 +65,8 @@ DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, QWidget *parent) :
                               "QComboBox::drop-down{border:0;width:30px;}"
                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}");
     ui->leCaPwd->setStyleSheet("QLineEdit{color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->checkBoxPwd->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
+    ui->checkBoxPwd->setStyleSheet("QCheckBox {border:none;background:transparent;}"
+                                   "QCheckBox::indicator {width: 18px; height: 9px;}"
                                    "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
                                    "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
     ui->checkBoxCA->setStyleSheet("QCheckBox{color:rgba(255,255,255,0.97);background-color:transparent;}");
@@ -77,7 +78,8 @@ DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, QWidget *parent) :
                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}");
     ui->leUserName->setStyleSheet("QLineEdit{color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
     ui->lePassword->setStyleSheet("QLineEdit{color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->checkBoxPwdSec->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
+    ui->checkBoxPwdSec->setStyleSheet("QCheckBox {border:none;background:transparent;}"
+                                   "QCheckBox::indicator {width: 18px; height: 9px;}"
                                    "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
                                    "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
 

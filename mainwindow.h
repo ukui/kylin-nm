@@ -76,6 +76,7 @@ public:
 
     void setTrayIcon(QIcon icon);
     void setTrayLoading(bool isLoading);
+    void getActiveInfo();
 
     void initTimer();
     void changeTimerState();
@@ -116,15 +117,14 @@ public slots:
 
     void oneLanFormSelected(QString lanName);
     void oneTopLanFormSelected(QString lanName);
-    void oneWifiFormSelected(QString wifiName);
-    void oneTopWifiFormSelected(QString wifiName);
+    void oneWifiFormSelected(QString wifiName, int extendLength);
+    void oneTopWifiFormSelected(QString wifiName, int extendLength);
 
     void on_btnHotspot_clicked();
     void on_btnHotspotState();
 
 private:
     void checkSingle();
-    void getActiveInfo();
     void initNetwork();
     void createTrayIcon();
     void handleIconClicked();

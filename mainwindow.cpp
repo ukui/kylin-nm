@@ -81,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent) :
     lbLoadDown->move(41 + 132, 52 + 32);
     lbLoadDown->resize(65, 20);
     lbLoadUp = new QLabel(ui->centralWidget);
-    lbLoadUp->move(41 + 215, 52 + 32);
+    lbLoadUp->move(41 + 217, 52 + 32);
     lbLoadUp->resize(65, 20);
 
     topWifiListWidget = new QWidget(ui->centralWidget);
@@ -1086,7 +1086,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         if(wname != "" && wname != "--"){
             // 当前连接的wifi
             if(wname == actWifiName){
-                connect(ccf, SIGNAL(selectedOneWifiForm(QString)), this, SLOT(oneTopWifiFormSelected(QString)));
+                connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
                 ccf->setName(wname);
                 ccf->setRate(wrate);
@@ -1104,7 +1104,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 wifiListWidget->resize(440, wifiListWidget->height() + 60);
 
                 OneConnForm *ocf = new OneConnForm(wifiListWidget, this, confForm, ksnm);
-                connect(ocf, SIGNAL(selectedOneWifiForm(QString)), this, SLOT(oneWifiFormSelected(QString)));
+                connect(ocf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneWifiFormSelected(QString,int)));
                 ocf->setName(wname);
                 ocf->setRate(wrate);
                 ocf->setLine(true);
@@ -1113,6 +1113,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
                 ocf->setConnedString(0, tr("Disconnected"), wsecu);
                 ocf->move(0, j * 60);
+                ocf->setSelected(false, false);
                 ocf->show();
 
                 j ++;
@@ -1226,7 +1227,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
                 wifiListWidget->resize(440, wifiListWidget->height() + 60);
                 OneConnForm *addItem = new OneConnForm(wifiListWidget, this, confForm, ksnm);
-                connect(addItem, SIGNAL(selectedOneWifiForm(QString)), this, SLOT(oneWifiFormSelected(QString)));
+                connect(addItem, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneWifiFormSelected(QString,int)));
                 addItem->setName(wname);
                 addItem->setRate(wrate);
                 addItem->setLine(false);
@@ -1235,6 +1236,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 addItem->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
                 addItem->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"
                 addItem->move(0, posY);
+                addItem->setSelected(false, false);
                 addItem->show();
 
                 count += 1;
@@ -1848,7 +1850,7 @@ void MainWindow::oneTopLanFormSelected(QString lanName)
     }
 }
 
-void MainWindow::oneWifiFormSelected(QString wifiName)
+void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
 {
     QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
 
@@ -1866,7 +1868,7 @@ void MainWindow::oneWifiFormSelected(QString wifiName)
 
     //是否与上一次选中同一个网络框
     if (currSelNetName == wifiName){
-        // 置选中，缩小所有选项卡
+        // 缩小所有选项卡
         for(int i = 0;i < wifiList.size(); i ++){
             OneConnForm *ocf = wifiList.at(i);
             if(ocf->wifiName == wifiName){
@@ -1886,7 +1888,7 @@ void MainWindow::oneWifiFormSelected(QString wifiName)
         }
         currSelNetName = "";
     } else {
-        // 设置选中，放大或缩小所有选项卡
+        // 选中的选项卡放大，其他选项卡缩小
         int selectY = 0;
 
         for(int i = 0;i < wifiList.size(); i ++){
@@ -1911,7 +1913,7 @@ void MainWindow::oneWifiFormSelected(QString wifiName)
         for(int i = 0;i < wifiList.size(); i ++){
             OneConnForm *ocf = wifiList.at(i);
             if(ocf->y() > selectY){
-                ocf->move(0, ocf->y() + 88);
+                ocf->move(0, ocf->y() + extendLength);
             }
         }
 
@@ -1925,7 +1927,7 @@ void MainWindow::oneWifiFormSelected(QString wifiName)
         lastItem->setLine(false);
     }
 }
-void MainWindow::oneTopWifiFormSelected(QString wifiName)
+void MainWindow::oneTopWifiFormSelected(QString wifiName, int extendLength)
 {
     QList<OneConnForm *> wifiList = topWifiListWidget->findChildren<OneConnForm *>();
 
@@ -2119,7 +2121,7 @@ void MainWindow::disWifiDone()
             ocf->setConnedString(1, tr("Disconnected"), "");//"未连接"
             ocf->isConnected = false;
             ocf->setTopItem(false);
-            disconnect(ocf, SIGNAL(selectedOneWifiForm(QString)), this, SLOT(oneTopWifiFormSelected(QString)));
+            disconnect(ocf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
         }else{
             ocf->deleteLater();
         }
@@ -2169,7 +2171,7 @@ void MainWindow::keepDisWifiState()
                 ocf->setConnedString(1, tr("Disconnected"), "");//"未连接"
                 ocf->isConnected = false;
                 ocf->setTopItem(false);
-                disconnect(ocf, SIGNAL(selectedOneWifiForm(QString)), this, SLOT(oneTopWifiFormSelected(QString)));
+                disconnect(ocf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
             }else{
                 ocf->deleteLater();
             }

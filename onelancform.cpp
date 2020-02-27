@@ -81,10 +81,8 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     this->isSelected = false;
     this->isActive = false;
 
-    ui->wbg_2->setAttribute(Qt::WA_Hover,true);//开启悬停事件
-    ui->wbg_2->installEventFilter(this);       //安装事件过滤器
-    ui->btnConn->setAttribute(Qt::WA_Hover,true);//开启悬停事件
-    ui->btnConn->installEventFilter(this);       //安装事件过滤器
+    this->setAttribute(Qt::WA_Hover,true);
+    this->installEventFilter(this);
 
     this->waitTimer = new QTimer(this);
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(waitAnimStep()));
@@ -106,25 +104,24 @@ void OneLancForm::mousePressEvent(QMouseEvent *){
 //事件过滤器
 bool OneLancForm::eventFilter(QObject *obj, QEvent *event)
 {
-    if(obj == ui->wbg_2) {
+    if (obj == this){
         if(event->type() == QEvent::HoverEnter) {
-            ui->btnConn->show();
-            ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+            if (this->isTopItem){
+                qDebug()<<"hover enter the top item of the window";
+            }else{
+                if (this->isSelected){
+                    qDebug()<<"will not show btnConn and wbg_2";
+                } else {
+                    ui->btnConn->show();
+                    ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+                    ui->wbg_2->show();
+                }
+            }
             return true;
         } else if(event->type() == QEvent::HoverLeave){
             ui->btnConn->hide();
             ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0);}");
-            return true;
-        }
-    }
-
-    if(obj == ui->btnConn) {
-        if(event->type() == QEvent::HoverEnter) {
             ui->wbg_2->hide();
-            ui->btnConn->show();
-            return true;
-        } else if(event->type() == QEvent::HoverLeave){
-            ui->wbg_2->show();
             return true;
         }
     }
@@ -153,7 +150,7 @@ void OneLancForm::setSelected(bool isSelected, bool isCurrName)
         resize(422, 168);
         ui->wbg->show();
         ui->wbg_2->hide();
-        ui->line->hide();
+        ui->line->move(0, 166);
         ui->btnConn->hide();
         ui->btnConnSub->show();
 
@@ -162,7 +159,7 @@ void OneLancForm::setSelected(bool isSelected, bool isCurrName)
         resize(422, 60);
         ui->wbg->hide();
         ui->wbg_2->show();
-        ui->line->show();
+        ui->line->move(0, 58);
         if(isCurrName){
             ui->btnConn->show();
         }else{
@@ -174,6 +171,8 @@ void OneLancForm::setSelected(bool isSelected, bool isCurrName)
     }
 
     ui->btnDisConn->hide();
+
+    this->isTopItem = false;
 }
 
 void OneLancForm::setTopItem(bool isSelected)
@@ -208,6 +207,8 @@ void OneLancForm::setTopItem(bool isSelected)
     ui->line->hide();
     ui->lbLoadUpImg->show();
     ui->lbLoadDownImg->show();
+
+    this->isTopItem = true;
 }
 
 void OneLancForm::setName(QString name){

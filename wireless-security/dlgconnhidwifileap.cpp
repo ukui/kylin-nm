@@ -49,7 +49,8 @@ DlgConnHidWifiLeap::DlgConnHidWifiLeap(QWidget *parent) :
     ui->cbxSecurity->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,1);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
                               "QComboBox::drop-down{border:0;width:30px;}"
                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}");
-    ui->checkBoxPwd->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
+    ui->checkBoxPwd->setStyleSheet("QCheckBox {border:none;background:transparent;}"
+                                   "QCheckBox::indicator {width: 18px; height: 9px;}"
                                    "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
                                    "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
 

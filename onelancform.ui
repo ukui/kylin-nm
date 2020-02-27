@@ -146,7 +146,7 @@
   <widget class="QLabel" name="lbLoadUpImg">
    <property name="geometry">
     <rect>
-     <x>198</x>
+     <x>200</x>
      <y>35</y>
      <width>16</width>
      <height>16</height>
@@ -172,7 +172,7 @@
   <widget class="QLabel" name="lbLoadUp">
    <property name="geometry">
     <rect>
-     <x>215</x>
+     <x>217</x>
      <y>32</y>
      <width>65</width>
      <height>20</height>

@@ -15,5 +15,6 @@
 #include <QDebug>
 #include <QFile>
 #include <QPainter>
+#include <QListView>
 
 #endif // KYLINHEADFILE_H

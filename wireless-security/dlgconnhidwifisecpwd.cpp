@@ -55,7 +55,8 @@ DlgConnHidWifiSecPwd::DlgConnHidWifiSecPwd(int type, QWidget *parent) :
                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}");
     ui->leUserName->setStyleSheet("QLineEdit{color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
     ui->lePassword->setStyleSheet("QLineEdit{color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->checkBox->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
+    ui->checkBox->setStyleSheet("QCheckBox {border:none;background:transparent;}"
+                                   "QCheckBox::indicator {width: 18px; height: 9px;}"
                                    "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
                                    "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
 

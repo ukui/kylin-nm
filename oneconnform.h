@@ -67,10 +67,11 @@ public:
     bool isSelected;
     bool isActive;
     bool isConnected;
+    bool isTopItem;
     int signalLv;
 
 signals:
-    void selectedOneWifiForm(QString wifiName);
+    void selectedOneWifiForm(QString wifiName, int extendLength);
     void connDone(int connFlag);
     void disconnActiveWifi();
 

@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
 //    this->setWindowFlags(Qt::FramelessWindowHint);
 
-    //this->setWindowOpacity(0.95);
+    //this->setWindowOpacity(0.7);
     this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
     //this->setStyleSheet("QWidget{border-top-left-radius:6px;border-top-right-radius:6px;}");
     this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
                         "padding: 0px 5px;"
                         "outline:none;}");
 
-    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.97);}");
+    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.85);}");
 
     lname = "-1";
     wname = "-1";
@@ -1502,7 +1502,8 @@ void MainWindow::on_btnWifiList_clicked()
 }
 
 //**************下为循环部分************************//
-void MainWindow::on_checkWifiListChanged(){
+void MainWindow::on_checkWifiListChanged()
+{
     if (is_stop_check_net_state==0 && this->is_btnWifiList_clicked==1 && this->isVisible()){
         BackThread *loop_bt = new BackThread();
         IFace *loop_iface = loop_bt->execGetIface();
@@ -1542,9 +1543,9 @@ void MainWindow::on_setNetSpeed()
     }
 }
 
-void MainWindow::connLanDone(int connFlag){
-    //停止加载动画
-    emit this->waitLanStop();
+void MainWindow::connLanDone(int connFlag)
+{
+    emit this->waitLanStop(); //停止加载动画
 
     // Lan连接结果，0点击连接成功 1失败 3开机启动网络工具时已经连接
     if(connFlag == 0){

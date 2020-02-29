@@ -144,12 +144,8 @@ bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == this){
         if(event->type() == QEvent::HoverEnter) {
-            if (this->isTopItem){
-                qDebug()<<"hover enter the top item of the window";
-            }else{
-                if (this->isSelected){
-                    qDebug()<<"will not show btnConn and wbg";
-                } else {
+            if (!this->isTopItem){
+                if (!this->isSelected){
                     ui->btnConn->show();
                     ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
                     ui->wbg->show();

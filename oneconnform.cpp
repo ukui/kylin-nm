@@ -428,11 +428,15 @@ void OneConnForm::on_btnDisConn_clicked()
     emit disconnActiveWifi();
 
     syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", ui->lbName->text().toUtf8().data());
+    qDebug()<<"DisConnect button about wifi net is clicked, current wifi name is "<<ui->lbName->text();
 }
 
 //点击列表item扩展时会出现该按钮 用于连接网络
 void OneConnForm::on_btnConnSub_clicked()
 {
+    syslog(LOG_DEBUG, "A button named on_btnConnSub about wifi net is clicked.");
+    qDebug()<<"A button named on_btnConnSub about wifi net is clicked.";
+
     if (ui->lbConned->text() == "--" || ui->lbConned->text() == " "){
         on_btnConnPWD_clicked();
         return;
@@ -454,6 +458,9 @@ void OneConnForm::on_btnConnSub_clicked()
 //无需密码的wifi连接
 void OneConnForm::on_btnConn_clicked()
 {
+    syslog(LOG_DEBUG, "A button named btnConn about wifi net is clicked.");
+    qDebug()<<"A button named btnConn about wifi net is clicked.";
+
     if (ui->lbConned->text() == "--" || ui->lbConned->text() == " "){
         on_btnConnPWD_clicked();
         return;
@@ -475,6 +482,9 @@ void OneConnForm::on_btnConn_clicked()
 //需要密码的wifi连接
 void OneConnForm::on_btnConnPWD_clicked()
 {
+    syslog(LOG_DEBUG, "A button named btnConnPWD about wifi net is clicked.");
+    qDebug()<<"A button named btnConnPWD about wifi net is clicked.";
+
     mw->is_stop_check_net_state = 1;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();

@@ -269,10 +269,14 @@ void OneLancForm::on_btnDisConn_clicked()
     emit disconnActiveLan();
 
     syslog(LOG_DEBUG, "DisConnect button about lan net is clicked, current wired net name is %s .", ui->lbName->text().toUtf8().data());
+    qDebug()<<"DisConnect button about lan net is clicked, current wired net name is "<<ui->lbName->text();
 }
 
 void OneLancForm::on_btnConn_clicked()
 {
+    syslog(LOG_DEBUG, "A button named btnConn about lan net is clicked.");
+    qDebug()<<"A button named btnConn about lan net is clicked.";
+
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);
@@ -286,6 +290,9 @@ void OneLancForm::on_btnConn_clicked()
 
 void OneLancForm::on_btnConnSub_clicked()
 {
+    syslog(LOG_DEBUG, "A button named btnConnSub about lan net is clicked.");
+    qDebug()<<"A button named btnConnSub about lan net is clicked.";
+
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);

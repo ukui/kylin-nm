@@ -181,6 +181,8 @@ void BackThread::execConnLan(QString connName){
     if(objKyDbus.isWiredCableOn){
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
         system(cmd.toUtf8().data());
+        qDebug()<<"debug: in function execConnLan, wired net state is: "<<QString::number(execGetIface()->lstate);
+        syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);
         emit connDone(0);
     } else {
         emit connDone(1);
@@ -205,6 +207,8 @@ void BackThread::execConnWifiPWD(QString connName, QString password){
 
     if(line.indexOf("successfully") != -1){
         emit connDone(0);
+        qDebug()<<"debug: in function execConnWifiPWD, wireless net state is: "<<QString::number(execGetIface()->wstate);
+        syslog(LOG_DEBUG, "In function execConnWifiPWD, wireless net state is: %d", execGetIface()->wstate);
     }else{
         QString txt(tr("Confirm your Wi-Fi password"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
@@ -229,6 +233,8 @@ void BackThread::on_readoutput()
     qDebug()<<"on_readoutput:  "<< str;
     if(str.indexOf("successfully") != -1){
         emit connDone(0);
+        qDebug()<<"debug: in function on_readoutput, wireless net state is: "<<QString::number(execGetIface()->wstate);
+        syslog(LOG_DEBUG, "In function on_readoutput, wireless net state is: %d", execGetIface()->wstate);
     }else if(str.indexOf("unknown") != -1){
         emit connDone(2);
     }else{
@@ -237,7 +243,6 @@ void BackThread::on_readoutput()
 
     emit btFinish();
 }
-
 void BackThread::on_readerror()
 {
     QString str = cmd->readAllStandardError();

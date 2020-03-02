@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    如果使用Qt::ToolTip, Qt::Tool + Qt::WindowStaysOnTopHint, Qt::X11BypassWindowManagerHint等flag则会导致X事件失效
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::Popup);//QTool
 //    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
-//    this->setWindowFlags(Qt::FramelessWindowHint);
+    //this->setWindowFlags(Qt::FramelessWindowHint);
 
     //this->setWindowOpacity(0.7);
     this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明

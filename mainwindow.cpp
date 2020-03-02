@@ -188,6 +188,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lbBtnNetBG->hide();
 
     ui->btnWifi->setFocusPolicy(Qt::NoFocus);
+    ui->btnWifi->setStyleSheet("QPushButton{border:none;background:transparent;}");
     ui->lbBtnWifiBall->setStyleSheet("QLabel{min-width: 16px; min-height: 16px;max-width:16px; max-height: 16px;"
                                      "border-radius: 8px;  border:1px solid white;background:white;}");
 
@@ -1356,7 +1357,7 @@ void MainWindow::onBtnNetListClicked(int flag)
     ui->lbNetListBG->setStyleSheet(btnOnQss);
     ui->lbWifiListBG->setStyleSheet(btnOffQss);
 
-    ui->lbNetwork->setText("有线网络");
+    ui->lbNetwork->setText(tr("Ethernet"));
     ui->btnWifi->hide();
     ui->lbBtnWifiBG->hide();
     ui->lbBtnWifiBall->hide();
@@ -1442,7 +1443,7 @@ void MainWindow::on_btnWifiList_clicked()
     ui->lbNetListBG->setStyleSheet(btnOffQss);
     ui->lbWifiListBG->setStyleSheet(btnOnQss);
 
-    ui->lbNetwork->setText("无线网络");
+    ui->lbNetwork->setText(tr("Wifi"));
     ui->btnWifi->show();
     ui->lbBtnWifiBG->show();
     ui->lbBtnWifiBall->show();

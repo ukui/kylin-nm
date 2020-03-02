@@ -5,9 +5,9 @@ Version: 1.2.0-1
 Auto-Built-Package: debug-symbols
 Architecture: amd64
 Maintainer: Kylin Team <team+kylin@tracker.debian.org>
-Installed-Size: 2527
+Installed-Size: 2536
 Depends: kylin-nm (= 1.2.0-1)
 Section: debug
 Priority: optional
 Description: debug symbols for kylin-nm
-Build-Ids: 1e33eb14ad8033cf888841efe6e3c2ca2cce8947
+Build-Ids: 1e622cec1ec1692a16f4690843cd87e91a8fa8fe

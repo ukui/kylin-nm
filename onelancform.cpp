@@ -267,6 +267,8 @@ void OneLancForm::on_btnDisConn_clicked()
     disconnect(this, SIGNAL(selectedOneLanForm(QString)), mw, SLOT(oneLanFormSelected(QString)));
 
     emit disconnActiveLan();
+
+    syslog(LOG_DEBUG, "DisConnect button about lan net is clicked, current wired net name is %s .", ui->lbName->text().toUtf8().data());
 }
 
 void OneLancForm::on_btnConn_clicked()

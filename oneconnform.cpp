@@ -426,6 +426,8 @@ void OneConnForm::on_btnDisConn_clicked()
     kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
     disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneWifiFormSelected(QString,int)));
     emit disconnActiveWifi();
+
+    syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", ui->lbName->text().toUtf8().data());
 }
 
 //点击列表item扩展时会出现该按钮 用于连接网络

@@ -40,6 +40,7 @@ public:
     QString dbusWifiMac = "";
 
 public slots:
+    void onNewConnection(QDBusObjectPath objPath);
     void onLanPropertyChanged(QVariantMap qvm);
     void onWifiPropertyChanged(QVariantMap qvm);
     void onAccessPointAdded(QDBusObjectPath objPath);
@@ -58,6 +59,10 @@ private:
     int a = 0;
     bool isRunningFunction = false;
     QTimer *time;
+
+signals:
+    void updateWiredList(int n);
+
 };
 
 #endif // KYLINDBUSINTERFACE_H

@@ -189,8 +189,6 @@ void ConfForm::on_btnCreate_clicked()
         this->on_btnOk_clicked();
     }
 
-    sleep(2);
-    emit this->updateNetList();
     this->hide();
 }
 

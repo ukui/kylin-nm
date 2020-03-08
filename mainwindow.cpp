@@ -125,7 +125,7 @@ MainWindow::MainWindow(QWidget *parent) :
     lbNoItemTip = new QLabel(ui->centralWidget);
     lbNoItemTip->resize(200, 20);
     lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2 + 96);
-    lbNoItemTip->setStyleSheet("QLabel{boder:none;background:transparent;font-size:14px;color:rgba(255,255,255,0.91);}");
+    lbNoItemTip->setStyleSheet("QLabel{border:none;background:transparent;font-size:14px;color:rgba(255,255,255,0.91);}");
     lbNoItemTip->setText(tr("No usable network in the list"));//列表暂无可连接网络
     lbNoItemTip->setAlignment(Qt::AlignCenter);
     lbNoItemTip->hide();
@@ -277,7 +277,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::checkSingle()
 {
-    int fd = open("/tmp/kylin-nm-lock", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+    //int fd = open("/tmp/kylin-nm-lock", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QString lockPath = homePath.at(0) + "/.config/kylin-nm-lock";
+    int fd = open(lockPath.toUtf8().data(), O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+
     if (fd < 0) { exit(1); }
 
     if (lockf(fd, F_TLOCK, 0)) {
@@ -2368,7 +2373,6 @@ void MainWindow::onBtnAddNetClicked()
 void MainWindow::onBtnCreateNetClicked()
 {
     ConfForm *m_cf = new ConfForm();
-    connect(m_cf, SIGNAL(updateNetList()), this, SLOT(onBtnNetListClicked()));
     m_cf->cbTypeChanged(3);
     m_cf->show();
 }

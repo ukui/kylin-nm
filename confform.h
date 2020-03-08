@@ -64,9 +64,6 @@ private:
     QPoint dragPos;
     bool isActConf;
     bool isShowSaveBtn = true;
-
-signals:
-    void updateNetList();
 };
 
 #endif // CONFFORM_H

@@ -43,6 +43,11 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
                                          QString("DeviceRemoved"), mw, SLOT(onWirelessDeviceRemoved(QDBusObjectPath) ) );
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                         QString("/org/freedesktop/NetworkManager/Settings"),
+                                         QString("org.freedesktop.NetworkManager.Settings"),
+                                         QString("NewConnection"), this, SLOT(onNewConnection(QDBusObjectPath) ) );
+
+    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString(wiredPath.path()),
                                          QString("org.freedesktop.NetworkManager.Device.Wired"),
                                          QString("PropertiesChanged"), this, SLOT(onLanPropertyChanged(QVariantMap) ) );
@@ -63,6 +68,8 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     time = new QTimer(this);
     time->setTimerType(Qt::PreciseTimer);
     QObject::connect(time, SIGNAL(timeout()), this, SLOT(slot_timeout()));
+
+    QObject::connect(this, SIGNAL(updateWiredList(int)), mw, SLOT(onBtnNetListClicked(int)));
 }
 
 void KylinDBus::getObjectPath()
@@ -334,6 +341,27 @@ int KylinDBus::getLanConnState()
     QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Device", "ActiveConnection");
 
     return 0;
+}
+
+void KylinDBus::onNewConnection(QDBusObjectPath objPath)
+{
+    QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                              objPath.path(),
+                              "org.freedesktop.NetworkManager.Settings.Connection",
+                              QDBusConnection::systemBus());
+    QDBusMessage result = m_interface.call("GetSettings");
+
+    const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+    QMap<QString,QMap<QString,QVariant>> map;
+    dbusArg1st >> map;
+
+    for(QString key : map.keys() ){
+        if (key == "802-3-ethernet") {
+            emit this->updateWiredList(0);
+            syslog(LOG_DEBUG, "A new wired network was created.");
+            qDebug()<<"A new wired network was created.";
+        }
+    }
 }
 
 void KylinDBus::onLanPropertyChanged(QVariantMap qvm)

@@ -42,6 +42,8 @@
 #include <QtDBus/QDBusObjectPath>
 #include <QDBusObjectPath>
 #include <QVariant>
+#include <QStandardPaths>
+#include <QStringList>
 
 #include <fcntl.h>
 #include <sys/types.h>

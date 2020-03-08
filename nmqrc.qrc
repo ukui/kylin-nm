@@ -99,5 +99,6 @@
         <file>res/s/conning-a/6.png</file>
         <file>res/s/conning-a/7.png</file>
         <file>res/s/conning-a/8.png</file>
+        <file>res/s/nonet.png</file>
     </qresource>
 </RCC>

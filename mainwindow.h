@@ -53,6 +53,7 @@
 #include "ksimplenm.h"
 #include "loadingdiv.h"
 #include "networkspeed.h"
+#include "confform.h"
 #include "kylin-dbus-interface.h"
 #include "kylin-network-interface.h"
 
@@ -150,10 +151,15 @@ private:
     QLabel *lbLoadDown;
     QLabel *lbLoadUp;
 
+    QLabel *lbNoItemImg;
+    QLabel *lbNoItemTip;
+
     QScrollArea *scrollAreal, *scrollAreaw;
     QLabel *lbTopLanList, *lbTopWifiList, *lbLanList, *lbWifiList;
     QLabel *lbBb;
     QPushButton *btnAddNet;
+    QPushButton *btnCreateNet;
+    ConfForm *cf;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
@@ -235,6 +241,7 @@ private slots:
     void on_btnFlyMode_clicked();
 
     void onBtnAddNetClicked();
+    void onBtnCreateNetClicked();
 signals:
     void deleteRedundantNet();
 

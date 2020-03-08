@@ -82,6 +82,8 @@ private slots:
     void startWaiting(bool isConn);
     void stopWaiting();
 
+    void on_btnInfo_clicked();
+
 private:
     QTimer *waitTimer;
     int waitPage;

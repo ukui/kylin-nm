@@ -23,6 +23,8 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QPoint>
+#include <QPainter>
+#include <QListView>
 
 namespace Ui {
 class ConfForm;
@@ -38,10 +40,17 @@ public:
 
     void setProp(QString connName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf);
 
+public slots:
+    void cbTypeChanged(int index);
+
+protected:
+    void paintEvent(QPaintEvent *event);
+
 private slots:
     void on_btnOk_clicked();
     void on_btnCancel_clicked();
-    void cbTypeChanged(int index);
+
+    void on_btnCreate_clicked();
 
 private:
     Ui::ConfForm *ui;
@@ -54,6 +63,10 @@ private:
     QPoint winPos;
     QPoint dragPos;
     bool isActConf;
+    bool isShowSaveBtn = true;
+
+signals:
+    void updateNetList();
 };
 
 #endif // CONFFORM_H

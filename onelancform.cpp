@@ -36,7 +36,8 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lbLoadUp->setAlignment(Qt::AlignLeft);
     ui->lbLoadDown->setAlignment(Qt::AlignLeft);
 
-    ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
+    ui->btnInfo->setStyleSheet("QPushButton{border:none;background:transparent;}");
     ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
     ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0);}");
                              //"#wbg_2:Hover{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
@@ -58,6 +59,7 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
     ui->lbWaitingIcon->setStyleSheet("QLabel{border:0px;background-color:transparent;}");
 
+    ui->btnInfo->setCursor(QCursor(Qt::PointingHandCursor));
     ui->btnConnSub->setFocusPolicy(Qt::NoFocus);
     ui->btnConn->setFocusPolicy(Qt::NoFocus);
     ui->btnDisConn->setFocusPolicy(Qt::NoFocus);
@@ -71,6 +73,8 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->line->show();
     ui->lbLoadDownImg->hide();
     ui->lbLoadUpImg->hide();
+    ui->lbLoadUp->hide();
+    ui->lbLoadDown->hide();
     ui->lbWaiting->hide();
     ui->lbWaitingIcon->hide();
 
@@ -83,6 +87,8 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 
     this->setAttribute(Qt::WA_Hover,true);
     this->installEventFilter(this);
+    ui->btnInfo->setAttribute(Qt::WA_Hover,true);
+    ui->btnInfo->installEventFilter(this);
 
     this->waitTimer = new QTimer(this);
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(waitAnimStep()));
@@ -104,7 +110,15 @@ void OneLancForm::mousePressEvent(QMouseEvent *){
 //事件过滤器
 bool OneLancForm::eventFilter(QObject *obj, QEvent *event)
 {
-    if (obj == this){
+    if (obj == ui->btnInfo){
+        if(event->type() == QEvent::HoverEnter) {
+            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
+            return true;
+        } else if(event->type() == QEvent::HoverLeave){
+            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.85);}");
+            return true;
+        }
+    }else if (obj == this){
         if(event->type() == QEvent::HoverEnter) {
             if (!this->isTopItem){
                 if (!this->isSelected){
@@ -185,24 +199,20 @@ void OneLancForm::setTopItem(bool isSelected)
         this->isSelected = false;
     }
     if (isConnected){
-//        ui->lbLoadUp->setText("0Kb/s");
-//        ui->lbLoadDown->setText("0Kb/s");
-        ui->lbLoadUp->hide();
-        ui->lbLoadDown->hide();
+        ui->lbLoadUpImg->show();
+        ui->lbLoadDownImg->show();
+
         ui->btnDisConn->show();
     } else {
-//        ui->lbLoadUp->setText("0Kb/s");
-//        ui->lbLoadDown->setText("0Kb/s");
-        ui->lbLoadUp->hide();
-        ui->lbLoadDown->hide();
+        ui->lbLoadUpImg->hide();
+        ui->lbLoadDownImg->hide();
+
         ui->btnDisConn->hide();
     }
 
     ui->btnConn->hide();
     ui->wbg_2->hide();
     ui->line->hide();
-    ui->lbLoadUpImg->show();
-    ui->lbLoadDownImg->show();
 
     this->isTopItem = true;
 }
@@ -260,6 +270,9 @@ void OneLancForm::slotConnLan(){
 
 void OneLancForm::on_btnDisConn_clicked()
 {
+    syslog(LOG_DEBUG, "DisConnect button about lan net is clicked, current wired net name is %s .", ui->lbName->text().toUtf8().data());
+    qDebug()<<"DisConnect button about lan net is clicked, current wired net name is "<<ui->lbName->text();
+
     this->startWaiting(false);
 
     kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
@@ -267,9 +280,6 @@ void OneLancForm::on_btnDisConn_clicked()
     disconnect(this, SIGNAL(selectedOneLanForm(QString)), mw, SLOT(oneLanFormSelected(QString)));
 
     emit disconnActiveLan();
-
-    syslog(LOG_DEBUG, "DisConnect button about lan net is clicked, current wired net name is %s .", ui->lbName->text().toUtf8().data());
-    qDebug()<<"DisConnect button about lan net is clicked, current wired net name is "<<ui->lbName->text();
 }
 
 void OneLancForm::on_btnConn_clicked()
@@ -302,6 +312,50 @@ void OneLancForm::on_btnConnSub_clicked()
     connect(bt, SIGNAL(connDone(int)), mw, SLOT(connLanDone(int)));
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     t->start();
+}
+
+void OneLancForm::on_btnInfo_clicked()
+{
+    QPoint pos = QCursor::pos();
+    QRect primaryGeometry;
+    for (QScreen *screen : qApp->screens()) {
+        if (screen->geometry().contains(pos)) {
+            primaryGeometry = screen->geometry();
+        }
+    }
+
+    if (primaryGeometry.isEmpty()) {
+        primaryGeometry = qApp->primaryScreen()->geometry();
+    }
+
+    BackThread *bt = new BackThread();
+    QString connProp = bt->getConnProp(ui->lbName->text());
+    QStringList propList = connProp.split("|");
+    QString v4method, addr, mask, gateway, dns;
+    foreach (QString line, propList) {
+        if(line.startsWith("method:")){
+            v4method = line.split(":").at(1);
+        }
+        if(line.startsWith("addr:")){
+            addr = line.split(":").at(1);
+        }
+        if(line.startsWith("mask:")){
+            mask = line.split(":").at(1);
+        }
+        if(line.startsWith("gateway:")){
+            gateway= line.split(":").at(1);
+        }
+        if(line.startsWith("dns:")){
+            dns = line.split(":").at(1);
+        }
+    }
+    // qDebug()<<v4method<<addr<<mask<<gateway<<dns;
+
+    cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive);
+
+    //cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
+    cf->show();
+    cf->raise();
 }
 
 void OneLancForm::waitAnimStep(){

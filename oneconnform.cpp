@@ -29,13 +29,6 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 {
     ui->setupUi(this);
 
-    this->setStyleSheet("QToolTip{background:rgba(26,26,26,0.95);"
-                        "font: 14px;"
-                        "color:rgba(255,255,255,1);"
-                        "border-radius: 2px;"
-                        "border:1px solid rgba(255,255,255,0.45);"
-                        "outline:none;}");
-
     ui->btnConnSub->setText(tr("Connect"));//"设置"
     ui->btnConn->setText(tr("Connect"));//"连接"
     ui->btnConnPWD->setText(tr("Connect"));//"连接"
@@ -49,7 +42,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lePassword->setEchoMode(QLineEdit::Normal);
     ui->btnConnPWD->setEnabled(false);
 
-    ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.85);}");
+    ui->btnInfo->setStyleSheet("QPushButton{border:none;background:transparent;}");
     ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0);}");
                              // "#wbg:Hover{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
     ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
@@ -83,6 +77,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
     ui->lbWaitingIcon->setStyleSheet("QLabel{border:0px;background-color:transparent;}");
 
+    ui->btnInfo->setCursor(QCursor(Qt::PointingHandCursor));
     ui->checkBoxPwd->setFocusPolicy(Qt::NoFocus);
     ui->btnConnSub->setFocusPolicy(Qt::NoFocus);
     ui->btnConn->setFocusPolicy(Qt::NoFocus);
@@ -106,8 +101,11 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->line->show();
     ui->lbLoadDownImg->hide();
     ui->lbLoadUpImg->hide();
+    ui->lbLoadUp->hide();
+    ui->lbLoadDown->hide();
     ui->lbWaiting->hide();
     ui->lbWaitingIcon->hide();
+    ui->btnInfo->hide();
 
     this->mw = mainWindow;
     this->cf = confForm;
@@ -120,6 +118,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     this->installEventFilter(this);
     ui->lePassword->setAttribute(Qt::WA_Hover,true);
     ui->lePassword->installEventFilter(this);
+    ui->btnInfo->setAttribute(Qt::WA_Hover,true);
+    ui->btnInfo->installEventFilter(this);
 
     connect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
     ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与登录按钮绑定在一起
@@ -142,7 +142,15 @@ void OneConnForm::mousePressEvent(QMouseEvent *){
 //事件过滤器
 bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
 {
-    if (obj == this){
+    if (obj == ui->btnInfo){
+        if(event->type() == QEvent::HoverEnter) {
+            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
+            return true;
+        } else if(event->type() == QEvent::HoverLeave){
+            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.85);}");
+            return true;
+        }
+    }else if (obj == this){
         if(event->type() == QEvent::HoverEnter) {
             if (!this->isTopItem){
                 if (!this->isSelected){
@@ -218,23 +226,21 @@ void OneConnForm::setTopItem(bool isSelected){
     ui->btnConn->hide();
     ui->btnConnPWD->hide();
     ui->btnHideConn->hide();
-    ui->lbLoadUpImg->show();
-    ui->lbLoadDownImg->show();
+    ui->btnInfo->show();
+
     if (isConnected){
-        // ui->lbLoadUp->setText("0Kb/s");
-        // ui->lbLoadDown->setText("0Kb/s");
-        ui->lbLoadUp->hide();
-        ui->lbLoadDown->hide();
+        ui->lbLoadUpImg->show();
+        ui->lbLoadDownImg->show();
+
         if (this->isWaiting){
             ui->btnDisConn->hide();
         }else{
             ui->btnDisConn->show();
         }
     }else{
-        // ui->lbLoadUp->setText("0Kb/s");
-        // ui->lbLoadDown->setText("0Kb/s");
-        ui->lbLoadUp->hide();
-        ui->lbLoadDown->hide();
+        ui->lbLoadUpImg->hide();
+        ui->lbLoadDownImg->hide();
+
         ui->btnDisConn->hide();
     }
 
@@ -279,10 +285,10 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName){
     ui->lePassword->hide();
     ui->checkBoxPwd->hide();
     ui->btnConnPWD->hide();
-
     ui->lbSignal->show();
     ui->btnDisConn->hide();
     ui->btnHideConn->hide();
+    ui->btnInfo->hide();
 
     this->isTopItem = false;
 }
@@ -331,11 +337,9 @@ QString OneConnForm::getName()
 }
 
 void OneConnForm::setRate(QString rate){
-    QString txt(tr("Rate"));//"速率"
-    //this->setToolTip("<span style=\"font-size:14px;border:none;background-color:#3593b5;color:white;\">&nbsp; " + txt + ": " + rate + " &nbsp;</span>");
-    //this->setToolTip(txt + ":" + rate);
-    QString rateStr = rate.split(" ").at(0);
-    int rateNum = rateStr.toInt();
+//    QString txt(tr("Rate"));//"速率"
+//    this->setToolTip("<span style=\"font-size:14px;border:none;background-color:#3593b5;color:white;\">&nbsp; " + txt + ": " + rate + " &nbsp;</span>");
+//    this->setToolTip(txt + ":" + rate);
 }
 
 void OneConnForm::setLine(bool isShow)
@@ -419,6 +423,9 @@ void OneConnForm::slotConnWifiPWD(){
 //点击后断开wifi网络
 void OneConnForm::on_btnDisConn_clicked()
 {
+    syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", ui->lbName->text().toUtf8().data());
+    qDebug()<<"DisConnect button about wifi net is clicked, current wifi name is "<<ui->lbName->text();
+
     this->startWaiting(false);
 
     mw->is_stop_check_net_state = 1;
@@ -426,9 +433,6 @@ void OneConnForm::on_btnDisConn_clicked()
     kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
     disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneWifiFormSelected(QString,int)));
     emit disconnActiveWifi();
-
-    syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", ui->lbName->text().toUtf8().data());
-    qDebug()<<"DisConnect button about wifi net is clicked, current wifi name is "<<ui->lbName->text();
 }
 
 //点击列表item扩展时会出现该按钮 用于连接网络
@@ -537,6 +541,50 @@ void OneConnForm::on_lePassword_textEdited(const QString &arg1)
                                       "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
         ui->btnConnPWD->setEnabled(true);
     }
+}
+
+void OneConnForm::on_btnInfo_clicked()
+{
+    QPoint pos = QCursor::pos();
+    QRect primaryGeometry;
+    for (QScreen *screen : qApp->screens()) {
+        if (screen->geometry().contains(pos)) {
+            primaryGeometry = screen->geometry();
+        }
+    }
+
+    if (primaryGeometry.isEmpty()) {
+        primaryGeometry = qApp->primaryScreen()->geometry();
+    }
+
+    BackThread *bt = new BackThread();
+    QString connProp = bt->getConnProp(ui->lbName->text());
+    QStringList propList = connProp.split("|");
+    QString v4method, addr, mask, gateway, dns;
+    foreach (QString line, propList) {
+        if(line.startsWith("method:")){
+            v4method = line.split(":").at(1);
+        }
+        if(line.startsWith("addr:")){
+            addr = line.split(":").at(1);
+        }
+        if(line.startsWith("mask:")){
+            mask = line.split(":").at(1);
+        }
+        if(line.startsWith("gateway:")){
+            gateway= line.split(":").at(1);
+        }
+        if(line.startsWith("dns:")){
+            dns = line.split(":").at(1);
+        }
+    }
+    // qDebug()<<v4method<<addr<<mask<<gateway<<dns;
+
+    cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive);
+
+    //cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
+    cf->show();
+    cf->raise();
 }
 
 // Wifi连接结果，0成功 1失败 2没有配置文件

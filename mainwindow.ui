@@ -7,23 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>515</height>
+    <height>538</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>kylin-nm</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="wdgHead" native="true">
-    <property name="geometry">
-     <rect>
-      <x>1</x>
-      <y>1</y>
-      <width>41</width>
-      <height>513</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="lbBtnNetBG">
     <property name="geometry">
      <rect>
@@ -80,7 +70,7 @@
     <property name="geometry">
      <rect>
       <x>2</x>
-      <y>460</y>
+      <y>490</y>
       <width>37</width>
       <height>37</height>
      </rect>
@@ -93,7 +83,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>468</y>
+      <y>498</y>
       <width>22</width>
       <height>22</height>
      </rect>
@@ -106,7 +96,7 @@
     <property name="geometry">
      <rect>
       <x>2</x>
-      <y>460</y>
+      <y>490</y>
       <width>37</width>
       <height>37</height>
      </rect>
@@ -297,29 +287,13 @@
      <string/>
     </property>
    </widget>
-   <widget class="Line" name="line">
-    <property name="geometry">
-     <rect>
-      <x>2</x>
-      <y>442</y>
-      <width>35</width>
-      <height>1</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255,0.06);</string>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_2">
+   <widget class="Line" name="vLine">
     <property name="geometry">
      <rect>
       <x>41</x>
       <y>0</y>
       <width>1</width>
-      <height>515</height>
+      <height>538</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -329,7 +303,6 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-   <zorder>wdgHead</zorder>
    <zorder>lbFlyBG</zorder>
    <zorder>lbHotBG</zorder>
    <zorder>lbFlyImg</zorder>
@@ -351,8 +324,7 @@
    <zorder>btnNetList</zorder>
    <zorder>btnWifiList</zorder>
    <zorder>lbNetwork</zorder>
-   <zorder>line</zorder>
-   <zorder>line_2</zorder>
+   <zorder>vLine</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

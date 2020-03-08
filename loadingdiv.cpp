@@ -20,11 +20,11 @@
 
 LoadingDiv::LoadingDiv(QWidget *parent) : QWidget(parent)
 {
-    this->resize(480, 500);
+    this->resize(480, 538);
 
     this->loadingGif = new QLabel(this);
     this->loadingGif->resize(96, 96);
-    this->loadingGif->move(this->width() / 2 - 96 / 2 + 20, this->height() / 2 - 96 / 2);
+    this->loadingGif->move(this->width()/2 - 96/2 + 41/2, this->height()/2 + 20);
     this->loadingGif->show();
 
 

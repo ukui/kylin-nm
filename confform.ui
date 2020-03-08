@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>432</width>
-    <height>442</height>
+    <height>487</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,14 +19,14 @@
      <x>0</x>
      <y>0</y>
      <width>432</width>
-     <height>442</height>
+     <height>487</height>
     </rect>
    </property>
    <widget class="QWidget" name="wgManual" native="true">
     <property name="geometry">
      <rect>
       <x>1</x>
-      <y>131</y>
+      <y>176</y>
       <width>430</width>
       <height>250</height>
      </rect>
@@ -35,50 +35,75 @@
      <property name="geometry">
       <rect>
        <x>175</x>
-       <y>20</y>
+       <y>15</y>
        <width>182</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
     </widget>
     <widget class="QComboBox" name="cbMask">
      <property name="geometry">
       <rect>
        <x>175</x>
-       <y>65</y>
+       <y>60</y>
        <width>182</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
     </widget>
     <widget class="QLineEdit" name="leGateway">
      <property name="geometry">
       <rect>
        <x>175</x>
-       <y>110</y>
+       <y>105</y>
        <width>182</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
     </widget>
     <widget class="QLineEdit" name="leDns">
      <property name="geometry">
       <rect>
        <x>175</x>
-       <y>155</y>
+       <y>150</y>
        <width>182</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
     </widget>
     <widget class="QLabel" name="lbTxt2">
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>26</y>
+       <y>20</y>
        <width>80</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
      <property name="text">
       <string/>
@@ -88,10 +113,15 @@
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>71</y>
+       <y>65</y>
        <width>80</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
      <property name="text">
       <string/>
@@ -101,10 +131,15 @@
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>116</y>
+       <y>110</y>
        <width>80</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
      <property name="text">
       <string/>
@@ -114,10 +149,15 @@
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>161</y>
+       <y>155</y>
        <width>80</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
      <property name="text">
       <string/>
@@ -127,38 +167,35 @@
      <property name="geometry">
       <rect>
        <x>175</x>
-       <y>200</y>
+       <y>195</y>
        <width>182</width>
        <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
     </widget>
     <widget class="QLabel" name="lbTxt6">
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>206</y>
+       <y>200</y>
        <width>80</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
      <property name="text">
       <string/>
      </property>
     </widget>
-   </widget>
-   <widget class="QLabel" name="lbName">
-    <property name="geometry">
-     <rect>
-      <x>151</x>
-      <y>1</y>
-      <width>100</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
    </widget>
    <widget class="QWidget" name="wdHead" native="true">
     <property name="geometry">
@@ -166,87 +203,81 @@
       <x>1</x>
       <y>1</y>
       <width>430</width>
-      <height>116</height>
+      <height>161</height>
      </rect>
     </property>
     <widget class="QComboBox" name="cbType">
      <property name="geometry">
       <rect>
        <x>175</x>
-       <y>55</y>
+       <y>105</y>
        <width>182</width>
        <height>32</height>
       </rect>
      </property>
-    </widget>
-    <widget class="QWidget" name="wdLeftup" native="true">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>100</width>
-       <height>32</height>
-      </rect>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
-     <widget class="QLabel" name="lbIcon">
-      <property name="geometry">
-       <rect>
-        <x>9</x>
-        <y>9</y>
-        <width>16</width>
-        <height>15</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="lbTitle">
-      <property name="geometry">
-       <rect>
-        <x>34</x>
-        <y>6</y>
-        <width>60</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
     </widget>
     <widget class="QLabel" name="lbTxt1">
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>60</y>
+       <y>110</y>
        <width>80</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
      <property name="text">
       <string/>
      </property>
     </widget>
-   </widget>
-   <widget class="QLabel" name="lbTraingle">
-    <property name="geometry">
-     <rect>
-      <x>204</x>
-      <y>117</y>
-      <width>22</width>
-      <height>14</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
+    <widget class="QLabel" name="lbName">
+     <property name="geometry">
+      <rect>
+       <x>76</x>
+       <y>65</y>
+       <width>80</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="leName">
+     <property name="geometry">
+      <rect>
+       <x>175</x>
+       <y>60</y>
+       <width>182</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="wdBottom" native="true">
     <property name="geometry">
      <rect>
       <x>1</x>
-      <y>381</y>
+      <y>426</y>
       <width>430</width>
       <height>60</height>
      </rect>
@@ -259,6 +290,11 @@
        <width>90</width>
        <height>30</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
      <property name="text">
       <string/>
@@ -273,10 +309,67 @@
        <height>30</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string/>
      </property>
     </widget>
+    <widget class="QPushButton" name="btnCreate">
+     <property name="geometry">
+      <rect>
+       <x>315</x>
+       <y>15</y>
+       <width>90</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="lbLeftupTitle">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>15</y>
+      <width>140</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="Line" name="lineUp">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>165</y>
+      <width>412</width>
+      <height>1</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="lineDown">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>423</y>
+      <width>412</width>
+      <height>1</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
    </widget>
   </widget>
  </widget>

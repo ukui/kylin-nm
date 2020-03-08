@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>422</width>
+    <width>424</width>
     <height>60</height>
    </rect>
   </property>
@@ -83,7 +83,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>422</width>
+     <width>424</width>
      <height>118</height>
     </rect>
    </property>
@@ -155,11 +155,24 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>422</width>
+     <width>424</width>
      <height>148</height>
     </rect>
    </property>
    <widget class="QLabel" name="lbInfo">
+    <property name="geometry">
+     <rect>
+      <x>63</x>
+      <y>71</y>
+      <width>230</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnInfo">
     <property name="geometry">
      <rect>
       <x>63</x>
@@ -178,7 +191,7 @@
     <rect>
      <x>0</x>
      <y>58</y>
-     <width>422</width>
+     <width>424</width>
      <height>1</height>
     </rect>
    </property>
@@ -220,7 +233,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>422</width>
+     <width>424</width>
      <height>60</height>
     </rect>
    </property>

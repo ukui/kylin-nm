@@ -7,6 +7,10 @@ kylin-nm (1.2.0-1) unstable; urgency=medium
   [ lixiang ]
   * update kylin-nm.pro and rules.
 
+  * Remove the depend package libnotify-bin.
+  * User can config network by clicking information button about IP.
+  * kylin-nm enable create new wired net now.
+
  -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 25 Feb 2020 14:12:29 +0800
 
 kylin-nm (1.0.4-1) unstable; urgency=medium

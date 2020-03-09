@@ -424,17 +424,50 @@ void MainWindow::handleIconClicked()
     QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
     QRect screenGeometry = qApp->primaryScreen()->geometry();
 
-    //QDesktopWidget* pDesktopWidget = QApplication::desktop();
-    //int nScreenCount = QApplication::desktop()->screenCount();
-    //QRect deskRect = pDesktopWidget->availableGeometry();//可用区域
-    //QRect screenRect = pDesktopWidget->screenGeometry();//屏幕区域
+    qDebug()<<"                                                  ";
+    qDebug()<<"trayIcon:"<<trayIcon->geometry();
+    qDebug()<<"screenGeometry: "<<screenGeometry;
+    qDebug()<<"availableGeometry: "<<availableGeometry;
 
-//    qDebug()<<"                                                  ";
-//    qDebug()<<"trayIcon:"<<trayIcon->geometry();
-//    qDebug()<<"screenGeometry: "<<screenGeometry;
-//    qDebug()<<"availableGeometry: "<<availableGeometry;
+    if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
+        QDesktopWidget* desktopWidget = QApplication::desktop();
 
-    if (screenGeometry.width() == availableGeometry.width()){
+        QRect deskMainRect = desktopWidget->availableGeometry(0);//获取可用桌面大小
+        QRect screenMainRect = desktopWidget->screenGeometry(0);//获取设备屏幕大小
+        QRect deskDupRect = desktopWidget->availableGeometry(1);//获取可用桌面大小
+        QRect screenDupRect = desktopWidget->screenGeometry(1);//获取设备屏幕大小
+
+        qDebug()<<"                                                  ";
+        qDebug()<<"deskMainRect: "<<deskMainRect;
+        qDebug()<<"screenMainRect: "<<screenMainRect;
+        qDebug()<<"deskDupRect: "<<deskDupRect;
+        qDebug()<<"screenDupRect: "<<screenDupRect;
+
+        int n = objKyDBus->getTaskbarPos("position");
+        int m = objKyDBus->getTaskbarHeight("height");
+
+        if(n == 0){
+            //任务栏在下侧
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), availableGeometry.height() - this->height() - m);
+        }else if(n == 1){
+            //任务栏在上侧
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenGeometry.height() - availableGeometry.height() + m);
+        } else if (n == 2){
+            //任务栏在左侧
+            if (screenGeometry.x() == 0){
+                this->move(screenGeometry.width() - availableGeometry.width() + m, screenMainRect.height() - this->height());//主屏在左侧
+            }else{
+                this->move(screenGeometry.width() - availableGeometry.width() + m, screenDupRect.height() - this->height());//主屏在右侧
+            }
+        } else if (n == 3){
+            //任务栏在右侧
+            if (screenGeometry.x() == 0){
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m, screenDupRect.height() - this->height());//主屏在左侧
+            }else{
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m, screenMainRect.height() - this->height());//主屏在右侧
+            }
+        }
+    } else if(screenGeometry.width() == availableGeometry.width() ){
         if (trayIcon->geometry().y() > availableGeometry.height()/2){
             //任务栏在下侧
             this->move(availableGeometry.x() + availableGeometry.width() - this->width(), availableGeometry.height() - this->height());
@@ -442,8 +475,7 @@ void MainWindow::handleIconClicked()
             //任务栏在上侧
             this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenGeometry.height() - availableGeometry.height());
         }
-    }
-    if (screenGeometry.height() == availableGeometry.height()){
+    } else if (screenGeometry.height() == availableGeometry.height()){
         if (trayIcon->geometry().x() > availableGeometry.width()/2){
             //任务栏在右侧
             this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenGeometry.height() - this->height());
@@ -452,20 +484,6 @@ void MainWindow::handleIconClicked()
             this->move(screenGeometry.width() - availableGeometry.width(), screenGeometry.height() - this->height());
         }
     }
-
-
-
-//    QPoint pos = QCursor::pos();
-//    QRect primaryGeometry;
-//    for (QScreen *screen : qApp->screens()) {
-//        if (screen->geometry().contains(pos)) {
-//            primaryGeometry = screen->geometry();
-//        }
-//    }
-//    if (primaryGeometry.isEmpty()) {
-//        primaryGeometry = qApp->primaryScreen()->geometry();
-//    }
-//    this->move(primaryGeometry.x() + primaryGeometry.width() - this->width(), primaryGeometry.height() - this->height());
 }
 
 void MainWindow::on_showWindowAction()
@@ -1616,8 +1634,8 @@ void MainWindow::on_setNetSpeed()
         if (delta_rcv>=10000 || delta_rcv<0){delta_rcv = 0;}
         if (delta_tx>=10000 || delta_tx<0){delta_tx = 0;}
 
-        QString str_rcv = QString::number(delta_rcv) + "kb/s";
-        QString str_tx = QString::number(delta_tx) + "kb/s";
+        QString str_rcv = QString::number(delta_rcv/3) + "kb/s";
+        QString str_tx = QString::number(delta_tx/3) + "kb/s";
 
         lbLoadUp->setText(str_rcv);
         lbLoadDown->setText(str_tx);

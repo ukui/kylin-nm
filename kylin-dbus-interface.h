@@ -25,6 +25,8 @@ public:
     void getObjectPath();
     int getAccessPointsNumber();
     int getLanConnState();
+    int getTaskbarPos(QString str);
+    int getTaskbarHeight(QString str);
 
     QDBusObjectPath wiredPath;
     QDBusObjectPath wirelessPath;

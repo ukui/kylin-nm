@@ -394,3 +394,25 @@ void KylinDBus::onAccessPointAdded(QDBusObjectPath objPath)
 {
     //qDebug()<<"debug: &&&&&&&&&&&&&"<<objPath.path();
 }
+
+int KylinDBus::getTaskbarPos(QString str)
+{
+    QDBusInterface interface( "com.ukui.panel.desktop",
+                              "/",
+                              "com.ukui.panel.desktop",
+                              QDBusConnection::sessionBus() );
+
+    QDBusReply<int> reply = interface.call("GetPanelPosition", str);
+    return reply;
+}
+
+int KylinDBus::getTaskbarHeight(QString str)
+{
+    QDBusInterface interface( "com.ukui.panel.desktop",
+                              "/",
+                              "com.ukui.panel.desktop",
+                              QDBusConnection::sessionBus() );
+
+    QDBusReply<int> reply = interface.call("GetPanelSize", str);
+    return reply;
+}

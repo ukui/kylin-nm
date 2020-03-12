@@ -1885,16 +1885,7 @@ void MainWindow::oneLanFormSelected(QString lanName)
     QList<OneLancForm *> topLanList = topLanListWidget->findChildren<OneLancForm *>();
     QList<OneLancForm *> lanList = lanListWidget->findChildren<OneLancForm *>();
 
-    // 顶部的item缩小
-    topLanListWidget->resize(435, 60 + 10 + 46);
-    lbTopLanList->move(19, 60 + 10);
-    btnCreateNet->move(365, 77 + 10);
-    scrollAreal->move(41, 178);
-    lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2);
-
-    OneLancForm *ocf = topLanList.at(0);
-    ocf->setTopItem(false);
-
+    //**********************先处理下方列表********************//
     // 下方所有元素回到原位
     for(int i = 0, j = 0;i < lanList.size(); i ++){
         OneLancForm *ocf = lanList.at(i);
@@ -1951,6 +1942,15 @@ void MainWindow::oneLanFormSelected(QString lanName)
         lastItem->setLine(false);
     }
 
+    //**********************处理上方列表-界面所有控件回原位********************//
+    topLanListWidget->resize(435, 60 + 10 + 46); // 顶部的item缩小
+    lbTopLanList->move(19, 60 + 10);
+    btnCreateNet->move(365, 77 + 10);
+    scrollAreal->move(41, 178);
+    lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2);
+
+    OneLancForm *ocf = topLanList.at(0);
+    ocf->setTopItem(false);
 }
 void MainWindow::oneTopLanFormSelected(QString lanName)
 {
@@ -1997,16 +1997,7 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
     QList<OneConnForm *>topWifiList = topWifiListWidget->findChildren<OneConnForm *>();
     QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
 
-    // 顶部的item缩小
-    topWifiListWidget->resize(435, 60 + 10 + 46);
-    lbTopWifiList->move(19, 60 + 10);
-    btnAddNet->move(365, 77 + 10);
-    scrollAreaw->move(41, 178);
-    lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2);
-
-    OneConnForm *ocf = topWifiList.at(0);
-    ocf->setTopItem(false);
-
+    //******************先处理下方列表****************//
     // 下方所有元素回到原位
     for(int i = 0, j = 0;i < wifiList.size(); i ++){
         OneConnForm *ocf = wifiList.at(i);
@@ -2079,6 +2070,17 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
         OneConnForm *lastItem = itemList.at(n-1);
         lastItem->setLine(false);
     }
+
+    //********************处理上方列表-界面所有控件回原位******************//
+    // 顶部的item缩小
+    topWifiListWidget->resize(435, 60 + 10 + 46);
+    lbTopWifiList->move(19, 60 + 10);
+    btnAddNet->move(365, 77 + 10);
+    scrollAreaw->move(41, 178);
+    lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2);
+
+    OneConnForm *ocf = topWifiList.at(0);
+    ocf->setTopItem(false);
 }
 void MainWindow::oneTopWifiFormSelected(QString wifiName, int extendLength)
 {

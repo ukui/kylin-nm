@@ -36,7 +36,15 @@ ConfForm::ConfForm(QWidget *parent) :
     this->setWindowTitle(tr("edit network"));//"网络设置"
     this->setAttribute(Qt::WA_TranslucentBackground);
     //需要添加 void paintEvent(QPaintEvent *event) 函数
-    this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
+
+    QPainterPath path;
+    auto rect = this->rect();
+    rect.adjust(0, 0, -0, -0);
+    path.addRoundedRect(rect, 6, 6);
+    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+
+//    this->setStyleSheet("QWidget{border-radius:6px;border:none;}");
+    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.9);}");
 
     ui->lbName->setText(tr("Network name: "));//"网络名称："
     ui->lbTxt1->setText(tr("Method: "));//"编辑IP设置："

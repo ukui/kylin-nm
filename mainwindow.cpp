@@ -34,14 +34,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     checkSingle();
 
-//    如果使用Qt::Popup 任务栏不显示且保留X事件如XCB_FOCUS_OUT, 但如果indicator点击鼠标右键触发，XCB_FOCUS_OUT事件依然会失效
-//    如果使用Qt::ToolTip, Qt::Tool + Qt::WindowStaysOnTopHint, Qt::X11BypassWindowManagerHint等flag则会导致X事件失效
+    // 如果使用Qt::Popup 任务栏不显示且保留X事件如XCB_FOCUS_OUT, 但如果indicator点击鼠标右键触发，XCB_FOCUS_OUT事件依然会失效
+    // 如果使用Qt::ToolTip, Qt::Tool + Qt::WindowStaysOnTopHint, Qt::X11BypassWindowManagerHint等flag则会导致X事件失效
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::Popup);//QTool
-//    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
+    // this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
 
-    //this->setWindowOpacity(0.7);
     this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
-    //this->setStyleSheet("QWidget{border-top-left-radius:6px;border-top-right-radius:6px;}");
+
+    QPainterPath path;
+    auto rect = this->rect();
+    rect.adjust(0, 0, -0, -0);
+    path.addRoundedRect(rect, 6, 6);
+    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+
     this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
     this->setStyleSheet("QToolTip{background:rgba(26,26,26,0.7);"
                         "font: 14px;"
@@ -51,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
                         "padding: 0px 5px;"
                         "outline:none;}");
 
-    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.95);}");
+    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.9);}");
 
     lname = "-1";
     wname = "-1";
@@ -60,6 +65,28 @@ MainWindow::MainWindow(QWidget *parent) :
     hideWiFiConn = "Connect to Hidden Wi-Fi Network";
     currentActWifiSignalLv = -1;
     count_loop = 0;
+
+    btnOffQss = "QLabel{min-width: 37px; min-height: 37px;max-width:37px; max-height: 37px;border-radius: 4px; background-color:rgba(255,255,255,0)}";
+    btnOnQss = "QLabel{min-width: 37px; min-height: 37px;max-width:37px; max-height: 37px;border-radius: 4px; background-color:rgba(61,107,229,1)}";
+    btnBgOffQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(255,255,255,0.2)}";
+    btnBgOnQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(61,107,229,1);}";
+    scrollBarQss = "QScrollBar:vertical{width:10px;background:rgba(48,48,51,1);border-radius:6px;}"
+                   "QScrollBar::up-arrow:vertical{height:0px;}"
+                   "QScrollBar::sub-line:vertical{border:0px solid;height:0px}"
+                   "QScrollBar::sub-page:vertical{background:transparent;}"
+                   "QScrollBar::handle:vertical{width:4px;background:rgba(72,72,76,1);border-radius:3px;}"
+                   "QScrollBar::handle:vertical:hover{width:4px;background:rgba(97,97,102,1);border-radius:3px;}"
+                   "QScrollBar::handle:vertical:pressed{width:4px;background:rgba(133,133,140,1);border-radius:3px;}"
+                   "QScrollBar::add-page:vertical{background:transparent;}"
+                   "QScrollBar::add-line:vertical{border:0px solid;height:0px}"
+                   "QScrollBar::down-arrow:vertical{height:0px;}";
+    leftBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
+                 "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
+                 "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}";
+    funcBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(107,142,235,0.97);font-size:14px;}"
+                 "QPushButton:Hover{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(151,175,241,0.97);font-size:14px;}"
+                 "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(61,107,229,0.97);font-size:14px;}";
+
 
     this->confForm = new ConfForm();
     this->ksnm = new KSimpleNM();
@@ -81,9 +108,7 @@ MainWindow::MainWindow(QWidget *parent) :
     btnCreateNet->resize(57, 14);
     btnCreateNet->move(365, 77 + 10);
     btnCreateNet->setText(tr("Create Lan Net"));//"新建网络"
-    btnCreateNet->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(107,142,235,0.97);font-size:14px;}"
-                             "QPushButton:Hover{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(151,175,241,0.97);font-size:14px;}"
-                             "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(61,107,229,0.97);font-size:14px;}");
+    btnCreateNet->setStyleSheet(funcBtnQss);
     btnCreateNet->setFocusPolicy(Qt::NoFocus);
     btnCreateNet->show();
     connect(btnCreateNet,SIGNAL(clicked()),this,SLOT(onBtnCreateNetClicked()));
@@ -103,28 +128,31 @@ MainWindow::MainWindow(QWidget *parent) :
     btnAddNet->resize(57, 14);
     btnAddNet->move(365, 77 + 10);
     btnAddNet->setText(tr("Add Hide Network"));//"加入网络"
-    btnAddNet->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(107,142,235,0.97);font-size:14px;}"
-                             "QPushButton:Hover{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(151,175,241,0.97);font-size:14px;}"
-                             "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(61,107,229,0.97);font-size:14px;}");
+    btnAddNet->setStyleSheet(funcBtnQss);
     btnAddNet->setFocusPolicy(Qt::NoFocus);
     btnAddNet->show();
     connect(btnAddNet,SIGNAL(clicked()),this,SLOT(onBtnAddNetClicked()));
 
     lbLoadDown = new QLabel(ui->centralWidget);
-    lbLoadDown->move(41 + 132, 57 + 32);
+    lbLoadDown->move(46 + 132, 57 + 32);
     lbLoadDown->resize(65, 20);
-    lbLoadUp = new QLabel(ui->centralWidget);
-    lbLoadUp->move(41 + 217, 57 + 32);
-    lbLoadUp->resize(65, 20);
+    lbLoadDownImg = new QLabel(ui->centralWidget);
+    lbLoadDownImg->move(46 + 115, 57 + 35);
+    lbLoadDownImg->resize(16, 16);
 
-    lbNoItemImg = new QLabel(ui->centralWidget);
-    lbNoItemImg->resize(96, 96);
-    lbNoItemImg->move(this->width()/2 - 96/2 + 41/2, this->height()/2 - 10);
-    lbNoItemImg->setStyleSheet("QLabel{background-image:url(:/res/s/nonet.png);}");
-    lbNoItemImg->hide();
+    lbLoadUp = new QLabel(ui->centralWidget);
+    lbLoadUp->move(46 + 217, 57 + 32);
+    lbLoadUp->resize(65, 20);
+    lbLoadUpImg = new QLabel(ui->centralWidget);
+    lbLoadUpImg->move(46 + 200, 57 + 35);
+    lbLoadUpImg->resize(16, 16);
+
+    lbLoadDownImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-down.png);}");
+    lbLoadUpImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-up.png);}");
+
     lbNoItemTip = new QLabel(ui->centralWidget);
-    lbNoItemTip->resize(200, 20);
-    lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2 + 96);
+    lbNoItemTip->resize(220, 20);
+    lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2);
     lbNoItemTip->setStyleSheet("QLabel{border:none;background:transparent;font-size:14px;color:rgba(255,255,255,0.91);}");
     lbNoItemTip->setText(tr("No usable network in the list"));//列表暂无可连接网络
     lbNoItemTip->setAlignment(Qt::AlignCenter);
@@ -147,11 +175,6 @@ MainWindow::MainWindow(QWidget *parent) :
     lbLanList = new QLabel(lanListWidget);
     lbWifiList = new QLabel(wifiListWidget);
 
-    btnOffQss = "QLabel{min-width: 37px; min-height: 37px;max-width:37px; max-height: 37px;border-radius: 4px; background-color:rgba(255,255,255,0)}";
-    btnOnQss = "QLabel{min-width: 37px; min-height: 37px;max-width:37px; max-height: 37px;border-radius: 4px; background-color:rgba(61,107,229,1)}";
-    btnBgOffQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(255,255,255,0.2)}";
-    btnBgOnQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(61,107,229,1);}";
-
     ui->lbNetwork->setStyleSheet("QLabel{font-size:20px;color:rgba(255,255,255,0.97);}");
     ui->lbNetwork->show();
 
@@ -168,30 +191,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     scrollAreal->setStyleSheet("QScrollArea{border:none;}");
     scrollAreal->viewport()->setStyleSheet("background-color:transparent;");
-    scrollAreal->verticalScrollBar()->setStyleSheet("QScrollBar:vertical{width:10px;background:rgba(48,48,51,1);border-radius:6px;}"
-                                                    "QScrollBar::up-arrow:vertical{height:0px;}"
-                                                    "QScrollBar::sub-line:vertical{border:0px solid;height:0px}"
-                                                    "QScrollBar::sub-page:vertical{background:transparent;}"
-                                                    "QScrollBar::handle:vertical{width:4px;background:rgba(72,72,76,1);border-radius:3px;}"
-                                                    "QScrollBar::handle:vertical:hover{width:4px;background:rgba(97,97,102,1);border-radius:3px;}"
-                                                    "QScrollBar::handle:vertical:pressed{width:4px;background:rgba(133,133,140,1);border-radius:3px;}"
-                                                    "QScrollBar::add-page:vertical{background:transparent;}"
-                                                    "QScrollBar::add-line:vertical{border:0px solid;height:0px}"
-                                                    "QScrollBar::down-arrow:vertical{height:0px;}");
+    scrollAreal->verticalScrollBar()->setStyleSheet(scrollBarQss);
 
 
     scrollAreaw->setStyleSheet("QScrollArea{border:none;}");
     scrollAreaw->viewport()->setStyleSheet("background-color:transparent;");
-    scrollAreaw->verticalScrollBar()->setStyleSheet("QScrollBar:vertical{width:10px;background:rgba(48,48,51,1);border-radius:6px;}"
-                                                    "QScrollBar::up-arrow:vertical{height:0px;}"
-                                                    "QScrollBar::sub-line:vertical{border:0px solid;height:0px}"
-                                                    "QScrollBar::sub-page:vertical{background:transparent;}"
-                                                    "QScrollBar::handle:vertical{width:4px;background:rgba(72,72,76,1);border-radius:3px;}"
-                                                    "QScrollBar::handle:vertical:hover{width:4px;background:rgba(97,97,102,1);border-radius:3px;}"
-                                                    "QScrollBar::handle:vertical:pressed{width:4px;background:rgba(133,133,140,1);border-radius:3px;}"
-                                                    "QScrollBar::add-page:vertical{background:transparent;}"
-                                                    "QScrollBar::add-line:vertical{border:0px solid;height:0px}"
-                                                    "QScrollBar::down-arrow:vertical{height:0px;}");
+    scrollAreaw->verticalScrollBar()->setStyleSheet(scrollBarQss);
 
     ui->btnNetList->setFocusPolicy(Qt::NoFocus);
     QString txtEthernet(tr("Ethernet"));
@@ -213,9 +218,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lbBtnWifiBall->setStyleSheet("QLabel{min-width: 16px; min-height: 16px;max-width:16px; max-height: 16px;"
                                      "border-radius: 8px;  border:1px solid white;background:white;}");
 
-    ui->btnHotspot->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
-                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
-                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
+    ui->btnHotspot->setStyleSheet(leftBtnQss);
     ui->btnHotspot->setFocusPolicy(Qt::NoFocus);
     QString txtHotSpot(tr("HotSpot"));
     ui->btnHotspot->setToolTip(txtHotSpot);
@@ -225,9 +228,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lbHotBG->hide();
     ui->lbHotBG->setStyleSheet(btnOffQss);
 
-    ui->btnFlyMode->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
-                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
-                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
+    ui->btnFlyMode->setStyleSheet(leftBtnQss);
     ui->btnFlyMode->setFocusPolicy(Qt::NoFocus);
     QString txtFlyMode(tr("FlyMode"));
     ui->btnFlyMode->setToolTip(txtFlyMode);
@@ -237,9 +238,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lbFlyBG->hide();
     ui->lbFlyBG->setStyleSheet(btnOffQss);
 
-    ui->btnAdvConf->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
-                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
-                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
+    ui->btnAdvConf->setStyleSheet(leftBtnQss);
     ui->btnAdvConf->setFocusPolicy(Qt::NoFocus);
     QString txtAdvanced(tr("Advanced"));
     ui->btnAdvConf->setToolTip(txtAdvanced);
@@ -268,6 +267,9 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon->show();
 
     connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClicked);
+
+    auto app = static_cast<QApplication*>(QCoreApplication::instance());
+    app->setStyle(new CustomStyle());
 }
 
 MainWindow::~MainWindow()
@@ -424,10 +426,10 @@ void MainWindow::handleIconClicked()
     QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
     QRect screenGeometry = qApp->primaryScreen()->geometry();
 
-    qDebug()<<"                                                  ";
-    qDebug()<<"trayIcon:"<<trayIcon->geometry();
-    qDebug()<<"screenGeometry: "<<screenGeometry;
-    qDebug()<<"availableGeometry: "<<availableGeometry;
+//    qDebug()<<"                                                  ";
+//    qDebug()<<"trayIcon:"<<trayIcon->geometry();
+//    qDebug()<<"screenGeometry: "<<screenGeometry;
+//    qDebug()<<"availableGeometry: "<<availableGeometry;
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
         QDesktopWidget* desktopWidget = QApplication::desktop();
@@ -437,11 +439,11 @@ void MainWindow::handleIconClicked()
         QRect deskDupRect = desktopWidget->availableGeometry(1);//获取可用桌面大小
         QRect screenDupRect = desktopWidget->screenGeometry(1);//获取设备屏幕大小
 
-        qDebug()<<"                                                  ";
-        qDebug()<<"deskMainRect: "<<deskMainRect;
-        qDebug()<<"screenMainRect: "<<screenMainRect;
-        qDebug()<<"deskDupRect: "<<deskDupRect;
-        qDebug()<<"screenDupRect: "<<screenDupRect;
+//        qDebug()<<"                                                  ";
+//        qDebug()<<"deskMainRect: "<<deskMainRect;
+//        qDebug()<<"screenMainRect: "<<screenMainRect;
+//        qDebug()<<"deskDupRect: "<<deskDupRect;
+//        qDebug()<<"screenDupRect: "<<screenDupRect;
 
         int n = objKyDBus->getTaskbarPos("position");
         int m = objKyDBus->getTaskbarHeight("height");
@@ -457,14 +459,14 @@ void MainWindow::handleIconClicked()
             if (screenGeometry.x() == 0){
                 this->move(screenGeometry.width() - availableGeometry.width() + m, screenMainRect.height() - this->height());//主屏在左侧
             }else{
-                this->move(screenGeometry.width() - availableGeometry.width() + m, screenDupRect.height() - this->height());//主屏在右侧
+                this->move(screenGeometry.width() - availableGeometry.width() + m,screenDupRect.y() + screenDupRect.height() - this->height());//主屏在右侧
             }
         } else if (n == 3){
             //任务栏在右侧
-            if (screenGeometry.x() == 0){
-                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m, screenDupRect.height() - this->height());//主屏在左侧
-            }else{
-                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m, screenMainRect.height() - this->height());//主屏在右侧
+            if (screenGeometry.x() == 0){//主屏在左侧
+                this->move(screenMainRect.width() + screenDupRect.width() - this->width() - m, screenDupRect.y() + screenDupRect.height() - this->height());
+            }else{//主屏在右侧
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m, screenMainRect.height() - this->height());
             }
         }
     } else if(screenGeometry.width() == availableGeometry.width() ){
@@ -687,7 +689,7 @@ void MainWindow::changeTimerState()
     }
 }
 
-//由kylin-dbus-interface.cpp调用
+//网线插拔处理,由kylin-dbus-interface.cpp调用
 void MainWindow::onPhysicalCarrierChanged(bool flag)
 {
     is_stop_check_net_state = 1;
@@ -941,9 +943,7 @@ void MainWindow::getLanListDone(QStringList slist)
     btnCreateNet->resize(57, 14);
     btnCreateNet->move(365, 77 + 10);
     btnCreateNet->setText(tr("Create Lan Net"));//"新建网络"
-    btnCreateNet->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(107,142,235,0.97);font-size:14px;}"
-                             "QPushButton:Hover{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(151,175,241,0.97);font-size:14px;}"
-                             "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(61,107,229,0.97);font-size:14px;}");
+    btnCreateNet->setStyleSheet(funcBtnQss);
     btnCreateNet->setFocusPolicy(Qt::NoFocus);
     btnCreateNet->show();
     connect(btnCreateNet,SIGNAL(clicked()),this,SLOT(onBtnCreateNetClicked()));
@@ -952,9 +952,6 @@ void MainWindow::getLanListDone(QStringList slist)
     lanListWidget->resize(440, 60 + 108);
     scrollAreal->setWidget(lanListWidget);
     scrollAreal->move(41, 178);
-
-    lbNoItemImg->hide();
-    lbNoItemTip->hide();
 
     // 获取当前连接的lan name
     QString actLanName = "--";
@@ -975,8 +972,11 @@ void MainWindow::getLanListDone(QStringList slist)
         ccf->setIcon(false);
         ccf->setConnedString(1, tr("Disconnected"));//"未连接"
         ccf->isConnected = false;
+        ifLanConnected = false;
         lbLoadDown->hide();
         lbLoadUp->hide();
+        lbLoadDownImg->hide();
+        lbLoadUpImg->hide();
         ccf->setTopItem(false);
     }
     ccf->setAct(true);
@@ -1007,8 +1007,11 @@ void MainWindow::getLanListDone(QStringList slist)
                 ccf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
                 ccf->setConnedString(1, tr("Connected"));//"已连接"
                 ccf->isConnected = true;
+                ifLanConnected = true;
                 lbLoadDown->show();
                 lbLoadUp->show();
+                lbLoadDownImg->show();
+                lbLoadUpImg->show();
                 ccf->setTopItem(false);
                 currSelNetName = "";
                 syslog(LOG_DEBUG, "already insert an active lannet in the top of lan list");
@@ -1035,9 +1038,16 @@ void MainWindow::getLanListDone(QStringList slist)
     if (n >= 1){
         OneLancForm *lastItem = itemList.at(n-1);
         lastItem->setLine(false);
-    } else{
-        lbNoItemImg->show();
-        lbNoItemTip->show();
+        lbNoItemTip->hide();
+    } else {
+        if (!ifLanConnected){
+            lbNoItemTip->hide();
+            lbTopLanList->hide();
+            btnCreateNet->hide();
+        } else{
+            lbNoItemTip->show();
+            lbNoItemTip->setText(tr("No Other Wired Network Scheme"));
+        }
     }
 
     this->lanListWidget->show();
@@ -1080,15 +1090,10 @@ void MainWindow::loadWifiListDone(QStringList slist)
     btnAddNet->resize(57, 14);
     btnAddNet->move(365, 77 + 10);
     btnAddNet->setText(tr("Add Hide Network"));
-    btnAddNet->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(107,142,235,0.97);font-size:14px;}"
-                             "QPushButton:Hover{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(151,175,241,0.97);font-size:14px;}"
-                             "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(61,107,229,0.97);font-size:14px;}");
+    btnAddNet->setStyleSheet(funcBtnQss);
     btnAddNet->setFocusPolicy(Qt::NoFocus);
     btnAddNet->show();
     connect(btnAddNet,SIGNAL(clicked()),this,SLOT(onBtnAddNetClicked()));
-
-    lbNoItemImg->hide();
-    lbNoItemTip->hide();
 
     // 清空wifi列表
     wifiListWidget = new QWidget(scrollAreaw);
@@ -1116,8 +1121,11 @@ void MainWindow::loadWifiListDone(QStringList slist)
         activeWifiSignalLv = 0;
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
         ccf->isConnected = false;
+        ifWLanConnected = false;
         lbLoadDown->hide();
         lbLoadUp->hide();
+        lbLoadDownImg->hide();
+        lbLoadUpImg->hide();
         ccf->setTopItem(false);
     }
     ccf->setAct(true);
@@ -1160,8 +1168,12 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
                 ccf->setConnedString(1, tr("Connected"), wsecu);//"已连接"
                 ccf->isConnected = true;
+                ifWLanConnected = true;
+                qDebug()<<"show load down and load up";
                 lbLoadDown->show();
                 lbLoadUp->show();
+                lbLoadDownImg->show();
+                lbLoadUpImg->show();
                 ccf->setTopItem(false);
                 currSelNetName = "";
 
@@ -1195,9 +1207,16 @@ void MainWindow::loadWifiListDone(QStringList slist)
     if (n >= 1){
         OneConnForm *lastItem = itemList.at(n-1);
         lastItem->setLine(false);
-    } else {
-        lbNoItemImg->show();
-        lbNoItemTip->show();
+        lbNoItemTip->hide();
+    }else{
+        if(ifWLanConnected){
+            lbNoItemTip->show();
+            lbNoItemTip->setText(tr("No Other Wireless Network Scheme"));
+        } else {
+            lbNoItemTip->hide();
+            lbTopWifiList->hide();
+            btnAddNet->hide();
+        }
     }
 
     this->lanListWidget->hide();
@@ -1354,6 +1373,7 @@ void MainWindow::on_btnWifi_clicked()
         // 网络开关关闭时，点击Wifi开关时，程序先打开有线开关
         if(checkLanOn()){
             if(checkWlOn()){
+                lbTopWifiList->hide();
                 btnAddNet->hide();
                 QThread *t = new QThread();
                 BackThread *bt = new BackThread();
@@ -1368,9 +1388,8 @@ void MainWindow::on_btnWifi_clicked()
                 if (is_fly_mode_on == 0){
                     on_btnWifiList_clicked();
                     is_stop_check_net_state = 1;
+                    lbTopWifiList->show();
                     btnAddNet->show();
-                    lbNoItemImg->hide();
-                    lbNoItemTip->hide();
                     QThread *t = new QThread();
                     BackThread *bt = new BackThread();
                     bt->moveToThread(t);
@@ -1391,6 +1410,7 @@ void MainWindow::on_btnWifi_clicked()
 
                 on_btnWifiList_clicked();
                 is_stop_check_net_state = 1;
+                lbTopWifiList->show();
                 btnAddNet->show();
                 QThread *t = new QThread();
                 BackThread *bt = new BackThread();
@@ -1406,6 +1426,7 @@ void MainWindow::on_btnWifi_clicked()
         }
         //this->startLoading();
     } else {
+        lbTopWifiList->hide();
         btnAddNet->hide();
         QString txt(tr("please insert the wireless network adapter"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
@@ -1433,8 +1454,9 @@ void MainWindow::onBtnNetListClicked(int flag)
 
     lbLoadDown->hide();
     lbLoadUp->hide();
+    lbLoadDownImg->hide();
+    lbLoadUpImg->hide();
 
-    lbNoItemImg->hide();
     lbNoItemTip->hide();
 
     ui->lbNetwork->setText(tr("Ethernet"));
@@ -1491,15 +1513,10 @@ void MainWindow::onBtnNetListClicked(int flag)
         btnCreateNet->resize(57, 14);
         btnCreateNet->move(365, 77 + 10);
         btnCreateNet->setText(tr("Create Lan Net"));//"新建网络"
-        btnCreateNet->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(107,142,235,0.97);font-size:14px;}"
-                                 "QPushButton:Hover{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(151,175,241,0.97);font-size:14px;}"
-                                 "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(61,107,229,0.97);font-size:14px;}");
+        btnCreateNet->setStyleSheet(funcBtnQss);
         btnCreateNet->setFocusPolicy(Qt::NoFocus);
         btnCreateNet->show();
         connect(btnCreateNet,SIGNAL(clicked()),this,SLOT(onBtnCreateNetClicked()));
-
-        lbNoItemImg->show();
-        lbNoItemTip->show();
 
         // 清空lan列表
         lanListWidget = new QWidget(scrollAreal);
@@ -1537,8 +1554,9 @@ void MainWindow::on_btnWifiList_clicked()
 
     lbLoadDown->hide();
     lbLoadUp->hide();
+    lbLoadDownImg->hide();
+    lbLoadUpImg->hide();
 
-    lbNoItemImg->hide();
     lbNoItemTip->hide();
 
     ui->lbNetwork->setText(tr("Wifi"));
@@ -1547,6 +1565,7 @@ void MainWindow::on_btnWifiList_clicked()
     ui->lbBtnWifiBall->show();
 
     if(checkWlOn()){
+        lbTopWifiList->show();
         btnAddNet->show();
         this->startLoading();
         this->ksnm->execGetWifiList();
@@ -1560,19 +1579,15 @@ void MainWindow::on_btnWifiList_clicked()
         lbTopWifiList->resize(260, 46);
         lbTopWifiList->move(19, 60 + 10);
         lbTopWifiList->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
-        lbTopWifiList->show();
+        lbTopWifiList->hide();
         btnAddNet = new QPushButton(topWifiListWidget);
         btnAddNet->resize(57, 14);
         btnAddNet->move(365, 77 + 10);
         btnAddNet->setText(tr("Add Hide Network"));
-        btnAddNet->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(107,142,235,0.97);font-size:14px;}"
-                                 "QPushButton:Hover{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(151,175,241,0.97);font-size:14px;}"
-                                 "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(61,107,229,0.97);font-size:14px;}");
+        btnAddNet->setStyleSheet(funcBtnQss);
         btnAddNet->setFocusPolicy(Qt::NoFocus);
         connect(btnAddNet,SIGNAL(clicked()),this,SLOT(onBtnAddNetClicked()));
         btnAddNet->hide();
-        lbNoItemImg->show();
-        lbNoItemTip->show();
 
         // 清空wifi列表
         wifiListWidget = new QWidget(scrollAreaw);
@@ -1637,8 +1652,8 @@ void MainWindow::on_setNetSpeed()
         QString str_rcv = QString::number(delta_rcv/3) + "kb/s";
         QString str_tx = QString::number(delta_tx/3) + "kb/s";
 
-        lbLoadUp->setText(str_rcv);
-        lbLoadDown->setText(str_tx);
+        lbLoadDown->setText(str_rcv);
+        lbLoadUp->setText(str_tx);
 
         end_rcv_rates = start_rcv_rates;
         end_tx_rates = start_tx_rates;
@@ -1867,9 +1882,20 @@ void MainWindow::on_btnWifiList_pressed()
 
 void MainWindow::oneLanFormSelected(QString lanName)
 {
+    QList<OneLancForm *> topLanList = topLanListWidget->findChildren<OneLancForm *>();
     QList<OneLancForm *> lanList = lanListWidget->findChildren<OneLancForm *>();
 
-    // 所有元素回到原位
+    // 顶部的item缩小
+    topLanListWidget->resize(435, 60 + 10 + 46);
+    lbTopLanList->move(19, 60 + 10);
+    btnCreateNet->move(365, 77 + 10);
+    scrollAreal->move(41, 178);
+    lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2);
+
+    OneLancForm *ocf = topLanList.at(0);
+    ocf->setTopItem(false);
+
+    // 下方所有元素回到原位
     for(int i = 0, j = 0;i < lanList.size(); i ++){
         OneLancForm *ocf = lanList.at(i);
         if(ocf->isActive == true){
@@ -1928,7 +1954,8 @@ void MainWindow::oneLanFormSelected(QString lanName)
 }
 void MainWindow::oneTopLanFormSelected(QString lanName)
 {
-    QList<OneLancForm *> lanList = topLanListWidget->findChildren<OneLancForm *>();
+    QList<OneLancForm *> topLanList = topLanListWidget->findChildren<OneLancForm *>();
+    QList<OneLancForm *> lanList = lanListWidget->findChildren<OneLancForm *>();
 
     if (currSelNetName == lanName){
         // 与上一次选中同一个网络框，缩小当前选项卡
@@ -1936,25 +1963,29 @@ void MainWindow::oneTopLanFormSelected(QString lanName)
         lbTopLanList->move(19, 60 + 10);
         btnCreateNet->move(365, 77 + 10);
         scrollAreal->move(41, 178);
+        lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2);
 
-        lbNoItemImg->move(this->width()/2 - 96/2 + 41/2, this->height()/2 - 10);
-        lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2 + 96);
-
-        OneLancForm *ocf = lanList.at(0);
+        OneLancForm *ocf = topLanList.at(0);
         ocf->setTopItem(false);
 
         currSelNetName = "";
     } else {
         // 没有与上一次选中同一个网络框，放大当前选项卡
+
+        for(int i = 0; i < lanList.size(); i ++){
+            // 所有元素缩小并回到原位
+            OneLancForm *ocf = lanList.at(i);
+            ocf->setSelected(false, false);
+            ocf->move(4, i*60);
+        }
+
         topLanListWidget->resize(435, 60 + 108 + 10 + 46);
         lbTopLanList->move(19, 60 + 108 + 10);
         btnCreateNet->move(365, 77 + 10 + 108);
         scrollAreal->move(41, 178 + 108);
+        lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2 + 80);
 
-        lbNoItemImg->move(this->width()/2 - 96/2 + 41/2, this->height()/2 - 10 + 54);
-        lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2 + 96 + 54);
-
-        OneLancForm *ocf = lanList.at(0);
+        OneLancForm *ocf = topLanList.at(0);
         ocf->setTopItem(true);
 
         currSelNetName = lanName;
@@ -1963,9 +1994,20 @@ void MainWindow::oneTopLanFormSelected(QString lanName)
 
 void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
 {
+    QList<OneConnForm *>topWifiList = topWifiListWidget->findChildren<OneConnForm *>();
     QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
 
-    // 所有元素回到原位
+    // 顶部的item缩小
+    topWifiListWidget->resize(435, 60 + 10 + 46);
+    lbTopWifiList->move(19, 60 + 10);
+    btnAddNet->move(365, 77 + 10);
+    scrollAreaw->move(41, 178);
+    lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2);
+
+    OneConnForm *ocf = topWifiList.at(0);
+    ocf->setTopItem(false);
+
+    // 下方所有元素回到原位
     for(int i = 0, j = 0;i < wifiList.size(); i ++){
         OneConnForm *ocf = wifiList.at(i);
         if(ocf->isActive == true){
@@ -2040,7 +2082,8 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
 }
 void MainWindow::oneTopWifiFormSelected(QString wifiName, int extendLength)
 {
-    QList<OneConnForm *> wifiList = topWifiListWidget->findChildren<OneConnForm *>();
+    QList<OneConnForm *>topWifiList = topWifiListWidget->findChildren<OneConnForm *>();
+    QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
 
     if (currSelNetName == wifiName){
         // 与上一次选中同一个网络框，缩小当前选项卡
@@ -2048,25 +2091,29 @@ void MainWindow::oneTopWifiFormSelected(QString wifiName, int extendLength)
         lbTopWifiList->move(19, 60 + 10);
         btnAddNet->move(365, 77 + 10);
         scrollAreaw->move(41, 178);
+        lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2);
 
-        lbNoItemImg->move(this->width()/2 - 96/2 + 41/2, this->height()/2 - 10);
-        lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2 + 96);
-
-        OneConnForm *ocf = wifiList.at(0);
+        OneConnForm *ocf = topWifiList.at(0);
         ocf->setTopItem(false);
 
         currSelNetName = "";
     } else {
         // 没有与上一次选中同一个网络框，放大当前选项卡
+
+        for(int i = 0;i < wifiList.size(); i ++){
+            // 所有元素回到原位
+            OneConnForm *ocf = wifiList.at(i);
+            ocf->setSelected(false, false);
+            ocf->move(4, i * 60);
+        }
+
         topWifiListWidget->resize(435, 60 + 88 + 10 + 46);
         lbTopWifiList->move(19, 60 + 88 + 10);
         btnAddNet->move(365, 77 + 10 + 88);
         scrollAreaw->move(41, 178 + 88);
+        lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2 + 65);
 
-        lbNoItemImg->move(this->width()/2 - 96/2 + 41/2, this->height()/2 - 10 + 44);
-        lbNoItemTip->move(this->width()/2 - 200/2 + 41/2, this->height()/2 + 96 + 44);
-
-        OneConnForm *ocf = wifiList.at(0);
+        OneConnForm *ocf = topWifiList.at(0);
         ocf->setTopItem(true);
 
         currSelNetName = wifiName;
@@ -2239,6 +2286,8 @@ void MainWindow::disWifiDone()
             ocf->isConnected = false;
             lbLoadDown->hide();
             lbLoadUp->hide();
+            lbLoadDownImg->hide();
+            lbLoadUpImg->hide();
             ocf->setTopItem(false);
             disconnect(ocf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
         }else{
@@ -2262,8 +2311,6 @@ void MainWindow::disWifiDone()
     syslog(LOG_DEBUG, "Already turn off the switch of wifi network");
 
     this->stopLoading();
-    lbNoItemImg->show();
-    lbNoItemTip->show();
 }
 
 void MainWindow::keepDisWifiState()

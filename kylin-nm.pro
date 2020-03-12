@@ -55,6 +55,7 @@ SOURCES += \
     backthread.cpp \
     onelancform.cpp \
     loadingdiv.cpp \
+    utils.cpp \
     wireless-security/dlgconnhidwifi.cpp \
     wireless-security/dlgconnhidwifisecfast.cpp \
     wireless-security/dlgconnhidwifisectunneltls.cpp \
@@ -66,8 +67,7 @@ SOURCES += \
     wireless-security/dlgconnhidwifileap.cpp \
     wireless-security/dlgconnhidwifiwpa.cpp \
     kylin-dbus-interface.cpp \
-    hot-spot/dlghotspotcreate.cpp \
-    networkspeed.cpp
+    hot-spot/dlghotspotcreate.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -78,6 +78,7 @@ HEADERS += \
     backthread.h \
     onelancform.h \
     loadingdiv.h \
+    utils.h \
     wireless-security/dlgconnhidwifi.h \
     wireless-security/dlgconnhidwifisecfast.h \
     wireless-security/dlgconnhidwifisectunneltls.h \
@@ -90,8 +91,7 @@ HEADERS += \
     wireless-security/dlgconnhidwifiwpa.h \
     wireless-security/kylinheadfile.h \
     kylin-dbus-interface.h \
-    hot-spot/dlghotspotcreate.h \
-    networkspeed.h
+    hot-spot/dlghotspotcreate.h
 
 FORMS += \
         mainwindow.ui \

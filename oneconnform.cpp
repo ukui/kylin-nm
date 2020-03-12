@@ -72,8 +72,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnHideConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
                                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
-    ui->lbLoadDownImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-down.png);}");
-    ui->lbLoadUpImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-up.png);}");
+//    ui->lbLoadDownImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-down.png);}");
+//    ui->lbLoadUpImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-up.png);}");
     ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
     ui->lbWaitingIcon->setStyleSheet("QLabel{border:0px;background-color:transparent;}");
 
@@ -229,8 +229,8 @@ void OneConnForm::setTopItem(bool isSelected){
     ui->btnInfo->show();
 
     if (isConnected){
-        ui->lbLoadUpImg->show();
-        ui->lbLoadDownImg->show();
+        ui->lbLoadUpImg->hide();
+        ui->lbLoadDownImg->hide();
 
         if (this->isWaiting){
             ui->btnDisConn->hide();

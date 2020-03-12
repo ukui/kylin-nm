@@ -367,6 +367,8 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
 void KylinDBus::onLanPropertyChanged(QVariantMap qvm)
 {
     if (!isRunningFunction) {
+        syslog(LOG_DEBUG, "kylin-nm receive a signal about interface 'Device.Wired' propertiesChanged.");
+        qDebug()<<"kylin-nm receive a signal about interface 'Device.Wired' propertiesChanged.";
         isRunningFunction = true;
         time->start(3000);
 

@@ -44,6 +44,7 @@
 #include <QVariant>
 #include <QStandardPaths>
 #include <QStringList>
+#include <QToolTip>
 
 #include <fcntl.h>
 #include <sys/types.h>
@@ -54,7 +55,7 @@
 
 #include "ksimplenm.h"
 #include "loadingdiv.h"
-#include "networkspeed.h"
+#include "utils.h"
 #include "confform.h"
 #include "kylin-dbus-interface.h"
 #include "kylin-network-interface.h"
@@ -150,11 +151,11 @@ private:
     QWidget *wifiListWidget;
     QWidget *optWifiWidget;
 
-    QLabel *lbLoadDown;
-    QLabel *lbLoadUp;
+    QLabel *lbLoadDown, *lbLoadDownImg, *lbLoadUp, *lbLoadUpImg;
 
-    QLabel *lbNoItemImg;
     QLabel *lbNoItemTip;
+    bool ifLanConnected;
+    bool ifWLanConnected;
 
     QScrollArea *scrollAreal, *scrollAreaw;
     QLabel *lbTopLanList, *lbTopWifiList, *lbLanList, *lbWifiList;
@@ -173,6 +174,7 @@ private:
     QString lname, wname; // 以太网卡和无线网卡名称
 
     QString btnOffQss, btnOnQss, btnBgOffQss, btnBgOnQss; // 主界面按钮底色
+    QString scrollBarQss, leftBtnQss, funcBtnQss;
 
     QStringList oldLanSlist; //上一次获取Lan列表
 

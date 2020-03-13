@@ -159,9 +159,7 @@ private:
 
     QScrollArea *scrollAreal, *scrollAreaw;
     QLabel *lbTopLanList, *lbTopWifiList, *lbLanList, *lbWifiList;
-    QLabel *lbBb;
-    QPushButton *btnAddNet;
-    QPushButton *btnCreateNet;
+    QPushButton *btnAddNet, *btnCreateNet;
     ConfForm *cf;
 
     QSystemTrayIcon *trayIcon;
@@ -227,6 +225,7 @@ private slots:
     void on_btnAdvConf_released();
     void on_checkWifiListChanged();
     void on_setNetSpeed();
+    void on_checkOverTime();
     void on_isLanConnect();
     void on_isWifiConnect();
     void on_isNetOn();

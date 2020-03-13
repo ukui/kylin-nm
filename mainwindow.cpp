@@ -36,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // 如果使用Qt::Popup 任务栏不显示且保留X事件如XCB_FOCUS_OUT, 但如果indicator点击鼠标右键触发，XCB_FOCUS_OUT事件依然会失效
     // 如果使用Qt::ToolTip, Qt::Tool + Qt::WindowStaysOnTopHint, Qt::X11BypassWindowManagerHint等flag则会导致X事件失效
-    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Popup);//QTool
     // this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
+    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Popup);//QTool
 
     this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
 
@@ -90,8 +90,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->confForm = new ConfForm();
     this->ksnm = new KSimpleNM();
-
-    loading = new LoadingDiv(this);
 
     topLanListWidget = new QWidget(ui->centralWidget);
     topLanListWidget->move(41, 57);
@@ -256,7 +254,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ksnm, SIGNAL(getWifiListFinished(QStringList)), this, SLOT(getWifiListDone(QStringList)));
 
     objKyDBus = new KylinDBus(this);
+
     objNetSpeed = new NetworkSpeed();
+
+    loading = new LoadingDiv(this);
+    connect(loading, SIGNAL(toStopLoading() ), this, SLOT(on_checkOverTime() ));
 
     checkIsWirelessDeviceOn(); //检测无线网卡是否插入
     getInitLanSlist(); //初始化有线网列表
@@ -311,6 +313,172 @@ bool MainWindow::nativeEvent(const QByteArray &eventType, void *message, long *r
     }
 
     return false;
+}
+
+//初始化有线网列表
+void MainWindow::getInitLanSlist()
+{
+    oldLanSlist.append("TYPE      DEVICE  NAME           ");
+    QString strSlist;
+
+    system("nmcli connection show>/tmp/kylin-nm-connshow");
+    QFile file("/tmp/kylin-nm-connshow");
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-connshow!");
+        qDebug()<<"Can't open the file /tmp/kylin-nm-connshow!";
+    }
+    QString txt = file.readAll();
+    QStringList txtLine = txt.split("\n");
+    file.close();
+    foreach (QString line, txtLine) {
+        if(line.indexOf("ethernet") != -1){
+            QStringList subLine = line.split(" ");
+            if (subLine[1].size() == 1){
+                strSlist =  "ethernet  --      " + subLine[0]+ " " + subLine[1] + "   ";
+            }else{strSlist =  "ethernet  --      " + subLine[0] + "   "; }
+            oldLanSlist.append(strSlist);
+        }
+    }
+}
+
+//初始化定时器
+void MainWindow::initTimer()
+{
+    checkIfLanConnect = new QTimer(this);
+    checkIfLanConnect->setTimerType(Qt::PreciseTimer);
+    QObject::connect(checkIfLanConnect, SIGNAL(timeout()), this, SLOT(on_isLanConnect()));
+    checkIfLanConnect->start(2000);
+
+    checkIfWifiConnect = new QTimer(this);
+    checkIfWifiConnect->setTimerType(Qt::PreciseTimer);
+    QObject::connect(checkIfWifiConnect, SIGNAL(timeout()), this, SLOT(on_isWifiConnect()));
+    checkIfWifiConnect->start(2000);
+
+    checkIfNetworkOn = new QTimer(this);
+    checkIfNetworkOn->setTimerType(Qt::PreciseTimer);
+    QObject::connect(checkIfNetworkOn, SIGNAL(timeout()), this, SLOT(on_isNetOn()));
+    checkIfNetworkOn->start(2000);
+}
+void MainWindow::changeTimerState()
+{
+    if (checkIfLanConnect->isActive()){
+        checkIfLanConnect->stop();
+    }
+
+    if (checkIfNetworkOn->isActive()){
+        checkIfNetworkOn->stop();
+    }
+
+    if (checkIfWifiConnect->isActive()){
+        checkIfWifiConnect->stop();
+    }
+}
+
+// 初始化网络
+void MainWindow::initNetwork()
+{
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+
+    wname = iface->wname;
+    lwname = iface->wname;
+    lname = iface->lname;
+    llname = iface->lname;
+
+    mwBandWidth = bt->execChkLanWidth(lname);
+
+    // 开关状态
+    qDebug()<<"lstate ="<<iface->lstate<<"    wstate ="<<iface->wstate ;
+    syslog(LOG_DEBUG, "state of switch:   lstate =%d    wstate =%d", iface->lstate, iface->wstate);
+
+    ui->lbBtnNetBG->setStyleSheet(btnOnQss);
+    if(iface->wstate == 0 || iface->wstate == 1){
+        ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
+        ui->lbBtnWifiBall->move(438, 22);
+    }else{
+        ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
+        ui->lbBtnWifiBall->move(412, 22);
+    }
+
+    // 初始化网络列表
+    if(iface->wstate != 2){
+        if (iface->wstate == 0){
+            connWifiDone(3);
+        }else{
+            if (iface->lstate == 0){
+                connLanDone(3);
+            }else{
+                //syslog(LOG_DEBUG, "Launch kylin-nm, will check if Lan or Wifi connected circularly");
+                //qDebug()<<"连接状态：启动kylin-nm, 即将循环检测 Lan或Wifi 是否连接";
+                //changeTimerState();
+                //checkIfNetworkOn->start(8000);
+            }
+        }
+        on_btnWifiList_clicked();
+
+        ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
+        ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
+    } else {
+        if(iface->lstate != 2){
+            if (iface->lstate == 0) {
+                connLanDone(3);
+            } else{
+                //syslog(LOG_DEBUG, "Launch kylin-nm, will check if Lan or Wifi connected circularly");
+                //qDebug()<<"连接状态：启动kylin-nm, 即将循环检测 Lan或Wifi 是否连接";
+                //changeTimerState();
+                //checkIfNetworkOn->start(8000);
+            }
+
+            onBtnNetListClicked();
+
+            ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
+            ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
+        }else {
+            BackThread *m_bt = new BackThread();
+            IFace *m_iface = m_bt->execGetIface();
+            qDebug()<<"m_lstate ="<<m_iface->lstate<<"    m_wstate ="<<m_iface->wstate ;
+
+            m_bt->lanDelete();
+            sleep(1);
+            m_bt->lanDelete();
+            sleep(1);
+            m_bt->lanDelete();
+            delete m_iface;
+            m_bt->deleteLater();
+
+            system("nmcli networking on");
+
+            onBtnNetListClicked();
+
+            ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
+            ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
+
+            //disNetDone();
+        }
+    }
+
+    //循环检测wifi列表的变化，可用于更新wifi列表
+    checkWifiListChanged = new QTimer(this);
+    checkWifiListChanged->setTimerType(Qt::PreciseTimer);
+    QObject::connect(checkWifiListChanged, SIGNAL(timeout()), this, SLOT(on_checkWifiListChanged()));
+    checkWifiListChanged->start(7000);
+    //网线插入时定时执行
+    wiredCableUpTimer = new QTimer(this);
+    wiredCableUpTimer->setTimerType(Qt::PreciseTimer);
+    QObject::connect(wiredCableUpTimer, SIGNAL(timeout()), this, SLOT(onCarrierUpHandle()));
+    //网线拔出时定时执行
+    wiredCableDownTimer = new QTimer(this);
+    wiredCableDownTimer->setTimerType(Qt::PreciseTimer);
+    QObject::connect(wiredCableDownTimer, SIGNAL(timeout()), this, SLOT(onCarrierDownHandle()));
+    //定时处理异常网络，即当点击Lan列表按钮时，若lstate=2，但任然有有线网连接的情况
+    deleteLanTimer = new QTimer(this);
+    deleteLanTimer->setTimerType(Qt::PreciseTimer);
+    QObject::connect(deleteLanTimer, SIGNAL(timeout()), this, SLOT(onDeleteLan()));
+    //定时获取网速
+    setNetSpeed = new QTimer(this);
+    setNetSpeed->setTimerType(Qt::PreciseTimer);
+    QObject::connect(setNetSpeed, SIGNAL(timeout()), this, SLOT(on_setNetSpeed()));
+    setNetSpeed->start(3000);
 }
 
 //托盘管理
@@ -549,21 +717,22 @@ void MainWindow::init_widget_action(QWidget *wid, QString iconstr, QString texts
     }
 }
 
-//加载动画
+//加载动画,获取当前连接的网络和状态并设置图标
 void MainWindow::startLoading()
 {
     loading->startLoading();
     setTrayLoading(true);
 }
-
 void MainWindow::stopLoading()
 {
     loading->stopLoading();
     setTrayLoading(false);
     getActiveInfo();
 }
-
-//获取当前连接的网络和状态并设置图标
+void MainWindow::on_checkOverTime()
+{
+    this->stopLoading(); //超时停止等待动画
+}
 void MainWindow::getActiveInfo()
 {
     QString actLanName = "--";
@@ -627,65 +796,6 @@ void MainWindow::getActiveInfo()
         }else{
             setTrayIcon(iconLanOffline);
         }
-    }
-}
-
-//初始化有线网列表
-void MainWindow::getInitLanSlist()
-{
-    oldLanSlist.append("TYPE      DEVICE  NAME           ");
-    QString strSlist;
-
-    system("nmcli connection show>/tmp/kylin-nm-connshow");
-    QFile file("/tmp/kylin-nm-connshow");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-connshow!");
-        qDebug()<<"Can't open the file /tmp/kylin-nm-connshow!";
-    }
-    QString txt = file.readAll();
-    QStringList txtLine = txt.split("\n");
-    file.close();
-    foreach (QString line, txtLine) {
-        if(line.indexOf("ethernet") != -1){
-            QStringList subLine = line.split(" ");
-            if (subLine[1].size() == 1){
-                strSlist =  "ethernet  --      " + subLine[0]+ " " + subLine[1] + "   ";
-            }else{strSlist =  "ethernet  --      " + subLine[0] + "   "; }
-            oldLanSlist.append(strSlist);
-        }
-    }
-}
-
-//初始化定时器
-void MainWindow::initTimer()
-{
-    checkIfLanConnect = new QTimer(this);
-    checkIfLanConnect->setTimerType(Qt::PreciseTimer);
-    QObject::connect(checkIfLanConnect, SIGNAL(timeout()), this, SLOT(on_isLanConnect()));
-    checkIfLanConnect->start(2000);
-
-    checkIfWifiConnect = new QTimer(this);
-    checkIfWifiConnect->setTimerType(Qt::PreciseTimer);
-    QObject::connect(checkIfWifiConnect, SIGNAL(timeout()), this, SLOT(on_isWifiConnect()));
-    checkIfWifiConnect->start(2000);
-
-    checkIfNetworkOn = new QTimer(this);
-    checkIfNetworkOn->setTimerType(Qt::PreciseTimer);
-    QObject::connect(checkIfNetworkOn, SIGNAL(timeout()), this, SLOT(on_isNetOn()));
-    checkIfNetworkOn->start(2000);
-}
-void MainWindow::changeTimerState()
-{
-    if (checkIfLanConnect->isActive()){
-        checkIfLanConnect->stop();
-    }
-
-    if (checkIfNetworkOn->isActive()){
-        checkIfNetworkOn->stop();
-    }
-
-    if (checkIfWifiConnect->isActive()){
-        checkIfWifiConnect->stop();
     }
 }
 
@@ -784,113 +894,6 @@ void MainWindow::getLanBandWidth()
     lname = iface->lname;
 
     mwBandWidth = bt->execChkLanWidth(lname);
-}
-
-// 初始化网络
-void MainWindow::initNetwork()
-{
-    BackThread *bt = new BackThread();
-    IFace *iface = bt->execGetIface();
-
-    wname = iface->wname;
-    lwname = iface->wname;
-    lname = iface->lname;
-    llname = iface->lname;
-
-    mwBandWidth = bt->execChkLanWidth(lname);
-
-    // 开关状态
-    qDebug()<<"lstate ="<<iface->lstate<<"    wstate ="<<iface->wstate ;
-    syslog(LOG_DEBUG, "state of switch:   lstate =%d    wstate =%d", iface->lstate, iface->wstate);
-
-    ui->lbBtnNetBG->setStyleSheet(btnOnQss);
-    if(iface->wstate == 0 || iface->wstate == 1){
-        ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
-        ui->lbBtnWifiBall->move(438, 22);
-    }else{
-        ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-        ui->lbBtnWifiBall->move(412, 22);
-    }
-
-    // 初始化网络列表
-    if(iface->wstate != 2){
-        if (iface->wstate == 0){
-            connWifiDone(3);
-        }else{
-            if (iface->lstate == 0){
-                connLanDone(3);
-            }else{
-                //syslog(LOG_DEBUG, "Launch kylin-nm, will check if Lan or Wifi connected circularly");
-                //qDebug()<<"连接状态：启动kylin-nm, 即将循环检测 Lan或Wifi 是否连接";
-                //changeTimerState();
-                //checkIfNetworkOn->start(8000);
-            }
-        }
-        on_btnWifiList_clicked();
-
-        ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
-        ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
-    } else {
-        if(iface->lstate != 2){
-            if (iface->lstate == 0) {
-                connLanDone(3);
-            } else{
-                //syslog(LOG_DEBUG, "Launch kylin-nm, will check if Lan or Wifi connected circularly");
-                //qDebug()<<"连接状态：启动kylin-nm, 即将循环检测 Lan或Wifi 是否连接";
-                //changeTimerState();
-                //checkIfNetworkOn->start(8000);
-            }
-
-            onBtnNetListClicked();
-
-            ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
-            ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
-        }else {
-            BackThread *m_bt = new BackThread();
-            IFace *m_iface = m_bt->execGetIface();
-            qDebug()<<"m_lstate ="<<m_iface->lstate<<"    m_wstate ="<<m_iface->wstate ;
-
-            m_bt->lanDelete();
-            sleep(1);
-            m_bt->lanDelete();
-            sleep(1);
-            m_bt->lanDelete();
-            delete m_iface;
-            m_bt->deleteLater();
-
-            system("nmcli networking on");
-
-            onBtnNetListClicked();
-
-            ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
-            ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
-
-            //disNetDone();
-        }
-    }
-
-    //循环检测wifi列表的变化，可用于更新wifi列表
-    checkWifiListChanged = new QTimer(this);
-    checkWifiListChanged->setTimerType(Qt::PreciseTimer);
-    QObject::connect(checkWifiListChanged, SIGNAL(timeout()), this, SLOT(on_checkWifiListChanged()));
-    checkWifiListChanged->start(7000);
-    //网线插入时定时执行
-    wiredCableUpTimer = new QTimer(this);
-    wiredCableUpTimer->setTimerType(Qt::PreciseTimer);
-    QObject::connect(wiredCableUpTimer, SIGNAL(timeout()), this, SLOT(onCarrierUpHandle()));
-    //网线拔出时定时执行
-    wiredCableDownTimer = new QTimer(this);
-    wiredCableDownTimer->setTimerType(Qt::PreciseTimer);
-    QObject::connect(wiredCableDownTimer, SIGNAL(timeout()), this, SLOT(onCarrierDownHandle()));
-    //定时处理异常网络，即当点击Lan列表按钮时，若lstate=2，但任然有有线网连接的情况
-    deleteLanTimer = new QTimer(this);
-    deleteLanTimer->setTimerType(Qt::PreciseTimer);
-    QObject::connect(deleteLanTimer, SIGNAL(timeout()), this, SLOT(onDeleteLan()));
-    //定时获取网速
-    setNetSpeed = new QTimer(this);
-    setNetSpeed->setTimerType(Qt::PreciseTimer);
-    QObject::connect(setNetSpeed, SIGNAL(timeout()), this, SLOT(on_setNetSpeed()));
-    setNetSpeed->start(3000);
 }
 
 bool MainWindow::checkLanOn()

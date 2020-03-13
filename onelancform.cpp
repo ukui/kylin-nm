@@ -22,6 +22,9 @@
 
 #include <time.h>
 
+#define FRAMESPEED 150
+#define ALLTIME 30*1000
+
 OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *confForm, KSimpleNM *ksnm) :
     QWidget(parent),
     ui(new Ui::OneLancForm)
@@ -370,6 +373,11 @@ void OneLancForm::waitAnimStep(){
     if(this->waitPage < 1){
         this->waitPage = 8;
     }
+
+    this->countCurrentTime += FRAMESPEED;
+    if (this->countCurrentTime >= ALLTIME){
+        this->stopWaiting();
+    }
 }
 
 void OneLancForm::startWaiting(bool isConn){
@@ -379,8 +387,9 @@ void OneLancForm::startWaiting(bool isConn){
         ui->btnDisConn->hide();
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
     }
+    this->countCurrentTime = 0;
     this->waitPage = 8;
-    this->waitTimer->start(150);
+    this->waitTimer->start(FRAMESPEED);
     ui->lbWaiting->show();
     ui->lbWaitingIcon->show();
 

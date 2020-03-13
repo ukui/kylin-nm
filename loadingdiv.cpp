@@ -18,6 +18,9 @@
 
 #include "loadingdiv.h"
 
+#define FRAMESPEED 60
+#define ALLTIME 20*1000
+
 LoadingDiv::LoadingDiv(QWidget *parent) : QWidget(parent)
 {
     this->resize(480, 538);
@@ -46,11 +49,17 @@ void LoadingDiv::switchAnimStep(){
     if(this->currentPage < 1){
         this->currentPage = 12;
     }
+
+    this->countCurrentTime += FRAMESPEED;
+    if (this->countCurrentTime >= ALLTIME){
+        emit this->toStopLoading();
+    }
 }
 
 void LoadingDiv::startLoading(){
     this->currentPage = 12;
-    this->switchTimer->start(60);
+    this->countCurrentTime = 0;
+    this->switchTimer->start(FRAMESPEED);
     this->show();
 }
 

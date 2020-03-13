@@ -33,6 +33,7 @@ public:
     explicit LoadingDiv(QWidget *parent = nullptr);
 
 signals:
+    void toStopLoading();
 
 public slots:
     void switchAnimStep();
@@ -44,6 +45,7 @@ private:
     QTimer *switchTimer;
 
     int currentPage;
+    int countCurrentTime;
 };
 
 #endif // LOADINGDIV_H

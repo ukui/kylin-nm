@@ -109,6 +109,7 @@ private slots:
 private:
     QTimer *waitTimer;
     int waitPage;
+    int countCurrentTime;
     bool isWaiting = false;
 
     Ui::OneConnForm *ui;

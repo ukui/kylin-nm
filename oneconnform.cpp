@@ -22,6 +22,8 @@
 #include "wireless-security/dlgconnhidwifi.h"
 
 extern int currentActWifiSignalLv;
+#define FRAMESPEED 150
+#define ALLTIME 30*1000
 
 OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *confForm, KSimpleNM *ksnm) :
     QWidget(parent),
@@ -643,6 +645,10 @@ void OneConnForm::waitAnimStep(){
     if(this->waitPage < 1){
         this->waitPage = 8;
     }
+    this->countCurrentTime += FRAMESPEED;
+    if (this->countCurrentTime >= ALLTIME){
+        this->stopWaiting();
+    }
 }
 
 void OneConnForm::startWaiting(bool isConn){
@@ -653,8 +659,9 @@ void OneConnForm::startWaiting(bool isConn){
         ui->btnDisConn->hide();
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
     }
+    this->countCurrentTime = 0;
     this->waitPage = 8;
-    this->waitTimer->start(150);
+    this->waitTimer->start(FRAMESPEED);
     ui->lbWaiting->show();
     ui->lbWaitingIcon->show();
 

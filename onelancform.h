@@ -87,6 +87,7 @@ private slots:
 private:
     QTimer *waitTimer;
     int waitPage;
+    int countCurrentTime;
 
     Ui::OneLancForm *ui;
     MainWindow *mw;

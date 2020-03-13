@@ -8,8 +8,8 @@
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusObjectPath>
-#include <QDBusObjectPath>
 #include <QDBusReply>
+#include <QDBusObjectPath>
 #include <QVariant>
 #include <QVariantMap>
 #include <QTimer>
@@ -43,6 +43,7 @@ public:
 
 public slots:
     void onNewConnection(QDBusObjectPath objPath);
+    void onConnectionRemoved(QDBusObjectPath objPath);
     void onLanPropertyChanged(QVariantMap qvm);
     void onWifiPropertyChanged(QVariantMap qvm);
     void onAccessPointAdded(QDBusObjectPath objPath);
@@ -51,7 +52,7 @@ public slots:
     void getWiredCardName();
     void getWirelessCardName();
     void getLanIp(QString netName);
-    void getWifiMac(QString netName, int num);
+    void getWifiMac(QString netName);
     void getActWifiMac(QString netName);
     void slot_timeout();
 

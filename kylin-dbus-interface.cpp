@@ -48,6 +48,11 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
                                          QString("NewConnection"), this, SLOT(onNewConnection(QDBusObjectPath) ) );
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                         QString("/org/freedesktop/NetworkManager/Settings"),
+                                         QString("org.freedesktop.NetworkManager.Settings"),
+                                         QString("ConnectionRemoved"), this, SLOT(onConnectionRemoved(QDBusObjectPath) ) );
+
+    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString(wiredPath.path()),
                                          QString("org.freedesktop.NetworkManager.Device.Wired"),
                                          QString("PropertiesChanged"), this, SLOT(onLanPropertyChanged(QVariantMap) ) );
@@ -204,7 +209,7 @@ void KylinDBus::getLanIp(QString netName)
     }
 }
 
-void KylinDBus::getWifiMac(QString netName, int num)
+void KylinDBus::getWifiMac(QString netName)
 {
     dbusWifiMac = "";
 
@@ -364,11 +369,19 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
     }
 }
 
+void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
+{
+    syslog(LOG_DEBUG, "An old network was removed from configure directory.");
+    qDebug()<<"An old network was removed from configure directory.";
+
+    emit this->updateWiredList(0);
+}
+
 void KylinDBus::onLanPropertyChanged(QVariantMap qvm)
 {
     if (!isRunningFunction) {
-        syslog(LOG_DEBUG, "kylin-nm receive a signal about interface 'Device.Wired' propertiesChanged.");
-        qDebug()<<"kylin-nm receive a signal about interface 'Device.Wired' propertiesChanged.";
+        syslog(LOG_DEBUG, "kylin-nm receive a signal 'Device.Wired propertiesChanged' about interface.");
+        qDebug()<<"kylin-nm receive a signal 'Device.Wired propertiesChanged' about interface.";
         isRunningFunction = true;
         time->start(3000);
 

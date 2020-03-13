@@ -1164,12 +1164,13 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ccf->setRate(wrate);
                 ccf->setSignal(wsignal, wsecu);
                 activeWifiSignalLv = wsignal.toInt();
-                objKyDBus->getActWifiMac(wname);
+                //objKyDBus->getActWifiMac(wname);
+                objKyDBus->getWifiMac(wname);
                 ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
                 ccf->setConnedString(1, tr("Connected"), wsecu);//"已连接"
                 ccf->isConnected = true;
                 ifWLanConnected = true;
-                qDebug()<<"show load down and load up";
+                qDebug()<<"show load down and load up in the function loadWifiListDone";
                 lbLoadDown->show();
                 lbLoadUp->show();
                 lbLoadDownImg->show();
@@ -1187,7 +1188,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->setRate(wrate);
                 ocf->setLine(true);
                 ocf->setSignal(wsignal, wsecu);
-                objKyDBus->getWifiMac(wname, i-1);
+                objKyDBus->getWifiMac(wname);
                 ocf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
                 ocf->setConnedString(0, tr("Disconnected"), wsecu);
                 ocf->move(4, j * 60);
@@ -1263,8 +1264,8 @@ void MainWindow::updateWifiListDone(QStringList slist)
                             //删除元素下面的的所有元素上移
                             for(int after_pos = pos+1; after_pos < wifiList.size(); after_pos ++){
                                 OneConnForm *after_ocf = wifiList.at(after_pos);
-                                if (lastWname == currSelNetName) {after_ocf->move(0, after_ocf->y() - 60 - 88);}
-                                else {after_ocf->move(0, after_ocf->y() - 60);}
+                                if (lastWname == currSelNetName) {after_ocf->move(4, after_ocf->y() - 60 - 88);}
+                                else {after_ocf->move(4, after_ocf->y() - 60);}
                             }
                             wifiListWidget->resize(440, wifiListWidget->height() - 60);
                             break;
@@ -1320,7 +1321,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 addItem->setRate(wrate);
                 addItem->setLine(false);
                 addItem->setSignal(wsignal, wsecu);
-                objKyDBus->getWifiMac(wname, i-1);
+                objKyDBus->getWifiMac(wname);
                 addItem->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
                 addItem->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"
                 addItem->move(4, posY);
@@ -1644,7 +1645,7 @@ void MainWindow::on_setNetSpeed()
             objNetSpeed->getCurrentDownloadRates(objKyDBus->dbusLanCardName.toUtf8().data(), &start_rcv_rates, &start_tx_rates);
         }
 
-        long int delta_rcv = (start_rcv_rates - end_rcv_rates)/8;
+        long int delta_rcv = (start_rcv_rates - end_rcv_rates)/800;
         long int delta_tx = (start_tx_rates - end_tx_rates)/8;
         if (delta_rcv>=10000 || delta_rcv<0){delta_rcv = 0;}
         if (delta_tx>=10000 || delta_tx<0){delta_tx = 0;}
@@ -1912,15 +1913,12 @@ void MainWindow::oneLanFormSelected(QString lanName)
 
         currSelNetName = "";
     } else {
-        // 选中的选项卡放大，其他选项卡缩小
         int selectY = 0;
         for(int i = 0;i < lanList.size(); i ++){
             OneLancForm *ocf = lanList.at(i);
             if(ocf->lanName == lanName){
-                ocf->setSelected(true, false);
-                selectY = ocf->y();
-            }else{
-                ocf->setSelected(false, false);
+                selectY = ocf->y(); //获取选中item的y坐标
+                break;
             }
         }
 
@@ -1929,6 +1927,16 @@ void MainWindow::oneLanFormSelected(QString lanName)
             OneLancForm *ocf = lanList.at(i);
             if(ocf->y() > selectY){
                 ocf->move(4, ocf->y() + 108);
+            }
+        }
+
+        for(int i = 0;i < lanList.size(); i ++){
+            OneLancForm *ocf = lanList.at(i);
+            if(ocf->lanName == lanName){
+                ocf->setSelected(true, false);
+                selectY = ocf->y();
+            }else{
+                ocf->setSelected(false, false);
             }
         }
 
@@ -2032,24 +2040,12 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
         }
         currSelNetName = "";
     } else {
-        // 选中的选项卡放大，其他选项卡缩小
         int selectY = 0;
-
         for(int i = 0;i < wifiList.size(); i ++){
             OneConnForm *ocf = wifiList.at(i);
             if(ocf->wifiName == wifiName){
-                if (ocf->wifiName == hideWiFiConn){
-                    ocf->setHideItem(true, true);
-                }else{
-                    ocf->setSelected(true, false);
-                }
-                selectY = ocf->y();
-            }else{
-                if (ocf->wifiName == hideWiFiConn){
-                    ocf->setHideItem(true, true);
-                }else{
-                    ocf->setSelected(false, false);
-                }
+                selectY = ocf->y(); //获取选中item的y坐标
+                break;
             }
         }
 
@@ -2061,9 +2057,27 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
             }
         }
 
+        for(int i = 0;i < wifiList.size(); i ++){
+            OneConnForm *ocf = wifiList.at(i);
+            if(ocf->wifiName == wifiName){
+                if (ocf->wifiName == hideWiFiConn){
+                    ocf->setHideItem(true, true);
+                }else{
+                    ocf->setSelected(true, false);
+                }
+            }else{
+                if (ocf->wifiName == hideWiFiConn){
+                    ocf->setHideItem(true, true);
+                }else{
+                    ocf->setSelected(false, false);
+                }
+            }
+        }
+
         currSelNetName = wifiName;
     }
 
+    //最后一个item没有下划线
     QList<OneConnForm *> itemList = wifiListWidget->findChildren<OneConnForm *>();
     int n = itemList.size();
     if (n >= 1){

@@ -78,6 +78,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lbWaitingIcon->setStyleSheet("QLabel{border:0px;background-color:transparent;}");
 
     ui->btnInfo->setCursor(QCursor(Qt::PointingHandCursor));
+    ui->btnInfo->setFocusPolicy(Qt::NoFocus);
     ui->checkBoxPwd->setFocusPolicy(Qt::NoFocus);
     ui->btnConnSub->setFocusPolicy(Qt::NoFocus);
     ui->btnConn->setFocusPolicy(Qt::NoFocus);

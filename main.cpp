@@ -31,6 +31,8 @@
 
 int main(int argc, char *argv[])
 {
+//    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
     QApplication a(argc, argv);
 
     openlog(LOG_IDENT, LOG_NDELAY | LOG_NOWAIT | LOG_PID, LOG_USER);

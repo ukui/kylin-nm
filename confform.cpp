@@ -43,7 +43,7 @@ ConfForm::ConfForm(QWidget *parent) :
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
-//    this->setStyleSheet("QWidget{border-radius:6px;border:none;}");
+    this->setStyleSheet("QWidget{border-radius:6px;border:none;}");
     ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.9);}");
 
     ui->lbName->setText(tr("Network name: "));//"网络名称："

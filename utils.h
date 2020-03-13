@@ -7,6 +7,8 @@
 #include <QProxyStyle>
 #include <QStyleFactory>
 #include <QWidget>
+#include <QPainter>
+#include <QStyleOptionSlider>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -155,6 +157,9 @@ public:
 signals:
 
 public slots:
+
+private:
+    void drawScrollbar( ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget ) const;
 };
 
 #endif // UTILS_H

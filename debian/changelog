@@ -1,3 +1,24 @@
+kylin-nm (1.2.2-1) unstable; urgency=medium
+
+  * New upstream release.
+    - Fix that the connect button display at wrong place.
+    - Fix that sometimes failed to switch network type.
+    - Fix the problem in multiscreen.
+    - Adjust the style sheet.
+    - Show configure window when click network info widget.
+    - Add the function to create new network.
+  * debian/control:
+    - Drop libnotify-bin from build-depends.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Sat, 14 Mar 2020 15:15:38 +0800
+
+kylin-nm (1.2.1-1) unstable; urgency=medium
+
+  [ lixiang ]
+  * update kylin-nm.pro and rules.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 26 Feb 2020 00:21:11 +0800
+
 kylin-nm (1.2.0-1) unstable; urgency=medium
 
   * New upstream release.

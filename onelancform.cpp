@@ -36,18 +36,13 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"
 
     ui->lbConned->setAlignment(Qt::AlignLeft);
-    ui->lbLoadUp->setAlignment(Qt::AlignLeft);
-    ui->lbLoadDown->setAlignment(Qt::AlignLeft);
 
     ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
     ui->btnInfo->setStyleSheet("QPushButton{border:none;background:transparent;}");
     ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
     ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0);}");
-                             //"#wbg_2:Hover{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
     ui->lbName->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.91);}");
     ui->lbConned->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
-    ui->lbLoadUp->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
-    ui->lbLoadDown->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
     ui->btnConnSub->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
                                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
@@ -57,8 +52,6 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnDisConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
                                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
-//    ui->lbLoadDownImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-down.png);}");
-//    ui->lbLoadUpImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-up.png);}");
     ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
     ui->lbWaitingIcon->setStyleSheet("QLabel{border:0px;background-color:transparent;}");
 
@@ -75,10 +68,6 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConn->hide();
     ui->btnDisConn->hide();
     ui->line->show();
-    ui->lbLoadDownImg->hide();
-    ui->lbLoadUpImg->hide();
-    ui->lbLoadUp->hide();
-    ui->lbLoadDown->hide();
     ui->lbWaiting->hide();
     ui->lbWaitingIcon->hide();
 
@@ -203,14 +192,8 @@ void OneLancForm::setTopItem(bool isSelected)
         this->isSelected = false;
     }
     if (isConnected){
-        ui->lbLoadUpImg->hide();
-        ui->lbLoadDownImg->hide();
-
         ui->btnDisConn->show();
     } else {
-        ui->lbLoadUpImg->hide();
-        ui->lbLoadDownImg->hide();
-
         ui->btnDisConn->hide();
     }
 

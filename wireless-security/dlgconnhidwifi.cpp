@@ -294,8 +294,8 @@ void DlgConnHidWifi::emitSignal()
 void DlgConnHidWifi::paintEvent(QPaintEvent *event)
 {
     QStyleOption opt;
-       opt.init(this);
-       QPainter p(this);
-       style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-       QWidget::paintEvent(event);
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+    QWidget::paintEvent(event);
 }

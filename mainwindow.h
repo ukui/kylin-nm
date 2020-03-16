@@ -75,6 +75,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void createTopLanUI();
+    void createTopWifiUI();
+
     void startLoading();
     void stopLoading();
 
@@ -237,7 +240,8 @@ private slots:
     void enWifiDone();
     void launchLanDone();
     void disWifiDone();
-    void keepDisWifiState();
+    void disWifiStateKeep();
+    void disWifiDoneUI();
     void connLanDone(int connFlag);
     void connWifiDone(int connFlag);
 

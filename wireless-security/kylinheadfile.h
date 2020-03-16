@@ -18,4 +18,13 @@
 #include <QListView>
 #include <QString>
 
+class MyQss
+{
+public:
+    MyQss();
+
+    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss, checkBoxCAQss;
+
+};
+
 #endif // KYLINHEADFILE_H

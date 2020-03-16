@@ -105,7 +105,7 @@ public:
     int is_wireless_adapter_ready = 1; //主机是否插入无线网卡
     int is_keep_wifi_turn_on_state = 1; //是否要执行wifi开关变为打开样式
     int is_stop_check_net_state = 0; //是否要在进行其他操作时停止检查网络状态
-    int is_fly_mode_on = 0; //是否打开飞行模式
+    int is_fly_mode_on = 0; //是否已经打开飞行模式
     int is_hot_sopt_on = 0; //是否已经打开热点
 
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
@@ -126,6 +126,8 @@ public slots:
 
     void on_btnHotspot_clicked();
     void on_btnHotspotState();
+
+    void onBtnWifiClicked(int flag = 0); //flag =0为打开、1为关闭、2为其他
 
 private:
     void checkSingle();
@@ -203,7 +205,6 @@ private slots:
     bool nativeEvent(const QByteArray &eventType, void *message, long *result);
 
     void on_btnNet_clicked();
-    void on_btnWifi_clicked();
     void on_btnWifiList_clicked();
     void onBtnNetListClicked(int flag=0);
 

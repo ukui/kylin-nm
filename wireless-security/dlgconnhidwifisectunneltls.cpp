@@ -40,80 +40,47 @@ DlgConnHidWifiSecTunnelTLS::DlgConnHidWifiSecTunnelTLS(int type, QWidget *parent
 
     this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.9);border:1px solid rgba(255, 255, 255, 0.05);}");
 
+    MyQss objQss;
+
     ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
     ui->lbBoder->hide();
     ui->lbLeftupTitle->setStyleSheet("QLabel{border:0px;font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbConn->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbNetName->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbSecurity->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbAuth->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbAnonyId->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbDomain->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbCA->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbCaPwd->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbInnerAuth->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbUserName->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbPassword->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbConn->setStyleSheet(objQss.labelQss);
+    ui->lbNetName->setStyleSheet(objQss.labelQss);
+    ui->lbSecurity->setStyleSheet(objQss.labelQss);
+    ui->lbAuth->setStyleSheet(objQss.labelQss);
+    ui->lbAnonyId->setStyleSheet(objQss.labelQss);
+    ui->lbDomain->setStyleSheet(objQss.labelQss);
+    ui->lbCA->setStyleSheet(objQss.labelQss);
+    ui->lbCaPwd->setStyleSheet(objQss.labelQss);
+    ui->lbInnerAuth->setStyleSheet(objQss.labelQss);
+    ui->lbUserName->setStyleSheet(objQss.labelQss);
+    ui->lbPassword->setStyleSheet(objQss.labelQss);
 
-    ui->cbxConn->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
-                               "QComboBox::drop-down{border:0px;width:30px;}"
-                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
-                               "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
-                               "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
-                               "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}");
+    ui->cbxConn->setStyleSheet(objQss.cbxQss);
     ui->cbxConn->setView(new  QListView());
-    ui->leNetName->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->cbxSecurity->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
-                               "QComboBox::drop-down{border:0px;width:30px;}"
-                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
-                               "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
-                               "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
-                               "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}");
+    ui->leNetName->setStyleSheet(objQss.leQss);
+    ui->cbxSecurity->setStyleSheet(objQss.cbxQss);
     ui->cbxSecurity->setView(new  QListView());
-    ui->cbxAuth->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
-                               "QComboBox::drop-down{border:0px;width:30px;}"
-                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
-                               "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
-                               "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
-                               "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}");
+    ui->cbxAuth->setStyleSheet(objQss.cbxQss);
     ui->cbxAuth->setView(new  QListView());
-    ui->leAnonyId->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->leDomain->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->cbxCA->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
-                               "QComboBox::drop-down{border:0px;width:30px;}"
-                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
-                               "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
-                               "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
-                               "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}");
+    ui->leAnonyId->setStyleSheet(objQss.leQss);
+    ui->leDomain->setStyleSheet(objQss.leQss);
+    ui->cbxCA->setStyleSheet(objQss.cbxQss);
     ui->cbxCA->setView(new  QListView());
-    ui->leCaPwd->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->checkBoxPwd->setStyleSheet("QCheckBox {border:none;background:transparent;}"
-                                   "QCheckBox::indicator {width: 18px; height: 9px;}"
-                                   "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
-                                   "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
-    ui->checkBoxCA->setStyleSheet("QCheckBox{color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->cbxInnerAuth->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
-                               "QComboBox::drop-down{border:0px;width:30px;}"
-                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
-                               "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
-                               "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
-                               "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}");
+    ui->leCaPwd->setStyleSheet(objQss.leQss);
+    ui->checkBoxPwd->setStyleSheet(objQss.checkBoxQss);
+    ui->checkBoxCA->setStyleSheet(objQss.checkBoxCAQss);
+    ui->cbxInnerAuth->setStyleSheet(objQss.cbxQss);
     ui->cbxInnerAuth->setView(new  QListView());
-    ui->leUserName->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->lePassword->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->checkBoxPwdSec->setStyleSheet("QCheckBox {border:none;background:transparent;}"
-                                   "QCheckBox::indicator {width: 18px; height: 9px;}"
-                                   "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
-                                   "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
+    ui->leUserName->setStyleSheet(objQss.leQss);
+    ui->lePassword->setStyleSheet(objQss.leQss);
+    ui->checkBoxPwdSec->setStyleSheet(objQss.checkBoxQss);
 
-    ui->btnCancel->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
-                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
-                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
-    ui->btnConnect->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
-                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
-                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
-    ui->lineUp->setStyleSheet("background:rgba(255,255,255,0.08);");
-    ui->lineDown->setStyleSheet("background:rgba(255,255,255,0.08);");
+    ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
+    ui->btnConnect->setStyleSheet(objQss.btnConnQss);
+    ui->lineUp->setStyleSheet(objQss.lineQss);
+    ui->lineDown->setStyleSheet(objQss.lineQss);
     ui->checkBoxCA->setFocusPolicy(Qt::NoFocus);
 
 

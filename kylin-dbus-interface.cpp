@@ -31,6 +31,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     getPhysicalCarrierState(0); //初始化获取网线插入状态
     getLanHwAddressState(); //获取有线网Mac地址
     getWiredCardName();
+    getWifiSwitchState();
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
@@ -430,4 +431,64 @@ int KylinDBus::getTaskbarHeight(QString str)
 
     QDBusReply<int> reply = interface.call("GetPanelSize", str);
     return reply;
+}
+
+void KylinDBus::getWifiSwitchState()
+{
+    if(QGSettings::isSchemaInstalled("org.ukui.control-center.wifi.switch")) {
+
+        m_gsettings = new QGSettings("org.ukui.control-center.wifi.switch");
+
+        // 监听key的value是否发生了变化
+        connect(m_gsettings, &QGSettings::changed, this, [=] (const QString &key) {
+
+            if (key == "switch") {
+                bool judge = getSwitchStatus(key);
+                if (judge){
+                    mw->onBtnWifiClicked(1); //打开wifi开关
+                }else{
+                    mw->onBtnWifiClicked(2); //关闭wifi开关
+                }
+            }
+        });
+    }
+}
+
+bool KylinDBus::getSwitchStatus(QString key){
+    if (!m_gsettings) {
+        return true;
+    }
+    const QStringList list = m_gsettings->keys();
+    if (!list.contains(key)) {
+        return true;
+    }
+    bool res = m_gsettings->get(key).toBool();
+    return res;
+}
+
+void KylinDBus::wifiSwitchSlot(bool signal){
+    if(!m_gsettings) {
+        return ;
+    }
+
+    const QStringList list = m_gsettings->keys();
+
+    if (!list.contains("switch")) {
+        return ;
+    }
+    m_gsettings->set("switch",signal);
+}
+
+void KylinDBus::wifiCardSlot(bool signal)
+{
+    if(!m_gsettings) {
+        return ;
+    }
+
+    const QStringList list = m_gsettings->keys();
+
+    if (!list.contains("wificard")) {
+        return ;
+    }
+    m_gsettings->set("wificard",signal);
 }

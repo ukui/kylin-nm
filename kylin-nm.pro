@@ -19,6 +19,7 @@ CONFIG += release
 #PKGCONFIG += libnm glib-2.0 gio-2.0 dbus-glib-1
 #PKGCONFIG += Qt5Svg
 
+LIBS    +=  -L/usr/lib/ -lgsettings-qt
 
 target.path = /usr/bin
 target.source += $$TARGET
@@ -67,7 +68,8 @@ SOURCES += \
     wireless-security/dlgconnhidwifileap.cpp \
     wireless-security/dlgconnhidwifiwpa.cpp \
     kylin-dbus-interface.cpp \
-    hot-spot/dlghotspotcreate.cpp
+    hot-spot/dlghotspotcreate.cpp \
+    wireless-security/kylinheadfile.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -121,3 +123,5 @@ unix {
 
 TRANSLATIONS = translations/kylin-nm_zh_CN.ts \
                translations/kylin-nm_bo.ts
+
+DISTFILES +=

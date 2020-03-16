@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QString>
+
 #include <QStyle>
 #include <QProxyStyle>
 #include <QStyleFactory>
@@ -10,10 +12,36 @@
 #include <QPainter>
 #include <QStyleOptionSlider>
 
+#include <QFile>
+#include <QApplication>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+
+
+/*!
+ * \brief The UseQssFile class
+ * \details
+ * 通过QSS文件设置样式
+ */
+class UseQssFile
+{
+public:
+    static void setStyle(const QString &style)
+    {
+        QString styleName = ":/qss/" + style;
+
+        QFile qss(styleName);
+        qss.open(QFile::ReadOnly);
+        qApp->setStyleSheet(qss.readAll());
+        qss.close();
+    }
+};
+
+
 
 
 /*!

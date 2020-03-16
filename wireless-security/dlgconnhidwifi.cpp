@@ -22,6 +22,7 @@
 #include "ui_dlgconnhidwifi.h"
 #include "backthread.h"
 #include "mainwindow.h"
+
 #include <unistd.h>
 
 #include <QStandardItemModel>
@@ -45,37 +46,25 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
 
     this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.9);border:1px solid rgba(255, 255, 255, 0.05);}");
 
+    MyQss objQss;
+
     ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
     ui->lbBoder->hide();
     ui->lbLeftupTitle->setStyleSheet("QLabel{border:0px;font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbConn->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbNetName->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbSecurity->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbConn->setStyleSheet(objQss.labelQss);
+    ui->lbNetName->setStyleSheet(objQss.labelQss);
+    ui->lbSecurity->setStyleSheet(objQss.labelQss);
 
-    ui->cbxConn->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
-                               "QComboBox::drop-down{border:0px;width:30px;}"
-                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
-                               "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
-                               "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
-                               "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}");
+    ui->cbxConn->setStyleSheet(objQss.cbxQss);
     ui->cbxConn->setView(new  QListView());
-    ui->leNetName->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->cbxSecurity->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
-                               "QComboBox::drop-down{border:0px;width:30px;}"
-                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
-                               "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
-                               "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
-                               "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}");
+    ui->leNetName->setStyleSheet(objQss.leQss);
+    ui->cbxSecurity->setStyleSheet(objQss.cbxQss);
     ui->cbxSecurity->setView(new  QListView());
 
-    ui->btnCancel->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
-                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
-                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
-    ui->btnConnect->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
-                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
-                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
-    ui->lineUp->setStyleSheet("background:rgba(255,255,255,0.08);");
-    ui->lineDown->setStyleSheet("background:rgba(255,255,255,0.08);");
+    ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
+    ui->btnConnect->setStyleSheet(objQss.btnConnQss);
+    ui->lineUp->setStyleSheet(objQss.lineQss);
+    ui->lineDown->setStyleSheet(objQss.lineQss);
 
     ui->lbLeftupTitle->setText(tr("Add hidden Wi-Fi")); //加入隐藏Wi-Fi
     ui->lbConn->setText(tr("Connection")); //连接设置:

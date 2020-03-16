@@ -12,6 +12,7 @@
 #include <QDBusObjectPath>
 #include <QVariant>
 #include <QVariantMap>
+#include <QGSettings/QGSettings>
 #include <QTimer>
 
 class MainWindow;
@@ -27,6 +28,11 @@ public:
     int getLanConnState();
     int getTaskbarPos(QString str);
     int getTaskbarHeight(QString str);
+
+    void getWifiSwitchState();
+    bool getSwitchStatus(QString key);
+    void wifiSwitchSlot(bool signal);
+    void wifiCardSlot(bool signal);
 
     QDBusObjectPath wiredPath;
     QDBusObjectPath wirelessPath;
@@ -62,6 +68,8 @@ private:
     int a = 0;
     bool isRunningFunction = false;
     QTimer *time;
+
+    QGSettings *m_gsettings;
 
 signals:
     void updateWiredList(int n);

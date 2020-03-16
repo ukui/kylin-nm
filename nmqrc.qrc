@@ -1,25 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>res/s/wifi-full.png</file>
-        <file>res/s/wifi-high.png</file>
-        <file>res/s/wifi-medium.png</file>
-        <file>res/s/wifi-low.png</file>
-        <file>res/s/wifi-none.png</file>
-        <file>res/s/wifi-full-secure.png</file>
-        <file>res/s/wifi-high-secure.png</file>
-        <file>res/s/wifi-medium-secure.png</file>
-        <file>res/s/wifi-low-secure.png</file>
-        <file>res/s/wifi-none-secure.png</file>
-        <file>res/x/network-error.png</file>
-        <file>res/x/network-line.png</file>
-        <file>res/x/network-offline.png</file>
         <file>res/x/setup.png</file>
-        <file>res/x/wifi-error.png</file>
-        <file>res/x/wifi-line.png</file>
-        <file>res/x/wifi-offline.png</file>
-        <file>res/s/pbad.png</file>
-        <file>res/s/pgood.png</file>
-        <file>res/s/pnormal.png</file>
         <file>res/s/conning-b/1.png</file>
         <file>res/s/conning-b/2.png</file>
         <file>res/s/conning-b/3.png</file>
@@ -32,11 +13,7 @@
         <file>res/s/conning-b/10.png</file>
         <file>res/s/conning-b/11.png</file>
         <file>res/s/conning-b/12.png</file>
-        <file>res/s/setting.png</file>
-        <file>res/g/triangle.png</file>
         <file>res/g/down_arrow.png</file>
-        <file>res/s/network-line.png</file>
-        <file>res/s/network-offline.png</file>
         <file>res/s/conning-s/1.png</file>
         <file>res/s/conning-s/2.png</file>
         <file>res/s/conning-s/3.png</file>
@@ -61,8 +38,6 @@
         <file>res/s/rescan/10.png</file>
         <file>res/s/rescan/11.png</file>
         <file>res/s/rescan/12.png</file>
-        <file>res/h/add-hide-wifi.png</file>
-        <file>res/h/add-hide-wifi.svg</file>
         <file>res/h/hide-pwd.png</file>
         <file>res/h/right-pwd.png</file>
         <file>res/h/show-pwd.png</file>
@@ -99,5 +74,6 @@
         <file>res/s/conning-a/6.png</file>
         <file>res/s/conning-a/7.png</file>
         <file>res/s/conning-a/8.png</file>
+        <file>qss/style.qss</file>
     </qresource>
 </RCC>

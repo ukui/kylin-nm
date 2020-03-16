@@ -49,6 +49,7 @@ private:
     int isUsed;//=0 current wifi not used before; >=1 used
     MainWindow *mw;
     QString strWifiname;
+//    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss;
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

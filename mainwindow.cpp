@@ -48,13 +48,15 @@ MainWindow::MainWindow(QWidget *parent) :
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
     this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
-    this->setStyleSheet("QToolTip{background:rgba(26,26,26,0.7);"
-                        "font: 14px;"
-                        "color:rgba(255,255,255,1);"
-                        "border-radius: 3px;"
-                        "border:1px solid rgba(255,255,255,0.2);"
-                        "padding: 0px 5px;"
-                        "outline:none;}");
+
+    UseQssFile::setStyle("style.qss");
+//    setStyleSheet("QToolTip{background:rgba(26,26,26,0.7);"
+//                  "font: 14px;"
+//                  "color:rgba(255,255,255,1);"
+//                  "border-radius: 3px;"
+//                  "border:1px solid rgba(255,255,255,0.2);"
+//                  "padding: 0px 5px;"
+//                  "outline:none;}");
 
     ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.9);}");
 
@@ -191,7 +193,6 @@ MainWindow::MainWindow(QWidget *parent) :
     scrollAreal->viewport()->setStyleSheet("background-color:transparent;");
     scrollAreal->verticalScrollBar()->setStyleSheet(scrollBarQss);
 
-
     scrollAreaw->setStyleSheet("QScrollArea{border:none;}");
     scrollAreaw->viewport()->setStyleSheet("background-color:transparent;");
     scrollAreaw->verticalScrollBar()->setStyleSheet(scrollBarQss);
@@ -269,6 +270,7 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon->show();
 
     connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClicked);
+    connect(ui->btnWifi, &QPushButton::clicked, this, &MainWindow::onBtnWifiClicked);
 
     auto app = static_cast<QApplication*>(QCoreApplication::instance());
     app->setStyle(new CustomStyle());
@@ -863,7 +865,7 @@ void MainWindow::onWirelessDeviceAdded(QDBusObjectPath objPath)
     } else {
         is_wireless_adapter_ready = 0;
     }
-    on_btnWifi_clicked();
+    onBtnWifiClicked(0);
 }
 void MainWindow::onWirelessDeviceRemoved(QDBusObjectPath objPath)
 {
@@ -873,7 +875,7 @@ void MainWindow::onWirelessDeviceRemoved(QDBusObjectPath objPath)
     if (objKyDBus->wirelessPath.path() == objPath.path()){
         is_wireless_adapter_ready = 0;
     }
-    on_btnWifi_clicked();
+    onBtnWifiClicked(0);
 }
 void MainWindow::checkIsWirelessDeviceOn()
 {
@@ -1370,15 +1372,19 @@ void MainWindow::on_btnNet_clicked()
     this->startLoading();
 }
 
-void MainWindow::on_btnWifi_clicked()
+void MainWindow::onBtnWifiClicked(int flag)
 {
-    //当连接上无线网卡时才能打开wifi开关
+    qDebug()<<"the value of flag = "<<flag;
+
     if(is_wireless_adapter_ready == 1){
+        // 当连接上无线网卡时才能打开wifi开关
         // 网络开关关闭时，点击Wifi开关时，程序先打开有线开关
-        if(checkLanOn()){
+        if (flag == 0) {
             if(checkWlOn()){
                 lbTopWifiList->hide();
                 btnAddNet->hide();
+                objKyDBus->wifiSwitchSlot(false);
+
                 QThread *t = new QThread();
                 BackThread *bt = new BackThread();
                 bt->moveToThread(t);
@@ -1394,6 +1400,9 @@ void MainWindow::on_btnWifi_clicked()
                     is_stop_check_net_state = 1;
                     lbTopWifiList->show();
                     btnAddNet->show();
+                    objKyDBus->wifiCardSlot(true);
+                    objKyDBus->wifiSwitchSlot(true);
+
                     QThread *t = new QThread();
                     BackThread *bt = new BackThread();
                     bt->moveToThread(t);
@@ -1406,16 +1415,13 @@ void MainWindow::on_btnWifi_clicked()
                     this->startLoading();
                 }
             }
-        }else{
-            if(!checkWlOn()){
-                QString txt(tr("keep wired network switch is on before turning on wireless switch"));
-                QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-                system(cmd.toUtf8().data());
-
+        } else if(flag == 1) {
+            if (is_fly_mode_on == 0){
                 on_btnWifiList_clicked();
                 is_stop_check_net_state = 1;
                 lbTopWifiList->show();
                 btnAddNet->show();
+
                 QThread *t = new QThread();
                 BackThread *bt = new BackThread();
                 bt->moveToThread(t);
@@ -1425,18 +1431,40 @@ void MainWindow::on_btnWifi_clicked()
                 connect(bt, SIGNAL(launchLanDone()), this, SLOT(launchLanDone()));
                 connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
                 t->start();
+                this->startLoading();
             }
+        } else if(flag == 2) {
+            lbTopWifiList->hide();
+            btnAddNet->hide();
+
+            QThread *t = new QThread();
+            BackThread *bt = new BackThread();
+            bt->moveToThread(t);
+            connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+            connect(t, SIGNAL(started()), bt, SLOT(execDisWifi()));
+            connect(bt, SIGNAL(disWifiDone()), this, SLOT(disWifiDone()));
+            connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
+            t->start();
             this->startLoading();
+        } else {
+            qDebug()<<"receive an invalid value in function onBtnWifiClicked";
+            syslog(LOG_DEBUG, "receive an invalid value in function onBtnWifiClicked");
         }
-        //this->startLoading();
+
     } else {
         lbTopWifiList->hide();
         btnAddNet->hide();
+        if (flag == 0) {
+            objKyDBus->wifiSwitchSlot(false);
+            objKyDBus->wifiCardSlot(false);
+        }
+
         QString txt(tr("please insert the wireless network adapter"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         system(cmd.toUtf8().data());
         keepDisWifiState();
     }
+
 }
 
 void MainWindow::onBtnNetListClicked(int flag)
@@ -2374,7 +2402,8 @@ void MainWindow::keepDisWifiState()
         this->scrollAreaw->show();
         this->topWifiListWidget->show();
 
-//        this->stopLoading();
+        // this->stopLoading();
+        getActiveInfo();
     }
 }
 
@@ -2385,7 +2414,7 @@ void MainWindow::on_btnFlyMode_clicked()
         ui->lbFlyBG->setStyleSheet(btnOnQss);
         is_fly_mode_on = 1;
 
-        on_btnWifi_clicked();
+        onBtnWifiClicked(0);
         on_btnWifiList_clicked();
     } else {
         ui->lbFlyImg->setStyleSheet("QLabel{background-image:url(:/res/x/fly-mode-off.svg);}");

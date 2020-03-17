@@ -32,6 +32,21 @@
 #include "backthread.h"
 #include "ksimplenm.h"
 
+#define FRAME_SPEED 150
+#define LIMIT_TIME 30*1000
+#define TOTAL_PAGE 8
+
+#define W_ITEM 424
+#define H_ITEM 60
+#define H_ITEM_BIG_EXTEND 148
+#define H_ITEM_SMALL_EXTEND 118
+#define Y_LINE 58
+#define X_LINE 0
+#define Y_LINE_SMALL_EXTEND 116
+#define X_LINE_SMALL_EXTEND 0
+#define Y_LINE_BIG_EXTEND 146
+#define X_LINE_BIG_EXTEND 0
+
 class MainWindow;
 
 namespace Ui {

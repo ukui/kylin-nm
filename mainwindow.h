@@ -60,6 +60,43 @@
 #include "kylin-dbus-interface.h"
 #include "kylin-network-interface.h"
 
+#define W_LEFT_AREA 41
+#define W_VERTICAL_LINE 1 //左边竖线宽度
+#define W_RIGHT_AREA 438 //41 + 1 + 438 = 480
+#define L_VERTICAL_LINE_TO_ITEM 4 //竖线到item左侧的距离
+
+#define X_LEFT_WIFI_BALL 412 //白色小球在左边
+#define X_RIGHT_WIFI_BALL 438 //白色小球在右边
+#define Y_WIFI_BALL 22 //白色小球y坐标
+#define X_ITEM 46 //item到窗口左侧的距离 41 + 1 + 4 = 46
+#define W_ITEM 424
+
+#define Y_TOP_ITEM 57 //顶部item、topLanListWidget、topWifiListWidget的y坐标
+#define H_NORMAL_ITEM 60
+#define H_GAP_UP 10
+#define H_MIDDLE_WORD 46 //"显示‘可用网络列表’的label"
+#define H_GAP_DOWN 5 //57 + 60 + 10 + 46 + 5 = 178
+#define X_MIDDLE_WORD 19
+#define W_MIDDLE_WORD 260
+
+#define H_LAN_ITEM_EXTEND 108
+#define H_WIFI_ITEM_EXTEND 88
+
+#define Y_SCROLL_AREA 178
+#define W_SCROLL_AREA 440
+#define H_SCROLL_AREA 360
+
+#define W_TOP_LIST_WIDGET 435
+#define W_LIST_WIDGET 440
+
+#define W_BTN_FUN 57
+#define H_BTN_FUN 14
+#define X_BTN_FUN 365
+#define Y_BTN_FUN 87 //新建网络，加入网络按钮的宽高、x坐标、y坐标
+
+#define W_NO_ITEM_TIP 220
+#define H_NO_ITEM_TIP 20
+
 class OneConnForm;
 class ConfForm;
 
@@ -75,8 +112,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void editQssString();
     void createTopLanUI();
     void createTopWifiUI();
+    void createOtherUI();
+    void createListAreaUI();
+    void createLeftAreaUI();
 
     void startLoading();
     void stopLoading();
@@ -241,7 +282,7 @@ private slots:
     void launchLanDone();
     void disWifiDone();
     void disWifiStateKeep();
-    void disWifiDoneUI();
+    void disWifiDoneChangeUI();
     void connLanDone(int connFlag);
     void connWifiDone(int connFlag);
 

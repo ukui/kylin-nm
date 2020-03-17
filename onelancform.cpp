@@ -22,9 +22,6 @@
 
 #include <time.h>
 
-#define FRAMESPEED 150
-#define ALLTIME 30*1000
-
 OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *confForm, KSimpleNM *ksnm) :
     QWidget(parent),
     ui(new Ui::OneLancForm)
@@ -150,19 +147,19 @@ void OneLancForm::setAct(bool isAct){
 void OneLancForm::setSelected(bool isSelected, bool isCurrName)
 {
     if(isSelected){
-        resize(422, 168);
+        resize(W_ITEM, H_ITEM_EXTEND);
         ui->wbg->show();
         ui->wbg_2->hide();
-        ui->line->move(0, 166);
+        ui->line->move(X_LINE_EXTEND, Y_LINE_EXTEND);
         ui->btnConn->hide();
         ui->btnConnSub->show();
 
         this->isSelected = true;
     }else{
-        resize(422, 60);
+        resize(W_ITEM, H_ITEM);
         ui->wbg->hide();
         ui->wbg_2->show();
-        ui->line->move(0, 58);
+        ui->line->move(X_LINE, Y_LINE);
         if(isCurrName){
             ui->btnConn->show();
         }else{
@@ -181,12 +178,12 @@ void OneLancForm::setSelected(bool isSelected, bool isCurrName)
 void OneLancForm::setTopItem(bool isSelected)
 {
     if(isSelected){
-        resize(422, 168);
+        resize(W_ITEM, H_ITEM_EXTEND);
         ui->wbg->show();
         ui->btnConnSub->hide();
         this->isSelected = true;
     }else{
-        resize(422, 60);
+        resize(W_ITEM, H_ITEM);
         ui->wbg->hide();
         ui->btnConnSub->hide();
         this->isSelected = false;
@@ -354,11 +351,11 @@ void OneLancForm::waitAnimStep(){
     this->waitPage --;
 
     if(this->waitPage < 1){
-        this->waitPage = 8;
+        this->waitPage = TOTAL_PAGE;
     }
 
-    this->countCurrentTime += FRAMESPEED;
-    if (this->countCurrentTime >= ALLTIME){
+    this->countCurrentTime += FRAME_SPEED;
+    if (this->countCurrentTime >= LIMIT_TIME){
         this->stopWaiting();
     }
 }
@@ -371,8 +368,8 @@ void OneLancForm::startWaiting(bool isConn){
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
     }
     this->countCurrentTime = 0;
-    this->waitPage = 8;
-    this->waitTimer->start(FRAMESPEED);
+    this->waitPage = TOTAL_PAGE;
+    this->waitTimer->start(FRAME_SPEED);
     ui->lbWaiting->show();
     ui->lbWaitingIcon->show();
 

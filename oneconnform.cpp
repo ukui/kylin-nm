@@ -22,8 +22,6 @@
 #include "wireless-security/dlgconnhidwifi.h"
 
 extern int currentActWifiSignalLv;
-#define FRAMESPEED 150
-#define ALLTIME 30*1000
 
 OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *confForm, KSimpleNM *ksnm) :
     QWidget(parent),
@@ -195,13 +193,13 @@ void OneConnForm::setLePassword()
 //点击窗口最上面的item时
 void OneConnForm::setTopItem(bool isSelected){
     if(isSelected){
-        resize(422, 148);
+        resize(W_ITEM, H_ITEM_BIG_EXTEND);
         ui->wbg_3->show();
         ui->lbInfo->show();
 
         this->isSelected = true;
     }else{
-        resize(422, 60);
+        resize(W_ITEM, H_ITEM);
         ui->lePassword->setText("");
         ui->wbg_3->hide();
         ui->lbInfo->hide();
@@ -235,8 +233,8 @@ void OneConnForm::setTopItem(bool isSelected){
 // 点击窗口下面的item时
 void OneConnForm::setSelected(bool isSelected, bool isCurrName){
     if(isSelected){
-        resize(422, 148);
-        ui->line->move(0, 146);
+        resize(W_ITEM, H_ITEM_BIG_EXTEND);
+        ui->line->move(X_LINE_BIG_EXTEND, Y_LINE_BIG_EXTEND);
         ui->wbg->hide();
         ui->wbg_2->hide();
         ui->wbg_3->show();
@@ -246,14 +244,14 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName){
 
         this->isSelected = true;
     }else{
-        resize(422, 60);
+        resize(W_ITEM, H_ITEM);
         ui->lePassword->setText(tr("Input Password..."));//"输入密码..."
         ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;"
                                       "background:rgba(0,0,0,0.2);color:rgba(255,255,255,0.35);font-size:14px;}");
         ui->lePassword->setEchoMode(QLineEdit::Normal);
         ui->checkBoxPwd->setChecked(true);
 
-        ui->line->move(0, 58);
+        ui->line->move(X_LINE, Y_LINE);
         ui->wbg->show();
         ui->wbg_2->hide();
         ui->wbg_3->hide();
@@ -579,9 +577,9 @@ void OneConnForm::slotConnWifiResult(int connFlag){
 
     if(connFlag == 2){
         mw->currSelNetName = "";
-        emit selectedOneWifiForm(ui->lbName->text(),58);
+        emit selectedOneWifiForm(ui->lbName->text(), Y_LINE);
 
-        resize(422, 118);
+        resize(W_ITEM, H_ITEM_SMALL_EXTEND);
         ui->wbg->hide();
         ui->wbg_2->show();
         ui->wbg_3->hide();
@@ -591,7 +589,7 @@ void OneConnForm::slotConnWifiResult(int connFlag){
         ui->btnConn->hide();
         ui->btnConnSub->hide();
         ui->lbInfo->hide();
-        ui->line->move(0, 116);
+        ui->line->move(X_LINE_SMALL_EXTEND, Y_LINE_SMALL_EXTEND);
 
         ui->lePassword->show();
         ui->checkBoxPwd->show();
@@ -626,10 +624,10 @@ void OneConnForm::waitAnimStep(){
     this->waitPage --;
 
     if(this->waitPage < 1){
-        this->waitPage = 8;
+        this->waitPage = TOTAL_PAGE;
     }
-    this->countCurrentTime += FRAMESPEED;
-    if (this->countCurrentTime >= ALLTIME){
+    this->countCurrentTime += FRAME_SPEED;
+    if (this->countCurrentTime >= LIMIT_TIME){
         this->stopWaiting();
     }
 }
@@ -643,8 +641,8 @@ void OneConnForm::startWaiting(bool isConn){
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
     }
     this->countCurrentTime = 0;
-    this->waitPage = 8;
-    this->waitTimer->start(FRAMESPEED);
+    this->waitPage = TOTAL_PAGE;
+    this->waitTimer->start(FRAME_SPEED);
     ui->lbWaiting->show();
     ui->lbWaitingIcon->show();
 

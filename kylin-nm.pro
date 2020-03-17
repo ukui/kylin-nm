@@ -19,7 +19,10 @@ CONFIG += release
 #PKGCONFIG += libnm glib-2.0 gio-2.0 dbus-glib-1
 #PKGCONFIG += Qt5Svg
 
-LIBS    +=  -L/usr/lib/ -lgsettings-qt
+
+CONFIG += link_pkgconfig
+PKGCONFIG += gsettings-qt
+#LIBS    +=  -L/usr/lib/ -lgsettings-qt
 
 target.path = /usr/bin
 target.source += $$TARGET

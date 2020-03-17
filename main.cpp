@@ -31,16 +31,13 @@
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
     QApplication a(argc, argv);
+
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     openlog(LOG_IDENT, LOG_NDELAY | LOG_NOWAIT | LOG_PID, LOG_USER);
 
     syslog(LOG_DEBUG, "Kylin Network Manager Is Already Launched");
-
-    syslog(LOG_DEBUG, "Using the icon theme named 'ukui-icon-theme-default'");
-    QIcon::setThemeName("ukui-icon-theme-default");
 
     // 国际化
     QString locale = QLocale::system().name();

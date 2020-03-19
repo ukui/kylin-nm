@@ -245,9 +245,8 @@ void BackThread::execConnWifiPWD(QString connName, QString password){
     }else{
         QString txt(tr("Confirm your Wi-Fi password"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-        Utils::m_system(cmd.toUtf8().data());
-//        int status1 = system(cmd.toUtf8().data());
-//        if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
+        int status1 = system(cmd.toUtf8().data());
+        if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
 
         emit connDone(1);
     }

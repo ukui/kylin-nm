@@ -72,52 +72,57 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->btnOk->setText(tr("Save"));//"保存"
     ui->btnCreate->setText(tr("Ok"));//"确定"
 
+    labelQss = "QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}";
+    cbxQss = "QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);"
+                        "border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
+             "QComboBox::drop-down{border:0px;width:30px;}"
+             "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
+             "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
+             "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
+             "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}";
+    leQss = "QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}";
+    btnOffQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
+                   "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
+                   "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}";
+    btnOnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
+                 "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                 "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}";
+    lineQss = "background:rgba(255,255,255,0.08);";
+
     // ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid #297a97;background-color:#ffffff;}");
     ui->wdHead->setStyleSheet("#wdHead{border:none}");
     ui->wgManual->setStyleSheet("#wgManual{border:none}");
     ui->wdBottom->setStyleSheet("#wdBottom{border:none}");
     ui->lbLeftupTitle->setStyleSheet("QLabel{border:0px;font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbName->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbTxt1->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbTxt2->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbTxt3->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbTxt4->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbTxt5->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbTxt6->setStyleSheet("QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbName->setStyleSheet(labelQss);
+    ui->lbTxt1->setStyleSheet(labelQss);
+    ui->lbTxt2->setStyleSheet(labelQss);
+    ui->lbTxt3->setStyleSheet(labelQss);
+    ui->lbTxt4->setStyleSheet(labelQss);
+    ui->lbTxt5->setStyleSheet(labelQss);
+    ui->lbTxt6->setStyleSheet(labelQss);
 
-    ui->cbType->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
-                               "QComboBox::drop-down{border:0px;width:30px;}"
-                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
-                               "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
-                               "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
-                               "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}");
+    ui->cbType->setStyleSheet(cbxQss);
     ui->cbType->setView(new  QListView());
-    ui->cbMask->setStyleSheet("QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
-                               "QComboBox::drop-down{border:0px;width:30px;}"
-                               "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
-                               "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
-                               "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
-                               "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}");
+    ui->cbMask->setStyleSheet(cbxQss);
     ui->cbMask->setView(new  QListView());
-    ui->leName->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->leAddr->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->leGateway->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->leDns->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
-    ui->leDns2->setStyleSheet("QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}");
+    ui->leName->setStyleSheet(leQss);
+    ui->leAddr->setStyleSheet(leQss);
+    ui->leGateway->setStyleSheet(leQss);
+    ui->leDns->setStyleSheet(leQss);
+    ui->leDns2->setStyleSheet(leQss);
 
-    ui->btnCancel->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
-                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
-                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
-    ui->btnOk->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
-                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
-                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
-    ui->btnCreate->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
-                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
-                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
-    ui->lineUp->setStyleSheet("background:rgba(255,255,255,0.08);");
-    ui->lineDown->setStyleSheet("background:rgba(255,255,255,0.08);");
+    ui->btnCancel->setStyleSheet(btnOffQss);
+    ui->btnOk->setStyleSheet(btnOnQss);
+    ui->btnCreate->setStyleSheet(btnOnQss);
+    ui->lineUp->setStyleSheet(lineQss);
+    ui->lineDown->setStyleSheet(lineQss);
     ui->lineUp->hide();
     ui->lineDown->hide();
+
+    ui->btnCancel->setFocusPolicy(Qt::NoFocus);
+    ui->btnOk->setFocusPolicy(Qt::NoFocus);
+    ui->btnCreate->setFocusPolicy(Qt::NoFocus);
 
     // IP的正则格式限制
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
@@ -238,16 +243,15 @@ void ConfForm::on_btnOk_clicked()
     // 如果是修改当前连接的网络，则修改设置后简略重连网络
     if(this->isActConf == true){
         //QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + ui->leName->text() + "'";
-        QString cmd = "nmcli connection up '" + ui->leName->text() + "'";
-        Utils::m_system(cmd.toUtf8().data());
+        QString cmdStr = "nmcli connection up '" + ui->leName->text() + "'";
+        Utils::m_system(cmdStr.toUtf8().data());
 //        int status = system(cmd.toUtf8().data());
 //        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection up' in function 'on_btnOk_clicked' failed");}
 
         QString txt(tr("New settings already effective"));
-        cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-        Utils::m_system(cmd.toUtf8().data());
-//        int status1 = system(cmd.toUtf8().data());
-//        if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'on_btnOk_clicked' failed");}
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
+        int status1 = system(cmd.toUtf8().data());
+        if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'on_btnOk_clicked' failed");}
     }
 }
 
@@ -258,6 +262,7 @@ void ConfForm::on_btnCancel_clicked()
 
 void ConfForm::cbTypeChanged(int index){
     if (isShowSaveBtn){
+        ui->leName->setEnabled(false);
         ui->btnOk->show();
         ui->btnCreate->hide();
         ui->lbLeftupTitle->setText(tr("edit network"));
@@ -267,19 +272,32 @@ void ConfForm::cbTypeChanged(int index){
         ui->lineUp->hide();
         ui->lineDown->hide();
         ui->wgManual->hide();
-        ui->centralWidget->resize(432, 223);
-        ui->wdBottom->move(1, 162);
-        this->resize(432, 223);
+        ui->centralWidget->resize(432, 230);
+        ui->wdBottom->move(1, 170);
+
+        this->setEnableOfBtn();
+
+        this->resize(432, 230);
     }
     if(index == 1){
         ui->lineUp->show();
         ui->lineDown->show();
         ui->wgManual->show();
-        ui->centralWidget->resize(432, 487);
-        ui->wdBottom->move(1, 426);
-        this->resize(432, 487);
+        ui->centralWidget->resize(432, 500);
+        ui->wdBottom->move(1, 440);
+
+        this->setEnableOfBtn();
+
+        this->resize(432, 500);
     }
     if(index == 3){
+        ui->btnOk->setStyleSheet(btnOffQss);
+        ui->btnOk->setEnabled(false);
+
+        ui->btnCreate->setStyleSheet(btnOffQss);
+        ui->btnCreate->setEnabled(false);
+
+        ui->leName->setEnabled(true);
         ui->btnOk->hide();
         ui->btnCreate->show();
         ui->lbLeftupTitle->setText(tr("add wired network"));
@@ -288,10 +306,86 @@ void ConfForm::cbTypeChanged(int index){
         ui->lineUp->hide();
         ui->lineDown->hide();
         ui->wgManual->hide();
-        ui->centralWidget->resize(432, 223);
-        ui->wdBottom->move(1, 162);
-        this->resize(432, 223);
+        ui->centralWidget->resize(432, 230);
+        ui->wdBottom->move(1, 170);
+        this->resize(432, 230);
     }
+}
+
+void ConfForm::on_leName_textEdited(const QString &arg1)
+{
+    this->setEnableOfBtn();
+}
+
+void ConfForm::on_leAddr_textEdited(const QString &arg1)
+{
+    this->setEnableOfBtn();
+}
+
+void ConfForm::on_leGateway_textEdited(const QString &arg1)
+{
+    this->setEnableOfBtn();
+}
+
+void ConfForm::on_leDns_textEdited(const QString &arg1)
+{
+    this->setEnableOfBtn();
+}
+
+void ConfForm::on_leDns2_textEdited(const QString &arg1)
+{
+    // this->setEnableOfBtn();
+}
+
+void ConfForm::setEnableOfBtn()
+{
+    if (ui->leName->text().size() == 0 ){
+        this->setBtnEnableFalse();
+        return;
+    }
+
+    if (ui->cbType->currentIndex() == 1){
+        if (!this->getTextEditState(ui->leAddr->text()) ){
+            this->setBtnEnableFalse();
+            return;
+        }
+
+        if (!this->getTextEditState(ui->leGateway->text()) ){
+            this->setBtnEnableFalse();
+            return;
+        }
+
+        if (!this->getTextEditState(ui->leDns->text()) ){
+            this->setBtnEnableFalse();
+            return;
+        }
+    }
+
+    ui->btnOk->setStyleSheet(btnOnQss);
+    ui->btnOk->setEnabled(true);
+
+    ui->btnCreate->setStyleSheet(btnOnQss);
+    ui->btnCreate->setEnabled(true);
+}
+
+bool ConfForm::getTextEditState(QString text)
+{
+    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+
+    bool match = false;
+    match = rx.exactMatch(text);
+    // qDebug()<<"the match result is: " << match;
+
+    return match;
+}
+
+void ConfForm::setBtnEnableFalse()
+{
+    ui->btnOk->setStyleSheet(btnOffQss);
+    ui->btnOk->setEnabled(false);
+
+    ui->btnCreate->setStyleSheet(btnOffQss);
+    ui->btnCreate->setEnabled(false);
 }
 
 void ConfForm::paintEvent(QPaintEvent *event)

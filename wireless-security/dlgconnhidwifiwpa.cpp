@@ -124,7 +124,7 @@ DlgConnHidWifiWpa::DlgConnHidWifiWpa(int type, MainWindow *mainWindow, QWidget *
         ui->checkBoxPwd->setEnabled(false);
     }
 
-    this->setFixedSize(432,412);
+    this->setFixedSize(432,397);
 
     this->mw = mainWindow;
 }

@@ -49,7 +49,7 @@ public:
     QString getConnProp(QString connName);
     bool execChkWifiExist(QString connName);
     QString execChkLanWidth(QString ethName);
-    QProcess *cmdConnWifi;
+    QProcess *cmdConnWifi = nullptr;
 
 public slots:
     void execEnNet();

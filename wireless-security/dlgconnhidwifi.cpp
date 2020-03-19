@@ -114,7 +114,7 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
         ui->btnConnect->setEnabled(true);
     }
 
-    this->setFixedSize(432,336);
+    this->setFixedSize(432,358);
 
     this->mw = mainWindow;
 }

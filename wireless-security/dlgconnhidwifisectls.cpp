@@ -61,24 +61,24 @@ DlgConnHidWifiSecTls::DlgConnHidWifiSecTls(int type, QWidget *parent) :
 
     ui->cbxConn->setStyleSheet(objQss.cbxQss);
     ui->cbxConn->setView(new  QListView());
-    ui->leNetName->setStyleSheet(objQss.lineQss);
+    ui->leNetName->setStyleSheet(objQss.leQss);
     ui->cbxSecurity->setStyleSheet(objQss.cbxQss);
     ui->cbxSecurity->setView(new  QListView());
     ui->cbxAuth->setStyleSheet(objQss.cbxQss);
     ui->cbxAuth->setView(new  QListView());
-    ui->leIdentity->setStyleSheet(objQss.lineQss);
-    ui->leDomain->setStyleSheet(objQss.lineQss);
+    ui->leIdentity->setStyleSheet(objQss.leQss);
+    ui->leDomain->setStyleSheet(objQss.leQss);
     ui->cbxCA->setStyleSheet(objQss.cbxQss);
     ui->cbxCA->setView(new  QListView());
-    ui->leCaPwd->setStyleSheet(objQss.lineQss);
+    ui->leCaPwd->setStyleSheet(objQss.leQss);
     ui->checkBoxPwd->setStyleSheet(objQss.checkBoxQss);
     ui->checkBoxCA->setStyleSheet(objQss.checkBoxCAQss);
     ui->cbxUserCertify->setStyleSheet(objQss.cbxQss);
     ui->cbxUserCertify->setView(new  QListView());
-    ui->leUserCertifyPwd->setStyleSheet(objQss.lineQss);
+    ui->leUserCertifyPwd->setStyleSheet(objQss.leQss);
     ui->cbxUserPriKey->setStyleSheet(objQss.cbxQss);
     ui->cbxUserPriKey->setView(new  QListView());
-    ui->leUserKeyPwd->setStyleSheet(objQss.lineQss);
+    ui->leUserKeyPwd->setStyleSheet(objQss.leQss);
     ui->checkBoxPwdSec->setStyleSheet(objQss.checkBoxQss);
 
     ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
@@ -171,7 +171,7 @@ DlgConnHidWifiSecTls::DlgConnHidWifiSecTls(int type, QWidget *parent) :
     ui->lbUserKeyPwd->setEnabled(false);
     ui->leUserKeyPwd->setEnabled(false);
 
-    this->setFixedSize(432,680);
+    this->setFixedSize(432,705);
 }
 
 DlgConnHidWifiSecTls::~DlgConnHidWifiSecTls()

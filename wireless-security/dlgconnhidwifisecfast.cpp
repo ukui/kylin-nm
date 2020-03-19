@@ -52,7 +52,7 @@ DlgConnHidWifiSecFast::DlgConnHidWifiSecFast(int type, QWidget *parent) :
     ui->lbSecurity->setStyleSheet(objQss.labelQss);
     ui->lbAuth->setStyleSheet(objQss.labelQss);
     ui->lbAnonyId->setStyleSheet(objQss.labelQss);
-    ui->checkBoxAutoPCA->setStyleSheet(objQss.checkBoxQss);
+    ui->checkBoxAutoPCA->setStyleSheet(objQss.checkBoxCAQss);
     ui->lbPCAfile->setStyleSheet(objQss.labelQss);
     ui->lbInnerAuth->setStyleSheet(objQss.labelQss);
     ui->lbUserName->setStyleSheet(objQss.labelQss);
@@ -93,6 +93,9 @@ DlgConnHidWifiSecFast::DlgConnHidWifiSecFast(int type, QWidget *parent) :
     ui->lbPassword->setText(tr("Password")); //密码:
     ui->btnCancel->setText(tr("Cancel")); //取消
     ui->btnConnect->setText(tr("Connect")); //连接
+
+    ui->checkBoxAutoPCA->setFocusPolicy(Qt::NoFocus);
+    ui->checkBoxPwd->setFocusPolicy(Qt::NoFocus);
 
     ui->cbxConn->addItem(tr("C_reate…")); //新建...
     int status = system("nmcli connection show>/tmp/kylin-nm-connshow");
@@ -150,7 +153,7 @@ DlgConnHidWifiSecFast::DlgConnHidWifiSecFast(int type, QWidget *parent) :
 
     ui->btnConnect->setEnabled(false);
 
-    this->setFixedSize(432,651);
+    this->setFixedSize(432,673);
 }
 
 DlgConnHidWifiSecFast::~DlgConnHidWifiSecFast()

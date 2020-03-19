@@ -38,13 +38,15 @@
 
 #define W_ITEM 424
 #define H_ITEM 60
-#define H_ITEM_BIG_EXTEND 148
-#define H_ITEM_SMALL_EXTEND 118
+#define H_ITEM_BIG 138
+#define H_ITEM_MIDDLE 106
+#define H_WIFI_ITEM_BIG_EXTEND 78 //138 - 60
+#define H_WIFI_ITEM_SMALL_EXTEND 46 //106 - 60
 #define Y_LINE 58
 #define X_LINE 0
-#define Y_LINE_SMALL_EXTEND 116
+#define Y_LINE_SMALL_EXTEND 104
 #define X_LINE_SMALL_EXTEND 0
-#define Y_LINE_BIG_EXTEND 146
+#define Y_LINE_BIG_EXTEND 136
 #define X_LINE_BIG_EXTEND 0
 
 class MainWindow;

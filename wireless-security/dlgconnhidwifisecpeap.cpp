@@ -162,7 +162,7 @@ DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, QWidget *parent) :
 
     ui->btnConnect->setEnabled(false);
 
-    this->setFixedSize(432,680);
+    this->setFixedSize(432,700);
 }
 
 DlgConnHidWifiSecPeap::~DlgConnHidWifiSecPeap()

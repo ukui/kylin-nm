@@ -14,7 +14,7 @@ MyQss::MyQss()
                   "QCheckBox::indicator {width: 18px; height: 9px;}"
                   "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
                   "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}";
-    checkBoxCAQss = "QCheckBox{color:rgba(255,255,255,0.97);background-color:transparent;}";
+    checkBoxCAQss = "QCheckBox{boder:none;color:rgba(255,255,255,0.97);background-color:transparent;}";
     btnCancelQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
                    "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
                    "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}";

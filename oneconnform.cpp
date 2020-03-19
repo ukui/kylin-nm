@@ -127,7 +127,7 @@ OneConnForm::~OneConnForm()
 }
 
 void OneConnForm::mousePressEvent(QMouseEvent *){
-    emit selectedOneWifiForm(wifiName,88);
+    emit selectedOneWifiForm(wifiName, H_WIFI_ITEM_BIG_EXTEND);
 }
 
 //事件过滤器
@@ -194,7 +194,7 @@ void OneConnForm::setLePassword()
 //点击窗口最上面的item时
 void OneConnForm::setTopItem(bool isSelected){
     if(isSelected){
-        resize(W_ITEM, H_ITEM_BIG_EXTEND);
+        resize(W_ITEM, H_ITEM_BIG);
         ui->wbg_3->show();
         ui->lbInfo->show();
 
@@ -234,7 +234,7 @@ void OneConnForm::setTopItem(bool isSelected){
 // 点击窗口下面的item时
 void OneConnForm::setSelected(bool isSelected, bool isCurrName){
     if(isSelected){
-        resize(W_ITEM, H_ITEM_BIG_EXTEND);
+        resize(W_ITEM, H_ITEM_BIG);
         ui->line->move(X_LINE_BIG_EXTEND, Y_LINE_BIG_EXTEND);
         ui->wbg->hide();
         ui->wbg_2->hide();
@@ -578,9 +578,9 @@ void OneConnForm::slotConnWifiResult(int connFlag){
 
     if(connFlag == 2){
         mw->currSelNetName = "";
-        emit selectedOneWifiForm(ui->lbName->text(), Y_LINE);
+        emit selectedOneWifiForm(ui->lbName->text(), H_WIFI_ITEM_SMALL_EXTEND);
 
-        resize(W_ITEM, H_ITEM_SMALL_EXTEND);
+        resize(W_ITEM, H_ITEM_MIDDLE);
         ui->wbg->hide();
         ui->wbg_2->show();
         ui->wbg_3->hide();
@@ -604,9 +604,8 @@ void OneConnForm::slotConnWifiResult(int connFlag){
         QString txt(tr("Conn Wifi Failed"));//"连接 Wifi 失败"
         syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", ui->lbName->text().toUtf8().data());
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
-        Utils::m_system(cmd.toUtf8().data());
-//        int status = system(cmd.toUtf8().data());
-//        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");}
+        int status = system(cmd.toUtf8().data());
+        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");}
     }
 
     // 设置全局变量，当前连接Wifi的信号强度

@@ -212,7 +212,7 @@
    <widget class="QLabel" name="lbNetListImg">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>11</x>
       <y>20</y>
       <width>19</width>
       <height>19</height>
@@ -225,7 +225,7 @@
    <widget class="QLabel" name="lbWifiListImg">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>11</x>
       <y>67</y>
       <width>19</width>
       <height>19</height>

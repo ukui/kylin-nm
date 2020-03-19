@@ -1219,7 +1219,7 @@ void MainWindow::on_btnWifiList_clicked()
 
         // 清空wifi列表
         wifiListWidget = new QWidget(scrollAreaw);
-        wifiListWidget->resize(W_LIST_WIDGET, H_WIFI_ITEM_EXTEND);
+        wifiListWidget->resize(W_LIST_WIDGET, H_WIFI_ITEM_BIG_EXTEND);
         scrollAreaw->setWidget(wifiListWidget);
         scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
 
@@ -1409,7 +1409,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 清空wifi列表
     wifiListWidget = new QWidget(scrollAreaw);
-    wifiListWidget->resize(W_LIST_WIDGET, H_WIFI_ITEM_EXTEND);
+    wifiListWidget->resize(W_LIST_WIDGET, H_WIFI_ITEM_BIG_EXTEND);
     scrollAreaw->setWidget(wifiListWidget);
     scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
 
@@ -1577,7 +1577,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                             //删除元素下面的的所有元素上移
                             for(int after_pos = pos+1; after_pos < wifiList.size(); after_pos ++){
                                 OneConnForm *after_ocf = wifiList.at(after_pos);
-                                if (lastWname == currSelNetName) {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM - H_WIFI_ITEM_EXTEND);}
+                                if (lastWname == currSelNetName) {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM - H_WIFI_ITEM_BIG_EXTEND);}
                                 else {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM);}
                             }
                             wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() - H_NORMAL_ITEM);
@@ -1904,7 +1904,7 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
             }
         }
 
-        // 选中元素下面的所有元素下移 H_WIFI_ITEM_EXTEND
+        // 选中元素下面的所有元素下移 H_WIFI_ITEM_BIG_EXTEND
         for(int i = 0;i < wifiList.size(); i ++){
             OneConnForm *ocf = wifiList.at(i);
             if(ocf->y() > selectY){
@@ -1978,10 +1978,10 @@ void MainWindow::oneTopWifiFormSelected(QString wifiName, int extendLength)
             ocf->move(L_VERTICAL_LINE_TO_ITEM, i * H_NORMAL_ITEM);
         }
 
-        topWifiListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_WIFI_ITEM_EXTEND + H_GAP_UP + X_ITEM);
-        lbTopWifiList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_WIFI_ITEM_EXTEND + H_GAP_UP);
-        btnAddNet->move(X_BTN_FUN, Y_BTN_FUN + H_WIFI_ITEM_EXTEND);
-        scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA + H_WIFI_ITEM_EXTEND);
+        topWifiListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_WIFI_ITEM_BIG_EXTEND + H_GAP_UP + X_ITEM);
+        lbTopWifiList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_WIFI_ITEM_BIG_EXTEND + H_GAP_UP);
+        btnAddNet->move(X_BTN_FUN, Y_BTN_FUN + H_WIFI_ITEM_BIG_EXTEND);
+        scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA + H_WIFI_ITEM_BIG_EXTEND);
         lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2 + 65);
 
         OneConnForm *ocf = topWifiList.at(0);
@@ -2141,7 +2141,7 @@ void MainWindow::disWifiStateKeep()
 void MainWindow::disWifiDoneChangeUI()
 {
     wifiListWidget = new QWidget(scrollAreaw);
-    wifiListWidget->resize(W_LIST_WIDGET, H_WIFI_ITEM_EXTEND);
+    wifiListWidget->resize(W_LIST_WIDGET, H_WIFI_ITEM_BIG_EXTEND);
     scrollAreaw->setWidget(wifiListWidget);
     scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
 

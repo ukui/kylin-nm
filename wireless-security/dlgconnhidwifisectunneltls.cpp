@@ -158,7 +158,7 @@ DlgConnHidWifiSecTunnelTLS::DlgConnHidWifiSecTunnelTLS(int type, QWidget *parent
 
     ui->btnConnect->setEnabled(false);
 
-    this->setFixedSize(432,640);
+    this->setFixedSize(432,665);
 }
 
 DlgConnHidWifiSecTunnelTLS::~DlgConnHidWifiSecTunnelTLS()

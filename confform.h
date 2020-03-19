@@ -52,6 +52,20 @@ private slots:
 
     void on_btnCreate_clicked();
 
+    void on_leName_textEdited(const QString &arg1);
+
+    void on_leAddr_textEdited(const QString &arg1);
+
+    void on_leGateway_textEdited(const QString &arg1);
+
+    void on_leDns_textEdited(const QString &arg1);
+
+    void on_leDns2_textEdited(const QString &arg1);
+
+    void setEnableOfBtn();
+    bool getTextEditState(QString text);
+    void setBtnEnableFalse();
+
 private:
     Ui::ConfForm *ui;
 
@@ -64,6 +78,8 @@ private:
     QPoint dragPos;
     bool isActConf;
     bool isShowSaveBtn = true;
+
+    QString labelQss, cbxQss, leQss, lineQss, btnOnQss, btnOffQss;
 };
 
 #endif // CONFFORM_H

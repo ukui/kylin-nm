@@ -17,7 +17,60 @@
  */
 
 #include "utils.h"
-#include <stdio.h>
+
+#include <sys/syslog.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <errno.h>
+
+///////////////////////////////////////////////////////////////////////////////
+// The Utils class
+
+Utils::Utils(){}
+
+int Utils::m_system(char *cmd)
+{
+    int status = 0;
+    pid_t pid;
+
+    if ((pid = vfork()) <0){
+        qDebug()<<"failed to create a subprocess by using vfork";
+        syslog(LOG_ERR, "failed to create a subprocess by using vfork");
+        status = -1;
+    } else if (pid==0) {
+        const char *new_argv[4];
+        struct sigaction sa_cld;
+        sa_cld.sa_handler = SIG_DFL;
+        sa_cld.sa_flags = 0;
+
+        // 在子进程中放开SIGINT信号
+        sigemptyset(&sa_cld.sa_mask);
+        sigaction (SIGINT, &sa_cld, NULL);
+        sigaction (SIGQUIT, &sa_cld, NULL);
+
+        new_argv[0] = "sh";
+        new_argv[1] = "-c";
+        new_argv[2] = cmd;
+        new_argv[3] = NULL;
+
+        // execl("/bin/sh","sh","-c" ,cmd,(char *)0);
+        if (execve("/bin/sh",(char *const *) new_argv, NULL) <0) {
+            qDebug()<<"failed to execve a shell command in function m_system";
+            syslog(LOG_ERR, "failed to execve %s! errno: %d\n",cmd, errno);
+            exit(1);
+        } else {
+            exit(0);
+        }
+    } else {
+        waitpid(pid,&status,0);
+    }
+
+    return status;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// The NetworkSpeed class, used to get network speed
 
 NetworkSpeed::NetworkSpeed(QObject *parent) :QObject(parent){}
 
@@ -76,7 +129,8 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
 }
 
 
-
+///////////////////////////////////////////////////////////////////////////////
+// The CustomStyle class, inherit from QProxyStyle, used to change style of control
 
 CustomStyle::CustomStyle(const QString &proxyStyleName, QObject *parent) : QProxyStyle (proxyStyleName)
 {

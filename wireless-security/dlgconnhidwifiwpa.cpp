@@ -80,7 +80,8 @@ DlgConnHidWifiWpa::DlgConnHidWifiWpa(int type, MainWindow *mainWindow, QWidget *
     ui->btnConnect->setText(tr("Connect")); //连接
 
     ui->cbxConn->addItem(tr("C_reate…")); //新建...
-    system("nmcli connection show>/tmp/kylin-nm-connshow");
+    int status = system("nmcli connection show>/tmp/kylin-nm-connshow");
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgConnHidWifiWpa' failed");}
     QFile file("/tmp/kylin-nm-connshow");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         qDebug()<<"Can't open the file!";
@@ -200,7 +201,8 @@ void DlgConnHidWifiWpa::changeWindow(){
         connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     }else if (ui->cbxConn->currentIndex() >= 1){
         QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " >/tmp/kylin-nm-connshow";
-        system(currStr.toUtf8().data());
+        int status = system(currStr.toUtf8().data());
+        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");}
         QFile file("/tmp/kylin-nm-connshow");
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
             qDebug()<<"Can't open the file!";
@@ -251,7 +253,8 @@ void DlgConnHidWifiWpa::on_btnConnect_clicked()
         do{
             sleep(1);
             QString cmd = "nmcli device wifi connect " + wifiName + " password " + wifiPassword + " hidden yes >/tmp/kylin-nm-btoutput";
-            system(cmd.toUtf8().data());
+            int status = system(cmd.toUtf8().data());
+            if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");}
 
             QFile file("/tmp/kylin-nm-btoutput");
             if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -308,7 +311,8 @@ void DlgConnHidWifiWpa::slotStartLoading()
 void DlgConnHidWifiWpa::on_execSecConn()
 {
     QString str = "nmcli device wifi connect " + strWifiname + " password " + strWifiPassword;
-    system(str.toUtf8().data());
+    int status = system(str.toUtf8().data());
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_execSecConn' failed");}
     connect(this, SIGNAL(sendMessage()), this,SLOT(emitSignal() ));
     QTimer::singleShot(3*1000, this, SLOT(emitSignal() ));
 }

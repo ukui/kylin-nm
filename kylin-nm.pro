@@ -15,14 +15,9 @@ LANGUAGE = C++
 CONFIG += c++14
 CONFIG += qt warn_on
 CONFIG += release
-#CONFIG += link_pkgconfig
-#PKGCONFIG += libnm glib-2.0 gio-2.0 dbus-glib-1
-#PKGCONFIG += Qt5Svg
-
 
 CONFIG += link_pkgconfig
 PKGCONFIG += gsettings-qt
-#LIBS    +=  -L/usr/lib/ -lgsettings-qt
 
 target.path = /usr/bin
 target.source += $$TARGET
@@ -43,6 +38,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+QMAKE_CXXFLAGS += -Wno-unused-parameter
 QMAKE_CPPFLAGS *= $(shell dpkg-buildflags --get CPPFLAGS)
 QMAKE_CFLAGS   *= $(shell dpkg-buildflags --get CFLAGS)
 QMAKE_CXXFLAGS *= $(shell dpkg-buildflags --get CXXFLAGS)

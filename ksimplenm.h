@@ -20,6 +20,7 @@
 #define KSIMPLENM_H
 
 #include <sys/syslog.h>
+
 #include <QObject>
 #include <QProcess>
 #include <QDebug>

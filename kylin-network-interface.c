@@ -16,19 +16,19 @@
  *
  */
 
+#include "kylin-network-interface.h"
+
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <linux/route.h>
 #include <netinet/ether.h>
 #include <net/ethernet.h>
-#include<sys/types.h>
-#include<sys/stat.h>
-#include<fcntl.h>
-#include "kylin-network-interface.h"
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/syslog.h>
+
 
 //获取网络接口名
 ifname *kylin_network_get_ifacename()
@@ -58,19 +58,19 @@ ifname *kylin_network_get_ifacename()
     //结构体指针ifreq指向buf，即ifconf.ifc_buf
     ifreq = (struct ifreq*)buf;
     int number=ifconf.ifc_len/sizeof(struct ifreq);
-//    printf("%d\n",number);
+    // printf("%d\n",number);
 
     ifname *ifn=(ifname *)malloc(sizeof(ifname)*(number+1));
 
     for(i = number; i>0; i--)
     {
-//        printf("name = [%s] \n",ifreq->ifr_name);
+        // printf("name = [%s] \n",ifreq->ifr_name);
 
         int j=number-i;
         ifn[j].if_name=(char *)malloc(sizeof(char)*10);
         strcpy(ifn[j].if_name,ifreq->ifr_name);
-//        ifn[j].if_name=ifreq->ifr_name;
-//        printf("if_name[%d]:%s\n",j,if_name[j]);
+        // ifn[j].if_name=ifreq->ifr_name;
+        // printf("if_name[%d]:%s\n",j,if_name[j]);
 
         ifreq++;
     }
@@ -83,7 +83,8 @@ ifname *kylin_network_get_ifacename()
 //获取所有网络连接
 conlist *kylin_network_get_conlist_info()
 {
-    system("nmcli connection show > /tmp/conlist.txt");
+    int status = system("nmcli connection show > /tmp/conlist.txt");
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'kylin_network_get_conlist_info' failed");}
     char *filename="/tmp/conlist.txt";
 
     FILE *confp;
@@ -100,7 +101,7 @@ conlist *kylin_network_get_conlist_info()
         fgets(ConStrLine,1024,confp);
         connum++;
     }
-//    printf("%d\n",connum);
+    // printf("%d\n",connum);
     fclose(confp);
     conlist *clist=(conlist *)malloc(sizeof(conlist)*connum);
 
@@ -134,12 +135,12 @@ conlist *kylin_network_get_conlist_info()
             num++;
         }
 
-//        printf("连接名称长度：%d\n",num);
+        // printf("连接名称长度：%d\n",num);
         clist[count].con_name=(char *)malloc(sizeof(char)*(num+1));
         strncpy(conname,StrLine,num+1);
         conname[num]='\0';
         strncpy(clist[count].con_name,conname,num+1);
-//        printf("%s\n",clist[count].con_name);
+        // printf("%s\n",clist[count].con_name);
 
         //截取连接类型
         char type[100];
@@ -173,7 +174,7 @@ conlist *kylin_network_get_conlist_info()
         strncpy(type,index1+2,num1+1);
         type[num1]='\0';
         strncpy(clist[count].type,type,num1+1);
-//        printf("%s\n",clist[count].type);
+        // printf("%s\n",clist[count].type);
         count++;
     }
     fclose(fp);
@@ -187,7 +188,8 @@ conlist *kylin_network_get_conlist_info()
 //获取当前活动网络连接
 activecon *kylin_network_get_activecon_info()
 {
-    system("nmcli connection show -active > /tmp/activecon.txt");
+    int status = system("nmcli connection show -active > /tmp/activecon.txt");
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show -active' in function 'kylin_network_get_activecon_info' failed");}
     char *filename="/tmp/activecon.txt";
 
     FILE *activefp;
@@ -204,7 +206,7 @@ activecon *kylin_network_get_activecon_info()
         fgets(activeStrLine,1024,activefp);
         activenum++;
     }
-//    printf("%d\n",activenum);
+    // printf("%d\n",activenum);
     fclose(activefp);
     activecon *activelist=(activecon *)malloc(sizeof(activecon)*activenum);
 
@@ -238,12 +240,12 @@ activecon *kylin_network_get_activecon_info()
             num++;
         }
 
-//        printf("连接名称长度：%d\n",num);
+        // printf("连接名称长度：%d\n",num);
         activelist[count].con_name=(char *)malloc(sizeof(char)*(num+1));
         strncpy(conname,StrLine,num+1);
         conname[num]='\0';
         strncpy(activelist[count].con_name,conname,num+1);
-//        printf("%s\n",activelist[count].con_name);
+        // printf("%s\n",activelist[count].con_name);
 
         //截取连接类型
         char type[100];
@@ -277,7 +279,7 @@ activecon *kylin_network_get_activecon_info()
         strncpy(type,index1+2,num1+1);
         type[num1]='\0';
         strncpy(activelist[count].type,type,num1+1);
-//        printf("%s\n",activelist[count].type);
+        // printf("%s\n",activelist[count].type);
 
         //截取连接所属设备
         char *index3=index2;
@@ -301,7 +303,7 @@ activecon *kylin_network_get_activecon_info()
         strncpy(dev,index3+1,num2+1);
         dev[num2]='\0';
         strncpy(activelist[count].dev,dev,num2+1);
-//        printf("%s\n",activelist[count].dev);
+        // printf("%s\n",activelist[count].dev);
         count++;
     }
     fclose(fp);
@@ -319,7 +321,8 @@ void kylin_network_create_new_ethernet(char *con_name,char *if_name)
     char str[100];
     char *net_type="ethernet";
     sprintf(str,"nmcli connection add con-name %s ifname %s type %s",con_name,if_name,net_type);
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection add con-name' in function 'kylin_network_create_new_ethernet' failed");}
 }
 
 // 创建新的wifi连接配置
@@ -328,7 +331,8 @@ void kylin_network_create_new_wifi(char *con_name, char *if_name)
     char str[200];
     sprintf(str, "nmcli connection add con-name '%s' ifname '%s' type wifi ssid '%s'",
             con_name, if_name, con_name);
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection add con-name' in function 'kylin_network_create_new_wifi' failed");}
 }
 
 //删除以太网连接
@@ -336,7 +340,8 @@ void kylin_network_del_ethernet_con(char *con_name)
 {
     char str[100];
     sprintf(str,"nmcli connection delete %s",con_name);
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'kylin_network_del_ethernet_con' failed");}
 }
 
 //设置动态分配ip
@@ -345,7 +350,8 @@ void kylin_network_set_automethod(char *con_name)
     char str[100];
     char *automethod="auto";
     sprintf(str,"nmcli connection modify '%s' ipv4.method %s",con_name,automethod);
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_automethod' failed");}
 }
 
 //设置手动分配ip
@@ -354,7 +360,8 @@ void kylin_network_set_manualmethod(char *con_name,char *ip)
     char str[100];
     char *method="manual";
     sprintf(str,"nmcli connection modify '%s' ipv4.method %s ipv4.address %s",con_name,method,ip);
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_manualmethod' failed");}
 }
 
 // 设置手动分配all
@@ -362,7 +369,8 @@ void kylin_network_set_manualall(char *con_name, char *addr, char *mask, char *g
     char str[200];
     sprintf(str, "nmcli connection modify '%s' ipv4.method manual ipv4.address %s/%s ipv4.gateway %s ipv4.dns %s",
             con_name, addr, mask, gateway, dns);
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_manualall' failed");}
 }
 
 //设置是否自动连接
@@ -378,7 +386,8 @@ void kylin_network_set_autoconnect(char *con_name,bool autocon)
         char *ac="yes";
         sprintf(str,"nmcli connection modify %s connection.autoconnect %s",con_name,ac);
     }
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_autoconnect' failed");}
 }
 
 //修改ip
@@ -386,7 +395,8 @@ void kylin_network_mod_ip(char *con_name,char *ip)
 {
     char str[100];
     sprintf(str,"nmcli connection modify %s ipv4.address %s",con_name,ip);
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_mod_ip' failed");}
 }
 
 //修改网关
@@ -394,7 +404,8 @@ void kylin_network_mod_gateway(char *con_name,char *gw)
 {
     char str[100];
     sprintf(str,"nmcli connection modify %s ipv4.gateway %s",con_name,gw);
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_mod_gateway' failed");}
 }
 
 //修改dns
@@ -402,7 +413,8 @@ void kylin_network_mod_dns(char *con_name,char *dns)
 {
     char str[100];
     sprintf(str,"nmcli connection modify %s ipv4.dns %s",con_name,dns);
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_mod_dns' failed");}
 }
 
 //连接以太网
@@ -410,7 +422,8 @@ void kylin_network_set_con_up(char *con_name)
 {
     char str[100];
     sprintf(str,"nmcli connection up '%s'",con_name);
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection up' in function 'kylin_network_set_con_up' failed");}
 }
 
 //断开以太网
@@ -418,7 +431,8 @@ void kylin_network_set_con_down(char *con_name)
 {
     char str[100];
     sprintf(str,"nmcli connection down '%s'",con_name);
-    system(str);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection down' in function 'kylin_network_set_con_down' failed");}
 }
 
 //连接wifi
@@ -426,8 +440,8 @@ void kylin_network_set_wifi_up(char *con_name,char *passwd)
 {
     char str[100];
     sprintf(str,"export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '%s' password '%s'", con_name,passwd);
-    system(str);
-
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'kylin_network_set_wifi_up' failed");}
 }
 
 //断开wifi连接
@@ -435,14 +449,15 @@ void kylin_network_set_wifi_down(char *if_name)
 {
     char str[100];
     sprintf(str,"nmcli device disconnect '%s'",if_name);
-    system(str);
-
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device disconnect' in function 'kylin_network_set_wifi_down' failed");}
 }
 
 //获取wifi列表信息
 wifilist *kylin_network_get_wifilist_info()
 {
-    system("nmcli device wifi > /tmp/wflist.txt");
+    int status = system("nmcli device wifi > /tmp/wflist.txt");
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi' in function 'kylin_network_get_wifilist_info' failed");}
     char *filename="/tmp/wflist.txt";
 
     FILE *wffp;
@@ -459,7 +474,7 @@ wifilist *kylin_network_get_wifilist_info()
         fgets(WfStrLine,1024,wffp);
         wfnum++;
     }
-//    printf("wifi数量：%d\n",wfnum);
+    // printf("wifi数量：%d\n",wfnum);
     fclose(wffp);
     //wifi实际数量是wfnum-1
     wifilist *wflist=(wifilist *)malloc(sizeof(wifilist)*wfnum);
@@ -479,7 +494,7 @@ wifilist *kylin_network_get_wifilist_info()
 
         fgets(StrLine,1024,fp);
 
-//        printf("%s\n",StrLine+3);
+        // printf("%s\n",StrLine+3);
         char *index=StrLine+3;
 
         //截取ssid
@@ -490,7 +505,7 @@ wifilist *kylin_network_get_wifilist_info()
             int result=strncmp(index,str1,5);
             if(result==0)
             {
-//                printf("%s\n",index);
+                // printf("%s\n",index);
                 break;
 
             }
@@ -501,15 +516,15 @@ wifilist *kylin_network_get_wifilist_info()
         char *ssidindex=index-1;
         int ssidnum=0;
         for(ssidindex;*ssidindex==' ';ssidindex--)ssidnum++;
-//        printf("空格数量：%d\n",ssidnum);
-//        if(ssidnum==1)
+        // printf("空格数量：%d\n",ssidnum);
+        // if(ssidnum==1)
         strncpy(ssid,StrLine+3,num-1);
         ssid[num-ssidnum]='\0';
-//        printf("-6666--%s---\n",ssid);
+        // printf("-6666--%s---\n",ssid);
 
         wflist[count].ssid=(char *)malloc(sizeof(char)*(num-ssidnum));
         strncpy(wflist[count].ssid,ssid,num-ssidnum+1);
-//        printf("第%d个：%s ",count,wflist[count].ssid);
+        // printf("第%d个：%s ",count,wflist[count].ssid);
 
 
         //截取信号强度
@@ -519,7 +534,7 @@ wifilist *kylin_network_get_wifilist_info()
             int result=strncmp(index,str2,6);
             if(result==0)
             {
-//                printf("%s\n",index);
+                // printf("%s\n",index);
                 break;
             }
         }
@@ -530,10 +545,10 @@ wifilist *kylin_network_get_wifilist_info()
         for(signalindex;*signalindex!=' ';signalindex++)signalnum++;
         strncpy(signal,index+8,signalnum);
         signal[signalnum]='\0';
-//        printf("-7777--%s---\n",signal);
+        // printf("-7777--%s---\n",signal);
 
         wflist[count].signal=atoi(signal);
-//        printf("%d ",wflist[count].signal);
+        // printf("%d ",wflist[count].signal);
 
          //截取安全性
         char *str3="WPA";
@@ -542,7 +557,7 @@ wifilist *kylin_network_get_wifilist_info()
             int result=strncmp(index,str3,3);
             if(result==0)
             {
-//                printf("%s\n",index);
+                // printf("%s\n",index);
                 break;
             }
         }
@@ -558,11 +573,11 @@ wifilist *kylin_network_get_wifilist_info()
         }
         strncpy(safety,index,safetynum+1);
         safety[safetynum+1]='\0';
-//        printf("-8888--%s---\n",safety);
+        // printf("-8888--%s---\n",safety);
 
         wflist[count].safety=(char *)malloc(sizeof(char)*(safetynum+1));
         strncpy(wflist[count].safety,safety,safetynum+2);
-//        printf("%s\n",wflist[count].safety);
+        // printf("%s\n",wflist[count].safety);
 
         count++;
 
@@ -580,29 +595,29 @@ wifilist *kylin_network_get_wifilist_info()
 //启用联网
 void kylin_network_enable_networking()
 {
-    system("nmcli networking on");
-
+    int status = system("nmcli networking on");
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli networking on' in function 'kylin_network_enable_networking' failed");}
 }
 
 //禁用联网
 void kylin_network_disable_networking()
 {
-    system("nmcli networking off");
-
+    int status = system("nmcli networking off");
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli networking off' in function 'kylin_network_disable_networking' failed");}
 }
 
 //启用wifi
 void kylin_network_enable_wifi()
 {
-    system("nmcli radio wifi on;sleep 3");
-
+    int status = system("nmcli radio wifi on;sleep 3");
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli radio wifi on' in function 'kylin_network_enable_wifi' failed");}
 }
 
 //禁用wifi
 void kylin_network_disable_wifi()
 {
-    system("nmcli radio wifi off;sleep 2");
-
+    int status = system("nmcli radio wifi off;sleep 2");
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli radio wifi off' in function 'kylin_network_disable_wifi' failed");}
 }
 
 //获取ip地址
@@ -706,7 +721,7 @@ int kylin_network_get_mac(char *if_name,char *macaddr)
     memcpy(&ethaddr,&ifr_mac.ifr_hwaddr.sa_data,sizeof(ethaddr));
     strcpy(macaddr,ether_ntoa(&ethaddr));//#include <netinet/ether.h>
 
-//    strcpy(macaddr,ether_ntoa((struct ether_addr*)ifr_mac.ifr_hwaddr.sa_data));
+    // strcpy(macaddr,ether_ntoa((struct ether_addr*)ifr_mac.ifr_hwaddr.sa_data));
 
     close(sock_mac);
     return 0;
@@ -734,8 +749,8 @@ int kylin_network_get_mtu(char *if_name)
     }
 
     int mtu=ifr_MTU.ifr_mtu;
-//    printf("%d\n",ifr_MTU.ifr_mtu);
-//    printf("%d\n",mtu);
+    // printf("%d\n",ifr_MTU.ifr_mtu);
+    // printf("%d\n",mtu);
 
     close(sock_mtu);
     return mtu;
@@ -964,4 +979,3 @@ long *kylin_network_get_fifo(char *if_name)
     }
     return rtfifo;
 }
-

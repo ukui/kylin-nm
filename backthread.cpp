@@ -17,30 +17,37 @@
  */
 
 #include "backthread.h"
+#include "utils.h"
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/syslog.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include <QFile>
 #include <QRegExp>
 
 BackThread::BackThread(QObject *parent) : QObject(parent){
-    cmd = new QProcess(this);
-    connect(cmd , SIGNAL(readyReadStandardOutput()) , this , SLOT(on_readoutput()));
-    connect(cmd , SIGNAL(readyReadStandardError()) , this , SLOT(on_readerror()));
-    cmd->start("bash");
-    cmd->waitForStarted();
+    cmdConnWifi = new QProcess(this);
+    connect(cmdConnWifi , SIGNAL(readyReadStandardOutput()) , this , SLOT(on_readoutput()));
+    connect(cmdConnWifi , SIGNAL(readyReadStandardError()) , this , SLOT(on_readerror()));
+    cmdConnWifi->start("bash");
+    cmdConnWifi->waitForStarted();
 }
 
 BackThread::~BackThread()
 {
-    cmd->close();
+    cmdConnWifi->close();
 }
 
 IFace* BackThread::execGetIface(){
     IFace *iface = new IFace();
     QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli -f TYPE,DEVICE,STATE device > /tmp/kylin-nm-iface";
-    system(cmd.toUtf8().data());
+    Utils::m_system(cmd.toUtf8().data());
+
+//    int status = system(cmd.toUtf8().data());
+//    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device' in function 'execGetIface' failed");}
 
     QFile file("/tmp/kylin-nm-iface");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -98,7 +105,11 @@ IFace* BackThread::execGetIface(){
 }
 
 void BackThread::execEnNet(){
-    system("nmcli networking on");
+    char *chr = "nmcli networking on";
+    Utils::m_system(chr);
+
+//    int status = system("nmcli networking on");
+//    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli networking on' in function 'execEnNet' failed");}
     while(1){
         if (execGetIface()->lstate != 2){
             sleep(3);
@@ -112,7 +123,11 @@ void BackThread::execEnNet(){
 
 void BackThread::execDisNet(){
     if (execGetIface()->wstate != 2){
-        system("nmcli radio wifi off");
+        char *chr = "nmcli radio wifi off";
+        Utils::m_system(chr);
+
+//        int status = system("nmcli radio wifi off");
+//        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli radio wifi off' in function 'execDisNet' failed");}
         while(1){
             if (execGetIface()->wstate == 2){
                 emit disWifiDone();
@@ -122,7 +137,11 @@ void BackThread::execDisNet(){
             sleep(1);
         }
     }
-    system("nmcli networking off");
+
+    char *chr1 = "nmcli networking off";
+    Utils::m_system(chr1);
+//    int status1 = system("nmcli networking off");
+//    if (status1 != 0){ syslog(LOG_ERR, "execute 'nmcli networking off' in function 'execDisNet' failed");}
     while(1){
         if (execGetIface()->lstate == 2){
             emit disNetDone();
@@ -135,7 +154,10 @@ void BackThread::execDisNet(){
 
 void BackThread::execEnWifi(){
     if (execGetIface()->lstate == 2){
-        system("nmcli networking on");
+        char *chr = "nmcli networking on";
+        Utils::m_system(chr);
+//        int status = system("nmcli networking on");
+//        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli networking on' in function 'execEnWifi' failed");}
         while(1){
             if (execGetIface()->lstate != 2){
                 emit launchLanDone();
@@ -144,7 +166,11 @@ void BackThread::execEnWifi(){
             sleep(1);
         }
     }
-    system("nmcli radio wifi on");
+
+    char *chr1 = "nmcli radio wifi on";
+    Utils::m_system(chr1);
+//    int status1 = system("nmcli radio wifi on");
+//    if (status1 != 0){ syslog(LOG_ERR, "execute 'nmcli radio wifi on' in function 'execEnWifi' failed");}
     while(1){
         if (execGetIface()->wstate != 2){
             KylinDBus objKyDbus;
@@ -163,7 +189,10 @@ void BackThread::execEnWifi(){
 }
 
 void BackThread::execDisWifi(){
-    system("nmcli radio wifi off");
+    char *chr = "nmcli radio wifi off";
+    Utils::m_system(chr);
+//    int status = system("nmcli radio wifi off");
+//    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli radio wifi off' in function 'execDisWifi' failed");}
     while(1){
         if (execGetIface()->wstate == 2){
             emit disWifiDone();
@@ -175,12 +204,14 @@ void BackThread::execDisWifi(){
 }
 
 void BackThread::execConnLan(QString connName){
-    lanDelete(); //连接前先断开已经连接的有线网
+    disConnLanOrWifi("ethernet");
 
     KylinDBus objKyDbus;
     if(objKyDbus.isWiredCableOn){
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
-        system(cmd.toUtf8().data());
+        Utils::m_system(cmd.toUtf8().data());
+//        int status = system(cmd.toUtf8().data());
+//        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection up' in function 'execConnLan' failed");}
         qDebug()<<"debug: in function execConnLan, wired net state is: "<<QString::number(execGetIface()->lstate);
         syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);
         emit connDone(0);
@@ -192,10 +223,12 @@ void BackThread::execConnLan(QString connName){
 }
 
 void BackThread::execConnWifiPWD(QString connName, QString password){
-    wifiDelete(); //连接前先断开已经连接的wifi
+    disConnLanOrWifi("wifi");
 
-    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > /tmp/kylin-nm-btoutput";
-    system(cmd.toUtf8().data());
+    QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > /tmp/kylin-nm-btoutput";
+    Utils::m_system(cmdStr.toUtf8().data());
+//    int status =  system(cmdStr.toUtf8().data());
+//    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'execConnWifiPWD' failed");}
 
     QFile file("/tmp/kylin-nm-btoutput");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -212,7 +245,10 @@ void BackThread::execConnWifiPWD(QString connName, QString password){
     }else{
         QString txt(tr("Confirm your Wi-Fi password"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-        system(cmd.toUtf8().data());
+        Utils::m_system(cmd.toUtf8().data());
+//        int status1 = system(cmd.toUtf8().data());
+//        if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
+
         emit connDone(1);
     }
 
@@ -220,16 +256,16 @@ void BackThread::execConnWifiPWD(QString connName, QString password){
 }
 
 void BackThread::execConnWifi(QString connName){
-    wifiDelete(); //连接前先断开已经连接的wifi
+    disConnLanOrWifi("wifi");
 
     QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'\n";
-    cmd->write(cmdStr.toUtf8().data());
+    cmdConnWifi->write(cmdStr.toUtf8().data());
 }
 
 void BackThread::on_readoutput()
 {
-    QString str = cmd->readAllStandardOutput();
-    cmd->close();
+    QString str = cmdConnWifi->readAllStandardOutput();
+    cmdConnWifi->close();
     qDebug()<<"on_readoutput:  "<< str;
     if(str.indexOf("successfully") != -1){
         emit connDone(0);
@@ -245,8 +281,8 @@ void BackThread::on_readoutput()
 }
 void BackThread::on_readerror()
 {
-    QString str = cmd->readAllStandardError();
-    cmd->close();
+    QString str = cmdConnWifi->readAllStandardError();
+    cmdConnWifi->close();
     qDebug()<<"on_readerror: "<< str;
     if(str.indexOf("successfully") != -1){
         emit connDone(0);
@@ -261,11 +297,12 @@ void BackThread::on_readerror()
 
 QString BackThread::getConnProp(QString connName){
     QString cmd = "nmcli connection show '" + connName + "' > /tmp/kylin-nm-connprop";
-    system(cmd.toUtf8().data());
+    Utils::m_system(cmd.toUtf8().data());
+//    int status = system(cmd.toUtf8().data());
+//    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'getConnProp' failed");}
 
     QFile file("/tmp/kylin-nm-connprop");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-connprop!");
         qDebug()<<"Can't open the file /tmp/kylin-nm-connprop!"<<endl;
     }
@@ -314,7 +351,9 @@ QString BackThread::getConnProp(QString connName){
 
 bool BackThread::execChkWifiExist(QString connName){
     QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection show '" + connName + "' > /tmp/kylin-nm-chkwifiexist";
-    system(cmd.toUtf8().data());
+    Utils::m_system(cmd.toUtf8().data());
+//    int status = system(cmd.toUtf8().data());
+//    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'execChkWifiExist' failed");}
 
     QFile file("/tmp/kylin-nm-chkwifiexist");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -334,7 +373,9 @@ bool BackThread::execChkWifiExist(QString connName){
 
 QString BackThread::execChkLanWidth(QString ethName){
     QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';ethtool '" + ethName + "' | grep Speed > /tmp/kylin-nm-bandwidth";
-    system(cmd.toUtf8().data());
+    Utils::m_system(cmd.toUtf8().data());
+//    int status = system(cmd.toUtf8().data());
+//    if (status != 0){ syslog(LOG_ERR, "execute 'ethtool' in function 'execChkLanWidth' failed");}
 
     QFile file("/tmp/kylin-nm-bandwidth");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -354,30 +395,37 @@ QString BackThread::execChkLanWidth(QString ethName){
     return rtn.trimmed();
 }
 
-void BackThread::redundantNetDeleted()
+void BackThread::disConnSparedNetSlot(QString type)
 {
     sleep(1);
-    wifiDelete();
+    if (type == "wifi"){
+        disConnLanOrWifi("wifi");
+    } else if(type == "ethernet") {
+        disConnLanOrWifi("ethernet");
+    }
+
 
     emit disFinish();
     emit ttFinish();
 }
 
-void BackThread::wifiDelete()
+void BackThread::disConnLanOrWifi(QString type)
 {
     QString strSlist;
-    system("nmcli connection show -active>/tmp/kylin-nm-connshow");
-    QFile file("/tmp/kylin-nm-connshow");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-connshow!");
-        qDebug()<<"Can't open the file /tmp/kylin-nm-connshow!";
+    const int BUF_SIZE = 1024;
+    char buf[BUF_SIZE];
+
+    FILE * p_file = NULL;
+
+    p_file = popen("nmcli connection show -active", "r");
+    if (!p_file) {
+        syslog(LOG_ERR, "Error occured when popen cmd 'nmcli connection show'");
+        qDebug()<<"Error occured when popen cmd 'nmcli connection show";
     }
 
-    QString txt = file.readAll();
-    QStringList txtLine = txt.split("\n");
-    file.close();
-    foreach (QString line, txtLine) {
-        if(line.indexOf("wifi") != -1){
+    while (fgets(buf, BUF_SIZE, p_file) != NULL) {
+        QString line(buf);
+        if(line.indexOf(type) != -1){
             QStringList subLine = line.split(" ");
             if (subLine[1].size() == 1){
                 strSlist =  subLine[0]+ " " + subLine[1];
@@ -386,31 +434,6 @@ void BackThread::wifiDelete()
             }
             kylin_network_set_con_down(strSlist.toUtf8().data());
         }
-    } //end foreach
-}
-
-void BackThread::lanDelete()
-{
-    QString strSlist;
-    system("nmcli connection show -active>/tmp/kylin-nm-connshow");
-    QFile file("/tmp/kylin-nm-connshow");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        syslog(LOG_DEBUG, "Can't open the file /tmp/kylin-nm-connshow!");
-        qDebug()<<"Can't open the file /tmp/kylin-nm-connshow!";
     }
-
-    QString txt = file.readAll();
-    QStringList txtLine = txt.split("\n");
-    file.close();
-    foreach (QString line, txtLine) {
-        if(line.indexOf("ethernet") != -1){
-            QStringList subLine = line.split(" ");
-            if (subLine[1].size() == 1){
-                strSlist =  subLine[0]+ " " + subLine[1];
-            }else {
-                strSlist =  subLine[0];
-            }
-            kylin_network_set_con_down(strSlist.toUtf8().data());
-        }
-    } //end foreach
+    pclose(p_file);
 }

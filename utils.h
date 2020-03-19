@@ -1,6 +1,11 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
 #include <QObject>
 #include <QDebug>
 #include <QString>
@@ -15,18 +20,23 @@
 #include <QFile>
 #include <QApplication>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+
+///////////////////////////////////////////////////////////////////////////////
+// The Utils class, used to do some assist function
+
+class Utils
+{
+public:
+    Utils();
+
+    static int m_system(char *cmd);
+
+};
 
 
+///////////////////////////////////////////////////////////////////////////////
+// The UseQssFile class, set control style by using .qss file
 
-/*!
- * \brief The UseQssFile class
- * \details
- * 通过QSS文件设置样式
- */
 class UseQssFile
 {
 public:
@@ -42,13 +52,9 @@ public:
 };
 
 
+///////////////////////////////////////////////////////////////////////////////
+// The NetworkSpeed class, get the network upload and download speed
 
-
-/*!
- * \brief The NetworkSpeed class
- * \details
- * 该类通过获取前后时间的流量差，计算单位时间的网络速度
- */
 class NetworkSpeed : public QObject
 {
     Q_OBJECT
@@ -61,22 +67,9 @@ public:
 
 
 
-/*!
- * \brief The CustomStyle class
- * \details
- * 自定义QStyle
- * 基于QProxyStyle，默认使用QProxyStyle的实例绘制控件，你需要针对某一个控件重新实现若干对应的接口。
- * QProxyStyle可以从现有的qt style实例化，我们只需要知道这个style的名字即可。
- * 这种做法带来了不错的扩展性和自由度，因为我们不需要将某个style的代码直接引入我们的项目中，
- * 也能够“继承”这个style类进行二次开发。
- *
- * 下面的方法展现了QStyle的所有的接口，使用QStyle进行控件的绘制使得qt应用能够进行风格的切换，
- * 从而达到不修改项目源码却对应用外观产生巨大影响的效果。
- *
- * \note
- * 需要注意QStyle与QSS并不兼容，因为QSS本身其实上也是QStyle的一种实现，对一个控件而言，本身理论上只能
- * 在同一时间调用唯一一个QStyle进行绘制。
- */
+///////////////////////////////////////////////////////////////////////////////
+// The CustomStyle class, inherit from class QProxyStyle, to change control style customize
+
 class CustomStyle : public QProxyStyle
 {
     Q_OBJECT

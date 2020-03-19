@@ -17,9 +17,11 @@
  */
 
 #include "ksimplenm.h"
+
 #include <stdio.h>
 #include <unistd.h>
 #include <QThread>
+
 #define MAX_LEN 2048
 #define MAX_PATH 1024
 

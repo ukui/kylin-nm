@@ -2,6 +2,7 @@
 #define KYLINDBUSINTERFACE_H
 
 #include <sys/syslog.h>
+
 #include <QObject>
 #include <QDebug>
 #include <QtDBus/QDBusConnection>
@@ -31,8 +32,8 @@ public:
 
     void getWifiSwitchState();
     bool getSwitchStatus(QString key);
-    void wifiSwitchSlot(bool signal);
-    void wifiCardSlot(bool signal);
+    void setWifiSwitchState(bool signal);
+    void setWifiCardState(bool signal);
 
     QDBusObjectPath wiredPath;
     QDBusObjectPath wirelessPath;

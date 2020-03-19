@@ -22,7 +22,6 @@
 #include "kylin-dbus-interface.h"
 #include "kylin-network-interface.h"
 
-#include <sys/syslog.h>
 #include <QObject>
 #include <QDebug>
 #include <QTimer>
@@ -50,7 +49,22 @@ public:
     QString getConnProp(QString connName);
     bool execChkWifiExist(QString connName);
     QString execChkLanWidth(QString ethName);
-    QProcess *cmd;
+    QProcess *cmdConnWifi;
+
+public slots:
+    void execEnNet();
+    void execDisNet();
+    void execEnWifi();
+    void execDisWifi();
+    void execConnLan(QString connName);
+    void execConnWifi(QString connName);
+    void execConnWifiPWD(QString connName, QString password);
+
+    void disConnSparedNetSlot(QString type);
+    void disConnLanOrWifi(QString type);
+
+    void on_readoutput();
+    void on_readerror();
 
 signals:
     void enNetDone();
@@ -64,20 +78,6 @@ signals:
     void btFinish();
     void disFinish();
     void ttFinish();
-
-public slots:
-    void execEnNet();
-    void execDisNet();
-    void execEnWifi();
-    void execDisWifi();
-    void execConnLan(QString connName);
-    void execConnWifi(QString connName);
-    void execConnWifiPWD(QString connName, QString password);
-    void redundantNetDeleted();
-    void lanDelete();
-    void wifiDelete();
-    void on_readoutput();
-    void on_readerror();
 };
 
 #endif // BACKTHREAD_H

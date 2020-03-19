@@ -1,6 +1,8 @@
 #ifndef DLGHOTSPOTCREATE_H
 #define DLGHOTSPOTCREATE_H
 
+#include <sys/syslog.h>
+
 #include <QDialog>
 #include <QMouseEvent>
 #include <QDebug>

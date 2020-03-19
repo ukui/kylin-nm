@@ -20,7 +20,9 @@
 #include "ui_confform.h"
 #include "kylin-network-interface.h"
 #include "backthread.h"
+#include "utils.h"
 
+#include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -70,7 +72,7 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->btnOk->setText(tr("Save"));//"保存"
     ui->btnCreate->setText(tr("Ok"));//"确定"
 
-//    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid #297a97;background-color:#ffffff;}");
+    // ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid #297a97;background-color:#ffffff;}");
     ui->wdHead->setStyleSheet("#wdHead{border:none}");
     ui->wgManual->setStyleSheet("#wgManual{border:none}");
     ui->wdBottom->setStyleSheet("#wdBottom{border:none}");
@@ -191,9 +193,12 @@ void ConfForm::setProp(QString connName, QString v4method, QString addr, QString
 void ConfForm::on_btnCreate_clicked()
 {
     QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' type ethernet";
-    system(cmdStr.toUtf8().data());
+    Utils::m_system(cmdStr.toUtf8().data());
+//    int status = system(cmdStr.toUtf8().data());
+//    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection add con-name' in function 'on_btnCreate_clicked' failed");}
 
     if(ui->cbType->currentIndex() == 1){
+        //config the ipv4 and netmask and gateway if select Manual
         this->on_btnOk_clicked();
     }
 
@@ -234,11 +239,15 @@ void ConfForm::on_btnOk_clicked()
     if(this->isActConf == true){
         //QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + ui->leName->text() + "'";
         QString cmd = "nmcli connection up '" + ui->leName->text() + "'";
-        system(cmd.toUtf8().data());
+        Utils::m_system(cmd.toUtf8().data());
+//        int status = system(cmd.toUtf8().data());
+//        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection up' in function 'on_btnOk_clicked' failed");}
 
         QString txt(tr("New settings already effective"));
         cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-        system(cmd.toUtf8().data());
+        Utils::m_system(cmd.toUtf8().data());
+//        int status1 = system(cmd.toUtf8().data());
+//        if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'on_btnOk_clicked' failed");}
     }
 }
 

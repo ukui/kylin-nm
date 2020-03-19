@@ -20,6 +20,7 @@
 #include "ui_oneconnform.h"
 #include "mainwindow.h"
 #include "wireless-security/dlgconnhidwifi.h"
+#include "utils.h"
 
 extern int currentActWifiSignalLv;
 
@@ -603,7 +604,9 @@ void OneConnForm::slotConnWifiResult(int connFlag){
         QString txt(tr("Conn Wifi Failed"));//"连接 Wifi 失败"
         syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", ui->lbName->text().toUtf8().data());
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
-        system(cmd.toUtf8().data());
+        Utils::m_system(cmd.toUtf8().data());
+//        int status = system(cmd.toUtf8().data());
+//        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");}
     }
 
     // 设置全局变量，当前连接Wifi的信号强度

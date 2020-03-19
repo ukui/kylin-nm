@@ -144,7 +144,6 @@ bool MainWindow::nativeEvent(const QByteArray &eventType, void *message, long *r
     return false;
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // 初始化控件、网络、定时器
 
@@ -219,10 +218,10 @@ void MainWindow::createOtherUI()
     lbLoadDownImg->resize(16, 16);
 
     lbLoadUp = new QLabel(ui->centralWidget);
-    lbLoadUp->move(X_ITEM + 217, Y_TOP_ITEM + 32);
+    lbLoadUp->move(X_ITEM + 207, Y_TOP_ITEM + 32);
     lbLoadUp->resize(65, 20);
     lbLoadUpImg = new QLabel(ui->centralWidget);
-    lbLoadUpImg->move(X_ITEM + 200, Y_TOP_ITEM + 35);
+    lbLoadUpImg->move(X_ITEM + 190, Y_TOP_ITEM + 35);
     lbLoadUpImg->resize(16, 16);
 
     lbLoadDownImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-down.png);}");
@@ -335,25 +334,29 @@ void MainWindow::getInitLanSlist()
 {
     oldLanSlist.append("TYPE      DEVICE  NAME           ");
     QString strSlist;
+    const int BUF_SIZE = 1024;
+    char buf[BUF_SIZE];
 
-    system("nmcli connection show>/tmp/kylin-nm-connshow");
-    QFile file("/tmp/kylin-nm-connshow");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-connshow!");
-        qDebug()<<"Can't open the file /tmp/kylin-nm-connshow!";
+    FILE * p_file = NULL;
+
+    p_file = popen("nmcli connection show", "r");
+    if (!p_file) {
+        syslog(LOG_ERR, "Error occured when popen cmd 'nmcli connection show'");
+        qDebug()<<"Error occured when popen cmd 'nmcli connection show";
     }
-    QString txt = file.readAll();
-    QStringList txtLine = txt.split("\n");
-    file.close();
-    foreach (QString line, txtLine) {
+
+    while (fgets(buf, BUF_SIZE, p_file) != NULL) {
+        QString line(buf);
         if(line.indexOf("ethernet") != -1){
             QStringList subLine = line.split(" ");
             if (subLine[1].size() == 1){
                 strSlist =  "ethernet  --      " + subLine[0]+ " " + subLine[1] + "   ";
             }else{strSlist =  "ethernet  --      " + subLine[0] + "   "; }
+            // qDebug()<<strSlist;
             oldLanSlist.append(strSlist);
         }
     }
+    pclose(p_file);
 }
 
 // 初始化网络
@@ -420,15 +423,18 @@ void MainWindow::initNetwork()
             IFace *m_iface = m_bt->execGetIface();
             qDebug()<<"m_lstate ="<<m_iface->lstate<<"    m_wstate ="<<m_iface->wstate ;
 
-            m_bt->lanDelete();
+            m_bt->disConnLanOrWifi("ethernet");
             sleep(1);
-            m_bt->lanDelete();
+            m_bt->disConnLanOrWifi("ethernet");
             sleep(1);
-            m_bt->lanDelete();
+            m_bt->disConnLanOrWifi("ethernet");
             delete m_iface;
             m_bt->deleteLater();
 
-            system("nmcli networking on");
+            char *chr = "nmcli networking on";
+            Utils::m_system(chr);
+//            int status = system("nmcli networking on");
+//            if (status != 0){ syslog(LOG_ERR, "execute 'nmcli networking on' in function 'initNetwork' failed");}
 
             onBtnNetListClicked();
 
@@ -613,38 +619,36 @@ void MainWindow::handleIconClicked()
     QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
     QRect screenGeometry = qApp->primaryScreen()->geometry();
 
+    QDesktopWidget* desktopWidget = QApplication::desktop();
+    QRect deskMainRect = desktopWidget->availableGeometry(0);//获取可用桌面大小
+    QRect screenMainRect = desktopWidget->screenGeometry(0);//获取设备屏幕大小
+    QRect deskDupRect = desktopWidget->availableGeometry(1);//获取可用桌面大小
+    QRect screenDupRect = desktopWidget->screenGeometry(1);//获取设备屏幕大小
+
 //    qDebug()<<"                                                  ";
 //    qDebug()<<"trayIcon:"<<trayIcon->geometry();
 //    qDebug()<<"screenGeometry: "<<screenGeometry;
 //    qDebug()<<"availableGeometry: "<<availableGeometry;
 
+//    qDebug()<<"deskMainRect: "<<deskMainRect;
+//    qDebug()<<"screenMainRect: "<<screenMainRect;
+//    qDebug()<<"deskDupRect: "<<deskDupRect;
+//    qDebug()<<"screenDupRect: "<<screenDupRect;
+
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
-        QDesktopWidget* desktopWidget = QApplication::desktop();
-
-        QRect deskMainRect = desktopWidget->availableGeometry(0);//获取可用桌面大小
-        QRect screenMainRect = desktopWidget->screenGeometry(0);//获取设备屏幕大小
-        QRect deskDupRect = desktopWidget->availableGeometry(1);//获取可用桌面大小
-        QRect screenDupRect = desktopWidget->screenGeometry(1);//获取设备屏幕大小
-
-//        qDebug()<<"                                                  ";
-//        qDebug()<<"deskMainRect: "<<deskMainRect;
-//        qDebug()<<"screenMainRect: "<<screenMainRect;
-//        qDebug()<<"deskDupRect: "<<deskDupRect;
-//        qDebug()<<"screenDupRect: "<<screenDupRect;
-
         int n = objKyDBus->getTaskbarPos("position");
         int m = objKyDBus->getTaskbarHeight("height");
 
         if(n == 0){
             //任务栏在下侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), availableGeometry.height() - this->height() - m);
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + availableGeometry.height() - this->height() - m);
         }else if(n == 1){
             //任务栏在上侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenGeometry.height() - availableGeometry.height() + m);
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m);
         } else if (n == 2){
             //任务栏在左侧
             if (screenGeometry.x() == 0){
-                this->move(screenGeometry.width() - availableGeometry.width() + m, screenMainRect.height() - this->height());//主屏在左侧
+                this->move(screenGeometry.width() - availableGeometry.width() + m, screenMainRect.y() + screenMainRect.height() - this->height());//主屏在左侧
             }else{
                 this->move(screenGeometry.width() - availableGeometry.width() + m,screenDupRect.y() + screenDupRect.height() - this->height());//主屏在右侧
             }
@@ -653,24 +657,24 @@ void MainWindow::handleIconClicked()
             if (screenGeometry.x() == 0){//主屏在左侧
                 this->move(screenMainRect.width() + screenDupRect.width() - this->width() - m, screenDupRect.y() + screenDupRect.height() - this->height());
             }else{//主屏在右侧
-                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m, screenMainRect.height() - this->height());
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m, screenMainRect.y() + screenMainRect.height() - this->height());
             }
         }
     } else if(screenGeometry.width() == availableGeometry.width() ){
         if (trayIcon->geometry().y() > availableGeometry.height()/2){
             //任务栏在下侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), availableGeometry.height() - this->height());
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + availableGeometry.height() - this->height());
         }else{
             //任务栏在上侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenGeometry.height() - availableGeometry.height());
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height());
         }
     } else if (screenGeometry.height() == availableGeometry.height()){
         if (trayIcon->geometry().x() > availableGeometry.width()/2){
             //任务栏在右侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenGeometry.height() - this->height());
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + screenGeometry.height() - this->height());
         } else {
             //任务栏在左侧
-            this->move(screenGeometry.width() - availableGeometry.width(), screenGeometry.height() - this->height());
+            this->move(screenGeometry.width() - availableGeometry.width(), screenMainRect.y() + screenGeometry.height() - this->height());
         }
     }
 }
@@ -846,11 +850,11 @@ void MainWindow::onCarrierUpHandle()
 {
     wiredCableUpTimer->stop();
     BackThread *up_bt = new BackThread();
-    up_bt->lanDelete();
+    up_bt->disConnLanOrWifi("ethernet");
     sleep(1);
-    up_bt->lanDelete();
+    up_bt->disConnLanOrWifi("ethernet");
     sleep(1);
-    up_bt->lanDelete();
+    up_bt->disConnLanOrWifi("ethernet");
     up_bt->deleteLater();
 
     this->stopLoading();
@@ -870,11 +874,11 @@ void MainWindow::onDeleteLan()
 {
     deleteLanTimer->stop();
     BackThread *btn_bt = new BackThread();
-    btn_bt->lanDelete();
+    btn_bt->disConnLanOrWifi("ethernet");
     sleep(1);
-    btn_bt->lanDelete();
+    btn_bt->disConnLanOrWifi("ethernet");
     sleep(1);
-    btn_bt->lanDelete();
+    btn_bt->disConnLanOrWifi("ethernet");
     btn_bt->deleteLater();
 
     this->stopLoading();
@@ -998,7 +1002,7 @@ void MainWindow::onBtnWifiClicked(int flag)
         // 网络开关关闭时，点击Wifi开关时，程序先打开有线开关
         if (flag == 0) {
             if(checkWlOn()){
-                //objKyDBus->wifiSwitchSlot(false);
+                objKyDBus->setWifiSwitchState(false);
                 lbTopWifiList->hide();
                 btnAddNet->hide();
 
@@ -1015,8 +1019,8 @@ void MainWindow::onBtnWifiClicked(int flag)
                 if (is_fly_mode_on == 0){
                     on_btnWifiList_clicked();
                     is_stop_check_net_state = 1;
-                    //objKyDBus->wifiCardSlot(true);
-                    //objKyDBus->wifiSwitchSlot(true);
+                    objKyDBus->setWifiCardState(true);
+                    objKyDBus->setWifiSwitchState(true);
                     lbTopWifiList->show();
                     btnAddNet->show();
 
@@ -1073,13 +1077,15 @@ void MainWindow::onBtnWifiClicked(int flag)
         btnAddNet->hide();
 
         if (flag == 0) {
-            //objKyDBus->wifiSwitchSlot(false);
-            //objKyDBus->wifiCardSlot(false);
+            objKyDBus->setWifiSwitchState(false);
+            objKyDBus->setWifiCardState(false);
         }
 
         QString txt(tr("please insert the wireless network adapter"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-        system(cmd.toUtf8().data());
+        int status = system(cmd.toUtf8().data());
+        if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnWifiClicked' failed");}
+
         disWifiStateKeep();
     }
 
@@ -1087,15 +1093,6 @@ void MainWindow::onBtnWifiClicked(int flag)
 
 void MainWindow::onBtnNetListClicked(int flag)
 {
-//    if (this->ksnm->isExecutingGetWifiList ){
-//        qDebug()<<"executing update Wifi list now, try again";
-//        on_btnWifiList_pressed(); //当正在更新wifi列表时，点击无效
-//        QString text(tr("update Wi-Fi list now, click again")); //"正在更新 Wi-Fi列表 请再次点击"
-//        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + text + "...' -t 3800";
-//        system(cmd.toUtf8().data());
-//        return;
-//    }
-
     this->is_btnNetList_clicked = 1;
     this->is_btnWifiList_clicked = 0;
 
@@ -1130,23 +1127,33 @@ void MainWindow::onBtnNetListClicked(int flag)
         this->startLoading();
         this->ksnm->execGetLanList();
     } else {
-        system("nmcli connection show -active>/tmp/kylin-nm-connshow");
-        QFile file("/tmp/kylin-nm-connshow");
-        if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-            syslog(LOG_DEBUG, "Can't open the file /tmp/kylin-nm-connshow!");
-            qDebug()<<"Can't open the file /tmp/kylin-nm-connshow!";
-        }
-        QString txt = file.readAll();
-        if (txt.indexOf("ethernet") != -1){
-            QString txt(tr("Abnormal connection exist, program will delete it"));//仍然有连接异常的有线网络，断开异常连接的网络
-            QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-            system(cmd.toUtf8().data());
+        const int BUF_SIZE = 1024;
+        char buf[BUF_SIZE];
 
-            is_stop_check_net_state = 1;
-            this->startLoading();
-            deleteLanTimer->start(1000);
-            return;
+        FILE * p_file = NULL;
+
+        p_file = popen("nmcli connection show -active", "r");
+        if (!p_file) {
+            syslog(LOG_ERR, "Error occured when popen cmd 'nmcli connection show'");
+            qDebug()<<"Error occured when popen cmd 'nmcli connection show";
         }
+
+        while (fgets(buf, BUF_SIZE, p_file) != NULL) {
+            QString line(buf);
+            if(line.indexOf("ethernet") != -1){
+                QString txt(tr("Abnormal connection exist, program will delete it"));//仍然有连接异常的有线网络，断开异常连接的网络
+                QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+                 int status = system(cmd.toUtf8().data());
+                 if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnNetListClicked' failed");}
+
+                is_stop_check_net_state = 1;
+                this->startLoading();
+                deleteLanTimer->start(1000);
+                pclose(p_file);
+                return;
+            }
+        }
+        pclose(p_file);
 
         delete topLanListWidget; // 清空top列表
         createTopLanUI(); //创建顶部有线网item
@@ -1652,7 +1659,10 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
 void MainWindow::on_btnAdvConf_clicked()
 {
-    system("nm-connection-editor &");
+    QProcess *qprocess = new QProcess(this);
+    qprocess->start("nm-connection-editor &");
+//    int status = system("nm-connection-editor &");
+//    if (status != 0){ syslog(LOG_ERR, "execute 'nm-connection-editor &' in function 'on_btnAdvConf_clicked' failed");}
 }
 
 void MainWindow::on_btnAdvConf_pressed()
@@ -1697,28 +1707,8 @@ void MainWindow::on_btnHotspot_clicked()
         } else {
             on_btnHotspotState();
 
-            QString strSlist;
-            system("nmcli connection show -active>/tmp/kylin-nm-connshow");
-            QFile file("/tmp/kylin-nm-connshow");
-            if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-                syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-connshow!");
-                qDebug()<<"Can't open the file /tmp/kylin-nm-connshow!";
-            }
-
-            QString txt = file.readAll();
-            QStringList txtLine = txt.split("\n");
-            file.close();
-            foreach (QString line, txtLine) {
-                if(line.indexOf("wifi") != -1){
-                    QStringList subLine = line.split(" ");
-                    if (subLine[1].size() == 1){
-                        strSlist =  subLine[0]+ " " + subLine[1];
-                    }else {
-                        strSlist =  subLine[0];
-                    }
-                    kylin_network_set_con_down(strSlist.toUtf8().data());
-                }
-            } //end foreach
+            BackThread objBT;
+            objBT.disConnLanOrWifi("wifi");
 
             sleep(2);
             on_btnWifiList_clicked();
@@ -2018,7 +2008,7 @@ void MainWindow::activeWifiDisconn()
     btt->moveToThread(tt);
     connect(tt, SIGNAL(finished()), tt, SLOT(deleteLater()));
     connect(tt, SIGNAL(started()), this, SLOT(activeStartLoading()));
-    connect(this, SIGNAL(deleteRedundantNet()), btt, SLOT(redundantNetDeleted()));
+    connect(this, SIGNAL(disConnSparedNet(QString)), btt, SLOT(disConnSparedNetSlot(QString)));
     connect(btt, SIGNAL(disFinish()), this, SLOT(activeGetWifiList()));
     connect(btt, SIGNAL(ttFinish()), tt, SLOT(quit()));
     tt->start();
@@ -2028,7 +2018,7 @@ void MainWindow::activeStartLoading()
     syslog(LOG_DEBUG, "Wi-Fi is disconnected");
     currSelNetName = "";
     //this->startLoading();
-    emit this->deleteRedundantNet();
+    emit this->disConnSparedNet("wifi");
 }
 void MainWindow::activeGetWifiList()
 {
@@ -2231,8 +2221,35 @@ void MainWindow::on_setNetSpeed()
         if (delta_rcv>=10000 || delta_rcv<0){delta_rcv = 0;}
         if (delta_tx>=10000 || delta_tx<0){delta_tx = 0;}
 
-        QString str_rcv = QString::number(delta_rcv/3) + "kb/s";
-        QString str_tx = QString::number(delta_tx/3) + "kb/s";
+        int rcv_num = delta_rcv/3;
+        int tx_num = delta_tx/3;
+
+        QString str_rcv;
+        QString str_tx;
+
+        if (rcv_num < 1000){
+            str_rcv = QString::number(rcv_num) + "KB/s";
+        } else {
+            int remainder;
+            if (rcv_num%1000 < 100) {
+                remainder = 0;
+            }else{
+                remainder = (rcv_num%1000)/100;
+            }
+            str_rcv = QString::number(rcv_num/1000) + "."  + QString::number(remainder) + "MB/s";
+        }
+
+        if (tx_num < 1000){
+            str_tx = QString::number(tx_num) + "KB/s";
+        } else {
+            int remainder;
+            if (tx_num%1000 < 100) {
+                remainder = 0;
+            }else{
+                remainder = (tx_num%1000)/100;
+            }
+            str_tx = QString::number(tx_num/1000) + "."  + QString::number(remainder) + "MB/s";
+        }
 
         lbLoadDown->setText(str_rcv);
         lbLoadUp->setText(str_tx);
@@ -2256,7 +2273,8 @@ void MainWindow::connLanDone(int connFlag)
         this->ksnm->execGetLanList();
         QString txt(tr("Conn Ethernet Success"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-        system(cmd.toUtf8().data());
+        int status = system(cmd.toUtf8().data());
+        if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
 
         //changeTimerState();
         //checkIfLanConnect->start(8000);
@@ -2267,7 +2285,9 @@ void MainWindow::connLanDone(int connFlag)
         this->is_wired_line_ready = 0; //without net line connect to computer
         QString txt(tr("Conn Ethernet Fail"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-        system(cmd.toUtf8().data());
+        int status = system(cmd.toUtf8().data());
+        if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
+
     }
 
     if(connFlag == 3){
@@ -2387,7 +2407,8 @@ void MainWindow::connWifiDone(int connFlag)
         this->ksnm->execGetWifiList();
         QString txt(tr("Conn Wifi Success"));
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-        system(cmd.toUtf8().data());
+        int status = system(cmd.toUtf8().data());
+        if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connWifiDone' failed");}
 
         //changeTimerState();
         //checkIfWifiConnect->start(8000);

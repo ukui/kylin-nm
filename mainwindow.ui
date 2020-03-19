@@ -43,7 +43,7 @@
    <widget class="QLabel" name="lbBtnWifiBG">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>420</x>
       <y>20</y>
       <width>50</width>
       <height>24</height>
@@ -56,7 +56,7 @@
    <widget class="QPushButton" name="btnWifi">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>420</x>
       <y>20</y>
       <width>50</width>
       <height>24</height>
@@ -147,7 +147,7 @@
    <widget class="QLabel" name="lbBtnWifiBall">
     <property name="geometry">
      <rect>
-      <x>438</x>
+      <x>448</x>
       <y>22</y>
       <width>20</width>
       <height>20</height>
@@ -199,7 +199,7 @@
    <widget class="QLabel" name="lbWifiListBG">
     <property name="geometry">
      <rect>
-      <x>1</x>
+      <x>2</x>
       <y>57</y>
       <width>37</width>
       <height>37</height>

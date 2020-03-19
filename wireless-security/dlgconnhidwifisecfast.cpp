@@ -21,6 +21,8 @@
 #include "ui_dlgconnhidwifisecfast.h"
 #include "kylinheadfile.h"
 
+#include <sys/syslog.h>
+
 DlgConnHidWifiSecFast::DlgConnHidWifiSecFast(int type, QWidget *parent) :
     WepOrWpa(type),
     QDialog(parent),
@@ -93,7 +95,8 @@ DlgConnHidWifiSecFast::DlgConnHidWifiSecFast(int type, QWidget *parent) :
     ui->btnConnect->setText(tr("Connect")); //连接
 
     ui->cbxConn->addItem(tr("C_reate…")); //新建...
-    system("nmcli connection show>/tmp/kylin-nm-connshow");
+    int status = system("nmcli connection show>/tmp/kylin-nm-connshow");
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgConnHidWifiSecFast' failed");}
     QFile file("/tmp/kylin-nm-connshow");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         qDebug()<<"Can't open the file!";

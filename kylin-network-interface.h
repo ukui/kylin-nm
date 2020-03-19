@@ -19,11 +19,12 @@
 #ifndef __KYLINNETWORKINTERFACE_H__
 #define __KYLINNETWORKINTERFACE_H__
 
-#include<stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <malloc.h>
-#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #ifdef __cplusplus
 extern "C"{

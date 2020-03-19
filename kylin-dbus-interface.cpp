@@ -18,8 +18,10 @@
 
 #include "kylin-dbus-interface.h"
 #include "mainwindow.h"
-#include <QTextCodec>
+
 #include <vector>
+
+#include <QTextCodec>
 #include <QByteArray>
 
 
@@ -466,20 +468,20 @@ bool KylinDBus::getSwitchStatus(QString key){
     return res;
 }
 
-void KylinDBus::wifiSwitchSlot(bool signal){
+void KylinDBus::setWifiSwitchState(bool signal){
     if(!m_gsettings) {
         return ;
     }
 
     const QStringList list = m_gsettings->keys();
 
-    if (!list.contains("switch")) {
+    if (!list.contains("switchor")) {
         return ;
     }
-    m_gsettings->set("switch",signal);
+    m_gsettings->set("switchor",signal);
 }
 
-void KylinDBus::wifiCardSlot(bool signal)
+void KylinDBus::setWifiCardState(bool signal)
 {
     if(!m_gsettings) {
         return ;

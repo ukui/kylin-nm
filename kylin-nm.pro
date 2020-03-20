@@ -16,8 +16,9 @@ CONFIG += c++14
 CONFIG += qt warn_on
 CONFIG += release
 
-CONFIG += link_pkgconfig
-PKGCONFIG += gsettings-qt
+# CONFIG += link_pkgconfig
+# PKGCONFIG += gsettings-qt
+LIBS    +=  -L/usr/lib/ -lgsettings-qt
 
 target.path = /usr/bin
 target.source += $$TARGET

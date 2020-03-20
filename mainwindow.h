@@ -66,8 +66,8 @@
 #define W_RIGHT_AREA 438 //41 + 1 + 438 = 480
 #define L_VERTICAL_LINE_TO_ITEM 4 //竖线到item左侧的距离
 
-#define X_LEFT_WIFI_BALL 422 //白色小球在左边
-#define X_RIGHT_WIFI_BALL 448 //白色小球在右边
+#define X_LEFT_WIFI_BALL 414 //白色小球在左边
+#define X_RIGHT_WIFI_BALL 440 //白色小球在右边
 #define Y_WIFI_BALL 22 //白色小球y坐标
 #define X_ITEM 46 //item到窗口左侧的距离 41 + 1 + 4 = 46
 #define W_ITEM 424
@@ -93,7 +93,7 @@
 
 #define W_BTN_FUN 57
 #define H_BTN_FUN 14
-#define X_BTN_FUN 371
+#define X_BTN_FUN 361
 #define Y_BTN_FUN 87 //新建网络，加入网络按钮的宽高、x坐标、y坐标
 
 #define W_NO_ITEM_TIP 220

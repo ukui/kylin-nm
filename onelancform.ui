@@ -90,7 +90,7 @@
    <widget class="QLabel" name="lbInfo">
     <property name="geometry">
      <rect>
-      <x>65</x>
+      <x>63</x>
       <y>64</y>
       <width>238</width>
       <height>85</height>
@@ -103,7 +103,7 @@
    <widget class="QPushButton" name="btnInfo">
     <property name="geometry">
      <rect>
-      <x>65</x>
+      <x>63</x>
       <y>64</y>
       <width>238</width>
       <height>85</height>

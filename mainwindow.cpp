@@ -266,8 +266,8 @@ void MainWindow::createListAreaUI()
 
     lbLoadUp->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
     lbLoadDown->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
-    lbLoadUp->setText("0Kb/s");
-    lbLoadDown->setText("0Kb/s");
+    lbLoadUp->setText("0KB/s");
+    lbLoadDown->setText("0KB/s");
 
     scrollAreal->setStyleSheet("QScrollArea{border:none;}");
     scrollAreal->viewport()->setStyleSheet("background-color:transparent;");

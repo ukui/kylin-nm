@@ -346,41 +346,41 @@ void OneConnForm::setSignal(QString lv, QString secu){
 
     if(signal > 75){
         if(hasPwd){
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-full-pwd.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-full-pwd.png);}");
         }else{
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-full.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-full.png);}");
         }
         signalLv = 1;
     }
     if(signal > 55 && signal <= 75){
         if(hasPwd){
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-high-pwd.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-high-pwd.png);}");
         }else{
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-high.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-high.png);}");
         }
         signalLv = 2;
     }
     if(signal > 35 && signal <= 55){
         if(hasPwd){
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-medium-pwd.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-medium-pwd.png);}");
         }else{
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-medium.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-medium.png);}");
         }
         signalLv = 3;
     }
     if(signal > 15 && signal <= 35){
         if(hasPwd){
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-low-pwd.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-low-pwd.png);}");
         }else{
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-low.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-low.png);}");
         }
         signalLv = 4;
     }
     if(signal <= 15){
         if(hasPwd){
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-none-pwd.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-none-pwd.png);}");
         }else{
-            ui->lbSignal->setStyleSheet("QLabel{background:url(:/res/w/wifi-none.png);}");
+            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-none.png);}");
         }
         signalLv = 4;
     }

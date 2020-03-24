@@ -44,7 +44,7 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
-    this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.9);border:1px solid rgba(255, 255, 255, 0.05);}");
+    this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.7);border:1px solid rgba(255, 255, 255, 0.05);}");
 
     MyQss objQss;
 
@@ -117,6 +117,8 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
     this->setFixedSize(432,358);
 
     this->mw = mainWindow;
+
+    KWindowEffects::enableBlurBehind(this->winId(), true);
 }
 
 DlgConnHidWifi::~DlgConnHidWifi()

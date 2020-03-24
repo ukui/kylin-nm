@@ -25,6 +25,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <KWindowEffects>
 
 extern QString llname, lwname;
 
@@ -46,7 +47,7 @@ ConfForm::ConfForm(QWidget *parent) :
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
     this->setStyleSheet("QWidget{border-radius:6px;border:none;}");
-    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.9);}");
+    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.7);}");
 
     ui->lbName->setText(tr("Network name: "));//"网络名称："
     ui->lbTxt1->setText(tr("Method: "));//"编辑IP设置："
@@ -130,6 +131,8 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->leGateway->setValidator(new QRegExpValidator(rx, this));
     ui->leDns->setValidator(new QRegExpValidator(rx, this));
     ui->leDns2->setValidator(new QRegExpValidator(rx, this));
+
+    KWindowEffects::enableBlurBehind(this->winId(), true);
 }
 
 ConfForm::~ConfForm()

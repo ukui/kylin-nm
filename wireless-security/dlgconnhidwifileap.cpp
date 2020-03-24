@@ -105,6 +105,8 @@ DlgConnHidWifiLeap::DlgConnHidWifiLeap(QWidget *parent) :
     ui->btnConnect->setEnabled(false);
 
     this->setFixedSize(432,434);
+
+    KWindowEffects::enableBlurBehind(this->winId(), true);
 }
 
 DlgConnHidWifiLeap::~DlgConnHidWifiLeap()

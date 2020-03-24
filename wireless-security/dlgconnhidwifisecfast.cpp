@@ -154,6 +154,8 @@ DlgConnHidWifiSecFast::DlgConnHidWifiSecFast(int type, QWidget *parent) :
     ui->btnConnect->setEnabled(false);
 
     this->setFixedSize(432,673);
+
+    KWindowEffects::enableBlurBehind(this->winId(), true);
 }
 
 DlgConnHidWifiSecFast::~DlgConnHidWifiSecFast()

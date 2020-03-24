@@ -1358,7 +1358,7 @@
         <location filename="../mainwindow.cpp" line="1006"/>
         <location filename="../mainwindow.cpp" line="1157"/>
         <source>Connected</source>
-        <translation>已连接</translation>
+        <translation>已连接，</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="102"/>

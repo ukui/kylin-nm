@@ -127,6 +127,8 @@ DlgConnHidWifiWpa::DlgConnHidWifiWpa(int type, MainWindow *mainWindow, QWidget *
     this->setFixedSize(432,397);
 
     this->mw = mainWindow;
+
+    KWindowEffects::enableBlurBehind(this->winId(), true);
 }
 
 DlgConnHidWifiWpa::~DlgConnHidWifiWpa()

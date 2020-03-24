@@ -172,6 +172,8 @@ DlgConnHidWifiSecTls::DlgConnHidWifiSecTls(int type, QWidget *parent) :
     ui->leUserKeyPwd->setEnabled(false);
 
     this->setFixedSize(432,705);
+
+    KWindowEffects::enableBlurBehind(this->winId(), true);
 }
 
 DlgConnHidWifiSecTls::~DlgConnHidWifiSecTls()

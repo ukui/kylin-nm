@@ -17,6 +17,7 @@
 #include <QPainter>
 #include <QListView>
 #include <QString>
+#include <KWindowEffects>
 
 class MyQss
 {

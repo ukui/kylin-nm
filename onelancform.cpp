@@ -231,9 +231,9 @@ void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString s
 
 void OneLancForm::setIcon(bool isOn){
     if(isOn){
-        ui->lbIcon->setStyleSheet("QLabel{background:url(:/res/l/network-online.png);}");
+        ui->lbIcon->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/l/network-online.png);}");
     }else{
-        ui->lbIcon->setStyleSheet("QLabel{background:url(:/res/l/network-offline.png);}");
+        ui->lbIcon->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/l/network-offline.png);}");
     }
 }
 

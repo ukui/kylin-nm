@@ -23,6 +23,8 @@
 #include "hot-spot/dlghotspotcreate.h"
 #include "wireless-security/dlgconnhidwifi.h"
 
+#include <KWindowEffects>
+
 QString llname, lwname, hideWiFiConn;
 int currentActWifiSignalLv, count_loop;
 
@@ -32,10 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    checkSingle();
+
     syslog(LOG_DEBUG, "Using the icon theme named 'ukui-icon-theme-default'");
     QIcon::setThemeName("ukui-icon-theme-default");
-
-    checkSingle();
 
     // 如果使用Qt::Popup 任务栏不显示且保留X事件如XCB_FOCUS_OUT, 但如果indicator点击鼠标右键触发，XCB_FOCUS_OUT事件依然会失效
     // 如果使用Qt::ToolTip, Qt::Tool + Qt::WindowStaysOnTopHint, Qt::X11BypassWindowManagerHint等flag则会导致X事件失效
@@ -47,14 +49,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QPainterPath path;
     auto rect = this->rect();
-    rect.adjust(0, 0, -0, -0);
+    rect.adjust(1, 1, -1, -1);
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
     this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
 
     ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);"
-                                     "border-radius:6px;background:rgba(19,19,20,0.9);}");
+                                     "border-radius:6px;background:rgba(19,19,20,0.7);}");
 
     editQssString(); //编辑部分控件QSS
     createTopLanUI(); //创建顶部有线网item
@@ -101,6 +103,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     auto app = static_cast<QApplication*>(QCoreApplication::instance());
     app->setStyle(new CustomStyle());
+
+    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
 MainWindow::~MainWindow()
@@ -211,17 +215,17 @@ void MainWindow::createTopWifiUI()
 void MainWindow::createOtherUI()
 {
     lbLoadDown = new QLabel(ui->centralWidget);
-    lbLoadDown->move(X_ITEM + 132, Y_TOP_ITEM + 32);
+    lbLoadDown->move(X_ITEM + 129, Y_TOP_ITEM + 32);
     lbLoadDown->resize(65, 20);
     lbLoadDownImg = new QLabel(ui->centralWidget);
-    lbLoadDownImg->move(X_ITEM + 115, Y_TOP_ITEM + 35);
+    lbLoadDownImg->move(X_ITEM + 112, Y_TOP_ITEM + 35);
     lbLoadDownImg->resize(16, 16);
 
     lbLoadUp = new QLabel(ui->centralWidget);
-    lbLoadUp->move(X_ITEM + 207, Y_TOP_ITEM + 32);
+    lbLoadUp->move(X_ITEM + 187, Y_TOP_ITEM + 32);
     lbLoadUp->resize(65, 20);
     lbLoadUpImg = new QLabel(ui->centralWidget);
-    lbLoadUpImg->move(X_ITEM + 190, Y_TOP_ITEM + 35);
+    lbLoadUpImg->move(X_ITEM + 170, Y_TOP_ITEM + 35);
     lbLoadUpImg->resize(16, 16);
 
     lbLoadDownImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-down.png);}");
@@ -267,7 +271,8 @@ void MainWindow::createListAreaUI()
     lbLoadUp->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
     lbLoadDown->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
     lbLoadUp->setText("0KB/s");
-    lbLoadDown->setText("0KB/s");
+    lbLoadDown->setText("0KB/s.");
+    this->on_setNetSpeed();
 
     scrollAreal->setStyleSheet("QScrollArea{border:none;}");
     scrollAreal->viewport()->setStyleSheet("background-color:transparent;");
@@ -2228,7 +2233,7 @@ void MainWindow::on_setNetSpeed()
         QString str_tx;
 
         if (rcv_num < 1000){
-            str_rcv = QString::number(rcv_num) + "KB/s";
+            str_rcv = QString::number(rcv_num) + "KB/s.";
         } else {
             int remainder;
             if (rcv_num%1000 < 100) {
@@ -2236,7 +2241,7 @@ void MainWindow::on_setNetSpeed()
             }else{
                 remainder = (rcv_num%1000)/100;
             }
-            str_rcv = QString::number(rcv_num/1000) + "."  + QString::number(remainder) + "MB/s";
+            str_rcv = QString::number(rcv_num/1000) + "."  + QString::number(remainder) + "MB/s.";
         }
 
         if (tx_num < 1000){
@@ -2253,6 +2258,23 @@ void MainWindow::on_setNetSpeed()
 
         lbLoadDown->setText(str_rcv);
         lbLoadUp->setText(str_tx);
+
+        switch (str_rcv.size()) {
+        case 6:
+            lbLoadUp->move(X_ITEM + 187, Y_TOP_ITEM + 32);
+            lbLoadUpImg->move(X_ITEM + 170, Y_TOP_ITEM + 35);
+            break;
+        case 7:
+            lbLoadUp->move(X_ITEM + 194, Y_TOP_ITEM + 32);
+            lbLoadUpImg->move(X_ITEM + 176, Y_TOP_ITEM + 35);
+            break;
+        case 8:
+            lbLoadUp->move(X_ITEM + 199, Y_TOP_ITEM + 32);
+            lbLoadUpImg->move(X_ITEM + 186, Y_TOP_ITEM + 35);
+            break;
+        default:
+            break;
+        }
 
         end_rcv_rates = start_rcv_rates;
         end_tx_rates = start_tx_rates;

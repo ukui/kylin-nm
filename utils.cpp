@@ -196,7 +196,7 @@ void CustomStyle::polish(QWidget *widget)
             QPainterPath path;
             auto rect = widget->rect();
             rect.adjust(0, 0, -0, -0);
-            path.addRoundedRect(rect, 6, 6);
+            path.addRoundedRect(rect, 3, 3);
 
             widget->setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
         }

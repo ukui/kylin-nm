@@ -104,6 +104,11 @@ MainWindow::MainWindow(QWidget *parent) :
     auto app = static_cast<QApplication*>(QCoreApplication::instance());
     app->setStyle(new CustomStyle());
 
+    ui->btnNetList->setAttribute(Qt::WA_Hover,true);
+    ui->btnNetList->installEventFilter(this);
+    ui->btnWifiList->setAttribute(Qt::WA_Hover,true);
+    ui->btnWifiList->installEventFilter(this);
+
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
@@ -148,6 +153,39 @@ bool MainWindow::nativeEvent(const QByteArray &eventType, void *message, long *r
     return false;
 }
 
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == ui->btnNetList){
+        if(event->type() == QEvent::HoverEnter) {
+            if (!is_btnNetList_clicked){
+                ui->lbNetListBG->setStyleSheet(btnBgHoverQss);
+            }
+            return true;
+        } else if(event->type() == QEvent::HoverLeave){
+            if (!is_btnNetList_clicked){
+                ui->lbNetListBG->setStyleSheet(btnBgLeaveQss);
+            }
+            return true;
+        }
+    }
+
+    if (obj == ui->btnWifiList){
+        if(event->type() == QEvent::HoverEnter) {
+            if (!is_btnWifiList_clicked){
+                ui->lbWifiListBG->setStyleSheet(btnBgHoverQss);
+            }
+            return true;
+        } else if(event->type() == QEvent::HoverLeave){
+            if (!is_btnWifiList_clicked){
+                ui->lbWifiListBG->setStyleSheet(btnBgLeaveQss);
+            }
+            return true;
+        }
+    }
+
+    return QWidget::eventFilter(obj,event);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // 初始化控件、网络、定时器
 
@@ -158,6 +196,8 @@ void MainWindow::editQssString()
     btnOnQss = "QLabel{min-width: 37px; min-height: 37px;max-width:37px; max-height: 37px;border-radius: 4px; background-color:rgba(61,107,229,1)}";
     btnBgOffQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(255,255,255,0.2)}";
     btnBgOnQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(61,107,229,1);}";
+    btnBgHoverQss = "QLabel{border-radius: 4px; background-color:rgba(255,255,255,0.12)}";
+    btnBgLeaveQss = "QLabel{border-radius: 4px; background-color:rgba(255,255,255,0)}";
     leftBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
                  "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
                  "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}";
@@ -640,46 +680,47 @@ void MainWindow::handleIconClicked()
 //    qDebug()<<"deskDupRect: "<<deskDupRect;
 //    qDebug()<<"screenDupRect: "<<screenDupRect;
 
-    if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
-        int n = objKyDBus->getTaskbarPos("position");
-        int m = objKyDBus->getTaskbarHeight("height");
+    int n = objKyDBus->getTaskbarPos("position");
+    int m = objKyDBus->getTaskbarHeight("height");
+    int d = 3; //窗口边沿到任务栏距离
 
+    if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
         if(n == 0){
             //任务栏在下侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + availableGeometry.height() - this->height() - m);
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + availableGeometry.height() - this->height() - m - d);
         }else if(n == 1){
             //任务栏在上侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m);
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m + d);
         } else if (n == 2){
             //任务栏在左侧
-            if (screenGeometry.x() == 0){
-                this->move(screenGeometry.width() - availableGeometry.width() + m, screenMainRect.y() + screenMainRect.height() - this->height());//主屏在左侧
-            }else{
-                this->move(screenGeometry.width() - availableGeometry.width() + m,screenDupRect.y() + screenDupRect.height() - this->height());//主屏在右侧
+            if (screenGeometry.x() == 0){//主屏在左侧
+                this->move(screenGeometry.width() - availableGeometry.width() + m + d, screenMainRect.y() + screenMainRect.height() - this->height());
+            }else{//主屏在右侧
+                this->move(screenGeometry.width() - availableGeometry.width() + m + d,screenDupRect.y() + screenDupRect.height() - this->height());
             }
         } else if (n == 3){
             //任务栏在右侧
             if (screenGeometry.x() == 0){//主屏在左侧
-                this->move(screenMainRect.width() + screenDupRect.width() - this->width() - m, screenDupRect.y() + screenDupRect.height() - this->height());
+                this->move(screenMainRect.width() + screenDupRect.width() - this->width() - m - d, screenDupRect.y() + screenDupRect.height() - this->height());
             }else{//主屏在右侧
-                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m, screenMainRect.y() + screenMainRect.height() - this->height());
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height());
             }
         }
     } else if(screenGeometry.width() == availableGeometry.width() ){
         if (trayIcon->geometry().y() > availableGeometry.height()/2){
             //任务栏在下侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + availableGeometry.height() - this->height());
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + availableGeometry.height() - this->height() - d);
         }else{
             //任务栏在上侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height());
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + d);
         }
     } else if (screenGeometry.height() == availableGeometry.height()){
         if (trayIcon->geometry().x() > availableGeometry.width()/2){
             //任务栏在右侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + screenGeometry.height() - this->height());
+            this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - this->height());
         } else {
             //任务栏在左侧
-            this->move(screenGeometry.width() - availableGeometry.width(), screenMainRect.y() + screenGeometry.height() - this->height());
+            this->move(screenGeometry.width() - availableGeometry.width() + d, screenMainRect.y() + screenGeometry.height() - this->height());
         }
     }
 }

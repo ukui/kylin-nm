@@ -3,12 +3,13 @@
 MyQss::MyQss()
 {
     labelQss = "QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}";
-    cbxQss = "QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
+    cbxQss = "QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);"
+                        "border:1px solid rgba(255, 255, 255, 0.05);border-radius:4px;background:rgba(255,255,255,0.08);}"
              "QComboBox::drop-down{border:0px;width:30px;}"
              "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
-             "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
-             "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
-             "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}";
+             "QComboBox QAbstractItemView {margin:0px 0px 0px 0px;padding: 0px 0px;border-radius:0px;background-color:#48484C;outline:0px;}"
+             "QComboBox QAbstractItemView::item{border-radius:0px;font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color:#48484C;outline:0px;}"
+             "QComboBox QAbstractItemView::item:hover{border-radius:0px;font-size:13px;color:rgba(255,255,255,0.91);background-color:#3D6BE5;outline:0px;}";
     leQss = "QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}";
     checkBoxQss = "QCheckBox {border:none;background:transparent;}"
                   "QCheckBox::indicator {width: 18px; height: 9px;}"

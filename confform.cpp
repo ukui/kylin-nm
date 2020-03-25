@@ -42,7 +42,7 @@ ConfForm::ConfForm(QWidget *parent) :
 
     QPainterPath path;
     auto rect = this->rect();
-    rect.adjust(0, 0, -0, -0);
+    rect.adjust(1, 1, -1, -1);
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
@@ -75,12 +75,12 @@ ConfForm::ConfForm(QWidget *parent) :
 
     labelQss = "QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}";
     cbxQss = "QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);"
-                        "border:1px solid rgba(255, 255, 255, 0.05);background:rgba(255,255,255,0.08);}"
+                        "border:1px solid rgba(255, 255, 255, 0.05);border-radius:4px;background:rgba(255,255,255,0.08);}"
              "QComboBox::drop-down{border:0px;width:30px;}"
              "QComboBox::down-arrow{image:url(:/res/g/down_arrow.png);}"
-             "QComboBox QAbstractItemView {border:1px solid rgba(255, 255, 255, 0.05);background-color: transparent;}"
-             "QComboBox QAbstractItemView::item{font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color: rgba(19,19,20,0.95);}"
-             "QComboBox QAbstractItemView::item:selected{font-size:13px;color:rgba(0,0,0,0.91);background-color:lightgray;}";
+             "QComboBox QAbstractItemView {margin:0px 0px 0px 0px;padding: 0px 0px;border-radius:0px;background-color:#48484C;outline:0px;}"
+             "QComboBox QAbstractItemView::item{border-radius:0px;font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color:#48484C;outline:0px;}"
+             "QComboBox QAbstractItemView::item:hover{border-radius:0px;font-size:13px;color:rgba(255,255,255,0.91);background-color:#3D6BE5;outline:0px;}";
     leQss = "QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}";
     btnOffQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
                    "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
@@ -107,6 +107,7 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->cbType->setView(new  QListView());
     ui->cbMask->setStyleSheet(cbxQss);
     ui->cbMask->setView(new  QListView());
+
     ui->leName->setStyleSheet(leQss);
     ui->leAddr->setStyleSheet(leQss);
     ui->leGateway->setStyleSheet(leQss);
@@ -132,7 +133,7 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->leDns->setValidator(new QRegExpValidator(rx, this));
     ui->leDns2->setValidator(new QRegExpValidator(rx, this));
 
-    KWindowEffects::enableBlurBehind(this->winId(), true);
+    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
 ConfForm::~ConfForm()

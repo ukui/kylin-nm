@@ -35,7 +35,7 @@ DlgConnHidWifiWep::DlgConnHidWifiWep(int type, QWidget *parent) :
 
     QPainterPath path;
     auto rect = this->rect();
-    rect.adjust(0, 0, -0, -0);
+    rect.adjust(1, 1, -1, -1);
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
@@ -126,7 +126,7 @@ DlgConnHidWifiWep::DlgConnHidWifiWep(int type, QWidget *parent) :
 
     this->setFixedSize(432,493);
 
-    KWindowEffects::enableBlurBehind(this->winId(), true);
+    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
 DlgConnHidWifiWep::~DlgConnHidWifiWep()

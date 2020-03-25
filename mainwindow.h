@@ -175,6 +175,9 @@ public slots:
 
     void onBtnWifiClicked(int flag = 0); //flag =0为打开、1为关闭、2为其他
 
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+
 private:
     void checkSingle();
     void initNetwork();
@@ -219,7 +222,7 @@ private:
 
     QString lname, wname; // 以太网卡和无线网卡名称
 
-    QString btnOffQss, btnOnQss, btnBgOffQss, btnBgOnQss; // 主界面按钮底色
+    QString btnOffQss, btnOnQss, btnBgOffQss, btnBgOnQss, btnBgHoverQss, btnBgLeaveQss; // 主界面按钮底色
     QString scrollBarQss, leftBtnQss, funcBtnQss;
 
     QStringList oldLanSlist; //上一次获取Lan列表

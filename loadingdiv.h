@@ -41,8 +41,8 @@ public slots:
     void stopLoading();
 
 private:
-    QLabel *loadingGif;
-    QTimer *switchTimer;
+    QLabel *loadingGif = nullptr;
+    QTimer *switchTimer = nullptr;
 
     int currentPage;
     int countCurrentTime;

@@ -4,7 +4,7 @@
 <context>
     <name>BackThread</name>
     <message>
-        <location filename="../backthread.cpp" line="213"/>
+        <location filename="../backthread.cpp" line="246"/>
         <source>Confirm your Wi-Fi password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12,83 +12,93 @@
 <context>
     <name>ConfForm</name>
     <message>
-        <location filename="../confform.cpp" line="36"/>
-        <location filename="../confform.cpp" line="254"/>
+        <location filename="../confform.cpp" line="39"/>
+        <location filename="../confform.cpp" line="282"/>
         <source>edit network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="49"/>
+        <location filename="../confform.cpp" line="52"/>
         <source>Network name: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="50"/>
+        <location filename="../confform.cpp" line="53"/>
         <source>Method: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="51"/>
+        <location filename="../confform.cpp" line="54"/>
         <source>Address: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="52"/>
+        <location filename="../confform.cpp" line="55"/>
         <source>Netmask: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="53"/>
+        <location filename="../confform.cpp" line="56"/>
         <source>Gateway: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="54"/>
+        <location filename="../confform.cpp" line="57"/>
         <source>DNS 1: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="55"/>
+        <location filename="../confform.cpp" line="58"/>
         <source>DNS 2: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="57"/>
+        <location filename="../confform.cpp" line="60"/>
         <source>Edit Conn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="58"/>
+        <location filename="../confform.cpp" line="61"/>
         <source>Auto(DHCP)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="59"/>
+        <location filename="../confform.cpp" line="62"/>
         <source>Manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="69"/>
+        <location filename="../confform.cpp" line="72"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="70"/>
+        <location filename="../confform.cpp" line="73"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="71"/>
+        <location filename="../confform.cpp" line="74"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="239"/>
+        <location filename="../confform.cpp" line="213"/>
+        <source>New network already created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../confform.cpp" line="250"/>
+        <source>New network settings already finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../confform.cpp" line="265"/>
         <source>New settings already effective</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../confform.cpp" line="276"/>
+        <location filename="../confform.cpp" line="317"/>
         <source>add wired network</source>
         <translation type="unfinished"></translation>
     </message>
@@ -101,67 +111,67 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="80"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="69"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="81"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="70"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="82"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="71"/>
         <source>Network name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="83"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="72"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="84"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="73"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="85"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="74"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="87"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="76"/>
         <source>C_reate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="105"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="95"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="106"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="96"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="107"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="97"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="108"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="98"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="110"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="100"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="111"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="101"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -174,77 +184,77 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="81"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="68"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="82"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="69"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="83"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="70"/>
         <source>Network name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="84"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="71"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="85"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="72"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="86"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="73"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="87"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="74"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="88"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="75"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="90"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="77"/>
         <source>C_reate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="107"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="95"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="108"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="96"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="109"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="97"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="110"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="98"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="112"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="100"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="113"/>
+        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="101"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -257,128 +267,128 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="111"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="83"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="112"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="84"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="113"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="85"/>
         <source>Network name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="114"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="86"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="115"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="87"/>
         <source>Authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="116"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="88"/>
         <source>Anonymous identity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="117"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="89"/>
         <source>Allow automatic PAC pro_visioning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="118"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="90"/>
         <source>PAC file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="119"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="91"/>
         <source>Inner authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="120"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="92"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="121"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="93"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="122"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="94"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="123"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="95"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="125"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="100"/>
         <source>C_reate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="142"/>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="172"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="118"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="148"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="143"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="119"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="144"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="120"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="145"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="121"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="147"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="123"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="148"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="124"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="160"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="136"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="161"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="137"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="167"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="143"/>
         <source>Anonymous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="168"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="144"/>
         <source>Authenticated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="169"/>
+        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="145"/>
         <source>Both</source>
         <translation type="unfinished"></translation>
     </message>
@@ -391,92 +401,92 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="91"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="73"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="92"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="74"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="93"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="75"/>
         <source>Network name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="94"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="76"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="95"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="77"/>
         <source>Authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="96"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="78"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="97"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="79"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="98"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="80"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="99"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="81"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="101"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="83"/>
         <source>C_reate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="118"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="101"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="119"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="102"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="120"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="103"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="121"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="104"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="123"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="106"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="124"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="107"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="136"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="119"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="137"/>
+        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="120"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -489,143 +499,143 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="127"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="91"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="128"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="92"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="129"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="93"/>
         <source>Network name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="130"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="94"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="131"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="95"/>
         <source>Authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="132"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="96"/>
         <source>Anonymous identity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="133"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="97"/>
         <source>Domain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="134"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="98"/>
         <source>CA certificate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="135"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="99"/>
         <source>CA certificate password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="136"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="100"/>
         <source>No CA certificate is required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="137"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="101"/>
         <source>PEAP version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="138"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="102"/>
         <source>Inner authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="139"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="103"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="140"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="104"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="141"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="105"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="142"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="106"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="161"/>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="184"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="126"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="149"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="162"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="127"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="163"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="128"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="164"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="129"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="166"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="131"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="167"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="132"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="179"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="144"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="180"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="145"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="185"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="150"/>
         <source>Choose from file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="188"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="153"/>
         <source>Automatic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="189"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="154"/>
         <source>Version 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="190"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="155"/>
         <source>Version 1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -638,92 +648,92 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="92"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="74"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="93"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="75"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="94"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="76"/>
         <source>Network name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="95"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="77"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="96"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="78"/>
         <source>Authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="97"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="79"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="98"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="80"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="99"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="81"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="100"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="82"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="102"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="84"/>
         <source>C_reate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="119"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="102"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="120"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="103"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="121"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="104"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="122"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="105"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="124"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="107"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="125"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="108"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="137"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="120"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="138"/>
+        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="121"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -736,137 +746,137 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="126"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="90"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="127"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="91"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="128"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="92"/>
         <source>Network name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="129"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="93"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="130"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="94"/>
         <source>Authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="131"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="95"/>
         <source>Identity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="132"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="96"/>
         <source>Domain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="133"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="97"/>
         <source>CA certificate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="134"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="98"/>
         <source>CA certificate password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="135"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="99"/>
         <source>No CA certificate is required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="136"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="100"/>
         <source>User certificate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="137"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="101"/>
         <source>User certificate password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="138"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="102"/>
         <source>User private key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="139"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="103"/>
         <source>User key password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="140"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="104"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="141"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="105"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="143"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="107"/>
         <source>C_reate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="160"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="183"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="187"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="191"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="125"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="148"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="152"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="156"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="161"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="126"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="162"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="127"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="163"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="128"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="165"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="130"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="166"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="131"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="178"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="143"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="179"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="144"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="184"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="188"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="192"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="149"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="153"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="157"/>
         <source>Choose from file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -879,128 +889,128 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="120"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="89"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="121"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="90"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="122"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="91"/>
         <source>Network name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="123"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="92"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="124"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="93"/>
         <source>Authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="125"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="94"/>
         <source>Anonymous identity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="126"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="95"/>
         <source>Domain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="127"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="96"/>
         <source>CA certificate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="128"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="97"/>
         <source>CA certificate password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="129"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="98"/>
         <source>No CA certificate is required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="130"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="99"/>
         <source>Inner authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="131"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="100"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="132"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="101"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="133"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="102"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="134"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="103"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="136"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="105"/>
         <source>C_reate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="153"/>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="176"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="123"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="146"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="154"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="124"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="155"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="125"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="156"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="126"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="158"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="128"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="159"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="129"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="171"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="141"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="172"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="142"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="177"/>
+        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="147"/>
         <source>Choose from file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1013,97 +1023,97 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="96"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="73"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="97"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="74"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="98"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="75"/>
         <source>Network name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="99"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="76"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="100"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="77"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="101"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="78"/>
         <source>WEP index</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="102"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="79"/>
         <source>Authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="103"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="80"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="104"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="81"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="106"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="83"/>
         <source>C_reate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="123"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="101"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="124"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="102"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="125"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="103"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="126"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="104"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="128"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="106"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="129"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="107"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="137"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="115"/>
         <source>1(default)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="143"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="121"/>
         <source>Open System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="144"/>
+        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="122"/>
         <source>Shared Key</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1116,72 +1126,72 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="88"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="74"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="89"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="75"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="90"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="76"/>
         <source>Network name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="91"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="77"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="92"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="78"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="93"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="79"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="94"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="80"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="96"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="82"/>
         <source>C_reate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="114"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="101"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="115"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="102"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="116"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="103"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="117"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="104"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="119"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="106"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="120"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="107"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1194,42 +1204,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="45"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="46"/>
         <source>Create Hotspot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="46"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="47"/>
         <source>Network name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="47"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="48"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="48"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="49"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="49"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="50"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="50"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="51"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="53"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="54"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="54"/>
+        <location filename="../hot-spot/dlghotspotcreate.cpp" line="55"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1238,146 +1248,140 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
-        <location filename="../mainwindow.cpp" line="319"/>
+        <location filename="../mainwindow.cpp" line="558"/>
         <source>kylin-nm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="245"/>
-        <location filename="../mainwindow.cpp" line="342"/>
+        <location filename="../mainwindow.cpp" line="370"/>
+        <location filename="../mainwindow.cpp" line="581"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="198"/>
-        <location filename="../mainwindow.cpp" line="1436"/>
+        <location filename="../mainwindow.cpp" line="329"/>
+        <location filename="../mainwindow.cpp" line="1155"/>
         <source>Ethernet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="204"/>
-        <location filename="../mainwindow.cpp" line="1534"/>
+        <location filename="../mainwindow.cpp" line="335"/>
+        <location filename="../mainwindow.cpp" line="1250"/>
         <source>Wifi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="221"/>
+        <location filename="../mainwindow.cpp" line="350"/>
         <source>HotSpot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="233"/>
+        <location filename="../mainwindow.cpp" line="360"/>
         <source>FlyMode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="972"/>
-        <location filename="../mainwindow.cpp" line="1110"/>
-        <location filename="../mainwindow.cpp" line="1505"/>
-        <location filename="../mainwindow.cpp" line="1574"/>
-        <location filename="../mainwindow.cpp" line="2151"/>
-        <location filename="../mainwindow.cpp" line="2213"/>
-        <location filename="../mainwindow.cpp" line="2265"/>
+        <location filename="../mainwindow.cpp" line="1217"/>
+        <location filename="../mainwindow.cpp" line="1274"/>
+        <location filename="../mainwindow.cpp" line="1345"/>
+        <location filename="../mainwindow.cpp" line="1477"/>
+        <location filename="../mainwindow.cpp" line="2131"/>
+        <location filename="../mainwindow.cpp" line="2215"/>
         <source>Not connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="974"/>
-        <location filename="../mainwindow.cpp" line="1021"/>
-        <location filename="../mainwindow.cpp" line="1022"/>
-        <location filename="../mainwindow.cpp" line="1113"/>
-        <location filename="../mainwindow.cpp" line="1176"/>
-        <location filename="../mainwindow.cpp" line="1303"/>
-        <location filename="../mainwindow.cpp" line="1507"/>
-        <location filename="../mainwindow.cpp" line="1577"/>
-        <location filename="../mainwindow.cpp" line="2153"/>
-        <location filename="../mainwindow.cpp" line="2215"/>
-        <location filename="../mainwindow.cpp" line="2267"/>
+        <location filename="../mainwindow.cpp" line="1219"/>
+        <location filename="../mainwindow.cpp" line="1277"/>
+        <location filename="../mainwindow.cpp" line="1347"/>
+        <location filename="../mainwindow.cpp" line="1400"/>
+        <location filename="../mainwindow.cpp" line="1401"/>
+        <location filename="../mainwindow.cpp" line="1480"/>
+        <location filename="../mainwindow.cpp" line="1551"/>
+        <location filename="../mainwindow.cpp" line="1685"/>
+        <location filename="../mainwindow.cpp" line="2133"/>
+        <location filename="../mainwindow.cpp" line="2217"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="80"/>
-        <location filename="../mainwindow.cpp" line="936"/>
-        <location filename="../mainwindow.cpp" line="1481"/>
-        <location filename="../mainwindow.cpp" line="2136"/>
+        <location filename="../mainwindow.cpp" line="216"/>
         <source>Ethernet Networks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1006"/>
-        <location filename="../mainwindow.cpp" line="1157"/>
+        <location filename="../mainwindow.cpp" line="1382"/>
+        <location filename="../mainwindow.cpp" line="1528"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="102"/>
-        <location filename="../mainwindow.cpp" line="1073"/>
-        <location filename="../mainwindow.cpp" line="1550"/>
+        <location filename="../mainwindow.cpp" line="239"/>
         <source>Wifi Networks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="89"/>
-        <location filename="../mainwindow.cpp" line="944"/>
-        <location filename="../mainwindow.cpp" line="1489"/>
+        <location filename="../mainwindow.cpp" line="225"/>
         <source>Create Lan Net</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="111"/>
-        <location filename="../mainwindow.cpp" line="1081"/>
-        <location filename="../mainwindow.cpp" line="1558"/>
+        <location filename="../mainwindow.cpp" line="248"/>
         <source>Add Hide Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="130"/>
+        <location filename="../mainwindow.cpp" line="278"/>
         <source>No usable network in the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="341"/>
+        <location filename="../mainwindow.cpp" line="580"/>
         <source>Show MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1039"/>
+        <location filename="../mainwindow.cpp" line="1423"/>
         <source>No Other Wired Network Scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1197"/>
+        <location filename="../mainwindow.cpp" line="1573"/>
         <source>No Other Wireless Network Scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1385"/>
-        <source>keep wired network switch is on before turning on wireless switch</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="1409"/>
+        <location filename="../mainwindow.cpp" line="1130"/>
         <source>please insert the wireless network adapter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1465"/>
+        <location filename="../mainwindow.cpp" line="1190"/>
         <source>Abnormal connection exist, program will delete it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1649"/>
+        <location filename="../mainwindow.cpp" line="2045"/>
+        <source>Wired net is disconnected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2072"/>
+        <source>Wi-Fi is disconnected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2349"/>
         <source>Conn Ethernet Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1660"/>
+        <location filename="../mainwindow.cpp" line="2361"/>
         <source>Conn Ethernet Fail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1780"/>
+        <location filename="../mainwindow.cpp" line="2483"/>
         <source>Conn Wifi Success</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1390,36 +1394,36 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../oneconnform.cpp" line="32"/>
         <location filename="../oneconnform.cpp" line="33"/>
         <location filename="../oneconnform.cpp" line="34"/>
-        <location filename="../oneconnform.cpp" line="36"/>
+        <location filename="../oneconnform.cpp" line="35"/>
+        <location filename="../oneconnform.cpp" line="37"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../oneconnform.cpp" line="35"/>
+        <location filename="../oneconnform.cpp" line="36"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../oneconnform.cpp" line="37"/>
-        <location filename="../oneconnform.cpp" line="264"/>
+        <location filename="../oneconnform.cpp" line="38"/>
+        <location filename="../oneconnform.cpp" line="249"/>
         <source>Input Password...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../oneconnform.cpp" line="330"/>
+        <location filename="../oneconnform.cpp" line="315"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../oneconnform.cpp" line="406"/>
+        <location filename="../oneconnform.cpp" line="391"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../oneconnform.cpp" line="619"/>
+        <location filename="../oneconnform.cpp" line="604"/>
         <source>Conn Wifi Failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1443,8 +1447,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../onelancform.cpp" line="237"/>
-        <location filename="../onelancform.cpp" line="241"/>
+        <location filename="../onelancform.cpp" line="221"/>
+        <location filename="../onelancform.cpp" line="225"/>
         <source>no configuration</source>
         <translation type="unfinished"></translation>
     </message>

@@ -124,15 +124,15 @@ private slots:
     void on_btnInfo_clicked();
 
 private:
-    QTimer *waitTimer;
+    QTimer *waitTimer = nullptr;
     int waitPage;
     int countCurrentTime;
     bool isWaiting = false;
 
-    Ui::OneConnForm *ui;
-    MainWindow *mw;
-    ConfForm *cf;
-    KSimpleNM *ks;
+    Ui::OneConnForm *ui = nullptr;
+    MainWindow *mw = nullptr;
+    ConfForm *cf = nullptr;
+    KSimpleNM *ks = nullptr;
     bool hasPwd;
 };
 

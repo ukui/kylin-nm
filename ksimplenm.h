@@ -31,7 +31,7 @@ class KSimpleNM : public QObject
 public:
     explicit KSimpleNM(QObject *parent = nullptr);
 
-    QProcess *runShellProcess;
+    QProcess *runShellProcess = nullptr;
     QString shellOutput;
     int type;
     bool isExecutingGetLanList = false;

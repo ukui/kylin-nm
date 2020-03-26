@@ -209,6 +209,11 @@ void ConfForm::on_btnCreate_clicked()
     if(ui->cbType->currentIndex() == 1){
         //config the ipv4 and netmask and gateway if select Manual
         this->on_btnOk_clicked();
+    } else {
+        QString txt(tr("New network already created"));
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+        int status1 = system(cmd.toUtf8().data());
+        if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
     }
 
     this->hide();
@@ -241,6 +246,11 @@ void ConfForm::on_btnOk_clicked()
         }
         kylin_network_set_manualall(ui->leName->text().toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
     }
+
+    QString txt(tr("New network settings already finished"));
+    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+    int status1 = system(cmd.toUtf8().data());
+    if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
 
     this->hide();
 

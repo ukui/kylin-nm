@@ -97,14 +97,14 @@ private slots:
     void on_btnInfo_clicked();
 
 private:
-    QTimer *waitTimer;
+    QTimer *waitTimer = nullptr;
     int waitPage;
     int countCurrentTime;
 
-    Ui::OneLancForm *ui;
-    MainWindow *mw;
-    ConfForm *cf;
-    KSimpleNM *ks;
+    Ui::OneLancForm *ui = nullptr;
+    MainWindow *mw = nullptr;
+    ConfForm *cf = nullptr;
+    KSimpleNM *ks = nullptr;
 };
 
 #endif // ONELANCFORM_H

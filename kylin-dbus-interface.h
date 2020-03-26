@@ -41,11 +41,12 @@ public:
     bool isWiredCableOn = false;
     bool isWirelessCardOn = false;
 
-    QString dbusLanCardName;
+    QString dbusLanCardName = "";
     QString dbusLanIpv4 = "";
     QString dbusLanIpv6 = "";
+    QString dbusLanGateway = "";
     QString dbusLanMac = "";
-    QString dbusWiFiCardName;
+    QString dbusWiFiCardName = "";
     QString dbusWifiMac = "";
 
 public slots:
@@ -68,9 +69,9 @@ private:
 
     int a = 0;
     bool isRunningFunction = false;
-    QTimer *time;
+    QTimer *time = nullptr;
 
-    QGSettings *m_gsettings;
+    QGSettings *m_gsettings = nullptr;
 
 signals:
     void updateWiredList(int n);

@@ -33,7 +33,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     getPhysicalCarrierState(0); //初始化获取网线插入状态
     getLanHwAddressState(); //获取有线网Mac地址
     getWiredCardName();
-    getWifiSwitchState();
+//    getWifiSwitchState();
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
@@ -181,35 +181,62 @@ void KylinDBus::getLanIp(QString netName)
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg1st >> map;
 
-        for (int i =0;i<2;i++){
-            if(map.values().at(1).values().at(i).toString() == netName){
-                for(QString key : map.keys() ){
-                    QMap<QString,QVariant> innerMap = map.value(key);
-                    //qDebug() << "Key: " << key;
-                    if (key == "ipv4") {
-                        for (QString inner_key : innerMap.keys()){
-                            if (inner_key == "address-data"){
-                                const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
-                                QMap<QString,QVariant> m_map;
+        for(QString outside_key : map.keys() ){
+            QMap<QString,QVariant> outsideMap = map.value(outside_key);
+            if (outside_key == "connection") {
+                for (QString search_key : outsideMap.keys()){
+                    if (search_key == "id"){
+                        //const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
+                        if (netName == outsideMap.value(search_key).toString()){
+                            qDebug()<<"aaaaaa"<<outsideMap.value(search_key).toString();
 
-                                dbusArg2nd.beginArray();
-                                while (!dbusArg2nd.atEnd()){
-                                    dbusArg2nd >> m_map;// append map to a vector here if you want to keep it
+                            for(QString key : map.keys() ){
+                                QMap<QString,QVariant> innerMap = map.value(key);
+                                //qDebug() << "Key: " << key;
+                                if (key == "ipv4") {
+                                    for (QString inner_key : innerMap.keys()){
+                                        if (inner_key == "address-data"){
+                                            const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
+                                            QMap<QString,QVariant> m_map;
+
+                                            dbusArg2nd.beginArray();
+                                            while (!dbusArg2nd.atEnd()){
+                                                dbusArg2nd >> m_map;// append map to a vector here if you want to keep it
+                                            }
+                                            dbusArg2nd.endArray();
+
+                                            //qDebug()<<"       " << m_map.value("address").toString();
+                                            dbusLanIpv4 = m_map.value("address").toString();
+                                        }
+                                    }
                                 }
-                                dbusArg2nd.endArray();
 
-                                //qDebug()<<"       " << m_map.value("address").toString();
-                                dbusLanIpv4 = m_map.value("address").toString();
-                            }
+                                if (key == "ipv6") {
+                                    for (QString inner_key : innerMap.keys()){
+                                        if (inner_key == "address-data"){
+                                            const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
+                                            QMap<QString,QVariant> m_map;
+
+                                            dbusArg2nd.beginArray();
+                                            while (!dbusArg2nd.atEnd()){
+                                                dbusArg2nd >> m_map;// append map to a vector here if you want to keep it
+                                            }
+                                            dbusArg2nd.endArray();
+
+                                            //qDebug()<<"       " << m_map.value("address").toString();
+                                            dbusLanIpv6 = m_map.value("address").toString();
+                                        }
+                                    }
+                                }
+                            } //end for(QString key : map.keys() )
+
                         }
                     }
-                }
-
-                dbusLanIpv6 = map.values().at(3).values().at(5).toString();
-                break;
+                } //end for (QString search_key : outsideMap.keys())
             }
-        }
-    }
+        } // end for(QString outside_key : map.keys() )
+
+    } //end foreach (QDBusObjectPath objNet, m_objNets)
 }
 
 void KylinDBus::getWifiMac(QString netName)

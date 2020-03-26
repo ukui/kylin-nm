@@ -139,8 +139,8 @@ public:
     QIcon iconConnecting;
     QList<QIcon> loadIcons;
     QString mwBandWidth;
-    KylinDBus *objKyDBus;
-    NetworkSpeed *objNetSpeed;
+    KylinDBus *objKyDBus = nullptr;
+    NetworkSpeed *objNetSpeed = nullptr;
 
     //状态设置,0为假，1为真
     int is_update_wifi_list = 0; //是否是update wifi列表，而不是load wifi列表
@@ -191,34 +191,42 @@ private:
 
     Ui::MainWindow *ui;
 
-    LoadingDiv *loading;
+    LoadingDiv *loading = nullptr;
 
     QDesktopWidget desktop;
-    KSimpleNM *ksnm;
-    ConfForm *confForm;
-    QWidget *topLanListWidget;
-    QWidget *topWifiListWidget;
-    QWidget *lanListWidget;
-    QWidget *wifiListWidget;
-    QWidget *optWifiWidget;
+    KSimpleNM *ksnm = nullptr;
+    ConfForm *confForm = nullptr;
+    QWidget *topLanListWidget = nullptr;
+    QWidget *topWifiListWidget = nullptr;
+    QWidget *lanListWidget = nullptr;
+    QWidget *wifiListWidget = nullptr;
+    QWidget *optWifiWidget = nullptr;
 
-    QLabel *lbLoadDown, *lbLoadDownImg, *lbLoadUp, *lbLoadUpImg;
+    QLabel *lbLoadDown = nullptr;
+    QLabel *lbLoadDownImg = nullptr;
+    QLabel *lbLoadUp = nullptr;
+    QLabel *lbLoadUpImg = nullptr;
 
-    QLabel *lbNoItemTip;
+    QLabel *lbNoItemTip = nullptr;
     bool ifLanConnected;
     bool ifWLanConnected;
 
-    QScrollArea *scrollAreal, *scrollAreaw;
-    QLabel *lbTopLanList, *lbTopWifiList, *lbLanList, *lbWifiList;
-    QPushButton *btnAddNet, *btnCreateNet;
-    ConfForm *cf;
+    QScrollArea *scrollAreal = nullptr;
+    QScrollArea *scrollAreaw = nullptr;
+    QLabel *lbTopLanList = nullptr;
+    QLabel *lbTopWifiList = nullptr;
+    QLabel *lbLanList = nullptr;
+    QLabel *lbWifiList = nullptr;
+    QPushButton *btnAddNet = nullptr;
+    QPushButton *btnCreateNet = nullptr;
+    ConfForm *cf = nullptr;
 
-    QSystemTrayIcon *trayIcon;
-    QMenu *trayIconMenu;
-    QWidgetAction *mShowWindow;
-    QWidgetAction *mAdvConf;
-    QWidget *widShowWindow;
-    QWidget *widAdvConf;
+    QSystemTrayIcon *trayIcon = nullptr;
+    QMenu *trayIconMenu = nullptr;
+    QWidgetAction *mShowWindow = nullptr;
+    QWidgetAction *mAdvConf = nullptr;
+    QWidget *widShowWindow = nullptr;
+    QWidget *widAdvConf = nullptr;
 
     QString lname, wname; // 以太网卡和无线网卡名称
 
@@ -230,15 +238,15 @@ private:
     QStringList oldWifiSlist; //上一次获取wifi列表
 
     //循环检测网络连接状态
-    QTimer *iconTimer;
-    QTimer *wiredCableUpTimer;
-    QTimer *wiredCableDownTimer;
-    QTimer *deleteLanTimer;
-    QTimer *checkWifiListChanged;
-    QTimer *checkIfLanConnect;
-    QTimer *checkIfWifiConnect;
-    QTimer *checkIfNetworkOn;
-    QTimer *setNetSpeed;
+    QTimer *iconTimer = nullptr;
+    QTimer *wiredCableUpTimer = nullptr;
+    QTimer *wiredCableDownTimer = nullptr;
+    QTimer *deleteLanTimer = nullptr;
+    QTimer *checkWifiListChanged = nullptr;
+    QTimer *checkIfLanConnect = nullptr;
+    QTimer *checkIfWifiConnect = nullptr;
+    QTimer *checkIfNetworkOn = nullptr;
+    QTimer *setNetSpeed = nullptr;
 
     int currentIconIndex;
     int activeWifiSignalLv;

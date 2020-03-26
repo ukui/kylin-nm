@@ -1048,7 +1048,7 @@ void MainWindow::onBtnWifiClicked(int flag)
         // 网络开关关闭时，点击Wifi开关时，程序先打开有线开关
         if (flag == 0) {
             if(checkWlOn()){
-                objKyDBus->setWifiSwitchState(false);
+                // objKyDBus->setWifiSwitchState(false);
                 lbTopWifiList->hide();
                 btnAddNet->hide();
 
@@ -1065,8 +1065,8 @@ void MainWindow::onBtnWifiClicked(int flag)
                 if (is_fly_mode_on == 0){
                     on_btnWifiList_clicked();
                     is_stop_check_net_state = 1;
-                    objKyDBus->setWifiCardState(true);
-                    objKyDBus->setWifiSwitchState(true);
+                    // objKyDBus->setWifiCardState(true);
+                    // objKyDBus->setWifiSwitchState(true);
                     lbTopWifiList->show();
                     btnAddNet->show();
 
@@ -1123,8 +1123,8 @@ void MainWindow::onBtnWifiClicked(int flag)
         btnAddNet->hide();
 
         if (flag == 0) {
-            objKyDBus->setWifiSwitchState(false);
-            objKyDBus->setWifiCardState(false);
+            // objKyDBus->setWifiSwitchState(false);
+            // objKyDBus->setWifiCardState(false);
         }
 
         QString txt(tr("please insert the wireless network adapter"));
@@ -2041,6 +2041,12 @@ void MainWindow::oneTopWifiFormSelected(QString wifiName, int extendLength)
 void MainWindow::activeLanDisconn()
 {
     syslog(LOG_DEBUG, "Wired net is disconnected");
+
+    QString txt(tr("Wired net is disconnected"));
+    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+    int status1 = system(cmd.toUtf8().data());
+    if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
+
     currSelNetName = "";
     //this->startLoading();
     emit this->waitLanStop();
@@ -2062,6 +2068,12 @@ void MainWindow::activeWifiDisconn()
 void MainWindow::activeStartLoading()
 {
     syslog(LOG_DEBUG, "Wi-Fi is disconnected");
+
+    QString txt(tr("Wi-Fi is disconnected"));
+    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+    int status1 = system(cmd.toUtf8().data());
+    if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
+
     currSelNetName = "";
     //this->startLoading();
     emit this->disConnSparedNet("wifi");

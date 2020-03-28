@@ -41,7 +41,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lePassword->setEchoMode(QLineEdit::Normal);
     ui->btnConnPWD->setEnabled(false);
 
-    ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.85);}");
+    ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);line-height:24px;}");
     ui->btnInfo->setStyleSheet("QPushButton{border:none;background:transparent;}");
     ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0);}");
     ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
@@ -135,10 +135,10 @@ bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == ui->btnInfo){
         if(event->type() == QEvent::HoverEnter) {
-            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
+            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.91);line-height:24px;}");
             return true;
         } else if(event->type() == QEvent::HoverLeave){
-            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.85);}");
+            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);line-height:24px;}");
             return true;
         }
     }else if (obj == this){

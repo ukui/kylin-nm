@@ -54,6 +54,13 @@ MainWindow::MainWindow(QWidget *parent) :
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
     this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
+//    this->setStyleSheet("QToolTip{background:rgba(26,26,26,0.7);"
+//                        "font: 14px;"
+//                        "color:rgba(255,255,255,1);"
+//                        "border-radius: 3px;"
+//                        "border:1px solid rgba(255,255,255,0.2);"
+//                        "padding: 0px 4px;"
+//                        "outline:none;}");
 
     ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);"
                                      "border-radius:6px;background:rgba(19,19,20,0.7);}");
@@ -101,15 +108,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClicked);
     connect(ui->btnWifi, &QPushButton::clicked, this, &MainWindow::onBtnWifiClicked);
 
-    auto app = static_cast<QApplication*>(QCoreApplication::instance());
-    app->setStyle(new CustomStyle());
+//    auto app = static_cast<QApplication*>(QCoreApplication::instance());
+//    app->setStyle(new CustomStyle());
 
     ui->btnNetList->setAttribute(Qt::WA_Hover,true);
     ui->btnNetList->installEventFilter(this);
     ui->btnWifiList->setAttribute(Qt::WA_Hover,true);
     ui->btnWifiList->installEventFilter(this);
 
-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+//    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
 MainWindow::~MainWindow()
@@ -137,7 +144,6 @@ void MainWindow::checkSingle()
 bool MainWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
     Q_UNUSED(result);
-
     if(eventType != "xcb_generic_event_t"){
         return false;
     }
@@ -559,9 +565,9 @@ void MainWindow::createTrayIcon()
 
     trayIconMenu = new QMenu(this);
     trayIconMenu->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
-    trayIconMenu->setStyleSheet("QMenu {background-color: rgba(19,19,20,0.95);"
+    trayIconMenu->setStyleSheet("QMenu {background-color: rgba(19,19,20,0.7);"
                                     "border:1px solid rgba(255, 255, 255, 0.05);"
-                                    "padding: 6px 1px;"
+                                    "padding: 6px 2px;"
                                     "border-radius: 6px;}"
                                 "QMenu::item {font-size: 14px;color: #ffffff;"
                                               "height: 36px;width: 248px;}"
@@ -646,13 +652,19 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     switch(reason){
     case QSystemTrayIcon::Trigger:
     case QSystemTrayIcon::MiddleClick:
-        //这里右键点击托盘图标无效
         handleIconClicked();
         if(this->isHidden()){
             this->showNormal();
         }else{
             this->hide();
         }
+        break;
+    case QSystemTrayIcon::DoubleClick:
+        this->hide();
+        break;
+    case QSystemTrayIcon::Context:
+        //右键点击托盘图标弹出菜单
+        showTrayIconMenu();
         break;
     default:
         break;
@@ -682,7 +694,7 @@ void MainWindow::handleIconClicked()
 
     int n = objKyDBus->getTaskbarPos("position");
     int m = objKyDBus->getTaskbarHeight("height");
-    int d = 3; //窗口边沿到任务栏距离
+    int d = 2; //窗口边沿到任务栏距离
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
         if(n == 0){
@@ -725,6 +737,55 @@ void MainWindow::handleIconClicked()
     }
 }
 
+void MainWindow::showTrayIconMenu()
+{
+    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+    QRect screenGeometry = qApp->primaryScreen()->geometry();
+
+    QDesktopWidget* desktopWidget = QApplication::desktop();
+    // QRect deskMainRect = desktopWidget->availableGeometry(0);//获取可用桌面大小
+    QRect screenMainRect = desktopWidget->screenGeometry(0);//获取设备屏幕大小
+    // QRect deskDupRect = desktopWidget->availableGeometry(1);//获取可用桌面大小
+    QRect screenDupRect = desktopWidget->screenGeometry(1);//获取设备屏幕大小
+
+    int n = objKyDBus->getTaskbarPos("position");
+    int m = objKyDBus->getTaskbarHeight("height");
+    int d = 2; //窗口边沿到任务栏距离
+    int s = 80; //窗口边沿到屏幕边沿距离
+
+    if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
+        if(n == 0){ //任务栏在下侧
+            trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width(), screenMainRect.y() + availableGeometry.height() - trayIconMenu->height() - m - d);
+        }else if(n == 1){ //任务栏在上侧
+            trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m + d);
+        } else if (n == 2){ //任务栏在左侧
+            if (screenGeometry.x() == 0){//主屏在左侧
+                trayIconMenu->move(screenGeometry.width() - availableGeometry.width() + m + d, screenMainRect.y() + screenMainRect.height() - trayIconMenu->height() - s);
+            }else{//主屏在右侧
+                trayIconMenu->move(screenGeometry.width() - availableGeometry.width() + m + d,screenDupRect.y() + screenDupRect.height() - trayIconMenu->height() - s);
+            }
+        } else if (n == 3){ //任务栏在右侧
+            if (screenGeometry.x() == 0){//主屏在左侧
+                trayIconMenu->move(screenMainRect.width() + screenDupRect.width() - trayIconMenu->width() - m - d, screenDupRect.y() + screenDupRect.height() - trayIconMenu->height() - s);
+            }else{//主屏在右侧
+                trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width() - m - d, screenMainRect.y() + screenMainRect.height() - trayIconMenu->height() - s);
+            }
+        }
+    } else if(screenGeometry.width() == availableGeometry.width() ){
+        if (trayIcon->geometry().y() > availableGeometry.height()/2){ //任务栏在下侧
+            trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width(), screenMainRect.y() + availableGeometry.height() - trayIconMenu->height() - d);
+        }else{ //任务栏在上侧
+            trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + d);
+        }
+    } else if (screenGeometry.height() == availableGeometry.height()){
+        if (trayIcon->geometry().x() > availableGeometry.width()/2){ //任务栏在右侧
+            trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width() - d, screenMainRect.y() + screenGeometry.height() - trayIconMenu->height() - s);
+        } else { //任务栏在左侧
+            trayIconMenu->move(screenGeometry.width() - availableGeometry.width() + d, screenMainRect.y() + screenGeometry.height() - trayIconMenu->height() - s);
+        }
+    }
+}
+
 void MainWindow::on_showWindowAction()
 {
     handleIconClicked();
@@ -733,7 +794,7 @@ void MainWindow::on_showWindowAction()
 
 void MainWindow::init_widget_action(QWidget *wid, QString iconstr, QString textstr)
 {
-    QString style="QWidget{background:transparent;border:0px;border-radius: 0px;}\
+    QString style="QWidget{background:transparent;border:0px;border-radius: 4px;}\
     QWidget:hover{background-color:#34bed8ef;}\
     QWidget:pressed{background-color:#3abed8ef;}";
 
@@ -1048,7 +1109,7 @@ void MainWindow::onBtnWifiClicked(int flag)
         // 网络开关关闭时，点击Wifi开关时，程序先打开有线开关
         if (flag == 0) {
             if(checkWlOn()){
-                // objKyDBus->setWifiSwitchState(false);
+                 objKyDBus->setWifiSwitchState(false);
                 lbTopWifiList->hide();
                 btnAddNet->hide();
 
@@ -1065,8 +1126,8 @@ void MainWindow::onBtnWifiClicked(int flag)
                 if (is_fly_mode_on == 0){
                     on_btnWifiList_clicked();
                     is_stop_check_net_state = 1;
-                    // objKyDBus->setWifiCardState(true);
-                    // objKyDBus->setWifiSwitchState(true);
+                     objKyDBus->setWifiCardState(true);
+                     objKyDBus->setWifiSwitchState(true);
                     lbTopWifiList->show();
                     btnAddNet->show();
 
@@ -1123,8 +1184,8 @@ void MainWindow::onBtnWifiClicked(int flag)
         btnAddNet->hide();
 
         if (flag == 0) {
-            // objKyDBus->setWifiSwitchState(false);
-            // objKyDBus->setWifiCardState(false);
+             objKyDBus->setWifiSwitchState(false);
+             objKyDBus->setWifiCardState(false);
         }
 
         QString txt(tr("please insert the wireless network adapter"));

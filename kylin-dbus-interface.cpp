@@ -33,7 +33,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     getPhysicalCarrierState(0); //初始化获取网线插入状态
     getLanHwAddressState(); //获取有线网Mac地址
     getWiredCardName();
-//    getWifiSwitchState();
+    getWifiSwitchState();
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
@@ -188,7 +188,7 @@ void KylinDBus::getLanIp(QString netName)
                     if (search_key == "id"){
                         //const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
                         if (netName == outsideMap.value(search_key).toString()){
-                            qDebug()<<"aaaaaa"<<outsideMap.value(search_key).toString();
+                            // qDebug()<<"aaaaaa"<<outsideMap.value(search_key).toString();
 
                             for(QString key : map.keys() ){
                                 QMap<QString,QVariant> innerMap = map.value(key);

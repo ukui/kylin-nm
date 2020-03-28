@@ -1,13 +1,3 @@
-QToolTip{
-    background:rgba(26,26,26,0.7);
-    font: 14px;
-    color:rgba(255,255,255,1);
-    border-radius: 3px;
-    border:1px solid rgba(255,255,255,0.2);
-    padding: 0px 4px;
-    outline:none;
-}
-
 QScrollBar:vertical{margin:0px 2px 0px 2px;width:10px;background:rgba(48,48,51,0);border-radius:6px;}
 QScrollBar::up-arrow:vertical{height:0px;}
 QScrollBar::sub-line:vertical{border:0px solid;height:0px}

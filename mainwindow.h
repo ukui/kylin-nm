@@ -183,6 +183,7 @@ private:
     void initNetwork();
     void createTrayIcon();
     void handleIconClicked();
+    void showTrayIconMenu();
     bool checkLanOn();
     bool checkWlOn();
     void getLanList();

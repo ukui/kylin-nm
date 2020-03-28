@@ -42,11 +42,11 @@
 #define H_ITEM_MIDDLE 106
 #define H_WIFI_ITEM_BIG_EXTEND 78 //138 - 60
 #define H_WIFI_ITEM_SMALL_EXTEND 46 //106 - 60
-#define Y_LINE 58
+#define Y_LINE 59
 #define X_LINE 0
-#define Y_LINE_SMALL_EXTEND 104
+#define Y_LINE_SMALL_EXTEND 105
 #define X_LINE_SMALL_EXTEND 0
-#define Y_LINE_BIG_EXTEND 136
+#define Y_LINE_BIG_EXTEND 137
 #define X_LINE_BIG_EXTEND 0
 
 class MainWindow;

@@ -47,16 +47,17 @@ QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-        ksimplenm.cpp \
-        oneconnform.cpp \
-        confform.cpp \
-        kylin-network-interface.c \
-    backthread.cpp \
-    onelancform.cpp \
-    loadingdiv.cpp \
-    utils.cpp \
+    src/backthread.cpp \
+    src/confform.cpp \
+    src/ksimplenm.cpp \
+    src/kylin-dbus-interface.cpp \
+    src/kylin-network-interface.c \
+    src/loadingdiv.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/oneconnform.cpp \
+    src/onelancform.cpp \
+    src/utils.cpp \
     wireless-security/dlgconnhidwifi.cpp \
     wireless-security/dlgconnhidwifisecfast.cpp \
     wireless-security/dlgconnhidwifisectunneltls.cpp \
@@ -67,20 +68,21 @@ SOURCES += \
     wireless-security/dlgconnhidwifiwep.cpp \
     wireless-security/dlgconnhidwifileap.cpp \
     wireless-security/dlgconnhidwifiwpa.cpp \
-    kylin-dbus-interface.cpp \
-    hot-spot/dlghotspotcreate.cpp \
-    wireless-security/kylinheadfile.cpp
+    wireless-security/kylinheadfile.cpp \
+    hot-spot/dlghotspotcreate.cpp
+
 
 HEADERS += \
-        mainwindow.h \
-        ksimplenm.h \
-        oneconnform.h \
-        confform.h \
-        kylin-network-interface.h \
-    backthread.h \
-    onelancform.h \
-    loadingdiv.h \
-    utils.h \
+    src/backthread.h \
+    src/confform.h \
+    src/ksimplenm.h \
+    src/kylin-dbus-interface.h \
+    src/kylin-network-interface.h \
+    src/loadingdiv.h \
+    src/mainwindow.h \
+    src/oneconnform.h \
+    src/onelancform.h \
+    src/utils.h \
     wireless-security/dlgconnhidwifi.h \
     wireless-security/dlgconnhidwifisecfast.h \
     wireless-security/dlgconnhidwifisectunneltls.h \
@@ -92,14 +94,13 @@ HEADERS += \
     wireless-security/dlgconnhidwifileap.h \
     wireless-security/dlgconnhidwifiwpa.h \
     wireless-security/kylinheadfile.h \
-    kylin-dbus-interface.h \
     hot-spot/dlghotspotcreate.h
 
 FORMS += \
-        mainwindow.ui \
-        oneconnform.ui \
-        confform.ui \
-    onelancform.ui \
+    src/confform.ui \
+    src/mainwindow.ui \
+    src/oneconnform.ui \
+    src/onelancform.ui \
     wireless-security/dlgconnhidwifi.ui \
     wireless-security/dlgconnhidwifisecfast.ui \
     wireless-security/dlgconnhidwifisectunneltls.ui \

@@ -20,8 +20,8 @@
 #include "dlgconnhidwifiwpa.h"
 #include "ui_dlgconnhidwifiwpa.h"
 #include "kylinheadfile.h"
-#include "backthread.h"
-#include "mainwindow.h"
+#include "src/backthread.h"
+#include "src/mainwindow.h"
 
 #include <unistd.h>
 #include <stdlib.h>

@@ -20,8 +20,8 @@
 #include "dlgconnhidwifi.h"
 #include "kylinheadfile.h"
 #include "ui_dlgconnhidwifi.h"
-#include "backthread.h"
-#include "mainwindow.h"
+#include "src/backthread.h"
+#include "src/mainwindow.h"
 
 #include <unistd.h>
 

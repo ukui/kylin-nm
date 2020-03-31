@@ -10,6 +10,6 @@
 
 # BUILD KYLIN-NM
     down the source sode
-    install depend packages(writed in the cntrol files in the debian directory) 
+    install dependency packages(see cntrol files in the debian directory) 
     execute debuild command in the root directory of project
     execute sudo dpkg -i packagename.deb to install

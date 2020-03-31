@@ -112,6 +112,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnInfo->setAttribute(Qt::WA_Hover,true);
     ui->btnInfo->installEventFilter(this);
 
+    //m_notify = new NotifySend();
+
     connect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
     ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与登录按钮绑定在一起
 
@@ -123,6 +125,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 
 OneConnForm::~OneConnForm()
 {
+    m_notify->deleteLater();
     delete ui;
 }
 
@@ -603,6 +606,7 @@ void OneConnForm::slotConnWifiResult(int connFlag){
         // 使用配置文件连接失败，需要删除该配置文件
         QString txt(tr("Conn Wifi Failed"));//"连接 Wifi 失败"
         syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", ui->lbName->text().toUtf8().data());
+        //m_notify->execNotifySend(txt);
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
         int status = system(cmd.toUtf8().data());
         if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");}

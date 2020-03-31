@@ -75,5 +75,7 @@
         <file>res/s/conning-a/7.png</file>
         <file>res/s/conning-a/8.png</file>
         <file>qss/style.qss</file>
+        <file>res/g/close_black.png</file>
+        <file>res/g/close_white.png</file>
     </qresource>
 </RCC>

@@ -31,6 +31,7 @@
 #include "kylin-network-interface.h"
 #include "backthread.h"
 #include "ksimplenm.h"
+#include "notifysend.h"
 
 #define FRAME_SPEED 150
 #define LIMIT_TIME 30*1000
@@ -80,6 +81,7 @@ public:
 
     void setLePassword();
 
+    NotifySend *m_notify = nullptr;
     QString wifiName;
     bool isSelected;
     bool isActive;

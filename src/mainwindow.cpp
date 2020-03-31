@@ -87,8 +87,8 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon->show();
 
     objKyDBus = new KylinDBus(this);
-
     objNetSpeed = new NetworkSpeed();
+    //m_notify = new NotifySend();
 
     this->confForm = new ConfForm();
 
@@ -126,13 +126,22 @@ MainWindow::~MainWindow()
 
 void MainWindow::checkSingle()
 {
-    //int fd = open("/tmp/kylin-nm-lock", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+    int fd = 0;
+    try{
+        QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+        QString lockPath = homePath.at(0) + "/.config/kylin-nm-lock";
+        fd = open(lockPath.toUtf8().data(), O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
 
-    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
-    QString lockPath = homePath.at(0) + "/.config/kylin-nm-lock";
-    int fd = open(lockPath.toUtf8().data(), O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+        if (fd < 0) {
+            throw -1;
+        }
+    }catch(...){
+        fd = open("/tmp/kylin-nm-lock", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+        if (fd < 0) {
+            exit(0);
+        }
+    }
 
-    if (fd < 0) { exit(1); }
 
     if (lockf(fd, F_TLOCK, 0)) {
         syslog(LOG_ERR, "Can't lock single file, kylin-network-manager is already running!");
@@ -424,8 +433,10 @@ void MainWindow::initNetwork()
     mwBandWidth = bt->execChkLanWidth(lname);
 
     // 开关状态
-    qDebug()<<"lstate ="<<iface->lstate<<"    wstate ="<<iface->wstate ;
-    syslog(LOG_DEBUG, "state of switch:   lstate =%d    wstate =%d", iface->lstate, iface->wstate);
+    qDebug()<<"state of network: '0' is connection, '1' is disconnection, '2' is net device off";
+    syslog(LOG_DEBUG, "state of network: '0' is connection, '1' is disconnection, '2' is switch off ");
+    qDebug()<<"current network state:  lan state ="<<iface->lstate<<",  wifi state ="<<iface->wstate ;
+    syslog(LOG_DEBUG, "current network state:  lan state =%d,  wifi state =%d", iface->lstate, iface->wstate);
 
     ui->lbBtnNetBG->setStyleSheet(btnOnQss);
     if(iface->wstate == 0 || iface->wstate == 1){
@@ -455,6 +466,7 @@ void MainWindow::initNetwork()
         ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
         ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
     } else {
+        objKyDBus->setWifiSwitchState(false); //通知控制面板wifi未开启
         if(iface->lstate != 2){
             if (iface->lstate == 0) {
                 connLanDone(3);
@@ -692,8 +704,9 @@ void MainWindow::handleIconClicked()
 //    qDebug()<<"deskDupRect: "<<deskDupRect;
 //    qDebug()<<"screenDupRect: "<<screenDupRect;
 
-    int n = objKyDBus->getTaskbarPos("position");
-    int m = objKyDBus->getTaskbarHeight("height");
+    int m = objKyDBus->getTaskbarHeight();
+    int n = objKyDBus->getTaskbarPos();
+    qDebug()<<"aaaaaaaa  "<<m<<"   "<<n;
     int d = 2; //窗口边沿到任务栏距离
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
@@ -705,18 +718,20 @@ void MainWindow::handleIconClicked()
             this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m + d);
         } else if (n == 2){
             //任务栏在左侧
-            if (screenGeometry.x() == 0){//主屏在左侧
-                this->move(screenGeometry.width() - availableGeometry.width() + m + d, screenMainRect.y() + screenMainRect.height() - this->height());
-            }else{//主屏在右侧
-                this->move(screenGeometry.width() - availableGeometry.width() + m + d,screenDupRect.y() + screenDupRect.height() - this->height());
-            }
+            this->move(m + d, screenMainRect.y() + screenMainRect.height() - this->height());
+//            if (screenGeometry.x() == 0){//主屏在左侧
+//                this->move(screenGeometry.width() - availableGeometry.width() + m + d, screenMainRect.y() + screenMainRect.height() - this->height());
+//            }else{//主屏在右侧
+//                this->move(screenGeometry.width() - availableGeometry.width() + m + d,screenDupRect.y() + screenDupRect.height() - this->height());
+//            }
         } else if (n == 3){
             //任务栏在右侧
-            if (screenGeometry.x() == 0){//主屏在左侧
-                this->move(screenMainRect.width() + screenDupRect.width() - this->width() - m - d, screenDupRect.y() + screenDupRect.height() - this->height());
-            }else{//主屏在右侧
-                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height());
-            }
+            this->move(screenMainRect.width() - this->width() - m - d, screenDupRect.y() + screenDupRect.height() - this->height());
+//            if (screenGeometry.x() == 0){//主屏在左侧
+//                this->move(screenMainRect.width() + screenDupRect.width() - this->width() - m - d, screenDupRect.y() + screenDupRect.height() - this->height());
+//            }else{//主屏在右侧
+//                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height());
+//            }
         }
     } else if(screenGeometry.width() == availableGeometry.width() ){
         if (trayIcon->geometry().y() > availableGeometry.height()/2){
@@ -748,8 +763,8 @@ void MainWindow::showTrayIconMenu()
     // QRect deskDupRect = desktopWidget->availableGeometry(1);//获取可用桌面大小
     QRect screenDupRect = desktopWidget->screenGeometry(1);//获取设备屏幕大小
 
-    int n = objKyDBus->getTaskbarPos("position");
-    int m = objKyDBus->getTaskbarHeight("height");
+    int m = objKyDBus->getTaskbarHeight();
+    int n = objKyDBus->getTaskbarPos();
     int d = 2; //窗口边沿到任务栏距离
     int s = 80; //窗口边沿到屏幕边沿距离
 
@@ -759,17 +774,19 @@ void MainWindow::showTrayIconMenu()
         }else if(n == 1){ //任务栏在上侧
             trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m + d);
         } else if (n == 2){ //任务栏在左侧
-            if (screenGeometry.x() == 0){//主屏在左侧
-                trayIconMenu->move(screenGeometry.width() - availableGeometry.width() + m + d, screenMainRect.y() + screenMainRect.height() - trayIconMenu->height() - s);
-            }else{//主屏在右侧
-                trayIconMenu->move(screenGeometry.width() - availableGeometry.width() + m + d,screenDupRect.y() + screenDupRect.height() - trayIconMenu->height() - s);
-            }
+            trayIconMenu->move(m + d, screenMainRect.y() + screenMainRect.height() - trayIconMenu->height() - s);
+//            if (screenGeometry.x() == 0){//主屏在左侧
+//                trayIconMenu->move(screenGeometry.width() - availableGeometry.width() + m + d, screenMainRect.y() + screenMainRect.height() - trayIconMenu->height() - s);
+//            }else{//主屏在右侧
+//                trayIconMenu->move(screenGeometry.width() - availableGeometry.width() + m + d,screenDupRect.y() + screenDupRect.height() - trayIconMenu->height() - s);
+//            }
         } else if (n == 3){ //任务栏在右侧
-            if (screenGeometry.x() == 0){//主屏在左侧
-                trayIconMenu->move(screenMainRect.width() + screenDupRect.width() - trayIconMenu->width() - m - d, screenDupRect.y() + screenDupRect.height() - trayIconMenu->height() - s);
-            }else{//主屏在右侧
-                trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width() - m - d, screenMainRect.y() + screenMainRect.height() - trayIconMenu->height() - s);
-            }
+            trayIconMenu->move(screenMainRect.width() - trayIconMenu->width() - m - d, screenDupRect.y() + screenDupRect.height() - trayIconMenu->height() - s);
+//            if (screenGeometry.x() == 0){//主屏在左侧
+//                trayIconMenu->move(screenMainRect.width() + screenDupRect.width() - trayIconMenu->width() - m - d, screenDupRect.y() + screenDupRect.height() - trayIconMenu->height() - s);
+//            }else{//主屏在右侧
+//                trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width() - m - d, screenMainRect.y() + screenMainRect.height() - trayIconMenu->height() - s);
+//            }
         }
     } else if(screenGeometry.width() == availableGeometry.width() ){
         if (trayIcon->geometry().y() > availableGeometry.height()/2){ //任务栏在下侧
@@ -1126,8 +1143,8 @@ void MainWindow::onBtnWifiClicked(int flag)
                 if (is_fly_mode_on == 0){
                     on_btnWifiList_clicked();
                     is_stop_check_net_state = 1;
-                     objKyDBus->setWifiCardState(true);
-                     objKyDBus->setWifiSwitchState(true);
+                    objKyDBus->setWifiCardState(true);
+                    objKyDBus->setWifiSwitchState(true);
                     lbTopWifiList->show();
                     btnAddNet->show();
 
@@ -1189,6 +1206,7 @@ void MainWindow::onBtnWifiClicked(int flag)
         }
 
         QString txt(tr("please insert the wireless network adapter"));
+        //m_notify->execNotifySend(txt);
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         int status = system(cmd.toUtf8().data());
         if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnWifiClicked' failed");}
@@ -1249,9 +1267,10 @@ void MainWindow::onBtnNetListClicked(int flag)
             QString line(buf);
             if(line.indexOf("ethernet") != -1){
                 QString txt(tr("Abnormal connection exist, program will delete it"));//仍然有连接异常的有线网络，断开异常连接的网络
+                //m_notify->execNotifySend(txt);
                 QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-                 int status = system(cmd.toUtf8().data());
-                 if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnNetListClicked' failed");}
+                int status = system(cmd.toUtf8().data());
+                if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnNetListClicked' failed");}
 
                 is_stop_check_net_state = 1;
                 this->startLoading();
@@ -2104,6 +2123,7 @@ void MainWindow::activeLanDisconn()
     syslog(LOG_DEBUG, "Wired net is disconnected");
 
     QString txt(tr("Wired net is disconnected"));
+    //m_notify->execNotifySend(txt);
     QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
     int status1 = system(cmd.toUtf8().data());
     if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
@@ -2131,6 +2151,7 @@ void MainWindow::activeStartLoading()
     syslog(LOG_DEBUG, "Wi-Fi is disconnected");
 
     QString txt(tr("Wi-Fi is disconnected"));
+    //m_notify->execNotifySend(txt);
     QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
     int status1 = system(cmd.toUtf8().data());
     if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
@@ -2330,9 +2351,13 @@ void MainWindow::on_setNetSpeed()
 {
     if (this->isVisible() && is_stop_check_net_state==0){
         if (is_btnWifiList_clicked == 1){
-            objNetSpeed->getCurrentDownloadRates(objKyDBus->dbusWiFiCardName.toUtf8().data(), &start_rcv_rates, &start_tx_rates);
+            if ( objNetSpeed->getCurrentDownloadRates(objKyDBus->dbusWiFiCardName.toUtf8().data(), &start_rcv_rates, &start_tx_rates) == -1){
+                start_rcv_rates = end_rcv_rates;
+            }
         }else if(is_btnNetList_clicked == 1){
-            objNetSpeed->getCurrentDownloadRates(objKyDBus->dbusLanCardName.toUtf8().data(), &start_rcv_rates, &start_tx_rates);
+            if ( objNetSpeed->getCurrentDownloadRates(objKyDBus->dbusLanCardName.toUtf8().data(), &start_rcv_rates, &start_tx_rates) == -1){
+                start_tx_rates = end_tx_rates;
+            }
         }
 
         long int delta_rcv = (start_rcv_rates - end_rcv_rates)/800;
@@ -2407,7 +2432,9 @@ void MainWindow::connLanDone(int connFlag)
         this->is_wired_line_ready = 1;
         this->is_by_click_connect = 1;
         this->ksnm->execGetLanList();
+
         QString txt(tr("Conn Ethernet Success"));
+        //m_notify->execNotifySend(txt);
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         int status = system(cmd.toUtf8().data());
         if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
@@ -2420,10 +2447,10 @@ void MainWindow::connLanDone(int connFlag)
         qDebug()<<"without net line connect to computer";
         this->is_wired_line_ready = 0; //without net line connect to computer
         QString txt(tr("Conn Ethernet Fail"));
+        //m_notify->execNotifySend(txt);
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         int status = system(cmd.toUtf8().data());
         if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
-
     }
 
     if(connFlag == 3){
@@ -2542,6 +2569,7 @@ void MainWindow::connWifiDone(int connFlag)
         this->is_by_click_connect = 1;
         this->ksnm->execGetWifiList();
         QString txt(tr("Conn Wifi Success"));
+        //m_notify->execNotifySend(txt);
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         int status = system(cmd.toUtf8().data());
         if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connWifiDone' failed");}
@@ -2550,6 +2578,12 @@ void MainWindow::connWifiDone(int connFlag)
         //checkIfWifiConnect->start(8000);
     } else if (connFlag == 1) {
         is_stop_check_net_state = 0;
+
+        QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
+        //m_notify->execNotifySend(txt);
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+        int status1 = system(cmd.toUtf8().data());
+        if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
     } else if (connFlag == 3) {
         syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected");
         //syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected, will check if Wi-Fi disconnected circularly");
@@ -2594,7 +2628,7 @@ void MainWindow::on_isWifiConnect()
             if (count_loop >= 2){ count_loop = 1;}
         }
     }
-    \
+
     delete loop_iface;
     delete loop_bt;
 }

@@ -85,12 +85,14 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
     char tmp_value[128];
 
     if((NULL == netname)||(NULL == save_rate)||(NULL == tx_rate)){
-        printf("bad param\n");
+        qDebug()<<"parameter pass to function getCurrentDownloadRates() error";
+        syslog(LOG_ERR, "parameter pass to function getCurrentDownloadRates() error");
         return -1;
     }
 
     if ( (net_dev_file=fopen("/proc/net/dev", "r")) == NULL ){ //打开文件/pro/net/dev/，从中读取流量数据
-        printf("open file /proc/net/dev/ error!\n");
+        qDebug()<<"error occured when try to open file /proc/net/dev/";
+        syslog(LOG_ERR, "error occured when try to open file /proc/net/dev/");
         return -1;
     }
     memset(buffer,0,sizeof(buffer));
@@ -99,10 +101,9 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
         match = strstr(buffer,netname);
 
         if(NULL == match){
-            //printf("no eth0 keyword to find!\n");
+            // qDebug()<<"No eth0 keyword to find!";
             continue;
         }else{
-            //printf("%s\n",buffer);
             match = match + strlen(netname) + strlen(":"); //地址偏移到冒号
             sscanf(match,"%ld ",save_rate);
             memset(tmp_value,0,sizeof(tmp_value));
@@ -121,7 +122,6 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
                     counter ++;
                 }
             }
-            //printf("%s save_rate:%ld tx_rate:%ld\n",netname,*save_rate,*tx_rate);
         }
     }
 

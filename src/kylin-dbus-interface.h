@@ -27,8 +27,10 @@ public:
     void getObjectPath();
     int getAccessPointsNumber();
     int getLanConnState();
-    int getTaskbarPos(QString str);
-    int getTaskbarHeight(QString str);
+
+    void initTaskbarGsetting();
+    int getTaskbarHeight();
+    int getTaskbarPos();
 
     void getWifiSwitchState();
     bool getSwitchStatus(QString key);
@@ -71,6 +73,7 @@ private:
     bool isRunningFunction = false;
     QTimer *time = nullptr;
 
+    QGSettings *m_tastbar_gsettings = nullptr;
     QGSettings *m_gsettings = nullptr;
 
 signals:

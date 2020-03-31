@@ -126,6 +126,8 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->btnOk->setFocusPolicy(Qt::NoFocus);
     ui->btnCreate->setFocusPolicy(Qt::NoFocus);
 
+    //m_notify = new NotifySend(); //显示桌面通知
+
     // IP的正则格式限制
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
     ui->leAddr->setValidator(new QRegExpValidator(rx, this));
@@ -138,6 +140,7 @@ ConfForm::ConfForm(QWidget *parent) :
 
 ConfForm::~ConfForm()
 {
+    m_notify->deleteLater();
     delete ui;
 }
 
@@ -211,6 +214,7 @@ void ConfForm::on_btnCreate_clicked()
         this->on_btnOk_clicked();
     } else {
         QString txt(tr("New network already created"));
+        //m_notify->execNotifySend(txt);
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
         int status1 = system(cmd.toUtf8().data());
         if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
@@ -248,6 +252,7 @@ void ConfForm::on_btnOk_clicked()
     }
 
     QString txt(tr("New network settings already finished"));
+    //m_notify->execNotifySend(txt);
     QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
     int status1 = system(cmd.toUtf8().data());
     if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
@@ -263,6 +268,7 @@ void ConfForm::on_btnOk_clicked()
 //        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection up' in function 'on_btnOk_clicked' failed");}
 
         QString txt(tr("New settings already effective"));
+        //m_notify->execNotifySend(txt);
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         int status1 = system(cmd.toUtf8().data());
         if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'on_btnOk_clicked' failed");}

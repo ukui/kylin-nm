@@ -303,12 +303,12 @@ void ConfForm::cbTypeChanged(int index){
         ui->lineUp->show();
         ui->lineDown->show();
         ui->wgManual->show();
-        ui->centralWidget->resize(432, 500);
+        ui->centralWidget->resize(432, 510);
         ui->wdBottom->move(1, 440);
 
         this->setEnableOfBtn();
 
-        this->resize(432, 500);
+        this->resize(432, 510);
     }
     if(index == 3){
         ui->btnOk->setStyleSheet(btnOffQss);

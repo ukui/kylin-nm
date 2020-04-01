@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>432</width>
-    <height>500</height>
+    <height>510</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>432</width>
-     <height>500</height>
+     <height>510</height>
     </rect>
    </property>
    <widget class="QWidget" name="wgManual" native="true">
@@ -279,7 +279,7 @@
       <x>1</x>
       <y>440</y>
       <width>430</width>
-      <height>60</height>
+      <height>70</height>
      </rect>
     </property>
     <widget class="QPushButton" name="btnOk">

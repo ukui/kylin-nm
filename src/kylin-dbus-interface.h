@@ -27,6 +27,7 @@ public:
     void getObjectPath();
     int getAccessPointsNumber();
     int getLanConnState();
+    void showDesktopNotify(QString message);
 
     void initTaskbarGsetting();
     int getTaskbarHeight();

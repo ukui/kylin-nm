@@ -28,7 +28,6 @@
 #include <QKeyEvent>
 
 #include "confform.h"
-#include "kylin-network-interface.h"
 #include "backthread.h"
 #include "ksimplenm.h"
 #include "notifysend.h"

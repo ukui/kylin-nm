@@ -32,7 +32,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     getObjectPath(); //获取dbus中 lan 与 WiFi 的device路径
     getPhysicalCarrierState(0); //初始化获取网线插入状态
     getLanHwAddressState(); //获取有线网Mac地址
-    getWiredCardName();
+    getWiredCardName(); //获取有线网卡名称
     initTaskbarGsetting(); //初始化taskbar的GSetting方法
     getWifiSwitchState(); //初始化wifi开关GSetting通信方法
 
@@ -475,6 +475,24 @@ void KylinDBus::onWifiPropertyChanged(QVariantMap qvm)
 void KylinDBus::onAccessPointAdded(QDBusObjectPath objPath)
 {
     //qDebug()<<"debug: &&&&&&&&&&&&&"<<objPath.path();
+}
+
+void KylinDBus::showDesktopNotify(QString message)
+{
+    QDBusInterface iface("org.freedesktop.Notifications",
+                         "/org/freedesktop/Notifications",
+                         "org.freedesktop.Notifications",
+                         QDBusConnection::sessionBus());
+    QList<QVariant> args;
+    args<<(QCoreApplication::applicationName())
+    <<((unsigned int) 0)
+    <<QString("qweq")
+    <<tr("kylin network applet desktop message")
+    <<message
+    <<QStringList()
+    <<QVariantMap()
+    <<(int)-1;
+    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

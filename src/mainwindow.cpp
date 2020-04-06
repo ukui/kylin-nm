@@ -706,7 +706,6 @@ void MainWindow::handleIconClicked()
 
     int m = objKyDBus->getTaskbarHeight();
     int n = objKyDBus->getTaskbarPos();
-    qDebug()<<"aaaaaaaa  "<<m<<"   "<<n;
     int d = 2; //窗口边沿到任务栏距离
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
@@ -1206,10 +1205,11 @@ void MainWindow::onBtnWifiClicked(int flag)
         }
 
         QString txt(tr("please insert the wireless network adapter"));
-        //m_notify->execNotifySend(txt);
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-        int status = system(cmd.toUtf8().data());
-        if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnWifiClicked' failed");}
+        //m_notify->execNotifySend(txt); //显示本应用自带的桌面通知
+        objKyDBus->showDesktopNotify(txt);
+        //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
+        //int status = system(cmd.toUtf8().data());
+        //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnWifiClicked' failed");}
 
         disWifiStateKeep();
     }
@@ -1267,10 +1267,11 @@ void MainWindow::onBtnNetListClicked(int flag)
             QString line(buf);
             if(line.indexOf("ethernet") != -1){
                 QString txt(tr("Abnormal connection exist, program will delete it"));//仍然有连接异常的有线网络，断开异常连接的网络
-                //m_notify->execNotifySend(txt);
-                QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-                int status = system(cmd.toUtf8().data());
-                if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnNetListClicked' failed");}
+                //m_notify->execNotifySend(txt);//显示本应用自带的桌面通知
+                objKyDBus->showDesktopNotify(txt);
+                //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+                //int status = system(cmd.toUtf8().data());
+                //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnNetListClicked' failed");}
 
                 is_stop_check_net_state = 1;
                 this->startLoading();
@@ -2124,9 +2125,10 @@ void MainWindow::activeLanDisconn()
 
     QString txt(tr("Wired net is disconnected"));
     //m_notify->execNotifySend(txt);
-    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-    int status1 = system(cmd.toUtf8().data());
-    if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
+    objKyDBus->showDesktopNotify(txt);
+    //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+    //int status1 = system(cmd.toUtf8().data());
+    //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
 
     currSelNetName = "";
     //this->startLoading();
@@ -2152,9 +2154,10 @@ void MainWindow::activeStartLoading()
 
     QString txt(tr("Wi-Fi is disconnected"));
     //m_notify->execNotifySend(txt);
-    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-    int status1 = system(cmd.toUtf8().data());
-    if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
+    objKyDBus->showDesktopNotify(txt);
+    //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+    //int status1 = system(cmd.toUtf8().data());
+    //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
 
     currSelNetName = "";
     //this->startLoading();
@@ -2435,9 +2438,10 @@ void MainWindow::connLanDone(int connFlag)
 
         QString txt(tr("Conn Ethernet Success"));
         //m_notify->execNotifySend(txt);
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-        int status = system(cmd.toUtf8().data());
-        if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
+        objKyDBus->showDesktopNotify(txt);
+        //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
+        //int status = system(cmd.toUtf8().data());
+        //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
 
         //changeTimerState();
         //checkIfLanConnect->start(8000);
@@ -2446,11 +2450,13 @@ void MainWindow::connLanDone(int connFlag)
     if(connFlag == 1){
         qDebug()<<"without net line connect to computer";
         this->is_wired_line_ready = 0; //without net line connect to computer
+
         QString txt(tr("Conn Ethernet Fail"));
         //m_notify->execNotifySend(txt);
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-        int status = system(cmd.toUtf8().data());
-        if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
+        objKyDBus->showDesktopNotify(txt);
+        //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
+        //int status = system(cmd.toUtf8().data());
+        //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
     }
 
     if(connFlag == 3){
@@ -2568,11 +2574,13 @@ void MainWindow::connWifiDone(int connFlag)
         //qDebug()<<"连接状态：Wifi网络已经点击连接，即将重新循环检测 Wifi 是否断开";
         this->is_by_click_connect = 1;
         this->ksnm->execGetWifiList();
+
         QString txt(tr("Conn Wifi Success"));
         //m_notify->execNotifySend(txt);
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-        int status = system(cmd.toUtf8().data());
-        if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connWifiDone' failed");}
+        objKyDBus->showDesktopNotify(txt);
+        //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
+        //int status = system(cmd.toUtf8().data());
+        //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connWifiDone' failed");}
 
         //changeTimerState();
         //checkIfWifiConnect->start(8000);
@@ -2581,9 +2589,10 @@ void MainWindow::connWifiDone(int connFlag)
 
         QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
         //m_notify->execNotifySend(txt);
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-        int status1 = system(cmd.toUtf8().data());
-        if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
+        objKyDBus->showDesktopNotify(txt);
+        //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+        //int status1 = system(cmd.toUtf8().data());
+        //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
     } else if (connFlag == 3) {
         syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected");
         //syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected, will check if Wi-Fi disconnected circularly");

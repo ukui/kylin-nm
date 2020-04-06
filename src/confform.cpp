@@ -215,9 +215,11 @@ void ConfForm::on_btnCreate_clicked()
     } else {
         QString txt(tr("New network already created"));
         //m_notify->execNotifySend(txt);
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-        int status1 = system(cmd.toUtf8().data());
-        if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
+        KylinDBus kylindbus;
+        kylindbus.showDesktopNotify(txt);
+        //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+        //int status1 = system(cmd.toUtf8().data());
+        //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
     }
 
     this->hide();
@@ -253,9 +255,11 @@ void ConfForm::on_btnOk_clicked()
 
     QString txt(tr("New network settings already finished"));
     //m_notify->execNotifySend(txt);
-    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-    int status1 = system(cmd.toUtf8().data());
-    if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
+    KylinDBus kylindbus;
+    kylindbus.showDesktopNotify(txt);
+    //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+    //int status1 = system(cmd.toUtf8().data());
+    //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
 
     this->hide();
 
@@ -267,11 +271,13 @@ void ConfForm::on_btnOk_clicked()
 //        int status = system(cmd.toUtf8().data());
 //        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection up' in function 'on_btnOk_clicked' failed");}
 
-        QString txt(tr("New settings already effective"));
-        //m_notify->execNotifySend(txt);
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
-        int status1 = system(cmd.toUtf8().data());
-        if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'on_btnOk_clicked' failed");}
+        QString m_txt(tr("New settings already effective"));
+        //m_notify->execNotifySend(m_txt);
+        KylinDBus m_kylindbus;
+        m_kylindbus.showDesktopNotify(m_txt);
+        //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + m_txt + "' -t 3800";
+        //int status1 = system(cmd.toUtf8().data());
+        //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'on_btnOk_clicked' failed");}
     }
 }
 

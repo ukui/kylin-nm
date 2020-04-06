@@ -19,6 +19,7 @@
 #include "oneconnform.h"
 #include "ui_oneconnform.h"
 #include "mainwindow.h"
+#include "kylin-network-interface.h"
 #include "wireless-security/dlgconnhidwifi.h"
 #include "utils.h"
 
@@ -606,10 +607,13 @@ void OneConnForm::slotConnWifiResult(int connFlag){
         // 使用配置文件连接失败，需要删除该配置文件
         QString txt(tr("Conn Wifi Failed"));//"连接 Wifi 失败"
         syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", ui->lbName->text().toUtf8().data());
+
         //m_notify->execNotifySend(txt);
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
-        int status = system(cmd.toUtf8().data());
-        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");}
+        KylinDBus kylindbus;
+        kylindbus.showDesktopNotify(txt);
+        //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
+        //int status = system(cmd.toUtf8().data());
+        //if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");}
     }
 
     // 设置全局变量，当前连接Wifi的信号强度

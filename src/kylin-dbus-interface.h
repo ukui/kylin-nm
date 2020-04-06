@@ -29,6 +29,8 @@ public:
     int getLanConnState();
     void showDesktopNotify(QString message);
 
+    int getTaskBarPos(QString str);
+    int getTaskBarHeight(QString str);
     void initTaskbarGsetting();
     int getTaskbarHeight();
     int getTaskbarPos();

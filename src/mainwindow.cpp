@@ -433,10 +433,12 @@ void MainWindow::initNetwork()
     mwBandWidth = bt->execChkLanWidth(lname);
 
     // 开关状态
-    qDebug()<<"state of network: '0' is connection, '1' is disconnection, '2' is net device off";
-    syslog(LOG_DEBUG, "state of network: '0' is connection, '1' is disconnection, '2' is switch off ");
+    qDebug()<<"===";
+    qDebug()<<"state of network: '0' is connected, '1' is disconnected, '2' is net device switch off";
+    syslog(LOG_DEBUG, "state of network: '0' is connected, '1' is disconnected, '2' is net device switch off");
     qDebug()<<"current network state:  lan state ="<<iface->lstate<<",  wifi state ="<<iface->wstate ;
     syslog(LOG_DEBUG, "current network state:  lan state =%d,  wifi state =%d", iface->lstate, iface->wstate);
+    qDebug()<<"===";
 
     ui->lbBtnNetBG->setStyleSheet(btnOnQss);
     if(iface->wstate == 0 || iface->wstate == 1){
@@ -704,8 +706,8 @@ void MainWindow::handleIconClicked()
 //    qDebug()<<"deskDupRect: "<<deskDupRect;
 //    qDebug()<<"screenDupRect: "<<screenDupRect;
 
-    int m = objKyDBus->getTaskbarHeight();
-    int n = objKyDBus->getTaskbarPos();
+    int n = objKyDBus->getTaskBarPos("position");
+    int m = objKyDBus->getTaskBarHeight("height");
     int d = 2; //窗口边沿到任务栏距离
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
@@ -725,7 +727,7 @@ void MainWindow::handleIconClicked()
 //            }
         } else if (n == 3){
             //任务栏在右侧
-            this->move(screenMainRect.width() - this->width() - m - d, screenDupRect.y() + screenDupRect.height() - this->height());
+            this->move(screenMainRect.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height());
 //            if (screenGeometry.x() == 0){//主屏在左侧
 //                this->move(screenMainRect.width() + screenDupRect.width() - this->width() - m - d, screenDupRect.y() + screenDupRect.height() - this->height());
 //            }else{//主屏在右侧
@@ -762,8 +764,8 @@ void MainWindow::showTrayIconMenu()
     // QRect deskDupRect = desktopWidget->availableGeometry(1);//获取可用桌面大小
     QRect screenDupRect = desktopWidget->screenGeometry(1);//获取设备屏幕大小
 
-    int m = objKyDBus->getTaskbarHeight();
-    int n = objKyDBus->getTaskbarPos();
+    int n = objKyDBus->getTaskBarPos("position");
+    int m = objKyDBus->getTaskBarHeight("height");
     int d = 2; //窗口边沿到任务栏距离
     int s = 80; //窗口边沿到屏幕边沿距离
 
@@ -1083,6 +1085,9 @@ bool MainWindow::checkWlOn()
     }else{
         return true;
     }
+
+    delete iface;
+    bt->deleteLater();
 }
 
 
@@ -1224,10 +1229,19 @@ void MainWindow::onBtnNetListClicked(int flag)
     ui->lbNetListBG->setStyleSheet(btnOnQss);
     ui->lbWifiListBG->setStyleSheet(btnOffQss);
 
-    lbLoadDown->hide();
-    lbLoadUp->hide();
-    lbLoadDownImg->hide();
-    lbLoadUpImg->hide();
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+
+    lbLoadDown->show();
+    lbLoadUp->show();
+    lbLoadDownImg->show();
+    lbLoadUpImg->show();
+    if(iface->lstate != 0){
+        lbLoadDown->hide();
+        lbLoadUp->hide();
+        lbLoadDownImg->hide();
+        lbLoadUpImg->hide();
+    }
 
     lbNoItemTip->hide();
 
@@ -1248,7 +1262,7 @@ void MainWindow::onBtnNetListClicked(int flag)
         return;
     }
 
-    if(checkLanOn()){
+    if(iface->lstate != 2){
         this->startLoading();
         this->ksnm->execGetLanList();
     } else {
@@ -1311,6 +1325,9 @@ void MainWindow::onBtnNetListClicked(int flag)
     this->scrollAreaw->hide();
     this->topWifiListWidget->hide();
     on_btnNetList_pressed();
+
+    delete iface;
+    bt->deleteLater();
 }
 
 void MainWindow::on_btnWifiList_clicked()
@@ -1318,13 +1335,22 @@ void MainWindow::on_btnWifiList_clicked()
     this->is_btnWifiList_clicked = 1;
     this->is_btnNetList_clicked = 0;
 
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+
+    lbLoadDown->show();
+    lbLoadUp->show();
+    lbLoadDownImg->show();
+    lbLoadUpImg->show();
+    if(iface->wstate != 0){
+        lbLoadDown->hide();
+        lbLoadUp->hide();
+        lbLoadDownImg->hide();
+        lbLoadUpImg->hide();
+    }
+
     ui->lbNetListBG->setStyleSheet(btnOffQss);
     ui->lbWifiListBG->setStyleSheet(btnOnQss);
-
-    lbLoadDown->hide();
-    lbLoadUp->hide();
-    lbLoadDownImg->hide();
-    lbLoadUpImg->hide();
 
     lbNoItemTip->hide();
 
@@ -1333,7 +1359,7 @@ void MainWindow::on_btnWifiList_clicked()
     ui->lbBtnWifiBG->show();
     ui->lbBtnWifiBall->show();
 
-    if(checkWlOn()){
+    if(iface->wstate != 2){
         lbTopWifiList->show();
         btnAddNet->show();
         this->startLoading();
@@ -1371,6 +1397,9 @@ void MainWindow::on_btnWifiList_clicked()
     this->scrollAreaw->show();
     this->topWifiListWidget->show();
     on_btnWifiList_pressed();
+
+    delete iface;
+    bt->deleteLater();
 }
 
 void MainWindow::on_btnNetList_pressed()
@@ -1532,7 +1561,7 @@ void MainWindow::getWifiListDone(QStringList slist)
 void MainWindow::loadWifiListDone(QStringList slist)
 {
     delete topWifiListWidget; //清空top列表
-    createTopWifiUI(); //创建顶部无线网item
+    createTopWifiUI(); //创建topWifiListWidget
 
     // 清空wifi列表
     wifiListWidget = new QWidget(scrollAreaw);
@@ -1609,7 +1638,6 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ccf->setConnedString(1, tr("Connected"), wsecu);//"已连接"
                 ccf->isConnected = true;
                 ifWLanConnected = true;
-                qDebug()<<"show load down and load up in the function loadWifiListDone";
                 lbLoadDown->show();
                 lbLoadUp->show();
                 lbLoadDownImg->show();

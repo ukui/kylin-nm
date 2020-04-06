@@ -33,7 +33,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     getPhysicalCarrierState(0); //初始化获取网线插入状态
     getLanHwAddressState(); //获取有线网Mac地址
     getWiredCardName(); //获取有线网卡名称
-    initTaskbarGsetting(); //初始化taskbar的GSetting方法
+    //initTaskbarGsetting(); //初始化taskbar的GSetting方法
     getWifiSwitchState(); //初始化wifi开关GSetting通信方法
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
@@ -447,8 +447,8 @@ void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
 void KylinDBus::onLanPropertyChanged(QVariantMap qvm)
 {
     if (!isRunningFunction) {
-        syslog(LOG_DEBUG, "kylin-nm receive a signal 'Device.Wired propertiesChanged' about interface.");
-        qDebug()<<"kylin-nm receive a signal 'Device.Wired propertiesChanged' about interface.";
+        syslog(LOG_DEBUG, "kylin-nm receive a signal 'Device.Wired PropertiesChanged' about interface.");
+        qDebug()<<"kylin-nm receive a signal 'Device.Wired PropertiesChanged' about interface.";
         isRunningFunction = true;
         time->start(3000);
 
@@ -493,6 +493,28 @@ void KylinDBus::showDesktopNotify(QString message)
     <<QVariantMap()
     <<(int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+}
+
+int KylinDBus::getTaskBarPos(QString str)
+{
+    QDBusInterface interface( "com.ukui.panel.desktop",
+                              "/",
+                              "com.ukui.panel.desktop",
+                              QDBusConnection::sessionBus() );
+
+    QDBusReply<int> reply = interface.call("GetPanelPosition", str);
+    return reply;
+}
+
+int KylinDBus::getTaskBarHeight(QString str)
+{
+    QDBusInterface interface( "com.ukui.panel.desktop",
+                              "/",
+                              "com.ukui.panel.desktop",
+                              QDBusConnection::sessionBus() );
+
+    QDBusReply<int> reply = interface.call("GetPanelSize", str);
+    return reply;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

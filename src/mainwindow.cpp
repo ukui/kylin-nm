@@ -1126,7 +1126,7 @@ void MainWindow::onBtnWifiClicked(int flag)
         // 网络开关关闭时，点击Wifi开关时，程序先打开有线开关
         if (flag == 0) {
             if(checkWlOn()){
-                 objKyDBus->setWifiSwitchState(false);
+                objKyDBus->setWifiSwitchState(false);
                 lbTopWifiList->hide();
                 btnAddNet->hide();
 

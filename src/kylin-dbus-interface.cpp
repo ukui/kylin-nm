@@ -489,14 +489,32 @@ void KylinDBus::initTaskbarGsetting()
 
 int KylinDBus::getTaskbarHeight()
 {
-    int h = m_tastbar_gsettings->get("panelsize").toInt();
-    return h;
+    if (!m_tastbar_gsettings) {
+        return 46;
+    }
+
+    QStringList keys = m_tastbar_gsettings->keys();
+    if(keys.contains("panelsize")){
+        int hh = m_tastbar_gsettings->get("panelsize").toInt();
+        return hh;
+    } else {
+        return 46;
+    }
 }
 
 int KylinDBus::getTaskbarPos()
 {
-    int p = m_tastbar_gsettings->get("panelposition").toInt();
-    return p;
+    if (!m_tastbar_gsettings) {
+        return 0;
+    }
+
+    QStringList keys = m_tastbar_gsettings->keys();
+    if(keys.contains("panelposition")) {
+        int pp = m_tastbar_gsettings->get("panelposition").toInt();
+        return pp;
+    } else {
+        return 0;
+    }
 }
 
 void KylinDBus::getWifiSwitchState()

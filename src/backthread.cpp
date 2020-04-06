@@ -413,8 +413,8 @@ void BackThread::disConnLanOrWifi(QString type)
 
     p_file = popen("nmcli connection show -active", "r");
     if (!p_file) {
-        syslog(LOG_ERR, "Error occured when popen cmd 'nmcli connection show'");
-        qDebug()<<"Error occured when popen cmd 'nmcli connection show";
+        syslog(LOG_ERR, "Error occurred when popen cmd 'nmcli connection show'");
+        qDebug()<<"Error occurred when popen cmd 'nmcli connection show";
     }
 
     while (fgets(buf, BUF_SIZE, p_file) != NULL) {

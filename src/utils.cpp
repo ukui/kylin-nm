@@ -91,8 +91,8 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
     }
 
     if ( (net_dev_file=fopen("/proc/net/dev", "r")) == NULL ){ //打开文件/pro/net/dev/，从中读取流量数据
-        qDebug()<<"error occured when try to open file /proc/net/dev/";
-        syslog(LOG_ERR, "error occured when try to open file /proc/net/dev/");
+        qDebug()<<"error occurred when try to open file /proc/net/dev/";
+        syslog(LOG_ERR, "error occurred when try to open file /proc/net/dev/");
         return -1;
     }
     memset(buffer,0,sizeof(buffer));

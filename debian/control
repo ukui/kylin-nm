@@ -22,7 +22,6 @@ Vcs-Browser: https://github.com/ukui/kylin-nm
 Package: kylin-nm
 Architecture: any
 Depends: network-manager (>=1.12.4),
-         libkf5windowsystem5,
          ${shlibs:Depends},
          ${misc:Depends}
 Description: Gui Applet tool for display and edit network simply

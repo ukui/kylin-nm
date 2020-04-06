@@ -1,3 +1,29 @@
+kylin-nm (1.2.3-1) unstable; urgency=medium
+
+  * New upstream bugfix release:
+    - Fix the error when communicate with ukui-control-center.
+    - Can't click save button when there is empty entry when configure
+      network.
+    - Fix the incorrect position of some buttons.
+    - Fix the crash when switch the wifi.
+    - Fix the wrong position between upload icon and download icon.
+    - Fix the occasional crash when get ipv4 and ipv6.
+    - Fix the wrong position of right-click menu.
+    - Fix that can't get normal message from ukui-panel.
+    - Fix that no notification after modify the configuration.
+    - Fix the error when state of connection and speed of network
+      display at the same time.
+  * debian/control:
+    - Add libgsettings-qt-dev, libkf5windowsystem-dev to build-depends.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 06 Apr 2020 23:11:15 +0800
+
+kylin-nm (1.2.2.1-1) unstable; urgency=medium
+
+  * Remove the .qmake.stash witch cause the build failed.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Sat, 14 Mar 2020 18:48:03 +0800
+
 kylin-nm (1.2.2-1) unstable; urgency=medium
 
   * New upstream release.

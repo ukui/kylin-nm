@@ -19,7 +19,7 @@
 #include "loadingdiv.h"
 
 #define FRAMESPEED 60
-#define ALLTIME 20*1000
+#define ALLTIME 15*1000
 
 LoadingDiv::LoadingDiv(QWidget *parent) : QWidget(parent)
 {

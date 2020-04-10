@@ -213,7 +213,7 @@ void MainWindow::editQssString()
     btnBgOnQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(61,107,229,1);}";
     btnBgHoverQss = "QLabel{border-radius: 4px; background-color:rgba(255,255,255,0.12)}";
     btnBgLeaveQss = "QLabel{border-radius: 4px; background-color:rgba(255,255,255,0)}";
-    leftBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
+    leftBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}"
                  "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
                  "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}";
     funcBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(107,142,235,0.97);font-size:14px;}"
@@ -357,8 +357,8 @@ void MainWindow::createLeftAreaUI()
 
     ui->btnWifi->setFocusPolicy(Qt::NoFocus);
     ui->btnWifi->setStyleSheet("QPushButton{border:none;background:transparent;}");
-    ui->lbBtnWifiBall->setStyleSheet("QLabel{min-width: 16px; min-height: 16px;max-width:16px; max-height: 16px;"
-                                     "border-radius: 8px;  border:1px solid white;background:white;}");
+    ui->lbBtnWifiBall->setStyleSheet("QLabel{min-width: 14px; min-height: 14px;max-width:14px; max-height: 14px;"
+                                     "border-radius: 7px;  border:1px solid white;background:white;}");
 
     ui->btnHotspot->setStyleSheet(leftBtnQss);
     ui->btnHotspot->setFocusPolicy(Qt::NoFocus);
@@ -486,20 +486,20 @@ void MainWindow::initNetwork()
         }else {
             BackThread *m_bt = new BackThread();
             IFace *m_iface = m_bt->execGetIface();
-            qDebug()<<"m_lstate ="<<m_iface->lstate<<"    m_wstate ="<<m_iface->wstate ;
 
             m_bt->disConnLanOrWifi("ethernet");
             sleep(1);
             m_bt->disConnLanOrWifi("ethernet");
             sleep(1);
             m_bt->disConnLanOrWifi("ethernet");
+
             delete m_iface;
             m_bt->deleteLater();
 
             char *chr = "nmcli networking on";
             Utils::m_system(chr);
-//            int status = system("nmcli networking on");
-//            if (status != 0){ syslog(LOG_ERR, "execute 'nmcli networking on' in function 'initNetwork' failed");}
+            //int status = system("nmcli networking on");
+            //if (status != 0){ syslog(LOG_ERR, "execute 'nmcli networking on' in function 'initNetwork' failed");}
 
             onBtnNetListClicked();
 
@@ -1012,30 +1012,32 @@ void MainWindow::onDeleteLan()
 }
 
 //无线网卡插拔处理
-void MainWindow::onWirelessDeviceAdded(QDBusObjectPath objPath)
+void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
 {
     //仅处理无线网卡插入情况
-    syslog(LOG_DEBUG,"wireless device is already plug in");
-//    KylinDBus kDBus1;
     objKyDBus->isWirelessCardOn = false;
     objKyDBus->getObjectPath();
-    if (objKyDBus->isWirelessCardOn) {
-        is_wireless_adapter_ready = 1;
-    } else {
+
+    if (objKyDBus->wirelessPath.path() == objPath.path()){ //证明添加的是无线网卡
         is_wireless_adapter_ready = 0;
+        if (objKyDBus->isWirelessCardOn) {
+            syslog(LOG_DEBUG,"wireless device is already plug in");
+            qDebug()<<"wireless device is already plug in";
+            is_wireless_adapter_ready = 1;
+            onBtnWifiClicked(0);
+        }
     }
-    onBtnWifiClicked(0);
 }
 
-void MainWindow::onWirelessDeviceRemoved(QDBusObjectPath objPath)
+void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
 {
     //仅处理无线网卡拔出情况
-    syslog(LOG_DEBUG,"wireless device is already plug out");
-//    KylinDBus kDBus2;
     if (objKyDBus->wirelessPath.path() == objPath.path()){
+        syslog(LOG_DEBUG,"wireless device is already plug out");
+        qDebug()<<"wireless device is already plug out";
         is_wireless_adapter_ready = 0;
+        onBtnWifiClicked(0);
     }
-    onBtnWifiClicked(0);
 }
 
 void MainWindow::checkIsWirelessDeviceOn()
@@ -1211,7 +1213,7 @@ void MainWindow::onBtnWifiClicked(int flag)
 
         QString txt(tr("please insert the wireless network adapter"));
         //m_notify->execNotifySend(txt); //显示本应用自带的桌面通知
-        objKyDBus->showDesktopNotify(txt);
+        //objKyDBus->showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnWifiClicked' failed");}
@@ -1266,58 +1268,62 @@ void MainWindow::onBtnNetListClicked(int flag)
         this->startLoading();
         this->ksnm->execGetLanList();
     } else {
-        const int BUF_SIZE = 1024;
-        char buf[BUF_SIZE];
+//        const int BUF_SIZE = 1024;
+//        char buf[BUF_SIZE];
 
-        FILE * p_file = NULL;
+//        FILE * p_file = NULL;
 
-        p_file = popen("nmcli connection show -active", "r");
-        if (!p_file) {
-            syslog(LOG_ERR, "Error occurred when popen cmd 'nmcli connection show'");
-            qDebug()<<"Error occurred when popen cmd 'nmcli connection show";
-        }
+//        p_file = popen("nmcli connection show -active", "r");
+//        if (!p_file) {
+//            syslog(LOG_ERR, "Error occurred when popen cmd 'nmcli connection show'");
+//            qDebug()<<"Error occurred when popen cmd 'nmcli connection show";
+//        }
 
-        while (fgets(buf, BUF_SIZE, p_file) != NULL) {
-            QString line(buf);
-            if(line.indexOf("ethernet") != -1){
-                QString txt(tr("Abnormal connection exist, program will delete it"));//仍然有连接异常的有线网络，断开异常连接的网络
-                //m_notify->execNotifySend(txt);//显示本应用自带的桌面通知
-                objKyDBus->showDesktopNotify(txt);
-                //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-                //int status = system(cmd.toUtf8().data());
-                //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnNetListClicked' failed");}
+//        while (fgets(buf, BUF_SIZE, p_file) != NULL) {
+//            QString line(buf);
+//            if(line.indexOf("ethernet") != -1){
+//                QString txt(tr("Abnormal connection exist, program will delete it"));//仍然有连接异常的有线网络，断开异常连接的网络
+//                //m_notify->execNotifySend(txt);//显示本应用自带的桌面通知
+//                //objKyDBus->showDesktopNotify(txt);
+//                //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
+//                //int status = system(cmd.toUtf8().data());
+//                //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnNetListClicked' failed");}
 
-                is_stop_check_net_state = 1;
-                this->startLoading();
-                deleteLanTimer->start(1000);
-                pclose(p_file);
-                return;
-            }
-        }
-        pclose(p_file);
+//                is_stop_check_net_state = 1;
+//                this->startLoading();
+//                deleteLanTimer->start(1000);
+//                pclose(p_file);
+//                return;
+//            }
+//        }
+//        pclose(p_file);
 
-        delete topLanListWidget; // 清空top列表
-        createTopLanUI(); //创建顶部有线网item
-        lbTopLanList->hide();
-        btnCreateNet->hide();
+        this->startLoading();
+        this->ksnm->execGetLanList();
 
-        // 清空lan列表
-        lanListWidget = new QWidget(scrollAreal);
-        lanListWidget->resize(W_LIST_WIDGET, H_NORMAL_ITEM + H_LAN_ITEM_EXTEND);
-        scrollAreal->setWidget(lanListWidget);
-        scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA);
+//        delete topLanListWidget; // 清空top列表
+//        createTopLanUI(); //创建顶部有线网item
+//        lbTopLanList->hide();
+//        btnCreateNet->hide();
 
-        // 当前连接的lan
-        OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
-        ccf->setName(tr("Not connected"));//"当前未连接任何 以太网"
-        ccf->setIcon(false);
-        ccf->setConnedString(1, tr("Disconnected"));//"未连接"
-        ccf->setAct(true);
-        ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
-        ccf->show();
+//        // 清空lan列表
+//        lanListWidget = new QWidget(scrollAreal);
+//        lanListWidget->resize(W_LIST_WIDGET, H_NORMAL_ITEM + H_LAN_ITEM_EXTEND);
+//        scrollAreal->setWidget(lanListWidget);
+//        scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA);
 
-        this->lanListWidget->show();
-        this->wifiListWidget->hide();
+//        // 当前连接的lan
+//        OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
+//        ccf->setName(tr("Not connected"));//"当前未连接任何 以太网"
+//        ccf->setIcon(false);
+//        ccf->setConnedString(1, tr("Disconnected"));//"未连接"
+//        ccf->setAct(true);
+//        ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
+//        ccf->setTopItem(false);
+//        ccf->show();
+
+//        this->lanListWidget->show();
+//        this->wifiListWidget->hide();
     }
 
     this->scrollAreal->show();
@@ -1359,12 +1365,27 @@ void MainWindow::on_btnWifiList_clicked()
     ui->lbBtnWifiBG->show();
     ui->lbBtnWifiBall->show();
 
+    if(iface->wstate == 0 || iface->wstate == 1){
+        ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
+        ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+    }else{
+        ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
+        ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+    }
+
     if(iface->wstate != 2){
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
+        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+
         lbTopWifiList->show();
         btnAddNet->show();
+
         this->startLoading();
         this->ksnm->execGetWifiList();
     }else{
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
+        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+
         delete topWifiListWidget; //清空top列表
         createTopWifiUI(); //创建顶部无线网item
         lbTopWifiList->hide();
@@ -1510,6 +1531,7 @@ void MainWindow::getLanListDone(QStringList slist)
                 ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), objKyDBus->dbusLanMac);
                 ocf->setConnedString(0, tr("Disconnected"));//"未连接"
                 ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
+                ocf->setSelected(false, false);
                 ocf->show();
 
                 j ++;
@@ -2153,7 +2175,7 @@ void MainWindow::activeLanDisconn()
 
     QString txt(tr("Wired net is disconnected"));
     //m_notify->execNotifySend(txt);
-    objKyDBus->showDesktopNotify(txt);
+    //objKyDBus->showDesktopNotify(txt);
     //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
     //int status1 = system(cmd.toUtf8().data());
     //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
@@ -2182,7 +2204,7 @@ void MainWindow::activeStartLoading()
 
     QString txt(tr("Wi-Fi is disconnected"));
     //m_notify->execNotifySend(txt);
-    objKyDBus->showDesktopNotify(txt);
+    //objKyDBus->showDesktopNotify(txt);
     //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
     //int status1 = system(cmd.toUtf8().data());
     //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
@@ -2466,7 +2488,7 @@ void MainWindow::connLanDone(int connFlag)
 
         QString txt(tr("Conn Ethernet Success"));
         //m_notify->execNotifySend(txt);
-        objKyDBus->showDesktopNotify(txt);
+        //objKyDBus->showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
@@ -2481,7 +2503,7 @@ void MainWindow::connLanDone(int connFlag)
 
         QString txt(tr("Conn Ethernet Fail"));
         //m_notify->execNotifySend(txt);
-        objKyDBus->showDesktopNotify(txt);
+        //objKyDBus->showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
@@ -2605,7 +2627,7 @@ void MainWindow::connWifiDone(int connFlag)
 
         QString txt(tr("Conn Wifi Success"));
         //m_notify->execNotifySend(txt);
-        objKyDBus->showDesktopNotify(txt);
+        //objKyDBus->showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connWifiDone' failed");}
@@ -2617,7 +2639,7 @@ void MainWindow::connWifiDone(int connFlag)
 
         QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
         //m_notify->execNotifySend(txt);
-        objKyDBus->showDesktopNotify(txt);
+        //objKyDBus->showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
         //int status1 = system(cmd.toUtf8().data());
         //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}

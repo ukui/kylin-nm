@@ -153,24 +153,24 @@ void BackThread::execDisNet(){
 }
 
 void BackThread::execEnWifi(){
-    if (execGetIface()->lstate == 2){
-        char *chr = "nmcli networking on";
-        Utils::m_system(chr);
-//        int status = system("nmcli networking on");
-//        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli networking on' in function 'execEnWifi' failed");}
-        while(1){
-            if (execGetIface()->lstate != 2){
-                emit launchLanDone();
-                break;
-            }
-            sleep(1);
-        }
-    }
+//    if (execGetIface()->lstate == 2){
+//        char *chr = "nmcli networking on";
+//        Utils::m_system(chr);
+//        //int status = system("nmcli networking on");
+//        //if (status != 0){ syslog(LOG_ERR, "execute 'nmcli networking on' in function 'execEnWifi' failed");}
+//        while(1){
+//            if (execGetIface()->lstate != 2){
+//                emit launchLanDone();
+//                break;
+//            }
+//            sleep(1);
+//        }
+//    }
 
     char *chr1 = "nmcli radio wifi on";
     Utils::m_system(chr1);
-//    int status1 = system("nmcli radio wifi on");
-//    if (status1 != 0){ syslog(LOG_ERR, "execute 'nmcli radio wifi on' in function 'execEnWifi' failed");}
+    //int status1 = system("nmcli radio wifi on");
+    //if (status1 != 0){ syslog(LOG_ERR, "execute 'nmcli radio wifi on' in function 'execEnWifi' failed");}
     while(1){
         if (execGetIface()->wstate != 2){
             KylinDBus objKyDbus;

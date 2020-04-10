@@ -33,7 +33,7 @@
 #include "notifysend.h"
 
 #define FRAME_SPEED 150
-#define LIMIT_TIME 30*1000
+#define LIMIT_TIME 20*1000
 #define TOTAL_PAGE 8
 
 #define W_ITEM 424

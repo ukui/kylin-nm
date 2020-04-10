@@ -609,8 +609,8 @@ void OneConnForm::slotConnWifiResult(int connFlag){
         syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", ui->lbName->text().toUtf8().data());
 
         //m_notify->execNotifySend(txt);
-        KylinDBus kylindbus;
-        kylindbus.showDesktopNotify(txt);
+        //KylinDBus kylindbus;
+        //kylindbus.showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");}

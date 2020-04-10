@@ -39,12 +39,12 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
                                          QString("org.freedesktop.NetworkManager"),
-                                         QString("DeviceAdded"), mw, SLOT(onWirelessDeviceAdded(QDBusObjectPath) ) );
+                                         QString("DeviceAdded"), mw, SLOT(onNetworkDeviceAdded(QDBusObjectPath) ) );
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
                                          QString("org.freedesktop.NetworkManager"),
-                                         QString("DeviceRemoved"), mw, SLOT(onWirelessDeviceRemoved(QDBusObjectPath) ) );
+                                         QString("DeviceRemoved"), mw, SLOT(onNetworkDeviceRemoved(QDBusObjectPath) ) );
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager/Settings"),
@@ -56,7 +56,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
                                          QString("org.freedesktop.NetworkManager.Settings"),
                                          QString("ConnectionRemoved"), this, SLOT(onConnectionRemoved(QDBusObjectPath) ) );
 
-    if (wirelessPath.path() != ""){
+    if (wiredPath.path() != ""){
         QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                              QString(wiredPath.path()),
                                              QString("org.freedesktop.NetworkManager.Device.Wired"),
@@ -503,7 +503,11 @@ int KylinDBus::getTaskBarPos(QString str)
                               QDBusConnection::sessionBus() );
 
     QDBusReply<int> reply = interface.call("GetPanelPosition", str);
-    return reply;
+    if (reply.isValid()){
+        return reply;
+    }else{
+        return 0;
+    }
 }
 
 int KylinDBus::getTaskBarHeight(QString str)
@@ -514,7 +518,11 @@ int KylinDBus::getTaskBarHeight(QString str)
                               QDBusConnection::sessionBus() );
 
     QDBusReply<int> reply = interface.call("GetPanelSize", str);
-    return reply;
+    if (reply.isValid()){
+        return reply;
+    }else{
+        return 46;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

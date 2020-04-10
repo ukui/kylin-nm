@@ -237,7 +237,7 @@ void MainWindow::createTopLanUI()
     btnCreateNet = new QPushButton(topLanListWidget);
     btnCreateNet->resize(W_BTN_FUN, H_BTN_FUN);
     btnCreateNet->move(X_BTN_FUN, Y_BTN_FUN);
-    btnCreateNet->setText(tr("Create Lan Net"));//"新建网络"
+    btnCreateNet->setText(tr("New LAN"));//"新建网络"
     btnCreateNet->setStyleSheet(funcBtnQss);
     btnCreateNet->setFocusPolicy(Qt::NoFocus);
     btnCreateNet->show();
@@ -260,7 +260,7 @@ void MainWindow::createTopWifiUI()
     btnAddNet = new QPushButton(topWifiListWidget);
     btnAddNet->resize(W_BTN_FUN, H_BTN_FUN);
     btnAddNet->move(X_BTN_FUN, Y_BTN_FUN);
-    btnAddNet->setText(tr("Add Hide Network"));//"加入网络"
+    btnAddNet->setText(tr("Hide WiFi"));//"加入网络"
     btnAddNet->setStyleSheet(funcBtnQss);
     btnAddNet->setFocusPolicy(Qt::NoFocus);
     btnAddNet->show();
@@ -357,8 +357,8 @@ void MainWindow::createLeftAreaUI()
 
     ui->btnWifi->setFocusPolicy(Qt::NoFocus);
     ui->btnWifi->setStyleSheet("QPushButton{border:none;background:transparent;}");
-    ui->lbBtnWifiBall->setStyleSheet("QLabel{min-width: 14px; min-height: 14px;max-width:14px; max-height: 14px;"
-                                     "border-radius: 7px;  border:1px solid white;background:white;}");
+    ui->lbBtnWifiBall->setStyleSheet("QLabel{min-width: 16px; min-height: 16px;max-width:16px; max-height: 16px;"
+                                     "border-radius: 8px;background:white;}");
 
     ui->btnHotspot->setStyleSheet(leftBtnQss);
     ui->btnHotspot->setFocusPolicy(Qt::NoFocus);
@@ -1213,7 +1213,7 @@ void MainWindow::onBtnWifiClicked(int flag)
 
         QString txt(tr("please insert the wireless network adapter"));
         //m_notify->execNotifySend(txt); //显示本应用自带的桌面通知
-        //objKyDBus->showDesktopNotify(txt);
+        objKyDBus->showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnWifiClicked' failed");}
@@ -1510,7 +1510,7 @@ void MainWindow::getLanListDone(QStringList slist)
                 ccf->setName(nname);
                 ccf->setIcon(true);
                 ccf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
-                ccf->setConnedString(1, tr("Connected"));//"已连接"
+                ccf->setConnedString(1, tr("NetOn,"));//"已连接"
                 ccf->isConnected = true;
                 ifLanConnected = true;
                 lbLoadDown->show();
@@ -1657,7 +1657,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 //objKyDBus->getActWifiMac(wname);
                 objKyDBus->getWifiMac(wname);
                 ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
-                ccf->setConnedString(1, tr("Connected"), wsecu);//"已连接"
+                ccf->setConnedString(1, tr("NetOn,"), wsecu);//"已连接"
                 ccf->isConnected = true;
                 ifWLanConnected = true;
                 lbLoadDown->show();
@@ -2175,7 +2175,7 @@ void MainWindow::activeLanDisconn()
 
     QString txt(tr("Wired net is disconnected"));
     //m_notify->execNotifySend(txt);
-    //objKyDBus->showDesktopNotify(txt);
+    objKyDBus->showDesktopNotify(txt);
     //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
     //int status1 = system(cmd.toUtf8().data());
     //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
@@ -2204,7 +2204,7 @@ void MainWindow::activeStartLoading()
 
     QString txt(tr("Wi-Fi is disconnected"));
     //m_notify->execNotifySend(txt);
-    //objKyDBus->showDesktopNotify(txt);
+    objKyDBus->showDesktopNotify(txt);
     //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
     //int status1 = system(cmd.toUtf8().data());
     //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
@@ -2488,7 +2488,7 @@ void MainWindow::connLanDone(int connFlag)
 
         QString txt(tr("Conn Ethernet Success"));
         //m_notify->execNotifySend(txt);
-        //objKyDBus->showDesktopNotify(txt);
+        objKyDBus->showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
@@ -2503,7 +2503,7 @@ void MainWindow::connLanDone(int connFlag)
 
         QString txt(tr("Conn Ethernet Fail"));
         //m_notify->execNotifySend(txt);
-        //objKyDBus->showDesktopNotify(txt);
+        objKyDBus->showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connLanDone' failed");}
@@ -2627,7 +2627,7 @@ void MainWindow::connWifiDone(int connFlag)
 
         QString txt(tr("Conn Wifi Success"));
         //m_notify->execNotifySend(txt);
-        //objKyDBus->showDesktopNotify(txt);
+        objKyDBus->showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connWifiDone' failed");}
@@ -2639,7 +2639,7 @@ void MainWindow::connWifiDone(int connFlag)
 
         QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
         //m_notify->execNotifySend(txt);
-        //objKyDBus->showDesktopNotify(txt);
+        objKyDBus->showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
         //int status1 = system(cmd.toUtf8().data());
         //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}

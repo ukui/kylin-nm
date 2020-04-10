@@ -393,7 +393,11 @@ void OneConnForm::setSignal(QString lv, QString secu){
 void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3)
 {
     if (str1 == "--" || str1 == ""){ str1 = tr("None"); };
-    QString str = "Wi-Fi安全性：" + str1 + "\n信号强度：" + str2 + "%\n物理地址(MAC)：" + str3;
+
+    QString strSecurity = QString(tr("WiFi Security："));
+    QString strSignal = QString(tr("Sifnal："));
+    QString strMAC = QString(tr("MAC："));
+    QString str = strSecurity + str1 + "\n" + strSignal + str2 + "%\n" + strMAC + str3;
     ui->lbInfo->setText(str);
 }
 
@@ -609,8 +613,8 @@ void OneConnForm::slotConnWifiResult(int connFlag){
         syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", ui->lbName->text().toUtf8().data());
 
         //m_notify->execNotifySend(txt);
-        //KylinDBus kylindbus;
-        //kylindbus.showDesktopNotify(txt);
+        KylinDBus kylindbus;
+        kylindbus.showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");}

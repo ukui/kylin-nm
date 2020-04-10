@@ -225,7 +225,11 @@ void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString s
         str2 = tr("no configuration");
     }
 
-    QString str = "IPv4地址：" + str1 + "\nIPv6地址：" + str2 + "\n带宽：" + str3 + " \n物理地址(MAC)：" + str4;
+    QString strIPv4 = QString(tr("IPv4："));
+    QString strIPv6 = QString(tr("IPv6："));
+    QString strBW = QString(tr("BandWidth："));
+    QString strMAC = QString(tr("MAC："));
+    QString str = strIPv4 + str1 + "\n" + strIPv6 + str2 + "\n" + strBW + str3 + "\n" + strMAC + str4;
     ui->lbInfo->setText(str);
 }
 

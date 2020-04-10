@@ -67,7 +67,7 @@
 #define W_RIGHT_AREA 438 //41 + 1 + 438 = 480
 #define L_VERTICAL_LINE_TO_ITEM 4 //竖线到item左侧的距离
 
-#define X_LEFT_WIFI_BALL 414 //白色小球在左边
+#define X_LEFT_WIFI_BALL 416 //白色小球在左边
 #define X_RIGHT_WIFI_BALL 440 //白色小球在右边
 #define Y_WIFI_BALL 23 //白色小球y坐标
 #define X_ITEM 46 //item到窗口左侧的距离 41 + 1 + 4 = 46

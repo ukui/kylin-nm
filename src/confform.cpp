@@ -49,30 +49,6 @@ ConfForm::ConfForm(QWidget *parent) :
     this->setStyleSheet("QWidget{border-radius:6px;border:none;}");
     ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.7);}");
 
-    ui->lbName->setText(tr("Network name: "));//"网络名称："
-    ui->lbTxt1->setText(tr("Method: "));//"编辑IP设置："
-    ui->lbTxt2->setText(tr("Address: "));//"IP地址："
-    ui->lbTxt3->setText(tr("Netmask: "));//"子网掩码："
-    ui->lbTxt4->setText(tr("Gateway: "));//"默认网关："
-    ui->lbTxt5->setText(tr("DNS 1: "));//"首选DNS："
-    ui->lbTxt6->setText(tr("DNS 2: "));//"备选DNS："
-
-    ui->lbLeftupTitle->setText(tr("Edit Conn"));//"网络设置"
-    ui->cbType->addItem(tr("Auto(DHCP)"));//"自动(DHCP)"
-    ui->cbType->addItem(tr("Manual"));//"手动"
-
-    connect(ui->cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(cbTypeChanged(int)));
-
-    ui->cbMask->addItem("255.255.255.0");
-    ui->cbMask->addItem("255.255.254.0");
-    ui->cbMask->addItem("255.255.252.0");
-    ui->cbMask->addItem("255.255.0.0");
-    ui->cbMask->addItem("255.0.0.0");
-
-    ui->btnCancel->setText(tr("Cancel"));//"取消"
-    ui->btnOk->setText(tr("Save"));//"保存"
-    ui->btnCreate->setText(tr("Ok"));//"确定"
-
     labelQss = "QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}";
     cbxQss = "QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);"
                         "border:1px solid rgba(255, 255, 255, 0.05);border-radius:4px;background:rgba(255,255,255,0.08);}"
@@ -121,6 +97,30 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->lineDown->setStyleSheet(lineQss);
     ui->lineUp->hide();
     ui->lineDown->hide();
+
+    ui->lbName->setText(tr("Network name: "));//"网络名称："
+    ui->lbTxt1->setText(tr("Method: "));//"编辑IP设置："
+    ui->lbTxt2->setText(tr("Address: "));//"IP地址："
+    ui->lbTxt3->setText(tr("Netmask: "));//"子网掩码："
+    ui->lbTxt4->setText(tr("Gateway: "));//"默认网关："
+    ui->lbTxt5->setText(tr("DNS 1: "));//"首选DNS："
+    ui->lbTxt6->setText(tr("DNS 2: "));//"备选DNS："
+
+    ui->lbLeftupTitle->setText(tr("Edit Conn"));//"网络设置"
+    ui->cbType->addItem(tr("Auto(DHCP)"));//"自动(DHCP)"
+    ui->cbType->addItem(tr("Manual"));//"手动"
+
+    connect(ui->cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(cbTypeChanged(int)));
+
+    ui->cbMask->addItem("255.255.255.0");
+    ui->cbMask->addItem("255.255.254.0");
+    ui->cbMask->addItem("255.255.252.0");
+    ui->cbMask->addItem("255.255.0.0");
+    ui->cbMask->addItem("255.0.0.0");
+
+    ui->btnCancel->setText(tr("Cancel"));//"取消"
+    ui->btnOk->setText(tr("Save"));//"保存"
+    ui->btnCreate->setText(tr("Ok"));//"确定"
 
     ui->btnCancel->setFocusPolicy(Qt::NoFocus);
     ui->btnOk->setFocusPolicy(Qt::NoFocus);

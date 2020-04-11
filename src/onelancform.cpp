@@ -94,7 +94,8 @@ OneLancForm::~OneLancForm()
 }
 
 void OneLancForm::mousePressEvent(QMouseEvent *){
-    emit selectedOneLanForm(lanName);
+    //emit selectedOneLanForm(lanName);
+    emit selectedOneLanForm(lanName, uniqueName);//避免重名情况
 }
 
 //事件过滤器
@@ -201,9 +202,10 @@ void OneLancForm::setTopItem(bool isSelected)
     this->isTopItem = true;
 }
 
-void OneLancForm::setName(QString name){
+void OneLancForm::setName(QString name, QString uniName){
     ui->lbName->setText(name);
     lanName = name;
+    uniqueName = uniName;
 }
 
 void OneLancForm::setConnedString(bool showLable, QString str){
@@ -265,7 +267,7 @@ void OneLancForm::on_btnDisConn_clicked()
 
     kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
 
-    disconnect(this, SIGNAL(selectedOneLanForm(QString)), mw, SLOT(oneLanFormSelected(QString)));
+    disconnect(this, SIGNAL(selectedOneLanForm(QString, QString)), mw, SLOT(oneTopLanFormSelected(QString, QString)));
 
     emit disconnActiveLan();
 }

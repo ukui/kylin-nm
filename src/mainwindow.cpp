@@ -392,27 +392,24 @@ void MainWindow::createLeftAreaUI()
 // 初始化有线网列表
 void MainWindow::getInitLanSlist()
 {
-    oldLanSlist.append("TYPE      DEVICE  NAME           ");
-    QString strSlist;
     const int BUF_SIZE = 1024;
     char buf[BUF_SIZE];
 
     FILE * p_file = NULL;
 
-    p_file = popen("nmcli connection show", "r");
+    p_file = popen("nmcli -f type,device,name connection show", "r");
     if (!p_file) {
         syslog(LOG_ERR, "Error occurred when popen cmd 'nmcli connection show'");
         qDebug()<<"Error occurred when popen cmd 'nmcli connection show";
     }
-
     while (fgets(buf, BUF_SIZE, p_file) != NULL) {
+        QString strSlist = "";
         QString line(buf);
-        if(line.indexOf("ethernet") != -1){
-            QStringList subLine = line.split(" ");
-            if (subLine[1].size() == 1){
-                strSlist =  "ethernet  --      " + subLine[0]+ " " + subLine[1] + "   ";
-            }else{strSlist =  "ethernet  --      " + subLine[0] + "   "; }
-            // qDebug()<<strSlist;
+        strSlist = line.trimmed();
+        if(strSlist.indexOf("UUID") != -1 || strSlist.indexOf("NAME") != -1){
+            oldLanSlist.append(strSlist);
+        }
+        if(strSlist.indexOf("ethernet") != -1){
             oldLanSlist.append(strSlist);
         }
     }
@@ -764,6 +761,10 @@ void MainWindow::showTrayIconMenu()
     // QRect deskDupRect = desktopWidget->availableGeometry(1);//获取可用桌面大小
     QRect screenDupRect = desktopWidget->screenGeometry(1);//获取设备屏幕大小
 
+    QPoint cursorPoint =  QCursor::pos();//返回相对显示器的全局坐标
+    int cursor_x = cursorPoint.x();
+    int cursor_y = cursorPoint.y();
+
     int n = objKyDBus->getTaskBarPos("position");
     int m = objKyDBus->getTaskBarHeight("height");
     int d = 2; //窗口边沿到任务栏距离
@@ -771,18 +772,18 @@ void MainWindow::showTrayIconMenu()
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
         if(n == 0){ //任务栏在下侧
-            trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width(), screenMainRect.y() + availableGeometry.height() - trayIconMenu->height() - m - d);
+            trayIconMenu->move(availableGeometry.x() + cursor_x - trayIconMenu->width()/2, screenMainRect.y() + availableGeometry.height() - trayIconMenu->height() - m - d);
         }else if(n == 1){ //任务栏在上侧
-            trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m + d);
+            trayIconMenu->move(availableGeometry.x() + cursor_x - trayIconMenu->width()/2, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m + d);
         } else if (n == 2){ //任务栏在左侧
-            trayIconMenu->move(m + d, screenMainRect.y() + screenMainRect.height() - trayIconMenu->height() - s);
+            trayIconMenu->move(m + d, cursor_y - trayIconMenu->height()/2);
 //            if (screenGeometry.x() == 0){//主屏在左侧
 //                trayIconMenu->move(screenGeometry.width() - availableGeometry.width() + m + d, screenMainRect.y() + screenMainRect.height() - trayIconMenu->height() - s);
 //            }else{//主屏在右侧
 //                trayIconMenu->move(screenGeometry.width() - availableGeometry.width() + m + d,screenDupRect.y() + screenDupRect.height() - trayIconMenu->height() - s);
 //            }
         } else if (n == 3){ //任务栏在右侧
-            trayIconMenu->move(screenMainRect.width() - trayIconMenu->width() - m - d, screenDupRect.y() + screenDupRect.height() - trayIconMenu->height() - s);
+            trayIconMenu->move(screenMainRect.width() - trayIconMenu->width() - m - d, cursor_y - trayIconMenu->height()/2);
 //            if (screenGeometry.x() == 0){//主屏在左侧
 //                trayIconMenu->move(screenMainRect.width() + screenDupRect.width() - trayIconMenu->width() - m - d, screenDupRect.y() + screenDupRect.height() - trayIconMenu->height() - s);
 //            }else{//主屏在右侧
@@ -791,15 +792,15 @@ void MainWindow::showTrayIconMenu()
         }
     } else if(screenGeometry.width() == availableGeometry.width() ){
         if (trayIcon->geometry().y() > availableGeometry.height()/2){ //任务栏在下侧
-            trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width(), screenMainRect.y() + availableGeometry.height() - trayIconMenu->height() - d);
+            trayIconMenu->move(availableGeometry.x() + cursor_x - trayIconMenu->width()/2, screenMainRect.y() + availableGeometry.height() - trayIconMenu->height() - d);
         }else{ //任务栏在上侧
-            trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + d);
+            trayIconMenu->move(availableGeometry.x() + cursor_x - trayIconMenu->width()/2, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + d);
         }
     } else if (screenGeometry.height() == availableGeometry.height()){
         if (trayIcon->geometry().x() > availableGeometry.width()/2){ //任务栏在右侧
-            trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width() - d, screenMainRect.y() + screenGeometry.height() - trayIconMenu->height() - s);
+            trayIconMenu->move(availableGeometry.x() + availableGeometry.width() - trayIconMenu->width() - d, cursor_y - trayIconMenu->height()/2);
         } else { //任务栏在左侧
-            trayIconMenu->move(screenGeometry.width() - availableGeometry.width() + d, screenMainRect.y() + screenGeometry.height() - trayIconMenu->height() - s);
+            trayIconMenu->move(screenGeometry.width() - availableGeometry.width() + d, cursor_y - trayIconMenu->height()/2);
         }
     }
 }
@@ -1473,7 +1474,7 @@ void MainWindow::getLanListDone(QStringList slist)
     // 若当前lan name为"--"，设置OneConnForm
     OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
     if(actLanName == "--"){
-        ccf->setName(tr("Not connected"));//"当前未连接任何 以太网"
+        ccf->setName(tr("Not connected"), "");//"当前未连接任何 以太网"
         ccf->setIcon(false);
         ccf->setConnedString(1, tr("Disconnected"));//"未连接"
         ccf->isConnected = false;
@@ -1494,6 +1495,7 @@ void MainWindow::getLanListDone(QStringList slist)
     int indexDevice = headLine.indexOf("DEVICE");
     int indexName = headLine.indexOf("NAME");
 
+    QString order = "a"; //为避免同名情况，这里给每一个有线网设定一个唯一标志
     for(int i = 1, j = 0; i < slist.size(); i ++) {
         QString line = slist.at(i);
         QString ltype = line.mid(0, indexDevice).trimmed();
@@ -1503,11 +1505,12 @@ void MainWindow::getLanListDone(QStringList slist)
             // 当前连接的lan
             objKyDBus->getLanIp(nname);
             if(nname == actLanName){
+                actLanName = "--";
                 if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
 
-                connect(ccf, SIGNAL(selectedOneLanForm(QString)), this, SLOT(oneTopLanFormSelected(QString)));
+                connect(ccf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneTopLanFormSelected(QString, QString)));
                 connect(ccf, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
-                ccf->setName(nname);
+                ccf->setName(nname, nname + order);
                 ccf->setIcon(true);
                 ccf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
                 ccf->setConnedString(1, tr("NetOn,"));//"已连接"
@@ -1524,8 +1527,8 @@ void MainWindow::getLanListDone(QStringList slist)
                 lanListWidget->resize(W_LIST_WIDGET, lanListWidget->height() + H_NORMAL_ITEM);
 
                 OneLancForm *ocf = new OneLancForm(lanListWidget, this, confForm, ksnm);
-                connect(ocf, SIGNAL(selectedOneLanForm(QString)), this, SLOT(oneLanFormSelected(QString)));
-                ocf->setName(nname);
+                connect(ocf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneLanFormSelected(QString, QString)));
+                ocf->setName(nname, nname + order);
                 ocf->setIcon(true);
                 ocf->setLine(true);
                 ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), objKyDBus->dbusLanMac);
@@ -1536,6 +1539,7 @@ void MainWindow::getLanListDone(QStringList slist)
 
                 j ++;
             }
+            order += "a";
         }
     }
 
@@ -1913,7 +1917,7 @@ void MainWindow::onBtnCreateNetClicked()
 //处理窗口变化、网络状态变化
 
 //列表中item的扩展与收缩
-void MainWindow::oneLanFormSelected(QString lanName)
+void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
 {
     QList<OneLancForm *> topLanList = topLanListWidget->findChildren<OneLancForm *>();
     QList<OneLancForm *> lanList = lanListWidget->findChildren<OneLancForm *>();
@@ -1932,11 +1936,11 @@ void MainWindow::oneLanFormSelected(QString lanName)
     }
 
     //是否与上一次选中同一个网络框
-    if (currSelNetName == lanName){
+    if (currSelNetName == uniqueName){
         // 缩小所有选项卡
         for(int i = 0;i < lanList.size(); i ++){
             OneLancForm *ocf = lanList.at(i);
-            if(ocf->lanName == lanName){
+            if(ocf->uniqueName == uniqueName){
                 ocf->setSelected(false, true);
             }else{
                 ocf->setSelected(false, false);
@@ -1948,7 +1952,7 @@ void MainWindow::oneLanFormSelected(QString lanName)
         int selectY = 0;
         for(int i = 0;i < lanList.size(); i ++){
             OneLancForm *ocf = lanList.at(i);
-            if(ocf->lanName == lanName){
+            if(ocf->uniqueName == uniqueName){
                 selectY = ocf->y(); //获取选中item的y坐标
                 break;
             }
@@ -1964,7 +1968,7 @@ void MainWindow::oneLanFormSelected(QString lanName)
 
         for(int i = 0;i < lanList.size(); i ++){
             OneLancForm *ocf = lanList.at(i);
-            if(ocf->lanName == lanName){
+            if(ocf->uniqueName == uniqueName){
                 ocf->setSelected(true, false);
                 selectY = ocf->y();
             }else{
@@ -1972,7 +1976,7 @@ void MainWindow::oneLanFormSelected(QString lanName)
             }
         }
 
-        currSelNetName = lanName;
+        currSelNetName = uniqueName;
     }
 
     QList<OneLancForm *> itemList = lanListWidget->findChildren<OneLancForm *>();
@@ -1992,12 +1996,12 @@ void MainWindow::oneLanFormSelected(QString lanName)
     OneLancForm *ocf = topLanList.at(0);
     ocf->setTopItem(false);
 }
-void MainWindow::oneTopLanFormSelected(QString lanName)
+void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
 {
     QList<OneLancForm *> topLanList = topLanListWidget->findChildren<OneLancForm *>();
     QList<OneLancForm *> lanList = lanListWidget->findChildren<OneLancForm *>();
 
-    if (currSelNetName == lanName){
+    if (currSelNetName == uniqueName){
         // 与上一次选中同一个网络框，缩小当前选项卡
         topLanListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_GAP_UP + X_ITEM);
         lbTopLanList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_GAP_UP);
@@ -2028,7 +2032,7 @@ void MainWindow::oneTopLanFormSelected(QString lanName)
         OneLancForm *ocf = topLanList.at(0);
         ocf->setTopItem(true);
 
-        currSelNetName = lanName;
+        currSelNetName = uniqueName;
     }
 }
 
@@ -2263,7 +2267,7 @@ void MainWindow::disNetDone()
 
     // 当前连接的lan
     OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
-    ccf->setName(tr("Not connected"));//"当前未连接任何 以太网"
+    ccf->setName(tr("Not connected"), "");//"当前未连接任何 以太网"
     ccf->setIcon(false);
     ccf->setConnedString(1, tr("Disconnected"));//"未连接"
     ccf->isConnected = false;

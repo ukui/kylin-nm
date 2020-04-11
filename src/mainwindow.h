@@ -157,6 +157,7 @@ public:
     int is_hot_sopt_on = 0; //是否已经打开热点
 
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
+    int currSelNetNum = 0; //当前选中的item序号
 
 public slots:
     void onPhysicalCarrierChanged(bool flag);
@@ -167,8 +168,8 @@ public slots:
     void onNetworkDeviceRemoved(QDBusObjectPath objPath);
     void getLanBandWidth();
 
-    void oneLanFormSelected(QString lanName);
-    void oneTopLanFormSelected(QString lanName);
+    void oneLanFormSelected(QString lanName, QString uniqueName);
+    void oneTopLanFormSelected(QString lanName, QString uniqueName);
     void oneWifiFormSelected(QString wifiName, int extendLength);
     void oneTopWifiFormSelected(QString wifiName, int extendLength);
 

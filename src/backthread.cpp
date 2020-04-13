@@ -27,6 +27,7 @@
 
 #include <QFile>
 #include <QRegExp>
+#include <QStandardPaths>
 
 BackThread::BackThread(QObject *parent) : QObject(parent){
     cmdConnWifi = new QProcess(this);
@@ -43,15 +44,18 @@ BackThread::~BackThread()
 
 IFace* BackThread::execGetIface(){
     IFace *iface = new IFace();
-    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli -f TYPE,DEVICE,STATE device > /tmp/kylin-nm-iface";
+
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QString localPath = homePath.at(0) + "/.config/kylin-nm-iface";
+
+    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli -f TYPE,DEVICE,STATE device > " + localPath;
     Utils::m_system(cmd.toUtf8().data());
 
 //    int status = system(cmd.toUtf8().data());
 //    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device' in function 'execGetIface' failed");}
 
-    QFile file("/tmp/kylin-nm-iface");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
+    QFile file(localPath);
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-iface!");
         qDebug()<<"Can't open the file /tmp/kylin-nm-iface!"<<endl;
     }
@@ -225,12 +229,15 @@ void BackThread::execConnLan(QString connName){
 void BackThread::execConnWifiPWD(QString connName, QString password){
     disConnLanOrWifi("wifi");
 
-    QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > /tmp/kylin-nm-btoutput";
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QString localPath = homePath.at(0) + "/.config/kylin-nm-btoutput";
+
+    QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > " + localPath;
     Utils::m_system(cmdStr.toUtf8().data());
 //    int status =  system(cmdStr.toUtf8().data());
 //    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'execConnWifiPWD' failed");}
 
-    QFile file("/tmp/kylin-nm-btoutput");
+    QFile file(localPath);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         syslog(LOG_DEBUG, "Can't open the file /tmp/kylin-nm-btoutput !");
         qDebug()<<"Can't open the file /tmp/kylin-nm-btoutput !"<<endl;
@@ -290,12 +297,15 @@ void BackThread::on_readerror()
 }
 
 QString BackThread::getConnProp(QString connName){
-    QString cmd = "nmcli connection show '" + connName + "' > /tmp/kylin-nm-connprop";
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QString localPath = homePath.at(0) + "/.config/kylin-nm-connprop";
+
+    QString cmd = "nmcli connection show '" + connName + "' > " + localPath;
     Utils::m_system(cmd.toUtf8().data());
 //    int status = system(cmd.toUtf8().data());
 //    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'getConnProp' failed");}
 
-    QFile file("/tmp/kylin-nm-connprop");
+    QFile file(localPath);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-connprop!");
         qDebug()<<"Can't open the file /tmp/kylin-nm-connprop!"<<endl;
@@ -344,12 +354,15 @@ QString BackThread::getConnProp(QString connName){
 }
 
 bool BackThread::execChkWifiExist(QString connName){
-    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection show '" + connName + "' > /tmp/kylin-nm-chkwifiexist";
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QString localPath = homePath.at(0) + "/.config/kylin-nm-chkwifiexist";
+
+    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection show '" + connName + "' > " + localPath;
     Utils::m_system(cmd.toUtf8().data());
 //    int status = system(cmd.toUtf8().data());
 //    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'execChkWifiExist' failed");}
 
-    QFile file("/tmp/kylin-nm-chkwifiexist");
+    QFile file(localPath);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-chkwifiexist!");
@@ -366,12 +379,15 @@ bool BackThread::execChkWifiExist(QString connName){
 }
 
 QString BackThread::execChkLanWidth(QString ethName){
-    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';ethtool '" + ethName + "' | grep Speed > /tmp/kylin-nm-bandwidth";
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QString localPath = homePath.at(0) + "/.config/kylin-nm-bandwidth";
+
+    QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';ethtool '" + ethName + "' | grep Speed > " + localPath;
     Utils::m_system(cmd.toUtf8().data());
 //    int status = system(cmd.toUtf8().data());
 //    if (status != 0){ syslog(LOG_ERR, "execute 'ethtool' in function 'execChkLanWidth' failed");}
 
-    QFile file("/tmp/kylin-nm-bandwidth");
+    QFile file(localPath);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-bandwidth!");

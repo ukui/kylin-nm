@@ -893,7 +893,10 @@ void MainWindow::getActiveInfo()
     QString actLanName = "--";
     QString actWifiName = "--";
 
-    activecon *act = kylin_network_get_activecon_info();
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QString lockPath = homePath.at(0) + "/.config/kylin-nm-activecon";
+
+    activecon *act = kylin_network_get_activecon_info(lockPath.toUtf8().data());
     int index = 0;
     while(act[index].con_name != NULL){
         if(QString(act[index].type) == "ethernet"){
@@ -1461,7 +1464,10 @@ void MainWindow::getLanListDone(QStringList slist)
 
     // 获取当前连接的lan name
     QString actLanName = "--";
-    activecon *act = kylin_network_get_activecon_info();
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QString lockPath = homePath.at(0) + "/.config/kylin-nm-activecon";
+
+    activecon *act = kylin_network_get_activecon_info(lockPath.toUtf8().data());
     int index = 0;
     while(act[index].con_name != NULL){
         if(QString(act[index].type) == "ethernet"){
@@ -1597,7 +1603,10 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 获取当前连接的wifi name
     QString actWifiName = "--";
-    activecon *act = kylin_network_get_activecon_info();
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QString lockPath = homePath.at(0) + "/.config/kylin-nm-activecon";
+
+    activecon *act = kylin_network_get_activecon_info(lockPath.toUtf8().data());
     int index = 0;
     while(act[index].con_name != NULL){
         if(QString(act[index].type) == "wifi"){

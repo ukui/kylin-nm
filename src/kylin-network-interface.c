@@ -186,11 +186,16 @@ conlist *kylin_network_get_conlist_info()
 }
 
 //获取当前活动网络连接
-activecon *kylin_network_get_activecon_info()
+activecon *kylin_network_get_activecon_info(char *path)
 {
-    int status = system("nmcli connection show -active > /tmp/activecon.txt");
+    char *chr = "nmcli connection show -active > ";
+    char *cmd = (char *) malloc(strlen(chr) + strlen(path));
+    strcpy(cmd, chr);
+    strcat(cmd, path);
+    int status = system(cmd);
+    //int status = system("nmcli connection show -active > /tmp/activecon.txt");
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show -active' in function 'kylin_network_get_activecon_info' failed");}
-    char *filename="/tmp/activecon.txt";
+    char *filename = path;
 
     FILE *activefp;
     int activenum=0;

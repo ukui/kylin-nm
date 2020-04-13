@@ -81,7 +81,6 @@ private:
 
 signals:
     void updateWiredList(int n);
-
 };
 
 #endif // KYLINDBUSINTERFACE_H

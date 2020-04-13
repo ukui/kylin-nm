@@ -25,6 +25,7 @@
 #include <malloc.h>
 #include <string.h>
 #include <unistd.h>
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C"{
@@ -72,7 +73,7 @@ conlist *kylin_network_get_conlist_info();
  * Get the active network connection.
  * return the struct pointer.
  */
-activecon *kylin_network_get_activecon_info();
+activecon *kylin_network_get_activecon_info(char *path);
 
 /*
  * Create a new Ethernet connection.

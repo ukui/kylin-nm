@@ -26,6 +26,7 @@
 #include <unistd.h>
 
 #include <QStandardItemModel>
+#include <QDir>
 
 DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     isUsed(type),
@@ -74,12 +75,11 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
     ui->btnConnect->setText(tr("Connect")); //连接
 
     ui->cbxConn->addItem(tr("C_reate…")); //新建...
-    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
-    QString localPath = homePath.at(0) + "/.config/kylin-nm-connshow";
-    QString cmd = "nmcli connection show>" + localPath;
+    QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
+    QString cmd = "nmcli connection show>" + tmpPath;
     int status = system(cmd.toUtf8().data());
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgConnHidWifi' failed");}
-    QFile file(localPath);
+    QFile file(tmpPath);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         qDebug()<<"Can't open the file!";
     }
@@ -198,13 +198,12 @@ void DlgConnHidWifi::changeWindow(){
         ui->cbxSecurity->setEnabled(true);
         ui->btnConnect->setEnabled(false);
     }else if (ui->cbxConn->currentIndex() >= 1){
-        QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
-        QString localPath = homePath.at(0) + "/.config/kylin-nm-connshow";
+        QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
+        QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " >" + tmpPath;
 
-        QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " >" + localPath;
         int status = system(currStr.toUtf8().data());
         if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");}
-        QFile file(localPath);
+        QFile file(tmpPath);
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
             qDebug()<<"Can't open the file!";
         }
@@ -247,24 +246,24 @@ void DlgConnHidWifi::on_btnConnect_clicked()
     //点击连接按钮以连接隐藏WiFi
     if (isUsed == 0){
         int x = 0;
-        do{
+        do {
             sleep(1);
 
-            QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
-            QString localPath = homePath.at(0) + "/.config/kylin-nm-btoutput";
+            QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
 
-           QString cmd = "nmcli device wifi connect " + wifiName + " password '' hidden yes > " + localPath;
-           int status = system(cmd.toUtf8().data());
-           if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");}
+            QString cmd = "nmcli device wifi connect " + wifiName + " password '' hidden yes > " + tmpPath;
+            int status = system(cmd.toUtf8().data());
+            if (status != 0)
+                syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");
 
-           QFile file(localPath);
-           if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-           {
-               qDebug()<<"Can't open the file!"<<endl;
-           }
-           QString text = file.readAll();
-           file.close();
-           if(text.indexOf("Scanning not allowed") != -1){x = 1;} else { x = 0;}
+            QFile file(tmpPath);
+            if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+            {
+               qDebug() << "Can't open the file!" << endl;
+            }
+            QString text = file.readAll();
+            file.close();
+            if(text.indexOf("Scanning not allowed") != -1){x = 1;} else { x = 0;}
         } while(x);
 
         connect(this, SIGNAL(execSecConn()), this,SLOT(on_execSecConn() ));

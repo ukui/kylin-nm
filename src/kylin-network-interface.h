@@ -73,7 +73,7 @@ conlist *kylin_network_get_conlist_info();
  * Get the active network connection.
  * return the struct pointer.
  */
-activecon *kylin_network_get_activecon_info(char *path);
+activecon *kylin_network_get_activecon_info();
 
 /*
  * Create a new Ethernet connection.

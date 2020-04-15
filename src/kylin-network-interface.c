@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/syslog.h>
+#include <pwd.h>
 
 
 //获取网络接口名
@@ -186,23 +187,30 @@ conlist *kylin_network_get_conlist_info()
 }
 
 //获取当前活动网络连接
-activecon *kylin_network_get_activecon_info(char *path)
+activecon *kylin_network_get_activecon_info()
 {
+    struct passwd *pwd;
+    pwd = getpwuid(getuid());
+    char *name = pwd->pw_name;
+    char *tmpPrefix = "/tmp/kylin-nm-activecon-";
     char *chr = "nmcli connection show -active > ";
-    char *cmd = (char *) malloc(strlen(chr) + strlen(path));
-    strcpy(cmd, chr);
-    strcat(cmd, path);
+    char *cmd;
+    asprintf(&cmd, "%s%s%s", chr, tmpPrefix, name);
+    char *path;
+    asprintf(&path, "%s%s", tmpPrefix, name);
     int status = system(cmd);
-    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show -active' in function 'kylin_network_get_activecon_info' failed");}
+    if (status != 0)
+        syslog(LOG_ERR, "execute 'nmcli connection show -active' in function 'kylin_network_get_activecon_info' failed");
+    free(cmd);
+
     char *filename = path;
 
     FILE *activefp;
     int activenum=0;
     char activeStrLine[1024];
-    if((activefp=fopen(filename,"r"))==NULL)
+    if ((activefp=fopen(filename,"r"))==NULL)
     {
         printf("error!");
-
     }
     fgets(activeStrLine,1024,activefp);
     while(!feof(activefp))
@@ -222,6 +230,8 @@ activecon *kylin_network_get_activecon_info(char *path)
         printf("error!");
 
     }
+    free(path);
+
     fgets(StrLine,1024,fp);
     while(!feof(fp))
     {

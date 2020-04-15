@@ -80,9 +80,12 @@ DlgConnHidWifiWpa::DlgConnHidWifiWpa(int type, MainWindow *mainWindow, QWidget *
     ui->btnConnect->setText(tr("Connect")); //连接
 
     ui->cbxConn->addItem(tr("C_reate…")); //新建...
-    int status = system("nmcli connection show>/tmp/kylin-nm-connshow");
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QString localPath = homePath.at(0) + "/.config/kylin-nm-connshow";
+    QString cmd = "nmcli connection show> " + localPath;
+    int status = system(cmd.toUtf8().data());
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgConnHidWifiWpa' failed");}
-    QFile file("/tmp/kylin-nm-connshow");
+    QFile file(localPath);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         qDebug()<<"Can't open the file!";
     }
@@ -202,10 +205,13 @@ void DlgConnHidWifiWpa::changeWindow(){
         connHidWifi->show();
         connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     }else if (ui->cbxConn->currentIndex() >= 1){
-        QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " >/tmp/kylin-nm-connshow";
+        QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+        QString localPath = homePath.at(0) + "/.config/kylin-nm-connshow";
+
+        QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " > " + localPath;
         int status = system(currStr.toUtf8().data());
         if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");}
-        QFile file("/tmp/kylin-nm-connshow");
+        QFile file(localPath);
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
             qDebug()<<"Can't open the file!";
         }
@@ -254,11 +260,15 @@ void DlgConnHidWifiWpa::on_btnConnect_clicked()
         int x = 0;
         do{
             sleep(1);
-            QString cmd = "nmcli device wifi connect " + wifiName + " password " + wifiPassword + " hidden yes >/tmp/kylin-nm-btoutput";
+
+            QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+            QString localPath = homePath.at(0) + "/.config/kylin-nm-btoutput";
+
+            QString cmd = "nmcli device wifi connect " + wifiName + " password " + wifiPassword + " hidden yes > " + localPath;
             int status = system(cmd.toUtf8().data());
             if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");}
 
-            QFile file("/tmp/kylin-nm-btoutput");
+            QFile file(localPath);
             if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
             {
                 qDebug()<<"Can't open the file!"<<endl;

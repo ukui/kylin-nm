@@ -39,12 +39,12 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
                                          QString("org.freedesktop.NetworkManager"),
-                                         QString("DeviceAdded"), mw, SLOT(onWirelessDeviceAdded(QDBusObjectPath) ) );
+                                         QString("DeviceAdded"), mw, SLOT(onNetworkDeviceAdded(QDBusObjectPath) ) );
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
                                          QString("org.freedesktop.NetworkManager"),
-                                         QString("DeviceRemoved"), mw, SLOT(onWirelessDeviceRemoved(QDBusObjectPath) ) );
+                                         QString("DeviceRemoved"), mw, SLOT(onNetworkDeviceRemoved(QDBusObjectPath) ) );
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager/Settings"),

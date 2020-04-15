@@ -1012,30 +1012,32 @@ void MainWindow::onDeleteLan()
 }
 
 //无线网卡插拔处理
-void MainWindow::onWirelessDeviceAdded(QDBusObjectPath objPath)
+void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
 {
     //仅处理无线网卡插入情况
-    syslog(LOG_DEBUG,"wireless device is already plug in");
-//    KylinDBus kDBus1;
     objKyDBus->isWirelessCardOn = false;
     objKyDBus->getObjectPath();
-    if (objKyDBus->isWirelessCardOn) {
-        is_wireless_adapter_ready = 1;
-    } else {
+
+    if (objKyDBus->wirelessPath.path() == objPath.path()){ //证明添加的是无线网卡
         is_wireless_adapter_ready = 0;
+        if (objKyDBus->isWirelessCardOn) {
+            syslog(LOG_DEBUG,"wireless device is already plug in");
+            qDebug()<<"wireless device is already plug in";
+            is_wireless_adapter_ready = 1;
+            onBtnWifiClicked(0);
+        }
     }
-    onBtnWifiClicked(0);
 }
 
-void MainWindow::onWirelessDeviceRemoved(QDBusObjectPath objPath)
+void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
 {
     //仅处理无线网卡拔出情况
-    syslog(LOG_DEBUG,"wireless device is already plug out");
-//    KylinDBus kDBus2;
-    if (objKyDBus->wirelessPath.path() == objPath.path()){
+    if (objKyDBus->wirelessPath.path() == objPath.path()){ //证明移出的是无线网卡
+        syslog(LOG_DEBUG,"wireless device is already plug out");
+        qDebug()<<"wireless device is already plug out";
         is_wireless_adapter_ready = 0;
+        onBtnWifiClicked(0);
     }
-    onBtnWifiClicked(0);
 }
 
 void MainWindow::checkIsWirelessDeviceOn()

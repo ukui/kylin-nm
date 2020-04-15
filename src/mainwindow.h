@@ -163,8 +163,8 @@ public slots:
     void onCarrierUpHandle();
     void onCarrierDownHandle();
     void onDeleteLan();
-    void onWirelessDeviceAdded(QDBusObjectPath objPath);
-    void onWirelessDeviceRemoved(QDBusObjectPath objPath);
+    void onNetworkDeviceAdded(QDBusObjectPath objPath);
+    void onNetworkDeviceRemoved(QDBusObjectPath objPath);
     void getLanBandWidth();
 
     void oneLanFormSelected(QString lanName);

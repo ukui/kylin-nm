@@ -189,18 +189,18 @@ int CustomStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *opt
 
 void CustomStyle::polish(QWidget *widget)
 {
-    if (widget) {
-        if (widget->inherits("QTipLabel")){
-            widget->setAttribute(Qt::WA_TranslucentBackground);
+//    if (widget) {
+//        if (widget->inherits("QTipLabel")){
+//            widget->setAttribute(Qt::WA_TranslucentBackground);
 
-            QPainterPath path;
-            auto rect = widget->rect();
-            rect.adjust(0, 0, -0, -0);
-            path.addRoundedRect(rect, 3, 3);
+//            QPainterPath path;
+//            auto rect = widget->rect();
+//            rect.adjust(0, 0, -0, -0);
+//            path.addRoundedRect(rect, 3, 3);
 
-            widget->setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-        }
-    }
+//            widget->setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+//        }
+//    }
 
     return QProxyStyle::polish(widget);
 }

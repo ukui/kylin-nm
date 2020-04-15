@@ -54,13 +54,13 @@ MainWindow::MainWindow(QWidget *parent) :
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
     this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
-//    this->setStyleSheet("QToolTip{background:rgba(26,26,26,0.7);"
-//                        "font: 14px;"
-//                        "color:rgba(255,255,255,1);"
-//                        "border-radius: 3px;"
-//                        "border:1px solid rgba(255,255,255,0.2);"
-//                        "padding: 0px 4px;"
-//                        "outline:none;}");
+    //this->setStyleSheet("QToolTip{background:rgba(26,26,26,0.7);"
+    //                    "font: 14px;"
+    //                    "color:rgba(255,255,255,1);"
+    //                    "border-radius: 3px;"
+    //                    "border:1px solid rgba(255,255,255,0.2);"
+    //                    "padding: 0px 4px;"
+    //                    "outline:none;}");
 
     ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);"
                                      "border-radius:6px;background:rgba(19,19,20,0.7);}");
@@ -108,15 +108,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClicked);
     connect(ui->btnWifi, &QPushButton::clicked, this, &MainWindow::onBtnWifiClicked);
 
-//    auto app = static_cast<QApplication*>(QCoreApplication::instance());
-//    app->setStyle(new CustomStyle());
+    //auto app = static_cast<QApplication*>(QCoreApplication::instance());
+    //app->setStyle(new CustomStyle()); //设置自定义主题
 
     ui->btnNetList->setAttribute(Qt::WA_Hover,true);
     ui->btnNetList->installEventFilter(this);
     ui->btnWifiList->setAttribute(Qt::WA_Hover,true);
     ui->btnWifiList->installEventFilter(this);
 
-//    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+    //KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
 MainWindow::~MainWindow()
@@ -576,29 +576,13 @@ void MainWindow::createTrayIcon()
 
     trayIconMenu = new QMenu(this);
     trayIconMenu->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
-    trayIconMenu->setStyleSheet("QMenu {background-color: rgba(19,19,20,0.7);"
-                                    "border:1px solid rgba(255, 255, 255, 0.05);"
-                                    "padding: 6px 2px;"
-                                    "border-radius: 6px;}"
-                                "QMenu::item {font-size: 14px;color: #ffffff;"
-                                              "height: 36px;width: 248px;}"
-                                "QMenu::separator{height:1px;background-color:rgba(19,19,20,0);"
-                                        "margin-top:1px;margin-bottom:2px;}");
 
-    mShowWindow = new QWidgetAction(trayIconMenu);
-    mAdvConf = new QWidgetAction(trayIconMenu);
-
-    widShowWindow = new QWidget();
-    widAdvConf = new QWidget();
-
-    mShowWindow->setDefaultWidget(widShowWindow);
-    mAdvConf->setDefaultWidget(widAdvConf);
-
-    init_widget_action(widShowWindow, "", tr("Show MainWindow"));
-    init_widget_action(widAdvConf, ":/res/x/setup.png", tr("Advanced"));
+    mShowWindow = new QAction(tr("Show MainWindow"),this);
+    mAdvConf = new QAction(tr("Advanced"),this);
+    mAdvConf->setIcon(QIcon(":/res/x/setup.png"));
 
     trayIconMenu->addAction(mShowWindow);
-    trayIconMenu->addSeparator();
+    //trayIconMenu->addSeparator();
     trayIconMenu->addAction(mAdvConf);
     trayIcon->setContextMenu(trayIconMenu);
 

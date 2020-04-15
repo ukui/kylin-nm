@@ -46,7 +46,7 @@
 #include <QScreen>
 #include <QMenu>
 #include <QAction>
-#include <QWidgetAction>
+#include <QAction>
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QDebug>
@@ -227,8 +227,8 @@ private:
 
     QSystemTrayIcon *trayIcon = nullptr;
     QMenu *trayIconMenu = nullptr;
-    QWidgetAction *mShowWindow = nullptr;
-    QWidgetAction *mAdvConf = nullptr;
+    QAction *mShowWindow = nullptr;
+    QAction *mAdvConf = nullptr;
     QWidget *widShowWindow = nullptr;
     QWidget *widAdvConf = nullptr;
 

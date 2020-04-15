@@ -56,7 +56,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
                                          QString("org.freedesktop.NetworkManager.Settings"),
                                          QString("ConnectionRemoved"), this, SLOT(onConnectionRemoved(QDBusObjectPath) ) );
 
-    if (wirelessPath.path() != ""){
+    if (wiredPath.path() != ""){
         QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                              QString(wiredPath.path()),
                                              QString("org.freedesktop.NetworkManager.Device.Wired"),

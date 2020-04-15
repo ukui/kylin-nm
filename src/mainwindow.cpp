@@ -1268,58 +1268,8 @@ void MainWindow::onBtnNetListClicked(int flag)
         this->startLoading();
         this->ksnm->execGetLanList();
     } else {
-        const int BUF_SIZE = 1024;
-        char buf[BUF_SIZE];
-
-        FILE * p_file = NULL;
-
-        p_file = popen("nmcli connection show -active", "r");
-        if (!p_file) {
-            syslog(LOG_ERR, "Error occurred when popen cmd 'nmcli connection show'");
-            qDebug()<<"Error occurred when popen cmd 'nmcli connection show";
-        }
-
-        while (fgets(buf, BUF_SIZE, p_file) != NULL) {
-            QString line(buf);
-            if(line.indexOf("ethernet") != -1){
-                QString txt(tr("Abnormal connection exist, program will delete it"));//仍然有连接异常的有线网络，断开异常连接的网络
-                //m_notify->execNotifySend(txt);//显示本应用自带的桌面通知
-                objKyDBus->showDesktopNotify(txt);
-                //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-                //int status = system(cmd.toUtf8().data());
-                //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnNetListClicked' failed");}
-
-                is_stop_check_net_state = 1;
-                this->startLoading();
-                deleteLanTimer->start(1000);
-                pclose(p_file);
-                return;
-            }
-        }
-        pclose(p_file);
-
-        delete topLanListWidget; // 清空top列表
-        createTopLanUI(); //创建顶部有线网item
-        lbTopLanList->hide();
-        btnCreateNet->hide();
-
-        // 清空lan列表
-        lanListWidget = new QWidget(scrollAreal);
-        lanListWidget->resize(W_LIST_WIDGET, H_NORMAL_ITEM + H_LAN_ITEM_EXTEND);
-        scrollAreal->setWidget(lanListWidget);
-        scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA);
-
-        // 当前连接的lan
-        OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
-        ccf->setName(tr("Not connected"));//"当前未连接任何 以太网"
-        ccf->setIcon(false);
-        ccf->setConnedString(1, tr("Disconnected"));//"未连接"
-        ccf->setAct(true);
-        ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
-        ccf->show();
-
-        this->lanListWidget->show();
-        this->wifiListWidget->hide();
+        this->startLoading();
+        this->ksnm->execGetLanList();
     }
 
     this->scrollAreal->show();

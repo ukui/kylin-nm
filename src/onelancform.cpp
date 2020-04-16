@@ -34,7 +34,13 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 
     ui->lbConned->setAlignment(Qt::AlignLeft);
 
-    ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    leQssLow = "QLineEdit{border:none;background:transparent;font-size:14px;color:rgba(255,255,255,0.57);font-family:Noto Sans CJK SC;}";
+    leQssHigh = "QLineEdit{border:none;background:transparent;font-size:14px;color:rgba(255,255,255,0.91);font-family:Noto Sans CJK SC;}";
+
+    ui->leInfo_1->setStyleSheet(leQssLow);
+    ui->leInfo_2->setStyleSheet(leQssLow);
+    ui->leInfo_3->setStyleSheet(leQssLow);
+    ui->leInfo_4->setStyleSheet(leQssLow);
     ui->btnInfo->setStyleSheet("QPushButton{border:none;background:transparent;}");
     ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
     ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0);}");
@@ -103,10 +109,16 @@ bool OneLancForm::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == ui->btnInfo){
         if(event->type() == QEvent::HoverEnter) {
-            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.91);}");
+            ui->leInfo_1->setStyleSheet(leQssHigh);
+            ui->leInfo_2->setStyleSheet(leQssHigh);
+            ui->leInfo_3->setStyleSheet(leQssHigh);
+            ui->leInfo_4->setStyleSheet(leQssHigh);
             return true;
         } else if(event->type() == QEvent::HoverLeave){
-            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+            ui->leInfo_1->setStyleSheet(leQssLow);
+            ui->leInfo_2->setStyleSheet(leQssLow);
+            ui->leInfo_3->setStyleSheet(leQssLow);
+            ui->leInfo_4->setStyleSheet(leQssLow);
             return true;
         }
     }else if (obj == this){
@@ -231,8 +243,11 @@ void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString s
     QString strIPv6 = QString(tr("IPv6："));
     QString strBW = QString(tr("BandWidth："));
     QString strMAC = QString(tr("MAC："));
-    QString str = strIPv4 + str1 + "\n" + strIPv6 + str2 + "\n" + strBW + str3 + "\n" + strMAC + str4;
-    ui->lbInfo->setText(str);
+
+    ui->leInfo_1->setText(strIPv4 + str1);
+    ui->leInfo_2->setText(strIPv6 + str2);
+    ui->leInfo_3->setText(strBW + str3);
+    ui->leInfo_4->setText(strMAC + str4);
 }
 
 void OneLancForm::setIcon(bool isOn){

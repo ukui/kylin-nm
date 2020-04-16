@@ -135,6 +135,8 @@ private:
     ConfForm *cf = nullptr;
     KSimpleNM *ks = nullptr;
     bool hasPwd;
+
+    QString leQssLow, leQssHigh;
 };
 
 #endif // ONECONNFORM_H

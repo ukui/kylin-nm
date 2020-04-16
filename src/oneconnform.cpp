@@ -42,7 +42,15 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lePassword->setEchoMode(QLineEdit::Normal);
     ui->btnConnPWD->setEnabled(false);
 
-    ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);line-height:24px;}");
+    leQssLow = "QLineEdit{border:none;background:transparent;font-size:14px;color:rgba(255,255,255,0.57);font-family:Noto Sans CJK SC;}";
+    leQssHigh = "QLineEdit{border:none;background:transparent;font-size:14px;color:rgba(255,255,255,0.91);font-family:Noto Sans CJK SC;}";
+
+    ui->leInfo_1->setStyleSheet(leQssLow);
+    ui->leInfo_2->setStyleSheet(leQssLow);
+    ui->leInfo_3->setStyleSheet(leQssLow);
+    ui->leInfo_1->setEnabled(false);
+    ui->leInfo_2->setEnabled(false);
+    ui->leInfo_3->setEnabled(false);
     ui->btnInfo->setStyleSheet("QPushButton{border:none;background:transparent;}");
     ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0);}");
     ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
@@ -85,7 +93,9 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->wbg_2->hide();
     ui->wbg_3->hide();
     ui->lbName->show();
-    ui->lbInfo->hide();
+    ui->leInfo_1->hide();
+    ui->leInfo_2->hide();
+    ui->leInfo_3->hide();
     ui->lePassword->hide();
     ui->checkBoxPwd->hide();
     ui->checkBoxPwd->setChecked(true);
@@ -137,25 +147,29 @@ void OneConnForm::mousePressEvent(QMouseEvent *){
 //事件过滤器
 bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
 {
-    if (obj == ui->btnInfo){
-        if(event->type() == QEvent::HoverEnter) {
-            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.91);line-height:24px;}");
+    if (obj == ui->btnInfo) {
+        if (event->type() == QEvent::HoverEnter) {
+            ui->leInfo_1->setStyleSheet(leQssHigh);
+            ui->leInfo_2->setStyleSheet(leQssHigh);
+            ui->leInfo_3->setStyleSheet(leQssHigh);
             return true;
-        } else if(event->type() == QEvent::HoverLeave){
-            ui->lbInfo->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);line-height:24px;}");
+        } else if(event->type() == QEvent::HoverLeave) {
+            ui->leInfo_1->setStyleSheet(leQssLow);
+            ui->leInfo_2->setStyleSheet(leQssLow);
+            ui->leInfo_3->setStyleSheet(leQssLow);
             return true;
         }
-    }else if (obj == this){
+    } else if (obj == this) {
         if(event->type() == QEvent::HoverEnter) {
-            if (!this->isTopItem){
-                if (!this->isSelected){
+            if (!this->isTopItem) {
+                if (!this->isSelected) {
                     ui->btnConn->show();
                     ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
                     ui->wbg->show();
                 }
             }
             return true;
-        } else if(event->type() == QEvent::HoverLeave){
+        } else if (event->type() == QEvent::HoverLeave) {
             ui->btnConn->hide();
             ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0);}");
             ui->wbg->hide();
@@ -163,10 +177,10 @@ bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
-    if(obj == ui->lePassword){
-        if(event->type() == QEvent::MouseButtonPress){
+    if (obj == ui->lePassword) {
+        if (event->type() == QEvent::MouseButtonPress) {
             this->setLePassword();
-        }else{
+        } else {
             return false;
         }
     }
@@ -200,14 +214,19 @@ void OneConnForm::setTopItem(bool isSelected){
     if(isSelected){
         resize(W_ITEM, H_ITEM_BIG);
         ui->wbg_3->show();
-        ui->lbInfo->show();
+        ui->leInfo_1->show();
+        ui->leInfo_2->show();
+        ui->leInfo_3->show();
 
         this->isSelected = true;
     }else{
         resize(W_ITEM, H_ITEM);
         ui->lePassword->setText("");
         ui->wbg_3->hide();
-        ui->lbInfo->hide();
+        ui->leInfo_1->hide();
+        ui->leInfo_2->hide();
+        ui->leInfo_3->hide();
+
 
         this->isSelected = false;
     }
@@ -243,7 +262,9 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName){
         ui->wbg->hide();
         ui->wbg_2->hide();
         ui->wbg_3->show();
-        ui->lbInfo->show();
+        ui->leInfo_1->show();
+        ui->leInfo_2->show();
+        ui->leInfo_3->show();
         ui->btnConn->hide();
         ui->btnConnSub->show();
 
@@ -260,7 +281,10 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName){
         ui->wbg->show();
         ui->wbg_2->hide();
         ui->wbg_3->hide();
-        ui->lbInfo->hide();
+        ui->leInfo_1->hide();
+        ui->leInfo_2->hide();
+        ui->leInfo_3->hide();
+
         if (isCurrName){
             ui->btnConn->show();
         }else{
@@ -397,8 +421,10 @@ void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3)
     QString strSecurity = QString(tr("WiFi Security："));
     QString strSignal = QString(tr("Sifnal："));
     QString strMAC = QString(tr("MAC："));
-    QString str = strSecurity + str1 + "\n" + strSignal + str2 + "%\n" + strMAC + str3;
-    ui->lbInfo->setText(str);
+
+    ui->leInfo_1->setText(strSecurity + str1);
+    ui->leInfo_2->setText(strSignal + str2);
+    ui->leInfo_3->setText(strMAC + str3);
 }
 
 void OneConnForm::slotConnWifi()
@@ -592,12 +618,13 @@ void OneConnForm::slotConnWifiResult(int connFlag){
         ui->wbg->hide();
         ui->wbg_2->show();
         ui->wbg_3->hide();
-        ui->lbInfo->hide();
+        ui->leInfo_1->hide();
+        ui->leInfo_2->hide();
+        ui->leInfo_3->hide();
         ui->btnHideConn->hide();
         ui->btnDisConn->hide();
         ui->btnConn->hide();
         ui->btnConnSub->hide();
-        ui->lbInfo->hide();
         ui->line->move(X_LINE_SMALL_EXTEND, Y_LINE_SMALL_EXTEND);
 
         ui->lePassword->show();

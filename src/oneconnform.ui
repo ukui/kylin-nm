@@ -159,19 +159,6 @@
      <height>138</height>
     </rect>
    </property>
-   <widget class="QLabel" name="lbInfo">
-    <property name="geometry">
-     <rect>
-      <x>63</x>
-      <y>64</y>
-      <width>230</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btnInfo">
     <property name="geometry">
      <rect>
@@ -185,6 +172,40 @@
      <string/>
     </property>
    </widget>
+   <widget class="QLineEdit" name="leInfo_1">
+    <property name="geometry">
+     <rect>
+      <x>63</x>
+      <y>62</y>
+      <width>230</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leInfo_2">
+    <property name="geometry">
+     <rect>
+      <x>63</x>
+      <y>86</y>
+      <width>230</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leInfo_3">
+    <property name="geometry">
+     <rect>
+      <x>63</x>
+      <y>110</y>
+      <width>230</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <zorder>leInfo_1</zorder>
+   <zorder>leInfo_2</zorder>
+   <zorder>leInfo_3</zorder>
+   <zorder>btnInfo</zorder>
   </widget>
   <widget class="Line" name="line">
    <property name="geometry">

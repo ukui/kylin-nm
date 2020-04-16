@@ -62,8 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //                    "padding: 0px 4px;"
     //                    "outline:none;}");
 
-    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);"
-                                     "border-radius:6px;background:rgba(19,19,20,0.7);}");
+    ui->centralWidget->setStyleSheet("#centralWidget{border:none;border-radius:6px;background:rgba(19,19,20,0.7);}");
 
     editQssString(); //编辑部分控件QSS
     createTopLanUI(); //创建顶部有线网item

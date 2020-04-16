@@ -106,6 +106,8 @@ private:
     MainWindow *mw = nullptr;
     ConfForm *cf = nullptr;
     KSimpleNM *ks = nullptr;
+
+    QString leQssLow, leQssHigh;
 };
 
 #endif // ONELANCFORM_H

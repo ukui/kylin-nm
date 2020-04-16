@@ -98,7 +98,7 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->lineUp->hide();
     ui->lineDown->hide();
 
-    ui->lbName->setText(tr("Network name: "));//"网络名称："
+    ui->lbName->setText(tr("LAN name: "));//"网络名称："
     ui->lbTxt1->setText(tr("Method: "));//"编辑IP设置："
     ui->lbTxt2->setText(tr("Address: "));//"IP地址："
     ui->lbTxt3->setText(tr("Netmask: "));//"子网掩码："
@@ -291,7 +291,7 @@ void ConfForm::cbTypeChanged(int index){
         ui->leName->setEnabled(false);
         ui->btnOk->show();
         ui->btnCreate->hide();
-        ui->lbLeftupTitle->setText(tr("edit network"));
+        ui->lbLeftupTitle->setText(tr("Edit Network"));
     }
 
     if(index == 0){
@@ -326,7 +326,7 @@ void ConfForm::cbTypeChanged(int index){
         ui->leName->setEnabled(true);
         ui->btnOk->hide();
         ui->btnCreate->show();
-        ui->lbLeftupTitle->setText(tr("add wired network"));
+        ui->lbLeftupTitle->setText(tr("Add Wired Network"));
         isShowSaveBtn = false;
 
         ui->lineUp->hide();

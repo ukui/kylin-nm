@@ -232,11 +232,11 @@ void OneLancForm::setConnedString(bool showLable, QString str){
 void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString str4)
 {
     if (str1 == "" || str1 == "auto"){
-        str1 = tr("no configuration");
+        str1 = tr("No Configuration");
     }
 
     if (str2 == "" || str2 == "auto"){
-        str2 = tr("no configuration");
+        str2 = tr("No Configuration");
     }
 
     QString strIPv4 = QString(tr("IPv4："));

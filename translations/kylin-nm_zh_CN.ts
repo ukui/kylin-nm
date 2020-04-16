@@ -12,13 +12,12 @@
     <name>ConfForm</name>
     <message>
         <location filename="../src/confform.cpp" line="39"/>
-        <location filename="../src/confform.cpp" line="294"/>
         <source>edit network</source>
         <translation>编辑网络设置</translation>
     </message>
     <message>
         <location filename="../src/confform.cpp" line="101"/>
-        <source>Network name: </source>
+        <source>LAN name: </source>
         <translation type="unfinished">网络名称：</translation>
     </message>
     <message>
@@ -92,6 +91,16 @@
         <translation type="unfinished">新的网络配置已经完成</translation>
     </message>
     <message>
+        <location filename="../src/confform.cpp" line="294"/>
+        <source>Edit Network</source>
+        <translation type="unfinished">编辑网络设置</translation>
+    </message>
+    <message>
+        <location filename="../src/confform.cpp" line="329"/>
+        <source>Add Wired Network</source>
+        <translation type="unfinished">新建有线网络</translation>
+    </message>
+    <message>
         <source>create wired network successfully</source>
         <translation type="obsolete">已创建新的有线网络</translation>
     </message>
@@ -104,18 +113,13 @@
         <source>New settings already effective</source>
         <translation>新的设置已经生效</translation>
     </message>
-    <message>
-        <location filename="../src/confform.cpp" line="329"/>
-        <source>add wired network</source>
-        <translation type="unfinished">新建有线网络</translation>
-    </message>
 </context>
 <context>
     <name>DlgConnHidWifi</name>
     <message>
         <location filename="../wireless-security/dlgconnhidwifi.cpp" line="69"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation>加入隐藏Wi-Fi</translation>
+        <source>Add Hidden Wi-Fi</source>
+        <translation type="unfinished">加入隐藏Wi-Fi</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifi.cpp" line="70"/>
@@ -124,8 +128,8 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifi.cpp" line="71"/>
-        <source>Network name</source>
-        <translation>网络名称:</translation>
+        <source>Wi-Fi name</source>
+        <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifi.cpp" line="72"/>
@@ -148,12 +152,12 @@
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="95"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="98"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="96"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="99"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation>WPA 及 WPA2 个人</translation>
     </message>
@@ -1130,7 +1134,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="74"/>
-        <source>Add hidden Wi-Fi</source>
+        <source>Add Hidden Wi-Fi</source>
         <translation type="unfinished">加入隐藏Wi-Fi</translation>
     </message>
     <message>
@@ -1140,7 +1144,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="76"/>
-        <source>Network name</source>
+        <source>Wi-Fi name</source>
         <translation type="unfinished">网络名称:</translation>
     </message>
     <message>
@@ -1169,12 +1173,12 @@
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="101"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="104"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="102"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="105"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
@@ -1255,7 +1259,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/mainwindow.ui" line="14"/>
-        <location filename="../src/mainwindow.cpp" line="578"/>
+        <location filename="../src/mainwindow.cpp" line="574"/>
         <source>kylin-nm</source>
         <translation>网络工具</translation>
     </message>
@@ -1264,14 +1268,14 @@
         <translation type="vanished">网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="385"/>
-        <location filename="../src/mainwindow.cpp" line="601"/>
+        <location filename="../src/mainwindow.cpp" line="384"/>
+        <location filename="../src/mainwindow.cpp" line="580"/>
         <source>Advanced</source>
         <translation>网络配置</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="344"/>
-        <location filename="../src/mainwindow.cpp" line="1250"/>
+        <location filename="../src/mainwindow.cpp" line="343"/>
+        <location filename="../src/mainwindow.cpp" line="1237"/>
         <source>Ethernet</source>
         <translation>有线网络</translation>
     </message>
@@ -1280,8 +1284,8 @@
         <translation type="vanished">加入网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="350"/>
-        <location filename="../src/mainwindow.cpp" line="1363"/>
+        <location filename="../src/mainwindow.cpp" line="349"/>
+        <location filename="../src/mainwindow.cpp" line="1350"/>
         <source>Wifi</source>
         <translation>无线网络</translation>
     </message>
@@ -1294,95 +1298,95 @@
         <translation type="vanished">已关闭</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="365"/>
+        <location filename="../src/mainwindow.cpp" line="364"/>
         <source>HotSpot</source>
         <translation>个人热点</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="375"/>
+        <location filename="../src/mainwindow.cpp" line="374"/>
         <source>FlyMode</source>
         <translation>飞行模式</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="600"/>
+        <location filename="../src/mainwindow.cpp" line="579"/>
         <source>Show MainWindow</source>
         <translation>显示网络连接界面</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1402"/>
-        <location filename="../src/mainwindow.cpp" line="1476"/>
-        <location filename="../src/mainwindow.cpp" line="1609"/>
-        <location filename="../src/mainwindow.cpp" line="2266"/>
-        <location filename="../src/mainwindow.cpp" line="2350"/>
+        <location filename="../src/mainwindow.cpp" line="1389"/>
+        <location filename="../src/mainwindow.cpp" line="1466"/>
+        <location filename="../src/mainwindow.cpp" line="1605"/>
+        <location filename="../src/mainwindow.cpp" line="2262"/>
+        <location filename="../src/mainwindow.cpp" line="2346"/>
         <source>Not connected</source>
         <translation>当前未连接任何网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1405"/>
-        <location filename="../src/mainwindow.cpp" line="1478"/>
-        <location filename="../src/mainwindow.cpp" line="1531"/>
-        <location filename="../src/mainwindow.cpp" line="1532"/>
-        <location filename="../src/mainwindow.cpp" line="1612"/>
-        <location filename="../src/mainwindow.cpp" line="1682"/>
-        <location filename="../src/mainwindow.cpp" line="1816"/>
-        <location filename="../src/mainwindow.cpp" line="2268"/>
-        <location filename="../src/mainwindow.cpp" line="2352"/>
+        <location filename="../src/mainwindow.cpp" line="1392"/>
+        <location filename="../src/mainwindow.cpp" line="1468"/>
+        <location filename="../src/mainwindow.cpp" line="1523"/>
+        <location filename="../src/mainwindow.cpp" line="1524"/>
+        <location filename="../src/mainwindow.cpp" line="1608"/>
+        <location filename="../src/mainwindow.cpp" line="1678"/>
+        <location filename="../src/mainwindow.cpp" line="1812"/>
+        <location filename="../src/mainwindow.cpp" line="2264"/>
+        <location filename="../src/mainwindow.cpp" line="2348"/>
         <source>Disconnected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1555"/>
+        <location filename="../src/mainwindow.cpp" line="1548"/>
         <source>No Other Wired Network Scheme</source>
         <translation type="unfinished">列表中无其他有线网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1704"/>
+        <location filename="../src/mainwindow.cpp" line="1700"/>
         <source>No Other Wireless Network Scheme</source>
         <translation type="unfinished">未检测到其他无线网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2176"/>
+        <location filename="../src/mainwindow.cpp" line="2172"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished">断开有线网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2205"/>
+        <location filename="../src/mainwindow.cpp" line="2201"/>
         <source>Wi-Fi is disconnected</source>
         <translation type="unfinished">断开无线网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2640"/>
+        <location filename="../src/mainwindow.cpp" line="2636"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">请确认Wi-Fi密码或无线设备</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="231"/>
+        <location filename="../src/mainwindow.cpp" line="230"/>
         <source>Ethernet Networks</source>
         <translation>可用有线网络列表</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="240"/>
+        <location filename="../src/mainwindow.cpp" line="239"/>
         <source>New LAN</source>
         <translation type="unfinished">新建网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="263"/>
+        <location filename="../src/mainwindow.cpp" line="262"/>
         <source>Hide WiFi</source>
         <translation>加入网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="293"/>
+        <location filename="../src/mainwindow.cpp" line="292"/>
         <source>No usable network in the list</source>
         <translation type="unfinished">列表暂无可连接网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1513"/>
-        <location filename="../src/mainwindow.cpp" line="1660"/>
+        <location filename="../src/mainwindow.cpp" line="1505"/>
+        <location filename="../src/mainwindow.cpp" line="1656"/>
         <source>NetOn,</source>
         <translation>已连接，</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="254"/>
+        <location filename="../src/mainwindow.cpp" line="253"/>
         <source>Wifi Networks</source>
         <translation>可用无线网络列表</translation>
     </message>
@@ -1395,7 +1399,7 @@
         <translation type="vanished">打开无线网开关前保持有线网开关打开</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1214"/>
+        <location filename="../src/mainwindow.cpp" line="1201"/>
         <source>please insert the wireless network adapter</source>
         <translation>请先插入无线网卡</translation>
     </message>
@@ -1412,17 +1416,17 @@
         <translation type="vanished">正在更新 Wi-Fi列表</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2489"/>
+        <location filename="../src/mainwindow.cpp" line="2485"/>
         <source>Conn Ethernet Success</source>
         <translation>连接有线网络成功</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2504"/>
+        <location filename="../src/mainwindow.cpp" line="2500"/>
         <source>Conn Ethernet Fail</source>
         <translation>连接有线网络失败</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2628"/>
+        <location filename="../src/mainwindow.cpp" line="2624"/>
         <source>Conn Wifi Success</source>
         <translation>连接无线网络成功</translation>
     </message>
@@ -1465,12 +1469,12 @@
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="39"/>
-        <location filename="../src/oneconnform.cpp" line="253"/>
+        <location filename="../src/oneconnform.cpp" line="274"/>
         <source>Input Password...</source>
         <translation type="unfinished">输入密码...</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="319"/>
+        <location filename="../src/oneconnform.cpp" line="343"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
@@ -1487,27 +1491,27 @@
         <translation type="vanished">速率</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="395"/>
+        <location filename="../src/oneconnform.cpp" line="419"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="397"/>
+        <location filename="../src/oneconnform.cpp" line="421"/>
         <source>WiFi Security：</source>
         <translation type="unfinished">WiFi安全性：</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="398"/>
+        <location filename="../src/oneconnform.cpp" line="422"/>
         <source>Sifnal：</source>
         <translation type="unfinished">信号强度：</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="399"/>
+        <location filename="../src/oneconnform.cpp" line="423"/>
         <source>MAC：</source>
         <translation type="unfinished">物理地址：</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="612"/>
+        <location filename="../src/oneconnform.cpp" line="639"/>
         <source>Conn Wifi Failed</source>
         <translation>连接无线网络失败</translation>
     </message>
@@ -1535,28 +1539,28 @@
         <translation>断开</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="221"/>
-        <location filename="../src/onelancform.cpp" line="225"/>
-        <source>no configuration</source>
+        <location filename="../src/onelancform.cpp" line="235"/>
+        <location filename="../src/onelancform.cpp" line="239"/>
+        <source>No Configuration</source>
         <translation type="unfinished">未配置</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="228"/>
+        <location filename="../src/onelancform.cpp" line="242"/>
         <source>IPv4：</source>
         <translation type="unfinished">IPv4地址：</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="229"/>
+        <location filename="../src/onelancform.cpp" line="243"/>
         <source>IPv6：</source>
         <translation type="unfinished">IPv6地址：</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="230"/>
+        <location filename="../src/onelancform.cpp" line="244"/>
         <source>BandWidth：</source>
         <translation type="unfinished">带宽：</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="231"/>
+        <location filename="../src/onelancform.cpp" line="245"/>
         <source>MAC：</source>
         <translation type="unfinished">物理地址：</translation>
     </message>

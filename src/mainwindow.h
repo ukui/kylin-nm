@@ -92,9 +92,9 @@
 #define W_TOP_LIST_WIDGET 435
 #define W_LIST_WIDGET 440
 
-#define W_BTN_FUN 57
+#define W_BTN_FUN 59
 #define H_BTN_FUN 14
-#define X_BTN_FUN 361
+#define X_BTN_FUN 360
 #define Y_BTN_FUN 87 //新建网络，加入网络按钮的宽高、x坐标、y坐标
 
 #define W_NO_ITEM_TIP 220

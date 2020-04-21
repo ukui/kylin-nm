@@ -176,7 +176,8 @@ public slots:
     void on_btnHotspot_clicked();
     void on_btnHotspotState();
 
-    void onBtnWifiClicked(int flag = 0); //flag =0为打开、1为关闭、2为其他
+    //flag =0为普通点击、1为收到打开信息、2为收到关闭信息、3为无线网卡插入、4为无线网卡拔出
+    void onBtnWifiClicked(int flag = 0);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);

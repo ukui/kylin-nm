@@ -1271,7 +1271,7 @@
         <location filename="../src/mainwindow.cpp" line="384"/>
         <location filename="../src/mainwindow.cpp" line="580"/>
         <source>Advanced</source>
-        <translation>网络配置</translation>
+        <translation>设置网络</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="343"/>

@@ -699,20 +699,18 @@ void MainWindow::handleIconClicked()
             this->move(availableGeometry.x() + availableGeometry.width() - this->width(), screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m + d);
         } else if (n == 2){
             //任务栏在左侧
-            this->move(m + d, screenMainRect.y() + screenMainRect.height() - this->height());
-//            if (screenGeometry.x() == 0){//主屏在左侧
-//                this->move(screenGeometry.width() - availableGeometry.width() + m + d, screenMainRect.y() + screenMainRect.height() - this->height());
-//            }else{//主屏在右侧
-//                this->move(screenGeometry.width() - availableGeometry.width() + m + d,screenDupRect.y() + screenDupRect.height() - this->height());
-//            }
+            if (screenGeometry.x() == 0){//主屏在左侧
+                this->move(m + d, screenMainRect.y() + screenMainRect.height() - this->height());
+            }else{//主屏在右侧
+                this->move(screenMainRect.x() + m + d, screenMainRect.y() + screenMainRect.height() - this->height());
+            }
         } else if (n == 3){
             //任务栏在右侧
-            this->move(screenMainRect.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height());
-//            if (screenGeometry.x() == 0){//主屏在左侧
-//                this->move(screenMainRect.width() + screenDupRect.width() - this->width() - m - d, screenDupRect.y() + screenDupRect.height() - this->height());
-//            }else{//主屏在右侧
-//                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height());
-//            }
+            if (screenGeometry.x() == 0){//主屏在左侧
+                this->move(screenMainRect.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height());
+            }else{//主屏在右侧
+                this->move(screenMainRect.x() + screenMainRect.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height());
+            }
         }
     } else if(screenGeometry.width() == availableGeometry.width() ){
         if (trayIcon->geometry().y() > availableGeometry.height()/2){

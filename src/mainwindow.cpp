@@ -1804,7 +1804,11 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 if (n >= 1){
                     OneConnForm *lastOcf = wifiList.at(n-1);
                     lastOcf->setLine(true);
-                    posY = lastOcf->y()+H_NORMAL_ITEM;
+                    if (lastOcf->wifiName == currSelNetName) {
+                        posY = lastOcf->y()+H_NORMAL_ITEM + H_WIFI_ITEM_BIG_EXTEND;
+                    } else {
+                        posY = lastOcf->y()+H_NORMAL_ITEM;
+                    }
                 }
 
                 wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() + H_NORMAL_ITEM);

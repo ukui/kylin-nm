@@ -11,3 +11,5 @@ Exec=/usr/bin/kylin-nm
 StartupNotify=false
 Terminal=false
 Type=Application
+OnlyShowIn=UKUI
+X-UKUI-AutoRestart=true

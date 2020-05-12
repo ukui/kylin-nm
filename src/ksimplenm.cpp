@@ -49,7 +49,7 @@ void KSimpleNM::execGetWifiList(){
     isExecutingGetWifiList = true;
     shellOutput = "";
     type = 1;
-    runShellProcess->start("nmcli -f signal,rate,security,ssid device wifi");
+    runShellProcess->start("nmcli -f signal,security,ssid device wifi");
 }
 
 void KSimpleNM::readProcess(){

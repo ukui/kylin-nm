@@ -80,6 +80,8 @@ public:
 
     void setLePassword();
 
+    bool isWifiConfExist(QString netName);
+
     NotifySend *m_notify = nullptr;
     QString wifiName;
     bool isSelected;

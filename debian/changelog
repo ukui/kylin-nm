@@ -1,3 +1,9 @@
+kylin-nm (1.2.3-1ubuntu1) eoan; urgency=medium
+
+  * Rebuild Kylin Network Manager for V10.
+
+ -- chenlelin <chenlelin@kylinos.cn>  Fri, 08 May 2020 15:37:02 +0800
+
 kylin-nm (1.2.3-1) unstable; urgency=medium
 
   * New upstream bugfix release:

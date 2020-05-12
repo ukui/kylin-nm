@@ -396,7 +396,7 @@ void MainWindow::getInitLanSlist()
 
     FILE * p_file = NULL;
 
-    p_file = popen("nmcli -f type,device,name connection show", "r");
+    p_file = popen("export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli -f type,device,name connection show", "r");
     if (!p_file) {
         syslog(LOG_ERR, "Error occurred when popen cmd 'nmcli connection show'");
         qDebug()<<"Error occurred when popen cmd 'nmcli connection show";
@@ -408,7 +408,7 @@ void MainWindow::getInitLanSlist()
         if(strSlist.indexOf("UUID") != -1 || strSlist.indexOf("NAME") != -1){
             oldLanSlist.append(strSlist);
         }
-        if(strSlist.indexOf("ethernet") != -1){
+        if(strSlist.indexOf("802-3-ethernet") != -1 || strSlist.indexOf("ethernet") != -1){
             oldLanSlist.append(strSlist);
         }
     }
@@ -880,10 +880,10 @@ void MainWindow::getActiveInfo()
     activecon *act = kylin_network_get_activecon_info(lockPath.toUtf8().data());
     int index = 0;
     while(act[index].con_name != NULL){
-        if(QString(act[index].type) == "ethernet"){
+        if(QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet"){
             actLanName = QString(act[index].con_name);
         }
-        if(QString(act[index].type) == "wifi"){
+        if(QString(act[index].type) == "wifi" || QString(act[index].type) == "802-11-wireless"){
             actWifiName = QString(act[index].con_name);
         }
         index ++;
@@ -1460,7 +1460,7 @@ void MainWindow::getLanListDone(QStringList slist)
     activecon *act = kylin_network_get_activecon_info(lockPath.toUtf8().data());
     int index = 0;
     while(act[index].con_name != NULL){
-        if(QString(act[index].type) == "ethernet"){
+        if(QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet"){
             actLanName = QString(act[index].con_name);
             break;
         }
@@ -1487,9 +1487,17 @@ void MainWindow::getLanListDone(QStringList slist)
 
     // 填充可用网络列表
     QString headLine = slist.at(0);
+    int indexDevice, indexName;
     headLine = headLine.trimmed();
-    int indexDevice = headLine.indexOf("DEVICE");
-    int indexName = headLine.indexOf("NAME");
+
+    bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (isChineseExist) {
+        indexDevice = headLine.indexOf("设备") + 2;
+        indexName = headLine.indexOf("名称") + 4;
+    } else {
+        indexDevice = headLine.indexOf("DEVICE");
+        indexName = headLine.indexOf("NAME");
+    }
 
     QString order = "a"; //为避免同名情况，这里给每一个有线网设定一个唯一标志
     for(int i = 1, j = 0; i < slist.size(); i ++) {
@@ -1497,7 +1505,7 @@ void MainWindow::getLanListDone(QStringList slist)
         QString ltype = line.mid(0, indexDevice).trimmed();
         QString nname = line.mid(indexName).trimmed();
 
-        if(ltype != "wifi" && ltype != "" && ltype != "--"){
+        if(ltype != "802-11-wireless" && ltype != "wifi" && ltype != "" && ltype != "--"){
             // 当前连接的lan
             objKyDBus->getLanIp(nname);
             if(nname == actLanName){
@@ -1599,7 +1607,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     activecon *act = kylin_network_get_activecon_info(lockPath.toUtf8().data());
     int index = 0;
     while(act[index].con_name != NULL){
-        if(QString(act[index].type) == "wifi"){
+        if(QString(act[index].type) == "wifi" || QString(act[index].type) == "802-11-wireless"){
             actWifiName = QString(act[index].con_name);
             break;
         }
@@ -1627,17 +1635,27 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 填充可用网络列表
     QString headLine = slist.at(0);
+    int indexSecu, indexName;
     headLine = headLine.trimmed();
-    int indexRate = headLine.indexOf("RATE");
-    int indexSecu = headLine.indexOf("SECURITY");
-    int indexName = headLine.indexOf("SSID");
+
+    bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (isChineseExist) {
+        indexSecu = headLine.indexOf("安全性");
+        indexName = headLine.indexOf("SSID") + 4;
+    } else {
+        //int indexRate = headLine.indexOf("RATE");
+        //indexSignal = headLine.indexOf("SIGNAL");
+        indexSecu = headLine.indexOf("SECURITY");
+        indexName = headLine.indexOf("SSID");
+    }
 
     QStringList wnames;
     int count = 0;
     for(int i = 1, j = 0; i < slist.size(); i ++) {
         QString line = slist.at(i);
-        QString wsignal = line.mid(0, indexRate).trimmed();
-        QString wrate = line.mid(indexRate, indexSecu - indexRate).trimmed();
+        //QString wsignal = line.mid(0, indexRate).trimmed();
+        //QString wrate = line.mid(indexRate, indexSecu - indexRate).trimmed();
+        QString wsignal = line.mid(0, indexSecu).trimmed();
         QString wsecu = line.mid(indexSecu, indexName - indexSecu).trimmed();
         QString wname = line.mid(indexName).trimmed();
 
@@ -1654,10 +1672,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
                 ccf->setName(wname);
-                ccf->setRate(wrate);
+                //ccf->setRate(wrate);
                 ccf->setSignal(wsignal, wsecu);
                 activeWifiSignalLv = wsignal.toInt();
-                //objKyDBus->getActWifiMac(wname);
                 objKyDBus->getWifiMac(wname);
                 ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
                 ccf->setConnedString(1, tr("NetOn,"), wsecu);//"已连接"
@@ -1677,7 +1694,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 OneConnForm *ocf = new OneConnForm(wifiListWidget, this, confForm, ksnm);
                 connect(ocf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneWifiFormSelected(QString,int)));
                 ocf->setName(wname);
-                ocf->setRate(wrate);
+                //ocf->setRate(wrate);
                 ocf->setLine(true);
                 ocf->setSignal(wsignal, wsecu);
                 objKyDBus->getWifiMac(wname);
@@ -1727,14 +1744,27 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
     //获取表头信息
     QString lastHeadLine = oldWifiSlist.at(0);
+    //int lastIndexName = lastHeadLine.indexOf("SSID");
+    int lastIndexName;
     lastHeadLine = lastHeadLine.trimmed();
-    int lastIndexName = lastHeadLine.indexOf("SSID");
+    bool isChineseInIt = lastHeadLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (isChineseInIt) {
+        lastIndexName = lastHeadLine.indexOf("SSID") + 4;
+    } else {
+        lastIndexName = lastHeadLine.indexOf("SSID");
+    }
 
     QString headLine = slist.at(0);
+    int indexSecu, indexName;
     headLine = headLine.trimmed();
-    int indexRate = headLine.indexOf("RATE");
-    int indexSecu = headLine.indexOf("SECURITY");
-    int indexName = headLine.indexOf("SSID");
+    bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (isChineseExist) {
+        indexSecu = headLine.indexOf("安全性");
+        indexName = headLine.indexOf("SSID") + 4;
+    } else {
+        indexSecu = headLine.indexOf("SECURITY");
+        indexName = headLine.indexOf("SSID");
+    }
 
     //列表中去除已经减少的wifi
     for (int i=1; i<oldWifiSlist.size(); i++){
@@ -1775,8 +1805,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     int count = 0;
     for(int i = 1; i < slist.size(); i++){
         QString line = slist.at(i);
-        QString wsignal = line.mid(0, indexRate).trimmed();
-        QString wrate = line.mid(indexRate, indexSecu - indexRate).trimmed();
+        QString wsignal = line.mid(0, indexSecu).trimmed();
         QString wsecu = line.mid(indexSecu, indexName - indexSecu).trimmed();
         QString wname = line.mid(indexName).trimmed();
 
@@ -1815,7 +1844,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 OneConnForm *addItem = new OneConnForm(wifiListWidget, this, confForm, ksnm);
                 connect(addItem, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneWifiFormSelected(QString,int)));
                 addItem->setName(wname);
-                addItem->setRate(wrate);
+                //addItem->setRate(wrate);
                 addItem->setLine(false);
                 addItem->setSignal(wsignal, wsecu);
                 objKyDBus->getWifiMac(wname);

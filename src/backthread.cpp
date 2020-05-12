@@ -287,7 +287,7 @@ void BackThread::on_readerror()
     qDebug()<<"on_readerror: "<< str;
     if(str.indexOf("successfully") != -1){
         emit connDone(0);
-    }else if(str.indexOf("unknown") != -1){
+    }else if(str.indexOf("unknown") != -1 || str.indexOf("not exist") != -1){
         emit connDone(2);
     }else{
         emit connDone(1);
@@ -435,11 +435,24 @@ void BackThread::disConnLanOrWifi(QString type)
 
     while (fgets(buf, BUF_SIZE, p_file) != NULL) {
         QString line(buf);
-        if(line.indexOf(type) != -1){
+
+        if (line.indexOf("802-11-wireless") != -1) {
+            if (type == "wifi") {
+                type = "802-11-wireless";
+            }
+        }
+
+        if (line.indexOf("802-3-ethernet") != -1) {
+            if (type == "ethernet") {
+                type = "802-3-ethernet";
+            }
+        }
+
+        if (line.indexOf(type) != -1) {
             QStringList subLine = line.split(" ");
-            if (subLine[1].size() == 1){
+            if (subLine[1].size() == 1) {
                 strSlist =  subLine[0]+ " " + subLine[1];
-            }else {
+            } else {
                 strSlist =  subLine[0];
             }
             kylin_network_set_con_down(strSlist.toUtf8().data());

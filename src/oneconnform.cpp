@@ -19,9 +19,17 @@
 #include "oneconnform.h"
 #include "ui_oneconnform.h"
 #include "mainwindow.h"
+#include "kylin-dbus-interface.h"
 #include "kylin-network-interface.h"
 #include "wireless-security/dlgconnhidwifi.h"
 #include "utils.h"
+
+#include <QtDBus/QDBusConnection>
+#include <QtDBus/QDBusMessage>
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusObjectPath>
+#include <QDBusReply>
+#include <QDBusObjectPath>
 
 extern int currentActWifiSignalLv;
 
@@ -350,9 +358,9 @@ QString OneConnForm::getName()
 }
 
 void OneConnForm::setRate(QString rate){
-//    QString txt(tr("Rate"));//"速率"
-//    this->setToolTip("<span style=\"font-size:14px;border:none;background-color:#3593b5;color:white;\">&nbsp; " + txt + ": " + rate + " &nbsp;</span>");
-//    this->setToolTip(txt + ":" + rate);
+    QString txt(tr("Rate"));//"速率"
+    this->setToolTip("<span style=\"font-size:14px;border:none;background-color:#3593b5;color:white;\">&nbsp; " + txt + ": " + rate + " &nbsp;</span>");
+    this->setToolTip(txt + ":" + rate);
 }
 
 void OneConnForm::setLine(bool isShow)
@@ -460,9 +468,11 @@ void OneConnForm::on_btnConnSub_clicked()
     syslog(LOG_DEBUG, "A button named on_btnConnSub about wifi net is clicked.");
     qDebug()<<"A button named on_btnConnSub about wifi net is clicked.";
 
-    if (ui->lbConned->text() == "--" || ui->lbConned->text() == " "){
-        on_btnConnPWD_clicked();
-        return;
+    if (ui->lbConned->text() == "--" || ui->lbConned->text() == " ") {
+        if (!isWifiConfExist(ui->lbName->text())) {
+            on_btnConnPWD_clicked();
+            return;
+        }
     }
 
     mw->is_stop_check_net_state = 1;
@@ -484,9 +494,11 @@ void OneConnForm::on_btnConn_clicked()
     syslog(LOG_DEBUG, "A button named btnConn about wifi net is clicked.");
     qDebug()<<"A button named btnConn about wifi net is clicked.";
 
-    if (ui->lbConned->text() == "--" || ui->lbConned->text() == " "){
-        on_btnConnPWD_clicked();
-        return;
+    if (ui->lbConned->text() == "--" || ui->lbConned->text() == " ") {
+        if (!isWifiConfExist(ui->lbName->text())) {
+            on_btnConnPWD_clicked();
+            return;
+        }
     }
 
     mw->is_stop_check_net_state = 1;
@@ -528,6 +540,53 @@ void OneConnForm::on_btnHideConn_clicked()
     DlgConnHidWifi *connHidWifi = new DlgConnHidWifi(0, mw);
     connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     connHidWifi->show();
+}
+
+bool OneConnForm::isWifiConfExist(QString netName)
+{
+    //dbusWifiMac = ""; //这个函数之前是用来获取已经连接的wifi的MAC地址
+
+    QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                      "/org/freedesktop/NetworkManager/Settings",
+                                      "org.freedesktop.NetworkManager.Settings",
+                                      QDBusConnection::systemBus() );
+    QDBusReply<QList<QDBusObjectPath>> m_reply = m_interface.call("ListConnections");
+
+    QList<QDBusObjectPath> m_objNets = m_reply.value();
+    foreach (QDBusObjectPath objNet, m_objNets){
+        QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                  objNet.path(),
+                                  "org.freedesktop.NetworkManager.Settings.Connection",
+                                  QDBusConnection::systemBus());
+        QDBusMessage reply = m_interface.call("GetSettings");
+        const QDBusArgument &dbusArg = reply.arguments().at( 0 ).value<QDBusArgument>();
+        QMap<QString,QMap<QString,QVariant>> map;
+        dbusArg >> map;
+
+        for(QString key : map.keys() ){
+            QMap<QString,QVariant> innerMap = map.value(key);
+            if (key == "connection"){
+                for (QString inner_key : innerMap.keys()){
+                    if (inner_key == "id"){
+                        if (netName == innerMap.value(inner_key).toString()){
+                            return true;
+
+                            //for (QString subkey : map.keys()){
+                            //    QMap<QString,QVariant> subMap = map.value(subkey);
+                            //    if (subkey == "802-11-wireless"){
+                            //        dbusWifiMac = subMap.value("seen-bssids").toString();
+                            //    }
+                            //} //end for (QString subkey : map.keys())
+
+                        }
+                    }
+                }
+            }
+        }
+
+    } // end foreach (QDBusObjectPath objNet, m_objNets)
+
+    return false;
 }
 
 //设置密码隐藏或可见

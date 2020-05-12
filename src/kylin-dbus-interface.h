@@ -66,7 +66,6 @@ public slots:
     void getWirelessCardName();
     void getLanIp(QString netName);
     void getWifiMac(QString netName);
-    void getActWifiMac(QString netName);
     void slot_timeout();
 
 private:

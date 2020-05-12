@@ -340,50 +340,6 @@ void KylinDBus::getWifiMac(QString netName)
     }
 }
 
-void KylinDBus::getActWifiMac(QString netName)
-{
-    dbusWifiMac = "";
-
-    QDBusInterface m_interface("org.freedesktop.NetworkManager",
-                                      "/org/freedesktop/NetworkManager/Settings",
-                                      "org.freedesktop.NetworkManager.Settings",
-                                      QDBusConnection::systemBus() );
-    QDBusReply<QList<QDBusObjectPath>> m_reply = m_interface.call("ListConnections");
-
-    QList<QDBusObjectPath> m_objNets = m_reply.value();
-    foreach (QDBusObjectPath objNet, m_objNets){
-        QDBusInterface m_interface("org.freedesktop.NetworkManager",
-                                  objNet.path(),
-                                  "org.freedesktop.NetworkManager.Settings.Connection",
-                                  QDBusConnection::systemBus());
-        QDBusMessage reply = m_interface.call("GetSettings");
-        const QDBusArgument &dbusArg = reply.arguments().at( 0 ).value<QDBusArgument>();
-        QMap<QString,QMap<QString,QVariant>> map;
-        dbusArg >> map;
-
-        for(QString key : map.keys() ){
-            QMap<QString,QVariant> innerMap = map.value(key);
-            if (key == "connection"){
-                for (QString inner_key : innerMap.keys()){
-                    if (inner_key == "id"){
-                        if (netName == innerMap.value(inner_key).toString()){
-
-                            for (QString subkey : map.keys()){
-                                QMap<QString,QVariant> subMap = map.value(subkey);
-                                if (subkey == "802-11-wireless"){
-                                    dbusWifiMac = subMap.value("seen-bssids").toString();
-                                }
-                            } //end for (QString subkey : map.keys())
-
-                        }
-                    }
-                }
-            }
-        }
-
-    } // end foreach (QDBusObjectPath objNet, m_objNets)
-}
-
 int KylinDBus::getAccessPointsNumber()
 {
     QDBusInterface interface( "org.freedesktop.NetworkManager",

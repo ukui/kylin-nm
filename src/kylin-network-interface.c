@@ -189,7 +189,7 @@ conlist *kylin_network_get_conlist_info()
 activecon *kylin_network_get_activecon_info(char *path)
 {
     char *chr = "nmcli connection show -active > ";
-    char *cmd = (char *) malloc(strlen(chr) + strlen(path));
+    char *cmd = (char *) malloc(strlen(chr) + strlen(path) + 1);
     strcpy(cmd, chr);
     strcat(cmd, path);
     int status = system(cmd);

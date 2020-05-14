@@ -13,3 +13,4 @@ Terminal=false
 Type=Application
 OnlyShowIn=UKUI
 X-UKUI-AutoRestart=true
+NoDisplay=true

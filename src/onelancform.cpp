@@ -279,6 +279,7 @@ void OneLancForm::on_btnDisConn_clicked()
     qDebug()<<"DisConnect button about lan net is clicked, current wired net name is "<<ui->lbName->text();
 
     this->startWaiting(false);
+    mw->is_stop_check_net_state = 1;
 
     kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
 
@@ -292,6 +293,7 @@ void OneLancForm::on_btnConn_clicked()
     syslog(LOG_DEBUG, "A button named btnConn about lan net is clicked.");
     qDebug()<<"A button named btnConn about lan net is clicked.";
 
+    mw->is_stop_check_net_state = 1;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);
@@ -308,6 +310,7 @@ void OneLancForm::on_btnConnSub_clicked()
     syslog(LOG_DEBUG, "A button named btnConnSub about lan net is clicked.");
     qDebug()<<"A button named btnConnSub about lan net is clicked.";
 
+    mw->is_stop_check_net_state = 1;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);

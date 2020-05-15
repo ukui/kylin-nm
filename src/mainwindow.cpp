@@ -86,6 +86,7 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon->show();
 
     objKyDBus = new KylinDBus(this);
+    objKyDBus->initConnectionInfo();
     objNetSpeed = new NetworkSpeed();
     //m_notify = new NotifySend();
 
@@ -622,11 +623,13 @@ void MainWindow::iconStep()
     currentIconIndex --;
 }
 
-void MainWindow::setTrayIcon(QIcon icon){
+void MainWindow::setTrayIcon(QIcon icon)
+{
     trayIcon->setIcon(icon);
 }
 
-void MainWindow::setTrayLoading(bool isLoading){
+void MainWindow::setTrayLoading(bool isLoading)
+{
     if(isLoading){
         currentIconIndex = 11;
         iconTimer->start(60);
@@ -1120,12 +1123,13 @@ void MainWindow::onBtnWifiClicked(int flag)
 {
     qDebug()<<"Value of flag passed into function 'onBtnWifiClicked' is:  "<<flag;
 
-    if(is_wireless_adapter_ready == 1){
+    if (is_wireless_adapter_ready == 1) {
         // 当连接上无线网卡时才能打开wifi开关
         // 网络开关关闭时，点击Wifi开关时，程序先打开有线开关
         if (flag == 0 || flag == 3 || flag == 4) {
-            if(checkWlOn()){
+            if (checkWlOn()) {
                 if (flag != 3) { //以防第二张无线网卡插入时断网
+                    is_stop_check_net_state = 1;
                     objKyDBus->setWifiSwitchState(false);
                     lbTopWifiList->hide();
                     btnAddNet->hide();
@@ -1140,9 +1144,9 @@ void MainWindow::onBtnWifiClicked(int flag)
                     t->start();
                     this->startLoading();
                 }
-            }else{
-                if (is_fly_mode_on == 0){
-                    on_btnWifiList_clicked();
+            } else {
+                if (is_fly_mode_on == 0) {
+                    //on_btnWifiList_clicked();
                     is_stop_check_net_state = 1;
                     objKyDBus->setWifiCardState(true);
                     objKyDBus->setWifiSwitchState(true);
@@ -1162,8 +1166,8 @@ void MainWindow::onBtnWifiClicked(int flag)
                 }
             }
         } else if(flag == 1) {
-            if (is_fly_mode_on == 0){
-                on_btnWifiList_clicked();
+            if (is_fly_mode_on == 0) {
+                //on_btnWifiList_clicked();
                 is_stop_check_net_state = 1;
                 lbTopWifiList->show();
                 btnAddNet->show();
@@ -1180,6 +1184,7 @@ void MainWindow::onBtnWifiClicked(int flag)
                 this->startLoading();
             }
         } else if(flag == 2) {
+            is_stop_check_net_state = 1;
             lbTopWifiList->hide();
             btnAddNet->hide();
 
@@ -1572,6 +1577,7 @@ void MainWindow::getLanListDone(QStringList slist)
 
     this->stopLoading();
     oldLanSlist = slist;
+    is_stop_check_net_state = 0;
 }
 
 // 获取wifi列表回调
@@ -1734,8 +1740,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
     this->topLanListWidget->hide();
     this->wifiListWidget->show();
     this->topWifiListWidget->show();
-    is_stop_check_net_state = 0;
+
     this->stopLoading();
+    is_stop_check_net_state = 0;
 }
 
 // 更新wifi列表
@@ -2354,6 +2361,7 @@ void MainWindow::disWifiDone()
     syslog(LOG_DEBUG, "Already turn off the switch of wifi network");
 
     this->stopLoading();
+    is_stop_check_net_state = 0;
 }
 void MainWindow::disWifiStateKeep()
 {
@@ -2417,6 +2425,29 @@ void MainWindow::on_btnHotspotState()
     is_hot_sopt_on = 0;
 }
 
+//处理外界对网络的连接与断开
+void MainWindow::onExternalConnectionChange(QString type)
+{
+    if (!is_stop_check_net_state) {
+        if (type == "802-3-ethernet" || type == "ethernet") {
+            QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
+        }
+
+        if (type == "802-11-wireless" || type == "wifi") {
+            QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
+        }
+    }
+}
+
+void MainWindow::onExternalLanChange()
+{
+    onBtnNetListClicked(0);
+}
+
+void MainWindow::onExternalWifiChange()
+{
+    on_btnWifiList_clicked();
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //循环处理部分，目前仅on_checkWifiListChanged 与on_setNetSpeed两个函数在运行
@@ -2537,6 +2568,7 @@ void MainWindow::connLanDone(int connFlag)
     if(connFlag == 1){
         qDebug()<<"without net line connect to computer";
         this->is_wired_line_ready = 0; //without net line connect to computer
+        is_stop_check_net_state = 0;
 
         QString txt(tr("Conn Ethernet Fail"));
         //m_notify->execNotifySend(txt);

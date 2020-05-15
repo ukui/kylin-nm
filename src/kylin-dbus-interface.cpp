@@ -39,6 +39,11 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
                                          QString("org.freedesktop.NetworkManager"),
+                                         QString("PropertiesChanged"), this, SLOT(onPropertiesChanged(QVariantMap) ) );
+
+    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                         QString("/org/freedesktop/NetworkManager"),
+                                         QString("org.freedesktop.NetworkManager"),
                                          QString("DeviceAdded"), mw, SLOT(onNetworkDeviceAdded(QDBusObjectPath) ) );
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
@@ -400,6 +405,112 @@ void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
     }
 }
 
+void KylinDBus::initConnectionInfo()
+{
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+
+    QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    QList<QVariant> outArgs = result.arguments();
+    QVariant first = outArgs.at(0);
+    QDBusVariant dbvFirst = first.value<QDBusVariant>();
+    QVariant vFirst = dbvFirst.variant();
+    QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
+
+    QDBusObjectPath objPath;
+    dbusArgs.beginArray();
+    while (!dbusArgs.atEnd()) {
+        dbusArgs >> objPath;
+        oldPaths.append(objPath);
+        //qDebug() <<"debug: *****path is: "<< objPath.path();
+
+        QDBusInterface interface( "org.freedesktop.NetworkManager",
+                                  objPath.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+
+        QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
+        //qDebug()<<"debug: *****connection type is: "<<reply.value().toString();
+        oldPathInfo.append(reply.value().toString());
+    }
+    dbusArgs.endArray();
+}
+
+void KylinDBus::onPropertiesChanged(QVariantMap qvm)
+{
+    for(QString keyStr : qvm.keys()) {
+        if (keyStr == "ActiveConnections") {
+            const QDBusArgument &dbusArg = qvm.value(keyStr).value<QDBusArgument>();
+            QList<QDBusObjectPath> newPaths;
+            dbusArg >> newPaths;
+            QStringList newPathInfo;
+            foreach (QDBusObjectPath objPath, newPaths) {
+                //qDebug()<<"dbug: bbbbb  "<<objPath.path();
+
+                QDBusInterface interface( "org.freedesktop.NetworkManager",
+                                          objPath.path(),
+                                          "org.freedesktop.DBus.Properties",
+                                          QDBusConnection::systemBus() );
+
+                QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
+                //qDebug()<<"dbug: ccccc "<<reply.value().toString();
+                newPathInfo.append(reply.value().toString());
+            }
+
+            // 第一步 处理相比于上次减少的网络连接
+            for (int i=0; i<oldPaths.size(); i++) {
+                QDBusObjectPath old_path = oldPaths.at(i);
+                if (newPaths.size() == 0) {
+                    mw->onExternalConnectionChange(oldPathInfo.at(i));
+                } else {
+                    for (int j=0; j<newPaths.size(); j++) {
+                        QDBusObjectPath new_path = newPaths.at(j);
+                        if (new_path == old_path) {
+                            break; //stop if new_path also in oldPaths
+                        }
+
+                        if (j == newPaths.size()-1) {
+                            mw->onExternalConnectionChange(oldPathInfo.at(i));
+                        }
+                    }
+                }
+            }
+
+            // 第二步 处理相比于上次增加的网络连接
+            for (int i=0; i<newPaths.size(); i++) {
+                QDBusObjectPath new_path = newPaths.at(i);
+                if (oldPaths.size() == 0) {
+                    mw->onExternalConnectionChange(newPathInfo.at(i));
+                } else {
+                    for (int j=0; j<oldPaths.size(); j++) {
+                        QDBusObjectPath old_path = oldPaths.at(j);
+                        if (new_path == old_path) {
+                            break; //stop if new_path also in oldPaths
+                        }
+
+                        if (j == oldPaths.size()-1) {
+                            mw->onExternalConnectionChange(newPathInfo.at(i));
+                        }
+                    }
+                }
+            }
+
+            bool isChangeOldPathInfo = true;
+            for (int k=0; k<newPathInfo.size(); k++) {
+                if (newPathInfo.at(k) == "") {
+                    isChangeOldPathInfo = false;
+                }
+            }
+            if (isChangeOldPathInfo) {
+                oldPathInfo = newPathInfo;
+            }
+            oldPaths = newPaths;
+        }
+    }
+}
+
 void KylinDBus::onLanPropertyChanged(QVariantMap qvm)
 {
     if (!isRunningFunction) {
@@ -409,7 +520,7 @@ void KylinDBus::onLanPropertyChanged(QVariantMap qvm)
         time->start(3000);
 
         QString str = qvm.value("Carrier").toString();
-        if (str == "false" || str == "true"){
+        if (str == "false" || str == "true") {
             getPhysicalCarrierState(1);
         }
     } else { a = 0; }
@@ -459,9 +570,9 @@ int KylinDBus::getTaskBarPos(QString str)
                               QDBusConnection::sessionBus() );
 
     QDBusReply<int> reply = interface.call("GetPanelPosition", str);
-    if (reply.isValid()){
+    if (reply.isValid()) {
         return reply;
-    }else{
+    } else {
         return 0;
     }
 }
@@ -474,9 +585,9 @@ int KylinDBus::getTaskBarHeight(QString str)
                               QDBusConnection::sessionBus() );
 
     QDBusReply<int> reply = interface.call("GetPanelSize", str);
-    if (reply.isValid()){
+    if (reply.isValid()) {
         return reply;
-    }else{
+    } else {
         return 46;
     }
 }
@@ -486,7 +597,7 @@ int KylinDBus::getTaskBarHeight(QString str)
 
 void KylinDBus::initTaskbarGsetting()
 {
-    if(QGSettings::isSchemaInstalled("org.ukui.panel.settings")) {
+    if (QGSettings::isSchemaInstalled("org.ukui.panel.settings")) {
         m_tastbar_gsettings = new QGSettings("org.ukui.panel.settings");
     }
 }
@@ -498,7 +609,7 @@ int KylinDBus::getTaskbarHeight()
     }
 
     QStringList keys = m_tastbar_gsettings->keys();
-    if(keys.contains("panelsize")){
+    if (keys.contains("panelsize")) {
         int hh = m_tastbar_gsettings->get("panelsize").toInt();
         return hh;
     } else {
@@ -513,7 +624,7 @@ int KylinDBus::getTaskbarPos()
     }
 
     QStringList keys = m_tastbar_gsettings->keys();
-    if(keys.contains("panelposition")) {
+    if (keys.contains("panelposition")) {
         int pp = m_tastbar_gsettings->get("panelposition").toInt();
         return pp;
     } else {
@@ -532,9 +643,9 @@ void KylinDBus::getWifiSwitchState()
 
             if (key == "switch") {
                 bool judge = getSwitchStatus(key);
-                if (judge){
+                if (judge) {
                     mw->onBtnWifiClicked(1); //打开wifi开关
-                }else{
+                } else {
                     mw->onBtnWifiClicked(2); //关闭wifi开关
                 }
             }
@@ -542,7 +653,7 @@ void KylinDBus::getWifiSwitchState()
     }
 }
 
-bool KylinDBus::getSwitchStatus(QString key){
+bool KylinDBus::getSwitchStatus(QString key) {
     if (!m_gsettings) {
         return true;
     }
@@ -554,7 +665,8 @@ bool KylinDBus::getSwitchStatus(QString key){
     return res;
 }
 
-void KylinDBus::setWifiSwitchState(bool signal){
+void KylinDBus::setWifiSwitchState(bool signal)
+{
     if(!m_gsettings) {
         return ;
     }

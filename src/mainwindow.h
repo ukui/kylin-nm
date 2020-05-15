@@ -168,6 +168,10 @@ public slots:
     void onNetworkDeviceRemoved(QDBusObjectPath objPath);
     void getLanBandWidth();
 
+    void onExternalConnectionChange(QString type);
+    void onExternalLanChange();
+    void onExternalWifiChange();
+
     void oneLanFormSelected(QString lanName, QString uniqueName);
     void oneTopLanFormSelected(QString lanName, QString uniqueName);
     void oneWifiFormSelected(QString wifiName, int extendLength);

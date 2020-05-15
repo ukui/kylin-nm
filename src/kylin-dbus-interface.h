@@ -28,6 +28,7 @@ public:
     int getAccessPointsNumber();
     int getLanConnState();
     void showDesktopNotify(QString message);
+    void initConnectionInfo();
 
     int getTaskBarPos(QString str);
     int getTaskBarHeight(QString str);
@@ -57,6 +58,7 @@ public:
 public slots:
     void onNewConnection(QDBusObjectPath objPath);
     void onConnectionRemoved(QDBusObjectPath objPath);
+    void onPropertiesChanged(QVariantMap qvm);
     void onLanPropertyChanged(QVariantMap qvm);
     void onWifiPropertyChanged(QVariantMap qvm);
     void onAccessPointAdded(QDBusObjectPath objPath);
@@ -74,6 +76,8 @@ private:
     int a = 0;
     bool isRunningFunction = false;
     QTimer *time = nullptr;
+    QStringList oldPathInfo;
+    QList<QDBusObjectPath> oldPaths;
 
     QGSettings *m_tastbar_gsettings = nullptr;
     QGSettings *m_gsettings = nullptr;

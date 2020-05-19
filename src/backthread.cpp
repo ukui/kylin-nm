@@ -227,7 +227,7 @@ void BackThread::execConnLan(QString connName){
 }
 
 void BackThread::execConnWifiPWD(QString connName, QString password){
-    disConnLanOrWifi("wifi");
+    //disConnLanOrWifi("wifi");
 
     QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
     QString localPath = homePath.at(0) + "/.config/kylin-nm-btoutput";
@@ -257,7 +257,7 @@ void BackThread::execConnWifiPWD(QString connName, QString password){
 }
 
 void BackThread::execConnWifi(QString connName){
-    disConnLanOrWifi("wifi");
+    //disConnLanOrWifi("wifi");
 
     QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'\n";
     cmdConnWifi->write(cmdStr.toUtf8().data());

@@ -2430,11 +2430,11 @@ void MainWindow::onExternalConnectionChange(QString type)
 {
     if (!is_stop_check_net_state) {
         if (type == "802-3-ethernet" || type == "ethernet") {
-            QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
+            //QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
         }
 
         if (type == "802-11-wireless" || type == "wifi") {
-            QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
+            //QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
         }
     }
 }

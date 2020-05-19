@@ -575,7 +575,7 @@ void MainWindow::createTrayIcon()
     trayIcon->setToolTip(QString(tr("kylin-nm")));
 
     trayIconMenu = new QMenu(this);
-    trayIconMenu->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
+    //trayIconMenu->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
 
     mShowWindow = new QAction(tr("Show MainWindow"),this);
     mAdvConf = new QAction(tr("Advanced"),this);
@@ -692,7 +692,7 @@ void MainWindow::handleIconClicked()
 
     int n = objKyDBus->getTaskBarPos("position");
     int m = objKyDBus->getTaskBarHeight("height");
-    int d = 2; //窗口边沿到任务栏距离
+    int d = 3; //窗口边沿到任务栏距离
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
         if(n == 0){
@@ -752,7 +752,7 @@ void MainWindow::showTrayIconMenu()
 
     int n = objKyDBus->getTaskBarPos("position");
     int m = objKyDBus->getTaskBarHeight("height");
-    int d = 2; //窗口边沿到任务栏距离
+    int d = 3; //窗口边沿到任务栏距离
     int s = 80; //窗口边沿到屏幕边沿距离
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
@@ -956,20 +956,20 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
         wiredCableUpTimer->start(2000);
     } else{
         syslog(LOG_DEBUG,"wired physical cable is already plug out");
-        wiredCableDownTimer->start(6000);
+        wiredCableDownTimer->start(8000);
     }
 }
 
 void MainWindow::onCarrierUpHandle()
 {
     wiredCableUpTimer->stop();
-    BackThread *up_bt = new BackThread();
-    up_bt->disConnLanOrWifi("ethernet");
-    sleep(1);
-    up_bt->disConnLanOrWifi("ethernet");
-    sleep(1);
-    up_bt->disConnLanOrWifi("ethernet");
-    up_bt->deleteLater();
+    //BackThread *up_bt = new BackThread();
+    //up_bt->disConnLanOrWifi("ethernet");
+    //sleep(1);
+    //up_bt->disConnLanOrWifi("ethernet");
+    //sleep(1);
+    //up_bt->disConnLanOrWifi("ethernet");
+    //up_bt->deleteLater();
 
     this->stopLoading();
     onBtnNetListClicked(1);

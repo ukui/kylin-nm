@@ -126,8 +126,6 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->btnOk->setFocusPolicy(Qt::NoFocus);
     ui->btnCreate->setFocusPolicy(Qt::NoFocus);
 
-    //m_notify = new NotifySend(); //显示桌面通知
-
     // IP的正则格式限制
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
     ui->leAddr->setValidator(new QRegExpValidator(rx, this));
@@ -140,7 +138,6 @@ ConfForm::ConfForm(QWidget *parent) :
 
 ConfForm::~ConfForm()
 {
-    m_notify->deleteLater();
     delete ui;
 }
 
@@ -206,20 +203,16 @@ void ConfForm::on_btnCreate_clicked()
 {
     QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' type ethernet";
     Utils::m_system(cmdStr.toUtf8().data());
-//    int status = system(cmdStr.toUtf8().data());
-//    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection add con-name' in function 'on_btnCreate_clicked' failed");}
+    //int status = system(cmdStr.toUtf8().data());
+    //if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection add con-name' in function 'on_btnCreate_clicked' failed");}
 
     if(ui->cbType->currentIndex() == 1){
         //config the ipv4 and netmask and gateway if select Manual
         this->on_btnOk_clicked();
     } else {
         QString txt(tr("New network already created"));
-        //m_notify->execNotifySend(txt);
         KylinDBus kylindbus;
         kylindbus.showDesktopNotify(txt);
-        //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-        //int status1 = system(cmd.toUtf8().data());
-        //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
     }
 
     this->hide();
@@ -254,30 +247,19 @@ void ConfForm::on_btnOk_clicked()
     }
 
     QString txt(tr("New network settings already finished"));
-    //m_notify->execNotifySend(txt);
     KylinDBus kylindbus;
     kylindbus.showDesktopNotify(txt);
-    //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "...' -t 3800";
-    //int status1 = system(cmd.toUtf8().data());
-    //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
 
     this->hide();
 
     // 如果是修改当前连接的网络，则修改设置后简略重连网络
     if(this->isActConf == true){
         //QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + ui->leName->text() + "'";
-        QString cmdStr = "nmcli connection up '" + ui->leName->text() + "'";
-        Utils::m_system(cmdStr.toUtf8().data());
-//        int status = system(cmd.toUtf8().data());
-//        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection up' in function 'on_btnOk_clicked' failed");}
+
+        kylindbus.connectWiredNet(ui->leName->text()); //reconnect this wired network
 
         QString m_txt(tr("New settings already effective"));
-        //m_notify->execNotifySend(m_txt);
-        KylinDBus m_kylindbus;
-        m_kylindbus.showDesktopNotify(m_txt);
-        //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + m_txt + "' -t 3800";
-        //int status1 = system(cmd.toUtf8().data());
-        //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'on_btnOk_clicked' failed");}
+        kylindbus.showDesktopNotify(m_txt); //show desktop notify
     }
 }
 

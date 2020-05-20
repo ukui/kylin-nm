@@ -29,6 +29,7 @@ public:
     int getLanConnState();
     void showDesktopNotify(QString message);
     void initConnectionInfo();
+    void connectWiredNet(QString netName);
 
     int getTaskBarPos(QString str);
     int getTaskBarHeight(QString str);

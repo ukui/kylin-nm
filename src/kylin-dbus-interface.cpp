@@ -355,10 +355,6 @@ int KylinDBus::getAccessPointsNumber()
     QDBusReply<QList<QDBusObjectPath>> reply = interface.call("GetAllAccessPoints");
     QList<QDBusObjectPath> objPaths = reply.value();
 
-//    foreach (QDBusObjectPath objPath, objPaths){
-//        qDebug()<<"debug: *****path is: "<<objPath.path(); //列出每一个objectPath
-//    }
-
     return objPaths.size();
 }
 
@@ -420,11 +416,12 @@ void KylinDBus::initConnectionInfo()
     QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
 
     QDBusObjectPath objPath;
+    qDebug()<<"             ";
     dbusArgs.beginArray();
     while (!dbusArgs.atEnd()) {
         dbusArgs >> objPath;
         oldPaths.append(objPath);
-        //qDebug() <<"debug: *****path is: "<< objPath.path();
+        qDebug() <<"debug: *****path is: "<< objPath.path();
 
         QDBusInterface interface( "org.freedesktop.NetworkManager",
                                   objPath.path(),
@@ -432,83 +429,84 @@ void KylinDBus::initConnectionInfo()
                                   QDBusConnection::systemBus() );
 
         QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
-        //qDebug()<<"debug: *****connection type is: "<<reply.value().toString();
+        qDebug()<<"debug: *****connection type is: "<<reply.value().toString();
         oldPathInfo.append(reply.value().toString());
     }
     dbusArgs.endArray();
+    qDebug()<<"             ";
 }
 
 void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 {
-    for(QString keyStr : qvm.keys()) {
-        if (keyStr == "ActiveConnections") {
-            const QDBusArgument &dbusArg = qvm.value(keyStr).value<QDBusArgument>();
-            QList<QDBusObjectPath> newPaths;
-            dbusArg >> newPaths;
-            QStringList newPathInfo;
-            foreach (QDBusObjectPath objPath, newPaths) {
-                //qDebug()<<"dbug: bbbbb  "<<objPath.path();
+//    for(QString keyStr : qvm.keys()) {
+//        if (keyStr == "ActiveConnections") {
+//            const QDBusArgument &dbusArg = qvm.value(keyStr).value<QDBusArgument>();
+//            QList<QDBusObjectPath> newPaths;
+//            dbusArg >> newPaths;
+//            QStringList newPathInfo;
+//            foreach (QDBusObjectPath objPath, newPaths) {
+//                qDebug()<<"dbug: bbbbb  "<<objPath.path();
 
-                QDBusInterface interface( "org.freedesktop.NetworkManager",
-                                          objPath.path(),
-                                          "org.freedesktop.DBus.Properties",
-                                          QDBusConnection::systemBus() );
+//                QDBusInterface interface( "org.freedesktop.NetworkManager",
+//                                          objPath.path(),
+//                                          "org.freedesktop.DBus.Properties",
+//                                          QDBusConnection::systemBus() );
 
-                QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
-                //qDebug()<<"dbug: ccccc "<<reply.value().toString();
-                newPathInfo.append(reply.value().toString());
-            }
+//                QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
+//                qDebug()<<"dbug: ccccc "<<reply.value().toString();
+//                newPathInfo.append(reply.value().toString());
+//            }
 
-            // 第一步 处理相比于上次减少的网络连接
-            for (int i=0; i<oldPaths.size(); i++) {
-                QDBusObjectPath old_path = oldPaths.at(i);
-                if (newPaths.size() == 0) {
-                    mw->onExternalConnectionChange(oldPathInfo.at(i));
-                } else {
-                    for (int j=0; j<newPaths.size(); j++) {
-                        QDBusObjectPath new_path = newPaths.at(j);
-                        if (new_path == old_path) {
-                            break; //stop if new_path also in oldPaths
-                        }
+//            // 第一步 处理相比于上次减少的网络连接
+//            for (int i=0; i<oldPaths.size(); i++) {
+//                QDBusObjectPath old_path = oldPaths.at(i);
+//                if (newPaths.size() == 0) {
+//                    mw->onExternalConnectionChange(oldPathInfo.at(i));
+//                } else {
+//                    for (int j=0; j<newPaths.size(); j++) {
+//                        QDBusObjectPath new_path = newPaths.at(j);
+//                        if (new_path == old_path) {
+//                            break; //stop if new_path also in oldPaths
+//                        }
 
-                        if (j == newPaths.size()-1) {
-                            mw->onExternalConnectionChange(oldPathInfo.at(i));
-                        }
-                    }
-                }
-            }
+//                        if (j == newPaths.size()-1) {
+//                            mw->onExternalConnectionChange(oldPathInfo.at(i));
+//                        }
+//                    }
+//                }
+//            }
 
-            // 第二步 处理相比于上次增加的网络连接
-            for (int i=0; i<newPaths.size(); i++) {
-                QDBusObjectPath new_path = newPaths.at(i);
-                if (oldPaths.size() == 0) {
-                    mw->onExternalConnectionChange(newPathInfo.at(i));
-                } else {
-                    for (int j=0; j<oldPaths.size(); j++) {
-                        QDBusObjectPath old_path = oldPaths.at(j);
-                        if (new_path == old_path) {
-                            break; //stop if new_path also in oldPaths
-                        }
+//            // 第二步 处理相比于上次增加的网络连接
+//            for (int i=0; i<newPaths.size(); i++) {
+//                QDBusObjectPath new_path = newPaths.at(i);
+//                if (oldPaths.size() == 0) {
+//                    mw->onExternalConnectionChange(newPathInfo.at(i));
+//                } else {
+//                    for (int j=0; j<oldPaths.size(); j++) {
+//                        QDBusObjectPath old_path = oldPaths.at(j);
+//                        if (new_path == old_path) {
+//                            break; //stop if new_path also in oldPaths
+//                        }
 
-                        if (j == oldPaths.size()-1) {
-                            mw->onExternalConnectionChange(newPathInfo.at(i));
-                        }
-                    }
-                }
-            }
+//                        if (j == oldPaths.size()-1) {
+//                            mw->onExternalConnectionChange(newPathInfo.at(i));
+//                        }
+//                    }
+//                }
+//            }
 
-            bool isChangeOldPathInfo = true;
-            for (int k=0; k<newPathInfo.size(); k++) {
-                if (newPathInfo.at(k) == "") {
-                    isChangeOldPathInfo = false;
-                }
-            }
-            if (isChangeOldPathInfo) {
-                oldPathInfo = newPathInfo;
-            }
-            oldPaths = newPaths;
-        }
-    }
+//            bool isChangeOldPathInfo = true;
+//            for (int k=0; k<newPathInfo.size(); k++) {
+//                if (newPathInfo.at(k) == "") {
+//                    isChangeOldPathInfo = false;
+//                }
+//            }
+//            if (isChangeOldPathInfo) {
+//                oldPathInfo = newPathInfo;
+//            }
+//            oldPaths = newPaths;
+//        }
+//    }
 }
 
 void KylinDBus::onLanPropertyChanged(QVariantMap qvm)
@@ -542,6 +540,50 @@ void KylinDBus::onWifiPropertyChanged(QVariantMap qvm)
 void KylinDBus::onAccessPointAdded(QDBusObjectPath objPath)
 {
     //qDebug()<<"debug: &&&&&&&&&&&&&"<<objPath.path();
+}
+
+void KylinDBus::connectWiredNet(QString netName)
+{
+    QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                      "/org/freedesktop/NetworkManager/Settings",
+                                      "org.freedesktop.NetworkManager.Settings",
+                                      QDBusConnection::systemBus() );
+    QDBusReply<QList<QDBusObjectPath>> m_reply = m_interface.call("ListConnections");
+
+    QDBusObjectPath active_connection;
+    active_connection.setPath("/");
+
+    QList<QDBusObjectPath> m_objNets = m_reply.value();
+    foreach (QDBusObjectPath objNet, m_objNets) {
+        QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                  objNet.path(),
+                                  "org.freedesktop.NetworkManager.Settings.Connection",
+                                  QDBusConnection::systemBus());
+        QDBusMessage result = m_interface.call("GetSettings");
+
+        const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+        QMap<QString,QMap<QString,QVariant>> map;
+        dbusArg1st >> map;
+
+        for (QString outside_key : map.keys() ) {
+            QMap<QString,QVariant> outsideMap = map.value(outside_key);
+            if (outside_key == "connection") {
+                for (QString search_key : outsideMap.keys()) {
+                    if (search_key == "id") {
+                        if (netName == outsideMap.value(search_key).toString()) {
+
+                            QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                                       "/org/freedesktop/NetworkManager",
+                                                       "org.freedesktop.NetworkManager",
+                                                       QDBusConnection::systemBus() );
+                            QDBusReply<QDBusObjectPath> connectionReply = m_interface.call("ActivateConnection", QVariant::fromValue(objNet), QVariant::fromValue(wiredPath), QVariant::fromValue(active_connection));
+                        }
+                    }
+                }
+            }
+        } // end for(QString outside_key : map.keys() )
+
+    } //end foreach (QDBusObjectPath objNet, m_objNets)
 }
 
 void KylinDBus::showDesktopNotify(QString message)

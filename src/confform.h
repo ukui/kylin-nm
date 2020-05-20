@@ -42,8 +42,6 @@ public:
 
     void setProp(QString connName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf);
 
-    NotifySend *m_notify = nullptr;
-
 public slots:
     void cbTypeChanged(int index);
 

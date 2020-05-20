@@ -108,7 +108,7 @@ DlgConnHidWifiWpa::DlgConnHidWifiWpa(int type, MainWindow *mainWindow, QWidget *
     //ui->cbxSecurity->addItem("LEAP");
     //ui->cbxSecurity->addItem(tr("Dynamic WEP (802.1X)")); //动态 WEP (802.1x)
     //ui->cbxSecurity->addItem(tr("WPA & WPA2 Enterprise")); //WPA 及 WPA2 企业
-    //ui->cbxSecurity->setCurrentIndex(1);
+    ui->cbxSecurity->setCurrentIndex(1);
     connect(ui->cbxSecurity,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeDialog()));
 
     if (isUsed == 0){

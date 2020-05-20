@@ -86,7 +86,6 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon->show();
 
     objKyDBus = new KylinDBus(this);
-    objKyDBus->initConnectionInfo();
     objNetSpeed = new NetworkSpeed();
     //m_notify = new NotifySend();
 

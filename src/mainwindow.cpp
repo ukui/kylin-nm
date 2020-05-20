@@ -1946,8 +1946,21 @@ void MainWindow::onBtnAddNetClicked()
 
 void MainWindow::onBtnCreateNetClicked()
 {
+    QPoint pos = QCursor::pos();
+    QRect primaryGeometry;
+    for (QScreen *screen : qApp->screens()) {
+        if (screen->geometry().contains(pos)) {
+            primaryGeometry = screen->geometry();
+        }
+    }
+
+    if (primaryGeometry.isEmpty()) {
+        primaryGeometry = qApp->primaryScreen()->geometry();
+    }
+
     ConfForm *m_cf = new ConfForm();
     m_cf->cbTypeChanged(3);
+    m_cf->move(primaryGeometry.width() / 2 - m_cf->width() / 2, primaryGeometry.height() / 2 - m_cf->height() / 2);
     m_cf->show();
 }
 

@@ -360,8 +360,9 @@ void OneLancForm::on_btnInfo_clicked()
     // qDebug()<<v4method<<addr<<mask<<gateway<<dns;
 
     cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive);
+    connect(cf, SIGNAL(requestRefreshLanList(int)), mw, SLOT(onBtnNetListClicked(int)));
 
-    //cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
+    cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();
     cf->raise();
 }

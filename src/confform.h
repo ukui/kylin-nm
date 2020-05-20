@@ -79,9 +79,13 @@ private:
     QPoint winPos;
     QPoint dragPos;
     bool isActConf;
+    bool isCreateNewNet = false;
     bool isShowSaveBtn = true;
 
     QString labelQss, cbxQss, leQss, lineQss, btnOnQss, btnOffQss;
+
+signals:
+    void requestRefreshLanList(int updateType);
 };
 
 #endif // CONFFORM_H

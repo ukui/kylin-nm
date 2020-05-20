@@ -228,7 +228,6 @@ private:
     QLabel *lbWifiList = nullptr;
     QPushButton *btnAddNet = nullptr;
     QPushButton *btnCreateNet = nullptr;
-    ConfForm *cf = nullptr;
 
     QSystemTrayIcon *trayIcon = nullptr;
     QMenu *trayIconMenu = nullptr;

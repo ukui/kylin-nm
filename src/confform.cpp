@@ -208,6 +208,7 @@ void ConfForm::on_btnCreate_clicked()
 
     if(ui->cbType->currentIndex() == 1){
         //config the ipv4 and netmask and gateway if select Manual
+        this->isCreateNewNet = true;
         this->on_btnOk_clicked();
     } else {
         QString txt(tr("New network already created"));
@@ -246,21 +247,28 @@ void ConfForm::on_btnOk_clicked()
         kylin_network_set_manualall(ui->leName->text().toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
     }
 
-    QString txt(tr("New network settings already finished"));
     KylinDBus kylindbus;
-    kylindbus.showDesktopNotify(txt);
 
     this->hide();
 
-    // 如果是修改当前连接的网络，则修改设置后简略重连网络
-    if(this->isActConf == true){
-        //QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + ui->leName->text() + "'";
+    QString txt(tr("New network settings already finished"));
+    kylindbus.showDesktopNotify(txt);
 
-        kylindbus.connectWiredNet(ui->leName->text()); //reconnect this wired network
+    if (!this->isCreateNewNet) {
+        if(this->isActConf == true){
+            // 如果是修改当前连接的网络，则修改设置后简略重连网络
+            //QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + ui->leName->text() + "'";
+            kylindbus.connectWiredNet(ui->leName->text()); //reconnect this wired network
 
-        QString m_txt(tr("New settings already effective"));
-        kylindbus.showDesktopNotify(m_txt); //show desktop notify
+            QString m_txt(tr("New settings already effective"));
+            kylindbus.showDesktopNotify(m_txt); //show desktop notify
+        }
+
+        //需要更新一下有线网界面
+        qDebug()<<"debug: request refresh Lan list";
+        emit requestRefreshLanList(0);
     }
+    this->isCreateNewNet = false;
 }
 
 void ConfForm::on_btnCancel_clicked()

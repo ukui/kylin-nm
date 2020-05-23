@@ -14,18 +14,6 @@
         <file>res/s/conning-b/11.png</file>
         <file>res/s/conning-b/12.png</file>
         <file>res/g/down_arrow.png</file>
-        <file>res/s/conning-s/1.png</file>
-        <file>res/s/conning-s/2.png</file>
-        <file>res/s/conning-s/3.png</file>
-        <file>res/s/conning-s/4.png</file>
-        <file>res/s/conning-s/5.png</file>
-        <file>res/s/conning-s/6.png</file>
-        <file>res/s/conning-s/7.png</file>
-        <file>res/s/conning-s/8.png</file>
-        <file>res/s/conning-s/9.png</file>
-        <file>res/s/conning-s/10.png</file>
-        <file>res/s/conning-s/11.png</file>
-        <file>res/s/conning-s/12.png</file>
         <file>res/s/rescan/1.png</file>
         <file>res/s/rescan/2.png</file>
         <file>res/s/rescan/3.png</file>
@@ -77,5 +65,17 @@
         <file>qss/style.qss</file>
         <file>res/g/close_black.png</file>
         <file>res/g/close_white.png</file>
+        <file>res/s/conning-s/1.png</file>
+        <file>res/s/conning-s/2.png</file>
+        <file>res/s/conning-s/3.png</file>
+        <file>res/s/conning-s/4.png</file>
+        <file>res/s/conning-s/5.png</file>
+        <file>res/s/conning-s/6.png</file>
+        <file>res/s/conning-s/7.png</file>
+        <file>res/s/conning-s/8.png</file>
+        <file>res/s/conning-s/9.png</file>
+        <file>res/s/conning-s/10.png</file>
+        <file>res/s/conning-s/11.png</file>
+        <file>res/s/conning-s/12.png</file>
     </qresource>
 </RCC>

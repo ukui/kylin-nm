@@ -587,25 +587,25 @@ void MainWindow::createTrayIcon()
     trayIcon->setContextMenu(trayIconMenu);
 
     // 初始化托盘所有Icon
-    iconLanOnline = QIcon::fromTheme("nm-device-wired");
-    iconLanOffline = QIcon::fromTheme("nm-no-connection");
-    iconWifiFull = QIcon::fromTheme("nm-signal-100");
-    iconWifiHigh = QIcon::fromTheme("nm-signal-75");
-    iconWifiMedium = QIcon::fromTheme("nm-signal-50");
-    iconWifiLow = QIcon::fromTheme("nm-signal-25");
+    iconLanOnline = QIcon::fromTheme("network-wired-symbolic");
+    iconLanOffline = QIcon::fromTheme("network-wired-offline-symbolic");
+    iconWifiFull = QIcon::fromTheme("network-wireless-signal-excellent-symbolic");
+    iconWifiHigh = QIcon::fromTheme("network-wireless-signal-good-symbolic");
+    iconWifiMedium = QIcon::fromTheme("network-wireless-signal-ok");
+    iconWifiLow = QIcon::fromTheme("network-wireless-signal-low");
 
-    loadIcons.append(QIcon(":/res/s/conning-s/1.png"));
-    loadIcons.append(QIcon(":/res/s/conning-s/2.png"));
-    loadIcons.append(QIcon(":/res/s/conning-s/3.png"));
-    loadIcons.append(QIcon(":/res/s/conning-s/4.png"));
-    loadIcons.append(QIcon(":/res/s/conning-s/5.png"));
-    loadIcons.append(QIcon(":/res/s/conning-s/6.png"));
-    loadIcons.append(QIcon(":/res/s/conning-s/7.png"));
-    loadIcons.append(QIcon(":/res/s/conning-s/8.png"));
-    loadIcons.append(QIcon(":/res/s/conning-s/9.png"));
-    loadIcons.append(QIcon(":/res/s/conning-s/10.png"));
-    loadIcons.append(QIcon(":/res/s/conning-s/11.png"));
-    loadIcons.append(QIcon(":/res/s/conning-s/12.png"));
+    loadIcons.append(QIcon::fromTheme("network-1"));
+    loadIcons.append(QIcon::fromTheme("network-2"));
+    loadIcons.append(QIcon::fromTheme("network-3"));
+    loadIcons.append(QIcon::fromTheme("network-4"));
+    loadIcons.append(QIcon::fromTheme("network-5"));
+    loadIcons.append(QIcon::fromTheme("network-6"));
+    loadIcons.append(QIcon::fromTheme("network-7"));
+    loadIcons.append(QIcon::fromTheme("network-8"));
+    loadIcons.append(QIcon::fromTheme("network-9"));
+    loadIcons.append(QIcon::fromTheme("network-10"));
+    loadIcons.append(QIcon::fromTheme("network-11"));
+    loadIcons.append(QIcon::fromTheme("network-12"));
 
     iconTimer = new QTimer(this);
     connect(iconTimer, SIGNAL(timeout()), this, SLOT(iconStep()));
@@ -691,7 +691,7 @@ void MainWindow::handleIconClicked()
 
     int n = objKyDBus->getTaskBarPos("position");
     int m = objKyDBus->getTaskBarHeight("height");
-    int d = 3; //窗口边沿到任务栏距离
+    int d = 2; //窗口边沿到任务栏距离
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){
         if(n == 0){
@@ -751,7 +751,7 @@ void MainWindow::showTrayIconMenu()
 
     int n = objKyDBus->getTaskBarPos("position");
     int m = objKyDBus->getTaskBarHeight("height");
-    int d = 3; //窗口边沿到任务栏距离
+    int d = 4; //窗口边沿到任务栏距离
     int s = 80; //窗口边沿到屏幕边沿距离
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()){

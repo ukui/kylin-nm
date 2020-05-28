@@ -18,9 +18,10 @@
 
 #include "loadingdiv.h"
 
-#define FRAMESPEED 60
-#define ALLTIME 15*1000
+#define FRAMESPEED 60 //帧与帧之间的间隔时间(ms)
+#define ALLTIME 15*1000 //等待动画持续总时间
 
+//加载动画控件'loadingGif'
 LoadingDiv::LoadingDiv(QWidget *parent) : QWidget(parent)
 {
     this->resize(480, 538);
@@ -30,14 +31,14 @@ LoadingDiv::LoadingDiv(QWidget *parent) : QWidget(parent)
     this->loadingGif->move(this->width()/2 - 96/2 + 41/2, this->height()/2 + 20);
     this->loadingGif->show();
 
-
-    this->switchTimer = new QTimer(this);
+    this->switchTimer = new QTimer(this); //QTimer对象，控制等待动画播放
     connect(switchTimer, SIGNAL(timeout()), this, SLOT(switchAnimStep()));
 
     this->raise();
     this->hide();
 }
 
+//加载动画控件'loadingGif'
 void LoadingDiv::switchAnimStep()
 {
     QString qpmQss = "QLabel{background-image:url(':/res/s/conning-b/";
@@ -48,15 +49,16 @@ void LoadingDiv::switchAnimStep()
     this->currentPage --;
 
     if (this->currentPage < 1) {
-        this->currentPage = 12;
+        this->currentPage = 12; //循环播放
     }
 
     this->countCurrentTime += FRAMESPEED;
     if (this->countCurrentTime >= ALLTIME) {
-        emit this->toStopLoading();
+        emit this->toStopLoading(); //发出信号停止主界面和托盘区的等待动画
     }
 }
 
+//开始播放动画
 void LoadingDiv::startLoading()
 {
     this->currentPage = 12;
@@ -65,6 +67,7 @@ void LoadingDiv::startLoading()
     this->show();
 }
 
+//结束播放动画
 void LoadingDiv::stopLoading()
 {
     this->switchTimer->stop();

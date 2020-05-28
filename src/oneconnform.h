@@ -88,14 +88,6 @@ public:
     bool isTopItem;
     int signalLv;
 
-signals:
-    void selectedOneWifiForm(QString wifiName, int extendLength);
-    void connDone(int connFlag);
-    void disconnActiveWifi();
-
-    void sigConnWifi(QString);
-    void sigConnWifiPWD(QString, QString);
-
 protected:
     void mousePressEvent(QMouseEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
@@ -137,6 +129,14 @@ private:
     bool hasPwd;
 
     QString leQssLow, leQssHigh;
+
+signals:
+    void selectedOneWifiForm(QString wifiName, int extendLength);
+    void connDone(int connFlag);
+    void disconnActiveWifi();
+
+    void sigConnWifi(QString);
+    void sigConnWifiPWD(QString, QString);
 };
 
 #endif // ONECONNFORM_H

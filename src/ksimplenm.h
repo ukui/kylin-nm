@@ -34,9 +34,9 @@ public:
     QProcess *runShellProcess = nullptr;
     QString shellOutput;
     int type;
-    bool isExecutingGetLanList = false;
-    bool isExecutingGetWifiList = false;
-    bool isUseOldLanSlist = false;
+    bool isExecutingGetLanList = false; //是否正在执行获取有线网列表
+    bool isExecutingGetWifiList = false; //是否正在执行获取无线网列表
+    bool isUseOldLanSlist = false; //是否应该要用上一次获取的有线列表
 
     void execGetLanList();
     void execGetWifiList();

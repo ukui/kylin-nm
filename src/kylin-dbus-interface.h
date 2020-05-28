@@ -26,7 +26,6 @@ public:
 
     void getObjectPath();
     int getAccessPointsNumber();
-    int getLanConnState();
     void showDesktopNotify(QString message);
     void initConnectionInfo();
     void connectWiredNet(QString netName);
@@ -42,11 +41,11 @@ public:
     void setWifiSwitchState(bool signal);
     void setWifiCardState(bool signal);
 
-    QDBusObjectPath wiredPath;
-    QDBusObjectPath wirelessPath;
+    QDBusObjectPath wiredPath; //有线设备的路径
+    QDBusObjectPath wirelessPath; //无线设备的路径
 
-    bool isWiredCableOn = false;
-    bool isWirelessCardOn = false;
+    bool isWiredCableOn = false; //是否插入了网线
+    bool isWirelessCardOn = false; //是否插入了网卡
 
     QString dbusLanCardName = "";
     QString dbusLanIpv4 = "";

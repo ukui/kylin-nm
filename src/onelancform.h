@@ -73,13 +73,6 @@ public:
     QString lanName;
     QString uniqueName;
 
-signals:
-    void selectedOneLanForm(QString lanName, QString uniqueName);
-    void connDone(int connFlag);
-    void disconnActiveLan();
-
-    void sigConnLan(QString);
-
 protected:
     void mousePressEvent(QMouseEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
@@ -108,6 +101,13 @@ private:
     KSimpleNM *ks = nullptr;
 
     QString leQssLow, leQssHigh;
+
+signals:
+    void selectedOneLanForm(QString lanName, QString uniqueName);
+    void connDone(int connFlag);
+    void disconnActiveLan();
+
+    void sigConnLan(QString);
 };
 
 #endif // ONELANCFORM_H

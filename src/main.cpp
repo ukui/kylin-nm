@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
     syslog(LOG_DEBUG, "Kylin Network Manager Is Already Launched");
 
-    // 国际化
+    // Internationalization
     QString locale = QLocale::system().name();
     QTranslator trans_global;
     if (locale == "zh_CN") {

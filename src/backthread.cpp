@@ -42,7 +42,7 @@ BackThread::~BackThread()
 {
     cmdConnWifi->close();
 }
-\
+
 //get the connection state of wired and wireles network
 IFace* BackThread::execGetIface()
 {

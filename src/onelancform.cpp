@@ -190,6 +190,7 @@ void OneLancForm::setSelected(bool isSelected, bool isCurrName)
     this->isTopItem = false;
 }
 
+//设置顶部这个item的显示
 void OneLancForm::setTopItem(bool isSelected)
 {
     if (isSelected) {
@@ -216,6 +217,7 @@ void OneLancForm::setTopItem(bool isSelected)
     this->isTopItem = true;
 }
 
+//设置网络名称
 void OneLancForm::setName(QString name, QString uniName)
 {
     ui->lbName->setText(name);
@@ -223,6 +225,7 @@ void OneLancForm::setName(QString name, QString uniName)
     uniqueName = uniName;
 }
 
+//根据有线网络连接与否，设置显示'已连接'文字的控件的可见与否
 void OneLancForm::setConnedString(bool showLable, QString str)
 {
     if (!showLable) {
@@ -233,6 +236,7 @@ void OneLancForm::setConnedString(bool showLable, QString str)
     }
 }
 
+//设置item被扩展后出现的网络信息
 void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString str4)
 {
     if (str1 == "" || str1 == "auto") {
@@ -254,6 +258,7 @@ void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString s
     ui->leInfo_4->setText(strMAC + str4);
 }
 
+//根据网络是否连接，设置网络状态图标
 void OneLancForm::setIcon(bool isOn)
 {
     if (isOn) {
@@ -263,6 +268,7 @@ void OneLancForm::setIcon(bool isOn)
     }
 }
 
+//设置item下方横线的可见与否
 void OneLancForm::setLine(bool isShow)
 {
     if (isShow) {
@@ -279,6 +285,7 @@ void OneLancForm::slotConnLan()
     emit sigConnLan(ui->lbName->text());
 }
 
+//点击网络断开按钮，执行该函数
 void OneLancForm::on_btnDisConn_clicked()
 {
     syslog(LOG_DEBUG, "DisConnect button about lan net is clicked, current wired net name is %s .", ui->lbName->text().toUtf8().data());
@@ -294,6 +301,7 @@ void OneLancForm::on_btnDisConn_clicked()
     emit disconnActiveLan();
 }
 
+//点击了连接网络按钮，执行该函数
 void OneLancForm::on_btnConn_clicked()
 {
     syslog(LOG_DEBUG, "A button named btnConn about lan net is clicked.");
@@ -311,6 +319,7 @@ void OneLancForm::on_btnConn_clicked()
     t->start();
 }
 
+//点击了item被扩展中的连接网络按钮，执行该函数
 void OneLancForm::on_btnConnSub_clicked()
 {
     syslog(LOG_DEBUG, "A button named btnConnSub about lan net is clicked.");
@@ -328,6 +337,7 @@ void OneLancForm::on_btnConnSub_clicked()
     t->start();
 }
 
+//点击列表中item扩展后显示信息的位置时，执行该函数，用于显示网络配置界面
 void OneLancForm::on_btnInfo_clicked()
 {
     QPoint pos = QCursor::pos();

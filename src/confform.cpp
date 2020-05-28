@@ -112,11 +112,11 @@ ConfForm::ConfForm(QWidget *parent) :
 
     connect(ui->cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(cbTypeChanged(int)));
 
-    ui->cbMask->addItem("255.255.255.0");
-    ui->cbMask->addItem("255.255.254.0");
-    ui->cbMask->addItem("255.255.252.0");
-    ui->cbMask->addItem("255.255.0.0");
-    ui->cbMask->addItem("255.0.0.0");
+    ui->cbMask->addItem("255.255.255.0"); //24
+    ui->cbMask->addItem("255.255.254.0"); //23
+    ui->cbMask->addItem("255.255.252.0"); //22
+    ui->cbMask->addItem("255.255.0.0"); //16
+    ui->cbMask->addItem("255.0.0.0"); //8
 
     ui->btnCancel->setText(tr("Cancel"));//"取消"
     ui->btnOk->setText(tr("Save"));//"保存"
@@ -289,8 +289,8 @@ void ConfForm::cbTypeChanged(int index)
 {
     if (isShowSaveBtn) {
         ui->leName->setEnabled(false);
-        ui->btnOk->show();
-        ui->btnCreate->hide();
+        ui->btnOk->show(); //显示保存按钮
+        ui->btnCreate->hide(); //隐藏创建按钮
         ui->lbLeftupTitle->setText(tr("Edit Network"));
     }
 

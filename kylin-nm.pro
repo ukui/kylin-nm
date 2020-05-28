@@ -55,7 +55,6 @@ SOURCES += \
     src/loadingdiv.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/notifysend.cpp \
     src/oneconnform.cpp \
     src/onelancform.cpp \
     src/utils.cpp \
@@ -81,7 +80,6 @@ HEADERS += \
     src/kylin-network-interface.h \
     src/loadingdiv.h \
     src/mainwindow.h \
-    src/notifysend.h \
     src/oneconnform.h \
     src/onelancform.h \
     src/utils.h \
@@ -101,7 +99,6 @@ HEADERS += \
 FORMS += \
     src/confform.ui \
     src/mainwindow.ui \
-    src/notifysend.ui \
     src/oneconnform.ui \
     src/onelancform.ui \
     wireless-security/dlgconnhidwifi.ui \

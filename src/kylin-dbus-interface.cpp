@@ -70,7 +70,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
         qDebug()<<"Can not find wired device object path when using dbus.";
     }
 
-    if (wirelessPath.path() != ""){
+    if (wirelessPath.path() != "") {
         QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                              QString(wirelessPath.path()),
                                              QString("org.freedesktop.NetworkManager.Device.Wireless"),
@@ -110,7 +110,7 @@ void KylinDBus::getObjectPath()
 
    QList<QDBusObjectPath> obj_paths = obj_reply.value();
 
-   foreach (QDBusObjectPath obj_path, obj_paths){
+   foreach (QDBusObjectPath obj_path, obj_paths) {
        QDBusInterface interface( "org.freedesktop.NetworkManager",
                                  obj_path.path(),
                                  "org.freedesktop.DBus.Introspectable",
@@ -121,9 +121,9 @@ void KylinDBus::getObjectPath()
            qDebug()<<"execute dbus method 'Introspect' is invalid in func getObjectPath()";
        }
 
-       if(reply.value().indexOf("org.freedesktop.NetworkManager.Device.Wired") != -1){
+       if(reply.value().indexOf("org.freedesktop.NetworkManager.Device.Wired") != -1) {
            wiredPath = obj_path;
-       } else if (reply.value().indexOf("org.freedesktop.NetworkManager.Device.Wireless") != -1){
+       } else if (reply.value().indexOf("org.freedesktop.NetworkManager.Device.Wireless") != -1) {
            wirelessPath = obj_path;
            isWirelessCardOn = true;
        }
@@ -139,17 +139,17 @@ void KylinDBus::getPhysicalCarrierState(int n)
 
     QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Device.Wired", "Carrier");
 
-    try{
-        if (reply.value().toString() == "true"){
+    try {
+        if (reply.value().toString() == "true") {
             isWiredCableOn = true;
             if (n == 1){ this->mw->onPhysicalCarrierChanged(isWiredCableOn);}
-        } else if (reply.value().toString() == "false"){
+        } else if (reply.value().toString() == "false") {
             isWiredCableOn = false;
             if (n == 1){ this->mw->onPhysicalCarrierChanged(isWiredCableOn);}
         } else {
             throw -1;
         }
-    }catch(...){
+    } catch(...) {
         syslog(LOG_ERR, "Error occurred when get the property 'Carrier' of Wired");
         qDebug()<<"Error occurred when get the property 'Carrier' of Wired";
     }
@@ -209,7 +209,7 @@ void KylinDBus::getLanIp(QString netName)
     QDBusReply<QList<QDBusObjectPath>> m_reply = m_interface.call("ListConnections");
 
     QList<QDBusObjectPath> m_objNets = m_reply.value();
-    foreach (QDBusObjectPath objNet, m_objNets){
+    foreach (QDBusObjectPath objNet, m_objNets) {
         QDBusInterface m_interface("org.freedesktop.NetworkManager",
                                   objNet.path(),
                                   "org.freedesktop.NetworkManager.Settings.Connection",
@@ -221,26 +221,26 @@ void KylinDBus::getLanIp(QString netName)
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg1st >> map;
 
-        for(QString outside_key : map.keys() ){
+        for (QString outside_key : map.keys() ) {
             QMap<QString,QVariant> outsideMap = map.value(outside_key);
             if (outside_key == "connection") {
-                for (QString search_key : outsideMap.keys()){
-                    if (search_key == "id"){
+                for (QString search_key : outsideMap.keys()) {
+                    if (search_key == "id") {
                         //const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
-                        if (netName == outsideMap.value(search_key).toString()){
+                        if (netName == outsideMap.value(search_key).toString()) {
                             // qDebug()<<"aaaaaa"<<outsideMap.value(search_key).toString();
 
-                            for(QString key : map.keys() ){
+                            for (QString key : map.keys() ) {
                                 QMap<QString,QVariant> innerMap = map.value(key);
                                 //qDebug() << "Key: " << key;
                                 if (key == "ipv4") {
-                                    for (QString inner_key : innerMap.keys()){
-                                        if (inner_key == "address-data"){
+                                    for (QString inner_key : innerMap.keys()) {
+                                        if (inner_key == "address-data") {
                                             const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
                                             QMap<QString,QVariant> m_map;
 
                                             dbusArg2nd.beginArray();
-                                            while (!dbusArg2nd.atEnd()){
+                                            while (!dbusArg2nd.atEnd()) {
                                                 dbusArg2nd >> m_map;// append map to a vector here if you want to keep it
                                             }
                                             dbusArg2nd.endArray();
@@ -252,13 +252,13 @@ void KylinDBus::getLanIp(QString netName)
                                 }
 
                                 if (key == "ipv6") {
-                                    for (QString inner_key : innerMap.keys()){
+                                    for (QString inner_key : innerMap.keys()) {
                                         if (inner_key == "address-data"){
                                             const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
                                             QMap<QString,QVariant> m_map;
 
                                             dbusArg2nd.beginArray();
-                                            while (!dbusArg2nd.atEnd()){
+                                            while (!dbusArg2nd.atEnd()) {
                                                 dbusArg2nd >> m_map;// append map to a vector here if you want to keep it
                                             }
                                             dbusArg2nd.endArray();
@@ -283,39 +283,6 @@ void KylinDBus::getWifiMac(QString netName)
 {
     dbusWifiMac = "";
 
-//    //将wifi名转为utf-8 十进制形式
-//    std::vector<int> vec;
-//    int len_encoded;
-//    int len_netName = netName.size();
-//    for (int i=0;i<len_netName;i++){
-//        QTextCodec *utf8 = QTextCodec::codecForName("utf-8");
-//        QByteArray encoded = utf8->fromUnicode(netName.at(i)).toHex();
-//        len_encoded = encoded.size();
-//        qDebug()<<"debug: 11"<<QString::number(len_encoded);
-
-//        if (len_encoded == 2){
-//            QString str;
-//            str.append(encoded.at(0));
-//            str.append(encoded.at(1));
-//            bool ok;
-//            QString hex = str;
-//            int dec = hex.toInt(&ok, 16);
-//            vec.push_back(dec);
-//        } else if (len_encoded == 6){
-//            for (int j=0;j<3;j++){
-//                QString str = "";
-//                str.append(encoded.at(j*2));
-//                str.append(encoded.at(j*2 + 1));
-//                bool ok;
-//                QString hex = str;
-//                int dec = hex.toInt(&ok, 16);
-//                vec.push_back(dec);
-//            }
-
-//        }
-//        len_encoded = 0;
-//    }
-
     QDBusInterface interface( "org.freedesktop.NetworkManager",
                               wirelessPath.path(),
                               "org.freedesktop.NetworkManager.Device.Wireless",
@@ -324,7 +291,7 @@ void KylinDBus::getWifiMac(QString netName)
     QDBusReply<QList<QDBusObjectPath>> reply = interface.call("GetAllAccessPoints");
     QList<QDBusObjectPath> objPaths = reply.value();
 
-    foreach (QDBusObjectPath objPath, objPaths){
+    foreach (QDBusObjectPath objPath, objPaths) {
         QDBusInterface ssid_interface( "org.freedesktop.NetworkManager",
                                   objPath.path(),
                                   "org.freedesktop.DBus.Properties",
@@ -333,7 +300,7 @@ void KylinDBus::getWifiMac(QString netName)
         QDBusReply<QVariant> ssid_replys = ssid_interface.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Ssid");
         QString str_name = ssid_replys.value().toString();
 
-        if (str_name == netName){
+        if (str_name == netName) {
             QDBusInterface path_interface( "org.freedesktop.NetworkManager",
                                       objPath.path(),
                                       "org.freedesktop.DBus.Properties",
@@ -382,7 +349,7 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
     QMap<QString,QMap<QString,QVariant>> map;
     dbusArg1st >> map;
 
-    for(QString key : map.keys() ){
+    for(QString key : map.keys() ) {
         if (key == "802-3-ethernet") {
             emit this->updateWiredList(0);
             syslog(LOG_DEBUG, "A new wired network was created.");
@@ -396,7 +363,7 @@ void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
     syslog(LOG_DEBUG, "An old network was removed from configure directory.");
     qDebug()<<"An old network was removed from configure directory.";
 
-    if (mw->is_btnNetList_clicked == 1){
+    if (mw->is_btnNetList_clicked == 1) {
         emit this->updateWiredList(0);
     }
 }
@@ -709,7 +676,7 @@ bool KylinDBus::getSwitchStatus(QString key) {
 
 void KylinDBus::setWifiSwitchState(bool signal)
 {
-    if(!m_gsettings) {
+    if (!m_gsettings) {
         return ;
     }
 
@@ -723,7 +690,7 @@ void KylinDBus::setWifiSwitchState(bool signal)
 
 void KylinDBus::setWifiCardState(bool signal)
 {
-    if(!m_gsettings) {
+    if (!m_gsettings) {
         return ;
     }
 

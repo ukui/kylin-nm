@@ -19,8 +19,6 @@
 #ifndef CONFFORM_H
 #define CONFFORM_H
 
-#include "notifysend.h"
-
 #include <QWidget>
 #include <QMouseEvent>
 #include <QDebug>

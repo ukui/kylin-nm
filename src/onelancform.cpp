@@ -99,7 +99,8 @@ OneLancForm::~OneLancForm()
     delete ui;
 }
 
-void OneLancForm::mousePressEvent(QMouseEvent *){
+void OneLancForm::mousePressEvent(QMouseEvent *)
+{
     //emit selectedOneLanForm(lanName);
     emit selectedOneLanForm(lanName, uniqueName);//避免重名情况
 }
@@ -107,31 +108,31 @@ void OneLancForm::mousePressEvent(QMouseEvent *){
 //事件过滤器
 bool OneLancForm::eventFilter(QObject *obj, QEvent *event)
 {
-    if (obj == ui->btnInfo){
+    if (obj == ui->btnInfo) {
         if(event->type() == QEvent::HoverEnter) {
             ui->leInfo_1->setStyleSheet(leQssHigh);
             ui->leInfo_2->setStyleSheet(leQssHigh);
             ui->leInfo_3->setStyleSheet(leQssHigh);
             ui->leInfo_4->setStyleSheet(leQssHigh);
             return true;
-        } else if(event->type() == QEvent::HoverLeave){
+        } else if(event->type() == QEvent::HoverLeave) {
             ui->leInfo_1->setStyleSheet(leQssLow);
             ui->leInfo_2->setStyleSheet(leQssLow);
             ui->leInfo_3->setStyleSheet(leQssLow);
             ui->leInfo_4->setStyleSheet(leQssLow);
             return true;
         }
-    }else if (obj == this){
-        if(event->type() == QEvent::HoverEnter) {
-            if (!this->isTopItem){
-                if (!this->isSelected){
+    } else if (obj == this) {
+        if (event->type() == QEvent::HoverEnter) {
+            if (!this->isTopItem) {
+                if (!this->isSelected) {
                     ui->btnConn->show();
                     ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
                     ui->wbg_2->show();
                 }
             }
             return true;
-        } else if(event->type() == QEvent::HoverLeave){
+        } else if(event->type() == QEvent::HoverLeave) {
             ui->btnConn->hide();
             ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0);}");
             ui->wbg_2->hide();
@@ -143,12 +144,13 @@ bool OneLancForm::eventFilter(QObject *obj, QEvent *event)
 }
 
 // 是否当前连接的网络，字体设置不同
-void OneLancForm::setAct(bool isAct){
-    if(isAct){
+void OneLancForm::setAct(bool isAct)
+{
+    if (isAct) {
         ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->show();
         ui->btnConnSub->hide();
-    }else{
+    } else {
         ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->hide();
         ui->btnConnSub->hide();
@@ -159,7 +161,7 @@ void OneLancForm::setAct(bool isAct){
 // 是否选中
 void OneLancForm::setSelected(bool isSelected, bool isCurrName)
 {
-    if(isSelected){
+    if (isSelected) {
         resize(W_ITEM, H_ITEM_EXTEND);
         ui->wbg->show();
         ui->wbg_2->hide();
@@ -168,7 +170,7 @@ void OneLancForm::setSelected(bool isSelected, bool isCurrName)
         ui->btnConnSub->show();
 
         this->isSelected = true;
-    }else{
+    } else {
         resize(W_ITEM, H_ITEM);
         ui->wbg->hide();
         ui->wbg_2->show();
@@ -190,18 +192,18 @@ void OneLancForm::setSelected(bool isSelected, bool isCurrName)
 
 void OneLancForm::setTopItem(bool isSelected)
 {
-    if(isSelected){
+    if (isSelected) {
         resize(W_ITEM, H_ITEM_EXTEND);
         ui->wbg->show();
         ui->btnConnSub->hide();
         this->isSelected = true;
-    }else{
+    } else {
         resize(W_ITEM, H_ITEM);
         ui->wbg->hide();
         ui->btnConnSub->hide();
         this->isSelected = false;
     }
-    if (isConnected){
+    if (isConnected) {
         ui->btnDisConn->show();
     } else {
         ui->btnDisConn->hide();
@@ -214,28 +216,30 @@ void OneLancForm::setTopItem(bool isSelected)
     this->isTopItem = true;
 }
 
-void OneLancForm::setName(QString name, QString uniName){
+void OneLancForm::setName(QString name, QString uniName)
+{
     ui->lbName->setText(name);
     lanName = name;
     uniqueName = uniName;
 }
 
-void OneLancForm::setConnedString(bool showLable, QString str){
-    if (!showLable){
+void OneLancForm::setConnedString(bool showLable, QString str)
+{
+    if (!showLable) {
         ui->lbConned->hide();
         ui->lbName->move(63, 18);
-    }else{
+    } else {
         ui->lbConned->setText(str);
     }
 }
 
 void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString str4)
 {
-    if (str1 == "" || str1 == "auto"){
+    if (str1 == "" || str1 == "auto") {
         str1 = tr("No Configuration");
     }
 
-    if (str2 == "" || str2 == "auto"){
+    if (str2 == "" || str2 == "auto") {
         str2 = tr("No Configuration");
     }
 
@@ -250,24 +254,26 @@ void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString s
     ui->leInfo_4->setText(strMAC + str4);
 }
 
-void OneLancForm::setIcon(bool isOn){
-    if(isOn){
+void OneLancForm::setIcon(bool isOn)
+{
+    if (isOn) {
         ui->lbIcon->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/l/network-online.png);}");
-    }else{
+    } else {
         ui->lbIcon->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/l/network-offline.png);}");
     }
 }
 
 void OneLancForm::setLine(bool isShow)
 {
-    if(isShow){
+    if (isShow) {
         ui->line->show();
-    }else{
+    } else {
         ui->line->hide();
     }
 }
 
-void OneLancForm::slotConnLan(){
+void OneLancForm::slotConnLan()
+{
     //mw->startLoading();
     this->startWaiting(true);
     emit sigConnLan(ui->lbName->text());
@@ -341,19 +347,19 @@ void OneLancForm::on_btnInfo_clicked()
     QStringList propList = connProp.split("|");
     QString v4method, addr, mask, gateway, dns;
     foreach (QString line, propList) {
-        if(line.startsWith("method:")){
+        if (line.startsWith("method:")) {
             v4method = line.split(":").at(1);
         }
-        if(line.startsWith("addr:")){
+        if (line.startsWith("addr:")) {
             addr = line.split(":").at(1);
         }
-        if(line.startsWith("mask:")){
+        if (line.startsWith("mask:")) {
             mask = line.split(":").at(1);
         }
-        if(line.startsWith("gateway:")){
+        if (line.startsWith("gateway:")) {
             gateway= line.split(":").at(1);
         }
-        if(line.startsWith("dns:")){
+        if (line.startsWith("dns:")) {
             dns = line.split(":").at(1);
         }
     }
@@ -367,7 +373,8 @@ void OneLancForm::on_btnInfo_clicked()
     cf->raise();
 }
 
-void OneLancForm::waitAnimStep(){
+void OneLancForm::waitAnimStep()
+{
     QString qpmQss = "QLabel{background-image:url(':/res/s/conning-a/";
     qpmQss.append(QString::number(this->waitPage));
     qpmQss.append(".png');}");
@@ -375,20 +382,21 @@ void OneLancForm::waitAnimStep(){
 
     this->waitPage --;
 
-    if(this->waitPage < 1){
+    if (this->waitPage < 1) {
         this->waitPage = TOTAL_PAGE;
     }
 
     this->countCurrentTime += FRAME_SPEED;
-    if (this->countCurrentTime >= LIMIT_TIME){
+    if (this->countCurrentTime >= LIMIT_TIME) {
         this->stopWaiting();
     }
 }
 
-void OneLancForm::startWaiting(bool isConn){
-    if (isConn){
+void OneLancForm::startWaiting(bool isConn)
+{
+    if (isConn) {
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
-    }else{
+    } else {
         ui->btnDisConn->hide();
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
     }
@@ -401,7 +409,8 @@ void OneLancForm::startWaiting(bool isConn){
     mw->setTrayLoading(true);
 }
 
-void OneLancForm::stopWaiting(){
+void OneLancForm::stopWaiting()
+{
     this->waitTimer->stop();
     ui->lbWaiting->hide();
     ui->lbWaitingIcon->hide();

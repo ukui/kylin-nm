@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     // 国际化
     QString locale = QLocale::system().name();
     QTranslator trans_global;
-    if(locale == "zh_CN"){
+    if (locale == "zh_CN") {
         trans_global.load(":/translations/kylin-nm_zh_CN.qm");
         //trans_global.load(":/translations/kylin-nm_bo.qm");
         a.installTranslator(&trans_global);

@@ -38,7 +38,8 @@ LoadingDiv::LoadingDiv(QWidget *parent) : QWidget(parent)
     this->hide();
 }
 
-void LoadingDiv::switchAnimStep(){
+void LoadingDiv::switchAnimStep()
+{
     QString qpmQss = "QLabel{background-image:url(':/res/s/conning-b/";
     qpmQss.append(QString::number(this->currentPage));
     qpmQss.append(".png');}");
@@ -46,24 +47,26 @@ void LoadingDiv::switchAnimStep(){
 
     this->currentPage --;
 
-    if(this->currentPage < 1){
+    if (this->currentPage < 1) {
         this->currentPage = 12;
     }
 
     this->countCurrentTime += FRAMESPEED;
-    if (this->countCurrentTime >= ALLTIME){
+    if (this->countCurrentTime >= ALLTIME) {
         emit this->toStopLoading();
     }
 }
 
-void LoadingDiv::startLoading(){
+void LoadingDiv::startLoading()
+{
     this->currentPage = 12;
     this->countCurrentTime = 0;
     this->switchTimer->start(FRAMESPEED);
     this->show();
 }
 
-void LoadingDiv::stopLoading(){
+void LoadingDiv::stopLoading()
+{
     this->switchTimer->stop();
     this->hide();
 }

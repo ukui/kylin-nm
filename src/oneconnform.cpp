@@ -144,11 +144,11 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 
 OneConnForm::~OneConnForm()
 {
-    m_notify->deleteLater();
     delete ui;
 }
 
-void OneConnForm::mousePressEvent(QMouseEvent *){
+void OneConnForm::mousePressEvent(QMouseEvent *)
+{
     emit selectedOneWifiForm(wifiName, H_WIFI_ITEM_BIG_EXTEND);
 }
 
@@ -197,11 +197,12 @@ bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
 }
 
 // 是否当前连接的网络，字体设置不同
-void OneConnForm::setAct(bool isAct){
-    if(isAct){
+void OneConnForm::setAct(bool isAct)
+{
+    if (isAct) {
         ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->show();
-    }else{
+    } else {
         ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->hide();
     }
@@ -210,7 +211,7 @@ void OneConnForm::setAct(bool isAct){
 
 void OneConnForm::setLePassword()
 {
-    if(ui->lePassword->text() == "Input Password..."  || ui->lePassword->text() == "输入密码..."){
+    if (ui->lePassword->text() == "Input Password..."  || ui->lePassword->text() == "输入密码...") {
         ui->lePassword->setText(tr(""));
         ui->lePassword->setEchoMode(QLineEdit::Password);
         ui->checkBoxPwd->setChecked(false);
@@ -218,8 +219,9 @@ void OneConnForm::setLePassword()
 }
 
 //点击窗口最上面的item时
-void OneConnForm::setTopItem(bool isSelected){
-    if(isSelected){
+void OneConnForm::setTopItem(bool isSelected)
+{
+    if (isSelected) {
         resize(W_ITEM, H_ITEM_BIG);
         ui->wbg_3->show();
         ui->leInfo_1->show();
@@ -227,7 +229,7 @@ void OneConnForm::setTopItem(bool isSelected){
         ui->leInfo_3->show();
 
         this->isSelected = true;
-    }else{
+    } else {
         resize(W_ITEM, H_ITEM);
         ui->lePassword->setText("");
         ui->wbg_3->hide();
@@ -250,21 +252,22 @@ void OneConnForm::setTopItem(bool isSelected){
     ui->btnHideConn->hide();
     ui->btnInfo->show();
 
-    if (isConnected){
-        if (this->isWaiting){
+    if (isConnected) {
+        if (this->isWaiting) {
             ui->btnDisConn->hide();
-        }else{
+        } else {
             ui->btnDisConn->show();
         }
-    }else{
+    } else {
         ui->btnDisConn->hide();
     }
 
     this->isTopItem = true;
 }
 // 点击窗口下面的item时
-void OneConnForm::setSelected(bool isSelected, bool isCurrName){
-    if(isSelected){
+void OneConnForm::setSelected(bool isSelected, bool isCurrName)
+{
+    if (isSelected) {
         resize(W_ITEM, H_ITEM_BIG);
         ui->line->move(X_LINE_BIG_EXTEND, Y_LINE_BIG_EXTEND);
         ui->wbg->hide();
@@ -277,7 +280,7 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName){
         ui->btnConnSub->show();
 
         this->isSelected = true;
-    }else{
+    } else {
         resize(W_ITEM, H_ITEM);
         ui->lePassword->setText(tr("Input Password..."));//"输入密码..."
         ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;"
@@ -293,9 +296,9 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName){
         ui->leInfo_2->hide();
         ui->leInfo_3->hide();
 
-        if (isCurrName){
+        if (isCurrName) {
             ui->btnConn->show();
-        }else{
+        } else {
             ui->btnConn->hide();
         }
         ui->btnConnSub->hide();
@@ -314,8 +317,9 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName){
     this->isTopItem = false;
 }
 // 点击连接隐藏wifi的item时
-void OneConnForm::setHideItem(bool isHideItem, bool isShowHideBtn){
-    if (isHideItem){
+void OneConnForm::setHideItem(bool isHideItem, bool isShowHideBtn)
+{
+    if (isHideItem) {
         ui->lbName->move(14, 20);
         ui->wbg->hide();
         ui->btnConn->hide();
@@ -325,24 +329,26 @@ void OneConnForm::setHideItem(bool isHideItem, bool isShowHideBtn){
         ui->btnConn->show();
     }
 
-    if (isShowHideBtn){
+    if (isShowHideBtn) {
         ui->btnHideConn->show();
     } else{
         ui->btnHideConn->hide();
     }
 }
 
-void OneConnForm::setConnedString(bool showLable, QString str, QString str1){
-    if (!showLable){
+void OneConnForm::setConnedString(bool showLable, QString str, QString str1)
+{
+    if (!showLable) {
         ui->lbConned->setText(str1);
         ui->lbConned->hide();
         ui->lbName->move(63, 18);
-    }else{
+    } else {
         ui->lbConned->setText(str);
     }
 }
 
-void OneConnForm::setName(QString name){
+void OneConnForm::setName(QString name)
+{
     ui->lbName->setText(name);
     wifiName = name;
 }
@@ -357,7 +363,8 @@ QString OneConnForm::getName()
     return ui->lbName->text();
 }
 
-void OneConnForm::setRate(QString rate){
+void OneConnForm::setRate(QString rate)
+{
     QString txt(tr("Rate"));//"速率"
     this->setToolTip("<span style=\"font-size:14px;border:none;background-color:#3593b5;color:white;\">&nbsp; " + txt + ": " + rate + " &nbsp;</span>");
     this->setToolTip(txt + ":" + rate);
@@ -365,57 +372,58 @@ void OneConnForm::setRate(QString rate){
 
 void OneConnForm::setLine(bool isShow)
 {
-    if(isShow){
+    if (isShow) {
         ui->line->show();
-    }else{
+    } else {
         ui->line->hide();
     }
 }
 
-void OneConnForm::setSignal(QString lv, QString secu){
+void OneConnForm::setSignal(QString lv, QString secu)
+{
     int signal = lv.toInt();
-    if (secu == "--" || secu == ""){
+    if (secu == "--" || secu == "") {
         hasPwd = false;
-    }else{
+    } else {
         hasPwd = true;
     }
 
-    if(signal > 75){
-        if(hasPwd){
+    if (signal > 75) {
+        if (hasPwd) {
             ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-full-pwd.png);}");
-        }else{
+        } else {
             ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-full.png);}");
         }
         signalLv = 1;
     }
-    if(signal > 55 && signal <= 75){
-        if(hasPwd){
+    if (signal > 55 && signal <= 75) {
+        if (hasPwd) {
             ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-high-pwd.png);}");
-        }else{
+        } else {
             ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-high.png);}");
         }
         signalLv = 2;
     }
-    if(signal > 35 && signal <= 55){
-        if(hasPwd){
+    if (signal > 35 && signal <= 55) {
+        if (hasPwd) {
             ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-medium-pwd.png);}");
-        }else{
+        } else {
             ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-medium.png);}");
         }
         signalLv = 3;
     }
-    if(signal > 15 && signal <= 35){
-        if(hasPwd){
+    if (signal > 15 && signal <= 35) {
+        if (hasPwd) {
             ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-low-pwd.png);}");
-        }else{
+        } else {
             ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-low.png);}");
         }
         signalLv = 4;
     }
-    if(signal <= 15){
-        if(hasPwd){
+    if (signal <= 15) {
+        if (hasPwd) {
             ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-none-pwd.png);}");
-        }else{
+        } else {
             ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-none.png);}");
         }
         signalLv = 4;
@@ -437,12 +445,13 @@ void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3)
 
 void OneConnForm::slotConnWifi()
 {
-//    mw->startLoading();
+    //mw->startLoading();
     this->startWaiting(true);
     emit sigConnWifi(ui->lbName->text());
 }
-void OneConnForm::slotConnWifiPWD(){
-//    mw->startLoading();
+void OneConnForm::slotConnWifiPWD()
+{
+    //mw->startLoading();
     this->startWaiting(true);
     emit sigConnWifiPWD(ui->lbName->text(), ui->lePassword->text());
 }
@@ -640,19 +649,19 @@ void OneConnForm::on_btnInfo_clicked()
     QStringList propList = connProp.split("|");
     QString v4method, addr, mask, gateway, dns;
     foreach (QString line, propList) {
-        if(line.startsWith("method:")){
+        if (line.startsWith("method:")) {
             v4method = line.split(":").at(1);
         }
-        if(line.startsWith("addr:")){
+        if (line.startsWith("addr:")) {
             addr = line.split(":").at(1);
         }
-        if(line.startsWith("mask:")){
+        if (line.startsWith("mask:")) {
             mask = line.split(":").at(1);
         }
-        if(line.startsWith("gateway:")){
+        if (line.startsWith("gateway:")) {
             gateway= line.split(":").at(1);
         }
-        if(line.startsWith("dns:")){
+        if (line.startsWith("dns:")) {
             dns = line.split(":").at(1);
         }
     }
@@ -666,10 +675,11 @@ void OneConnForm::on_btnInfo_clicked()
 }
 
 // Wifi连接结果，0成功 1失败 2没有配置文件
-void OneConnForm::slotConnWifiResult(int connFlag){
+void OneConnForm::slotConnWifiResult(int connFlag)
+{
     qDebug()<<"Function slotConnWifiResult receives a number: "<<connFlag;
 
-    if(connFlag == 2){
+    if (connFlag == 2) {
         mw->currSelNetName = "";
         emit selectedOneWifiForm(ui->lbName->text(), H_WIFI_ITEM_SMALL_EXTEND);
 
@@ -693,12 +703,11 @@ void OneConnForm::slotConnWifiResult(int connFlag){
         this->isSelected = true;
     }
 
-    if(connFlag == 1){
+    if (connFlag == 1) {
         // 使用配置文件连接失败，需要删除该配置文件
         QString txt(tr("Conn Wifi Failed"));//"连接 Wifi 失败"
         syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", ui->lbName->text().toUtf8().data());
 
-        //m_notify->execNotifySend(txt);
         KylinDBus kylindbus;
         kylindbus.showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
@@ -713,12 +722,13 @@ void OneConnForm::slotConnWifiResult(int connFlag){
     currentActWifiSignalLv = signalLv;
 
     this->stopWaiting();
-//    if (connFlag != 0){
-//        mw->stopLoading();
-//    }
+    //if (connFlag != 0){
+    //    mw->stopLoading();
+    //}
 }
 
-void OneConnForm::waitAnimStep(){
+void OneConnForm::waitAnimStep()
+{
     QString qpmQss = "QLabel{background-image:url(':/res/s/conning-a/";
     qpmQss.append(QString::number(this->waitPage));
     qpmQss.append(".png');}");
@@ -726,20 +736,21 @@ void OneConnForm::waitAnimStep(){
 
     this->waitPage --;
 
-    if(this->waitPage < 1){
+    if (this->waitPage < 1) {
         this->waitPage = TOTAL_PAGE;
     }
     this->countCurrentTime += FRAME_SPEED;
-    if (this->countCurrentTime >= LIMIT_TIME){
+    if (this->countCurrentTime >= LIMIT_TIME) {
         this->stopWaiting();
     }
 }
 
-void OneConnForm::startWaiting(bool isConn){
+void OneConnForm::startWaiting(bool isConn)
+{
     this->isWaiting = true;
-    if (isConn){
+    if (isConn) {
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
-    }else{
+    } else {
         ui->btnDisConn->hide();
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
     }
@@ -752,7 +763,8 @@ void OneConnForm::startWaiting(bool isConn){
     mw->setTrayLoading(true);
 }
 
-void OneConnForm::stopWaiting(){
+void OneConnForm::stopWaiting()
+{
     this->isWaiting = false;
     this->waitTimer->stop();
     ui->lbWaiting->hide();

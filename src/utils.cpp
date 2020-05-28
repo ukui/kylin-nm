@@ -33,7 +33,7 @@ int Utils::m_system(char *cmd)
     int status = 0;
     pid_t pid;
 
-    if ((pid = vfork()) <0){
+    if ((pid = vfork()) <0) {
         qDebug()<<"failed to create a subprocess by using vfork";
         syslog(LOG_ERR, "failed to create a subprocess by using vfork");
         status = -1;
@@ -84,36 +84,36 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
     //int i = 0;
     char tmp_value[128];
 
-    if((NULL == netname)||(NULL == save_rate)||(NULL == tx_rate)){
+    if((NULL == netname)||(NULL == save_rate)||(NULL == tx_rate)) {
         qDebug()<<"parameter pass to function getCurrentDownloadRates() error";
         syslog(LOG_ERR, "parameter pass to function getCurrentDownloadRates() error");
         return -1;
     }
 
-    if ( (net_dev_file=fopen("/proc/net/dev", "r")) == NULL ){ //打开文件/pro/net/dev/，从中读取流量数据
+    if ( (net_dev_file=fopen("/proc/net/dev", "r")) == NULL ) { //打开文件/pro/net/dev/，从中读取流量数据
         qDebug()<<"error occurred when try to open file /proc/net/dev/";
         syslog(LOG_ERR, "error occurred when try to open file /proc/net/dev/");
         return -1;
     }
     memset(buffer,0,sizeof(buffer));
 
-    while(fgets(buffer,sizeof(buffer),net_dev_file) != NULL){
+    while (fgets(buffer,sizeof(buffer),net_dev_file) != NULL) {
         match = strstr(buffer,netname);
 
-        if(NULL == match){
+        if (NULL == match) {
             // qDebug()<<"No eth0 keyword to find!";
             continue;
-        }else{
+        } else {
             match = match + strlen(netname) + strlen(":"); //地址偏移到冒号
             sscanf(match,"%ld ",save_rate);
             memset(tmp_value,0,sizeof(tmp_value));
             sscanf(match,"%s ",tmp_value);
             match = match + strlen(tmp_value);
-            for(size_t i=0;i<strlen(buffer);i++){
-                if(0x20 == *match){
+            for (size_t i=0;i<strlen(buffer);i++) {
+                if (0x20 == *match) {
                     match ++;
-                } else{
-                    if(8 == counter){
+                } else {
+                    if (8 == counter) {
                         sscanf(match,"%ld ",tx_rate);
                     }
                     memset(tmp_value,0,sizeof(tmp_value));
@@ -189,19 +189,6 @@ int CustomStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *opt
 
 void CustomStyle::polish(QWidget *widget)
 {
-//    if (widget) {
-//        if (widget->inherits("QTipLabel")){
-//            widget->setAttribute(Qt::WA_TranslucentBackground);
-
-//            QPainterPath path;
-//            auto rect = widget->rect();
-//            rect.adjust(0, 0, -0, -0);
-//            path.addRoundedRect(rect, 3, 3);
-
-//            widget->setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-//        }
-//    }
-
     return QProxyStyle::polish(widget);
 }
 

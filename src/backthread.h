@@ -47,7 +47,6 @@ public:
 
     IFace* execGetIface();
     QString getConnProp(QString connName);
-    bool execChkWifiExist(QString connName);
     QString execChkLanWidth(QString ethName);
     QProcess *cmdConnWifi = nullptr;
 

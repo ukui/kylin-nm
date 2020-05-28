@@ -30,7 +30,6 @@
 #include "confform.h"
 #include "backthread.h"
 #include "ksimplenm.h"
-#include "notifysend.h"
 
 #define FRAME_SPEED 150
 #define LIMIT_TIME 20*1000
@@ -82,7 +81,6 @@ public:
 
     bool isWifiConfExist(QString netName);
 
-    NotifySend *m_notify = nullptr;
     QString wifiName;
     bool isSelected;
     bool isActive;

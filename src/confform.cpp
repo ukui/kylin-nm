@@ -141,32 +141,37 @@ ConfForm::~ConfForm()
     delete ui;
 }
 
-void ConfForm::mousePressEvent(QMouseEvent *event){
-    if(event->button() == Qt::LeftButton){
+void ConfForm::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
         this->isPress = true;
         this->winPos = this->pos();
         this->dragPos = event->globalPos();
         event->accept();
     }
 }
-void ConfForm::mouseReleaseEvent(QMouseEvent *event){
+void ConfForm::mouseReleaseEvent(QMouseEvent *event)
+{
     this->isPress = false;
 }
-void ConfForm::mouseMoveEvent(QMouseEvent *event){
-    if(this->isPress){
+void ConfForm::mouseMoveEvent(QMouseEvent *event)
+{
+    if (this->isPress) {
         this->move(this->winPos - (this->dragPos - event->globalPos()));
         event->accept();
     }
 }
 
-void ConfForm::setProp(QString connName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf){
+//网络配置参数设置界面的显示内容
+void ConfForm::setProp(QString connName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf)
+{
     this->isActConf = isActConf;
     ui->leName->setText(connName);
 
-    if(v4method == "auto" || v4method == ""){
+    if (v4method == "auto" || v4method == "") {
         ui->cbType->setCurrentIndex(0);
         cbTypeChanged(0);
-    }else{
+    } else {
         ui->cbType->setCurrentIndex(1);
         cbTypeChanged(1);
     }
@@ -175,30 +180,31 @@ void ConfForm::setProp(QString connName, QString v4method, QString addr, QString
     ui->leGateway->setText(gateway);
 
     // 配置中有多个DNS，只处理前两个
-    if(dns.indexOf(",") != -1){
+    if (dns.indexOf(",") != -1) {
         QStringList dnss = dns.split(",");
         ui->leDns->setText(dnss.at(0));
         ui->leDns2->setText(dnss.at(1));
-    }else{
+    } else {
         ui->leDns->setText(dns);
         ui->leDns2->setText("");
     }
 
-    if(mask == "24"){
+    if (mask == "24") {
         ui->cbMask->setCurrentIndex(0);
-    }else if(mask == "23"){
+    } else if(mask == "23") {
         ui->cbMask->setCurrentIndex(1);
-    }else if(mask == "22"){
+    } else if(mask == "22") {
         ui->cbMask->setCurrentIndex(2);
-    }else if(mask == "16"){
+    } else if(mask == "16") {
         ui->cbMask->setCurrentIndex(3);
-    }else if(mask == "8"){
+    } else if(mask == "8") {
         ui->cbMask->setCurrentIndex(4);
-    }else{
+    } else {
         ui->cbMask->setCurrentIndex(0);
     }
 }
 
+//点击了创建新的网络的按钮
 void ConfForm::on_btnCreate_clicked()
 {
     QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' type ethernet";
@@ -206,7 +212,7 @@ void ConfForm::on_btnCreate_clicked()
     //int status = system(cmdStr.toUtf8().data());
     //if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection add con-name' in function 'on_btnCreate_clicked' failed");}
 
-    if(ui->cbType->currentIndex() == 1){
+    if (ui->cbType->currentIndex() == 1) {
         //config the ipv4 and netmask and gateway if select Manual
         this->isCreateNewNet = true;
         this->on_btnOk_clicked();
@@ -219,28 +225,29 @@ void ConfForm::on_btnCreate_clicked()
     this->hide();
 }
 
+//点击了保存更改网络设置的按钮
 void ConfForm::on_btnOk_clicked()
 {
     QString mask = "";
-    if(ui->cbMask->currentIndex() == 0){
+    if (ui->cbMask->currentIndex() == 0) {
         mask = "24";
-    }else if(ui->cbMask->currentIndex() == 1){
+    } else if(ui->cbMask->currentIndex() == 1) {
         mask = "23";
-    }else if(ui->cbMask->currentIndex() == 2){
+    } else if(ui->cbMask->currentIndex() == 2) {
         mask = "22";
-    }else if(ui->cbMask->currentIndex() == 3){
+    } else if(ui->cbMask->currentIndex() == 3) {
         mask = "16";
-    }else if(ui->cbMask->currentIndex() == 4){
+    } else if(ui->cbMask->currentIndex() == 4) {
         mask = "8";
-    }else{
+    } else {
         mask = "24";
     }
 
-    if(ui->cbType->currentIndex() == 0){
+    if (ui->cbType->currentIndex() == 0) {
         kylin_network_set_automethod(ui->leName->text().toUtf8().data());
-    }else{
+    } else {
         QString dnss = ui->leDns->text();
-        if(ui->leDns2->text() != ""){
+        if (ui->leDns2->text() != "") {
             dnss.append(",");
             dnss.append(ui->leDns2->text());
         }
@@ -255,7 +262,7 @@ void ConfForm::on_btnOk_clicked()
     kylindbus.showDesktopNotify(txt);
 
     if (!this->isCreateNewNet) {
-        if(this->isActConf == true){
+        if (this->isActConf == true) {
             // 如果是修改当前连接的网络，则修改设置后简略重连网络
             //QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + ui->leName->text() + "'";
             kylindbus.connectWiredNet(ui->leName->text()); //reconnect this wired network
@@ -271,20 +278,23 @@ void ConfForm::on_btnOk_clicked()
     this->isCreateNewNet = false;
 }
 
+//点击取消按钮
 void ConfForm::on_btnCancel_clicked()
 {
     this->hide();
 }
 
-void ConfForm::cbTypeChanged(int index){
-    if (isShowSaveBtn){
+//根据需要设置的种类(自动或手动等)显示界面内容
+void ConfForm::cbTypeChanged(int index)
+{
+    if (isShowSaveBtn) {
         ui->leName->setEnabled(false);
         ui->btnOk->show();
         ui->btnCreate->hide();
         ui->lbLeftupTitle->setText(tr("Edit Network"));
     }
 
-    if(index == 0){
+    if (index == 0) {
         ui->lineUp->hide();
         ui->lineDown->hide();
         ui->wgManual->hide();
@@ -295,7 +305,7 @@ void ConfForm::cbTypeChanged(int index){
 
         this->resize(432, 230);
     }
-    if(index == 1){
+    if (index == 1) {
         ui->lineUp->show();
         ui->lineDown->show();
         ui->wgManual->show();
@@ -306,7 +316,7 @@ void ConfForm::cbTypeChanged(int index){
 
         this->resize(432, 510);
     }
-    if(index == 3){
+    if (index == 3) {
         ui->btnOk->setStyleSheet(btnOffQss);
         ui->btnOk->setEnabled(false);
 
@@ -328,50 +338,56 @@ void ConfForm::cbTypeChanged(int index){
     }
 }
 
+//编辑网络名称
 void ConfForm::on_leName_textEdited(const QString &arg1)
 {
     this->setEnableOfBtn();
 }
 
+//编辑网络ip
 void ConfForm::on_leAddr_textEdited(const QString &arg1)
 {
     this->setEnableOfBtn();
 }
 
+//编辑网络网关
 void ConfForm::on_leGateway_textEdited(const QString &arg1)
 {
     this->setEnableOfBtn();
 }
 
+//编辑网络DNS
 void ConfForm::on_leDns_textEdited(const QString &arg1)
 {
     this->setEnableOfBtn();
 }
 
+//编辑网络备用DNS
 void ConfForm::on_leDns2_textEdited(const QString &arg1)
 {
     // this->setEnableOfBtn();
 }
 
+//设置界面按钮是否可点击
 void ConfForm::setEnableOfBtn()
 {
-    if (ui->leName->text().size() == 0 ){
+    if (ui->leName->text().size() == 0 ) {
         this->setBtnEnableFalse();
         return;
     }
 
-    if (ui->cbType->currentIndex() == 1){
-        if (!this->getTextEditState(ui->leAddr->text()) ){
+    if (ui->cbType->currentIndex() == 1) {
+        if (!this->getTextEditState(ui->leAddr->text()) ) {
             this->setBtnEnableFalse();
             return;
         }
 
-        if (!this->getTextEditState(ui->leGateway->text()) ){
+        if (!this->getTextEditState(ui->leGateway->text()) ) {
             this->setBtnEnableFalse();
             return;
         }
 
-        if (!this->getTextEditState(ui->leDns->text()) ){
+        if (!this->getTextEditState(ui->leDns->text()) ) {
             this->setBtnEnableFalse();
             return;
         }
@@ -384,6 +400,7 @@ void ConfForm::setEnableOfBtn()
     ui->btnCreate->setEnabled(true);
 }
 
+//文本的输入要符合ip的格式要求
 bool ConfForm::getTextEditState(QString text)
 {
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
@@ -395,6 +412,7 @@ bool ConfForm::getTextEditState(QString text)
     return match;
 }
 
+//设置创建或保存按钮不可点击
 void ConfForm::setBtnEnableFalse()
 {
     ui->btnOk->setStyleSheet(btnOffQss);

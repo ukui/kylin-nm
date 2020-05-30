@@ -476,25 +476,7 @@ void OneConnForm::on_btnConnSub_clicked()
 {
     syslog(LOG_DEBUG, "A button named on_btnConnSub about wifi net is clicked.");
     qDebug()<<"A button named on_btnConnSub about wifi net is clicked.";
-
-    if (ui->lbConned->text() == "--" || ui->lbConned->text() == " ") {
-        if (!isWifiConfExist(ui->lbName->text())) {
-            on_btnConnPWD_clicked();
-            return;
-        }
-    }
-
-    mw->is_stop_check_net_state = 1;
-    QThread *t = new QThread();
-    BackThread *bt = new BackThread();
-    bt->moveToThread(t);
-    connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
-    connect(t, SIGNAL(started()), this, SLOT(slotConnWifi()));
-    connect(this, SIGNAL(sigConnWifi(QString)), bt, SLOT(execConnWifi(QString)));
-    connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
-    connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
-    connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
-    t->start();
+    toConnectWirelessNetwork();
 }
 
 //无需密码的wifi连接
@@ -502,9 +484,14 @@ void OneConnForm::on_btnConn_clicked()
 {
     syslog(LOG_DEBUG, "A button named btnConn about wifi net is clicked.");
     qDebug()<<"A button named btnConn about wifi net is clicked.";
+    toConnectWirelessNetwork();
+}
 
+void OneConnForm::toConnectWirelessNetwork()
+{
     if (ui->lbConned->text() == "--" || ui->lbConned->text() == " ") {
         if (!isWifiConfExist(ui->lbName->text())) {
+            //没有配置文件，使用有密码的wifi连接
             on_btnConnPWD_clicked();
             return;
         }
@@ -574,19 +561,11 @@ bool OneConnForm::isWifiConfExist(QString netName)
 
         for(QString key : map.keys() ){
             QMap<QString,QVariant> innerMap = map.value(key);
-            if (key == "connection"){
-                for (QString inner_key : innerMap.keys()){
+            if (key == "connection") {
+                for (QString inner_key : innerMap.keys()) {
                     if (inner_key == "id"){
-                        if (netName == innerMap.value(inner_key).toString()){
+                        if (netName == innerMap.value(inner_key).toString()) {
                             return true;
-
-                            //for (QString subkey : map.keys()){
-                            //    QMap<QString,QVariant> subMap = map.value(subkey);
-                            //    if (subkey == "802-11-wireless"){
-                            //        dbusWifiMac = subMap.value("seen-bssids").toString();
-                            //    }
-                            //} //end for (QString subkey : map.keys())
-
                         }
                     }
                 }
@@ -737,11 +716,12 @@ void OneConnForm::waitAnimStep()
     this->waitPage --;
 
     if (this->waitPage < 1) {
-        this->waitPage = TOTAL_PAGE;
+        this->waitPage = TOTAL_PAGE; //循环播放8张图片
     }
     this->countCurrentTime += FRAME_SPEED;
     if (this->countCurrentTime >= LIMIT_TIME) {
-        this->stopWaiting();
+        this->stopWaiting(); //动画超出时间限制，强制停止动画
+        mw->is_stop_check_net_state = 0;
     }
 }
 
@@ -755,7 +735,7 @@ void OneConnForm::startWaiting(bool isConn)
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
     }
     this->countCurrentTime = 0;
-    this->waitPage = TOTAL_PAGE;
+    this->waitPage = TOTAL_PAGE; //总共有8张图片
     this->waitTimer->start(FRAME_SPEED);
     ui->lbWaiting->show();
     ui->lbWaitingIcon->show();

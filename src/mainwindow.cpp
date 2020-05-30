@@ -54,13 +54,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
     this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
-    //this->setStyleSheet("QToolTip{background:rgba(26,26,26,0.7);"
-    //                    "font: 14px;"
-    //                    "color:rgba(255,255,255,1);"
-    //                    "border-radius: 3px;"
-    //                    "border:1px solid rgba(255,255,255,0.2);"
-    //                    "padding: 0px 4px;"
-    //                    "outline:none;}");
 
     ui->centralWidget->setStyleSheet("#centralWidget{border:none;border-radius:6px;background:rgba(19,19,20,0.7);}");
 
@@ -86,8 +79,9 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon->show();
 
     objKyDBus = new KylinDBus(this);
+    objKyDBus->initConnectionInfo();
+
     objNetSpeed = new NetworkSpeed();
-    //m_notify = new NotifySend();
 
     this->confForm = new ConfForm();
 
@@ -768,6 +762,7 @@ void MainWindow::stopLoading()
 void MainWindow::on_checkOverTime()
 {
     this->stopLoading(); //超时停止等待动画
+    is_stop_check_net_state = 0;
 }
 
 void MainWindow::getActiveInfo()
@@ -846,14 +841,24 @@ void MainWindow::getActiveInfo()
 //网线插拔处理,由kylin-dbus-interface.cpp调用
 void MainWindow::onPhysicalCarrierChanged(bool flag)
 {
-    is_stop_check_net_state = 1;
     this->startLoading();
     if (flag) {
+        is_stop_check_net_state = 1;
+        qDebug()<<"插入了有线网卡";
         syslog(LOG_DEBUG,"wired physical cable is already plug in");
         wiredCableUpTimer->start(2000);
     } else {
+        qDebug()<<"拔出了有线网卡";
         syslog(LOG_DEBUG,"wired physical cable is already plug out");
-        wiredCableDownTimer->start(8000);
+
+        BackThread *bt = new BackThread();
+        IFace *iface = bt->execGetIface();
+        if (iface->lstate != 0) {
+            is_stop_check_net_state = 1;
+            wiredCableDownTimer->start(2000);
+        }
+        delete iface;
+        bt->deleteLater();
     }
 }
 
@@ -2219,11 +2224,11 @@ void MainWindow::disWifiDone()
 }
 void MainWindow::disWifiStateKeep()
 {
-    if(this->is_btnNetList_clicked == 1) {
+    if (this->is_btnNetList_clicked == 1) {
         ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
         ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
     }
-    if(this->is_btnWifiList_clicked== 1) {
+    if (this->is_btnWifiList_clicked== 1) {
         disWifiDoneChangeUI();
 
         // this->stopLoading();
@@ -2284,11 +2289,13 @@ void MainWindow::onExternalConnectionChange(QString type)
 {
     if (!is_stop_check_net_state) {
         if (type == "802-3-ethernet" || type == "ethernet") {
-            //QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
+            qDebug()<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
         }
 
         if (type == "802-11-wireless" || type == "wifi") {
-            //QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
+            qDebug()<<"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+            QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
         }
     }
 }
@@ -2301,6 +2308,11 @@ void MainWindow::onExternalLanChange()
 void MainWindow::onExternalWifiChange()
 {
     on_btnWifiList_clicked();
+}
+
+//终止当前与nmcli有关的进程
+void MainWindow::toTerminateProcess()
+{
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -306,17 +306,7 @@ void OneLancForm::on_btnConn_clicked()
 {
     syslog(LOG_DEBUG, "A button named btnConn about lan net is clicked.");
     qDebug()<<"A button named btnConn about lan net is clicked.";
-
-    mw->is_stop_check_net_state = 1;
-    QThread *t = new QThread();
-    BackThread *bt = new BackThread();
-    bt->moveToThread(t);
-    connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
-    connect(t, SIGNAL(started()), this, SLOT(slotConnLan()));
-    connect(this, SIGNAL(sigConnLan(QString)), bt, SLOT(execConnLan(QString)));
-    connect(bt, SIGNAL(connDone(int)), mw, SLOT(connLanDone(int)));
-    connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
-    t->start();
+    toConnectWiredNetwork();
 }
 
 //点击了item被扩展中的连接网络按钮，执行该函数
@@ -324,7 +314,11 @@ void OneLancForm::on_btnConnSub_clicked()
 {
     syslog(LOG_DEBUG, "A button named btnConnSub about lan net is clicked.");
     qDebug()<<"A button named btnConnSub about lan net is clicked.";
+    toConnectWiredNetwork();
+}
 
+void OneLancForm::toConnectWiredNetwork()
+{
     mw->is_stop_check_net_state = 1;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
@@ -393,12 +387,13 @@ void OneLancForm::waitAnimStep()
     this->waitPage --;
 
     if (this->waitPage < 1) {
-        this->waitPage = TOTAL_PAGE;
+        this->waitPage = TOTAL_PAGE; //循环播放8张图片
     }
 
     this->countCurrentTime += FRAME_SPEED;
     if (this->countCurrentTime >= LIMIT_TIME) {
-        this->stopWaiting();
+        this->stopWaiting(); //动画超出时间限制，强制停止动画
+        mw->is_stop_check_net_state = 0;
     }
 }
 
@@ -411,7 +406,7 @@ void OneLancForm::startWaiting(bool isConn)
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
     }
     this->countCurrentTime = 0;
-    this->waitPage = TOTAL_PAGE;
+    this->waitPage = TOTAL_PAGE; //总共有8张图片
     this->waitTimer->start(FRAME_SPEED);
     ui->lbWaiting->show();
     ui->lbWaitingIcon->show();

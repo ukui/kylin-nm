@@ -131,6 +131,8 @@ public:
     void initTimer();
     void checkIsWirelessDeviceOn();
 
+    void toTerminateProcess();
+
     QIcon iconLanOnline, iconLanOffline;
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
     QIcon iconConnecting;

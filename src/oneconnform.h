@@ -94,7 +94,9 @@ protected:
 
 private slots:
     void on_btnConn_clicked();
+    void on_btnConnSub_clicked();
     void on_btnDisConn_clicked();
+    void toConnectWirelessNetwork();
 
     void slotConnWifi();
     void slotConnWifiPWD();
@@ -107,8 +109,6 @@ private slots:
     void on_checkBoxPwd_stateChanged(int arg1);
 
     void on_lePassword_textEdited(const QString &arg1);
-
-    void on_btnConnSub_clicked();
 
     void waitAnimStep();
     void startWaiting(bool isConn);

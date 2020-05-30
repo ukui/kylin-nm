@@ -361,7 +361,7 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
     }
 }
 
-//新增了一个网络，伴随着减少了一个网络配置文件
+//减少了一个网络，伴随着减少了一个网络配置文件
 void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
 {
     syslog(LOG_DEBUG, "An old network was removed from configure directory.");
@@ -388,12 +388,12 @@ void KylinDBus::initConnectionInfo()
     QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
 
     QDBusObjectPath objPath;
-    //qDebug()<<"             ";
+    // qDebug()<<"             ";
     dbusArgs.beginArray();
     while (!dbusArgs.atEnd()) {
         dbusArgs >> objPath;
         oldPaths.append(objPath);
-        //qDebug() <<"debug: *****path is: "<< objPath.path();
+        // qDebug() <<"debug: *****path is: "<< objPath.path();
 
         QDBusInterface interface( "org.freedesktop.NetworkManager",
                                   objPath.path(),
@@ -401,85 +401,94 @@ void KylinDBus::initConnectionInfo()
                                   QDBusConnection::systemBus() );
 
         QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
-        //qDebug()<<"debug: *****connection type is: "<<reply.value().toString();
+        // qDebug()<<"debug: *****connection type is: "<<reply.value().toString();
         oldPathInfo.append(reply.value().toString());
     }
     dbusArgs.endArray();
-    //qDebug()<<"             ";
+    // qDebug()<<"             ";
 }
 
 //网络连接变化时，如有新增或减少的网络，发信号通知更新主界面
 void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 {
-//    for(QString keyStr : qvm.keys()) {
-//        if (keyStr == "ActiveConnections") {
-//            const QDBusArgument &dbusArg = qvm.value(keyStr).value<QDBusArgument>();
-//            QList<QDBusObjectPath> newPaths;
-//            dbusArg >> newPaths;
-//            QStringList newPathInfo;
-//            foreach (QDBusObjectPath objPath, newPaths) {
-//                qDebug()<<"dbug: bbbbb  "<<objPath.path();
+    for(QString keyStr : qvm.keys()) {
+        if (keyStr == "ActiveConnections") {
+            // 第一步 获取当前已连接网络的对象路径和对应的网络类型(ethernet or wifi)
+            const QDBusArgument &dbusArg = qvm.value(keyStr).value<QDBusArgument>();
+            QList<QDBusObjectPath> newPaths;
+            dbusArg >> newPaths;
+            QStringList newPathInfo;
+            qDebug()<<"             ";
+            foreach (QDBusObjectPath objPath, newPaths) {
+                qDebug()<<"dbug: bbbbb  "<<objPath.path();
 
-//                QDBusInterface interface( "org.freedesktop.NetworkManager",
-//                                          objPath.path(),
-//                                          "org.freedesktop.DBus.Properties",
-//                                          QDBusConnection::systemBus() );
+                QDBusInterface interface( "org.freedesktop.NetworkManager",
+                                          objPath.path(),
+                                          "org.freedesktop.DBus.Properties",
+                                          QDBusConnection::systemBus() );
 
-//                QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
-//                qDebug()<<"dbug: ccccc "<<reply.value().toString();
-//                newPathInfo.append(reply.value().toString());
-//            }
+                QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
+                qDebug()<<"dbug: ccccc "<<reply.value().toString();
+                newPathInfo.append(reply.value().toString());
+            }
+            qDebug()<<"             ";
 
-//            // 第一步 处理相比于上次减少的网络连接
-//            for (int i=0; i<oldPaths.size(); i++) {
-//                QDBusObjectPath old_path = oldPaths.at(i);
-//                if (newPaths.size() == 0) {
-//                    mw->onExternalConnectionChange(oldPathInfo.at(i));
-//                } else {
-//                    for (int j=0; j<newPaths.size(); j++) {
-//                        QDBusObjectPath new_path = newPaths.at(j);
-//                        if (new_path == old_path) {
-//                            break; //stop if new_path also in oldPaths
-//                        }
+            // 第二步 同上一次获取的已连接网络相比较，处理相比于上次减少的网络连接
+            for (int i=0; i<oldPaths.size(); i++) {
+                QDBusObjectPath old_path = oldPaths.at(i);
+                if (newPaths.size() == 0) {
+                    qDebug()<<"debug: 已连接网络个数由1减少到0";
+                    mw->onExternalConnectionChange(oldPathInfo.at(i));
+                } else {
+                    for (int j=0; j<newPaths.size(); j++) {
+                        QDBusObjectPath new_path = newPaths.at(j);
+                        if (new_path == old_path) {
+                            break; //stop if new_path also in oldPaths
+                        }
 
-//                        if (j == newPaths.size()-1) {
-//                            mw->onExternalConnectionChange(oldPathInfo.at(i));
-//                        }
-//                    }
-//                }
-//            }
+                        if (j == newPaths.size()-1) {
+                            if (oldPathInfo.size() == oldPaths.size()) {
+                                qDebug()<<"debug: 已连接网络个数由3减少到2，或由2减少到1";
+                                mw->onExternalConnectionChange(oldPathInfo.at(i));
+                            }
+                        }
+                    }
+                }
+            }
 
-//            // 第二步 处理相比于上次增加的网络连接
-//            for (int i=0; i<newPaths.size(); i++) {
-//                QDBusObjectPath new_path = newPaths.at(i);
-//                if (oldPaths.size() == 0) {
-//                    mw->onExternalConnectionChange(newPathInfo.at(i));
-//                } else {
-//                    for (int j=0; j<oldPaths.size(); j++) {
-//                        QDBusObjectPath old_path = oldPaths.at(j);
-//                        if (new_path == old_path) {
-//                            break; //stop if new_path also in oldPaths
-//                        }
+            // 第三步 同上一次获取的已连接网络相比较，处理相比于上次增加的网络连接
+            for (int i=0; i<newPaths.size(); i++) {
+                QDBusObjectPath new_path = newPaths.at(i);
+                if (oldPaths.size() == 0) {
+                    qDebug()<<"debug: 已连接网络个数由0增加到1";
+                    mw->onExternalConnectionChange(newPathInfo.at(i));
+                } else {
+                    for (int j=0; j<oldPaths.size(); j++) {
+                        QDBusObjectPath old_path = oldPaths.at(j);
+                        if (new_path == old_path) {
+                            break; //stop if new_path also in oldPaths
+                        }
 
-//                        if (j == oldPaths.size()-1) {
-//                            mw->onExternalConnectionChange(newPathInfo.at(i));
-//                        }
-//                    }
-//                }
-//            }
+                        if (j == oldPaths.size()-1) {
+                            qDebug()<<"debug: 已连接网络个数由1增加到2，或2增加到3";
+                            mw->onExternalConnectionChange(newPathInfo.at(i));
+                        }
+                    }
+                }
+            }
 
-//            bool isChangeOldPathInfo = true;
-//            for (int k=0; k<newPathInfo.size(); k++) {
-//                if (newPathInfo.at(k) == "") {
-//                    isChangeOldPathInfo = false;
-//                }
-//            }
-//            if (isChangeOldPathInfo) {
-//                oldPathInfo = newPathInfo;
-//            }
-//            oldPaths = newPaths;
-//        }
-//    }
+            bool isChangeOldPathInfo = true;
+            for (int k=0; k<newPathInfo.size(); k++) {
+                if (newPathInfo.at(k) == "") {
+                    isChangeOldPathInfo = false;
+                }
+            }
+            if (isChangeOldPathInfo) {
+                oldPathInfo = newPathInfo;
+            }
+            oldPaths = newPaths;
+        }
+    }
 }
 
 //有线网属性变化时，执行该函数。由于可能在短时间收到几条相同属性变化信息，所以在短时间内，执行一次

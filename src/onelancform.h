@@ -81,6 +81,7 @@ private slots:
     void on_btnConn_clicked();
     void on_btnConnSub_clicked();
     void on_btnDisConn_clicked();
+    void toConnectWiredNetwork();
 
     void slotConnLan();
 

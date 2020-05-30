@@ -385,14 +385,21 @@ void OneLancForm::waitAnimStep()
     ui->lbWaitingIcon->setStyleSheet(qpmQss);
 
     this->waitPage --;
-
     if (this->waitPage < 1) {
         this->waitPage = TOTAL_PAGE; //循环播放8张图片
     }
 
     this->countCurrentTime += FRAME_SPEED;
     if (this->countCurrentTime >= LIMIT_TIME) {
+        QString cmd = "kill -9 $(pidof nmcli)"; //杀掉当前正在进行的有关nmcli命令的进程
+        int status = system(cmd.toUtf8().data());
+        if (status != 0) {
+            qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'waitAnimStep' failed";
+            syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'waitAnimStep' failed");
+        }
+
         this->stopWaiting(); //动画超出时间限制，强制停止动画
+
         mw->is_stop_check_net_state = 0;
     }
 }

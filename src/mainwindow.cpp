@@ -113,6 +113,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    trayIcon->deleteLater();
     trayIconMenu->deleteLater();
     delete ui;
 }
@@ -527,7 +528,7 @@ void MainWindow::initTimer()
 
 void MainWindow::createTrayIcon()
 {
-    trayIcon = new QSystemTrayIcon(this);
+    trayIcon = new QSystemTrayIcon();
     trayIcon->setToolTip(QString(tr("kylin-nm")));
 
     trayIconMenu = new QMenu();
@@ -761,6 +762,12 @@ void MainWindow::stopLoading()
 
 void MainWindow::on_checkOverTime()
 {
+    QString cmd = "kill -9 $(pidof nmcli)"; //杀掉当前正在进行的有关nmcli命令的进程
+    int status = system(cmd.toUtf8().data());
+    if (status != 0) {
+        qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_checkOverTime' failed";
+        syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_checkOverTime' failed");
+    }
     this->stopLoading(); //超时停止等待动画
     is_stop_check_net_state = 0;
 }
@@ -2289,12 +2296,12 @@ void MainWindow::onExternalConnectionChange(QString type)
 {
     if (!is_stop_check_net_state) {
         if (type == "802-3-ethernet" || type == "ethernet") {
-            qDebug()<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            qDebug()<<"debug: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
         }
 
         if (type == "802-11-wireless" || type == "wifi") {
-            qDebug()<<"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+            qDebug()<<"debug: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
             QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
         }
     }
@@ -2307,7 +2314,12 @@ void MainWindow::onExternalLanChange()
 
 void MainWindow::onExternalWifiChange()
 {
-    on_btnWifiList_clicked();
+    if (is_connect_wifi_failed) {
+        qDebug()<<"debug: connect wifi failed just now, no need to refresh wifi interface";
+        is_connect_wifi_failed = 0;
+    } else {
+        on_btnWifiList_clicked();
+    }
 }
 
 //终止当前与nmcli有关的进程
@@ -2460,6 +2472,7 @@ void MainWindow::connWifiDone(int connFlag)
         //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'connWifiDone' failed");}
     } else if (connFlag == 1) {
         is_stop_check_net_state = 0;
+        is_connect_wifi_failed = 1;
 
         QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
         objKyDBus->showDesktopNotify(txt);

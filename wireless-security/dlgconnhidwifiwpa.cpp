@@ -26,6 +26,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+#include <QDir>
+
 DlgConnHidWifiWpa::DlgConnHidWifiWpa(int type, MainWindow *mainWindow, QWidget *parent) :
     isUsed(type),
     QDialog(parent),
@@ -80,12 +82,13 @@ DlgConnHidWifiWpa::DlgConnHidWifiWpa(int type, MainWindow *mainWindow, QWidget *
     ui->btnConnect->setText(tr("Connect")); //连接
 
     ui->cbxConn->addItem(tr("C_reate…")); //新建...
-    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
-    QString localPath = homePath.at(0) + "/.config/kylin-nm-connshow";
-    QString cmd = "nmcli connection show> " + localPath;
+    QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
+    QString cmd = "nmcli connection show > " + tmpPath;
     int status = system(cmd.toUtf8().data());
-    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgConnHidWifiWpa' failed");}
-    QFile file(localPath);
+    if (status != 0) {
+        syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgConnHidWifiWpa' failed");
+    }
+    QFile file(tmpPath);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         qDebug()<<"Can't open the file!";
     }
@@ -197,7 +200,8 @@ void DlgConnHidWifiWpa::changeDialog()
 }
 
 //同一 Wi-Fi安全类型的窗口变换
-void DlgConnHidWifiWpa::changeWindow(){
+void DlgConnHidWifiWpa::changeWindow()
+{
     if (ui->cbxConn->currentIndex() == 0){
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
@@ -205,13 +209,14 @@ void DlgConnHidWifiWpa::changeWindow(){
         connHidWifi->show();
         connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     }else if (ui->cbxConn->currentIndex() >= 1){
-        QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
-        QString localPath = homePath.at(0) + "/.config/kylin-nm-connshow";
+        QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
+        QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " > " + tmpPath;
 
-        QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " > " + localPath;
         int status = system(currStr.toUtf8().data());
-        if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");}
-        QFile file(localPath);
+        if(status != 0){
+            syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");
+        }
+        QFile file(tmpPath);
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
             qDebug()<<"Can't open the file!";
         }
@@ -260,17 +265,16 @@ void DlgConnHidWifiWpa::on_btnConnect_clicked()
         int x = 0;
         do{
             sleep(1);
+            QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
+            QString cmd = "nmcli device wifi connect " + wifiName + " password " + wifiPassword + " hidden yes > " + tmpPath;
 
-            QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
-            QString localPath = homePath.at(0) + "/.config/kylin-nm-btoutput";
-
-            QString cmd = "nmcli device wifi connect " + wifiName + " password " + wifiPassword + " hidden yes > " + localPath;
             int status = system(cmd.toUtf8().data());
-            if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");}
+            if (status != 0) {
+                syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");
+            }
 
-            QFile file(localPath);
-            if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-            {
+            QFile file(tmpPath);
+            if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 qDebug()<<"Can't open the file!"<<endl;
             }
             QString text = file.readAll();
@@ -339,8 +343,8 @@ void DlgConnHidWifiWpa::emitSignal()
 void DlgConnHidWifiWpa::paintEvent(QPaintEvent *event)
 {
     QStyleOption opt;
-       opt.init(this);
-       QPainter p(this);
-       style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-       QWidget::paintEvent(event);
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+    QWidget::paintEvent(event);
 }

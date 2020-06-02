@@ -380,6 +380,7 @@ void KylinDBus::initConnectionInfo()
                               "org.freedesktop.DBus.Properties",
                               QDBusConnection::systemBus() );
 
+    //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
@@ -406,12 +407,19 @@ void KylinDBus::initConnectionInfo()
     }
     dbusArgs.endArray();
     // qDebug()<<"             ";
+
+
+    //获取当前wifi是否连接
+    QDBusReply<QVariant> m_result = interface.call("Get", "org.freedesktop.NetworkManager", "WirelessEnabled");
+    qDebug()<<"debug: *****初始的无线网络开关状态是: "<<m_result.value().toBool();
+    oldWifiSwitchState = m_result.value().toBool();
 }
 
 //网络连接变化时，如有新增或减少的网络，发信号通知更新主界面
 void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 {
     for(QString keyStr : qvm.keys()) {
+        //有关已连接网络变化的信号
         if (keyStr == "ActiveConnections") {
             // 第一步 获取当前已连接网络的对象路径和对应的网络类型(ethernet or wifi)
             const QDBusArgument &dbusArg = qvm.value(keyStr).value<QDBusArgument>();
@@ -487,6 +495,21 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
                 oldPathInfo = newPathInfo;
             }
             oldPaths = newPaths;
+        }
+
+        //收到wifi开关打开或关闭的信号后，进行处理
+        if (keyStr == "WirelessEnabled") {
+            bool newWifiSwitchState = qvm.value("WirelessEnabled").toBool();
+            if (oldWifiSwitchState == false && newWifiSwitchState == true) {
+                qDebug()<<"debug: wifi开关已经打开";
+                mw->onExternalWifiSwitchChange(true);
+            }
+            if (oldWifiSwitchState == true && newWifiSwitchState == false) {
+                qDebug()<<"debug: wifi开关已经关闭";
+                mw->onExternalWifiSwitchChange(false);
+            }
+
+            oldWifiSwitchState = newWifiSwitchState; //更新状态用于下一次
         }
     }
 }

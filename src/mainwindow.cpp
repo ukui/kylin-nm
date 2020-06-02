@@ -1262,6 +1262,9 @@ void MainWindow::on_btnWifiList_clicked()
 
         this->lanListWidget->hide();
         this->wifiListWidget->show();
+
+        getActiveInfo();
+        is_stop_check_net_state = 0;
     }
 
     this->scrollAreal->hide();
@@ -2286,6 +2289,7 @@ void MainWindow::on_btnHotspotState()
 void MainWindow::onExternalConnectionChange(QString type)
 {
     if (!is_stop_check_net_state) {
+        is_stop_check_net_state = 1;
         if (type == "802-3-ethernet" || type == "ethernet") {
             qDebug()<<"debug: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
@@ -2313,10 +2317,21 @@ void MainWindow::onExternalWifiChange()
     }
 }
 
-//终止当前与nmcli有关的进程
-void MainWindow::toTerminateProcess()
+//处理外界对wifi的打开与关闭
+void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
 {
+    if (!is_stop_check_net_state) {
+        is_stop_check_net_state = 1;
+        if (wifiEnabled) {
+            qDebug()<<"debug: ccccccccccccccccccccccccccccccccc";
+            QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
+        } else {
+            qDebug()<<"debug: ddddddddddddddddddddddddddddddddd";
+            QTimer::singleShot(3*1000, this, SLOT(onExternalWifiChange() ));
+        }
+    }
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //循环处理部分，目前仅on_checkWifiListChanged 与on_setNetSpeed两个函数在运行

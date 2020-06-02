@@ -76,8 +76,9 @@ private:
     int a = 0;
     bool isRunningFunction = false;
     QTimer *time = nullptr;
-    QStringList oldPathInfo;
-    QList<QDBusObjectPath> oldPaths;
+    QList<QDBusObjectPath> oldPaths; //已连接网络的对象路径列表
+    QStringList oldPathInfo; //某个已连接网络对象路径对应的网络类型(ethernet or wifi)
+    bool oldWifiSwitchState; //上一次获取到的wifi开关状态
 
     QGSettings *m_tastbar_gsettings = nullptr;
     QGSettings *m_gsettings = nullptr;

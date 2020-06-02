@@ -131,8 +131,6 @@ public:
     void initTimer();
     void checkIsWirelessDeviceOn();
 
-    void toTerminateProcess();
-
     QIcon iconLanOnline, iconLanOffline;
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
     QIcon iconConnecting;
@@ -169,6 +167,7 @@ public slots:
     void onExternalConnectionChange(QString type);
     void onExternalLanChange();
     void onExternalWifiChange();
+    void onExternalWifiSwitchChange(bool wifiEnabled);
 
     void oneLanFormSelected(QString lanName, QString uniqueName);
     void oneTopLanFormSelected(QString lanName, QString uniqueName);

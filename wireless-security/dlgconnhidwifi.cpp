@@ -87,7 +87,7 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
     QStringList txtLine = txt.split("\n");
     file.close();
     foreach (QString line, txtLine) {
-        if(line.indexOf("wifi") != -1){
+        if (line.indexOf("wifi") != -1 || line.indexOf("802-11-wireless") != -1) {
             QStringList subLine = line.split(" ");
             ui->cbxConn->addItem(subLine[0]);
         }

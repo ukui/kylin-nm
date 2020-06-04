@@ -644,13 +644,15 @@ void OneConnForm::on_btnInfo_clicked()
             dns = line.split(":").at(1);
         }
     }
-    // qDebug()<<v4method<<addr<<mask<<gateway<<dns;
+    // qDebug()<<"v4method:"<<v4method<<" addr:"<<addr<<" mask:"<<mask<<" gateway:"<<gateway<<" dns:"<<dns;
 
     cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive);
 
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();
     cf->raise();
+
+    bt->deleteLater();
 }
 
 // Wifi连接结果，0成功 1失败 2没有配置文件

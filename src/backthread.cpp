@@ -339,9 +339,10 @@ QString BackThread::getConnProp(QString connName)
             QString v4method = line.mid(12).trimmed();
             rtn += "method:" + v4method + "|";
         }
+
         if (line.startsWith("ipv4.addresses:")) {
             QString value = line.mid(15).trimmed();
-            if (value == "--") {
+            if (value == "--" || value == "") {
                 rtn += "addr:|mask:|";
             } else {
                 QString addr = value.split("/").at(0);
@@ -350,17 +351,19 @@ QString BackThread::getConnProp(QString connName)
                 rtn += "mask:" + mask + "|";
             }
         }
+
         if (line.startsWith("ipv4.gateway:")) {
             QString value = line.mid(13).trimmed();
-            if (value == "--") {
+            if (value == "--" || value == "") {
                 rtn += "gateway:|";
             } else {
                 rtn += "gateway:" + value + "|";
             }
         }
+
         if (line.startsWith("ipv4.dns:")) {
             QString value = line.mid(9).trimmed();
-            if (value == "--") {
+            if (value == "--" || value == "") {
                 rtn += "dns:|";
             } else {
                 rtn += "dns:" + value + "|";

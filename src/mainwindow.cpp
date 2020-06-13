@@ -597,19 +597,18 @@ void MainWindow::setTrayLoading(bool isLoading)
 
 void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    //    switch (reason) {
-    //    case QSystemTrayIcon::Trigger:
-    //    case QSystemTrayIcon::DoubleClick:
-    //    case QSystemTrayIcon::MiddleClick:
-    //        break;
-    //    }
-
     switch (reason) {
     case QSystemTrayIcon::Trigger:
     case QSystemTrayIcon::MiddleClick:
         handleIconClicked();
         if (this->isHidden()) {
             this->showNormal();
+            if (is_btnNetList_clicked == 1) {
+                onBtnNetListClicked(0);
+            }
+            if (is_btnWifiList_clicked == 1) {
+                on_btnWifiList_clicked();
+            }
         } else {
             this->hide();
         }
@@ -811,7 +810,9 @@ void MainWindow::getActiveInfo()
     }
 
     // 设置图标
-    if (actWifiName != "--") {
+    if (actLanName != "--") {
+        setTrayIcon(iconLanOnline);
+    } else if (actWifiName != "--") {
         switch (currentActWifiSignalLv) {
         case 1:
             setTrayIcon(iconWifiFull);
@@ -830,11 +831,7 @@ void MainWindow::getActiveInfo()
             break;
         }
     } else {
-        if (actLanName != "--") {
-            setTrayIcon(iconLanOnline);
-        } else {
-            setTrayIcon(iconLanOffline);
-        }
+        setTrayIcon(iconLanOffline);
     }
 }
 

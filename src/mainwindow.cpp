@@ -606,9 +606,20 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
             if (is_btnNetList_clicked == 1) {
                 onBtnNetListClicked(0);
             }
+            is_stop_check_net_state = 1;
             if (is_btnWifiList_clicked == 1) {
-                on_btnWifiList_clicked();
+                BackThread *loop_bt = new BackThread();
+                IFace *loop_iface = loop_bt->execGetIface();
+
+                if (loop_iface->wstate != 2) {
+                    is_update_wifi_list = 1;
+                    this->ksnm->execGetWifiList(); //更新wifi列表
+                }
+
+                delete loop_iface;
+                loop_bt->deleteLater();
             }
+            is_stop_check_net_state = 0;
         } else {
             this->hide();
         }

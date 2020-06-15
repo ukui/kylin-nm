@@ -75,26 +75,31 @@
     </message>
     <message>
         <location filename="../src/confform.cpp" line="216"/>
+        <source>Can not create new wired network for without wired card</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/confform.cpp" line="232"/>
         <source>New network already created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="256"/>
+        <location filename="../src/confform.cpp" line="272"/>
         <source>New network settings already finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="274"/>
+        <location filename="../src/confform.cpp" line="281"/>
         <source>New settings already effective</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="294"/>
+        <location filename="../src/confform.cpp" line="305"/>
         <source>Edit Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="329"/>
+        <location filename="../src/confform.cpp" line="340"/>
         <source>Add Wired Network</source>
         <translation type="unfinished"></translation>
     </message>
@@ -107,37 +112,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="69"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="70"/>
         <source>Add Hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="70"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="71"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="71"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="72"/>
         <source>Wi-Fi name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="72"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="73"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="73"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="74"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="74"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="75"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="76"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="77"/>
         <source>C_reate…</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1102,52 +1107,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="74"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="76"/>
         <source>Add Hidden Wi-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="75"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="77"/>
         <source>Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="76"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="78"/>
         <source>Wi-Fi name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="77"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="79"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="78"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="80"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="79"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="81"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="80"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="82"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="82"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="84"/>
         <source>C_reate…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="104"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="107"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="105"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="108"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1203,7 +1208,7 @@
 <context>
     <name>KylinDBus</name>
     <message>
-        <location filename="../src/kylin-dbus-interface.cpp" line="490"/>
+        <location filename="../src/kylin-dbus-interface.cpp" line="617"/>
         <source>kylin network applet desktop message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1212,147 +1217,139 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/mainwindow.ui" line="14"/>
-        <location filename="../src/mainwindow.cpp" line="574"/>
+        <location filename="../src/mainwindow.cpp" line="532"/>
         <source>kylin-nm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="384"/>
-        <location filename="../src/mainwindow.cpp" line="580"/>
+        <location filename="../src/mainwindow.cpp" line="379"/>
+        <location filename="../src/mainwindow.cpp" line="537"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="343"/>
-        <location filename="../src/mainwindow.cpp" line="1237"/>
+        <location filename="../src/mainwindow.cpp" line="338"/>
+        <location filename="../src/mainwindow.cpp" line="1163"/>
         <source>Ethernet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="239"/>
+        <location filename="../src/mainwindow.cpp" line="234"/>
         <source>New LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="262"/>
+        <location filename="../src/mainwindow.cpp" line="257"/>
         <source>Hide WiFi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="349"/>
-        <location filename="../src/mainwindow.cpp" line="1350"/>
+        <location filename="../src/mainwindow.cpp" line="344"/>
+        <location filename="../src/mainwindow.cpp" line="1222"/>
         <source>Wifi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="364"/>
+        <location filename="../src/mainwindow.cpp" line="359"/>
         <source>HotSpot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="374"/>
+        <location filename="../src/mainwindow.cpp" line="369"/>
         <source>FlyMode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1389"/>
-        <location filename="../src/mainwindow.cpp" line="1466"/>
-        <location filename="../src/mainwindow.cpp" line="1605"/>
-        <location filename="../src/mainwindow.cpp" line="2262"/>
-        <location filename="../src/mainwindow.cpp" line="2346"/>
+        <location filename="../src/mainwindow.cpp" line="1261"/>
+        <location filename="../src/mainwindow.cpp" line="1338"/>
+        <location filename="../src/mainwindow.cpp" line="1483"/>
+        <location filename="../src/mainwindow.cpp" line="2178"/>
+        <location filename="../src/mainwindow.cpp" line="2263"/>
         <source>Not connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1392"/>
-        <location filename="../src/mainwindow.cpp" line="1468"/>
-        <location filename="../src/mainwindow.cpp" line="1523"/>
-        <location filename="../src/mainwindow.cpp" line="1524"/>
-        <location filename="../src/mainwindow.cpp" line="1608"/>
-        <location filename="../src/mainwindow.cpp" line="1678"/>
-        <location filename="../src/mainwindow.cpp" line="1812"/>
-        <location filename="../src/mainwindow.cpp" line="2264"/>
-        <location filename="../src/mainwindow.cpp" line="2348"/>
+        <location filename="../src/mainwindow.cpp" line="1264"/>
+        <location filename="../src/mainwindow.cpp" line="1340"/>
+        <location filename="../src/mainwindow.cpp" line="1403"/>
+        <location filename="../src/mainwindow.cpp" line="1404"/>
+        <location filename="../src/mainwindow.cpp" line="1486"/>
+        <location filename="../src/mainwindow.cpp" line="1565"/>
+        <location filename="../src/mainwindow.cpp" line="1717"/>
+        <location filename="../src/mainwindow.cpp" line="2180"/>
+        <location filename="../src/mainwindow.cpp" line="2265"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="230"/>
+        <location filename="../src/mainwindow.cpp" line="225"/>
         <source>Ethernet Networks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="253"/>
+        <location filename="../src/mainwindow.cpp" line="248"/>
         <source>Wifi Networks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="292"/>
+        <location filename="../src/mainwindow.cpp" line="287"/>
         <source>No usable network in the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="579"/>
+        <location filename="../src/mainwindow.cpp" line="536"/>
         <source>Show MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1548"/>
+        <location filename="../src/mainwindow.cpp" line="1428"/>
         <source>No Other Wired Network Scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1700"/>
+        <location filename="../src/mainwindow.cpp" line="1587"/>
         <source>No Other Wireless Network Scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2636"/>
+        <location filename="../src/mainwindow.cpp" line="2491"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1201"/>
+        <location filename="../src/mainwindow.cpp" line="1128"/>
         <source>please insert the wireless network adapter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1505"/>
-        <location filename="../src/mainwindow.cpp" line="1656"/>
+        <location filename="../src/mainwindow.cpp" line="1385"/>
+        <location filename="../src/mainwindow.cpp" line="1543"/>
         <source>NetOn,</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2172"/>
+        <location filename="../src/mainwindow.cpp" line="2090"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2201"/>
+        <location filename="../src/mainwindow.cpp" line="2118"/>
         <source>Wi-Fi is disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2485"/>
+        <location filename="../src/mainwindow.cpp" line="2447"/>
         <source>Conn Ethernet Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2500"/>
+        <location filename="../src/mainwindow.cpp" line="2459"/>
         <source>Conn Ethernet Fail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2624"/>
+        <location filename="../src/mainwindow.cpp" line="2482"/>
         <source>Conn Wifi Success</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>NotifySend</name>
-    <message>
-        <location filename="../src/notifysend.ui" line="14"/>
-        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1364,51 +1361,56 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="34"/>
-        <location filename="../src/oneconnform.cpp" line="35"/>
-        <location filename="../src/oneconnform.cpp" line="36"/>
-        <location filename="../src/oneconnform.cpp" line="38"/>
+        <location filename="../src/oneconnform.cpp" line="42"/>
+        <location filename="../src/oneconnform.cpp" line="43"/>
+        <location filename="../src/oneconnform.cpp" line="44"/>
+        <location filename="../src/oneconnform.cpp" line="46"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="37"/>
+        <location filename="../src/oneconnform.cpp" line="45"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="39"/>
-        <location filename="../src/oneconnform.cpp" line="274"/>
+        <location filename="../src/oneconnform.cpp" line="47"/>
+        <location filename="../src/oneconnform.cpp" line="285"/>
         <source>Input Password...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="343"/>
+        <location filename="../src/oneconnform.cpp" line="357"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="419"/>
+        <location filename="../src/oneconnform.cpp" line="368"/>
+        <source>Rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/oneconnform.cpp" line="435"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="421"/>
+        <location filename="../src/oneconnform.cpp" line="437"/>
         <source>WiFi Security：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="422"/>
+        <location filename="../src/oneconnform.cpp" line="438"/>
         <source>Sifnal：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="423"/>
+        <location filename="../src/oneconnform.cpp" line="439"/>
         <source>MAC：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="639"/>
+        <location filename="../src/oneconnform.cpp" line="689"/>
         <source>Conn Wifi Failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1432,28 +1434,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="235"/>
-        <location filename="../src/onelancform.cpp" line="239"/>
+        <location filename="../src/onelancform.cpp" line="243"/>
+        <location filename="../src/onelancform.cpp" line="247"/>
         <source>No Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="242"/>
+        <location filename="../src/onelancform.cpp" line="250"/>
         <source>IPv4：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="243"/>
+        <location filename="../src/onelancform.cpp" line="251"/>
         <source>IPv6：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="245"/>
+        <location filename="../src/onelancform.cpp" line="253"/>
         <source>MAC：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="244"/>
+        <location filename="../src/onelancform.cpp" line="252"/>
         <source>BandWidth：</source>
         <translation type="unfinished"></translation>
     </message>

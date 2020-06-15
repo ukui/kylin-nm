@@ -181,16 +181,21 @@ void KylinDBus::getLanHwAddressState()
 //获取有线网卡名称
 void KylinDBus::getWiredCardName()
 {
-    QDBusInterface lanInterface( "org.freedesktop.NetworkManager",
-                              wiredPath.path(),
-                              "org.freedesktop.DBus.Properties",
-                              QDBusConnection::systemBus() );
-
-    QDBusReply<QVariant> lanReply = lanInterface.call("Get", "org.freedesktop.NetworkManager.Device", "Interface");
-    if (!lanReply.isValid()) {
-        qDebug()<<"can not get the attribute 'Interface' in func getWiredCardName()";
+    if (wiredPath.path() == "") {
+        dbusLanCardName = "";
     } else {
-        dbusLanCardName = lanReply.value().toString();
+        QDBusInterface lanInterface( "org.freedesktop.NetworkManager",
+                                  wiredPath.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+
+        QDBusReply<QVariant> lanReply = lanInterface.call("Get", "org.freedesktop.NetworkManager.Device", "Interface");
+        if (!lanReply.isValid()) {
+            qDebug()<<"can not get the attribute 'Interface' in func getWiredCardName()";
+            dbusLanCardName = "";
+        } else {
+            dbusLanCardName = lanReply.value().toString();
+        }
     }
 }
 

@@ -207,7 +207,18 @@ void ConfForm::setProp(QString connName, QString v4method, QString addr, QString
 //点击了创建新的网络的按钮
 void ConfForm::on_btnCreate_clicked()
 {
-    QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' type ethernet";
+    KylinDBus kylindbus;
+    kylindbus.getWiredCardName();
+    QString mIfname = kylindbus.dbusLanCardName;
+
+    if (mIfname == "") {
+        QString tip(tr("Can not create new wired network for without wired card"));
+        kylindbus.showDesktopNotify(tip);
+        this->hide();
+        return;
+    }
+
+    QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
     Utils::m_system(cmdStr.toUtf8().data());
     //int status = system(cmdStr.toUtf8().data());
     //if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection add con-name' in function 'on_btnCreate_clicked' failed");}
@@ -218,7 +229,6 @@ void ConfForm::on_btnCreate_clicked()
         this->on_btnOk_clicked();
     } else {
         QString txt(tr("New network already created"));
-        KylinDBus kylindbus;
         kylindbus.showDesktopNotify(txt);
     }
 

@@ -15,6 +15,7 @@
 #include <QStyleFactory>
 #include <QWidget>
 #include <QPainter>
+#include <QPainterPath>
 #include <QStyleOptionSlider>
 
 #include <QFile>

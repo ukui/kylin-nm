@@ -48,6 +48,7 @@
 #include <QAction>
 #include <QHBoxLayout>
 #include <QPainter>
+#include <QPainterPath>
 #include <QDebug>
 #include <QString>
 #include <QTimer>

@@ -24,6 +24,7 @@
 #include <QDebug>
 #include <QPoint>
 #include <QPainter>
+#include <QPainterPath>
 #include <QListView>
 
 namespace Ui {

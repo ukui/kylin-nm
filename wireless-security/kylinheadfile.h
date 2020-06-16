@@ -15,6 +15,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QPainter>
+#include <QPainterPath>
 #include <QListView>
 #include <QString>
 #include <KWindowEffects>

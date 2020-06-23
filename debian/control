@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Kylin Team <team+kylin@tracker.debian.org>
 Uploaders: handsome_feng <jianfengli@ubuntukylin.com>
-Build-Depends: debhelper (>= 9),
+Build-Depends: debhelper-compat (= 13),
                qtbase5-dev,
                qt5-qmake,
                qtchooser,

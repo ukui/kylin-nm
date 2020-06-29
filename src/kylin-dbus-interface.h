@@ -59,6 +59,9 @@ public:
     void setWifiSwitchState(bool signal);
     void setWifiCardState(bool signal);
 
+    void initTransparentState();
+    double getTransparentData();
+
     QDBusObjectPath wiredPath; //有线设备的路径
     QDBusObjectPath wirelessPath; //无线设备的路径
 
@@ -100,6 +103,7 @@ private:
 
     QGSettings *m_tastbar_gsettings = nullptr;
     QGSettings *m_gsettings = nullptr;
+    QGSettings *m_transparency_gsettings = nullptr;
 
 signals:
     void updateWiredList(int n);

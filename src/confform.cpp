@@ -47,7 +47,12 @@ ConfForm::ConfForm(QWidget *parent) :
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
     this->setStyleSheet("QWidget{border-radius:6px;border:none;}");
-    ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20,0.7);}");
+    KylinDBus mkylindbus;
+    double trans = mkylindbus.getTransparentData();
+    QString strTrans;
+    strTrans =  QString::number(trans, 10, 2);
+    QString sty = "#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20," + strTrans + ");}";
+    ui->centralWidget->setStyleSheet(sty);
 
     labelQss = "QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}";
     cbxQss = "QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);"

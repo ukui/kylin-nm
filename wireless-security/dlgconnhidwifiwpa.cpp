@@ -45,7 +45,13 @@ DlgConnHidWifiWpa::DlgConnHidWifiWpa(int type, MainWindow *mainWindow, QWidget *
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
-    this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.7);border:1px solid rgba(255, 255, 255, 0.05);}");
+    KylinDBus mkylindbus;
+    double trans = mkylindbus.getTransparentData();
+    QString strTrans;
+    strTrans =  QString::number(trans, 10, 2);
+    QString sty = "QWidget{border-radius:6px;background-color:rgba(19,19,20," + strTrans + ");border:1px solid rgba(255, 255, 255, 0.05);}";
+    this->setStyleSheet(sty);
+    //this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.7);border:1px solid rgba(255, 255, 255, 0.05);}");
 
     MyQss objQss;
 

@@ -35,6 +35,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     getWiredCardName(); //获取有线网卡名称
     //initTaskbarGsetting(); //初始化taskbar的GSetting方法
     getWifiSwitchState(); //初始化wifi开关GSetting通信方法
+    initTransparentState(); //初始化窗口透明度的GSetting方法
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
@@ -756,4 +757,26 @@ void KylinDBus::setWifiCardState(bool signal)
         return ;
     }
     m_gsettings->set("wificard",signal);
+}
+
+void KylinDBus::initTransparentState()
+{
+    if (QGSettings::isSchemaInstalled("org.ukui.control-center.personalise")) {
+        m_transparency_gsettings = new QGSettings("org.ukui.control-center.personalise");
+    }
+}
+
+double KylinDBus::getTransparentData()
+{
+    if (!m_transparency_gsettings) {
+        return 0.7;
+    }
+
+    QStringList keys = m_transparency_gsettings->keys();
+    if (keys.contains("transparency")) {
+        double tp = m_transparency_gsettings->get("transparency").toInt();
+        return tp;
+    } else {
+        return 0.7;
+    }
 }

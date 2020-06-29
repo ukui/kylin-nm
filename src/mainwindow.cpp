@@ -600,8 +600,16 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     switch (reason) {
     case QSystemTrayIcon::Trigger:
     case QSystemTrayIcon::MiddleClick:
+
         handleIconClicked();
+
         if (this->isHidden()) {
+            double trans = objKyDBus->getTransparentData();
+            QString strTrans;
+            strTrans =  QString::number(trans, 10, 2);
+            QString sty = "#centralWidget{background:rgba(19,19,20," + strTrans + ");}";
+            ui->centralWidget->setStyleSheet(sty);
+
             this->showNormal();
             if (is_btnNetList_clicked == 1) {
                 onBtnNetListClicked(0);

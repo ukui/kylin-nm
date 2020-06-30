@@ -658,6 +658,7 @@ int KylinDBus::getTaskBarHeight(QString str)
 ///////////////////////////////////////////////////////////////////////////////
 //下方使用Gsetting 进程通信方法
 
+//创建获取任务栏信息的GSetting对象
 void KylinDBus::initTaskbarGsetting()
 {
     if (QGSettings::isSchemaInstalled("org.ukui.panel.settings")) {
@@ -665,6 +666,7 @@ void KylinDBus::initTaskbarGsetting()
     }
 }
 
+//使用GSetting方法获取任务栏高度
 int KylinDBus::getTaskbarHeight()
 {
     if (!m_tastbar_gsettings) {
@@ -680,6 +682,7 @@ int KylinDBus::getTaskbarHeight()
     }
 }
 
+//使用GSetting方法获取任务栏位置，上下左右
 int KylinDBus::getTaskbarPos()
 {
     if (!m_tastbar_gsettings) {
@@ -695,6 +698,7 @@ int KylinDBus::getTaskbarPos()
     }
 }
 
+//创建监听wifi打开或关闭信息的GSetting对象
 void KylinDBus::getWifiSwitchState()
 {
     if (QGSettings::isSchemaInstalled("org.ukui.control-center.wifi.switch")) {
@@ -759,6 +763,7 @@ void KylinDBus::setWifiCardState(bool signal)
     m_gsettings->set("wificard",signal);
 }
 
+//创建获取窗口透明度信息的GSetting的对象
 void KylinDBus::initTransparentState()
 {
     if (QGSettings::isSchemaInstalled("org.ukui.control-center.personalise")) {
@@ -766,6 +771,7 @@ void KylinDBus::initTransparentState()
     }
 }
 
+//使用GSetting获取当前窗口应该使用的透明度
 double KylinDBus::getTransparentData()
 {
     if (!m_transparency_gsettings) {
@@ -774,7 +780,7 @@ double KylinDBus::getTransparentData()
 
     QStringList keys = m_transparency_gsettings->keys();
     if (keys.contains("transparency")) {
-        double tp = m_transparency_gsettings->get("transparency").toInt();
+        double tp = m_transparency_gsettings->get("transparency").toDouble();
         return tp;
     } else {
         return 0.7;

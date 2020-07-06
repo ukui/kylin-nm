@@ -1,3 +1,18 @@
+kylin-nm (1.2.5-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Mon, 06 Jul 2020 11:21:48 +0800
+
+kylin-nm (1.2.4-1) unstable; urgency=medium
+
+  * New upstream bugfix release:
+    - Fix that the UI stuck under multiple user.
+    - Fix that the wired network disconnected after docker started.
+    - Fix the wrong device object path.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Wed, 15 Apr 2020 23:07:10 +0800
+
 kylin-nm (1.2.3-1) unstable; urgency=medium
 
   * New upstream bugfix release:

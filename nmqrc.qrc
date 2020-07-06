@@ -31,6 +31,7 @@
         <file>res/h/show-pwd.png</file>
         <file>res/h/no-pwd-wifi.png</file>
         <file>translations/kylin-nm_bo.qm</file>
+        <file>translations/kylin-nm_tr.qm</file>
         <file>translations/kylin-nm_zh_CN.qm</file>
         <file>res/x/fly-mode-off.svg</file>
         <file>res/x/fly-mode-on.svg</file>

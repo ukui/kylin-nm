@@ -18,7 +18,7 @@ CONFIG += release
 
 # CONFIG += link_pkgconfig
 # PKGCONFIG += gsettings-qt
-LIBS    +=  -L/usr/lib/ -lgsettings-qt
+LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11
 
 target.path = /usr/bin
 target.source += $$TARGET

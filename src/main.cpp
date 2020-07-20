@@ -34,14 +34,13 @@ int main(int argc, char *argv[])
 {
     //QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    QApplication a(argc, argv);
-
-    if (QApplication::desktop()->width() >= 2560) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
         QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
-    }
+
+    QApplication a(argc, argv);
+
 
     openlog(LOG_IDENT, LOG_NDELAY | LOG_NOWAIT | LOG_PID, LOG_USER);
 

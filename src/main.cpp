@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
+#include <X11/Xlib.h>
 
 #define LOG_IDENT "ukui_kylin_nm"
 
@@ -33,15 +34,22 @@
 int main(int argc, char *argv[])
 {
     //QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    Display *disp = XOpenDisplay(NULL);
+    Screen *scrn = DefaultScreenOfDisplay(disp);
+    if (NULL == scrn) {
+        return 0;
+    }
+    int width = scrn->width;
+
+    if (width > 2560) {
+        #if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
+                QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+                QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+        #endif
+    }
 
     QApplication a(argc, argv);
 
-    if (QApplication::desktop()->width() >= 2560) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
-        QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-        QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-#endif
-    }
 
     openlog(LOG_IDENT, LOG_NDELAY | LOG_NOWAIT | LOG_PID, LOG_USER);
 

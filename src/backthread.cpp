@@ -236,6 +236,8 @@ void BackThread::execConnLan(QString connName)
         syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);
         emit connDone(0);
     } else {
+        qDebug()<<"connect wired network failed for without wired cable plug in.";
+        syslog(LOG_DEBUG, "connect wired network failed for without wired cable plug in.");
         emit connDone(1);
     }
 

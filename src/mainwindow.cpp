@@ -1135,6 +1135,8 @@ void MainWindow::onBtnWifiClicked(int flag)
 
         QString txt(tr("please insert the wireless network adapter"));
         objKyDBus->showDesktopNotify(txt);
+        qDebug()<<"please insert the wireless network adapter";
+        syslog(LOG_DEBUG, "please insert the wireless network adapter");
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnWifiClicked' failed");}
@@ -2339,10 +2341,12 @@ void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
     if (!is_stop_check_net_state) {
         is_stop_check_net_state = 1;
         if (wifiEnabled) {
-            qDebug()<<"debug: ccccccccccccccccccccccccccccccccc";
+            qDebug()<<"debug: external wifi switch turn on";
+            syslog(LOG_DEBUG, "debug: external wifi switch turn on");
             QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
         } else {
-            qDebug()<<"debug: ddddddddddddddddddddddddddddddddd";
+            qDebug()<<"debug: external wifi switch turn off";
+            syslog(LOG_DEBUG, "debug: external wifi switch turn off");
             QTimer::singleShot(3*1000, this, SLOT(onExternalWifiChange() ));
         }
     }

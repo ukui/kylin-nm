@@ -415,7 +415,7 @@ void KylinDBus::initConnectionInfo()
     // qDebug()<<"             ";
 
 
-    //获取当前wifi是否连接
+    //获取当前wifi的开关状态
     QDBusReply<QVariant> m_result = interface.call("Get", "org.freedesktop.NetworkManager", "WirelessEnabled");
     qDebug()<<"debug: *****初始的无线网络开关状态是: "<<m_result.value().toBool();
     oldWifiSwitchState = m_result.value().toBool();
@@ -712,8 +712,12 @@ void KylinDBus::getWifiSwitchState()
                 bool judge = getSwitchStatus(key);
                 if (judge) {
                     mw->onBtnWifiClicked(1); //打开wifi开关
+                    qDebug()<<"receive a signal to turn on wifi switch from control-center";
+                    syslog(LOG_DEBUG, "receive a signal to turn on wifi switch from control-center");
                 } else {
                     mw->onBtnWifiClicked(2); //关闭wifi开关
+                    qDebug()<<"receive a signal to turn off wifi switch from control-center";
+                    syslog(LOG_DEBUG, "receive a signal to turn off wifi switch from control-center");
                 }
             }
         });

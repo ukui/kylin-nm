@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>res/x/setup.png</file>
         <file>res/s/conning-b/1.png</file>
         <file>res/s/conning-b/2.png</file>
         <file>res/s/conning-b/3.png</file>
@@ -78,5 +77,6 @@
         <file>res/s/conning-s/10.png</file>
         <file>res/s/conning-s/11.png</file>
         <file>res/s/conning-s/12.png</file>
+        <file>res/x/setup.png</file>
     </qresource>
 </RCC>

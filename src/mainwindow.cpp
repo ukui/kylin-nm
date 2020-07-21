@@ -207,9 +207,9 @@ void MainWindow::editQssString()
     btnBgOnQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(61,107,229,1);}";
     btnBgHoverQss = "QLabel{border-radius: 4px; background-color:rgba(255,255,255,0.12)}";
     btnBgLeaveQss = "QLabel{border-radius: 4px; background-color:rgba(255,255,255,0)}";
-    leftBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}"
-                 "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
-                 "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}";
+    leftBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);}"
+                 "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.12);}"
+                 "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.12);}";
     funcBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(107,142,235,0.97);font-size:14px;}"
                  "QPushButton:Hover{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(151,175,241,0.97);font-size:14px;}"
                  "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(61,107,229,0.97);font-size:14px;}";
@@ -378,9 +378,9 @@ void MainWindow::createLeftAreaUI()
     ui->btnAdvConf->setFocusPolicy(Qt::NoFocus);
     QString txtAdvanced(tr("Advanced"));
     ui->btnAdvConf->setToolTip(txtAdvanced);
-    ui->lbBtnConfImg->setStyleSheet("QLabel{background-image:url(:/res/x/setup.png);}");
-    ui->lbBtnConfBG->hide();
-    ui->lbBtnConfBG->setStyleSheet(btnOffQss);
+    //ui->lbBtnConfImg->setStyleSheet("QLabel{background-image:url(:/res/x/setup.png);}");
+    ui->btnConfImg->setStyleSheet("QPushButton{background-image:url(:/res/x/setup.png);}");
+    //ui->btnConfImg->setIcon(QIcon::fromTheme("settings-app-symbolic.svg", QIcon(":/res/x/setup.png")) );
 }
 
 // 初始化有线网列表
@@ -1755,12 +1755,12 @@ void MainWindow::on_btnAdvConf_clicked()
 
 void MainWindow::on_btnAdvConf_pressed()
 {
-    ui->lbBtnConfBG->setStyleSheet(btnOnQss);
+    //ui->lbBtnConfBG->setStyleSheet(btnOnQss);
 }
 
 void MainWindow::on_btnAdvConf_released()
 {
-    ui->lbBtnConfBG->setStyleSheet(btnOffQss);
+    //ui->lbBtnConfBG->setStyleSheet(btnOffQss);
 }
 
 void MainWindow::on_btnFlyMode_clicked()

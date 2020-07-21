@@ -66,32 +66,6 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="lbBtnConfBG">
-    <property name="geometry">
-     <rect>
-      <x>2</x>
-      <y>490</y>
-      <width>37</width>
-      <height>37</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbBtnConfImg">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>498</y>
-      <width>22</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btnAdvConf">
     <property name="geometry">
      <rect>
@@ -303,6 +277,20 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnConfImg">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>499</y>
+      <width>19</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>btnConfImg</zorder>
    <zorder>lbFlyBG</zorder>
    <zorder>lbHotBG</zorder>
    <zorder>lbFlyImg</zorder>
@@ -310,8 +298,6 @@
    <zorder>lbBtnNetBG</zorder>
    <zorder>btnNet</zorder>
    <zorder>lbBtnWifiBG</zorder>
-   <zorder>lbBtnConfBG</zorder>
-   <zorder>lbBtnConfImg</zorder>
    <zorder>btnAdvConf</zorder>
    <zorder>btnHotspot</zorder>
    <zorder>btnFlyMode</zorder>

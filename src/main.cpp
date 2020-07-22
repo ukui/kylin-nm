@@ -66,6 +66,10 @@ int main(int argc, char *argv[])
         //trans_global.load(":/translations/kylin-nm_bo.qm");
         a.installTranslator(&trans_global);
     }
+        if (locale == "tr_TR") {
+        trans_global.load(":/translations/kylin-nm_tr.qm");
+        a.installTranslator(&trans_global);
+    }
 
     MainWindow w;
     return a.exec();

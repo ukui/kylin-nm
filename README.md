@@ -6,7 +6,7 @@
     It provides a GUI for users to connect or disconnect wired or wireless network which managed by NetworkManager. 
     Users can also create new wired network and configure a old network. 
     By click button at left bottom in the main window, a network configure window of NetworkManager will show in the screen.
-    Users can get some information about network directly by clicking one item in the network list, these information shown in extention area.
+    Users can get some information about network directly by clicking one item in the network list, these information shown in extension area.
 
 # BUILD KYLIN-NM
     down the source sode

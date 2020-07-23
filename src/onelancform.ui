@@ -162,10 +162,10 @@
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>2</x>
      <y>59</y>
-     <width>424</width>
-     <height>1</height>
+     <width>421</width>
+     <height>2</height>
     </rect>
    </property>
    <property name="styleSheet">

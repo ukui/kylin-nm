@@ -37,9 +37,9 @@
 #define H_ITEM 60
 #define H_ITEM_EXTEND 162
 #define Y_LINE 59
-#define X_LINE 0
+#define X_LINE 2
 #define Y_LINE_EXTEND 161
-#define X_LINE_EXTEND 0
+#define X_LINE_EXTEND 2
 
 class MainWindow;
 

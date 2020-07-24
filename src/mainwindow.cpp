@@ -108,7 +108,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->btnWifiList->setAttribute(Qt::WA_Hover,true);
     ui->btnWifiList->installEventFilter(this);
 
-    //KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
 MainWindow::~MainWindow()

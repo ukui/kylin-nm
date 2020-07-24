@@ -1382,8 +1382,8 @@ void MainWindow::getLanListDone(QStringList slist)
 
         if (ltype != "802-11-wireless" && ltype != "wifi" && ltype != "" && ltype != "--") {
             // 当前连接的lan
-            objKyDBus->getLanIp(nname);
             if (nname == actLanName) {
+                objKyDBus->getConnectNetIp();
                 actLanName = "--";
                 if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
 
@@ -1391,7 +1391,7 @@ void MainWindow::getLanListDone(QStringList slist)
                 connect(ccf, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
                 ccf->setName(nname, nname + order);
                 ccf->setIcon(true);
-                ccf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
+                ccf->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
                 ccf->setConnedString(1, tr("NetOn,"));//"已连接"
                 ccf->isConnected = true;
                 ifLanConnected = true;
@@ -1401,8 +1401,11 @@ void MainWindow::getLanListDone(QStringList slist)
                 lbLoadUpImg->show();
                 ccf->setTopItem(false);
                 currSelNetName = "";
+                objKyDBus->dbusActiveLanIpv4 = "";
+                objKyDBus->dbusActiveLanIpv6 = "";
                 syslog(LOG_DEBUG, "already insert an active lannet in the top of lan list");
             } else {
+                objKyDBus->getLanIp(nname);
                 lanListWidget->resize(W_LIST_WIDGET, lanListWidget->height() + H_NORMAL_ITEM);
 
                 OneLancForm *ocf = new OneLancForm(lanListWidget, this, confForm, ksnm);

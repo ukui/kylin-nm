@@ -47,6 +47,7 @@ public:
     void showDesktopNotify(QString message);
     void initConnectionInfo();
     void connectWiredNet(QString netName);
+    void getConnectNetIp();
 
     int getTaskBarPos(QString str);
     int getTaskBarHeight(QString str);
@@ -71,6 +72,8 @@ public:
     QString dbusLanCardName = "";
     QString dbusLanIpv4 = "";
     QString dbusLanIpv6 = "";
+    QString dbusActiveLanIpv4 = "";
+    QString dbusActiveLanIpv6 = "";
     QString dbusLanGateway = "";
     QString dbusLanMac = "";
     QString dbusWiFiCardName = "";

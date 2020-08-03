@@ -12,8 +12,7 @@ TARGET = kylin-nm
 TEMPLATE = app
 LANGUAGE = C++
 
-CONFIG += c++14 \
-    qt
+CONFIG += c++14
 CONFIG += qt warn_on
 CONFIG += release
 

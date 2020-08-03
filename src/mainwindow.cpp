@@ -98,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent) :
     initTimer(); //初始化定时器
 
     connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClicked);
-    connect(ui->btnWifi, &QPushButton::clicked, this, &MainWindow::onBtnWifiClicked);
+    connect(btnWireless, &SwitchButton::clicked,this, &MainWindow::onBtnWifiClicked);
 
     //auto app = static_cast<QApplication*>(QCoreApplication::instance());
     //app->setStyle(new CustomStyle()); //设置自定义主题
@@ -334,6 +334,8 @@ void MainWindow::createListAreaUI()
 
 void MainWindow::createLeftAreaUI()
 {
+    btnWireless = new SwitchButton(this);
+    btnWireless->setStyleSheet("SwitchButton{border:none;background-color:rgba(255,255,255,0.12);}");
     ui->btnNetList->setFocusPolicy(Qt::NoFocus);
     QString txtEthernet(tr("Ethernet"));
     ui->btnNetList->setToolTip(txtEthernet);
@@ -347,12 +349,8 @@ void MainWindow::createLeftAreaUI()
     ui->lbWifiListImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-list-bg.svg);}");
 
     ui->btnNet->hide();
-    ui->lbBtnNetBG->hide();
 
-    ui->btnWifi->setFocusPolicy(Qt::NoFocus);
-    ui->btnWifi->setStyleSheet("QPushButton{border:none;background:transparent;}");
-    ui->lbBtnWifiBall->setStyleSheet("QLabel{min-width: 16px; min-height: 16px;max-width:16px; max-height: 16px;"
-                                     "border-radius: 8px;background:white;}");
+    btnWireless->setGeometry(412,20,50,24);
 
     ui->btnHotspot->setStyleSheet(leftBtnQss);
     ui->btnHotspot->setFocusPolicy(Qt::NoFocus);
@@ -431,13 +429,15 @@ void MainWindow::initNetwork()
     syslog(LOG_DEBUG, "current network state:  wired state =%d,  wifi state =%d", iface->lstate, iface->wstate);
     qDebug()<<"===";
 
-    ui->lbBtnNetBG->setStyleSheet(btnOnQss);
+    //ui->lbBtnNetBG->setStyleSheet(btnOnQss);
     if (iface->wstate == 0 || iface->wstate == 1) {
-        ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
-        ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+       // ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
+        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+        btnWireless->setSwitchStatus(true);
     } else {
-        ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-        ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+        btnWireless->setSwitchStatus(false);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
+        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
     }
 
     // 初始化网络列表
@@ -1059,6 +1059,7 @@ void MainWindow::onBtnWifiClicked(int flag)
                     QThread *t = new QThread();
                     BackThread *bt = new BackThread();
                     bt->moveToThread(t);
+                    btnWireless->setSwitchStatus(true);
                     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
                     connect(t, SIGNAL(started()), bt, SLOT(execDisWifi()));
                     connect(bt, SIGNAL(disWifiDone()), this, SLOT(disWifiDone()));
@@ -1077,6 +1078,7 @@ void MainWindow::onBtnWifiClicked(int flag)
 
                     QThread *t = new QThread();
                     BackThread *bt = new BackThread();
+                    btnWireless->setSwitchStatus(true);
                     bt->moveToThread(t);
                     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
                     connect(t, SIGNAL(started()), bt, SLOT(execEnWifi()));
@@ -1096,6 +1098,7 @@ void MainWindow::onBtnWifiClicked(int flag)
 
                 QThread *t = new QThread();
                 BackThread *bt = new BackThread();
+                btnWireless->setSwitchStatus(true);
                 bt->moveToThread(t);
                 connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
                 connect(t, SIGNAL(started()), bt, SLOT(execEnWifi()));
@@ -1112,6 +1115,7 @@ void MainWindow::onBtnWifiClicked(int flag)
 
             QThread *t = new QThread();
             BackThread *bt = new BackThread();
+            btnWireless->setSwitchStatus(true);
             bt->moveToThread(t);
             connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
             connect(t, SIGNAL(started()), bt, SLOT(execDisWifi()));
@@ -1171,9 +1175,9 @@ void MainWindow::onBtnNetListClicked(int flag)
     lbNoItemTip->hide();
 
     ui->lbNetwork->setText(tr("Ethernet"));
-    ui->btnWifi->hide();
-    ui->lbBtnWifiBG->hide();
-    ui->lbBtnWifiBall->hide(); 
+    btnWireless->hide();
+    //ui->lbBtnWifiBG->hide();
+    //ui->lbBtnWifiBall->hide();
 
     // 强行设置为打开
     if (flag == 1) {
@@ -1230,22 +1234,23 @@ void MainWindow::on_btnWifiList_clicked()
     lbNoItemTip->hide();
 
     ui->lbNetwork->setText(tr("Wifi"));
-    ui->btnWifi->show();
-    ui->lbBtnWifiBG->show();
-    ui->lbBtnWifiBall->show();
-
+    btnWireless->show();
+    //ui->lbBtnWifiBG->show();
+    //ui->lbBtnWifiBall->show();
     if (iface->wstate == 0 || iface->wstate == 1) {
-        ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
-        ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
+        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+        btnWireless->setSwitchStatus(true);
     } else {
-        ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-        ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
+        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+        btnWireless->setSwitchStatus(false);
     }
 
     if (iface->wstate != 2) {
         //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
         //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
-
+        btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();
 
@@ -1254,7 +1259,7 @@ void MainWindow::on_btnWifiList_clicked()
     } else {
         //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
         //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
-
+        btnWireless->setSwitchStatus(false);
         delete topWifiListWidget; //清空top列表
         createTopWifiUI(); //创建顶部无线网item
         lbTopWifiList->hide();
@@ -2154,8 +2159,9 @@ void MainWindow::enNetDone()
 
     // 打开网络开关时如果Wifi开关是打开的，设置其样式
     if (checkWlOn()) {
-        ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
-        ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+        btnWireless->setSwitchStatus(true);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
+        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
     }
 
     onBtnNetListClicked(1);
@@ -2173,9 +2179,9 @@ void MainWindow::disNetDone()
     ui->lbWifiListBG->setStyleSheet(btnOffQss);
 
     ui->lbNetwork->setText("有线网络");
-    ui->btnWifi->hide();
-    ui->lbBtnWifiBG->hide();
-    ui->lbBtnWifiBall->hide();
+    btnWireless->hide();
+    //ui->lbBtnWifiBG->hide();
+    //ui->lbBtnWifiBall->hide();
 
     delete topLanListWidget; // 清空top列表
     createTopLanUI(); //创建顶部有线网item
@@ -2199,8 +2205,7 @@ void MainWindow::disNetDone()
 
     ui->lbBtnNetBG->setStyleSheet(btnOffQss);
 
-    ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-    ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+    btnWireless->setSwitchStatus(false);
 
     this->lanListWidget->show();
     this->wifiListWidget->hide();
@@ -2223,8 +2228,8 @@ void MainWindow::launchLanDone()
 
 void MainWindow::enWifiDone()
 {
-    ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
-    ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+    //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
+    //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
 
     is_update_wifi_list = 0;
     this->ksnm->execGetWifiList();
@@ -2247,8 +2252,9 @@ void MainWindow::disWifiDone()
 void MainWindow::disWifiStateKeep()
 {
     if (this->is_btnNetList_clicked == 1) {
-        ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-        ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+        btnWireless->setSwitchStatus(false);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
+        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
     }
     if (this->is_btnWifiList_clicked== 1) {
         disWifiDoneChangeUI();
@@ -2288,8 +2294,9 @@ void MainWindow::disWifiDoneChangeUI()
         }
     }
 
-    ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-    ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+    btnWireless->setSwitchStatus(false);
+    //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
+    //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
 
     this->lanListWidget->hide();
     this->topLanListWidget->hide();

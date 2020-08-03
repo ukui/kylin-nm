@@ -25,6 +25,7 @@
 #include "kylin-dbus-interface.h"
 #include "kylin-network-interface.h"
 #include "utils.h"
+#include "switchbutton.h"
 
 #include <fcntl.h>
 #include <sys/types.h>
@@ -139,6 +140,7 @@ public:
     QString mwBandWidth;
     KylinDBus *objKyDBus = nullptr;
     NetworkSpeed *objNetSpeed = nullptr;
+    SwitchButton *btnWireless;
 
     //状态设置,0为假，1为真
     int is_update_wifi_list = 0; //是否是update wifi列表，而不是load wifi列表

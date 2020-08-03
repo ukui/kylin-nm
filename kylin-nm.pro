@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui x11extras dbus KWindowSystem
+QT       += core gui x11extras dbus KWindowSystem \
+    widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,7 +13,8 @@ TARGET = kylin-nm
 TEMPLATE = app
 LANGUAGE = C++
 
-CONFIG += c++14
+CONFIG += c++14 \
+    qt
 CONFIG += qt warn_on
 CONFIG += release
 
@@ -57,6 +59,7 @@ SOURCES += \
     src/mainwindow.cpp \
     src/oneconnform.cpp \
     src/onelancform.cpp \
+    src/switchbutton.cpp \
     src/utils.cpp \
     wireless-security/dlgconnhidwifi.cpp \
     wireless-security/dlgconnhidwifisecfast.cpp \
@@ -82,6 +85,7 @@ HEADERS += \
     src/mainwindow.h \
     src/oneconnform.h \
     src/onelancform.h \
+    src/switchbutton.h \
     src/utils.h \
     wireless-security/dlgconnhidwifi.h \
     wireless-security/dlgconnhidwifisecfast.h \

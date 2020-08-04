@@ -57,6 +57,7 @@ SOURCES += \
     src/mainwindow.cpp \
     src/oneconnform.cpp \
     src/onelancform.cpp \
+    src/switchbutton.cpp \
     src/utils.cpp \
     wireless-security/dlgconnhidwifi.cpp \
     wireless-security/dlgconnhidwifisecfast.cpp \
@@ -82,6 +83,7 @@ HEADERS += \
     src/mainwindow.h \
     src/oneconnform.h \
     src/onelancform.h \
+    src/switchbutton.h \
     src/utils.h \
     wireless-security/dlgconnhidwifi.h \
     wireless-security/dlgconnhidwifisecfast.h \

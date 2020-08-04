@@ -53,19 +53,6 @@
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnWifi">
-    <property name="geometry">
-     <rect>
-      <x>412</x>
-      <y>20</y>
-      <width>50</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btnAdvConf">
     <property name="geometry">
      <rect>
@@ -302,7 +289,6 @@
    <zorder>btnHotspot</zorder>
    <zorder>btnFlyMode</zorder>
    <zorder>lbBtnWifiBall</zorder>
-   <zorder>btnWifi</zorder>
    <zorder>lbNetListBG</zorder>
    <zorder>lbWifiListBG</zorder>
    <zorder>lbWifiListImg</zorder>

@@ -35,7 +35,7 @@ ConfForm::ConfForm(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setWindowFlags(Qt::FramelessWindowHint);
+    this->setWindowFlags(Qt::FramelessWindowHint); //Qt::WindowStaysOnTopHint
     this->setWindowTitle(tr("edit network"));//"网络设置"
     this->setAttribute(Qt::WA_TranslucentBackground);
     //需要添加 void paintEvent(QPaintEvent *event) 函数

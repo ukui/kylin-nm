@@ -1044,6 +1044,7 @@ void MainWindow::on_btnNet_clicked()
 void MainWindow::onBtnWifiClicked(int flag)
 {
     qDebug()<<"Value of flag passed into function 'onBtnWifiClicked' is:  "<<flag;
+    syslog(LOG_DEBUG, "Value of flag passed into function 'onBtnWifiClicked' is: %d", flag);
 
     if (is_wireless_adapter_ready == 1) {
         // 当连接上无线网卡时才能打开wifi开关
@@ -1137,10 +1138,10 @@ void MainWindow::onBtnWifiClicked(int flag)
              objKyDBus->setWifiCardState(false);
         }
 
-        QString txt(tr("please insert the wireless network adapter"));
+        QString txt(tr("No wireless card detected"));
         objKyDBus->showDesktopNotify(txt);
-        qDebug()<<"please insert the wireless network adapter";
-        syslog(LOG_DEBUG, "please insert the wireless network adapter");
+        qDebug()<<"No wireless card detected";
+        syslog(LOG_DEBUG, "No wireless card detected");
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';notify-send '" + txt + "' -t 3800";
         //int status = system(cmd.toUtf8().data());
         //if (status != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'onBtnWifiClicked' failed");}
@@ -2319,12 +2320,10 @@ void MainWindow::onExternalConnectionChange(QString type)
     if (!is_stop_check_net_state) {
         is_stop_check_net_state = 1;
         if (type == "802-3-ethernet" || type == "ethernet") {
-            qDebug()<<"debug: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
         }
 
         if (type == "802-11-wireless" || type == "wifi") {
-            qDebug()<<"debug: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
             QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
         }
     }

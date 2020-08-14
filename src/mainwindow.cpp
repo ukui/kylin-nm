@@ -1074,12 +1074,12 @@ void MainWindow::onBtnWifiClicked(int flag)
                     is_stop_check_net_state = 1;
                     objKyDBus->setWifiCardState(true);
                     objKyDBus->setWifiSwitchState(true);
-                    lbTopWifiList->show();
-                    btnAddNet->show();
+                    //lbTopWifiList->show();
+                    //btnAddNet->show();
+                    btnWireless->setSwitchStatus(true);
 
                     QThread *t = new QThread();
                     BackThread *bt = new BackThread();
-                    btnWireless->setSwitchStatus(true);
                     bt->moveToThread(t);
                     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
                     connect(t, SIGNAL(started()), bt, SLOT(execEnWifi()));
@@ -1138,7 +1138,7 @@ void MainWindow::onBtnWifiClicked(int flag)
              objKyDBus->setWifiCardState(false);
         }
 
-        QString txt(tr("No wireless card detected"));
+        QString txt(tr("No wireless card detected")); //未检测到无线网卡
         objKyDBus->showDesktopNotify(txt);
         qDebug()<<"No wireless card detected";
         syslog(LOG_DEBUG, "No wireless card detected");
@@ -2233,7 +2233,11 @@ void MainWindow::enWifiDone()
     //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
 
     is_update_wifi_list = 0;
-    this->ksnm->execGetWifiList();
+    if (is_btnWifiList_clicked) {
+        this->ksnm->execGetWifiList();
+    } else {
+        on_btnWifiList_clicked();
+    }
 
     qDebug()<<"debug: already turn on the switch of wifi network";
     syslog(LOG_DEBUG, "Already turn on the switch of wifi network");

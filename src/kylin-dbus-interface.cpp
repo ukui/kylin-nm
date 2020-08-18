@@ -53,6 +53,16 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
                                          QString("DeviceRemoved"), mw, SLOT(onNetworkDeviceRemoved(QDBusObjectPath) ) );
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                         QString("/org/freedesktop/NetworkManager"),
+                                         QString("org.freedesktop.NetworkManager"),
+                                         QString("DeviceAdded"), this, SLOT(onNetworkDeviceChanged(QDBusObjectPath) ) );
+
+    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                         QString("/org/freedesktop/NetworkManager"),
+                                         QString("org.freedesktop.NetworkManager"),
+                                         QString("DeviceRemoved"), this, SLOT(onNetworkDeviceChanged(QDBusObjectPath) ) );
+
+    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager/Settings"),
                                          QString("org.freedesktop.NetworkManager.Settings"),
                                          QString("NewConnection"), this, SLOT(onNewConnection(QDBusObjectPath) ) );
@@ -100,6 +110,10 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
 //获取dbus中 lan 与 WiFi 的device路径
 void KylinDBus::getObjectPath()
 {
+    foreach (QDBusObjectPath mPath, multiWiredPaths) {
+        multiWiredPaths.removeOne(mPath);
+    }
+
     QDBusInterface m_interface( "org.freedesktop.NetworkManager",
                               "/org/freedesktop/NetworkManager",
                               "org.freedesktop.NetworkManager",
@@ -128,6 +142,7 @@ void KylinDBus::getObjectPath()
        if(reply.value().indexOf("org.freedesktop.NetworkManager.Device.Wired") != -1) {
            //表明有有线网设备
            wiredPath = obj_path;
+           multiWiredPaths.append(obj_path);
        } else if (reply.value().indexOf("org.freedesktop.NetworkManager.Device.Wireless") != -1) {
            //表明有wifi设备
            wirelessPath = obj_path;
@@ -139,28 +154,60 @@ void KylinDBus::getObjectPath()
 //获取是否连接有线网网线
 void KylinDBus::getPhysicalCarrierState(int n)
 {
-    QDBusInterface interface( "org.freedesktop.NetworkManager",
-                              wiredPath.path(),
-                              "org.freedesktop.DBus.Properties",
-                              QDBusConnection::systemBus() );
-
-    //Carrier值为true，插了网线；为false，未插网线
-    QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Device.Wired", "Carrier");
-
-    try {
-        if (reply.value().toString() == "true") {
-            isWiredCableOn = true;
-            if (n == 1){ this->mw->onPhysicalCarrierChanged(isWiredCableOn);}
-        } else if (reply.value().toString() == "false") {
-            isWiredCableOn = false;
-            if (n == 1){ this->mw->onPhysicalCarrierChanged(isWiredCableOn);}
-        } else {
-            throw -1; //出现异常
-        }
-    } catch(...) {
-        syslog(LOG_ERR, "Error occurred when get the property 'Carrier' of Wired");
-        qDebug()<<"Error occurred when get the property 'Carrier' of Wired";
+    foreach (QString mStr, multiWiredCableState) {
+        multiWiredCableState.removeOne(mStr);
     }
+
+    foreach (QDBusObjectPath localPath, multiWiredPaths) {
+        QDBusInterface interface( "org.freedesktop.NetworkManager",
+                                  localPath.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+
+        //Carrier值为true，插了网线；为false，未插网线
+        QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Device.Wired", "Carrier");
+
+        try {
+            if (reply.value().toString() == "true") {
+                //isWiredCableOn = true;
+                multiWiredCableState.append("true");
+                //if (n == 1){ this->mw->onPhysicalCarrierChanged(isWiredCableOn);}
+            } else if (reply.value().toString() == "false") {
+                //isWiredCableOn = false;
+                multiWiredCableState.append("false");
+                //if (n == 1){ this->mw->onPhysicalCarrierChanged(isWiredCableOn);}
+            } else {
+                throw -1; //出现异常
+            }
+        } catch(...) {
+            syslog(LOG_ERR, "Error occurred when get the property 'Carrier' of Wired");
+            qDebug()<<"Error occurred when get the property 'Carrier' of Wired";
+        }
+    }
+
+    isWiredCableOn = false;
+    foreach (QString state, multiWiredCableState) {
+        if (state == "true") {
+            isWiredCableOn = true;
+        }
+    }
+
+    if (n == 1) { this->mw->onPhysicalCarrierChanged(isWiredCableOn);}
+}
+
+//网络设备插拔处理 目前仅处理有线设备的插拔
+void KylinDBus::onNetworkDeviceChanged(QDBusObjectPath objPath)
+{
+    //重新设置部分元素
+    wiredPath.setPath("/");
+    wirelessPath.setPath("/");
+    isWirelessCardOn = false;
+
+    //重新获取网络设备的状态
+    getObjectPath();
+    getPhysicalCarrierState(0);
+    getLanHwAddressState(); //获取有线网Mac地址
+    getWiredCardName(); //获取有线网卡名称
 }
 
 //获取有线网Mac地址

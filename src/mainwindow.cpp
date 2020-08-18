@@ -864,11 +864,11 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
     this->startLoading();
     if (flag) {
         is_stop_check_net_state = 1;
-        qDebug()<<"插入了有线网卡";
+        qDebug()<<"插入了有线网的网线";
         syslog(LOG_DEBUG,"wired physical cable is already plug in");
         wiredCableUpTimer->start(2000);
     } else {
-        qDebug()<<"拔出了有线网卡";
+        qDebug()<<"拔出了有线网的网线";
         syslog(LOG_DEBUG,"wired physical cable is already plug out");
 
         BackThread *bt = new BackThread();

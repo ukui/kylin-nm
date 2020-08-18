@@ -65,9 +65,11 @@ public:
 
     QDBusObjectPath wiredPath; //有线设备的路径
     QDBusObjectPath wirelessPath; //无线设备的路径
+    QList<QDBusObjectPath> multiWiredPaths; //已连接网络的对象路径列表
 
+    QList<QString> multiWiredCableState;
     bool isWiredCableOn = false; //是否插入了网线
-    bool isWirelessCardOn = false; //是否插入了网卡
+    bool isWirelessCardOn = false; //是否插入了无线网卡
 
     QString dbusLanCardName = "";
     QString dbusLanIpv4 = "";
@@ -93,6 +95,7 @@ public slots:
     void getLanIp(QString netName);
     void getWifiMac(QString netName);
     void slot_timeout();
+    void onNetworkDeviceChanged(QDBusObjectPath objPath);
 
 private:
     MainWindow *mw;

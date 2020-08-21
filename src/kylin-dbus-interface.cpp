@@ -18,12 +18,29 @@
 
 #include "kylin-dbus-interface.h"
 #include "mainwindow.h"
+#include "utils.h"
 
 #include <vector>
 
 #include <QTextCodec>
 #include <QByteArray>
 
+
+namespace {
+
+void quitThread(QThread *thread)
+{
+    Q_ASSERT(thread);
+    if (thread) {
+        thread->quit();
+        if (!thread->wait(2000)) {
+            thread->terminate();
+            thread->wait();
+        }
+    }
+}
+
+} // namespace
 
 KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
 {
@@ -51,16 +68,6 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
                                          QString("/org/freedesktop/NetworkManager"),
                                          QString("org.freedesktop.NetworkManager"),
                                          QString("DeviceRemoved"), mw, SLOT(onNetworkDeviceRemoved(QDBusObjectPath) ) );
-
-    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
-                                         QString("/org/freedesktop/NetworkManager"),
-                                         QString("org.freedesktop.NetworkManager"),
-                                         QString("DeviceAdded"), this, SLOT(onNetworkDeviceChanged(QDBusObjectPath) ) );
-
-    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
-                                         QString("/org/freedesktop/NetworkManager"),
-                                         QString("org.freedesktop.NetworkManager"),
-                                         QString("DeviceRemoved"), this, SLOT(onNetworkDeviceChanged(QDBusObjectPath) ) );
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager/Settings"),
@@ -101,6 +108,20 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     QObject::connect(time, SIGNAL(timeout()), this, SLOT(slot_timeout()));
 
     QObject::connect(this, SIGNAL(updateWiredList(int)), mw, SLOT(onBtnNetListClicked(int)));
+
+    mUtils = new Utils();
+    mUtilsThread = new QThread(this);
+    mUtils->moveToThread(mUtilsThread);
+    connect(mUtilsThread, &QThread::finished, mUtils, &Utils::deleteLater);
+    connect(this, SIGNAL(requestSendDesktopNotify(QString)), mUtils, SLOT(onRequestSendDesktopNotify(QString)), Qt::QueuedConnection);
+    QTimer::singleShot(1, this, [=] {
+        mUtilsThread->start();
+    });
+}
+
+KylinDBus::~KylinDBus()
+{
+    quitThread(mUtilsThread);
 }
 
 
@@ -193,21 +214,6 @@ void KylinDBus::getPhysicalCarrierState(int n)
     }
 
     if (n == 1) { this->mw->onPhysicalCarrierChanged(isWiredCableOn);}
-}
-
-//网络设备插拔处理 目前仅处理有线设备的插拔
-void KylinDBus::onNetworkDeviceChanged(QDBusObjectPath objPath)
-{
-//    //重新设置部分元素
-//    wiredPath.setPath("/");
-//    wirelessPath.setPath("/");
-//    isWirelessCardOn = false;
-
-//    //重新获取网络设备的状态
-//    getObjectPath();
-//    getPhysicalCarrierState(0);
-//    getLanHwAddressState(); //获取有线网Mac地址
-//    getWiredCardName(); //获取有线网卡名称
 }
 
 //获取有线网Mac地址
@@ -748,20 +754,7 @@ void KylinDBus::connectWiredNet(QString netName)
 //显示桌面通知
 void KylinDBus::showDesktopNotify(QString message)
 {
-    QDBusInterface iface("org.freedesktop.Notifications",
-                         "/org/freedesktop/Notifications",
-                         "org.freedesktop.Notifications",
-                         QDBusConnection::sessionBus());
-    QList<QVariant> args;
-    args<<(QCoreApplication::applicationName())
-    <<((unsigned int) 0)
-    <<QString("qweq")
-    <<tr("kylin network applet desktop message") //显示的是什么类型的信息
-    <<message //显示的具体信息
-    <<QStringList()
-    <<QVariantMap()
-    <<(int)-1;
-    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+    emit requestSendDesktopNotify(message);
 }
 
 //获取任务栏位置，上下左右

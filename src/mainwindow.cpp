@@ -935,7 +935,7 @@ void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
             syslog(LOG_DEBUG,"wireless device is already plug in");
             qDebug()<<"wireless device is already plug in";
             is_wireless_adapter_ready = 1;
-            onBtnWifiClicked(3);
+            onBtnWifiClicked(4);
         }
     }
 }
@@ -950,7 +950,7 @@ void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
             syslog(LOG_DEBUG,"wireless device is already plug out");
             qDebug()<<"wireless device is already plug out";
             is_wireless_adapter_ready = 0;
-            onBtnWifiClicked(4);
+            onBtnWifiClicked(5);
         } else {
             syslog(LOG_DEBUG,"wireless device is already plug out, but one more wireless exist");
             qDebug()<<"wireless device is already plug out, but one more wireless exist";
@@ -1049,10 +1049,11 @@ void MainWindow::onBtnWifiClicked(int flag)
     if (is_wireless_adapter_ready == 1) {
         // 当连接上无线网卡时才能打开wifi开关
         // 网络开关关闭时，点击Wifi开关时，程序先打开有线开关
-        if (flag == 0 || flag == 3 || flag == 4) {
+        if (flag == 0 || flag == 1 || flag == 4 || flag == 5) {
             if (checkWlOn()) {
-                if (flag != 3) { //以防第二张无线网卡插入时断网
+                if (flag != 4) { //以防第二张无线网卡插入时断网
                     is_stop_check_net_state = 1;
+                    qDebug() << "aaa111";
                     objKyDBus->setWifiSwitchState(false);
                     lbTopWifiList->hide();
                     btnAddNet->hide();
@@ -1072,15 +1073,16 @@ void MainWindow::onBtnWifiClicked(int flag)
                 if (is_fly_mode_on == 0) {
                     //on_btnWifiList_clicked();
                     is_stop_check_net_state = 1;
+                    qDebug() << "aaa222";
                     objKyDBus->setWifiCardState(true);
                     objKyDBus->setWifiSwitchState(true);
                     //lbTopWifiList->show();
                     //btnAddNet->show();
-                    btnWireless->setSwitchStatus(true);
 
                     QThread *t = new QThread();
                     BackThread *bt = new BackThread();
                     bt->moveToThread(t);
+                    btnWireless->setSwitchStatus(true);
                     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
                     connect(t, SIGNAL(started()), bt, SLOT(execEnWifi()));
                     connect(bt, SIGNAL(enWifiDone()), this, SLOT(enWifiDone()));
@@ -1090,7 +1092,7 @@ void MainWindow::onBtnWifiClicked(int flag)
                     this->startLoading();
                 }
             }
-        } else if(flag == 1) {
+        } else if(flag == 2) {
             if (is_fly_mode_on == 0) {
                 //on_btnWifiList_clicked();
                 is_stop_check_net_state = 1;
@@ -1109,7 +1111,7 @@ void MainWindow::onBtnWifiClicked(int flag)
                 t->start();
                 this->startLoading();
             }
-        } else if(flag == 2) {
+        } else if(flag == 3) {
             is_stop_check_net_state = 1;
             lbTopWifiList->hide();
             btnAddNet->hide();

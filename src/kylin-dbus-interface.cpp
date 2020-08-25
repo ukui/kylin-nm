@@ -846,11 +846,11 @@ void KylinDBus::getWifiSwitchState()
                 if (isWirelessCardOn) {
                     bool judge = getSwitchStatus(key);
                     if (judge) {
-                        mw->onBtnWifiClicked(1); //打开wifi开关
+                        mw->onBtnWifiClicked(2); //打开wifi开关
                         qDebug()<<"receive a signal to turn on wifi switch from control-center";
                         syslog(LOG_DEBUG, "receive a signal to turn on wifi switch from control-center");
                     } else {
-                        mw->onBtnWifiClicked(2); //关闭wifi开关
+                        mw->onBtnWifiClicked(3); //关闭wifi开关
                         qDebug()<<"receive a signal to turn off wifi switch from control-center";
                         syslog(LOG_DEBUG, "receive a signal to turn off wifi switch from control-center");
                     }
@@ -876,6 +876,7 @@ bool KylinDBus::getSwitchStatus(QString key) {
 //通知控制面板wifi开关的信息
 void KylinDBus::setWifiSwitchState(bool signal)
 {
+    qDebug() << "111aaa";
     if (!m_gsettings) {
         return ;
     }
@@ -885,7 +886,9 @@ void KylinDBus::setWifiSwitchState(bool signal)
     if (!list.contains("switchor")) {
         return ;
     }
+    qDebug() << "111bbb";
     m_gsettings->set("switchor",signal);
+    qDebug() << "111ccc";
 }
 
 //通知控制面板无线网卡的状态信息

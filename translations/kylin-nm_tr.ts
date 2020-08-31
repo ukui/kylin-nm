@@ -1247,9 +1247,8 @@
 <context>
     <name>KylinDBus</name>
     <message>
-        <location filename="../src/kylin-dbus-interface.cpp" line="712"/>
         <source>kylin network applet desktop message</source>
-        <translation type="unfinished">Kylin ağ uygulaması masaüstü mesajı</translation>
+        <translation type="obsolete">Kylin ağ uygulaması masaüstü mesajı</translation>
     </message>
 </context>
 <context>
@@ -1272,7 +1271,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="340"/>
-        <location filename="../src/mainwindow.cpp" line="1177"/>
+        <location filename="../src/mainwindow.cpp" line="1180"/>
         <source>Ethernet</source>
         <translation>Kablolu Ağ</translation>
     </message>
@@ -1282,7 +1281,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="346"/>
-        <location filename="../src/mainwindow.cpp" line="1236"/>
+        <location filename="../src/mainwindow.cpp" line="1239"/>
         <source>Wifi</source>
         <translation>Wi-Fi</translation>
     </message>
@@ -1310,54 +1309,54 @@
         <translation>Ana Pencereyi Göster</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1140"/>
+        <location filename="../src/mainwindow.cpp" line="1143"/>
         <source>No wireless card detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1276"/>
-        <location filename="../src/mainwindow.cpp" line="1353"/>
-        <location filename="../src/mainwindow.cpp" line="1501"/>
-        <location filename="../src/mainwindow.cpp" line="2197"/>
-        <location filename="../src/mainwindow.cpp" line="2282"/>
+        <location filename="../src/mainwindow.cpp" line="1279"/>
+        <location filename="../src/mainwindow.cpp" line="1356"/>
+        <location filename="../src/mainwindow.cpp" line="1504"/>
+        <location filename="../src/mainwindow.cpp" line="2200"/>
+        <location filename="../src/mainwindow.cpp" line="2289"/>
         <source>Not connected</source>
         <translation>Bağlanamadı</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1279"/>
-        <location filename="../src/mainwindow.cpp" line="1355"/>
-        <location filename="../src/mainwindow.cpp" line="1421"/>
-        <location filename="../src/mainwindow.cpp" line="1422"/>
-        <location filename="../src/mainwindow.cpp" line="1504"/>
-        <location filename="../src/mainwindow.cpp" line="1583"/>
-        <location filename="../src/mainwindow.cpp" line="1735"/>
-        <location filename="../src/mainwindow.cpp" line="2199"/>
-        <location filename="../src/mainwindow.cpp" line="2284"/>
+        <location filename="../src/mainwindow.cpp" line="1282"/>
+        <location filename="../src/mainwindow.cpp" line="1358"/>
+        <location filename="../src/mainwindow.cpp" line="1424"/>
+        <location filename="../src/mainwindow.cpp" line="1425"/>
+        <location filename="../src/mainwindow.cpp" line="1507"/>
+        <location filename="../src/mainwindow.cpp" line="1586"/>
+        <location filename="../src/mainwindow.cpp" line="1738"/>
+        <location filename="../src/mainwindow.cpp" line="2202"/>
+        <location filename="../src/mainwindow.cpp" line="2291"/>
         <source>Disconnected</source>
         <translation>Bağlantı Kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1446"/>
+        <location filename="../src/mainwindow.cpp" line="1449"/>
         <source>No Other Wired Network Scheme</source>
         <translation type="unfinished">Başka Kablolu Ağ Düzeni Yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1605"/>
+        <location filename="../src/mainwindow.cpp" line="1608"/>
         <source>No Other Wireless Network Scheme</source>
         <translation type="unfinished">Başka Kablosuz Ağ Düzeni Yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2108"/>
+        <location filename="../src/mainwindow.cpp" line="2111"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished">Kablolu ağ bağlantısı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2136"/>
+        <location filename="../src/mainwindow.cpp" line="2139"/>
         <source>Wi-Fi is disconnected</source>
         <translation type="unfinished">Kablosuz bağlantı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2513"/>
+        <location filename="../src/mainwindow.cpp" line="2518"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
@@ -1382,8 +1381,8 @@
         <translation type="unfinished">Listede kullanılabilir ağ yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1400"/>
-        <location filename="../src/mainwindow.cpp" line="1561"/>
+        <location filename="../src/mainwindow.cpp" line="1403"/>
+        <location filename="../src/mainwindow.cpp" line="1564"/>
         <source>NetOn,</source>
         <translation></translation>
     </message>
@@ -1417,17 +1416,17 @@
         <translation type="vanished">Kablosuz listesini şimdi güncelle</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2469"/>
+        <location filename="../src/mainwindow.cpp" line="2474"/>
         <source>Conn Ethernet Success</source>
         <translation>Ethernet Bağlantısı Başarılı</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2481"/>
+        <location filename="../src/mainwindow.cpp" line="2486"/>
         <source>Conn Ethernet Fail</source>
         <translation>Ethernet Bağlantısı Hatası</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2504"/>
+        <location filename="../src/mainwindow.cpp" line="2509"/>
         <source>Conn Wifi Success</source>
         <translation>Wi-Fi Bağlantısı Başarılı</translation>
     </message>
@@ -1572,6 +1571,14 @@
     <message>
         <source>Auto</source>
         <translation type="obsolete">Oto</translation>
+    </message>
+</context>
+<context>
+    <name>Utils</name>
+    <message>
+        <location filename="../src/utils.cpp" line="87"/>
+        <source>kylin network applet desktop message</source>
+        <translation type="unfinished">Kylin ağ uygulaması masaüstü mesajı</translation>
     </message>
 </context>
 </TS>

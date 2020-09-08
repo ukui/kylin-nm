@@ -876,7 +876,6 @@ bool KylinDBus::getSwitchStatus(QString key) {
 //通知控制面板wifi开关的信息
 void KylinDBus::setWifiSwitchState(bool signal)
 {
-    qDebug() << "111aaa";
     if (!m_gsettings) {
         return ;
     }
@@ -886,9 +885,7 @@ void KylinDBus::setWifiSwitchState(bool signal)
     if (!list.contains("switchor")) {
         return ;
     }
-    qDebug() << "111bbb";
     m_gsettings->set("switchor",signal);
-    qDebug() << "111ccc";
 }
 
 //通知控制面板无线网卡的状态信息

@@ -936,6 +936,7 @@ void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
             qDebug()<<"wireless device is already plug in";
             is_wireless_adapter_ready = 1;
             onBtnWifiClicked(4);
+            objKyDBus->getWirelessCardName();
         }
     }
 }
@@ -952,6 +953,7 @@ void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
             is_wireless_adapter_ready = 0;
             onBtnWifiClicked(5);
         } else {
+            objKyDBus->getWirelessCardName();
             syslog(LOG_DEBUG,"wireless device is already plug out, but one more wireless exist");
             qDebug()<<"wireless device is already plug out, but one more wireless exist";
         }
@@ -1073,7 +1075,6 @@ void MainWindow::onBtnWifiClicked(int flag)
                 if (is_fly_mode_on == 0) {
                     //on_btnWifiList_clicked();
                     is_stop_check_net_state = 1;
-                    qDebug() << "aaa222";
                     objKyDBus->setWifiCardState(true);
                     objKyDBus->setWifiSwitchState(true);
                     //lbTopWifiList->show();
@@ -2241,6 +2242,7 @@ void MainWindow::enWifiDone()
         on_btnWifiList_clicked();
     }
 
+    objKyDBus->getWirelessCardName();
     qDebug()<<"debug: already turn on the switch of wifi network";
     syslog(LOG_DEBUG, "Already turn on the switch of wifi network");
 }

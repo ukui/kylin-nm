@@ -280,6 +280,9 @@ void ConfForm::on_btnOk_clicked()
         if (this->isActConf == true) {
             // 如果是修改当前连接的网络，则修改设置后简略重连网络
             //QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + ui->leName->text() + "'";
+            //QString connCmd  = "nmcli connection up '" +  ui->leName->text() + "'";
+            //system(connCmd.toUtf8().data());
+
             kylindbus.connectWiredNet(ui->leName->text()); //reconnect this wired network
 
             QString m_txt(tr("New settings already effective"));

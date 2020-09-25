@@ -738,9 +738,55 @@ void KylinDBus::connectWiredNet(QString netName)
                                                        "/org/freedesktop/NetworkManager",
                                                        "org.freedesktop.NetworkManager",
                                                        QDBusConnection::systemBus() );
+
+                            QDBusInterface interface( "org.freedesktop.NetworkManager",
+                                                      "/org/freedesktop/NetworkManager",
+                                                      "org.freedesktop.DBus.Properties",
+                                                      QDBusConnection::systemBus() );
+
+                            //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
+                            QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+                            QList<QVariant> outArgs = result.arguments();
+                            QVariant first = outArgs.at(0);
+                            QDBusVariant dbvFirst = first.value<QDBusVariant>();
+                            QVariant vFirst = dbvFirst.variant();
+                            QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
+
+                            QDBusObjectPath connWiredPath;
+                            QDBusObjectPath objPath;
+                            dbusArgs.beginArray();
+                            while (!dbusArgs.atEnd()) {
+                                dbusArgs >> objPath;
+
+                                QDBusInterface interfacePro( "org.freedesktop.NetworkManager",
+                                                          objPath.path(),
+                                                          "org.freedesktop.DBus.Properties",
+                                                          QDBusConnection::systemBus() );
+
+                                QDBusReply<QVariant> reply = interfacePro.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
+                                if (reply.value().toString() == "ethernet" || reply.value().toString() == "802-3-ethernet") {
+                                    //先获取已连接有线网络对应的设备路径
+                                    QDBusInterface interfaceConn( "org.freedesktop.NetworkManager",
+                                                              objPath.path(),
+                                                              "org.freedesktop.DBus.Properties",
+                                                              QDBusConnection::systemBus() );
+                                    QDBusMessage replyConn = interfaceConn.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Devices");
+                                    QList<QVariant> outArgsIp4 = replyConn.arguments();
+                                    QVariant firstIp4 = outArgsIp4.at(0);
+                                    QDBusVariant dbvFirstIp4 = firstIp4.value<QDBusVariant>();
+                                    QVariant vFirstIp4 = dbvFirstIp4.variant();
+                                    const QDBusArgument &dbusArgIpv4 = vFirstIp4.value<QDBusArgument>();
+                                    QList<QDBusObjectPath> mDatasIpv4;
+                                    dbusArgIpv4 >> mDatasIpv4;
+                                    connWiredPath = mDatasIpv4.at(0);
+                                    //qDebug() << "xxxxxxxxxxxxxxxxxxxxxxxxxx" << mDatasIpv4.at(0).path();
+                                }
+                            }
+                            dbusArgs.endArray();
+
                             QDBusReply<QDBusObjectPath> connectionReply = m_interface.call("ActivateConnection",
                                                                                            QVariant::fromValue(objNet),
-                                                                                           QVariant::fromValue(wiredPath),
+                                                                                           QVariant::fromValue(connWiredPath),
                                                                                            QVariant::fromValue(active_connection));
                         }
                     }

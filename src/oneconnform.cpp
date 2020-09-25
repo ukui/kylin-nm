@@ -474,6 +474,10 @@ void OneConnForm::on_btnDisConn_clicked()
 //点击列表item扩展时会出现该按钮 用于连接网络
 void OneConnForm::on_btnConnSub_clicked()
 {
+    if (mw->is_stop_check_net_state == 1) {
+        return;
+    }
+
     syslog(LOG_DEBUG, "A button named on_btnConnSub about wifi net is clicked.");
     qDebug()<<"A button named on_btnConnSub about wifi net is clicked.";
     toConnectWirelessNetwork();
@@ -482,6 +486,10 @@ void OneConnForm::on_btnConnSub_clicked()
 //无需密码的wifi连接
 void OneConnForm::on_btnConn_clicked()
 {
+    if (mw->is_stop_check_net_state == 1) {
+        return;
+    }
+
     syslog(LOG_DEBUG, "A button named btnConn about wifi net is clicked.");
     qDebug()<<"A button named btnConn about wifi net is clicked.";
     toConnectWirelessNetwork();
@@ -682,6 +690,7 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         ui->btnConnPWD->show();
 
         this->isSelected = true;
+        mw->is_stop_check_net_state = 0;
     }
 
     if (connFlag == 1) {
@@ -697,6 +706,8 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         if (status != 0) {
             syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");
         }
+
+        mw->is_stop_check_net_state = 0;
     }
 
     // 设置全局变量，当前连接Wifi的信号强度

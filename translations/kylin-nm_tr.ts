@@ -16,92 +16,92 @@
         <translation>Ağı düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="101"/>
+        <location filename="../src/confform.cpp" line="106"/>
         <source>LAN name: </source>
         <translation type="unfinished">LAN adı: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="102"/>
+        <location filename="../src/confform.cpp" line="107"/>
         <source>Method: </source>
         <translation>Yöntem: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="103"/>
+        <location filename="../src/confform.cpp" line="108"/>
         <source>Address: </source>
         <translation>Adres: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="104"/>
+        <location filename="../src/confform.cpp" line="109"/>
         <source>Netmask: </source>
         <translation>Netmask: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="105"/>
+        <location filename="../src/confform.cpp" line="110"/>
         <source>Gateway: </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="106"/>
+        <location filename="../src/confform.cpp" line="111"/>
         <source>DNS 1: </source>
         <translation>DNS 1: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="107"/>
+        <location filename="../src/confform.cpp" line="112"/>
         <source>DNS 2: </source>
         <translation>DNS 2: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="109"/>
+        <location filename="../src/confform.cpp" line="114"/>
         <source>Edit Conn</source>
         <translation>Bağ. Düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="110"/>
+        <location filename="../src/confform.cpp" line="115"/>
         <source>Auto(DHCP)</source>
         <translation>Oto(DHCP)</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="111"/>
+        <location filename="../src/confform.cpp" line="116"/>
         <source>Manual</source>
         <translation>Elle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="121"/>
+        <location filename="../src/confform.cpp" line="126"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="122"/>
+        <location filename="../src/confform.cpp" line="127"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="123"/>
+        <location filename="../src/confform.cpp" line="128"/>
         <source>Ok</source>
         <translation type="unfinished">Tamam</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="216"/>
+        <location filename="../src/confform.cpp" line="220"/>
         <source>Can not create new wired network for without wired card</source>
         <translation type="unfinished">Kablolu kart olmadan yeni kablolu ağ oluşturulamıyor</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="232"/>
+        <location filename="../src/confform.cpp" line="236"/>
         <source>New network already created</source>
         <translation type="unfinished">Yeni ağ zaten oluşturuldu</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="272"/>
+        <location filename="../src/confform.cpp" line="276"/>
         <source>New network settings already finished</source>
         <translation type="unfinished">Yeni ağ ayarları zaten tamamlandı</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="305"/>
+        <location filename="../src/confform.cpp" line="309"/>
         <source>Edit Network</source>
         <translation type="unfinished">Ağı Düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="340"/>
+        <location filename="../src/confform.cpp" line="344"/>
         <source>Add Wired Network</source>
         <translation type="unfinished">Kablolu Ağ Ekle</translation>
     </message>
@@ -114,7 +114,7 @@
         <translation type="obsolete">Kablolu ağın yapılandırmasını başarıyla değiştirildi</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="281"/>
+        <location filename="../src/confform.cpp" line="285"/>
         <source>New settings already effective</source>
         <translation>Yeni ayarlar zaten etkili</translation>
     </message>
@@ -122,47 +122,47 @@
 <context>
     <name>DlgConnHidWifi</name>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="70"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="77"/>
         <source>Add Hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="71"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="78"/>
         <source>Connection</source>
         <translation>Bağlantı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="72"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="79"/>
         <source>Wi-Fi name</source>
         <translation type="unfinished">Wi-Fi adı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="73"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="80"/>
         <source>Wi-Fi security</source>
         <translation>Wi-Fi güvenlik</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="74"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="81"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="75"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="82"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlantı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="77"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="84"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="98"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="105"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="99"/>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="106"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation>WPA &amp; WPA2 Kişisel</translation>
     </message>
@@ -248,7 +248,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="96"/>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="97"/>
@@ -258,7 +258,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="98"/>
         <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="100"/>
@@ -268,7 +268,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="101"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
 </context>
 <context>
@@ -311,7 +311,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="89"/>
         <source>Allow automatic PAC pro_visioning</source>
-        <translation>Otomatik PAC pro_visioning'e izin ver</translation>
+        <translation>Otomatik PAC pro_visioning&apos;e izin ver</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="90"/>
@@ -357,7 +357,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="119"/>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="120"/>
@@ -367,7 +367,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="121"/>
         <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="123"/>
@@ -377,7 +377,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="124"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="136"/>
@@ -480,7 +480,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="104"/>
         <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="106"/>
@@ -490,7 +490,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="107"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="119"/>
@@ -609,7 +609,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="129"/>
         <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="131"/>
@@ -619,7 +619,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="132"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="144"/>
@@ -727,7 +727,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="105"/>
         <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="107"/>
@@ -737,7 +737,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="108"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="120"/>
@@ -790,7 +790,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="96"/>
         <source>Domain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Domain:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="97"/>
@@ -863,7 +863,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="128"/>
         <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="130"/>
@@ -873,7 +873,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="131"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="143"/>
@@ -999,7 +999,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="126"/>
         <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="128"/>
@@ -1009,7 +1009,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="129"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="141"/>
@@ -1102,7 +1102,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="104"/>
         <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="106"/>
@@ -1112,7 +1112,7 @@
     <message>
         <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="107"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="115"/>
@@ -1138,52 +1138,52 @@
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="76"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="82"/>
         <source>Add Hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="77"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="83"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="78"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="84"/>
         <source>Wi-Fi name</source>
         <translation type="unfinished">Wi-Fi adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="79"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="85"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi güvenlik:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="80"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="86"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="81"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="87"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="82"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="88"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="84"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="90"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="107"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="113"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="108"/>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="114"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
     </message>
@@ -1192,16 +1192,8 @@
         <translation type="obsolete">WEP 40/128-bit Key (Hex veya ASCII)</translation>
     </message>
     <message>
-        <source>WEP 128-bit Passphrase</source>
-        <translation type="obsolete"></translation>
-    </message>
-    <message>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="obsolete">Dinamik WEP (802.1x)</translation>
-    </message>
-    <message>
-        <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="obsolete"></translation>
     </message>
 </context>
 <context>
@@ -1255,7 +1247,7 @@
 <context>
     <name>KylinDBus</name>
     <message>
-        <location filename="../src/kylin-dbus-interface.cpp" line="617"/>
+        <location filename="../src/kylin-dbus-interface.cpp" line="618"/>
         <source>kylin network applet desktop message</source>
         <translation type="unfinished">Kylin ağ uygulaması masaüstü mesajı</translation>
     </message>
@@ -1280,7 +1272,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="338"/>
-        <location filename="../src/mainwindow.cpp" line="1163"/>
+        <location filename="../src/mainwindow.cpp" line="1171"/>
         <source>Ethernet</source>
         <translation>Kablolu Ağ</translation>
     </message>
@@ -1290,7 +1282,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="344"/>
-        <location filename="../src/mainwindow.cpp" line="1222"/>
+        <location filename="../src/mainwindow.cpp" line="1230"/>
         <source>Wifi</source>
         <translation>Wi-Fi</translation>
     </message>
@@ -1318,49 +1310,49 @@
         <translation>Ana Pencereyi Göster</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1261"/>
-        <location filename="../src/mainwindow.cpp" line="1338"/>
-        <location filename="../src/mainwindow.cpp" line="1483"/>
-        <location filename="../src/mainwindow.cpp" line="2178"/>
-        <location filename="../src/mainwindow.cpp" line="2263"/>
+        <location filename="../src/mainwindow.cpp" line="1269"/>
+        <location filename="../src/mainwindow.cpp" line="1346"/>
+        <location filename="../src/mainwindow.cpp" line="1491"/>
+        <location filename="../src/mainwindow.cpp" line="2186"/>
+        <location filename="../src/mainwindow.cpp" line="2271"/>
         <source>Not connected</source>
         <translation>Bağlanamadı</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1264"/>
-        <location filename="../src/mainwindow.cpp" line="1340"/>
-        <location filename="../src/mainwindow.cpp" line="1403"/>
-        <location filename="../src/mainwindow.cpp" line="1404"/>
-        <location filename="../src/mainwindow.cpp" line="1486"/>
-        <location filename="../src/mainwindow.cpp" line="1565"/>
-        <location filename="../src/mainwindow.cpp" line="1717"/>
-        <location filename="../src/mainwindow.cpp" line="2180"/>
-        <location filename="../src/mainwindow.cpp" line="2265"/>
+        <location filename="../src/mainwindow.cpp" line="1272"/>
+        <location filename="../src/mainwindow.cpp" line="1348"/>
+        <location filename="../src/mainwindow.cpp" line="1411"/>
+        <location filename="../src/mainwindow.cpp" line="1412"/>
+        <location filename="../src/mainwindow.cpp" line="1494"/>
+        <location filename="../src/mainwindow.cpp" line="1573"/>
+        <location filename="../src/mainwindow.cpp" line="1725"/>
+        <location filename="../src/mainwindow.cpp" line="2188"/>
+        <location filename="../src/mainwindow.cpp" line="2273"/>
         <source>Disconnected</source>
         <translation>Bağlantı Kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1428"/>
+        <location filename="../src/mainwindow.cpp" line="1436"/>
         <source>No Other Wired Network Scheme</source>
         <translation type="unfinished">Başka Kablolu Ağ Düzeni Yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1587"/>
+        <location filename="../src/mainwindow.cpp" line="1595"/>
         <source>No Other Wireless Network Scheme</source>
         <translation type="unfinished">Başka Kablosuz Ağ Düzeni Yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2090"/>
+        <location filename="../src/mainwindow.cpp" line="2098"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished">Kablolu ağ bağlantısı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2118"/>
+        <location filename="../src/mainwindow.cpp" line="2126"/>
         <source>Wi-Fi is disconnected</source>
         <translation type="unfinished">Kablosuz bağlantı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2491"/>
+        <location filename="../src/mainwindow.cpp" line="2499"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
@@ -1385,8 +1377,8 @@
         <translation type="unfinished">Listede kullanılabilir ağ yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1385"/>
-        <location filename="../src/mainwindow.cpp" line="1543"/>
+        <location filename="../src/mainwindow.cpp" line="1393"/>
+        <location filename="../src/mainwindow.cpp" line="1551"/>
         <source>NetOn,</source>
         <translation></translation>
     </message>
@@ -1404,7 +1396,7 @@
         <translation type="vanished">Kablosuz anahtarı açmadan önce kablolu ağ anahtarını açık tut</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1128"/>
+        <location filename="../src/mainwindow.cpp" line="1136"/>
         <source>please insert the wireless network adapter</source>
         <translation>Lütfen kablosuz ağ adaptörünü takın</translation>
     </message>
@@ -1421,17 +1413,17 @@
         <translation type="vanished">Kablosuz listesini şimdi güncelle</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2447"/>
+        <location filename="../src/mainwindow.cpp" line="2455"/>
         <source>Conn Ethernet Success</source>
         <translation>Ethernet Bağlantısı Başarılı</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2459"/>
+        <location filename="../src/mainwindow.cpp" line="2467"/>
         <source>Conn Ethernet Fail</source>
         <translation>Ethernet Bağlantısı Hatası</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2482"/>
+        <location filename="../src/mainwindow.cpp" line="2490"/>
         <source>Conn Wifi Success</source>
         <translation>Wi-Fi Bağlantısı Başarılı</translation>
     </message>

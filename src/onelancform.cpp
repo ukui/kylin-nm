@@ -375,6 +375,7 @@ void OneLancForm::on_btnInfo_clicked()
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();
     cf->raise();
+    cf->activateWindow();
 }
 
 void OneLancForm::waitAnimStep()

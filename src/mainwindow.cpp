@@ -2225,7 +2225,11 @@ void MainWindow::enWifiDone()
     ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
 
     is_update_wifi_list = 0;
-    this->ksnm->execGetWifiList();
+    if (is_btnWifiList_clicked) {
+        this->ksnm->execGetWifiList();
+    } else {
+        on_btnWifiList_clicked();
+    }
 
     qDebug()<<"debug: already turn on the switch of wifi network";
     syslog(LOG_DEBUG, "Already turn on the switch of wifi network");

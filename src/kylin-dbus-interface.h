@@ -33,14 +33,17 @@
 #include <QVariantMap>
 #include <QGSettings/QGSettings>
 #include <QTimer>
+#include <QThread>
 
 class MainWindow;
+class Utils;
 
 class KylinDBus : public QObject
 {
     Q_OBJECT
 public:
     explicit KylinDBus(MainWindow *mw = 0, QObject *parent = nullptr);
+    ~KylinDBus();
 
     void getObjectPath();
     int getAccessPointsNumber();
@@ -95,10 +98,11 @@ public slots:
     void getLanIp(QString netName);
     void getWifiMac(QString netName);
     void slot_timeout();
-    void onNetworkDeviceChanged(QDBusObjectPath objPath);
 
 private:
     MainWindow *mw;
+    Utils *mUtils;
+    QThread *mUtilsThread;
 
     int a = 0;
     bool isRunningFunction = false;
@@ -113,6 +117,7 @@ private:
 
 signals:
     void updateWiredList(int n);
+    void requestSendDesktopNotify(QString message);
 };
 
 #endif // KYLINDBUSINTERFACE_H

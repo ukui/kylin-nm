@@ -43,12 +43,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 // The Utils class, used to do some assist function
 
-class Utils
+class Utils : public QObject
 {
+    Q_OBJECT
 public:
     Utils();
 
     static int m_system(char *cmd);
+
+public slots:
+    void onRequestSendDesktopNotify(QString message);
 
 };
 

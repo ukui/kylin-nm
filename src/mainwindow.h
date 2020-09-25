@@ -178,7 +178,7 @@ public slots:
     void on_btnHotspot_clicked();
     void on_btnHotspotState();
 
-    //flag =0为普通点击、1为收到打开信息、2为收到关闭信息、3为无线网卡插入、4为无线网卡拔出
+    //flag =0或1为普通点击、2为收到打开信息、3为收到关闭信息、4为无线网卡插入、5为无线网卡拔出
     void onBtnWifiClicked(int flag = 0);
 
 protected:

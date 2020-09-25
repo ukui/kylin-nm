@@ -198,16 +198,16 @@ void KylinDBus::getPhysicalCarrierState(int n)
 //网络设备插拔处理 目前仅处理有线设备的插拔
 void KylinDBus::onNetworkDeviceChanged(QDBusObjectPath objPath)
 {
-    //重新设置部分元素
-    wiredPath.setPath("/");
-    wirelessPath.setPath("/");
-    isWirelessCardOn = false;
+//    //重新设置部分元素
+//    wiredPath.setPath("/");
+//    wirelessPath.setPath("/");
+//    isWirelessCardOn = false;
 
-    //重新获取网络设备的状态
-    getObjectPath();
-    getPhysicalCarrierState(0);
-    getLanHwAddressState(); //获取有线网Mac地址
-    getWiredCardName(); //获取有线网卡名称
+//    //重新获取网络设备的状态
+//    getObjectPath();
+//    getPhysicalCarrierState(0);
+//    getLanHwAddressState(); //获取有线网Mac地址
+//    getWiredCardName(); //获取有线网卡名称
 }
 
 //获取有线网Mac地址

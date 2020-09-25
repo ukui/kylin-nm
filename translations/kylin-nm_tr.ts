@@ -1475,6 +1475,11 @@
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
+        <location filename="../src/oneconnform.cpp" line="438"/>
+        <source>Signal：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Public</source>
         <translation type="vanished">Halka açık</translation>
     </message>
@@ -1498,9 +1503,8 @@
         <translation type="unfinished">WiFi güvenliği:</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="438"/>
         <source>Sifnal：</source>
-        <translation type="unfinished">Sinyal gücü:</translation>
+        <translation type="obsolete">Sinyal gücü:</translation>
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="439"/>

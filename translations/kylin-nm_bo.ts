@@ -1401,7 +1401,7 @@
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="438"/>
-        <source>Sifnal：</source>
+        <source>Signal：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

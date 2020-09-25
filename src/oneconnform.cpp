@@ -435,7 +435,7 @@ void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3)
     if (str1 == "--" || str1 == ""){ str1 = tr("None"); };
 
     QString strSecurity = QString(tr("WiFi Security："));
-    QString strSignal = QString(tr("Sifnal："));
+    QString strSignal = QString(tr("Signal："));
     QString strMAC = QString(tr("MAC："));
 
     ui->leInfo_1->setText(strSecurity + str1);

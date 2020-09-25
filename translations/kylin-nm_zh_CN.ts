@@ -1483,6 +1483,11 @@
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
     <message>
+        <location filename="../src/oneconnform.cpp" line="438"/>
+        <source>Signal：</source>
+        <translation type="unfinished">信号强度：</translation>
+    </message>
+    <message>
         <source>Public</source>
         <translation type="vanished">开放</translation>
     </message>
@@ -1506,9 +1511,8 @@
         <translation type="unfinished">WiFi安全性：</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="438"/>
         <source>Sifnal：</source>
-        <translation type="unfinished">信号强度：</translation>
+        <translation type="obsolete">信号强度：</translation>
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="439"/>

@@ -803,11 +803,17 @@ void KylinDBus::getWifiSwitchState()
         connect(m_gsettings, &QGSettings::changed, this, [=] (const QString &key) {
 
             if (key == "switch") {
-                bool judge = getSwitchStatus(key);
-                if (judge) {
-                    mw->onBtnWifiClicked(1); //打开wifi开关
-                } else {
-                    mw->onBtnWifiClicked(2); //关闭wifi开关
+                if (isWirelessCardOn) {
+                    bool judge = getSwitchStatus(key);
+                    if (judge) {
+                        mw->onBtnWifiClicked(1); //打开wifi开关
+                        qDebug()<<"receive a signal to turn on wifi switch from control-center";
+                        syslog(LOG_DEBUG, "receive a signal to turn on wifi switch from control-center");
+                    } else {
+                        mw->onBtnWifiClicked(2); //关闭wifi开关
+                        qDebug()<<"receive a signal to turn off wifi switch from control-center";
+                        syslog(LOG_DEBUG, "receive a signal to turn off wifi switch from control-center");
+                    }
                 }
             }
         });

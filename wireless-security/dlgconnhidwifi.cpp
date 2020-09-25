@@ -38,6 +38,7 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
 
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")) );
     //需要添加 void paintEvent(QPaintEvent *event) 函数
 
     QPainterPath path;

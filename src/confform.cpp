@@ -38,6 +38,7 @@ ConfForm::ConfForm(QWidget *parent) :
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setWindowTitle(tr("edit network"));//"网络设置"
     this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")) );
     //需要添加 void paintEvent(QPaintEvent *event) 函数
 
     QPainterPath path;

@@ -598,8 +598,10 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
             for (int i=0; i<oldPaths.size(); i++) {
                 QDBusObjectPath old_path = oldPaths.at(i);
                 if (newPaths.size() == 0) {
-                    qDebug()<<"debug: 已连接网络个数由1减少到0";
-                    mw->onExternalConnectionChange(oldPathInfo.at(i));
+                    if (oldPathInfo.size() == oldPaths.size()) {
+                        qDebug()<<"debug: 已连接网络个数由1减少到0";
+                        mw->onExternalConnectionChange(oldPathInfo.at(i));
+                    }
                 } else {
                     for (int j=0; j<newPaths.size(); j++) {
                         QDBusObjectPath new_path = newPaths.at(j);

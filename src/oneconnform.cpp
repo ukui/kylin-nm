@@ -50,8 +50,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lePassword->setEchoMode(QLineEdit::Normal);
     ui->btnConnPWD->setEnabled(false);
 
-    leQssLow = "QLineEdit{border:none;background:transparent;font-size:14px;color:rgba(255,255,255,0.57);font-family:Noto Sans CJK SC;}";
-    leQssHigh = "QLineEdit{border:none;background:transparent;font-size:14px;color:rgba(255,255,255,0.91);font-family:Noto Sans CJK SC;}";
+    leQssLow = "QLineEdit{border:none;background:transparent;font-family:Noto Sans CJK SC;}";
+    leQssHigh = "QLineEdit{border:none;background:transparent;font-family:Noto Sans CJK SC;}";
 
     ui->leInfo_1->setStyleSheet(leQssLow);
     ui->leInfo_2->setStyleSheet(leQssLow);
@@ -60,13 +60,14 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->leInfo_2->setEnabled(false);
     ui->leInfo_3->setEnabled(false);
     ui->btnInfo->setStyleSheet("QPushButton{border:none;background:transparent;}");
-    ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0);}");
-    ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
-    ui->wbg_3->setStyleSheet("#wbg_3{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
-    ui->lbName->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.91);}");
-    ui->lbConned->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
-    ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;"
-                                  "background:rgba(0,0,0,0.2);color:rgba(255,255,255,0.35);font-size:14px;}");
+    ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(156,156,156,0);}");
+    ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(156,156,156,0.1);}");
+    ui->wbg_3->setStyleSheet("#wbg_3{border-radius:4px;background-color:rgba(156,156,156,0.1);}");
+//    ui->lbName->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.91);}");
+//    ui->lbConned->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+//    ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;"
+//                                  "background:rgba(0,0,0,0.2);color:rgba(255,255,255,0.35);font-size:14px;}");
+    ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;background:rgba(0,0,0,0.2);}");
     ui->checkBoxPwd->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
                                    "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
                                    "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
@@ -79,9 +80,12 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConnPWD->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
                                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
-    ui->btnDisConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
-                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
-                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
+//    ui->btnDisConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
+//                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
+//                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
+    ui->btnDisConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(156,156,156,0.2);}"
+                               "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(156,156,156,0.3);}"
+                               "QPushButton:Pressed{border-radius:4px;background-color:rgba(156,156,156,0.1);}");
     ui->btnHideConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
                                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
@@ -172,14 +176,14 @@ bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
             if (!this->isTopItem) {
                 if (!this->isSelected) {
                     ui->btnConn->show();
-                    ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0.1);}");
+                    ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(156,156,156,0.1);}");
                     ui->wbg->show();
                 }
             }
             return true;
         } else if (event->type() == QEvent::HoverLeave) {
             ui->btnConn->hide();
-            ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(255,255,255,0);}");
+            ui->wbg->setStyleSheet("#wbg{border-radius:4px;background-color:rgba(156,156,156,0);}");
             ui->wbg->hide();
             return true;
         }
@@ -200,10 +204,10 @@ bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
 void OneConnForm::setAct(bool isAct)
 {
     if (isAct) {
-        ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
+        //ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->show();
     } else {
-        ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
+        //ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->hide();
     }
     isActive = isAct;
@@ -283,8 +287,7 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName)
     } else {
         resize(W_ITEM, H_ITEM);
         ui->lePassword->setText(tr("Input Password..."));//"输入密码..."
-        ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;"
-                                      "background:rgba(0,0,0,0.2);color:rgba(255,255,255,0.35);font-size:14px;}");
+        ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;background:rgba(0,0,0,0.2);}");
         ui->lePassword->setEchoMode(QLineEdit::Normal);
         ui->checkBoxPwd->setChecked(true);
 
@@ -589,7 +592,7 @@ bool OneConnForm::isWifiConfExist(QString netName)
 void OneConnForm::on_checkBoxPwd_stateChanged(int arg1)
 {
     if (arg1 == 0) {
-        ui->lePassword ->setEchoMode(QLineEdit::Password);
+        ui->lePassword->setEchoMode(QLineEdit::Password);
     } else {
         ui->lePassword->setEchoMode(QLineEdit::Normal);
     }
@@ -597,17 +600,15 @@ void OneConnForm::on_checkBoxPwd_stateChanged(int arg1)
 
 void OneConnForm::on_lePassword_textEdited(const QString &arg1)
 {
-    ui->lePassword->setStyleSheet("QLineEdit{border:2px solid rgba(28, 47, 146, 1);border-radius:4px;"
-                                  "background:rgba(0,0,0,0.2);color:rgba(255,255,255,0.91);font-size:14px;}");
+    ui->lePassword->setStyleSheet("QLineEdit{border:2px solid rgba(28, 47, 146, 1);border-radius:4px;background:rgba(0,0,0,0.2);}");
 
-    if (ui->lePassword->text().size() < 5){
+    if (ui->lePassword->text().size() < 5) {
         ui->btnConnPWD->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
                                    "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
                                    "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
         ui->btnConnPWD->setEnabled(false);
-        if (ui->lePassword->text().size() == 0){
-            ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;"
-                                          "background:rgba(0,0,0,0.2);color:rgba(255,255,255,0.35);font-size:14px;}");
+        if (ui->lePassword->text().size() == 0) {
+            ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;background:rgba(0,0,0,0.2);}");
         }
     } else {
         ui->btnConnPWD->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"

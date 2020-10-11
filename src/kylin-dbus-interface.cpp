@@ -974,3 +974,12 @@ double KylinDBus::getTransparentData()
         return 0.7;
     }
 }
+
+//使用GSetting获取当前系统主题样式
+void KylinDBus::getUkuiStyleState()
+{
+//    if(QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
+//        QGSettings* gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
+//        connect(gsetting,&QGSettings::changed,this,&SideBarWidget::themeModeChangeSlot);
+//    }
+}

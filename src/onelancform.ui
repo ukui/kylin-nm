@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>424</width>
-    <height>250</height>
+    <height>60</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -115,7 +115,7 @@
      <rect>
       <x>63</x>
       <y>86</y>
-      <width>250</width>
+      <width>260</width>
       <height>20</height>
      </rect>
     </property>
@@ -169,7 +169,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgba(255, 255, 255,0.05);</string>
+    <string notr="true">background-color: rgba(156, 156, 156,0.1);</string>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>

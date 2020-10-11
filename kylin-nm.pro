@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui x11extras dbus KWindowSystem
+QT       += core gui x11extras dbus KWindowSystem svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

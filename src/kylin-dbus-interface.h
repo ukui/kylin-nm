@@ -57,6 +57,7 @@ public:
     void initTaskbarGsetting();
     int getTaskbarHeight();
     int getTaskbarPos();
+    void getUkuiStyleState();
 
     void getWifiSwitchState();
     bool getSwitchStatus(QString key);

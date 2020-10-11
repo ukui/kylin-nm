@@ -170,32 +170,6 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="lbNetListImg">
-    <property name="geometry">
-     <rect>
-      <x>11</x>
-      <y>20</y>
-      <width>19</width>
-      <height>19</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbWifiListImg">
-    <property name="geometry">
-     <rect>
-      <x>11</x>
-      <y>67</y>
-      <width>19</width>
-      <height>19</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QLabel" name="lbHotBG">
     <property name="geometry">
      <rect>
@@ -258,26 +232,51 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255,0.06);</string>
+     <string notr="true">background-color: rgba(156, 156, 156,0.1);</string>
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnConfImg">
+   <widget class="QPushButton" name="btnNetListImg">
     <property name="geometry">
      <rect>
-      <x>11</x>
-      <y>499</y>
-      <width>19</width>
-      <height>19</height>
+      <x>8</x>
+      <y>18</y>
+      <width>24</width>
+      <height>24</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
    </widget>
-   <zorder>btnConfImg</zorder>
+   <widget class="QPushButton" name="btnWifiListImg">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>65</y>
+      <width>24</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnConfImg">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>497</y>
+      <width>24</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>lbFlyBG</zorder>
    <zorder>lbHotBG</zorder>
    <zorder>lbFlyImg</zorder>
@@ -285,18 +284,19 @@
    <zorder>lbBtnNetBG</zorder>
    <zorder>btnNet</zorder>
    <zorder>lbBtnWifiBG</zorder>
-   <zorder>btnAdvConf</zorder>
    <zorder>btnHotspot</zorder>
    <zorder>btnFlyMode</zorder>
    <zorder>lbBtnWifiBall</zorder>
    <zorder>lbNetListBG</zorder>
    <zorder>lbWifiListBG</zorder>
-   <zorder>lbWifiListImg</zorder>
-   <zorder>lbNetListImg</zorder>
-   <zorder>btnNetList</zorder>
-   <zorder>btnWifiList</zorder>
    <zorder>lbNetwork</zorder>
    <zorder>vLine</zorder>
+   <zorder>btnNetListImg</zorder>
+   <zorder>btnNetList</zorder>
+   <zorder>btnWifiListImg</zorder>
+   <zorder>btnConfImg</zorder>
+   <zorder>btnWifiList</zorder>
+   <zorder>btnAdvConf</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

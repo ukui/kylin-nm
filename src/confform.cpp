@@ -48,13 +48,13 @@ ConfForm::ConfForm(QWidget *parent) :
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
-    this->setStyleSheet("QWidget{border-radius:6px;border:none;}");
-    KylinDBus mkylindbus;
-    double trans = mkylindbus.getTransparentData();
-    QString strTrans;
-    strTrans =  QString::number(trans, 10, 2);
-    QString sty = "#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20," + strTrans + ");}";
-    ui->centralWidget->setStyleSheet(sty);
+//    this->setStyleSheet("QWidget{border-radius:6px;border:none;}");
+//    KylinDBus mkylindbus;
+//    double trans = mkylindbus.getTransparentData();
+//    QString strTrans;
+//    strTrans =  QString::number(trans, 10, 2);
+//    QString sty = "#centralWidget{border:1px solid rgba(255,255,255,0.05);border-radius:6px;background:rgba(19,19,20," + strTrans + ");}";
+//    ui->centralWidget->setStyleSheet(sty);
 
     labelQss = "QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}";
     cbxQss = "QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);"
@@ -71,35 +71,35 @@ ConfForm::ConfForm(QWidget *parent) :
     btnOnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
                  "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                  "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}";
-    lineQss = "background:rgba(255,255,255,0.08);";
+    lineQss = "background:rgba(156,156,156,0.1);";
 
     // ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid #297a97;background-color:#ffffff;}");
     ui->wdHead->setStyleSheet("#wdHead{border:none}");
     ui->wgManual->setStyleSheet("#wgManual{border:none}");
     ui->wdBottom->setStyleSheet("#wdBottom{border:none}");
-    ui->lbLeftupTitle->setStyleSheet("QLabel{border:0px;font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbName->setStyleSheet(labelQss);
-    ui->lbTxt1->setStyleSheet(labelQss);
-    ui->lbTxt2->setStyleSheet(labelQss);
-    ui->lbTxt3->setStyleSheet(labelQss);
-    ui->lbTxt4->setStyleSheet(labelQss);
-    ui->lbTxt5->setStyleSheet(labelQss);
-    ui->lbTxt6->setStyleSheet(labelQss);
+//    ui->lbLeftupTitle->setStyleSheet("QLabel{border:0px;font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+//    ui->lbName->setStyleSheet(labelQss);
+//    ui->lbTxt1->setStyleSheet(labelQss);
+//    ui->lbTxt2->setStyleSheet(labelQss);
+//    ui->lbTxt3->setStyleSheet(labelQss);
+//    ui->lbTxt4->setStyleSheet(labelQss);
+//    ui->lbTxt5->setStyleSheet(labelQss);
+//    ui->lbTxt6->setStyleSheet(labelQss);
 
-    ui->cbType->setStyleSheet(cbxQss);
-    ui->cbType->setView(new  QListView());
-    ui->cbMask->setStyleSheet(cbxQss);
-    ui->cbMask->setView(new  QListView());
+//    ui->cbType->setStyleSheet(cbxQss);
+//    ui->cbType->setView(new  QListView());
+//    ui->cbMask->setStyleSheet(cbxQss);
+//    ui->cbMask->setView(new  QListView());
 
-    ui->leName->setStyleSheet(leQss);
-    ui->leAddr->setStyleSheet(leQss);
-    ui->leGateway->setStyleSheet(leQss);
-    ui->leDns->setStyleSheet(leQss);
-    ui->leDns2->setStyleSheet(leQss);
+//    ui->leName->setStyleSheet(leQss);
+//    ui->leAddr->setStyleSheet(leQss);
+//    ui->leGateway->setStyleSheet(leQss);
+//    ui->leDns->setStyleSheet(leQss);
+//    ui->leDns2->setStyleSheet(leQss);
 
-    ui->btnCancel->setStyleSheet(btnOffQss);
-    ui->btnOk->setStyleSheet(btnOnQss);
-    ui->btnCreate->setStyleSheet(btnOnQss);
+//    ui->btnCancel->setStyleSheet(btnOffQss);
+//    ui->btnOk->setStyleSheet(btnOnQss);
+//    ui->btnCreate->setStyleSheet(btnOnQss);
     ui->lineUp->setStyleSheet(lineQss);
     ui->lineDown->setStyleSheet(lineQss);
     ui->lineUp->hide();
@@ -337,10 +337,10 @@ void ConfForm::cbTypeChanged(int index)
         this->resize(432, 510);
     }
     if (index == 3) {
-        ui->btnOk->setStyleSheet(btnOffQss);
+//        ui->btnOk->setStyleSheet(btnOffQss);
         ui->btnOk->setEnabled(false);
 
-        ui->btnCreate->setStyleSheet(btnOffQss);
+//        ui->btnCreate->setStyleSheet(btnOffQss);
         ui->btnCreate->setEnabled(false);
 
         ui->leName->setEnabled(true);
@@ -413,10 +413,10 @@ void ConfForm::setEnableOfBtn()
         }
     }
 
-    ui->btnOk->setStyleSheet(btnOnQss);
+//    ui->btnOk->setStyleSheet(btnOnQss);
     ui->btnOk->setEnabled(true);
 
-    ui->btnCreate->setStyleSheet(btnOnQss);
+//    ui->btnCreate->setStyleSheet(btnOnQss);
     ui->btnCreate->setEnabled(true);
 }
 
@@ -435,10 +435,10 @@ bool ConfForm::getTextEditState(QString text)
 //设置创建或保存按钮不可点击
 void ConfForm::setBtnEnableFalse()
 {
-    ui->btnOk->setStyleSheet(btnOffQss);
+//    ui->btnOk->setStyleSheet(btnOffQss);
     ui->btnOk->setEnabled(false);
 
-    ui->btnCreate->setStyleSheet(btnOffQss);
+//    ui->btnCreate->setStyleSheet(btnOffQss);
     ui->btnCreate->setEnabled(false);
 }
 
@@ -448,5 +448,12 @@ void ConfForm::paintEvent(QPaintEvent *event)
     opt.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+
+    QRect rect = this->rect();
+    p.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
+    p.setBrush(opt.palette.color(QPalette::Base));
+    //p.setOpacity(1);
+    p.setPen(Qt::NoPen);
+    p.drawRoundedRect(rect, 6, 6);
     QWidget::paintEvent(event);
 }

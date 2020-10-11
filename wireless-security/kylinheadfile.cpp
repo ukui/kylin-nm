@@ -40,5 +40,5 @@ MyQss::MyQss()
     btnConnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
                  "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                  "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}";
-    lineQss = "background:rgba(255,255,255,0.08);";
+    lineQss = "background:rgba(156,156,156,0.1);";
 }

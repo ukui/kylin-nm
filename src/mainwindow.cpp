@@ -53,9 +53,9 @@ MainWindow::MainWindow(QWidget *parent) :
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
-    this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
+    //this->setStyleSheet("QWidget{border:none;border-radius:6px;}");
 
-    ui->centralWidget->setStyleSheet("#centralWidget{border:none;border-radius:6px;background:rgba(19,19,20,0.7);}");
+    //ui->centralWidget->setStyleSheet("#centralWidget{border:none;border-radius:6px;background:rgba(19,19,20,0.5);}");
 
     editQssString(); //编辑部分控件QSS
     createTopLanUI(); //创建顶部有线网item
@@ -205,11 +205,11 @@ void MainWindow::editQssString()
     btnOnQss = "QLabel{min-width: 37px; min-height: 37px;max-width:37px; max-height: 37px;border-radius: 4px; background-color:rgba(61,107,229,1)}";
     btnBgOffQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(255,255,255,0.2)}";
     btnBgOnQss = "QLabel{min-width: 48px; min-height: 22px;max-width:48px; max-height: 22px;border-radius: 10px; background-color:rgba(61,107,229,1);}";
-    btnBgHoverQss = "QLabel{border-radius: 4px; background-color:rgba(255,255,255,0.12)}";
+    btnBgHoverQss = "QLabel{border-radius: 4px; background-color:rgba(156,156,156,0.3)}";
     btnBgLeaveQss = "QLabel{border-radius: 4px; background-color:rgba(255,255,255,0)}";
     leftBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);}"
-                 "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.12);}"
-                 "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.12);}";
+                 "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(156,156,156,0.3);}"
+                 "QPushButton:Pressed{border-radius:4px;background-color:rgba(156,156,156,0.3);}";
     funcBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(107,142,235,0.97);font-size:14px;}"
                  "QPushButton:Hover{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(151,175,241,0.97);font-size:14px;}"
                  "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(61,107,229,0.97);font-size:14px;}";
@@ -225,7 +225,7 @@ void MainWindow::createTopLanUI()
     lbTopLanList->setText(tr("Ethernet Networks"));//"可用网络列表"
     lbTopLanList->resize(W_MIDDLE_WORD, H_MIDDLE_WORD);
     lbTopLanList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_GAP_UP);
-    lbTopLanList->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
+//    lbTopLanList->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
     lbTopLanList->show();
     /*新建有线网按钮*/
     btnCreateNet = new QPushButton(topLanListWidget);
@@ -248,7 +248,7 @@ void MainWindow::createTopWifiUI()
     lbTopWifiList->setText(tr("Wifi Networks"));//"可用网络列表"
     lbTopWifiList->resize(W_MIDDLE_WORD, H_MIDDLE_WORD);
     lbTopWifiList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_GAP_UP);
-    lbTopWifiList->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
+//    lbTopWifiList->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
     lbTopWifiList->show();
     /*新建有线网按钮*/
     btnAddNet = new QPushButton(topWifiListWidget);
@@ -283,7 +283,8 @@ void MainWindow::createOtherUI()
     lbNoItemTip = new QLabel(ui->centralWidget);
     lbNoItemTip->resize(W_NO_ITEM_TIP, H_NO_ITEM_TIP);
     lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2);
-    lbNoItemTip->setStyleSheet("QLabel{border:none;background:transparent;font-size:14px;color:rgba(255,255,255,0.91);}");
+//    lbNoItemTip->setStyleSheet("QLabel{border:none;background:transparent;font-size:14px;color:rgba(255,255,255,0.91);}");
+    lbNoItemTip->setStyleSheet("QLabel{border:none;background:transparent;}");
     lbNoItemTip->setText(tr("No usable network in the list"));//列表暂无可连接网络
     lbNoItemTip->setAlignment(Qt::AlignCenter);
     lbNoItemTip->hide();
@@ -308,7 +309,7 @@ void MainWindow::createListAreaUI()
     lbLanList = new QLabel(lanListWidget);
     lbWifiList = new QLabel(wifiListWidget);
 
-    ui->lbNetwork->setStyleSheet("QLabel{font-size:20px;color:rgba(255,255,255,0.97);}");
+//    ui->lbNetwork->setStyleSheet("QLabel{font-size:20px;color:rgba(255,255,255,0.97);}");
     ui->lbNetwork->show();
 
     topLanListWidget->setStyleSheet("QWidget{border:none;}");
@@ -317,19 +318,19 @@ void MainWindow::createListAreaUI()
     topWifiListWidget->setStyleSheet("QWidget{border:none;}");
     topWifiListWidget->setStyleSheet("background-color:transparent;");
 
-    lbLoadUp->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
-    lbLoadDown->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+//    lbLoadUp->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+//    lbLoadDown->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
     lbLoadUp->setText("0KB/s");
     lbLoadDown->setText("0KB/s.");
     this->on_setNetSpeed();
 
     scrollAreal->setStyleSheet("QScrollArea{border:none;}");
     scrollAreal->viewport()->setStyleSheet("background-color:transparent;");
-    //scrollAreal->verticalScrollBar()->setStyleSheet(scrollBarQss);
+    //scrollAreal->verticalScrollBar()->setStyleSheet(scrollBarQss);////
 
     scrollAreaw->setStyleSheet("QScrollArea{border:none;}");
     scrollAreaw->viewport()->setStyleSheet("background-color:transparent;");
-    //scrollAreaw->verticalScrollBar()->setStyleSheet(scrollBarQss);
+    //scrollAreaw->verticalScrollBar()->setStyleSheet(scrollBarQss);////
 }
 
 void MainWindow::createLeftAreaUI()
@@ -340,13 +341,32 @@ void MainWindow::createLeftAreaUI()
     QString txtEthernet(tr("Ethernet"));
     ui->btnNetList->setToolTip(txtEthernet);
     ui->lbNetListBG->setStyleSheet(btnOffQss);
-    ui->lbNetListImg->setStyleSheet("QLabel{background-image:url(:/res/x/net-list-bg.svg);}");
+    //ui->lbNetListImg->setStyleSheet("QLabel{background-image:url(:/res/x/net-list-bg.svg);}");
+    //ui->btnNetListImg->setStyleSheet("QPushButton{background:transparent;}");
+    //设置PushButton背景透明
+    QPalette paletteLan = ui->btnNetListImg->palette();
+    paletteLan.setColor(QPalette::Highlight, Qt::transparent);
+    paletteLan.setBrush(QPalette::Button, QBrush(QColor(1,1,1,0)));
+    ui->btnNetListImg->setPalette(paletteLan);
+    //添加PushButton的svg图片
+    ui->btnNetListImg->setIcon(QIcon(":/res/x/net-list-bg.svg"));
+    ui->btnNetListImg->setProperty("useIconHighlightEffect", true);
+    ui->btnNetListImg->setProperty("iconHighlightEffectMode", true);
 
     ui->btnWifiList->setFocusPolicy(Qt::NoFocus);
     QString txtWifi(tr("Wifi"));
     ui->btnWifiList->setToolTip(txtWifi);
     ui->lbWifiListBG->setStyleSheet(btnOffQss);
-    ui->lbWifiListImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-list-bg.svg);}");
+    //ui->lbWifiListImg->setStyleSheet("QLabel{background-image:url(:/res/x/wifi-list-bg.svg);}");
+    //设置PushButton背景透明
+    QPalette paletteWifi = ui->btnWifiListImg->palette();
+    paletteWifi.setColor(QPalette::Highlight, Qt::transparent);
+    paletteWifi.setBrush(QPalette::Button, QBrush(QColor(1,1,1,0)));
+    ui->btnWifiListImg->setPalette(paletteWifi);
+    //添加PushButton的svg图片
+    ui->btnWifiListImg->setIcon(QIcon(":/res/x/wifi-list-bg.svg"));
+    ui->btnWifiListImg->setProperty("useIconHighlightEffect", true);
+    ui->btnWifiListImg->setProperty("iconHighlightEffectMode", true);
 
     ui->btnNet->hide();
 
@@ -376,9 +396,16 @@ void MainWindow::createLeftAreaUI()
     ui->btnAdvConf->setFocusPolicy(Qt::NoFocus);
     QString txtAdvanced(tr("Advanced"));
     ui->btnAdvConf->setToolTip(txtAdvanced);
-    //ui->lbBtnConfImg->setStyleSheet("QLabel{background-image:url(:/res/x/setup.png);}");
-    ui->btnConfImg->setStyleSheet("QPushButton{background-image:url(:/res/x/setup.png);}");
-    //ui->btnConfImg->setIcon(QIcon::fromTheme("settings-app-symbolic.svg", QIcon(":/res/x/setup.png")) );
+    //ui->lbBtnConfImg->setStyleSheet("QLabel{background-image:url(:/res/x/control.svg);}");
+    //设置PushButton背景透明
+    QPalette paletteConf = ui->btnConfImg->palette();
+    paletteConf.setColor(QPalette::Highlight, Qt::transparent);
+    paletteConf.setBrush(QPalette::Button, QBrush(QColor(1,1,1,0)));
+    ui->btnConfImg->setPalette(paletteConf);
+    //添加PushButton的svg图片
+    ui->btnConfImg->setIcon(QIcon(":/res/x/control.svg"));
+    ui->btnConfImg->setProperty("useIconHighlightEffect", true);
+    ui->btnConfImg->setProperty("iconHighlightEffectMode", true);
 }
 
 // 初始化有线网列表
@@ -429,15 +456,15 @@ void MainWindow::initNetwork()
     syslog(LOG_DEBUG, "current network state:  wired state =%d,  wifi state =%d", iface->lstate, iface->wstate);
     qDebug()<<"===";
 
-    //ui->lbBtnNetBG->setStyleSheet(btnOnQss);
+    //ui->lbBtnNetBG->setStyleSheet(btnOnQss);////
     if (iface->wstate == 0 || iface->wstate == 1) {
-       // ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
-        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+       // ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);////
+        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);////
         btnWireless->setSwitchStatus(true);
     } else {
         btnWireless->setSwitchStatus(false);
-        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);////
+        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);////
     }
 
     // 初始化网络列表
@@ -604,11 +631,11 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
         handleIconClicked();
 
         if (this->isHidden()) {
-            double trans = objKyDBus->getTransparentData();
-            QString strTrans;
-            strTrans =  QString::number(trans, 10, 2);
-            QString sty = "#centralWidget{background:rgba(19,19,20," + strTrans + ");}";
-            ui->centralWidget->setStyleSheet(sty);
+//            double trans = objKyDBus->getTransparentData();
+//            QString strTrans;
+//            strTrans =  QString::number(trans, 10, 2);
+//            QString sty = "#centralWidget{background:rgba(19,19,20," + strTrans + ");}";
+//            ui->centralWidget->setStyleSheet(sty);
 
             this->showNormal();
             if (is_btnNetList_clicked == 1) {
@@ -1242,18 +1269,18 @@ void MainWindow::on_btnWifiList_clicked()
     //ui->lbBtnWifiBG->show();
     //ui->lbBtnWifiBall->show();
     if (iface->wstate == 0 || iface->wstate == 1) {
-        //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
-        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);////
+        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);////
         btnWireless->setSwitchStatus(true);
     } else {
-        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);////
+        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);////
         btnWireless->setSwitchStatus(false);
     }
 
     if (iface->wstate != 2) {
-        //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
-        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);////
+        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);////
         btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();
@@ -1261,8 +1288,8 @@ void MainWindow::on_btnWifiList_clicked()
         this->startLoading();
         this->ksnm->execGetWifiList();
     } else {
-        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);////
+        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);////
         btnWireless->setSwitchStatus(false);
         delete topWifiListWidget; //清空top列表
         createTopWifiUI(); //创建顶部无线网item
@@ -1778,15 +1805,15 @@ void MainWindow::on_btnAdvConf_released()
 void MainWindow::on_btnFlyMode_clicked()
 {
     if (is_fly_mode_on == 0) {
-        ui->lbFlyImg->setStyleSheet("QLabel{background-image:url(:/res/x/fly-mode-on.svg);}");
-        ui->lbFlyBG->setStyleSheet(btnOnQss);
+//        ui->lbFlyImg->setStyleSheet("QLabel{background-image:url(:/res/x/fly-mode-on.svg);}");
+//        ui->lbFlyBG->setStyleSheet(btnOnQss);
         is_fly_mode_on = 1;
 
         onBtnWifiClicked(0);
         on_btnWifiList_clicked();
     } else {
-        ui->lbFlyImg->setStyleSheet("QLabel{background-image:url(:/res/x/fly-mode-off.svg);}");
-        ui->lbFlyBG->setStyleSheet(btnOffQss);
+//        ui->lbFlyImg->setStyleSheet("QLabel{background-image:url(:/res/x/fly-mode-off.svg);}");
+//        ui->lbFlyBG->setStyleSheet(btnOffQss);
         is_fly_mode_on = 0;
     }
 }
@@ -2159,13 +2186,13 @@ void MainWindow::enNetDone()
     BackThread *bt = new BackThread();
     mwBandWidth = bt->execChkLanWidth(lname);
 
-    ui->lbBtnNetBG->setStyleSheet(btnOnQss);
+//    ui->lbBtnNetBG->setStyleSheet(btnOnQss);
 
     // 打开网络开关时如果Wifi开关是打开的，设置其样式
     if (checkWlOn()) {
         btnWireless->setSwitchStatus(true);
-        //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
-        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);////
+        //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);////
     }
 
     onBtnNetListClicked(1);
@@ -2207,7 +2234,7 @@ void MainWindow::disNetDone()
     ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
     ccf->show();
 
-    ui->lbBtnNetBG->setStyleSheet(btnOffQss);
+//    ui->lbBtnNetBG->setStyleSheet(btnOffQss);
 
     btnWireless->setSwitchStatus(false);
 
@@ -2227,13 +2254,13 @@ void MainWindow::disNetDone()
 }
 void MainWindow::launchLanDone()
 {
-    ui->lbBtnNetBG->setStyleSheet(btnOnQss);
+//    ui->lbBtnNetBG->setStyleSheet(btnOnQss);
 }
 
 void MainWindow::enWifiDone()
 {
-    //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);
-    //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);
+    //ui->lbBtnWifiBG->setStyleSheet(btnBgOnQss);////
+    //ui->lbBtnWifiBall->move(X_RIGHT_WIFI_BALL, Y_WIFI_BALL);////
 
     is_update_wifi_list = 0;
     if (is_btnWifiList_clicked) {
@@ -2262,8 +2289,8 @@ void MainWindow::disWifiStateKeep()
 {
     if (this->is_btnNetList_clicked == 1) {
         btnWireless->setSwitchStatus(false);
-        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+        //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);////
+        //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);////
     }
     if (this->is_btnWifiList_clicked== 1) {
         disWifiDoneChangeUI();
@@ -2304,8 +2331,8 @@ void MainWindow::disWifiDoneChangeUI()
     }
 
     btnWireless->setSwitchStatus(false);
-    //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);
-    //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);
+    //ui->lbBtnWifiBG->setStyleSheet(btnBgOffQss);////
+    //ui->lbBtnWifiBall->move(X_LEFT_WIFI_BALL, Y_WIFI_BALL);////
 
     this->lanListWidget->hide();
     this->topLanListWidget->hide();
@@ -2525,4 +2552,97 @@ void MainWindow::connWifiDone(int connFlag)
     } else if (connFlag == 3) {
         syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected");
     }
+}
+
+//重新绘制背景色
+void MainWindow::paintEvent(QPaintEvent *event)
+{
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    QRect rect = this->rect();
+    p.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
+    p.setBrush(opt.palette.color(QPalette::Base));
+    //p.setOpacity(1);
+    p.setPen(Qt::NoPen);
+    p.drawRoundedRect(rect, 6, 6);
+    QWidget::paintEvent(event);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//控件随主题色置灰或置白
+void MainWindow::setUkuiStyle(QString style)
+{
+    qDebug() << "zzzzz" << style;
+//    const auto ratio=devicePixelRatioF();
+//    QPixmap pixmap=loadSvg(iconStr,19*ratio);
+//    if (style == "ukui-light") {
+//        pixmap=drawSymbolicBlackColoredPixmap(pixmap);
+//    } else {
+//        pixmap=drawSymbolicColoredPixmap(pixmap);//反白
+//    }
+//    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+//    label->setPixmap(pixmap);
+}
+
+QPixmap MainWindow::drawSymbolicColoredPixmap(const QPixmap &source)
+{
+    QColor gray(128,128,128);
+    QColor standard (31,32,34);
+    QImage img = source.toImage();
+    for (int x = 0; x < img.width(); x++) {
+        for (int y = 0; y < img.height(); y++) {
+            auto color = img.pixelColor(x, y);
+            if (color.alpha() > 0) {
+                if (qAbs(color.red()-gray.red())<20 && qAbs(color.green()-gray.green())<20 && qAbs(color.blue()-gray.blue())<20) {
+                    color.setRed(255);
+                    color.setGreen(255);
+                    color.setBlue(255);
+                    img.setPixelColor(x, y, color);
+                } else if(qAbs(color.red()-standard.red())<20 && qAbs(color.green()-standard.green())<20 && qAbs(color.blue()-standard.blue())<20) {
+                    color.setRed(255);
+                    color.setGreen(255);
+                    color.setBlue(255);
+                    img.setPixelColor(x, y, color);
+                } else {
+                    img.setPixelColor(x, y, color);
+                }
+            }
+        }
+    }
+    return QPixmap::fromImage(img);
+}
+
+QPixmap MainWindow::drawSymbolicBlackColoredPixmap(const QPixmap &source)
+{
+    QImage img = source.toImage();
+    for (int x = 0; x < img.width(); x++) {
+        for (int y = 0; y < img.height(); y++) {
+            auto color = img.pixelColor(x, y);
+            if (color.alpha() > 0) {
+                if (qAbs(color.red())>=200 && qAbs(color.green())>=200 && qAbs(color.blue())>=200) {
+                    color.setRed(56);
+                    color.setGreen(56);
+                    color.setBlue(56);
+                    img.setPixelColor(x, y, color);
+                }
+            }
+        }
+    }
+    return QPixmap::fromImage(img);
+}
+
+const QPixmap MainWindow::loadSvg(const QString &fileName, const int size)
+{
+    QPixmap pixmap(size, size);
+    QSvgRenderer renderer(fileName);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter;
+    painter.begin(&pixmap);
+    renderer.render(&painter);
+    painter.end();
+
+    return pixmap;
 }

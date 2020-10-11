@@ -14,6 +14,7 @@ Build-Depends: debhelper-compat (= 12),
                libgsettings-qt-dev,
                libkf5windowsystem-dev,
                libx11-dev,
+               libqt5svg5-dev,
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: https://github.com/ukui/kylin-nm

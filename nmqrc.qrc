@@ -78,5 +78,6 @@
         <file>res/s/conning-s/11.png</file>
         <file>res/s/conning-s/12.png</file>
         <file>res/x/setup.png</file>
+        <file>res/x/control.svg</file>
     </qresource>
 </RCC>

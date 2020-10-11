@@ -70,8 +70,8 @@ void SwitchButton::paintEvent(QPaintEvent *event) {
     painter.setRenderHint(QPainter::Antialiasing); //抗锯齿效果
     painter.setPen(Qt::NoPen);
     QColor colorActive(61,107,229);
-    QColor colorInactive(255,255,255);
-	colorInactive.setAlphaF(0.12);
+    QColor colorInactive(190,190,190);
+    colorInactive.setAlphaF(0.12);
     if(m_bIsOn) {
         painter.save();
         painter.setBrush(colorActive);

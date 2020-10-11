@@ -62,6 +62,7 @@
 #include <QStandardPaths>
 #include <QStringList>
 #include <QToolTip>
+#include <QSvgRenderer>
 
 #define W_LEFT_AREA 41
 #define W_VERTICAL_LINE 1 //左边竖线宽度
@@ -166,6 +167,7 @@ public slots:
     void onNetworkDeviceAdded(QDBusObjectPath objPath);
     void onNetworkDeviceRemoved(QDBusObjectPath objPath);
     void getLanBandWidth();
+    void setUkuiStyle(QString style);
 
     void onExternalConnectionChange(QString type);
     void onExternalLanChange();
@@ -185,6 +187,7 @@ public slots:
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
+    void paintEvent(QPaintEvent *event);
 
 private:
     void checkSingle();
@@ -197,6 +200,9 @@ private:
     void getLanList();
     void getWifiList();
     void getInitLanSlist();
+    QPixmap drawSymbolicColoredPixmap(const QPixmap &source);
+    QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
+    const QPixmap loadSvg(const QString &fileName, const int size);
 
     Ui::MainWindow *ui;
 

@@ -46,34 +46,34 @@ DlgConnHidWifiWpa::DlgConnHidWifiWpa(int type, MainWindow *mainWindow, QWidget *
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
-    KylinDBus mkylindbus;
-    double trans = mkylindbus.getTransparentData();
-    QString strTrans;
-    strTrans =  QString::number(trans, 10, 2);
-    QString sty = "QWidget{border-radius:6px;background-color:rgba(19,19,20," + strTrans + ");border:1px solid rgba(255, 255, 255, 0.05);}";
-    this->setStyleSheet(sty);
+//    KylinDBus mkylindbus;
+//    double trans = mkylindbus.getTransparentData();
+//    QString strTrans;
+//    strTrans =  QString::number(trans, 10, 2);
+//    QString sty = "QWidget{border-radius:6px;background-color:rgba(19,19,20," + strTrans + ");border:1px solid rgba(255, 255, 255, 0.05);}";
+//    this->setStyleSheet(sty);
     //this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.7);border:1px solid rgba(255, 255, 255, 0.05);}");
 
     MyQss objQss;
 
-    ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
+//    ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
     ui->lbBoder->hide();
-    ui->lbLeftupTitle->setStyleSheet("QLabel{border:0px;font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbConn->setStyleSheet(objQss.labelQss);
-    ui->lbNetName->setStyleSheet(objQss.labelQss);
-    ui->lbSecurity->setStyleSheet(objQss.labelQss);
-    ui->lbPassword->setStyleSheet(objQss.labelQss);
+//    ui->lbLeftupTitle->setStyleSheet("QLabel{border:0px;font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+//    ui->lbConn->setStyleSheet(objQss.labelQss);
+//    ui->lbNetName->setStyleSheet(objQss.labelQss);
+//    ui->lbSecurity->setStyleSheet(objQss.labelQss);
+//    ui->lbPassword->setStyleSheet(objQss.labelQss);
 
-    ui->cbxConn->setStyleSheet(objQss.cbxQss);
-    ui->cbxConn->setView(new  QListView());
-    ui->leNetName->setStyleSheet(objQss.leQss);
-    ui->lePassword->setStyleSheet(objQss.leQss);
-    ui->cbxSecurity->setStyleSheet(objQss.cbxQss);
-    ui->cbxSecurity->setView(new  QListView());
+//    ui->cbxConn->setStyleSheet(objQss.cbxQss);
+//    ui->cbxConn->setView(new  QListView());
+//    ui->leNetName->setStyleSheet(objQss.leQss);
+//    ui->lePassword->setStyleSheet(objQss.leQss);
+//    ui->cbxSecurity->setStyleSheet(objQss.cbxQss);
+//    ui->cbxSecurity->setView(new  QListView());
     ui->checkBoxPwd->setStyleSheet(objQss.checkBoxQss);
 
-    ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
-    ui->btnConnect->setStyleSheet(objQss.btnConnQss);
+//    ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
+//    ui->btnConnect->setStyleSheet(objQss.btnConnQss);
     ui->lineUp->setStyleSheet(objQss.lineQss);
     ui->lineDown->setStyleSheet(objQss.lineQss);
     ui->btnCancel->setFocusPolicy(Qt::NoFocus);
@@ -353,5 +353,12 @@ void DlgConnHidWifiWpa::paintEvent(QPaintEvent *event)
     opt.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+
+    QRect rect = this->rect();
+    p.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
+    p.setBrush(opt.palette.color(QPalette::Base));
+    //p.setOpacity(1);
+    p.setPen(Qt::NoPen);
+    p.drawRoundedRect(rect, 6, 6);
     QWidget::paintEvent(event);
 }

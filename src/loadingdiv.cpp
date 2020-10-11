@@ -17,6 +17,7 @@
  */
 
 #include "loadingdiv.h"
+#include <QIcon>
 
 #define FRAMESPEED 60 //帧与帧之间的间隔时间(ms)
 #define ALLTIME 15*1000 //等待动画持续总时间
@@ -41,10 +42,18 @@ LoadingDiv::LoadingDiv(QWidget *parent) : QWidget(parent)
 //加载动画控件'loadingGif'
 void LoadingDiv::switchAnimStep()
 {
-    QString qpmQss = "QLabel{background-image:url(':/res/s/conning-b/";
+//    QString qpmQss = "QLabel{background-image:url(':/res/s/conning-b/";
+//    qpmQss.append(QString::number(this->currentPage));
+//    qpmQss.append(".png');}");
+//    loadingGif->setStyleSheet(qpmQss);
+
+    //另外一种加载方法
+    QString qpmQss = ":/res/s/conning-b/";
     qpmQss.append(QString::number(this->currentPage));
-    qpmQss.append(".png');}");
-    loadingGif->setStyleSheet(qpmQss);
+    qpmQss.append(".png");
+    loadingGif->setPixmap(QPixmap(qpmQss));
+    loadingGif->setProperty("useIconHighlightEffect", true);
+    loadingGif->setProperty("iconHighlightEffectMode", true);
 
     this->currentPage --;
 

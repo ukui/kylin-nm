@@ -631,11 +631,11 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
         handleIconClicked();
 
         if (this->isHidden()) {
-//            double trans = objKyDBus->getTransparentData();
-//            QString strTrans;
-//            strTrans =  QString::number(trans, 10, 2);
-//            QString sty = "#centralWidget{background:rgba(19,19,20," + strTrans + ");}";
-//            ui->centralWidget->setStyleSheet(sty);
+            //double trans = objKyDBus->getTransparentData();
+            //QString strTrans;
+            //strTrans =  QString::number(trans, 10, 2);
+            //QString sty = "#centralWidget{background:rgba(19,19,20," + strTrans + ");}";
+            //ui->centralWidget->setStyleSheet(sty);
 
             this->showNormal();
             if (is_btnNetList_clicked == 1) {
@@ -2557,13 +2557,15 @@ void MainWindow::connWifiDone(int connFlag)
 //重新绘制背景色
 void MainWindow::paintEvent(QPaintEvent *event)
 {
+    double trans = objKyDBus->getTransparentData();
+
     QStyleOption opt;
     opt.init(this);
     QPainter p(this);
     QRect rect = this->rect();
     p.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     p.setBrush(opt.palette.color(QPalette::Base));
-    //p.setOpacity(1);
+    p.setOpacity(trans);
     p.setPen(Qt::NoPen);
     p.drawRoundedRect(rect, 6, 6);
     QWidget::paintEvent(event);

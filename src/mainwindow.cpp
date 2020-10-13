@@ -684,7 +684,7 @@ void MainWindow::handleIconClicked()
 
     int n = objKyDBus->getTaskBarPos("position");
     int m = objKyDBus->getTaskBarHeight("height");
-    int d = 2; //窗口边沿到任务栏距离
+    int d = 7; //窗口边沿到任务栏距离
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()) {
         if (n == 0) {

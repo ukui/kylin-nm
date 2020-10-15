@@ -49,9 +49,9 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
 
     MyQss objQss;
 
-//    ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
+    ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
     ui->lbBoder->hide();
-//    ui->lbLeftupTitle->setStyleSheet("QLabel{border:0px;font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbLeftupTitle->setStyleSheet("QLabel{font-size:20px;}");
 //    ui->lbConn->setStyleSheet(objQss.labelQss);
 //    ui->lbNetName->setStyleSheet(objQss.labelQss);
 //    ui->lbSecurity->setStyleSheet(objQss.labelQss);

@@ -24,6 +24,7 @@
 #include "wireless-security/dlgconnhidwifi.h"
 
 #include <KWindowEffects>
+#include <QFont>
 
 QString llname, lwname, hideWiFiConn;
 int currentActWifiSignalLv, count_loop;
@@ -225,7 +226,8 @@ void MainWindow::createTopLanUI()
     lbTopLanList->setText(tr("Ethernet Networks"));//"可用网络列表"
     lbTopLanList->resize(W_MIDDLE_WORD, H_MIDDLE_WORD);
     lbTopLanList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_GAP_UP);
-//    lbTopLanList->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
+    QFont fontTopLanList( "Noto Sans CJK SC", 14);
+    lbTopLanList->setFont(fontTopLanList);
     lbTopLanList->show();
     /*新建有线网按钮*/
     btnCreateNet = new QPushButton(topLanListWidget);
@@ -248,7 +250,8 @@ void MainWindow::createTopWifiUI()
     lbTopWifiList->setText(tr("Wifi Networks"));//"可用网络列表"
     lbTopWifiList->resize(W_MIDDLE_WORD, H_MIDDLE_WORD);
     lbTopWifiList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_GAP_UP);
-//    lbTopWifiList->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.97);}");
+    QFont fontTopWifiList( "Noto Sans CJK SC", 14);
+    lbTopWifiList->setFont(fontTopWifiList);
     lbTopWifiList->show();
     /*新建有线网按钮*/
     btnAddNet = new QPushButton(topWifiListWidget);
@@ -309,7 +312,7 @@ void MainWindow::createListAreaUI()
     lbLanList = new QLabel(lanListWidget);
     lbWifiList = new QLabel(wifiListWidget);
 
-//    ui->lbNetwork->setStyleSheet("QLabel{font-size:20px;color:rgba(255,255,255,0.97);}");
+    ui->lbNetwork->setStyleSheet("QLabel{font-size:20px;}");
     ui->lbNetwork->show();
 
     topLanListWidget->setStyleSheet("QWidget{border:none;}");
@@ -318,8 +321,8 @@ void MainWindow::createListAreaUI()
     topWifiListWidget->setStyleSheet("QWidget{border:none;}");
     topWifiListWidget->setStyleSheet("background-color:transparent;");
 
-//    lbLoadUp->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
-//    lbLoadDown->setStyleSheet("QLabel{font-size:14px;color:rgba(255,255,255,0.57);}");
+    lbLoadUp->setStyleSheet("QLabel{font-size:14px;}");
+    lbLoadDown->setStyleSheet("QLabel{font-size:14px;}");
     lbLoadUp->setText("0KB/s");
     lbLoadDown->setText("0KB/s.");
     this->on_setNetSpeed();
@@ -2209,7 +2212,7 @@ void MainWindow::disNetDone()
     ui->lbNetListBG->setStyleSheet(btnOnQss);
     ui->lbWifiListBG->setStyleSheet(btnOffQss);
 
-    ui->lbNetwork->setText("有线网络");
+    ui->lbNetwork->setText(tr("Ethernet"));
     btnWireless->hide();
     //ui->lbBtnWifiBG->hide();
     //ui->lbBtnWifiBall->hide();

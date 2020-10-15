@@ -69,7 +69,7 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->wdHead->setStyleSheet("#wdHead{border:none}");
     ui->wgManual->setStyleSheet("#wgManual{border:none}");
     ui->wdBottom->setStyleSheet("#wdBottom{border:none}");
-//    ui->lbLeftupTitle->setStyleSheet("QLabel{border:0px;font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
+    ui->lbLeftupTitle->setStyleSheet("QLabel{font-size:20px;}");
 //    ui->lbName->setStyleSheet(labelQss);
 //    ui->lbTxt1->setStyleSheet(labelQss);
 //    ui->lbTxt2->setStyleSheet(labelQss);

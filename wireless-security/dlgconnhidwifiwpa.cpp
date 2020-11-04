@@ -244,7 +244,8 @@ void DlgConnHidWifiWpa::changeWindow()
 
 void DlgConnHidWifiWpa::on_btnCancel_clicked()
 {
-    this->close();
+    //this->close();
+    this->hide();
 }
 
 void DlgConnHidWifiWpa::on_btnConnect_clicked()
@@ -289,6 +290,7 @@ void DlgConnHidWifiWpa::on_btnConnect_clicked()
         QTimer::singleShot(4*1000, this, SLOT(emitSignal() ));
     }
     this->close();
+    this->hide();
 }
 
 void DlgConnHidWifiWpa::on_checkBoxPwd_stateChanged(int arg1)

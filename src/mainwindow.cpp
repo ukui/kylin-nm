@@ -84,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     objNetSpeed = new NetworkSpeed();
 
+    QApplication::setQuitOnLastWindowClosed(false);
     this->confForm = new ConfForm();
 
     this->ksnm = new KSimpleNM();

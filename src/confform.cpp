@@ -213,6 +213,7 @@ void ConfForm::on_btnCreate_clicked()
     if (mIfname == "") {
         QString tip(tr("Can not create new wired network for without wired card"));
         kylindbus.showDesktopNotify(tip);
+        //this->close();
         this->hide();
         return;
     }
@@ -231,6 +232,7 @@ void ConfForm::on_btnCreate_clicked()
         kylindbus.showDesktopNotify(txt);
     }
 
+    //this->close();
     this->hide();
 }
 
@@ -265,6 +267,7 @@ void ConfForm::on_btnOk_clicked()
 
     KylinDBus kylindbus;
 
+    //this->close();
     this->hide();
 
     QString txt(tr("New network settings already finished"));
@@ -293,6 +296,7 @@ void ConfForm::on_btnOk_clicked()
 //点击取消按钮
 void ConfForm::on_btnCancel_clicked()
 {
+    //this->close();
     this->hide();
 }
 

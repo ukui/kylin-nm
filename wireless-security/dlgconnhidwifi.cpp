@@ -230,7 +230,8 @@ void DlgConnHidWifi::changeWindow(){
 
 void DlgConnHidWifi::on_btnCancel_clicked()
 {
-    this->close();
+    //this->close();
+    this->hide();
 }
 
 void DlgConnHidWifi::on_btnConnect_clicked()
@@ -276,7 +277,8 @@ void DlgConnHidWifi::on_btnConnect_clicked()
         connect(this, SIGNAL(sendMessage()), this,SLOT(emitSignal() ));
         QTimer::singleShot(4*1000, this, SLOT(emitSignal() ));
     }
-    this->close();
+    //this->close();
+    this->hide();
 }
 
 void DlgConnHidWifi::on_leNetName_textEdited(const QString &arg1)

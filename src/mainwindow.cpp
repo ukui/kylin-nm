@@ -1868,6 +1868,7 @@ void MainWindow::onBtnCreateNetClicked()
         primaryGeometry = qApp->primaryScreen()->geometry();
     }
 
+    QApplication::setQuitOnLastWindowClosed(false);
     ConfForm *m_cf = new ConfForm();
     m_cf->cbTypeChanged(3);
     m_cf->move(primaryGeometry.width() / 2 - m_cf->width() / 2, primaryGeometry.height() / 2 - m_cf->height() / 2);

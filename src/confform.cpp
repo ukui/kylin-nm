@@ -30,7 +30,7 @@
 extern QString llname, lwname;
 
 ConfForm::ConfForm(QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::ConfForm)
 {
     ui->setupUi(this);
@@ -92,6 +92,12 @@ ConfForm::ConfForm(QWidget *parent) :
 //    ui->btnCancel->setStyleSheet(btnOffQss);
 //    ui->btnOk->setStyleSheet(btnOnQss);
 //    ui->btnCreate->setStyleSheet(btnOnQss);
+    ui->leAddr->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->leName->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->leDns->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->leDns2->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->leGateway->setContextMenuPolicy(Qt::NoContextMenu);
+
     ui->lineUp->setStyleSheet(lineQss);
     ui->lineDown->setStyleSheet(lineQss);
     ui->lineUp->hide();
@@ -148,6 +154,7 @@ void ConfForm::mousePressEvent(QMouseEvent *event)
         this->dragPos = event->globalPos();
         event->accept();
     }
+    return QDialog::mousePressEvent(event);
 }
 void ConfForm::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -159,6 +166,7 @@ void ConfForm::mouseMoveEvent(QMouseEvent *event)
         this->move(this->winPos - (this->dragPos - event->globalPos()));
         event->accept();
     }
+    return QDialog::mouseMoveEvent(event);
 }
 
 //网络配置参数设置界面的显示内容

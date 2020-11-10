@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="toolTip">
+   <string/>
+  </property>
   <widget class="QWidget" name="centralWidget" native="true">
    <property name="geometry">
     <rect>

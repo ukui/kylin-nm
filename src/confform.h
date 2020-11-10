@@ -25,13 +25,14 @@
 #include <QPoint>
 #include <QPainter>
 #include <QPainterPath>
+#include <QDialog>
 #include <QListView>
 
 namespace Ui {
 class ConfForm;
 }
 
-class ConfForm : public QWidget
+class ConfForm : public QDialog
 {
     Q_OBJECT
 

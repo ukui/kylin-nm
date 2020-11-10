@@ -373,7 +373,7 @@ void OneLancForm::on_btnInfo_clicked()
     connect(cf, SIGNAL(requestRefreshLanList(int)), mw, SLOT(onBtnNetListClicked(int)));
 
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
-    cf->show();
+    cf->exec();
     cf->raise();
     cf->activateWindow();
 }

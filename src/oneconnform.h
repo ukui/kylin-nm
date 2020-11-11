@@ -82,6 +82,7 @@ public:
     bool isWifiConfExist(QString netName);
 
     QString wifiName;
+    QString connType;
     bool isSelected;
     bool isActive;
     bool isConnected;
@@ -136,7 +137,7 @@ signals:
     void disconnActiveWifi();
 
     void sigConnWifi(QString);
-    void sigConnWifiPWD(QString, QString);
+    void sigConnWifiPWD(QString, QString, QString);
 };
 
 #endif // ONECONNFORM_H

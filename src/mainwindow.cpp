@@ -1693,8 +1693,8 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
             if (lastWname == wname){break;} //在slist最后之前找到了lastWname，则停止
             if (j == slist.size()-1) {
-                syslog(LOG_DEBUG, "Will remove a Wi-Fi, it's name is: %s", lastWname.toUtf8().data());
-                qDebug()<<"Will remove a Wi-Fi, it's name is: "<<lastWname;
+                //syslog(LOG_DEBUG, "Will remove a Wi-Fi, it's name is: %s", lastWname.toUtf8().data());
+                //qDebug()<<"Will remove a Wi-Fi, it's name is: "<<lastWname;
                 QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
                 for (int pos = 0; pos < wifiList.size(); pos ++) {
                     OneConnForm *ocf = wifiList.at(pos);
@@ -1743,8 +1743,8 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
             if (lastWname == wname){break;} //上一次的wifi列表已经有名为wname的wifi，则停止
             if (j == oldWifiSlist.size()-1) { //到lastSlist最后一个都没找到，执行下面流程
-                syslog(LOG_DEBUG, "Will add a Wi-Fi, it's name is: %s", wname.toUtf8().data());
-                qDebug()<<"Will add a Wi-Fi, it's name is: "<<wname;
+                //syslog(LOG_DEBUG, "Will add a Wi-Fi, it's name is: %s", wname.toUtf8().data());
+                //qDebug()<<"Will add a Wi-Fi, it's name is: "<<wname;
                 QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
                 int n = wifiList.size();
                 int posY = 0;

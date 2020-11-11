@@ -139,6 +139,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(waitAnimStep()));
 
     connect(mw, SIGNAL(waitWifiStop()), this, SLOT(stopWaiting()));
+
+    connType = "";
 }
 
 OneConnForm::~OneConnForm()
@@ -451,7 +453,7 @@ void OneConnForm::slotConnWifiPWD()
 {
     //mw->startLoading();
     this->startWaiting(true);
-    emit sigConnWifiPWD(ui->lbName->text(), ui->lePassword->text());
+    emit sigConnWifiPWD(ui->lbName->text(), ui->lePassword->text(), connType);
 }
 
 //点击后断开wifi网络
@@ -528,7 +530,8 @@ void OneConnForm::on_btnConnPWD_clicked()
     bt->moveToThread(t);
     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
     connect(t, SIGNAL(started()), this, SLOT(slotConnWifiPWD()));
-    connect(this, SIGNAL(sigConnWifiPWD(QString, QString)), bt, SLOT(execConnWifiPWD(QString, QString)));
+    connect(this, SIGNAL(sigConnWifiPWD(QString, QString, QString)),
+            bt, SLOT(execConnWifiPWD(QString, QString, QString)));
     connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
     connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
@@ -664,7 +667,13 @@ void OneConnForm::slotConnWifiResult(int connFlag)
 {
     qDebug()<<"Function slotConnWifiResult receives a number: "<<connFlag;
 
-    if (connFlag == 2) {
+    if (!connType.isEmpty()) {
+        QString strConntype = "nmcli connection modify " + ui->lbName->text() + " wifi-sec.psk-flags 2";
+        system(strConntype.toUtf8().data());
+    }
+    connType = "";
+
+    if (connFlag == 2 || connFlag == 4) {
         mw->currSelNetName = "";
         emit selectedOneWifiForm(ui->lbName->text(), H_WIFI_ITEM_SMALL_EXTEND);
 
@@ -686,7 +695,11 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         ui->btnConnPWD->show();
 
         this->isSelected = true;
-        mw->is_stop_check_net_state = 0;
+        if (connFlag == 2) {
+            mw->is_stop_check_net_state = 0;
+        } else {
+            connType = "RequestPassword";
+        }
     }
 
     if (connFlag == 1) {

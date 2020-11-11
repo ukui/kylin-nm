@@ -245,9 +245,14 @@ void BackThread::execConnLan(QString connName)
 }
 
 //to connected wireless network need a password
-void BackThread::execConnWifiPWD(QString connName, QString password)
+void BackThread::execConnWifiPWD(QString connName, QString password, QString connType)
 {
     //disConnLanOrWifi("wifi");
+
+    if (!connType.isEmpty()) {
+        QString strConntype = "nmcli connection modify " + connName + " wifi-sec.psk-flags 0";
+        Utils::m_system(strConntype.toUtf8().data());
+    }
 
     QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
     QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > " + tmpPath;
@@ -262,11 +267,14 @@ void BackThread::execConnWifiPWD(QString connName, QString password)
     }
     QString line = file.readLine();
     file.close();
+    qDebug()<<"debug:  chenlelin "<< line;
 
     if (line.indexOf("successfully") != -1) {
         emit connDone(0);
         qDebug()<<"debug: in function execConnWifiPWD, wireless net state is: "<<QString::number(execGetIface()->wstate);
         syslog(LOG_DEBUG, "In function execConnWifiPWD, wireless net state is: %d", execGetIface()->wstate);
+    } else if(line.indexOf("Secrets were required") != -1){
+        emit connDone(4);
     } else {
         emit connDone(1);
     }
@@ -295,7 +303,7 @@ void BackThread::on_readoutput()
     } else if(str.indexOf("unknown") != -1) {
         emit connDone(2);
     } else {
-        emit connDone(1);
+        //emit connDone(1);
     }
 
     emit btFinish();
@@ -305,10 +313,14 @@ void BackThread::on_readerror()
     QString str = cmdConnWifi->readAllStandardError();
     cmdConnWifi->close();
     qDebug()<<"on_readerror: "<< str;
+    syslog(LOG_DEBUG, "on_readerror : %s", str.toUtf8().data());
     if (str.indexOf("successfully") != -1) {
-        emit connDone(0);
+        //emit connDone(0);
     } else if(str.indexOf("unknown") != -1 || str.indexOf("not exist") != -1) {
         emit connDone(2); //send this signal if the network we want to connect has not a configuration file
+    } else if(str.indexOf("not given") != -1 || str.indexOf("Secrets were required") != -1){
+        //password for '802-11-wireless-security.psk' not given in 'passwd-file'
+        emit connDone(4);
     } else {
         emit connDone(1); //send this signal if connect net failed
     }

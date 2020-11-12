@@ -1424,6 +1424,7 @@ void MainWindow::getLanListDone(QStringList slist)
             // 当前连接的lan
             if (nname == actLanName) {
                 objKyDBus->getConnectNetIp();
+                objKyDBus->getLanIp(nname);
                 actLanName = "--";
                 if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
 
@@ -1431,7 +1432,8 @@ void MainWindow::getLanListDone(QStringList slist)
                 connect(ccf, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
                 ccf->setName(nname, nname + order);
                 ccf->setIcon(true);
-                ccf->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
+                //ccf->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
+                ccf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
                 ccf->setConnedString(1, tr("NetOn,"));//"已连接"
                 ccf->isConnected = true;
                 ifLanConnected = true;

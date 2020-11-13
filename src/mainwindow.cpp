@@ -1428,9 +1428,11 @@ void MainWindow::getLanListDone(QStringList slist)
                 actLanName = "--";
                 if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
 
+                QString strLanName = TranslateLanName(nname);
+
                 connect(ccf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneTopLanFormSelected(QString, QString)));
                 connect(ccf, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
-                ccf->setName(nname, nname + order);
+                ccf->setName(strLanName, strLanName + order);
                 ccf->setIcon(true);
                 //ccf->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
                 ccf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
@@ -1450,9 +1452,11 @@ void MainWindow::getLanListDone(QStringList slist)
                 objKyDBus->getLanIp(nname);
                 lanListWidget->resize(W_LIST_WIDGET, lanListWidget->height() + H_NORMAL_ITEM);
 
+                QString strLanName = TranslateLanName(nname);
+
                 OneLancForm *ocf = new OneLancForm(lanListWidget, this, confForm, ksnm);
                 connect(ocf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneLanFormSelected(QString, QString)));
-                ocf->setName(nname, nname + order);
+                ocf->setName(strLanName, strLanName + order);
                 ocf->setIcon(true);
                 ocf->setLine(true);
                 ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), objKyDBus->dbusLanMac);
@@ -1786,6 +1790,48 @@ void MainWindow::updateWifiListDone(QStringList slist)
     this->stopLoading();
 }
 
+QString MainWindow::TranslateLanName(QString lanName)
+{
+    QString returnLanName = lanName;
+
+    if (lanName.indexOf("有线连接") != -1) {
+        QStringList strList = lanName.split(" ");
+        if (strList.at(1) != "") {
+            returnLanName = tr("Wired connection") + " " + strList.at(1);
+        } else {
+            returnLanName = tr("Wired connection");
+        }
+    }
+
+    if (lanName.indexOf("Wired connection") != -1) {
+        QStringList strList = lanName.split(" ");
+        if (strList.at(2) != "") {
+            returnLanName = tr("Wired connection") + " " + strList.at(2);
+        } else {
+            returnLanName = tr("Wired connection");
+        }
+    }
+
+    if (lanName.indexOf("以太网连接") != -1) {
+        QStringList strList = lanName.split(" ");
+        if (strList.at(1) != "") {
+            returnLanName = tr("Ethernet connection") + " " + strList.at(1);
+        } else {
+            returnLanName = tr("Ethernet connection");
+        }
+    }
+
+    if (lanName.indexOf("Ethernet connection") != -1) {
+        QStringList strList = lanName.split(" ");
+        if (strList.at(2) != "") {
+            returnLanName = tr("Ethernet connection") + " " + strList.at(2);
+        } else {
+            returnLanName = tr("Ethernet connection");
+        }
+    }
+
+    return returnLanName;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //主窗口其他按钮点击响应

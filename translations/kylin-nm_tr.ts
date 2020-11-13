@@ -16,92 +16,92 @@
         <translation>Ağı düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="100"/>
+        <location filename="../src/confform.cpp" line="106"/>
         <source>LAN name: </source>
         <translation type="unfinished">LAN adı: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="101"/>
+        <location filename="../src/confform.cpp" line="107"/>
         <source>Method: </source>
         <translation>Yöntem: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="102"/>
+        <location filename="../src/confform.cpp" line="108"/>
         <source>Address: </source>
         <translation>Adres: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="103"/>
+        <location filename="../src/confform.cpp" line="109"/>
         <source>Netmask: </source>
         <translation>Netmask: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="104"/>
+        <location filename="../src/confform.cpp" line="110"/>
         <source>Gateway: </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="105"/>
+        <location filename="../src/confform.cpp" line="111"/>
         <source>DNS 1: </source>
         <translation>DNS 1: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="106"/>
+        <location filename="../src/confform.cpp" line="112"/>
         <source>DNS 2: </source>
         <translation>DNS 2: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="108"/>
+        <location filename="../src/confform.cpp" line="114"/>
         <source>Edit Conn</source>
         <translation>Bağ. Düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="109"/>
+        <location filename="../src/confform.cpp" line="115"/>
         <source>Auto(DHCP)</source>
         <translation>Oto(DHCP)</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="110"/>
+        <location filename="../src/confform.cpp" line="116"/>
         <source>Manual</source>
         <translation>Elle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="120"/>
+        <location filename="../src/confform.cpp" line="126"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="121"/>
+        <location filename="../src/confform.cpp" line="127"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="122"/>
+        <location filename="../src/confform.cpp" line="128"/>
         <source>Ok</source>
         <translation type="unfinished">Tamam</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="214"/>
+        <location filename="../src/confform.cpp" line="222"/>
         <source>Can not create new wired network for without wired card</source>
         <translation type="unfinished">Kablolu kart olmadan yeni kablolu ağ oluşturulamıyor</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="230"/>
+        <location filename="../src/confform.cpp" line="239"/>
         <source>New network already created</source>
         <translation type="unfinished">Yeni ağ zaten oluşturuldu</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="270"/>
+        <location filename="../src/confform.cpp" line="281"/>
         <source>New network settings already finished</source>
         <translation type="unfinished">Yeni ağ ayarları zaten tamamlandı</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="306"/>
+        <location filename="../src/confform.cpp" line="318"/>
         <source>Edit Network</source>
         <translation type="unfinished">Ağı Düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="341"/>
+        <location filename="../src/confform.cpp" line="353"/>
         <source>Add Wired Network</source>
         <translation type="unfinished">Kablolu Ağ Ekle</translation>
     </message>
@@ -114,7 +114,7 @@
         <translation type="obsolete">Kablolu ağın yapılandırmasını başarıyla değiştirildi</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="282"/>
+        <location filename="../src/confform.cpp" line="293"/>
         <source>New settings already effective</source>
         <translation>Yeni ayarlar zaten etkili</translation>
     </message>
@@ -1255,7 +1255,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/mainwindow.ui" line="14"/>
-        <location filename="../src/mainwindow.cpp" line="559"/>
+        <location filename="../src/mainwindow.cpp" line="563"/>
         <source>kylin-nm</source>
         <translation></translation>
     </message>
@@ -1264,15 +1264,15 @@
         <translation type="vanished">Ağ</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="397"/>
-        <location filename="../src/mainwindow.cpp" line="564"/>
+        <location filename="../src/mainwindow.cpp" line="401"/>
+        <location filename="../src/mainwindow.cpp" line="568"/>
         <source>Advanced</source>
         <translation>Gelişmiş</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="341"/>
-        <location filename="../src/mainwindow.cpp" line="1208"/>
-        <location filename="../src/mainwindow.cpp" line="2212"/>
+        <location filename="../src/mainwindow.cpp" line="345"/>
+        <location filename="../src/mainwindow.cpp" line="1212"/>
+        <location filename="../src/mainwindow.cpp" line="2266"/>
         <source>Ethernet</source>
         <translation>Kablolu Ağ</translation>
     </message>
@@ -1281,8 +1281,8 @@
         <translation type="vanished">Gizli Ağı Bağlan</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="357"/>
-        <location filename="../src/mainwindow.cpp" line="1267"/>
+        <location filename="../src/mainwindow.cpp" line="361"/>
+        <location filename="../src/mainwindow.cpp" line="1271"/>
         <source>Wifi</source>
         <translation>Wi-Fi</translation>
     </message>
@@ -1295,100 +1295,116 @@
         <translation type="vanished">Pasif</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="377"/>
+        <location filename="../src/mainwindow.cpp" line="381"/>
         <source>HotSpot</source>
         <translation>HotSpot</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="387"/>
+        <location filename="../src/mainwindow.cpp" line="391"/>
         <source>FlyMode</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="563"/>
+        <location filename="../src/mainwindow.cpp" line="567"/>
         <source>Show MainWindow</source>
         <translation>Ana Pencereyi Göster</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1171"/>
+        <location filename="../src/mainwindow.cpp" line="1175"/>
         <source>No wireless card detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1307"/>
-        <location filename="../src/mainwindow.cpp" line="1384"/>
-        <location filename="../src/mainwindow.cpp" line="1532"/>
-        <location filename="../src/mainwindow.cpp" line="2228"/>
-        <location filename="../src/mainwindow.cpp" line="2318"/>
+        <location filename="../src/mainwindow.cpp" line="1311"/>
+        <location filename="../src/mainwindow.cpp" line="1388"/>
+        <location filename="../src/mainwindow.cpp" line="1542"/>
+        <location filename="../src/mainwindow.cpp" line="2282"/>
+        <location filename="../src/mainwindow.cpp" line="2372"/>
         <source>Not connected</source>
         <translation>Bağlanamadı</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1310"/>
-        <location filename="../src/mainwindow.cpp" line="1386"/>
-        <location filename="../src/mainwindow.cpp" line="1452"/>
-        <location filename="../src/mainwindow.cpp" line="1453"/>
-        <location filename="../src/mainwindow.cpp" line="1535"/>
-        <location filename="../src/mainwindow.cpp" line="1614"/>
-        <location filename="../src/mainwindow.cpp" line="1766"/>
-        <location filename="../src/mainwindow.cpp" line="2230"/>
-        <location filename="../src/mainwindow.cpp" line="2320"/>
+        <location filename="../src/mainwindow.cpp" line="1314"/>
+        <location filename="../src/mainwindow.cpp" line="1390"/>
+        <location filename="../src/mainwindow.cpp" line="1462"/>
+        <location filename="../src/mainwindow.cpp" line="1463"/>
+        <location filename="../src/mainwindow.cpp" line="1545"/>
+        <location filename="../src/mainwindow.cpp" line="1624"/>
+        <location filename="../src/mainwindow.cpp" line="1776"/>
+        <location filename="../src/mainwindow.cpp" line="2284"/>
+        <location filename="../src/mainwindow.cpp" line="2374"/>
         <source>Disconnected</source>
         <translation>Bağlantı Kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1477"/>
+        <location filename="../src/mainwindow.cpp" line="1487"/>
         <source>No Other Wired Network Scheme</source>
         <translation type="unfinished">Başka Kablolu Ağ Düzeni Yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1636"/>
+        <location filename="../src/mainwindow.cpp" line="1646"/>
         <source>No Other Wireless Network Scheme</source>
         <translation type="unfinished">Başka Kablosuz Ağ Düzeni Yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2139"/>
+        <location filename="../src/mainwindow.cpp" line="1800"/>
+        <location filename="../src/mainwindow.cpp" line="1802"/>
+        <location filename="../src/mainwindow.cpp" line="1809"/>
+        <location filename="../src/mainwindow.cpp" line="1811"/>
+        <source>Wired connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="1818"/>
+        <location filename="../src/mainwindow.cpp" line="1820"/>
+        <location filename="../src/mainwindow.cpp" line="1827"/>
+        <location filename="../src/mainwindow.cpp" line="1829"/>
+        <source>Ethernet connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="2193"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished">Kablolu ağ bağlantısı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2167"/>
+        <location filename="../src/mainwindow.cpp" line="2221"/>
         <source>Wi-Fi is disconnected</source>
         <translation type="unfinished">Kablosuz bağlantı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2547"/>
+        <location filename="../src/mainwindow.cpp" line="2601"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="225"/>
+        <location filename="../src/mainwindow.cpp" line="227"/>
         <source>Ethernet Networks</source>
         <translation>Ethernet Ağları</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="234"/>
+        <location filename="../src/mainwindow.cpp" line="237"/>
         <source>New LAN</source>
         <translation type="unfinished">Yeni LAN</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="257"/>
+        <location filename="../src/mainwindow.cpp" line="261"/>
         <source>Hide WiFi</source>
         <translation>Gizli Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="288"/>
+        <location filename="../src/mainwindow.cpp" line="292"/>
         <source>No usable network in the list</source>
         <translation type="unfinished">Listede kullanılabilir ağ yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1431"/>
-        <location filename="../src/mainwindow.cpp" line="1592"/>
+        <location filename="../src/mainwindow.cpp" line="1439"/>
+        <location filename="../src/mainwindow.cpp" line="1602"/>
         <source>NetOn,</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="248"/>
+        <location filename="../src/mainwindow.cpp" line="251"/>
         <source>Wifi Networks</source>
         <translation>Wi-Fi Ağları</translation>
     </message>
@@ -1417,17 +1433,17 @@
         <translation type="vanished">Kablosuz listesini şimdi güncelle</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2503"/>
+        <location filename="../src/mainwindow.cpp" line="2557"/>
         <source>Conn Ethernet Success</source>
         <translation>Ethernet Bağlantısı Başarılı</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2515"/>
+        <location filename="../src/mainwindow.cpp" line="2569"/>
         <source>Conn Ethernet Fail</source>
         <translation>Ethernet Bağlantısı Hatası</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2538"/>
+        <location filename="../src/mainwindow.cpp" line="2592"/>
         <source>Conn Wifi Success</source>
         <translation>Wi-Fi Bağlantısı Başarılı</translation>
     </message>
@@ -1516,7 +1532,7 @@
         <translation type="unfinished">Fiziksel adres:</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="696"/>
+        <location filename="../src/oneconnform.cpp" line="707"/>
         <source>Conn Wifi Failed</source>
         <translation>Wifi Bağlantısı Başarısız</translation>
     </message>
@@ -1544,28 +1560,28 @@
         <translation>Bağlantıyı Kes</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="245"/>
-        <location filename="../src/onelancform.cpp" line="249"/>
+        <location filename="../src/onelancform.cpp" line="243"/>
+        <location filename="../src/onelancform.cpp" line="247"/>
         <source>No Configuration</source>
         <translation type="unfinished">Yapılandırma Yok</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="252"/>
+        <location filename="../src/onelancform.cpp" line="250"/>
         <source>IPv4：</source>
         <translation type="unfinished">IPv4 adresi:</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="253"/>
+        <location filename="../src/onelancform.cpp" line="251"/>
         <source>IPv6：</source>
         <translation type="unfinished">IPv6 adresi:</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="254"/>
+        <location filename="../src/onelancform.cpp" line="252"/>
         <source>BandWidth：</source>
         <translation type="unfinished">Bant genişliği:</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="255"/>
+        <location filename="../src/onelancform.cpp" line="253"/>
         <source>MAC：</source>
         <translation type="unfinished">Fiziksel adres:</translation>
     </message>

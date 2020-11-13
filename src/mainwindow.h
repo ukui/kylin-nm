@@ -283,6 +283,7 @@ private slots:
     void getWifiListDone(QStringList slist);
     void loadWifiListDone(QStringList slist);
     void updateWifiListDone(QStringList slist);
+    QString TranslateLanName(QString lanName);
 
     void on_showWindowAction();
     void on_btnAdvConf_clicked();

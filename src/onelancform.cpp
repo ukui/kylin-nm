@@ -34,8 +34,8 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 
     ui->lbConned->setAlignment(Qt::AlignLeft);
 
-    leQssLow = "QLineEdit{border:none;background:transparent;font-family:Noto Sans CJK SC;font-size:14px;}";
-    leQssHigh = "QLineEdit{border:none;background:transparent;font-family:Noto Sans CJK SC;font-size:14px;}";
+    leQssLow = "QLineEdit{border:none;background:transparent;font-size:14px;}";
+    leQssHigh = "QLineEdit{border:none;background:transparent;font-size:14px;}";
 
     ui->leInfo_1->setStyleSheet(leQssLow);
     ui->leInfo_2->setStyleSheet(leQssLow);
@@ -369,13 +369,14 @@ void OneLancForm::on_btnInfo_clicked()
     }
     // qDebug()<<v4method<<addr<<mask<<gateway<<dns;
 
-    cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive);
     connect(cf, SIGNAL(requestRefreshLanList(int)), mw, SLOT(onBtnNetListClicked(int)));
-
+    cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive);
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->exec();
     cf->raise();
     cf->activateWindow();
+
+    bt->deleteLater();
 }
 
 void OneLancForm::waitAnimStep()

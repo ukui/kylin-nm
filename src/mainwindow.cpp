@@ -25,6 +25,7 @@
 
 #include <KWindowEffects>
 #include <QFont>
+#include <QFontMetrics>
 
 QString llname, lwname, hideWiFiConn;
 int currentActWifiSignalLv, count_loop;
@@ -98,6 +99,7 @@ MainWindow::MainWindow(QWidget *parent) :
     getInitLanSlist(); //初始化有线网列表
     initNetwork(); //初始化网络
     initTimer(); //初始化定时器
+    getSystemFontFamily();//建立GSetting监听系统字体
 
     connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClicked);
     connect(btnWireless, &SwitchButton::clicked,this, &MainWindow::onBtnWifiClicked);
@@ -1919,7 +1921,7 @@ void MainWindow::onBtnCreateNetClicked()
 
     QApplication::setQuitOnLastWindowClosed(false);
     ConfForm *m_cf = new ConfForm();
-    m_cf->setAttribute(Qt::WA_DeleteOnClose);
+    //m_cf->setAttribute(Qt::WA_DeleteOnClose);
     m_cf->cbTypeChanged(3);
     m_cf->move(primaryGeometry.width() / 2 - m_cf->width() / 2, primaryGeometry.height() / 2 - m_cf->height() / 2);
     m_cf->exec();
@@ -2627,7 +2629,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
 
 ///////////////////////////////////////////////////////////////////////////////
-//控件随主题色置灰或置白
+//控件随主题
 void MainWindow::setUkuiStyle(QString style)
 {
     qDebug() << "zzzzz" << style;
@@ -2701,4 +2703,19 @@ const QPixmap MainWindow::loadSvg(const QString &fileName, const int size)
     painter.end();
 
     return pixmap;
+}
+
+void MainWindow::getSystemFontFamily()
+{
+    const QByteArray id("org.ukui.style");
+    QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+    connect(fontSetting, &QGSettings::changed,[=](QString key) {
+        if ("systemFont" == key || "systemFontSize" ==key) {
+            QFont font = this->font();
+            int width = font.pointSize();
+            for (auto widget : qApp->allWidgets()) {
+                widget->setFont(font);
+            }
+        }
+    });
 }

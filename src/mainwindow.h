@@ -203,6 +203,7 @@ private:
     QPixmap drawSymbolicColoredPixmap(const QPixmap &source);
     QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
     const QPixmap loadSvg(const QString &fileName, const int size);
+    void getSystemFontFamily();
 
     Ui::MainWindow *ui;
 

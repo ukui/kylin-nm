@@ -50,8 +50,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lePassword->setEchoMode(QLineEdit::Normal);
     ui->btnConnPWD->setEnabled(false);
 
-    leQssLow = "QLineEdit{border:none;background:transparent;font-family:Noto Sans CJK SC;font-size:14px;}";
-    leQssHigh = "QLineEdit{border:none;background:transparent;font-family:Noto Sans CJK SC;font-size:14px;}";
+    leQssLow = "QLineEdit{border:none;background:transparent;font-size:14px;}";
+    leQssHigh = "QLineEdit{border:none;background:transparent;font-size:14px;}";
 
     ui->leInfo_1->setStyleSheet(leQssLow);
     ui->leInfo_2->setStyleSheet(leQssLow);
@@ -654,7 +654,6 @@ void OneConnForm::on_btnInfo_clicked()
     // qDebug()<<"v4method:"<<v4method<<" addr:"<<addr<<" mask:"<<mask<<" gateway:"<<gateway<<" dns:"<<dns;
 
     cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive);
-
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->exec();
     cf->raise();

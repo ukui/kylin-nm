@@ -44,7 +44,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConnPWD->setText(tr("Connect"));//"连接"
     ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"
     ui->btnHideConn->setText(tr("Connect"));//"连接"
-    ui->lePassword->setText(tr("Input Password..."));//"输入密码..."
+    //ui->lePassword->setText(tr("Input Password..."));//"输入密码..."
 
     ui->lbConned->setAlignment(Qt::AlignLeft);
     ui->lePassword->setEchoMode(QLineEdit::Normal);
@@ -283,7 +283,8 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName)
         this->isSelected = true;
     } else {
         resize(W_ITEM, H_ITEM);
-        ui->lePassword->setText(tr("Input Password..."));//"输入密码..."
+        //ui->lePassword->setText(tr("Input Password..."));//"输入密码..."
+        ui->lePassword->setText("");
         ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;background:rgba(0,0,0,0.2);}");
         ui->lePassword->setEchoMode(QLineEdit::Normal);
         ui->checkBoxPwd->setChecked(true);
@@ -699,6 +700,11 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         } else {
             connType = "RequestPassword";
         }
+
+        //设置输入密码框被选中
+        ui->lePassword->setFocus();
+        ui->lePassword->setEchoMode(QLineEdit::Password);
+        ui->checkBoxPwd->setChecked(false);
     }
 
     if (connFlag == 1) {

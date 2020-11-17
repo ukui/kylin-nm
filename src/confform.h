@@ -75,6 +75,8 @@ private:
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
+    bool check_ip_conflict(QString ifname);
+
     bool isPress;
     QPoint winPos;
     QPoint dragPos;

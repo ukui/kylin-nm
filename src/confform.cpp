@@ -226,6 +226,10 @@ void ConfForm::on_btnCreate_clicked()
         return;
     }
 
+    if (check_ip_conflict(mIfname)) {
+        return;
+    }
+
     QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
     Utils::m_system(cmdStr.toUtf8().data());
     //int status = system(cmdStr.toUtf8().data());
@@ -247,6 +251,22 @@ void ConfForm::on_btnCreate_clicked()
 //点击了保存更改网络设置的按钮
 void ConfForm::on_btnOk_clicked()
 {
+    KylinDBus kylindbus;
+    kylindbus.getWiredCardName();
+    QString mIfname = kylindbus.dbusLanCardName;
+
+    if (mIfname == "") {
+        QString tip(tr("Can not create new wired network for without wired card"));
+        kylindbus.showDesktopNotify(tip);
+        //this->close();
+        this->hide();
+        return;
+    }
+
+    if (check_ip_conflict(mIfname)) {
+        return;
+    }
+
     QString mask = "";
     if (ui->cbMask->currentIndex() == 0) {
         mask = "24";
@@ -273,8 +293,6 @@ void ConfForm::on_btnOk_clicked()
         kylin_network_set_manualall(ui->leName->text().toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
     }
 
-    KylinDBus kylindbus;
-
     //this->close();
     this->hide();
 
@@ -299,6 +317,46 @@ void ConfForm::on_btnOk_clicked()
         emit requestRefreshLanList(0);
     }
     this->isCreateNewNet = false;
+}
+
+bool ConfForm::check_ip_conflict(QString ifname)
+{
+    FILE *fp;
+    char ret[10], arp_all[1024];
+
+    QString arp_all_cmd = "arping -c 3 -f -I " + ifname + " -D " + ui->leAddr->text();
+    fp = popen(arp_all_cmd.toUtf8().data(),"r");
+    if(!fp)
+        return false;
+    fread(arp_all, 1, sizeof(arp_all), fp);
+    pclose(fp);
+
+    if (strstr(arp_all, "Received") && strstr(arp_all, " response(s)")) {
+        QString arp_result = "arping -c 1 -f -I " + ifname + " -D " + ui->leAddr->text() + " | awk '{print $2}' | sed -n '3p'";
+
+        fp = popen(arp_result.toUtf8().data(),"r");
+        if(!fp)
+            return false;
+        fgets(ret,sizeof(ret),fp);
+        pclose(fp);
+
+        ret[strlen(ret)-1]=0;
+
+        if ( ret != NULL ) {
+            if (!strcmp(ret,"0")) {
+                //printf("正常连接");
+                return  false;
+            } else {
+                //printf("ip地址冲突");
+                QString strInfo = tr("IP address conflict, Please change IP");
+                QString buffer = "notify-send -i network-offline " + strInfo;
+                system(buffer.toUtf8().data());
+                return  true;
+            }
+        }
+    }
+    //printf("正常连接");
+    return false;
 }
 
 //点击取消按钮

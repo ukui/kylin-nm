@@ -99,7 +99,7 @@
 #define X_BTN_FUN 360
 #define Y_BTN_FUN 87 //新建网络，加入网络按钮的宽高、x坐标、y坐标
 
-#define W_NO_ITEM_TIP 220
+#define W_NO_ITEM_TIP 235
 #define H_NO_ITEM_TIP 20
 
 class OneConnForm;

@@ -174,6 +174,7 @@ void ConfForm::setProp(QString connName, QString v4method, QString addr, QString
 {
     this->isActConf = isActConf;
     ui->leName->setText(connName);
+    lastConnName = connName;
 
     if (v4method == "auto" || v4method == "") {
         ui->cbType->setCurrentIndex(0);
@@ -251,6 +252,20 @@ void ConfForm::on_btnCreate_clicked()
 //点击了保存更改网络设置的按钮
 void ConfForm::on_btnOk_clicked()
 {
+    //如果网络的名称已经修改，则删掉当前网络，新建一个网络
+    if (ui->leName->text() != lastConnName) {
+        QString cmd = "nmcli connection delete '" + lastConnName + "'";
+        int status = system(cmd.toUtf8().data());
+        if (status != 0) {
+            syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'on_btnCreate_clicked' failed");
+        }
+        this->hide();
+
+        on_btnCreate_clicked();
+
+        return;
+    }
+
     KylinDBus kylindbus;
     kylindbus.getWiredCardName();
     QString mIfname = kylindbus.dbusLanCardName;
@@ -370,7 +385,7 @@ void ConfForm::on_btnCancel_clicked()
 void ConfForm::cbTypeChanged(int index)
 {
     if (isShowSaveBtn) {
-        ui->leName->setEnabled(false);
+        ui->leName->setEnabled(true);
         ui->btnOk->show(); //显示保存按钮
         ui->btnCreate->hide(); //隐藏创建按钮
         ui->lbLeftupTitle->setText(tr("Edit Network"));

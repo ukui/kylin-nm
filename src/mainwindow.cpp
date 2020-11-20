@@ -1794,44 +1794,49 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
 QString MainWindow::TranslateLanName(QString lanName)
 {
+    syslog(LOG_DEBUG, "debug: aaaab");
     QString returnLanName = lanName;
 
-    if (lanName.indexOf("有线连接") != -1) {
+    if (lanName == "有线连接") {
+        returnLanName = tr("Wired connection");
+    } else if (lanName.indexOf("有线连接") != -1) {
         QStringList strList = lanName.split(" ");
-        if (strList.at(1) != "") {
+        if (strList.size() >= 2 && strList.at(1) != "") {
             returnLanName = tr("Wired connection") + " " + strList.at(1);
-        } else {
-            returnLanName = tr("Wired connection");
         }
     }
 
-    if (lanName.indexOf("Wired connection") != -1) {
+    syslog(LOG_DEBUG, "debug: aaaac");
+    if (lanName == "Wired connection") {
+        returnLanName = tr("Wired connection");
+    } else if (lanName.indexOf("Wired connection") != -1) {
         QStringList strList = lanName.split(" ");
-        if (strList.at(2) != "") {
+        if (strList.size() >= 3 && strList.at(2) != "") {
             returnLanName = tr("Wired connection") + " " + strList.at(2);
-        } else {
-            returnLanName = tr("Wired connection");
         }
     }
 
-    if (lanName.indexOf("以太网连接") != -1) {
+    syslog(LOG_DEBUG, "debug: aaaad");
+    if (lanName == "以太网连接") {
+        returnLanName = tr("Ethernet connection");
+    } else if (lanName.indexOf("以太网连接") != -1) {
         QStringList strList = lanName.split(" ");
-        if (strList.at(1) != "") {
+        if (strList.size() >= 2 && strList.at(1) != "") {
             returnLanName = tr("Ethernet connection") + " " + strList.at(1);
-        } else {
-            returnLanName = tr("Ethernet connection");
         }
     }
 
-    if (lanName.indexOf("Ethernet connection") != -1) {
+    syslog(LOG_DEBUG, "debug: aaaae");
+    if (lanName == "Ethernet connection") {
+        returnLanName = tr("Ethernet connection");
+    } else if (lanName.indexOf("Ethernet connection") != -1) {
         QStringList strList = lanName.split(" ");
-        if (strList.at(2) != "") {
+        if (strList.size() >= 3 && strList.at(2) != "") {
             returnLanName = tr("Ethernet connection") + " " + strList.at(2);
-        } else {
-            returnLanName = tr("Ethernet connection");
         }
     }
 
+    syslog(LOG_DEBUG, "debug: aaaaf");
     return returnLanName;
 }
 

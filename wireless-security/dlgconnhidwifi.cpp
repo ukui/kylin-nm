@@ -97,15 +97,15 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
 
     ui->cbxSecurity->addItem(tr("None")); //无
     ui->cbxSecurity->addItem(tr("WPA & WPA2 Personal")); //WPA 及 WPA2 个人
+    ui->cbxSecurity->addItem(tr("WPA & WPA2 Enterprise")); //WPA 及 WPA2 企业
     //ui->cbxSecurity->addItem(tr("WEP 40/128-bit Key (Hex or ASCII)")); //WEP 40/128 位密钥(十六进制或ASCII)
     //ui->cbxSecurity->addItem(tr("WEP 128-bit Passphrase")); //WEP 128 位密码句
     //ui->cbxSecurity->addItem("LEAP");
     //ui->cbxSecurity->addItem(tr("Dynamic WEP (802.1X)")); //动态 WEP (802.1x)
-    //ui->cbxSecurity->addItem(tr("WPA & WPA2 Enterprise")); //WPA 及 WPA2 企业
     ui->cbxSecurity->setCurrentIndex(0);
     connect(ui->cbxSecurity,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeDialog()));
 
-    if (isUsed == 0){
+    if (isUsed == 0) {
         ui->btnConnect->setEnabled(false);
     }else{
         ui->cbxConn->setCurrentIndex(isUsed);
@@ -161,28 +161,28 @@ void DlgConnHidWifi::changeDialog()
     } else if(ui->cbxSecurity->currentIndex()==2) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiWep *connHidWifiWep = new DlgConnHidWifiWep(0);
-        connHidWifiWep->show();
+        DlgConnHidWifiSecPeap *connHidWifiSecPeap = new DlgConnHidWifiSecPeap(1, 0, mw);
+        connHidWifiSecPeap->show();
     } else if(ui->cbxSecurity->currentIndex()==3) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiWep *connHidWifiWep = new DlgConnHidWifiWep(1);
+        DlgConnHidWifiWep *connHidWifiWep = new DlgConnHidWifiWep(0);
         connHidWifiWep->show();
     } else if(ui->cbxSecurity->currentIndex()==4) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiLeap *connHidWifiLeap = new DlgConnHidWifiLeap();
-        connHidWifiLeap->show();
+        DlgConnHidWifiWep *connHidWifiWep = new DlgConnHidWifiWep(1);
+        connHidWifiWep->show();
     } else if(ui->cbxSecurity->currentIndex()==5) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiSecTls *connHidWifiSecTls = new DlgConnHidWifiSecTls(0);
-        connHidWifiSecTls->show();
+        DlgConnHidWifiLeap *connHidWifiLeap = new DlgConnHidWifiLeap();
+        connHidWifiLeap->show();
     } else {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiSecTls *connHidWifiSecTls = new DlgConnHidWifiSecTls(1);
-        connHidWifiSecTls->show();
+        DlgConnHidWifiSecPeap *connHidWifiSecPeap = new DlgConnHidWifiSecPeap(0, 0, mw);
+        connHidWifiSecPeap->show();
     }
 }
 
@@ -211,11 +211,19 @@ void DlgConnHidWifi::changeWindow(){
         QString txt = file.readAll();
         file.close();
         if (txt.indexOf("802-11-wireless-security.key-mgmt:") != -1){
-            QApplication::setQuitOnLastWindowClosed(false);
-            this->hide();
-            DlgConnHidWifiWpa *connHidWifiWpa = new DlgConnHidWifiWpa(ui->cbxConn->currentIndex(), mw);
-            connHidWifiWpa->show();
-            connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+            if (txt.indexOf("wpa-psk") != -1) {
+                QApplication::setQuitOnLastWindowClosed(false);
+                this->hide();
+                DlgConnHidWifiWpa *connHidWifiWpa = new DlgConnHidWifiWpa(ui->cbxConn->currentIndex(), mw);
+                connHidWifiWpa->show();
+                connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+            }
+            if (txt.indexOf("wpa-eap") != -1) {
+                QApplication::setQuitOnLastWindowClosed(false);
+                this->hide();
+                DlgConnHidWifiSecPeap *connHidWifiSecPeap = new DlgConnHidWifiSecPeap(1, ui->cbxConn->currentIndex(), mw);
+                connHidWifiSecPeap->show();
+            }
         }else {
             isUsed = ui->cbxConn->currentIndex();
             ui->leNetName->setText(ui->cbxConn->currentText());

@@ -20,11 +20,17 @@
 #include "dlgconnhidwifisecpeap.h"
 #include "ui_dlgconnhidwifisecpeap.h"
 #include "kylinheadfile.h"
+#include "src/mainwindow.h"
+#include "src/kylin-dbus-interface.h"
 
 #include <sys/syslog.h>
 
-DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, QWidget *parent) :
+#include <QStandardItemModel>
+#include <QDir>
+
+DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, int beUsed, MainWindow *mainWindow, QWidget *parent) :
     WepOrWpa(type),
+    isUsed(beUsed),
     QDialog(parent),
     ui(new Ui::DlgConnHidWifiSecPeap)
 {
@@ -32,6 +38,7 @@ DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, QWidget *parent) :
 
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")) );
     //需要添加 void paintEvent(QPaintEvent *event) 函数
 
     QPainterPath path;
@@ -40,50 +47,50 @@ DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, QWidget *parent) :
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
-    this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.7);border:1px solid rgba(255, 255, 255, 0.05);}");
+    //this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.7);border:1px solid rgba(255, 255, 255, 0.05);}");
 
     MyQss objQss;
 
     ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
     ui->lbBoder->hide();
-    ui->lbLeftupTitle->setStyleSheet("QLabel{border:0px;font-size:20px;color:rgba(255,255,255,0.97);background-color:transparent;}");
-    ui->lbConn->setStyleSheet(objQss.labelQss);
-    ui->lbNetName->setStyleSheet(objQss.labelQss);
-    ui->lbSecurity->setStyleSheet(objQss.labelQss);
-    ui->lbAuth->setStyleSheet(objQss.labelQss);
-    ui->lbAnonyId->setStyleSheet(objQss.labelQss);
-    ui->lbDomain->setStyleSheet(objQss.labelQss);
-    ui->lbCA->setStyleSheet(objQss.labelQss);
-    ui->lbCaPwd->setStyleSheet(objQss.labelQss);
-    ui->lbPEAPver->setStyleSheet(objQss.labelQss);
-    ui->lbInnerAuth->setStyleSheet(objQss.labelQss);
-    ui->lbUserName->setStyleSheet(objQss.labelQss);
-    ui->lbPassword->setStyleSheet(objQss.labelQss);
+    ui->lbLeftupTitle->setStyleSheet("QLabel{font-size:20px;}");
+//    ui->lbConn->setStyleSheet(objQss.labelQss);
+//    ui->lbNetName->setStyleSheet(objQss.labelQss);
+//    ui->lbSecurity->setStyleSheet(objQss.labelQss);
+//    ui->lbAuth->setStyleSheet(objQss.labelQss);
+//    ui->lbAnonyId->setStyleSheet(objQss.labelQss);
+//    ui->lbDomain->setStyleSheet(objQss.labelQss);
+//    ui->lbCA->setStyleSheet(objQss.labelQss);
+//    ui->lbCaPwd->setStyleSheet(objQss.labelQss);
+//    ui->lbPEAPver->setStyleSheet(objQss.labelQss);
+//    ui->lbInnerAuth->setStyleSheet(objQss.labelQss);
+//    ui->lbUserName->setStyleSheet(objQss.labelQss);
+//    ui->lbPassword->setStyleSheet(objQss.labelQss);
 
-    ui->cbxConn->setStyleSheet(objQss.cbxQss);
-    ui->cbxConn->setView(new  QListView());
-    ui->leNetName->setStyleSheet(objQss.leQss);
-    ui->cbxSecurity->setStyleSheet(objQss.cbxQss);
-    ui->cbxSecurity->setView(new  QListView());
-    ui->cbxAuth->setStyleSheet(objQss.cbxQss);
-    ui->cbxAuth->setView(new  QListView());
-    ui->leAnonyId->setStyleSheet(objQss.leQss);
-    ui->leDomain->setStyleSheet(objQss.leQss);
-    ui->cbxCA->setStyleSheet(objQss.cbxQss);
-    ui->cbxCA->setView(new  QListView());
-    ui->leCaPwd->setStyleSheet(objQss.leQss);
+//    ui->cbxConn->setStyleSheet(objQss.cbxQss);
+//    ui->cbxConn->setView(new  QListView());
+//    ui->leNetName->setStyleSheet(objQss.leQss);
+//    ui->cbxSecurity->setStyleSheet(objQss.cbxQss);
+//    ui->cbxSecurity->setView(new  QListView());
+//    ui->cbxAuth->setStyleSheet(objQss.cbxQss);
+//    ui->cbxAuth->setView(new  QListView());
+//    ui->leAnonyId->setStyleSheet(objQss.leQss);
+//    ui->leDomain->setStyleSheet(objQss.leQss);
+//    ui->cbxCA->setStyleSheet(objQss.cbxQss);
+//    ui->cbxCA->setView(new  QListView());
+//    ui->leCaPwd->setStyleSheet(objQss.leQss);
     ui->checkBoxPwd->setStyleSheet(objQss.checkBoxQss);
-    ui->checkBoxCA->setStyleSheet(objQss.checkBoxCAQss);
-    ui->cbxPEAPver->setStyleSheet(objQss.cbxQss);
-    ui->cbxPEAPver->setView(new  QListView());
-    ui->cbxInnerAuth->setStyleSheet(objQss.cbxQss);
-    ui->cbxInnerAuth->setView(new  QListView());
-    ui->leUserName->setStyleSheet(objQss.leQss);
-    ui->lePassword->setStyleSheet(objQss.leQss);
+//    ui->checkBoxCA->setStyleSheet(objQss.checkBoxCAQss);
+//    ui->cbxPEAPver->setStyleSheet(objQss.cbxQss);
+//    ui->cbxPEAPver->setView(new  QListView());
+//    ui->cbxInnerAuth->setStyleSheet(objQss.cbxQss);
+//    ui->cbxInnerAuth->setView(new  QListView());
+//    ui->leUserName->setStyleSheet(objQss.leQss);
+//    ui->lePassword->setStyleSheet(objQss.leQss);
     ui->checkBoxPwdSec->setStyleSheet(objQss.checkBoxQss);
 
-    ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
-    ui->btnConnect->setStyleSheet(objQss.btnConnQss);
+//    ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
+//    ui->btnConnect->setStyleSheet(objQss.btnConnQss);
     ui->lineUp->setStyleSheet(objQss.lineQss);
     ui->lineDown->setStyleSheet(objQss.lineQss);
 
@@ -109,42 +116,44 @@ DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, QWidget *parent) :
     int status = system("nmcli connection show>/tmp/kylin-nm-connshow");
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgConnHidWifiSecPeap' failed");}
     QFile file("/tmp/kylin-nm-connshow");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug()<<"Can't open the file!";
     }
     QString txt = file.readAll();
     QStringList txtLine = txt.split("\n");
     file.close();
     foreach (QString line, txtLine) {
-        if(line.indexOf("wifi") != -1){
+        if (line.indexOf("wifi") != -1) {
             QStringList subLine = line.split(" ");
             ui->cbxConn->addItem(subLine[0]);
         }
     }
     ui->cbxConn->setCurrentIndex(0);
+    connect(ui->cbxConn,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeWindow()));
 
     ui->cbxSecurity->addItem(tr("None")); //无
     ui->cbxSecurity->addItem(tr("WPA & WPA2 Personal")); //WPA 及 WPA2 个人
-    ui->cbxSecurity->addItem(tr("WEP 40/128-bit Key (Hex or ASCII)")); //WEP 40/128 位密钥(十六进制或ASCII)
-    ui->cbxSecurity->addItem(tr("WEP 128-bit Passphrase")); //WEP 128 位密码句
-    ui->cbxSecurity->addItem("LEAP");
-    ui->cbxSecurity->addItem(tr("Dynamic WEP (802.1X)")); //动态 WEP (802.1x)
     ui->cbxSecurity->addItem(tr("WPA & WPA2 Enterprise")); //WPA 及 WPA2 企业
+    //ui->cbxSecurity->addItem(tr("WEP 40/128-bit Key (Hex or ASCII)")); //WEP 40/128 位密钥(十六进制或ASCII)
+    //ui->cbxSecurity->addItem(tr("WEP 128-bit Passphrase")); //WEP 128 位密码句
+    //ui->cbxSecurity->addItem("LEAP");
+    //ui->cbxSecurity->addItem(tr("Dynamic WEP (802.1X)")); //动态 WEP (802.1x)
+
     if (WepOrWpa == 0) {
         ui->cbxSecurity->setCurrentIndex(5);
     } else if (WepOrWpa == 1) {
-        ui->cbxSecurity->setCurrentIndex(6);
+        ui->cbxSecurity->setCurrentIndex(2);
     }
     connect(ui->cbxSecurity,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeDialogSecu()));
 
-    ui->cbxAuth->addItem("TLS");
-    ui->cbxAuth->addItem("LEAP");
-    ui->cbxAuth->addItem("PWD");
-    ui->cbxAuth->addItem("FAST");
-    ui->cbxAuth->addItem(tr("Tunneled TLS"));//隧道 TLS
+    //ui->cbxAuth->addItem("TLS");
+    //ui->cbxAuth->addItem("LEAP");
+    //ui->cbxAuth->addItem("PWD");
+    //ui->cbxAuth->addItem("FAST");
+    //ui->cbxAuth->addItem(tr("Tunneled TLS"));//隧道 TLS
     ui->cbxAuth->addItem(tr("Protected EAP (PEAP)")); //受保护的 EAP
-    ui->cbxAuth->setCurrentIndex(5);
-    connect(ui->cbxAuth,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeDialogAuth()));
+    ui->cbxAuth->setCurrentIndex(0);
+    //connect(ui->cbxAuth,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeDialogAuth()));
 
     ui->cbxCA->addItem(tr("None")); //无
     ui->cbxCA->addItem(tr("Choose from file")); //从文件选择...
@@ -160,9 +169,31 @@ DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, QWidget *parent) :
     ui->cbxInnerAuth->addItem("GTC");
     ui->cbxInnerAuth->setCurrentIndex(0);
 
-    ui->btnConnect->setEnabled(false);
+    if (isUsed == 0) {
+        ui->btnConnect->setEnabled(false);
+    } else {
+        ui->cbxConn->setCurrentIndex(isUsed);
+        ui->leNetName->setText(ui->cbxConn->currentText());
+        ui->leNetName->setEnabled(false);
+        ui->cbxSecurity->setEnabled(false);
+        ui->cbxAuth->setEnabled(false);
+        ui->leAnonyId->setEnabled(false);
+        ui->leDomain->setEnabled(false);
+        ui->cbxCA->setEnabled(false);
+        ui->leCaPwd->setEnabled(false);
+        ui->checkBoxCA->setEnabled(false);
+        ui->cbxPEAPver->setEnabled(false);
+        ui->cbxInnerAuth->setEnabled(false);
+        ui->leUserName->setText("<Hidden>");
+        ui->leUserName->setEnabled(false);
+        ui->lePassword->setText("<Hidden>");
+        ui->lePassword->setEnabled(false);
+        ui->btnConnect->setEnabled(true);
+    }
 
     this->setFixedSize(432,700);
+
+    this->mw = mainWindow;
 
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
@@ -173,7 +204,7 @@ DlgConnHidWifiSecPeap::~DlgConnHidWifiSecPeap()
 }
 
 void DlgConnHidWifiSecPeap::mousePressEvent(QMouseEvent *event){
-    if(event->button() == Qt::LeftButton){
+    if (event->button() == Qt::LeftButton) {
         this->isPress = true;
         this->winPos = this->pos();
         this->dragPos = event->globalPos();
@@ -184,58 +215,62 @@ void DlgConnHidWifiSecPeap::mouseReleaseEvent(QMouseEvent *event){
     this->isPress = false;
 }
 void DlgConnHidWifiSecPeap::mouseMoveEvent(QMouseEvent *event){
-    if(this->isPress){
+    if (this->isPress) {
         this->move(this->winPos - (this->dragPos - event->globalPos()));
         event->accept();
     }
 }
 
+//切换到其他Wi-Fi安全类型
 void DlgConnHidWifiSecPeap::changeDialogSecu()
 {
-    if(ui->cbxSecurity->currentIndex()==0){
+    if (ui->cbxSecurity->currentIndex()==0) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
         DlgConnHidWifi *connHidWifi = new DlgConnHidWifi(0);
         connHidWifi->show();
+        connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     } else if(ui->cbxSecurity->currentIndex()==1) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
         DlgConnHidWifiWpa *connHidWifiWpa = new DlgConnHidWifiWpa(0);
         connHidWifiWpa->show();
+        connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     } else if(ui->cbxSecurity->currentIndex()==2) {
+        if (WepOrWpa == 0) {
+            ui->cbxSecurity->setCurrentIndex(6);
+            WepOrWpa = 1;
+        }
+    } else if(ui->cbxSecurity->currentIndex()==3) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
         DlgConnHidWifiWep *connHidWifiWep = new DlgConnHidWifiWep(0);
         connHidWifiWep->show();
-    } else if(ui->cbxSecurity->currentIndex()==3) {
+    } else if(ui->cbxSecurity->currentIndex()==4) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
         DlgConnHidWifiWep *connHidWifiWep = new DlgConnHidWifiWep(1);
         connHidWifiWep->show();
-    } else if(ui->cbxSecurity->currentIndex()==4) {
+    } else if(ui->cbxSecurity->currentIndex()==5) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
         DlgConnHidWifiLeap *connHidWifiLeap = new DlgConnHidWifiLeap();
         connHidWifiLeap->show();
-    } else if(ui->cbxSecurity->currentIndex()==5) {
+    } else {
         if (WepOrWpa == 1) {
             ui->cbxSecurity->setCurrentIndex(5);
             WepOrWpa = 0;
         }
-    } else {
-        if (WepOrWpa == 0){
-            ui->cbxSecurity->setCurrentIndex(6);
-            WepOrWpa = 1;
-        }
     }
 }
 
+//同一 Wi-Fi安全类型的Authentication变换
 void DlgConnHidWifiSecPeap::changeDialogAuth()
 {
-    if(ui->cbxAuth->currentIndex()==0){
+    if (ui->cbxAuth->currentIndex()==0) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiSecTls *connHidWifiSecTls = new DlgConnHidWifiSecTls(WepOrWpa);
+        DlgConnHidWifiSecTls *connHidWifiSecTls = new DlgConnHidWifiSecTls(WepOrWpa, 0, mw);
         connHidWifiSecTls->show();
     } else if(ui->cbxAuth->currentIndex()==1) {
         QApplication::setQuitOnLastWindowClosed(false);
@@ -262,9 +297,69 @@ void DlgConnHidWifiSecPeap::changeDialogAuth()
     }
 }
 
+//同一 Wi-Fi安全类型的窗口变换
+void DlgConnHidWifiSecPeap::changeWindow(){
+    if (ui->cbxConn->currentIndex() == 0) {
+        QApplication::setQuitOnLastWindowClosed(false);
+        this->hide();
+        DlgConnHidWifi *connHidWifi = new DlgConnHidWifi(0, mw);
+        connHidWifi->show();
+        connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+    } else if (ui->cbxConn->currentIndex() >= 1) {
+        QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
+        QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " > " + tmpPath;
+
+        int status = system(currStr.toUtf8().data());
+        if(status != 0){
+            syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");
+        }
+        QFile file(tmpPath);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qDebug()<<"Can't open the file!";
+        }
+        QString txt = file.readAll();
+        file.close();
+        if (txt.indexOf("802-11-wireless-security.key-mgmt:") != -1) {
+            if (txt.indexOf("wpa-psk") != -1) {
+                QApplication::setQuitOnLastWindowClosed(false);
+                this->hide();
+                DlgConnHidWifiWpa *connHidWifiWpa = new DlgConnHidWifiWpa(ui->cbxConn->currentIndex(), mw);
+                connHidWifiWpa->show();
+                connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+            }
+            if (txt.indexOf("wpa-eap") != -1) {
+                isUsed = ui->cbxConn->currentIndex();
+                ui->leNetName->setText(ui->cbxConn->currentText());
+                ui->leNetName->setEnabled(false);
+                ui->cbxSecurity->setEnabled(false);
+                ui->cbxAuth->setEnabled(false);
+                ui->leAnonyId->setEnabled(false);
+                ui->leDomain->setEnabled(false);
+                ui->cbxCA->setEnabled(false);
+                ui->leCaPwd->setEnabled(false);
+                ui->checkBoxCA->setEnabled(false);
+                ui->cbxPEAPver->setEnabled(false);
+                ui->cbxInnerAuth->setEnabled(false);
+                ui->leUserName->setText("<Hidden>");
+                ui->leUserName->setEnabled(false);
+                ui->lePassword->setText("<Hidden>");
+                ui->lePassword->setEnabled(false);
+                ui->btnConnect->setEnabled(true);
+            }
+        } else {
+            QApplication::setQuitOnLastWindowClosed(false);
+            this->hide();
+            DlgConnHidWifi *connHidWifi = new DlgConnHidWifi(ui->cbxConn->currentIndex(), mw);
+            connHidWifi->show();
+            connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+        }
+    }
+}
+
+//CA证书的Index变化
 void DlgConnHidWifiSecPeap::on_cbxCA_currentIndexChanged(const QString &arg1)
 {
-    if (ui->cbxCA->currentIndex() == 0){
+    if (ui->cbxCA->currentIndex() == 0) {
         ui->leCaPwd->setText("");
         ui->lbCaPwd->setEnabled(false);
         ui->leCaPwd->setEnabled(false);
@@ -285,6 +380,7 @@ void DlgConnHidWifiSecPeap::on_btnConnect_clicked()
     this->close();
 }
 
+//是否显示密码
 void DlgConnHidWifiSecPeap::on_checkBoxPwd_stateChanged(int arg1)
 {
     if (arg1 == 0) {
@@ -294,6 +390,7 @@ void DlgConnHidWifiSecPeap::on_checkBoxPwd_stateChanged(int arg1)
     }
 }
 
+//是否是不需要CA证书
 void DlgConnHidWifiSecPeap::on_checkBoxCA_stateChanged(int arg1)
 {
     if (arg1 == 0) {
@@ -309,6 +406,7 @@ void DlgConnHidWifiSecPeap::on_checkBoxCA_stateChanged(int arg1)
     }
 }
 
+//是否显示密码
 void DlgConnHidWifiSecPeap::on_checkBoxPwdSec_stateChanged(int arg1)
 {
     if (arg1 == 0) {
@@ -318,145 +416,167 @@ void DlgConnHidWifiSecPeap::on_checkBoxPwdSec_stateChanged(int arg1)
     }
 }
 
+//编辑网络名称
 void DlgConnHidWifiSecPeap::on_leNetName_textEdited(const QString &arg1)
 {
-    if (ui->leNetName->text() == ""){
+    if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leAnonyId->text() == ""){
+    } else if (ui->leUserName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leDomain->text() == ""){
+    } else if (ui->lePassword->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leUserName->text() == ""){
-        ui->btnConnect->setEnabled(false);
-    }else if (ui->lePassword->text() == ""){
-        ui->btnConnect->setEnabled(false);
-    }else{
-        if (ui->cbxCA->currentIndex() == 0){
+    } else {
+        if (ui->checkBoxCA->isChecked()) {
+            //勾选"不需要CA证书"
             ui->btnConnect->setEnabled(true);
-        }else if(ui->leCaPwd->text() == ""){
-            ui->btnConnect->setEnabled(false);
-        }else{
-            ui->btnConnect->setEnabled(true);
+        } else {
+            //未勾选"不需要CA证书"
+            if (ui->cbxCA->currentIndex() == 0) {
+                ui->btnConnect->setEnabled(true);
+            } else if(ui->leCaPwd->text() == "") {
+                ui->btnConnect->setEnabled(false);
+            } else {
+                ui->btnConnect->setEnabled(true);
+            }
         }
     }
 }
 
+//编辑匿名身份
 void DlgConnHidWifiSecPeap::on_leAnonyId_textEdited(const QString &arg1)
 {
-    if (ui->leNetName->text() == ""){
+    if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leAnonyId->text() == ""){
+    } else if (ui->leAnonyId->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leDomain->text() == ""){
+    } else if (ui->leDomain->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leUserName->text() == ""){
+    } else if (ui->leUserName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->lePassword->text() == ""){
+    } else if (ui->lePassword->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else{
-        if (ui->cbxCA->currentIndex() == 0){
+    } else {
+        if (ui->cbxCA->currentIndex() == 0) {
             ui->btnConnect->setEnabled(true);
-        }else if(ui->leCaPwd->text() == ""){
+        } else if(ui->leCaPwd->text() == "") {
             ui->btnConnect->setEnabled(false);
-        }else{
+        } else {
             ui->btnConnect->setEnabled(true);
         }
     }
 }
 
+//编辑域名
 void DlgConnHidWifiSecPeap::on_leDomain_textEdited(const QString &arg1)
 {
-    if (ui->leNetName->text() == ""){
+    if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leAnonyId->text() == ""){
+    } else if (ui->leAnonyId->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leDomain->text() == ""){
+    } else if (ui->leDomain->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leUserName->text() == ""){
+    } else if (ui->leUserName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->lePassword->text() == ""){
+    } else if (ui->lePassword->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else{
-        if (ui->cbxCA->currentIndex() == 0){
+    } else {
+        if (ui->cbxCA->currentIndex() == 0) {
             ui->btnConnect->setEnabled(true);
-        }else if(ui->leCaPwd->text() == ""){
+        } else if(ui->leCaPwd->text() == "") {
             ui->btnConnect->setEnabled(false);
-        }else{
+        } else {
             ui->btnConnect->setEnabled(true);
         }
     }
 }
 
+//编辑CA证书密码
 void DlgConnHidWifiSecPeap::on_leCaPwd_textEdited(const QString &arg1)
 {
-    if (ui->leNetName->text() == ""){
+    if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leAnonyId->text() == ""){
+    } else if (ui->leAnonyId->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leDomain->text() == ""){
+    } else if (ui->leDomain->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leUserName->text() == ""){
+    } else if (ui->leUserName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->lePassword->text() == ""){
+    } else if (ui->lePassword->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leCaPwd->text() == ""){
+    } else if (ui->leCaPwd->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else{
+    } else {
         ui->btnConnect->setEnabled(true);
     }
 }
 
+//编辑用户名
 void DlgConnHidWifiSecPeap::on_leUserName_textEdited(const QString &arg1)
 {
-    if (ui->leNetName->text() == ""){
+    if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leAnonyId->text() == ""){
+    } else if (ui->leUserName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leDomain->text() == ""){
+    } else if (ui->lePassword->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leUserName->text() == ""){
-        ui->btnConnect->setEnabled(false);
-    }else if (ui->lePassword->text() == ""){
-        ui->btnConnect->setEnabled(false);
-    }else{
-        if (ui->cbxCA->currentIndex() == 0){
+    } else {
+        if (ui->checkBoxCA->isChecked()) {
+            //勾选"不需要CA证书"
             ui->btnConnect->setEnabled(true);
-        }else if(ui->leCaPwd->text() == ""){
-            ui->btnConnect->setEnabled(false);
-        }else{
-            ui->btnConnect->setEnabled(true);
+        } else {
+            //未勾选"不需要CA证书"
+            if (ui->cbxCA->currentIndex() == 0) {
+                ui->btnConnect->setEnabled(true);
+            } else if(ui->leCaPwd->text() == "") {
+                ui->btnConnect->setEnabled(false);
+            } else {
+                ui->btnConnect->setEnabled(true);
+            }
         }
     }
 }
 
+//编辑密码
 void DlgConnHidWifiSecPeap::on_lePassword_textEdited(const QString &arg1)
 {
-    if (ui->leNetName->text() == ""){
+    if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leAnonyId->text() == ""){
+    } else if (ui->leUserName->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leDomain->text() == ""){
+    } else if (ui->lePassword->text() == "") {
         ui->btnConnect->setEnabled(false);
-    }else if (ui->leUserName->text() == ""){
-        ui->btnConnect->setEnabled(false);
-    }else if (ui->lePassword->text() == ""){
-        ui->btnConnect->setEnabled(false);
-    }else{
-        if (ui->cbxCA->currentIndex() == 0){
+    } else {
+        if (ui->checkBoxCA->isChecked()) {
+            //勾选"不需要CA证书"
             ui->btnConnect->setEnabled(true);
-        }else if(ui->leCaPwd->text() == ""){
-            ui->btnConnect->setEnabled(false);
-        }else{
-            ui->btnConnect->setEnabled(true);
+        } else {
+            //未勾选"不需要CA证书"
+            if (ui->cbxCA->currentIndex() == 0) {
+                ui->btnConnect->setEnabled(true);
+            } else if(ui->leCaPwd->text() == "") {
+                ui->btnConnect->setEnabled(false);
+            } else {
+                ui->btnConnect->setEnabled(true);
+            }
         }
     }
 }
 
 void DlgConnHidWifiSecPeap::paintEvent(QPaintEvent *event)
 {
+    KylinDBus mkylindbus;
+    double trans = mkylindbus.getTransparentData();
+
     QStyleOption opt;
-       opt.init(this);
-       QPainter p(this);
-       style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-       QWidget::paintEvent(event);
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+
+    QRect rect = this->rect();
+    p.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
+    p.setBrush(opt.palette.color(QPalette::Base));
+    p.setOpacity(trans);
+    p.setPen(Qt::NoPen);
+    p.drawRoundedRect(rect, 6, 6);
+    QWidget::paintEvent(event);
 }

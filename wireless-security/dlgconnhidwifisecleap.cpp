@@ -194,10 +194,10 @@ void DlgConnHidWifiSecLeap::changeDialogSecu()
 void DlgConnHidWifiSecLeap::changeDialogAuth()
 {
     if(ui->cbxAuth->currentIndex()==0){
-        QApplication::setQuitOnLastWindowClosed(false);
-        this->hide();
-        DlgConnHidWifiSecTls *connHidWifiSecTls = new DlgConnHidWifiSecTls(WepOrWpa);
-        connHidWifiSecTls->show();
+//        QApplication::setQuitOnLastWindowClosed(false);
+//        this->hide();
+//        DlgConnHidWifiSecTls *connHidWifiSecTls = new DlgConnHidWifiSecTls(WepOrWpa);
+//        connHidWifiSecTls->show();
     } else if(ui->cbxAuth->currentIndex()==1) {
         qDebug()<<"it's not need to change dialog";
     } else if(ui->cbxAuth->currentIndex()==2) {
@@ -216,10 +216,10 @@ void DlgConnHidWifiSecLeap::changeDialogAuth()
         DlgConnHidWifiSecTunnelTLS *connHidWifiSecTuTls = new DlgConnHidWifiSecTunnelTLS(WepOrWpa);
         connHidWifiSecTuTls->show();
     } else {
-        QApplication::setQuitOnLastWindowClosed(false);
-        this->hide();
-        DlgConnHidWifiSecPeap *connHidWifiSecPeap = new DlgConnHidWifiSecPeap(WepOrWpa);
-        connHidWifiSecPeap->show();
+//        QApplication::setQuitOnLastWindowClosed(false);
+//        this->hide();
+//        DlgConnHidWifiSecPeap *connHidWifiSecPeap = new DlgConnHidWifiSecPeap(WepOrWpa);
+//        connHidWifiSecPeap->show();
     }
 }
 

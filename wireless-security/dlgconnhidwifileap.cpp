@@ -158,15 +158,15 @@ void DlgConnHidWifiLeap::changeDialog()
     } else if(ui->cbxSecurity->currentIndex()==4) {
         qDebug()<<"it's not need to change dialog";
     } else if(ui->cbxSecurity->currentIndex()==5) {
-        QApplication::setQuitOnLastWindowClosed(false);
-        this->hide();
-        DlgConnHidWifiSecTls *connHidWifiSecTls = new DlgConnHidWifiSecTls(0);
-        connHidWifiSecTls->show();
+//        QApplication::setQuitOnLastWindowClosed(false);
+//        this->hide();
+//        DlgConnHidWifiSecTls *connHidWifiSecTls = new DlgConnHidWifiSecTls(0);
+//        connHidWifiSecTls->show();
     } else {
-        QApplication::setQuitOnLastWindowClosed(false);
-        this->hide();
-        DlgConnHidWifiSecTls *connHidWifiSecTls = new DlgConnHidWifiSecTls(1);
-        connHidWifiSecTls->show();
+//        QApplication::setQuitOnLastWindowClosed(false);
+//        this->hide();
+//        DlgConnHidWifiSecTls *connHidWifiSecTls = new DlgConnHidWifiSecTls(1);
+//        connHidWifiSecTls->show();
     }
 }
 

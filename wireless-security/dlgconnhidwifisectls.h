@@ -22,6 +22,8 @@
 #include <QDialog>
 #include <QMouseEvent>
 
+class MainWindow;
+
 namespace Ui {
 class DlgConnHidWifiSecTls;
 }
@@ -31,7 +33,7 @@ class DlgConnHidWifiSecTls : public QDialog
     Q_OBJECT
 
 public:
-    explicit DlgConnHidWifiSecTls(int type, QWidget *parent = 0);
+    explicit DlgConnHidWifiSecTls(int type, int beUsed, MainWindow *mw = 0, QWidget *parent = 0);
     ~DlgConnHidWifiSecTls();
 
 protected:
@@ -40,6 +42,7 @@ protected:
 public slots:
     void changeDialogSecu();
     void changeDialogAuth();
+    void changeWindow();
 
 private slots:
     void on_btnCancel_clicked();
@@ -73,6 +76,8 @@ private slots:
 private:
     Ui::DlgConnHidWifiSecTls *ui;
     int WepOrWpa = 0;//0 WEP;1WPA
+    int isUsed;//=0 current wifi not used before; >=1 used
+    MainWindow *mw;
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

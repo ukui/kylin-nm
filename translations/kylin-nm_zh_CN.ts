@@ -81,33 +81,33 @@
         <translation type="unfinished">确定</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="222"/>
-        <location filename="../src/confform.cpp" line="259"/>
+        <location filename="../src/confform.cpp" line="223"/>
+        <location filename="../src/confform.cpp" line="274"/>
         <source>Can not create new wired network for without wired card</source>
         <translation type="unfinished">缺少有线网卡 无法新建网络</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="243"/>
+        <location filename="../src/confform.cpp" line="244"/>
         <source>New network already created</source>
         <translation type="unfinished">已创建新的有线网络</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="299"/>
+        <location filename="../src/confform.cpp" line="314"/>
         <source>New network settings already finished</source>
         <translation type="unfinished">新的网络配置已经完成</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="351"/>
+        <location filename="../src/confform.cpp" line="366"/>
         <source>IP address conflict, Please change IP</source>
         <translation type="unfinished">IP地址冲突，请更换IP</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="376"/>
+        <location filename="../src/confform.cpp" line="391"/>
         <source>Edit Network</source>
         <translation type="unfinished">编辑网络设置</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="411"/>
+        <location filename="../src/confform.cpp" line="426"/>
         <source>Add Wired Network</source>
         <translation type="unfinished">新建有线网络</translation>
     </message>
@@ -120,7 +120,7 @@
         <translation type="obsolete">新的设置已经生效</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="311"/>
+        <location filename="../src/confform.cpp" line="326"/>
         <source>New settings already effective</source>
         <translation>新的设置已经生效</translation>
     </message>
@@ -169,7 +169,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifi.cpp" line="99"/>
-        <source>WPA &amp; WPA2 Personal</source>
+        <source>WPA & WPA2 Enterprise</source>
         <translation>WPA 及 WPA2 个人</translation>
     </message>
     <message>
@@ -185,8 +185,9 @@
         <translation type="vanished">动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="vanished">WPA 及 WPA2 企业</translation>
+        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="100"/>
+        <source>WPA & WPA2 Enterprise</source>
+        <translation>WPA 及 WPA2 企业</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifi.ui" line="14"/>
@@ -253,7 +254,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="96"/>
-        <source>WPA &amp; WPA2 Personal</source>
+        <source>WPA & WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
@@ -362,7 +363,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="119"/>
-        <source>WPA &amp; WPA2 Personal</source>
+        <source>WPA & WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
@@ -475,7 +476,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="102"/>
-        <source>WPA &amp; WPA2 Personal</source>
+        <source>WPA & WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
@@ -604,7 +605,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="127"/>
-        <source>WPA &amp; WPA2 Personal</source>
+        <source>WPA & WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
@@ -722,7 +723,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="103"/>
-        <source>WPA &amp; WPA2 Personal</source>
+        <source>WPA & WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
@@ -858,26 +859,23 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="126"/>
-        <source>WPA &amp; WPA2 Personal</source>
+        <source>WPA & WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="127"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
-        <translation type="unfinished">WEP 40/128 位密钥(十六进制或ASCII)</translation>
+        <translation type="obsolete">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="128"/>
         <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished">WEP 128 位密码句</translation>
+        <translation type="obsolete">WEP 128 位密码句</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="130"/>
         <source>Dynamic WEP (802.1X)</source>
-        <translation type="unfinished">动态 WEP (802.1x)</translation>
+        <translation type="obsolete">动态 WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="131"/>
+        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="127"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 企业</translation>
     </message>
@@ -994,7 +992,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="124"/>
-        <source>WPA &amp; WPA2 Personal</source>
+        <source>WPA & WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
@@ -1097,7 +1095,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="102"/>
-        <source>WPA &amp; WPA2 Personal</source>
+        <source>WPA & WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
@@ -1190,7 +1188,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="107"/>
-        <source>WPA &amp; WPA2 Personal</source>
+        <source>WPA & WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
@@ -1206,8 +1204,9 @@
         <translation type="obsolete">动态 WEP (802.1x)</translation>
     </message>
     <message>
+        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="108"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="obsolete">WPA 及 WPA2 企业</translation>
+        <translation type="unfinished">WPA 及 WPA2 企业</translation>
     </message>
 </context>
 <context>
@@ -1254,7 +1253,7 @@
     </message>
     <message>
         <location filename="../hot-spot/dlghotspotcreate.cpp" line="55"/>
-        <source>WPA &amp; WPA2 Personal</source>
+        <source>WPA & WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
 </context>
@@ -1286,7 +1285,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="347"/>
         <location filename="../src/mainwindow.cpp" line="1214"/>
-        <location filename="../src/mainwindow.cpp" line="2268"/>
+        <location filename="../src/mainwindow.cpp" line="2273"/>
         <source>Ethernet</source>
         <translation>有线网络</translation>
     </message>
@@ -1332,8 +1331,8 @@
         <location filename="../src/mainwindow.cpp" line="1313"/>
         <location filename="../src/mainwindow.cpp" line="1390"/>
         <location filename="../src/mainwindow.cpp" line="1544"/>
-        <location filename="../src/mainwindow.cpp" line="2284"/>
-        <location filename="../src/mainwindow.cpp" line="2374"/>
+        <location filename="../src/mainwindow.cpp" line="2289"/>
+        <location filename="../src/mainwindow.cpp" line="2379"/>
         <source>Not connected</source>
         <translation>当前未连接任何网络</translation>
     </message>
@@ -1345,8 +1344,8 @@
         <location filename="../src/mainwindow.cpp" line="1547"/>
         <location filename="../src/mainwindow.cpp" line="1626"/>
         <location filename="../src/mainwindow.cpp" line="1778"/>
-        <location filename="../src/mainwindow.cpp" line="2286"/>
-        <location filename="../src/mainwindow.cpp" line="2376"/>
+        <location filename="../src/mainwindow.cpp" line="2291"/>
+        <location filename="../src/mainwindow.cpp" line="2381"/>
         <source>Disconnected</source>
         <translation>未连接</translation>
     </message>
@@ -1361,33 +1360,33 @@
         <translation type="unfinished">未检测到其他无线网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1802"/>
-        <location filename="../src/mainwindow.cpp" line="1804"/>
+        <location filename="../src/mainwindow.cpp" line="1801"/>
+        <location filename="../src/mainwindow.cpp" line="1805"/>
         <location filename="../src/mainwindow.cpp" line="1811"/>
-        <location filename="../src/mainwindow.cpp" line="1813"/>
+        <location filename="../src/mainwindow.cpp" line="1815"/>
         <source>Wired connection</source>
         <translation type="unfinished">有线连接</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1820"/>
-        <location filename="../src/mainwindow.cpp" line="1822"/>
-        <location filename="../src/mainwindow.cpp" line="1829"/>
+        <location filename="../src/mainwindow.cpp" line="1821"/>
+        <location filename="../src/mainwindow.cpp" line="1825"/>
         <location filename="../src/mainwindow.cpp" line="1831"/>
+        <location filename="../src/mainwindow.cpp" line="1835"/>
         <source>Ethernet connection</source>
         <translation type="unfinished">以太网连接</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2195"/>
+        <location filename="../src/mainwindow.cpp" line="2200"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished">断开有线网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2223"/>
+        <location filename="../src/mainwindow.cpp" line="2228"/>
         <source>Wi-Fi is disconnected</source>
         <translation type="unfinished">断开无线网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2603"/>
+        <location filename="../src/mainwindow.cpp" line="2608"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">请确认Wi-Fi密码或无线设备</translation>
     </message>
@@ -1447,17 +1446,17 @@
         <translation type="vanished">正在更新 Wi-Fi列表</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2559"/>
+        <location filename="../src/mainwindow.cpp" line="2564"/>
         <source>Conn Ethernet Success</source>
         <translation>连接有线网络成功</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2571"/>
+        <location filename="../src/mainwindow.cpp" line="2576"/>
         <source>Conn Ethernet Fail</source>
         <translation>连接有线网络失败</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2594"/>
+        <location filename="../src/mainwindow.cpp" line="2599"/>
         <source>Conn Wifi Success</source>
         <translation>连接无线网络成功</translation>
     </message>

@@ -21,7 +21,7 @@
 #include "mainwindow.h"
 #include "kylin-dbus-interface.h"
 #include "kylin-network-interface.h"
-#include "wireless-security/dlgconnhidwifi.h"
+#include "wireless-security/dlghidewifi.h"
 #include "utils.h"
 
 #include <QtDBus/QDBusConnection>
@@ -543,7 +543,7 @@ void OneConnForm::on_btnConnPWD_clicked()
 void OneConnForm::on_btnHideConn_clicked()
 {
     QApplication::setQuitOnLastWindowClosed(false);
-    DlgConnHidWifi *connHidWifi = new DlgConnHidWifi(0, mw);
+    DlgHideWifi *connHidWifi = new DlgHideWifi(0, mw);
     connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     connHidWifi->show();
 }

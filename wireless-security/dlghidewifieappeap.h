@@ -16,55 +16,75 @@
  *
  */
 
-#ifndef DLGCONNHIDWIFILEAP_H
-#define DLGCONNHIDWIFILEAP_H
+#ifndef DLGCONNHIDWIFISECPEAP_H
+#define DLGCONNHIDWIFISECPEAP_H
 
 #include <QDialog>
 #include <QMouseEvent>
 
+class MainWindow;
+
 namespace Ui {
-class DlgConnHidWifiLeap;
+class DlgHideWifiEapPeap;
 }
 
-class DlgConnHidWifiLeap : public QDialog
+class DlgHideWifiEapPeap : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DlgConnHidWifiLeap(QWidget *parent = 0);
-    ~DlgConnHidWifiLeap();
+    //type: 0是动态 WEP， 1是企业wpa, beUsed:是否是之前已经连接过多网络
+    explicit DlgHideWifiEapPeap(int type, int beUsed, MainWindow *mw = 0, QWidget *parent = 0);
+    ~DlgHideWifiEapPeap();
 
 protected:
     void paintEvent(QPaintEvent *event);
 
 public slots:
-    void changeDialog();
+    void changeDialogSecu();
+    void changeDialogAuth();
+    void changeWindow();
 
 private slots:
     void on_btnCancel_clicked();
 
     void on_btnConnect_clicked();
 
+    void on_cbxCA_currentIndexChanged(const QString &arg1);
+
     void on_checkBoxPwd_stateChanged(int arg1);
 
+    void on_checkBoxCA_stateChanged(int arg1);
+
+    void on_checkBoxPwdSec_stateChanged(int arg1);
+
     void on_leNetName_textEdited(const QString &arg1);
+
+    void on_leAnonyId_textEdited(const QString &arg1);
+
+    void on_leDomain_textEdited(const QString &arg1);
+
+    void on_leCaPwd_textEdited(const QString &arg1);
 
     void on_leUserName_textEdited(const QString &arg1);
 
     void on_lePassword_textEdited(const QString &arg1);
 
 private:
-    Ui::DlgConnHidWifiLeap *ui;
+    Ui::DlgHideWifiEapPeap *ui;
+    int WepOrWpa = 0;//0 WEP;1 WPA
+    int isUsed;//=0 current wifi not used before; >=1 used
+    MainWindow *mw;
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
-//    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss;
+//    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss, checkBoxCAQss;
 
     bool isPress;
     QPoint winPos;
     QPoint dragPos;
 };
 
-#endif // DLGCONNHIDWIFILEAP_H
+#endif // DLGCONNHIDWIFISECPEAP_H

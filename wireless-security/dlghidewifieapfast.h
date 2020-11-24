@@ -16,23 +16,23 @@
  *
  */
 
-#ifndef DLGCONNHIDWIFISECLEAP_H
-#define DLGCONNHIDWIFISECLEAP_H
+#ifndef DLGCONNHIDWIFISECFAST_H
+#define DLGCONNHIDWIFISECFAST_H
 
 #include <QDialog>
 #include <QMouseEvent>
 
 namespace Ui {
-class DlgConnHidWifiSecLeap;
+class DlgHideWifiEapFast;
 }
 
-class DlgConnHidWifiSecLeap : public QDialog
+class DlgHideWifiEapFast : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DlgConnHidWifiSecLeap(int type, QWidget *parent = 0);
-    ~DlgConnHidWifiSecLeap();
+    explicit DlgHideWifiEapFast(int type, QWidget *parent = 0);
+    ~DlgHideWifiEapFast();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -46,27 +46,31 @@ private slots:
 
     void on_btnConnect_clicked();
 
-    void on_checkBox_stateChanged(int arg1);
+    void on_checkBoxAutoPCA_stateChanged(int arg1);
+
+    void on_checkBoxPwd_stateChanged(int arg1);
 
     void on_leNetName_textEdited(const QString &arg1);
+
+    void on_leAnonyId_textEdited(const QString &arg1);
 
     void on_leUserName_textEdited(const QString &arg1);
 
     void on_lePassword_textEdited(const QString &arg1);
 
 private:
-    Ui::DlgConnHidWifiSecLeap *ui;
+    Ui::DlgHideWifiEapFast *ui;
     int WepOrWpa = 0;//0 WEP;1WPA
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
-//    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss, checkBoxCAQss;
+//    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss;
 
     bool isPress;
     QPoint winPos;
     QPoint dragPos;
 };
 
-#endif // DLGCONNHIDWIFISECLEAP_H
+#endif // DLGCONNHIDWIFISECFAST_H

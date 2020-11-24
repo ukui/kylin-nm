@@ -16,37 +16,36 @@
  *
  */
 
-#ifndef DLGCONNHIDWIFISECPWD_H
-#define DLGCONNHIDWIFISECPWD_H
+#ifndef DLGCONNHIDWIFILEAP_H
+#define DLGCONNHIDWIFILEAP_H
 
 #include <QDialog>
 #include <QMouseEvent>
 
 namespace Ui {
-class DlgConnHidWifiSecPwd;
+class DlgHideWifiLeap;
 }
 
-class DlgConnHidWifiSecPwd : public QDialog
+class DlgHideWifiLeap : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DlgConnHidWifiSecPwd(int type, QWidget *parent = 0);
-    ~DlgConnHidWifiSecPwd();
+    explicit DlgHideWifiLeap(QWidget *parent = 0);
+    ~DlgHideWifiLeap();
 
 protected:
     void paintEvent(QPaintEvent *event);
 
 public slots:
-    void changeDialogSecu();
-    void changeDialogAuth();
+    void changeDialog();
 
 private slots:
     void on_btnCancel_clicked();
 
     void on_btnConnect_clicked();
 
-    void on_checkBox_stateChanged(int arg1);
+    void on_checkBoxPwd_stateChanged(int arg1);
 
     void on_leNetName_textEdited(const QString &arg1);
 
@@ -55,18 +54,17 @@ private slots:
     void on_lePassword_textEdited(const QString &arg1);
 
 private:
-    Ui::DlgConnHidWifiSecPwd *ui;
-    int WepOrWpa = 0;//0 WEP;1WPA
+    Ui::DlgHideWifiLeap *ui;
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
-//    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss, checkBoxCAQss;
+//    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss;
 
     bool isPress;
     QPoint winPos;
     QPoint dragPos;
 };
 
-#endif // DLGCONNHIDWIFISECPWD_H
+#endif // DLGCONNHIDWIFILEAP_H

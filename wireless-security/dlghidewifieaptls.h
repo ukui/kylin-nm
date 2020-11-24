@@ -16,66 +16,78 @@
  *
  */
 
-#ifndef DLGCONNHIDWIFI_H
-#define DLGCONNHIDWIFI_H
+#ifndef DLGCONNHIDWIFISECTLS_H
+#define DLGCONNHIDWIFISECTLS_H
 
 #include <QDialog>
 #include <QMouseEvent>
-#include <QThread>
-#include <QTimer>
-#include <QFile>
 
 class MainWindow;
 
 namespace Ui {
-class DlgConnHidWifi;
+class DlgHideWifiEapTls;
 }
 
-class DlgConnHidWifi : public QDialog
+class DlgHideWifiEapTls : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DlgConnHidWifi(int type, MainWindow *mw = 0, QWidget *parent = 0);
-    ~DlgConnHidWifi();
+    explicit DlgHideWifiEapTls(int type, int beUsed, MainWindow *mw = 0, QWidget *parent = 0);
+    ~DlgHideWifiEapTls();
 
 protected:
     void paintEvent(QPaintEvent *event);
 
 public slots:
-    void changeDialog();
+    void changeDialogSecu();
+    void changeDialogAuth();
     void changeWindow();
-    void emitSignal();
-    void on_execSecConn();
-    void slotStartLoading();
 
 private slots:
     void on_btnCancel_clicked();
 
     void on_btnConnect_clicked();
 
+    void on_checkBoxCA_stateChanged(int arg1);
+
+    void on_checkBoxPwd_stateChanged(int arg1);
+
+    void on_checkBoxPwdSec_stateChanged(int arg1);
+
     void on_leNetName_textEdited(const QString &arg1);
 
-signals:
-    void reSetWifiList();
-    void sendMessage();
-    void execSecConn();
-    void stopSignal();
+    void on_leIdentity_textEdited(const QString &arg1);
+
+    void on_leDomain_textEdited(const QString &arg1);
+
+    void on_leCaPwd_textEdited(const QString &arg1);
+
+    void on_leUserCertifyPwd_textEdited(const QString &arg1);
+
+    void on_leUserKeyPwd_textEdited(const QString &arg1);
+
+    void on_cbxCA_currentIndexChanged(const QString &arg1);
+
+    void on_cbxUserCertify_currentIndexChanged(const QString &arg1);
+
+    void on_cbxUserPriKey_currentIndexChanged(const QString &arg1);
 
 private:
-    Ui::DlgConnHidWifi *ui;
+    Ui::DlgHideWifiEapTls *ui;
+    int WepOrWpa = 0;//0 WEP;1WPA
     int isUsed;//=0 current wifi not used before; >=1 used
     MainWindow *mw;
-    QString strWifiname;
-//    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss;
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+
+//    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss, checkBoxCAQss;
 
     bool isPress;
     QPoint winPos;
     QPoint dragPos;
 };
 
-#endif // DLGCONNHIDWIFI_H
+#endif // DLGCONNHIDWIFISECTLS_H

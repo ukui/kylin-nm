@@ -16,70 +16,69 @@
  *
  */
 
-#ifndef DLGCONNHIDWIFIWPA_H
-#define DLGCONNHIDWIFIWPA_H
+#ifndef DLGCONNHIDWIFISECTUNNELTLS_H
+#define DLGCONNHIDWIFISECTUNNELTLS_H
 
 #include <QDialog>
 #include <QMouseEvent>
-#include <QThread>
-
-class MainWindow;
 
 namespace Ui {
-class DlgConnHidWifiWpa;
+class DlgHideWifiEapTTLS;
 }
 
-class DlgConnHidWifiWpa : public QDialog
+class DlgHideWifiEapTTLS : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DlgConnHidWifiWpa(int type, MainWindow *mw = 0, QWidget *parent = 0);
-    ~DlgConnHidWifiWpa();
+    explicit DlgHideWifiEapTTLS(int type, QWidget *parent = 0);
+    ~DlgHideWifiEapTTLS();
 
 protected:
     void paintEvent(QPaintEvent *event);
 
 public slots:
-    void changeDialog();
-    void changeWindow();
-    void emitSignal();
-    void on_execSecConn();
-    void slotStartLoading();
+    void changeDialogSecu();
+    void changeDialogAuth();
 
 private slots:
     void on_btnCancel_clicked();
 
     void on_btnConnect_clicked();
 
+    void on_cbxCA_currentIndexChanged(const QString &arg1);
+
     void on_checkBoxPwd_stateChanged(int arg1);
+
+    void on_checkBoxCA_stateChanged(int arg1);
+
+    void on_checkBoxPwdSec_stateChanged(int arg1);
 
     void on_leNetName_textEdited(const QString &arg1);
 
-    void on_lePassword_textEdited(const QString &arg1);
+    void on_leAnonyId_textEdited(const QString &arg1);
 
-signals:
-    void reSetWifiList();
-    void sendMessage();
-    void execSecConn();
-    void stopSignal();
+    void on_leDomain_textEdited(const QString &arg1);
+
+    void on_leCaPwd_textEdited(const QString &arg1);
+
+    void on_leUserName_textEdited(const QString &arg1);
+
+    void on_lePwd_textEdited(const QString &arg1);
 
 private:
-    Ui::DlgConnHidWifiWpa *ui;
-    int isUsed;//=0 current wifi not used before; >=1 used
-    MainWindow *mw;
-    QString strWifiname;
-    QString strWifiPassword;
+    Ui::DlgHideWifiEapTTLS *ui;
+    int WepOrWpa = 0;//0 WEP;1WPA
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
-//    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss;
+//    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss, checkBoxCAQss;
 
     bool isPress;
     QPoint winPos;
     QPoint dragPos;
 };
 
-#endif // DLGCONNHIDWIFIWPA_H
+#endif // DLGCONNHIDWIFISECTUNNELTLS_H

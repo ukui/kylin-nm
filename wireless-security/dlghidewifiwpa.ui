@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DlgConnHidWifi</class>
- <widget class="QDialog" name="DlgConnHidWifi">
+ <class>DlgHideWifiWpa</class>
+ <widget class="QDialog" name="DlgHideWifiWpa">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>432</width>
-    <height>358</height>
+    <height>397</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Connect to Hidden Wi-Fi Network</string>
   </property>
-  <widget class="QLabel" name="lbConn">
+  <widget class="QLabel" name="lbNetName">
    <property name="geometry">
     <rect>
      <x>76</x>
-     <y>80</y>
+     <y>221</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -27,8 +27,41 @@
      <pointsize>10</pointsize>
     </font>
    </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbSecurity">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>176</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnCancel">
+   <property name="geometry">
+    <rect>
+     <x>215</x>
+     <y>350</y>
+     <width>90</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="text">
     <string/>
@@ -52,11 +85,29 @@
     <string notr="true"/>
    </property>
   </widget>
-  <widget class="QLabel" name="lbNetName">
+  <widget class="QCheckBox" name="checkBoxPwd">
+   <property name="geometry">
+    <rect>
+     <x>332</x>
+     <y>272</y>
+     <width>18</width>
+     <height>9</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbPassword">
    <property name="geometry">
     <rect>
      <x>76</x>
-     <y>221</y>
+     <y>266</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -88,11 +139,47 @@
     <string notr="true"/>
    </property>
   </widget>
-  <widget class="QLabel" name="lbSecurity">
+  <widget class="QLineEdit" name="lePassword">
+   <property name="geometry">
+    <rect>
+     <x>175</x>
+     <y>261</y>
+     <width>182</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnConnect">
+   <property name="geometry">
+    <rect>
+     <x>315</x>
+     <y>350</y>
+     <width>90</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbConn">
    <property name="geometry">
     <rect>
      <x>76</x>
-     <y>176</y>
+     <y>80</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -101,6 +188,9 @@
     <font>
      <pointsize>10</pointsize>
     </font>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
    </property>
    <property name="text">
     <string/>
@@ -121,37 +211,14 @@
     </font>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnConnect">
+  <widget class="QLabel" name="lbBoder">
    <property name="geometry">
     <rect>
-     <x>315</x>
-     <y>310</y>
-     <width>90</width>
-     <height>30</height>
+     <x>0</x>
+     <y>0</y>
+     <width>432</width>
+     <height>397</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnCancel">
-   <property name="geometry">
-    <rect>
-     <x>215</x>
-     <y>310</y>
-     <width>90</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
    </property>
    <property name="text">
     <string/>
@@ -164,24 +231,6 @@
      <y>30</y>
      <width>240</width>
      <height>22</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>9</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbBoder">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>432</width>
-     <height>358</height>
     </rect>
    </property>
    <property name="text">
@@ -197,9 +246,6 @@
      <height>1</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
@@ -208,27 +254,27 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>280</y>
+     <y>320</y>
      <width>412</width>
      <height>1</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
   <zorder>lbBoder</zorder>
-  <zorder>lbConn</zorder>
-  <zorder>cbxConn</zorder>
+  <zorder>lePassword</zorder>
   <zorder>lbNetName</zorder>
-  <zorder>cbxSecurity</zorder>
   <zorder>lbSecurity</zorder>
-  <zorder>leNetName</zorder>
-  <zorder>btnConnect</zorder>
   <zorder>btnCancel</zorder>
+  <zorder>cbxConn</zorder>
+  <zorder>checkBoxPwd</zorder>
+  <zorder>lbPassword</zorder>
+  <zorder>cbxSecurity</zorder>
+  <zorder>btnConnect</zorder>
+  <zorder>lbConn</zorder>
+  <zorder>leNetName</zorder>
   <zorder>lbLeftupTitle</zorder>
   <zorder>lineUp</zorder>
   <zorder>lineDown</zorder>

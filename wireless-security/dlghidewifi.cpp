@@ -17,9 +17,9 @@
  */
 
 
-#include "dlgconnhidwifi.h"
+#include "dlghidewifi.h"
 #include "kylinheadfile.h"
-#include "ui_dlgconnhidwifi.h"
+#include "ui_dlghidewifi.h"
 #include "src/backthread.h"
 #include "src/mainwindow.h"
 #include "src/kylin-dbus-interface.h"
@@ -29,10 +29,10 @@
 #include <QStandardItemModel>
 #include <QDir>
 
-DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent) :
+DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     isUsed(type),
     QDialog(parent),
-    ui(new Ui::DlgConnHidWifi)
+    ui(new Ui::DlgHideWifi)
 {
     ui->setupUi(this);
 
@@ -78,7 +78,7 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
     QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
     QString cmd = "nmcli connection show>" + tmpPath;
     int status = system(cmd.toUtf8().data());
-    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgConnHidWifi' failed");}
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgHideWifi' failed");}
     QFile file(tmpPath);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         qDebug()<<"Can't open the file!";
@@ -124,12 +124,12 @@ DlgConnHidWifi::DlgConnHidWifi(int type, MainWindow *mainWindow, QWidget *parent
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
-DlgConnHidWifi::~DlgConnHidWifi()
+DlgHideWifi::~DlgHideWifi()
 {
     delete ui;
 }
 
-void DlgConnHidWifi::mousePressEvent(QMouseEvent *event){
+void DlgHideWifi::mousePressEvent(QMouseEvent *event){
     if(event->button() == Qt::LeftButton){
         this->isPress = true;
         this->winPos = this->pos();
@@ -137,10 +137,10 @@ void DlgConnHidWifi::mousePressEvent(QMouseEvent *event){
         event->accept();
     }
 }
-void DlgConnHidWifi::mouseReleaseEvent(QMouseEvent *event){
+void DlgHideWifi::mouseReleaseEvent(QMouseEvent *event){
     this->isPress = false;
 }
-void DlgConnHidWifi::mouseMoveEvent(QMouseEvent *event){
+void DlgHideWifi::mouseMoveEvent(QMouseEvent *event){
     if(this->isPress){
         this->move(this->winPos - (this->dragPos - event->globalPos()));
         event->accept();
@@ -148,46 +148,46 @@ void DlgConnHidWifi::mouseMoveEvent(QMouseEvent *event){
 }
 
 //切换到其他Wi-Fi安全类型
-void DlgConnHidWifi::changeDialog()
+void DlgHideWifi::changeDialog()
 {
     if(ui->cbxSecurity->currentIndex()==0){
         qDebug()<<"it's not need to change dialog";
     } else if(ui->cbxSecurity->currentIndex()==1) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiWpa *connHidWifiWpa = new DlgConnHidWifiWpa(0, mw);
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0, mw);
         connHidWifiWpa->show();
         connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     } else if(ui->cbxSecurity->currentIndex()==2) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiSecPeap *connHidWifiSecPeap = new DlgConnHidWifiSecPeap(1, 0, mw);
-        connHidWifiSecPeap->show();
+        DlgHideWifiEapPeap *connHidWifiEapPeap = new DlgHideWifiEapPeap(1, 0, mw);
+        connHidWifiEapPeap->show();
     } else if(ui->cbxSecurity->currentIndex()==3) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiWep *connHidWifiWep = new DlgConnHidWifiWep(0);
+        DlgHideWifiWep *connHidWifiWep = new DlgHideWifiWep(0);
         connHidWifiWep->show();
     } else if(ui->cbxSecurity->currentIndex()==4) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiWep *connHidWifiWep = new DlgConnHidWifiWep(1);
+        DlgHideWifiWep *connHidWifiWep = new DlgHideWifiWep(1);
         connHidWifiWep->show();
     } else if(ui->cbxSecurity->currentIndex()==5) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiLeap *connHidWifiLeap = new DlgConnHidWifiLeap();
+        DlgHideWifiLeap *connHidWifiLeap = new DlgHideWifiLeap();
         connHidWifiLeap->show();
     } else {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiSecPeap *connHidWifiSecPeap = new DlgConnHidWifiSecPeap(0, 0, mw);
-        connHidWifiSecPeap->show();
+        DlgHideWifiEapPeap *connHidWifiEapPeap = new DlgHideWifiEapPeap(0, 0, mw);
+        connHidWifiEapPeap->show();
     }
 }
 
 //同一 Wi-Fi安全类型的窗口变换
-void DlgConnHidWifi::changeWindow(){
+void DlgHideWifi::changeWindow(){
     if (ui->cbxConn->currentIndex() == 0){
         isUsed = ui->cbxConn->currentIndex();
         ui->cbxConn->setCurrentIndex(0);
@@ -214,15 +214,15 @@ void DlgConnHidWifi::changeWindow(){
             if (txt.indexOf("wpa-psk") != -1) {
                 QApplication::setQuitOnLastWindowClosed(false);
                 this->hide();
-                DlgConnHidWifiWpa *connHidWifiWpa = new DlgConnHidWifiWpa(ui->cbxConn->currentIndex(), mw);
+                DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(ui->cbxConn->currentIndex(), mw);
                 connHidWifiWpa->show();
                 connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
             }
             if (txt.indexOf("wpa-eap") != -1) {
                 QApplication::setQuitOnLastWindowClosed(false);
                 this->hide();
-                DlgConnHidWifiSecPeap *connHidWifiSecPeap = new DlgConnHidWifiSecPeap(1, ui->cbxConn->currentIndex(), mw);
-                connHidWifiSecPeap->show();
+                DlgHideWifiEapPeap *connHidWifiEapPeap = new DlgHideWifiEapPeap(1, ui->cbxConn->currentIndex(), mw);
+                connHidWifiEapPeap->show();
             }
         }else {
             isUsed = ui->cbxConn->currentIndex();
@@ -236,13 +236,13 @@ void DlgConnHidWifi::changeWindow(){
     }
 }
 
-void DlgConnHidWifi::on_btnCancel_clicked()
+void DlgHideWifi::on_btnCancel_clicked()
 {
     //this->close();
     this->hide();
 }
 
-void DlgConnHidWifi::on_btnConnect_clicked()
+void DlgHideWifi::on_btnConnect_clicked()
 {
     QThread *t = new QThread();
     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
@@ -289,7 +289,7 @@ void DlgConnHidWifi::on_btnConnect_clicked()
     this->hide();
 }
 
-void DlgConnHidWifi::on_leNetName_textEdited(const QString &arg1)
+void DlgHideWifi::on_leNetName_textEdited(const QString &arg1)
 {
     if (ui->leNetName->text() == ""){
         ui->btnConnect->setEnabled(false);
@@ -298,12 +298,12 @@ void DlgConnHidWifi::on_leNetName_textEdited(const QString &arg1)
     }
 }
 
-void DlgConnHidWifi::slotStartLoading()
+void DlgHideWifi::slotStartLoading()
 {
     mw->startLoading();
 }
 
-void DlgConnHidWifi::on_execSecConn()
+void DlgHideWifi::on_execSecConn()
 {
     QString str = "nmcli device wifi connect " + strWifiname + " password ''";
     int status = system(str.toUtf8().data());
@@ -312,14 +312,14 @@ void DlgConnHidWifi::on_execSecConn()
     QTimer::singleShot(3*1000, this, SLOT(emitSignal() ));
 }
 
-void DlgConnHidWifi::emitSignal()
+void DlgHideWifi::emitSignal()
 {
     emit reSetWifiList();
     mw->stopLoading();
     emit this->stopSignal();
 }
 
-void DlgConnHidWifi::paintEvent(QPaintEvent *event)
+void DlgHideWifi::paintEvent(QPaintEvent *event)
 {
     KylinDBus mkylindbus;
     double trans = mkylindbus.getTransparentData();

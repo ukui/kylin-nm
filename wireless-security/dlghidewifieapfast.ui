@@ -1,66 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DlgConnHidWifiSecLeap</class>
- <widget class="QDialog" name="DlgConnHidWifiSecLeap">
+ <class>DlgHideWifiEapFast</class>
+ <widget class="QDialog" name="DlgHideWifiEapFast">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>432</width>
-    <height>487</height>
+    <height>673</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Connect to Hidden Wi-Fi Network</string>
   </property>
-  <widget class="QComboBox" name="cbxSecurity">
-   <property name="geometry">
-    <rect>
-     <x>175</x>
-     <y>215</y>
-     <width>182</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lePassword">
-   <property name="geometry">
-    <rect>
-     <x>175</x>
-     <y>350</y>
-     <width>182</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="echoMode">
-    <enum>QLineEdit::Password</enum>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox">
+  <widget class="QCheckBox" name="checkBoxPwd">
    <property name="geometry">
     <rect>
      <x>332</x>
-     <y>362</y>
+     <y>542</y>
      <width>18</width>
      <height>9</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>10</pointsize>
+     <pointsize>11</pointsize>
     </font>
    </property>
    <property name="text">
@@ -85,11 +49,26 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="lbSecurity">
+  <widget class="QLineEdit" name="leNetName">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>170</y>
+     <width>182</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbConn">
    <property name="geometry">
     <rect>
      <x>76</x>
-     <y>221</y>
+     <y>80</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -103,11 +82,29 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLineEdit" name="leUserName">
+  <widget class="QComboBox" name="cbxAuth">
    <property name="geometry">
     <rect>
-     <x>175</x>
-     <y>305</y>
+     <x>180</x>
+     <y>260</y>
+     <width>182</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lePassword">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>530</y>
      <width>182</width>
      <height>32</height>
     </rect>
@@ -117,12 +114,84 @@
      <pointsize>10</pointsize>
     </font>
    </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="leUserName">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>485</y>
+     <width>182</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbUserName">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>491</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cbxSecurity">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>215</y>
+     <width>182</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbPassword">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>536</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
   <widget class="QPushButton" name="btnConnect">
    <property name="geometry">
     <rect>
      <x>315</x>
-     <y>440</y>
+     <y>620</y>
      <width>90</width>
      <height>30</height>
     </rect>
@@ -139,62 +208,8 @@
   <widget class="QComboBox" name="cbxConn">
    <property name="geometry">
     <rect>
-     <x>175</x>
+     <x>180</x>
      <y>75</y>
-     <width>182</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbUserName">
-   <property name="geometry">
-    <rect>
-     <x>76</x>
-     <y>311</y>
-     <width>90</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnCancel">
-   <property name="geometry">
-    <rect>
-     <x>215</x>
-     <y>440</y>
-     <width>90</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="cbxAuth">
-   <property name="geometry">
-    <rect>
-     <x>175</x>
-     <y>260</y>
      <width>182</width>
      <height>32</height>
     </rect>
@@ -226,11 +241,65 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLineEdit" name="leNetName">
+  <widget class="QLabel" name="lbSecurity">
    <property name="geometry">
     <rect>
-     <x>175</x>
-     <y>170</y>
+     <x>76</x>
+     <y>221</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnCancel">
+   <property name="geometry">
+    <rect>
+     <x>215</x>
+     <y>620</y>
+     <width>90</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbAnonyId">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>311</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="leAnonyId">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>305</y>
      <width>182</width>
      <height>32</height>
     </rect>
@@ -241,11 +310,47 @@
     </font>
    </property>
   </widget>
-  <widget class="QLabel" name="lbPassword">
+  <widget class="QCheckBox" name="checkBoxAutoPCA">
    <property name="geometry">
     <rect>
      <x>76</x>
      <y>356</y>
+     <width>100</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cbxAutoPCA">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>350</y>
+     <width>182</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbPCAfile">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>401</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -259,11 +364,26 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="lbConn">
+  <widget class="QLineEdit" name="lePCAfile">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>395</y>
+     <width>182</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbInnerAuth">
    <property name="geometry">
     <rect>
      <x>76</x>
-     <y>80</y>
+     <y>446</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -275,6 +395,24 @@
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cbxInnerAuth">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>440</y>
+     <width>182</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QLabel" name="lbLeftupTitle">
@@ -286,6 +424,11 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -296,7 +439,7 @@
      <x>0</x>
      <y>0</y>
      <width>432</width>
-     <height>487</height>
+     <height>673</height>
     </rect>
    </property>
    <property name="text">
@@ -320,7 +463,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>410</y>
+     <y>590</y>
      <width>412</width>
      <height>1</height>
     </rect>
@@ -330,21 +473,29 @@
    </property>
   </widget>
   <zorder>lbBoder</zorder>
-  <zorder>cbxSecurity</zorder>
-  <zorder>lePassword</zorder>
-  <zorder>checkBox</zorder>
   <zorder>lbNetName</zorder>
-  <zorder>lbSecurity</zorder>
+  <zorder>leNetName</zorder>
+  <zorder>lbConn</zorder>
+  <zorder>cbxAuth</zorder>
+  <zorder>lePassword</zorder>
   <zorder>leUserName</zorder>
+  <zorder>lbUserName</zorder>
+  <zorder>cbxSecurity</zorder>
+  <zorder>lbPassword</zorder>
   <zorder>btnConnect</zorder>
   <zorder>cbxConn</zorder>
-  <zorder>lbUserName</zorder>
-  <zorder>btnCancel</zorder>
-  <zorder>cbxAuth</zorder>
   <zorder>lbAuth</zorder>
-  <zorder>leNetName</zorder>
-  <zorder>lbPassword</zorder>
-  <zorder>lbConn</zorder>
+  <zorder>lbSecurity</zorder>
+  <zorder>btnCancel</zorder>
+  <zorder>lbAnonyId</zorder>
+  <zorder>leAnonyId</zorder>
+  <zorder>checkBoxAutoPCA</zorder>
+  <zorder>cbxAutoPCA</zorder>
+  <zorder>lbPCAfile</zorder>
+  <zorder>lePCAfile</zorder>
+  <zorder>lbInnerAuth</zorder>
+  <zorder>cbxInnerAuth</zorder>
+  <zorder>checkBoxPwd</zorder>
   <zorder>lbLeftupTitle</zorder>
   <zorder>lineUp</zorder>
   <zorder>lineDown</zorder>

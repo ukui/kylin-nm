@@ -126,7 +126,7 @@
     </message>
 </context>
 <context>
-    <name>DlgConnHidWifi</name>
+    <name>DlgHideWifi</name>
     <message>
         <location filename="../wireless-security/dlgconnhidwifi.cpp" line="70"/>
         <source>Add Hidden Wi-Fi</source>
@@ -196,7 +196,7 @@
     </message>
 </context>
 <context>
-    <name>DlgConnHidWifiLeap</name>
+    <name>DlgHideWifiLeap</name>
     <message>
         <location filename="../wireless-security/dlgconnhidwifileap.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
@@ -279,7 +279,7 @@
     </message>
 </context>
 <context>
-    <name>DlgConnHidWifiSecFast</name>
+    <name>DlgHideWifiEapFast</name>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecfast.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
@@ -413,7 +413,7 @@
     </message>
 </context>
 <context>
-    <name>DlgConnHidWifiSecLeap</name>
+    <name>DlgHideWifiEapLeap</name>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecleap.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
@@ -511,7 +511,7 @@
     </message>
 </context>
 <context>
-    <name>DlgConnHidWifiSecPeap</name>
+    <name>DlgHideWifiEapPeap</name>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpeap.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
@@ -660,7 +660,7 @@
     </message>
 </context>
 <context>
-    <name>DlgConnHidWifiSecPwd</name>
+    <name>DlgHideWifiEapPwd</name>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisecpwd.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
@@ -758,7 +758,7 @@
     </message>
 </context>
 <context>
-    <name>DlgConnHidWifiSecTls</name>
+    <name>DlgHideWifiEapTls</name>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectls.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
@@ -898,7 +898,7 @@
     </message>
 </context>
 <context>
-    <name>DlgConnHidWifiSecTunnelTLS</name>
+    <name>DlgHideWifiEapTTLS</name>
     <message>
         <location filename="../wireless-security/dlgconnhidwifisectunneltls.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
@@ -1032,7 +1032,7 @@
     </message>
 </context>
 <context>
-    <name>DlgConnHidWifiWep</name>
+    <name>DlgHideWifiWep</name>
     <message>
         <location filename="../wireless-security/dlgconnhidwifiwep.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
@@ -1135,7 +1135,7 @@
     </message>
 </context>
 <context>
-    <name>DlgConnHidWifiWpa</name>
+    <name>DlgHideWifiWpa</name>
     <message>
         <location filename="../wireless-security/dlgconnhidwifiwpa.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>

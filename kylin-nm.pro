@@ -59,16 +59,16 @@ SOURCES += \
     src/onelancform.cpp \
     src/switchbutton.cpp \
     src/utils.cpp \
-    wireless-security/dlgconnhidwifi.cpp \
-    wireless-security/dlgconnhidwifisecfast.cpp \
-    wireless-security/dlgconnhidwifisectunneltls.cpp \
-    wireless-security/dlgconnhidwifisecpeap.cpp \
-    wireless-security/dlgconnhidwifisectls.cpp \
-    wireless-security/dlgconnhidwifisecleap.cpp \
-    wireless-security/dlgconnhidwifisecpwd.cpp \
-    wireless-security/dlgconnhidwifiwep.cpp \
-    wireless-security/dlgconnhidwifileap.cpp \
-    wireless-security/dlgconnhidwifiwpa.cpp \
+    wireless-security/dlghidewifi.cpp \
+    wireless-security/dlghidewifieapfast.cpp \
+    wireless-security/dlghidewifieapleap.cpp \
+    wireless-security/dlghidewifieappeap.cpp \
+    wireless-security/dlghidewifieappwd.cpp \
+    wireless-security/dlghidewifieaptls.cpp \
+    wireless-security/dlghidewifieapttls.cpp \
+    wireless-security/dlghidewifileap.cpp \
+    wireless-security/dlghidewifiwep.cpp \
+    wireless-security/dlghidewifiwpa.cpp \
     wireless-security/kylinheadfile.cpp \
     hot-spot/dlghotspotcreate.cpp
 
@@ -85,16 +85,16 @@ HEADERS += \
     src/onelancform.h \
     src/switchbutton.h \
     src/utils.h \
-    wireless-security/dlgconnhidwifi.h \
-    wireless-security/dlgconnhidwifisecfast.h \
-    wireless-security/dlgconnhidwifisectunneltls.h \
-    wireless-security/dlgconnhidwifisecpeap.h \
-    wireless-security/dlgconnhidwifisectls.h \
-    wireless-security/dlgconnhidwifisecleap.h \
-    wireless-security/dlgconnhidwifisecpwd.h \
-    wireless-security/dlgconnhidwifiwep.h \
-    wireless-security/dlgconnhidwifileap.h \
-    wireless-security/dlgconnhidwifiwpa.h \
+    wireless-security/dlghidewifi.h \
+    wireless-security/dlghidewifieapfast.h \
+    wireless-security/dlghidewifieapleap.h \
+    wireless-security/dlghidewifieappeap.h \
+    wireless-security/dlghidewifieappwd.h \
+    wireless-security/dlghidewifieaptls.h \
+    wireless-security/dlghidewifieapttls.h \
+    wireless-security/dlghidewifileap.h \
+    wireless-security/dlghidewifiwep.h \
+    wireless-security/dlghidewifiwpa.h \
     wireless-security/kylinheadfile.h \
     hot-spot/dlghotspotcreate.h
 
@@ -103,17 +103,17 @@ FORMS += \
     src/mainwindow.ui \
     src/oneconnform.ui \
     src/onelancform.ui \
-    wireless-security/dlgconnhidwifi.ui \
-    wireless-security/dlgconnhidwifisecfast.ui \
-    wireless-security/dlgconnhidwifisectunneltls.ui \
-    wireless-security/dlgconnhidwifisecpeap.ui \
-    wireless-security/dlgconnhidwifisectls.ui \
-    wireless-security/dlgconnhidwifisecleap.ui \
-    wireless-security/dlgconnhidwifisecpwd.ui \
-    wireless-security/dlgconnhidwifiwep.ui \
-    wireless-security/dlgconnhidwifileap.ui \
-    wireless-security/dlgconnhidwifiwpa.ui \
-    hot-spot/dlghotspotcreate.ui
+    hot-spot/dlghotspotcreate.ui \
+    wireless-security/dlghidewifi.ui \
+    wireless-security/dlghidewifieapfast.ui \
+    wireless-security/dlghidewifieapleap.ui \
+    wireless-security/dlghidewifieappeap.ui \
+    wireless-security/dlghidewifieappwd.ui \
+    wireless-security/dlghidewifieaptls.ui \
+    wireless-security/dlghidewifieapttls.ui \
+    wireless-security/dlghidewifileap.ui \
+    wireless-security/dlghidewifiwep.ui \
+    wireless-security/dlghidewifiwpa.ui
 
 RESOURCES += \
     nmqrc.qrc

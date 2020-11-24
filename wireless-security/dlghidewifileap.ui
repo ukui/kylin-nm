@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DlgConnHidWifiLeap</class>
- <widget class="QDialog" name="DlgConnHidWifiLeap">
+ <class>DlgHideWifiLeap</class>
+ <widget class="QDialog" name="DlgHideWifiLeap">
   <property name="geometry">
    <rect>
     <x>0</x>

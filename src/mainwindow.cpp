@@ -21,7 +21,7 @@
 #include "oneconnform.h"
 #include "onelancform.h"
 #include "hot-spot/dlghotspotcreate.h"
-#include "wireless-security/dlgconnhidwifi.h"
+#include "wireless-security/dlghidewifi.h"
 
 #include <KWindowEffects>
 #include <QFont>
@@ -1905,7 +1905,7 @@ void MainWindow::on_btnHotspot_clicked()
 void MainWindow::onBtnAddNetClicked()
 {
     QApplication::setQuitOnLastWindowClosed(false);
-    DlgConnHidWifi *connHidWifi = new DlgConnHidWifi(0, this);
+    DlgHideWifi *connHidWifi = new DlgHideWifi(0, this);
     connect(connHidWifi, SIGNAL(reSetWifiList() ), this, SLOT(on_btnWifiList_clicked()) );
     connHidWifi->show();
 }

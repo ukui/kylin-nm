@@ -17,8 +17,8 @@
  */
 
 
-#include "dlgconnhidwifisecpeap.h"
-#include "ui_dlgconnhidwifisecpeap.h"
+#include "dlghidewifieappeap.h"
+#include "ui_dlghidewifieappeap.h"
 #include "kylinheadfile.h"
 #include "src/mainwindow.h"
 #include "src/kylin-dbus-interface.h"
@@ -28,11 +28,11 @@
 #include <QStandardItemModel>
 #include <QDir>
 
-DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, int beUsed, MainWindow *mainWindow, QWidget *parent) :
+DlgHideWifiEapPeap::DlgHideWifiEapPeap(int type, int beUsed, MainWindow *mainWindow, QWidget *parent) :
     WepOrWpa(type),
     isUsed(beUsed),
     QDialog(parent),
-    ui(new Ui::DlgConnHidWifiSecPeap)
+    ui(new Ui::DlgHideWifiEapPeap)
 {
     ui->setupUi(this);
 
@@ -114,7 +114,7 @@ DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, int beUsed, MainWindow *m
 
     ui->cbxConn->addItem("新建...");
     int status = system("nmcli connection show>/tmp/kylin-nm-connshow");
-    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgConnHidWifiSecPeap' failed");}
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgHideWifiEapPeap' failed");}
     QFile file("/tmp/kylin-nm-connshow");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug()<<"Can't open the file!";
@@ -198,12 +198,12 @@ DlgConnHidWifiSecPeap::DlgConnHidWifiSecPeap(int type, int beUsed, MainWindow *m
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
-DlgConnHidWifiSecPeap::~DlgConnHidWifiSecPeap()
+DlgHideWifiEapPeap::~DlgHideWifiEapPeap()
 {
     delete ui;
 }
 
-void DlgConnHidWifiSecPeap::mousePressEvent(QMouseEvent *event){
+void DlgHideWifiEapPeap::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::LeftButton) {
         this->isPress = true;
         this->winPos = this->pos();
@@ -211,10 +211,10 @@ void DlgConnHidWifiSecPeap::mousePressEvent(QMouseEvent *event){
         event->accept();
     }
 }
-void DlgConnHidWifiSecPeap::mouseReleaseEvent(QMouseEvent *event){
+void DlgHideWifiEapPeap::mouseReleaseEvent(QMouseEvent *event){
     this->isPress = false;
 }
-void DlgConnHidWifiSecPeap::mouseMoveEvent(QMouseEvent *event){
+void DlgHideWifiEapPeap::mouseMoveEvent(QMouseEvent *event){
     if (this->isPress) {
         this->move(this->winPos - (this->dragPos - event->globalPos()));
         event->accept();
@@ -222,18 +222,18 @@ void DlgConnHidWifiSecPeap::mouseMoveEvent(QMouseEvent *event){
 }
 
 //切换到其他Wi-Fi安全类型
-void DlgConnHidWifiSecPeap::changeDialogSecu()
+void DlgHideWifiEapPeap::changeDialogSecu()
 {
     if (ui->cbxSecurity->currentIndex()==0) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifi *connHidWifi = new DlgConnHidWifi(0);
+        DlgHideWifi *connHidWifi = new DlgHideWifi(0);
         connHidWifi->show();
         connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     } else if(ui->cbxSecurity->currentIndex()==1) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiWpa *connHidWifiWpa = new DlgConnHidWifiWpa(0);
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0);
         connHidWifiWpa->show();
         connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     } else if(ui->cbxSecurity->currentIndex()==2) {
@@ -244,17 +244,17 @@ void DlgConnHidWifiSecPeap::changeDialogSecu()
     } else if(ui->cbxSecurity->currentIndex()==3) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiWep *connHidWifiWep = new DlgConnHidWifiWep(0);
+        DlgHideWifiWep *connHidWifiWep = new DlgHideWifiWep(0);
         connHidWifiWep->show();
     } else if(ui->cbxSecurity->currentIndex()==4) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiWep *connHidWifiWep = new DlgConnHidWifiWep(1);
+        DlgHideWifiWep *connHidWifiWep = new DlgHideWifiWep(1);
         connHidWifiWep->show();
     } else if(ui->cbxSecurity->currentIndex()==5) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiLeap *connHidWifiLeap = new DlgConnHidWifiLeap();
+        DlgHideWifiLeap *connHidWifiLeap = new DlgHideWifiLeap();
         connHidWifiLeap->show();
     } else {
         if (WepOrWpa == 1) {
@@ -265,44 +265,44 @@ void DlgConnHidWifiSecPeap::changeDialogSecu()
 }
 
 //同一 Wi-Fi安全类型的Authentication变换
-void DlgConnHidWifiSecPeap::changeDialogAuth()
+void DlgHideWifiEapPeap::changeDialogAuth()
 {
     if (ui->cbxAuth->currentIndex()==0) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiSecTls *connHidWifiSecTls = new DlgConnHidWifiSecTls(WepOrWpa, 0, mw);
-        connHidWifiSecTls->show();
+        DlgHideWifiEapTls *connHidWifiEapTls = new DlgHideWifiEapTls(WepOrWpa, 0, mw);
+        connHidWifiEapTls->show();
     } else if(ui->cbxAuth->currentIndex()==1) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiSecLeap *connHidWifiSecLeap = new DlgConnHidWifiSecLeap(WepOrWpa);
-        connHidWifiSecLeap->show();
+        DlgHideWifiEapLeap *connHidWifiEapLeap = new DlgHideWifiEapLeap(WepOrWpa);
+        connHidWifiEapLeap->show();
     } else if(ui->cbxAuth->currentIndex()==2) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiSecPwd *connHidWifiSecPwd = new DlgConnHidWifiSecPwd(WepOrWpa);
-        connHidWifiSecPwd->show();
+        DlgHideWifiEapPwd *connHidWifiEapPwd = new DlgHideWifiEapPwd(WepOrWpa);
+        connHidWifiEapPwd->show();
     } else if(ui->cbxAuth->currentIndex()==3) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiSecFast *connHidWifiSecFast = new DlgConnHidWifiSecFast(WepOrWpa);
-        connHidWifiSecFast->show();
+        DlgHideWifiEapFast *connHidWifiEapFast = new DlgHideWifiEapFast(WepOrWpa);
+        connHidWifiEapFast->show();
     } else if(ui->cbxAuth->currentIndex()==4) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifiSecTunnelTLS *connHidWifiSecTuTls = new DlgConnHidWifiSecTunnelTLS(WepOrWpa);
-        connHidWifiSecTuTls->show();
+        DlgHideWifiEapTTLS *connHidWifiEapTTls = new DlgHideWifiEapTTLS(WepOrWpa);
+        connHidWifiEapTTls->show();
     } else {
         qDebug()<<"it's not need to change dialog";
     }
 }
 
 //同一 Wi-Fi安全类型的窗口变换
-void DlgConnHidWifiSecPeap::changeWindow(){
+void DlgHideWifiEapPeap::changeWindow(){
     if (ui->cbxConn->currentIndex() == 0) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgConnHidWifi *connHidWifi = new DlgConnHidWifi(0, mw);
+        DlgHideWifi *connHidWifi = new DlgHideWifi(0, mw);
         connHidWifi->show();
         connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     } else if (ui->cbxConn->currentIndex() >= 1) {
@@ -323,7 +323,7 @@ void DlgConnHidWifiSecPeap::changeWindow(){
             if (txt.indexOf("wpa-psk") != -1) {
                 QApplication::setQuitOnLastWindowClosed(false);
                 this->hide();
-                DlgConnHidWifiWpa *connHidWifiWpa = new DlgConnHidWifiWpa(ui->cbxConn->currentIndex(), mw);
+                DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(ui->cbxConn->currentIndex(), mw);
                 connHidWifiWpa->show();
                 connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
             }
@@ -349,7 +349,7 @@ void DlgConnHidWifiSecPeap::changeWindow(){
         } else {
             QApplication::setQuitOnLastWindowClosed(false);
             this->hide();
-            DlgConnHidWifi *connHidWifi = new DlgConnHidWifi(ui->cbxConn->currentIndex(), mw);
+            DlgHideWifi *connHidWifi = new DlgHideWifi(ui->cbxConn->currentIndex(), mw);
             connHidWifi->show();
             connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
         }
@@ -357,7 +357,7 @@ void DlgConnHidWifiSecPeap::changeWindow(){
 }
 
 //CA证书的Index变化
-void DlgConnHidWifiSecPeap::on_cbxCA_currentIndexChanged(const QString &arg1)
+void DlgHideWifiEapPeap::on_cbxCA_currentIndexChanged(const QString &arg1)
 {
     if (ui->cbxCA->currentIndex() == 0) {
         ui->leCaPwd->setText("");
@@ -370,18 +370,18 @@ void DlgConnHidWifiSecPeap::on_cbxCA_currentIndexChanged(const QString &arg1)
     }
 }
 
-void DlgConnHidWifiSecPeap::on_btnCancel_clicked()
+void DlgHideWifiEapPeap::on_btnCancel_clicked()
 {
     this->close();
 }
 
-void DlgConnHidWifiSecPeap::on_btnConnect_clicked()
+void DlgHideWifiEapPeap::on_btnConnect_clicked()
 {
     this->close();
 }
 
 //是否显示密码
-void DlgConnHidWifiSecPeap::on_checkBoxPwd_stateChanged(int arg1)
+void DlgHideWifiEapPeap::on_checkBoxPwd_stateChanged(int arg1)
 {
     if (arg1 == 0) {
         ui->leCaPwd->setEchoMode(QLineEdit::Password);
@@ -391,7 +391,7 @@ void DlgConnHidWifiSecPeap::on_checkBoxPwd_stateChanged(int arg1)
 }
 
 //是否是不需要CA证书
-void DlgConnHidWifiSecPeap::on_checkBoxCA_stateChanged(int arg1)
+void DlgHideWifiEapPeap::on_checkBoxCA_stateChanged(int arg1)
 {
     if (arg1 == 0) {
         ui->cbxCA->setCurrentIndex(0);
@@ -407,7 +407,7 @@ void DlgConnHidWifiSecPeap::on_checkBoxCA_stateChanged(int arg1)
 }
 
 //是否显示密码
-void DlgConnHidWifiSecPeap::on_checkBoxPwdSec_stateChanged(int arg1)
+void DlgHideWifiEapPeap::on_checkBoxPwdSec_stateChanged(int arg1)
 {
     if (arg1 == 0) {
         ui->lePassword->setEchoMode(QLineEdit::Password);
@@ -417,7 +417,7 @@ void DlgConnHidWifiSecPeap::on_checkBoxPwdSec_stateChanged(int arg1)
 }
 
 //编辑网络名称
-void DlgConnHidWifiSecPeap::on_leNetName_textEdited(const QString &arg1)
+void DlgHideWifiEapPeap::on_leNetName_textEdited(const QString &arg1)
 {
     if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
@@ -443,7 +443,7 @@ void DlgConnHidWifiSecPeap::on_leNetName_textEdited(const QString &arg1)
 }
 
 //编辑匿名身份
-void DlgConnHidWifiSecPeap::on_leAnonyId_textEdited(const QString &arg1)
+void DlgHideWifiEapPeap::on_leAnonyId_textEdited(const QString &arg1)
 {
     if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
@@ -467,7 +467,7 @@ void DlgConnHidWifiSecPeap::on_leAnonyId_textEdited(const QString &arg1)
 }
 
 //编辑域名
-void DlgConnHidWifiSecPeap::on_leDomain_textEdited(const QString &arg1)
+void DlgHideWifiEapPeap::on_leDomain_textEdited(const QString &arg1)
 {
     if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
@@ -491,7 +491,7 @@ void DlgConnHidWifiSecPeap::on_leDomain_textEdited(const QString &arg1)
 }
 
 //编辑CA证书密码
-void DlgConnHidWifiSecPeap::on_leCaPwd_textEdited(const QString &arg1)
+void DlgHideWifiEapPeap::on_leCaPwd_textEdited(const QString &arg1)
 {
     if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
@@ -511,7 +511,7 @@ void DlgConnHidWifiSecPeap::on_leCaPwd_textEdited(const QString &arg1)
 }
 
 //编辑用户名
-void DlgConnHidWifiSecPeap::on_leUserName_textEdited(const QString &arg1)
+void DlgHideWifiEapPeap::on_leUserName_textEdited(const QString &arg1)
 {
     if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
@@ -537,7 +537,7 @@ void DlgConnHidWifiSecPeap::on_leUserName_textEdited(const QString &arg1)
 }
 
 //编辑密码
-void DlgConnHidWifiSecPeap::on_lePassword_textEdited(const QString &arg1)
+void DlgHideWifiEapPeap::on_lePassword_textEdited(const QString &arg1)
 {
     if (ui->leNetName->text() == "") {
         ui->btnConnect->setEnabled(false);
@@ -562,7 +562,7 @@ void DlgConnHidWifiSecPeap::on_lePassword_textEdited(const QString &arg1)
     }
 }
 
-void DlgConnHidWifiSecPeap::paintEvent(QPaintEvent *event)
+void DlgHideWifiEapPeap::paintEvent(QPaintEvent *event)
 {
     KylinDBus mkylindbus;
     double trans = mkylindbus.getTransparentData();

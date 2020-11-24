@@ -19,16 +19,16 @@
 #ifndef KYLINHEADFILE_H
 #define KYLINHEADFILE_H
 
-#include "dlgconnhidwifi.h"
-#include "dlgconnhidwifileap.h"
-#include "dlgconnhidwifisecfast.h"
-#include "dlgconnhidwifisecleap.h"
-#include "dlgconnhidwifisecpeap.h"
-#include "dlgconnhidwifisecpwd.h"
-#include "dlgconnhidwifisectls.h"
-#include "dlgconnhidwifisectunneltls.h"
-#include "dlgconnhidwifiwep.h"
-#include "dlgconnhidwifiwpa.h"
+#include "dlghidewifi.h"
+#include "dlghidewifileap.h"
+#include "dlghidewifieapfast.h"
+#include "dlghidewifieapleap.h"
+#include "dlghidewifieappeap.h"
+#include "dlghidewifieappwd.h"
+#include "dlghidewifieaptls.h"
+#include "dlghidewifieapttls.h"
+#include "dlghidewifiwep.h"
+#include "dlghidewifiwpa.h"
 
 #include <QDebug>
 #include <QFile>

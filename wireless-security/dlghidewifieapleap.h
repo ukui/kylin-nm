@@ -16,23 +16,23 @@
  *
  */
 
-#ifndef DLGCONNHIDWIFISECTUNNELTLS_H
-#define DLGCONNHIDWIFISECTUNNELTLS_H
+#ifndef DLGCONNHIDWIFISECLEAP_H
+#define DLGCONNHIDWIFISECLEAP_H
 
 #include <QDialog>
 #include <QMouseEvent>
 
 namespace Ui {
-class DlgConnHidWifiSecTunnelTLS;
+class DlgHideWifiEapLeap;
 }
 
-class DlgConnHidWifiSecTunnelTLS : public QDialog
+class DlgHideWifiEapLeap : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DlgConnHidWifiSecTunnelTLS(int type, QWidget *parent = 0);
-    ~DlgConnHidWifiSecTunnelTLS();
+    explicit DlgHideWifiEapLeap(int type, QWidget *parent = 0);
+    ~DlgHideWifiEapLeap();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -46,28 +46,16 @@ private slots:
 
     void on_btnConnect_clicked();
 
-    void on_cbxCA_currentIndexChanged(const QString &arg1);
-
-    void on_checkBoxPwd_stateChanged(int arg1);
-
-    void on_checkBoxCA_stateChanged(int arg1);
-
-    void on_checkBoxPwdSec_stateChanged(int arg1);
+    void on_checkBox_stateChanged(int arg1);
 
     void on_leNetName_textEdited(const QString &arg1);
 
-    void on_leAnonyId_textEdited(const QString &arg1);
-
-    void on_leDomain_textEdited(const QString &arg1);
-
-    void on_leCaPwd_textEdited(const QString &arg1);
-
     void on_leUserName_textEdited(const QString &arg1);
 
-    void on_lePwd_textEdited(const QString &arg1);
+    void on_lePassword_textEdited(const QString &arg1);
 
 private:
-    Ui::DlgConnHidWifiSecTunnelTLS *ui;
+    Ui::DlgHideWifiEapLeap *ui;
     int WepOrWpa = 0;//0 WEP;1WPA
 
     void mousePressEvent(QMouseEvent *event);
@@ -81,4 +69,4 @@ private:
     QPoint dragPos;
 };
 
-#endif // DLGCONNHIDWIFISECTUNNELTLS_H
+#endif // DLGCONNHIDWIFISECLEAP_H

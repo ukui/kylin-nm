@@ -19,7 +19,7 @@
 #include "mainwindow.h"
 #include "ksimplenm.h"
 #include "kylin-network-interface.h"
-#include "wireless-security/dlgconnhidwifi.h"
+#include "wireless-security/dlghidewifi.h"
 
 #include <QTranslator>
 #include <QLocale>

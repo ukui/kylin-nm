@@ -81,33 +81,38 @@
         <translation type="unfinished">Tamam</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="223"/>
-        <location filename="../src/confform.cpp" line="274"/>
+        <location filename="../src/confform.cpp" line="224"/>
+        <location filename="../src/confform.cpp" line="264"/>
         <source>Can not create new wired network for without wired card</source>
         <translation type="unfinished">Kablolu kart olmadan yeni kablolu ağ oluşturulamıyor</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="244"/>
+        <location filename="../src/confform.cpp" line="248"/>
         <source>New network already created</source>
         <translation type="unfinished">Yeni ağ zaten oluşturuldu</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="314"/>
+        <location filename="../src/confform.cpp" line="320"/>
         <source>New network settings already finished</source>
         <translation type="unfinished">Yeni ağ ayarları zaten tamamlandı</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="366"/>
+        <location filename="../src/confform.cpp" line="345"/>
+        <source>Will check the IP address conflict</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/confform.cpp" line="376"/>
         <source>IP address conflict, Please change IP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="391"/>
+        <location filename="../src/confform.cpp" line="401"/>
         <source>Edit Network</source>
         <translation type="unfinished">Ağı Düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="426"/>
+        <location filename="../src/confform.cpp" line="436"/>
         <source>Add Wired Network</source>
         <translation type="unfinished">Kablolu Ağ Ekle</translation>
     </message>
@@ -120,7 +125,7 @@
         <translation type="obsolete">Kablolu ağın yapılandırmasını başarıyla değiştirildi</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="326"/>
+        <location filename="../src/confform.cpp" line="332"/>
         <source>New settings already effective</source>
         <translation>Yeni ayarlar zaten etkili</translation>
     </message>
@@ -128,47 +133,47 @@
 <context>
     <name>DlgHideWifi</name>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="70"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="70"/>
         <source>Add Hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="71"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="71"/>
         <source>Connection</source>
         <translation>Bağlantı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="72"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="72"/>
         <source>Wi-Fi name</source>
         <translation type="unfinished">Wi-Fi adı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="73"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="73"/>
         <source>Wi-Fi security</source>
         <translation>Wi-Fi güvenlik</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="74"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="74"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="75"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="75"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlantı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="77"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="77"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="98"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="98"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="99"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="99"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation>WPA &amp; WPA2 Kişisel</translation>
     </message>
@@ -185,229 +190,146 @@
         <translation type="vanished">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.cpp" line="100"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="100"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation>WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifi.ui" line="14"/>
+        <location filename="../wireless-security/dlghidewifi.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
-    </message>
-</context>
-<context>
-    <name>DlgHideWifiLeap</name>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="68"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="69"/>
-        <source>Connection</source>
-        <translation type="unfinished">Bağlantı</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="70"/>
-        <source>Network name</source>
-        <translation type="unfinished">Ağ adı</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="71"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi Güvenlik</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="72"/>
-        <source>Username</source>
-        <translation>Kullanıcı adı</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="73"/>
-        <source>Password</source>
-        <translation>Parola</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="74"/>
-        <source>Cancel</source>
-        <translation type="unfinished">İptal</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="75"/>
-        <source>Connect</source>
-        <translation type="unfinished">Bağlan</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="77"/>
-        <source>C_reate…</source>
-        <translation type="unfinished">Oluştur...</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="95"/>
-        <source>None</source>
-        <translation type="unfinished">Yok</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="96"/>
-        <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="97"/>
-        <source>WEP 40/128-bit Key (Hex or ASCII)</source>
-        <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="98"/>
-        <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished">WEP 128-bit Passphrase</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="100"/>
-        <source>Dynamic WEP (802.1X)</source>
-        <translation type="unfinished">Dinamik WEP (802.1X)</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifileap.cpp" line="101"/>
-        <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
 </context>
 <context>
     <name>DlgHideWifiEapFast</name>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.ui" line="14"/>
+        <location filename="../wireless-security/dlghidewifieapfast.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="83"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="83"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="84"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="84"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="85"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="85"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="86"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="86"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi güvenliği</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="87"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="87"/>
         <source>Authentication</source>
         <translation>Kimlik Doğrulama</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="88"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="88"/>
         <source>Anonymous identity</source>
         <translation>Anonim kimlik</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="89"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="89"/>
         <source>Allow automatic PAC pro_visioning</source>
         <translation>Otomatik PAC pro_visioning&apos;e izin ver</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="90"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="90"/>
         <source>PAC file</source>
         <translation>PAC dosyası</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="91"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="91"/>
         <source>Inner authentication</source>
         <translation>İç kimlik doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="92"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="92"/>
         <source>Username</source>
         <translation type="unfinished">Kullanıcı adı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="93"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="93"/>
         <source>Password</source>
         <translation type="unfinished">Parola</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="94"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="94"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="95"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="95"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="100"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="100"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="118"/>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="148"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="118"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="148"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="119"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="119"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="120"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="120"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="121"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="121"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="123"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="123"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="124"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="124"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="136"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="136"/>
         <source>Tunneled TLS</source>
         <translation>Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="137"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="137"/>
         <source>Protected EAP (PEAP)</source>
         <translation>Korumalı EAP (PEAP)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="143"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="143"/>
         <source>Anonymous</source>
         <translation>Anonim</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="144"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="144"/>
         <source>Authenticated</source>
         <translation>Doğrulanmış</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecfast.cpp" line="145"/>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="145"/>
         <source>Both</source>
         <translation>Her ikisi de</translation>
     </message>
@@ -415,97 +337,97 @@
 <context>
     <name>DlgHideWifiEapLeap</name>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.ui" line="14"/>
+        <location filename="../wireless-security/dlghidewifieapleap.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>Gizli Wi-Fi ağına bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="73"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="73"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="74"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="74"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="75"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="75"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="76"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="76"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="77"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="77"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="78"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="78"/>
         <source>Username</source>
         <translation type="unfinished">Kullanıcı adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="79"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="79"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="80"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="80"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="81"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="81"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="83"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="83"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="101"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="101"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="102"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="102"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="103"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="103"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="104"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="104"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="106"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="106"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="107"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="107"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="119"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="119"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecleap.cpp" line="120"/>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="120"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">Korumalı EAP (PEAP)</translation>
     </message>
@@ -513,352 +435,98 @@
 <context>
     <name>DlgHideWifiEapPeap</name>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.ui" line="14"/>
+        <location filename="../wireless-security/dlghidewifieappeap.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="91"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="98"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="92"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="99"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="93"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="100"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="94"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="101"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="95"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="102"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="96"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="103"/>
         <source>Anonymous identity</source>
         <translation type="unfinished">Anonim kimlik:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="97"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="104"/>
         <source>Domain</source>
         <translation>Domain:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="98"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="105"/>
         <source>CA certificate</source>
         <translation>CA sertifikası:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="99"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="106"/>
         <source>CA certificate password</source>
         <translation>CA sertifika şifresi:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="100"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="107"/>
         <source>No CA certificate is required</source>
         <translation>CA sertifikası gerekmez</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="101"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="108"/>
         <source>PEAP version</source>
         <translation>PEAP sürümü:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="102"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="109"/>
         <source>Inner authentication</source>
         <translation type="unfinished">İç kimlik doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="103"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="110"/>
         <source>Username</source>
         <translation type="unfinished">Kullanıcı adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="104"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="111"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="105"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="112"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="106"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="113"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="126"/>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="149"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="134"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="158"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="127"/>
-        <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="128"/>
-        <source>WEP 40/128-bit Key (Hex or ASCII)</source>
-        <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="129"/>
-        <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished">WEP 128-bit Passphrase</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="131"/>
-        <source>Dynamic WEP (802.1X)</source>
-        <translation type="unfinished">Dinamik WEP (802.1x)</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="132"/>
-        <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="144"/>
-        <source>Tunneled TLS</source>
-        <translation type="unfinished">Tünelli TLS</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="145"/>
-        <source>Protected EAP (PEAP)</source>
-        <translation type="unfinished">Korumalı EAP (PEAP)</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="150"/>
-        <source>Choose from file</source>
-        <translation>Dosyadan seçin...</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="153"/>
-        <source>Automatic</source>
-        <translation>Otomatik</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="154"/>
-        <source>Version 0</source>
-        <translation>Sürüm 0</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpeap.cpp" line="155"/>
-        <source>Version 1</source>
-        <translation>Sürüm 1</translation>
-    </message>
-</context>
-<context>
-    <name>DlgHideWifiEapPwd</name>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="74"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi ekle</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="75"/>
-        <source>Connection</source>
-        <translation type="unfinished">Bağlantı:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="76"/>
-        <source>Network name</source>
-        <translation type="unfinished">Ağ adı:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="77"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi güvenliği:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="78"/>
-        <source>Authentication</source>
-        <translation type="unfinished">Kimlik Doğrulama:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="79"/>
-        <source>Username</source>
-        <translation type="unfinished">Kullanıcı adı:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="80"/>
-        <source>Password</source>
-        <translation type="unfinished">Parola:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="81"/>
-        <source>Cancel</source>
-        <translation type="unfinished">İptal</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="82"/>
-        <source>Connect</source>
-        <translation type="unfinished">Bağlan</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="84"/>
-        <source>C_reate…</source>
-        <translation type="unfinished">Oluştur...</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="102"/>
-        <source>None</source>
-        <translation type="unfinished">Yok</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="103"/>
-        <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="104"/>
-        <source>WEP 40/128-bit Key (Hex or ASCII)</source>
-        <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="105"/>
-        <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished">WEP 128-bit Passphrase</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="107"/>
-        <source>Dynamic WEP (802.1X)</source>
-        <translation type="unfinished">Dinamik WEP (802.1x)</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="108"/>
-        <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="120"/>
-        <source>Tunneled TLS</source>
-        <translation type="unfinished">Tünelli TLS</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisecpwd.cpp" line="121"/>
-        <source>Protected EAP (PEAP)</source>
-        <translation type="unfinished">Korumalı EAP (PEAP)</translation>
-    </message>
-</context>
-<context>
-    <name>DlgHideWifiEapTls</name>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="90"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi ekle</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="91"/>
-        <source>Connection</source>
-        <translation type="unfinished">Bağlantı:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="92"/>
-        <source>Network name</source>
-        <translation type="unfinished">Ağ adı:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="93"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi güvenliği:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="94"/>
-        <source>Authentication</source>
-        <translation type="unfinished">Kimlik Doğrulama:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="95"/>
-        <source>Identity</source>
-        <translation>Kimlik:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="96"/>
-        <source>Domain</source>
-        <translation type="unfinished">Domain:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="97"/>
-        <source>CA certificate</source>
-        <translation type="unfinished">CA sertifikası:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="98"/>
-        <source>CA certificate password</source>
-        <translation type="unfinished">CA sertifika şifresi:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="99"/>
-        <source>No CA certificate is required</source>
-        <translation>CA sertifikası gerekmez</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="100"/>
-        <source>User certificate</source>
-        <translation>Kullanıcı sertifikası:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="101"/>
-        <source>User certificate password</source>
-        <translation>Kullanıcı sertifikası şifresi:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="102"/>
-        <source>User private key</source>
-        <translation>Kullanıcı özel anahtarı:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="103"/>
-        <source>User key password</source>
-        <translation>Kullanıcı anahtarı şifresi:</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="104"/>
-        <source>Cancel</source>
-        <translation type="unfinished">İptal</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="105"/>
-        <source>Connect</source>
-        <translation type="unfinished">Bağlan</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="107"/>
-        <source>C_reate…</source>
-        <translation type="unfinished">Oluştur...</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="125"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="148"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="152"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="156"/>
-        <source>None</source>
-        <translation type="unfinished">Yok</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="126"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="135"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
     </message>
@@ -875,261 +543,594 @@
         <translation type="obsolete">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="127"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="136"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="143"/>
         <source>Tunneled TLS</source>
-        <translation type="unfinished">Tünelli TLS</translation>
+        <translation type="obsolete">Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="144"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="154"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">Korumalı EAP (PEAP)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="149"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="153"/>
-        <location filename="../wireless-security/dlgconnhidwifisectls.cpp" line="157"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="159"/>
         <source>Choose from file</source>
-        <translation type="unfinished">Dosyadan seç...</translation>
+        <translation>Dosyadan seçin...</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="162"/>
+        <source>Automatic</source>
+        <translation>Otomatik</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="163"/>
+        <source>Version 0</source>
+        <translation>Sürüm 0</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="164"/>
+        <source>Version 1</source>
+        <translation>Sürüm 1</translation>
+    </message>
+</context>
+<context>
+    <name>DlgHideWifiEapPwd</name>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.ui" line="14"/>
+        <source>Connect to Hidden Wi-Fi Network</source>
+        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="74"/>
+        <source>Add hidden Wi-Fi</source>
+        <translation type="unfinished">Gizli Wi-Fi ekle</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="75"/>
+        <source>Connection</source>
+        <translation type="unfinished">Bağlantı:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="76"/>
+        <source>Network name</source>
+        <translation type="unfinished">Ağ adı:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="77"/>
+        <source>Wi-Fi security</source>
+        <translation type="unfinished">Wi-Fi güvenliği:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="78"/>
+        <source>Authentication</source>
+        <translation type="unfinished">Kimlik Doğrulama:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="79"/>
+        <source>Username</source>
+        <translation type="unfinished">Kullanıcı adı:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="80"/>
+        <source>Password</source>
+        <translation type="unfinished">Parola:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="81"/>
+        <source>Cancel</source>
+        <translation type="unfinished">İptal</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="82"/>
+        <source>Connect</source>
+        <translation type="unfinished">Bağlan</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="84"/>
+        <source>C_reate…</source>
+        <translation type="unfinished">Oluştur...</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="102"/>
+        <source>None</source>
+        <translation type="unfinished">Yok</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="103"/>
+        <source>WPA &amp; WPA2 Personal</source>
+        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="104"/>
+        <source>WEP 40/128-bit Key (Hex or ASCII)</source>
+        <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="105"/>
+        <source>WEP 128-bit Passphrase</source>
+        <translation type="unfinished">WEP 128-bit Passphrase</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="107"/>
+        <source>Dynamic WEP (802.1X)</source>
+        <translation type="unfinished">Dinamik WEP (802.1x)</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="108"/>
+        <source>WPA &amp; WPA2 Enterprise</source>
+        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="120"/>
+        <source>Tunneled TLS</source>
+        <translation type="unfinished">Tünelli TLS</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="121"/>
+        <source>Protected EAP (PEAP)</source>
+        <translation type="unfinished">Korumalı EAP (PEAP)</translation>
     </message>
 </context>
 <context>
     <name>DlgHideWifiEapTTLS</name>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.ui" line="14"/>
+        <location filename="../wireless-security/dlghidewifieapttls.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="89"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="89"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="90"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="90"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="91"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="91"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="92"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="92"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi Güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="93"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="93"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="94"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="94"/>
         <source>Anonymous identity</source>
         <translation type="unfinished">Anonim kimlik:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="95"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="95"/>
         <source>Domain</source>
         <translation type="unfinished">Domain:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="96"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="96"/>
         <source>CA certificate</source>
         <translation type="unfinished">CA Sertifikası:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="97"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="97"/>
         <source>CA certificate password</source>
         <translation type="unfinished">CA sertifika şifresi:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="98"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="98"/>
         <source>No CA certificate is required</source>
         <translation>CA sertifikası gerekmez</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="99"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="99"/>
         <source>Inner authentication</source>
         <translation type="unfinished">İç kimlik doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="100"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="100"/>
         <source>Username</source>
         <translation type="unfinished">Kullanıcı adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="101"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="101"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="102"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="102"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="103"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="103"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="105"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="105"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="123"/>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="146"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="123"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="146"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="124"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="124"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="125"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="125"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="126"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="126"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="128"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="128"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="129"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="129"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="141"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="141"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="142"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="142"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">Korumalı EAP (PEAP)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifisectunneltls.cpp" line="147"/>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="147"/>
         <source>Choose from file</source>
         <translation type="unfinished">Dosyadan seçiniz...</translation>
     </message>
 </context>
 <context>
-    <name>DlgHideWifiWep</name>
+    <name>DlgHideWifiEapTls</name>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.ui" line="14"/>
+        <location filename="../wireless-security/dlghidewifieaptls.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="73"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="97"/>
         <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
+        <translation type="unfinished">Gizli Wi-Fi ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="74"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="98"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="75"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="99"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="76"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="100"/>
         <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi Güvenliği:</translation>
+        <translation type="unfinished">Wi-Fi güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="77"/>
-        <source>Key</source>
-        <translation>Anahtar</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="78"/>
-        <source>WEP index</source>
-        <translation>WEP index</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="79"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="101"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="80"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="102"/>
+        <source>Identity</source>
+        <translation>Kimlik:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="103"/>
+        <source>Domain</source>
+        <translation type="unfinished">Domain:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="104"/>
+        <source>CA certificate</source>
+        <translation type="unfinished">CA sertifikası:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="105"/>
+        <source>CA certificate password</source>
+        <translation type="unfinished">CA sertifika şifresi:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="106"/>
+        <source>No CA certificate is required</source>
+        <translation>CA sertifikası gerekmez</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="107"/>
+        <source>User certificate</source>
+        <translation>Kullanıcı sertifikası:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="108"/>
+        <source>User certificate password</source>
+        <translation>Kullanıcı sertifikası şifresi:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="109"/>
+        <source>User private key</source>
+        <translation>Kullanıcı özel anahtarı:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="110"/>
+        <source>User key password</source>
+        <translation>Kullanıcı anahtarı şifresi:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="111"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="81"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="112"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="83"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="114"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="101"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="133"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="156"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="160"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="164"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="102"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="134"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="103"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
-        <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
+        <translation type="obsolete">WEP 40/128-bit Key (Hex veya ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="104"/>
         <source>WEP 128-bit Passphrase</source>
-        <translation type="unfinished">WEP 128-bit Passphrase</translation>
+        <translation type="obsolete">WEP 128-bit Passphrase</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="106"/>
         <source>Dynamic WEP (802.1X)</source>
-        <translation type="unfinished">Dinamik WEP (802.1x)</translation>
+        <translation type="obsolete">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="107"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="135"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="115"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="151"/>
+        <source>Tunneled TLS</source>
+        <translation type="unfinished">Tünelli TLS</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="152"/>
+        <source>Protected EAP (PEAP)</source>
+        <translation type="unfinished">Korumalı EAP (PEAP)</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="157"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="161"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="165"/>
+        <source>Choose from file</source>
+        <translation type="unfinished">Dosyadan seç...</translation>
+    </message>
+</context>
+<context>
+    <name>DlgHideWifiLeap</name>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.ui" line="14"/>
+        <source>Connect to Hidden Wi-Fi Network</source>
+        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="68"/>
+        <source>Add hidden Wi-Fi</source>
+        <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="69"/>
+        <source>Connection</source>
+        <translation type="unfinished">Bağlantı</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="70"/>
+        <source>Network name</source>
+        <translation type="unfinished">Ağ adı</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="71"/>
+        <source>Wi-Fi security</source>
+        <translation type="unfinished">Wi-Fi Güvenlik</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="72"/>
+        <source>Username</source>
+        <translation>Kullanıcı adı</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="73"/>
+        <source>Password</source>
+        <translation>Parola</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="74"/>
+        <source>Cancel</source>
+        <translation type="unfinished">İptal</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="75"/>
+        <source>Connect</source>
+        <translation type="unfinished">Bağlan</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="77"/>
+        <source>C_reate…</source>
+        <translation type="unfinished">Oluştur...</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="95"/>
+        <source>None</source>
+        <translation type="unfinished">Yok</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="96"/>
+        <source>WPA &amp; WPA2 Personal</source>
+        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="97"/>
+        <source>WEP 40/128-bit Key (Hex or ASCII)</source>
+        <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="98"/>
+        <source>WEP 128-bit Passphrase</source>
+        <translation type="unfinished">WEP 128-bit Passphrase</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="100"/>
+        <source>Dynamic WEP (802.1X)</source>
+        <translation type="unfinished">Dinamik WEP (802.1X)</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="101"/>
+        <source>WPA &amp; WPA2 Enterprise</source>
+        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+    </message>
+</context>
+<context>
+    <name>DlgHideWifiWep</name>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.ui" line="14"/>
+        <source>Connect to Hidden Wi-Fi Network</source>
+        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="73"/>
+        <source>Add hidden Wi-Fi</source>
+        <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="74"/>
+        <source>Connection</source>
+        <translation type="unfinished">Bağlantı:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="75"/>
+        <source>Network name</source>
+        <translation type="unfinished">Ağ adı:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="76"/>
+        <source>Wi-Fi security</source>
+        <translation type="unfinished">Wi-Fi Güvenliği:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="77"/>
+        <source>Key</source>
+        <translation>Anahtar</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="78"/>
+        <source>WEP index</source>
+        <translation>WEP index</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="79"/>
+        <source>Authentication</source>
+        <translation type="unfinished">Kimlik Doğrulama:</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="80"/>
+        <source>Cancel</source>
+        <translation type="unfinished">İptal</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="81"/>
+        <source>Connect</source>
+        <translation type="unfinished">Bağlan</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="83"/>
+        <source>C_reate…</source>
+        <translation type="unfinished">Oluştur...</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="101"/>
+        <source>None</source>
+        <translation type="unfinished">Yok</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="102"/>
+        <source>WPA &amp; WPA2 Personal</source>
+        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="103"/>
+        <source>WEP 40/128-bit Key (Hex or ASCII)</source>
+        <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="104"/>
+        <source>WEP 128-bit Passphrase</source>
+        <translation type="unfinished">WEP 128-bit Passphrase</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="106"/>
+        <source>Dynamic WEP (802.1X)</source>
+        <translation type="unfinished">Dinamik WEP (802.1x)</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="107"/>
+        <source>WPA &amp; WPA2 Enterprise</source>
+        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="115"/>
         <source>1(default)</source>
         <translation>1(default)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="121"/>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="121"/>
         <source>Open System</source>
         <translation>Sistemi aç</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwep.cpp" line="122"/>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="122"/>
         <source>Shared Key</source>
         <translation>Paylaşılan Anahtar</translation>
     </message>
@@ -1137,62 +1138,62 @@
 <context>
     <name>DlgHideWifiWpa</name>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.ui" line="14"/>
+        <location filename="../wireless-security/dlghidewifiwpa.ui" line="14"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="75"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="75"/>
         <source>Add Hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="76"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="76"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="77"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="77"/>
         <source>Wi-Fi name</source>
         <translation type="unfinished">Wi-Fi adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="78"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="78"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi güvenlik:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="79"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="79"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="80"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="80"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="81"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="81"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="83"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="83"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="106"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="106"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="107"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="107"/>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlgconnhidwifiwpa.cpp" line="108"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="108"/>
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
     </message>

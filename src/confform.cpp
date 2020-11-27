@@ -124,11 +124,11 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->cbMask->addItem("255.0.0.0"); //8
 
     ui->btnCancel->setText(tr("Cancel"));//"取消"
-    ui->btnOk->setText(tr("Save"));//"保存"
+    ui->btnSave->setText(tr("Save"));//"保存"
     ui->btnCreate->setText(tr("Ok"));//"确定"
 
     ui->btnCancel->setFocusPolicy(Qt::NoFocus);
-    ui->btnOk->setFocusPolicy(Qt::NoFocus);
+    ui->btnSave->setFocusPolicy(Qt::NoFocus);
     ui->btnCreate->setFocusPolicy(Qt::NoFocus);
 
     // IP的正则格式限制
@@ -175,6 +175,7 @@ void ConfForm::setProp(QString connName, QString v4method, QString addr, QString
     this->isActConf = isActConf;
     ui->leName->setText(connName);
     lastConnName = connName;
+    lastIpv4 = addr;
 
     if (v4method == "auto" || v4method == "") {
         ui->cbType->setCurrentIndex(0);
@@ -227,8 +228,11 @@ void ConfForm::on_btnCreate_clicked()
         return;
     }
 
-    if (check_ip_conflict(mIfname)) {
-        return;
+    if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
+        //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
+        if (check_ip_conflict(mIfname)) {
+            return;
+        }
     }
 
     QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
@@ -239,7 +243,7 @@ void ConfForm::on_btnCreate_clicked()
     if (ui->cbType->currentIndex() == 1) {
         //config the ipv4 and netmask and gateway if select Manual
         this->isCreateNewNet = true;
-        this->on_btnOk_clicked();
+        this->on_btnSave_clicked();
     } else {
         QString txt(tr("New network already created"));
         kylindbus.showDesktopNotify(txt);
@@ -250,22 +254,8 @@ void ConfForm::on_btnCreate_clicked()
 }
 
 //点击了保存更改网络设置的按钮
-void ConfForm::on_btnOk_clicked()
+void ConfForm::on_btnSave_clicked()
 {
-    //如果网络的名称已经修改，则删掉当前网络，新建一个网络
-    if (ui->leName->text() != lastConnName) {
-        QString cmd = "nmcli connection delete '" + lastConnName + "'";
-        int status = system(cmd.toUtf8().data());
-        if (status != 0) {
-            syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'on_btnCreate_clicked' failed");
-        }
-        this->hide();
-
-        on_btnCreate_clicked();
-
-        return;
-    }
-
     KylinDBus kylindbus;
     kylindbus.getWiredCardName();
     QString mIfname = kylindbus.dbusLanCardName;
@@ -278,8 +268,24 @@ void ConfForm::on_btnOk_clicked()
         return;
     }
 
-    if (check_ip_conflict(mIfname)) {
-        return;
+    //如果网络的名称已经修改，则删掉当前网络，新建一个网络
+    if (ui->leName->text() != lastConnName) {
+        QString cmd = "nmcli connection delete '" + lastConnName + "'";
+        int status = system(cmd.toUtf8().data());
+        if (status != 0) {
+            syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'on_btnSave_clicked' failed");
+        }
+        //this->hide();
+
+        QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
+        Utils::m_system(cmdStr.toUtf8().data());
+    }
+
+    if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
+        //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
+        if (check_ip_conflict(mIfname)) {
+            return;
+        }
     }
 
     QString mask = "";
@@ -336,6 +342,11 @@ void ConfForm::on_btnOk_clicked()
 
 bool ConfForm::check_ip_conflict(QString ifname)
 {
+    //即将检测Ip地址冲突
+    QString strIpCheck = tr("Will check the IP address conflict");
+    QString bufferIpCheck = "notify-send -i network-offline " + strIpCheck;
+    system(bufferIpCheck.toUtf8().data());
+
     FILE *fp;
     char ret[10], arp_all[1024];
 
@@ -386,7 +397,7 @@ void ConfForm::cbTypeChanged(int index)
 {
     if (isShowSaveBtn) {
         ui->leName->setEnabled(true);
-        ui->btnOk->show(); //显示保存按钮
+        ui->btnSave->show(); //显示保存按钮
         ui->btnCreate->hide(); //隐藏创建按钮
         ui->lbLeftupTitle->setText(tr("Edit Network"));
     }
@@ -415,13 +426,13 @@ void ConfForm::cbTypeChanged(int index)
     }
     if (index == 3) {
 //        ui->btnOk->setStyleSheet(btnOffQss);
-        ui->btnOk->setEnabled(false);
+        ui->btnSave->setEnabled(false);
 
 //        ui->btnCreate->setStyleSheet(btnOffQss);
         ui->btnCreate->setEnabled(false);
 
         ui->leName->setEnabled(true);
-        ui->btnOk->hide();
+        ui->btnSave->hide();
         ui->btnCreate->show();
         ui->lbLeftupTitle->setText(tr("Add Wired Network"));
         isShowSaveBtn = false;
@@ -491,7 +502,7 @@ void ConfForm::setEnableOfBtn()
     }
 
 //    ui->btnOk->setStyleSheet(btnOnQss);
-    ui->btnOk->setEnabled(true);
+    ui->btnSave->setEnabled(true);
 
 //    ui->btnCreate->setStyleSheet(btnOnQss);
     ui->btnCreate->setEnabled(true);
@@ -513,7 +524,7 @@ bool ConfForm::getTextEditState(QString text)
 void ConfForm::setBtnEnableFalse()
 {
 //    ui->btnOk->setStyleSheet(btnOffQss);
-    ui->btnOk->setEnabled(false);
+    ui->btnSave->setEnabled(false);
 
 //    ui->btnCreate->setStyleSheet(btnOffQss);
     ui->btnCreate->setEnabled(false);

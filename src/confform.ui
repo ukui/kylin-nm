@@ -292,7 +292,7 @@
       <height>70</height>
      </rect>
     </property>
-    <widget class="QPushButton" name="btnOk">
+    <widget class="QPushButton" name="btnSave">
      <property name="geometry">
       <rect>
        <x>315</x>

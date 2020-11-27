@@ -97,6 +97,11 @@
         <translation type="unfinished">新的网络配置已经完成</translation>
     </message>
     <message>
+        <location filename="../src/confform.cpp" line="346"/>
+        <source>Will check the IP address conflict</source>
+        <translation type="unfinished">即将检测IP地址冲突</translation>
+    </message>
+    <message>
         <location filename="../src/confform.cpp" line="366"/>
         <source>IP address conflict, Please change IP</source>
         <translation type="unfinished">IP地址冲突，请更换IP</translation>

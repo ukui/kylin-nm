@@ -1430,11 +1430,11 @@ void MainWindow::getLanListDone(QStringList slist)
                 actLanName = "--";
                 if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
 
-                QString strLanName = TranslateLanName(nname);
+                //QString strLanName = TranslateLanName(nname);
 
                 connect(ccf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneTopLanFormSelected(QString, QString)));
                 connect(ccf, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
-                ccf->setName(strLanName, strLanName + order);
+                ccf->setName(nname, nname + order);
                 ccf->setIcon(true);
                 //ccf->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
                 ccf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
@@ -1454,11 +1454,11 @@ void MainWindow::getLanListDone(QStringList slist)
                 objKyDBus->getLanIp(nname);
                 lanListWidget->resize(W_LIST_WIDGET, lanListWidget->height() + H_NORMAL_ITEM);
 
-                QString strLanName = TranslateLanName(nname);
+                //QString strLanName = TranslateLanName(nname);
 
                 OneLancForm *ocf = new OneLancForm(lanListWidget, this, confForm, ksnm);
                 connect(ocf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneLanFormSelected(QString, QString)));
-                ocf->setName(strLanName, strLanName + order);
+                ocf->setName(nname, nname + order);
                 ocf->setIcon(true);
                 ocf->setLine(true);
                 ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), objKyDBus->dbusLanMac);
@@ -1794,7 +1794,6 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
 QString MainWindow::TranslateLanName(QString lanName)
 {
-    syslog(LOG_DEBUG, "debug: aaaab");
     QString returnLanName = lanName;
 
     if (lanName == "有线连接") {
@@ -1806,7 +1805,6 @@ QString MainWindow::TranslateLanName(QString lanName)
         }
     }
 
-    syslog(LOG_DEBUG, "debug: aaaac");
     if (lanName == "Wired connection") {
         returnLanName = tr("Wired connection");
     } else if (lanName.indexOf("Wired connection") != -1) {
@@ -1816,7 +1814,6 @@ QString MainWindow::TranslateLanName(QString lanName)
         }
     }
 
-    syslog(LOG_DEBUG, "debug: aaaad");
     if (lanName == "以太网连接") {
         returnLanName = tr("Ethernet connection");
     } else if (lanName.indexOf("以太网连接") != -1) {
@@ -1826,7 +1823,6 @@ QString MainWindow::TranslateLanName(QString lanName)
         }
     }
 
-    syslog(LOG_DEBUG, "debug: aaaae");
     if (lanName == "Ethernet connection") {
         returnLanName = tr("Ethernet connection");
     } else if (lanName.indexOf("Ethernet connection") != -1) {
@@ -1836,7 +1832,6 @@ QString MainWindow::TranslateLanName(QString lanName)
         }
     }
 
-    syslog(LOG_DEBUG, "debug: aaaaf");
     return returnLanName;
 }
 

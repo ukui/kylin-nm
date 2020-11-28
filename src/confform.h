@@ -68,6 +68,7 @@ private slots:
     void setEnableOfBtn();
     bool getTextEditState(QString text);
     void setBtnEnableFalse();
+    void saveNetworkConfiguration();
 
 private:
     Ui::ConfForm *ui;

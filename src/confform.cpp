@@ -243,7 +243,7 @@ void ConfForm::on_btnCreate_clicked()
     if (ui->cbType->currentIndex() == 1) {
         //config the ipv4 and netmask and gateway if select Manual
         this->isCreateNewNet = true;
-        this->on_btnSave_clicked();
+        this->saveNetworkConfiguration();
     } else {
         QString txt(tr("New network already created"));
         kylindbus.showDesktopNotify(txt);
@@ -288,31 +288,7 @@ void ConfForm::on_btnSave_clicked()
         }
     }
 
-    QString mask = "";
-    if (ui->cbMask->currentIndex() == 0) {
-        mask = "24";
-    } else if(ui->cbMask->currentIndex() == 1) {
-        mask = "23";
-    } else if(ui->cbMask->currentIndex() == 2) {
-        mask = "22";
-    } else if(ui->cbMask->currentIndex() == 3) {
-        mask = "16";
-    } else if(ui->cbMask->currentIndex() == 4) {
-        mask = "8";
-    } else {
-        mask = "24";
-    }
-
-    if (ui->cbType->currentIndex() == 0) {
-        kylin_network_set_automethod(ui->leName->text().toUtf8().data());
-    } else {
-        QString dnss = ui->leDns->text();
-        if (ui->leDns2->text() != "") {
-            dnss.append(",");
-            dnss.append(ui->leDns2->text());
-        }
-        kylin_network_set_manualall(ui->leName->text().toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
-    }
+    this->saveNetworkConfiguration();
 
     //this->close();
     this->hide();
@@ -338,6 +314,35 @@ void ConfForm::on_btnSave_clicked()
         emit requestRefreshLanList(0);
     }
     this->isCreateNewNet = false;
+}
+
+void ConfForm::saveNetworkConfiguration()
+{
+    QString mask = "";
+    if (ui->cbMask->currentIndex() == 0) {
+        mask = "24";
+    } else if(ui->cbMask->currentIndex() == 1) {
+        mask = "23";
+    } else if(ui->cbMask->currentIndex() == 2) {
+        mask = "22";
+    } else if(ui->cbMask->currentIndex() == 3) {
+        mask = "16";
+    } else if(ui->cbMask->currentIndex() == 4) {
+        mask = "8";
+    } else {
+        mask = "24";
+    }
+
+    if (ui->cbType->currentIndex() == 0) {
+        kylin_network_set_automethod(ui->leName->text().toUtf8().data());
+    } else {
+        QString dnss = ui->leDns->text();
+        if (ui->leDns2->text() != "") {
+            dnss.append(",");
+            dnss.append(ui->leDns2->text());
+        }
+        kylin_network_set_manualall(ui->leName->text().toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+    }
 }
 
 bool ConfForm::check_ip_conflict(QString ifname)

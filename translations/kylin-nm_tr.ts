@@ -92,27 +92,27 @@
         <translation type="unfinished">Yeni ağ zaten oluşturuldu</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="320"/>
+        <location filename="../src/confform.cpp" line="296"/>
         <source>New network settings already finished</source>
         <translation type="unfinished">Yeni ağ ayarları zaten tamamlandı</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="345"/>
+        <location filename="../src/confform.cpp" line="351"/>
         <source>Will check the IP address conflict</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="376"/>
+        <location filename="../src/confform.cpp" line="382"/>
         <source>IP address conflict, Please change IP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="401"/>
+        <location filename="../src/confform.cpp" line="407"/>
         <source>Edit Network</source>
         <translation type="unfinished">Ağı Düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="436"/>
+        <location filename="../src/confform.cpp" line="442"/>
         <source>Add Wired Network</source>
         <translation type="unfinished">Kablolu Ağ Ekle</translation>
     </message>
@@ -125,7 +125,7 @@
         <translation type="obsolete">Kablolu ağın yapılandırmasını başarıyla değiştirildi</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="332"/>
+        <location filename="../src/confform.cpp" line="308"/>
         <source>New settings already effective</source>
         <translation>Yeni ayarlar zaten etkili</translation>
     </message>
@@ -174,8 +174,17 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="99"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="100"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation>WPA &amp; WPA2 Kişisel</translation>
+        <translation type="vanished">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
@@ -190,9 +199,8 @@
         <translation type="vanished">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="100"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation>WPA &amp; WPA2 Enterprise</translation>
+        <translation type="vanished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.ui" line="14"/>
@@ -285,8 +293,17 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="119"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="124"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="120"/>
@@ -304,9 +321,8 @@
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="124"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="136"/>
@@ -398,8 +414,17 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="102"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="107"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="103"/>
@@ -417,9 +442,8 @@
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="107"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="119"/>
@@ -527,8 +551,17 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.cpp" line="135"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="136"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
@@ -543,9 +576,8 @@
         <translation type="obsolete">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="136"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <source>Tunneled TLS</source>
@@ -641,8 +673,17 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="103"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="108"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="104"/>
@@ -660,9 +701,8 @@
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="108"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="120"/>
@@ -770,8 +810,17 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="124"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="129"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="125"/>
@@ -789,9 +838,8 @@
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="129"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="141"/>
@@ -911,8 +959,17 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="134"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="135"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
@@ -927,9 +984,8 @@
         <translation type="obsolete">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="135"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="151"/>
@@ -1008,8 +1064,17 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="96"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifileap.cpp" line="101"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="97"/>
@@ -1027,9 +1092,8 @@
         <translation type="unfinished">Dinamik WEP (802.1X)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="101"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
 </context>
 <context>
@@ -1096,8 +1160,17 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="102"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwep.cpp" line="107"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="103"/>
@@ -1115,9 +1188,8 @@
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="107"/>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="115"/>
@@ -1189,13 +1261,21 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="107"/>
-        <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="108"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WPA &amp; WPA2 Personal</source>
+        <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
+    </message>
+    <message>
         <source>WPA &amp; WPA2 Enterprise</source>
-        <translation type="unfinished">WPA &amp; WPA2 Enterprise</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
@@ -1250,8 +1330,12 @@
     </message>
     <message>
         <location filename="../hot-spot/dlghotspotcreate.cpp" line="55"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>WPA &amp; WPA2 Personal</source>
-        <translation type="unfinished">WPA &amp; WPA2 Kişisel</translation>
+        <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
 </context>
 <context>
@@ -1282,7 +1366,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="347"/>
         <location filename="../src/mainwindow.cpp" line="1214"/>
-        <location filename="../src/mainwindow.cpp" line="2273"/>
+        <location filename="../src/mainwindow.cpp" line="2268"/>
         <source>Ethernet</source>
         <translation>Kablolu Ağ</translation>
     </message>
@@ -1328,8 +1412,8 @@
         <location filename="../src/mainwindow.cpp" line="1313"/>
         <location filename="../src/mainwindow.cpp" line="1390"/>
         <location filename="../src/mainwindow.cpp" line="1544"/>
-        <location filename="../src/mainwindow.cpp" line="2289"/>
-        <location filename="../src/mainwindow.cpp" line="2379"/>
+        <location filename="../src/mainwindow.cpp" line="2284"/>
+        <location filename="../src/mainwindow.cpp" line="2374"/>
         <source>Not connected</source>
         <translation>Bağlanamadı</translation>
     </message>
@@ -1341,8 +1425,8 @@
         <location filename="../src/mainwindow.cpp" line="1547"/>
         <location filename="../src/mainwindow.cpp" line="1626"/>
         <location filename="../src/mainwindow.cpp" line="1778"/>
-        <location filename="../src/mainwindow.cpp" line="2291"/>
-        <location filename="../src/mainwindow.cpp" line="2381"/>
+        <location filename="../src/mainwindow.cpp" line="2286"/>
+        <location filename="../src/mainwindow.cpp" line="2376"/>
         <source>Disconnected</source>
         <translation>Bağlantı Kesildi</translation>
     </message>
@@ -1357,33 +1441,33 @@
         <translation type="unfinished">Başka Kablosuz Ağ Düzeni Yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1801"/>
-        <location filename="../src/mainwindow.cpp" line="1805"/>
-        <location filename="../src/mainwindow.cpp" line="1811"/>
-        <location filename="../src/mainwindow.cpp" line="1815"/>
+        <location filename="../src/mainwindow.cpp" line="1800"/>
+        <location filename="../src/mainwindow.cpp" line="1804"/>
+        <location filename="../src/mainwindow.cpp" line="1809"/>
+        <location filename="../src/mainwindow.cpp" line="1813"/>
         <source>Wired connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1821"/>
-        <location filename="../src/mainwindow.cpp" line="1825"/>
+        <location filename="../src/mainwindow.cpp" line="1818"/>
+        <location filename="../src/mainwindow.cpp" line="1822"/>
+        <location filename="../src/mainwindow.cpp" line="1827"/>
         <location filename="../src/mainwindow.cpp" line="1831"/>
-        <location filename="../src/mainwindow.cpp" line="1835"/>
         <source>Ethernet connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2200"/>
+        <location filename="../src/mainwindow.cpp" line="2195"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished">Kablolu ağ bağlantısı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2228"/>
+        <location filename="../src/mainwindow.cpp" line="2223"/>
         <source>Wi-Fi is disconnected</source>
         <translation type="unfinished">Kablosuz bağlantı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2608"/>
+        <location filename="../src/mainwindow.cpp" line="2603"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
@@ -1443,17 +1527,17 @@
         <translation type="vanished">Kablosuz listesini şimdi güncelle</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2564"/>
+        <location filename="../src/mainwindow.cpp" line="2559"/>
         <source>Conn Ethernet Success</source>
         <translation>Ethernet Bağlantısı Başarılı</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2576"/>
+        <location filename="../src/mainwindow.cpp" line="2571"/>
         <source>Conn Ethernet Fail</source>
         <translation>Ethernet Bağlantısı Hatası</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2599"/>
+        <location filename="../src/mainwindow.cpp" line="2594"/>
         <source>Conn Wifi Success</source>
         <translation>Wi-Fi Bağlantısı Başarılı</translation>
     </message>

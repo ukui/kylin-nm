@@ -52,7 +52,7 @@ DlgHotspotCreate::DlgHotspotCreate(QString wiFiCardName, QWidget *parent) :
     ui->btnOk->setEnabled(false);
 
     ui->cbxSecurity->addItem(tr("None")); //无
-    ui->cbxSecurity->addItem(tr("WPA & WPA2 Personal")); //WPA 及 WPA2 个人
+    ui->cbxSecurity->addItem(tr("WPA and WPA2 Personal")); //WPA 及 WPA2 个人
     ui->cbxSecurity->setCurrentIndex(1);
     connect(ui->cbxSecurity,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeDialog()));
 }

@@ -83,7 +83,7 @@ void Utils::onRequestSendDesktopNotify(QString message)
     QList<QVariant> args;
     args<<(QCoreApplication::applicationName())
        <<((unsigned int) 0)
-      <<QString("qweq")
+      <<QString("/usr/share/icons/ukui-icon-theme-default/22x22/devices/network-wired.png")
      <<tr("kylin network applet desktop message") //显示的是什么类型的信息
     <<message //显示的具体信息
     <<QStringList()

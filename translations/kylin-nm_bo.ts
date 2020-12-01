@@ -1425,26 +1425,27 @@
     <message>
         <location filename="../src/onelancform.cpp" line="243"/>
         <location filename="../src/onelancform.cpp" line="247"/>
+        <location filename="../src/onelancform.cpp" line="248"/>
         <source>No Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="250"/>
+        <location filename="../src/onelancform.cpp" line="251"/>
         <source>IPv4：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="251"/>
+        <location filename="../src/onelancform.cpp" line="252"/>
         <source>IPv6：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="253"/>
+        <location filename="../src/onelancform.cpp" line="254"/>
         <source>MAC：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="252"/>
+        <location filename="../src/onelancform.cpp" line="253"/>
         <source>BandWidth：</source>
         <translation type="unfinished"></translation>
     </message>

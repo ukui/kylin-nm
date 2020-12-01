@@ -239,11 +239,12 @@ void OneLancForm::setConnedString(bool showLable, QString str)
 //设置item被扩展后出现的网络信息
 void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString str4)
 {
-    if (str1 == "" || str1 == "auto") {
-        str1 = tr("No Configuration");
+    if (str2 == "" || str2 == "auto") {
+        str2 = tr("No Configuration");
     }
 
-    if (str2 == "" || str2 == "auto") {
+    if (str1 == "" || str1 == "auto") {
+        str1 = tr("No Configuration");
         str2 = tr("No Configuration");
     }
 

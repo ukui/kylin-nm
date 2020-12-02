@@ -53,6 +53,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     //initTaskbarGsetting(); //初始化taskbar的GSetting方法
     getWifiSwitchState(); //初始化wifi开关GSetting通信方法
     initTransparentState(); //初始化窗口透明度的GSetting方法
+    getLanIpChanged();
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
@@ -443,6 +444,25 @@ void KylinDBus::getConnectNetIp()
     dbusArgs.endArray();
 }
 
+ //监听有线网络ip变化
+void KylinDBus::getLanIpChanged()
+{
+    QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                      "/org/freedesktop/NetworkManager/Settings",
+                                      "org.freedesktop.NetworkManager.Settings",
+                                      QDBusConnection::systemBus() );
+    QDBusReply<QList<QDBusObjectPath>> m_reply = m_interface.call("ListConnections");
+
+    QList<QDBusObjectPath> m_objNets = m_reply.value();
+    foreach (QDBusObjectPath objNet, m_objNets) {
+        oldSettingPaths.append(objNet);
+        QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                             objNet.path(),
+                                             QString("org.freedesktop.NetworkManager.Settings.Connection"),
+                                             QString("Updated"), this, SLOT(onIpPropertiesChanged() ) );
+    }
+}
+
 //获取wifi的mac地址
 void KylinDBus::getWifiMac(QString netName)
 {
@@ -512,6 +532,8 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
             qDebug()<<"A new wired network was created.";
         }
     }
+
+    onWiredSettingNumChanged();
 }
 
 //减少了一个网络，伴随着减少了一个网络配置文件
@@ -523,6 +545,22 @@ void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
     if (mw->is_btnNetList_clicked == 1) {
         emit this->updateWiredList(0); //send this signal to update wired network list
     }
+
+    onWiredSettingNumChanged();
+}
+
+void KylinDBus::onWiredSettingNumChanged()
+{
+    //先取消之前建立的信号槽连接
+    foreach (QDBusObjectPath objSettingPath, oldSettingPaths) {
+        QDBusConnection::systemBus().disconnect(QString("org.freedesktop.NetworkManager"),
+                                             objSettingPath.path(),
+                                             QString("org.freedesktop.NetworkManager.Settings.Connection"),
+                                             QString("Updated"), this, SLOT(onIpPropertiesChanged() ) );
+    }
+
+    //再建立新的信号槽连接
+    getLanIpChanged();
 }
 
 //应用启动时，获取已经连接的网络信息，包括该网络的路径和类型
@@ -697,6 +735,13 @@ void KylinDBus::onWifiPropertyChanged(QVariantMap qvm)
     //uint ii = qvm.value("Bitrate").toUInt();
     //QString ss = QString::number(ii);
     //qDebug()<<"debug: ============="<<ss;
+}
+
+//有线网的Ip属性变化时的响应函数
+void KylinDBus::onIpPropertiesChanged()
+{
+    qDebug() << "哈哈哈哈哈或或或或或";
+    emit this->updateWiredList(0);
 }
 
 //增加了新的accesspoint时执行该函数，即检测到一个新的wifi

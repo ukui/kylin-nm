@@ -296,23 +296,23 @@ void ConfForm::on_btnSave_clicked()
     QString txt(tr("New network settings already finished"));
     kylindbus.showDesktopNotify(txt);
 
-    if (!this->isCreateNewNet) {
-        if (this->isActConf == true) {
-            // 如果是修改当前连接的网络，则修改设置后简略重连网络
-            //QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + ui->leName->text() + "'";
-            //QString connCmd  = "nmcli connection up '" +  ui->leName->text() + "'";
-            //system(connCmd.toUtf8().data());
+//    if (!this->isCreateNewNet) {
+//        if (this->isActConf == true) {
+//            // 如果是修改当前连接的网络，则修改设置后简略重连网络
+//            //QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + ui->leName->text() + "'";
+//            //QString connCmd  = "nmcli connection up '" +  ui->leName->text() + "'";
+//            //system(connCmd.toUtf8().data());
 
-            kylindbus.connectWiredNet(ui->leName->text()); //reconnect this wired network
+//            kylindbus.connectWiredNet(ui->leName->text()); //reconnect this wired network
 
-            QString m_txt(tr("New settings already effective"));
-            kylindbus.showDesktopNotify(m_txt); //show desktop notify
-        }
+//            QString m_txt(tr("New settings already effective"));
+//            kylindbus.showDesktopNotify(m_txt); //show desktop notify
+//        }
 
-        //需要更新一下有线网界面
-        qDebug()<<"debug: request refresh Lan list";
-        emit requestRefreshLanList(0);
-    }
+//        //需要更新一下有线网界面
+//        qDebug()<<"debug: request refresh Lan list";
+//        emit requestRefreshLanList(0);
+//    }
     this->isCreateNewNet = false;
 }
 

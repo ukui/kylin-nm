@@ -1446,6 +1446,14 @@ void MainWindow::getLanListDone(QStringList slist)
                 lbLoadDownImg->show();
                 lbLoadUpImg->show();
                 ccf->setTopItem(false);
+
+                if (!objKyDBus->dbusLanIpv4.isEmpty()) {
+                    if (objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
+                        //在第三方nm-connection-editor进行新的配置后，重新连接网络
+                        objKyDBus->connectWiredNet(nname);
+                    }
+                }
+
                 currSelNetName = "";
                 objKyDBus->dbusActiveLanIpv4 = "";
                 objKyDBus->dbusActiveLanIpv6 = "";

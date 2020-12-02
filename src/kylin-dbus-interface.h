@@ -51,6 +51,8 @@ public:
     void initConnectionInfo();
     void connectWiredNet(QString netName);
     void getConnectNetIp();
+    void getLanIpChanged();
+    void onWiredSettingNumChanged();
 
     int getTaskBarPos(QString str);
     int getTaskBarHeight(QString str);
@@ -91,6 +93,7 @@ public slots:
     void onPropertiesChanged(QVariantMap qvm);
     void onLanPropertyChanged(QVariantMap qvm);
     void onWifiPropertyChanged(QVariantMap qvm);
+    void onIpPropertiesChanged();
     void onAccessPointAdded(QDBusObjectPath objPath);
     void getPhysicalCarrierState(int n);
     void getLanHwAddressState();
@@ -109,6 +112,7 @@ private:
     bool isRunningFunction = false;
     QTimer *time = nullptr;
     QList<QDBusObjectPath> oldPaths; //已连接网络的对象路径列表
+    QList<QDBusObjectPath> oldSettingPaths; //保存之前的路径
     QStringList oldPathInfo; //某个已连接网络对象路径对应的网络类型(ethernet or wifi)
     bool oldWifiSwitchState; //上一次获取到的wifi开关状态
 

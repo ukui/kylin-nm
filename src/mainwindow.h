@@ -134,6 +134,8 @@ public:
     void initTimer();
     void checkIsWirelessDeviceOn();
 
+    void initActNetDNS();
+
     QIcon iconLanOnline, iconLanOffline;
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
     QIcon iconConnecting;
@@ -249,8 +251,9 @@ private:
     QString scrollBarQss, leftBtnQss, funcBtnQss;
 
     QStringList oldLanSlist; //上一次获取Lan列表
-
     QStringList oldWifiSlist; //上一次获取wifi列表
+    QString oldActLanName = ""; //上一次获取的已连接有线网名称
+    int oldDbusActLanDNS = 0; //上一次获取的已连接有线网的DNS代号
 
     //循环检测网络连接状态
     QTimer *iconTimer = nullptr;

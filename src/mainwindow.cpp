@@ -99,6 +99,7 @@ MainWindow::MainWindow(QWidget *parent) :
     getInitLanSlist(); //初始化有线网列表
     initNetwork(); //初始化网络
     initTimer(); //初始化定时器
+    initActNetDNS();//初始化已连接网络的DNS
     getSystemFontFamily();//建立GSetting监听系统字体
 
     connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClicked);
@@ -555,6 +556,26 @@ void MainWindow::initTimer()
     setNetSpeed->start(3000);
 }
 
+//初始化已经连接网络的DNS
+void MainWindow::initActNetDNS()
+{
+    QString actLanName = "--";
+    activecon *act = kylin_network_get_activecon_info();
+    int index = 0;
+    while (act[index].con_name != NULL) {
+        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet") {
+            actLanName = QString(act[index].con_name);
+            break;
+        }
+        index ++;
+    }
+
+    if (actLanName != "--") {
+        oldActLanName = actLanName;
+        objKyDBus->getLanIp(actLanName, true);
+        oldDbusActLanDNS = objKyDBus->dbusActLanDNS;
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // 任务栏托盘管理、托盘图标处理
@@ -1426,7 +1447,7 @@ void MainWindow::getLanListDone(QStringList slist)
             // 当前连接的lan
             if (nname == actLanName) {
                 objKyDBus->getConnectNetIp();
-                objKyDBus->getLanIp(nname);
+                objKyDBus->getLanIp(nname, true);
                 actLanName = "--";
                 if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
 
@@ -1449,7 +1470,10 @@ void MainWindow::getLanListDone(QStringList slist)
 
                 if (!objKyDBus->dbusLanIpv4.isEmpty()) {
                     if (objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
-                        //在第三方nm-connection-editor进行新的配置后，重新连接网络
+                        //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
+                        objKyDBus->connectWiredNet(nname);
+                    } else if ((oldActLanName == actLanName) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
+                        //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
                         objKyDBus->connectWiredNet(nname);
                     }
                 }
@@ -1457,9 +1481,11 @@ void MainWindow::getLanListDone(QStringList slist)
                 currSelNetName = "";
                 objKyDBus->dbusActiveLanIpv4 = "";
                 objKyDBus->dbusActiveLanIpv6 = "";
+                oldActLanName = actLanName;
+                oldDbusActLanDNS = objKyDBus->dbusActLanDNS;
                 syslog(LOG_DEBUG, "already insert an active lannet in the top of lan list");
             } else {
-                objKyDBus->getLanIp(nname);
+                objKyDBus->getLanIp(nname, false);
                 lanListWidget->resize(W_LIST_WIDGET, lanListWidget->height() + H_NORMAL_ITEM);
 
                 //QString strLanName = TranslateLanName(nname);
@@ -2207,6 +2233,8 @@ void MainWindow::activeLanDisconn()
     //if (status1 != 0){ syslog(LOG_ERR, "execute 'notify-send' in function 'execConnWifiPWD' failed");}
 
     currSelNetName = "";
+    oldActLanName = "";
+    oldDbusActLanDNS = 0;
     //this->startLoading();
     emit this->waitLanStop();
     this->ksnm->execGetLanList();

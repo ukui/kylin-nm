@@ -271,7 +271,7 @@ void KylinDBus::getWirelessCardName()
 }
 
 //获取没有连接的有线网ip
-void KylinDBus::getLanIp(QString netName)
+void KylinDBus::getLanIp(QString netName, bool isActNet)
 {
     QDBusInterface m_interface("org.freedesktop.NetworkManager",
                                       "/org/freedesktop/NetworkManager/Settings",
@@ -306,6 +306,7 @@ void KylinDBus::getLanIp(QString netName)
                                 //qDebug() << "Key: " << key;
                                 if (key == "ipv4") {
                                     for (QString inner_key : innerMap.keys()) {
+                                        //获取ipv4
                                         if (inner_key == "address-data") {
                                             const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
                                             QMap<QString,QVariant> m_map;
@@ -318,6 +319,17 @@ void KylinDBus::getLanIp(QString netName)
 
                                             //qDebug()<<"       " << m_map.value("address").toString();
                                             dbusLanIpv4 = m_map.value("address").toString();
+                                        }
+
+                                        if (isActNet && inner_key == "dns") {
+                                            const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
+                                            int strDns;
+                                            dbusArg2nd.beginArray();
+                                            while (!dbusArg2nd.atEnd()) {
+                                                dbusArg2nd >> strDns;// append map to a vector here if you want to keep it
+                                            }
+                                            dbusArg2nd.endArray();
+                                            dbusActLanDNS = strDns;
                                         }
                                     }
                                 }
@@ -740,7 +752,6 @@ void KylinDBus::onWifiPropertyChanged(QVariantMap qvm)
 //有线网的Ip属性变化时的响应函数
 void KylinDBus::onIpPropertiesChanged()
 {
-    qDebug() << "哈哈哈哈哈或或或或或";
     emit this->updateWiredList(0);
 }
 

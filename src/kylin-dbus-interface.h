@@ -86,6 +86,7 @@ public:
     QString dbusLanMac = "";
     QString dbusWiFiCardName = "";
     QString dbusWifiMac = "";
+    int dbusActLanDNS;
 
 public slots:
     void onNewConnection(QDBusObjectPath objPath);
@@ -99,7 +100,7 @@ public slots:
     void getLanHwAddressState();
     void getWiredCardName();
     void getWirelessCardName();
-    void getLanIp(QString netName);
+    void getLanIp(QString netName, bool isActNet);
     void getWifiMac(QString netName);
     void slot_timeout();
 

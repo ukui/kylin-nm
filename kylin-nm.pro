@@ -59,6 +59,7 @@ SOURCES += \
     src/onelancform.cpp \
     src/switchbutton.cpp \
     src/utils.cpp \
+    src/wpawifidialog.cpp \
     wireless-security/dlghidewifi.cpp \
     wireless-security/dlghidewifieapfast.cpp \
     wireless-security/dlghidewifieapleap.cpp \
@@ -85,6 +86,7 @@ HEADERS += \
     src/onelancform.h \
     src/switchbutton.h \
     src/utils.h \
+    src/wpawifidialog.h \
     wireless-security/dlghidewifi.h \
     wireless-security/dlghidewifieapfast.h \
     wireless-security/dlghidewifieapleap.h \
@@ -104,6 +106,7 @@ FORMS += \
     src/oneconnform.ui \
     src/onelancform.ui \
     hot-spot/dlghotspotcreate.ui \
+    src/wpawifidialog.ui \
     wireless-security/dlghidewifi.ui \
     wireless-security/dlghidewifieapfast.ui \
     wireless-security/dlghidewifieapleap.ui \

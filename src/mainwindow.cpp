@@ -947,6 +947,9 @@ void MainWindow::onCarrierUpHandle()
     //up_bt->disConnLanOrWifi("ethernet");
     //up_bt->deleteLater();
 
+    //检查有线网络的个数是否为0,如果是0，则新建一个有线网络
+    checkIfWiredNetExist();
+
     this->stopLoading();
     onBtnNetListClicked(1);
     is_stop_check_net_state = 0;
@@ -974,6 +977,13 @@ void MainWindow::onDeleteLan()
     this->stopLoading();
     onBtnNetListClicked(0);
     is_stop_check_net_state = 0;
+}
+
+void MainWindow::checkIfWiredNetExist()
+{
+    if (objKyDBus->getWiredNetworkNumber() == 0) {
+        objKyDBus->toCreateNewLan();
+    }
 }
 
 //无线网卡插拔处理

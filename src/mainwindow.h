@@ -170,6 +170,7 @@ public slots:
     void onNetworkDeviceRemoved(QDBusObjectPath objPath);
     void getLanBandWidth();
     void setUkuiStyle(QString style);
+    void checkIfWiredNetExist();
 
     void onExternalConnectionChange(QString type);
     void onExternalLanChange();

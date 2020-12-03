@@ -524,6 +524,44 @@ int KylinDBus::getAccessPointsNumber()
     return objPaths.size();
 }
 
+int KylinDBus::getWiredNetworkNumber()
+{
+    QDBusInterface interface("org.freedesktop.NetworkManager",
+                                      "/org/freedesktop/NetworkManager/Settings",
+                                      "org.freedesktop.NetworkManager.Settings",
+                                      QDBusConnection::systemBus() );
+    QDBusReply<QList<QDBusObjectPath>> reply = interface.call("ListConnections");
+    QList<QDBusObjectPath> objNetPaths = reply.value();
+
+    int wiredNetworkNumber = 0;
+    foreach (QDBusObjectPath objNetPath, objNetPaths) {
+        QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                  objNetPath.path(),
+                                  "org.freedesktop.NetworkManager.Settings.Connection",
+                                  QDBusConnection::systemBus());
+        QDBusMessage result = m_interface.call("GetSettings");
+
+        const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+        QMap<QString,QMap<QString,QVariant>> map;
+        dbusArg1st >> map;
+
+        for(QString key : map.keys() ) {
+            if (key == "802-3-ethernet") {
+                wiredNetworkNumber += 1;
+                qDebug()<<"A new wired network was created.";
+            }
+        }
+    }
+
+    return wiredNetworkNumber;
+}
+
+void KylinDBus::toCreateNewLan()
+{
+    QString cmdStr = "nmcli connection add con-name '有线连接 1' ifname '" + dbusLanCardName + "' type ethernet";
+    Utils::m_system(cmdStr.toUtf8().data());
+}
+
 //新增了一个网络，伴随着多了一个网络配置文件
 void KylinDBus::onNewConnection(QDBusObjectPath objPath)
 {
@@ -561,6 +599,7 @@ void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
     onWiredSettingNumChanged();
 }
 
+//有线网的个数，也即有线网配置的个数变化
 void KylinDBus::onWiredSettingNumChanged()
 {
     //先取消之前建立的信号槽连接

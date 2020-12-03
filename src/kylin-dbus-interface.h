@@ -47,6 +47,7 @@ public:
 
     void getObjectPath();
     int getAccessPointsNumber();
+    int getWiredNetworkNumber();
     void showDesktopNotify(QString message);
     void initConnectionInfo();
     void connectWiredNet(QString netName);
@@ -91,6 +92,7 @@ public:
 public slots:
     void onNewConnection(QDBusObjectPath objPath);
     void onConnectionRemoved(QDBusObjectPath objPath);
+    void toCreateNewLan();
     void onPropertiesChanged(QVariantMap qvm);
     void onLanPropertyChanged(QVariantMap qvm);
     void onWifiPropertyChanged(QVariantMap qvm);

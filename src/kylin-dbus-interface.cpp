@@ -467,11 +467,25 @@ void KylinDBus::getLanIpChanged()
 
     QList<QDBusObjectPath> m_objNets = m_reply.value();
     foreach (QDBusObjectPath objNet, m_objNets) {
-        oldSettingPaths.append(objNet);
-        QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
-                                             objNet.path(),
-                                             QString("org.freedesktop.NetworkManager.Settings.Connection"),
-                                             QString("Updated"), this, SLOT(onIpPropertiesChanged() ) );
+        QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                  objNet.path(),
+                                  "org.freedesktop.NetworkManager.Settings.Connection",
+                                  QDBusConnection::systemBus());
+        QDBusMessage result = m_interface.call("GetSettings");
+
+        const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+        QMap<QString,QMap<QString,QVariant>> map;
+        dbusArg1st >> map;
+
+        for(QString key : map.keys() ) {
+            if (key == "802-3-ethernet") {
+                oldSettingPaths.append(objNet);
+                QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                                     objNet.path(),
+                                                     QString("org.freedesktop.NetworkManager.Settings.Connection"),
+                                                     QString("Updated"), this, SLOT(onIpPropertiesChanged() ) );
+            }
+        }
     }
 }
 
@@ -791,6 +805,7 @@ void KylinDBus::onWifiPropertyChanged(QVariantMap qvm)
 //有线网的Ip属性变化时的响应函数
 void KylinDBus::onIpPropertiesChanged()
 {
+    qDebug () <<"哈哈哈哈或哈哈哈哈或或或或或";
     emit this->updateWiredList(0);
 }
 

@@ -170,12 +170,17 @@ void ConfForm::mouseMoveEvent(QMouseEvent *event)
 }
 
 //网络配置参数设置界面的显示内容
-void ConfForm::setProp(QString connName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf)
+void ConfForm::setProp(QString connName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf,  bool isWiFi)
 {
     this->isActConf = isActConf;
     ui->leName->setText(connName);
     lastConnName = connName;
     lastIpv4 = addr;
+
+    if (isWiFi) {
+        ui->leName->setEnabled(false);
+        isActWifi = isWiFi;
+    }
 
     if (v4method == "auto" || v4method == "") {
         ui->cbType->setCurrentIndex(0);
@@ -401,7 +406,9 @@ void ConfForm::on_btnCancel_clicked()
 void ConfForm::cbTypeChanged(int index)
 {
     if (isShowSaveBtn) {
-        ui->leName->setEnabled(true);
+        if (!isActWifi) {
+            ui->leName->setEnabled(true);
+        }
         ui->btnSave->show(); //显示保存按钮
         ui->btnCreate->hide(); //隐藏创建按钮
         ui->lbLeftupTitle->setText(tr("Edit Network"));
@@ -436,7 +443,9 @@ void ConfForm::cbTypeChanged(int index)
 //        ui->btnCreate->setStyleSheet(btnOffQss);
         ui->btnCreate->setEnabled(false);
 
-        ui->leName->setEnabled(true);
+        if (!isActWifi) {
+            ui->leName->setEnabled(true);
+        }
         ui->btnSave->hide();
         ui->btnCreate->show();
         ui->lbLeftupTitle->setText(tr("Add Wired Network"));

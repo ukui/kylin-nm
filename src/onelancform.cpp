@@ -371,7 +371,7 @@ void OneLancForm::on_btnInfo_clicked()
     // qDebug()<<v4method<<addr<<mask<<gateway<<dns;
 
     connect(cf, SIGNAL(requestRefreshLanList(int)), mw, SLOT(onBtnNetListClicked(int)));
-    cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive);
+    cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive, false);
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->exec();
     cf->raise();

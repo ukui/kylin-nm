@@ -13,10 +13,27 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QPoint>
+#include <QThread>
 
 namespace Ui {
 class WpaWifiDialog;
 }
+
+class UpConnThread : public QThread
+{
+    Q_OBJECT
+
+public:
+    explicit UpConnThread();
+    ~UpConnThread();
+
+public:
+    void run();
+    QString conn_name = 0;
+
+Q_SIGNALS:
+    void connRes(int respond);
+};
 
 class WpaWifiDialog : public QDialog
 {
@@ -36,7 +53,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    QString connection_name;
+    QString connectionName;
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -44,6 +61,11 @@ private:
     bool isPress;
     QPoint winPos;
     QPoint dragPos;
+
+    QString configPath = 0; //配置文件路径
+
+    void setEditorEnable(bool is_checking); //设置是否禁用输入
+    void activateConnection();
 
 private:
     QWidget * mainWidget = nullptr;
@@ -96,8 +118,13 @@ private:
     QPushButton * cancelBtn = nullptr; //取消
     QPushButton * connectBtn = nullptr; //连接
 
+Q_SIGNALS:
+    void conn_done();
+    void conn_failed();
+
 private slots:
     void slot_on_connectBtn_clicked();
+    void slot_line_edit_changed();
 };
 
 #endif // WPAWIFIDIALOG_H

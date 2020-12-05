@@ -23,6 +23,7 @@
 #include "kylin-network-interface.h"
 #include "wireless-security/dlghidewifi.h"
 #include "utils.h"
+#include "wpawifidialog.h"
 
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
@@ -438,6 +439,7 @@ void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3)
     QString strSecurity = QString(tr("WiFi Security："));
     QString strSignal = QString(tr("Signal："));
     QString strMAC = QString(tr("MAC："));
+    wifiSecu = str1;
 
     ui->leInfo_1->setText(strSecurity + str1);
     ui->leInfo_2->setText(strSignal + str2);
@@ -498,6 +500,31 @@ void OneConnForm::on_btnConn_clicked()
 
 void OneConnForm::toConnectWirelessNetwork()
 {
+    if (wifiSecu.contains("802.1x", Qt::CaseInsensitive)) {
+        //企业wifi
+        WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, "NewWifi");
+        QPoint pos = QCursor::pos();
+        QRect primaryGeometry;
+        for (QScreen *screen : qApp->screens()) {
+            if (screen->geometry().contains(pos)) {
+                primaryGeometry = screen->geometry();
+            }
+        }
+        if (primaryGeometry.isEmpty()) {
+            primaryGeometry = qApp->primaryScreen()->geometry();
+        }
+        wpadlg->move(primaryGeometry.width() / 2 - wpadlg->width() / 2, primaryGeometry.height() / 2 - wpadlg->height() / 2);
+        wpadlg->show();
+        connect(wpadlg, &WpaWifiDialog::conn_done, this, [ = ]() {
+            QString txt(tr("Conn Wifi Success"));
+            mw->objKyDBus->showDesktopNotify(txt);
+        });
+        connect(wpadlg, &WpaWifiDialog::conn_failed, this, [ = ]() {
+            QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
+            mw->objKyDBus->showDesktopNotify(txt);
+        });
+        return;
+    }
     if (ui->lbConned->text() == "--" || ui->lbConned->text() == " ") {
         if (!isWifiConfExist(ui->lbName->text())) {
             //没有配置文件，使用有密码的wifi连接

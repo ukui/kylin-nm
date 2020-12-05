@@ -83,6 +83,7 @@ public:
 
     QString wifiName;
     QString connType;
+    QString wifiSecu;
     bool isSelected;
     bool isActive;
     bool isConnected;

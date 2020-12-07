@@ -24,6 +24,7 @@
 #include <QDBusConnection>
 #include <QDBusReply>
 #include <QDBusInterface>
+#include <QString>
 
 #include <QFile>
 
@@ -47,6 +48,9 @@ signals:
 public slots:
 
     Q_SCRIPTABLE void systemRun(QString cmd);
+    Q_SCRIPTABLE QStringList getWifiInfo(QString wifiName);
+    Q_SCRIPTABLE bool appendWifiInfo(QString name, QString eap, QString inner, QString user);
+    Q_SCRIPTABLE bool appendWifiUser(QString name, QString user);
 
 };
 

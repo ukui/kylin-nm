@@ -22,6 +22,7 @@
 #include "onelancform.h"
 #include "hot-spot/dlghotspotcreate.h"
 #include "wireless-security/dlghidewifi.h"
+#include "sysdbusregister.h"
 
 #include <KWindowEffects>
 #include <QFont>
@@ -113,6 +114,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->btnWifiList->installEventFilter(this);
 
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+
+    QDBusConnection systemBus = QDBusConnection::systemBus();
+    if (!systemBus.registerService("com.kylin.NetworkManager.qt.systemdbus")){
+        qCritical() << "QDbus register service failed reason:" << systemBus.lastError();
+    }
+
+    if (!systemBus.registerObject("/", new SysdbusRegister(), QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)){
+        qCritical() << "QDbus register object failed reason:" << systemBus.lastError();
+    }
 }
 
 MainWindow::~MainWindow()

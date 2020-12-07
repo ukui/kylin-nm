@@ -1,0 +1,53 @@
+/*
+ * Copyright (C) 2020 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+#ifndef SYSDBUSREGISTER_H
+#define SYSDBUSREGISTER_H
+
+#include <QObject>
+#include <QProcess>
+#include <QDBusError>
+#include <QDBusConnection>
+#include <QDBusReply>
+#include <QDBusInterface>
+
+#include <QFile>
+
+class SysdbusRegister : public QObject
+{
+    Q_OBJECT
+
+    Q_CLASSINFO("D-Bus Interface", "com.kylin.NetworkManager.interface")
+
+public:
+    explicit SysdbusRegister();
+    ~SysdbusRegister();
+
+private:
+//    QString m_name;
+
+signals:
+//    Q_SCRIPTABLE void nameChanged(QString);
+//    Q_SCRIPTABLE void computerinfo(QString);
+
+public slots:
+
+    Q_SCRIPTABLE void systemRun(QString cmd);
+
+};
+
+#endif // SYSDBUSREGISTER_H

@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.kylin.NetworkManager.qt.systemdbus
+Exec=/usr/bin/kylin-nm
+User=root

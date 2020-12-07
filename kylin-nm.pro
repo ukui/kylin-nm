@@ -25,8 +25,15 @@ target.source += $$TARGET
 desktop.path = /etc/xdg/autostart/
 desktop.files = kylin-nm.desktop
 
+inst1.files += src/conf/com.kylin.NetworkManager.qt.systemdbus.service
+inst1.path = /usr/share/dbus-1/system-services/
+inst2.files += src/conf/com.kylin.NetworkManager.qt.systemdbus.conf
+inst2.path = /etc/dbus-1/system.d/
+
 INSTALLS += target \
-    desktop
+    desktop \
+    inst1 \
+    inst2 \
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -58,6 +65,7 @@ SOURCES += \
     src/oneconnform.cpp \
     src/onelancform.cpp \
     src/switchbutton.cpp \
+    src/sysdbusregister.cpp \
     src/utils.cpp \
     src/wpawifidialog.cpp \
     wireless-security/dlghidewifi.cpp \
@@ -85,6 +93,7 @@ HEADERS += \
     src/oneconnform.h \
     src/onelancform.h \
     src/switchbutton.h \
+    src/sysdbusregister.h \
     src/utils.h \
     src/wpawifidialog.h \
     wireless-security/dlghidewifi.h \
@@ -131,4 +140,6 @@ TRANSLATIONS = translations/kylin-nm_zh_CN.ts \
                translations/kylin-nm_tr.ts \
                translations/kylin-nm_bo.ts
 
-DISTFILES +=
+DISTFILES += \
+    src/conf/com.kylin.NetworkManager.qt.systemdbus.conf \
+    src/conf/com.kylin.NetworkManager.qt.systemdbus.service

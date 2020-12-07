@@ -58,8 +58,6 @@ private slots:
 
 signals:
     void reSetWifiList();
-    void sendMessage();
-    void execSecConn();
     void stopSignal();
 
 private:

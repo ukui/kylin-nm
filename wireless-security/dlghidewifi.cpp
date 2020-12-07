@@ -278,12 +278,10 @@ void DlgHideWifi::on_btnConnect_clicked()
             }
         } while(x);
 
-        connect(this, SIGNAL(execSecConn()), this,SLOT(on_execSecConn() ));
         QTimer::singleShot(5*1000, this, SLOT(on_execSecConn() ));
     } else {
         bt->execConnWifi(wifiName);
-        connect(this, SIGNAL(sendMessage()), this,SLOT(emitSignal() ));
-        QTimer::singleShot(4*1000, this, SLOT(emitSignal() ));
+        QTimer::singleShot(6*1000, this, SLOT(emitSignal() ));
     }
     //this->close();
     this->hide();
@@ -308,7 +306,6 @@ void DlgHideWifi::on_execSecConn()
     QString str = "nmcli device wifi connect " + strWifiname + " password ''";
     int status = system(str.toUtf8().data());
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_execSecConn' failed");}
-    connect(this, SIGNAL(sendMessage()), this,SLOT(emitSignal() ));
     QTimer::singleShot(3*1000, this, SLOT(emitSignal() ));
 }
 

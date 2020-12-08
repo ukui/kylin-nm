@@ -101,7 +101,9 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     time->setTimerType(Qt::PreciseTimer);
     QObject::connect(time, SIGNAL(timeout()), this, SLOT(slot_timeout()));
 
-    QObject::connect(this, SIGNAL(updateWiredList(int)), mw, SLOT(onBtnNetListClicked(int)));
+    if (mw) {
+        QObject::connect(this, SIGNAL(updateWiredList(int)), mw, SLOT(onBtnNetListClicked(int)));
+    }
 
     mUtils = new Utils();
     mUtilsThread = new QThread(this);

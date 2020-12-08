@@ -68,7 +68,7 @@ public:
     QString getName();
     void setRate(QString rate);
     void setLine(bool isShow);
-    void setWifiInfo(QString str1, QString str2, QString str3);
+    void setWifiInfo(QString str1, QString str2, QString str3, bool is_double_freq);
 
     void setSelected(bool isSelected, bool isCurrName);
     void setHideItem(bool isHideItem, bool isShowHideBtn);
@@ -83,6 +83,7 @@ public:
 
     QString wifiName;
     QString connType;
+    QString wifiSecu;
     bool isSelected;
     bool isActive;
     bool isConnected;

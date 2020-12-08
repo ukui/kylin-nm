@@ -259,6 +259,22 @@
     <string/>
    </property>
   </widget>
+  <widget class="QLabel" name="fiveGlabel">
+   <property name="geometry">
+    <rect>
+     <x>255</x>
+     <y>17</y>
+     <width>50</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>2.4/5G</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
   <zorder>wbg_3</zorder>
   <zorder>wbg_2</zorder>
   <zorder>lbName</zorder>
@@ -273,6 +289,7 @@
   <zorder>btnHideConn</zorder>
   <zorder>lbWaiting</zorder>
   <zorder>lbWaitingIcon</zorder>
+  <zorder>fiveGlabel</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -351,11 +351,11 @@ void WpaWifiDialog::setEditorEnable(bool is_checking) {
 void WpaWifiDialog::activateConnection() {
     UpConnThread * upThread = new UpConnThread();
     upThread->conn_name = nameEditor->text();
+    //超时计时器
+    QTimer * timeout = new QTimer(this);
     connect(upThread, &UpConnThread::started, this, [ = ]() {
         //线程开始，开始校验密码，此时弹窗的连接按钮被禁用，所有输入框禁用
         setEditorEnable(false);
-        //超时计时器
-        QTimer * timeout = new QTimer(this);
         QObject::connect(timeout, &QTimer::timeout, this, [ = ](){
             //连接超时
             timeout->stop();
@@ -376,6 +376,8 @@ void WpaWifiDialog::activateConnection() {
             emit conn_failed();
         } else {
             //连接成功
+            timeout->stop();
+            timeout->deleteLater();
             upThread->quit();
             upThread->wait();
             upThread->deleteLater();

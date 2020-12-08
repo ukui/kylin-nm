@@ -24,8 +24,10 @@
 #include <KWindowEffects>
 #include <sys/syslog.h>
 #include <QFile>
+#include <QStringListModel>
+#include <QCompleter>
 
-#define CONFIG_FILE "/.config/wpaconf.ini"
+const QString CONFIG_FILE = "/tmp/wpaconf.ini";
 
 UpConnThread::UpConnThread()
 {
@@ -238,11 +240,24 @@ void WpaWifiDialog::initCombox() {
         innerCombox->addItem(innerStringList.at(i), QString(innerStringList.at(i)).toLower());
     }
 //    //读配置文件
-//    QFile configFile(configPath);
-//    if (!configFile.open(QIODevice::ReadOnly)) {
-//        qDebug() << "qDebug: Read config file failed!";
-//        return;
-//    }
+    wifi_info = getWifiInfo(connectionName);
+    if (wifi_info.isEmpty()) {
+        has_config = false;
+    } else {
+        has_config = true;
+        //读配置信息
+        eapCombox->setCurrentIndex(eapCombox->findData(wifi_info.at(0)));
+        innerCombox->setCurrentIndex(innerCombox->findData(wifi_info.at(1)));
+        for (int i = 2; i < wifi_info.length(); i++) {
+            user_list << wifi_info.at(i);
+        }
+        userEditor->setText(user_list.at(user_list.length() - 1));
+        QCompleter *completer = new QCompleter(userEditor);
+        QStringListModel * listModel = new QStringListModel(user_list, userEditor);
+        completer->setCaseSensitivity(Qt::CaseInsensitive);
+        completer->setModel(listModel);
+        userEditor->setCompleter(completer);
+    }
 }
 void WpaWifiDialog::initConnect() {
     //取消按钮
@@ -273,17 +288,24 @@ void WpaWifiDialog::slot_line_edit_changed() {
 
 void WpaWifiDialog::slot_on_connectBtn_clicked() {
     qDebug()<<"Clicked on connect Btn!";
+    //先写配置文件
+    if (has_config) {
+        appendWifiUser(nameEditor->text(), userEditor->text());
+    } else {
+        appendWifiInfo(nameEditor->text(), eapCombox->currentData().toString(), innerCombox->currentData().toString(), userEditor->text());
+        has_config = true;
+    }
     QString cmdStr = "nmcli connection modify " + nameEditor->text() + " 802-1x.password " + pwdEditor->text();
     int res = Utils::m_system(cmdStr.toUtf8().data());
     if (res == 0) {
-        //有配置文件，密码已修改，接下来修改用户名和其他配置，然后激活连接
+        //有网络配置文件，密码已修改，接下来修改用户名和其他配置，然后激活连接
         QString cmdStr_1 = "nmcli connection modify " + nameEditor->text() + " 802-1x.identity " + userEditor->text()
                            + " 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth " + innerCombox->currentData().toString();
         Utils::m_system(cmdStr_1.toUtf8().data());
         //激活连接
         activateConnection();
     } else {
-        //无配置文件，需要新创建
+        //无网络配置文件，需要新创建
         //获取网卡名称
         KylinDBus mkylindbus;
         QString wifi_card_name= mkylindbus.dbusWiFiCardName;
@@ -364,6 +386,78 @@ void WpaWifiDialog::activateConnection() {
         }
     });
     upThread->start();
+}
+
+QStringList WpaWifiDialog::getWifiInfo(QString wifiName) {
+    //返回名为wifiName的企业wifi的配置信息，包括eap,inner和用户列表
+    QStringList wlist;
+    QFile file(CONFIG_FILE);
+    if(!file.exists()) {
+        return wlist;
+    }
+    QSharedPointer<QSettings>  autoSettings = QSharedPointer<QSettings>(new QSettings(CONFIG_FILE, QSettings::IniFormat));
+    autoSettings.get()->beginGroup(wifiName);
+    wlist << autoSettings.get()->value("eap").toString();
+    wlist << autoSettings.get()->value("inner").toString();
+    autoSettings.get()->beginReadArray(wifiName);
+    for (int i = 0; ; i++) {
+        autoSettings.get()->setArrayIndex(i);
+        if (autoSettings.get()->value("user").toString().isEmpty()) {
+            break;
+        }
+        wlist << autoSettings.get()->value("user").toString();
+    }
+    autoSettings.get()->endArray();
+    autoSettings.get()->endGroup();
+    return wlist;
+}
+
+bool WpaWifiDialog::appendWifiInfo(QString name, QString eap, QString inner, QString user) {
+    //向配置文件添加名为name的wifi配置，包括eap,inner和它的第一个用户
+    QSharedPointer<QSettings>  autoSettings = QSharedPointer<QSettings>(new QSettings(CONFIG_FILE, QSettings::IniFormat));
+    autoSettings.get()->beginGroup(name);
+    autoSettings.get()->setValue("eap", eap);
+    autoSettings.get()->setValue("inner", inner);
+    //以数组形式写入用户名
+    autoSettings.get()->beginWriteArray(name);
+    autoSettings.get()->setArrayIndex(0);
+    autoSettings.get()->setValue("user", user);
+    user_list << user;
+    autoSettings.get()->endArray();
+    return true;
+}
+
+bool WpaWifiDialog::appendWifiUser(QString name, QString user) {
+    //向名为name的wifi用户列表添加名为user的用户名
+    QSharedPointer<QSettings>  autoSettings = QSharedPointer<QSettings>(new QSettings(CONFIG_FILE, QSettings::IniFormat));
+//    autoSettings.get()->beginWriteArray(name);
+//    autoSettings.get()->setArrayIndex(0);
+    //读到用户名列表长度并在队尾添加一个用户名
+    autoSettings.get()->beginGroup(name);
+    autoSettings.get()->setValue("eap", eapCombox->currentData().toString());
+    autoSettings.get()->setValue("inner", innerCombox->currentData().toString());
+    if (user_list.contains(user)) {
+        qDebug()<<"已经有了";
+        autoSettings.get()->endGroup();
+        return true;
+    }
+    autoSettings.get()->beginReadArray(name);
+    int size = 1;
+    while (size) {
+        autoSettings.get()->setArrayIndex(size);
+        if (autoSettings.get()->value("user").toString().isEmpty()) {
+            autoSettings.get()->setValue("user", user);
+            user_list << user;
+            break;
+        }
+        size ++;
+    }
+//    autoSettings.get()->beginWriteArray(name);
+//    autoSettings.get()->setArrayIndex(size + 1);
+//    autoSettings.get()->setValue("user", user);
+    autoSettings.get()->endArray();
+    autoSettings.get()->endGroup();
+    return true;
 }
 
 void WpaWifiDialog::mousePressEvent(QMouseEvent *event)

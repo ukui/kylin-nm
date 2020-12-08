@@ -31,6 +31,8 @@
 #include <QMouseEvent>
 #include <QPoint>
 #include <QThread>
+#include <QSettings>
+#include <QSharedPointer>
 
 namespace Ui {
 class WpaWifiDialog;
@@ -79,10 +81,15 @@ private:
     QPoint winPos;
     QPoint dragPos;
 
-    QString configPath = 0; //配置文件路径
+    QStringList wifi_info;
+    bool has_config;
+    QStringList user_list;
 
     void setEditorEnable(bool is_checking); //设置是否禁用输入
     void activateConnection();
+    QStringList getWifiInfo(QString wifiName);
+    bool appendWifiInfo(QString name, QString eap, QString inner, QString user);
+    bool appendWifiUser(QString name, QString user);
 
 private:
     QWidget * mainWidget = nullptr;

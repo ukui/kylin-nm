@@ -115,14 +115,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 
-    QDBusConnection systemBus = QDBusConnection::systemBus();
-    if (!systemBus.registerService("com.kylin.NetworkManager.qt.systemdbus")){
-        qCritical() << "QDbus register service failed reason:" << systemBus.lastError();
-    }
+//    QDBusConnection systemBus = QDBusConnection::systemBus();
+//    if (!systemBus.registerService("com.kylin.NetworkManager.qt.systemdbus")){
+//        qCritical() << "QDbus register service failed reason:" << systemBus.lastError();
+//    }
 
-    if (!systemBus.registerObject("/", new SysdbusRegister(), QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)){
-        qCritical() << "QDbus register object failed reason:" << systemBus.lastError();
-    }
+//    if (!systemBus.registerObject("/", new SysdbusRegister(), QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)){
+//        qCritical() << "QDbus register object failed reason:" << systemBus.lastError();
+//    }
 }
 
 MainWindow::~MainWindow()
@@ -1569,20 +1569,21 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 填充可用网络列表
     QString headLine = slist.at(0);
-    int indexSecu, indexName;
+    int indexSecu, indexName, indexFreq;
     headLine = headLine.trimmed();
 
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
         indexSecu = headLine.indexOf("安全性");
         indexName = headLine.indexOf("SSID") + 4;
+        indexFreq = headLine.indexOf("FREQ") + 4;
     } else {
         //int indexRate = headLine.indexOf("RATE");
         //indexSignal = headLine.indexOf("SIGNAL");
         indexSecu = headLine.indexOf("SECURITY");
         indexName = headLine.indexOf("SSID");
+        indexFreq = headLine.indexOf("FREQ");
     }
-
     QStringList wnames;
     int count = 0;
     for (int i = 1, j = 0; i < slist.size(); i ++) {
@@ -1591,8 +1592,8 @@ void MainWindow::loadWifiListDone(QStringList slist)
         //QString wrate = line.mid(indexRate, indexSecu - indexRate).trimmed();
         QString wsignal = line.mid(0, indexSecu).trimmed();
         QString wsecu = line.mid(indexSecu, indexName - indexSecu).trimmed();
-        QString wname = line.mid(indexName).trimmed();
-
+        QString wname = line.mid(indexName, indexFreq - indexName).trimmed();
+        QString wfreq = line.mid(indexFreq, 4).trimmed();
         bool isContinue = false;
         foreach (QString addName, wnames) {
             // 重复的网络名称，跳过不处理
@@ -1600,6 +1601,18 @@ void MainWindow::loadWifiListDone(QStringList slist)
         }
         if(isContinue){ continue; }
 
+        bool is_fast = false;
+        if (wfreq.toInt() >= 5000) {
+            is_fast = true;
+        } else {
+            for (int k = i; k < slist.size(); k ++) {
+                if (wname == slist.at(k).mid(indexName, indexFreq - indexName).trimmed()) {
+                    if (slist.at(k).mid(indexFreq, 4).trimmed() >= 5000) {
+                        is_fast = true;
+                    }
+                }
+            }
+        }
         if (wname != "" && wname != "--") {
             // 当前连接的wifi
             if (wname == actWifiName) {
@@ -1610,7 +1623,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ccf->setSignal(wsignal, wsecu);
                 activeWifiSignalLv = wsignal.toInt();
                 objKyDBus->getWifiMac(wname);
-                ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
+                ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, is_fast);
                 ccf->setConnedString(1, tr("NetOn,"), wsecu);//"已连接"
                 ccf->isConnected = true;
                 ifWLanConnected = true;
@@ -1632,7 +1645,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->setLine(true);
                 ocf->setSignal(wsignal, wsecu);
                 objKyDBus->getWifiMac(wname);
-                ocf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
+                ocf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, is_fast);
                 ocf->setConnedString(0, tr("Disconnected"), wsecu);
                 ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
                 ocf->setSelected(false, false);
@@ -1690,15 +1703,17 @@ void MainWindow::updateWifiListDone(QStringList slist)
     }
 
     QString headLine = slist.at(0);
-    int indexSecu, indexName;
+    int indexSecu, indexName, indexFreq;
     headLine = headLine.trimmed();
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
         indexSecu = headLine.indexOf("安全性");
         indexName = headLine.indexOf("SSID") + 4;
+        indexFreq = headLine.indexOf("FREQ") + 4;
     } else {
         indexSecu = headLine.indexOf("SECURITY");
         indexName = headLine.indexOf("SSID");
+        indexFreq = headLine.indexOf("FREQ");
     }
 
     //列表中去除已经减少的wifi
@@ -1707,7 +1722,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
         QString lastWname = line.mid(lastIndexName).trimmed();
         for (int j=1; j<slist.size(); j++){
             QString line = slist.at(j);
-            QString wname = line.mid(indexName).trimmed();
+            QString wname = line.mid(indexName, indexFreq - indexName).trimmed();
 
             if (lastWname == wname){break;} //在slist最后之前找到了lastWname，则停止
             if (j == slist.size()-1) {
@@ -1743,7 +1758,8 @@ void MainWindow::updateWifiListDone(QStringList slist)
         QString line = slist.at(i);
         QString wsignal = line.mid(0, indexSecu).trimmed();
         QString wsecu = line.mid(indexSecu, indexName - indexSecu).trimmed();
-        QString wname = line.mid(indexName).trimmed();
+        QString wname = line.mid(indexName, indexFreq - indexName).trimmed();
+        QString wfreq = line.mid(indexFreq, 4).trimmed();
 
         if(wname == "" || wname == "--"){continue;}
 
@@ -1753,6 +1769,20 @@ void MainWindow::updateWifiListDone(QStringList slist)
             if(addName == wname){isContinue = true;}
         }
         if(isContinue){continue;}
+
+        bool is_fast = false;
+        if (wfreq.toInt() >= 5000) {
+            is_fast = true;
+        } else {
+            for (int k = i; k < slist.size(); k ++) {
+                if (wname == slist.at(k).mid(indexName, indexFreq - indexName).trimmed()) {
+                    if (slist.at(k).mid(indexFreq, 4).trimmed() >= 5000) {
+                        is_fast = true;
+                    }
+                }
+            }
+        }
+
         wnames.append(wname);
 
         for (int j=1; j < oldWifiSlist.size(); j++) {
@@ -1784,7 +1814,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 addItem->setLine(false);
                 addItem->setSignal(wsignal, wsecu);
                 objKyDBus->getWifiMac(wname);
-                addItem->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac);
+                addItem->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, is_fast);
                 addItem->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"
                 addItem->move(L_VERTICAL_LINE_TO_ITEM, posY);
                 addItem->setSelected(false, false);

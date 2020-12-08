@@ -142,6 +142,9 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     connect(mw, SIGNAL(waitWifiStop()), this, SLOT(stopWaiting()));
 
     connType = "";
+
+    ui->fiveGlabel->hide();
+    ui->fiveGlabel->setStyleSheet("QLabel{background-color: palette(button); border-radius: 4px;}");
 }
 
 OneConnForm::~OneConnForm()
@@ -432,8 +435,11 @@ void OneConnForm::setSignal(QString lv, QString secu)
     }
 }
 
-void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3)
+void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, bool is_double_freq)
 {
+    if (is_double_freq) {
+        ui->fiveGlabel->show();
+    }
     if (str1 == "--" || str1 == ""){ str1 = tr("None"); };
 
     QString strSecurity = QString(tr("WiFi Security："));

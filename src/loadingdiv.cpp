@@ -42,11 +42,6 @@ LoadingDiv::LoadingDiv(QWidget *parent) : QWidget(parent)
 //加载动画控件'loadingGif'
 void LoadingDiv::switchAnimStep()
 {
-//    QString qpmQss = "QLabel{background-image:url(':/res/s/conning-b/";
-//    qpmQss.append(QString::number(this->currentPage));
-//    qpmQss.append(".png');}");
-//    loadingGif->setStyleSheet(qpmQss);
-
     //另外一种加载方法
     QString qpmQss = ":/res/s/conning-b/";
     qpmQss.append(QString::number(this->currentPage));

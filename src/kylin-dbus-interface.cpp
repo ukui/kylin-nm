@@ -86,21 +86,14 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
                                              QString("org.freedesktop.NetworkManager.Device.Wired"),
                                              QString("PropertiesChanged"), this, SLOT(onLanPropertyChanged(QVariantMap) ) );
     } else {
+        syslog(LOG_DEBUG, "Can not find wired device object path when using dbus.");
         qDebug()<<"Can not find wired device object path when using dbus.";
     }
 
     if (wirelessPath.path() != "") {
-        QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
-                                             QString(wirelessPath.path()),
-                                             QString("org.freedesktop.NetworkManager.Device.Wireless"),
-                                             QString("PropertiesChanged"), this, SLOT(onWifiPropertyChanged(QVariantMap) ) );
-
-        QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
-                                             QString(wirelessPath.path()),
-                                             QString("org.freedesktop.NetworkManager.Device.Wireless"),
-                                             QString("AccessPointAdded"), this, SLOT(onAccessPointAdded(QDBusObjectPath) ) );
         getWirelessCardName();//获取无线网卡名称
     } else {
+        syslog(LOG_DEBUG, "Can not find wireless device object path when using dbus.");
         qDebug()<<"Can not find wireless device object path when using dbus.";
     }
 
@@ -144,6 +137,7 @@ void KylinDBus::getObjectPath()
    //先获取所有的网络设备的设备路径
    QDBusReply<QList<QDBusObjectPath>> obj_reply = m_interface.call("GetAllDevices");
    if (!obj_reply.isValid()) {
+       syslog(LOG_DEBUG, "execute dbus method 'GetAllDevices' is invalid in func getObjectPath()");
        qDebug()<<"execute dbus method 'GetAllDevices' is invalid in func getObjectPath()";
    }
 
@@ -158,6 +152,7 @@ void KylinDBus::getObjectPath()
 
        QDBusReply<QString> reply = interface.call("Introspect");
        if (!reply.isValid()) {
+           syslog(LOG_DEBUG, "execute dbus method 'Introspect' is invalid in func getObjectPath()");
            qDebug()<<"execute dbus method 'Introspect' is invalid in func getObjectPath()";
        }
 
@@ -191,13 +186,9 @@ void KylinDBus::getPhysicalCarrierState(int n)
 
         try {
             if (reply.value().toString() == "true") {
-                //isWiredCableOn = true;
                 multiWiredCableState.append("true");
-                //if (n == 1){ this->mw->onPhysicalCarrierChanged(isWiredCableOn);}
             } else if (reply.value().toString() == "false") {
-                //isWiredCableOn = false;
                 multiWiredCableState.append("false");
-                //if (n == 1){ this->mw->onPhysicalCarrierChanged(isWiredCableOn);}
             } else {
                 throw -1; //出现异常
             }
@@ -227,6 +218,7 @@ void KylinDBus::getLanHwAddressState()
 
     QDBusReply<QVariant> lanReply = lanInterface.call("Get", "org.freedesktop.NetworkManager.Device.Wired", "HwAddress");
     if (!lanReply.isValid()) {
+        syslog(LOG_DEBUG, "can not get the attribute 'HwAddress' in func getLanHwAddressState()");
         qDebug()<<"can not get the attribute 'HwAddress' in func getLanHwAddressState()";
     } else {
         dbusLanMac = lanReply.value().toString();
@@ -246,6 +238,7 @@ void KylinDBus::getWiredCardName()
 
         QDBusReply<QVariant> lanReply = lanInterface.call("Get", "org.freedesktop.NetworkManager.Device", "Interface");
         if (!lanReply.isValid()) {
+            syslog(LOG_DEBUG, "can not get the attribute 'Interface' in func getWiredCardName()");
             qDebug()<<"can not get the attribute 'Interface' in func getWiredCardName()";
             dbusLanCardName = "";
         } else {
@@ -264,6 +257,7 @@ void KylinDBus::getWirelessCardName()
 
     QDBusReply<QVariant> lanReply = lanInterface.call("Get", "org.freedesktop.NetworkManager.Device", "Interface");
     if (!lanReply.isValid()) {
+        syslog(LOG_DEBUG, "can not get the attribute 'Interface' in func getWirelessCardName()");
         qDebug()<<"can not get the attribute 'Interface' in func getWirelessCardName()";
     } else {
         dbusWiFiCardName = lanReply.value().toString();
@@ -288,7 +282,6 @@ void KylinDBus::getLanIp(QString netName, bool isActNet)
         QDBusMessage result = m_interface.call("GetSettings"); //get information of this network
 
         const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
-        //DBus type : a{sa{sv}}, a map with a key of QString, which maps to another map of QString,QVariant
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg1st >> map;
 
@@ -297,13 +290,10 @@ void KylinDBus::getLanIp(QString netName, bool isActNet)
             if (outside_key == "connection") {
                 for (QString search_key : outsideMap.keys()) {
                     if (search_key == "id") {
-                        //const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
                         if (netName == outsideMap.value(search_key).toString()) {
-                            // qDebug()<<"aaaaaa"<<outsideMap.value(search_key).toString();
 
                             for (QString key : map.keys() ) {
                                 QMap<QString,QVariant> innerMap = map.value(key);
-                                //qDebug() << "Key: " << key;
                                 if (key == "ipv4") {
                                     for (QString inner_key : innerMap.keys()) {
                                         //获取ipv4
@@ -317,7 +307,6 @@ void KylinDBus::getLanIp(QString netName, bool isActNet)
                                             }
                                             dbusArg2nd.endArray();
 
-                                            //qDebug()<<"       " << m_map.value("address").toString();
                                             dbusLanIpv4 = m_map.value("address").toString();
                                         }
 
@@ -346,7 +335,6 @@ void KylinDBus::getLanIp(QString netName, bool isActNet)
                                             }
                                             dbusArg2nd.endArray();
 
-                                            //qDebug()<<"       " << m_map.value("address").toString();
                                             dbusLanIpv6 = m_map.value("address").toString();
                                         }
                                     }
@@ -645,12 +633,10 @@ void KylinDBus::initConnectionInfo()
     QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
 
     QDBusObjectPath objPath;
-    // qDebug()<<"             ";
     dbusArgs.beginArray();
     while (!dbusArgs.atEnd()) {
         dbusArgs >> objPath;
         oldPaths.append(objPath);
-        // qDebug() <<"debug: *****path is: "<< objPath.path();
 
         QDBusInterface interface( "org.freedesktop.NetworkManager",
                                   objPath.path(),
@@ -658,12 +644,9 @@ void KylinDBus::initConnectionInfo()
                                   QDBusConnection::systemBus() );
 
         QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
-        // qDebug()<<"debug: *****connection type is: "<<reply.value().toString();
         oldPathInfo.append(reply.value().toString());
     }
     dbusArgs.endArray();
-    // qDebug()<<"             ";
-
 
     //获取当前wifi的开关状态
     QDBusReply<QVariant> m_result = interface.call("Get", "org.freedesktop.NetworkManager", "WirelessEnabled");
@@ -684,15 +667,12 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
             QStringList newPathInfo;
             qDebug()<<"             ";
             foreach (QDBusObjectPath objPath, newPaths) {
-                qDebug()<<"dbug: bbbbb  "<<objPath.path();
-
                 QDBusInterface interface( "org.freedesktop.NetworkManager",
                                           objPath.path(),
                                           "org.freedesktop.DBus.Properties",
                                           QDBusConnection::systemBus() );
 
                 QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
-                qDebug()<<"dbug: ccccc "<<reply.value().toString();
                 newPathInfo.append(reply.value().toString());
             }
             qDebug()<<"             ";
@@ -793,26 +773,10 @@ void KylinDBus::slot_timeout()
     time->stop();
 }
 
-//无线网属性变化时，执行该函数
-void KylinDBus::onWifiPropertyChanged(QVariantMap qvm)
-{
-    //qDebug()<<"debug: *************"<<qvm.values();
-    //uint ii = qvm.value("Bitrate").toUInt();
-    //QString ss = QString::number(ii);
-    //qDebug()<<"debug: ============="<<ss;
-}
-
 //有线网的Ip属性变化时的响应函数
 void KylinDBus::onIpPropertiesChanged()
 {
-    qDebug () <<"哈哈哈哈或哈哈哈哈或或或或或";
     emit this->updateWiredList(0);
-}
-
-//增加了新的accesspoint时执行该函数，即检测到一个新的wifi
-void KylinDBus::onAccessPointAdded(QDBusObjectPath objPath)
-{
-    //qDebug()<<"debug: &&&&&&&&&&&&&"<<objPath.path();
 }
 
 //利用dbus的方法连接有线网
@@ -1083,13 +1047,4 @@ double KylinDBus::getTransparentData()
     } else {
         return 0.7;
     }
-}
-
-//使用GSetting获取当前系统主题样式
-void KylinDBus::getUkuiStyleState()
-{
-//    if(QGSettings::isSchemaInstalled(QString("org.ukui.style").toLocal8Bit())) {
-//        QGSettings* gsetting=new QGSettings(QString("org.ukui.style").toLocal8Bit());
-//        connect(gsetting,&QGSettings::changed,this,&SideBarWidget::themeModeChangeSlot);
-//    }
 }

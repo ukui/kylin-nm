@@ -52,18 +52,7 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
     ui->lbBoder->hide();
     ui->lbLeftupTitle->setStyleSheet("QLabel{font-size:20px;}");
-//    ui->lbConn->setStyleSheet(objQss.labelQss);
-//    ui->lbNetName->setStyleSheet(objQss.labelQss);
-//    ui->lbSecurity->setStyleSheet(objQss.labelQss);
 
-//    ui->cbxConn->setStyleSheet(objQss.cbxQss);
-//    ui->cbxConn->setView(new  QListView());
-//    ui->leNetName->setStyleSheet(objQss.leQss);
-//    ui->cbxSecurity->setStyleSheet(objQss.cbxQss);
-//    ui->cbxSecurity->setView(new  QListView());
-
-//    ui->btnConnect->setStyleSheet(objQss.btnConnQss);
-//    ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
     ui->lineUp->setStyleSheet(objQss.lineQss);
     ui->lineDown->setStyleSheet(objQss.lineQss);
 

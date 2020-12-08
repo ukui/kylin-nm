@@ -52,9 +52,6 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
                                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
-    //ui->btnDisConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
-    //                           "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
-    //                           "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
     ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
     ui->lbWaitingIcon->setStyleSheet("QLabel{border:0px;background-color:transparent;}");
 
@@ -101,7 +98,6 @@ OneLancForm::~OneLancForm()
 
 void OneLancForm::mousePressEvent(QMouseEvent *)
 {
-    //emit selectedOneLanForm(lanName);
     emit selectedOneLanForm(lanName, uniqueName);//避免重名情况
 }
 
@@ -147,11 +143,9 @@ bool OneLancForm::eventFilter(QObject *obj, QEvent *event)
 void OneLancForm::setAct(bool isAct)
 {
     if (isAct) {
-        //ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->show();
         ui->btnConnSub->hide();
     } else {
-        //ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->hide();
         ui->btnConnSub->hide();
     }

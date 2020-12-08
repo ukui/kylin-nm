@@ -44,7 +44,6 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConnPWD->setText(tr("Connect"));//"连接"
     ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"
     ui->btnHideConn->setText(tr("Connect"));//"连接"
-    //ui->lePassword->setText(tr("Input Password..."));//"输入密码..."
 
     ui->lbConned->setAlignment(Qt::AlignLeft);
     ui->lePassword->setEchoMode(QLineEdit::Normal);
@@ -78,9 +77,6 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConnPWD->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
                                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
-    //ui->btnDisConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
-    //                           "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
-    //                           "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
     ui->btnHideConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
                                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
@@ -129,8 +125,6 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lePassword->installEventFilter(this);
     ui->btnInfo->setAttribute(Qt::WA_Hover,true);
     ui->btnInfo->installEventFilter(this);
-
-    //m_notify = new NotifySend();
 
     connect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
     ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与登录按钮绑定在一起
@@ -201,10 +195,8 @@ bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
 void OneConnForm::setAct(bool isAct)
 {
     if (isAct) {
-        //ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->show();
     } else {
-        //ui->lbName->setStyleSheet("QLabel{font-size:14px;color:#ffffff;}");
         ui->lbConned->hide();
     }
     isActive = isAct;
@@ -283,7 +275,6 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName)
         this->isSelected = true;
     } else {
         resize(W_ITEM, H_ITEM);
-        //ui->lePassword->setText(tr("Input Password..."));//"输入密码..."
         ui->lePassword->setText("");
         ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;background:rgba(0,0,0,0.2);}");
         ui->lePassword->setEchoMode(QLineEdit::Normal);
@@ -446,13 +437,11 @@ void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3)
 
 void OneConnForm::slotConnWifi()
 {
-    //mw->startLoading();
     this->startWaiting(true);
     emit sigConnWifi(ui->lbName->text());
 }
 void OneConnForm::slotConnWifiPWD()
 {
-    //mw->startLoading();
     this->startWaiting(true);
     emit sigConnWifiPWD(ui->lbName->text(), ui->lePassword->text(), connType);
 }
@@ -728,9 +717,6 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     currentActWifiSignalLv = signalLv;
 
     this->stopWaiting();
-    //if (connFlag != 0){
-    //    mw->stopLoading();
-    //}
 }
 
 void OneConnForm::waitAnimStep()

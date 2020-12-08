@@ -65,33 +65,10 @@ ConfForm::ConfForm(QWidget *parent) :
                  "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}";
     lineQss = "background:rgba(156,156,156,0.1);";
 
-    // ui->centralWidget->setStyleSheet("#centralWidget{border:1px solid #297a97;background-color:#ffffff;}");
     ui->wdHead->setStyleSheet("#wdHead{border:none}");
     ui->wgManual->setStyleSheet("#wgManual{border:none}");
     ui->wdBottom->setStyleSheet("#wdBottom{border:none}");
     ui->lbLeftupTitle->setStyleSheet("QLabel{font-size:20px;}");
-//    ui->lbName->setStyleSheet(labelQss);
-//    ui->lbTxt1->setStyleSheet(labelQss);
-//    ui->lbTxt2->setStyleSheet(labelQss);
-//    ui->lbTxt3->setStyleSheet(labelQss);
-//    ui->lbTxt4->setStyleSheet(labelQss);
-//    ui->lbTxt5->setStyleSheet(labelQss);
-//    ui->lbTxt6->setStyleSheet(labelQss);
-
-//    ui->cbType->setStyleSheet(cbxQss);
-//    ui->cbType->setView(new  QListView());
-//    ui->cbMask->setStyleSheet(cbxQss);
-//    ui->cbMask->setView(new  QListView());
-
-//    ui->leName->setStyleSheet(leQss);
-//    ui->leAddr->setStyleSheet(leQss);
-//    ui->leGateway->setStyleSheet(leQss);
-//    ui->leDns->setStyleSheet(leQss);
-//    ui->leDns2->setStyleSheet(leQss);
-
-//    ui->btnCancel->setStyleSheet(btnOffQss);
-//    ui->btnOk->setStyleSheet(btnOnQss);
-//    ui->btnCreate->setStyleSheet(btnOnQss);
     ui->leAddr->setContextMenuPolicy(Qt::NoContextMenu);
     ui->leName->setContextMenuPolicy(Qt::NoContextMenu);
     ui->leDns->setContextMenuPolicy(Qt::NoContextMenu);
@@ -242,8 +219,6 @@ void ConfForm::on_btnCreate_clicked()
 
     QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
     Utils::m_system(cmdStr.toUtf8().data());
-    //int status = system(cmdStr.toUtf8().data());
-    //if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection add con-name' in function 'on_btnCreate_clicked' failed");}
 
     if (ui->cbType->currentIndex() == 1) {
         //config the ipv4 and netmask and gateway if select Manual
@@ -254,7 +229,6 @@ void ConfForm::on_btnCreate_clicked()
         kylindbus.showDesktopNotify(txt);
     }
 
-    //this->close();
     this->hide();
 }
 
@@ -294,30 +268,11 @@ void ConfForm::on_btnSave_clicked()
     }
 
     this->saveNetworkConfiguration();
-
-    //this->close();
     this->hide();
 
     QString txt(tr("New network settings already finished"));
     kylindbus.showDesktopNotify(txt);
 
-//    if (!this->isCreateNewNet) {
-//        if (this->isActConf == true) {
-//            // 如果是修改当前连接的网络，则修改设置后简略重连网络
-//            //QString cmd = "/usr/share/kylin-nm/shell/connup.sh '" + ui->leName->text() + "'";
-//            //QString connCmd  = "nmcli connection up '" +  ui->leName->text() + "'";
-//            //system(connCmd.toUtf8().data());
-
-//            kylindbus.connectWiredNet(ui->leName->text()); //reconnect this wired network
-
-//            QString m_txt(tr("New settings already effective"));
-//            kylindbus.showDesktopNotify(m_txt); //show desktop notify
-//        }
-
-//        //需要更新一下有线网界面
-//        qDebug()<<"debug: request refresh Lan list";
-//        emit requestRefreshLanList(0);
-//    }
     this->isCreateNewNet = false;
 }
 
@@ -437,10 +392,7 @@ void ConfForm::cbTypeChanged(int index)
         this->resize(432, 510);
     }
     if (index == 3) {
-//        ui->btnOk->setStyleSheet(btnOffQss);
         ui->btnSave->setEnabled(false);
-
-//        ui->btnCreate->setStyleSheet(btnOffQss);
         ui->btnCreate->setEnabled(false);
 
         if (!isActWifi) {
@@ -515,10 +467,7 @@ void ConfForm::setEnableOfBtn()
         }
     }
 
-//    ui->btnOk->setStyleSheet(btnOnQss);
     ui->btnSave->setEnabled(true);
-
-//    ui->btnCreate->setStyleSheet(btnOnQss);
     ui->btnCreate->setEnabled(true);
 }
 
@@ -529,7 +478,6 @@ bool ConfForm::getTextEditState(QString text)
 
     bool match = false;
     match = rx.exactMatch(text);
-    // qDebug()<<"the match result is: " << match;
 
     return match;
 }
@@ -537,10 +485,7 @@ bool ConfForm::getTextEditState(QString text)
 //设置创建或保存按钮不可点击
 void ConfForm::setBtnEnableFalse()
 {
-//    ui->btnOk->setStyleSheet(btnOffQss);
     ui->btnSave->setEnabled(false);
-
-//    ui->btnCreate->setStyleSheet(btnOffQss);
     ui->btnCreate->setEnabled(false);
 }
 

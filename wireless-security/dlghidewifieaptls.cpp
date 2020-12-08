@@ -46,53 +46,16 @@ DlgHideWifiEapTls::DlgHideWifiEapTls(int type, int beUsed, MainWindow *mainWindo
     path.addRoundedRect(rect, 6, 6);
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
 
-    //this->setStyleSheet("QWidget{border-radius:6px;background-color:rgba(19,19,20,0.7);border:1px solid rgba(255, 255, 255, 0.05);}");
-
     MyQss objQss;
 
     ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
     ui->lbBoder->hide();
     ui->lbLeftupTitle->setStyleSheet("QLabel{font-size:20px;}");
-//    ui->lbConn->setStyleSheet(objQss.labelQss);
-//    ui->lbNetName->setStyleSheet(objQss.labelQss);
-//    ui->lbSecurity->setStyleSheet(objQss.labelQss);
-//    ui->lbAuth->setStyleSheet(objQss.labelQss);
-//    ui->lbIdentity->setStyleSheet(objQss.labelQss);
-//    ui->lbDomain->setStyleSheet(objQss.labelQss);
-//    ui->lbCA->setStyleSheet(objQss.labelQss);
-//    ui->lbCaPwd->setStyleSheet(objQss.labelQss);
-//    ui->lbUserCertify->setStyleSheet(objQss.labelQss);
-//    ui->lbUserCertifyPwd->setStyleSheet(objQss.labelQss);
-//    ui->lbUserPriKey->setStyleSheet(objQss.labelQss);
-//    ui->lbUserKeyPwd->setStyleSheet(objQss.labelQss);
-
-//    ui->cbxConn->setStyleSheet(objQss.cbxQss);
-//    ui->cbxConn->setView(new  QListView());
-//    ui->leNetName->setStyleSheet(objQss.leQss);
-//    ui->cbxSecurity->setStyleSheet(objQss.cbxQss);
-//    ui->cbxSecurity->setView(new  QListView());
-//    ui->cbxAuth->setStyleSheet(objQss.cbxQss);
-//    ui->cbxAuth->setView(new  QListView());
-//    ui->leIdentity->setStyleSheet(objQss.leQss);
-//    ui->leDomain->setStyleSheet(objQss.leQss);
-//    ui->cbxCA->setStyleSheet(objQss.cbxQss);
-//    ui->cbxCA->setView(new  QListView());
-//    ui->leCaPwd->setStyleSheet(objQss.leQss);
     ui->checkBoxPwd->setStyleSheet(objQss.checkBoxQss);
-//    ui->checkBoxCA->setStyleSheet(objQss.checkBoxCAQss);
-//    ui->cbxUserCertify->setStyleSheet(objQss.cbxQss);
-//    ui->cbxUserCertify->setView(new  QListView());
-//    ui->leUserCertifyPwd->setStyleSheet(objQss.leQss);
-//    ui->cbxUserPriKey->setStyleSheet(objQss.cbxQss);
-//    ui->cbxUserPriKey->setView(new  QListView());
-//    ui->leUserKeyPwd->setStyleSheet(objQss.leQss);
     ui->checkBoxPwdSec->setStyleSheet(objQss.checkBoxQss);
 
-    //ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
-    //ui->btnConnect->setStyleSheet(objQss.btnCancelQss);
     ui->lineUp->setStyleSheet(objQss.lineQss);
     ui->lineDown->setStyleSheet(objQss.lineQss);
-    //ui->checkBoxCA->setFocusPolicy(Qt::NoFocus);
 
     ui->lbLeftupTitle->setText(tr("Add hidden Wi-Fi")); //加入隐藏Wi-Fi
     ui->lbConn->setText(tr("Connection")); //连接设置:

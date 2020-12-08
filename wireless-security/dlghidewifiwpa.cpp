@@ -51,21 +51,9 @@ DlgHideWifiWpa::DlgHideWifiWpa(int type, MainWindow *mainWindow, QWidget *parent
     ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
     ui->lbBoder->hide();
     ui->lbLeftupTitle->setStyleSheet("QLabel{font-size:20px;}");
-//    ui->lbConn->setStyleSheet(objQss.labelQss);
-//    ui->lbNetName->setStyleSheet(objQss.labelQss);
-//    ui->lbSecurity->setStyleSheet(objQss.labelQss);
-//    ui->lbPassword->setStyleSheet(objQss.labelQss);
 
-//    ui->cbxConn->setStyleSheet(objQss.cbxQss);
-//    ui->cbxConn->setView(new  QListView());
-//    ui->leNetName->setStyleSheet(objQss.leQss);
-//    ui->lePassword->setStyleSheet(objQss.leQss);
-//    ui->cbxSecurity->setStyleSheet(objQss.cbxQss);
-//    ui->cbxSecurity->setView(new  QListView());
     ui->checkBoxPwd->setStyleSheet(objQss.checkBoxQss);
 
-//    ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
-//    ui->btnConnect->setStyleSheet(objQss.btnConnQss);
     ui->lineUp->setStyleSheet(objQss.lineQss);
     ui->lineDown->setStyleSheet(objQss.lineQss);
     ui->btnCancel->setFocusPolicy(Qt::NoFocus);

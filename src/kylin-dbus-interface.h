@@ -60,7 +60,6 @@ public:
     void initTaskbarGsetting();
     int getTaskbarHeight();
     int getTaskbarPos();
-    void getUkuiStyleState();
 
     void getWifiSwitchState();
     bool getSwitchStatus(QString key);
@@ -95,9 +94,7 @@ public slots:
     void toCreateNewLan();
     void onPropertiesChanged(QVariantMap qvm);
     void onLanPropertyChanged(QVariantMap qvm);
-    void onWifiPropertyChanged(QVariantMap qvm);
     void onIpPropertiesChanged();
-    void onAccessPointAdded(QDBusObjectPath objPath);
     void getPhysicalCarrierState(int n);
     void getLanHwAddressState();
     void getWiredCardName();

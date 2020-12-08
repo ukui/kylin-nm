@@ -181,15 +181,15 @@ void DlgHideWifiWep::changeDialog()
         DlgHideWifiLeap *connHidWifiLeap = new DlgHideWifiLeap();
         connHidWifiLeap->show();
     } else if(ui->cbxSecurity->currentIndex()==5) {
-//        QApplication::setQuitOnLastWindowClosed(false);
-//        this->hide();
-//        DlgHideWifiEapTls *connHidWifiEapTls = new DlgHideWifiEapTls(0);
-//        connHidWifiEapTls->show();
+        //QApplication::setQuitOnLastWindowClosed(false);
+        //this->hide();
+        //DlgHideWifiEapTls *connHidWifiEapTls = new DlgHideWifiEapTls(0);
+        //connHidWifiEapTls->show();
     } else {
-//        QApplication::setQuitOnLastWindowClosed(false);
-//        this->hide();
-//        DlgHideWifiEapTls *connHidWifiEapTls = new DlgHideWifiEapTls(1);
-//        connHidWifiEapTls->show();
+        //QApplication::setQuitOnLastWindowClosed(false);
+        //this->hide();
+        //DlgHideWifiEapTls *connHidWifiEapTls = new DlgHideWifiEapTls(1);
+        //connHidWifiEapTls->show();
     }
 }
 

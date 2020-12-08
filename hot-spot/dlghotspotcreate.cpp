@@ -99,8 +99,6 @@ void DlgHotspotCreate::on_btnOk_clicked()
         str = "nmcli device wifi hotspot ifname " + wirelessCardName + " con-name " + ui->leNetName->text() + " ssid " + ui->leNetName->text() + " password " + ui->lePassword->text();
     }
     Utils::m_system(str.toUtf8().data());
-//    int status = system(str.toUtf8().data());
-//    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi hotspot' in function 'on_btnOk_clicked' failed");}
 
     this->close();
     emit updateHotspotList();

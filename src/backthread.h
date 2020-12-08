@@ -69,7 +69,6 @@ signals:
     void enNetDone();
     void disNetDone();
     void enWifiDone();
-    void launchLanDone();
     void disWifiDone();
 
     void connDone(int connFlag);

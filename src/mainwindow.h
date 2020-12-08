@@ -169,7 +169,6 @@ public slots:
     void onNetworkDeviceAdded(QDBusObjectPath objPath);
     void onNetworkDeviceRemoved(QDBusObjectPath objPath);
     void getLanBandWidth();
-    void setUkuiStyle(QString style);
     void checkIfWiredNetExist();
 
     void onExternalConnectionChange(QString type);
@@ -292,15 +291,11 @@ private slots:
 
     void on_showWindowAction();
     void on_btnAdvConf_clicked();
-    void on_btnNetList_pressed();
-    void on_btnWifiList_pressed();
 
     void activeLanDisconn();
     void activeWifiDisconn();
     void activeStartLoading();
     void activeGetWifiList();
-    void on_btnAdvConf_pressed();
-    void on_btnAdvConf_released();
     void on_checkWifiListChanged();
     void on_setNetSpeed();
     void on_checkOverTime();
@@ -309,7 +304,6 @@ private slots:
     void enNetDone();
     void disNetDone();
     void enWifiDone();
-    void launchLanDone();
     void disWifiDone();
     void disWifiStateKeep();
     void disWifiDoneChangeUI();

@@ -52,9 +52,6 @@ IFace* BackThread::execGetIface()
     QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli -f TYPE,DEVICE,STATE device > " + tmpPath;
     Utils::m_system(cmd.toUtf8().data());
 
-    // int status = system(cmd.toUtf8().data());
-    // if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device' in function 'execGetIface' failed");}
-
     QFile file(tmpPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         // print information if can not open file ~/.config/kylin-nm-iface
@@ -118,8 +115,6 @@ void BackThread::execEnNet()
     char *chr = "nmcli networking on";
     Utils::m_system(chr);
 
-    // int status = system("nmcli networking on");
-    // if (status != 0){ syslog(LOG_ERR, "execute 'nmcli networking on' in function 'execEnNet' failed");}
     while (1) {
         if (execGetIface()->lstate != 2) {
             sleep(3);
@@ -138,8 +133,6 @@ void BackThread::execDisNet()
         char *chr = "nmcli radio wifi off";
         Utils::m_system(chr);
 
-        // int status = system("nmcli radio wifi off");
-        // if (status != 0){ syslog(LOG_ERR, "execute 'nmcli radio wifi off' in function 'execDisNet' failed");}
         while (1) {
             if (execGetIface()->wstate == 2) {
                 emit disWifiDone();
@@ -152,8 +145,7 @@ void BackThread::execDisNet()
 
     char *chr1 = "nmcli networking off";
     Utils::m_system(chr1);
-    // int status1 = system("nmcli networking off");
-    // if (status1 != 0){ syslog(LOG_ERR, "execute 'nmcli networking off' in function 'execDisNet' failed");}
+
     while (1) {
         if (execGetIface()->lstate == 2) {
             emit disNetDone();
@@ -167,24 +159,8 @@ void BackThread::execDisNet()
 //turn on the switch of wireless network
 void BackThread::execEnWifi()
 {
-    //if (execGetIface()->lstate == 2){
-    //    char *chr = "nmcli networking on";
-    //    Utils::m_system(chr);
-    //    //int status = system("nmcli networking on");
-    //    //if (status != 0){ syslog(LOG_ERR, "execute 'nmcli networking on' in function 'execEnWifi' failed");}
-    //    while(1){
-    //        if (execGetIface()->lstate != 2){
-    //            emit launchLanDone();
-    //            break;
-    //        }
-    //        sleep(1);
-    //    }
-    //}
-
     char *chr1 = "nmcli radio wifi on";
     Utils::m_system(chr1);
-    //int status1 = system("nmcli radio wifi on");
-    //if (status1 != 0){ syslog(LOG_ERR, "execute 'nmcli radio wifi on' in function 'execEnWifi' failed");}
     while (1) {
         if (execGetIface()->wstate != 2) {
             KylinDBus objKyDbus;
@@ -208,8 +184,6 @@ void BackThread::execDisWifi()
 {
     char *chr = "nmcli radio wifi off";
     Utils::m_system(chr);
-    // int status = system("nmcli radio wifi off");
-    // if (status != 0){ syslog(LOG_ERR, "execute 'nmcli radio wifi off' in function 'execDisWifi' failed");}
     while (1) {
         if (execGetIface()->wstate == 2) {
             emit disWifiDone();
@@ -230,8 +204,6 @@ void BackThread::execConnLan(QString connName)
         // only if wired cable is plug in, can connect wired network
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
         Utils::m_system(cmd.toUtf8().data());
-        // int status = system(cmd.toUtf8().data());
-        // if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection up' in function 'execConnLan' failed");}
         qDebug()<<"debug: in function execConnLan, wired net state is: "<<QString::number(execGetIface()->lstate);
         syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);
         emit connDone(0);
@@ -257,8 +229,6 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
     QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
     QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > " + tmpPath;
     Utils::m_system(cmdStr.toUtf8().data());
-    // int status =  system(cmdStr.toUtf8().data());
-    // if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'execConnWifiPWD' failed");}
 
     QFile file(tmpPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -334,8 +304,6 @@ QString BackThread::getConnProp(QString connName)
     QString tmpPath = "/tmp/kylin-nm-connprop-" + QDir::home().dirName();
     QString cmd = "nmcli connection show '" + connName + "' > " + tmpPath;
     Utils::m_system(cmd.toUtf8().data());
-    // int status = system(cmd.toUtf8().data());
-    // if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'getConnProp' failed");}
 
     QFile file(tmpPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -394,8 +362,6 @@ QString BackThread::execChkLanWidth(QString ethName)
     QString tmpPath = "/tmp/kylin-nm-bandwidth-" + QDir::home().dirName();
     QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';ethtool '" + ethName + "' | grep Speed > " + tmpPath;
     Utils::m_system(cmd.toUtf8().data());
-    // int status = system(cmd.toUtf8().data());
-    // if (status != 0){ syslog(LOG_ERR, "execute 'ethtool' in function 'execChkLanWidth' failed");}
 
     QFile file(tmpPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {

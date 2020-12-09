@@ -1535,7 +1535,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         QString line = slist.at(i);
         QString wsignal = line.mid(0, indexSecu).trimmed();
         QString wsecu = line.mid(indexSecu, indexName - indexSecu).trimmed();
-        QString wname = line.mid(indexName, indexFreq - indexName).trimmed();
+        QString wname = line.mid(indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
         bool isContinue = false;
         foreach (QString addName, wnames) {
@@ -1651,7 +1651,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     if (isChineseExist) {
         indexSecu = headLine.indexOf("安全性");
         indexName = headLine.indexOf("SSID") + 4;
-        indexFreq = headLine.indexOf("FREQ") + 4;
+        indexFreq = headLine.indexOf("FREQ");
     } else {
         indexSecu = headLine.indexOf("SECURITY");
         indexName = headLine.indexOf("SSID");
@@ -1664,7 +1664,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
         QString lastWname = line.mid(lastIndexName).trimmed();
         for (int j=1; j<slist.size(); j++){
             QString line = slist.at(j);
-            QString wname = line.mid(indexName, indexFreq - indexName).trimmed();
+            QString wname = line.mid(indexName).trimmed();
 
             if (lastWname == wname){break;} //在slist最后之前找到了lastWname，则停止
             if (j == slist.size()-1) {
@@ -1698,7 +1698,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
         QString line = slist.at(i);
         QString wsignal = line.mid(0, indexSecu).trimmed();
         QString wsecu = line.mid(indexSecu, indexName - indexSecu).trimmed();
-        QString wname = line.mid(indexName, indexFreq - indexName).trimmed();
+        QString wname = line.mid(indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
 
         if(wname == "" || wname == "--"){continue;}

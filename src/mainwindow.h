@@ -268,6 +268,7 @@ private:
 
     int currentIconIndex;
     int activeWifiSignalLv;
+    int disconnect_time = 0;
 
     long int start_rcv_rates = 0;	//保存开始时的流量计数
     long int end_rcv_rates = 0;	//保存结束时的流量计数

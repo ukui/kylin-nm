@@ -494,10 +494,16 @@ void MainWindow::initNetwork()
             BackThread *m_bt = new BackThread();
             IFace *m_iface = m_bt->execGetIface();
 
-            m_bt->disConnLanOrWifi("ethernet");
-            sleep(1);
-            m_bt->disConnLanOrWifi("ethernet");
-            sleep(1);
+            //写成信号监听自动执行，避免阻塞主线程
+           disconnect_time = 1;
+           connect (m_bt, &BackThread::btFinish, this, [ = ](){
+               disconnect_time ++;
+               if (disconnect_time <= 3) {
+                   m_bt->disConnLanOrWifi("ethernet");
+               } else {
+                   m_bt->disconnect();
+               }
+           });
             m_bt->disConnLanOrWifi("ethernet");
 
             delete m_iface;
@@ -918,10 +924,16 @@ void MainWindow::onDeleteLan()
 {
     deleteLanTimer->stop();
     BackThread *btn_bt = new BackThread();
-    btn_bt->disConnLanOrWifi("ethernet");
-    sleep(1);
-    btn_bt->disConnLanOrWifi("ethernet");
-    sleep(1);
+    //写成信号监听自动执行，避免阻塞主线程
+    disconnect_time = 1;
+    connect (btn_bt, &BackThread::btFinish, this, [ = ](){
+        disconnect_time ++;
+        if (disconnect_time <= 3) {
+            btn_bt->disConnLanOrWifi("ethernet");
+        } else {
+            btn_bt->disconnect();
+        }
+    });
     btn_bt->disConnLanOrWifi("ethernet");
     btn_bt->deleteLater();
 

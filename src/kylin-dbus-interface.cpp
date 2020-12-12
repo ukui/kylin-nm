@@ -598,6 +598,7 @@ int KylinDBus::getAccessPointsNumber()
     return objPaths.size();
 }
 
+//返回当前已创建有线的个数
 int KylinDBus::getWiredNetworkNumber()
 {
     QDBusInterface interface("org.freedesktop.NetworkManager",
@@ -632,9 +633,13 @@ int KylinDBus::getWiredNetworkNumber()
 
 void KylinDBus::toCreateNewLan()
 {
+    int i = 1;
     if (multiWiredIfName.size() != 0) {
-        QString cmdStr = "nmcli connection add con-name '有线连接 1' ifname '" + multiWiredIfName.at(0) + "' type ethernet";
-        Utils::m_system(cmdStr.toUtf8().data());
+        foreach (QString strIfName, multiWiredIfName) {
+            QString cmdStr = "nmcli connection add con-name '有线连接 " + QString::number(i,10) + "' ifname '" + strIfName + "' type ethernet";
+            Utils::m_system(cmdStr.toUtf8().data());
+            i += 1;
+        }
     }
 }
 

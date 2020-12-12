@@ -76,7 +76,7 @@ WpaWifiDialog::~WpaWifiDialog()
 void WpaWifiDialog::initUI() {
     mainWidget = new QWidget(this);
     mainLyt = new QVBoxLayout(mainWidget);
-    mainWidget->setFixedSize(360, 504);
+    mainWidget->setFixedSize(360, 530);
 
     titleFrame = new QFrame(mainWidget); //标题栏
     titleFrame->setFixedHeight(48);
@@ -161,7 +161,7 @@ void WpaWifiDialog::initUI() {
     userFrame->setLayout(userLyt);
 
     pwdFrame = new QFrame(mainWidget); //密码
-    pwdFrame->setFixedHeight(72);
+    pwdFrame->setFixedHeight(96);
     pwdLyt = new QVBoxLayout(pwdFrame);
     pwdLyt->setContentsMargins(0, 0, 0, 0);
     pwdLyt->setSpacing(0);
@@ -191,8 +191,23 @@ void WpaWifiDialog::initUI() {
     pwdShowLyt->addWidget(pwdShowLabel);
     pwdShowLyt->addStretch();
     pwdShowFrame->setLayout(pwdShowLyt);
+    askPwdFrame = new QFrame(pwdFrame); //每次询问密码
+    askPwdFrame->setFixedHeight(24);
+    askPwdLyt = new QHBoxLayout(askPwdFrame);
+    askPwdLyt->setContentsMargins(130, 0, 0, 0);
+    askPwdBtn = new QCheckBox(askPwdFrame);
+    askPwdlabel = new QLabel(askPwdFrame);
+//    askPwdlabel->setFixedWidth(120);
+    askPwdBtn->setFixedSize(16, 16);
+    askPwdlabel->setText(tr("Ask pwd each query"));
+    askPwdLyt->addWidget(askPwdBtn);
+    askPwdLyt->addWidget(askPwdlabel);
+    askPwdLyt->addStretch();
+    askPwdFrame->setLayout(askPwdLyt);
+
     pwdLyt->addWidget(pwdEditFrame);
     pwdLyt->addWidget(pwdShowFrame);
+    pwdLyt->addWidget(askPwdFrame);
     pwdFrame->setLayout(pwdLyt);
 
     buttonFrame = new QFrame(mainWidget); //按钮
@@ -241,16 +256,28 @@ void WpaWifiDialog::initCombox() {
     }
 //    //读配置文件
     wifi_info = getWifiInfo(connectionName);
-    if (wifi_info.isEmpty()) {
+    if (wifi_info.length() < 4) {
+        askPwdBtn->setChecked(true);
         has_config = false;
     } else {
         has_config = true;
         //读配置信息
         eapCombox->setCurrentIndex(eapCombox->findData(wifi_info.at(0)));
         innerCombox->setCurrentIndex(innerCombox->findData(wifi_info.at(1)));
-        for (int i = 2; i < wifi_info.length(); i++) {
-            user_list << wifi_info.at(i);
+        if (wifi_info.at(wifi_info.length() - 1) == "true") {
+            askPwdBtn->setChecked(true);
+            for (int i = 2; i < wifi_info.length() - 1; i++) {
+                user_list << wifi_info.at(i);
+            }
+        } else {
+            askPwdBtn->setChecked(false);
+            pwdEditor->setText(wifi_info.at(wifi_info.length() - 2));
+            this->connectBtn->setEnabled(true);
+            for (int i = 2; i < wifi_info.length() - 2; i++) {
+                user_list << wifi_info.at(i);
+            }
         }
+//        askPwdBtn->setChecked(wifi_info.at(wifi_info.length() - 1) == "true");
         userEditor->setText(user_list.at(user_list.length() - 1));
         QCompleter *completer = new QCompleter(userEditor);
         QStringListModel * listModel = new QStringListModel(user_list, userEditor);
@@ -292,7 +319,7 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
     if (has_config) {
         appendWifiUser(nameEditor->text(), userEditor->text());
     } else {
-        appendWifiInfo(nameEditor->text(), eapCombox->currentData().toString(), innerCombox->currentData().toString(), userEditor->text());
+        appendWifiInfo(nameEditor->text(), eapCombox->currentData().toString(), innerCombox->currentData().toString(), userEditor->text(), askPwdBtn->isChecked());
         has_config = true;
     }
     QString cmdStr = "nmcli connection modify " + nameEditor->text() + " 802-1x.password " + pwdEditor->text();
@@ -344,6 +371,8 @@ void WpaWifiDialog::setEditorEnable(bool is_checking) {
     pwdEditor->setEnabled(is_checking);
     pwdShowBtn->setEnabled(is_checking);
     pwdShowLabel->setEnabled(is_checking);
+    askPwdBtn->setEnabled(is_checking);
+    askPwdlabel->setEnabled(is_checking);
     cancelBtn->setEnabled(is_checking);
     connectBtn->setEnabled(is_checking);
 }
@@ -410,11 +439,15 @@ QStringList WpaWifiDialog::getWifiInfo(QString wifiName) {
         wlist << autoSettings.get()->value("user").toString();
     }
     autoSettings.get()->endArray();
+    if (!autoSettings.get()->value("askpwd").toBool()) {
+        wlist << autoSettings.get()->value("pwd").toString();
+    }
+    wlist << autoSettings.get()->value("askpwd").toString();
     autoSettings.get()->endGroup();
     return wlist;
 }
 
-bool WpaWifiDialog::appendWifiInfo(QString name, QString eap, QString inner, QString user) {
+bool WpaWifiDialog::appendWifiInfo(QString name, QString eap, QString inner, QString user, bool ask) {
     //向配置文件添加名为name的wifi配置，包括eap,inner和它的第一个用户
     QSharedPointer<QSettings>  autoSettings = QSharedPointer<QSettings>(new QSettings(CONFIG_FILE, QSettings::IniFormat));
     autoSettings.get()->beginGroup(name);
@@ -426,6 +459,11 @@ bool WpaWifiDialog::appendWifiInfo(QString name, QString eap, QString inner, QSt
     autoSettings.get()->setValue("user", user);
     user_list << user;
     autoSettings.get()->endArray();
+    autoSettings.get()->setValue("askpwd", ask);
+    //保存密码
+    if (!ask) {
+        autoSettings.get()->setValue("pwd", this->pwdEditor->text());
+    }
     return true;
 }
 
@@ -438,8 +476,11 @@ bool WpaWifiDialog::appendWifiUser(QString name, QString user) {
     autoSettings.get()->beginGroup(name);
     autoSettings.get()->setValue("eap", eapCombox->currentData().toString());
     autoSettings.get()->setValue("inner", innerCombox->currentData().toString());
+    autoSettings.get()->setValue("askpwd", askPwdBtn->isChecked());
+    if (!askPwdBtn->isChecked()) {
+        autoSettings.get()->setValue("pwd", this->pwdEditor->text());
+    }
     if (user_list.contains(user)) {
-        qDebug()<<"已经有了";
         autoSettings.get()->endGroup();
         return true;
     }

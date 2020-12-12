@@ -88,7 +88,7 @@ private:
     void setEditorEnable(bool is_checking); //设置是否禁用输入
     void activateConnection();
     QStringList getWifiInfo(QString wifiName);
-    bool appendWifiInfo(QString name, QString eap, QString inner, QString user);
+    bool appendWifiInfo(QString name, QString eap, QString inner, QString user, bool ask);
     bool appendWifiUser(QString name, QString user);
 
 private:
@@ -136,6 +136,10 @@ private:
     QHBoxLayout * pwdShowLyt = nullptr;
     QCheckBox * pwdShowBtn = nullptr;
     QLabel * pwdShowLabel = nullptr;
+    QFrame * askPwdFrame = nullptr; //每次询问密码
+    QHBoxLayout * askPwdLyt = nullptr;
+    QCheckBox * askPwdBtn = nullptr;
+    QLabel * askPwdlabel = nullptr;
 
     QFrame * buttonFrame = nullptr; //按钮
     QHBoxLayout * buttonLyt = nullptr;

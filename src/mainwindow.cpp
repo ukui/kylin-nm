@@ -1544,12 +1544,12 @@ void MainWindow::loadWifiListDone(QStringList slist)
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
         indexSecu = headLine.indexOf("安全性");
-        indexName = headLine.indexOf("SSID") + 4;
-        indexFreq = headLine.indexOf("FREQ") + 4;
+        indexFreq = headLine.indexOf("频率") + 4;
+        indexName = headLine.indexOf("SSID") + 6;
     } else {
         indexSecu = headLine.indexOf("SECURITY");
-        indexName = headLine.indexOf("SSID");
         indexFreq = headLine.indexOf("FREQ");
+        indexName = headLine.indexOf("SSID");
     }
     QStringList wnames;
     int count = 0;
@@ -1672,12 +1672,12 @@ void MainWindow::updateWifiListDone(QStringList slist)
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
         indexSecu = headLine.indexOf("安全性");
-        indexName = headLine.indexOf("SSID") + 4;
-        indexFreq = headLine.indexOf("FREQ");
+        indexFreq = headLine.indexOf("频率") + 4;
+        indexName = headLine.indexOf("SSID") + 6;
     } else {
         indexSecu = headLine.indexOf("SECURITY");
-        indexName = headLine.indexOf("SSID");
         indexFreq = headLine.indexOf("FREQ");
+        indexName = headLine.indexOf("SSID");
     }
 
     //列表中去除已经减少的wifi

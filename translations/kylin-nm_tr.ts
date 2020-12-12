@@ -16,103 +16,103 @@
         <translation>Ağı düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="106"/>
+        <location filename="../src/confform.cpp" line="83"/>
         <source>LAN name: </source>
         <translation type="unfinished">LAN adı: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="107"/>
+        <location filename="../src/confform.cpp" line="84"/>
         <source>Method: </source>
         <translation>Yöntem: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="108"/>
+        <location filename="../src/confform.cpp" line="85"/>
         <source>Address: </source>
         <translation>Adres: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="109"/>
+        <location filename="../src/confform.cpp" line="86"/>
         <source>Netmask: </source>
         <translation>Netmask: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="110"/>
+        <location filename="../src/confform.cpp" line="87"/>
         <source>Gateway: </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="111"/>
+        <location filename="../src/confform.cpp" line="88"/>
         <source>DNS 1: </source>
         <translation>DNS 1: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="112"/>
+        <location filename="../src/confform.cpp" line="89"/>
         <source>DNS 2: </source>
         <translation>DNS 2: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="114"/>
+        <location filename="../src/confform.cpp" line="91"/>
         <source>Edit Conn</source>
         <translation>Bağ. Düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="115"/>
+        <location filename="../src/confform.cpp" line="92"/>
         <source>Auto(DHCP)</source>
         <translation>Oto(DHCP)</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="116"/>
+        <location filename="../src/confform.cpp" line="93"/>
         <source>Manual</source>
         <translation>Elle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="126"/>
+        <location filename="../src/confform.cpp" line="103"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="127"/>
+        <location filename="../src/confform.cpp" line="104"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="128"/>
+        <location filename="../src/confform.cpp" line="105"/>
         <source>Ok</source>
         <translation type="unfinished">Tamam</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="224"/>
-        <location filename="../src/confform.cpp" line="264"/>
+        <location filename="../src/confform.cpp" line="206"/>
+        <location filename="../src/confform.cpp" line="245"/>
         <source>Can not create new wired network for without wired card</source>
         <translation type="unfinished">Kablolu kart olmadan yeni kablolu ağ oluşturulamıyor</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="248"/>
+        <location filename="../src/confform.cpp" line="230"/>
         <source>New network already created</source>
         <translation type="unfinished">Yeni ağ zaten oluşturuldu</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="296"/>
+        <location filename="../src/confform.cpp" line="277"/>
         <source>New network settings already finished</source>
         <translation type="unfinished">Yeni ağ ayarları zaten tamamlandı</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="351"/>
+        <location filename="../src/confform.cpp" line="315"/>
         <source>Will check the IP address conflict</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="382"/>
+        <location filename="../src/confform.cpp" line="346"/>
         <source>IP address conflict, Please change IP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="407"/>
+        <location filename="../src/confform.cpp" line="373"/>
         <source>Edit Network</source>
         <translation type="unfinished">Ağı Düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="442"/>
+        <location filename="../src/confform.cpp" line="407"/>
         <source>Add Wired Network</source>
         <translation type="unfinished">Kablolu Ağ Ekle</translation>
     </message>
@@ -125,60 +125,59 @@
         <translation type="obsolete">Kablolu ağın yapılandırmasını başarıyla değiştirildi</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="308"/>
         <source>New settings already effective</source>
-        <translation>Yeni ayarlar zaten etkili</translation>
+        <translation type="vanished">Yeni ayarlar zaten etkili</translation>
     </message>
 </context>
 <context>
     <name>DlgHideWifi</name>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="70"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="59"/>
         <source>Add Hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="71"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="60"/>
         <source>Connection</source>
         <translation>Bağlantı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="72"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="61"/>
         <source>Wi-Fi name</source>
         <translation type="unfinished">Wi-Fi adı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="73"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="62"/>
         <source>Wi-Fi security</source>
         <translation>Wi-Fi güvenlik</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="74"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="63"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="75"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="64"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlantı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="77"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="66"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="98"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="87"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="99"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="88"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="100"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="89"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -464,98 +463,98 @@
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="98"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="61"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="99"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="62"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="100"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="63"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="101"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="64"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="102"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="65"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="103"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="66"/>
         <source>Anonymous identity</source>
         <translation type="unfinished">Anonim kimlik:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="104"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="67"/>
         <source>Domain</source>
         <translation>Domain:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="105"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="68"/>
         <source>CA certificate</source>
         <translation>CA sertifikası:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="106"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="69"/>
         <source>CA certificate password</source>
         <translation>CA sertifika şifresi:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="107"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="70"/>
         <source>No CA certificate is required</source>
         <translation>CA sertifikası gerekmez</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="108"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="71"/>
         <source>PEAP version</source>
         <translation>PEAP sürümü:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="109"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="72"/>
         <source>Inner authentication</source>
         <translation type="unfinished">İç kimlik doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="110"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="73"/>
         <source>Username</source>
         <translation type="unfinished">Kullanıcı adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="111"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="74"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="112"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="75"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="113"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="76"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="134"/>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="158"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="97"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="121"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="135"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="98"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="136"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="99"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -584,27 +583,27 @@
         <translation type="obsolete">Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="154"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="117"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">Korumalı EAP (PEAP)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="159"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="122"/>
         <source>Choose from file</source>
         <translation>Dosyadan seçin...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="162"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="125"/>
         <source>Automatic</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="163"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="126"/>
         <source>Version 0</source>
         <translation>Sürüm 0</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="164"/>
+        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="127"/>
         <source>Version 1</source>
         <translation>Sürüm 1</translation>
     </message>
@@ -865,105 +864,105 @@
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="97"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="60"/>
         <source>Add hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="98"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="61"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="99"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="62"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="100"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="63"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="101"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="64"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="102"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="65"/>
         <source>Identity</source>
         <translation>Kimlik:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="103"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="66"/>
         <source>Domain</source>
         <translation type="unfinished">Domain:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="104"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="67"/>
         <source>CA certificate</source>
         <translation type="unfinished">CA sertifikası:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="105"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="68"/>
         <source>CA certificate password</source>
         <translation type="unfinished">CA sertifika şifresi:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="106"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="69"/>
         <source>No CA certificate is required</source>
         <translation>CA sertifikası gerekmez</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="107"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="70"/>
         <source>User certificate</source>
         <translation>Kullanıcı sertifikası:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="108"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="71"/>
         <source>User certificate password</source>
         <translation>Kullanıcı sertifikası şifresi:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="109"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="72"/>
         <source>User private key</source>
         <translation>Kullanıcı özel anahtarı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="110"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="73"/>
         <source>User key password</source>
         <translation>Kullanıcı anahtarı şifresi:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="111"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="74"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="112"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="75"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="114"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="77"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="133"/>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="156"/>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="160"/>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="164"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="96"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="119"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="123"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="127"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="134"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="97"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="135"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="98"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -988,19 +987,19 @@
         <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="151"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="114"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="152"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="115"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">Korumalı EAP (PEAP)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="157"/>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="161"/>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="165"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="120"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="124"/>
+        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="128"/>
         <source>Choose from file</source>
         <translation type="unfinished">Dosyadan seç...</translation>
     </message>
@@ -1215,57 +1214,57 @@
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="75"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="63"/>
         <source>Add Hidden Wi-Fi</source>
         <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="76"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="64"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="77"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="65"/>
         <source>Wi-Fi name</source>
         <translation type="unfinished">Wi-Fi adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="78"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="66"/>
         <source>Wi-Fi security</source>
         <translation type="unfinished">Wi-Fi güvenlik:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="79"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="67"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="80"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="68"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="81"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="69"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="83"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="71"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="106"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="94"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="107"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="95"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="108"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="96"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1349,7 +1348,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/mainwindow.ui" line="14"/>
-        <location filename="../src/mainwindow.cpp" line="566"/>
+        <location filename="../src/mainwindow.cpp" line="575"/>
         <source>kylin-nm</source>
         <translation></translation>
     </message>
@@ -1358,15 +1357,15 @@
         <translation type="vanished">Ağ</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="404"/>
-        <location filename="../src/mainwindow.cpp" line="571"/>
+        <location filename="../src/mainwindow.cpp" line="403"/>
+        <location filename="../src/mainwindow.cpp" line="580"/>
         <source>Advanced</source>
         <translation>Gelişmiş</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="348"/>
-        <location filename="../src/mainwindow.cpp" line="1215"/>
-        <location filename="../src/mainwindow.cpp" line="2272"/>
+        <location filename="../src/mainwindow.cpp" line="350"/>
+        <location filename="../src/mainwindow.cpp" line="1189"/>
+        <location filename="../src/mainwindow.cpp" line="2229"/>
         <source>Ethernet</source>
         <translation>Kablolu Ağ</translation>
     </message>
@@ -1376,7 +1375,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="364"/>
-        <location filename="../src/mainwindow.cpp" line="1274"/>
+        <location filename="../src/mainwindow.cpp" line="1244"/>
         <source>Wifi</source>
         <translation>Wi-Fi</translation>
     </message>
@@ -1389,116 +1388,116 @@
         <translation type="vanished">Pasif</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="384"/>
+        <location filename="../src/mainwindow.cpp" line="383"/>
         <source>HotSpot</source>
         <translation>HotSpot</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="394"/>
+        <location filename="../src/mainwindow.cpp" line="393"/>
         <source>FlyMode</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="570"/>
+        <location filename="../src/mainwindow.cpp" line="579"/>
         <source>Show MainWindow</source>
         <translation>Ana Pencereyi Göster</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1178"/>
+        <location filename="../src/mainwindow.cpp" line="1155"/>
         <source>No wireless card detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1314"/>
-        <location filename="../src/mainwindow.cpp" line="1391"/>
-        <location filename="../src/mainwindow.cpp" line="1545"/>
-        <location filename="../src/mainwindow.cpp" line="2288"/>
-        <location filename="../src/mainwindow.cpp" line="2378"/>
+        <location filename="../src/mainwindow.cpp" line="1274"/>
+        <location filename="../src/mainwindow.cpp" line="1336"/>
+        <location filename="../src/mainwindow.cpp" line="1511"/>
+        <location filename="../src/mainwindow.cpp" line="2243"/>
+        <location filename="../src/mainwindow.cpp" line="2316"/>
         <source>Not connected</source>
         <translation>Bağlanamadı</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1317"/>
-        <location filename="../src/mainwindow.cpp" line="1393"/>
-        <location filename="../src/mainwindow.cpp" line="1465"/>
-        <location filename="../src/mainwindow.cpp" line="1466"/>
-        <location filename="../src/mainwindow.cpp" line="1548"/>
-        <location filename="../src/mainwindow.cpp" line="1627"/>
-        <location filename="../src/mainwindow.cpp" line="1779"/>
-        <location filename="../src/mainwindow.cpp" line="2290"/>
-        <location filename="../src/mainwindow.cpp" line="2380"/>
+        <location filename="../src/mainwindow.cpp" line="1277"/>
+        <location filename="../src/mainwindow.cpp" line="1338"/>
+        <location filename="../src/mainwindow.cpp" line="1431"/>
+        <location filename="../src/mainwindow.cpp" line="1432"/>
+        <location filename="../src/mainwindow.cpp" line="1514"/>
+        <location filename="../src/mainwindow.cpp" line="1602"/>
+        <location filename="../src/mainwindow.cpp" line="1766"/>
+        <location filename="../src/mainwindow.cpp" line="2245"/>
+        <location filename="../src/mainwindow.cpp" line="2318"/>
         <source>Disconnected</source>
         <translation>Bağlantı Kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1490"/>
+        <location filename="../src/mainwindow.cpp" line="1456"/>
         <source>No Other Wired Network Scheme</source>
         <translation type="unfinished">Başka Kablolu Ağ Düzeni Yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1649"/>
+        <location filename="../src/mainwindow.cpp" line="1624"/>
         <source>No Other Wireless Network Scheme</source>
         <translation type="unfinished">Başka Kablosuz Ağ Düzeni Yok</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="1788"/>
+        <location filename="../src/mainwindow.cpp" line="1792"/>
+        <location filename="../src/mainwindow.cpp" line="1797"/>
         <location filename="../src/mainwindow.cpp" line="1801"/>
-        <location filename="../src/mainwindow.cpp" line="1805"/>
-        <location filename="../src/mainwindow.cpp" line="1810"/>
-        <location filename="../src/mainwindow.cpp" line="1814"/>
         <source>Wired connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="1806"/>
+        <location filename="../src/mainwindow.cpp" line="1810"/>
+        <location filename="../src/mainwindow.cpp" line="1815"/>
         <location filename="../src/mainwindow.cpp" line="1819"/>
-        <location filename="../src/mainwindow.cpp" line="1823"/>
-        <location filename="../src/mainwindow.cpp" line="1828"/>
-        <location filename="../src/mainwindow.cpp" line="1832"/>
         <source>Ethernet connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2199"/>
+        <location filename="../src/mainwindow.cpp" line="2166"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished">Kablolu ağ bağlantısı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2227"/>
+        <location filename="../src/mainwindow.cpp" line="2192"/>
         <source>Wi-Fi is disconnected</source>
         <translation type="unfinished">Kablosuz bağlantı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2607"/>
+        <location filename="../src/mainwindow.cpp" line="2535"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="230"/>
+        <location filename="../src/mainwindow.cpp" line="233"/>
         <source>Ethernet Networks</source>
         <translation>Ethernet Ağları</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="240"/>
+        <location filename="../src/mainwindow.cpp" line="243"/>
         <source>New LAN</source>
         <translation type="unfinished">Yeni LAN</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="264"/>
+        <location filename="../src/mainwindow.cpp" line="267"/>
         <source>Hide WiFi</source>
         <translation>Gizli Wi-Fi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="295"/>
+        <location filename="../src/mainwindow.cpp" line="297"/>
         <source>No usable network in the list</source>
         <translation type="unfinished">Listede kullanılabilir ağ yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1442"/>
-        <location filename="../src/mainwindow.cpp" line="1605"/>
+        <location filename="../src/mainwindow.cpp" line="1397"/>
+        <location filename="../src/mainwindow.cpp" line="1580"/>
         <source>NetOn,</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="254"/>
+        <location filename="../src/mainwindow.cpp" line="257"/>
         <source>Wifi Networks</source>
         <translation>Wi-Fi Ağları</translation>
     </message>
@@ -1527,17 +1526,17 @@
         <translation type="vanished">Kablosuz listesini şimdi güncelle</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2563"/>
+        <location filename="../src/mainwindow.cpp" line="2500"/>
         <source>Conn Ethernet Success</source>
         <translation>Ethernet Bağlantısı Başarılı</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2575"/>
+        <location filename="../src/mainwindow.cpp" line="2509"/>
         <source>Conn Ethernet Fail</source>
         <translation>Ethernet Bağlantısı Hatası</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2598"/>
+        <location filename="../src/mainwindow.cpp" line="2529"/>
         <source>Conn Wifi Success</source>
         <translation>Wi-Fi Bağlantısı Başarılı</translation>
     </message>
@@ -1557,6 +1556,11 @@
         <translation>--</translation>
     </message>
     <message>
+        <location filename="../src/oneconnform.ui" line="272"/>
+        <source>2.4/5G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Input password</source>
         <translation type="vanished">Parola gir</translation>
     </message>
@@ -1565,15 +1569,15 @@
         <translation type="vanished">Ayar</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="42"/>
         <location filename="../src/oneconnform.cpp" line="43"/>
         <location filename="../src/oneconnform.cpp" line="44"/>
-        <location filename="../src/oneconnform.cpp" line="46"/>
+        <location filename="../src/oneconnform.cpp" line="45"/>
+        <location filename="../src/oneconnform.cpp" line="47"/>
         <source>Connect</source>
         <translation>Bağlan</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="45"/>
+        <location filename="../src/oneconnform.cpp" line="46"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı Kes</translation>
     </message>
@@ -1582,12 +1586,12 @@
         <translation type="obsolete">Parola gir...</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="358"/>
+        <location filename="../src/oneconnform.cpp" line="353"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="439"/>
+        <location filename="../src/oneconnform.cpp" line="437"/>
         <source>Signal：</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1600,17 +1604,17 @@
         <translation type="vanished">Güvenli</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="369"/>
+        <location filename="../src/oneconnform.cpp" line="364"/>
         <source>Rate</source>
         <translation>Oran</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="436"/>
+        <location filename="../src/oneconnform.cpp" line="434"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="438"/>
+        <location filename="../src/oneconnform.cpp" line="436"/>
         <source>WiFi Security：</source>
         <translation type="unfinished">WiFi güvenliği:</translation>
     </message>
@@ -1619,12 +1623,22 @@
         <translation type="obsolete">Sinyal gücü:</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="440"/>
+        <location filename="../src/oneconnform.cpp" line="438"/>
         <source>MAC：</source>
         <translation type="unfinished">Fiziksel adres:</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="712"/>
+        <location filename="../src/oneconnform.cpp" line="514"/>
+        <source>Conn Wifi Success</source>
+        <translation type="unfinished">Wi-Fi Bağlantısı Başarılı</translation>
+    </message>
+    <message>
+        <location filename="../src/oneconnform.cpp" line="518"/>
+        <source>Confirm your Wi-Fi password or usable of wireless card</source>
+        <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
+    </message>
+    <message>
+        <location filename="../src/oneconnform.cpp" line="734"/>
         <source>Conn Wifi Failed</source>
         <translation>Wifi Bağlantısı Başarısız</translation>
     </message>
@@ -1652,11 +1666,17 @@
         <translation>Bağlantıyı Kes</translation>
     </message>
     <message>
+        <location filename="../src/onelancform.cpp" line="238"/>
+        <location filename="../src/onelancform.cpp" line="242"/>
         <location filename="../src/onelancform.cpp" line="243"/>
         <location filename="../src/onelancform.cpp" line="247"/>
-        <location filename="../src/onelancform.cpp" line="248"/>
         <source>No Configuration</source>
         <translation type="unfinished">Yapılandırma Yok</translation>
+    </message>
+    <message>
+        <location filename="../src/onelancform.cpp" line="248"/>
+        <source>No IfName</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/onelancform.cpp" line="251"/>
@@ -1699,64 +1719,63 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="46"/>
+        <location filename="../src/wpawifidialog.cpp" line="85"/>
         <source>Connect Wifi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="59"/>
+        <location filename="../src/wpawifidialog.cpp" line="98"/>
         <source>Connection name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="74"/>
+        <location filename="../src/wpawifidialog.cpp" line="113"/>
         <source>Security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="93"/>
+        <location filename="../src/wpawifidialog.cpp" line="132"/>
         <source>EAP type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="106"/>
+        <location filename="../src/wpawifidialog.cpp" line="145"/>
         <source>inner authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="119"/>
+        <location filename="../src/wpawifidialog.cpp" line="158"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="136"/>
+        <location filename="../src/wpawifidialog.cpp" line="175"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="150"/>
+        <location filename="../src/wpawifidialog.cpp" line="189"/>
         <source>Show password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="165"/>
+        <location filename="../src/wpawifidialog.cpp" line="205"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="166"/>
+        <location filename="../src/wpawifidialog.cpp" line="206"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="188"/>
+        <location filename="../src/wpawifidialog.cpp" line="228"/>
         <source>WPA &amp; WPA2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="198"/>
         <source>None</source>
-        <translation type="unfinished">Yok</translation>
+        <translation type="obsolete">Yok</translation>
     </message>
 </context>
 </TS>

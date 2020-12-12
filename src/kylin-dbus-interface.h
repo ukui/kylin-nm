@@ -69,29 +69,31 @@ public:
     void initTransparentState();
     double getTransparentData();
 
-    QDBusObjectPath wiredPath; //有线设备的路径
     QDBusObjectPath wirelessPath; //无线设备的路径
     QList<QDBusObjectPath> multiWiredPaths; //已连接网络的对象路径列表
+    QList<QString> multiWiredCableState;//多有线网卡的情况，判断有线网卡对应网线是否插入
+    QList<QString> multiWiredMac; //对应有线网卡的Mac地址
+    QList<QString> multiWiredIfName; //对应有线网的接口
 
-    QList<QString> multiWiredCableState;
     bool isWiredCableOn = false; //是否插入了网线
     bool isWirelessCardOn = false; //是否插入了无线网卡
 
-    QString dbusLanCardName = "";
     QString dbusLanIpv4 = "";
     QString dbusLanIpv6 = "";
     QString dbusActiveLanIpv4 = "";
     QString dbusActiveLanIpv6 = "";
     QString dbusLanGateway = "";
-    QString dbusLanMac = "";
     QString dbusWiFiCardName = "";
     QString dbusWifiMac = "";
+    QString dbusIfName;
+    QString dbusMacDefault;
     int dbusActLanDNS;
 
 public slots:
     void onNewConnection(QDBusObjectPath objPath);
     void onConnectionRemoved(QDBusObjectPath objPath);
     void toCreateNewLan();
+    bool getWiredCableStateByIfname(QString ifname);
     void onPropertiesChanged(QVariantMap qvm);
     void onLanPropertyChanged(QVariantMap qvm);
     void onIpPropertiesChanged();
@@ -99,7 +101,8 @@ public slots:
     void getLanHwAddressState();
     void getWiredCardName();
     void getWirelessCardName();
-    void getLanIp(QString netName, bool isActNet);
+    void getLanIpDNS(QString netName, bool isActNet);
+    QString getLanMAC(QString ifname);
     void getWifiMac(QString netName);
     void slot_timeout();
 

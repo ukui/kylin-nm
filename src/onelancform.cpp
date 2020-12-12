@@ -212,11 +212,12 @@ void OneLancForm::setTopItem(bool isSelected)
 }
 
 //设置网络名称
-void OneLancForm::setName(QString name, QString uniName)
+void OneLancForm::setName(QString name, QString uniName, QString ifName)
 {
     ui->lbName->setText(name);
     lanName = name;
     uniqueName = uniName;
+    ifname = ifName;
 }
 
 //根据有线网络连接与否，设置显示'已连接'文字的控件的可见与否
@@ -240,6 +241,11 @@ void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString s
     if (str1 == "" || str1 == "auto") {
         str1 = tr("No Configuration");
         str2 = tr("No Configuration");
+    }
+
+    if (str4 == "--" || str4 == "") {
+        str1 = tr("No Configuration");
+        str4 = tr("No IfName");
     }
 
     QString strIPv4 = QString(tr("IPv4："));
@@ -277,7 +283,7 @@ void OneLancForm::slotConnLan()
 {
     //mw->startLoading();
     this->startWaiting(true);
-    emit sigConnLan(ui->lbName->text());
+    emit sigConnLan(ui->lbName->text(), ifname);
 }
 
 //点击网络断开按钮，执行该函数
@@ -320,7 +326,7 @@ void OneLancForm::toConnectWiredNetwork()
     bt->moveToThread(t);
     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
     connect(t, SIGNAL(started()), this, SLOT(slotConnLan()));
-    connect(this, SIGNAL(sigConnLan(QString)), bt, SLOT(execConnLan(QString)));
+    connect(this, SIGNAL(sigConnLan(QString, QString)), bt, SLOT(execConnLan(QString, QString)));
     connect(bt, SIGNAL(connDone(int)), mw, SLOT(connLanDone(int)));
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     t->start();

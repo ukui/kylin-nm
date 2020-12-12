@@ -195,14 +195,16 @@ void BackThread::execDisWifi()
 }
 
 //to connect wired network
-void BackThread::execConnLan(QString connName)
+void BackThread::execConnLan(QString connName, QString ifname)
 {
     disConnLanOrWifi("ethernet");
 
     KylinDBus objKyDbus;
-    if (objKyDbus.isWiredCableOn) {
+    bool wiredCableState = objKyDbus.getWiredCableStateByIfname(ifname);
+    if (wiredCableState) {
         // only if wired cable is plug in, can connect wired network
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
+        qDebug() << "连接命令" << cmd;
         Utils::m_system(cmd.toUtf8().data());
         qDebug()<<"debug: in function execConnLan, wired net state is: "<<QString::number(execGetIface()->lstate);
         syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);

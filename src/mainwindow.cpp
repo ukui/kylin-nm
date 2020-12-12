@@ -561,7 +561,7 @@ void MainWindow::initActNetDNS()
 
     if (actLanName != "--") {
         oldActLanName = actLanName;
-        objKyDBus->getLanIp(actLanName, true);
+        objKyDBus->getLanIpDNS(actLanName, true);
         oldDbusActLanDNS = objKyDBus->dbusActLanDNS;
     }
 }
@@ -1333,7 +1333,7 @@ void MainWindow::getLanListDone(QStringList slist)
     // 若当前lan name为"--"，设置OneConnForm
     OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
     if (actLanName == "--") {
-        ccf->setName(tr("Not connected"), "");//"当前未连接任何 以太网"
+        ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
         ccf->setIcon(false);
         ccf->setConnedString(1, tr("Disconnected"));//"未连接"
         ccf->isConnected = false;
@@ -1370,19 +1370,30 @@ void MainWindow::getLanListDone(QStringList slist)
 
         if (ltype != "802-11-wireless" && ltype != "wifi" && ltype != "" && ltype != "--") {
             // 当前连接的lan
+            objKyDBus->getLanIpDNS(nname, true);
+
+            QString macAdd = "--";
+            QString mIfName = "--";
+            if (objKyDBus->dbusIfName != "--") {
+                mIfName = objKyDBus->dbusIfName;
+                macAdd = objKyDBus->getLanMAC(objKyDBus->dbusIfName);
+            } else {
+                mIfName = objKyDBus->multiWiredIfName.at(0); //使用默认的网络接口
+                macAdd = objKyDBus->dbusMacDefault; //使用默认的MAC地址
+            }
+
             if (nname == actLanName) {
                 objKyDBus->getConnectNetIp();
-                objKyDBus->getLanIp(nname, true);
+
                 actLanName = "--";
                 if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
                 //QString strLanName = TranslateLanName(nname); //进行中英文系统环境下有线网络名称的汉化
 
                 connect(ccf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneTopLanFormSelected(QString, QString)));
                 connect(ccf, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
-                ccf->setName(nname, nname + order);
+                ccf->setName(nname, nname + order, mIfName);
                 ccf->setIcon(true);
-                //ccf->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
-                ccf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, objKyDBus->dbusLanMac);
+                ccf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macAdd);
                 ccf->setConnedString(1, tr("NetOn,"));//"已连接"
                 ccf->isConnected = true;
                 ifLanConnected = true;
@@ -1409,16 +1420,15 @@ void MainWindow::getLanListDone(QStringList slist)
                 oldDbusActLanDNS = objKyDBus->dbusActLanDNS;
                 syslog(LOG_DEBUG, "already insert an active lannet in the top of lan list");
             } else {
-                objKyDBus->getLanIp(nname, false);
                 lanListWidget->resize(W_LIST_WIDGET, lanListWidget->height() + H_NORMAL_ITEM);
                 //QString strLanName = TranslateLanName(nname);
 
                 OneLancForm *ocf = new OneLancForm(lanListWidget, this, confForm, ksnm);
                 connect(ocf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneLanFormSelected(QString, QString)));
-                ocf->setName(nname, nname + order);
+                ocf->setName(nname, nname + order, mIfName);
                 ocf->setIcon(true);
                 ocf->setLine(true);
-                ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), objKyDBus->dbusLanMac);
+                ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), macAdd);
                 ocf->setConnedString(0, tr("Disconnected"));//"未连接"
                 ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
                 ocf->setSelected(false, false);
@@ -2230,7 +2240,7 @@ void MainWindow::disNetDone()
 
     // 当前连接的lan
     OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
-    ccf->setName(tr("Not connected"), "");//"当前未连接任何 以太网"
+    ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
     ccf->setIcon(false);
     ccf->setConnedString(1, tr("Disconnected"));//"未连接"
     ccf->isConnected = false;
@@ -2410,7 +2420,8 @@ void MainWindow::on_setNetSpeed()
                 start_rcv_rates = end_rcv_rates;
             }
         } else if(is_btnNetList_clicked == 1) {
-            if ( objNetSpeed->getCurrentDownloadRates(objKyDBus->dbusLanCardName.toUtf8().data(), &start_rcv_rates, &start_tx_rates) == -1) {
+            //if ( objNetSpeed->getCurrentDownloadRates(objKyDBus->dbusLanCardName.toUtf8().data(), &start_rcv_rates, &start_tx_rates) == -1) {
+            if ( objNetSpeed->getCurrentDownloadRates("enp3s0", &start_rcv_rates, &start_tx_rates) == -1) {
                 start_tx_rates = end_tx_rates;
             }
         }

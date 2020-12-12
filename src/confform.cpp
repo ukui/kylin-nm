@@ -200,14 +200,16 @@ void ConfForm::on_btnCreate_clicked()
 {
     KylinDBus kylindbus;
     kylindbus.getWiredCardName();
-    QString mIfname = kylindbus.dbusLanCardName;
+    QString mIfname;
 
-    if (mIfname == "") {
+    if (kylindbus.multiWiredIfName.size() == 0) {
         QString tip(tr("Can not create new wired network for without wired card"));
         kylindbus.showDesktopNotify(tip);
         //this->close();
         this->hide();
         return;
+    } else {
+        mIfname = kylindbus.multiWiredIfName.at(0);
     }
 
     if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
@@ -237,14 +239,16 @@ void ConfForm::on_btnSave_clicked()
 {
     KylinDBus kylindbus;
     kylindbus.getWiredCardName();
-    QString mIfname = kylindbus.dbusLanCardName;
+    QString mIfname;
 
-    if (mIfname == "") {
+    if (kylindbus.multiWiredIfName.size() == 0) {
         QString tip(tr("Can not create new wired network for without wired card"));
         kylindbus.showDesktopNotify(tip);
         //this->close();
         this->hide();
         return;
+    } else {
+        mIfname = kylindbus.multiWiredIfName.at(0);
     }
 
     //如果网络的名称已经修改，则删掉当前网络，新建一个网络

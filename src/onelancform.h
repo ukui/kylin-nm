@@ -55,7 +55,7 @@ public:
     explicit OneLancForm(QWidget *parent = 0, MainWindow *mw = 0, ConfForm *confForm = 0, KSimpleNM *ksnm = 0);
     ~OneLancForm();
 
-    void setName(QString name, QString uniName);
+    void setName(QString name, QString uniName, QString ifName);
     void setIcon(bool isOn);
     void setLine(bool isShow);
     void setLanInfo(QString str1, QString str2, QString str3, QString str4);
@@ -72,6 +72,7 @@ public:
     bool isConnected;
     QString lanName;
     QString uniqueName;
+    QString ifname;
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -108,7 +109,7 @@ signals:
     void connDone(int connFlag);
     void disconnActiveLan();
 
-    void sigConnLan(QString);
+    void sigConnLan(QString, QString);
 };
 
 #endif // ONELANCFORM_H

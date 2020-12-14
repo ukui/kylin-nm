@@ -1362,22 +1362,23 @@ void MainWindow::getLanListDone(QStringList slist)
 
     // 填充可用网络列表
     QString headLine = slist.at(0);
-    int indexDevice, indexName;
+    int indexUuid, indexName;
     headLine = headLine.trimmed();
 
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
-        indexDevice = headLine.indexOf("设备") + 2;
-        indexName = headLine.indexOf("名称") + 4;
+        indexUuid = headLine.indexOf("UUID") + 2;
+        indexName = headLine.indexOf("名称") + 2;
     } else {
-        indexDevice = headLine.indexOf("DEVICE");
+        indexUuid = headLine.indexOf("UUID");
         indexName = headLine.indexOf("NAME");
     }
 
     QString order = "a"; //为避免同名情况，这里给每一个有线网设定一个唯一标志
     for(int i = 1, j = 0; i < slist.size(); i ++) {
         QString line = slist.at(i);
-        QString ltype = line.mid(0, indexDevice).trimmed();
+        QString ltype = line.mid(0, indexUuid).trimmed();
+        QString nuuid = line.mid(indexUuid, indexName - indexUuid).trimmed();
         QString nname = line.mid(indexName).trimmed();
 
         if (ltype != "802-11-wireless" && ltype != "wifi" && ltype != "" && ltype != "--") {
@@ -1403,7 +1404,7 @@ void MainWindow::getLanListDone(QStringList slist)
 
                 connect(ccf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneTopLanFormSelected(QString, QString)));
                 connect(ccf, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
-                ccf->setName(nname, nname + order, mIfName);
+                ccf->setName(nname, nuuid, mIfName);
                 ccf->setIcon(true);
                 ccf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macAdd);
                 ccf->setConnedString(1, tr("NetOn,"));//"已连接"
@@ -1437,7 +1438,7 @@ void MainWindow::getLanListDone(QStringList slist)
 
                 OneLancForm *ocf = new OneLancForm(lanListWidget, this, confForm, ksnm);
                 connect(ocf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneLanFormSelected(QString, QString)));
-                ocf->setName(nname, nname + order, mIfName);
+                ocf->setName(nname, nuuid, mIfName);
                 ocf->setIcon(true);
                 ocf->setLine(true);
                 ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), macAdd);
@@ -1938,7 +1939,7 @@ void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
         // 缩小所有选项卡
         for (int i = 0;i < lanList.size(); i ++) {
             OneLancForm *ocf = lanList.at(i);
-            if (ocf->uniqueName == uniqueName) {
+            if (ocf->uuidName == uniqueName) {
                 ocf->setSelected(false, true);
             } else {
                 ocf->setSelected(false, false);
@@ -1950,7 +1951,7 @@ void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
         int selectY = 0;
         for (int i = 0;i < lanList.size(); i ++) {
             OneLancForm *ocf = lanList.at(i);
-            if (ocf->uniqueName == uniqueName) {
+            if (ocf->uuidName == uniqueName) {
                 selectY = ocf->y(); //获取选中item的y坐标
                 break;
             }
@@ -1966,7 +1967,7 @@ void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
 
         for (int i = 0;i < lanList.size(); i ++) {
             OneLancForm *ocf = lanList.at(i);
-            if (ocf->uniqueName == uniqueName) {
+            if (ocf->uuidName == uniqueName) {
                 ocf->setSelected(true, false);
                 selectY = ocf->y();
             } else {

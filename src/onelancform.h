@@ -55,7 +55,7 @@ public:
     explicit OneLancForm(QWidget *parent = 0, MainWindow *mw = 0, ConfForm *confForm = 0, KSimpleNM *ksnm = 0);
     ~OneLancForm();
 
-    void setName(QString name, QString uniName, QString ifName);
+    void setName(QString ssid, QString uuid, QString interface);
     void setIcon(bool isOn);
     void setLine(bool isShow);
     void setLanInfo(QString str1, QString str2, QString str3, QString str4);
@@ -70,9 +70,9 @@ public:
     bool isTopItem;
     bool isActive;
     bool isConnected;
-    QString lanName;
-    QString uniqueName;
-    QString ifname;
+    QString ssidName;
+    QString uuidName;
+    QString ifName;
 
 protected:
     void mousePressEvent(QMouseEvent *event);

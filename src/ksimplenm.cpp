@@ -44,7 +44,7 @@ void KSimpleNM::execGetLanList()
     isExecutingGetLanList = true;
     shellOutput = "";
     type = 0;
-    runShellProcess->start("nmcli -f type,device,name connection show");
+    runShellProcess->start("nmcli -f type,uuid,name connection show");
 }
 
 //获取无线网络列表数据

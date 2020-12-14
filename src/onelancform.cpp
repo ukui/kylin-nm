@@ -98,7 +98,7 @@ OneLancForm::~OneLancForm()
 
 void OneLancForm::mousePressEvent(QMouseEvent *)
 {
-    emit selectedOneLanForm(lanName, uniqueName);//避免重名情况
+    emit selectedOneLanForm(ssidName, uuidName);//避免重名情况
 }
 
 //事件过滤器
@@ -212,12 +212,14 @@ void OneLancForm::setTopItem(bool isSelected)
 }
 
 //设置网络名称
-void OneLancForm::setName(QString name, QString uniName, QString ifName)
+void OneLancForm::setName(QString ssid, QString uuid, QString interface)
 {
-    ui->lbName->setText(name);
-    lanName = name;
-    uniqueName = uniName;
-    ifname = ifName;
+    ui->lbName->setText(ssid);
+    ssidName = ssid;
+    qDebug() << "获取到的SSID是" << ssidName;
+    uuidName = uuid;
+    qDebug() << "获取到的UUID是" << uuidName;
+    ifName = interface;
 }
 
 //根据有线网络连接与否，设置显示'已连接'文字的控件的可见与否
@@ -283,7 +285,8 @@ void OneLancForm::slotConnLan()
 {
     //mw->startLoading();
     this->startWaiting(true);
-    emit sigConnLan(ui->lbName->text(), ifname);
+    //emit sigConnLan(ui->lbName->text(), ifName);
+    emit sigConnLan(uuidName, ifName);
 }
 
 //点击网络断开按钮，执行该函数

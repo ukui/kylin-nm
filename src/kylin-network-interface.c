@@ -200,7 +200,6 @@ activecon *kylin_network_get_activecon_info()
     char *path;
     asprintf(&path, "%s%s", tmpPrefix, name);
     int status = system(cmd);
-    //int status = system("nmcli connection show -active > /tmp/activecon.txt");
     if (status != 0)
         syslog(LOG_ERR, "execute 'nmcli connection show -active' in function 'kylin_network_get_activecon_info' failed");
     free(cmd);
@@ -235,6 +234,9 @@ activecon *kylin_network_get_activecon_info()
     free(path);
 
     fgets(StrLine,1024,fp);
+//    printf("      ");
+//    printf("the string is :%s", StrLine);
+//    printf("      ");
     while(!feof(fp))
     {
         if(count==activenum-1)break;

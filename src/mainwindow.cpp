@@ -1595,15 +1595,14 @@ void MainWindow::loadWifiListDone(QStringList slist)
         }
         if(isContinue){ continue; }
 
-        bool is_fast = false;
-        if (wfreq.toInt() >= 5000) {
-            is_fast = true;
-        } else {
-            for (int k = i; k < slist.size(); k ++) {
-                if (wname == slist.at(k).mid(indexName, indexFreq - indexName).trimmed()) {
-                    if (slist.at(k).mid(indexFreq, 4).trimmed() >= 5000) {
-                        is_fast = true;
-                    }
+        int max_freq = wfreq.toInt();
+        int min_freq = wfreq.toInt();
+        for (int k = i; k < slist.size(); k ++) {
+            if (wname == slist.at(k).mid(indexName).trimmed()) {
+                if (slist.at(k).mid(indexFreq, 4).trimmed().toInt() > max_freq) {
+                    max_freq = slist.at(k).mid(indexFreq, 4).trimmed().toInt();
+                } else if (slist.at(k).mid(indexFreq, 4).trimmed().toInt() < min_freq) {
+                    min_freq = slist.at(k).mid(indexFreq, 4).trimmed().toInt();
                 }
             }
         }
@@ -1617,7 +1616,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ccf->setSignal(wsignal, wsecu);
                 activeWifiSignalLv = wsignal.toInt();
                 objKyDBus->getWifiMac(wname);
-                ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, is_fast);
+                ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, ((max_freq > 5000) && (min_freq < 3000)));
                 ccf->setConnedString(1, tr("NetOn,"), wsecu);//"已连接"
                 ccf->isConnected = true;
                 ifWLanConnected = true;
@@ -1639,7 +1638,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->setLine(true);
                 ocf->setSignal(wsignal, wsecu);
                 objKyDBus->getWifiMac(wname);
-                ocf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, is_fast);
+                ocf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, ((max_freq > 5000) && (min_freq < 3000)));
                 ocf->setConnedString(0, tr("Disconnected"), wsecu);
                 ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
                 ocf->setSelected(false, false);
@@ -1761,15 +1760,14 @@ void MainWindow::updateWifiListDone(QStringList slist)
         }
         if(isContinue){continue;}
 
-        bool is_fast = false;
-        if (wfreq.toInt() >= 5000) {
-            is_fast = true;
-        } else {
-            for (int k = i; k < slist.size(); k ++) {
-                if (wname == slist.at(k).mid(indexName, indexFreq - indexName).trimmed()) {
-                    if (slist.at(k).mid(indexFreq, 4).trimmed() >= 5000) {
-                        is_fast = true;
-                    }
+        int max_freq = wfreq.toInt();
+        int min_freq = wfreq.toInt();
+        for (int k = i; k < slist.size(); k ++) {
+            if (wname == slist.at(k).mid(indexName).trimmed()) {
+                if (slist.at(k).mid(indexFreq, 4).trimmed().toInt() > max_freq) {
+                    max_freq = slist.at(k).mid(indexFreq, 4).trimmed().toInt();
+                } else if (slist.at(k).mid(indexFreq, 4).trimmed().toInt() < min_freq) {
+                    min_freq = slist.at(k).mid(indexFreq, 4).trimmed().toInt();
                 }
             }
         }
@@ -1803,7 +1801,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 addItem->setLine(false);
                 addItem->setSignal(wsignal, wsecu);
                 objKyDBus->getWifiMac(wname);
-                addItem->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, is_fast);
+                addItem->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, ((max_freq > 5000) && (min_freq < 3000)));
                 addItem->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"
                 addItem->move(L_VERTICAL_LINE_TO_ITEM, posY);
                 addItem->setSelected(false, false);

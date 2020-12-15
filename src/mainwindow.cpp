@@ -1322,9 +1322,19 @@ void MainWindow::on_btnWifiList_clicked()
 // 获取lan列表回调
 void MainWindow::getLanListDone(QStringList slist)
 {
+    //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldLanSlist) {
         slist = oldLanSlist;
         this->ksnm->isUseOldLanSlist = false;
+    }
+
+    //若slist为空，则也使用上一次获取到的列表
+    if (slist.size() == 1 && slist.at(0) == "") {
+        if (oldLanSlist.size() == 1 && oldLanSlist.at(0) == "") {
+            return;
+        } else {
+            slist = oldLanSlist;
+        }
     }
 
     delete topLanListWidget; // 清空top列表

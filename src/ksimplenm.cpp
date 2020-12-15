@@ -44,6 +44,7 @@ void KSimpleNM::execGetLanList()
     isExecutingGetLanList = true;
     shellOutput = "";
     type = 0;
+
     runShellProcess->start("nmcli -f type,uuid,name connection show");
 }
 

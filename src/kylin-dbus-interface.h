@@ -50,6 +50,7 @@ public:
     int getWiredNetworkNumber();
     void showDesktopNotify(QString message);
     void initConnectionInfo();
+    QList<QString> getConnectNetName();
     void connectWiredNet(QString netName);
     void getConnectNetIp();
     void getLanIpChanged();
@@ -101,7 +102,7 @@ public slots:
     void getLanHwAddressState();
     void getWiredCardName();
     void getWirelessCardName();
-    void getLanIpDNS(QString netName, bool isActNet);
+    void getLanIpDNS(QString uuidName, bool isActNet);
     QString getLanMAC(QString ifname);
     void getWifiMac(QString netName);
     void slot_timeout();

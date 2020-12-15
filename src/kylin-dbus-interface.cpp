@@ -286,8 +286,8 @@ void KylinDBus::getWirelessCardName()
     }
 }
 
-//获取没有连接的有线网ip、DNS、ifname
-void KylinDBus::getLanIpDNS(QString netName, bool isActNet)
+//获取普通的有线网ip、DNS、ifname
+void KylinDBus::getLanIpDNS(QString uuidName, bool isActNet)
 {
     dbusIfName = "--";
     QDBusInterface m_interface("org.freedesktop.NetworkManager",
@@ -312,8 +312,8 @@ void KylinDBus::getLanIpDNS(QString netName, bool isActNet)
             QMap<QString,QVariant> outsideMap = map.value(outside_key);
             if (outside_key == "connection") {
                 for (QString search_key : outsideMap.keys()) {
-                    if (search_key == "id") {
-                        if (netName == outsideMap.value(search_key).toString()) {
+                    if (search_key == "uuid") {
+                        if (uuidName == outsideMap.value(search_key).toString()) {
                             for (QString search_key : outsideMap.keys()) {
                                 if (search_key == "interface-name") {
                                     dbusIfName = outsideMap.value("interface-name").toString();
@@ -774,6 +774,51 @@ void KylinDBus::initConnectionInfo()
     QDBusReply<QVariant> m_result = interface.call("Get", "org.freedesktop.NetworkManager", "WirelessEnabled");
     qDebug()<<"debug: *****初始的无线网络开关状态是: "<<m_result.value().toBool();
     oldWifiSwitchState = m_result.value().toBool();
+}
+
+//获取已经连接网络的ssid和uuid
+QList<QString> KylinDBus::getConnectNetName()
+{
+    QList<QString> strSsidUuid;
+
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+
+    //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
+    QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    QList<QVariant> outArgs = result.arguments();
+    QVariant first = outArgs.at(0);
+    QDBusVariant dbvFirst = first.value<QDBusVariant>();
+    QVariant vFirst = dbvFirst.variant();
+    QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
+
+    QDBusObjectPath objPath;
+    dbusArgs.beginArray();
+    while (!dbusArgs.atEnd()) {
+        dbusArgs >> objPath;
+
+        QDBusInterface interfaceType( "org.freedesktop.NetworkManager",
+                                  objPath.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+        QDBusReply<QVariant> reply = interfaceType.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
+
+        if (reply.value().toString() == "ethernet" || reply.value().toString() == "802-3-ethernet") {
+            QDBusInterface interfaceInfo( "org.freedesktop.NetworkManager",
+                                      objPath.path(),
+                                      "org.freedesktop.DBus.Properties",
+                                      QDBusConnection::systemBus() );
+            QDBusReply<QVariant> replyId = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Id");
+            QDBusReply<QVariant> replyUuid = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Uuid");
+            strSsidUuid.append(replyId.value().toString());
+            strSsidUuid.append(replyUuid.value().toString());
+        }
+    }
+    dbusArgs.endArray();
+
+    return strSsidUuid;
 }
 
 //网络连接变化时，如有新增或减少的网络，发信号通知更新主界面

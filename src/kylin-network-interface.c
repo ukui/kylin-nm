@@ -234,9 +234,6 @@ activecon *kylin_network_get_activecon_info()
     free(path);
 
     fgets(StrLine,1024,fp);
-//    printf("      ");
-//    printf("the string is :%s", StrLine);
-//    printf("      ");
     while(!feof(fp))
     {
         if(count==activenum-1)break;

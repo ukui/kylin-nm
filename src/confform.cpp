@@ -147,12 +147,13 @@ void ConfForm::mouseMoveEvent(QMouseEvent *event)
 }
 
 //网络配置参数设置界面的显示内容
-void ConfForm::setProp(QString connName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf,  bool isWiFi)
+void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf, bool isWiFi)
 {
     this->isActConf = isActConf;
     ui->leName->setText(connName);
     lastConnName = connName;
     lastIpv4 = addr;
+    theUuid = uuidName;
 
     if (isWiFi) {
         ui->leName->setEnabled(false);
@@ -223,10 +224,11 @@ void ConfForm::on_btnCreate_clicked()
     Utils::m_system(cmdStr.toUtf8().data());
 
     if (ui->cbType->currentIndex() == 1) {
-        //config the ipv4 and netmask and gateway if select Manual
+        //选择手动，配置Ipv4、掩码、网关
         this->isCreateNewNet = true;
         this->saveNetworkConfiguration();
     } else {
+        //选择自动，则配置完成并发出桌面通知
         QString txt(tr("New network already created"));
         kylindbus.showDesktopNotify(txt);
     }
@@ -262,6 +264,10 @@ void ConfForm::on_btnSave_clicked()
 
         QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
         Utils::m_system(cmdStr.toUtf8().data());
+
+        this->isCreateNewNet = true;
+    } else {
+        this->isCreateNewNet = false;
     }
 
     if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
@@ -276,12 +282,11 @@ void ConfForm::on_btnSave_clicked()
 
     QString txt(tr("New network settings already finished"));
     kylindbus.showDesktopNotify(txt);
-
-    this->isCreateNewNet = false;
 }
 
 void ConfForm::saveNetworkConfiguration()
 {
+    //获取对应掩码的参数
     QString mask = "";
     if (ui->cbMask->currentIndex() == 0) {
         mask = "24";
@@ -297,15 +302,23 @@ void ConfForm::saveNetworkConfiguration()
         mask = "24";
     }
 
+    //是选择的自动还是手动配置网络
     if (ui->cbType->currentIndex() == 0) {
-        kylin_network_set_automethod(ui->leName->text().toUtf8().data());
+        if (!this->isCreateNewNet) {
+            //kylin_network_set_automethod(ui->leName->text().toUtf8().data());
+            kylin_network_set_automethod(theUuid.toUtf8().data());
+        }
     } else {
         QString dnss = ui->leDns->text();
         if (ui->leDns2->text() != "") {
             dnss.append(",");
             dnss.append(ui->leDns2->text());
         }
-        kylin_network_set_manualall(ui->leName->text().toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+        if (this->isCreateNewNet) {
+            kylin_network_set_manualall(ui->leName->text().toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+        } else {
+            kylin_network_set_manualall(theUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+        }
     }
 }
 

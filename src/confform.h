@@ -40,7 +40,7 @@ public:
     explicit ConfForm(QWidget *parent = 0);
     ~ConfForm();
 
-    void setProp(QString connName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf, bool isWiFi);
+    void setProp(QString connName, QString uuidName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf, bool isWiFi);
 
 public slots:
     void cbTypeChanged(int index);
@@ -85,7 +85,7 @@ private:
     bool isActConf; //是否对已经连接的网络进行的更改
     bool isCreateNewNet = false; //是否是创建的新网络
     bool isShowSaveBtn = true; //是否显示保存按钮，即是否是编辑网络界面
-    QString lastConnName, lastIpv4;
+    QString lastConnName, lastIpv4, theUuid;
     bool isActWifi; //是否是wifi网络
 
     QString labelQss, cbxQss, leQss, lineQss, btnOnQss, btnOffQss;

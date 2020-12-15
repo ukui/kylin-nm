@@ -216,9 +216,7 @@ void OneLancForm::setName(QString ssid, QString uuid, QString interface)
 {
     ui->lbName->setText(ssid);
     ssidName = ssid;
-    qDebug() << "获取到的SSID是" << ssidName;
     uuidName = uuid;
-    qDebug() << "获取到的UUID是" << uuidName;
     ifName = interface;
 }
 
@@ -298,7 +296,10 @@ void OneLancForm::on_btnDisConn_clicked()
     this->startWaiting(false);
     mw->is_stop_check_net_state = 1;
 
-    kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
+    //使用有线网ssid断开网络
+    //kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
+    //使用有线网uuid断开网络
+    kylin_network_set_con_down(uuidName.toUtf8().data());
 
     disconnect(this, SIGNAL(selectedOneLanForm(QString, QString)), mw, SLOT(oneTopLanFormSelected(QString, QString)));
 
@@ -374,7 +375,7 @@ void OneLancForm::on_btnInfo_clicked()
     // qDebug()<<v4method<<addr<<mask<<gateway<<dns;
 
     connect(cf, SIGNAL(requestRefreshLanList(int)), mw, SLOT(onBtnNetListClicked(int)));
-    cf->setProp(ui->lbName->text(), v4method, addr, mask, gateway, dns, this->isActive, false);
+    cf->setProp(ui->lbName->text(), uuidName, v4method, addr, mask, gateway, dns, this->isActive, false);
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->exec();
     cf->raise();

@@ -554,20 +554,26 @@ void MainWindow::initTimer()
 //初始化已经连接网络的DNS
 void MainWindow::initActNetDNS()
 {
-    QString actLanName = "--";
-    activecon *act = kylin_network_get_activecon_info();
-    int index = 0;
-    while (act[index].con_name != NULL) {
-        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet") {
-            actLanName = QString(act[index].con_name);
-            break;
-        }
-        index ++;
-    }
+//    QString actLanName = "--";
 
-    if (actLanName != "--") {
-        oldActLanName = actLanName;
-        objKyDBus->getLanIpDNS(actLanName, true);
+//    activecon *act = kylin_network_get_activecon_info();
+//    int index = 0;
+//    while (act[index].con_name != NULL) {
+//        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet") {
+//            actLanName = QString(act[index].con_name);
+//            break;
+//        }
+//        index ++;
+//    }
+
+    QList<QString> currConnNames =objKyDBus->getConnectNetName();
+
+//    if (actLanName != "--") {
+    if (currConnNames.size() > 0) {
+//        oldActLanName = actLanName;
+//        objKyDBus->getLanIpDNS(actLanName, true);
+        oldActLanName = currConnNames.at(0);
+        objKyDBus->getLanIpDNS(currConnNames.at(1), true);
         oldDbusActLanDNS = objKyDBus->dbusActLanDNS;
     }
 }
@@ -1330,21 +1336,26 @@ void MainWindow::getLanListDone(QStringList slist)
     scrollAreal->setWidget(lanListWidget);
     scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA);
 
-    // 获取当前连接的lan name
-    QString actLanName = "--";
-    activecon *act = kylin_network_get_activecon_info();
-    int index = 0;
-    while (act[index].con_name != NULL) {
-        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet") {
-            actLanName = QString(act[index].con_name);
-            break;
-        }
-        index ++;
-    }
+    // 获取当前连接有线网的SSID和UUID
+    QString actLanSsidName = "--";
+    QString actLanUuidName = "--";
+
+//    activecon *act = kylin_network_get_activecon_info();
+//    int index = 0;
+//    while (act[index].con_name != NULL) {
+//        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet") {
+//            actLanName = QString(act[index].con_name);
+//            break;
+//        }
+//        index ++;
+//    }
+
+    QList<QString> currConnNames =objKyDBus->getConnectNetName();
 
     // 若当前lan name为"--"，设置OneConnForm
     OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
-    if (actLanName == "--") {
+//    if (actLanName == "--") {
+    if (currConnNames.size() == 0) {
         ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
         ccf->setIcon(false);
         ccf->setConnedString(1, tr("Disconnected"));//"未连接"
@@ -1355,6 +1366,9 @@ void MainWindow::getLanListDone(QStringList slist)
         lbLoadDownImg->hide();
         lbLoadUpImg->hide();
         ccf->setTopItem(false);
+    } else {
+        actLanSsidName = currConnNames.at(0); //网络名称
+        actLanUuidName = currConnNames.at(1); //网络唯一ID
     }
     ccf->setAct(true);
     ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
@@ -1383,7 +1397,7 @@ void MainWindow::getLanListDone(QStringList slist)
 
         if (ltype != "802-11-wireless" && ltype != "wifi" && ltype != "" && ltype != "--") {
             // 当前连接的lan
-            objKyDBus->getLanIpDNS(nname, true);
+            objKyDBus->getLanIpDNS(nuuid, true);
 
             QString macAdd = "--";
             QString mIfName = "--";
@@ -1395,10 +1409,12 @@ void MainWindow::getLanListDone(QStringList slist)
                 macAdd = objKyDBus->dbusMacDefault; //使用默认的MAC地址
             }
 
-            if (nname == actLanName) {
+//            if (nname == actLanName) {
+            if (nname == actLanSsidName && nuuid == actLanUuidName) {
                 objKyDBus->getConnectNetIp();
 
-                actLanName = "--";
+//                actLanName = "--";
+                actLanSsidName = "--";
                 if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
                 //QString strLanName = TranslateLanName(nname); //进行中英文系统环境下有线网络名称的汉化
 
@@ -1420,7 +1436,8 @@ void MainWindow::getLanListDone(QStringList slist)
                     if (objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
                         //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
                         objKyDBus->connectWiredNet(nname);
-                    } else if ((oldActLanName == actLanName) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
+//                    } else if ((oldActLanName == actLanName) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
+                    } else if ((oldActLanName == actLanSsidName) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
                         //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
                         objKyDBus->connectWiredNet(nname);
                     }
@@ -1429,7 +1446,8 @@ void MainWindow::getLanListDone(QStringList slist)
                 currSelNetName = "";
                 objKyDBus->dbusActiveLanIpv4 = "";
                 objKyDBus->dbusActiveLanIpv6 = "";
-                oldActLanName = actLanName;
+//                oldActLanName = actLanName;
+                oldActLanName = actLanSsidName;
                 oldDbusActLanDNS = objKyDBus->dbusActLanDNS;
                 syslog(LOG_DEBUG, "already insert an active lannet in the top of lan list");
             } else {

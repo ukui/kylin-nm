@@ -190,6 +190,7 @@ public slots:
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
     void paintEvent(QPaintEvent *event);
+    bool event(QEvent *event);
 
 private:
     void checkSingle();
@@ -277,8 +278,6 @@ private:
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
-
-    bool nativeEvent(const QByteArray &eventType, void *message, long *result);
 
     void on_btnNet_clicked();
     void on_btnWifiList_clicked();

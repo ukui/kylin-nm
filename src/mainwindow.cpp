@@ -45,7 +45,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // 如果使用Qt::Popup 任务栏不显示且保留X事件如XCB_FOCUS_OUT, 但如果indicator点击鼠标右键触发，XCB_FOCUS_OUT事件依然会失效
     // 如果使用Qt::ToolTip, Qt::Tool + Qt::WindowStaysOnTopHint, Qt::X11BypassWindowManagerHint等flag则会导致X事件失效
     // this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
-    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Popup);//QTool
+    //this->setWindowFlags(Qt::FramelessWindowHint | Qt::Popup);//QTool
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);//QTool
     this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
 
     UseQssFile::setStyle("style.qss");
@@ -150,24 +151,6 @@ void MainWindow::checkSingle()
         qDebug()<<"Can't lock single file, kylin-network-manager is already running!";
         exit(0);
     }
-}
-
-bool MainWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
-{
-    Q_UNUSED(result);
-    if (eventType != "xcb_generic_event_t") {
-        return false;
-    }
-
-    xcb_generic_event_t *event = (xcb_generic_event_t*)message;
-
-    switch (event->response_type & ~0x80) {
-    case XCB_FOCUS_OUT:
-        // this->hide();
-        break;
-    }
-
-    return false;
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -657,6 +640,8 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 
         if (this->isHidden()) {
             this->showNormal();
+            this->raise();
+            this->activateWindow();
             if (is_btnNetList_clicked == 1) {
                 onBtnNetListClicked(0);
             }
@@ -2601,6 +2586,16 @@ void MainWindow::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 }
 
+bool MainWindow::event(QEvent *event)
+{
+    if (event->type() == QEvent::ActivationChange) {
+        if (QApplication::activeWindow() != this) {
+            this->hide();
+        }
+    }
+
+    return QMainWindow::event(event);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 QPixmap MainWindow::drawSymbolicColoredPixmap(const QPixmap &source)

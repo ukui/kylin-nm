@@ -136,9 +136,18 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     connect(mw, SIGNAL(waitWifiStop()), this, SLOT(stopWaiting()));
 
     connType = "";
-
-    ui->fiveGlabel->hide();
-    ui->fiveGlabel->setStyleSheet("QLabel{background-color: palette(button); border-radius: 4px;}");
+    lbNameLyt = new QHBoxLayout(ui->lbName);
+    lbFreq = new QLabel(ui->lbName);
+    lbFreq->setAlignment(Qt::AlignCenter);
+    lbFreq->setEnabled(false);
+    lbFreq->setStyleSheet("QLabel{border: 1px solid rgba(0, 0, 0, 0.5); background: transparent; color: rgba(0, 0, 0, 0.5); border-radius: 4px; font-size: 12px;}");
+    lbNameText = new QLabel(ui->lbName);
+    lbNameLyt->setContentsMargins(0, 0, 0, 0);
+    lbNameLyt->setSpacing(4);
+    lbNameLyt->addWidget(lbNameText);
+    lbNameLyt->addWidget(lbFreq);
+    lbNameLyt->addStretch();
+    ui->lbName->setLayout(lbNameLyt);
 }
 
 OneConnForm::~OneConnForm()
@@ -345,18 +354,18 @@ void OneConnForm::setConnedString(bool showLable, QString str, QString str1)
 
 void OneConnForm::setName(QString name)
 {
-    ui->lbName->setText(name);
+    lbNameText->setText(name);
     wifiName = name;
 }
 void OneConnForm::setSpecialName(QString name)
 {
-    ui->lbName->setText(tr("Connect to Hidden Wi-Fi Network")); //连接到隐藏的 Wi-Fi 网络
+    lbNameText->setText(tr("Connect to Hidden Wi-Fi Network")); //连接到隐藏的 Wi-Fi 网络
     wifiName = name;
 }
 
 QString OneConnForm::getName()
 {
-    return ui->lbName->text();
+    return lbNameText->text();
 }
 
 void OneConnForm::setRate(QString rate)
@@ -426,10 +435,18 @@ void OneConnForm::setSignal(QString lv, QString secu)
     }
 }
 
-void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, bool is_double_freq)
+void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, int freq)
 {
-    if (is_double_freq) {
-        ui->fiveGlabel->show();
+    //freq 0:含2.4G和5G， 1：只有2.4G， 2：只有5G
+    if (freq == 1) {
+        //freq ~ 2.4G
+        lbFreq->setText("2.4G");
+    } else if (freq == 2) {
+        //freq ~ 5G
+        lbFreq->setText("5G");
+    } else {
+        //freq ~ 5G&2.4G
+        lbFreq->setText("2.4/5G");
     }
     if (str1 == "--" || str1 == ""){ str1 = tr("None"); };
 
@@ -446,25 +463,25 @@ void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, bool is_
 void OneConnForm::slotConnWifi()
 {
     this->startWaiting(true);
-    emit sigConnWifi(ui->lbName->text());
+    emit sigConnWifi(lbNameText->text());
 }
 void OneConnForm::slotConnWifiPWD()
 {
     this->startWaiting(true);
-    emit sigConnWifiPWD(ui->lbName->text(), ui->lePassword->text(), connType);
+    emit sigConnWifiPWD(lbNameText->text(), ui->lePassword->text(), connType);
 }
 
 //点击后断开wifi网络
 void OneConnForm::on_btnDisConn_clicked()
 {
-    syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", ui->lbName->text().toUtf8().data());
-    qDebug()<<"DisConnect button about wifi net is clicked, current wifi name is "<<ui->lbName->text();
+    syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", lbNameText->text().toUtf8().data());
+    qDebug()<<"DisConnect button about wifi net is clicked, current wifi name is "<<lbNameText->text();
 
     this->startWaiting(false);
 
     mw->is_stop_check_net_state = 1;
     mw->on_btnHotspotState();
-    kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
+    kylin_network_set_con_down(lbNameText->text().toUtf8().data());
     disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneWifiFormSelected(QString,int)));
     emit disconnActiveWifi();
 }
@@ -521,7 +538,7 @@ void OneConnForm::toConnectWirelessNetwork()
         return;
     }
     if (ui->lbConned->text() == "--" || ui->lbConned->text() == " ") {
-        if (!isWifiConfExist(ui->lbName->text())) {
+        if (!isWifiConfExist(lbNameText->text())) {
             //没有配置文件，使用有密码的wifi连接
             on_btnConnPWD_clicked();
             return;
@@ -654,7 +671,7 @@ void OneConnForm::on_btnInfo_clicked()
     }
 
     BackThread *bt = new BackThread();
-    QString connProp = bt->getConnProp(ui->lbName->text());
+    QString connProp = bt->getConnProp(lbNameText->text());
     QStringList propList = connProp.split("|");
     QString v4method, addr, mask, gateway, dns;
     foreach (QString line, propList) {
@@ -676,7 +693,7 @@ void OneConnForm::on_btnInfo_clicked()
     }
     // qDebug()<<"v4method:"<<v4method<<" addr:"<<addr<<" mask:"<<mask<<" gateway:"<<gateway<<" dns:"<<dns;
 
-    cf->setProp(ui->lbName->text(), "--", v4method, addr, mask, gateway, dns, this->isActive, true);
+    cf->setProp(lbNameText->text(), "--", v4method, addr, mask, gateway, dns, this->isActive, true);
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->exec();
     cf->raise();
@@ -690,14 +707,14 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     qDebug()<<"Function slotConnWifiResult receives a number: "<<connFlag;
 
     if (!connType.isEmpty()) {
-        QString strConntype = "nmcli connection modify " + ui->lbName->text() + " wifi-sec.psk-flags 2";
+        QString strConntype = "nmcli connection modify " + lbNameText->text() + " wifi-sec.psk-flags 2";
         system(strConntype.toUtf8().data());
     }
     connType = "";
 
     if (connFlag == 2 || connFlag == 4) {
         mw->currSelNetName = "";
-        emit selectedOneWifiForm(ui->lbName->text(), H_WIFI_ITEM_SMALL_EXTEND);
+        emit selectedOneWifiForm(lbNameText->text(), H_WIFI_ITEM_SMALL_EXTEND);
 
         resize(W_ITEM, H_ITEM_MIDDLE);
         ui->wbg->hide();
@@ -732,12 +749,12 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     if (connFlag == 1) {
         // 使用配置文件连接失败，需要删除该配置文件
         QString txt(tr("Conn Wifi Failed"));//"连接 Wifi 失败"
-        syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", ui->lbName->text().toUtf8().data());
+        syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", lbNameText->text().toUtf8().data());
 
         KylinDBus kylindbus;
         kylindbus.showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "'";
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + lbNameText->text() + "'";
         int status = system(cmd.toUtf8().data());
         if (status != 0) {
             syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");

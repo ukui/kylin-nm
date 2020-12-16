@@ -1591,7 +1591,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     for (int i = 1, j = 0; i < slist.size(); i ++) {
         QString line = slist.at(i);
         QString wsignal = line.mid(0, indexSecu).trimmed();
-        QString wsecu = line.mid(indexSecu, indexName - indexSecu).trimmed();
+        QString wsecu = line.mid(indexSecu, indexFreq - indexSecu).trimmed();
         QString wname = line.mid(indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
         bool isContinue = false;
@@ -1612,6 +1612,14 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 }
             }
         }
+        int freqState = 0;
+        if (max_freq < 3000) {
+            //只有2.4GHZ
+            freqState = 1;
+        } else if (min_freq >= 5000) {
+            //只有5GHZ
+            freqState = 2;
+        }
         if (wname != "" && wname != "--") {
             // 当前连接的wifi
             if (wname == actWifiName) {
@@ -1622,7 +1630,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ccf->setSignal(wsignal, wsecu);
                 activeWifiSignalLv = wsignal.toInt();
                 objKyDBus->getWifiMac(wname);
-                ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, ((max_freq > 5000) && (min_freq < 3000)));
+                ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, freqState);
                 ccf->setConnedString(1, tr("NetOn,"), wsecu);//"已连接"
                 ccf->isConnected = true;
                 ifWLanConnected = true;
@@ -1644,7 +1652,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->setLine(true);
                 ocf->setSignal(wsignal, wsecu);
                 objKyDBus->getWifiMac(wname);
-                ocf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, ((max_freq > 5000) && (min_freq < 3000)));
+                ocf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, freqState);
                 ocf->setConnedString(0, tr("Disconnected"), wsecu);
                 ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
                 ocf->setSelected(false, false);
@@ -1753,7 +1761,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     for(int i = 1; i < slist.size(); i++){
         QString line = slist.at(i);
         QString wsignal = line.mid(0, indexSecu).trimmed();
-        QString wsecu = line.mid(indexSecu, indexName - indexSecu).trimmed();
+        QString wsecu = line.mid(indexSecu, indexFreq - indexSecu).trimmed();
         QString wname = line.mid(indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
 
@@ -1776,6 +1784,15 @@ void MainWindow::updateWifiListDone(QStringList slist)
                     min_freq = slist.at(k).mid(indexFreq, 4).trimmed().toInt();
                 }
             }
+        }
+
+        int freqState = 0;
+        if (max_freq < 3000) {
+            //只有2.4GHZ
+            freqState = 1;
+        } else if (min_freq >= 5000) {
+            //只有5GHZ
+            freqState = 2;
         }
 
         wnames.append(wname);
@@ -1807,7 +1824,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 addItem->setLine(false);
                 addItem->setSignal(wsignal, wsecu);
                 objKyDBus->getWifiMac(wname);
-                addItem->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, ((max_freq > 5000) && (min_freq < 3000)));
+                addItem->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, freqState);
                 addItem->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"
                 addItem->move(L_VERTICAL_LINE_TO_ITEM, posY);
                 addItem->setSelected(false, false);

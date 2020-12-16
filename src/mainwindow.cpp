@@ -1322,6 +1322,12 @@ void MainWindow::on_btnWifiList_clicked()
 // 获取lan列表回调
 void MainWindow::getLanListDone(QStringList slist)
 {
+    qDebug() << "              ";
+    foreach (QString sss, slist) {
+        qDebug() <<sss;
+    }
+    qDebug() << "              ";
+
     //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldLanSlist) {
         slist = oldLanSlist;

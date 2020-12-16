@@ -46,6 +46,8 @@ void KSimpleNM::execGetLanList()
     type = 0;
 
     runShellProcess->start("nmcli -f type,uuid,name connection show");
+    runShellProcess->waitForStarted(-1);
+    runShellProcess->waitForFinished(-1);
 }
 
 //获取无线网络列表数据
@@ -54,7 +56,10 @@ void KSimpleNM::execGetWifiList()
     isExecutingGetWifiList = true;
     shellOutput = "";
     type = 1;
+
     runShellProcess->start("nmcli -f signal,security,freq,ssid device wifi");
+    runShellProcess->waitForStarted(-1);
+    runShellProcess->waitForFinished(-1);
 }
 
 //读取获取到的结果

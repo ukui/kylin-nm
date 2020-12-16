@@ -141,6 +141,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     lbFreq->setAlignment(Qt::AlignCenter);
     lbFreq->setEnabled(false);
     lbFreq->setStyleSheet("QLabel{border: 1px solid rgba(0, 0, 0, 0.5); background: transparent; color: rgba(0, 0, 0, 0.5); border-radius: 4px; font-size: 12px;}");
+    lbFreq->hide();
     lbNameText = new QLabel(ui->lbName);
     lbNameLyt->setContentsMargins(0, 0, 0, 0);
     lbNameLyt->setSpacing(4);
@@ -438,6 +439,7 @@ void OneConnForm::setSignal(QString lv, QString secu)
 void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, int freq)
 {
     //freq 0:含2.4G和5G， 1：只有2.4G， 2：只有5G
+    lbFreq->show();
     if (freq == 1) {
         //freq ~ 2.4G
         lbFreq->setText("2.4G");

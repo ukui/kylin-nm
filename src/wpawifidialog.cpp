@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QStringListModel>
 #include <QCompleter>
+#include <QDateTime>
 
 const QString CONFIG_FILE = "/tmp/wpaconf.ini";
 
@@ -395,7 +396,7 @@ void WpaWifiDialog::activateConnection() {
             qDebug() << "qDebug: activate time out!";
         });
         //设置超时时间
-        timeout->start(5000);
+        timeout->start(12 * 1000);
     });
     connect(upThread, &UpConnThread::connRes, this, [ = ](int res) {
         qDebug()<<"qDebug: Connect result is: "<<res;

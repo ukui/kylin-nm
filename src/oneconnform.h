@@ -26,6 +26,8 @@
 #include <QLineEdit>
 #include <QShortcut>
 #include <QKeyEvent>
+#include <QLabel>
+#include <QHBoxLayout>
 
 #include "confform.h"
 #include "backthread.h"
@@ -68,7 +70,7 @@ public:
     QString getName();
     void setRate(QString rate);
     void setLine(bool isShow);
-    void setWifiInfo(QString str1, QString str2, QString str3, bool is_double_freq);
+    void setWifiInfo(QString str1, QString str2, QString str3, int freq);
 
     void setSelected(bool isSelected, bool isCurrName);
     void setHideItem(bool isHideItem, bool isShowHideBtn);
@@ -131,6 +133,9 @@ private:
     bool hasPwd;
 
     QString leQssLow, leQssHigh;
+    QLabel * lbFreq = nullptr;
+    QLabel * lbNameText = nullptr;
+    QHBoxLayout * lbNameLyt = nullptr;
 
 signals:
     void selectedOneWifiForm(QString wifiName, int extendLength);

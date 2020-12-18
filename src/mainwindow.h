@@ -183,6 +183,7 @@ public slots:
 
     void on_btnHotspot_clicked();
     void on_btnHotspotState();
+    void on_btnWifiList_clicked();
 
     //flag =0或1为普通点击、2为收到打开信息、3为收到关闭信息、4为无线网卡插入、5为无线网卡拔出
     void onBtnWifiClicked(int flag = 0);
@@ -280,7 +281,7 @@ private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
     void on_btnNet_clicked();
-    void on_btnWifiList_clicked();
+//    void on_btnWifiList_clicked();
     void onBtnNetListClicked(int flag=0);
 
     void getLanListDone(QStringList slist);

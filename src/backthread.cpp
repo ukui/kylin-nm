@@ -198,7 +198,7 @@ void BackThread::execDisWifi()
 //to connect wired network
 void BackThread::execConnLan(QString connName, QString ifname)
 {
-    disConnLanOrWifi("ethernet");
+    //disConnLanOrWifi("ethernet");
 
     KylinDBus objKyDbus;
     bool wiredCableState = objKyDbus.getWiredCableStateByIfname(ifname);

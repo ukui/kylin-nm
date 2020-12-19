@@ -1307,12 +1307,6 @@ void MainWindow::on_btnWifiList_clicked()
 // 获取lan列表回调
 void MainWindow::getLanListDone(QStringList slist)
 {
-    qDebug() << "              ";
-    foreach (QString sss, slist) {
-        qDebug() <<sss;
-    }
-    qDebug() << "              ";
-
     //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldLanSlist) {
         slist = oldLanSlist;
@@ -1338,42 +1332,37 @@ void MainWindow::getLanListDone(QStringList slist)
     scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA);
 
     // 获取当前连接有线网的SSID和UUID
-    QString actLanSsidName = "--";
-    QString actLanUuidName = "--";
-
-//    activecon *act = kylin_network_get_activecon_info();
-//    int index = 0;
-//    while (act[index].con_name != NULL) {
-//        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet") {
-//            actLanName = QString(act[index].con_name);
-//            break;
-//        }
-//        index ++;
-//    }
-
+    QList<QString> actLanSsidName;
+    QList<QString> actLanUuidName;
     QList<QString> currConnNames =objKyDBus->getConnectNetName();
 
     // 若当前lan name为"--"，设置OneConnForm
-    OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
-//    if (actLanName == "--") {
     if (currConnNames.size() == 0) {
+        OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
         ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
         ccf->setIcon(false);
-        ccf->setConnedString(1, tr("Disconnected"));//"未连接"
+        ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
         ccf->isConnected = false;
         ifLanConnected = false;
         lbLoadDown->hide();
         lbLoadUp->hide();
         lbLoadDownImg->hide();
         lbLoadUpImg->hide();
-        ccf->setTopItem(false);
+        ccf->setTopItem(false);//"当前未连接任何 以太网"
+        ccf->setAct(true);
+        ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
+        ccf->show();
+        ccf->setLine(false);
+        currTopLanItem = 1;
     } else {
-        actLanSsidName = currConnNames.at(0); //网络名称
-        actLanUuidName = currConnNames.at(1); //网络唯一ID
+        int i = 0;
+        do {
+            actLanSsidName.append(currConnNames.at(i)); //网络名称
+            actLanUuidName.append(currConnNames.at(i+1)); //网络唯一ID
+            i += 2;
+        } while(i<currConnNames.size());
+        currTopLanItem = actLanSsidName.size();
     }
-    ccf->setAct(true);
-    ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
-    ccf->show();
 
     // 填充可用网络列表
     QString headLine = slist.at(0);
@@ -1389,16 +1378,16 @@ void MainWindow::getLanListDone(QStringList slist)
         indexName = headLine.indexOf("NAME");
     }
 
-    QString order = "a"; //为避免同名情况，这里给每一个有线网设定一个唯一标志
     for(int i = 1, j = 0; i < slist.size(); i ++) {
         QString line = slist.at(i);
         QString ltype = line.mid(0, indexUuid).trimmed();
         QString nuuid = line.mid(indexUuid, indexName - indexUuid).trimmed();
         QString nname = line.mid(indexName).trimmed();
+        bool isActiveNet = false; //是否是活动的连接
 
+        //仅仅对有线网络进行添加列表处理
         if (ltype != "802-11-wireless" && ltype != "wifi" && ltype != "" && ltype != "--") {
-            // 当前连接的lan
-            objKyDBus->getLanIpDNS(nuuid, true);
+            objKyDBus->getLanIpDNS(nuuid, true); //使用UUID获取有线网的ip和dns信息
 
             QString macAdd = "--";
             QString mIfName = "--";
@@ -1410,48 +1399,76 @@ void MainWindow::getLanListDone(QStringList slist)
                 macAdd = objKyDBus->dbusMacDefault; //使用默认的MAC地址
             }
 
-//            if (nname == actLanName) {
-            if (nname == actLanSsidName && nuuid == actLanUuidName) {
-                objKyDBus->getConnectNetIp();
+            //**********************创建已经连接的有线网item********************//
+            if (currConnNames.size() != 0) {//证明有已经连接的有线网络
+                for (int kk=0; kk<actLanSsidName.size(); kk++) {
+                    if (nname == actLanSsidName.at(kk) && nuuid == actLanUuidName.at(kk)) {
+                        topLanListWidget->resize(topLanListWidget->width(), topLanListWidget->height() + H_NORMAL_ITEM*kk);
+                        isActiveNet = true; //名为nname的网络是已经连接的有线网络
+                        ifLanConnected = true;
 
-//                actLanName = "--";
-                actLanSsidName = "--";
-                if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
-                //QString strLanName = TranslateLanName(nname); //进行中英文系统环境下有线网络名称的汉化
+                        objKyDBus->getConnectNetIp();
+                        if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
+                        //QString strLanName = TranslateLanName(nname); //进行中英文系统环境下有线网络名称的汉化
 
-                connect(ccf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneTopLanFormSelected(QString, QString)));
-                connect(ccf, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
-                ccf->setName(nname, nuuid, mIfName);
-                ccf->setIcon(true);
-                ccf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macAdd);
-                ccf->setConnedString(1, tr("NetOn,"));//"已连接"
-                ccf->isConnected = true;
-                ifLanConnected = true;
-                lbLoadDown->show();
-                lbLoadUp->show();
-                lbLoadDownImg->show();
-                lbLoadUpImg->show();
-                ccf->setTopItem(false);
+                        OneLancForm *ccfAct = new OneLancForm(topLanListWidget, this, confForm, ksnm);
+                        connect(ccfAct, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneTopLanFormSelected(QString, QString)));
+                        connect(ccfAct, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
+                        ccfAct->setName(nname, nuuid, mIfName);
+                        ccfAct->setIcon(true);
+                        ccfAct->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macAdd);
+                        ccfAct->isConnected = true;
+                        ccfAct->setTopItem(false);
+                        ccfAct->setAct(true);
+                        ccfAct->move(L_VERTICAL_LINE_TO_ITEM, kk*H_NORMAL_ITEM);
+                        ccfAct->show();
 
-                if (!objKyDBus->dbusLanIpv4.isEmpty()) {
-                    if (objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
-                        //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
-                        objKyDBus->connectWiredNet(nname);
-//                    } else if ((oldActLanName == actLanName) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
-                    } else if ((oldActLanName == actLanSsidName) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
-                        //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
-                        objKyDBus->connectWiredNet(nname);
+                        if (actLanSsidName.size() == 1) {
+                            lbLoadDown->show();
+                            lbLoadUp->show();
+                            lbLoadDownImg->show();
+                            lbLoadUpImg->show();
+                            currConnIfname = mIfName;
+                            ccfAct->setConnedString(1, tr("NetOn,"), "");//"已连接"
+                        } else {
+                            lbLoadDown->hide();
+                            lbLoadUp->hide();
+                            lbLoadDownImg->hide();
+                            lbLoadUpImg->hide();
+                            ccfAct->setConnedString(1, tr("NetOn,IfName:"), mIfName);//"已连接"
+                        }
+
+                        if (kk != actLanSsidName.size() - 1) {
+                            ccfAct->setLine(true);
+                        } else {
+                            ccfAct->setLine(false);
+                        }
+
+                        if (!objKyDBus->dbusLanIpv4.isEmpty()) {
+                            if (objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
+                                //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
+                                objKyDBus->connectWiredNet(nname);
+                            } else if ((oldActLanName == actLanSsidName.at(kk)) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
+                                //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
+                                objKyDBus->connectWiredNet(nname);
+                            }
+                        }
+
+                        currSelNetName = "";
+                        objKyDBus->dbusActiveLanIpv4 = "";
+                        objKyDBus->dbusActiveLanIpv6 = "";
+                        oldActLanName = actLanSsidName.at(kk);
+                        oldDbusActLanDNS = objKyDBus->dbusActLanDNS;
+                        lbTopLanList->move(lbTopLanList->x(), lbTopLanList->y() + kk*60);
+                        btnCreateNet->move(btnCreateNet->x(), btnCreateNet->y() + kk*60);
+                        scrollAreal->move(scrollAreal->x(), scrollAreal->y() + kk*60);
+                        syslog(LOG_DEBUG, "already insert an active lannet in the top of lan list");
                     }
                 }
+            }
 
-                currSelNetName = "";
-                objKyDBus->dbusActiveLanIpv4 = "";
-                objKyDBus->dbusActiveLanIpv6 = "";
-//                oldActLanName = actLanName;
-                oldActLanName = actLanSsidName;
-                oldDbusActLanDNS = objKyDBus->dbusActLanDNS;
-                syslog(LOG_DEBUG, "already insert an active lannet in the top of lan list");
-            } else {
+            //**********************创建未连接的有线网item********************//
+            if (!isActiveNet) {
                 lanListWidget->resize(W_LIST_WIDGET, lanListWidget->height() + H_NORMAL_ITEM);
                 //QString strLanName = TranslateLanName(nname);
 
@@ -1461,14 +1478,13 @@ void MainWindow::getLanListDone(QStringList slist)
                 ocf->setIcon(true);
                 ocf->setLine(true);
                 ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), macAdd);
-                ocf->setConnedString(0, tr("Disconnected"));//"未连接"
+                ocf->setConnedString(0, tr("Disconnected"), "");//"未连接"
                 ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
                 ocf->setSelected(false, false);
                 ocf->show();
 
                 j ++;
             }
-            order += "a";
         }
     }
 
@@ -2020,50 +2036,84 @@ void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
     }
 
     //**********************处理上方列表-界面所有控件回原位********************//
-    topLanListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_GAP_UP + X_ITEM); // 顶部的item缩小
-    lbTopLanList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_GAP_UP);
-    btnCreateNet->move(X_BTN_FUN, Y_BTN_FUN);
-    scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA);
-    lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2);
+    topLanListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM*currTopLanItem + H_GAP_UP + X_ITEM); // 顶部的item缩小
+    lbTopLanList->move(X_MIDDLE_WORD, H_NORMAL_ITEM*currTopLanItem + H_GAP_UP);
+    btnCreateNet->move(X_BTN_FUN, Y_BTN_FUN + H_NORMAL_ITEM*(currTopLanItem-1));
+    scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA + H_NORMAL_ITEM*(currTopLanItem-1));
+    lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2 + H_NORMAL_ITEM*(currTopLanItem-1)/2);
 
-    OneLancForm *ocf = topLanList.at(0);
-    ocf->setTopItem(false);
+    foreach (OneLancForm *ocf, topLanList) {
+        ocf->setTopItem(false);
+    }
 }
 void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
 {
     QList<OneLancForm *> topLanList = topLanListWidget->findChildren<OneLancForm *>();
     QList<OneLancForm *> lanList = lanListWidget->findChildren<OneLancForm *>();
 
+    // 顶部所有元素回到原位
+    for (int i = topLanList.size() - 1;i >= 0; i --) {
+        OneLancForm *ocf = topLanList.at(i);
+        qDebug() << "网络的名称是"<< ocf->ssidName;
+        ocf->move(L_VERTICAL_LINE_TO_ITEM, (topLanList.size() - 1 - i) * H_NORMAL_ITEM);
+    }
+
     if (currSelNetName == uniqueName) {
         // 与上一次选中同一个网络框，缩小当前选项卡
-        topLanListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_GAP_UP + X_ITEM);
-        lbTopLanList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_GAP_UP);
-        btnCreateNet->move(X_BTN_FUN, Y_BTN_FUN);
-        scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA);
-        lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2);
+        topLanListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM*currTopLanItem + H_GAP_UP + X_ITEM);
+        lbTopLanList->move(X_MIDDLE_WORD, H_NORMAL_ITEM*currTopLanItem + H_GAP_UP);
+        btnCreateNet->move(X_BTN_FUN, Y_BTN_FUN + H_NORMAL_ITEM*(currTopLanItem-1));
+        scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA + H_NORMAL_ITEM*(currTopLanItem-1));
+        lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2 + H_NORMAL_ITEM*(currTopLanItem-1)/2);
 
-        OneLancForm *ocf = topLanList.at(0);
-        ocf->setTopItem(false);
+        foreach (OneLancForm *ocf, topLanList) {
+            ocf->setTopItem(false);
+        }
 
         currSelNetName = "";
     } else {
         // 没有与上一次选中同一个网络框，放大当前选项卡
 
+        //下方列表所有元素缩小并回到原位
         for (int i = 0; i < lanList.size(); i ++) {
-            // 所有元素缩小并回到原位
             OneLancForm *ocf = lanList.at(i);
             ocf->setSelected(false, false);
             ocf->move(L_VERTICAL_LINE_TO_ITEM, i*H_NORMAL_ITEM);
         }
 
-        topLanListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_LAN_ITEM_EXTEND + H_GAP_UP + X_ITEM);
-        lbTopLanList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_LAN_ITEM_EXTEND + H_GAP_UP);
-        btnCreateNet->move(X_BTN_FUN, Y_BTN_FUN + H_LAN_ITEM_EXTEND);
-        scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA + H_LAN_ITEM_EXTEND);
-        lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2 + 80);
+        topLanListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM*currTopLanItem + H_LAN_ITEM_EXTEND + H_GAP_UP + X_ITEM);
+        lbTopLanList->move(X_MIDDLE_WORD, H_NORMAL_ITEM*currTopLanItem + H_LAN_ITEM_EXTEND + H_GAP_UP);
+        btnCreateNet->move(X_BTN_FUN, Y_BTN_FUN + H_LAN_ITEM_EXTEND + H_NORMAL_ITEM*(currTopLanItem-1));
+        scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA + H_LAN_ITEM_EXTEND + H_NORMAL_ITEM*(currTopLanItem-1));
+        lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2 + 80 +  + H_NORMAL_ITEM*(currTopLanItem-1)/2);
 
-        OneLancForm *ocf = topLanList.at(0);
-        ocf->setTopItem(true);
+        int selectY = 0;
+        for (int i = 0;i < topLanList.size(); i ++) {
+            OneLancForm *ocf = topLanList.at(i);
+            if (ocf->uuidName == uniqueName) {
+                selectY = ocf->y(); //获取选中item的y坐标
+                break;
+            }
+        }
+
+        // 选中元素下面的所有元素下移 H_LAN_ITEM_EXTEND
+        for (int i = 0;i < topLanList.size(); i ++) {
+            OneLancForm *ocf = topLanList.at(i);
+            if (ocf->y() > selectY) {
+                ocf->move(L_VERTICAL_LINE_TO_ITEM, ocf->y() + H_LAN_ITEM_EXTEND);
+            }
+        }
+
+        //选中的元素进行扩展
+        for (int i = 0;i < topLanList.size(); i ++) {
+            OneLancForm *ocf = topLanList.at(i);
+            if (ocf->uuidName == uniqueName) {
+                ocf->setTopItem(true);
+                selectY = ocf->y();
+            } else {
+                ocf->setTopItem(false);
+            }
+        }
 
         currSelNetName = uniqueName;
     }
@@ -2289,7 +2339,7 @@ void MainWindow::disNetDone()
     OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
     ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
     ccf->setIcon(false);
-    ccf->setConnedString(1, tr("Disconnected"));//"未连接"
+    ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
     ccf->isConnected = false;
     ccf->setTopItem(false);
     ccf->setAct(true);
@@ -2467,8 +2517,7 @@ void MainWindow::on_setNetSpeed()
                 start_rcv_rates = end_rcv_rates;
             }
         } else if(is_btnNetList_clicked == 1) {
-            //if ( objNetSpeed->getCurrentDownloadRates(objKyDBus->dbusLanCardName.toUtf8().data(), &start_rcv_rates, &start_tx_rates) == -1) {
-            if ( objNetSpeed->getCurrentDownloadRates("enp3s0", &start_rcv_rates, &start_tx_rates) == -1) {
+            if ( objNetSpeed->getCurrentDownloadRates(currConnIfname.toUtf8().data(), &start_rcv_rates, &start_tx_rates) == -1) {
                 start_tx_rates = end_tx_rates;
             }
         }

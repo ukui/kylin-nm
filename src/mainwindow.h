@@ -76,8 +76,8 @@
 #define W_ITEM 424
 
 #define Y_TOP_ITEM 57 //顶部item、topLanListWidget、topWifiListWidget的y坐标
-#define H_NORMAL_ITEM 60
-#define H_GAP_UP 10
+#define H_NORMAL_ITEM 60 //一个没有扩展的，普通item的高度
+#define H_GAP_UP 10 //H_NORMAL_ITEM 与 H_MIDDLE_WORD之间的间距
 #define H_MIDDLE_WORD 46 //"显示‘可用网络列表’的label"
 #define H_GAP_DOWN 5 //57 + 60 + 10 + 46 + 5 = 178
 #define X_MIDDLE_WORD 19
@@ -159,6 +159,7 @@ public:
     int is_hot_sopt_on = 0; //是否已经打开热点
 
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
+    QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
     int currSelNetNum = 0; //当前选中的item序号
 
 public slots:
@@ -270,6 +271,7 @@ private:
     int currentIconIndex;
     int activeWifiSignalLv;
     int disconnect_time = 0;
+    int currTopLanItem = 1; //当前连接的有线网个数
 
     long int start_rcv_rates = 0;	//保存开始时的流量计数
     long int end_rcv_rates = 0;	//保存结束时的流量计数

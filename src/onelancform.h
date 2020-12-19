@@ -64,7 +64,7 @@ public:
     void setTopItem(bool isSelected);
     void setAct(bool isAct);
 
-    void setConnedString(bool showLable, QString str);
+    void setConnedString(bool showLable, QString str, QString ifname);
 
     bool isSelected;
     bool isTopItem;

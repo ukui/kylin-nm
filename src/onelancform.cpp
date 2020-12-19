@@ -192,11 +192,13 @@ void OneLancForm::setTopItem(bool isSelected)
         ui->wbg->show();
         ui->btnConnSub->hide();
         this->isSelected = true;
+        ui->line->move(X_LINE_EXTEND, Y_LINE_EXTEND);
     } else {
         resize(W_ITEM, H_ITEM);
         ui->wbg->hide();
         ui->btnConnSub->hide();
         this->isSelected = false;
+        ui->line->move(X_LINE, Y_LINE);
     }
     if (isConnected) {
         ui->btnDisConn->show();
@@ -206,7 +208,6 @@ void OneLancForm::setTopItem(bool isSelected)
 
     ui->btnConn->hide();
     ui->wbg_2->hide();
-    ui->line->hide();
 
     this->isTopItem = true;
 }
@@ -221,13 +222,13 @@ void OneLancForm::setName(QString ssid, QString uuid, QString interface)
 }
 
 //根据有线网络连接与否，设置显示'已连接'文字的控件的可见与否
-void OneLancForm::setConnedString(bool showLable, QString str)
+void OneLancForm::setConnedString(bool showLable, QString str, QString ifname)
 {
     if (!showLable) {
         ui->lbConned->hide();
         ui->lbName->move(63, 18);
     } else {
-        ui->lbConned->setText(str);
+        ui->lbConned->setText(str+ifname);
     }
 }
 

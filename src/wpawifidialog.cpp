@@ -39,6 +39,8 @@ UpConnThread::~UpConnThread() {
 
 void UpConnThread::run() {
     QString cmdStr = "nmcli connection up " + this->conn_name;
+    qDebug()<<"qDebug: 激活连接: \n"<<
+              "qDebug: nmcli connection up " + this->conn_name;
     int res = Utils::m_system(cmdStr.toUtf8().data());
     emit connRes(res);
 }
@@ -98,7 +100,13 @@ void WpaWifiDialog::initUI() {
     nameLabel->setFixedWidth(100);
     nameLabel->setText(tr("Connection name"));
     nameEditor->setText(connectionName);
-    nameEditor->setEnabled(false);//暂时不允许编辑wifi名
+    if (connectionName == "") {
+        //添加隐藏wifi时
+        nameEditor->setEnabled(true);//允许编辑wifi名
+    } else {
+        //连接现有wifi时
+        nameEditor->setEnabled(false);//暂时不允许编辑wifi名
+    }
     nameLyt->addWidget(nameLabel);
     nameLyt->addWidget(nameEditor);
     nameFrame->setLayout(nameLyt);
@@ -255,6 +263,10 @@ void WpaWifiDialog::initCombox() {
     for (int i = 0; i < innerStringList.length(); i++) {
         innerCombox->addItem(innerStringList.at(i), QString(innerStringList.at(i)).toLower());
     }
+    if (connectionName == "") {
+        askPwdBtn->setChecked(true);
+        return;
+    }
 //    //读配置文件
     wifi_info = getWifiInfo(connectionName);
     if (wifi_info.length() < 4) {
@@ -327,6 +339,9 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
     int res = Utils::m_system(cmdStr.toUtf8().data());
     if (res == 0) {
         //有网络配置文件，密码已修改，接下来修改用户名和其他配置，然后激活连接
+        qDebug()<<"qDebug: 有配置文件，修改配置后激活:"<<"\n"<<
+                  "qDebug: nmcli connection modify " + nameEditor->text() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text()
+                  + " 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth " + innerCombox->currentData().toString();
         QString cmdStr_1 = "nmcli connection modify " + nameEditor->text() + " 802-1x.identity " + userEditor->text()
                            + " 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth " + innerCombox->currentData().toString();
         Utils::m_system(cmdStr_1.toUtf8().data());
@@ -337,12 +352,13 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
         //获取网卡名称
         KylinDBus mkylindbus;
         QString wifi_card_name= mkylindbus.dbusWiFiCardName;
-//        qDebug()<<"qDebug: con-name & ssid: "<<nameEditor->text()<<"\n"<<
-//                  "qDebug: wifi card name(ifname): "<<wifi_card_name<<"\n"<<
-//                  "qDebug: 802-1x.eap: "<<eapCombox->currentData().toString()<<"\n"<<
-//                  "qDebug: 802-1x.phase2-auth: "<<innerCombox->currentData().toString()<<"\n"<<
-//                  "qDebug: 802-1x.identity: "<<userEditor->text()<<"\n"<<
-//                  "qDebug: 802-1x.password: "<<pwdEditor->text();
+        qDebug()<<"qDebug: 无配置文件，使用如下配置新建配置文件:"<<"\n"<<
+                  "qDebug: con-name & ssid: "<<nameEditor->text()<<"\n"<<
+                  "qDebug: wifi card name(ifname): "<<wifi_card_name<<"\n"<<
+                  "qDebug: 802-1x.eap: "<<eapCombox->currentData().toString()<<"\n"<<
+                  "qDebug: 802-1x.phase2-auth: "<<innerCombox->currentData().toString()<<"\n"<<
+                  "qDebug: 802-1x.identity: "<<userEditor->text()<<"\n"<<
+                  "qDebug: 802-1x.password: "<<pwdEditor->text();
         QString create_cmd;
         create_cmd = "nmcli connection add con-name " + nameEditor->text() + " ifname "
                      + wifi_card_name + " ipv4.method auto type wifi ssid " + nameEditor->text()
@@ -394,6 +410,7 @@ void WpaWifiDialog::activateConnection() {
             Utils::m_system(cmdStr_2.toUtf8().data());
             syslog(LOG_DEBUG, "execute 'nmcli connection up' in function 'activateConnection' time out");
             qDebug() << "qDebug: activate time out!";
+            qDebug() << "qDebug: 连接超时（12秒超时时间）";
         });
         //设置超时时间
         timeout->start(12 * 1000);

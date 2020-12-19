@@ -532,10 +532,12 @@ void OneConnForm::toConnectWirelessNetwork()
         connect(wpadlg, &WpaWifiDialog::conn_done, this, [ = ]() {
             QString txt(tr("Conn Wifi Success"));
             mw->objKyDBus->showDesktopNotify(txt);
+            mw->on_btnWifiList_clicked();
         });
         connect(wpadlg, &WpaWifiDialog::conn_failed, this, [ = ]() {
             QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
             mw->objKyDBus->showDesktopNotify(txt);
+            mw->on_btnWifiList_clicked();
         });
         return;
     }

@@ -413,7 +413,7 @@ void WpaWifiDialog::activateConnection() {
             qDebug() << "qDebug: 连接超时（12秒超时时间）";
         });
         //设置超时时间
-        timeout->start(12 * 1000);
+        timeout->start(20 * 1000);
     });
     connect(upThread, &UpConnThread::connRes, this, [ = ](int res) {
         qDebug()<<"qDebug: Connect result is: "<<res;

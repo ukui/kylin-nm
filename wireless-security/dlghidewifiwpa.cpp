@@ -22,6 +22,7 @@
 #include "kylinheadfile.h"
 #include "src/backthread.h"
 #include "src/mainwindow.h"
+#include "src/wpawifidialog.h"
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -161,8 +162,31 @@ void DlgHideWifiWpa::changeDialog()
     } else if(ui->cbxSecurity->currentIndex()==2) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgHideWifiEapPeap *connHidWifiEapPeap = new DlgHideWifiEapPeap(1, 0, mw);
-        connHidWifiEapPeap->show();
+        WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, "");
+        QPoint pos = QCursor::pos();
+        QRect primaryGeometry;
+        for (QScreen *screen : qApp->screens()) {
+            if (screen->geometry().contains(pos)) {
+                primaryGeometry = screen->geometry();
+            }
+        }
+        if (primaryGeometry.isEmpty()) {
+            primaryGeometry = qApp->primaryScreen()->geometry();
+        }
+        wpadlg->move(primaryGeometry.width() / 2 - wpadlg->width() / 2, primaryGeometry.height() / 2 - wpadlg->height() / 2);
+        wpadlg->show();
+        connect(wpadlg, &WpaWifiDialog::conn_done, this, [ = ]() {
+            QString txt(tr("Conn Wifi Success"));
+            mw->objKyDBus->showDesktopNotify(txt);
+            mw->on_btnWifiList_clicked();
+        });
+        connect(wpadlg, &WpaWifiDialog::conn_failed, this, [ = ]() {
+            QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
+            mw->objKyDBus->showDesktopNotify(txt);
+            mw->on_btnWifiList_clicked();
+        });
+//        DlgHideWifiEapPeap *connHidWifiEapPeap = new DlgHideWifiEapPeap(1, 0, mw);
+//        connHidWifiEapPeap->show();
     } else if(ui->cbxSecurity->currentIndex()==3) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();

@@ -2054,7 +2054,6 @@ void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
     // 顶部所有元素回到原位
     for (int i = topLanList.size() - 1;i >= 0; i --) {
         OneLancForm *ocf = topLanList.at(i);
-        qDebug() << "网络的名称是"<< ocf->ssidName;
         ocf->move(L_VERTICAL_LINE_TO_ITEM, (topLanList.size() - 1 - i) * H_NORMAL_ITEM);
     }
 

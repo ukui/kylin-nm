@@ -198,9 +198,15 @@ void BackThread::execDisWifi()
 //to connect wired network
 void BackThread::execConnLan(QString connName, QString ifname)
 {
-    //disConnLanOrWifi("ethernet");
-
     KylinDBus objKyDbus;
+
+    //先断开当前网卡对应的已连接有线网
+    QString uuid = objKyDbus.getConnLanNameByIfname(ifname);
+    if (!uuid.isEmpty()) {
+        qDebug() << "断开网络：" <<uuid;
+        kylin_network_set_con_down(uuid.toUtf8().data());
+    }
+
     bool wiredCableState = objKyDbus.getWiredCableStateByIfname(ifname);
     if (wiredCableState) {
         // only if wired cable is plug in, can connect wired network

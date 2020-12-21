@@ -95,6 +95,7 @@ public slots:
     void onConnectionRemoved(QDBusObjectPath objPath);
     void toCreateNewLan();
     bool getWiredCableStateByIfname(QString ifname);
+    QString getConnLanNameByIfname(QString ifname);
     void onPropertiesChanged(QVariantMap qvm);
     void onLanPropertyChanged(QVariantMap qvm);
     void onIpPropertiesChanged();

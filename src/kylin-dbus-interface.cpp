@@ -686,6 +686,66 @@ bool KylinDBus::getWiredCableStateByIfname(QString ifname)
     return false;
 }
 
+//根据网卡接口的名称获取接口对应网线是否接入
+QString KylinDBus::getConnLanNameByIfname(QString ifname)
+{
+    QString uuidName = "--";
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+
+    QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    QList<QVariant> outArgs = result.arguments();
+    QVariant first = outArgs.at(0);
+    QDBusVariant dbvFirst = first.value<QDBusVariant>();
+    QVariant vFirst = dbvFirst.variant();
+    QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
+
+    QDBusObjectPath objPath;
+    dbusArgs.beginArray();
+    while (!dbusArgs.atEnd()) {
+        dbusArgs >> objPath;
+
+        QDBusInterface interfaceDevice( "org.freedesktop.NetworkManager",
+                                  objPath.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+
+        QDBusMessage replyDevices = interfaceDevice.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Devices");
+        QList<QVariant> outArgsDevices = replyDevices.arguments();
+        QVariant firstDevices = outArgsDevices.at(0);
+        QDBusVariant dbvFirstDevices = firstDevices.value<QDBusVariant>();
+        QVariant vFirstDevices = dbvFirstDevices.variant();
+        QDBusArgument dbusArgsDevices = vFirstDevices.value<QDBusArgument>();
+
+        QDBusObjectPath objPathDevices;
+        dbusArgsDevices.beginArray();
+        while (!dbusArgsDevices.atEnd()) {
+            dbusArgsDevices >> objPathDevices;
+            QDBusInterface interfaceInterface( "org.freedesktop.NetworkManager",
+                                      objPathDevices.path(),
+                                      "org.freedesktop.DBus.Properties",
+                                      QDBusConnection::systemBus() );
+
+            QDBusReply<QVariant> replyInterface = interfaceInterface.call("Get", "org.freedesktop.NetworkManager.Device", "Interface");
+            if (replyInterface.value().toString() == ifname) {
+                QDBusInterface interfaceUuid( "org.freedesktop.NetworkManager",
+                                          objPath.path(),
+                                          "org.freedesktop.DBus.Properties",
+                                          QDBusConnection::systemBus() );
+
+                QDBusReply<QVariant> replyDevices = interfaceUuid.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Uuid");
+                uuidName = replyDevices.value().toString();
+            }
+        }
+        dbusArgsDevices.endArray();
+    }
+    dbusArgs.endArray();
+
+    return uuidName;
+}
+
 //新增了一个网络，伴随着多了一个网络配置文件
 void KylinDBus::onNewConnection(QDBusObjectPath objPath)
 {

@@ -58,8 +58,8 @@ void KSimpleNM::execGetWifiList()
     type = 1;
 
     runShellProcess->start("nmcli -f signal,security,freq,ssid device wifi");
-    runShellProcess->waitForStarted(-1);
-    runShellProcess->waitForFinished(-1);
+    //runShellProcess->waitForStarted(-1);
+    //runShellProcess->waitForFinished(-1);
 }
 
 //读取获取到的结果

@@ -140,11 +140,16 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     lbFreq = new QLabel(ui->lbName);
     lbFreq->setAlignment(Qt::AlignCenter);
     lbFreq->setEnabled(false);
-    lbFreq->setStyleSheet("QLabel{border: 1px solid rgba(0, 0, 0, 0.5); background: transparent; color: rgba(0, 0, 0, 0.5); border-radius: 4px; font-size: 12px;}");
+    lbFreq->setFixedHeight(14);
+    lbFreq->setStyleSheet("QLabel{border: 1px solid rgba(165, 165, 165, 1);"
+                          "background: transparent; color: rgba(0, 0, 0, 0.5);"
+                          "border-radius: 3px; font-size: 10px;"
+                          "color: rgba(165, 165, 165, 1)}");
+    lbFreq->setContentsMargins(2, 0, 2, 0);
     lbFreq->hide();
     lbNameText = new QLabel(ui->lbName);
     lbNameLyt->setContentsMargins(0, 0, 0, 0);
-    lbNameLyt->setSpacing(4);
+    lbNameLyt->setSpacing(8);
     lbNameLyt->addWidget(lbNameText);
     lbNameLyt->addWidget(lbFreq);
     lbNameLyt->addStretch();

@@ -2621,7 +2621,7 @@ void MainWindow::connLanDone(int connFlag)
 {
     emit this->waitLanStop(); //停止加载动画
 
-    // Lan连接结果，0点击连接成功 1失败 3开机启动网络工具时已经连接
+    // Lan连接结果，0点击连接成功 1因网线未插入失败 2因mac地址匹配不上失败 3开机启动网络工具时已经连接
     if (connFlag == 0) {
         syslog(LOG_DEBUG, "Wired net already connected by clicking button");
         this->is_wired_line_ready = 1;
@@ -2637,7 +2637,15 @@ void MainWindow::connLanDone(int connFlag)
         this->is_wired_line_ready = 0; //without net line connect to computer
         is_stop_check_net_state = 0;
 
-        QString txt(tr("Conn Ethernet Fail"));
+        QString txt(tr("Without Lan Cable"));
+        objKyDBus->showDesktopNotify(txt);
+    }
+
+    if (connFlag == 2) {
+        qDebug()<<"The MACs of the device and the connection do not match.";
+        is_stop_check_net_state = 0;
+
+        QString txt(tr("MAC Address Mismatch"));
         objKyDBus->showDesktopNotify(txt);
     }
 

@@ -202,7 +202,7 @@ void BackThread::execConnLan(QString connName, QString ifname)
 
     //先断开当前网卡对应的已连接有线网
     QString uuid = objKyDbus.getConnLanNameByIfname(ifname);
-    if (!uuid.isEmpty()) {
+    if (uuid != "--") {
         //qDebug() << "断开网络：" <<uuid;
         kylin_network_set_con_down(uuid.toUtf8().data());
     }
@@ -210,12 +210,25 @@ void BackThread::execConnLan(QString connName, QString ifname)
     bool wiredCableState = objKyDbus.getWiredCableStateByIfname(ifname);
     if (wiredCableState) {
         // only if wired cable is plug in, can connect wired network
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
-        qDebug() << "连接命令" << cmd;
+        QString tmpPath = "/tmp/kylin-nm-connprop-" + QDir::home().dirName();
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "' > " + tmpPath;
         Utils::m_system(cmd.toUtf8().data());
-        qDebug()<<"debug: in function execConnLan, wired net state is: "<<QString::number(execGetIface()->lstate);
-        syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);
-        emit connDone(0);
+
+        QFile file(tmpPath);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-lanprop!");
+            qDebug()<<"Can't open the file /tmp/kylin-nm-lanprop!"<<endl;
+        }
+
+        QString txt = file.readAll();
+        file.close();
+        if (txt.indexOf("successfully") != -1) {
+            qDebug()<<"debug: in function execConnLan, wired net state is: "<<QString::number(execGetIface()->lstate);
+            syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);
+            emit connDone(0);
+        } else {
+            emit connDone(2);
+        }
     } else {
         qDebug()<<"connect wired network failed for without wired cable plug in.";
         syslog(LOG_DEBUG, "connect wired network failed for without wired cable plug in.");

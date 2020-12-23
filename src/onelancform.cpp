@@ -353,7 +353,7 @@ void OneLancForm::on_btnInfo_clicked()
     }
 
     BackThread *bt = new BackThread();
-    QString connProp = bt->getConnProp(ui->lbName->text());
+    QString connProp = bt->getConnProp(uuidName);
     QStringList propList = connProp.split("|");
     QString v4method, addr, mask, gateway, dns;
     foreach (QString line, propList) {

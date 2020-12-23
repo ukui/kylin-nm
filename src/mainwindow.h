@@ -291,6 +291,7 @@ private slots:
     void loadWifiListDone(QStringList slist);
     void updateWifiListDone(QStringList slist);
     QString TranslateLanName(QString lanName);
+    QString getMacByUuid(QString uuidName);
 
     void on_showWindowAction();
     void on_btnAdvConf_clicked();

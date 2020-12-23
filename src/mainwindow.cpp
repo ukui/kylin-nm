@@ -27,6 +27,7 @@
 #include <KWindowEffects>
 #include <QFont>
 #include <QFontMetrics>
+#include <QDir>
 
 QString llname, lwname, hideWiFiConn;
 int currentActWifiSignalLv, count_loop;
@@ -1388,15 +1389,21 @@ void MainWindow::getLanListDone(QStringList slist)
         //仅仅对有线网络进行添加列表处理
         if (ltype != "802-11-wireless" && ltype != "wifi" && ltype != "" && ltype != "--") {
             objKyDBus->getLanIpDNS(nuuid, true); //使用UUID获取有线网的ip和dns信息
+            QString macLan = getMacByUuid(nuuid); //有线网对应的mac地址
 
-            QString macAdd = "--";
+            QString macInterface = "--";
             QString mIfName = "--";
             if (objKyDBus->dbusIfName != "--") {
                 mIfName = objKyDBus->dbusIfName;
-                macAdd = objKyDBus->getLanMAC(objKyDBus->dbusIfName);
+                macInterface = objKyDBus->getLanMAC(objKyDBus->dbusIfName); //有限网卡对应的mac地址
+
+                if (macLan!="" && macLan!="--" && macLan != macInterface) {
+                    //continue; //有线网的permenant mac地址与网卡的地址不同，则不在列表中显示
+                    macInterface = macLan;
+                }
             } else {
                 mIfName = objKyDBus->multiWiredIfName.at(0); //使用默认的网络接口
-                macAdd = objKyDBus->dbusMacDefault; //使用默认的MAC地址
+                macInterface = objKyDBus->dbusMacDefault; //使用默认的MAC地址
             }
 
             //**********************创建已经连接的有线网item********************//
@@ -1416,7 +1423,7 @@ void MainWindow::getLanListDone(QStringList slist)
                         connect(ccfAct, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
                         ccfAct->setName(nname, nuuid, mIfName);
                         ccfAct->setIcon(true);
-                        ccfAct->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macAdd);
+                        ccfAct->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macInterface);
                         ccfAct->isConnected = true;
                         ccfAct->setTopItem(false);
                         ccfAct->setAct(true);
@@ -1477,7 +1484,7 @@ void MainWindow::getLanListDone(QStringList slist)
                 ocf->setName(nname, nuuid, mIfName);
                 ocf->setIcon(true);
                 ocf->setLine(true);
-                ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), macAdd);
+                ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), macInterface);
                 ocf->setConnedString(0, tr("Disconnected"), "");//"未连接"
                 ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
                 ocf->setSelected(false, false);
@@ -1843,6 +1850,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     this->stopLoading();
 }
 
+//用于中英文系统有线网络名称国际话
 QString MainWindow::TranslateLanName(QString lanName)
 {
     QString returnLanName = lanName;
@@ -1884,6 +1892,34 @@ QString MainWindow::TranslateLanName(QString lanName)
     }
 
     return returnLanName;
+}
+
+//使用uuid获取对应的mac地址
+QString MainWindow::getMacByUuid(QString uuidName)
+{
+    QString resultMac = "";
+
+    QString tmpPath = "/tmp/kylin-nm-lanprop-" + QDir::home().dirName();
+    QString cmd = "nmcli connection show '" + uuidName + "' > " + tmpPath;
+    Utils::m_system(cmd.toUtf8().data());
+
+    QFile file(tmpPath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-lanprop!");
+        qDebug()<<"Can't open the file /tmp/kylin-nm-lanprop!"<<endl;
+    }
+
+    QString txt = file.readAll();
+    QStringList txtLine = txt.split("\n");
+    file.close();
+
+    foreach (QString line, txtLine) {
+        if (line.startsWith("802-3-ethernet.mac-address:")) {
+            resultMac = line.mid(30).trimmed();
+        }
+    }
+
+    return resultMac;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

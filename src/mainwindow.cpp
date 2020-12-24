@@ -716,18 +716,42 @@ void MainWindow::handleIconClicked()
     } else if(screenGeometry.width() == availableGeometry.width() ) {
         if (trayIcon->geometry().y() > availableGeometry.height()/2) {
             //任务栏在下侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + availableGeometry.height() - this->height() - d);
+            if (screenGeometry.height() - 20 < availableGeometry.height()) {
+                //任务栏隐藏
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + availableGeometry.height() - this->height() - m );
+            } else {
+                //任务栏不隐藏
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + availableGeometry.height() - this->height() - d);
+            }
         } else {
             //任务栏在上侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + d);
+            if (screenGeometry.height() - 20 < availableGeometry.height()) {
+                //任务栏隐藏
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m );
+            } else {
+                //任务栏不隐藏
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + d);
+            }
         }
     } else if (screenGeometry.height() == availableGeometry.height()) {
         if (trayIcon->geometry().x() > availableGeometry.width()/2) {
             //任务栏在右侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - this->height() - d);
+            if (screenGeometry.width() - 20 < availableGeometry.width()) {
+                //任务栏隐藏
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
+            } else {
+                //任务栏不隐藏
+                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
+            }
         } else {
             //任务栏在左侧
-            this->move(screenGeometry.width() - availableGeometry.width() + d, screenMainRect.y() + screenGeometry.height() - this->height() - d);
+            if (screenGeometry.width() - 20 < availableGeometry.width()) {
+                //任务栏隐藏
+                this->move(screenGeometry.width() - availableGeometry.width() + m, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
+            } else {
+                //任务栏不隐藏
+                this->move(screenGeometry.width() - availableGeometry.width() + d, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
+            }
         }
     }
 }

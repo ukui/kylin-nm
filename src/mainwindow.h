@@ -147,6 +147,7 @@ public:
 
     //状态设置,0为假，1为真
     int is_update_wifi_list = 0; //是否是update wifi列表，而不是load wifi列表
+    int is_init_wifi_list = 0; //是否在启动软件时正在获取wifi的列表
     int is_by_click_connect = 0; //是否是通过点击连接按钮进行的连接
     int is_btnNetList_clicked = 1; //是否处于有线网界面
     int is_btnWifiList_clicked = 0; //是否处于无线网界面

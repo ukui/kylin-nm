@@ -460,6 +460,7 @@ void MainWindow::initNetwork()
                 connLanDone(3);
             }
         }
+        is_init_wifi_list = 1;
         on_btnWifiList_clicked();
 
         ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
@@ -646,20 +647,22 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
             if (is_btnNetList_clicked == 1) {
                 onBtnNetListClicked(0);
             }
-            is_stop_check_net_state = 1;
-            if (is_btnWifiList_clicked == 1) {
-                BackThread *loop_bt = new BackThread();
-                IFace *loop_iface = loop_bt->execGetIface();
+            if (!is_init_wifi_list) {
+                is_stop_check_net_state = 1;
+                if (is_btnWifiList_clicked == 1) {
+                    BackThread *loop_bt = new BackThread();
+                    IFace *loop_iface = loop_bt->execGetIface();
 
-                if (loop_iface->wstate != 2) {
-                    is_update_wifi_list = 1;
-                    this->ksnm->execGetWifiList(); //更新wifi列表
+                    if (loop_iface->wstate != 2) {
+                        is_update_wifi_list = 1;
+                        this->ksnm->execGetWifiList(); //更新wifi列表
+                    }
+
+                    delete loop_iface;
+                    loop_bt->deleteLater();
                 }
-
-                delete loop_iface;
-                loop_bt->deleteLater();
+                is_stop_check_net_state = 0;
             }
-            is_stop_check_net_state = 0;
         } else {
             this->hide();
         }
@@ -1472,7 +1475,7 @@ void MainWindow::getLanListDone(QStringList slist)
                         if (kk != actLanSsidName.size() - 1) {
                             ccfAct->setLine(true);
                         } else {
-                            ccfAct->setLine(false);
+                            ccfAct->setLine(false); //最后一个item不显示下划线
                         }
 
                         if (!objKyDBus->dbusLanIpv4.isEmpty()) {
@@ -1523,7 +1526,7 @@ void MainWindow::getLanListDone(QStringList slist)
     int n = itemList.size();
     if (n >= 1) {
         OneLancForm *lastItem = itemList.at(n-1);
-        lastItem->setLine(false);
+        lastItem->setLine(false); //最后一个item不显示下划线
         lbNoItemTip->hide();
     } else {
         if (!ifLanConnected) {
@@ -1562,6 +1565,7 @@ void MainWindow::getWifiListDone(QStringList slist)
 
     if (is_update_wifi_list == 0) {
         loadWifiListDone(slist);
+        is_init_wifi_list = 0;
     } else {
         updateWifiListDone(slist);
         is_update_wifi_list = 0;
@@ -1711,7 +1715,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     int n = itemList.size();
     if (n >= 1) {
         OneConnForm *lastItem = itemList.at(n-1);
-        lastItem->setLine(false);
+        lastItem->setLine(false); //最后一个item不需要下划线
         lbNoItemTip->hide();
     } else {
         if (ifWLanConnected) {

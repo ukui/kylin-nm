@@ -2712,6 +2712,9 @@ void MainWindow::connWifiDone(int connFlag)
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 3) {
         syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected");
+    } else if (connFlag == 4) {
+        QString txt(tr("Confirm your Wi-Fi password"));
+        objKyDBus->showDesktopNotify(txt);
     }
 }
 

@@ -746,7 +746,8 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         if (connFlag == 2) {
             mw->is_stop_check_net_state = 0;
         } else {
-            connType = "RequestPassword";
+            mw->is_stop_check_net_state = 0;
+            //connType = "RequestPassword";
         }
 
         //设置输入密码框被选中
@@ -757,11 +758,11 @@ void OneConnForm::slotConnWifiResult(int connFlag)
 
     if (connFlag == 1) {
         // 使用配置文件连接失败，需要删除该配置文件
-        QString txt(tr("Conn Wifi Failed"));//"连接 Wifi 失败"
-        syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", lbNameText->text().toUtf8().data());
+        //QString txt(tr("Connect Wifi Failed"));//"连接 Wifi 失败"
+        //syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", lbNameText->text().toUtf8().data());
 
-        KylinDBus kylindbus;
-        kylindbus.showDesktopNotify(txt);
+        //KylinDBus kylindbus;
+        //kylindbus.showDesktopNotify(txt);
         //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + lbNameText->text() + "'";
         int status = system(cmd.toUtf8().data());

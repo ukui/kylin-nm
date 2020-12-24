@@ -259,7 +259,7 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
     }
     QString line = file.readLine();
     file.close();
-    qDebug()<<"debug:  chenlelin "<< line;
+    qDebug()<<"connect result of wifi: "<< line;
 
     if (line.indexOf("successfully") != -1) {
         emit connDone(0);

@@ -1551,6 +1551,15 @@ void MainWindow::getWifiListDone(QStringList slist)
 {
     qDebug()<<"debug: oldWifiSlist.size()="<<oldWifiSlist.size()<<"   slist.size()="<<slist.size();
 
+    //若slist为空，则使用上一次获取到的列表
+    if (slist.size() == 1 && slist.at(0) == "") {
+        if (oldWifiSlist.size() == 1 && oldWifiSlist.at(0) == "") {
+            return;
+        } else {
+            slist = oldWifiSlist;
+        }
+    }
+
     if (is_update_wifi_list == 0) {
         loadWifiListDone(slist);
     } else {

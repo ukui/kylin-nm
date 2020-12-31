@@ -245,6 +245,10 @@ void WpaWifiDialog::initUI() {
     mainLyt->setSpacing(8);
     mainLyt->setContentsMargins(8, 16, 8, 16);
     mainWidget->setLayout(mainLyt);
+
+    nameEditor->setContextMenuPolicy(Qt::NoContextMenu); //禁止LineEdit的右键菜单
+    userEditor->setContextMenuPolicy(Qt::NoContextMenu);
+    pwdEditor->setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 void WpaWifiDialog::initCombox() {

@@ -118,6 +118,9 @@ DlgHideWifiWpa::DlgHideWifiWpa(int type, MainWindow *mainWindow, QWidget *parent
         ui->checkBoxPwd->setEnabled(false);
     }
 
+    ui->leNetName->setContextMenuPolicy(Qt::NoContextMenu);//禁止LineEdit的右键菜单
+    ui->lePassword->setContextMenuPolicy(Qt::NoContextMenu);
+
     this->setFixedSize(432,397);
 
     this->mw = mainWindow;
@@ -137,15 +140,18 @@ void DlgHideWifiWpa::mousePressEvent(QMouseEvent *event){
         this->dragPos = event->globalPos();
         event->accept();
     }
+    return QDialog::mousePressEvent(event);
 }
 void DlgHideWifiWpa::mouseReleaseEvent(QMouseEvent *event){
     this->isPress = false;
+    return QDialog::mouseReleaseEvent(event);
 }
 void DlgHideWifiWpa::mouseMoveEvent(QMouseEvent *event){
     if(this->isPress){
         this->move(this->winPos - (this->dragPos - event->globalPos()));
         event->accept();
     }
+    return QDialog::mouseMoveEvent(event);
 }
 
 //切换到其他Wi-Fi安全类型

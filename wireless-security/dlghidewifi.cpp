@@ -108,6 +108,8 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
         ui->btnConnect->setEnabled(true);
     }
 
+    ui->leNetName->setContextMenuPolicy(Qt::NoContextMenu); //禁止LineEdit的右键菜单
+
     this->setFixedSize(432,358);
 
     this->mw = mainWindow;
@@ -127,15 +129,19 @@ void DlgHideWifi::mousePressEvent(QMouseEvent *event){
         this->dragPos = event->globalPos();
         event->accept();
     }
+
+    return QDialog::mousePressEvent(event);
 }
 void DlgHideWifi::mouseReleaseEvent(QMouseEvent *event){
     this->isPress = false;
+    return QDialog::mouseReleaseEvent(event);
 }
 void DlgHideWifi::mouseMoveEvent(QMouseEvent *event){
     if(this->isPress){
         this->move(this->winPos - (this->dragPos - event->globalPos()));
         event->accept();
     }
+    return QDialog::mouseMoveEvent(event);
 }
 
 //切换到其他Wi-Fi安全类型

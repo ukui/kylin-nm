@@ -1281,6 +1281,7 @@ void MainWindow::on_btnWifiList_clicked()
     }
 
     if (iface->wstate != 2) {
+        qDebug()<<"debug: WiFi的开关已经打开";
         btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();
@@ -1288,6 +1289,7 @@ void MainWindow::on_btnWifiList_clicked()
         this->startLoading();
         this->ksnm->execGetWifiList();
     } else {
+        qDebug()<<"debug: WiFi的开关已经关闭";
         btnWireless->setSwitchStatus(false);
         delete topWifiListWidget; //清空top列表
         createTopWifiUI(); //创建顶部无线网item
@@ -1564,10 +1566,12 @@ void MainWindow::getWifiListDone(QStringList slist)
     }
 
     if (is_update_wifi_list == 0) {
+        qDebug() << "加载无线列表";
         loadWifiListDone(slist);
         is_init_wifi_list = 0;
     } else {
-        updateWifiListDone(slist);
+        //updateWifiListDone(slist);
+        qDebug() << "更新无线列表";
         is_update_wifi_list = 0;
     }
     oldWifiSlist = slist;
@@ -1576,6 +1580,12 @@ void MainWindow::getWifiListDone(QStringList slist)
 // 加载wifi列表
 void MainWindow::loadWifiListDone(QStringList slist)
 {
+    qDebug() << "         ";
+    foreach (QString sss, slist) {
+        qDebug() << "列表是： "<< sss;
+    }
+    qDebug() << "         ";
+
     delete topWifiListWidget; //清空top列表
     createTopWifiUI(); //创建topWifiListWidget
 

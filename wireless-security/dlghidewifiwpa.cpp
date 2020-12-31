@@ -28,6 +28,8 @@
 #include <stdlib.h>
 
 #include <QDir>
+#include <QtConcurrent>
+#include <QFuture>
 
 DlgHideWifiWpa::DlgHideWifiWpa(int type, MainWindow *mainWindow, QWidget *parent) :
     isUsed(type),
@@ -276,6 +278,8 @@ void DlgHideWifiWpa::on_btnCancel_clicked()
 
 void DlgHideWifiWpa::on_btnConnect_clicked()
 {
+    mw->is_stop_check_net_state = 1;
+
     QThread *t = new QThread();
     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
     connect(t, SIGNAL(started()), this, SLOT(slotStartLoading()));
@@ -308,10 +312,10 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
             if(text.indexOf("Scanning not allowed") != -1){x = 1;} else { x = 0;}
         } while(x == 1);
 
-        QTimer::singleShot(5*1000, this, SLOT(on_execSecConn() ));
+        QTimer::singleShot(8*1000, this, SLOT(on_execSecConn() ));
     } else {
         bt->execConnWifi(wifiName);
-        QTimer::singleShot(6*1000, this, SLOT(emitSignal() ));
+        QTimer::singleShot(4*1000, this, SLOT(emitSignal() ));
     }
     this->close();
 }
@@ -353,14 +357,35 @@ void DlgHideWifiWpa::on_execSecConn()
     QString str = "nmcli device wifi connect " + strWifiname + " password " + strWifiPassword;
     int status = system(str.toUtf8().data());
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_execSecConn' failed");}
-    QTimer::singleShot(3*1000, this, SLOT(emitSignal() ));
+    QTimer::singleShot(7*1000, this, SLOT(emitSignal() ));
 }
 
 void DlgHideWifiWpa::emitSignal()
 {
-    emit reSetWifiList();
-    mw->stopLoading();
     emit this->stopSignal();
+    QFuture < void > future =  QtConcurrent::run([=](){
+        int xx = 1;
+        int nn = 0;
+        do {
+            BackThread *bt = new BackThread();
+            IFace *iface = bt->execGetIface();
+
+            sleep(1);
+            nn += 1;
+            if (nn == 8) {
+                xx = 0;
+            } else {
+                if (iface->wstate != 2) {
+                    emit reSetWifiList();
+                    mw->stopLoading();
+                    xx = 0;
+                }
+            }
+
+            delete iface;
+            bt->deleteLater();
+        } while(xx == 1);
+    });
 }
 
 void DlgHideWifiWpa::paintEvent(QPaintEvent *event)

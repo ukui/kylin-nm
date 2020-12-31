@@ -61,6 +61,7 @@ private slots:
 signals:
     void reSetWifiList();
     void stopSignal();
+    void stopSignalAgain();
 
 private:
     Ui::DlgHideWifiWpa *ui;

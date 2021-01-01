@@ -1566,12 +1566,10 @@ void MainWindow::getWifiListDone(QStringList slist)
     }
 
     if (is_update_wifi_list == 0) {
-        qDebug() << "加载无线列表";
         loadWifiListDone(slist);
         is_init_wifi_list = 0;
     } else {
-        //updateWifiListDone(slist);
-        qDebug() << "更新无线列表";
+        updateWifiListDone(slist);
         is_update_wifi_list = 0;
     }
     oldWifiSlist = slist;
@@ -1580,12 +1578,6 @@ void MainWindow::getWifiListDone(QStringList slist)
 // 加载wifi列表
 void MainWindow::loadWifiListDone(QStringList slist)
 {
-    qDebug() << "         ";
-    foreach (QString sss, slist) {
-        qDebug() << "列表是： "<< sss;
-    }
-    qDebug() << "         ";
-
     delete topWifiListWidget; //清空top列表
     createTopWifiUI(); //创建topWifiListWidget
 

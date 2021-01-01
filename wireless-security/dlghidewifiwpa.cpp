@@ -291,28 +291,35 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
     BackThread *bt = new BackThread();
     strWifiname = wifiName;
     strWifiPassword = wifiPassword;
-    if (isUsed == 0){
-        int x = 0;
-        do{
-            sleep(1);
-            QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
-            QString cmd = "nmcli device wifi connect " + wifiName + " password " + wifiPassword + " hidden yes > " + tmpPath;
+    if (isUsed == 0) {
+        QFuture < void > future1 =  QtConcurrent::run([=](){
+            int x(1);
+            do {
+                sleep(1);
+                QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
+                QString cmd = "nmcli device wifi connect " + wifiName + " password " + wifiPassword + " hidden yes > " + tmpPath;
 
-            int status = system(cmd.toUtf8().data());
-            if (status != 0) {
-                syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");
-            }
+                int status = system(cmd.toUtf8().data());
+                if (status != 0) {
+                    syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");
+                }
 
-            QFile file(tmpPath);
-            if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                qDebug()<<"Can't open the file!"<<endl;
-            }
-            QString text = file.readAll();
-            file.close();
-            if(text.indexOf("Scanning not allowed") != -1){x = 1;} else { x = 0;}
-        } while(x == 1);
+                QFile file(tmpPath);
+                if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    qDebug()<<"Can't open the file!"<<endl;
+                }
+                QString text = file.readAll();
+                qDebug() << "hhhhhhhh";
+                qDebug() << text;
+                file.close();
+                if(text.indexOf("Scanning not allowed") != -1 || text.isEmpty()){x = 1;} else { x = 0;}
+            } while (x == 1);
 
-        QTimer::singleShot(8*1000, this, SLOT(on_execSecConn() ));
+            emit this->stopSignal();
+            emit reSetWifiList();
+            //mw->stopLoading();
+            //QTimer::singleShot(8*1000, this, SLOT(on_execSecConn() ));
+        });
     } else {
         bt->execConnWifi(wifiName);
         QTimer::singleShot(4*1000, this, SLOT(emitSignal() ));
@@ -357,6 +364,7 @@ void DlgHideWifiWpa::on_execSecConn()
     QString str = "nmcli device wifi connect " + strWifiname + " password " + strWifiPassword;
     int status = system(str.toUtf8().data());
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_execSecConn' failed");}
+    qDebug() << "debug: 准备等待7秒";
     QTimer::singleShot(7*1000, this, SLOT(emitSignal() ));
 }
 
@@ -376,6 +384,7 @@ void DlgHideWifiWpa::emitSignal()
                 xx = 0;
             } else {
                 if (iface->wstate != 2) {
+                    qDebug() << "debug: 发出信号";
                     emit reSetWifiList();
                     mw->stopLoading();
                     xx = 0;

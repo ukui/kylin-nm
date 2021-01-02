@@ -2569,6 +2569,10 @@ void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
 
 void MainWindow::on_checkWifiListChanged()
 {
+    if (is_init_wifi_list || is_connect_hide_wifi) {
+        return; //遇到启动软件第一次加载wifi列表的时候，或正在连接隐藏wifi，停止更新
+    }
+
     if (is_stop_check_net_state==0 && this->is_btnWifiList_clicked==1 && this->isVisible()) {
         BackThread *loop_bt = new BackThread();
         IFace *loop_iface = loop_bt->execGetIface();

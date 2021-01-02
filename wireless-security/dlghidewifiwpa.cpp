@@ -279,6 +279,7 @@ void DlgHideWifiWpa::on_btnCancel_clicked()
 void DlgHideWifiWpa::on_btnConnect_clicked()
 {
     mw->is_stop_check_net_state = 1;
+    mw->is_connect_hide_wifi = 1;
 
     QThread *t = new QThread();
     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
@@ -293,9 +294,15 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
     strWifiPassword = wifiPassword;
     if (isUsed == 0) {
         QFuture < void > future1 =  QtConcurrent::run([=](){
-            int x(1);
+            int x(1), n(0);
             do {
                 sleep(1);
+                n += 1;
+                if (n >= 20) {
+                    x = 0;
+                    mw->is_connect_hide_wifi = 0;
+                }
+
                 QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
                 QString cmd = "nmcli device wifi connect " + wifiName + " password " + wifiPassword + " hidden yes > " + tmpPath;
 
@@ -309,8 +316,6 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
                     qDebug()<<"Can't open the file!"<<endl;
                 }
                 QString text = file.readAll();
-                qDebug() << "hhhhhhhh";
-                qDebug() << text;
                 file.close();
                 if(text.indexOf("Scanning not allowed") != -1 || text.isEmpty()){x = 1;} else { x = 0;}
             } while (x == 1);

@@ -647,7 +647,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
             if (is_btnNetList_clicked == 1) {
                 onBtnNetListClicked(0);
             }
-            if (!is_init_wifi_list) {
+            if (!is_init_wifi_list && !is_connect_hide_wifi) {
                 is_stop_check_net_state = 1;
                 if (is_btnWifiList_clicked == 1) {
                     BackThread *loop_bt = new BackThread();
@@ -1281,7 +1281,6 @@ void MainWindow::on_btnWifiList_clicked()
     }
 
     if (iface->wstate != 2) {
-        qDebug()<<"debug: WiFi的开关已经打开";
         btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();
@@ -1737,6 +1736,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     this->stopLoading();
     is_stop_check_net_state = 0;
+    is_connect_hide_wifi = 0;
 }
 
 // 更新wifi列表
@@ -2519,7 +2519,7 @@ void MainWindow::on_btnHotspotState()
 //处理外界对网络的连接与断开
 void MainWindow::onExternalConnectionChange(QString type)
 {
-    if (!is_stop_check_net_state) {
+    if (!is_connect_hide_wifi && !is_stop_check_net_state) {
         is_stop_check_net_state = 1;
         if (type == "802-3-ethernet" || type == "ethernet") {
             QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));

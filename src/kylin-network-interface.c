@@ -122,7 +122,7 @@ conlist *kylin_network_get_conlist_info()
         fgets(StrLine,1024,fp);
 
         char *index=StrLine;
-        char conname[100];
+        char conname[256];
 
         //截取连接名称
         int num=0;
@@ -144,7 +144,7 @@ conlist *kylin_network_get_conlist_info()
         // printf("%s\n",clist[count].con_name);
 
         //截取连接类型
-        char type[100];
+        char type[256];
         for(index;*index!='\n';index++)
         {
             if(*index==' ')
@@ -241,7 +241,7 @@ activecon *kylin_network_get_activecon_info()
         fgets(StrLine,1024,fp);
 
         char *index=StrLine;
-        char conname[100];
+        char conname[256];
 
         //截取连接名称
         int num=0;
@@ -263,7 +263,7 @@ activecon *kylin_network_get_activecon_info()
         // printf("%s\n",activelist[count].con_name);
 
         //截取连接类型
-        char type[100];
+        char type[256];
         for(index;*index!='\n';index++)
         {
             if(*index==' ')
@@ -298,7 +298,7 @@ activecon *kylin_network_get_activecon_info()
 
         //截取连接所属设备
         char *index3=index2;
-        char dev[100];
+        char dev[256];
         for(index3;*index3!='\n';index3++)
         {
             if(*index3==' ')
@@ -333,7 +333,7 @@ activecon *kylin_network_get_activecon_info()
 //创建新的以太网连接
 void kylin_network_create_new_ethernet(char *con_name,char *if_name)
 {
-    char str[100];
+    char str[256];
     char *net_type="ethernet";
     sprintf(str,"nmcli connection add con-name %s ifname %s type %s",con_name,if_name,net_type);
     int status = system(str);
@@ -353,7 +353,7 @@ void kylin_network_create_new_wifi(char *con_name, char *if_name)
 //删除以太网连接
 void kylin_network_del_ethernet_con(char *con_name)
 {
-    char str[100];
+    char str[256];
     sprintf(str,"nmcli connection delete %s",con_name);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'kylin_network_del_ethernet_con' failed");}
@@ -362,7 +362,7 @@ void kylin_network_del_ethernet_con(char *con_name)
 //设置动态分配ip
 void kylin_network_set_automethod(char *con_name)
 {
-    char str[100];
+    char str[256];
     char *automethod="auto";
     sprintf(str,"nmcli connection modify '%s' ipv4.method %s",con_name,automethod);
     int status = system(str);
@@ -372,7 +372,7 @@ void kylin_network_set_automethod(char *con_name)
 //设置手动分配ip
 void kylin_network_set_manualmethod(char *con_name,char *ip)
 {
-    char str[100];
+    char str[256];
     char *method="manual";
     sprintf(str,"nmcli connection modify '%s' ipv4.method %s ipv4.address %s",con_name,method,ip);
     int status = system(str);
@@ -391,7 +391,7 @@ void kylin_network_set_manualall(char *con_name, char *addr, char *mask, char *g
 //设置是否自动连接
 void kylin_network_set_autoconnect(char *con_name,bool autocon)
 {
-    char str[100];
+    char str[256];
     if(autocon==false)
     {
         char *ac="no";
@@ -408,7 +408,7 @@ void kylin_network_set_autoconnect(char *con_name,bool autocon)
 //修改ip
 void kylin_network_mod_ip(char *con_name,char *ip)
 {
-    char str[100];
+    char str[256];
     sprintf(str,"nmcli connection modify %s ipv4.address %s",con_name,ip);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_mod_ip' failed");}
@@ -417,7 +417,7 @@ void kylin_network_mod_ip(char *con_name,char *ip)
 //修改网关
 void kylin_network_mod_gateway(char *con_name,char *gw)
 {
-    char str[100];
+    char str[256];
     sprintf(str,"nmcli connection modify %s ipv4.gateway %s",con_name,gw);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_mod_gateway' failed");}
@@ -426,7 +426,7 @@ void kylin_network_mod_gateway(char *con_name,char *gw)
 //修改dns
 void kylin_network_mod_dns(char *con_name,char *dns)
 {
-    char str[100];
+    char str[256];
     sprintf(str,"nmcli connection modify %s ipv4.dns %s",con_name,dns);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_mod_dns' failed");}
@@ -435,7 +435,7 @@ void kylin_network_mod_dns(char *con_name,char *dns)
 //连接以太网
 void kylin_network_set_con_up(char *con_name)
 {
-    char str[100];
+    char str[256];
     sprintf(str,"nmcli connection up '%s'",con_name);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection up' in function 'kylin_network_set_con_up' failed");}
@@ -444,7 +444,7 @@ void kylin_network_set_con_up(char *con_name)
 //断开以太网
 void kylin_network_set_con_down(char *con_name)
 {
-    char str[100];
+    char str[256];
     sprintf(str,"nmcli connection down '%s'",con_name);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection down' in function 'kylin_network_set_con_down' failed");}
@@ -453,7 +453,7 @@ void kylin_network_set_con_down(char *con_name)
 //连接wifi
 void kylin_network_set_wifi_up(char *con_name,char *passwd)
 {
-    char str[100];
+    char str[256];
     sprintf(str,"export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '%s' password '%s'", con_name,passwd);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'kylin_network_set_wifi_up' failed");}
@@ -462,8 +462,8 @@ void kylin_network_set_wifi_up(char *con_name,char *passwd)
 //断开wifi连接
 void kylin_network_set_wifi_down(char *if_name)
 {
-    char str[100];
-    sprintf(str,"nmcli device disconnect '%s'",if_name);
+    char str[256];
+    snprintf(str,sizeof(str),"nmcli device disconnect '%s'",if_name);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device disconnect' in function 'kylin_network_set_wifi_down' failed");}
 }
@@ -527,7 +527,7 @@ wifilist *kylin_network_get_wifilist_info()
             num++;
 
         }
-        char ssid[100];
+        char ssid[256];
         char *ssidindex=index-1;
         int ssidnum=0;
         for(ssidindex;*ssidindex==' ';ssidindex--)ssidnum++;

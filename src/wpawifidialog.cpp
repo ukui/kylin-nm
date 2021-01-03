@@ -343,12 +343,12 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
     QString cmdStr = "nmcli connection modify " +  nameEditor->text() + " ipv4.method auto";
     int res = Utils::m_system(cmdStr.toUtf8().data());
     if (res == 0) {
-        //有网络配置文件，密码已修改，接下来修改用户名和其他配置，然后激活连接
+        //有网络配置文件，接下来修改网络配置，然后激活连接
         qDebug()<<"qDebug: 有配置文件，修改配置后激活:"<<"\n"<<
-                  "qDebug: nmcli connection modify " + nameEditor->text() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text()
-                  + " 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth " + innerCombox->currentData().toString();
-        QString cmdStr_1 = "nmcli connection modify " + nameEditor->text() + " 802-1x.identity " + userEditor->text()
-                           + " 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth " + innerCombox->currentData().toString();
+                  "qDebug: nmcli connection modify " + nameEditor->text() + " 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth "
+                  + innerCombox->currentData().toString() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text();
+        QString cmdStr_1 = "nmcli connection modify " + nameEditor->text() + " 802-1x.eap " + eapCombox->currentData().toString()+ " 802-1x.phase2-auth "
+                + innerCombox->currentData().toString() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text();
         Utils::m_system(cmdStr_1.toUtf8().data());
         //激活连接
         activateConnection();

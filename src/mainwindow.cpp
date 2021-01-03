@@ -1101,7 +1101,6 @@ void MainWindow::onBtnWifiClicked(int flag)
             if (checkWlOn()) {
                 if (flag != 4) { //以防第二张无线网卡插入时断网
                     is_stop_check_net_state = 1;
-                    qDebug() << "aaa111";
                     objKyDBus->setWifiSwitchState(false);
                     lbTopWifiList->hide();
                     btnAddNet->hide();
@@ -1287,6 +1286,29 @@ void MainWindow::on_btnWifiList_clicked()
 
         this->startLoading();
         this->ksnm->execGetWifiList();
+    } else if (iface->wstate == 3) { //连接中，正在配置wifi设备
+        btnWireless->setSwitchStatus(true);
+        lbTopWifiList->show();
+        btnAddNet->show();
+
+        QList<OneConnForm*> topwifis = topWifiListWidget->findChildren<OneConnForm*>();
+        foreach(OneConnForm* topwifi, topwifis)
+        {
+            delete topwifi;
+            topwifi = NULL;
+        }
+        // 当前连接的wifi
+        OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
+        ccf->setName(tr("Not connected"));//"当前未连接任何 Wifi"
+
+        ccf->setSignal("0", "--");
+        ccf->setRate("0");
+        ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
+        ccf->isConnected = false;
+        ccf->setTopItem(false);
+        ccf->setAct(true);
+        ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
+        ccf->show();
     } else {
         qDebug()<<"debug: WiFi的开关已经关闭";
         btnWireless->setSwitchStatus(false);

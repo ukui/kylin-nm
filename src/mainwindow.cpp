@@ -1610,6 +1610,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 获取当前连接的wifi name
     QString actWifiName = "--";
+    actWifissid = "--";
     activecon *act = kylin_network_get_activecon_info();
     int index = 0;
     while (act[index].con_name != NULL) {
@@ -1634,6 +1635,22 @@ void MainWindow::loadWifiListDone(QStringList slist)
         lbLoadDownImg->hide();
         lbLoadUpImg->hide();
         ccf->setTopItem(false);
+    } else {
+        QProcess * process = new QProcess;
+        QString name = actWifiName;
+        if (name.contains(" ")) {
+            name.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
+        }
+        process->start(QString("nmcli -f 802-11-wireless.ssid connection show %1").arg(name));
+        connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+            process->deleteLater();
+        });
+        connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
+            QString str = process->readAllStandardOutput();
+            actWifissid = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2);
+            qDebug()<<actWifissid;
+        });
+        process->waitForFinished();
     }
     ccf->setAct(true);
     ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
@@ -1656,6 +1673,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     }
     QStringList wnames;
     int count = 0;
+
     for (int i = 1, j = 0; i < slist.size(); i ++) {
         QString line = slist.at(i);
         QString wsignal = line.mid(0, indexSecu).trimmed();
@@ -1690,7 +1708,8 @@ void MainWindow::loadWifiListDone(QStringList slist)
         }
         if (wname != "" && wname != "--") {
             // 当前连接的wifi
-            if (wname == actWifiName) {
+//            if (wname == actWifiName) {
+            if (wname == actWifissid) {
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
                 ccf->setName(wname);

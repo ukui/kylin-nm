@@ -335,7 +335,8 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
         appendWifiInfo(nameEditor->text(), eapCombox->currentData().toString(), innerCombox->currentData().toString(), userEditor->text(), askPwdBtn->isChecked());
         has_config = true;
     }
-    QString cmdStr = "nmcli connection modify " + nameEditor->text() + " 802-1x.password " + pwdEditor->text();
+//    QString cmdStr = "nmcli connection modify " + nameEditor->text() + " 802-1x.password " + pwdEditor->text();
+    QString cmdStr = "nmcli connection modify " +  nameEditor->text() + " ipv4.method auto";
     int res = Utils::m_system(cmdStr.toUtf8().data());
     if (res == 0) {
         //有网络配置文件，密码已修改，接下来修改用户名和其他配置，然后激活连接
@@ -410,7 +411,7 @@ void WpaWifiDialog::activateConnection() {
             Utils::m_system(cmdStr_2.toUtf8().data());
             syslog(LOG_DEBUG, "execute 'nmcli connection up' in function 'activateConnection' time out");
             qDebug() << "qDebug: activate time out!";
-            qDebug() << "qDebug: 连接超时（12秒超时时间）";
+            qDebug() << "qDebug: 连接超时（30秒超时时间）";
         });
         //设置超时时间
         timeout->start(30 * 1000);

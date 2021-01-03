@@ -96,12 +96,13 @@ IFace* BackThread::execGetIface()
 
                 if (istateStr == "unmanaged" || istateStr == "unavailable") {
                     iface->wstate = 2; //switch of wireless device is off
-                }
-                if (istateStr == "disconnected") {
+                } else if (istateStr == "disconnected") {
                     iface->wstate = 1; //wireless network is disconnected
-                }
-                if (istateStr == "connected") {
+                } else if (istateStr == "connected") {
                     iface->wstate = 0; //wireless network is connected
+                } else {
+                    //连接中，正在配置
+                    iface->wstate = 3;
                 }
             }
         }

@@ -806,6 +806,8 @@ void MainWindow::on_showWindowAction()
 {
     handleIconClicked();
     this->showNormal();
+    this->raise();
+    this->activateWindow();
 }
 
 

@@ -424,13 +424,6 @@ void MainWindow::getInitLanSlist()
         }
     }
 
-    qDebug() << "                    ";
-    foreach (QString sss, oldLanSlist) {
-        qDebug() << "AAAAA the oldLanSlist is:"<<sss;
-        //syslog(LOG_DEBUG, "AAAAA the oldLanSlist is: %s",sss.toUtf8().data());
-    }
-    qDebug() << "                    ";
-
     pclose(p_file);
 }
 
@@ -1184,7 +1177,6 @@ void MainWindow::onBtnWifiClicked(int flag)
             qDebug()<<"receive an invalid value in function onBtnWifiClicked";
             syslog(LOG_DEBUG, "receive an invalid value in function onBtnWifiClicked");
         }
-
     } else {
         lbTopWifiList->hide();
         btnAddNet->hide();
@@ -1201,7 +1193,6 @@ void MainWindow::onBtnWifiClicked(int flag)
 
         disWifiStateKeep();
     }
-
 }
 
 void MainWindow::onBtnNetListClicked(int flag)
@@ -1370,29 +1361,17 @@ void MainWindow::on_btnWifiList_clicked()
 // 获取lan列表回调
 void MainWindow::getLanListDone(QStringList slist)
 {
-    qDebug() << "                    ";
-    qDebug() <<slist;
-    qDebug() << "                    ";
-    foreach (QString sss, slist) {
-        qDebug() << "AAAAA the slist is:"<<sss;
-        //syslog(LOG_DEBUG, "AAAAA the slist is: %s",sss.toUtf8().data());
-    }
-    qDebug() << "                    ";
-
     //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldLanSlist) {
         slist = oldLanSlist;
         this->ksnm->isUseOldLanSlist = false;
     }
-    syslog(LOG_DEBUG, "AAAAAAAAAAAAAAAAAAAAAAA");
 
     //若slist为空，则也使用上一次获取到的列表
     if (slist.size() == 1 && slist.at(0) == "") {
         if (oldLanSlist.size() == 1 && oldLanSlist.at(0) == "") {
-            syslog(LOG_DEBUG, "AAAAAAAAAAAAAAAAAAAAAAB");
             return;
         } else {
-            syslog(LOG_DEBUG, "AAAAAAAAAAAAAAAAAAAAAAC");
             slist = oldLanSlist;
         }
     }
@@ -1413,7 +1392,6 @@ void MainWindow::getLanListDone(QStringList slist)
 
     // 若当前lan name为"--"，设置OneConnForm
     if (currConnNames.size() == 0) {
-        syslog(LOG_DEBUG, "AAAAAAAAAAAAAAAAAAAAAAD");
         OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
         ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
         ccf->setIcon(false);
@@ -1431,24 +1409,13 @@ void MainWindow::getLanListDone(QStringList slist)
         ccf->setLine(false);
         currTopLanItem = 1;
     } else {
-        syslog(LOG_DEBUG, "AAAAAAAAAAAAAAAAAAAAAAE");
         int i = 0;
         do {
-            syslog(LOG_DEBUG, "AAAAAAAAAAAAAAAAAAAAAAF");
             actLanSsidName.append(currConnNames.at(i)); //网络名称
             actLanUuidName.append(currConnNames.at(i+1)); //网络唯一ID
             i += 2;
         } while(i<currConnNames.size());
         currTopLanItem = actLanSsidName.size();
-
-        syslog(LOG_DEBUG, "AAAAAAAAAAAAAAAAAAAAAAG");
-        foreach (QString ssid, actLanSsidName) {
-            syslog(LOG_DEBUG, "AAAAA the ssid is: %s",ssid.toUtf8().data());
-        }
-
-        foreach (QString uuid, actLanUuidName) {
-            syslog(LOG_DEBUG, "AAAAA the uuid is: %s",uuid.toUtf8().data());
-        }
     }
 
     // 填充可用网络列表
@@ -1495,11 +1462,7 @@ void MainWindow::getLanListDone(QStringList slist)
             //**********************创建已经连接的有线网item********************//
             if (currConnNames.size() != 0) {//证明有已经连接的有线网络
                 for (int kk=0; kk<actLanSsidName.size(); kk++) {
-                    syslog(LOG_DEBUG, "AAAAAAAAAAAAAAAAAAAAAAH");
-                    syslog(LOG_DEBUG, "AAAAA the name is: %s",nname.toUtf8().data());
-                    syslog(LOG_DEBUG, "AAAAA the nuid is: %s",nuuid.toUtf8().data());
                     if (nname == actLanSsidName.at(kk) && nuuid == actLanUuidName.at(kk)) {
-                        syslog(LOG_DEBUG, "AAAAAAAAAAAAAAAAAAAAAAI");
                         topLanListWidget->resize(topLanListWidget->width(), topLanListWidget->height() + H_NORMAL_ITEM*kk);
                         isActiveNet = true; //名为nname的网络是已经连接的有线网络
                         ifLanConnected = true;
@@ -2636,10 +2599,12 @@ void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
             qDebug()<<"debug: external wifi switch turn on";
             syslog(LOG_DEBUG, "debug: external wifi switch turn on");
             QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
+            objKyDBus->setWifiSwitchState(true);
         } else {
             qDebug()<<"debug: external wifi switch turn off";
             syslog(LOG_DEBUG, "debug: external wifi switch turn off");
             QTimer::singleShot(3*1000, this, SLOT(onExternalWifiChange() ));
+            objKyDBus->setWifiSwitchState(false);
         }
     }
 }

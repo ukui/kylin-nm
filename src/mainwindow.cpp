@@ -133,9 +133,8 @@ void MainWindow::checkSingle()
     int fd = 0;
     try {
         QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
-        QString lockPath = homePath.at(0) + "/.config/kylin-nm-lock";
+        QString lockPath = QString(homePath.at(0) + "/.config/kylin-nm-lock-%1.lock").arg(getenv("DISPLAY")).toUtf8().data();
         fd = open(lockPath.toUtf8().data(), O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
-
         if (fd < 0) {
             throw -1;
         }

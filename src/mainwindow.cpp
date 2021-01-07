@@ -314,6 +314,11 @@ void MainWindow::createListAreaUI()
     lbLoadDown->setStyleSheet("QLabel{font-size:14px;}");
     lbLoadUp->setText("0KB/s");
     lbLoadDown->setText("0KB/s.");
+    lbLoadUp->hide();
+    lbLoadDown->hide();
+    lbLoadUpImg->hide();
+    lbLoadDownImg->hide();
+
     this->on_setNetSpeed();
 
     scrollAreal->setStyleSheet("QScrollArea{border:none;}");
@@ -1205,17 +1210,6 @@ void MainWindow::onBtnNetListClicked(int flag)
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
-//    lbLoadDown->show();
-//    lbLoadUp->show();
-//    lbLoadDownImg->show();
-//    lbLoadUpImg->show();
-//    if (iface->lstate != 0) {
-//        lbLoadDown->hide();
-//        lbLoadUp->hide();
-//        lbLoadDownImg->hide();
-//        lbLoadUpImg->hide();
-//    }
-
     lbLoadDown->hide();
     lbLoadUp->hide();
     lbLoadDownImg->hide();
@@ -1262,10 +1256,6 @@ void MainWindow::on_btnWifiList_clicked()
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
-    lbLoadDown->show();
-    lbLoadUp->show();
-    lbLoadDownImg->show();
-    lbLoadUpImg->show();
     if (iface->wstate != 0) {
         lbLoadDown->hide();
         lbLoadUp->hide();

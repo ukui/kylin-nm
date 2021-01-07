@@ -1205,16 +1205,21 @@ void MainWindow::onBtnNetListClicked(int flag)
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
-    lbLoadDown->show();
-    lbLoadUp->show();
-    lbLoadDownImg->show();
-    lbLoadUpImg->show();
-    if (iface->lstate != 0) {
-        lbLoadDown->hide();
-        lbLoadUp->hide();
-        lbLoadDownImg->hide();
-        lbLoadUpImg->hide();
-    }
+//    lbLoadDown->show();
+//    lbLoadUp->show();
+//    lbLoadDownImg->show();
+//    lbLoadUpImg->show();
+//    if (iface->lstate != 0) {
+//        lbLoadDown->hide();
+//        lbLoadUp->hide();
+//        lbLoadDownImg->hide();
+//        lbLoadUpImg->hide();
+//    }
+
+    lbLoadDown->hide();
+    lbLoadUp->hide();
+    lbLoadDownImg->hide();
+    lbLoadUpImg->hide();
 
     lbNoItemTip->hide();
 

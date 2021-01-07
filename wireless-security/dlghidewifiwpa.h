@@ -22,6 +22,7 @@
 #include <QDialog>
 #include <QMouseEvent>
 #include <QThread>
+#include <QProcess>
 
 class MainWindow;
 
@@ -58,6 +59,8 @@ private slots:
 
     void on_lePassword_textEdited(const QString &arg1);
 
+    void finishedProcess(int res);
+
 signals:
     void reSetWifiList();
     void stopSignal();
@@ -79,6 +82,10 @@ private:
     bool isPress;
     QPoint winPos;
     QPoint dragPos;
+
+    QString shellOutput = "";
+    QStringList wlist;
+    QProcess * shellProcess;
 };
 
 #endif // DLGCONNHIDWIFIWPA_H

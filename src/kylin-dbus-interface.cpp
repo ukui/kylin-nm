@@ -340,10 +340,15 @@ void KylinDBus::getLanIpDNS(QString uuidName, bool isActNet)
 
                                         if (isActNet && inner_key == "dns") {
                                             const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
-                                            int strDns;
+                                            int strDns = 0;
                                             dbusArg2nd.beginArray();
                                             while (!dbusArg2nd.atEnd()) {
                                                 dbusArg2nd >> strDns;// append map to a vector here if you want to keep it
+                                                // 当获取到dns时，dns肯定不会为0，所以就会有一个类似出栈的操作，就会走到atEnd尾部；
+                                                // 当获取到的dns为空时，就没有类似的出栈操作，获取到的数字就有问题；
+                                                if (strDns == 0) {
+                                                    dbusArg2nd.endArray();
+                                                }
                                             }
                                             dbusArg2nd.endArray();
                                             dbusActLanDNS = strDns;
@@ -845,7 +850,6 @@ QList<QString> KylinDBus::getConnectNetName()
                               "/org/freedesktop/NetworkManager",
                               "org.freedesktop.DBus.Properties",
                               QDBusConnection::systemBus() );
-
     //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
     QList<QVariant> outArgs = result.arguments();
@@ -890,6 +894,7 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
             // 第一步 获取当前已连接网络的对象路径和对应的网络类型(ethernet or wifi)
             const QDBusArgument &dbusArg = qvm.value(keyStr).value<QDBusArgument>();
             QList<QDBusObjectPath> newPaths;
+            newPaths.clear();
             dbusArg >> newPaths;
             QStringList newPathInfo;
             qDebug()<<"             ";
@@ -902,8 +907,6 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
                 QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
                 newPathInfo.append(reply.value().toString());
             }
-            qDebug()<<"             ";
-
             // 第二步 同上一次获取的已连接网络相比较，处理相比于上次减少的网络连接
             for (int i=0; i<oldPaths.size(); i++) {
                 QDBusObjectPath old_path = oldPaths.at(i);

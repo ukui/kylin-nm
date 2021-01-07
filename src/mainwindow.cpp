@@ -1504,7 +1504,7 @@ void MainWindow::getLanListDone(QStringList slist)
                                 //objKyDBus->connectWiredNet(nname);
                             } else if ((oldActLanName == actLanSsidName.at(kk)) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
                                 //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
-                                //objKyDBus->connectWiredNet(nname);
+                                objKyDBus->connectWiredNet(nname);
                             }
                         }
 

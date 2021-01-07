@@ -1087,6 +1087,7 @@ void KylinDBus::connectWiredNet(QString netName)
                             }
                             dbusArgs.endArray();
 
+                            //获取到所需的信息后，接下来进行连接
                             QDBusReply<QDBusObjectPath> connectionReply = m_interface.call("ActivateConnection",
                                                                                            QVariant::fromValue(objNet),
                                                                                            QVariant::fromValue(connWiredPath),

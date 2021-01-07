@@ -314,6 +314,11 @@ void MainWindow::createListAreaUI()
     lbLoadDown->setStyleSheet("QLabel{font-size:14px;}");
     lbLoadUp->setText("0KB/s");
     lbLoadDown->setText("0KB/s.");
+    lbLoadUp->hide();
+    lbLoadDown->hide();
+    lbLoadUpImg->hide();
+    lbLoadDownImg->hide();
+
     this->on_setNetSpeed();
 
     scrollAreal->setStyleSheet("QScrollArea{border:none;}");
@@ -1205,17 +1210,6 @@ void MainWindow::onBtnNetListClicked(int flag)
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
-//    lbLoadDown->show();
-//    lbLoadUp->show();
-//    lbLoadDownImg->show();
-//    lbLoadUpImg->show();
-//    if (iface->lstate != 0) {
-//        lbLoadDown->hide();
-//        lbLoadUp->hide();
-//        lbLoadDownImg->hide();
-//        lbLoadUpImg->hide();
-//    }
-
     lbLoadDown->hide();
     lbLoadUp->hide();
     lbLoadDownImg->hide();
@@ -1262,10 +1256,6 @@ void MainWindow::on_btnWifiList_clicked()
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
-    lbLoadDown->show();
-    lbLoadUp->show();
-    lbLoadDownImg->show();
-    lbLoadUpImg->show();
     if (iface->wstate != 0) {
         lbLoadDown->hide();
         lbLoadUp->hide();
@@ -1511,10 +1501,10 @@ void MainWindow::getLanListDone(QStringList slist)
                         if (!objKyDBus->dbusLanIpv4.isEmpty()) {
                             if (objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
                                 //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
-                                objKyDBus->connectWiredNet(nname);
+                                //objKyDBus->connectWiredNet(nname);
                             } else if ((oldActLanName == actLanSsidName.at(kk)) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
                                 //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
-                                objKyDBus->connectWiredNet(nname);
+                                //objKyDBus->connectWiredNet(nname);
                             }
                         }
 
@@ -1715,7 +1705,6 @@ void MainWindow::loadWifiListDone(QStringList slist)
         }
         if (wname != "" && wname != "--") {
             // 当前连接的wifi
-//            if (wname == actWifiName) {
             if (wname == actWifissid) {
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));

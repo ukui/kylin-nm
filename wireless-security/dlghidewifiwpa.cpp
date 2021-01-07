@@ -257,8 +257,31 @@ void DlgHideWifiWpa::changeWindow()
             if (txt.indexOf("wpa-eap") != -1) {
                 QApplication::setQuitOnLastWindowClosed(false);
                 this->hide();
-                DlgHideWifiEapPeap *connHidWifiEapPeap = new DlgHideWifiEapPeap(1, ui->cbxConn->currentIndex(), mw);
-                connHidWifiEapPeap->show();
+//                DlgHideWifiEapPeap *connHidWifiEapPeap = new DlgHideWifiEapPeap(1, ui->cbxConn->currentIndex(), mw);
+//                connHidWifiEapPeap->show();
+                WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, ui->cbxConn->currentText());
+                QPoint pos = QCursor::pos();
+                QRect primaryGeometry;
+                for (QScreen *screen : qApp->screens()) {
+                    if (screen->geometry().contains(pos)) {
+                        primaryGeometry = screen->geometry();
+                    }
+                }
+                if (primaryGeometry.isEmpty()) {
+                    primaryGeometry = qApp->primaryScreen()->geometry();
+                }
+                wpadlg->move(primaryGeometry.width() / 2 - wpadlg->width() / 2, primaryGeometry.height() / 2 - wpadlg->height() / 2);
+                wpadlg->show();
+                connect(wpadlg, &WpaWifiDialog::conn_done, this, [ = ]() {
+                    QString txt(tr("Conn Wifi Success"));
+                    mw->objKyDBus->showDesktopNotify(txt);
+                    mw->on_btnWifiList_clicked();
+                });
+                connect(wpadlg, &WpaWifiDialog::conn_failed, this, [ = ]() {
+                    QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
+                    mw->objKyDBus->showDesktopNotify(txt);
+                    mw->on_btnWifiList_clicked();
+                });
             }
         }else {
             QApplication::setQuitOnLastWindowClosed(false);
@@ -289,7 +312,7 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
 
     QString wifiName = ui->leNetName->text();
     QString wifiPassword = ui->lePassword->text();
-    BackThread *bt = new BackThread();
+
     strWifiname = wifiName;
     strWifiPassword = wifiPassword;
     if (isUsed == 0) {
@@ -326,10 +349,39 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
             //QTimer::singleShot(8*1000, this, SLOT(on_execSecConn() ));
         });
     } else {
-        bt->execConnWifi(wifiName);
-        QTimer::singleShot(4*1000, this, SLOT(emitSignal() ));
+        shellProcess = new QProcess(this);
+        shellProcess->start("nmcli -f ssid device wifi");
+        connect(shellProcess, &QProcess::readyRead, [ = ]() {
+            QString output = shellProcess->readAll();
+            shellOutput += output;
+        });
+        connect(shellProcess, SIGNAL(finished(int)), this, SLOT(finishedProcess(int)));
     }
     this->close();
+}
+
+void DlgHideWifiWpa::finishedProcess(int state) {
+    if (! state) syslog(LOG_ERR, "Scan wifi list failed in functin on_btnConnect_clicked() in dlghidewifiwpa.cpp 359.");
+    wlist = shellOutput.split("\n");
+    bool is_hidden  = true;
+    foreach (QString wifi, wlist) {
+        if (wifi.trimmed() == ui->leNetName->text()) {
+            is_hidden = false;
+        }
+    }
+    if (! is_hidden) {
+        BackThread *bt = new BackThread();
+        bt->execConnWifi(ui->leNetName->text());
+        QTimer::singleShot(4*1000, this, SLOT(emitSignal() ));
+    } else {
+        //已保存的wifi没有在wifi列表找到（隐藏wifi保存后也会出现在wifi列表），则当前区域无法连接此wifi
+        syslog(LOG_DEBUG, "Choosen wifi can not be sacnned in finishedProcess() in dlghidewifiwpa.cpp 377.");
+        QString txt(tr("Selected Wifi has not been scanned."));
+        mw->objKyDBus->showDesktopNotify(txt);
+        emit this->stopSignal();
+        emit reSetWifiList();
+    }
+    shellProcess->deleteLater();
 }
 
 void DlgHideWifiWpa::on_checkBoxPwd_stateChanged(int arg1)

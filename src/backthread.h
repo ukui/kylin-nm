@@ -65,6 +65,7 @@ public slots:
     void on_readoutput();
     void on_readerror();
 
+
 signals:
     void enNetDone();
     void disNetDone();

@@ -1430,8 +1430,8 @@ void MainWindow::getLanListDone(QStringList slist)
                 macInterface = objKyDBus->getLanMAC(objKyDBus->dbusIfName); //有限网卡对应的mac地址
 
                 if (macLan!="" && macLan!="--" && macLan != macInterface) {
-                    continue; //有线网的permenant mac地址与网卡的地址不同，则不在列表中显示
-                    //macInterface = macLan;
+                    //continue; //有线网的permenant mac地址与网卡的地址不同，则不在列表中显示
+                    macInterface = macLan;
                 }
             } else {
                 mIfName = objKyDBus->multiWiredIfName.at(0); //使用默认的网络接口
@@ -2700,7 +2700,8 @@ void MainWindow::connLanDone(int connFlag)
     }
 
     if (connFlag == 1) {
-        qDebug()<<"without net line connect to computer";
+        //qDebug()<<"without net line connect to computer";
+        syslog(LOG_DEBUG, "without net line connect to computer.");
         this->is_wired_line_ready = 0; //without net line connect to computer
         is_stop_check_net_state = 0;
 
@@ -2709,7 +2710,8 @@ void MainWindow::connLanDone(int connFlag)
     }
 
     if (connFlag == 2) {
-        qDebug()<<"The MACs of the device and the connection do not match.";
+        //qDebug()<<"The MACs of the device and the connection do not match.";
+        syslog(LOG_DEBUG, "The MACs of the device and the connection do not match.");
         is_stop_check_net_state = 0;
 
         QString txt(tr("MAC Address Mismatch"));
@@ -2719,6 +2721,22 @@ void MainWindow::connLanDone(int connFlag)
     if (connFlag == 3) {
         syslog(LOG_DEBUG, "Launch kylin-nm, Lan already connected");
         this->is_wired_line_ready = 1;
+    }
+
+    if (connFlag == 4) {
+        syslog(LOG_DEBUG, "Connect Wired Network Failed");
+        this->is_wired_line_ready = 1;
+
+        QString txt(tr("Connect Wired Network Failed"));
+        objKyDBus->showDesktopNotify(txt);
+    }
+
+    if (connFlag == 5) {
+        syslog(LOG_DEBUG, "IP configuration could not be reserved");
+        this->is_wired_line_ready = 1;
+
+        QString txt(tr("IP configuration could not be reserved"));
+        objKyDBus->showDesktopNotify(txt);
     }
 
     this->stopLoading();

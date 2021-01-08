@@ -214,21 +214,29 @@ void BackThread::execConnLan(QString connName, QString ifname)
         QString tmpPath = "/tmp/kylin-nm-connprop-" + QDir::home().dirName();
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "' > " + tmpPath;
         Utils::m_system(cmd.toUtf8().data());
-
         QFile file(tmpPath);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-lanprop!");
             qDebug()<<"Can't open the file /tmp/kylin-nm-lanprop!"<<endl;
         }
-
         QString txt = file.readAll();
         file.close();
+
+        qDebug() << txt;
         if (txt.indexOf("successfully") != -1) {
             qDebug()<<"debug: in function execConnLan, wired net state is: "<<QString::number(execGetIface()->lstate);
             syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);
             emit connDone(0);
         } else {
-            emit connDone(2);
+            QString cmd = "nmcli connection down '" + connName + "'";
+            Utils::m_system(cmd.toUtf8().data());
+            if (txt.indexOf("IP configuration could not be reserved") != -1) {
+                emit connDone(5);
+            } else if(txt.indexOf("MACs") != -1 || txt.indexOf("Mac") != -1 || txt.indexOf("MAC") != -1) {
+                emit connDone(2);
+            } else {
+                emit connDone(4);
+            }
         }
     } else {
         qDebug()<<"connect wired network failed for without wired cable plug in.";

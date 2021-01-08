@@ -716,6 +716,7 @@ void OneConnForm::on_btnInfo_clicked()
 // Wifi连接结果，0成功 1失败 2没有配置文件
 void OneConnForm::slotConnWifiResult(int connFlag)
 {
+    mw->is_stop_check_net_state = 0;
     qDebug()<<"Function slotConnWifiResult receives a number: "<<connFlag;
 
     if (!connType.isEmpty()) {
@@ -746,12 +747,12 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         ui->btnConnPWD->show();
 
         this->isSelected = true;
-        if (connFlag == 2) {
-            mw->is_stop_check_net_state = 0;
-        } else {
-            mw->is_stop_check_net_state = 0;
-            //connType = "RequestPassword";
-        }
+//        if (connFlag == 2) {
+//            mw->is_stop_check_net_state = 0;
+//        } else {
+//            mw->is_stop_check_net_state = 0;
+//            //connType = "RequestPassword";
+//        }
 
         //设置输入密码框被选中
         ui->lePassword->setFocus();
@@ -773,7 +774,7 @@ void OneConnForm::slotConnWifiResult(int connFlag)
             syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");
         }
 
-        mw->is_stop_check_net_state = 0;
+//        mw->is_stop_check_net_state = 0;
     }
 
     // 设置全局变量，当前连接Wifi的信号强度

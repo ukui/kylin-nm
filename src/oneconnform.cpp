@@ -649,7 +649,7 @@ void OneConnForm::on_lePassword_textEdited(const QString &arg1)
 {
     ui->lePassword->setStyleSheet("QLineEdit{border:2px solid rgba(28, 47, 146, 1);border-radius:4px;background:rgba(0,0,0,0.2);}");
 
-    if (ui->lePassword->text().size() < 5) {
+    if (ui->lePassword->text().size() < 6) {
         ui->btnConnPWD->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
                                    "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
                                    "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");

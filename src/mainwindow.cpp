@@ -546,24 +546,9 @@ void MainWindow::initTimer()
 //初始化已经连接网络的DNS
 void MainWindow::initActNetDNS()
 {
-//    QString actLanName = "--";
-
-//    activecon *act = kylin_network_get_activecon_info();
-//    int index = 0;
-//    while (act[index].con_name != NULL) {
-//        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet") {
-//            actLanName = QString(act[index].con_name);
-//            break;
-//        }
-//        index ++;
-//    }
-
     QList<QString> currConnNames =objKyDBus->getConnectNetName();
 
-//    if (actLanName != "--") {
     if (currConnNames.size() > 0) {
-//        oldActLanName = actLanName;
-//        objKyDBus->getLanIpDNS(actLanName, true);
         oldActLanName = currConnNames.at(0);
         objKyDBus->getLanIpDNS(currConnNames.at(1), true);
         oldDbusActLanDNS = objKyDBus->dbusActLanDNS;

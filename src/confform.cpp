@@ -390,23 +390,27 @@ void ConfForm::cbTypeChanged(int index)
         ui->lineUp->hide();
         ui->lineDown->hide();
         ui->wgManual->hide();
-        ui->centralWidget->resize(432, 230);
+        //ui->centralWidget->resize(432, 230);
+        ui->centralWidget->setFixedSize(432, 230);
         ui->wdBottom->move(1, 170);
 
         this->setEnableOfBtn();
 
-        this->resize(432, 230);
+        //this->resize(432, 230);
+        this->setFixedSize(432, 230);
     }
     if (index == 1) {
         ui->lineUp->show();
         ui->lineDown->show();
         ui->wgManual->show();
-        ui->centralWidget->resize(432, 510);
+        //ui->centralWidget->resize(432, 510);
+        ui->centralWidget->setFixedSize(432, 510);
         ui->wdBottom->move(1, 440);
 
         this->setEnableOfBtn();
 
-        this->resize(432, 510);
+        //this->resize(432, 510);
+        this->setFixedSize(432, 510);
     }
     if (index == 3) {
         ui->btnSave->setEnabled(false);
@@ -423,9 +427,11 @@ void ConfForm::cbTypeChanged(int index)
         ui->lineUp->hide();
         ui->lineDown->hide();
         ui->wgManual->hide();
-        ui->centralWidget->resize(432, 230);
+        //ui->centralWidget->resize(432, 230);
+        ui->centralWidget->setFixedSize(432, 230);
         ui->wdBottom->move(1, 170);
-        this->resize(432, 230);
+        //this->resize(432, 230);
+        this->setFixedSize(432, 230);
     }
 }
 

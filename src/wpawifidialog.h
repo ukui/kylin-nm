@@ -43,12 +43,14 @@ class UpConnThread : public QThread
     Q_OBJECT
 
 public:
-    explicit UpConnThread();
+    explicit UpConnThread(const QString &, const QString &);
     ~UpConnThread();
 
 public:
     void run();
     QString conn_name = 0;
+    QString m_user = 0;
+    QString m_pwd = 0;
 
 Q_SIGNALS:
     void connRes(int respond);
@@ -67,11 +69,15 @@ private:
     void initUI(); //初始化UI界面
     void initCombox(); //初始化所有下拉框
     void initConnect(); //初始化连接
+    void getPwdFlag(); //获取是否每次询问密码
+    bool setPwdFlag(const int&); //设置是否每次询问密码
 
 protected:
     void paintEvent(QPaintEvent *event);
 
 private:
+    int pwd_flag = 2; //是否每次询问密码，0保存密码，2询问，默认不保存密码
+
     QString connectionName;
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

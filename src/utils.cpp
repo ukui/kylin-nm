@@ -81,7 +81,7 @@ void Utils::onRequestSendDesktopNotify(QString message)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QList<QVariant> args;
-    args<<(QCoreApplication::applicationName())
+    args<<(tr("kylin-nm"))
        <<((unsigned int) 0)
       <<QString("/usr/share/icons/ukui-icon-theme-default/22x22/devices/network-wired.png")
      <<tr("kylin network applet desktop message") //显示的是什么类型的信息

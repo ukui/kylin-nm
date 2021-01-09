@@ -27,72 +27,79 @@
 
 KSimpleNM::KSimpleNM(QObject *parent) : QObject(parent)
 {
-    runShellProcess = new QProcess(this);
+    runProcessWifi = new QProcess(this);
+    connect(runProcessWifi, &QProcess::readyRead, this, &KSimpleNM::readProcessWifi);
+    connect(runProcessWifi, SIGNAL(finished(int)), this, SLOT(finishedProcessWifi(int)));
 
-    connect(runShellProcess, &QProcess::readyRead, this, &KSimpleNM::readProcess);
-    connect(runShellProcess, SIGNAL(finished(int)), this, SLOT(finishedProcess(int)));
+    runProcessLan = new QProcess(this);
+    connect(runProcessLan, &QProcess::readyRead, this, &KSimpleNM::readProcessLan);
+    connect(runProcessLan, SIGNAL(finished(int)), this, SLOT(finishedProcessLan(int)));
+}
+
+KSimpleNM::~KSimpleNM()
+{
+    delete runProcessWifi;
+    delete runProcessLan;
 }
 
 //获取有线网络列表数据
 void KSimpleNM::execGetLanList()
 {
-    if (isExecutingGetWifiList || isExecutingGetLanList) {
-        syslog(LOG_DEBUG, "It is running getting wifi or lan list when getting lan list");
-        qDebug()<<"debug: it is running getting wifi or lan list when getting lan list";
+    if (isExecutingGetLanList) {
+        syslog(LOG_DEBUG, "It is running getting lan list when getting lan list");
+        qDebug()<<"debug: it is running getting lan list when getting lan list";
         isUseOldLanSlist = true;
         QStringList slistmEmpty;
         slistmEmpty.append("Empty");
         emit getLanListFinished(slistmEmpty);
         return;
     }
-
     isExecutingGetLanList = true;
-    shellOutput = "";
-    type = 0;
 
-    runShellProcess->start("nmcli -f type,uuid,name connection show");
-    //runShellProcess->waitForStarted(-1);
-    //runShellProcess->waitForFinished(-1);
+    shellOutputLan = "";
+    runProcessLan->start("nmcli -f type,uuid,name connection show");
 }
 
 //获取无线网络列表数据
 void KSimpleNM::execGetWifiList()
 {
-    if (isExecutingGetWifiList || isExecutingGetLanList) {
-        syslog(LOG_DEBUG, "It is running getting wifi or lan list when getting wifi list");
-        qDebug()<<"debug: it is running getting wifi or lan list when getting wifi list";
+    if (isExecutingGetWifiList) {
+        syslog(LOG_DEBUG, "It is running getting wifi list when getting wifi list");
+        qDebug()<<"debug: it is running getting wifi list when getting wifi list";
         isUseOldWifiSlist = true;
         QStringList slistmEmpty;
         slistmEmpty.append("Empty");
         emit getWifiListFinished(slistmEmpty);
         return;
     }
-
     isExecutingGetWifiList = true;
-    shellOutput = "";
-    type = 1;
 
-    runShellProcess->start("nmcli -f signal,security,freq,ssid device wifi");
-    //runShellProcess->waitForStarted(-1);
-    //runShellProcess->waitForFinished(-1);
+    shellOutputWifi = "";
+    runProcessWifi->start("nmcli -f signal,security,freq,ssid device wifi");
 }
 
 //读取获取到的结果
-void KSimpleNM::readProcess()
+void KSimpleNM::readProcessWifi()
 {
-    QString output = runShellProcess->readAll();
-    shellOutput += output;
+    QString output = runProcessWifi->readAll();
+    shellOutputWifi += output;
+}
+void KSimpleNM::readProcessLan()
+{
+    QString output = runProcessLan->readAll();
+    shellOutputLan += output;
 }
 
 //读取完所有列表数据后发信号，将数据发往mainwindow用于显示网络列表
-void KSimpleNM::finishedProcess(int msg)
+void KSimpleNM::finishedProcessWifi(int msg)
 {
-    QStringList slist = shellOutput.split("\n");
-    if (type == 0) {
-        emit getLanListFinished(slist);
-        isExecutingGetLanList = false;
-    } else {
-        emit getWifiListFinished(slist);
-        isExecutingGetWifiList = false;
-    }
+    QStringList slist = shellOutputWifi.split("\n");
+    emit getWifiListFinished(slist);
+    isExecutingGetWifiList = false;
+}
+void KSimpleNM::finishedProcessLan(int msg)
+{
+    QStringList slist = shellOutputLan.split("\n");
+    emit getLanListFinished(slist);
+    isExecutingGetLanList = false;
 }

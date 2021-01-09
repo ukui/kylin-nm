@@ -1247,6 +1247,8 @@ void MainWindow::on_btnWifiList_clicked()
         lbLoadUp->hide();
         lbLoadDownImg->hide();
         lbLoadUpImg->hide();
+    } else {
+        hasWifiConnected = true;
     }
 
     ui->lbNetListBG->setStyleSheet(btnOffQss);
@@ -1266,7 +1268,6 @@ void MainWindow::on_btnWifiList_clicked()
         btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();
-        hasWifiConnected = true;
 
         this->startLoading();
         this->ksnm->execGetWifiList();
@@ -2390,6 +2391,8 @@ void MainWindow::activeLanDisconn()
 
 void MainWindow::activeWifiDisconn()
 {
+    hasWifiConnected = false;
+
     QThread *tt = new QThread();
     BackThread *btt = new BackThread();
     btt->moveToThread(tt);

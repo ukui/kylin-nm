@@ -49,6 +49,8 @@ public:
     QString getConnProp(QString connName);
     QString execChkLanWidth(QString ethName);
     QProcess *cmdConnWifi = nullptr;
+    QProcess *process;
+    QString currConnLanUuid;
 
 public slots:
     void execEnNet();
@@ -62,8 +64,13 @@ public slots:
     void disConnSparedNetSlot(QString type);
     void disConnLanOrWifi(QString type);
 
-    void on_readoutput();
-    void on_readerror();
+    void onReadOutputWifi();
+    void onReadErrorWifi();
+    void dellConnectWifiResult(QString info);
+
+    void onReadOutputLan();
+    void onReadErrorLan();
+    void dellConnectLanResult(QString info);
 
 
 signals:

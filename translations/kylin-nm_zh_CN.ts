@@ -1482,12 +1482,17 @@
         <translation type="unfinished">IP 未分配成功</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2759"/>
+        <location filename="../src/mainwindow.cpp" line="2746"/>
+        <source>Connection timed out</source>
+        <translation type="unfinished">连接超时</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="2767"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">请确认Wi-Fi密码或无线设备</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2764"/>
+        <location filename="../src/mainwindow.cpp" line="2772"/>
         <source>Confirm your Wi-Fi password</source>
         <translation type="unfinished">请再次确认Wi-Fi密码</translation>
     </message>
@@ -1556,7 +1561,7 @@
         <translation type="vanished">连接有线网络失败</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2753"/>
+        <location filename="../src/mainwindow.cpp" line="2761"/>
         <source>Conn Wifi Success</source>
         <translation>连接无线网络成功</translation>
     </message>

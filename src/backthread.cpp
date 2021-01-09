@@ -32,15 +32,20 @@
 BackThread::BackThread(QObject *parent) : QObject(parent)
 {
     cmdConnWifi = new QProcess(this);
-    connect(cmdConnWifi , SIGNAL(readyReadStandardOutput()) , this , SLOT(on_readoutput()));
-    connect(cmdConnWifi , SIGNAL(readyReadStandardError()) , this , SLOT(on_readerror()));
-    cmdConnWifi->start("bash");
+    connect(cmdConnWifi , SIGNAL(readyReadStandardOutput()) , this , SLOT(onReadOutputWifi()));
+    connect(cmdConnWifi , SIGNAL(readyReadStandardError()) , this , SLOT(onReadErrorWifi()));
+    cmdConnWifi->start("/bin/bash");
     cmdConnWifi->waitForStarted();
+
+    process = new QProcess(this);
+    connect(process , SIGNAL(readyReadStandardOutput()) , this , SLOT(onReadOutputLan()));
+    connect(process , SIGNAL(readyReadStandardError()) , this , SLOT(onReadErrorLan()));
 }
 
 BackThread::~BackThread()
 {
     cmdConnWifi->close();
+    process->close();
 }
 
 //get the connection state of wired and wireles network
@@ -199,6 +204,7 @@ void BackThread::execDisWifi()
 //to connect wired network
 void BackThread::execConnLan(QString connName, QString ifname)
 {
+    currConnLanUuid = connName;
     KylinDBus objKyDbus;
 
     //先断开当前网卡对应的已连接有线网
@@ -210,34 +216,12 @@ void BackThread::execConnLan(QString connName, QString ifname)
 
     bool wiredCableState = objKyDbus.getWiredCableStateByIfname(ifname);
     if (wiredCableState) {
-        // only if wired cable is plug in, can connect wired network
-        QString tmpPath = "/tmp/kylin-nm-connprop-" + QDir::home().dirName();
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "' > " + tmpPath;
-        Utils::m_system(cmd.toUtf8().data());
-        QFile file(tmpPath);
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-lanprop!");
-            qDebug()<<"Can't open the file /tmp/kylin-nm-lanprop!"<<endl;
-        }
-        QString txt = file.readAll();
-        file.close();
-
-        qDebug() << txt;
-        if (txt.indexOf("successfully") != -1) {
-            qDebug()<<"debug: in function execConnLan, wired net state is: "<<QString::number(execGetIface()->lstate);
-            syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);
-            emit connDone(0);
-        } else {
-            QString cmd = "nmcli connection down '" + connName + "'";
-            Utils::m_system(cmd.toUtf8().data());
-            if (txt.indexOf("IP configuration could not be reserved") != -1) {
-                emit connDone(5);
-            } else if(txt.indexOf("MACs") != -1 || txt.indexOf("Mac") != -1 || txt.indexOf("MAC") != -1) {
-                emit connDone(2);
-            } else {
-                emit connDone(4);
-            }
-        }
+        QString mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
+        QStringList options;
+        options << "-c" << mycmd;
+        process->start("/bin/bash",options);
+        process->waitForStarted();
+        process->waitForFinished();
     } else {
         qDebug()<<"connect wired network failed for without wired cable plug in.";
         syslog(LOG_DEBUG, "connect wired network failed for without wired cable plug in.");
@@ -245,6 +229,42 @@ void BackThread::execConnLan(QString connName, QString ifname)
     }
 
     emit btFinish();
+}
+
+void BackThread::onReadOutputLan()
+{
+    QByteArray cmdout = process->readAllStandardOutput();
+    QString strResult = QString::fromLocal8Bit(cmdout);
+    qDebug()<<"on_readoutput_lan:  "<< strResult;
+    dellConnectLanResult(strResult);
+}
+void BackThread::onReadErrorLan()
+{
+    QByteArray cmdout = process->readAllStandardError();
+    QString strResult = QString::fromLocal8Bit(cmdout);
+    qDebug()<<"on_readerror_lan:  "<< strResult;
+    dellConnectLanResult(strResult);
+}
+
+void BackThread::dellConnectLanResult(QString info)
+{
+    if (info.indexOf("successfully") != -1) {
+        qDebug()<<"debug: in function execConnLan, wired net state is: "<<QString::number(execGetIface()->lstate);
+        syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);
+        emit connDone(0);
+    } else {
+        QString cmd = "nmcli connection down '" + currConnLanUuid + "'";
+        Utils::m_system(cmd.toUtf8().data());
+        if (info.indexOf("IP configuration could not be reserved") != -1) {
+            emit connDone(4);
+        } else if(info.indexOf("MACs") != -1 || info.indexOf("Mac") != -1 || info.indexOf("MAC") != -1) {
+            emit connDone(5);
+        } else if(info.indexOf("Killed") != -1 || info.indexOf("killed") != -1) {
+            emit connDone(6);
+        } else {
+            emit connDone(7);
+        }
+    }
 }
 
 //to connected wireless network need a password
@@ -292,42 +312,39 @@ void BackThread::execConnWifi(QString connName)
     cmdConnWifi->write(cmdStr.toUtf8().data());
 }
 
-void BackThread::on_readoutput()
+void BackThread::onReadOutputWifi()
 {
     QString str = cmdConnWifi->readAllStandardOutput();
-    cmdConnWifi->close();
-    qDebug()<<"on_readoutput:  "<< str;
-    if (str.indexOf("successfully") != -1) {
-        emit connDone(0); //send this signal if connect net successfully
-        qDebug()<<"debug: in function on_readoutput, wireless net state is: "<<QString::number(execGetIface()->wstate);
-        syslog(LOG_DEBUG, "In function on_readoutput, wireless net state is: %d", execGetIface()->wstate);
-    } else if(str.indexOf("unknown") != -1) {
-        emit connDone(2);
-    } else {
-        //emit connDone(1);
-    }
-
-    emit btFinish();
+    qDebug()<<"on_readoutput_wifi:  "<< str;
+    syslog(LOG_DEBUG, "on_readoutput_wifi : %s", str.toUtf8().data());
+    dellConnectWifiResult(str);
 }
-void BackThread::on_readerror()
+void BackThread::onReadErrorWifi()
 {
     QString str = cmdConnWifi->readAllStandardError();
-    cmdConnWifi->close();
-    qDebug()<<"on_readerror: "<< str;
-    syslog(LOG_DEBUG, "on_readerror : %s", str.toUtf8().data());
-    if (str.indexOf("successfully") != -1) {
-        //emit connDone(0);
-    } else if(str.indexOf("unknown") != -1 || str.indexOf("not exist") != -1) {
-        emit connDone(2); //send this signal if the network we want to connect has not a configuration file
-    } else if(str.indexOf("not given") != -1 || str.indexOf("Secrets were required") != -1){
+    qDebug()<<"on_readerror_wifi: "<< str;
+    syslog(LOG_DEBUG, "on_readerror_wifi : %s", str.toUtf8().data());
+    dellConnectWifiResult(str);
+}
+
+void BackThread::dellConnectWifiResult(QString info)
+{
+    if (info.indexOf("successfully") != -1) {
+        emit connDone(0);
+    } else if(info.indexOf("unknown") != -1 || info.indexOf("not exist") != -1) {
+        //send this signal if the network we want to connect has not a configuration file
+        emit connDone(2);
+    } else if(info.indexOf("not given") != -1 || info.indexOf("Secrets were required") != -1){
         //password for '802-11-wireless-security.psk' not given in 'passwd-file'
         emit connDone(4);
     } else {
-        emit connDone(1); //send this signal if connect net failed
+        //send this signal if connect net failed
+        emit connDone(1);
     }
 
     emit btFinish();
 }
+
 
 //get property of connected network
 QString BackThread::getConnProp(QString connName)

@@ -2692,29 +2692,18 @@ void MainWindow::connLanDone(int connFlag)
     if (connFlag == 0) {
         syslog(LOG_DEBUG, "Wired net already connected by clicking button");
         this->is_wired_line_ready = 1;
-        this->is_by_click_connect = 1;
-        this->ksnm->execGetLanList();
+        //this->ksnm->execGetLanList();
 
         QString txt(tr("Conn Ethernet Success"));
         objKyDBus->showDesktopNotify(txt);
     }
 
     if (connFlag == 1) {
-        //qDebug()<<"without net line connect to computer";
         syslog(LOG_DEBUG, "without net line connect to computer.");
-        this->is_wired_line_ready = 0; //without net line connect to computer
+        this->is_wired_line_ready = 0; //is_wired_line_ready=0 mean without wired cable
         is_stop_check_net_state = 0;
 
         QString txt(tr("Without Lan Cable"));
-        objKyDBus->showDesktopNotify(txt);
-    }
-
-    if (connFlag == 2) {
-        //qDebug()<<"The MACs of the device and the connection do not match.";
-        syslog(LOG_DEBUG, "The MACs of the device and the connection do not match.");
-        is_stop_check_net_state = 0;
-
-        QString txt(tr("MAC Address Mismatch"));
         objKyDBus->showDesktopNotify(txt);
     }
 
@@ -2724,18 +2713,34 @@ void MainWindow::connLanDone(int connFlag)
     }
 
     if (connFlag == 4) {
-        syslog(LOG_DEBUG, "Connect Wired Network Failed");
-        this->is_wired_line_ready = 1;
-
-        QString txt(tr("Connect Wired Network Failed"));
-        objKyDBus->showDesktopNotify(txt);
-    }
-
-    if (connFlag == 5) {
         syslog(LOG_DEBUG, "IP configuration could not be reserved");
         this->is_wired_line_ready = 1;
 
         QString txt(tr("IP configuration could not be reserved"));
+        objKyDBus->showDesktopNotify(txt);
+    }
+
+    if (connFlag == 5) {
+        syslog(LOG_DEBUG, "The MACs of the device and the connection do not match.");
+        this->is_wired_line_ready = 1;
+
+        QString txt(tr("MAC Address Mismatch"));
+        objKyDBus->showDesktopNotify(txt);
+    }
+
+    if (connFlag == 6) {
+        syslog(LOG_DEBUG, "Connection timed out");
+        this->is_wired_line_ready = 1;
+
+        QString txt(tr("Connection timed out"));
+        objKyDBus->showDesktopNotify(txt);
+    }
+
+    if (connFlag == 7) {
+        syslog(LOG_DEBUG, "Connect Wired Network Failed");
+        this->is_wired_line_ready = 1;
+
+        QString txt(tr("Connect Wired Network Failed"));
         objKyDBus->showDesktopNotify(txt);
     }
 
@@ -2747,7 +2752,6 @@ void MainWindow::connWifiDone(int connFlag)
     // Wifi连接结果，0点击连接成功 1失败 2没有配置文件 3开机启动网络工具时已经连接
     if (connFlag == 0) {
         syslog(LOG_DEBUG, "Wi-Fi already connected by clicking button");
-        this->is_by_click_connect = 1;
         this->ksnm->execGetWifiList();
 
         QString txt(tr("Conn Wifi Success"));

@@ -1363,12 +1363,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2759"/>
+        <location filename="../src/mainwindow.cpp" line="2746"/>
+        <source>Connection timed out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="2767"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2764"/>
+        <location filename="../src/mainwindow.cpp" line="2772"/>
         <source>Confirm your Wi-Fi password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1394,7 +1399,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2753"/>
+        <location filename="../src/mainwindow.cpp" line="2761"/>
         <source>Conn Wifi Success</source>
         <translation type="unfinished"></translation>
     </message>

@@ -111,6 +111,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 
+    hasWifiConnected = false;
 //    QDBusConnection systemBus = QDBusConnection::systemBus();
 //    if (!systemBus.registerService("com.kylin.NetworkManager.qt.systemdbus")){
 //        qCritical() << "QDbus register service failed reason:" << systemBus.lastError();
@@ -1056,7 +1057,7 @@ bool MainWindow::checkWlOn()
 ///////////////////////////////////////////////////////////////////////////////
 //有线网与无线网按钮响应
 
-void MainWindow::on_btnNet_clicked()
+void MainWindow::onBtnNetClicked()
 {
     if (checkLanOn()) {
         QThread *t = new QThread();
@@ -1265,6 +1266,7 @@ void MainWindow::on_btnWifiList_clicked()
         btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();
+        hasWifiConnected = true;
 
         this->startLoading();
         this->ksnm->execGetWifiList();
@@ -1291,6 +1293,7 @@ void MainWindow::on_btnWifiList_clicked()
         ccf->setAct(true);
         ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
         ccf->show();
+        is_stop_check_net_state = 0;
     } else {
         qDebug()<<"debug: WiFi的开关已经关闭";
         btnWireless->setSwitchStatus(false);
@@ -1559,6 +1562,18 @@ void MainWindow::getWifiListDone(QStringList slist)
 {
     qDebug()<<"debug: oldWifiSlist.size()="<<oldWifiSlist.size()<<"   slist.size()="<<slist.size();
 
+    //qDebug()<<"0            ";
+    //foreach (QString str, slist) {
+    //    qDebug()<<str;
+    //}
+    //qDebug()<<"0            ";
+
+    //要求使用上一次获取到的列表
+    if (this->ksnm->isUseOldWifiSlist) {
+        slist = oldWifiSlist;
+        this->ksnm->isUseOldWifiSlist = false;
+    }
+
     //若slist为空，则使用上一次获取到的列表
     if (slist.size() == 1 && slist.at(0) == "") {
         if (oldWifiSlist.size() == 1 && oldWifiSlist.at(0) == "") {
@@ -1764,6 +1779,13 @@ void MainWindow::loadWifiListDone(QStringList slist)
 // 更新wifi列表
 void MainWindow::updateWifiListDone(QStringList slist)
 {
+    if (hasWifiConnected) {
+        lbLoadDown->show();
+        lbLoadUp->show();
+        lbLoadDownImg->show();
+        lbLoadUpImg->show();
+    }
+
     if (this->ksnm->isExecutingGetLanList){ return;}
 
     //获取表头信息

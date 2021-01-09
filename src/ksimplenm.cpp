@@ -36,11 +36,16 @@ KSimpleNM::KSimpleNM(QObject *parent) : QObject(parent)
 //获取有线网络列表数据
 void KSimpleNM::execGetLanList()
 {
-    if (isExecutingGetWifiList) {
-        syslog(LOG_DEBUG, "It is running getting wifi list when getting lan list");
-        qDebug()<<"debug: it is running getting wifi list when getting lan list";
+    if (isExecutingGetWifiList || isExecutingGetLanList) {
+        syslog(LOG_DEBUG, "It is running getting wifi or lan list when getting lan list");
+        qDebug()<<"debug: it is running getting wifi or lan list when getting lan list";
         isUseOldLanSlist = true;
+        QStringList slistmEmpty;
+        slistmEmpty.append("Empty");
+        emit getLanListFinished(slistmEmpty);
+        return;
     }
+
     isExecutingGetLanList = true;
     shellOutput = "";
     type = 0;
@@ -53,6 +58,16 @@ void KSimpleNM::execGetLanList()
 //获取无线网络列表数据
 void KSimpleNM::execGetWifiList()
 {
+    if (isExecutingGetWifiList || isExecutingGetLanList) {
+        syslog(LOG_DEBUG, "It is running getting wifi or lan list when getting wifi list");
+        qDebug()<<"debug: it is running getting wifi or lan list when getting wifi list";
+        isUseOldWifiSlist = true;
+        QStringList slistmEmpty;
+        slistmEmpty.append("Empty");
+        emit getWifiListFinished(slistmEmpty);
+        return;
+    }
+
     isExecutingGetWifiList = true;
     shellOutput = "";
     type = 1;

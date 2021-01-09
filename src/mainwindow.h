@@ -282,10 +282,12 @@ private:
     long int end_tx_rates = 0; //保存结束时的流量计数
     QString actWifissid = "--"; //当前连接wifi的ssid
 
+    bool hasWifiConnected;//当前是否有wifi连接
+
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
-    void on_btnNet_clicked();
+    void onBtnNetClicked();
 //    void on_btnWifiList_clicked();
     void onBtnNetListClicked(int flag=0);
 

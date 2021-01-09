@@ -189,6 +189,8 @@ public slots:
     //flag =0或1为普通点击、2为收到打开信息、3为收到关闭信息、4为无线网卡插入、5为无线网卡拔出
     void onBtnWifiClicked(int flag = 0);
 
+    void on_showWindowAction();
+
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
     void paintEvent(QPaintEvent *event);
@@ -294,7 +296,6 @@ private slots:
     QString TranslateLanName(QString lanName);
     QString getMacByUuid(QString uuidName);
 
-    void on_showWindowAction();
     void on_btnAdvConf_clicked();
 
     void activeLanDisconn();

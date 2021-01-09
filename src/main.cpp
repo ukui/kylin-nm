@@ -20,6 +20,7 @@
 #include "ksimplenm.h"
 #include "kylin-network-interface.h"
 #include "wireless-security/dlghidewifi.h"
+#include "dbusadaptor.h"
 
 #include <QTranslator>
 #include <QLocale>
@@ -56,5 +57,20 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w;
+
+    DbusAdaptor adaptor(&w);
+    Q_UNUSED(adaptor);
+    auto connection = QDBusConnection::sessionBus();
+    if (!connection.registerService("com.kylin.network") || !connection.registerObject("/com/kylin/network", &w)) {
+        qCritical() << "QDbus register service failed reason:" << connection.lastError();
+        QDBusInterface iface("com.kylin.network",
+                                       "/com/kylin/network",
+                                       "com.kylin.network",
+                                       connection);
+        iface.call("showMainWindow");
+
+        return 0;
+    }
+
     return a.exec();
 }

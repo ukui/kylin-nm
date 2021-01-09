@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    checkSingle();
+    //checkSingle();
 
     syslog(LOG_DEBUG, "Using the icon theme named 'ukui-icon-theme-default'");
     QIcon::setThemeName("ukui-icon-theme-default");

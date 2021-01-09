@@ -56,6 +56,7 @@ QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 SOURCES += \
     src/backthread.cpp \
     src/confform.cpp \
+    src/dbusadaptor.cpp \
     src/ksimplenm.cpp \
     src/kylin-dbus-interface.cpp \
     src/kylin-network-interface.c \
@@ -85,6 +86,7 @@ SOURCES += \
 HEADERS += \
     src/backthread.h \
     src/confform.h \
+    src/dbusadaptor.h \
     src/ksimplenm.h \
     src/kylin-dbus-interface.h \
     src/kylin-network-interface.h \

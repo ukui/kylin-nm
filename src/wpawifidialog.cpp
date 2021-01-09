@@ -27,20 +27,32 @@
 #include <QStringListModel>
 #include <QCompleter>
 #include <QDateTime>
+#include <QIODevice>
 
 const QString CONFIG_FILE = "/tmp/wpaconf.ini";
 
-UpConnThread::UpConnThread()
+UpConnThread::UpConnThread(const QString& user, const QString& pwd)
 {
+    m_user = user;
+    m_pwd = pwd;
 }
 
 UpConnThread::~UpConnThread() {
 }
 
 void UpConnThread::run() {
-    QString cmdStr = "nmcli connection up " + this->conn_name;
+    QString cmdStr = 0;
+    QFile::remove(QString("/tmp/%1.txt").arg(conn_name).toUtf8());
+    QFile *passwdFile = new QFile(QString("/tmp/%1.txt").arg(conn_name));
+    if (passwdFile->open(QIODevice::ReadWrite)) {
+        passwdFile->write(QString("802-1x.identity:%1\n802-1x.password:%2").arg(m_user).arg(m_pwd).toUtf8());
+        passwdFile->close();
+        cmdStr = "nmcli connection up " + this->conn_name + " passwd-file /tmp/" + conn_name + ".txt";
+    } else {
+        cmdStr = "nmcli connection up " + this->conn_name;
+    }
     qDebug()<<"qDebug: 激活连接: \n"<<
-              "qDebug: nmcli connection up " + this->conn_name;
+              "qDebug: " + cmdStr;
     int res = Utils::m_system(cmdStr.toUtf8().data());
     emit connRes(res);
 }
@@ -273,6 +285,7 @@ void WpaWifiDialog::initCombox() {
     }
 //    //读配置文件
     wifi_info = getWifiInfo(connectionName);
+//    qDebug() << wifi_info << wifi_info.length();
     if (wifi_info.length() < 4) {
         askPwdBtn->setChecked(true);
         has_config = false;
@@ -281,16 +294,17 @@ void WpaWifiDialog::initCombox() {
         //读配置信息
         eapCombox->setCurrentIndex(eapCombox->findData(wifi_info.at(0)));
         innerCombox->setCurrentIndex(innerCombox->findData(wifi_info.at(1)));
-        if (wifi_info.at(wifi_info.length() - 1) == "true") {
+        getPwdFlag();
+        if (pwd_flag == 2) {
             askPwdBtn->setChecked(true);
             for (int i = 2; i < wifi_info.length() - 1; i++) {
                 user_list << wifi_info.at(i);
             }
         } else {
             askPwdBtn->setChecked(false);
-            pwdEditor->setText(wifi_info.at(wifi_info.length() - 2));
+            pwdEditor->setText(wifi_info.at(wifi_info.length() - 1));
             this->connectBtn->setEnabled(true);
-            for (int i = 2; i < wifi_info.length() - 2; i++) {
+            for (int i = 2; i < wifi_info.length() - 1; i++) {
                 user_list << wifi_info.at(i);
             }
         }
@@ -303,6 +317,47 @@ void WpaWifiDialog::initCombox() {
         userEditor->setCompleter(completer);
     }
 }
+
+/**
+ * @brief WpaWifiDialog::getPwdFlag 获取是否每次询问密码
+ * @return
+ */
+void WpaWifiDialog::getPwdFlag() {
+    QProcess * process = new QProcess(this);
+    QString ssid = nameEditor->text();
+    if (ssid.contains(" ")) {
+        ssid.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
+    }
+    process->start(QString("nmcli -f 802-1x.password-flags connection show %1").arg(ssid));
+    connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+        process->deleteLater();
+    });
+    connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
+        QString str = process->readAllStandardOutput();
+        pwd_flag = str.mid(str.lastIndexOf(" ") - 1, 1).toInt();
+    });
+    process->waitForFinished();
+}
+
+/**
+ * @brief WpaWifiDialog::setPwdFlag 设置是否每次询问密码
+ * @param flag 0不询问， 2询问
+ * @return
+ */
+bool WpaWifiDialog::setPwdFlag(const int & flag) {
+    QProcess * process = new QProcess;
+    QString ssid = nameEditor->text();
+    if (ssid.contains(" ")) {
+        ssid.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
+    }
+    process->start(QString("nmcli connection modify %1 802-1x.password-flags %2").arg(ssid).arg(QString::number(flag)));
+    connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+        process->deleteLater();
+    });
+    process->waitForFinished();
+    return true;
+}
+
 void WpaWifiDialog::initConnect() {
     //取消按钮
     connect(cancelBtn, &QPushButton::clicked, this, [ = ]() {
@@ -332,7 +387,7 @@ void WpaWifiDialog::slot_line_edit_changed() {
 
 void WpaWifiDialog::slot_on_connectBtn_clicked() {
     qDebug()<<"Clicked on connect Btn!";
-    //先写配置文件
+    //写/tmp/wpaconfig.ini配置文件
     if (has_config) {
         appendWifiUser(nameEditor->text(), userEditor->text());
     } else {
@@ -350,6 +405,8 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
         QString cmdStr_1 = "nmcli connection modify " + nameEditor->text() + " 802-1x.eap " + eapCombox->currentData().toString()+ " 802-1x.phase2-auth "
                 + innerCombox->currentData().toString() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text();
         Utils::m_system(cmdStr_1.toUtf8().data());
+        if (askPwdBtn->isChecked()) setPwdFlag(2);
+        else setPwdFlag(0);
         //激活连接
         activateConnection();
     } else {
@@ -376,6 +433,8 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
         if (res == 0) {
             syslog(LOG_DEBUG, "In function slot_on_connectBtn_clicked, created a wifi config named %s", nameEditor->text());
             qDebug() << "qDebug: created a wifi config successfully";
+            if (askPwdBtn->isChecked()) setPwdFlag(2);
+            else setPwdFlag(0);
             //创建成功，激活连接
             activateConnection();
         } else {
@@ -400,7 +459,7 @@ void WpaWifiDialog::setEditorEnable(bool is_checking) {
 }
 
 void WpaWifiDialog::activateConnection() {
-    UpConnThread * upThread = new UpConnThread();
+    UpConnThread * upThread = new UpConnThread(userEditor->text(), pwdEditor->text());
     upThread->conn_name = nameEditor->text();
     //超时计时器
     QTimer * timeout = new QTimer(this);
@@ -462,10 +521,7 @@ QStringList WpaWifiDialog::getWifiInfo(QString wifiName) {
         wlist << autoSettings.get()->value("user").toString();
     }
     autoSettings.get()->endArray();
-    if (!autoSettings.get()->value("askpwd").toBool()) {
-        wlist << autoSettings.get()->value("pwd").toString();
-    }
-    wlist << autoSettings.get()->value("askpwd").toString();
+    wlist << autoSettings.get()->value("pwd").toString();
     autoSettings.get()->endGroup();
     return wlist;
 }
@@ -482,11 +538,8 @@ bool WpaWifiDialog::appendWifiInfo(QString name, QString eap, QString inner, QSt
     autoSettings.get()->setValue("user", user);
     user_list << user;
     autoSettings.get()->endArray();
-    autoSettings.get()->setValue("askpwd", ask);
-    //保存密码
-    if (!ask) {
-        autoSettings.get()->setValue("pwd", this->pwdEditor->text());
-    }
+//    autoSettings.get()->setValue("askpwd", ask);
+    autoSettings.get()->setValue("pwd", this->pwdEditor->text());
     return true;
 }
 
@@ -499,10 +552,8 @@ bool WpaWifiDialog::appendWifiUser(QString name, QString user) {
     autoSettings.get()->beginGroup(name);
     autoSettings.get()->setValue("eap", eapCombox->currentData().toString());
     autoSettings.get()->setValue("inner", innerCombox->currentData().toString());
-    autoSettings.get()->setValue("askpwd", askPwdBtn->isChecked());
-    if (!askPwdBtn->isChecked()) {
-        autoSettings.get()->setValue("pwd", this->pwdEditor->text());
-    }
+//    autoSettings.get()->setValue("askpwd", askPwdBtn->isChecked());
+    autoSettings.get()->setValue("pwd", this->pwdEditor->text());
     if (user_list.contains(user)) {
         autoSettings.get()->endGroup();
         return true;

@@ -1247,6 +1247,7 @@ void MainWindow::on_btnWifiList_clicked()
         lbLoadUp->hide();
         lbLoadDownImg->hide();
         lbLoadUpImg->hide();
+        hasWifiConnected = false;
     } else {
         hasWifiConnected = true;
     }

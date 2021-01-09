@@ -115,10 +115,12 @@ private slots:
     void on_lePassword_textEdited(const QString &arg1);
 
     void waitAnimStep();
-    void startWaiting(bool isConn);
+    void startWaiting(bool isToConnect);
     void stopWaiting();
 
     void on_btnInfo_clicked();
+
+    void on_btnCancel_clicked();
 
 private:
     QTimer *waitTimer = nullptr;

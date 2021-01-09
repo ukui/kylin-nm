@@ -28,9 +28,10 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 {
     ui->setupUi(this);
 
-    ui->btnConnSub->setText(tr("Connect"));//"设置"
+    ui->btnConnSub->setText(tr("Connect"));//"连接"
     ui->btnConn->setText(tr("Connect"));//"连接"
     ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"
+    ui->btnCancel->setText(tr("Cancel"));//取消连接
 
     ui->lbConned->setAlignment(Qt::AlignLeft);
 
@@ -55,6 +56,7 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
                                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
+    ui->btnCancel->setStyleSheet("QPushButton{border:none;background:transparent;color:white;font-size:14px;}");
     ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
     ui->lbWaitingIcon->setStyleSheet("QLabel{border:0px;background-color:transparent;}");
 
@@ -63,6 +65,7 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConnSub->setFocusPolicy(Qt::NoFocus);
     ui->btnConn->setFocusPolicy(Qt::NoFocus);
     ui->btnDisConn->setFocusPolicy(Qt::NoFocus);
+    ui->btnCancel->setFocusPolicy(Qt::NoFocus);
 
     ui->wbg->hide();
     ui->wbg_2->show();
@@ -70,6 +73,7 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConnSub->hide();
     ui->btnConn->hide();
     ui->btnDisConn->hide();
+    ui->btnCancel->hide();
     ui->line->show();
     ui->lbWaiting->hide();
     ui->lbWaitingIcon->hide();
@@ -415,11 +419,13 @@ void OneLancForm::waitAnimStep()
     }
 }
 
-void OneLancForm::startWaiting(bool isConn)
+void OneLancForm::startWaiting(bool isToConnect)
 {
-    if (isConn) {
+    if (isToConnect) {
+        ui->btnCancel->show();
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
     } else {
+        ui->lbWaitingIcon->move(ui->lbWaitingIcon->x() - 24, ui->lbWaitingIcon->y());
         ui->btnDisConn->hide();
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
     }
@@ -434,10 +440,26 @@ void OneLancForm::startWaiting(bool isConn)
 
 void OneLancForm::stopWaiting()
 {
+    ui->lbWaitingIcon->move(380, 20);
+    ui->btnCancel->hide();
+
     this->waitTimer->stop();
     ui->lbWaiting->hide();
     ui->lbWaitingIcon->hide();
 
     mw->setTrayLoading(false);
     mw->getActiveInfo();
+}
+
+void OneLancForm::on_btnCancel_clicked()
+{
+    QString cmd = "kill -9 $(pidof nmcli)"; //杀掉当前正在进行的有关nmcli命令的进程
+    int status = system(cmd.toUtf8().data());
+    if (status != 0) {
+        qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
+        syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
+    }
+
+    this->stopWaiting();
+    mw->is_stop_check_net_state = 0;
 }

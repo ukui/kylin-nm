@@ -1462,37 +1462,41 @@
         <translation type="unfinished">断开无线网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2708"/>
+        <location filename="../src/mainwindow.cpp" line="2706"/>
         <source>Without Lan Cable</source>
         <translation type="unfinished">未插入对应网卡网线</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2717"/>
+        <location filename="../src/mainwindow.cpp" line="2727"/>
         <source>MAC Address Mismatch</source>
         <translation type="unfinished">有线网MAC地址不匹配</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2730"/>
+        <location filename="../src/mainwindow.cpp" line="2735"/>
+        <source>Connection Be Killed</source>
+        <translation type="unfinished">连接进程被中断</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="2743"/>
         <source>Connect Wired Network Failed</source>
         <translation type="unfinished">连接有线网络失败</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2738"/>
+        <location filename="../src/mainwindow.cpp" line="2719"/>
         <source>IP configuration could not be reserved</source>
         <translation type="unfinished">IP 未分配成功</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2746"/>
         <source>Connection timed out</source>
-        <translation type="unfinished">连接超时</translation>
+        <translation type="obsolete">连接超时</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2767"/>
+        <location filename="../src/mainwindow.cpp" line="2763"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">请确认Wi-Fi密码或无线设备</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2772"/>
+        <location filename="../src/mainwindow.cpp" line="2768"/>
         <source>Confirm your Wi-Fi password</source>
         <translation type="unfinished">请再次确认Wi-Fi密码</translation>
     </message>
@@ -1552,7 +1556,7 @@
         <translation type="vanished">正在更新 Wi-Fi列表</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2698"/>
+        <location filename="../src/mainwindow.cpp" line="2697"/>
         <source>Conn Ethernet Success</source>
         <translation>连接有线网络成功</translation>
     </message>
@@ -1561,7 +1565,7 @@
         <translation type="vanished">连接有线网络失败</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2761"/>
+        <location filename="../src/mainwindow.cpp" line="2757"/>
         <source>Conn Wifi Success</source>
         <translation>连接无线网络成功</translation>
     </message>
@@ -1606,12 +1610,12 @@
         <translation type="obsolete">输入密码...</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="371"/>
+        <location filename="../src/oneconnform.cpp" line="376"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>连接到隐藏 Wi-Fi 网络</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="464"/>
+        <location filename="../src/oneconnform.cpp" line="469"/>
         <source>Signal：</source>
         <translation type="unfinished">信号强度：</translation>
     </message>
@@ -1624,32 +1628,37 @@
         <translation type="vanished">安全</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="382"/>
+        <location filename="../src/oneconnform.cpp" line="48"/>
+        <source>Cancel</source>
+        <translation type="unfinished">取 消</translation>
+    </message>
+    <message>
+        <location filename="../src/oneconnform.cpp" line="387"/>
         <source>Rate</source>
         <translation>速率</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="461"/>
+        <location filename="../src/oneconnform.cpp" line="466"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="463"/>
+        <location filename="../src/oneconnform.cpp" line="468"/>
         <source>WiFi Security：</source>
         <translation type="unfinished">WiFi安全性：</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="465"/>
+        <location filename="../src/oneconnform.cpp" line="470"/>
         <source>MAC：</source>
         <translation type="unfinished">物理地址：</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="541"/>
+        <location filename="../src/oneconnform.cpp" line="546"/>
         <source>Conn Wifi Success</source>
         <translation type="unfinished">连接无线网络成功</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="546"/>
+        <location filename="../src/oneconnform.cpp" line="551"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">请确认Wi-Fi密码或无线设备</translation>
     </message>
@@ -1677,35 +1686,40 @@
         <translation>断开</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="242"/>
-        <location filename="../src/onelancform.cpp" line="246"/>
-        <location filename="../src/onelancform.cpp" line="247"/>
-        <location filename="../src/onelancform.cpp" line="251"/>
+        <location filename="../src/onelancform.cpp" line="34"/>
+        <source>Cancel</source>
+        <translation type="unfinished">取 消</translation>
+    </message>
+    <message>
+        <location filename="../src/onelancform.cpp" line="249"/>
+        <location filename="../src/onelancform.cpp" line="253"/>
+        <location filename="../src/onelancform.cpp" line="254"/>
+        <location filename="../src/onelancform.cpp" line="258"/>
         <source>No Configuration</source>
         <translation type="unfinished">未配置</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="252"/>
+        <location filename="../src/onelancform.cpp" line="259"/>
         <source>No IfName</source>
         <translation type="unfinished">无网卡信息</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="255"/>
+        <location filename="../src/onelancform.cpp" line="262"/>
         <source>IPv4：</source>
         <translation type="unfinished">IPv4地址：</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="256"/>
+        <location filename="../src/onelancform.cpp" line="263"/>
         <source>IPv6：</source>
         <translation type="unfinished">IPv6地址：</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="257"/>
+        <location filename="../src/onelancform.cpp" line="264"/>
         <source>BandWidth：</source>
         <translation type="unfinished">带宽：</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="258"/>
+        <location filename="../src/onelancform.cpp" line="265"/>
         <source>MAC：</source>
         <translation type="unfinished">物理地址：</translation>
     </message>
@@ -1735,62 +1749,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="88"/>
+        <location filename="../src/wpawifidialog.cpp" line="100"/>
         <source>Connect Wifi</source>
         <translation type="unfinished">连接网络</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="101"/>
+        <location filename="../src/wpawifidialog.cpp" line="113"/>
         <source>Connection name</source>
         <translation type="unfinished">连接名称</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="122"/>
+        <location filename="../src/wpawifidialog.cpp" line="134"/>
         <source>Security</source>
         <translation type="unfinished">安全性</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="141"/>
+        <location filename="../src/wpawifidialog.cpp" line="153"/>
         <source>EAP type</source>
         <translation type="unfinished">EAP方法</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="154"/>
+        <location filename="../src/wpawifidialog.cpp" line="166"/>
         <source>inner authentication</source>
         <translation type="unfinished">阶段2身份验证</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="167"/>
+        <location filename="../src/wpawifidialog.cpp" line="179"/>
         <source>Username</source>
         <translation type="unfinished">用户名:</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="184"/>
+        <location filename="../src/wpawifidialog.cpp" line="196"/>
         <source>Password</source>
         <translation type="unfinished">密码:</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="198"/>
+        <location filename="../src/wpawifidialog.cpp" line="210"/>
         <source>Show password</source>
         <translation type="unfinished">显示密码</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="211"/>
+        <location filename="../src/wpawifidialog.cpp" line="223"/>
         <source>Ask pwd each query</source>
         <translation type="unfinished">每次询问密码</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="229"/>
+        <location filename="../src/wpawifidialog.cpp" line="241"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="230"/>
+        <location filename="../src/wpawifidialog.cpp" line="242"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="256"/>
+        <location filename="../src/wpawifidialog.cpp" line="268"/>
         <source>WPA &amp; WPA2</source>
         <translation type="unfinished">WPA 及 WPA2企业</translation>
     </message>

@@ -45,6 +45,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConnPWD->setText(tr("Connect"));//"连接"
     ui->btnDisConn->setText(tr("Disconnect"));//"断开连接"
     ui->btnHideConn->setText(tr("Connect"));//"连接"
+    ui->btnCancel->setText(tr("Cancel"));//取消连接
 
     ui->lbConned->setAlignment(Qt::AlignLeft);
     ui->lePassword->setEchoMode(QLineEdit::Normal);
@@ -81,6 +82,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnDisConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
                                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
+    ui->btnCancel->setStyleSheet("QPushButton{border:none;background:transparent;color:white;font-size:14px;}");
     ui->btnHideConn->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
                                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                                "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
@@ -110,6 +112,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConn->hide();
     ui->btnDisConn->hide();
     ui->btnConnPWD->hide();
+    ui->btnCancel->hide();
     ui->btnHideConn->hide();
     ui->line->show();
     ui->lbWaiting->hide();
@@ -716,7 +719,6 @@ void OneConnForm::on_btnInfo_clicked()
 // Wifi连接结果，0成功 1失败 2没有配置文件
 void OneConnForm::slotConnWifiResult(int connFlag)
 {
-    mw->is_stop_check_net_state = 0;
     qDebug()<<"Function slotConnWifiResult receives a number: "<<connFlag;
 
     if (!connType.isEmpty()) {
@@ -747,12 +749,12 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         ui->btnConnPWD->show();
 
         this->isSelected = true;
-//        if (connFlag == 2) {
-//            mw->is_stop_check_net_state = 0;
-//        } else {
-//            mw->is_stop_check_net_state = 0;
-//            //connType = "RequestPassword";
-//        }
+        //if (connFlag == 2) {
+        //    mw->is_stop_check_net_state = 0;
+        //} else {
+        //    mw->is_stop_check_net_state = 0;
+        //    //connType = "RequestPassword";
+        //}
 
         //设置输入密码框被选中
         ui->lePassword->setFocus();
@@ -762,25 +764,19 @@ void OneConnForm::slotConnWifiResult(int connFlag)
 
     if (connFlag == 1) {
         // 使用配置文件连接失败，需要删除该配置文件
-        //QString txt(tr("Connect Wifi Failed"));//"连接 Wifi 失败"
-        //syslog(LOG_DEBUG, "Try to connect wifi named %s, but failed, will delete it's configuration file", lbNameText->text().toUtf8().data());
-
-        //KylinDBus kylindbus;
-        //kylindbus.showDesktopNotify(txt);
-        //QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->lbName->text() + "';notify-send '" + txt + "...' -t 3800";
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + lbNameText->text() + "'";
         int status = system(cmd.toUtf8().data());
         if (status != 0) {
             syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");
         }
-
-//        mw->is_stop_check_net_state = 0;
     }
 
     // 设置全局变量，当前连接Wifi的信号强度
     currentActWifiSignalLv = signalLv;
 
     this->stopWaiting();
+
+    mw->is_stop_check_net_state = 0;
 }
 
 void OneConnForm::waitAnimStep()
@@ -810,12 +806,14 @@ void OneConnForm::waitAnimStep()
     }
 }
 
-void OneConnForm::startWaiting(bool isConn)
+void OneConnForm::startWaiting(bool isToConnect)
 {
     this->isWaiting = true;
-    if (isConn) {
+    if (isToConnect) {
+        ui->btnCancel->show();
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);}");
     } else {
+        ui->lbWaitingIcon->move(ui->lbWaitingIcon->x() - 24, ui->lbWaitingIcon->y());
         ui->btnDisConn->hide();
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
     }
@@ -830,6 +828,8 @@ void OneConnForm::startWaiting(bool isConn)
 
 void OneConnForm::stopWaiting()
 {
+    ui->lbWaitingIcon->move(380, 20);
+    ui->btnCancel->hide();
     this->isWaiting = false;
     this->waitTimer->stop();
     ui->lbWaiting->hide();
@@ -837,4 +837,14 @@ void OneConnForm::stopWaiting()
 
     mw->setTrayLoading(false);
     mw->getActiveInfo();
+}
+
+void OneConnForm::on_btnCancel_clicked()
+{
+    QString cmd = "kill -9 $(pidof nmcli)"; //杀掉当前正在进行的有关nmcli命令的进程
+    int status = system(cmd.toUtf8().data());
+    if (status != 0) {
+        qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
+        syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
+    }
 }

@@ -1502,37 +1502,37 @@
         <translation type="unfinished">Kablosuz bağlantı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2708"/>
+        <location filename="../src/mainwindow.cpp" line="2706"/>
         <source>Without Lan Cable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2717"/>
+        <location filename="../src/mainwindow.cpp" line="2727"/>
         <source>MAC Address Mismatch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2730"/>
+        <location filename="../src/mainwindow.cpp" line="2735"/>
+        <source>Connection Be Killed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="2743"/>
         <source>Connect Wired Network Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2738"/>
+        <location filename="../src/mainwindow.cpp" line="2719"/>
         <source>IP configuration could not be reserved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2746"/>
-        <source>Connection timed out</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="2767"/>
+        <location filename="../src/mainwindow.cpp" line="2763"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2772"/>
+        <location filename="../src/mainwindow.cpp" line="2768"/>
         <source>Confirm your Wi-Fi password</source>
         <translation type="unfinished">Wi-Fi parolasını doğrula</translation>
     </message>
@@ -1592,7 +1592,7 @@
         <translation type="vanished">Kablosuz listesini şimdi güncelle</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2698"/>
+        <location filename="../src/mainwindow.cpp" line="2697"/>
         <source>Conn Ethernet Success</source>
         <translation>Ethernet Bağlantısı Başarılı</translation>
     </message>
@@ -1601,7 +1601,7 @@
         <translation type="vanished">Ethernet Bağlantısı Hatası</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2761"/>
+        <location filename="../src/mainwindow.cpp" line="2757"/>
         <source>Conn Wifi Success</source>
         <translation>Wi-Fi Bağlantısı Başarılı</translation>
     </message>
@@ -1646,12 +1646,12 @@
         <translation type="obsolete">Parola gir...</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="371"/>
+        <location filename="../src/oneconnform.cpp" line="376"/>
         <source>Connect to Hidden Wi-Fi Network</source>
         <translation>Gizli Wi-Fi Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="464"/>
+        <location filename="../src/oneconnform.cpp" line="469"/>
         <source>Signal：</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1664,17 +1664,22 @@
         <translation type="vanished">Güvenli</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="382"/>
+        <location filename="../src/oneconnform.cpp" line="48"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/oneconnform.cpp" line="387"/>
         <source>Rate</source>
         <translation>Oran</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="461"/>
+        <location filename="../src/oneconnform.cpp" line="466"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="463"/>
+        <location filename="../src/oneconnform.cpp" line="468"/>
         <source>WiFi Security：</source>
         <translation type="unfinished">WiFi güvenliği:</translation>
     </message>
@@ -1683,17 +1688,17 @@
         <translation type="obsolete">Sinyal gücü:</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="465"/>
+        <location filename="../src/oneconnform.cpp" line="470"/>
         <source>MAC：</source>
         <translation type="unfinished">Fiziksel adres:</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="541"/>
+        <location filename="../src/oneconnform.cpp" line="546"/>
         <source>Conn Wifi Success</source>
         <translation type="unfinished">Wi-Fi Bağlantısı Başarılı</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="546"/>
+        <location filename="../src/oneconnform.cpp" line="551"/>
         <source>Confirm your Wi-Fi password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
@@ -1725,35 +1730,40 @@
         <translation>Bağlantıyı Kes</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="242"/>
-        <location filename="../src/onelancform.cpp" line="246"/>
-        <location filename="../src/onelancform.cpp" line="247"/>
-        <location filename="../src/onelancform.cpp" line="251"/>
+        <location filename="../src/onelancform.cpp" line="34"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/onelancform.cpp" line="249"/>
+        <location filename="../src/onelancform.cpp" line="253"/>
+        <location filename="../src/onelancform.cpp" line="254"/>
+        <location filename="../src/onelancform.cpp" line="258"/>
         <source>No Configuration</source>
         <translation type="unfinished">Yapılandırma Yok</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="252"/>
+        <location filename="../src/onelancform.cpp" line="259"/>
         <source>No IfName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="255"/>
+        <location filename="../src/onelancform.cpp" line="262"/>
         <source>IPv4：</source>
         <translation type="unfinished">IPv4 adresi:</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="256"/>
+        <location filename="../src/onelancform.cpp" line="263"/>
         <source>IPv6：</source>
         <translation type="unfinished">IPv6 adresi:</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="257"/>
+        <location filename="../src/onelancform.cpp" line="264"/>
         <source>BandWidth：</source>
         <translation type="unfinished">Bant genişliği:</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="258"/>
+        <location filename="../src/onelancform.cpp" line="265"/>
         <source>MAC：</source>
         <translation type="unfinished">Fiziksel adres:</translation>
     </message>
@@ -1783,62 +1793,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="88"/>
+        <location filename="../src/wpawifidialog.cpp" line="100"/>
         <source>Connect Wifi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="101"/>
+        <location filename="../src/wpawifidialog.cpp" line="113"/>
         <source>Connection name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="122"/>
+        <location filename="../src/wpawifidialog.cpp" line="134"/>
         <source>Security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="141"/>
+        <location filename="../src/wpawifidialog.cpp" line="153"/>
         <source>EAP type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="154"/>
+        <location filename="../src/wpawifidialog.cpp" line="166"/>
         <source>inner authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="167"/>
+        <location filename="../src/wpawifidialog.cpp" line="179"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="184"/>
+        <location filename="../src/wpawifidialog.cpp" line="196"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="198"/>
+        <location filename="../src/wpawifidialog.cpp" line="210"/>
         <source>Show password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="211"/>
+        <location filename="../src/wpawifidialog.cpp" line="223"/>
         <source>Ask pwd each query</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="229"/>
+        <location filename="../src/wpawifidialog.cpp" line="241"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="230"/>
+        <location filename="../src/wpawifidialog.cpp" line="242"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="256"/>
+        <location filename="../src/wpawifidialog.cpp" line="268"/>
         <source>WPA &amp; WPA2</source>
         <translation type="unfinished"></translation>
     </message>

@@ -288,14 +288,15 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
     }
     QString line = file.readLine();
     file.close();
-    qDebug()<<"connect result of wifi: "<< line;
+    qDebug()<<"connect_wifi_result: "<< line;
 
     if (line.indexOf("successfully") != -1) {
         emit connDone(0);
         qDebug()<<"debug: in function execConnWifiPWD, wireless net state is: "<<QString::number(execGetIface()->wstate);
         syslog(LOG_DEBUG, "In function execConnWifiPWD, wireless net state is: %d", execGetIface()->wstate);
     } else if(line.indexOf("Secrets were required") != -1){
-        emit connDone(4);
+        //emit connDone(4);//发出信号4是之前添加每次连接输入密码的功能时需要的
+        emit connDone(1);
     } else {
         emit connDone(1);
     }

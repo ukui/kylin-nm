@@ -2544,11 +2544,23 @@ void MainWindow::onExternalConnectionChange(QString type)
     if (!is_connect_hide_wifi && !is_stop_check_net_state) {
         is_stop_check_net_state = 1;
         if (type == "802-3-ethernet" || type == "ethernet") {
-            QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
+            if (is_connect_net_failed) {
+                qDebug()<<"debug: connect wired network failed, no need to refresh wired interface";
+                is_connect_net_failed = 0;
+                is_stop_check_net_state = 0;
+            } else {
+                QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
+            }
         }
 
         if (type == "802-11-wireless" || type == "wifi") {
-            QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
+            if (is_connect_net_failed) {
+                qDebug()<<"debug: connect wifi failed just now, no need to refresh wifi interface";
+                is_connect_net_failed = 0;
+                is_stop_check_net_state = 0;
+            } else {
+                QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
+            }
         }
     }
 }
@@ -2560,15 +2572,10 @@ void MainWindow::onExternalLanChange()
 
 void MainWindow::onExternalWifiChange()
 {
-    if (is_connect_wifi_failed) {
-        qDebug()<<"debug: connect wifi failed just now, no need to refresh wifi interface";
-        is_connect_wifi_failed = 0;
-    } else {
-        on_btnWifiList_clicked();
-    }
+    on_btnWifiList_clicked();
 }
 
-//处理外界对wifi的打开与关闭
+//处理外界对wifi开关的打开与关闭
 void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
 {
     if (!is_stop_check_net_state) {
@@ -2691,7 +2698,6 @@ void MainWindow::connLanDone(int connFlag)
     // Lan连接结果，0点击连接成功 1因网线未插入失败 2因mac地址匹配不上失败 3开机启动网络工具时已经连接
     if (connFlag == 0) {
         syslog(LOG_DEBUG, "Wired net already connected by clicking button");
-        this->is_wired_line_ready = 1;
         //this->ksnm->execGetLanList();
 
         QString txt(tr("Conn Ethernet Success"));
@@ -2700,7 +2706,6 @@ void MainWindow::connLanDone(int connFlag)
 
     if (connFlag == 1) {
         syslog(LOG_DEBUG, "without net line connect to computer.");
-        this->is_wired_line_ready = 0; //is_wired_line_ready=0 mean without wired cable
         is_stop_check_net_state = 0;
 
         QString txt(tr("Without Lan Cable"));
@@ -2709,37 +2714,32 @@ void MainWindow::connLanDone(int connFlag)
 
     if (connFlag == 3) {
         syslog(LOG_DEBUG, "Launch kylin-nm, Lan already connected");
-        this->is_wired_line_ready = 1;
     }
 
     if (connFlag == 4) {
         syslog(LOG_DEBUG, "IP configuration could not be reserved");
-        this->is_wired_line_ready = 1;
-
+        is_connect_net_failed = 1;
         QString txt(tr("IP configuration could not be reserved"));
         objKyDBus->showDesktopNotify(txt);
     }
 
     if (connFlag == 5) {
         syslog(LOG_DEBUG, "The MACs of the device and the connection do not match.");
-        this->is_wired_line_ready = 1;
-
+        is_connect_net_failed = 1;
         QString txt(tr("MAC Address Mismatch"));
         objKyDBus->showDesktopNotify(txt);
     }
 
     if (connFlag == 6) {
-        syslog(LOG_DEBUG, "Connection timed out");
-        this->is_wired_line_ready = 1;
-
-        QString txt(tr("Connection timed out"));
+        syslog(LOG_DEBUG, "Connection Be Killed");
+        is_connect_net_failed = 1;
+        QString txt(tr("Connection Be Killed"));
         objKyDBus->showDesktopNotify(txt);
     }
 
     if (connFlag == 7) {
         syslog(LOG_DEBUG, "Connect Wired Network Failed");
-        this->is_wired_line_ready = 1;
-
+        is_connect_net_failed = 1;
         QString txt(tr("Connect Wired Network Failed"));
         objKyDBus->showDesktopNotify(txt);
     }
@@ -2758,13 +2758,14 @@ void MainWindow::connWifiDone(int connFlag)
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 1) {
         is_stop_check_net_state = 0;
-        is_connect_wifi_failed = 1;
+        is_connect_net_failed = 1;
 
         QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 3) {
         syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected");
     } else if (connFlag == 4) {
+        is_connect_net_failed = 1;
         QString txt(tr("Confirm your Wi-Fi password"));
         objKyDBus->showDesktopNotify(txt);
     }

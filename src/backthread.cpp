@@ -86,13 +86,14 @@ IFace* BackThread::execGetIface()
                 iface->lname = iname;
 
                 if (istateStr == "unmanaged") {
-                    iface->lstate = 2; //switch of wired device is off
-                }
-                if (istateStr == "disconnected" || istateStr == "unavailable") {
-                    iface->lstate = 1; //wired network is disconnected
-                }
-                if (istateStr == "connected") {
-                    iface->lstate = 0; //wired network is connected
+                    iface->lstate = 3; //switch of wired device is off
+                } else if (istateStr == "disconnected" || istateStr == "unavailable") {
+                    iface->lstate = 3; //wired network is disconnected
+                } else if (istateStr == "connected") {
+                    iface->lstate = 3; //wired network is connected
+                } else {
+                    //连接中，正在配置
+                    iface->lstate = 3;
                 }
             }
             if (type == "wifi") {

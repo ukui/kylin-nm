@@ -1217,9 +1217,14 @@ void MainWindow::onBtnNetListClicked(int flag)
         return;
     }
 
-    if (iface->lstate != 2) {
+    if (iface->lstate == 0 || iface->lstate == 1) {
         this->startLoading();
         this->ksnm->execGetLanList();
+    } else if (iface->lstate == 3) {
+        this->ksnm->isUseOldLanSlist = true;
+        QStringList slistLan;
+        slistLan.append("empty");
+        getLanListDone(slistLan);
     } else {
         this->startLoading();
         this->ksnm->execGetLanList();
@@ -1259,13 +1264,8 @@ void MainWindow::on_btnWifiList_clicked()
 
     ui->lbNetwork->setText(tr("Wifi"));
     btnWireless->show();
-    if (iface->wstate == 0 || iface->wstate == 1) {
-        btnWireless->setSwitchStatus(true);
-    } else {
-        btnWireless->setSwitchStatus(false);
-    }
 
-    if (iface->wstate != 2) {
+    if (iface->wstate == 0 || iface->wstate == 1) {
         btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();

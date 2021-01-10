@@ -27,25 +27,25 @@
 
 KSimpleNM::KSimpleNM(QObject *parent) : QObject(parent)
 {
-    runProcessWifi = new QProcess(this);
-    connect(runProcessWifi, &QProcess::readyRead, this, &KSimpleNM::readProcessWifi);
-    connect(runProcessWifi, SIGNAL(finished(int)), this, SLOT(finishedProcessWifi(int)));
-
     runProcessLan = new QProcess(this);
     connect(runProcessLan, &QProcess::readyRead, this, &KSimpleNM::readProcessLan);
     connect(runProcessLan, SIGNAL(finished(int)), this, SLOT(finishedProcessLan(int)));
+
+    runProcessWifi = new QProcess(this);
+    connect(runProcessWifi, &QProcess::readyRead, this, &KSimpleNM::readProcessWifi);
+    connect(runProcessWifi, SIGNAL(finished(int)), this, SLOT(finishedProcessWifi(int)));
 }
 
 KSimpleNM::~KSimpleNM()
 {
-    delete runProcessWifi;
     delete runProcessLan;
+    delete runProcessWifi;
 }
 
 //获取有线网络列表数据
 void KSimpleNM::execGetLanList()
 {
-    if (isExecutingGetLanList) {
+    if (isExecutingGetLanList || isExecutingGetWifiList) {
         syslog(LOG_DEBUG, "It is running getting lan list when getting lan list");
         qDebug()<<"debug: it is running getting lan list when getting lan list";
         isUseOldLanSlist = true;
@@ -63,7 +63,7 @@ void KSimpleNM::execGetLanList()
 //获取无线网络列表数据
 void KSimpleNM::execGetWifiList()
 {
-    if (isExecutingGetWifiList) {
+    if (isExecutingGetWifiList || isExecutingGetLanList) {
         syslog(LOG_DEBUG, "It is running getting wifi list when getting wifi list");
         qDebug()<<"debug: it is running getting wifi list when getting wifi list";
         isUseOldWifiSlist = true;
@@ -79,27 +79,27 @@ void KSimpleNM::execGetWifiList()
 }
 
 //读取获取到的结果
-void KSimpleNM::readProcessWifi()
-{
-    QString output = runProcessWifi->readAll();
-    shellOutputWifi += output;
-}
 void KSimpleNM::readProcessLan()
 {
     QString output = runProcessLan->readAll();
     shellOutputLan += output;
 }
+void KSimpleNM::readProcessWifi()
+{
+    QString output = runProcessWifi->readAll();
+    shellOutputWifi += output;
+}
 
 //读取完所有列表数据后发信号，将数据发往mainwindow用于显示网络列表
-void KSimpleNM::finishedProcessWifi(int msg)
-{
-    QStringList slist = shellOutputWifi.split("\n");
-    emit getWifiListFinished(slist);
-    isExecutingGetWifiList = false;
-}
 void KSimpleNM::finishedProcessLan(int msg)
 {
     QStringList slist = shellOutputLan.split("\n");
     emit getLanListFinished(slist);
     isExecutingGetLanList = false;
+}
+void KSimpleNM::finishedProcessWifi(int msg)
+{
+    QStringList slist = shellOutputWifi.split("\n");
+    emit getWifiListFinished(slist);
+    isExecutingGetWifiList = false;
 }

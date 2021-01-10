@@ -32,10 +32,10 @@ public:
     explicit KSimpleNM(QObject *parent = nullptr);
     ~KSimpleNM();
 
-    QProcess *runProcessWifi;
     QProcess *runProcessLan;
-    QString shellOutputWifi;
+    QProcess *runProcessWifi;
     QString shellOutputLan;
+    QString shellOutputWifi;
 
     bool isExecutingGetLanList = false; //是否正在执行获取有线网列表
     bool isExecutingGetWifiList = false; //是否正在执行获取无线网列表
@@ -50,10 +50,10 @@ signals:
     void getWifiListFinished(QStringList slist);
 
 public slots:
-    void readProcessWifi();
     void readProcessLan();
-    void finishedProcessWifi(int msg);
+    void readProcessWifi();
     void finishedProcessLan(int msg);
+    void finishedProcessWifi(int msg);
 };
 
 #endif // KSIMPLENM_H

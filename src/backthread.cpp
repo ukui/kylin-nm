@@ -334,13 +334,15 @@ void BackThread::dellConnectWifiResult(QString info)
     if (info.indexOf("successfully") != -1) {
         emit connDone(0);
     } else if(info.indexOf("unknown") != -1 || info.indexOf("not exist") != -1) {
-        //send this signal if the network we want to connect has not a configuration file
+        //qDebug() << "send this signal if the network we want to connect has not a configuration file";
         emit connDone(2);
-    } else if(info.indexOf("not given") != -1 || info.indexOf("Secrets were required") != -1){
-        //password for '802-11-wireless-security.psk' not given in 'passwd-file'
+    } else if(info.indexOf("not given") != -1 || info.indexOf("Secrets were required") != -1) {
+        //no need to handle this situation
+    } else if(info.indexOf("Passwords or encryption keys are required") != -1){
+        //qDebug() << "password for '802-11-wireless-security.psk' not given in 'passwd-file'";
         emit connDone(4);
     } else {
-        //send this signal if connect net failed
+        //qDebug() << "send this signal if connect net failed";
         emit connDone(1);
     }
 

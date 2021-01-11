@@ -1435,8 +1435,8 @@ void MainWindow::getLanListDone(QStringList slist)
                 macInterface = objKyDBus->getLanMAC(objKyDBus->dbusIfName); //有限网卡对应的mac地址
 
                 if (macLan!="" && macLan!="--" && macLan != macInterface) {
-                    //continue; //有线网的permenant mac地址与网卡的地址不同，则不在列表中显示
-                    macInterface = macLan;
+                    continue; //有线网的permenant mac地址与网卡的地址不同，则不在列表中显示
+                    //macInterface = macLan;
                 }
             } else {
                 mIfName = objKyDBus->multiWiredIfName.at(0); //使用默认的网络接口

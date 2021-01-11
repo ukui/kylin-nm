@@ -45,7 +45,7 @@ KSimpleNM::~KSimpleNM()
 //获取有线网络列表数据
 void KSimpleNM::execGetLanList()
 {
-    if (isExecutingGetLanList || isExecutingGetWifiList) {
+    if (isExecutingGetLanList) {
         syslog(LOG_DEBUG, "It is running getting lan list when getting lan list");
         qDebug()<<"debug: it is running getting lan list when getting lan list";
         isUseOldLanSlist = true;
@@ -63,7 +63,7 @@ void KSimpleNM::execGetLanList()
 //获取无线网络列表数据
 void KSimpleNM::execGetWifiList()
 {
-    if (isExecutingGetWifiList || isExecutingGetLanList) {
+    if (isExecutingGetWifiList) {
         syslog(LOG_DEBUG, "It is running getting wifi list when getting wifi list");
         qDebug()<<"debug: it is running getting wifi list when getting wifi list";
         isUseOldWifiSlist = true;

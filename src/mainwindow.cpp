@@ -158,12 +158,12 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == ui->btnNetList) {
         if (event->type() == QEvent::HoverEnter) {
-            if (!is_btnNetList_clicked) {
+            if (!is_btnLanList_clicked) {
                 ui->lbNetListBG->setStyleSheet(btnBgHoverQss);
             }
             return true;
         } else if(event->type() == QEvent::HoverLeave) {
-            if (!is_btnNetList_clicked) {
+            if (!is_btnLanList_clicked) {
                 ui->lbNetListBG->setStyleSheet(btnBgLeaveQss);
             }
             return true;
@@ -637,7 +637,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
             this->showNormal();
             this->raise();
             this->activateWindow();
-            if (is_btnNetList_clicked == 1) {
+            if (is_btnLanList_clicked == 1) {
                 onBtnNetListClicked(0);
             }
             if (!is_init_wifi_list && !is_connect_hide_wifi) {
@@ -1187,7 +1187,7 @@ void MainWindow::onBtnWifiClicked(int flag)
 
 void MainWindow::onBtnNetListClicked(int flag)
 {
-    this->is_btnNetList_clicked = 1;
+    this->is_btnLanList_clicked = 1;
     this->is_btnWifiList_clicked = 0;
 
     ui->lbNetListBG->setStyleSheet(btnOnQss);
@@ -1242,7 +1242,7 @@ void MainWindow::onBtnNetListClicked(int flag)
 void MainWindow::on_btnWifiList_clicked()
 {
     this->is_btnWifiList_clicked = 1;
-    this->is_btnNetList_clicked = 0;
+    this->is_btnLanList_clicked = 0;
 
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
@@ -1345,6 +1345,10 @@ void MainWindow::on_btnWifiList_clicked()
 // 获取lan列表回调
 void MainWindow::getLanListDone(QStringList slist)
 {
+    if (this->is_btnWifiList_clicked == 1) {
+        return;
+    }
+
     //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldLanSlist) {
         slist = oldLanSlist;
@@ -1562,6 +1566,10 @@ void MainWindow::getLanListDone(QStringList slist)
 // 获取wifi列表回调
 void MainWindow::getWifiListDone(QStringList slist)
 {
+    if (this->is_btnLanList_clicked == 1) {
+        return;
+    }
+
     qDebug()<<"debug: oldWifiSlist.size()="<<oldWifiSlist.size()<<"   slist.size()="<<slist.size();
 
     //qDebug()<<"0            ";
@@ -2439,7 +2447,7 @@ void MainWindow::enNetDone()
 }
 void MainWindow::disNetDone()
 {
-    this->is_btnNetList_clicked = 1;
+    this->is_btnLanList_clicked = 1;
     this->is_btnWifiList_clicked = 0;
 
     ui->lbNetListBG->setStyleSheet(btnOnQss);
@@ -2508,7 +2516,7 @@ void MainWindow::disWifiDone()
 }
 void MainWindow::disWifiStateKeep()
 {
-    if (this->is_btnNetList_clicked == 1) {
+    if (this->is_btnLanList_clicked == 1) {
         btnWireless->setSwitchStatus(false);
     }
     if (this->is_btnWifiList_clicked== 1) {
@@ -2651,7 +2659,7 @@ void MainWindow::on_setNetSpeed()
             if ( objNetSpeed->getCurrentDownloadRates(objKyDBus->dbusWiFiCardName.toUtf8().data(), &start_rcv_rates, &start_tx_rates) == -1) {
                 start_rcv_rates = end_rcv_rates;
             }
-        } else if(is_btnNetList_clicked == 1) {
+        } else if(is_btnLanList_clicked == 1) {
             if ( objNetSpeed->getCurrentDownloadRates(currConnIfname.toUtf8().data(), &start_rcv_rates, &start_tx_rates) == -1) {
                 start_tx_rates = end_tx_rates;
             }

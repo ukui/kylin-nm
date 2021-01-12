@@ -781,7 +781,7 @@ void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
     syslog(LOG_DEBUG, "An old network was removed from configure directory.");
     qDebug()<<"An old network was removed from configure directory.";
 
-    if (mw->is_btnNetList_clicked == 1) {
+    if (mw->is_btnLanList_clicked == 1) {
         emit this->updateWiredList(0); //send this signal to update wired network list
     }
 

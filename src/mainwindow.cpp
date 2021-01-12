@@ -92,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ksnm, SIGNAL(getWifiListFinished(QStringList)), this, SLOT(getWifiListDone(QStringList)));
 
     loading = new LoadingDiv(this);
+    loading->move(40,0);
     connect(loading, SIGNAL(toStopLoading() ), this, SLOT(on_checkOverTime() ));
 
     checkIsWirelessDeviceOn(); //检测无线网卡是否插入
@@ -1243,6 +1244,9 @@ void MainWindow::on_btnWifiList_clicked()
 {
     this->is_btnWifiList_clicked = 1;
     this->is_btnLanList_clicked = 0;
+    if (this->is_btnLanList_clicked == 1) {
+        return;
+    }
 
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
@@ -1266,38 +1270,26 @@ void MainWindow::on_btnWifiList_clicked()
     btnWireless->show();
 
     if (iface->wstate == 0 || iface->wstate == 1) {
+        //qDebug() << "wifi开关在打开状态";
         btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();
 
         this->startLoading();
         this->ksnm->execGetWifiList();
-    } else if (iface->wstate == 3) { //连接中，正在配置wifi设备
+    } else if (iface->wstate == 3) {
+        //qDebug() << "连接中，正在配置wifi设备";
+
+        this->ksnm->isUseOldWifiSlist = true;
+        QStringList slistWifi;
+        slistWifi.append("empty");
+        getWifiListDone(slistWifi);
+
         btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();
-
-        QList<OneConnForm*> topwifis = topWifiListWidget->findChildren<OneConnForm*>();
-        foreach(OneConnForm* topwifi, topwifis)
-        {
-            delete topwifi;
-            topwifi = NULL;
-        }
-        // 当前连接的wifi
-        OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
-        ccf->setName(tr("Not connected"));//"当前未连接任何 Wifi"
-
-        ccf->setSignal("0", "--");
-        ccf->setRate("0");
-        ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
-        ccf->isConnected = false;
-        ccf->setTopItem(false);
-        ccf->setAct(true);
-        ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
-        ccf->show();
-        is_stop_check_net_state = 0;
     } else {
-        qDebug()<<"debug: WiFi的开关已经关闭";
+        //qDebug()<<"debug: WiFi的开关已经关闭";
         btnWireless->setSwitchStatus(false);
         delete topWifiListWidget; //清空top列表
         createTopWifiUI(); //创建顶部无线网item
@@ -1337,7 +1329,6 @@ void MainWindow::on_btnWifiList_clicked()
     delete iface;
     bt->deleteLater();
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 //网络列表加载与更新
@@ -1655,7 +1646,6 @@ void MainWindow::loadWifiListDone(QStringList slist)
         connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
             QString str = process->readAllStandardOutput();
             actWifissid = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2);
-            qDebug()<<actWifissid;
         });
         process->waitForFinished();
     }
@@ -2497,7 +2487,7 @@ void MainWindow::enWifiDone()
     if (is_btnWifiList_clicked) {
         this->ksnm->execGetWifiList();
     } else {
-        on_btnWifiList_clicked();
+        //on_btnWifiList_clicked();
     }
 
     objKyDBus->getWirelessCardName();
@@ -2606,7 +2596,11 @@ void MainWindow::onExternalLanChange()
 
 void MainWindow::onExternalWifiChange()
 {
-    on_btnWifiList_clicked();
+    if (is_btnWifiList_clicked) {
+        this->ksnm->execGetWifiList();
+    } else {
+        //on_btnWifiList_clicked();
+    }
 }
 
 //处理外界对wifi开关的打开与关闭

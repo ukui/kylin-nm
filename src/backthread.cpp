@@ -169,6 +169,8 @@ void BackThread::execEnWifi()
 {
     char *chr1 = "nmcli radio wifi on";
     Utils::m_system(chr1);
+    emit btFinish();
+
     while (1) {
         if (execGetIface()->wstate != 2) {
             KylinDBus objKyDbus;

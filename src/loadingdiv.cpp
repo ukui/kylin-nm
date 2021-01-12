@@ -29,7 +29,7 @@ LoadingDiv::LoadingDiv(QWidget *parent) : QWidget(parent)
 
     this->loadingGif = new QLabel(this);
     this->loadingGif->resize(96, 96);
-    this->loadingGif->move(this->width()/2 - 96/2 + 41/2, this->height()/2 + 20);
+    this->loadingGif->move(this->width()/2 - 96/2 + 41/2 - 40, this->height()/2 + 20);
     this->loadingGif->show();
 
     this->switchTimer = new QTimer(this); //QTimer对象，控制等待动画播放

@@ -2564,8 +2564,10 @@ void MainWindow::on_btnHotspotState()
 }
 
 //处理外界对网络的连接与断开
-void MainWindow::onExternalConnectionChange(QString type)
+void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 {
+    isWifiBeDisConn = true;
+    isWifiBeDisConn = isConnUp;
     if (!is_connect_hide_wifi && !is_stop_check_net_state) {
         is_stop_check_net_state = 1;
         if (type == "802-3-ethernet" || type == "ethernet") {
@@ -2601,6 +2603,11 @@ void MainWindow::onExternalWifiChange()
         this->ksnm->execGetWifiList();
     } else {
         //on_btnWifiList_clicked();
+    }
+
+    if (!isWifiBeDisConn) {
+        QString txt(tr("WiFi already disconnect"));
+        objKyDBus->showDesktopNotify(txt);
     }
 }
 

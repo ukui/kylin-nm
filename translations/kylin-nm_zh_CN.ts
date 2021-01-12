@@ -1452,6 +1452,11 @@
         <translation type="unfinished">以太网连接</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="2606"/>
+        <source>WiFi already disconnect</source>
+        <translation type="unfinished">WiFi已经断开</translation>
+    </message>
+    <message>
         <location filename="../src/mainwindow.cpp" line="2359"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished">断开有线网络</translation>

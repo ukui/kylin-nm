@@ -913,7 +913,7 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
                 if (newPaths.size() == 0) {
                     if (oldPathInfo.size() == oldPaths.size()) {
                         qDebug()<<"debug: 已连接网络个数由1减少到0";
-                        mw->onExternalConnectionChange(oldPathInfo.at(i));
+                        mw->onExternalConnectionChange(oldPathInfo.at(i), false);
                     }
                 } else {
                     for (int j=0; j<newPaths.size(); j++) {
@@ -925,7 +925,7 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
                         if (j == newPaths.size()-1) {
                             if (oldPathInfo.size() == oldPaths.size()) {
                                 qDebug()<<"debug: 已连接网络个数由3减少到2，或由2减少到1";
-                                mw->onExternalConnectionChange(oldPathInfo.at(i));
+                                mw->onExternalConnectionChange(oldPathInfo.at(i), false);
                             }
                         }
                     }
@@ -937,7 +937,7 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
                 QDBusObjectPath new_path = newPaths.at(i);
                 if (oldPaths.size() == 0) {
                     qDebug()<<"debug: 已连接网络个数由0增加到1";
-                    mw->onExternalConnectionChange(newPathInfo.at(i));
+                    mw->onExternalConnectionChange(newPathInfo.at(i), true);
                 } else {
                     for (int j=0; j<oldPaths.size(); j++) {
                         QDBusObjectPath old_path = oldPaths.at(j);
@@ -947,7 +947,7 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 
                         if (j == oldPaths.size()-1) {
                             qDebug()<<"debug: 已连接网络个数由1增加到2，或2增加到3";
-                            mw->onExternalConnectionChange(newPathInfo.at(i));
+                            mw->onExternalConnectionChange(newPathInfo.at(i), true);
                         }
                     }
                 }

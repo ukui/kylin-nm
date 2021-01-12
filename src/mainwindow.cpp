@@ -1710,7 +1710,8 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
                 ccf->setName(wname);
                 //ccf->setRate(wrate);
-                ccf->setSignal(wsignal, wsecu);
+                int signal = wsignal.toInt() + 11;
+                ccf->setSignal(QString::number(signal), wsecu);
                 activeWifiSignalLv = wsignal.toInt();
                 objKyDBus->getWifiMac(wname);
                 ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, freqState);

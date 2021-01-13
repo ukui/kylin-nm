@@ -1446,7 +1446,7 @@ void MainWindow::getLanListDone(QStringList slist)
                         isActiveNet = true; //名为nname的网络是已经连接的有线网络
                         ifLanConnected = true;
 
-                        objKyDBus->getConnectNetIp();
+                        objKyDBus->getConnectNetIp(nuuid);
                         if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
                         //QString strLanName = TranslateLanName(nname); //进行中英文系统环境下有线网络名称的汉化
 
@@ -1483,10 +1483,10 @@ void MainWindow::getLanListDone(QStringList slist)
                             ccfAct->setLine(false); //最后一个item不显示下划线
                         }
 \
-                        if (!objKyDBus->dbusLanIpv4.isEmpty() && !objKyDBus->dbusActiveLanIpv4.isEmpty()) {
-                            if (objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
+                        if (!objKyDBus->dbusLanIpv4.isEmpty()) {
+                            if (!objKyDBus->dbusActiveLanIpv4.isEmpty() && objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
                                 //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
-                                objKyDBus->connectWiredNet(nname);
+                                //objKyDBus->connectWiredNet(nname);
                             } else if ((oldActLanName == actLanSsidName.at(kk)) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
                                 //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
                                 objKyDBus->connectWiredNet(nname);
@@ -2162,8 +2162,10 @@ void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
     scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA + H_NORMAL_ITEM*(currTopLanItem-1));
     lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2 + H_NORMAL_ITEM*(currTopLanItem-1)/2);
 
-    foreach (OneLancForm *ocf, topLanList) {
+    for (int i = topLanList.size() - 1;i >= 0; i --) {
+        OneLancForm *ocf = topLanList.at(i);
         ocf->setTopItem(false);
+        ocf->move(L_VERTICAL_LINE_TO_ITEM, (topLanList.size() - 1 - i) * H_NORMAL_ITEM);
     }
 }
 void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)

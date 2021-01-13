@@ -213,7 +213,6 @@ void BackThread::execConnLan(QString connName, QString ifname)
     //先断开当前网卡对应的已连接有线网
     QString uuid = objKyDbus.getConnLanNameByIfname(ifname);
     if (uuid != "--") {
-        //qDebug() << "断开网络：" <<uuid;
         kylin_network_set_con_down(uuid.toUtf8().data());
     }
 

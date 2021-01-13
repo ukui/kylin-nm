@@ -427,7 +427,7 @@ QString KylinDBus::getLanMAC(QString ifname)
 }
 
 //获取已经连接的有线网ip
-void KylinDBus::getConnectNetIp()
+void KylinDBus::getConnectNetIp(QString netUuid)
 {
     QDBusInterface interface( "org.freedesktop.NetworkManager",
                               "/org/freedesktop/NetworkManager",
@@ -452,69 +452,73 @@ void KylinDBus::getConnectNetIp()
                                   "org.freedesktop.DBus.Properties",
                                   QDBusConnection::systemBus() );
 
-        QDBusReply<QVariant> reply = interfacePro.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
-        if (reply.value().toString() == "ethernet" || reply.value().toString() == "802-3-ethernet") {
-            //ipv4的路径信息和ip信息
-            QDBusInterface interfaceIp4( "org.freedesktop.NetworkManager",
-                                      objPath.path(),
-                                      "org.freedesktop.DBus.Properties",
-                                      QDBusConnection::systemBus() );
-            QDBusMessage replyIp4 = interfaceIp4.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Ip4Config");
-            QList<QVariant> outArgsIp4 = replyIp4.arguments();
-            QVariant firstIp4 = outArgsIp4.at(0);
-            QDBusVariant dbvFirstIp4 = firstIp4.value<QDBusVariant>();
-            QVariant vFirstIp4 = dbvFirstIp4.variant();
-            QDBusObjectPath dbusPathIp4 = vFirstIp4.value<QDBusObjectPath>();
-
-            QDBusInterface interfaceIpv4( "org.freedesktop.NetworkManager",
-                                          dbusPathIp4.path(),
+        QDBusReply<QVariant> replyType = interfacePro.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
+        QDBusReply<QVariant> replyUuid = interfacePro.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Uuid");
+        if (replyType.value().toString() == "ethernet" || replyType.value().toString() == "802-3-ethernet") {
+            if (replyUuid.value().toString() == netUuid) {
+                //ipv4的路径信息和ip信息
+                QDBusInterface interfaceIp4( "org.freedesktop.NetworkManager",
+                                          objPath.path(),
                                           "org.freedesktop.DBus.Properties",
                                           QDBusConnection::systemBus() );
-            QDBusMessage replyIpv4 = interfaceIpv4.call("Get", "org.freedesktop.NetworkManager.IP4Config", "AddressData");
+                QDBusMessage replyIp4 = interfaceIp4.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Ip4Config");
+                QList<QVariant> outArgsIp4 = replyIp4.arguments();
+                QVariant firstIp4 = outArgsIp4.at(0);
+                QDBusVariant dbvFirstIp4 = firstIp4.value<QDBusVariant>();
+                QVariant vFirstIp4 = dbvFirstIp4.variant();
+                QDBusObjectPath dbusPathIp4 = vFirstIp4.value<QDBusObjectPath>();
 
-            QList<QVariant> outArgsIpv4 = replyIpv4.arguments();
-            QVariant firstIpv4 = outArgsIpv4.at(0);
-            QDBusVariant dbvFirstIpv4 = firstIpv4.value<QDBusVariant>();
-            QVariant vFirstIpv4 = dbvFirstIpv4.variant();
+                QDBusInterface interfaceIpv4( "org.freedesktop.NetworkManager",
+                                              dbusPathIp4.path(),
+                                              "org.freedesktop.DBus.Properties",
+                                              QDBusConnection::systemBus() );
+                QDBusMessage replyIpv4 = interfaceIpv4.call("Get", "org.freedesktop.NetworkManager.IP4Config", "AddressData");
 
-            const QDBusArgument &dbusArgIpv4 = vFirstIpv4.value<QDBusArgument>();
-            QList<QVariantMap> mDatasIpv4;
-            dbusArgIpv4 >> mDatasIpv4;
+                QList<QVariant> outArgsIpv4 = replyIpv4.arguments();
+                QVariant firstIpv4 = outArgsIpv4.at(0);
+                QDBusVariant dbvFirstIpv4 = firstIpv4.value<QDBusVariant>();
+                QVariant vFirstIpv4 = dbvFirstIpv4.variant();
 
-            foreach (QVariantMap mDataIpv4, mDatasIpv4) {
-                dbusActiveLanIpv4 = mDataIpv4.value("address").toString();
-            }
+                const QDBusArgument &dbusArgIpv4 = vFirstIpv4.value<QDBusArgument>();
+                QList<QVariantMap> mDatasIpv4;
+                dbusArgIpv4 >> mDatasIpv4;
 
-            //ipv6的路径信息和ip信息
-            QDBusInterface interfaceIp6( "org.freedesktop.NetworkManager",
-                                      objPath.path(),
-                                      "org.freedesktop.DBus.Properties",
-                                      QDBusConnection::systemBus() );
-            QDBusMessage replyIp6 = interfaceIp6.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Ip6Config");
-            QList<QVariant> outArgsIp6 = replyIp6.arguments();
-            QVariant firstIp6 = outArgsIp6.at(0);
-            QDBusVariant dbvFirstIp6 = firstIp6.value<QDBusVariant>();
-            QVariant vFirstIp6 = dbvFirstIp6.variant();
-            QDBusObjectPath dbusPathIp6 = vFirstIp6.value<QDBusObjectPath>();
+                foreach (QVariantMap mDataIpv4, mDatasIpv4) {
+                    dbusActiveLanIpv4 = mDataIpv4.value("address").toString();
+                }
 
-            QDBusInterface interfaceIpv6( "org.freedesktop.NetworkManager",
-                                          dbusPathIp6.path(),
+                //ipv6的路径信息和ip信息
+                QDBusInterface interfaceIp6( "org.freedesktop.NetworkManager",
+                                          objPath.path(),
                                           "org.freedesktop.DBus.Properties",
                                           QDBusConnection::systemBus() );
-            QDBusMessage replyIpv6 = interfaceIpv6.call("Get", "org.freedesktop.NetworkManager.IP6Config", "AddressData");
+                QDBusMessage replyIp6 = interfaceIp6.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Ip6Config");
+                QList<QVariant> outArgsIp6 = replyIp6.arguments();
+                QVariant firstIp6 = outArgsIp6.at(0);
+                QDBusVariant dbvFirstIp6 = firstIp6.value<QDBusVariant>();
+                QVariant vFirstIp6 = dbvFirstIp6.variant();
+                QDBusObjectPath dbusPathIp6 = vFirstIp6.value<QDBusObjectPath>();
 
-            QList<QVariant> outArgsIpv6 = replyIpv6.arguments();
-            QVariant firstIpv6 = outArgsIpv6.at(0);
-            QDBusVariant dbvFirstIpv6 = firstIpv6.value<QDBusVariant>();
-            QVariant vFirstIpv6 = dbvFirstIpv6.variant();
+                QDBusInterface interfaceIpv6( "org.freedesktop.NetworkManager",
+                                              dbusPathIp6.path(),
+                                              "org.freedesktop.DBus.Properties",
+                                              QDBusConnection::systemBus() );
+                QDBusMessage replyIpv6 = interfaceIpv6.call("Get", "org.freedesktop.NetworkManager.IP6Config", "AddressData");
 
-            const QDBusArgument &dbusArgIpv6 = vFirstIpv6.value<QDBusArgument>();
-            QList<QVariantMap> mDatasIpv6;
-            dbusArgIpv6 >> mDatasIpv6;
+                QList<QVariant> outArgsIpv6 = replyIpv6.arguments();
+                QVariant firstIpv6 = outArgsIpv6.at(0);
+                QDBusVariant dbvFirstIpv6 = firstIpv6.value<QDBusVariant>();
+                QVariant vFirstIpv6 = dbvFirstIpv6.variant();
 
-            foreach (QVariantMap mDataIpv6, mDatasIpv6) {
-                dbusActiveLanIpv6 = mDataIpv6.value("address").toString();
+                const QDBusArgument &dbusArgIpv6 = vFirstIpv6.value<QDBusArgument>();
+                QList<QVariantMap> mDatasIpv6;
+                dbusArgIpv6 >> mDatasIpv6;
+
+                foreach (QVariantMap mDataIpv6, mDatasIpv6) {
+                    dbusActiveLanIpv6 = mDataIpv6.value("address").toString();
+                }
             }
+
         }
     }
     dbusArgs.endArray();

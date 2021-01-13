@@ -52,7 +52,7 @@ public:
     void initConnectionInfo();
     QList<QString> getConnectNetName();
     void connectWiredNet(QString netName);
-    void getConnectNetIp();
+    void getConnectNetIp(QString netUuid);
     void getLanIpChanged();
     void onWiredSettingNumChanged();
 

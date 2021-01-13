@@ -85,11 +85,12 @@ IFace* BackThread::execGetIface()
                 // if type is wired network
                 iface->lname = iname;
 
+                qDebug() << "有线网的状态是 "<<istateStr;
                 if (istateStr == "unmanaged") {
                     iface->lstate = 2; //switch of wired device is off
                 } else if (istateStr == "disconnected" || istateStr == "unavailable") {
                     iface->lstate = 1; //wired network is disconnected
-                } else if (istateStr == "connected") {
+                } else if (istateStr == "connected" || istateStr == "connecting (getting IP configuration)") {
                     iface->lstate = 0; //wired network is connected
                 } else {
                     //连接中，正在配置

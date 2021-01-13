@@ -344,9 +344,8 @@ void KylinDBus::getLanIpDNS(QString uuidName, bool isActNet)
                                             dbusArg2nd.beginArray();
                                             while (!dbusArg2nd.atEnd()) {
                                                 dbusArg2nd >> strDns;// append map to a vector here if you want to keep it
-                                                // 当获取到dns时，dns肯定不会为0，所以就会有一个类似出栈的操作，就会走到atEnd尾部；
-                                                // 当获取到的dns为空时，就没有类似的出栈操作，获取到的数字就有问题；
                                                 if (strDns == 0) {
+                                                    //dbusArg2nd为空时，strDns没有从dbusArg2nd获取到结果
                                                     dbusArg2nd.endArray();
                                                 }
                                             }

@@ -1482,11 +1482,11 @@ void MainWindow::getLanListDone(QStringList slist)
                         } else {
                             ccfAct->setLine(false); //最后一个item不显示下划线
                         }
-
-                        if (!objKyDBus->dbusLanIpv4.isEmpty()) {
+\
+                        if (!objKyDBus->dbusLanIpv4.isEmpty() && !objKyDBus->dbusActiveLanIpv4.isEmpty()) {
                             if (objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
                                 //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
-                                //objKyDBus->connectWiredNet(nname);
+                                objKyDBus->connectWiredNet(nname);
                             } else if ((oldActLanName == actLanSsidName.at(kk)) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
                                 //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
                                 objKyDBus->connectWiredNet(nname);

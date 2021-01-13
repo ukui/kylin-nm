@@ -1645,7 +1645,10 @@ void MainWindow::loadWifiListDone(QStringList slist)
         });
         connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
             QString str = process->readAllStandardOutput();
-            actWifissid = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2);
+            actWifissid = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2); //获取到ssid时，以ssid为准
+        });
+        connect(process, &QProcess::readyReadStandardError, this, [ = ]() {
+            actWifissid = actWifiName; //没有获取到ssid时，以wifi名为准
         });
         process->waitForFinished();
     }

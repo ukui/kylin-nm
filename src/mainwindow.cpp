@@ -548,11 +548,11 @@ void MainWindow::initTimer()
 //初始化已经连接网络的DNS
 void MainWindow::initActNetDNS()
 {
-    QList<QString> currConnNames =objKyDBus->getConnectNetName();
+    QList<QString> currConnLanSsidUuid =objKyDBus->getAtiveLanSsidUuid();
 
-    if (currConnNames.size() > 0) {
-        oldActLanName = currConnNames.at(0);
-        objKyDBus->getLanIpDNS(currConnNames.at(1), true);
+    if (currConnLanSsidUuid.size() > 0) {
+        oldActLanName = currConnLanSsidUuid.at(0);
+        objKyDBus->getLanIpDNS(currConnLanSsidUuid.at(1), true);
         oldDbusActLanDNS = objKyDBus->dbusActLanDNS;
     }
 }
@@ -1304,7 +1304,7 @@ void MainWindow::on_btnWifiList_clicked()
 
         // 当前连接的wifi
         OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
-        ccf->setName(tr("Not connected"));//"当前未连接任何 Wifi"
+        ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--");
         ccf->setRate("0");
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
@@ -1367,10 +1367,10 @@ void MainWindow::getLanListDone(QStringList slist)
     // 获取当前连接有线网的SSID和UUID
     QList<QString> actLanSsidName;
     QList<QString> actLanUuidName;
-    QList<QString> currConnNames =objKyDBus->getConnectNetName();
+    QList<QString> currConnLanSsidUuid =objKyDBus->getAtiveLanSsidUuid();
 
     // 若当前lan name为"--"，设置OneConnForm
-    if (currConnNames.size() == 0) {
+    if (currConnLanSsidUuid.size() == 0) {
         OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
         ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
         ccf->setIcon(false);
@@ -1390,10 +1390,10 @@ void MainWindow::getLanListDone(QStringList slist)
     } else {
         int i = 0;
         do {
-            actLanSsidName.append(currConnNames.at(i)); //网络名称
-            actLanUuidName.append(currConnNames.at(i+1)); //网络唯一ID
+            actLanSsidName.append(currConnLanSsidUuid.at(i)); //网络名称
+            actLanUuidName.append(currConnLanSsidUuid.at(i+1)); //网络唯一ID
             i += 2;
-        } while(i<currConnNames.size());
+        } while(i<currConnLanSsidUuid.size());
         currTopLanItem = actLanSsidName.size();
     }
 
@@ -1439,7 +1439,7 @@ void MainWindow::getLanListDone(QStringList slist)
             }
 
             //**********************创建已经连接的有线网item********************//
-            if (currConnNames.size() != 0) {//证明有已经连接的有线网络
+            if (currConnLanSsidUuid.size() != 0) {//证明有已经连接的有线网络
                 for (int kk=0; kk<actLanSsidName.size(); kk++) {
                     if (nname == actLanSsidName.at(kk) && nuuid == actLanUuidName.at(kk)) {
                         topLanListWidget->resize(topLanListWidget->width(), topLanListWidget->height() + H_NORMAL_ITEM*kk);
@@ -1585,9 +1585,11 @@ void MainWindow::getWifiListDone(QStringList slist)
     }
 
     if (is_update_wifi_list == 0) {
+        //qDebug() << "loadwifi的列表";
         loadWifiListDone(slist);
         is_init_wifi_list = 0;
     } else {
+        //qDebug() << "updatewifi的列表";
         updateWifiListDone(slist);
         is_update_wifi_list = 0;
     }
@@ -1606,9 +1608,20 @@ void MainWindow::loadWifiListDone(QStringList slist)
     scrollAreaw->setWidget(wifiListWidget);
     scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
 
+    QList<QString> currConnWifiSsidUuid = objKyDBus->getAtiveWifiBSsidUuid();
+
     // 获取当前连接的wifi name
     QString actWifiName = "--";
     actWifissid = "--";
+    actWifiBssid = "--";
+    actWifiUuid = "--";
+    if (currConnWifiSsidUuid.size() > 1) {
+        actWifiBssid = currConnWifiSsidUuid.at(0);
+        actWifiUuid = currConnWifiSsidUuid.at(1);
+        //qDebug() << "获取到的bssid是：" << actWifiBssid;
+        //qDebug() << "获取到的uuid是：" << actWifiUuid;
+    }
+
     activecon *act = kylin_network_get_activecon_info();
     int index = 0;
     while (act[index].con_name != NULL) {
@@ -1622,7 +1635,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     // 根据当前连接的wifi 设置OneConnForm
     OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
     if (actWifiName == "--") {
-        ccf->setName(tr("Not connected"));//"当前未连接任何 Wifi"
+        ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--");
         activeWifiSignalLv = 0;
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
@@ -1658,18 +1671,22 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 填充可用网络列表
     QString headLine = slist.at(0);
-    int indexSecu, indexName, indexFreq;
+    int indexSecu, indexFreq, indexBSsid, indexName;
     headLine = headLine.trimmed();
 
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
         indexSecu = headLine.indexOf("安全性");
         indexFreq = headLine.indexOf("频率") + 4;
-        indexName = headLine.indexOf("SSID") + 6;
+        indexBSsid = headLine.indexOf("BSSID") + 6;
+        //indexName = headLine.indexOf("SSID") + 6;
+        indexName = indexBSsid + 19;
     } else {
         indexSecu = headLine.indexOf("SECURITY");
         indexFreq = headLine.indexOf("FREQ");
-        indexName = headLine.indexOf("SSID");
+        indexBSsid = headLine.indexOf("BSSID");
+        //indexName = headLine.indexOf("SSID");
+        indexName = indexBSsid + 19;
     }
     QStringList wnames;
     int count = 0;
@@ -1678,6 +1695,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         QString line = slist.at(i);
         QString wsignal = line.mid(0, indexSecu).trimmed();
         QString wsecu = line.mid(indexSecu, indexFreq - indexSecu).trimmed();
+        QString wbssid = line.mid(indexBSsid, 17).trimmed();
         QString wname = line.mid(indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
         bool isContinue = false;
@@ -1708,10 +1726,10 @@ void MainWindow::loadWifiListDone(QStringList slist)
         }
         if (wname != "" && wname != "--") {
             // 当前连接的wifi
-            if (wname == actWifissid) {
+            if (wbssid == actWifiBssid) {
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
-                ccf->setName(wname);
+                ccf->setName(wname, wbssid, actWifiUuid);
                 //ccf->setRate(wrate);
                 int signal = wsignal.toInt() + 11;
                 ccf->setSignal(QString::number(signal), wsecu);
@@ -1734,7 +1752,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
                 OneConnForm *ocf = new OneConnForm(wifiListWidget, this, confForm, ksnm);
                 connect(ocf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneWifiFormSelected(QString,int)));
-                ocf->setName(wname);
+                ocf->setName(wname, wbssid, "--");
                 //ocf->setRate(wrate);
                 ocf->setLine(true);
                 ocf->setSignal(wsignal, wsecu);
@@ -1798,23 +1816,27 @@ void MainWindow::updateWifiListDone(QStringList slist)
     lastHeadLine = lastHeadLine.trimmed();
     bool isChineseInIt = lastHeadLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseInIt) {
-        lastIndexName = lastHeadLine.indexOf("SSID") + 4;
+        lastIndexName = lastHeadLine.indexOf("BSSID") + 6 + 19;
     } else {
-        lastIndexName = lastHeadLine.indexOf("SSID");
+        lastIndexName = lastHeadLine.indexOf("BSSID") + 19;
     }
 
     QString headLine = slist.at(0);
-    int indexSecu, indexName, indexFreq;
+    int indexSecu, indexFreq, indexBSsid, indexName;
     headLine = headLine.trimmed();
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
         indexSecu = headLine.indexOf("安全性");
         indexFreq = headLine.indexOf("频率") + 4;
-        indexName = headLine.indexOf("SSID") + 6;
+        indexBSsid = headLine.indexOf("BSSID") + 6;
+        //indexName = headLine.indexOf("SSID") + 6;
+        indexName = indexBSsid + 19;
     } else {
         indexSecu = headLine.indexOf("SECURITY");
         indexFreq = headLine.indexOf("FREQ");
-        indexName = headLine.indexOf("SSID");
+        indexBSsid = headLine.indexOf("BSSID");
+        //indexName = headLine.indexOf("SSID");
+        indexName = indexBSsid + 19;
     }
 
     //列表中去除已经减少的wifi
@@ -1857,6 +1879,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
         QString line = slist.at(i);
         QString wsignal = line.mid(0, indexSecu).trimmed();
         QString wsecu = line.mid(indexSecu, indexFreq - indexSecu).trimmed();
+        QString wbssid = line.mid(indexBSsid, 17).trimmed();
         QString wname = line.mid(indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
 
@@ -1914,7 +1937,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() + H_NORMAL_ITEM);
                 OneConnForm *addItem = new OneConnForm(wifiListWidget, this, confForm, ksnm);
                 connect(addItem, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneWifiFormSelected(QString,int)));
-                addItem->setName(wname);
+                addItem->setName(wname, wbssid, "--");
                 //addItem->setRate(wrate);
                 addItem->setLine(false);
                 addItem->setSignal(wsignal, wsecu);
@@ -2536,7 +2559,7 @@ void MainWindow::disWifiDoneChangeUI()
         OneConnForm *ocf = wifiList.at(i);
         if (ocf->isActive == true) {
             ocf->setSelected(false, false);
-            ocf->setName(tr("Not connected"));//"当前未连接任何 Wifi"
+            ocf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 Wifi"
             ocf->setSignal("0", "--");
             ocf->setConnedString(1, tr("Disconnected"), "");//"未连接"
             lbLoadDown->hide();

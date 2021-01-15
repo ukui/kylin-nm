@@ -65,8 +65,7 @@ public:
     ~OneConnForm();
 
     void setSignal(QString lv, QString secu);
-    void setName(QString name);
-    void setSpecialName(QString name);
+    void setName(QString name, QString bssid, QString uuid);
     QString getName();
     void setRate(QString rate);
     void setLine(bool isShow);
@@ -84,6 +83,8 @@ public:
     bool isWifiConfExist(QString netName);
 
     QString wifiName;
+    QString wifiBSsid;
+    QString wifiUuid;
     QString connType;
     QString wifiSecu;
     bool isSelected;

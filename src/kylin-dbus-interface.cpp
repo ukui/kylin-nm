@@ -844,8 +844,8 @@ void KylinDBus::initConnectionInfo()
     oldWifiSwitchState = m_result.value().toBool();
 }
 
-//获取已经连接网络的ssid和uuid
-QList<QString> KylinDBus::getConnectNetName()
+//获取已经连接有线网络的ssid和uuid
+QList<QString> KylinDBus::getAtiveLanSsidUuid()
 {
     QList<QString> strSsidUuid;
 
@@ -886,6 +886,80 @@ QList<QString> KylinDBus::getConnectNetName()
     dbusArgs.endArray();
 
     return strSsidUuid;
+}
+
+//获取已经连接无线网络的ssid和uuid
+QList<QString> KylinDBus::getAtiveWifiBSsidUuid()
+{
+    QList<QString> strBSsidUuid;
+
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+    //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
+    QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    QList<QVariant> outArgs = result.arguments();
+    QVariant first = outArgs.at(0);
+    QDBusVariant dbvFirst = first.value<QDBusVariant>();
+    QVariant vFirst = dbvFirst.variant();
+    QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
+
+    QDBusObjectPath objPath;
+    dbusArgs.beginArray();
+    while (!dbusArgs.atEnd()) {
+        dbusArgs >> objPath;
+
+        QDBusInterface interfaceType( "org.freedesktop.NetworkManager",
+                                  objPath.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+        QDBusReply<QVariant> reply = interfaceType.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
+
+        if (reply.value().toString() == "wifi" || reply.value().toString() == "802-11-wireless") {
+            QDBusInterface interfaceInfo( "org.freedesktop.NetworkManager",
+                                      objPath.path(),
+                                      "org.freedesktop.DBus.Properties",
+                                      QDBusConnection::systemBus() );
+
+            QDBusMessage resultConnection = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Connection");
+
+            QList<QVariant> outArgsConnection = resultConnection.arguments();
+            QVariant firstConnection = outArgsConnection.at(0);
+            QDBusVariant dbvFirstConnection = firstConnection.value<QDBusVariant>();
+            QVariant vFirstConnection = dbvFirstConnection.variant();
+            QDBusObjectPath dbusArgsConnection = vFirstConnection.value<QDBusObjectPath>();
+
+            QDBusInterface interfaceSet("org.freedesktop.NetworkManager",
+                                      dbusArgsConnection.path(),
+                                      "org.freedesktop.NetworkManager.Settings.Connection",
+                                      QDBusConnection::systemBus());
+            QDBusMessage resultSet = interfaceSet.call("GetSettings");
+
+            const QDBusArgument &dbusArg1stSet = resultSet.arguments().at( 0 ).value<QDBusArgument>();
+            QMap<QString,QMap<QString,QVariant>> mapSet;
+            dbusArg1stSet >> mapSet;
+
+            for (QString setKey : mapSet.keys() ) {
+                QMap<QString,QVariant> subSetMap = mapSet.value(setKey);
+                if (setKey == "802-11-wireless") {
+                    for (QString searchKey : subSetMap.keys()) {
+                        if (searchKey == "seen-bssids") {
+                            //qDebug() << "wifi bssid : "<<subSetMap.value(searchKey).toString();
+                            strBSsidUuid.append(subSetMap.value(searchKey).toString());
+                        }
+                    }
+                }
+            }
+
+            QDBusReply<QVariant> replyUuid = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Uuid");
+            //qDebug() << "wifi uuid : "<< replyUuid.value().toString();
+            strBSsidUuid.append(replyUuid.value().toString());
+        }
+    }
+    dbusArgs.endArray();
+
+    return strBSsidUuid;
 }
 
 //网络连接变化时，如有新增或减少的网络，发信号通知更新主界面

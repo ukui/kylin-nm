@@ -75,7 +75,7 @@ void KSimpleNM::execGetWifiList()
     isExecutingGetWifiList = true;
 
     shellOutputWifi = "";
-    runProcessWifi->start("nmcli -f signal,security,freq,ssid device wifi");
+    runProcessWifi->start("nmcli -f signal,security,freq,bssid,ssid device wifi");
 }
 
 //读取获取到的结果

@@ -364,15 +364,12 @@ void OneConnForm::setConnedString(bool showLable, QString str, QString str1)
     }
 }
 
-void OneConnForm::setName(QString name)
+void OneConnForm::setName(QString name, QString bssid, QString uuid)
 {
     lbNameText->setText(name);
     wifiName = name;
-}
-void OneConnForm::setSpecialName(QString name)
-{
-    lbNameText->setText(tr("Connect to Hidden Wi-Fi Network")); //连接到隐藏的 Wi-Fi 网络
-    wifiName = name;
+    wifiBSsid = bssid;
+    wifiUuid = uuid;
 }
 
 QString OneConnForm::getName()
@@ -494,7 +491,8 @@ void OneConnForm::on_btnDisConn_clicked()
 
     mw->is_stop_check_net_state = 1;
     mw->on_btnHotspotState();
-    kylin_network_set_con_down(lbNameText->text().toUtf8().data());
+    //kylin_network_set_con_down(lbNameText->text().toUtf8().data());
+    kylin_network_set_con_down(wifiUuid.toUtf8().data());
     disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneWifiFormSelected(QString,int)));
     emit disconnActiveWifi();
 }

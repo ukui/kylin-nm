@@ -50,7 +50,8 @@ public:
     int getWiredNetworkNumber();
     void showDesktopNotify(QString message);
     void initConnectionInfo();
-    QList<QString> getConnectNetName();
+    QList<QString> getAtiveLanSsidUuid();
+    QList<QString> getAtiveWifiBSsidUuid();
     void connectWiredNet(QString netName);
     void getConnectNetIp(QString netUuid);
     void getLanIpChanged();

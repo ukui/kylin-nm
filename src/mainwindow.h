@@ -282,6 +282,8 @@ private:
     long int start_tx_rates = 0;   //保存开始时的流量计数
     long int end_tx_rates = 0; //保存结束时的流量计数
     QString actWifissid = "--"; //当前连接wifi的ssid
+    QString actWifiBssid = "--"; //当前连接wifi的bssid
+    QString actWifiUuid = "--"; //当前连接wifi的uuid
 
     bool hasWifiConnected;//当前是否有wifi连接
 

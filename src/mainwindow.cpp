@@ -1336,6 +1336,12 @@ void MainWindow::on_btnWifiList_clicked()
 // 获取lan列表回调
 void MainWindow::getLanListDone(QStringList slist)
 {
+    qDebug()<<"0            ";
+    foreach (QString str, slist) {
+        qDebug()<<str;
+    }
+    qDebug()<<"0            ";
+
     if (this->is_btnWifiList_clicked == 1) {
         return;
     }

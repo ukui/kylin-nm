@@ -1336,12 +1336,6 @@ void MainWindow::on_btnWifiList_clicked()
 // 获取lan列表回调
 void MainWindow::getLanListDone(QStringList slist)
 {
-    qDebug()<<"0            ";
-    foreach (QString str, slist) {
-        qDebug()<<str;
-    }
-    qDebug()<<"0            ";
-
     if (this->is_btnWifiList_clicked == 1) {
         return;
     }
@@ -1492,7 +1486,7 @@ void MainWindow::getLanListDone(QStringList slist)
                         if (!objKyDBus->dbusLanIpv4.isEmpty()) {
                             if (!objKyDBus->dbusActiveLanIpv4.isEmpty() && objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
                                 //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
-                                //objKyDBus->connectWiredNet(nname);
+                                objKyDBus->connectWiredNet(nname);
                             } else if ((oldActLanName == actLanSsidName.at(kk)) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
                                 //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
                                 objKyDBus->connectWiredNet(nname);

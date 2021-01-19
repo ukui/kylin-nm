@@ -29,14 +29,11 @@ inst1.files += src/conf/com.kylin.NetworkManager.qt.systemdbus.service
 inst1.path = /usr/share/dbus-1/system-services/
 inst2.files += src/conf/com.kylin.NetworkManager.qt.systemdbus.conf
 inst2.path = /etc/dbus-1/system.d/
-guideCN.files += guide/kylin-nm-guide.wps
-guideCN.path = /usr/share/kylin-user-guide/data/guide/kylin-nm/
 
 INSTALLS += target \
     desktop \
     inst1 \
     inst2 \
-    guideCN
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings

@@ -1372,7 +1372,7 @@ void MainWindow::getLanListDone(QStringList slist)
     // 若当前lan name为"--"，设置OneConnForm
     if (currConnLanSsidUuid.size() == 0) {
         OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
-        ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
+        ccf->setName(tr("Not connected"), tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
         ccf->setIcon(false);
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
         ccf->isConnected = false;
@@ -1453,7 +1453,7 @@ void MainWindow::getLanListDone(QStringList slist)
                         OneLancForm *ccfAct = new OneLancForm(topLanListWidget, this, confForm, ksnm);
                         connect(ccfAct, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneTopLanFormSelected(QString, QString)));
                         connect(ccfAct, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
-                        ccfAct->setName(nname, nuuid, mIfName);
+                        ccfAct->setName(nname, nname, nuuid, mIfName);//第二个参数本来是strLanName，但目前不需要翻译
                         ccfAct->setIcon(true);
                         ccfAct->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macInterface);
                         ccfAct->isConnected = true;
@@ -1513,7 +1513,7 @@ void MainWindow::getLanListDone(QStringList slist)
 
                 OneLancForm *ocf = new OneLancForm(lanListWidget, this, confForm, ksnm);
                 connect(ocf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneLanFormSelected(QString, QString)));
-                ocf->setName(nname, nuuid, mIfName);
+                ocf->setName(nname, nname, nuuid, mIfName);
                 ocf->setIcon(true);
                 ocf->setLine(true);
                 ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), macInterface);
@@ -2486,7 +2486,7 @@ void MainWindow::disNetDone()
 
     // 当前连接的lan
     OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
-    ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
+    ccf->setName(tr("Not connected"), tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
     ccf->setIcon(false);
     ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
     ccf->isConnected = false;

@@ -1436,18 +1436,18 @@
         <translation type="unfinished">未检测到其他无线网络</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1920"/>
-        <location filename="../src/mainwindow.cpp" line="1924"/>
-        <location filename="../src/mainwindow.cpp" line="1929"/>
-        <location filename="../src/mainwindow.cpp" line="1933"/>
+        <location filename="../src/mainwindow.cpp" line="1969"/>
+        <location filename="../src/mainwindow.cpp" line="1973"/>
+        <location filename="../src/mainwindow.cpp" line="1978"/>
+        <location filename="../src/mainwindow.cpp" line="1982"/>
         <source>Wired connection</source>
         <translation type="unfinished">有线连接</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1938"/>
-        <location filename="../src/mainwindow.cpp" line="1942"/>
-        <location filename="../src/mainwindow.cpp" line="1947"/>
-        <location filename="../src/mainwindow.cpp" line="1951"/>
+        <location filename="../src/mainwindow.cpp" line="1987"/>
+        <location filename="../src/mainwindow.cpp" line="1991"/>
+        <location filename="../src/mainwindow.cpp" line="1996"/>
+        <location filename="../src/mainwindow.cpp" line="2000"/>
         <source>Ethernet connection</source>
         <translation type="unfinished">以太网连接</translation>
     </message>

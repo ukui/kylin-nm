@@ -220,10 +220,11 @@ void OneLancForm::setTopItem(bool isSelected)
 }
 
 //设置网络名称
-void OneLancForm::setName(QString ssid, QString uuid, QString interface)
+void OneLancForm::setName(QString ssid, QString transSsid, QString uuid, QString interface)
 {
-    ui->lbName->setText(ssid);
+    ui->lbName->setText(transSsid);
     ssidName = ssid;
+    transSsidName = transSsid;
     uuidName = uuid;
     ifName = interface;
 }

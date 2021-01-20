@@ -269,13 +269,15 @@ void WpaWifiDialog::initCombox() {
 //    securityCombox->setEnabled(false);
     //EAP方法
     QStringList eapStringList;
-    eapStringList<< "PEAP" << "FAST" << "MD5" << "PWD" << "SIM" << "TLS" << "TTLS";
+    //eapStringList<< "PEAP" << "FAST" << "MD5" << "PWD" << "SIM" << "TLS" << "TTLS";
+    eapStringList<< "PEAP";
     for (int i = 0; i < eapStringList.length(); i++) {
         eapCombox->addItem(eapStringList.at(i), QString(eapStringList.at(i)).toLower());
     }
     //阶段2认证方式
     QStringList innerStringList;
-    innerStringList<< "MSCHAPv2" << "MSCHAP" << "MD5" << "CHAP" << "OTP" << "GTC" << "PAP" << "TLS";
+    //innerStringList<< "MSCHAPv2" << "MSCHAP" << "MD5" << "CHAP" << "OTP" << "GTC" << "PAP" << "TLS";
+    innerStringList<< "MSCHAPv2";
     for (int i = 0; i < innerStringList.length(); i++) {
         innerCombox->addItem(innerStringList.at(i), QString(innerStringList.at(i)).toLower());
     }

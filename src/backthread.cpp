@@ -205,7 +205,7 @@ void BackThread::execDisWifi()
 }
 
 //to connect wired network
-void BackThread::execConnLan(QString connName, QString ifname)
+void BackThread::execConnLan(QString connName, QString ifname, QString connectType)
 {
     currConnLanUuid = connName;
     KylinDBus objKyDbus;
@@ -223,7 +223,14 @@ void BackThread::execConnLan(QString connName, QString ifname)
         //} else {
         //    emit connDone(7);
         //}
-        QString mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
+        QString mycmd;
+        qDebug() << "传送过来的类型-------------------》" << connectType;
+        if (connectType == "bluetooth") {
+            mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
+        } else {
+            mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
+        }
+        qDebug() << "sdasadsadsadsa------------->" << mycmd;
         QStringList options;
         options << "-c" << mycmd;
         process->start("/bin/bash",options);

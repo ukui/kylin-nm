@@ -57,7 +57,7 @@ void KSimpleNM::execGetLanList()
     isExecutingGetLanList = true;
 
     shellOutputLan = "";
-    QString getCmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli -f type,uuid,name connection show";
+    QString getCmd = "export LANG='zh_CN.UTF-8';export LANGUAGE='zh_CN:zh';nmcli -f type,uuid,name connection show";
     QStringList options;
     options << "-c" << getCmd;
     runProcessLan->start("/bin/bash",options);

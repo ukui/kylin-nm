@@ -872,7 +872,7 @@ QList<QString> KylinDBus::getAtiveLanSsidUuid()
                                   QDBusConnection::systemBus() );
         QDBusReply<QVariant> reply = interfaceType.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
 
-        if (reply.value().toString() == "ethernet" || reply.value().toString() == "802-3-ethernet") {
+        if (reply.value().toString() == "ethernet" || reply.value().toString() == "802-3-ethernet" || reply.value().toString() == "bluetooth") {
             QDBusInterface interfaceInfo( "org.freedesktop.NetworkManager",
                                       objPath.path(),
                                       "org.freedesktop.DBus.Properties",

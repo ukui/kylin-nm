@@ -80,7 +80,7 @@ public:
     bool isActive;
     bool isConnected;
     QString ssidName;
-    QString transSsidName;
+    QString m_sConnectType;
     QString uuidName;
     QString ifName;
 
@@ -122,7 +122,7 @@ signals:
     void connDone(int connFlag);
     void disconnActiveLan();
 
-    void sigConnLan(QString, QString);
+    void sigConnLan(QString, QString, QString);
 };
 
 #endif // ONELANCFORM_H

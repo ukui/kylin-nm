@@ -222,11 +222,12 @@ void OneLancForm::setTopItem(bool isSelected)
 //设置网络名称
 void OneLancForm::setName(QString ssid, QString transSsid, QString uuid, QString interface)
 {
-    ui->lbName->setText(transSsid);
+    ui->lbName->setText(ssid);
     ssidName = ssid;
-    transSsidName = transSsid;
+    m_sConnectType = transSsid;
     uuidName = uuid;
     ifName = interface;
+    qDebug() << "连接类型" << m_sConnectType;
 }
 
 //根据有线网络连接与否，设置显示'已连接'文字的控件的可见与否
@@ -293,7 +294,7 @@ void OneLancForm::slotConnLan()
     //mw->startLoading();
     this->startWaiting(true);
     //emit sigConnLan(ui->lbName->text(), ifName);
-    emit sigConnLan(uuidName, ifName);
+    emit sigConnLan(uuidName, ifName, m_sConnectType);
 }
 
 //点击网络断开按钮，执行该函数
@@ -381,7 +382,7 @@ void OneLancForm::toConnectWiredNetwork()
     bt->moveToThread(t);
     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
     connect(t, SIGNAL(started()), this, SLOT(slotConnLan()));
-    connect(this, SIGNAL(sigConnLan(QString, QString)), bt, SLOT(execConnLan(QString, QString)));
+    connect(this, SIGNAL(sigConnLan(QString, QString, QString)), bt, SLOT(execConnLan(QString, QString, QString)));
     connect(bt, SIGNAL(connDone(int)), mw, SLOT(connLanDone(int)));
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     t->start();

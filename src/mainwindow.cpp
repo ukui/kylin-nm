@@ -1453,7 +1453,7 @@ void MainWindow::getLanListDone(QStringList slist)
                         OneLancForm *ccfAct = new OneLancForm(topLanListWidget, this, confForm, ksnm);
                         connect(ccfAct, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneTopLanFormSelected(QString, QString)));
                         connect(ccfAct, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
-                        ccfAct->setName(nname, nname, nuuid, mIfName);//第二个参数本来是strLanName，但目前不需要翻译
+                        ccfAct->setName(nname, ltype, nuuid, mIfName);//第二个参数本来是strLanName，但目前不需要翻译
                         ccfAct->setIcon(true);
                         ccfAct->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macInterface);
                         ccfAct->isConnected = true;
@@ -1513,7 +1513,7 @@ void MainWindow::getLanListDone(QStringList slist)
 
                 OneLancForm *ocf = new OneLancForm(lanListWidget, this, confForm, ksnm);
                 connect(ocf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneLanFormSelected(QString, QString)));
-                ocf->setName(nname, nname, nuuid, mIfName);
+                ocf->setName(nname, ltype, nuuid, mIfName);
                 ocf->setIcon(true);
                 ocf->setLine(true);
                 ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), macInterface);
@@ -2762,7 +2762,7 @@ void MainWindow::connLanDone(int connFlag)
     // Lan连接结果，0点击连接成功 1因网线未插入失败 2因mac地址匹配不上失败 3开机启动网络工具时已经连接
     if (connFlag == 0) {
         syslog(LOG_DEBUG, "Wired net already connected by clicking button");
-        //this->ksnm->execGetLanList();
+        this->ksnm->execGetLanList();
 
         QString txt(tr("Conn Ethernet Success"));
         objKyDBus->showDesktopNotify(txt);

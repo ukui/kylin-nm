@@ -1430,8 +1430,8 @@ void MainWindow::getLanListDone(QStringList slist)
                 macInterface = objKyDBus->getLanMAC(objKyDBus->dbusIfName); //有限网卡对应的mac地址
 
                 if (macLan!="" && macLan!="--" && macLan != macInterface) {
-                    continue; //有线网的permenant mac地址与网卡的地址不同，则不在列表中显示
-                    //macInterface = macLan;
+                    //continue; //有线网的permenant mac地址与网卡的地址不同，则不在列表中显示
+                    macInterface = macLan;
                 }
             } else {
                 mIfName = objKyDBus->multiWiredIfName.at(0); //使用默认的网络接口
@@ -1486,10 +1486,10 @@ void MainWindow::getLanListDone(QStringList slist)
                         if (!objKyDBus->dbusLanIpv4.isEmpty()) {
                             if (!objKyDBus->dbusActiveLanIpv4.isEmpty() && objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
                                 //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
-                                objKyDBus->connectWiredNet(nname);
+                                objKyDBus->reConnectWiredNet(nuuid);
                             } else if ((oldActLanName == actLanSsidName.at(kk)) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
                                 //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
-                                objKyDBus->connectWiredNet(nname);
+                                objKyDBus->reConnectWiredNet(nuuid);
                             }
                         }
 
@@ -2773,6 +2773,12 @@ void MainWindow::connLanDone(int connFlag)
         is_stop_check_net_state = 0;
 
         QString txt(tr("Without Lan Cable"));
+        objKyDBus->showDesktopNotify(txt);
+    }
+
+    if (connFlag == 2) {
+        this->ksnm->execGetLanList();
+        QString txt(tr("Conn Ethernet Success"));
         objKyDBus->showDesktopNotify(txt);
     }
 

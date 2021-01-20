@@ -306,14 +306,56 @@ void OneLancForm::on_btnDisConn_clicked()
     mw->is_stop_check_net_state = 1;
 
     //使用有线网ssid断开网络
-    //kylin_network_set_con_down(ui->lbName->text().toUtf8().data());
+    //kylin_network_set_con_down(ssidName.toUtf8().data());
     //使用有线网uuid断开网络
     kylin_network_set_con_down(uuidName.toUtf8().data());
+    //使用dbus接口断开网络
+    //toDisConnWiredNetwork(uuidName);
 
     disconnect(this, SIGNAL(selectedOneLanForm(QString, QString)), mw, SLOT(oneTopLanFormSelected(QString, QString)));
 
     emit disconnActiveLan();
 }
+
+void OneLancForm::toDisConnWiredNetwork(QString netUuid)
+{
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+
+    //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
+    QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    QList<QVariant> outArgs = result.arguments();
+    QVariant first = outArgs.at(0);
+    QDBusVariant dbvFirst = first.value<QDBusVariant>();
+    QVariant vFirst = dbvFirst.variant();
+    QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
+
+    QDBusObjectPath activeConnPath;
+    dbusArgs.beginArray();
+    while (!dbusArgs.atEnd()) {
+        dbusArgs >> activeConnPath;
+
+        QDBusInterface interfacePro( "org.freedesktop.NetworkManager",
+                                  activeConnPath.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+
+        QDBusReply<QVariant> replyUuid = interfacePro.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Uuid");
+        if (replyUuid.value().toString() == netUuid) {
+            //断开当前连接网络
+            QDBusInterface disConnIf("org.freedesktop.NetworkManager",
+                                       "/org/freedesktop/NetworkManager",
+                                       "org.freedesktop.NetworkManager",
+                                       QDBusConnection::systemBus() );
+
+            QDBusReply<QDBusObjectPath> disReply = disConnIf.call("DeactivateConnection", QVariant::fromValue(activeConnPath));
+        }
+    }
+    dbusArgs.endArray();
+}
+
 
 //点击了连接网络按钮，执行该函数
 void OneLancForm::on_btnConn_clicked()

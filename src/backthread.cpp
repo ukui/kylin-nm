@@ -218,6 +218,11 @@ void BackThread::execConnLan(QString connName, QString ifname)
 
     bool wiredCableState = objKyDbus.getWiredCableStateByIfname(ifname);
     if (wiredCableState) {
+        //if(objKyDbus.toConnectWiredNet(connName, ifname)) { //此处connName是有线网Uuid
+        //    emit connDone(2);
+        //} else {
+        //    emit connDone(7);
+        //}
         QString mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
         QStringList options;
         options << "-c" << mycmd;

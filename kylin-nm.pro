@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui x11extras dbus KWindowSystem svg concurrent concurrent
+QT       += core gui x11extras dbus KWindowSystem svg concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,7 +18,7 @@ CONFIG += release
 
 # CONFIG += link_pkgconfig
 # PKGCONFIG += gsettings-qt
-LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11
+LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lnm
 
 target.path = /usr/bin
 target.source += $$TARGET

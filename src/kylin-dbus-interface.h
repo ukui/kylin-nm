@@ -52,7 +52,8 @@ public:
     void initConnectionInfo();
     QList<QString> getAtiveLanSsidUuid();
     QList<QString> getAtiveWifiBSsidUuid();
-    void connectWiredNet(QString netName);
+    void reConnectWiredNet(QString netUuid);
+    bool toConnectWiredNet(QString netUuid, QString netIfName);
     void getConnectNetIp(QString netUuid);
     void getLanIpChanged();
     void onWiredSettingNumChanged();
@@ -72,7 +73,7 @@ public:
     double getTransparentData();
 
     QDBusObjectPath wirelessPath; //无线设备的路径
-    QList<QDBusObjectPath> multiWiredPaths; //已连接网络的对象路径列表
+    QList<QDBusObjectPath> multiWiredPaths; //Wired Device的对象路径列表
     QList<QString> multiWiredCableState;//多有线网卡的情况，判断有线网卡对应网线是否插入
     QList<QString> multiWiredMac; //对应有线网卡的Mac地址
     QList<QString> multiWiredIfName; //对应有线网的接口

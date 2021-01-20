@@ -694,7 +694,7 @@ bool KylinDBus::getWiredCableStateByIfname(QString ifname)
     return false;
 }
 
-//根据网卡接口的名称获取接口对应网线是否接入
+//根据网卡接口的名称获取uuid
 QString KylinDBus::getConnLanNameByIfname(QString ifname)
 {
     QString uuidName = "--";
@@ -1086,8 +1086,8 @@ void KylinDBus::onIpPropertiesChanged()
     emit this->updateWiredList(0);
 }
 
-//利用dbus的方法连接有线网
-void KylinDBus::connectWiredNet(QString netName)
+//利用dbus的方法对已经连接的有线网进行再次连接
+void KylinDBus::reConnectWiredNet(QString netUuid)
 {
     QDBusInterface m_interface("org.freedesktop.NetworkManager",
                                       "/org/freedesktop/NetworkManager/Settings",
@@ -1095,13 +1095,13 @@ void KylinDBus::connectWiredNet(QString netName)
                                       QDBusConnection::systemBus() );
     QDBusReply<QList<QDBusObjectPath>> m_reply = m_interface.call("ListConnections");
 
-    QDBusObjectPath active_connection;
-    active_connection.setPath("/");
+    QDBusObjectPath specific_connection;
+    specific_connection.setPath("/");
 
-    QList<QDBusObjectPath> m_objNets = m_reply.value();
-    foreach (QDBusObjectPath objNet, m_objNets) {
+    QList<QDBusObjectPath> m_objSettingPaths = m_reply.value();
+    foreach (QDBusObjectPath objSettingPath, m_objSettingPaths) {
         QDBusInterface m_interface("org.freedesktop.NetworkManager",
-                                  objNet.path(),
+                                  objSettingPath.path(),
                                   "org.freedesktop.NetworkManager.Settings.Connection",
                                   QDBusConnection::systemBus());
         QDBusMessage result = m_interface.call("GetSettings");
@@ -1114,10 +1114,10 @@ void KylinDBus::connectWiredNet(QString netName)
             QMap<QString,QVariant> outsideMap = map.value(outside_key);
             if (outside_key == "connection") {
                 for (QString search_key : outsideMap.keys()) {
-                    if (search_key == "id") {
-                        if (netName == outsideMap.value(search_key).toString()) {
+                    if (search_key == "uuid") {
+                        if (netUuid == outsideMap.value(search_key).toString()) {
 
-                            QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                            QDBusInterface conn_interface("org.freedesktop.NetworkManager",
                                                        "/org/freedesktop/NetworkManager",
                                                        "org.freedesktop.NetworkManager",
                                                        QDBusConnection::systemBus() );
@@ -1135,7 +1135,7 @@ void KylinDBus::connectWiredNet(QString netName)
                             QVariant vFirst = dbvFirst.variant();
                             QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
 
-                            QDBusObjectPath connWiredPath;
+                            QDBusObjectPath connWiredDivicePath; //已经连接的有线网对应的device路径
                             QDBusObjectPath objPath;
                             dbusArgs.beginArray();
                             while (!dbusArgs.atEnd()) {
@@ -1161,24 +1161,117 @@ void KylinDBus::connectWiredNet(QString netName)
                                     const QDBusArgument &dbusArgIpv4 = vFirstIp4.value<QDBusArgument>();
                                     QList<QDBusObjectPath> mDatasIpv4;
                                     dbusArgIpv4 >> mDatasIpv4;
-                                    connWiredPath = mDatasIpv4.at(0);
+                                    connWiredDivicePath = mDatasIpv4.at(0);
                                     //qDebug() << "xxxxxxxxxxxxxxxxxxxxxxxxxx" << mDatasIpv4.at(0).path();
                                 }
                             }
                             dbusArgs.endArray();
 
-                            //获取到所需的信息后，接下来进行连接
-                            QDBusReply<QDBusObjectPath> connectionReply = m_interface.call("ActivateConnection",
-                                                                                           QVariant::fromValue(objNet),
-                                                                                           QVariant::fromValue(connWiredPath),
-                                                                                           QVariant::fromValue(active_connection));
+                            /*
+                             * 获取到所需的信息后，接下来进行连接
+                             * conn_interface.call("ActivateConnection" 用到的参数
+                             * 1. QVariant::fromValue(objSettingPath)  有线网络对应的Setting Path
+                             * 2. QVariant::fromValue(connWiredDivicePath) 有线网络对应的Devices Path
+                             * 3. QVariant::fromValue(specific_connection) 其他选项路径，可设置为"/"
+                             */
+                            QDBusReply<QDBusObjectPath> connectionReply = conn_interface.call("ActivateConnection",
+                                                                                           QVariant::fromValue(objSettingPath),
+                                                                                           QVariant::fromValue(connWiredDivicePath),
+                                                                                           QVariant::fromValue(specific_connection));
                         }
                     }
                 }
             }
         } // end for(QString outside_key : map.keys() )
 
-    } //end foreach (QDBusObjectPath objNet, m_objNets)
+    } //end foreach (QDBusObjectPath objSettingPath, m_objSettingPaths)
+}
+
+//利用dbus的方法连接有线网
+bool KylinDBus::toConnectWiredNet(QString netUuid, QString netIfName)
+{
+    bool isConnectUp = false; //是否连接上
+
+    QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                      "/org/freedesktop/NetworkManager/Settings",
+                                      "org.freedesktop.NetworkManager.Settings",
+                                      QDBusConnection::systemBus() );
+    QDBusReply<QList<QDBusObjectPath>> m_reply = m_interface.call("ListConnections");
+
+    QDBusObjectPath specific_connection;
+    specific_connection.setPath("/");
+
+    QList<QDBusObjectPath> m_objSettingPaths = m_reply.value();
+    foreach (QDBusObjectPath objSettingPath, m_objSettingPaths) {
+        QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                  objSettingPath.path(),
+                                  "org.freedesktop.NetworkManager.Settings.Connection",
+                                  QDBusConnection::systemBus());
+        QDBusMessage result = m_interface.call("GetSettings");
+
+        const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+        QMap<QString,QMap<QString,QVariant>> map;
+        dbusArg1st >> map;
+
+        for (QString outside_key : map.keys() ) {
+            QMap<QString,QVariant> outsideMap = map.value(outside_key);
+            if (outside_key == "connection") {
+                for (QString search_key : outsideMap.keys()) {
+                    if (search_key == "uuid") {
+                        if (netUuid == outsideMap.value(search_key).toString()) {
+                            QDBusInterface connInterface("org.freedesktop.NetworkManager",
+                                                       "/org/freedesktop/NetworkManager",
+                                                       "org.freedesktop.NetworkManager",
+                                                       QDBusConnection::systemBus() );
+
+                            //获取对应的设备路径
+                            QDBusObjectPath connWiredDivicePath;
+                            connWiredDivicePath.setPath("/");
+                            QDBusInterface interfaceDevice( "org.freedesktop.NetworkManager",
+                                                      "/org/freedesktop/NetworkManager",
+                                                      "org.freedesktop.DBus.Properties",
+                                                      QDBusConnection::systemBus() );
+
+                            QDBusMessage resultDevice = interfaceDevice.call("Get", "org.freedesktop.NetworkManager", "AllDevices");
+                            QList<QVariant> outArgsDevice = resultDevice.arguments();
+                            QVariant firstDevice = outArgsDevice.at(0);
+                            QDBusVariant dbvFirstDevice = firstDevice.value<QDBusVariant>();
+                            QVariant vFirstDevice = dbvFirstDevice.variant();
+                            QDBusArgument dbusArgsDevice = vFirstDevice.value<QDBusArgument>();
+
+                            QDBusObjectPath objPathDevice;
+                            dbusArgsDevice.beginArray();
+                            while (!dbusArgsDevice.atEnd()) {
+                                dbusArgsDevice >> objPathDevice;
+                                QDBusInterface interfaceInterfaceDevice( "org.freedesktop.NetworkManager",
+                                                          objPathDevice.path(),
+                                                          "org.freedesktop.DBus.Properties",
+                                                          QDBusConnection::systemBus() );
+
+                                QDBusReply<QVariant> replyInterfaceDevice = interfaceInterfaceDevice.call("Get", "org.freedesktop.NetworkManager.Device", "Interface");
+                                if (replyInterfaceDevice.value().toString() == netIfName) {
+                                    connWiredDivicePath = objPathDevice;
+                                }
+                            }
+                            dbusArgsDevice.endArray();
+
+                            //下面执行连接网络
+                            QDBusReply<QDBusObjectPath> connectionReply = connInterface.call("ActivateConnection",
+                                                                                           QVariant::fromValue(objSettingPath),
+                                                                                           QVariant::fromValue(connWiredDivicePath),
+                                                                                           QVariant::fromValue(specific_connection));
+                            if (!connectionReply.value().path().isEmpty()) {
+                                isConnectUp = true;
+                            }
+                        }
+                    }
+                }
+            }
+        } // end for(QString outside_key : map.keys() )
+
+    } //end foreach (QDBusObjectPath objSettingPath, m_objSettingPaths)
+
+    return isConnectUp;
 }
 
 //显示桌面通知

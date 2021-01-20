@@ -29,6 +29,15 @@
 #include "backthread.h"
 #include "ksimplenm.h"
 
+#include <QtDBus/QDBusConnection>
+#include <QtDBus/QDBusMessage>
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusObjectPath>
+#include <QDBusReply>
+#include <QDBusObjectPath>
+#include <QVariant>
+#include <QVariantMap>
+
 #define FRAME_SPEED 150
 #define LIMIT_TIME 60*1000
 #define TOTAL_PAGE 8
@@ -84,6 +93,7 @@ private slots:
     void on_btnConnSub_clicked();
     void on_btnDisConn_clicked();
     void toConnectWiredNetwork();
+    void toDisConnWiredNetwork(QString netUuid);
 
     void slotConnLan();
 

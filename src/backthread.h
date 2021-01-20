@@ -51,6 +51,7 @@ public:
     QProcess *cmdConnWifi = nullptr;
     QProcess *process;
     QString currConnLanUuid;
+    QString currConnLanType;
 
 public slots:
     void execEnNet();

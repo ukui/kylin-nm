@@ -208,6 +208,7 @@ void BackThread::execDisWifi()
 void BackThread::execConnLan(QString connName, QString ifname, QString connectType)
 {
     currConnLanUuid = connName;
+    currConnLanType = connectType;
     KylinDBus objKyDbus;
 
     //先断开当前网卡对应的已连接有线网
@@ -224,13 +225,11 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
         //    emit connDone(7);
         //}
         QString mycmd;
-        qDebug() << "传送过来的类型-------------------》" << connectType;
         if (connectType == "bluetooth") {
             mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
         } else {
             mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
         }
-        qDebug() << "sdasadsadsadsa------------->" << mycmd;
         QStringList options;
         options << "-c" << mycmd;
         process->start("/bin/bash",options);
@@ -265,7 +264,12 @@ void BackThread::dellConnectLanResult(QString info)
     if (info.indexOf("successfully") != -1) {
         qDebug()<<"debug: in function execConnLan, wired net state is: "<<QString::number(execGetIface()->lstate);
         syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);
-        emit connDone(0);
+
+        if (currConnLanType == "bluetooth") {
+            emit connDone(2);
+        } else {
+            emit connDone(0);
+        }
     } else {
         QString cmd = "nmcli connection down '" + currConnLanUuid + "'";
         Utils::m_system(cmd.toUtf8().data());

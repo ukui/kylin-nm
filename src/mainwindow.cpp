@@ -2762,7 +2762,7 @@ void MainWindow::connLanDone(int connFlag)
     // Lan连接结果，0点击连接成功 1因网线未插入失败 2因mac地址匹配不上失败 3开机启动网络工具时已经连接
     if (connFlag == 0) {
         syslog(LOG_DEBUG, "Wired net already connected by clicking button");
-        this->ksnm->execGetLanList();
+        //this->ksnm->execGetLanList();
 
         QString txt(tr("Conn Ethernet Success"));
         objKyDBus->showDesktopNotify(txt);

@@ -227,7 +227,6 @@ void OneLancForm::setName(QString ssid, QString transSsid, QString uuid, QString
     m_sConnectType = transSsid;
     uuidName = uuid;
     ifName = interface;
-    qDebug() << "连接类型" << m_sConnectType;
 }
 
 //根据有线网络连接与否，设置显示'已连接'文字的控件的可见与否

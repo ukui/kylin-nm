@@ -34,6 +34,8 @@
 #include <QSettings>
 #include <QSharedPointer>
 
+class MainWindow;
+
 namespace Ui {
 class WpaWifiDialog;
 }
@@ -61,7 +63,7 @@ class WpaWifiDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit WpaWifiDialog(QWidget *parent = nullptr, QString conname = 0);
+    explicit WpaWifiDialog(QWidget *parent = nullptr, MainWindow *mw = 0, QString conname = 0);
     ~WpaWifiDialog();
 
 private:
@@ -90,6 +92,8 @@ private:
     QStringList wifi_info;
     bool has_config;
     QStringList user_list;
+
+    MainWindow *mw;
 
     void setEditorEnable(bool is_checking); //设置是否禁用输入
     void activateConnection();
@@ -159,6 +163,7 @@ Q_SIGNALS:
 private slots:
     void slot_on_connectBtn_clicked();
     void slot_line_edit_changed();
+    void changeDialog();
 };
 
 #endif // WPAWIFIDIALOG_H

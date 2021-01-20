@@ -158,7 +158,7 @@ void DlgHideWifi::changeDialog()
     } else if(ui->cbxSecurity->currentIndex()==2) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, "");
+        WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, mw, "");
         QPoint pos = QCursor::pos();
         QRect primaryGeometry;
         for (QScreen *screen : qApp->screens()) {
@@ -243,7 +243,7 @@ void DlgHideWifi::changeWindow(){
                 this->hide();
 //                DlgHideWifiEapPeap *connHidWifiEapPeap = new DlgHideWifiEapPeap(1, ui->cbxConn->currentIndex(), mw);
 //                connHidWifiEapPeap->show();
-                WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, ui->cbxConn->currentText());
+                WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, mw, ui->cbxConn->currentText());
                 QPoint pos = QCursor::pos();
                 QRect primaryGeometry;
                 for (QScreen *screen : qApp->screens()) {

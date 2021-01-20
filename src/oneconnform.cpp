@@ -525,7 +525,7 @@ void OneConnForm::toConnectWirelessNetwork()
 {
     if (wifiSecu.contains("802.1x", Qt::CaseInsensitive)) {
         //企业wifi
-        WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, this->wifiName);
+        WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, mw, this->wifiName);
         QPoint pos = QCursor::pos();
         QRect primaryGeometry;
         for (QScreen *screen : qApp->screens()) {

@@ -20,6 +20,8 @@
 #include "kylin-network-interface.h"
 #include "backthread.h"
 #include "utils.h"
+#include "mainwindow.h"
+#include "wireless-security/kylinheadfile.h"
 
 #include <KWindowEffects>
 #include <sys/syslog.h>
@@ -57,7 +59,7 @@ void UpConnThread::run() {
     emit connRes(res);
 }
 
-WpaWifiDialog::WpaWifiDialog(QWidget *parent, QString conname) :
+WpaWifiDialog::WpaWifiDialog(QWidget *parent, MainWindow *mainWindow, QString conname) :
     QDialog(parent),
     ui(new Ui::WpaWifiDialog)
 {
@@ -66,7 +68,6 @@ WpaWifiDialog::WpaWifiDialog(QWidget *parent, QString conname) :
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")));
 //    this->setAttribute(Qt::WA_DeleteOnClose);
-
 
     connectionName = conname;
 //    configPath = getenv("HOME") + CONFIG_FILE;
@@ -81,6 +82,8 @@ WpaWifiDialog::WpaWifiDialog(QWidget *parent, QString conname) :
     initUI();
     initCombox();
     initConnect();
+
+    this->mw = mainWindow;
 }
 
 WpaWifiDialog::~WpaWifiDialog()
@@ -265,7 +268,17 @@ void WpaWifiDialog::initUI() {
 
 void WpaWifiDialog::initCombox() {
     //wifi安全性
-    securityCombox->addItem(tr("WPA & WPA2"));
+    //securityCombox->addItem(tr("WPA & WPA2"));
+    securityCombox->addItem(tr("None")); //无
+    securityCombox->addItem(tr("WPA and WPA2 Personal")); //WPA 及 WPA2 个人
+    securityCombox->addItem(tr("WPA and WPA2 Enterprise")); //WPA 及 WPA2 企业
+    //ui->cbxSecurity->addItem(tr("WEP 40/128-bit Key (Hex or ASCII)")); //WEP 40/128 位密钥(十六进制或ASCII)
+    //ui->cbxSecurity->addItem(tr("WEP 128-bit Passphrase")); //WEP 128 位密码句
+    //ui->cbxSecurity->addItem("LEAP");
+    //ui->cbxSecurity->addItem(tr("Dynamic WEP (802.1X)")); //动态 WEP (802.1x)
+    securityCombox->setCurrentIndex(2);
+    connect(securityCombox,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeDialog()));
+
 //    securityCombox->setEnabled(false);
     //EAP方法
     QStringList eapStringList;
@@ -317,6 +330,27 @@ void WpaWifiDialog::initCombox() {
         completer->setCaseSensitivity(Qt::CaseInsensitive);
         completer->setModel(listModel);
         userEditor->setCompleter(completer);
+    }
+}
+
+void WpaWifiDialog::changeDialog()
+{
+    if (securityCombox->currentIndex() == 0) {
+        //无安全性
+        QApplication::setQuitOnLastWindowClosed(false);
+        this->hide();
+        DlgHideWifi *connHidWifi = new DlgHideWifi(0);
+        connHidWifi->show();
+        connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+    }
+
+    if (securityCombox->currentIndex() == 1) {
+        //WPA 及 WPA2 个人
+        QApplication::setQuitOnLastWindowClosed(false);
+        this->hide();
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0, mw);
+        connHidWifiWpa->show();
+        connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     }
 }
 

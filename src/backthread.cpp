@@ -209,6 +209,7 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
 {
     currConnLanUuid = connName;
     currConnLanType = connectType;
+    QString mycmd; //连接命令
     KylinDBus objKyDbus;
 
     //先断开当前网卡对应的已连接有线网
@@ -218,18 +219,20 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
     }
 
     bool wiredCableState = objKyDbus.getWiredCableStateByIfname(ifname);
+
+    if (connectType == "bluetooth") {
+        wiredCableState = true; //对于蓝牙类型的网络不需要接入网线就可以连接
+        mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
+    } else {
+        mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
+    }
+
     if (wiredCableState) {
         //if(objKyDbus.toConnectWiredNet(connName, ifname)) { //此处connName是有线网Uuid
         //    emit connDone(2);
         //} else {
-        //    emit connDone(7);
+        //    emit connDone(8);
         //}
-        QString mycmd;
-        if (connectType == "bluetooth") {
-            mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
-        } else {
-            mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
-        }
         QStringList options;
         options << "-c" << mycmd;
         process->start("/bin/bash",options);
@@ -279,8 +282,12 @@ void BackThread::dellConnectLanResult(QString info)
             emit connDone(5);
         } else if(info.indexOf("Killed") != -1 || info.indexOf("killed") != -1) {
             emit connDone(6);
-        } else {
+        } else if(info.indexOf("The Bluetooth connection failed") != -1) {
             emit connDone(7);
+        } else if(info.indexOf("Carrier/link changed") != -1) {
+            emit connDone(8);
+        } else {
+            emit connDone(9);
         }
     }
 }

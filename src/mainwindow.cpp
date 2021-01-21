@@ -841,7 +841,7 @@ void MainWindow::getActiveInfo()
     activecon *act = kylin_network_get_activecon_info();
     int index = 0;
     while (act[index].con_name != NULL) {
-        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet") {
+        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet" || QString(act[index].type) == "bluetooth") {
             actLanName = QString(act[index].con_name);
         }
         if (QString(act[index].type) == "wifi" || QString(act[index].type) == "802-11-wireless") {
@@ -2819,6 +2819,20 @@ void MainWindow::connLanDone(int connFlag)
     }
 
     if (connFlag == 7) {
+        syslog(LOG_DEBUG, "Connect Bluetooth Network Failed");
+        is_connect_net_failed = 1;
+        QString txt(tr("Connect Bluetooth Network Failed"));
+        objKyDBus->showDesktopNotify(txt);
+    }
+
+    if (connFlag == 8) {
+        syslog(LOG_DEBUG, "Carrier/link changed");
+        is_connect_net_failed = 1;
+        QString txt(tr("Carrier/link changed"));
+        objKyDBus->showDesktopNotify(txt);
+    }
+
+    if (connFlag == 9) {
         syslog(LOG_DEBUG, "Connect Wired Network Failed");
         is_connect_net_failed = 1;
         QString txt(tr("Connect Wired Network Failed"));

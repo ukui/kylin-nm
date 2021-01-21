@@ -437,8 +437,6 @@ void MainWindow::getInitLanSlist()
 // 初始化网络
 void MainWindow::initNetwork()
 {
-    ksnm->execGetConnList();
-
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
@@ -515,6 +513,7 @@ void MainWindow::initNetwork()
             ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
         }
     }
+    ksnm->execGetConnList();
 }
 
 // 初始化定时器

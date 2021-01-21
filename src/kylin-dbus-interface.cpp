@@ -105,6 +105,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
 
     if (mw) {
         QObject::connect(this, SIGNAL(updateWiredList(int)), mw, SLOT(onBtnNetListClicked(int)));
+        QObject::connect(this, SIGNAL(newConnAdded(int)), mw, SLOT(onNewConnAdded(int)));
     }
 
     mUtils = new Utils();
@@ -770,8 +771,15 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
     for(QString key : map.keys() ) {
         if (key == "802-3-ethernet") {
             emit this->updateWiredList(0); //send this signal to update wired network list
+            emit this->newConnAdded(0);
             syslog(LOG_DEBUG, "A new wired network was created.");
             qDebug()<<"A new wired network was created.";
+            break;
+        } else if (key == "802-11-wireless") {
+            syslog(LOG_DEBUG, "A new wireless network(wifi) was created.");
+            qDebug()<<"A new wireless network was created.";
+            emit this->newConnAdded(1);
+            break;
         }
     }
 

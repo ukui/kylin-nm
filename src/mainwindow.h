@@ -258,6 +258,10 @@ private:
 
     QStringList oldLanSlist; //上一次获取Lan列表
     QStringList oldWifiSlist; //上一次获取wifi列表
+    QStringList oldConnSlist; //上一次获取的以保存网络列表
+    bool isInitConnList = true;
+    bool isAddedWifi = false;
+    QString lastAddedConn = "";
     QString oldActLanName = ""; //上一次获取的已连接有线网名称
     int oldDbusActLanDNS = 0; //上一次获取的已连接有线网的DNS代号
 
@@ -293,9 +297,11 @@ private slots:
     void onBtnNetClicked();
 //    void on_btnWifiList_clicked();
     void onBtnNetListClicked(int flag=0);
+    void onNewConnAdded(int type);
 
     void getLanListDone(QStringList slist);
     void getWifiListDone(QStringList slist);
+    void getConnListDone(QStringList slist);
     void loadWifiListDone(QStringList slist);
     void updateWifiListDone(QStringList slist);
     QString TranslateLanName(QString lanName);

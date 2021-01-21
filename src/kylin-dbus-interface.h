@@ -130,6 +130,7 @@ private:
 signals:
     void updateWiredList(int n);
     void requestSendDesktopNotify(QString message);
+    void newConnAdded(int type);
 };
 
 #endif // KYLINDBUSINTERFACE_H

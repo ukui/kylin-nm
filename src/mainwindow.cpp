@@ -90,6 +90,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ksnm = new KSimpleNM();
     connect(ksnm, SIGNAL(getLanListFinished(QStringList)), this, SLOT(getLanListDone(QStringList)));
     connect(ksnm, SIGNAL(getWifiListFinished(QStringList)), this, SLOT(getWifiListDone(QStringList)));
+    connect(ksnm, SIGNAL(getConnListFinished(QStringList)), this, SLOT(getConnListDone(QStringList)));
 
     loading = new LoadingDiv(this);
     loading->move(40,0);
@@ -436,6 +437,8 @@ void MainWindow::getInitLanSlist()
 // 初始化网络
 void MainWindow::initNetwork()
 {
+    ksnm->execGetConnList();
+
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
 
@@ -1330,6 +1333,17 @@ void MainWindow::on_btnWifiList_clicked()
     bt->deleteLater();
 }
 
+/**
+ * @brief MainWindow::onNewConnAdded 获取新的连接列表
+ * @param type 0为有线，1为无线
+ */
+void MainWindow::onNewConnAdded(int type) {
+    if (type == 1) {
+        isAddedWifi = true;
+    }
+    this->ksnm->execGetConnList();
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //网络列表加载与更新
 
@@ -1594,6 +1608,42 @@ void MainWindow::getWifiListDone(QStringList slist)
         is_update_wifi_list = 0;
     }
     oldWifiSlist = slist;
+}
+
+// 获取已保存的连接列表回调
+void MainWindow::getConnListDone(QStringList slist)
+{
+    if (isInitConnList) {
+//        oldConnSlist = slist;
+        for (int i = 1; i < slist.length() - 1; i++) {
+            oldConnSlist << slist.at(i).trimmed();
+        }
+//        qDebug()<<oldConnSlist;
+        isInitConnList = false;
+        return;
+    } else {
+        QStringList newConnSlist;
+        for (int i = 1; i < slist.length() - 1; i++) {
+            newConnSlist << slist.at(i).trimmed();
+        }
+        for (auto s : newConnSlist) {
+            if (!oldConnSlist.contains(s)) {
+                lastAddedConn = s;
+                break;
+            }
+        }
+        if (isAddedWifi) {
+            isAddedWifi = false;
+            //如果是新添加的wifi，尝试激活这个wifi
+            this->is_stop_check_net_state = 1;
+            BackThread *bt = new BackThread();
+            bt->execConnWifi(lastAddedConn);
+            connect(bt, SIGNAL(connDone(int)), this, SLOT(connWifiDone(int)));
+        }
+        oldConnSlist.clear();
+        oldConnSlist = newConnSlist;
+        return;
+    }
 }
 
 // 加载wifi列表
@@ -2852,7 +2902,7 @@ void MainWindow::connWifiDone(int connFlag)
         QString txt(tr("Conn Wifi Success"));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 1) {
-        is_stop_check_net_state = 0;
+//        is_stop_check_net_state = 0;
         is_connect_net_failed = 1;
 
         QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
@@ -2864,6 +2914,7 @@ void MainWindow::connWifiDone(int connFlag)
         QString txt(tr("Confirm your Wi-Fi password"));
         objKyDBus->showDesktopNotify(txt);
     }
+    is_stop_check_net_state = 0;
 }
 
 //重新绘制背景色

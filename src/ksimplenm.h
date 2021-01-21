@@ -34,8 +34,10 @@ public:
 
     QProcess *runProcessLan;
     QProcess *runProcessWifi;
+    QProcess *runProcessConn;
     QString shellOutputLan;
     QString shellOutputWifi;
+    QString shellOutputConn;
 
     bool isExecutingGetLanList = false; //是否正在执行获取有线网列表
     bool isExecutingGetWifiList = false; //是否正在执行获取无线网列表
@@ -44,16 +46,20 @@ public:
 
     void execGetLanList();
     void execGetWifiList();
+    void execGetConnList();
 
 signals:
     void getLanListFinished(QStringList slist);
     void getWifiListFinished(QStringList slist);
+    void getConnListFinished(QStringList slist);
 
 public slots:
     void readProcessLan();
     void readProcessWifi();
+    void readProcessConn();
     void finishedProcessLan(int msg);
     void finishedProcessWifi(int msg);
+    void finishedProcessConn(int msg);
 };
 
 #endif // KSIMPLENM_H

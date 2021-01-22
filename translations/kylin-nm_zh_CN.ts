@@ -1338,6 +1338,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="14"/>
         <location filename="../src/mainwindow.cpp" line="564"/>
+        <location filename="../src/mainwindow.cpp" line="2104"/>
         <source>kylin-nm</source>
         <translation>网络工具</translation>
     </message>

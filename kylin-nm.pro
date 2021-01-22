@@ -15,9 +15,10 @@ LANGUAGE = C++
 CONFIG += c++14
 CONFIG += qt warn_on
 CONFIG += release
+CONFIG += link_pkgconfig
 
-# CONFIG += link_pkgconfig
-# PKGCONFIG += gsettings-qt
+PKGCONFIG += glib-2.0 gio-2.0 gsettings-qt
+
 LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lkysec
 
 target.path = /usr/bin

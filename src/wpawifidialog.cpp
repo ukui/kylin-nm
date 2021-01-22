@@ -516,7 +516,7 @@ void WpaWifiDialog::activateConnection() {
         timeout->start(30 * 1000);
     });
     connect(upThread, &UpConnThread::connRes, this, [ = ](int res) {
-        qDebug()<<"qDebug: Connect result is: "<<res;
+        //qDebug()<<"qDebug: Connect result is: "<<res;
         if (res != 0) {
             //连接错误或连接超时
             setEditorEnable(true);
@@ -530,7 +530,7 @@ void WpaWifiDialog::activateConnection() {
             upThread->deleteLater();
             emit conn_done();
             syslog(LOG_DEBUG, "execute 'nmcli connection up' in function 'activateConnection' accepted");
-            qDebug() << "qDebug: activated wpa wifi successfully";
+            //qDebug() << "qDebug: activated wpa wifi successfully";
             this->close();
         }
     });

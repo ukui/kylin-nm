@@ -1270,7 +1270,7 @@ void MainWindow::on_btnWifiList_clicked()
     btnWireless->show();
 
     if (iface->wstate == 0 || iface->wstate == 1) {
-        //qDebug() << "wifi开关在打开状态";
+        qDebug() << "debug: wifi开关在打开状态";
         btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();
@@ -1278,7 +1278,7 @@ void MainWindow::on_btnWifiList_clicked()
         this->startLoading();
         this->ksnm->execGetWifiList();
     } else if (iface->wstate == 3) {
-        //qDebug() << "连接中，正在配置wifi设备";
+        qDebug() << "debug: 连接中，正在配置wifi设备";
 
         this->ksnm->isUseOldWifiSlist = true;
         QStringList slistWifi;
@@ -1289,7 +1289,7 @@ void MainWindow::on_btnWifiList_clicked()
         lbTopWifiList->show();
         btnAddNet->show();
     } else {
-        //qDebug()<<"debug: WiFi的开关已经关闭";
+        qDebug()<<"debug: WiFi的开关已经关闭";
         btnWireless->setSwitchStatus(false);
         delete topWifiListWidget; //清空top列表
         createTopWifiUI(); //创建顶部无线网item
@@ -1561,13 +1561,13 @@ void MainWindow::getWifiListDone(QStringList slist)
         return;
     }
 
-    qDebug()<<"debug: oldWifiSlist.size()="<<oldWifiSlist.size()<<"   slist.size()="<<slist.size();
+    //qDebug()<<"debug: oldWifiSlist.size()="<<oldWifiSlist.size()<<"   slist.size()="<<slist.size();
 
-    //qDebug()<<"0            ";
+    //qDebug()<<"------------";
     //foreach (QString str, slist) {
     //    qDebug()<<str;
     //}
-    //qDebug()<<"0            ";
+    //qDebug()<<"------------";
 
     //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldWifiSlist) {
@@ -1599,6 +1599,8 @@ void MainWindow::getWifiListDone(QStringList slist)
 // 加载wifi列表
 void MainWindow::loadWifiListDone(QStringList slist)
 {
+    qDebug() << "debug: 现在在函数 loadWifiListDone 中";
+
     delete topWifiListWidget; //清空top列表
     createTopWifiUI(); //创建topWifiListWidget
 
@@ -1608,7 +1610,16 @@ void MainWindow::loadWifiListDone(QStringList slist)
     scrollAreaw->setWidget(wifiListWidget);
     scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
 
-    QList<QString> currConnWifiSsidUuid = objKyDBus->getAtiveWifiBSsidUuid();
+    QList<QString> currConnWifiSsidUuid;
+    bool isLoop = true;
+    do {
+        currConnWifiSsidUuid = objKyDBus->getAtiveWifiBSsidUuid();
+        if (currConnWifiSsidUuid.size() == 1) {
+            sleep(1);
+        } else {
+            isLoop = false;
+        }
+    } while (isLoop);
 
     // 获取当前连接的wifi name
     QString actWifiName = "--";
@@ -1618,8 +1629,8 @@ void MainWindow::loadWifiListDone(QStringList slist)
     if (currConnWifiSsidUuid.size() > 1) {
         actWifiBssid = currConnWifiSsidUuid.at(0);
         actWifiUuid = currConnWifiSsidUuid.at(1);
-        //qDebug() << "获取到的bssid是：" << actWifiBssid;
-        //qDebug() << "获取到的uuid是：" << actWifiUuid;
+        //qDebug() << "debug: 获取到的bssid是：" << actWifiBssid;
+        //qDebug() << "debug: 获取到的uuid是：" << actWifiUuid;
     }
 
     activecon *act = kylin_network_get_activecon_info();

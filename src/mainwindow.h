@@ -63,6 +63,9 @@
 #include <QStringList>
 #include <QToolTip>
 #include <QSvgRenderer>
+#include <kysec/libkysec.h>
+#include <kysec/status.h>
+#include <QMessageBox>
 
 #define W_LEFT_AREA 41
 #define W_VERTICAL_LINE 1 //左边竖线宽度

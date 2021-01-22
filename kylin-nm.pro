@@ -18,7 +18,7 @@ CONFIG += release
 
 # CONFIG += link_pkgconfig
 # PKGCONFIG += gsettings-qt
-LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11
+LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lkysec
 
 target.path = /usr/bin
 target.source += $$TARGET
@@ -34,6 +34,10 @@ INSTALLS += target \
     desktop \
     inst1 \
     inst2 \
+
+TRANSLATIONS += ./translations/kylin-nm_zh_CN.ts \
+               ./translations/kylin-nm_tr.ts \
+               ./translations/kylin-nm_bo.ts
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -138,9 +142,7 @@ unix {
     OBJECTS_DIR = .obj
 }
 
-TRANSLATIONS = translations/kylin-nm_zh_CN.ts \
-               translations/kylin-nm_tr.ts \
-               translations/kylin-nm_bo.ts
+
 
 DISTFILES += \
     src/conf/com.kylin.NetworkManager.qt.systemdbus.conf \

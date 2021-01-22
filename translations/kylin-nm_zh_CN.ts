@@ -1809,13 +1809,19 @@
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="268"/>
-        <source>WPA &amp; WPA2</source>
-        <translation type="unfinished">WPA 及 WPA2企业</translation>
+        <location filename="../src/wpawifidialog.cpp" line="272"/>
+        <source>None</source>
+        <translation type="unfinished">无</translation>
     </message>
     <message>
-        <source>None</source>
-        <translation type="obsolete">无</translation>
+        <location filename="../src/wpawifidialog.cpp" line="273"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished">WPA 及 WPA2个人</translation>
+    </message>
+    <message>
+        <location filename="../src/wpawifidialog.cpp" line="274"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished">WPA 及 WPA2企业</translation>
     </message>
 </context>
 </TS>

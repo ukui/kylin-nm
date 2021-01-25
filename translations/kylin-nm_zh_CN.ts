@@ -26,9 +26,14 @@
         <translation>编辑IP设置: </translation>
     </message>
     <message>
+        <location filename="../src/confform.cpp" line="90"/>
+        <source>Ipv6 Address: </source>
+        <translation>IPV6地址: </translation>
+    </message>
+    <message>
         <location filename="../src/confform.cpp" line="85"/>
         <source>Address: </source>
-        <translation>IP地址: </translation>
+        <translation>IPV4地址: </translation>
     </message>
     <message>
         <location filename="../src/confform.cpp" line="86"/>

@@ -1480,7 +1480,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="2735"/>
         <source>Connection Be Killed</source>
-        <translation type="unfinished">连接进程被中断</translation>
+        <translation type="unfinished">连接超时或连接被取消</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2743"/>

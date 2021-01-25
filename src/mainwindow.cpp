@@ -76,7 +76,8 @@ MainWindow::MainWindow(QWidget *parent) :
     createTrayIcon();
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
     connect(mShowWindow,SIGNAL(triggered()),this,SLOT(on_showWindowAction()));
-    connect(mAdvConf,SIGNAL(triggered()),this,SLOT(on_btnAdvConf_clicked()));
+    connect(mAdvConf, &QAction::triggered, this, &MainWindow::actionTriggerSlots);
+
     trayIcon->show();
 
     objKyDBus = new KylinDBus(this);
@@ -668,7 +669,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
         break;
     case QSystemTrayIcon::Context:
         //右键点击托盘图标弹出菜单
-        showTrayIconMenu();
+//        showTrayIconMenu();
         break;
     default:
         break;
@@ -2111,8 +2112,9 @@ void MainWindow::on_btnAdvConf_clicked()
 //        QProcess *qprocess = new QProcess(this);
 //        qprocess->start("nm-connection-editor &");
 //    }
-    QProcess *qprocess = new QProcess(this);
-    qprocess->start("nm-connection-editor &");
+    QProcess p(0);
+    p.startDetached("nm-connection-editor &");
+    p.waitForStarted();
     return;
 }
 
@@ -2182,6 +2184,18 @@ void MainWindow::onBtnCreateNetClicked()
     m_cf->exec();
 }
 
+/* 右键菜单打开网络设置界面 */
+void MainWindow::actionTriggerSlots()
+{
+    this->move(-500, -500);
+    this->showNormal();
+    this->raise();
+    this->activateWindow();
+    QProcess p(0);
+    p.startDetached("nm-connection-editor &");
+    p.waitForStarted();
+    return;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //处理窗口变化、网络状态变化

@@ -335,6 +335,7 @@ private slots:
 
     void onBtnAddNetClicked();
     void onBtnCreateNetClicked();
+    void actionTriggerSlots();
 
 signals:
     void disConnSparedNet(QString type);

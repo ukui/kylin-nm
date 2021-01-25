@@ -2097,22 +2097,24 @@ QString MainWindow::getMacByUuid(QString uuidName)
 
 void MainWindow::on_btnAdvConf_clicked()
 {
-    if (!kysec_is_disabled() && kysec_get_3adm_status()) {
-        //三权分立启用的操作
-        qDebug() << "三权分立启用的操作------>";
-        QMessageBox msgBox;
-        msgBox.setWindowTitle(QObject::tr("kylin-nm"));
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText(QObject::tr("Insufficient permissions"));
-        msgBox.addButton(QMessageBox::Ok);
-        msgBox.button(QMessageBox::Ok)->setText(QObject::tr("OK"));
-        msgBox.exec();
-    } else {
-        //三权分立未启用的操作
-        qDebug() << "三权分立未启用的操作";
-        QProcess *qprocess = new QProcess(this);
-        qprocess->start("nm-connection-editor &");
-    }
+//    if (!kysec_is_disabled() && kysec_get_3adm_status()) {
+//        //三权分立启用的操作
+//        qDebug() << "三权分立启用的操作------>";
+//        QMessageBox msgBox;
+//        msgBox.setWindowTitle(QObject::tr("kylin-nm"));
+//        msgBox.setIcon(QMessageBox::Warning);
+//        msgBox.setText(QObject::tr("Insufficient permissions"));
+//        msgBox.addButton(QMessageBox::Ok);
+//        msgBox.button(QMessageBox::Ok)->setText(QObject::tr("OK"));
+//        msgBox.exec();
+//    } else {
+//        //三权分立未启用的操作
+//        qDebug() << "三权分立未启用的操作";
+//        QProcess *qprocess = new QProcess(this);
+//        qprocess->start("nm-connection-editor &");
+//    }
+    QProcess *qprocess = new QProcess(this);
+    qprocess->start("nm-connection-editor &");
     return;
 }
 

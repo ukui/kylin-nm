@@ -67,8 +67,11 @@ private slots:
 
     void setEnableOfBtn();
     bool getTextEditState(QString text);
+    bool getIpv6EditState(QString text);
     void setBtnEnableFalse();
     void saveNetworkConfiguration();
+
+    void on_leAddr_ipv6_textChanged(const QString &arg1);
 
 private:
     Ui::ConfForm *ui;

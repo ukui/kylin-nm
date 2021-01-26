@@ -87,6 +87,7 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->lbTxt4->setText(tr("Gateway: "));//"默认网关："
     ui->lbTxt5->setText(tr("DNS 1: "));//"首选DNS："
     ui->lbTxt6->setText(tr("DNS 2: "));//"备选DNS："
+    ui->lbTxt_ipv6->setText(tr("Ipv6 Address: "));
 
     ui->lbLeftupTitle->setText(tr("Edit Conn"));//"网络设置"
     ui->cbType->addItem(tr("Auto(DHCP)"));//"自动(DHCP)"
@@ -110,10 +111,12 @@ ConfForm::ConfForm(QWidget *parent) :
 
     // IP的正则格式限制
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+    QRegExp ipv6_rx("^\\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?\\s*$");
     ui->leAddr->setValidator(new QRegExpValidator(rx, this));
     ui->leGateway->setValidator(new QRegExpValidator(rx, this));
     ui->leDns->setValidator(new QRegExpValidator(rx, this));
     ui->leDns2->setValidator(new QRegExpValidator(rx, this));
+    ui->leAddr_ipv6->setValidator(new QRegExpValidator(ipv6_rx, this));
 
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
@@ -234,6 +237,11 @@ void ConfForm::on_btnCreate_clicked()
         kylindbus.showDesktopNotify(txt);
     }
 
+    if (!ui->leAddr_ipv6->text().isEmpty()) {
+        QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.addresses " + ui->leAddr_ipv6->text();
+        Utils::m_system(cmdStr.toUtf8().data());
+    }
+
     this->hide();
 }
 
@@ -305,6 +313,11 @@ void ConfForm::on_btnSave_clicked()
         }
 
         this->saveNetworkConfiguration();
+    }
+
+    if (!ui->leAddr_ipv6->text().isEmpty()) {
+        QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.addresses " + ui->leAddr_ipv6->text();
+        Utils::m_system(cmdStr.toUtf8().data());
     }
 
     QString txt(tr("New network settings already finished"));
@@ -480,6 +493,12 @@ void ConfForm::on_leAddr_textEdited(const QString &arg1)
     this->setEnableOfBtn();
 }
 
+//编辑ipv6地址
+void ConfForm::on_leAddr_ipv6_textChanged(const QString &arg1)
+{
+    this->setEnableOfBtn();
+}
+
 //编辑网络网关
 void ConfForm::on_leGateway_textEdited(const QString &arg1)
 {
@@ -521,6 +540,11 @@ void ConfForm::setEnableOfBtn()
             this->setBtnEnableFalse();
             return;
         }
+
+        if (!ui->leAddr_ipv6->text().isEmpty() && ! this->getIpv6EditState(ui->leAddr_ipv6->text())) {
+            this->setBtnEnableFalse();
+            return;
+        }
     }
 
     ui->btnSave->setEnabled(true);
@@ -531,6 +555,16 @@ void ConfForm::setEnableOfBtn()
 bool ConfForm::getTextEditState(QString text)
 {
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+
+    bool match = false;
+    match = rx.exactMatch(text);
+
+    return match;
+}
+
+bool ConfForm::getIpv6EditState(QString text)
+{
+    QRegExp rx("^\\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?\\s*$");
 
     bool match = false;
     match = rx.exactMatch(text);

@@ -61,6 +61,7 @@ public slots:
     void execConnLan(QString connName, QString ifname, QString connectType);
     void execConnWifi(QString connName);
     void execConnWifiPWD(QString connName, QString password, QString connType);
+    void execConnWifiPsk(QString cmd);
 
     void disConnSparedNetSlot(QString type);
     void disConnLanOrWifi(QString type);

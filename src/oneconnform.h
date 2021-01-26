@@ -128,6 +128,7 @@ private:
     int waitPage;
     int countCurrentTime;
     bool isWaiting = false;
+    int psk_flag = 0; //密码存储策略
 
     Ui::OneConnForm *ui = nullptr;
     MainWindow *mw = nullptr;
@@ -147,6 +148,7 @@ signals:
 
     void sigConnWifi(QString);
     void sigConnWifiPWD(QString, QString, QString);
+    void sigConnWifiPsk(QString);
 };
 
 #endif // ONECONNFORM_H

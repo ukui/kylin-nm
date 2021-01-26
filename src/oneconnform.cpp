@@ -605,6 +605,7 @@ void OneConnForm::toConnectWirelessNetwork()
         }
         return;
     } else { //为所有用户存储密码
+        QString homePath = getenv("HOME");
         QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text()).toUtf8()); //删除密码文件
     }
 
@@ -627,7 +628,7 @@ void OneConnForm::on_btnConnPWD_clicked()
     syslog(LOG_DEBUG, "A button named btnConnPWD about wifi net is clicked.");
     qDebug()<<"A button named btnConnPWD about wifi net is clicked.";
 
-    if (psk_flag != 0) {
+    if (this->getPskFlag() != 0) {
 //        QString cmdStr = 0;
         QString homePath = getenv("HOME");
         QFile *passwdFile = new QFile(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text()));
@@ -927,4 +928,23 @@ void OneConnForm::on_btnCancel_clicked()
         qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
         syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
     }
+}
+
+int OneConnForm::getPskFlag()
+{
+    QProcess * process = new QProcess(this);
+    QString ssid = lbNameText->text();
+    if (ssid.contains(" ")) {
+        ssid.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
+    }
+    process->start(QString("nmcli -f 802-11-wireless-security.psk-flags connection show %1").arg(lbNameText->text()));
+    connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+        process->deleteLater();
+    });
+    connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
+        QString str = process->readAllStandardOutput();
+        psk_flag = str.mid(str.lastIndexOf(" ") - 1, 1).toInt();
+    });
+    process->waitForFinished();
+    return psk_flag;
 }

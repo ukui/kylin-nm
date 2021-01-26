@@ -129,6 +129,7 @@ private:
     int countCurrentTime;
     bool isWaiting = false;
     int psk_flag = 0; //密码存储策略
+    int getPskFlag();
 
     Ui::OneConnForm *ui = nullptr;
     MainWindow *mw = nullptr;

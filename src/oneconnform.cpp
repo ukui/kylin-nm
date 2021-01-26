@@ -553,9 +553,59 @@ void OneConnForm::toConnectWirelessNetwork()
     if (ui->lbConned->text() == "--" || ui->lbConned->text() == " ") {
         if (!isWifiConfExist(lbNameText->text())) {
             //没有配置文件，使用有密码的wifi连接
+            psk_flag = 0;
             on_btnConnPWD_clicked();
             return;
         }
+    }
+
+    if (isWifiConfExist(lbNameText->text())) {
+        //有配置文件，获取密码存储策略
+        QProcess * process = new QProcess(this);
+        QString ssid = lbNameText->text();
+        if (ssid.contains(" ")) {
+            ssid.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
+        }
+        process->start(QString("nmcli -f 802-11-wireless-security.psk-flags connection show %1").arg(lbNameText->text()));
+        connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+            process->deleteLater();
+        });
+        connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
+            QString str = process->readAllStandardOutput();
+            psk_flag = str.mid(str.lastIndexOf(" ") - 1, 1).toInt();
+        });
+        process->waitForFinished();
+    }
+    if (psk_flag != 0) { //未为所有用户存储密码
+        QString homePath = getenv("HOME");
+        if (QFile(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text())).exists()) { //已为该用户存储密码
+            mw->is_stop_check_net_state = 1;
+            QThread *t = new QThread();
+            BackThread *bt = new BackThread();
+            bt->moveToThread(t);
+            connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+            connect(t, &QThread::started, this, [ = ]() {
+                this->startWaiting(true);
+                QString cmdStr = "nmcli connection up " + lbNameText->text() + " passwd-file " + homePath +"/.config/" + lbNameText->text() + ".psk";
+                emit this->sigConnWifiPsk(cmdStr);
+            });
+            connect(this, SIGNAL(sigConnWifiPsk(QString)), bt, SLOT(execConnWifiPsk(QString)));
+            connect(bt, &BackThread::connDone, this, [ = ](int res) {
+                this->stopWaiting();
+                mw->is_stop_check_net_state = 0;
+                if (res) {
+                    QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text()).toUtf8());
+                }
+                mw->connWifiDone(res);
+            });
+            connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
+            t->start();
+        } else { //没有为该用户存储密码
+            slotConnWifiResult(2);
+        }
+        return;
+    } else { //为所有用户存储密码
+        QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text()).toUtf8()); //删除密码文件
     }
 
     mw->is_stop_check_net_state = 1;
@@ -576,6 +626,38 @@ void OneConnForm::on_btnConnPWD_clicked()
 {
     syslog(LOG_DEBUG, "A button named btnConnPWD about wifi net is clicked.");
     qDebug()<<"A button named btnConnPWD about wifi net is clicked.";
+
+    if (psk_flag != 0) {
+//        QString cmdStr = 0;
+        QString homePath = getenv("HOME");
+        QFile *passwdFile = new QFile(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text()));
+        if (passwdFile->open(QIODevice::ReadWrite)) {
+            passwdFile->write(QString("802-11-wireless-security.psk:%1").arg(ui->lePassword->text()).toUtf8());
+            passwdFile->close();
+//            cmdStr = "nmcli connection up " + lbNameText->text() + " passwd-file " + homePath +"/.config/" + lbNameText->text() + ".psk";
+        }
+        mw->is_stop_check_net_state = 1;
+        QThread *t = new QThread();
+        BackThread *bt = new BackThread();
+        bt->moveToThread(t);
+        connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+        connect(t, &QThread::started, this, [ = ]() {
+            this->startWaiting(true);
+            QString cmdStr = "nmcli connection up " + lbNameText->text() + " passwd-file " + homePath +"/.config/" + lbNameText->text() + ".psk";
+            emit this->sigConnWifiPsk(cmdStr);
+        });
+        connect(this, SIGNAL(sigConnWifiPsk(QString)), bt, SLOT(execConnWifiPsk(QString)));
+        connect(bt, &BackThread::connDone, this, [ = ](int res) {
+            this->stopWaiting();
+            mw->is_stop_check_net_state = 0;
+            if (res) {
+                QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text()).toUtf8());
+            }
+            mw->connWifiDone(res);
+        });
+        connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
+        t->start();
+    }
 
     mw->is_stop_check_net_state = 1;
     QThread *t = new QThread();

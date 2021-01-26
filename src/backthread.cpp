@@ -329,6 +329,12 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
     emit btFinish();
 }
 
+void BackThread::execConnWifiPsk(QString cmd)
+{
+    int res = Utils::m_system(cmd.toUtf8().data());
+    emit connDone(res);
+}
+
 //to connected wireless network driectly do not need a password
 void BackThread::execConnWifi(QString connName)
 {

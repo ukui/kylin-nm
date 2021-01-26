@@ -1648,8 +1648,6 @@ void MainWindow::getConnListDone(QStringList slist)
 // 加载wifi列表
 void MainWindow::loadWifiListDone(QStringList slist)
 {
-    qDebug() << "debug: 现在在函数 loadWifiListDone 中";
-
     delete topWifiListWidget; //清空top列表
     createTopWifiUI(); //创建topWifiListWidget
 
@@ -2692,6 +2690,11 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
                 is_stop_check_net_state = 0;
             } else {
                 QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
+
+                if (!isWifiBeDisConn) {
+                    QString txt(tr("WiFi already disconnect"));
+                    objKyDBus->showDesktopNotify(txt);
+                }
             }
         }
     }
@@ -2705,14 +2708,10 @@ void MainWindow::onExternalLanChange()
 void MainWindow::onExternalWifiChange()
 {
     if (is_btnWifiList_clicked) {
-        this->ksnm->execGetWifiList();
+        //this->ksnm->execGetWifiList();
+        on_btnWifiList_clicked();
     } else {
         //on_btnWifiList_clicked();
-    }
-
-    if (!isWifiBeDisConn) {
-        QString txt(tr("WiFi already disconnect"));
-        objKyDBus->showDesktopNotify(txt);
     }
 }
 
@@ -2730,7 +2729,7 @@ void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
             qDebug()<<"debug: external wifi switch turn off";
             syslog(LOG_DEBUG, "debug: external wifi switch turn off");
             QTimer::singleShot(3*1000, this, SLOT(onExternalWifiChange() ));
-            objKyDBus->setWifiSwitchState(false);
+            objKyDBus->setWifiSwitchState(false);//通知控制面板wifi开关已经关闭
         }
     }
 }

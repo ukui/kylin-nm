@@ -1663,7 +1663,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     do {
         currConnWifiSsidUuid = objKyDBus->getAtiveWifiBSsidUuid();
         if (currConnWifiSsidUuid.size() == 1) {
-            sleep(1);
+            sleep(1); //等于1说明只获取到uuid，1秒后再获取一次
         } else {
             isLoop = false;
         }
@@ -1672,13 +1672,16 @@ void MainWindow::loadWifiListDone(QStringList slist)
     // 获取当前连接的wifi name
     QString actWifiName = "--";
     actWifissid = "--";
-    actWifiBssid = "--";
     actWifiUuid = "--";
     if (currConnWifiSsidUuid.size() > 1) {
-        actWifiBssid = currConnWifiSsidUuid.at(0);
-        actWifiUuid = currConnWifiSsidUuid.at(1);
-        //qDebug() << "debug: 获取到的bssid是：" << actWifiBssid;
+        actWifiUuid = currConnWifiSsidUuid.at(0);
+        for (int i=1; i<currConnWifiSsidUuid.size(); i++) {
+            actWifiBssidList.append(currConnWifiSsidUuid.at(i));
+            //qDebug() << "debug: 获取到的bssid是：" << currConnWifiSsidUuid.at(i);
+        }
         //qDebug() << "debug: 获取到的uuid是：" << actWifiUuid;
+    } else {
+        actWifiBssidList.append("--");
     }
 
     activecon *act = kylin_network_get_activecon_info();
@@ -1757,12 +1760,15 @@ void MainWindow::loadWifiListDone(QStringList slist)
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
         QString wname = line.mid(indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
-        bool isContinue = false;
-        foreach (QString addName, wnames) {
-            // 重复的网络名称，跳过不处理
-            if(addName == wname){ isContinue = true; }
+
+        if (actWifiName != "--" && actWifiName == wname) {
+            if (!actWifiBssidList.contains(wbssid)) {
+                continue; //若当前热点ssid名称和已经连接的wifi的ssid名称相同，但bssid不同，则跳过
+            }
         }
-        if(isContinue){ continue; }
+        if (wnames.contains(wname)) {
+            continue; //过滤相同名称的wifi
+        }
 
         int max_freq = wfreq.toInt();
         int min_freq = wfreq.toInt();
@@ -1785,7 +1791,8 @@ void MainWindow::loadWifiListDone(QStringList slist)
         }
         if (wname != "" && wname != "--") {
             // 当前连接的wifi
-            if (wbssid == actWifiBssid) {
+            //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
+            if (actWifiBssidList.contains(wbssid)) {
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
                 ccf->setName(wname, wbssid, actWifiUuid);
@@ -1855,6 +1862,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
     this->stopLoading();
     is_stop_check_net_state = 0;
     is_connect_hide_wifi = 0;
+
+    actWifiBssidList.clear();
+    wnames.clear();
 }
 
 // 更新wifi列表

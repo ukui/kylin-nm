@@ -1498,6 +1498,11 @@
         <translation type="unfinished">IP 未分配成功</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="2907"/>
+        <source>Connect Bluetooth Network Failed</source>
+        <translation type="unfinished">通过蓝牙连接网络失败</translation>
+    </message>
+    <message>
         <source>Connection timed out</source>
         <translation type="obsolete">连接超时</translation>
     </message>

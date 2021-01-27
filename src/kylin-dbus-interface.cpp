@@ -925,12 +925,18 @@ QList<QString> KylinDBus::getAtiveWifiBSsidUuid()
         QDBusReply<QVariant> reply = interfaceType.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
 
         if (reply.value().toString() == "wifi" || reply.value().toString() == "802-11-wireless") {
-            //先获取bssid
             QDBusInterface interfaceInfo( "org.freedesktop.NetworkManager",
                                       objPath.path(),
                                       "org.freedesktop.DBus.Properties",
                                       QDBusConnection::systemBus() );
 
+            //先获取uuid
+            QDBusReply<QVariant> replyUuid = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Uuid");
+            //qDebug() << "wifi uuid : "<< replyUuid.value().toString();
+            strBSsidUuid.append(replyUuid.value().toString());
+
+
+            //再获取bssid
             QDBusMessage resultConnection = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Connection");
 
             QList<QVariant> outArgsConnection = resultConnection.arguments();
@@ -954,17 +960,15 @@ QList<QString> KylinDBus::getAtiveWifiBSsidUuid()
                 if (setKey == "802-11-wireless") {
                     for (QString searchKey : subSetMap.keys()) {
                         if (searchKey == "seen-bssids") {
-                            //qDebug() << "wifi bssid : "<<subSetMap.value(searchKey).toString();
-                            strBSsidUuid.append(subSetMap.value(searchKey).toString());
+                            //qDebug() << "wifi bssid : "<<subSetMap.value(searchKey).toStringList();
+                            QStringList strBssidList = subSetMap.value(searchKey).toStringList();
+                            foreach (QString strBssid, strBssidList) {
+                                strBSsidUuid.append(strBssid);
+                            }
                         }
                     }
                 }
             }
-
-            //再获取uuid
-            QDBusReply<QVariant> replyUuid = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Uuid");
-            //qDebug() << "wifi uuid : "<< replyUuid.value().toString();
-            strBSsidUuid.append(replyUuid.value().toString());
         }
     }
     dbusArgs.endArray();

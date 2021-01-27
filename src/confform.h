@@ -88,7 +88,7 @@ private:
     bool isActConf; //是否对已经连接的网络进行的更改
     bool isCreateNewNet = false; //是否是创建的新网络
     bool isShowSaveBtn = true; //是否显示保存按钮，即是否是编辑网络界面
-    QString lastConnName, lastIpv4, theUuid, newUuid;
+    QString lastConnName, lastIpv4, netUuid, newUuid;
     bool isActWifi; //是否是wifi网络
 
     QString labelQss, cbxQss, leQss, lineQss, btnOnQss, btnOffQss;

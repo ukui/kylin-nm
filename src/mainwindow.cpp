@@ -2713,11 +2713,12 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
                 is_connect_net_failed = 0;
                 is_stop_check_net_state = 0;
             } else {
-                QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
-
                 if (!isWifiBeDisConn) {
                     QString txt(tr("WiFi already disconnect"));
                     objKyDBus->showDesktopNotify(txt);
+                    onExternalWifiChange();
+                } else {
+                    QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
                 }
             }
         }

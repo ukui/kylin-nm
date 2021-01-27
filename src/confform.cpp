@@ -156,7 +156,7 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
     ui->leName->setText(connName);
     lastConnName = connName;
     lastIpv4 = addr;
-    theUuid = uuidName;
+    netUuid = uuidName;
 
     if (isWiFi) {
         ui->leName->setEnabled(false);
@@ -249,48 +249,76 @@ void ConfForm::on_btnCreate_clicked()
 void ConfForm::on_btnSave_clicked()
 {
     KylinDBus kylindbus;
-    kylindbus.getWiredCardName();
-    QString mIfname;
 
-    if (kylindbus.multiWiredIfName.size() == 0) {
-        QString tip(tr("Can not create new wired network for without wired card"));
-        kylindbus.showDesktopNotify(tip);
-        //this->close();
-        this->hide();
-        return;
-    } else {
-        mIfname = kylindbus.multiWiredIfName.at(0);
-    }
+    if (isActWifi) {
+        kylindbus.getWirelessCardName();
+        QString mWifiIfname = kylindbus.dbusWiFiCardName;
+        this->isCreateNewNet = false;
 
-    //如果网络的名称已经修改，则删掉当前网络，新建一个网络
-    if (ui->leName->text() != lastConnName) {
-        QString cmd = "nmcli connection delete '" + theUuid + "'";
-        int status = system(cmd.toUtf8().data());
-        if (status != 0) {
-            syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'on_btnSave_clicked' failed");
+        if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
+            //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
+            if (check_ip_conflict(mWifiIfname)) {
+                return;
+            }
         }
-        //this->hide();
 
-        //QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
-        //Utils::m_system(cmdStr.toUtf8().data());
+        this->saveNetworkConfiguration();
+    } else {
+        kylindbus.getWiredCardName();
+        QString mIfname;
 
-        this->isCreateNewNet = true;
-        newUuid = "--";
+        if (kylindbus.multiWiredIfName.size() == 0) {
+            QString tip(tr("Can not save wired network for without wired card"));
+            kylindbus.showDesktopNotify(tip);
+            //this->close();
+            this->hide();
+            return;
+        } else {
+            mIfname = kylindbus.multiWiredIfName.at(0);
+        }
 
-        QProcess * processAdd = new QProcess;
-        QString cmdAdd = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
-        QStringList options;
-        options << "-c" << cmdAdd;
-        processAdd->start("/bin/bash",options);
-        connect(processAdd, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
-            processAdd->deleteLater();
-        });
-        connect(processAdd, &QProcess::channelReadyRead, this, [ = ]() {
-            QString str = processAdd->readAll();
-            QString regExpPattern("[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}");
-            QRegExp regExpTest(regExpPattern);
-            int pos = str.indexOf(regExpTest);
-            newUuid = str.mid(pos,36); //36是uuid的长度
+        //如果网络的名称已经修改，则删掉当前网络，新建一个网络
+        if (ui->leName->text() != lastConnName) {
+            QString cmd = "nmcli connection delete '" + netUuid + "'";
+            int status = system(cmd.toUtf8().data());
+            if (status != 0) {
+                syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'on_btnSave_clicked' failed");
+            }
+            //this->hide();
+
+            //QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
+            //Utils::m_system(cmdStr.toUtf8().data());
+
+            this->isCreateNewNet = true;
+            newUuid = "--";
+
+            QProcess * processAdd = new QProcess;
+            QString cmdAdd = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
+            QStringList options;
+            options << "-c" << cmdAdd;
+            processAdd->start("/bin/bash",options);
+            connect(processAdd, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+                processAdd->deleteLater();
+            });
+            connect(processAdd, &QProcess::channelReadyRead, this, [ = ]() {
+                QString str = processAdd->readAll();
+                QString regExpPattern("[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}");
+                QRegExp regExpTest(regExpPattern);
+                int pos = str.indexOf(regExpTest);
+                newUuid = str.mid(pos,36); //36是uuid的长度
+
+                if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
+                    //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
+                    if (check_ip_conflict(mIfname)) {
+                        return;
+                    }
+                }
+
+                this->saveNetworkConfiguration();
+            });
+            processAdd->waitForFinished();
+        } else {
+            this->isCreateNewNet = false;
 
             if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
                 //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
@@ -300,22 +328,10 @@ void ConfForm::on_btnSave_clicked()
             }
 
             this->saveNetworkConfiguration();
-        });
-        processAdd->waitForFinished();
-    } else {
-        this->isCreateNewNet = false;
-
-        if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
-            //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
-            if (check_ip_conflict(mIfname)) {
-                return;
-            }
         }
-
-        this->saveNetworkConfiguration();
     }
 
-    if (!ui->leAddr_ipv6->text().isEmpty()) {
+    if (ui->cbType->currentIndex() == 1 && !ui->leAddr_ipv6->text().isEmpty()) {
         QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.addresses " + ui->leAddr_ipv6->text();
         Utils::m_system(cmdStr.toUtf8().data());
     }
@@ -346,7 +362,7 @@ void ConfForm::saveNetworkConfiguration()
     if (ui->cbType->currentIndex() == 0) {
         if (!this->isCreateNewNet) {
             //kylin_network_set_automethod(ui->leName->text().toUtf8().data());
-            kylin_network_set_automethod(theUuid.toUtf8().data());
+            kylin_network_set_automethod(netUuid.toUtf8().data());
         }
     } else {
         QString dnss = ui->leDns->text();
@@ -361,7 +377,7 @@ void ConfForm::saveNetworkConfiguration()
                 kylin_network_set_manualall(ui->leName->text().toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
             }
         } else {
-            kylin_network_set_manualall(theUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+            kylin_network_set_manualall(netUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
         }
     }
 

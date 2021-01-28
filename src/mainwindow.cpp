@@ -2695,8 +2695,6 @@ void MainWindow::on_btnHotspotState()
 //处理外界对网络的连接与断开
 void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 {
-    isWifiBeDisConn = true;
-    isWifiBeDisConn = isConnUp;
     if (!is_connect_hide_wifi && !is_stop_check_net_state) {
         is_stop_check_net_state = 1;
         if (type == "802-3-ethernet" || type == "ethernet") {
@@ -2715,11 +2713,10 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
                 is_connect_net_failed = 0;
                 is_stop_check_net_state = 0;
             } else {
-                if (!isWifiBeDisConn) {
-                    QString txt(tr("WiFi already disconnect"));
-                    objKyDBus->showDesktopNotify(txt);
-                    onExternalWifiChange();
-                } else {
+                if (!isStopThisStep) {
+                    isStopThisStep = true;
+                    isWifiBeConnUp = true;
+                    isWifiBeConnUp = isConnUp;
                     QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
                 }
             }
@@ -2734,11 +2731,31 @@ void MainWindow::onExternalLanChange()
 
 void MainWindow::onExternalWifiChange()
 {
+    if (!isWifiBeConnUp) {
+        QString txt(tr("WiFi already disconnect"));
+        objKyDBus->showDesktopNotify(txt);
+
+        //wifi被拉黑后强制断开wifi网络
+        QString disWifiCmd = "nmcli connection down '" + actWifiUuid + "'";
+        system(disWifiCmd.toUtf8().data());
+    }
+
     if (is_btnWifiList_clicked) {
         //this->ksnm->execGetWifiList();
         on_btnWifiList_clicked();
     } else {
         //on_btnWifiList_clicked();
+    }
+
+    //isStopThisStep 用来防止连接的wifi被拉黑后，wifi连接断开后又立即重新连接
+    isStopThisStep = false;
+}
+
+void MainWindow::onWifiSwitchChange()
+{
+    if (is_btnWifiList_clicked) {
+        //this->ksnm->execGetWifiList();
+        on_btnWifiList_clicked();
     }
 }
 
@@ -2750,12 +2767,12 @@ void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
         if (wifiEnabled) {
             qDebug()<<"debug: external wifi switch turn on";
             syslog(LOG_DEBUG, "debug: external wifi switch turn on");
-            QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
+            QTimer::singleShot(4*1000, this, SLOT(onWifiSwitchChange() ));
             objKyDBus->setWifiSwitchState(true);
         } else {
             qDebug()<<"debug: external wifi switch turn off";
             syslog(LOG_DEBUG, "debug: external wifi switch turn off");
-            QTimer::singleShot(3*1000, this, SLOT(onExternalWifiChange() ));
+            QTimer::singleShot(3*1000, this, SLOT(onWifiSwitchChange() ));
             objKyDBus->setWifiSwitchState(false);//通知控制面板wifi开关已经关闭
         }
     }

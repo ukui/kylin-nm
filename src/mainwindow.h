@@ -164,7 +164,8 @@ public:
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
     QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
     int currSelNetNum = 0; //当前选中的item序号
-    bool isWifiBeDisConn;
+    bool isWifiBeConnUp;
+    bool isStopThisStep = false;
 
 public slots:
     void onPhysicalCarrierChanged(bool flag);
@@ -179,6 +180,7 @@ public slots:
     void onExternalConnectionChange(QString type, bool isConnUp);
     void onExternalLanChange();
     void onExternalWifiChange();
+    void onWifiSwitchChange();
     void onExternalWifiSwitchChange(bool wifiEnabled);
 
     void oneLanFormSelected(QString lanName, QString uniqueName);

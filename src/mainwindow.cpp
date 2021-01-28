@@ -1635,10 +1635,12 @@ void MainWindow::getConnListDone(QStringList slist)
         if (isAddedWifi) {
             isAddedWifi = false;
             //如果是新添加的wifi，尝试激活这个wifi
-            this->is_stop_check_net_state = 1;
-            BackThread *bt = new BackThread();
-            bt->execConnWifi(lastAddedConn);
-            connect(bt, SIGNAL(connDone(int)), this, SLOT(connWifiDone(int)));
+            if (! is_stop_check_net_state) {
+                this->is_stop_check_net_state = 1;
+                BackThread *bt = new BackThread();
+                bt->execConnWifi(lastAddedConn);
+                connect(bt, SIGNAL(connDone(int)), this, SLOT(connWifiDone(int)));
+            }
         }
         oldConnSlist.clear();
         oldConnSlist = newConnSlist;

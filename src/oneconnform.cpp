@@ -660,18 +660,20 @@ void OneConnForm::on_btnConnPWD_clicked()
         t->start();
     }
 
-    mw->is_stop_check_net_state = 1;
-    QThread *t = new QThread();
-    BackThread *bt = new BackThread();
-    bt->moveToThread(t);
-    connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
-    connect(t, SIGNAL(started()), this, SLOT(slotConnWifiPWD()));
-    connect(this, SIGNAL(sigConnWifiPWD(QString, QString, QString)),
-            bt, SLOT(execConnWifiPWD(QString, QString, QString)));
-    connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
-    connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
-    connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
-    t->start();
+    if (! mw->is_stop_check_net_state) {
+        mw->is_stop_check_net_state = 1;
+        QThread *t = new QThread();
+        BackThread *bt = new BackThread();
+        bt->moveToThread(t);
+        connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+        connect(t, SIGNAL(started()), this, SLOT(slotConnWifiPWD()));
+        connect(this, SIGNAL(sigConnWifiPWD(QString, QString, QString)),
+                bt, SLOT(execConnWifiPWD(QString, QString, QString)));
+        connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
+        connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
+        connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
+        t->start();
+    }
 }
 
 //点击后弹出连接隐藏wifi网络窗口

@@ -2759,9 +2759,10 @@ void MainWindow::onExternalWifiChange()
         QString txt(tr("WiFi already disconnect"));
         objKyDBus->showDesktopNotify(txt);
 
+        //先注释掉，这样会导致休眠唤醒操作之后，wifi无法回连
         //wifi被拉黑后强制断开wifi网络
-        QString disWifiCmd = "nmcli connection down '" + actWifiUuid + "'";
-        system(disWifiCmd.toUtf8().data());
+        //QString disWifiCmd = "nmcli connection down '" + actWifiUuid + "'";
+        //system(disWifiCmd.toUtf8().data());
     }
 
     if (is_btnWifiList_clicked) {

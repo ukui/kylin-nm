@@ -92,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ksnm, SIGNAL(getLanListFinished(QStringList)), this, SLOT(getLanListDone(QStringList)));
     connect(ksnm, SIGNAL(getWifiListFinished(QStringList)), this, SLOT(getWifiListDone(QStringList)));
     connect(ksnm, SIGNAL(getConnListFinished(QStringList)), this, SLOT(getConnListDone(QStringList)));
+    connect(ksnm, SIGNAL(requestRevalueUpdateWifi()), this, SLOT(onRequestRevalueUpdateWifi()));
 
     loading = new LoadingDiv(this);
     loading->move(40,0);
@@ -651,8 +652,10 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
                     IFace *loop_iface = loop_bt->execGetIface();
 
                     if (loop_iface->wstate != 2) {
-                        is_update_wifi_list = 1;
-                        this->ksnm->execGetWifiList(); //更新wifi列表
+                        //is_update_wifi_list = 1;
+                        //checkIfConnectedWifiExist();
+                        //this->ksnm->execGetWifiList(); //更新wifi列表
+                        this->on_btnWifiList_clicked(); //加载wifi列表
                     }
 
                     delete loop_iface;
@@ -1245,6 +1248,8 @@ void MainWindow::onBtnNetListClicked(int flag)
 
 void MainWindow::on_btnWifiList_clicked()
 {
+    is_stop_check_net_state = 1;
+    is_update_wifi_list = 0;
     this->is_btnWifiList_clicked = 1;
     this->is_btnLanList_clicked = 0;
     if (this->is_btnLanList_clicked == 1) {
@@ -1291,6 +1296,7 @@ void MainWindow::on_btnWifiList_clicked()
         btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();
+        is_stop_check_net_state = 0;
     } else {
         qDebug()<<"debug: WiFi的开关已经关闭";
         btnWireless->setSwitchStatus(false);
@@ -1566,6 +1572,13 @@ void MainWindow::getLanListDone(QStringList slist)
     this->stopLoading();
     oldLanSlist = slist;
     is_stop_check_net_state = 0;
+}
+
+// 获取wifi列表回调
+void MainWindow::onRequestRevalueUpdateWifi()
+{
+    is_stop_check_net_state = 1;
+    is_update_wifi_list = 0;
 }
 
 // 获取wifi列表回调
@@ -2101,6 +2114,17 @@ QString MainWindow::getMacByUuid(QString uuidName)
     }
 
     return resultMac;
+}
+
+void MainWindow::checkIfConnectedWifiExist()
+{
+    //在点击托盘图标时，判读有无wifi的连接，若wstate不为0，但是有wifi连接，就断开
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+    if (iface->wstate != 0) {
+        QString toDisConnWifi = "nmcli connection down '" + actWifiUuid + "'";
+        system(toDisConnWifi.toUtf8().data());
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -52,6 +52,7 @@ signals:
     void getLanListFinished(QStringList slist);
     void getWifiListFinished(QStringList slist);
     void getConnListFinished(QStringList slist);
+    void requestRevalueUpdateWifi();
 
 public slots:
     void readProcessLan();

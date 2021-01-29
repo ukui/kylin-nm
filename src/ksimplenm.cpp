@@ -78,6 +78,7 @@ void KSimpleNM::execGetWifiList()
         isUseOldWifiSlist = true;
         QStringList slistmEmpty;
         slistmEmpty.append("Empty");
+        //emit requestRevalueUpdateWifi();
         emit getWifiListFinished(slistmEmpty);
         return;
     }

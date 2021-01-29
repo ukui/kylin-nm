@@ -199,6 +199,8 @@ public slots:
 
     void on_showWindowAction();
 
+    void checkIfConnectedWifiExist();
+
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
     void paintEvent(QPaintEvent *event);
@@ -306,6 +308,7 @@ private slots:
     void onBtnNetListClicked(int flag=0);
     void onNewConnAdded(int type);
 
+    void onRequestRevalueUpdateWifi();
     void getLanListDone(QStringList slist);
     void getWifiListDone(QStringList slist);
     void getConnListDone(QStringList slist);

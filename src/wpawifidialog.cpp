@@ -411,6 +411,7 @@ void WpaWifiDialog::initConnect() {
     });
     connect(pwdEditor, &QLineEdit::textChanged, this, &WpaWifiDialog::slot_line_edit_changed);
     connect(userEditor, &QLineEdit::textChanged, this, &WpaWifiDialog::slot_line_edit_changed);
+    connect(nameEditor, &QLineEdit::textChanged, this, &WpaWifiDialog::slot_line_edit_changed);
 }
 
 void WpaWifiDialog::slot_line_edit_changed() {
@@ -418,6 +419,11 @@ void WpaWifiDialog::slot_line_edit_changed() {
         connectBtn->setEnabled(true);
     } else {
         connectBtn->setEnabled(false);
+    }
+
+    if (nameEditor->text().size() > 32) {
+        QString cutStr = nameEditor->text().mid(0,32);
+        nameEditor->setText(cutStr);
     }
 }
 

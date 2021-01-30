@@ -400,6 +400,11 @@ void DlgHideWifiWpa::on_leNetName_textEdited(const QString &arg1)
     } else {
         ui->btnConnect->setEnabled(true);
     }
+
+    if (ui->leNetName->text().size() > 32) {
+        QString cutStr = ui->leNetName->text().mid(0,32);
+        ui->leNetName->setText(cutStr);
+    }
 }
 
 void DlgHideWifiWpa::on_lePassword_textEdited(const QString &arg1)

@@ -1356,6 +1356,12 @@ void MainWindow::onNewConnAdded(int type) {
 // 获取lan列表回调
 void MainWindow::getLanListDone(QStringList slist)
 {
+    qDebug()<<"------------";
+    foreach (QString str, slist) {
+        qDebug()<<str;
+    }
+    qDebug()<<"------------";
+
     if (this->is_btnWifiList_clicked == 1) {
         return;
     }
@@ -1436,6 +1442,9 @@ void MainWindow::getLanListDone(QStringList slist)
         QString ltype = line.mid(0, indexUuid).trimmed();
         QString nuuid = line.mid(indexUuid, indexName - indexUuid).trimmed();
         QString nname = line.mid(indexName).trimmed();
+        if (nname=="") {
+            nname = " "; //防止有线网络的名称为空
+        }
         bool isActiveNet = false; //是否是活动的连接
 
         //仅仅对有线网络进行添加列表处理

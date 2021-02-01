@@ -573,7 +573,7 @@ void MainWindow::createTrayIcon()
 
     mShowWindow = new QAction(tr("Show MainWindow"),this);
     mAdvConf = new QAction(tr("Advanced"),this);
-    mAdvConf->setIcon(QIcon::fromTheme("document-page-setup", QIcon(":/res/x/setup.png")) );
+    mAdvConf->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
 
     trayIconMenu->addAction(mShowWindow);
     trayIconMenu->addAction(mAdvConf);

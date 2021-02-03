@@ -141,6 +141,7 @@ private:
     QLabel * lbFreq = nullptr;
     QLabel * lbNameText = nullptr;
     QHBoxLayout * lbNameLyt = nullptr;
+    QString key_mgmt;
 
 signals:
     void selectedOneWifiForm(QString wifiName, int extendLength);

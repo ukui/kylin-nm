@@ -375,6 +375,9 @@ void OneLancForm::on_btnConnSub_clicked()
 
 void OneLancForm::toConnectWiredNetwork()
 {
+    if (mw->is_stop_check_net_state == 1) {
+        return;
+    }
     mw->is_stop_check_net_state = 1;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();

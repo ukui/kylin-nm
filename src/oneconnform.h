@@ -82,6 +82,9 @@ public:
 
     bool isWifiConfExist(QString netName);
 
+    void setPositionY(const int& y);
+    int getPositionY();
+
     QString wifiName;
     QString wifiBSsid;
     QString wifiUuid;
@@ -130,6 +133,8 @@ private:
     bool isWaiting = false;
     int psk_flag = 0; //密码存储策略
     int getPskFlag();
+
+    int position_y = 0;
 
     Ui::OneConnForm *ui = nullptr;
     MainWindow *mw = nullptr;

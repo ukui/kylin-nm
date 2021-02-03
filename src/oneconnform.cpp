@@ -744,6 +744,17 @@ bool OneConnForm::isWifiConfExist(QString netName)
     return false;
 }
 
+void OneConnForm::setPositionY(const int &y)
+{
+//    qDebug()<<this->wifiName<<" height has been set to be "<<y;
+    this->position_y = y;
+}
+
+int OneConnForm::getPositionY()
+{
+    return this->position_y;
+}
+
 //设置密码隐藏或可见
 void OneConnForm::on_checkBoxPwd_stateChanged(int arg1)
 {

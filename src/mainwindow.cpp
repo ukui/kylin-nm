@@ -1321,6 +1321,7 @@ void MainWindow::on_btnWifiList_clicked()
         ccf->setTopItem(false);
         ccf->setAct(true);
         ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
+        ccf->setPositionY(0);
         ccf->show();
 
         this->lanListWidget->hide();
@@ -1753,6 +1754,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     }
     ccf->setAct(true);
     ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
+    ccf->setPositionY(0);
     ccf->show();
 
     // 填充可用网络列表
@@ -1850,6 +1852,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, freqState);
                 ocf->setConnedString(0, tr("Disconnected"), wsecu);
                 ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
+                ocf->setPositionY(j * H_NORMAL_ITEM);
                 ocf->setSelected(false, false);
                 ocf->show();
 
@@ -1954,6 +1957,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                                 OneConnForm *after_ocf = wifiList.at(after_pos);
                                 if (lastWname == currSelNetName) {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM - H_WIFI_ITEM_BIG_EXTEND);}
                                 else {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM);}
+                                after_ocf->setPositionY(after_ocf->y());
                             }
                             wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() - H_NORMAL_ITEM);
                             break;
@@ -2005,7 +2009,6 @@ void MainWindow::updateWifiListDone(QStringList slist)
             //只有5GHZ
             freqState = 2;
         }
-
         wnames.append(wname);
 
         for (int j=1; j < oldWifiSlist.size(); j++) {
@@ -2014,17 +2017,34 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
             if (lastWname == wname){break;} //上一次的wifi列表已经有名为wname的wifi，则停止
             if (j == oldWifiSlist.size()-1) { //到lastSlist最后一个都没找到，执行下面流程
+
                 QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
                 int n = wifiList.size();
                 int posY = 0;
-                if (n >= 1) {
-                    OneConnForm *lastOcf = wifiList.at(n-1);
-                    lastOcf->setLine(true);
-                    if (lastOcf->wifiName == currSelNetName) {
-                        posY = lastOcf->y()+H_NORMAL_ITEM + H_WIFI_ITEM_BIG_EXTEND;
-                    } else {
-                        posY = lastOcf->y()+H_NORMAL_ITEM;
+                bool showLine = false;
+
+                //此时的wnames.length()恰好等于新增wifi在所有wifi中的信号排名,1表示信号最好，若恰好等于旧wifi列表长度+1表示信号最差
+                if (wnames.length() >= n + 1) {
+                    if (n >= 1) {
+                        OneConnForm *lastOcf = wifiList.at(n - 1);
+                        lastOcf->setLine(true);
+                        if (lastOcf->wifiName == currSelNetName) {
+                            posY = lastOcf->y()+H_NORMAL_ITEM + H_WIFI_ITEM_BIG_EXTEND;
+                        } else {
+                            posY = lastOcf->y()+H_NORMAL_ITEM;
+                        }
                     }
+                } else {
+                    if (n >= 1) {
+                        OneConnForm *oneOcf = wifiList.at(wnames.length() - 1);
+                        posY = oneOcf->y();
+                    }
+                    for (int i = wnames.length() - 1; i < n; i++) {
+                        OneConnForm *oneOcf = wifiList.at(i);
+                        oneOcf->move(L_VERTICAL_LINE_TO_ITEM, oneOcf->y() + H_NORMAL_ITEM);
+                        oneOcf->setPositionY(oneOcf->y());
+                    }
+                    showLine = true;
                 }
 
                 wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() + H_NORMAL_ITEM);
@@ -2032,12 +2052,13 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 connect(addItem, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneWifiFormSelected(QString,int)));
                 addItem->setName(wname, wbssid, "--");
                 //addItem->setRate(wrate);
-                addItem->setLine(false);
+                addItem->setLine(showLine);
                 addItem->setSignal(wsignal, wsecu);
                 objKyDBus->getWifiMac(wname);
                 addItem->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, freqState);
                 addItem->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"
                 addItem->move(L_VERTICAL_LINE_TO_ITEM, posY);
+                addItem->setPositionY(posY);
                 addItem->setSelected(false, false);
                 addItem->show();
 
@@ -2409,11 +2430,12 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
     // 下方所有元素回到原位
     for (int i = 0, j = 0;i < wifiList.size(); i ++) {
         OneConnForm *ocf = wifiList.at(i);
-        if (ocf->isActive == true) {
+        if (ocf->isActive) {
             ocf->move(L_VERTICAL_LINE_TO_ITEM, 0);
-        }
-        if (ocf->isActive == false) {
-            ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
+        } else {
+//            ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
+            //为防止插队情况导致位置计算错误，给每项OneConnForm新增属性position_y，记下他们应处于的y坐标位置
+            ocf->move(L_VERTICAL_LINE_TO_ITEM, ocf->getPositionY());
             j ++;
         }
     }

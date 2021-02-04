@@ -2918,7 +2918,6 @@ void MainWindow::connLanDone(int connFlag)
 
     if (connFlag == 1) {
         syslog(LOG_DEBUG, "without net line connect to computer.");
-        is_stop_check_net_state = 0;
 
         QString txt(tr("Without Lan Cable"));
         objKyDBus->showDesktopNotify(txt);
@@ -2977,6 +2976,7 @@ void MainWindow::connLanDone(int connFlag)
     }
 
     this->stopLoading();
+    this->is_stop_check_net_state = 0;
 }
 
 void MainWindow::connWifiDone(int connFlag)

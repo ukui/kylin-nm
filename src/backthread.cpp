@@ -213,10 +213,10 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
     KylinDBus objKyDbus;
 
     //先断开当前网卡对应的已连接有线网
-    QString uuid = objKyDbus.getConnLanNameByIfname(ifname);
-    if (uuid != "--") {
-        kylin_network_set_con_down(uuid.toUtf8().data());
-    }
+//    QString uuid = objKyDbus.getConnLanNameByIfname(ifname);
+//    if (uuid != "--") {
+//        kylin_network_set_con_down(uuid.toUtf8().data());
+//    }
 
     bool wiredCableState = objKyDbus.getWiredCableStateByIfname(ifname);
 

@@ -105,6 +105,10 @@
 #define W_NO_ITEM_TIP 235
 #define H_NO_ITEM_TIP 20
 
+#define DBUS_NAME       "org.ukui.SettingsDaemon"
+#define DBUS_PATH       "/org/ukui/SettingsDaemon/xrandr"
+#define DBUS_INTERFACE  "org.ukui.SettingsDaemon.xrandr"
+
 class OneConnForm;
 class ConfForm;
 
@@ -138,6 +142,9 @@ public:
     void checkIsWirelessDeviceOn();
 
     void initActNetDNS();
+    void PrimaryManager();
+    void start();
+    int  getScreenGeometry(QString methodName);
 
     QIcon iconLanOnline, iconLanOffline;
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
@@ -166,6 +173,10 @@ public:
     int currSelNetNum = 0; //当前选中的item序号
     bool isWifiBeConnUp;
     bool isStopThisStep = false;
+    int m_priX;
+    int m_priY;
+    int m_priWid;
+    int m_priHei;
 
 public slots:
     void onPhysicalCarrierChanged(bool flag);
@@ -299,6 +310,7 @@ private:
     QString actWifiUuid = "--"; //当前连接wifi的uuid
 
     bool hasWifiConnected;//当前是否有wifi连接
+    QDBusInterface  *mDbusXrandInter;
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
@@ -343,6 +355,8 @@ private slots:
     void onBtnAddNetClicked();
     void onBtnCreateNetClicked();
     void actionTriggerSlots();
+
+    void priScreenChanged(int x, int y, int width, int height);
 
 signals:
     void disConnSparedNet(QString type);

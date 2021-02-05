@@ -51,7 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
 
     UseQssFile::setStyle("style.qss");
-
+    PrimaryManager();
+    start();
     QPainterPath path;
     auto rect = this->rect();
     rect.adjust(1, 1, -1, -1);
@@ -679,6 +680,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
+// 双屏问题
 void MainWindow::handleIconClicked()
 {
     QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
@@ -697,7 +699,7 @@ void MainWindow::handleIconClicked()
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()) {
         if (n == 0) {
             //任务栏在下侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + availableGeometry.height() - this->height() - m - d);
+            this->move( + availableGeometry.width() - this->width() - d, screenMainRect.y() + availableGeometry.height() - this->height() - m - d);
         } else if(n == 1) {
             //任务栏在上侧
             this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m + d);
@@ -3107,4 +3109,57 @@ void MainWindow::getSystemFontFamily()
             }
         }
     });
+}
+
+void MainWindow::PrimaryManager()
+{
+    //QDBusConnection conn = QDBusConnection::sessionBus();
+    mDbusXrandInter = new QDBusInterface(DBUS_NAME,
+                                         DBUS_PATH,
+                                         DBUS_INTERFACE,
+                                         QDBusConnection::sessionBus());
+    connect(mDbusXrandInter, SIGNAL(screenPrimaryChanged(int,int,int,int)),
+            this, SLOT(priScreenChanged(int,int,int,int)));
+
+}
+
+void MainWindow::start()
+{
+    m_priX = getScreenGeometry("x");
+    m_priY = getScreenGeometry("y");
+    m_priWid = getScreenGeometry("width");
+    m_priHei = getScreenGeometry("height");
+
+    qDebug("Start: Primary screen geometry is x=%d, y=%d, windth=%d, height=%d", m_priX, m_priY, m_priWid, m_priHei);
+}
+
+int MainWindow::getScreenGeometry(QString methodName)
+{
+    int res = 0;
+    QDBusMessage message = QDBusMessage::createMethodCall(DBUS_NAME,
+                               DBUS_PATH,
+                               DBUS_INTERFACE,
+                               methodName);
+    QDBusMessage response = QDBusConnection::sessionBus().call(message);
+    if (response.type() == QDBusMessage::ReplyMessage)
+    {
+        if(response.arguments().isEmpty() == false) {
+            int value = response.arguments().takeFirst().toInt();
+            res = value;
+            qDebug() << value;
+        }
+    } else {
+        qDebug()<<methodName<<"called failed";
+    }
+    return res;
+}
+
+/* get primary screen changed */
+void MainWindow::priScreenChanged(int x, int y, int width, int height)
+{
+    m_priX = x;
+    m_priY = y;
+    m_priWid = width;
+    m_priHei = height;
+    qDebug("primary screen  changed, geometry is  x=%d, y=%d, windth=%d, height=%d", x, y, width, height);
 }

@@ -813,7 +813,7 @@ void OneConnForm::on_btnInfo_clicked()
 
     cf->setProp(lbNameText->text(), wifiUuid, v4method, addr, mask, gateway, dns, this->isActive, true);
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
-    cf->exec();
+    cf->show();
     cf->raise();
 
     bt->deleteLater();

@@ -66,22 +66,10 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     ui->btnConnect->setText(tr("Connect")); //连接
 
     ui->cbxConn->addItem(tr("C_reate…")); //新建...
-    QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
-    QString cmd = "nmcli connection show>" + tmpPath;
-    int status = system(cmd.toUtf8().data());
-    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgHideWifi' failed");}
-    QFile file(tmpPath);
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        qDebug()<<"Can't open the file!";
-    }
-    QString txt = file.readAll();
-    QStringList txtLine = txt.split("\n");
-    file.close();
-    foreach (QString line, txtLine) {
-        if (line.indexOf("wifi") != -1 || line.indexOf("802-11-wireless") != -1) {
-            QStringList subLine = line.split(" ");
-            ui->cbxConn->addItem(subLine[0]);
-        }
+    KylinDBus mkylindbus;
+    QStringList wifiList = mkylindbus.getWifiSsidList();
+    foreach (QString strWifiSsid, wifiList) {
+        ui->cbxConn->addItem(strWifiSsid);
     }
     ui->cbxConn->setCurrentIndex(0);
     connect(ui->cbxConn,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeWindow()));

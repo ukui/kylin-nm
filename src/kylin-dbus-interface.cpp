@@ -640,6 +640,39 @@ int KylinDBus::getWiredNetworkNumber()
     return wiredNetworkNumber;
 }
 
+QStringList KylinDBus::getWifiSsidList()
+{
+    QStringList wifiSsidList;
+
+    QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                      "/org/freedesktop/NetworkManager/Settings",
+                                      "org.freedesktop.NetworkManager.Settings",
+                                      QDBusConnection::systemBus() );
+    QDBusReply<QList<QDBusObjectPath>> m_reply = m_interface.call("ListConnections");
+
+    QDBusObjectPath specific_connection;
+    specific_connection.setPath("/");
+
+    QList<QDBusObjectPath> m_objSettingPaths = m_reply.value();
+    foreach (QDBusObjectPath objSettingPath, m_objSettingPaths) {
+        QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                  objSettingPath.path(),
+                                  "org.freedesktop.NetworkManager.Settings.Connection",
+                                  QDBusConnection::systemBus());
+        QDBusMessage result = m_interface.call("GetSettings");
+
+        const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+        QMap<QString,QMap<QString,QVariant>> map;
+        dbusArg1st >> map;
+
+        if (map.value("802-11-wireless").value("mode").toString() == "infrastructure") {
+            wifiSsidList.append(map.value("connection").value("id").toString());
+        }
+    }
+
+    return wifiSsidList;
+}
+
 void KylinDBus::toCreateNewLan()
 {
     int i = 1;

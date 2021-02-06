@@ -38,8 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //checkSingle();
-
     syslog(LOG_DEBUG, "Using the icon theme named 'ukui-icon-theme-default'");
     QIcon::setThemeName("ukui-icon-theme-default");
 
@@ -78,7 +76,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mShowWindow,SIGNAL(triggered()),this,SLOT(on_showWindowAction()));
     connect(mAdvConf, &QAction::triggered, this, &MainWindow::actionTriggerSlots);
 
-    trayIcon->show();
+    checkSingleAndShowTrayicon();
+    //trayIcon->setVisible(true);
 
     objKyDBus = new KylinDBus(this);
     objKyDBus->initConnectionInfo();
@@ -133,7 +132,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::checkSingle()
+void MainWindow::checkSingleAndShowTrayicon()
 {
     int fd = 0;
     try {
@@ -152,9 +151,11 @@ void MainWindow::checkSingle()
 
 
     if (lockf(fd, F_TLOCK, 0)) {
-        syslog(LOG_ERR, "Can't lock single file, kylin-network-manager is already running!");
-        qDebug()<<"Can't lock single file, kylin-network-manager is already running!";
-        exit(0);
+        //syslog(LOG_ERR, "Can't lock single file, kylin-network-manager is already running!");
+        //qDebug()<<"Can't lock single file, kylin-network-manager is already running!";
+        //exit(0);
+    } else {
+        trayIcon->setVisible(true);
     }
 }
 

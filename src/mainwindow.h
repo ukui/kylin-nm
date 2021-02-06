@@ -207,7 +207,7 @@ protected:
     bool event(QEvent *event);
 
 private:
-    void checkSingle();
+    void checkSingleAndShowTrayicon();
     void initNetwork();
     void createTrayIcon();
     void handleIconClicked();

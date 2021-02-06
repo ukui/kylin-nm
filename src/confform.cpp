@@ -518,13 +518,13 @@ void ConfForm::on_leAddr_ipv6_textChanged(const QString &arg1)
 //编辑网络网关
 void ConfForm::on_leGateway_textEdited(const QString &arg1)
 {
-    this->setEnableOfBtn();
+    //this->setEnableOfBtn();
 }
 
 //编辑网络DNS
 void ConfForm::on_leDns_textEdited(const QString &arg1)
 {
-    this->setEnableOfBtn();
+    //this->setEnableOfBtn();
 }
 
 //编辑网络备用DNS
@@ -547,12 +547,12 @@ void ConfForm::setEnableOfBtn()
             return;
         }
 
-        if (!this->getTextEditState(ui->leGateway->text()) ) {
+        if (!ui->leGateway->text().isEmpty() && !this->getTextEditState(ui->leGateway->text()) ) {
             this->setBtnEnableFalse();
             return;
         }
 
-        if (!this->getTextEditState(ui->leDns->text()) ) {
+        if (!ui->leDns->text().isEmpty() && !this->getTextEditState(ui->leDns->text()) ) {
             this->setBtnEnableFalse();
             return;
         }

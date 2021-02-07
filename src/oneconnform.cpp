@@ -950,6 +950,15 @@ void OneConnForm::on_btnCancel_clicked()
         qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
         syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
     }
+
+    KylinDBus myKylinDbus;
+    QList<QString> wifiSsidAndUuid =  myKylinDbus.getAtiveWifiBSsidUuid();
+    if (wifiSsidAndUuid.size() >= 1) {
+        qDebug() << "aaaaaaaaa "<< wifiSsidAndUuid.at(0);
+        QString currentConnectWifiUuid = wifiSsidAndUuid.at(0);
+        kylin_network_set_con_down(currentConnectWifiUuid.toUtf8().data());
+    }
+    this->stopWaiting();
 }
 
 int OneConnForm::getPskFlag()

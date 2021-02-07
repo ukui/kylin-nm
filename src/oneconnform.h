@@ -34,7 +34,7 @@
 #include "ksimplenm.h"
 
 #define FRAME_SPEED 150
-#define LIMIT_TIME 20*1000
+#define LIMIT_TIME 90*1000
 #define TOTAL_PAGE 8
 
 #define W_ITEM 424
@@ -93,6 +93,11 @@ public:
     bool isTopItem;
     int signalLv;
 
+public slots:
+    void waitAnimStep();
+    void startWaiting(bool isToConnect);
+    void stopWaiting();
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
@@ -114,10 +119,6 @@ private slots:
     void on_checkBoxPwd_stateChanged(int arg1);
 
     void on_lePassword_textEdited(const QString &arg1);
-
-    void waitAnimStep();
-    void startWaiting(bool isToConnect);
-    void stopWaiting();
 
     void on_btnInfo_clicked();
 

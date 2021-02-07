@@ -72,6 +72,7 @@ public:
 
     void initTransparentState();
     double getTransparentData();
+    int checkWifiConnectivity();
 
     QDBusObjectPath wirelessPath; //无线设备的路径
     QList<QDBusObjectPath> multiWiredPaths; //Wired Device的对象路径列表

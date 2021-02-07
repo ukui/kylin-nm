@@ -1677,6 +1677,11 @@ void MainWindow::loadWifiListDone(QStringList slist)
     scrollAreaw->setWidget(wifiListWidget);
     scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
 
+    int wifiState = objKyDBus->checkWifiConnectivity(); //检查wifi的连接状态
+    if (isWifiBeConnUp && wifiState == 1) {
+        wifiState = 2;
+    }
+
     QList<QString> currConnWifiSsidUuid;
     bool isLoop = true;
     do {
@@ -1715,7 +1720,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 根据当前连接的wifi 设置OneConnForm
     OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
-    if (actWifiName == "--") {
+    if (actWifiName == "--" || wifiState == 1) {
         ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--");
         activeWifiSignalLv = 0;
@@ -1808,10 +1813,11 @@ void MainWindow::loadWifiListDone(QStringList slist)
             //只有5GHZ
             freqState = 2;
         }
+
         if (wname != "" && wname != "--") {
-            // 当前连接的wifi
             //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
-            if (actWifiBssidList.contains(wbssid)) {
+            if (actWifiBssidList.contains(wbssid) && wifiState == 2) {
+                //对于已经连接的wifi
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
                 ccf->setName(wname, wbssid, actWifiUuid);
@@ -1833,6 +1839,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
                 syslog(LOG_DEBUG, "already insert an active wifi in the top of wifi list");
             } else {
+                //对于未连接的wifi
                 wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() + H_NORMAL_ITEM);
 
                 OneConnForm *ocf = new OneConnForm(wifiListWidget, this, confForm, ksnm);
@@ -1847,6 +1854,10 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
                 ocf->setSelected(false, false);
                 ocf->show();
+
+                if (actWifiBssidList.contains(wbssid) && wifiState == 1) {
+                    ocf->startWaiting(true);
+                }
 
                 j ++;
                 count ++;
@@ -2723,8 +2734,14 @@ void MainWindow::on_btnHotspotState()
 //处理外界对网络的连接与断开
 void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 {
+    if (isToSetValue) {
+        isWifiBeConnUp = true;
+        isWifiBeConnUp = isConnUp;
+    }
+
     if (!is_connect_hide_wifi && !is_stop_check_net_state) {
         is_stop_check_net_state = 1;
+
         if (type == "802-3-ethernet" || type == "ethernet") {
             if (is_connect_net_failed) {
                 qDebug()<<"debug: connect wired network failed, no need to refresh wired interface";
@@ -2741,12 +2758,8 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
                 is_connect_net_failed = 0;
                 is_stop_check_net_state = 0;
             } else {
-                if (!isStopThisStep) {
-                    isStopThisStep = true;
-                    isWifiBeConnUp = true;
-                    isWifiBeConnUp = isConnUp;
-                    QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
-                }
+                isToSetValue = false;
+                QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
             }
         }
     }
@@ -2762,22 +2775,13 @@ void MainWindow::onExternalWifiChange()
     if (!isWifiBeConnUp) {
         QString txt(tr("WiFi already disconnect"));
         objKyDBus->showDesktopNotify(txt);
-
-        //先注释掉，这样会导致休眠唤醒操作之后，wifi无法回连
-        //wifi被拉黑后强制断开wifi网络
-        //QString disWifiCmd = "nmcli connection down '" + actWifiUuid + "'";
-        //system(disWifiCmd.toUtf8().data());
     }
 
     if (is_btnWifiList_clicked) {
-        //this->ksnm->execGetWifiList();
-        on_btnWifiList_clicked();
-    } else {
-        //on_btnWifiList_clicked();
+         on_btnWifiList_clicked();
     }
 
-    //isStopThisStep 用来防止连接的wifi被拉黑后，wifi连接断开后又立即重新连接
-    isStopThisStep = false;
+    isToSetValue = true;
 }
 
 void MainWindow::onWifiSwitchChange()

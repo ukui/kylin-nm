@@ -791,7 +791,7 @@ void OneConnForm::on_btnInfo_clicked()
     BackThread *bt = new BackThread();
     QString connProp = bt->getConnProp(lbNameText->text());
     QStringList propList = connProp.split("|");
-    QString v4method, addr, mask, gateway, dns;
+    QString v4method, addr, mask, gateway, dns, v6method, v6addr;
     foreach (QString line, propList) {
         if (line.startsWith("method:")) {
             v4method = line.split(":").at(1);
@@ -802,6 +802,12 @@ void OneConnForm::on_btnInfo_clicked()
         if (line.startsWith("mask:")) {
             mask = line.split(":").at(1);
         }
+        if (line.startsWith("v6method:")) {
+            v6method = line.split(":").at(1);
+        }
+        if (line.startsWith("v6addr:")) {
+            v6addr = line.right(line.length() - line.indexOf(":") - 1);
+        }
         if (line.startsWith("gateway:")) {
             gateway= line.split(":").at(1);
         }
@@ -811,7 +817,7 @@ void OneConnForm::on_btnInfo_clicked()
     }
     // qDebug()<<"v4method:"<<v4method<<" addr:"<<addr<<" mask:"<<mask<<" gateway:"<<gateway<<" dns:"<<dns;
 
-    cf->setProp(lbNameText->text(), wifiUuid, v4method, addr, mask, gateway, dns, this->isActive, true);
+    cf->setProp(lbNameText->text(), wifiUuid, v4method, addr, v6method, v6addr, mask, gateway, dns, this->isActive, true);
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();
     cf->raise();

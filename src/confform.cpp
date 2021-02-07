@@ -57,12 +57,15 @@ ConfForm::ConfForm(QWidget *parent) :
              "QComboBox QAbstractItemView::item{padding-left:17px;border-radius:0px;font-size:13px;color:rgba(255,255,255,0.91);height: 32px;background-color:#48484C;outline:0px;}"
              "QComboBox QAbstractItemView::item:hover{padding-left:17px;border-radius:0px;font-size:13px;color:rgba(255,255,255,0.91);background-color:#3D6BE5;outline:0px;}";
     leQss = "QLineEdit{padding-left:20px;color:rgba(255,255,255,0.97);background:rgba(255,255,255,0.08);}";
-    btnOffQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
-                   "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
-                   "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}";
-    btnOnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
-                 "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
-                 "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}";
+    btnOffQss = "QPushButton[on=false]{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.08);color:white;font-size:14px;}"
+                   "QPushButton[on=false]:Hover{border:0px solid rgba(255,255,255,0.1);border-radius:4px;background-color:rgba(255,255,255,0.1);}"
+                   "QPushButton[on=false]:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}"
+                "QPushButton[on=true]{border:0px;border-radius:4px;background-color:rgba(244,244,244,0.12);color:white;font-size:14px;}"
+                "QPushButton[on=true]:Hover{border:0px solid rgba(244,244,244,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                "QPushButton[on=true]:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}";
+    btnOnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
+                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);";
     lineQss = "background:rgba(156,156,156,0.1);";
 
     ui->wdHead->setStyleSheet("#wdHead{border:none}");
@@ -105,6 +108,14 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->btnSave->setText(tr("Save"));//"保存"
     ui->btnCreate->setText(tr("Ok"));//"确定"
 
+    ui->btnCancel->setProperty("on",true);
+    ui->btnSave->setProperty("on",false);
+    ui->btnCreate->setProperty("on",false);
+
+    ui->btnCancel->setStyleSheet(btnOffQss);
+    ui->btnSave->setStyleSheet(btnOffQss);
+    ui->btnCreate->setStyleSheet(btnOffQss);
+
     ui->btnCancel->setFocusPolicy(Qt::NoFocus);
     ui->btnSave->setFocusPolicy(Qt::NoFocus);
     ui->btnCreate->setFocusPolicy(Qt::NoFocus);
@@ -117,6 +128,7 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->leDns->setValidator(new QRegExpValidator(rx, this));
     ui->leDns2->setValidator(new QRegExpValidator(rx, this));
     ui->leAddr_ipv6->setValidator(new QRegExpValidator(ipv6_rx, this));
+    setModal(false);
 
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
@@ -475,8 +487,7 @@ void ConfForm::cbTypeChanged(int index)
         this->setFixedSize(432, 510);
     }
     if (index == 3) {
-        ui->btnSave->setEnabled(false);
-        ui->btnCreate->setEnabled(false);
+        setBtnEnableFalse();
 
         if (!isActWifi) {
             ui->leName->setEnabled(true);
@@ -563,8 +574,17 @@ void ConfForm::setEnableOfBtn()
         }
     }
 
+
     ui->btnSave->setEnabled(true);
     ui->btnCreate->setEnabled(true);
+    ui->btnSave->setProperty("on",true);
+    ui->btnSave->style()->unpolish(ui->btnSave);
+    ui->btnSave->style()->polish(ui->btnSave);
+
+    ui->btnCreate->setProperty("on",true);
+    ui->btnCreate->style()->unpolish(ui->btnCreate);
+    ui->btnCreate->style()->polish(ui->btnCreate);
+
 }
 
 //文本的输入要符合ip的格式要求
@@ -593,6 +613,13 @@ void ConfForm::setBtnEnableFalse()
 {
     ui->btnSave->setEnabled(false);
     ui->btnCreate->setEnabled(false);
+    ui->btnSave->setProperty("on",false);
+    ui->btnSave->style()->unpolish(ui->btnSave);
+    ui->btnSave->style()->polish(ui->btnSave);
+
+    ui->btnCreate->setProperty("on",false);
+    ui->btnCreate->style()->unpolish(ui->btnCreate);
+    ui->btnCreate->style()->polish(ui->btnCreate);
 }
 
 void ConfForm::paintEvent(QPaintEvent *event)

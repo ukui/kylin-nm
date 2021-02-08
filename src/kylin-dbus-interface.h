@@ -51,7 +51,7 @@ public:
     QStringList getWifiSsidList();
     void showDesktopNotify(QString message);
     void initConnectionInfo();
-    QList<QString> getAtiveLanSsidUuid();
+    QList<QString> getAtiveLanSsidUuidState();
     QList<QString> getAtiveWifiBSsidUuid();
     void reConnectWiredNet(QString netUuid);
     bool toConnectWiredNet(QString netUuid, QString netIfName);
@@ -73,6 +73,7 @@ public:
     void initTransparentState();
     double getTransparentData();
     int checkWifiConnectivity();
+    bool checkNetworkConnectivity();
 
     QDBusObjectPath wirelessPath; //无线设备的路径
     QList<QDBusObjectPath> multiWiredPaths; //Wired Device的对象路径列表

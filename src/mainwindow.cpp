@@ -553,11 +553,11 @@ void MainWindow::initTimer()
 //初始化已经连接网络的DNS
 void MainWindow::initActNetDNS()
 {
-    QList<QString> currConnLanSsidUuid =objKyDBus->getAtiveLanSsidUuid();
+    QList<QString> currConnLanSsidUuidState =objKyDBus->getAtiveLanSsidUuidState();
 
-    if (currConnLanSsidUuid.size() > 0) {
-        oldActLanName = currConnLanSsidUuid.at(0);
-        objKyDBus->getLanIpDNS(currConnLanSsidUuid.at(1), true);
+    if (currConnLanSsidUuidState.size() > 0) {
+        oldActLanName = currConnLanSsidUuidState.at(0);
+        objKyDBus->getLanIpDNS(currConnLanSsidUuidState.at(1), true);
         oldDbusActLanDNS = objKyDBus->dbusActLanDNS;
     }
 }
@@ -842,6 +842,12 @@ void MainWindow::on_checkOverTime()
 
 void MainWindow::getActiveInfo()
 {
+    bool hasNetConnecting =objKyDBus->checkNetworkConnectivity();
+    if (hasNetConnecting) {
+        this->setTrayLoading(true);
+        return;
+    }
+
     QString actLanName = "--";
     QString actWifiName = "--";
 
@@ -1388,10 +1394,16 @@ void MainWindow::getLanListDone(QStringList slist)
     // 获取当前连接有线网的SSID和UUID
     QList<QString> actLanSsidName;
     QList<QString> actLanUuidName;
-    QList<QString> currConnLanSsidUuid =objKyDBus->getAtiveLanSsidUuid();
+    QList<QString> actLanStateName;
+    QList<QString> currConnLanSsidUuidState =objKyDBus->getAtiveLanSsidUuidState();
 
-    // 若当前lan name为"--"，设置OneConnForm
-    if (currConnLanSsidUuid.size() == 0) {
+    bool hasCurrentLanConnected = false;
+    if (currConnLanSsidUuidState.contains("connected")) {
+        hasCurrentLanConnected = true;
+    }
+
+    // 若当前没有任何一个有线网连接，设置有线列表顶部的item状态为未连接
+    if (!hasCurrentLanConnected) {
         OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
         ccf->setName(tr("Not connected"), tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
         ccf->setIcon(false);
@@ -1408,13 +1420,15 @@ void MainWindow::getLanListDone(QStringList slist)
         ccf->show();
         ccf->setLine(false);
         currTopLanItem = 1;
-    } else {
+    }
+    if (currConnLanSsidUuidState.size() != 0) {
         int i = 0;
         do {
-            actLanSsidName.append(currConnLanSsidUuid.at(i)); //网络名称
-            actLanUuidName.append(currConnLanSsidUuid.at(i+1)); //网络唯一ID
-            i += 2;
-        } while(i<currConnLanSsidUuid.size());
+            actLanSsidName.append(currConnLanSsidUuidState.at(i)); //有线网络名称
+            actLanUuidName.append(currConnLanSsidUuidState.at(i+1)); //有线网络唯一ID
+            actLanStateName.append(currConnLanSsidUuidState.at(i+2)); //有线网络连接状态
+            i += 3;
+        } while(i<currConnLanSsidUuidState.size());
         currTopLanItem = actLanSsidName.size();
     }
 
@@ -1440,7 +1454,7 @@ void MainWindow::getLanListDone(QStringList slist)
         if (nname=="") {
             nname = " "; //防止有线网络的名称为空
         }
-        bool isActiveNet = false; //是否是活动的连接
+        bool isActiveNet = false; //isActiveNet用来表明nname是否是活动的连接
 
         //仅仅对有线网络进行添加列表处理
         if (ltype != "802-11-wireless" && ltype != "wifi" && ltype != "bridge" && ltype != "" && ltype != "--") {
@@ -1463,9 +1477,9 @@ void MainWindow::getLanListDone(QStringList slist)
             }
 
             //**********************创建已经连接的有线网item********************//
-            if (currConnLanSsidUuid.size() != 0) {//证明有已经连接的有线网络
+            if (currConnLanSsidUuidState.size() != 0) {//证明有已经连接的有线网络
                 for (int kk=0; kk<actLanSsidName.size(); kk++) {
-                    if (nname == actLanSsidName.at(kk) && nuuid == actLanUuidName.at(kk)) {
+                    if (nname == actLanSsidName.at(kk) && nuuid == actLanUuidName.at(kk) && actLanStateName.at(kk) == "connected") {
                         topLanListWidget->resize(topLanListWidget->width(), topLanListWidget->height() + H_NORMAL_ITEM*kk);
                         isActiveNet = true; //名为nname的网络是已经连接的有线网络
                         ifLanConnected = true;
@@ -1546,6 +1560,11 @@ void MainWindow::getLanListDone(QStringList slist)
                 ocf->setSelected(false, false);
                 ocf->show();
 
+                for (int kk=0; kk<actLanSsidName.size(); kk++) {
+                    if (nname == actLanSsidName.at(kk) && nuuid == actLanUuidName.at(kk) &&  actLanStateName.at(kk) == "connecting") {
+                            ocf->startWaiting(true);
+                    }
+                }
                 j ++;
             }
         }
@@ -1677,9 +1696,10 @@ void MainWindow::loadWifiListDone(QStringList slist)
     scrollAreaw->setWidget(wifiListWidget);
     scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
 
-    int wifiState = objKyDBus->checkWifiConnectivity(); //检查wifi的连接状态
-    if (isWifiBeConnUp && wifiState == 1) {
-        wifiState = 2;
+    // 获取当前有线网的连接状态，正在连接wifiActState==1，已近连接wifiActState==2, 未连接wifiActState==3
+    int wifiActState = objKyDBus->checkWifiConnectivity(); //检查wifi的连接状态
+    if (isWifiBeConnUp && wifiActState == 1) {
+        wifiActState = 2;
     }
 
     QList<QString> currConnWifiSsidUuid;
@@ -1720,7 +1740,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 根据当前连接的wifi 设置OneConnForm
     OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
-    if (actWifiName == "--" || wifiState == 1) {
+    if (actWifiName == "--" || wifiActState == 1) {
         ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--");
         activeWifiSignalLv = 0;
@@ -1816,7 +1836,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
         if (wname != "" && wname != "--") {
             //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
-            if (actWifiBssidList.contains(wbssid) && wifiState == 2) {
+            if (actWifiBssidList.contains(wbssid) && wifiActState == 2) {
                 //对于已经连接的wifi
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
@@ -1855,7 +1875,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->setSelected(false, false);
                 ocf->show();
 
-                if (actWifiBssidList.contains(wbssid) && wifiState == 1) {
+                if (actWifiBssidList.contains(wbssid) && wifiActState == 1) {
                     ocf->startWaiting(true);
                 }
 
@@ -2734,9 +2754,18 @@ void MainWindow::on_btnHotspotState()
 //处理外界对网络的连接与断开
 void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 {
-    if (isToSetValue) {
-        isWifiBeConnUp = true;
-        isWifiBeConnUp = isConnUp;
+    if (isToSetLanValue) {
+        if (type == "802-3-ethernet" || type == "ethernet") {
+            isLanBeConnUp = true;
+            isLanBeConnUp = isConnUp;
+        }
+    }
+
+    if (isToSetWifiValue) {
+        if (type == "802-11-wireless" || type == "wifi") {
+            isWifiBeConnUp = true;
+            isWifiBeConnUp = isConnUp;
+        }
     }
 
     if (!is_connect_hide_wifi && !is_stop_check_net_state) {
@@ -2748,6 +2777,7 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
                 is_connect_net_failed = 0;
                 is_stop_check_net_state = 0;
             } else {
+                isToSetLanValue = false;
                 QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
             }
         }
@@ -2758,7 +2788,7 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
                 is_connect_net_failed = 0;
                 is_stop_check_net_state = 0;
             } else {
-                isToSetValue = false;
+                isToSetWifiValue = false;
                 QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
             }
         }
@@ -2767,7 +2797,11 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 
 void MainWindow::onExternalLanChange()
 {
-    onBtnNetListClicked(0);
+    if (is_btnLanList_clicked) {
+        onBtnNetListClicked(0);
+    }
+
+    isToSetLanValue = true;
 }
 
 void MainWindow::onExternalWifiChange()
@@ -2781,7 +2815,7 @@ void MainWindow::onExternalWifiChange()
          on_btnWifiList_clicked();
     }
 
-    isToSetValue = true;
+    isToSetWifiValue = true;
 }
 
 void MainWindow::onWifiSwitchChange()

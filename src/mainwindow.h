@@ -164,8 +164,10 @@ public:
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
     QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
     int currSelNetNum = 0; //当前选中的item序号
+    bool isLanBeConnUp = false; //lan是否连接上
     bool isWifiBeConnUp = false; //wifi是否是连接上
-    bool isToSetValue = true; //本次执行是否进行赋值
+    bool isToSetLanValue = true; //本次执行是否进行赋值
+    bool isToSetWifiValue = true; //本次执行是否进行赋值
 
 public slots:
     void onPhysicalCarrierChanged(bool flag);

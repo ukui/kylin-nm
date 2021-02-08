@@ -950,17 +950,16 @@ void OneConnForm::stopWaiting()
 
 void OneConnForm::on_btnCancel_clicked()
 {
-    QString cmd = "kill -9 $(pidof nmcli)"; //杀掉当前正在进行的有关nmcli命令的进程
-    int status = system(cmd.toUtf8().data());
-    if (status != 0) {
-        qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
-        syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
-    }
+//    QString cmd = "kill -9 $(pidof nmcli)"; //杀掉当前正在进行的有关nmcli命令的进程
+//    int status = system(cmd.toUtf8().data());
+//    if (status != 0) {
+//        qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
+//        syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
+//    }
 
     KylinDBus myKylinDbus;
     QList<QString> wifiSsidAndUuid =  myKylinDbus.getAtiveWifiBSsidUuid();
     if (wifiSsidAndUuid.size() >= 1) {
-        qDebug() << "aaaaaaaaa "<< wifiSsidAndUuid.at(0);
         QString currentConnectWifiUuid = wifiSsidAndUuid.at(0);
         kylin_network_set_con_down(currentConnectWifiUuid.toUtf8().data());
     }

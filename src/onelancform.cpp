@@ -499,6 +499,16 @@ void OneLancForm::stopWaiting()
     ui->lbWaiting->hide();
     ui->lbWaitingIcon->hide();
 
+    KylinDBus myKylinDbus;
+    QList<QString> actLanSsidUuidState =  myKylinDbus.getAtiveLanSsidUuidState();
+    if (actLanSsidUuidState.size() >= 3) {
+        for (int i=0; i<actLanSsidUuidState.size()-1; i++) {
+            if (actLanSsidUuidState.at(i) == uuidName && actLanSsidUuidState.at(i+1) == "connecting") {
+                kylin_network_set_con_down(uuidName.toUtf8().data());
+            }
+        }
+    }
+
     mw->setTrayLoading(false);
     mw->getActiveInfo();
 }
@@ -510,6 +520,12 @@ void OneLancForm::on_btnCancel_clicked()
     if (status != 0) {
         qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
         syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
+    }
+
+    KylinDBus myKylinDbus;
+    QList<QString> lanSsidAndUuid =  myKylinDbus.getAtiveLanSsidUuidState();
+    if (lanSsidAndUuid.contains(uuidName)) {
+        kylin_network_set_con_down(uuidName.toUtf8().data());
     }
 
     this->stopWaiting();

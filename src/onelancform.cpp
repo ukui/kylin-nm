@@ -375,6 +375,9 @@ void OneLancForm::on_btnConnSub_clicked()
 
 void OneLancForm::toConnectWiredNetwork()
 {
+    if (mw->is_stop_check_net_state == 1) {
+        return;
+    }
     mw->is_stop_check_net_state = 1;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
@@ -405,16 +408,22 @@ void OneLancForm::on_btnInfo_clicked()
     BackThread *bt = new BackThread();
     QString connProp = bt->getConnProp(uuidName);
     QStringList propList = connProp.split("|");
-    QString v4method, addr, mask, gateway, dns;
+    QString v4method, addr, mask, gateway, dns, v6method, v6addr;
     foreach (QString line, propList) {
         if (line.startsWith("method:")) {
             v4method = line.split(":").at(1);
         }
-        if (line.startsWith("addr:")) {
+        if (line.startsWith("v4addr:")) {
             addr = line.split(":").at(1);
         }
         if (line.startsWith("mask:")) {
             mask = line.split(":").at(1);
+        }
+        if (line.startsWith("v6method:")) {
+            v6method = line.split(":").at(1);
+        }
+        if (line.startsWith("v6addr:")) {
+            v6addr = line.right(line.length() - line.indexOf(":") - 1);
         }
         if (line.startsWith("gateway:")) {
             gateway= line.split(":").at(1);
@@ -426,7 +435,7 @@ void OneLancForm::on_btnInfo_clicked()
     // qDebug()<<v4method<<addr<<mask<<gateway<<dns;
 
     connect(cf, SIGNAL(requestRefreshLanList(int)), mw, SLOT(onBtnNetListClicked(int)));
-    cf->setProp(ui->lbName->text(), uuidName, v4method, addr, mask, gateway, dns, this->isActive, false);
+    cf->setProp(ui->lbName->text(), uuidName, v4method, addr, v6method, v6addr, mask, gateway, dns, this->isActive, false);
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->exec();
     cf->raise();
@@ -490,6 +499,16 @@ void OneLancForm::stopWaiting()
     ui->lbWaiting->hide();
     ui->lbWaitingIcon->hide();
 
+    KylinDBus myKylinDbus;
+    QList<QString> actLanSsidUuidState =  myKylinDbus.getAtiveLanSsidUuidState();
+    if (actLanSsidUuidState.size() >= 3) {
+        for (int i=0; i<actLanSsidUuidState.size()-1; i++) {
+            if (actLanSsidUuidState.at(i) == uuidName && actLanSsidUuidState.at(i+1) == "connecting") {
+                kylin_network_set_con_down(uuidName.toUtf8().data());
+            }
+        }
+    }
+
     mw->setTrayLoading(false);
     mw->getActiveInfo();
 }
@@ -501,6 +520,12 @@ void OneLancForm::on_btnCancel_clicked()
     if (status != 0) {
         qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
         syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
+    }
+
+    KylinDBus myKylinDbus;
+    QList<QString> lanSsidAndUuid =  myKylinDbus.getAtiveLanSsidUuidState();
+    if (lanSsidAndUuid.contains(uuidName)) {
+        kylin_network_set_con_down(uuidName.toUtf8().data());
     }
 
     this->stopWaiting();

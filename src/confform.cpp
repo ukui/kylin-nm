@@ -162,12 +162,12 @@ void ConfForm::mouseMoveEvent(QMouseEvent *event)
 }
 
 //网络配置参数设置界面的显示内容
-void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf, bool isWiFi)
+void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QString v4addr, QString v6method, QString v6addr, QString mask, QString gateway, QString dns, bool isActConf, bool isWiFi)
 {
     this->isActConf = isActConf;
     ui->leName->setText(connName);
     lastConnName = connName;
-    lastIpv4 = addr;
+    lastIpv4 = v4addr;
     netUuid = uuidName;
 
     if (isWiFi) {
@@ -183,7 +183,11 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
         cbTypeChanged(1);
     }
 
-    ui->leAddr->setText(addr);
+    if (v6method == "manual") {
+        ui->leAddr_ipv6->setText(v6addr);
+    }
+
+    ui->leAddr->setText(v4addr);
     ui->leGateway->setText(gateway);
 
     // 配置中有多个DNS，只处理前两个
@@ -250,7 +254,10 @@ void ConfForm::on_btnCreate_clicked()
     }
 
     if (!ui->leAddr_ipv6->text().isEmpty()) {
-        QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.addresses " + ui->leAddr_ipv6->text();
+        QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+        Utils::m_system(cmdStr.toUtf8().data());
+    } else {
+        QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method auto";
         Utils::m_system(cmdStr.toUtf8().data());
     }
 
@@ -343,9 +350,14 @@ void ConfForm::on_btnSave_clicked()
         }
     }
 
-    if (ui->cbType->currentIndex() == 1 && !ui->leAddr_ipv6->text().isEmpty()) {
-        QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.addresses " + ui->leAddr_ipv6->text();
-        Utils::m_system(cmdStr.toUtf8().data());
+    if (ui->cbType->currentIndex() == 1) {
+        if (!ui->leAddr_ipv6->text().isEmpty()) {
+            QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+            Utils::m_system(cmdStr.toUtf8().data());
+        } else {
+            QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method auto";
+            Utils::m_system(cmdStr.toUtf8().data());
+        }
     }
 
     QString txt(tr("New network settings already finished"));
@@ -558,12 +570,12 @@ void ConfForm::setEnableOfBtn()
             return;
         }
 
-        if (!this->getTextEditState(ui->leGateway->text()) ) {
+        if (!ui->leGateway->text().isEmpty() && !this->getTextEditState(ui->leGateway->text()) ) {
             this->setBtnEnableFalse();
             return;
         }
 
-        if (!this->getTextEditState(ui->leDns->text()) ) {
+        if (!ui->leDns->text().isEmpty() && !this->getTextEditState(ui->leDns->text()) ) {
             this->setBtnEnableFalse();
             return;
         }

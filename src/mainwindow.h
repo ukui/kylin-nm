@@ -134,9 +134,6 @@ public:
     void setTrayLoading(bool isLoading);
     void getActiveInfo();
 
-    void addListHeight(int add);
-    void decListHeight(int dec);
-
     void initTimer();
     void checkIsWirelessDeviceOn();
 
@@ -150,7 +147,6 @@ public:
     KylinDBus *objKyDBus = nullptr;
     NetworkSpeed *objNetSpeed = nullptr;
     SwitchButton *btnWireless;
-    QList<OneConnForm *>mItemList;
 
     //状态设置,0为假，1为真
     int is_update_wifi_list = 0; //是否是update wifi列表，而不是load wifi列表
@@ -168,11 +164,10 @@ public:
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
     QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
     int currSelNetNum = 0; //当前选中的item序号
-    bool isWifiBeConnUp;
-    bool isStopThisStep = false;
-    int bIsUserOper = 0;
-    QStringList m_szItemList;
-    int curSize;
+    bool isLanBeConnUp = false; //lan是否连接上
+    bool isWifiBeConnUp = false; //wifi是否是连接上
+    bool isToSetLanValue = true; //本次执行是否进行赋值
+    bool isToSetWifiValue = true; //本次执行是否进行赋值
 
 public slots:
     void onPhysicalCarrierChanged(bool flag);
@@ -214,7 +209,7 @@ protected:
     bool event(QEvent *event);
 
 private:
-    void checkSingle();
+    void checkSingleAndShowTrayicon();
     void initNetwork();
     void createTrayIcon();
     void handleIconClicked();
@@ -274,7 +269,6 @@ private:
 
     QStringList oldLanSlist; //上一次获取Lan列表
     QStringList oldWifiSlist; //上一次获取wifi列表
-    QStringList curWifiSlits; // current wifi list
     QStringList oldConnSlist; //上一次获取的以保存网络列表
     bool isInitConnList = true;
     bool isAddedWifi = false;
@@ -298,9 +292,6 @@ private:
     int disconnect_time = 0;
     int currTopLanItem = 1; //当前连接的有线网个数
 
-    bool isSelecting = false;
-    bool isDisConnecting = false;
-
     long int start_rcv_rates = 0;	//保存开始时的流量计数
     long int end_rcv_rates = 0;	//保存结束时的流量计数
     long int start_tx_rates = 0;   //保存开始时的流量计数
@@ -310,11 +301,6 @@ private:
     QString actWifiUuid = "--"; //当前连接wifi的uuid
 
     bool hasWifiConnected;//当前是否有wifi连接
-
-    QMap<int,int> lockMap;
-public slots:
-    void onBlur(int id);
-    void onFocus(int id);
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
@@ -365,8 +351,6 @@ signals:
 
     void waitWifiStop();
     void waitLanStop();
-
-    void showSize(int size);
 };
 
 #endif // MAINWINDOW_H

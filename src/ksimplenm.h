@@ -24,7 +24,6 @@
 #include <QObject>
 #include <QProcess>
 #include <QDebug>
-#include <QtConcurrent>
 
 class KSimpleNM : public QObject
 {
@@ -34,10 +33,10 @@ public:
     ~KSimpleNM();
 
     QProcess *runProcessLan;
-//    QProcess *runProcessWifi;
+    QProcess *runProcessWifi;
     QProcess *runProcessConn;
     QString shellOutputLan;
-//    QString shellOutputWifi;
+    QString shellOutputWifi;
     QString shellOutputConn;
 
     bool isExecutingGetLanList = false; //是否正在执行获取有线网列表
@@ -46,7 +45,7 @@ public:
     bool isUseOldWifiSlist = false; //是否应该要用上一次获取的有线列表
 
     void execGetLanList();
-    void execGetWifiList(int mode = 0);
+    void execGetWifiList();
     void execGetConnList();
 
 signals:

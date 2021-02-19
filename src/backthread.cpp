@@ -213,10 +213,10 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
     KylinDBus objKyDbus;
 
     //先断开当前网卡对应的已连接有线网
-//    QString uuid = objKyDbus.getConnLanNameByIfname(ifname);
-//    if (uuid != "--") {
-//        kylin_network_set_con_down(uuid.toUtf8().data());
-//    }
+    QString uuid = objKyDbus.getConnLanNameByIfname(ifname);
+    if (uuid != "--") {
+        kylin_network_set_con_down(uuid.toUtf8().data());
+    }
 
     bool wiredCableState = objKyDbus.getWiredCableStateByIfname(ifname);
 
@@ -407,34 +407,14 @@ QString BackThread::getConnProp(QString connName)
         if (line.startsWith("ipv4.addresses:")) {
             QString value = line.mid(15).trimmed();
             if (value == "--" || value == "") {
-                rtn += "v4addr:|mask:|";
+                rtn += "addr:|mask:|";
             } else {
                 QString addr = value.split("/").at(0);
                 QString mask = value.trimmed().split("/").at(1);
-                rtn += "v4addr:" + addr + "|";
+                rtn += "addr:" + addr + "|";
                 rtn += "mask:" + mask + "|";
             }
         }
-
-        if (line.startsWith("ipv6.method:")) {
-            QString value = line.mid(12).trimmed();
-            if (value == "auto") {
-                rtn += "v6method:auto|v6addr:|";
-            } else {
-                rtn += "v6method:manual|";
-            }
-        }
-
-        if (line.startsWith("ipv6.addresses:")) {
-            QString value = line.mid(15).trimmed();
-            if (value == "--" || value == "") {
-                rtn += "v6addr:|";
-            } else {
-                QString addr = value.split("/").at(0);
-                rtn += "v6addr:" + addr + "|";
-            }
-        }
-
 
         if (line.startsWith("ipv4.gateway:")) {
             QString value = line.mid(13).trimmed();

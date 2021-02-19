@@ -54,6 +54,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     leQssLow = "QLineEdit{border:none;background:transparent;font-size:14px;}";
     leQssHigh = "QLineEdit{border:none;background:transparent;font-size:14px;}";
 
+
+
     ui->leInfo_1->setStyleSheet(leQssLow);
     ui->leInfo_2->setStyleSheet(leQssLow);
     ui->leInfo_3->setStyleSheet(leQssLow);
@@ -160,6 +162,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     lbNameLyt->addWidget(lbFreq);
     lbNameLyt->addStretch();
     ui->lbName->setLayout(lbNameLyt);
+    resize(L_VERTICAL_LINE_TO_ITEM,H_NORMAL_ITEM);
 }
 
 OneConnForm::~OneConnForm()
@@ -171,6 +174,7 @@ void OneConnForm::mousePressEvent(QMouseEvent *)
 {
     emit selectedOneWifiForm(wifiName, H_WIFI_ITEM_BIG_EXTEND);
 }
+
 
 //事件过滤器
 bool OneConnForm::eventFilter(QObject *obj, QEvent *event)
@@ -296,6 +300,8 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName)
         ui->leInfo_3->show();
         ui->btnConn->hide();
         ui->btnConnSub->show();
+        if(this->isTopItem == false)
+            Q_EMIT focusSignal(connFormId);
 
         this->isSelected = true;
     } else {
@@ -312,6 +318,8 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName)
         ui->leInfo_1->hide();
         ui->leInfo_2->hide();
         ui->leInfo_3->hide();
+        if(this->isTopItem == false)
+            Q_EMIT blurSignal(connFormId);
 
         if (isCurrName) {
             ui->btnConn->show();
@@ -382,6 +390,7 @@ void OneConnForm::setRate(QString rate)
     QString txt(tr("Rate"));//"速率"
     this->setToolTip("<span style=\"font-size:14px;border:none;background-color:#3593b5;color:white;\">&nbsp; " + txt + ": " + rate + " &nbsp;</span>");
     this->setToolTip(txt + ":" + rate);
+    this->rate = rate.toInt();
 }
 
 void OneConnForm::setLine(bool isShow)
@@ -444,9 +453,10 @@ void OneConnForm::setSignal(QString lv, QString secu)
     }
 }
 
-void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, int freq)
+void OneConnForm::setWifiInfo(QString secur, QString signal, QString MAC, int freq)
 {
     //freq 0:含2.4G和5G， 1：只有2.4G， 2：只有5G
+    this->freq = freq;
     lbFreq->show();
     if (freq == 1) {
         //freq ~ 2.4G
@@ -458,16 +468,16 @@ void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, int freq
         //freq ~ 5G&2.4G
         lbFreq->setText("2.4/5G");
     }
-    if (str1 == "--" || str1 == ""){ str1 = tr("None"); };
+    if (secur == "--" || secur == ""){ secur = tr("None"); };
 
     QString strSecurity = QString(tr("WiFi Security："));
     QString strSignal = QString(tr("Signal："));
     QString strMAC = QString(tr("MAC："));
-    wifiSecu = str1;
+    wifiSecu = secur;
 
-    ui->leInfo_1->setText(strSecurity + str1);
-    ui->leInfo_2->setText(strSignal + str2);
-    ui->leInfo_3->setText(strMAC + str3);
+    ui->leInfo_1->setText(strSecurity + secur);
+    ui->leInfo_2->setText(strSignal + signal);
+    ui->leInfo_3->setText(strMAC + MAC);
 }
 
 void OneConnForm::slotConnWifi()
@@ -557,26 +567,6 @@ void OneConnForm::toConnectWirelessNetwork()
             on_btnConnPWD_clicked();
             return;
         }
-    }
-
-    //有配置文件，需要判断一下当前配置文件wifi安全性是不是wpa-eap，若是，需要把原配置文件删除，重新配置
-    QProcess * process = new QProcess(this);
-    process->start(QString("nmcli -f 802-11-wireless-security.key-mgmt connection show %1").arg(lbNameText->text()));
-    connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
-        process->deleteLater();
-    });
-    connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
-        QString str = process->readAllStandardOutput();
-        key_mgmt = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2);
-    });
-    process->waitForFinished();
-    if (QString::compare(key_mgmt, "wpa-eap") == 0) {
-        //原配置文件是企业wifi，删掉，请求输入新的密码
-        QString cmdStr = "nmcli connection delete " +  lbNameText->text();
-        Utils::m_system(cmdStr.toUtf8().data());
-        psk_flag = 0;
-        slotConnWifiResult(2); //现在已无配置文件，申请输入密码
-        return;
     }
 
     if (isWifiConfExist(lbNameText->text())) {
@@ -791,7 +781,7 @@ void OneConnForm::on_btnInfo_clicked()
     BackThread *bt = new BackThread();
     QString connProp = bt->getConnProp(lbNameText->text());
     QStringList propList = connProp.split("|");
-    QString v4method, addr, mask, gateway, dns, v6method, v6addr;
+    QString v4method, addr, mask, gateway, dns;
     foreach (QString line, propList) {
         if (line.startsWith("method:")) {
             v4method = line.split(":").at(1);
@@ -802,12 +792,6 @@ void OneConnForm::on_btnInfo_clicked()
         if (line.startsWith("mask:")) {
             mask = line.split(":").at(1);
         }
-        if (line.startsWith("v6method:")) {
-            v6method = line.split(":").at(1);
-        }
-        if (line.startsWith("v6addr:")) {
-            v6addr = line.right(line.length() - line.indexOf(":") - 1);
-        }
         if (line.startsWith("gateway:")) {
             gateway= line.split(":").at(1);
         }
@@ -817,7 +801,7 @@ void OneConnForm::on_btnInfo_clicked()
     }
     // qDebug()<<"v4method:"<<v4method<<" addr:"<<addr<<" mask:"<<mask<<" gateway:"<<gateway<<" dns:"<<dns;
 
-    cf->setProp(lbNameText->text(), wifiUuid, v4method, addr, v6method, v6addr, mask, gateway, dns, this->isActive, true);
+    cf->setProp(lbNameText->text(), wifiUuid, v4method, addr, mask, gateway, dns, this->isActive, true);
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();
     cf->raise();
@@ -950,20 +934,12 @@ void OneConnForm::stopWaiting()
 
 void OneConnForm::on_btnCancel_clicked()
 {
-//    QString cmd = "kill -9 $(pidof nmcli)"; //杀掉当前正在进行的有关nmcli命令的进程
-//    int status = system(cmd.toUtf8().data());
-//    if (status != 0) {
-//        qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
-//        syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
-//    }
-
-    KylinDBus myKylinDbus;
-    QList<QString> wifiSsidAndUuid =  myKylinDbus.getAtiveWifiBSsidUuid();
-    if (wifiSsidAndUuid.size() >= 1) {
-        QString currentConnectWifiUuid = wifiSsidAndUuid.at(0);
-        kylin_network_set_con_down(currentConnectWifiUuid.toUtf8().data());
+    QString cmd = "kill -9 $(pidof nmcli)"; //杀掉当前正在进行的有关nmcli命令的进程
+    int status = system(cmd.toUtf8().data());
+    if (status != 0) {
+        qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
+        syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
     }
-    this->stopWaiting();
 }
 
 int OneConnForm::getPskFlag()
@@ -983,4 +959,23 @@ int OneConnForm::getPskFlag()
     });
     process->waitForFinished();
     return psk_flag;
+}
+
+int OneConnForm::getConnFormId() {
+    return this->connFormId;
+}
+
+
+void OneConnForm::autoRelease(int size) {
+    if(this->isActive) {
+        return ;
+    }
+
+    if(this->connFormId >= size) {
+        delete  this;
+    }
+}
+
+void OneConnForm::setId(int id) {
+    this->connFormId = id;
 }

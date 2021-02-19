@@ -92,7 +92,6 @@ private:
     QStringList wifi_info;
     bool has_config;
     QStringList user_list;
-    QString key_mgmt = "wpa-eap";
 
     MainWindow *mw;
 

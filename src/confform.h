@@ -40,7 +40,7 @@ public:
     explicit ConfForm(QWidget *parent = 0);
     ~ConfForm();
 
-    void setProp(QString connName, QString uuidName, QString v4method, QString v4addr, QString v6method, QString v6addr, QString mask, QString gateway, QString dns, bool isActConf, bool isWiFi);
+    void setProp(QString connName, QString uuidName, QString v4method, QString addr, QString mask, QString gateway, QString dns, bool isActConf, bool isWiFi);
 
 public slots:
     void cbTypeChanged(int index);

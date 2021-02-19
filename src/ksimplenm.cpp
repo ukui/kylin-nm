@@ -19,6 +19,7 @@
 #include "ksimplenm.h"
 
 #include <stdio.h>
+#include "priorityQueue.h"
 #include <unistd.h>
 #include <QThread>
 
@@ -31,9 +32,9 @@ KSimpleNM::KSimpleNM(QObject *parent) : QObject(parent)
     connect(runProcessLan, &QProcess::readyRead, this, &KSimpleNM::readProcessLan);
     connect(runProcessLan, SIGNAL(finished(int)), this, SLOT(finishedProcessLan(int)));
 
-    runProcessWifi = new QProcess(this);
-    connect(runProcessWifi, &QProcess::readyRead, this, &KSimpleNM::readProcessWifi);
-    connect(runProcessWifi, SIGNAL(finished(int)), this, SLOT(finishedProcessWifi(int)));
+//    runProcessWifi = new QProcess(this);
+//    connect(runProcessWifi, &QProcess::readyRead, this, &KSimpleNM::readProcessWifi);
+//    connect(runProcessWifi, SIGNAL(finished(int)), this, SLOT(finishedProcessWifi(int)));
 
     runProcessConn = new QProcess(this);
     connect(runProcessConn, &QProcess::readyRead, this, &KSimpleNM::readProcessConn);
@@ -43,7 +44,7 @@ KSimpleNM::KSimpleNM(QObject *parent) : QObject(parent)
 KSimpleNM::~KSimpleNM()
 {
     delete runProcessLan;
-    delete runProcessWifi;
+//    delete runProcessWifi;
 }
 
 //获取有线网络列表数据
@@ -70,22 +71,54 @@ void KSimpleNM::execGetLanList()
 }
 
 //获取无线网络列表数据
-void KSimpleNM::execGetWifiList()
+void KSimpleNM::execGetWifiList(int mode)
 {
-    if (isExecutingGetWifiList) {
-        syslog(LOG_DEBUG, "It is running getting wifi list when getting wifi list");
-        qDebug()<<"debug: it is running getting wifi list when getting wifi list";
-        isUseOldWifiSlist = true;
-        QStringList slistmEmpty;
-        slistmEmpty.append("Empty");
-        emit requestRevalueUpdateWifi();
-        emit getWifiListFinished(slistmEmpty);
-        return;
-    }
-    isExecutingGetWifiList = true;
 
-    shellOutputWifi = "";
-    runProcessWifi->start("nmcli -f signal,security,freq,bssid,ssid device wifi");
+//    if (isExecutingGetWifiList) {
+//            syslog(LOG_DEBUG, "It is running getting wifi list when getting wifi list");
+//            qDebug()<<"debug: it is running getting wifi list when getting wifi list";
+//            isUseOldWifiSlist = true;
+//            QStringList slistmEmpty;
+//            slistmEmpty.append("Empty");
+//            emit requestRevalueUpdateWifi();
+//            emit getWifiListFinished(slistmEmpty);
+//            return;
+//        }
+//        isExecutingGetWifiList = true;
+
+//        shellOutputWifi = "";
+//        runProcessWifi->start("nmcli -f signal,security,freq,bssid,ssid device wifi");
+    QtConcurrent::run([=] {
+        if (isExecutingGetWifiList) {
+            syslog(LOG_DEBUG, "It is running getting lan list when getting lan list");
+            qDebug()<<"debug: it is running getting lan list when getting lan list";
+            isUseOldLanSlist = true;
+            QStringList slistmEmpty;
+            slistmEmpty.append("Empty");
+            emit getLanListFinished(slistmEmpty);
+            return;
+        }
+        isExecutingGetWifiList = true;
+        QProcess resultProc;
+        QStringList option;
+        if(mode == 0)
+            option << "-c" << "nmcli -f signal,security,freq,bssid,ssid device wifi list --rescan yes | tail -n +2 | sort -k1rn";
+        else
+            option << "-c" << "nmcli -f signal,security,freq,bssid,ssid device wifi list | tail -n +2 | sort -k1rn";
+        resultProc.start("/bin/bash",option);
+
+        resultProc.waitForFinished(-1);
+        QByteArray result = resultProc.readAll();
+
+        QString resString = result.toStdString().c_str();
+        //qDebug() << resString;
+
+        QStringList list = resString.split("\n");
+        list.push_front("SIGNAL  SECURITY   FREQ      BSSID              SSID");
+
+        emit getWifiListFinished(list);
+        isExecutingGetWifiList = false;
+    });
 }
 
 //获取保存的网络列表数据
@@ -103,8 +136,8 @@ void KSimpleNM::readProcessLan()
 }
 void KSimpleNM::readProcessWifi()
 {
-    QString output = runProcessWifi->readAll();
-    shellOutputWifi += output;
+//    QString output = runProcessWifi->readAll();
+//    shellOutputWifi += output;
 }
 void KSimpleNM::readProcessConn()
 {
@@ -121,9 +154,9 @@ void KSimpleNM::finishedProcessLan(int msg)
 }
 void KSimpleNM::finishedProcessWifi(int msg)
 {
-    QStringList slist = shellOutputWifi.split("\n");
-    emit getWifiListFinished(slist);
-    isExecutingGetWifiList = false;
+//    QStringList slist = shellOutputWifi.split("\n");
+//    emit getWifiListFinished(slist);
+//    isExecutingGetWifiList = false;
 }
 void KSimpleNM::finishedProcessConn(int msg)
 {

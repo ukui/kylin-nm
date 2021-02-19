@@ -34,7 +34,7 @@
 #include "ksimplenm.h"
 
 #define FRAME_SPEED 150
-#define LIMIT_TIME 90*1000
+#define LIMIT_TIME 20*1000
 #define TOTAL_PAGE 8
 
 #define W_ITEM 424
@@ -69,7 +69,7 @@ public:
     QString getName();
     void setRate(QString rate);
     void setLine(bool isShow);
-    void setWifiInfo(QString str1, QString str2, QString str3, int freq);
+    void setWifiInfo(QString secur, QString signal, QString MAC, int freq);
 
     void setSelected(bool isSelected, bool isCurrName);
     void setHideItem(bool isHideItem, bool isShowHideBtn);
@@ -82,25 +82,27 @@ public:
 
     bool isWifiConfExist(QString netName);
 
+    void setId(int id);
+
     QString wifiName;
     QString wifiBSsid;
     QString wifiUuid;
     QString connType;
     QString wifiSecu;
+    int rate;
+    int freq;
     bool isSelected;
     bool isActive;
     bool isConnected;
     bool isTopItem;
     int signalLv;
 
-public slots:
-    void waitAnimStep();
-    void startWaiting(bool isToConnect);
-    void stopWaiting();
-
 protected:
     void mousePressEvent(QMouseEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
+
+public slots:
+    void autoRelease(int size);
 
 private slots:
     void on_btnConn_clicked();
@@ -120,9 +122,16 @@ private slots:
 
     void on_lePassword_textEdited(const QString &arg1);
 
+    void waitAnimStep();
+    void startWaiting(bool isToConnect);
+    void stopWaiting();
+
     void on_btnInfo_clicked();
 
     void on_btnCancel_clicked();
+
+
+    int getConnFormId();
 
 private:
     QTimer *waitTimer = nullptr;
@@ -142,7 +151,8 @@ private:
     QLabel * lbFreq = nullptr;
     QLabel * lbNameText = nullptr;
     QHBoxLayout * lbNameLyt = nullptr;
-    QString key_mgmt;
+
+    int connFormId;
 
 signals:
     void selectedOneWifiForm(QString wifiName, int extendLength);
@@ -152,6 +162,11 @@ signals:
     void sigConnWifi(QString);
     void sigConnWifiPWD(QString, QString, QString);
     void sigConnWifiPsk(QString);
+
+    void blurSignal(int id);
+
+    void focusSignal(int id);
+
 };
 
 #endif // ONECONNFORM_H

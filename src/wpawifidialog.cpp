@@ -18,6 +18,7 @@
 #include "wpawifidialog.h"
 #include "ui_wpawifidialog.h"
 #include "kylin-network-interface.h"
+#include "backthread.h"
 #include "utils.h"
 #include "mainwindow.h"
 #include "wireless-security/kylinheadfile.h"
@@ -439,24 +440,6 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
     QString cmdStr = "nmcli connection modify " +  nameEditor->text() + " ipv4.method auto";
     int res = Utils::m_system(cmdStr.toUtf8().data());
     if (res == 0) {
-        //有配置文件，需要判断一下当前配置文件wifi安全性是不是wpa-eap，若不是，需要把原配置文件删除，重新配置
-        QProcess * process = new QProcess(this);
-        process->start(QString("nmcli -f 802-11-wireless-security.key-mgmt connection show %1").arg(nameEditor->text()));
-        connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
-            process->deleteLater();
-        });
-        connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
-            QString str = process->readAllStandardOutput();
-            key_mgmt = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2);
-        });
-        process->waitForFinished();
-        if (QString::compare(key_mgmt, "wpa-eap")) {
-            //原配置文件不是企业wifi，删掉重新创建
-            QString cmdStr = "nmcli connection delete " +  nameEditor->text();
-            Utils::m_system(cmdStr.toUtf8().data());
-            goto next;
-        }
-        process->waitForFinished();
         //有网络配置文件，接下来修改网络配置，然后激活连接
         qDebug()<<"qDebug: 有配置文件，修改配置后激活:"<<"\n"<<
                   "qDebug: nmcli connection modify " + nameEditor->text() + " 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth "
@@ -469,7 +452,6 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
         //激活连接
         activateConnection();
     } else {
-    next:
         //无网络配置文件，需要新创建
         //获取网卡名称
         KylinDBus mkylindbus;

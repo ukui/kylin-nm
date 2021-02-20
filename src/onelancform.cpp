@@ -95,6 +95,9 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 
     connect(mw, SIGNAL(waitLanStop()), this, SLOT(stopWaiting()));
 
+    ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与连接按钮绑定在一起
+    ui->btnConnSub->setShortcut(Qt::Key_Return);//点击连接按钮触发回车键
+
     srand((unsigned)time(NULL));
 }
 
@@ -128,7 +131,7 @@ bool OneLancForm::eventFilter(QObject *obj, QEvent *event)
     } else if (obj == this) {
         if (event->type() == QEvent::HoverEnter) {
             if (!this->isTopItem) {
-                if (!this->isSelected) {
+                if (!this->isSelected && mw->currSelNetName.isEmpty()) {
                     ui->btnConn->show();
                     ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(156,156,156,0.1);}");
                     ui->wbg_2->show();

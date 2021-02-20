@@ -134,7 +134,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnInfo->installEventFilter(this);
 
     connect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
-    ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与登录按钮绑定在一起
+    ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与连接按钮绑定在一起
+    ui->btnConnSub->setShortcut(Qt::Key_Return);//点击连接按钮触发回车键
 
     this->waitTimer = new QTimer(this);
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(waitAnimStep()));

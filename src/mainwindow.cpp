@@ -643,10 +643,10 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
             this->showNormal();
             this->raise();
             this->activateWindow();
-            if (is_btnLanList_clicked == 1) {
+            if (is_btnLanList_clicked == 1&& is_stop_check_net_state==0) {
                 onBtnNetListClicked(0);
             }
-            if (!is_init_wifi_list && !is_connect_hide_wifi) {
+            if (!is_init_wifi_list && !is_connect_hide_wifi && is_stop_check_net_state==0) {
                 is_stop_check_net_state = 1;
                 if (is_btnWifiList_clicked == 1) {
                     BackThread *loop_bt = new BackThread();

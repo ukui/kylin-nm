@@ -1014,9 +1014,9 @@ bool KylinDBus::checkNetworkConnectivity()
 }
 
 //获取已经连接无线网络的ssid和uuid
-QList<QString> KylinDBus::getAtiveWifiBSsidUuid()
+QStringList KylinDBus::getAtiveWifiBSsidUuid()
 {
-    QList<QString> strBSsidUuid;
+    QStringList strBSsidUuid;
 
     QDBusInterface interface( "org.freedesktop.NetworkManager",
                               "/org/freedesktop/NetworkManager",

@@ -170,7 +170,7 @@ OneConnForm::~OneConnForm()
 
 void OneConnForm::mousePressEvent(QMouseEvent *)
 {
-    emit selectedOneWifiForm(wifiName, H_WIFI_ITEM_BIG_EXTEND);
+    emit selectedOneWifiForm(wifiBSsid, H_WIFI_ITEM_BIG_EXTEND);
 }
 
 //事件过滤器
@@ -494,7 +494,7 @@ void OneConnForm::on_btnDisConn_clicked()
     mw->on_btnHotspotState();
     //kylin_network_set_con_down(lbNameText->text().toUtf8().data());
     kylin_network_set_con_down(wifiUuid.toUtf8().data());
-    disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneWifiFormSelected(QString,int)));
+    disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneTopWifiFormSelected(QString,int)));
     emit disconnActiveWifi();
 }
 
@@ -837,9 +837,13 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     }
     connType = "";
 
+    if (connFlag == 0) {
+        disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneWifiFormSelected(QString,int)));
+    }
+
     if (connFlag == 2 || connFlag == 4) {
         mw->currSelNetName = "";
-        emit selectedOneWifiForm(lbNameText->text(), H_WIFI_ITEM_SMALL_EXTEND);
+        emit selectedOneWifiForm(wifiBSsid, H_WIFI_ITEM_SMALL_EXTEND);
 
         resize(W_ITEM, H_ITEM_MIDDLE);
         ui->wbg->hide();

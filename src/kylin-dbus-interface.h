@@ -52,7 +52,7 @@ public:
     void showDesktopNotify(QString message);
     void initConnectionInfo();
     QList<QString> getAtiveLanSsidUuidState();
-    QList<QString> getAtiveWifiBSsidUuid();
+    QStringList getAtiveWifiBSsidUuid();
     void reConnectWiredNet(QString netUuid);
     bool toConnectWiredNet(QString netUuid, QString netIfName);
     void getConnectNetIp(QString netUuid);

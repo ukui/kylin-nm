@@ -187,8 +187,8 @@ public slots:
 
     void oneLanFormSelected(QString lanName, QString uniqueName);
     void oneTopLanFormSelected(QString lanName, QString uniqueName);
-    void oneWifiFormSelected(QString wifiName, int extendLength);
-    void oneTopWifiFormSelected(QString wifiName, int extendLength);
+    void oneWifiFormSelected(QString wifibssid, int extendLength);
+    void oneTopWifiFormSelected(QString wifibssid, int extendLength);
 
     void on_btnHotspot_clicked();
     void on_btnHotspotState();
@@ -296,7 +296,7 @@ private:
     long int end_rcv_rates = 0;	//保存结束时的流量计数
     long int start_tx_rates = 0;   //保存开始时的流量计数
     long int end_tx_rates = 0; //保存结束时的流量计数
-    QString actWifissid = "--"; //当前连接wifi的ssid
+    QString actWifiSsid = "--"; //当前连接wifi的ssid
     QStringList actWifiBssidList; //当前连接wifi的bssid
     QString actWifiUuid = "--"; //当前连接wifi的uuid
 

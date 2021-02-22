@@ -1702,11 +1702,11 @@ void MainWindow::loadWifiListDone(QStringList slist)
         wifiActState = 2;
     }
 
-    QList<QString> currConnWifiSsidUuid;
+    QList<QString> currConnWifiBSsidUuid;
     bool isLoop = true;
     do {
-        currConnWifiSsidUuid = objKyDBus->getAtiveWifiBSsidUuid();
-        if (currConnWifiSsidUuid.size() == 1) {
+        currConnWifiBSsidUuid = objKyDBus->getAtiveWifiBSsidUuid();
+        if (currConnWifiBSsidUuid.size() == 1) {
             sleep(1); //等于1说明只获取到uuid，1秒后再获取一次
         } else {
             isLoop = false;
@@ -1715,13 +1715,13 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 获取当前连接的wifi name
     QString actWifiName = "--";
-    actWifissid = "--";
+    actWifiSsid = "--";
     actWifiUuid = "--";
-    if (currConnWifiSsidUuid.size() > 1) {
-        actWifiUuid = currConnWifiSsidUuid.at(0);
-        for (int i=1; i<currConnWifiSsidUuid.size(); i++) {
-            actWifiBssidList.append(currConnWifiSsidUuid.at(i));
-            //qDebug() << "debug: 获取到的bssid是：" << currConnWifiSsidUuid.at(i);
+    if (currConnWifiBSsidUuid.size() > 1) {
+        actWifiUuid = currConnWifiBSsidUuid.at(0);
+        for (int i=1; i<currConnWifiBSsidUuid.size(); i++) {
+            actWifiBssidList.append(currConnWifiBSsidUuid.at(i));
+            //qDebug() << "debug: 获取到的bssid是：" << currConnWifiBSsidUuid.at(i);
         }
         //qDebug() << "debug: 获取到的uuid是：" << actWifiUuid;
     } else {
@@ -1764,10 +1764,10 @@ void MainWindow::loadWifiListDone(QStringList slist)
         });
         connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
             QString str = process->readAllStandardOutput();
-            actWifissid = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2); //获取到ssid时，以ssid为准
+            actWifiSsid = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2); //获取到ssid时，以ssid为准
         });
         connect(process, &QProcess::readyReadStandardError, this, [ = ]() {
-            actWifissid = actWifiName; //没有获取到ssid时，以wifi名为准
+            actWifiSsid = actWifiName; //没有获取到ssid时，以wifi名为准
         });
         process->waitForFinished();
     }
@@ -1845,8 +1845,8 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 int signal = wsignal.toInt() + 11;
                 ccf->setSignal(QString::number(signal), wsecu);
                 activeWifiSignalLv = wsignal.toInt();
-                objKyDBus->getWifiMac(wname);
-                ccf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, freqState);
+                //objKyDBus->getWifiMac(wname);
+                ccf->setWifiInfo(wsecu, wsignal, wbssid, freqState);
                 ccf->setConnedString(1, tr("NetOn,"), wsecu);//"已连接"
                 ccf->isConnected = true;
                 ifWLanConnected = true;
@@ -1868,8 +1868,8 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 //ocf->setRate(wrate);
                 ocf->setLine(true);
                 ocf->setSignal(wsignal, wsecu);
-                objKyDBus->getWifiMac(wname);
-                ocf->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, freqState);
+                //objKyDBus->getWifiMac(wname);
+                ocf->setWifiInfo(wsecu, wsignal, wbssid, freqState);
                 ocf->setConnedString(0, tr("Disconnected"), wsecu);
                 ocf->move(L_VERTICAL_LINE_TO_ITEM, j * H_NORMAL_ITEM);
                 ocf->setSelected(false, false);
@@ -2060,8 +2060,8 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 //addItem->setRate(wrate);
                 addItem->setLine(false);
                 addItem->setSignal(wsignal, wsecu);
-                objKyDBus->getWifiMac(wname);
-                addItem->setWifiInfo(wsecu, wsignal, objKyDBus->dbusWifiMac, freqState);
+                //objKyDBus->getWifiMac(wname);
+                addItem->setWifiInfo(wsecu, wsignal, wbssid, freqState);
                 addItem->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"
                 addItem->move(L_VERTICAL_LINE_TO_ITEM, posY);
                 addItem->setSelected(false, false);
@@ -2426,7 +2426,7 @@ void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
     }
 }
 
-void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
+void MainWindow::oneWifiFormSelected(QString wifibssid, int extendLength)
 {
     QList<OneConnForm *>topWifiList = topWifiListWidget->findChildren<OneConnForm *>();
     QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
@@ -2445,18 +2445,18 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
     }
 
     //是否与上一次选中同一个网络框
-    if (currSelNetName == wifiName) {
+    if (currSelNetName == wifibssid) {
         // 缩小所有选项卡
         for (int i = 0;i < wifiList.size(); i ++) {
             OneConnForm *ocf = wifiList.at(i);
-            if (ocf->wifiName == wifiName) {
-                if (ocf->wifiName == hideWiFiConn) {
+            if (ocf->wifiBSsid == wifibssid) {
+                if (ocf->wifiBSsid == hideWiFiConn) {
                     ocf->setHideItem(true, true);
                 } else {
                     ocf->setSelected(false, true);
                 }
             } else {
-                if (ocf->wifiName == hideWiFiConn) {
+                if (ocf->wifiBSsid == hideWiFiConn) {
                     ocf->setHideItem(true, true);
                 } else {
                     ocf->setSelected(false, false);
@@ -2469,7 +2469,7 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
         int selectY = 0;
         for (int i = 0;i < wifiList.size(); i ++) {
             OneConnForm *ocf = wifiList.at(i);
-            if (ocf->wifiName == wifiName) {
+            if (ocf->wifiBSsid == wifibssid) {
                 selectY = ocf->y(); //获取选中item的y坐标
                 break;
             }
@@ -2485,14 +2485,14 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
 
         for (int i = 0;i < wifiList.size(); i ++) {
             OneConnForm *ocf = wifiList.at(i);
-            if (ocf->wifiName == wifiName) {
-                if (ocf->wifiName == hideWiFiConn) {
+            if (ocf->wifiBSsid == wifibssid) {
+                if (ocf->wifiBSsid == hideWiFiConn) {
                     ocf->setHideItem(true, true);
                 } else {
                     ocf->setSelected(true, false);
                 }
             } else {
-                if (ocf->wifiName == hideWiFiConn) {
+                if (ocf->wifiBSsid == hideWiFiConn) {
                     ocf->setHideItem(true, true);
                 } else {
                     ocf->setSelected(false, false);
@@ -2500,7 +2500,7 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
             }
         }
 
-        currSelNetName = wifiName;
+        currSelNetName = wifibssid;
     }
 
     //最后一个item没有下划线
@@ -2522,12 +2522,12 @@ void MainWindow::oneWifiFormSelected(QString wifiName, int extendLength)
     OneConnForm *ocf = topWifiList.at(0);
     ocf->setTopItem(false);
 }
-void MainWindow::oneTopWifiFormSelected(QString wifiName, int extendLength)
+void MainWindow::oneTopWifiFormSelected(QString wifibssid, int extendLength)
 {
     QList<OneConnForm *>topWifiList = topWifiListWidget->findChildren<OneConnForm *>();
     QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
 
-    if (currSelNetName == wifiName) {
+    if (currSelNetName == wifibssid) {
         // 与上一次选中同一个网络框，缩小当前选项卡
         topWifiListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_GAP_UP + X_ITEM);
         lbTopWifiList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_GAP_UP);
@@ -2558,7 +2558,7 @@ void MainWindow::oneTopWifiFormSelected(QString wifiName, int extendLength)
         OneConnForm *ocf = topWifiList.at(0);
         ocf->setTopItem(true);
 
-        currSelNetName = wifiName;
+        currSelNetName = wifibssid;
     }
 }
 

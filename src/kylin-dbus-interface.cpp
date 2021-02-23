@@ -1014,9 +1014,9 @@ bool KylinDBus::checkNetworkConnectivity()
 }
 
 //获取已经连接无线网络的ssid和uuid
-QStringList KylinDBus::getAtiveWifiBSsidUuid()
+QList<QString> KylinDBus::getAtiveWifiBSsidUuid()
 {
-    QStringList strBSsidUuid;
+    QList<QString> strBSsidUuid;
 
     QDBusInterface interface( "org.freedesktop.NetworkManager",
                               "/org/freedesktop/NetworkManager",
@@ -1048,48 +1048,73 @@ QStringList KylinDBus::getAtiveWifiBSsidUuid()
                                       QDBusConnection::systemBus() );
 
             //先获取uuid
+            qDebug() << "00000000000000000000";
             QDBusReply<QVariant> replyUuid = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Uuid");
             //qDebug() << "wifi uuid : "<< replyUuid.value().toString();
             strBSsidUuid.append(replyUuid.value().toString());
 
 
             //再获取bssid
-            QDBusMessage resultConnection = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Connection");
+//            QDBusMessage resultConnection = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Connection");
 
-            QList<QVariant> outArgsConnection = resultConnection.arguments();
-            QVariant firstConnection = outArgsConnection.at(0);
-            QDBusVariant dbvFirstConnection = firstConnection.value<QDBusVariant>();
-            QVariant vFirstConnection = dbvFirstConnection.variant();
-            QDBusObjectPath dbusArgsConnection = vFirstConnection.value<QDBusObjectPath>();
+//            QList<QVariant> outArgsConnection = resultConnection.arguments();
+//            QVariant firstConnection = outArgsConnection.at(0);
+//            QDBusVariant dbvFirstConnection = firstConnection.value<QDBusVariant>();
+//            QVariant vFirstConnection = dbvFirstConnection.variant();
+//            QDBusObjectPath dbusArgsConnection = vFirstConnection.value<QDBusObjectPath>();
 
-            QDBusInterface interfaceSet("org.freedesktop.NetworkManager",
-                                      dbusArgsConnection.path(),
-                                      "org.freedesktop.NetworkManager.Settings.Connection",
-                                      QDBusConnection::systemBus());
-            QDBusMessage resultSet = interfaceSet.call("GetSettings");
+//            QDBusInterface interfaceSet("org.freedesktop.NetworkManager",
+//                                      dbusArgsConnection.path(),
+//                                      "org.freedesktop.NetworkManager.Settings.Connection",
+//                                      QDBusConnection::systemBus());
+//            QDBusMessage resultSet = interfaceSet.call("GetSettings");
 
-            const QDBusArgument &dbusArg1stSet = resultSet.arguments().at( 0 ).value<QDBusArgument>();
-            QMap<QString,QMap<QString,QVariant>> mapSet;
-            dbusArg1stSet >> mapSet;
+//            const QDBusArgument &dbusArg1stSet = resultSet.arguments().at( 0 ).value<QDBusArgument>();
+//            QMap<QString,QMap<QString,QVariant>> mapSet;
+//            dbusArg1stSet >> mapSet;
 
-            for (QString setKey : mapSet.keys() ) {
-                QMap<QString,QVariant> subSetMap = mapSet.value(setKey);
-                if (setKey == "802-11-wireless") {
-                    for (QString searchKey : subSetMap.keys()) {
-                        if (searchKey == "seen-bssids") {
-                            //qDebug() << "wifi bssid : "<<subSetMap.value(searchKey).toStringList();
-                            QStringList strBssidList = subSetMap.value(searchKey).toStringList();
-                            foreach (QString strBssid, strBssidList) {
-                                strBSsidUuid.append(strBssid);
-                            }
-                        }
-                    }
-                }
-            }
+//            for (QString setKey : mapSet.keys() ) {
+//                QMap<QString,QVariant> subSetMap = mapSet.value(setKey);
+//                if (setKey == "802-11-wireless") {
+//                    for (QString searchKey : subSetMap.keys()) {
+//                        if (searchKey == "seen-bssids") {
+//                            //qDebug() << "wifi bssid : "<<subSetMap.value(searchKey).toStringList();
+//                            QStringList strBssidList = subSetMap.value(searchKey).toStringList();
+//                            foreach (QString strBssid, strBssidList) {
+//                                strBSsidUuid.append(strBssid);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
     }
     dbusArgs.endArray();
 
+    QStringList wifiBSsid;
+    QString connWifiBSsid = "--";
+    QProcess * processWifiBSsid = new QProcess;
+    processWifiBSsid->start("nmcli -f IN-USE,BSSID device wifi");
+    connect(processWifiBSsid, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+        processWifiBSsid->deleteLater();
+    });
+    connect(processWifiBSsid, &QProcess::readyReadStandardOutput, this, [ = ]() {
+        QString strOutput = processWifiBSsid->readAllStandardOutput();
+        actWifiListInfo += strOutput;
+    });
+    processWifiBSsid->waitForFinished();
+
+    wifiBSsid = actWifiListInfo.split("\n");
+    foreach (QString strActWifiBSsid, wifiBSsid) {
+        if (strActWifiBSsid.indexOf("*") != -1) {
+            connWifiBSsid = strActWifiBSsid.mid(3).trimmed();
+        }
+    }
+
+    if (connWifiBSsid != "--") {
+        strBSsidUuid.append(connWifiBSsid);
+    }
+    actWifiListInfo = "";
     return strBSsidUuid;
 }
 

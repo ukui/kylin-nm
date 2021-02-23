@@ -1706,7 +1706,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     bool isLoop = true;
     do {
         currConnWifiBSsidUuid = objKyDBus->getAtiveWifiBSsidUuid();
-        if (currConnWifiBSsidUuid.size() == 1) {
+        if (currConnWifiBSsidUuid.size() == 1 && currConnWifiBSsidUuid.at(0).length() != 17) {
             sleep(1); //等于1说明只获取到uuid，1秒后再获取一次
         } else {
             isLoop = false;

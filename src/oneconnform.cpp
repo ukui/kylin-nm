@@ -900,9 +900,9 @@ void OneConnForm::waitAnimStep()
     qpmQss.append(".png');}");
     ui->lbWaitingIcon->setStyleSheet(qpmQss);
 
-    this->waitPage --;
-    if (this->waitPage < 1) {
-        this->waitPage = TOTAL_PAGE; //循环播放8张图片
+    this->waitPage ++;
+    if (this->waitPage > TOTAL_PAGE) {
+        this->waitPage = 1; //循环播放8张图片
     }
 
     this->countCurrentTime += FRAME_SPEED;
@@ -932,7 +932,7 @@ void OneConnForm::startWaiting(bool isToConnect)
         ui->lbWaiting->setStyleSheet("QLabel{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);}");
     }
     this->countCurrentTime = 0;
-    this->waitPage = TOTAL_PAGE; //总共有8张图片
+    this->waitPage = 1; //总共有8张图片
     this->waitTimer->start(FRAME_SPEED);
     ui->lbWaiting->show();
     ui->lbWaitingIcon->show();

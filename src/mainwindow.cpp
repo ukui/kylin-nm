@@ -609,11 +609,11 @@ void MainWindow::createTrayIcon()
 
 void MainWindow::iconStep()
 {
-    if (currentIconIndex < 0) {
-        currentIconIndex = 11;
+    if (currentIconIndex > 11) {
+        currentIconIndex = 0;
     }
     setTrayIcon(loadIcons.at(currentIconIndex));
-    currentIconIndex --;
+    currentIconIndex ++;
 }
 
 void MainWindow::setTrayIcon(QIcon icon)
@@ -624,7 +624,7 @@ void MainWindow::setTrayIcon(QIcon icon)
 void MainWindow::setTrayLoading(bool isLoading)
 {
     if (isLoading) {
-        currentIconIndex = 11;
+        currentIconIndex = 0;
         iconTimer->start(60);
     } else {
         iconTimer->stop();

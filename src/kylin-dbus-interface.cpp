@@ -1090,7 +1090,9 @@ QList<QString> KylinDBus::getAtiveWifiBSsidUuid(QStringList wifilist)
     return strBSsidUuid;
 }
 
-void KylinDBus::execGetWifiList()
+
+//使用dbus的方法获取wifi的信息，形成包含每个wifi信息的列表
+void KylinDBus::toGetWifiList()
 {
     QStringList slist;
 
@@ -1140,16 +1142,37 @@ void KylinDBus::execGetWifiList()
             QDBusReply<QVariant> replyHwAddress = interfaceAP.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "HwAddress"); //bssid
             QDBusReply<QVariant> replySsid = interfaceAP.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Ssid"); //ssid
 
+            QString strFlags = replyFlags.value().toString();
 
-            //QString strSsid = replySsid.value().toString();
-            //slist.append(strSsid);
+            QString strStrength;
+            QByteArray sesultStrength = replyStrength.value().toByteArray();
+            int addr = sesultStrength[0] & 0x000000FF;
+            addr |= ((sesultStrength[1] << 8) & 0x0000FF00);
+            addr |= ((sesultStrength[2] << 16) & 0x00FF0000);
+            addr |= ((sesultStrength[3] << 24) & 0xFF000000);
+            strStrength = QString::number(addr);
+
+            QString strWpaFlags = replyWpaFlags.value().toString();
+
+            QString strFrequency = replyFrequency.value().toString();
+
+            QString strHwAddress = replyHwAddress.value().toString();
+
+            QString strSsid = replySsid.value().toString();
+
+            slist.append(strFlags);
+            slist.append(strStrength);
+            slist.append(strWpaFlags);
+            slist.append(strFrequency);
+            slist.append(strHwAddress);
+            slist.append(strSsid);
         }
         dbusArgsAccessPoints.endArray();
 
     }
     dbusArgsAllDevices.endArray();
 
-    emit getWifiListFinished(slist);
+    emit toGetWifiListFinished(slist);
 }
 
 //网络连接变化时，如有新增或减少的网络，发信号通知更新主界面

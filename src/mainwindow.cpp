@@ -81,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     objKyDBus = new KylinDBus(this);
     objKyDBus->initConnectionInfo();
-    connect(objKyDBus, SIGNAL(getWifiListFinished(QStringList)), this, SLOT(getWifiListDone(QStringList)));
+    connect(objKyDBus, SIGNAL(toGetWifiListFinished(QStringList)), this, SLOT(loadWifiListDone(QStringList)));
 
     objNetSpeed = new NetworkSpeed();
 
@@ -1292,7 +1292,7 @@ void MainWindow::on_btnWifiList_clicked()
         btnAddNet->show();
 
         this->startLoading();
-        //this->objKyDBus->execGetWifiList();
+        //this->objKyDBus->toGetWifiList();
         this->ksnm->execGetWifiList();
     } else if (iface->wstate == 3) {
         qDebug() << "debug: 连接中，正在配置wifi设备";

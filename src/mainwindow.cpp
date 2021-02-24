@@ -1705,7 +1705,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     QList<QString> currConnWifiBSsidUuid;
     bool isLoop = true;
     do {
-        currConnWifiBSsidUuid = objKyDBus->getAtiveWifiBSsidUuid();
+        currConnWifiBSsidUuid = objKyDBus->getAtiveWifiBSsidUuid(slist);
         if (currConnWifiBSsidUuid.size() == 1 && currConnWifiBSsidUuid.at(0).length() != 17) {
             sleep(1); //等于1说明只获取到uuid，1秒后再获取一次
         } else {
@@ -1777,21 +1777,21 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 填充可用网络列表
     QString headLine = slist.at(0);
-    int indexSecu, indexFreq, indexBSsid, indexName;
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName;
     headLine = headLine.trimmed();
 
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
+        indexSignal = headLine.indexOf("SIGNAL");
         indexSecu = headLine.indexOf("安全性");
         indexFreq = headLine.indexOf("频率") + 4;
         indexBSsid = headLine.indexOf("BSSID") + 6;
-        //indexName = headLine.indexOf("SSID") + 6;
         indexName = indexBSsid + 19;
     } else {
+        indexSignal = headLine.indexOf("SIGNAL");
         indexSecu = headLine.indexOf("SECURITY");
         indexFreq = headLine.indexOf("FREQ");
         indexBSsid = headLine.indexOf("BSSID");
-        //indexName = headLine.indexOf("SSID");
         indexName = indexBSsid + 19;
     }
     QStringList wnames;
@@ -1809,7 +1809,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     for (int i = 1, j = 0; i < slist.size(); i ++) {
         QString line = slist.at(i);
-        QString wsignal = line.mid(0, indexSecu).trimmed();
+        QString wsignal = line.mid(indexSignal, 3).trimmed();
         QString wsecu = line.mid(indexSecu, indexFreq - indexSecu).trimmed();
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
         QString wname = line.mid(indexName).trimmed();

@@ -963,8 +963,9 @@ void OneConnForm::on_btnCancel_clicked()
 //    }
 
     KylinDBus myKylinDbus;
-    QList<QString> wifiSsidAndUuid =  myKylinDbus.getAtiveWifiBSsidUuid();
-    if (wifiSsidAndUuid.size() >= 1) {
+    QStringList wifiListInfo;
+    QList<QString> wifiSsidAndUuid =  myKylinDbus.getAtiveWifiBSsidUuid(wifiListInfo);
+    if (wifiSsidAndUuid.size() >= 1 && wifiSsidAndUuid.at(0).length() != 17) {
         QString currentConnectWifiUuid = wifiSsidAndUuid.at(0);
         kylin_network_set_con_down(currentConnectWifiUuid.toUtf8().data());
     }

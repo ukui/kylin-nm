@@ -52,7 +52,7 @@ public:
     void showDesktopNotify(QString message);
     void initConnectionInfo();
     QList<QString> getAtiveLanSsidUuidState();
-    QList<QString> getAtiveWifiBSsidUuid();
+    QList<QString> getAtiveWifiBSsidUuid(QStringList wifilist);
     void reConnectWiredNet(QString netUuid);
     bool toConnectWiredNet(QString netUuid, QString netIfName);
     void getConnectNetIp(QString netUuid);
@@ -117,8 +117,6 @@ private:
     MainWindow *mw;
     Utils *mUtils;
     QThread *mUtilsThread;
-
-    QString actWifiListInfo;
 
     int a = 0;
     bool isRunningFunction = false;

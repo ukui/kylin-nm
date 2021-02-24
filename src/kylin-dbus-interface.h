@@ -75,6 +75,8 @@ public:
     int checkWifiConnectivity();
     bool checkNetworkConnectivity();
 
+    void execGetWifiList();
+
     QDBusObjectPath wirelessPath; //无线设备的路径
     QList<QDBusObjectPath> multiWiredPaths; //Wired Device的对象路径列表
     QList<QString> multiWiredCableState;//多有线网卡的情况，判断有线网卡对应网线是否插入
@@ -134,6 +136,7 @@ signals:
     void updateWiredList(int n);
     void requestSendDesktopNotify(QString message);
     void newConnAdded(int type);
+    void getWifiListFinished(QStringList slist);
 };
 
 #endif // KYLINDBUSINTERFACE_H

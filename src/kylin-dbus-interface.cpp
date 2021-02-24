@@ -1090,6 +1090,68 @@ QList<QString> KylinDBus::getAtiveWifiBSsidUuid(QStringList wifilist)
     return strBSsidUuid;
 }
 
+void KylinDBus::execGetWifiList()
+{
+    QStringList slist;
+
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+
+    QDBusMessage resultAllDevices = interface.call("Get", "org.freedesktop.NetworkManager", "AllDevices");
+    QList<QVariant> outArgsAllDevices = resultAllDevices.arguments();
+    QVariant firstAllDevices = outArgsAllDevices.at(0);
+    QDBusVariant dbvFirstAllDevices = firstAllDevices.value<QDBusVariant>();
+    QVariant vFirstAllDevices = dbvFirstAllDevices.variant();
+    QDBusArgument dbusArgsAllDevices = vFirstAllDevices.value<QDBusArgument>();
+
+    QDBusObjectPath objPathDevice;
+    dbusArgsAllDevices.beginArray();
+    while (!dbusArgsAllDevices.atEnd()) {
+        dbusArgsAllDevices >> objPathDevice;
+
+        QDBusInterface interfacePro( "org.freedesktop.NetworkManager",
+                                  objPathDevice.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+
+        QDBusMessage resultAccessPoints = interfacePro.call("Get", "org.freedesktop.NetworkManager.Device.Wireless", "AccessPoints");
+        QList<QVariant> outArgsAccessPoints = resultAccessPoints.arguments();
+        QVariant firstAccessPoints = outArgsAccessPoints.at(0);
+        QDBusVariant dbvFirstAccessPoints = firstAccessPoints.value<QDBusVariant>();
+        QVariant vFirstAccessPoints = dbvFirstAccessPoints.variant();
+        QDBusArgument dbusArgsAccessPoints = vFirstAccessPoints.value<QDBusArgument>();
+
+        QDBusObjectPath objPathAccessPoint;
+        dbusArgsAccessPoints.beginArray();
+        while (!dbusArgsAccessPoints.atEnd()) {
+            dbusArgsAccessPoints >> objPathAccessPoint;
+
+            QDBusInterface interfaceAP( "org.freedesktop.NetworkManager",
+                                      objPathAccessPoint.path(),
+                                      "org.freedesktop.DBus.Properties",
+                                      QDBusConnection::systemBus() );
+
+            QDBusReply<QVariant> replyFlags = interfaceAP.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Flags"); //in-use
+            QDBusReply<QVariant> replyStrength = interfaceAP.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Strength"); //signal
+            QDBusReply<QVariant> replyWpaFlags = interfaceAP.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "WpaFlags"); //security
+            QDBusReply<QVariant> replyFrequency = interfaceAP.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Frequency"); //freq
+            QDBusReply<QVariant> replyHwAddress = interfaceAP.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "HwAddress"); //bssid
+            QDBusReply<QVariant> replySsid = interfaceAP.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Ssid"); //ssid
+
+
+            //QString strSsid = replySsid.value().toString();
+            //slist.append(strSsid);
+        }
+        dbusArgsAccessPoints.endArray();
+
+    }
+    dbusArgsAllDevices.endArray();
+
+    emit getWifiListFinished(slist);
+}
+
 //网络连接变化时，如有新增或减少的网络，发信号通知更新主界面
 void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 {

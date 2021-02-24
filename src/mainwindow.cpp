@@ -1797,6 +1797,16 @@ void MainWindow::loadWifiListDone(QStringList slist)
     QStringList wnames;
     int count = 0;
 
+    for (int i = 1; i < slist.size(); i ++) {
+        QString line = slist.at(i);
+        QString wbssid = line.mid(indexBSsid, 17).trimmed();
+        QString wname = line.mid(indexName).trimmed();
+
+        if (actWifiBssidList.contains(wbssid)) {
+            actWifiName = wname;
+        }
+    }
+
     for (int i = 1, j = 0; i < slist.size(); i ++) {
         QString line = slist.at(i);
         QString wsignal = line.mid(0, indexSecu).trimmed();
@@ -1835,7 +1845,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         }
 
         if (wname != "" && wname != "--") {
-            //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
+            qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
             if (actWifiBssidList.contains(wbssid) && wifiActState == 2) {
                 //对于已经连接的wifi
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));

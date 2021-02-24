@@ -1048,7 +1048,6 @@ QList<QString> KylinDBus::getAtiveWifiBSsidUuid()
                                       QDBusConnection::systemBus() );
 
             //先获取uuid
-            qDebug() << "00000000000000000000";
             QDBusReply<QVariant> replyUuid = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Uuid");
             //qDebug() << "wifi uuid : "<< replyUuid.value().toString();
             strBSsidUuid.append(replyUuid.value().toString());

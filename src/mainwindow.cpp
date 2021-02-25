@@ -49,6 +49,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
 
     UseQssFile::setStyle("style.qss");
+    PrimaryManager();
+    start();
 
     QPainterPath path;
     auto rect = this->rect();
@@ -697,65 +699,68 @@ void MainWindow::handleIconClicked()
     int d = 4; //窗口边沿到任务栏距离
 
     if (screenGeometry.width() == availableGeometry.width() && screenGeometry.height() == availableGeometry.height()) {
+        qDebug() << "000000000000000";
         if (n == 0) {
             //任务栏在下侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + availableGeometry.height() - this->height() - m - d);
+            this->move(m_priX + availableGeometry.width() - this->width() - d, screenMainRect.y() + availableGeometry.height() - this->height() - m - d);
         } else if(n == 1) {
             //任务栏在上侧
-            this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m + d);
+            this->move(m_priX + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m + d);
         } else if (n == 2) {
             //任务栏在左侧
             if (screenGeometry.x() == 0) {//主屏在左侧
-                this->move(m + d, screenMainRect.y() + screenMainRect.height() - this->height() - d);
+                this->move(m_priX + m + d, screenMainRect.y() + screenMainRect.height() - this->height() - d);
             } else {//主屏在右侧
-                this->move(screenMainRect.x() + m + d, screenMainRect.y() + screenMainRect.height() - this->height() - d);
+                this->move(m_priX + m + d, screenMainRect.y() + screenMainRect.height() - this->height() - d);
             }
         } else if (n == 3) {
             //任务栏在右侧
             if (screenGeometry.x() == 0) {//主屏在左侧
-                this->move(screenMainRect.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height() - d);
+                this->move(m_priX + screenMainRect.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height() - d);
             } else {//主屏在右侧
-                this->move(screenMainRect.x() + screenMainRect.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height() - d);
+                this->move(m_priX + screenMainRect.width() - this->width() - m - d, screenMainRect.y() + screenMainRect.height() - this->height() - d);
             }
         }
     } else if(screenGeometry.width() == availableGeometry.width() ) {
+        qDebug() << "000000000000001";
         if (trayIcon->geometry().y() > availableGeometry.height()/2) {
             //任务栏在下侧
             if (screenGeometry.height() - 20 < availableGeometry.height()) {
                 //任务栏隐藏
-                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + availableGeometry.height() - this->height() - m );
+                this->move(m_priX + availableGeometry.width() - this->width() - d, screenMainRect.y() + availableGeometry.height() - this->height() - m );
             } else {
                 //任务栏不隐藏
-                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + availableGeometry.height() - this->height() - d);
+                this->move(m_priX + availableGeometry.width() - this->width() - d, screenMainRect.y() + availableGeometry.height() - this->height() - d);
             }
         } else {
             //任务栏在上侧
             if (screenGeometry.height() - 20 < availableGeometry.height()) {
                 //任务栏隐藏
-                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m );
+                this->move(m_priX + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + m );
             } else {
                 //任务栏不隐藏
-                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + d);
+                this->move(m_priX + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - availableGeometry.height() + d);
             }
         }
     } else if (screenGeometry.height() == availableGeometry.height()) {
+        qDebug() << "000000000000002";
         if (trayIcon->geometry().x() > availableGeometry.width()/2) {
             //任务栏在右侧
             if (screenGeometry.width() - 20 < availableGeometry.width()) {
                 //任务栏隐藏
-                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - m, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
+                this->move(m_priX + availableGeometry.width() - this->width() - m, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
             } else {
                 //任务栏不隐藏
-                this->move(availableGeometry.x() + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
+                this->move(m_priX + availableGeometry.width() - this->width() - d, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
             }
         } else {
             //任务栏在左侧
             if (screenGeometry.width() - 20 < availableGeometry.width()) {
                 //任务栏隐藏
-                this->move(screenGeometry.width() - availableGeometry.width() + m, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
+                this->move(m_priX + screenGeometry.width() - availableGeometry.width() + m, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
             } else {
                 //任务栏不隐藏
-                this->move(screenGeometry.width() - availableGeometry.width() + d, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
+                this->move(m_priX + screenGeometry.width() - availableGeometry.width() + d, screenMainRect.y() + screenGeometry.height() - this->height() - d - 3);
             }
         }
     }
@@ -3158,4 +3163,64 @@ void MainWindow::getSystemFontFamily()
             }
         }
     });
+}
+
+void MainWindow::PrimaryManager()
+{
+    //QDBusConnection conn = QDBusConnection::sessionBus();
+    mDbusXrandInter = new QDBusInterface(DBUS_NAME,
+                                         DBUS_PATH,
+                                         DBUS_INTERFACE,
+                                         QDBusConnection::sessionBus());
+    connect(mDbusXrandInter, SIGNAL(screenPrimaryChanged(int,int,int,int)),
+            this, SLOT(priScreenChanged(int,int,int,int)));
+
+}
+
+void MainWindow::start()
+{
+    m_priX = getScreenGeometry("x");
+    m_priY = getScreenGeometry("y");
+    m_priWid = getScreenGeometry("width");
+    m_priHei = getScreenGeometry("height");
+    if (m_priWid == 0 || m_priHei == 0) {
+        QRect rect = QApplication::desktop()->screenGeometry(0);
+        m_priX=rect.x();
+        m_priY=rect.y();
+        m_priWid=rect.width();
+        m_priHei=rect.height();
+    }
+
+    qDebug("Start: Primary screen geometry is x=%d, y=%d, windth=%d, height=%d", m_priX, m_priY, m_priWid, m_priHei);
+}
+
+int MainWindow::getScreenGeometry(QString methodName)
+{
+    int res = 0;
+    QDBusMessage message = QDBusMessage::createMethodCall(DBUS_NAME,
+                               DBUS_PATH,
+                               DBUS_INTERFACE,
+                               methodName);
+    QDBusMessage response = QDBusConnection::sessionBus().call(message);
+    if (response.type() == QDBusMessage::ReplyMessage)
+    {
+        if(response.arguments().isEmpty() == false) {
+            int value = response.arguments().takeFirst().toInt();
+            res = value;
+            qDebug() << value;
+        }
+    } else {
+        qDebug()<<methodName<<"called failed";
+    }
+    return res;
+}
+
+/* get primary screen changed */
+void MainWindow::priScreenChanged(int x, int y, int width, int height)
+{
+    m_priX = x;
+    m_priY = y;
+    m_priWid = width;
+    m_priHei = height;
+    qDebug("primary screen  changed, geometry is  x=%d, y=%d, windth=%d, height=%d", x, y, width, height);
 }

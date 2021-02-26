@@ -1916,7 +1916,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         }
 
         if (wname != "" && wname != "--") {
-            qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
+            //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
             if (actWifiBssidList.contains(wbssid) && wifiActState == 2) {
                 //对于已经连接的wifi
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
@@ -2333,7 +2333,7 @@ void MainWindow::onBtnCreateNetClicked()
     ConfForm *m_cf = new ConfForm();
     m_cf->cbTypeChanged(3);
     m_cf->move(primaryGeometry.width() / 2 - m_cf->width() / 2, primaryGeometry.height() / 2 - m_cf->height() / 2);
-    m_cf->exec();
+    m_cf->show();
 }
 
 /* 右键菜单打开网络设置界面 */

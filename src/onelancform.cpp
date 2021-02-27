@@ -131,7 +131,7 @@ bool OneLancForm::eventFilter(QObject *obj, QEvent *event)
     } else if (obj == this) {
         if (event->type() == QEvent::HoverEnter) {
             if (!this->isTopItem) {
-                if (!this->isSelected && mw->currSelNetName.isEmpty()) {
+                if (!this->isSelected) {
                     ui->btnConn->show();
                     ui->wbg_2->setStyleSheet("#wbg_2{border-radius:4px;background-color:rgba(156,156,156,0.1);}");
                     ui->wbg_2->show();

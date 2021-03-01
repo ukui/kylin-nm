@@ -65,13 +65,14 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     ui->btnCancel->setText(tr("Cancel")); //取消
     ui->btnConnect->setText(tr("Connect")); //连接
 
+    ui->cbxConn->clear();
     ui->cbxConn->addItem(tr("C_reate…")); //新建...
     KylinDBus mkylindbus;
     QStringList wifiList = mkylindbus.getWifiSsidList();
     foreach (QString strWifiSsid, wifiList) {
         ui->cbxConn->addItem(strWifiSsid);
     }
-    ui->cbxConn->setCurrentIndex(0);
+    ui->cbxConn->setCurrentIndex(isUsed);
     connect(ui->cbxConn,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeWindow()));
 
     ui->cbxSecurity->addItem(tr("None")); //无
@@ -86,8 +87,7 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
 
     if (isUsed == 0) {
         ui->btnConnect->setEnabled(false);
-    }else{
-        ui->cbxConn->setCurrentIndex(isUsed);
+    } else {
         ui->leNetName->setText(ui->cbxConn->currentText());
         ui->lbNetName->setEnabled(false);
         ui->leNetName->setEnabled(false);
@@ -218,7 +218,7 @@ void DlgHideWifi::changeWindow(){
         }
         QString txt = file.readAll();
         file.close();
-        if (txt.indexOf("802-11-wireless-security.key-mgmt:") != -1){
+        if (txt.indexOf("802-11-wireless-security.key-mgmt:") != -1) {
             if (txt.indexOf("wpa-psk") != -1) {
                 QApplication::setQuitOnLastWindowClosed(false);
                 this->hide();
@@ -255,7 +255,7 @@ void DlgHideWifi::changeWindow(){
                     mw->on_btnWifiList_clicked();
                 });
             }
-        }else {
+        } else {
             isUsed = ui->cbxConn->currentIndex();
             ui->leNetName->setText(ui->cbxConn->currentText());
             ui->lbNetName->setEnabled(false);

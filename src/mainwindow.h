@@ -124,6 +124,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void justShowTrayIcon();
+
     void editQssString();
     void createTopLanUI();
     void createTopWifiUI();

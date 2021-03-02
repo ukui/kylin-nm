@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mShowWindow,SIGNAL(triggered()),this,SLOT(on_showWindowAction()));
     connect(mAdvConf, &QAction::triggered, this, &MainWindow::actionTriggerSlots);
 
-    checkSingleAndShowTrayicon();
+    //checkSingleAndShowTrayicon();
     //trayIcon->setVisible(true);
 
     objKyDBus = new KylinDBus(this);
@@ -161,6 +161,11 @@ void MainWindow::checkSingleAndShowTrayicon()
     } else {
         trayIcon->setVisible(true);
     }
+}
+
+void MainWindow::justShowTrayIcon()
+{
+    trayIcon->setVisible(true);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)

@@ -660,6 +660,11 @@ void WpaWifiDialog::mouseMoveEvent(QMouseEvent *event)
     return QDialog::mouseMoveEvent(event);
 }
 
+void WpaWifiDialog::keyPressEvent(QKeyEvent *event)
+{
+    //return QDialog::keyPressEvent(event);
+}
+
 void WpaWifiDialog::paintEvent(QPaintEvent *event)
 {
     KylinDBus mkylindbus;

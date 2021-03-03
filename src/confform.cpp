@@ -553,7 +553,7 @@ void ConfForm::on_leDns_textEdited(const QString &arg1)
 //编辑网络备用DNS
 void ConfForm::on_leDns2_textEdited(const QString &arg1)
 {
-    // this->setEnableOfBtn();
+     this->setEnableOfBtn();
 }
 
 //设置界面按钮是否可点击
@@ -583,6 +583,14 @@ void ConfForm::setEnableOfBtn()
         if (!ui->leAddr_ipv6->text().isEmpty() && ! this->getIpv6EditState(ui->leAddr_ipv6->text())) {
             this->setBtnEnableFalse();
             return;
+        }
+        if(ui->leDns2->text().isEmpty()){
+
+        }else{
+            if(!this->getTextEditState(ui->leDns2->text())){
+                this->setBtnEnableFalse();
+                return ;
+            }
         }
     }
 

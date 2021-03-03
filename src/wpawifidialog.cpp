@@ -112,7 +112,7 @@ void WpaWifiDialog::initUI() {
     nameEditor = new QLineEdit(nameFrame);
     nameEditor->setFixedHeight(48);
     nameLabel->setFixedWidth(100);
-    nameLabel->setText(tr("Connection name"));
+    nameLabel->setText(tr("Name"));
     nameEditor->setText(connectionName);
     if (connectionName == "") {
         //添加隐藏wifi时
@@ -165,7 +165,7 @@ void WpaWifiDialog::initUI() {
     innerCombox = new QComboBox(innerFrame);
     innerCombox->setFixedHeight(48);
     innerLabel->setFixedWidth(100);
-    innerLabel->setText(tr("inner authentication"));
+    innerLabel->setText(tr("Inner auth"));
     innerLyt->addWidget(innerLabel);
     innerLyt->addWidget(innerCombox);
     innerFrame->setLayout(innerLyt);

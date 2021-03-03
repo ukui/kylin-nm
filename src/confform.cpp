@@ -131,6 +131,7 @@ ConfForm::ConfForm(QWidget *parent) :
     setModal(false);
 
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+    setEnableOfBtn();
 }
 
 ConfForm::~ConfForm()

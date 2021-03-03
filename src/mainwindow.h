@@ -289,7 +289,7 @@ private:
     QString lastAddedConn = "";
     QString oldActLanName = ""; //上一次获取的已连接有线网名称
     int oldDbusActLanDNS = 0; //上一次获取的已连接有线网的DNS代号
-
+    void wifiListOptimize(QStringList& slist);  //只保留同名同频信号最强AP
     //循环检测网络连接状态
     QTimer *iconTimer = nullptr;
     QTimer *wiredCableUpTimer = nullptr;

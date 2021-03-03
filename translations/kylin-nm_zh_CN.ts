@@ -1771,7 +1771,7 @@
     </message>
     <message>
         <location filename="../src/wpawifidialog.cpp" line="113"/>
-        <source>Connection name</source>
+        <source>Name</source>
         <translation type="unfinished">连接名称</translation>
     </message>
     <message>
@@ -1786,7 +1786,7 @@
     </message>
     <message>
         <location filename="../src/wpawifidialog.cpp" line="166"/>
-        <source>inner authentication</source>
+        <source>Inner auth</source>
         <translation type="unfinished">阶段2身份验证</translation>
     </message>
     <message>

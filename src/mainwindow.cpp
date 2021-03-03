@@ -1759,6 +1759,65 @@ void MainWindow::getConnListDone(QStringList slist)
         return;
     }
 }
+void MainWindow::wifiListOptimize(QStringList& slist)
+{
+    QString headLine = slist.at(0);
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName;
+    headLine = headLine.trimmed();
+
+    bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (isChineseExist) {
+        indexSignal = headLine.indexOf("SIGNAL");
+        indexSecu = headLine.indexOf("安全性");
+        indexFreq = headLine.indexOf("频率") + 4;
+        indexBSsid = headLine.indexOf("BSSID") + 6;
+        indexName = indexBSsid + 19;
+    } else {
+        indexSignal = headLine.indexOf("SIGNAL");
+        indexSecu = headLine.indexOf("SECURITY");
+        indexFreq = headLine.indexOf("FREQ");
+        indexBSsid = headLine.indexOf("BSSID");
+        indexName = indexBSsid + 19;
+    }
+
+    QStringList targetList; //slist优化，同名同频AP中只留信号最强
+    targetList<<slist.at(0);    //把第一行加进去
+    for(int it = 1;it < slist.size();it++){
+        QString i = slist.at(it);
+        bool ifContinue = false;
+        QString conName = i.mid(indexName).trimmed();
+        int conSignal = i.mid(indexSignal,3).trimmed().toInt();
+        int conFreq = i.mid(indexFreq,4).trimmed().toInt();
+        for(int i=0;i<slist.size();i++){
+            QString str = slist.at(i);
+            QString name = str.mid(indexName).trimmed();
+            int signal = str.mid(indexSignal,3).trimmed().toInt();
+            int freq = str.mid(indexFreq,4).trimmed().toInt();
+            if(conName == name){
+                if(conFreq < 5000 && freq < 5000){
+                    if(conSignal < signal){
+                        ifContinue = true;
+                        break;
+                    }
+                }
+                if(conFreq >= 5000 && freq >= 5000){
+                    if(conSignal < signal){
+                        ifContinue = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if(ifContinue)  continue;
+//        if(conFreq < 5000)
+//            apSignalSet[conName+"2.4"] = conSignal;
+//        else
+//            apSignalSet[conName+"5"] = conSignal;
+        targetList<<i;
+    }
+    slist = targetList;
+    return ;
+}
 
 // 加载wifi列表
 void MainWindow::loadWifiListDone(QStringList slist)

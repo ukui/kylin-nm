@@ -428,6 +428,8 @@ void WpaWifiDialog::slot_line_edit_changed() {
 
 void WpaWifiDialog::slot_on_connectBtn_clicked() {
     qDebug()<<"Clicked on connect Btn!";
+    //this->mw->is_stop_check_net_state = 1;
+    //this->mw->setTrayLoading(true);
     //写/tmp/wpaconfig.ini配置文件
     if (has_config) {
         appendWifiUser(nameEditor->text(), userEditor->text());
@@ -532,6 +534,8 @@ void WpaWifiDialog::activateConnection() {
             timeout->deleteLater();
             QString cmdStr_2 = "nmcli connection down " + nameEditor->text();
             Utils::m_system(cmdStr_2.toUtf8().data());
+            //this->mw->is_stop_check_net_state = 0;
+            //this->mw->setTrayLoading(false);
             syslog(LOG_DEBUG, "execute 'nmcli connection up' in function 'activateConnection' time out");
             qDebug() << "qDebug: activate time out!";
             qDebug() << "qDebug: 连接超时（30秒超时时间）";
@@ -545,6 +549,8 @@ void WpaWifiDialog::activateConnection() {
             //连接错误或连接超时
             setEditorEnable(true);
             emit conn_failed();
+            //this->mw->is_stop_check_net_state = 0;
+            //this->mw->setTrayLoading(false);
         } else {
             //连接成功
             timeout->stop();
@@ -553,6 +559,8 @@ void WpaWifiDialog::activateConnection() {
             upThread->wait();
             upThread->deleteLater();
             emit conn_done();
+            //this->mw->is_stop_check_net_state = 0;
+            //this->mw->setTrayLoading(false);
             syslog(LOG_DEBUG, "execute 'nmcli connection up' in function 'activateConnection' accepted");
             //qDebug() << "qDebug: activated wpa wifi successfully";
             this->close();

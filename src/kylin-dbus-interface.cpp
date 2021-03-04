@@ -1051,41 +1051,76 @@ QList<QString> KylinDBus::getAtiveWifiBSsidUuid(QStringList wifilist)
             QDBusReply<QVariant> replyUuid = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Uuid");
             //qDebug() << "wifi uuid : "<< replyUuid.value().toString();
             strBSsidUuid.append(replyUuid.value().toString());
+
+
+            //再获取bssid
+            QDBusMessage resultConnection = interfaceInfo.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Connection");
+
+            QList<QVariant> outArgsConnection = resultConnection.arguments();
+            QVariant firstConnection = outArgsConnection.at(0);
+            QDBusVariant dbvFirstConnection = firstConnection.value<QDBusVariant>();
+            QVariant vFirstConnection = dbvFirstConnection.variant();
+            QDBusObjectPath dbusArgsConnection = vFirstConnection.value<QDBusObjectPath>();
+
+            QDBusInterface interfaceSet("org.freedesktop.NetworkManager",
+                                      dbusArgsConnection.path(),
+                                      "org.freedesktop.NetworkManager.Settings.Connection",
+                                      QDBusConnection::systemBus());
+            QDBusMessage resultSet = interfaceSet.call("GetSettings");
+
+            const QDBusArgument &dbusArg1stSet = resultSet.arguments().at( 0 ).value<QDBusArgument>();
+            QMap<QString,QMap<QString,QVariant>> mapSet;
+            dbusArg1stSet >> mapSet;
+
+            for (QString setKey : mapSet.keys() ) {
+                QMap<QString,QVariant> subSetMap = mapSet.value(setKey);
+                if (setKey == "802-11-wireless") {
+                    for (QString searchKey : subSetMap.keys()) {
+                        if (searchKey == "seen-bssids") {
+                            //qDebug() << "wifi bssid : "<<subSetMap.value(searchKey).toStringList();
+                            QStringList strBssidList = subSetMap.value(searchKey).toStringList();
+                            foreach (QString strBssid, strBssidList) {
+                                strBSsidUuid.append(strBssid);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     dbusArgs.endArray();
 
-    //获取已经连接wifi的bssid
-    if (wifilist.size() != 0) {
-        // 填充可用网络列表
-        QString headLine = wifilist.at(0);
-        int indexSignal,indexSecu, indexFreq, indexBSsid, indexName;
-        headLine = headLine.trimmed();
+//    //获取已经连接wifi的bssid
+//    if (wifilist.size() != 0) {
+//        // 填充可用网络列表
+//        QString headLine = wifilist.at(0);
+//        int indexSignal,indexSecu, indexFreq, indexBSsid, indexName;
+//        headLine = headLine.trimmed();
 
-        bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
-        if (isChineseExist) {
-            indexSignal = headLine.indexOf("SIGNAL");
-            indexSecu = headLine.indexOf("安全性");
-            indexFreq = headLine.indexOf("频率") + 4;
-            indexBSsid = headLine.indexOf("BSSID") + 6;
-            indexName = indexBSsid + 19;
-        } else {
-            indexSignal = headLine.indexOf("SIGNAL");
-            indexSecu = headLine.indexOf("SECURITY");
-            indexFreq = headLine.indexOf("FREQ");
-            indexBSsid = headLine.indexOf("BSSID");
-            indexName = indexBSsid + 19;
-        }
+//        bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+//        if (isChineseExist) {
+//            indexSignal = headLine.indexOf("SIGNAL");
+//            indexSecu = headLine.indexOf("安全性");
+//            indexFreq = headLine.indexOf("频率") + 4;
+//            indexBSsid = headLine.indexOf("BSSID") + 6;
+//            indexName = indexBSsid + 19;
+//        } else {
+//            indexSignal = headLine.indexOf("SIGNAL");
+//            indexSecu = headLine.indexOf("SECURITY");
+//            indexFreq = headLine.indexOf("FREQ");
+//            indexBSsid = headLine.indexOf("BSSID");
+//            indexName = indexBSsid + 19;
+//        }
 
-        for (int i = 1, j = 0; i < wifilist.size(); i ++) {
-            QString line = wifilist.at(i);
-            QString winuse = line.mid(0, indexSignal).trimmed();
-            QString wbssid = line.mid(indexBSsid, 17).trimmed();
-            if (winuse == "*") {
-                strBSsidUuid.append(wbssid);
-            }
-        }
-    }
+//        for (int i = 1, j = 0; i < wifilist.size(); i ++) {
+//            QString line = wifilist.at(i);
+//            QString winuse = line.mid(0, indexSignal).trimmed();
+//            QString wbssid = line.mid(indexBSsid, 17).trimmed();
+//            if (winuse == "*") {
+//                strBSsidUuid.append(wbssid);
+//            }
+//        }
+//    }
 
     return strBSsidUuid;
 }

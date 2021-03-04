@@ -369,6 +369,8 @@ void KylinDBus::getLanIpDNS(QString uuidName, bool isActNet)
                                             dbusArg2nd.endArray();
 
                                             dbusLanIpv6 = m_map.value("address").toString();
+                                        } else if (inner_key == "method") {
+                                            dbusLanIpv6Method = innerMap.value(inner_key).toString();
                                         }
                                     }
                                 }

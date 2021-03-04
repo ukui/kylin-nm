@@ -1604,6 +1604,9 @@ void MainWindow::getLanListDone(QStringList slist)
                             } else if ((oldActLanName == actLanSsidName.at(kk)) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
                                 //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
                                 objKyDBus->reConnectWiredNet(nuuid);
+                            } else if (!objKyDBus->dbusActiveLanIpv6.isEmpty() && objKyDBus->dbusActiveLanIpv6 != objKyDBus->dbusLanIpv6 && objKyDBus->dbusLanIpv6Method == "manual") {
+                                //在第三方nm-connection-editor或kylin-nm配置页进行新的IPV6配置后，重新连接网络
+                                objKyDBus->reConnectWiredNet(nuuid);
                             }
                         }
 

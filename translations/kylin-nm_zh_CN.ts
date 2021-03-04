@@ -1465,7 +1465,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="2359"/>
         <source>Wired net is disconnected</source>
-        <translation type="unfinished">断开有线网络</translation>
+        <translation type="unfinished">有线网络断开</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2385"/>

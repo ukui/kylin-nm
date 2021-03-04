@@ -81,7 +81,7 @@ private:
     void mouseMoveEvent(QMouseEvent *event);
 
     bool check_ip_conflict(QString ifname);
-
+    void onConfformHide();
     bool isPress;
     QPoint winPos;
     QPoint dragPos;

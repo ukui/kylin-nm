@@ -645,7 +645,6 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     switch (reason) {
     case QSystemTrayIcon::Trigger:
     case QSystemTrayIcon::MiddleClick:
-
         handleIconClicked();
 
         if (this->isHidden()) {
@@ -991,7 +990,7 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
     } else {
         qDebug()<<"拔出了有线网的网线";
         syslog(LOG_DEBUG,"wired physical cable is already plug out");
-
+        activeLanDisconn();
         BackThread *bt = new BackThread();
         IFace *iface = bt->execGetIface();
         if (iface->lstate != 0) {
@@ -2726,7 +2725,6 @@ void MainWindow::activeLanDisconn()
 
     QString txt(tr("Wired net is disconnected"));
     objKyDBus->showDesktopNotify(txt);
-
     currSelNetName = "";
     oldActLanName = "";
     oldDbusActLanDNS = 0;
@@ -2751,7 +2749,6 @@ void MainWindow::activeWifiDisconn()
 void MainWindow::activeStartLoading()
 {
     syslog(LOG_DEBUG, "Wi-Fi is disconnected");
-
     QString txt(tr("Wi-Fi is disconnected"));
     objKyDBus->showDesktopNotify(txt);
 

@@ -88,6 +88,7 @@ public:
 
     QString dbusLanIpv4 = "";
     QString dbusLanIpv6 = "";
+    QString dbusLanIpv6Method = "";
     QString dbusActiveLanIpv4 = "";
     QString dbusActiveLanIpv6 = "";
     QString dbusLanGateway = "";

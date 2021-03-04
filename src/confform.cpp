@@ -172,6 +172,7 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
     lastIpv4 = v4addr;
     netUuid = uuidName;
 
+    isActWifi = false;
     if (isWiFi) {
         ui->leName->setEnabled(false);
         isActWifi = isWiFi;

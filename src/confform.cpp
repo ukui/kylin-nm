@@ -132,6 +132,7 @@ ConfForm::ConfForm(QWidget *parent) :
     setModal(false);
 
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+    setEnableOfBtn();
 }
 
 ConfForm::~ConfForm()
@@ -254,11 +255,22 @@ void ConfForm::on_btnCreate_clicked()
         kylindbus.showDesktopNotify(txt);
     }
 
+    QString name = ui->leName->text();
+    QStringList charToEscape;
+    charToEscape << "~" << "(" << ")" << "<" << ">" <<"\\" << "*" << "|" << "&" << "#";  //一些命令行特殊字符，需要转义
+    foreach (auto ch , charToEscape) {
+        if (name.contains(ch)) {
+            name.replace(ch, QString("%1%2").arg("\\").arg(ch));
+        }
+    }
+    if (name.contains(" ")) { //空格会影响命令行参数的判断，需要转义
+        name.replace(QRegExp("[\\s]"), "\\\ ");
+    }
     if (!ui->leAddr_ipv6->text().isEmpty()) {
-        QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+        QString cmdStr = "nmcli connection modify " + name + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
         Utils::m_system(cmdStr.toUtf8().data());
     } else {
-        QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method auto";
+        QString cmdStr = "nmcli connection modify " + name + " ipv6.method auto";
         Utils::m_system(cmdStr.toUtf8().data());
     }
 
@@ -352,15 +364,15 @@ void ConfForm::on_btnSave_clicked()
     }
 
     if (ui->cbType->currentIndex() == 1) {
+        //对于已保存连接修改ipv6地址，使用UUID区分各网络配置（排除名称含空格或特殊字符的干扰）
         if (!ui->leAddr_ipv6->text().isEmpty()) {
-            QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+            QString cmdStr = "nmcli connection modify " + netUuid + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
             Utils::m_system(cmdStr.toUtf8().data());
         } else {
-            QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method auto";
+            QString cmdStr = "nmcli connection modify " + netUuid + " ipv6.method auto";
             Utils::m_system(cmdStr.toUtf8().data());
         }
     }
-
     QString txt(tr("New network settings already finished"));
     kylindbus.showDesktopNotify(txt);
 }
@@ -554,7 +566,7 @@ void ConfForm::on_leDns_textEdited(const QString &arg1)
 //编辑网络备用DNS
 void ConfForm::on_leDns2_textEdited(const QString &arg1)
 {
-    // this->setEnableOfBtn();
+     this->setEnableOfBtn();
 }
 
 //设置界面按钮是否可点击
@@ -584,6 +596,14 @@ void ConfForm::setEnableOfBtn()
         if (!ui->leAddr_ipv6->text().isEmpty() && ! this->getIpv6EditState(ui->leAddr_ipv6->text())) {
             this->setBtnEnableFalse();
             return;
+        }
+        if(ui->leDns2->text().isEmpty()){
+
+        }else{
+            if(!this->getTextEditState(ui->leDns2->text())){
+                this->setBtnEnableFalse();
+                return ;
+            }
         }
     }
 

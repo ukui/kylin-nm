@@ -183,7 +183,6 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
         ui->cbType->setCurrentIndex(1);
         cbTypeChanged(1);
     }
-
     if (v6method == "manual") {
         ui->leAddr_ipv6->setText(v6addr);
     }
@@ -226,8 +225,8 @@ void ConfForm::on_btnCreate_clicked()
     if (kylindbus.multiWiredIfName.size() == 0) {
         QString tip(tr("Can not create new wired network for without wired card"));
         kylindbus.showDesktopNotify(tip);
-        //this->close();
-        this->hide();
+        //this->close();this->hide();
+        onConfformHide();
         return;
     } else {
         mIfname = kylindbus.multiWiredIfName.at(0);
@@ -262,7 +261,7 @@ void ConfForm::on_btnCreate_clicked()
         Utils::m_system(cmdStr.toUtf8().data());
     }
 
-    this->hide();
+    onConfformHide();
 }
 
 //点击了保存更改网络设置的按钮
@@ -291,7 +290,7 @@ void ConfForm::on_btnSave_clicked()
             QString tip(tr("Can not save wired network for without wired card"));
             kylindbus.showDesktopNotify(tip);
             //this->close();
-            this->hide();
+            onConfformHide();
             return;
         } else {
             mIfname = kylindbus.multiWiredIfName.at(0);
@@ -406,7 +405,7 @@ void ConfForm::saveNetworkConfiguration()
         }
     }
 
-    this->hide();
+    onConfformHide();
 }
 
 bool ConfForm::check_ip_conflict(QString ifname)
@@ -457,8 +456,7 @@ bool ConfForm::check_ip_conflict(QString ifname)
 //点击取消按钮
 void ConfForm::on_btnCancel_clicked()
 {
-    //this->close();
-    this->hide();
+    onConfformHide();
 }
 
 //根据需要设置的种类(自动或手动等)显示界面内容
@@ -627,6 +625,17 @@ bool ConfForm::getIpv6EditState(QString text)
     match = rx.exactMatch(text);
 
     return match;
+}
+
+void ConfForm::onConfformHide()
+{
+    clearFocus();
+    ui->leAddr->clearFocus();
+    ui->leAddr_ipv6->clearFocus();
+    ui->leGateway->clearFocus();
+    ui->leDns->clearFocus();
+    ui->leDns2->clearFocus();
+    this->hide();
 }
 
 //设置创建或保存按钮不可点击

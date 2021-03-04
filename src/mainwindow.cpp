@@ -1858,9 +1858,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
         actWifiUuid = currConnWifiBSsidUuid.at(0);
         for (int i=1; i<currConnWifiBSsidUuid.size(); i++) {
             actWifiBssidList.append(currConnWifiBSsidUuid.at(i));
-            qDebug() << "debug: 获取到的bssid是：" << currConnWifiBSsidUuid.at(i);
+            //qDebug() << "debug: 获取到的bssid是：" << currConnWifiBSsidUuid.at(i);
         }
-        qDebug() << "debug: 获取到的uuid是：" << actWifiUuid;
+        //qDebug() << "debug: 获取到的uuid是：" << actWifiUuid;
     } else {
         actWifiBssidList.append("--");
     }

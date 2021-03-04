@@ -77,6 +77,7 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->leDns->setContextMenuPolicy(Qt::NoContextMenu);
     ui->leDns2->setContextMenuPolicy(Qt::NoContextMenu);
     ui->leGateway->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->leAddr_ipv6->setContextMenuPolicy(Qt::NoContextMenu);
 
     ui->lineUp->setStyleSheet(lineQss);
     ui->lineDown->setStyleSheet(lineQss);

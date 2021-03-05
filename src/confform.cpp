@@ -77,6 +77,7 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->leDns->setContextMenuPolicy(Qt::NoContextMenu);
     ui->leDns2->setContextMenuPolicy(Qt::NoContextMenu);
     ui->leGateway->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->leAddr_ipv6->setContextMenuPolicy(Qt::NoContextMenu);
 
     ui->lineUp->setStyleSheet(lineQss);
     ui->lineDown->setStyleSheet(lineQss);
@@ -171,6 +172,7 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
     lastIpv4 = v4addr;
     netUuid = uuidName;
 
+    isActWifi = false;
     if (isWiFi) {
         ui->leName->setEnabled(false);
         isActWifi = isWiFi;
@@ -253,11 +255,22 @@ void ConfForm::on_btnCreate_clicked()
         kylindbus.showDesktopNotify(txt);
     }
 
+    QString name = ui->leName->text();
+    QStringList charToEscape;
+    charToEscape << "~" << "(" << ")" << "<" << ">" <<"\\" << "*" << "|" << "&" << "#";  //一些命令行特殊字符，需要转义
+    foreach (auto ch , charToEscape) {
+        if (name.contains(ch)) {
+            name.replace(ch, QString("%1%2").arg("\\").arg(ch));
+        }
+    }
+    if (name.contains(" ")) { //空格会影响命令行参数的判断，需要转义
+        name.replace(QRegExp("[\\s]"), "\\\ ");
+    }
     if (!ui->leAddr_ipv6->text().isEmpty()) {
-        QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+        QString cmdStr = "nmcli connection modify " + name + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
         Utils::m_system(cmdStr.toUtf8().data());
     } else {
-        QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method auto";
+        QString cmdStr = "nmcli connection modify " + name + " ipv6.method auto";
         Utils::m_system(cmdStr.toUtf8().data());
     }
 
@@ -351,15 +364,15 @@ void ConfForm::on_btnSave_clicked()
     }
 
     if (ui->cbType->currentIndex() == 1) {
+        //对于已保存连接修改ipv6地址，使用UUID区分各网络配置（排除名称含空格或特殊字符的干扰）
         if (!ui->leAddr_ipv6->text().isEmpty()) {
-            QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+            QString cmdStr = "nmcli connection modify " + netUuid + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
             Utils::m_system(cmdStr.toUtf8().data());
         } else {
-            QString cmdStr = "nmcli connection modify " + ui->leName->text() + " ipv6.method auto";
+            QString cmdStr = "nmcli connection modify " + netUuid + " ipv6.method auto";
             Utils::m_system(cmdStr.toUtf8().data());
         }
     }
-
     QString txt(tr("New network settings already finished"));
     kylindbus.showDesktopNotify(txt);
 }

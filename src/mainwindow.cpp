@@ -1603,6 +1603,9 @@ void MainWindow::getLanListDone(QStringList slist)
                             } else if ((oldActLanName == actLanSsidName.at(kk)) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
                                 //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
                                 objKyDBus->reConnectWiredNet(nuuid);
+                            } else if (!objKyDBus->dbusActiveLanIpv6.isEmpty() && objKyDBus->dbusActiveLanIpv6 != objKyDBus->dbusLanIpv6 && objKyDBus->dbusLanIpv6Method == "manual") {
+                                //在第三方nm-connection-editor或kylin-nm配置页进行新的IPV6配置后，重新连接网络
+                                objKyDBus->reConnectWiredNet(nuuid);
                             }
                         }
 
@@ -1830,25 +1833,27 @@ void MainWindow::loadWifiListDone(QStringList slist)
     scrollAreaw->setWidget(wifiListWidget);
     scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
 
-    // 获取当前有线网的连接状态，正在连接wifiActState==1，已近连接wifiActState==2, 未连接wifiActState==3
+    // 获取当前有线网的连接状态，正在连接wifiActState==1，已经连接wifiActState==2, 未连接wifiActState==3
     int wifiActState = objKyDBus->checkWifiConnectivity(); //检查wifi的连接状态
-    if (isWifiBeConnUp && wifiActState == 1) {
-        wifiActState = 2;
-    }
+//    if (isWifiBeConnUp && wifiActState == 1) {
+//        wifiActState = 2;
+//    }
 
     QList<QString> currConnWifiBSsidUuid;
-    bool isLoop = true;
-    do {
-        currConnWifiBSsidUuid = objKyDBus->getAtiveWifiBSsidUuid(slist);
-        if (currConnWifiBSsidUuid.size() == 1 && currConnWifiBSsidUuid.at(0).length() != 17) {
-            sleep(1); //等于1说明只获取到uuid，1秒后再获取一次
-        } else {
-            isLoop = false;
-        }
-    } while (isLoop);
+    currConnWifiBSsidUuid = objKyDBus->getAtiveWifiBSsidUuid(slist);
+//    bool isLoop = true;
+//    do {
+//        currConnWifiBSsidUuid = objKyDBus->getAtiveWifiBSsidUuid(slist);
+//        if (currConnWifiBSsidUuid.size() == 1 && currConnWifiBSsidUuid.at(0).length() != 17) {
+//            sleep(1); //等于1说明只获取到uuid，1秒后再获取一次
+//        } else {
+//            isLoop = false;
+//        }
+//    } while (isLoop);
 
     // 获取当前连接的wifi name
     QString actWifiName = "--";
+    QString actWifiId = "--";
     actWifiSsid = "--";
     actWifiUuid = "--";
     if (currConnWifiBSsidUuid.size() > 1) {
@@ -1874,7 +1879,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 根据当前连接的wifi 设置OneConnForm
     OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
-    if (actWifiName == "--" || wifiActState == 1) {
+    if (actWifiName == "--" || wifiActState == 1 || actWifiBssidList.at(0) == "--") {
         ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--");
         activeWifiSignalLv = 0;
@@ -1939,6 +1944,11 @@ void MainWindow::loadWifiListDone(QStringList slist)
         if (actWifiBssidList.contains(wbssid)) {
             actWifiName = wname;
         }
+    }
+
+    if (actWifiBssidList.size()==1 && actWifiBssidList.at(0)=="--") {
+        actWifiId = actWifiName;
+        actWifiName = "--";
     }
 
     for (int i = 1, j = 0; i < slist.size(); i ++) {
@@ -2020,6 +2030,8 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->show();
 
                 if (actWifiBssidList.contains(wbssid) && wifiActState == 1) {
+                    ocf->startWaiting(true);
+                } else if (actWifiId == wname && wifiActState == 1) {
                     ocf->startWaiting(true);
                 }
 

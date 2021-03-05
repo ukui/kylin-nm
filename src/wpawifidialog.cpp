@@ -65,6 +65,7 @@ WpaWifiDialog::WpaWifiDialog(QWidget *parent, MainWindow *mainWindow, QString co
     ui->setupUi(this);
     this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setAttribute(Qt::WA_DeleteOnClose);
     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")));
 //    this->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -337,8 +338,8 @@ void WpaWifiDialog::changeDialog()
     if (securityCombox->currentIndex() == 0) {
         //无安全性
         QApplication::setQuitOnLastWindowClosed(false);
-        this->hide();
-        DlgHideWifi *connHidWifi = new DlgHideWifi(0);
+        this->close();
+        DlgHideWifi *connHidWifi = new DlgHideWifi(0,mw);
         connHidWifi->show();
         connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     }
@@ -346,7 +347,7 @@ void WpaWifiDialog::changeDialog()
     if (securityCombox->currentIndex() == 1) {
         //WPA 及 WPA2 个人
         QApplication::setQuitOnLastWindowClosed(false);
-        this->hide();
+        this->close();
         DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0, mw);
         connHidWifiWpa->show();
         connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );

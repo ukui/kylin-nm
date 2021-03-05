@@ -37,7 +37,7 @@ DlgHideWifiWpa::DlgHideWifiWpa(int type, MainWindow *mainWindow, QWidget *parent
     ui(new Ui::DlgHideWifiWpa)
 {
     ui->setupUi(this);
-
+    this->setAttribute(Qt::WA_DeleteOnClose);
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")) );
@@ -147,15 +147,15 @@ void DlgHideWifiWpa::changeDialog()
 {
     if (ui->cbxSecurity->currentIndex()==0) {
         QApplication::setQuitOnLastWindowClosed(false);
-        this->hide();
-        DlgHideWifi *connHidWifi = new DlgHideWifi(0);
+        this->close();
+        DlgHideWifi *connHidWifi = new DlgHideWifi(0,mw);
         connHidWifi->show();
         connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     } else if(ui->cbxSecurity->currentIndex()==1) {
         qDebug()<<"it's not need to change dialog";
     } else if(ui->cbxSecurity->currentIndex()==2) {
         QApplication::setQuitOnLastWindowClosed(false);
-        this->hide();
+        this->close();
         WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, mw, "");
         QPoint pos = QCursor::pos();
         QRect primaryGeometry;

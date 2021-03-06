@@ -1935,7 +1935,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     }
     QStringList wnames;
     int count = 0;
-
+    QString actWifiBssid = " ";
     for (int i = 1; i < slist.size(); i ++) {
         QString line = slist.at(i);
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
@@ -1943,6 +1943,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
         if (actWifiBssidList.contains(wbssid)) {
             actWifiName = wname;
+        }
+        if ("*" == line.mid(0,indexSignal).trimmed()){
+            actWifiBssid = wbssid;
         }
     }
 
@@ -1964,7 +1967,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 continue; //若当前热点ssid名称和已经连接的wifi的ssid名称相同，但bssid不同，则跳过
             }
         }
-        if (wnames.contains(wname)) {
+        if (wnames.contains(wname) && wbssid != actWifiBssid) {
             continue; //过滤相同名称的wifi
         }
 
@@ -1987,10 +1990,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
             //只有5GHZ
             freqState = 2;
         }
-
         if (wname != "" && wname != "--") {
             //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
-            if (actWifiBssidList.contains(wbssid) && wifiActState == 2) {
+            if(actWifiBssid == wbssid && wifiActState == 2){
                 //对于已经连接的wifi
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
@@ -2010,7 +2012,6 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 lbLoadUpImg->show();
                 ccf->setTopItem(false);
                 currSelNetName = "";
-
                 syslog(LOG_DEBUG, "already insert an active wifi in the top of wifi list");
             } else {
                 //对于未连接的wifi

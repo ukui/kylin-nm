@@ -396,8 +396,8 @@ void ConfForm::saveNetworkConfiguration()
     }
 
     //是选择的自动还是手动配置网络
+    if (!this->isCreateNewNet) {
     if (ui->cbType->currentIndex() == 0) {
-        if (!this->isCreateNewNet) {
             //kylin_network_set_automethod(ui->leName->text().toUtf8().data());
             kylin_network_set_automethod(netUuid.toUtf8().data());
         }
@@ -571,40 +571,44 @@ void ConfForm::on_leDns2_textEdited(const QString &arg1)
 //设置界面按钮是否可点击
 void ConfForm::setEnableOfBtn()
 {
-    if (ui->leName->text().size() == 0 ) {
+    if(!isEditingAlready()){
         this->setBtnEnableFalse();
         return;
     }
+//    if (ui->leName->text().size() == 0 ) {
+//        this->setBtnEnableFalse();
+//        return;
+//    }
 
-    if (ui->cbType->currentIndex() == 1) {
-        if (!this->getTextEditState(ui->leAddr->text()) ) {
-            this->setBtnEnableFalse();
-            return;
-        }
+//    if (ui->cbType->currentIndex() == 1) {
+//        if (!this->getTextEditState(ui->leAddr->text()) ) {
+//            this->setBtnEnableFalse();
+//            return;
+//        }
 
-        if (!ui->leGateway->text().isEmpty() && !this->getTextEditState(ui->leGateway->text()) ) {
-            this->setBtnEnableFalse();
-            return;
-        }
+//        if (!ui->leGateway->text().isEmpty() && !this->getTextEditState(ui->leGateway->text()) ) {
+//            this->setBtnEnableFalse();
+//            return;
+//        }
 
-        if (!ui->leDns->text().isEmpty() && !this->getTextEditState(ui->leDns->text()) ) {
-            this->setBtnEnableFalse();
-            return;
-        }
+//        if (!ui->leDns->text().isEmpty() && !this->getTextEditState(ui->leDns->text()) ) {
+//            this->setBtnEnableFalse();
+//            return;
+//        }
 
-        if (!ui->leAddr_ipv6->text().isEmpty() && ! this->getIpv6EditState(ui->leAddr_ipv6->text())) {
-            this->setBtnEnableFalse();
-            return;
-        }
-        if(ui->leDns2->text().isEmpty()){
+//        if (!ui->leAddr_ipv6->text().isEmpty() && ! this->getIpv6EditState(ui->leAddr_ipv6->text())) {
+//            this->setBtnEnableFalse();
+//            return;
+//        }
+//        if(ui->leDns2->text().isEmpty()){
 
-        }else{
-            if(!this->getTextEditState(ui->leDns2->text())){
-                this->setBtnEnableFalse();
-                return ;
-            }
-        }
-    }
+//        }else{
+//            if(!this->getTextEditState(ui->leDns2->text())){
+//                this->setBtnEnableFalse();
+//                return ;
+//            }
+//        }
+//    }
 
 
     ui->btnSave->setEnabled(true);
@@ -619,6 +623,24 @@ void ConfForm::setEnableOfBtn()
 
 }
 
+bool ConfForm::isEditingAlready(){
+    if (ui->leName->text().size() == 0) return false;
+    if(ui->cbType->currentIndex() == 1){    //手动新建网络
+        //仅填写连接名和ipv4地址时可被按下
+        if(getTextEditState(ui->leAddr->text()) && ui->leAddr_ipv6->text().isEmpty()
+                && ui->leGateway->text().isEmpty() && ui->leDns->text().isEmpty() && ui->leDns2->text().isEmpty()){
+            return true;
+        }
+        //全部填写完成时可被按下
+        if(getTextEditState(ui->leAddr->text()) && ui->leAddr_ipv6->text().isEmpty()
+                && getTextEditState(ui->leGateway->text()) && getTextEditState(ui->leDns->text())){
+            if(getTextEditState(ui->leDns2->text()) || ui->leDns2->text().isEmpty()){
+                return true;
+            }
+        }
+    }
+    return false;
+}
 //文本的输入要符合ip的格式要求
 bool ConfForm::getTextEditState(QString text)
 {

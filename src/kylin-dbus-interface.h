@@ -52,6 +52,7 @@ public:
     void showDesktopNotify(QString message);
     void initConnectionInfo();
     QList<QString> getAtiveLanSsidUuidState();
+    QString getActiveWifiUuid();
     QList<QString> getAtiveWifiBSsidUuid(QStringList wifilist);
     void reConnectWiredNet(QString netUuid);
     bool toConnectWiredNet(QString netUuid, QString netIfName);
@@ -89,8 +90,11 @@ public:
     QString dbusLanIpv4 = "";
     QString dbusLanIpv6 = "";
     QString dbusLanIpv6Method = "";
+    QString dbusWifiIpv4Method = "";
     QString dbusActiveLanIpv4 = "";
     QString dbusActiveLanIpv6 = "";
+    QString dbusActiveWifiIpv4 = "";
+    QString dbusWifiIpv4 = "";
     QString dbusLanGateway = "";
     QString dbusWiFiCardName = "";
     QString dbusWifiMac = "";
@@ -106,12 +110,14 @@ public slots:
     QString getConnLanNameByIfname(QString ifname);
     void onPropertiesChanged(QVariantMap qvm);
     void onLanPropertyChanged(QVariantMap qvm);
-    void onIpPropertiesChanged();
+    void onLanIpPropertiesChanged();
+    void onWifiIpPropertiesChanged();
     void getPhysicalCarrierState(int n);
     void getLanHwAddressState();
     void getWiredCardName();
     void getWirelessCardName();
     void getLanIpDNS(QString uuidName, bool isActNet);
+    void getWifiIp(QString uuid);
     QString getLanMAC(QString ifname);
     void getWifiMac(QString netName);
     void slot_timeout();
@@ -135,6 +141,7 @@ private:
 
 signals:
     void updateWiredList(int n);
+    void updateWirelessList();
     void requestSendDesktopNotify(QString message);
     void newConnAdded(int type);
     void toGetWifiListFinished(QStringList slist);

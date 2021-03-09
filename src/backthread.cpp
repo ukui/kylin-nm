@@ -344,6 +344,14 @@ void BackThread::execConnWifi(QString connName)
     cmdConnWifi->write(cmdStr.toUtf8().data());
 }
 
+void BackThread::execReconnWIfi(QString uuid)
+{
+    QString cmd = "nmcli connection down " + uuid;
+    Utils::m_system(cmd.toUtf8().data());
+   cmd = "nmcli connection up " + uuid;
+    Utils::m_system(cmd.toUtf8().data());
+}
+
 void BackThread::onReadOutputWifi()
 {
     QString str = cmdConnWifi->readAllStandardOutput();

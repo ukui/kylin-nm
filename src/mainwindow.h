@@ -166,12 +166,14 @@ public:
     int is_keep_wifi_turn_on_state = 1; //是否要执行wifi开关变为打开样式
     int is_stop_check_net_state = 0; //是否要在进行其他操作时停止检查网络状态
     int is_connect_net_failed = 0; //刚才是否连接网络失败
+    int is_wifi_reconnected = 0;//刚才是否主动重连wifi导致wifi断开
     int is_fly_mode_on = 0; //是否已经打开飞行模式
     int is_hot_sopt_on = 0; //是否已经打开热点
     int is_connect_hide_wifi = 0; //是否正在连接隐藏wifi
 
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
     QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
+    QString oldWifiIpv4Method = ""; //原来的wifi的ipv4地址获取方式,自动还是手动
     int currSelNetNum = 0; //当前选中的item序号
     bool isLanBeConnUp = false; //lan是否连接上
     bool isWifiBeConnUp = false; //wifi是否是连接上
@@ -369,6 +371,7 @@ signals:
 
     void waitWifiStop();
     void waitLanStop();
+    void reConnectWifi(const QString& uuid);
 };
 
 #endif // MAINWINDOW_H

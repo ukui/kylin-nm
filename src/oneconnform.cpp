@@ -141,6 +141,19 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(waitAnimStep()));
 
     connect(mw, SIGNAL(waitWifiStop()), this, SLOT(stopWaiting()));
+    connect(mw, &MainWindow::reConnectWifi, this, [ = ](const QString& uuid) {
+        if (isActive) {
+            QThread *t = new QThread();
+            BackThread *bt = new BackThread();
+            bt->moveToThread(t);
+            connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+            connect(t, &QThread::started, bt, [ = ]() {
+                mw->is_wifi_reconnected = 1;
+                bt->execReconnWIfi(uuid);
+            });
+            t->start();
+        }
+    });
 
     connType = "";
     lbNameLyt = new QHBoxLayout(ui->lbName);

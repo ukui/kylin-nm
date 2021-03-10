@@ -364,7 +364,7 @@ void kylin_network_set_automethod(char *con_name)
 {
     char str[256];
     char *automethod="auto";
-    sprintf(str,"nmcli connection modify '%s' ipv4.method %s",con_name,automethod);
+    sprintf(str,"nmcli connection modify '%s' ipv4.method %s ipv4.address '' ipv4.gateway ''",con_name,automethod);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_automethod' failed");}
 }

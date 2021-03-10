@@ -23,6 +23,7 @@
 #include "kylin-network-interface.h"
 #include "wireless-security/dlghidewifi.h"
 #include "utils.h"
+#include "wificonfigdialog.h"
 #include "wpawifidialog.h"
 
 #include <QtDBus/QDBusConnection>
@@ -551,6 +552,7 @@ void OneConnForm::toConnectWirelessNetwork()
         });
         return;
     }
+
     if (ui->lbConned->text() == "--" || ui->lbConned->text() == " ") {
         if (!isWifiConfExist(lbNameText->text())) {
             //没有配置文件，使用有密码的wifi连接
@@ -597,6 +599,29 @@ void OneConnForm::toConnectWirelessNetwork()
         });
         process->waitForFinished();
     }
+
+    if (key_mgmt == "wpa-psk" && this->getPskFlag() != 0) {
+        //当设置为每次询问密码时执行
+        QPoint pos = QCursor::pos();
+        QRect primaryGeometry;
+        for (QScreen *screen : qApp->screens()) {
+            if (screen->geometry().contains(pos)) {
+                primaryGeometry = screen->geometry();
+            }
+        }
+        if (primaryGeometry.isEmpty()) {
+            primaryGeometry = qApp->primaryScreen()->geometry();
+        }
+
+        QApplication::setQuitOnLastWindowClosed(false);
+        WiFiConfigDialog *wifiConfigDialog = new WiFiConfigDialog();
+        wifiConfigDialog->move(primaryGeometry.width() / 2 - wifiConfigDialog->width() / 2, primaryGeometry.height() / 2 - wifiConfigDialog->height() / 2);
+        wifiConfigDialog->show();
+        wifiConfigDialog->raise();
+
+        return;
+    }
+
     if (psk_flag != 0) { //未为所有用户存储密码
         QString homePath = getenv("HOME");
         if (QFile(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text())).exists()) { //已为该用户存储密码
@@ -832,7 +857,7 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     qDebug()<<"Function slotConnWifiResult receives a number: "<<connFlag;
 
     if (!connType.isEmpty()) {
-        QString strConntype = "nmcli connection modify " + lbNameText->text() + " wifi-sec.psk-flags 2";
+        QString strConntype = "nmcli connection modify '" + lbNameText->text() + "' wifi-sec.psk-flags 2";
         system(strConntype.toUtf8().data());
     }
     connType = "";
@@ -985,7 +1010,10 @@ int OneConnForm::getPskFlag()
     });
     connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
         QString str = process->readAllStandardOutput();
-        psk_flag = str.mid(str.lastIndexOf(" ") - 1, 1).toInt();
+        QString regExpPattern("[ ][0-9][ ]");
+        QRegExp regExpTest(regExpPattern);
+        int pos = str.indexOf(regExpTest);
+        psk_flag = str.mid(pos,2).trimmed().toInt();
     });
     process->waitForFinished();
     return psk_flag;

@@ -2861,6 +2861,11 @@ void MainWindow::on_btnHotspotState()
 //处理外界对网络的连接与断开
 void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 {
+    if (type == "") {
+        is_stop_check_net_state = 0;
+        return;
+    }
+
     if (isToSetLanValue) {
         if (type == "802-3-ethernet" || type == "ethernet") {
             isLanBeConnUp = true;

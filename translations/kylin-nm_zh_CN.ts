@@ -1758,6 +1758,39 @@
     </message>
 </context>
 <context>
+    <name>WiFiConfigDialog</name>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="32"/>
+        <source>Input Wi-Fi Information Please</source>
+        <translation type="unfinished">输入Wi-Fi名称和密码后点击确定</translation>
+    </message>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="33"/>
+        <source>Wi-Fi ID：</source>
+        <translation type="unfinished">Wi-Fi连接名称：</translation>
+    </message>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="34"/>
+        <source>Wi-Fi Name：</source>
+        <translation type="unfinished">Wi-Fi名称：</translation>
+    </message>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="35"/>
+        <source>Password：</source>
+        <translation type="unfinished">Wi-Fi密码：</translation>
+    </message>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="36"/>
+        <source>Cancl</source>
+        <translation type="unfinished">取消</translation>
+    </message>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="37"/>
+        <source>Ok</source>
+        <translation type="unfinished">确定</translation>
+    </message>
+</context>
+<context>
     <name>WpaWifiDialog</name>
     <message>
         <location filename="../src/wpawifidialog.ui" line="26"/>

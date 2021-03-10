@@ -19,6 +19,7 @@
 #include "kylin-dbus-interface.h"
 #include "mainwindow.h"
 #include "utils.h"
+#include "wificonfigdialog.h"
 
 #include <vector>
 
@@ -813,7 +814,54 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
         } else if (key == "802-11-wireless") {
             syslog(LOG_DEBUG, "A new wireless network(wifi) was created.");
             qDebug()<<"A new wireless network was created.";
-            emit this->newConnAdded(1);
+            sleep(1);
+            bool has_wpa_psk = false;
+            bool has_psk_flags = false;
+            QDBusInterface interfaceSet("org.freedesktop.NetworkManager",
+                                      objPath.path(),
+                                      "org.freedesktop.NetworkManager.Settings.Connection",
+                                      QDBusConnection::systemBus());
+            QDBusMessage resultSet = interfaceSet.call("GetSettings");
+            const QDBusArgument &dbusArg1stSet = resultSet.arguments().at( 0 ).value<QDBusArgument>();
+            QMap<QString,QMap<QString,QVariant>> mapSet;
+            dbusArg1stSet >> mapSet;
+            for (QString setKey : mapSet.keys() ) {
+                QMap<QString,QVariant> subSetMap = mapSet.value(setKey);
+                if (setKey == "802-11-wireless-security") {
+                    for (QString searchKey : subSetMap.keys()) {
+                        if (searchKey == "key-mgmt") {
+                            qDebug() << "key-mgmt : "<<subSetMap.value(searchKey).toString();
+                            has_wpa_psk = true;
+                        }
+                        if (searchKey == "psk-flags") {
+                            qDebug() << "psk-flags : "<<subSetMap.value(searchKey).toInt();
+                            has_psk_flags = true;
+                        }
+                    }
+                }
+            }
+
+            if (has_wpa_psk && has_psk_flags) {
+                QPoint pos = QCursor::pos();
+                QRect primaryGeometry;
+                for (QScreen *screen : qApp->screens()) {
+                    if (screen->geometry().contains(pos)) {
+                        primaryGeometry = screen->geometry();
+                    }
+                }
+                if (primaryGeometry.isEmpty()) {
+                    primaryGeometry = qApp->primaryScreen()->geometry();
+                }
+
+                QApplication::setQuitOnLastWindowClosed(false);
+                WiFiConfigDialog *wifiConfigDialog = new WiFiConfigDialog();
+                wifiConfigDialog->move(primaryGeometry.width() / 2 - wifiConfigDialog->width() / 2, primaryGeometry.height() / 2 - wifiConfigDialog->height() / 2);
+                wifiConfigDialog->show();
+                wifiConfigDialog->raise();
+            } else {
+                emit this->newConnAdded(1);
+            }
+
             break;
         }
     }

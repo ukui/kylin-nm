@@ -298,7 +298,7 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
     //disConnLanOrWifi("wifi");
 
     if (!connType.isEmpty()) {
-        QString strConntype = "nmcli connection modify " + connName + " wifi-sec.psk-flags 0";
+        QString strConntype = "nmcli connection modify '" + connName + "' wifi-sec.psk-flags 0";
         Utils::m_system(strConntype.toUtf8().data());
     }
 

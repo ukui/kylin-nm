@@ -75,6 +75,7 @@ SOURCES += \
     src/sysdbusregister.cpp \
     src/utils.cpp \
     src/wpawifidialog.cpp \
+    src/wificonfigdialog.cpp \
     wireless-security/dlghidewifi.cpp \
     wireless-security/dlghidewifieapfast.cpp \
     wireless-security/dlghidewifieapleap.cpp \
@@ -104,6 +105,7 @@ HEADERS += \
     src/sysdbusregister.h \
     src/utils.h \
     src/wpawifidialog.h \
+    src/wificonfigdialog.h \
     wireless-security/dlghidewifi.h \
     wireless-security/dlghidewifieapfast.h \
     wireless-security/dlghidewifieapleap.h \
@@ -124,6 +126,7 @@ FORMS += \
     src/onelancform.ui \
     hot-spot/dlghotspotcreate.ui \
     src/wpawifidialog.ui \
+    src/wificonfigdialog.ui \
     wireless-security/dlghidewifi.ui \
     wireless-security/dlghidewifieapfast.ui \
     wireless-security/dlghidewifieapleap.ui \

@@ -608,8 +608,13 @@ void OneConnForm::toConnectWirelessNetwork()
             process->deleteLater();
         });
         connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
+            //QString str = process->readAllStandardOutput();
+            //psk_flag = str.mid(str.lastIndexOf(" ") - 1, 1).toInt();
             QString str = process->readAllStandardOutput();
-            psk_flag = str.mid(str.lastIndexOf(" ") - 1, 1).toInt();
+            QString regExpPattern("[ ][0-9][ (（]");
+            QRegExp regExpTest(regExpPattern);
+            int pos = str.indexOf(regExpTest);
+            psk_flag = str.mid(pos,2).trimmed().toInt();
         });
         process->waitForFinished();
     }

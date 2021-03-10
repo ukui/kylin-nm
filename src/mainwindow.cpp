@@ -1641,6 +1641,22 @@ void MainWindow::getWifiListDone(QStringList slist)
         return;
     }
 
+    QString actWifiUuid = objKyDBus->getActiveWifiUuid();
+    objKyDBus->getConnectNetIp(actWifiUuid);
+    objKyDBus->getWifiIp(actWifiUuid);
+    if (oldWifiIpv4Method == "") {
+        oldWifiIpv4Method = objKyDBus-> dbusWifiIpv4Method;
+    }
+    if (objKyDBus->dbusWifiIpv4 != "" && objKyDBus->dbusActiveWifiIpv4 != "" && objKyDBus->dbusWifiIpv4 != objKyDBus->dbusActiveWifiIpv4 &&objKyDBus-> dbusWifiIpv4Method == "manual") {
+        //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
+        oldWifiIpv4Method = "manual";
+        qDebug()<<"Ipv4.address of current activated wifi is:"<<objKyDBus->dbusActiveWifiIpv4 << ". Real ipv4.address is:" << objKyDBus->dbusWifiIpv4;
+        emit this->reConnectWifi(actWifiUuid);
+    } else if (objKyDBus-> dbusWifiIpv4Method == "auto" && oldWifiIpv4Method == "manual") {
+        oldWifiIpv4Method = "auto";
+        qDebug()<<"Ipv4.method is set to auto.";
+        emit this->reConnectWifi(actWifiUuid);
+    }
     //qDebug()<<"debug: oldWifiSlist.size()="<<oldWifiSlist.size()<<"   slist.size()="<<slist.size();
 
     //qDebug()<<"------------";
@@ -2899,7 +2915,10 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
                 qDebug()<<"debug: connect wifi failed just now, no need to refresh wifi interface";
                 is_connect_net_failed = 0;
                 is_stop_check_net_state = 0;
-            } else {
+            } else if (is_wifi_reconnected) {
+                qDebug()<<"debug: wifi reconnected just now, no need to refresh wifi interface";
+                is_wifi_reconnected = 0;
+            }else {
                 isToSetWifiValue = false;
                 QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
             }

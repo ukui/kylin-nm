@@ -224,6 +224,21 @@ void ConfForm::on_btnCreate_clicked()
     kylindbus.getWiredCardName();
     QString mIfname;
 
+    QString mask = "";
+    if (ui->cbMask->currentIndex() == 0) {
+        mask = "24";
+    } else if(ui->cbMask->currentIndex() == 1) {
+        mask = "23";
+    } else if(ui->cbMask->currentIndex() == 2) {
+        mask = "22";
+    } else if(ui->cbMask->currentIndex() == 3) {
+        mask = "16";
+    } else if(ui->cbMask->currentIndex() == 4) {
+        mask = "8";
+    } else {
+        mask = "24";
+    }
+
     if (kylindbus.multiWiredIfName.size() == 0) {
         QString tip(tr("Can not create new wired network for without wired card"));
         kylindbus.showDesktopNotify(tip);
@@ -240,8 +255,22 @@ void ConfForm::on_btnCreate_clicked()
             return;
         }
     }
-
-    QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
+    QString cmdStr;
+    if(ui->cbType->currentIndex() == 0){
+        cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
+    }else{
+        cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet ipv4.method manual ipv4.address "
+                + ui->leAddr->text() + "/" + mask.toUtf8().data();
+        if(!ui->leGateway->text().isEmpty()){
+            cmdStr += " ipv4.gateway " + ui->leGateway->text();
+        }
+        if(!ui->leDns->text().isEmpty()){
+            cmdStr += " ipv4.dns " + ui->leDns->text();
+            if(!ui->leDns2->text().isEmpty()){
+                cmdStr += "," + ui->leDns2->text();
+            }
+        }
+    }
     Utils::m_system(cmdStr.toUtf8().data());
 
     if (ui->cbType->currentIndex() == 1) {
@@ -571,44 +600,44 @@ void ConfForm::on_leDns2_textEdited(const QString &arg1)
 //设置界面按钮是否可点击
 void ConfForm::setEnableOfBtn()
 {
-    if(!isEditingAlready()){
-        this->setBtnEnableFalse();
-        return;
-    }
-//    if (ui->leName->text().size() == 0 ) {
+//    if(!isEditingAlready()){
 //        this->setBtnEnableFalse();
 //        return;
 //    }
+    if (ui->leName->text().size() == 0 ) {
+        this->setBtnEnableFalse();
+        return;
+    }
 
-//    if (ui->cbType->currentIndex() == 1) {
-//        if (!this->getTextEditState(ui->leAddr->text()) ) {
-//            this->setBtnEnableFalse();
-//            return;
-//        }
+    if (ui->cbType->currentIndex() == 1) {
+        if (!this->getTextEditState(ui->leAddr->text()) ) {
+            this->setBtnEnableFalse();
+            return;
+        }
 
-//        if (!ui->leGateway->text().isEmpty() && !this->getTextEditState(ui->leGateway->text()) ) {
-//            this->setBtnEnableFalse();
-//            return;
-//        }
+        if (!ui->leGateway->text().isEmpty() && !this->getTextEditState(ui->leGateway->text()) ) {
+            this->setBtnEnableFalse();
+            return;
+        }
 
-//        if (!ui->leDns->text().isEmpty() && !this->getTextEditState(ui->leDns->text()) ) {
-//            this->setBtnEnableFalse();
-//            return;
-//        }
+        if (!ui->leDns->text().isEmpty() && !this->getTextEditState(ui->leDns->text()) ) {
+            this->setBtnEnableFalse();
+            return;
+        }
 
-//        if (!ui->leAddr_ipv6->text().isEmpty() && ! this->getIpv6EditState(ui->leAddr_ipv6->text())) {
-//            this->setBtnEnableFalse();
-//            return;
-//        }
-//        if(ui->leDns2->text().isEmpty()){
+        if (!ui->leAddr_ipv6->text().isEmpty() && ! this->getIpv6EditState(ui->leAddr_ipv6->text())) {
+            this->setBtnEnableFalse();
+            return;
+        }
+        if(ui->leDns2->text().isEmpty()){
 
-//        }else{
-//            if(!this->getTextEditState(ui->leDns2->text())){
-//                this->setBtnEnableFalse();
-//                return ;
-//            }
-//        }
-//    }
+        }else{
+            if(!this->getTextEditState(ui->leDns2->text())){
+                this->setBtnEnableFalse();
+                return ;
+            }
+        }
+    }
 
 
     ui->btnSave->setEnabled(true);

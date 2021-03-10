@@ -558,6 +558,7 @@ void OneConnForm::toConnectWirelessNetwork()
             //没有配置文件，使用有密码的wifi连接
             psk_flag = 0;
             on_btnConnPWD_clicked();
+            qDebug() << "00000000000000000000000000000";
             return;
         }
     }
@@ -1010,7 +1011,7 @@ int OneConnForm::getPskFlag()
     });
     connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
         QString str = process->readAllStandardOutput();
-        QString regExpPattern("[ ][0-9][ ]");
+        QString regExpPattern("[ ][0-9][ (（]");
         QRegExp regExpTest(regExpPattern);
         int pos = str.indexOf(regExpTest);
         psk_flag = str.mid(pos,2).trimmed().toInt();

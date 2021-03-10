@@ -209,6 +209,7 @@ public slots:
     void on_btnHotspot_clicked();
     void on_btnHotspotState();
     void on_btnWifiList_clicked();
+    void on_wifi_changed();
 
     void connWifiDone(int connFlag);
 

@@ -106,7 +106,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     if (mw) {
         QObject::connect(this, SIGNAL(updateWiredList(int)), mw, SLOT(onBtnNetListClicked(int)));
         QObject::connect(this, SIGNAL(newConnAdded(int)), mw, SLOT(onNewConnAdded(int)));
-        QObject::connect(this, SIGNAL(updateWirelessList()), mw, SLOT(on_btnWifiList_clicked()));
+        QObject::connect(this, SIGNAL(updateWirelessList()), mw, SLOT(on_wifi_changed()));
     }
 
     mUtils = new Utils();

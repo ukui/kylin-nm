@@ -1373,6 +1373,26 @@ void MainWindow::on_btnWifiList_clicked()
     bt->deleteLater();
 }
 
+void MainWindow::on_wifi_changed()
+{
+    QString actWifiUuid = objKyDBus->getActiveWifiUuid();
+    objKyDBus->getConnectNetIp(actWifiUuid);
+    objKyDBus->getWifiIp(actWifiUuid);
+    if (oldWifiIpv4Method == "") {
+        oldWifiIpv4Method = objKyDBus-> dbusWifiIpv4Method;
+    }
+    if (objKyDBus->dbusWifiIpv4 != "" && objKyDBus->dbusActiveWifiIpv4 != "" && objKyDBus->dbusWifiIpv4 != objKyDBus->dbusActiveWifiIpv4 &&objKyDBus-> dbusWifiIpv4Method == "manual") {
+        //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
+        oldWifiIpv4Method = "manual";
+        qDebug()<<"Ipv4.address of current activated wifi is:"<<objKyDBus->dbusActiveWifiIpv4 << ". Real ipv4.address is:" << objKyDBus->dbusWifiIpv4;
+        emit this->reConnectWifi(actWifiUuid);
+    } else if (objKyDBus-> dbusWifiIpv4Method == "auto" && oldWifiIpv4Method == "manual") {
+        oldWifiIpv4Method = "auto";
+        qDebug()<<"Ipv4.method is set to auto.";
+        emit this->reConnectWifi(actWifiUuid);
+    }
+}
+
 /**
  * @brief MainWindow::onNewConnAdded 获取新的连接列表
  * @param type 0为有线，1为无线
@@ -1641,22 +1661,22 @@ void MainWindow::getWifiListDone(QStringList slist)
         return;
     }
 
-    QString actWifiUuid = objKyDBus->getActiveWifiUuid();
-    objKyDBus->getConnectNetIp(actWifiUuid);
-    objKyDBus->getWifiIp(actWifiUuid);
-    if (oldWifiIpv4Method == "") {
-        oldWifiIpv4Method = objKyDBus-> dbusWifiIpv4Method;
-    }
-    if (objKyDBus->dbusWifiIpv4 != "" && objKyDBus->dbusActiveWifiIpv4 != "" && objKyDBus->dbusWifiIpv4 != objKyDBus->dbusActiveWifiIpv4 &&objKyDBus-> dbusWifiIpv4Method == "manual") {
-        //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
-        oldWifiIpv4Method = "manual";
-        qDebug()<<"Ipv4.address of current activated wifi is:"<<objKyDBus->dbusActiveWifiIpv4 << ". Real ipv4.address is:" << objKyDBus->dbusWifiIpv4;
-        emit this->reConnectWifi(actWifiUuid);
-    } else if (objKyDBus-> dbusWifiIpv4Method == "auto" && oldWifiIpv4Method == "manual") {
-        oldWifiIpv4Method = "auto";
-        qDebug()<<"Ipv4.method is set to auto.";
-        emit this->reConnectWifi(actWifiUuid);
-    }
+//    QString actWifiUuid = objKyDBus->getActiveWifiUuid();
+//    objKyDBus->getConnectNetIp(actWifiUuid);
+//    objKyDBus->getWifiIp(actWifiUuid);
+//    if (oldWifiIpv4Method == "") {
+//        oldWifiIpv4Method = objKyDBus-> dbusWifiIpv4Method;
+//    }
+//    if (objKyDBus->dbusWifiIpv4 != "" && objKyDBus->dbusActiveWifiIpv4 != "" && objKyDBus->dbusWifiIpv4 != objKyDBus->dbusActiveWifiIpv4 &&objKyDBus-> dbusWifiIpv4Method == "manual") {
+//        //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
+//        oldWifiIpv4Method = "manual";
+//        qDebug()<<"Ipv4.address of current activated wifi is:"<<objKyDBus->dbusActiveWifiIpv4 << ". Real ipv4.address is:" << objKyDBus->dbusWifiIpv4;
+//        emit this->reConnectWifi(actWifiUuid);
+//    } else if (objKyDBus-> dbusWifiIpv4Method == "auto" && oldWifiIpv4Method == "manual") {
+//        oldWifiIpv4Method = "auto";
+//        qDebug()<<"Ipv4.method is set to auto.";
+//        emit this->reConnectWifi(actWifiUuid);
+//    }
     //qDebug()<<"debug: oldWifiSlist.size()="<<oldWifiSlist.size()<<"   slist.size()="<<slist.size();
 
     //qDebug()<<"------------";

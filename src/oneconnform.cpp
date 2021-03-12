@@ -381,7 +381,9 @@ void OneConnForm::setConnedString(bool showLable, QString str, QString str1)
 
 void OneConnForm::setName(QString name, QString bssid, QString uuid)
 {
-    lbNameText->setText(name);
+    QFontMetrics fontMetrics(lbNameText->font());
+    QString showname = fontMetrics.elidedText(name, Qt::ElideRight, 200);
+    lbNameText->setText(showname);
     wifiName = name;
     wifiBSsid = bssid;
     wifiUuid = uuid;
@@ -389,7 +391,7 @@ void OneConnForm::setName(QString name, QString bssid, QString uuid)
 
 QString OneConnForm::getName()
 {
-    return lbNameText->text();
+    return wifiName;
 }
 
 void OneConnForm::setRate(QString rate)
@@ -488,25 +490,25 @@ void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, int freq
 void OneConnForm::slotConnWifi()
 {
     this->startWaiting(true);
-    emit sigConnWifi(lbNameText->text());
+    emit sigConnWifi(wifiName);
 }
 void OneConnForm::slotConnWifiPWD()
 {
     this->startWaiting(true);
-    emit sigConnWifiPWD(lbNameText->text(), ui->lePassword->text(), connType);
+    emit sigConnWifiPWD(wifiName, ui->lePassword->text(), connType);
 }
 
 //点击后断开wifi网络
 void OneConnForm::on_btnDisConn_clicked()
 {
-    syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", lbNameText->text().toUtf8().data());
-    qDebug()<<"DisConnect button about wifi net is clicked, current wifi name is "<<lbNameText->text();
+    syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", wifiName.toUtf8().data());
+    qDebug()<<"DisConnect button about wifi net is clicked, current wifi name is "<<wifiName;
 
     this->startWaiting(false);
 
     mw->is_stop_check_net_state = 1;
     mw->on_btnHotspotState();
-    //kylin_network_set_con_down(lbNameText->text().toUtf8().data());
+    //kylin_network_set_con_down(wifiName.toUtf8().data());
     kylin_network_set_con_down(wifiUuid.toUtf8().data());
     disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneTopWifiFormSelected(QString,int)));
     emit disconnActiveWifi();
@@ -567,7 +569,7 @@ void OneConnForm::toConnectWirelessNetwork()
     }
 
     if (ui->lbConned->text() == "--" || ui->lbConned->text() == " ") {
-        if (!isWifiConfExist(lbNameText->text())) {
+        if (!isWifiConfExist(wifiName)) {
             //没有配置文件，使用有密码的wifi连接
             psk_flag = 0;
             on_btnConnPWD_clicked();
@@ -578,7 +580,7 @@ void OneConnForm::toConnectWirelessNetwork()
 
     //有配置文件，需要判断一下当前配置文件wifi安全性是不是wpa-eap，若是，需要把原配置文件删除，重新配置
     QProcess * process = new QProcess(this);
-    process->start(QString("nmcli -f 802-11-wireless-security.key-mgmt connection show %1").arg(lbNameText->text()));
+    process->start(QString("nmcli -f 802-11-wireless-security.key-mgmt connection show %1").arg(wifiName));
     connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
         process->deleteLater();
     });
@@ -589,21 +591,21 @@ void OneConnForm::toConnectWirelessNetwork()
     process->waitForFinished();
     if (QString::compare(key_mgmt, "wpa-eap") == 0) {
         //原配置文件是企业wifi，删掉，请求输入新的密码
-        QString cmdStr = "nmcli connection delete " +  lbNameText->text();
+        QString cmdStr = "nmcli connection delete " +  wifiName;
         Utils::m_system(cmdStr.toUtf8().data());
         psk_flag = 0;
         slotConnWifiResult(2); //现在已无配置文件，申请输入密码
         return;
     }
 
-    if (isWifiConfExist(lbNameText->text())) {
+    if (isWifiConfExist(wifiName)) {
         //有配置文件，获取密码存储策略
         QProcess * process = new QProcess(this);
-        QString ssid = lbNameText->text();
+        QString ssid = wifiName;
         if (ssid.contains(" ")) {
             ssid.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
         }
-        process->start(QString("nmcli -f 802-11-wireless-security.psk-flags connection show %1").arg(lbNameText->text()));
+        process->start(QString("nmcli -f 802-11-wireless-security.psk-flags connection show %1").arg(wifiName));
         connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
             process->deleteLater();
         });
@@ -643,7 +645,7 @@ void OneConnForm::toConnectWirelessNetwork()
 
     if (psk_flag != 0) { //未为所有用户存储密码
         QString homePath = getenv("HOME");
-        if (QFile(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text())).exists()) { //已为该用户存储密码
+        if (QFile(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName)).exists()) { //已为该用户存储密码
             mw->is_stop_check_net_state = 1;
             QThread *t = new QThread();
             BackThread *bt = new BackThread();
@@ -651,7 +653,7 @@ void OneConnForm::toConnectWirelessNetwork()
             connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
             connect(t, &QThread::started, this, [ = ]() {
                 this->startWaiting(true);
-                QString cmdStr = "nmcli connection up " + lbNameText->text() + " passwd-file " + homePath +"/.config/" + lbNameText->text() + ".psk";
+                QString cmdStr = "nmcli connection up " + wifiName + " passwd-file " + homePath +"/.config/" + wifiName + ".psk";
                 emit this->sigConnWifiPsk(cmdStr);
             });
             connect(this, SIGNAL(sigConnWifiPsk(QString)), bt, SLOT(execConnWifiPsk(QString)));
@@ -659,7 +661,7 @@ void OneConnForm::toConnectWirelessNetwork()
                 this->stopWaiting();
                 mw->is_stop_check_net_state = 0;
                 if (res) {
-                    QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text()).toUtf8());
+                    QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName).toUtf8());
                 }
                 mw->connWifiDone(res);
             });
@@ -671,7 +673,7 @@ void OneConnForm::toConnectWirelessNetwork()
         return;
     } else { //为所有用户存储密码
         QString homePath = getenv("HOME");
-        QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text()).toUtf8()); //删除密码文件
+        QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName).toUtf8()); //删除密码文件
     }
 
     mw->is_stop_check_net_state = 1;
@@ -696,11 +698,11 @@ void OneConnForm::on_btnConnPWD_clicked()
     if (this->getPskFlag() != 0) {
 //        QString cmdStr = 0;
         QString homePath = getenv("HOME");
-        QFile *passwdFile = new QFile(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text()));
+        QFile *passwdFile = new QFile(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName));
         if (passwdFile->open(QIODevice::ReadWrite)) {
             passwdFile->write(QString("802-11-wireless-security.psk:%1").arg(ui->lePassword->text()).toUtf8());
             passwdFile->close();
-//            cmdStr = "nmcli connection up " + lbNameText->text() + " passwd-file " + homePath +"/.config/" + lbNameText->text() + ".psk";
+//            cmdStr = "nmcli connection up " + wifiName + " passwd-file " + homePath +"/.config/" + wifiName + ".psk";
         }
         mw->is_stop_check_net_state = 1;
         QThread *t = new QThread();
@@ -709,7 +711,7 @@ void OneConnForm::on_btnConnPWD_clicked()
         connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
         connect(t, &QThread::started, this, [ = ]() {
             this->startWaiting(true);
-            QString cmdStr = "nmcli connection up " + lbNameText->text() + " passwd-file " + homePath +"/.config/" + lbNameText->text() + ".psk";
+            QString cmdStr = "nmcli connection up " + wifiName + " passwd-file " + homePath +"/.config/" + wifiName + ".psk";
             emit this->sigConnWifiPsk(cmdStr);
         });
         connect(this, SIGNAL(sigConnWifiPsk(QString)), bt, SLOT(execConnWifiPsk(QString)));
@@ -717,7 +719,7 @@ void OneConnForm::on_btnConnPWD_clicked()
             this->stopWaiting();
             mw->is_stop_check_net_state = 0;
             if (res) {
-                QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(lbNameText->text()).toUtf8());
+                QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName).toUtf8());
             }
             mw->connWifiDone(res);
         });
@@ -834,7 +836,7 @@ void OneConnForm::on_btnInfo_clicked()
     }
 
     BackThread *bt = new BackThread();
-    QString connProp = bt->getConnProp(lbNameText->text());
+    QString connProp = bt->getConnProp(wifiName);
     QStringList propList = connProp.split("|");
     QString v4method, addr, mask, gateway, dns, v6method, v6addr;
     foreach (QString line, propList) {
@@ -862,7 +864,7 @@ void OneConnForm::on_btnInfo_clicked()
     }
     // qDebug()<<"v4method:"<<v4method<<" addr:"<<addr<<" mask:"<<mask<<" gateway:"<<gateway<<" dns:"<<dns;
 
-    cf->setProp(lbNameText->text(), wifiUuid, v4method, addr, v6method, v6addr, mask, gateway, dns, this->isActive, true);
+    cf->setProp(wifiName, wifiUuid, v4method, addr, v6method, v6addr, mask, gateway, dns, this->isActive, true);
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();
     cf->raise();
@@ -876,7 +878,7 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     qDebug()<<"Function slotConnWifiResult receives a number: "<<connFlag;
 
     if (!connType.isEmpty()) {
-        QString strConntype = "nmcli connection modify '" + lbNameText->text() + "' wifi-sec.psk-flags 2";
+        QString strConntype = "nmcli connection modify '" + wifiName + "' wifi-sec.psk-flags 2";
         system(strConntype.toUtf8().data());
     }
     connType = "";
@@ -922,7 +924,7 @@ void OneConnForm::slotConnWifiResult(int connFlag)
 
     if (connFlag == 1) {
         // 使用配置文件连接失败，需要删除该配置文件
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + lbNameText->text() + "'";
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
         int status = system(cmd.toUtf8().data());
         if (status != 0) {
             syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");
@@ -1019,11 +1021,11 @@ void OneConnForm::on_btnCancel_clicked()
 int OneConnForm::getPskFlag()
 {
     QProcess * process = new QProcess(this);
-    QString ssid = lbNameText->text();
+    QString ssid = wifiName;
     if (ssid.contains(" ")) {
         ssid.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
     }
-    process->start(QString("nmcli -f 802-11-wireless-security.psk-flags connection show %1").arg(lbNameText->text()));
+    process->start(QString("nmcli -f 802-11-wireless-security.psk-flags connection show %1").arg(wifiName));
     connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
         process->deleteLater();
     });

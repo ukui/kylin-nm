@@ -75,6 +75,7 @@ public:
     double getTransparentData();
     int checkWifiConnectivity();
     bool checkNetworkConnectivity();
+    int getActiveWifiSignal();
 
     void toGetWifiList();
 

@@ -874,6 +874,14 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
     //    return;
     //}
 
+    int wifiSignal = 0;
+    if (activeWifiSignalLv == 0) {
+        wifiSignal = objKyDBus->getActiveWifiSignal();
+        if (wifiSignal != 0) {
+            activeWifiSignalLv = wifiSignal;
+        }
+    }
+
     QString actLanName = "--";
     QString actWifiName = "--";
 
@@ -2897,6 +2905,8 @@ void MainWindow::on_btnHotspotState()
 //处理外界对网络的连接与断开
 void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 {
+    QTimer::singleShot(4*1000, this, SLOT(onToSetTrayIcon() ));
+
     if (type == "") {
         is_stop_check_net_state = 0;
         return;
@@ -2973,8 +2983,6 @@ void MainWindow::onExternalWifiChange()
     } else {
         is_stop_check_net_state = 0;
     }
-
-    QTimer::singleShot(1*1000, this, SLOT(onToSetTrayIcon() ));
 
     isToSetWifiValue = true;
 }

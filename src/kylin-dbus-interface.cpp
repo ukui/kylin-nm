@@ -1125,6 +1125,69 @@ QString KylinDBus::getActiveWifiUuid()
     return ssid;
 }
 
+//获取已连接wifi的uuid
+int KylinDBus::getActiveWifiSignal()
+{
+    int wifistrength = 0;
+
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+    //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
+    QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    QList<QVariant> outArgs = result.arguments();
+    QVariant first = outArgs.at(0);
+    QDBusVariant dbvFirst = first.value<QDBusVariant>();
+    QVariant vFirst = dbvFirst.variant();
+    QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
+
+    QDBusObjectPath objPath;
+    dbusArgs.beginArray();
+    while (!dbusArgs.atEnd()) {
+        dbusArgs >> objPath;
+
+        QDBusInterface interfaceType( "org.freedesktop.NetworkManager",
+                                  objPath.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+        QDBusReply<QVariant> reply = interfaceType.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
+
+        if (reply.value().toString() == "wifi" || reply.value().toString() == "802-11-wireless") {
+            QDBusInterface interfaceSpecificObject( "org.freedesktop.NetworkManager",
+                                      objPath.path(),
+                                      "org.freedesktop.DBus.Properties",
+                                      QDBusConnection::systemBus() );
+
+            QDBusMessage resultSpecificObject = interfaceSpecificObject.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "SpecificObject");
+            QList<QVariant> outArgsSpecificObject = resultSpecificObject.arguments();
+            QVariant firstSpecificObject = outArgsSpecificObject.at(0);
+            QDBusVariant dbvFirstSpecificObject = firstSpecificObject.value<QDBusVariant>();
+            QVariant vFirstSpecificObject = dbvFirstSpecificObject.variant();
+            QDBusObjectPath objPathSpecificObject = vFirstSpecificObject.value<QDBusObjectPath>();
+
+            QDBusInterface interfaceAP( "org.freedesktop.NetworkManager",
+                                      objPathSpecificObject.path(),
+                                      "org.freedesktop.DBus.Properties",
+                                      QDBusConnection::systemBus() );
+
+            QDBusReply<QVariant> replyStrength = interfaceAP.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Strength"); //signal
+
+            //QString strStrength;
+            QByteArray sesultStrength = replyStrength.value().toByteArray();
+            int wifiSignal = sesultStrength[0] & 0x000000FF;
+            wifiSignal |= ((sesultStrength[1] << 8) & 0x0000FF00);
+            wifiSignal |= ((sesultStrength[2] << 16) & 0x00FF0000);
+            wifiSignal |= ((sesultStrength[3] << 24) & 0xFF000000);
+            //strStrength = QString::number(addr);
+            wifistrength = wifiSignal;
+        }
+    }
+    dbusArgs.endArray();
+
+    return wifistrength;
+}
+
 //检查wifi连接状态
 int KylinDBus::checkWifiConnectivity()
 {

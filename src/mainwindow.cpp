@@ -556,7 +556,7 @@ void MainWindow::initTimer()
     setNetSpeed = new QTimer(this);
     setNetSpeed->setTimerType(Qt::PreciseTimer);
     QObject::connect(setNetSpeed, SIGNAL(timeout()), this, SLOT(on_setNetSpeed()));
-    setNetSpeed->start(3000);
+    setNetSpeed->start(1000);
 }
 
 //初始化已经连接网络的DNS
@@ -3033,13 +3033,15 @@ void MainWindow::on_setNetSpeed()
             }
         }
 
-        long int delta_rcv = (start_rcv_rates - end_rcv_rates)/800;
-        long int delta_tx = (start_tx_rates - end_tx_rates)/8;
-        if (delta_rcv>=10000 || delta_rcv<0){delta_rcv = 0;}
-        if (delta_tx>=10000 || delta_tx<0){delta_tx = 0;}
+        qDebug() << Q_FUNC_INFO << "start" << start_rcv_rates << start_tx_rates;
+        long int delta_rcv = (start_rcv_rates - end_rcv_rates)/1024;
+        long int delta_tx = (start_tx_rates - end_tx_rates)/1024;
+        qDebug() << Q_FUNC_INFO << "delta" << delta_rcv << delta_tx;
+//        if (delta_rcv>=10000 || delta_rcv<0){delta_rcv = 0;}
+//        if (delta_tx>=10000 || delta_tx<0){delta_tx = 0;}
 
-        int rcv_num = delta_rcv/3;
-        int tx_num = delta_tx/3;
+        int rcv_num = delta_rcv;
+        int tx_num = delta_tx;
 
         QString str_rcv;
         QString str_tx;

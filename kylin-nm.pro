@@ -61,6 +61,7 @@ QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 
 SOURCES += \
     src/backthread.cpp \
+    src/wifi-auth-thread.cpp \
     src/confform.cpp \
     src/dbusadaptor.cpp \
     src/ksimplenm.cpp \
@@ -92,6 +93,7 @@ SOURCES += \
 
 HEADERS += \
     src/backthread.h \
+    src/wifi-auth-thread.h \
     src/confform.h \
     src/dbusadaptor.h \
     src/ksimplenm.h \

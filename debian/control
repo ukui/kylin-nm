@@ -24,6 +24,10 @@ Vcs-Browser: https://github.com/ukui/kylin-nm
 Package: kylin-nm
 Architecture: any
 Depends: network-manager (>=1.2.6),
+         network-manager-config-connectivity-ubuntu,
+         gir1.2-javascriptcoregtk-4.0,
+         gir1.2-webkit2-4.0,
+         gnome-shell,
          ${shlibs:Depends},
          ${misc:Depends}
 Description: Gui Applet tool for display and edit network simply

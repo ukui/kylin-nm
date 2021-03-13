@@ -20,6 +20,7 @@
 #include "ui_mainwindow.h"
 #include "oneconnform.h"
 #include "onelancform.h"
+#include "wifi-auth-thread.h"
 #include "hot-spot/dlghotspotcreate.h"
 #include "wireless-security/dlghidewifi.h"
 #include "sysdbusregister.h"
@@ -3198,6 +3199,8 @@ void MainWindow::connWifiDone(int connFlag)
 {
     // Wifi连接结果，0点击连接成功 1失败 2没有配置文件 3开机启动网络工具时已经连接
     if (connFlag == 0) {
+	WifiAuthThread *wifi_auth_thread=new WifiAuthThread();
+	wifi_auth_thread->start();
         syslog(LOG_DEBUG, "Wi-Fi already connected by clicking button");
         this->ksnm->execGetWifiList();
 

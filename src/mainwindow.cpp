@@ -851,7 +851,7 @@ void MainWindow::stopLoading()
 {
     loading->stopLoading();
     setTrayLoading(false);
-    getActiveInfo();
+    getActiveInfoAndSetTrayIcon();
 }
 
 void MainWindow::on_checkOverTime()
@@ -866,13 +866,13 @@ void MainWindow::on_checkOverTime()
     is_stop_check_net_state = 0;
 }
 
-void MainWindow::getActiveInfo()
+void MainWindow::getActiveInfoAndSetTrayIcon()
 {
-    bool hasNetConnecting =objKyDBus->checkNetworkConnectivity();
-    if (hasNetConnecting) {
-        this->setTrayLoading(true);
-        return;
-    }
+    //bool hasNetConnecting =objKyDBus->checkNetworkConnectivity();
+    //if (hasNetConnecting) {
+    //    this->setTrayLoading(true);
+    //    return;
+    //}
 
     QString actLanName = "--";
     QString actWifiName = "--";
@@ -1360,7 +1360,7 @@ void MainWindow::on_btnWifiList_clicked()
         this->lanListWidget->hide();
         this->wifiListWidget->show();
 
-        getActiveInfo();
+        getActiveInfoAndSetTrayIcon();
         is_stop_check_net_state = 0;
     }
 
@@ -2843,7 +2843,7 @@ void MainWindow::disWifiStateKeep()
     }
     if (this->is_btnWifiList_clicked== 1) {
         disWifiDoneChangeUI();
-        getActiveInfo();
+        getActiveInfoAndSetTrayIcon();
     }
 }
 void MainWindow::disWifiDoneChangeUI()
@@ -2940,7 +2940,7 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
                 is_wifi_reconnected = 0;
             }else {
                 isToSetWifiValue = false;
-                QTimer::singleShot(4*1000, this, SLOT(onExternalWifiChange() ));
+                QTimer::singleShot(2*1000, this, SLOT(onExternalWifiChange() ));
             }
         }
     }
@@ -2950,6 +2950,8 @@ void MainWindow::onExternalLanChange()
 {
     if (is_btnLanList_clicked) {
         onBtnNetListClicked(0);
+    } else {
+        is_stop_check_net_state = 0;
     }
 
     isToSetLanValue = true;
@@ -2958,15 +2960,28 @@ void MainWindow::onExternalLanChange()
 void MainWindow::onExternalWifiChange()
 {
     if (!isWifiBeConnUp) {
-        QString txt(tr("WiFi already disconnect"));
-        objKyDBus->showDesktopNotify(txt);
+        //QString txt(tr("WiFi already disconnect"));
+        //objKyDBus->showDesktopNotify(txt);
+    }
+    if (isWifiBeConnUp) {
+        //QString txt(tr("WiFi already connected external"));
+        //objKyDBus->showDesktopNotify(txt);
     }
 
     if (is_btnWifiList_clicked) {
          on_btnWifiList_clicked();
+    } else {
+        is_stop_check_net_state = 0;
     }
 
+    QTimer::singleShot(1*1000, this, SLOT(onToSetTrayIcon() ));
+
     isToSetWifiValue = true;
+}
+
+void MainWindow::onToSetTrayIcon()
+{
+    getActiveInfoAndSetTrayIcon();
 }
 
 void MainWindow::onWifiSwitchChange()

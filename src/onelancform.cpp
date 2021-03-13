@@ -513,7 +513,7 @@ void OneLancForm::stopWaiting()
     }
 
     mw->setTrayLoading(false);
-    mw->getActiveInfo();
+    mw->getActiveInfoAndSetTrayIcon();
 }
 
 void OneLancForm::on_btnCancel_clicked()

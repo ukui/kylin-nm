@@ -571,7 +571,6 @@ void OneConnForm::toConnectWirelessNetwork()
             //没有配置文件，使用有密码的wifi连接
             psk_flag = 0;
             on_btnConnPWD_clicked();
-            qDebug() << "00000000000000000000000000000";
             return;
         }
     }
@@ -994,7 +993,7 @@ void OneConnForm::stopWaiting()
     ui->lbWaitingIcon->hide();
 
     mw->setTrayLoading(false);
-    mw->getActiveInfo();
+    mw->getActiveInfoAndSetTrayIcon();
 }
 
 void OneConnForm::on_btnCancel_clicked()

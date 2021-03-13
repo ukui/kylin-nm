@@ -138,7 +138,7 @@ public:
 
     void setTrayIcon(QIcon icon);
     void setTrayLoading(bool isLoading);
-    void getActiveInfo();
+    void getActiveInfoAndSetTrayIcon();
 
     void initTimer();
     void checkIsWirelessDeviceOn();
@@ -198,6 +198,7 @@ public slots:
     void onExternalConnectionChange(QString type, bool isConnUp);
     void onExternalLanChange();
     void onExternalWifiChange();
+    void onToSetTrayIcon();
     void onWifiSwitchChange();
     void onExternalWifiSwitchChange(bool wifiEnabled);
 

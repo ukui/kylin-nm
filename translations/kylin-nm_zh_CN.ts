@@ -1463,6 +1463,11 @@
         <translation type="unfinished">WiFi已经断开</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="2965"/>
+        <source>WiFi already connected external</source>
+        <translation type="unfinished">WiFi已经连接</translation>
+    </message>
+    <message>
         <location filename="../src/mainwindow.cpp" line="2359"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished">有线网络断开</translation>

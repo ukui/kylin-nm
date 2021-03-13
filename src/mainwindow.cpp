@@ -3033,10 +3033,10 @@ void MainWindow::on_setNetSpeed()
             }
         }
 
-        qDebug() << Q_FUNC_INFO << "start" << start_rcv_rates << start_tx_rates;
+//        qDebug() << Q_FUNC_INFO << "start" << start_rcv_rates << start_tx_rates;
         long int delta_rcv = (start_rcv_rates - end_rcv_rates)/1024;
         long int delta_tx = (start_tx_rates - end_tx_rates)/1024;
-        qDebug() << Q_FUNC_INFO << "delta" << delta_rcv << delta_tx;
+//        qDebug() << Q_FUNC_INFO << "delta" << delta_rcv << delta_tx;
 //        if (delta_rcv>=10000 || delta_rcv<0){delta_rcv = 0;}
 //        if (delta_tx>=10000 || delta_tx<0){delta_tx = 0;}
 

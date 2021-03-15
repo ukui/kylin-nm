@@ -305,7 +305,7 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
         QFuture < void > future1 =  QtConcurrent::run([=](){
             int x(1), n(0);
             do {
-                sleep(1);
+                sleep(2);
                 n += 1;
                 if (n >= 20) {
                     x = 0;
@@ -313,7 +313,7 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
                 }
 
                 QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
-                QString cmd = "nmcli device wifi connect " + wifiName + " password " + wifiPassword + " hidden yes > " + tmpPath;
+                QString cmd = "nmcli device wifi connect " + wifiName + " password " + wifiPassword + " hidden yes > " + tmpPath + " 2>&1";
 
                 int status = system(cmd.toUtf8().data());
                 if (status != 0) {

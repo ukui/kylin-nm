@@ -23,7 +23,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
-
+#include <time.h>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusInterface>
@@ -38,7 +38,7 @@ int Utils::m_system(char *cmd)
 {
     int status = 0;
     pid_t pid;
-
+    clock_t start,finish;
     if ((pid = vfork()) <0) {
         qDebug()<<"failed to create a subprocess by using vfork";
         syslog(LOG_ERR, "failed to create a subprocess by using vfork");
@@ -60,6 +60,7 @@ int Utils::m_system(char *cmd)
         new_argv[3] = NULL;
 
         // execl("/bin/sh","sh","-c" ,cmd,(char *)0);
+        start = clock();
         if (execve("/bin/sh",(char *const *) new_argv, NULL) <0) {
             qDebug()<<"failed to execve a shell command in function m_system";
             syslog(LOG_ERR, "failed to execve %s! errno: %d\n",cmd, errno);
@@ -69,8 +70,11 @@ int Utils::m_system(char *cmd)
         }
     } else {
         waitpid(pid,&status,0);
+        finish = clock();
     }
-
+    double duration = (double)(finish-start)/CLOCKS_PER_SEC;
+    QString str = "It takes "+QString::number(duration)+" seconds to execute command:"+cmd;
+    syslog(LOG_DEBUG,"%s",str.toStdString().c_str());
     return status;
 }
 

@@ -224,6 +224,21 @@ void ConfForm::on_btnCreate_clicked()
     kylindbus.getWiredCardName();
     QString mIfname;
 
+    QString mask = "";
+    if (ui->cbMask->currentIndex() == 0) {
+        mask = "24";
+    } else if(ui->cbMask->currentIndex() == 1) {
+        mask = "23";
+    } else if(ui->cbMask->currentIndex() == 2) {
+        mask = "22";
+    } else if(ui->cbMask->currentIndex() == 3) {
+        mask = "16";
+    } else if(ui->cbMask->currentIndex() == 4) {
+        mask = "8";
+    } else {
+        mask = "24";
+    }
+
     if (kylindbus.multiWiredIfName.size() == 0) {
         QString tip(tr("Can not create new wired network for without wired card"));
         kylindbus.showDesktopNotify(tip);
@@ -240,8 +255,22 @@ void ConfForm::on_btnCreate_clicked()
             return;
         }
     }
-
-    QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
+    QString cmdStr;
+    if(ui->cbType->currentIndex() == 0){
+        cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
+    }else{
+        cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet ipv4.method manual ipv4.address "
+                + ui->leAddr->text() + "/" + mask.toUtf8().data();
+        if(!ui->leGateway->text().isEmpty()){
+            cmdStr += " ipv4.gateway " + ui->leGateway->text();
+        }
+        if(!ui->leDns->text().isEmpty()){
+            cmdStr += " ipv4.dns " + ui->leDns->text();
+            if(!ui->leDns2->text().isEmpty()){
+                cmdStr += "," + ui->leDns2->text();
+            }
+        }
+    }
     Utils::m_system(cmdStr.toUtf8().data());
 
     if (ui->cbType->currentIndex() == 1) {
@@ -396,8 +425,8 @@ void ConfForm::saveNetworkConfiguration()
     }
 
     //是选择的自动还是手动配置网络
+    if (!this->isCreateNewNet) {
     if (ui->cbType->currentIndex() == 0) {
-        if (!this->isCreateNewNet) {
             //kylin_network_set_automethod(ui->leName->text().toUtf8().data());
             kylin_network_set_automethod(netUuid.toUtf8().data());
         }
@@ -571,6 +600,10 @@ void ConfForm::on_leDns2_textEdited(const QString &arg1)
 //设置界面按钮是否可点击
 void ConfForm::setEnableOfBtn()
 {
+//    if(!isEditingAlready()){
+//        this->setBtnEnableFalse();
+//        return;
+//    }
     if (ui->leName->text().size() == 0 ) {
         this->setBtnEnableFalse();
         return;
@@ -619,6 +652,24 @@ void ConfForm::setEnableOfBtn()
 
 }
 
+bool ConfForm::isEditingAlready(){
+    if (ui->leName->text().size() == 0) return false;
+    if(ui->cbType->currentIndex() == 1){    //手动新建网络
+        //仅填写连接名和ipv4地址时可被按下
+        if(getTextEditState(ui->leAddr->text()) && ui->leAddr_ipv6->text().isEmpty()
+                && ui->leGateway->text().isEmpty() && ui->leDns->text().isEmpty() && ui->leDns2->text().isEmpty()){
+            return true;
+        }
+        //全部填写完成时可被按下
+        if(getTextEditState(ui->leAddr->text()) && ui->leAddr_ipv6->text().isEmpty()
+                && getTextEditState(ui->leGateway->text()) && getTextEditState(ui->leDns->text())){
+            if(getTextEditState(ui->leDns2->text()) || ui->leDns2->text().isEmpty()){
+                return true;
+            }
+        }
+    }
+    return false;
+}
 //文本的输入要符合ip的格式要求
 bool ConfForm::getTextEditState(QString text)
 {

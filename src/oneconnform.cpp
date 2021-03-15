@@ -134,7 +134,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnInfo->setAttribute(Qt::WA_Hover,true);
     ui->btnInfo->installEventFilter(this);
 
-    connect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
+//    connect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
     ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与连接按钮绑定在一起
     ui->btnConnSub->setShortcut(Qt::Key_Return);//点击连接按钮触发回车键
 
@@ -765,6 +765,7 @@ void OneConnForm::on_lePassword_textEdited(const QString &arg1)
                                    "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(255,255,255,0.2);}"
                                    "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0.08);}");
         ui->btnConnPWD->setEnabled(false);
+        disconnect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
         if (ui->lePassword->text().size() == 0) {
             ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;background:rgba(0,0,0,0.2);}");
         }
@@ -772,6 +773,7 @@ void OneConnForm::on_lePassword_textEdited(const QString &arg1)
         ui->btnConnPWD->setStyleSheet("QPushButton{border:0px;border-radius:4px;background-color:rgba(61,107,229,1);color:white;font-size:14px;}"
                                       "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                                       "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}");
+        connect(ui->lePassword, SIGNAL(returnPressed()), this, SLOT(on_btnConnPWD_clicked()));
         ui->btnConnPWD->setEnabled(true);
     }
 }

@@ -1885,6 +1885,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         activeWifiSignalLv = 0;
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
         ccf->isConnected = false;
+        ccf->lbFreq->hide();
         ifWLanConnected = false;
         lbLoadDown->hide();
         lbLoadUp->hide();

@@ -87,6 +87,7 @@ public:
     QString wifiUuid;
     QString connType;
     QString wifiSecu;
+    QLabel * lbFreq = nullptr;
     bool isSelected;
     bool isActive;
     bool isConnected;
@@ -139,7 +140,6 @@ private:
     bool hasPwd;
 
     QString leQssLow, leQssHigh;
-    QLabel * lbFreq = nullptr;
     QLabel * lbNameText = nullptr;
     QHBoxLayout * lbNameLyt = nullptr;
     QString key_mgmt;

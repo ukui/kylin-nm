@@ -80,6 +80,7 @@ private:
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
+    void showNotify(QString message);
     bool check_ip_conflict(QString ifname);
     void onConfformHide();
     bool isPress;

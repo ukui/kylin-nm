@@ -1115,30 +1115,26 @@ bool MainWindow::checkLanOn()
 {
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
-
-    if (iface->lstate == 2) {
+    bt->deleteLater();
+    int state = iface->lstate;
+    if (state == 2) {
         return false;
     } else {
         return true;
     }
-
-    delete iface;
-    bt->deleteLater();
 }
 
 bool MainWindow::checkWlOn()
 {
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
-
-    if (iface->wstate == 2) {
+    bt->deleteLater();
+    int state = iface->wstate;
+    if (state == 2) {
         return false;
     } else {
         return true;
     }
-
-    delete iface;
-    bt->deleteLater();
 }
 
 

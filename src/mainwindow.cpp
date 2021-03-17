@@ -1549,7 +1549,7 @@ void MainWindow::getLanListDone(QStringList slist)
                         connect(ccfAct, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
                         ccfAct->setName(nname, ltype, nuuid, mIfName);//第二个参数本来是strLanName，但目前不需要翻译
                         ccfAct->setIcon(true);
-                        ccfAct->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macInterface);
+                        ccfAct->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macInterface);
                         ccfAct->isConnected = true;
                         ccfAct->setTopItem(false);
                         ccfAct->setAct(true);

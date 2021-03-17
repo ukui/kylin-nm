@@ -1914,7 +1914,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 填充可用网络列表
     QString headLine = slist.at(0);
-    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName;
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath;
     headLine = headLine.trimmed();
 
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
@@ -1924,12 +1924,14 @@ void MainWindow::loadWifiListDone(QStringList slist)
         indexFreq = headLine.indexOf("频率") + 4;
         indexBSsid = headLine.indexOf("BSSID") + 6;
         indexName = indexBSsid + 19;
+        indexPath = headLine.indexOf("DBUS-PATH");
     } else {
         indexSignal = headLine.indexOf("SIGNAL");
         indexSecu = headLine.indexOf("SECURITY");
         indexFreq = headLine.indexOf("FREQ");
         indexBSsid = headLine.indexOf("BSSID");
         indexName = indexBSsid + 19;
+        indexPath = headLine.indexOf("DBUS-PATH");
     }
     QStringList wnames;
     int count = 0;
@@ -1937,7 +1939,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
     for (int i = 1; i < slist.size(); i ++) {
         QString line = slist.at(i);
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
-        QString wname = line.mid(indexName).trimmed();
+        QString path = line.mid(indexPath).trimmed();
+        QString wname = this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
+        if (wname.isEmpty() || wname == "") wname = line.mid(indexName, indexPath - indexName).trimmed();
 
         if (actWifiBssidList.contains(wbssid)) {
             actWifiName = wname;
@@ -1951,14 +1955,16 @@ void MainWindow::loadWifiListDone(QStringList slist)
         actWifiId = actWifiName;
         actWifiName = "--";
     }
-
     for (int i = 1, j = 0; i < slist.size(); i ++) {
         QString line = slist.at(i);
         QString wsignal = line.mid(indexSignal, 3).trimmed();
         QString wsecu = line.mid(indexSecu, indexFreq - indexSecu).trimmed();
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
-        QString wname = line.mid(indexName).trimmed();
+        QString path = line.mid(indexPath).trimmed();
+        QString wname = this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
         QString wfreq = line.mid(indexFreq, 4).trimmed();
+
+        if (wname.isEmpty() || wname == "") wname = line.mid(indexName, indexPath - indexName).trimmed();
 
         if (actWifiName != "--" && actWifiName == wname) {
             if (!actWifiBssidList.contains(wbssid)) {
@@ -2096,7 +2102,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     }
 
     QString headLine = slist.at(0);
-    int indexSecu, indexFreq, indexBSsid, indexName;
+    int indexSecu, indexFreq, indexBSsid, indexName, indexPath;
     headLine = headLine.trimmed();
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
@@ -2105,12 +2111,14 @@ void MainWindow::updateWifiListDone(QStringList slist)
         indexBSsid = headLine.indexOf("BSSID") + 6;
         //indexName = headLine.indexOf("SSID") + 6;
         indexName = indexBSsid + 19;
+        indexPath = headLine.indexOf("DBUS-PATH");
     } else {
         indexSecu = headLine.indexOf("SECURITY");
         indexFreq = headLine.indexOf("FREQ");
         indexBSsid = headLine.indexOf("BSSID");
         //indexName = headLine.indexOf("SSID");
         indexName = indexBSsid + 19;
+        indexPath = headLine.indexOf("DBUS-PATH");
     }
 
     //列表中去除已经减少的wifi
@@ -2119,7 +2127,10 @@ void MainWindow::updateWifiListDone(QStringList slist)
         QString lastWname = line.mid(lastIndexName).trimmed();
         for (int j=1; j<slist.size(); j++){
             QString line = slist.at(j);
-            QString wname = line.mid(indexName).trimmed();
+//            QString wname = line.mid(indexName).trimmed();
+            QString path = line.mid(indexPath).trimmed();
+            QString wname = this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
+            if (wname.isEmpty() || wname == "") wname = line.mid(indexName, indexPath - indexName).trimmed();
 
             if (lastWname == wname){break;} //在slist最后之前找到了lastWname，则停止
             if (j == slist.size()-1) {
@@ -2154,8 +2165,11 @@ void MainWindow::updateWifiListDone(QStringList slist)
         QString wsignal = line.mid(0, indexSecu).trimmed();
         QString wsecu = line.mid(indexSecu, indexFreq - indexSecu).trimmed();
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
-        QString wname = line.mid(indexName).trimmed();
+//        QString wname = line.mid(indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
+        QString path = line.mid(indexPath).trimmed();
+        QString wname = this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
+        if (wname.isEmpty() || wname == "") wname = line.mid(indexName, indexPath - indexName).trimmed();
 
         if(wname == "" || wname == "--"){continue;}
 

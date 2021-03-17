@@ -1188,6 +1188,18 @@ int KylinDBus::getActiveWifiSignal()
     return wifistrength;
 }
 
+//根据Dbus路径获取wifi的ssid（排除空格干扰）
+QString KylinDBus::getWifiSsid(QString accessPointPath)
+{
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              accessPointPath,
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+    QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Ssid");
+    if (result.arguments().isEmpty()) return "";
+    return result.arguments().at(0).value<QDBusVariant>().variant().toString();
+}
+
 //检查wifi连接状态
 int KylinDBus::checkWifiConnectivity()
 {

@@ -450,12 +450,30 @@ void ConfForm::saveNetworkConfiguration()
     onConfformHide();
 }
 
+void ConfForm::showNotify(QString message)
+{
+    QDBusInterface iface("org.freedesktop.Notifications",
+                         "/org/freedesktop/Notifications",
+                         "org.freedesktop.Notifications",
+                         QDBusConnection::sessionBus());
+    QList<QVariant> args;
+    args<<(tr("kylin-nm"))
+       <<((unsigned int) 0)
+      <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+     <<tr("kylin network applet desktop message") //显示的是什么类型的信息
+    <<message //显示的具体信息
+    <<QStringList()
+    <<QVariantMap()
+    <<(int)-1;
+    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+}
+
 bool ConfForm::check_ip_conflict(QString ifname)
 {
     //即将检测Ip地址冲突
     QString strIpCheck = tr("Will check the IP address conflict");
     QString bufferIpCheck = "notify-send -i network-offline " + strIpCheck;
-    system(bufferIpCheck.toUtf8().data());
+    showNotify(strIpCheck);
 
     FILE *fp;
     char ret[10], arp_all[1024];
@@ -486,7 +504,7 @@ bool ConfForm::check_ip_conflict(QString ifname)
                 //printf("ip地址冲突");
                 QString strInfo = tr("IP address conflict, Please change IP");
                 QString buffer = "notify-send -i network-offline " + strInfo;
-                system(buffer.toUtf8().data());
+                showNotify(strInfo);
                 return  true;
             }
         }

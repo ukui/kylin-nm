@@ -85,7 +85,7 @@ void KSimpleNM::execGetWifiList()
     isExecutingGetWifiList = true;
 
     shellOutputWifi = "";
-    runProcessWifi->start("nmcli -f in-use,signal,security,freq,bssid,ssid device wifi");
+    runProcessWifi->start("nmcli -f in-use,signal,security,freq,bssid,ssid,dbus-path device wifi");
 }
 
 //获取保存的网络列表数据

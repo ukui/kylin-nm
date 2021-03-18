@@ -292,14 +292,11 @@ void ConfForm::on_btnCreate_clicked()
             name.replace(ch, QString("%1%2").arg("\\").arg(ch));
         }
     }
-    if (name.contains(" ")) { //空格会影响命令行参数的判断，需要转义
-        name.replace(QRegExp("[\\s]"), "\\\ ");
-    }
     if (!ui->leAddr_ipv6->text().isEmpty()) {
-        QString cmdStr = "nmcli connection modify " + name + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
         Utils::m_system(cmdStr.toUtf8().data());
     } else {
-        QString cmdStr = "nmcli connection modify " + name + " ipv6.method auto";
+        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method auto";
         Utils::m_system(cmdStr.toUtf8().data());
     }
 

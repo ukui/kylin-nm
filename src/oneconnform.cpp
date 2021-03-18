@@ -605,11 +605,7 @@ void OneConnForm::toConnectWirelessNetwork()
     if (isWifiConfExist(wifiName)) {
         //有配置文件，获取密码存储策略
         QProcess * process = new QProcess(this);
-        QString ssid = wifiName;
-        if (ssid.contains(" ")) {
-            ssid.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
-        }
-        process->start(QString("nmcli -f 802-11-wireless-security.psk-flags connection show %1").arg(wifiName));
+        process->start(QString("nmcli -f 802-11-wireless-security.psk-flags connection show \"%1\"").arg(wifiName));
         connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
             process->deleteLater();
         });
@@ -1027,11 +1023,7 @@ void OneConnForm::on_btnCancel_clicked()
 int OneConnForm::getPskFlag()
 {
     QProcess * process = new QProcess(this);
-    QString ssid = wifiName;
-    if (ssid.contains(" ")) {
-        ssid.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
-    }
-    process->start(QString("nmcli -f 802-11-wireless-security.psk-flags connection show %1").arg(wifiName));
+    process->start(QString("nmcli -f 802-11-wireless-security.psk-flags connection show \"%1\"").arg(wifiName));
     connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
         process->deleteLater();
     });

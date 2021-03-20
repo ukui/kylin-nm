@@ -2907,6 +2907,34 @@ void MainWindow::on_btnHotspotState()
 //处理外界对网络的连接与断开
 void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 {
+    if ( (type == "802-11-wireless" || type == "wifi") && !isConnUp ){
+        QTimer::singleShot(2*1000, this, SLOT(onToResetValue() ));
+    }
+    if (type == "802-11-wireless" || type == "wifi") {
+        addNumberForWifi += 1;
+    }
+    if (addNumberForWifi == 2) {
+        //断开一个wifi的时候，如果存在回连，可能接连发出两个信号
+        //当连续发出wifi断开与连接的信号时，短时间内addNumberForWifi值为2
+        is_stop_check_net_state = 1;
+        if (is_connect_net_failed) {
+            qDebug()<<"debug: connect wifi failed just now, no need to refresh wifi interface";
+            is_connect_net_failed = 0;
+            is_stop_check_net_state = 0;
+        } else if (is_wifi_reconnected) {
+            qDebug()<<"debug: wifi reconnected just now, no need to refresh wifi interface";
+            is_wifi_reconnected = 0;
+            is_stop_check_net_state = 0;
+        }else {
+            QTimer::singleShot(1*1000, this, SLOT(onExternalWifiChange() ));
+        }
+        addNumberForWifi = 0;
+        return;
+    }
+    if ( (type == "802-11-wireless" || type == "wifi") && isConnUp ){
+        addNumberForWifi = 0;
+    }
+
     QTimer::singleShot(4*1000, this, SLOT(onToSetTrayIcon() ));
 
     if (type == "") {
@@ -2943,6 +2971,7 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
         }
 
         if (type == "802-11-wireless" || type == "wifi") {
+            addNumberForWifi = 0;
             if (is_connect_net_failed) {
                 qDebug()<<"debug: connect wifi failed just now, no need to refresh wifi interface";
                 is_connect_net_failed = 0;
@@ -2950,6 +2979,7 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
             } else if (is_wifi_reconnected) {
                 qDebug()<<"debug: wifi reconnected just now, no need to refresh wifi interface";
                 is_wifi_reconnected = 0;
+                is_stop_check_net_state = 0;
             }else {
                 isToSetWifiValue = false;
                 QTimer::singleShot(2*1000, this, SLOT(onExternalWifiChange() ));
@@ -2992,6 +3022,11 @@ void MainWindow::onExternalWifiChange()
 void MainWindow::onToSetTrayIcon()
 {
     getActiveInfoAndSetTrayIcon();
+}
+
+void MainWindow::onToResetValue()
+{
+    addNumberForWifi = 0;
 }
 
 void MainWindow::onWifiSwitchChange()

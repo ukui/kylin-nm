@@ -179,6 +179,7 @@ public:
     bool isWifiBeConnUp = false; //wifi是否是连接上
     bool isToSetLanValue = true; //本次执行是否进行赋值
     bool isToSetWifiValue = true; //本次执行是否进行赋值
+    int addNumberForWifi = 0;
 
     int m_priX;
     int m_priY;
@@ -199,6 +200,7 @@ public slots:
     void onExternalLanChange();
     void onExternalWifiChange();
     void onToSetTrayIcon();
+    void onToResetValue();
     void onWifiSwitchChange();
     void onExternalWifiSwitchChange(bool wifiEnabled);
 

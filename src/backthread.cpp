@@ -495,7 +495,7 @@ void BackThread::disConnSparedNetSlot(QString type)
 {
     sleep(1);
     if (type == "wifi") {
-        disConnLanOrWifi("wifi");
+        //disConnLanOrWifi("wifi");
     } else if(type == "ethernet") {
         disConnLanOrWifi("ethernet");
     }

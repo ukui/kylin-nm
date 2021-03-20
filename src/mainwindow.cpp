@@ -1892,10 +1892,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     } else {
         QProcess * process = new QProcess;
         QString name = actWifiName;
-        if (name.contains(" ")) {
-            name.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
-        }
-        process->start(QString("nmcli -f 802-11-wireless.ssid connection show %1").arg(name));
+        process->start(QString("nmcli -f 802-11-wireless.ssid connection show \"%1\"").arg(name));
         connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
             process->deleteLater();
         });
@@ -1971,14 +1968,15 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 continue; //若当前热点ssid名称和已经连接的wifi的ssid名称相同，但bssid不同，则跳过
             }
         }
-        if (wnames.contains(wname) && wbssid != actWifiBssid) {
+        if ((wnames.contains(wname) && wbssid != actWifiBssid) || (wbssid != actWifiBssid && wname == actWifiName)) {
             continue; //过滤相同名称的wifi
         }
 
         int max_freq = wfreq.toInt();
         int min_freq = wfreq.toInt();
-        for (int k = i; k < slist.size(); k ++) {
-            if (wname == slist.at(k).mid(indexName).trimmed()) {
+        for (int k = 0; k < slist.size(); k ++) {
+            QString m_name = this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(slist.at(k).mid(slist.at(k).lastIndexOf("/") + 1).trimmed()));
+            if (wname == m_name) {
                 if (slist.at(k).mid(indexFreq, 4).trimmed().toInt() > max_freq) {
                     max_freq = slist.at(k).mid(indexFreq, 4).trimmed().toInt();
                 } else if (slist.at(k).mid(indexFreq, 4).trimmed().toInt() < min_freq) {
@@ -1986,6 +1984,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 }
             }
         }
+
         int freqState = 0;
         if (max_freq < 3000) {
             //只有2.4GHZ
@@ -2124,7 +2123,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     //列表中去除已经减少的wifi
     for (int i=1; i<oldWifiSlist.size(); i++){
         QString line = oldWifiSlist.at(i);
-        QString lastWname = line.mid(lastIndexName).trimmed();
+        QString lastWname = line.mid(lastIndexName, indexPath - lastIndexName).trimmed();
         for (int j=1; j<slist.size(); j++){
             QString line = slist.at(j);
 //            QString wname = line.mid(indexName).trimmed();
@@ -2182,8 +2181,9 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
         int max_freq = wfreq.toInt();
         int min_freq = wfreq.toInt();
-        for (int k = i; k < slist.size(); k ++) {
-            if (wname == slist.at(k).mid(indexName).trimmed()) {
+        for (int k = 0; k < slist.size(); k ++) {
+            QString m_name = this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(slist.at(k).mid(slist.at(k).lastIndexOf("/") + 1).trimmed()));
+            if (wname == m_name) {
                 if (slist.at(k).mid(indexFreq, 4).trimmed().toInt() > max_freq) {
                     max_freq = slist.at(k).mid(indexFreq, 4).trimmed().toInt();
                 } else if (slist.at(k).mid(indexFreq, 4).trimmed().toInt() < min_freq) {
@@ -2205,7 +2205,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
         for (int j=1; j < oldWifiSlist.size(); j++) {
             QString line = oldWifiSlist.at(j);
-            QString lastWname = line.mid(lastIndexName).trimmed();
+            QString lastWname = line.mid(lastIndexName, indexPath - lastIndexName).trimmed();
 
             if (lastWname == wname){break;} //上一次的wifi列表已经有名为wname的wifi，则停止
             if (j == oldWifiSlist.size()-1) { //到lastSlist最后一个都没找到，执行下面流程

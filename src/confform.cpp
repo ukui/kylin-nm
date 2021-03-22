@@ -79,6 +79,9 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->leGateway->setContextMenuPolicy(Qt::NoContextMenu);
     ui->leAddr_ipv6->setContextMenuPolicy(Qt::NoContextMenu);
 
+    //设置网络名称的正则表达式
+    ui->leName->setValidator(new QRegExpValidator(QRegExp("[^ \s]*"), ui->leName));
+
     ui->lineUp->setStyleSheet(lineQss);
     ui->lineDown->setStyleSheet(lineQss);
     ui->lineUp->hide();

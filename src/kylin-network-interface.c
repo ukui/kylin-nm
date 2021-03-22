@@ -335,7 +335,7 @@ void kylin_network_create_new_ethernet(char *con_name,char *if_name)
 {
     char str[256];
     char *net_type="ethernet";
-    sprintf(str,"nmcli connection add con-name %s ifname %s type %s",con_name,if_name,net_type);
+    sprintf(str,"nmcli connection add con-name '%s' ifname '%s' type %s",con_name,if_name,net_type);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection add con-name' in function 'kylin_network_create_new_ethernet' failed");}
 }

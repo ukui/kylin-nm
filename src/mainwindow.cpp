@@ -1807,16 +1807,51 @@ void MainWindow::wifiListOptimize(QStringList& slist)
             }
         }
         if(ifContinue)  continue;
-//        if(conFreq < 5000)
-//            apSignalSet[conName+"2.4"] = conSignal;
-//        else
-//            apSignalSet[conName+"5"] = conSignal;
         targetList<<i;
     }
     slist = targetList;
     return ;
 }
-
+QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
+    QStringList target;
+    if(!slist.size()) return target;
+    OneConnForm *ocf = new OneConnForm();
+    QString headLine = slist.at(0);
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName;
+    headLine = headLine.trimmed();
+    bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (isChineseExist) {
+        indexSignal = headLine.indexOf("SIGNAL");
+        indexSecu = headLine.indexOf("安全性");
+        indexFreq = headLine.indexOf("频率") + 4;
+        indexBSsid = headLine.indexOf("BSSID") + 6;
+        indexName = indexBSsid + 19;
+    } else {
+        indexSignal = headLine.indexOf("SIGNAL");
+        indexSecu = headLine.indexOf("SECURITY");
+        indexFreq = headLine.indexOf("FREQ");
+        indexBSsid = headLine.indexOf("BSSID");
+        indexName = indexBSsid + 19;
+    }
+    QStringList tmp = slist;
+    for(int i=1;i<tmp.size();i++){
+        QString line = tmp.at(i);
+        QString name = line.mid(indexName).trimmed();
+        int freq = line.mid(indexFreq,4).trimmed().toInt();
+        int signal = line.mid(indexSignal,3).trimmed().toInt();
+        if(freq >= 5000 && ocf->isWifiConfExist(name) && signal > 55){  //两格以上有配置的5Gwifi中选择信号最佳的
+            target << line;
+            tmp.removeAt(i);
+        }
+    }
+    for(QString i:tmp){
+        QString name = i.mid(indexName).trimmed();
+        if(ocf->isWifiConfExist(name)){
+            target<<i;
+        }
+    }
+    return target;
+}
 // 加载wifi列表
 void MainWindow::loadWifiListDone(QStringList slist)
 {

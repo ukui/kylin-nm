@@ -370,6 +370,7 @@ void ConfForm::on_btnSave_clicked()
             processAdd->waitForFinished();
         } else {
             this->isCreateNewNet = false;
+            newUuid = "--";
 
             if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
                 //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
@@ -378,6 +379,7 @@ void ConfForm::on_btnSave_clicked()
                 }
             }
 
+            qDebug() << Q_FUNC_INFO;
             this->saveNetworkConfiguration();
         }
     }
@@ -415,26 +417,24 @@ void ConfForm::saveNetworkConfiguration()
     }
 
     QString name = ui->leName->text().trimmed();
-    //是选择的自动还是手动配置网络
-    if (!this->isCreateNewNet) {
+    QString dnss = ui->leDns->text();
+    if (ui->leDns2->text() != "") {
+        dnss.append(",");
+        dnss.append(ui->leDns2->text());
+    }
+    //是选择的自动还是手动配置网络  
     if (ui->cbType->currentIndex() == 0) {
-            //kylin_network_set_automethod(name.toUtf8().data());
-            kylin_network_set_automethod(netUuid.toUtf8().data());
-        }
-    } else {
-        QString dnss = ui->leDns->text();
-        if (ui->leDns2->text() != "") {
-            dnss.append(",");
-            dnss.append(ui->leDns2->text());
-        }
-        if (this->isCreateNewNet) {
-            if (newUuid != "--") {
-                kylin_network_set_manualall(newUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
-            } else {
-                kylin_network_set_manualall(name.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
-            }
+        qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text();
+        //kylin_network_set_automethod(name.toUtf8().data());
+        kylin_network_set_automethod(netUuid.toUtf8().data());
+    }
+    else {
+        if (newUuid != "--") {
+            qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
+            kylin_network_set_manualall(newUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
         } else {
-            kylin_network_set_manualall(netUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+            qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
+            kylin_network_set_manualall(name.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
         }
     }
 

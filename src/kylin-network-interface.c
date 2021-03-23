@@ -372,7 +372,7 @@ void kylin_network_set_manualmethod(char *con_name,char *ip)
 {
     char str[256];
     char *method="manual";
-    sprintf(str,"nmcli connection modify '%s' ipv4.method %s ipv4.address %s",con_name,method,ip);
+    sprintf(str,"nmcli connection modify '%s' ipv4.method %s ipv4.address '%s'",con_name,method,ip);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_manualmethod' failed");}
 }
@@ -381,7 +381,7 @@ void kylin_network_set_manualmethod(char *con_name,char *ip)
 void kylin_network_set_manualall(char *con_name, char *addr, char *mask, char *gateway, char *dns)
 {
     char str[200];
-    sprintf(str, "nmcli connection modify '%s' ipv4.method manual ipv4.address %s/%s ipv4.gateway %s ipv4.dns %s",
+    sprintf(str, "nmcli connection modify '%s' ipv4.method manual ipv4.address %s/%s ipv4.gateway '%s' ipv4.dns '%s'",
             con_name, addr, mask, gateway, dns);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_manualall' failed");}

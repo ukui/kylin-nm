@@ -536,7 +536,7 @@ void MainWindow::initTimer()
     checkWifiListChanged = new QTimer(this);
     checkWifiListChanged->setTimerType(Qt::PreciseTimer);
     QObject::connect(checkWifiListChanged, SIGNAL(timeout()), this, SLOT(on_checkWifiListChanged()));
-    checkWifiListChanged->start(7000);
+    checkWifiListChanged->start(10*1000);
 
     //网线插入时定时执行
     wiredCableUpTimer = new QTimer(this);

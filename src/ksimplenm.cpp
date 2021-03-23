@@ -70,7 +70,7 @@ void KSimpleNM::execGetLanList()
 }
 
 //获取无线网络列表数据
-void KSimpleNM::execGetWifiList()
+void KSimpleNM::execGetWifiList(const QString& wname)
 {
     if (isExecutingGetWifiList) {
         syslog(LOG_DEBUG, "It is running getting wifi list when getting wifi list");
@@ -85,7 +85,13 @@ void KSimpleNM::execGetWifiList()
     isExecutingGetWifiList = true;
 
     shellOutputWifi = "";
-    runProcessWifi->start("nmcli -f in-use,signal,security,freq,bssid,ssid device wifi");
+    QString cmd;
+    if (wname.isEmpty() || wname == "") {
+        cmd = "nmcli -f in-use,signal,security,freq,bssid,ssid,dbus-path device wifi";
+    } else {
+        cmd = "nmcli -f in-use,signal,security,freq,bssid,ssid,dbus-path device wifi list ifname " + wname;
+    }
+    runProcessWifi->start(cmd);
 }
 
 //获取保存的网络列表数据

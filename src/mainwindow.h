@@ -282,7 +282,7 @@ private:
     QWidget *widShowWindow = nullptr;
     QWidget *widAdvConf = nullptr;
 
-    QString lname, wname; // 以太网卡和无线网卡名称
+    QString lcardname, wcardname; // 以太网卡和无线网卡名称
 
     QString btnOffQss, btnOnQss, btnBgOffQss, btnBgOnQss, btnBgHoverQss, btnBgLeaveQss; // 主界面按钮底色
     QString scrollBarQss, leftBtnQss, funcBtnQss;

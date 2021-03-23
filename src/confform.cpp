@@ -292,14 +292,11 @@ void ConfForm::on_btnCreate_clicked()
             name.replace(ch, QString("%1%2").arg("\\").arg(ch));
         }
     }
-    if (name.contains(" ")) { //空格会影响命令行参数的判断，需要转义
-        name.replace(QRegExp("[\\s]"), "\\\ ");
-    }
     if (!ui->leAddr_ipv6->text().isEmpty()) {
-        QString cmdStr = "nmcli connection modify " + name + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
         Utils::m_system(cmdStr.toUtf8().data());
     } else {
-        QString cmdStr = "nmcli connection modify " + name + " ipv6.method auto";
+        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method auto";
         Utils::m_system(cmdStr.toUtf8().data());
     }
 
@@ -395,10 +392,10 @@ void ConfForm::on_btnSave_clicked()
     if (ui->cbType->currentIndex() == 1) {
         //对于已保存连接修改ipv6地址，使用UUID区分各网络配置（排除名称含空格或特殊字符的干扰）
         if (!ui->leAddr_ipv6->text().isEmpty()) {
-            QString cmdStr = "nmcli connection modify " + netUuid + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+            QString cmdStr = "nmcli connection modify \"" + netUuid + "\" ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
             Utils::m_system(cmdStr.toUtf8().data());
         } else {
-            QString cmdStr = "nmcli connection modify " + netUuid + " ipv6.method auto";
+            QString cmdStr = "nmcli connection modify \"" + netUuid + "\" ipv6.method auto";
             Utils::m_system(cmdStr.toUtf8().data());
         }
     }
@@ -426,9 +423,16 @@ void ConfForm::saveNetworkConfiguration()
 
     //是选择的自动还是手动配置网络
     if (!this->isCreateNewNet) {
-    if (ui->cbType->currentIndex() == 0) {
+        if (ui->cbType->currentIndex() == 0) {
             //kylin_network_set_automethod(ui->leName->text().toUtf8().data());
             kylin_network_set_automethod(netUuid.toUtf8().data());
+        } else {
+            QString dnss = ui->leDns->text();
+            if (ui->leDns2->text() != "") {
+                dnss.append(",");
+                dnss.append(ui->leDns2->text());
+            }
+            kylin_network_set_manualall(netUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
         }
     } else {
         QString dnss = ui->leDns->text();

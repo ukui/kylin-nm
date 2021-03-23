@@ -96,7 +96,7 @@ IFace* BackThread::execGetIface()
                     iface->lstate = 3;
                 }
             }
-            if (type == "wifi") {
+            if (type == "wifi" && iface->wname.isEmpty()) { //仅统计第一个无线网卡，后续无线网卡状态必然等于或差与第一个获取到的无线网卡
                 // if type is wireless network
                 iface->wname = iname;
 

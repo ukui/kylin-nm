@@ -55,7 +55,6 @@ void LoadingDiv::switchAnimStep()
     if (this->currentPage > 12) {
         this->currentPage = 1; //循环播放
     }
-
     this->countCurrentTime += FRAMESPEED;
     if (this->countCurrentTime >= ALLTIME) {
         emit this->toStopLoading(); //发出信号停止主界面和托盘区的等待动画

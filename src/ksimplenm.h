@@ -45,7 +45,7 @@ public:
     bool isUseOldWifiSlist = false; //是否应该要用上一次获取的有线列表
 
     void execGetLanList();
-    void execGetWifiList();
+    void execGetWifiList(const QString& wname);
     void execGetConnList();
 
 signals:

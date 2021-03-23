@@ -44,6 +44,10 @@ WiFiConfigDialog::WiFiConfigDialog(QWidget *parent) :
     ui->checkBoxPwd->setStyleSheet(checkBoxQss);
     ui->checkBoxPwd->setFocusPolicy(Qt::NoFocus);
 
+    ui->leWifiId->setContextMenuPolicy(Qt::NoContextMenu); //禁止LineEdit的右键菜单
+    ui->leWiFiName->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->leWifiPassword->setContextMenuPolicy(Qt::NoContextMenu);
+
     this->setEnableOfBtn();
 
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));

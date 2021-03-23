@@ -259,7 +259,7 @@ void DlgHideWifiEapTls::changeWindow(){
         connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     }else if (ui->cbxConn->currentIndex() >= 1){
         QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
-        QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " >" + tmpPath;
+        QString currStr = "nmcli connection show '" + ui->cbxConn->currentText() + "' >" + tmpPath;
 
         int status = system(currStr.toUtf8().data());
         if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");}

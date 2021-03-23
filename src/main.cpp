@@ -21,7 +21,6 @@
 #include "kylin-network-interface.h"
 #include "wireless-security/dlghidewifi.h"
 #include "dbusadaptor.h"
-
 #include <QTranslator>
 #include <QLocale>
 #include <QApplication>
@@ -30,7 +29,6 @@
 #include <X11/Xlib.h>
 
 #define LOG_IDENT "ukui_kylin_nm"
-
 
 int main(int argc, char *argv[])
 {

@@ -584,7 +584,7 @@ void OneConnForm::toConnectWirelessNetwork()
 
     //有配置文件，需要判断一下当前配置文件wifi安全性是不是wpa-eap，若是，需要把原配置文件删除，重新配置
     QProcess * process = new QProcess(this);
-    process->start(QString("nmcli -f 802-11-wireless-security.key-mgmt connection show %1").arg(wifiName));
+    process->start(QString("nmcli -f 802-11-wireless-security.key-mgmt connection show '%1'").arg(wifiName));
     connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
         process->deleteLater();
     });
@@ -595,7 +595,7 @@ void OneConnForm::toConnectWirelessNetwork()
     process->waitForFinished();
     if (QString::compare(key_mgmt, "wpa-eap") == 0) {
         //原配置文件是企业wifi，删掉，请求输入新的密码
-        QString cmdStr = "nmcli connection delete " +  wifiName;
+        QString cmdStr = "nmcli connection delete '" +  wifiName + "'";
         Utils::m_system(cmdStr.toUtf8().data());
         psk_flag = 0;
         slotConnWifiResult(2); //现在已无配置文件，申请输入密码
@@ -653,7 +653,7 @@ void OneConnForm::toConnectWirelessNetwork()
             connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
             connect(t, &QThread::started, this, [ = ]() {
                 this->startWaiting(true);
-                QString cmdStr = "nmcli connection up " + wifiName + " passwd-file " + homePath +"/.config/" + wifiName + ".psk";
+                QString cmdStr = "nmcli connection up '" + wifiName + "' passwd-file " + homePath +"/.config/" + wifiName + ".psk";
                 emit this->sigConnWifiPsk(cmdStr);
             });
             connect(this, SIGNAL(sigConnWifiPsk(QString)), bt, SLOT(execConnWifiPsk(QString)));
@@ -711,7 +711,7 @@ void OneConnForm::on_btnConnPWD_clicked()
         connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
         connect(t, &QThread::started, this, [ = ]() {
             this->startWaiting(true);
-            QString cmdStr = "nmcli connection up " + wifiName + " passwd-file " + homePath +"/.config/" + wifiName + ".psk";
+            QString cmdStr = "nmcli connection up '" + wifiName + "' passwd-file " + homePath +"/.config/" + wifiName + ".psk";
             emit this->sigConnWifiPsk(cmdStr);
         });
         connect(this, SIGNAL(sigConnWifiPsk(QString)), bt, SLOT(execConnWifiPsk(QString)));

@@ -215,7 +215,7 @@ void DlgHideWifiWpa::changeWindow()
         connect(connHidWifi, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     }else if (ui->cbxConn->currentIndex() >= 1){
         QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
-        QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " > " + tmpPath;
+        QString currStr = "nmcli connection show '" + ui->cbxConn->currentText() + "' > " + tmpPath;
 
         int status = system(currStr.toUtf8().data());
         if(status != 0){
@@ -313,8 +313,9 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
                 }
 
                 QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
-                QString cmd = "nmcli device wifi connect " + wifiName + " password " + wifiPassword + " hidden yes > " + tmpPath + " 2>&1";
+                QString cmd = "nmcli device wifi connect '" + wifiName + "' password '" + wifiPassword + "' hidden yes > " + tmpPath + " 2>&1";
 
+//                qDebug() << Q_FUNC_INFO << cmd << tmpPath;
                 int status = system(cmd.toUtf8().data());
                 if (status != 0) {
                     syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");
@@ -327,12 +328,12 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
                 QString text = file.readAll();
                 file.close();
                 if(text.indexOf("Scanning not allowed") != -1 || text.isEmpty()){x = 1;} else { x = 0;}
+//                qDebug() << Q_FUNC_INFO << x << text;
             } while (x == 1);
 
-            emit this->stopSignal();
-            emit reSetWifiList();
-            //mw->stopLoading();
-            //QTimer::singleShot(8*1000, this, SLOT(on_execSecConn() ));
+            //屏蔽下面两行可以大大减小崩溃的概率
+//            emit reSetWifiList();
+//            emit stopSignal();
         });
     } else {
         shellProcess = new QProcess(this);
@@ -409,7 +410,7 @@ void DlgHideWifiWpa::slotStartLoading()
 
 void DlgHideWifiWpa::on_execSecConn()
 {
-    QString str = "nmcli device wifi connect " + strWifiname + " password " + strWifiPassword;
+    QString str = "nmcli device wifi connect '" + strWifiname + "' password '" + strWifiPassword + "'";
     int status = system(str.toUtf8().data());
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_execSecConn' failed");}
     qDebug() << "debug: 准备等待7秒";

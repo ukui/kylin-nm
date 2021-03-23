@@ -208,7 +208,7 @@ void DlgHideWifi::changeWindow(){
         ui->btnConnect->setEnabled(false);
     }else if (ui->cbxConn->currentIndex() >= 1){
         QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
-        QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " >" + tmpPath;
+        QString currStr = "nmcli connection show '" + ui->cbxConn->currentText() + "' >" + tmpPath;
 
         int status = system(currStr.toUtf8().data());
         if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");}
@@ -291,7 +291,7 @@ void DlgHideWifi::on_btnConnect_clicked()
         do {
             sleep(1);
             QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
-            QString cmd = "nmcli device wifi connect " + wifiName + " password '' hidden yes > " + tmpPath;
+            QString cmd = "nmcli device wifi connect '" + wifiName + "' password '' hidden yes > " + tmpPath;
 
             int status = system(cmd.toUtf8().data());
             if (status != 0)
@@ -340,7 +340,7 @@ void DlgHideWifi::slotStartLoading()
 
 void DlgHideWifi::on_execSecConn()
 {
-    QString str = "nmcli device wifi connect " + strWifiname + " password ''";
+    QString str = "nmcli device wifi connect '" + strWifiname + "' password ''";
     int status = system(str.toUtf8().data());
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_execSecConn' failed");}
     QTimer::singleShot(3*1000, this, SLOT(emitSignal() ));

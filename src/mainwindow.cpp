@@ -1892,10 +1892,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     } else {
         QProcess * process = new QProcess;
         QString name = actWifiName;
-        if (name.contains(" ")) {
-            name.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
-        }
-        process->start(QString("nmcli -f 802-11-wireless.ssid connection show %1").arg(name));
+        process->start(QString("nmcli -f 802-11-wireless.ssid connection show '%1'").arg(name));
         connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
             process->deleteLater();
         });

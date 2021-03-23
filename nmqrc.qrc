@@ -79,5 +79,15 @@
         <file>res/s/conning-s/12.png</file>
         <file>res/x/setup.png</file>
         <file>res/x/control.svg</file>
+        <file>res/w/wifi6-full-pwd.png</file>
+        <file>res/w/wifi6-full.png</file>
+        <file>res/w/wifi6-high-pwd.png</file>
+        <file>res/w/wifi6-high.png</file>
+        <file>res/w/wifi6-low-pwd.png</file>
+        <file>res/w/wifi6-low.png</file>
+        <file>res/w/wifi6-medium-pwd.png</file>
+        <file>res/w/wifi6-medium.png</file>
+        <file>res/w/wifi6-none.png</file>
+        <file>res/w/wifi6-null-pwd.png</file>
     </qresource>
 </RCC>

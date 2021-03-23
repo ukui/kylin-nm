@@ -170,8 +170,8 @@ public:
     int is_fly_mode_on = 0; //是否已经打开飞行模式
     int is_hot_sopt_on = 0; //是否已经打开热点
     int is_connect_hide_wifi = 0; //是否正在连接隐藏wifi
-
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
+
     QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
     QString oldWifiIpv4Method = ""; //原来的wifi的ipv4地址获取方式,自动还是手动
     int currSelNetNum = 0; //当前选中的item序号
@@ -296,6 +296,7 @@ private:
     QString oldActLanName = ""; //上一次获取的已连接有线网名称
     int oldDbusActLanDNS = 0; //上一次获取的已连接有线网的DNS代号
     void wifiListOptimize(QStringList& slist);  //只保留同名同频信号最强AP
+    QStringList connectableWifiPriorityList(const QStringList slist); //可连接wifi优先级列表
     //循环检测网络连接状态
     QTimer *iconTimer = nullptr;
     QTimer *wiredCableUpTimer = nullptr;

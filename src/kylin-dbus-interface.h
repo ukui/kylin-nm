@@ -76,6 +76,7 @@ public:
     int checkWifiConnectivity();
     bool checkNetworkConnectivity();
     int getActiveWifiSignal();
+    QString getWifiSsid(QString accessPointPath);
 
     void toGetWifiList();
 

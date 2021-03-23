@@ -417,9 +417,16 @@ void ConfForm::saveNetworkConfiguration()
     QString name = ui->leName->text().trimmed();
     //是选择的自动还是手动配置网络
     if (!this->isCreateNewNet) {
-    if (ui->cbType->currentIndex() == 0) {
-            //kylin_network_set_automethod(name.toUtf8().data());
+        if (ui->cbType->currentIndex() == 0) {
+            //kylin_network_set_automethod(ui->leName->text().toUtf8().data())
             kylin_network_set_automethod(netUuid.toUtf8().data());
+        } else {
+            QString dnss = ui->leDns->text();
+            if (ui->leDns2->text() != "") {
+                dnss.append(",");
+                dnss.append(ui->leDns2->text());
+            }
+            kylin_network_set_manualall(netUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
         }
     } else {
         QString dnss = ui->leDns->text();

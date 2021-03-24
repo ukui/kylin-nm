@@ -1638,14 +1638,8 @@ void MainWindow::getLanListDone(QStringList slist)
         lastItem->setLine(false); //最后一个item不显示下划线
         lbNoItemTip->hide();
     } else {
-        if (!ifLanConnected) {
-            lbNoItemTip->hide();
-            lbTopLanList->hide();
-            btnCreateNet->hide();
-        } else {
-            lbNoItemTip->show();
-            lbNoItemTip->setText(tr("No Other Wired Network Scheme"));
-        }
+        lbNoItemTip->show();
+        lbNoItemTip->setText(tr("No Other Wired Network Scheme"));
     }
 
     this->lanListWidget->show();

@@ -621,7 +621,7 @@ void OneConnForm::toConnectWirelessNetwork()
         process->waitForFinished();
     }
 
-    if (key_mgmt == "wpa-psk" && this->getPskFlag() != 0) {
+    if (key_mgmt == "wpa-psk" && this->getPskFlag() == 2) {
         //当设置为每次询问密码时执行
         QPoint pos = QCursor::pos();
         QRect primaryGeometry;

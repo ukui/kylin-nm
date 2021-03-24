@@ -109,6 +109,10 @@
 #define DBUS_PATH       "/org/ukui/SettingsDaemon/wayland"
 #define DBUS_INTERFACE  "org.ukui.SettingsDaemon.wayland"
 
+#define LOAD_WIFI_LIST 0
+#define UPDATE_WIFI_LIST 1
+#define RECONNECT_WIFI 2
+
 class OneConnForm;
 class ConfForm;
 
@@ -147,6 +151,7 @@ public:
     void PrimaryManager();
     void toStart();
     int  getScreenGeometry(QString methodName);
+    void toReconnectWifi();
 
     QIcon iconLanOnline, iconLanOffline;
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
@@ -158,7 +163,7 @@ public:
     SwitchButton *btnWireless;
 
     //状态设置,0为假，1为真
-    int is_update_wifi_list = 0; //是否是update wifi列表，而不是load wifi列表
+    int current_wifi_list_state = LOAD_WIFI_LIST;
     int is_init_wifi_list = 0; //是否在启动软件时正在获取wifi的列表
     int is_btnLanList_clicked = 1; //是否处于有线网界面
     int is_btnWifiList_clicked = 0; //是否处于无线网界面

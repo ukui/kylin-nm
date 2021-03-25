@@ -912,7 +912,15 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
 
     // 设置图标
     if (actLanName != "--") {
-        setTrayIcon(iconLanOnline);
+        QList<QString> lanstate = objKyDBus->getAtiveLanSsidUuidState();
+        qDebug() << lanstate;
+        if (lanstate[2] == "connected") {
+            setTrayIcon(iconLanOnline);
+        }
+        else {
+            setTrayLoading(true);
+        }
+
     } else if (actWifiName != "--") {
         switch (currentActWifiSignalLv) {
         case 1:

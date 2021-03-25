@@ -184,13 +184,15 @@ public:
     bool isWifiBeConnUp = false; //wifi是否是连接上
     bool isToSetLanValue = true; //本次执行是否进行赋值
     bool isToSetWifiValue = true; //本次执行是否进行赋值
-    bool isWifiReconnecting;
+    bool isWifiReconnecting = false; //是否正在执行wifi的回连
     int addNumberForWifi = 0;
 
     int m_priX;
     int m_priY;
     int m_priWid;
     int m_priHei;
+
+    int isHuaWeiPC;
 
 public slots:
     void onPhysicalCarrierChanged(bool flag);
@@ -301,7 +303,8 @@ private:
     QString lastAddedConn = "";
     QString oldActLanName = ""; //上一次获取的已连接有线网名称
     int oldDbusActLanDNS = 0; //上一次获取的已连接有线网的DNS代号
-    void wifiListOptimize(QStringList& slist);  //只保留同名同频信号最强AP
+    void wifiListOptimize(QStringList& slist); //只保留同名同频信号最强AP
+    void getFinalWifiList(QStringList& slist); //获取应该显示在wifi列表中的最优列表参数
     QStringList connectableWifiPriorityList(const QStringList slist); //可连接wifi优先级列表
     //循环检测网络连接状态
     QTimer *iconTimer = nullptr;
@@ -329,7 +332,6 @@ private:
 
     bool hasWifiConnected;//当前是否有wifi连接
     QDBusInterface  *mDbusXrandInter;
-    int isHuaWeiPC;
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);

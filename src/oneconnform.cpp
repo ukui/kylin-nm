@@ -32,6 +32,7 @@
 #include <QtDBus/QDBusObjectPath>
 #include <QDBusReply>
 #include <QDBusObjectPath>
+#include <QtConcurrent>
 
 extern int currentActWifiSignalLv;
 
@@ -886,6 +887,17 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     connType = "";
 
     if (connFlag == 0) {
+        if (mw->isHuaWeiPC) {
+            //network-manager可能回连接到其他bssid对应的网络，改成我们想要连接的那个网络
+            QFuture < void > future1 =  QtConcurrent::run([=]() {
+                qDebug() << "实际连接的wifi的bssid是 " << wifiBSsid;
+                QString modityCmd = "nmcli connection modify \""+ wifiName + "\" " + "802-11-wireless.bssid " + wifiBSsid;
+                system(modityCmd.toUtf8().data());
+                QString reconnectWifiCmd = "nmcli connection up \"" + wifiName + "\"";
+                system(reconnectWifiCmd.toUtf8().data());
+            });
+        }
+
         disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneWifiFormSelected(QString,int)));
     }
 

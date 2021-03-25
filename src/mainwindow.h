@@ -184,6 +184,7 @@ public:
     bool isWifiBeConnUp = false; //wifi是否是连接上
     bool isToSetLanValue = true; //本次执行是否进行赋值
     bool isToSetWifiValue = true; //本次执行是否进行赋值
+    bool isWifiReconnecting;
     int addNumberForWifi = 0;
 
     int m_priX;

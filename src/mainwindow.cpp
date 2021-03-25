@@ -1694,13 +1694,16 @@ void MainWindow::getWifiListDone(QStringList slist)
         QStringList targetWifiList = connectableWifiPriorityList(slist);
 
         if (!targetWifiList.isEmpty()) {
-            QFuture < void > future1 =  QtConcurrent::run([=](){
-                QString wifiSsid = objKyDBus->getWifiSsid(targetWifiList.at(0));
-                QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiList.at(1);
-                system(modityCmd.toUtf8().data());
-                QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
-                system(reconnectWifiCmd.toUtf8().data());
-            });
+            if (!isWifiReconnecting) {
+                isWifiReconnecting = true;
+                QFuture < void > future1 =  QtConcurrent::run([=]() {
+                    QString wifiSsid = objKyDBus->getWifiSsid(targetWifiList.at(0));
+                    QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiList.at(1);
+                    system(modityCmd.toUtf8().data());
+                    QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
+                    system(reconnectWifiCmd.toUtf8().data());
+                });
+            }
         }
     } else if (current_wifi_list_state == LOAD_WIFI_LIST) {
         //qDebug() << "loadwifi的列表";
@@ -1709,8 +1712,8 @@ void MainWindow::getWifiListDone(QStringList slist)
     } else {
         //qDebug() << "updatewifi的列表";
         updateWifiListDone(slist);
-        current_wifi_list_state = LOAD_WIFI_LIST;
     }
+    current_wifi_list_state = LOAD_WIFI_LIST;
     oldWifiSlist = slist;
 }
 
@@ -2977,6 +2980,8 @@ void MainWindow::toReconnectWifi()
 //处理外界对网络的连接与断开
 void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 {
+    isWifiReconnecting = false;
+
     if ( (type == "802-11-wireless" || type == "wifi") && !isConnUp ){
         QTimer::singleShot(2*1000, this, SLOT(onToResetValue() ));
     }

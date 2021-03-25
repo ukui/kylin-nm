@@ -1258,11 +1258,6 @@
         <translation type="unfinished">请确认Wi-Fi密码或无线设备</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="379"/>
-        <source>Selected Wifi has not been scanned.</source>
-        <translation type="unfinished">当前区域未扫描到选中的wifi</translation>
-    </message>
-    <message>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="obsolete">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
@@ -1520,6 +1515,11 @@
         <location filename="../src/mainwindow.cpp" line="2768"/>
         <source>Confirm your Wi-Fi password</source>
         <translation type="unfinished">请再次确认Wi-Fi密码</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="3331"/>
+        <source>Selected Wifi has not been scanned.</source>
+        <translation type="unfinished">当前区域未扫描到选中的wifi</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="216"/>

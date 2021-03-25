@@ -46,7 +46,8 @@ public slots:
     void changeWindow();
     void emitSignal();
     void on_execSecConn();
-    void slotStartLoading();
+    void slotStartConnectHiddenWifi();
+    void slotStartConnectRememberedHiddenWifi();
 
 private slots:
     void on_btnCancel_clicked();
@@ -59,12 +60,14 @@ private slots:
 
     void on_lePassword_textEdited(const QString &arg1);
 
-    void finishedProcess(int res);
+//    void finishedProcess(int res);
 
 signals:
     void reSetWifiList();
     void stopSignal();
     void stopSignalAgain();
+    void sigConnHiddenWifi(QString wifiName, QString wifiPasswd);
+    void sigConnRememberedHiddenWifi(QString wifiName);
 
 private:
     Ui::DlgHideWifiWpa *ui;

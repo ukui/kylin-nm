@@ -48,6 +48,8 @@ public slots:
     void emitSignal();
     void on_execSecConn();
     void slotStartLoading();
+    void slotStartConnectHiddenOpenWifi();
+    void slotStartConnectRememberedHiddenWifi();
 
 private slots:
     void on_btnCancel_clicked();
@@ -59,6 +61,8 @@ private slots:
 signals:
     void reSetWifiList();
     void stopSignal();
+    void sigConnHiddenWifi(QString wifiName, QString wifiPasswd);
+    void sigConnRememberedHiddenWifi(QString wifiName);
 
 private:
     Ui::DlgHideWifi *ui;

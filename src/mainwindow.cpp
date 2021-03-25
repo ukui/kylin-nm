@@ -1402,6 +1402,9 @@ void MainWindow::on_wifi_changed()
         oldWifiIpv4Method = "auto";
         qDebug()<<"Ipv4.method is set to auto.";
         emit this->reConnectWifi(actWifiUuid);
+    } else if (!objKyDBus->dbusActiveWifiIpv6.isEmpty() && objKyDBus->dbusActiveWifiIpv6 != objKyDBus->dbusWifiIpv6 && objKyDBus->dbusWifiIpv6Method == "manual") {
+        //在第三方nm-connection-editor或kylin-nm配置页进行新的IPV6配置后，重新连接网络
+        emit this->reConnectWifi(actWifiUuid);
     }
 }
 

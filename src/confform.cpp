@@ -429,7 +429,7 @@ void ConfForm::saveNetworkConfiguration()
         kylin_network_set_automethod(netUuid.toUtf8().data());
     }
     else {
-        if (newUuid != "--") {
+        if (newUuid != "--" && newUuid != "" && !newUuid.isEmpty()) {
             qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
             kylin_network_set_manualall(newUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
         } else {

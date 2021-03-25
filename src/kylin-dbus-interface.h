@@ -93,10 +93,13 @@ public:
     QString dbusLanIpv6 = "";
     QString dbusLanIpv6Method = "";
     QString dbusWifiIpv4Method = "";
+    QString dbusWifiIpv6Method = "";
     QString dbusActiveLanIpv4 = "";
     QString dbusActiveLanIpv6 = "";
     QString dbusActiveWifiIpv4 = "";
+    QString dbusActiveWifiIpv6 = "";
     QString dbusWifiIpv4 = "";
+    QString dbusWifiIpv6 = "";
     QString dbusLanGateway = "";
     QString dbusWiFiCardName = "";
     QString dbusWifiMac = "";

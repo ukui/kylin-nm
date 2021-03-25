@@ -436,6 +436,24 @@ void KylinDBus::getWifiIp(QString uuid)
                                         }
                                     }
                                 }
+                                if (key == "ipv6") {
+                                    for (QString inner_key : innerMap.keys()) {
+                                        if (inner_key == "address-data"){
+                                            const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
+                                            QMap<QString,QVariant> m_map;
+
+                                            dbusArg2nd.beginArray();
+                                            while (!dbusArg2nd.atEnd()) {
+                                                dbusArg2nd >> m_map;// append map to a vector here if you want to keep it
+                                            }
+                                            dbusArg2nd.endArray();
+
+                                            dbusWifiIpv6 = m_map.value("address").toString();
+                                        } else if (inner_key == "method") {
+                                            dbusWifiIpv6Method = innerMap.value(inner_key).toString();
+                                        }
+                                    }
+                                }
                             }
                         }
                     } else {
@@ -522,7 +540,7 @@ void KylinDBus::getConnectNetIp(QString netUuid)
 
         QDBusReply<QVariant> replyType = interfacePro.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
         QDBusReply<QVariant> replyUuid = interfacePro.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Uuid");
-        if (replyType.value().toString() == "ethernet" || replyType.value().toString() == "802-3-ethernet") { //有线网
+        if (replyType.value().toString() == "ethernet" || replyType.value().toString() == "802-3-ethernet" || replyType.value().toString() == "bluetooth") { //有线网或蓝牙共享网络
             if (replyUuid.value().toString() == netUuid) {
                 //ipv4的路径信息和ip信息
                 QDBusInterface interfaceIp4( "org.freedesktop.NetworkManager",
@@ -618,6 +636,37 @@ void KylinDBus::getConnectNetIp(QString netUuid)
 
                 foreach (QVariantMap mDataIpv4, mDatasIpv4) {
                     dbusActiveWifiIpv4 = mDataIpv4.value("address").toString();
+                }
+
+                //ipv6的路径信息和ip信息
+                QDBusInterface interfaceIp6( "org.freedesktop.NetworkManager",
+                                          objPath.path(),
+                                          "org.freedesktop.DBus.Properties",
+                                          QDBusConnection::systemBus() );
+                QDBusMessage replyIp6 = interfaceIp6.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Ip6Config");
+                QList<QVariant> outArgsIp6 = replyIp6.arguments();
+                QVariant firstIp6 = outArgsIp6.at(0);
+                QDBusVariant dbvFirstIp6 = firstIp6.value<QDBusVariant>();
+                QVariant vFirstIp6 = dbvFirstIp6.variant();
+                QDBusObjectPath dbusPathIp6 = vFirstIp6.value<QDBusObjectPath>();
+
+                QDBusInterface interfaceIpv6( "org.freedesktop.NetworkManager",
+                                              dbusPathIp6.path(),
+                                              "org.freedesktop.DBus.Properties",
+                                              QDBusConnection::systemBus() );
+                QDBusMessage replyIpv6 = interfaceIpv6.call("Get", "org.freedesktop.NetworkManager.IP6Config", "AddressData");
+
+                QList<QVariant> outArgsIpv6 = replyIpv6.arguments();
+                QVariant firstIpv6 = outArgsIpv6.at(0);
+                QDBusVariant dbvFirstIpv6 = firstIpv6.value<QDBusVariant>();
+                QVariant vFirstIpv6 = dbvFirstIpv6.variant();
+
+                const QDBusArgument &dbusArgIpv6 = vFirstIpv6.value<QDBusArgument>();
+                QList<QVariantMap> mDatasIpv6;
+                dbusArgIpv6 >> mDatasIpv6;
+
+                foreach (QVariantMap mDataIpv6, mDatasIpv6) {
+                    dbusActiveWifiIpv6 = mDataIpv6.value("address").toString();
                 }
             }
         }

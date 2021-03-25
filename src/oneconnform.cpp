@@ -508,7 +508,7 @@ void OneConnForm::on_btnDisConn_clicked()
 
     syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", wifiName.toUtf8().data());
     qDebug()<<"DisConnect button about wifi net is clicked, current wifi name is "<<wifiName;
-
+    mw->DisconnectedWifiSsidManualy = wifiName;
     this->startWaiting(false);
 
     mw->is_stop_check_net_state = 1;

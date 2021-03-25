@@ -1692,7 +1692,6 @@ void MainWindow::getWifiListDone(QStringList slist)
         wifiListOptimize(slist);
 
         QStringList targetWifiList = connectableWifiPriorityList(slist);
-
         if (!targetWifiList.isEmpty()) {
             QFuture < void > future1 =  QtConcurrent::run([=](){
                 QString wifiSsid = objKyDBus->getWifiSsid(targetWifiList.at(0));
@@ -1841,15 +1840,9 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
         QString wifiObjectPath = line.mid(indexPath).trimmed();
         int freq = line.mid(indexFreq,4).trimmed().toInt();
         int signal = line.mid(indexSignal,3).trimmed().toInt();
-        if(freq >= 5000 && ocf->isWifiConfExist(name) && signal > 55){  //两格以上有配置的5Gwifi中选择信号最佳的
+        if(freq >= 5000 && ocf->isWifiConfExist(name) && signal > 55 && name != DisconnectedWifiSsidManualy){  //两格以上有配置的5Gwifi中选择信号最佳的
             target << wifiObjectPath <<wifibssid;
             tmp.removeAt(i);
-        }
-    }
-    for(QString i:tmp){
-        QString name = i.mid(indexName,indexPath - indexPath).trimmed();
-        if(ocf->isWifiConfExist(name)){
-            target<<i;
         }
     }
     return target;
@@ -2029,6 +2022,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
             //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
             if(actWifiBssid == wbssid && wifiActState == 2){
                 //对于已经连接的wifi
+                DisconnectedWifiSsidManualy = "";
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
                 QString path = line.mid(indexPath).trimmed();

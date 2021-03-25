@@ -176,7 +176,7 @@ public:
     int is_hot_sopt_on = 0; //是否已经打开热点
     int is_connect_hide_wifi = 0; //是否正在连接隐藏wifi
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
-
+    QString DisconnectedWifiSsidManualy;    //上一次手动断开的wifi
     QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
     QString oldWifiIpv4Method = ""; //原来的wifi的ipv4地址获取方式,自动还是手动
     int currSelNetNum = 0; //当前选中的item序号

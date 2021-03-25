@@ -1235,6 +1235,8 @@ void MainWindow::onBtnNetListClicked(int flag)
 {
     this->is_btnLanList_clicked = 1;
     this->is_btnWifiList_clicked = 0;
+    end_rcv_rates = 0;
+    end_tx_rates = 0;
 
     ui->lbNetListBG->setStyleSheet(btnOnQss);
     ui->lbWifiListBG->setStyleSheet(btnOffQss);
@@ -1289,8 +1291,12 @@ void MainWindow::on_btnWifiList_clicked()
 {
     is_stop_check_net_state = 1;
     current_wifi_list_state = LOAD_WIFI_LIST;
+
     this->is_btnWifiList_clicked = 1;
     this->is_btnLanList_clicked = 0;
+    end_rcv_rates = 0;
+    end_tx_rates = 0;
+
     if (this->is_btnLanList_clicked == 1) {
         return;
     }
@@ -1633,14 +1639,8 @@ void MainWindow::getLanListDone(QStringList slist)
         lastItem->setLine(false); //最后一个item不显示下划线
         lbNoItemTip->hide();
     } else {
-        if (!ifLanConnected) {
-            lbNoItemTip->hide();
-            lbTopLanList->hide();
-            btnCreateNet->hide();
-        } else {
-            lbNoItemTip->show();
-            lbNoItemTip->setText(tr("No Other Wired Network Scheme"));
-        }
+        lbNoItemTip->show();
+        lbNoItemTip->setText(tr("No Other Wired Network Scheme"));
     }
 
     this->lanListWidget->show();
@@ -3157,18 +3157,27 @@ void MainWindow::on_setNetSpeed()
             if ( objNetSpeed->getCurrentDownloadRates(objKyDBus->dbusWiFiCardName.toUtf8().data(), &start_rcv_rates, &start_tx_rates) == -1) {
                 start_rcv_rates = end_rcv_rates;
             }
-        } else if(is_btnLanList_clicked == 1) {
+        }
+        else if(is_btnLanList_clicked == 1) {
             if ( objNetSpeed->getCurrentDownloadRates(currConnIfname.toUtf8().data(), &start_rcv_rates, &start_tx_rates) == -1) {
                 start_tx_rates = end_tx_rates;
             }
         }
-
-//        qDebug() << Q_FUNC_INFO << "start" << start_rcv_rates << start_tx_rates;
         long int delta_rcv = (start_rcv_rates - end_rcv_rates)/1024;
         long int delta_tx = (start_tx_rates - end_tx_rates)/1024;
-//        qDebug() << Q_FUNC_INFO << "delta" << delta_rcv << delta_tx;
-//        if (delta_rcv>=10000 || delta_rcv<0){delta_rcv = 0;}
-//        if (delta_tx>=10000 || delta_tx<0){delta_tx = 0;}
+
+        //简易滤波
+        if (delta_rcv < 0 || delta_tx < 0) {
+            delta_rcv = 0;
+            delta_tx = 0;
+        }
+        else if (end_rcv_rates == 0 || end_tx_rates == 0){
+            delta_rcv = 0;
+            delta_tx = 0;
+        }
+
+        end_rcv_rates = start_rcv_rates;
+        end_tx_rates = start_tx_rates;
 
         int rcv_num = delta_rcv;
         int tx_num = delta_tx;
@@ -3176,52 +3185,40 @@ void MainWindow::on_setNetSpeed()
         QString str_rcv;
         QString str_tx;
 
-        if (rcv_num < 1000) {
+        if (rcv_num < 1024) {
             str_rcv = QString::number(rcv_num) + "KB/s.";
         } else {
             int remainder;
-            if (rcv_num%1000 < 100) {
+            if (rcv_num%1024 < 100) {
                 remainder = 0;
             } else {
-                remainder = (rcv_num%1000)/100;
+                remainder = (rcv_num%1024)/100;
             }
-            str_rcv = QString::number(rcv_num/1000) + "."  + QString::number(remainder) + "MB/s.";
+            str_rcv = QString::number(rcv_num/1024) + "."  + QString::number(remainder) + "MB/s.";
         }
 
-        if (tx_num < 1000) {
+        if (tx_num < 1024) {
             str_tx = QString::number(tx_num) + "KB/s";
         } else {
             int remainder;
-            if (tx_num%1000 < 100) {
+            if (tx_num%1024 < 100) {
                 remainder = 0;
             } else {
-                remainder = (tx_num%1000)/100;
+                remainder = (tx_num%1024)/100;
             }
-            str_tx = QString::number(tx_num/1000) + "."  + QString::number(remainder) + "MB/s";
+            str_tx = QString::number(tx_num/1024) + "."  + QString::number(remainder) + "MB/s";
         }
 
         lbLoadDown->setText(str_rcv);
         lbLoadUp->setText(str_tx);
 
-        switch (str_rcv.size()) {
-        case 6:
-            lbLoadUp->move(X_ITEM + 187, Y_TOP_ITEM + 32);
-            lbLoadUpImg->move(X_ITEM + 170, Y_TOP_ITEM + 35);
-            break;
-        case 7:
-            lbLoadUp->move(X_ITEM + 194, Y_TOP_ITEM + 32);
-            lbLoadUpImg->move(X_ITEM + 176, Y_TOP_ITEM + 35);
-            break;
-        case 8:
-            lbLoadUp->move(X_ITEM + 199, Y_TOP_ITEM + 32);
-            lbLoadUpImg->move(X_ITEM + 186, Y_TOP_ITEM + 35);
-            break;
-        default:
-            break;
-        }
-
-        end_rcv_rates = start_rcv_rates;
-        end_tx_rates = start_tx_rates;
+        int offset = str_rcv.length() * 7;
+        lbLoadUp->move(X_ITEM + offset + 145, Y_TOP_ITEM + 32);
+        lbLoadUpImg->move(X_ITEM + offset + 128, Y_TOP_ITEM + 35);
+    }
+    else {
+        end_rcv_rates = 0;
+        end_tx_rates = 0;
     }
 }
 

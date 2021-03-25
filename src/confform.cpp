@@ -730,6 +730,13 @@ void ConfForm::paintEvent(QPaintEvent *event)
     KylinDBus mkylindbus;
     double trans = mkylindbus.getTransparentData();
 
+    QString name = tr("Method: ");
+    ui->lbTxt1->setText(ui->lbTxt1->fontMetrics().elidedText(name, Qt::ElideRight, 95));
+    if (name != ui->lbTxt1->text()) {
+        ui->lbTxt1->setToolTip(tr("Method: "));
+    } else {
+        ui->lbTxt1->setToolTip("");
+    }
 
     QStyleOption opt;
     opt.init(this);

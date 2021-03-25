@@ -29,6 +29,7 @@
 #include <QFont>
 #include <QFontMetrics>
 #include <QDir>
+#include <QtConcurrent>
 
 QString llname, lwname, hideWiFiConn;
 int currentActWifiSignalLv, count_loop;
@@ -662,7 +663,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
                     IFace *loop_iface = loop_bt->execGetIface();
 
                     if (loop_iface->wstate != 2) {
-                        //is_update_wifi_list = 1;
+                        //current_wifi_list_state = UPDATE_WIFI_LIST;
                         //checkIfConnectedWifiExist();
                         //this->ksnm->execGetWifiList(); //更新wifi列表
                         this->on_btnWifiList_clicked(); //加载wifi列表
@@ -1289,7 +1290,7 @@ void MainWindow::onBtnNetListClicked(int flag)
 void MainWindow::on_btnWifiList_clicked()
 {
     is_stop_check_net_state = 1;
-    is_update_wifi_list = 0;
+    current_wifi_list_state = LOAD_WIFI_LIST;
 
     this->is_btnWifiList_clicked = 1;
     this->is_btnLanList_clicked = 0;
@@ -1656,7 +1657,7 @@ void MainWindow::getLanListDone(QStringList slist)
 void MainWindow::onRequestRevalueUpdateWifi()
 {
     is_stop_check_net_state = 1;
-    is_update_wifi_list = 0;
+    current_wifi_list_state = LOAD_WIFI_LIST;
 }
 
 // 获取wifi列表回调
@@ -1665,24 +1666,6 @@ void MainWindow::getWifiListDone(QStringList slist)
     if (this->is_btnLanList_clicked == 1) {
         return;
     }
-
-//    QString actWifiUuid = objKyDBus->getActiveWifiUuid();
-//    objKyDBus->getConnectNetIp(actWifiUuid);
-//    objKyDBus->getWifiIp(actWifiUuid);
-//    if (oldWifiIpv4Method == "") {
-//        oldWifiIpv4Method = objKyDBus-> dbusWifiIpv4Method;
-//    }
-//    if (objKyDBus->dbusWifiIpv4 != "" && objKyDBus->dbusActiveWifiIpv4 != "" && objKyDBus->dbusWifiIpv4 != objKyDBus->dbusActiveWifiIpv4 &&objKyDBus-> dbusWifiIpv4Method == "manual") {
-//        //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
-//        oldWifiIpv4Method = "manual";
-//        qDebug()<<"Ipv4.address of current activated wifi is:"<<objKyDBus->dbusActiveWifiIpv4 << ". Real ipv4.address is:" << objKyDBus->dbusWifiIpv4;
-//        emit this->reConnectWifi(actWifiUuid);
-//    } else if (objKyDBus-> dbusWifiIpv4Method == "auto" && oldWifiIpv4Method == "manual") {
-//        oldWifiIpv4Method = "auto";
-//        qDebug()<<"Ipv4.method is set to auto.";
-//        emit this->reConnectWifi(actWifiUuid);
-//    }
-    //qDebug()<<"debug: oldWifiSlist.size()="<<oldWifiSlist.size()<<"   slist.size()="<<slist.size();
 
     //qDebug()<<"------------";
     //foreach (QString str, slist) {
@@ -1705,14 +1688,28 @@ void MainWindow::getWifiListDone(QStringList slist)
         }
     }
 
-    if (is_update_wifi_list == 0) {
-        qDebug() << "loadwifi的列表";
+    if (current_wifi_list_state == RECONNECT_WIFI) {
+        wifiListOptimize(slist);
+
+        QStringList targetWifiList = connectableWifiPriorityList(slist);
+
+        if (!targetWifiList.isEmpty()) {
+            QFuture < void > future1 =  QtConcurrent::run([=](){
+                QString wifiSsid = objKyDBus->getWifiSsid(targetWifiList.at(0));
+                QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiList.at(1);
+                system(modityCmd.toUtf8().data());
+                QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
+                system(reconnectWifiCmd.toUtf8().data());
+            });
+        }
+    } else if (current_wifi_list_state == LOAD_WIFI_LIST) {
+        //qDebug() << "loadwifi的列表";
         loadWifiListDone(slist);
         is_init_wifi_list = 0;
     } else {
         //qDebug() << "updatewifi的列表";
         updateWifiListDone(slist);
-        is_update_wifi_list = 0;
+        current_wifi_list_state = LOAD_WIFI_LIST;
     }
     oldWifiSlist = slist;
 }
@@ -1754,6 +1751,8 @@ void MainWindow::getConnListDone(QStringList slist)
         return;
     }
 }
+
+//进行wifi列表优化选择
 void MainWindow::wifiListOptimize(QStringList& slist)
 {
     QString headLine = slist.at(0);
@@ -1810,6 +1809,8 @@ void MainWindow::wifiListOptimize(QStringList& slist)
     slist = targetList;
     return ;
 }
+
+//从有配置文件的wifi选出最优wifi进行连接
 QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
     QStringList target;
     if(!slist.size()) return target;
@@ -1831,25 +1832,29 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
         indexBSsid = headLine.indexOf("BSSID");
         indexName = indexBSsid + 19;
     }
+    int indexPath = headLine.indexOf("DBUS-PATH");
     QStringList tmp = slist;
     for(int i=1;i<tmp.size();i++){
         QString line = tmp.at(i);
-        QString name = line.mid(indexName).trimmed();
+        QString name = line.mid(indexName,indexPath - indexName).trimmed();
+        QString wifibssid = line.mid(indexBSsid, indexName-indexBSsid).trimmed();
+        QString wifiObjectPath = line.mid(indexPath).trimmed();
         int freq = line.mid(indexFreq,4).trimmed().toInt();
         int signal = line.mid(indexSignal,3).trimmed().toInt();
         if(freq >= 5000 && ocf->isWifiConfExist(name) && signal > 55){  //两格以上有配置的5Gwifi中选择信号最佳的
-            target << line;
+            target << wifiObjectPath <<wifibssid;
             tmp.removeAt(i);
         }
     }
     for(QString i:tmp){
-        QString name = i.mid(indexName).trimmed();
+        QString name = i.mid(indexName,indexPath - indexPath).trimmed();
         if(ocf->isWifiConfExist(name)){
             target<<i;
         }
     }
     return target;
 }
+
 // 加载wifi列表
 void MainWindow::loadWifiListDone(QStringList slist)
 {
@@ -2883,7 +2888,7 @@ void MainWindow::disNetDone()
 
 void MainWindow::enWifiDone()
 {
-    is_update_wifi_list = 0;
+    current_wifi_list_state = LOAD_WIFI_LIST;
     if (is_btnWifiList_clicked) {
         this->ksnm->execGetWifiList(this->wcardname);
     } else {
@@ -2960,6 +2965,13 @@ void MainWindow::on_btnHotspotState()
     ui->lbHotImg->setStyleSheet("QLabel{background-image:url(:/res/x/hot-spot-off.svg);}");
     ui->lbHotBG->setStyleSheet(btnOffQss);
     is_hot_sopt_on = 0;
+}
+
+//执行wifi的重新连接
+void MainWindow::toReconnectWifi()
+{
+    current_wifi_list_state = RECONNECT_WIFI;
+    this->ksnm->execGetWifiList(this->wcardname);
 }
 
 //处理外界对网络的连接与断开
@@ -3129,7 +3141,7 @@ void MainWindow::on_checkWifiListChanged()
         IFace *loop_iface = loop_bt->execGetIface();
 
         if (loop_iface->wstate != 2) {
-            is_update_wifi_list = 1;
+            current_wifi_list_state = UPDATE_WIFI_LIST;
             this->ksnm->execGetWifiList(this->wcardname); //更新wifi列表
         }
 

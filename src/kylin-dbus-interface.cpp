@@ -64,6 +64,11 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
                                          QString("org.freedesktop.NetworkManager"),
+                                         QString("AutoConnect"), this, SLOT(onAutoConnect() ) );
+
+    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                         QString("/org/freedesktop/NetworkManager"),
+                                         QString("org.freedesktop.NetworkManager"),
                                          QString("DeviceAdded"), mw, SLOT(onNetworkDeviceAdded(QDBusObjectPath) ) );
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
@@ -1569,6 +1574,14 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
             oldWifiSwitchState = newWifiSwitchState; //更新状态用于下一次
         }
     }
+}
+
+//接收到自动连接的信号过后执行自动连接wifi
+void KylinDBus::onAutoConnect()
+{
+    syslog(LOG_DEBUG, "Receive a auto-connect signal to reconnect wifi");
+    qDebug() << "Receive a auto-connect signal to reconnect wifi";
+    mw->toReconnectWifi();
 }
 
 //有线网属性变化时，执行该函数。由于可能在短时间收到几条相同属性变化信息，所以在短时间内，执行一次

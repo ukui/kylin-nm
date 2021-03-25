@@ -111,6 +111,7 @@ public slots:
     bool getWiredCableStateByIfname(QString ifname);
     QString getConnLanNameByIfname(QString ifname);
     void onPropertiesChanged(QVariantMap qvm);
+    void onAutoConnect();
     void onLanPropertyChanged(QVariantMap qvm);
     void onLanIpPropertiesChanged();
     void onWifiIpPropertiesChanged();

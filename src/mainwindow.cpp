@@ -3310,7 +3310,7 @@ void MainWindow::connLanDone(int connFlag)
 
 void MainWindow::connWifiDone(int connFlag)
 {
-    // Wifi连接结果，0点击连接成功 1失败 2没有配置文件 3开机启动网络工具时已经连接
+    // Wifi连接结果，0点击连接成功 1失败 2没有配置文件 3开机启动网络工具时已经连接 4密码错误 5找不到已保存的网络
     if (connFlag == 0) {
 	WifiAuthThread *wifi_auth_thread=new WifiAuthThread();
 	wifi_auth_thread->start();
@@ -3331,7 +3331,12 @@ void MainWindow::connWifiDone(int connFlag)
         is_connect_net_failed = 1;
         QString txt(tr("Confirm your Wi-Fi password"));
         objKyDBus->showDesktopNotify(txt);
+    } else if (connFlag == 5) {
+        is_connect_net_failed = 1;
+        QString txt(tr("Selected Wifi has not been scanned."));
+        objKyDBus->showDesktopNotify(txt);
     }
+    this->stopLoading();
     is_stop_check_net_state = 0;
 }
 

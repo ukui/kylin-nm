@@ -1901,11 +1901,12 @@ void MainWindow::getFinalWifiList(QStringList &slist)
 //从有配置文件的wifi选出最优wifi进行连接
 QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
     QStringList target;
-    if(!slist.size()) return target;
+    if(slist.size()<2) return target;
     OneConnForm *ocf = new OneConnForm();
     QString headLine = slist.at(0);
-    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName;
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath;
     headLine = headLine.trimmed();
+
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
         indexSignal = headLine.indexOf("SIGNAL");
@@ -1913,23 +1914,25 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
         indexFreq = headLine.indexOf("频率") + 4;
         indexBSsid = headLine.indexOf("BSSID") + 6;
         indexName = indexBSsid + 19;
+        indexPath = headLine.indexOf("DBUS-PATH");
     } else {
         indexSignal = headLine.indexOf("SIGNAL");
         indexSecu = headLine.indexOf("SECURITY");
         indexFreq = headLine.indexOf("FREQ");
         indexBSsid = headLine.indexOf("BSSID");
         indexName = indexBSsid + 19;
+        indexPath = headLine.indexOf("DBUS-PATH");
     }
-    int indexPath = headLine.indexOf("DBUS-PATH");
+
     QStringList tmp = slist;
     for (int i=1;i<tmp.size();i++) {
         QString line = tmp.at(i);
         QString wifiname = line.mid(indexName,indexPath - indexName).trimmed();
         QString wifibssid = line.mid(indexBSsid, indexName-indexBSsid).trimmed();
         QString wifiObjectPath = line.mid(indexPath).trimmed();
-        if (ocf->isWifiConfExist(wifiname) && wifiname != DisconnectedWifiSsidManualy) {  //两格以上有配置的5Gwifi中选择信号最佳的
+        if (ocf->isWifiConfExist(wifiname) && canReconnectWifiList.contains(wifiname)) {  //两格以上有配置的5Gwifi中选择信号最佳的
             target << wifiObjectPath <<wifibssid;
-            tmp.removeAt(i);
+            //tmp.removeAt(i);
         }
     }
 
@@ -2122,7 +2125,6 @@ void MainWindow::loadWifiListDone(QStringList slist)
             //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
             if(actWifiBssid == wbssid && wifiActState == 2){
                 //对于已经连接的wifi
-                DisconnectedWifiSsidManualy = "";
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
                 QString path = line.mid(indexPath).trimmed();
@@ -2130,9 +2132,16 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
                 if (m_name.isEmpty() || m_name == "") {
                     ccf->setName(wname, wbssid, actWifiUuid);
+                    if (!canReconnectWifiList.contains(wname)) {
+                        canReconnectWifiList.append(wname);
+                    }
                 } else {
                     ccf->setName(m_name, wbssid, actWifiUuid);
+                    if (!canReconnectWifiList.contains(m_name)) {
+                        canReconnectWifiList.append(m_name);
+                    }
                 }
+
                 //ccf->setRate(wrate);
                 int signal = wsignal.toInt() + 11;
                 ccf->setSignal(QString::number(signal), wsecu);

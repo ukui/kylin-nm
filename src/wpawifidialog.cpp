@@ -210,6 +210,7 @@ void WpaWifiDialog::initUI() {
     pwdShowLabel = new QLabel(pwdShowFrame);
     pwdShowLabel->setFixedWidth(120);
     pwdShowBtn->setFixedSize(16, 16);
+    pwdShowBtn->setStyleSheet("background-color:rgb(61,61,65);");
     pwdShowLabel->setText(tr("Show password"));
     pwdShowLyt->addWidget(pwdShowBtn);
     pwdShowLyt->addWidget(pwdShowLabel);
@@ -220,6 +221,7 @@ void WpaWifiDialog::initUI() {
     askPwdLyt = new QHBoxLayout(askPwdFrame);
     askPwdLyt->setContentsMargins(130, 0, 0, 0);
     askPwdBtn = new QCheckBox(askPwdFrame);
+    askPwdBtn->setStyleSheet("background-color:rgb(61,61,65);");
     askPwdlabel = new QLabel(askPwdFrame);
 //    askPwdlabel->setFixedWidth(120);
     askPwdBtn->setFixedSize(16, 16);

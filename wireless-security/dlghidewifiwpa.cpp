@@ -352,7 +352,7 @@ void DlgHideWifiWpa::on_checkBoxPwd_stateChanged(int arg1)
 
 void DlgHideWifiWpa::on_leNetName_textEdited(const QString &arg1)
 {
-    if (ui->leNetName->text() == "" || ui->lePassword->text() == ""){
+    if (ui->leNetName->text() == "" || ui->lePassword->text().size() < 6){
         ui->btnConnect->setEnabled(false);
     } else {
         ui->btnConnect->setEnabled(true);
@@ -366,7 +366,7 @@ void DlgHideWifiWpa::on_leNetName_textEdited(const QString &arg1)
 
 void DlgHideWifiWpa::on_lePassword_textEdited(const QString &arg1)
 {
-    if (ui->leNetName->text() == "" || ui->lePassword->text() == ""){
+    if (ui->leNetName->text() == "" || ui->lePassword->text().size() < 6){
         ui->btnConnect->setEnabled(false);
     } else {
         ui->btnConnect->setEnabled(true);

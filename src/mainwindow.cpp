@@ -1706,12 +1706,6 @@ void MainWindow::getWifiListDone(QStringList slist)
         }
     }
 
-    qDebug()<<"------------";
-    foreach (QString str, slist) {
-        qDebug()<<str;
-    }
-    qDebug()<<"------------";
-
     if (current_wifi_list_state == RECONNECT_WIFI) {
         QStringList targetWifiList = connectableWifiPriorityList(slist);
         if (!targetWifiList.isEmpty()) {
@@ -3067,8 +3061,10 @@ void MainWindow::on_btnHotspotState()
 //执行wifi的重新连接
 void MainWindow::toReconnectWifi()
 {
-    current_wifi_list_state = RECONNECT_WIFI;
-    this->ksnm->execGetWifiList(this->wcardname);
+    if (isHuaWeiPC) {
+        current_wifi_list_state = RECONNECT_WIFI;
+        this->ksnm->execGetWifiList(this->wcardname);
+    }
 }
 
 //处理外界对网络的连接与断开

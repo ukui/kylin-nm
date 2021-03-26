@@ -122,6 +122,16 @@
         <translation type="unfinished">新建有线网络</translation>
     </message>
     <message>
+        <location filename="../src/confform.cpp" line="451"/>
+        <source>kylin-nm</source>
+        <translation type="unfinished">网络工具</translation>
+    </message>
+    <message>
+        <location filename="../src/confform.cpp" line="454"/>
+        <source>kylin network applet desktop message</source>
+        <translation type="unfinished">麒麟网络工具信息提示</translation>
+    </message>
+    <message>
         <source>create wired network successfully</source>
         <translation type="obsolete">已创建新的有线网络</translation>
     </message>
@@ -1327,13 +1337,6 @@
     </message>
 </context>
 <context>
-    <name>KylinDBus</name>
-    <message>
-        <source>kylin network applet desktop message</source>
-        <translation type="obsolete">麒麟网络工具信息提示</translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
         <location filename="../src/mainwindow.ui" line="14"/>
@@ -1752,14 +1755,14 @@
 <context>
     <name>Utils</name>
     <message>
-        <location filename="../src/utils.cpp" line="84"/>
+        <location filename="../src/utils.cpp" line="88"/>
         <source>kylin-nm</source>
         <translation type="unfinished">网络工具</translation>
     </message>
     <message>
-        <location filename="../src/utils.cpp" line="87"/>
+        <location filename="../src/utils.cpp" line="91"/>
         <source>kylin network applet desktop message</source>
-        <translation type="unfinished">麒麟网络工具信息提示</translation>
+        <translation>麒麟网络工具信息提示</translation>
     </message>
 </context>
 <context>

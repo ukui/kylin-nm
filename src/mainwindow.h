@@ -145,7 +145,7 @@ public:
     void getActiveInfoAndSetTrayIcon();
 
     void initTimer();
-    void checkIsWirelessDeviceOn();
+    void checkIsWirelessDevicePluggedIn();
 
     void initActNetDNS();
     void PrimaryManager();
@@ -332,7 +332,8 @@ private:
     QString actWifiUuid = "--"; //当前连接wifi的uuid
 
     bool hasWifiConnected;//当前是否有wifi连接
-    QDBusInterface  *mDbusXrandInter;
+    QDBusInterface *mDbusXrandInter;
+    QDBusInterface *kdsDbus;
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
@@ -379,6 +380,8 @@ private slots:
     void actionTriggerSlots();
 
     void priScreenChanged(int x, int y, int width, int height);
+
+    void onRfkillStatusChanged();
 
 signals:
     void disConnSparedNet(QString type);

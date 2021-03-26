@@ -151,7 +151,6 @@ public:
     void PrimaryManager();
     void toStart();
     int  getScreenGeometry(QString methodName);
-    void toReconnectWifi();
 
     QIcon iconLanOnline, iconLanOffline;
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
@@ -230,6 +229,8 @@ public slots:
     void on_showWindowAction();
 
     void checkIfConnectedWifiExist();
+
+    void toReconnectWifi();
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);

@@ -534,6 +534,9 @@ void MainWindow::initNetwork()
 void MainWindow::initTimer()
 {
     //循环检测wifi列表的变化，可用于更新wifi列表
+    QTimer::singleShot(1*1000, this, SLOT(toReconnectWifi() ));
+
+    //循环检测wifi列表的变化，可用于更新wifi列表
     checkWifiListChanged = new QTimer(this);
     checkWifiListChanged->setTimerType(Qt::PreciseTimer);
     QObject::connect(checkWifiListChanged, SIGNAL(timeout()), this, SLOT(on_checkWifiListChanged()));

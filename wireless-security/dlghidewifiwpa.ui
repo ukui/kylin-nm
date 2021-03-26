@@ -88,8 +88,8 @@
   <widget class="QCheckBox" name="checkBoxPwd">
    <property name="geometry">
     <rect>
-     <x>332</x>
-     <y>272</y>
+     <x>370</x>
+     <y>270</y>
      <width>18</width>
      <height>9</height>
     </rect>

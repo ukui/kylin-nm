@@ -1937,6 +1937,13 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
         QString wifiname = line.mid(indexName,indexPath - indexName).trimmed();
         QString wifibssid = line.mid(indexBSsid, indexName-indexBSsid).trimmed();
         QString wifiObjectPath = line.mid(indexPath).trimmed();
+
+        qDebug()<<"------------";
+        foreach (QString strr, canReconnectWifiList) {
+            qDebug()<<strr;
+        }
+        qDebug()<<"------------";
+
         if (ocf->isWifiConfExist(wifiname) && canReconnectWifiList.contains(wifiname)) {  //两格以上有配置的5Gwifi中选择信号最佳的
             target << wifiObjectPath <<wifibssid;
             //tmp.removeAt(i);
@@ -3092,6 +3099,12 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
     isWifiReconnecting = false;
 
     if ( (type == "802-11-wireless" || type == "wifi") && !isConnUp ){
+        if (!is_stop_check_net_state) {
+            if (canReconnectWifiList.size() >= 1) {
+                int removePos = canReconnectWifiList.size() - 1;
+                canReconnectWifiList.removeAt(removePos);
+            }
+        }
         QTimer::singleShot(2*1000, this, SLOT(onToResetValue() ));
     }
     if (type == "802-11-wireless" || type == "wifi") {

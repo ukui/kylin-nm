@@ -53,6 +53,13 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);//QTool
     this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
 
+    // 连接kds的dbus接收rfkill变化的信号&获取当前WIFI状态
+    kdsDbus = new QDBusInterface("org.ukui.kds", \
+                               "/", \
+                               "org.ukui.kds.interface", \
+                               QDBusConnection::systemBus());
+    QDBusConnection::systemBus().connect(kdsDbus->service(), kdsDbus->path(), kdsDbus->interface(), "signalRfkillStatusChanged", this, SLOT(onRfkillStatusChanged));
+
     UseQssFile::setStyle("style.qss");
 
     QPainterPath path;
@@ -103,7 +110,7 @@ MainWindow::MainWindow(QWidget *parent) :
     loading->move(40,0);
     connect(loading, SIGNAL(toStopLoading() ), this, SLOT(on_checkOverTime() ));
 
-    checkIsWirelessDeviceOn(); //检测无线网卡是否插入
+    checkIsWirelessDevicePluggedIn(); //检测无线网卡是否插入
     getInitLanSlist(); //初始化有线网列表
     initNetwork(); //初始化网络
     initTimer(); //初始化定时器
@@ -1062,7 +1069,7 @@ void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
     }
 }
 
-void MainWindow::checkIsWirelessDeviceOn()
+void MainWindow::checkIsWirelessDevicePluggedIn()
 {
     //启动时判断是否有无线网卡
     //KylinDBus kDBus3;
@@ -3617,4 +3624,20 @@ void MainWindow::priScreenChanged(int x, int y, int width, int height)
     m_priWid = width;
     m_priHei = height;
     qDebug("primary screen  changed, geometry is  x=%d, y=%d, windth=%d, height=%d", x, y, width, height);
+}
+
+// 通过kds的dbus发现rfkill状态变化
+void MainWindow::onRfkillStatusChanged()
+{
+    QDBusReply<int> reply = kdsDbus->call("getCurrentWlanMode");
+    if (reply.isValid()){
+        int current = reply.value();
+
+        if (current == -1){
+            qWarning("Error Occur When Get Current WlanMode");
+            return;
+        }
+        onExternalWifiSwitchChange(bool(current));
+    }
+
 }

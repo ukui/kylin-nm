@@ -428,6 +428,7 @@ void MainWindow::createLeftAreaUI()
 // 初始化有线网列表
 void MainWindow::getInitLanSlist()
 {
+    canReconnectWifiList.clear();
     const int BUF_SIZE = 1024;
     char buf[BUF_SIZE];
 
@@ -440,15 +441,26 @@ void MainWindow::getInitLanSlist()
         syslog(LOG_ERR, "Error occurred when popen cmd 'nmcli connection show'");
         qDebug()<<"Error occurred when popen cmd 'nmcli connection show";
     }
+
+    int trimPos = 0;
     while (fgets(buf, BUF_SIZE, p_file) != NULL) {
         QString strSlist = "";
         QString line(buf);
         strSlist = line.trimmed();
         if (strSlist.indexOf("UUID") != -1 || strSlist.indexOf("NAME") != -1) {
+            trimPos = strSlist.indexOf("NAME");
             oldLanSlist.append(strSlist);
         }
         if (strSlist.indexOf("802-3-ethernet") != -1 || strSlist.indexOf("ethernet") != -1) {
             oldLanSlist.append(strSlist);
+        }
+        if (strSlist.indexOf("802-11-wireless") != -1 || strSlist.indexOf("wifi") != -1) {
+            if (trimPos != 0) {
+                QString mywifiname = line.mid(trimPos).trimmed();//这里没有考虑wifi为空格的情况
+                if (!canReconnectWifiList.contains(mywifiname)) {
+                    canReconnectWifiList.append(mywifiname);
+                }
+            }
         }
     }
 
@@ -1701,14 +1713,23 @@ void MainWindow::getWifiListDone(QStringList slist)
         this->ksnm->isUseOldWifiSlist = false;
     }
 
-    //若slist为空，则使用上一次获取到的列表
-    if (slist.size() == 1 && slist.at(0) == "") {
-        if (oldWifiSlist.size() == 1 && oldWifiSlist.at(0) == "") {
+    if (slist.isEmpty() || slist.size() == 1) {
+        if (oldWifiSlist.isEmpty() || oldWifiSlist.size() == 1) {
+            this->stopLoading();
             return;
         } else {
             slist = oldWifiSlist;
         }
     }
+
+    //若slist为空，则使用上一次获取到的列表
+//    if (slist.size() == 1 && slist.at(0) == "") {
+//        if (oldWifiSlist.size() == 1 && oldWifiSlist.at(0) == "") {
+//            return;
+//        } else {
+//            slist = oldWifiSlist;
+//        }
+//    }
 
     if (isHuaWeiPC) {
         if (slist.size() >= 2) {
@@ -1939,12 +1960,6 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
         QString wifibssid = line.mid(indexBSsid, indexName-indexBSsid).trimmed();
         QString wifiObjectPath = line.mid(indexPath).trimmed();
 
-        qDebug()<<"------------";
-        foreach (QString strr, canReconnectWifiList) {
-            qDebug()<<strr;
-        }
-        qDebug()<<"------------";
-
         if (ocf->isWifiConfExist(wifiname) && canReconnectWifiList.contains(wifiname)) {  //两格以上有配置的5Gwifi中选择信号最佳的
             target << wifiObjectPath <<wifibssid;
             //tmp.removeAt(i);
@@ -2149,10 +2164,16 @@ void MainWindow::loadWifiListDone(QStringList slist)
                     ccf->setName(wname, wbssid, actWifiUuid);
                     if (!canReconnectWifiList.contains(wname)) {
                         canReconnectWifiList.append(wname);
+                    } else {
+                        canReconnectWifiList.removeOne(wname);
+                        canReconnectWifiList.append(wname);
                     }
                 } else {
                     ccf->setName(m_name, wbssid, actWifiUuid);
                     if (!canReconnectWifiList.contains(m_name)) {
+                        canReconnectWifiList.append(m_name);
+                    } else {
+                        canReconnectWifiList.removeOne(m_name);
                         canReconnectWifiList.append(m_name);
                     }
                 }

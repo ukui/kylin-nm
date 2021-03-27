@@ -1,6 +1,6 @@
 #include "wifi-auth-thread.h"
 
-#include <QDebug>
+#include <QProcess>
 
 void WifiAuthThread::run()
 {
@@ -11,9 +11,9 @@ void WifiAuthThread::run()
 			QDBusConnection::systemBus() );
 	QDBusReply<uint> reply= interface.call("CheckConnectivity");
 	if (reply.isValid()) {
-        //qDebug() << "-----------------------> 000000000000000011" << reply.value();
         if (reply.value() == 2) {
-            system("gdbus call --session --dest org.gnome.Shell.PortalHelper --object-path /org/gnome/Shell/PortalHelper --method org.gtk.Application.Activate []");
+            //system("xdg-open http://nmcheck.gnome.org");
+            QProcess::startDetached(QString("xdg-open http://nmcheck.gnome.org"));
         }
 	}
 }

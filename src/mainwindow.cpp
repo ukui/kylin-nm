@@ -3429,12 +3429,13 @@ void MainWindow::connWifiDone(int connFlag)
 {
     // Wifi连接结果，0点击连接成功 1失败 2没有配置文件 3开机启动网络工具时已经连接 4密码错误 5找不到已保存的网络
     if (connFlag == 0) {
-        WifiAuthThread *wifi_auth_thread=new WifiAuthThread();
-        wifi_auth_thread->start();
         syslog(LOG_DEBUG, "Wi-Fi already connected by clicking button");
         if (!isHuaWeiPC) {
             //如果是华为电脑，使用获取连接信号的方式更新列表
             this->ksnm->execGetWifiList(this->wcardname);
+        } else {
+            WifiAuthThread *wifi_auth_thread=new WifiAuthThread();
+            wifi_auth_thread->start();
         }
 
         QString txt(tr("Conn Wifi Success"));

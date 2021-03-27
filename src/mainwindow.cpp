@@ -1386,6 +1386,7 @@ void MainWindow::on_btnWifiList_clicked()
         ccf->setAct(true);
         ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
         ccf->show();
+        ccf->lbFreq->hide();
 
         this->lanListWidget->hide();
         this->wifiListWidget->show();
@@ -3055,6 +3056,7 @@ void MainWindow::disWifiDoneChangeUI()
             ocf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 Wifi"
             ocf->setSignal("0", "--");
             ocf->setConnedString(1, tr("Disconnected"), "");//"未连接"
+            ocf->lbFreq->hide();
             lbLoadDown->hide();
             lbLoadUp->hide();
             lbLoadDownImg->hide();

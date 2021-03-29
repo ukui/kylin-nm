@@ -1630,6 +1630,11 @@
         <translation>断开</translation>
     </message>
     <message>
+        <location filename="../src/oneconnform.cpp" line="131"/>
+        <source>Property</source>
+        <translation>属 性</translation>
+    </message>
+    <message>
         <source>Input Password...</source>
         <translation type="obsolete">输入密码...</translation>
     </message>

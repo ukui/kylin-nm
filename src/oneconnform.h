@@ -98,6 +98,7 @@ public slots:
     void waitAnimStep();
     void startWaiting(bool isToConnect);
     void stopWaiting();
+    void onBtnPropertyClicked();
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -142,7 +143,8 @@ private:
     QString leQssLow, leQssHigh;
     QLabel * lbNameText = nullptr;
     QHBoxLayout * lbNameLyt = nullptr;
-    QString key_mgmt;
+    QString key_mgmt, funcBtnQss;
+    QPushButton *btnProperty = nullptr;
 
 signals:
     void selectedOneWifiForm(QString wifiName, int extendLength);

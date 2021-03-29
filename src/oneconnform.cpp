@@ -56,6 +56,9 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
 
     leQssLow = "QLineEdit{border:none;background:transparent;font-size:14px;}";
     leQssHigh = "QLineEdit{border:none;background:transparent;font-size:14px;}";
+    funcBtnQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(107,142,235,0.97);font-size:14px;}"
+                 "QPushButton:Hover{border:0px;border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(151,175,241,0.97);font-size:14px;}"
+                 "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(61,107,229,0.97);font-size:14px;}";
 
     ui->leInfo_1->setStyleSheet(leQssLow);
     ui->leInfo_2->setStyleSheet(leQssLow);
@@ -122,6 +125,15 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lbWaitingIcon->hide();
     ui->btnInfo->hide();
 
+    btnProperty = new QPushButton(ui->wbg_3);
+    btnProperty->resize(60, 20);
+    btnProperty->move(335, 108);
+    btnProperty->setText(tr("Property"));//"属性"
+    btnProperty->setStyleSheet(funcBtnQss);
+    btnProperty->setFocusPolicy(Qt::NoFocus);
+    btnProperty->show();
+    connect(btnProperty,SIGNAL(clicked()),this,SLOT(onBtnPropertyClicked()));
+
     this->mw = mainWindow;
     this->cf = confForm;
     this->ks = ksnm;
@@ -187,6 +199,12 @@ OneConnForm::~OneConnForm()
 void OneConnForm::mousePressEvent(QMouseEvent *)
 {
     emit selectedOneWifiForm(wifiBSsid, H_WIFI_ITEM_BIG_EXTEND);
+}
+
+void OneConnForm::onBtnPropertyClicked()
+{
+    qDebug() <<"----------------> hhhhhhhhhh";
+    system("ukui-control-centor --netconnect");
 }
 
 //事件过滤器

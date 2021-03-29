@@ -1742,7 +1742,7 @@ void MainWindow::getWifiListDone(QStringList slist)
         QStringList targetWifiList = connectableWifiPriorityList(slist);
         if (!targetWifiList.isEmpty()) {
             if (!isWifiReconnecting) {
-                isWifiReconnecting = true;
+                isWifiReconnecting = true; //保证对于连续发出的重连信号，只处理第一个
                 QFuture < void > future1 =  QtConcurrent::run([=]() {
                     QString wifiSsid = objKyDBus->getWifiSsid(targetWifiList.at(0));
                     QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiList.at(1);
@@ -2122,7 +2122,6 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 continue; //过滤相同名称的wifi
             }
         } else {
-            //qDebug() << "--------------------> actWifiName=  " << actWifiName << " wname= " << wname;
             if ((actWifiName == wname) && actWifiBssidList.size()>=1) {
                 //防止列表中没有已经连接的那个wifi
                 wbssid = actWifiBssidList.at(0);
@@ -3122,9 +3121,12 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
     isWifiReconnecting = false;
 
     if ( (type == "802-11-wireless" || type == "wifi") && !isConnUp ){
+        //如果是手动点击断开连接，因为还在处理中，所以is_stop_check_net_state的值为true,
+        //这样对于点击手动断开连接后立马发出的断开连接信号，便不会做处理
         if (!is_stop_check_net_state) {
             if (canReconnectWifiList.size() >= 1) {
                 int removePos = canReconnectWifiList.size() - 1;
+                //从列表中移除最后一个wifi，因为可能有外界因素导致wifi断开连接
                 canReconnectWifiList.removeAt(removePos);
             }
         }
@@ -3454,9 +3456,10 @@ void MainWindow::connWifiDone(int connFlag)
     if (connFlag == 0) {
         syslog(LOG_DEBUG, "Wi-Fi already connected by clicking button");
         if (!isHuaWeiPC) {
-            //如果是华为电脑，使用获取连接信号的方式更新列表
+            //如果不是华为电脑，使用获取连接信号的方式更新列表
             this->ksnm->execGetWifiList(this->wcardname);
         } else {
+            //如果是华为电脑，连接wifi后判断到portal网络弹出认证框
             WifiAuthThread *wifi_auth_thread=new WifiAuthThread();
             wifi_auth_thread->start();
         }

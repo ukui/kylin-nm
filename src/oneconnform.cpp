@@ -203,8 +203,7 @@ void OneConnForm::mousePressEvent(QMouseEvent *)
 
 void OneConnForm::onBtnPropertyClicked()
 {
-    qDebug() <<"----------------> hhhhhhhhhh";
-    system("ukui-control-centor --netconnect");
+    QProcess::startDetached(QString("ukui-control-center --netconnect"));
 }
 
 //事件过滤器

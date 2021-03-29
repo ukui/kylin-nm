@@ -232,6 +232,9 @@ public slots:
 
     void toReconnectWifi();
 
+    void rfkillDisableWifiDone();
+    void rfkillEnableWifiDone();
+
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
     void paintEvent(QPaintEvent *event);

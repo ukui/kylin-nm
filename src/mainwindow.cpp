@@ -58,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
                                "/", \
                                "org.ukui.kds.interface", \
                                QDBusConnection::systemBus());
-    QDBusConnection::systemBus().connect(kdsDbus->service(), kdsDbus->path(), kdsDbus->interface(), "signalRfkillStatusChanged", this, SLOT(onRfkillStatusChanged));
+    QDBusConnection::systemBus().connect(kdsDbus->service(), kdsDbus->path(), kdsDbus->interface(), "signalRfkillStatusChanged", this, SLOT(onRfkillStatusChanged()));
 
     UseQssFile::setStyle("style.qss");
 
@@ -1166,6 +1166,7 @@ void MainWindow::onBtnWifiClicked(int flag)
     syslog(LOG_DEBUG, "Value of flag passed into function 'onBtnWifiClicked' is: %d", flag);
 
     if (is_wireless_adapter_ready == 1) {
+        // flag: 0->UI点击关闭 1->UI点击打开 2->gsetting打开 3->gsetting关闭 4->网卡热插 5->网卡热拔
         // 当连接上无线网卡时才能打开wifi开关
         // 网络开关关闭时，点击Wifi开关时，程序先打开有线开关
         if (flag == 0 || flag == 1 || flag == 4 || flag == 5) {
@@ -3677,7 +3678,66 @@ void MainWindow::onRfkillStatusChanged()
             qWarning("Error Occur When Get Current WlanMode");
             return;
         }
-        onExternalWifiSwitchChange(bool(current));
+        if (!current) {
+            is_stop_check_net_state = 1;
+            lbTopWifiList->hide();
+            btnAddNet->hide();
+            objKyDBus->setWifiSwitchState(false);
+
+            QThread *t = new QThread();
+            BackThread *bt = new BackThread();
+            bt->moveToThread(t);
+            btnWireless->setSwitchStatus(true);
+            connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+            connect(t, SIGNAL(started()), bt, SLOT(execDisWifi()));
+            connect(bt, SIGNAL(disWifiDone()), this, SLOT(rfkillDisableWifiDone()));
+            connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
+            t->start();
+            this->startLoading();
+        } else {
+            if (is_fly_mode_on == 0) {
+                on_btnWifiList_clicked();
+                is_stop_check_net_state = 1;
+                objKyDBus->setWifiCardState(true);
+                objKyDBus->setWifiSwitchState(true);
+
+                QThread *t = new QThread();
+                BackThread *bt = new BackThread();
+                bt->moveToThread(t);
+                btnWireless->setSwitchStatus(true);
+                connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+                connect(t, SIGNAL(started()), bt, SLOT(execEnWifi()));
+                connect(bt, SIGNAL(enWifiDone()), this, SLOT(rfkillEnableWifiDone()));
+                connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
+                t->start();
+                this->startLoading();
+            }
+        }
+    }
+}
+
+void MainWindow::rfkillDisableWifiDone()
+{
+    if (is_btnWifiList_clicked)
+        disWifiDoneChangeUI();
+
+    qDebug()<<"debug: already turn off the switch of wifi network by keyboard button";
+    syslog(LOG_DEBUG, "Already turn off the switch of wifi network by keyboard button");
+
+    this->stopLoading();
+    is_stop_check_net_state = 0;
+}
+
+void MainWindow::rfkillEnableWifiDone()
+{
+    current_wifi_list_state = LOAD_WIFI_LIST;
+    if (is_btnWifiList_clicked) {
+        this->ksnm->execGetWifiList(this->wcardname);
+    } else {
+//        on_btnWifiList_clicked();
     }
 
+    objKyDBus->getWirelessCardName();
+    qDebug()<<"debug: already turn on the switch of wifi network";
+    syslog(LOG_DEBUG, "Already turn on the switch of wifi network");
 }

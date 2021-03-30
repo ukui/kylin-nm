@@ -3109,7 +3109,6 @@ void MainWindow::on_btnHotspotState()
 //执行wifi的重新连接
 void MainWindow::toReconnectWifi()
 {
-    syslog(LOG_DEBUG, "------------------> toReconnectWifi");
     if (isHuaWeiPC) {
         current_wifi_list_state = RECONNECT_WIFI;
         this->ksnm->execGetWifiList(this->wcardname);
@@ -3124,13 +3123,13 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
     if ( (type == "802-11-wireless" || type == "wifi") && !isConnUp ){
         //如果是手动点击断开连接，因为还在处理中，所以is_stop_check_net_state的值为true,
         //这样对于点击手动断开连接后立马发出的断开连接信号，便不会做处理
-        if (!is_stop_check_net_state) {
-            if (canReconnectWifiList.size() >= 1) {
-                int removePos = canReconnectWifiList.size() - 1;
-                //从列表中移除最后一个wifi，因为可能有外界因素导致wifi断开连接
-                canReconnectWifiList.removeAt(removePos);
-            }
-        }
+//        if (!is_stop_check_net_state) {
+//            if (canReconnectWifiList.size() >= 1) {
+//                int removePos = canReconnectWifiList.size() - 1;
+//                //从列表中移除最后一个wifi，因为可能有外界因素导致wifi断开连接
+//                canReconnectWifiList.removeAt(removePos);
+//            }
+//        }
         QTimer::singleShot(2*1000, this, SLOT(onToResetValue() ));
     }
     if (type == "802-11-wireless" || type == "wifi") {

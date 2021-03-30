@@ -786,7 +786,6 @@ int KylinDBus::getWiredNetworkNumber()
         for(QString key : map.keys() ) {
             if (key == "802-3-ethernet") {
                 wiredNetworkNumber += 1;
-                qDebug()<<"A new wired network was created.";
             }
         }
     }

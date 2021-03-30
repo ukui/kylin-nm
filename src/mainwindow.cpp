@@ -1698,10 +1698,6 @@ void MainWindow::onRequestRevalueUpdateWifi()
 // 获取wifi列表回调
 void MainWindow::getWifiListDone(QStringList slist)
 {
-    if (this->is_btnLanList_clicked == 1) {
-        return;
-    }
-
     //qDebug()<<"------------";
     //foreach (QString str, slist) {
     //    qDebug()<<str;
@@ -1753,15 +1749,25 @@ void MainWindow::getWifiListDone(QStringList slist)
                 });
             }
         }
-    } else if (current_wifi_list_state == LOAD_WIFI_LIST) {
+        current_wifi_list_state = LOAD_WIFI_LIST;
+    }
+
+    if (this->is_btnLanList_clicked == 1) {
+        return;
+    }
+
+    if (current_wifi_list_state == LOAD_WIFI_LIST) {
         //qDebug() << "loadwifi的列表";
         loadWifiListDone(slist);
         is_init_wifi_list = 0;
-    } else {
+    }
+
+    if (current_wifi_list_state == UPDATE_WIFI_LIST) {
         //qDebug() << "updatewifi的列表";
         updateWifiListDone(slist);
+        current_wifi_list_state = LOAD_WIFI_LIST;
     }
-    current_wifi_list_state = LOAD_WIFI_LIST;
+
     oldWifiSlist = slist;
 }
 

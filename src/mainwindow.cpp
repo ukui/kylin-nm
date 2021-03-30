@@ -3109,6 +3109,7 @@ void MainWindow::on_btnHotspotState()
 //执行wifi的重新连接
 void MainWindow::toReconnectWifi()
 {
+    syslog(LOG_DEBUG, "------------------> toReconnectWifi");
     if (isHuaWeiPC) {
         current_wifi_list_state = RECONNECT_WIFI;
         this->ksnm->execGetWifiList(this->wcardname);

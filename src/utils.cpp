@@ -74,7 +74,7 @@ int Utils::m_system(char *cmd)
     }
     double duration = (double)(finish-start)/CLOCKS_PER_SEC;
     QString str = "It takes "+QString::number(duration)+" seconds to execute command:"+cmd;
-    syslog(LOG_DEBUG,"%s",str.toStdString().c_str());
+    //syslog(LOG_DEBUG,"%s",str.toStdString().c_str());
     return status;
 }
 

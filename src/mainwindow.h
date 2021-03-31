@@ -174,10 +174,6 @@ public:
     int is_fly_mode_on = 0; //是否已经打开飞行模式
     int is_hot_sopt_on = 0; //是否已经打开热点
     int is_connect_hide_wifi = 0; //是否正在连接隐藏wifi
-    QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
-    QStringList canReconnectWifiList; //当前可以会连的wifi列表
-    QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
-    QString oldWifiIpv4Method = ""; //原来的wifi的ipv4地址获取方式,自动还是手动
     int currSelNetNum = 0; //当前选中的item序号
     bool isLanBeConnUp = false; //lan是否连接上
     bool isWifiBeConnUp = false; //wifi是否是连接上
@@ -185,13 +181,18 @@ public:
     bool isToSetWifiValue = true; //本次执行是否进行赋值
     bool isWifiReconnecting = false; //是否正在执行wifi的回连
     int addNumberForWifi = 0; //短时间内收到关于wifi连接信号的次数
+    bool isHuaWeiPC;
+
+    QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
+    QStringList canReconnectWifiList; //当前可以会连的wifi列表
+    QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
+    QString oldWifiIpv4Method = ""; //原来的wifi的ipv4地址获取方式,自动还是手动
+    int numberForWifiScan; //该值控制wifi的扫描
 
     int m_priX;
     int m_priY;
     int m_priWid;
     int m_priHei;
-
-    int isHuaWeiPC;
 
 public slots:
     void onPhysicalCarrierChanged(bool flag);
@@ -362,6 +363,7 @@ private slots:
     void activeStartLoading();
     void activeGetWifiList();
     void onRequestScanAccesspoint();
+    void toScanWifi(bool isShow);
     void on_setNetSpeed();
     void on_checkOverTime();
 

@@ -128,14 +128,7 @@ MainWindow::MainWindow(QWidget *parent) :
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 
     hasWifiConnected = false;
-//    QDBusConnection systemBus = QDBusConnection::systemBus();
-//    if (!systemBus.registerService("com.kylin.NetworkManager.qt.systemdbus")){
-//        qCritical() << "QDbus register service failed reason:" << systemBus.lastError();
-//    }
-
-//    if (!systemBus.registerObject("/", new SysdbusRegister(), QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)){
-//        qCritical() << "QDbus register object failed reason:" << systemBus.lastError();
-//    }
+    numberForWifiScan = 0;
 }
 
 MainWindow::~MainWindow()
@@ -559,7 +552,7 @@ void MainWindow::initTimer()
     checkWifiListChanged = new QTimer(this);
     checkWifiListChanged->setTimerType(Qt::PreciseTimer);
     QObject::connect(checkWifiListChanged, SIGNAL(timeout()), this, SLOT(onRequestScanAccesspoint()));
-    checkWifiListChanged->start(11*1000);
+    checkWifiListChanged->start(10*1000);
 
     //网线插入时定时执行
     wiredCableUpTimer = new QTimer(this);
@@ -698,10 +691,11 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
             }
         } else {
             this->hide();
+            numberForWifiScan = 0;
         }
         break;
     case QSystemTrayIcon::DoubleClick:
-        this->hide();
+        //this->hide();
         break;
     case QSystemTrayIcon::Context:
         //右键点击托盘图标弹出菜单
@@ -2955,8 +2949,6 @@ void MainWindow::activeWifiDisconn()
 }
 void MainWindow::activeStartLoading()
 {
-    QTimer::singleShot(13*1000, objKyDBus, SLOT(requestScanWifi() ));
-
     syslog(LOG_DEBUG, "Wi-Fi is disconnected");
     QString txt(tr("Wi-Fi is disconnected"));
     objKyDBus->showDesktopNotify(txt);
@@ -3293,25 +3285,96 @@ void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
 
 void MainWindow::onRequestScanAccesspoint()
 {
-    if (is_init_wifi_list || is_connect_hide_wifi) {
-        return; //遇到启动软件第一次加载wifi列表的时候，或正在连接隐藏wifi，停止更新
-    }
+    if (isHuaWeiPC) {
+        numberForWifiScan += 1;
+        int numScanPerSecond0 = 0;
+        int numScanPerSecond1 = 0;
+        if (numberForWifiScan > 12) {
+            numScanPerSecond0 = (numberForWifiScan-12)/6; //获取除数
+            numScanPerSecond1 = (numberForWifiScan-12)%6; //获取余数
+        }
 
-    if (is_stop_check_net_state==0 && this->is_btnWifiList_clicked==1 && this->isVisible()) {
-        BackThread *loop_bt = new BackThread();
-        IFace *loop_iface = loop_bt->execGetIface();
+        if (is_init_wifi_list || is_connect_hide_wifi) {
+            return; //遇到启动软件第一次加载wifi列表的时候，或正在连接隐藏wifi，停止更新
+        }
 
-        if (loop_iface->wstate != 2) {
-            if (loop_iface->wstate == 0) {
-                objKyDBus->requestScanWifi();
+        if (is_stop_check_net_state==0 && this->is_btnWifiList_clicked==1) {
+            if (this->isVisible()) {
+                this->toScanWifi(1);
+            } else {
+                switch (numberForWifiScan) {
+                case 1 :
+                    this->toScanWifi(0);
+                    break;
+                case 2:
+                    this->toScanWifi(0);
+                    break;
+                case 3:
+                    this->toScanWifi(0);
+                    break;
+                case 6:
+                    this->toScanWifi(0);
+                    break;
+                case 9:
+                    this->toScanWifi(0);
+                    break;
+                case 12:
+                    this->toScanWifi(0);
+                    break;
+                }
+
+                if ((numScanPerSecond0 != 0) && (numScanPerSecond1 == 0)) {
+                    this->toScanWifi(0);
+                }
+            } // end if(this->isVisible())
+        }
+
+        if (numberForWifiScan > 500) numberForWifiScan = 0;
+    } else {
+        if (is_init_wifi_list || is_connect_hide_wifi) {
+            return; //遇到启动软件第一次加载wifi列表的时候，或正在连接隐藏wifi，停止更新
+        }
+
+        if (is_stop_check_net_state==0 && this->is_btnWifiList_clicked==1 && this->isVisible()) {
+            BackThread *loop_bt = new BackThread();
+            IFace *loop_iface = loop_bt->execGetIface();
+
+            if (loop_iface->wstate != 2) {
+                current_wifi_list_state = UPDATE_WIFI_LIST;
+                this->ksnm->execGetWifiList(this->wcardname); //更新wifi列表
             }
+
+            delete loop_iface;
+            loop_bt->deleteLater();
+        }
+    }
+}
+
+void MainWindow::toScanWifi(bool isShow)
+{
+    BackThread *loop_bt = new BackThread();
+    IFace *loop_iface = loop_bt->execGetIface();
+
+    if (loop_iface->wstate != 2) {
+        if (loop_iface->wstate == 0) {
+            if (isShow) {
+                objKyDBus->requestScanWifi(); //要求后台扫描AP
+            }
+        }
+
+        if (loop_iface->wstate == 1) {
+            objKyDBus->requestScanWifi(); //要求后台扫描AP
+        }
+
+        if (isShow) {
+            //只有在显示窗口时更新wifi列表
             current_wifi_list_state = UPDATE_WIFI_LIST;
             this->ksnm->execGetWifiList(this->wcardname); //更新wifi列表
         }
-
-        delete loop_iface;
-        loop_bt->deleteLater();
     }
+
+    delete loop_iface;
+    loop_bt->deleteLater();
 }
 
 void MainWindow::on_setNetSpeed()
@@ -3521,6 +3584,7 @@ bool MainWindow::event(QEvent *event)
     if (event->type() == QEvent::ActivationChange) {
         if (QApplication::activeWindow() != this) {
             this->hide();
+            numberForWifiScan = 0;
         }
     }
 

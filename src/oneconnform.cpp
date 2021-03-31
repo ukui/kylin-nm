@@ -131,7 +131,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     btnProperty->setText(tr("Property"));//"属性"
     btnProperty->setStyleSheet(funcBtnQss);
     btnProperty->setFocusPolicy(Qt::NoFocus);
-    btnProperty->show();
+    btnProperty->hide();
     connect(btnProperty,SIGNAL(clicked()),this,SLOT(onBtnPropertyClicked()));
 
     this->mw = mainWindow;

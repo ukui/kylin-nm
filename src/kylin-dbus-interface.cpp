@@ -25,7 +25,8 @@
 
 #include <QTextCodec>
 #include <QByteArray>
-
+#include <QMetaType>
+#include <QDBusMetaType>
 
 namespace {
 
@@ -177,6 +178,7 @@ void KylinDBus::getObjectPath()
            multiWiredPaths.append(obj_path);
        } else if (reply.value().indexOf("org.freedesktop.NetworkManager.Device.Wireless") != -1) {
            //表明有wifi设备
+           multiWirelessPaths.append(obj_path);
            wirelessPath = obj_path;
            isWirelessCardOn = true;
        }
@@ -1849,6 +1851,23 @@ bool KylinDBus::toConnectWiredNet(QString netUuid, QString netIfName)
     } //end foreach (QDBusObjectPath objSettingPath, m_objSettingPaths)
 
     return isConnectUp;
+}
+
+//要求底层的驱动进行扫描AP
+void KylinDBus::requestScanWifi()
+{
+    if (multiWirelessPaths.size() == 0)  return;
+    qDebug() << "----------------------> requestScanWifi  " << multiWirelessPaths.at(0).path();
+
+    qRegisterMetaType<QMap<QString, QVariant>>("QMap<QString, QVariant>");
+    qDBusRegisterMetaType<QMap<QString, QVariant>>();
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              multiWirelessPaths.at(0).path(),
+                              "org.freedesktop.NetworkManager.Device.Wireless",
+                              QDBusConnection::systemBus() );
+    QMap<QString, QVariant> my_map;
+    my_map = {};
+    interface.call("RequestScan", my_map); //get accesspoint for each wifi
 }
 
 //显示桌面通知

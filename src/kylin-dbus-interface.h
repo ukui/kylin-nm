@@ -81,6 +81,7 @@ public:
     void toGetWifiList();
 
     QDBusObjectPath wirelessPath; //无线设备的路径
+    QList<QDBusObjectPath> multiWirelessPaths; //Wireless Device的对象路径列表
     QList<QDBusObjectPath> multiWiredPaths; //Wired Device的对象路径列表
     QList<QString> multiWiredCableState;//多有线网卡的情况，判断有线网卡对应网线是否插入
     QList<QString> multiWiredMac; //对应有线网卡的Mac地址
@@ -127,6 +128,7 @@ public slots:
     QString getLanMAC(QString ifname);
     void getWifiMac(QString netName);
     void slot_timeout();
+    void requestScanWifi();
 
 private:
     MainWindow *mw;

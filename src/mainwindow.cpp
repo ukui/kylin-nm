@@ -558,8 +558,8 @@ void MainWindow::initTimer()
     //循环检测wifi列表的变化，可用于更新wifi列表
     checkWifiListChanged = new QTimer(this);
     checkWifiListChanged->setTimerType(Qt::PreciseTimer);
-    QObject::connect(checkWifiListChanged, SIGNAL(timeout()), this, SLOT(on_checkWifiListChanged()));
-    checkWifiListChanged->start(10*1000);
+    QObject::connect(checkWifiListChanged, SIGNAL(timeout()), this, SLOT(onRequestScanAccesspoint()));
+    checkWifiListChanged->start(11*1000);
 
     //网线插入时定时执行
     wiredCableUpTimer = new QTimer(this);
@@ -2955,6 +2955,8 @@ void MainWindow::activeWifiDisconn()
 }
 void MainWindow::activeStartLoading()
 {
+    QTimer::singleShot(13*1000, objKyDBus, SLOT(requestScanWifi() ));
+
     syslog(LOG_DEBUG, "Wi-Fi is disconnected");
     QString txt(tr("Wi-Fi is disconnected"));
     objKyDBus->showDesktopNotify(txt);
@@ -3289,7 +3291,7 @@ void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
 ///////////////////////////////////////////////////////////////////////////////
 //循环处理部分，目前仅on_checkWifiListChanged 与on_setNetSpeed两个函数在运行
 
-void MainWindow::on_checkWifiListChanged()
+void MainWindow::onRequestScanAccesspoint()
 {
     if (is_init_wifi_list || is_connect_hide_wifi) {
         return; //遇到启动软件第一次加载wifi列表的时候，或正在连接隐藏wifi，停止更新
@@ -3300,6 +3302,9 @@ void MainWindow::on_checkWifiListChanged()
         IFace *loop_iface = loop_bt->execGetIface();
 
         if (loop_iface->wstate != 2) {
+            if (loop_iface->wstate == 0) {
+                objKyDBus->requestScanWifi();
+            }
             current_wifi_list_state = UPDATE_WIFI_LIST;
             this->ksnm->execGetWifiList(this->wcardname); //更新wifi列表
         }

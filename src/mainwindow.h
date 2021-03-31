@@ -361,7 +361,7 @@ private slots:
     void activeWifiDisconn();
     void activeStartLoading();
     void activeGetWifiList();
-    void on_checkWifiListChanged();
+    void onRequestScanAccesspoint();
     void on_setNetSpeed();
     void on_checkOverTime();
 

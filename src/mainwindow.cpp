@@ -1976,7 +1976,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
 {
     delete topWifiListWidget; //清空top列表
     createTopWifiUI(); //创建topWifiListWidget
-
+    for(auto i:slist){
+        qDebug()<<"sxs# "<<i;
+    }
     // 清空wifi列表
     wifiListWidget = new QWidget(scrollAreaw);
     wifiListWidget->resize(W_LIST_WIDGET, H_WIFI_ITEM_BIG_EXTEND);
@@ -2064,7 +2066,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 填充可用网络列表
     QString headLine = slist.at(0);
-    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath;
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath, indexCate;
     headLine = headLine.trimmed();
 
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
@@ -2075,6 +2077,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         indexBSsid = headLine.indexOf("BSSID") + 6;
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
     } else {
         indexSignal = headLine.indexOf("SIGNAL");
         indexSecu = headLine.indexOf("SECURITY");
@@ -2082,6 +2085,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         indexBSsid = headLine.indexOf("BSSID");
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
     }
     QStringList wnames;
     int count = 0;
@@ -2111,6 +2115,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
         QString wname = line.mid(indexName, indexPath - indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
+        QString wcate = line.mid(indexCate).trimmed();
 
         if (!isHuaWeiPC) {
             //如果不是华为的电脑，选择wifi在这里执行
@@ -2211,7 +2216,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 }
                 //ocf->setRate(wrate);
                 ocf->setLine(true);
-                ocf->setSignal(wsignal, wsecu);
+                ocf->setSignal(wsignal, wsecu, wcate);
                 //objKyDBus->getWifiMac(wname);
                 ocf->setWifiInfo(wsecu, wsignal, wbssid, freqState);
                 ocf->setConnedString(0, tr("Disconnected"), wsecu);
@@ -2287,7 +2292,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     }
 
     QString headLine = slist.at(0);
-    int indexSecu, indexFreq, indexBSsid, indexName, indexPath;
+    int indexSecu, indexFreq, indexBSsid, indexName, indexPath, indexCate;
     headLine = headLine.trimmed();
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
@@ -2297,6 +2302,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
         //indexName = headLine.indexOf("SSID") + 6;
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate= headLine.indexOf("CATEGORY");
     } else {
         indexSecu = headLine.indexOf("SECURITY");
         indexFreq = headLine.indexOf("FREQ");
@@ -2304,6 +2310,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
         //indexName = headLine.indexOf("SSID");
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
     }
 
     //列表中去除已经减少的wifi
@@ -2349,6 +2356,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
         QString wname = line.mid(indexName, indexPath - indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
+        QString wcate =line.mid(indexCate).trimmed();
 
         if(wname == "" || wname == "--"){continue;}
 
@@ -2416,7 +2424,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 }
                 //addItem->setRate(wrate);
                 addItem->setLine(false);
-                addItem->setSignal(wsignal, wsecu);
+                addItem->setSignal(wsignal, wsecu, wcate);
                 //objKyDBus->getWifiMac(wname);
                 addItem->setWifiInfo(wsecu, wsignal, wbssid, freqState);
                 addItem->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"

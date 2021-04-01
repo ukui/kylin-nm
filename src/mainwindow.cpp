@@ -1831,11 +1831,11 @@ void MainWindow::wifiListOptimize(QStringList& slist)
     QStringList targetList; //slist优化，同名同频AP中只留信号最强
     targetList<<slist.at(0);    //把第一行加进去
     for(int it = 1;it < slist.size();it++){
-        QString i = slist.at(it);
+        QString currentWifiInfo = slist.at(it);
         bool ifContinue = false;
-        QString conName = i.mid(indexName, indexPath - indexName).trimmed();
-        int conSignal = i.mid(indexSignal,3).trimmed().toInt();
-        int conFreq = i.mid(indexFreq,4).trimmed().toInt();
+        QString conName = currentWifiInfo.mid(indexName, indexPath - indexName).trimmed();
+        int conSignal = currentWifiInfo.mid(indexSignal,3).trimmed().toInt();
+        int conFreq = currentWifiInfo.mid(indexFreq,4).trimmed().toInt();
         for(int i=0;i<slist.size();i++){
             QString str = slist.at(i);
             QString name = str.mid(indexName, indexPath - indexName).trimmed();
@@ -1857,7 +1857,7 @@ void MainWindow::wifiListOptimize(QStringList& slist)
             }
         }
         if(ifContinue)  continue;
-        targetList<<i;
+        targetList<<currentWifiInfo;
     }
     slist = targetList;
     return ;
@@ -1903,17 +1903,22 @@ void MainWindow::getFinalWifiList(QStringList &slist)
             int signal = wifiStr.mid(indexSignal,3).trimmed().toInt();
             int freq = wifiStr.mid(indexFreq,4).trimmed().toInt();
             if(conName == name){
-                if (conFreq > freq) {
-                    if ((signal-conSignal) > 50) { //低频的信号格数比高频大于两格，选低频
-                        deleteWifiStr.append(wifiInfo);
-                    } else {
-                        deleteWifiStr.append(wifiStr);
-                    }
+                if (conFreq >= 5000) {
+                    //排在前面的一个是5Gwifi，并且信号也强一些
+                    deleteWifiStr.append(wifiStr);
                 } else {
-                    if ((conSignal-signal) > 50) { //低频的信号格数比高频大于两格，选低频
-                        deleteWifiStr.append(wifiStr);
+                    //排在前面的一个是2.4G
+                    if (freq >= 5000) {
+                        //排在后面的一个是5G
+                        if (signal >= 55) {
+                            //排在后面的一个是5Gwifi信号强度 >= 3格，选5G
+                            deleteWifiStr.append(wifiInfo);
+                        } else {
+                            deleteWifiStr.append(wifiStr);
+                        }
                     } else {
-                        deleteWifiStr.append(wifiInfo);
+                        //排在后面的一个是2.4G
+                        deleteWifiStr.append(wifiStr);
                     }
                 }
                 break;

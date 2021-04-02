@@ -1629,8 +1629,8 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 //接收到自动连接的信号过后执行自动连接wifi
 void KylinDBus::onAutoConnect()
 {
-    syslog(LOG_DEBUG, "Receive a auto-connect signal to reconnect network");
-    qDebug() << "Receive a auto-connect signal to reconnect network";
+    syslog(LOG_DEBUG, "Receive a auto-connect signal to reconnect wifi");
+    qDebug() << "Receive a auto-connect signal to reconnect wifi";
     mw->toReconnectWifi();
 }
 

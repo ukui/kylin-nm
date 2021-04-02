@@ -183,7 +183,7 @@ public:
     bool isReconnectingLan = false; //是否正在执行lan的回连
     int addNumberForWifi = 0; //短时间内收到关于wifi连接信号的次数
     bool isHuaWeiPC;
-    bool canReconnectNetwork = true;
+    bool canReconnectWifiTimeInterval = true;
 
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
     QStringList canReconnectWifiList; //当前可以回连的wifi列表
@@ -234,7 +234,7 @@ public slots:
     void checkIfConnectedWifiExist();
 
     void toReconnectWifi();
-    void toChangeReconnectValue();
+    void timeIntervalToConnectWifi();
 
     void rfkillDisableWifiDone();
     void rfkillEnableWifiDone();

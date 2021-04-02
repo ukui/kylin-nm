@@ -3168,18 +3168,20 @@ void MainWindow::on_btnHotspotState()
 //执行wifi的重新连接
 void MainWindow::toReconnectWifi()
 {
-    if (canReconnectNetwork) {
-        canReconnectNetwork = false;
-        if (!is_stop_check_net_state && isHuaWeiPC) {
+    if (canReconnectWifiTimeInterval) {
+        canReconnectWifiTimeInterval = false;
+        QTimer::singleShot(2*1000, this, SLOT(timeIntervalToConnectWifi() ));
+
+        if (isHuaWeiPC) {
             current_wifi_list_state = RECONNECT_WIFI;
             this->ksnm->execGetWifiList(this->wcardname);
         }
     }
 }
 
-void MainWindow::toChangeReconnectValue()
+void MainWindow::timeIntervalToConnectWifi()
 {
-    canReconnectNetwork = true;
+    canReconnectWifiTimeInterval = true;
 }
 
 //处理外界对网络的连接与断开

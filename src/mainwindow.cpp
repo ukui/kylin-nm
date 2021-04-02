@@ -422,7 +422,6 @@ void MainWindow::createLeftAreaUI()
 void MainWindow::initLanSlistAndGetReconnectNetList()
 {
     canReconnectWifiList.clear();
-    canReconnectLanList.clear();
     const int BUF_SIZE = 1024;
     char buf[BUF_SIZE];
 
@@ -437,24 +436,16 @@ void MainWindow::initLanSlistAndGetReconnectNetList()
     }
 
     int trimNamePos = 0;
-    int trimUuidPos = 0;
     while (fgets(buf, BUF_SIZE, p_file) != NULL) {
         QString strSlist = "";
         QString line(buf);
         strSlist = line.trimmed();
         if (strSlist.indexOf("UUID") != -1 || strSlist.indexOf("NAME") != -1) {
             trimNamePos = strSlist.indexOf("NAME");
-            trimUuidPos = strSlist.indexOf("UUID");
             oldLanSlist.append(strSlist);
         }
         if (strSlist.indexOf("802-3-ethernet") != -1 || strSlist.indexOf("ethernet") != -1) {
             oldLanSlist.append(strSlist);
-            if (trimUuidPos != 0) {
-                QString mylanuuid = strSlist.mid(trimUuidPos, trimNamePos-trimUuidPos).trimmed();
-                if (!canReconnectLanList.contains(mylanuuid)) {
-                    canReconnectLanList.append(mylanuuid);
-                }
-            }
         }
         if (strSlist.indexOf("802-11-wireless") != -1 || strSlist.indexOf("wifi") != -1) {
             if (trimNamePos != 0) {
@@ -1580,7 +1571,6 @@ void MainWindow::getLanListDone(QStringList slist)
                         topLanListWidget->resize(topLanListWidget->width(), topLanListWidget->height() + H_NORMAL_ITEM*kk);
                         isActiveNet = true; //名为nname的网络是已经连接的有线网络
                         ifLanConnected = true;
-                        canReconnectLanUuid = nuuid;
 
                         objKyDBus->getConnectNetIp(nuuid);
                         if (mwBandWidth == "Unknown!") { getLanBandWidth(); }

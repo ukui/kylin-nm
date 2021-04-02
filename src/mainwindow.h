@@ -187,8 +187,6 @@ public:
 
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
     QStringList canReconnectWifiList; //当前可以回连的wifi列表
-    QStringList canReconnectLanList; //当前可以回连的Lan列表
-    QString canReconnectLanUuid; //当前可以回连的Lan
     QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
     QString oldWifiIpv4Method = ""; //原来的wifi的ipv4地址获取方式,自动还是手动
     int numberForWifiScan; //该值控制wifi的扫描

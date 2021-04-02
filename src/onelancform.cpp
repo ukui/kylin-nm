@@ -319,6 +319,7 @@ void OneLancForm::on_btnDisConn_clicked()
     //kylin_network_set_con_down(ssidName.toUtf8().data());
     //使用有线网uuid断开网络
     kylin_network_set_con_down(uuidName.toUtf8().data());
+    mw->canReconnectLanUuid = "";
     //使用dbus接口断开网络
     //toDisConnWiredNetwork(uuidName);
 
@@ -361,6 +362,7 @@ void OneLancForm::toDisConnWiredNetwork(QString netUuid)
                                        QDBusConnection::systemBus() );
 
             QDBusReply<QDBusObjectPath> disReply = disConnIf.call("DeactivateConnection", QVariant::fromValue(activeConnPath));
+            mw->canReconnectLanUuid = "";
         }
     }
     dbusArgs.endArray();

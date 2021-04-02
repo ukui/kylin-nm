@@ -338,6 +338,8 @@ void ConfForm::on_btnSave_clicked()
             int status = system(cmd.toUtf8().data());
             if (status != 0) {
                 syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'on_btnSave_clicked' failed");
+            } else {
+                syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'on_btnSave_clicked' success");
             }
 
             this->isCreateNewNet = true;

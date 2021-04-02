@@ -179,12 +179,16 @@ public:
     bool isWifiBeConnUp = false; //wifi是否是连接上
     bool isToSetLanValue = true; //本次执行是否进行赋值
     bool isToSetWifiValue = true; //本次执行是否进行赋值
-    bool isWifiReconnecting = false; //是否正在执行wifi的回连
+    bool isReconnectingWifi = false; //是否正在执行wifi的回连
+    bool isReconnectingLan = false; //是否正在执行lan的回连
     int addNumberForWifi = 0; //短时间内收到关于wifi连接信号的次数
     bool isHuaWeiPC;
+    bool canReconnectNetwork = true;
 
     QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
-    QStringList canReconnectWifiList; //当前可以会连的wifi列表
+    QStringList canReconnectWifiList; //当前可以回连的wifi列表
+    QStringList canReconnectLanList; //当前可以回连的Lan列表
+    QString canReconnectLanUuid; //当前可以回连的Lan
     QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
     QString oldWifiIpv4Method = ""; //原来的wifi的ipv4地址获取方式,自动还是手动
     int numberForWifiScan; //该值控制wifi的扫描
@@ -251,7 +255,7 @@ private:
     bool checkWlOn();
     void getLanList();
     void getWifiList();
-    void getInitLanSlist();
+    void initLanSlistAndGetReconnectNetList();
     QPixmap drawSymbolicColoredPixmap(const QPixmap &source);
     QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
     const QPixmap loadSvg(const QString &fileName, const int size);

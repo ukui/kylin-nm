@@ -1629,8 +1629,8 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 //接收到自动连接的信号过后执行自动连接wifi
 void KylinDBus::onAutoConnect()
 {
-    syslog(LOG_DEBUG, "Receive a auto-connect signal to reconnect wifi");
-    qDebug() << "Receive a auto-connect signal to reconnect wifi";
+    syslog(LOG_DEBUG, "Receive a auto-connect signal to reconnect network");
+    qDebug() << "Receive a auto-connect signal to reconnect network";
     mw->toReconnectWifi();
 }
 
@@ -1665,6 +1665,7 @@ void KylinDBus::onLanIpPropertiesChanged()
 void KylinDBus::onWifiIpPropertiesChanged() {
     emit this->updateWirelessList();
 }
+
 //利用dbus的方法对已经连接的有线网进行再次连接
 void KylinDBus::reConnectWiredNet(QString netUuid)
 {
@@ -1857,7 +1858,6 @@ bool KylinDBus::toConnectWiredNet(QString netUuid, QString netIfName)
 void KylinDBus::requestScanWifi()
 {
     if (multiWirelessPaths.size() == 0)  return;
-    qDebug() << "----------------------> requestScanWifi  " << multiWirelessPaths.at(0).path();
 
     qRegisterMetaType<QMap<QString, QVariant>>("QMap<QString, QVariant>");
     qDBusRegisterMetaType<QMap<QString, QVariant>>();

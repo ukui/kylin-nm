@@ -234,6 +234,7 @@ public slots:
     void checkIfConnectedWifiExist();
 
     void toReconnectWifi();
+    void toChangeReconnectValue();
 
     void rfkillDisableWifiDone();
     void rfkillEnableWifiDone();

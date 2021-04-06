@@ -94,9 +94,9 @@ void DlgHotspotCreate::on_btnOk_clicked()
     //example: nmcli device wifi hotspot ifname wlan0 con-name MyHostspot ssid MyHostspotSSID password 12345678
     QString str;
     if(ui->cbxSecurity->currentIndex() == 0 ){
-        str = "nmcli device wifi hotspot ifname " + wirelessCardName + " con-name " + ui->leNetName->text() + " ssid " + ui->leNetName->text() + "SSID";
+        str = "nmcli device wifi hotspot ifname '" + wirelessCardName + "' con-name '" + ui->leNetName->text() + "' ssid '" + ui->leNetName->text() + "' SSID";
     }else{
-        str = "nmcli device wifi hotspot ifname " + wirelessCardName + " con-name " + ui->leNetName->text() + " ssid " + ui->leNetName->text() + " password " + ui->lePassword->text();
+        str = "nmcli device wifi hotspot ifname '" + wirelessCardName + "' con-name '" + ui->leNetName->text() + "' ssid '" + ui->leNetName->text() + "' password '" + ui->lePassword->text() + "'";
     }
     Utils::m_system(str.toUtf8().data());
 

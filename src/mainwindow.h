@@ -102,12 +102,16 @@
 #define X_BTN_FUN 360
 #define Y_BTN_FUN 87 //新建网络，加入网络按钮的宽高、x坐标、y坐标
 
-#define W_NO_ITEM_TIP 235
-#define H_NO_ITEM_TIP 20
+#define W_NO_ITEM_TIP 240
+#define H_NO_ITEM_TIP 24
 
 #define DBUS_NAME       "org.ukui.SettingsDaemon"
 #define DBUS_PATH       "/org/ukui/SettingsDaemon/wayland"
 #define DBUS_INTERFACE  "org.ukui.SettingsDaemon.wayland"
+
+#define LOAD_WIFI_LIST 0
+#define UPDATE_WIFI_LIST 1
+#define RECONNECT_WIFI 2
 
 class OneConnForm;
 class ConfForm;
@@ -138,10 +142,10 @@ public:
 
     void setTrayIcon(QIcon icon);
     void setTrayLoading(bool isLoading);
-    void getActiveInfo();
+    void getActiveInfoAndSetTrayIcon();
 
     void initTimer();
-    void checkIsWirelessDeviceOn();
+    void checkIsWirelessDevicePluggedIn();
 
     void initActNetDNS();
     void PrimaryManager();
@@ -158,7 +162,7 @@ public:
     SwitchButton *btnWireless;
 
     //状态设置,0为假，1为真
-    int is_update_wifi_list = 0; //是否是update wifi列表，而不是load wifi列表
+    int current_wifi_list_state = LOAD_WIFI_LIST;
     int is_init_wifi_list = 0; //是否在启动软件时正在获取wifi的列表
     int is_btnLanList_clicked = 1; //是否处于有线网界面
     int is_btnWifiList_clicked = 0; //是否处于无线网界面
@@ -166,17 +170,24 @@ public:
     int is_keep_wifi_turn_on_state = 1; //是否要执行wifi开关变为打开样式
     int is_stop_check_net_state = 0; //是否要在进行其他操作时停止检查网络状态
     int is_connect_net_failed = 0; //刚才是否连接网络失败
+    int is_wifi_reconnected = 0;//刚才是否主动重连wifi导致wifi断开
     int is_fly_mode_on = 0; //是否已经打开飞行模式
     int is_hot_sopt_on = 0; //是否已经打开热点
     int is_connect_hide_wifi = 0; //是否正在连接隐藏wifi
-    QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
-
-    QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
     int currSelNetNum = 0; //当前选中的item序号
     bool isLanBeConnUp = false; //lan是否连接上
     bool isWifiBeConnUp = false; //wifi是否是连接上
     bool isToSetLanValue = true; //本次执行是否进行赋值
     bool isToSetWifiValue = true; //本次执行是否进行赋值
+    bool isWifiReconnecting = false; //是否正在执行wifi的回连
+    int addNumberForWifi = 0; //短时间内收到关于wifi连接信号的次数
+    bool isHuaWeiPC;
+
+    QString currSelNetName = ""; //当前ScrollArea中选中的网络名称
+    QStringList canReconnectWifiList; //当前可以会连的wifi列表
+    QString currConnIfname = ""; //当前连接的有线网对应网卡名称，只有一个有线网连接的情况
+    QString oldWifiIpv4Method = ""; //原来的wifi的ipv4地址获取方式,自动还是手动
+    int numberForWifiScan; //该值控制wifi的扫描
 
     int m_priX;
     int m_priY;
@@ -196,6 +207,8 @@ public slots:
     void onExternalConnectionChange(QString type, bool isConnUp);
     void onExternalLanChange();
     void onExternalWifiChange();
+    void onToSetTrayIcon();
+    void onToResetValue();
     void onWifiSwitchChange();
     void onExternalWifiSwitchChange(bool wifiEnabled);
 
@@ -207,6 +220,7 @@ public slots:
     void on_btnHotspot_clicked();
     void on_btnHotspotState();
     void on_btnWifiList_clicked();
+    void on_wifi_changed();
 
     void connWifiDone(int connFlag);
 
@@ -216,6 +230,11 @@ public slots:
     void on_showWindowAction();
 
     void checkIfConnectedWifiExist();
+
+    void toReconnectWifi();
+
+    void rfkillDisableWifiDone();
+    void rfkillEnableWifiDone();
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
@@ -276,7 +295,7 @@ private:
     QWidget *widShowWindow = nullptr;
     QWidget *widAdvConf = nullptr;
 
-    QString lname, wname; // 以太网卡和无线网卡名称
+    QString lcardname, wcardname; // 以太网卡和无线网卡名称
 
     QString btnOffQss, btnOnQss, btnBgOffQss, btnBgOnQss, btnBgHoverQss, btnBgLeaveQss; // 主界面按钮底色
     QString scrollBarQss, leftBtnQss, funcBtnQss;
@@ -289,7 +308,8 @@ private:
     QString lastAddedConn = "";
     QString oldActLanName = ""; //上一次获取的已连接有线网名称
     int oldDbusActLanDNS = 0; //上一次获取的已连接有线网的DNS代号
-    void wifiListOptimize(QStringList& slist);  //只保留同名同频信号最强AP
+    void wifiListOptimize(QStringList& slist); //只保留同名同频信号最强AP
+    void getFinalWifiList(QStringList& slist); //获取应该显示在wifi列表中的最优列表参数
     QStringList connectableWifiPriorityList(const QStringList slist); //可连接wifi优先级列表
     //循环检测网络连接状态
     QTimer *iconTimer = nullptr;
@@ -316,8 +336,8 @@ private:
     QString actWifiUuid = "--"; //当前连接wifi的uuid
 
     bool hasWifiConnected;//当前是否有wifi连接
-    QDBusInterface  *mDbusXrandInter;
-    int isHuaWeiPC;
+    QDBusInterface *mDbusXrandInter;
+    QDBusInterface *kdsDbus;
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
@@ -342,7 +362,8 @@ private slots:
     void activeWifiDisconn();
     void activeStartLoading();
     void activeGetWifiList();
-    void on_checkWifiListChanged();
+    void onRequestScanAccesspoint();
+    void toScanWifi(bool isShow);
     void on_setNetSpeed();
     void on_checkOverTime();
 
@@ -365,11 +386,14 @@ private slots:
 
     void priScreenChanged(int x, int y, int width, int height);
 
+    void onRfkillStatusChanged();
+
 signals:
     void disConnSparedNet(QString type);
 
     void waitWifiStop();
     void waitLanStop();
+    void reConnectWifi(const QString& uuid);
 };
 
 #endif // MAINWINDOW_H

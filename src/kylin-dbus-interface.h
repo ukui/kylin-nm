@@ -52,6 +52,7 @@ public:
     void showDesktopNotify(QString message);
     void initConnectionInfo();
     QList<QString> getAtiveLanSsidUuidState();
+    QString getActiveWifiUuid();
     QList<QString> getAtiveWifiBSsidUuid(QStringList wifilist);
     void reConnectWiredNet(QString netUuid);
     bool toConnectWiredNet(QString netUuid, QString netIfName);
@@ -74,10 +75,13 @@ public:
     double getTransparentData();
     int checkWifiConnectivity();
     bool checkNetworkConnectivity();
+    int getActiveWifiSignal();
+    QString getWifiSsid(QString accessPointPath);
 
     void toGetWifiList();
 
     QDBusObjectPath wirelessPath; //无线设备的路径
+    QList<QDBusObjectPath> multiWirelessPaths; //Wireless Device的对象路径列表
     QList<QDBusObjectPath> multiWiredPaths; //Wired Device的对象路径列表
     QList<QString> multiWiredCableState;//多有线网卡的情况，判断有线网卡对应网线是否插入
     QList<QString> multiWiredMac; //对应有线网卡的Mac地址
@@ -89,8 +93,14 @@ public:
     QString dbusLanIpv4 = "";
     QString dbusLanIpv6 = "";
     QString dbusLanIpv6Method = "";
+    QString dbusWifiIpv4Method = "";
+    QString dbusWifiIpv6Method = "";
     QString dbusActiveLanIpv4 = "";
     QString dbusActiveLanIpv6 = "";
+    QString dbusActiveWifiIpv4 = "";
+    QString dbusActiveWifiIpv6 = "";
+    QString dbusWifiIpv4 = "";
+    QString dbusWifiIpv6 = "";
     QString dbusLanGateway = "";
     QString dbusWiFiCardName = "";
     QString dbusWifiMac = "";
@@ -105,16 +115,20 @@ public slots:
     bool getWiredCableStateByIfname(QString ifname);
     QString getConnLanNameByIfname(QString ifname);
     void onPropertiesChanged(QVariantMap qvm);
+    void onAutoConnect();
     void onLanPropertyChanged(QVariantMap qvm);
-    void onIpPropertiesChanged();
+    void onLanIpPropertiesChanged();
+    void onWifiIpPropertiesChanged();
     void getPhysicalCarrierState(int n);
     void getLanHwAddressState();
     void getWiredCardName();
     void getWirelessCardName();
     void getLanIpDNS(QString uuidName, bool isActNet);
+    void getWifiIp(QString uuid);
     QString getLanMAC(QString ifname);
     void getWifiMac(QString netName);
     void slot_timeout();
+    void requestScanWifi();
 
 private:
     MainWindow *mw;
@@ -135,6 +149,7 @@ private:
 
 signals:
     void updateWiredList(int n);
+    void updateWirelessList();
     void requestSendDesktopNotify(QString message);
     void newConnAdded(int type);
     void toGetWifiListFinished(QStringList slist);

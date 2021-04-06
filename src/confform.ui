@@ -98,9 +98,9 @@
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>15</y>
-       <width>80</width>
-       <height>20</height>
+       <y>13</y>
+       <width>95</width>
+       <height>24</height>
       </rect>
      </property>
      <property name="font">
@@ -117,9 +117,9 @@
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>100</y>
-       <width>80</width>
-       <height>20</height>
+       <y>98</y>
+       <width>95</width>
+       <height>24</height>
       </rect>
      </property>
      <property name="font">
@@ -136,9 +136,9 @@
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>145</y>
-       <width>80</width>
-       <height>20</height>
+       <y>143</y>
+       <width>95</width>
+       <height>24</height>
       </rect>
      </property>
      <property name="font">
@@ -155,9 +155,9 @@
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>190</y>
-       <width>80</width>
-       <height>20</height>
+       <y>188</y>
+       <width>95</width>
+       <height>24</height>
       </rect>
      </property>
      <property name="font">
@@ -189,9 +189,9 @@
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>235</y>
-       <width>80</width>
-       <height>20</height>
+       <y>233</y>
+       <width>95</width>
+       <height>24</height>
       </rect>
      </property>
      <property name="font">
@@ -208,9 +208,9 @@
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>57</y>
-       <width>91</width>
-       <height>20</height>
+       <y>55</y>
+       <width>95</width>
+       <height>24</height>
       </rect>
      </property>
      <property name="font">
@@ -267,9 +267,9 @@
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>125</y>
-       <width>80</width>
-       <height>20</height>
+       <y>123</y>
+       <width>95</width>
+       <height>24</height>
       </rect>
      </property>
      <property name="font">
@@ -286,9 +286,9 @@
      <property name="geometry">
       <rect>
        <x>76</x>
-       <y>80</y>
-       <width>80</width>
-       <height>20</height>
+       <y>78</y>
+       <width>95</width>
+       <height>24</height>
       </rect>
      </property>
      <property name="font">

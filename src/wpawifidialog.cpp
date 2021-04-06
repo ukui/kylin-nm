@@ -48,9 +48,9 @@ void UpConnThread::run() {
     if (passwdFile->open(QIODevice::ReadWrite)) {
         passwdFile->write(QString("802-1x.identity:%1\n802-1x.password:%2").arg(m_user).arg(m_pwd).toUtf8());
         passwdFile->close();
-        cmdStr = "nmcli connection up " + this->conn_name + " passwd-file /tmp/" + conn_name + ".txt";
+        cmdStr = "nmcli connection up '" + this->conn_name + "' passwd-file /tmp/" + conn_name + ".txt";
     } else {
-        cmdStr = "nmcli connection up " + this->conn_name;
+        cmdStr = "nmcli connection up '" + this->conn_name + "'";
     }
     qDebug()<<"qDebug: 激活连接: \n"<<
               "qDebug: " + cmdStr;
@@ -210,6 +210,7 @@ void WpaWifiDialog::initUI() {
     pwdShowLabel = new QLabel(pwdShowFrame);
     pwdShowLabel->setFixedWidth(120);
     pwdShowBtn->setFixedSize(16, 16);
+    pwdShowBtn->setStyleSheet("background-color:rgb(61,61,65);");
     pwdShowLabel->setText(tr("Show password"));
     pwdShowLyt->addWidget(pwdShowBtn);
     pwdShowLyt->addWidget(pwdShowLabel);
@@ -220,6 +221,7 @@ void WpaWifiDialog::initUI() {
     askPwdLyt = new QHBoxLayout(askPwdFrame);
     askPwdLyt->setContentsMargins(130, 0, 0, 0);
     askPwdBtn = new QCheckBox(askPwdFrame);
+    askPwdBtn->setStyleSheet("background-color:rgb(61,61,65);");
     askPwdlabel = new QLabel(askPwdFrame);
 //    askPwdlabel->setFixedWidth(120);
     askPwdBtn->setFixedSize(16, 16);
@@ -361,10 +363,7 @@ void WpaWifiDialog::changeDialog()
 void WpaWifiDialog::getPwdFlag() {
     QProcess * process = new QProcess(this);
     QString ssid = nameEditor->text();
-    if (ssid.contains(" ")) {
-        ssid.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
-    }
-    process->start(QString("nmcli -f 802-1x.password-flags connection show %1").arg(ssid));
+    process->start(QString("nmcli -f 802-1x.password-flags connection show '%1'").arg(ssid));
     connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
         process->deleteLater();
     });
@@ -383,10 +382,7 @@ void WpaWifiDialog::getPwdFlag() {
 bool WpaWifiDialog::setPwdFlag(const int & flag) {
     QProcess * process = new QProcess;
     QString ssid = nameEditor->text();
-    if (ssid.contains(" ")) {
-        ssid.replace(QRegExp("[\\s]"), "\\\ "); //防止名字包含空格导致指令识别错误，需要转义
-    }
-    process->start(QString("nmcli connection modify %1 802-1x.password-flags %2").arg(ssid).arg(QString::number(flag)));
+    process->start(QString("nmcli connection modify '%1' 802-1x.password-flags %2").arg(ssid).arg(QString::number(flag)));
     connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
         process->deleteLater();
     });
@@ -439,7 +435,7 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
         has_config = true;
     }
 //    QString cmdStr = "nmcli connection modify " + nameEditor->text() + " 802-1x.password " + pwdEditor->text();
-    QString cmdStr = "nmcli connection modify " +  nameEditor->text() + " ipv4.method auto";
+    QString cmdStr = "nmcli connection modify '" +  nameEditor->text() + "' ipv4.method auto";
     int res = Utils::m_system(cmdStr.toUtf8().data());
     if (res == 0) {
         //有配置文件，需要判断一下当前配置文件wifi安全性是不是wpa-eap，若不是，需要把原配置文件删除，重新配置
@@ -462,9 +458,9 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
         process->waitForFinished();
         //有网络配置文件，接下来修改网络配置，然后激活连接
         qDebug()<<"qDebug: 有配置文件，修改配置后激活:"<<"\n"<<
-                  "qDebug: nmcli connection modify " + nameEditor->text() + " 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth "
+                  "qDebug: nmcli connection modify '" + nameEditor->text() + "' 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth "
                   + innerCombox->currentData().toString() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text();
-        QString cmdStr_1 = "nmcli connection modify " + nameEditor->text() + " 802-1x.eap " + eapCombox->currentData().toString()+ " 802-1x.phase2-auth "
+        QString cmdStr_1 = "nmcli connection modify '" + nameEditor->text() + "' 802-1x.eap " + eapCombox->currentData().toString()+ " 802-1x.phase2-auth "
                 + innerCombox->currentData().toString() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text();
         Utils::m_system(cmdStr_1.toUtf8().data());
         if (askPwdBtn->isChecked()) setPwdFlag(2);
@@ -485,7 +481,7 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
                   "qDebug: 802-1x.identity: "<<userEditor->text()<<"\n"<<
                   "qDebug: 802-1x.password: "<<pwdEditor->text();
         QString create_cmd;
-        create_cmd = "nmcli connection add con-name " + nameEditor->text() + " ifname "
+        create_cmd = "nmcli connection add con-name '" + nameEditor->text() + "' ifname "
                      + wifi_card_name + " ipv4.method auto type wifi ssid " + nameEditor->text()
                      + " 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth "
                      + innerCombox->currentData().toString() + " 802-1x.identity "
@@ -533,7 +529,7 @@ void WpaWifiDialog::activateConnection() {
             //连接超时
             timeout->stop();
             timeout->deleteLater();
-            QString cmdStr_2 = "nmcli connection down " + nameEditor->text();
+            QString cmdStr_2 = "nmcli connection down '" + nameEditor->text() + "'";
             Utils::m_system(cmdStr_2.toUtf8().data());
             //this->mw->is_stop_check_net_state = 0;
             //this->mw->setTrayLoading(false);

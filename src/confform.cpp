@@ -79,6 +79,9 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->leGateway->setContextMenuPolicy(Qt::NoContextMenu);
     ui->leAddr_ipv6->setContextMenuPolicy(Qt::NoContextMenu);
 
+    //设置网络名称的正则表达式
+//    ui->leName->setValidator(new QRegExpValidator(QRegExp("[^ \s]*"), ui->leName));
+
     ui->lineUp->setStyleSheet(lineQss);
     ui->lineDown->setStyleSheet(lineQss);
     ui->lineUp->hide();
@@ -255,11 +258,12 @@ void ConfForm::on_btnCreate_clicked()
             return;
         }
     }
+    QString name = ui->leName->text().trimmed();
     QString cmdStr;
     if(ui->cbType->currentIndex() == 0){
-        cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
+        cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet";
     }else{
-        cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet ipv4.method manual ipv4.address "
+        cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet ipv4.method manual ipv4.address "
                 + ui->leAddr->text() + "/" + mask.toUtf8().data();
         if(!ui->leGateway->text().isEmpty()){
             cmdStr += " ipv4.gateway " + ui->leGateway->text();
@@ -284,22 +288,11 @@ void ConfForm::on_btnCreate_clicked()
         kylindbus.showDesktopNotify(txt);
     }
 
-    QString name = ui->leName->text();
-    QStringList charToEscape;
-    charToEscape << "~" << "(" << ")" << "<" << ">" <<"\\" << "*" << "|" << "&" << "#";  //一些命令行特殊字符，需要转义
-    foreach (auto ch , charToEscape) {
-        if (name.contains(ch)) {
-            name.replace(ch, QString("%1%2").arg("\\").arg(ch));
-        }
-    }
-    if (name.contains(" ")) { //空格会影响命令行参数的判断，需要转义
-        name.replace(QRegExp("[\\s]"), "\\\ ");
-    }
     if (!ui->leAddr_ipv6->text().isEmpty()) {
-        QString cmdStr = "nmcli connection modify " + name + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
         Utils::m_system(cmdStr.toUtf8().data());
     } else {
-        QString cmdStr = "nmcli connection modify " + name + " ipv6.method auto";
+        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method auto";
         Utils::m_system(cmdStr.toUtf8().data());
     }
 
@@ -339,22 +332,19 @@ void ConfForm::on_btnSave_clicked()
         }
 
         //如果网络的名称已经修改，则删掉当前网络，新建一个网络
-        if (ui->leName->text() != lastConnName) {
+        QString name = ui->leName->text().trimmed();
+        if (name != lastConnName) {
             QString cmd = "nmcli connection delete '" + netUuid + "'";
             int status = system(cmd.toUtf8().data());
             if (status != 0) {
                 syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'on_btnSave_clicked' failed");
             }
-            //this->hide();
-
-            //QString cmdStr = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
-            //Utils::m_system(cmdStr.toUtf8().data());
 
             this->isCreateNewNet = true;
             newUuid = "--";
 
             QProcess * processAdd = new QProcess;
-            QString cmdAdd = "nmcli connection add con-name '" + ui->leName->text() + "' ifname '" + mIfname + "' type ethernet";
+            QString cmdAdd = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet";
             QStringList options;
             options << "-c" << cmdAdd;
             processAdd->start("/bin/bash",options);
@@ -380,6 +370,7 @@ void ConfForm::on_btnSave_clicked()
             processAdd->waitForFinished();
         } else {
             this->isCreateNewNet = false;
+            newUuid = "--";
 
             if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
                 //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
@@ -388,6 +379,7 @@ void ConfForm::on_btnSave_clicked()
                 }
             }
 
+            qDebug() << Q_FUNC_INFO;
             this->saveNetworkConfiguration();
         }
     }
@@ -395,10 +387,10 @@ void ConfForm::on_btnSave_clicked()
     if (ui->cbType->currentIndex() == 1) {
         //对于已保存连接修改ipv6地址，使用UUID区分各网络配置（排除名称含空格或特殊字符的干扰）
         if (!ui->leAddr_ipv6->text().isEmpty()) {
-            QString cmdStr = "nmcli connection modify " + netUuid + " ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+            QString cmdStr = "nmcli connection modify '" + netUuid + "' ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
             Utils::m_system(cmdStr.toUtf8().data());
         } else {
-            QString cmdStr = "nmcli connection modify " + netUuid + " ipv6.method auto";
+            QString cmdStr = "nmcli connection modify '" + netUuid + "' ipv6.method auto";
             Utils::m_system(cmdStr.toUtf8().data());
         }
     }
@@ -424,30 +416,47 @@ void ConfForm::saveNetworkConfiguration()
         mask = "24";
     }
 
-    //是选择的自动还是手动配置网络
-    if (!this->isCreateNewNet) {
+    QString name = ui->leName->text().trimmed();
+    QString dnss = ui->leDns->text();
+    if (ui->leDns2->text() != "") {
+        dnss.append(",");
+        dnss.append(ui->leDns2->text());
+    }
+    //是选择的自动还是手动配置网络  
     if (ui->cbType->currentIndex() == 0) {
-            //kylin_network_set_automethod(ui->leName->text().toUtf8().data());
-            kylin_network_set_automethod(netUuid.toUtf8().data());
-        }
-    } else {
-        QString dnss = ui->leDns->text();
-        if (ui->leDns2->text() != "") {
-            dnss.append(",");
-            dnss.append(ui->leDns2->text());
-        }
-        if (this->isCreateNewNet) {
-            if (newUuid != "--") {
-                kylin_network_set_manualall(newUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
-            } else {
-                kylin_network_set_manualall(ui->leName->text().toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
-            }
+        qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text();
+        //kylin_network_set_automethod(name.toUtf8().data());
+        kylin_network_set_automethod(netUuid.toUtf8().data());
+    }
+    else {
+        if (newUuid != "--" && newUuid != "" && !newUuid.isEmpty()) {
+            qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
+            kylin_network_set_manualall(newUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
         } else {
-            kylin_network_set_manualall(netUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+            qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
+            kylin_network_set_manualall(name.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
         }
     }
 
     onConfformHide();
+}
+
+void ConfForm::showNotify(QString message)
+{
+    QDBusInterface iface("org.freedesktop.Notifications",
+                         "/org/freedesktop/Notifications",
+                         "org.freedesktop.Notifications",
+                         QDBusConnection::sessionBus());
+    QList<QVariant> args;
+    args<<(tr("kylin-nm"))
+       <<((unsigned int) 0)
+      <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+     <<tr("kylin network applet desktop message") //显示的是什么类型的信息
+    <<message //显示的具体信息
+    <<QStringList()
+    <<QVariantMap()
+    <<(int)-1;
+    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
 
 bool ConfForm::check_ip_conflict(QString ifname)
@@ -455,7 +464,7 @@ bool ConfForm::check_ip_conflict(QString ifname)
     //即将检测Ip地址冲突
     QString strIpCheck = tr("Will check the IP address conflict");
     QString bufferIpCheck = "notify-send -i network-offline " + strIpCheck;
-    system(bufferIpCheck.toUtf8().data());
+    showNotify(strIpCheck);
 
     FILE *fp;
     char ret[10], arp_all[1024];
@@ -486,7 +495,7 @@ bool ConfForm::check_ip_conflict(QString ifname)
                 //printf("ip地址冲突");
                 QString strInfo = tr("IP address conflict, Please change IP");
                 QString buffer = "notify-send -i network-offline " + strInfo;
-                system(buffer.toUtf8().data());
+                showNotify(strInfo);
                 return  true;
             }
         }
@@ -604,7 +613,7 @@ void ConfForm::setEnableOfBtn()
 //        this->setBtnEnableFalse();
 //        return;
 //    }
-    if (ui->leName->text().size() == 0 ) {
+    if (ui->leName->text().trimmed().size() == 0 ) {
         this->setBtnEnableFalse();
         return;
     }
@@ -721,6 +730,13 @@ void ConfForm::paintEvent(QPaintEvent *event)
     KylinDBus mkylindbus;
     double trans = mkylindbus.getTransparentData();
 
+    QString name = tr("Method: ");
+    ui->lbTxt1->setText(ui->lbTxt1->fontMetrics().elidedText(name, Qt::ElideRight, 95));
+    if (name != ui->lbTxt1->text()) {
+        ui->lbTxt1->setToolTip(tr("Method: "));
+    } else {
+        ui->lbTxt1->setToolTip("");
+    }
 
     QStyleOption opt;
     opt.init(this);

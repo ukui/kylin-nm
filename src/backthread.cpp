@@ -96,7 +96,7 @@ IFace* BackThread::execGetIface()
                     iface->lstate = 3;
                 }
             }
-            if (type == "wifi") {
+            if (type == "wifi" && iface->wname.isEmpty()) { //仅统计第一个无线网卡，后续无线网卡状态必然等于或差与第一个获取到的无线网卡
                 // if type is wireless network
                 iface->wname = iname;
 
@@ -298,7 +298,7 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
     //disConnLanOrWifi("wifi");
 
     if (!connType.isEmpty()) {
-        QString strConntype = "nmcli connection modify " + connName + " wifi-sec.psk-flags 0";
+        QString strConntype = "nmcli connection modify '" + connName + "' wifi-sec.psk-flags 0";
         Utils::m_system(strConntype.toUtf8().data());
     }
 
@@ -329,6 +329,74 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
     emit btFinish();
 }
 
+void BackThread::execConnHiddenWifiWPA(QString wifiName, QString wifiPassword)
+{
+    int x(1), n(0);
+    do {
+        n += 1;
+        if (n >= 3) {
+            syslog(LOG_ERR, "connection attempt of hidden wifi %s failed for 3 times, no more attempt", wifiName);
+            x = 0;
+            emit connDone(1);
+        }
+
+        QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
+        QString cmd = "nmcli device wifi connect '" + wifiName + "' password '" + wifiPassword + "' hidden yes > " + tmpPath + " 2>&1";
+
+//                qDebug() << Q_FUNC_INFO << cmd << tmpPath;
+        int status = Utils::m_system(cmd.toUtf8().data());
+        if (status != 0) {
+            syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");
+        }
+
+        QFile file(tmpPath);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qDebug()<<"Can't open the file!"<<endl;
+        }
+        QString text = file.readAll();
+        file.close();
+        if(text.indexOf("Scanning not allowed") != -1
+           || text.isEmpty()
+           || text.indexOf("No network with SSID") != -1){
+            x = 1;
+            sleep(15);//nm扫描冷却为10s
+        } else {
+            emit connDone(0);
+            x = 0;
+        }
+//                qDebug() << Q_FUNC_INFO << x << text;
+    } while (x == 1);
+
+    emit btFinish();
+}
+
+void BackThread::execConnRememberedHiddenWifi(QString wifiName)
+{
+    QProcess shellProcess;
+    shellProcess.start("nmcli -f ssid device wifi");
+    shellProcess.waitForFinished(3000); // 等待最多3s
+    if (shellProcess.exitCode() == 0)
+    {
+        QString shellOutput = shellProcess.readAllStandardOutput();
+        QStringList wlist = shellOutput.split("\n");
+        bool is_hidden  = true;
+        foreach (QString wifi, wlist) {
+            if (wifi.trimmed() == wifiName) {
+                is_hidden = false;
+            }
+        }
+        if (! is_hidden) {
+            QString cmd = "nmcli connection up '" + wifiName + "'";
+            int res = Utils::m_system(cmd.toUtf8().data());
+            emit connDone(res);
+        } else {
+            //已保存的wifi没有在wifi列表找到（隐藏wifi保存后也会出现在wifi列表），则当前区域无法连接此wifi
+            syslog(LOG_DEBUG, "Choosen wifi can not be sacnned in finishedProcess() in dlghidewifiwpa.cpp 377.");
+            emit connDone(5);
+        }
+    }
+    emit btFinish();
+}
 void BackThread::execConnWifiPsk(QString cmd)
 {
     int res = Utils::m_system(cmd.toUtf8().data());
@@ -342,6 +410,14 @@ void BackThread::execConnWifi(QString connName)
 
     QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'\n";
     cmdConnWifi->write(cmdStr.toUtf8().data());
+}
+
+void BackThread::execReconnWIfi(QString uuid)
+{
+    QString cmd = "nmcli connection down " + uuid;
+    Utils::m_system(cmd.toUtf8().data());
+   cmd = "nmcli connection up " + uuid;
+    Utils::m_system(cmd.toUtf8().data());
 }
 
 void BackThread::onReadOutputWifi()
@@ -487,7 +563,7 @@ void BackThread::disConnSparedNetSlot(QString type)
 {
     sleep(1);
     if (type == "wifi") {
-        disConnLanOrWifi("wifi");
+        //disConnLanOrWifi("wifi");
     } else if(type == "ethernet") {
         disConnLanOrWifi("ethernet");
     }

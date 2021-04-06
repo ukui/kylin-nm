@@ -208,7 +208,7 @@ void DlgHideWifi::changeWindow(){
         ui->btnConnect->setEnabled(false);
     }else if (ui->cbxConn->currentIndex() >= 1){
         QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
-        QString currStr = "nmcli connection show " + ui->cbxConn->currentText() + " >" + tmpPath;
+        QString currStr = "nmcli connection show '" + ui->cbxConn->currentText() + "' >" + tmpPath;
 
         int status = system(currStr.toUtf8().data());
         if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");}
@@ -276,45 +276,31 @@ void DlgHideWifi::on_btnCancel_clicked()
 
 void DlgHideWifi::on_btnConnect_clicked()
 {
+    mw->is_stop_check_net_state = 1;
+    mw->is_connect_hide_wifi = 1;
+
     QThread *t = new QThread();
     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
-    connect(t, SIGNAL(started()), this, SLOT(slotStartLoading()));
     connect(this, SIGNAL(stopSignal()), t, SLOT(quit()));
-    t->start();
 
     QString wifiName = ui->leNetName->text();
-    BackThread *bt = new BackThread();
+
     strWifiname = wifiName;
-    //点击连接按钮以连接隐藏WiFi
+    BackThread *bt = new BackThread();
     if (isUsed == 0) {
-        int x = 0;
-        do {
-            sleep(1);
-            QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
-            QString cmd = "nmcli device wifi connect " + wifiName + " password '' hidden yes > " + tmpPath;
-
-            int status = system(cmd.toUtf8().data());
-            if (status != 0)
-                syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");
-
-            QFile file(tmpPath);
-            if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                qDebug()<<"Can't open the file!"<<endl;
-            }
-            QString text = file.readAll();
-            file.close();
-            if (text.indexOf("Scanning not allowed") != -1) {
-                x = 1;
-            } else {
-                x = 0;
-            }
-        } while(x);
-
-        QTimer::singleShot(5*1000, this, SLOT(on_execSecConn() ));
+        bt->moveToThread(t);
+        connect(t, SIGNAL(started()), this, SLOT(slotStartConnectHiddenOpenWifi()));
+        connect(this, SIGNAL(sigConnHiddenWifi(QString, QString)), bt, SLOT(execConnHiddenWifiWPA(QString,QString)));
+        connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
+        connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     } else {
-        bt->execConnWifi(wifiName);
-        QTimer::singleShot(6*1000, this, SLOT(emitSignal() ));
+        bt->moveToThread(t);
+        connect(t, SIGNAL(started()), this, SLOT(slotStartConnectRememberedHiddenWifi()));
+        connect(this, SIGNAL(sigConnRememberedHiddenWifi(QString)), bt, SLOT(execConnRememberedHiddenWifi(QString)));
+        connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
+        connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     }
+    t->start();
     //this->close();
     this->hide();
 }
@@ -338,9 +324,21 @@ void DlgHideWifi::slotStartLoading()
     mw->startLoading();
 }
 
+void DlgHideWifi::slotStartConnectHiddenOpenWifi()
+{
+    mw->startLoading();
+    emit sigConnHiddenWifi(ui->leNetName->text(), QString(""));
+}
+
+void DlgHideWifi::slotStartConnectRememberedHiddenWifi()
+{
+    mw->startLoading();
+    emit sigConnRememberedHiddenWifi(ui->leNetName->text());
+}
+
 void DlgHideWifi::on_execSecConn()
 {
-    QString str = "nmcli device wifi connect " + strWifiname + " password ''";
+    QString str = "nmcli device wifi connect '" + strWifiname + "' password ''";
     int status = system(str.toUtf8().data());
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_execSecConn' failed");}
     QTimer::singleShot(3*1000, this, SLOT(emitSignal() ));

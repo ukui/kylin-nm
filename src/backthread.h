@@ -60,8 +60,11 @@ public slots:
     void execDisWifi();
     void execConnLan(QString connName, QString ifname, QString connectType);
     void execConnWifi(QString connName);
+    void execReconnWIfi(QString uuid);
     void execConnWifiPWD(QString connName, QString password, QString connType);
     void execConnWifiPsk(QString cmd);
+    void execConnHiddenWifiWPA(QString connName, QString password);
+    void execConnRememberedHiddenWifi(QString connName);
 
     void disConnSparedNetSlot(QString type);
     void disConnLanOrWifi(QString type);

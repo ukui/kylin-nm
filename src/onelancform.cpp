@@ -225,7 +225,14 @@ void OneLancForm::setTopItem(bool isSelected)
 //设置网络名称
 void OneLancForm::setName(QString ssid, QString transSsid, QString uuid, QString interface)
 {
-    ui->lbName->setText(ssid);
+    //处理过长SSID
+    QString displayName;
+    if(ssid.length() > 23){
+        displayName = ssid.mid(0, 20) + "...";
+    }else{
+        displayName = ssid;
+    }
+    ui->lbName->setText(displayName);
     ssidName = ssid;
     m_sConnectType = transSsid;
     uuidName = uuid;
@@ -513,7 +520,7 @@ void OneLancForm::stopWaiting()
     }
 
     mw->setTrayLoading(false);
-    mw->getActiveInfo();
+    mw->getActiveInfoAndSetTrayIcon();
 }
 
 void OneLancForm::on_btnCancel_clicked()

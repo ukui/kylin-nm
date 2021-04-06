@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui x11extras dbus KWindowSystem svg concurrent
+QT       += core gui x11extras dbus KWindowSystem svg concurrent network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -61,6 +61,7 @@ QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 
 SOURCES += \
     src/backthread.cpp \
+    src/wifi-auth-thread.cpp \
     src/confform.cpp \
     src/dbusadaptor.cpp \
     src/ksimplenm.cpp \
@@ -75,6 +76,7 @@ SOURCES += \
     src/sysdbusregister.cpp \
     src/utils.cpp \
     src/wpawifidialog.cpp \
+    src/wificonfigdialog.cpp \
     wireless-security/dlghidewifi.cpp \
     wireless-security/dlghidewifieapfast.cpp \
     wireless-security/dlghidewifieapleap.cpp \
@@ -91,6 +93,7 @@ SOURCES += \
 
 HEADERS += \
     src/backthread.h \
+    src/wifi-auth-thread.h \
     src/confform.h \
     src/dbusadaptor.h \
     src/ksimplenm.h \
@@ -104,6 +107,7 @@ HEADERS += \
     src/sysdbusregister.h \
     src/utils.h \
     src/wpawifidialog.h \
+    src/wificonfigdialog.h \
     wireless-security/dlghidewifi.h \
     wireless-security/dlghidewifieapfast.h \
     wireless-security/dlghidewifieapleap.h \
@@ -124,6 +128,7 @@ FORMS += \
     src/onelancform.ui \
     hot-spot/dlghotspotcreate.ui \
     src/wpawifidialog.ui \
+    src/wificonfigdialog.ui \
     wireless-security/dlghidewifi.ui \
     wireless-security/dlghidewifieapfast.ui \
     wireless-security/dlghidewifieapleap.ui \

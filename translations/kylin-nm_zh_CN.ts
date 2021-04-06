@@ -122,6 +122,16 @@
         <translation type="unfinished">新建有线网络</translation>
     </message>
     <message>
+        <location filename="../src/confform.cpp" line="451"/>
+        <source>kylin-nm</source>
+        <translation type="unfinished">网络工具</translation>
+    </message>
+    <message>
+        <location filename="../src/confform.cpp" line="454"/>
+        <source>kylin network applet desktop message</source>
+        <translation type="unfinished">麒麟网络工具信息提示</translation>
+    </message>
+    <message>
         <source>create wired network successfully</source>
         <translation type="obsolete">已创建新的有线网络</translation>
     </message>
@@ -1258,11 +1268,6 @@
         <translation type="unfinished">请确认Wi-Fi密码或无线设备</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="379"/>
-        <source>Selected Wifi has not been scanned.</source>
-        <translation type="unfinished">当前区域未扫描到选中的wifi</translation>
-    </message>
-    <message>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="obsolete">WEP 40/128 位密钥(十六进制或ASCII)</translation>
     </message>
@@ -1329,13 +1334,6 @@
     <message>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="obsolete">WPA 及 WPA2 企业</translation>
-    </message>
-</context>
-<context>
-    <name>KylinDBus</name>
-    <message>
-        <source>kylin network applet desktop message</source>
-        <translation type="obsolete">麒麟网络工具信息提示</translation>
     </message>
 </context>
 <context>
@@ -1463,6 +1461,11 @@
         <translation type="unfinished">WiFi已经断开</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="2965"/>
+        <source>WiFi already connected external</source>
+        <translation type="unfinished">WiFi已经连接</translation>
+    </message>
+    <message>
         <location filename="../src/mainwindow.cpp" line="2359"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished">有线网络断开</translation>
@@ -1515,6 +1518,11 @@
         <location filename="../src/mainwindow.cpp" line="2768"/>
         <source>Confirm your Wi-Fi password</source>
         <translation type="unfinished">请再次确认Wi-Fi密码</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="3331"/>
+        <source>Selected Wifi has not been scanned.</source>
+        <translation type="unfinished">当前区域未扫描到选中的wifi</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="216"/>
@@ -1620,6 +1628,11 @@
         <location filename="../src/oneconnform.cpp" line="46"/>
         <source>Disconnect</source>
         <translation>断开</translation>
+    </message>
+    <message>
+        <location filename="../src/oneconnform.cpp" line="131"/>
+        <source>Property</source>
+        <translation>属 性</translation>
     </message>
     <message>
         <source>Input Password...</source>
@@ -1747,14 +1760,47 @@
 <context>
     <name>Utils</name>
     <message>
-        <location filename="../src/utils.cpp" line="84"/>
+        <location filename="../src/utils.cpp" line="88"/>
         <source>kylin-nm</source>
         <translation type="unfinished">网络工具</translation>
     </message>
     <message>
-        <location filename="../src/utils.cpp" line="87"/>
+        <location filename="../src/utils.cpp" line="91"/>
         <source>kylin network applet desktop message</source>
-        <translation type="unfinished">麒麟网络工具信息提示</translation>
+        <translation>麒麟网络工具信息提示</translation>
+    </message>
+</context>
+<context>
+    <name>WiFiConfigDialog</name>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="32"/>
+        <source>Input Wi-Fi Information Please</source>
+        <translation type="unfinished">输入Wi-Fi名称和密码后点击确定</translation>
+    </message>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="33"/>
+        <source>Wi-Fi ID：</source>
+        <translation type="unfinished">Wi-Fi连接名称：</translation>
+    </message>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="34"/>
+        <source>Wi-Fi Name：</source>
+        <translation type="unfinished">Wi-Fi名称：</translation>
+    </message>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="35"/>
+        <source>Password：</source>
+        <translation type="unfinished">Wi-Fi密码：</translation>
+    </message>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="36"/>
+        <source>Cancl</source>
+        <translation type="unfinished">取消</translation>
+    </message>
+    <message>
+        <location filename="../src/wificonfigdialog.cpp" line="37"/>
+        <source>Ok</source>
+        <translation type="unfinished">确定</translation>
     </message>
 </context>
 <context>

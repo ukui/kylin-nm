@@ -15,7 +15,6 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
  *
  */
-
 #include "kylin-network-interface.h"
 
 #include <netinet/in.h>
@@ -29,7 +28,6 @@
 #include <fcntl.h>
 #include <sys/syslog.h>
 #include <pwd.h>
-
 
 //获取网络接口名
 ifname *kylin_network_get_ifacename()
@@ -335,7 +333,7 @@ void kylin_network_create_new_ethernet(char *con_name,char *if_name)
 {
     char str[256];
     char *net_type="ethernet";
-    sprintf(str,"nmcli connection add con-name %s ifname %s type %s",con_name,if_name,net_type);
+    sprintf(str,"nmcli connection add con-name '%s' ifname '%s' type %s",con_name,if_name,net_type);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection add con-name' in function 'kylin_network_create_new_ethernet' failed");}
 }
@@ -354,7 +352,7 @@ void kylin_network_create_new_wifi(char *con_name, char *if_name)
 void kylin_network_del_ethernet_con(char *con_name)
 {
     char str[256];
-    sprintf(str,"nmcli connection delete %s",con_name);
+    sprintf(str,"nmcli connection delete '%s'",con_name);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'kylin_network_del_ethernet_con' failed");}
 }
@@ -364,7 +362,7 @@ void kylin_network_set_automethod(char *con_name)
 {
     char str[256];
     char *automethod="auto";
-    sprintf(str,"nmcli connection modify '%s' ipv4.method %s",con_name,automethod);
+    sprintf(str,"nmcli connection modify '%s' ipv4.method %s ipv4.address '' ipv4.gateway ''",con_name,automethod);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_automethod' failed");}
 }
@@ -374,15 +372,16 @@ void kylin_network_set_manualmethod(char *con_name,char *ip)
 {
     char str[256];
     char *method="manual";
-    sprintf(str,"nmcli connection modify '%s' ipv4.method %s ipv4.address %s",con_name,method,ip);
+    sprintf(str,"nmcli connection modify '%s' ipv4.method %s ipv4.address '%s'",con_name,method,ip);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_manualmethod' failed");}
 }
 
 // 设置手动分配all
-void kylin_network_set_manualall(char *con_name, char *addr, char *mask, char *gateway, char *dns){
+void kylin_network_set_manualall(char *con_name, char *addr, char *mask, char *gateway, char *dns)
+{
     char str[200];
-    sprintf(str, "nmcli connection modify '%s' ipv4.method manual ipv4.address %s/%s ipv4.gateway %s ipv4.dns %s",
+    sprintf(str, "nmcli connection modify '%s' ipv4.method manual ipv4.address %s/%s ipv4.gateway '%s' ipv4.dns '%s'",
             con_name, addr, mask, gateway, dns);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_manualall' failed");}
@@ -395,11 +394,11 @@ void kylin_network_set_autoconnect(char *con_name,bool autocon)
     if(autocon==false)
     {
         char *ac="no";
-        sprintf(str,"nmcli connection modify %s connection.autoconnect %s",con_name,ac);
+        sprintf(str,"nmcli connection modify '%s' connection.autoconnect %s",con_name,ac);
     }
     else{
         char *ac="yes";
-        sprintf(str,"nmcli connection modify %s connection.autoconnect %s",con_name,ac);
+        sprintf(str,"nmcli connection modify '%s' connection.autoconnect %s",con_name,ac);
     }
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_autoconnect' failed");}
@@ -409,7 +408,7 @@ void kylin_network_set_autoconnect(char *con_name,bool autocon)
 void kylin_network_mod_ip(char *con_name,char *ip)
 {
     char str[256];
-    sprintf(str,"nmcli connection modify %s ipv4.address %s",con_name,ip);
+    sprintf(str,"nmcli connection modify '%s' ipv4.address %s",con_name,ip);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_mod_ip' failed");}
 }
@@ -418,7 +417,7 @@ void kylin_network_mod_ip(char *con_name,char *ip)
 void kylin_network_mod_gateway(char *con_name,char *gw)
 {
     char str[256];
-    sprintf(str,"nmcli connection modify %s ipv4.gateway %s",con_name,gw);
+    sprintf(str,"nmcli connection modify '%s' ipv4.gateway %s",con_name,gw);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_mod_gateway' failed");}
 }
@@ -427,7 +426,7 @@ void kylin_network_mod_gateway(char *con_name,char *gw)
 void kylin_network_mod_dns(char *con_name,char *dns)
 {
     char str[256];
-    sprintf(str,"nmcli connection modify %s ipv4.dns %s",con_name,dns);
+    sprintf(str,"nmcli connection modify '%s' ipv4.dns %s",con_name,dns);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_mod_dns' failed");}
 }

@@ -485,7 +485,6 @@ void OneConnForm::setSignal(QString lv, QString secu, QString category)
         signalLv = 4;
     }
     ui->lbSignal->setStyleSheet(signalStyle);
-    qDebug()<<"sxs#setSignal"<<signalStyle;
 }
 
 void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, int freq)

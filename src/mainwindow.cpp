@@ -1721,7 +1721,6 @@ void MainWindow::getWifiListDone(QStringList slist)
 //            slist = oldWifiSlist;
 //        }
 //    }
-
     if (isHuaWeiPC) {
         if (slist.size() >= 2) {
             wifiListOptimize(slist);
@@ -1802,8 +1801,89 @@ void MainWindow::getConnListDone(QStringList slist)
         return;
     }
 }
+QStringList MainWindow::priorityList(QStringList slist){
+    QStringList ret;
+    ret.append(slist[0]);
+    QString headLine = slist.at(0);
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName,indexPath,indexCate;
+    headLine = headLine.trimmed();
+    for(auto i:slist){
+        qDebug()<<"sxs#before "<<slist.size();
+    }
 
-//进行wifi列表优化选择
+    bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (isChineseExist) {
+        indexSignal = headLine.indexOf("SIGNAL");
+        indexSecu = headLine.indexOf("安全性");
+        indexFreq = headLine.indexOf("频率") + 4;
+        indexBSsid = headLine.indexOf("BSSID") + 6;
+        indexName = indexBSsid + 19;
+        indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
+    } else {
+        indexSignal = headLine.indexOf("SIGNAL");
+        indexSecu = headLine.indexOf("SECURITY");
+        indexFreq = headLine.indexOf("FREQ");
+        indexBSsid = headLine.indexOf("BSSID");
+        indexName = indexBSsid + 19;
+        indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
+    }
+    QStringList p1,p2,p3,p4,p5,p6;//按照信号与频段划分为6个列表
+    for(int i=1;i<slist.size();i++){
+        QString line = slist.at(i);
+        int conSignal = line.mid(indexSignal,3).trimmed().toInt();
+        int conFreq = line.mid(indexFreq,4).trimmed().toInt();
+        if(conSignal > 75 && conFreq >= 5000){
+            p1.append(line);
+            continue;
+        }else if(conSignal > 55 && conFreq >= 5000){
+            p2.append(line);
+            continue;
+        }else if(conSignal > 75){
+            p3.append(line);
+            continue;
+        }else if(conSignal > 55){
+            p4.append(line);
+            continue;
+        }else if(conSignal > 15){
+            p5.append(line);
+            continue;
+        }else{
+            p6.append(line);
+        }
+    }
+    QVector<QStringList> listVec;
+    listVec<<p1<<p2<<p3<<p4<<p5<<p6;
+    for(auto list:listVec){
+        list = sortApByCategory(list,indexCate);
+        ret += list;
+    }
+    return ret;
+}
+QStringList MainWindow::sortApByCategory(QStringList list,int cateIndex){
+    QStringList ret;
+    for(auto line:list){
+        int conCate = line.mid(cateIndex).trimmed().toInt();
+        if(conCate == 2){
+            ret.append(line);
+        }
+    }
+    for(auto line:list){
+        int conCate = line.mid(cateIndex).trimmed().toInt();
+        if(conCate == 1){
+            ret.append(line);
+        }
+    }
+    for(auto line:list){
+        int conCate = line.mid(cateIndex).trimmed().toInt();
+        if(conCate == 0){
+            ret.append(line);
+        }
+    }
+    return ret;
+}
+//wifi列表优化去重，同名同频下只留最*优*wifi
 void MainWindow::wifiListOptimize(QStringList& slist)
 {
     //这个函数可能会把已经连接的那个wifi给筛选出去
@@ -1924,10 +2004,8 @@ void MainWindow::getFinalWifiList(QStringList &slist)
     foreach (QString deleteStr, deleteWifiStr) {
         slist.removeOne(deleteStr);
     }
-
     return;
 }
-
 //从有配置文件的wifi选出最优wifi进行连接
 QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
     QStringList target;
@@ -1963,7 +2041,6 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
 
         if (ocf->isWifiConfExist(wifiname) && canReconnectWifiList.contains(wifiname)) {  //两格以上有配置的5Gwifi中选择信号最佳的
             target << wifiObjectPath <<wifibssid;
-            //tmp.removeAt(i);
         }
     }
 
@@ -1976,9 +2053,6 @@ void MainWindow::loadWifiListDone(QStringList slist)
 {
     delete topWifiListWidget; //清空top列表
     createTopWifiUI(); //创建topWifiListWidget
-    for(auto i:slist){
-        qDebug()<<"sxs# "<<i;
-    }
     // 清空wifi列表
     wifiListWidget = new QWidget(scrollAreaw);
     wifiListWidget->resize(W_LIST_WIDGET, H_WIFI_ITEM_BIG_EXTEND);

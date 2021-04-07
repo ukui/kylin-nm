@@ -1721,6 +1721,7 @@ void MainWindow::getWifiListDone(QStringList slist)
 //            slist = oldWifiSlist;
 //        }
 //    }
+    slist = priorityList(slist);
     if (isHuaWeiPC) {
         if (slist.size() >= 2) {
             wifiListOptimize(slist);
@@ -1729,13 +1730,13 @@ void MainWindow::getWifiListDone(QStringList slist)
     }
 
     if (current_wifi_list_state == RECONNECT_WIFI) {
-        QStringList targetWifiList = connectableWifiPriorityList(slist);
-        if (!targetWifiList.isEmpty()) {
+        QVector<QStringList> targetWifiList = connectableWifiPriorityList(slist);
+        if (!targetWifiList[0].isEmpty()) {
             if (!isWifiReconnecting) {
                 isWifiReconnecting = true; //保证对于连续发出的重连信号，只处理第一个
                 QFuture < void > future1 =  QtConcurrent::run([=]() {
-                    QString wifiSsid = objKyDBus->getWifiSsid(targetWifiList.at(0));
-                    QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiList.at(1);
+                    QString wifiSsid = objKyDBus->getWifiSsid(targetWifiList[0].at(0));
+                    QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiList[0].at(1);
                     system(modityCmd.toUtf8().data());
                     QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
                     system(reconnectWifiCmd.toUtf8().data());
@@ -1768,11 +1769,9 @@ void MainWindow::getWifiListDone(QStringList slist)
 void MainWindow::getConnListDone(QStringList slist)
 {
     if (isInitConnList) {
-//        oldConnSlist = slist;
         for (int i = 1; i < slist.length() - 1; i++) {
             oldConnSlist << slist.at(i).trimmed();
         }
-//        qDebug()<<oldConnSlist;
         isInitConnList = false;
         return;
     } else {
@@ -1807,10 +1806,6 @@ QStringList MainWindow::priorityList(QStringList slist){
     QString headLine = slist.at(0);
     int indexSignal,indexSecu, indexFreq, indexBSsid, indexName,indexPath,indexCate;
     headLine = headLine.trimmed();
-    for(auto i:slist){
-        qDebug()<<"sxs#before "<<slist.size();
-    }
-
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
         indexSignal = headLine.indexOf("SIGNAL");
@@ -1861,6 +1856,10 @@ QStringList MainWindow::priorityList(QStringList slist){
     }
     return ret;
 }
+QVector<QStringList> MainWindow::repetitionFilter(QVector<QStringList>){
+    QVector<QStringList> ret;
+    return ret;
+}
 QStringList MainWindow::sortApByCategory(QStringList list,int cateIndex){
     QStringList ret;
     for(auto line:list){
@@ -1883,9 +1882,10 @@ QStringList MainWindow::sortApByCategory(QStringList list,int cateIndex){
     }
     return ret;
 }
-//wifi列表优化去重，同名同频下只留最*优*wifi
+//wifi列表优化去重，同名同频下只留最优wifi
 void MainWindow::wifiListOptimize(QStringList& slist)
 {
+    if(slist.size() < 2) return ;
     //这个函数可能会把已经连接的那个wifi给筛选出去
     QString headLine = slist.at(0);
     int indexSignal,indexSecu, indexFreq, indexBSsid, indexName,indexPath;
@@ -1907,7 +1907,6 @@ void MainWindow::wifiListOptimize(QStringList& slist)
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
     }
-
     QStringList targetList; //slist优化，同名同频AP中只留信号最强
     targetList<<slist.at(0);    //把第一行加进去
     for(int it = 1;it < slist.size();it++){
@@ -1946,7 +1945,6 @@ void MainWindow::wifiListOptimize(QStringList& slist)
 void MainWindow::getFinalWifiList(QStringList &slist)
 {
     if(slist.size() < 2) return ;
-
     QString headLine = slist.at(0);
     int indexSignal,indexSecu, indexFreq, indexBSsid, indexName,indexPath;
     headLine = headLine.trimmed();
@@ -2000,19 +1998,18 @@ void MainWindow::getFinalWifiList(QStringList &slist)
             }
         }
     }
-
     foreach (QString deleteStr, deleteWifiStr) {
         slist.removeOne(deleteStr);
     }
     return;
 }
 //从有配置文件的wifi选出最优wifi进行连接
-QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
-    QStringList target;
+QVector<QStringList> MainWindow::connectableWifiPriorityList(const QStringList slist){
+    QVector<QStringList> target;
     if(slist.size()<2) return target;
     OneConnForm *ocf = new OneConnForm();
     QString headLine = slist.at(0);
-    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath;
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath,indexCate;
     headLine = headLine.trimmed();
 
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
@@ -2023,6 +2020,7 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
         indexBSsid = headLine.indexOf("BSSID") + 6;
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
     } else {
         indexSignal = headLine.indexOf("SIGNAL");
         indexSecu = headLine.indexOf("SECURITY");
@@ -2030,6 +2028,7 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
         indexBSsid = headLine.indexOf("BSSID");
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
     }
 
     QStringList tmp = slist;
@@ -2037,13 +2036,13 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
         QString line = tmp.at(i);
         QString wifiname = line.mid(indexName,indexPath - indexName).trimmed();
         QString wifibssid = line.mid(indexBSsid, indexName-indexBSsid).trimmed();
-        QString wifiObjectPath = line.mid(indexPath).trimmed();
-
-        if (ocf->isWifiConfExist(wifiname) && canReconnectWifiList.contains(wifiname)) {  //两格以上有配置的5Gwifi中选择信号最佳的
-            target << wifiObjectPath <<wifibssid;
+        QString wifiObjectPath = line.mid(indexPath,indexCate-indexPath).trimmed();
+        if (ocf->isWifiConfExist(wifiname) && canReconnectWifiList.contains(wifiname)) {
+            QStringList oneconf;
+            oneconf<<wifiObjectPath<<wifibssid;
+            target<<oneconf;
         }
     }
-
     ocf->deleteLater();
     return target;
 }

@@ -150,6 +150,7 @@ signals:
     void selectedOneWifiForm(QString wifiName, int extendLength);
     void connDone(int connFlag);
     void disconnActiveWifi();
+    void requestRefreshWifiList();
 
     void sigConnWifi(QString);
     void sigConnWifiPWD(QString, QString, QString);

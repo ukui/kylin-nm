@@ -225,6 +225,7 @@ public slots:
     void on_wifi_changed();
 
     void connWifiDone(int connFlag);
+    void onRequestRefreshWifiList();
 
     //flag =0或1为普通点击、2为收到打开信息、3为收到关闭信息、4为无线网卡插入、5为无线网卡拔出
     void onBtnWifiClicked(int flag = 0);

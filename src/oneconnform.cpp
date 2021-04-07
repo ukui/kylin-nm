@@ -189,6 +189,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     lbNameLyt->addWidget(lbFreq);
     lbNameLyt->addStretch();
     ui->lbName->setLayout(lbNameLyt);
+
+    connect(this, SIGNAL(requestRefreshWifiList()), mw, SLOT(onRequestRefreshWifiList()));
 }
 
 OneConnForm::~OneConnForm()
@@ -908,13 +910,26 @@ void OneConnForm::slotConnWifiResult(int connFlag)
 
     if (connFlag == 0) {
         if (mw->isHuaWeiPC) {
-            //network-manager可能回连接到其他bssid对应的网络，改成我们想要连接的那个网络
-            QFuture < void > future1 =  QtConcurrent::run([=]() {
+            //network-manager可能会连接到其他bssid对应的网络，改成我们想要连接的那个网络
+            QtConcurrent::run([=]() {
+                QString currConnWifiBssid;
+                KylinDBus myKylinDbus;
+                QStringList wifiListInfo;
+                QList<QString> wifiSsidAndUuid =  myKylinDbus.getAtiveWifiBSsidUuid(wifiListInfo);
+                if (wifiSsidAndUuid.size() > 1 && wifiSsidAndUuid.at(1).length() == 17) {
+                    qDebug() << "想要连接的wifi的bssid是 " << wifiSsidAndUuid.at(1);
+                    currConnWifiBssid = wifiSsidAndUuid.at(1);
+                }
+
                 qDebug() << "实际连接的wifi的bssid是 " << wifiBSsid;
-                QString modityCmd = "nmcli connection modify \""+ wifiName + "\" " + "802-11-wireless.bssid " + wifiBSsid;
-                system(modityCmd.toUtf8().data());
-                QString reconnectWifiCmd = "nmcli connection up \"" + wifiName + "\"";
-                system(reconnectWifiCmd.toUtf8().data());
+                if (currConnWifiBssid != wifiBSsid && !currConnWifiBssid.isEmpty()) {
+                    QString modityCmd = "nmcli connection modify \""+ wifiName + "\" " + "802-11-wireless.bssid " + wifiBSsid;
+                    system(modityCmd.toUtf8().data());
+                    QString reconnectWifiCmd = "nmcli connection up \"" + wifiName + "\"";
+                    system(reconnectWifiCmd.toUtf8().data());
+                } else {
+                    emit requestRefreshWifiList();
+                }
             });
         }
 

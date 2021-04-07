@@ -3630,6 +3630,11 @@ void MainWindow::connWifiDone(int connFlag)
     is_stop_check_net_state = 0;
 }
 
+void MainWindow::onRequestRefreshWifiList()
+{
+    this->ksnm->execGetWifiList(this->wcardname);
+}
+
 //重新绘制背景色
 void MainWindow::paintEvent(QPaintEvent *event)
 {

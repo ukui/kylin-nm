@@ -40,8 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    syslog(LOG_DEBUG, "Using the icon theme named 'ukui-icon-theme-default'");
-    QIcon::setThemeName("ukui-icon-theme-default");
+    //syslog(LOG_DEBUG, "Using the icon theme named 'ukui-icon-theme-default'");
+    //QIcon::setThemeName("ukui-icon-theme-default");
 
     PrimaryManager();
     toStart();
@@ -111,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(loading, SIGNAL(toStopLoading() ), this, SLOT(on_checkOverTime() ));
 
     checkIsWirelessDevicePluggedIn(); //检测无线网卡是否插入
-    getInitLanSlist(); //初始化有线网列表
+    initLanSlistAndGetReconnectNetList(); //初始化有线网列表
     initNetwork(); //初始化网络
     initTimer(); //初始化定时器
     initActNetDNS();//初始化已连接网络的DNS
@@ -418,8 +418,8 @@ void MainWindow::createLeftAreaUI()
     ui->btnConfImg->setProperty("iconHighlightEffectMode", true);
 }
 
-// 初始化有线网列表
-void MainWindow::getInitLanSlist()
+// 初始化有线网列表,初始化可回连wifi列表
+void MainWindow::initLanSlistAndGetReconnectNetList()
 {
     canReconnectWifiList.clear();
     const int BUF_SIZE = 1024;
@@ -435,21 +435,21 @@ void MainWindow::getInitLanSlist()
         qDebug()<<"Error occurred when popen cmd 'nmcli connection show";
     }
 
-    int trimPos = 0;
+    int trimNamePos = 0;
     while (fgets(buf, BUF_SIZE, p_file) != NULL) {
         QString strSlist = "";
         QString line(buf);
         strSlist = line.trimmed();
         if (strSlist.indexOf("UUID") != -1 || strSlist.indexOf("NAME") != -1) {
-            trimPos = strSlist.indexOf("NAME");
+            trimNamePos = strSlist.indexOf("NAME");
             oldLanSlist.append(strSlist);
         }
         if (strSlist.indexOf("802-3-ethernet") != -1 || strSlist.indexOf("ethernet") != -1) {
             oldLanSlist.append(strSlist);
         }
         if (strSlist.indexOf("802-11-wireless") != -1 || strSlist.indexOf("wifi") != -1) {
-            if (trimPos != 0) {
-                QString mywifiname = line.mid(trimPos).trimmed();//这里没有考虑wifi为空格的情况
+            if (trimNamePos != 0) {
+                QString mywifiname = strSlist.mid(trimNamePos).trimmed();//这里没有考虑wifi为空格的情况
                 if (!canReconnectWifiList.contains(mywifiname)) {
                     canReconnectWifiList.append(mywifiname);
                 }
@@ -545,7 +545,7 @@ void MainWindow::initNetwork()
 // 初始化定时器
 void MainWindow::initTimer()
 {
-    //循环检测wifi列表的变化，可用于更新wifi列表
+    //应用启动后，需要连接可连接的网络
     QTimer::singleShot(1*1000, this, SLOT(toReconnectWifi() ));
 
     //循环检测wifi列表的变化，可用于更新wifi列表
@@ -1714,14 +1714,13 @@ void MainWindow::getWifiListDone(QStringList slist)
     }
 
     //若slist为空，则使用上一次获取到的列表
-//    if (slist.size() == 1 && slist.at(0) == "") {
-//        if (oldWifiSlist.size() == 1 && oldWifiSlist.at(0) == "") {
-//            return;
-//        } else {
-//            slist = oldWifiSlist;
-//        }
-//    }
-    slist = priorityList(slist);
+    //if (slist.size() == 1 && slist.at(0) == "") {
+    //    if (oldWifiSlist.size() == 1 && oldWifiSlist.at(0) == "") {
+    //        return;
+    //    } else {
+    //        slist = oldWifiSlist;
+    //    }
+    //}
     if (isHuaWeiPC) {
         if (slist.size() >= 2) {
             wifiListOptimize(slist);
@@ -1729,6 +1728,7 @@ void MainWindow::getWifiListDone(QStringList slist)
         }
     }
     if (current_wifi_list_state == RECONNECT_WIFI) {
+
         QVector<QStringList> targetWifiList = connectableWifiPriorityList(slist);
         if (!targetWifiList[0].isEmpty()) {
             if (!isWifiReconnecting) {
@@ -1883,7 +1883,9 @@ QStringList MainWindow::sortApByCategory(QStringList list,int cateIndex){
     }
     return ret;
 }
-//wifi列表优化去重，同名同频下只留最优wifi
+
+//进行wifi列表优化选择，分为2.4G和5G进行选择，先每种频率形成一个列表
+//同一个列表中同名wifi只有一个，再按信号强度由大到小合并列表
 void MainWindow::wifiListOptimize(QStringList& slist)
 {
     if(slist.size() < 2) return ;
@@ -1911,11 +1913,11 @@ void MainWindow::wifiListOptimize(QStringList& slist)
     QStringList targetList; //slist优化，同名同频AP中只留信号最强
     targetList<<slist.at(0);    //把第一行加进去
     for(int it = 1;it < slist.size();it++){
-        QString i = slist.at(it);
+        QString currentWifiInfo = slist.at(it);
         bool ifContinue = false;
-        QString conName = i.mid(indexName, indexPath - indexName).trimmed();
-        int conSignal = i.mid(indexSignal,3).trimmed().toInt();
-        int conFreq = i.mid(indexFreq,4).trimmed().toInt();
+        QString conName = currentWifiInfo.mid(indexName, indexPath - indexName).trimmed();
+        int conSignal = currentWifiInfo.mid(indexSignal,3).trimmed().toInt();
+        int conFreq = currentWifiInfo.mid(indexFreq,4).trimmed().toInt();
         for(int i=0;i<slist.size();i++){
             QString str = slist.at(i);
             QString name = str.mid(indexName, indexPath - indexName).trimmed();
@@ -1937,12 +1939,12 @@ void MainWindow::wifiListOptimize(QStringList& slist)
             }
         }
         if(ifContinue)  continue;
-        targetList<<i;
+        targetList<<currentWifiInfo;
     }
     slist = targetList;
-    return ;
 }
 
+//最终优选出来的wifi列表
 void MainWindow::getFinalWifiList(QStringList &slist)
 {
     if(slist.size() < 2) return ;
@@ -1981,17 +1983,22 @@ void MainWindow::getFinalWifiList(QStringList &slist)
             int signal = wifiStr.mid(indexSignal,3).trimmed().toInt();
             int freq = wifiStr.mid(indexFreq,4).trimmed().toInt();
             if(conName == name){
-                if (conFreq > freq) {
-                    if ((signal-conSignal) > 50) { //低频的信号格数比高频大于两格，选低频
-                        deleteWifiStr.append(wifiInfo);
-                    } else {
-                        deleteWifiStr.append(wifiStr);
-                    }
+                if (conFreq >= 5000) {
+                    //排在前面的一个是5Gwifi，并且信号也强一些
+                    deleteWifiStr.append(wifiStr);
                 } else {
-                    if ((conSignal-signal) > 50) { //低频的信号格数比高频大于两格，选低频
-                        deleteWifiStr.append(wifiStr);
+                    //排在前面的一个是2.4G
+                    if (freq >= 5000) {
+                        //排在后面的一个是5G
+                        if (signal >= 55) {
+                            //排在后面的一个是5Gwifi信号强度 >= 3格，选5G
+                            deleteWifiStr.append(wifiInfo);
+                        } else {
+                            deleteWifiStr.append(wifiStr);
+                        }
                     } else {
-                        deleteWifiStr.append(wifiInfo);
+                        //排在后面的一个是2.4G
+                        deleteWifiStr.append(wifiStr);
                     }
                 }
                 break;
@@ -2003,7 +2010,7 @@ void MainWindow::getFinalWifiList(QStringList &slist)
     }
     return;
 }
-//从有配置文件的wifi选出最优wifi进行连接
+//从有配置文件的wifi选出最优wifi进行连接同时考虑用户手动设置的优先级,这个函数在回连中用到
 QVector<QStringList> MainWindow::connectableWifiPriorityList(const QStringList slist){
     QVector<QStringList> target;
     if(slist.size()<2) return target;
@@ -2032,19 +2039,74 @@ QVector<QStringList> MainWindow::connectableWifiPriorityList(const QStringList s
     }
 
     QStringList tmp = slist;
-    for (int i=1;i<tmp.size();i++) {
-        QString line = tmp.at(i);
+    for (int iter=1; iter<tmp.size(); iter++) {
+        QString line = tmp.at(iter);
         QString wifiname = line.mid(indexName,indexPath - indexName).trimmed();
         QString wifibssid = line.mid(indexBSsid, indexName-indexBSsid).trimmed();
-        QString wifiObjectPath = line.mid(indexPath,indexCate-indexPath).trimmed();
+        QString wifiObjectPath = line.mid(indexPath).trimmed();
+        QString wifiAutoConnection;
+        QString wifiPriority;
+
         if (ocf->isWifiConfExist(wifiname) && canReconnectWifiList.contains(wifiname)) {
-            QStringList oneconf;
-            oneconf<<wifiObjectPath<<wifibssid;
-            target<<oneconf;
+            QString tmpPath = "/tmp/kylin-nm-lanprop-" + QDir::home().dirName();
+            QString getInfoCmd = "nmcli connection show '" + wifiname + "' > " + tmpPath;
+            Utils::m_system(getInfoCmd.toUtf8().data());
+            QFile file(tmpPath);
+            if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-lanprop in function connectableWifiPriorityList!");
+                qDebug()<<"Can't open the file /tmp/kylin-nm-lanprop in function connectableWifiPriorityList!";
+            }
+            QString txt = file.readAll();
+            QStringList txtLine = txt.split("\n");
+            file.close();
+            foreach (QString line, txtLine) {
+                if (line.startsWith("connection.autoconnect:")) {
+                    wifiAutoConnection = line.mid(25).trimmed(); //connection.autoconnect:有23个字符
+                }
+                if (line.startsWith("connection.autoconnect-priority:")) {
+                    wifiPriority = line.mid(34).trimmed(); //connection.autoconnect-priority:有32个字符
+                }
+            }
+
+            //可以自动回连，则加入列表
+            if (wifiAutoConnection == "是" || wifiAutoConnection == "yes") {
+                selectedWifiList << wifiObjectPath << wifibssid << wifiPriority;
+            }
         }
     }
+
+    //再按照wifiPriority进行排序，先简单的选出最高优先级的wifi进行连接
+//    QStringList targetWifiList;
+//    int maxPos;
+//    int maxPriority = -999;
+//    //选找到最高优先级的那个wifi的位置
+//    if (selectedWifiList.size() > 1) {
+//        for (int i=0; i+2 < selectedWifiList.size(); i=i+2) {
+//            QString strPriority = selectedWifiList.at(i+2);
+//            int priority = strPriority.toInt();
+//            if (priority >= maxPriority) {
+//                maxPos = i;
+//                maxPriority = priority;
+//            }
+//        }
+//    }
+//    //将最高优先级的那个wifi信息放入列表中
+//    targetWifiList.append(selectedWifiList.at(maxPos));
+//    targetWifiList.append(selectedWifiList.at(maxPos+1));
+//    targetWifiList.append(selectedWifiList.at(maxPos+2));
+//    //剩下的暂时不排序，按照原来顺序放入列表中
+//    if (selectedWifiList.size() > 1) {
+//        for (int i=0; i+2 < selectedWifiList.size(); i=i+2) {
+//            if (i != maxPos) {
+//                targetWifiList.append(selectedWifiList.at(i));
+//                targetWifiList.append(selectedWifiList.at(i+1));
+//                targetWifiList.append(selectedWifiList.at(i+2));
+//            }
+//        }
+//    }
+
     ocf->deleteLater();
-    return target;
+    return selectedWifiList;
 }
 
 // 加载wifi列表
@@ -3194,16 +3256,26 @@ void MainWindow::on_btnHotspotState()
 //执行wifi的重新连接
 void MainWindow::toReconnectWifi()
 {
-    if (isHuaWeiPC) {
-        current_wifi_list_state = RECONNECT_WIFI;
-        this->ksnm->execGetWifiList(this->wcardname);
+    if (canReconnectWifiTimeInterval) {
+        canReconnectWifiTimeInterval = false;
+        QTimer::singleShot(2*1000, this, SLOT(timeIntervalToConnectWifi() ));
+
+        if (isHuaWeiPC) {
+            current_wifi_list_state = RECONNECT_WIFI;
+            this->ksnm->execGetWifiList(this->wcardname);
+        }
     }
+}
+
+void MainWindow::timeIntervalToConnectWifi()
+{
+    canReconnectWifiTimeInterval = true;
 }
 
 //处理外界对网络的连接与断开
 void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 {
-    isWifiReconnecting = false;
+    isReconnectingWifi = false;
 
     if ( (type == "802-11-wireless" || type == "wifi") && !isConnUp ){
         //如果是手动点击断开连接，因为还在处理中，所以is_stop_check_net_state的值为true,

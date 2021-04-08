@@ -1665,6 +1665,7 @@ void KylinDBus::onLanIpPropertiesChanged()
 void KylinDBus::onWifiIpPropertiesChanged() {
     emit this->updateWirelessList();
 }
+
 //利用dbus的方法对已经连接的有线网进行再次连接
 void KylinDBus::reConnectWiredNet(QString netUuid)
 {
@@ -1857,7 +1858,6 @@ bool KylinDBus::toConnectWiredNet(QString netUuid, QString netIfName)
 void KylinDBus::requestScanWifi()
 {
     if (multiWirelessPaths.size() == 0)  return;
-    qDebug() << "----------------------> requestScanWifi  " << multiWirelessPaths.at(0).path();
 
     qRegisterMetaType<QMap<QString, QVariant>>("QMap<QString, QVariant>");
     qDBusRegisterMetaType<QMap<QString, QVariant>>();

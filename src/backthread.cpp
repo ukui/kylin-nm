@@ -218,16 +218,16 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
 //        kylin_network_set_con_down(uuid.toUtf8().data());
 //    }
 
-    bool wiredCableState = objKyDbus.getWiredCableStateByIfname(ifname);
+    bool isWiredCableAlready = objKyDbus.getWiredCableStateByIfname(ifname);
 
     if (connectType == "bluetooth") {
-        wiredCableState = true; //对于蓝牙类型的网络不需要接入网线就可以连接
+        isWiredCableAlready = true; //对于蓝牙类型的网络不需要接入网线就可以连接
         mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
     } else {
         mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
     }
 
-    if (wiredCableState) {
+    if (isWiredCableAlready) {
         //if(objKyDbus.toConnectWiredNet(connName, ifname)) { //此处connName是有线网Uuid
         //    emit connDone(2);
         //} else {

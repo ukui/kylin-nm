@@ -314,7 +314,9 @@ private:
     int oldDbusActLanDNS = 0; //上一次获取的已连接有线网的DNS代号
     void wifiListOptimize(QStringList& slist); //只保留同名同频信号最强AP
     void getFinalWifiList(QStringList& slist); //获取应该显示在wifi列表中的最优列表参数
-    QStringList connectableWifiPriorityList(const QStringList slist); //可连接wifi优先级列表
+    QList<structWifiProperty> connectableWifiPriorityList(const QStringList slist); //可连接wifi优先级列表
+    void devListSort(QList<structWifiProperty> *list);
+    static bool subDevListSort(const structWifiProperty&info1,const structWifiProperty&info2);
     //循环检测网络连接状态
     QTimer *iconTimer = nullptr;
     QTimer *wiredCableUpTimer = nullptr;

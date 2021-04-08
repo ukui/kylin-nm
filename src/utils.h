@@ -52,6 +52,16 @@ extern "C" {
 }
  */
 
+
+///////////////////////////////////////////////////////////////////////////////
+// wifi property struct
+ typedef struct structWifiProperty{
+    QString objectPath;
+    QString bssid;
+    int priority;
+}structWifiProperty;
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // The Utils class, used to do some assist function
 

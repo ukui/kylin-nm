@@ -25,6 +25,8 @@
 #include "wireless-security/dlghidewifi.h"
 #include "sysdbusregister.h"
 
+#include <algorithm>//sort函数包含的头文件
+
 #include <KWindowEffects>
 #include <QFont>
 #include <QFontMetrics>
@@ -1730,13 +1732,13 @@ void MainWindow::getWifiListDone(QStringList slist)
     }
 
     if (current_wifi_list_state == RECONNECT_WIFI) {
-        QStringList targetWifiList = connectableWifiPriorityList(slist);
-        if (!targetWifiList.isEmpty()) {
+        QList<structWifiProperty> targetWifiStructList = connectableWifiPriorityList(slist);
+        if (!targetWifiStructList.isEmpty()) {
             if (!isReconnectingWifi) {
                 isReconnectingWifi = true; //保证对于连续发出的重连信号，只处理第一个
                 QtConcurrent::run([=]() {
-                    QString wifiSsid = objKyDBus->getWifiSsid(targetWifiList.at(0));
-                    QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiList.at(1);
+                    QString wifiSsid = objKyDBus->getWifiSsid(targetWifiStructList.at(0).objectPath);
+                    QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiStructList.at(0).bssid;
                     system(modityCmd.toUtf8().data());
                     QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
                     system(reconnectWifiCmd.toUtf8().data());
@@ -1933,9 +1935,9 @@ void MainWindow::getFinalWifiList(QStringList &slist)
 }
 
 //从有配置文件的wifi选出最优wifi进行连接,同时考虑用户手动设置的优先级,这个函数在回连中用到
-QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
-    QStringList selectedWifiList;
-    if(slist.size()<2) return selectedWifiList;
+QList<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStringList slist){
+    QList<structWifiProperty> selectedWifiListStruct;
+    if(slist.size()<2) return selectedWifiListStruct;
     OneConnForm *ocf = new OneConnForm();
     QString headLine = slist.at(0);
     int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath;
@@ -1990,43 +1992,35 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
 
             //可以自动回连，则加入列表
             if (wifiAutoConnection == "是" || wifiAutoConnection == "yes") {
-                selectedWifiList << wifiObjectPath << wifibssid << wifiPriority;
+                structWifiProperty myWifiProStruct;
+                myWifiProStruct.objectPath = wifiObjectPath;
+                myWifiProStruct.bssid = wifibssid;
+                myWifiProStruct.priority = wifiPriority.toInt();
+                selectedWifiListStruct.append(myWifiProStruct);
             }
         }
     }
 
     //再按照wifiPriority进行排序，先简单的选出最高优先级的wifi进行连接
-//    QStringList targetWifiList;
-//    int maxPos;
-//    int maxPriority = -999;
-//    //选找到最高优先级的那个wifi的位置
-//    if (selectedWifiList.size() > 1) {
-//        for (int i=0; i+2 < selectedWifiList.size(); i=i+2) {
-//            QString strPriority = selectedWifiList.at(i+2);
-//            int priority = strPriority.toInt();
-//            if (priority >= maxPriority) {
-//                maxPos = i;
-//                maxPriority = priority;
-//            }
-//        }
-//    }
-//    //将最高优先级的那个wifi信息放入列表中
-//    targetWifiList.append(selectedWifiList.at(maxPos));
-//    targetWifiList.append(selectedWifiList.at(maxPos+1));
-//    targetWifiList.append(selectedWifiList.at(maxPos+2));
-//    //剩下的暂时不排序，按照原来顺序放入列表中
-//    if (selectedWifiList.size() > 1) {
-//        for (int i=0; i+2 < selectedWifiList.size(); i=i+2) {
-//            if (i != maxPos) {
-//                targetWifiList.append(selectedWifiList.at(i));
-//                targetWifiList.append(selectedWifiList.at(i+1));
-//                targetWifiList.append(selectedWifiList.at(i+2));
-//            }
-//        }
-//    }
+    if (selectedWifiListStruct.size() > 1) {
+        devListSort(&selectedWifiListStruct);
+        foreach (structWifiProperty wifiPriorityAfterSort, selectedWifiListStruct) {
+            qDebug() << "-----------------------> 排序后" << wifiPriorityAfterSort.priority;
+        }
+    }
 
     ocf->deleteLater();
-    return selectedWifiList;
+    return selectedWifiListStruct;
+}
+
+//排序
+void MainWindow::devListSort(QList<structWifiProperty> *list)
+{
+    qSort(list->begin(), list->end(), subDevListSort);
+}
+bool MainWindow::subDevListSort(const structWifiProperty &info1, const structWifiProperty &info2)
+{
+   return info1.priority > info2.priority;
 }
 
 // 加载wifi列表

@@ -40,8 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    syslog(LOG_DEBUG, "Using the icon theme named 'ukui-icon-theme-default'");
-    QIcon::setThemeName("ukui-icon-theme-default");
+    //syslog(LOG_DEBUG, "Using the icon theme named 'ukui-icon-theme-default'");
+    //QIcon::setThemeName("ukui-icon-theme-default");
 
     PrimaryManager();
     toStart();

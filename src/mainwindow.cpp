@@ -1692,12 +1692,6 @@ void MainWindow::onRequestRevalueUpdateWifi()
 // 获取wifi列表回调
 void MainWindow::getWifiListDone(QStringList slist)
 {
-    //qDebug()<<"------------";
-    //foreach (QString str, slist) {
-    //    qDebug()<<str;
-    //}
-    //qDebug()<<"------------";
-
     //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldWifiSlist) {
         slist = oldWifiSlist;
@@ -1718,9 +1712,10 @@ void MainWindow::getWifiListDone(QStringList slist)
     if (isHuaWeiPC) {
         if (slist.size() >= 2) {
             wifiListOptimize(slist);
-            getFinalWifiList(slist);
+//            getFinalWifiList(slist);
         }
     }
+
     if (current_wifi_list_state == RECONNECT_WIFI) {
         QVector<QStringList> targetWifiList = connectableWifiPriorityList(slist);
         if (!targetWifiList[0].isEmpty()) {
@@ -2035,7 +2030,7 @@ QVector<QStringList> MainWindow::connectableWifiPriorityList(const QStringList s
         QString line = tmp.at(iter);
         QString wifiname = line.mid(indexName,indexPath - indexName).trimmed();
         QString wifibssid = line.mid(indexBSsid, indexName-indexBSsid).trimmed();
-        QString wifiObjectPath = line.mid(indexPath).trimmed();
+        QString wifiObjectPath = line.mid(indexPath,indexCate-indexPath).trimmed();
         QString wifiAutoConnection;
         QString wifiPriority;
 

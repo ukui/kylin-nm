@@ -2288,7 +2288,6 @@ void MainWindow::loadWifiListDone(QStringList slist)
     QList<OneConnForm *> itemList = wifiListWidget->findChildren<OneConnForm *>();
     int n = itemList.size();
     if (n >= 1) {
-        qDebug() << "111111111111111111";
         OneConnForm *lastItem = itemList.at(n-1);
         lastItem->setLine(false); //最后一个item不需要下划线
         lbNoItemTip->hide();
@@ -3609,7 +3608,6 @@ void MainWindow::connWifiDone(int connFlag)
     } else if (connFlag == 1) {
 //        is_stop_check_net_state = 0;
         is_connect_net_failed = 1;
-
         QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 3) {

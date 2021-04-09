@@ -334,10 +334,12 @@ void BackThread::execConnHiddenWifiWPA(QString wifiName, QString wifiPassword)
     int x(1), n(0);
     do {
         n += 1;
-        if (n >= 3) {
+        if (n >= 4) {
             syslog(LOG_ERR, "connection attempt of hidden wifi %s failed for 3 times, no more attempt", wifiName);
             x = 0;
             emit connDone(1);
+            emit btFinish();
+            return ;
         }
 
         QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
@@ -359,7 +361,7 @@ void BackThread::execConnHiddenWifiWPA(QString wifiName, QString wifiPassword)
            || text.isEmpty()
            || text.indexOf("No network with SSID") != -1){
             x = 1;
-            sleep(15);//nm扫描冷却为10s
+            sleep(10);//nm扫描冷却为10s
         } else {
             emit connDone(0);
             x = 0;

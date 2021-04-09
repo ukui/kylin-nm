@@ -1722,13 +1722,13 @@ void MainWindow::getWifiListDone(QStringList slist)
         }
     }
     if (current_wifi_list_state == RECONNECT_WIFI) {
-        QStringList targetWifiList = connectableWifiPriorityList(slist);
-        if (!targetWifiList.isEmpty()) {
+        QVector<QStringList> targetWifiList = connectableWifiPriorityList(slist);
+        if (!targetWifiList[0].isEmpty()) {
             if (!isReconnectingWifi) {
                 isReconnectingWifi = true; //保证对于连续发出的重连信号，只处理第一个
                 QtConcurrent::run([=]() {
-                    QString wifiSsid = objKyDBus->getWifiSsid(targetWifiList.at(0));
-                    QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiList.at(1);
+                    QString wifiSsid = objKyDBus->getWifiSsid(targetWifiList[0].at(0));
+                    QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiList[0].at(1);
                     system(modityCmd.toUtf8().data());
                     QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
                     system(reconnectWifiCmd.toUtf8().data());
@@ -2003,8 +2003,8 @@ void MainWindow::getFinalWifiList(QStringList &slist)
 }
 
 //从有配置文件的wifi选出最优wifi进行连接,同时考虑用户手动设置的优先级,这个函数在回连中用到
-QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
-    QStringList selectedWifiList;
+QVector<QStringList> MainWindow::connectableWifiPriorityList(const QStringList slist){
+    QVector<QStringList> selectedWifiList;
     if(slist.size()<2) return selectedWifiList;
     OneConnForm *ocf = new OneConnForm();
     QString headLine = slist.at(0);
@@ -2062,7 +2062,9 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
 
             //可以自动回连，则加入列表
             if (wifiAutoConnection == "是" || wifiAutoConnection == "yes") {
-                selectedWifiList << wifiObjectPath << wifibssid << wifiPriority;
+                QStringList apConf;
+                apConf << wifiObjectPath << wifibssid << wifiPriority;
+                selectedWifiList << apConf;
             }
         }
     }

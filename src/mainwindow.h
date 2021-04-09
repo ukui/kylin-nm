@@ -316,7 +316,7 @@ private:
     QStringList priorityList(QStringList);
     QStringList sortApByCategory(QStringList,int);
     void getFinalWifiList(QStringList& slist); //获取应该显示在wifi列表中的最优列表参数
-    QStringList connectableWifiPriorityList(const QStringList slist); //可连接wifi优先级列表
+    QVector<QStringList> connectableWifiPriorityList(const QStringList slist); //可连接wifi优先级列表
     //循环检测网络连接状态
     QTimer *iconTimer = nullptr;
     QTimer *wiredCableUpTimer = nullptr;

@@ -2288,9 +2288,12 @@ void MainWindow::loadWifiListDone(QStringList slist)
     QList<OneConnForm *> itemList = wifiListWidget->findChildren<OneConnForm *>();
     int n = itemList.size();
     if (n >= 1) {
+        qDebug() << "111111111111111111";
         OneConnForm *lastItem = itemList.at(n-1);
         lastItem->setLine(false); //最后一个item不需要下划线
         lbNoItemTip->hide();
+        lbTopWifiList->show();
+        btnAddNet->show();
     } else {
         if (ifWLanConnected) {
             lbNoItemTip->show();

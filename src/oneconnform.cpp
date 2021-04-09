@@ -429,7 +429,7 @@ void OneConnForm::setLine(bool isShow)
     }
 }
 
-void OneConnForm::setSignal(QString lv, QString secu)
+void OneConnForm::setSignal(QString lv, QString secu, QString category)
 {
     int signal = lv.toInt();
     if (secu == "--" || secu == "") {
@@ -437,47 +437,54 @@ void OneConnForm::setSignal(QString lv, QString secu)
     } else {
         hasPwd = true;
     }
+    QString signalStyle = "QLabel{border-radius:0px;background:url(:/res/w/wifi";
+    if("1" == category){
+        signalStyle += "6";
+    }else if("2" == category){
+        signalStyle += "6+";
+    }
 
     if (signal > 75) {
         if (hasPwd) {
-            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-full-pwd.png);}");
+            signalStyle += "-full-pwd.png);}";
         } else {
-            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-full.png);}");
+            signalStyle += "-full.png);}";
         }
         signalLv = 1;
     }
     if (signal > 55 && signal <= 75) {
         if (hasPwd) {
-            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-high-pwd.png);}");
+            signalStyle += "-high-pwd.png);}";
         } else {
-            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-high.png);}");
+            signalStyle += "-high.png);}";
         }
         signalLv = 2;
     }
     if (signal > 35 && signal <= 55) {
         if (hasPwd) {
-            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-medium-pwd.png);}");
+            signalStyle += "-medium-pwd.png);}";
         } else {
-            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-medium.png);}");
+            signalStyle += "-medium.png);}";
         }
         signalLv = 3;
     }
     if (signal > 15 && signal <= 35) {
         if (hasPwd) {
-            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-low-pwd.png);}");
+            signalStyle += "-low-pwd.png);}";
         } else {
-            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-low.png);}");
+            signalStyle += "-low.png);}";
         }
         signalLv = 4;
     }
     if (signal <= 15) {
         if (hasPwd) {
-            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-none-pwd.png);}");
+            signalStyle += "-none-pwd.png);}";
         } else {
-            ui->lbSignal->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/w/wifi-none.png);}");
+            signalStyle += "-none.png);}";
         }
         signalLv = 4;
     }
+    ui->lbSignal->setStyleSheet(signalStyle);
 }
 
 void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, int freq)

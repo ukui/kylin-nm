@@ -1713,22 +1713,14 @@ void MainWindow::getWifiListDone(QStringList slist)
         }
     }
 
-    //若slist为空，则使用上一次获取到的列表
-    //if (slist.size() == 1 && slist.at(0) == "") {
-    //    if (oldWifiSlist.size() == 1 && oldWifiSlist.at(0) == "") {
-    //        return;
-    //    } else {
-    //        slist = oldWifiSlist;
-    //    }
-    //}
 
+    slist = priorityList(slist);
     if (isHuaWeiPC) {
         if (slist.size() >= 2) {
             wifiListOptimize(slist);
             getFinalWifiList(slist);
         }
     }
-
     if (current_wifi_list_state == RECONNECT_WIFI) {
         QStringList targetWifiList = connectableWifiPriorityList(slist);
         if (!targetWifiList.isEmpty()) {
@@ -1749,7 +1741,6 @@ void MainWindow::getWifiListDone(QStringList slist)
     if (this->is_btnLanList_clicked == 1) {
         return;
     }
-
     if (current_wifi_list_state == LOAD_WIFI_LIST) {
         //qDebug() << "loadwifi的列表";
         loadWifiListDone(slist);
@@ -1769,11 +1760,9 @@ void MainWindow::getWifiListDone(QStringList slist)
 void MainWindow::getConnListDone(QStringList slist)
 {
     if (isInitConnList) {
-//        oldConnSlist = slist;
         for (int i = 1; i < slist.length() - 1; i++) {
             oldConnSlist << slist.at(i).trimmed();
         }
-//        qDebug()<<oldConnSlist;
         isInitConnList = false;
         return;
     } else {
@@ -1802,11 +1791,96 @@ void MainWindow::getConnListDone(QStringList slist)
         return;
     }
 }
-
+QStringList MainWindow::priorityList(QStringList slist){
+    QStringList ret;
+    ret.append(slist[0]);
+    QString headLine = slist.at(0);
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName,indexPath,indexCate;
+    headLine = headLine.trimmed();
+    bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (isChineseExist) {
+        indexSignal = headLine.indexOf("SIGNAL");
+        indexSecu = headLine.indexOf("安全性");
+        indexFreq = headLine.indexOf("频率") + 4;
+        indexBSsid = headLine.indexOf("BSSID") + 6;
+        indexName = indexBSsid + 19;
+        indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
+    } else {
+        indexSignal = headLine.indexOf("SIGNAL");
+        indexSecu = headLine.indexOf("SECURITY");
+        indexFreq = headLine.indexOf("FREQ");
+        indexBSsid = headLine.indexOf("BSSID");
+        indexName = indexBSsid + 19;
+        indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
+    }
+    QStringList p1,p2,p3,p4,p5,p6,p7;//按照信号与频段划分为6个列表
+    for(int i=1;i<slist.size();i++){
+        QString line = slist.at(i);
+        int conSignal = line.mid(indexSignal,3).trimmed().toInt();
+        int conFreq = line.mid(indexFreq,4).trimmed().toInt();
+        if(conSignal > 75 && conFreq >= 5000){
+            p1.append(line);
+            continue;
+        }else if(conSignal > 55 && conFreq >= 5000){
+            p2.append(line);
+            continue;
+        }else if(conSignal > 75){
+            p3.append(line);
+            continue;
+        }else if(conSignal > 55){
+            p4.append(line);
+            continue;
+        }else if(conSignal > 35){
+            p5.append(line);
+            continue;
+        }else if(conSignal > 15){
+            p6.append(line);
+            continue;
+        }else{
+            p7.append(line);
+        }
+    }
+    QVector<QStringList> listVec;
+    listVec<<p1<<p2<<p3<<p4<<p5<<p6<<p7;
+    for(auto list:listVec){
+        list = sortApByCategory(list,indexCate);
+        ret += list;
+    }
+    return ret;
+}
+QVector<QStringList> MainWindow::repetitionFilter(QVector<QStringList>){
+    QVector<QStringList> ret;
+    return ret;
+}
+QStringList MainWindow::sortApByCategory(QStringList list,int cateIndex){
+    QStringList ret;
+    for(auto line:list){
+        int conCate = line.mid(cateIndex).trimmed().toInt();
+        if(conCate == 2){
+            ret.append(line);
+        }
+    }
+    for(auto line:list){
+        int conCate = line.mid(cateIndex).trimmed().toInt();
+        if(conCate == 1){
+            ret.append(line);
+        }
+    }
+    for(auto line:list){
+        int conCate = line.mid(cateIndex).trimmed().toInt();
+        if(conCate == 0){
+            ret.append(line);
+        }
+    }
+    return ret;
+}
 //进行wifi列表优化选择，分为2.4G和5G进行选择，先每种频率形成一个列表
 //同一个列表中同名wifi只有一个，再按信号强度由大到小合并列表
 void MainWindow::wifiListOptimize(QStringList& slist)
 {
+    if(slist.size() < 2) return ;
     //这个函数可能会把已经连接的那个wifi给筛选出去
     QString headLine = slist.at(0);
     int indexSignal,indexSecu, indexFreq, indexBSsid, indexName,indexPath;
@@ -1828,7 +1902,6 @@ void MainWindow::wifiListOptimize(QStringList& slist)
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
     }
-
     QStringList targetList; //slist优化，同名同频AP中只留信号最强
     targetList<<slist.at(0);    //把第一行加进去
     for(int it = 1;it < slist.size();it++){
@@ -1867,11 +1940,9 @@ void MainWindow::wifiListOptimize(QStringList& slist)
 void MainWindow::getFinalWifiList(QStringList &slist)
 {
     if(slist.size() < 2) return ;
-
     QString headLine = slist.at(0);
     int indexSignal,indexSecu, indexFreq, indexBSsid, indexName,indexPath;
     headLine = headLine.trimmed();
-
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
         indexSignal = headLine.indexOf("SIGNAL");
@@ -1926,7 +1997,6 @@ void MainWindow::getFinalWifiList(QStringList &slist)
             }
         }
     }
-
     foreach (QString deleteStr, deleteWifiStr) {
         slist.removeOne(deleteStr);
     }
@@ -1938,7 +2008,7 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
     if(slist.size()<2) return selectedWifiList;
     OneConnForm *ocf = new OneConnForm();
     QString headLine = slist.at(0);
-    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath;
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath,indexCate;
     headLine = headLine.trimmed();
 
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
@@ -1949,6 +2019,7 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
         indexBSsid = headLine.indexOf("BSSID") + 6;
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
     } else {
         indexSignal = headLine.indexOf("SIGNAL");
         indexSecu = headLine.indexOf("SECURITY");
@@ -1956,6 +2027,7 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
         indexBSsid = headLine.indexOf("BSSID");
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
     }
 
     QStringList tmp = slist;
@@ -2024,7 +2096,6 @@ QStringList MainWindow::connectableWifiPriorityList(const QStringList slist){
 //            }
 //        }
 //    }
-
     ocf->deleteLater();
     return selectedWifiList;
 }
@@ -2034,7 +2105,6 @@ void MainWindow::loadWifiListDone(QStringList slist)
 {
     delete topWifiListWidget; //清空top列表
     createTopWifiUI(); //创建topWifiListWidget
-
     // 清空wifi列表
     wifiListWidget = new QWidget(scrollAreaw);
     wifiListWidget->resize(W_LIST_WIDGET, H_WIFI_ITEM_BIG_EXTEND);
@@ -2122,7 +2192,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 填充可用网络列表
     QString headLine = slist.at(0);
-    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath;
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath, indexCate;
     headLine = headLine.trimmed();
 
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
@@ -2133,6 +2203,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         indexBSsid = headLine.indexOf("BSSID") + 6;
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
     } else {
         indexSignal = headLine.indexOf("SIGNAL");
         indexSecu = headLine.indexOf("SECURITY");
@@ -2140,6 +2211,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         indexBSsid = headLine.indexOf("BSSID");
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
     }
     QStringList wnames;
     int count = 0;
@@ -2153,7 +2225,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
             actWifiName = wname;
         }
         if ("*" == line.mid(0,indexSignal).trimmed()) {
-            //在华为的电脑中，因为前面的优选工作，及时有已经连接的wifi，也可能会被筛选出去
+            //在华为的电脑中，因为前面的优选工作，即使有已经连接的wifi，也可能会被筛选出去
             actWifiBssid = wbssid;
         }
     }
@@ -2169,6 +2241,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
         QString wname = line.mid(indexName, indexPath - indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
+        QString wcate = line.mid(indexCate).trimmed();
 
         if (!isHuaWeiPC) {
             //如果不是华为的电脑，选择wifi在这里执行
@@ -2185,6 +2258,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 //防止列表中没有已经连接的那个wifi
                 wbssid = actWifiBssidList.at(0);
                 actWifiBssid = actWifiBssidList.at(0);
+            }
+            if ((wnames.contains(wname) && wbssid != actWifiBssid)) {
+                continue; //过滤相同名称的wifi
             }
         }
 
@@ -2269,7 +2345,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 }
                 //ocf->setRate(wrate);
                 ocf->setLine(true);
-                ocf->setSignal(wsignal, wsecu);
+                ocf->setSignal(wsignal, wsecu, wcate);
                 //objKyDBus->getWifiMac(wname);
                 ocf->setWifiInfo(wsecu, wsignal, wbssid, freqState);
                 ocf->setConnedString(0, tr("Disconnected"), wsecu);
@@ -2345,7 +2421,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     }
 
     QString headLine = slist.at(0);
-    int indexSecu, indexFreq, indexBSsid, indexName, indexPath;
+    int indexSecu, indexFreq, indexBSsid, indexName, indexPath, indexCate;
     headLine = headLine.trimmed();
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
@@ -2355,6 +2431,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
         //indexName = headLine.indexOf("SSID") + 6;
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate= headLine.indexOf("CATEGORY");
     } else {
         indexSecu = headLine.indexOf("SECURITY");
         indexFreq = headLine.indexOf("FREQ");
@@ -2362,6 +2439,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
         //indexName = headLine.indexOf("SSID");
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
     }
 
     //列表中去除已经减少的wifi
@@ -2407,6 +2485,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
         QString wname = line.mid(indexName, indexPath - indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
+        QString wcate =line.mid(indexCate).trimmed();
 
         if(wname == "" || wname == "--"){continue;}
 
@@ -2474,7 +2553,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 }
                 //addItem->setRate(wrate);
                 addItem->setLine(false);
-                addItem->setSignal(wsignal, wsecu);
+                addItem->setSignal(wsignal, wsecu, wcate);
                 //objKyDBus->getWifiMac(wname);
                 addItem->setWifiInfo(wsecu, wsignal, wbssid, freqState);
                 addItem->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"

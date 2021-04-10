@@ -1569,7 +1569,8 @@ void MainWindow::getLanListDone(QStringList slist)
             //**********************创建已经连接的有线网item********************//
             if (currConnLanSsidUuidState.size() != 0) {//证明有已经连接的有线网络
                 for (int kk=0; kk<actLanSsidName.size(); kk++) {
-                    if (nname == actLanSsidName.at(kk) && nuuid == actLanUuidName.at(kk) && actLanStateName.at(kk) == "connected") {
+                    //actLanSsidName.at(kk).contains(nname)是为了防止名称中部分空格被trimmed()删除导致名称无法对应，witch caused 显示错误
+                    if ((nname == actLanSsidName.at(kk) || actLanSsidName.at(kk).contains(nname)) && nuuid == actLanUuidName.at(kk) && actLanStateName.at(kk) == "connected") {
                         topLanListWidget->resize(topLanListWidget->width(), topLanListWidget->height() + H_NORMAL_ITEM*kk);
                         isActiveNet = true; //名为nname的网络是已经连接的有线网络
                         ifLanConnected = true;

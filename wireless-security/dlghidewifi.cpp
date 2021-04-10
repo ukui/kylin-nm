@@ -44,12 +44,6 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")) );
     //需要添加 void paintEvent(QPaintEvent *event) 函数
 
-    QPainterPath path;
-    auto rect = this->rect();
-    rect.adjust(1, 1, -1, -1);
-    path.addRoundedRect(rect, 6, 6);
-    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-
     MyQss objQss;
 
     ui->lbBoder->setStyleSheet("QLabel{border-radius:6px;background-color:rgba(19,19,20,0.95);border:1px solid rgba(255, 255, 255, 0.05);}");
@@ -102,8 +96,6 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     this->setFixedSize(432,358);
 
     this->mw = mainWindow;
-
-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
 DlgHideWifi::~DlgHideWifi()
@@ -362,10 +354,14 @@ void DlgHideWifi::paintEvent(QPaintEvent *event)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 
     QRect rect = this->rect();
+    rect.adjust(1, 1, -1, -1);
     p.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     p.setBrush(opt.palette.color(QPalette::Base));
     p.setOpacity(trans);
     p.setPen(Qt::NoPen);
     p.drawRoundedRect(rect, 6, 6);
     QWidget::paintEvent(event);
+
+    QPainterPath path;
+    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }

@@ -42,12 +42,6 @@ ConfForm::ConfForm(QWidget *parent) :
     //需要添加 void paintEvent(QPaintEvent *event) 函数
     //this->setWindowIcon(QIcon::fromTheme("indicator-china-weather", QIcon(":/res/x/setup.png")) );
 
-    QPainterPath path;
-    auto rect = this->rect();
-    rect.adjust(1, 1, -1, -1);
-    path.addRoundedRect(rect, 6, 6);
-    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-
     labelQss = "QLabel{border:0px;color:rgba(255,255,255,0.97);background-color:transparent;}";
     cbxQss = "QComboBox{padding-left:20px;font-size:13px;color:rgba(255,255,255,0.91);"
                         "border:1px solid rgba(255, 255, 255, 0.05);border-radius:4px;background:rgba(255,255,255,0.08);}"
@@ -134,7 +128,6 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->leAddr_ipv6->setValidator(new QRegExpValidator(ipv6_rx, this));
     setModal(false);
 
-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
     setEnableOfBtn();
 }
 
@@ -746,10 +739,14 @@ void ConfForm::paintEvent(QPaintEvent *event)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 
     QRect rect = this->rect();
+    rect.adjust(1, 1, -1, -1);
     p.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     p.setBrush(opt.palette.color(QPalette::Base));
     p.setOpacity(trans);
     p.setPen(Qt::NoPen);
     p.drawRoundedRect(rect, 6, 6);
     QWidget::paintEvent(event);
+
+    QPainterPath path;
+    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }

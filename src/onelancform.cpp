@@ -446,6 +446,7 @@ void OneLancForm::on_btnInfo_clicked()
 
     connect(cf, SIGNAL(requestRefreshLanList(int)), mw, SLOT(onBtnNetListClicked(int)));
     cf->setProp(ui->lbName->text(), uuidName, v4method, addr, v6method, v6addr, mask, gateway, dns, this->isActive, false);
+    qDebug() << Q_FUNC_INFO << __LINE__ << ui->lbName->text() << uuidName;
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();
     cf->raise();

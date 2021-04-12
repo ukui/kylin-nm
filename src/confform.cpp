@@ -167,6 +167,7 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
     lastConnName = connName;
     lastIpv4 = v4addr;
     netUuid = uuidName;
+    qDebug() << Q_FUNC_INFO << __LINE__ << connName << uuidName;
 
     isActWifi = false;
     if (isWiFi) {
@@ -428,8 +429,8 @@ void ConfForm::saveNetworkConfiguration()
             qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
             kylin_network_set_manualall(newUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
         } else {
-            qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
-            kylin_network_set_manualall(name.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+            qDebug() << Q_FUNC_INFO  << __LINE__ << name << netUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
+            kylin_network_set_manualall(netUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
         }
     }
 

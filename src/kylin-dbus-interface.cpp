@@ -1180,7 +1180,7 @@ QString KylinDBus::getActiveWifiUuid()
     return ssid;
 }
 
-//获取已连接wifi的uuid
+//获取已连接wifi的信息
 int KylinDBus::getActiveWifiSignal()
 {
     int wifistrength = 0;

@@ -123,6 +123,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     hasWifiConnected = false;
     numberForWifiScan = 0;
+
+    //检查有线网络的个数是否为0,如果是0，则新建一个有线网络
+    checkIfWiredNetExist();
 }
 
 MainWindow::~MainWindow()

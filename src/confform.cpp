@@ -239,7 +239,6 @@ void ConfForm::on_btnCreate_clicked()
     if (kylindbus.multiWiredIfName.size() == 0) {
         QString tip(tr("Can not create new wired network for without wired card"));
         kylindbus.showDesktopNotify(tip);
-        //this->close();this->hide();
         onConfformHide();
         return;
     } else {
@@ -457,6 +456,12 @@ void ConfForm::showNotify(QString message)
 
 bool ConfForm::check_ip_conflict(QString ifname)
 {
+    if (canCheckIpConflict) {
+        canCheckIpConflict = false;
+        QTimer::singleShot(2*1000, this, SLOT(changeEnableCheckIp() ));
+    } else {
+        return true;
+    }
     //即将检测Ip地址冲突
     QString strIpCheck = tr("Will check the IP address conflict");
     QString bufferIpCheck = "notify-send -i network-offline " + strIpCheck;
@@ -498,6 +503,11 @@ bool ConfForm::check_ip_conflict(QString ifname)
     }
     //printf("正常连接");
     return false;
+}
+
+void ConfForm::changeEnableCheckIp()
+{
+    canCheckIpConflict = true;
 }
 
 //点击取消按钮

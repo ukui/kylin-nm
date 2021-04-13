@@ -44,6 +44,7 @@ public:
 
 public slots:
     void cbTypeChanged(int index);
+    void changeEnableCheckIp();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -83,15 +84,17 @@ private:
     void showNotify(QString message);
     bool check_ip_conflict(QString ifname);
     void onConfformHide();
+    bool isEditingAlready();    //连接按钮是否可被按
+
     bool isPress;
     QPoint winPos;
     QPoint dragPos;
     bool isActConf; //是否对已经连接的网络进行的更改
     bool isCreateNewNet = false; //是否是创建的新网络
     bool isShowSaveBtn = true; //是否显示保存按钮，即是否是编辑网络界面
-    bool isEditingAlready();    //连接按钮是否可被按下
     QString lastConnName, lastIpv4, netUuid, newUuid;
     bool isActWifi; //是否是wifi网络
+    bool canCheckIpConflict = true; //当前是否可以执行IP冲突的检测
 
     QString labelQss, cbxQss, leQss, lineQss, btnOnQss, btnOffQss;
 

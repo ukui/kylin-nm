@@ -43,6 +43,7 @@ WiFiConfigDialog::WiFiConfigDialog(QWidget *parent) :
     ui->leWifiPassword->setContextMenuPolicy(Qt::NoContextMenu);
 
     this->setEnableOfBtn();
+    this->setFixedSize(474, 320);
 }
 
 WiFiConfigDialog::~WiFiConfigDialog()

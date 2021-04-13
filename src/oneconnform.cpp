@@ -861,7 +861,7 @@ void OneConnForm::on_btnInfo_clicked()
     }
 
     BackThread *bt = new BackThread();
-    QString connProp = bt->getConnProp(wifiName);
+    QString connProp = bt->getConnProp(wifiUuid);
     QStringList propList = connProp.split("|");
     QString v4method, addr, mask, gateway, dns, v6method, v6addr;
     foreach (QString line, propList) {
@@ -890,6 +890,7 @@ void OneConnForm::on_btnInfo_clicked()
     // qDebug()<<"v4method:"<<v4method<<" addr:"<<addr<<" mask:"<<mask<<" gateway:"<<gateway<<" dns:"<<dns;
 
     cf->setProp(wifiName, wifiUuid, v4method, addr, v6method, v6addr, mask, gateway, dns, this->isActive, true);
+    qDebug() << Q_FUNC_INFO << __LINE__ << wifiName << wifiUuid;
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();
     cf->raise();

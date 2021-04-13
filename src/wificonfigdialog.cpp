@@ -19,7 +19,7 @@ WiFiConfigDialog::WiFiConfigDialog(QWidget *parent) :
     initTransparentState(); //初始化窗口透明度的GSetting方法
 
     this->setWindowFlags(Qt::FramelessWindowHint); //Qt::WindowStaysOnTopHint
-    this->setWindowTitle(tr("edit network"));//"网络设置"
+    this->setWindowTitle(tr("Wifi Authentication"));//"Wifi 认证"
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")) );
 

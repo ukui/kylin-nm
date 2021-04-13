@@ -1773,6 +1773,11 @@
 <context>
     <name>WiFiConfigDialog</name>
     <message>
+        <location filename="../src/wificonfigdialog.cpp" line="22"/>
+        <source>Wifi Authentication</source>
+        <translation type="unfinished">Wifi 认证</translation>
+    </message>
+    <message>
         <location filename="../src/wificonfigdialog.cpp" line="32"/>
         <source>Input Wi-Fi Information Please</source>
         <translation type="unfinished">输入Wi-Fi名称和密码后点击确定</translation>

@@ -644,6 +644,18 @@ void MainWindow::setTrayIcon(QIcon icon)
     trayIcon->setIcon(icon);
 }
 
+void MainWindow::setTrayIconOfWifi(int signal){
+    if (signal > 75) {
+        setTrayIcon(iconWifiFull);
+    } else if(signal > 55 && signal <= 75) {
+        setTrayIcon(iconWifiHigh);
+    } else if(signal > 35 && signal <= 55) {
+        setTrayIcon(iconWifiMedium);
+    } else if( signal <= 35) {
+        setTrayIcon(iconWifiLow);
+    }
+}
+
 void MainWindow::setTrayLoading(bool isLoading)
 {
     if (isLoading) {
@@ -911,18 +923,6 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
         }
         index ++;
     }
-
-    //ukui3.0中获取currentActWifiSignalLv的值
-    if (activeWifiSignalLv > 75) {
-        currentActWifiSignalLv = 1;
-    } else if(activeWifiSignalLv > 55 && activeWifiSignalLv <= 75) {
-        currentActWifiSignalLv = 2;
-    } else if(activeWifiSignalLv > 35 && activeWifiSignalLv <= 55) {
-        currentActWifiSignalLv = 3;
-    } else if( activeWifiSignalLv <= 35) {
-        currentActWifiSignalLv = 4;
-    }
-
     // 设置图标
     if (actLanName != "--") {
         QList<QString> lanstate = objKyDBus->getAtiveLanSsidUuidState();
@@ -935,23 +935,7 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
         }
 
     } else if (actWifiName != "--") {
-        switch (currentActWifiSignalLv) {
-        case 1:
-            setTrayIcon(iconWifiFull);
-            break;
-        case 2:
-            setTrayIcon(iconWifiHigh);
-            break;
-        case 3:
-            setTrayIcon(iconWifiMedium);
-            break;
-        case 4:
-            setTrayIcon(iconWifiLow);
-            break;
-        default:
-            setTrayIcon(iconWifiFull);
-            break;
-        }
+        setTrayIconOfWifi(activeWifiSignalLv);
     } else {
         setTrayIcon(iconLanOffline);
     }
@@ -2229,6 +2213,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 //ccf->setRate(wrate);
                 int signal = wsignal.toInt() + 11;
                 ccf->setSignal(QString::number(signal), wsecu);
+                setTrayIconOfWifi(wsignal.toInt());
                 activeWifiSignalLv = wsignal.toInt();
                 //objKyDBus->getWifiMac(wname);
                 ccf->setWifiInfo(wsecu, wsignal, wbssid, freqState);

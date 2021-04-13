@@ -141,6 +141,7 @@ public:
     void stopLoading();
 
     void setTrayIcon(QIcon icon);
+    void setTrayIconOfWifi(int);
     void setTrayLoading(bool isLoading);
     void getActiveInfoAndSetTrayIcon();
 

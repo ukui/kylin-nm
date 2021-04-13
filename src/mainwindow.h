@@ -400,6 +400,7 @@ signals:
     void waitWifiStop();
     void waitLanStop();
     void reConnectWifi(const QString& uuid);
+    void actWifiSignalLvChanaged(const int& currentLevel);
 };
 
 #endif // MAINWINDOW_H

@@ -859,8 +859,9 @@ QString KylinDBus::checkHasWifiConfigFile(QString wifiName)
         dbusArg1st >> map;
 
         if (map.value("connection").value("type").toString() == "802-11-wireless") {
-            if (map.value("connection").value("id").toString().indexOf(wifiName) != -1) {
-                qDebug() << "-------------------------> wifi id : " <<map.value("connection").value("id").toString();
+            if (map.value("802-11-wireless").value("ssid").toString() == wifiName) {
+                //qDebug() << "-------------------------> wifi ssid : " <<map.value("802-11-wireless").value("ssid").toString();
+                //qDebug() << "-------------------------> wifi id : " <<map.value("connection").value("id").toString();
                 wifiUuid = map.value("connection").value("uuid").toString();
             }
         }

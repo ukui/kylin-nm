@@ -405,12 +405,11 @@ void BackThread::execConnWifi(QString connName, QString connIfName)
     QString wifiUuid = objBackThreadDBus.checkHasWifiConfigFile(connName);
     if (!wifiUuid.isEmpty()) {
         //有配置文件
-        qDebug() << "-------------------------> 000000002 " << wifiUuid;
+        //qDebug() << "-------------------------> wifiUuid = " << wifiUuid;
         cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + wifiUuid + "'\n";
-        //cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + wifiUuid + "' ifname '" + connIfName + "'\n";
     } else {
         //没有配置文件
-        qDebug() << "-------------------------> 000000003" << connName;
+        //qDebug() << "-------------------------> connName = " << connName;
         cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + connIfName + "'\n";
     }
 

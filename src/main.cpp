@@ -38,8 +38,14 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     openlog(LOG_IDENT, LOG_NDELAY | LOG_NOWAIT | LOG_PID, LOG_USER);
-
     syslog(LOG_DEBUG, "Kylin Network Manager Is Already Launched");
+
+    if (!QSystemTrayIcon::isSystemTrayAvailable()) {
+        qDebug()<<"I couldn't detect any system tray on this system now";
+        syslog(LOG_DEBUG, "I couldn't detect any system tray on this system now");
+        return 1;
+    }
+    QApplication::setQuitOnLastWindowClosed(false);
 
     // Internationalization
     QString locale = QLocale::system().name();

@@ -1025,7 +1025,7 @@ void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
     objKyDBus->isWirelessCardOn = false;
     objKyDBus->getObjectPath();
 
-    if (objKyDBus->wirelessPath.path() == objPath.path()) { //证明添加的是无线网卡
+    if (objKyDBus->multiWirelessPaths.at(0).path() == objPath.path()) { //证明添加的是无线网卡
         is_wireless_adapter_ready = 0;
         if (objKyDBus->isWirelessCardOn) {
             syslog(LOG_DEBUG,"wireless device is already plug in");
@@ -1040,7 +1040,7 @@ void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
 void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
 {
     //仅处理无线网卡拔出情况
-    if (objKyDBus->wirelessPath.path() == objPath.path()) {
+    if (objKyDBus->multiWirelessPaths.at(0).path() == objPath.path()) {
         objKyDBus->isWirelessCardOn = false;
         objKyDBus->getObjectPath(); //检查是不是还有无线网卡
         if (!objKyDBus->isWirelessCardOn) {
@@ -1365,7 +1365,7 @@ void MainWindow::on_btnWifiList_clicked()
 
         // 当前连接的wifi
         OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
-        ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 Wifi"
+        ccf->setName(tr("Not connected"), "--", "--", "--");//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--");
         ccf->setRate("0");
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
@@ -1775,7 +1775,7 @@ void MainWindow::getConnListDone(QStringList slist)
             if (! is_stop_check_net_state) {
                 this->is_stop_check_net_state = 1;
                 BackThread *bt = new BackThread();
-                bt->execConnWifi(lastAddedConn);
+                bt->execConnWifi(lastAddedConn, objKyDBus->dbusWiFiCardName);
                 connect(bt, SIGNAL(connDone(int)), this, SLOT(connWifiDone(int)));
             }
         }
@@ -2062,7 +2062,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     // 根据当前连接的wifi 设置OneConnForm
     OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
     if (actWifiName == "--" || wifiActState == 1 || actWifiBssidList.at(0) == "--") {
-        ccf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 Wifi"
+        ccf->setName(tr("Not connected"), "--", "--", "--");//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--");
         activeWifiSignalLv = 0;
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
@@ -2193,7 +2193,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 QString m_name;
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
                 if (m_name.isEmpty() || m_name == "") {
-                    ccf->setName(wname, wbssid, actWifiUuid);
+                    ccf->setName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
                     if (!canReconnectWifiList.contains(wname)) {
                         canReconnectWifiList.append(wname);
                     } else {
@@ -2201,7 +2201,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                         canReconnectWifiList.append(wname);
                     }
                 } else {
-                    ccf->setName(m_name, wbssid, actWifiUuid);
+                    ccf->setName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
                     if (!canReconnectWifiList.contains(m_name)) {
                         canReconnectWifiList.append(m_name);
                     } else {
@@ -2238,9 +2238,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 QString m_name;
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
                 if (m_name.isEmpty() || m_name == "") {
-                    ocf->setName(wname, wbssid, actWifiUuid);
+                    ocf->setName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
                 } else {
-                    ocf->setName(m_name, wbssid, actWifiUuid);
+                    ocf->setName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
                 }
                 //ocf->setRate(wrate);
                 ocf->setLine(true);
@@ -2440,14 +2440,13 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() + H_NORMAL_ITEM);
                 OneConnForm *addItem = new OneConnForm(wifiListWidget, this, confForm, ksnm);
                 connect(addItem, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneWifiFormSelected(QString,int)));
-//                addItem->setName(wname, wbssid, "--");
                 QString path = line.mid(indexPath).trimmed();
                 QString m_name;
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
                 if (m_name.isEmpty() || m_name == "") {
-                    addItem->setName(wname, wbssid, actWifiUuid);
+                    addItem->setName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
                 } else {
-                    addItem->setName(m_name, wbssid, actWifiUuid);
+                    addItem->setName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
                 }
                 //addItem->setRate(wrate);
                 addItem->setLine(false);
@@ -3109,7 +3108,7 @@ void MainWindow::disWifiDoneChangeUI()
         OneConnForm *ocf = wifiList.at(i);
         if (ocf->isActive == true) {
             ocf->setSelected(false, false);
-            ocf->setName(tr("Not connected"), "--", "--");//"当前未连接任何 Wifi"
+            ocf->setName(tr("Not connected"), "--", "--", "--");//"当前未连接任何 Wifi"
             ocf->setSignal("0", "--");
             ocf->setConnedString(1, tr("Disconnected"), "");//"未连接"
             ocf->lbFreq->hide();

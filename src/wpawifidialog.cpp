@@ -466,6 +466,11 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
         //获取网卡名称
         KylinDBus mkylindbus;
         QString wifi_card_name= mkylindbus.dbusWiFiCardName;
+        if (wifi_card_name.isEmpty()) {
+            QString notifyTxt(tr("Wireless card not exist"));
+            mkylindbus.showDesktopNotify(notifyTxt);
+            return;
+        }
         qDebug()<<"qDebug: 无配置文件，使用如下配置新建配置文件:"<<"\n"<<
                   "qDebug: con-name & ssid: "<<nameEditor->text()<<"\n"<<
                   "qDebug: wifi card name(ifname): "<<wifi_card_name<<"\n"<<

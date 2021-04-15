@@ -99,7 +99,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
         qDebug()<<"Can not find wired device object path when using dbus.";
     }
 
-    if (wirelessPath.path() != "") {
+    if (!multiWirelessPaths.isEmpty()) {
         getWirelessCardName();//获取无线网卡名称
     } else {
         syslog(LOG_DEBUG, "Can not find wireless device object path when using dbus.");
@@ -282,8 +282,13 @@ void KylinDBus::getWiredCardName()
 //获取无线网卡名称
 void KylinDBus::getWirelessCardName()
 {
+    if (multiWirelessPaths.size() == 0) {
+        dbusWiFiCardName = "";
+        return;
+    }
+
     QDBusInterface lanInterface( "org.freedesktop.NetworkManager",
-                              wirelessPath.path(),
+                              multiWirelessPaths.at(0).path(),
                               "org.freedesktop.DBus.Properties",
                               QDBusConnection::systemBus() );
 
@@ -720,7 +725,7 @@ void KylinDBus::getWifiMac(QString netName)
     dbusWifiMac = "";
 
     QDBusInterface interface( "org.freedesktop.NetworkManager",
-                              wirelessPath.path(),
+                              multiWirelessPaths.at(0).path(),
                               "org.freedesktop.NetworkManager.Device.Wireless",
                               QDBusConnection::systemBus() );
 
@@ -753,7 +758,7 @@ void KylinDBus::getWifiMac(QString netName)
 int KylinDBus::getAccessPointsNumber()
 {
     QDBusInterface interface( "org.freedesktop.NetworkManager",
-                              wirelessPath.path(),
+                              multiWirelessPaths.at(0).path(),
                               "org.freedesktop.NetworkManager.Device.Wireless",
                               QDBusConnection::systemBus() );
 
@@ -826,6 +831,42 @@ QStringList KylinDBus::getWifiSsidList()
     }
 
     return wifiSsidList;
+}
+
+QString KylinDBus::checkHasWifiConfigFile(QString wifiName)
+{
+    QString wifiUuid = "";
+
+    QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                      "/org/freedesktop/NetworkManager/Settings",
+                                      "org.freedesktop.NetworkManager.Settings",
+                                      QDBusConnection::systemBus() );
+    QDBusReply<QList<QDBusObjectPath>> m_reply = m_interface.call("ListConnections");
+
+    QDBusObjectPath specific_connection;
+    specific_connection.setPath("/");
+
+    QList<QDBusObjectPath> m_objSettingPaths = m_reply.value();
+    foreach (QDBusObjectPath objSettingPath, m_objSettingPaths) {
+        QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                  objSettingPath.path(),
+                                  "org.freedesktop.NetworkManager.Settings.Connection",
+                                  QDBusConnection::systemBus());
+        QDBusMessage result = m_interface.call("GetSettings");
+
+        const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+        QMap<QString,QMap<QString,QVariant>> map;
+        dbusArg1st >> map;
+
+        if (map.value("connection").value("type").toString() == "802-11-wireless") {
+            if (map.value("connection").value("id").toString().indexOf(wifiName) != -1) {
+                qDebug() << "-------------------------> wifi id : " <<map.value("connection").value("id").toString();
+                wifiUuid = map.value("connection").value("uuid").toString();
+            }
+        }
+    }
+
+    return wifiUuid;
 }
 
 void KylinDBus::toCreateNewLan()

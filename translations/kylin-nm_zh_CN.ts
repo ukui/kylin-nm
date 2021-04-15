@@ -97,6 +97,11 @@
         <translation type="unfinished">已创建新的有线网络</translation>
     </message>
     <message>
+        <location filename="../src/confform.cpp" line="306"/>
+        <source>Wireless card not exist</source>
+        <translation type="unfinished">没找到无线网卡</translation>
+    </message>
+    <message>
         <location filename="../src/confform.cpp" line="283"/>
         <source>New network settings already finished</source>
         <translation type="unfinished">新的网络配置已经完成</translation>
@@ -1884,6 +1889,11 @@
         <location filename="../src/wpawifidialog.cpp" line="274"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2企业</translation>
+    </message>
+    <message>
+        <location filename="../src/wpawifidialog.cpp" line="470"/>
+        <source>Wireless card not exist</source>
+        <translation type="unfinished">没找到无线网卡</translation>
     </message>
 </context>
 </TS>

@@ -400,7 +400,7 @@ void OneConnForm::setConnedString(bool showLable, QString str, QString str1)
     }
 }
 
-void OneConnForm::setName(QString name, QString bssid, QString uuid)
+void OneConnForm::setName(QString name, QString bssid, QString uuid, QString ifname)
 {
     QFontMetrics fontMetrics(lbNameText->font());
     QString showname = fontMetrics.elidedText(name, Qt::ElideRight, 200);
@@ -408,6 +408,7 @@ void OneConnForm::setName(QString name, QString bssid, QString uuid)
     wifiName = name;
     wifiBSsid = bssid;
     wifiUuid = uuid;
+    wifiIfName = ifname;
 }
 
 QString OneConnForm::getName()
@@ -511,7 +512,7 @@ void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, int freq
 void OneConnForm::slotConnWifi()
 {
     this->startWaiting(true);
-    emit sigConnWifi(wifiName);
+    emit sigConnWifi(wifiName, wifiIfName);
 }
 void OneConnForm::slotConnWifiPWD()
 {
@@ -705,7 +706,7 @@ void OneConnForm::toConnectWirelessNetwork()
     bt->moveToThread(t);
     connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
     connect(t, SIGNAL(started()), this, SLOT(slotConnWifi()));
-    connect(this, SIGNAL(sigConnWifi(QString)), bt, SLOT(execConnWifi(QString)));
+    connect(this, SIGNAL(sigConnWifi(QString, QString)), bt, SLOT(execConnWifi(QString, QString)));
     connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
     connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));

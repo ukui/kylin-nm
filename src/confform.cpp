@@ -302,6 +302,11 @@ void ConfForm::on_btnSave_clicked()
         QString mWifiIfname = kylindbus.dbusWiFiCardName;
         this->isCreateNewNet = false;
 
+        if (mWifiIfname.isEmpty()) {
+            QString notifyTxt(tr("Wireless card not exist"));
+            kylindbus.showDesktopNotify(notifyTxt);
+            return;
+        }
         if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
             //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
             if (check_ip_conflict(mWifiIfname)) {

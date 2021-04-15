@@ -170,13 +170,13 @@ void BackThread::execEnWifi()
     char *chr1 = "nmcli radio wifi on";
     Utils::m_system(chr1);
     emit btFinish();
+    KylinDBus objBackThreadDBus;
 
     while (1) {
         if (execGetIface()->wstate != 2) {
-            KylinDBus objKyDbus;
             while (1) {
-                if (objKyDbus.getAccessPointsNumber() > 0) {
-                    // objKyDbus.getAccessPointsNumber()>0 standard can get wireless accesspoints now
+                if (objBackThreadDBus.getAccessPointsNumber() > 0) {
+                    // objBackThreadDBus.getAccessPointsNumber()>0 standard can get wireless accesspoints now
                     emit enWifiDone();
                     emit btFinish();
                     break;
@@ -210,15 +210,9 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
     currConnLanUuid = connName;
     currConnLanType = connectType;
     QString mycmd; //连接命令
-    KylinDBus objKyDbus;
+    KylinDBus objBackThreadDBus;
 
-    //先断开当前网卡对应的已连接有线网
-//    QString uuid = objKyDbus.getConnLanNameByIfname(ifname);
-//    if (uuid != "--") {
-//        kylin_network_set_con_down(uuid.toUtf8().data());
-//    }
-
-    bool isWiredCableAlready = objKyDbus.getWiredCableStateByIfname(ifname);
+    bool isWiredCableAlready = objBackThreadDBus.getWiredCableStateByIfname(ifname);
 
     if (connectType == "bluetooth") {
         isWiredCableAlready = true; //对于蓝牙类型的网络不需要接入网线就可以连接
@@ -228,11 +222,6 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
     }
 
     if (isWiredCableAlready) {
-        //if(objKyDbus.toConnectWiredNet(connName, ifname)) { //此处connName是有线网Uuid
-        //    emit connDone(2);
-        //} else {
-        //    emit connDone(8);
-        //}
         QStringList options;
         options << "-c" << mycmd;
         process->start("/bin/bash",options);
@@ -406,11 +395,25 @@ void BackThread::execConnWifiPsk(QString cmd)
 }
 
 //to connected wireless network driectly do not need a password
-void BackThread::execConnWifi(QString connName)
+void BackThread::execConnWifi(QString connName, QString connIfName)
 {
-    //disConnLanOrWifi("wifi");
+    qDebug() << "Will to connect wifi " << connName << " with wifi card named " <<connIfName;
+    syslog(LOG_DEBUG, "Will to connect wifi %s with wifi card named %s", connName.toUtf8().data(), connIfName.toUtf8().data());
 
-    QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'\n";
+    QString cmdStr;
+    KylinDBus objBackThreadDBus;
+    QString wifiUuid = objBackThreadDBus.checkHasWifiConfigFile(connName);
+    if (!wifiUuid.isEmpty()) {
+        //有配置文件
+        qDebug() << "-------------------------> 000000002 " << wifiUuid;
+        cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + wifiUuid + "'\n";
+        //cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + wifiUuid + "' ifname '" + connIfName + "'\n";
+    } else {
+        //没有配置文件
+        qDebug() << "-------------------------> 000000003" << connName;
+        cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + connIfName + "'\n";
+    }
+
     cmdConnWifi->write(cmdStr.toUtf8().data());
 }
 
@@ -418,7 +421,7 @@ void BackThread::execReconnWIfi(QString uuid)
 {
     QString cmd = "nmcli connection down " + uuid;
     Utils::m_system(cmd.toUtf8().data());
-   cmd = "nmcli connection up " + uuid;
+    cmd = "nmcli connection up " + uuid;
     Utils::m_system(cmd.toUtf8().data());
 }
 
@@ -444,8 +447,10 @@ void BackThread::dellConnectWifiResult(QString info)
     } else if(info.indexOf("unknown") != -1 || info.indexOf("not exist") != -1) {
         //qDebug() << "send this signal if the network we want to connect has not a configuration file";
         emit connDone(2);
+    } else if (info.indexOf("The connection was not a Wi-Fi connection..") != -1) {
+        emit connDone(2);
     } else if(info.indexOf("not given") != -1 || info.indexOf("Secrets were required") != -1) {
-        //no need to handle this situation
+        //nothing need to do
     } else if(info.indexOf("Passwords or encryption keys are required") != -1){
         //qDebug() << "password for '802-11-wireless-security.psk' not given in 'passwd-file'";
         emit connDone(4);

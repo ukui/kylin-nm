@@ -65,7 +65,7 @@ public:
     ~OneConnForm();
 
     void setSignal(QString lv, QString secu);
-    void setName(QString name, QString bssid, QString uuid);
+    void setName(QString name, QString bssid, QString uuid, QString isname);
     QString getName();
     void setRate(QString rate);
     void setLine(bool isShow);
@@ -85,6 +85,7 @@ public:
     QString wifiName;
     QString wifiBSsid;
     QString wifiUuid;
+    QString wifiIfName;
     QString connType;
     QString wifiSecu;
     QLabel * lbFreq = nullptr;
@@ -152,7 +153,7 @@ signals:
     void disconnActiveWifi();
     void requestRefreshWifiList();
 
-    void sigConnWifi(QString);
+    void sigConnWifi(QString, QString);
     void sigConnWifiPWD(QString, QString, QString);
     void sigConnWifiPsk(QString);
 };

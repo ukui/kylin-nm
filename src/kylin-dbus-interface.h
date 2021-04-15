@@ -49,6 +49,7 @@ public:
     int getAccessPointsNumber();
     int getWiredNetworkNumber();
     QStringList getWifiSsidList();
+    QString checkHasWifiConfigFile(QString wifiName);
     void showDesktopNotify(QString message);
     void initConnectionInfo();
     QList<QString> getAtiveLanSsidUuidState();

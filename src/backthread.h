@@ -59,7 +59,7 @@ public slots:
     void execEnWifi();
     void execDisWifi();
     void execConnLan(QString connName, QString ifname, QString connectType);
-    void execConnWifi(QString connName);
+    void execConnWifi(QString connName, QString connIfName);
     void execReconnWIfi(QString uuid);
     void execConnWifiPWD(QString connName, QString password, QString connType);
     void execConnWifiPsk(QString cmd);
@@ -76,7 +76,6 @@ public slots:
     void onReadOutputLan();
     void onReadErrorLan();
     void dellConnectLanResult(QString info);
-
 
 signals:
     void enNetDone();

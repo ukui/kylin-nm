@@ -936,6 +936,7 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
 
     } else if (actWifiName != "--") {
         setTrayIconOfWifi(activeWifiSignalLv);
+        emit this->actWifiSignalLvChanaged(activeWifiSignalLv);
     } else {
         setTrayIcon(iconLanOffline);
     }
@@ -2187,6 +2188,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
             //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
             if(actWifiBssid == wbssid && wifiActState == 2){
                 //对于已经连接的wifi
+                connect(this, &MainWindow::actWifiSignalLvChanaged, ccf, [ = ](const int &signalLv) {
+                    ccf->setSignal(QString::number(signalLv), wsecu);
+                });
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
                 QString path = line.mid(indexPath).trimmed();

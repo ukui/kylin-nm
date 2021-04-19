@@ -40,11 +40,20 @@ int main(int argc, char *argv[])
     openlog(LOG_IDENT, LOG_NDELAY | LOG_NOWAIT | LOG_PID, LOG_USER);
     syslog(LOG_DEBUG, "Kylin Network Manager Is Already Launched");
 
-    if (!QSystemTrayIcon::isSystemTrayAvailable()) {
+    int loopNum = 0;
+    while (!QSystemTrayIcon::isSystemTrayAvailable()) {
+        if (loopNum == 15) return 1;
         qDebug()<<"I couldn't detect any system tray on this system now";
         syslog(LOG_DEBUG, "I couldn't detect any system tray on this system now");
-        return 1;
+        loopNum += 1;
+        sleep(1);
     }
+
+    //if (!QSystemTrayIcon::isSystemTrayAvailable()) {
+    //    qDebug()<<"I couldn't detect any system tray on this system now";
+    //    syslog(LOG_DEBUG, "I couldn't detect any system tray on this system now");
+    //    return 1;
+    //}
     QApplication::setQuitOnLastWindowClosed(false);
 
     // Internationalization

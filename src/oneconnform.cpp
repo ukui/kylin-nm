@@ -131,7 +131,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     btnProperty->setText(tr("Property"));//"属性"
     btnProperty->setStyleSheet(funcBtnQss);
     btnProperty->setFocusPolicy(Qt::NoFocus);
-    btnProperty->show();
+    btnProperty->hide();
     connect(btnProperty,SIGNAL(clicked()),this,SLOT(onBtnPropertyClicked()));
 
     this->mw = mainWindow;
@@ -205,7 +205,6 @@ void OneConnForm::mousePressEvent(QMouseEvent *)
 
 void OneConnForm::onBtnPropertyClicked()
 {
-    qDebug() << "点击了弹出控制面板窗口按钮";
     QProcess::startDetached(QString("ukui-control-center --netconnect"));
 }
 
@@ -258,8 +257,10 @@ void OneConnForm::setAct(bool isAct)
 {
     if (isAct) {
         ui->lbConned->show();
+        btnProperty->show();
     } else {
         ui->lbConned->hide();
+        btnProperty->hide();
     }
     isActive = isAct;
 }

@@ -64,7 +64,8 @@ public:
     explicit OneConnForm(QWidget *parent = 0, MainWindow *mw = 0, ConfForm *confForm = 0, KSimpleNM *ksnm = 0);
     ~OneConnForm();
 
-    void setSignal(QString lv, QString secu);
+    // category:1->normal protocol 1->wifi 6 2->wifi 6+
+    void setSignal(QString lv, QString secu,QString category = "0");
     void setName(QString name, QString bssid, QString uuid, QString isname);
     QString getName();
     void setRate(QString rate);

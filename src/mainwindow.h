@@ -313,7 +313,10 @@ private:
     QString lastAddedConn = "";
     QString oldActLanName = ""; //上一次获取的已连接有线网名称
     int oldDbusActLanDNS = 0; //上一次获取的已连接有线网的DNS代号
-    void wifiListOptimize(QStringList& slist); //只保留同名同频信号最强AP
+    void wifiListOptimize(QStringList& slist); //只保留同名同频信号最优AP
+    QVector<QStringList> repetitionFilter(QVector<QStringList>);
+    QStringList priorityList(QStringList);
+    QStringList sortApByCategory(QStringList,int);
     void getFinalWifiList(QStringList& slist); //获取应该显示在wifi列表中的最优列表参数
     QList<structWifiProperty> connectableWifiPriorityList(const QStringList slist); //可连接wifi优先级列表
     void devListSort(QList<structWifiProperty> *list);

@@ -31,21 +31,19 @@
 
 BackThread::BackThread(QObject *parent) : QObject(parent)
 {
-    cmdConnWifi = new QProcess(this);
-    connect(cmdConnWifi , SIGNAL(readyReadStandardOutput()) , this , SLOT(onReadOutputWifi()));
-    connect(cmdConnWifi , SIGNAL(readyReadStandardError()) , this , SLOT(onReadErrorWifi()));
-    cmdConnWifi->start("/bin/bash");
-    cmdConnWifi->waitForStarted();
+    cmdProcessWifi = new QProcess(this);
+    connect(cmdProcessWifi , SIGNAL(readyReadStandardOutput()) , this , SLOT(onReadOutputWifi()));
+    connect(cmdProcessWifi , SIGNAL(readyReadStandardError()) , this , SLOT(onReadErrorWifi()));
 
-    process = new QProcess(this);
-    connect(process , SIGNAL(readyReadStandardOutput()) , this , SLOT(onReadOutputLan()));
-    connect(process , SIGNAL(readyReadStandardError()) , this , SLOT(onReadErrorLan()));
+    cmdProcessLan = new QProcess(this);
+    connect(cmdProcessLan , SIGNAL(readyReadStandardOutput()) , this , SLOT(onReadOutputLan()));
+    connect(cmdProcessLan , SIGNAL(readyReadStandardError()) , this , SLOT(onReadErrorLan()));
 }
 
 BackThread::~BackThread()
 {
-    cmdConnWifi->close();
-    process->close();
+    cmdProcessWifi->close();
+    cmdProcessLan->close();
 }
 
 //get the connection state of wired and wireles network
@@ -224,9 +222,9 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
     if (isWiredCableAlready) {
         QStringList options;
         options << "-c" << mycmd;
-        process->start("/bin/bash",options);
-        process->waitForStarted();
-        process->waitForFinished();
+        cmdProcessLan->start("/bin/bash",options);
+        cmdProcessLan->waitForStarted();
+        cmdProcessLan->waitForFinished();
     } else {
         qDebug()<<"connect wired network failed for without wired cable plug in.";
         syslog(LOG_DEBUG, "connect wired network failed for without wired cable plug in.");
@@ -238,14 +236,14 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
 
 void BackThread::onReadOutputLan()
 {
-    QByteArray cmdout = process->readAllStandardOutput();
+    QByteArray cmdout = cmdProcessLan->readAllStandardOutput();
     QString strResult = QString::fromLocal8Bit(cmdout);
     qDebug()<<"on_readoutput_lan:  "<< strResult;
     dellConnectLanResult(strResult);
 }
 void BackThread::onReadErrorLan()
 {
-    QByteArray cmdout = process->readAllStandardError();
+    QByteArray cmdout = cmdProcessLan->readAllStandardError();
     QString strResult = QString::fromLocal8Bit(cmdout);
     qDebug()<<"on_readerror_lan:  "<< strResult;
     dellConnectLanResult(strResult);
@@ -413,7 +411,11 @@ void BackThread::execConnWifi(QString connName, QString connIfName)
         cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + connIfName + "'\n";
     }
 
-    cmdConnWifi->write(cmdStr.toUtf8().data());
+    QStringList options;
+    options << "-c" << cmdStr;
+    cmdProcessWifi->start("/bin/bash",options);
+    cmdProcessWifi->waitForStarted();
+    cmdProcessWifi->waitForFinished();
 }
 
 void BackThread::execReconnWIfi(QString uuid)
@@ -426,14 +428,14 @@ void BackThread::execReconnWIfi(QString uuid)
 
 void BackThread::onReadOutputWifi()
 {
-    QString str = cmdConnWifi->readAllStandardOutput();
+    QString str = cmdProcessWifi->readAllStandardOutput();
     qDebug()<<"on_readoutput_wifi:  "<< str;
     syslog(LOG_DEBUG, "on_readoutput_wifi : %s", str.toUtf8().data());
     dellConnectWifiResult(str);
 }
 void BackThread::onReadErrorWifi()
 {
-    QString str = cmdConnWifi->readAllStandardError();
+    QString str = cmdProcessWifi->readAllStandardError();
     qDebug()<<"on_readerror_wifi: "<< str;
     syslog(LOG_DEBUG, "on_readerror_wifi : %s", str.toUtf8().data());
     dellConnectWifiResult(str);

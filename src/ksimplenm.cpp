@@ -87,7 +87,7 @@ void KSimpleNM::execGetWifiList(const QString& wname)
     shellOutputWifi = "";
     QString cmd;
     if (wname.isEmpty() || wname == "") {
-        cmd = "nmcli -f in-use,signal,security,freq,bssid,ssid,dbus-path device wifi";
+        cmd = "nmcli -f in-use,signal,security,freq,bssid,ssid,dbus-path,category device wifi";
     } else {
         cmd = "nmcli -f in-use,signal,security,freq,bssid,ssid,dbus-path,category device wifi list ifname " + wname;
     }

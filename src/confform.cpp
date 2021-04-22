@@ -494,17 +494,71 @@ bool ConfForm::check_ip_conflict(QString ifname)
         ret[strlen(ret)-1]=0;
 
         if ( ret != NULL ) {
-            if (!strcmp(ret,"0")) {
-                //printf("正常连接");
-                return  false;
-            } else {
-                //printf("ip地址冲突");
-                QString strInfo = tr("IP address conflict, Please change IP");
-                QString buffer = "notify-send -i network-offline " + strInfo;
+//            if (!strcmp(ret,"0")) {
+//                //printf("正常连接");
+//                return  false;
+//            } else {
+            if (strcmp(ret,"0")) {
+                //printf("ipv4地址冲突");
+                QString strInfo = tr("IPV4 address conflict, Please change IP");
+//                QString buffer = "notify-send -i network-offline " + strInfo;
                 showNotify(strInfo);
                 return  true;
             }
         }
+    }
+    if (ui->leAddr_ipv6->text().isEmpty() || ui->leAddr_ipv6->text() == "") {
+        //未配置ipv6地址，跳过ipv6地址冲突检测
+        return false;
+    }
+    isIpv6Conflict = false;
+    QProcess * process = new QProcess;
+    if (this->isActWifi) {
+        //指定无线网卡检测
+        process->start(QString("ping6 %1%%2").arg(ui->leAddr_ipv6->text()).arg(wcard));
+    } else {
+        //指定有线网卡检测
+        process->start(QString("ping6 %1%%2").arg(ui->leAddr_ipv6->text()).arg(lcard));
+    }
+    connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+        process->deleteLater();
+    });
+    connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
+        QString str = process->readAllStandardOutput();
+        if (!str.contains("PING")) {
+            if (str.contains("unreachable")) {
+                isIpv6Conflict = false;
+            } else {
+                //如果能ping通，需要看是不是当前本机连接的ipv6地址，如果是本机连接的，也不算冲突
+                if (this->isActWifi) {
+                    if (ui->leAddr_ipv6->text() == actWifiIpv6Addr) {
+                        //新地址与当前本机连接的wifi的ipv6地址一直，不算冲突
+                        isIpv6Conflict = false;
+                    } else {
+                        isIpv6Conflict = true;
+                    }
+                } else {
+                    if (ui->leAddr_ipv6->text() == actLanIpv6Addr) {
+                        //新地址与当前本机连接的有线的ipv6地址一直，不算冲突
+                        isIpv6Conflict = false;
+                    } else {
+                        isIpv6Conflict = true;
+                    }
+                }
+            }
+            process->close();
+        }
+    });
+    connect(process, &QProcess::readyReadStandardError, this, [ = ]() {
+        isIpv6Conflict = false;
+        process->close();
+    });
+    process->waitForFinished();
+    if (isIpv6Conflict) {
+        //printf("ipv6地址冲突");
+        QString strInfo = tr("IPV6 address conflict, Please change IP");
+        showNotify(strInfo);
+        return  true;
     }
     //printf("正常连接");
     return false;

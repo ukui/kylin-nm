@@ -926,7 +926,7 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
     // 设置图标
     if (actLanName != "--") {
         QList<QString> lanstate = objKyDBus->getAtiveLanSsidUuidState();
-        qDebug() << lanstate;
+        qDebug() << Q_FUNC_INFO << lanstate;
         if (lanstate[2] == "connected") {
             setTrayIcon(iconLanOnline);
         }
@@ -1556,7 +1556,8 @@ void MainWindow::getLanListDone(QStringList slist)
                         ifLanConnected = true;
 
                         objKyDBus->getConnectNetIp(nuuid);
-                        if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
+//                        if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
+                        getLanBandWidth();
                         //QString strLanName = TranslateLanName(nname); //进行中英文系统环境下有线网络名称的汉化
 
                         OneLancForm *ccfAct = new OneLancForm(topLanListWidget, this, confForm, ksnm);
@@ -1594,12 +1595,14 @@ void MainWindow::getLanListDone(QStringList slist)
 \
                         if (!objKyDBus->dbusLanIpv4.isEmpty()) {
                             if (!objKyDBus->dbusActiveLanIpv4.isEmpty() && objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
+//                                qDebug() << Q_FUNC_INFO << __LINE__ << objKyDBus->dbusActiveLanIpv4 << objKyDBus->dbusLanIpv4;
                                 //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
                                 objKyDBus->reConnectWiredNet(nuuid);
                             } else if ((oldActLanName == actLanSsidName.at(kk)) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
                                 //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
                                 objKyDBus->reConnectWiredNet(nuuid);
                             } else if (!objKyDBus->dbusActiveLanIpv6.isEmpty() && objKyDBus->dbusActiveLanIpv6 != objKyDBus->dbusLanIpv6 && objKyDBus->dbusLanIpv6Method == "manual") {
+//                                qDebug() << Q_FUNC_INFO << __LINE__ << objKyDBus->dbusActiveLanIpv6 << objKyDBus->dbusLanIpv6 <<  objKyDBus->dbusLanIpv6Method;
                                 //在第三方nm-connection-editor或kylin-nm配置页进行新的IPV6配置后，重新连接网络
                                 objKyDBus->reConnectWiredNet(nuuid);
                             }

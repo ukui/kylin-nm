@@ -363,7 +363,7 @@ void MainWindow::createLeftAreaUI()
     ui->btnNetListImg->setProperty("iconHighlightEffectMode", true);
 
     ui->btnWifiList->setFocusPolicy(Qt::NoFocus);
-    QString txtWifi(tr("Wifi"));
+    QString txtWifi("Wifi");
     ui->btnWifiList->setToolTip(txtWifi);
     ui->lbWifiListBG->setStyleSheet(btnOffQss);
     //设置PushButton背景透明
@@ -1333,7 +1333,7 @@ void MainWindow::on_btnWifiList_clicked()
 
     lbNoItemTip->hide();
 
-    ui->lbNetwork->setText(tr("Wifi"));
+    ui->lbNetwork->setText("Wifi");
     btnWireless->show();
 
     if (iface->wstate == 0 || iface->wstate == 1) {

@@ -48,8 +48,8 @@ public:
     IFace* execGetIface();
     QString getConnProp(QString connName);
     QString execChkLanWidth(QString ethName);
-    QProcess *cmdConnWifi = nullptr;
-    QProcess *process;
+    QProcess *cmdProcessWifi = nullptr;
+    QProcess *cmdProcessLan;
     QString currConnLanUuid;
     QString currConnLanType;
 

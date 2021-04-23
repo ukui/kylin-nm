@@ -112,9 +112,14 @@
         <translation type="unfinished">即将检测IP地址冲突</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="359"/>
-        <source>IP address conflict, Please change IP</source>
-        <translation type="unfinished">IP地址冲突，请更换IP</translation>
+        <location filename="../src/confform.cpp" line="503"/>
+        <source>IPV4 address conflict, Please change IP</source>
+        <translation>IPV4地址冲突，请更换IP</translation>
+    </message>
+    <message>
+        <location filename="../src/confform.cpp" line="559"/>
+        <source>IPV6 address conflict, Please change IP</source>
+        <translation>IPV6地址冲突，请更换IP</translation>
     </message>
     <message>
         <location filename="../src/confform.cpp" line="386"/>

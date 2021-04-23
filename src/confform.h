@@ -27,6 +27,7 @@
 #include <QPainterPath>
 #include <QDialog>
 #include <QListView>
+#include "kylin-dbus-interface.h"
 
 namespace Ui {
 class ConfForm;
@@ -41,6 +42,9 @@ public:
     ~ConfForm();
 
     void setProp(QString connName, QString uuidName, QString v4method, QString v4addr, QString v6method, QString v6addr, QString mask, QString gateway, QString dns, bool isActConf, bool isWiFi);
+    QString actLanIpv6Addr;
+    QString actWifiIpv6Addr;
+    QString lcard, wcard;
 
 public slots:
     void cbTypeChanged(int index);
@@ -95,6 +99,7 @@ private:
     QString lastConnName, lastIpv4, netUuid, newUuid;
     bool isActWifi; //是否是wifi网络
     bool canCheckIpConflict = true; //当前是否可以执行IP冲突的检测
+    bool isIpv6Conflict = false; //ipv6地址是否冲突
 
     QString labelQss, cbxQss, leQss, lineQss, btnOnQss, btnOffQss;
 

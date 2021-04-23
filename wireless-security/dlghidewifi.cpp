@@ -363,5 +363,7 @@ void DlgHideWifi::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 
     QPainterPath path;
+    path.addRoundedRect(rect, 6, 6);
+    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }

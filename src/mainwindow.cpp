@@ -467,6 +467,8 @@ void MainWindow::initNetwork()
     lwname = iface->wname;
     lcardname = iface->lname;
     llname = iface->lname;
+    confForm->lcard = lcardname;
+    confForm->wcard = wcardname;
 
     mwBandWidth = bt->execChkLanWidth(lcardname);
 
@@ -537,6 +539,11 @@ void MainWindow::initNetwork()
         }
     }
     ksnm->execGetConnList();
+
+    QString actWifiUuid = objKyDBus->getActiveWifiUuid();
+    objKyDBus->getConnectNetIp(actWifiUuid);
+    objKyDBus->getWifiIp(actWifiUuid);
+    confForm->actWifiIpv6Addr = objKyDBus->dbusActiveWifiIpv6;
 }
 
 // 初始化定时器
@@ -1398,6 +1405,7 @@ void MainWindow::on_wifi_changed()
     QString actWifiUuid = objKyDBus->getActiveWifiUuid();
     objKyDBus->getConnectNetIp(actWifiUuid);
     objKyDBus->getWifiIp(actWifiUuid);
+    confForm->actWifiIpv6Addr = objKyDBus->dbusActiveWifiIpv6;
     if (oldWifiIpv4Method == "") {
         oldWifiIpv4Method = objKyDBus-> dbusWifiIpv4Method;
     }
@@ -1556,7 +1564,7 @@ void MainWindow::getLanListDone(QStringList slist)
                         ifLanConnected = true;
 
                         objKyDBus->getConnectNetIp(nuuid);
-//                        if (mwBandWidth == "Unknown!") { getLanBandWidth(); }
+                        confForm->actLanIpv6Addr = objKyDBus->dbusActiveLanIpv6;
                         getLanBandWidth();
                         //QString strLanName = TranslateLanName(nname); //进行中英文系统环境下有线网络名称的汉化
 
@@ -3709,6 +3717,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 
     QPainterPath path;
+    path.addRoundedRect(rect, 6, 6);
+    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 

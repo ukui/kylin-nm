@@ -347,6 +347,7 @@ void KylinDBus::getLanIpDNS(QString uuidName, bool isActNet)
                                             dbusArg2nd.beginArray();
                                             while (!dbusArg2nd.atEnd()) {
                                                 dbusArg2nd >> m_map;// append map to a vector here if you want to keep it
+                                                break;
                                             }
                                             dbusArg2nd.endArray();
 
@@ -379,6 +380,7 @@ void KylinDBus::getLanIpDNS(QString uuidName, bool isActNet)
                                             dbusArg2nd.beginArray();
                                             while (!dbusArg2nd.atEnd()) {
                                                 dbusArg2nd >> m_map;// append map to a vector here if you want to keep it
+                                                break;
                                             }
                                             dbusArg2nd.endArray();
 
@@ -578,6 +580,7 @@ void KylinDBus::getConnectNetIp(QString netUuid)
 
                 foreach (QVariantMap mDataIpv4, mDatasIpv4) {
                     dbusActiveLanIpv4 = mDataIpv4.value("address").toString();
+                    break;
                 }
 
                 //ipv6的路径信息和ip信息
@@ -609,6 +612,7 @@ void KylinDBus::getConnectNetIp(QString netUuid)
 
                 foreach (QVariantMap mDataIpv6, mDatasIpv6) {
                     dbusActiveLanIpv6 = mDataIpv6.value("address").toString();
+                    break;
                 }
             }
 

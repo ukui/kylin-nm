@@ -2396,7 +2396,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
     //获取表头信息
     QString lastHeadLine = oldWifiSlist.at(0);
-    int lastIndexName;
+    int lastIndexName, lastIndexPath;
     lastHeadLine = lastHeadLine.trimmed();
     bool isChineseInIt = lastHeadLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseInIt) {
@@ -2404,6 +2404,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     } else {
         lastIndexName = lastHeadLine.indexOf("BSSID") + 19;
     }
+    lastIndexPath = lastHeadLine.indexOf("DBUS-PATH");
 
     QString headLine = slist.at(0);
     int indexSecu, indexFreq, indexBSsid, indexName, indexPath, indexCate;
@@ -2430,7 +2431,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     //列表中去除已经减少的wifi
     for (int i=1; i<oldWifiSlist.size(); i++){
         QString line = oldWifiSlist.at(i);
-        QString lastWname = line.mid(lastIndexName, indexPath - lastIndexName).trimmed();
+        QString lastWname = line.mid(lastIndexName, lastIndexPath - lastIndexName).trimmed();
         for (int j=1; j<slist.size(); j++){
             QString line = slist.at(j);
             QString wname = line.mid(indexName, indexPath - indexName).trimmed();
@@ -2508,7 +2509,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
 
         for (int j=1; j < oldWifiSlist.size(); j++) {
             QString line = oldWifiSlist.at(j);
-            QString lastWname = line.mid(lastIndexName, indexPath - lastIndexName).trimmed();
+            QString lastWname = line.mid(lastIndexName, lastIndexPath - lastIndexName).trimmed();
             if (lastWname == wname){break;} //上一次的wifi列表已经有名为wname的wifi，则停止
             if (j == oldWifiSlist.size()-1) { //到lastSlist最后一个都没找到，执行下面流程
                 QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();

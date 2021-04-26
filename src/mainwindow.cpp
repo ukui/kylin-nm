@@ -2201,7 +2201,13 @@ void MainWindow::loadWifiListDone(QStringList slist)
         QString line = slist.at(i);
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
         QString wname = line.mid(indexName, indexPath - indexName).trimmed();
-
+        int chineseNum = 0;
+        for(QChar text:wname){
+            if(text.unicode() > 0x4E00 && text.unicode() <= 0x9FFF){//统计字符串中中文字符的个数
+                chineseNum++;
+            }
+        }
+        wname = line.mid(indexName, indexPath - indexName - chineseNum).trimmed();
         if (actWifiBssidList.contains(wbssid)) {
             actWifiName = wname;
         }
@@ -2223,6 +2229,13 @@ void MainWindow::loadWifiListDone(QStringList slist)
         QString wname = line.mid(indexName, indexPath - indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
         QString wcate = line.mid(indexCate).trimmed();
+        int chineseNum = 0;
+        for(QChar text:wname){
+            if(text.unicode() > 0x4E00 && text.unicode() <= 0x9FFF){//统计字符串中中文字符的个数
+                chineseNum++;
+            }
+        }
+        wname = line.mid(indexName, indexPath - indexName - chineseNum).trimmed();
 
         if (!isHuaWeiPC) {
             //如果不是华为的电脑，选择wifi在这里执行
@@ -2249,6 +2262,14 @@ void MainWindow::loadWifiListDone(QStringList slist)
         int min_freq = wfreq.toInt();
         for (int k = i; k < slist.size(); k ++) {
             QString m_name = slist.at(k).mid(indexName, indexPath - indexName).trimmed();
+            int chineseNum = 0;
+            for(QChar text:wname){
+                if(text.unicode() > 0x4E00 && text.unicode() <= 0x9FFF){//统计字符串中中文字符的个数
+                    chineseNum++;
+                }
+            }
+            wname = line.mid(indexName, indexPath - indexName - chineseNum).trimmed();
+
             if (wname == m_name) {
                 if (slist.at(k).mid(indexFreq, 4).trimmed().toInt() > max_freq) {
                     max_freq = slist.at(k).mid(indexFreq, 4).trimmed().toInt();

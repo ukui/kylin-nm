@@ -98,8 +98,8 @@ public:
 
 public slots:
     void waitAnimStep();
-    void startWaiting(bool isToConnect);
-    void stopWaiting();
+    void startWifiWaiting(bool isToConnect);
+    void stopWifiWaiting(bool isUpdateTrayIcon);
     void onBtnPropertyClicked();
 
 protected:

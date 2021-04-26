@@ -1578,6 +1578,9 @@ void KylinDBus::toGetWifiList()
 //网络连接变化时，如有新增或减少的网络，发信号通知更新主界面
 void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 {
+    if (mw->is_stop_check_net_state) {
+        return;
+    }
     for(QString keyStr : qvm.keys()) {
         //有关已连接网络变化的信号
         if (keyStr == "ActiveConnections") {
@@ -1709,6 +1712,9 @@ void KylinDBus::onLanIpPropertiesChanged()
 
 //无线网的Ip属性变化时的响应函数
 void KylinDBus::onWifiIpPropertiesChanged() {
+    if (mw->is_stop_check_net_state) {
+        return;
+    }
     emit this->updateWirelessList();
 }
 

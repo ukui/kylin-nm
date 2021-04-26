@@ -155,7 +155,6 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     this->waitTimer = new QTimer(this);
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(waitAnimStep()));
 
-    connect(mw, SIGNAL(waitWifiStop()), this, SLOT(stopWaiting()));
     connect(mw, &MainWindow::reConnectWifi, this, [ = ](const QString& uuid) {
         if (isActive) {
             QThread *t = new QThread();
@@ -520,12 +519,12 @@ void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, int freq
 
 void OneConnForm::slotConnWifi()
 {
-    this->startWaiting(true);
+    this->startWifiWaiting(true);
     emit sigConnWifi(wifiName, wifiIfName);
 }
 void OneConnForm::slotConnWifiPWD()
 {
-    this->startWaiting(true);
+    this->startWifiWaiting(true);
     emit sigConnWifiPWD(wifiName, ui->lePassword->text(), connType);
 }
 
@@ -542,10 +541,10 @@ void OneConnForm::on_btnDisConn_clicked()
         mw->canReconnectWifiList.removeOne(wifiName);
     }
 
-    this->startWaiting(false);
+    this->startWifiWaiting(false);
 
     mw->is_stop_check_net_state = 1;
-    mw->on_btnHotspotState();
+    //mw->on_btnHotspotState();
     //kylin_network_set_con_down(wifiName.toUtf8().data());
     kylin_network_set_con_down(wifiUuid.toUtf8().data());
     disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneTopWifiFormSelected(QString,int)));
@@ -685,13 +684,13 @@ void OneConnForm::toConnectWirelessNetwork()
             bt->moveToThread(t);
             connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
             connect(t, &QThread::started, this, [ = ]() {
-                this->startWaiting(true);
+                this->startWifiWaiting(true);
                 QString cmdStr = "nmcli connection up '" + wifiName + "' passwd-file " + homePath +"/.config/" + wifiName + ".psk";
                 emit this->sigConnWifiPsk(cmdStr);
             });
             connect(this, SIGNAL(sigConnWifiPsk(QString)), bt, SLOT(execConnWifiPsk(QString)));
             connect(bt, &BackThread::connDone, this, [ = ](int res) {
-                this->stopWaiting();
+                this->stopWifiWaiting(true);
                 mw->is_stop_check_net_state = 0;
                 if (res) {
                     QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName).toUtf8());
@@ -743,13 +742,13 @@ void OneConnForm::on_btnConnPWD_clicked()
         bt->moveToThread(t);
         connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
         connect(t, &QThread::started, this, [ = ]() {
-            this->startWaiting(true);
+            this->startWifiWaiting(true);
             QString cmdStr = "nmcli connection up '" + wifiName + "' passwd-file " + homePath +"/.config/" + wifiName + ".psk";
             emit this->sigConnWifiPsk(cmdStr);
         });
         connect(this, SIGNAL(sigConnWifiPsk(QString)), bt, SLOT(execConnWifiPsk(QString)));
         connect(bt, &BackThread::connDone, this, [ = ](int res) {
-            this->stopWaiting();
+            this->stopWifiWaiting(true);
             mw->is_stop_check_net_state = 0;
             if (res) {
                 QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName).toUtf8());
@@ -994,7 +993,7 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     // 设置全局变量，当前连接Wifi的信号强度
     currentActWifiSignalLv = signalLv;
 
-    this->stopWaiting();
+    this->stopWifiWaiting(true);
 
     mw->is_stop_check_net_state = 0;
 }
@@ -1020,13 +1019,13 @@ void OneConnForm::waitAnimStep()
             syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'waitAnimStep' failed");
         }
 
-        this->stopWaiting(); //动画超出时间限制，强制停止动画
+        this->stopWifiWaiting(true); //动画超出时间限制，强制停止动画
 
         mw->is_stop_check_net_state = 0;
     }
 }
 
-void OneConnForm::startWaiting(bool isToConnect)
+void OneConnForm::startWifiWaiting(bool isToConnect)
 {
     this->isWaiting = true;
     if (isToConnect) {
@@ -1046,7 +1045,7 @@ void OneConnForm::startWaiting(bool isToConnect)
     mw->setTrayLoading(true);
 }
 
-void OneConnForm::stopWaiting()
+void OneConnForm::stopWifiWaiting(bool isUpdateTrayIcon)
 {
     ui->lbWaitingIcon->move(380, 20);
     ui->btnCancel->hide();
@@ -1055,8 +1054,10 @@ void OneConnForm::stopWaiting()
     ui->lbWaiting->hide();
     ui->lbWaitingIcon->hide();
 
-    mw->setTrayLoading(false);
-    mw->getActiveInfoAndSetTrayIcon();
+    if (isUpdateTrayIcon) {
+        mw->setTrayLoading(false);
+        mw->getActiveInfoAndSetTrayIcon();
+    }
 }
 
 void OneConnForm::on_btnCancel_clicked()
@@ -1075,7 +1076,7 @@ void OneConnForm::on_btnCancel_clicked()
         QString currentConnectWifiUuid = wifiSsidAndUuid.at(0);
         kylin_network_set_con_down(currentConnectWifiUuid.toUtf8().data());
     }
-    this->stopWaiting();
+    this->stopWifiWaiting(true);
 }
 
 int OneConnForm::getPskFlag()

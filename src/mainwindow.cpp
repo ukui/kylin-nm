@@ -2064,7 +2064,7 @@ QList<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStringL
     if (selectedWifiListStruct.size() > 1) {
         devListSort(&selectedWifiListStruct);
         foreach (structWifiProperty wifiPriorityAfterSort, selectedWifiListStruct) {
-            qDebug() << "-----------------------> 排序后" << wifiPriorityAfterSort.priority;
+            qDebug() << wifiPriorityAfterSort.bssid << " 的自动连接优先级是 ： " << wifiPriorityAfterSort.priority;
         }
     }
     ocf->deleteLater();
@@ -2339,9 +2339,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->show();
 
                 if (actWifiBssidList.contains(wbssid) && wifiActState == 1) {
-                    ocf->startWaiting(true);
+                    ocf->startWifiWaiting(true);
                 } else if (actWifiId == wname && wifiActState == 1) {
-                    ocf->startWaiting(true);
+                    ocf->startWifiWaiting(true);
                 }
 
                 j ++;
@@ -3060,16 +3060,11 @@ void MainWindow::activeLanDisconn()
 void MainWindow::activeWifiDisconn()
 {
     hasWifiConnected = false;
-
-    QThread *tt = new QThread();
-    BackThread *btt = new BackThread();
-    btt->moveToThread(tt);
-    connect(tt, SIGNAL(finished()), tt, SLOT(deleteLater()));
-    connect(tt, SIGNAL(started()), this, SLOT(activeStartLoading()));
-    connect(this, SIGNAL(disConnSparedNet(QString)), btt, SLOT(disConnSparedNetSlot(QString)));
-    connect(btt, SIGNAL(disFinish()), this, SLOT(activeGetWifiList()));
-    connect(btt, SIGNAL(ttFinish()), tt, SLOT(quit()));
-    tt->start();
+    currSelNetName = "";
+    this->ksnm->execGetWifiList(this->wcardname);
+    QtConcurrent::run([=]() {
+        activeStartLoading();
+    });
 }
 void MainWindow::activeStartLoading()
 {
@@ -3077,13 +3072,8 @@ void MainWindow::activeStartLoading()
     QString txt(tr("Wi-Fi is disconnected"));
     objKyDBus->showDesktopNotify(txt);
 
-    currSelNetName = "";
-    emit this->disConnSparedNet("wifi");
-}
-void MainWindow::activeGetWifiList()
-{
-    emit this->waitWifiStop();
-    this->ksnm->execGetWifiList(this->wcardname);
+    setTrayLoading(false);
+    getActiveInfoAndSetTrayIcon();
 }
 
 //网络开关处理，打开与关闭网络

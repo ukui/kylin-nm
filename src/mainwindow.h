@@ -371,7 +371,6 @@ private slots:
     void activeLanDisconn();
     void activeWifiDisconn();
     void activeStartLoading();
-    void activeGetWifiList();
     void onRequestScanAccesspoint();
     void toScanWifi(bool isShow);
     void on_setNetSpeed();
@@ -401,7 +400,6 @@ private slots:
 signals:
     void disConnSparedNet(QString type);
 
-    void waitWifiStop();
     void waitLanStop();
     void reConnectWifi(const QString& uuid);
     void actWifiSignalLvChanaged(const int& currentLevel);

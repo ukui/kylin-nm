@@ -569,15 +569,12 @@ QString BackThread::execChkLanWidth(QString ethName)
 //disconnected spare ethernet or wifi
 void BackThread::disConnSparedNetSlot(QString type)
 {
-    sleep(1);
     if (type == "wifi") {
         //disConnLanOrWifi("wifi");
     } else if(type == "ethernet") {
+        sleep(1);
         disConnLanOrWifi("ethernet");
     }
-
-    emit disFinish();
-    emit ttFinish();
 }
 
 //disconnected ethernet or wifi according to network type

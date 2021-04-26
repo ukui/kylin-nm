@@ -86,8 +86,6 @@ signals:
     void connDone(int connFlag);
 
     void btFinish();
-    void disFinish();
-    void ttFinish();
 };
 
 #endif // BACKTHREAD_H

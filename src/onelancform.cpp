@@ -259,7 +259,7 @@ void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString s
 
     if (str1 == "" || str1 == "auto") {
         str1 = tr("No Configuration");
-        str2 = tr("No Configuration");
+//        str2 = tr("No Configuration");
     }
 
     if (str4 == "--" || str4 == "") {

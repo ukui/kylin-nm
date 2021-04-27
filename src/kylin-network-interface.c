@@ -367,6 +367,16 @@ void kylin_network_set_automethod(char *con_name)
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_automethod' failed");}
 }
 
+//设置动态分配ipv6地址
+void kylin_network_set_ipv6_automethod(char *con_name)
+{
+    char str[256];
+    char *automethod="auto";
+    sprintf(str,"nmcli connection modify '%s' ipv6.method %s ipv6.address ''",con_name,automethod);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_ipv6_automethod' failed");}
+}
+
 //设置手动分配ip
 void kylin_network_set_manualmethod(char *con_name,char *ip)
 {
@@ -375,6 +385,16 @@ void kylin_network_set_manualmethod(char *con_name,char *ip)
     sprintf(str,"nmcli connection modify '%s' ipv4.method %s ipv4.address '%s'",con_name,method,ip);
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_manualmethod' failed");}
+}
+
+//设置手动分配ipv6地址
+void kylin_network_set_ipv6_manualmethod(char *con_name,char *ip)
+{
+    char str[256];
+    char *method="manual";
+    sprintf(str,"nmcli connection modify '%s' ipv6.method %s ipv6.address '%s'",con_name,method,ip);
+    int status = system(str);
+    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_ipv6_manualmethod' failed");}
 }
 
 // 设置手动分配all

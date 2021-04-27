@@ -101,12 +101,15 @@ void kylin_network_del_ethernet_con(char *con_name);
  */
 void kylin_network_set_automethod(char *con_name);
 
+void kylin_network_set_ipv6_automethod(char *con_name);
 /*
  * Set up manual IP assignment.
  * @con_name is the connection name.
  * @ip is the ip address(for example,"192.168.68.160/16")
  */
 void kylin_network_set_manualmethod(char *con_name,char *ip);
+
+void kylin_network_set_ipv6_manualmethod(char *con_name,char *ip);
 
 /*
  * Set up manual all prop.

@@ -166,6 +166,7 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
     ui->leName->setText(connName);
     lastConnName = connName;
     lastIpv4 = v4addr;
+    lastIpv6 = v6addr;
     netUuid = uuidName;
     qDebug() << Q_FUNC_INFO << __LINE__ << connName << uuidName;
 
@@ -175,7 +176,7 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
         isActWifi = isWiFi;
     }
 
-    if (v4method == "auto" || v4method == "") {
+    if ((v4method == "auto" || v4method == "") && (v6method == "auto" || v6method == "")) {
         ui->cbType->setCurrentIndex(0);
         cbTypeChanged(0);
     } else {
@@ -245,10 +246,12 @@ void ConfForm::on_btnCreate_clicked()
         mIfname = kylindbus.multiWiredIfName.at(0);
     }
 
-    if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
+    if (ui->cbType->currentIndex() == 1) {
         //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
-        if (check_ip_conflict(mIfname)) {
-            return;
+        if (!ui->leAddr->text().isEmpty()|| !ui->leAddr_ipv6->text().isEmpty()) {
+            if (check_ip_conflict(mIfname)) {
+                return;
+            }
         }
     }
     QString name = ui->leName->text().trimmed();
@@ -256,8 +259,16 @@ void ConfForm::on_btnCreate_clicked()
     if(ui->cbType->currentIndex() == 0){
         cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet";
     }else{
-        cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet ipv4.method manual ipv4.address "
-                + ui->leAddr->text() + "/" + mask.toUtf8().data();
+        if (ui->leAddr->text().isEmpty()) { //只配置了ipv6地址
+            cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet ipv4.method auto ipv6.method manual ipv6.address "
+                    + ui->leAddr_ipv6->text();
+        } else if (ui->leAddr_ipv6->text().isEmpty()) { //只配置了ipv4地址
+            cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet ipv6.method auto ipv4.method manual ipv4.address "
+                    + ui->leAddr->text() + "/" + mask.toUtf8().data();
+        } else {
+            cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet ipv6.method manual ipv6.address " + ui->leAddr_ipv6->text()
+                    + " ipv4.method manual ipv4.address " + ui->leAddr->text() + "/" + mask.toUtf8().data();
+        }
         if(!ui->leGateway->text().isEmpty()){
             cmdStr += " ipv4.gateway " + ui->leGateway->text();
         }
@@ -281,13 +292,13 @@ void ConfForm::on_btnCreate_clicked()
         kylindbus.showDesktopNotify(txt);
     }
 
-    if (!ui->leAddr_ipv6->text().isEmpty()) {
-        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
-        Utils::m_system(cmdStr.toUtf8().data());
-    } else {
-        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method auto";
-        Utils::m_system(cmdStr.toUtf8().data());
-    }
+//    if (!ui->leAddr_ipv6->text().isEmpty()) {
+//        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
+//        Utils::m_system(cmdStr.toUtf8().data());
+//    } else {
+//        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method auto";
+//        Utils::m_system(cmdStr.toUtf8().data());
+//    }
 
     onConfformHide();
 }
@@ -307,10 +318,12 @@ void ConfForm::on_btnSave_clicked()
             kylindbus.showDesktopNotify(notifyTxt);
             return;
         }
-        if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
+        if (ui->cbType->currentIndex() == 1) {
             //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
-            if (check_ip_conflict(mWifiIfname)) {
-                return;
+            if ((!ui->leAddr->text().isEmpty() && (ui->leAddr->text() != lastIpv4)) || (!ui->leAddr_ipv6->text().isEmpty() && (ui->leAddr_ipv6->text() != lastIpv6))) {
+                if (check_ip_conflict(mWifiIfname)) {
+                    return;
+                }
             }
         }
 
@@ -358,10 +371,12 @@ void ConfForm::on_btnSave_clicked()
                 int pos = str.indexOf(regExpTest);
                 newUuid = str.mid(pos,36); //36是uuid的长度
 
-                if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
+                if (ui->cbType->currentIndex() == 1) {
                     //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
-                    if (check_ip_conflict(mIfname)) {
-                        return;
+                    if ((!ui->leAddr->text().isEmpty() && (ui->leAddr->text() != lastIpv4)) || (!ui->leAddr_ipv6->text().isEmpty() && (ui->leAddr_ipv6->text() != lastIpv6))) {
+                        if (check_ip_conflict(mIfname)) {
+                            return;
+                        }
                     }
                 }
 
@@ -372,26 +387,17 @@ void ConfForm::on_btnSave_clicked()
             this->isCreateNewNet = false;
             newUuid = "--";
 
-            if (ui->cbType->currentIndex() == 1 && (ui->leAddr->text() != lastIpv4)) {
+            if (ui->cbType->currentIndex() == 1) {
                 //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
-                if (check_ip_conflict(mIfname)) {
-                    return;
+                if ((!ui->leAddr->text().isEmpty() && (ui->leAddr->text() != lastIpv4)) || (!ui->leAddr_ipv6->text().isEmpty() && (ui->leAddr_ipv6->text() != lastIpv6))) {
+                    if (check_ip_conflict(mIfname)) {
+                        return;
+                    }
                 }
             }
 
             qDebug() << Q_FUNC_INFO;
             this->saveNetworkConfiguration();
-        }
-    }
-
-    if (ui->cbType->currentIndex() == 1) {
-        //对于已保存连接修改ipv6地址，使用UUID区分各网络配置（排除名称含空格或特殊字符的干扰）
-        if (!ui->leAddr_ipv6->text().isEmpty()) {
-            QString cmdStr = "nmcli connection modify '" + netUuid + "' ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
-            Utils::m_system(cmdStr.toUtf8().data());
-        } else {
-            QString cmdStr = "nmcli connection modify '" + netUuid + "' ipv6.method auto";
-            Utils::m_system(cmdStr.toUtf8().data());
         }
     }
     QString txt(tr("New network settings already finished"));
@@ -427,14 +433,33 @@ void ConfForm::saveNetworkConfiguration()
         qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text();
         //kylin_network_set_automethod(name.toUtf8().data());
         kylin_network_set_automethod(netUuid.toUtf8().data());
+        kylin_network_set_ipv6_automethod(netUuid.toUtf8().data());
     }
     else {
         if (newUuid != "--" && newUuid != "" && !newUuid.isEmpty()) {
             qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
-            kylin_network_set_manualall(newUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+            if (!ui->leAddr->text().isEmpty()) {
+                kylin_network_set_manualall(newUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+            } else {
+                kylin_network_set_automethod(newUuid.toUtf8().data());
+            }
+            if (!ui->leAddr_ipv6->text().isEmpty()) {
+                kylin_network_set_ipv6_manualmethod(newUuid.toUtf8().data(), ui->leAddr_ipv6->text().toUtf8().data());
+            } else {
+                kylin_network_set_ipv6_automethod(newUuid.toUtf8().data());
+            }
         } else {
             qDebug() << Q_FUNC_INFO  << __LINE__ << name << netUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
-            kylin_network_set_manualall(netUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+            if (!ui->leAddr->text().isEmpty()) {
+                kylin_network_set_manualall(netUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
+            } else {
+                kylin_network_set_automethod(netUuid.toUtf8().data());
+            }
+            if (!ui->leAddr_ipv6->text().isEmpty()) {
+                kylin_network_set_ipv6_manualmethod(netUuid.toUtf8().data(), ui->leAddr_ipv6->text().toUtf8().data());
+            } else {
+                kylin_network_set_ipv6_automethod(netUuid.toUtf8().data());
+            }
         }
     }
 
@@ -475,35 +500,38 @@ bool ConfForm::check_ip_conflict(QString ifname)
     FILE *fp;
     char ret[10], arp_all[1024];
 
-    QString arp_all_cmd = "arping -c 3 -f -I " + ifname + " -D " + ui->leAddr->text();
-    fp = popen(arp_all_cmd.toUtf8().data(),"r");
-    if(!fp)
-        return false;
-    fread(arp_all, 1, sizeof(arp_all), fp);
-    pclose(fp);
-
-    if (strstr(arp_all, "Received") && strstr(arp_all, " response(s)")) {
-        QString arp_result = "arping -c 1 -f -I " + ifname + " -D " + ui->leAddr->text() + " | awk '{print $2}' | sed -n '3p'";
-
-        fp = popen(arp_result.toUtf8().data(),"r");
+    if (!ui->leAddr_ipv6->text().isEmpty() && ui->leAddr_ipv6->text() != "") {
+        //ipv4地址不为空，需要验证是否冲突
+        QString arp_all_cmd = "arping -c 3 -f -I " + ifname + " -D " + ui->leAddr->text();
+        fp = popen(arp_all_cmd.toUtf8().data(),"r");
         if(!fp)
             return false;
-        fgets(ret,sizeof(ret),fp);
+        fread(arp_all, 1, sizeof(arp_all), fp);
         pclose(fp);
 
-        ret[strlen(ret)-1]=0;
+        if (strstr(arp_all, "Received") && strstr(arp_all, " response(s)")) {
+            QString arp_result = "arping -c 1 -f -I " + ifname + " -D " + ui->leAddr->text() + " | awk '{print $2}' | sed -n '3p'";
 
-        if ( ret != NULL ) {
-//            if (!strcmp(ret,"0")) {
-//                //printf("正常连接");
-//                return  false;
-//            } else {
-            if (strcmp(ret,"0")) {
-                //printf("ipv4地址冲突");
-                QString strInfo = tr("IPV4 address conflict, Please change IP");
-//                QString buffer = "notify-send -i network-offline " + strInfo;
-                showNotify(strInfo);
-                return  true;
+            fp = popen(arp_result.toUtf8().data(),"r");
+            if(!fp)
+                return false;
+            fgets(ret,sizeof(ret),fp);
+            pclose(fp);
+
+            ret[strlen(ret)-1]=0;
+
+            if ( ret != NULL ) {
+    //            if (!strcmp(ret,"0")) {
+    //                //printf("正常连接");
+    //                return  false;
+    //            } else {
+                if (strcmp(ret,"0")) {
+                    //printf("ipv4地址冲突");
+                    QString strInfo = tr("IPV4 address conflict, Please change IP");
+    //                QString buffer = "notify-send -i network-offline " + strInfo;
+                    showNotify(strInfo);
+                    return  true;
+                }
             }
         }
     }
@@ -684,7 +712,13 @@ void ConfForm::setEnableOfBtn()
     }
 
     if (ui->cbType->currentIndex() == 1) {
-        if (!this->getTextEditState(ui->leAddr->text()) ) {
+        if (ui->leAddr->text().isEmpty() && ui->leAddr_ipv6->text().isEmpty()) {
+            //当ipv4和ipv6地址均未设置时，禁止保存
+            this->setBtnEnableFalse();
+            return;
+        }
+
+        if (!ui->leAddr->text().isEmpty() && !this->getTextEditState(ui->leAddr->text()) ) {
             this->setBtnEnableFalse();
             return;
         }

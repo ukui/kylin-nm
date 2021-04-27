@@ -879,7 +879,8 @@ void KylinDBus::toCreateNewLan()
     int i = 1;
     if (multiWiredIfName.size() != 0) {
         foreach (QString strIfName, multiWiredIfName) {
-            QString cmdStr = "nmcli connection add con-name '有线连接 " + QString::number(i,10) + "' ifname '" + strIfName + "' type ethernet";
+            //QString cmdStr = "nmcli connection add con-name '有线连接 " + QString::number(i,10) + "' ifname '" + strIfName + "' type ethernet";
+            QString cmdStr = "nmcli connection add con-name '"+tr("Wired connection")+" "+ QString::number(i,10) + "' ifname '" + strIfName + "' type ethernet";
             Utils::m_system(cmdStr.toUtf8().data());
             i += 1;
         }

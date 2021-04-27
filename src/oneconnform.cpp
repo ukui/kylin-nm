@@ -579,6 +579,23 @@ void OneConnForm::toConnectWirelessNetwork()
 {
     if (wifiSecu.contains("802.1x", Qt::CaseInsensitive)) {
         //企业wifi
+        WifiConfig wc;
+        bool isConfiged = getWifiConfig(wc, this->wifiName);
+        if (isConfiged && wc.eap != "peap") {
+            mw->is_stop_check_net_state = 1;
+            QThread *t = new QThread();
+            BackThread *bt = new BackThread();
+            bt->moveToThread(t);
+            connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
+            connect(t, SIGNAL(started()), this, SLOT(slotConnWifi()));
+            connect(this, SIGNAL(sigConnWifi(QString, QString)), bt, SLOT(execConnWifi(QString, QString)));
+            connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
+            connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
+            connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
+            t->start();
+            return;
+        }
+
         WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, mw, this->wifiName);
         QPoint pos = QCursor::pos();
         QRect primaryGeometry;
@@ -1095,4 +1112,76 @@ int OneConnForm::getPskFlag()
     });
     process->waitForFinished();
     return psk_flag;
+}
+
+/**
+ * @brief OneConnForm::getWifiConfig
+ * @param wc
+ * @return
+ */
+bool OneConnForm::getWifiConfig(WifiConfig &wc, QString netName)
+{
+    bool isConfiged = false;
+    QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                      "/org/freedesktop/NetworkManager/Settings",
+                                      "org.freedesktop.NetworkManager.Settings",
+                                      QDBusConnection::systemBus() );
+    QDBusReply<QList<QDBusObjectPath>> m_reply = m_interface.call("ListConnections");
+
+    QList<QDBusObjectPath> m_objNets = m_reply.value();
+    foreach (QDBusObjectPath objNet, m_objNets){
+        QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                  objNet.path(),
+                                  "org.freedesktop.NetworkManager.Settings.Connection",
+                                  QDBusConnection::systemBus());
+        QDBusMessage reply = m_interface.call("GetSettings");
+        const QDBusArgument &dbusArg = reply.arguments().at( 0 ).value<QDBusArgument>();
+        QMap<QString,QMap<QString,QVariant>> map;
+        dbusArg >> map;
+
+        for(QString key : map.keys() ){
+            QMap<QString,QVariant> innerMap = map.value(key);
+            if (key == "connection") {
+                for (QString inner_key : innerMap.keys()) {
+                    if (inner_key == "id"){
+                        if (netName == innerMap.value(inner_key).toString()) {
+                            isConfiged = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (isConfiged) {
+            for(QString key : map.keys()) {
+                QMap<QString,QVariant> eapMap = map.value(key);
+                if (key == "802-1x") {
+                    wc.connectName = netName;
+                    for (QString eap_key : eapMap.keys()) {
+                        if (eap_key == "ca-cert"){
+                            qDebug() << "OneConnForm::getWifiConfig client-cert path = " << eapMap.value(eap_key).toString();
+                            wc.caCert = eapMap.value(eap_key).toString();
+                        } else if (eap_key == "client-cert"){
+                            qDebug() << "OneConnForm::getWifiConfig client-cert path = " << eapMap.value(eap_key).toString();
+                            wc.clientCert = eapMap.value(eap_key).toString();
+                        } else if (eap_key == "eap") {
+                            wc.eap = eapMap.value(eap_key).toStringList().at(0);
+                            qDebug() << "OneConnForm::getWifiConfig eap = " << eapMap.value(eap_key).toStringList().at(0);
+                        } else if (eap_key == "identity") {
+                            wc.identity = eapMap.value(eap_key).toString();
+                        } else if (eap_key == "private-key") {
+                            wc.privateKey = eapMap.value(eap_key).toString();
+                        } else if (eap_key == "anonymous-identity") {
+                            wc.anonymousIdentity = eapMap.value(eap_key).toString();
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+    } // end foreach (QDBusObjectPath objNet, m_objNets)
+
+    return false;
 }

@@ -32,6 +32,7 @@
 #include "confform.h"
 #include "backthread.h"
 #include "ksimplenm.h"
+#include "wpawifidialog.h"
 
 #define FRAME_SPEED 150
 #define LIMIT_TIME 90*1000
@@ -105,6 +106,9 @@ public slots:
 protected:
     void mousePressEvent(QMouseEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
+
+private:
+    bool getWifiConfig(WifiConfig &wc, QString netName);
 
 private slots:
     void on_btnConn_clicked();

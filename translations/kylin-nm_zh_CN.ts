@@ -1900,5 +1900,45 @@
         <source>Wireless card not exist</source>
         <translation type="unfinished">没找到无线网卡</translation>
     </message>
+    <message>
+        <source>Choose from file...</source>
+        <translation>从文件选择...</translation>
+    </message>
+    <message>
+        <source>Identity</source>
+        <translation>身份</translation>
+    </message>
+    <message>
+        <source>Anonymous Identity</source>
+        <translation>匿名身份</translation>
+    </message>
+    <message>
+        <source>Domain</source>
+        <translation>域</translation>
+    </message>
+    <message>
+        <source>CA certificate</source>
+        <translation>CA 证书</translation>
+    </message>
+    <message>
+        <source>no need for CA certificate</source>
+        <translation>不需要CA证书</translation>
+    </message>
+    <message>
+        <source>User Certificate</source>
+        <translation>用户证书</translation>
+    </message>
+    <message>
+        <source>User Private Key</source>
+        <translation>用户私钥</translation>
+    </message>
+    <message>
+        <source>User Private Key password</source>
+        <translation>用户私钥密码</translation>
+    </message>
+    <message>
+        <source>Choose a CA certificate</source>
+        <translation>选择一个CA证书</translation>
+    </message>
 </context>
 </TS>

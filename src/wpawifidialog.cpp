@@ -29,8 +29,10 @@
 #include <QCompleter>
 #include <QDateTime>
 #include <QIODevice>
+#include <QFileDialog>
 
-const QString CONFIG_FILE = "/tmp/wpaconf.ini";
+const QString CONFIG_FILE    = "/tmp/wpaconf.ini";
+const int ITEAM_FIXED_HEIGHT = 42;
 
 UpConnThread::UpConnThread(const QString& user, const QString& pwd)
 {
@@ -70,24 +72,65 @@ WpaWifiDialog::WpaWifiDialog(QWidget *parent, MainWindow *mainWindow, QString co
 //    this->setAttribute(Qt::WA_DeleteOnClose);
 
     connectionName = conname;
+    m_wifiConfig = new WifiConfig;
+    m_wifiConfig->connectName = conname;
 //    configPath = getenv("HOME") + CONFIG_FILE;
 
+    QPainterPath path;
+    auto rect = this->rect();
+    rect.adjust(1, 1, -1, -1);
+    path.addRoundedRect(rect, 6, 6);
+    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+
     initUI();
+    initCAConfigUI();
+    initUserConfig4TLSUI();
+
+    mainLyt->setSpacing(8);
+    mainLyt->setContentsMargins(8, 16, 8, 16);
+    mainWidget->setLayout(mainLyt);
+
     initCombox();
     initConnect();
 
+    eapTypeChange();
     this->mw = mainWindow;
+    checkConnectBtnIsEnabled();
+}
+
+WpaWifiDialog::WpaWifiDialog(QWidget *parent, MainWindow *mw, WifiConfig *wifiConfig)
+{
+    if (wifiConfig) {
+        m_wifiConfig = wifiConfig;
+    } else {
+        m_wifiConfig = new WifiConfig;
+    }
+    connectionName = wifiConfig->connectName;
+    WpaWifiDialog(parent, mw, connectionName);
 }
 
 WpaWifiDialog::~WpaWifiDialog()
 {
+    if (m_wifiConfig != nullptr) {
+        delete m_wifiConfig;
+    }
+
+    /*清理父类为空的QFrame对象*/
+    for(QObject *obj : m_frameList) {
+        if (obj != nullptr && obj->parent() == nullptr)
+        {
+            obj->deleteLater();
+        }
+    }
+
     delete ui;
 }
 
 void WpaWifiDialog::initUI() {
     mainWidget = new QWidget(this);
     mainLyt = new QVBoxLayout(mainWidget);
-    mainWidget->setFixedSize(360, 530);
+    mainWidget->setFixedSize(360, 590);
 
     titleFrame = new QFrame(mainWidget); //标题栏
     titleFrame->setFixedHeight(48);
@@ -151,38 +194,39 @@ void WpaWifiDialog::initUI() {
     eapLyt->addWidget(eapCombox);
     eapFrame->setLayout(eapLyt);
 
-    innerFrame = new QFrame(mainWidget); //阶段2身份认证
+    /*以下为动态变更的地方*/
+    innerFrame = new QFrame(); //阶段2身份认证
     innerFrame->setFixedHeight(48);
     innerLyt = new QHBoxLayout(innerFrame);
     innerLyt->setContentsMargins(24, 0, 24, 0);
     innerLabel = new QLabel(innerFrame);
     innerCombox = new QComboBox(innerFrame);
-    innerCombox->setFixedHeight(48);
+    innerCombox->setFixedHeight(ITEAM_FIXED_HEIGHT);
     innerLabel->setFixedWidth(100);
     innerLabel->setText(tr("Inner auth"));
     innerLyt->addWidget(innerLabel);
     innerLyt->addWidget(innerCombox);
     innerFrame->setLayout(innerLyt);
 
-    userFrame = new QFrame(mainWidget); //用户名
+    userFrame = new QFrame(); //用户名
     userFrame->setFixedHeight(48);
     userLyt = new QHBoxLayout(userFrame);
     userLyt->setContentsMargins(24, 0, 24, 0);
     userLabel = new QLabel(userFrame);
     userEditor = new QLineEdit(userFrame);
-    userEditor->setFixedHeight(48);
+    userEditor->setFixedHeight(ITEAM_FIXED_HEIGHT);
     userLabel->setFixedWidth(100);
     userLabel->setText(tr("Username"));
     userLyt->addWidget(userLabel);
     userLyt->addWidget(userEditor);
     userFrame->setLayout(userLyt);
 
-    pwdFrame = new QFrame(mainWidget); //密码
+    pwdFrame = new QFrame(); //密码
     pwdFrame->setFixedHeight(96);
     pwdLyt = new QVBoxLayout(pwdFrame);
     pwdLyt->setContentsMargins(0, 0, 0, 0);
     pwdLyt->setSpacing(0);
-    pwdEditFrame = new QFrame(pwdFrame); //输入密码
+    pwdEditFrame = new QFrame(); //输入密码
     pwdEditFrame->setFixedHeight(48);
     pwdEditLyt = new QHBoxLayout(pwdEditFrame);
     pwdEditLyt->setContentsMargins(24, 0, 24, 0);
@@ -191,11 +235,11 @@ void WpaWifiDialog::initUI() {
     pwdEditor->setEchoMode(QLineEdit::Password);
     pwdLabel->setText(tr("Password"));
     pwdLabel->setFixedWidth(100);
-    pwdEditor->setFixedHeight(48);
+    pwdEditor->setFixedHeight(ITEAM_FIXED_HEIGHT);
     pwdEditLyt->addWidget(pwdLabel);
     pwdEditLyt->addWidget(pwdEditor);
     pwdEditFrame->setLayout(pwdEditLyt);
-    pwdShowFrame = new QFrame(pwdFrame); //显示密码
+    pwdShowFrame = new QFrame(); //显示密码
     pwdShowFrame->setFixedHeight(24);
     pwdShowLyt = new QHBoxLayout(pwdShowFrame);
     pwdShowLyt->setContentsMargins(130, 0, 0, 0);
@@ -229,7 +273,7 @@ void WpaWifiDialog::initUI() {
     pwdLyt->addWidget(askPwdFrame);
     pwdFrame->setLayout(pwdLyt);
 
-    buttonFrame = new QFrame(mainWidget); //按钮
+    buttonFrame = new QFrame(); //按钮
     buttonLyt = new QHBoxLayout(buttonFrame);
     cancelBtn = new QPushButton(buttonFrame); //取消
     connectBtn = new QPushButton(buttonFrame); //连接
@@ -243,22 +287,18 @@ void WpaWifiDialog::initUI() {
     buttonLyt->addWidget(connectBtn);
     buttonFrame->setLayout(buttonLyt);
 
-    mainLyt->addWidget(titleFrame);
-    mainLyt->addWidget(nameFrame);
-    mainLyt->addWidget(securityFrame);
-    mainLyt->addWidget(hLine);
-    mainLyt->addWidget(eapFrame);
-    mainLyt->addWidget(innerFrame);
-    mainLyt->addWidget(userFrame);
-    mainLyt->addWidget(pwdFrame);
-    mainLyt->addWidget(buttonFrame);
-    mainLyt->setSpacing(8);
-    mainLyt->setContentsMargins(8, 16, 8, 16);
-    mainWidget->setLayout(mainLyt);
-
     nameEditor->setContextMenuPolicy(Qt::NoContextMenu); //禁止LineEdit的右键菜单
     userEditor->setContextMenuPolicy(Qt::NoContextMenu);
     pwdEditor->setContextMenuPolicy(Qt::NoContextMenu);
+
+    m_frameList.append(titleFrame);
+    m_frameList.append(nameFrame);
+    m_frameList.append(securityFrame);
+    m_frameList.append(eapFrame);
+    m_frameList.append(innerFrame);
+    m_frameList.append(userFrame);
+    m_frameList.append(pwdFrame);
+    m_frameList.append(buttonFrame);
 }
 
 void WpaWifiDialog::initCombox() {
@@ -277,11 +317,14 @@ void WpaWifiDialog::initCombox() {
 //    securityCombox->setEnabled(false);
     //EAP方法
     QStringList eapStringList;
-    //eapStringList<< "PEAP" << "FAST" << "MD5" << "PWD" << "SIM" << "TLS" << "TTLS";
-    eapStringList<< "PEAP";
+    /*eapStringList<< "PEAP" << "FAST" << "MD5" << "PWD" << "SIM" << "TLS" << "TTLS";*/
+    /*eapStringList<< "PEAP";*/
+    eapStringList << "TLS" << "LEAP" << "PWD" << "FAST" << "TTLS" << "PEAP";
     for (int i = 0; i < eapStringList.length(); i++) {
         eapCombox->addItem(eapStringList.at(i), QString(eapStringList.at(i)).toLower());
     }
+    connect(eapCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(eapTypeChange()));
+
     //阶段2认证方式
     QStringList innerStringList;
     //innerStringList<< "MSCHAPv2" << "MSCHAP" << "MD5" << "CHAP" << "OTP" << "GTC" << "PAP" << "TLS";
@@ -326,6 +369,76 @@ void WpaWifiDialog::initCombox() {
         completer->setModel(listModel);
         userEditor->setCompleter(completer);
     }
+
+    /*选择CA证书路径*/
+    m_CAComboBox->addItem(tr("None"), QString(tr("None"))); //无
+    m_CAComboBox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    m_CAComboBox->setCurrentIndex(0);
+    connect(m_CAComboBox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged), this, [=] (const QString &str) {
+        if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+        {
+            QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
+                                                            tr("CA Files (*.pem *.der *.p12 *.crt)"));
+            if (!fileName.isNull()) {
+                m_wifiConfig->caCert = fileName;
+                QStringList nameList = fileName.split("/");
+                m_CAComboBox->setItemText(0, nameList.back());
+                m_CAComboBox->setCurrentIndex(0);
+            } else {
+                m_CAComboBox->setItemText(0, tr("None"));
+                m_CAComboBox->setCurrentIndex(0);
+            }
+        } else {
+            qWarning() << "Choose file is null or unvalible";
+        }
+        checkConnectBtnIsEnabled();
+    });
+
+    m_UserCertificateComboBox->addItem(tr("None"), QString(tr("None"))); //无
+    m_UserCertificateComboBox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    m_UserCertificateComboBox->setCurrentIndex(0);
+    connect(m_UserCertificateComboBox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged), this, [=] (const QString &str) {
+        if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+        {
+            QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
+                                                            tr("CA Files (*.pem *.der *.p12 *.crt)"));
+            if (!fileName.isNull()) {
+                m_wifiConfig->clientCert = fileName;
+                QStringList nameList = fileName.split("/");
+                m_UserCertificateComboBox->setItemText(0, nameList.back());
+                m_UserCertificateComboBox->setCurrentIndex(0);
+            } else {
+                m_UserCertificateComboBox->setItemText(0, tr("None"));
+                m_UserCertificateComboBox->setCurrentIndex(0);
+            }
+        } else {
+            qWarning() << "Choose file is null or unvalible";
+        }
+        checkConnectBtnIsEnabled();
+    });
+
+    m_UserPrivateKeyComboBox->addItem(tr("None"), QString(tr("None"))); //无
+    m_UserPrivateKeyComboBox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    m_UserPrivateKeyComboBox->setCurrentIndex(0);
+    connect(m_UserPrivateKeyComboBox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged), this, [=] (const QString &str) {
+        if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+        {
+            QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
+                                                            tr("CA Files (*.pem *.der *.p12 *.crt *.key)"));
+            if (!fileName.isNull()) {
+                m_wifiConfig->privateKey = fileName;
+                QStringList nameList = fileName.split("/");
+                m_UserPrivateKeyComboBox->setItemText(0, nameList.back());
+                m_UserPrivateKeyComboBox->setCurrentIndex(0);
+            } else {
+                m_UserPrivateKeyComboBox->setItemText(0, tr("None"));
+                m_UserPrivateKeyComboBox->setCurrentIndex(0);
+            }
+        } else {
+            qWarning() << "Choose file is null or unvalible";
+        }
+        checkConnectBtnIsEnabled();
+    });
 }
 
 void WpaWifiDialog::changeDialog()
@@ -394,13 +507,36 @@ void WpaWifiDialog::initConnect() {
     connect(pwdShowBtn, &QCheckBox::clicked, this, [ = ]() {
         if (pwdShowBtn->isChecked()) {
             pwdEditor->setEchoMode(QLineEdit::Normal);
+            m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Normal);
         } else {
             pwdEditor->setEchoMode(QLineEdit::Password);
+            m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Password);
         }
     });
     connect(pwdEditor, &QLineEdit::textChanged, this, &WpaWifiDialog::slot_line_edit_changed);
     connect(userEditor, &QLineEdit::textChanged, this, &WpaWifiDialog::slot_line_edit_changed);
     connect(nameEditor, &QLineEdit::textChanged, this, &WpaWifiDialog::slot_line_edit_changed);
+
+    connect(m_isCANeededShowBtn, &QCheckBox::clicked, this, [=]() {
+        if (m_isCANeededShowBtn->isChecked()) {
+            m_CAComboBox->setDisabled(true);
+            if (m_wifiConfig) {
+                m_wifiConfig->caCert = nullptr;
+            }
+        } else {
+            m_CAComboBox->setDisabled(false);
+        }
+        checkConnectBtnIsEnabled();
+    });
+
+    connect(m_identityEditor, &QLineEdit::textChanged, this, [=]() {
+        m_wifiConfig->identity = m_identityEditor->text();
+        checkConnectBtnIsEnabled();
+    });
+
+    connect(m_pwd4PrivateKeyPWDEditor, &QLineEdit::textChanged, this, [=]() {
+       checkConnectBtnIsEnabled();
+    });
 }
 
 void WpaWifiDialog::slot_line_edit_changed() {
@@ -421,6 +557,10 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
     //this->mw->is_stop_check_net_state = 1;
     //this->mw->setTrayLoading(true);
     //写/tmp/wpaconfig.ini配置文件
+    if (eapCombox->currentIndex() == EapType::TTLS) {
+        //Todo
+    }
+
     if (has_config) {
         appendWifiUser(nameEditor->text(), userEditor->text());
     } else {
@@ -450,13 +590,26 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
         }
         process->waitForFinished();
         //有网络配置文件，接下来修改网络配置，然后激活连接
-        qDebug()<<"qDebug: 有配置文件，修改配置后激活:"<<"\n"<<
-                  "qDebug: nmcli connection modify '" + nameEditor->text() + "' 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth "
-                  + innerCombox->currentData().toString() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text();
-        QString cmdStr_1 = "nmcli connection modify '" + nameEditor->text() + "' 802-1x.eap " + eapCombox->currentData().toString()+ " 802-1x.phase2-auth "
-                + innerCombox->currentData().toString() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text();
+        QString cmdStr_1;
+
+        if (eapCombox->currentIndex() == EapType::TLS) {
+            qDebug() << "nmcli connection modify '" + m_wifiConfig->connectName + "' 802-1x.eap " + eapCombox->currentData().toString()+ " 802-1x.ca-cert "
+                        + (m_wifiConfig->caCert.isEmpty() ? "''" : m_wifiConfig->caCert) + " 802-1x.identity " + m_wifiConfig->identity + " 802-1x.client-cert " + m_wifiConfig->clientCert
+                        + " 802-1x.private-key " + m_wifiConfig->privateKey + " 802-1x.private-key-password " + m_pwd4PrivateKeyPWDEditor->text();
+            cmdStr_1 = "nmcli connection modify '" + m_wifiConfig->connectName + "' 802-1x.eap " + eapCombox->currentData().toString()+ " 802-1x.ca-cert "
+                    + m_wifiConfig->caCert + " 802-1x.identity " + m_wifiConfig->identity + " 802-1x.client-cert " + m_wifiConfig->clientCert
+                    + " 802-1x.private-key " + m_wifiConfig->privateKey + " 802-1x.private-key-password " + m_pwd4PrivateKeyPWDEditor->text();
+        }
+        if (eapCombox->currentIndex() == EapType::PEAP) {
+            qDebug()<<"qDebug: 有配置文件，修改配置后激活:"<<"\n"<<
+                      "qDebug: nmcli connection modify '" + nameEditor->text() + "' 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth "
+                      + innerCombox->currentData().toString() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text();
+            cmdStr_1 = "nmcli connection modify '" + nameEditor->text() + "' 802-1x.eap " + eapCombox->currentData().toString()+ " 802-1x.phase2-auth "
+                    + innerCombox->currentData().toString() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text();
+        }
+
         Utils::m_system(cmdStr_1.toUtf8().data());
-        if (askPwdBtn->isChecked()) setPwdFlag(2);
+        if (askPwdBtn->isChecked() && eapCombox->currentIndex() == EapType::PEAP) setPwdFlag(2);
         else setPwdFlag(0);
         //激活连接
         activateConnection();
@@ -466,11 +619,6 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
         //获取网卡名称
         KylinDBus mkylindbus;
         QString wifi_card_name= mkylindbus.dbusWiFiCardName;
-        if (wifi_card_name.isEmpty()) {
-            QString notifyTxt(tr("Wireless card not exist"));
-            mkylindbus.showDesktopNotify(notifyTxt);
-            return;
-        }
         qDebug()<<"qDebug: 无配置文件，使用如下配置新建配置文件:"<<"\n"<<
                   "qDebug: con-name & ssid: "<<nameEditor->text()<<"\n"<<
                   "qDebug: wifi card name(ifname): "<<wifi_card_name<<"\n"<<
@@ -479,18 +627,32 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
                   "qDebug: 802-1x.identity: "<<userEditor->text()<<"\n"<<
                   "qDebug: 802-1x.password: "<<pwdEditor->text();
         QString create_cmd;
-        create_cmd = "nmcli connection add con-name '" + nameEditor->text() + "' ifname "
-                     + wifi_card_name + " ipv4.method auto type wifi ssid " + nameEditor->text()
-                     + " 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth "
-                     + innerCombox->currentData().toString() + " 802-1x.identity "
-                     + userEditor->text() + " 802-1x.password " + pwdEditor->text() +
-                     " wifi-sec.key-mgmt wpa-eap autoconnect no";
+        if (eapCombox->currentIndex() == EapType::TLS) {
+            create_cmd = "nmcli connection add con-name '" + nameEditor->text() + "' ifname "
+                    + wifi_card_name + " ipv4.method auto type wifi ssid " + nameEditor->text()
+                    + " 802-1x.eap " + eapCombox->currentData().toString()+ " 802-1x.ca-cert "
+                    + (m_wifiConfig->caCert.isEmpty() ? "''" : m_wifiConfig->caCert) + " 802-1x.identity " + m_wifiConfig->identity
+                    + " 802-1x.client-cert " + m_wifiConfig->clientCert
+                    + " 802-1x.private-key " + m_wifiConfig->privateKey
+                    + " 802-1x.private-key-password " + m_pwd4PrivateKeyPWDEditor->text() +
+                    " wifi-sec.key-mgmt wpa-eap autoconnect yes";
+            qDebug() << create_cmd;
+        }
+
+        if (eapCombox->currentIndex() == EapType::PEAP) {
+            create_cmd = "nmcli connection add con-name '" + nameEditor->text() + "' ifname "
+                    + wifi_card_name + " ipv4.method auto type wifi ssid " + nameEditor->text()
+                    + " 802-1x.eap " + eapCombox->currentData().toString() + " 802-1x.phase2-auth "
+                    + innerCombox->currentData().toString() + " 802-1x.identity "
+                    + userEditor->text() + " 802-1x.password " + pwdEditor->text() +
+                    " wifi-sec.key-mgmt wpa-eap autoconnect no";
+        }
 //        qDebug() << create_cmd;
         int res = Utils::m_system(create_cmd.toUtf8().data());
         if (res == 0) {
             syslog(LOG_DEBUG, "In function slot_on_connectBtn_clicked, created a wifi config named %s", nameEditor->text());
             qDebug() << "qDebug: created a wifi config successfully";
-            if (askPwdBtn->isChecked()) setPwdFlag(2);
+            if (askPwdBtn->isChecked() && eapCombox->currentIndex() == EapType::PEAP) setPwdFlag(2);
             else setPwdFlag(0);
             //创建成功，激活连接
             activateConnection();
@@ -513,6 +675,15 @@ void WpaWifiDialog::setEditorEnable(bool is_checking) {
     askPwdlabel->setEnabled(is_checking);
     cancelBtn->setEnabled(is_checking);
     connectBtn->setEnabled(is_checking);
+
+    m_identityEditor->setEnabled(is_checking);
+    m_anonymousIdentityEditor->setEnabled(is_checking);
+    m_domainEditor->setEnabled(is_checking);
+    m_CAComboBox->setEnabled(is_checking);
+    m_isCANeededShowBtn->setEnabled(is_checking);
+    m_UserCertificateComboBox->setEnabled(is_checking);
+    m_UserPrivateKeyComboBox->setEnabled(is_checking);
+    m_pwd4PrivateKeyPWDEditor->setEnabled(is_checking);
 }
 
 void WpaWifiDialog::activateConnection() {
@@ -679,16 +850,273 @@ void WpaWifiDialog::paintEvent(QPaintEvent *event)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 
     QRect rect = this->rect();
-    rect.adjust(1, 1, -1, -1);
     p.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     p.setBrush(opt.palette.color(QPalette::Base));
     p.setOpacity(trans);
     p.setPen(Qt::NoPen);
     p.drawRoundedRect(rect, 6, 6);
     QWidget::paintEvent(event);
+}
 
-    QPainterPath path;
-    path.addRoundedRect(rect, 6, 6);
-    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+void WpaWifiDialog::eapTypeChange()
+{
+    deleteAllItemOfLayout(mainLyt);
+    mainLyt->addWidget(titleFrame);
+    mainLyt->addWidget(nameFrame);
+    mainLyt->addWidget(securityFrame);
+    mainLyt->addWidget(hLine);
+    mainLyt->addWidget(eapFrame);
+
+    // << "TLS" << "LEAP" << "PWD" << "FAST" << "TTLS" << "PEAP";
+    switch (eapCombox->currentIndex()) {
+    case EapType::TLS:
+        mainLyt->addWidget(m_identityFrame);
+        mainLyt->addWidget(m_domainFrame);
+        mainLyt->addWidget(m_CAFrame);
+        mainLyt->addWidget(m_isCANeededFrame);
+        mainLyt->addWidget(m_UserCertificateFrame);
+        mainLyt->addWidget(m_UserPrivateKeyFrame);
+        mainLyt->addWidget(m_pwd4PrivateKeyPWDFrame);
+        break;
+    case EapType::LEAP:
+        // Todo
+        break;
+    case EapType::PWD:
+        // Todo
+        break;
+    case EapType::FAST:
+        // Todo
+        break;
+    case EapType::TTLS:
+        // Todo
+        /*
+        mainLyt->addWidget(m_anonymousIdentityFrame);
+        mainLyt->addWidget(m_domainFrame);
+        mainLyt->addWidget(m_CAFrame);
+        mainLyt->addWidget(m_isCANeededFrame);
+        mainLyt->addWidget(innerFrame);
+        mainLyt->addWidget(userFrame);
+        mainLyt->addWidget(pwdFrame);
+        */
+        break;
+    case EapType::PEAP:
+        // 需要抽离的
+        mainLyt->addWidget(innerFrame);
+        mainLyt->addWidget(userFrame);
+        mainLyt->addWidget(pwdFrame);
+        break;
+    default: // TLS
+        mainLyt->addWidget(m_identityFrame);
+        mainLyt->addWidget(m_domainFrame);
+        mainLyt->addWidget(m_CAFrame);
+        mainLyt->addWidget(m_UserCertificateFrame);
+        mainLyt->addWidget(m_UserPrivateKeyFrame);
+        mainLyt->addWidget(m_pwd4PrivateKeyPWDFrame);
+        break;
+    }
+
+    mainLyt->addWidget(pwdShowFrame);
+    mainLyt->addWidget(buttonFrame);
+    repaint();
+}
+
+void WpaWifiDialog::initCAConfigUI()
+{
+    /*身份 identity*/
+    m_identityFrame  = new QFrame(nullptr);
+    m_identityLyt    = new QHBoxLayout(m_identityFrame);
+    m_identityLabel  = new QLabel(m_identityFrame);
+    m_identityEditor = new QLineEdit(m_identityFrame);
+
+    m_identityLabel->setText(tr("Identity"));
+    m_identityLyt->addWidget(m_identityLabel);
+    m_identityLyt->setContentsMargins(24, 0, 24, 0);
+    m_identityLyt->addWidget(m_identityEditor);
+    m_identityFrame->setFixedHeight(48);
+    m_identityLabel->setFixedWidth(100);
+    m_identityEditor->setFixedHeight(ITEAM_FIXED_HEIGHT);
+    m_identityFrame->setLayout(m_identityLyt);
+    m_frameList.append(m_identityFrame);
+
+    /*匿名身份 anonymous identity*/
+    m_anonymousIdentityFrame  = new QFrame(nullptr);
+    m_anonymousIdentityLyt    = new QHBoxLayout(m_anonymousIdentityFrame);
+    m_anonymousIdentityLabel  = new QLabel(m_anonymousIdentityFrame);
+    m_anonymousIdentityEditor = new QLineEdit(m_anonymousIdentityFrame);
+
+    m_anonymousIdentityLabel->setText(tr("Anonymous Identity"));
+    m_anonymousIdentityLabel->setFixedWidth(100);
+    m_anonymousIdentityLyt->setContentsMargins(24, 0, 24, 0);
+    m_anonymousIdentityLyt->addWidget(m_anonymousIdentityLabel);
+    m_anonymousIdentityLyt->addWidget(m_anonymousIdentityEditor);
+    m_anonymousIdentityFrame->setFixedHeight(48);
+    m_anonymousIdentityEditor->setFixedHeight(ITEAM_FIXED_HEIGHT);
+    m_anonymousIdentityFrame->setLayout(m_anonymousIdentityLyt);
+    m_frameList.append(m_anonymousIdentityFrame);
+
+    /*域 domain*/
+    m_domainFrame  = new QFrame(nullptr);
+    m_domainLyt    = new QHBoxLayout(m_domainFrame);
+    m_domainLabel  = new QLabel(m_domainFrame);
+    m_domainEditor = new QLineEdit(m_domainFrame);
+
+    m_domainLabel->setText(tr("Domain"));
+    m_domainLabel->setFixedWidth(100);
+    m_domainLyt->setContentsMargins(24, 0, 24, 0);
+    m_domainLyt->addWidget(m_domainLabel);
+    m_domainLyt->addWidget(m_domainEditor);
+    m_domainFrame->setFixedHeight(48);
+    m_domainEditor->setFixedHeight(ITEAM_FIXED_HEIGHT);
+    m_domainFrame->setLayout(m_anonymousIdentityLyt);
+    m_frameList.append(m_domainFrame);
+
+    /*CA证书 certificate*/
+    m_CAFrame    = new QFrame(nullptr);
+    m_CALyt      = new QHBoxLayout(m_CAFrame);
+    m_CALabel    = new QLabel(m_CAFrame);
+    m_CAComboBox = new QComboBox(m_CAFrame);
+
+    m_CALabel->setText(tr("CA certificate"));
+    m_CALabel->setFixedWidth(100);
+    m_CALyt->setContentsMargins(24, 0, 24, 0);
+    m_CALyt->addWidget(m_CALabel);
+    m_CALyt->addWidget(m_CAComboBox);// 默认为(无)、QFileDialog
+    m_CAFrame->setFixedHeight(48);
+    m_CAComboBox->setFixedHeight(ITEAM_FIXED_HEIGHT);
+    m_CAFrame->setLayout(m_CALyt);
+    m_frameList.append(m_CAFrame);
+
+    /*不需要CA证书?  no need for CA certificate*/
+    m_isCANeededFrame     = new QFrame(nullptr);
+    m_isCANeededShowLyt   = new QHBoxLayout(m_isCANeededFrame);
+    m_isCANeededShowBtn   = new QCheckBox(m_isCANeededFrame);
+    m_isCANeededShowLabel = new QLabel(m_isCANeededFrame);
+
+    m_isCANeededShowLabel->setText(tr("no need for CA certificate"));
+    m_isCANeededShowLabel->setFixedWidth(200);
+    m_isCANeededShowLyt->setContentsMargins(24, 0, 24, 0);
+    m_isCANeededShowLyt->addWidget(m_isCANeededShowBtn);
+    m_isCANeededShowLyt->addWidget(m_isCANeededShowLabel);// tr("no need for CA certificate")
+    m_isCANeededShowBtn->setFixedSize(16, 16);
+    m_isCANeededShowBtn->setStyleSheet("background-color:rgb(61,61,65);");
+    m_isCANeededFrame->setFixedHeight(24);
+    m_isCANeededFrame->setLayout(m_isCANeededShowLyt);
+    m_frameList.append(m_isCANeededFrame);
+}
+
+void WpaWifiDialog::initUserConfig4TLSUI()
+{
+    /*用户证书 user certificate*/
+    m_UserCertificateFrame    = new QFrame(nullptr);
+    m_UserCertificateLyt      = new QHBoxLayout(m_UserCertificateFrame);
+    m_UserCertificateLabel    = new QLabel(m_UserCertificateFrame);
+    m_UserCertificateComboBox = new QComboBox(m_UserCertificateFrame);// 默认为(无)、QFileDialog
+
+    m_UserCertificateLabel->setText(tr("User Certificate"));
+    m_UserCertificateLabel->setFixedWidth(100);
+    m_UserCertificateLyt->addWidget(m_UserCertificateLabel);
+    m_UserCertificateLyt->addWidget(m_UserCertificateComboBox);// 默认为(无)、QFileDialog
+    m_UserCertificateLyt->setContentsMargins(24, 0, 24, 0);
+    m_UserCertificateFrame->setFixedHeight(48);
+    m_UserCertificateFrame->setLayout(m_UserCertificateLyt);
+    m_UserCertificateComboBox->setFixedHeight(ITEAM_FIXED_HEIGHT);
+
+    /*用户私钥 user private key*/
+    m_UserPrivateKeyFrame    = new QFrame(nullptr);
+    m_UserPrivateKeyLyt      = new QHBoxLayout(m_UserPrivateKeyFrame);
+    m_UserPrivateKeyLabel    = new QLabel(m_UserPrivateKeyFrame);
+    m_UserPrivateKeyComboBox = new QComboBox(m_UserPrivateKeyFrame);// 默认为(无)、QFileDialog
+
+    m_UserPrivateKeyLabel->setText(tr("User Private Key"));
+    m_UserPrivateKeyLabel->setFixedWidth(100);
+    m_UserPrivateKeyComboBox->setFixedHeight(ITEAM_FIXED_HEIGHT);
+    m_UserPrivateKeyLyt->addWidget(m_UserPrivateKeyLabel);
+    m_UserPrivateKeyLyt->addWidget(m_UserPrivateKeyComboBox);// 默认为(无)、QFileDialog
+    m_UserPrivateKeyLyt->setContentsMargins(24, 0, 24, 0);
+    m_UserPrivateKeyFrame->setFixedHeight(48);
+    m_UserPrivateKeyFrame->setLayout(m_UserPrivateKeyLyt);
+
+    /*私钥密码 password for private key*/
+    m_pwd4PrivateKeyPWDFrame  = new QFrame(nullptr);
+    m_pwd4PrivateKeyPWDLyt    = new QHBoxLayout(m_pwd4PrivateKeyPWDFrame);
+    m_pwd4PrivateKeyPWDLabel  = new QLabel(m_pwd4PrivateKeyPWDFrame);
+    m_pwd4PrivateKeyPWDEditor = new QLineEdit(m_pwd4PrivateKeyPWDFrame);
+
+    m_pwd4PrivateKeyPWDLabel->setText(tr("User Private Key password"));
+    m_pwd4PrivateKeyPWDLabel->setFixedWidth(100);
+    m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Password);
+    m_pwd4PrivateKeyPWDEditor->setFixedHeight(ITEAM_FIXED_HEIGHT);
+    m_pwd4PrivateKeyPWDLyt->addWidget(m_pwd4PrivateKeyPWDLabel);
+    m_pwd4PrivateKeyPWDLyt->addWidget(m_pwd4PrivateKeyPWDEditor);
+    m_pwd4PrivateKeyPWDLyt->setContentsMargins(24, 0, 24, 0);
+    m_pwd4PrivateKeyPWDFrame->setFixedHeight(48);
+    m_pwd4PrivateKeyPWDFrame->setLayout(m_pwd4PrivateKeyPWDLyt);
+}
+
+/**
+ * @brief WpaWifiDialog::deleteAllItemOfLayout
+ * @param layout
+ * 清空布局中的所有控件
+ */
+void WpaWifiDialog::deleteAllItemOfLayout(QLayout *layout)
+{
+    qDebug() << "WpaWifiDialog::deleteAllItemOfLayout";
+    QLayoutItem *child;
+    while ((child = layout->takeAt(0)) != nullptr) {
+        if (child->widget()) {
+            child->widget()->setParent(nullptr);
+        } else if (child->layout()) {
+            deleteAllItemOfLayout(child->layout());
+        }
+        delete child;
+    }
+}
+
+void WpaWifiDialog::checkConnectBtnIsEnabled()
+{
+    // << "TLS" << "LEAP" << "PWD" << "FAST" << "TTLS" << "PEAP";
+    if(m_wifiConfig == nullptr || m_wifiConfig->connectName.isEmpty()) {
+        qWarning() << "WpaWifiDialog::checkConnectBtnIsEnabled no wifi config";
+        return;
+    }
+
+    switch (eapCombox->currentIndex()) {
+    case EapType::TLS:
+        if (m_wifiConfig->identity.isEmpty() || (m_wifiConfig->caCert.isEmpty() && !m_isCANeededShowBtn->isChecked()) || m_wifiConfig->clientCert.isEmpty()
+                || m_wifiConfig->privateKey.isEmpty() || (m_pwd4PrivateKeyPWDEditor->text().length() <= 0)) {
+            connectBtn->setEnabled(false);
+        } else {
+            connectBtn->setEnabled(true);
+        }
+        break;
+    case EapType::LEAP:
+        // Todo
+        break;
+    case EapType::PWD:
+        // Todo
+        break;
+    case EapType::FAST:
+        // Todo
+        break;
+    case EapType::TTLS:
+        if (m_wifiConfig->anonymousIdentity.isEmpty() || (m_wifiConfig->caCert.isEmpty() && !m_isCANeededShowBtn->isChecked())
+                || pwdEditor->text().length() <= 0 || userEditor->text().length() <= 0) {
+            connectBtn->setEnabled(false);
+        } else {
+            connectBtn->setEnabled(true);
+        }
+        break;
+    case EapType::PEAP:
+        if (pwdEditor->text().length() >= 1 && userEditor->text().length() >= 1) {
+            connectBtn->setEnabled(true);
+        } else {
+            connectBtn->setEnabled(false);
+        }
+        break;
+    default:
+        connectBtn->setEnabled(false);
+        break;
+    }
+
+    return;
 }

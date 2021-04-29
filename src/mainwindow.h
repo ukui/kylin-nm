@@ -369,8 +369,8 @@ private slots:
     void on_btnAdvConf_clicked();
 
     void activeLanDisconn();
-    void activeWifiDisconn();
-    void activeStartLoading();
+    void handleWifiDisconn();
+    void handleWifiDisconnLoading();
     void onRequestScanAccesspoint();
     void toScanWifi(bool isShow);
     void on_setNetSpeed();

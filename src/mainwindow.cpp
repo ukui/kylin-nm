@@ -2295,7 +2295,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                     ccf->setSignal(QString::number(signalLv), wsecu);
                 });
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
-                connect(ccf, SIGNAL(disconnActiveWifi()), this, SLOT(activeWifiDisconn()));
+                connect(ccf, SIGNAL(requestHandleWifiDisconn()), this, SLOT(handleWifiDisconn()));
                 QString path = line.mid(indexPath).trimmed();
                 QString m_name;
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
@@ -3078,23 +3078,23 @@ void MainWindow::activeLanDisconn()
     this->ksnm->execGetLanList();
 }
 
-void MainWindow::activeWifiDisconn()
+void MainWindow::handleWifiDisconn()
 {
     hasWifiConnected = false;
     currSelNetName = "";
     this->ksnm->execGetWifiList(this->wcardname);
     QtConcurrent::run([=]() {
-        activeStartLoading();
+        handleWifiDisconnLoading();
     });
 }
-void MainWindow::activeStartLoading()
+void MainWindow::handleWifiDisconnLoading()
 {
     syslog(LOG_DEBUG, "Wi-Fi is disconnected");
     QString txt(tr("Wi-Fi is disconnected"));
     objKyDBus->showDesktopNotify(txt);
 
-    setTrayLoading(false);
-    getActiveInfoAndSetTrayIcon();
+    //setTrayLoading(false);
+    //getActiveInfoAndSetTrayIcon();
 }
 
 //网络开关处理，打开与关闭网络

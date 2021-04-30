@@ -933,7 +933,7 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
     // 设置图标
     if (actLanName != "--") {
         QList<QString> lanstate = objKyDBus->getAtiveLanSsidUuidState();
-        qDebug() << Q_FUNC_INFO << lanstate;
+        //qDebug() << Q_FUNC_INFO << lanstate;
         if (lanstate[2] == "connected") {
             setTrayIcon(iconLanOnline);
         }
@@ -3267,15 +3267,6 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
     isReconnectingWifi = false;
 
     if ( (type == "802-11-wireless" || type == "wifi") && !isConnUp ){
-        //如果是手动点击断开连接，因为还在处理中，所以is_stop_check_net_state的值为true,
-        //这样对于点击手动断开连接后立马发出的断开连接信号，便不会做处理
-//        if (!is_stop_check_net_state) {
-//            if (canReconnectWifiList.size() >= 1) {
-//                int removePos = canReconnectWifiList.size() - 1;
-//                //从列表中移除最后一个wifi，因为可能有外界因素导致wifi断开连接
-//                canReconnectWifiList.removeAt(removePos);
-//            }
-//        }
         QTimer::singleShot(2*1000, this, SLOT(onToResetValue() ));
     }
     if (type == "802-11-wireless" || type == "wifi") {
@@ -3294,7 +3285,7 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
             is_wifi_reconnected = 0;
             is_stop_check_net_state = 0;
         }else {
-            QTimer::singleShot(1*1000, this, SLOT(onExternalWifiChange() ));
+            QTimer::singleShot(2*1000, this, SLOT(onExternalWifiChange() ));
         }
         addNumberForWifi = 0;
         return;

@@ -1712,7 +1712,7 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 void KylinDBus::onAutoConnect()
 {
     syslog(LOG_DEBUG, "Receive a auto-connect signal to reconnect wifi");
-    qDebug() << "Receive a auto-connect signal to reconnect wifi";
+    qDebug() << Q_FUNC_INFO << "Receive a auto-connect signal to reconnect wifi";
     mw->toReconnectWifi();
 }
 

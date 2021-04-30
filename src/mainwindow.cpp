@@ -618,18 +618,18 @@ void MainWindow::createTrayIcon()
     iconWifiMedium = QIcon::fromTheme("network-wireless-signal-ok");
     iconWifiLow = QIcon::fromTheme("network-wireless-signal-low");
 
-    loadIcons.append(QIcon::fromTheme("kylin-network-1"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-2"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-3"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-4"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-5"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-6"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-7"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-8"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-9"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-10"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-11"));
     loadIcons.append(QIcon::fromTheme("kylin-network-12"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-11"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-10"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-9"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-8"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-7"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-6"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-5"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-4"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-3"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-2"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-1"));
 
     iconTimer = new QTimer(this);
     connect(iconTimer, SIGNAL(timeout()), this, SLOT(iconStep()));

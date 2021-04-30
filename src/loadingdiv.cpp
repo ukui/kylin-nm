@@ -50,10 +50,10 @@ void LoadingDiv::switchAnimStep()
     loadingGif->setProperty("useIconHighlightEffect", true);
     loadingGif->setProperty("iconHighlightEffectMode", true);
 
-    this->currentPage --;
+    this->currentPage ++;
 
-    if (this->currentPage < 1) {
-        this->currentPage = 12; //循环播放
+    if (this->currentPage > 12) {
+        this->currentPage = 1; //循环播放
     }
     this->countCurrentTime += FRAMESPEED;
     if (this->countCurrentTime >= ALLTIME) {
@@ -64,7 +64,7 @@ void LoadingDiv::switchAnimStep()
 //开始播放动画
 void LoadingDiv::startLoading()
 {
-    this->currentPage = 12;
+    this->currentPage = 1;
     this->countCurrentTime = 0;
     this->switchTimer->start(FRAMESPEED);
     this->show();

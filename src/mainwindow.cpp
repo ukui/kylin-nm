@@ -1333,7 +1333,7 @@ void MainWindow::on_btnWifiList_clicked()
 
     lbNoItemTip->hide();
 
-    ui->lbNetwork->setText("Wifi");
+    ui->lbNetwork->setText("Wi-Fi");
     btnWireless->show();
 
     if (iface->wstate == 0 || iface->wstate == 1) {

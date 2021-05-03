@@ -23,6 +23,13 @@ WiFiConfigDialog::WiFiConfigDialog(QWidget *parent) :
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")) );
 
+    QPainterPath path;
+    auto rect = this->rect();
+    rect.adjust(1, 1, -1, -1);
+    path.addRoundedRect(rect, 6, 6);
+    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+
     ui->lbTitle->setText(tr("Input Wi-Fi Information Please")); //输入Wi-Fi名称和密码后点击确定
     ui->lbWifiId->setText(tr("Wi-Fi ID：")); //Wi-Fi连接名称：
     ui->lbWifiName->setText(tr("Wi-Fi Name：")); //Wi-Fi名称：
@@ -61,18 +68,12 @@ void WiFiConfigDialog::paintEvent(QPaintEvent *event)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 
     QRect rect = this->rect();
-    rect.adjust(1, 1, -1, -1);
     p.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     p.setBrush(opt.palette.color(QPalette::Base));
     p.setOpacity(trans);
     p.setPen(Qt::NoPen);
     p.drawRoundedRect(rect, 6, 6);
     QWidget::paintEvent(event);
-
-    QPainterPath path;
-    path.addRoundedRect(rect, 6, 6);
-    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
 //创建获取窗口透明度信息的GSetting的对象

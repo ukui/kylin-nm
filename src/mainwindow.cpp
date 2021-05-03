@@ -64,6 +64,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     UseQssFile::setStyle("style.qss");
 
+    QPainterPath path;
+    auto rect = this->rect();
+    rect.adjust(1, 1, -1, -1);
+    path.addRoundedRect(rect, 6, 6);
+    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
+    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+
     editQssString(); //编辑部分控件QSS
     createTopLanUI(); //创建顶部有线网item
     createTopWifiUI(); //创建顶部无线网item
@@ -120,7 +127,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->btnNetList->installEventFilter(this);
     ui->btnWifiList->setAttribute(Qt::WA_Hover,true);
     ui->btnWifiList->installEventFilter(this);
-
     hasWifiConnected = false;
     numberForWifiScan = 0;
 
@@ -3711,18 +3717,12 @@ void MainWindow::paintEvent(QPaintEvent *event)
     opt.init(this);
     QPainter p(this);
     QRect rect = this->rect();
-    rect.adjust(1, 1, -1, -1);
     p.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     p.setBrush(opt.palette.color(QPalette::Base));
     p.setOpacity(trans);
     p.setPen(Qt::NoPen);
     p.drawRoundedRect(rect, 6, 6);
     QWidget::paintEvent(event);
-
-    QPainterPath path;
-    path.addRoundedRect(rect, 6, 6);
-    setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
 bool MainWindow::event(QEvent *event)

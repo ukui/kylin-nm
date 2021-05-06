@@ -97,6 +97,7 @@ private:
     bool isCreateNewNet = false; //是否是创建的新网络
     bool isShowSaveBtn = true; //是否显示保存按钮，即是否是编辑网络界面
     QString lastConnName, lastIpv4, netUuid, newUuid, lastIpv6;
+    int lastTypeIndex;
     bool isActWifi; //是否是wifi网络
     bool canCheckIpConflict = true; //当前是否可以执行IP冲突的检测
     bool isIpv6Conflict = false; //ipv6地址是否冲突

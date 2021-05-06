@@ -173,8 +173,9 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
     lastConnName = connName;
     lastIpv4 = v4addr;
     lastIpv6 = v6addr;
+    lastTypeIndex = ui->cbType->currentIndex();
     netUuid = uuidName;
-    qDebug() << Q_FUNC_INFO << __LINE__ << connName << uuidName;
+    //qDebug() << Q_FUNC_INFO << __LINE__ << connName << uuidName;
 
     isActWifi = false;
     if (isWiFi) {
@@ -402,7 +403,6 @@ void ConfForm::on_btnSave_clicked()
                 }
             }
 
-            qDebug() << Q_FUNC_INFO;
             this->saveNetworkConfiguration();
         }
     }
@@ -440,6 +440,11 @@ void ConfForm::saveNetworkConfiguration()
         //kylin_network_set_automethod(name.toUtf8().data());
         kylin_network_set_automethod(netUuid.toUtf8().data());
         kylin_network_set_ipv6_automethod(netUuid.toUtf8().data());
+        if (this->isActConf && lastTypeIndex == 1 && ui->cbType->currentIndex() == 0) {
+            //对于已经连接的网络，若由手动改为自动，则进行重连以保证配置生效
+            KylinDBus kylindbus;
+            kylindbus.reConnectWiredNet(netUuid.toUtf8().data());
+        }
     }
     else {
         if (newUuid != "--" && newUuid != "" && !newUuid.isEmpty()) {

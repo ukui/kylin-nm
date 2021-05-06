@@ -1606,7 +1606,7 @@ void MainWindow::getLanListDone(QStringList slist)
                         } else {
                             ccfAct->setLine(false); //最后一个item不显示下划线
                         }
-\
+
                         if (!objKyDBus->dbusLanIpv4.isEmpty()) {
                             if (!objKyDBus->dbusActiveLanIpv4.isEmpty() && objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
 //                                qDebug() << Q_FUNC_INFO << __LINE__ << objKyDBus->dbusActiveLanIpv4 << objKyDBus->dbusLanIpv4;

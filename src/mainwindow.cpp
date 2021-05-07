@@ -2298,7 +2298,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
             if(actWifiBssid == wbssid && wifiActState == 2){
                 //对于已经连接的wifi
                 connect(this, &MainWindow::actWifiSignalLvChanaged, ccf, [ = ](const int &signalLv) {
-                    ccf->setSignal(QString::number(signalLv), wsecu);
+                    ccf->setSignal(QString::number(signalLv), wsecu, wcate);
                 });
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(requestHandleWifiDisconn()), this, SLOT(handleWifiDisconn()));
@@ -2325,7 +2325,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
                 //ccf->setRate(wrate);
                 int signal = wsignal.toInt() + 11;
-                ccf->setSignal(QString::number(signal), wsecu);
+                ccf->setSignal(QString::number(signal), wsecu, wcate);
                 setTrayIconOfWifi(wsignal.toInt());
                 activeWifiSignalLv = wsignal.toInt();
                 //objKyDBus->getWifiMac(wname);

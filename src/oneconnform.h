@@ -124,13 +124,15 @@ private slots:
 
     void on_btnHideConn_clicked();
 
-    void on_checkBoxPwd_stateChanged(int arg1);
-
     void on_lePassword_textEdited(const QString &arg1);
 
     void on_btnInfo_clicked();
 
     void on_btnCancel_clicked();
+
+    void on_checkBoxPwd_pressed();
+
+    void on_checkBoxPwd_released();
 
 private:
     QTimer *waitTimer = nullptr;

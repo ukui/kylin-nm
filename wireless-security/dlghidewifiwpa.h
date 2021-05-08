@@ -54,13 +54,15 @@ private slots:
 
     void on_btnConnect_clicked();
 
-    void on_checkBoxPwd_stateChanged(int arg1);
-
     void on_leNetName_textEdited(const QString &arg1);
 
     void on_lePassword_textEdited(const QString &arg1);
 
 //    void finishedProcess(int res);
+
+    void on_checkBoxPwd_pressed();
+
+    void on_checkBoxPwd_released();
 
 signals:
     void reSetWifiList();

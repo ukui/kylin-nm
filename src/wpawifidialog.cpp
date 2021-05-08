@@ -504,14 +504,15 @@ void WpaWifiDialog::initConnect() {
     //连接按钮
     connect(connectBtn, &QPushButton::clicked, this, &WpaWifiDialog::slot_on_connectBtn_clicked);
     //显示密码
-    connect(pwdShowBtn, &QCheckBox::clicked, this, [ = ]() {
-        if (pwdShowBtn->isChecked()) {
-            pwdEditor->setEchoMode(QLineEdit::Normal);
-            m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Normal);
-        } else {
-            pwdEditor->setEchoMode(QLineEdit::Password);
-            m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Password);
-        }
+    connect(pwdShowBtn, &QCheckBox::pressed, this, [ = ]() {
+        pwdShowBtn->setChecked(true);
+        pwdEditor->setEchoMode(QLineEdit::Normal);
+        m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Normal);
+    });
+    connect(pwdShowBtn, &QCheckBox::released, this, [ = ]() {
+        pwdShowBtn->setChecked(false);
+        pwdEditor->setEchoMode(QLineEdit::Password);
+        m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Password);
     });
     connect(pwdEditor, &QLineEdit::textChanged, this, &WpaWifiDialog::slot_line_edit_changed);
     connect(userEditor, &QLineEdit::textChanged, this, &WpaWifiDialog::slot_line_edit_changed);

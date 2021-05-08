@@ -148,13 +148,17 @@ void WiFiConfigDialog::toConfigWifi()
     }
 }
 
-void WiFiConfigDialog::on_checkBoxPwd_stateChanged(int arg1)
+//切换密码明文
+void WiFiConfigDialog::on_checkBoxPwd_pressed()
 {
-    if (arg1 == 0) {
-        ui->leWifiPassword ->setEchoMode(QLineEdit::Password);
-    } else {
-        ui->leWifiPassword->setEchoMode(QLineEdit::Normal);
-    }
+    ui->checkBoxPwd->setChecked(true);
+    ui->leWifiPassword->setEchoMode(QLineEdit::Normal);
+}
+
+void WiFiConfigDialog::on_checkBoxPwd_released()
+{
+    ui->checkBoxPwd->setChecked(false);
+    ui->leWifiPassword ->setEchoMode(QLineEdit::Password);
 }
 
 void WiFiConfigDialog::on_leWifiId_textEdited(const QString &arg1)

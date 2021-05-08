@@ -52,6 +52,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lbConned->setAlignment(Qt::AlignLeft);
     ui->lePassword->setEchoMode(QLineEdit::Normal);
     ui->lePassword->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->lePassword->setTextMargins(0,0,24,0);
     ui->btnConnPWD->setEnabled(false);
 
     leQssLow = "QLineEdit{border:none;background:transparent;font-size:14px;}";

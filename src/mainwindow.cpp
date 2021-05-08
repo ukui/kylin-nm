@@ -694,7 +694,6 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
                 onBtnNetListClicked(0);
             }
 
-            qDebug() << "00000000000000000   " <<is_connect_hide_wifi;
             if (!is_init_wifi_list && !is_connect_hide_wifi && is_stop_check_net_state==0) {
                 is_stop_check_net_state = 1;
                 if (is_btnWifiList_clicked == 1) {
@@ -1381,7 +1380,7 @@ void MainWindow::on_btnWifiList_clicked()
 
         // 当前连接的wifi
         OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
-        ccf->setName(tr("Not connected"), "--", "--", "--");//"当前未连接任何 Wifi"
+        ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC);//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--");
         ccf->setRate("0");
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
@@ -1491,7 +1490,7 @@ void MainWindow::getLanListDone(QStringList slist)
     // 若当前没有任何一个有线网连接，设置有线列表顶部的item状态为未连接
     if (!hasCurrentLanConnected) {
         OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
-        ccf->setName(tr("Not connected"), tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
+        ccf->setLanName(tr("Not connected"), tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
         ccf->setIcon(false);
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
         ccf->isConnected = false;
@@ -1579,7 +1578,7 @@ void MainWindow::getLanListDone(QStringList slist)
                         OneLancForm *ccfAct = new OneLancForm(topLanListWidget, this, confForm, ksnm);
                         connect(ccfAct, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneTopLanFormSelected(QString, QString)));
                         connect(ccfAct, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
-                        ccfAct->setName(nname, ltype, nuuid, mIfName);//第二个参数本来是strLanName，但目前不需要翻译
+                        ccfAct->setLanName(nname, ltype, nuuid, mIfName);//第二个参数本来是strLanName，但目前不需要翻译
                         ccfAct->setIcon(true);
                         ccfAct->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macInterface);
                         ccfAct->isConnected = true;
@@ -1644,7 +1643,7 @@ void MainWindow::getLanListDone(QStringList slist)
 
                 OneLancForm *ocf = new OneLancForm(lanListWidget, this, confForm, ksnm);
                 connect(ocf, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneLanFormSelected(QString, QString)));
-                ocf->setName(nname, ltype, nuuid, mIfName);
+                ocf->setLanName(nname, ltype, nuuid, mIfName);
                 ocf->setIcon(true);
                 ocf->setLine(true);
                 ocf->setLanInfo(objKyDBus->dbusLanIpv4, objKyDBus->dbusLanIpv6, tr("Disconnected"), macInterface);
@@ -2148,7 +2147,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     // 根据当前连接的wifi 设置OneConnForm
     OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
     if (actWifiName == "--" || wifiActState == 1 || actWifiBssidList.at(0) == "--") {
-        ccf->setName(tr("Not connected"), "--", "--", "--");//"当前未连接任何 Wifi"
+        ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC);//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--");
         activeWifiSignalLv = 0;
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
@@ -2310,7 +2309,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 QString m_name;
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
                 if (m_name.isEmpty() || m_name == "") {
-                    ccf->setName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
+                    ccf->setWifiName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
                     if (!canReconnectWifiList.contains(wname)) {
                         canReconnectWifiList.append(wname);
                     } else {
@@ -2318,7 +2317,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                         canReconnectWifiList.append(wname);
                     }
                 } else {
-                    ccf->setName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
+                    ccf->setWifiName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
                     if (!canReconnectWifiList.contains(m_name)) {
                         canReconnectWifiList.append(m_name);
                     } else {
@@ -2359,14 +2358,13 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
                 OneConnForm *ocf = new OneConnForm(wifiListWidget, this, confForm, ksnm);
                 connect(ocf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneWifiFormSelected(QString,int)));
-//                ocf->setName(wname, wbssid, "--");
                 QString path = line.mid(indexPath).trimmed();
                 QString m_name;
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
                 if (m_name.isEmpty() || m_name == "") {
-                    ocf->setName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
+                    ocf->setWifiName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
                 } else {
-                    ocf->setName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
+                    ocf->setWifiName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
                 }
                 //ocf->setRate(wrate);
                 ocf->setLine(true);
@@ -2592,9 +2590,9 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 QString m_name;
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(QString("/org/freedesktop/NetworkManager/AccessPoint/%1").arg(path.mid(path.lastIndexOf("/") + 1)));
                 if (m_name.isEmpty() || m_name == "") {
-                    addItem->setName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
+                    addItem->setWifiName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
                 } else {
-                    addItem->setName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName);
+                    addItem->setWifiName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
                 }
                 //addItem->setRate(wrate);
                 addItem->setLine(false);
@@ -3179,7 +3177,7 @@ void MainWindow::disNetDone()
 
     // 当前连接的lan
     OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
-    ccf->setName(tr("Not connected"), tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
+    ccf->setLanName(tr("Not connected"), tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
     ccf->setIcon(false);
     ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
     ccf->isConnected = false;
@@ -3252,7 +3250,7 @@ void MainWindow::disWifiDoneChangeUI()
         OneConnForm *ocf = wifiList.at(i);
         if (ocf->isActive == true) {
             ocf->setSelected(false, false);
-            ocf->setName(tr("Not connected"), "--", "--", "--");//"当前未连接任何 Wifi"
+            ocf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC);//"当前未连接任何 Wifi"
             ocf->setSignal("0", "--");
             ocf->setConnedString(1, tr("Disconnected"), "");//"未连接"
             ocf->lbFreq->hide();

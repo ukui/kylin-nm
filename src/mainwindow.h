@@ -319,9 +319,10 @@ private:
     QVector<QStringList> repetitionFilter(QVector<QStringList>);
     QStringList priorityList(QStringList);
     QStringList sortApByCategory(QStringList,int);
+    QStringList sortApByFreq(QStringList,int, int);
     void getFinalWifiList(QStringList& slist); //获取应该显示在wifi列表中的最优列表参数
-    QList<structWifiProperty> connectableWifiPriorityList(const QStringList slist); //可连接wifi优先级列表
-    void devListSort(QList<structWifiProperty> *list);
+    QVector<structWifiProperty> connectableWifiPriorityList(const QStringList slist); //可连接wifi优先级列表
+    void devListSort(QVector<structWifiProperty> *list);
     static bool subDevListSort(const structWifiProperty&info1,const structWifiProperty&info2);
     //循环检测网络连接状态
     QTimer *iconTimer = nullptr;

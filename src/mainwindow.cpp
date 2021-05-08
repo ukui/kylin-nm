@@ -1716,9 +1716,8 @@ void MainWindow::getWifiListDone(QStringList slist)
 //            getFinalWifiList(slist);
         }
     }
-
     if (current_wifi_list_state == RECONNECT_WIFI) {
-        QList<structWifiProperty> targetWifiStructList = connectableWifiPriorityList(slist);
+        QVector<structWifiProperty> targetWifiStructList = connectableWifiPriorityList(slist);
         if (!targetWifiStructList.isEmpty()) {
             if (!isReconnectingWifi) {
                 isReconnectingWifi = true; //保证对于连续发出的重连信号，只处理第一个
@@ -1787,6 +1786,66 @@ void MainWindow::getConnListDone(QStringList slist)
         return;
     }
 }
+//QStringList MainWindow::priorityList(QStringList slist){
+//    QStringList ret;
+//    ret.append(slist[0]);
+//    QString headLine = slist.at(0);
+//    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName,indexPath,indexCate;
+//    headLine = headLine.trimmed();
+//    bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+//    if (isChineseExist) {
+//        indexSignal = headLine.indexOf("SIGNAL");
+//        indexSecu = headLine.indexOf("安全性");
+//        indexFreq = headLine.indexOf("频率") + 4;
+//        indexBSsid = headLine.indexOf("BSSID") + 6;
+//        indexName = indexBSsid + 19;
+//        indexPath = headLine.indexOf("DBUS-PATH");
+//        indexCate = headLine.indexOf("CATEGORY");
+//    } else {
+//        indexSignal = headLine.indexOf("SIGNAL");
+//        indexSecu = headLine.indexOf("SECURITY");
+//        indexFreq = headLine.indexOf("FREQ");
+//        indexBSsid = headLine.indexOf("BSSID");
+//        indexName = indexBSsid + 19;
+//        indexPath = headLine.indexOf("DBUS-PATH");
+//        indexCate = headLine.indexOf("CATEGORY");
+//    }
+//    QStringList p1,p2,p3,p4,p5,p6,p7;//按照信号与频段划分为6个列表
+//    for(int i=1;i<slist.size();i++){
+//        QString line = slist.at(i);
+//        int conSignal = line.mid(indexSignal,3).trimmed().toInt();
+//        int conFreq = line.mid(indexFreq,4).trimmed().toInt();
+//        if(conSignal > 75 && conFreq >= 5000){
+//            p1.append(line);
+//            continue;
+//        }else if(conSignal > 55 && conFreq >= 5000){
+//            p2.append(line);
+//            continue;
+//        }else if(conSignal > 75){
+//            p3.append(line);
+//            continue;
+//        }else if(conSignal > 55){
+//            p4.append(line);
+//            continue;
+//        }else if(conSignal > 35){
+//            p5.append(line);
+//            continue;
+//        }else if(conSignal > 15){
+//            p6.append(line);
+//            continue;
+//        }else{
+//            p7.append(line);
+//        }
+//    }
+//    QVector<QStringList> listVec;
+//    listVec<<p1<<p2<<p3<<p4<<p5<<p6<<p7;
+//    for(auto list:listVec){
+//        list = sortApByCategory(list,indexCate);
+//        ret += list;
+//    }
+//    return ret;
+//}
+
 QStringList MainWindow::priorityList(QStringList slist){
     QStringList ret;
     ret.append(slist[0]);
@@ -1811,11 +1870,41 @@ QStringList MainWindow::priorityList(QStringList slist){
         indexPath = headLine.indexOf("DBUS-PATH");
         indexCate = headLine.indexOf("CATEGORY");
     }
-    QStringList p1,p2,p3,p4,p5,p6,p7;//按照信号与频段划分为6个列表
+    QStringList p1,p2,p3;//按照信号与category划分为3个列表
     for(int i=1;i<slist.size();i++){
         QString line = slist.at(i);
         int conSignal = line.mid(indexSignal,3).trimmed().toInt();
-        int conFreq = line.mid(indexFreq,4).trimmed().toInt();
+        int conCate = line.mid(indexCate).trimmed().toInt();
+        if(conSignal > 55 && conCate == 2){
+            p1.append(line);
+            continue;
+        }else if(conSignal > 55 && conCate == 1){
+            p2.append(line);
+            continue;
+        }else{
+            p3.append(line);
+            continue;
+        }
+    }
+    QVector<QStringList> listVec;
+    listVec<<p1<<p2<<p3;
+    for(auto list:listVec){
+        list = sortApByFreq(list,indexFreq, indexSignal);
+        ret += list;
+    }
+    foreach (QString s, ret) {
+        qDebug()<<s;
+    }
+    return ret;
+}
+
+QStringList MainWindow::sortApByFreq(QStringList list, int freqIndex, int signalIndex)
+{
+    QStringList ret;
+    QStringList p1,p2,p3,p4,p5,p6,p7;
+    for(auto line:list){
+        int conSignal = line.mid(signalIndex,3).trimmed().toInt();
+        int conFreq = line.mid(freqIndex,4).trimmed().toInt();
         if(conSignal > 75 && conFreq >= 5000){
             p1.append(line);
             continue;
@@ -1838,14 +1927,10 @@ QStringList MainWindow::priorityList(QStringList slist){
             p7.append(line);
         }
     }
-    QVector<QStringList> listVec;
-    listVec<<p1<<p2<<p3<<p4<<p5<<p6<<p7;
-    for(auto list:listVec){
-        list = sortApByCategory(list,indexCate);
-        ret += list;
-    }
+    ret<<p1<<p2<<p3<<p4<<p5<<p6<<p7;
     return ret;
 }
+
 QVector<QStringList> MainWindow::repetitionFilter(QVector<QStringList>){
     QVector<QStringList> ret;
     return ret;
@@ -1999,8 +2084,8 @@ void MainWindow::getFinalWifiList(QStringList &slist)
 }
 
 //从有配置文件的wifi选出最优wifi进行连接,同时考虑用户手动设置的优先级,这个函数在回连中用到
-QList<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStringList slist){
-    QList<structWifiProperty> selectedWifiListStruct;
+QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStringList slist){
+    QVector<structWifiProperty> selectedWifiListStruct;
     if(slist.size()<2) return selectedWifiListStruct;
     OneConnForm *ocf = new OneConnForm();
     QString headLine = slist.at(0);
@@ -2063,6 +2148,7 @@ QList<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStringL
                 myWifiProStruct.bssid = wifibssid;
                 myWifiProStruct.priority = wifiPriority.toInt();
                 selectedWifiListStruct.append(myWifiProStruct);
+                qDebug()<<wifiname<<"->"<<wifibssid<<"->"<<wifiPriority<<"->"<<line.mid(indexCate).trimmed();
             }
         }
     }
@@ -2079,13 +2165,14 @@ QList<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStringL
 }
 
 //排序
-void MainWindow::devListSort(QList<structWifiProperty> *list)
+void MainWindow::devListSort(QVector<structWifiProperty> *list)
 {
-    qSort(list->begin(), list->end(), subDevListSort);
+//    qSort(list->begin(), list->end(), subDevListSort);
+    std::sort(list->begin(), list->end(), subDevListSort);
 }
 bool MainWindow::subDevListSort(const structWifiProperty &info1, const structWifiProperty &info2)
 {
-   return info1.priority > info2.priority;
+    return info1.priority > info2.priority;
 }
 
 // 加载wifi列表

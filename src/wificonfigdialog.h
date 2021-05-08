@@ -31,13 +31,15 @@ private slots:
 
     void on_btnOk_clicked();
 
-    void on_checkBoxPwd_stateChanged(int arg1);
-
     void on_leWifiId_textEdited(const QString &arg1);
 
     void on_leWiFiName_textEdited(const QString &arg1);
 
     void on_leWifiPassword_textEdited(const QString &arg1);
+
+    void on_checkBoxPwd_pressed();
+
+    void on_checkBoxPwd_released();
 
 private:
     Ui::WiFiConfigDialog *ui;

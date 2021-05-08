@@ -340,13 +340,17 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
 //    shellProcess->deleteLater();
 //}
 
-void DlgHideWifiWpa::on_checkBoxPwd_stateChanged(int arg1)
+//切换密码明文
+void DlgHideWifiWpa::on_checkBoxPwd_pressed()
 {
-    if (arg1 == 0) {
-        ui->lePassword ->setEchoMode(QLineEdit::Password);
-    } else {
-        ui->lePassword->setEchoMode(QLineEdit::Normal);
-    }
+    ui->checkBoxPwd->setChecked(true);
+    ui->lePassword->setEchoMode(QLineEdit::Normal);
+}
+
+void DlgHideWifiWpa::on_checkBoxPwd_released()
+{
+    ui->checkBoxPwd->setChecked(false);
+    ui->lePassword->setEchoMode(QLineEdit::Password);
 }
 
 void DlgHideWifiWpa::on_leNetName_textEdited(const QString &arg1)

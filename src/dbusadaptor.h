@@ -14,13 +14,15 @@
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
+#include <QtDBus/QDBusMetaType>
 QT_BEGIN_NAMESPACE
 class QByteArray;
-template<class T> class QList;
+//template<class T> class QList;
 template<class Key, class Value> class QMap;
 class QString;
 class QStringList;
 class QVariant;
+template<class T> class QVector;
 QT_END_NAMESPACE
 
 /*
@@ -36,6 +38,11 @@ class DbusAdaptor: public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Introspection", ""
 "  <interface name=\"com.kylin.network\">\n"
 "    <method name=\"showMainWindow\"/>\n"
+"    <method name=\"requestRefreshWifiList\"/>\n"
+"    <method name=\"getWifiList\">\n"
+"       <arg type=\"av\" direction=\"out\"/>\n"
+"    </method>\n"
+"    <signal name=\"getWifiListFinished\"/>\n"
 "  </interface>\n"
         "")
 public:
@@ -48,7 +55,10 @@ public:
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
     void showMainWindow();
+    void requestRefreshWifiList();
+    QVector<QStringList> getWifiList();
 Q_SIGNALS: // SIGNALS
+    void getWifiListFinished();
 };
 
 #endif

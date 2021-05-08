@@ -52,6 +52,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lbConned->setAlignment(Qt::AlignLeft);
     ui->lePassword->setEchoMode(QLineEdit::Normal);
     ui->lePassword->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->lePassword->setTextMargins(0,0,24,0);
     ui->btnConnPWD->setEnabled(false);
 
     leQssLow = "QLineEdit{border:none;background:transparent;font-size:14px;}";
@@ -436,6 +437,7 @@ void OneConnForm::setLine(bool isShow)
 
 void OneConnForm::setSignal(QString lv, QString secu, QString category)
 {
+    this->m_signal = lv.toInt();
     int signal = lv.toInt();
     if (secu == "--" || secu == "") {
         hasPwd = false;
@@ -497,6 +499,11 @@ void OneConnForm::setSignal(QString lv, QString secu, QString category)
         signalLv = 4;
     }
     ui->lbSignal->setStyleSheet(signalStyle);
+}
+
+int OneConnForm::getSignal()
+{
+    return this->m_signal;
 }
 
 void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, int freq)

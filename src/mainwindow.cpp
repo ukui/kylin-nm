@@ -2098,6 +2098,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     wifiListWidget->resize(W_LIST_WIDGET, H_WIFI_ITEM_BIG_EXTEND);
     scrollAreaw->setWidget(wifiListWidget);
     scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
+    dbus_wifiList.clear();
 
     // 获取当前有线网的连接状态，正在连接wifiActState==1，已经连接wifiActState==2, 未连接wifiActState==3
     int wifiActState = objKyDBus->checkWifiConnectivity(); //检查wifi的连接状态
@@ -2158,6 +2159,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         lbLoadDownImg->hide();
         lbLoadUpImg->hide();
         ccf->setTopItem(false);
+        dbus_wifiList.append(QStringList("--")); //没有已连接wifi时，第一个元素为--
     } else {
         QProcess * process = new QProcess;
         QString name = actWifiName;
@@ -2325,8 +2327,12 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 }
 
                 //ccf->setRate(wrate);
-                int signal = wsignal.toInt() + 11;
-                ccf->setSignal(QString::number(signal), wsecu, wcate);
+                int signal;
+                if (wsignal.toInt() != 0)
+                    signal = ccf->getSignal();
+                else
+                    signal = wsignal.toInt() + 11;
+                ccf->setSignal(QString::number(signal), wsecu);
                 setTrayIconOfWifi(wsignal.toInt());
                 activeWifiSignalLv = wsignal.toInt();
                 //objKyDBus->getWifiMac(wname);
@@ -2341,6 +2347,11 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ccf->setTopItem(false);
                 currSelNetName = "";
                 syslog(LOG_DEBUG, "already insert an active wifi in the top of wifi list");
+                if (m_name.isEmpty() || m_name == "") {
+                    dbus_wifiList.insert(0, QStringList()<<wname<<wsignal<<wsecu<<QString::number(max_freq)<<QString::number(min_freq)<<wcate);
+                } else {
+                    dbus_wifiList.insert(0, QStringList()<<m_name<<wsignal<<wsecu<<QString::number(max_freq)<<QString::number(min_freq)<<wcate);
+                }
             } else {
                 //对于未连接的wifi
                 wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() + H_NORMAL_ITEM);
@@ -2373,6 +2384,12 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
                 j ++;
                 count ++;
+
+                if (m_name.isEmpty() || m_name == "") {
+                    dbus_wifiList.append(QStringList()<<wname<<wsignal<<wsecu<<QString::number(max_freq)<<QString::number(min_freq)<<wcate);
+                } else {
+                    dbus_wifiList.append(QStringList()<<m_name<<wsignal<<wsecu<<QString::number(max_freq)<<QString::number(min_freq)<<wcate);
+                }
             }
 
             wnames.append(wname);
@@ -2409,6 +2426,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     actWifiBssidList.clear();
     wnames.clear();
+    emit this->getWifiListFinished();
 }
 
 // 更新wifi列表
@@ -2482,6 +2500,17 @@ void MainWindow::updateWifiListDone(QStringList slist)
                             }
                             wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() - H_NORMAL_ITEM);
                             break;
+                            //从向外提供的wifi列表中找到并删除这一行
+                            QStringList list_to_remove;
+                            foreach (QStringList list, dbus_wifiList) {
+                                if (list.at(0).trimmed() == lastWname) {
+                                    list_to_remove = list;
+                                    break;
+                                }
+                            }
+                            if (!list_to_remove.isEmpty()) {
+                                dbus_wifiList.removeOne(list_to_remove);
+                            }
                         }
                     }
                 }
@@ -2574,6 +2603,11 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 addItem->move(L_VERTICAL_LINE_TO_ITEM, posY);
                 addItem->setSelected(false, false);
                 addItem->show();
+                if (m_name.isEmpty() || m_name == "") {
+                    dbus_wifiList.append(QStringList()<<wname<<wsignal<<wsecu<<QString::number(max_freq)<<QString::number(min_freq)<<wcate);
+                } else {
+                    dbus_wifiList.append(QStringList()<<m_name<<wsignal<<wsecu<<QString::number(max_freq)<<QString::number(min_freq)<<wcate);
+                }
 
                 count += 1;
             }
@@ -2585,6 +2619,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     this->wifiListWidget->show();
     this->topWifiListWidget->show();
     this->stopLoading();
+    emit this->getWifiListFinished();
 }
 
 //用于中英文系统有线网络名称国际话
@@ -3882,6 +3917,11 @@ int MainWindow::getScreenGeometry(QString methodName)
         qDebug()<< "to get message about "<< methodName<<" of screen failed";
     }
     return res;
+}
+
+void MainWindow::requestRefreshWifiList()
+{
+    this->ksnm->execGetWifiList(this->wcardname);
 }
 
 /* get primary screen changed */

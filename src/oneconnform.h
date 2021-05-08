@@ -67,7 +67,7 @@ public:
 
     // category:1->normal protocol 1->wifi 6 2->wifi 6+
     void setSignal(QString lv, QString secu,QString category = "0");
-    void setName(QString name, QString bssid, QString uuid, QString isname);
+    void setWifiName(QString name, QString bssid, QString uuid, QString isname, bool isHW);
     QString getName();
     void setRate(QString rate);
     void setLine(bool isShow);
@@ -91,6 +91,7 @@ public:
     QString connType;
     QString wifiSecu;
     QLabel * lbFreq = nullptr;
+    bool isHuaweiPC;
     bool isSelected;
     bool isActive;
     bool isConnected;

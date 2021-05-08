@@ -401,7 +401,7 @@ void OneConnForm::setConnedString(bool showLable, QString str, QString str1)
     }
 }
 
-void OneConnForm::setName(QString name, QString bssid, QString uuid, QString ifname)
+void OneConnForm::setWifiName(QString name, QString bssid, QString uuid, QString ifname, bool isHW)
 {
     QFontMetrics fontMetrics(lbNameText->font());
     QString showname = fontMetrics.elidedText(name, Qt::ElideRight, 200);
@@ -410,6 +410,7 @@ void OneConnForm::setName(QString name, QString bssid, QString uuid, QString ifn
     wifiBSsid = bssid;
     wifiUuid = uuid;
     wifiIfName = ifname;
+    isHuaweiPC = isHW;
 }
 
 QString OneConnForm::getName()
@@ -441,10 +442,17 @@ void OneConnForm::setSignal(QString lv, QString secu, QString category)
     } else {
         hasPwd = true;
     }
-    QString signalStyle = "QLabel{border-radius:0px;background:url(:/res/w/wifi";
-    if("1" == category){
+
+    QString signalStyle;
+    if (isHuaweiPC) {
+        signalStyle = "QLabel{border-radius:0px;background:url(:/res/hw/wifi";
+    } else {
+        signalStyle = "QLabel{border-radius:0px;background:url(:/res/w/wifi";
+    }
+
+    if ("1" == category) {
         signalStyle += "6";
-    }else if("2" == category){
+    } else if ("2" == category) {
         signalStyle += "6+";
     }
 

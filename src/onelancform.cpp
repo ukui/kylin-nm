@@ -223,7 +223,7 @@ void OneLancForm::setTopItem(bool isSelected)
 }
 
 //设置网络名称
-void OneLancForm::setName(QString ssid, QString transSsid, QString uuid, QString interface)
+void OneLancForm::setLanName(QString ssid, QString transSsid, QString uuid, QString interface)
 {
     //处理过长SSID
     QString displayName;

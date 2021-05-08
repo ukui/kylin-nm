@@ -67,6 +67,7 @@ public:
 
     // category:1->normal protocol 1->wifi 6 2->wifi 6+
     void setSignal(QString lv, QString secu,QString category = "0");
+    int getSignal();
     void setName(QString name, QString bssid, QString uuid, QString isname);
     QString getName();
     void setRate(QString rate);
@@ -96,6 +97,7 @@ public:
     bool isConnected;
     bool isTopItem;
     int signalLv;
+    int m_signal;
 
 public slots:
     void waitAnimStep();

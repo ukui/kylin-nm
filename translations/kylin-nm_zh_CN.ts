@@ -1547,6 +1547,11 @@
         <translation type="unfinished">当前区域未扫描到选中的wifi</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="3705"/>
+        <source>Connect Hidden Wifi Success</source>
+        <translation type="unfinished">连接隐藏Wifi成功</translation>
+    </message>
+    <message>
         <location filename="../src/mainwindow.cpp" line="230"/>
         <source>Ethernet Networks</source>
         <translation>可用有线网络列表</translation>

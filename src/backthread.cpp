@@ -332,7 +332,7 @@ void BackThread::execConnHiddenWifiWPA(QString wifiName, QString wifiPassword)
         QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
         QString cmd = "nmcli device wifi connect '" + wifiName + "' password '" + wifiPassword + "' hidden yes > " + tmpPath + " 2>&1";
 
-//                qDebug() << Q_FUNC_INFO << cmd << tmpPath;
+        qDebug() << Q_FUNC_INFO << cmd << tmpPath;
         int status = Utils::m_system(cmd.toUtf8().data());
         if (status != 0) {
             syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");
@@ -350,7 +350,7 @@ void BackThread::execConnHiddenWifiWPA(QString wifiName, QString wifiPassword)
             x = 1;
             sleep(10);//nm扫描冷却为10s
         } else {
-            emit connDone(0);
+            emit connDone(6);
             x = 0;
         }
 //                qDebug() << Q_FUNC_INFO << x << text;

@@ -693,6 +693,8 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
             if (is_btnLanList_clicked == 1&& is_stop_check_net_state==0) {
                 onBtnNetListClicked(0);
             }
+
+            qDebug() << "00000000000000000   " <<is_connect_hide_wifi;
             if (!is_init_wifi_list && !is_connect_hide_wifi && is_stop_check_net_state==0) {
                 is_stop_check_net_state = 1;
                 if (is_btnWifiList_clicked == 1) {
@@ -3686,6 +3688,7 @@ void MainWindow::connWifiDone(int connFlag)
     } else if (connFlag == 1) {
 //        is_stop_check_net_state = 0;
         is_connect_net_failed = 1;
+        is_connect_hide_wifi = 0;
         QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 3) {
@@ -3698,7 +3701,12 @@ void MainWindow::connWifiDone(int connFlag)
         is_connect_net_failed = 1;
         QString txt(tr("Selected Wifi has not been scanned."));
         objKyDBus->showDesktopNotify(txt);
+    } else if (connFlag == 6) {
+        this->ksnm->execGetWifiList(this->wcardname);
+        QString txt(tr("Connect Hidden Wifi Success"));
+        objKyDBus->showDesktopNotify(txt);
     }
+
     this->stopLoading();
     is_stop_check_net_state = 0;
 }

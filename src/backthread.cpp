@@ -364,8 +364,7 @@ void BackThread::execConnRememberedHiddenWifi(QString wifiName)
     QProcess shellProcess;
     shellProcess.start("nmcli -f ssid device wifi");
     shellProcess.waitForFinished(3000); // 等待最多3s
-    if (shellProcess.exitCode() == 0)
-    {
+    if (shellProcess.exitCode() == 0) {
         QString shellOutput = shellProcess.readAllStandardOutput();
         QStringList wlist = shellOutput.split("\n");
         bool is_hidden  = true;
@@ -377,7 +376,11 @@ void BackThread::execConnRememberedHiddenWifi(QString wifiName)
         if (! is_hidden) {
             QString cmd = "nmcli connection up '" + wifiName + "'";
             int res = Utils::m_system(cmd.toUtf8().data());
-            emit connDone(res);
+            if (res == 0) {
+                emit connDone(6);
+            } else {
+                emit connDone(res);
+            }
         } else {
             //已保存的wifi没有在wifi列表找到（隐藏wifi保存后也会出现在wifi列表），则当前区域无法连接此wifi
             syslog(LOG_DEBUG, "Choosen wifi can not be sacnned in finishedProcess() in dlghidewifiwpa.cpp 377.");

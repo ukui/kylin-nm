@@ -694,7 +694,6 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
                 onBtnNetListClicked(0);
             }
 
-            qDebug() << "00000000000000000   " <<is_connect_hide_wifi;
             if (!is_init_wifi_list && !is_connect_hide_wifi && is_stop_check_net_state==0) {
                 is_stop_check_net_state = 1;
                 if (is_btnWifiList_clicked == 1) {

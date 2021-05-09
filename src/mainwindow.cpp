@@ -1381,7 +1381,7 @@ void MainWindow::on_btnWifiList_clicked()
         // 当前连接的wifi
         OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
         ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC);//"当前未连接任何 Wifi"
-        ccf->setSignal("0", "--");
+        ccf->setSignal("0", "--", "0");
         ccf->setRate("0");
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
         ccf->isConnected = false;
@@ -1710,12 +1710,14 @@ void MainWindow::getWifiListDone(QStringList slist)
 
 
     slist = priorityList(slist);
+
     if (isHuaWeiPC) {
         if (slist.size() >= 2) {
             wifiListOptimize(slist);
-//            getFinalWifiList(slist);
+            //getFinalWifiList(slist);
         }
     }
+
     if (current_wifi_list_state == RECONNECT_WIFI) {
         QVector<structWifiProperty> targetWifiStructList = connectableWifiPriorityList(slist);
         if (!targetWifiStructList.isEmpty()) {
@@ -1850,7 +1852,7 @@ QStringList MainWindow::priorityList(QStringList slist){
     QStringList ret;
     ret.append(slist[0]);
     QString headLine = slist.at(0);
-    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName,indexPath,indexCate;
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath, indexCate;
     headLine = headLine.trimmed();
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
@@ -1892,9 +1894,7 @@ QStringList MainWindow::priorityList(QStringList slist){
         list = sortApByFreq(list,indexFreq, indexSignal);
         ret += list;
     }
-    foreach (QString s, ret) {
-        qDebug()<<s;
-    }
+
     return ret;
 }
 
@@ -1935,6 +1935,7 @@ QVector<QStringList> MainWindow::repetitionFilter(QVector<QStringList>){
     QVector<QStringList> ret;
     return ret;
 }
+
 QStringList MainWindow::sortApByCategory(QStringList list,int cateIndex){
     QStringList ret;
     for(auto line:list){
@@ -1957,16 +1958,16 @@ QStringList MainWindow::sortApByCategory(QStringList list,int cateIndex){
     }
     return ret;
 }
+
 //进行wifi列表优化选择，分为2.4G和5G进行选择，先每种频率形成一个列表
 //同一个列表中同名wifi只有一个，再按信号强度由大到小合并列表
 void MainWindow::wifiListOptimize(QStringList& slist)
 {
-    if(slist.size() < 2) return ;
-    //这个函数可能会把已经连接的那个wifi给筛选出去
-    QString headLine = slist.at(0);
-    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName,indexPath;
-    headLine = headLine.trimmed();
+    if (slist.size() < 2) return ;
 
+    QString headLine = slist.at(0);
+    int indexSignal, indexSecu, indexFreq, indexBSsid, indexName, indexPath;
+    headLine = headLine.trimmed();
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
         indexSignal = headLine.indexOf("SIGNAL");
@@ -1983,37 +1984,68 @@ void MainWindow::wifiListOptimize(QStringList& slist)
         indexName = indexBSsid + 19;
         indexPath = headLine.indexOf("DBUS-PATH");
     }
+
     QStringList targetList; //slist优化，同名同频AP中只留信号最强
     targetList<<slist.at(0);    //把第一行加进去
-    for(int it = 1;it < slist.size();it++){
-        QString currentWifiInfo = slist.at(it);
+    hasStarWifiInfo = "";
+    hasStarWifiName = "";
+    for (int ii = 1;ii < slist.size();ii++) {
+        if ((ii+1) == slist.size()) {
+            break;
+        }
+        QString currentWifiInfo = slist.at(ii);
         bool ifContinue = false;
+
         QString conName = currentWifiInfo.mid(indexName, indexPath - indexName).trimmed();
         int conSignal = currentWifiInfo.mid(indexSignal,3).trimmed().toInt();
         int conFreq = currentWifiInfo.mid(indexFreq,4).trimmed().toInt();
-        for(int i=0;i<slist.size();i++){
-            QString str = slist.at(i);
-            QString name = str.mid(indexName, indexPath - indexName).trimmed();
-            int signal = str.mid(indexSignal,3).trimmed().toInt();
-            int freq = str.mid(indexFreq,4).trimmed().toInt();
-            if(conName == name){
-                if(conFreq < 5000 && freq < 5000){
+
+        if ("*" == currentWifiInfo.mid(0,indexSignal).trimmed()) {
+            hasStarWifiInfo = currentWifiInfo;
+            hasStarWifiName = conName;
+        }
+
+        for (int jj=1;jj<slist.size();jj++) {
+            QString compareWifiInfo = slist.at(jj);
+            QString name = compareWifiInfo.mid(indexName, indexPath - indexName).trimmed();
+            int signal = compareWifiInfo.mid(indexSignal,3).trimmed().toInt();
+            int freq = compareWifiInfo.mid(indexFreq,4).trimmed().toInt();
+            if (conName == name) {
+                if (conFreq < 5000 && freq < 5000) {
                     if(conSignal < signal){
                         ifContinue = true;
                         break;
                     }
                 }
-                if(conFreq >= 5000 && freq >= 5000){
-                    if(conSignal < signal){
+                if (conFreq >= 5000 && freq >= 5000) {
+                    if (conSignal < signal) {
                         ifContinue = true;
                         break;
                     }
                 }
             }
         }
-        if(ifContinue)  continue;
-        targetList<<currentWifiInfo;
+        if (ifContinue)  continue;
+        targetList << currentWifiInfo;
     }
+
+    //上面的选网方法容易把存在同名wifi的情况下把已经连接的那个wifi给去掉
+    //在这种情况下，把连接的wifi信息加回去
+    int changePosition = 100000;
+    for (int kk=1;kk<targetList.size();kk++) {
+        QString wifiInfo = slist.at(kk);
+        QString wifiName = wifiInfo.mid(indexName, indexPath - indexName).trimmed();
+        if (hasStarWifiName == wifiName) {
+            changePosition = kk;
+            break;
+        }
+    }
+
+    if (changePosition < 100000) {
+        //证明确实有已经连接的wifi被去掉了
+        targetList.replace(changePosition, hasStarWifiInfo);
+    }
+
     slist = targetList;
 }
 
@@ -2178,6 +2210,13 @@ bool MainWindow::subDevListSort(const structWifiProperty &info1, const structWif
 // 加载wifi列表
 void MainWindow::loadWifiListDone(QStringList slist)
 {
+//    qDebug() << "kkkkkkkkkkkkkkkkkkkkkkkk";
+//    foreach (QString kkkkk, slist) {
+//        qDebug() << kkkkk;
+//    }
+//    qDebug() << "kkkkkkkkkkkkkkkkkkkkkkkk";
+//    qDebug() << "                        ";
+
     delete topWifiListWidget; //清空top列表
     createTopWifiUI(); //创建topWifiListWidget
     // 清空wifi列表
@@ -2235,7 +2274,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
     if (actWifiName == "--" || wifiActState == 1 || actWifiBssidList.at(0) == "--") {
         ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC);//"当前未连接任何 Wifi"
-        ccf->setSignal("0", "--");
+        ccf->setSignal("0", "--" , "0");
         activeWifiSignalLv = 0;
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
         ccf->isConnected = false;
@@ -2344,11 +2383,11 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 continue; //过滤相同名称的wifi
             }
         } else {
-            if ((actWifiName == wname) && actWifiBssidList.size()>=1) {
-                //防止列表中没有已经连接的那个wifi
-                wbssid = actWifiBssidList.at(0);
-                actWifiBssid = actWifiBssidList.at(0);
-            }
+//            if ((actWifiName == wname) && actWifiBssidList.size()>=1) {
+//                //防止列表中没有已经连接的那个wifi
+//                wbssid = actWifiBssidList.at(0);
+//                actWifiBssid = actWifiBssidList.at(0);
+//            }
             if ((wnames.contains(wname) && wbssid != actWifiBssid)) {
                 continue; //过滤相同名称的wifi
             }
@@ -2384,8 +2423,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
             freqState = 2;
         }
         if (wname != "" && wname != "--") {
+            //qDebug() << "wifi的 actWifiBssid: " << actWifiBssid << "      wcate = " << wcate;
             //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
-            if(actWifiBssid == wbssid && wifiActState == 2){
+            if(actWifiBssid == wbssid && wifiActState == 2) {
                 //对于已经连接的wifi
                 connect(this, &MainWindow::actWifiSignalLvChanaged, ccf, [ = ](const int &signalLv) {
                     ccf->setSignal(QString::number(signalLv), wsecu, wcate);
@@ -2419,7 +2459,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                     signal = ccf->getSignal();
                 else
                     signal = wsignal.toInt() + 11;
-                ccf->setSignal(QString::number(signal), wsecu);
+                ccf->setSignal(QString::number(signal), wsecu, wcate);
                 setTrayIconOfWifi(wsignal.toInt());
                 activeWifiSignalLv = wsignal.toInt();
                 //objKyDBus->getWifiMac(wname);
@@ -3338,7 +3378,7 @@ void MainWindow::disWifiDoneChangeUI()
         if (ocf->isActive == true) {
             ocf->setSelected(false, false);
             ocf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC);//"当前未连接任何 Wifi"
-            ocf->setSignal("0", "--");
+            ocf->setSignal("0", "--", "0");
             ocf->setConnedString(1, tr("Disconnected"), "");//"未连接"
             ocf->lbFreq->hide();
             lbLoadDown->hide();

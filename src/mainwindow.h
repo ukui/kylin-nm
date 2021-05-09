@@ -347,6 +347,8 @@ private:
     QString actWifiSsid = "--"; //当前连接wifi的ssid
     QStringList actWifiBssidList; //当前连接wifi的bssid
     QString actWifiUuid = "--"; //当前连接wifi的uuid
+    QString hasStarWifiInfo; //nmcli命令获取的wifi列表中已经连接的wifi in-use熟悉会有一个*
+    QString hasStarWifiName;
 
     bool hasWifiConnected;//当前是否有wifi连接
     QDBusInterface *mDbusXrandInter;

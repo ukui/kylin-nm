@@ -1735,10 +1735,10 @@ void MainWindow::getWifiListDone(QStringList slist)
         current_wifi_list_state = LOAD_WIFI_LIST;
     }
 
-    if (this->is_btnLanList_clicked == 1) {
+    if (this->is_btnLanList_clicked == 1 && current_wifi_list_state != REFRESH_WIFI) {
         return;
     }
-    if (current_wifi_list_state == LOAD_WIFI_LIST) {
+    if (current_wifi_list_state == LOAD_WIFI_LIST || current_wifi_list_state == REFRESH_WIFI) {
         //qDebug() << "loadwifi的列表";
         loadWifiListDone(slist);
         is_init_wifi_list = 0;
@@ -4048,6 +4048,7 @@ int MainWindow::getScreenGeometry(QString methodName)
 
 void MainWindow::requestRefreshWifiList()
 {
+    current_wifi_list_state = REFRESH_WIFI;
     this->ksnm->execGetWifiList(this->wcardname);
 }
 

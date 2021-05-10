@@ -112,6 +112,7 @@
 #define LOAD_WIFI_LIST 0
 #define UPDATE_WIFI_LIST 1
 #define RECONNECT_WIFI 2
+#define REFRESH_WIFI 3
 
 class OneConnForm;
 class ConfForm;

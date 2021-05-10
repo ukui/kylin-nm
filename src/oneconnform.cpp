@@ -205,7 +205,10 @@ void OneConnForm::mousePressEvent(QMouseEvent *)
 
 void OneConnForm::onBtnPropertyClicked()
 {
-    QProcess::startDetached(QString("ukui-control-center --netconnect"));
+    //WORKAROUND::ukui-control-center启动会出现rfkill僵尸进程
+    //添加sleep后可以正常打开
+    //此处sleep了10毫秒
+    QProcess::startDetached(QString("bash -c \"sleep 0.01; ukui-control-center --netconnect;\""));
 }
 
 //事件过滤器

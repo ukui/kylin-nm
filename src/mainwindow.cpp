@@ -1421,13 +1421,16 @@ void MainWindow::on_wifi_changed()
         oldWifiIpv4Method = "manual";
         qDebug()<<"Ipv4.address of current activated wifi is:"<<objKyDBus->dbusActiveWifiIpv4 << ". Real ipv4.address is:" << objKyDBus->dbusWifiIpv4;
         emit this->reConnectWifi(actWifiUuid);
+        emit this->configurationChanged();
     } else if (objKyDBus-> dbusWifiIpv4Method == "auto" && oldWifiIpv4Method == "manual") {
         oldWifiIpv4Method = "auto";
         qDebug()<<"Ipv4.method is set to auto.";
         emit this->reConnectWifi(actWifiUuid);
+        emit this->configurationChanged();
     } else if (!objKyDBus->dbusActiveWifiIpv6.isEmpty() && objKyDBus->dbusActiveWifiIpv6 != objKyDBus->dbusWifiIpv6 && objKyDBus->dbusWifiIpv6Method == "manual") {
         //在第三方nm-connection-editor或kylin-nm配置页进行新的IPV6配置后，重新连接网络
         emit this->reConnectWifi(actWifiUuid);
+        emit this->configurationChanged();
     }
 }
 
@@ -1613,13 +1616,16 @@ void MainWindow::getLanListDone(QStringList slist)
 //                                qDebug() << Q_FUNC_INFO << __LINE__ << objKyDBus->dbusActiveLanIpv4 << objKyDBus->dbusLanIpv4;
                                 //在第三方nm-connection-editor进行新的IP配置后，重新连接网络
                                 objKyDBus->reConnectWiredNet(nuuid);
+                                emit this->configurationChanged();
                             } else if ((oldActLanName == actLanSsidName.at(kk)) && (oldDbusActLanDNS != objKyDBus->dbusActLanDNS)) {
                                 //在第三方nm-connection-editor进行新的DNS配置后，重新连接网络
                                 objKyDBus->reConnectWiredNet(nuuid);
+                                emit this->configurationChanged();
                             } else if (!objKyDBus->dbusActiveLanIpv6.isEmpty() && objKyDBus->dbusActiveLanIpv6 != objKyDBus->dbusLanIpv6 && objKyDBus->dbusLanIpv6Method == "manual") {
 //                                qDebug() << Q_FUNC_INFO << __LINE__ << objKyDBus->dbusActiveLanIpv6 << objKyDBus->dbusLanIpv6 <<  objKyDBus->dbusLanIpv6Method;
                                 //在第三方nm-connection-editor或kylin-nm配置页进行新的IPV6配置后，重新连接网络
                                 objKyDBus->reConnectWiredNet(nuuid);
+                                emit this->configurationChanged();
                             }
                         }
 

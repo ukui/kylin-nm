@@ -43,6 +43,7 @@ class DbusAdaptor: public QDBusAbstractAdaptor
 "       <arg type=\"av\" direction=\"out\"/>\n"
 "    </method>\n"
 "    <signal name=\"getWifiListFinished\"/>\n"
+"    <signal name=\"configurationChanged\"/>\n"
 "  </interface>\n"
         "")
 public:
@@ -59,6 +60,7 @@ public Q_SLOTS: // METHODS
     QVector<QStringList> getWifiList();
 Q_SIGNALS: // SIGNALS
     void getWifiListFinished();
+    void configurationChanged();
 };
 
 #endif

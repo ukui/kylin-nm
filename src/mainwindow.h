@@ -407,6 +407,7 @@ signals:
     void disConnSparedNet(QString type);
 
     void waitLanStop();
+    void configurationChanged();
     void reConnectWifi(const QString& uuid);
     void actWifiSignalLvChanaged(const int& currentLevel);
     void getWifiListFinished();

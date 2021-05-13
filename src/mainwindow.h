@@ -408,6 +408,7 @@ private slots:
 signals:
     void disConnSparedNet(QString type);
     void refreshWifiListAfterScan();
+    void carrierDownHandle();
     void waitLanStop();
     void configurationChanged();
     void reConnectWifi(const QString& uuid);

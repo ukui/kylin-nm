@@ -1740,7 +1740,9 @@ void KylinDBus::slot_timeout()
 //有线网的Ip属性变化时的响应函数
 void KylinDBus::onLanIpPropertiesChanged()
 {
-    emit this->updateWiredList(0);
+    if (!mw->is_stop_check_net_state) {
+        emit this->updateWiredList(0);
+    }
 }
 
 //无线网的Ip属性变化时的响应函数

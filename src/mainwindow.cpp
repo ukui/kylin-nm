@@ -571,9 +571,10 @@ void MainWindow::initTimer()
     QObject::connect(wiredCableUpTimer, SIGNAL(timeout()), this, SLOT(onCarrierUpHandle()));
 
     //网线拔出时定时执行
-    wiredCableDownTimer = new QTimer(this);
-    wiredCableDownTimer->setTimerType(Qt::PreciseTimer);
-    QObject::connect(wiredCableDownTimer, SIGNAL(timeout()), this, SLOT(onCarrierDownHandle()));
+//    wiredCableDownTimer = new QTimer(this);
+//    wiredCableDownTimer->setTimerType(Qt::PreciseTimer);
+//    QObject::connect(wiredCableDownTimer, SIGNAL(timeout()), this, SLOT(onCarrierDownHandle()));
+    connect(this, SIGNAL(carrierDownHandle()), this, SLOT(onCarrierDownHandle()));
 
     //定时处理异常网络，即当点击Lan列表按钮时，若lstate=2，但任然有有线网连接的情况
     deleteLanTimer = new QTimer(this);
@@ -969,19 +970,29 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
         is_stop_check_net_state = 1;
         qDebug()<<"插入了有线网的网线";
         syslog(LOG_DEBUG,"wired physical cable is already plug in");
-        wiredCableUpTimer->start(2000);
+        wiredCableUpTimer->start(4000);
     } else {
         qDebug()<<"拔出了有线网的网线";
         syslog(LOG_DEBUG,"wired physical cable is already plug out");
-        activeLanDisconn();
-        BackThread *bt = new BackThread();
-        IFace *iface = bt->execGetIface();
-        if (iface->lstate != 0) {
-            is_stop_check_net_state = 1;
-            wiredCableDownTimer->start(2000);
-        }
-        delete iface;
-        bt->deleteLater();
+        QtConcurrent::run([=](){
+            while (1) {
+                //activeLanDisconn();
+                BackThread *bt = new BackThread();
+                IFace *iface = bt->execGetIface();
+                if (iface->lstate != 0) {
+                    is_stop_check_net_state = 1;
+                    sleep(2);
+                    //wiredCableDownTimer->start(2000);
+                    emit carrierDownHandle();
+                    delete iface;
+                    bt->deleteLater();
+                    break;
+                }
+                delete iface;
+                bt->deleteLater();
+                sleep(2);
+            }
+        });
     }
 }
 
@@ -999,7 +1010,17 @@ void MainWindow::onCarrierUpHandle()
 
 void MainWindow::onCarrierDownHandle()
 {
-    wiredCableDownTimer->stop();
+    syslog(LOG_DEBUG, "Wired net is disconnected");
+
+    QString txt(tr("Wired net is disconnected"));
+    objKyDBus->showDesktopNotify(txt);
+    currSelNetName = "";
+    oldActLanName = "";
+    oldDbusActLanDNS = 0;
+    //emit this->waitLanStop();
+    //this->ksnm->execGetLanList();
+
+    //wiredCableDownTimer->stop();
     this->stopLoading();
     onBtnNetListClicked(0);
     is_stop_check_net_state = 0;
@@ -1255,6 +1276,7 @@ void MainWindow::onBtnWifiClicked(int flag)
 
 void MainWindow::onBtnNetListClicked(int flag)
 {
+    qDebug() << Q_FUNC_INFO <<" --------------> 0000004";
     this->is_btnLanList_clicked = 1;
     this->is_btnWifiList_clicked = 0;
     end_rcv_rates = 0;
@@ -3468,6 +3490,7 @@ void MainWindow::timeIntervalToConnectWifi()
 //处理外界对网络的连接与断开
 void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 {
+    qDebug() << Q_FUNC_INFO <<" --------------> 0000000-0";
     isReconnectingWifi = false;
 
     if ( (type == "802-11-wireless" || type == "wifi") && !isConnUp ){
@@ -3476,6 +3499,8 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
     if (type == "802-11-wireless" || type == "wifi") {
         addNumberForWifi += 1;
     }
+
+    qDebug() << Q_FUNC_INFO <<" --------------> 0000000-1";
     if (addNumberForWifi == 2) {
         //断开一个wifi的时候，如果存在回连，可能接连发出两个信号
         //当连续发出wifi断开与连接的信号时，短时间内addNumberForWifi值为2
@@ -3494,6 +3519,8 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
         addNumberForWifi = 0;
         return;
     }
+
+    qDebug() << Q_FUNC_INFO <<" --------------> 0000000-2 type = " << type;
     if ( (type == "802-11-wireless" || type == "wifi") && isConnUp ){
         addNumberForWifi = 0;
     }
@@ -3505,6 +3532,8 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
         return;
     }
 
+
+    qDebug() << Q_FUNC_INFO <<" --------------> 0000000-3";
     if (isToSetLanValue) {
         if (type == "802-3-ethernet" || type == "ethernet") {
             isLanBeConnUp = true;
@@ -3519,16 +3548,20 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
         }
     }
 
+    qDebug() << Q_FUNC_INFO <<" --------------> 0000000";
     if (!is_connect_hide_wifi && !is_stop_check_net_state) {
+        qDebug() << Q_FUNC_INFO <<" --------------> 0000001";
         is_stop_check_net_state = 1;
 
         if (type == "802-3-ethernet" || type == "ethernet") {
+            qDebug() << Q_FUNC_INFO <<" --------------> 0000002";
             if (is_connect_net_failed) {
                 qDebug()<<"debug: connect wired network failed, no need to refresh wired interface";
                 is_connect_net_failed = 0;
                 is_stop_check_net_state = 0;
             } else {
                 isToSetLanValue = false;
+                qDebug() << Q_FUNC_INFO <<" --------------> 0000003";
                 QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
             }
         }

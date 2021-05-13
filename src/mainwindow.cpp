@@ -1733,8 +1733,23 @@ void MainWindow::getWifiListDone(QStringList slist)
                     QString wifiSsid = objKyDBus->getWifiSsid(targetWifiStructList.at(0).objectPath);
                     QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiStructList.at(0).bssid;
                     system(modityCmd.toUtf8().data());
-                    QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
-                    system(reconnectWifiCmd.toUtf8().data());
+//                    QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
+//                    system(reconnectWifiCmd.toUtf8().data());
+                    canReconnectWifiTimeInterval = false;
+                    BackThread *bt = new BackThread();
+                    connect(bt, &BackThread::connDone, this, [ = ](int res) {
+                        if (res == 1  || res == 4) {
+                            // 使用配置文件连接失败，需要删除该配置文件
+                            QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiSsid + "'";
+                            int status = system(cmd.toUtf8().data());
+                            if (status != 0) {
+                                syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");
+                            }
+                        }
+                        //连接结束后再开放重连，防止连接失败时针对一个连不上的wifi反复尝试重连
+                        timeIntervalToConnectWifi();
+                    });
+                    bt->execConnWifi(wifiSsid, this->wcardname);
                 });
             }
         }
@@ -1744,6 +1759,7 @@ void MainWindow::getWifiListDone(QStringList slist)
     if (this->is_btnLanList_clicked == 1 && current_wifi_list_state != REFRESH_WIFI) {
         return;
     }
+
     if (current_wifi_list_state == LOAD_WIFI_LIST || current_wifi_list_state == REFRESH_WIFI) {
         //qDebug() << "loadwifi的列表";
         loadWifiListDone(slist);
@@ -1751,9 +1767,17 @@ void MainWindow::getWifiListDone(QStringList slist)
     }
 
     if (current_wifi_list_state == UPDATE_WIFI_LIST) {
-        //qDebug() << "updatewifi的列表";
-        updateWifiListDone(slist);
-        current_wifi_list_state = LOAD_WIFI_LIST;
+        //如果WiFi连接状态发生了改变，需要刷新整个列表，否则只需要比对新旧列表更新即可
+        if (m_isWifiConnected && objKyDBus->checkWifiConnectivity() != 2) {
+            //qDebug() << "loadwifi的列表";
+            loadWifiListDone(slist);
+        } else if (!m_isWifiConnected && objKyDBus->checkWifiConnectivity() == 2) {
+            loadWifiListDone(slist);
+        } else {
+            //qDebug() << "updatewifi的列表";
+            updateWifiListDone(slist);
+            current_wifi_list_state = LOAD_WIFI_LIST;
+        }
     }
 
     oldWifiSlist = slist;
@@ -2232,8 +2256,13 @@ void MainWindow::loadWifiListDone(QStringList slist)
     scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
     dbus_wifiList.clear();
 
-    // 获取当前有线网的连接状态，正在连接wifiActState==1，已经连接wifiActState==2, 未连接wifiActState==3
+    // 获取当前无线网的连接状态，正在连接wifiActState==1，已经连接wifiActState==2, 未连接wifiActState==3
     int wifiActState = objKyDBus->checkWifiConnectivity(); //检查wifi的连接状态
+    if (wifiActState == 2) {
+        m_isWifiConnected = true;
+    } else {
+        m_isWifiConnected = false;
+    }
 //    if (isWifiBeConnUp && wifiActState == 1) {
 //        wifiActState = 2;
 //    }
@@ -3420,8 +3449,8 @@ void MainWindow::on_btnHotspotState()
 void MainWindow::toReconnectWifi()
 {
     if (canReconnectWifiTimeInterval) {
-        canReconnectWifiTimeInterval = false;
-        QTimer::singleShot(2*1000, this, SLOT(timeIntervalToConnectWifi() ));
+//        canReconnectWifiTimeInterval = false;
+//        QTimer::singleShot(2*1000, this, SLOT(timeIntervalToConnectWifi() ));
 
         if (isHuaWeiPC) {
             current_wifi_list_state = RECONNECT_WIFI;

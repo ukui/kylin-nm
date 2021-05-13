@@ -185,6 +185,7 @@ public:
     bool isReconnectingLan = false; //是否正在执行lan的回连
     int addNumberForWifi = 0; //短时间内收到关于wifi连接信号的次数
     bool isHuaWeiPC;
+    bool isHandlingWiredCableOn = false;
     bool canReconnectWifiTimeInterval = true;
     QVector<QStringList> dbus_wifiList; //其他组件通过dbus接口获取到的wifi列表,第一个元素一定为已连接wifi，若没有已连接wifi则显示为--
     void requestRefreshWifiList(); //申请刷新wifi列表

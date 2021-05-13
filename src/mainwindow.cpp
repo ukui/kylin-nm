@@ -967,6 +967,7 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
 {
     this->startLoading();
     if (flag) {
+        isHandlingWiredCableOn = true;
         is_stop_check_net_state = 1;
         qDebug()<<"插入了有线网的网线";
         syslog(LOG_DEBUG,"wired physical cable is already plug in");
@@ -1006,6 +1007,7 @@ void MainWindow::onCarrierUpHandle()
     this->stopLoading();
     onBtnNetListClicked(1);
     is_stop_check_net_state = 0;
+    isHandlingWiredCableOn = false;
 }
 
 void MainWindow::onCarrierDownHandle()

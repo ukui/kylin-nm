@@ -128,7 +128,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->btnWifiList->setAttribute(Qt::WA_Hover,true);
     ui->btnWifiList->installEventFilter(this);
     hasWifiConnected = false;
-    numberForWifiScan = 0;
 
     //检查有线网络的个数是否为0,如果是0，则新建一个有线网络
     checkIfWiredNetExist();
@@ -559,6 +558,8 @@ void MainWindow::initTimer()
     QTimer::singleShot(1*1000, this, SLOT(toReconnectWifi() ));
 
     //循环检测wifi列表的变化，可用于更新wifi列表
+    numberForWifiScan = 0;
+    QObject::connect(this, SIGNAL(refreshWifiListAfterScan()), this, SLOT(onRefreshWifiListAfterScan()));
     checkWifiListChanged = new QTimer(this);
     checkWifiListChanged->setTimerType(Qt::PreciseTimer);
     QObject::connect(checkWifiListChanged, SIGNAL(timeout()), this, SLOT(onRequestScanAccesspoint()));
@@ -3691,29 +3692,37 @@ void MainWindow::onRequestScanAccesspoint()
 
 void MainWindow::toScanWifi(bool isShow)
 {
-    BackThread *loop_bt = new BackThread();
-    IFace *loop_iface = loop_bt->execGetIface();
+    QtConcurrent::run([=](){
+        BackThread *loop_bt = new BackThread();
+        IFace *loop_iface = loop_bt->execGetIface();
 
-    if (loop_iface->wstate != 2) {
-        if (loop_iface->wstate == 0) {
-            if (isShow) {
+        if (loop_iface->wstate != 2) {
+            if (loop_iface->wstate == 0) {
+                if (isShow) {
+                    objKyDBus->requestScanWifi(); //要求后台扫描AP
+                }
+            }
+
+            if (loop_iface->wstate == 1) {
                 objKyDBus->requestScanWifi(); //要求后台扫描AP
+            }
+
+            sleep(2);
+            if (isShow) {
+                //只有在显示窗口时更新wifi列表
+                emit this->refreshWifiListAfterScan();
             }
         }
 
-        if (loop_iface->wstate == 1) {
-            objKyDBus->requestScanWifi(); //要求后台扫描AP
-        }
+        delete loop_iface;
+        loop_bt->deleteLater();
+    });
+}
 
-        if (isShow) {
-            //只有在显示窗口时更新wifi列表
-            current_wifi_list_state = UPDATE_WIFI_LIST;
-            this->ksnm->execGetWifiList(this->wcardname); //更新wifi列表
-        }
-    }
-
-    delete loop_iface;
-    loop_bt->deleteLater();
+void MainWindow::onRefreshWifiListAfterScan()
+{
+    current_wifi_list_state = UPDATE_WIFI_LIST;
+    this->ksnm->execGetWifiList(this->wcardname); //更新wifi列表
 }
 
 void MainWindow::on_setNetSpeed()

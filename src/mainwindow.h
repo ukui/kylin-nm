@@ -230,6 +230,7 @@ public slots:
 
     void connWifiDone(int connFlag);
     void onRequestRefreshWifiList();
+    void onRefreshWifiListAfterScan();
 
     //flag =0或1为普通点击、2为收到打开信息、3为收到关闭信息、4为无线网卡插入、5为无线网卡拔出
     void onBtnWifiClicked(int flag = 0);
@@ -406,7 +407,7 @@ private slots:
 
 signals:
     void disConnSparedNet(QString type);
-
+    void refreshWifiListAfterScan();
     void waitLanStop();
     void configurationChanged();
     void reConnectWifi(const QString& uuid);

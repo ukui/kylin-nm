@@ -984,7 +984,16 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         disconnect(this, SIGNAL(selectedOneWifiForm(QString,int)), mw, SLOT(oneWifiFormSelected(QString,int)));
     }
 
-    if (connFlag == 2 || connFlag == 4) {
+    if (connFlag == 1  || connFlag == 4) {
+        // 使用配置文件连接失败，需要删除该配置文件
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
+        int status = system(cmd.toUtf8().data());
+        if (status != 0) {
+            syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");
+        }
+    }
+
+    if (connFlag == 2 || connFlag == 4 || connFlag == 1) {
         mw->currSelNetName = "";
         emit selectedOneWifiForm(wifiBSsid, H_WIFI_ITEM_SMALL_EXTEND);
 
@@ -1017,15 +1026,6 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         ui->lePassword->setFocus();
         ui->lePassword->setEchoMode(QLineEdit::Password);
         ui->checkBoxPwd->setChecked(false);
-    }
-
-    if (connFlag == 1) {
-        // 使用配置文件连接失败，需要删除该配置文件
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
-        int status = system(cmd.toUtf8().data());
-        if (status != 0) {
-            syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");
-        }
     }
 
     // 设置全局变量，当前连接Wifi的信号强度

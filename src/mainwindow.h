@@ -313,6 +313,7 @@ private:
     QStringList oldConnSlist; //上一次获取的以保存网络列表
     bool isInitConnList = true;
     bool isAddedWifi = false;
+    bool m_isWifiConnected = false; //专用于处理dbus获取的WiFi状态，用于对比每次刷新后的WiFi连接状态变化
     QString lastAddedConn = "";
     QString oldActLanName = ""; //上一次获取的已连接有线网名称
     int oldDbusActLanDNS = 0; //上一次获取的已连接有线网的DNS代号
@@ -407,6 +408,7 @@ signals:
     void disConnSparedNet(QString type);
 
     void waitLanStop();
+    void configurationChanged();
     void reConnectWifi(const QString& uuid);
     void actWifiSignalLvChanaged(const int& currentLevel);
     void getWifiListFinished();

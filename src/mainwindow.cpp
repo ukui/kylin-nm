@@ -2461,7 +2461,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
             int Path = tmpLine.indexOf("/org/");
             QString m_DbusPath = slist.at(k).mid(Path, indexCate-indexPath).trimmed();
             QDBusInterface m_interface("org.freedesktop.NetworkManager",
-                                    wDbusPath,
+                                    m_DbusPath,
                                     "org.freedesktop.DBus.Properties",
                                     QDBusConnection::systemBus() );
             QDBusReply<QVariant> m_reply = m_interface.call("Get","org.freedesktop.NetworkManager.AccessPoint","Ssid");
@@ -2525,7 +2525,15 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 setTrayIconOfWifi(wsignal.toInt());
                 activeWifiSignalLv = wsignal.toInt();
                 //objKyDBus->getWifiMac(wname);
-                ccf->setWifiInfo(wsecu, wsignal, wbssid, freqState);
+                if (freqState == 0) {
+                    //该WiFi含2.4G和5G的AP，需要判断当前连接的是那种类型
+                    if (wfreq.toInt() >= 5000)
+                        ccf->setWifiInfo(wsecu, wsignal, wbssid, 2);
+                    else
+                        ccf->setWifiInfo(wsecu, wsignal, wbssid, 1);
+                } else {
+                    ccf->setWifiInfo(wsecu, wsignal, wbssid, freqState);
+                }
                 ccf->setConnedString(1, tr("NetOn,"), wsecu);//"已连接"
                 ccf->isConnected = true;
                 ifWLanConnected = true;

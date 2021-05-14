@@ -145,7 +145,7 @@
     <message>
         <location filename="../src/confform.cpp" line="479"/>
         <source>kylin network applet desktop message</source>
-        <translation type="unfinished">麒麟网络工具信息提示</translation>
+        <translation type="unfinished">网络工具信息提示</translation>
     </message>
     <message>
         <source>create wired network successfully</source>
@@ -1793,7 +1793,7 @@
     <message>
         <location filename="../src/utils.cpp" line="92"/>
         <source>kylin network applet desktop message</source>
-        <translation>麒麟网络工具信息提示</translation>
+        <translation>网络工具信息提示</translation>
     </message>
 </context>
 <context>

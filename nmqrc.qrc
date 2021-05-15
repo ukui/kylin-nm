@@ -1,17 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>res/s/conning-b/1.png</file>
-        <file>res/s/conning-b/2.png</file>
-        <file>res/s/conning-b/3.png</file>
-        <file>res/s/conning-b/4.png</file>
-        <file>res/s/conning-b/5.png</file>
-        <file>res/s/conning-b/6.png</file>
-        <file>res/s/conning-b/7.png</file>
-        <file>res/s/conning-b/8.png</file>
-        <file>res/s/conning-b/9.png</file>
-        <file>res/s/conning-b/10.png</file>
-        <file>res/s/conning-b/11.png</file>
-        <file>res/s/conning-b/12.png</file>
         <file>res/g/down_arrow.png</file>
         <file>res/s/rescan/1.png</file>
         <file>res/s/rescan/2.png</file>
@@ -129,5 +117,17 @@
         <file>res/hw/wifi6+-medium.png</file>
         <file>res/hw/wifi6+-none-pwd.png</file>
         <file>res/hw/wifi6+-none.png</file>
+        <file>res/s/conning-b/1.png</file>
+        <file>res/s/conning-b/2.png</file>
+        <file>res/s/conning-b/3.png</file>
+        <file>res/s/conning-b/4.png</file>
+        <file>res/s/conning-b/5.png</file>
+        <file>res/s/conning-b/6.png</file>
+        <file>res/s/conning-b/7.png</file>
+        <file>res/s/conning-b/8.png</file>
+        <file>res/s/conning-b/9.png</file>
+        <file>res/s/conning-b/10.png</file>
+        <file>res/s/conning-b/11.png</file>
+        <file>res/s/conning-b/12.png</file>
     </qresource>
 </RCC>

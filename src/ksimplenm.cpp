@@ -86,10 +86,11 @@ void KSimpleNM::execGetWifiList(const QString& wname)
 
     shellOutputWifi = "";
     QString cmd;
+    //将ssid放置在最后一列以防ssid存在中文或特殊字符导致其后面的列不对齐
     if (wname.isEmpty() || wname == "") {
-        cmd = "nmcli -f in-use,signal,security,freq,bssid,ssid,dbus-path,category device wifi";
+        cmd = "nmcli -f in-use,signal,security,freq,bssid,dbus-path,category,ssid device wifi";
     } else {
-        cmd = "nmcli -f in-use,signal,security,freq,bssid,ssid,dbus-path,category device wifi list ifname " + wname;
+        cmd = "nmcli -f in-use,signal,security,freq,bssid,dbus-path,category,ssid device wifi list ifname " + wname;
     }
     runProcessWifi->start(cmd);
 }

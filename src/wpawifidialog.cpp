@@ -130,7 +130,8 @@ WpaWifiDialog::~WpaWifiDialog()
 void WpaWifiDialog::initUI() {
     mainWidget = new QWidget(this);
     mainLyt = new QVBoxLayout(mainWidget);
-    mainWidget->setFixedSize(360, 590);
+    mainWidget->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_PEAP);
+    this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_PEAP);
 
     titleFrame = new QFrame(mainWidget); //标题栏
     titleFrame->setFixedHeight(48);
@@ -222,7 +223,7 @@ void WpaWifiDialog::initUI() {
     userFrame->setLayout(userLyt);
 
     pwdFrame = new QFrame(); //密码
-    pwdFrame->setFixedHeight(96);
+    pwdFrame->setFixedHeight(72);
     pwdLyt = new QVBoxLayout(pwdFrame);
     pwdLyt->setContentsMargins(0, 0, 0, 0);
     pwdLyt->setSpacing(0);
@@ -878,15 +879,23 @@ void WpaWifiDialog::eapTypeChange()
         mainLyt->addWidget(m_UserCertificateFrame);
         mainLyt->addWidget(m_UserPrivateKeyFrame);
         mainLyt->addWidget(m_pwd4PrivateKeyPWDFrame);
+        mainWidget->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_TLP);
+        this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_TLP);
         break;
     case EapType::LEAP:
         // Todo
+        mainWidget->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_ELSE);
+        this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_ELSE);
         break;
     case EapType::PWD:
         // Todo
+        mainWidget->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_ELSE);
+        this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_ELSE);
         break;
     case EapType::FAST:
         // Todo
+        mainWidget->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_ELSE);
+        this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_ELSE);
         break;
     case EapType::TTLS:
         // Todo
@@ -899,12 +908,16 @@ void WpaWifiDialog::eapTypeChange()
         mainLyt->addWidget(userFrame);
         mainLyt->addWidget(pwdFrame);
         */
+        mainWidget->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_ELSE);
+        this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_ELSE);
         break;
     case EapType::PEAP:
         // 需要抽离的
         mainLyt->addWidget(innerFrame);
         mainLyt->addWidget(userFrame);
         mainLyt->addWidget(pwdFrame);
+        mainWidget->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_PEAP);
+        this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_PEAP);
         break;
     default: // TLS
         mainLyt->addWidget(m_identityFrame);
@@ -913,6 +926,8 @@ void WpaWifiDialog::eapTypeChange()
         mainLyt->addWidget(m_UserCertificateFrame);
         mainLyt->addWidget(m_UserPrivateKeyFrame);
         mainLyt->addWidget(m_pwd4PrivateKeyPWDFrame);
+        mainWidget->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_TLP);
+        this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_TLP);
         break;
     }
 

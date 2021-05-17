@@ -950,10 +950,10 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
             setTrayLoading(true);
         }
 
-    } else if (actWifiName != "--") {
+    } else if (actWifiName != "--" && activeWifiSignalLv != 0) {
         setTrayIconOfWifi(activeWifiSignalLv);
         emit this->actWifiSignalLvChanaged(activeWifiSignalLv);
-    } else {
+    } else if (actWifiName == "--") {
         setTrayIcon(iconLanOffline);
     }
 }
@@ -1634,7 +1634,6 @@ void MainWindow::getLanListDone(QStringList slist)
                         } else {
                             ccfAct->setLine(false); //最后一个item不显示下划线
                         }
-
                         if (!objKyDBus->dbusLanIpv4.isEmpty()) {
                             if (!objKyDBus->dbusActiveLanIpv4.isEmpty() && objKyDBus->dbusActiveLanIpv4 != objKyDBus->dbusLanIpv4) {
 //                                qDebug() << Q_FUNC_INFO << __LINE__ << objKyDBus->dbusActiveLanIpv4 << objKyDBus->dbusLanIpv4;
@@ -1651,6 +1650,16 @@ void MainWindow::getLanListDone(QStringList slist)
                                 objKyDBus->reConnectWiredNet(nuuid);
                                 emit this->configurationChanged();
                             }
+                            actLanUuid = nuuid;
+                            actLanIpv4Method = "manual";
+                        } else {
+                            //已连接WiFi未改变但IP获取方式改变，重连之
+                            if (actLanUuid == nuuid && actLanIpv4Method == "manual") {
+                                objKyDBus->reConnectWiredNet(nuuid);
+                                emit this->configurationChanged();
+                            }
+                            actLanUuid = nuuid;
+                            actLanIpv4Method = "auto";
                         }
 
                         currSelNetName = "";

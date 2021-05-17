@@ -318,6 +318,8 @@ private:
     bool m_isWifiConnected = false; //专用于处理dbus获取的WiFi状态，用于对比每次刷新后的WiFi连接状态变化
     QString lastAddedConn = "";
     QString oldActLanName = ""; //上一次获取的已连接有线网名称
+    QString actLanUuid = ""; //当前连接的有线网uuid
+    QString actLanIpv4Method = ""; //当前连接的有线网的ip获取方式
     int oldDbusActLanDNS = 0; //上一次获取的已连接有线网的DNS代号
     void wifiListOptimize(QStringList& slist); //只保留同名同频信号最优AP
     QVector<QStringList> repetitionFilter(QVector<QStringList>);
@@ -411,7 +413,7 @@ signals:
     void refreshWifiListAfterScan();
     void carrierDownHandle();
     void waitLanStop();
-    void configurationChanged();
+    void configurationChanged(); //通知控制面板更新IP的信号
     void reConnectWifi(const QString& uuid);
     void actWifiSignalLvChanaged(const int& currentLevel);
     void getWifiListFinished();

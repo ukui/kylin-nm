@@ -1749,16 +1749,20 @@ void MainWindow::getWifiListDone(QStringList slist)
     }
 
     if (current_wifi_list_state == RECONNECT_WIFI) {
+        qDebug()<<"======优选后的列表为======";
+        foreach (QString line, slist) {
+            qDebug()<<line;
+        }
+        qDebug()<<"========================";
         QVector<structWifiProperty> targetWifiStructList = connectableWifiPriorityList(slist);
         if (!targetWifiStructList.isEmpty()) {
             if (!isReconnectingWifi) {
                 isReconnectingWifi = true; //保证对于连续发出的重连信号，只处理第一个
                 QtConcurrent::run([=]() {
                     QString wifiSsid = objKyDBus->getWifiSsid(targetWifiStructList.at(0).objectPath);
-                    QString modityCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiStructList.at(0).bssid;
-                    qDebug()<<"Will modify configuration for "<<wifiSsid<<"; cmd = "<<modityCmd;
-                    int res = system(modityCmd.toUtf8().data());
-                    qDebug()<<"Modifination finished, res = "<<res;
+                    QString modifyCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiStructList.at(0).bssid;
+                    int res = system(modifyCmd.toUtf8().data());
+                    qDebug()<<"Modification finished, cmd = "<<modifyCmd<<". res = "<<res;
 //                    QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
 //                    system(reconnectWifiCmd.toUtf8().data());
                     canReconnectWifiTimeInterval = false;
@@ -2023,7 +2027,7 @@ void MainWindow::wifiListOptimize(QStringList& slist)
     if (slist.size() < 2) return ;
 
     QString headLine = slist.at(0);
-    int indexSignal, indexSecu, indexFreq, indexBSsid, indexName, indexPath;
+    int indexSignal, indexSecu, indexFreq, indexBSsid, indexName, indexPath, indexCate;
     headLine = headLine.trimmed();
     bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (isChineseExist) {
@@ -2032,6 +2036,7 @@ void MainWindow::wifiListOptimize(QStringList& slist)
         indexFreq = headLine.indexOf("频率") + 4;
         indexBSsid = headLine.indexOf("BSSID") + 6;
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
         indexName = headLine.lastIndexOf("SSID");
     } else {
         indexSignal = headLine.indexOf("SIGNAL");
@@ -2039,69 +2044,71 @@ void MainWindow::wifiListOptimize(QStringList& slist)
         indexFreq = headLine.indexOf("FREQ");
         indexBSsid = headLine.indexOf("BSSID");
         indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
         indexName = headLine.lastIndexOf("SSID");
     }
 
-    QStringList targetList; //slist优化，同名同频AP中只留信号最强
+    QStringList targetList; //slist优化，同名同频同类别(category)AP中只留信号最强
     targetList<<slist.at(0);    //把第一行加进去
-    hasStarWifiInfo = "";
-    hasStarWifiName = "";
+//    hasStarWifiInfo = "";
+//    hasStarWifiName = "";
     for (int ii = 1;ii < slist.size();ii++) {
         if ((ii+1) == slist.size()) {
             break;
         }
         QString currentWifiInfo = slist.at(ii);
         bool ifContinue = false;
+        bool isConnected = false;
 
         QString conName = currentWifiInfo.mid(indexName).trimmed();
-        int conSignal = currentWifiInfo.mid(indexSignal,3).trimmed().toInt();
+//        int conSignal = currentWifiInfo.mid(indexSignal,3).trimmed().toInt();
         int conFreq = currentWifiInfo.mid(indexFreq,4).trimmed().toInt();
+        int conCate = currentWifiInfo.mid(indexCate,1).trimmed().toInt();
 
         if ("*" == currentWifiInfo.mid(0,indexSignal).trimmed()) {
-            hasStarWifiInfo = currentWifiInfo;
-            hasStarWifiName = conName;
+//            hasStarWifiInfo = currentWifiInfo;
+//            hasStarWifiName = conName;
+            isConnected = true;
         }
 
-        for (int jj=1;jj<slist.size();jj++) {
+        for (int jj=1;jj<ii;jj++) {//仅与排在它前面的wifi比较即可
             QString compareWifiInfo = slist.at(jj);
             QString name = compareWifiInfo.mid(indexName).trimmed();
-            int signal = compareWifiInfo.mid(indexSignal,3).trimmed().toInt();
+//            int signal = compareWifiInfo.mid(indexSignal,3).trimmed().toInt();
             int freq = compareWifiInfo.mid(indexFreq,4).trimmed().toInt();
+            int category = compareWifiInfo.mid(indexCate,1).trimmed().toInt();
             if (conName == name) {
-                if (conFreq < 5000 && freq < 5000) {
-                    if(conSignal < signal){
-                        ifContinue = true;
-                        break;
-                    }
+                if (conFreq < 5000 && freq < 5000 && conCate == category) {
+                    //若前面有同频同category的同名wifi，它的信号一定比此wifi强
+                    ifContinue = true;
+                    break;
                 }
-                if (conFreq >= 5000 && freq >= 5000) {
-                    if (conSignal < signal) {
-                        ifContinue = true;
-                        break;
-                    }
+                if (conFreq >= 5000 && freq >= 5000 && conCate == category) {
+                    ifContinue = true;
+                    break;
                 }
             }
         }
-        if (ifContinue)  continue;
+        if (ifContinue && !isConnected)  continue;
         targetList << currentWifiInfo;
     }
 
-    //上面的选网方法容易把存在同名wifi的情况下把已经连接的那个wifi给去掉
-    //在这种情况下，把连接的wifi信息加回去
-    int changePosition = 100000;
-    for (int kk=1;kk<targetList.size();kk++) {
-        QString wifiInfo = slist.at(kk);
-        QString wifiName = wifiInfo.mid(indexName).trimmed();
-        if (hasStarWifiName == wifiName) {
-            changePosition = kk;
-            break;
-        }
-    }
+//    //上面的选网方法容易把存在同名wifi的情况下把已经连接的那个wifi给去掉
+//    //在这种情况下，把连接的wifi信息加回去
+//    int changePosition = 100000;
+//    for (int kk=1;kk<targetList.size();kk++) {
+//        QString wifiInfo = slist.at(kk);
+//        QString wifiName = wifiInfo.mid(indexName).trimmed();
+//        if (hasStarWifiName == wifiName) {
+//            changePosition = kk;
+//            break;
+//        }
+//    }
 
-    if (changePosition < 100000) {
-        //证明确实有已经连接的wifi被去掉了
-        targetList.replace(changePosition, hasStarWifiInfo);
-    }
+//    if (changePosition < 100000) {
+//        //证明确实有已经连接的wifi被去掉了
+//        targetList.replace(changePosition, hasStarWifiInfo);
+//    }
 
     slist = targetList;
 }
@@ -2206,12 +2213,12 @@ QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStrin
         QString wifiname = line.mid(indexName).trimmed();
         QString wifibssid = line.mid(indexBSsid, indexPath-indexBSsid).trimmed();
         QString wifiObjectPath = line.mid(indexPath,indexCate-indexPath).trimmed();
-        QString wifiAutoConnection;
+        QString wifiAutoConnection = "no";
         QString wifiPriority;
 
         if (ocf->isWifiConfExist(wifiname) && canReconnectWifiList.contains(wifiname)) {
             QString tmpPath = "/tmp/kylin-nm-lanprop-" + QDir::home().dirName();
-            QString getInfoCmd = "nmcli connection show '" + wifiname + "' > " + tmpPath;
+            QString getInfoCmd = "nmcli -f connection.autoconnect,connection.autoconnect-priority connection show '" + wifiname + "' > " + tmpPath;
             Utils::m_system(getInfoCmd.toUtf8().data());
             QFile file(tmpPath);
             if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {

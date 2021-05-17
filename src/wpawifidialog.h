@@ -38,6 +38,11 @@
 #include <QModelIndex>
 #include <QList>
 
+#define WINDOW_WIDTH 360
+#define WINDOW_HEIGHT_PEAP 540
+#define WINDOW_HEIGHT_TLP 670
+#define WINDOW_HEIGHT_ELSE 360
+
 class MainWindow;
 
 typedef QList<QObject*> QObjectList;

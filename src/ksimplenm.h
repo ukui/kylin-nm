@@ -45,7 +45,7 @@ public:
     bool isUseOldWifiSlist = false; //是否应该要用上一次获取的有线列表
 
     void execGetLanList();
-    void execGetWifiList(const QString& wname);
+    void execGetWifiList(const QString& wname, const bool& isHuaweiPc = false);
     void execGetConnList();
 
 signals:

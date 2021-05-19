@@ -261,7 +261,7 @@ void ConfForm::on_btnCreate_clicked()
             }
         }
     }
-    QString name = ui->leName->text().trimmed();
+    QString name = ui->leName->text();
     QString cmdStr;
     if(ui->cbType->currentIndex() == 0){
         cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet";
@@ -350,7 +350,7 @@ void ConfForm::on_btnSave_clicked()
         }
 
         //如果网络的名称已经修改，则删掉当前网络，新建一个网络
-        QString name = ui->leName->text().trimmed();
+        QString name = ui->leName->text();
         if (name != lastConnName) {
             QString cmd = "nmcli connection delete '" + netUuid + "'";
             int status = system(cmd.toUtf8().data());
@@ -428,7 +428,7 @@ void ConfForm::saveNetworkConfiguration()
         mask = "24";
     }
 
-    QString name = ui->leName->text().trimmed();
+    QString name = ui->leName->text();
     QString dnss = ui->leDns->text();
     if (ui->leDns2->text() != "") {
         dnss.append(",");
@@ -717,7 +717,7 @@ void ConfForm::setEnableOfBtn()
 //        this->setBtnEnableFalse();
 //        return;
 //    }
-    if (ui->leName->text().trimmed().size() == 0 ) {
+    if (ui->leName->text().size() == 0 ) {
         this->setBtnEnableFalse();
         return;
     }

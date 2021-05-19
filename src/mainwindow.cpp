@@ -1375,7 +1375,7 @@ void MainWindow::on_btnWifiList_clicked()
 
         this->startLoading();
         //this->objKyDBus->toGetWifiList();
-        this->ksnm->execGetWifiList(this->wcardname);
+        this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
     } else if (iface->wstate == 3) {
         qDebug() << "debug: 连接中，正在配置wifi设备";
 
@@ -1768,27 +1768,35 @@ void MainWindow::getWifiListDone(QStringList slist)
             if (!isReconnectingWifi) {
                 isReconnectingWifi = true; //保证对于连续发出的重连信号，只处理第一个
                 QtConcurrent::run([=]() {
-                    QString wifiSsid = objKyDBus->getWifiSsid(targetWifiStructList.at(0).objectPath);
-                    QString modifyCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiStructList.at(0).bssid;
-                    int res = system(modifyCmd.toUtf8().data());
-                    qDebug()<<"Modification finished, cmd = "<<modifyCmd<<". res = "<<res;
-//                    QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
-//                    system(reconnectWifiCmd.toUtf8().data());
+                    int current_try_time = 0;
                     canReconnectWifiTimeInterval = false;
-                    BackThread *bt = new BackThread();
-                    connect(bt, &BackThread::connDone, this, [ = ](int res) {
-                        if (res == 1  || res == 4) {
-                            // 使用配置文件连接失败，需要删除该配置文件
-                            QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiSsid + "'";
-                            int status = system(cmd.toUtf8().data());
-                            if (status != 0) {
-                                syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");
-                            }
+                    //若使用配置文件连接失败且还有可以回连的wifi，继续尝试回连下一个
+                    for (current_try_time; current_try_time < targetWifiStructList.length(); current_try_time++) {
+                        is_stop_check_net_state = 1;
+                        QString wifiSsid = objKyDBus->getWifiSsid(targetWifiStructList.at(current_try_time).objectPath);
+                        emit this->startReconnectWifi(wifiSsid);
+                        QString modifyCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiStructList.at(current_try_time).bssid;
+                        int mdf_res = system(modifyCmd.toUtf8().data());
+                        qDebug()<<"Modification finished, cmd = "<<modifyCmd<<". res = "<<mdf_res;
+                        QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
+                        int con_res = system(reconnectWifiCmd.toUtf8().data());
+                        qDebug()<<"Reconnect finished, cmd = "<<reconnectWifiCmd<<". res = "<<con_res;
+                        emit this->stopReconnectWifi(wifiSsid);
+                        if (con_res == 0) {
+                            //回连成功，停止
+                            this->stopLoading();
+                            is_stop_check_net_state = 0;
+                            break;
                         }
-                        //连接结束后再开放重连，防止连接失败时针对一个连不上的wifi反复尝试重连
-                        timeIntervalToConnectWifi();
-                    });
-                    bt->execConnWifi(wifiSsid, this->wcardname);
+                        //回连失败，继续，且弹出提示
+                        QString txt(tr("Confirm your Wi-Fi password"));
+                        objKyDBus->showDesktopNotify(txt);
+                        this->stopLoading();
+                        is_stop_check_net_state = 0;
+                    }
+                    isReconnectingWifi = false;
+                    timeIntervalToConnectWifi();
+                    current_wifi_list_state = LOAD_WIFI_LIST;
                 });
             }
         }
@@ -2590,9 +2598,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->setSelected(false, false);
                 ocf->show();
 
-                if (actWifiBssidList.contains(wbssid) && wifiActState == 1) {
-                    ocf->startWifiWaiting(true);
-                } else if (actWifiId == wname && wifiActState == 1) {
+                if ((actWifiBssidList.contains(wbssid) && wifiActState == 1) || (actWifiId == wname && wifiActState == 1)) {
                     ocf->startWifiWaiting(true);
                 }
 
@@ -3329,7 +3335,7 @@ void MainWindow::handleWifiDisconn()
 {
     hasWifiConnected = false;
     currSelNetName = "";
-    this->ksnm->execGetWifiList(this->wcardname);
+    this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
     QtConcurrent::run([=]() {
         handleWifiDisconnLoading();
     });
@@ -3411,7 +3417,7 @@ void MainWindow::enWifiDone()
 {
     current_wifi_list_state = LOAD_WIFI_LIST;
     if (is_btnWifiList_clicked) {
-        this->ksnm->execGetWifiList(this->wcardname);
+        this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
     } else {
         //on_btnWifiList_clicked();
     }
@@ -3498,7 +3504,7 @@ void MainWindow::toReconnectWifi()
 
         if (isHuaWeiPC) {
             current_wifi_list_state = RECONNECT_WIFI;
-            this->ksnm->execGetWifiList(this->wcardname);
+            this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
         }
     }
 }
@@ -3726,7 +3732,7 @@ void MainWindow::onRequestScanAccesspoint()
 
             if (loop_iface->wstate != 2) {
                 current_wifi_list_state = UPDATE_WIFI_LIST;
-                this->ksnm->execGetWifiList(this->wcardname); //更新wifi列表
+                this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC); //更新wifi列表
             }
 
             delete loop_iface;
@@ -3767,7 +3773,7 @@ void MainWindow::toScanWifi(bool isShow)
 void MainWindow::onRefreshWifiListAfterScan()
 {
     current_wifi_list_state = UPDATE_WIFI_LIST;
-    this->ksnm->execGetWifiList(this->wcardname); //更新wifi列表
+    this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC); //更新wifi列表
 }
 
 void MainWindow::on_setNetSpeed()
@@ -3925,7 +3931,7 @@ void MainWindow::connWifiDone(int connFlag)
         syslog(LOG_DEBUG, "Wi-Fi already connected by clicking button");
         if (!isHuaWeiPC) {
             //如果不是华为电脑，使用获取连接信号的方式更新列表
-            this->ksnm->execGetWifiList(this->wcardname);
+            this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
         } else {
             //如果是华为电脑，连接wifi后判断到portal网络弹出认证框
             WifiAuthThread *wifi_auth_thread=new WifiAuthThread();
@@ -3951,7 +3957,7 @@ void MainWindow::connWifiDone(int connFlag)
         QString txt(tr("Selected Wifi has not been scanned."));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 6) {
-        this->ksnm->execGetWifiList(this->wcardname);
+        this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
         QString txt(tr("Connect Hidden Wifi Success"));
         objKyDBus->showDesktopNotify(txt);
     }
@@ -3962,7 +3968,7 @@ void MainWindow::connWifiDone(int connFlag)
 
 void MainWindow::onRequestRefreshWifiList()
 {
-    this->ksnm->execGetWifiList(this->wcardname);
+    this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
 }
 
 //重新绘制背景色
@@ -4138,7 +4144,7 @@ int MainWindow::getScreenGeometry(QString methodName)
 void MainWindow::requestRefreshWifiList()
 {
     current_wifi_list_state = REFRESH_WIFI;
-    this->ksnm->execGetWifiList(this->wcardname);
+    this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
 }
 
 /* get primary screen changed */
@@ -4216,7 +4222,7 @@ void MainWindow::rfkillEnableWifiDone()
 {
     current_wifi_list_state = LOAD_WIFI_LIST;
     if (is_btnWifiList_clicked) {
-        this->ksnm->execGetWifiList(this->wcardname);
+        this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
     } else {
 //        on_btnWifiList_clicked();
     }

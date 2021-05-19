@@ -417,6 +417,8 @@ signals:
     void reConnectWifi(const QString& uuid);
     void actWifiSignalLvChanaged(const int& currentLevel);
     void getWifiListFinished();
+    void startReconnectWifi(const QString& ssid);
+    void stopReconnectWifi(const QString& ssid);
 };
 
 #endif // MAINWINDOW_H

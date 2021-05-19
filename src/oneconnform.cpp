@@ -170,6 +170,17 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
         }
     });
 
+    connect(mw, &MainWindow::startReconnectWifi, this, [ = ](const QString &ssid) {
+        if (ssid == this->wifiName && !this->isWaiting) {
+            this->startWifiWaiting(true);
+        }
+    });
+    connect(mw, &MainWindow::stopReconnectWifi, this, [ = ](const QString &ssid) {
+        if (ssid == this->wifiName && this->isWaiting) {
+            this->stopWifiWaiting(true);
+        }
+    });
+
     connType = "";
     lbNameLyt = new QHBoxLayout(ui->lbName);
     lbFreq = new QLabel(ui->lbName);

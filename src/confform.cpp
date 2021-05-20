@@ -350,33 +350,35 @@ void ConfForm::on_btnSave_clicked()
         }
 
         //如果网络的名称已经修改，则删掉当前网络，新建一个网络
+        //修改为   直接modify  不删除不新建
         QString name = ui->leName->text();
         if (name != lastConnName) {
-            QString cmd = "nmcli connection delete '" + netUuid + "'";
+            // QString cmd = "nmcli connection delete '" + netUuid + "'";
+            QString cmd = "nmcli connection modify '" + lastConnName + "' con-name '"+name+"'";
             int status = system(cmd.toUtf8().data());
             if (status != 0) {
-                syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'on_btnSave_clicked' failed");
+                syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'on_btnSave_clicked' failed");
             } else {
-                syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'on_btnSave_clicked' success");
+                syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'on_btnSave_clicked' success");
             }
 
-            this->isCreateNewNet = true;
-            newUuid = "--";
+            // this->isCreateNewNet = true;
+            // newUuid = "--";
 
-            QProcess * processAdd = new QProcess;
-            QString cmdAdd = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet";
-            QStringList options;
-            options << "-c" << cmdAdd;
-            processAdd->start("/bin/bash",options);
-            connect(processAdd, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
-                processAdd->deleteLater();
-            });
-            connect(processAdd, &QProcess::channelReadyRead, this, [ = ]() {
-                QString str = processAdd->readAll();
-                QString regExpPattern("[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}");
-                QRegExp regExpTest(regExpPattern);
-                int pos = str.indexOf(regExpTest);
-                newUuid = str.mid(pos,36); //36是uuid的长度
+            // QProcess * processAdd = new QProcess;
+            // QString cmdAdd = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet";
+            // QStringList options;
+            // options << "-c" << cmdAdd;
+            // processAdd->start("/bin/bash",options);
+            // connect(processAdd, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+            //     processAdd->deleteLater();
+            // });
+            // connect(processAdd, &QProcess::channelReadyRead, this, [ = ]() {
+            //     QString str = processAdd->readAll();
+            //     QString regExpPattern("[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}");
+            //     QRegExp regExpTest(regExpPattern);
+            //     int pos = str.indexOf(regExpTest);
+            //     newUuid = str.mid(pos,36); //36是uuid的长度
 
                 if (ui->cbType->currentIndex() == 1) {
                     //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
@@ -388,8 +390,9 @@ void ConfForm::on_btnSave_clicked()
                 }
 
                 this->saveNetworkConfiguration();
-            });
-            processAdd->waitForFinished();
+                return;
+            // });
+            // processAdd->waitForFinished();
         } else {
             this->isCreateNewNet = false;
             newUuid = "--";
@@ -511,7 +514,8 @@ bool ConfForm::check_ip_conflict(QString ifname)
     FILE *fp;
     char ret[10], arp_all[1024];
 
-    if (!ui->leAddr_ipv6->text().isEmpty() && ui->leAddr_ipv6->text() != "") {
+    // if (!ui->leAddr_ipv6->text().isEmpty() && ui->leAddr_ipv6->text() != "") {
+    if (!ui->leAddr->text().isEmpty() && ui->leAddr->text() != "") {
         //ipv4地址不为空，需要验证是否冲突
         QString arp_all_cmd = "arping -c 3 -f -I " + ifname + " -D " + ui->leAddr->text();
         fp = popen(arp_all_cmd.toUtf8().data(),"r");

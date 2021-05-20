@@ -1771,9 +1771,14 @@ void MainWindow::getWifiListDone(QStringList slist)
                     int current_try_time = 0;
                     canReconnectWifiTimeInterval = false;
                     //若使用配置文件连接失败且还有可以回连的wifi，继续尝试回连下一个
+                    QStringList tried_list;
                     for (current_try_time; current_try_time < targetWifiStructList.length(); current_try_time++) {
                         is_stop_check_net_state = 1;
                         QString wifiSsid = objKyDBus->getWifiSsid(targetWifiStructList.at(current_try_time).objectPath);
+                        if (tried_list.contains(wifiSsid)) {
+                            //如果已有同名AP尝试过重连了，就不再尝试此AP，以防多个同名AP连续尝试连接均失败
+                            continue;
+                        }
                         emit this->startReconnectWifi(wifiSsid);
                         QString modifyCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiStructList.at(current_try_time).bssid;
                         int mdf_res = system(modifyCmd.toUtf8().data());
@@ -1793,6 +1798,7 @@ void MainWindow::getWifiListDone(QStringList slist)
                         objKyDBus->showDesktopNotify(txt);
                         this->stopLoading();
                         is_stop_check_net_state = 0;
+                        tried_list.append(wifiSsid);
                     }
                     isReconnectingWifi = false;
                     timeIntervalToConnectWifi();

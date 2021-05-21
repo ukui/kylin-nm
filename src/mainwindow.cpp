@@ -1584,7 +1584,10 @@ void MainWindow::getLanListDone(QStringList slist)
                     macInterface = macLan;
                 }
             } else {
-                mIfName = objKyDBus->multiWiredIfName.at(0); //使用默认的网络接口
+                if (objKyDBus->multiWiredIfName.length() > 0)
+                    mIfName = objKyDBus->multiWiredIfName.at(0); //使用默认的网络接口
+                else
+                    mIfName = "";
                 macInterface = objKyDBus->dbusMacDefault; //使用默认的MAC地址
             }
 
@@ -1771,9 +1774,14 @@ void MainWindow::getWifiListDone(QStringList slist)
                     int current_try_time = 0;
                     canReconnectWifiTimeInterval = false;
                     //若使用配置文件连接失败且还有可以回连的wifi，继续尝试回连下一个
+                    QStringList tried_list;
                     for (current_try_time; current_try_time < targetWifiStructList.length(); current_try_time++) {
                         is_stop_check_net_state = 1;
                         QString wifiSsid = objKyDBus->getWifiSsid(targetWifiStructList.at(current_try_time).objectPath);
+                        if (tried_list.contains(wifiSsid)) {
+                            //如果已有同名AP尝试过重连了，就不再尝试此AP，以防多个同名AP连续尝试连接均失败
+                            continue;
+                        }
                         emit this->startReconnectWifi(wifiSsid);
                         QString modifyCmd = "nmcli connection modify \""+ wifiSsid + "\" " + "802-11-wireless.bssid " + targetWifiStructList.at(current_try_time).bssid;
                         int mdf_res = system(modifyCmd.toUtf8().data());
@@ -1793,6 +1801,7 @@ void MainWindow::getWifiListDone(QStringList slist)
                         objKyDBus->showDesktopNotify(txt);
                         this->stopLoading();
                         is_stop_check_net_state = 0;
+                        tried_list.append(wifiSsid);
                     }
                     isReconnectingWifi = false;
                     timeIntervalToConnectWifi();
@@ -2229,7 +2238,12 @@ QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStrin
         QString line = tmp.at(iter);
         QString wifiname = line.mid(indexName).trimmed();
         QString wifibssid = line.mid(indexBSsid, indexPath-indexBSsid).trimmed();
-        QString wifiObjectPath = line.mid(indexPath,indexCate-indexPath).trimmed();
+        QString wifiObjectPath;
+        if (indexCate) {
+            wifiObjectPath = line.mid(indexPath,indexCate-indexPath).trimmed();
+        } else {
+            wifiObjectPath = line.mid(indexPath,indexName-indexPath).trimmed();
+        }
         QString wifiAutoConnection = "no";
         QString wifiPriority;
 
@@ -2421,7 +2435,12 @@ void MainWindow::loadWifiListDone(QStringList slist)
         QString line = slist.at(i);
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
         int Path = line.indexOf("/org/");
-        QString wDbusPath = line.mid(Path, indexCate-indexPath).trimmed();
+        QString wDbusPath;
+        if (indexCate >= 0) {
+            wDbusPath = line.mid(Path,indexCate-Path).trimmed();
+        } else {
+            wDbusPath = line.mid(Path,indexName-Path).trimmed();
+        }
         QDBusInterface interface("org.freedesktop.NetworkManager",
                                   wDbusPath,
                                   "org.freedesktop.DBus.Properties",
@@ -2448,9 +2467,18 @@ void MainWindow::loadWifiListDone(QStringList slist)
         QString wsecu = line.mid(indexSecu, indexFreq - indexSecu).trimmed();
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
-        QString wcate = line.mid(indexCate, 1).trimmed();
+        QString wcate;
+        if (indexCate >= 0)
+            wcate = line.mid(indexCate, 1).trimmed();
+        else
+            wcate = QString::number(0);
         int Path = line.indexOf("/org/");
-        QString wDbusPath = line.mid(Path, indexCate-indexPath).trimmed();
+        QString wDbusPath;
+        if (indexCate >= 0) {
+            wDbusPath = line.mid(Path,indexCate-Path).trimmed();
+        } else {
+            wDbusPath = line.mid(Path,indexName-Path).trimmed();
+        }
         QDBusInterface interface("org.freedesktop.NetworkManager",
                                   wDbusPath,
                                   "org.freedesktop.DBus.Properties",
@@ -2484,7 +2512,12 @@ void MainWindow::loadWifiListDone(QStringList slist)
         for (int k = i; k < slist.size(); k ++) {
             QString tmpLine = slist.at(k);
             int Path = tmpLine.indexOf("/org/");
-            QString m_DbusPath = slist.at(k).mid(Path, indexCate-indexPath).trimmed();
+            QString m_DbusPath;
+            if (indexCate >= 0) {
+                m_DbusPath = line.mid(Path,indexCate-Path).trimmed();
+            } else {
+                m_DbusPath = line.mid(Path,indexName-Path).trimmed();
+            }
             QDBusInterface m_interface("org.freedesktop.NetworkManager",
                                     m_DbusPath,
                                     "org.freedesktop.DBus.Properties",
@@ -2519,7 +2552,12 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 });
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(requestHandleWifiDisconn()), this, SLOT(handleWifiDisconn()));
-                QString path = line.mid(indexPath, indexCate-indexPath).trimmed();
+                QString path;
+                if (indexCate >= 0) {
+                    path = line.mid(indexPath, indexCate - indexPath).trimmed();
+                } else {
+                    path = line.mid(indexPath, indexName - indexPath).trimmed();
+                }
                 QString m_name;
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(path);
                 if (m_name.isEmpty() || m_name == "") {
@@ -2580,7 +2618,12 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
                 OneConnForm *ocf = new OneConnForm(wifiListWidget, this, confForm, ksnm);
                 connect(ocf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneWifiFormSelected(QString,int)));
-                QString path = line.mid(indexPath,indexCate-indexPath).trimmed();
+                QString path;
+                if (indexCate >= 0) {
+                    path = line.mid(indexPath, indexCate - indexPath).trimmed();
+                } else {
+                    path = line.mid(indexPath, indexName - indexPath).trimmed();
+                }
                 QString m_name;
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(path);
                 if (m_name.isEmpty() || m_name == "") {
@@ -2742,7 +2785,12 @@ void MainWindow::updateWifiListDone(QStringList slist)
         QString wbssid = line.mid(indexBSsid, 17).trimmed();
         QString wname = line.mid(indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
-        QString wpath = line.mid(indexPath, indexCate - indexPath).trimmed();
+        QString wpath;
+        if (indexCate) {
+            wpath = line.mid(indexPath, indexCate - indexPath).trimmed();
+        } else {
+            wpath = line.mid(indexPath, indexName - indexPath).trimmed();
+        }
         QString wcate = line.mid(indexCate, 1).trimmed();
 
         if(wname == "" || wname == "--"){continue;}

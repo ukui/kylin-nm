@@ -4004,7 +4004,8 @@ void MainWindow::connWifiDone(int connFlag)
         QString txt(tr("Conn Wifi Success"));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 1) {
-//        is_stop_check_net_state = 0;
+        syslog(LOG_DEBUG, "Confirm your Wi-Fi password or usable of wireless card");
+        //is_stop_check_net_state = 0;
         is_connect_net_failed = 1;
         is_connect_hide_wifi = 0;
         QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
@@ -4012,14 +4013,17 @@ void MainWindow::connWifiDone(int connFlag)
     } else if (connFlag == 3) {
         syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected");
     } else if (connFlag == 4) {
+        syslog(LOG_DEBUG, "Confirm your Wi-Fi password");
         is_connect_net_failed = 1;
         QString txt(tr("Confirm your Wi-Fi password"));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 5) {
+        syslog(LOG_DEBUG, "Selected Wifi has not been scanned.");
         is_connect_net_failed = 1;
         QString txt(tr("Selected Wifi has not been scanned."));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 6) {
+        syslog(LOG_DEBUG, "Connect Hidden Wifi Success.");
         this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
         QString txt(tr("Connect Hidden Wifi Success"));
         objKyDBus->showDesktopNotify(txt);
@@ -4200,6 +4204,7 @@ int MainWindow::getScreenGeometry(QString methodName)
         }
     } else {
         qDebug()<< "to get message about "<< methodName<<" of screen failed";
+        syslog(LOG_DEBUG, "to get message about %s of screen failed", methodName.toUtf8().data());
     }
     return res;
 }
@@ -4218,6 +4223,7 @@ void MainWindow::priScreenChanged(int x, int y, int width, int height)
     m_priWid = width;
     m_priHei = height;
     qDebug("primary screen  changed, geometry is  x=%d, y=%d, windth=%d, height=%d", x, y, width, height);
+    syslog(LOG_DEBUG, "primary screen  changed, geometry is  x=%d, y=%d, windth=%d, height=%d", x, y, width, height);
 }
 
 // 通过kds的dbus发现rfkill状态变化
@@ -4229,6 +4235,7 @@ void MainWindow::onRfkillStatusChanged()
 
         if (current == -1){
             qWarning("Error Occur When Get Current WlanMode");
+            syslog(LOG_DEBUG, "Error Occur When Get Current WlanMode");
             return;
         }
         if (!current) {

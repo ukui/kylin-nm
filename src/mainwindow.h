@@ -232,6 +232,7 @@ public slots:
     void connWifiDone(int connFlag);
     void onRequestRefreshWifiList();
     void onRefreshWifiListAfterScan();
+    void onLoadWifiListAfterScan();
 
     //flag =0或1为普通点击、2为收到打开信息、3为收到关闭信息、4为无线网卡插入、5为无线网卡拔出
     void onBtnWifiClicked(int flag = 0);
@@ -411,6 +412,7 @@ private slots:
 signals:
     void disConnSparedNet(QString type);
     void refreshWifiListAfterScan();
+    void loadWifiListAfterScan();
     void carrierDownHandle();
     void waitLanStop();
     void configurationChanged(); //通知控制面板更新IP的信号

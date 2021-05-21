@@ -559,6 +559,7 @@ void MainWindow::initTimer()
 
     //循环检测wifi列表的变化，可用于更新wifi列表
     numberForWifiScan = 0;
+    QObject::connect(this, SIGNAL(loadWifiListAfterScan()), this, SLOT(onLoadWifiListAfterScan()));
     QObject::connect(this, SIGNAL(refreshWifiListAfterScan()), this, SLOT(onRefreshWifiListAfterScan()));
     checkWifiListChanged = new QTimer(this);
     checkWifiListChanged->setTimerType(Qt::PreciseTimer);
@@ -1374,8 +1375,16 @@ void MainWindow::on_btnWifiList_clicked()
         btnAddNet->show();
 
         this->startLoading();
-        //this->objKyDBus->toGetWifiList();
-        this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
+        if (isHuaWeiPC) {
+            QtConcurrent::run([=](){
+                objKyDBus->requestScanWifi(); //要求后台扫描AP
+                sleep(2);
+                emit loadWifiListAfterScan();
+            });
+        } else {
+            //this->objKyDBus->toGetWifiList(); //这一句是使用dbus的方法获取wifilist
+            this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
+        }
     } else if (iface->wstate == 3) {
         qDebug() << "debug: 连接中，正在配置wifi设备";
 
@@ -1429,6 +1438,12 @@ void MainWindow::on_btnWifiList_clicked()
 
     delete iface;
     bt->deleteLater();
+}
+
+void MainWindow::onLoadWifiListAfterScan()
+{
+    current_wifi_list_state = LOAD_WIFI_LIST;
+    this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC); //加载wifi列表
 }
 
 void MainWindow::on_wifi_changed()

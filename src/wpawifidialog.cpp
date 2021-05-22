@@ -54,6 +54,7 @@ void UpConnThread::run() {
     } else {
         cmdStr = "nmcli connection up '" + this->conn_name + "'";
     }
+    qDebug()<<"Trying to connect wifi. ssid="<<this->conn_name;
     qDebug()<<"qDebug: 激活连接: \n"<<
               "qDebug: " + cmdStr;
     int res = Utils::m_system(cmdStr.toUtf8().data());

@@ -218,6 +218,7 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
     } else {
         mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
     }
+    qDebug()<<"Trying to connect wifi. ssid="<<connName;
 
     if (isWiredCableAlready) {
         QStringList options;
@@ -375,6 +376,7 @@ void BackThread::execConnRememberedHiddenWifi(QString wifiName)
         }
         if (! is_hidden) {
             QString cmd = "nmcli connection up '" + wifiName + "'";
+            qDebug()<<"Trying to connect wifi. ssid="<<wifiName;
             int res = Utils::m_system(cmd.toUtf8().data());
             if (res == 0) {
                 emit connDone(6);
@@ -413,6 +415,7 @@ void BackThread::execConnWifi(QString connName, QString connIfName)
         //qDebug() << "-------------------------> connName = " << connName;
         cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + connIfName + "'\n";
     }
+    qDebug()<<"Trying to connect wifi. ssid="<<connName;
 
     QStringList options;
     options << "-c" << cmdStr;
@@ -427,6 +430,7 @@ void BackThread::execReconnWIfi(QString uuid)
     Utils::m_system(cmd.toUtf8().data());
     cmd = "nmcli connection up " + uuid;
     Utils::m_system(cmd.toUtf8().data());
+    qDebug()<<"Trying to connect wifi. uuid="<<uuid;
 }
 
 void BackThread::onReadOutputWifi()

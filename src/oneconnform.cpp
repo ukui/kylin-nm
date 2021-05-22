@@ -732,6 +732,7 @@ void OneConnForm::toConnectWirelessNetwork()
             connect(t, &QThread::started, this, [ = ]() {
                 this->startWifiWaiting(true);
                 QString cmdStr = "nmcli connection up '" + wifiName + "' passwd-file " + homePath +"/.config/" + wifiName + ".psk";
+                qDebug()<<"Trying to connect wifi. ssid="<<wifiName;
                 emit this->sigConnWifiPsk(cmdStr);
             });
             connect(this, SIGNAL(sigConnWifiPsk(QString)), bt, SLOT(execConnWifiPsk(QString)));
@@ -790,6 +791,7 @@ void OneConnForm::on_btnConnPWD_clicked()
         connect(t, &QThread::started, this, [ = ]() {
             this->startWifiWaiting(true);
             QString cmdStr = "nmcli connection up '" + wifiName + "' passwd-file " + homePath +"/.config/" + wifiName + ".psk";
+            qDebug()<<"Trying to connect wifi. ssid="<<wifiName;
             emit this->sigConnWifiPsk(cmdStr);
         });
         connect(this, SIGNAL(sigConnWifiPsk(QString)), bt, SLOT(execConnWifiPsk(QString)));
@@ -983,8 +985,10 @@ void OneConnForm::slotConnWifiResult(int connFlag)
                 qDebug() << "实际连接的wifi的bssid是 " << wifiBSsid;
                 if (currConnWifiBssid != wifiBSsid && !currConnWifiBssid.isEmpty()) {
                     QString modityCmd = "nmcli connection modify \""+ wifiName + "\" " + "802-11-wireless.bssid " + wifiBSsid;
-                    system(modityCmd.toUtf8().data());
+                    int res = system(modityCmd.toUtf8().data());
+                    qDebug()<<"Modified bssid for wifi. ssid="<<wifiName<<". bssid="<<wifiBSsid<<". res="<<res;
                     QString reconnectWifiCmd = "nmcli connection up \"" + wifiName + "\"";
+                    qDebug()<<"Trying to connect wifi. ssid="<<wifiName;
                     system(reconnectWifiCmd.toUtf8().data());
                 } else {
                     emit requestRefreshWifiList();

@@ -1802,6 +1802,7 @@ void MainWindow::getWifiListDone(QStringList slist)
                         int mdf_res = system(modifyCmd.toUtf8().data());
                         qDebug()<<"Modification finished, cmd = "<<modifyCmd<<". res = "<<mdf_res;
                         QString reconnectWifiCmd = "nmcli connection up \"" + wifiSsid + "\"";
+                        qDebug()<<"Trying to connect wifi. ssid="<<wifiSsid;
                         int con_res = system(reconnectWifiCmd.toUtf8().data());
                         qDebug()<<"Reconnect finished, cmd = "<<reconnectWifiCmd<<". res = "<<con_res;
                         emit this->stopReconnectWifi(wifiSsid);
@@ -2254,7 +2255,7 @@ QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStrin
         QString wifiname = line.mid(indexName).trimmed();
         QString wifibssid = line.mid(indexBSsid, indexPath-indexBSsid).trimmed();
         QString wifiObjectPath;
-        if (indexCate) {
+        if (indexCate >= 0) {
             wifiObjectPath = line.mid(indexPath,indexCate-indexPath).trimmed();
         } else {
             wifiObjectPath = line.mid(indexPath,indexName-indexPath).trimmed();
@@ -2487,12 +2488,11 @@ void MainWindow::loadWifiListDone(QStringList slist)
             wcate = line.mid(indexCate, 1).trimmed();
         else
             wcate = QString::number(0);
-        int Path = line.indexOf("/org/");
         QString wDbusPath;
         if (indexCate >= 0) {
-            wDbusPath = line.mid(Path,indexCate-Path).trimmed();
+            wDbusPath = line.mid(indexPath,indexCate-indexPath).trimmed();
         } else {
-            wDbusPath = line.mid(Path,indexName-Path).trimmed();
+            wDbusPath = line.mid(indexPath,indexName-indexPath).trimmed();
         }
         QDBusInterface interface("org.freedesktop.NetworkManager",
                                   wDbusPath,
@@ -2525,13 +2525,11 @@ void MainWindow::loadWifiListDone(QStringList slist)
         int max_freq = wfreq.toInt();
         int min_freq = wfreq.toInt();
         for (int k = i; k < slist.size(); k ++) {
-            QString tmpLine = slist.at(k);
-            int Path = tmpLine.indexOf("/org/");
             QString m_DbusPath;
             if (indexCate >= 0) {
-                m_DbusPath = line.mid(Path,indexCate-Path).trimmed();
+                m_DbusPath = slist.at(k).mid(indexPath,indexCate-indexPath).trimmed();
             } else {
-                m_DbusPath = line.mid(Path,indexName-Path).trimmed();
+                m_DbusPath = slist.at(k).mid(indexPath,indexName-indexPath).trimmed();
             }
             QDBusInterface m_interface("org.freedesktop.NetworkManager",
                                     m_DbusPath,
@@ -2548,7 +2546,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 }
             }
         }
-
+        qDebug()<<"Wifi ssid="<<wname<<". max_freq="<<max_freq<<". min_freq="<<min_freq;
         int freqState = 0;
         if (max_freq < 3000) {
             //只有2.4GHZ
@@ -2801,7 +2799,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
         QString wname = line.mid(indexName).trimmed();
         QString wfreq = line.mid(indexFreq, 4).trimmed();
         QString wpath;
-        if (indexCate) {
+        if (indexCate >= 0) {
             wpath = line.mid(indexPath, indexCate - indexPath).trimmed();
         } else {
             wpath = line.mid(indexPath, indexName - indexPath).trimmed();
@@ -2831,6 +2829,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
             }
         }
 
+        qDebug()<<"Wifi ssid="<<wname<<". max_freq="<<max_freq<<". min_freq="<<min_freq;
         int freqState = 0;
         if (max_freq < 3000) {
             //只有2.4GHZ
@@ -3992,6 +3991,7 @@ void MainWindow::connWifiDone(int connFlag)
     // Wifi连接结果，0点击连接成功 1失败 2没有配置文件 3开机启动网络工具时已经连接 4密码错误 5找不到已保存的网络
     if (connFlag == 0) {
         syslog(LOG_DEBUG, "Wi-Fi already connected by clicking button");
+        qDebug()<<"Wi-Fi connected succeed. res=0";
         if (!isHuaWeiPC) {
             //如果不是华为电脑，使用获取连接信号的方式更新列表
             this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
@@ -4005,6 +4005,7 @@ void MainWindow::connWifiDone(int connFlag)
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 1) {
         syslog(LOG_DEBUG, "Confirm your Wi-Fi password or usable of wireless card");
+        qWarning()<<"Wi-Fi connected failed. res=1";
         //is_stop_check_net_state = 0;
         is_connect_net_failed = 1;
         is_connect_hide_wifi = 0;
@@ -4012,20 +4013,24 @@ void MainWindow::connWifiDone(int connFlag)
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 3) {
         syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected");
+        qWarning()<<"Wi-Fi connected failed. res=3";
     } else if (connFlag == 4) {
         syslog(LOG_DEBUG, "Confirm your Wi-Fi password");
         is_connect_net_failed = 1;
         QString txt(tr("Confirm your Wi-Fi password"));
+        qWarning()<<"Wi-Fi connected failed. res=4";
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 5) {
         syslog(LOG_DEBUG, "Selected Wifi has not been scanned.");
         is_connect_net_failed = 1;
         QString txt(tr("Selected Wifi has not been scanned."));
+        qWarning()<<"Wi-Fi connected failed. res=5";
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 6) {
         syslog(LOG_DEBUG, "Connect Hidden Wifi Success.");
         this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
         QString txt(tr("Connect Hidden Wifi Success"));
+        qWarning()<<"Wi-Fi connected failed. res=6";
         objKyDBus->showDesktopNotify(txt);
     }
 

@@ -653,15 +653,15 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
 //        qDebug() << create_cmd;
         int res = Utils::m_system(create_cmd.toUtf8().data());
         if (res == 0) {
-            syslog(LOG_DEBUG, "In function slot_on_connectBtn_clicked, created a wifi config named %s", nameEditor->text());
-            qDebug() << "qDebug: created a wifi config successfully";
+            //syslog(LOG_DEBUG, "In function slot_on_connectBtn_clicked, created a wifi config named %s", nameEditor->text());
+            qDebug() << "qDebug: created a wifi config successfully in function slot_on_connectBtn_clicked";
             if (askPwdBtn->isChecked() && eapCombox->currentIndex() == EapType::PEAP) setPwdFlag(2);
             else setPwdFlag(0);
             //创建成功，激活连接
             activateConnection();
         } else {
-            syslog(LOG_ERR, "execute 'nmcli connection add' in function 'slot_on_connectBtn_clicked' failed");
-            qDebug() << "qDebug: create wpa wifi config file failed!";
+            //syslog(LOG_ERR, "execute 'nmcli connection add' in function 'slot_on_connectBtn_clicked' failed");
+            qDebug() << "qDebug: create wpa wifi config file failed in function slot_on_connectBtn_clicked";
         }
     }
 }
@@ -705,8 +705,8 @@ void WpaWifiDialog::activateConnection() {
             Utils::m_system(cmdStr_2.toUtf8().data());
             //this->mw->is_stop_check_net_state = 0;
             //this->mw->setTrayLoading(false);
-            syslog(LOG_DEBUG, "execute 'nmcli connection up' in function 'activateConnection' time out");
-            qDebug() << "qDebug: activate time out!";
+            //syslog(LOG_DEBUG, "execute 'nmcli connection up' in function 'activateConnection' time out");
+            qDebug() << "qDebug: activate time out in function activateConnection";
             qDebug() << "qDebug: 连接超时（30秒超时时间）";
         });
         //设置超时时间
@@ -730,8 +730,8 @@ void WpaWifiDialog::activateConnection() {
             emit conn_done();
             //this->mw->is_stop_check_net_state = 0;
             //this->mw->setTrayLoading(false);
-            syslog(LOG_DEBUG, "execute 'nmcli connection up' in function 'activateConnection' accepted");
-            //qDebug() << "qDebug: activated wpa wifi successfully";
+            //syslog(LOG_DEBUG, "execute 'nmcli connection up' in function 'activateConnection' accepted");
+            qDebug() << "qDebug: activated wpa security wifi successfully";
             this->close();
         }
     });

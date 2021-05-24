@@ -564,10 +564,8 @@ void OneConnForm::on_btnDisConn_clicked()
         return;
     }
 
-    syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", wifiName.toUtf8().data());
+    //syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", wifiName.toUtf8().data());
     qDebug()<<"DisConnect button about wifi net is clicked, current wifi name is "<<wifiName;
-    //syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, wifi may be disconnected .");
-    //qDebug()<<"DisConnect button about wifi net is clicked, wifi may be disconnected";
     if (mw->canReconnectWifiList.contains(wifiName)) {
         mw->canReconnectWifiList.removeOne(wifiName);
     }
@@ -589,7 +587,7 @@ void OneConnForm::on_btnConnSub_clicked()
         return;
     }
 
-    syslog(LOG_DEBUG, "A button named on_btnConnSub about wifi net is clicked.");
+    //syslog(LOG_DEBUG, "A button named on_btnConnSub about wifi net is clicked.");
     qDebug()<<"A button named on_btnConnSub about wifi net is clicked.";
     toConnectWirelessNetwork();
 }
@@ -601,7 +599,7 @@ void OneConnForm::on_btnConn_clicked()
         return;
     }
 
-    syslog(LOG_DEBUG, "A button named btnConn about wifi net is clicked.");
+    //syslog(LOG_DEBUG, "A button named btnConn about wifi net is clicked.");
     qDebug()<<"A button named btnConn about wifi net is clicked.";
     toConnectWirelessNetwork();
 }
@@ -773,7 +771,7 @@ void OneConnForm::toConnectWirelessNetwork()
 //需要密码的wifi连接
 void OneConnForm::on_btnConnPWD_clicked()
 {
-    syslog(LOG_DEBUG, "A button named btnConnPWD about wifi net is clicked.");
+    //syslog(LOG_DEBUG, "A button named btnConnPWD about wifi net is clicked.");
     qDebug()<<"A button named btnConnPWD about wifi net is clicked.";
 
     if (this->getPskFlag() != 0) {
@@ -1006,7 +1004,8 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
         int status = system(cmd.toUtf8().data());
         if (status != 0) {
-            syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");
+            //syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");
+            qDebug()<<"execute 'nmcli connection delete' in function 'slotConnWifiResult' failed.";
         }
     }
 
@@ -1071,7 +1070,7 @@ void OneConnForm::waitAnimStep()
         int status = system(cmd.toUtf8().data());
         if (status != 0) {
             qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'waitAnimStep' failed";
-            syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'waitAnimStep' failed");
+            //syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'waitAnimStep' failed");
         }
 
         this->stopWifiWaiting(true); //动画超出时间限制，强制停止动画

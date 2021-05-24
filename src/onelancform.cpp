@@ -309,10 +309,8 @@ void OneLancForm::slotConnLan()
 //点击网络断开按钮，执行该函数
 void OneLancForm::on_btnDisConn_clicked()
 {
-    syslog(LOG_DEBUG, "DisConnect button about lan net is clicked, current wired net name is %s .", ui->lbName->text().toUtf8().data());
+    //syslog(LOG_DEBUG, "DisConnect button about lan net is clicked, current wired net name is %s .", ui->lbName->text().toUtf8().data());
     qDebug()<<"DisConnect button about lan net is clicked, current wired net name is "<<ui->lbName->text();
-    //syslog(LOG_DEBUG, "DisConnect button about lan net is clicked, a wired network may be disconnected .");
-    //qDebug()<<"DisConnect button about lan net is clicked, a wired network may be disconnected";
 
     this->startWaiting(false);
     mw->is_stop_check_net_state = 1;
@@ -372,7 +370,7 @@ void OneLancForm::toDisConnWiredNetwork(QString netUuid)
 //点击了连接网络按钮，执行该函数
 void OneLancForm::on_btnConn_clicked()
 {
-    syslog(LOG_DEBUG, "A button named btnConn about lan net is clicked.");
+    //syslog(LOG_DEBUG, "A button named btnConn about lan net is clicked.");
     qDebug()<<"A button named btnConn about lan net is clicked.";
     toConnectWiredNetwork();
 }
@@ -380,7 +378,7 @@ void OneLancForm::on_btnConn_clicked()
 //点击了item被扩展中的连接网络按钮，执行该函数
 void OneLancForm::on_btnConnSub_clicked()
 {
-    syslog(LOG_DEBUG, "A button named btnConnSub about lan net is clicked.");
+    //syslog(LOG_DEBUG, "A button named btnConnSub about lan net is clicked.");
     qDebug()<<"A button named btnConnSub about lan net is clicked.";
     toConnectWiredNetwork();
 }
@@ -475,7 +473,7 @@ void OneLancForm::waitAnimStep()
         int status = system(cmd.toUtf8().data());
         if (status != 0) {
             qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'waitAnimStep' failed";
-            syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'waitAnimStep' failed");
+            //syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'waitAnimStep' failed");
         }
 
         this->stopWaiting(); //动画超出时间限制，强制停止动画
@@ -532,7 +530,7 @@ void OneLancForm::on_btnCancel_clicked()
     int status = system(cmd.toUtf8().data());
     if (status != 0) {
         qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
-        syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
+        //syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
     }
 
     KylinDBus myKylinDbus;

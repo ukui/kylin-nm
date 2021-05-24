@@ -84,7 +84,7 @@ DlgHideWifiWep::DlgHideWifiWep(int type, QWidget *parent) :
 
     ui->cbxConn->addItem(tr("C_reate…")); //新建...
     int status = system("nmcli connection show>/tmp/kylin-nm-connshow");
-    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgHideWifiWep' failed");}
+    if (status != 0){ //syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgHideWifiWep' failed");}
     QFile file("/tmp/kylin-nm-connshow");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         qDebug()<<"Can't open the file!";

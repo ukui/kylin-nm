@@ -82,25 +82,20 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QApplication a(argc, argv);
-    //qInstallMessageHandler(messageOutput);
+    qInstallMessageHandler(messageOutput);
 
     openlog(LOG_IDENT, LOG_NDELAY | LOG_NOWAIT | LOG_PID, LOG_USER);
-    syslog(LOG_DEBUG, "Kylin Network Manager Is Already Launched");
+    qDebug()<<"Kylin Network Manager Is Already Launched";
+    //syslog(LOG_DEBUG, "Kylin Network Manager Is Already Launched");
 
     int loopNum = 0;
     while (!QSystemTrayIcon::isSystemTrayAvailable()) {
         if (loopNum == 15) return 1;
         qDebug()<<"I couldn't detect any system tray on this system now";
-        syslog(LOG_DEBUG, "I couldn't detect any system tray on this system now");
+        //syslog(LOG_DEBUG, "I couldn't detect any system tray on this system now");
         loopNum += 1;
         sleep(1);
     }
-
-    //if (!QSystemTrayIcon::isSystemTrayAvailable()) {
-    //    qDebug()<<"I couldn't detect any system tray on this system now";
-    //    syslog(LOG_DEBUG, "I couldn't detect any system tray on this system now");
-    //    return 1;
-    //}
     QApplication::setQuitOnLastWindowClosed(false);
 
     // Internationalization

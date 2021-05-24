@@ -50,7 +50,7 @@ KSimpleNM::~KSimpleNM()
 void KSimpleNM::execGetLanList()
 {
     if (isExecutingGetLanList) {
-        syslog(LOG_DEBUG, "It is running getting lan list when getting lan list");
+        //syslog(LOG_DEBUG, "It is running getting lan list when getting lan list");
         qDebug()<<"debug: it is running getting lan list when getting lan list";
         isUseOldLanSlist = true;
         QStringList slistmEmpty;
@@ -73,7 +73,7 @@ void KSimpleNM::execGetLanList()
 void KSimpleNM::execGetWifiList(const QString& wname, const bool &isHuaweiPc)
 {
     if (isExecutingGetWifiList) {
-        syslog(LOG_DEBUG, "It is running getting wifi list when getting wifi list");
+        //syslog(LOG_DEBUG, "It is running getting wifi list when getting wifi list");
         qDebug()<<"debug: it is running getting wifi list when getting wifi list";
         isUseOldWifiSlist = true;
         QStringList slistmEmpty;

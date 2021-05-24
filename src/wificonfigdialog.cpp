@@ -129,7 +129,7 @@ void WiFiConfigDialog::toConfigWifi()
 
     QFile file(tmpPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        syslog(LOG_DEBUG, "Can't open the file /tmp/kylin-nm-btoutput in function toConfigWifi !");
+        //syslog(LOG_DEBUG, "Can't open the file /tmp/kylin-nm-btoutput in function toConfigWifi !");
         qDebug()<<"Can't open the file /tmp/kylin-nm-btoutput in function toConfigWifi !";
     }
     QString line = file.readLine();
@@ -143,7 +143,8 @@ void WiFiConfigDialog::toConfigWifi()
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + ui->leWifiId->text() + "'";
         int status = system(cmd.toUtf8().data());
         if (status != 0) {
-            syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'toConfigWifi' failed");
+            //syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'toConfigWifi' failed");
+            qDebug()<<"execute 'nmcli connection delete' in function 'toConfigWifi' failed";
         }
     }
 }

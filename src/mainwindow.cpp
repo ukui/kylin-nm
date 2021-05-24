@@ -433,7 +433,7 @@ void MainWindow::initLanSlistAndGetReconnectNetList()
     //nmcli -f type,uuid,name connection show
     p_file = popen("export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli -f type,uuid,name connection show", "r");
     if (!p_file) {
-        syslog(LOG_ERR, "Error occurred when popen cmd 'nmcli connection show'");
+        //syslog(LOG_ERR, "Error occurred when popen cmd 'nmcli connection show'");
         qDebug()<<"Error occurred when popen cmd 'nmcli connection show";
     }
 
@@ -480,9 +480,9 @@ void MainWindow::initNetwork()
     // 开关状态
     qDebug()<<"===";
     qDebug()<<"state of network: '0' is connected, '1' is disconnected, '2' is net device switch off";
-    syslog(LOG_DEBUG, "state of network: '0' is connected, '1' is disconnected, '2' is net device switch off");
+    //syslog(LOG_DEBUG, "state of network: '0' is connected, '1' is disconnected, '2' is net device switch off");
     qDebug()<<"current network state:  lan state ="<<iface->lstate<<",  wifi state ="<<iface->wstate ;
-    syslog(LOG_DEBUG, "current network state:  wired state =%d,  wifi state =%d", iface->lstate, iface->wstate);
+    //syslog(LOG_DEBUG, "current network state:  wired state =%d,  wifi state =%d", iface->lstate, iface->wstate);
     qDebug()<<"===";
 
     if (iface->wstate == 0 || iface->wstate == 1) {
@@ -904,7 +904,7 @@ void MainWindow::on_checkOverTime()
     int status = system(cmd.toUtf8().data());
     if (status != 0) {
         qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_checkOverTime' failed";
-        syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_checkOverTime' failed");
+        //syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_checkOverTime' failed");
     }
     this->stopLoading(); //超时停止等待动画
     is_stop_check_net_state = 0;
@@ -970,12 +970,12 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
     if (flag) {
         isHandlingWiredCableOn = true;
         is_stop_check_net_state = 1;
-        qDebug()<<"插入了有线网的网线";
-        syslog(LOG_DEBUG,"wired physical cable is already plug in");
+        qDebug()<<"wired physical cable is already plug in";
+        //syslog(LOG_DEBUG,"wired physical cable is already plug in");
         wiredCableUpTimer->start(4000);
     } else {
-        qDebug()<<"拔出了有线网的网线";
-        syslog(LOG_DEBUG,"wired physical cable is already plug out");
+        qDebug()<<"wired physical cable is already plug out";
+        //syslog(LOG_DEBUG,"wired physical cable is already plug out");
         QtConcurrent::run([=](){
             while (1) {
                 BackThread *bt = new BackThread();
@@ -1012,7 +1012,7 @@ void MainWindow::onCarrierUpHandle()
 
 void MainWindow::onCarrierDownHandle()
 {
-    syslog(LOG_DEBUG, "Wired net is disconnected");
+    //syslog(LOG_DEBUG, "Wired net is disconnected");
 
     QString txt(tr("Wired net is disconnected"));
     objKyDBus->showDesktopNotify(txt);
@@ -1067,7 +1067,7 @@ void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
     if (objKyDBus->multiWirelessPaths.at(0).path() == objPath.path()) { //证明添加的是无线网卡
         is_wireless_adapter_ready = 0;
         if (objKyDBus->isWirelessCardOn) {
-            syslog(LOG_DEBUG,"wireless device is already plug in");
+            //syslog(LOG_DEBUG,"wireless device is already plug in");
             qDebug()<<"wireless device is already plug in";
             is_wireless_adapter_ready = 1;
             onBtnWifiClicked(4);
@@ -1083,13 +1083,13 @@ void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
         objKyDBus->isWirelessCardOn = false;
         objKyDBus->getObjectPath(); //检查是不是还有无线网卡
         if (!objKyDBus->isWirelessCardOn) {
-            syslog(LOG_DEBUG,"wireless device is already plug out");
+            //syslog(LOG_DEBUG,"wireless device is already plug out");
             qDebug()<<"wireless device is already plug out";
             is_wireless_adapter_ready = 0;
             onBtnWifiClicked(5);
         } else {
             objKyDBus->getWirelessCardName();
-            syslog(LOG_DEBUG,"wireless device is already plug out, but one more wireless exist");
+            //syslog(LOG_DEBUG,"wireless device is already plug out, but one more wireless exist");
             qDebug()<<"wireless device is already plug out, but one more wireless exist";
         }
     }
@@ -1177,7 +1177,7 @@ void MainWindow::onBtnNetClicked()
 void MainWindow::onBtnWifiClicked(int flag)
 {
     qDebug()<<"Value of flag passed into function 'onBtnWifiClicked' is:  "<<flag;
-    syslog(LOG_DEBUG, "Value of flag passed into function 'onBtnWifiClicked' is: %d", flag);
+    //syslog(LOG_DEBUG, "Value of flag passed into function 'onBtnWifiClicked' is: %d", flag);
 
     if (is_wireless_adapter_ready == 1) {
         // flag: 0->UI点击关闭 1->UI点击打开 2->gsetting打开 3->gsetting关闭 4->网卡热插 5->网卡热拔
@@ -1256,7 +1256,7 @@ void MainWindow::onBtnWifiClicked(int flag)
             this->startLoading();
         } else {
             qDebug()<<"receive an invalid value in function onBtnWifiClicked";
-            syslog(LOG_DEBUG, "receive an invalid value in function onBtnWifiClicked");
+            //syslog(LOG_DEBUG, "receive an invalid value in function onBtnWifiClicked");
         }
     } else {
         lbTopWifiList->hide();
@@ -1270,7 +1270,7 @@ void MainWindow::onBtnWifiClicked(int flag)
         QString txt(tr("No wireless card detected")); //未检测到无线网卡
         objKyDBus->showDesktopNotify(txt);
         qDebug()<<"No wireless card detected";
-        syslog(LOG_DEBUG, "No wireless card detected");
+        //syslog(LOG_DEBUG, "No wireless card detected");
 
         disWifiStateKeep();
     }
@@ -1687,7 +1687,8 @@ void MainWindow::getLanListDone(QStringList slist)
                         lbTopLanList->move(lbTopLanList->x(), lbTopLanList->y() + kk*60);
                         btnCreateNet->move(btnCreateNet->x(), btnCreateNet->y() + kk*60);
                         scrollAreal->move(scrollAreal->x(), scrollAreal->y() + kk*60);
-                        syslog(LOG_DEBUG, "already insert an active lannet in the top of lan list");
+                        qDebug()<<"already insert an active lan network item in the top of lan list";
+                        //syslog(LOG_DEBUG, "already insert an active lan network item in the top of lan list");
                     }
                 }
             }
@@ -2268,7 +2269,7 @@ QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStrin
             Utils::m_system(getInfoCmd.toUtf8().data());
             QFile file(tmpPath);
             if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-lanprop in function connectableWifiPriorityList!");
+                //syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-lanprop in function connectableWifiPriorityList!");
                 qDebug()<<"Can't open the file /tmp/kylin-nm-lanprop in function connectableWifiPriorityList!";
             }
             QString txt = file.readAll();
@@ -2618,7 +2619,8 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 lbLoadUpImg->show();
                 ccf->setTopItem(false);
                 currSelNetName = "";
-                syslog(LOG_DEBUG, "already insert an active wifi in the top of wifi list");
+                qDebug()<<"already insert an active wifi item in the top of wifi list";
+                //syslog(LOG_DEBUG, "already insert an active wifi item in the top of wifi list");
                 if (m_name.isEmpty() || m_name == "") {
                     dbus_wifiList.insert(0, QStringList()<<wname<<wsignal<<wsecu<<QString::number(max_freq)<<QString::number(min_freq)<<wcate);
                 } else {
@@ -2950,7 +2952,7 @@ QString MainWindow::getMacByUuid(QString uuidName)
 
     QFile file(tmpPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-lanprop!");
+        //syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-lanprop!");
         qDebug()<<"Can't open the file /tmp/kylin-nm-lanprop!"<<endl;
     }
 
@@ -3381,7 +3383,8 @@ void MainWindow::oneTopWifiFormSelected(QString wifibssid, int extendLength)
 //断开网络处理
 void MainWindow::handleLanDisconn()
 {
-    syslog(LOG_DEBUG, "Wired net is disconnected");
+    //syslog(LOG_DEBUG, "Wired net is disconnected");
+    qDebug()<<"Wired net is disconnected!";
 
     QString txt(tr("Wired net is disconnected"));
     objKyDBus->showDesktopNotify(txt);
@@ -3403,7 +3406,8 @@ void MainWindow::handleWifiDisconn()
 }
 void MainWindow::handleWifiDisconnLoading()
 {
-    syslog(LOG_DEBUG, "Wi-Fi is disconnected");
+    //syslog(LOG_DEBUG, "Wi-Fi is disconnected");
+    qDebug()<<"Wi-Fi is disconnected!";
     QString txt(tr("Wi-Fi is disconnected"));
     objKyDBus->showDesktopNotify(txt);
 
@@ -3426,7 +3430,7 @@ void MainWindow::enNetDone()
     is_stop_check_net_state = 0;
 
     qDebug()<<"debug: already turn on the switch of lan network";
-    syslog(LOG_DEBUG, "Already turn on the switch of lan network");
+    //syslog(LOG_DEBUG, "Already turn on the switch of lan network");
 }
 void MainWindow::disNetDone()
 {
@@ -3469,7 +3473,7 @@ void MainWindow::disNetDone()
     this->topWifiListWidget->hide();
 
     qDebug()<<"debug: already turn off the switch of lan network";
-    syslog(LOG_DEBUG, "Already turn off the switch of lan network");
+    //syslog(LOG_DEBUG, "Already turn off the switch of lan network");
 
     this->stopLoading();
 }
@@ -3485,14 +3489,14 @@ void MainWindow::enWifiDone()
 
     objKyDBus->getWirelessCardName();
     qDebug()<<"debug: already turn on the switch of wifi network";
-    syslog(LOG_DEBUG, "Already turn on the switch of wifi network");
+    //syslog(LOG_DEBUG, "Already turn on the switch of wifi network");
 }
 void MainWindow::disWifiDone()
 {
     disWifiDoneChangeUI();
 
     qDebug()<<"debug: already turn off the switch of wifi network";
-    syslog(LOG_DEBUG, "Already turn off the switch of wifi network");
+    //syslog(LOG_DEBUG, "Already turn off the switch of wifi network");
 
     this->stopLoading();
     is_stop_check_net_state = 0;
@@ -3719,12 +3723,12 @@ void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
         is_stop_check_net_state = 1;
         if (wifiEnabled) {
             qDebug()<<"debug: external wifi switch turn on";
-            syslog(LOG_DEBUG, "debug: external wifi switch turn on");
+            //syslog(LOG_DEBUG, "debug: external wifi switch turn on");
             QTimer::singleShot(4*1000, this, SLOT(onWifiSwitchChange() ));
             objKyDBus->setWifiSwitchState(true);
         } else {
             qDebug()<<"debug: external wifi switch turn off";
-            syslog(LOG_DEBUG, "debug: external wifi switch turn off");
+            //syslog(LOG_DEBUG, "debug: external wifi switch turn off");
             QTimer::singleShot(3*1000, this, SLOT(onWifiSwitchChange() ));
             objKyDBus->setWifiSwitchState(false);//通知控制面板wifi开关已经关闭
         }
@@ -3915,7 +3919,8 @@ void MainWindow::connLanDone(int connFlag)
 
     // Lan连接结果，0点击连接成功 1因网线未插入失败 2因mac地址匹配不上失败 3开机启动网络工具时已经连接
     if (connFlag == 0) {
-        syslog(LOG_DEBUG, "Wired net already connected by clicking button");
+        //syslog(LOG_DEBUG, "Wired net already connected by clicking button");
+        qDebug()<<"Wired net already connected by clicking button!";
         //this->ksnm->execGetLanList();
 
         QString txt(tr("Conn Ethernet Success"));
@@ -3923,59 +3928,69 @@ void MainWindow::connLanDone(int connFlag)
     }
 
     if (connFlag == 1) {
-        syslog(LOG_DEBUG, "without net line connect to computer.");
+        //syslog(LOG_DEBUG, "without network line connect to computer.");
+        qDebug()<<"without network line connect to computer.!";
 
         QString txt(tr("Without Lan Cable"));
         objKyDBus->showDesktopNotify(txt);
     }
 
     if (connFlag == 2) {
+        qDebug()<<"Conn Ethernet Success";
+        //syslog(LOG_DEBUG, "Conn Ethernet Success");
         this->ksnm->execGetLanList();
         QString txt(tr("Conn Ethernet Success"));
         objKyDBus->showDesktopNotify(txt);
     }
 
     if (connFlag == 3) {
-        syslog(LOG_DEBUG, "Launch kylin-nm, Lan already connected");
+        qDebug()<<"Launch kylin-nm, wired network already connected";
+        //syslog(LOG_DEBUG, "Launch kylin-nm, wired network already connected");
     }
 
     if (connFlag == 4) {
-        syslog(LOG_DEBUG, "IP configuration could not be reserved");
+        qDebug()<<"IP configuration could not be reserved";
+        //syslog(LOG_DEBUG, "IP configuration could not be reserved");
         is_connect_net_failed = 1;
         QString txt(tr("IP configuration could not be reserved"));
         objKyDBus->showDesktopNotify(txt);
     }
 
     if (connFlag == 5) {
-        syslog(LOG_DEBUG, "The MACs of the device and the connection do not match.");
+        //syslog(LOG_DEBUG, "The MACs of the device and the connection do not match.");
+        qDebug()<<"The MACs of the device and the connection do not match.";
         is_connect_net_failed = 1;
         QString txt(tr("MAC Address Mismatch"));
         objKyDBus->showDesktopNotify(txt);
     }
 
     if (connFlag == 6) {
-        syslog(LOG_DEBUG, "Connection Be Killed");
+        //syslog(LOG_DEBUG, "Connection Be Killed");
+        qDebug()<<"Connection Be Killed";
         is_connect_net_failed = 1;
         QString txt(tr("Connection Be Killed"));
         objKyDBus->showDesktopNotify(txt);
     }
 
     if (connFlag == 7) {
-        syslog(LOG_DEBUG, "Connect Bluetooth Network Failed");
+        qDebug()<<"Connect Bluetooth Network Failed";
+        //syslog(LOG_DEBUG, "Connect Bluetooth Network Failed");
         is_connect_net_failed = 1;
         QString txt(tr("Connect Bluetooth Network Failed"));
         objKyDBus->showDesktopNotify(txt);
     }
 
     if (connFlag == 8) {
-        syslog(LOG_DEBUG, "Carrier/link changed");
+        qDebug()<<"Carrier/link changed";
+        //syslog(LOG_DEBUG, "Carrier/link changed");
         is_connect_net_failed = 1;
         QString txt(tr("Carrier/link changed"));
         objKyDBus->showDesktopNotify(txt);
     }
 
     if (connFlag == 9) {
-        syslog(LOG_DEBUG, "Connect Wired Network Failed");
+        qDebug()<<"Connect Wired Network Failed";
+        //syslog(LOG_DEBUG, "Connect Wired Network Failed");
         is_connect_net_failed = 1;
         QString txt(tr("Connect Wired Network Failed"));
         objKyDBus->showDesktopNotify(txt);
@@ -3989,7 +4004,7 @@ void MainWindow::connWifiDone(int connFlag)
 {
     // Wifi连接结果，0点击连接成功 1失败 2没有配置文件 3开机启动网络工具时已经连接 4密码错误 5找不到已保存的网络
     if (connFlag == 0) {
-        syslog(LOG_DEBUG, "Wi-Fi already connected by clicking button");
+        //syslog(LOG_DEBUG, "Wi-Fi already connected by clicking button");
         qDebug()<<"Wi-Fi connected succeed. res=0";
         if (!isHuaWeiPC) {
             //如果不是华为电脑，使用获取连接信号的方式更新列表
@@ -4003,7 +4018,7 @@ void MainWindow::connWifiDone(int connFlag)
         QString txt(tr("Conn Wifi Success"));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 1) {
-        syslog(LOG_DEBUG, "Confirm your Wi-Fi password or usable of wireless card");
+        //syslog(LOG_DEBUG, "Confirm your Wi-Fi password or usable of wireless card");
         qWarning()<<"Wi-Fi connected failed. res=1";
         //is_stop_check_net_state = 0;
         is_connect_net_failed = 1;
@@ -4011,22 +4026,22 @@ void MainWindow::connWifiDone(int connFlag)
         QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 3) {
-        syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected");
+        //syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected");
         qWarning()<<"Wi-Fi connected failed. res=3";
     } else if (connFlag == 4) {
-        syslog(LOG_DEBUG, "Confirm your Wi-Fi password");
+        //syslog(LOG_DEBUG, "Confirm your Wi-Fi password");
         is_connect_net_failed = 1;
         QString txt(tr("Confirm your Wi-Fi password"));
         qWarning()<<"Wi-Fi connected failed. res=4";
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 5) {
-        syslog(LOG_DEBUG, "Selected Wifi has not been scanned.");
+        //syslog(LOG_DEBUG, "Selected Wifi has not been scanned.");
         is_connect_net_failed = 1;
         QString txt(tr("Selected Wifi has not been scanned."));
         qWarning()<<"Wi-Fi connected failed. res=5";
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 6) {
-        syslog(LOG_DEBUG, "Connect Hidden Wifi Success.");
+        //syslog(LOG_DEBUG, "Connect Hidden Wifi Success.");
         this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
         QString txt(tr("Connect Hidden Wifi Success"));
         qWarning()<<"Connect Hidden Wifi Success. res=6";
@@ -4208,7 +4223,7 @@ int MainWindow::getScreenGeometry(QString methodName)
         }
     } else {
         qDebug()<< "to get message about "<< methodName<<" of screen failed";
-        syslog(LOG_DEBUG, "to get message about %s of screen failed", methodName.toUtf8().data());
+        //syslog(LOG_DEBUG, "to get message about %s of screen failed", methodName.toUtf8().data());
     }
     return res;
 }
@@ -4227,7 +4242,7 @@ void MainWindow::priScreenChanged(int x, int y, int width, int height)
     m_priWid = width;
     m_priHei = height;
     qDebug("primary screen  changed, geometry is  x=%d, y=%d, windth=%d, height=%d", x, y, width, height);
-    syslog(LOG_DEBUG, "primary screen  changed, geometry is  x=%d, y=%d, windth=%d, height=%d", x, y, width, height);
+    //syslog(LOG_DEBUG, "primary screen  changed, geometry is  x=%d, y=%d, windth=%d, height=%d", x, y, width, height);
 }
 
 // 通过kds的dbus发现rfkill状态变化
@@ -4239,7 +4254,7 @@ void MainWindow::onRfkillStatusChanged()
 
         if (current == -1){
             qWarning("Error Occur When Get Current WlanMode");
-            syslog(LOG_DEBUG, "Error Occur When Get Current WlanMode");
+            //syslog(LOG_DEBUG, "Error Occur When Get Current WlanMode");
             return;
         }
         if (!current) {
@@ -4286,7 +4301,7 @@ void MainWindow::rfkillDisableWifiDone()
         disWifiDoneChangeUI();
 
     qDebug()<<"debug: already turn off the switch of wifi network by keyboard button";
-    syslog(LOG_DEBUG, "Already turn off the switch of wifi network by keyboard button");
+    //syslog(LOG_DEBUG, "Already turn off the switch of wifi network by keyboard button");
 
     this->stopLoading();
     is_stop_check_net_state = 0;
@@ -4303,5 +4318,5 @@ void MainWindow::rfkillEnableWifiDone()
 
     objKyDBus->getWirelessCardName();
     qDebug()<<"debug: already turn on the switch of wifi network";
-    syslog(LOG_DEBUG, "Already turn on the switch of wifi network");
+    //syslog(LOG_DEBUG, "Already turn on the switch of wifi network");
 }

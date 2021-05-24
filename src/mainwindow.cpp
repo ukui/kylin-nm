@@ -978,7 +978,6 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
         syslog(LOG_DEBUG,"wired physical cable is already plug out");
         QtConcurrent::run([=](){
             while (1) {
-                //activeLanDisconn();
                 BackThread *bt = new BackThread();
                 IFace *iface = bt->execGetIface();
                 if (iface->lstate != 0) {
@@ -1622,7 +1621,7 @@ void MainWindow::getLanListDone(QStringList slist)
 
                         OneLancForm *ccfAct = new OneLancForm(topLanListWidget, this, confForm, ksnm);
                         connect(ccfAct, SIGNAL(selectedOneLanForm(QString, QString)), this, SLOT(oneTopLanFormSelected(QString, QString)));
-                        connect(ccfAct, SIGNAL(disconnActiveLan()), this, SLOT(activeLanDisconn()));
+                        connect(ccfAct, SIGNAL(requestHandleLanDisconn()), this, SLOT(handleLanDisconn()));
                         ccfAct->setLanName(nname, ltype, nuuid, mIfName);//第二个参数本来是strLanName，但目前不需要翻译
                         ccfAct->setIcon(true);
                         ccfAct->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macInterface);
@@ -1776,11 +1775,11 @@ void MainWindow::getWifiListDone(QStringList slist)
     }
 
     if (current_wifi_list_state == RECONNECT_WIFI) {
-        qDebug()<<"======优选后的列表为======";
-        foreach (QString line, slist) {
-            qDebug()<<line;
-        }
-        qDebug()<<"========================";
+        //qDebug()<<"======优选后的列表为======";
+        //foreach (QString line, slist) {
+        //    qDebug()<<line;
+        //}
+        //qDebug()<<"========================";
         QVector<structWifiProperty> targetWifiStructList = connectableWifiPriorityList(slist);
         if (!targetWifiStructList.isEmpty()) {
             if (!isReconnectingWifi) {
@@ -2298,9 +2297,9 @@ QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStrin
     //再按照wifiPriority进行排序，先简单的选出最高优先级的wifi进行连接
     if (selectedWifiListStruct.size() > 1) {
         devListSort(&selectedWifiListStruct);
-        foreach (structWifiProperty wifiPriorityAfterSort, selectedWifiListStruct) {
-            qDebug() << wifiPriorityAfterSort.bssid << " 的自动连接优先级是 ： " << wifiPriorityAfterSort.priority;
-        }
+        //foreach (structWifiProperty wifiPriorityAfterSort, selectedWifiListStruct) {
+        //    qDebug() << wifiPriorityAfterSort.bssid << " 的自动连接优先级是 ： " << wifiPriorityAfterSort.priority;
+        //}
     }
     ocf->deleteLater();
     return selectedWifiListStruct;
@@ -2546,7 +2545,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 }
             }
         }
-        qDebug()<<"Wifi ssid="<<wname<<". max_freq="<<max_freq<<". min_freq="<<min_freq;
+        //qDebug()<<"Wifi ssid="<<wname<<". max_freq="<<max_freq<<". min_freq="<<min_freq;
         int freqState = 0;
         if (max_freq < 3000) {
             //只有2.4GHZ
@@ -2829,7 +2828,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
             }
         }
 
-        qDebug()<<"Wifi ssid="<<wname<<". max_freq="<<max_freq<<". min_freq="<<min_freq;
+        //qDebug()<<"Wifi ssid="<<wname<<". max_freq="<<max_freq<<". min_freq="<<min_freq;
         int freqState = 0;
         if (max_freq < 3000) {
             //只有2.4GHZ
@@ -3380,7 +3379,7 @@ void MainWindow::oneTopWifiFormSelected(QString wifibssid, int extendLength)
 }
 
 //断开网络处理
-void MainWindow::activeLanDisconn()
+void MainWindow::handleLanDisconn()
 {
     syslog(LOG_DEBUG, "Wired net is disconnected");
 
@@ -4030,7 +4029,7 @@ void MainWindow::connWifiDone(int connFlag)
         syslog(LOG_DEBUG, "Connect Hidden Wifi Success.");
         this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
         QString txt(tr("Connect Hidden Wifi Success"));
-        qWarning()<<"Wi-Fi connected failed. res=6";
+        qWarning()<<"Connect Hidden Wifi Success. res=6";
         objKyDBus->showDesktopNotify(txt);
     }
 

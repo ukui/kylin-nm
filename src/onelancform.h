@@ -121,7 +121,7 @@ private:
 signals:
     void selectedOneLanForm(QString lanName, QString uniqueName);
     void connDone(int connFlag);
-    void disconnActiveLan();
+    void requestHandleLanDisconn();
 
     void sigConnLan(QString, QString, QString);
 };

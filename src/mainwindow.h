@@ -380,7 +380,7 @@ private slots:
 
     void on_btnAdvConf_clicked();
 
-    void activeLanDisconn();
+    void handleLanDisconn();
     void handleWifiDisconn();
     void handleWifiDisconnLoading();
     void onRequestScanAccesspoint();

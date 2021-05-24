@@ -311,6 +311,8 @@ void OneLancForm::on_btnDisConn_clicked()
 {
     syslog(LOG_DEBUG, "DisConnect button about lan net is clicked, current wired net name is %s .", ui->lbName->text().toUtf8().data());
     qDebug()<<"DisConnect button about lan net is clicked, current wired net name is "<<ui->lbName->text();
+    //syslog(LOG_DEBUG, "DisConnect button about lan net is clicked, a wired network may be disconnected .");
+    //qDebug()<<"DisConnect button about lan net is clicked, a wired network may be disconnected";
 
     this->startWaiting(false);
     mw->is_stop_check_net_state = 1;
@@ -324,7 +326,7 @@ void OneLancForm::on_btnDisConn_clicked()
 
     disconnect(this, SIGNAL(selectedOneLanForm(QString, QString)), mw, SLOT(oneTopLanFormSelected(QString, QString)));
 
-    emit disconnActiveLan();
+    emit requestHandleLanDisconn();
 }
 
 void OneLancForm::toDisConnWiredNetwork(QString netUuid)

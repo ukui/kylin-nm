@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QApplication a(argc, argv);
-    qInstallMessageHandler(messageOutput);
+    //qInstallMessageHandler(messageOutput);
 
     openlog(LOG_IDENT, LOG_NDELAY | LOG_NOWAIT | LOG_PID, LOG_USER);
     syslog(LOG_DEBUG, "Kylin Network Manager Is Already Launched");

@@ -313,7 +313,8 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
         connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     }
     t->start();
-    this->close();
+//    this->close();
+    this->hide();
 }
 
 //void DlgHideWifiWpa::finishedProcess(int state) {

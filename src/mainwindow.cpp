@@ -1336,7 +1336,7 @@ void MainWindow::on_btnWifiList_clicked()
 {
     is_stop_check_net_state = 1;
     current_wifi_list_state = LOAD_WIFI_LIST;
-
+    qDebug()<<__FUNCTION__<< __LINE__<<current_wifi_list_state;
     this->is_btnWifiList_clicked = 1;
     this->is_btnLanList_clicked = 0;
     end_rcv_rates = 0;
@@ -1442,6 +1442,7 @@ void MainWindow::on_btnWifiList_clicked()
 void MainWindow::onLoadWifiListAfterScan()
 {
     current_wifi_list_state = LOAD_WIFI_LIST;
+    qDebug()<<__FUNCTION__<< __LINE__<<current_wifi_list_state;
     this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC); //加载wifi列表
 }
 
@@ -1745,6 +1746,7 @@ void MainWindow::onRequestRevalueUpdateWifi()
 {
     is_stop_check_net_state = 1;
     current_wifi_list_state = LOAD_WIFI_LIST;
+    qDebug()<<__FUNCTION__<< __LINE__<<current_wifi_list_state;
 }
 
 // 获取wifi列表回调
@@ -1774,7 +1776,7 @@ void MainWindow::getWifiListDone(QStringList slist)
             //getFinalWifiList(slist);
         }
     }
-
+    qDebug()<<__FUNCTION__<< __LINE__<<current_wifi_list_state;
     if (current_wifi_list_state == RECONNECT_WIFI) {
         //qDebug()<<"======优选后的列表为======";
         //foreach (QString line, slist) {
@@ -1783,6 +1785,7 @@ void MainWindow::getWifiListDone(QStringList slist)
         //qDebug()<<"========================";
         QVector<structWifiProperty> targetWifiStructList = connectableWifiPriorityList(slist);
         if (!targetWifiStructList.isEmpty()) {
+        qDebug()<< __FUNCTION__<<__LINE__<<"current_wifi_list_state="<<current_wifi_list_state<<"isReconnectingWifi="<<isReconnectingWifi;
             if (!isReconnectingWifi) {
                 isReconnectingWifi = true; //保证对于连续发出的重连信号，只处理第一个
                 QtConcurrent::run([=]() {
@@ -3563,12 +3566,14 @@ void MainWindow::on_btnHotspotState()
 //执行wifi的重新连接
 void MainWindow::toReconnectWifi()
 {
+    qDebug()<<__FUNCTION__<<__LINE__<<"canReconnectWifiTimeInterval="<<canReconnectWifiTimeInterval;
     if (canReconnectWifiTimeInterval) {
 //        canReconnectWifiTimeInterval = false;
 //        QTimer::singleShot(2*1000, this, SLOT(timeIntervalToConnectWifi() ));
 
         if (isHuaWeiPC) {
             current_wifi_list_state = RECONNECT_WIFI;
+            qDebug()<<__FUNCTION__<<__LINE__<<"current_wifi_list_state="<<current_wifi_list_state;
             this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
         }
     }
@@ -3797,6 +3802,7 @@ void MainWindow::onRequestScanAccesspoint()
 
             if (loop_iface->wstate != 2) {
                 current_wifi_list_state = UPDATE_WIFI_LIST;
+                qDebug()<<__FUNCTION__<< __LINE__<<current_wifi_list_state;
                 this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC); //更新wifi列表
             }
 
@@ -3838,6 +3844,7 @@ void MainWindow::toScanWifi(bool isShow)
 void MainWindow::onRefreshWifiListAfterScan()
 {
     current_wifi_list_state = UPDATE_WIFI_LIST;
+    qDebug()<<__FUNCTION__<< __LINE__<<current_wifi_list_state;
     this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC); //更新wifi列表
 }
 
@@ -4231,6 +4238,7 @@ int MainWindow::getScreenGeometry(QString methodName)
 void MainWindow::requestRefreshWifiList()
 {
     current_wifi_list_state = REFRESH_WIFI;
+    syslog(LOG_DEBUG, "[%s++%d] state[%d]", __FUNCTION__, __LINE__, current_wifi_list_state);
     this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
 }
 

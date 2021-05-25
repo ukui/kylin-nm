@@ -321,7 +321,9 @@ void WpaWifiDialog::initCombox() {
     QStringList eapStringList;
     /*eapStringList<< "PEAP" << "FAST" << "MD5" << "PWD" << "SIM" << "TLS" << "TTLS";*/
     /*eapStringList<< "PEAP";*/
-    eapStringList << "TLS" << "LEAP" << "PWD" << "FAST" << "TTLS" << "PEAP";
+//    eapStringList << "TLS" << "PEAP" << "PWD" << "FAST" << "TTLS" << "LEAP";
+    //暂时隐藏尚未完成的功能
+    eapStringList << "TLS" << "PEAP";
     for (int i = 0; i < eapStringList.length(); i++) {
         eapCombox->addItem(eapStringList.at(i), QString(eapStringList.at(i)).toLower());
     }

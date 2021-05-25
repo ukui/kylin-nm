@@ -209,9 +209,59 @@ OneConnForm::~OneConnForm()
     delete ui;
 }
 
-void OneConnForm::mousePressEvent(QMouseEvent *)
+void OneConnForm::mousePressEvent(QMouseEvent *event)
 {
+    if (event->button() == Qt::RightButton && this->wifiBSsid != "--") {
+        QMenu * m_menu = new QMenu();//右键菜单
+        if (this->isTopItem) {
+            m_menu->addAction(new QAction(tr("Disconnect"), this));
+        } else {
+            m_menu->addAction(new QAction(tr("Connect"), this));
+        }
+        if (checkIsSaved())
+            m_menu->addAction(new QAction(tr("Forget"), this));
+        m_menu->move(cursor().pos());
+        m_menu->show();
+        connect(m_menu, &QMenu::triggered, this, &OneConnForm::onMenuTriggered);
+    }
     emit selectedOneWifiForm(wifiBSsid, H_WIFI_ITEM_BIG_EXTEND);
+}
+
+bool OneConnForm::checkIsSaved()
+{
+    QString name = this->wifiName;
+    QString currStr = "nmcli -f connection.type connection show \"" + name.replace("\"","\\\"") + "\"";
+    int status = system(currStr.toUtf8().data());
+    if (status != 0){
+        qDebug()<<"There is no configuration for wifi "<<this->wifiName;
+        return false;
+    } else {
+        return true;
+    }
+}
+
+/**
+ * @brief OneConnForm::onMenuTriggered 点击右键菜单选项的槽函数
+ * @param action
+ */
+bool OneConnForm::onMenuTriggered(QAction *action)
+{
+    if (action->text() == tr("Disconnect")) {
+        this->on_btnDisConn_clicked();
+        return true;
+    } else if (action->text() == tr("Connect")) {
+        this->on_btnConn_clicked();
+        return true;
+    } else if (action->text() == tr("Forget")) {
+        QString name = this->wifiName;
+        QString currStr = "nmcli connection delete \"" + name.replace("\"","\\\"") + "\"";
+        int status = system(currStr.toUtf8().data());
+        if (status != 0){
+            qDebug()<<"Delete wifi failed. wifi="<<this->wifiName;
+            return false;
+        }
+        return true;
+    }
 }
 
 void OneConnForm::onBtnPropertyClicked()

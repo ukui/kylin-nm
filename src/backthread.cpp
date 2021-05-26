@@ -281,18 +281,24 @@ void BackThread::dellConnectLanResult(QString info)
 }
 
 //to connected wireless network need a password
-void BackThread::execConnWifiPWD(QString connName, QString password, QString connType)
+void BackThread::execConnWifiPWD(QString connName, QString password, QString connType, QString security)
 {
     //disConnLanOrWifi("wifi");
-
     if (!connType.isEmpty()) {
         QString strConntype = "nmcli connection modify '" + connName + "' wifi-sec.psk-flags 0";
         Utils::m_system(strConntype.toUtf8().data());
     }
 
     QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
-    QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > " + tmpPath;
-    Utils::m_system(cmdStr.toUtf8().data());
+    if (security.contains("WPA3")) {
+        QString create_cmd = QString("nmcli connection add con-name %1 type wifi 802-11-wireless-security.key-mgmt sae ssid %2 802-11-wireless-security.psk %3").arg(connName).arg(connName).arg(password);
+        Utils::m_system(create_cmd.toUtf8().data());
+        QString connect_cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' > " + tmpPath;
+        Utils::m_system(connect_cmdStr.toUtf8().data());
+    } else {
+        QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > " + tmpPath;
+        Utils::m_system(cmdStr.toUtf8().data());
+    }
 
     QFile file(tmpPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {

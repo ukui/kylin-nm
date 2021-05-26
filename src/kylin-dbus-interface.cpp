@@ -717,6 +717,7 @@ void KylinDBus::getConnectNetIp(QString netUuid)
  //监听有线网络ip变化
 void KylinDBus::getLanIpChanged()
 {
+    m_lanPathList.clear();
     QDBusInterface m_interface("org.freedesktop.NetworkManager",
                                       "/org/freedesktop/NetworkManager/Settings",
                                       "org.freedesktop.NetworkManager.Settings",
@@ -742,6 +743,7 @@ void KylinDBus::getLanIpChanged()
                                                      objNet.path(),
                                                      QString("org.freedesktop.NetworkManager.Settings.Connection"),
                                                      QString("Updated"), this, SLOT(onLanIpPropertiesChanged() ) );
+                m_lanPathList.append(objNet.path());
             } else if (key == "802-11-wireless") {
                 QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                                      objNet.path(),
@@ -1036,6 +1038,8 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
         if (key == "802-3-ethernet") {
             emit this->updateWiredList(0); //send this signal to update wired network list
             emit this->newConnAdded(0);
+            m_lanPathList.append(objPath.path());
+            emit mw->wiredConnectionAdded();
             //syslog(LOG_DEBUG, "A new wired network was created.");
             qDebug()<<"A new wired network was created.";
             break;
@@ -1101,10 +1105,13 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
 void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
 {
     //syslog(LOG_DEBUG, "An old network was removed from configure directory.");
-    qDebug()<<"An old network was removed from configure directory.";
-
-    if (mw->is_btnLanList_clicked == 1) {
-        emit this->updateWiredList(0); //send this signal to update wired network list
+    if (m_lanPathList.contains(objPath.path())) {
+        m_lanPathList.removeOne(objPath.path());
+        qDebug()<<"An old network was removed from configure directory.";
+        if (mw->is_btnLanList_clicked == 1) {
+            emit this->updateWiredList(0); //send this signal to update wired network list
+        }
+        emit mw->wiredConnectionRemoved();
     }
 
     onWiredSettingNumChanged();
@@ -1724,7 +1731,6 @@ void KylinDBus::onLanPropertyChanged(QVariantMap qvm)
         qDebug()<<"kylin-nm receive a signal 'Device.Wired PropertiesChanged' about interface.";
         isRunningFunction = true;  //function onLanPropertyChanged is running
         time->start(3000);
-
         QString str = qvm.value("Carrier").toString();
         if (str == "false" || str == "true") {
             getPhysicalCarrierState(1);

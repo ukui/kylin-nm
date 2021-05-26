@@ -3387,6 +3387,7 @@ void MainWindow::handleLanDisconn()
     qDebug()<<"Wired net is disconnected!";
 
     QString txt(tr("Wired net is disconnected"));
+    emit this->actWiredConnectionChanged();
     objKyDBus->showDesktopNotify(txt);
     currSelNetName = "";
     oldActLanName = "";
@@ -3669,6 +3670,7 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 
 void MainWindow::onExternalLanChange()
 {
+    emit this->actWiredConnectionChanged();
     if (is_btnLanList_clicked) {
         onBtnNetListClicked(0);
     } else {
@@ -3924,6 +3926,7 @@ void MainWindow::connLanDone(int connFlag)
         //this->ksnm->execGetLanList();
 
         QString txt(tr("Conn Ethernet Success"));
+        emit this->actWiredConnectionChanged();
         objKyDBus->showDesktopNotify(txt);
     }
 

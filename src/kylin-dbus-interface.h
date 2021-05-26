@@ -147,6 +147,7 @@ private:
     QGSettings *m_tastbar_gsettings = nullptr;
     QGSettings *m_gsettings = nullptr;
     QGSettings *m_transparency_gsettings = nullptr;
+    QStringList m_lanPathList;//有线网dbuspath列表
 
 signals:
     void updateWiredList(int n);

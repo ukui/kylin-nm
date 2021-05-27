@@ -74,6 +74,8 @@ DlgHideWifiEapTls::DlgHideWifiEapTls(int type, int beUsed, MainWindow *mainWindo
     ui->lbUserKeyPwd->setText(tr("User key password")); //用户密钥密码:
     ui->btnCancel->setText(tr("Cancel")); //取消
     ui->btnConnect->setText(tr("Connect")); //连接
+    ui->btnCancel->setStyleSheet(objQss.btnOffQss);
+    ui->btnConnect->setStyleSheet(objQss.btnOffQss);
 
     ui->cbxConn->addItem(tr("C_reate…")); //新建...
     int status = system("nmcli connection show>/tmp/kylin-nm-connshow");

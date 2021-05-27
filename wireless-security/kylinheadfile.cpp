@@ -41,4 +41,8 @@ MyQss::MyQss()
                  "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
                  "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);}";
     lineQss = "background:rgba(156,156,156,0.1);";
+
+    btnOffQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
+                "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);";
 }

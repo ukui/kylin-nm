@@ -43,7 +43,7 @@ class MyQss
 public:
     MyQss();
 
-    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss, checkBoxCAQss;
+    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss, checkBoxCAQss, btnOffQss;
 
 };
 

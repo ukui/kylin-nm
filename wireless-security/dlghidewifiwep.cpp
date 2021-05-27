@@ -67,8 +67,8 @@ DlgHideWifiWep::DlgHideWifiWep(int type, QWidget *parent) :
     ui->cbxAuth->setStyleSheet(objQss.cbxQss);
     ui->cbxAuth->setView(new  QListView());
 
-    ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
-    ui->btnConnect->setStyleSheet(objQss.btnConnQss);
+    ui->btnCancel->setStyleSheet(objQss.btnOffQss);
+    ui->btnConnect->setStyleSheet(objQss.btnOffQss);
     ui->lineUp->setStyleSheet(objQss.lineQss);
     ui->lineDown->setStyleSheet(objQss.lineQss);
 

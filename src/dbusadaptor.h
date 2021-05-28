@@ -44,6 +44,9 @@ class DbusAdaptor: public QDBusAbstractAdaptor
 "    </method>\n"
 "    <signal name=\"getWifiListFinished\"/>\n"
 "    <signal name=\"configurationChanged\"/>\n"
+"    <signal name=\"wiredConnectionAdded\"/>\n"
+"    <signal name=\"wiredConnectionRemoved\"/>\n"
+"    <signal name=\"actWiredConnectionChanged\"/>\n"
 "  </interface>\n"
         "")
 public:
@@ -61,6 +64,9 @@ public Q_SLOTS: // METHODS
 Q_SIGNALS: // SIGNALS
     void getWifiListFinished();
     void configurationChanged();
+    void wiredConnectionAdded();
+    void wiredConnectionRemoved();
+    void actWiredConnectionChanged();
 };
 
 #endif

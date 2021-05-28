@@ -421,6 +421,9 @@ signals:
     void getWifiListFinished();
     void startReconnectWifi(const QString& ssid);
     void stopReconnectWifi(const QString& ssid);
+    void wiredConnectionAdded();
+    void wiredConnectionRemoved();
+    void actWiredConnectionChanged();
 };
 
 #endif // MAINWINDOW_H

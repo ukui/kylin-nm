@@ -4003,6 +4003,13 @@ void MainWindow::connLanDone(int connFlag)
         objKyDBus->showDesktopNotify(txt);
     }
 
+    if (connFlag == 10) {
+        qDebug()<<"Connect VPN Network Failed";
+        is_connect_net_failed = 1;
+        QString txt(tr("Connect VPN Network Failed"));
+        objKyDBus->showDesktopNotify(txt);
+    }
+
     this->stopLoading();
     this->is_stop_check_net_state = 0;
 }

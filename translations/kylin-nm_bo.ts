@@ -1363,6 +1363,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="4009"/>
+        <source>Connect VPN Network Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/mainwindow.cpp" line="2719"/>
         <source>IP configuration could not be reserved</source>
         <translation type="unfinished"></translation>

@@ -66,6 +66,8 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     ui->lbSecurity->setText(tr("Wi-Fi security")); //Wi-Fi安全性:
     ui->btnCancel->setText(tr("Cancel")); //取消
     ui->btnConnect->setText(tr("Connect")); //连接
+    ui->btnCancel->setStyleSheet(objQss.btnOffQss);
+    ui->btnConnect->setStyleSheet(objQss.btnOffQss);
 
     ui->cbxConn->clear();
     ui->cbxConn->addItem(tr("C_reate…")); //新建...

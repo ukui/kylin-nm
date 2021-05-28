@@ -289,6 +289,12 @@ void WpaWifiDialog::initUI() {
     buttonLyt->addWidget(connectBtn);
     buttonFrame->setLayout(buttonLyt);
 
+    QString btnOffQss = "QPushButton{border:0px;border-radius:4px;background-color:rgba(255,255,255,0.12);color:white;font-size:14px;}"
+                        "QPushButton:Hover{border:0px solid rgba(255,255,255,0.2);border-radius:4px;background-color:rgba(107,142,235,1);}"
+                        "QPushButton:Pressed{border-radius:4px;background-color:rgba(50,87,202,1);";
+    cancelBtn->setStyleSheet(btnOffQss);
+    connectBtn->setStyleSheet(btnOffQss);
+
     nameEditor->setContextMenuPolicy(Qt::NoContextMenu); //禁止LineEdit的右键菜单
     userEditor->setContextMenuPolicy(Qt::NoContextMenu);
     pwdEditor->setContextMenuPolicy(Qt::NoContextMenu);

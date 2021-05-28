@@ -62,8 +62,8 @@ DlgHideWifiLeap::DlgHideWifiLeap(QWidget *parent) :
     ui->cbxSecurity->setView(new  QListView());
     ui->checkBoxPwd->setStyleSheet(objQss.checkBoxQss);
 
-    ui->btnCancel->setStyleSheet(objQss.btnCancelQss);
-    ui->btnConnect->setStyleSheet(objQss.btnConnQss);
+    ui->btnCancel->setStyleSheet(objQss.btnOffQss);
+    ui->btnConnect->setStyleSheet(objQss.btnOffQss);
     ui->lineUp->setStyleSheet(objQss.lineQss);
     ui->lineDown->setStyleSheet(objQss.lineQss);
 

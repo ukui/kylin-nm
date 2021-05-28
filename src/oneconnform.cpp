@@ -554,7 +554,7 @@ void OneConnForm::slotConnWifi()
 void OneConnForm::slotConnWifiPWD()
 {
     this->startWifiWaiting(true);
-    emit sigConnWifiPWD(wifiName, ui->lePassword->text(), connType);
+    emit sigConnWifiPWD(wifiName, ui->lePassword->text(), connType, wifiSecu);
 }
 
 //点击后断开wifi网络
@@ -814,8 +814,8 @@ void OneConnForm::on_btnConnPWD_clicked()
         bt->moveToThread(t);
         connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
         connect(t, SIGNAL(started()), this, SLOT(slotConnWifiPWD()));
-        connect(this, SIGNAL(sigConnWifiPWD(QString, QString, QString)),
-                bt, SLOT(execConnWifiPWD(QString, QString, QString)));
+        connect(this, SIGNAL(sigConnWifiPWD(QString, QString, QString, QString)),
+                bt, SLOT(execConnWifiPWD(QString, QString, QString, QString)));
         connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
         connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
         connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));

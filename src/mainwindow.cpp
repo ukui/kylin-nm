@@ -2385,42 +2385,6 @@ void MainWindow::loadWifiListDone(QStringList slist)
         index ++;
     }
 
-    // 根据当前连接的wifi 设置OneConnForm
-    OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
-    if (actWifiName == "--" || wifiActState == 1 || actWifiBssidList.at(0) == "--") {
-        ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC);//"当前未连接任何 Wifi"
-        ccf->setSignal("0", "--" , "0");
-        activeWifiSignalLv = 0;
-        ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
-        ccf->isConnected = false;
-        ccf->lbFreq->hide();
-        ifWLanConnected = false;
-        lbLoadDown->hide();
-        lbLoadUp->hide();
-        lbLoadDownImg->hide();
-        lbLoadUpImg->hide();
-        ccf->setTopItem(false);
-        dbus_wifiList.append(QStringList("--")); //没有已连接wifi时，第一个元素为--
-    } else {
-        QProcess * process = new QProcess;
-        QString name = actWifiName;
-        process->start(QString("nmcli -f 802-11-wireless.ssid connection show \"%1\"").arg(name));
-        connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
-            process->deleteLater();
-        });
-        connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
-            QString str = process->readAllStandardOutput();
-            actWifiSsid = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2); //获取到ssid时，以ssid为准
-        });
-        connect(process, &QProcess::readyReadStandardError, this, [ = ]() {
-            actWifiSsid = actWifiName; //没有获取到ssid时，以wifi名为准
-        });
-        process->waitForFinished();
-    }
-    ccf->setAct(true);
-    ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
-    ccf->show();
-
     // 填充可用网络列表
     QString headLine = slist.at(0);
     int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath, indexCate;
@@ -2472,6 +2436,42 @@ void MainWindow::loadWifiListDone(QStringList slist)
             actWifiBssid = wbssid;
         }
     }
+
+    // 根据当前连接的wifi 设置OneConnForm
+    OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
+    if (actWifiName == "--" || wifiActState == 1 || actWifiBssidList.at(0) == "--" || actWifiBssid == " ") {
+        ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC);//"当前未连接任何 Wifi"
+        ccf->setSignal("0", "--" , "0");
+        activeWifiSignalLv = 0;
+        ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
+        ccf->isConnected = false;
+        ccf->lbFreq->hide();
+        ifWLanConnected = false;
+        lbLoadDown->hide();
+        lbLoadUp->hide();
+        lbLoadDownImg->hide();
+        lbLoadUpImg->hide();
+        ccf->setTopItem(false);
+        dbus_wifiList.append(QStringList("--")); //没有已连接wifi时，第一个元素为--
+    } else {
+        QProcess * process = new QProcess;
+        QString name = actWifiName;
+        process->start(QString("nmcli -f 802-11-wireless.ssid connection show \"%1\"").arg(name));
+        connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+            process->deleteLater();
+        });
+        connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
+            QString str = process->readAllStandardOutput();
+            actWifiSsid = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2); //获取到ssid时，以ssid为准
+        });
+        connect(process, &QProcess::readyReadStandardError, this, [ = ]() {
+            actWifiSsid = actWifiName; //没有获取到ssid时，以wifi名为准
+        });
+        process->waitForFinished();
+    }
+    ccf->setAct(true);
+    ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
+    ccf->show();
 
     if (actWifiBssidList.size()==1 && actWifiBssidList.at(0)=="--") {
         actWifiId = actWifiName;
@@ -2558,7 +2558,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         if (wname != "" && wname != "--") {
             //qDebug() << "wifi的 actWifiBssid: " << actWifiBssid << "      wcate = " << wcate;
             //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
-            if(actWifiBssid == wbssid && wifiActState == 2) {
+            if (actWifiBssid == wbssid && wifiActState == 2) {
                 //对于已经连接的wifi
                 connect(this, &MainWindow::actWifiSignalLvChanaged, ccf, [ = ](const int &signalLv) {
                     ccf->setSignal(QString::number(signalLv), wsecu, wcate);

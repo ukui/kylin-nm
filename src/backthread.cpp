@@ -212,7 +212,7 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
 
     bool isWiredCableAlready = objBackThreadDBus.getWiredCableStateByIfname(ifname);
 
-    if (connectType == "bluetooth" || ifname == "") {
+    if (connectType == "bluetooth" || connectType == "vpn"|| ifname == "") {
         isWiredCableAlready = true; //对于蓝牙类型的网络不需要接入网线就可以连接
         mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
     } else {
@@ -275,7 +275,12 @@ void BackThread::dellConnectLanResult(QString info)
         } else if(info.indexOf("Carrier/link changed") != -1) {
             emit connDone(8);
         } else {
-            emit connDone(9);
+            if (currConnLanType == "vpn"){
+                emit connDone(10);
+            }
+            else{
+                emit connDone(9);
+            }
         }
     }
 }

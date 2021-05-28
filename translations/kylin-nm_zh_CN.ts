@@ -1518,6 +1518,11 @@
         <translation type="unfinished">连接有线网络失败</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="4009"/>
+        <source>Connect VPN Network Failed</source>
+        <translation>连接VPN失败</translation>
+    </message>
+    <message>
         <location filename="../src/mainwindow.cpp" line="3630"/>
         <source>IP configuration could not be reserved</source>
         <translation type="unfinished">IP 未分配成功</translation>

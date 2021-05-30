@@ -113,6 +113,8 @@ ConfForm::ConfForm(QWidget *parent) :
     ui->cbMask->addItem("255.255.0.0"); //16
     ui->cbMask->addItem("255.0.0.0"); //8
 
+    connect(ui->cbMask, SIGNAL(currentIndexChanged(int)), this, SLOT(cbMaskChanged(int)));
+
     ui->btnCancel->setText(tr("Cancel"));//"取消"
     ui->btnSave->setText(tr("Save"));//"保存"
     ui->btnCreate->setText(tr("Ok"));//"确定"
@@ -224,6 +226,8 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
     } else {
         ui->cbMask->setCurrentIndex(0);
     }
+
+    ui->btnSave->setEnabled(false);
 }
 
 //点击了创建新的网络的按钮
@@ -680,6 +684,11 @@ void ConfForm::cbTypeChanged(int index)
         //this->resize(432, 230);
         this->setFixedSize(432, 230);
     }
+}
+
+void ConfForm::cbMaskChanged(int index)
+{
+    this->setEnableOfBtn();
 }
 
 //编辑网络名称

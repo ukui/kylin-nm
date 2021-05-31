@@ -27,7 +27,6 @@
 #include <QDebug>
 #include <QDesktopWidget>
 #include <X11/Xlib.h>
-#include <syslog.h>
 #include <QFile>
 
 #define LOG_IDENT "ukui_kylin_nm"
@@ -84,15 +83,12 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     qInstallMessageHandler(messageOutput);
 
-    openlog(LOG_IDENT, LOG_NDELAY | LOG_NOWAIT | LOG_PID, LOG_USER);
     qDebug()<<"Kylin Network Manager Is Already Launched";
-    //syslog(LOG_DEBUG, "Kylin Network Manager Is Already Launched");
 
     int loopNum = 0;
     while (!QSystemTrayIcon::isSystemTrayAvailable()) {
         if (loopNum == 15) return 1;
         qDebug()<<"I couldn't detect any system tray on this system now";
-        //syslog(LOG_DEBUG, "I couldn't detect any system tray on this system now");
         loopNum += 1;
         sleep(1);
     }

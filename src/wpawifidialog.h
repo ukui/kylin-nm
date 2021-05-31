@@ -214,11 +214,11 @@ private:
       **/
     enum EapType {
         TLS = 0,
-        LEAP,
+        PEAP,
         PWD,
         FAST,
         TTLS,
-        PEAP
+        LEAP
     };
 
     WifiConfig    *m_wifiConfig              = nullptr;

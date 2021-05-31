@@ -21,7 +21,6 @@
 
 #include <unistd.h>
 #include <stdlib.h>
-#include <sys/syslog.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -57,8 +56,6 @@ IFace* BackThread::execGetIface()
 
     QFile file(tmpPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        // print information if can not open file ~/.config/kylin-nm-iface
-        //syslog(LOG_ERR, "Can't open the file ~/.config/kylin-nm-iface!");
         qDebug()<<"Can't open the file ~/.config/kylin-nm-iface!";
     }
     QString txt = file.readAll();
@@ -228,7 +225,6 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
         cmdProcessLan->waitForFinished();
     } else {
         qDebug()<<"connect wired network failed for without wired cable plug in.";
-        //syslog(LOG_DEBUG, "connect wired network failed for without wired cable plug in.");
         emit connDone(1);
     }
 
@@ -254,7 +250,6 @@ void BackThread::dellConnectLanResult(QString info)
 {
     if (info.indexOf("successfully") != -1) {
         qDebug()<<"debug: in function execConnLan, wired net state is: "<<QString::number(execGetIface()->lstate);
-        //syslog(LOG_DEBUG, "In function execConnLan, wired net state is: %d", execGetIface()->lstate);
 
         if (currConnLanType == "bluetooth") {
             emit connDone(2);
@@ -307,7 +302,6 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
 
     QFile file(tmpPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        //syslog(LOG_DEBUG, "Can't open the file /tmp/kylin-nm-btoutput !");
         qDebug()<<"Can't open the file /tmp/kylin-nm-btoutput !"<<endl;
     }
     QString line = file.readLine();
@@ -317,7 +311,6 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
     if (line.indexOf("successfully") != -1) {
         emit connDone(0);
         qDebug()<<"debug: in function execConnWifiPWD, wireless net state is: "<<QString::number(execGetIface()->wstate);
-        //syslog(LOG_DEBUG, "In function execConnWifiPWD, wireless net state is: %d", execGetIface()->wstate);
     } else if(line.indexOf("Secrets were required") != -1){
         //emit connDone(4);//发出信号4是之前添加每次连接输入密码的功能时需要的
         emit connDone(1);
@@ -334,7 +327,7 @@ void BackThread::execConnHiddenWifiWPA(QString wifiName, QString wifiPassword)
     do {
         n += 1;
         if (n >= 4) {
-            //syslog(LOG_ERR, "connection attempt of hidden wifi %s failed for 3 times, no more attempt", wifiName);
+            qDebug()<<"connection attempt of hidden wifi"<<wifiName<<" failed for 3 times, no more attempt";
             x = 0;
             emit connDone(1);
             emit btFinish();
@@ -344,11 +337,8 @@ void BackThread::execConnHiddenWifiWPA(QString wifiName, QString wifiPassword)
         QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
         QString cmd = "nmcli device wifi connect '" + wifiName + "' password '" + wifiPassword + "' hidden yes > " + tmpPath + " 2>&1";
 
-        qDebug() << Q_FUNC_INFO << cmd << tmpPath;
         int status = Utils::m_system(cmd.toUtf8().data());
-        if (status != 0) {
-            //syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_btnConnect_clicked' failed");
-        }
+        qDebug() << Q_FUNC_INFO << cmd << tmpPath << "res=" << status;
 
         QFile file(tmpPath);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -365,7 +355,6 @@ void BackThread::execConnHiddenWifiWPA(QString wifiName, QString wifiPassword)
             emit connDone(6);
             x = 0;
         }
-//                qDebug() << Q_FUNC_INFO << x << text;
     } while (x == 1);
 
     emit btFinish();
@@ -396,7 +385,7 @@ void BackThread::execConnRememberedHiddenWifi(QString wifiName)
             }
         } else {
             //已保存的wifi没有在wifi列表找到（隐藏wifi保存后也会出现在wifi列表），则当前区域无法连接此wifi
-            //syslog(LOG_DEBUG, "Choosen wifi can not be sacnned in finishedProcess() in dlghidewifiwpa.cpp 377.");
+            qDebug() << "Choosen wifi can not be sacnned, wifiName=" << wifiName;
             emit connDone(5);
         }
     }
@@ -411,22 +400,19 @@ void BackThread::execConnWifiPsk(QString cmd)
 //to connected wireless network driectly do not need a password
 void BackThread::execConnWifi(QString connName, QString connIfName)
 {
-    qDebug() << "Will to connect wifi " << connName << " with wifi card named " <<connIfName;
-    //syslog(LOG_DEBUG, "Will to connect wifi %s with wifi card named %s", connName.toUtf8().data(), connIfName.toUtf8().data());
+    qDebug() << "Will to connect wifi " << connName << " with wifi card named " << connIfName;
 
     QString cmdStr;
     KylinDBus objBackThreadDBus;
     QString wifiUuid = objBackThreadDBus.checkHasWifiConfigFile(connName);
     if (!wifiUuid.isEmpty()) {
         //有配置文件
-        //qDebug() << "-------------------------> wifiUuid = " << wifiUuid;
         cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + wifiUuid + "'\n";
     } else {
         //没有配置文件
-        //qDebug() << "-------------------------> connName = " << connName;
         cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + connIfName + "'\n";
     }
-    qDebug()<<"Trying to connect wifi. ssid="<<connName;
+    qDebug() << "Trying to connect wifi. cmd=" << cmdStr;
 
     QStringList options;
     options << "-c" << cmdStr;
@@ -448,14 +434,12 @@ void BackThread::onReadOutputWifi()
 {
     QString str = cmdProcessWifi->readAllStandardOutput();
     qDebug()<<"on_readoutput_wifi:  "<< str;
-    //syslog(LOG_DEBUG, "on_readoutput_wifi : %s", str.toUtf8().data());
     dellConnectWifiResult(str);
 }
 void BackThread::onReadErrorWifi()
 {
     QString str = cmdProcessWifi->readAllStandardError();
     qDebug()<<"on_readerror_wifi: "<< str;
-    //syslog(LOG_DEBUG, "on_readerror_wifi : %s", str.toUtf8().data());
     dellConnectWifiResult(str);
 }
 
@@ -491,8 +475,7 @@ QString BackThread::getConnProp(QString connName)
 
     QFile file(tmpPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        //syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-connprop!");
-        qDebug()<<"Can't open the file /tmp/kylin-nm-connprop!"<<endl;
+        qDebug() << "Can't open the file /tmp/kylin-nm-connprop!";
     }
 
     QString txt = file.readAll();
@@ -565,12 +548,12 @@ QString BackThread::execChkLanWidth(QString ethName)
 {
     QString tmpPath = "/tmp/kylin-nm-bandwidth-" + QDir::home().dirName();
     QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';ethtool '" + ethName + "' | grep Speed > " + tmpPath;
-    Utils::m_system(cmd.toUtf8().data());
+    int res = Utils::m_system(cmd.toUtf8().data());
+    qDebug() << "executed cmd=" << cmd << ".res="<<res;
 
     QFile file(tmpPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        //syslog(LOG_ERR, "Can't open the file /tmp/kylin-nm-bandwidth!");
-        qDebug()<<"Can't open the file /tmp/kylin-nm-bandwidth!"<<endl;
+        qDebug() << "Can't open the file /tmp/kylin-nm-bandwidth!";
     }
     QString line = file.readLine();
     file.close();
@@ -606,8 +589,7 @@ void BackThread::disConnLanOrWifi(QString type)
 
     p_file = popen("nmcli connection show -active", "r");
     if (!p_file) {
-        //syslog(LOG_ERR, "Error occurred when popen cmd 'nmcli connection show'");
-        qDebug()<<"Error occurred when popen cmd 'nmcli connection show";
+        qDebug() << "Error occurred when popen cmd 'nmcli connection show";
     }
 
     while (fgets(buf, BUF_SIZE, p_file) != NULL) {

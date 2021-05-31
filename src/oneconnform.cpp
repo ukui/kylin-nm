@@ -209,9 +209,59 @@ OneConnForm::~OneConnForm()
     delete ui;
 }
 
-void OneConnForm::mousePressEvent(QMouseEvent *)
+void OneConnForm::mousePressEvent(QMouseEvent *event)
 {
+    if (event->button() == Qt::RightButton && this->wifiBSsid != "--") {
+        QMenu * m_menu = new QMenu();//右键菜单
+        if (this->isTopItem) {
+            m_menu->addAction(new QAction(tr("Disconnect"), this));
+        } else {
+            m_menu->addAction(new QAction(tr("Connect"), this));
+        }
+        if (checkIsSaved())
+            m_menu->addAction(new QAction(tr("Forget"), this));
+        m_menu->move(cursor().pos());
+        m_menu->show();
+        connect(m_menu, &QMenu::triggered, this, &OneConnForm::onMenuTriggered);
+    }
     emit selectedOneWifiForm(wifiBSsid, H_WIFI_ITEM_BIG_EXTEND);
+}
+
+bool OneConnForm::checkIsSaved()
+{
+    QString name = this->wifiName;
+    QString currStr = "nmcli -f connection.type connection show \"" + name.replace("\"","\\\"") + "\"";
+    int status = system(currStr.toUtf8().data());
+    if (status != 0){
+        qDebug()<<"There is no configuration for wifi "<<this->wifiName;
+        return false;
+    } else {
+        return true;
+    }
+}
+
+/**
+ * @brief OneConnForm::onMenuTriggered 点击右键菜单选项的槽函数
+ * @param action
+ */
+bool OneConnForm::onMenuTriggered(QAction *action)
+{
+    if (action->text() == tr("Disconnect")) {
+        this->on_btnDisConn_clicked();
+        return true;
+    } else if (action->text() == tr("Connect")) {
+        this->on_btnConn_clicked();
+        return true;
+    } else if (action->text() == tr("Forget")) {
+        QString name = this->wifiName;
+        QString currStr = "nmcli connection delete \"" + name.replace("\"","\\\"") + "\"";
+        int status = system(currStr.toUtf8().data());
+        if (status != 0){
+            qDebug()<<"Delete wifi failed. wifi="<<this->wifiName;
+            return false;
+        }
+        return true;
+    }
 }
 
 void OneConnForm::onBtnPropertyClicked()
@@ -564,7 +614,6 @@ void OneConnForm::on_btnDisConn_clicked()
         return;
     }
 
-    //syslog(LOG_DEBUG, "DisConnect button about wifi net is clicked, current wifi name is %s .", wifiName.toUtf8().data());
     qDebug()<<"DisConnect button about wifi net is clicked, current wifi name is "<<wifiName;
     if (mw->canReconnectWifiList.contains(wifiName)) {
         mw->canReconnectWifiList.removeOne(wifiName);
@@ -587,7 +636,6 @@ void OneConnForm::on_btnConnSub_clicked()
         return;
     }
 
-    //syslog(LOG_DEBUG, "A button named on_btnConnSub about wifi net is clicked.");
     qDebug()<<"A button named on_btnConnSub about wifi net is clicked.";
     toConnectWirelessNetwork();
 }
@@ -599,7 +647,6 @@ void OneConnForm::on_btnConn_clicked()
         return;
     }
 
-    //syslog(LOG_DEBUG, "A button named btnConn about wifi net is clicked.");
     qDebug()<<"A button named btnConn about wifi net is clicked.";
     toConnectWirelessNetwork();
 }
@@ -771,7 +818,6 @@ void OneConnForm::toConnectWirelessNetwork()
 //需要密码的wifi连接
 void OneConnForm::on_btnConnPWD_clicked()
 {
-    //syslog(LOG_DEBUG, "A button named btnConnPWD about wifi net is clicked.");
     qDebug()<<"A button named btnConnPWD about wifi net is clicked.";
 
     if (this->getPskFlag() != 0) {
@@ -1004,7 +1050,6 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
         int status = system(cmd.toUtf8().data());
         if (status != 0) {
-            //syslog(LOG_ERR, "execute 'nmcli connection delete' in function 'slotConnWifiResult' failed");
             qDebug()<<"execute 'nmcli connection delete' in function 'slotConnWifiResult' failed.";
         }
     }
@@ -1070,7 +1115,6 @@ void OneConnForm::waitAnimStep()
         int status = system(cmd.toUtf8().data());
         if (status != 0) {
             qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'waitAnimStep' failed";
-            //syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'waitAnimStep' failed");
         }
 
         this->stopWifiWaiting(true); //动画超出时间限制，强制停止动画
@@ -1120,7 +1164,6 @@ void OneConnForm::on_btnCancel_clicked()
 //    int status = system(cmd.toUtf8().data());
 //    if (status != 0) {
 //        qDebug()<<"execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed";
-//        syslog(LOG_ERR, "execute 'kill -9 $(pidof nmcli)' in function 'on_btnCancel_clicked' failed");
 //    }
 
     KylinDBus myKylinDbus;

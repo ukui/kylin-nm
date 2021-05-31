@@ -22,9 +22,6 @@
 #include "kylinheadfile.h"
 #include "src/mainwindow.h"
 #include "src/kylin-dbus-interface.h"
-
-#include <sys/syslog.h>
-
 #include <QStandardItemModel>
 #include <QDir>
 
@@ -80,7 +77,7 @@ DlgHideWifiEapPeap::DlgHideWifiEapPeap(int type, int beUsed, MainWindow *mainWin
 
     ui->cbxConn->addItem("新建...");
     int status = system("nmcli connection show>/tmp/kylin-nm-connshow");
-    //if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection show' in function 'DlgHideWifiEapPeap' failed");}
+    qDebug()<<"executed cmd=nmcli connection show>/tmp/kylin-nm-connshow. res="<<status;
     QFile file("/tmp/kylin-nm-connshow");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug()<<"Can't open the file!";
@@ -274,9 +271,7 @@ void DlgHideWifiEapPeap::changeWindow(){
         QString currStr = "nmcli connection show '" + ui->cbxConn->currentText() + "' > " + tmpPath;
 
         int status = system(currStr.toUtf8().data());
-        if(status != 0){
-            //syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");
-        }
+        qDebug()<<"executed cmd="<<currStr<<". res="<<status;
         QFile file(tmpPath);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             qDebug()<<"Can't open the file!";

@@ -219,10 +219,7 @@ void DlgHideWifiWpa::changeWindow()
         QString currStr = "nmcli connection show '" + ui->cbxConn->currentText() + "' > " + tmpPath;
 
         int status = system(currStr.toUtf8().data());
-        if(status != 0){
-            //syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");
-            qDebug() << "execute 'nmcli connection show' in function 'changeWindow' failed";
-        }
+        qDebug()<<"executed cmd="<<currStr<<". res="<<status;
         QFile file(tmpPath);
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
             qDebug()<<"Can't open the file!";
@@ -321,7 +318,6 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
 }
 
 //void DlgHideWifiWpa::finishedProcess(int state) {
-//    if (! state) syslog(LOG_ERR, "Scan wifi list failed in functin on_btnConnect_clicked() in dlghidewifiwpa.cpp 359.");
 //    wlist = shellOutput.split("\n");
 //    bool is_hidden  = true;
 //    foreach (QString wifi, wlist) {
@@ -335,7 +331,6 @@ void DlgHideWifiWpa::on_btnConnect_clicked()
 //        QTimer::singleShot(4*1000, this, SLOT(emitSignal() ));
 //    } else {
 //        //已保存的wifi没有在wifi列表找到（隐藏wifi保存后也会出现在wifi列表），则当前区域无法连接此wifi
-//        syslog(LOG_DEBUG, "Choosen wifi can not be sacnned in finishedProcess() in dlghidewifiwpa.cpp 377.");
 //        QString txt(tr("Selected Wifi has not been scanned."));
 //        mw->objKyDBus->showDesktopNotify(txt);
 //        emit this->stopSignal();
@@ -396,10 +391,7 @@ void DlgHideWifiWpa::on_execSecConn()
 {
     QString str = "nmcli device wifi connect '" + strWifiname + "' password '" + strWifiPassword + "'";
     int status = system(str.toUtf8().data());
-    if (status != 0){
-        //syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_execSecConn' failed");
-        qDebug() << "execute 'nmcli device wifi connect' in function 'on_execSecConn' failed";
-    }
+    qDebug()<<"executed cmd="<<str<<". res="<<status;
     qDebug() << "debug: 准备等待7秒";
     QTimer::singleShot(7*1000, this, SLOT(emitSignal() ));
 }

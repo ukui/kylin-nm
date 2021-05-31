@@ -95,14 +95,12 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
                                                  QString("PropertiesChanged"), this, SLOT(onLanPropertyChanged(QVariantMap) ) );
         }
     } else {
-        //syslog(LOG_DEBUG, "Can not find wired device object path when using dbus.");
         qDebug()<<"Can not find wired device object path when using dbus.";
     }
 
     if (!multiWirelessPaths.isEmpty()) {
         getWirelessCardName();//获取无线网卡名称
     } else {
-        //syslog(LOG_DEBUG, "Can not find wireless device object path when using dbus.");
         qDebug()<<"Can not find wireless device object path when using dbus.";
     }
 
@@ -154,7 +152,6 @@ void KylinDBus::getObjectPath()
    //先获取所有的网络设备的设备路径
    QDBusReply<QList<QDBusObjectPath>> obj_reply = m_interface.call("GetAllDevices");
    if (!obj_reply.isValid()) {
-       //syslog(LOG_DEBUG, "execute dbus method 'GetAllDevices' is invalid in func getObjectPath()");
        qDebug()<<"execute dbus method 'GetAllDevices' is invalid in func getObjectPath()";
    }
 
@@ -169,7 +166,6 @@ void KylinDBus::getObjectPath()
 
        QDBusReply<QString> reply = interface.call("Introspect");
        if (!reply.isValid()) {
-           //syslog(LOG_DEBUG, "execute dbus method 'Introspect' is invalid in func getObjectPath()");
            qDebug()<<"execute dbus method 'Introspect' is invalid in func getObjectPath()";
        }
 
@@ -210,7 +206,6 @@ void KylinDBus::getPhysicalCarrierState(int n)
                 throw -1; //出现异常
             }
         } catch(...) {
-            //syslog(LOG_ERR, "Error occurred when get the property 'Carrier' of Wired");
             qDebug()<<"Error occurred when get the property 'Carrier' of Wired";
         }
     }
@@ -240,7 +235,6 @@ void KylinDBus::getLanHwAddressState()
 
         QDBusReply<QVariant> lanReply = lanInterface.call("Get", "org.freedesktop.NetworkManager.Device.Wired", "HwAddress");
         if (!lanReply.isValid()) {
-            //syslog(LOG_DEBUG, "can not get the attribute 'HwAddress' in func getLanHwAddressState()");
             qDebug()<<"can not get the attribute 'HwAddress' in func getLanHwAddressState()";
         } else {
             QString dbusLanMac = lanReply.value().toString();
@@ -270,7 +264,6 @@ void KylinDBus::getWiredCardName()
 
         QDBusReply<QVariant> lanReply = lanInterface.call("Get", "org.freedesktop.NetworkManager.Device", "Interface");
         if (!lanReply.isValid()) {
-            //syslog(LOG_DEBUG, "can not get the attribute 'Interface' in func getWiredCardName()");
             qDebug()<<"can not get the attribute 'Interface' in func getWiredCardName()";
         } else {
             QString dbusLanCardName = lanReply.value().toString();
@@ -294,7 +287,6 @@ void KylinDBus::getWirelessCardName()
 
     QDBusReply<QVariant> lanReply = lanInterface.call("Get", "org.freedesktop.NetworkManager.Device", "Interface");
     if (!lanReply.isValid()) {
-        //syslog(LOG_DEBUG, "can not get the attribute 'Interface' in func getWirelessCardName()");
         qDebug()<<"can not get the attribute 'Interface' in func getWirelessCardName()";
     } else {
         dbusWiFiCardName = lanReply.value().toString();
@@ -1040,11 +1032,9 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
             emit this->newConnAdded(0);
             m_lanPathList.append(objPath.path());
             emit mw->wiredConnectionAdded();
-            //syslog(LOG_DEBUG, "A new wired network was created.");
             qDebug()<<"A new wired network was created.";
             break;
         } else if (key == "802-11-wireless") {
-            //syslog(LOG_DEBUG, "A new wireless network(wifi) was created.");
             qDebug()<<"A new wireless network was created.";
             sleep(1);
             bool has_wpa_psk = false;
@@ -1104,7 +1094,6 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
 //减少了一个网络，伴随着减少了一个网络配置文件
 void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
 {
-    //syslog(LOG_DEBUG, "An old network was removed from configure directory.");
     if (m_lanPathList.contains(objPath.path())) {
         m_lanPathList.removeOne(objPath.path());
         qDebug()<<"An old network was removed from configure directory.";
@@ -1718,8 +1707,7 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 //接收到自动连接的信号过后执行自动连接wifi
 void KylinDBus::onAutoConnect()
 {
-    //syslog(LOG_DEBUG, "Receive a auto-connect signal to reconnect wifi");
-    qDebug() << Q_FUNC_INFO << "Receive a auto-connect signal to reconnect wifi";
+    qDebug() << "Receive a auto-connect signal to reconnect wifi";
     mw->toReconnectWifi();
 }
 
@@ -1727,7 +1715,6 @@ void KylinDBus::onAutoConnect()
 void KylinDBus::onLanPropertyChanged(QVariantMap qvm)
 {
     if (!isRunningFunction) {
-        //syslog(LOG_DEBUG, "kylin-nm receive a signal 'Device.Wired PropertiesChanged' about interface.");
         qDebug()<<"kylin-nm receive a signal 'Device.Wired PropertiesChanged' about interface.";
         isRunningFunction = true;  //function onLanPropertyChanged is running
         time->start(3000);
@@ -2060,11 +2047,9 @@ void KylinDBus::getWifiSwitchState()
                     if (judge) {
                         mw->onBtnWifiClicked(2); //打开wifi开关
                         qDebug()<<"receive a signal to turn on wifi switch from control-center";
-                        //syslog(LOG_DEBUG, "receive a signal to turn on wifi switch from control-center");
                     } else {
                         mw->onBtnWifiClicked(3); //关闭wifi开关
                         qDebug()<<"receive a signal to turn off wifi switch from control-center";
-                        //syslog(LOG_DEBUG, "receive a signal to turn off wifi switch from control-center");
                     }
                 }
             }

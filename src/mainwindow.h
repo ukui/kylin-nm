@@ -31,7 +31,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-#include <sys/syslog.h>
 #include <unistd.h>
 #include <xcb/xcb.h>
 

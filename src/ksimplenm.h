@@ -19,8 +19,6 @@
 #ifndef KSIMPLENM_H
 #define KSIMPLENM_H
 
-#include <sys/syslog.h>
-
 #include <QObject>
 #include <QProcess>
 #include <QDebug>

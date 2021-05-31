@@ -1960,7 +1960,7 @@ void KylinDBus::requestScanWifi()
                               QDBusConnection::systemBus() );
     QMap<QString, QVariant> my_map;
     my_map = {};
-    interface.call("RequestScan", my_map); //get accesspoint for each wifi
+    interface.call("RequestScan", my_map);
 }
 
 //显示桌面通知

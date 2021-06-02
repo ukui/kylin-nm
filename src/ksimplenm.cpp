@@ -81,7 +81,6 @@ void KSimpleNM::execGetWifiList(const QString& wname, const bool &isHuaweiPc)
         return;
     }
     isExecutingGetWifiList = true;
-    qDebug()<< __FUNCTION__<<__LINE__;
     shellOutputWifi = "";
     QString cmd;
     //将ssid放置在最后一列以防ssid存在中文或特殊字符导致其后面的列不对齐
@@ -135,7 +134,6 @@ void KSimpleNM::finishedProcessWifi(int msg)
     QStringList slist = shellOutputWifi.split("\n");
     emit getWifiListFinished(slist);
     isExecutingGetWifiList = false;
-    qDebug()<< __FUNCTION__<<__LINE__;
 }
 void KSimpleNM::finishedProcessConn(int msg)
 {

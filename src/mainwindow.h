@@ -182,10 +182,12 @@ public:
     bool isToSetWifiValue = true; //本次执行是否进行赋值
     bool isReconnectingWifi = false; //是否正在执行wifi的回连
     bool isReconnectingLan = false; //是否正在执行lan的回连
+    bool isScaningWifi = false; //是否正在进行扫描
     int addNumberForWifi = 0; //短时间内收到关于wifi连接信号的次数
     bool isHuaWeiPC;
     bool isHandlingWiredCableOn = false;
-    bool canReconnectWifiTimeInterval = true;
+    bool ifCanReconnectWifiNow = true;
+    bool isRadioWifiTurningOn = false; //是否正在打开wifi开关
     QVector<QStringList> dbus_wifiList; //其他组件通过dbus接口获取到的wifi列表,第一个元素一定为已连接wifi，若没有已连接wifi则显示为--
     void requestRefreshWifiList(); //申请刷新wifi列表
 
@@ -232,6 +234,7 @@ public slots:
     void onRequestRefreshWifiList();
     void onRefreshWifiListAfterScan();
     void onLoadWifiListAfterScan();
+    void onRequestReconnecWifi();
 
     //flag =0或1为普通点击、2为收到打开信息、3为收到关闭信息、4为无线网卡插入、5为无线网卡拔出
     void onBtnWifiClicked(int flag = 0);
@@ -241,7 +244,6 @@ public slots:
     void checkIfConnectedWifiExist();
 
     void toReconnectWifi();
-    void timeIntervalToConnectWifi();
 
     void rfkillDisableWifiDone();
     void rfkillEnableWifiDone();
@@ -423,6 +425,7 @@ signals:
     void wiredConnectionAdded();
     void wiredConnectionRemoved();
     void actWiredConnectionChanged();
+    void requestReconnecWifi();
 };
 
 #endif // MAINWINDOW_H

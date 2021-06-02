@@ -1707,8 +1707,13 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 //接收到自动连接的信号过后执行自动连接wifi
 void KylinDBus::onAutoConnect()
 {
-    qDebug() << "Receive a auto-connect signal to reconnect wifi";
-    mw->toReconnectWifi();
+    //syslog(LOG_DEBUG, "Receive a auto-connect signal to reconnect wifi");
+    qDebug() << Q_FUNC_INFO << "Receive a auto-connect signal to reconnect wifi";
+    if (!mw->isRadioWifiTurningOn) {
+        mw->toReconnectWifi();
+    } else {
+        qDebug() << Q_FUNC_INFO << "but need waiting turn on wifi switch, will not reconnect wifi";
+    }
 }
 
 //有线网属性变化时，执行该函数。由于可能在短时间收到几条相同属性变化信息，所以在短时间内，执行一次
@@ -1947,7 +1952,7 @@ void KylinDBus::requestScanWifi()
                               QDBusConnection::systemBus() );
     QMap<QString, QVariant> my_map;
     my_map = {};
-    interface.call("RequestScan", my_map); //get accesspoint for each wifi
+    interface.call("RequestScan", my_map);
 }
 
 //显示桌面通知

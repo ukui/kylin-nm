@@ -1398,7 +1398,7 @@ void MainWindow::on_btnWifiList_clicked()
         is_stop_check_net_state = 0;
     } else {
         qDebug()<<"debug: WiFi的开关已经关闭";
-        btnWireless->setSwitchStatus(false);
+        //btnWireless->setSwitchStatus(false);其他部分已经对关掉wifi开关进行处理，此处不再处理。有几率出现打开关闭再打开的现象，因此注释掉关闭的动作
         delete topWifiListWidget; //清空top列表
         createTopWifiUI(); //创建顶部无线网item
         lbTopWifiList->hide();
@@ -4284,7 +4284,7 @@ void MainWindow::onRfkillStatusChanged()
             QThread *t = new QThread();
             BackThread *bt = new BackThread();
             bt->moveToThread(t);
-            btnWireless->setSwitchStatus(true);
+            btnWireless->setSwitchStatus(false);//此处逻辑应为关闭开关，故应将true改为false
             connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
             connect(t, SIGNAL(started()), bt, SLOT(execDisWifi()));
             connect(bt, SIGNAL(disWifiDone()), this, SLOT(rfkillDisableWifiDone()));

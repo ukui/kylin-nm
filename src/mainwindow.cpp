@@ -887,12 +887,14 @@ void MainWindow::on_showWindowAction()
 
 void MainWindow::startLoading()
 {
+    qDebug()<<"Start loading...";
     loading->startLoading();
     setTrayLoading(true);
 }
 
 void MainWindow::stopLoading()
 {
+    qDebug()<<"Stop loading!";
     loading->stopLoading();
     setTrayLoading(false);
     getActiveInfoAndSetTrayIcon();
@@ -1810,6 +1812,7 @@ void MainWindow::getWifiListDone(QStringList slist)
                         qDebug()<<"Reconnect finished, cmd = "<<reconnectWifiCmd<<". res = "<<con_res;
                         emit this->stopReconnectWifi(wifiSsid);
                         if (con_res == 0) {
+                            m_connected_by_self = true;
                             //回连成功，停止
                             this->stopLoading();
                             is_stop_check_net_state = 0;
@@ -3704,13 +3707,17 @@ void MainWindow::onExternalLanChange()
 
 void MainWindow::onExternalWifiChange()
 {
-    if (!isWifiBeConnUp) {
-        //QString txt(tr("WiFi already disconnect"));
-        //objKyDBus->showDesktopNotify(txt);
-    }
-    if (isWifiBeConnUp) {
-        //QString txt(tr("WiFi already connected external"));
-        //objKyDBus->showDesktopNotify(txt);
+//    if (!isWifiBeConnUp) {
+//        //QString txt(tr("WiFi already disconnect"));
+//        //objKyDBus->showDesktopNotify(txt);
+//    }
+//    if (isWifiBeConnUp) {
+//        //QString txt(tr("WiFi already connected external"));
+//        //objKyDBus->showDesktopNotify(txt);
+//    }
+    if (m_connected_by_self) {
+        m_connected_by_self = false;
+        return;
     }
 
     if (is_btnWifiList_clicked) {

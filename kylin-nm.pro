@@ -14,14 +14,13 @@ LANGUAGE = C++
 
 CONFIG += c++14
 CONFIG += qt warn_on
-CONFIG += release
+#CONFIG += release
 #CONFIG += link_pkgconfig
 
 #PKGCONFIG += glib-2.0 gio-2.0 gsettings-qt
 
 LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11
 #LIBS  +=  -lkysec
-
 target.path = /usr/bin
 target.source += $$TARGET
 desktop.path = /etc/xdg/autostart/

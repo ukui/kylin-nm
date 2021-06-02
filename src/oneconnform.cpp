@@ -202,17 +202,23 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lbName->setLayout(lbNameLyt);
 
     connect(this, SIGNAL(requestRefreshWifiList()), mw, SLOT(onRequestRefreshWifiList()));
+
+    m_menu = new QMenu();//右键菜单
 }
 
 OneConnForm::~OneConnForm()
 {
     delete ui;
+    if (m_menu) {
+        delete m_menu;
+        m_menu = nullptr;
+    }
 }
 
 void OneConnForm::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton && this->wifiBSsid != "--") {
-        QMenu * m_menu = new QMenu();//右键菜单
+        m_menu->clear();
         if (this->isTopItem) {
             m_menu->addAction(new QAction(tr("Disconnect"), this));
         } else {

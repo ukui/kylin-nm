@@ -1663,6 +1663,11 @@
         <translation>断开</translation>
     </message>
     <message>
+        <location filename="../src/oneconnform.cpp" line="222"/>
+        <source>Forget</source>
+        <translation>忘记此网络</translation>
+    </message>
+    <message>
         <location filename="../src/oneconnform.cpp" line="131"/>
         <source>Property</source>
         <translation>属 性</translation>

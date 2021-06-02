@@ -364,11 +364,7 @@ void ConfForm::on_btnSave_clicked()
             // QString cmd = "nmcli connection delete '" + netUuid + "'";
             QString cmd = "nmcli connection modify '" + lastConnName + "' con-name '"+name+"'";
             int status = system(cmd.toUtf8().data());
-            if (status != 0) {
-                //syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'on_btnSave_clicked' failed");
-            } else {
-                //syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'on_btnSave_clicked' success");
-            }
+            qDebug()<<"executed 'nmcli connection modify'. cmd="<<cmd<<". res="<<status;
 
             // this->isCreateNewNet = true;
             // newUuid = "--";

@@ -17,8 +17,6 @@
  */
 
 #include "utils.h"
-
-#include <sys/syslog.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -42,7 +40,6 @@ int Utils::m_system(char *cmd)
     clock_t start,finish;
     if ((pid = vfork()) <0) {
         qDebug()<<"failed to create a subprocess by using vfork";
-        //syslog(LOG_ERR, "failed to create a subprocess by using vfork");
         status = -1;
     } else if (pid==0) {
         const char *new_argv[4];
@@ -64,7 +61,6 @@ int Utils::m_system(char *cmd)
         start = clock();
         if (execve("/bin/sh",(char *const *) new_argv, NULL) <0) {
             qDebug()<<"failed to execve a shell command in function m_system";
-            //syslog(LOG_ERR, "failed to execve %s! errno: %d\n",cmd, errno);
             exit(1);
         } else {
             exit(0);
@@ -74,8 +70,7 @@ int Utils::m_system(char *cmd)
         finish = clock();
     }
     double duration = (double)(finish-start)/CLOCKS_PER_SEC;
-    QString str = "It takes "+QString::number(duration)+" seconds to execute command:"+cmd;
-    //syslog(LOG_DEBUG,"%s",str.toStdString().c_str());
+    qDebug()<<"It takes "<<QString::number(duration)<<" seconds to execute command:"<<cmd;
     return status;
 }
 
@@ -114,14 +109,12 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
     char tmp_value[128];
 
     if((NULL == netname)||(NULL == save_rate)||(NULL == tx_rate)) {
-        qDebug()<<"parameter pass to function getCurrentDownloadRates() error";
-        //syslog(LOG_ERR, "parameter pass to function getCurrentDownloadRates() error");
+        qDebug()<<"parameter pass error";
         return -1;
     }
 
     if ( (net_dev_file=fopen("/proc/net/dev", "r")) == NULL ) { //打开文件/pro/net/dev/，从中读取流量数据
         qDebug()<<"error occurred when try to open file /proc/net/dev/";
-        //syslog(LOG_ERR, "error occurred when try to open file /proc/net/dev/");
         return -1;
     }
     memset(buffer,0,sizeof(buffer));

@@ -42,7 +42,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //syslog(LOG_DEBUG, "Using the icon theme named 'ukui-icon-theme-default'");
     //QIcon::setThemeName("ukui-icon-theme-default");
 
     PrimaryManager();
@@ -363,7 +362,7 @@ void MainWindow::createLeftAreaUI()
     paletteLan.setBrush(QPalette::Button, QBrush(QColor(1,1,1,0)));
     ui->btnNetListImg->setPalette(paletteLan);
     //添加PushButton的svg图片
-    ui->btnNetListImg->setIcon(QIcon(":/res/x/net-list-bg.svg"));
+    ui->btnNetListImg->setIcon(QIcon::fromTheme("network-wired-symbolic"));
     ui->btnNetListImg->setProperty("useIconHighlightEffect", true);
     ui->btnNetListImg->setProperty("iconHighlightEffectMode", true);
 
@@ -377,7 +376,7 @@ void MainWindow::createLeftAreaUI()
     paletteWifi.setBrush(QPalette::Button, QBrush(QColor(1,1,1,0)));
     ui->btnWifiListImg->setPalette(paletteWifi);
     //添加PushButton的svg图片
-    ui->btnWifiListImg->setIcon(QIcon(":/res/x/wifi-list-bg.svg"));
+    ui->btnWifiListImg->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
     ui->btnWifiListImg->setProperty("useIconHighlightEffect", true);
     ui->btnWifiListImg->setProperty("iconHighlightEffectMode", true);
 
@@ -3096,6 +3095,9 @@ void MainWindow::actionTriggerSlots()
 //列表中item的扩展与收缩
 void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
 {
+    if (currSelNetName == uniqueName) {
+        return;
+    }
     QList<OneLancForm *> topLanList = topLanListWidget->findChildren<OneLancForm *>();
     QList<OneLancForm *> lanList = lanListWidget->findChildren<OneLancForm *>();
 
@@ -3115,16 +3117,16 @@ void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
     //是否与上一次选中同一个网络框
     if (currSelNetName == uniqueName) {
         // 缩小所有选项卡
-        for (int i = 0;i < lanList.size(); i ++) {
-            OneLancForm *ocf = lanList.at(i);
-            if (ocf->uuidName == uniqueName) {
-                ocf->setSelected(false, true);
-            } else {
-                ocf->setSelected(false, false);
-            }
-        }
+//        for (int i = 0;i < lanList.size(); i ++) {
+//            OneLancForm *ocf = lanList.at(i);
+//            if (ocf->uuidName == uniqueName) {
+//                ocf->setSelected(false, true);
+//            } else {
+//                ocf->setSelected(false, false);
+//            }
+//        }
 
-        currSelNetName = "";
+//        currSelNetName = "";
     } else {
         int selectY = 0;
         for (int i = 0;i < lanList.size(); i ++) {
@@ -3178,6 +3180,8 @@ void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
 }
 void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
 {
+    //应设计要求，选中同一选项卡不再缩小
+    if (currSelNetName == uniqueName) return;
     QList<OneLancForm *> topLanList = topLanListWidget->findChildren<OneLancForm *>();
     QList<OneLancForm *> lanList = lanListWidget->findChildren<OneLancForm *>();
 
@@ -3189,17 +3193,17 @@ void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
 
     if (currSelNetName == uniqueName) {
         // 与上一次选中同一个网络框，缩小当前选项卡
-        topLanListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM*currTopLanItem + H_GAP_UP + X_ITEM);
-        lbTopLanList->move(X_MIDDLE_WORD, H_NORMAL_ITEM*currTopLanItem + H_GAP_UP);
-        btnCreateNet->move(X_BTN_FUN, Y_BTN_FUN + H_NORMAL_ITEM*(currTopLanItem-1));
-        scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA + H_NORMAL_ITEM*(currTopLanItem-1));
-        lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2 + H_NORMAL_ITEM*(currTopLanItem-1)/2);
+//        topLanListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM*currTopLanItem + H_GAP_UP + X_ITEM);
+//        lbTopLanList->move(X_MIDDLE_WORD, H_NORMAL_ITEM*currTopLanItem + H_GAP_UP);
+//        btnCreateNet->move(X_BTN_FUN, Y_BTN_FUN + H_NORMAL_ITEM*(currTopLanItem-1));
+//        scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA + H_NORMAL_ITEM*(currTopLanItem-1));
+//        lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2 + H_NORMAL_ITEM*(currTopLanItem-1)/2);
 
-        foreach (OneLancForm *ocf, topLanList) {
-            ocf->setTopItem(false);
-        }
+//        foreach (OneLancForm *ocf, topLanList) {
+//            ocf->setTopItem(false);
+//        }
 
-        currSelNetName = "";
+//        currSelNetName = "";
     } else {
         // 没有与上一次选中同一个网络框，放大当前选项卡
 
@@ -3250,6 +3254,11 @@ void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
 
 void MainWindow::oneWifiFormSelected(QString wifibssid, int extendLength)
 {
+    if (currSelNetName == wifibssid) {
+        //与win逻辑一致，点击同一选项不再缩小选项卡
+        return;
+    }
+
     QList<OneConnForm *>topWifiList = topWifiListWidget->findChildren<OneConnForm *>();
     QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
 
@@ -3268,25 +3277,25 @@ void MainWindow::oneWifiFormSelected(QString wifibssid, int extendLength)
 
     //是否与上一次选中同一个网络框
     if (currSelNetName == wifibssid) {
-        // 缩小所有选项卡
-        for (int i = 0;i < wifiList.size(); i ++) {
-            OneConnForm *ocf = wifiList.at(i);
-            if (ocf->wifiBSsid == wifibssid) {
-                if (ocf->wifiBSsid == hideWiFiConn) {
-                    ocf->setHideItem(true, true);
-                } else {
-                    ocf->setSelected(false, true);
-                }
-            } else {
-                if (ocf->wifiBSsid == hideWiFiConn) {
-                    ocf->setHideItem(true, true);
-                } else {
-                    ocf->setSelected(false, false);
-                }
-            }
+//        // 缩小所有选项卡
+//        for (int i = 0;i < wifiList.size(); i ++) {
+//            OneConnForm *ocf = wifiList.at(i);
+//            if (ocf->wifiBSsid == wifibssid) {
+//                if (ocf->wifiBSsid == hideWiFiConn) {
+//                    ocf->setHideItem(true, true);
+//                } else {
+//                    ocf->setSelected(false, true);
+//                }
+//            } else {
+//                if (ocf->wifiBSsid == hideWiFiConn) {
+//                    ocf->setHideItem(true, true);
+//                } else {
+//                    ocf->setSelected(false, false);
+//                }
+//            }
 
-        }
-        currSelNetName = "";
+//        }
+//        currSelNetName = "";
     } else {
         int selectY = 0;
         for (int i = 0;i < wifiList.size(); i ++) {
@@ -3346,21 +3355,23 @@ void MainWindow::oneWifiFormSelected(QString wifibssid, int extendLength)
 }
 void MainWindow::oneTopWifiFormSelected(QString wifibssid, int extendLength)
 {
+    //应设计师要求，此处展开后点击不再收起
+    if (currSelNetName == wifibssid) return;
     QList<OneConnForm *>topWifiList = topWifiListWidget->findChildren<OneConnForm *>();
     QList<OneConnForm *> wifiList = wifiListWidget->findChildren<OneConnForm *>();
 
     if (currSelNetName == wifibssid) {
         // 与上一次选中同一个网络框，缩小当前选项卡
-        topWifiListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_GAP_UP + X_ITEM);
-        lbTopWifiList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_GAP_UP);
-        btnAddNet->move(X_BTN_FUN, Y_BTN_FUN);
-        scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
-        lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2);
+//        topWifiListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_GAP_UP + X_ITEM);
+//        lbTopWifiList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_GAP_UP);
+//        btnAddNet->move(X_BTN_FUN, Y_BTN_FUN);
+//        scrollAreaw->move(W_LEFT_AREA, Y_SCROLL_AREA);
+//        lbNoItemTip->move(this->width()/2 - W_NO_ITEM_TIP/2 + W_LEFT_AREA/2, this->height()/2);
 
-        OneConnForm *ocf = topWifiList.at(0);
-        ocf->setTopItem(false);
+//        OneConnForm *ocf = topWifiList.at(0);
+//        ocf->setTopItem(false);
 
-        currSelNetName = "";
+//        currSelNetName = "";
     } else {
         // 没有与上一次选中同一个网络框，放大当前选项卡
 
@@ -4264,7 +4275,7 @@ void MainWindow::requestRefreshWifiList()
         });
     } else {
         current_wifi_list_state = REFRESH_WIFI;
-        syslog(LOG_DEBUG, "[%s++%d] state[%d]", __FUNCTION__, __LINE__, current_wifi_list_state);
+        qDebug()<<"current_wifi_list_state="<<current_wifi_list_state;
         this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
     }
 }

@@ -2721,6 +2721,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 // 更新wifi列表
 void MainWindow::updateWifiListDone(QStringList slist)
 {
+    qDebug()<<"Refreshed wifi list.";
     if (hasWifiConnected) {
         lbLoadDown->show();
         lbLoadUp->show();
@@ -2781,7 +2782,6 @@ void MainWindow::updateWifiListDone(QStringList slist)
                                 else {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM);}
                             }
                             wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() - H_NORMAL_ITEM);
-                            break;
                             //从向外提供的wifi列表中找到并删除这一行
                             QStringList list_to_remove;
                             foreach (QStringList list, dbus_wifiList) {
@@ -2793,6 +2793,9 @@ void MainWindow::updateWifiListDone(QStringList slist)
                             if (!list_to_remove.isEmpty()) {
                                 dbus_wifiList.removeOne(list_to_remove);
                             }
+                            qDebug()<<"移除了一个WiFi，将会向控制面板发送信号。ssid="<<lastWname;
+                            emit this->getWifiListFinished();
+                            break;
                         }
                     }
                 }
@@ -2897,6 +2900,8 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 }
 
                 count += 1;
+                qDebug()<<"新增了一个WiFi，将会向控制面板发送信号。ssid="<<lastWname;
+                emit this->getWifiListFinished();
             }
         }
     }
@@ -2906,7 +2911,6 @@ void MainWindow::updateWifiListDone(QStringList slist)
     this->wifiListWidget->show();
     this->topWifiListWidget->show();
     this->stopLoading();
-    emit this->getWifiListFinished();
 }
 
 //用于中英文系统有线网络名称国际话

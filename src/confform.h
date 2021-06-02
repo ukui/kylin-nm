@@ -48,6 +48,7 @@ public:
 
 public slots:
     void cbTypeChanged(int index);
+    void cbMaskChanged(int index);
     void changeEnableCheckIp();
 
 protected:

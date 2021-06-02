@@ -204,6 +204,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     connect(this, SIGNAL(requestRefreshWifiList()), mw, SLOT(onRequestRefreshWifiList()));
 
     m_menu = new QMenu();//右键菜单
+    connect(m_menu, &QMenu::triggered, this, &OneConnForm::onMenuTriggered);
 }
 
 OneConnForm::~OneConnForm()
@@ -228,7 +229,6 @@ void OneConnForm::mousePressEvent(QMouseEvent *event)
             m_menu->addAction(new QAction(tr("Forget"), this));
         m_menu->move(cursor().pos());
         m_menu->show();
-        connect(m_menu, &QMenu::triggered, this, &OneConnForm::onMenuTriggered);
     }
     emit selectedOneWifiForm(wifiBSsid, H_WIFI_ITEM_BIG_EXTEND);
 }

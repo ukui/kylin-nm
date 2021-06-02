@@ -362,7 +362,10 @@ void MainWindow::createLeftAreaUI()
     paletteLan.setBrush(QPalette::Button, QBrush(QColor(1,1,1,0)));
     ui->btnNetListImg->setPalette(paletteLan);
     //添加PushButton的svg图片
-    ui->btnNetListImg->setIcon(QIcon::fromTheme("network-wired-symbolic"));
+    if (!QIcon::fromTheme("network-wired-symbolic").isNull())
+        ui->btnNetListImg->setIcon(QIcon::fromTheme("network-wired-symbolic"));
+    else
+        ui->btnNetListImg->setIcon(QIcon(":/res/x/net-list-bg.svg"));
     ui->btnNetListImg->setProperty("useIconHighlightEffect", true);
     ui->btnNetListImg->setProperty("iconHighlightEffectMode", true);
 
@@ -376,7 +379,10 @@ void MainWindow::createLeftAreaUI()
     paletteWifi.setBrush(QPalette::Button, QBrush(QColor(1,1,1,0)));
     ui->btnWifiListImg->setPalette(paletteWifi);
     //添加PushButton的svg图片
-    ui->btnWifiListImg->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
+    if (!QIcon::fromTheme("network-wireless-signal-excellent-symbolic").isNull())
+        ui->btnWifiListImg->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
+    else
+        ui->btnWifiListImg->setIcon(QIcon(":/res/x/wifi-list-bg.svg"));
     ui->btnWifiListImg->setProperty("useIconHighlightEffect", true);
     ui->btnWifiListImg->setProperty("iconHighlightEffectMode", true);
 

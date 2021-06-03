@@ -4305,7 +4305,7 @@ void MainWindow::onRfkillStatusChanged()
                 QThread *rfkill_t = new QThread();
                 BackThread *rfkill_bt = new BackThread();
                 rfkill_bt->moveToThread(rfkill_t);
-                btnWireless->setSwitchStatus(true);
+                btnWireless->setSwitchStatus(false);
                 connect(rfkill_t, SIGNAL(finished()), rfkill_t, SLOT(deleteLater()));
                 connect(rfkill_t, SIGNAL(started()), rfkill_bt, SLOT(rfkillExecDisWifi()));
                 connect(rfkill_bt, SIGNAL(disWifiDoneByRfkill()), this, SLOT(rfkillDisableWifiDone()));

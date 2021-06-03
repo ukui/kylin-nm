@@ -1946,13 +1946,13 @@
     <message>
         <location filename="../src/wpawifidialog.cpp" line="381"/>
         <location filename="../src/wpawifidialog.cpp" line="404"/>
-        <source>CA Files (*.pem *.der *.p12 *.crt)</source>
-        <translation type="unfinished"></translation>
+        <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+        <translation>CA 文件 (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../src/wpawifidialog.cpp" line="427"/>
-        <source>CA Files (*.pem *.der *.p12 *.crt *.key)</source>
-        <translation type="unfinished"></translation>
+        <source>CA Files (*.pem *.der *.p12 *.crt *.key *.cer *.pfx)</source>
+        <translation>CA 文件 (*.pem *.der *.p12 *.crt *.key *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../src/wpawifidialog.cpp" line="931"/>

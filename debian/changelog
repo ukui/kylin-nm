@@ -1,7 +1,7 @@
-kylin-nm (3.0.1-1kylin49hw1) v101.hw; urgency=medium
+kylin-nm (3.0.1-1kylin49) v101; urgency=medium
   
-  * BUG号：#49773
-  * 需求号：无
+  * BUG号：无
+  * 需求号：#33308
   * 其他改动：无
 
  -- zhangjiaping <zhangjiaping@kylinos.cn>  Wed, 02 Jun 2021 17:53:12 +0800

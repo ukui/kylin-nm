@@ -1720,10 +1720,10 @@ void KylinDBus::onAutoConnect()
 {
     //syslog(LOG_DEBUG, "Receive a auto-connect signal to reconnect wifi");
     qDebug() << Q_FUNC_INFO << "Receive a auto-connect signal to reconnect wifi";
-    if (!mw->isRadioWifiTurningOn) {
+    if (!mw->isRadioWifiTurningOn && !mw->isScaningWifi) {
         mw->toReconnectWifi();
     } else {
-        qDebug() << Q_FUNC_INFO << "but need waiting turn on wifi switch, will not reconnect wifi";
+        qDebug() << Q_FUNC_INFO << "but need waiting turn on wifi switch or finish scan, will not reconnect wifi";
     }
 }
 

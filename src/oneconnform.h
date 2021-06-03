@@ -112,6 +112,7 @@ protected:
 
 private:
     bool getWifiConfig(WifiConfig &wc, QString netName);
+    bool checkIsSaved();
 
 private slots:
     void on_btnConn_clicked();
@@ -137,6 +138,8 @@ private slots:
 
     void on_checkBoxPwd_released();
 
+    bool onMenuTriggered(QAction *);
+
 private:
     QTimer *waitTimer = nullptr;
     int waitPage;
@@ -156,6 +159,7 @@ private:
     QHBoxLayout * lbNameLyt = nullptr;
     QString key_mgmt, funcBtnQss;
     QPushButton *btnProperty = nullptr;
+    QMenu * m_menu = nullptr;
 
 signals:
     void selectedOneWifiForm(QString wifiName, int extendLength);

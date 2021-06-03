@@ -212,10 +212,7 @@ void DlgHideWifi::changeWindow(){
         QString currStr = "nmcli connection show '" + ui->cbxConn->currentText() + "' >" + tmpPath;
 
         int status = system(currStr.toUtf8().data());
-        if (status != 0){
-            qDebug() << "execute 'nmcli connection show' in function 'changeWindow' failed";
-            //syslog(LOG_ERR, "execute 'nmcli connection show' in function 'changeWindow' failed");
-        }
+        qDebug()<<"executed cmd="<<currStr<<". res="<<status;
 
         QFile file(tmpPath);
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -344,10 +341,7 @@ void DlgHideWifi::on_execSecConn()
 {
     QString str = "nmcli device wifi connect '" + strWifiname + "' password ''";
     int status = system(str.toUtf8().data());
-    if (status != 0){
-        //syslog(LOG_ERR, "execute 'nmcli device wifi connect' in function 'on_execSecConn' failed");
-        qDebug() << "execute 'nmcli device wifi connect' in function 'on_execSecConn' failed";
-    }
+    qDebug()<<"executed cmd="<<str<<". res="<<status;
     QTimer::singleShot(3*1000, this, SLOT(emitSignal() ));
 }
 

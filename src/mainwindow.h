@@ -31,7 +31,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-#include <sys/syslog.h>
 #include <unistd.h>
 #include <xcb/xcb.h>
 
@@ -360,6 +359,7 @@ private:
 //    QString hasStarWifiName;
 
     bool hasWifiConnected;//当前是否有wifi连接
+    bool m_connected_by_self = false; //是否在本进程执行的连接操作
     QDBusInterface *mDbusXrandInter;
     QDBusInterface *kdsDbus;
 

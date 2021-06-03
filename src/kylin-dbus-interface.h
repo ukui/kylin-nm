@@ -19,8 +19,6 @@
 #ifndef KYLINDBUSINTERFACE_H
 #define KYLINDBUSINTERFACE_H
 
-#include <sys/syslog.h>
-
 #include <QObject>
 #include <QDebug>
 #include <QtDBus/QDBusConnection>

@@ -57,7 +57,9 @@ public slots:
     void execEnNet();
     void execDisNet();
     void execEnWifi();
+    void rfKillexecEnWifi();
     void execDisWifi();
+    void rfkillExecDisWifi();
     void execConnLan(QString connName, QString ifname, QString connectType);
     void execConnWifi(QString connName, QString connIfName);
     void execReconnWIfi(QString uuid);
@@ -81,11 +83,14 @@ signals:
     void enNetDone();
     void disNetDone();
     void enWifiDone();
+    void enWifiDoneByRfkill();
     void disWifiDone();
+    void disWifiDoneByRfkill();
 
     void connDone(int connFlag);
 
     void btFinish();
+    void btFinishByRfkill();
 };
 
 #endif // BACKTHREAD_H

@@ -1668,6 +1668,11 @@
         <translation>忘记此网络</translation>
     </message>
     <message>
+        <location filename="../src/oneconnform.cpp" line="212"/>
+        <source>Password Incorrect</source>
+        <translation>密码错误</translation>
+    </message>
+    <message>
         <location filename="../src/oneconnform.cpp" line="131"/>
         <source>Property</source>
         <translation>属 性</translation>

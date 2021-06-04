@@ -175,9 +175,14 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
             this->startWifiWaiting(true);
         }
     });
-    connect(mw, &MainWindow::stopReconnectWifi, this, [ = ](const QString &ssid) {
-        if (ssid == this->wifiName && this->isWaiting) {
-            this->stopWifiWaiting(true);
+    connect(mw, &MainWindow::stopReconnectWifi, this, [ = ](const QString &ssid, const int &result) {
+        if (ssid == this->wifiName) {
+            qDebug()<<"Reconnect "<<ssid<<" finished. result="<<result;
+            if (result != 0) {
+                lbPwdTip->show();
+            }
+            if (this->isWaiting)
+                this->stopWifiWaiting(true);
         }
     });
 
@@ -193,11 +198,25 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
                           "color: rgba(165, 165, 165, 1)}");
     lbFreq->setContentsMargins(2, 0, 2, 0);
     lbFreq->hide();
+
+    lbPwdTip = new QLabel(ui->lbName);
+    lbPwdTip->setAlignment(Qt::AlignCenter);
+    lbPwdTip->setEnabled(false);
+    lbPwdTip->setFixedHeight(14);
+    lbPwdTip->setStyleSheet("QLabel{border: 1px solid rgba(165, 165, 165, 1);"
+                          "background: transparent; color: rgba(0, 0, 0, 0.5);"
+                          "border-radius: 3px; font-size: 10px;"
+                          "color: rgba(165, 165, 165, 1)}");
+    lbPwdTip->setContentsMargins(2, 0, 2, 0);
+    lbPwdTip->hide();
+    lbPwdTip->setText(tr("Password Incorrect"));
+
     lbNameText = new QLabel(ui->lbName);
     lbNameLyt->setContentsMargins(0, 0, 0, 0);
     lbNameLyt->setSpacing(8);
     lbNameLyt->addWidget(lbNameText);
     lbNameLyt->addWidget(lbFreq);
+    lbNameLyt->addWidget(lbPwdTip);
     lbNameLyt->addStretch();
     ui->lbName->setLayout(lbNameLyt);
 
@@ -642,6 +661,11 @@ void OneConnForm::on_btnConnSub_clicked()
         return;
     }
 
+    if (lbPwdTip->isVisible()) {
+        this->slotConnWifiResult(2);
+        return;
+    }
+
     qDebug()<<"A button named on_btnConnSub about wifi net is clicked.";
     toConnectWirelessNetwork();
 }
@@ -650,6 +674,11 @@ void OneConnForm::on_btnConnSub_clicked()
 void OneConnForm::on_btnConn_clicked()
 {
     if (mw->is_stop_check_net_state == 1) {
+        return;
+    }
+
+    if (lbPwdTip->isVisible()) {
+        this->slotConnWifiResult(2);
         return;
     }
 
@@ -809,6 +838,7 @@ void OneConnForm::toConnectWirelessNetwork()
     }
 
     mw->is_stop_check_net_state = 1;
+    m_connWithPwd = false;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);
@@ -824,7 +854,12 @@ void OneConnForm::toConnectWirelessNetwork()
 //需要密码的wifi连接
 void OneConnForm::on_btnConnPWD_clicked()
 {
+    m_connWithPwd = true;
     qDebug()<<"A button named btnConnPWD about wifi net is clicked.";
+    if (lbPwdTip->isVisible()) {
+        lbPwdTip->hide();
+        mw->m_wifi_list_pwd_changed.removeOne(wifiName);
+    }
 
     if (this->getPskFlag() != 0) {
 //        QString cmdStr = 0;
@@ -921,6 +956,11 @@ bool OneConnForm::isWifiConfExist(QString netName)
     } // end foreach (QDBusObjectPath objNet, m_objNets)
 
     return false;
+}
+
+void OneConnForm::setlbPwdTipVisble(const bool &visible)
+{
+    lbPwdTip->setVisible(visible);
 }
 
 //设置密码隐藏或可见
@@ -1052,12 +1092,20 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     }
 
     if (connFlag == 1  || connFlag == 4) {
-        // 使用配置文件连接失败，需要删除该配置文件
-        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
-        int status = system(cmd.toUtf8().data());
-        if (status != 0) {
-            qDebug()<<"execute 'nmcli connection delete' in function 'slotConnWifiResult' failed.";
+        if (!m_connWithPwd) {
+            //用原有配置文件连接失败，显示密码错误
+            qDebug()<<"Connected failed with old configuration. ssid="<<wifiName;
+            if (lbPwdTip)
+                this->lbPwdTip->show();
+        } else {
+            // 使用密码连接失败，需要删除该配置文件
+            QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
+            int status = system(cmd.toUtf8().data());
+            if (status != 0) {
+                qDebug()<<"execute 'nmcli connection delete' in function 'slotConnWifiResult' failed.";
+            }
         }
+
     }
 
     if (connFlag == 2 || connFlag == 4 || connFlag == 1) {

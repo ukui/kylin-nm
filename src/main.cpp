@@ -106,8 +106,10 @@ int main(int argc, char *argv[])
         trans_global.load(":/translations/kylin-nm_tr.qm");
         a.installTranslator(&trans_global);
     }
+    qDebug()<<"Translations Are Already Loaded";
 
     MainWindow w;
+    qDebug()<<"Mainwindow is Already Registered";
 
     DbusAdaptor adaptor(&w);
     Q_UNUSED(adaptor);

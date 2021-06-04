@@ -387,7 +387,7 @@ void WpaWifiDialog::initCombox() {
         if (str.contains("Choose from file...") || str.contains("从文件选择..."))
         {
             QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
-                                                            tr("CA Files (*.pem *.der *.p12 *.crt)"));
+                                                            tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
             if (!fileName.isNull()) {
                 m_wifiConfig->caCert = fileName;
                 QStringList nameList = fileName.split("/");
@@ -410,7 +410,7 @@ void WpaWifiDialog::initCombox() {
         if (str.contains("Choose from file...") || str.contains("从文件选择..."))
         {
             QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
-                                                            tr("CA Files (*.pem *.der *.p12 *.crt)"));
+                                                            tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
             if (!fileName.isNull()) {
                 m_wifiConfig->clientCert = fileName;
                 QStringList nameList = fileName.split("/");
@@ -433,7 +433,7 @@ void WpaWifiDialog::initCombox() {
         if (str.contains("Choose from file...") || str.contains("从文件选择..."))
         {
             QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
-                                                            tr("CA Files (*.pem *.der *.p12 *.crt *.key)"));
+                                                            tr("CA Files (*.pem *.der *.p12 *.crt *.key *.cer *.pfx)"));
             if (!fileName.isNull()) {
                 m_wifiConfig->privateKey = fileName;
                 QStringList nameList = fileName.split("/");

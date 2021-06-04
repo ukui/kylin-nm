@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QApplication a(argc, argv);
-    //qInstallMessageHandler(messageOutput);
+    qInstallMessageHandler(messageOutput);
 
     qDebug()<<"Kylin Network Manager Is Already Launched";
 
@@ -106,8 +106,10 @@ int main(int argc, char *argv[])
         trans_global.load(":/translations/kylin-nm_tr.qm");
         a.installTranslator(&trans_global);
     }
+    qDebug()<<"Translations Are Already Loaded";
 
     MainWindow w;
+    qDebug()<<"Mainwindow is Already Registered";
 
     DbusAdaptor adaptor(&w);
     Q_UNUSED(adaptor);

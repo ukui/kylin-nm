@@ -1668,6 +1668,11 @@
         <translation>忘记此网络</translation>
     </message>
     <message>
+        <location filename="../src/oneconnform.cpp" line="212"/>
+        <source>Password Incorrect</source>
+        <translation>密码错误</translation>
+    </message>
+    <message>
         <location filename="../src/oneconnform.cpp" line="131"/>
         <source>Property</source>
         <translation>属 性</translation>
@@ -1946,13 +1951,13 @@
     <message>
         <location filename="../src/wpawifidialog.cpp" line="381"/>
         <location filename="../src/wpawifidialog.cpp" line="404"/>
-        <source>CA Files (*.pem *.der *.p12 *.crt)</source>
-        <translation type="unfinished"></translation>
+        <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+        <translation>CA 文件 (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../src/wpawifidialog.cpp" line="427"/>
-        <source>CA Files (*.pem *.der *.p12 *.crt *.key)</source>
-        <translation type="unfinished"></translation>
+        <source>CA Files (*.pem *.der *.p12 *.crt *.key *.cer *.pfx)</source>
+        <translation>CA 文件 (*.pem *.der *.p12 *.crt *.key *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../src/wpawifidialog.cpp" line="931"/>

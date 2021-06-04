@@ -84,6 +84,7 @@ public:
     void setLePassword();
 
     bool isWifiConfExist(QString netName);
+    void setlbPwdTipVisble(const bool&);
 
     QString wifiName;
     QString wifiBSsid;
@@ -92,6 +93,7 @@ public:
     QString connType;
     QString wifiSecu;
     QLabel * lbFreq = nullptr;
+    QLabel * lbPwdTip = nullptr;
     bool isHuaweiPC;
     bool isSelected;
     bool isActive;
@@ -147,6 +149,7 @@ private:
     bool isWaiting = false;
     int psk_flag = 0; //密码存储策略
     int getPskFlag();
+    bool m_connWithPwd = true; //是否使用密码连接
 
     Ui::OneConnForm *ui = nullptr;
     MainWindow *mw = nullptr;

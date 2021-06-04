@@ -202,6 +202,8 @@ public:
     int m_priWid;
     int m_priHei;
 
+    QStringList m_wifi_list_pwd_changed; //WiFi密码以改变的WiFi列表（990/9a0自动回连失败）
+
 public slots:
     void onPhysicalCarrierChanged(bool flag);
     void onCarrierUpHandle();
@@ -422,7 +424,7 @@ signals:
     void actWifiSignalLvChanaged(const int& currentLevel);
     void getWifiListFinished();
     void startReconnectWifi(const QString& ssid);
-    void stopReconnectWifi(const QString& ssid);
+    void stopReconnectWifi(const QString& ssid, const int& result);
     void wiredConnectionAdded();
     void wiredConnectionRemoved();
     void actWiredConnectionChanged();

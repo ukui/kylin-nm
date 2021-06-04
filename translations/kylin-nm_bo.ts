@@ -114,12 +114,12 @@
     <name>DlgHideWifi</name>
     <message>
         <location filename="../wireless-security/dlghidewifi.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
+        <source>Connect to Hidden WLAN Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="61"/>
-        <source>Add Hidden Wi-Fi</source>
+        <source>Add Hidden WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -129,12 +129,12 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="63"/>
-        <source>Wi-Fi name</source>
+        <source>WLAN name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="64"/>
-        <source>Wi-Fi security</source>
+        <source>WLAN security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -170,13 +170,13 @@
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="175"/>
         <location filename="../wireless-security/dlghidewifi.cpp" line="260"/>
-        <source>Conn Wifi Success</source>
+        <source>Conn WLAN Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="180"/>
         <location filename="../wireless-security/dlghidewifi.cpp" line="265"/>
-        <source>Confirm your Wi-Fi password or usable of wireless card</source>
+        <source>Confirm your WLAN password or usable of wireless card</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -184,12 +184,12 @@
     <name>DlgHideWifiEapFast</name>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
+        <source>Connect to Hidden WLAN Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="83"/>
-        <source>Add hidden Wi-Fi</source>
+        <source>Add hidden WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -204,7 +204,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="86"/>
-        <source>Wi-Fi security</source>
+        <source>WLAN security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -318,12 +318,12 @@
     <name>DlgHideWifiEapLeap</name>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
+        <source>Connect to Hidden WLAN Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="73"/>
-        <source>Add hidden Wi-Fi</source>
+        <source>Add hidden WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -338,7 +338,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="76"/>
-        <source>Wi-Fi security</source>
+        <source>WLAN security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -416,12 +416,12 @@
     <name>DlgHideWifiEapPeap</name>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
+        <source>Connect to Hidden WLAN Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.cpp" line="61"/>
-        <source>Add hidden Wi-Fi</source>
+        <source>Add hidden WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -436,7 +436,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.cpp" line="64"/>
-        <source>Wi-Fi security</source>
+        <source>WLAN security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -545,12 +545,12 @@
     <name>DlgHideWifiEapPwd</name>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
+        <source>Connect to Hidden WLAN Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="74"/>
-        <source>Add hidden Wi-Fi</source>
+        <source>Add hidden WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -565,7 +565,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="77"/>
-        <source>Wi-Fi security</source>
+        <source>WLAN security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -643,12 +643,12 @@
     <name>DlgHideWifiEapTTLS</name>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
+        <source>Connect to Hidden WLAN Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="89"/>
-        <source>Add hidden Wi-Fi</source>
+        <source>Add hidden WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -663,7 +663,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="92"/>
-        <source>Wi-Fi security</source>
+        <source>WLAN security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -777,12 +777,12 @@
     <name>DlgHideWifiEapTls</name>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
+        <source>Connect to Hidden WLAN Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="60"/>
-        <source>Add hidden Wi-Fi</source>
+        <source>Add hidden WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -797,7 +797,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="63"/>
-        <source>Wi-Fi security</source>
+        <source>WLAN security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -905,12 +905,12 @@
     <name>DlgHideWifiLeap</name>
     <message>
         <location filename="../wireless-security/dlghidewifileap.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
+        <source>Connect to Hidden WLAN Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="68"/>
-        <source>Add hidden Wi-Fi</source>
+        <source>Add hidden WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -925,7 +925,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="71"/>
-        <source>Wi-Fi security</source>
+        <source>WLAN security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -988,12 +988,12 @@
     <name>DlgHideWifiWep</name>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
+        <source>Connect to Hidden WLAN Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="73"/>
-        <source>Add hidden Wi-Fi</source>
+        <source>Add hidden WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1008,7 +1008,7 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="76"/>
-        <source>Wi-Fi security</source>
+        <source>WLAN security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1091,12 +1091,12 @@
     <name>DlgHideWifiWpa</name>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
+        <source>Connect to Hidden WLAN Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="66"/>
-        <source>Add Hidden Wi-Fi</source>
+        <source>Add Hidden WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1106,12 +1106,12 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="68"/>
-        <source>Wi-Fi name</source>
+        <source>WLAN name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="69"/>
-        <source>Wi-Fi security</source>
+        <source>WLAN security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1152,18 +1152,18 @@
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="187"/>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="276"/>
-        <source>Conn Wifi Success</source>
+        <source>Conn WLAN Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="192"/>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="281"/>
-        <source>Confirm your Wi-Fi password or usable of wireless card</source>
+        <source>Confirm your WLAN password or usable of wireless card</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="379"/>
-        <source>Selected Wifi has not been scanned.</source>
+        <source>Selected WLAN has not been scanned.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1186,7 +1186,7 @@
     </message>
     <message>
         <location filename="../hot-spot/dlghotspotcreate.cpp" line="48"/>
-        <source>Wi-Fi security</source>
+        <source>WLAN security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1243,13 +1243,13 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="250"/>
-        <source>Hide WiFi</source>
+        <source>Hide WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="352"/>
         <location filename="../src/mainwindow.cpp" line="1256"/>
-        <source>Wifi</source>
+        <source>WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1298,7 +1298,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="240"/>
-        <source>Wifi Networks</source>
+        <source>WLAN Networks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1374,12 +1374,12 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2763"/>
-        <source>Confirm your Wi-Fi password or usable of wireless card</source>
+        <source>Confirm your WLAN password or usable of wireless card</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2768"/>
-        <source>Confirm your Wi-Fi password</source>
+        <source>Confirm your WLAN password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1395,7 +1395,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2385"/>
-        <source>Wi-Fi is disconnected</source>
+        <source>WLAN is disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1405,7 +1405,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2757"/>
-        <source>Conn Wifi Success</source>
+        <source>Conn WLAN Success</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1436,7 +1436,7 @@
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="376"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
+        <source>Connect to Hidden WLAN Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1451,7 +1451,7 @@
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="468"/>
-        <source>WiFi Security：</source>
+        <source>WLAN Security：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1466,12 +1466,12 @@
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="546"/>
-        <source>Conn Wifi Success</source>
+        <source>Conn WLAN Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="551"/>
-        <source>Confirm your Wi-Fi password or usable of wireless card</source>
+        <source>Confirm your WLAN password or usable of wireless card</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1554,7 +1554,7 @@
     </message>
     <message>
         <location filename="../src/wpawifidialog.cpp" line="100"/>
-        <source>Connect Wifi</source>
+        <source>Connect WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

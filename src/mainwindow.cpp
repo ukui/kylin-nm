@@ -84,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
     wcardname = "-1";
     llname = "-1";
     lwname = "-1";
-    hideWiFiConn = "Connect to Hidden Wi-Fi Network";
+    hideWiFiConn = "Connect to Hidden WLAN Network";
     currentActWifiSignalLv = -1;
     count_loop = 0;
 
@@ -265,7 +265,7 @@ void MainWindow::createTopWifiUI()
     topWifiListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_GAP_UP + X_ITEM);
     /*顶部的一个item*/
     lbTopWifiList = new QLabel(topWifiListWidget);
-    lbTopWifiList->setText(tr("Wifi Networks"));//"可用网络列表"
+    lbTopWifiList->setText(tr("WLAN Networks"));//"可用网络列表"
     lbTopWifiList->resize(W_MIDDLE_WORD, H_MIDDLE_WORD);
     lbTopWifiList->move(X_MIDDLE_WORD, H_NORMAL_ITEM + H_GAP_UP);
     QFont fontTopWifiList( "Noto Sans CJK SC", 14);
@@ -275,7 +275,7 @@ void MainWindow::createTopWifiUI()
     btnAddNet = new QPushButton(topWifiListWidget);
     btnAddNet->resize(W_BTN_FUN, H_BTN_FUN);
     btnAddNet->move(X_BTN_FUN, Y_BTN_FUN);
-    btnAddNet->setText(tr("Hide WiFi"));//"加入网络"
+    btnAddNet->setText(tr("Hide WLAN"));//"加入网络"
     btnAddNet->setStyleSheet(funcBtnQss);
     btnAddNet->setFocusPolicy(Qt::NoFocus);
     btnAddNet->show();
@@ -383,7 +383,7 @@ void MainWindow::createLeftAreaUI()
     ui->btnNetListImg->setProperty("iconHighlightEffectMode", true);
 
     ui->btnWifiList->setFocusPolicy(Qt::NoFocus);
-    QString txtWifi("Wifi");
+    QString txtWifi("WLAN");
     ui->btnWifiList->setToolTip(txtWifi);
     ui->lbWifiListBG->setStyleSheet(btnOffQss);
     //设置PushButton背景透明
@@ -1391,7 +1391,7 @@ void MainWindow::on_btnWifiList_clicked()
 
     lbNoItemTip->hide();
 
-    ui->lbNetwork->setText("Wi-Fi");
+    ui->lbNetwork->setText("WLAN");
     btnWireless->show();
 
     if (iface->wstate == 0 || iface->wstate == 1) {
@@ -3465,9 +3465,9 @@ void MainWindow::handleWifiDisconn()
 }
 void MainWindow::handleWifiDisconnLoading()
 {
-    //syslog(LOG_DEBUG, "Wi-Fi is disconnected");
-    qDebug()<<"Wi-Fi is disconnected!";
-    QString txt(tr("Wi-Fi is disconnected"));
+    //syslog(LOG_DEBUG, "WLAN is disconnected");
+    qDebug()<<"WLAN is disconnected!";
+    QString txt(tr("WLAN is disconnected"));
     objKyDBus->showDesktopNotify(txt);
 
     //setTrayLoading(false);
@@ -4088,36 +4088,36 @@ void MainWindow::connWifiDone(int connFlag)
             wifi_auth_thread->start();
         }
 
-        QString txt(tr("Conn Wifi Success"));
+        QString txt(tr("Conn WLAN Success"));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 1) {
-        //syslog(LOG_DEBUG, "Confirm your Wi-Fi password or usable of wireless card");
+        //syslog(LOG_DEBUG, "Confirm your WLAN password or usable of wireless card");
         qWarning()<<"Wi-Fi connected failed. res=1";
         //is_stop_check_net_state = 0;
         is_connect_net_failed = 1;
         is_connect_hide_wifi = 0;
-        QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
+        QString txt(tr("Confirm your WLAN password or usable of wireless card"));
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 3) {
         //syslog(LOG_DEBUG, "Launch kylin-nm, Wi-Fi already connected");
         qWarning()<<"Wi-Fi connected failed. res=3";
     } else if (connFlag == 4) {
-        //syslog(LOG_DEBUG, "Confirm your Wi-Fi password");
+        //syslog(LOG_DEBUG, "Confirm your WLAN password");
         is_connect_net_failed = 1;
-        QString txt(tr("Confirm your Wi-Fi password"));
+        QString txt(tr("Confirm your WLAN password"));
         qWarning()<<"Wi-Fi connected failed. res=4";
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 5) {
-        //syslog(LOG_DEBUG, "Selected Wifi has not been scanned.");
+        //syslog(LOG_DEBUG, "Selected WLAN has not been scanned.");
         is_connect_net_failed = 1;
-        QString txt(tr("Selected Wifi has not been scanned."));
+        QString txt(tr("Selected WLAN has not been scanned."));
         qWarning()<<"Wi-Fi connected failed. res=5";
         objKyDBus->showDesktopNotify(txt);
     } else if (connFlag == 6) {
-        //syslog(LOG_DEBUG, "Connect Hidden Wifi Success.");
+        //syslog(LOG_DEBUG, "Connect Hidden WLAN Success.");
         this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
-        QString txt(tr("Connect Hidden Wifi Success"));
-        qWarning()<<"Connect Hidden Wifi Success. res=6";
+        QString txt(tr("Connect Hidden WLAN Success"));
+        qWarning()<<"Connect Hidden WLAN Success. res=6";
         objKyDBus->showDesktopNotify(txt);
     }
 

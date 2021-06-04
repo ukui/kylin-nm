@@ -2256,6 +2256,8 @@ QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStrin
         QString line = tmp.at(iter);
         QString wifiname = line.mid(indexName).trimmed();
         QString wifibssid = line.mid(indexBSsid, indexPath-indexBSsid).trimmed();
+        QString wificate = line.mid(indexCate, 1).trimmed();
+        QString wififreq = line.mid(indexFreq, 4).trimmed();
         QString wifiObjectPath;
         if (indexCate >= 0) {
             wifiObjectPath = line.mid(indexPath,indexCate-indexPath).trimmed();
@@ -2288,6 +2290,7 @@ QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStrin
 
             //可以自动回连，则加入列表
             if (wifiAutoConnection == "是" || wifiAutoConnection == "yes") {
+                qDebug("Connectable wifi SSID:%s ,signal strength:% category:%s ,frequence:%s",wifibssid,wificate,wififreq);
                 structWifiProperty myWifiProStruct;
                 myWifiProStruct.objectPath = wifiObjectPath;
                 myWifiProStruct.bssid = wifibssid;

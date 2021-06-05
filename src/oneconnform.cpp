@@ -611,7 +611,7 @@ void OneConnForm::setWifiInfo(QString str1, QString str2, QString str3, int freq
     }
     if (str1 == "--" || str1 == ""){ str1 = tr("None"); };
 
-    QString strSecurity = QString(tr("WiFi Security："));
+    QString strSecurity = QString(tr("WLAN Security："));
     QString strSignal = QString(tr("Signal："));
     QString strMAC = QString(tr("MAC："));
     wifiSecu = str1;
@@ -721,12 +721,12 @@ void OneConnForm::toConnectWirelessNetwork()
         wpadlg->move(primaryGeometry.width() / 2 - wpadlg->width() / 2, primaryGeometry.height() / 2 - wpadlg->height() / 2);
         wpadlg->show();
         connect(wpadlg, &WpaWifiDialog::conn_done, this, [ = ]() {
-            QString txt(tr("Conn Wifi Success"));
+            QString txt(tr("Conn WLAN Success"));
             mw->objKyDBus->showDesktopNotify(txt);
             mw->on_btnWifiList_clicked();
         });
         connect(wpadlg, &WpaWifiDialog::conn_failed, this, [ = ]() {
-            QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
+            QString txt(tr("Confirm your WLAN password or usable of wireless card"));
             mw->objKyDBus->showDesktopNotify(txt);
             mw->on_btnWifiList_clicked();
         });

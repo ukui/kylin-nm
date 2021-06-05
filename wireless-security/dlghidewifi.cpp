@@ -60,10 +60,10 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     ui->lineUp->setStyleSheet(objQss.lineQss);
     ui->lineDown->setStyleSheet(objQss.lineQss);
 
-    ui->lbLeftupTitle->setText(tr("Add Hidden Wi-Fi")); //加入隐藏Wi-Fi
+    ui->lbLeftupTitle->setText(tr("Add Hidden WLAN")); //加入隐藏WLAN
     ui->lbConn->setText(tr("Connection")); //连接设置:
-    ui->lbNetName->setText(tr("Wi-Fi name")); //网络名称:
-    ui->lbSecurity->setText(tr("Wi-Fi security")); //Wi-Fi安全性:
+    ui->lbNetName->setText(tr("WLAN name")); //网络名称:
+    ui->lbSecurity->setText(tr("WLAN security")); //Wi-Fi安全性:
     ui->btnCancel->setText(tr("Cancel")); //取消
     ui->btnConnect->setText(tr("Connect")); //连接
     ui->btnCancel->setStyleSheet(objQss.btnOffQss);
@@ -162,12 +162,12 @@ void DlgHideWifi::changeDialog()
         wpadlg->move(primaryGeometry.width() / 2 - wpadlg->width() / 2, primaryGeometry.height() / 2 - wpadlg->height() / 2);
         wpadlg->show();
         connect(wpadlg, &WpaWifiDialog::conn_done, this, [ = ]() {
-            QString txt(tr("Conn Wifi Success"));
+            QString txt(tr("Conn WLAN Success"));
             mw->objKyDBus->showDesktopNotify(txt);
             mw->on_btnWifiList_clicked();
         });
         connect(wpadlg, &WpaWifiDialog::conn_failed, this, [ = ]() {
-            QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
+            QString txt(tr("Confirm your WLAN password or usable of wireless card"));
             mw->objKyDBus->showDesktopNotify(txt);
             mw->on_btnWifiList_clicked();
         });
@@ -247,12 +247,12 @@ void DlgHideWifi::changeWindow(){
                 wpadlg->move(primaryGeometry.width() / 2 - wpadlg->width() / 2, primaryGeometry.height() / 2 - wpadlg->height() / 2);
                 wpadlg->show();
                 connect(wpadlg, &WpaWifiDialog::conn_done, this, [ = ]() {
-                    QString txt(tr("Conn Wifi Success"));
+                    QString txt(tr("Conn WLAN Success"));
                     mw->objKyDBus->showDesktopNotify(txt);
                     mw->on_btnWifiList_clicked();
                 });
                 connect(wpadlg, &WpaWifiDialog::conn_failed, this, [ = ]() {
-                    QString txt(tr("Confirm your Wi-Fi password or usable of wireless card"));
+                    QString txt(tr("Confirm your WLAN password or usable of wireless card"));
                     mw->objKyDBus->showDesktopNotify(txt);
                     mw->on_btnWifiList_clicked();
                 });

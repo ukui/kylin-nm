@@ -45,7 +45,7 @@ DlgHotspotCreate::DlgHotspotCreate(QString wiFiCardName, QWidget *parent) :
 
     ui->lbLeftupTitle->setText(tr("Create Hotspot")); //创建个人热点
     ui->lbNetName->setText(tr("Network name")); //网络名称:
-    ui->lbSecurity->setText(tr("Wi-Fi security")); //Wi-Fi 安全性:
+    ui->lbSecurity->setText(tr("WLAN security")); //WLAN 安全性:
     ui->lbPassword->setText(tr("Password")); //密码:
     ui->btnCancel->setText(tr("Cancel")); //取消
     ui->btnOk->setText(tr("Ok")); //确定

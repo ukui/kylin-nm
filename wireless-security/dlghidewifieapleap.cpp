@@ -70,10 +70,10 @@ DlgHideWifiEapLeap::DlgHideWifiEapLeap(int type, QWidget *parent) :
     ui->lineUp->setStyleSheet(objQss.lineQss);
     ui->lineDown->setStyleSheet(objQss.lineQss);
 
-    ui->lbLeftupTitle->setText(tr("Add hidden Wi-Fi")); //加入隐藏Wi-Fi
+    ui->lbLeftupTitle->setText(tr("Add hidden WLAN")); //加入隐藏WLAN
     ui->lbConn->setText(tr("Connection")); //连接设置:
     ui->lbNetName->setText(tr("Network name")); //网络名称:
-    ui->lbSecurity->setText(tr("Wi-Fi security")); //Wi-Fi安全性:
+    ui->lbSecurity->setText(tr("WLAN security")); //Wi-Fi安全性:
     ui->lbAuth->setText(tr("Authentication")); //认证:
     ui->lbUserName->setText(tr("Username")); //用户名:
     ui->lbPassword->setText(tr("Password")); //密码:

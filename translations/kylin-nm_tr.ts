@@ -4,8 +4,8 @@
 <context>
     <name>BackThread</name>
     <message>
-        <source>Confirm your Wi-Fi password</source>
-        <translation type="vanished">Wi-Fi parolasını doğrula</translation>
+        <source>Confirm your WLAN password</source>
+        <translation type="vanished">WLAN parolasını doğrula</translation>
     </message>
 </context>
 <context>
@@ -133,8 +133,8 @@
     <name>DlgHideWifi</name>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="61"/>
-        <source>Add Hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
+        <source>Add Hidden WLAN</source>
+        <translation type="unfinished">Gizli WLAN Ekle</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="62"/>
@@ -143,13 +143,13 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="63"/>
-        <source>Wi-Fi name</source>
-        <translation type="unfinished">Wi-Fi adı</translation>
+        <source>WLAN name</source>
+        <translation type="unfinished">WLAN adı</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="64"/>
-        <source>Wi-Fi security</source>
-        <translation>Wi-Fi güvenlik</translation>
+        <source>WLAN security</source>
+        <translation>WLAN güvenlik</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="65"/>
@@ -184,13 +184,13 @@
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="175"/>
         <location filename="../wireless-security/dlghidewifi.cpp" line="260"/>
-        <source>Conn Wifi Success</source>
-        <translation type="unfinished">Wi-Fi Bağlantısı Başarılı</translation>
+        <source>Conn WLAN Success</source>
+        <translation type="unfinished">WLAN Bağlantısı Başarılı</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="180"/>
         <location filename="../wireless-security/dlghidewifi.cpp" line="265"/>
-        <source>Confirm your Wi-Fi password or usable of wireless card</source>
+        <source>Confirm your WLAN password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
     <message>
@@ -215,21 +215,21 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+        <source>Connect to Hidden WLAN Network</source>
+        <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
 </context>
 <context>
     <name>DlgHideWifiEapFast</name>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+        <source>Connect to Hidden WLAN Network</source>
+        <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="83"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
+        <source>Add hidden WLAN</source>
+        <translation type="unfinished">Gizli WLAN Ekle</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="84"/>
@@ -243,8 +243,8 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="86"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi güvenliği</translation>
+        <source>WLAN security</source>
+        <translation type="unfinished">WLAN güvenliği</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="87"/>
@@ -365,13 +365,13 @@
     <name>DlgHideWifiEapLeap</name>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi ağına bağlan</translation>
+        <source>Connect to Hidden WLAN Network</source>
+        <translation>Gizli WLAN ağına bağlan</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="73"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi ekle</translation>
+        <source>Add hidden WLAN</source>
+        <translation type="unfinished">Gizli WLAN ekle</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="74"/>
@@ -385,8 +385,8 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="76"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi güvenliği:</translation>
+        <source>WLAN security</source>
+        <translation type="unfinished">WLAN güvenliği:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="77"/>
@@ -471,13 +471,13 @@
     <name>DlgHideWifiEapPeap</name>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+        <source>Connect to Hidden WLAN Network</source>
+        <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.cpp" line="61"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi ekle</translation>
+        <source>Add hidden WLAN</source>
+        <translation type="unfinished">Gizli WLAN ekle</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.cpp" line="62"/>
@@ -491,8 +491,8 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.cpp" line="64"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi güvenliği:</translation>
+        <source>WLAN security</source>
+        <translation type="unfinished">WLAN güvenliği:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.cpp" line="65"/>
@@ -624,13 +624,13 @@
     <name>DlgHideWifiEapPwd</name>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+        <source>Connect to Hidden WLAN Network</source>
+        <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="74"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi ekle</translation>
+        <source>Add hidden WLAN</source>
+        <translation type="unfinished">Gizli WLAN ekle</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="75"/>
@@ -644,8 +644,8 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="77"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi güvenliği:</translation>
+        <source>WLAN security</source>
+        <translation type="unfinished">WLAN güvenliği:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="78"/>
@@ -730,13 +730,13 @@
     <name>DlgHideWifiEapTTLS</name>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+        <source>Connect to Hidden WLAN Network</source>
+        <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="89"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi ekle</translation>
+        <source>Add hidden WLAN</source>
+        <translation type="unfinished">Gizli WLAN ekle</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="90"/>
@@ -750,8 +750,8 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="92"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi Güvenliği:</translation>
+        <source>WLAN security</source>
+        <translation type="unfinished">WLAN Güvenliği:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="93"/>
@@ -872,13 +872,13 @@
     <name>DlgHideWifiEapTls</name>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+        <source>Connect to Hidden WLAN Network</source>
+        <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="60"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi ekle</translation>
+        <source>Add hidden WLAN</source>
+        <translation type="unfinished">Gizli WLAN ekle</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="61"/>
@@ -892,8 +892,8 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="63"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi güvenliği:</translation>
+        <source>WLAN security</source>
+        <translation type="unfinished">WLAN güvenliği:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="64"/>
@@ -1020,13 +1020,13 @@
     <name>DlgHideWifiLeap</name>
     <message>
         <location filename="../wireless-security/dlghidewifileap.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+        <source>Connect to Hidden WLAN Network</source>
+        <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="68"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
+        <source>Add hidden WLAN</source>
+        <translation type="unfinished">Gizli WLAN Ekle</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="69"/>
@@ -1040,8 +1040,8 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="71"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi Güvenlik</translation>
+        <source>WLAN security</source>
+        <translation type="unfinished">WLAN Güvenlik</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="72"/>
@@ -1111,13 +1111,13 @@
     <name>DlgHideWifiWep</name>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+        <source>Connect to Hidden WLAN Network</source>
+        <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="73"/>
-        <source>Add hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
+        <source>Add hidden WLAN</source>
+        <translation type="unfinished">Gizli WLAN Ekle</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="74"/>
@@ -1131,8 +1131,8 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="76"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi Güvenliği:</translation>
+        <source>WLAN security</source>
+        <translation type="unfinished">WLAN Güvenliği:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="77"/>
@@ -1222,13 +1222,13 @@
     <name>DlgHideWifiWpa</name>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.ui" line="14"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+        <source>Connect to Hidden WLAN Network</source>
+        <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="66"/>
-        <source>Add Hidden Wi-Fi</source>
-        <translation type="unfinished">Gizli Wi-Fi Ekle</translation>
+        <source>Add Hidden WLAN</source>
+        <translation type="unfinished">Gizli WLAN Ekle</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="67"/>
@@ -1237,13 +1237,13 @@
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="68"/>
-        <source>Wi-Fi name</source>
-        <translation type="unfinished">Wi-Fi adı:</translation>
+        <source>WLAN name</source>
+        <translation type="unfinished">WLAN adı:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="69"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi güvenlik:</translation>
+        <source>WLAN security</source>
+        <translation type="unfinished">WLAN güvenlik:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="70"/>
@@ -1283,18 +1283,18 @@
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="187"/>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="276"/>
-        <source>Conn Wifi Success</source>
-        <translation type="unfinished">Wi-Fi Bağlantısı Başarılı</translation>
+        <source>Conn WLAN Success</source>
+        <translation type="unfinished">WLAN Bağlantısı Başarılı</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="192"/>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="281"/>
-        <source>Confirm your Wi-Fi password or usable of wireless card</source>
+        <source>Confirm your WLAN password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="379"/>
-        <source>Selected Wifi has not been scanned.</source>
+        <source>Selected WLAN has not been scanned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1333,8 +1333,8 @@
     </message>
     <message>
         <location filename="../hot-spot/dlghotspotcreate.cpp" line="48"/>
-        <source>Wi-Fi security</source>
-        <translation type="unfinished">Wi-Fi Güvenlik:</translation>
+        <source>WLAN security</source>
+        <translation type="unfinished">WLAN Güvenlik:</translation>
     </message>
     <message>
         <location filename="../hot-spot/dlghotspotcreate.cpp" line="49"/>
@@ -1405,8 +1405,8 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="352"/>
         <location filename="../src/mainwindow.cpp" line="1256"/>
-        <source>Wifi</source>
-        <translation>Wi-Fi</translation>
+        <source>WLAN</source>
+        <translation>WLAN</translation>
     </message>
     <message>
         <source>Enabled</source>
@@ -1498,7 +1498,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2385"/>
-        <source>Wi-Fi is disconnected</source>
+        <source>WLAN is disconnected</source>
         <translation type="unfinished">Kablosuz bağlantı kesildi</translation>
     </message>
     <message>
@@ -1533,13 +1533,13 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2763"/>
-        <source>Confirm your Wi-Fi password or usable of wireless card</source>
+        <source>Confirm your WLAN password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2768"/>
-        <source>Confirm your Wi-Fi password</source>
-        <translation type="unfinished">Wi-Fi parolasını doğrula</translation>
+        <source>Confirm your WLAN password</source>
+        <translation type="unfinished">WLAN parolasını doğrula</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="216"/>
@@ -1553,8 +1553,8 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="250"/>
-        <source>Hide WiFi</source>
-        <translation>Gizli Wi-Fi</translation>
+        <source>Hide WLAN</source>
+        <translation>Gizli WLAN</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="280"/>
@@ -1569,8 +1569,8 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="240"/>
-        <source>Wifi Networks</source>
-        <translation>Wi-Fi Ağları</translation>
+        <source>WLAN Networks</source>
+        <translation>WLAN Ağları</translation>
     </message>
     <message>
         <source>None</source>
@@ -1589,11 +1589,11 @@
         <translation type="vanished">Anormal bağlantı var, program onu ​​silecek</translation>
     </message>
     <message>
-        <source>update Wi-Fi list now, click again</source>
+        <source>update WLAN list now, click again</source>
         <translation type="vanished">Kablosuz listesini şimdi güncelle, tekrar tıkla</translation>
     </message>
     <message>
-        <source>update Wi-Fi list now</source>
+        <source>update WLAN list now</source>
         <translation type="vanished">Kablosuz listesini şimdi güncelle</translation>
     </message>
     <message>
@@ -1607,8 +1607,8 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2757"/>
-        <source>Conn Wifi Success</source>
-        <translation>Wi-Fi Bağlantısı Başarılı</translation>
+        <source>Conn WLAN Success</source>
+        <translation>WLAN Bağlantısı Başarılı</translation>
     </message>
 </context>
 <context>
@@ -1652,8 +1652,8 @@
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="376"/>
-        <source>Connect to Hidden Wi-Fi Network</source>
-        <translation>Gizli Wi-Fi Ağına Bağlan</translation>
+        <source>Connect to Hidden WLAN Network</source>
+        <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="469"/>
@@ -1685,8 +1685,8 @@
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="468"/>
-        <source>WiFi Security：</source>
-        <translation type="unfinished">WiFi güvenliği:</translation>
+        <source>WLAN Security：</source>
+        <translation type="unfinished">WLAN güvenliği:</translation>
     </message>
     <message>
         <source>Sifnal：</source>
@@ -1699,17 +1699,17 @@
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="546"/>
-        <source>Conn Wifi Success</source>
-        <translation type="unfinished">Wi-Fi Bağlantısı Başarılı</translation>
+        <source>Conn WLAN Success</source>
+        <translation type="unfinished">WLAN Bağlantısı Başarılı</translation>
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="551"/>
-        <source>Confirm your Wi-Fi password or usable of wireless card</source>
+        <source>Confirm your WLAN password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
     <message>
-        <source>Conn Wifi Failed</source>
-        <translation type="vanished">Wifi Bağlantısı Başarısız</translation>
+        <source>Conn WLAN Failed</source>
+        <translation type="vanished">WLAN Bağlantısı Başarısız</translation>
     </message>
 </context>
 <context>
@@ -1799,7 +1799,7 @@
     </message>
     <message>
         <location filename="../src/wpawifidialog.cpp" line="100"/>
-        <source>Connect Wifi</source>
+        <source>Connect WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -18,7 +18,7 @@ WiFiConfigDialog::WiFiConfigDialog(QWidget *parent) :
     initTransparentState(); //初始化窗口透明度的GSetting方法
 
     this->setWindowFlags(Qt::FramelessWindowHint); //Qt::WindowStaysOnTopHint
-    this->setWindowTitle(tr("Wifi Authentication"));//"Wifi 认证"
+    this->setWindowTitle(tr("WLAN Authentication"));//"Wifi 认证"
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")) );
 
@@ -29,9 +29,9 @@ WiFiConfigDialog::WiFiConfigDialog(QWidget *parent) :
     setProperty("blurRegion", QRegion(path.toFillPolygon().toPolygon()));
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 
-    ui->lbTitle->setText(tr("Input Wi-Fi Information Please")); //输入Wi-Fi名称和密码后点击确定
-    ui->lbWifiId->setText(tr("Wi-Fi ID：")); //Wi-Fi连接名称：
-    ui->lbWifiName->setText(tr("Wi-Fi Name：")); //Wi-Fi名称：
+    ui->lbTitle->setText(tr("Input WLAN Information Please")); //输入Wi-Fi名称和密码后点击确定
+    ui->lbWifiId->setText(tr("WLAN ID：")); //Wi-Fi连接名称：
+    ui->lbWifiName->setText(tr("WLAN Name:")); //Wi-Fi名称：
     ui->lbWifiPassord->setText(tr("Password：")); //Wi-Fi密码：
     ui->btnCancel->setText(tr("Cancl"));
     ui->btnOk->setText(tr("Ok"));

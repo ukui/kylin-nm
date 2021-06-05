@@ -137,7 +137,7 @@ void WpaWifiDialog::initUI() {
     titleFrame->setFixedHeight(48);
     titleLyt = new QHBoxLayout(titleFrame);
     titleLabel = new QLabel(titleFrame);
-    titleLabel->setText(tr("Connect Wifi"));
+    titleLabel->setText(tr("Connect WLAN"));
     titleLyt->addWidget(titleLabel);
     titleLyt->addStretch();
     titleFrame->setLayout(titleLyt);

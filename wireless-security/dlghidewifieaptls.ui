@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Connect to Hidden Wi-Fi Network</string>
+   <string>Connect to Hidden WLAN Network</string>
   </property>
   <widget class="QComboBox" name="cbxSecurity">
    <property name="geometry">

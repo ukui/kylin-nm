@@ -69,8 +69,8 @@ int Utils::m_system(char *cmd)
         waitpid(pid,&status,0);
         finish = clock();
     }
-    double duration = (double)(finish-start)/CLOCKS_PER_SEC;
-    qDebug()<<"It takes "<<QString::number(duration)<<" seconds to execute command:"<<cmd;
+    //double duration = (double)(finish-start)/CLOCKS_PER_SEC;
+    //qDebug()<<"It takes "<<QString::number(duration)<<" seconds to execute command:"<<cmd;
     return status;
 }
 

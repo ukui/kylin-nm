@@ -1688,19 +1688,19 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
         }
 
         //收到wifi开关打开或关闭的信号后，进行处理
-        if (keyStr == "WirelessEnabled") {
-            bool newWifiSwitchState = qvm.value("WirelessEnabled").toBool();
-            if (oldWifiSwitchState == false && newWifiSwitchState == true) {
-                qDebug()<<"debug: wifi开关已经打开";
-                mw->onExternalWifiSwitchChange(true);
-            }
-            if (oldWifiSwitchState == true && newWifiSwitchState == false) {
-                qDebug()<<"debug: wifi开关已经关闭";
-                mw->onExternalWifiSwitchChange(false);
-            }
+//        if (keyStr == "WirelessEnabled") {
+//            bool newWifiSwitchState = qvm.value("WirelessEnabled").toBool();
+//            if (oldWifiSwitchState == false && newWifiSwitchState == true) {
+//                qDebug()<<"debug: wifi开关已经打开";
+//                mw->onExternalWifiSwitchChange(true);
+//            }
+//            if (oldWifiSwitchState == true && newWifiSwitchState == false) {
+//                qDebug()<<"debug: wifi开关已经关闭";
+//                mw->onExternalWifiSwitchChange(false);
+//            }
 
-            oldWifiSwitchState = newWifiSwitchState; //更新状态用于下一次
-        }
+//            oldWifiSwitchState = newWifiSwitchState; //更新状态用于下一次
+//        }
     }
 }
 
@@ -1708,11 +1708,11 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
 void KylinDBus::onAutoConnect()
 {
     //syslog(LOG_DEBUG, "Receive a auto-connect signal to reconnect wifi");
-    qDebug() << Q_FUNC_INFO << "Receive a auto-connect signal to reconnect wifi";
-    if (!mw->isRadioWifiTurningOn && !mw->isScaningWifi) {
-        mw->toReconnectWifi();
+    qDebug() << "Receive a auto-connect signal to reconnect wifi";
+    if (mw->isRadioWifiTurningOn) {
+        qDebug() << "But it is turning wifi switch on now, stop to reconnect wifi";
     } else {
-        qDebug() << Q_FUNC_INFO << "but need waiting turn on wifi switch or finish scan, will not reconnect wifi";
+        mw->toReconnectWifi();
     }
 }
 

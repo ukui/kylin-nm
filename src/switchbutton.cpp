@@ -38,6 +38,8 @@ SwitchButton::SwitchButton(QWidget *parent) : QWidget(parent)
 }
 
 void SwitchButton::setSwitchStatus(bool check) {
+    if (!m_enabled)
+        return;
     if(check == true) {
         m_bIsOn = 1;
     } else {
@@ -45,6 +47,18 @@ void SwitchButton::setSwitchStatus(bool check) {
     }
 
     m_cTimer->start(); //开始播放动画
+}
+
+bool SwitchButton::getSwitchStatus()
+{
+    if (m_bIsOn == 1)
+        return true;
+    return false;
+}
+
+void SwitchButton::setEnabled(bool enabled)
+{
+    m_enabled = enabled;
 }
 
 
@@ -72,6 +86,8 @@ void SwitchButton::startAnimation() { //滑动按钮动作播放
 /* 按钮按下处理 */
 void SwitchButton::mousePressEvent(QMouseEvent *event) {
     Q_UNUSED(event);
+    if (!m_enabled)
+        return QWidget::mousePressEvent(event);
     m_bIsOn = !m_bIsOn;
 
     Q_EMIT clicked(m_bIsOn);

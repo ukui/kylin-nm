@@ -82,7 +82,9 @@ IFace* BackThread::execGetIface()
 
                 if (istateStr == "unmanaged") {
                     iface->lstate = 2; //switch of wired device is off
-                } else if (istateStr == "disconnected" || istateStr == "unavailable") {
+                } else if (istateStr == "unavailable") {
+                    iface->lstate = 4;
+                } else if (istateStr == "disconnected") {
                     iface->lstate = 1; //wired network is disconnected
                 } else if (istateStr == "connected" || istateStr == "connecting (getting IP configuration)") {
                     iface->lstate = 0; //wired network is connected

@@ -45,7 +45,7 @@ public:
     explicit BackThread(QObject *parent = nullptr);
     ~BackThread();
 
-    IFace* execGetIface();
+    static IFace* execGetIface();
     QString getConnProp(QString connName);
     QString execChkLanWidth(QString ethName);
     QProcess *cmdProcessWifi = nullptr;

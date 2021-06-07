@@ -129,6 +129,19 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug()<<"Init button connections...";
     connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClicked);
     connect(btnWireless, &SwitchButton::clicked,this, &MainWindow::onBtnWifiClicked);
+    connect(btnWired, &SwitchButton::clicked, this, &MainWindow::onBtnLanClicked);
+    connect(this, &MainWindow::onWiredDeviceChanged, this, &MainWindow::setLanSwitchStatus);
+    int lstate = BackThread::execGetIface()->lstate;
+    if (objKyDBus->isWiredCableOn) {
+        if (lstate == 2) {
+            btnWired->setSwitchStatus(false);
+        } else {
+            btnWired->setSwitchStatus(true);
+        }
+    } else {
+        btnWired->setSwitchStatus(false);
+        btnWired->setEnabled(false);
+    }
 
     ui->btnNetList->setAttribute(Qt::WA_Hover,true);
     ui->btnNetList->installEventFilter(this);
@@ -365,6 +378,8 @@ void MainWindow::createLeftAreaUI()
     qDebug()<<"Creating Left Area Ui...";
     btnWireless = new SwitchButton(this);
     btnWireless->setStyleSheet("SwitchButton{border:none;background-color:rgba(255,255,255,0.12);}");
+    btnWired= new SwitchButton(this);
+    btnWired->setStyleSheet("SwitchButton{border:none;background-color:rgba(255,255,255,0.12);}");
     ui->btnNetList->setFocusPolicy(Qt::NoFocus);
     QString txtEthernet(tr("Ethernet"));
     ui->btnNetList->setToolTip(txtEthernet);
@@ -402,6 +417,7 @@ void MainWindow::createLeftAreaUI()
     ui->btnNet->hide();
 
     btnWireless->setGeometry(412,20,50,24);
+    btnWired->setGeometry(412,20,50,24);
 
     ui->btnHotspot->setStyleSheet(leftBtnQss);
     ui->btnHotspot->setFocusPolicy(Qt::NoFocus);
@@ -999,6 +1015,7 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
         qDebug()<<"wired physical cable is already plug in";
         //syslog(LOG_DEBUG,"wired physical cable is already plug in");
         wiredCableUpTimer->start(4000);
+//        onBtnLanClicked(4);
     } else {
         qDebug()<<"wired physical cable is already plug out";
         //syslog(LOG_DEBUG,"wired physical cable is already plug out");
@@ -1011,6 +1028,7 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
                     sleep(2);
                     //wiredCableDownTimer->start(2000);
                     emit carrierDownHandle();
+                    emit btnWired->clicked(5);
                     delete iface;
                     bt->deleteLater();
                     break;
@@ -1034,6 +1052,7 @@ void MainWindow::onCarrierUpHandle()
     onBtnNetListClicked(1);
     is_stop_check_net_state = 0;
     isHandlingWiredCableOn = false;
+    emit btnWired->clicked(4);
 }
 
 void MainWindow::onCarrierDownHandle()
@@ -1304,6 +1323,80 @@ void MainWindow::onBtnWifiClicked(int flag)
     }
 }
 
+/**
+ * @brief MainWindow::onBtnLanClicked 有线网按钮状态更改
+ * @param flag falg=0 0 UI关闭， 1 UI打开 ，2收到打开信息，3收到关闭信息，4有线设备插入，5有线设备拔出
+ */
+void MainWindow::onBtnLanClicked(int flag)
+{
+    switch (flag) {
+    case 0: {
+        qDebug()<<"On btnWired clicked! will close switch button";
+        QtConcurrent::run([=]() {
+            QString close_device_cmd = "nmcli device set " + llname + " managed false";
+            int res = system(close_device_cmd.toUtf8().data());
+            qDebug()<<"Trying to close ethernet device : "<<llname<<". res="<<res;
+            if (res == 0) {
+                emit this->onWiredDeviceChanged(false);
+            } else {
+                qWarning()<<"Close ethernet device failed!";
+            }
+        });
+        break;
+    }
+    case 1: {
+        qDebug()<<"On btnWired clicked! will open switch button";
+        QtConcurrent::run([=]() {
+            QString open_device_cmd = "nmcli device set " + llname + " managed true";
+            int res = system(open_device_cmd.toUtf8().data());
+            qDebug()<<"Trying to open ethernet device : "<<llname<<". res="<<res;
+            if (res == 0) {
+                emit this->onWiredDeviceChanged(true);
+            } else {
+                qWarning()<<"Open ethernet device failed!";
+            }
+        });
+        break;
+    }
+    case 2: {
+        emit this->onWiredDeviceChanged(true);
+        break;
+    }
+    case 3: {
+        emit this->onWiredDeviceChanged(false);
+        break;
+    }
+    case 4: {
+        btnWired->setEnabled(true);
+        qDebug()<<"Set btnwired enabled=true!";
+        //获取有线设备托管状态，是否需要打开开关
+        if (BackThread::execGetIface()->lstate != 2) {
+            emit this->onWiredDeviceChanged(true);
+        }
+        break;
+    }
+    case 5: {
+        btnWired->setSwitchStatus(false);
+        qDebug()<<"Set btnwired enabled=false!";
+        btnWired->setEnabled(false);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void MainWindow::setLanSwitchStatus(bool is_opened)
+{
+    if (is_opened) {
+        btnWired->setSwitchStatus(true);
+        ksnm->execGetLanList();
+    } else {
+        btnWired->setSwitchStatus(false);
+        ksnm->execGetLanList();
+    }
+}
+
 void MainWindow::onBtnNetListClicked(int flag)
 {
     this->is_btnLanList_clicked = 1;
@@ -1326,6 +1419,7 @@ void MainWindow::onBtnNetListClicked(int flag)
 
     ui->lbNetwork->setText(tr("Ethernet"));
     btnWireless->hide();
+    btnWired->show();
 
     // 强行设置为打开
     if (flag == 1) {
@@ -1338,7 +1432,7 @@ void MainWindow::onBtnNetListClicked(int flag)
         return;
     }
 
-    if (iface->lstate == 0 || iface->lstate == 1) {
+    if (iface->lstate == 0 || iface->lstate == 1 ||  iface->lstate == 4) {
         this->startLoading();
         this->ksnm->execGetLanList();
     } else if (iface->lstate == 3) {
@@ -1393,6 +1487,7 @@ void MainWindow::on_btnWifiList_clicked()
 
     ui->lbNetwork->setText("WLAN");
     btnWireless->show();
+    btnWired->hide();
 
     if (iface->wstate == 0 || iface->wstate == 1) {
         qDebug() << "debug: wifi开关在打开状态";
@@ -1766,6 +1861,13 @@ void MainWindow::getLanListDone(QStringList slist)
     this->stopLoading();
     oldLanSlist = slist;
     is_stop_check_net_state = 0;
+    //有线网按钮状态校准
+    if (btnWired->isEnabled() && !objKyDBus->isWiredCableOn) {
+        emit btnWired->clicked(5);
+    }
+    if (btnWired->isEnabled() && !btnWired->getSwitchStatus() && BackThread::execGetIface()->lstate != 2) {
+        btnWired->setSwitchStatus(true);
+    }
 }
 
 // 获取wifi列表回调
@@ -2319,7 +2421,7 @@ QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStrin
 
             //可以自动回连，则加入列表
             if (wifiAutoConnection == "是" || wifiAutoConnection == "yes") {
-                qDebug("Connectable wifi SSID:%s ,signal strength:% category:%s ,frequence:%s",wifibssid,wificate,wififreq);
+                qDebug("Connectable wifi SSID:%s ,category:%s ,frequence:%s",wifibssid,wificate,wififreq);
                 structWifiProperty myWifiProStruct;
                 myWifiProStruct.objectPath = wifiObjectPath;
                 myWifiProStruct.bssid = wifibssid;
@@ -3504,6 +3606,7 @@ void MainWindow::disNetDone()
 
     ui->lbNetwork->setText(tr("Ethernet"));
     btnWireless->hide();
+    btnWired->show();
 
     delete topLanListWidget; // 清空top列表
     createTopLanUI(); //创建顶部有线网item

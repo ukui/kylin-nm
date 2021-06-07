@@ -184,6 +184,7 @@ public:
     bool isReconnectingLan = false; //是否正在执行lan的回连
     int addNumberForWifi = 0; //短时间内收到关于wifi连接信号的次数
     bool isHuaWeiPC;
+    bool isHuaWei9006C;
     bool isHandlingWiredCableOn = false;
     bool ifCanReconnectWifiNow = true;
     bool isReConnAfterTurnOnWifi = false;//是否是在打开wifi的开关后回连wifi

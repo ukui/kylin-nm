@@ -1095,6 +1095,8 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         if (!m_connWithPwd) {
             //用原有配置文件连接失败，显示密码错误
             qDebug()<<"Connected failed with old configuration. ssid="<<wifiName;
+            if (mw)
+                mw->m_wifi_list_pwd_changed.append(wifiName);
             if (lbPwdTip)
                 this->lbPwdTip->show();
         } else {

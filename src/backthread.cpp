@@ -188,29 +188,16 @@ void BackThread::rfKillexecEnWifi()
 {
     char *chr1 = "nmcli radio wifi on";
     Utils::m_system(chr1);
-    emit enWifiDoneByRfkill();
-    emit btFinishByRfkill();
 
-//    char *chr1 = "nmcli radio wifi on";
-//    Utils::m_system(chr1);
-//    emit btFinish();
-//    KylinDBus objBackThreadDBus;
+    if (execGetIface()->wstate != 2) {
+        emit enWifiDoneByRfkill();
+        emit btFinishByRfkill();
+    } else {
+        usleep(500*1000);
+        emit enWifiDoneByRfkill();
+        emit btFinishByRfkill();
+    }
 
-//    while (1) {
-//        if (execGetIface()->wstate != 2) {
-//            while (1) {
-//                if (objBackThreadDBus.getAccessPointsNumber() > 0) {
-//                    // objBackThreadDBus.getAccessPointsNumber()>0 standard can get wireless accesspoints now
-//                    emit enWifiDoneByRfkill();
-//                    emit btFinishByRfkill();
-//                    break;
-//                }
-//                sleep(2);
-//            }
-//            break;
-//        }
-//        sleep(1);
-//    }
 }
 
 //turn off the switch of wireless network

@@ -114,6 +114,25 @@ IFace* BackThread::execGetIface()
     return iface;
 }
 
+void BackThread::saveSwitchButtonState(const QString &key, const QVariant &value)
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->setValue(key, value);
+    m_settings->sync();
+    delete m_settings;
+    return;
+}
+
+QVariant BackThread::getSwitchState(const QString &key)
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    QVariant value = m_settings->value(key);
+    delete m_settings;
+    if (!value.isValid())
+        return QVariant();
+    return value;
+}
+
 //turn on the switch of network
 void BackThread::execEnNet()
 {

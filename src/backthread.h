@@ -29,6 +29,11 @@
 #include <QDBusInterface>
 #include <QDBusMessage>
 #include <QDBusArgument>
+#include <QSettings>
+
+#define CONFIG_FILE_PATH QDir::homePath() + "/.config/ukui/kylin-nm.conf"
+#define WIFI_SWITCH_OPENED "wifi_switch_opened"
+#define LAN_SWITCH_OPENED "lan_switch_opened"
 
 class IFace{
 public:
@@ -46,6 +51,8 @@ public:
     ~BackThread();
 
     static IFace* execGetIface();
+    static void saveSwitchButtonState(const QString &key, const QVariant &value);
+    static QVariant getSwitchState(const QString &key);
     QString getConnProp(QString connName);
     QString execChkLanWidth(QString ethName);
     QProcess *cmdProcessWifi = nullptr;

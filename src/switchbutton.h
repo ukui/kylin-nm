@@ -44,6 +44,7 @@ private:
 
 Q_SIGNALS:
     void clicked(int check);
+    void switchStatusChanged();
 private Q_SLOTS:
     void startAnimation();
 

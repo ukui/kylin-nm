@@ -131,16 +131,34 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(btnWireless, &SwitchButton::clicked,this, &MainWindow::onBtnWifiClicked);
     connect(btnWired, &SwitchButton::clicked, this, &MainWindow::onBtnLanClicked);
     connect(this, &MainWindow::onWiredDeviceChanged, this, &MainWindow::setLanSwitchStatus);
-    int lstate = BackThread::execGetIface()->lstate;
-    if (objKyDBus->isWiredCableOn) {
-        if (lstate == 2) {
-            btnWired->setSwitchStatus(false);
-        } else {
-            btnWired->setSwitchStatus(true);
-        }
-    } else {
+
+    QVariant wifi_state = BackThread::getSwitchState(WIFI_SWITCH_OPENED);
+    QVariant lan_state = BackThread::getSwitchState(LAN_SWITCH_OPENED);
+    if (!wifi_state.isNull() && wifi_state.isValid()) {
+        //设置WiFi开关状态
+        if (wifi_state.toBool() && !btnWireless->getSwitchStatus())
+            onBtnWifiClicked(1);
+        else if (!wifi_state.toBool() && btnWireless->getSwitchStatus())
+            onBtnWifiClicked(0);
+    }
+    if (!lan_state.isNull() && lan_state.isValid()) {
+        //设置lan开关状态
+        if (lan_state.toBool() && !btnWired->getSwitchStatus())
+            onBtnLanClicked(1);
+        else if (!lan_state.toBool() && btnWired->getSwitchStatus())
+            onBtnLanClicked(0);
+    }
+    connect(btnWired, &SwitchButton::switchStatusChanged, this, [ = ]() {
+        BackThread::saveSwitchButtonState(LAN_SWITCH_OPENED, btnWired->getSwitchStatus());
+    });
+    connect(btnWireless, &SwitchButton::switchStatusChanged, this, [ = ]() {
+        BackThread::saveSwitchButtonState(WIFI_SWITCH_OPENED, btnWireless->getSwitchStatus());
+    });
+    if (!objKyDBus->isWiredCableOn) {
+        btnWired->blockSignals(true);
         btnWired->setSwitchStatus(false);
         btnWired->setEnabled(false);
+        btnWired->blockSignals(false);
     }
 
     ui->btnNetList->setAttribute(Qt::WA_Hover,true);
@@ -378,7 +396,7 @@ void MainWindow::createLeftAreaUI()
     qDebug()<<"Creating Left Area Ui...";
     btnWireless = new SwitchButton(this);
     btnWireless->setStyleSheet("SwitchButton{border:none;background-color:rgba(255,255,255,0.12);}");
-    btnWired= new SwitchButton(this);
+    btnWired = new SwitchButton(this);
     btnWired->setStyleSheet("SwitchButton{border:none;background-color:rgba(255,255,255,0.12);}");
     ui->btnNetList->setFocusPolicy(Qt::NoFocus);
     QString txtEthernet(tr("Ethernet"));
@@ -1109,6 +1127,8 @@ void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
     //仅处理无线网卡插入情况
     objKyDBus->isWirelessCardOn = false;
     objKyDBus->getObjectPath();
+    if (objKyDBus->multiWirelessPaths.isEmpty())
+        return;
 
     if (objKyDBus->multiWirelessPaths.at(0).path() == objPath.path()) { //证明添加的是无线网卡
         is_wireless_adapter_ready = 0;
@@ -1124,6 +1144,8 @@ void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
 
 void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
 {
+    if (objKyDBus->multiWirelessPaths.isEmpty())
+        return;
     //仅处理无线网卡拔出情况
     if (objKyDBus->multiWirelessPaths.at(0).path() == objPath.path()) {
         objKyDBus->isWirelessCardOn = false;
@@ -1376,9 +1398,11 @@ void MainWindow::onBtnLanClicked(int flag)
         break;
     }
     case 5: {
+        btnWired->blockSignals(true);
         btnWired->setSwitchStatus(false);
         qDebug()<<"Set btnwired enabled=false!";
         btnWired->setEnabled(false);
+        btnWired->blockSignals(false);
         break;
     }
     default:

@@ -408,10 +408,13 @@ void MainWindow::createLeftAreaUI()
     paletteLan.setBrush(QPalette::Button, QBrush(QColor(1,1,1,0)));
     ui->btnNetListImg->setPalette(paletteLan);
     //添加PushButton的svg图片
-    if (!QIcon::fromTheme("network-wired-symbolic").isNull())
+    if (!QIcon::fromTheme("network-wired-connected-symbolic").isNull()) {
+        ui->btnNetListImg->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
+    } else if (!QIcon::fromTheme("network-wired-symbolic").isNull()) {
         ui->btnNetListImg->setIcon(QIcon::fromTheme("network-wired-symbolic"));
-    else
+    } else {
         ui->btnNetListImg->setIcon(QIcon(":/res/x/net-list-bg.svg"));
+    }
     ui->btnNetListImg->setProperty("useIconHighlightEffect", true);
     ui->btnNetListImg->setProperty("iconHighlightEffectMode", true);
 
@@ -678,8 +681,18 @@ void MainWindow::createTrayIcon()
     trayIcon->setContextMenu(trayIconMenu);
 
     // 初始化托盘所有Icon
-    iconLanOnline = QIcon::fromTheme("network-wired-symbolic");
-    iconLanOffline = QIcon::fromTheme("network-wired-offline-symbolic");
+    if (!QIcon::fromTheme("network-wired-connected-symbolic").isNull()) {
+        iconLanOnline = QIcon::fromTheme("network-wired-connected-symbolic");
+    } else if (!QIcon::fromTheme("network-wired-symbolic").isNull()) {
+        iconLanOnline = QIcon::fromTheme("network-wired-symbolic");
+    } else {
+        iconLanOnline = QIcon(":/res/x/net-list-bg.svg");
+    }
+    if (!QIcon::fromTheme("network-wired-disconnected-symbolic").isNull()) {
+        iconLanOffline = QIcon::fromTheme("network-wired-disconnected-symbolic");
+    } else {
+        iconLanOffline = QIcon::fromTheme("network-wired-offline-symbolic");
+    }
     iconWifiFull = QIcon::fromTheme("network-wireless-signal-excellent-symbolic");
     iconWifiHigh = QIcon::fromTheme("network-wireless-signal-good-symbolic");
     iconWifiMedium = QIcon::fromTheme("network-wireless-signal-ok");

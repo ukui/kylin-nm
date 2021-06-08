@@ -29,6 +29,8 @@ class SwitchButton : public QWidget
 public:
     explicit SwitchButton(QWidget *parent = nullptr);
     void     setSwitchStatus(bool check);
+    bool     getSwitchStatus();
+    void     setEnabled(bool enabled);
 
 private:
     int             m_bIsOn = 1;
@@ -38,9 +40,11 @@ private:
     float           m_fCurrentValue;
     void            paintEvent(QPaintEvent *event);
     void            mousePressEvent(QMouseEvent *event);
+    bool            m_enabled = true;
 
 Q_SIGNALS:
     void clicked(int check);
+    void switchStatusChanged();
 private Q_SLOTS:
     void startAnimation();
 

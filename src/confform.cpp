@@ -294,6 +294,7 @@ void ConfForm::on_btnCreate_clicked()
             }
         }
     }
+    cmdStr += " connection.autoconnect yes connection.autoconnect-priority 0";
     Utils::m_system(cmdStr.toUtf8().data());
 
     if (ui->cbType->currentIndex() == 1) {

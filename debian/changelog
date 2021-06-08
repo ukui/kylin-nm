@@ -1,4 +1,13 @@
-kylin-nm (3.0.1-1kylin51hw1) v101.hw; urgency=medium
+kylin-nm (3.0.1-1kylin51) v101; urgency=medium
+
+  * BUG号：无
+  * 需求号：无
+  * 其他改动：修改主程序启动方式为两段式启动，开机仅进行一级启动，五秒/点击托盘图标后进行二级启动
+
+ -- zhangjiaping <zhangjiaping@kylinos.cn>  Tue, 08 Jun 2021 16:49:12 +0800
+
+
+kylin-nm (3.0.1-1kylin50) v101; urgency=medium
 
   * BUG号：无
   * 需求号：无

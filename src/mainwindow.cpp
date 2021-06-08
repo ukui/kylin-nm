@@ -3024,8 +3024,8 @@ void MainWindow::updateWifiListDone(QStringList slist)
                             if (!list_to_remove.isEmpty()) {
                                 dbus_wifiList.removeOne(list_to_remove);
                             }
-                            qDebug()<<"移除了一个WiFi，将会向控制面板发送信号。ssid="<<lastWname;
-                            emit this->getWifiListFinished();
+//                            qDebug()<<"移除了一个WiFi，将会向控制面板发送信号。ssid="<<lastWname;
+//                            emit this->getWifiListFinished();
                             break;
                         }
                     }
@@ -3136,8 +3136,8 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 }
 
                 count += 1;
-                qDebug()<<"新增了一个WiFi，将会向控制面板发送信号。ssid="<<lastWname;
-                emit this->getWifiListFinished();
+//                qDebug()<<"新增了一个WiFi，将会向控制面板发送信号。ssid="<<lastWname;
+//                emit this->getWifiListFinished();
             }
         }
     }
@@ -3147,6 +3147,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     this->wifiListWidget->show();
     this->topWifiListWidget->show();
     this->stopLoading();
+    emit this->getWifiListFinished();
 }
 
 //用于中英文系统有线网络名称国际话
@@ -4112,7 +4113,7 @@ void MainWindow::toScanWifi(bool isShow)
 
 void MainWindow::onRefreshWifiListAfterScan()
 {
-    current_wifi_list_state = UPDATE_WIFI_LIST;
+    current_wifi_list_state = REFRESH_WIFI;
     this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC); //更新wifi列表
 }
 
@@ -4537,13 +4538,14 @@ void MainWindow::requestRefreshWifiList()
 {
     if (isHuaWeiPC) {
         QtConcurrent::run([=](){
+            qDebug()<<"Received signal to refresh wifi from ukcc, current_wifi_list_state="<<current_wifi_list_state;
             objKyDBus->requestScanWifi(); //要求后台扫描AP
             sleep(2);
             emit refreshWifiListAfterScan();
         });
     } else {
         current_wifi_list_state = REFRESH_WIFI;
-        qDebug()<<"current_wifi_list_state="<<current_wifi_list_state;
+        qDebug()<<"Received signal to refresh wifi from ukcc, current_wifi_list_state="<<current_wifi_list_state;
         this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
     }
 }

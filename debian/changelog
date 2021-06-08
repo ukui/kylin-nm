@@ -1,3 +1,11 @@
+kylin-nm (3.0.1-1kylin51hw1) v101.hw; urgency=medium
+
+  * BUG号：无
+  * 需求号：无
+  * 其他改动：增加维测日志,优化WiFi刷新触发底层扫描,优化WiFi密码错误提醒,优化WiFi刷新dbus信号发送流程
+
+ -- zhangjiaping <zhangjiaping@kylinos.cn>  Mon, 07 Jun 2021 19:54:21 +0800
+
 kylin-nm (3.0.1-1kylin50) v101; urgency=medium
 
   * BUG号：无

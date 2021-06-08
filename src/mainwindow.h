@@ -261,6 +261,10 @@ protected:
     bool event(QEvent *event);
 
 private:
+    void firstlyStart(); //一级启动
+    void secondaryStart(); //二级启动
+    bool m_load_finished = false; //是否二级启动已执行完
+    QTimer * m_secondary_start_timer = nullptr; //执行二级启动的倒计时
     void checkSingleAndShowTrayicon();
     void initNetwork();
     void createTrayIcon();

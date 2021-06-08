@@ -20,7 +20,7 @@
 #include <QIcon>
 
 #define FRAMESPEED 60 //帧与帧之间的间隔时间(ms)
-#define ALLTIME 10*1000 //等待动画持续总时间
+#define ALLTIME 40*1000 //等待动画持续总时间
 
 //加载动画控件'loadingGif'
 LoadingDiv::LoadingDiv(QWidget *parent) : QWidget(parent)

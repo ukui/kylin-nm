@@ -1401,18 +1401,13 @@ void MainWindow::on_btnWifiList_clicked()
         btnAddNet->show();
         this->startLoading();
         if (isHuaWeiPC) {
-            qDebug() << "11111111111111111111111111110";
             QtConcurrent::run([=]() {
-                qDebug() << "11111111111111111111111111111";
                 if (m_connected_by_self) {
-                    qDebug() << "11111111111111111111111111112";
                     m_connected_by_self = false;
                 } else {
                     if (this->isRadioWifiTurningOn) {
-                        qDebug() << "11111111111111111111111111113";
                         qDebug() << "Turning wifi switch on now, stop to load wifi list";
                     } else {
-                        qDebug() << "11111111111111111111111111114";
                         objKyDBus->requestScanWifi(); //要求后台扫描AP
                         sleep(2);
                         qDebug() << "scan finished, will load wifi list";
@@ -3790,9 +3785,7 @@ void MainWindow::onExternalWifiChange()
 //        //QString txt(tr("WiFi already connected external"));
 //        //objKyDBus->showDesktopNotify(txt);
 //    }
-    qDebug() << "1111111111111111111111111111115";
     if (m_connected_by_self) {
-        qDebug() << "1111111111111111111111111111116";
         m_connected_by_self = false;
         return;
     }

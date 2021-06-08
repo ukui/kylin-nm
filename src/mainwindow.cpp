@@ -1527,24 +1527,32 @@ void MainWindow::on_btnWifiList_clicked()
     btnWired->hide();
 
     if (iface->wstate == 0 || iface->wstate == 1) {
-        qDebug() << "debug: wifi开关在打开状态";
+        qDebug()<<"现在的WiFi的开关是已经打开状态";
         btnWireless->setSwitchStatus(true);
         lbTopWifiList->show();
         btnAddNet->show();
         this->startLoading();
         if (isHuaWeiPC) {
             QtConcurrent::run([=]() {
-                objKyDBus->requestScanWifi(); //要求后台扫描AP
-                sleep(2);
-                qDebug() << "scan finished, will load wifi list";
-                emit loadWifiListAfterScan();
+                if (m_connected_by_self) {
+                    m_connected_by_self = false;
+                } else {
+                    if (this->isRadioWifiTurningOn) {
+                        qDebug() << "Turning wifi switch on now, stop to load wifi list";
+                    } else {
+                        objKyDBus->requestScanWifi(); //要求后台扫描AP
+                        sleep(2);
+                        qDebug() << "scan finished, will load wifi list";
+                        emit loadWifiListAfterScan();
+                    }
+                }
             });
         } else {
             //this->objKyDBus->toGetWifiList(); //这一句是使用dbus的方法获取wifilist
             this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
         }
     } else if (iface->wstate == 3) {
-        qDebug() << "debug: 连接中，正在配置wifi设备";
+        qDebug()<<"现在的WiFi的开关是正在配置状态";
 
         this->ksnm->isUseOldWifiSlist = true;
         QStringList slistWifi;
@@ -1556,7 +1564,7 @@ void MainWindow::on_btnWifiList_clicked()
         btnAddNet->show();
         is_stop_check_net_state = 0;
     } else {
-        qDebug()<<"debug: WiFi的开关已经关闭";
+        qDebug()<<"现在WiFi的开关是关闭状态";
         //btnWireless->setSwitchStatus(false);其他部分已经对关掉wifi开关进行处理，此处不再处理。有几率出现打开关闭再打开的现象，因此注释掉关闭的动作
         delete topWifiListWidget; //清空top列表
         createTopWifiUI(); //创建顶部无线网item
@@ -1910,8 +1918,11 @@ void MainWindow::getLanListDone(QStringList slist)
 // 获取wifi列表回调
 void MainWindow::onRequestRevalueUpdateWifi()
 {
-    is_stop_check_net_state = 1;
-    current_wifi_list_state = LOAD_WIFI_LIST;
+    if (!isReConnAfterTurnOnWifi) {
+        isReConnAfterTurnOnWifi = false;
+        is_stop_check_net_state = 1;
+        current_wifi_list_state = LOAD_WIFI_LIST;
+    }
 }
 
 // 获取wifi列表回调
@@ -1950,9 +1961,9 @@ void MainWindow::getWifiListDone(QStringList slist)
         QVector<structWifiProperty> targetWifiStructList = connectableWifiPriorityList(slist);
         if (!targetWifiStructList.isEmpty()) {
             if (!isReconnectingWifi) {
-                isReconnectingWifi = true; //保证对于连续发出的重连信号，只处理第一个
                 QtConcurrent::run([=]() {
                     int current_try_time = 0;
+                    isReconnectingWifi = true; //保证对于连续发出的重连信号，只处理第一个
                     ifCanReconnectWifiNow = false;
                     //若使用配置文件连接失败且还有可以回连的wifi，继续尝试回连下一个
                     QStringList tried_list;
@@ -1960,6 +1971,8 @@ void MainWindow::getWifiListDone(QStringList slist)
                     is_stop_check_net_state = 1;
                     for (current_try_time; current_try_time < targetWifiStructList.length(); current_try_time++) {
                         QString wifiSsid = objKyDBus->getWifiSsid(targetWifiStructList.at(current_try_time).objectPath);
+                        qDebug() << "开始回连  objectPath: " << targetWifiStructList.at(current_try_time).objectPath;
+                        qDebug() << "开始回连  wifiSsid: " << wifiSsid;
                         if (tried_list.contains(wifiSsid) || m_wifi_list_pwd_changed.contains(wifiSsid)) {
                             //如果已有同名AP尝试过重连了或此AP已被标记为密码错误，就不再尝试此AP，以防多个同名AP连续尝试连接均失败
                             continue;
@@ -1976,7 +1989,8 @@ void MainWindow::getWifiListDone(QStringList slist)
                         if (con_res == 0) {
                             m_connected_by_self = true;
                             //回连成功，停止
-                            emit this->stopReconnectWifi(wifiSsid, con_res);
+                            this->stopLoading();
+                            is_stop_check_net_state = 0;
                             break;
                         }
                         if (!m_wifi_list_pwd_changed.contains(wifiSsid)) {
@@ -1990,22 +2004,30 @@ void MainWindow::getWifiListDone(QStringList slist)
                     is_stop_check_net_state = 0;
                     isReconnectingWifi = false;
                     ifCanReconnectWifiNow = true;
-                    current_wifi_list_state = LOAD_WIFI_LIST;
+                    emit loadWifiListAfterScan();
+                    //current_wifi_list_state = LOAD_WIFI_LIST;
                 });
             }
         }
         current_wifi_list_state = LOAD_WIFI_LIST;
+        oldWifiSlist = slist;
         return;
     }
 
     if (this->is_btnLanList_clicked == 1 && current_wifi_list_state != REFRESH_WIFI) {
+        oldWifiSlist = slist;
         return;
     }
 
     if (current_wifi_list_state == LOAD_WIFI_LIST || current_wifi_list_state == REFRESH_WIFI) {
-        //qDebug() << "loadwifi的列表";
-        loadWifiListDone(slist);
-        is_init_wifi_list = 0;
+        if (!isReconnectingWifi) {
+            loadWifiListDone(slist);
+            is_init_wifi_list = 0;
+        } else {
+            qDebug() << "正在进行wifi的回连操作，现在停止加载wifi界面";
+            oldWifiSlist = slist;
+            return;
+        }
     }
 
     if (current_wifi_list_state == UPDATE_WIFI_LIST) {
@@ -2458,7 +2480,7 @@ QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStrin
 
             //可以自动回连，则加入列表
             if (wifiAutoConnection == "是" || wifiAutoConnection == "yes") {
-                qDebug("Connectable wifi SSID:%s ,category:%s ,frequence:%s",wifibssid,wificate,wififreq);
+                qDebug("Connectable wifi SSID:%s , category:%s ,frequence:%s",wifibssid.toUtf8().data(),wificate.toUtf8().data(),wififreq.toUtf8().data());
                 structWifiProperty myWifiProStruct;
                 myWifiProStruct.objectPath = wifiObjectPath;
                 myWifiProStruct.bssid = wifibssid;
@@ -3771,10 +3793,14 @@ void MainWindow::toReconnectWifi()
 {
     if (ifCanReconnectWifiNow) {
         if (isHuaWeiPC) {
+            qDebug() << "Execute reconnect wifi now, first get wifi list then reconnect";
             current_wifi_list_state = RECONNECT_WIFI;
             this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
         }
+    } else {
+        qDebug() << "Execute reconnect wifi now or wlan already connected, stop to exec if another request launched";
     }
+
 }
 
 //处理外界对网络的连接与断开
@@ -4046,6 +4072,7 @@ void MainWindow::onRefreshWifiListAfterScan()
 
 void MainWindow::onRequestReconnecWifi()
 {
+    qDebug() << "Receive request reconnect wifi signal, then to reconnect wifi";
     toReconnectWifi();
 }
 
@@ -4475,59 +4502,64 @@ void MainWindow::priScreenChanged(int x, int y, int width, int height)
 // 通过kds的dbus发现rfkill状态变化
 void MainWindow::onRfkillStatusChanged()
 {
-    if (isHuaWeiPC) {
-        QDBusReply<int> reply = kdsDbus->call("getCurrentWlanMode");
-        if (reply.isValid()){
-            int current = reply.value();
+    if (canExecHandleWifiSwitchChange) {
+        canExecHandleWifiSwitchChange = false;
+        qDebug() << "收到信号了，开始处理wifi开关的处理问题";
+        if (isHuaWeiPC) {
+            QDBusReply<int> reply = kdsDbus->call("getCurrentWlanMode");
+            if (reply.isValid()){
+                int current = reply.value();
 
-            if (current == -1){
-                qWarning("Error Occur When Get Current WlanMode");
-                //syslog(LOG_DEBUG, "Error Occur When Get Current WlanMode");
-                return;
-            }
-            if (!current) {
-                is_stop_check_net_state = 1;
-                lbTopWifiList->hide();
-                btnAddNet->hide();
-                objKyDBus->setWifiSwitchState(false);
-
-                QThread *rfkill_t = new QThread();
-                BackThread *rfkill_bt = new BackThread();
-                rfkill_bt->moveToThread(rfkill_t);
-                btnWireless->setSwitchStatus(false);
-                connect(rfkill_t, SIGNAL(finished()), rfkill_t, SLOT(deleteLater()));
-                connect(rfkill_t, SIGNAL(started()), rfkill_bt, SLOT(rfkillExecDisWifi()));
-                connect(rfkill_bt, SIGNAL(disWifiDoneByRfkill()), this, SLOT(rfkillDisableWifiDone()));
-                connect(rfkill_bt, SIGNAL(btFinishByRfkill()), rfkill_t, SLOT(quit()));
-                rfkill_t->start();
-                this->startLoading();
-            } else {
-                if (is_fly_mode_on == 0) {
-                    on_btnWifiList_clicked();
+                if (current == -1){
+                    qWarning("Error Occur When Get Current WlanMode");
+                    //syslog(LOG_DEBUG, "Error Occur When Get Current WlanMode");
+                    return;
+                }
+                if (!current) {
                     is_stop_check_net_state = 1;
-                    isRadioWifiTurningOn = true;
-                    objKyDBus->setWifiCardState(true);
-                    objKyDBus->setWifiSwitchState(true);
+                    lbTopWifiList->hide();
+                    btnAddNet->hide();
+                    objKyDBus->setWifiSwitchState(false);
 
                     QThread *rfkill_t = new QThread();
                     BackThread *rfkill_bt = new BackThread();
                     rfkill_bt->moveToThread(rfkill_t);
                     btnWireless->setSwitchStatus(true);
                     connect(rfkill_t, SIGNAL(finished()), rfkill_t, SLOT(deleteLater()));
-                    connect(rfkill_t, SIGNAL(started()), rfkill_bt, SLOT(rfKillexecEnWifi()));
-                    connect(rfkill_bt, SIGNAL(enWifiDoneByRfkill()), this, SLOT(rfkillEnableWifiDone()));
+                    connect(rfkill_t, SIGNAL(started()), rfkill_bt, SLOT(rfkillExecDisWifi()));
+                    connect(rfkill_bt, SIGNAL(disWifiDoneByRfkill()), this, SLOT(rfkillDisableWifiDone()));
                     connect(rfkill_bt, SIGNAL(btFinishByRfkill()), rfkill_t, SLOT(quit()));
                     rfkill_t->start();
                     this->startLoading();
+                } else {
+                    if (is_fly_mode_on == 0) {
+                        on_btnWifiList_clicked();
+                        is_stop_check_net_state = 1;
+                        isRadioWifiTurningOn = true;
+                        objKyDBus->setWifiCardState(true);
+                        objKyDBus->setWifiSwitchState(true);
+
+                        QThread *rfkill_t = new QThread();
+                        BackThread *rfkill_bt = new BackThread();
+                        rfkill_bt->moveToThread(rfkill_t);
+                        btnWireless->setSwitchStatus(true);
+                        connect(rfkill_t, SIGNAL(finished()), rfkill_t, SLOT(deleteLater()));
+                        connect(rfkill_t, SIGNAL(started()), rfkill_bt, SLOT(rfKillexecEnWifi()));
+                        connect(rfkill_bt, SIGNAL(enWifiDoneByRfkill()), this, SLOT(rfkillEnableWifiDone()));
+                        connect(rfkill_bt, SIGNAL(btFinishByRfkill()), rfkill_t, SLOT(quit()));
+                        rfkill_t->start();
+                        this->startLoading();
+                    }
                 }
             }
         }
     }
 }
 
+//wifi开关关闭
 void MainWindow::rfkillDisableWifiDone()
 {
-    //wifi开关关闭
+    canExecHandleWifiSwitchChange = true;
     if (is_btnWifiList_clicked)
         disWifiDoneChangeUI();
 
@@ -4538,29 +4570,26 @@ void MainWindow::rfkillDisableWifiDone()
     is_stop_check_net_state = 0;
 }
 
+//wifi开关打开
 void MainWindow::rfkillEnableWifiDone()
 {
-    //wifi开关打开
-    isRadioWifiTurningOn = false;
-    current_wifi_list_state = LOAD_WIFI_LIST;
+    canExecHandleWifiSwitchChange = true;
     if (is_btnWifiList_clicked) {
         QtConcurrent::run([=]() {
-            isScaningWifi = true;
+            qDebug()<<"Already turn on the switch of wifi network detected by kds policy";
+            usleep(1600*1000);
             objKyDBus->requestScanWifi(); //要求后台扫描AP
-            //sleep(1);
-            isScaningWifi = false;
-            qDebug() << Q_FUNC_INFO << "scan finished, will exec reconnect wifi";
+            isReConnAfterTurnOnWifi = true;
+            qDebug() << "Scan finished after truning wifi switch on, ready to reconnect wifi";
+            usleep(1600*1000);
+            emit this->requestReconnecWifi();
+
             //emit loadWifiListAfterScan();
-            emit requestReconnecWifi();
-
-
-
-            //this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
-            objKyDBus->getWirelessCardName();
-            qDebug()<<"debug: already turn on the switch of wifi network detected by kds policy";
-            //syslog(LOG_DEBUG, "Already turn on the switch of wifi network detected by kds policy");
+            isRadioWifiTurningOn = false;
         });
     } else {
+        current_wifi_list_state = LOAD_WIFI_LIST;
         //on_btnWifiList_clicked();
+        isRadioWifiTurningOn = false;
     }
 }

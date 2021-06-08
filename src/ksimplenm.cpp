@@ -72,7 +72,7 @@ void KSimpleNM::execGetLanList()
 void KSimpleNM::execGetWifiList(const QString& wname, const bool &isHuaweiPc)
 {
     if (isExecutingGetWifiList) {
-        qDebug()<<"debug: it is running getting wifi list when getting wifi list";
+        qDebug() << "It is running getting wifi list when getting wifi list";
         isUseOldWifiSlist = true;
         QStringList slistmEmpty;
         slistmEmpty.append("Empty");

@@ -94,6 +94,7 @@ void MainWindow::firstlyStart()
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
     connect(mShowWindow, &QAction::triggered, this, &MainWindow::on_showWindowAction);
     connect(mAdvConf, &QAction::triggered, this, &MainWindow::actionTriggerSlots);
+    connect(this,&MainWindow::showPbSignal,trayIcon,&QSystemTrayIcon::activated);
 
     //checkSingleAndShowTrayicon();
     //trayIcon->setVisible(true);
@@ -1570,6 +1571,7 @@ void MainWindow::on_btnWifiList_clicked()
                     if (this->isRadioWifiTurningOn) {
                         qDebug() << "Turning wifi switch on now, stop to load wifi list";
                     } else {
+                        bShowPb = false;  //不可以showpb
                         objKyDBus->requestScanWifi(); //要求后台扫描AP
                         sleep(2);
                         qDebug() << "scan finished, will load wifi list";
@@ -2947,6 +2949,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     actWifiBssidList.clear();
     wnames.clear();
     emit this->getWifiListFinished();
+    bShowPb = true;  //可以showpb
 }
 
 // 更新wifi列表
@@ -3556,6 +3559,7 @@ void MainWindow::oneWifiFormSelected(QString wifibssid, int extendLength)
             OneConnForm *ocf = wifiList.at(i);
             if (ocf->wifiBSsid == wifibssid) {
                 selectY = ocf->y(); //获取选中item的y坐标
+                scrollAreaw->verticalScrollBar()->setValue(selectY);
                 break;
             }
         }
@@ -4653,5 +4657,36 @@ void MainWindow::rfkillEnableWifiDone()
         current_wifi_list_state = LOAD_WIFI_LIST;
         //on_btnWifiList_clicked();
         isRadioWifiTurningOn = false;
+    }
+}
+
+void MainWindow::showPb(QString type, QString name)
+{
+    bShowPb = false;
+    if (type != "wifi") {
+        onBtnNetListClicked(1);
+    }
+    else {
+        on_btnWifiList_clicked();
+    }
+    emit showPbSignal(QSystemTrayIcon::Trigger);
+    if (name.isEmpty() || name == "") return;
+    qDebug()<<"A "<<type<<" named "<<name<<" clicked! mainwindow.cpp ShowPb(QString,QString):void";
+    if (type == "wifi") {
+        QtConcurrent::run([=]() {
+            int runtime = 0;
+            //等待扫描完成
+            while(!bShowPb)
+            {
+                usleep(500*1000);
+                runtime++;
+                if(runtime > 10)
+                    break;
+            }
+            qDebug()<<__FUNCTION__<<__LINE__<<runtime;
+            emit this->wifiClicked(name);
+        });
+    } else {
+        emit this->lanClicked(name);
     }
 }

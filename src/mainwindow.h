@@ -152,6 +152,7 @@ public:
     void PrimaryManager();
     void toStart();
     int  getScreenGeometry(QString methodName);
+    void showPb(QString type, QString name);
 
     QIcon iconLanOnline, iconLanOffline;
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
@@ -190,6 +191,7 @@ public:
     bool ifCanReconnectWifiNow = true;
     bool isReConnAfterTurnOnWifi = false;//是否是在打开wifi的开关后回连wifi
     bool isRadioWifiTurningOn = false; //是否正在打开wifi开关
+    bool bShowPb = false; //是否可以showPb
     bool canExecHandleWifiSwitchChange = true;
     QVector<QStringList> dbus_wifiList; //其他组件通过dbus接口获取到的wifi列表,第一个元素一定为已连接wifi，若没有已连接wifi则显示为--
     void requestRefreshWifiList(); //申请刷新wifi列表
@@ -424,6 +426,7 @@ private slots:
     void onRfkillStatusChanged();
 
 signals:
+    void showPbSignal(QSystemTrayIcon::ActivationReason act);
     void disConnSparedNet(QString type);
     void refreshWifiListAfterScan();
     void loadWifiListAfterScan();
@@ -439,6 +442,8 @@ signals:
     void wiredConnectionRemoved();
     void actWiredConnectionChanged();
     void requestReconnecWifi();
+    void wifiClicked(QString);
+    void lanClicked(QString);
     void onWiredDeviceChanged(const bool&);
 };
 

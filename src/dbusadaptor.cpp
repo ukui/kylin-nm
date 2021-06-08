@@ -47,6 +47,11 @@ void DbusAdaptor::showMainWindow()
     parent()->on_showWindowAction();
 }
 
+void DbusAdaptor::showPb(QString type, QString name)
+{
+    parent()->showPb(type, name);
+}
+
 void DbusAdaptor::requestRefreshWifiList()
 {
     parent()->requestRefreshWifiList();

@@ -94,6 +94,11 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(waitAnimStep()));
 
     connect(mw, SIGNAL(waitLanStop()), this, SLOT(stopWaiting()));
+    connect(mw, &MainWindow::lanClicked, this, [ = ](QString name) {
+        if (QString::compare(name, this->ssidName) == 0 && !this->isActive) {
+            on_btnConn_clicked();
+        }
+    });
 
     ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与连接按钮绑定在一起
     ui->btnConnSub->setShortcut(Qt::Key_Return);//点击连接按钮触发回车键

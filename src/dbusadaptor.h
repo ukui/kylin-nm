@@ -42,6 +42,10 @@ class DbusAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"getWifiList\">\n"
 "       <arg type=\"av\" direction=\"out\"/>\n"
 "    </method>\n"
+"    <method name=\"showPb\">\n"
+"       <arg direction=\"in\" name=\"type\" type=\"s\"/>\n"
+"       <arg direction=\"in\" name=\"name\" type=\"s\"/>\n"
+"    </method>\n"
 "    <signal name=\"getWifiListFinished\"/>\n"
 "    <signal name=\"configurationChanged\"/>\n"
 "    <signal name=\"wiredConnectionAdded\"/>\n"
@@ -59,6 +63,7 @@ public:
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
     void showMainWindow();
+    void showPb(QString type, QString name);
     void requestRefreshWifiList();
     QVector<QStringList> getWifiList();
 Q_SIGNALS: // SIGNALS

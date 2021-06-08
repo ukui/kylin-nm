@@ -160,7 +160,8 @@ public:
     QString mwBandWidth;
     KylinDBus *objKyDBus = nullptr;
     NetworkSpeed *objNetSpeed = nullptr;
-    SwitchButton *btnWireless;
+    SwitchButton *btnWireless = nullptr;
+    SwitchButton *btnWired = nullptr;
 
     //状态设置,0为假，1为真
     int current_wifi_list_state = LOAD_WIFI_LIST;
@@ -241,6 +242,9 @@ public slots:
 
     //flag =0或1为普通点击、2为收到打开信息、3为收到关闭信息、4为无线网卡插入、5为无线网卡拔出
     void onBtnWifiClicked(int flag = 0);
+    //falg=0 UI点击，1收到打开信息，2收到关闭信息，3有线设备插入，4有线设备拔出
+    void onBtnLanClicked(int flag = 0);
+    void setLanSwitchStatus(bool is_opened);
 
     void on_showWindowAction();
 
@@ -430,6 +434,7 @@ signals:
     void wiredConnectionRemoved();
     void actWiredConnectionChanged();
     void requestReconnecWifi();
+    void onWiredDeviceChanged(const bool&);
 };
 
 #endif // MAINWINDOW_H

@@ -282,9 +282,17 @@ void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString s
 void OneLancForm::setIcon(bool isOn)
 {
     if (isOn) {
-        ui->lbIcon->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/l/network-online.png);}");
+        if (!QIcon::fromTheme("network-wired-connected-symbolic").isNull()) {
+            ui->lbIcon->setPixmap(QIcon::fromTheme("network-wired-connected-symbolic").pixmap(32,32));
+        } else {
+            ui->lbIcon->setPixmap(QIcon(":/res/l/network-online.png").pixmap(32,32));
+        }
     } else {
-        ui->lbIcon->setStyleSheet("QLabel{border-radius:0px;background:url(:/res/l/network-offline.png);}");
+        if (!QIcon::fromTheme("network-wired-disconnected-symbolic").isNull()) {
+            ui->lbIcon->setPixmap(QIcon::fromTheme("network-wired-disconnected-symbolic").pixmap(32,32));
+        } else {
+            ui->lbIcon->setPixmap(QIcon(":/res/l/network-offline.png").pixmap(32,32));
+        }
     }
 }
 

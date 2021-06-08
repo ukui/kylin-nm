@@ -1579,7 +1579,7 @@ void MainWindow::on_btnWifiList_clicked()
 
         // 当前连接的wifi
         OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
-        ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC);//"当前未连接任何 Wifi"
+        ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC, isHuaWei9006C);//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--", "0");
         ccf->setRate("0");
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
@@ -1987,7 +1987,7 @@ void MainWindow::getWifiListDone(QStringList slist)
                         qDebug()<<"Reconnect finished, cmd = "<<reconnectWifiCmd<<". res = "<<con_res;
 
                         if (con_res == 0) {
-                            m_connected_by_self = true;
+                            m_connected_by_self = false;
                             //回连成功，停止
                             this->stopLoading();
                             is_stop_check_net_state = 0;
@@ -2172,6 +2172,9 @@ QStringList MainWindow::priorityList(QStringList slist){
         QString line = slist.at(i);
         int conSignal = line.mid(indexSignal,3).trimmed().toInt();
         int conCate = line.mid(indexCate, 1).trimmed().toInt();
+        if (!isHuaWei9006C) {
+            conCate = 0;
+        }
         if(conSignal > 55 && conCate == 2){
             p1.append(line);
             continue;
@@ -2298,6 +2301,9 @@ void MainWindow::wifiListOptimize(QStringList& slist)
 //        int conSignal = currentWifiInfo.mid(indexSignal,3).trimmed().toInt();
         int conFreq = currentWifiInfo.mid(indexFreq,4).trimmed().toInt();
         int conCate = currentWifiInfo.mid(indexCate,1).trimmed().toInt();
+        if (!isHuaWei9006C) {
+            conCate = 0;
+        }
 
         if ("*" == currentWifiInfo.mid(0,indexSignal).trimmed()) {
 //            hasStarWifiInfo = currentWifiInfo;
@@ -2311,6 +2317,9 @@ void MainWindow::wifiListOptimize(QStringList& slist)
 //            int signal = compareWifiInfo.mid(indexSignal,3).trimmed().toInt();
             int freq = compareWifiInfo.mid(indexFreq,4).trimmed().toInt();
             int category = compareWifiInfo.mid(indexCate,1).trimmed().toInt();
+            if (!isHuaWei9006C) {
+                category = 0;
+            }
             if (conName == name) {
                 if (conFreq < 5000 && freq < 5000 && conCate == category) {
                     //若前面有同频同category的同名wifi，它的信号一定比此wifi强
@@ -2447,6 +2456,9 @@ QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStrin
         QString wifiname = line.mid(indexName).trimmed();
         QString wifibssid = line.mid(indexBSsid, indexPath-indexBSsid).trimmed();
         QString wificate = line.mid(indexCate, 1).trimmed();
+        if (!isHuaWei9006C) {
+            wificate = "0";
+        }
         QString wififreq = line.mid(indexFreq, 4).trimmed();
         QString wifiObjectPath;
         if (indexCate >= 0) {
@@ -2635,7 +2647,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     // 根据当前连接的wifi 设置OneConnForm
     OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
     if (actWifiName == "--" || wifiActState == 1 || actWifiBssidList.at(0) == "--" || actWifiBssid == " ") {
-        ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC);//"当前未连接任何 Wifi"
+        ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC, isHuaWei9006C);//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--" , "0");
         activeWifiSignalLv = 0;
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
@@ -2769,7 +2781,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 QString m_name;
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(path);
                 if (m_name.isEmpty() || m_name == "") {
-                    ccf->setWifiName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
+                    ccf->setWifiName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC, isHuaWei9006C);
                     if (!canReconnectWifiList.contains(wname)) {
                         canReconnectWifiList.append(wname);
                     } else {
@@ -2777,7 +2789,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                         canReconnectWifiList.append(wname);
                     }
                 } else {
-                    ccf->setWifiName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
+                    ccf->setWifiName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC, isHuaWei9006C);
                     if (!canReconnectWifiList.contains(m_name)) {
                         canReconnectWifiList.append(m_name);
                     } else {
@@ -2836,9 +2848,9 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 QString m_name;
                 if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(path);
                 if (m_name.isEmpty() || m_name == "") {
-                    ocf->setWifiName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
+                    ocf->setWifiName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC, isHuaWei9006C);
                 } else {
-                    ocf->setWifiName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
+                    ocf->setWifiName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC, isHuaWei9006C);
                 }
                 if (m_wifi_list_pwd_changed.contains(ocf->getName())) {
                     ocf->setlbPwdTipVisble(true);
@@ -3069,9 +3081,9 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 QString m_name;
                 if (wpath != "" && !wpath.isEmpty()) m_name= this->objKyDBus->getWifiSsid(wpath);
                 if (m_name.isEmpty() || m_name == "") {
-                    addItem->setWifiName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
+                    addItem->setWifiName(wname, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC, isHuaWei9006C);
                 } else {
-                    addItem->setWifiName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC);
+                    addItem->setWifiName(m_name, wbssid, actWifiUuid, objKyDBus->dbusWiFiCardName, isHuaWeiPC, isHuaWei9006C);
                 }
                 if (m_wifi_list_pwd_changed.contains(addItem->getName())) {
                     addItem->setlbPwdTipVisble(true);
@@ -3755,7 +3767,7 @@ void MainWindow::disWifiDoneChangeUI()
         OneConnForm *ocf = wifiList.at(i);
         if (ocf->isActive == true) {
             ocf->setSelected(false, false);
-            ocf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC);//"当前未连接任何 Wifi"
+            ocf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC, isHuaWei9006C);//"当前未连接任何 Wifi"
             ocf->setSignal("0", "--", "0");
             ocf->setConnedString(1, tr("Disconnected"), "");//"未连接"
             ocf->lbFreq->hide();
@@ -4419,6 +4431,7 @@ void MainWindow::PrimaryManager()
                                          QDBusConnection::sessionBus());
 
     isHuaWeiPC = false;
+    isHuaWei9006C = false;
     QDBusMessage message = QDBusMessage::createMethodCall(DBUS_NAME,
                                DBUS_PATH,
                                DBUS_INTERFACE,
@@ -4426,11 +4439,24 @@ void MainWindow::PrimaryManager()
     QDBusMessage response = QDBusConnection::sessionBus().call(message);
     if (response.type() == QDBusMessage::ReplyMessage) {
         isHuaWeiPC = true;
+
+        //继续判断是990或者9006c
+        QProcess * processCpuinfo = new QProcess(this);
+        processCpuinfo->start(QString("cat /proc/cpuinfo"));
+        connect(processCpuinfo, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+            processCpuinfo->deleteLater();
+        });
+        connect(processCpuinfo, &QProcess::readyReadStandardOutput, this, [ = ]() {
+            QString ctrCpuinfo = processCpuinfo->readAllStandardOutput();
+            if (ctrCpuinfo.indexOf("HUAWEI Kirin 9006C") != -1) {
+                isHuaWei9006C = true;
+            }
+        });
+        processCpuinfo->waitForFinished();
     }
 
     connect(mDbusXrandInter, SIGNAL(screenPrimaryChanged(int,int,int,int)),
             this, SLOT(priScreenChanged(int,int,int,int)));
-
 }
 
 void MainWindow::toStart()

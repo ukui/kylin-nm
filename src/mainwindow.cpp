@@ -41,12 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     //QIcon::setThemeName("ukui-icon-theme-default");
-
-    PrimaryManager();
-    toStart();
-
     // 如果使用Qt::Popup 任务栏不显示且保留X事件如XCB_FOCUS_OUT, 但如果indicator点击鼠标右键触发，XCB_FOCUS_OUT事件依然会失效
     // 如果使用Qt::ToolTip, Qt::Tool + Qt::WindowStaysOnTopHint, Qt::X11BypassWindowManagerHint等flag则会导致X事件失效
     // this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
@@ -54,14 +49,21 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);//QTool
     this->setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
 
-    // 连接kds的dbus接收rfkill变化的信号&获取当前WIFI状态
-    qDebug()<<"Initing kdsDbus...";
-    kdsDbus = new QDBusInterface("org.ukui.kds", \
-                               "/", \
-                               "org.ukui.kds.interface", \
-                               QDBusConnection::systemBus());
-    QDBusConnection::systemBus().connect(kdsDbus->service(), kdsDbus->path(), kdsDbus->interface(), "signalRfkillStatusChanged", this, SLOT(onRfkillStatusChanged()));
+    firstlyStart(); //先执行一些不耗时的一级启动项
+}
 
+MainWindow::~MainWindow()
+{
+    trayIcon->deleteLater();
+    trayIconMenu->deleteLater();
+    delete ui;
+}
+
+/**
+ * @brief MainWindow::firstlyStart 一级启动
+ */
+void MainWindow::firstlyStart()
+{
     qDebug()<<"Loading qss...";
     UseQssFile::setStyle("style.qss");
 
@@ -90,11 +92,37 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createTrayIcon();
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
-    connect(mShowWindow,SIGNAL(triggered()),this,SLOT(on_showWindowAction()));
+    connect(mShowWindow, &QAction::triggered, this, &MainWindow::on_showWindowAction);
     connect(mAdvConf, &QAction::triggered, this, &MainWindow::actionTriggerSlots);
 
     //checkSingleAndShowTrayicon();
     //trayIcon->setVisible(true);
+
+    m_secondary_start_timer = new QTimer(this);
+    connect(m_secondary_start_timer, &QTimer::timeout, this, [ = ]() {
+        m_secondary_start_timer->stop();
+        secondaryStart();//满足条件后执行比较耗时的二级启动
+    });
+    m_secondary_start_timer->start(5 * 1000);
+}
+
+/**
+ * @brief MainWindow::secondaryStart 二级启动
+ */
+void MainWindow::secondaryStart()
+{
+    if (m_load_finished)
+        return;
+    // 连接kds的dbus接收rfkill变化的信号&获取当前WIFI状态
+    qDebug()<<"Initing kdsDbus...";
+    kdsDbus = new QDBusInterface("org.ukui.kds", \
+                               "/", \
+                               "org.ukui.kds.interface", \
+                               QDBusConnection::systemBus());
+    QDBusConnection::systemBus().connect(kdsDbus->service(), kdsDbus->path(), kdsDbus->interface(), "signalRfkillStatusChanged", this, SLOT(onRfkillStatusChanged()));
+
+    PrimaryManager();
+    toStart();
 
     qDebug()<<"Init objKyDbus...";
     objKyDBus = new KylinDBus(this);
@@ -169,13 +197,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //检查有线网络的个数是否为0,如果是0，则新建一个有线网络
     checkIfWiredNetExist();
-}
-
-MainWindow::~MainWindow()
-{
-    trayIcon->deleteLater();
-    trayIconMenu->deleteLater();
-    delete ui;
+    m_load_finished = true;
 }
 
 void MainWindow::checkSingleAndShowTrayicon()
@@ -755,6 +777,10 @@ void MainWindow::setTrayLoading(bool isLoading)
 
 void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
+    if (!m_load_finished) {
+        m_secondary_start_timer->stop();
+        secondaryStart();
+    }
     switch (reason) {
     case QSystemTrayIcon::Trigger:
     case QSystemTrayIcon::MiddleClick:
@@ -946,6 +972,10 @@ void MainWindow::showTrayIconMenu()
 
 void MainWindow::on_showWindowAction()
 {
+    if (!m_load_finished) {
+        m_secondary_start_timer->stop();
+        secondaryStart();
+    }
     handleIconClicked();
     this->showNormal();
     this->raise();
@@ -3298,6 +3328,10 @@ void MainWindow::onBtnCreateNetClicked()
 /* 右键菜单打开网络设置界面 */
 void MainWindow::actionTriggerSlots()
 {
+    if (!m_load_finished) {
+        m_secondary_start_timer->stop();
+        secondaryStart();
+    }
     this->move(-500, -500);
     this->showNormal();
     this->raise();

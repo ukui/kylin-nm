@@ -3927,7 +3927,7 @@ void MainWindow::toScanWifi(bool isShow)
 
 void MainWindow::onRefreshWifiListAfterScan()
 {
-    current_wifi_list_state = UPDATE_WIFI_LIST;
+    current_wifi_list_state = REFRESH_WIFI;
     this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC); //更新wifi列表
 }
 
@@ -4338,13 +4338,14 @@ void MainWindow::requestRefreshWifiList()
 {
     if (isHuaWeiPC) {
         QtConcurrent::run([=](){
+            qDebug()<<"Received signal to refresh wifi from ukcc, current_wifi_list_state="<<current_wifi_list_state;
             objKyDBus->requestScanWifi(); //要求后台扫描AP
             sleep(2);
             emit refreshWifiListAfterScan();
         });
     } else {
         current_wifi_list_state = REFRESH_WIFI;
-        qDebug()<<"current_wifi_list_state="<<current_wifi_list_state;
+        qDebug()<<"Received signal to refresh wifi from ukcc, current_wifi_list_state="<<current_wifi_list_state;
         this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
     }
 }

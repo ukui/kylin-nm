@@ -638,7 +638,7 @@ void OneConnForm::slotConnWifi()
 void OneConnForm::slotConnWifiPWD()
 {
     this->startWifiWaiting(true);
-    emit sigConnWifiPWD(wifiName, ui->lePassword->text(), connType, wifiSecu);
+    emit sigConnWifiPWD(wifiName, ui->lePassword->text(), connType, wifiSecu, wifiIfName);
 }
 
 //点击后断开wifi网络
@@ -670,7 +670,7 @@ void OneConnForm::on_btnConnSub_clicked()
         return;
     }
 
-    if (lbPwdTip->isVisible()) {
+    if (lbPwdTip->isVisible() && this->hasPwd) {
         this->slotConnWifiResult(2);
         return;
     }
@@ -686,7 +686,7 @@ void OneConnForm::on_btnConn_clicked()
         return;
     }
 
-    if (lbPwdTip->isVisible()) {
+    if (lbPwdTip->isVisible() && this->hasPwd) {
         this->slotConnWifiResult(2);
         return;
     }
@@ -753,18 +753,35 @@ void OneConnForm::toConnectWirelessNetwork()
 
     //有配置文件，需要判断一下当前配置文件wifi安全性是不是wpa-eap，若是，需要把原配置文件删除，重新配置
     QProcess * process = new QProcess(this);
-    process->start(QString("nmcli -f 802-11-wireless-security.key-mgmt connection show '%1'").arg(wifiName));
     connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
         process->deleteLater();
     });
     connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
         QString str = process->readAllStandardOutput();
-        key_mgmt = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2);
+        key_mgmt = str.mid(str.lastIndexOf(":") + 1).trimmed();
     });
+    process->start(QString("nmcli -f 802-11-wireless-security.key-mgmt connection show \"%1\"").arg(wifiName));
     process->waitForFinished();
-    if (QString::compare(key_mgmt, "wpa-eap") == 0) {
-        //原配置文件是企业wifi，删掉，请求输入新的密码
-        QString cmdStr = "nmcli connection delete '" +  wifiName + "'";
+    QString cur_secu;
+    if (wifiSecu.contains("WPA3"))
+        cur_secu = "sae";
+    else if (wifiSecu.contains("--"))
+        cur_secu = "--";
+    else
+        cur_secu = "wpa-psk";
+    if (!hasPwd && !key_mgmt.isEmpty()) {
+        QString cmdStr = "nmcli connection delete \"" +  wifiName + "\"";
+        Utils::m_system(cmdStr.toUtf8().data());
+        psk_flag = 0;
+        if (lbPwdTip->isVisible()) {
+            lbPwdTip->hide();
+            mw->m_wifi_list_pwd_changed.removeOne(wifiName);
+        }
+        toConnectWirelessNetwork();
+        return;
+    } else if (QString::compare(key_mgmt, cur_secu) != 0) {
+        //原配置文件与当前加密方式不一致，删掉，请求输入新的密码
+        QString cmdStr = "nmcli connection delete \"" +  wifiName + "\"";
         Utils::m_system(cmdStr.toUtf8().data());
         psk_flag = 0;
         slotConnWifiResult(2); //现在已无配置文件，申请输入密码
@@ -910,8 +927,8 @@ void OneConnForm::on_btnConnPWD_clicked()
         bt->moveToThread(t);
         connect(t, SIGNAL(finished()), t, SLOT(deleteLater()));
         connect(t, SIGNAL(started()), this, SLOT(slotConnWifiPWD()));
-        connect(this, SIGNAL(sigConnWifiPWD(QString, QString, QString, QString)),
-                bt, SLOT(execConnWifiPWD(QString, QString, QString, QString)));
+        connect(this, SIGNAL(sigConnWifiPWD(QString, QString, QString, QString, QString)),
+                bt, SLOT(execConnWifiPWD(QString, QString, QString, QString, QString)));
         connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
         connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
         connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));

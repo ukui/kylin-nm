@@ -332,7 +332,7 @@ void BackThread::dellConnectLanResult(QString info)
 }
 
 //to connected wireless network need a password
-void BackThread::execConnWifiPWD(QString connName, QString password, QString connType, QString security)
+void BackThread::execConnWifiPWD(QString connName, QString password, QString connType, QString security, QString ifname)
 {
     //disConnLanOrWifi("wifi");
     if (!connType.isEmpty()) {
@@ -344,7 +344,7 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
     if (security.contains("WPA3")) {
         QString create_cmd = QString("nmcli connection add con-name %1 type wifi 802-11-wireless-security.key-mgmt sae ssid %2 802-11-wireless-security.psk %3").arg(connName).arg(connName).arg(password);
         Utils::m_system(create_cmd.toUtf8().data());
-        QString connect_cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' > " + tmpPath;
+        QString connect_cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname " + ifname +" > " + tmpPath;
         Utils::m_system(connect_cmdStr.toUtf8().data());
     } else {
         QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > " + tmpPath;
@@ -458,7 +458,7 @@ void BackThread::execConnWifi(QString connName, QString connIfName)
     QString wifiUuid = objBackThreadDBus.checkHasWifiConfigFile(connName);
     if (!wifiUuid.isEmpty()) {
         //有配置文件
-        cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + wifiUuid + "'\n";
+        cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + wifiUuid + "' ifname '" + connIfName + "'\n";
     } else {
         //没有配置文件
         cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + connIfName + "'\n";

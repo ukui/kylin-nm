@@ -70,7 +70,7 @@ public slots:
     void execConnLan(QString connName, QString ifname, QString connectType);
     void execConnWifi(QString connName, QString connIfName);
     void execReconnWIfi(QString uuid);
-    void execConnWifiPWD(QString connName, QString password, QString connType, QString security);
+    void execConnWifiPWD(QString connName, QString password, QString connType, QString security, QString ifname);
     void execConnWifiPsk(QString cmd);
     void execConnHiddenWifiWPA(QString connName, QString password);
     void execConnRememberedHiddenWifi(QString connName);

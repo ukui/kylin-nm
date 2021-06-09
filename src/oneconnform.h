@@ -172,7 +172,7 @@ signals:
     void requestRefreshWifiList();
 
     void sigConnWifi(QString, QString);
-    void sigConnWifiPWD(QString, QString, QString, QString);
+    void sigConnWifiPWD(QString, QString, QString, QString, QString);
     void sigConnWifiPsk(QString);
 };
 

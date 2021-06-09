@@ -779,7 +779,7 @@ void OneConnForm::toConnectWirelessNetwork()
         }
         toConnectWirelessNetwork();
         return;
-    } else if (QString::compare(key_mgmt, cur_secu) != 0) {
+    } else if (!key_mgmt.isEmpty() && QString::compare(key_mgmt, cur_secu) != 0) {
         //原配置文件与当前加密方式不一致，删掉，请求输入新的密码
         QString cmdStr = "nmcli connection delete \"" +  wifiName + "\"";
         Utils::m_system(cmdStr.toUtf8().data());

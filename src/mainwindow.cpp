@@ -327,10 +327,11 @@ void MainWindow::createTopWifiUI()
     lbTopWifiList->show();
     /*新建有线网按钮*/
     btnAddNet = new QPushButton(topWifiListWidget);
-    btnAddNet->resize(W_BTN_FUN, H_BTN_FUN);
     btnAddNet->move(X_BTN_FUN, Y_BTN_FUN);
     btnAddNet->setText(tr("Hide WLAN"));//"加入网络"
     btnAddNet->setStyleSheet(funcBtnQss);
+    int textWidth = QFontMetrics(btnAddNet->font()).width(btnAddNet->text());
+    btnAddNet->resize(textWidth > W_BTN_FUN ? textWidth : W_BTN_FUN, H_BTN_FUN);
     btnAddNet->setFocusPolicy(Qt::NoFocus);
     btnAddNet->show();
     connect(btnAddNet,SIGNAL(clicked()),this,SLOT(onBtnAddNetClicked()));

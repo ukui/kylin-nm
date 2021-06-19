@@ -814,6 +814,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
                 is_stop_check_net_state = 0;
             }
         } else {
+            this->m_is_inputting_wifi_password = false;
             this->hide();
             numberForWifiScan = 0;
         }
@@ -2051,7 +2052,7 @@ void MainWindow::getWifiListDone(QStringList slist)
         return;
     }
 
-    if (current_wifi_list_state == LOAD_WIFI_LIST || current_wifi_list_state == REFRESH_WIFI) {
+    if ((current_wifi_list_state == LOAD_WIFI_LIST || current_wifi_list_state == REFRESH_WIFI) && !this->m_is_inputting_wifi_password) {
         if (!isReconnectingWifi) {
             loadWifiListDone(slist);
             is_init_wifi_list = 0;
@@ -2062,12 +2063,12 @@ void MainWindow::getWifiListDone(QStringList slist)
         }
     }
 
-    if (current_wifi_list_state == UPDATE_WIFI_LIST) {
+    if (current_wifi_list_state == UPDATE_WIFI_LIST || this->m_is_inputting_wifi_password) {
         //如果WiFi连接状态发生了改变，需要刷新整个列表，否则只需要比对新旧列表更新即可
-        if (m_isWifiConnected && objKyDBus->checkWifiConnectivity() != 2) {
+        if (m_isWifiConnected && objKyDBus->checkWifiConnectivity() != WIFI_CONNECTED) {
             //qDebug() << "loadwifi的列表";
             loadWifiListDone(slist);
-        } else if (!m_isWifiConnected && objKyDBus->checkWifiConnectivity() == 2) {
+        } else if (!m_isWifiConnected && objKyDBus->checkWifiConnectivity() == WIFI_CONNECTED) {
             loadWifiListDone(slist);
         } else {
             //qDebug() << "updatewifi的列表";
@@ -2577,7 +2578,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 获取当前无线网的连接状态，正在连接wifiActState==1，已经连接wifiActState==2, 未连接wifiActState==3
     int wifiActState = objKyDBus->checkWifiConnectivity(); //检查wifi的连接状态
-    if (wifiActState == 2) {
+    if (wifiActState == WIFI_CONNECTED) {
         m_isWifiConnected = true;
     } else {
         m_isWifiConnected = false;
@@ -2678,7 +2679,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
     // 根据当前连接的wifi 设置OneConnForm
     OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
-    if (actWifiName == "--" || wifiActState == 1 || actWifiBssidList.at(0) == "--" || actWifiBssid == " ") {
+    if (actWifiName == "--" || wifiActState == WIFI_CONNECTING || actWifiBssidList.at(0) == "--" || actWifiBssid == " ") {
         ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC, isHuaWei9006C);//"当前未连接任何 Wifi"
         ccf->setSignal("0", "--" , "0");
         activeWifiSignalLv = 0;
@@ -2797,7 +2798,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
         if (wname != "" && wname != "--") {
             //qDebug() << "wifi的 actWifiBssid: " << actWifiBssid << "      wcate = " << wcate;
             //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
-            if (actWifiBssid == wbssid && wifiActState == 2) {
+            if (actWifiBssid == wbssid && wifiActState == WIFI_CONNECTED) {
                 //对于已经连接的wifi
                 connect(this, &MainWindow::actWifiSignalLvChanaged, ccf, [ = ](const int &signalLv) {
                     ccf->setSignal(QString::number(signalLv), wsecu, wcate);
@@ -2899,7 +2900,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 ocf->setSelected(false, false);
                 ocf->show();
 
-                if ((actWifiBssidList.contains(wbssid) && wifiActState == 1) || (actWifiId == wname && wifiActState == 1)) {
+                if ((actWifiBssidList.contains(wbssid) && wifiActState == WIFI_CONNECTING) || (actWifiId == wname && wifiActState == WIFI_CONNECTING)) {
                     ocf->startWifiWaiting(true);
                 }
 
@@ -3514,6 +3515,11 @@ void MainWindow::oneWifiFormSelected(QString wifibssid, int extendLength)
     if (currSelNetName == wifibssid) {
         //与win逻辑一致，点击同一选项不再缩小选项卡
         return;
+    }
+    if (extendLength == H_WIFI_ITEM_SMALL_EXTEND) {
+        this->m_is_inputting_wifi_password = true;
+    } else {
+        this->m_is_inputting_wifi_password = false;
     }
 
     QList<OneConnForm *>topWifiList = topWifiListWidget->findChildren<OneConnForm *>();
@@ -4372,6 +4378,7 @@ bool MainWindow::event(QEvent *event)
 {
     if (event->type() == QEvent::ActivationChange) {
         if (QApplication::activeWindow() != this) {
+            this->m_is_inputting_wifi_password = false;
             this->hide();
             numberForWifiScan = 0;
         }

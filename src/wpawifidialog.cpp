@@ -513,16 +513,22 @@ void WpaWifiDialog::initConnect() {
     //连接按钮
     connect(connectBtn, &QPushButton::clicked, this, &WpaWifiDialog::slot_on_connectBtn_clicked);
     //显示密码
-    connect(pwdShowBtn, &QCheckBox::pressed, this, [ = ]() {
-        pwdShowBtn->setChecked(true);
-        pwdEditor->setEchoMode(QLineEdit::Normal);
-        m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Normal);
+    connect(pwdShowBtn, &QCheckBox::clicked, this, [ = ]() {
+        if (pwdEditor->echoMode() == QLineEdit::Password) {
+            pwdShowBtn->setChecked(true);
+            pwdEditor->setEchoMode(QLineEdit::Normal);
+            m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Normal);
+        } else {
+            pwdShowBtn->setChecked(false);
+            pwdEditor->setEchoMode(QLineEdit::Password);
+            m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Password);
+        }
     });
-    connect(pwdShowBtn, &QCheckBox::released, this, [ = ]() {
-        pwdShowBtn->setChecked(false);
-        pwdEditor->setEchoMode(QLineEdit::Password);
-        m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Password);
-    });
+//    connect(pwdShowBtn, &QCheckBox::released, this, [ = ]() {
+//        pwdShowBtn->setChecked(false);
+//        pwdEditor->setEchoMode(QLineEdit::Password);
+//        m_pwd4PrivateKeyPWDEditor->setEchoMode(QLineEdit::Password);
+//    });
     connect(pwdEditor, &QLineEdit::textChanged, this, &WpaWifiDialog::slot_line_edit_changed);
     connect(userEditor, &QLineEdit::textChanged, this, &WpaWifiDialog::slot_line_edit_changed);
     connect(nameEditor, &QLineEdit::textChanged, this, &WpaWifiDialog::slot_line_edit_changed);
@@ -708,8 +714,8 @@ void WpaWifiDialog::activateConnection() {
             timeout->deleteLater();
             QString cmdStr_2 = "nmcli connection down '" + nameEditor->text() + "'";
             Utils::m_system(cmdStr_2.toUtf8().data());
-            //this->mw->is_stop_check_net_state = 0;
-            //this->mw->setTrayLoading(false);
+            this->mw->is_stop_check_net_state = 0;
+            this->mw->setTrayLoading(false);
             qDebug() << "qDebug: activate time out in function activateConnection";
             qDebug() << "qDebug: 连接超时（30秒超时时间）";
         });
@@ -722,8 +728,8 @@ void WpaWifiDialog::activateConnection() {
             //连接错误或连接超时
             setEditorEnable(true);
             emit conn_failed();
-            //this->mw->is_stop_check_net_state = 0;
-            //this->mw->setTrayLoading(false);
+            this->mw->is_stop_check_net_state = 0;
+            this->mw->setTrayLoading(false);
         } else {
             //连接成功
             timeout->stop();
@@ -732,13 +738,15 @@ void WpaWifiDialog::activateConnection() {
             upThread->wait();
             upThread->deleteLater();
             emit conn_done();
-            //this->mw->is_stop_check_net_state = 0;
-            //this->mw->setTrayLoading(false);
+            this->mw->is_stop_check_net_state = 0;
+            this->mw->setTrayLoading(false);
             qDebug() << "qDebug: activated wpa security wifi successfully";
             this->close();
         }
     });
     upThread->start();
+    this->mw->is_stop_check_net_state = 1;
+    this->mw->setTrayLoading(true);
 }
 
 QStringList WpaWifiDialog::getWifiInfo(QString wifiName) {

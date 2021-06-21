@@ -701,6 +701,10 @@ void WpaWifiDialog::setEditorEnable(bool is_checking) {
 }
 
 void WpaWifiDialog::activateConnection() {
+    if (this->mw->is_stop_check_net_state == 1) {
+//        conn_failed();
+        return;
+    }
     UpConnThread * upThread = new UpConnThread(userEditor->text(), pwdEditor->text());
     upThread->conn_name = nameEditor->text();
     //超时计时器

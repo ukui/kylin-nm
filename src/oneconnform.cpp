@@ -34,8 +34,6 @@
 #include <QDBusObjectPath>
 #include <QtConcurrent>
 
-extern int currentActWifiSignalLv;
-
 OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *confForm, KSimpleNM *ksnm) :
     QWidget(parent),
     ui(new Ui::OneConnForm)
@@ -531,7 +529,7 @@ void OneConnForm::setLine(bool isShow)
     }
 }
 
-void OneConnForm::setSignal(QString lv, QString secu, QString category)
+void OneConnForm::setSignal(QString lv, QString secu, QString category, bool hasSignalStrength)
 {
     this->m_signal = lv.toInt();
     int signal = lv.toInt();
@@ -562,7 +560,6 @@ void OneConnForm::setSignal(QString lv, QString secu, QString category)
         } else {
             signalStyle += "-full.png);}";
         }
-        signalLv = 1;
     }
     if (signal > 55 && signal <= 75) {
         if (hasPwd) {
@@ -570,7 +567,6 @@ void OneConnForm::setSignal(QString lv, QString secu, QString category)
         } else {
             signalStyle += "-high.png);}";
         }
-        signalLv = 2;
     }
     if (signal > 35 && signal <= 55) {
         if (hasPwd) {
@@ -578,24 +574,19 @@ void OneConnForm::setSignal(QString lv, QString secu, QString category)
         } else {
             signalStyle += "-medium.png);}";
         }
-        signalLv = 3;
     }
-    if (signal > 15 && signal <= 35) {
-        if (hasPwd) {
-            signalStyle += "-low-pwd.png);}";
-        } else {
-            signalStyle += "-low.png);}";
-        }
-        signalLv = 4;
-    }
-    if (signal <= 15) {
-        if (hasPwd) {
-            signalStyle += "-none-pwd.png);}";
+    if (signal <= 35) {
+        if (hasSignalStrength) {
+            if (hasPwd) {
+                signalStyle += "-low-pwd.png);}";
+            } else {
+                signalStyle += "-low.png);}";
+            }
         } else {
             signalStyle += "-none.png);}";
         }
-        signalLv = 4;
     }
+
     ui->lbSignal->setStyleSheet(signalStyle);
 }
 
@@ -1170,9 +1161,6 @@ void OneConnForm::slotConnWifiResult(int connFlag)
         ui->lePassword->setEchoMode(QLineEdit::Password);
         ui->checkBoxPwd->setChecked(false);
     }
-
-    // 设置全局变量，当前连接Wifi的信号强度
-    currentActWifiSignalLv = signalLv;
 
     this->stopWifiWaiting(true);
 

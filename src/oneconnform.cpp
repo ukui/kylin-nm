@@ -887,6 +887,7 @@ void OneConnForm::on_btnConnPWD_clicked()
             passwdFile->close();
 //            cmdStr = "nmcli connection up " + wifiName + " passwd-file " + homePath +"/.config/" + wifiName + ".psk";
         }
+
         mw->is_stop_check_net_state = 1;
         QThread *t = new QThread();
         BackThread *bt = new BackThread();
@@ -981,17 +982,22 @@ void OneConnForm::setlbPwdTipVisble(const bool &visible)
 }
 
 //设置密码隐藏或可见
-void OneConnForm::on_checkBoxPwd_pressed()
+void OneConnForm::on_checkBoxPwd_clicked()
 {
-    ui->checkBoxPwd->setChecked(true);
-    ui->lePassword->setEchoMode(QLineEdit::Normal);
+    if (ui->lePassword->echoMode() == QLineEdit::Password) {
+        ui->checkBoxPwd->setChecked(true);
+        ui->lePassword->setEchoMode(QLineEdit::Normal);
+    } else {
+        ui->checkBoxPwd->setChecked(false);
+        ui->lePassword->setEchoMode(QLineEdit::Password);
+    }
 }
 
-void OneConnForm::on_checkBoxPwd_released()
-{
-    ui->checkBoxPwd->setChecked(false);
-    ui->lePassword->setEchoMode(QLineEdit::Password);
-}
+//void OneConnForm::on_checkBoxPwd_released()
+//{
+//    ui->checkBoxPwd->setChecked(false);
+//    ui->lePassword->setEchoMode(QLineEdit::Password);
+//}
 
 void OneConnForm::on_lePassword_textEdited(const QString &arg1)
 {

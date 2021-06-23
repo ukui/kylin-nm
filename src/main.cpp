@@ -23,7 +23,8 @@
 #include "dbusadaptor.h"
 #include <QTranslator>
 #include <QLocale>
-#include <QApplication>
+//#include <QApplication>
+#include "qt-single-application.h"
 #include <QDebug>
 #include <QDesktopWidget>
 #include <X11/Xlib.h>
@@ -80,8 +81,19 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    QApplication a(argc, argv);
+//    QApplication a(argc, argv);
+    QString id = QString("kylin-nm"+ QLatin1String(getenv("DISPLAY")));
+    QtSingleApplication a(id, argc, argv);
     qInstallMessageHandler(messageOutput);
+    if (a.isRunning()) {
+        auto connection = QDBusConnection::sessionBus();
+        QDBusInterface iface("com.kylin.network",
+                                       "/com/kylin/network",
+                                       "com.kylin.network",
+                                       connection);
+        iface.call("showMainWindow");
+        return 0;
+    }
 
     qDebug()<<"Kylin Network Manager Is Already Launched";
 
@@ -113,17 +125,19 @@ int main(int argc, char *argv[])
 
     DbusAdaptor adaptor(&w);
     Q_UNUSED(adaptor);
+
     auto connection = QDBusConnection::sessionBus();
     if (!connection.registerService("com.kylin.network") || !connection.registerObject("/com/kylin/network", &w)) {
         qCritical() << "QDbus register service failed reason:" << connection.lastError();
-        QDBusInterface iface("com.kylin.network",
-                                       "/com/kylin/network",
-                                       "com.kylin.network",
-                                       connection);
-        iface.call("showMainWindow");
-
-        return 0;
     }
+//        QDBusInterface iface("com.kylin.network",
+//                                       "/com/kylin/network",
+//                                       "com.kylin.network",
+//                                       connection);
+//        iface.call("showMainWindow");
+
+//        return 0;
+//    }
 
     w.justShowTrayIcon();
 

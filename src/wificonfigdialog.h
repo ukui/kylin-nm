@@ -37,9 +37,9 @@ private slots:
 
     void on_leWifiPassword_textEdited(const QString &arg1);
 
-    void on_checkBoxPwd_pressed();
+    void on_checkBoxPwd_clicked();
 
-    void on_checkBoxPwd_released();
+//    void on_checkBoxPwd_released();
 
 private:
     Ui::WiFiConfigDialog *ui;

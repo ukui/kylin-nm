@@ -137,9 +137,7 @@ private slots:
 
     void on_btnCancel_clicked();
 
-    void on_checkBoxPwd_pressed();
-
-    void on_checkBoxPwd_released();
+    void on_checkBoxPwd_clicked();
 
     bool onMenuTriggered(QAction *);
 

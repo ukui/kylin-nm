@@ -1052,7 +1052,10 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
         else {
             setTrayLoading(true);
         }
-
+        if (actWifiName != "--" && activeWifiSignalLv != 0) {
+            setTrayIconOfWifi(activeWifiSignalLv);
+            emit this->actWifiSignalLvChanaged(activeWifiSignalLv);
+        }
     } else if (actWifiName != "--" && activeWifiSignalLv != 0) {
         setTrayIconOfWifi(activeWifiSignalLv);
         emit this->actWifiSignalLvChanaged(activeWifiSignalLv);
@@ -2103,8 +2106,12 @@ void MainWindow::getConnListDone(QStringList slist)
             if (! is_stop_check_net_state) {
                 this->is_stop_check_net_state = 1;
                 BackThread *bt = new BackThread();
+//                connect(bt, SIGNAL(connDone(int)), this, SLOT(connWifiDone(int)));
+                connect(bt, &BackThread::connDone, this, [ = ](int res) {
+                    connWifiDone(res);
+                    bt->deleteLater();
+                });
                 bt->execConnWifi(lastAddedConn, objKyDBus->dbusWiFiCardName);
-                connect(bt, SIGNAL(connDone(int)), this, SLOT(connWifiDone(int)));
             }
         }
         oldConnSlist.clear();
@@ -2830,10 +2837,10 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
                 //ccf->setRate(wrate);
                 int signal;
-                if (wsignal.toInt() != 0)
+                if (wsignal.toInt() == 0)
                     signal = ccf->getSignal();
                 else
-                    signal = wsignal.toInt() + 11;
+                    signal = wsignal.toInt();
                 ccf->setSignal(QString::number(signal), wsecu, wcate, true);
                 setTrayIconOfWifi(wsignal.toInt());
                 activeWifiSignalLv = wsignal.toInt();
@@ -3963,6 +3970,7 @@ void MainWindow::onExternalWifiChange()
 //        //objKyDBus->showDesktopNotify(txt);
 //    }
     if (m_connected_by_self) {
+        is_stop_check_net_state = 0;
         m_connected_by_self = false;
         return;
     }

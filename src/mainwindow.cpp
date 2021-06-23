@@ -1055,7 +1055,10 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
         else {
             setTrayLoading(true);
         }
-
+        if (actWifiName != "--" && activeWifiSignalLv != 0) {
+            setTrayIconOfWifi(activeWifiSignalLv);
+            emit this->actWifiSignalLvChanaged(activeWifiSignalLv);
+        }
     } else if (actWifiName != "--" && activeWifiSignalLv != 0) {
         setTrayIconOfWifi(activeWifiSignalLv);
         emit this->actWifiSignalLvChanaged(activeWifiSignalLv);
@@ -2833,10 +2836,10 @@ void MainWindow::loadWifiListDone(QStringList slist)
 
                 //ccf->setRate(wrate);
                 int signal;
-                if (wsignal.toInt() != 0)
+                if (wsignal.toInt() == 0)
                     signal = ccf->getSignal();
                 else
-                    signal = wsignal.toInt() + 11;
+                    signal = wsignal.toInt();
                 ccf->setSignal(QString::number(signal), wsecu, wcate);
                 setTrayIconOfWifi(wsignal.toInt());
                 activeWifiSignalLv = wsignal.toInt();

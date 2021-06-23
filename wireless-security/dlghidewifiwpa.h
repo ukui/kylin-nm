@@ -60,9 +60,9 @@ private slots:
 
 //    void finishedProcess(int res);
 
-    void on_checkBoxPwd_pressed();
+    void on_checkBoxPwd_clicked();
 
-    void on_checkBoxPwd_released();
+//    void on_checkBoxPwd_released();
 
 signals:
     void reSetWifiList();

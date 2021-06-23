@@ -289,12 +289,14 @@ void OneLancForm::setIcon(bool isOn)
     if (isOn) {
         if (!QIcon::fromTheme("network-wired-connected-symbolic").isNull()) {
             ui->lbIcon->setPixmap(QIcon::fromTheme("network-wired-connected-symbolic").pixmap(32,32));
+            ui->lbIcon->setProperty("useIconHighlightEffect", 0x10);
         } else {
             ui->lbIcon->setPixmap(QIcon(":/res/l/network-online.png").pixmap(32,32));
         }
     } else {
         if (!QIcon::fromTheme("network-wired-disconnected-symbolic").isNull()) {
             ui->lbIcon->setPixmap(QIcon::fromTheme("network-wired-disconnected-symbolic").pixmap(32,32));
+            ui->lbIcon->setProperty("useIconHighlightEffect", 0x10);
         } else {
             ui->lbIcon->setPixmap(QIcon(":/res/l/network-offline.png").pixmap(32,32));
         }

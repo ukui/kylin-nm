@@ -66,7 +66,7 @@ public:
     ~OneConnForm();
 
     // category:1->normal protocol 1->wifi 6 2->wifi 6+
-    void setSignal(QString lv, QString secu,QString category = "0");
+    void setSignal(QString lv, QString secu, QString category = "0", bool hasSignalStrength = true);
     int getSignal();
     void setWifiName(QString name, QString bssid, QString uuid, QString isname, bool isHW, bool is9006C);
     QString getName();

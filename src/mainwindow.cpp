@@ -34,7 +34,6 @@
 #include <QtConcurrent>
 
 QString llname, lwname, hideWiFiConn;
-int currentActWifiSignalLv, count_loop;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -87,8 +86,6 @@ void MainWindow::firstlyStart()
     llname = "-1";
     lwname = "-1";
     hideWiFiConn = "Connect to Hidden WLAN Network";
-    currentActWifiSignalLv = -1;
-    count_loop = 0;
 
     createTrayIcon();
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
@@ -1616,7 +1613,7 @@ void MainWindow::on_btnWifiList_clicked()
         // 当前连接的wifi
         OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
         ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC, isHuaWei9006C);//"当前未连接任何 Wifi"
-        ccf->setSignal("0", "--", "0");
+        ccf->setSignal("0", "--", "0", false);
         ccf->setRate("0");
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
         ccf->isConnected = false;
@@ -2688,7 +2685,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     OneConnForm *ccf = new OneConnForm(topWifiListWidget, this, confForm, ksnm);
     if (actWifiName == "--" || wifiActState == 1 || actWifiBssidList.at(0) == "--" || actWifiBssid == " ") {
         ccf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC, isHuaWei9006C);//"当前未连接任何 Wifi"
-        ccf->setSignal("0", "--" , "0");
+        ccf->setSignal("0", "--" , "0", false);
         activeWifiSignalLv = 0;
         ccf->setConnedString(1, tr("Disconnected"), "");//"未连接"
         ccf->isConnected = false;
@@ -2808,7 +2805,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
             if (actWifiBssid == wbssid && wifiActState == 2) {
                 //对于已经连接的wifi
                 connect(this, &MainWindow::actWifiSignalLvChanaged, ccf, [ = ](const int &signalLv) {
-                    ccf->setSignal(QString::number(signalLv), wsecu, wcate);
+                    ccf->setSignal(QString::number(signalLv), wsecu, wcate, true);
                 });
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
                 connect(ccf, SIGNAL(requestHandleWifiDisconn()), this, SLOT(handleWifiDisconn()));
@@ -2844,7 +2841,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                     signal = ccf->getSignal();
                 else
                     signal = wsignal.toInt();
-                ccf->setSignal(QString::number(signal), wsecu, wcate);
+                ccf->setSignal(QString::number(signal), wsecu, wcate, true);
                 setTrayIconOfWifi(wsignal.toInt());
                 activeWifiSignalLv = wsignal.toInt();
                 //objKyDBus->getWifiMac(wname);
@@ -2899,7 +2896,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
                 }
                 //ocf->setRate(wrate);
                 ocf->setLine(true);
-                ocf->setSignal(wsignal, wsecu, wcate);
+                ocf->setSignal(wsignal, wsecu, wcate, true);
                 //objKyDBus->getWifiMac(wname);
                 ocf->setWifiInfo(wsecu, wsignal, wbssid, freqState);
                 ocf->setConnedString(0, tr("Disconnected"), wsecu);
@@ -3133,7 +3130,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
                 }
                 //addItem->setRate(wrate);
                 addItem->setLine(false);
-                addItem->setSignal(wsignal, wsecu, wcate);
+                addItem->setSignal(wsignal, wsecu, wcate, true);
                 //objKyDBus->getWifiMac(wname);
                 addItem->setWifiInfo(wsecu, wsignal, wbssid, freqState);
                 addItem->setConnedString(0, tr("Disconnected"), wsecu);//"未连接"
@@ -3815,7 +3812,7 @@ void MainWindow::disWifiDoneChangeUI()
         if (ocf->isActive == true) {
             ocf->setSelected(false, false);
             ocf->setWifiName(tr("Not connected"), "--", "--", "--", isHuaWeiPC, isHuaWei9006C);//"当前未连接任何 Wifi"
-            ocf->setSignal("0", "--", "0");
+            ocf->setSignal("0", "--", "0", false);
             ocf->setConnedString(1, tr("Disconnected"), "");//"未连接"
             ocf->lbFreq->hide();
             lbLoadDown->hide();

@@ -880,9 +880,13 @@ void OneConnForm::toConnectWirelessNetwork()
 //需要密码的wifi连接
 void OneConnForm::on_btnConnPWD_clicked()
 {
+    mw->m_is_inputting_wifi_password = false; //点击连接表示密码输入已完成
     m_connWithPwd = true;
     qDebug()<<"A button named btnConnPWD about wifi net is clicked.";
     if (lbPwdTip->isVisible()) {
+        QString modifyCmd = "nmcli connection modify \""+ wifiName + "\" " + "802-11-wireless-security.psk " + ui->lePassword->text();
+        int mdf_res = system(modifyCmd.toUtf8().data());
+        qDebug()<<"Modified wifi password, cmd="<<modifyCmd<<";res="<<mdf_res;
         lbPwdTip->hide();
         mw->m_wifi_list_pwd_changed.removeOne(wifiName);
     }
@@ -1118,7 +1122,7 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     }
 
     if (connFlag == 1  || connFlag == 4) {
-        if (!m_connWithPwd) {
+        if (!m_connWithPwd && hasPwd) {
             //用原有配置文件连接失败，显示密码错误
             qDebug()<<"Connected failed with old configuration. ssid="<<wifiName;
             if (mw)

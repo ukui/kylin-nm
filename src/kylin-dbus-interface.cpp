@@ -1330,7 +1330,7 @@ QString KylinDBus::getWifiSsid(QString accessPointPath)
 //检查wifi连接状态
 int KylinDBus::checkWifiConnectivity()
 {
-    int wifiState = 3;
+    int wifiState = WIFI_DISCONNECTED;
 
     QDBusInterface interface( "org.freedesktop.NetworkManager",
                               "/org/freedesktop/NetworkManager",

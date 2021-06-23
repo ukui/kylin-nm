@@ -896,6 +896,7 @@ void OneConnForm::on_btnConnPWD_clicked()
             passwdFile->close();
 //            cmdStr = "nmcli connection up " + wifiName + " passwd-file " + homePath +"/.config/" + wifiName + ".psk";
         }
+
         mw->is_stop_check_net_state = 1;
         QThread *t = new QThread();
         BackThread *bt = new BackThread();

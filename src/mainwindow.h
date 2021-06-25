@@ -184,6 +184,7 @@ public:
     bool isToSetWifiValue = true; //本次执行是否进行赋值
     bool isReconnectingWifi = false; //是否正在执行wifi的回连
     bool isReconnectingLan = false; //是否正在执行lan的回连
+    bool m_is_inputting_wifi_password = false; //是否正在输入密码
     int addNumberForWifi = 0; //短时间内收到关于wifi连接信号的次数
     bool isHuaWeiPC;
     bool isHuaWei9006C;

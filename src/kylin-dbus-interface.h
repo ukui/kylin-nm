@@ -33,6 +33,10 @@
 #include <QTimer>
 #include <QThread>
 
+#define WIFI_CONNECTING 1
+#define WIFI_CONNECTED 2
+#define WIFI_DISCONNECTED 3
+
 class MainWindow;
 class Utils;
 

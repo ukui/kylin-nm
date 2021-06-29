@@ -1053,11 +1053,7 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
         else {
             setTrayLoading(true);
         }
-        if (actWifiName != "--" && activeWifiSignalLv != 0) {
-            setTrayIconOfWifi(activeWifiSignalLv);
-            emit this->actWifiSignalLvChanaged(activeWifiSignalLv);
-        }
-    } else if (actWifiName != "--" && activeWifiSignalLv != 0) {
+    } else if (actLanName == "--" && actWifiName != "--" && activeWifiSignalLv != 0) {
         setTrayIconOfWifi(activeWifiSignalLv);
         emit this->actWifiSignalLvChanaged(activeWifiSignalLv);
     } else if (actWifiName == "--") {

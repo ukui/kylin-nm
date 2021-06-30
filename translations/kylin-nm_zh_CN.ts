@@ -1801,9 +1801,9 @@
 <context>
     <name>Utils</name>
     <message>
-        <location filename="../src/utils.cpp" line="89"/>
-        <source>kylin-nm</source>
-        <translation type="unfinished">网络工具</translation>
+        <location filename="../src/utils.cpp" line="84"/>
+        <source>Kylin NM</source>
+        <translation type="unfinished">麒麟网络设置工具</translation>
     </message>
     <message>
         <location filename="../src/utils.cpp" line="92"/>

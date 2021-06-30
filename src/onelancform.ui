@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>424</width>
-    <height>60</height>
+    <height>167</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -100,7 +100,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLineEdit" name="leInfo_1">
+   <widget class="QLabel" name="leInfo_1">
     <property name="geometry">
      <rect>
       <x>63</x>
@@ -109,8 +109,11 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
-   <widget class="QLineEdit" name="leInfo_2">
+   <widget class="QLabel" name="leInfo_2">
     <property name="geometry">
      <rect>
       <x>63</x>
@@ -119,8 +122,11 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
-   <widget class="QLineEdit" name="leInfo_3">
+   <widget class="QLabel" name="leInfo_3">
     <property name="geometry">
      <rect>
       <x>63</x>
@@ -129,8 +135,11 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
-   <widget class="QLineEdit" name="leInfo_4">
+   <widget class="QLabel" name="leInfo_4">
     <property name="geometry">
      <rect>
       <x>63</x>
@@ -138,6 +147,9 @@
       <width>238</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
    <zorder>leInfo_1</zorder>

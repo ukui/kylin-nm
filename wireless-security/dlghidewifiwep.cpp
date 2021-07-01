@@ -70,10 +70,10 @@ DlgHideWifiWep::DlgHideWifiWep(int type, QWidget *parent) :
     ui->lineUp->setStyleSheet(objQss.lineQss);
     ui->lineDown->setStyleSheet(objQss.lineQss);
 
-    ui->lbLeftupTitle->setText(tr("Add hidden Wi-Fi")); //加入隐藏Wi-Fi
+    ui->lbLeftupTitle->setText(tr("Add hidden WLAN")); //加入隐藏Wi-Fi
     ui->lbConn->setText(tr("Connection")); //连接设置:
     ui->lbNetName->setText(tr("Network name")); //网络名称:
-    ui->lbSecurity->setText(tr("Wi-Fi security")); //Wi-Fi 安全性:
+    ui->lbSecurity->setText(tr("WLAN security")); //Wi-Fi 安全性:
     ui->lbKey->setText(tr("Key")); //密钥:
     ui->lbWEPindex->setText(tr("WEP index")); //WEP 检索:
     ui->lbAuth->setText(tr("Authentication")); //认证:

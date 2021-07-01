@@ -342,7 +342,7 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
 
     QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
     if (security.contains("WPA3")) {
-        QString create_cmd = QString("nmcli connection add con-name %1 type wifi 802-11-wireless-security.key-mgmt sae ssid %2 802-11-wireless-security.psk %3").arg(connName).arg(connName).arg(password);
+        QString create_cmd = QString("nmcli connection add con-name \"1\" type wifi 802-11-wireless-security.key-mgmt sae ssid \"%2\" 802-11-wireless-security.psk %3").arg(connName).arg(connName).arg(password);
         Utils::m_system(create_cmd.toUtf8().data());
         QString connect_cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname " + ifname +" > " + tmpPath;
         Utils::m_system(connect_cmdStr.toUtf8().data());

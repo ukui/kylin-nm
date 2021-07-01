@@ -144,9 +144,8 @@ void KylinDBus::getObjectPath()
         multiWiredPaths.removeOne(mPath);
     }
 
-    foreach (QDBusObjectPath mPath, multiWirelessPaths) {
-        multiWirelessPaths.removeOne(mPath);
-    }
+    multiWirelessPaths.clear();
+
 
     QDBusInterface m_interface( "org.freedesktop.NetworkManager",
                               "/org/freedesktop/NetworkManager",

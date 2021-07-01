@@ -1042,33 +1042,40 @@ void OneConnForm::on_btnInfo_clicked()
     BackThread *bt = new BackThread();
     QString connProp = bt->getConnProp(wifiUuid);
     QStringList propList = connProp.split("|");
-    QString v4method, addr, mask, gateway, dns, v6method, v6addr;
+    ConnProperties connection;
+//    QString v4method, addr, mask, gateway, dns, v6method, v6addr;
     foreach (QString line, propList) {
         if (line.startsWith("method:")) {
-            v4method = line.split(":").at(1);
+            connection.v4method = line.split(":").at(1);
         }
         if (line.startsWith("v4addr:")) {
-            addr = line.split(":").at(1);
+            connection.v4addr = line.split(":").at(1);
         }
         if (line.startsWith("mask:")) {
-            mask = line.split(":").at(1);
+            connection.mask = line.split(":").at(1);
         }
         if (line.startsWith("v6method:")) {
-            v6method = line.split(":").at(1);
+            connection.v6method = line.split(":").at(1);
         }
         if (line.startsWith("v6addr:")) {
-            v6addr = line.right(line.length() - line.indexOf(":") - 1);
+            connection.v6addr = line.right(line.length() - line.indexOf(":") - 1);
         }
         if (line.startsWith("gateway:")) {
-            gateway= line.split(":").at(1);
+            connection.gateway= line.split(":").at(1);
         }
         if (line.startsWith("dns:")) {
-            dns = line.split(":").at(1);
+            connection.dns = line.split(":").at(1);
+        }
+        if (line.startsWith("type:")) {
+            connection.type = line.split(":").at(1);
         }
     }
+    connection.connName = wifiName;
+    connection.uuidName = wifiUuid;
+    connection.isActConf = this->isActive;
     // qDebug()<<"v4method:"<<v4method<<" addr:"<<addr<<" mask:"<<mask<<" gateway:"<<gateway<<" dns:"<<dns;
 
-    cf->setProp(wifiName, wifiUuid, v4method, addr, v6method, v6addr, mask, gateway, dns, this->isActive, true);
+    cf->setProp(connection);
     qDebug() << Q_FUNC_INFO << __LINE__ << wifiName << wifiUuid;
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();

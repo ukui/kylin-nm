@@ -589,6 +589,15 @@ QString BackThread::getConnProp(QString connName)
                 rtn += "dns:" + value + "|";
             }
         }
+
+        if (line.startsWith("connection.type:")) {
+            QString value = line.mid(16).trimmed();
+            if (value == "--" || value == "") {
+                rtn += "type:|";
+            } else {
+                rtn += "type:" + value + "|";
+            }
+        }
     }
 
     return rtn.left(rtn.length() - 1);

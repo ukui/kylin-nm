@@ -1781,7 +1781,8 @@ void MainWindow::getLanListDone(QStringList slist)
         bool isActiveNet = false; //isActiveNet用来表明nname是否是活动的连接
 
         //仅仅对有线网络进行添加列表处理
-        if (ltype != "802-11-wireless" && ltype != "wifi" && ltype != "bridge" && ltype != "bluetooth" && ltype != "" && ltype != "--") {
+//        if (ltype != "802-11-wireless" && ltype != "wifi" && ltype != "bridge" && ltype != "bluetooth" && ltype != "" && ltype != "--") {
+        if (ltype == "802-3-ethernet" || ltype == "ethernet" || ltype == "vpn") {
             objKyDBus->getLanIpDNS(nuuid, true); //使用UUID获取有线网的ip和dns信息
             QString macLan = getMacByUuid(nuuid); //有线网对应的mac地址
 

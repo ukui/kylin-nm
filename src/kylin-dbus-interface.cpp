@@ -144,6 +144,10 @@ void KylinDBus::getObjectPath()
         multiWiredPaths.removeOne(mPath);
     }
 
+    foreach (QDBusObjectPath mPath, multiWirelessPaths) {
+        multiWirelessPaths.removeOne(mPath);
+    }
+
     QDBusInterface m_interface( "org.freedesktop.NetworkManager",
                               "/org/freedesktop/NetworkManager",
                               "org.freedesktop.NetworkManager",
@@ -178,6 +182,11 @@ void KylinDBus::getObjectPath()
            wirelessPath = obj_path;
            isWirelessCardOn = true;
        }
+   }
+
+   for(int i = 0 ; i< multiWirelessPaths.size();i++)
+   {
+       qDebug() << "exist WirelessPaths:" << multiWirelessPaths.at(i).path();
    }
 }
 

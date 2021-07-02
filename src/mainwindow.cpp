@@ -716,8 +716,10 @@ void MainWindow::createTrayIcon()
     }
     iconWifiFull = QIcon::fromTheme("network-wireless-signal-excellent-symbolic");
     iconWifiHigh = QIcon::fromTheme("network-wireless-signal-good-symbolic");
-    iconWifiMedium = QIcon::fromTheme("network-wireless-signal-ok");
-    iconWifiLow = QIcon::fromTheme("network-wireless-signal-low");
+    iconWifiMedium = QIcon::fromTheme("network-wireless-signal-ok-symbolic").isNull() ?
+                    QIcon::fromTheme("network-wireless-signal-ok") : QIcon::fromTheme("network-wireless-signal-ok-symbolic");
+    iconWifiLow = QIcon::fromTheme("network-wireless-signal-weak-symbolic").isNull() ?
+                    QIcon::fromTheme("network-wireless-signal-low") : QIcon::fromTheme("network-wireless-signal-weak-symbolic");
 
     loadIcons.append(QIcon::fromTheme("kylin-network-1"));
     loadIcons.append(QIcon::fromTheme("kylin-network-2"));

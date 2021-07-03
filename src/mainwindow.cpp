@@ -1166,13 +1166,14 @@ void MainWindow::checkIfWiredNetExist()
 //无线网卡插拔处理
 void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
 {
+    qDebug() <<"add "<< objPath.path();
     //仅处理无线网卡插入情况
     objKyDBus->isWirelessCardOn = false;
     objKyDBus->getObjectPath();
     if (objKyDBus->multiWirelessPaths.isEmpty())
         return;
 
-    if (objKyDBus->multiWirelessPaths.at(0).path() == objPath.path()) { //证明添加的是无线网卡
+    if (objKyDBus->multiWirelessPaths.at(objKyDBus->multiWirelessPaths.size()-1).path() == objPath.path()) { //证明添加的是无线网卡
         is_wireless_adapter_ready = 0;
         if (objKyDBus->isWirelessCardOn) {
             //syslog(LOG_DEBUG,"wireless device is already plug in");
@@ -1186,21 +1187,25 @@ void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
 
 void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
 {
+    qDebug() <<"remove "<< objPath.path();
     if (objKyDBus->multiWirelessPaths.isEmpty())
         return;
     //仅处理无线网卡拔出情况
-    if (objKyDBus->multiWirelessPaths.at(0).path() == objPath.path()) {
-        objKyDBus->isWirelessCardOn = false;
-        objKyDBus->getObjectPath(); //检查是不是还有无线网卡
-        if (!objKyDBus->isWirelessCardOn) {
-            //syslog(LOG_DEBUG,"wireless device is already plug out");
-            qDebug()<<"wireless device is already plug out";
-            is_wireless_adapter_ready = 0;
-            onBtnWifiClicked(5);
-        } else {
-            objKyDBus->getWirelessCardName();
-            //syslog(LOG_DEBUG,"wireless device is already plug out, but one more wireless exist");
-            qDebug()<<"wireless device is already plug out, but one more wireless exist";
+
+    for (int i = 0; i < objKyDBus->multiWirelessPaths.size(); ++i) {
+        if (objKyDBus->multiWirelessPaths.at(i).path() == objPath.path()) {
+            objKyDBus->isWirelessCardOn = false;
+            objKyDBus->getObjectPath(); //检查是不是还有无线网卡
+            if (!objKyDBus->isWirelessCardOn) {
+                //syslog(LOG_DEBUG,"wireless device is already plug out");
+                qDebug()<<"wireless device is already plug out";
+                is_wireless_adapter_ready = 0;
+                onBtnWifiClicked(5);
+            } else {
+                objKyDBus->getWirelessCardName();
+                //syslog(LOG_DEBUG,"wireless device is already plug out, but one more wireless exist");
+                qDebug()<<"wireless device is already plug out, but one more wireless exist";
+            }
         }
     }
 }

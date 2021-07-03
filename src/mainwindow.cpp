@@ -169,9 +169,9 @@ void MainWindow::secondaryStart()
     }
     if (!lan_state.isNull() && lan_state.isValid()) {
         //设置lan开关状态
-        if (lan_state.toBool() && !btnWired->getSwitchStatus())
+        if (lan_state.toBool() && !btnWired->getSwitchStatus() && objKyDBus->isWiredCableOn)
             onBtnLanClicked(1);
-        else if (!lan_state.toBool() && btnWired->getSwitchStatus())
+        else
             onBtnLanClicked(0);
     }
     connect(btnWired, &SwitchButton::switchStatusChanged, this, [ = ]() {
@@ -180,12 +180,12 @@ void MainWindow::secondaryStart()
     connect(btnWireless, &SwitchButton::switchStatusChanged, this, [ = ]() {
         BackThread::saveSwitchButtonState(WIFI_SWITCH_OPENED, btnWireless->getSwitchStatus());
     });
-    if (!objKyDBus->isWiredCableOn) {
-        btnWired->blockSignals(true);
-        btnWired->setSwitchStatus(false);
-        btnWired->setEnabled(false);
-        btnWired->blockSignals(false);
-    }
+//    if (!objKyDBus->isWiredCableOn) {
+//        btnWired->blockSignals(true);
+//        btnWired->setSwitchStatus(false);
+//        btnWired->setEnabled(false);
+//        btnWired->blockSignals(false);
+//    }
 
     ui->btnNetList->setAttribute(Qt::WA_Hover,true);
     ui->btnNetList->installEventFilter(this);
@@ -1416,6 +1416,13 @@ void MainWindow::onBtnLanClicked(int flag)
         break;
     }
     case 1: {
+        objKyDBus->getPhysicalCarrierState(0);
+        if (!objKyDBus->isWiredCableOn) {
+            qWarning()<<"No ethernet device avaliable!";
+            QString txt(tr("No ethernet device avaliable"));
+            objKyDBus->showDesktopNotify(txt);
+            return;
+        }
         qDebug()<<"On btnWired clicked! will open switch button";
         QtConcurrent::run([=]() {
             QString open_device_cmd = "nmcli device set " + llname + " managed true";
@@ -1438,19 +1445,37 @@ void MainWindow::onBtnLanClicked(int flag)
         break;
     }
     case 4: {
-        btnWired->setEnabled(true);
-        qDebug()<<"Set btnwired enabled=true!";
-        //获取有线设备托管状态，是否需要打开开关
-        if (BackThread::execGetIface()->lstate != 2) {
-            emit this->onWiredDeviceChanged(true);
+        qDebug()<<"Wired device plug in!";
+//        btnWired->setEnabled(true);
+//        qDebug()<<"Set btnwired enabled=true!";
+        //获取上次设备拔出前的有线开关状态，以判断是否需要打开开关
+//        if (BackThread::execGetIface()->lstate != 2) {
+//            emit this->onWiredDeviceChanged(true);
+//        }
+        objKyDBus->getPhysicalCarrierState(0);
+        if (objKyDBus->isWiredCableOn) {
+            QVariant lan_state = BackThread::getSwitchState(LAN_SWITCH_OPENED);
+            if (!lan_state.isNull() && lan_state.isValid() && lan_state.toBool() && !btnWired->getSwitchStatus()) {
+                QString open_device_cmd = "nmcli device set " + llname + " managed true";
+                int res = system(open_device_cmd.toUtf8().data());
+                qDebug()<<"Trying to open ethernet device : "<<llname<<". res="<<res;
+                if (res == 0) {
+                    btnWired->blockSignals(true);
+                    emit this->onWiredDeviceChanged(true);
+                    btnWired->blockSignals(false);
+                } else {
+                    qWarning()<<"Open ethernet device failed!";
+                }
+            }
         }
         break;
     }
     case 5: {
+        qDebug()<<"Wired device plug out!";
         btnWired->blockSignals(true);
-        btnWired->setSwitchStatus(false);
-        qDebug()<<"Set btnwired enabled=false!";
-        btnWired->setEnabled(false);
+        emit this->onWiredDeviceChanged(false);
+//        qDebug()<<"Set btnwired enabled=false!";
+//        btnWired->setEnabled(false);
         btnWired->blockSignals(false);
         break;
     }
@@ -1945,11 +1970,15 @@ void MainWindow::getLanListDone(QStringList slist)
     oldLanSlist = slist;
     is_stop_check_net_state = 0;
     //有线网按钮状态校准
+    objKyDBus->getPhysicalCarrierState(0);
     if (btnWired->isEnabled() && !objKyDBus->isWiredCableOn) {
-        emit btnWired->clicked(5);
-    }
-    if (btnWired->isEnabled() && !btnWired->getSwitchStatus() && BackThread::execGetIface()->lstate != 2) {
+        btnWired->blockSignals(true);
+        btnWired->setSwitchStatus(false);
+        btnWired->blockSignals(false);
+    } else {
+        btnWired->blockSignals(true);
         btnWired->setSwitchStatus(true);
+        btnWired->blockSignals(false);
     }
 }
 

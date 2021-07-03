@@ -5,7 +5,7 @@
     <name>BackThread</name>
     <message>
         <source>Confirm your WLAN password</source>
-        <translation type="vanished">请再次确认WLAN密码</translation>
+        <translation type="vanished">请再次确认无线网络密码</translation>
     </message>
 </context>
 <context>
@@ -165,7 +165,7 @@
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="56"/>
         <source>Add Hidden WLAN</source>
-        <translation type="unfinished">加入隐藏WLAN</translation>
+        <translation type="unfinished">加入隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="57"/>
@@ -175,12 +175,12 @@
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="58"/>
         <source>WLAN name</source>
-        <translation type="unfinished">网络名称:</translation>
+        <translation type="unfinished">无线网络名称:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="59"/>
         <source>WLAN security</source>
-        <translation>WLAN 安全性:</translation>
+        <translation>无线网络安全性:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="60"/>
@@ -222,7 +222,7 @@
         <location filename="../wireless-security/dlghidewifi.cpp" line="161"/>
         <location filename="../wireless-security/dlghidewifi.cpp" line="246"/>
         <source>Confirm your WLAN password or usable of wireless card</source>
-        <translation type="unfinished">请确认WLAN密码或无线设备</translation>
+        <translation type="unfinished">请确认无线网络密码或无线设备</translation>
     </message>
     <message>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
@@ -239,7 +239,7 @@
     <message>
         <location filename="../wireless-security/dlghidewifi.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>连接到隐藏 WLAN 网络</translation>
+        <translation>连接到隐藏无线网络</translation>
     </message>
 </context>
 <context>
@@ -247,12 +247,12 @@
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>连接到隐藏 WLAN 网络</translation>
+        <translation>连接到隐藏无线网络</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="78"/>
         <source>Add hidden WLAN</source>
-        <translation type="unfinished">加入隐藏WLAN</translation>
+        <translation type="unfinished">加入隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="79"/>
@@ -267,7 +267,7 @@
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="81"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN 安全性:</translation>
+        <translation type="unfinished">无线网络安全性:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapfast.cpp" line="82"/>
@@ -385,12 +385,12 @@
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>连接到隐藏 WLAN 网络</translation>
+        <translation>连接到隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="68"/>
         <source>Add hidden WLAN</source>
-        <translation type="unfinished">加入隐藏WLAN</translation>
+        <translation type="unfinished">加入隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="69"/>
@@ -405,7 +405,7 @@
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="71"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN 安全性:</translation>
+        <translation type="unfinished">无线网络安全性:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapleap.cpp" line="72"/>
@@ -487,12 +487,12 @@
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>连接到隐藏 WLAN 网络</translation>
+        <translation>连接到隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.cpp" line="55"/>
         <source>Add hidden WLAN</source>
-        <translation type="unfinished">加入隐藏WLAN</translation>
+        <translation type="unfinished">加入隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.cpp" line="56"/>
@@ -507,7 +507,7 @@
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.cpp" line="58"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN 安全性:</translation>
+        <translation type="unfinished">无线网络安全性:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappeap.cpp" line="59"/>
@@ -636,12 +636,12 @@
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>连接到隐藏 WLAN 网络</translation>
+        <translation>连接到隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="69"/>
         <source>Add hidden WLAN</source>
-        <translation type="unfinished">加入隐藏WLAN</translation>
+        <translation type="unfinished">加入隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="70"/>
@@ -656,7 +656,7 @@
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="72"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN 安全性:</translation>
+        <translation type="unfinished">无线网络安全性:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieappwd.cpp" line="73"/>
@@ -738,12 +738,12 @@
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>连接到隐藏 WLAN 网络</translation>
+        <translation>连接到隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="84"/>
         <source>Add hidden WLAN</source>
-        <translation type="unfinished">加入隐藏WLAN</translation>
+        <translation type="unfinished">加入隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="85"/>
@@ -758,7 +758,7 @@
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="87"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN 安全性:</translation>
+        <translation type="unfinished">无线网络安全性:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieapttls.cpp" line="88"/>
@@ -876,12 +876,12 @@
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>连接到隐藏 WLAN 网络</translation>
+        <translation>连接到隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="54"/>
         <source>Add hidden WLAN</source>
-        <translation type="unfinished">加入隐藏WLAN</translation>
+        <translation type="unfinished">加入隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="55"/>
@@ -896,7 +896,7 @@
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="57"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN 安全性:</translation>
+        <translation type="unfinished">无线网络安全性:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifieaptls.cpp" line="58"/>
@@ -1020,12 +1020,12 @@
     <message>
         <location filename="../wireless-security/dlghidewifileap.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>连接到隐藏 WLAN 网络</translation>
+        <translation>连接到隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="63"/>
         <source>Add hidden WLAN</source>
-        <translation type="unfinished">加入隐藏WLAN</translation>
+        <translation type="unfinished">加入隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="64"/>
@@ -1040,7 +1040,7 @@
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="66"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN 安全性:</translation>
+        <translation type="unfinished">无线网络安全性:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifileap.cpp" line="67"/>
@@ -1107,12 +1107,12 @@
     <message>
         <location filename="../wireless-security/dlghidewifiwep.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>连接到隐藏 WLAN 网络</translation>
+        <translation>连接到隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="68"/>
         <source>Add hidden WLAN</source>
-        <translation type="unfinished">加入隐藏WLAN</translation>
+        <translation type="unfinished">加入隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="69"/>
@@ -1127,7 +1127,7 @@
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="71"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN 安全性:</translation>
+        <translation type="unfinished">无线网络安全性:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwep.cpp" line="72"/>
@@ -1214,12 +1214,12 @@
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>连接到隐藏 WLAN 网络</translation>
+        <translation>连接到隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="60"/>
         <source>Add Hidden WLAN</source>
-        <translation type="unfinished">加入隐藏WLAN</translation>
+        <translation type="unfinished">加入隐藏无线网</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="61"/>
@@ -1229,12 +1229,12 @@
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="62"/>
         <source>WLAN name</source>
-        <translation type="unfinished">网络名称:</translation>
+        <translation type="unfinished">无线网络名称:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="63"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN 安全性:</translation>
+        <translation type="unfinished">无线网络安全性:</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="64"/>
@@ -1281,7 +1281,7 @@
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="170"/>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="259"/>
         <source>Confirm your WLAN password or usable of wireless card</source>
-        <translation type="unfinished">请确认WLAN密码或无线设备</translation>
+        <translation type="unfinished">请确认无线网络密码或无线设备</translation>
     </message>
     <message>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
@@ -1320,7 +1320,7 @@
     <message>
         <location filename="../hot-spot/dlghotspotcreate.cpp" line="48"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN 安全性:</translation>
+        <translation type="unfinished">无线网络安全性:</translation>
     </message>
     <message>
         <location filename="../hot-spot/dlghotspotcreate.cpp" line="49"/>
@@ -1386,20 +1386,14 @@
         <translation>有线网络</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="443"/>
+        <location filename="../src/mainwindow.cpp" line="1554"/>
+        <source>WLAN</source>
+        <translation>无线局域网</translation>
+    </message>
+    <message>
         <source>Connect Hide Network</source>
         <translation type="vanished">加入网络</translation>
-    </message>
-    <message>
-        <source>WLAN</source>
-        <translation type="vanished">无线网络</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="vanished">已开启</translation>
-    </message>
-    <message>
-        <source>Disabled</source>
-        <translation type="vanished">已关闭</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="385"/>
@@ -1475,14 +1469,6 @@
         <translation type="unfinished">以太网连接</translation>
     </message>
     <message>
-        <source>WLAN already disconnect</source>
-        <translation type="obsolete">WLAN已经断开</translation>
-    </message>
-    <message>
-        <source>WLAN already connected external</source>
-        <translation type="obsolete">WLAN已经连接</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.cpp" line="3072"/>
         <source>Wired net is disconnected</source>
         <translation type="unfinished">有线网络断开</translation>
@@ -1539,22 +1525,22 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="3692"/>
         <source>Confirm your WLAN password or usable of wireless card</source>
-        <translation type="unfinished">请确认WLAN密码或无线设备</translation>
+        <translation type="unfinished">请确认无线网络密码或无线设备</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="3698"/>
         <source>Confirm your WLAN password</source>
-        <translation type="unfinished">请再次确认WLAN密码</translation>
+        <translation type="unfinished">请再次确认无线网络密码</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="3702"/>
         <source>Selected WLAN has not been scanned.</source>
-        <translation type="unfinished">当前区域未扫描到选中的WLAN</translation>
+        <translation type="unfinished">当前区域未扫描到选中的无线网络</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="3705"/>
         <source>Connect Hidden WLAN Success</source>
-        <translation type="unfinished">连接隐藏WLAN成功</translation>
+        <translation type="unfinished">连接隐藏无线网成功</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="230"/>
@@ -1586,30 +1572,6 @@
         <location filename="../src/mainwindow.cpp" line="254"/>
         <source>WLAN Networks</source>
         <translation>可用无线网络列表</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="vanished">无</translation>
-    </message>
-    <message>
-        <source>keep wired network switch is on before turning on wireless switch</source>
-        <translation type="vanished">打开无线网开关前保持有线网开关打开</translation>
-    </message>
-    <message>
-        <source>please insert the wireless network adapter</source>
-        <translation type="vanished">请先插入无线网卡</translation>
-    </message>
-    <message>
-        <source>Abnormal connection exist, program will delete it</source>
-        <translation type="vanished">正在断开异常连接的网络</translation>
-    </message>
-    <message>
-        <source>update WLAN list now, click again</source>
-        <translation type="vanished">正在更新 WLAN 列表 请再次点击</translation>
-    </message>
-    <message>
-        <source>update WLAN list now</source>
-        <translation type="vanished">正在更新 WLAN列表</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="3606"/>
@@ -1678,14 +1640,6 @@
         <translation>属 性</translation>
     </message>
     <message>
-        <source>Input Password...</source>
-        <translation type="obsolete">输入密码...</translation>
-    </message>
-    <message>
-        <source>Connect to Hidden WLAN Network</source>
-        <translation type="vanished">连接到隐藏 WLAN 网络</translation>
-    </message>
-    <message>
         <location filename="../src/oneconnform.cpp" line="511"/>
         <source>Signal：</source>
         <translation type="unfinished">信号强度：</translation>
@@ -1716,7 +1670,7 @@
     <message>
         <location filename="../src/oneconnform.cpp" line="510"/>
         <source>WLAN Security：</source>
-        <translation type="unfinished">WLAN安全性：</translation>
+        <translation type="unfinished">无线网络安全性：</translation>
     </message>
     <message>
         <location filename="../src/oneconnform.cpp" line="512"/>
@@ -1731,7 +1685,7 @@
     <message>
         <location filename="../src/oneconnform.cpp" line="618"/>
         <source>Confirm your WLAN password or usable of wireless card</source>
-        <translation type="unfinished">请确认WLAN密码或无线设备</translation>
+        <translation type="unfinished">请确认无线网络密码或无线设备</translation>
     </message>
 </context>
 <context>
@@ -1816,27 +1770,27 @@
     <message>
         <location filename="../src/wificonfigdialog.cpp" line="22"/>
         <source>WLAN Authentication</source>
-        <translation type="unfinished">WLAN 认证</translation>
+        <translation type="unfinished">无线网络认证</translation>
     </message>
     <message>
         <location filename="../src/wificonfigdialog.cpp" line="26"/>
         <source>Input WLAN Information Please</source>
-        <translation type="unfinished">输入WLAN名称和密码后点击确定</translation>
+        <translation type="unfinished">输入无线网络名称和密码后点击确定</translation>
     </message>
     <message>
         <location filename="../src/wificonfigdialog.cpp" line="27"/>
         <source>WLAN ID：</source>
-        <translation type="unfinished">WLAN连接名称：</translation>
+        <translation type="unfinished">无线连接名称：</translation>
     </message>
     <message>
         <location filename="../src/wificonfigdialog.cpp" line="28"/>
         <source>WLAN Name:</source>
-        <translation type="unfinished">WLAN名称：</translation>
+        <translation type="unfinished">无线网络名称：</translation>
     </message>
     <message>
         <location filename="../src/wificonfigdialog.cpp" line="29"/>
         <source>Password：</source>
-        <translation type="unfinished">WLAN密码：</translation>
+        <translation type="unfinished">无线网络密码：</translation>
     </message>
     <message>
         <location filename="../src/wificonfigdialog.cpp" line="30"/>

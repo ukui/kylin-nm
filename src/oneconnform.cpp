@@ -539,55 +539,49 @@ void OneConnForm::setSignal(QString lv, QString secu, QString category, bool has
         hasPwd = true;
     }
 
-    QString signalStyle;
+    QString signalIcon;
     if (isHuaweiPC) {
-        signalStyle = "QLabel{border-radius:0px;background:url(:/res/hw/wifi";
+        signalIcon = "QLabel{border-radius:0px;background:url(:/res/hw/wifi";
     } else {
-        signalStyle = "QLabel{border-radius:0px;background:url(:/res/w/wifi";
+        signalIcon = "network-wireless-signal-";
     }
 
     if (isHuaWei9006C) {
         if ("1" == category) {
-            signalStyle += "6";
+            signalIcon += "6";
         } else if ("2" == category) {
-            signalStyle += "6+";
+            signalIcon += "6+";
         }
     }
 
     if (signal > 75) {
-        if (hasPwd) {
-            signalStyle += "-full-pwd.png);}";
-        } else {
-            signalStyle += "-full.png);}";
-        }
+        signalIcon += isHuaweiPC ? (hasPwd ? "-full-pwd.png);}" : "-full.png);}") :
+                                   (hasPwd ? "excellent-secure-symbolic" : "excellent-symbolic");
     }
     if (signal > 55 && signal <= 75) {
-        if (hasPwd) {
-            signalStyle += "-high-pwd.png);}";
-        } else {
-            signalStyle += "-high.png);}";
-        }
+        signalIcon += isHuaweiPC ? (hasPwd ? "-high-pwd.png);}" : "-high.png);}") :
+                                   (hasPwd ? "good-secure-symbolic" : "good-symbolic");
     }
     if (signal > 35 && signal <= 55) {
-        if (hasPwd) {
-            signalStyle += "-medium-pwd.png);}";
-        } else {
-            signalStyle += "-medium.png);}";
-        }
+        signalIcon += isHuaweiPC ? (hasPwd ? "-medium-pwd.png);}" : "-medium.png);}") :
+                                   (hasPwd ? "ok-secure-symbolic" : "ok-symbolic");
     }
     if (signal <= 35) {
         if (hasSignalStrength) {
-            if (hasPwd) {
-                signalStyle += "-low-pwd.png);}";
-            } else {
-                signalStyle += "-low.png);}";
-            }
+            signalIcon += isHuaweiPC ? (hasPwd ? "-low-pwd.png);}" : "-low.png);}") :
+                                       (hasPwd ? "weak-secure-symbolic" : "weak-symbolic");
         } else {
-            signalStyle += "-none.png);}";
+            signalIcon += isHuaweiPC ? "-none.png);}" :
+                                       (hasPwd ? "none-secure-symbolic" : "none-symbolic");
         }
     }
 
-    ui->lbSignal->setStyleSheet(signalStyle);
+    if (!isHuaweiPC) {
+        ui->lbSignal->setPixmap(QIcon::fromTheme(signalIcon).pixmap(32, 32));
+        ui->lbSignal->setProperty("useIconHighlightEffect", 0x10);
+    } else {
+        ui->lbSignal->setStyleSheet(signalIcon);
+    }
 }
 
 int OneConnForm::getSignal()
@@ -1042,33 +1036,40 @@ void OneConnForm::on_btnInfo_clicked()
     BackThread *bt = new BackThread();
     QString connProp = bt->getConnProp(wifiUuid);
     QStringList propList = connProp.split("|");
-    QString v4method, addr, mask, gateway, dns, v6method, v6addr;
+    ConnProperties connection;
+//    QString v4method, addr, mask, gateway, dns, v6method, v6addr;
     foreach (QString line, propList) {
         if (line.startsWith("method:")) {
-            v4method = line.split(":").at(1);
+            connection.v4method = line.split(":").at(1);
         }
         if (line.startsWith("v4addr:")) {
-            addr = line.split(":").at(1);
+            connection.v4addr = line.split(":").at(1);
         }
         if (line.startsWith("mask:")) {
-            mask = line.split(":").at(1);
+            connection.mask = line.split(":").at(1);
         }
         if (line.startsWith("v6method:")) {
-            v6method = line.split(":").at(1);
+            connection.v6method = line.split(":").at(1);
         }
         if (line.startsWith("v6addr:")) {
-            v6addr = line.right(line.length() - line.indexOf(":") - 1);
+            connection.v6addr = line.right(line.length() - line.indexOf(":") - 1);
         }
         if (line.startsWith("gateway:")) {
-            gateway= line.split(":").at(1);
+            connection.gateway= line.split(":").at(1);
         }
         if (line.startsWith("dns:")) {
-            dns = line.split(":").at(1);
+            connection.dns = line.split(":").at(1);
+        }
+        if (line.startsWith("type:")) {
+            connection.type = line.split(":").at(1);
         }
     }
+    connection.connName = wifiName;
+    connection.uuidName = wifiUuid;
+    connection.isActConf = this->isActive;
     // qDebug()<<"v4method:"<<v4method<<" addr:"<<addr<<" mask:"<<mask<<" gateway:"<<gateway<<" dns:"<<dns;
 
-    cf->setProp(wifiName, wifiUuid, v4method, addr, v6method, v6addr, mask, gateway, dns, this->isActive, true);
+    cf->setProp(connection);
     qDebug() << Q_FUNC_INFO << __LINE__ << wifiName << wifiUuid;
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();

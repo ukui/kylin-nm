@@ -1201,8 +1201,11 @@ void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
             if (!objKyDBus->isWirelessCardOn) {
                 //syslog(LOG_DEBUG,"wireless device is already plug out");
                 qDebug()<<"wireless device is already plug out";
+                dbus_wifiList.clear();
+                dbus_wifiList.append(QStringList("--"));
                 is_wireless_adapter_ready = 0;
                 onBtnWifiClicked(5);
+                emit this->getWifiListFinished();
             } else {
                 objKyDBus->getWirelessCardName();
                 //syslog(LOG_DEBUG,"wireless device is already plug out, but one more wireless exist");
@@ -1210,6 +1213,7 @@ void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
             }
         }
     }
+
 }
 
 void MainWindow::checkIsWirelessDevicePluggedIn()
@@ -4585,6 +4589,11 @@ void MainWindow::priScreenChanged(int x, int y, int width, int height)
 // 通过kds的dbus发现rfkill状态变化
 void MainWindow::onRfkillStatusChanged()
 {
+    if (checkWlOn()) {
+        btnWireless->setSwitchStatus(true);
+    } else {
+        btnWireless->setSwitchStatus(false);
+    }
     if (canExecHandleWifiSwitchChange) {
         canExecHandleWifiSwitchChange = false;
         qDebug() << "收到信号了，开始处理wifi开关的处理问题";

@@ -1967,6 +1967,20 @@ void MainWindow::onRequestRevalueUpdateWifi()
     }
 }
 
+void MainWindow::setBtnWirelessStatus() {
+    QThread *btnStatus = new QThread();
+    BackThread *backThread = new BackThread();
+    backThread->moveToThread(btnStatus);
+    connect(btnStatus, &QThread::started, backThread, &BackThread::getInitStatus);
+    connect(backThread, &BackThread::wifiStatus, this, [=] (bool status) {
+        btnWireless->setSwitchStatus(status);
+        btnStatus->quit(); //退出事件循环
+        btnStatus->wait(); //释放资源
+    });
+    connect(btnStatus, SIGNAL(finished()), btnStatus, SLOT(deleteLater()));
+    connect(backThread, SIGNAL(getWifiStatusComplete()), btnStatus, SLOT(quit()));
+    btnStatus->start();
+}
 // 获取wifi列表回调
 void MainWindow::getWifiListDone(QStringList slist)
 {
@@ -4589,21 +4603,7 @@ void MainWindow::priScreenChanged(int x, int y, int width, int height)
 // 通过kds的dbus发现rfkill状态变化
 void MainWindow::onRfkillStatusChanged()
 {
-    if (!isHuaWeiPC) {
-        if (checkWlOn()) {
-            btnWireless->setSwitchStatus(true);
-        } else {
-            btnWireless->setSwitchStatus(false);
-        }
-    } else {
-        if (checkWlOn()) {
-            objKyDBus->setWifiSwitchState(false);
-            btnWireless->setSwitchStatus(true);
-        } else {
-            objKyDBus->setWifiSwitchState(true);
-            btnWireless->setSwitchStatus(true);
-        }
-    }
+    setBtnWirelessStatus();
     if (canExecHandleWifiSwitchChange) {
         canExecHandleWifiSwitchChange = false;
         qDebug() << "收到信号了，开始处理wifi开关的处理问题";

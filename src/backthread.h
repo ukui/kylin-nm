@@ -35,6 +35,12 @@
 #define WIFI_SWITCH_OPENED "wifi_switch_opened"
 #define LAN_SWITCH_OPENED "lan_switch_opened"
 
+#define DEVICE_CONNECTED 0
+#define DEVICE_DISCONNECTED 1
+#define DEVICE_UNMANAGED 2
+#define DEVICE_CONNECTING 3
+#define DEVICE_UNAVALIABLE 4
+
 class IFace{
 public:
     QString lname;

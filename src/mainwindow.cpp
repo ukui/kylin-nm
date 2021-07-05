@@ -574,7 +574,7 @@ void MainWindow::initNetwork()
         if (iface->wstate == 0) {
             connWifiDone(3);
         } else {
-            if (iface->lstate == 0) {
+            if (iface->lstate == DEVICE_CONNECTED) {
                 connLanDone(3);
             }
         }
@@ -585,8 +585,8 @@ void MainWindow::initNetwork()
         ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
     } else {
         objKyDBus->setWifiSwitchState(false); //通知控制面板wifi未开启
-        if (iface->lstate != 2) {
-            if (iface->lstate == 0) {
+        if (iface->lstate != DEVICE_UNMANAGED) {
+            if (iface->lstate == DEVICE_CONNECTED) {
                 connLanDone(3);
             }
             onBtnNetListClicked();
@@ -1085,7 +1085,7 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
             while (1) {
                 BackThread *bt = new BackThread();
                 IFace *iface = bt->execGetIface();
-                if (iface->lstate != 0) {
+                if (iface->lstate != DEVICE_CONNECTED) {
                     is_stop_check_net_state = 1;
                     sleep(2);
                     //wiredCableDownTimer->start(2000);
@@ -1530,17 +1530,14 @@ void MainWindow::onBtnNetListClicked(int flag)
         return;
     }
 
-    if (iface->lstate == 0 || iface->lstate == 1 ||  iface->lstate == 4) {
+    if (iface->lstate == DEVICE_CONNECTED || iface->lstate == DEVICE_DISCONNECTED ||  iface->lstate == DEVICE_CONNECTING) {
         this->startLoading();
         this->ksnm->execGetLanList();
-    } else if (iface->lstate == 3) {
+    } else {
         this->ksnm->isUseOldLanSlist = true;
         QStringList slistLan;
         slistLan.append("empty");
         getLanListDone(slistLan);
-    } else {
-        this->startLoading();
-        this->ksnm->execGetLanList();
     }
 
     this->scrollAreal->show();
@@ -1970,8 +1967,8 @@ void MainWindow::getLanListDone(QStringList slist)
     oldLanSlist = slist;
     is_stop_check_net_state = 0;
     //有线网按钮状态校准
-    objKyDBus->getPhysicalCarrierState(0);
-    if (btnWired->isEnabled() && !objKyDBus->isWiredCableOn) {
+    IFace *iface = BackThread::execGetIface();
+    if (iface && (iface->lstate == DEVICE_UNAVALIABLE || iface->lstate == DEVICE_UNMANAGED)) {
         btnWired->blockSignals(true);
         btnWired->setSwitchStatus(false);
         btnWired->blockSignals(false);
@@ -1980,6 +1977,8 @@ void MainWindow::getLanListDone(QStringList slist)
         btnWired->setSwitchStatus(true);
         btnWired->blockSignals(false);
     }
+    if (iface)
+        delete iface;
 }
 
 // 获取wifi列表回调

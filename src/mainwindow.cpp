@@ -1149,8 +1149,11 @@ void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
             if (!objKyDBus->isWirelessCardOn) {
                 //syslog(LOG_DEBUG,"wireless device is already plug out");
                 qDebug()<<"wireless device is already plug out";
+                dbus_wifiList.clear();
+                dbus_wifiList.append(QStringList("--"));
                 is_wireless_adapter_ready = 0;
                 onBtnWifiClicked(5);
+                emit this->getWifiListFinished();
             } else {
                 objKyDBus->getWirelessCardName();
                 //syslog(LOG_DEBUG,"wireless device is already plug out, but one more wireless exist");
@@ -1158,6 +1161,7 @@ void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
             }
         }
     }
+
 }
 
 void MainWindow::checkIsWirelessDevicePluggedIn()
@@ -1939,9 +1943,24 @@ void MainWindow::onRequestRevalueUpdateWifi()
     }
 }
 
+void MainWindow::setBtnWirelessStatus() {
+    QThread *btnStatus = new QThread();
+    BackThread *backThread = new BackThread();
+    backThread->moveToThread(btnStatus);
+    connect(btnStatus, &QThread::started, backThread, &BackThread::getInitStatus);
+    connect(backThread, &BackThread::wifiStatus, this, [=] (bool status) {
+        btnWireless->setSwitchStatus(status);
+        btnStatus->quit(); //退出事件循环
+        btnStatus->wait(); //释放资源
+    });
+    connect(btnStatus, SIGNAL(finished()), btnStatus, SLOT(deleteLater()));
+    connect(backThread, SIGNAL(getWifiStatusComplete()), btnStatus, SLOT(quit()));
+    btnStatus->start();
+}
 // 获取wifi列表回调
 void MainWindow::getWifiListDone(QStringList slist)
 {
+    setBtnWirelessStatus();
     //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldWifiSlist) {
         slist = oldWifiSlist;

@@ -114,6 +114,25 @@ IFace* BackThread::execGetIface()
     return iface;
 }
 
+void BackThread::getInitStatus() {
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+    //　获取当前wifi是否打开
+    QDBusReply<QVariant> m_result = interface.call("Get", "org.freedesktop.NetworkManager", "WirelessEnabled");
+
+    if (m_result.isValid()) {
+        bool status = m_result.value().toBool();
+        emit wifiStatus(status);
+        emit getWifiStatusComplete();
+    } else {
+        qDebug()<<"org.freedesktop.NetworkManager get invalid"<<endl;
+        emit wifiStatus(false);
+        emit getWifiStatusComplete();
+    }
+}
+
 void BackThread::saveSwitchButtonState(const QString &key, const QVariant &value)
 {
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);

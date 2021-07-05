@@ -85,7 +85,7 @@ public slots:
     void onReadOutputLan();
     void onReadErrorLan();
     void dellConnectLanResult(QString info);
-
+    void getInitStatus();
 signals:
     void enNetDone();
     void disNetDone();
@@ -93,7 +93,8 @@ signals:
     void enWifiDoneByRfkill();
     void disWifiDone();
     void disWifiDoneByRfkill();
-
+    void wifiStatus(bool status);
+    void getWifiStatusComplete();
     void connDone(int connFlag);
 
     void btFinish();

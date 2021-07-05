@@ -278,6 +278,7 @@ private:
     bool checkWlOn();
     void getLanList();
     void getWifiList();
+    void setBtnWirelessStatus();
     void initLanSlistAndGetReconnectNetList();
     QPixmap drawSymbolicColoredPixmap(const QPixmap &source);
     QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);

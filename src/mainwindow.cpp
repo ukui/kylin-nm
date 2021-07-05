@@ -1984,6 +1984,7 @@ void MainWindow::setBtnWirelessStatus() {
 // 获取wifi列表回调
 void MainWindow::getWifiListDone(QStringList slist)
 {
+    setBtnWirelessStatus();
     //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldWifiSlist) {
         slist = oldWifiSlist;
@@ -4603,7 +4604,6 @@ void MainWindow::priScreenChanged(int x, int y, int width, int height)
 // 通过kds的dbus发现rfkill状态变化
 void MainWindow::onRfkillStatusChanged()
 {
-    setBtnWirelessStatus();
     if (canExecHandleWifiSwitchChange) {
         canExecHandleWifiSwitchChange = false;
         qDebug() << "收到信号了，开始处理wifi开关的处理问题";

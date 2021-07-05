@@ -2564,6 +2564,10 @@ bool MainWindow::subDevListSort(const structWifiProperty &info1, const structWif
 // 加载wifi列表
 void MainWindow::loadWifiListDone(QStringList slist)
 {
+    if (this->is_btnLanList_clicked == 1) {
+        onlyRefreshWifiList(slist);
+        return;
+    }
 //    qDebug() << "kkkkkkkkkkkkkkkkkkkkkkkk";
 //    foreach (QString kkkkk, slist) {
 //        qDebug() << kkkkk;
@@ -2960,6 +2964,10 @@ void MainWindow::loadWifiListDone(QStringList slist)
 // 更新wifi列表
 void MainWindow::updateWifiListDone(QStringList slist)
 {
+    if (this->is_btnLanList_clicked == 1) {
+        onlyRefreshWifiList(slist);
+        return;
+    }
     qDebug()<<"Refreshed wifi list.";
     if (hasWifiConnected) {
         lbLoadDown->show();
@@ -3155,6 +3163,224 @@ void MainWindow::updateWifiListDone(QStringList slist)
     this->wifiListWidget->show();
     this->topWifiListWidget->show();
     this->stopLoading();
+    emit this->getWifiListFinished();
+}
+
+/**
+ * @brief MainWindow::onlyRefreshWifiList 当停留在有线页面时，不重绘列表，仅更新
+ * @param slist
+ */
+void MainWindow::onlyRefreshWifiList(QStringList slist)
+{
+    dbus_wifiList.clear();
+    // 获取当前无线网的连接状态，正在连接wifiActState==1，已经连接wifiActState==2, 未连接wifiActState==3
+    int wifiActState = objKyDBus->checkWifiConnectivity(); //检查wifi的连接状态
+    if (wifiActState == WIFI_CONNECTED) {
+        m_isWifiConnected = true;
+    } else {
+        m_isWifiConnected = false;
+    }
+    QList<QString> currConnWifiBSsidUuid;
+    currConnWifiBSsidUuid = objKyDBus->getAtiveWifiBSsidUuid(slist);
+
+    // 获取当前连接的wifi name
+    QString actWifiName = "--";
+    QString actWifiId = "--";
+    actWifiSsid = "--";
+    actWifiUuid = "--";
+    if (currConnWifiBSsidUuid.size() > 1) {
+        actWifiUuid = currConnWifiBSsidUuid.at(0);
+        for (int i=1; i<currConnWifiBSsidUuid.size(); i++) {
+            actWifiBssidList.append(currConnWifiBSsidUuid.at(i));
+        }
+    } else {
+        actWifiBssidList.append("--");
+    }
+
+    activecon *act = kylin_network_get_activecon_info();
+    int index = 0;
+    while (act[index].con_name != NULL) {
+        if (QString(act[index].type) == "wifi" || QString(act[index].type) == "802-11-wireless") {
+            actWifiName = QString(act[index].con_name);
+            break;
+        }
+        index ++;
+    }
+
+    QString headLine = slist.at(0);
+    int indexSignal,indexSecu, indexFreq, indexBSsid, indexName, indexPath, indexCate;
+    headLine = headLine.trimmed();
+
+    bool isChineseExist = headLine.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+    if (isChineseExist) {
+        indexSignal = headLine.indexOf("SIGNAL");
+        indexSecu = headLine.indexOf("安全性");
+        indexFreq = headLine.indexOf("频率") + 4;
+        indexBSsid = headLine.indexOf("BSSID") + 6;
+        indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
+        indexName = headLine.lastIndexOf("SSID");
+    } else {
+        indexSignal = headLine.indexOf("SIGNAL");
+        indexSecu = headLine.indexOf("SECURITY");
+        indexFreq = headLine.indexOf("FREQ");
+        indexBSsid = headLine.indexOf("BSSID");
+        indexPath = headLine.indexOf("DBUS-PATH");
+        indexCate = headLine.indexOf("CATEGORY");
+        indexName = headLine.lastIndexOf("SSID");
+    }
+    QStringList wnames;
+    QString actWifiBssid = " ";
+    for (int i = 1; i < slist.size(); i ++) {
+        QString line = slist.at(i);
+        QString wbssid = line.mid(indexBSsid, 17).trimmed();
+        int Path = line.indexOf("/org/");
+        QString wDbusPath;
+        if (indexCate >= 0) {
+            wDbusPath = line.mid(Path,indexCate-Path).trimmed();
+        } else {
+            wDbusPath = line.mid(Path,indexName-Path).trimmed();
+        }
+        QDBusInterface interface("org.freedesktop.NetworkManager",
+                                  wDbusPath,
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+        QDBusReply<QVariant> reply = interface.call("Get","org.freedesktop.NetworkManager.AccessPoint","Ssid");
+        QString wname = reply.value().toString();
+
+        if (actWifiBssidList.contains(wbssid)) {
+            actWifiName = wname;
+        }
+        if ("*" == line.mid(0,indexSignal).trimmed()) {
+            //在华为的电脑中，因为前面的优选工作，即使有已经连接的wifi，也可能会被筛选出去
+            actWifiBssid = wbssid;
+        }
+    }
+
+    if (actWifiName == "--" || wifiActState == WIFI_CONNECTING || actWifiBssidList.at(0) == "--" || actWifiBssid == " ") {
+        dbus_wifiList.append(QStringList("--")); //没有已连接wifi时，第一个元素为--
+    } else {
+        QProcess * process = new QProcess;
+        QString name = actWifiName;
+        process->start(QString("nmcli -f 802-11-wireless.ssid connection show \"%1\"").arg(name));
+        connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+            process->deleteLater();
+        });
+        connect(process, &QProcess::readyReadStandardOutput, this, [ = ]() {
+            QString str = process->readAllStandardOutput();
+            actWifiSsid = str.mid(str.lastIndexOf(" ") + 1, str.length() - str.lastIndexOf(" ") - 2); //获取到ssid时，以ssid为准
+        });
+        connect(process, &QProcess::readyReadStandardError, this, [ = ]() {
+            actWifiSsid = actWifiName; //没有获取到ssid时，以wifi名为准
+        });
+        process->waitForFinished();
+        process->deleteLater();
+    }
+
+    if (actWifiBssidList.size()==1 && actWifiBssidList.at(0)=="--") {
+        actWifiId = actWifiName;
+        actWifiName = "--";
+    }
+    for (int i = 1, j = 0; i < slist.size(); i ++) {
+        QString line = slist.at(i);
+        QString wsignal = line.mid(indexSignal, 3).trimmed();
+        QString wsecu = line.mid(indexSecu, indexFreq - indexSecu).trimmed();
+        QString wbssid = line.mid(indexBSsid, 17).trimmed();
+        QString wfreq = line.mid(indexFreq, 4).trimmed();
+        QString wcate;
+        if (indexCate >= 0)
+            wcate = line.mid(indexCate, 1).trimmed();
+        else
+            wcate = QString::number(0);
+        QString wDbusPath;
+        if (indexCate >= 0) {
+            wDbusPath = line.mid(indexPath,indexCate-indexPath).trimmed();
+        } else {
+            wDbusPath = line.mid(indexPath,indexName-indexPath).trimmed();
+        }
+        QDBusInterface interface("org.freedesktop.NetworkManager",
+                                  wDbusPath,
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+        QDBusReply<QVariant> reply = interface.call("Get","org.freedesktop.NetworkManager.AccessPoint","Ssid");
+        QString wname = reply.value().toString();
+
+        if (!isHuaWeiPC) {
+            //如果不是华为的电脑，选择wifi在这里执行
+            if (actWifiName != "--" && actWifiName == wname) {
+                if (!actWifiBssidList.contains(wbssid)) {
+                    continue; //若当前热点ssid名称和已经连接的wifi的ssid名称相同，但bssid不同，则跳过
+                }
+            }
+            if ((wnames.contains(wname) && wbssid != actWifiBssid)) {
+                continue; //过滤相同名称的wifi
+            }
+        } else {
+            if ((wnames.contains(wname) && wbssid != actWifiBssid)) {
+                continue; //过滤相同名称的wifi
+            }
+        }
+
+        int max_freq = wfreq.toInt();
+        int min_freq = wfreq.toInt();
+        for (int k = i; k < slist.size(); k ++) {
+            QString m_DbusPath;
+            if (indexCate >= 0) {
+                m_DbusPath = slist.at(k).mid(indexPath,indexCate-indexPath).trimmed();
+            } else {
+                m_DbusPath = slist.at(k).mid(indexPath,indexName-indexPath).trimmed();
+            }
+            QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                                    m_DbusPath,
+                                    "org.freedesktop.DBus.Properties",
+                                    QDBusConnection::systemBus() );
+            QDBusReply<QVariant> m_reply = m_interface.call("Get","org.freedesktop.NetworkManager.AccessPoint","Ssid");
+            QString m_name = m_reply.value().toString();
+
+            if (wname == m_name) {
+                if (slist.at(k).mid(indexFreq, 4).trimmed().toInt() > max_freq) {
+                    max_freq = slist.at(k).mid(indexFreq, 4).trimmed().toInt();
+                } else if (slist.at(k).mid(indexFreq, 4).trimmed().toInt() < min_freq) {
+                    min_freq = slist.at(k).mid(indexFreq, 4).trimmed().toInt();
+                }
+            }
+        }
+        if (wname != "" && wname != "--") {
+            QString path;
+            if (indexCate >= 0) {
+                path = line.mid(indexPath, indexCate - indexPath).trimmed();
+            } else {
+                path = line.mid(indexPath, indexName - indexPath).trimmed();
+            }
+            QString m_name;
+            if (path != "" && !path.isEmpty()) m_name= this->objKyDBus->getWifiSsid(path);
+            if (actWifiBssid == wbssid && wifiActState == WIFI_CONNECTED) {
+                //对于已经连接的wifi
+                if (m_name.isEmpty() || m_name == "") {
+                    dbus_wifiList.insert(0, QStringList()<<wname<<wsignal<<wsecu<<QString::number(max_freq)<<QString::number(min_freq)<<wcate);
+                } else {
+                    dbus_wifiList.insert(0, QStringList()<<m_name<<wsignal<<wsecu<<QString::number(max_freq)<<QString::number(min_freq)<<wcate);
+                }
+            } else {
+                //对于未连接的wifi
+                j ++;
+                if (m_name.isEmpty() || m_name == "") {
+                    dbus_wifiList.append(QStringList()<<wname<<wsignal<<wsecu<<QString::number(max_freq)<<QString::number(min_freq)<<wcate);
+                } else {
+                    dbus_wifiList.append(QStringList()<<m_name<<wsignal<<wsecu<<QString::number(max_freq)<<QString::number(min_freq)<<wcate);
+                }
+            }
+            wnames.append(wname);
+        }
+    }
+
+    if (!this->isReconnectingWifi)
+        this->stopLoading();
+    is_stop_check_net_state = 0;
+    is_connect_hide_wifi = 0;
+
+    actWifiBssidList.clear();
+    wnames.clear();
     emit this->getWifiListFinished();
 }
 

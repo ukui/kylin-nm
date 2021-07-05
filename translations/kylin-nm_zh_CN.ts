@@ -1416,6 +1416,11 @@
         <translation type="unfinished">未检测到无线网卡</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="1239"/>
+        <source>No ethernet device avaliable</source>
+        <translation type="unfinished">未检测到有线设备</translation>
+    </message>
+    <message>
         <location filename="../src/mainwindow.cpp" line="1376"/>
         <location filename="../src/mainwindow.cpp" line="1486"/>
         <location filename="../src/mainwindow.cpp" line="2142"/>

@@ -62,8 +62,8 @@ IFace* BackThread::execGetIface()
     QStringList txtList = txt.split("\n");
     file.close();
 
-    iface->lstate = 2;
-    iface->wstate = 2;
+    iface->lstate = DEVICE_UNMANAGED;
+    iface->wstate = DEVICE_UNMANAGED;
 
     for (int i = 1; i < txtList.size(); i ++) {
         QString line = txtList.at(i);
@@ -76,21 +76,21 @@ IFace* BackThread::execGetIface()
             QString istateStr = lastStr.mid(index2).trimmed();
 
             //只要存在一个有线设备已连接，就不再扫描其他有线设备状态，避免有线被误断开
-            if (type == "ethernet" && iface->lstate != 0) {
+            if (type == "ethernet" && iface->lstate != DEVICE_CONNECTED) {
                 // if type is wired network
                 iface->lname = iname;
 
                 if (istateStr == "unmanaged") {
-                    iface->lstate = 2; //switch of wired device is off
+                    iface->lstate = DEVICE_UNMANAGED; //switch of wired device is off
                 } else if (istateStr == "unavailable") {
-                    iface->lstate = 4;
+                    iface->lstate = DEVICE_UNAVALIABLE;
                 } else if (istateStr == "disconnected") {
-                    iface->lstate = 1; //wired network is disconnected
+                    iface->lstate = DEVICE_DISCONNECTED; //wired network is disconnected
                 } else if (istateStr == "connected" || istateStr == "connecting (getting IP configuration)") {
-                    iface->lstate = 0; //wired network is connected
+                    iface->lstate = DEVICE_CONNECTED; //wired network is connected
                 } else {
                     //连接中，正在配置
-                    iface->lstate = 3;
+                    iface->lstate = DEVICE_CONNECTING;
                 }
             }
             if (type == "wifi" && iface->wname.isEmpty()) { //仅统计第一个无线网卡，后续无线网卡状态必然等于或差与第一个获取到的无线网卡
@@ -140,7 +140,7 @@ void BackThread::execEnNet()
     Utils::m_system(chr);
 
     while (1) {
-        if (execGetIface()->lstate != 2) {
+        if (execGetIface()->lstate != DEVICE_UNMANAGED) {
             sleep(3);
             emit enNetDone();
             emit btFinish();
@@ -171,7 +171,7 @@ void BackThread::execDisNet()
     Utils::m_system(chr1);
 
     while (1) {
-        if (execGetIface()->lstate == 2) {
+        if (execGetIface()->lstate == DEVICE_UNMANAGED) {
             emit disNetDone();
             emit btFinish();
             break;

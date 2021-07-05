@@ -4589,10 +4589,20 @@ void MainWindow::priScreenChanged(int x, int y, int width, int height)
 // 通过kds的dbus发现rfkill状态变化
 void MainWindow::onRfkillStatusChanged()
 {
-    if (checkWlOn()) {
-        btnWireless->setSwitchStatus(true);
+    if (!isHuaWeiPC) {
+        if (checkWlOn()) {
+            btnWireless->setSwitchStatus(true);
+        } else {
+            btnWireless->setSwitchStatus(false);
+        }
     } else {
-        btnWireless->setSwitchStatus(false);
+        if (checkWlOn()) {
+            objKyDBus->setWifiSwitchState(false);
+            btnWireless->setSwitchStatus(true);
+        } else {
+            objKyDBus->setWifiSwitchState(true);
+            btnWireless->setSwitchStatus(true);
+        }
     }
     if (canExecHandleWifiSwitchChange) {
         canExecHandleWifiSwitchChange = false;

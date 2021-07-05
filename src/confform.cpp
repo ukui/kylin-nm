@@ -741,7 +741,7 @@ void ConfForm::setEnableOfBtn()
     }
 
     if (ui->cbType->currentIndex() == 1) {
-        if (ui->leAddr->text().isEmpty() && ui->leAddr_ipv6->text().isEmpty()) {
+        if (ui->leAddr->text().isEmpty() && ui->leAddr_ipv6->text().isEmpty() || ui->leGateway->text().isEmpty() || ui->leDns->text().isEmpty()) {
             //当ipv4和ipv6地址均未设置时，禁止保存
             this->setBtnEnableFalse();
             return;

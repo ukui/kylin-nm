@@ -103,11 +103,14 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与连接按钮绑定在一起
     ui->btnConnSub->setShortcut(Qt::Key_Return);//点击连接按钮触发回车键
 
+    m_networkConnect = new KyNetworkConnect();
+
     srand((unsigned)time(NULL));
 }
 
 OneLancForm::~OneLancForm()
 {
+    delete m_networkConnect;
     delete ui;
 }
 
@@ -332,7 +335,8 @@ void OneLancForm::on_btnDisConn_clicked()
     //使用有线网ssid断开网络
     //kylin_network_set_con_down(ssidName.toUtf8().data());
     //使用有线网uuid断开网络
-    kylin_network_set_con_down(uuidName.toUtf8().data());
+    //kylin_network_set_con_down(uuidName.toUtf8().data());
+    m_networkConnect->deactivateConnection(ui->lbName->text(), uuidName);
     //使用dbus接口断开网络
     //toDisConnWiredNetwork(uuidName);
 
@@ -402,6 +406,7 @@ void OneLancForm::toConnectWiredNetwork()
     }
 
     mw->is_stop_check_net_state = 1;
+/*
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);
@@ -411,6 +416,9 @@ void OneLancForm::toConnectWiredNetwork()
     connect(bt, SIGNAL(connDone(int)), mw, SLOT(connLanDone(int)));
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     t->start();
+    */
+
+    m_networkConnect->activateConnection(uuidName);
 }
 
 //点击列表中item扩展后显示信息的位置时，执行该函数，用于显示网络配置界面

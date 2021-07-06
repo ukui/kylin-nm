@@ -15,11 +15,13 @@ LANGUAGE = C++
 CONFIG += c++14
 CONFIG += qt warn_on
 #CONFIG += release
-#CONFIG += link_pkgconfig
+CONFIG += link_pkgconfig
 
-#PKGCONFIG += glib-2.0 gio-2.0 gsettings-qt
+PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm
 
-LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11
+INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
+
+LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt
 #LIBS  +=  -lkysec
 target.path = /usr/bin
 target.source += $$TARGET
@@ -62,6 +64,8 @@ include(src/singleapplication/qt-single-application.pri)
 
 SOURCES += \
     src/backthread.cpp \
+    src/kylinnetworkconnect.cpp \
+    src/kylinnetworkresourcemanager.cpp \
     src/wifi-auth-thread.cpp \
     src/confform.cpp \
     src/dbusadaptor.cpp \
@@ -94,6 +98,8 @@ SOURCES += \
 
 HEADERS += \
     src/backthread.h \
+    src/kylinnetworkconnect.h \
+    src/kylinnetworkresourcemanager.h \
     src/wifi-auth-thread.h \
     src/confform.h \
     src/dbusadaptor.h \

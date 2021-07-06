@@ -26,6 +26,7 @@
 #include "kylin-network-interface.h"
 #include "utils.h"
 #include "switchbutton.h"
+#include "kylinnetworkresourcemanager.h"
 
 #include <fcntl.h>
 #include <sys/types.h>
@@ -377,6 +378,8 @@ private:
     bool m_connected_by_self = false; //是否在本进程执行的连接操作
     QDBusInterface *mDbusXrandInter;
     QDBusInterface *kdsDbus;
+
+    KyNetworkResourceManager *m_networkResourceInstance = nullptr;
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);

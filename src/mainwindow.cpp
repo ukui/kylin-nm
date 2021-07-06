@@ -109,6 +109,9 @@ void MainWindow::firstlyStart()
  */
 void MainWindow::secondaryStart()
 {
+    m_networkResourceInstance = KyNetworkResourceManager::getInstance();
+    //m_networkResourceInstance = new KyNetworkResourceManager();
+
     if (m_load_finished)
         return;
     // 连接kds的dbus接收rfkill变化的信号&获取当前WIFI状态

@@ -169,7 +169,7 @@ void MainWindow::secondaryStart()
     }
     if (!lan_state.isNull() && lan_state.isValid()) {
         //设置lan开关状态
-        if (lan_state.toBool() && !btnWired->getSwitchStatus() && objKyDBus->isWiredCableOn)
+        if (lan_state.toBool() && objKyDBus->isWiredCableOn)
             onBtnLanClicked(1);
         else
             onBtnLanClicked(0);

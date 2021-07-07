@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 //    QApplication a(argc, argv);
     QString id = QString("kylin-nm"+ QLatin1String(getenv("DISPLAY")));
     QtSingleApplication a(id, argc, argv);
-    qInstallMessageHandler(messageOutput);
+    //qInstallMessageHandler(messageOutput);
     if (a.isRunning()) {
         auto connection = QDBusConnection::sessionBus();
         QDBusInterface iface("com.kylin.network",

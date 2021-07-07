@@ -198,19 +198,29 @@
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="73"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="71"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="74"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="72"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="75"/>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="73"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation>WPA 及 WPA2 企业</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="74"/>
+        <source>WPA2 and WPA3 Personal</source>
+        <translation type="unfinished">WPA2 及 WPA3 个人</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifi.cpp" line="75"/>
+        <source>WPA3 Personal</source>
+        <translation type="unfinished">WPA3 个人</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifi.cpp" line="156"/>
@@ -1257,19 +1267,29 @@
         <translation type="unfinished">新建...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="77"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="76"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="78"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="77"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished">WPA 及 WPA2 个人</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="79"/>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="78"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2 企业</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="79"/>
+        <source>WPA2 and WPA3 Personal</source>
+        <translation type="unfinished">WPA2 及 WPA3 个人</translation>
+    </message>
+    <message>
+        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="80"/>
+        <source>WPA3 Personal</source>
+        <translation type="unfinished">WPA3 个人</translation>
     </message>
     <message>
         <location filename="../wireless-security/dlghidewifiwpa.cpp" line="165"/>
@@ -1895,6 +1915,16 @@
         <location filename="../src/wpawifidialog.cpp" line="309"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished">WPA 及 WPA2企业</translation>
+    </message>
+    <message>
+        <location filename="../src/wpawifidialog.cpp" line="317"/>
+        <source>WPA2 and WPA3 Personal</source>
+        <translation type="unfinished">WPA2 及 WPA3个人</translation>
+    </message>
+    <message>
+        <location filename="../src/wpawifidialog.cpp" line="318"/>
+        <source>WPA3 Personal</source>
+        <translation type="unfinished">WPA3个人</translation>
     </message>
     <message>
         <source>Wireless card not exist</source>

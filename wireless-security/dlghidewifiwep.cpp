@@ -161,7 +161,7 @@ void DlgHideWifiWep::changeDialog()
     } else if(ui->cbxSecurity->currentIndex()==1) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0);
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(1, 0);
         connHidWifiWpa->show();
     } else if(ui->cbxSecurity->currentIndex()==2) {
         if (WepPwdOrCode == 1) {

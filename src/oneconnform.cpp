@@ -48,7 +48,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnCancel->setText(tr("Cancel"));//取消连接
 
     ui->lbConned->setAlignment(Qt::AlignLeft);
-    ui->lePassword->setEchoMode(QLineEdit::Normal);
+    ui->lePassword->setEchoMode(QLineEdit::Password);
+    ui->checkBoxPwd->setChecked(false);
     ui->lePassword->setContextMenuPolicy(Qt::NoContextMenu);
     ui->lePassword->setTextMargins(0,0,24,0);
     ui->btnConnPWD->setEnabled(false);
@@ -112,7 +113,6 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->leInfo_3->hide();
     ui->lePassword->hide();
     ui->checkBoxPwd->hide();
-    ui->checkBoxPwd->setChecked(true);
     ui->btnConnSub->hide();
     ui->btnConn->hide();
     ui->btnDisConn->hide();
@@ -433,8 +433,8 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName)
         resize(W_ITEM, H_ITEM);
         ui->lePassword->setText("");
         ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;background:rgba(0,0,0,0.2);}");
-        ui->lePassword->setEchoMode(QLineEdit::Normal);
-        ui->checkBoxPwd->setChecked(true);
+        ui->lePassword->setEchoMode(QLineEdit::Password);
+        ui->checkBoxPwd->setChecked(false);
 
         ui->line->move(X_LINE, Y_LINE);
         ui->wbg->show();
@@ -1169,8 +1169,9 @@ void OneConnForm::slotConnWifiResult(int connFlag)
 
         //设置输入密码框被选中
         ui->lePassword->setFocus();
-        ui->lePassword->setEchoMode(QLineEdit::Password);
-        ui->checkBoxPwd->setChecked(false);
+//        ui->lePassword->setEchoMode(QLineEdit::Password);
+        ui->lePassword->selectAll();
+//        ui->checkBoxPwd->setChecked(false);
     }
 
     this->stopWifiWaiting(true);

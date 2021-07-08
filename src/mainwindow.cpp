@@ -1438,13 +1438,17 @@ void MainWindow::onBtnLanClicked(int flag)
 
 void MainWindow::setLanSwitchStatus(bool is_opened)
 {
+    btnWired->blockSignals(true);
     if (is_opened) {
         btnWired->setSwitchStatus(true);
-        ksnm->execGetLanList();
     } else {
         btnWired->setSwitchStatus(false);
-        ksnm->execGetLanList();
     }
+    btnWired->blockSignals(false);
+    QTimer::singleShot(100, this, [=](){
+        //加一点点延时再刷新列表，避免刚刚触发设备开关时刷新列表调用的dbus卡住
+        ksnm->execGetLanList();
+    });
 }
 
 void MainWindow::onBtnNetListClicked(int flag)

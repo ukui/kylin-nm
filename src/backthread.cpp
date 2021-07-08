@@ -421,11 +421,15 @@ void BackThread::execConnHiddenWifiWPA(QString wifiName, QString wifiPassword)
            || text.indexOf("No network with SSID") != -1){
             x = 1;
             sleep(10);//nm扫描冷却为10s
-        } else {
+        } else if(text.indexOf("Secrets were required, but not provided") != -1){//SSID正确但密码错误的情况
+            emit connDone(4);
+            x = 0;
+        }else{
+            qDebug()<<"Connect hidden wifi success,recoding to the shell output:"<<text;
             emit connDone(6);
             x = 0;
         }
-    } while (x == 1);
+    } while (x);
 
     emit btFinish();
 }

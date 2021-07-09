@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2020 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "kylinnetworkresourcemanager.h"
 
 KyNetworkResourceManager* KyNetworkResourceManager::m_pInstance = nullptr;
@@ -72,6 +90,7 @@ void KyNetworkResourceManager::addActiveConnection(NetworkManager::ActiveConnect
     connect(conn.data(), &NetworkManager::ActiveConnection::typeChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::masterChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::specificObjectChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
+        connect(conn.data(), &NetworkManager::ActiveConnection::stateChangedReason, this, &KyNetworkResourceManager::onActiveConnectionChangedReason);
     connect(conn.data(), &NetworkManager::ActiveConnection::stateChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::vpnChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::uuidChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
@@ -133,7 +152,7 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
 {
     m_devices.push_back(device);
     //device signals
-    connect(device.data(), &NetworkManager::Device::stateChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
+    //connect(device.data(), &NetworkManager::Device::stateChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::activeConnectionChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::autoconnectChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::availableConnectionChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
@@ -158,6 +177,7 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
     connect(device.data(), &NetworkManager::Device::meteredChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::connectionStateChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::stateReasonChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
+    connect(device.data(), &NetworkManager::Device::stateChanged, this, &KyNetworkResourceManager::onDeviceStateChanged);
     connect(device.data(), &NetworkManager::Device::udiChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     switch (device->type())
     {
@@ -344,9 +364,32 @@ void KyNetworkResourceManager::onActiveConnectionUpdated()
     emit activeConnectionUpdate(qobject_cast<NetworkManager::ActiveConnection *>(sender()));
 }
 
+void KyNetworkResourceManager::onActiveConnectionChangedReason(NetworkManager::ActiveConnection::State state,
+                                      NetworkManager::ActiveConnection::Reason reason)
+{
+    qWarning()<<"the active connect state"<<state;
+    qWarning()<<"the active connect state chanager reason:"<<reason;
+    return;
+}
+
 void KyNetworkResourceManager::onDeviceUpdated()
 {
     emit deviceUpdate(qobject_cast<NetworkManager::Device *>(sender()));
+}
+
+void KyNetworkResourceManager::onDeviceStateChanged(
+                    NetworkManager::Device::State newstate,
+                    NetworkManager::Device::State oldstate,
+                    NetworkManager::Device::StateChangeReason reason)
+{
+    NetworkManager::WiredDevice *wiredDevice = qobject_cast<NetworkManager::WiredDevice *>(sender());
+    if (wiredDevice->carrier()) {
+        qWarning()<<"the device carrier true";
+    } else {
+        qWarning()<<"the device carrier false";
+    }
+
+    qWarning()<<"the device state "<<oldstate << "to" <<newstate << "reason"<< reason;
 }
 
 void KyNetworkResourceManager::onWifiNetworkAppeared(QString const & ssid)

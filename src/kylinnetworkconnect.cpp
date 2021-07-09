@@ -1,13 +1,179 @@
+/*
+ * Copyright (C) 2020 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+ *
+ */
+
 #include "kylinnetworkconnect.h"
+
+#include <NetworkManagerQt/AdslDevice>
+#include <NetworkManagerQt/WiredDevice>
+#include <NetworkManagerQt/Ipv4Setting>
+#include <NetworkManagerQt/Ipv6Setting>
+#include <NetworkManagerQt/WiredSetting>
 
 KyNetworkConnect::KyNetworkConnect()
 {
+    qDebug()<<"construct network connect";
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
 }
 
 KyNetworkConnect::~KyNetworkConnect()
 {
     m_networkResourceInstance = nullptr;
+}
+
+void KyNetworkConnect::ipv4SettingInit(
+        NetworkManager::Ipv4Setting::Ptr &ipv4Setting,
+        const KyConnectInfo &connectInfo)
+{
+    ipv4Setting->setInitialized(true);
+
+    if (CONFIG_IP_DHCP == connectInfo.m_ipv4ConfigIpType) {
+        ipv4Setting->setMethod(NetworkManager::Ipv4Setting::Automatic);
+        return;
+    } else {
+        ipv4Setting->setMethod(NetworkManager::Ipv4Setting::Manual);
+    }
+
+    if (!connectInfo.m_ipv4Dns.empty()) {
+        ipv4Setting->setDns(connectInfo.m_ipv4Dns);
+    }
+
+    if (!connectInfo.m_ipv4Address.empty()) {
+        ipv4Setting->setAddresses(connectInfo.m_ipv4Address);
+    }
+
+    return;
+}
+void KyNetworkConnect::ipv6SettingInit(
+        NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
+        const KyConnectInfo &connectInfo)
+{
+    ipv6Setting->setInitialized(true);
+
+    if (CONFIG_IP_DHCP == connectInfo.m_ipv6ConfigIpType) {
+        ipv6Setting->setMethod(NetworkManager::Ipv6Setting::Automatic);
+        return;
+    }
+
+    ipv6Setting->setMethod(NetworkManager::Ipv6Setting::Manual);
+    if (!connectInfo.m_ipv6Dns.empty()) {
+        ipv6Setting->setDns(connectInfo.m_ipv6Dns);
+    }
+
+    if (!connectInfo.m_ipv6Address.empty()) {
+        ipv6Setting->setAddresses(connectInfo.m_ipv6Address);
+    }
+
+    return ;
+}
+
+void KyNetworkConnect::connectSettingInit(
+        NetworkManager::ConnectionSettings::Ptr connectionSettings,
+        const KyConnectInfo &connectInfo)
+{
+    connectionSettings->setId(connectInfo.m_connectName);
+    connectionSettings->setUuid(NetworkManager::ConnectionSettings::createNewUuid());
+    connectionSettings->setAutoconnect(true);
+    connectionSettings->setAutoconnectPriority(0);
+    connectionSettings->setInterfaceName(connectInfo.m_ifaceName);
+    return;
+}
+
+void KyNetworkConnect::createWiredConnect(const KyConnectInfo &connectInfo)
+{
+    NetworkManager::ConnectionSettings::Ptr connectionSettings = NetworkManager::ConnectionSettings::Ptr(new NetworkManager::ConnectionSettings(NetworkManager::ConnectionSettings::Wired));
+    connectSettingInit(connectionSettings, connectInfo);
+
+    NetworkManager::Ipv4Setting::Ptr ipv4Setting = connectionSettings->setting(NetworkManager::Setting::Ipv4).dynamicCast<NetworkManager::Ipv4Setting>();
+    ipv4SettingInit(ipv4Setting, connectInfo);
+
+    NetworkManager::Ipv6Setting::Ptr ipv6Setting = connectionSettings->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
+    ipv6SettingInit(ipv6Setting, connectInfo);
+
+    NetworkManager::WiredSetting::Ptr wiredSetting = connectionSettings->setting(NetworkManager::Setting::Wired).dynamicCast<NetworkManager::WiredSetting>();
+    wiredSetting->setInitialized(true);
+
+    qDebug()<<"add wired connect"<<connectInfo.m_connectName;
+
+    QDBusPendingCallWatcher * watcher;
+    watcher = new QDBusPendingCallWatcher{NetworkManager::addConnection(connectionSettings->toMap()), this};
+    connect(watcher, &QDBusPendingCallWatcher::finished, [](QDBusPendingCallWatcher * watcher) {
+        if (watcher->isError() || !watcher->isValid()) {
+            //TODO: in what form should we output the warning messages
+            qWarning() << "create connection failed: " << watcher->error().message();
+         } else {
+            qWarning()<<"success"<<watcher->reply().errorName() <<"error msg"<<watcher->reply().errorMessage();
+            qWarning()<<"error type"<<watcher->error().type();
+         }
+         watcher->deleteLater();
+    });
+
+    return;
+}
+
+void KyNetworkConnect::createConnect(KyConnectType connectType, const KyConnectInfo &connectInfo)
+{
+    switch (connectType) {
+        case WIRED_CONNECT:
+            qDebug()<<"create wired connect";
+            createWiredConnect(connectInfo);
+            break;
+        default:
+            qWarning()<<"the connect type undefined"<<connectType;
+            break;
+    }
+
+    return;
+}
+
+void KyNetworkConnect::updateConnect(const QString &connectUuid, const KyConnectInfo &connectInfo)
+{
+    qDebug()<<"update connect"<<connectUuid;
+    NetworkManager::Connection::Ptr connectPtr =
+            NetworkManager::findConnectionByUuid(connectUuid);
+
+    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
+    connectSettingInit(connectionSettings, connectInfo);
+
+    NetworkManager::Ipv4Setting::Ptr ipv4Setting = connectionSettings->setting(NetworkManager::Setting::Ipv4).dynamicCast<NetworkManager::Ipv4Setting>();
+    ipv4SettingInit(ipv4Setting, connectInfo);
+
+    NetworkManager::Ipv6Setting::Ptr ipv6Setting = connectionSettings->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
+    ipv6SettingInit(ipv6Setting, connectInfo);
+
+    NetworkManager::WiredSetting::Ptr wiredSetting = connectionSettings->setting(NetworkManager::Setting::Wired).dynamicCast<NetworkManager::WiredSetting>();
+    wiredSetting->setInitialized(true);
+
+    connectPtr->update(connectionSettings->toMap());
+
+    return ;
+}
+
+void KyNetworkConnect::deleteConnect(const QString &connectUuid)
+{
+
+    qWarning()<<"TODO:delete connect ";
+
+    NetworkManager::Connection::Ptr connectPtr =
+            NetworkManager::findConnectionByUuid(connectUuid);
+
+    connectPtr->remove();
+
+    return ;
 }
 
 int KyNetworkConnect::activateConnection(const QString connectUuid)
@@ -70,9 +236,12 @@ int KyNetworkConnect::activateConnection(const QString connectUuid)
     connect(watcher, &QDBusPendingCallWatcher::finished, [conn_name, dev_name] (QDBusPendingCallWatcher * watcher) {
         if (watcher->isError() || !watcher->isValid()) {
             //TODO: in what form should we output the warning messages
-            qWarning() << QStringLiteral("activation of connection '%1' on interface '%2' failed: %3").arg(conn_name)
-                    .arg(dev_name).arg(watcher->error().message());
+            qWarning() << "activate  connection failed: " << watcher->error().message();
+         } else {
+            qWarning()<<"success"<<watcher->reply().errorName() <<"error msg"<<watcher->reply().errorMessage();
+            qWarning()<<"error type"<<watcher->error().type();
          }
+
          watcher->deleteLater();
     });
 

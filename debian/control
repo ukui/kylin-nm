@@ -15,6 +15,8 @@ Build-Depends: debhelper (>=9),
                libkf5windowsystem-dev,
                libx11-dev,
                libqt5svg5-dev,
+               libkf5networkmanagerqt-dev (>= 5.36.0),
+	       libnm-dev,
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: https://github.com/ukui/kylin-nm

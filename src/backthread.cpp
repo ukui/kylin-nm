@@ -550,7 +550,7 @@ void BackThread::execConnHiddenWifiWPA(int secuType, QString wifiName, QString w
             emit connDone(6);
             x = 0;
         }
-    } while (x == 1);
+    } while (x);
 
     emit btFinish();
 }

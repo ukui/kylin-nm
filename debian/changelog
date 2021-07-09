@@ -1,6 +1,14 @@
+kylin-nm (3.0.1-1kylin57) v101; urgency=medium
+
+  * BUG号：#63907 #51262 #65498 #65502 #61100 #61346 #61517 #65961
+  * 需求号：无
+  * 其他改动：无
+
+ -- zhangjiaping <zhangjiaping@kylinos.cn>  Fri, 09 Jul 2021 10:00:56 +0800
+
 kylin-nm (3.0.1-1kylin56) v101; urgency=medium
 
-  * BUG号：#61887 #61255 #62956 #56352
+  * BUG号：#61187 #61255 #62956 #56352
   * 需求号：无
   * 其他改动：无
 

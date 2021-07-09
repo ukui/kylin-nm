@@ -28,10 +28,17 @@
 #include <QDialog>
 #include <QListView>
 #include "kylin-dbus-interface.h"
+#include "kylinnetworkconnect.h"
+#include "kylinconnectinfo.h"
 
 namespace Ui {
 class ConfForm;
 }
+
+enum{
+    DHCP_IP = 0,
+    MANUAL_IP = 1,
+};
 
 class ConfForm : public QDialog
 {
@@ -90,6 +97,7 @@ private:
     bool check_ip_conflict(QString ifname);
     void onConfformHide();
     bool isEditingAlready();    //连接按钮是否可被按
+    void connectInfoConstruct(KyConnectInfo &connectInfo);
 
     bool isPress;
     QPoint winPos;
@@ -104,6 +112,9 @@ private:
     bool isIpv6Conflict = false; //ipv6地址是否冲突
 
     QString labelQss, cbxQss, leQss, lineQss, btnOnQss, btnOffQss;
+
+    KyNetworkConnect m_networkConnect;
+    QString m_ifaceName;
 
 signals:
     void requestRefreshLanList(int updateType);

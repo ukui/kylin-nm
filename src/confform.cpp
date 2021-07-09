@@ -181,7 +181,7 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
     lastIpv6 = v6addr;
     lastTypeIndex = ui->cbType->currentIndex();
     netUuid = uuidName;
-    //qDebug() << Q_FUNC_INFO << __LINE__ << connName << uuidName;
+    qDebug() << Q_FUNC_INFO << connName << uuidName;
 
     isActWifi = false;
     if (isWiFi) {
@@ -230,27 +230,43 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
     ui->btnSave->setEnabled(false);
 }
 
+void ConfForm::connectInfoConstruct(KyConnectInfo &connectInfo)
+{
+    QString connectName = ui->leName->text();
+
+    connectInfo.setConnectName(connectName);
+    connectInfo.setIfaceName(m_ifaceName);
+    if (MANUAL_IP == ui->cbType->currentIndex()) {
+        if (!ui->leAddr->text().isEmpty()) {
+            QString ipv4Address = ui->leAddr->text();
+            QString ipv4NetMask = ui->cbMask->currentText();
+            QString ipv4GateWay = ui->leGateway->text();
+
+            QStringList ipv4DnsList;
+            ipv4DnsList.clear();
+            ipv4DnsList<<ui->leDns->text();
+            if (ui->leDns2->text() != "") {
+                ipv4DnsList << ui->leDns2->text();
+            }
+
+            connectInfo.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
+            connectInfo.ipv4AddressConstruct(ipv4Address, ipv4NetMask,
+                                         ipv4GateWay, ipv4DnsList);
+        }
+
+        if (!ui->leAddr_ipv6->text().isEmpty()) {
+            qWarning()<<"ipv6 function need todo";
+        }
+    }
+
+    return;
+}
+
 //点击了创建新的网络的按钮
 void ConfForm::on_btnCreate_clicked()
 {
     KylinDBus kylindbus;
     kylindbus.getWiredCardName();
-    QString mIfname;
-
-    QString mask = "";
-    if (ui->cbMask->currentIndex() == 0) {
-        mask = "24";
-    } else if(ui->cbMask->currentIndex() == 1) {
-        mask = "23";
-    } else if(ui->cbMask->currentIndex() == 2) {
-        mask = "22";
-    } else if(ui->cbMask->currentIndex() == 3) {
-        mask = "16";
-    } else if(ui->cbMask->currentIndex() == 4) {
-        mask = "8";
-    } else {
-        mask = "24";
-    }
 
     if (kylindbus.multiWiredIfName.size() == 0) {
         QString tip(tr("Can not create new wired network for without wired card"));
@@ -258,63 +274,27 @@ void ConfForm::on_btnCreate_clicked()
         onConfformHide();
         return;
     } else {
-        mIfname = kylindbus.multiWiredIfName.at(0);
+        m_ifaceName = kylindbus.multiWiredIfName.at(0);
     }
 
-    if (ui->cbType->currentIndex() == 1) {
+    if (ui->cbType->currentIndex() == MANUAL_IP) {
         //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
         if (!ui->leAddr->text().isEmpty()|| !ui->leAddr_ipv6->text().isEmpty()) {
-            if (check_ip_conflict(mIfname)) {
+            if (check_ip_conflict(m_ifaceName)) {
                 return;
             }
         }
     }
-    QString name = ui->leName->text();
-    QString cmdStr;
-    if(ui->cbType->currentIndex() == 0){
-        cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet";
-    }else{
-        if (ui->leAddr->text().isEmpty()) { //只配置了ipv6地址
-            cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet ipv4.method auto ipv6.method manual ipv6.address "
-                    + ui->leAddr_ipv6->text();
-        } else if (ui->leAddr_ipv6->text().isEmpty()) { //只配置了ipv4地址
-            cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet ipv6.method auto ipv4.method manual ipv4.address "
-                    + ui->leAddr->text() + "/" + mask.toUtf8().data();
-        } else {
-            cmdStr = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet ipv6.method manual ipv6.address " + ui->leAddr_ipv6->text()
-                    + " ipv4.method manual ipv4.address " + ui->leAddr->text() + "/" + mask.toUtf8().data();
-        }
-        if(!ui->leGateway->text().isEmpty()){
-            cmdStr += " ipv4.gateway " + ui->leGateway->text();
-        }
-        if(!ui->leDns->text().isEmpty()){
-            cmdStr += " ipv4.dns " + ui->leDns->text();
-            if(!ui->leDns2->text().isEmpty()){
-                cmdStr += "," + ui->leDns2->text();
-            }
-        }
-    }
-    cmdStr += " connection.autoconnect yes connection.autoconnect-priority 0";
-    Utils::m_system(cmdStr.toUtf8().data());
 
-    if (ui->cbType->currentIndex() == 1) {
-        //选择手动，配置Ipv4、掩码、网关
-        this->isCreateNewNet = true;
-        newUuid = "--";
-        this->saveNetworkConfiguration();
-    } else {
+    KyConnectInfo newConnectInfo;
+    connectInfoConstruct(newConnectInfo);
+    m_networkConnect.createConnect(WIRED_CONNECT, newConnectInfo);
+
+    if (DHCP_IP == ui->cbType->currentIndex()) {
         //选择自动，则配置完成并发出桌面通知
         QString txt(tr("New network already created"));
         kylindbus.showDesktopNotify(txt);
     }
-
-//    if (!ui->leAddr_ipv6->text().isEmpty()) {
-//        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method manual ipv6.addresses " + ui->leAddr_ipv6->text();
-//        Utils::m_system(cmdStr.toUtf8().data());
-//    } else {
-//        QString cmdStr = "nmcli connection modify '" + name + "' ipv6.method auto";
-//        Utils::m_system(cmdStr.toUtf8().data());
-//    }
 
     onConfformHide();
 }
@@ -326,10 +306,10 @@ void ConfForm::on_btnSave_clicked()
 
     if (isActWifi) {
         kylindbus.getWirelessCardName();
-        QString mWifiIfname = kylindbus.dbusWiFiCardName;
+        m_ifaceName = kylindbus.dbusWiFiCardName;
         this->isCreateNewNet = false;
 
-        if (mWifiIfname.isEmpty()) {
+        if (m_ifaceName.isEmpty()) {
             QString notifyTxt(tr("Wireless card not exist"));
             kylindbus.showDesktopNotify(notifyTxt);
             return;
@@ -337,7 +317,7 @@ void ConfForm::on_btnSave_clicked()
         if (ui->cbType->currentIndex() == 1) {
             //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
             if ((!ui->leAddr->text().isEmpty() && (ui->leAddr->text() != lastIpv4)) || (!ui->leAddr_ipv6->text().isEmpty() && (ui->leAddr_ipv6->text() != lastIpv6))) {
-                if (check_ip_conflict(mWifiIfname)) {
+                if (check_ip_conflict(m_ifaceName)) {
                     return;
                 }
             }
@@ -346,8 +326,6 @@ void ConfForm::on_btnSave_clicked()
         this->saveNetworkConfiguration();
     } else {
         kylindbus.getWiredCardName();
-        QString mIfname;
-
         if (kylindbus.multiWiredIfName.size() == 0) {
             QString tip(tr("Can not save wired network for without wired card"));
             kylindbus.showDesktopNotify(tip);
@@ -355,64 +333,22 @@ void ConfForm::on_btnSave_clicked()
             onConfformHide();
             return;
         } else {
-            mIfname = kylindbus.multiWiredIfName.at(0);
+            m_ifaceName = kylindbus.multiWiredIfName.at(0);
         }
 
-        //如果网络的名称已经修改，则删掉当前网络，新建一个网络
-        //修改为   直接modify  不删除不新建
-        QString name = ui->leName->text();
-        if (name != lastConnName) {
-            // QString cmd = "nmcli connection delete '" + netUuid + "'";
-            QString cmd = "nmcli connection modify '" + lastConnName + "' con-name '"+name+"'";
-            int status = system(cmd.toUtf8().data());
-            qDebug()<<"executed 'nmcli connection modify'. cmd="<<cmd<<". res="<<status;
+        this->isCreateNewNet = false;
 
-            // this->isCreateNewNet = true;
-            // newUuid = "--";
-
-            // QProcess * processAdd = new QProcess;
-            // QString cmdAdd = "nmcli connection add con-name '" + name + "' ifname '" + mIfname + "' type ethernet";
-            // QStringList options;
-            // options << "-c" << cmdAdd;
-            // processAdd->start("/bin/bash",options);
-            // connect(processAdd, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
-            //     processAdd->deleteLater();
-            // });
-            // connect(processAdd, &QProcess::channelReadyRead, this, [ = ]() {
-            //     QString str = processAdd->readAll();
-            //     QString regExpPattern("[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}");
-            //     QRegExp regExpTest(regExpPattern);
-            //     int pos = str.indexOf(regExpTest);
-            //     newUuid = str.mid(pos,36); //36是uuid的长度
-
-                if (ui->cbType->currentIndex() == 1) {
-                    //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
-                    if ((!ui->leAddr->text().isEmpty() && (ui->leAddr->text() != lastIpv4)) || (!ui->leAddr_ipv6->text().isEmpty() && (ui->leAddr_ipv6->text() != lastIpv6))) {
-                        if (check_ip_conflict(mIfname)) {
-                            return;
-                        }
-                    }
-                }
-
-                this->saveNetworkConfiguration();
-                return;
-            // });
-            // processAdd->waitForFinished();
-        } else {
-            this->isCreateNewNet = false;
-            newUuid = "--";
-
-            if (ui->cbType->currentIndex() == 1) {
-                //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
-                if ((!ui->leAddr->text().isEmpty() && (ui->leAddr->text() != lastIpv4)) || (!ui->leAddr_ipv6->text().isEmpty() && (ui->leAddr_ipv6->text() != lastIpv6))) {
-                    if (check_ip_conflict(mIfname)) {
-                        return;
-                    }
+        if (ui->cbType->currentIndex() == 1) {
+            //在手动配置网络的情况下以及当前的IP参数有更改的情况下，检测IP冲突
+            if ((!ui->leAddr->text().isEmpty() && (ui->leAddr->text() != lastIpv4)) || (!ui->leAddr_ipv6->text().isEmpty() && (ui->leAddr_ipv6->text() != lastIpv6))) {
+                if (check_ip_conflict(m_ifaceName)) {
+                    return;
                 }
             }
-
-            this->saveNetworkConfiguration();
         }
+
+        this->saveNetworkConfiguration();
+
     }
     QString txt(tr("New network settings already finished"));
     kylindbus.showDesktopNotify(txt);
@@ -420,65 +356,17 @@ void ConfForm::on_btnSave_clicked()
 
 void ConfForm::saveNetworkConfiguration()
 {
-    //获取对应掩码的参数
-    QString mask = "";
-    if (ui->cbMask->currentIndex() == 0) {
-        mask = "24";
-    } else if(ui->cbMask->currentIndex() == 1) {
-        mask = "23";
-    } else if(ui->cbMask->currentIndex() == 2) {
-        mask = "22";
-    } else if(ui->cbMask->currentIndex() == 3) {
-        mask = "16";
-    } else if(ui->cbMask->currentIndex() == 4) {
-        mask = "8";
-    } else {
-        mask = "24";
-    }
+    KylinDBus kylindbus;
 
-    QString name = ui->leName->text();
-    QString dnss = ui->leDns->text();
-    if (ui->leDns2->text() != "") {
-        dnss.append(",");
-        dnss.append(ui->leDns2->text());
-    }
+    KyConnectInfo newConnectInfo;
+    connectInfoConstruct(newConnectInfo);
+    m_networkConnect.updateConnect(netUuid, newConnectInfo);
+
     //是选择的自动还是手动配置网络  
-    if (ui->cbType->currentIndex() == 0) {
-        qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text();
-        //kylin_network_set_automethod(name.toUtf8().data());
-        kylin_network_set_automethod(netUuid.toUtf8().data());
-        kylin_network_set_ipv6_automethod(netUuid.toUtf8().data());
+    if (ui->cbType->currentIndex() == DHCP_IP) {
         if (this->isActConf && lastTypeIndex == 1 && ui->cbType->currentIndex() == 0) {
             //对于已经连接的网络，若由手动改为自动，则进行重连以保证配置生效
-            KylinDBus kylindbus;
             kylindbus.reConnectWiredNet(netUuid.toUtf8().data());
-        }
-    }
-    else {
-        if (newUuid != "--" && newUuid != "" && !newUuid.isEmpty()) {
-            qDebug() << Q_FUNC_INFO  << __LINE__ << name << newUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
-            if (!ui->leAddr->text().isEmpty()) {
-                kylin_network_set_manualall(newUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
-            } else {
-                kylin_network_set_automethod(newUuid.toUtf8().data());
-            }
-            if (!ui->leAddr_ipv6->text().isEmpty()) {
-                kylin_network_set_ipv6_manualmethod(newUuid.toUtf8().data(), ui->leAddr_ipv6->text().toUtf8().data());
-            } else {
-                kylin_network_set_ipv6_automethod(newUuid.toUtf8().data());
-            }
-        } else {
-            qDebug() << Q_FUNC_INFO  << __LINE__ << name << netUuid << ui->leAddr->text() << mask << ui->leGateway->text() << dnss;
-            if (!ui->leAddr->text().isEmpty()) {
-                kylin_network_set_manualall(netUuid.toUtf8().data(), ui->leAddr->text().toUtf8().data(), mask.toUtf8().data(), ui->leGateway->text().toUtf8().data(), dnss.toUtf8().data());
-            } else {
-                kylin_network_set_automethod(netUuid.toUtf8().data());
-            }
-            if (!ui->leAddr_ipv6->text().isEmpty()) {
-                kylin_network_set_ipv6_manualmethod(netUuid.toUtf8().data(), ui->leAddr_ipv6->text().toUtf8().data());
-            } else {
-                kylin_network_set_ipv6_automethod(netUuid.toUtf8().data());
-            }
         }
     }
 

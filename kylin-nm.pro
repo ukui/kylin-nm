@@ -64,6 +64,7 @@ include(src/singleapplication/qt-single-application.pri)
 
 SOURCES += \
     src/backthread.cpp \
+    src/kylinconnectinfo.cpp \
     src/kylinnetworkconnect.cpp \
     src/kylinnetworkresourcemanager.cpp \
     src/wifi-auth-thread.cpp \
@@ -98,6 +99,7 @@ SOURCES += \
 
 HEADERS += \
     src/backthread.h \
+    src/kylinconnectinfo.h \
     src/kylinnetworkconnect.h \
     src/kylinnetworkresourcemanager.h \
     src/wifi-auth-thread.h \

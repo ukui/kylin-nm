@@ -651,7 +651,10 @@ void OneConnForm::on_btnDisConn_clicked()
 //点击列表item扩展时会出现该按钮 用于连接网络
 void OneConnForm::on_btnConnSub_clicked()
 {
-    if (mw->is_stop_check_net_state == 1) {
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+    //当有其他wifi正在连接时，禁止点击连接按钮
+    if (mw->is_stop_check_net_state == 1 || iface->wstate == DEVICE_CONNECTING) {
         return;
     }
 
@@ -667,9 +670,16 @@ void OneConnForm::on_btnConnSub_clicked()
 //无需密码的wifi连接
 void OneConnForm::on_btnConn_clicked()
 {
-    if (mw->is_stop_check_net_state == 1) {
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+    //当有其他wifi正在连接时，禁止点击连接按钮
+    if (mw->is_stop_check_net_state == 1 || iface->wstate == DEVICE_CONNECTING) {
+        delete iface;
+        delete bt;
         return;
     }
+    delete iface;
+    delete bt;
 
     if (lbPwdTip->isVisible() && this->hasPwd) {
         this->slotConnWifiResult(2);
@@ -867,6 +877,14 @@ void OneConnForm::toConnectWirelessNetwork()
 //需要密码的wifi连接
 void OneConnForm::on_btnConnPWD_clicked()
 {
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+    //当有其他wifi正在连接时，禁止点击连接按钮
+    if (iface->wstate == DEVICE_CONNECTING) {
+        delete iface;
+        delete bt;
+        return;
+    }
     mw->m_is_inputting_wifi_password = false; //点击连接表示密码输入已完成
     m_connWithPwd = true;
     qDebug()<<"A button named btnConnPWD about wifi net is clicked.";

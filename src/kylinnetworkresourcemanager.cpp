@@ -291,6 +291,10 @@ NetworkManager::ActiveConnection::Ptr KyNetworkResourceManager::getActiveConnect
 
 NetworkManager::Connection::Ptr KyNetworkResourceManager::getConnect(const QString connectUuid)
 {
+    if(connectUuid.isEmpty()) {
+        return nullptr;
+    }
+
     int index = 0;
     NetworkManager::Connection::Ptr connectPtr = nullptr;
 
@@ -476,5 +480,15 @@ void KyNetworkResourceManager::onConnectionRemoved(QString const & path)
         }
 
         emit connectionRemove(conn.data());
+    }
+}
+
+void KyNetworkResourceManager::removeConnection(QString const & uuid)
+{
+    NetworkManager::Connection::Ptr conn = this->getConnect(uuid);
+    if(!conn.isNull())
+    {
+        conn->disconnect(this);
+        conn->remove();
     }
 }

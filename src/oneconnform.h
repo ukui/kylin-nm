@@ -33,6 +33,7 @@
 #include "backthread.h"
 #include "ksimplenm.h"
 #include "wpawifidialog.h"
+#include "kylinnetworkconnect.h"
 
 #define FRAME_SPEED 150
 #define LIMIT_TIME 90*1000
@@ -86,6 +87,8 @@ public:
     bool isWifiConfExist(QString netName);
     void setlbPwdTipVisble(const bool&);
 
+    QString getUuidByWifiName(const QString &wifiname);
+
     QString wifiName;
     QString wifiBSsid;
     QString wifiUuid;
@@ -108,6 +111,8 @@ public slots:
     void startWifiWaiting(bool isToConnect);
     void stopWifiWaiting(bool isUpdateTrayIcon);
     void onBtnPropertyClicked();
+    void onNoConnetion();
+    void onNotSavedConnection();
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -116,6 +121,7 @@ protected:
 private:
     bool getWifiConfig(WifiConfig &wc, QString netName);
     bool checkIsSaved();
+    void showLePassword();
 
 private slots:
     void on_btnConn_clicked();
@@ -162,6 +168,7 @@ private:
     QString key_mgmt, funcBtnQss;
     QPushButton *btnProperty = nullptr;
     QMenu * m_menu = nullptr;
+    KyNetworkConnect *m_networkConnect = nullptr;
 
 signals:
     void selectedOneWifiForm(QString wifiName, int extendLength);
@@ -172,6 +179,9 @@ signals:
     void sigConnWifi(QString, QString);
     void sigConnWifiPWD(QString, QString, QString, QString, QString);
     void sigConnWifiPsk(QString);
+
+    void activateWirelessConnection(const QString &connectSsid, const QString &connectUuid);
+    void activateWirelessConnectionWithPWD(const QString &connectSsid, const QString &psk, bool isNotSaved, const QString &connectUuid);
 };
 
 #endif // ONECONNFORM_H

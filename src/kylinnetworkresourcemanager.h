@@ -66,6 +66,8 @@ public:
 
     void requestScan(NetworkManager::WirelessDevice * dev);
 
+    void removeConnection(QString const & uuid);
+
 public:
     NetworkManager::Device::Ptr getNetworkDevice(const QString ifaceName);
     NetworkManager::ActiveConnection::Ptr getActiveConnect(const QString uuid);

@@ -164,7 +164,7 @@ public:
     NetworkSpeed *objNetSpeed = nullptr;
     SwitchButton *btnWireless = nullptr;
     SwitchButton *btnWired = nullptr;
-
+    KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     //状态设置,0为假，1为真
     int current_wifi_list_state = LOAD_WIFI_LIST;
     int is_init_wifi_list = 0; //是否在启动软件时正在获取wifi的列表
@@ -378,8 +378,6 @@ private:
     bool m_connected_by_self = false; //是否在本进程执行的连接操作
     QDBusInterface *mDbusXrandInter;
     QDBusInterface *kdsDbus;
-
-    KyNetworkResourceManager *m_networkResourceInstance = nullptr;
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);

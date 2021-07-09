@@ -41,6 +41,8 @@
 #define DEVICE_CONNECTING 3
 #define DEVICE_UNAVALIABLE 4
 
+#define PSKFLAG 0
+
 class IFace{
 public:
     QString lname;
@@ -61,10 +63,13 @@ public:
     static QVariant getSwitchState(const QString &key);
     QString getConnProp(QString connName);
     QString execChkLanWidth(QString ethName);
+    void getTheWifiCardName();
     QProcess *cmdProcessWifi = nullptr;
     QProcess *cmdProcessLan;
     QString currConnLanUuid;
     QString currConnLanType;
+    QList<QDBusObjectPath> wifiCardPaths;
+    QString wifiIfnameInUse;
 
 public slots:
     void execEnNet();
@@ -78,7 +83,7 @@ public slots:
     void execReconnWIfi(QString uuid);
     void execConnWifiPWD(QString connName, QString password, QString connType, QString security, QString ifname);
     void execConnWifiPsk(QString cmd);
-    void execConnHiddenWifiWPA(QString connName, QString password);
+    void execConnHiddenWifiWPA(int secuType, QString connName, QString password);
     void execConnRememberedHiddenWifi(QString connName);
 
     void disConnSparedNetSlot(QString type);

@@ -2111,6 +2111,7 @@ void MainWindow::getConnListDone(QStringList slist)
                     connWifiDone(res);
                     bt->deleteLater();
                 });
+                qDebug() << "-------------------------> 0000-1";
                 bt->execConnWifi(lastAddedConn, objKyDBus->dbusWiFiCardName);
             }
         }
@@ -4350,6 +4351,24 @@ void MainWindow::connWifiDone(int connFlag)
         this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
         QString txt(tr("Connect Hidden WLAN Success"));
         qWarning()<<"Connect Hidden WLAN Success. res=6";
+        objKyDBus->showDesktopNotify(txt);
+    } else if (connFlag == 7) {
+        //syslog(LOG_DEBUG, "Secrets were required, but not provided. res=7");
+        qWarning()<<"Secrets were required, but not provided. res=7";
+        is_connect_net_failed = 1;
+        QString txt(tr("Confirm your WLAN password"));
+        objKyDBus->showDesktopNotify(txt);
+    } else if (connFlag == 8) {
+        //syslog(LOG_DEBUG, "Error: 802-11-wireless-security.psk: ????. res=8");
+        qWarning()<<"Error: 802-11-wireless-security.psk: ????. res=8";
+        is_connect_net_failed = 1;
+        QString txt(tr("Confirm your WLAN password"));
+        objKyDBus->showDesktopNotify(txt);
+    } else if (connFlag == 9) {
+        //syslog(LOG_DEBUG, "Passwords or encryption keys are required to access the wireless network. res=9");
+        qWarning()<<"Passwords or encryption keys are required to access the wireless network. res=9";
+        is_connect_net_failed = 1;
+        QString txt(tr("Confirm your WLAN password"));
         objKyDBus->showDesktopNotify(txt);
     }
 

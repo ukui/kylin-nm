@@ -748,7 +748,9 @@ void OneConnForm::toConnectWirelessNetwork()
     process->start(QString("nmcli -f 802-11-wireless-security.key-mgmt connection show \"%1\"").arg(wifiName));
     process->waitForFinished();
     QString cur_secu;
-    if (wifiSecu.contains("WPA3"))
+    if (wifiSecu.contains("WPA2") && wifiSecu.contains("WPA3"))
+        cur_secu = "wpa-psk";
+    else if (wifiSecu.contains("WPA3"))
         cur_secu = "sae";
     else if (wifiSecu.contains("--"))
         cur_secu = "--";
@@ -793,25 +795,25 @@ void OneConnForm::toConnectWirelessNetwork()
     }
 
     if (key_mgmt == "wpa-psk" && this->getPskFlag() == 2) {
-        //当设置为每次询问密码时执行
-        QPoint pos = QCursor::pos();
-        QRect primaryGeometry;
-        for (QScreen *screen : qApp->screens()) {
-            if (screen->geometry().contains(pos)) {
-                primaryGeometry = screen->geometry();
-            }
-        }
-        if (primaryGeometry.isEmpty()) {
-            primaryGeometry = qApp->primaryScreen()->geometry();
-        }
+//        //当设置为每次询问密码时执行
+//        QPoint pos = QCursor::pos();
+//        QRect primaryGeometry;
+//        for (QScreen *screen : qApp->screens()) {
+//            if (screen->geometry().contains(pos)) {
+//                primaryGeometry = screen->geometry();
+//            }
+//        }
+//        if (primaryGeometry.isEmpty()) {
+//            primaryGeometry = qApp->primaryScreen()->geometry();
+//        }
 
-        QApplication::setQuitOnLastWindowClosed(false);
-        WiFiConfigDialog *wifiConfigDialog = new WiFiConfigDialog();
-        wifiConfigDialog->move(primaryGeometry.width() / 2 - wifiConfigDialog->width() / 2, primaryGeometry.height() / 2 - wifiConfigDialog->height() / 2);
-        wifiConfigDialog->show();
-        wifiConfigDialog->raise();
+//        QApplication::setQuitOnLastWindowClosed(false);
+//        WiFiConfigDialog *wifiConfigDialog = new WiFiConfigDialog();
+//        wifiConfigDialog->move(primaryGeometry.width() / 2 - wifiConfigDialog->width() / 2, primaryGeometry.height() / 2 - wifiConfigDialog->height() / 2);
+//        wifiConfigDialog->show();
+//        wifiConfigDialog->raise();
 
-        return;
+//        return;
     }
 
     if (psk_flag != 0) { //未为所有用户存储密码
@@ -1120,22 +1122,12 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     }
 
     if (connFlag == 1  || connFlag == 4) {
-        if (!m_connWithPwd && hasPwd) {
-            //用原有配置文件连接失败，显示密码错误
-            qDebug()<<"Connected failed with old configuration. ssid="<<wifiName;
-            if (mw)
-                mw->m_wifi_list_pwd_changed.append(wifiName);
-            if (lbPwdTip)
-                this->lbPwdTip->show();
-        } else {
-            // 使用密码连接失败，需要删除该配置文件
-            QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
-            int status = system(cmd.toUtf8().data());
-            if (status != 0) {
-                qDebug()<<"execute 'nmcli connection delete' in function 'slotConnWifiResult' failed.";
-            }
+        // 使用密码连接失败，需要删除该配置文件
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
+        int status = system(cmd.toUtf8().data());
+        if (status != 0) {
+            qDebug()<<"execute 'nmcli connection delete' in function 'slotConnWifiResult' failed.";
         }
-
     }
 
     if (connFlag == 2 || connFlag == 4 || connFlag == 1) {

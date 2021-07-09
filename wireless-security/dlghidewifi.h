@@ -44,7 +44,6 @@ protected:
 
 public slots:
     void changeDialog();
-    void changeWindow();
     void emitSignal();
     void on_execSecConn();
     void slotStartLoading();
@@ -61,7 +60,7 @@ private slots:
 signals:
     void reSetWifiList();
     void stopSignal();
-    void sigConnHiddenWifi(QString wifiName, QString wifiPasswd);
+    void sigConnHiddenWifi(int secuType, QString wifiName, QString wifiPasswd);
     void sigConnRememberedHiddenWifi(QString wifiName);
 
 private:

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>432</width>
-    <height>397</height>
+    <height>327</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>76</x>
-     <y>221</y>
+     <y>151</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -35,7 +35,7 @@
    <property name="geometry">
     <rect>
      <x>76</x>
-     <y>176</y>
+     <y>106</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -53,7 +53,7 @@
    <property name="geometry">
     <rect>
      <x>215</x>
-     <y>350</y>
+     <y>280</y>
      <width>90</width>
      <height>30</height>
     </rect>
@@ -67,29 +67,11 @@
     <string/>
    </property>
   </widget>
-  <widget class="QComboBox" name="cbxConn">
-   <property name="geometry">
-    <rect>
-     <x>175</x>
-     <y>75</y>
-     <width>182</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-  </widget>
   <widget class="QCheckBox" name="checkBoxPwd">
    <property name="geometry">
     <rect>
      <x>370</x>
-     <y>270</y>
+     <y>203</y>
      <width>18</width>
      <height>9</height>
     </rect>
@@ -107,7 +89,7 @@
    <property name="geometry">
     <rect>
      <x>76</x>
-     <y>266</y>
+     <y>196</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -125,7 +107,7 @@
    <property name="geometry">
     <rect>
      <x>175</x>
-     <y>170</y>
+     <y>100</y>
      <width>182</width>
      <height>32</height>
     </rect>
@@ -143,7 +125,7 @@
    <property name="geometry">
     <rect>
      <x>175</x>
-     <y>261</y>
+     <y>191</y>
      <width>182</width>
      <height>32</height>
     </rect>
@@ -161,7 +143,7 @@
    <property name="geometry">
     <rect>
      <x>315</x>
-     <y>350</y>
+     <y>280</y>
      <width>90</width>
      <height>30</height>
     </rect>
@@ -175,32 +157,11 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="lbConn">
-   <property name="geometry">
-    <rect>
-     <x>76</x>
-     <y>80</y>
-     <width>90</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
   <widget class="QLineEdit" name="leNetName">
    <property name="geometry">
     <rect>
      <x>175</x>
-     <y>215</y>
+     <y>145</y>
      <width>182</width>
      <height>32</height>
     </rect>
@@ -217,7 +178,7 @@
      <x>0</x>
      <y>0</y>
      <width>432</width>
-     <height>397</height>
+     <height>327</height>
     </rect>
    </property>
    <property name="text">
@@ -241,7 +202,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>140</y>
+     <y>70</y>
      <width>412</width>
      <height>1</height>
     </rect>
@@ -254,7 +215,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>320</y>
+     <y>250</y>
      <width>412</width>
      <height>1</height>
     </rect>
@@ -268,12 +229,10 @@
   <zorder>lbNetName</zorder>
   <zorder>lbSecurity</zorder>
   <zorder>btnCancel</zorder>
-  <zorder>cbxConn</zorder>
   <zorder>checkBoxPwd</zorder>
   <zorder>lbPassword</zorder>
   <zorder>cbxSecurity</zorder>
   <zorder>btnConnect</zorder>
-  <zorder>lbConn</zorder>
   <zorder>leNetName</zorder>
   <zorder>lbLeftupTitle</zorder>
   <zorder>lineUp</zorder>

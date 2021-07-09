@@ -314,6 +314,8 @@ void WpaWifiDialog::initCombox() {
     securityCombox->addItem(tr("None")); //无
     securityCombox->addItem(tr("WPA and WPA2 Personal")); //WPA 及 WPA2 个人
     securityCombox->addItem(tr("WPA and WPA2 Enterprise")); //WPA 及 WPA2 企业
+    securityCombox->addItem(tr("WPA2 and WPA3 Personal")); //WPA2 及 WPA3 个人
+    securityCombox->addItem(tr("WPA3 Personal")); //WPA3 个人
     //ui->cbxSecurity->addItem(tr("WEP 40/128-bit Key (Hex or ASCII)")); //WEP 40/128 位密钥(十六进制或ASCII)
     //ui->cbxSecurity->addItem(tr("WEP 128-bit Passphrase")); //WEP 128 位密码句
     //ui->cbxSecurity->addItem("LEAP");
@@ -465,7 +467,25 @@ void WpaWifiDialog::changeDialog()
         //WPA 及 WPA2 个人
         QApplication::setQuitOnLastWindowClosed(false);
         this->close();
-        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0, mw);
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(1, 0, mw);
+        connHidWifiWpa->show();
+        connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+    }
+
+    if (securityCombox->currentIndex() == 3) {
+        // WPA2 及 WPA3 个人
+        QApplication::setQuitOnLastWindowClosed(false);
+        this->close();
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(3, 0, mw);
+        connHidWifiWpa->show();
+        connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+    }
+
+    if (securityCombox->currentIndex() == 4) {
+        //WPA3 个人
+        QApplication::setQuitOnLastWindowClosed(false);
+        this->close();
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(4, 0, mw);
         connHidWifiWpa->show();
         connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     }

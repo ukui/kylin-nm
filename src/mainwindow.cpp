@@ -792,12 +792,14 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
             this->showNormal();
             this->raise();
             this->activateWindow();
+
+            currSelNetName = "";
             if (is_btnLanList_clicked == 1&& is_stop_check_net_state==0) {
                 onBtnNetListClicked(0);
             }
 
             if (!is_init_wifi_list && !is_connect_hide_wifi && is_stop_check_net_state==0) {
-                is_stop_check_net_state = 1;
+                is_stop_:check_net_state = 1;
                 if (is_btnWifiList_clicked == 1) {
                     BackThread *loop_bt = new BackThread();
                     IFace *loop_iface = loop_bt->execGetIface();
@@ -1679,7 +1681,7 @@ void MainWindow::on_wifi_changed()
  */
 void MainWindow::onNewConnAdded(int type) {
     if (type == 1) {
-        isAddedWifi = true;
+//        isAddedWifi = true;
     }
     this->ksnm->execGetConnList();
 }
@@ -2100,20 +2102,20 @@ void MainWindow::getConnListDone(QStringList slist)
                 break;
             }
         }
-        if (isAddedWifi) {
-            isAddedWifi = false;
-            //如果是新添加的wifi，尝试激活这个wifi
-            if (! is_stop_check_net_state) {
-                this->is_stop_check_net_state = 1;
-                BackThread *bt = new BackThread();
-//                connect(bt, SIGNAL(connDone(int)), this, SLOT(connWifiDone(int)));
-                connect(bt, &BackThread::connDone, this, [ = ](int res) {
-                    connWifiDone(res);
-                    bt->deleteLater();
-                });
-                bt->execConnWifi(lastAddedConn, objKyDBus->dbusWiFiCardName);
-            }
-        }
+//        if (isAddedWifi) {
+//            isAddedWifi = false;
+//            //如果是新添加的wifi，尝试激活这个wifi
+//            if (! is_stop_check_net_state) {
+//                this->is_stop_check_net_state = 1;
+//                BackThread *bt = new BackThread();
+////                connect(bt, SIGNAL(connDone(int)), this, SLOT(connWifiDone(int)));
+//                connect(bt, &BackThread::connDone, this, [ = ](int res) {
+//                    connWifiDone(res);
+//                    bt->deleteLater();
+//                });
+//                bt->execConnWifi(lastAddedConn, objKyDBus->dbusWiFiCardName);
+//            }
+//        }
         oldConnSlist.clear();
         oldConnSlist = newConnSlist;
         return;
@@ -3155,6 +3157,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
     this->wifiListWidget->show();
     this->topWifiListWidget->show();
     this->stopLoading();
+    is_stop_check_net_state = 0;
     emit this->getWifiListFinished();
 }
 
@@ -3922,7 +3925,6 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 
     if (!is_connect_hide_wifi && !is_stop_check_net_state) {
         is_stop_check_net_state = 1;
-
         if (type == "802-3-ethernet" || type == "ethernet") {
             if (is_connect_net_failed) {
                 qDebug()<<"debug: connect wired network failed, no need to refresh wired interface";

@@ -840,11 +840,11 @@ void OneConnForm::on_btnConnPWD_clicked()
         mw->m_wifi_list_pwd_changed.removeOne(wifiName);
     }
 
-
-    if (!uuid.isEmpty())
-    {
-        bIsNotSaved = true;
-    }
+//TODO:connect not saved wireless
+//    if (!uuid.isEmpty())
+//    {
+//        bIsNotSaved = true;
+//    }
 
     emit activateWirelessConnectionWithPWD(wifiName,ui->lePassword->text(),bIsNotSaved,uuid);
 }
@@ -1041,7 +1041,6 @@ void OneConnForm::slotConnWifiResult(int connFlag)
 
     if(connFlag == 1)
     {
-        qDebug() << "11111111111111111111111";
         if (hasPwd) {
             if (mw)
                 mw->m_wifi_list_pwd_changed.append(wifiName);

@@ -799,7 +799,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
             }
 
             if (!is_init_wifi_list && !is_connect_hide_wifi && is_stop_check_net_state==0) {
-                is_stop_:check_net_state = 1;
+                is_stop_check_net_state = 1;
                 if (is_btnWifiList_clicked == 1) {
                     BackThread *loop_bt = new BackThread();
                     IFace *loop_iface = loop_bt->execGetIface();

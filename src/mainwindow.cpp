@@ -2757,7 +2757,8 @@ void MainWindow::loadWifiListDone(QStringList slist)
         if (!isHuaWeiPC) {
             //如果不是华为的电脑，选择wifi在这里执行
             if (actWifiName != "--" && actWifiName == wname) {
-                if (!actWifiBssidList.contains(wbssid)) {
+//                if (!actWifiBssidList.contains(wbssid)) {
+                if(actWifiBssid != wbssid)
                     continue; //若当前热点ssid名称和已经连接的wifi的ssid名称相同，但bssid不同，则跳过
                 }
             }

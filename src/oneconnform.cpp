@@ -655,8 +655,12 @@ void OneConnForm::on_btnConnSub_clicked()
     IFace *iface = bt->execGetIface();
     //当有其他wifi正在连接时，禁止点击连接按钮
     if (mw->is_stop_check_net_state == 1 || iface->wstate == DEVICE_CONNECTING) {
+        delete iface;
+        delete bt;
         return;
     }
+    delete iface;
+    delete bt;
 
     if (lbPwdTip->isVisible() && this->hasPwd) {
         this->slotConnWifiResult(2);

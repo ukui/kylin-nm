@@ -1248,6 +1248,7 @@ void MainWindow::onBtnWifiClicked(int flag)
 {
     qDebug()<<"Value of flag passed into function 'onBtnWifiClicked' is:  "<<flag;
     //syslog(LOG_DEBUG, "Value of flag passed into function 'onBtnWifiClicked' is: %d", flag);
+    this->m_is_inputting_wifi_password = false; //wifi密码输入框一定会被收起
 
     if (is_wireless_adapter_ready == 1) {
         // flag: 0->UI点击关闭 1->UI点击打开 2->gsetting打开 3->gsetting关闭 4->网卡热插 5->网卡热拔
@@ -1964,6 +1965,7 @@ void MainWindow::setBtnWirelessStatus() {
 // 获取wifi列表回调
 void MainWindow::getWifiListDone(QStringList slist)
 {
+    qDebug()<<"zjp-->"<<current_wifi_list_state<<"->"<<slist.length();
     setBtnWirelessStatus();
     //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldWifiSlist) {
@@ -2048,7 +2050,7 @@ void MainWindow::getWifiListDone(QStringList slist)
         }
         current_wifi_list_state = LOAD_WIFI_LIST;
         oldWifiSlist = slist;
-        return;
+//        return;
     }
 
     if (this->is_btnLanList_clicked == 1 && current_wifi_list_state != REFRESH_WIFI) {
@@ -3032,8 +3034,10 @@ void MainWindow::updateWifiListDone(QStringList slist)
                             for (int after_pos = pos+1; after_pos < wifiList.size(); after_pos ++) {
                                 OneConnForm *after_ocf = wifiList.at(after_pos);
                                 if (lastWname == currSelNetName) {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM - H_WIFI_ITEM_BIG_EXTEND);}
-                                else if (is_inputting) {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM - H_WIFI_ITEM_SMALL_EXTEND);}
-                                else {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM);}
+                                else if (is_inputting) {
+                                    after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM - H_WIFI_ITEM_SMALL_EXTEND);
+                                    this->m_is_inputting_wifi_password = false; //正在输入密码的wifi消失了
+                                } else {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM);}
                             }
                             wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() - H_NORMAL_ITEM);
                             //从向外提供的wifi列表中找到并删除这一行

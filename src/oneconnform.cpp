@@ -998,6 +998,11 @@ bool OneConnForm::isWifiConfExist(QString netName)
     return false;
 }
 
+bool OneConnForm::isInputtingPwd()
+{
+    return ui->lePassword->isVisible();
+}
+
 void OneConnForm::setlbPwdTipVisble(const bool &visible)
 {
     lbPwdTip->setVisible(visible);

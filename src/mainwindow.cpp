@@ -3026,11 +3026,13 @@ void MainWindow::updateWifiListDone(QStringList slist)
                     if (ocf->getName() == lastWname) {
                         if (ocf->isActive == true){break;
                         } else {
+                            bool is_inputting = ocf->isInputtingPwd();
                             delete ocf;
                             //删除元素下面的的所有元素上移
                             for (int after_pos = pos+1; after_pos < wifiList.size(); after_pos ++) {
                                 OneConnForm *after_ocf = wifiList.at(after_pos);
                                 if (lastWname == currSelNetName) {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM - H_WIFI_ITEM_BIG_EXTEND);}
+                                else if (is_inputting) {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM - H_WIFI_ITEM_SMALL_EXTEND);}
                                 else {after_ocf->move(L_VERTICAL_LINE_TO_ITEM, after_ocf->y() - H_NORMAL_ITEM);}
                             }
                             wifiListWidget->resize(W_LIST_WIDGET, wifiListWidget->height() - H_NORMAL_ITEM);

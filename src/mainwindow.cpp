@@ -797,6 +797,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 
             if (!is_init_wifi_list && !is_connect_hide_wifi && is_stop_check_net_state==0) {
                 is_stop_check_net_state = 1;
+                qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
                 if (is_btnWifiList_clicked == 1) {
                     BackThread *loop_bt = new BackThread();
                     IFace *loop_iface = loop_bt->execGetIface();
@@ -812,6 +813,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
                     loop_bt->deleteLater();
                 }
                 is_stop_check_net_state = 0;
+                qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
             }
         } else {
             this->m_is_inputting_wifi_password = false;
@@ -961,6 +963,7 @@ void MainWindow::on_checkOverTime()
     }
     this->stopLoading(); //超时停止等待动画
     is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
 }
 
 void MainWindow::getActiveInfoAndSetTrayIcon()
@@ -1022,6 +1025,7 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
     if (flag) {
         isHandlingWiredCableOn = true;
         is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
         qDebug()<<"wired physical cable is already plug in";
         //syslog(LOG_DEBUG,"wired physical cable is already plug in");
         wiredCableUpTimer->start(4000);
@@ -1035,6 +1039,7 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
                 IFace *iface = bt->execGetIface();
                 if (iface->lstate != DEVICE_CONNECTED) {
                     is_stop_check_net_state = 1;
+                    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
                     sleep(2);
                     //wiredCableDownTimer->start(2000);
                     emit carrierDownHandle();
@@ -1061,6 +1066,7 @@ void MainWindow::onCarrierUpHandle()
     this->stopLoading();
     onBtnNetListClicked(1);
     is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
     isHandlingWiredCableOn = false;
     emit btnWired->clicked(4);
 }
@@ -1081,6 +1087,7 @@ void MainWindow::onCarrierDownHandle()
     this->stopLoading();
     onBtnNetListClicked(0);
     is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
 }
 
 void MainWindow::onDeleteLan()
@@ -1103,6 +1110,7 @@ void MainWindow::onDeleteLan()
     this->stopLoading();
     onBtnNetListClicked(0);
     is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
 }
 
 void MainWindow::checkIfWiredNetExist()
@@ -1231,6 +1239,7 @@ void MainWindow::onBtnNetClicked()
 
     } else {
         is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
         QThread *t = new QThread();
         BackThread *bt = new BackThread();
         bt->moveToThread(t);
@@ -1258,6 +1267,7 @@ void MainWindow::onBtnWifiClicked(int flag)
             if (checkWlOn()) {
                 if (flag != 4) { //以防第二张无线网卡插入时断网
                     is_stop_check_net_state = 1;
+                    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
                     objKyDBus->setWifiSwitchState(false);
                     lbTopWifiList->hide();
                     btnAddNet->hide();
@@ -1277,6 +1287,7 @@ void MainWindow::onBtnWifiClicked(int flag)
                 if (is_fly_mode_on == 0) {
                     //on_btnWifiList_clicked();
                     is_stop_check_net_state = 1;
+                    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
                     objKyDBus->setWifiCardState(true);
                     objKyDBus->setWifiSwitchState(true);
 
@@ -1296,6 +1307,7 @@ void MainWindow::onBtnWifiClicked(int flag)
             if (is_fly_mode_on == 0) {
                 //on_btnWifiList_clicked();
                 is_stop_check_net_state = 1;
+                qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
                 lbTopWifiList->show();
                 btnAddNet->show();
 
@@ -1312,6 +1324,7 @@ void MainWindow::onBtnWifiClicked(int flag)
             }
         } else if(flag == 3) {
             is_stop_check_net_state = 1;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
             lbTopWifiList->hide();
             btnAddNet->hide();
 
@@ -1508,7 +1521,9 @@ void MainWindow::onBtnNetListClicked(int flag)
 
 void MainWindow::on_btnWifiList_clicked()
 {
+    m_is_inputting_wifi_password = false;
     is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
     current_wifi_list_state = LOAD_WIFI_LIST;
     this->is_btnWifiList_clicked = 1;
     this->is_btnLanList_clicked = 0;
@@ -1579,6 +1594,7 @@ void MainWindow::on_btnWifiList_clicked()
         lbTopWifiList->show();
         btnAddNet->show();
         is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
     } else {
         qDebug()<<"现在WiFi的开关是关闭状态";
         //btnWireless->setSwitchStatus(false);其他部分已经对关掉wifi开关进行处理，此处不再处理。有几率出现打开关闭再打开的现象，因此注释掉关闭的动作
@@ -1611,6 +1627,7 @@ void MainWindow::on_btnWifiList_clicked()
 
         getActiveInfoAndSetTrayIcon();
         is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
     }
 
     this->scrollAreal->hide();
@@ -1923,6 +1940,7 @@ void MainWindow::getLanListDone(QStringList slist)
     this->stopLoading();
     oldLanSlist = slist;
     is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
     //有线网按钮状态校准
     IFace *iface = BackThread::execGetIface();
     if (iface && (iface->lstate == DEVICE_UNAVALIABLE || iface->lstate == DEVICE_UNMANAGED)) {
@@ -1944,6 +1962,7 @@ void MainWindow::onRequestRevalueUpdateWifi()
     if (!isReConnAfterTurnOnWifi) {
         isReConnAfterTurnOnWifi = false;
         is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
         current_wifi_list_state = LOAD_WIFI_LIST;
     }
 }
@@ -1965,7 +1984,6 @@ void MainWindow::setBtnWirelessStatus() {
 // 获取wifi列表回调
 void MainWindow::getWifiListDone(QStringList slist)
 {
-    qDebug()<<"zjp-->"<<current_wifi_list_state<<"->"<<slist.length();
     setBtnWirelessStatus();
     //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldWifiSlist) {
@@ -2008,6 +2026,7 @@ void MainWindow::getWifiListDone(QStringList slist)
                     QStringList tried_list;
                     this->startLoading();
                     is_stop_check_net_state = 1;
+                    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
                     for (current_try_time; current_try_time < targetWifiStructList.length(); current_try_time++) {
                         QString wifiSsid = objKyDBus->getWifiSsid(targetWifiStructList.at(current_try_time).objectPath);
                         qDebug() << "开始回连  objectPath: " << targetWifiStructList.at(current_try_time).objectPath;
@@ -2030,6 +2049,7 @@ void MainWindow::getWifiListDone(QStringList slist)
                             //回连成功，停止
                             this->stopLoading();
                             is_stop_check_net_state = 0;
+                            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
                             break;
                         }
                         if (!m_wifi_list_pwd_changed.contains(wifiSsid)) {
@@ -2041,6 +2061,7 @@ void MainWindow::getWifiListDone(QStringList slist)
                     }
                     this->stopLoading();
                     is_stop_check_net_state = 0;
+                    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
                     isReconnectingWifi = false;
                     ifCanReconnectWifiNow = true;
                     emit loadWifiListAfterScan();
@@ -2111,6 +2132,7 @@ void MainWindow::getConnListDone(QStringList slist)
             //如果是新添加的wifi，尝试激活这个wifi
             if (! is_stop_check_net_state) {
                 this->is_stop_check_net_state = 1;
+                qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
                 BackThread *bt = new BackThread();
 //                connect(bt, SIGNAL(connDone(int)), this, SLOT(connWifiDone(int)));
                 connect(bt, &BackThread::connDone, this, [ = ](int res) {
@@ -2960,6 +2982,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
     if (!this->isReconnectingWifi)
         this->stopLoading();
     is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
     is_connect_hide_wifi = 0;
 
     actWifiBssidList.clear();
@@ -3388,6 +3411,7 @@ void MainWindow::onlyRefreshWifiList(QStringList slist)
     if (!this->isReconnectingWifi)
         this->stopLoading();
     is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
     is_connect_hide_wifi = 0;
 
     actWifiBssidList.clear();
@@ -3949,7 +3973,7 @@ void MainWindow::enNetDone()
 
     onBtnNetListClicked(1);
     is_stop_check_net_state = 0;
-
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
     qDebug()<<"debug: already turn on the switch of lan network";
     //syslog(LOG_DEBUG, "Already turn on the switch of lan network");
 }
@@ -4023,6 +4047,7 @@ void MainWindow::disWifiDone()
         disWifiDoneChangeUI();
         this->stopLoading();
         is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
         qDebug()<<"debug: already turn on the switch of wifi network";
         //syslog(LOG_DEBUG, "Already turn on the switch of wifi network");
     }
@@ -4117,14 +4142,17 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
         //断开一个wifi的时候，如果存在回连，可能接连发出两个信号
         //当连续发出wifi断开与连接的信号时，短时间内addNumberForWifi值为2
         is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
         if (is_connect_net_failed) {
             qDebug()<<"debug: connect wifi failed just now, no need to refresh wifi interface";
             is_connect_net_failed = 0;
             is_stop_check_net_state = 0;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
         } else if (is_wifi_reconnected) {
             qDebug()<<"debug: wifi reconnected just now, no need to refresh wifi interface";
             is_wifi_reconnected = 0;
             is_stop_check_net_state = 0;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
         }else {
             QTimer::singleShot(2*1000, this, SLOT(onExternalWifiChange() ));
         }
@@ -4140,6 +4168,7 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 
     if (type == "") {
         is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
         return;
     }
 
@@ -4159,12 +4188,14 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 
     if (!is_connect_hide_wifi && !is_stop_check_net_state) {
         is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
 
         if (type == "802-3-ethernet" || type == "ethernet") {
             if (is_connect_net_failed) {
                 qDebug()<<"debug: connect wired network failed, no need to refresh wired interface";
                 is_connect_net_failed = 0;
                 is_stop_check_net_state = 0;
+                qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
             } else {
                 isToSetLanValue = false;
                 QTimer::singleShot(2*1000, this, SLOT(onExternalLanChange() ));
@@ -4177,10 +4208,12 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
                 qDebug()<<"debug: connect wifi failed just now, no need to refresh wifi interface";
                 is_connect_net_failed = 0;
                 is_stop_check_net_state = 0;
+                qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
             } else if (is_wifi_reconnected) {
                 qDebug()<<"debug: wifi reconnected just now, no need to refresh wifi interface";
                 is_wifi_reconnected = 0;
                 is_stop_check_net_state = 0;
+                qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
             }else {
                 isToSetWifiValue = false;
                 QTimer::singleShot(2*1000, this, SLOT(onExternalWifiChange() ));
@@ -4196,6 +4229,7 @@ void MainWindow::onExternalLanChange()
         onBtnNetListClicked(0);
     } else {
         is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
     }
 
     isToSetLanValue = true;
@@ -4213,6 +4247,7 @@ void MainWindow::onExternalWifiChange()
 //    }
     if (m_connected_by_self) {
         is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
         m_connected_by_self = false;
         return;
     }
@@ -4221,6 +4256,7 @@ void MainWindow::onExternalWifiChange()
          on_btnWifiList_clicked();
     } else {
         is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
     }
 
     isToSetWifiValue = true;
@@ -4249,6 +4285,7 @@ void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
 {
     if (!is_stop_check_net_state) {
         is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
         if (wifiEnabled) {
             qDebug()<<"debug: external wifi switch turn on";
             //syslog(LOG_DEBUG, "debug: external wifi switch turn on");
@@ -4540,6 +4577,7 @@ void MainWindow::connLanDone(int connFlag)
 
     this->stopLoading();
     this->is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
 }
 
 void MainWindow::connWifiDone(int connFlag)
@@ -4610,6 +4648,7 @@ void MainWindow::connWifiDone(int connFlag)
 
     this->stopLoading();
     is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
 }
 
 void MainWindow::onRequestRefreshWifiList()
@@ -4850,6 +4889,7 @@ void MainWindow::onRfkillStatusChanged()
                 }
                 if (!current) {
                     is_stop_check_net_state = 1;
+                    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
                     lbTopWifiList->hide();
                     btnAddNet->hide();
                     objKyDBus->setWifiSwitchState(false);
@@ -4868,6 +4908,7 @@ void MainWindow::onRfkillStatusChanged()
                     if (is_fly_mode_on == 0) {
                         on_btnWifiList_clicked();
                         is_stop_check_net_state = 1;
+                        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
                         isRadioWifiTurningOn = true;
                         objKyDBus->setWifiCardState(true);
                         objKyDBus->setWifiSwitchState(true);
@@ -4901,6 +4942,7 @@ void MainWindow::rfkillDisableWifiDone()
 
     this->stopLoading();
     is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
 }
 
 //wifi开关打开

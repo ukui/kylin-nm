@@ -641,6 +641,7 @@ void OneConnForm::on_btnDisConn_clicked()
     this->startWifiWaiting(false);
 
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     //mw->on_btnHotspotState();
     //kylin_network_set_con_down(wifiName.toUtf8().data());
     kylin_network_set_con_down(wifiUuid.toUtf8().data());
@@ -702,6 +703,7 @@ void OneConnForm::toConnectWirelessNetwork()
         bool isConfiged = getWifiConfig(wc, this->wifiName);
         if (isConfiged && wc.eap != "peap") {
             mw->is_stop_check_net_state = 1;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             QThread *t = new QThread();
             BackThread *bt = new BackThread();
             bt->moveToThread(t);
@@ -834,6 +836,7 @@ void OneConnForm::toConnectWirelessNetwork()
         QString homePath = getenv("HOME");
         if (QFile(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName)).exists()) { //已为该用户存储密码
             mw->is_stop_check_net_state = 1;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             QThread *t = new QThread();
             BackThread *bt = new BackThread();
             bt->moveToThread(t);
@@ -848,6 +851,7 @@ void OneConnForm::toConnectWirelessNetwork()
             connect(bt, &BackThread::connDone, this, [ = ](int res) {
                 this->stopWifiWaiting(true);
                 mw->is_stop_check_net_state = 0;
+                qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
                 if (res) {
                     QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName).toUtf8());
                 }
@@ -865,6 +869,7 @@ void OneConnForm::toConnectWirelessNetwork()
     }
 
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     m_connWithPwd = false;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
@@ -911,6 +916,7 @@ void OneConnForm::on_btnConnPWD_clicked()
         }
 
         mw->is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
         QThread *t = new QThread();
         BackThread *bt = new BackThread();
         bt->moveToThread(t);
@@ -925,6 +931,7 @@ void OneConnForm::on_btnConnPWD_clicked()
         connect(bt, &BackThread::connDone, this, [ = ](int res) {
             this->stopWifiWaiting(true);
             mw->is_stop_check_net_state = 0;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             if (res) {
                 QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName).toUtf8());
             }
@@ -936,6 +943,7 @@ void OneConnForm::on_btnConnPWD_clicked()
 
     if (! mw->is_stop_check_net_state) {
         mw->is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
         QThread *t = new QThread();
         BackThread *bt = new BackThread();
         bt->moveToThread(t);
@@ -1196,6 +1204,7 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     this->stopWifiWaiting(true);
 
     mw->is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
 }
 
 void OneConnForm::waitAnimStep()
@@ -1221,6 +1230,7 @@ void OneConnForm::waitAnimStep()
         this->stopWifiWaiting(true); //动画超出时间限制，强制停止动画
 
         mw->is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     }
 }
 

@@ -328,6 +328,7 @@ void OneLancForm::on_btnDisConn_clicked()
 
     this->startWaiting(false);
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
 
     //使用有线网ssid断开网络
     //kylin_network_set_con_down(ssidName.toUtf8().data());
@@ -402,6 +403,7 @@ void OneLancForm::toConnectWiredNetwork()
     }
 
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);
@@ -497,6 +499,7 @@ void OneLancForm::waitAnimStep()
         this->stopWaiting(); //动画超出时间限制，强制停止动画
 
         mw->is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     }
 }
 
@@ -558,4 +561,5 @@ void OneLancForm::on_btnCancel_clicked()
 
     this->stopWaiting();
     mw->is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
 }

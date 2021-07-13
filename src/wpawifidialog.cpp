@@ -739,6 +739,7 @@ void WpaWifiDialog::activateConnection() {
             QString cmdStr_2 = "nmcli connection down '" + nameEditor->text() + "'";
             Utils::m_system(cmdStr_2.toUtf8().data());
             this->mw->is_stop_check_net_state = 0;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             this->mw->setTrayLoading(false);
             qDebug() << "qDebug: activate time out in function activateConnection";
             qDebug() << "qDebug: 连接超时（30秒超时时间）";
@@ -753,6 +754,7 @@ void WpaWifiDialog::activateConnection() {
             setEditorEnable(true);
             emit conn_failed();
             this->mw->is_stop_check_net_state = 0;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             this->mw->setTrayLoading(false);
         } else {
             //连接成功
@@ -763,6 +765,7 @@ void WpaWifiDialog::activateConnection() {
             upThread->deleteLater();
             emit conn_done();
             this->mw->is_stop_check_net_state = 0;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             this->mw->setTrayLoading(false);
             qDebug() << "qDebug: activated wpa security wifi successfully";
             this->close();
@@ -770,6 +773,7 @@ void WpaWifiDialog::activateConnection() {
     });
     upThread->start();
     this->mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     this->mw->setTrayLoading(true);
 }
 

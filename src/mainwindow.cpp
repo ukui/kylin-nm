@@ -95,22 +95,6 @@ void MainWindow::firstlyStart()
 
     //checkSingleAndShowTrayicon();
     //trayIcon->setVisible(true);
-
-    m_secondary_start_timer = new QTimer(this);
-    connect(m_secondary_start_timer, &QTimer::timeout, this, [ = ]() {
-        m_secondary_start_timer->stop();
-        secondaryStart();//满足条件后执行比较耗时的二级启动
-    });
-    m_secondary_start_timer->start(5 * 1000);
-}
-
-/**
- * @brief MainWindow::secondaryStart 二级启动
- */
-void MainWindow::secondaryStart()
-{
-    if (m_load_finished)
-        return;
     // 连接kds的dbus接收rfkill变化的信号&获取当前WIFI状态
     qDebug()<<"Initing kdsDbus...";
     kdsDbus = new QDBusInterface("org.ukui.kds", \
@@ -120,7 +104,6 @@ void MainWindow::secondaryStart()
     QDBusConnection::systemBus().connect(kdsDbus->service(), kdsDbus->path(), kdsDbus->interface(), "signalRfkillStatusChanged", this, SLOT(onRfkillStatusChanged()));
 
     PrimaryManager();
-    toStart();
 
     qDebug()<<"Init objKyDbus...";
     objKyDBus = new KylinDBus(this);
@@ -180,12 +163,32 @@ void MainWindow::secondaryStart()
     connect(btnWireless, &SwitchButton::switchStatusChanged, this, [ = ]() {
         BackThread::saveSwitchButtonState(WIFI_SWITCH_OPENED, btnWireless->getSwitchStatus());
     });
+
+    //检查有线网络的个数是否为0,如果是0，则新建一个有线网络
+    checkIfWiredNetExist();
+
+    m_secondary_start_timer = new QTimer(this);
+    connect(m_secondary_start_timer, &QTimer::timeout, this, [ = ]() {
+        m_secondary_start_timer->stop();
+        secondaryStart();//满足条件后执行比较耗时的二级启动
+    });
+    m_secondary_start_timer->start(5 * 1000);
+}
+
+/**
+ * @brief MainWindow::secondaryStart 二级启动
+ */
+void MainWindow::secondaryStart()
+{
+    if (m_load_finished)
+        return;
 //    if (!objKyDBus->isWiredCableOn) {
 //        btnWired->blockSignals(true);
 //        btnWired->setSwitchStatus(false);
 //        btnWired->setEnabled(false);
 //        btnWired->blockSignals(false);
 //    }
+    toStart();
 
     ui->btnNetList->setAttribute(Qt::WA_Hover,true);
     ui->btnNetList->installEventFilter(this);
@@ -193,8 +196,6 @@ void MainWindow::secondaryStart()
     ui->btnWifiList->installEventFilter(this);
     hasWifiConnected = false;
 
-    //检查有线网络的个数是否为0,如果是0，则新建一个有线网络
-    checkIfWiredNetExist();
     m_load_finished = true;
 }
 

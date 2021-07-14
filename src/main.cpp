@@ -97,13 +97,13 @@ int main(int argc, char *argv[])
 
     qDebug()<<"Kylin Network Manager Is Already Launched";
 
-    int loopNum = 0;
-    while (!QSystemTrayIcon::isSystemTrayAvailable()) {
-        if (loopNum == 15) return 1;
-        qDebug()<<"I couldn't detect any system tray on this system now";
-        loopNum += 1;
-        sleep(1);
-    }
+//    int loopNum = 0;
+//    while (!QSystemTrayIcon::isSystemTrayAvailable()) {
+//        if (loopNum == 15) return 1;
+//        qDebug()<<"I couldn't detect any system tray on this system now";
+//        loopNum += 1;
+//        sleep(1);
+//    }
     QApplication::setQuitOnLastWindowClosed(false);
 
     // Internationalization

@@ -82,6 +82,12 @@ IFace* BackThread::execGetIface()
             QString iname = lastStr.left(index2);
             QString istateStr = lastStr.mid(index2).trimmed();
 
+            if (type == "ethernet") {
+                iface->lcards.append(iname);
+            } else if (type == "wifi") {
+                iface->wcards.append(iname);
+            }
+
             //只要存在一个有线设备已连接，就不再扫描其他有线设备状态，避免有线被误断开
             if (type == "ethernet" && iface->lstate != DEVICE_CONNECTED) {
                 // if type is wired network

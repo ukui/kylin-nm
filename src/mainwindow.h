@@ -219,6 +219,8 @@ public slots:
     void onNetworkDeviceRemoved(QDBusObjectPath objPath);
     void getLanBandWidth();
     void checkIfWiredNetExist();
+    void onBtnNetListClicked(int flag=0);
+    void onNewConnAdded(int type);
 
     void onExternalConnectionChange(QString type, bool isConnUp);
     void onExternalLanChange();
@@ -384,8 +386,6 @@ private slots:
 
     void onBtnNetClicked();
 //    void on_btnWifiList_clicked();
-    void onBtnNetListClicked(int flag=0);
-    void onNewConnAdded(int type);
 
     void onRequestRevalueUpdateWifi();
     void getLanListDone(QStringList slist);

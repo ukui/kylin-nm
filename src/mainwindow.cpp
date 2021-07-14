@@ -34,6 +34,7 @@
 #include <QtConcurrent>
 
 QString llname, lwname, hideWiFiConn;
+QStringList lcards,wcards;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -549,6 +550,8 @@ void MainWindow::initNetwork()
     wcardname = iface->wname;
     lwname = iface->wname;
     lcardname = iface->lname;
+    lcards = iface->lcards;
+    wcards = iface->wcards;
     llname = iface->lname;
     confForm->lcard = lcardname;
     confForm->wcard = wcardname;
@@ -1356,14 +1359,12 @@ void MainWindow::onBtnLanClicked(int flag)
     case 0: {
         qDebug()<<"On btnWired clicked! will close switch button";
         QtConcurrent::run([=]() {
-            QString close_device_cmd = "nmcli device set " + llname + " managed false";
-            int res = system(close_device_cmd.toUtf8().data());
-            qDebug()<<"Trying to close ethernet device : "<<llname<<". res="<<res;
-            if (res == 0) {
-                emit this->onWiredDeviceChanged(false);
-            } else {
-                qWarning()<<"Close ethernet device failed!";
+            foreach (QString lcard, lcards) {
+                QString close_device_cmd = "nmcli device set " + lcard + " managed false";
+                int res = system(close_device_cmd.toUtf8().data());
+                qDebug()<<"Trying to close ethernet device : "<<lcard<<". res="<<res;
             }
+            emit this->onWiredDeviceChanged(false);
         });
         break;
     }
@@ -1377,14 +1378,12 @@ void MainWindow::onBtnLanClicked(int flag)
         }
         qDebug()<<"On btnWired clicked! will open switch button";
         QtConcurrent::run([=]() {
-            QString open_device_cmd = "nmcli device set " + llname + " managed true";
-            int res = system(open_device_cmd.toUtf8().data());
-            qDebug()<<"Trying to open ethernet device : "<<llname<<". res="<<res;
-            if (res == 0) {
-                emit this->onWiredDeviceChanged(true);
-            } else {
-                qWarning()<<"Open ethernet device failed!";
+            foreach (QString lcard, lcards) {
+                QString open_device_cmd = "nmcli device set " + lcard + " managed true";
+                int res = system(open_device_cmd.toUtf8().data());
+                qDebug()<<"Trying to open ethernet device : "<<lcard<<". res="<<res;
             }
+            emit this->onWiredDeviceChanged(true);
         });
         break;
     }
@@ -1732,12 +1731,12 @@ void MainWindow::getLanListDone(QStringList slist)
     }
     if (currConnLanSsidUuidState.size() != 0) {
         int i = 0;
-        do {
+        while((i + 2) < currConnLanSsidUuidState.size()) {
             actLanSsidName.append(currConnLanSsidUuidState.at(i)); //有线网络名称
             actLanUuidName.append(currConnLanSsidUuidState.at(i+1)); //有线网络唯一ID
             actLanStateName.append(currConnLanSsidUuidState.at(i+2)); //有线网络连接状态
             i += 3;
-        } while(i<currConnLanSsidUuidState.size());
+        }
         currTopLanItem = actLanSsidName.size();
     }
 

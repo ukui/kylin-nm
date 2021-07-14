@@ -51,6 +51,7 @@ public:
     QStringList wcards;
     int lstate; // 0已连接 1未连接 2已关闭
     int wstate; // 0已连接 1未连接 2已关闭
+    bool lmanaged;
 };
 
 class BackThread : public QObject

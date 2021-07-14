@@ -231,6 +231,7 @@ void DlgHideWifiWpa::on_btnCancel_clicked()
 void DlgHideWifiWpa::on_btnConnect_clicked()
 {
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     mw->is_connect_hide_wifi = 1;
 
     QThread *t = new QThread();

@@ -641,6 +641,7 @@ void OneConnForm::on_btnDisConn_clicked()
     this->startWifiWaiting(false);
 
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     //mw->on_btnHotspotState();
     //kylin_network_set_con_down(wifiName.toUtf8().data());
     kylin_network_set_con_down(wifiUuid.toUtf8().data());
@@ -651,9 +652,16 @@ void OneConnForm::on_btnDisConn_clicked()
 //点击列表item扩展时会出现该按钮 用于连接网络
 void OneConnForm::on_btnConnSub_clicked()
 {
-    if (mw->is_stop_check_net_state == 1) {
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+    //当有其他wifi正在连接时，禁止点击连接按钮
+    if (mw->is_stop_check_net_state == 1 || iface->wstate == DEVICE_CONNECTING) {
+        delete iface;
+        delete bt;
         return;
     }
+    delete iface;
+    delete bt;
 
     if (lbPwdTip->isVisible() && this->hasPwd) {
         this->slotConnWifiResult(2);
@@ -667,9 +675,16 @@ void OneConnForm::on_btnConnSub_clicked()
 //无需密码的wifi连接
 void OneConnForm::on_btnConn_clicked()
 {
-    if (mw->is_stop_check_net_state == 1) {
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+    //当有其他wifi正在连接时，禁止点击连接按钮
+    if (mw->is_stop_check_net_state == 1 || iface->wstate == DEVICE_CONNECTING) {
+        delete iface;
+        delete bt;
         return;
     }
+    delete iface;
+    delete bt;
 
     if (lbPwdTip->isVisible() && this->hasPwd) {
         this->slotConnWifiResult(2);
@@ -688,6 +703,7 @@ void OneConnForm::toConnectWirelessNetwork()
         bool isConfiged = getWifiConfig(wc, this->wifiName);
         if (isConfiged && wc.eap != "peap") {
             mw->is_stop_check_net_state = 1;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             QThread *t = new QThread();
             BackThread *bt = new BackThread();
             bt->moveToThread(t);
@@ -820,6 +836,7 @@ void OneConnForm::toConnectWirelessNetwork()
         QString homePath = getenv("HOME");
         if (QFile(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName)).exists()) { //已为该用户存储密码
             mw->is_stop_check_net_state = 1;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             QThread *t = new QThread();
             BackThread *bt = new BackThread();
             bt->moveToThread(t);
@@ -834,6 +851,7 @@ void OneConnForm::toConnectWirelessNetwork()
             connect(bt, &BackThread::connDone, this, [ = ](int res) {
                 this->stopWifiWaiting(true);
                 mw->is_stop_check_net_state = 0;
+                qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
                 if (res) {
                     QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName).toUtf8());
                 }
@@ -851,6 +869,7 @@ void OneConnForm::toConnectWirelessNetwork()
     }
 
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     m_connWithPwd = false;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
@@ -867,6 +886,14 @@ void OneConnForm::toConnectWirelessNetwork()
 //需要密码的wifi连接
 void OneConnForm::on_btnConnPWD_clicked()
 {
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+    //当有其他wifi正在连接时，禁止点击连接按钮
+    if (iface->wstate == DEVICE_CONNECTING) {
+        delete iface;
+        delete bt;
+        return;
+    }
     mw->m_is_inputting_wifi_password = false; //点击连接表示密码输入已完成
     m_connWithPwd = true;
     qDebug()<<"A button named btnConnPWD about wifi net is clicked.";
@@ -889,6 +916,7 @@ void OneConnForm::on_btnConnPWD_clicked()
         }
 
         mw->is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
         QThread *t = new QThread();
         BackThread *bt = new BackThread();
         bt->moveToThread(t);
@@ -903,6 +931,7 @@ void OneConnForm::on_btnConnPWD_clicked()
         connect(bt, &BackThread::connDone, this, [ = ](int res) {
             this->stopWifiWaiting(true);
             mw->is_stop_check_net_state = 0;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             if (res) {
                 QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName).toUtf8());
             }
@@ -914,6 +943,7 @@ void OneConnForm::on_btnConnPWD_clicked()
 
     if (! mw->is_stop_check_net_state) {
         mw->is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
         QThread *t = new QThread();
         BackThread *bt = new BackThread();
         bt->moveToThread(t);
@@ -974,6 +1004,11 @@ bool OneConnForm::isWifiConfExist(QString netName)
     } // end foreach (QDBusObjectPath objNet, m_objNets)
 
     return false;
+}
+
+bool OneConnForm::isInputtingPwd()
+{
+    return ui->lePassword->isVisible();
 }
 
 void OneConnForm::setlbPwdTipVisble(const bool &visible)
@@ -1169,6 +1204,7 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     this->stopWifiWaiting(true);
 
     mw->is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
 }
 
 void OneConnForm::waitAnimStep()
@@ -1194,6 +1230,7 @@ void OneConnForm::waitAnimStep()
         this->stopWifiWaiting(true); //动画超出时间限制，强制停止动画
 
         mw->is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     }
 }
 

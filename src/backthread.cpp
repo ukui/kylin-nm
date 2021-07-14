@@ -286,13 +286,13 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
 
     bool isWiredCableAlready = objBackThreadDBus.getWiredCableStateByIfname(ifname);
 
-    if (connectType == "bluetooth" || connectType == "vpn"|| ifname == "") {
+    if (connectType == "bluetooth" || connectType == "vpn"|| ifname == "" || ifname == "--") {
         isWiredCableAlready = true; //对于蓝牙类型的网络不需要接入网线就可以连接
         mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
     } else {
         mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
     }
-    qDebug()<<"Trying to connect wifi. ssid="<<connName;
+    qDebug()<<"Trying to connect lan. uuid="<<connName<<". cmd="<<mycmd;
 
     if (isWiredCableAlready) {
         QStringList options;

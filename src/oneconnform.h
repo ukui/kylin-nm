@@ -84,6 +84,7 @@ public:
     void setLePassword();
 
     bool isWifiConfExist(QString netName);
+    bool isInputtingPwd();
     void setlbPwdTipVisble(const bool&);
 
     QString wifiName;
@@ -96,7 +97,7 @@ public:
     QLabel * lbPwdTip = nullptr;
     bool isHuaweiPC;
     bool isHuaWei9006C;
-    bool isSelected;
+    bool isSelected;\
     bool isActive;
     bool isConnected;
     bool isTopItem;

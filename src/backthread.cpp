@@ -71,6 +71,7 @@ IFace* BackThread::execGetIface()
 
     iface->lstate = DEVICE_UNMANAGED;
     iface->wstate = DEVICE_UNMANAGED;
+    iface->lmanaged = false;
 
     for (int i = 1; i < txtList.size(); i ++) {
         QString line = txtList.at(i);
@@ -99,11 +100,14 @@ IFace* BackThread::execGetIface()
                     iface->lstate = DEVICE_UNAVALIABLE;
                 } else if (istateStr == "disconnected") {
                     iface->lstate = DEVICE_DISCONNECTED; //wired network is disconnected
+                    iface->lmanaged = true;
                 } else if (istateStr == "connected" || istateStr == "connecting (getting IP configuration)") {
                     iface->lstate = DEVICE_CONNECTED; //wired network is connected
+                    iface->lmanaged = true;
                 } else {
                     //连接中，正在配置
                     iface->lstate = DEVICE_CONNECTING;
+                    iface->lmanaged = true;
                 }
             }
             if (type == "wifi" && iface->wname.isEmpty()) { //仅统计第一个无线网卡，后续无线网卡状态必然等于或差与第一个获取到的无线网卡

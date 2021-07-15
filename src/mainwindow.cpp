@@ -1943,7 +1943,7 @@ void MainWindow::getLanListDone(QStringList slist)
     qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<is_stop_check_net_state;
     //有线网按钮状态校准
     IFace *iface = BackThread::execGetIface();
-    if (iface && (iface->lstate == DEVICE_UNAVALIABLE || iface->lstate == DEVICE_UNMANAGED)) {
+    if (iface && !iface->lmanaged) {
         btnWired->blockSignals(true);
         btnWired->setSwitchStatus(false);
         btnWired->blockSignals(false);
@@ -2782,7 +2782,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
             //如果不是华为的电脑，选择wifi在这里执行
             if (actWifiName != "--" && actWifiName == wname) {
 //                if (!actWifiBssidList.contains(wbssid)) {
-                if(actWifiBssid != wbssid)
+                if(actWifiBssid != wbssid) {
                     continue; //若当前热点ssid名称和已经连接的wifi的ssid名称相同，但bssid不同，则跳过
                 }
             }

@@ -557,7 +557,7 @@ void MainWindow::initNetwork()
     confForm->lcard = lcardname;
     confForm->wcard = wcardname;
 
-    mwBandWidth = bt->execChkLanWidth(lcardname);
+//    mwBandWidth = bt->execChkLanWidth(lcardname);
 
     // 开关状态
     qDebug()<<"===";
@@ -1195,7 +1195,7 @@ void MainWindow::getLanBandWidth()
 
     lcardname = iface->lname;
 
-    mwBandWidth = bt->execChkLanWidth(lcardname);
+//    mwBandWidth = bt->execChkLanWidth(lcardname);
 }
 
 //检测网络设备状态
@@ -1826,6 +1826,9 @@ void MainWindow::getLanListDone(QStringList slist)
                         connect(ccfAct, SIGNAL(requestHandleLanDisconn()), this, SLOT(handleLanDisconn()));
                         ccfAct->setLanName(nname, ltype, nuuid, mIfName);//第二个参数本来是strLanName，但目前不需要翻译
                         ccfAct->setIcon(true);
+                        BackThread *bt = new BackThread();
+                        mwBandWidth = bt->execChkLanWidth(mIfName);
+                        delete bt;
                         ccfAct->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macInterface);
                         ccfAct->isConnected = true;
                         ccfAct->setTopItem(false);
@@ -3964,8 +3967,8 @@ void MainWindow::handleWifiDisconnLoading()
 //网络开关处理，打开与关闭网络
 void MainWindow::enNetDone()
 {
-    BackThread *bt = new BackThread();
-    mwBandWidth = bt->execChkLanWidth(lcardname);
+//    BackThread *bt = new BackThread();
+//    mwBandWidth = bt->execChkLanWidth(lcardname);
 
     // 打开网络开关时如果Wifi开关是打开的，设置其样式
     if (checkWlOn()) {

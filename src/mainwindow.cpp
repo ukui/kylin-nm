@@ -1004,7 +1004,7 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
     if (actLanName != "--") {
         QList<QString> lanstate = objKyDBus->getAtiveLanSsidUuidState();
         //qDebug() << Q_FUNC_INFO << lanstate;
-        if (lanstate[2] == "connected") {
+        if (lanstate.length() >= 2 && lanstate[2] == "connected") {
             setTrayIcon(iconLanOnline);
         }
         else {

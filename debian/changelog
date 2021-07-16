@@ -1,10 +1,18 @@
+kylin-nm (3.0.1-1kylin59) v101; urgency=medium
+
+  * BUG号：#67155
+  * 需求号：无
+  * 其他改动：修复多有线网卡速率显示有误问题
+
+ -- zhangjiaping <zhangjiaping@kylinos.cn>  Fri, 16 Jul 2021 09:31:45 +0800
+
 kylin-nm (3.0.1-1kylin58) v101; urgency=medium
   
   * BUG号：#51253 #65507 #65518 #56565 #66970
   * 需求号：无
   * 其他改动：修复增删有线网，有线列表不刷新问题
 
- -- zhangjiaping <zhangjiaping@kylinos.cn>  Fri, 14 Jul 2021 15:46:13 +0800
+ -- zhangjiaping <zhangjiaping@kylinos.cn>  Wed, 14 Jul 2021 15:46:13 +0800
 
 kylin-nm (3.0.1-1kylin57) v101; urgency=medium
 

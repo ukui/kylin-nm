@@ -850,6 +850,7 @@ void MainWindow::handleIconClicked()
     if (!iface.isValid() || !reply.isValid() || reply.value().size()<5) {
         qCritical() << QDBusConnection::sessionBus().lastError().message();
         this->setGeometry(0,0,this->width(),this->height());
+        return;
     }
 
     qDebug()<<reply.value().at(4).toInt();
@@ -1453,11 +1454,8 @@ void MainWindow::onBtnLanClicked(int flag)
 void MainWindow::setLanSwitchStatus(bool is_opened)
 {
     btnWired->blockSignals(true);
-    if (is_opened) {
-        btnWired->setSwitchStatus(true);
-    } else {
-        btnWired->setSwitchStatus(false);
-    }
+    btnWired->setSwitchStatus(is_opened);
+    BackThread::saveSwitchButtonState(LAN_SWITCH_OPENED, is_opened);
     btnWired->blockSignals(false);
     QTimer::singleShot(100, this, [=](){
         //加一点点延时再刷新列表，避免刚刚触发设备开关时刷新列表调用的dbus卡住
@@ -4836,7 +4834,7 @@ int MainWindow::getScreenGeometry(QString methodName)
     QDBusMessage response = QDBusConnection::sessionBus().call(message);
     if (response.type() == QDBusMessage::ReplyMessage)
     {
-        if(response.arguments().isEmpty() == false) {
+        if(!response.arguments().isEmpty()) {
             int value = response.arguments().takeFirst().toInt();
             res = value;
             qDebug() << value;

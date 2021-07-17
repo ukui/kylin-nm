@@ -1374,13 +1374,16 @@ void MainWindow::onBtnLanClicked(int flag)
     switch (flag) {
     case 0: {
         qDebug()<<"On btnWired clicked! will close switch button";
+        emit this->onWiredDeviceChanged(false);
+        BackThread::saveSwitchButtonState(LAN_SWITCH_OPENED, false);
+        this->startLoading();
         QtConcurrent::run([=]() {
             foreach (QString lcard, lcards) {
                 QString close_device_cmd = "nmcli device set " + lcard + " managed false";
                 int res = system(close_device_cmd.toUtf8().data());
                 qDebug()<<"Trying to close ethernet device : "<<lcard<<". res="<<res;
             }
-            emit this->onWiredDeviceChanged(false);
+            this->ksnm->execGetLanList();
         });
         break;
     }
@@ -1393,13 +1396,19 @@ void MainWindow::onBtnLanClicked(int flag)
             return;
         }
         qDebug()<<"On btnWired clicked! will open switch button";
+        emit this->onWiredDeviceChanged(true);
+        BackThread::saveSwitchButtonState(LAN_SWITCH_OPENED, true);
+        this->startLoading();
         QtConcurrent::run([=]() {
             foreach (QString lcard, lcards) {
                 QString open_device_cmd = "nmcli device set " + lcard + " managed true";
                 int res = system(open_device_cmd.toUtf8().data());
                 qDebug()<<"Trying to open ethernet device : "<<lcard<<". res="<<res;
             }
-            emit this->onWiredDeviceChanged(true);
+            QTimer::singleShot(0.5 * 1000, this, [ = ]() {
+                //防止卡顿，延时一小段时间后再获取列表
+                this->ksnm->execGetLanList();
+            });
         });
         break;
     }
@@ -1427,9 +1436,7 @@ void MainWindow::onBtnLanClicked(int flag)
                 int res = system(open_device_cmd.toUtf8().data());
                 qDebug()<<"Trying to open ethernet device : "<<llname<<". res="<<res;
                 if (res == 0) {
-                    btnWired->blockSignals(true);
                     emit this->onWiredDeviceChanged(true);
-                    btnWired->blockSignals(false);
                 } else {
                     qWarning()<<"Open ethernet device failed!";
                 }
@@ -1439,11 +1446,10 @@ void MainWindow::onBtnLanClicked(int flag)
     }
     case 5: {
         qDebug()<<"Wired device plug out!";
-        btnWired->blockSignals(true);
-        emit this->onWiredDeviceChanged(false);
-//        qDebug()<<"Set btnwired enabled=false!";
-//        btnWired->setEnabled(false);
-        btnWired->blockSignals(false);
+        IFace *iface = BackThread::execGetIface();
+        if (iface && !iface->lmanaged) {
+            emit this->onWiredDeviceChanged(false);
+        }
         break;
     }
     default:
@@ -1455,12 +1461,11 @@ void MainWindow::setLanSwitchStatus(bool is_opened)
 {
     btnWired->blockSignals(true);
     btnWired->setSwitchStatus(is_opened);
-    BackThread::saveSwitchButtonState(LAN_SWITCH_OPENED, is_opened);
     btnWired->blockSignals(false);
-    QTimer::singleShot(100, this, [=](){
-        //加一点点延时再刷新列表，避免刚刚触发设备开关时刷新列表调用的dbus卡住
-        ksnm->execGetLanList();
-    });
+//    QTimer::singleShot(100, this, [=](){
+//        //加一点点延时再刷新列表，避免刚刚触发设备开关时刷新列表调用的dbus卡住
+//        ksnm->execGetLanList();
+//    });
 }
 
 void MainWindow::onBtnNetListClicked(int flag)

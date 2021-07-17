@@ -1039,7 +1039,7 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
 
     for(QString key : map.keys() ) {
         if (key == "802-3-ethernet") {
-            emit this->updateWiredList(0); //send this signal to update wired network list
+            emit this->updateWiredList(1); //send this signal to update wired network list
             emit this->newConnAdded(0);
             m_lanPathList.append(objPath.path());
             emit mw->wiredConnectionAdded();
@@ -1109,7 +1109,7 @@ void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
         m_lanPathList.removeOne(objPath.path());
         qDebug()<<"An old network was removed from configure directory.";
         if (mw->is_btnLanList_clicked == 1) {
-            emit this->updateWiredList(0); //send this signal to update wired network list
+            emit this->updateWiredList(1); //send this signal to update wired network list
         }
         emit mw->wiredConnectionRemoved();
     }
@@ -1750,7 +1750,11 @@ void KylinDBus::slot_timeout()
 void KylinDBus::onLanIpPropertiesChanged()
 {
     if (!mw->isHandlingWiredCableOn) {
-        emit this->updateWiredList(0);
+        QTimer::singleShot(0.5 * 1000, this, [ = ]() {
+            //防止卡顿，延时一小段时间后再发信号
+            emit this->updateWiredList(0);
+        });
+//        emit this->updateWiredList(0);
     }
 }
 

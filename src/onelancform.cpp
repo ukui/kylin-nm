@@ -272,6 +272,10 @@ void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString s
         str4 = tr("No IfName");
     }
 
+    if (str3.isEmpty() || str3 == "") {
+        str3 = "--";
+    }
+
     QString strIPv4 = QString(tr("IPv4："));
     QString strIPv6 = QString(tr("IPv6："));
     QString strBW = QString(tr("BandWidth："));

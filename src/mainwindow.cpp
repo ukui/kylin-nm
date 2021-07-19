@@ -144,7 +144,7 @@ void MainWindow::firstlyStart()
 
     QVariant wifi_state = BackThread::getSwitchState(WIFI_SWITCH_OPENED);
     QVariant lan_state = BackThread::getSwitchState(LAN_SWITCH_OPENED);
-    if (!wifi_state.isNull() && wifi_state.isValid()) {
+    if (!wifi_state.isNull() && wifi_state.isValid() && is_wireless_adapter_ready == 1) {
         //设置WiFi开关状态
         if (wifi_state.toBool() && !btnWireless->getSwitchStatus())
             onBtnWifiClicked(1);
@@ -557,7 +557,7 @@ void MainWindow::initNetwork()
     confForm->lcard = lcardname;
     confForm->wcard = wcardname;
 
-    mwBandWidth = bt->execChkLanWidth(lcardname);
+//    mwBandWidth = bt->execChkLanWidth(lcardname);
 
     // 开关状态
     qDebug()<<"===";
@@ -850,6 +850,7 @@ void MainWindow::handleIconClicked()
     if (!iface.isValid() || !reply.isValid() || reply.value().size()<5) {
         qCritical() << QDBusConnection::sessionBus().lastError().message();
         this->setGeometry(0,0,this->width(),this->height());
+        return;
     }
 
     qDebug()<<reply.value().at(4).toInt();
@@ -992,7 +993,7 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
     activecon *act = kylin_network_get_activecon_info();
     int index = 0;
     while (act[index].con_name != NULL) {
-        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet" || QString(act[index].type) == "bluetooth") {
+        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet" || QString(act[index].type) == "bluetooth" || QString(act[index].type) == "vpn") {
             actLanName = QString(act[index].con_name);
         }
         if (QString(act[index].type) == "wifi" || QString(act[index].type) == "802-11-wireless") {
@@ -1004,7 +1005,7 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
     if (actLanName != "--") {
         QList<QString> lanstate = objKyDBus->getAtiveLanSsidUuidState();
         //qDebug() << Q_FUNC_INFO << lanstate;
-        if (lanstate[2] == "connected") {
+        if (lanstate.length() >= 2 && lanstate[2] == "connected") {
             setTrayIcon(iconLanOnline);
         }
         else {
@@ -1195,7 +1196,7 @@ void MainWindow::getLanBandWidth()
 
     lcardname = iface->lname;
 
-    mwBandWidth = bt->execChkLanWidth(lcardname);
+//    mwBandWidth = bt->execChkLanWidth(lcardname);
 }
 
 //检测网络设备状态
@@ -1373,13 +1374,16 @@ void MainWindow::onBtnLanClicked(int flag)
     switch (flag) {
     case 0: {
         qDebug()<<"On btnWired clicked! will close switch button";
+        emit this->onWiredDeviceChanged(false);
+        BackThread::saveSwitchButtonState(LAN_SWITCH_OPENED, false);
+        this->startLoading();
         QtConcurrent::run([=]() {
             foreach (QString lcard, lcards) {
                 QString close_device_cmd = "nmcli device set " + lcard + " managed false";
                 int res = system(close_device_cmd.toUtf8().data());
                 qDebug()<<"Trying to close ethernet device : "<<lcard<<". res="<<res;
             }
-            emit this->onWiredDeviceChanged(false);
+            this->ksnm->execGetLanList();
         });
         break;
     }
@@ -1392,13 +1396,19 @@ void MainWindow::onBtnLanClicked(int flag)
             return;
         }
         qDebug()<<"On btnWired clicked! will open switch button";
+        emit this->onWiredDeviceChanged(true);
+        BackThread::saveSwitchButtonState(LAN_SWITCH_OPENED, true);
+        this->startLoading();
         QtConcurrent::run([=]() {
             foreach (QString lcard, lcards) {
                 QString open_device_cmd = "nmcli device set " + lcard + " managed true";
                 int res = system(open_device_cmd.toUtf8().data());
                 qDebug()<<"Trying to open ethernet device : "<<lcard<<". res="<<res;
             }
-            emit this->onWiredDeviceChanged(true);
+            QTimer::singleShot(0.5 * 1000, this, [ = ]() {
+                //防止卡顿，延时一小段时间后再获取列表
+                this->ksnm->execGetLanList();
+            });
         });
         break;
     }
@@ -1426,9 +1436,7 @@ void MainWindow::onBtnLanClicked(int flag)
                 int res = system(open_device_cmd.toUtf8().data());
                 qDebug()<<"Trying to open ethernet device : "<<llname<<". res="<<res;
                 if (res == 0) {
-                    btnWired->blockSignals(true);
                     emit this->onWiredDeviceChanged(true);
-                    btnWired->blockSignals(false);
                 } else {
                     qWarning()<<"Open ethernet device failed!";
                 }
@@ -1438,11 +1446,10 @@ void MainWindow::onBtnLanClicked(int flag)
     }
     case 5: {
         qDebug()<<"Wired device plug out!";
-        btnWired->blockSignals(true);
-        emit this->onWiredDeviceChanged(false);
-//        qDebug()<<"Set btnwired enabled=false!";
-//        btnWired->setEnabled(false);
-        btnWired->blockSignals(false);
+        IFace *iface = BackThread::execGetIface();
+        if (iface && !iface->lmanaged) {
+            emit this->onWiredDeviceChanged(false);
+        }
         break;
     }
     default:
@@ -1453,16 +1460,12 @@ void MainWindow::onBtnLanClicked(int flag)
 void MainWindow::setLanSwitchStatus(bool is_opened)
 {
     btnWired->blockSignals(true);
-    if (is_opened) {
-        btnWired->setSwitchStatus(true);
-    } else {
-        btnWired->setSwitchStatus(false);
-    }
+    btnWired->setSwitchStatus(is_opened);
     btnWired->blockSignals(false);
-    QTimer::singleShot(100, this, [=](){
-        //加一点点延时再刷新列表，避免刚刚触发设备开关时刷新列表调用的dbus卡住
-        ksnm->execGetLanList();
-    });
+//    QTimer::singleShot(100, this, [=](){
+//        //加一点点延时再刷新列表，避免刚刚触发设备开关时刷新列表调用的dbus卡住
+//        ksnm->execGetLanList();
+//    });
 }
 
 void MainWindow::onBtnNetListClicked(int flag)
@@ -1826,6 +1829,9 @@ void MainWindow::getLanListDone(QStringList slist)
                         connect(ccfAct, SIGNAL(requestHandleLanDisconn()), this, SLOT(handleLanDisconn()));
                         ccfAct->setLanName(nname, ltype, nuuid, mIfName);//第二个参数本来是strLanName，但目前不需要翻译
                         ccfAct->setIcon(true);
+                        BackThread *bt = new BackThread();
+                        mwBandWidth = bt->execChkLanWidth(mIfName);
+                        delete bt;
                         ccfAct->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macInterface);
                         ccfAct->isConnected = true;
                         ccfAct->setTopItem(false);
@@ -3964,8 +3970,8 @@ void MainWindow::handleWifiDisconnLoading()
 //网络开关处理，打开与关闭网络
 void MainWindow::enNetDone()
 {
-    BackThread *bt = new BackThread();
-    mwBandWidth = bt->execChkLanWidth(lcardname);
+//    BackThread *bt = new BackThread();
+//    mwBandWidth = bt->execChkLanWidth(lcardname);
 
     // 打开网络开关时如果Wifi开关是打开的，设置其样式
     if (checkWlOn()) {
@@ -4833,7 +4839,7 @@ int MainWindow::getScreenGeometry(QString methodName)
     QDBusMessage response = QDBusConnection::sessionBus().call(message);
     if (response.type() == QDBusMessage::ReplyMessage)
     {
-        if(response.arguments().isEmpty() == false) {
+        if(!response.arguments().isEmpty()) {
             int value = response.arguments().takeFirst().toInt();
             res = value;
             qDebug() << value;

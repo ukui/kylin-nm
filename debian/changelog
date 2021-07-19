@@ -1,3 +1,11 @@
+kylin-nm (3.0.1-1kylin60) v101; urgency=medium
+
+  * BUG号：#66995 #67247 #67155 
+  * 需求号：无
+  * 其他改动：修复4院项目有线网卡带宽显示错误问题和有线网连接指定网卡错误问题
+
+ -- zhangjiaping <zhangjiaping@kylinos.cn>  Mon, 19 Jul 2021 13:51:24 +0800
+
 kylin-nm (3.0.1-1kylin59) v101; urgency=medium
 
   * BUG号：#67155

@@ -144,7 +144,7 @@ void MainWindow::firstlyStart()
 
     QVariant wifi_state = BackThread::getSwitchState(WIFI_SWITCH_OPENED);
     QVariant lan_state = BackThread::getSwitchState(LAN_SWITCH_OPENED);
-    if (!wifi_state.isNull() && wifi_state.isValid()) {
+    if (!wifi_state.isNull() && wifi_state.isValid() && is_wireless_adapter_ready == 1) {
         //设置WiFi开关状态
         if (wifi_state.toBool() && !btnWireless->getSwitchStatus())
             onBtnWifiClicked(1);
@@ -993,7 +993,7 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
     activecon *act = kylin_network_get_activecon_info();
     int index = 0;
     while (act[index].con_name != NULL) {
-        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet" || QString(act[index].type) == "bluetooth") {
+        if (QString(act[index].type) == "ethernet" || QString(act[index].type) == "802-3-ethernet" || QString(act[index].type) == "bluetooth" || QString(act[index].type) == "vpn") {
             actLanName = QString(act[index].con_name);
         }
         if (QString(act[index].type) == "wifi" || QString(act[index].type) == "802-11-wireless") {

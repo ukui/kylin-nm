@@ -21,28 +21,32 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <QThread>
+#include <QtConcurrent>
 
 #define MAX_LEN 2048
 #define MAX_PATH 1024
 
 KSimpleNM::KSimpleNM(QObject *parent) : QObject(parent)
 {
-    runProcessLan = new QProcess(this);
-    connect(runProcessLan, &QProcess::readyRead, this, &KSimpleNM::readProcessLan);
-    connect(runProcessLan, SIGNAL(finished(int)), this, SLOT(finishedProcessLan(int)));
+//    runProcessLan = new QProcess(this);
+//    connect(runProcessLan, &QProcess::readyRead, this, &KSimpleNM::readProcessLan);
+//    connect(runProcessLan, SIGNAL(finished(int)), this, SLOT(finishedProcessLan(int)));
+//    connect(runProcessLan, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &KSimpleNM::finishedProcessLan);
 
     runProcessWifi = new QProcess(this);
     connect(runProcessWifi, &QProcess::readyRead, this, &KSimpleNM::readProcessWifi);
     connect(runProcessWifi, SIGNAL(finished(int)), this, SLOT(finishedProcessWifi(int)));
+//    connect(runProcessWifi, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &KSimpleNM::finishedProcessWifi);
 
     runProcessConn = new QProcess(this);
     connect(runProcessConn, &QProcess::readyRead, this, &KSimpleNM::readProcessConn);
     connect(runProcessConn, SIGNAL(finished(int)), this, SLOT(finishedProcessConn(int)));
+//    connect(runProcessConn, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &KSimpleNM::finishedProcessConn);
 }
 
 KSimpleNM::~KSimpleNM()
 {
-    delete runProcessLan;
+//    delete runProcessLan;
     delete runProcessWifi;
 }
 
@@ -59,12 +63,24 @@ void KSimpleNM::execGetLanList()
     }
     isExecutingGetLanList = true;
 
-    shellOutputLan = "";
-    QString getCmd = "export LANG='zh_CN.UTF-8';export LANGUAGE='zh_CN:zh';nmcli -f type,uuid,name connection show";
-    QStringList options;
-    options << "-c" << getCmd;
-    runProcessLan->start("/bin/bash",options);
-
+    QtConcurrent::run([=]() {
+        QProcess *runProcessLan = new QProcess(this);
+//        connect(runProcessLan, &QProcess::readyRead, this, &KSimpleNM::readProcessLan);
+//        connect(runProcessLan, SIGNAL(finished(int)), this, SLOT(finishedProcessLan(int)));
+        shellOutputLan = "";
+        QString getCmd = "export LANG='zh_CN.UTF-8';export LANGUAGE='zh_CN:zh';nmcli -f type,uuid,name connection show";
+        QStringList options;
+        options << "-c" << getCmd;
+        runProcessLan->start("/bin/bash",options);
+        runProcessLan->waitForFinished();
+        shellOutputLan = runProcessLan->readAll();
+        QStringList slist = shellOutputLan.split("\n");
+        qDebug()<<"Get Lan list Finished!";
+        emit this->getLanListFinished(slist);
+        isExecutingGetLanList = false;
+        delete runProcessLan;
+        runProcessLan = NULL;
+    });
     //runProcessLan->start("nmcli -f type,uuid,name connection show");
 }
 
@@ -108,8 +124,8 @@ void KSimpleNM::execGetConnList()
 //读取获取到的结果
 void KSimpleNM::readProcessLan()
 {
-    QString output = runProcessLan->readAll();
-    shellOutputLan += output;
+//    QString output = runProcessLan->readAll();
+//    shellOutputLan += output;
 }
 void KSimpleNM::readProcessWifi()
 {

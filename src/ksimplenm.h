@@ -30,7 +30,7 @@ public:
     explicit KSimpleNM(QObject *parent = nullptr);
     ~KSimpleNM();
 
-    QProcess *runProcessLan;
+//    QProcess *runProcessLan;
     QProcess *runProcessWifi;
     QProcess *runProcessConn;
     QString shellOutputLan;

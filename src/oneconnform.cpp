@@ -878,7 +878,11 @@ void OneConnForm::toConnectWirelessNetwork()
     connect(t, SIGNAL(started()), this, SLOT(slotConnWifi()));
     connect(this, SIGNAL(sigConnWifi(QString, QString)), bt, SLOT(execConnWifi(QString, QString)));
     connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
-    connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
+//    connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
+    connect(bt,&BackThread::connDone,this,[=](int res){
+       this->stopWifiWaiting(true);
+       slotConnWifiResult(res);
+    });
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     t->start();
 }

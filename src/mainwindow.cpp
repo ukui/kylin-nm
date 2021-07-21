@@ -1829,10 +1829,11 @@ void MainWindow::getLanListDone(QStringList slist)
                         connect(ccfAct, SIGNAL(requestHandleLanDisconn()), this, SLOT(handleLanDisconn()));
                         ccfAct->setLanName(nname, ltype, nuuid, mIfName);//第二个参数本来是strLanName，但目前不需要翻译
                         ccfAct->setIcon(true);
-                        BackThread *bt = new BackThread();
-                        mwBandWidth = bt->execChkLanWidth(mIfName);
-                        delete bt;
-                        ccfAct->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, mwBandWidth, macInterface);
+//                        BackThread *bt = new BackThread();
+//                        mwBandWidth = bt->execChkLanWidth(mIfName);
+//                        delete bt;
+                        QString bandWidth = BackThread::execChkLanWidth(mIfName);
+                        ccfAct->setLanInfo(objKyDBus->dbusActiveLanIpv4, objKyDBus->dbusActiveLanIpv6, bandWidth, macInterface);
                         ccfAct->isConnected = true;
                         ccfAct->setTopItem(false);
                         ccfAct->setAct(true);

@@ -158,7 +158,7 @@ public:
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
     QIcon iconConnecting;
     QList<QIcon> loadIcons;
-    QString mwBandWidth;
+//    QString mwBandWidth;
     KylinDBus *objKyDBus = nullptr;
     NetworkSpeed *objNetSpeed = nullptr;
     SwitchButton *btnWireless = nullptr;

@@ -65,7 +65,7 @@ public:
     static void saveSwitchButtonState(const QString &key, const QVariant &value);
     static QVariant getSwitchState(const QString &key);
     QString getConnProp(QString connName);
-    QString execChkLanWidth(QString ethName);
+    static QString execChkLanWidth(QString ethName);
     void getTheWifiCardName();
     QProcess *cmdProcessWifi = nullptr;
     QProcess *cmdProcessLan;

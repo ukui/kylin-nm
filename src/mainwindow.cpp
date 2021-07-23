@@ -1503,15 +1503,18 @@ void MainWindow::onBtnNetListClicked(int flag)
         return;
     }
 
-    if (iface->lstate == DEVICE_CONNECTED || iface->lstate == DEVICE_DISCONNECTED ||  iface->lstate == DEVICE_CONNECTING) {
-        this->startLoading();
-        this->ksnm->execGetLanList();
-    } else {
-        this->ksnm->isUseOldLanSlist = true;
-        QStringList slistLan;
-        slistLan.append("empty");
-        getLanListDone(slistLan);
-    }
+//    if (iface->lstate == DEVICE_CONNECTED || iface->lstate == DEVICE_DISCONNECTED ||  iface->lstate == DEVICE_CONNECTING) {
+//        this->startLoading();
+//        this->ksnm->execGetLanList();
+//    } else {
+//        this->ksnm->isUseOldLanSlist = true;
+//        QStringList slistLan;
+//        slistLan.append("empty");
+//        getLanListDone(slistLan);
+//    }
+    //不管有没有打开有线设备，有线列表都应该刷新
+    this->startLoading();
+    this->ksnm->execGetLanList();
 
     this->scrollAreal->show();
     this->topLanListWidget->show();

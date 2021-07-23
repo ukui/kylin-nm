@@ -30,9 +30,9 @@ public:
     explicit KSimpleNM(QObject *parent = nullptr);
     ~KSimpleNM();
 
-    QProcess *runProcessLan;
-    QProcess *runProcessWifi;
-    QProcess *runProcessConn;
+//    QProcess *runProcessLan;
+//    QProcess *runProcessWifi;
+//    QProcess *runProcessConn;
     QString shellOutputLan;
     QString shellOutputWifi;
     QString shellOutputConn;
@@ -53,12 +53,12 @@ signals:
     void requestRevalueUpdateWifi();
 
 public slots:
-    void readProcessLan();
-    void readProcessWifi();
-    void readProcessConn();
-    void finishedProcessLan(int msg);
-    void finishedProcessWifi(int msg);
-    void finishedProcessConn(int msg);
+//    void readProcessLan();
+//    void readProcessWifi();
+//    void readProcessConn();
+//    void finishedProcessLan(int msg);
+//    void finishedProcessWifi(int msg);
+//    void finishedProcessConn(int msg);
 };
 
 #endif // KSIMPLENM_H

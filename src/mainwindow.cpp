@@ -34,7 +34,7 @@
 #include <QtConcurrent>
 
 QString llname, lwname, hideWiFiConn;
-QStringList lcards,wcards;
+//QStringList lcards,wcards;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -551,8 +551,8 @@ void MainWindow::initNetwork()
     wcardname = iface->wname;
     lwname = iface->wname;
     lcardname = iface->lname;
-    lcards = iface->lcards;
-    wcards = iface->wcards;
+//    lcards = iface->lcards;
+//    wcards = iface->wcards;
     llname = iface->lname;
     confForm->lcard = lcardname;
     confForm->wcard = wcardname;
@@ -1378,7 +1378,7 @@ void MainWindow::onBtnLanClicked(int flag)
         BackThread::saveSwitchButtonState(LAN_SWITCH_OPENED, false);
         this->startLoading();
         QtConcurrent::run([=]() {
-            foreach (QString lcard, lcards) {
+            foreach (QString lcard, BackThread::execGetIface()->lcards) {
                 QString close_device_cmd = "nmcli device set " + lcard + " managed false";
                 int res = system(close_device_cmd.toUtf8().data());
                 qDebug()<<"Trying to close ethernet device : "<<lcard<<". res="<<res;
@@ -1400,7 +1400,7 @@ void MainWindow::onBtnLanClicked(int flag)
         BackThread::saveSwitchButtonState(LAN_SWITCH_OPENED, true);
         this->startLoading();
         QtConcurrent::run([=]() {
-            foreach (QString lcard, lcards) {
+            foreach (QString lcard, BackThread::execGetIface()->lcards) {
                 QString open_device_cmd = "nmcli device set " + lcard + " managed true";
                 int res = system(open_device_cmd.toUtf8().data());
                 qDebug()<<"Trying to open ethernet device : "<<lcard<<". res="<<res;

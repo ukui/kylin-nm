@@ -33,21 +33,21 @@ KSimpleNM::KSimpleNM(QObject *parent) : QObject(parent)
 //    connect(runProcessLan, SIGNAL(finished(int)), this, SLOT(finishedProcessLan(int)));
 //    connect(runProcessLan, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &KSimpleNM::finishedProcessLan);
 
-    runProcessWifi = new QProcess(this);
-    connect(runProcessWifi, &QProcess::readyRead, this, &KSimpleNM::readProcessWifi);
-    connect(runProcessWifi, SIGNAL(finished(int)), this, SLOT(finishedProcessWifi(int)));
+//    runProcessWifi = new QProcess(this);
+//    connect(runProcessWifi, &QProcess::readyRead, this, &KSimpleNM::readProcessWifi);
+//    connect(runProcessWifi, SIGNAL(finished(int)), this, SLOT(finishedProcessWifi(int)));
 //    connect(runProcessWifi, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &KSimpleNM::finishedProcessWifi);
 
-    runProcessConn = new QProcess(this);
-    connect(runProcessConn, &QProcess::readyRead, this, &KSimpleNM::readProcessConn);
-    connect(runProcessConn, SIGNAL(finished(int)), this, SLOT(finishedProcessConn(int)));
+//    runProcessConn = new QProcess(this);
+//    connect(runProcessConn, &QProcess::readyRead, this, &KSimpleNM::readProcessConn);
+//    connect(runProcessConn, SIGNAL(finished(int)), this, SLOT(finishedProcessConn(int)));
 //    connect(runProcessConn, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &KSimpleNM::finishedProcessConn);
 }
 
 KSimpleNM::~KSimpleNM()
 {
 //    delete runProcessLan;
-    delete runProcessWifi;
+//    delete runProcessWifi;
 }
 
 //获取有线网络列表数据
@@ -69,9 +69,10 @@ void KSimpleNM::execGetLanList()
 //        connect(runProcessLan, SIGNAL(finished(int)), this, SLOT(finishedProcessLan(int)));
         shellOutputLan = "";
         QString getCmd = "export LANG='zh_CN.UTF-8';export LANGUAGE='zh_CN:zh';nmcli -f type,uuid,name connection show";
-        QStringList options;
-        options << "-c" << getCmd;
-        runProcessLan->start("/bin/bash",options);
+//        QStringList options;
+//        options << "-c" << getCmd;
+//        runProcessLan->start("/bin/bash",options);
+        runProcessLan->start(getCmd);
         runProcessLan->waitForFinished();
         shellOutputLan = runProcessLan->readAll();
         QStringList slist = shellOutputLan.split("\n");
@@ -111,48 +112,71 @@ void KSimpleNM::execGetWifiList(const QString& wname, const bool &isHuaweiPc)
         else
             cmd = "nmcli -f in-use,signal,security,freq,bssid,dbus-path,ssid device wifi list ifname " + wname;
     }
-    runProcessWifi->start(cmd);
+    QtConcurrent::run([=]() {
+        QProcess *runProcessWifi = new QProcess(this);
+        runProcessWifi->start(cmd);
+        runProcessWifi->waitForFinished();
+        shellOutputWifi = runProcessWifi->readAll();
+        QStringList slist = shellOutputWifi.split("\n");
+        qDebug()<<"Get Wifi list Finished!";
+        emit this->getWifiListFinished(slist);
+        isExecutingGetWifiList = false;
+        delete runProcessWifi;
+        runProcessWifi = NULL;
+    });
+//    runProcessWifi->start(cmd);
 }
 
 //获取保存的网络列表数据
 void KSimpleNM::execGetConnList()
 {
     shellOutputConn = "";
-    runProcessConn->start("nmcli -f name connection show");
+//    runProcessConn->start("nmcli -f name connection show");
+    QtConcurrent::run([=]() {
+        QProcess *runProcessConn = new QProcess(this);
+        runProcessConn->start("nmcli -f name connection show");
+        runProcessConn->waitForFinished();
+        shellOutputConn = runProcessConn->readAll();
+        QStringList slist = shellOutputConn.split("\n");
+        qDebug()<<"Get Connection list Finished!";
+        emit this->getConnListFinished(slist);
+        delete runProcessConn;
+        runProcessConn = NULL;
+    });
 }
 
-//读取获取到的结果
-void KSimpleNM::readProcessLan()
-{
+////读取获取到的结果
+//void KSimpleNM::readProcessLan()
+//{
 //    QString output = runProcessLan->readAll();
 //    shellOutputLan += output;
-}
-void KSimpleNM::readProcessWifi()
-{
-    QString output = runProcessWifi->readAll();
-    shellOutputWifi += output;
-}
-void KSimpleNM::readProcessConn()
-{
-    QString output = runProcessConn->readAll();
-    shellOutputConn += output;
-}
+//}
+//void KSimpleNM::readProcessWifi()
+//{
+//    QString output = runProcessWifi->readAll();
+//    shellOutputWifi += output;
+//}
+//void KSimpleNM::readProcessConn()
+//{
+//    QString output = runProcessConn->readAll();
+//    shellOutputConn += output;
+//}
 
-//读取完所有列表数据后发信号，将数据发往mainwindow用于显示网络列表
-void KSimpleNM::finishedProcessLan(int msg)
-{
-    QStringList slist = shellOutputLan.split("\n");
-    emit getLanListFinished(slist);
-    isExecutingGetLanList = false;
-}
-void KSimpleNM::finishedProcessWifi(int msg)
-{
-    QStringList slist = shellOutputWifi.split("\n");
-    emit getWifiListFinished(slist);
-    isExecutingGetWifiList = false;
-}
-void KSimpleNM::finishedProcessConn(int msg)
-{
-    QStringList slist = shellOutputConn.split("\n");
-    emit getConnListFinished(slist);
-}
+////读取完所有列表数据后发信号，将数据发往mainwindow用于显示网络列表
+//void KSimpleNM::finishedProcessLan(int msg)
+//{
+//    QStringList slist = shellOutputLan.split("\n");
+//    emit getLanListFinished(slist);
+//    isExecutingGetLanList = false;
+//}
+//void KSimpleNM::finishedProcessWifi(int msg)
+//{
+//    QStringList slist = shellOutputWifi.split("\n");
+//    emit getWifiListFinished(slist);
+//    isExecutingGetWifiList = false;
+//}
+//void KSimpleNM::finishedProcessConn(int msg)
+//{
+//    QStringList slist = shellOutputConn.split("\n");
+//    emit getConnListFinished(slist);
+//}

@@ -69,10 +69,10 @@ void KSimpleNM::execGetLanList()
 //        connect(runProcessLan, SIGNAL(finished(int)), this, SLOT(finishedProcessLan(int)));
         shellOutputLan = "";
         QString getCmd = "export LANG='zh_CN.UTF-8';export LANGUAGE='zh_CN:zh';nmcli -f type,uuid,name connection show";
-//        QStringList options;
-//        options << "-c" << getCmd;
-//        runProcessLan->start("/bin/bash",options);
-        runProcessLan->start(getCmd);
+        QStringList options;
+        options << "-c" << getCmd;
+        runProcessLan->start("/bin/bash",options);
+//        runProcessLan->start(getCmd);
         runProcessLan->waitForFinished();
         shellOutputLan = runProcessLan->readAll();
         QStringList slist = shellOutputLan.split("\n");
@@ -114,7 +114,9 @@ void KSimpleNM::execGetWifiList(const QString& wname, const bool &isHuaweiPc)
     }
     QtConcurrent::run([=]() {
         QProcess *runProcessWifi = new QProcess(this);
-        runProcessWifi->start(cmd);
+        QStringList options;
+        options << "-c" << cmd;
+        runProcessWifi->start("/bin/bash",options);
         runProcessWifi->waitForFinished();
         shellOutputWifi = runProcessWifi->readAll();
         QStringList slist = shellOutputWifi.split("\n");

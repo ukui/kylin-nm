@@ -7,56 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>432</width>
-    <height>358</height>
+    <height>288</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Connect to Hidden WLAN Network</string>
   </property>
-  <widget class="QLabel" name="lbConn">
-   <property name="geometry">
-    <rect>
-     <x>76</x>
-     <y>80</y>
-     <width>90</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="cbxConn">
-   <property name="geometry">
-    <rect>
-     <x>175</x>
-     <y>75</y>
-     <width>182</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-  </widget>
   <widget class="QLabel" name="lbNetName">
    <property name="geometry">
     <rect>
      <x>76</x>
-     <y>221</y>
+     <y>151</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -74,7 +35,7 @@
    <property name="geometry">
     <rect>
      <x>175</x>
-     <y>170</y>
+     <y>100</y>
      <width>182</width>
      <height>32</height>
     </rect>
@@ -92,7 +53,7 @@
    <property name="geometry">
     <rect>
      <x>76</x>
-     <y>176</y>
+     <y>106</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -110,7 +71,7 @@
    <property name="geometry">
     <rect>
      <x>175</x>
-     <y>215</y>
+     <y>145</y>
      <width>182</width>
      <height>32</height>
     </rect>
@@ -125,7 +86,7 @@
    <property name="geometry">
     <rect>
      <x>315</x>
-     <y>310</y>
+     <y>240</y>
      <width>90</width>
      <height>30</height>
     </rect>
@@ -143,7 +104,7 @@
    <property name="geometry">
     <rect>
      <x>215</x>
-     <y>310</y>
+     <y>240</y>
      <width>90</width>
      <height>30</height>
     </rect>
@@ -181,7 +142,7 @@
      <x>0</x>
      <y>0</y>
      <width>432</width>
-     <height>358</height>
+     <height>288</height>
     </rect>
    </property>
    <property name="text">
@@ -192,7 +153,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>140</y>
+     <y>70</y>
      <width>412</width>
      <height>1</height>
     </rect>
@@ -208,7 +169,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>280</y>
+     <y>210</y>
      <width>412</width>
      <height>1</height>
     </rect>
@@ -221,8 +182,6 @@
    </property>
   </widget>
   <zorder>lbBoder</zorder>
-  <zorder>lbConn</zorder>
-  <zorder>cbxConn</zorder>
   <zorder>lbNetName</zorder>
   <zorder>cbxSecurity</zorder>
   <zorder>lbSecurity</zorder>

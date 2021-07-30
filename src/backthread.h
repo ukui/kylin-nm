@@ -35,12 +35,23 @@
 #define WIFI_SWITCH_OPENED "wifi_switch_opened"
 #define LAN_SWITCH_OPENED "lan_switch_opened"
 
+#define DEVICE_CONNECTED 0
+#define DEVICE_DISCONNECTED 1
+#define DEVICE_UNMANAGED 2
+#define DEVICE_CONNECTING 3
+#define DEVICE_UNAVALIABLE 4
+
+#define PSKFLAG 0
+
 class IFace{
 public:
     QString lname;
     QString wname;
+    QStringList lcards;
+    QStringList wcards;
     int lstate; // 0已连接 1未连接 2已关闭
     int wstate; // 0已连接 1未连接 2已关闭
+    bool lmanaged;
 };
 
 class BackThread : public QObject
@@ -54,11 +65,14 @@ public:
     static void saveSwitchButtonState(const QString &key, const QVariant &value);
     static QVariant getSwitchState(const QString &key);
     QString getConnProp(QString connName);
-    QString execChkLanWidth(QString ethName);
+    static QString execChkLanWidth(QString ethName);
+    void getTheWifiCardName();
     QProcess *cmdProcessWifi = nullptr;
     QProcess *cmdProcessLan;
     QString currConnLanUuid;
     QString currConnLanType;
+    QList<QDBusObjectPath> wifiCardPaths;
+    QString wifiIfnameInUse;
 
 public slots:
     void execEnNet();
@@ -72,7 +86,7 @@ public slots:
     void execReconnWIfi(QString uuid);
     void execConnWifiPWD(QString connName, QString password, QString connType, QString security, QString ifname);
     void execConnWifiPsk(QString cmd);
-    void execConnHiddenWifiWPA(QString connName, QString password);
+    void execConnHiddenWifiWPA(int secuType, QString connName, QString password);
     void execConnRememberedHiddenWifi(QString connName);
 
     void disConnSparedNetSlot(QString type);
@@ -85,7 +99,7 @@ public slots:
     void onReadOutputLan();
     void onReadErrorLan();
     void dellConnectLanResult(QString info);
-
+    void getInitStatus();
 signals:
     void enNetDone();
     void disNetDone();
@@ -93,7 +107,8 @@ signals:
     void enWifiDoneByRfkill();
     void disWifiDone();
     void disWifiDoneByRfkill();
-
+    void wifiStatus(bool status);
+    void getWifiStatusComplete();
     void connDone(int connFlag);
 
     void btFinish();

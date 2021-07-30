@@ -194,7 +194,7 @@ void DlgHideWifiEapPeap::changeDialogSecu()
     } else if(ui->cbxSecurity->currentIndex()==1) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0);
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(1, 0);
         connHidWifiWpa->show();
         connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     } else if(ui->cbxSecurity->currentIndex()==2) {
@@ -282,7 +282,7 @@ void DlgHideWifiEapPeap::changeWindow(){
             if (txt.indexOf("wpa-psk") != -1) {
                 QApplication::setQuitOnLastWindowClosed(false);
                 this->hide();
-                DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(ui->cbxConn->currentIndex(), mw);
+                DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(1, ui->cbxConn->currentIndex(), mw);
                 connHidWifiWpa->show();
                 connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
             }

@@ -158,7 +158,7 @@ public:
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
     QIcon iconConnecting;
     QList<QIcon> loadIcons;
-    QString mwBandWidth;
+//    QString mwBandWidth;
     KylinDBus *objKyDBus = nullptr;
     NetworkSpeed *objNetSpeed = nullptr;
     SwitchButton *btnWireless = nullptr;
@@ -184,6 +184,7 @@ public:
     bool isToSetWifiValue = true; //本次执行是否进行赋值
     bool isReconnectingWifi = false; //是否正在执行wifi的回连
     bool isReconnectingLan = false; //是否正在执行lan的回连
+    bool m_is_inputting_wifi_password = false; //是否正在输入密码
     int addNumberForWifi = 0; //短时间内收到关于wifi连接信号的次数
     bool isHuaWeiPC;
     bool isHuaWei9006C;
@@ -218,6 +219,8 @@ public slots:
     void onNetworkDeviceRemoved(QDBusObjectPath objPath);
     void getLanBandWidth();
     void checkIfWiredNetExist();
+    void onBtnNetListClicked(int flag=0);
+    void onNewConnAdded(int type);
 
     void onExternalConnectionChange(QString type, bool isConnUp);
     void onExternalLanChange();
@@ -277,6 +280,7 @@ private:
     bool checkWlOn();
     void getLanList();
     void getWifiList();
+    void setBtnWirelessStatus();
     void initLanSlistAndGetReconnectNetList();
     QPixmap drawSymbolicColoredPixmap(const QPixmap &source);
     QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
@@ -382,8 +386,6 @@ private slots:
 
     void onBtnNetClicked();
 //    void on_btnWifiList_clicked();
-    void onBtnNetListClicked(int flag=0);
-    void onNewConnAdded(int type);
 
     void onRequestRevalueUpdateWifi();
     void getLanListDone(QStringList slist);
@@ -391,6 +393,7 @@ private slots:
     void getConnListDone(QStringList slist);
     void loadWifiListDone(QStringList slist);
     void updateWifiListDone(QStringList slist);
+    void onlyRefreshWifiList(QStringList slist);
     QString TranslateLanName(QString lanName);
     QString getMacByUuid(QString uuidName);
 

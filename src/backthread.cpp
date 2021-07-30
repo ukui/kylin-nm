@@ -27,6 +27,13 @@
 #include <QFile>
 #include <QRegExp>
 #include <QDir>
+#include <QObject>
+#include <QDebug>
+#include <QTimer>
+#include <QProcess>
+#include <QDBusInterface>
+#include <QDBusMessage>
+#include <QDBusArgument>
 
 BackThread::BackThread(QObject *parent) : QObject(parent)
 {
@@ -62,8 +69,9 @@ IFace* BackThread::execGetIface()
     QStringList txtList = txt.split("\n");
     file.close();
 
-    iface->lstate = 2;
-    iface->wstate = 2;
+    iface->lstate = DEVICE_UNMANAGED;
+    iface->wstate = DEVICE_UNMANAGED;
+    iface->lmanaged = false;
 
     for (int i = 1; i < txtList.size(); i ++) {
         QString line = txtList.at(i);
@@ -75,22 +83,31 @@ IFace* BackThread::execGetIface()
             QString iname = lastStr.left(index2);
             QString istateStr = lastStr.mid(index2).trimmed();
 
+            if (type == "ethernet") {
+                iface->lcards.append(iname);
+            } else if (type == "wifi") {
+                iface->wcards.append(iname);
+            }
+
             //只要存在一个有线设备已连接，就不再扫描其他有线设备状态，避免有线被误断开
-            if (type == "ethernet" && iface->lstate != 0) {
+            if (type == "ethernet" && iface->lstate != DEVICE_CONNECTED) {
                 // if type is wired network
                 iface->lname = iname;
 
                 if (istateStr == "unmanaged") {
-                    iface->lstate = 2; //switch of wired device is off
+                    iface->lstate = DEVICE_UNMANAGED; //switch of wired device is off
                 } else if (istateStr == "unavailable") {
-                    iface->lstate = 4;
+                    iface->lstate = DEVICE_UNAVALIABLE;
                 } else if (istateStr == "disconnected") {
-                    iface->lstate = 1; //wired network is disconnected
+                    iface->lstate = DEVICE_DISCONNECTED; //wired network is disconnected
+                    iface->lmanaged = true;
                 } else if (istateStr == "connected" || istateStr == "connecting (getting IP configuration)") {
-                    iface->lstate = 0; //wired network is connected
+                    iface->lstate = DEVICE_CONNECTED; //wired network is connected
+                    iface->lmanaged = true;
                 } else {
                     //连接中，正在配置
-                    iface->lstate = 3;
+                    iface->lstate = DEVICE_CONNECTING;
+                    iface->lmanaged = true;
                 }
             }
             if (type == "wifi" && iface->wname.isEmpty()) { //仅统计第一个无线网卡，后续无线网卡状态必然等于或差与第一个获取到的无线网卡
@@ -112,6 +129,25 @@ IFace* BackThread::execGetIface()
     }
 
     return iface;
+}
+
+void BackThread::getInitStatus() {
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+    //　获取当前wifi是否打开
+    QDBusReply<QVariant> m_result = interface.call("Get", "org.freedesktop.NetworkManager", "WirelessEnabled");
+
+    if (m_result.isValid()) {
+        bool status = m_result.value().toBool();
+        emit wifiStatus(status);
+        emit getWifiStatusComplete();
+    } else {
+        qDebug()<<"org.freedesktop.NetworkManager get invalid"<<endl;
+        emit wifiStatus(false);
+        emit getWifiStatusComplete();
+    }
 }
 
 void BackThread::saveSwitchButtonState(const QString &key, const QVariant &value)
@@ -140,7 +176,7 @@ void BackThread::execEnNet()
     Utils::m_system(chr);
 
     while (1) {
-        if (execGetIface()->lstate != 2) {
+        if (execGetIface()->lstate != DEVICE_UNMANAGED) {
             sleep(3);
             emit enNetDone();
             emit btFinish();
@@ -171,7 +207,7 @@ void BackThread::execDisNet()
     Utils::m_system(chr1);
 
     while (1) {
-        if (execGetIface()->lstate == 2) {
+        if (execGetIface()->lstate == DEVICE_UNMANAGED) {
             emit disNetDone();
             emit btFinish();
             break;
@@ -260,13 +296,13 @@ void BackThread::execConnLan(QString connName, QString ifname, QString connectTy
 
     bool isWiredCableAlready = objBackThreadDBus.getWiredCableStateByIfname(ifname);
 
-    if (connectType == "bluetooth" || connectType == "vpn"|| ifname == "") {
+    if (connectType == "bluetooth" || connectType == "vpn"|| ifname == "" || ifname == "--") {
         isWiredCableAlready = true; //对于蓝牙类型的网络不需要接入网线就可以连接
         mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "'";
     } else {
         mycmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname '" + ifname + "'";
     }
-    qDebug()<<"Trying to connect wifi. ssid="<<connName;
+    qDebug()<<"Trying to connect lan. uuid="<<connName<<". cmd="<<mycmd;
 
     if (isWiredCableAlready) {
         QStringList options;
@@ -341,12 +377,52 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
     }
 
     QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
+//    if (security.contains("WPA3")) {
+//        QString create_cmd = QString("nmcli connection add con-name \"1\" type wifi 802-11-wireless-security.key-mgmt sae ssid \"%2\" 802-11-wireless-security.psk %3").arg(connName).arg(connName).arg(password);
+//        Utils::m_system(create_cmd.toUtf8().data());
+//        QString connect_cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname " + ifname +" > " + tmpPath;
+//        Utils::m_system(connect_cmdStr.toUtf8().data());
+//    } else {
+//        QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > " + tmpPath;
+//        Utils::m_system(cmdStr.toUtf8().data());
+//    }
     if (security.contains("WPA3")) {
-        QString create_cmd = QString("nmcli connection add con-name %1 type wifi 802-11-wireless-security.key-mgmt sae ssid %2 802-11-wireless-security.psk %3").arg(connName).arg(connName).arg(password);
+        QString create_cmd;
+        if (security.contains("WPA2")) {
+            qDebug() << "连接wpa2 和 wpa3混合模式的wifi";
+            create_cmd = QString("nmcli connection add con-name \"%1\" "
+                                 "type wifi 802-11-wireless-security.psk-flags %2 "
+                                 " 802-11-wireless-security.key-mgmt wpa-psk ssid \"%3\" "
+                                 "802-11-wireless-security.psk %4")
+                                 .arg(connName).arg(PSKFLAG).arg(connName).arg(password);
+        } else {
+            qDebug() << "连接 wpa3个人模式的wifi";
+            create_cmd = QString("nmcli connection add con-name \"%1\""
+                                 " type wifi 802-11-wireless-security.psk-flags %2 "
+                                 "802-11-wireless-security.key-mgmt sae ssid \"%3\" "
+                                 "802-11-wireless-security.psk %4")
+                                 .arg(connName).arg(PSKFLAG).arg(connName).arg(password);
+        }
         Utils::m_system(create_cmd.toUtf8().data());
-        QString connect_cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection up '" + connName + "' ifname " + ifname +" > " + tmpPath;
-        Utils::m_system(connect_cmdStr.toUtf8().data());
+        qDebug()<<"create connection by shell cmd:"<<create_cmd;
+        QString homepath = getenv("HOME");
+        QString psk_file = homepath + "/.config/" + connName + ".psk";
+        if (QFile::exists(psk_file)) {
+            QString connect_cmdStr =
+                    "export LANG='en_US.UTF-8';export LANGUAGE='en_US';"
+                    "nmcli connection up '" + connName
+                    + "' passwd-file '" + psk_file + "'"
+                    + " ifname " + ifname +" > " + tmpPath;
+            Utils::m_system(connect_cmdStr.toUtf8().data());
+        } else {
+            QString connect_cmdStr =
+                    "export LANG='en_US.UTF-8';export LANGUAGE='en_US';"
+                    "nmcli connection up '" + connName
+                    + "' ifname " + ifname +" > " + tmpPath;
+            Utils::m_system(connect_cmdStr.toUtf8().data());
+        }
     } else {
+        qDebug() << "连接普通安全性类型的wifi";
         QString cmdStr = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli device wifi connect '" + connName + "' password '" + password + "' > " + tmpPath;
         Utils::m_system(cmdStr.toUtf8().data());
     }
@@ -372,8 +448,24 @@ void BackThread::execConnWifiPWD(QString connName, QString password, QString con
     emit btFinish();
 }
 
-void BackThread::execConnHiddenWifiWPA(QString wifiName, QString wifiPassword)
+void BackThread::execConnHiddenWifiWPA(int secuType, QString wifiName, QString wifiPassword)
 {
+    //this->getTheWifiCardName();
+
+    QProcess shellProcess;
+    shellProcess.start("nmcli -f ssid device wifi");
+    shellProcess.waitForFinished(3000); // 等待最多3s
+    bool is_hidden  = true;
+    if (shellProcess.exitCode() == 0) {
+        QString shellOutput = shellProcess.readAllStandardOutput();
+        QStringList wlist = shellOutput.split("\n");
+        foreach (QString wifi, wlist) {
+            if (wifi.trimmed() == wifiName) {
+                is_hidden = false;
+            }
+        }
+    }
+
     int x(1), n(0);
     do {
         n += 1;
@@ -386,27 +478,89 @@ void BackThread::execConnHiddenWifiWPA(QString wifiName, QString wifiPassword)
         }
 
         QString tmpPath = "/tmp/kylin-nm-btoutput-" + QDir::home().dirName();
-        QString cmd = "nmcli device wifi connect '" + wifiName + "' password '" + wifiPassword + "' hidden yes > " + tmpPath + " 2>&1";
 
-        int status = Utils::m_system(cmd.toUtf8().data());
-        qDebug() << Q_FUNC_INFO << cmd << tmpPath << "res=" << status;
+        if (secuType == 3 || secuType == 4) {
+            qDebug() << "第一步 删除连接失败的配置文件";
+            QString delete_cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
+            Utils::m_system(delete_cmd.toUtf8().data());
+
+            qDebug() << "第二步 创建隐藏wifi对应的配置文件";
+            QString create_cmd;
+            if (secuType == 3) {
+                //wpa2 and wpa3 personal
+                create_cmd = QString("nmcli connection add con-name \"%1\" "
+                            "type wifi 802-11-wireless-security.psk-flags %2 "
+                            "802-11-wireless-security.key-mgmt wpa-psk ssid \"%3\" "
+                            "802-11-wireless-security.psk %4")
+                            .arg(wifiName).arg(PSKFLAG).arg(wifiName).arg(wifiPassword);
+            }
+            if (secuType == 4) {
+                //wpa3 personal
+                create_cmd = QString("nmcli connection add con-name \"%1\""
+                            " type wifi 802-11-wireless-security.psk-flags %2 "
+                            "802-11-wireless-security.key-mgmt sae ssid \"%3\" "
+                            "802-11-wireless-security.psk %4")
+                            .arg(wifiName).arg(PSKFLAG).arg(wifiName).arg(wifiPassword);
+            }
+            Utils::m_system(create_cmd.toUtf8().data());
+
+            qDebug() << "第三步 再执行连接隐藏wifi";
+            QString homepath = getenv("HOME");
+            QString psk_file = homepath + "/.config/" + wifiName + ".psk";
+            if (QFile::exists(psk_file)) {
+                QString connect_cmdStr =
+                        "export LANG='en_US.UTF-8';export LANGUAGE='en_US';"
+                        "nmcli connection up '" + wifiName
+                        + "' passwd-file '" + psk_file + "' > " + tmpPath;
+                Utils::m_system(connect_cmdStr.toUtf8().data());
+            } else {
+                QString connect_cmdStr =
+                        "export LANG='en_US.UTF-8';export LANGUAGE='en_US';"
+                        "nmcli connection up '" + wifiName + "' > " + tmpPath;
+                Utils::m_system(connect_cmdStr.toUtf8().data());
+            }
+        } else {
+            QString cmd;
+            if (is_hidden) {
+                cmd = "nmcli device wifi connect '" + wifiName
+                        + "' password '" + wifiPassword + "' hidden yes > " + tmpPath + " 2>&1";
+            } else {
+                cmd = "nmcli device wifi connect '" + wifiName
+                        + "' password '" + wifiPassword + "' > " + tmpPath + " 2>&1";
+            }
+
+            int status = Utils::m_system(cmd.toUtf8().data());
+            qDebug() << Q_FUNC_INFO << cmd << tmpPath << "res=" << status;
+        }
 
         QFile file(tmpPath);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            qDebug()<<"Can't open the file!"<<endl;
+            qDebug()<<"Can't open the file!";
         }
         QString text = file.readAll();
+        qDebug() << text;
         file.close();
-        if(text.indexOf("Scanning not allowed") != -1
-           || text.isEmpty()
-           || text.indexOf("No network with SSID") != -1){
+        if (text.indexOf("Scanning not allowed") != -1 || text.isEmpty() || text.indexOf("No network with SSID") != -1) {
             x = 1;
             sleep(10);//nm扫描冷却为10s
+        } else if (text.indexOf("Secrets were required, but not provided.") != -1) {
+            emit connDone(7);
+            QString delete_cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
+            Utils::m_system(delete_cmd.toUtf8().data());
+            x = 0;
+        } else if (text.indexOf("Error: 802-11-wireless-security.psk: ????.") != -1) {
+            emit connDone(8);
+            x = 0;
+        } else if (text.indexOf("Passwords or encryption keys are required") != -1) {
+            emit connDone(9);
+            QString delete_cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
+            Utils::m_system(delete_cmd.toUtf8().data());
+            x = 0;
         } else {
             emit connDone(6);
             x = 0;
         }
-    } while (x == 1);
+    } while (x);
 
     emit btFinish();
 }
@@ -446,6 +600,57 @@ void BackThread::execConnWifiPsk(QString cmd)
 {
     int res = Utils::m_system(cmd.toUtf8().data());
     emit connDone(res);
+}
+
+void BackThread::getTheWifiCardName()
+{
+    QDBusInterface m_interface( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.NetworkManager",
+                              QDBusConnection::systemBus() );
+
+   //先获取所有的网络设备的设备路径
+   QDBusReply<QList<QDBusObjectPath>> obj_reply = m_interface.call("GetAllDevices");
+   if (!obj_reply.isValid()) {
+       qDebug()<<"execute dbus method 'GetAllDevices' is invalid in func getObjectPath()";
+   }
+
+   QList<QDBusObjectPath> obj_paths = obj_reply.value();
+
+   //再判断有无有线设备和无线设备的路径
+   foreach (QDBusObjectPath obj_path, obj_paths) {
+       QDBusInterface interface( "org.freedesktop.NetworkManager",
+                                 obj_path.path(),
+                                 "org.freedesktop.DBus.Introspectable",
+                                 QDBusConnection::systemBus() );
+
+       QDBusReply<QString> reply = interface.call("Introspect");
+       if (!reply.isValid()) {
+           qDebug()<<Q_FUNC_INFO <<" Result of executing dbus method 'Introspect' is invalid";
+       }
+
+       if (reply.value().indexOf("org.freedesktop.NetworkManager.Device.Wireless") != -1) {
+           //表明有wifi设备
+           wifiCardPaths.append(obj_path);
+       }
+   }
+
+   if (wifiCardPaths.size() == 0) {
+       wifiIfnameInUse = "";
+       return;
+   }
+
+   QDBusInterface lanInterface( "org.freedesktop.NetworkManager",
+                             wifiCardPaths.at(0).path(),
+                             "org.freedesktop.DBus.Properties",
+                             QDBusConnection::systemBus() );
+
+   QDBusReply<QVariant> lanReply = lanInterface.call("Get", "org.freedesktop.NetworkManager.Device", "Interface");
+   if (!lanReply.isValid()) {
+       qDebug()<<"can not get the attribute 'Interface' in func getWirelessCardName()";
+   } else {
+       wifiIfnameInUse = lanReply.value().toString();
+   }
 }
 
 //to connected wireless network driectly do not need a password
@@ -504,10 +709,12 @@ void BackThread::dellConnectWifiResult(QString info)
     } else if (info.indexOf("The connection was not a Wi-Fi connection..") != -1) {
         emit connDone(2);
     } else if(info.indexOf("not given") != -1 || info.indexOf("Secrets were required") != -1) {
-        //nothing need to do
+        //nothing to do
     } else if(info.indexOf("Passwords or encryption keys are required") != -1){
         //qDebug() << "password for '802-11-wireless-security.psk' not given in 'passwd-file'";
         emit connDone(4);
+    } else if(info.indexOf("No network with SSID") != -1){
+        //nothing to do
     } else {
         //qDebug() << "send this signal if connect net failed";
         emit connDone(1);
@@ -587,6 +794,15 @@ QString BackThread::getConnProp(QString connName)
                 rtn += "dns:|";
             } else {
                 rtn += "dns:" + value + "|";
+            }
+        }
+
+        if (line.startsWith("connection.type:")) {
+            QString value = line.mid(16).trimmed();
+            if (value == "--" || value == "") {
+                rtn += "type:|";
+            } else {
+                rtn += "type:" + value + "|";
             }
         }
     }

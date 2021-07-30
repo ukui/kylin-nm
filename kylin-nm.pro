@@ -57,6 +57,8 @@ QMAKE_CFLAGS   *= $(shell dpkg-buildflags --get CFLAGS)
 QMAKE_CXXFLAGS *= $(shell dpkg-buildflags --get CXXFLAGS)
 QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 
+include(src/singleapplication/qt-single-application.pri)
+
 
 SOURCES += \
     src/backthread.cpp \

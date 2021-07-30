@@ -272,6 +272,10 @@ void OneLancForm::setLanInfo(QString str1, QString str2, QString str3, QString s
         str4 = tr("No IfName");
     }
 
+    if (str3.isEmpty() || str3 == "") {
+        str3 = "--";
+    }
+
     QString strIPv4 = QString(tr("IPv4："));
     QString strIPv6 = QString(tr("IPv6："));
     QString strBW = QString(tr("BandWidth："));
@@ -289,12 +293,14 @@ void OneLancForm::setIcon(bool isOn)
     if (isOn) {
         if (!QIcon::fromTheme("network-wired-connected-symbolic").isNull()) {
             ui->lbIcon->setPixmap(QIcon::fromTheme("network-wired-connected-symbolic").pixmap(32,32));
+            ui->lbIcon->setProperty("useIconHighlightEffect", 0x10);
         } else {
             ui->lbIcon->setPixmap(QIcon(":/res/l/network-online.png").pixmap(32,32));
         }
     } else {
         if (!QIcon::fromTheme("network-wired-disconnected-symbolic").isNull()) {
             ui->lbIcon->setPixmap(QIcon::fromTheme("network-wired-disconnected-symbolic").pixmap(32,32));
+            ui->lbIcon->setProperty("useIconHighlightEffect", 0x10);
         } else {
             ui->lbIcon->setPixmap(QIcon(":/res/l/network-offline.png").pixmap(32,32));
         }
@@ -326,6 +332,7 @@ void OneLancForm::on_btnDisConn_clicked()
 
     this->startWaiting(false);
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
 
     //使用有线网ssid断开网络
     //kylin_network_set_con_down(ssidName.toUtf8().data());
@@ -398,7 +405,9 @@ void OneLancForm::toConnectWiredNetwork()
     if (mw->is_stop_check_net_state == 1) {
         return;
     }
+
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);
@@ -428,34 +437,40 @@ void OneLancForm::on_btnInfo_clicked()
     BackThread *bt = new BackThread();
     QString connProp = bt->getConnProp(uuidName);
     QStringList propList = connProp.split("|");
-    QString v4method, addr, mask, gateway, dns, v6method, v6addr;
+    ConnProperties connection;
+//    QString v4method, addr, mask, gateway, dns, v6method, v6addr, type;
     foreach (QString line, propList) {
         if (line.startsWith("method:")) {
-            v4method = line.split(":").at(1);
+            connection.v4method = line.split(":").at(1);
         }
         if (line.startsWith("v4addr:")) {
-            addr = line.split(":").at(1);
+            connection.v4addr = line.split(":").at(1);
         }
         if (line.startsWith("mask:")) {
-            mask = line.split(":").at(1);
+            connection.mask = line.split(":").at(1);
         }
         if (line.startsWith("v6method:")) {
-            v6method = line.split(":").at(1);
+            connection.v6method = line.split(":").at(1);
         }
         if (line.startsWith("v6addr:")) {
-            v6addr = line.right(line.length() - line.indexOf(":") - 1);
+            connection.v6addr = line.right(line.length() - line.indexOf(":") - 1);
         }
         if (line.startsWith("gateway:")) {
-            gateway= line.split(":").at(1);
+            connection.gateway= line.split(":").at(1);
         }
         if (line.startsWith("dns:")) {
-            dns = line.split(":").at(1);
+            connection.dns = line.split(":").at(1);
+        }
+        if (line.startsWith("type:")) {
+            connection.type = line.split(":").at(1);
         }
     }
     // qDebug()<<v4method<<addr<<mask<<gateway<<dns;
-
+    connection.connName = ui->lbName->text();
+    connection.uuidName = uuidName;
+    connection.isActConf = this->isActive;
     connect(cf, SIGNAL(requestRefreshLanList(int)), mw, SLOT(onBtnNetListClicked(int)));
-    cf->setProp(ui->lbName->text(), uuidName, v4method, addr, v6method, v6addr, mask, gateway, dns, this->isActive, false);
+    cf->setProp(connection);
     qDebug() << Q_FUNC_INFO << __LINE__ << ui->lbName->text() << uuidName;
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();
@@ -488,6 +503,7 @@ void OneLancForm::waitAnimStep()
         this->stopWaiting(); //动画超出时间限制，强制停止动画
 
         mw->is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     }
 }
 
@@ -549,4 +565,5 @@ void OneLancForm::on_btnCancel_clicked()
 
     this->stopWaiting();
     mw->is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
 }

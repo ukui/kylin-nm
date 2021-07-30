@@ -33,6 +33,21 @@ namespace Ui {
 class ConfForm;
 }
 
+struct ConnProperties
+{
+    QString connName;
+    QString uuidName;
+    QString v4method;
+    QString v4addr;
+    QString v6method;
+    QString v6addr;
+    QString mask;
+    QString gateway;
+    QString dns;
+    bool isActConf;
+    QString type;
+};
+
 class ConfForm : public QDialog
 {
     Q_OBJECT
@@ -41,7 +56,7 @@ public:
     explicit ConfForm(QWidget *parent = 0);
     ~ConfForm();
 
-    void setProp(QString connName, QString uuidName, QString v4method, QString v4addr, QString v6method, QString v6addr, QString mask, QString gateway, QString dns, bool isActConf, bool isWiFi);
+    void setProp(ConnProperties connection);
     QString actLanIpv6Addr;
     QString actWifiIpv6Addr;
     QString lcard, wcard;

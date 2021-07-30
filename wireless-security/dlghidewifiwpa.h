@@ -35,7 +35,7 @@ class DlgHideWifiWpa : public QDialog
     Q_OBJECT
 
 public:
-    explicit DlgHideWifiWpa(int type, MainWindow *mw = 0, QWidget *parent = 0);
+    explicit DlgHideWifiWpa(int secuType, int type, MainWindow *mw = 0, QWidget *parent = 0);
     ~DlgHideWifiWpa();
 
 protected:
@@ -43,7 +43,6 @@ protected:
 
 public slots:
     void changeDialog();
-    void changeWindow();
     void emitSignal();
     void on_execSecConn();
     void slotStartConnectHiddenWifi();
@@ -60,19 +59,20 @@ private slots:
 
 //    void finishedProcess(int res);
 
-    void on_checkBoxPwd_pressed();
+    void on_checkBoxPwd_clicked();
 
-    void on_checkBoxPwd_released();
+//    void on_checkBoxPwd_released();
 
 signals:
     void reSetWifiList();
     void stopSignal();
     void stopSignalAgain();
-    void sigConnHiddenWifi(QString wifiName, QString wifiPasswd);
+    void sigConnHiddenWifi(int secuType, QString wifiName, QString wifiPasswd);
     void sigConnRememberedHiddenWifi(QString wifiName);
 
 private:
     Ui::DlgHideWifiWpa *ui;
+    int secuType; //=1 is wpa and wpa2, =3 is wpa2 and wpa3, =4 is wpa3 personal
     int isUsed;//=0 current wifi not used before; >=1 used
     MainWindow *mw;
     QString strWifiname;

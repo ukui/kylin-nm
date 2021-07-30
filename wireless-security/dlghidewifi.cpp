@@ -61,7 +61,6 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     ui->lineDown->setStyleSheet(objQss.lineQss);
 
     ui->lbLeftupTitle->setText(tr("Add Hidden WLAN")); //加入隐藏WLAN
-    ui->lbConn->setText(tr("Connection")); //连接设置:
     ui->lbNetName->setText(tr("WLAN name")); //网络名称:
     ui->lbSecurity->setText(tr("WLAN security")); //Wi-Fi安全性:
     ui->btnCancel->setText(tr("Cancel")); //取消
@@ -69,19 +68,11 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     ui->btnCancel->setStyleSheet(objQss.btnOffQss);
     ui->btnConnect->setStyleSheet(objQss.btnOffQss);
 
-    ui->cbxConn->clear();
-    ui->cbxConn->addItem(tr("C_reate…")); //新建...
-    KylinDBus mkylindbus;
-    QStringList wifiList = mkylindbus.getWifiSsidList();
-    foreach (QString strWifiSsid, wifiList) {
-        ui->cbxConn->addItem(strWifiSsid);
-    }
-    ui->cbxConn->setCurrentIndex(isUsed);
-    connect(ui->cbxConn,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeWindow()));
-
     ui->cbxSecurity->addItem(tr("None")); //无
     ui->cbxSecurity->addItem(tr("WPA and WPA2 Personal")); //WPA 及 WPA2 个人
     ui->cbxSecurity->addItem(tr("WPA and WPA2 Enterprise")); //WPA 及 WPA2 企业
+    ui->cbxSecurity->addItem(tr("WPA2 and WPA3 Personal")); //WPA2 及 WPA3 个人
+    ui->cbxSecurity->addItem(tr("WPA3 Personal")); //WPA3 个人
     //ui->cbxSecurity->addItem(tr("WEP 40/128-bit Key (Hex or ASCII)")); //WEP 40/128 位密钥(十六进制或ASCII)
     //ui->cbxSecurity->addItem(tr("WEP 128-bit Passphrase")); //WEP 128 位密码句
     //ui->cbxSecurity->addItem("LEAP");
@@ -92,7 +83,6 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
     if (isUsed == 0) {
         ui->btnConnect->setEnabled(false);
     } else {
-        ui->leNetName->setText(ui->cbxConn->currentText());
         ui->lbNetName->setEnabled(false);
         ui->leNetName->setEnabled(false);
         ui->lbSecurity->setEnabled(false);
@@ -102,7 +92,7 @@ DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
 
     ui->leNetName->setContextMenuPolicy(Qt::NoContextMenu); //禁止LineEdit的右键菜单
 
-    this->setFixedSize(432,358);
+    this->setFixedSize(432,288);
 
     this->mw = mainWindow;
 }
@@ -138,14 +128,17 @@ void DlgHideWifi::mouseMoveEvent(QMouseEvent *event){
 void DlgHideWifi::changeDialog()
 {
     if(ui->cbxSecurity->currentIndex()==0){
+        //无安全性
         qDebug()<<"it's not need to change dialog";
     } else if(ui->cbxSecurity->currentIndex()==1) {
+        //WPA 及 WPA2 个人
         QApplication::setQuitOnLastWindowClosed(false);
         this->close();
-        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0, mw);
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(1, 0, mw);
         connHidWifiWpa->show();
         connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     } else if(ui->cbxSecurity->currentIndex()==2) {
+        //WPA 及 WPA2 企业
         QApplication::setQuitOnLastWindowClosed(false);
         this->close();
         WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, mw, "");
@@ -174,16 +167,30 @@ void DlgHideWifi::changeDialog()
 //        DlgHideWifiEapPeap *connHidWifiEapPeap = new DlgHideWifiEapPeap(1, 0, mw);
 //        connHidWifiEapPeap->show();
     } else if(ui->cbxSecurity->currentIndex()==3) {
+        //WPA2 及 WPA3 个人
+        QApplication::setQuitOnLastWindowClosed(false);
+        this->close();
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(3, 0, mw);
+        connHidWifiWpa->show();
+        connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+    } else if(ui->cbxSecurity->currentIndex()==4) {
+        //WPA3 个人
+        QApplication::setQuitOnLastWindowClosed(false);
+        this->close();
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(4, 0, mw);
+        connHidWifiWpa->show();
+        connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+    } else if(ui->cbxSecurity->currentIndex()==5) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
         DlgHideWifiWep *connHidWifiWep = new DlgHideWifiWep(0);
         connHidWifiWep->show();
-    } else if(ui->cbxSecurity->currentIndex()==4) {
+    } else if(ui->cbxSecurity->currentIndex()==6) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
         DlgHideWifiWep *connHidWifiWep = new DlgHideWifiWep(1);
         connHidWifiWep->show();
-    } else if(ui->cbxSecurity->currentIndex()==5) {
+    } else if(ui->cbxSecurity->currentIndex()==7) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
         DlgHideWifiLeap *connHidWifiLeap = new DlgHideWifiLeap();
@@ -196,79 +203,6 @@ void DlgHideWifi::changeDialog()
     }
 }
 
-//同一 Wi-Fi安全类型的窗口变换
-void DlgHideWifi::changeWindow(){
-    if (ui->cbxConn->currentIndex() == 0){
-        isUsed = ui->cbxConn->currentIndex();
-        ui->cbxConn->setCurrentIndex(0);
-        ui->leNetName->setText("");
-        ui->lbNetName->setEnabled(true);
-        ui->leNetName->setEnabled(true);
-        ui->lbSecurity->setEnabled(true);
-        ui->cbxSecurity->setEnabled(true);
-        ui->btnConnect->setEnabled(false);
-    }else if (ui->cbxConn->currentIndex() >= 1){
-        QString tmpPath = "/tmp/kylin-nm-connshow-" + QDir::home().dirName();
-        QString currStr = "nmcli connection show '" + ui->cbxConn->currentText() + "' >" + tmpPath;
-
-        int status = system(currStr.toUtf8().data());
-        qDebug()<<"executed cmd="<<currStr<<". res="<<status;
-
-        QFile file(tmpPath);
-        if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-            qDebug()<<"Can't open the file!";
-        }
-        QString txt = file.readAll();
-        file.close();
-        if (txt.indexOf("802-11-wireless-security.key-mgmt:") != -1) {
-            if (txt.indexOf("wpa-psk") != -1) {
-                QApplication::setQuitOnLastWindowClosed(false);
-                this->hide();
-                DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(ui->cbxConn->currentIndex(), mw);
-                connHidWifiWpa->show();
-                connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
-            }
-            if (txt.indexOf("wpa-eap") != -1) {
-                QApplication::setQuitOnLastWindowClosed(false);
-                this->hide();
-//                DlgHideWifiEapPeap *connHidWifiEapPeap = new DlgHideWifiEapPeap(1, ui->cbxConn->currentIndex(), mw);
-//                connHidWifiEapPeap->show();
-                WpaWifiDialog * wpadlg = new WpaWifiDialog(mw, mw, ui->cbxConn->currentText());
-                QPoint pos = QCursor::pos();
-                QRect primaryGeometry;
-                for (QScreen *screen : qApp->screens()) {
-                    if (screen->geometry().contains(pos)) {
-                        primaryGeometry = screen->geometry();
-                    }
-                }
-                if (primaryGeometry.isEmpty()) {
-                    primaryGeometry = qApp->primaryScreen()->geometry();
-                }
-                wpadlg->move(primaryGeometry.width() / 2 - wpadlg->width() / 2, primaryGeometry.height() / 2 - wpadlg->height() / 2);
-                wpadlg->show();
-                connect(wpadlg, &WpaWifiDialog::conn_done, this, [ = ]() {
-                    QString txt(tr("Conn WLAN Success"));
-                    mw->objKyDBus->showDesktopNotify(txt);
-                    mw->on_btnWifiList_clicked();
-                });
-                connect(wpadlg, &WpaWifiDialog::conn_failed, this, [ = ]() {
-                    QString txt(tr("Confirm your WLAN password or usable of wireless card"));
-                    mw->objKyDBus->showDesktopNotify(txt);
-                    mw->on_btnWifiList_clicked();
-                });
-            }
-        } else {
-            isUsed = ui->cbxConn->currentIndex();
-            ui->leNetName->setText(ui->cbxConn->currentText());
-            ui->lbNetName->setEnabled(false);
-            ui->leNetName->setEnabled(false);
-            ui->lbSecurity->setEnabled(false);
-            ui->cbxSecurity->setEnabled(false);mw->on_btnWifiList_clicked();
-            ui->btnConnect->setEnabled(true);
-        }
-    }
-}
-
 void DlgHideWifi::on_btnCancel_clicked()
 {
     //this->close();
@@ -278,6 +212,7 @@ void DlgHideWifi::on_btnCancel_clicked()
 void DlgHideWifi::on_btnConnect_clicked()
 {
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     mw->is_connect_hide_wifi = 1;
 
     QThread *t = new QThread();
@@ -291,7 +226,7 @@ void DlgHideWifi::on_btnConnect_clicked()
     if (isUsed == 0) {
         bt->moveToThread(t);
         connect(t, SIGNAL(started()), this, SLOT(slotStartConnectHiddenOpenWifi()));
-        connect(this, SIGNAL(sigConnHiddenWifi(QString, QString)), bt, SLOT(execConnHiddenWifiWPA(QString,QString)));
+        connect(this, SIGNAL(sigConnHiddenWifi(int, QString, QString)), bt, SLOT(execConnHiddenWifiWPA(int, QString,QString)));
         connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
         connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     } else {
@@ -328,7 +263,7 @@ void DlgHideWifi::slotStartLoading()
 void DlgHideWifi::slotStartConnectHiddenOpenWifi()
 {
     mw->startLoading();
-    emit sigConnHiddenWifi(ui->leNetName->text(), QString(""));
+    emit sigConnHiddenWifi(ui->cbxSecurity->currentIndex(), ui->leNetName->text(), QString(""));
 }
 
 void DlgHideWifi::slotStartConnectRememberedHiddenWifi()

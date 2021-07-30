@@ -109,9 +109,12 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     QObject::connect(time, SIGNAL(timeout()), this, SLOT(slot_timeout()));
 
     if (mw) {
-        QObject::connect(this, SIGNAL(updateWiredList(int)), mw, SLOT(onBtnNetListClicked(int)));
-        QObject::connect(this, SIGNAL(newConnAdded(int)), mw, SLOT(onNewConnAdded(int)));
-        QObject::connect(this, SIGNAL(updateWirelessList()), mw, SLOT(on_wifi_changed()));
+//        QObject::connect(this, SIGNAL(updateWiredList(int)), mw, SLOT(onBtnNetListClicked(int)));
+//        QObject::connect(this, SIGNAL(newConnAdded(int)), mw, SLOT(onNewConnAdded(int)));
+//        QObject::connect(this, SIGNAL(updateWirelessList()), mw, SLOT(on_wifi_changed()));
+        connect(this, &KylinDBus::updateWiredList, mw, &MainWindow::onBtnNetListClicked);
+        connect(this, &KylinDBus::newConnAdded, mw, &MainWindow::onNewConnAdded);
+        connect(this, &KylinDBus::updateWirelessList, mw, &MainWindow::on_wifi_changed);
     }
 
     mUtils = new Utils();
@@ -143,6 +146,9 @@ void KylinDBus::getObjectPath()
                                              QString("PropertiesChanged"), this, SLOT(onLanPropertyChanged(QVariantMap) ) );
         multiWiredPaths.removeOne(mPath);
     }
+
+    multiWirelessPaths.clear();
+
 
     QDBusInterface m_interface( "org.freedesktop.NetworkManager",
                               "/org/freedesktop/NetworkManager",
@@ -178,6 +184,11 @@ void KylinDBus::getObjectPath()
            wirelessPath = obj_path;
            isWirelessCardOn = true;
        }
+   }
+
+   for(int i = 0 ; i< multiWirelessPaths.size();i++)
+   {
+       qDebug() << "exist WirelessPaths:" << multiWirelessPaths.at(i).path();
    }
 }
 
@@ -1028,7 +1039,7 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
 
     for(QString key : map.keys() ) {
         if (key == "802-3-ethernet") {
-            emit this->updateWiredList(0); //send this signal to update wired network list
+            emit this->updateWiredList(1); //send this signal to update wired network list
             emit this->newConnAdded(0);
             m_lanPathList.append(objPath.path());
             emit mw->wiredConnectionAdded();
@@ -1098,7 +1109,7 @@ void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
         m_lanPathList.removeOne(objPath.path());
         qDebug()<<"An old network was removed from configure directory.";
         if (mw->is_btnLanList_clicked == 1) {
-            emit this->updateWiredList(0); //send this signal to update wired network list
+            emit this->updateWiredList(1); //send this signal to update wired network list
         }
         emit mw->wiredConnectionRemoved();
     }
@@ -1187,7 +1198,7 @@ QList<QString> KylinDBus::getAtiveLanSsidUuidState()
                                   QDBusConnection::systemBus() );
         QDBusReply<QVariant> reply = interfaceType.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
 
-        if (reply.value().toString() == "ethernet" || reply.value().toString() == "802-3-ethernet" || reply.value().toString() == "bluetooth") {
+        if (reply.value().toString() == "ethernet" || reply.value().toString() == "802-3-ethernet" || reply.value().toString() == "bluetooth" || reply.value().toString() == "vpn") {
             QDBusInterface interfaceInfo( "org.freedesktop.NetworkManager",
                                       objPath.path(),
                                       "org.freedesktop.DBus.Properties",
@@ -1330,7 +1341,7 @@ QString KylinDBus::getWifiSsid(QString accessPointPath)
 //检查wifi连接状态
 int KylinDBus::checkWifiConnectivity()
 {
-    int wifiState = 3;
+    int wifiState = WIFI_DISCONNECTED;
 
     QDBusInterface interface( "org.freedesktop.NetworkManager",
                               "/org/freedesktop/NetworkManager",
@@ -1739,7 +1750,11 @@ void KylinDBus::slot_timeout()
 void KylinDBus::onLanIpPropertiesChanged()
 {
     if (!mw->isHandlingWiredCableOn) {
-        emit this->updateWiredList(0);
+        QTimer::singleShot(0.5 * 1000, this, [ = ]() {
+            //防止卡顿，延时一小段时间后再发信号
+            emit this->updateWiredList(0);
+        });
+//        emit this->updateWiredList(0);
     }
 }
 

@@ -172,56 +172,60 @@ void ConfForm::mouseMoveEvent(QMouseEvent *event)
 }
 
 //网络配置参数设置界面的显示内容
-void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QString v4addr, QString v6method, QString v6addr, QString mask, QString gateway, QString dns, bool isActConf, bool isWiFi)
+void ConfForm::setProp(ConnProperties connection)
 {
-    this->isActConf = isActConf;
-    ui->leName->setText(connName);
-    lastConnName = connName;
-    lastIpv4 = v4addr;
-    lastIpv6 = v6addr;
-    lastTypeIndex = ui->cbType->currentIndex();
-    netUuid = uuidName;
-    //qDebug() << Q_FUNC_INFO << __LINE__ << connName << uuidName;
-
     isActWifi = false;
-    if (isWiFi) {
-        ui->leName->setEnabled(false);
-        isActWifi = isWiFi;
+    ui->cbType->removeItem(1);
+    if (connection.type != "vpn") {
+        ui->cbType->addItem(tr("Manual"));
+        if (connection.type == "wifi") {
+            ui->leName->setEnabled(false);
+            isActWifi = true;
+        }
     }
 
-    if ((v4method == "auto" || v4method == "") && (v6method == "auto" || v6method == "")) {
+    this->isActConf = connection.isActConf;
+    ui->leName->setText(connection.connName);
+    lastConnName = connection.connName;
+    lastIpv4 = connection.v4addr;
+    lastIpv6 = connection.v6addr;
+    lastTypeIndex = ui->cbType->currentIndex();
+    netUuid = connection.uuidName;
+    //qDebug() << Q_FUNC_INFO << __LINE__ << connName << uuidName;
+
+    if ((connection.v4method == "auto" || connection.v4method == "") && (connection.v6method == "auto" || connection.v6method == "")) {
         ui->cbType->setCurrentIndex(0);
         cbTypeChanged(0);
     } else {
         ui->cbType->setCurrentIndex(1);
         cbTypeChanged(1);
     }
-    if (v6method == "manual") {
-        ui->leAddr_ipv6->setText(v6addr);
+    if (connection.v6method == "manual") {
+        ui->leAddr_ipv6->setText(connection.v6addr);
     }
 
-    ui->leAddr->setText(v4addr);
-    ui->leGateway->setText(gateway);
+    ui->leAddr->setText(connection.v4addr);
+    ui->leGateway->setText(connection.gateway);
 
     // 配置中有多个DNS，只处理前两个
-    if (dns.indexOf(",") != -1) {
-        QStringList dnss = dns.split(",");
+    if (connection.dns.indexOf(",") != -1) {
+        QStringList dnss = connection.dns.split(",");
         ui->leDns->setText(dnss.at(0));
         ui->leDns2->setText(dnss.at(1));
     } else {
-        ui->leDns->setText(dns);
+        ui->leDns->setText(connection.dns);
         ui->leDns2->setText("");
     }
 
-    if (mask == "24") {
+    if (connection.mask == "24") {
         ui->cbMask->setCurrentIndex(0);
-    } else if(mask == "23") {
+    } else if(connection.mask == "23") {
         ui->cbMask->setCurrentIndex(1);
-    } else if(mask == "22") {
+    } else if(connection.mask == "22") {
         ui->cbMask->setCurrentIndex(2);
-    } else if(mask == "16") {
+    } else if(connection.mask == "16") {
         ui->cbMask->setCurrentIndex(3);
-    } else if(mask == "8") {
+    } else if(connection.mask == "8") {
         ui->cbMask->setCurrentIndex(4);
     } else {
         ui->cbMask->setCurrentIndex(0);
@@ -737,7 +741,7 @@ void ConfForm::setEnableOfBtn()
     }
 
     if (ui->cbType->currentIndex() == 1) {
-        if (ui->leAddr->text().isEmpty() && ui->leAddr_ipv6->text().isEmpty()) {
+        if (ui->leAddr->text().isEmpty() && ui->leAddr_ipv6->text().isEmpty() || ui->leGateway->text().isEmpty() || ui->leDns->text().isEmpty()) {
             //当ipv4和ipv6地址均未设置时，禁止保存
             this->setBtnEnableFalse();
             return;

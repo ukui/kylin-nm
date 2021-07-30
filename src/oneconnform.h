@@ -66,7 +66,7 @@ public:
     ~OneConnForm();
 
     // category:1->normal protocol 1->wifi 6 2->wifi 6+
-    void setSignal(QString lv, QString secu,QString category = "0");
+    void setSignal(QString lv, QString secu, QString category = "0", bool hasSignalStrength = true);
     int getSignal();
     void setWifiName(QString name, QString bssid, QString uuid, QString isname, bool isHW, bool is9006C);
     QString getName();
@@ -84,6 +84,7 @@ public:
     void setLePassword();
 
     bool isWifiConfExist(QString netName);
+    bool isInputtingPwd();
     void setlbPwdTipVisble(const bool&);
 
     QString wifiName;
@@ -96,7 +97,7 @@ public:
     QLabel * lbPwdTip = nullptr;
     bool isHuaweiPC;
     bool isHuaWei9006C;
-    bool isSelected;
+    bool isSelected;\
     bool isActive;
     bool isConnected;
     bool isTopItem;
@@ -137,9 +138,7 @@ private slots:
 
     void on_btnCancel_clicked();
 
-    void on_checkBoxPwd_pressed();
-
-    void on_checkBoxPwd_released();
+    void on_checkBoxPwd_clicked();
 
     bool onMenuTriggered(QAction *);
 

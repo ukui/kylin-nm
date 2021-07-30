@@ -34,8 +34,6 @@
 #include <QDBusObjectPath>
 #include <QtConcurrent>
 
-extern int currentActWifiSignalLv;
-
 OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *confForm, KSimpleNM *ksnm) :
     QWidget(parent),
     ui(new Ui::OneConnForm)
@@ -50,7 +48,8 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnCancel->setText(tr("Cancel"));//取消连接
 
     ui->lbConned->setAlignment(Qt::AlignLeft);
-    ui->lePassword->setEchoMode(QLineEdit::Normal);
+    ui->lePassword->setEchoMode(QLineEdit::Password);
+    ui->checkBoxPwd->setChecked(false);
     ui->lePassword->setContextMenuPolicy(Qt::NoContextMenu);
     ui->lePassword->setTextMargins(0,0,24,0);
     ui->btnConnPWD->setEnabled(false);
@@ -114,7 +113,6 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->leInfo_3->hide();
     ui->lePassword->hide();
     ui->checkBoxPwd->hide();
-    ui->checkBoxPwd->setChecked(true);
     ui->btnConnSub->hide();
     ui->btnConn->hide();
     ui->btnDisConn->hide();
@@ -435,8 +433,8 @@ void OneConnForm::setSelected(bool isSelected, bool isCurrName)
         resize(W_ITEM, H_ITEM);
         ui->lePassword->setText("");
         ui->lePassword->setStyleSheet("QLineEdit{border:1px solid rgba(61,107,229,1);border-radius:4px;background:rgba(0,0,0,0.2);}");
-        ui->lePassword->setEchoMode(QLineEdit::Normal);
-        ui->checkBoxPwd->setChecked(true);
+        ui->lePassword->setEchoMode(QLineEdit::Password);
+        ui->checkBoxPwd->setChecked(false);
 
         ui->line->move(X_LINE, Y_LINE);
         ui->wbg->show();
@@ -531,7 +529,7 @@ void OneConnForm::setLine(bool isShow)
     }
 }
 
-void OneConnForm::setSignal(QString lv, QString secu, QString category)
+void OneConnForm::setSignal(QString lv, QString secu, QString category, bool hasSignalStrength)
 {
     this->m_signal = lv.toInt();
     int signal = lv.toInt();
@@ -541,62 +539,49 @@ void OneConnForm::setSignal(QString lv, QString secu, QString category)
         hasPwd = true;
     }
 
-    QString signalStyle;
+    QString signalIcon;
     if (isHuaweiPC) {
-        signalStyle = "QLabel{border-radius:0px;background:url(:/res/hw/wifi";
+        signalIcon = "QLabel{border-radius:0px;background:url(:/res/hw/wifi";
     } else {
-        signalStyle = "QLabel{border-radius:0px;background:url(:/res/w/wifi";
+        signalIcon = "network-wireless-signal-";
     }
 
     if (isHuaWei9006C) {
         if ("1" == category) {
-            signalStyle += "6";
+            signalIcon += "6";
         } else if ("2" == category) {
-            signalStyle += "6+";
+            signalIcon += "6+";
         }
     }
 
     if (signal > 75) {
-        if (hasPwd) {
-            signalStyle += "-full-pwd.png);}";
-        } else {
-            signalStyle += "-full.png);}";
-        }
-        signalLv = 1;
+        signalIcon += isHuaweiPC ? (hasPwd ? "-full-pwd.png);}" : "-full.png);}") :
+                                   (hasPwd ? "excellent-secure-symbolic" : "excellent-symbolic");
     }
     if (signal > 55 && signal <= 75) {
-        if (hasPwd) {
-            signalStyle += "-high-pwd.png);}";
-        } else {
-            signalStyle += "-high.png);}";
-        }
-        signalLv = 2;
+        signalIcon += isHuaweiPC ? (hasPwd ? "-high-pwd.png);}" : "-high.png);}") :
+                                   (hasPwd ? "good-secure-symbolic" : "good-symbolic");
     }
     if (signal > 35 && signal <= 55) {
-        if (hasPwd) {
-            signalStyle += "-medium-pwd.png);}";
-        } else {
-            signalStyle += "-medium.png);}";
-        }
-        signalLv = 3;
+        signalIcon += isHuaweiPC ? (hasPwd ? "-medium-pwd.png);}" : "-medium.png);}") :
+                                   (hasPwd ? "ok-secure-symbolic" : "ok-symbolic");
     }
-    if (signal > 15 && signal <= 35) {
-        if (hasPwd) {
-            signalStyle += "-low-pwd.png);}";
+    if (signal <= 35) {
+        if (hasSignalStrength) {
+            signalIcon += isHuaweiPC ? (hasPwd ? "-low-pwd.png);}" : "-low.png);}") :
+                                       (hasPwd ? "weak-secure-symbolic" : "weak-symbolic");
         } else {
-            signalStyle += "-low.png);}";
+            signalIcon += isHuaweiPC ? "-none.png);}" :
+                                       (hasPwd ? "none-secure-symbolic" : "none-symbolic");
         }
-        signalLv = 4;
     }
-    if (signal <= 15) {
-        if (hasPwd) {
-            signalStyle += "-none-pwd.png);}";
-        } else {
-            signalStyle += "-none.png);}";
-        }
-        signalLv = 4;
+
+    if (!isHuaweiPC) {
+        ui->lbSignal->setPixmap(QIcon::fromTheme(signalIcon).pixmap(32, 32));
+        ui->lbSignal->setProperty("useIconHighlightEffect", 0x10);
+    } else {
+        ui->lbSignal->setStyleSheet(signalIcon);
     }
-    ui->lbSignal->setStyleSheet(signalStyle);
 }
 
 int OneConnForm::getSignal()
@@ -656,6 +641,7 @@ void OneConnForm::on_btnDisConn_clicked()
     this->startWifiWaiting(false);
 
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     //mw->on_btnHotspotState();
     //kylin_network_set_con_down(wifiName.toUtf8().data());
     kylin_network_set_con_down(wifiUuid.toUtf8().data());
@@ -666,9 +652,16 @@ void OneConnForm::on_btnDisConn_clicked()
 //点击列表item扩展时会出现该按钮 用于连接网络
 void OneConnForm::on_btnConnSub_clicked()
 {
-    if (mw->is_stop_check_net_state == 1) {
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+    //当有其他wifi正在连接时，禁止点击连接按钮
+    if (mw->is_stop_check_net_state == 1 || iface->wstate == DEVICE_CONNECTING) {
+        delete iface;
+        delete bt;
         return;
     }
+    delete iface;
+    delete bt;
 
     if (lbPwdTip->isVisible() && this->hasPwd) {
         this->slotConnWifiResult(2);
@@ -682,9 +675,16 @@ void OneConnForm::on_btnConnSub_clicked()
 //无需密码的wifi连接
 void OneConnForm::on_btnConn_clicked()
 {
-    if (mw->is_stop_check_net_state == 1) {
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+    //当有其他wifi正在连接时，禁止点击连接按钮
+    if (mw->is_stop_check_net_state == 1 || iface->wstate == DEVICE_CONNECTING) {
+        delete iface;
+        delete bt;
         return;
     }
+    delete iface;
+    delete bt;
 
     if (lbPwdTip->isVisible() && this->hasPwd) {
         this->slotConnWifiResult(2);
@@ -703,6 +703,7 @@ void OneConnForm::toConnectWirelessNetwork()
         bool isConfiged = getWifiConfig(wc, this->wifiName);
         if (isConfiged && wc.eap != "peap") {
             mw->is_stop_check_net_state = 1;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             QThread *t = new QThread();
             BackThread *bt = new BackThread();
             bt->moveToThread(t);
@@ -763,7 +764,9 @@ void OneConnForm::toConnectWirelessNetwork()
     process->start(QString("nmcli -f 802-11-wireless-security.key-mgmt connection show \"%1\"").arg(wifiName));
     process->waitForFinished();
     QString cur_secu;
-    if (wifiSecu.contains("WPA3"))
+    if (wifiSecu.contains("WPA2") && wifiSecu.contains("WPA3"))
+        cur_secu = "wpa-psk";
+    else if (wifiSecu.contains("WPA3"))
         cur_secu = "sae";
     else if (wifiSecu.contains("--"))
         cur_secu = "--";
@@ -808,31 +811,32 @@ void OneConnForm::toConnectWirelessNetwork()
     }
 
     if (key_mgmt == "wpa-psk" && this->getPskFlag() == 2) {
-        //当设置为每次询问密码时执行
-        QPoint pos = QCursor::pos();
-        QRect primaryGeometry;
-        for (QScreen *screen : qApp->screens()) {
-            if (screen->geometry().contains(pos)) {
-                primaryGeometry = screen->geometry();
-            }
-        }
-        if (primaryGeometry.isEmpty()) {
-            primaryGeometry = qApp->primaryScreen()->geometry();
-        }
+//        //当设置为每次询问密码时执行
+//        QPoint pos = QCursor::pos();
+//        QRect primaryGeometry;
+//        for (QScreen *screen : qApp->screens()) {
+//            if (screen->geometry().contains(pos)) {
+//                primaryGeometry = screen->geometry();
+//            }
+//        }
+//        if (primaryGeometry.isEmpty()) {
+//            primaryGeometry = qApp->primaryScreen()->geometry();
+//        }
 
-        QApplication::setQuitOnLastWindowClosed(false);
-        WiFiConfigDialog *wifiConfigDialog = new WiFiConfigDialog();
-        wifiConfigDialog->move(primaryGeometry.width() / 2 - wifiConfigDialog->width() / 2, primaryGeometry.height() / 2 - wifiConfigDialog->height() / 2);
-        wifiConfigDialog->show();
-        wifiConfigDialog->raise();
+//        QApplication::setQuitOnLastWindowClosed(false);
+//        WiFiConfigDialog *wifiConfigDialog = new WiFiConfigDialog();
+//        wifiConfigDialog->move(primaryGeometry.width() / 2 - wifiConfigDialog->width() / 2, primaryGeometry.height() / 2 - wifiConfigDialog->height() / 2);
+//        wifiConfigDialog->show();
+//        wifiConfigDialog->raise();
 
-        return;
+//        return;
     }
 
     if (psk_flag != 0) { //未为所有用户存储密码
         QString homePath = getenv("HOME");
         if (QFile(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName)).exists()) { //已为该用户存储密码
             mw->is_stop_check_net_state = 1;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             QThread *t = new QThread();
             BackThread *bt = new BackThread();
             bt->moveToThread(t);
@@ -847,6 +851,7 @@ void OneConnForm::toConnectWirelessNetwork()
             connect(bt, &BackThread::connDone, this, [ = ](int res) {
                 this->stopWifiWaiting(true);
                 mw->is_stop_check_net_state = 0;
+                qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
                 if (res) {
                     QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName).toUtf8());
                 }
@@ -864,6 +869,7 @@ void OneConnForm::toConnectWirelessNetwork()
     }
 
     mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     m_connWithPwd = false;
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
@@ -872,7 +878,11 @@ void OneConnForm::toConnectWirelessNetwork()
     connect(t, SIGNAL(started()), this, SLOT(slotConnWifi()));
     connect(this, SIGNAL(sigConnWifi(QString, QString)), bt, SLOT(execConnWifi(QString, QString)));
     connect(bt, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
-    connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
+//    connect(bt, SIGNAL(connDone(int)), this, SLOT(slotConnWifiResult(int)));
+    connect(bt,&BackThread::connDone,this,[=](int res){
+       this->stopWifiWaiting(true);
+       slotConnWifiResult(res);
+    });
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     t->start();
 }
@@ -880,9 +890,21 @@ void OneConnForm::toConnectWirelessNetwork()
 //需要密码的wifi连接
 void OneConnForm::on_btnConnPWD_clicked()
 {
+    BackThread *bt = new BackThread();
+    IFace *iface = bt->execGetIface();
+    //当有其他wifi正在连接时，禁止点击连接按钮
+    if (iface->wstate == DEVICE_CONNECTING) {
+        delete iface;
+        delete bt;
+        return;
+    }
+    mw->m_is_inputting_wifi_password = false; //点击连接表示密码输入已完成
     m_connWithPwd = true;
     qDebug()<<"A button named btnConnPWD about wifi net is clicked.";
     if (lbPwdTip->isVisible()) {
+        QString modifyCmd = "nmcli connection modify \""+ wifiName + "\" " + "802-11-wireless-security.psk " + ui->lePassword->text();
+        int mdf_res = system(modifyCmd.toUtf8().data());
+        qDebug()<<"Modified wifi password, cmd="<<modifyCmd<<";res="<<mdf_res;
         lbPwdTip->hide();
         mw->m_wifi_list_pwd_changed.removeOne(wifiName);
     }
@@ -896,7 +918,9 @@ void OneConnForm::on_btnConnPWD_clicked()
             passwdFile->close();
 //            cmdStr = "nmcli connection up " + wifiName + " passwd-file " + homePath +"/.config/" + wifiName + ".psk";
         }
+
         mw->is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
         QThread *t = new QThread();
         BackThread *bt = new BackThread();
         bt->moveToThread(t);
@@ -911,6 +935,7 @@ void OneConnForm::on_btnConnPWD_clicked()
         connect(bt, &BackThread::connDone, this, [ = ](int res) {
             this->stopWifiWaiting(true);
             mw->is_stop_check_net_state = 0;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             if (res) {
                 QFile::remove(QString("%1/.config/%2.psk").arg(homePath).arg(wifiName).toUtf8());
             }
@@ -922,6 +947,7 @@ void OneConnForm::on_btnConnPWD_clicked()
 
     if (! mw->is_stop_check_net_state) {
         mw->is_stop_check_net_state = 1;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
         QThread *t = new QThread();
         BackThread *bt = new BackThread();
         bt->moveToThread(t);
@@ -984,23 +1010,33 @@ bool OneConnForm::isWifiConfExist(QString netName)
     return false;
 }
 
+bool OneConnForm::isInputtingPwd()
+{
+    return ui->lePassword->isVisible();
+}
+
 void OneConnForm::setlbPwdTipVisble(const bool &visible)
 {
     lbPwdTip->setVisible(visible);
 }
 
 //设置密码隐藏或可见
-void OneConnForm::on_checkBoxPwd_pressed()
+void OneConnForm::on_checkBoxPwd_clicked()
 {
-    ui->checkBoxPwd->setChecked(true);
-    ui->lePassword->setEchoMode(QLineEdit::Normal);
+    if (ui->lePassword->echoMode() == QLineEdit::Password) {
+        ui->checkBoxPwd->setChecked(true);
+        ui->lePassword->setEchoMode(QLineEdit::Normal);
+    } else {
+        ui->checkBoxPwd->setChecked(false);
+        ui->lePassword->setEchoMode(QLineEdit::Password);
+    }
 }
 
-void OneConnForm::on_checkBoxPwd_released()
-{
-    ui->checkBoxPwd->setChecked(false);
-    ui->lePassword->setEchoMode(QLineEdit::Password);
-}
+//void OneConnForm::on_checkBoxPwd_released()
+//{
+//    ui->checkBoxPwd->setChecked(false);
+//    ui->lePassword->setEchoMode(QLineEdit::Password);
+//}
 
 void OneConnForm::on_lePassword_textEdited(const QString &arg1)
 {
@@ -1041,33 +1077,40 @@ void OneConnForm::on_btnInfo_clicked()
     BackThread *bt = new BackThread();
     QString connProp = bt->getConnProp(wifiUuid);
     QStringList propList = connProp.split("|");
-    QString v4method, addr, mask, gateway, dns, v6method, v6addr;
+    ConnProperties connection;
+//    QString v4method, addr, mask, gateway, dns, v6method, v6addr;
     foreach (QString line, propList) {
         if (line.startsWith("method:")) {
-            v4method = line.split(":").at(1);
+            connection.v4method = line.split(":").at(1);
         }
         if (line.startsWith("v4addr:")) {
-            addr = line.split(":").at(1);
+            connection.v4addr = line.split(":").at(1);
         }
         if (line.startsWith("mask:")) {
-            mask = line.split(":").at(1);
+            connection.mask = line.split(":").at(1);
         }
         if (line.startsWith("v6method:")) {
-            v6method = line.split(":").at(1);
+            connection.v6method = line.split(":").at(1);
         }
         if (line.startsWith("v6addr:")) {
-            v6addr = line.right(line.length() - line.indexOf(":") - 1);
+            connection.v6addr = line.right(line.length() - line.indexOf(":") - 1);
         }
         if (line.startsWith("gateway:")) {
-            gateway= line.split(":").at(1);
+            connection.gateway= line.split(":").at(1);
         }
         if (line.startsWith("dns:")) {
-            dns = line.split(":").at(1);
+            connection.dns = line.split(":").at(1);
+        }
+        if (line.startsWith("type:")) {
+            connection.type = line.split(":").at(1);
         }
     }
+    connection.connName = wifiName;
+    connection.uuidName = wifiUuid;
+    connection.isActConf = this->isActive;
     // qDebug()<<"v4method:"<<v4method<<" addr:"<<addr<<" mask:"<<mask<<" gateway:"<<gateway<<" dns:"<<dns;
 
-    cf->setProp(wifiName, wifiUuid, v4method, addr, v6method, v6addr, mask, gateway, dns, this->isActive, true);
+    cf->setProp(connection);
     qDebug() << Q_FUNC_INFO << __LINE__ << wifiName << wifiUuid;
     cf->move(primaryGeometry.width() / 2 - cf->width() / 2, primaryGeometry.height() / 2 - cf->height() / 2);
     cf->show();
@@ -1118,22 +1161,12 @@ void OneConnForm::slotConnWifiResult(int connFlag)
     }
 
     if (connFlag == 1  || connFlag == 4) {
-        if (!m_connWithPwd) {
-            //用原有配置文件连接失败，显示密码错误
-            qDebug()<<"Connected failed with old configuration. ssid="<<wifiName;
-            if (mw)
-                mw->m_wifi_list_pwd_changed.append(wifiName);
-            if (lbPwdTip)
-                this->lbPwdTip->show();
-        } else {
-            // 使用密码连接失败，需要删除该配置文件
-            QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
-            int status = system(cmd.toUtf8().data());
-            if (status != 0) {
-                qDebug()<<"execute 'nmcli connection delete' in function 'slotConnWifiResult' failed.";
-            }
+        // 使用密码连接失败，需要删除该配置文件
+        QString cmd = "export LANG='en_US.UTF-8';export LANGUAGE='en_US';nmcli connection delete '" + wifiName + "'";
+        int status = system(cmd.toUtf8().data());
+        if (status != 0) {
+            qDebug()<<"execute 'nmcli connection delete' in function 'slotConnWifiResult' failed.";
         }
-
     }
 
     if (connFlag == 2 || connFlag == 4 || connFlag == 1) {
@@ -1167,16 +1200,15 @@ void OneConnForm::slotConnWifiResult(int connFlag)
 
         //设置输入密码框被选中
         ui->lePassword->setFocus();
-        ui->lePassword->setEchoMode(QLineEdit::Password);
-        ui->checkBoxPwd->setChecked(false);
+//        ui->lePassword->setEchoMode(QLineEdit::Password);
+        ui->lePassword->selectAll();
+//        ui->checkBoxPwd->setChecked(false);
     }
-
-    // 设置全局变量，当前连接Wifi的信号强度
-    currentActWifiSignalLv = signalLv;
 
     this->stopWifiWaiting(true);
 
     mw->is_stop_check_net_state = 0;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
 }
 
 void OneConnForm::waitAnimStep()
@@ -1202,6 +1234,7 @@ void OneConnForm::waitAnimStep()
         this->stopWifiWaiting(true); //动画超出时间限制，强制停止动画
 
         mw->is_stop_check_net_state = 0;
+        qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     }
 }
 

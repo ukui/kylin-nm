@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef KYLINCONNECTINFO_H
-#define KYLINCONNECTINFO_H
+#ifndef KYLINCONNECTSETTING_H
+#define KYLINCONNECTSETTING_H
 
 #include <QStringList>
 #include <QString>
@@ -39,12 +39,12 @@ typedef enum {
     IPADDRESS_V6,
 }KyIpAddressType;
 
-class KyConnectInfo : public QObject
+class KyConnectSetting : public QObject
 {
     Q_OBJECT
 public:
-    KyConnectInfo();
-    ~KyConnectInfo();
+    KyConnectSetting();
+    ~KyConnectSetting();
 
 public:
     void setIfaceName(QString &ifaceName);
@@ -52,6 +52,7 @@ public:
     int  setIpConfigType(KyIpAddressType ipType, KyIpConfigType configType);
     void ipv4AddressConstruct(QString &ipv4Address, QString &ipv4NetMask, QString &ipv4GateWay, QStringList &ipv4Dns);
     void ipv6AddressConstruct(QString &ipv6Address, QString &ipv6NetMask, QString &ipv6GateWay, QStringList &ipv6Dns);
+    void dumpInfo();
 
 public:
     QString  m_connectName;
@@ -66,4 +67,4 @@ public:
     QList<QHostAddress> m_ipv6Dns;
 };
 
-#endif // KYLINCONNECTINFO_H
+#endif // KYLINCONNECTSETTING_H

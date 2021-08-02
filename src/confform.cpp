@@ -230,7 +230,7 @@ void ConfForm::setProp(QString connName, QString uuidName, QString v4method, QSt
     ui->btnSave->setEnabled(false);
 }
 
-void ConfForm::connectInfoConstruct(KyConnectInfo &connectInfo)
+void ConfForm::connectInfoConstruct(KyConnectSetting &connectInfo)
 {
     QString connectName = ui->leName->text();
 
@@ -286,9 +286,9 @@ void ConfForm::on_btnCreate_clicked()
         }
     }
 
-    KyConnectInfo newConnectInfo;
+    KyConnectSetting newConnectInfo;
     connectInfoConstruct(newConnectInfo);
-    m_networkConnect.createConnect(WIRED_CONNECT, newConnectInfo);
+    m_networkConnect.createWiredConnect(newConnectInfo);
 
     if (DHCP_IP == ui->cbType->currentIndex()) {
         //选择自动，则配置完成并发出桌面通知
@@ -358,9 +358,9 @@ void ConfForm::saveNetworkConfiguration()
 {
     KylinDBus kylindbus;
 
-    KyConnectInfo newConnectInfo;
+    KyConnectSetting newConnectInfo;
     connectInfoConstruct(newConnectInfo);
-    m_networkConnect.updateConnect(netUuid, newConnectInfo);
+    m_networkConnect.updateWiredConnect(netUuid, newConnectInfo);
 
     //是选择的自动还是手动配置网络  
     if (ui->cbType->currentIndex() == DHCP_IP) {

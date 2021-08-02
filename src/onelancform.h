@@ -26,9 +26,11 @@
 
 #include "confform.h"
 #include "kylin-network-interface.h"
-#include "kylinnetworkconnect.h"
+#include "kylinwiredconnectoperation.h"
 #include "backthread.h"
 #include "ksimplenm.h"
+#include "kylinwiredconnectitem.h"
+
 
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
@@ -60,10 +62,14 @@ class OneLancForm;
 class OneLancForm : public QWidget
 {
     Q_OBJECT
+public:
+    explicit OneLancForm(QWidget *parent = 0, KyWiredConnectItem *wiredConnectItem = 0);
+    ~OneLancForm();
 
 public:
-    explicit OneLancForm(QWidget *parent = 0, MainWindow *mw = 0, ConfForm *confForm = 0, KSimpleNM *ksnm = 0);
-    ~OneLancForm();
+    void constructConnectionItem(int index);
+    void constructActiveConnectionItem(int index);
+    void constructActiveConnectionEmptyItem();
 
     void setLanName(QString ssid, QString transSsid, QString uuid, QString interface);
     void setIcon(bool isOn);
@@ -89,6 +95,7 @@ public slots:
     void waitAnimStep();
     void startWaiting(bool isToConnect);
     void stopWaiting();
+    void updateNetworkSpeed();
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -109,6 +116,7 @@ private slots:
 
 private:
     QTimer *waitTimer = nullptr;
+    QTimer *m_updateSpeedTimer = nullptr;
     int waitPage;
     int countCurrentTime;
 
@@ -116,9 +124,10 @@ private:
     MainWindow *mw = nullptr;
     ConfForm *cf = nullptr;
     KSimpleNM *ks = nullptr;
-    KyNetworkConnect *m_networkConnect = nullptr;
+    KyWiredConnectOperation *m_wiredConnectOperation = nullptr;
 
     QString leQssLow, leQssHigh;
+    KyWiredConnectItem *m_wiredConnectItem = nullptr;
 
 signals:
     void selectedOneLanForm(QString lanName, QString uniqueName);

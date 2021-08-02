@@ -86,40 +86,63 @@ public:
 
     void removeConnection(QString const & uuid);
 
+    void connectionDump();
+
 public:
     NetworkManager::Device::Ptr getNetworkDevice(const QString ifaceName);
-    NetworkManager::ActiveConnection::Ptr getActiveConnect(const QString uuid);
+    NetworkManager::ActiveConnection::Ptr getActiveConnect(const QString activeConnectUuid);
     NetworkManager::Connection::Ptr getConnect(const QString uuid);
     NetworkManager::WirelessNetwork::Ptr getWifiNetwork(const QString apName);
 
+    NetworkManager::ActiveConnection::List getActiveConnectList();
+    NetworkManager::Connection::List getConnectList();
+    NetworkManager::Device::List getNetworkDeviceList();
+    bool isActiveConnection(QString uuid);
+
 signals:
-    void connectionAdd(NetworkManager::Connection::Ptr conn);
-    void connectionUpdate(NetworkManager::Connection * conn);
-    void connectionRemove(NetworkManager::Connection * conn);
-    void activeConnectionAdd(NetworkManager::ActiveConnection::Ptr conn);
-    void activeConnectionUpdate(NetworkManager::ActiveConnection * conn);
-    void activeConnectionRemove(NetworkManager::ActiveConnection * conn);
-    void activeConnectionsReset();
-    void deviceAdd(NetworkManager::Device::Ptr dev);
+    void connectionAdd(QString uuid);
+    void connectionUpdate(QString uuid);
+    void connectionRemove(QString path);
+
+    void deviceAdd(QString deviceName);
     void deviceUpdate(NetworkManager::Device * dev);
-    void deviceRemove(NetworkManager::Device * dev);
+    void deviceRemove(QString deviceName);
+
+    void deviceCarrierChanage(QString deviceName, bool pluged);
+    void deviceBitRateChanage(QString deviceName, int bitRate);
+    void deviceMacAddressChanaged(QString deviceName, const QString &hwAddress);
+
     void wifiNetworkAdd(NetworkManager::Device * dev, QString const & ssid);
     void wifiNetworkUpdate(NetworkManager::WirelessNetwork * net);
     void wifiNetworkRemove(NetworkManager::Device * dev, QString const & ssid);
 
+    void activeConnectionAdd(QString uuid);
+    void activeConnectionUpdate(QString uuid);
+    void activeConnectionRemove(QString uuid);
+    void activeConnectStateChangeReason(QString uuid,
+                                    NetworkManager::ActiveConnection::State state,
+                                    NetworkManager::ActiveConnection::Reason reason);
+    void vpnActiveConnectStateChangeReason(QString uuid,
+                                           NetworkManager::VpnConnection::State state,
+                                           NetworkManager::VpnConnection::StateChangeReason reason);
 
 private slots:
     //connection
     void onConnectionUpdated();
-    void onConnectionRemoved();
+    //void onConnectionRemoved();
 
     //active connection
     void onActiveConnectionUpdated();
     void onActiveConnectionChangedReason(NetworkManager::ActiveConnection::State state,
                                           NetworkManager::ActiveConnection::Reason reason);
+    void onVpnActiveConnectChanagedReason(NetworkManager::VpnConnection::State state,
+                                          NetworkManager::VpnConnection::StateChangeReason reason);
 
     //device
     void onDeviceUpdated();
+    void onDeviceCarrierChanage(bool pluged);
+    void onDeviceBitRateChanage(int bitRate);
+    void onDeviceMacAddressChanaged(const QString &hwAddress);
     void onDeviceStateChanged(NetworkManager::Device::State newstate,
                       NetworkManager::Device::State oldstate,
                       NetworkManager::Device::StateChangeReason reason);
@@ -134,7 +157,6 @@ private slots:
     void onDeviceRemoved(QString const & uni);
     void onActiveConnectionAdded(QString const & path);
     void onActiveConnectionRemoved(QString const & path);
-    void onActiveConnectionsChanged();
 
     //settings notifier
     void onConnectionAdded(QString const & path);
@@ -147,7 +169,6 @@ public:
     NetworkManager::Connection::List m_connections;
     NetworkManager::Device::List m_devices;
     NetworkManager::WirelessNetwork::List m_wifiNets;
-
 };
 
 

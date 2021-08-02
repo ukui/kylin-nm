@@ -20,7 +20,7 @@
 #define KYLINNETWORKCONNECT_H
 
 #include "kylinnetworkresourcemanager.h"
-#include "kylinconnectinfo.h"
+#include "kylinconnectsetting.h"
 
 typedef enum{
     WIRED_CONNECT,
@@ -35,8 +35,8 @@ public:
     ~KyNetworkConnect();
 
 public:
-    void  createConnect(KyConnectType connectType, const KyConnectInfo &connectInfo);
-    void  updateConnect(const QString &connectUuid, const KyConnectInfo &connectInfo);
+    void  createConnect(KyConnectType connectType, const KyConnectSetting &connectInfo);
+    void  updateConnect(const QString &connectUuid, const KyConnectSetting &connectInfo);
     void  deleteConnect(const QString &connectUuid);
     int  addAndActivateConnect(const QString );
     int  activateConnection(const QString connectUuid);
@@ -49,13 +49,13 @@ public:
 private:
     void connectSettingInit(
                         NetworkManager::ConnectionSettings::Ptr connectionSettings,
-                        const KyConnectInfo &connectInfo);
+                        const KyConnectSetting &connectInfo);
     void ipv4SettingInit(NetworkManager::Ipv4Setting::Ptr &ipv4Setting,
-                         const KyConnectInfo &connectInfo);
+                         const KyConnectSetting &connectInfo);
     void ipv6SettingInit(NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
-                         const KyConnectInfo &connectInfo);
+                         const KyConnectSetting &connectInfo);
 
-    void createWiredConnect(const KyConnectInfo &connectInfo);
+    void createWiredConnect(const KyConnectSetting &connectInfo);
 
 signals:
     void activateConnectionFinished(NetworkManager::Connection::Ptr &conn);

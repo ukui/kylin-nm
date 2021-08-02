@@ -27,6 +27,7 @@
 #include "utils.h"
 #include "switchbutton.h"
 #include "kylinnetworkresourcemanager.h"
+#include "kylinwiredwidget.h"
 
 #include <fcntl.h>
 #include <sys/types.h>
@@ -116,6 +117,7 @@
 
 class OneConnForm;
 class ConfForm;
+class KyWiredWidget;
 
 namespace Ui {
 class MainWindow;
@@ -292,9 +294,9 @@ private:
     QDesktopWidget desktop;
     KSimpleNM *ksnm = nullptr;
     ConfForm *confForm = nullptr;
-    QWidget *topLanListWidget = nullptr;
+    KyWiredWidget *topLanListWidget = nullptr;
     QWidget *topWifiListWidget = nullptr;
-    QWidget *lanListWidget = nullptr;
+    KyWiredWidget *lanListWidget = nullptr;
     QWidget *wifiListWidget = nullptr;
     QWidget *optWifiWidget = nullptr;
 
@@ -385,6 +387,7 @@ private slots:
     void onBtnNetClicked();
 //    void on_btnWifiList_clicked();
     void onBtnNetListClicked(int flag=0);
+    void onBtnNetListClickeds(int flag=0);
     void onNewConnAdded(int type);
 
     void onRequestRevalueUpdateWifi();
@@ -403,6 +406,7 @@ private slots:
     void handleWifiDisconnLoading();
     void onRequestScanAccesspoint();
     void toScanWifi(bool isShow);
+    void on_setNetSpeeds(qulonglong rx, qulonglong tx);
     void on_setNetSpeed();
     void on_checkOverTime();
 

@@ -28,8 +28,8 @@
 #include <QDialog>
 #include <QListView>
 #include "kylin-dbus-interface.h"
-#include "kylinnetworkconnect.h"
-#include "kylinconnectinfo.h"
+#include "kylinwiredconnectoperation.h"
+#include "kylinconnectsetting.h"
 
 namespace Ui {
 class ConfForm;
@@ -97,7 +97,7 @@ private:
     bool check_ip_conflict(QString ifname);
     void onConfformHide();
     bool isEditingAlready();    //连接按钮是否可被按
-    void connectInfoConstruct(KyConnectInfo &connectInfo);
+    void connectInfoConstruct(KyConnectSetting &connectInfo);
 
     bool isPress;
     QPoint winPos;
@@ -113,7 +113,7 @@ private:
 
     QString labelQss, cbxQss, leQss, lineQss, btnOnQss, btnOffQss;
 
-    KyNetworkConnect m_networkConnect;
+    KyWiredConnectOperation m_networkConnect;
     QString m_ifaceName;
 
 signals:

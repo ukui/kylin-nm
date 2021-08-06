@@ -19,10 +19,11 @@
 #include "onelancform.h"
 #include "ui_onelancform.h"
 #include "mainwindow.h"
+#include "kylinwiredwidget.h"
 
 #include <time.h>
 
-OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *confForm, KSimpleNM *ksnm) :
+OneLancForm::OneLancForm(QWidget *parent, KyConnectItem *wiredConnectItem) :
     QWidget(parent),
     ui(new Ui::OneLancForm)
 {
@@ -78,9 +79,8 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->lbWaiting->hide();
     ui->lbWaitingIcon->hide();
 
-    this->mw = mainWindow;
-    this->cf = confForm;
-    this->ks = ksnm;
+
+    m_wiredConnectItem = wiredConnectItem;
 
     this->isSelected = false;
     this->isActive = false;
@@ -90,7 +90,9 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     ui->btnInfo->setAttribute(Qt::WA_Hover,true);
     ui->btnInfo->installEventFilter(this);
 
+
     this->waitTimer = new QTimer(this);
+#if 0
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(waitAnimStep()));
 
     connect(mw, SIGNAL(waitLanStop()), this, SLOT(stopWaiting()));
@@ -99,19 +101,73 @@ OneLancForm::OneLancForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
             on_btnConn_clicked();
         }
     });
+#endif
+    m_updateSpeedTimer = new QTimer(this);
+    connect(m_updateSpeedTimer, &QTimer::timeout, this, &OneLancForm::updateNetworkSpeed);
+    if (nullptr != m_wiredConnectItem
+            && NetworkManager::ActiveConnection::State::Activated == m_wiredConnectItem->m_connectState) {
+        m_updateSpeedTimer->start(1000);
+    }
 
     ui->btnConn->setShortcut(Qt::Key_Return);//将字母区回车键与连接按钮绑定在一起
     ui->btnConnSub->setShortcut(Qt::Key_Return);//点击连接按钮触发回车键
 
-    m_networkConnect = new KyNetworkConnect();
+    m_wiredConnectOperation = new KyWiredConnectOperation();
 
     srand((unsigned)time(NULL));
 }
 
 OneLancForm::~OneLancForm()
 {
-    delete m_networkConnect;
+    delete m_wiredConnectItem;
+    delete m_wiredConnectOperation;
     delete ui;
+}
+
+void OneLancForm::constructActiveConnectionEmptyItem()
+{
+    setLanName(tr("Not connected"), tr("Not connected"), "--", "--");//"当前未连接任何 以太网"
+    setIcon(false);
+    setConnedString(1, tr("Disconnected"), "");//"未连接"
+    isConnected = false;
+    setTopItem(false);//"当前未连接任何 以太网"
+    setAct(true);
+    move(L_VERTICAL_LINE_TO_ITEM, 0);
+    show();
+    setLine(false);
+}
+
+void OneLancForm::constructActiveConnectionItem(int index)
+{
+    setLanName(m_wiredConnectItem->m_connectName,
+               tr("Ethernet"), m_wiredConnectItem->m_connectUuid,
+               m_wiredConnectItem->m_ifaceName);//第二个参数本来是strLanName，但目前不需要翻译
+    setIcon(true);
+    //setLanInfo(m_wiredConnectItem->m_ipv4, m_wiredConnectItem->m_ipv6,
+    //           m_wiredConnectItem->m_bandWith, m_wiredConnectItem->m_hardAddress);
+    //setConnedString(true, tr("NetOn,IfName:"), m_wiredConnectItem->m_ifaceName);
+    setConnedString(1, tr("NetOn,"), "");
+    isConnected = true;
+    setTopItem(false);
+    setLine(true);
+    setAct(true);
+    move(L_VERTICAL_LINE_TO_ITEM, index*H_NORMAL_ITEM);
+    show();
+}
+
+void OneLancForm::constructConnectionItem(int index)
+{
+    setLanName(m_wiredConnectItem->m_connectName,
+               tr("Ethernet"), m_wiredConnectItem->m_connectUuid,
+               m_wiredConnectItem->m_ifaceName);
+    setIcon(true);
+    setLine(true);
+    //setLanInfo(m_wiredConnectItem->m_ipv4, m_wiredConnectItem->m_ipv6,
+    //           tr("Disconnected"), m_wiredConnectItem->m_hardAddress);
+    setConnedString(0, tr("Disconnected"), "");//"未连接"
+    move(L_VERTICAL_LINE_TO_ITEM, index * H_NORMAL_ITEM);
+    setSelected(false, false);
+    show();
 }
 
 void OneLancForm::mousePressEvent(QMouseEvent *)
@@ -328,7 +384,9 @@ void OneLancForm::slotConnLan()
 void OneLancForm::on_btnDisConn_clicked()
 {
     qDebug()<<"DisConnect button about lan net is clicked, current wired net name is "<<ui->lbName->text();
+    m_wiredConnectOperation->deactivateWiredConnection(ssidName, uuidName);
 
+#if 0
     this->startWaiting(false);
     mw->is_stop_check_net_state = 1;
 
@@ -343,6 +401,7 @@ void OneLancForm::on_btnDisConn_clicked()
     disconnect(this, SIGNAL(selectedOneLanForm(QString, QString)), mw, SLOT(oneTopLanFormSelected(QString, QString)));
 
     emit requestHandleLanDisconn();
+#endif
 }
 
 void OneLancForm::toDisConnWiredNetwork(QString netUuid)
@@ -401,12 +460,13 @@ void OneLancForm::on_btnConnSub_clicked()
 
 void OneLancForm::toConnectWiredNetwork()
 {
+    /*
     if (mw->is_stop_check_net_state == 1) {
         return;
     }
 
     mw->is_stop_check_net_state = 1;
-/*
+
     QThread *t = new QThread();
     BackThread *bt = new BackThread();
     bt->moveToThread(t);
@@ -418,7 +478,7 @@ void OneLancForm::toConnectWiredNetwork()
     t->start();
     */
 
-    m_networkConnect->activateConnection(uuidName);
+    m_wiredConnectOperation->activateWiredConnection(uuidName);
 }
 
 //点击列表中item扩展后显示信息的位置时，执行该函数，用于显示网络配置界面
@@ -542,6 +602,15 @@ void OneLancForm::stopWaiting()
 
     mw->setTrayLoading(false);
     mw->getActiveInfoAndSetTrayIcon();
+}
+
+void OneLancForm::updateNetworkSpeed()
+{
+    KyWiredWidget *wiredWidget = (KyWiredWidget *)parentWidget();
+   // wiredWidget->updateDeviceRefreshRate(m_wiredConnectItem->m_ifaceName, 1000);
+   // wiredWidget->updateNetworkSpeed(m_wiredConnectItem);
+
+    return;
 }
 
 void OneLancForm::on_btnCancel_clicked()

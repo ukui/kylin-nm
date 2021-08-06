@@ -14,7 +14,7 @@ KyWirelessNetResource::KyWirelessNetResource(QObject *parent)
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkPropertyChange, this, &KyWirelessNetResource::onWifiNetworkPropertyChange);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkDeviceDisappear, this, &KyWirelessNetResource::onWifiNetworkDeviceDisappear);
 
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionAdd, this, &KyWirelessNetResource::onConnectionAdd);
+    //connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionAdd, this, &KyWirelessNetResource::onConnectionAdd);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionRemove, this, &KyWirelessNetResource::onConnectionRemove);
 
 }

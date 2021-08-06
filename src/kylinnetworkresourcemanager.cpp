@@ -57,16 +57,11 @@ KyNetworkResourceManager::KyNetworkResourceManager()
 
     });
 
-
-
     // Note: the connectionRemoved is never emitted in case network-manager service stop,
     // we need remove the connections manually.
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::serviceDisappeared, this, &KyNetworkResourceManager::clearConnections);
-
-
-
     connect(this, &KyNetworkResourceManager::wifiNetworkAdd, [this] (NetworkManager::Device * dev, QString const & ssid) {
-qDebug() << "wifiNetworkAdd" << dev << dev->interfaceName() << ssid;
+        qDebug() << "wifiNetworkAdd" << dev << dev->interfaceName() << ssid;
         NetworkManager::WirelessDevice * w_dev = qobject_cast<NetworkManager::WirelessDevice *>(dev);
         NetworkManager::WirelessNetwork::Ptr net = w_dev->findNetwork(ssid);
         if (!net.isNull())
@@ -119,7 +114,7 @@ qDebug() << "wifiNetworkAdd" << dev << dev->interfaceName() << ssid;
         }
     });
     connect(this, &KyNetworkResourceManager::wifiNetworkRemove, [this] (NetworkManager::Device * dev, QString const & ssid) {
-qDebug() << "wifiNetworkRemove" << dev << dev->interfaceName() << ssid;
+        qDebug() << "wifiNetworkRemove" << dev << dev->interfaceName() << ssid;
         NetworkManager::WirelessNetwork::Ptr net = findWifiNetwork(ssid, dev->uni());
         if (!net.isNull())
         {
@@ -132,7 +127,10 @@ qDebug() << "wifiNetworkRemove" << dev << dev->interfaceName() << ssid;
         }
     });
 
-    qDebug() << m_activeConns.size() << m_connections.size() << m_devices.size();
+    qDebug() <<"[KyNetworkResourceManager]"
+            << "active connections:" << m_activeConns.size()
+             << "connections:" << m_connections.size()
+             << "network device:" << m_devices.size();
 }
 
 KyNetworkResourceManager::~KyNetworkResourceManager()
@@ -172,10 +170,9 @@ void KyNetworkResourceManager::addActiveConnection(NetworkManager::ActiveConnect
     connect(conn.data(), &NetworkManager::ActiveConnection::vpnChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::uuidChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::devicesChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
-    if (conn->vpn())
-    {
+    if (conn->vpn()) {
         connect(qobject_cast<NetworkManager::VpnConnection *>(conn.data()), &NetworkManager::VpnConnection::bannerChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
-        connect(qobject_cast<NetworkManager::VpnConnection *>(conn.data()), &NetworkManager::VpnConnection::stateChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
+        connect(qobject_cast<NetworkManager::VpnConnection *>(conn.data()), &NetworkManager::VpnConnection::stateChanged, this, &KyNetworkResourceManager::onVpnActiveConnectChanagedReason);
     }
 }
 
@@ -194,16 +191,18 @@ void KyNetworkResourceManager::removeConnection(int pos)
 
 void KyNetworkResourceManager::clearConnections()
 {
-    while (0 < m_connections.size())
+    while (0 < m_connections.size()) {
         removeConnection(0);
+    }
 }
 
 void KyNetworkResourceManager::addConnection(NetworkManager::Connection::Ptr conn)
 {
     m_connections.push_back(conn);
+
     //connections signals
     connect(conn.data(), &NetworkManager::Connection::updated, this, &KyNetworkResourceManager::onConnectionUpdated);
-    connect(conn.data(), &NetworkManager::Connection::removed, this, static_cast<void (KyNetworkResourceManager::*)()>(&KyNetworkResourceManager::onConnectionRemoved));
+    connect(conn.data(), &NetworkManager::Connection::removed, this, &KyNetworkResourceManager::onConnectionRemoved);
 }
 
 void KyNetworkResourceManager::insertConnections()
@@ -259,9 +258,9 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
     switch (device->type())
     {
         case NetworkManager::Ethernet:
-            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::bitRateChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
-            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::carrierChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
-            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::hardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
+            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::bitRateChanged, this, &KyNetworkResourceManager::onDeviceBitRateChanage);
+            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::carrierChanged, this, &KyNetworkResourceManager::onDeviceCarrierChanage);
+            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::hardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceMacAddressChanaged);
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::permanentHardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
             break;
 
@@ -320,10 +319,8 @@ void KyNetworkResourceManager::insertWifiNetworks()
         if (NetworkManager::Device::Wifi == device->type())
         {
             NetworkManager::WirelessDevice::Ptr w_dev = device.objectCast<NetworkManager::WirelessDevice>();
-            for (auto const & net : w_dev->networks())
-            {
-                if (!net.isNull())
-                {
+            for (auto const & net : w_dev->networks()) {
+                if (!net.isNull()) {
                     addWifiNetwork(net);
                     count++;
                 }
@@ -368,37 +365,52 @@ NetworkManager::WirelessNetwork::Ptr KyNetworkResourceManager::findWifiNetwork(Q
 
 NetworkManager::Device::Ptr KyNetworkResourceManager::getNetworkDevice(const QString ifaceName)
 {
+    NetworkManager::Device::Ptr devicePtr = nullptr;
+    if (ifaceName.isEmpty()) {
+        return nullptr;
+    }
+
+    for (int index = 0; index < m_devices.size(); ++index) {
+        devicePtr = m_devices.at(index);
+        if (ifaceName == devicePtr->interfaceName()) {
+            return devicePtr;
+        }
+    }
+
     return nullptr;
 }
 
-NetworkManager::ActiveConnection::Ptr KyNetworkResourceManager::getActiveConnect(const QString connectUuid)
+NetworkManager::ActiveConnection::Ptr KyNetworkResourceManager::getActiveConnect(const QString activeConnectUuid)
 {
     int index = 0;
     NetworkManager::ActiveConnection::Ptr activateConnectPtr = nullptr;
 
-    qDebug()<<"get activetate connect with uuid"<<connectUuid;
+    qDebug()<<"[KyNetworkResourceManager]"<<"get activetate connect with uuid"<< activeConnectUuid;
+    if (activeConnectUuid.isEmpty()) {
+        return nullptr;
+    }
+
     for (index = 0; index < m_activeConns.size(); ++index) {
         activateConnectPtr = m_activeConns.at(index);
-        if (activateConnectPtr->uuid() == connectUuid) {
+        if (activateConnectPtr->uuid() == activeConnectUuid) {
             return activateConnectPtr;
         }
     }
 
-    qWarning()<<"it can not find the activate connect with uuid" <<connectUuid;
+    qWarning()<<"[KyNetworkResourceManager]"<<"it can not find the activate connect with uuid" <<activeConnectUuid;
 
     return nullptr;
 }
 
 NetworkManager::Connection::Ptr KyNetworkResourceManager::getConnect(const QString connectUuid)
 {
-    if(connectUuid.isEmpty()) {
-        return nullptr;
-    }
-
     int index = 0;
     NetworkManager::Connection::Ptr connectPtr = nullptr;
 
-    qDebug()<<"get connect with uuid"<<connectUuid;
+    qDebug()<<"[KyNetworkResourceManager]"<<"get connect with uuid"<<connectUuid;
+    if (connectUuid.isEmpty()) {
+        return nullptr;
+    }
 
     for (index = 0; index < m_connections.size(); ++index) {
         connectPtr = m_connections.at(index);
@@ -407,7 +419,7 @@ NetworkManager::Connection::Ptr KyNetworkResourceManager::getConnect(const QStri
         }
     }
 
-    qWarning()<<"it can not find connect with uuid"<<connectUuid;
+    qWarning()<<"[KyNetworkResourceManager]"<<"it can not find connect with uuid"<<connectUuid;
 
     return nullptr;
 }
@@ -417,9 +429,44 @@ NetworkManager::WirelessNetwork::Ptr KyNetworkResourceManager::getWifiNetwork(co
     return nullptr;
 }
 
+NetworkManager::ActiveConnection::List KyNetworkResourceManager::getActiveConnectList()
+{
+    return m_activeConns;
+}
+
+NetworkManager::Connection::List KyNetworkResourceManager::getConnectList()
+{
+    return m_connections;
+}
+
+NetworkManager::Device::List KyNetworkResourceManager::getNetworkDeviceList()
+{
+    return m_devices;
+}
+
+bool KyNetworkResourceManager::isActiveConnection(QString uuid)
+{
+    int index = 0;
+    NetworkManager::ActiveConnection::Ptr activateConnectPtr = nullptr;
+
+    if (uuid.isEmpty()) {
+        return false;
+    }
+
+    for (index = 0; index < m_activeConns.size(); ++index) {
+        activateConnectPtr = m_activeConns.at(index);
+        if (activateConnectPtr->uuid() == uuid
+             && NetworkManager::ActiveConnection::State::Activated == activateConnectPtr->state()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void KyNetworkResourceManager::requestScan(NetworkManager::WirelessDevice * dev)
 {
-    qDebug() << __FUNCTION__ << dev->interfaceName();
+    qDebug() <<"[KyNetworkResourceManager]"<< dev->interfaceName()<<"start scan wifi ap";
     QDBusPendingReply<> reply = dev->requestScan();
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, dev);
     connect(watcher, &QDBusPendingCallWatcher::finished, [dev] (QDBusPendingCallWatcher * watcher) {
@@ -435,24 +482,62 @@ void KyNetworkResourceManager::requestScan(NetworkManager::WirelessDevice * dev)
 
 void KyNetworkResourceManager::onConnectionUpdated()
 {
-    emit connectionUpdate(qobject_cast<NetworkManager::Connection *>(sender()));
-}
+    NetworkManager::Connection *connectPtr =
+            qobject_cast<NetworkManager::Connection *>(sender());
 
-void KyNetworkResourceManager::onConnectionRemoved()
-{
-    emit connectionRemove(qobject_cast<NetworkManager::Connection *>(sender())->uuid());
+    qDebug()<<"[KyNetworkResourceManager]"<<"onConnectionUpdate "<<connectPtr->name()<<connectPtr->uuid();
+
+    if (connectPtr->isValid()) {
+        emit connectionUpdate(connectPtr->uuid());
+    } else {
+        qWarning()<< "[KyNetworkResourceManager]"
+                  <<"connect update failed, the connect is invalid"
+                  <<connectPtr->name()
+                  <<connectPtr->uuid()
+                  <<connectPtr->path();
+    }
+
+    return;
 }
 
 void KyNetworkResourceManager::onActiveConnectionUpdated()
 {
-    emit activeConnectionUpdate(qobject_cast<NetworkManager::ActiveConnection *>(sender()));
+    //emit activeConnectionUpdate(qobject_cast<NetworkManager::ActiveConnection *>(sender()));
 }
 
-void KyNetworkResourceManager::onActiveConnectionChangedReason(NetworkManager::ActiveConnection::State state,
+void KyNetworkResourceManager::onActiveConnectionChangedReason(
+                                      NetworkManager::ActiveConnection::State state,
                                       NetworkManager::ActiveConnection::Reason reason)
 {
-    qWarning()<<"the active connect state"<<state;
-    qWarning()<<"the active connect state chanager reason:"<<reason;
+    NetworkManager::ActiveConnection * activeConnect =
+        qobject_cast<NetworkManager::ActiveConnection *>(sender());
+    if (activeConnect->isValid()) {
+        qDebug()<<"state change activate connect"<<activeConnect->uuid();
+        qDebug()<<"the active connect state"<<state;
+        qDebug()<<"the active connect state chanager reason:"<<reason;
+        emit activeConnectStateChangeReason(activeConnect->uuid(), state, reason);
+    } else {
+
+    }
+
+    return;
+}
+
+void KyNetworkResourceManager::onVpnActiveConnectChanagedReason(NetworkManager::VpnConnection::State state,
+                                      NetworkManager::VpnConnection::StateChangeReason reason)
+{
+    NetworkManager::ActiveConnection *activeConnect =
+        qobject_cast<NetworkManager::ActiveConnection *>(sender());
+
+    if (activeConnect->isValid()) {
+        qDebug()<<"state change activate connect"<<activeConnect->uuid();
+        qDebug()<<"the active connect state"<<state;
+        qDebug()<<"the active connect state chanager reason:"<<reason;
+        emit vpnActiveConnectStateChangeReason(activeConnect->uuid(), state, reason);
+    } else {
+
+    }
+
     return;
 }
 
@@ -461,22 +546,56 @@ void KyNetworkResourceManager::onDeviceUpdated()
     emit deviceUpdate(qobject_cast<NetworkManager::Device *>(sender()));
 }
 
+void KyNetworkResourceManager::onDeviceCarrierChanage(bool pluged)
+{
+    NetworkManager::WiredDevice * networkDevice
+            = qobject_cast<NetworkManager::WiredDevice *>(sender());
+
+    qDebug()<<"device carrier chanage"<< pluged;
+    if (networkDevice->isValid()) {
+        emit deviceCarrierChanage(networkDevice->interfaceName(), pluged);
+    } else {
+        qWarning()<<"the device is not invalid";
+    }
+
+    return;
+}
+
+void KyNetworkResourceManager::onDeviceBitRateChanage(int bitRate)
+{
+    NetworkManager::WiredDevice * networkDevice
+            = qobject_cast<NetworkManager::WiredDevice *>(sender());
+
+    if (networkDevice->isValid()) {
+        emit deviceBitRateChanage(networkDevice->interfaceName(), bitRate);
+    } else {
+        qWarning()<<"the device is not invalid";
+    }
+
+    return;
+}
+
+void KyNetworkResourceManager::onDeviceMacAddressChanaged(const QString &hwAddress)
+{
+    NetworkManager::WiredDevice * networkDevice
+            = qobject_cast<NetworkManager::WiredDevice *>(sender());
+
+    if (networkDevice->isValid()) {
+        emit deviceMacAddressChanaged(networkDevice->interfaceName(), hwAddress);
+    } else {
+        qWarning()<<"the device is not invalid";
+    }
+
+    return;
+}
+
 void KyNetworkResourceManager::onDeviceStateChanged(
                     NetworkManager::Device::State newstate,
                     NetworkManager::Device::State oldstate,
                     NetworkManager::Device::StateChangeReason reason)
 {
-//    NetworkManager::WiredDevice *wiredDevice = qobject_cast<NetworkManager::WiredDevice *>(sender());
-
-//    if (wiredDevice->type() == NM_DEVICE_TYPE_ETHERNET) {
-//        if (wiredDevice->carrier()) {
-//            qWarning()<<"the device carrier true";
-//        } else {
-//            qWarning()<<"the device carrier false";
-//        }
-//    }
-
     qWarning()<<"the device state "<<oldstate << "to" <<newstate << "reason"<< reason;
+    return;
 }
 
 void KyNetworkResourceManager::onWifiNetworkAppeared(QString const & ssid)
@@ -500,98 +619,121 @@ void KyNetworkResourceManager::onWifiNetworkUpdated()
 
 void KyNetworkResourceManager::onDeviceAdded(QString const & uni)
 {
-    qDebug()<<Q_FUNC_INFO<<"onDeviceAdded"<<uni;
+    qDebug()<< "onDeviceAdded"<<uni;
 
-    NetworkManager::Device::Ptr dev = NetworkManager::findNetworkInterface(uni);
-    if (!dev.isNull()) {
-        if (dev->isValid())
-            qWarning() << Q_FUNC_INFO << uni << " is currently invalid...";
-
-        if (0 > m_devices.indexOf(dev)) {
-            addDevice(dev);
-        }
-
-        emit deviceAdd(dev);
+    NetworkManager::Device::Ptr networkDevice = NetworkManager::findNetworkInterface(uni);
+    if (networkDevice.isNull()) {
+        qWarning()<<"the device is not exist in networkmanager."<< uni;
+        return;
     }
+
+    if (!networkDevice->isValid()) {
+        qWarning() << uni << " is currently not invalid";
+        return;
+    }
+
+    if (0 > m_devices.indexOf(networkDevice)) {
+        addDevice(networkDevice);
+        emit deviceAdd(networkDevice->interfaceName());
+    } else {
+        qWarning() << networkDevice->interfaceName() <<"the device is exist in network device list.";
+    }
+
+    return;
 }
 
 void KyNetworkResourceManager::onDeviceRemoved(QString const & uni)
 {
-    qDebug()<<Q_FUNC_INFO<<"onDeviceRemoved"<<uni;
-    NetworkManager::Device::Ptr dev = findDeviceUni(uni);
-    if (!dev.isNull())
-    {
-        if (dev->isValid())
-            qWarning() << Q_FUNC_INFO << uni << " is currently invalid...";
-
-        auto index = std::find(m_devices.cbegin(), m_devices.cend(), dev);
-        if (m_devices.cend() != index) {
-            const int pos = index - m_devices.cbegin();
-            removeDevice(pos);
-        }
-
-        emit deviceRemove(dev.data());
+    NetworkManager::Device::Ptr networkDevice = findDeviceUni(uni);
+    if (networkDevice.isNull()) {
+        qWarning()<<"the device is not exist in network device list ."<< uni;
+        return;
     }
+
+    qDebug()<<"remove network device"<< uni;
+
+    auto index = std::find(m_devices.cbegin(), m_devices.cend(), networkDevice);
+    if (m_devices.cend() != index) {
+        const int pos = index - m_devices.cbegin();
+        removeDevice(pos);
+        emit deviceRemove(networkDevice->interfaceName());
+    }
+
+    return;
 }
 
 void KyNetworkResourceManager::onActiveConnectionAdded(QString const & path)
 {
-    NetworkManager::ActiveConnection::Ptr conn = NetworkManager::findActiveConnection(path);//XXX: const QString &uni
-    if (!conn.isNull()) {
-        if (conn->isValid())
-            qWarning() << Q_FUNC_INFO << path << " is currently invalid...";
-
-        if (0 > m_activeConns.indexOf(conn)) {
-            addActiveConnection(conn);
-        } else {
-            //TODO: onActiveConnectionUpdate
-            qWarning() << Q_FUNC_INFO << "update active connection tp do";
-        }
-
-        emit activeConnectionAdd(conn);
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr = NetworkManager::findActiveConnection(path);//XXX: const QString &uni
+    if (activeConnectPtr.isNull()) {
+        qWarning() << "[KyNetworkResourceManager]" << "the active connect is null, so do not add it."<<path;
+        return;
     }
+
+    if (!activeConnectPtr->isValid()) {
+        qWarning() << "[KyNetworkResourceManager]" << path << " connect is currently not valid";
+        return;
+    }
+
+    qDebug()<<"add active connect"<<activeConnectPtr->connection()->name();
+
+    if (0 > m_activeConns.indexOf(activeConnectPtr)) {
+        addActiveConnection(activeConnectPtr);
+        emit activeConnectionAdd(activeConnectPtr->uuid());
+    } else {
+        //TODO: onActiveConnectionUpdate
+        qWarning() << "[KyNetworkResourceManager]" << "update active connection to do";
+        //emit activeConnectionUpdate(conn->uuid());
+    }
+
+    return;
 }
 
 void KyNetworkResourceManager::onActiveConnectionRemoved(QString const & path)
 {
-    NetworkManager::ActiveConnection::Ptr conn = findActiveConnection(path);//XXX: const QString &uni
-    if (!conn.isNull()) {
-        if (conn->isValid())
-            qWarning() << Q_FUNC_INFO << path << " is currently invalid...";
-
-        auto index = std::find(m_activeConns.cbegin(), m_activeConns.cend(), conn);
-        if (m_activeConns.cend() != index) {
-            const int pos = index - m_activeConns.cbegin();
-            removeActiveConnection(pos);
-        }
-        emit activeConnectionRemove(conn.data());
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr = findActiveConnection(path);//XXX: const QString &uni
+    if (activeConnectPtr.isNull()) {
+        qWarning() <<"[KyNetworkResourceManager]"
+                  <<"the active connect is null, so do not remove it. "<< path;
+        return;
     }
-}
 
-void KyNetworkResourceManager::onActiveConnectionsChanged()
-{
-    emit activeConnectionsReset();
+    qDebug() <<"[KyNetworkResourceManager]"<<"remove active connect"<<activeConnectPtr->uuid();
+
+    auto index = std::find(m_activeConns.cbegin(), m_activeConns.cend(), activeConnectPtr);
+    if (m_activeConns.cend() != index) {
+        const int pos = index - m_activeConns.cbegin();
+        removeActiveConnection(pos);
+        emit activeConnectionRemove(activeConnectPtr->uuid());
+    }
+
+    return;
 }
 
 void KyNetworkResourceManager::onConnectionAdded(QString const & path)
 {
-    NetworkManager::Connection::Ptr conn = NetworkManager::findConnection(path);
-    if (!conn.isNull())
-    {
-        if (conn->isValid())
-            qWarning() << Q_FUNC_INFO << path << " is currently invalid...";
-
-        if (0 > m_connections.indexOf(conn)) {
-            addConnection(conn);
-        } else {
-            //TODO: onConnectionUpdate
-            return;
-        }
-
-        emit connectionAdd(conn);
-        NetworkManager::ConnectionSettings::Ptr sett= conn->settings();
-        qDebug() << "onConnectionAdded" << sett->name();
+    NetworkManager::Connection::Ptr connectPtr = NetworkManager::findConnection(path);
+    if (connectPtr.isNull()) {
+        qWarning() <<"[KyNetworkResourceManager]" <<"it can not find in networkmanager."<<path;
+        return;
     }
+
+    if (!connectPtr->isValid()) {
+        qWarning() <<"[KyNetworkResourceManager]" << path << " is currently not invalid";
+        return;
+    }
+
+    qDebug() <<"[KyNetworkResourceManager]" <<"add connect "<< connectPtr->name() << connectPtr->path();
+
+    if (0 > m_connections.indexOf(connectPtr)) {
+        addConnection(connectPtr);
+        emit connectionAdd(connectPtr->uuid());
+    } else {
+        //TODO::updateconnect
+        qWarning() << "[KyNetworkResourceManager]" << connectPtr->uuid() <<" connect is exist in connect list.";
+    }
+
+    return;
 }
 
 void KyNetworkResourceManager::onConnectionRemoved(QString const & path)
@@ -600,6 +742,7 @@ void KyNetworkResourceManager::onConnectionRemoved(QString const & path)
         qDebug() <<"[KyNetworkResourceManager]" <<"the connect path is empty";
         return;
     }
+
     qDebug() <<"[KyNetworkResourceManager]" << "remove connection path" << path;
     NetworkManager::Connection::Ptr connectionPtr = nullptr;
     for (int index = 0; index < m_connections.size(); ++index) {
@@ -610,9 +753,10 @@ void KyNetworkResourceManager::onConnectionRemoved(QString const & path)
             return;
         }
     }
-    qWarning() <<"[KyNetworkResourceManager]" << path <<" connect is no exist in connect list";
-    return;
 
+    qWarning() <<"[KyNetworkResourceManager]" << path <<" connect is no exist in connect list";
+
+    return;
 }
 
 void KyNetworkResourceManager::removeConnection(QString const & uuid)
@@ -622,5 +766,18 @@ void KyNetworkResourceManager::removeConnection(QString const & uuid)
     {
         conn->disconnect(this);
         conn->remove();
+    }
+}
+
+
+void KyNetworkResourceManager::connectionDump()
+{
+    NetworkManager::Connection::Ptr connectionPtr = nullptr;
+    for (int index = 0; index < m_connections.size(); ++index) {
+        connectionPtr = m_connections.at(index);
+        qDebug()<<"connection info**********************";
+        qDebug()<<"connection name"<< connectionPtr->name();
+        qDebug()<<"connection uuid"<< connectionPtr->uuid();
+        qDebug()<<"connection path"<< connectionPtr->path();
     }
 }

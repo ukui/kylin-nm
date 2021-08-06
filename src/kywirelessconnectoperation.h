@@ -4,7 +4,7 @@
 #include <QObject>
 #include "kylinnetworkresourcemanager.h"
 #include "kyenterpricesettinginfo.h"
-#include "kylinconnectinfo.h"
+//#include "kylinconnectinfo.h"
 
 enum KySecuType {
     NONE = 0,

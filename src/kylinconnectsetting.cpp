@@ -15,10 +15,10 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
  *
  */
-#include "kylinconnectinfo.h"
+#include "kylinconnectsetting.h"
 #include <QDebug>
 
-KyConnectInfo::KyConnectInfo()
+KyConnectSetting::KyConnectSetting()
 {
     m_connectName = "";
     m_ifaceName = "";
@@ -32,22 +32,22 @@ KyConnectInfo::KyConnectInfo()
     m_ipv6Dns.clear();
 }
 
-KyConnectInfo::~KyConnectInfo()
+KyConnectSetting::~KyConnectSetting()
 {
 
 }
 
-void KyConnectInfo::setIfaceName(QString &ifaceName)
+void KyConnectSetting::setIfaceName(QString &ifaceName)
 {
     m_ifaceName = ifaceName;
 }
 
-void KyConnectInfo::setConnectName(QString &connectName)
+void KyConnectSetting::setConnectName(QString &connectName)
 {
     m_connectName = connectName;
 }
 
-int KyConnectInfo::setIpConfigType(KyIpAddressType ipType, KyIpConfigType ipConfigType)
+int KyConnectSetting::setIpConfigType(KyIpAddressType ipType, KyIpConfigType ipConfigType)
 {
     if (ipType != IPADDRESS_V4 && ipType != IPADDRESS_V6) {
         qWarning()<<"set config ip type failed, the ip address type undefined"<<ipType;
@@ -67,7 +67,7 @@ int KyConnectInfo::setIpConfigType(KyIpAddressType ipType, KyIpConfigType ipConf
 
     return 0;
 }
-void KyConnectInfo::ipv4AddressConstruct(QString &ipv4Address, QString &ipv4NetMask, QString &ipv4GateWay, QStringList &ipv4Dns)
+void KyConnectSetting::ipv4AddressConstruct(QString &ipv4Address, QString &ipv4NetMask, QString &ipv4GateWay, QStringList &ipv4Dns)
 {
     qDebug()<<"ipv4 address"<<ipv4Address << ipv4NetMask << ipv4GateWay;
     NetworkManager::IpAddress  nmIpv4Address;
@@ -83,7 +83,7 @@ void KyConnectInfo::ipv4AddressConstruct(QString &ipv4Address, QString &ipv4NetM
 
     return ;
 }
-void KyConnectInfo::ipv6AddressConstruct(QString &ipv6Address, QString &ipv6NetMask, QString &ipv6GateWay, QStringList &ipv6Dns)
+void KyConnectSetting::ipv6AddressConstruct(QString &ipv6Address, QString &ipv6NetMask, QString &ipv6GateWay, QStringList &ipv6Dns)
 {
     NetworkManager::IpAddress  nmIpv6Address;
     nmIpv6Address.setIp(QHostAddress(ipv6Address));
@@ -96,4 +96,33 @@ void KyConnectInfo::ipv6AddressConstruct(QString &ipv6Address, QString &ipv6NetM
     }
 
     return ;
+}
+
+void KyConnectSetting::dumpInfo()
+{
+    qDebug()<<"connect setting info:";
+    qDebug()<<"connect name"<< m_connectName;
+    qDebug()<<"iface name" << m_ifaceName;
+
+    for (int index = 0 ; index << m_ipv4Address.size(); index++) {
+        qDebug()<<"ipv4 address" << m_ipv4Address.at(index).ip().toString();
+        qDebug()<<"ipv4 gate way" << m_ipv4Address.at(index).gateway().toString();
+        qDebug()<<"ipv4 net mask" << m_ipv4Address.at(index).netmask().toString();
+    }
+
+    for (int index = 0; index < m_ipv4Dns.size(); ++index) {
+        qDebug()<<"ipv4 dns" << m_ipv4Dns.at(index).toString();
+    }
+
+    /*
+    for (int index = 0 ; index << m_ipv6Address.size(); index++) {
+        qDebug()<<"ipv6 address" << m_ipv6Address.at(index).ip().toString();
+        qDebug()<<"ipv6 gate way" << m_ipv6Address.at(index).gateway().toString();
+        qDebug()<<"ipv6 net mask" << m_ipv6Address.at(index).netmask().toString();
+    }
+
+    for (int index = 0; index < m_ipv6Dns.size(); ++index) {
+        qDebug()<<"ipv6 dns" << m_ipv6Dns.at(index).toString();
+    }
+    */
 }

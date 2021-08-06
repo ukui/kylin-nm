@@ -3,7 +3,7 @@
 
 #include <QString>
 #include "kylinnetworkresourcemanager.h"
-#include "kylinwiredconnectitem.h"
+#include "kylinconnectitem.h"
 #include "kylinnetworkdeviceresource.h"
 #include "kylinvpnconnectitem.h"
 #include "kylinbluetoothconnectitem.h"
@@ -16,15 +16,22 @@ public:
     ~KyActiveConnectResourse();
 
 public:
-    void getWiredActivateConnect(QList<KyWiredConnectItem *> &wiredActiveConnectItemList);
+    void getActiveConnectionList(QString DeviceName,
+                                 NetworkManager::ConnectionSettings::ConnectionType connectionType,
+                                 QList<KyConnectItem *> &connectItemList);
+    //void getWiredActivateConnect(QList<KyWiredConnectItem *> &wiredActiveConnectItemList);
     void getVpnActivateConnect(QList<KyVpnConnectItem *> &vpnActiveConnectItemList);
-    void getBluetoothConnect(QList<KyBluetoothConnectItem *> &btActiveConnectItemList);
+    void getBtActivateConnect(QList<KyBluetoothConnectItem *> &btActiveConnectItemList);
 
 private:
+    KyConnectItem *getActiveConnectionItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
     void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
                             QString &ipv4Address,
                             QString &ipv6Address);
-    KyWiredConnectItem *getWiredActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
+    void getActiveConnectDns(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
+                             QList<QHostAddress> &ipv4Dns,
+                             QList<QHostAddress> &ipv6Dns);
+   // KyWiredConnectItem *getWiredActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
     KyVpnConnectItem *getVpnActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
     KyBluetoothConnectItem *getBtActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
 

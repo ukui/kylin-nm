@@ -19,42 +19,61 @@ KyNetworkDeviceResourse::~KyNetworkDeviceResourse()
     m_networkResourceInstance = nullptr;
 }
 
-void KyNetworkDeviceResourse::getWiredDevices(QStringList &wiredDeviceList)
+void KyNetworkDeviceResourse::getNetworkDevices(QStringList &networkDeviceList)
 {
     qDebug()<<"[KyNetworkDeviceResourse]"<<"get device list";
-    NetworkManager::Device::List networkDeviceList
+    NetworkManager::Device::List deviceList
             = m_networkResourceInstance->getNetworkDeviceList();
 
-    if (networkDeviceList.isEmpty()) {
+    if (deviceList.isEmpty()) {
         qDebug()<<"[KyNetworkDeviceResourse]"<<"network device is not exist.";
         return;
     }
 
     NetworkManager::Device::Ptr devicePtr = nullptr;
-    for (int index = 0; index < networkDeviceList.size(); ++index) {
-        devicePtr = networkDeviceList.at(index);
-        if (NetworkManager::Device::Type::Ethernet == devicePtr->type()) {
-            wiredDeviceList<<devicePtr->interfaceName();
-        }
+    for (int index = 0; index < deviceList.size(); ++index) {
+        devicePtr = deviceList.at(index);
+        networkDeviceList<<devicePtr->interfaceName();
     }
 
     return;
 }
 
-void KyNetworkDeviceResourse::getWiredHardwareInfo(QString ifaceName, KyWiredConnectItem *wiredItem)
+void KyNetworkDeviceResourse::getHardwareInfo(QString ifaceName, QString &hardAddress, int &bandWith)
 {
-    qDebug()<<"[KyNetworkDeviceResourse]"<<"get wired hardware info"<<ifaceName;
+    qDebug() << "[KyNetworkDeviceResourse]" << "get wired hardware info"<<ifaceName;
+
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->getNetworkDevice(ifaceName);
 
-    if (nullptr != connectDevice && connectDevice->isValid()
-            && NetworkManager::Device::Ethernet == connectDevice->type()) {
-        NetworkManager::WiredDevice *wiredDevicePtr =
-            qobject_cast<NetworkManager::WiredDevice *>(connectDevice.data());
-        wiredItem->m_hardAddress = wiredDevicePtr->hardwareAddress();
-        wiredItem->m_bandWith = wiredDevicePtr->bitRate();
-    } else {
-        qWarning()<<"[KyNetworkDeviceResourse]"<<"getwiredhardwareinfo failed, the device" << ifaceName << "is not existed";
+    if (nullptr == connectDevice || !connectDevice->isValid()) {
+        qWarning()<<"[KyNetworkDeviceResourse]"<<"get hardware info failed, the device" << ifaceName << "is not existed";
+    }
+
+    switch (connectDevice->type()) {
+        case NetworkManager::Device::Ethernet:
+        {
+            NetworkManager::WiredDevice *wiredDevicePtr =
+                qobject_cast<NetworkManager::WiredDevice *>(connectDevice.data());
+            hardAddress = wiredDevicePtr->hardwareAddress();
+            bandWith = wiredDevicePtr->bitRate();
+            break;
+        }
+        case NetworkManager::Device::Wifi:
+        {
+            NetworkManager::WirelessDevice *wirelessDevicePtr =
+                qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
+            hardAddress = wirelessDevicePtr->hardwareAddress();
+            bandWith = wirelessDevicePtr->bitRate();
+            break;
+        }
+        default:
+        {
+            hardAddress = "";
+            bandWith = 0;
+            qWarning()<<"the network device type is undefined"<<connectDevice->type();
+            break;
+        }
     }
 
     return;
@@ -105,7 +124,8 @@ void KyNetworkDeviceResourse::setDeviceRefreshRate(QString deviceName, int ms)
     return;
 }
 
-void KyNetworkDeviceResourse::DeviceSpeed(QString deviceName, KyWiredConnectItem *wiredItem)
+#if 0
+void KyNetworkDeviceResourse::DeviceSpeed(QString deviceName, KyConnectItem *wiredItem)
 {
    // qDebug()<<"[KyNetworkDeviceResourse]"<<deviceName<<"get deivce up and down speed.";
 
@@ -119,5 +139,5 @@ void KyNetworkDeviceResourse::DeviceSpeed(QString deviceName, KyWiredConnectItem
 
     return;
 }
-
+#endif
 

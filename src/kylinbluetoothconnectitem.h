@@ -4,6 +4,7 @@
 #include <QObject>
 #include <NetworkManagerQt/BluetoothDevice>
 #include <NetworkManagerQt/BluetoothSetting>
+#include <NetworkManagerQt/BluetoothDevice>
 
 class KyBluetoothConnectItem : public QObject
 {

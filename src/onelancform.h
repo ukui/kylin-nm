@@ -29,7 +29,7 @@
 #include "kylinwiredconnectoperation.h"
 #include "backthread.h"
 #include "ksimplenm.h"
-#include "kylinwiredconnectitem.h"
+#include "kylinconnectitem.h"
 
 
 #include <QtDBus/QDBusConnection>
@@ -63,7 +63,7 @@ class OneLancForm : public QWidget
 {
     Q_OBJECT
 public:
-    explicit OneLancForm(QWidget *parent = 0, KyWiredConnectItem *wiredConnectItem = 0);
+    explicit OneLancForm(QWidget *parent = 0, KyConnectItem *wiredConnectItem = 0);
     ~OneLancForm();
 
 public:
@@ -127,7 +127,7 @@ private:
     KyWiredConnectOperation *m_wiredConnectOperation = nullptr;
 
     QString leQssLow, leQssHigh;
-    KyWiredConnectItem *m_wiredConnectItem = nullptr;
+    KyConnectItem *m_wiredConnectItem = nullptr;
 
 signals:
     void selectedOneLanForm(QString lanName, QString uniqueName);

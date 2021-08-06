@@ -3,7 +3,7 @@
 
 #include <QString>
 #include "kylinnetworkresourcemanager.h"
-#include "kylinwiredconnectitem.h"
+#include "kylinconnectitem.h"
 #include "kylinvpnconnectitem.h"
 #include "kylinbluetoothconnectitem.h"
 #include "kylinnetworkdeviceresource.h"
@@ -17,16 +17,20 @@ public:
     ~KyConnectResourse();
 
 public:
-    void getWiredConnections(QList<KyWiredConnectItem *> &wiredConnectItemList);
+    void getConnectionList(QString DeviceName,
+                           NetworkManager::ConnectionSettings::ConnectionType connectionType,
+                           QList<KyConnectItem *> &connectItemList);
+ //   void getWiredConnections(QList<KyWiredConnectItem *> &wiredConnectItemList);
     void getVpnConnections(QList<KyVpnConnectItem *> &vpnConnectItemList);
     void getBluetoothConnections(QList<KyBluetoothConnectItem *> &bluetoothConnectItemList);
     void getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting);
 
 private:
+    KyConnectItem *getConnectionItem(NetworkManager::Connection::Ptr connectPtr);
     void getConnectIp(NetworkManager::ConnectionSettings::Ptr settingPtr,
                       QString &ipv4Address,
                       QString &ipv6Address);
-    KyWiredConnectItem *getWiredConnectItem(NetworkManager::Connection::Ptr connectPtr);
+//    KyWiredConnectItem *getWiredConnectItem(NetworkManager::Connection::Ptr connectPtr);
 
     void getVpnConnectData(NetworkManager::ConnectionSettings::Ptr settingPtr,
                            KyVpnConnectItem *vpnItem);

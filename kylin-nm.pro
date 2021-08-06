@@ -66,13 +66,14 @@ SOURCES += \
     src/backthread.cpp \
     src/kylinactiveconnectresource.cpp \
     src/kylinbluetoothconnectitem.cpp \
+    src/kylinconnectitem.cpp \
+    src/kylinconnectoperation.cpp \
     src/kylinconnectresource.cpp \
     src/kylinconnectsetting.cpp \
     src/kylinnetworkconnect.cpp \
     src/kylinnetworkdeviceresource.cpp \
     src/kylinnetworkresourcemanager.cpp \
     src/kylinvpnconnectitem.cpp \
-    src/kylinwiredconnectitem.cpp \
     src/kylinwiredconnectoperation.cpp \
     src/kylinwiredwidget.cpp \
     src/wifi-auth-thread.cpp \
@@ -109,13 +110,14 @@ HEADERS += \
     src/backthread.h \
     src/kylinactiveconnectresource.h \
     src/kylinbluetoothconnectitem.h \
+    src/kylinconnectitem.h \
+    src/kylinconnectoperation.h \
     src/kylinconnectresource.h \
     src/kylinconnectsetting.h \
     src/kylinnetworkconnect.h \
     src/kylinnetworkdeviceresource.h \
     src/kylinnetworkresourcemanager.h \
     src/kylinvpnconnectitem.h \
-    src/kylinwiredconnectitem.h \
     src/kylinwiredconnectoperation.h \
     src/kylinwiredwidget.h \
     src/wifi-auth-thread.h \

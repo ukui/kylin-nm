@@ -3,7 +3,7 @@
 
 #include <QString>
 #include "kylinnetworkresourcemanager.h"
-#include "kylinwiredconnectitem.h"
+#include "kylinconnectitem.h"
 
 class KyNetworkDeviceResourse : public QObject
 {
@@ -23,11 +23,11 @@ signals:
     void deviceMacAddressChanaged(QString deviceName, const QString &hwAddress);
 
 public:
-    void getWiredDevices(QStringList &wiredDeviceList);
-    void getWiredHardwareInfo(QString ifaceName, KyWiredConnectItem *wiredItem);
+    void getNetworkDevices(QStringList &networkDeviceList);
+    void getHardwareInfo(QString ifaceName, QString &hardAddress, int &bandWith);
     NetworkManager::Device::State getDeviceState(QString deviceName);
     bool wiredDeviceCarriered(QString deviceName);
-    void DeviceSpeed(QString deviceName, KyWiredConnectItem *wiredItem);
+    //void DeviceSpeed(QString deviceName, KyWiredConnectItem *wiredItem);
     void setDeviceRefreshRate(QString deviceName, int ms);
 
 private:

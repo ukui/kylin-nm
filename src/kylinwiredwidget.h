@@ -5,7 +5,7 @@
 #include "kylinactiveconnectresource.h"
 #include "kylinconnectresource.h"
 #include "kylinnetworkdeviceresource.h"
-#include "kylinwiredconnectitem.h"
+#include "kylinconnectitem.h"
 #include "onelancform.h"
 #include "mainwindow.h"
 
@@ -26,7 +26,7 @@ public:
     void constructWiredActiveConnectList();
 
     void updateDeviceRefreshRate(QString deviceName, int ms);
-    void updateNetworkSpeed(KyWiredConnectItem *wiredItem);
+    void updateNetworkSpeed(KyConnectItem *wiredItem);
 
 private:
     void updateWiredActiveConnection();

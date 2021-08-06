@@ -23,7 +23,7 @@
 
 #include <time.h>
 
-OneLancForm::OneLancForm(QWidget *parent, KyWiredConnectItem *wiredConnectItem) :
+OneLancForm::OneLancForm(QWidget *parent, KyConnectItem *wiredConnectItem) :
     QWidget(parent),
     ui(new Ui::OneLancForm)
 {
@@ -105,7 +105,7 @@ OneLancForm::OneLancForm(QWidget *parent, KyWiredConnectItem *wiredConnectItem) 
     m_updateSpeedTimer = new QTimer(this);
     connect(m_updateSpeedTimer, &QTimer::timeout, this, &OneLancForm::updateNetworkSpeed);
     if (nullptr != m_wiredConnectItem
-            && NetworkManager::ActiveConnection::State::Activated == m_wiredConnectItem->m_state) {
+            && NetworkManager::ActiveConnection::State::Activated == m_wiredConnectItem->m_connectState) {
         m_updateSpeedTimer->start(1000);
     }
 
@@ -143,8 +143,8 @@ void OneLancForm::constructActiveConnectionItem(int index)
                tr("Ethernet"), m_wiredConnectItem->m_connectUuid,
                m_wiredConnectItem->m_ifaceName);//第二个参数本来是strLanName，但目前不需要翻译
     setIcon(true);
-    setLanInfo(m_wiredConnectItem->m_ipv4, m_wiredConnectItem->m_ipv6,
-               m_wiredConnectItem->m_bandWith, m_wiredConnectItem->m_hardAddress);
+    //setLanInfo(m_wiredConnectItem->m_ipv4, m_wiredConnectItem->m_ipv6,
+    //           m_wiredConnectItem->m_bandWith, m_wiredConnectItem->m_hardAddress);
     //setConnedString(true, tr("NetOn,IfName:"), m_wiredConnectItem->m_ifaceName);
     setConnedString(1, tr("NetOn,"), "");
     isConnected = true;
@@ -162,8 +162,8 @@ void OneLancForm::constructConnectionItem(int index)
                m_wiredConnectItem->m_ifaceName);
     setIcon(true);
     setLine(true);
-    setLanInfo(m_wiredConnectItem->m_ipv4, m_wiredConnectItem->m_ipv6,
-               tr("Disconnected"), m_wiredConnectItem->m_hardAddress);
+    //setLanInfo(m_wiredConnectItem->m_ipv4, m_wiredConnectItem->m_ipv6,
+    //           tr("Disconnected"), m_wiredConnectItem->m_hardAddress);
     setConnedString(0, tr("Disconnected"), "");//"未连接"
     move(L_VERTICAL_LINE_TO_ITEM, index * H_NORMAL_ITEM);
     setSelected(false, false);
@@ -607,8 +607,8 @@ void OneLancForm::stopWaiting()
 void OneLancForm::updateNetworkSpeed()
 {
     KyWiredWidget *wiredWidget = (KyWiredWidget *)parentWidget();
-    wiredWidget->updateDeviceRefreshRate(m_wiredConnectItem->m_ifaceName, 1000);
-    wiredWidget->updateNetworkSpeed(m_wiredConnectItem);
+   // wiredWidget->updateDeviceRefreshRate(m_wiredConnectItem->m_ifaceName, 1000);
+   // wiredWidget->updateNetworkSpeed(m_wiredConnectItem);
 
     return;
 }

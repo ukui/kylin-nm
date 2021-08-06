@@ -30,8 +30,10 @@ KyWiredWidget::~KyWiredWidget()
 void KyWiredWidget::constructWiredActiveConnectList()
 {
     qDebug()<<"constructWiredActiveConnectList";
-    QList<KyWiredConnectItem *> wiredActiveConnect;
-    m_activeConnectResource->getWiredActivateConnect(wiredActiveConnect);
+    QList<KyConnectItem *> wiredActiveConnect;
+    m_activeConnectResource->getActiveConnectionList("enp2s0",
+                                                     NetworkManager::ConnectionSettings::ConnectionType::Wired,
+                                                     wiredActiveConnect);
     if (wiredActiveConnect.isEmpty()) {
         OneLancForm *activeWiredForm = new OneLancForm(this, nullptr);
         activeWiredForm->constructActiveConnectionEmptyItem();
@@ -56,8 +58,10 @@ void KyWiredWidget::setType(WIDGETTYPE type)
 void KyWiredWidget::constructWiredConnectList()
 {
     qDebug()<<"constructWiredConnectList.....";
-    QList<KyWiredConnectItem *> wiredConnections;
-    m_connectResource->getWiredConnections(wiredConnections);
+    QList<KyConnectItem *> wiredConnections;
+    m_connectResource->getConnectionList("enp2s0",
+                                         NetworkManager::ConnectionSettings::ConnectionType::Wired,
+                                         wiredConnections);
     if (!wiredConnections.isEmpty()) {
         for (int index = 0; index < wiredConnections.size(); ++index) {
             resize(W_LIST_WIDGET, height() + H_NORMAL_ITEM);
@@ -176,7 +180,8 @@ void KyWiredWidget::updateDeviceRefreshRate(QString deviceName, int ms)
     return;
 }
 
-void KyWiredWidget::updateNetworkSpeed(KyWiredConnectItem *wiredItem)
+#if 0
+void KyWiredWidget::updateNetworkSpeed(KyConnectItem *wiredItem)
 {
     qulonglong txBytes = wiredItem->m_upSpeed;
     qulonglong rxBytes = wiredItem->m_downSpeed;
@@ -199,3 +204,4 @@ void KyWiredWidget::updateNetworkSpeed(KyWiredConnectItem *wiredItem)
 
     return;
 }
+#endif

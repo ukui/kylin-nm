@@ -25,6 +25,79 @@ KyConnectResourse::~KyConnectResourse()
     }
 }
 
+KyConnectItem *KyConnectResourse::getConnectionItem(NetworkManager::Connection::Ptr connectPtr)
+{
+    if (nullptr == connectPtr) {
+        qWarning()<<"[KyConnectResourse]"<<"the connect is empty";
+        return nullptr;
+    }
+
+    KyConnectItem *connectionItem = new KyConnectItem();
+    connectionItem->m_connectName = connectPtr->name();
+    connectionItem->m_connectUuid = connectPtr->uuid();
+    connectionItem->m_connectPath = connectPtr->path();
+
+    NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
+    connectionItem->m_ifaceName = settingPtr->interfaceName();
+
+    connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
+
+    return connectionItem;
+}
+
+void KyConnectResourse::getConnectionList(QString DeviceName,
+                       NetworkManager::ConnectionSettings::ConnectionType connectionType,
+                       QList<KyConnectItem *> &connectItemList)
+{
+    NetworkManager::Connection::List connectList;
+
+    qDebug()<<"[KyConnectResourse]"<<"get connections item, device"
+           <<DeviceName << "connect type" << connectionType;
+
+    connectList.clear();
+    connectList = m_networkResourceInstance->getConnectList();
+
+    if (connectList.empty()) {
+        qWarning()<<"[KyConnectResourse]"<<"get connection failed, the connect list is empty";
+        return;
+    }
+
+    NetworkManager::Connection::Ptr connectPtr = nullptr;
+    for (int index = 0; index < connectList.size(); index++) {
+        connectPtr = connectList.at(index);
+        if (connectionType != connectPtr->settings()->connectionType()) {
+            qDebug()<<"[KyConnectResourse]"<<"connect name:" << connectPtr->name()
+                   <<"connect type:"<<connectPtr->settings()->connectionType();
+            continue;
+        }
+        
+        QString connectInterface = connectPtr->settings()->interfaceName();
+        if (!connectInterface.isEmpty()
+               && DeviceName != connectInterface) {
+            qDebug()<<"[KyConnectResourse]" << "connect name:"<< connectPtr->name()
+                   << "connect device name" << connectInterface;
+            continue;
+        }
+
+        if (m_networkResourceInstance->isActiveConnection(connectPtr->uuid())) {
+            qDebug()<<"[KyConnectResourse]"<<connectPtr->name()<<"is active connection";
+            continue;
+        }
+
+        KyConnectItem *connectItem = getConnectionItem(connectPtr);
+        if (nullptr != connectItem) {
+            connectItem->m_itemType = connectionType;
+            connectItemList << connectItem;
+            connectItem->dumpInfo();
+        }
+
+        connectPtr = nullptr;
+    }
+
+    return;    
+}
+
+#if 0
 void KyConnectResourse::getWiredConnections(QList<KyWiredConnectItem *> &wiredConnectItemList)
 {
     int index = 0;
@@ -93,6 +166,8 @@ KyWiredConnectItem *KyConnectResourse::getWiredConnectItem(NetworkManager::Conne
     return wiredItem;
 }
 
+#endif
+
 void KyConnectResourse::getConnectIp(
                         NetworkManager::ConnectionSettings::Ptr settingPtr,
                         QString &ipv4Address,
@@ -113,7 +188,8 @@ void KyConnectResourse::getConnectIp(
     }
 
     NetworkManager::Ipv6Setting::Ptr ipv6Setting = settingPtr->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
-    if (NetworkManager::Ipv4Setting::Manual == ipv6Setting->method()) {
+    if (nullptr !=ipv6Setting
+            && NetworkManager::Ipv4Setting::Manual == ipv6Setting->method()) {
        QList<NetworkManager::IpAddress> ipv6AddressList = ipv6Setting->addresses();
        NetworkManager::IpAddress settingIpv6Address = ipv6AddressList.at(0);
        if (settingIpv6Address.isValid()) {
@@ -166,14 +242,14 @@ void KyConnectResourse::getIpv6ConnectSetting(
 
 void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting)
 {
-    qDebug()<< connectUuid <<"get connect setting info";
+    qDebug() <<"[KyConnectResourse]" << connectUuid <<"get connect setting info, connect uuid";
 
     NetworkManager::Connection::Ptr connectPtr =
                             m_networkResourceInstance->getConnect(connectUuid);
 
     if (nullptr == connectPtr
                || !connectPtr->isValid()) {
-        qWarning() << "it can not find valid connection" << connectUuid;
+        qWarning() <<"[KyConnectResourse]" << "it can not find valid connection" << connectUuid;
         return;
     }
 
@@ -294,7 +370,14 @@ KyBluetoothConnectItem *KyConnectResourse::getBluetoothConnectItem(NetworkManage
     NetworkManager::BluetoothSetting::Ptr bluetoothSetting =
             settingPtr->setting(NetworkManager::Setting::Bluetooth).dynamicCast<NetworkManager::BluetoothSetting>();
     bluetoothItem->m_deviceAddress = bluetoothSetting->bluetoothAddress();
-    qDebug()<<"bluetooth device address:"<<bluetoothItem->m_deviceAddress;
+    QByteArray btAddrArray = bluetoothSetting->bluetoothAddress();
+    for (int index = 0; index < btAddrArray.size(); ++index) {
+        qDebug("bt address %d %s", index, btAddrArray[index]);
+    }
+   // qDebug()<<"bt address 0:"<< btAddrArray[0];
+   // qDebug()<<"bt address 1:"<< btAddrArray[1];
+   // qDebug()<<"array size:"<<btAddrArray.size();
+    qDebug()<<"bluetooth device address:"<<bluetoothItem->m_deviceAddress.toInt(nullptr, 16);
 
     return bluetoothItem;
 }

@@ -40,6 +40,7 @@
 #include <NetworkManagerQt/WirelessSecuritySetting>
 #include <NetworkManagerQt/Utils>
 #include <NetworkManagerQt/ConnectionSettings>
+#include <NetworkManagerQt/Security8021xSetting>
 #include <QDBusPendingCallWatcher>
 #include <QInputDialog>
 #include <QMetaEnum>
@@ -95,7 +96,7 @@ public:
 signals:
     void connectionAdd(NetworkManager::Connection::Ptr conn);
     void connectionUpdate(NetworkManager::Connection * conn);
-    void connectionRemove(NetworkManager::Connection * conn);
+//    void connectionRemove(NetworkManager::Connection * conn);
     void activeConnectionAdd(NetworkManager::ActiveConnection::Ptr conn);
     void activeConnectionUpdate(NetworkManager::ActiveConnection * conn);
     void activeConnectionRemove(NetworkManager::ActiveConnection * conn);
@@ -107,6 +108,13 @@ signals:
     void wifiNetworkUpdate(NetworkManager::WirelessNetwork * net);
     void wifiNetworkRemove(NetworkManager::Device * dev, QString const & ssid);
 
+    //to KyWirelessNetResource
+    void wifiNetworkRemoved(QString, QString);
+    void wifiNetworkAdded(QString, QString);
+    void wifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net);
+    void wifiNetworkDeviceDisappear();
+    void wifinEnabledChanged(bool);
+    void connectionRemove(QString);
 
 private slots:
     //connection

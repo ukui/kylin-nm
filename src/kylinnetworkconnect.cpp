@@ -306,6 +306,7 @@ int KyNetworkConnect::deactivateConnection(const QString connectName, const QStr
     QDBusPendingReply<> reply = NetworkManager::deactivateConnection(activateConnectPtr->path());
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
     connect(watcher, &QDBusPendingCallWatcher::finished, [activateConnectPtr] (QDBusPendingCallWatcher * watcher) {
+        qDebug() << "finshed";
         //TODO::it may should send signal deactivateConnectionFinished
         if (watcher->isError() || !watcher->isValid()) {
             //TODO: in what form should we output the warning messages
@@ -459,7 +460,6 @@ void KyNetworkConnect::addAndActivateWirelessConnection(NetworkManager::Wireless
          }
          else{
             emit checkActiveonnection((qdbus_cast<QDBusObjectPath>(watcher->reply().arguments().at(1))).path());
-
         }
          watcher->deleteLater();
     });
@@ -471,6 +471,7 @@ void KyNetworkConnect::onActivateWirelessConnection(const QString &connectSsid, 
     NetworkManager::WirelessNetwork::Ptr wirelessNet = nullptr;
     for (auto const & net : m_networkResourceInstance->m_wifiNets)
     {
+        qDebug() << net->ssid() << "   " << connectSsid;
         if (net->ssid() == connectSsid)
         {
             wirelessNet = net;
@@ -481,7 +482,7 @@ void KyNetworkConnect::onActivateWirelessConnection(const QString &connectSsid, 
     if (wirelessNet.isNull())
     {
         //TODO:隐藏wifi不会存在与AP中，需要新建connection去连接
-        qDebug() << "hidewifi";
+        qDebug() << "hidewifi";emit noConnection();
         return;
     }
 

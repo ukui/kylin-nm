@@ -23,7 +23,7 @@ signals:
     void deviceMacAddressChanaged(QString deviceName, const QString &hwAddress);
 
 public:
-    void getNetworkDevices(QStringList &networkDeviceList);
+    void getNetworkDeviceList(QStringList &networkDeviceList);
     void getHardwareInfo(QString ifaceName, QString &hardAddress, int &bandWith);
     NetworkManager::Device::State getDeviceState(QString deviceName);
     bool wiredDeviceCarriered(QString deviceName);

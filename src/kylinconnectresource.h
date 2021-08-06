@@ -17,7 +17,8 @@ public:
     ~KyConnectResourse();
 
 public:
-    void getConnectionList(QString DeviceName,
+    KyConnectItem *getConnectionItemByUuid(QString connectUuid, QString deviceName);
+    void getConnectionList(QString deviceName,
                            NetworkManager::ConnectionSettings::ConnectionType connectionType,
                            QList<KyConnectItem *> &connectItemList);
  //   void getWiredConnections(QList<KyWiredConnectItem *> &wiredConnectItemList);

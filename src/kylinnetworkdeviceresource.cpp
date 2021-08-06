@@ -19,7 +19,7 @@ KyNetworkDeviceResourse::~KyNetworkDeviceResourse()
     m_networkResourceInstance = nullptr;
 }
 
-void KyNetworkDeviceResourse::getNetworkDevices(QStringList &networkDeviceList)
+void KyNetworkDeviceResourse::getNetworkDeviceList(QStringList &networkDeviceList)
 {
     qDebug()<<"[KyNetworkDeviceResourse]"<<"get device list";
     NetworkManager::Device::List deviceList

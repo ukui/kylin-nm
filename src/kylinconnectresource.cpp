@@ -39,20 +39,53 @@ KyConnectItem *KyConnectResourse::getConnectionItem(NetworkManager::Connection::
 
     NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
     connectionItem->m_ifaceName = settingPtr->interfaceName();
+    connectionItem->m_itemType = settingPtr->connectionType();
 
     connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
 
     return connectionItem;
 }
 
-void KyConnectResourse::getConnectionList(QString DeviceName,
+KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, QString deviceName)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            m_networkResourceInstance->getConnect(connectUuid);
+
+    if (nullptr == connectPtr) {
+        qWarning()<<"get connect failed, connect uuid"<<connectUuid;
+        return nullptr;
+    }
+
+    QString connectInterface = connectPtr->settings()->interfaceName();
+    if (!connectInterface.isEmpty()
+           && deviceName != connectInterface) {
+        qDebug()<<"[KyConnectResourse]" << "connect name:"<< connectPtr->name()
+               << "connect device name" << connectInterface;
+        return nullptr;
+    }
+
+    if (m_networkResourceInstance->isActiveConnection(connectPtr->uuid())) {
+        qDebug()<<"[KyConnectResourse]"<<connectPtr->name()<<"is active connection";
+        return nullptr;
+    }
+
+    KyConnectItem *connectItem = getConnectionItem(connectPtr);
+    if (nullptr != connectItem) {
+        connectItem->dumpInfo();
+        return connectItem;
+    }
+
+    return nullptr;
+}
+
+void KyConnectResourse::getConnectionList(QString deviceName,
                        NetworkManager::ConnectionSettings::ConnectionType connectionType,
                        QList<KyConnectItem *> &connectItemList)
 {
     NetworkManager::Connection::List connectList;
 
     qDebug()<<"[KyConnectResourse]"<<"get connections item, device"
-           <<DeviceName << "connect type" << connectionType;
+           <<deviceName << "connect type" << connectionType;
 
     connectList.clear();
     connectList = m_networkResourceInstance->getConnectList();
@@ -73,7 +106,7 @@ void KyConnectResourse::getConnectionList(QString DeviceName,
         
         QString connectInterface = connectPtr->settings()->interfaceName();
         if (!connectInterface.isEmpty()
-               && DeviceName != connectInterface) {
+               && deviceName != connectInterface) {
             qDebug()<<"[KyConnectResourse]" << "connect name:"<< connectPtr->name()
                    << "connect device name" << connectInterface;
             continue;
@@ -86,7 +119,7 @@ void KyConnectResourse::getConnectionList(QString DeviceName,
 
         KyConnectItem *connectItem = getConnectionItem(connectPtr);
         if (nullptr != connectItem) {
-            connectItem->m_itemType = connectionType;
+           // connectItem->m_itemType = connectionType;
             connectItemList << connectItem;
             connectItem->dumpInfo();
         }

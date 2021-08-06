@@ -72,7 +72,7 @@ KyNetworkConnect::~KyNetworkConnect()
 
 void KyNetworkConnect::ipv4SettingInit(
         NetworkManager::Ipv4Setting::Ptr &ipv4Setting,
-        const KyConnectInfo &connectInfo)
+        const KyConnectSetting &connectInfo)
 {
     ipv4Setting->setInitialized(true);
 
@@ -95,7 +95,7 @@ void KyNetworkConnect::ipv4SettingInit(
 }
 void KyNetworkConnect::ipv6SettingInit(
         NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
-        const KyConnectInfo &connectInfo)
+        const KyConnectSetting &connectInfo)
 {
     ipv6Setting->setInitialized(true);
 
@@ -118,7 +118,7 @@ void KyNetworkConnect::ipv6SettingInit(
 
 void KyNetworkConnect::connectSettingInit(
         NetworkManager::ConnectionSettings::Ptr connectionSettings,
-        const KyConnectInfo &connectInfo)
+        const KyConnectSetting &connectInfo)
 {
     connectionSettings->setId(connectInfo.m_connectName);
     connectionSettings->setUuid(NetworkManager::ConnectionSettings::createNewUuid());
@@ -128,7 +128,7 @@ void KyNetworkConnect::connectSettingInit(
     return;
 }
 
-void KyNetworkConnect::createWiredConnect(const KyConnectInfo &connectInfo)
+void KyNetworkConnect::createWiredConnect(const KyConnectSetting &connectInfo)
 {
     NetworkManager::ConnectionSettings::Ptr connectionSettings = NetworkManager::ConnectionSettings::Ptr(new NetworkManager::ConnectionSettings(NetworkManager::ConnectionSettings::Wired));
     connectSettingInit(connectionSettings, connectInfo);
@@ -160,7 +160,7 @@ void KyNetworkConnect::createWiredConnect(const KyConnectInfo &connectInfo)
     return;
 }
 
-void KyNetworkConnect::createConnect(KyConnectType connectType, const KyConnectInfo &connectInfo)
+void KyNetworkConnect::createConnect(KyConnectType connectType, const KyConnectSetting &connectInfo)
 {
     switch (connectType) {
         case WIRED_CONNECT:
@@ -175,7 +175,7 @@ void KyNetworkConnect::createConnect(KyConnectType connectType, const KyConnectI
     return;
 }
 
-void KyNetworkConnect::updateConnect(const QString &connectUuid, const KyConnectInfo &connectInfo)
+void KyNetworkConnect::updateConnect(const QString &connectUuid, const KyConnectSetting &connectInfo)
 {
     qDebug()<<"update connect"<<connectUuid;
     NetworkManager::Connection::Ptr connectPtr =

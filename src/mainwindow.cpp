@@ -24,6 +24,7 @@
 #include "hot-spot/dlghotspotcreate.h"
 #include "wireless-security/dlghidewifi.h"
 #include "sysdbusregister.h"
+#include "kylinwiredwidget.h"
 
 #include <algorithm>//sort函数包含的头文件
 
@@ -138,25 +139,26 @@ void MainWindow::secondaryStart()
 
     qDebug()<<"Init ksnm...";
     this->ksnm = new KSimpleNM();
+#if 0
     connect(ksnm, SIGNAL(getLanListFinished(QStringList)), this, SLOT(getLanListDone(QStringList)));
     connect(ksnm, SIGNAL(getWifiListFinished(QStringList)), this, SLOT(getWifiListDone(QStringList)));
     connect(ksnm, SIGNAL(getConnListFinished(QStringList)), this, SLOT(getConnListDone(QStringList)));
     connect(ksnm, SIGNAL(requestRevalueUpdateWifi()), this, SLOT(onRequestRevalueUpdateWifi()));
-
+#endif
     qDebug()<<"Init LoadingDiv...";
     loading = new LoadingDiv(this);
     loading->move(40,0);
     connect(loading, SIGNAL(toStopLoading() ), this, SLOT(on_checkOverTime() ));
 
     checkIsWirelessDevicePluggedIn(); //检测无线网卡是否插入
-    initLanSlistAndGetReconnectNetList(); //初始化有线网列表
+    //initLanSlistAndGetReconnectNetList(); //初始化有线网列表
     initNetwork(); //初始化网络
     initTimer(); //初始化定时器
     initActNetDNS();//初始化已连接网络的DNS
     getSystemFontFamily();//建立GSetting监听系统字体
 
     qDebug()<<"Init button connections...";
-    connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClicked);
+    connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClickeds);
     connect(btnWireless, &SwitchButton::clicked,this, &MainWindow::onBtnWifiClicked);
     connect(btnWired, &SwitchButton::clicked, this, &MainWindow::onBtnLanClicked);
     connect(this, &MainWindow::onWiredDeviceChanged, this, &MainWindow::setLanSwitchStatus);
@@ -289,9 +291,13 @@ void MainWindow::editQssString()
 void MainWindow::createTopLanUI()
 {
     qDebug()<<"Creating Top Lan UI...";
-    topLanListWidget = new QWidget(ui->centralWidget);
+    topLanListWidget = new KyWiredWidget(ui->centralWidget);
+    topLanListWidget->setType(ACTIVECONNECTION);
     topLanListWidget->move(W_LEFT_AREA, Y_TOP_ITEM);
     topLanListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_GAP_UP + X_ITEM);
+
+    connect(topLanListWidget, &KyWiredWidget::updateSpeed, this, &MainWindow::on_setNetSpeeds);
+
     /*顶部的一个item*/
     lbTopLanList = new QLabel(topLanListWidget);
     lbTopLanList->setText(tr("Ethernet Networks"));//"可用网络列表"
@@ -381,7 +387,8 @@ void MainWindow::createListAreaUI()
     scrollAreaw->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollAreaw->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-    lanListWidget = new QWidget(scrollAreal);
+    lanListWidget = new KyWiredWidget(scrollAreal);
+    lanListWidget->setType(CONNECTION);
     wifiListWidget = new QWidget(scrollAreaw);
     lbLanList = new QLabel(lanListWidget);
     lbWifiList = new QLabel(wifiListWidget);
@@ -592,7 +599,7 @@ void MainWindow::initNetwork()
             if (iface->lstate == 0) {
                 connLanDone(3);
             }
-            onBtnNetListClicked();
+            onBtnNetListClickeds();
 
             ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
             ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
@@ -618,7 +625,7 @@ void MainWindow::initNetwork()
             char *chr = "nmcli networking on";
             Utils::m_system(chr);
 
-            onBtnNetListClicked();
+            onBtnNetListClickeds();
 
             ui->btnNetList->setStyleSheet("QPushButton{border:0px solid rgba(255,255,255,0);background-color:rgba(255,255,255,0);}");
             ui->btnWifiList->setStyleSheet("QPushButton{border:none;}");
@@ -652,24 +659,24 @@ void MainWindow::initTimer()
     //网线插入时定时执行
     wiredCableUpTimer = new QTimer(this);
     wiredCableUpTimer->setTimerType(Qt::PreciseTimer);
-    QObject::connect(wiredCableUpTimer, SIGNAL(timeout()), this, SLOT(onCarrierUpHandle()));
+  //  QObject::connect(wiredCableUpTimer, SIGNAL(timeout()), this, SLOT(onCarrierUpHandle()));
 
     //网线拔出时定时执行
 //    wiredCableDownTimer = new QTimer(this);
 //    wiredCableDownTimer->setTimerType(Qt::PreciseTimer);
 //    QObject::connect(wiredCableDownTimer, SIGNAL(timeout()), this, SLOT(onCarrierDownHandle()));
-    connect(this, SIGNAL(carrierDownHandle()), this, SLOT(onCarrierDownHandle()));
+    //connect(this, SIGNAL(carrierDownHandle()), this, SLOT(onCarrierDownHandle()));
 
     //定时处理异常网络，即当点击Lan列表按钮时，若lstate=2，但任然有有线网连接的情况
     deleteLanTimer = new QTimer(this);
     deleteLanTimer->setTimerType(Qt::PreciseTimer);
-    QObject::connect(deleteLanTimer, SIGNAL(timeout()), this, SLOT(onDeleteLan()));
+//    QObject::connect(deleteLanTimer, SIGNAL(timeout()), this, SLOT(onDeleteLan()));
 
     //定时获取网速
     setNetSpeed = new QTimer(this);
     setNetSpeed->setTimerType(Qt::PreciseTimer);
-    QObject::connect(setNetSpeed, SIGNAL(timeout()), this, SLOT(on_setNetSpeed()));
-    setNetSpeed->start(1000);
+//    QObject::connect(setNetSpeed, SIGNAL(timeout()), this, SLOT(on_setNetSpeed()));
+//    setNetSpeed->start(1000);
 }
 
 //初始化已经连接网络的DNS
@@ -1073,6 +1080,7 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
 //网线插拔处理,由kylin-dbus-interface.cpp调用
 void MainWindow::onPhysicalCarrierChanged(bool flag)
 {
+#if 0
     this->startLoading();
     if (flag) {
         isHandlingWiredCableOn = true;
@@ -1104,10 +1112,12 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
             }
         });
     }
+#endif
 }
 
 void MainWindow::onCarrierUpHandle()
 {
+#if 0
     wiredCableUpTimer->stop();
 
     //检查有线网络的个数是否为0,如果是0，则新建一个有线网络
@@ -1118,12 +1128,13 @@ void MainWindow::onCarrierUpHandle()
     is_stop_check_net_state = 0;
     isHandlingWiredCableOn = false;
     emit btnWired->clicked(4);
+#endif
 }
 
 void MainWindow::onCarrierDownHandle()
 {
     //syslog(LOG_DEBUG, "Wired net is disconnected");
-
+#if 0
     QString txt(tr("Wired net is disconnected"));
     objKyDBus->showDesktopNotify(txt);
     currSelNetName = "";
@@ -1136,6 +1147,7 @@ void MainWindow::onCarrierDownHandle()
     this->stopLoading();
     onBtnNetListClicked(0);
     is_stop_check_net_state = 0;
+#endif
 }
 
 void MainWindow::onDeleteLan()
@@ -1468,8 +1480,23 @@ void MainWindow::setLanSwitchStatus(bool is_opened)
     }
 }
 
+void MainWindow::onBtnNetListClickeds(int flag)
+{
+    this->scrollAreal->show();
+    topLanListWidget->constructWiredActiveConnectList();
+    lanListWidget->constructWiredConnectList();
+    this->scrollAreaw->hide();
+    this->topWifiListWidget->hide();
+
+    lbLoadDown->show();
+    lbLoadUp->show();
+    lbLoadDownImg->show();
+    lbLoadUpImg->show();
+}
+
 void MainWindow::onBtnNetListClicked(int flag)
 {
+#if 0
     this->is_btnLanList_clicked = 1;
     this->is_btnWifiList_clicked = 0;
     end_rcv_rates = 0;
@@ -1523,6 +1550,7 @@ void MainWindow::onBtnNetListClicked(int flag)
 
     delete iface;
     bt->deleteLater();
+#endif
 }
 
 void MainWindow::on_btnWifiList_clicked()
@@ -1692,6 +1720,7 @@ void MainWindow::onNewConnAdded(int type) {
 // 获取lan列表回调
 void MainWindow::getLanListDone(QStringList slist)
 {
+#if 0
     if (this->is_btnWifiList_clicked == 1) {
         return;
     }
@@ -1948,6 +1977,7 @@ void MainWindow::getLanListDone(QStringList slist)
     if (btnWired->isEnabled() && !btnWired->getSwitchStatus() && BackThread::execGetIface()->lstate != 2) {
         btnWired->setSwitchStatus(true);
     }
+#endif
 }
 
 // 获取wifi列表回调
@@ -3363,6 +3393,7 @@ void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
     if (currSelNetName == uniqueName) {
         return;
     }
+#if 0
     QList<OneLancForm *> topLanList = topLanListWidget->findChildren<OneLancForm *>();
     QList<OneLancForm *> lanList = lanListWidget->findChildren<OneLancForm *>();
 
@@ -3442,9 +3473,12 @@ void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
         ocf->setTopItem(false);
         ocf->move(L_VERTICAL_LINE_TO_ITEM, (topLanList.size() - 1 - i) * H_NORMAL_ITEM);
     }
+#endif
 }
+
 void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
 {
+#if 0
     //应设计要求，选中同一选项卡不再缩小
     if (currSelNetName == uniqueName) return;
     QList<OneLancForm *> topLanList = topLanListWidget->findChildren<OneLancForm *>();
@@ -3515,6 +3549,8 @@ void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
 
         currSelNetName = uniqueName;
     }
+
+#endif
 }
 
 void MainWindow::oneWifiFormSelected(QString wifibssid, int extendLength)
@@ -3734,11 +3770,13 @@ void MainWindow::disNetDone()
     delete topLanListWidget; // 清空top列表
     createTopLanUI(); //创建顶部有线网item
 
+ #if 0
     // 清空lan列表
     lanListWidget = new QWidget(scrollAreal);
     lanListWidget->resize(W_LIST_WIDGET, H_NORMAL_ITEM + H_LAN_ITEM_EXTEND);
     scrollAreal->setWidget(lanListWidget);
     scrollAreal->move(W_LEFT_AREA, Y_SCROLL_AREA);
+
 
     // 当前连接的lan
     OneLancForm *ccf = new OneLancForm(topLanListWidget, this, confForm, ksnm);
@@ -3750,7 +3788,7 @@ void MainWindow::disNetDone()
     ccf->setAct(true);
     ccf->move(L_VERTICAL_LINE_TO_ITEM, 0);
     ccf->show();
-
+#endif
     btnWireless->setSwitchStatus(false);
 
     this->lanListWidget->show();
@@ -4138,6 +4176,56 @@ void MainWindow::onRequestReconnecWifi()
 {
     qDebug() << "Receive request reconnect wifi signal, then to reconnect wifi";
     toReconnectWifi();
+}
+
+void MainWindow::on_setNetSpeeds(qulonglong rx, qulonglong tx)
+{
+    long int delta_rcv = rx/1024;
+    long int delta_tx = tx/1024;
+
+    //简易滤波
+    if (delta_rcv < 0 || delta_tx < 0) {
+        delta_rcv = 0;
+        delta_tx = 0;
+    }
+
+    int rcv_num = delta_rcv;
+    int tx_num = delta_tx;
+
+    QString str_rcv;
+    QString str_tx;
+
+    if (rcv_num < 1024) {
+        str_rcv = QString::number(rcv_num) + "KB/s.";
+    } else {
+        int remainder;
+        if (rcv_num%1024 < 100) {
+            remainder = 0;
+        } else {
+            remainder = (rcv_num%1024)/100;
+        }
+        str_rcv = QString::number(rcv_num/1024) + "."  + QString::number(remainder) + "MB/s.";
+    }
+
+    if (tx_num < 1024) {
+        str_tx = QString::number(tx_num) + "KB/s";
+    } else {
+        int remainder;
+        if (tx_num%1024 < 100) {
+            remainder = 0;
+        } else {
+            remainder = (tx_num%1024)/100;
+        }
+        str_tx = QString::number(tx_num/1024) + "."  + QString::number(remainder) + "MB/s";
+    }
+
+    lbLoadDown->setText(str_rcv);
+    lbLoadUp->setText(str_tx);
+
+    int offset = str_rcv.length() * 7;
+    lbLoadUp->move(X_ITEM + offset + 145, Y_TOP_ITEM + 32);
+    lbLoadUpImg->move(X_ITEM + offset + 128, Y_TOP_ITEM + 35);
+    return;
 }
 
 void MainWindow::on_setNetSpeed()

@@ -1,0 +1,90 @@
+#include "kywirelessnetitem.h"
+#include <NetworkManagerQt/Connection>
+
+QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags)
+{
+    QString out;
+    if (   (cap & NM_802_11_AP_FLAGS_PRIVACY)
+           && (wpa_flags == NM_802_11_AP_SEC_NONE)
+           && (rsn_flags == NM_802_11_AP_SEC_NONE)) {
+        out += "WEP ";
+    }
+    if (wpa_flags != NM_802_11_AP_SEC_NONE) {
+        out += "WPA1 ";
+    }
+    if ((rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_PSK)
+            || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
+        out += "WPA2 ";
+    }
+    if (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_SAE) {
+        out += "WPA3 ";
+    }
+    if (   (wpa_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)
+           || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
+        out += "802.1X ";
+    }
+    return out;
+}
+
+KyWirelessNetItem::KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net)
+{
+    m_networkResourceInstance = KyNetworkResourceManager::getInstance();
+
+    m_bssid = "";
+    m_connectUuid = "";
+    m_isConfigured = false;
+    m_connName = "";
+    m_connDbusPath = "";
+    m_secuType = "";
+
+    init(net);
+}
+
+
+KyWirelessNetItem::~KyWirelessNetItem()
+{
+    m_networkResourceInstance = nullptr;
+}
+
+
+void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
+{
+    m_NetSsid = net->ssid();
+    m_signalStrength = net->signalStrength();
+    m_frequency = net->referenceAccessPoint()->frequency();
+    NetworkManager::AccessPoint::Capabilities cap = net->referenceAccessPoint()->capabilities();
+    NetworkManager::AccessPoint::WpaFlags wpaFlag = net->referenceAccessPoint()->wpaFlags();
+    NetworkManager::AccessPoint::WpaFlags rsnFlag = net->referenceAccessPoint()->rsnFlags();
+    m_secuType = enumToQstring(cap, wpaFlag, rsnFlag);
+    m_bssid = net->referenceAccessPoint()->hardwareAddress();
+    initInfoBySsid();
+}
+
+void KyWirelessNetItem::initInfoBySsid()
+{
+    for (auto const & conn : m_networkResourceInstance->m_connections)
+    {
+        NetworkManager::ConnectionSettings::Ptr settings = conn->settings();
+        if (settings->connectionType() != NetworkManager::ConnectionSettings::Wireless)
+        {
+            continue;
+        }
+        NetworkManager::WirelessSetting::Ptr wifi_sett
+            = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+        if (wifi_sett->ssid() == m_NetSsid)
+        {
+            m_connectUuid = settings->uuid();
+            m_connName    = conn->name();
+            m_connDbusPath = conn->path();
+            m_isConfigured = true;
+
+            if(wifi_sett->ssid() == "NewWifi")
+            {
+                NetworkManager::WirelessSecuritySetting::Ptr security_sett
+                    = settings->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+                qDebug() << security_sett->keyMgmt();
+            }
+            return;
+        }
+    }
+}

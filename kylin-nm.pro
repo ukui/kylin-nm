@@ -61,9 +61,9 @@ QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 
 include(src/singleapplication/qt-single-application.pri)
 
-
 SOURCES += \
     src/backthread.cpp \
+    src/kyenterpricesettinginfo.cpp \
     src/kylinactiveconnectresource.cpp \
     src/kylinbluetoothconnectitem.cpp \
     src/kylinconnectitem.cpp \
@@ -73,6 +73,10 @@ SOURCES += \
     src/kylinnetworkconnect.cpp \
     src/kylinnetworkdeviceresource.cpp \
     src/kylinnetworkresourcemanager.cpp \
+    src/kywirelessconnectoperation.cpp \
+    src/kywirelessnetitem.cpp \
+    src/kywirelessnetresource.cpp \
+    src/nmdemo.cpp \
     src/kylinvpnconnectitem.cpp \
     src/kylinwiredconnectoperation.cpp \
     src/kylinwiredwidget.cpp \
@@ -108,6 +112,7 @@ SOURCES += \
 
 HEADERS += \
     src/backthread.h \
+    src/kyenterpricesettinginfo.h \
     src/kylinactiveconnectresource.h \
     src/kylinbluetoothconnectitem.h \
     src/kylinconnectitem.h \
@@ -117,6 +122,10 @@ HEADERS += \
     src/kylinnetworkconnect.h \
     src/kylinnetworkdeviceresource.h \
     src/kylinnetworkresourcemanager.h \
+    src/kywirelessconnectoperation.h \
+    src/kywirelessnetitem.h \
+    src/kywirelessnetresource.h \
+    src/nmdemo.h \
     src/kylinvpnconnectitem.h \
     src/kylinwiredconnectoperation.h \
     src/kylinwiredwidget.h \

@@ -17,15 +17,15 @@
  */
 
 
-#include "dlghidewifieappwd.h"
-#include "ui_dlghidewifieappwd.h"
+#include "dlghidewifieapttls.h"
+#include "ui_dlghidewifieapttls.h"
 #include "kylinheadfile.h"
-#include "src/kylin-dbus-interface.h"
+#include "kylin-dbus-interface.h"
 
-DlgHideWifiEapPwd::DlgHideWifiEapPwd(int type, QWidget *parent) :
+DlgHideWifiEapTTLS::DlgHideWifiEapTTLS(int type, QWidget *parent) :
     WepOrWpa(type),
     QDialog(parent),
-    ui(new Ui::DlgHideWifiEapPwd)
+    ui(new Ui::DlgHideWifiEapTTLS)
 {
     ui->setupUi(this);
 
@@ -51,6 +51,11 @@ DlgHideWifiEapPwd::DlgHideWifiEapPwd(int type, QWidget *parent) :
     ui->lbNetName->setStyleSheet(objQss.labelQss);
     ui->lbSecurity->setStyleSheet(objQss.labelQss);
     ui->lbAuth->setStyleSheet(objQss.labelQss);
+    ui->lbAnonyId->setStyleSheet(objQss.labelQss);
+    ui->lbDomain->setStyleSheet(objQss.labelQss);
+    ui->lbCA->setStyleSheet(objQss.labelQss);
+    ui->lbCaPwd->setStyleSheet(objQss.labelQss);
+    ui->lbInnerAuth->setStyleSheet(objQss.labelQss);
     ui->lbUserName->setStyleSheet(objQss.labelQss);
     ui->lbPassword->setStyleSheet(objQss.labelQss);
 
@@ -61,14 +66,24 @@ DlgHideWifiEapPwd::DlgHideWifiEapPwd(int type, QWidget *parent) :
     ui->cbxSecurity->setView(new  QListView());
     ui->cbxAuth->setStyleSheet(objQss.cbxQss);
     ui->cbxAuth->setView(new  QListView());
+    ui->leAnonyId->setStyleSheet(objQss.leQss);
+    ui->leDomain->setStyleSheet(objQss.leQss);
+    ui->cbxCA->setStyleSheet(objQss.cbxQss);
+    ui->cbxCA->setView(new  QListView());
+    ui->leCaPwd->setStyleSheet(objQss.leQss);
+    ui->checkBoxPwd->setStyleSheet(objQss.checkBoxQss);
+    ui->checkBoxCA->setStyleSheet(objQss.checkBoxCAQss);
+    ui->cbxInnerAuth->setStyleSheet(objQss.cbxQss);
+    ui->cbxInnerAuth->setView(new  QListView());
     ui->leUserName->setStyleSheet(objQss.leQss);
     ui->lePassword->setStyleSheet(objQss.leQss);
-    ui->checkBox->setStyleSheet(objQss.checkBoxQss);
+    ui->checkBoxPwdSec->setStyleSheet(objQss.checkBoxQss);
 
     ui->btnCancel->setStyleSheet(objQss.btnOffQss);
     ui->btnConnect->setStyleSheet(objQss.btnOffQss);
     ui->lineUp->setStyleSheet(objQss.lineQss);
     ui->lineDown->setStyleSheet(objQss.lineQss);
+    ui->checkBoxCA->setFocusPolicy(Qt::NoFocus);
 
 
     ui->lbLeftupTitle->setText(tr("Add hidden WLAN")); //加入隐藏WLAN
@@ -76,6 +91,12 @@ DlgHideWifiEapPwd::DlgHideWifiEapPwd(int type, QWidget *parent) :
     ui->lbNetName->setText(tr("Network name")); //网络名称:
     ui->lbSecurity->setText(tr("WLAN security")); //Wi-Fi安全性:
     ui->lbAuth->setText(tr("Authentication")); //认证:
+    ui->lbAnonyId->setText(tr("Anonymous identity")); //匿名身份:
+    ui->lbDomain->setText(tr("Domain")); //域名:
+    ui->lbCA->setText(tr("CA certificate")); //CA 证书:
+    ui->lbCaPwd->setText(tr("CA certificate password")); //CA 证书密码:
+    ui->checkBoxCA->setText(tr("No CA certificate is required")); //不需要CA证书
+    ui->lbInnerAuth->setText(tr("Inner authentication")); //内部认证:
     ui->lbUserName->setText(tr("Username")); //用户名:
     ui->lbPassword->setText(tr("Password")); //密码:
     ui->btnCancel->setText(tr("Cancel")); //取消
@@ -119,20 +140,33 @@ DlgHideWifiEapPwd::DlgHideWifiEapPwd(int type, QWidget *parent) :
     ui->cbxAuth->addItem("FAST");
     ui->cbxAuth->addItem(tr("Tunneled TLS"));//隧道 TLS
     ui->cbxAuth->addItem(tr("Protected EAP (PEAP)")); //受保护的 EAP
-    ui->cbxAuth->setCurrentIndex(2);
+    ui->cbxAuth->setCurrentIndex(4);
     connect(ui->cbxAuth,SIGNAL(currentIndexChanged(QString)),this,SLOT(changeDialogAuth()));
+
+    ui->cbxCA->addItem(tr("None")); //无
+    ui->cbxCA->addItem(tr("Choose from file")); //从文件选择...
+    ui->cbxCA->setCurrentIndex(0);
+
+    ui->cbxInnerAuth->addItem("PAP");
+    ui->cbxInnerAuth->addItem("MSCHAP");
+    ui->cbxInnerAuth->addItem("MSCHAPv2");
+    ui->cbxInnerAuth->addItem("MSCHAPv2(no EAP)");
+    ui->cbxInnerAuth->addItem("CHAP");
+    ui->cbxInnerAuth->addItem("MDS");
+    ui->cbxInnerAuth->addItem("GTC");
+    ui->cbxInnerAuth->setCurrentIndex(0);
 
     ui->btnConnect->setEnabled(false);
 
-    this->setFixedSize(432,487);
+    this->setFixedSize(432,665);
 }
 
-DlgHideWifiEapPwd::~DlgHideWifiEapPwd()
+DlgHideWifiEapTTLS::~DlgHideWifiEapTTLS()
 {
     delete ui;
 }
 
-void DlgHideWifiEapPwd::mousePressEvent(QMouseEvent *event){
+void DlgHideWifiEapTTLS::mousePressEvent(QMouseEvent *event){
     if(event->button() == Qt::LeftButton){
         this->isPress = true;
         this->winPos = this->pos();
@@ -140,17 +174,17 @@ void DlgHideWifiEapPwd::mousePressEvent(QMouseEvent *event){
         event->accept();
     }
 }
-void DlgHideWifiEapPwd::mouseReleaseEvent(QMouseEvent *event){
+void DlgHideWifiEapTTLS::mouseReleaseEvent(QMouseEvent *event){
     this->isPress = false;
 }
-void DlgHideWifiEapPwd::mouseMoveEvent(QMouseEvent *event){
+void DlgHideWifiEapTTLS::mouseMoveEvent(QMouseEvent *event){
     if(this->isPress){
         this->move(this->winPos - (this->dragPos - event->globalPos()));
         event->accept();
     }
 }
 
-void DlgHideWifiEapPwd::changeDialogSecu()
+void DlgHideWifiEapTTLS::changeDialogSecu()
 {
     if(ui->cbxSecurity->currentIndex()==0){
         QApplication::setQuitOnLastWindowClosed(false);
@@ -190,7 +224,7 @@ void DlgHideWifiEapPwd::changeDialogSecu()
     }
 }
 
-void DlgHideWifiEapPwd::changeDialogAuth()
+void DlgHideWifiEapTTLS::changeDialogAuth()
 {
     if(ui->cbxAuth->currentIndex()==0){
         //QApplication::setQuitOnLastWindowClosed(false);
@@ -203,17 +237,17 @@ void DlgHideWifiEapPwd::changeDialogAuth()
         DlgHideWifiEapLeap *connHidWifiEapLeap = new DlgHideWifiEapLeap(WepOrWpa);
         connHidWifiEapLeap->show();
     } else if(ui->cbxAuth->currentIndex()==2) {
-        qDebug()<<"it's not need to change dialog";
+        QApplication::setQuitOnLastWindowClosed(false);
+        this->hide();
+        DlgHideWifiEapPwd *connHidWifiEapPwd = new DlgHideWifiEapPwd(WepOrWpa);
+        connHidWifiEapPwd->show();
     } else if(ui->cbxAuth->currentIndex()==3) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
         DlgHideWifiEapFast *connHidWifiEapFast = new DlgHideWifiEapFast(WepOrWpa);
         connHidWifiEapFast->show();
     } else if(ui->cbxAuth->currentIndex()==4) {
-        QApplication::setQuitOnLastWindowClosed(false);
-        this->hide();
-        DlgHideWifiEapTTLS *connHidWifiEapTTls = new DlgHideWifiEapTTLS(WepOrWpa);
-        connHidWifiEapTTls->show();
+        qDebug()<<"it's not need to change dialog";
     } else {
         //QApplication::setQuitOnLastWindowClosed(false);
         //this->hide();
@@ -222,65 +256,197 @@ void DlgHideWifiEapPwd::changeDialogAuth()
     }
 }
 
-void DlgHideWifiEapPwd::on_btnCancel_clicked()
+void DlgHideWifiEapTTLS::on_cbxCA_currentIndexChanged(const QString &arg1)
+{
+    if (ui->cbxCA->currentIndex() == 0){
+        ui->leCaPwd->setText("");
+        ui->lbCaPwd->setEnabled(false);
+        ui->leCaPwd->setEnabled(false);
+    } else {
+        ui->leCaPwd->setText("");
+        ui->lbCaPwd->setEnabled(true);
+        ui->leCaPwd->setEnabled(true);
+    }
+}
+
+void DlgHideWifiEapTTLS::on_btnCancel_clicked()
 {
     this->close();
 }
 
-void DlgHideWifiEapPwd::on_btnConnect_clicked()
+void DlgHideWifiEapTTLS::on_btnConnect_clicked()
 {
     this->close();
 }
 
-void DlgHideWifiEapPwd::on_checkBox_stateChanged(int arg1)
+void DlgHideWifiEapTTLS::on_checkBoxPwd_stateChanged(int arg1)
 {
     if (arg1 == 0) {
-        ui->lePassword ->setEchoMode(QLineEdit::Password);
+        ui->leCaPwd->setEchoMode(QLineEdit::Password);
+    } else {
+        ui->leCaPwd->setEchoMode(QLineEdit::Normal);
+    }
+}
+
+void DlgHideWifiEapTTLS::on_checkBoxCA_stateChanged(int arg1)
+{
+    if (arg1 == 0) {
+        ui->cbxCA->setCurrentIndex(0);
+        ui->leCaPwd->setText("");
+        ui->lbCA->setEnabled(true);
+        ui->cbxCA->setEnabled(true);
+    } else {
+        ui->cbxCA->setCurrentIndex(0);
+        ui->leCaPwd->setText("");
+        ui->lbCA->setEnabled(false);
+        ui->cbxCA->setEnabled(false);
+    }
+}
+
+void DlgHideWifiEapTTLS::on_checkBoxPwdSec_stateChanged(int arg1)
+{
+    if (arg1 == 0) {
+        ui->lePassword->setEchoMode(QLineEdit::Password);
     } else {
         ui->lePassword->setEchoMode(QLineEdit::Normal);
     }
 }
 
-void DlgHideWifiEapPwd::on_leNetName_textEdited(const QString &arg1)
+void DlgHideWifiEapTTLS::on_leNetName_textEdited(const QString &arg1)
 {
     if (ui->leNetName->text() == ""){
         ui->btnConnect->setEnabled(false);
-    } else if (ui->leUserName->text() == ""){
+    }else if (ui->leAnonyId->text() == ""){
         ui->btnConnect->setEnabled(false);
-    } else if (ui->lePassword->text() == ""){
+    }else if (ui->leDomain->text() == ""){
         ui->btnConnect->setEnabled(false);
-    } else {
+    }else if (ui->leUserName->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->lePassword->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else{
+        if (ui->cbxCA->currentIndex() == 0){
+            ui->btnConnect->setEnabled(true);
+        }else if(ui->leCaPwd->text() == ""){
+            ui->btnConnect->setEnabled(false);
+        }else{
+            ui->btnConnect->setEnabled(true);
+        }
+    }
+}
+
+void DlgHideWifiEapTTLS::on_leAnonyId_textEdited(const QString &arg1)
+{
+    if (ui->leNetName->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->leAnonyId->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->leDomain->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->leUserName->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->lePassword->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else{
+        if (ui->cbxCA->currentIndex() == 0){
+            ui->btnConnect->setEnabled(true);
+        }else if(ui->leCaPwd->text() == ""){
+            ui->btnConnect->setEnabled(false);
+        }else{
+            ui->btnConnect->setEnabled(true);
+        }
+    }
+}
+
+void DlgHideWifiEapTTLS::on_leDomain_textEdited(const QString &arg1)
+{
+    if (ui->leNetName->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->leAnonyId->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->leDomain->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->leUserName->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->lePassword->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else{
+        if (ui->cbxCA->currentIndex() == 0){
+            ui->btnConnect->setEnabled(true);
+        }else if(ui->leCaPwd->text() == ""){
+            ui->btnConnect->setEnabled(false);
+        }else{
+            ui->btnConnect->setEnabled(true);
+        }
+    }
+}
+
+void DlgHideWifiEapTTLS::on_leCaPwd_textEdited(const QString &arg1)
+{
+    if (ui->leNetName->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->leAnonyId->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->leDomain->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->leUserName->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->lePassword->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->leCaPwd->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else{
         ui->btnConnect->setEnabled(true);
     }
 }
 
-void DlgHideWifiEapPwd::on_leUserName_textEdited(const QString &arg1)
+void DlgHideWifiEapTTLS::on_leUserName_textEdited(const QString &arg1)
 {
     if (ui->leNetName->text() == ""){
         ui->btnConnect->setEnabled(false);
-    } else if (ui->leUserName->text() == ""){
+    }else if (ui->leAnonyId->text() == ""){
         ui->btnConnect->setEnabled(false);
-    } else if (ui->lePassword->text() == ""){
+    }else if (ui->leDomain->text() == ""){
         ui->btnConnect->setEnabled(false);
-    } else {
-        ui->btnConnect->setEnabled(true);
+    }else if (ui->leUserName->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->lePassword->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else{
+        if (ui->cbxCA->currentIndex() == 0){
+            ui->btnConnect->setEnabled(true);
+        }else if(ui->leCaPwd->text() == ""){
+            ui->btnConnect->setEnabled(false);
+        }else{
+            ui->btnConnect->setEnabled(true);
+        }
     }
 }
 
-void DlgHideWifiEapPwd::on_lePassword_textEdited(const QString &arg1)
+void DlgHideWifiEapTTLS::on_lePwd_textEdited(const QString &arg1)
 {
     if (ui->leNetName->text() == ""){
         ui->btnConnect->setEnabled(false);
-    } else if (ui->leUserName->text() == ""){
+    }else if (ui->leAnonyId->text() == ""){
         ui->btnConnect->setEnabled(false);
-    } else if (ui->lePassword->text() == ""){
+    }else if (ui->leDomain->text() == ""){
         ui->btnConnect->setEnabled(false);
-    } else {
-        ui->btnConnect->setEnabled(true);
+    }else if (ui->leUserName->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else if (ui->lePassword->text() == ""){
+        ui->btnConnect->setEnabled(false);
+    }else{
+        if (ui->cbxCA->currentIndex() == 0){
+            ui->btnConnect->setEnabled(true);
+        }else if(ui->leCaPwd->text() == ""){
+            ui->btnConnect->setEnabled(false);
+        }else{
+            ui->btnConnect->setEnabled(true);
+        }
     }
 }
 
-void DlgHideWifiEapPwd::paintEvent(QPaintEvent *event)
+void DlgHideWifiEapTTLS::paintEvent(QPaintEvent *event)
 {
     KylinDBus mkylindbus;
     double trans = mkylindbus.getTransparentData();

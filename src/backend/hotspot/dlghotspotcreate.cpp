@@ -18,7 +18,7 @@
 
 #include "dlghotspotcreate.h"
 #include "ui_dlghotspotcreate.h"
-#include "src/utils.h"
+#include "utils.h"
 
 DlgHotspotCreate::DlgHotspotCreate(QString wiFiCardName, QWidget *parent) :
     wirelessCardName(wiFiCardName),

@@ -4,6 +4,7 @@
 #include <QString>
 #include "kylinnetworkresourcemanager.h"
 #include "kylinconnectitem.h"
+#include "kylinwiredconnectoperation.h"
 
 class KyNetworkDeviceResourse : public QObject
 {
@@ -29,8 +30,12 @@ public:
     bool wiredDeviceCarriered(QString deviceName);
     //void DeviceSpeed(QString deviceName, KyWiredConnectItem *wiredItem);
     void setDeviceRefreshRate(QString deviceName, int ms);
+    void disconnectDevice();
+    void setDeviceAutoConnect();
 
 private:
+    KyWiredConnectOperation wiredOperation;
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
+    QStringList m_activeConnectUuidList;
 };
 #endif // KYLINNETORKDEVICERESOURCE_H

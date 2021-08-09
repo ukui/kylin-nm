@@ -5,6 +5,9 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse()
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
 
+    m_activeConnectUuidList.clear();
+    //TODO::get uuid from settings for system reboot;
+
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceAdd, this, &KyNetworkDeviceResourse::deviceAdd);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceRemove, this, &KyNetworkDeviceResourse::deviceRemove);
 
@@ -140,4 +143,63 @@ void KyNetworkDeviceResourse::DeviceSpeed(QString deviceName, KyConnectItem *wir
     return;
 }
 #endif
+
+
+void KyNetworkDeviceResourse::disconnectDevice()
+{
+    NetworkManager::Device::List networkDeviceList =
+                        m_networkResourceInstance->getNetworkDeviceList();
+
+    if (networkDeviceList.isEmpty()) {
+        qDebug()<<"[KyNetworkDeviceResourse]"<<"the network device is empty, no need disconnect.";
+        return;
+    }
+
+    m_activeConnectUuidList.clear();
+
+    for (int index = 0; index < networkDeviceList.size(); ++index) {
+        NetworkManager::Device::Ptr networkDevicePtr = networkDeviceList.at(index);
+        if (networkDevicePtr->isValid() &&
+                NetworkManager::Device::Type::Ethernet == networkDevicePtr->type()) {
+            NetworkManager::ActiveConnection::Ptr activeConnectPtr = networkDevicePtr->activeConnection();
+            QString activeConnectUuid = activeConnectPtr->uuid();
+            if (!activeConnectUuid.isEmpty()) {
+                m_activeConnectUuidList<<activeConnectUuid;
+                //TODO:save uuid for system reboot.
+            }
+            networkDevicePtr->disconnectInterface();
+        }
+        networkDevicePtr = nullptr;
+    }
+
+    return;
+}
+
+void KyNetworkDeviceResourse::setDeviceAutoConnect()
+{
+    NetworkManager::Device::List networkDeviceList =
+                        m_networkResourceInstance->getNetworkDeviceList();
+
+    if (networkDeviceList.isEmpty()) {
+        qDebug()<<"[KyNetworkDeviceResourse]" << "the network device is empty,so no need set auto connect.";
+        return;
+    }
+
+    for (int index = 0; index < m_activeConnectUuidList.size(); ++index) {
+        QString connectUuid = m_activeConnectUuidList.at(index);
+        wiredOperation.activateConnection(connectUuid);
+        qDebug()<<"[KyNetworkDeviceResourse]" << "active connect uuid"<< connectUuid;
+    }
+
+    for (int index = 0; index < networkDeviceList.size(); ++index) {
+        NetworkManager::Device::Ptr networkDevicePtr = networkDeviceList.at(index);
+        if (networkDevicePtr->isValid()
+            && NetworkManager::Device::Type::Ethernet == networkDevicePtr->type()) {
+            networkDevicePtr->setAutoconnect(true);
+        }
+        networkDevicePtr = nullptr;
+    }
+
+    return;
+}
 

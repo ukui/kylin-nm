@@ -1412,7 +1412,10 @@ void MainWindow::onBtnLanClicked(int flag)
 {
     switch (flag) {
     case 0: {
-        qDebug()<<"On btnWired clicked! will close switch button";
+        qDebug()<<"On btnWired clicked! will close switch button----------------------------";
+        m_networkDevice.disconnectDevice();
+        emit this->onWiredDeviceChanged(false);
+#if 0
         QtConcurrent::run([=]() {
             QString close_device_cmd = "nmcli device set " + llname + " managed false";
             int res = system(close_device_cmd.toUtf8().data());
@@ -1423,10 +1426,14 @@ void MainWindow::onBtnLanClicked(int flag)
                 qWarning()<<"Close ethernet device failed!";
             }
         });
+#endif
         break;
     }
     case 1: {
-        qDebug()<<"On btnWired clicked! will open switch button";
+        qDebug()<<"On btnWired clicked! will open switch button++++++++++++++++++++++++++++";
+        m_networkDevice.setDeviceAutoConnect();
+         emit this->onWiredDeviceChanged(true);
+#if 0
         QtConcurrent::run([=]() {
             QString open_device_cmd = "nmcli device set " + llname + " managed true";
             int res = system(open_device_cmd.toUtf8().data());
@@ -1437,6 +1444,7 @@ void MainWindow::onBtnLanClicked(int flag)
                 qWarning()<<"Open ethernet device failed!";
             }
         });
+#endif
         break;
     }
     case 2: {

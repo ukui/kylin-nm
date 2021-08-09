@@ -2,10 +2,10 @@
 #define KYLINWIREDWIDGET_H
 
 #include <QWidget>
-#include "kylinactiveconnectresource.h"
-#include "kylinconnectresource.h"
-#include "kylinnetworkdeviceresource.h"
-#include "kylinconnectitem.h"
+#include "backend/dbus-interface/kylinactiveconnectresource.h"
+#include "backend/dbus-interface/kylinconnectresource.h"
+#include "backend/dbus-interface/kylinnetworkdeviceresource.h"
+#include "backend/dbus-interface/kylinconnectitem.h"
 #include "onelancform.h"
 #include "mainwindow.h"
 

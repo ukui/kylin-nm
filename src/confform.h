@@ -28,8 +28,8 @@
 #include <QDialog>
 #include <QListView>
 #include "kylin-dbus-interface.h"
-#include "kylinwiredconnectoperation.h"
-#include "kylinconnectsetting.h"
+#include "backend/dbus-interface/kylinwiredconnectoperation.h"
+#include "backend/dbus-interface/kylinconnectsetting.h"
 
 namespace Ui {
 class ConfForm;

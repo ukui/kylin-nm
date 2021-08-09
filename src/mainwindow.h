@@ -26,7 +26,7 @@
 #include "kylin-network-interface.h"
 #include "utils.h"
 #include "switchbutton.h"
-#include "kylinnetworkresourcemanager.h"
+#include "backend/dbus-interface/kylinnetworkresourcemanager.h"
 #include "kylinwiredwidget.h"
 
 #include <fcntl.h>

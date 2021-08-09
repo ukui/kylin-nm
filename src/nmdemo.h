@@ -8,9 +8,9 @@
 #include <QLineEdit>
 #include <QLabel>
 
-#include "kylinnetworkresourcemanager.h"
-#include "kywirelessconnectoperation.h"
-#include "kywirelessnetresource.h"
+#include "backend/dbus-interface/kylinnetworkresourcemanager.h"
+#include "backend/dbus-interface/kywirelessconnectoperation.h"
+#include "backend/dbus-interface/kywirelessnetresource.h"
 
 class NmDemo : public QDialog
 {

@@ -26,10 +26,10 @@
 
 #include "confform.h"
 #include "kylin-network-interface.h"
-#include "kylinwiredconnectoperation.h"
+#include "backend/dbus-interface/kylinwiredconnectoperation.h"
 #include "backthread.h"
 #include "ksimplenm.h"
-#include "kylinconnectitem.h"
+#include "backend/dbus-interface/kylinconnectitem.h"
 
 
 #include <QtDBus/QDBusConnection>

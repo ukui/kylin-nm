@@ -20,8 +20,8 @@
 #include "dlghidewifieappeap.h"
 #include "ui_dlghidewifieappeap.h"
 #include "kylinheadfile.h"
-#include "src/mainwindow.h"
-#include "src/kylin-dbus-interface.h"
+#include "mainwindow.h"
+#include "kylin-dbus-interface.h"
 #include <QStandardItemModel>
 #include <QDir>
 

@@ -21,7 +21,7 @@
 #include "oneconnform.h"
 #include "onelancform.h"
 #include "wifi-auth-thread.h"
-#include "hot-spot/dlghotspotcreate.h"
+#include "hotspot/dlghotspotcreate.h"
 #include "wireless-security/dlghidewifi.h"
 #include "sysdbusregister.h"
 #include "kylinwiredwidget.h"

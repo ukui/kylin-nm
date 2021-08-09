@@ -5,7 +5,7 @@
 #include <NetworkManagerQt/Dhcp4Config>
 #include <NetworkManagerQt/Dhcp6Config>
 
-KyActiveConnectResourse::KyActiveConnectResourse()
+KyActiveConnectResourse::KyActiveConnectResourse(QObject *parent) : QObject(parent)
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
     m_networkdevice = new KyNetworkDeviceResourse();
@@ -62,7 +62,7 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
             m_networkResourceInstance->getActiveConnect(connectUuid);
 
     if (nullptr == activeConnectPtr) {
-        qWarning()<<"it can not find connect "<< connectUuid;
+        qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< connectUuid;
         return nullptr;
     }
 

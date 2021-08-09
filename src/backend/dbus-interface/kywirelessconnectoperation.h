@@ -4,7 +4,7 @@
 #include <QObject>
 #include "kylinnetworkresourcemanager.h"
 #include "kyenterpricesettinginfo.h"
-//#include "kylinconnectinfo.h"
+#include "kylinconnectoperation.h"
 
 enum KySecuType {
     NONE = 0,
@@ -13,7 +13,7 @@ enum KySecuType {
     WPA2_AND_WPA3_PERSONAL
 };
 
-class KyWirelessConnectOperation : public QObject
+class KyWirelessConnectOperation : public KyConnectOperation
 {
     Q_OBJECT
 public:
@@ -26,6 +26,7 @@ public:
     bool getConnSecretFlags(QString &, NetworkManager::Setting::SecretFlags &);
 
     void activeWirelessConnect(QString , QString);
+    void deactivateWirelessConnection(const QString activeConnectName, const QString &activeConnectUuid);
 //todo:
 //    void activeWirelessConnectWithPwd(QString , QString, QString);
     void deActiveWirelessConnect(QString &);

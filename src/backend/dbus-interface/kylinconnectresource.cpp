@@ -6,7 +6,7 @@
 #include <NetworkManagerQt/VpnPlugin>
 #include <NetworkManagerQt/VpnSetting>
 
-KyConnectResourse::KyConnectResourse()
+KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
     m_networkdevice = new KyNetworkDeviceResourse();

@@ -36,7 +36,7 @@ void KyNetworkResourceManager::Release()
     }
 }
 
-KyNetworkResourceManager::KyNetworkResourceManager()
+KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(parent)
 {
     insertActiveConnections();
     insertConnections();

@@ -26,7 +26,7 @@
 #include "kylin-network-interface.h"
 #include "utils.h"
 #include "switchbutton.h"
-#include "kylinnetworkresourcemanager.h"
+#include "backend/dbus-interface/kylinnetworkresourcemanager.h"
 #include "kylinwiredwidget.h"
 
 #include <fcntl.h>
@@ -212,6 +212,8 @@ public:
     int m_priHei;
 
     QStringList m_wifi_list_pwd_changed; //WiFi密码以改变的WiFi列表（990/9a0自动回连失败）
+    KyNetworkDeviceResourse m_networkDevice;
+
 
 public slots:
     void onPhysicalCarrierChanged(bool flag);

@@ -53,7 +53,7 @@ public:
     static void Release();
 
 public:
-    explicit KyNetworkResourceManager();
+    explicit KyNetworkResourceManager(QObject *parent = nullptr);
     ~KyNetworkResourceManager();
 
     void removeActiveConnection(int pos);

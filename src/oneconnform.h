@@ -33,7 +33,7 @@
 #include "backthread.h"
 #include "ksimplenm.h"
 #include "wpawifidialog.h"
-#include "kylinnetworkconnect.h"
+//#include "kylinnetworkconnect.h"
 
 #define FRAME_SPEED 150
 #define LIMIT_TIME 90*1000
@@ -168,7 +168,7 @@ private:
     QString key_mgmt, funcBtnQss;
     QPushButton *btnProperty = nullptr;
     QMenu * m_menu = nullptr;
-    KyNetworkConnect *m_networkConnect = nullptr;
+    KyWiredConnectOperation *m_networkConnect = nullptr;
 
 signals:
     void selectedOneWifiForm(QString wifiName, int extendLength);

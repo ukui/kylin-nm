@@ -12,7 +12,7 @@ class KyActiveConnectResourse : public QObject
 {
     Q_OBJECT
 public:
-    KyActiveConnectResourse();
+    explicit KyActiveConnectResourse(QObject *parent = nullptr);
     ~KyActiveConnectResourse();
 
 public:

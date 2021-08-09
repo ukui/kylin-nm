@@ -62,23 +62,22 @@ QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 include(src/singleapplication/qt-single-application.pri)
 
 SOURCES += \
+    src/backend/dbus-interface/kylinconnectitem.cpp \
+    src/backend/dbus-interface/kylinconnectoperation.cpp \
+    src/backend/dbus-interface/kylinconnectresource.cpp \
+    src/backend/dbus-interface/kylinconnectsetting.cpp \
+    src/backend/dbus-interface/kylinnetworkdeviceresource.cpp \
+    src/backend/dbus-interface/kylinnetworkresourcemanager.cpp \
+    src/backend/dbus-interface/kylinvpnconnectitem.cpp \
+    src/backend/dbus-interface/kylinwiredconnectoperation.cpp \
+    src/backend/dbus-interface/kywirelessconnectoperation.cpp \
+    src/backend/dbus-interface/kywirelessnetitem.cpp \
+    src/backend/dbus-interface/kywirelessnetresource.cpp \
+    src/backend/dbus-interface/kyenterpricesettinginfo.cpp \
+    src/backend/dbus-interface/kylinactiveconnectresource.cpp \
+    src/backend/dbus-interface/kylinbluetoothconnectitem.cpp \
     src/backthread.cpp \
-    src/kyenterpricesettinginfo.cpp \
-    src/kylinactiveconnectresource.cpp \
-    src/kylinbluetoothconnectitem.cpp \
-    src/kylinconnectitem.cpp \
-    src/kylinconnectoperation.cpp \
-    src/kylinconnectresource.cpp \
-    src/kylinconnectsetting.cpp \
-    src/kylinnetworkconnect.cpp \
-    src/kylinnetworkdeviceresource.cpp \
-    src/kylinnetworkresourcemanager.cpp \
-    src/kywirelessconnectoperation.cpp \
-    src/kywirelessnetitem.cpp \
-    src/kywirelessnetresource.cpp \
     src/nmdemo.cpp \
-    src/kylinvpnconnectitem.cpp \
-    src/kylinwiredconnectoperation.cpp \
     src/kylinwiredwidget.cpp \
     src/wifi-auth-thread.cpp \
     src/confform.cpp \
@@ -111,23 +110,22 @@ SOURCES += \
 
 
 HEADERS += \
+    src/backend/dbus-interface/kyenterpricesettinginfo.h \
+    src/backend/dbus-interface/kylinactiveconnectresource.h \
+    src/backend/dbus-interface/kylinbluetoothconnectitem.h \
+    src/backend/dbus-interface/kylinconnectitem.h \
+    src/backend/dbus-interface/kylinconnectoperation.h \
+    src/backend/dbus-interface/kylinconnectresource.h \
+    src/backend/dbus-interface/kylinconnectsetting.h \
+    src/backend/dbus-interface/kylinnetworkdeviceresource.h \
+    src/backend/dbus-interface/kylinnetworkresourcemanager.h \
+    src/backend/dbus-interface/kylinvpnconnectitem.h \
+    src/backend/dbus-interface/kylinwiredconnectoperation.h \
+    src/backend/dbus-interface/kywirelessconnectoperation.h \
+    src/backend/dbus-interface/kywirelessnetitem.h \
+    src/backend/dbus-interface/kywirelessnetresource.h \
     src/backthread.h \
-    src/kyenterpricesettinginfo.h \
-    src/kylinactiveconnectresource.h \
-    src/kylinbluetoothconnectitem.h \
-    src/kylinconnectitem.h \
-    src/kylinconnectoperation.h \
-    src/kylinconnectresource.h \
-    src/kylinconnectsetting.h \
-    src/kylinnetworkconnect.h \
-    src/kylinnetworkdeviceresource.h \
-    src/kylinnetworkresourcemanager.h \
-    src/kywirelessconnectoperation.h \
-    src/kywirelessnetitem.h \
-    src/kywirelessnetresource.h \
     src/nmdemo.h \
-    src/kylinvpnconnectitem.h \
-    src/kylinwiredconnectoperation.h \
     src/kylinwiredwidget.h \
     src/wifi-auth-thread.h \
     src/confform.h \

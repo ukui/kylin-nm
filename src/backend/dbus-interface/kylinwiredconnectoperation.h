@@ -9,7 +9,7 @@ class KyWiredConnectOperation : public KyConnectOperation
 {
     Q_OBJECT
 public:
-    KyWiredConnectOperation();
+    explicit KyWiredConnectOperation(QObject *parent = nullptr);
     ~KyWiredConnectOperation();
 
 public:

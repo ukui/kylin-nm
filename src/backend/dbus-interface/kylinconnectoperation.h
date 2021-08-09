@@ -8,7 +8,7 @@ class KyConnectOperation : public QObject
 {
     Q_OBJECT
 public:
-    explicit KyConnectOperation();
+    explicit KyConnectOperation(QObject *parent = nullptr);
     ~KyConnectOperation();
 
 public:
@@ -18,7 +18,7 @@ public:
     void  activateConnection(const QString connectUuid);
     void  deactivateConnection(const QString activeConnectName, const QString &activeConnectUuid);
 
-private:
+public:
     void connectSettingSet(
                         NetworkManager::ConnectionSettings::Ptr connectionSettings,
                         const KyConnectSetting &connectSettingsInfo);

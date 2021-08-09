@@ -43,7 +43,7 @@ class KyConnectSetting : public QObject
 {
     Q_OBJECT
 public:
-    KyConnectSetting();
+    explicit KyConnectSetting(QObject *parent = nullptr);
     ~KyConnectSetting();
 
 public:

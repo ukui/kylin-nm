@@ -18,7 +18,7 @@
 #include "kylinconnectsetting.h"
 #include <QDebug>
 
-KyConnectSetting::KyConnectSetting()
+KyConnectSetting::KyConnectSetting(QObject *parent) : QObject(parent)
 {
     m_connectName = "";
     m_ifaceName = "";

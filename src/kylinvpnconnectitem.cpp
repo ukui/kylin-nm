@@ -2,7 +2,7 @@
 #include "kylinvpnconnectitem.h"
 
 
-KyVpnConnectItem::KyVpnConnectItem()
+KyVpnConnectItem::KyVpnConnectItem(QObject *parent) : QObject(parent)
 {
     m_vpnName = "";
     m_vpnUuid = "";

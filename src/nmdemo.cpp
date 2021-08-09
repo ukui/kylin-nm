@@ -33,7 +33,7 @@ NmDemo::NmDemo(QWidget *parent) : QDialog(parent)
 
     //init ptr
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
-    m_wco = new KyWirelessConnectOperation(this);
+    m_wco = new KyWirelessConnectOperation();
     m_wnr = new KyWirelessNetResource(this);
     m_timer = new QTimer(this);
 

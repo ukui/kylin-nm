@@ -70,7 +70,6 @@ SOURCES += \
     src/kylinconnectoperation.cpp \
     src/kylinconnectresource.cpp \
     src/kylinconnectsetting.cpp \
-    src/kylinnetworkconnect.cpp \
     src/kylinnetworkdeviceresource.cpp \
     src/kylinnetworkresourcemanager.cpp \
     src/kywirelessconnectoperation.cpp \
@@ -119,7 +118,6 @@ HEADERS += \
     src/kylinconnectoperation.h \
     src/kylinconnectresource.h \
     src/kylinconnectsetting.h \
-    src/kylinnetworkconnect.h \
     src/kylinnetworkdeviceresource.h \
     src/kylinnetworkresourcemanager.h \
     src/kywirelessconnectoperation.h \

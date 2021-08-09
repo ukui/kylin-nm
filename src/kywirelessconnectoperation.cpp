@@ -74,7 +74,7 @@ NetworkManager::ConnectionSettings::Ptr assembleWpaXPskHiddenSettings(QString &s
     return settings;
 }
 
-KyWirelessConnectOperation::KyWirelessConnectOperation(QObject *parent) : QObject(parent)
+KyWirelessConnectOperation::KyWirelessConnectOperation(QObject *parent) : KyConnectOperation(parent)
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifinEnabledChanged, this, &KyWirelessConnectOperation::wifinEnabledChanged);
@@ -87,6 +87,9 @@ KyWirelessConnectOperation::~KyWirelessConnectOperation()
 
 void KyWirelessConnectOperation::activeWirelessConnect(QString devIfaceName, QString connUuid)
 {
+    activateConnection(connUuid);
+    return;
+#if 0
     NetworkManager::Connection::Ptr conn;
     conn = m_networkResourceInstance->getConnect(connUuid);
     if (conn.isNull())
@@ -118,6 +121,13 @@ void KyWirelessConnectOperation::activeWirelessConnect(QString devIfaceName, QSt
         qDebug() << "5";
         watcher->deleteLater();
     });
+#endif
+}
+
+void KyWirelessConnectOperation::deactivateWirelessConnection(const QString activeConnectName, const QString &activeConnectUuid)
+{
+    deactivateConnection(activeConnectName, activeConnectUuid);
+    return;
 }
 
 //void KyWirelessConnectOperation::activeWirelessConnectWithPwd(QString devIfaceName, QString connUuid, QString psk)

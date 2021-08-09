@@ -9,7 +9,7 @@ class KyVpnConnectItem : public QObject
 {
     Q_OBJECT
 public:
-    explicit KyVpnConnectItem();
+    explicit KyVpnConnectItem(QObject *parent = nullptr);
     ~KyVpnConnectItem();
     
 public:

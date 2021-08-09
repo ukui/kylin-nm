@@ -229,6 +229,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     m_menu = new QMenu();//右键菜单
     connect(m_menu, &QMenu::triggered, this, &OneConnForm::onMenuTriggered);
 
+#if 0
     m_networkConnect = new KyNetworkConnect();
     connect(this, &OneConnForm::activateWirelessConnection, m_networkConnect, &KyNetworkConnect::onActivateWirelessConnection);
     connect(this, &OneConnForm::activateWirelessConnectionWithPWD, m_networkConnect, &KyNetworkConnect::onActivateWirelessConnectionWithPWD);
@@ -238,7 +239,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     connect(m_networkConnect, &KyNetworkConnect::starWaiting, [=](){
         this->startWifiWaiting(true);
     });
-
+#endif
 
     connect(this, SIGNAL(connDone(int)), mw, SLOT(connWifiDone(int)));
 }

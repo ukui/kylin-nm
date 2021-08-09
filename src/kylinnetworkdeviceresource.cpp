@@ -1,7 +1,7 @@
 
 #include "kylinnetworkdeviceresource.h"
 
-KyNetworkDeviceResourse::KyNetworkDeviceResourse()
+KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(parent)
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
 
@@ -74,7 +74,7 @@ void KyNetworkDeviceResourse::getHardwareInfo(QString ifaceName, QString &hardAd
         {
             hardAddress = "";
             bandWith = 0;
-            qWarning()<<"the network device type is undefined"<<connectDevice->type();
+            qWarning()<<"[KyNetworkDeviceResourse]" <<"the network device type is undefined"<<connectDevice->type();
             break;
         }
     }

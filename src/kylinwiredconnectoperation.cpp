@@ -24,8 +24,9 @@
 #include <NetworkManagerQt/Ipv6Setting>
 #include <NetworkManagerQt/WiredSetting>
 
-KyWiredConnectOperation::KyWiredConnectOperation()
+KyWiredConnectOperation::KyWiredConnectOperation(QObject *parent) : KyConnectOperation(parent)
 {
+
 }
 
 KyWiredConnectOperation::~KyWiredConnectOperation()
@@ -34,10 +35,33 @@ KyWiredConnectOperation::~KyWiredConnectOperation()
 
 void KyWiredConnectOperation::createWiredConnect(KyConnectSetting &connectSettingsInfo)
 {
-    qDebug()<<"create wired connect";
+    qDebug()<<"[KyWiredConnectOperation]" << "create connect ";
     connectSettingsInfo.dumpInfo();
 
-    createConnect(connectSettingsInfo);
+    NetworkManager::ConnectionSettings::Ptr wiredConnectionSettings = NetworkManager::ConnectionSettings::Ptr(new NetworkManager::ConnectionSettings(NetworkManager::ConnectionSettings::Wired));
+    connectSettingSet(wiredConnectionSettings, connectSettingsInfo);
+
+    NetworkManager::Ipv4Setting::Ptr ipv4Setting = wiredConnectionSettings->setting(NetworkManager::Setting::Ipv4).dynamicCast<NetworkManager::Ipv4Setting>();
+    ipv4SettingSet(ipv4Setting, connectSettingsInfo);
+
+    NetworkManager::Ipv6Setting::Ptr ipv6Setting = wiredConnectionSettings->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
+    ipv6SettingSet(ipv6Setting, connectSettingsInfo);
+
+    NetworkManager::WiredSetting::Ptr wiredSetting = wiredConnectionSettings->setting(NetworkManager::Setting::Wired).dynamicCast<NetworkManager::WiredSetting>();
+    wiredSetting->setInitialized(true);
+
+    QDBusPendingCallWatcher * watcher;
+    watcher = new QDBusPendingCallWatcher{NetworkManager::addConnection(wiredConnectionSettings->toMap()), this};
+    connect(watcher, &QDBusPendingCallWatcher::finished, [this](QDBusPendingCallWatcher * watcher) {
+        if (watcher->isError() || !watcher->isValid()) {
+            QString errorMessage = tr("create wired connection failed: ") + watcher->error().message();
+            qWarning()<<errorMessage;
+            emit this->createConnectionError(errorMessage);
+         } else {
+            qDebug()<<"create wired connect complete";
+         }
+         watcher->deleteLater();
+    });
 
     return;
 }

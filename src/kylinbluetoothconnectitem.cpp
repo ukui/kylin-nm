@@ -1,7 +1,7 @@
 #include "kylinbluetoothconnectitem.h"
 
 
-KyBluetoothConnectItem::KyBluetoothConnectItem()
+KyBluetoothConnectItem::KyBluetoothConnectItem(QObject *parent) : QObject(parent)
 {
     m_connectName = "";
     m_connectUuid = "";

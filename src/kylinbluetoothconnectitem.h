@@ -10,7 +10,7 @@ class KyBluetoothConnectItem : public QObject
 {
     Q_OBJECT
 public:
-    explicit KyBluetoothConnectItem();
+    explicit KyBluetoothConnectItem(QObject *parent = nullptr);
     ~KyBluetoothConnectItem();
 
 public:

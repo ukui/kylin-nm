@@ -10,7 +10,7 @@ class KyNetworkDeviceResourse : public QObject
 {
     Q_OBJECT
 public:
-    KyNetworkDeviceResourse();
+    explicit KyNetworkDeviceResourse(QObject *parent = nullptr);
     ~KyNetworkDeviceResourse();
 
 signals:

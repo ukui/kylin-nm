@@ -24,7 +24,7 @@
 #include <NetworkManagerQt/Ipv6Setting>
 #include <NetworkManagerQt/WiredSetting>
 
-KyConnectOperation::KyConnectOperation()
+KyConnectOperation::KyConnectOperation(QObject *parent) : QObject(parent)
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
 }
@@ -97,33 +97,7 @@ void KyConnectOperation::connectSettingSet(
 
 void KyConnectOperation::createConnect(KyConnectSetting &connectSettingsInfo)
 {
-    qDebug()<<"create connect";
-    connectSettingsInfo.dumpInfo();
-    NetworkManager::ConnectionSettings::Ptr wiredConnectionSettings = NetworkManager::ConnectionSettings::Ptr(new NetworkManager::ConnectionSettings(NetworkManager::ConnectionSettings::Wired));
-    connectSettingSet(wiredConnectionSettings, connectSettingsInfo);
-
-    NetworkManager::Ipv4Setting::Ptr ipv4Setting = wiredConnectionSettings->setting(NetworkManager::Setting::Ipv4).dynamicCast<NetworkManager::Ipv4Setting>();
-    ipv4SettingSet(ipv4Setting, connectSettingsInfo);
-
-    NetworkManager::Ipv6Setting::Ptr ipv6Setting = wiredConnectionSettings->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
-    ipv6SettingSet(ipv6Setting, connectSettingsInfo);
-
-    NetworkManager::WiredSetting::Ptr wiredSetting = wiredConnectionSettings->setting(NetworkManager::Setting::Wired).dynamicCast<NetworkManager::WiredSetting>();
-    wiredSetting->setInitialized(true);
-
-    QDBusPendingCallWatcher * watcher;
-    watcher = new QDBusPendingCallWatcher{NetworkManager::addConnection(wiredConnectionSettings->toMap()), this};
-    connect(watcher, &QDBusPendingCallWatcher::finished, [this](QDBusPendingCallWatcher * watcher) {
-        if (watcher->isError() || !watcher->isValid()) {
-            QString errorMessage = tr("create wired connection failed: ") + watcher->error().message();
-            qWarning()<<errorMessage;
-            emit this->createConnectionError(errorMessage);
-         } else {
-            qDebug()<<"create wired connect complete";
-         }
-         watcher->deleteLater();
-    });
-
+    qDebug()<<"create connect need to do";
     return;
 }
 
@@ -149,8 +123,8 @@ void KyConnectOperation::updateConnect(const QString &connectUuid, const KyConne
     NetworkManager::Ipv6Setting::Ptr ipv6Setting = connectionSettings->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
     ipv6SettingSet(ipv6Setting, connectSettingsInfo);
 
-    NetworkManager::WiredSetting::Ptr wiredSetting = connectionSettings->setting(NetworkManager::Setting::Wired).dynamicCast<NetworkManager::WiredSetting>();
-    wiredSetting->setInitialized(true);
+//    NetworkManager::WiredSetting::Ptr wiredSetting = connectionSettings->setting(NetworkManager::Setting::Wired).dynamicCast<NetworkManager::WiredSetting>();
+//    wiredSetting->setInitialized(true);
 
     connectPtr->update(connectionSettings->toMap());
 
@@ -192,7 +166,7 @@ void KyConnectOperation::activateConnection(const QString connectUuid)
         Q_EMIT activateConnectionError(errorMessage);
         return;
     }
-
+#if 0
     if (NetworkManager::ConnectionSettings::Wired != connectPtr->settings()->connectionType()) {
         QString errorMessage = tr("the connect type is")
                                 + connectPtr->settings()->connectionType()
@@ -201,7 +175,7 @@ void KyConnectOperation::activateConnection(const QString connectUuid)
         Q_EMIT activateConnectionError(errorMessage);
         return;
     }
-
+#endif
     connectPath = connectPtr->path();
     connectName = connectPtr->name();
     deviceName = connectPtr->settings()->interfaceName();
@@ -240,7 +214,7 @@ void KyConnectOperation::activateConnection(const QString connectUuid)
     watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
     connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName, deviceName] (QDBusPendingCallWatcher * watcher) {
         if (watcher->isError() || !watcher->isValid()) {
-            QString errorMessage = tr("activate  connection failed: ") + watcher->error().message();
+            QString errorMessage = tr("activate connection failed: ") + watcher->error().message();
             qWarning()<<errorMessage;
             emit this->activateConnectionError(errorMessage);
          } else {

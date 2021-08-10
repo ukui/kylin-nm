@@ -43,7 +43,7 @@
 #define WINDOW_HEIGHT_TLP 670
 #define WINDOW_HEIGHT_ELSE 360
 
-class MainWindow;
+class OldMainWindow;
 
 typedef QList<QObject*> QObjectList;
 
@@ -91,8 +91,8 @@ class WpaWifiDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit WpaWifiDialog(QWidget *parent = nullptr, MainWindow *mw = 0, QString conname = 0);
-    explicit WpaWifiDialog(QWidget *parent = nullptr, MainWindow *mw = 0, WifiConfig *wifiConfig = nullptr);
+    explicit WpaWifiDialog(QWidget *parent = nullptr, OldMainWindow *mw = 0, QString conname = 0);
+    explicit WpaWifiDialog(QWidget *parent = nullptr, OldMainWindow *mw = 0, WifiConfig *wifiConfig = nullptr);
     ~WpaWifiDialog();
 
 private:
@@ -133,7 +133,7 @@ private:
     QStringList user_list;
     QString key_mgmt = "wpa-eap";
 
-    MainWindow *mw;
+    OldMainWindow *mw;
     QObjectList m_frameList;
 
     void setEditorEnable(bool is_checking); //设置是否禁用输入

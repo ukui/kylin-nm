@@ -41,24 +41,19 @@ DbusAdaptor::~DbusAdaptor()
 
 void DbusAdaptor::showMainWindow()
 {
-    // handle method call com.kylin.weather.showMainWindow
-    //edited the code manually by lixiang
-    //parent()->handleIconClicked();
-    parent()->on_showWindowAction();
+    parent()->show();
 }
 
 void DbusAdaptor::showPb(QString type, QString name)
 {
-    parent()->showPb(type, name);
 }
 
 void DbusAdaptor::requestRefreshWifiList()
 {
-    parent()->requestRefreshWifiList();
 }
 
 QVector<QStringList> DbusAdaptor::getWifiList()
 {
-    return parent()->dbus_wifiList;
+    return QVector<QStringList>();
 }
 

@@ -36,7 +36,7 @@
 
 QString llname, lwname, hideWiFiConn;
 
-MainWindow::MainWindow(QWidget *parent) :
+OldMainWindow::OldMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     firstlyStart(); //先执行一些不耗时的一级启动项
 }
 
-MainWindow::~MainWindow()
+OldMainWindow::~OldMainWindow()
 {
     trayIcon->deleteLater();
     trayIconMenu->deleteLater();
@@ -62,7 +62,7 @@ MainWindow::~MainWindow()
 /**
  * @brief MainWindow::firstlyStart 一级启动
  */
-void MainWindow::firstlyStart()
+void OldMainWindow::firstlyStart()
 {
     qDebug()<<"Loading qss...";
     UseQssFile::setStyle("style.qss");
@@ -89,10 +89,10 @@ void MainWindow::firstlyStart()
     hideWiFiConn = "Connect to Hidden WLAN Network";
 
     createTrayIcon();
-    connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
-    connect(mShowWindow, &QAction::triggered, this, &MainWindow::on_showWindowAction);
-    connect(mAdvConf, &QAction::triggered, this, &MainWindow::actionTriggerSlots);
-    connect(this,&MainWindow::showPbSignal,trayIcon,&QSystemTrayIcon::activated);
+    connect(trayIcon, &QSystemTrayIcon::activated, this, &OldMainWindow::iconActivated);
+    connect(mShowWindow, &QAction::triggered, this, &OldMainWindow::on_showWindowAction);
+    connect(mAdvConf, &QAction::triggered, this, &OldMainWindow::actionTriggerSlots);
+    connect(this,&OldMainWindow::showPbSignal,trayIcon,&QSystemTrayIcon::activated);
 
     //checkSingleAndShowTrayicon();
     //trayIcon->setVisible(true);
@@ -108,7 +108,7 @@ void MainWindow::firstlyStart()
 /**
  * @brief MainWindow::secondaryStart 二级启动
  */
-void MainWindow::secondaryStart()
+void OldMainWindow::secondaryStart()
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
     //m_networkResourceInstance = new KyNetworkResourceManager();
@@ -158,10 +158,10 @@ void MainWindow::secondaryStart()
     getSystemFontFamily();//建立GSetting监听系统字体
 
     qDebug()<<"Init button connections...";
-    connect(ui->btnNetList, &QPushButton::clicked, this, &MainWindow::onBtnNetListClickeds);
-    connect(btnWireless, &SwitchButton::clicked,this, &MainWindow::onBtnWifiClicked);
-    connect(btnWired, &SwitchButton::clicked, this, &MainWindow::onBtnLanClicked);
-    connect(this, &MainWindow::onWiredDeviceChanged, this, &MainWindow::setLanSwitchStatus);
+    connect(ui->btnNetList, &QPushButton::clicked, this, &OldMainWindow::onBtnNetListClickeds);
+    connect(btnWireless, &SwitchButton::clicked,this, &OldMainWindow::onBtnWifiClicked);
+    connect(btnWired, &SwitchButton::clicked, this, &OldMainWindow::onBtnLanClicked);
+    connect(this, &OldMainWindow::onWiredDeviceChanged, this, &OldMainWindow::setLanSwitchStatus);
 
     QVariant wifi_state = BackThread::getSwitchState(WIFI_SWITCH_OPENED);
     QVariant lan_state = BackThread::getSwitchState(LAN_SWITCH_OPENED);
@@ -203,7 +203,7 @@ void MainWindow::secondaryStart()
     m_load_finished = true;
 }
 
-void MainWindow::checkSingleAndShowTrayicon()
+void OldMainWindow::checkSingleAndShowTrayicon()
 {
     int fd = 0;
     try {
@@ -230,12 +230,12 @@ void MainWindow::checkSingleAndShowTrayicon()
     }
 }
 
-void MainWindow::justShowTrayIcon()
+void OldMainWindow::justShowTrayIcon()
 {
     trayIcon->setVisible(true);
 }
 
-bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+bool OldMainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == ui->btnNetList) {
         if (event->type() == QEvent::HoverEnter) {
@@ -272,7 +272,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 // 初始化控件、网络、定时器
 
 // 初始化界面各控件
-void MainWindow::editQssString()
+void OldMainWindow::editQssString()
 {
     btnOffQss = "QLabel{min-width: 37px; min-height: 37px;max-width:37px; max-height: 37px;border-radius: 4px; background-color:rgba(255,255,255,0)}";
     btnOnQss = "QLabel{min-width: 37px; min-height: 37px;max-width:37px; max-height: 37px;border-radius: 4px; background-color:rgba(61,107,229,1)}";
@@ -288,7 +288,7 @@ void MainWindow::editQssString()
                  "QPushButton:Pressed{border-radius:4px;background-color:rgba(255,255,255,0);color:rgba(61,107,229,0.97);font-size:14px;}";
 }
 
-void MainWindow::createTopLanUI()
+void OldMainWindow::createTopLanUI()
 {
     qDebug()<<"Creating Top Lan UI...";
     topLanListWidget = new KyWiredWidget(ui->centralWidget);
@@ -296,7 +296,7 @@ void MainWindow::createTopLanUI()
     topLanListWidget->move(W_LEFT_AREA, Y_TOP_ITEM);
     topLanListWidget->resize(W_TOP_LIST_WIDGET, H_NORMAL_ITEM + H_GAP_UP + X_ITEM);
 
-    connect(topLanListWidget, &KyWiredWidget::updateSpeed, this, &MainWindow::on_setNetSpeeds);
+    connect(topLanListWidget, &KyWiredWidget::updateSpeed, this, &OldMainWindow::on_setNetSpeeds);
 
     /*顶部的一个item*/
     lbTopLanList = new QLabel(topLanListWidget);
@@ -317,7 +317,7 @@ void MainWindow::createTopLanUI()
     connect(btnCreateNet,SIGNAL(clicked()),this,SLOT(onBtnCreateNetClicked()));
 }
 
-void MainWindow::createTopWifiUI()
+void OldMainWindow::createTopWifiUI()
 {
     qDebug()<<"Creating Top Wifi UI...";
     topWifiListWidget = new QWidget(ui->centralWidget);
@@ -343,7 +343,7 @@ void MainWindow::createTopWifiUI()
     connect(btnAddNet,SIGNAL(clicked()),this,SLOT(onBtnAddNetClicked()));
 }
 
-void MainWindow::createOtherUI()
+void OldMainWindow::createOtherUI()
 {
     qDebug()<<"Creating Other Ui...";
     lbLoadDown = new QLabel(ui->centralWidget);
@@ -372,7 +372,7 @@ void MainWindow::createOtherUI()
     lbNoItemTip->hide();
 }
 
-void MainWindow::createListAreaUI()
+void OldMainWindow::createListAreaUI()
 {
     qDebug()<<"Creating List Area Ui...";
     scrollAreal = new QScrollArea(ui->centralWidget);
@@ -422,7 +422,7 @@ void MainWindow::createListAreaUI()
     //scrollAreaw->verticalScrollBar()->setStyleSheet(scrollBarQss);////
 }
 
-void MainWindow::createLeftAreaUI()
+void OldMainWindow::createLeftAreaUI()
 {
     qDebug()<<"Creating Left Area Ui...";
     btnWireless = new SwitchButton(this);
@@ -507,7 +507,7 @@ void MainWindow::createLeftAreaUI()
 }
 
 // 初始化有线网列表,初始化可回连wifi列表
-void MainWindow::initLanSlistAndGetReconnectNetList()
+void OldMainWindow::initLanSlistAndGetReconnectNetList()
 {
     qDebug()<<"Init Net List...";
     canReconnectWifiList.clear();
@@ -550,7 +550,7 @@ void MainWindow::initLanSlistAndGetReconnectNetList()
 }
 
 // 初始化网络
-void MainWindow::initNetwork()
+void OldMainWindow::initNetwork()
 {
     qDebug()<<"Init Net interface & list...";
     BackThread *bt = new BackThread();
@@ -640,7 +640,7 @@ void MainWindow::initNetwork()
 }
 
 // 初始化定时器
-void MainWindow::initTimer()
+void OldMainWindow::initTimer()
 {
     qDebug()<<"Init Timer...";
     //应用启动后，需要连接可连接的网络
@@ -680,7 +680,7 @@ void MainWindow::initTimer()
 }
 
 //初始化已经连接网络的DNS
-void MainWindow::initActNetDNS()
+void OldMainWindow::initActNetDNS()
 {
     qDebug()<<"Init Active Net Dns...";
     QList<QString> currConnLanSsidUuidState =objKyDBus->getAtiveLanSsidUuidState();
@@ -695,7 +695,7 @@ void MainWindow::initActNetDNS()
 ///////////////////////////////////////////////////////////////////////////////
 // 任务栏托盘管理、托盘图标处理
 
-void MainWindow::createTrayIcon()
+void OldMainWindow::createTrayIcon()
 {
     qDebug()<<"Creating Tray Icon...";
     trayIcon = new QSystemTrayIcon();
@@ -748,7 +748,7 @@ void MainWindow::createTrayIcon()
     setTrayIcon(iconLanOnline);
 }
 
-void MainWindow::iconStep()
+void OldMainWindow::iconStep()
 {
     if (currentIconIndex > 11) {
         currentIconIndex = 0;
@@ -757,12 +757,12 @@ void MainWindow::iconStep()
     currentIconIndex ++;
 }
 
-void MainWindow::setTrayIcon(QIcon icon)
+void OldMainWindow::setTrayIcon(QIcon icon)
 {
     trayIcon->setIcon(icon);
 }
 
-void MainWindow::setTrayIconOfWifi(int signal){
+void OldMainWindow::setTrayIconOfWifi(int signal){
     if (signal > 75) {
         setTrayIcon(iconWifiFull);
     } else if(signal > 55 && signal <= 75) {
@@ -774,7 +774,7 @@ void MainWindow::setTrayIconOfWifi(int signal){
     }
 }
 
-void MainWindow::setTrayLoading(bool isLoading)
+void OldMainWindow::setTrayLoading(bool isLoading)
 {
     if (isLoading) {
         currentIconIndex = 0;
@@ -784,7 +784,7 @@ void MainWindow::setTrayLoading(bool isLoading)
     }
 }
 
-void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
+void OldMainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if (!m_load_finished) {
         m_secondary_start_timer->stop();
@@ -841,7 +841,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
-void MainWindow::handleIconClicked()
+void OldMainWindow::handleIconClicked()
 {
     QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
     QRect screenGeometry = qApp->primaryScreen()->geometry();
@@ -939,7 +939,7 @@ void MainWindow::handleIconClicked()
     }
 }
 
-void MainWindow::showTrayIconMenu()
+void OldMainWindow::showTrayIconMenu()
 {
     QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
     QRect screenGeometry = qApp->primaryScreen()->geometry();
@@ -982,7 +982,7 @@ void MainWindow::showTrayIconMenu()
     }
 }
 
-void MainWindow::on_showWindowAction()
+void OldMainWindow::on_showWindowAction()
 {
     if (!m_load_finished) {
         m_secondary_start_timer->stop();
@@ -998,14 +998,14 @@ void MainWindow::on_showWindowAction()
 ///////////////////////////////////////////////////////////////////////////////
 //加载动画,获取当前连接的网络和状态并设置图标
 
-void MainWindow::startLoading()
+void OldMainWindow::startLoading()
 {
     qDebug()<<"Start loading...";
     loading->startLoading();
     setTrayLoading(true);
 }
 
-void MainWindow::stopLoading()
+void OldMainWindow::stopLoading()
 {
     qDebug()<<"Stop loading!";
     loading->stopLoading();
@@ -1013,7 +1013,7 @@ void MainWindow::stopLoading()
     getActiveInfoAndSetTrayIcon();
 }
 
-void MainWindow::on_checkOverTime()
+void OldMainWindow::on_checkOverTime()
 {
     QString cmd = "kill -9 $(pidof nmcli)"; //杀掉当前正在进行的有关nmcli命令的进程
     int status = system(cmd.toUtf8().data());
@@ -1025,7 +1025,7 @@ void MainWindow::on_checkOverTime()
     is_stop_check_net_state = 0;
 }
 
-void MainWindow::getActiveInfoAndSetTrayIcon()
+void OldMainWindow::getActiveInfoAndSetTrayIcon()
 {
     //bool hasNetConnecting =objKyDBus->checkNetworkConnectivity();
     //if (hasNetConnecting) {
@@ -1078,7 +1078,7 @@ void MainWindow::getActiveInfoAndSetTrayIcon()
 //网络设备管理
 
 //网线插拔处理,由kylin-dbus-interface.cpp调用
-void MainWindow::onPhysicalCarrierChanged(bool flag)
+void OldMainWindow::onPhysicalCarrierChanged(bool flag)
 {
 #if 0
     this->startLoading();
@@ -1115,7 +1115,7 @@ void MainWindow::onPhysicalCarrierChanged(bool flag)
 #endif
 }
 
-void MainWindow::onCarrierUpHandle()
+void OldMainWindow::onCarrierUpHandle()
 {
 #if 0
     wiredCableUpTimer->stop();
@@ -1131,7 +1131,7 @@ void MainWindow::onCarrierUpHandle()
 #endif
 }
 
-void MainWindow::onCarrierDownHandle()
+void OldMainWindow::onCarrierDownHandle()
 {
     //syslog(LOG_DEBUG, "Wired net is disconnected");
 #if 0
@@ -1150,7 +1150,7 @@ void MainWindow::onCarrierDownHandle()
 #endif
 }
 
-void MainWindow::onDeleteLan()
+void OldMainWindow::onDeleteLan()
 {
     deleteLanTimer->stop();
     BackThread *btn_bt = new BackThread();
@@ -1172,7 +1172,7 @@ void MainWindow::onDeleteLan()
     is_stop_check_net_state = 0;
 }
 
-void MainWindow::checkIfWiredNetExist()
+void OldMainWindow::checkIfWiredNetExist()
 {
     qDebug()<<"Checking Wired Net (num is 0?)...";
     if (objKyDBus->getWiredNetworkNumber() == 0) {
@@ -1181,7 +1181,7 @@ void MainWindow::checkIfWiredNetExist()
 }
 
 //无线网卡插拔处理
-void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
+void OldMainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
 {
     //仅处理无线网卡插入情况
     objKyDBus->isWirelessCardOn = false;
@@ -1201,7 +1201,7 @@ void MainWindow::onNetworkDeviceAdded(QDBusObjectPath objPath)
     }
 }
 
-void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
+void OldMainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
 {
     if (objKyDBus->multiWirelessPaths.isEmpty())
         return;
@@ -1222,7 +1222,7 @@ void MainWindow::onNetworkDeviceRemoved(QDBusObjectPath objPath)
     }
 }
 
-void MainWindow::checkIsWirelessDevicePluggedIn()
+void OldMainWindow::checkIsWirelessDevicePluggedIn()
 {
     qDebug()<<"Checking wireless device...";
     //启动时判断是否有无线网卡
@@ -1234,7 +1234,7 @@ void MainWindow::checkIsWirelessDevicePluggedIn()
     }
 }
 
-void MainWindow::getLanBandWidth()
+void OldMainWindow::getLanBandWidth()
 {
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
@@ -1245,7 +1245,7 @@ void MainWindow::getLanBandWidth()
 }
 
 //检测网络设备状态
-bool MainWindow::checkLanOn()
+bool OldMainWindow::checkLanOn()
 {
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
@@ -1258,7 +1258,7 @@ bool MainWindow::checkLanOn()
     }
 }
 
-bool MainWindow::checkWlOn()
+bool OldMainWindow::checkWlOn()
 {
     BackThread *bt = new BackThread();
     IFace *iface = bt->execGetIface();
@@ -1275,7 +1275,7 @@ bool MainWindow::checkWlOn()
 ///////////////////////////////////////////////////////////////////////////////
 //有线网与无线网按钮响应
 
-void MainWindow::onBtnNetClicked()
+void OldMainWindow::onBtnNetClicked()
 {
     if (checkLanOn()) {
         QThread *t = new QThread();
@@ -1302,7 +1302,7 @@ void MainWindow::onBtnNetClicked()
     this->startLoading();
 }
 
-void MainWindow::onBtnWifiClicked(int flag)
+void OldMainWindow::onBtnWifiClicked(int flag)
 {
     qDebug()<<"Value of flag passed into function 'onBtnWifiClicked' is:  "<<flag;
     //syslog(LOG_DEBUG, "Value of flag passed into function 'onBtnWifiClicked' is: %d", flag);
@@ -1408,7 +1408,7 @@ void MainWindow::onBtnWifiClicked(int flag)
  * @brief MainWindow::onBtnLanClicked 有线网按钮状态更改
  * @param flag falg=0 0 UI关闭， 1 UI打开 ，2收到打开信息，3收到关闭信息，4有线设备插入，5有线设备拔出
  */
-void MainWindow::onBtnLanClicked(int flag)
+void OldMainWindow::onBtnLanClicked(int flag)
 {
     switch (flag) {
     case 0: {
@@ -1477,7 +1477,7 @@ void MainWindow::onBtnLanClicked(int flag)
     }
 }
 
-void MainWindow::setLanSwitchStatus(bool is_opened)
+void OldMainWindow::setLanSwitchStatus(bool is_opened)
 {
     if (is_opened) {
         btnWired->setSwitchStatus(true);
@@ -1488,7 +1488,7 @@ void MainWindow::setLanSwitchStatus(bool is_opened)
     }
 }
 
-void MainWindow::onBtnNetListClickeds(int flag)
+void OldMainWindow::onBtnNetListClickeds(int flag)
 {
     this->scrollAreal->show();
     topLanListWidget->constructWiredActiveConnectList();
@@ -1502,7 +1502,7 @@ void MainWindow::onBtnNetListClickeds(int flag)
     lbLoadUpImg->show();
 }
 
-void MainWindow::onBtnNetListClicked(int flag)
+void OldMainWindow::onBtnNetListClicked(int flag)
 {
 #if 0
     this->is_btnLanList_clicked = 1;
@@ -1561,7 +1561,7 @@ void MainWindow::onBtnNetListClicked(int flag)
 #endif
 }
 
-void MainWindow::on_btnWifiList_clicked()
+void OldMainWindow::on_btnWifiList_clicked()
 {
     is_stop_check_net_state = 1;
     current_wifi_list_state = LOAD_WIFI_LIST;
@@ -1677,14 +1677,14 @@ void MainWindow::on_btnWifiList_clicked()
     bt->deleteLater();
 }
 
-void MainWindow::onLoadWifiListAfterScan()
+void OldMainWindow::onLoadWifiListAfterScan()
 {
     current_wifi_list_state = LOAD_WIFI_LIST;
     this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC); //加载wifi列表
     objKyDBus->getWirelessCardName();
 }
 
-void MainWindow::on_wifi_changed()
+void OldMainWindow::on_wifi_changed()
 {
     QString actWifiUuid = objKyDBus->getActiveWifiUuid();
     objKyDBus->getConnectNetIp(actWifiUuid);
@@ -1715,7 +1715,7 @@ void MainWindow::on_wifi_changed()
  * @brief MainWindow::onNewConnAdded 获取新的连接列表
  * @param type 0为有线，1为无线
  */
-void MainWindow::onNewConnAdded(int type) {
+void OldMainWindow::onNewConnAdded(int type) {
     if (type == 1) {
 //        isAddedWifi = true;
     }
@@ -1726,7 +1726,7 @@ void MainWindow::onNewConnAdded(int type) {
 //网络列表加载与更新
 
 // 获取lan列表回调
-void MainWindow::getLanListDone(QStringList slist)
+void OldMainWindow::getLanListDone(QStringList slist)
 {
 #if 0
     if (this->is_btnWifiList_clicked == 1) {
@@ -1989,7 +1989,7 @@ void MainWindow::getLanListDone(QStringList slist)
 }
 
 // 获取wifi列表回调
-void MainWindow::onRequestRevalueUpdateWifi()
+void OldMainWindow::onRequestRevalueUpdateWifi()
 {
     if (!isReConnAfterTurnOnWifi) {
         isReConnAfterTurnOnWifi = false;
@@ -1999,7 +1999,7 @@ void MainWindow::onRequestRevalueUpdateWifi()
 }
 
 // 获取wifi列表回调
-void MainWindow::getWifiListDone(QStringList slist)
+void OldMainWindow::getWifiListDone(QStringList slist)
 {
     //要求使用上一次获取到的列表
     if (this->ksnm->isUseOldWifiSlist) {
@@ -2121,7 +2121,7 @@ void MainWindow::getWifiListDone(QStringList slist)
 }
 
 // 获取已保存的连接列表回调
-void MainWindow::getConnListDone(QStringList slist)
+void OldMainWindow::getConnListDone(QStringList slist)
 {
     if (isInitConnList) {
         for (int i = 1; i < slist.length() - 1; i++) {
@@ -2219,7 +2219,7 @@ void MainWindow::getConnListDone(QStringList slist)
 //    return ret;
 //}
 
-QStringList MainWindow::priorityList(QStringList slist){
+QStringList OldMainWindow::priorityList(QStringList slist){
     QStringList ret;
     ret.append(slist[0]);
     QString headLine = slist.at(0);
@@ -2273,7 +2273,7 @@ QStringList MainWindow::priorityList(QStringList slist){
     return ret;
 }
 
-QStringList MainWindow::sortApByFreq(QStringList list, int freqIndex, int signalIndex)
+QStringList OldMainWindow::sortApByFreq(QStringList list, int freqIndex, int signalIndex)
 {
     QStringList ret;
     QStringList p1,p2,p3,p4,p5,p6,p7;
@@ -2306,12 +2306,12 @@ QStringList MainWindow::sortApByFreq(QStringList list, int freqIndex, int signal
     return ret;
 }
 
-QVector<QStringList> MainWindow::repetitionFilter(QVector<QStringList>){
+QVector<QStringList> OldMainWindow::repetitionFilter(QVector<QStringList>){
     QVector<QStringList> ret;
     return ret;
 }
 
-QStringList MainWindow::sortApByCategory(QStringList list,int cateIndex){
+QStringList OldMainWindow::sortApByCategory(QStringList list,int cateIndex){
     QStringList ret;
     for(auto line:list){
         int conCate = line.mid(cateIndex).trimmed().toInt();
@@ -2336,7 +2336,7 @@ QStringList MainWindow::sortApByCategory(QStringList list,int cateIndex){
 
 //进行wifi列表优化选择，分为2.4G和5G进行选择，先每种频率形成一个列表
 //同一个列表中同名wifi只有一个，再按信号强度由大到小合并列表
-void MainWindow::wifiListOptimize(QStringList& slist)
+void OldMainWindow::wifiListOptimize(QStringList& slist)
 {
     if (slist.size() < 2) return ;
 
@@ -2434,7 +2434,7 @@ void MainWindow::wifiListOptimize(QStringList& slist)
 }
 
 //最终优选出来的wifi列表
-void MainWindow::getFinalWifiList(QStringList &slist)
+void OldMainWindow::getFinalWifiList(QStringList &slist)
 {
     if(slist.size() < 2) return ;
     QString headLine = slist.at(0);
@@ -2500,7 +2500,7 @@ void MainWindow::getFinalWifiList(QStringList &slist)
 }
 
 //从有配置文件的wifi选出最优wifi进行连接,同时考虑用户手动设置的优先级,这个函数在回连中用到
-QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStringList slist){
+QVector<structWifiProperty> OldMainWindow::connectableWifiPriorityList(const QStringList slist){
     QVector<structWifiProperty> selectedWifiListStruct;
     if(slist.size()<2) return selectedWifiListStruct;
     OneConnForm *ocf = new OneConnForm();
@@ -2591,18 +2591,18 @@ QVector<structWifiProperty> MainWindow::connectableWifiPriorityList(const QStrin
 }
 
 //排序
-void MainWindow::devListSort(QVector<structWifiProperty> *list)
+void OldMainWindow::devListSort(QVector<structWifiProperty> *list)
 {
 //    qSort(list->begin(), list->end(), subDevListSort);
     std::sort(list->begin(), list->end(), subDevListSort);
 }
-bool MainWindow::subDevListSort(const structWifiProperty &info1, const structWifiProperty &info2)
+bool OldMainWindow::subDevListSort(const structWifiProperty &info1, const structWifiProperty &info2)
 {
     return info1.priority > info2.priority;
 }
 
 // 加载wifi列表
-void MainWindow::loadWifiListDone(QStringList slist)
+void OldMainWindow::loadWifiListDone(QStringList slist)
 {
 //    qDebug() << "kkkkkkkkkkkkkkkkkkkkkkkk";
 //    foreach (QString kkkkk, slist) {
@@ -2844,7 +2844,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
             //qDebug() << "wifi的 bssid: " << wbssid << "当前连接的wifi的bssid: " << actWifiBssidList;
             if (actWifiBssid == wbssid && wifiActState == WIFI_CONNECTED) {
                 //对于已经连接的wifi
-                connect(this, &MainWindow::actWifiSignalLvChanaged, ccf, [ = ](const int &signalLv) {
+                connect(this, &OldMainWindow::actWifiSignalLvChanaged, ccf, [ = ](const int &signalLv) {
                     ccf->setSignal(QString::number(signalLv), wsecu, wcate, true);
                 });
                 connect(ccf, SIGNAL(selectedOneWifiForm(QString,int)), this, SLOT(oneTopWifiFormSelected(QString,int)));
@@ -2998,7 +2998,7 @@ void MainWindow::loadWifiListDone(QStringList slist)
 }
 
 // 更新wifi列表
-void MainWindow::updateWifiListDone(QStringList slist)
+void OldMainWindow::updateWifiListDone(QStringList slist)
 {
     qDebug()<<"Refreshed wifi list.";
     if (hasWifiConnected) {
@@ -3200,7 +3200,7 @@ void MainWindow::updateWifiListDone(QStringList slist)
 }
 
 //用于中英文系统有线网络名称国际话
-QString MainWindow::TranslateLanName(QString lanName)
+QString OldMainWindow::TranslateLanName(QString lanName)
 {
     QString returnLanName = lanName;
 
@@ -3244,7 +3244,7 @@ QString MainWindow::TranslateLanName(QString lanName)
 }
 
 //使用uuid获取对应的mac地址
-QString MainWindow::getMacByUuid(QString uuidName)
+QString OldMainWindow::getMacByUuid(QString uuidName)
 {
     QString resultMac = "";
 
@@ -3271,7 +3271,7 @@ QString MainWindow::getMacByUuid(QString uuidName)
     return resultMac;
 }
 
-void MainWindow::checkIfConnectedWifiExist()
+void OldMainWindow::checkIfConnectedWifiExist()
 {
     //在点击托盘图标时，判读有无wifi的连接，若wstate不为0，但是有wifi连接，就断开
     BackThread *bt = new BackThread();
@@ -3285,7 +3285,7 @@ void MainWindow::checkIfConnectedWifiExist()
 ///////////////////////////////////////////////////////////////////////////////
 //主窗口其他按钮点击响应
 
-void MainWindow::on_btnAdvConf_clicked()
+void OldMainWindow::on_btnAdvConf_clicked()
 {
 //    if (!kysec_is_disabled() && kysec_get_3adm_status()) {
 //        //三权分立启用的操作
@@ -3309,7 +3309,7 @@ void MainWindow::on_btnAdvConf_clicked()
     return;
 }
 
-void MainWindow::on_btnFlyMode_clicked()
+void OldMainWindow::on_btnFlyMode_clicked()
 {
     if (is_fly_mode_on == 0) {
         is_fly_mode_on = 1;
@@ -3321,7 +3321,7 @@ void MainWindow::on_btnFlyMode_clicked()
     }
 }
 
-void MainWindow::on_btnHotspot_clicked()
+void OldMainWindow::on_btnHotspot_clicked()
 {
     if (is_wireless_adapter_ready == 1) {
         if (is_hot_sopt_on == 0) {
@@ -3346,7 +3346,7 @@ void MainWindow::on_btnHotspot_clicked()
     }
 }
 
-void MainWindow::onBtnAddNetClicked()
+void OldMainWindow::onBtnAddNetClicked()
 {
     QApplication::setQuitOnLastWindowClosed(false);
     DlgHideWifi *connHidWifi = new DlgHideWifi(0, this);
@@ -3354,7 +3354,7 @@ void MainWindow::onBtnAddNetClicked()
     connHidWifi->show();
 }
 
-void MainWindow::onBtnCreateNetClicked()
+void OldMainWindow::onBtnCreateNetClicked()
 {
     QPoint pos = QCursor::pos();
     QRect primaryGeometry;
@@ -3376,7 +3376,7 @@ void MainWindow::onBtnCreateNetClicked()
 }
 
 /* 右键菜单打开网络设置界面 */
-void MainWindow::actionTriggerSlots()
+void OldMainWindow::actionTriggerSlots()
 {
     if (!m_load_finished) {
         m_secondary_start_timer->stop();
@@ -3396,7 +3396,7 @@ void MainWindow::actionTriggerSlots()
 //处理窗口变化、网络状态变化
 
 //列表中item的扩展与收缩
-void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
+void OldMainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
 {
     if (currSelNetName == uniqueName) {
         return;
@@ -3484,7 +3484,7 @@ void MainWindow::oneLanFormSelected(QString lanName, QString uniqueName)
 #endif
 }
 
-void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
+void OldMainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
 {
 #if 0
     //应设计要求，选中同一选项卡不再缩小
@@ -3561,7 +3561,7 @@ void MainWindow::oneTopLanFormSelected(QString lanName, QString uniqueName)
 #endif
 }
 
-void MainWindow::oneWifiFormSelected(QString wifibssid, int extendLength)
+void OldMainWindow::oneWifiFormSelected(QString wifibssid, int extendLength)
 {
     if (currSelNetName == wifibssid) {
         //与win逻辑一致，点击同一选项不再缩小选项卡
@@ -3668,7 +3668,7 @@ void MainWindow::oneWifiFormSelected(QString wifibssid, int extendLength)
     OneConnForm *ocf = topWifiList.at(0);
     ocf->setTopItem(false);
 }
-void MainWindow::oneTopWifiFormSelected(QString wifibssid, int extendLength)
+void OldMainWindow::oneTopWifiFormSelected(QString wifibssid, int extendLength)
 {
     //应设计师要求，此处展开后点击不再收起
     if (currSelNetName == wifibssid) return;
@@ -3711,7 +3711,7 @@ void MainWindow::oneTopWifiFormSelected(QString wifibssid, int extendLength)
 }
 
 //断开网络处理
-void MainWindow::handleLanDisconn()
+void OldMainWindow::handleLanDisconn()
 {
     //syslog(LOG_DEBUG, "Wired net is disconnected");
     qDebug()<<"Wired net is disconnected!";
@@ -3726,7 +3726,7 @@ void MainWindow::handleLanDisconn()
     this->ksnm->execGetLanList();
 }
 
-void MainWindow::handleWifiDisconn()
+void OldMainWindow::handleWifiDisconn()
 {
     hasWifiConnected = false;
     currSelNetName = "";
@@ -3735,7 +3735,7 @@ void MainWindow::handleWifiDisconn()
         handleWifiDisconnLoading();
     });
 }
-void MainWindow::handleWifiDisconnLoading()
+void OldMainWindow::handleWifiDisconnLoading()
 {
     //syslog(LOG_DEBUG, "WLAN is disconnected");
     qDebug()<<"WLAN is disconnected!";
@@ -3747,7 +3747,7 @@ void MainWindow::handleWifiDisconnLoading()
 }
 
 //网络开关处理，打开与关闭网络
-void MainWindow::enNetDone()
+void OldMainWindow::enNetDone()
 {
     BackThread *bt = new BackThread();
     mwBandWidth = bt->execChkLanWidth(lcardname);
@@ -3763,7 +3763,7 @@ void MainWindow::enNetDone()
     qDebug()<<"debug: already turn on the switch of lan network";
     //syslog(LOG_DEBUG, "Already turn on the switch of lan network");
 }
-void MainWindow::disNetDone()
+void OldMainWindow::disNetDone()
 {
     this->is_btnLanList_clicked = 1;
     this->is_btnWifiList_clicked = 0;
@@ -3812,7 +3812,7 @@ void MainWindow::disNetDone()
     this->stopLoading();
 }
 
-void MainWindow::enWifiDone()
+void OldMainWindow::enWifiDone()
 {
     if (isHuaWeiPC) {
         //这里先不做什么，因为onRfkillStatusChanged这个函数也在处理wifi开关
@@ -3827,7 +3827,7 @@ void MainWindow::enWifiDone()
         //syslog(LOG_DEBUG, "Already turn on the switch of wifi network");
     }
 }
-void MainWindow::disWifiDone()
+void OldMainWindow::disWifiDone()
 {
     if (isHuaWeiPC) {
         //这里先不做什么，因为onRfkillStatusChanged这个函数也在处理wifi开关
@@ -3839,7 +3839,7 @@ void MainWindow::disWifiDone()
         //syslog(LOG_DEBUG, "Already turn on the switch of wifi network");
     }
 }
-void MainWindow::disWifiStateKeep()
+void OldMainWindow::disWifiStateKeep()
 {
     if (this->is_btnLanList_clicked == 1) {
         btnWireless->setSwitchStatus(false);
@@ -3849,7 +3849,7 @@ void MainWindow::disWifiStateKeep()
         getActiveInfoAndSetTrayIcon();
     }
 }
-void MainWindow::disWifiDoneChangeUI()
+void OldMainWindow::disWifiDoneChangeUI()
 {
     wifiListWidget = new QWidget(scrollAreaw);
     wifiListWidget->resize(W_LIST_WIDGET, H_WIFI_ITEM_BIG_EXTEND);
@@ -3891,7 +3891,7 @@ void MainWindow::disWifiDoneChangeUI()
     this->scrollAreaw->show();
 }
 
-void MainWindow::on_btnHotspotState()
+void OldMainWindow::on_btnHotspotState()
 {
     ui->lbHotImg->setStyleSheet("QLabel{background-image:url(:/res/x/hot-spot-off.svg);}");
     ui->lbHotBG->setStyleSheet(btnOffQss);
@@ -3899,7 +3899,7 @@ void MainWindow::on_btnHotspotState()
 }
 
 //执行wifi的重新连接
-void MainWindow::toReconnectWifi()
+void OldMainWindow::toReconnectWifi()
 {
     if (ifCanReconnectWifiNow) {
         if (isHuaWeiPC) {
@@ -3914,7 +3914,7 @@ void MainWindow::toReconnectWifi()
 }
 
 //处理外界对网络的连接与断开
-void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
+void OldMainWindow::onExternalConnectionChange(QString type, bool isConnUp)
 {
     isReconnectingWifi = false;
 
@@ -4000,7 +4000,7 @@ void MainWindow::onExternalConnectionChange(QString type, bool isConnUp)
     }
 }
 
-void MainWindow::onExternalLanChange()
+void OldMainWindow::onExternalLanChange()
 {
     emit this->actWiredConnectionChanged();
     if (is_btnLanList_clicked) {
@@ -4012,7 +4012,7 @@ void MainWindow::onExternalLanChange()
     isToSetLanValue = true;
 }
 
-void MainWindow::onExternalWifiChange()
+void OldMainWindow::onExternalWifiChange()
 {
 //    if (!isWifiBeConnUp) {
 //        //QString txt(tr("WiFi already disconnect"));
@@ -4037,17 +4037,17 @@ void MainWindow::onExternalWifiChange()
     isToSetWifiValue = true;
 }
 
-void MainWindow::onToSetTrayIcon()
+void OldMainWindow::onToSetTrayIcon()
 {
     getActiveInfoAndSetTrayIcon();
 }
 
-void MainWindow::onToResetValue()
+void OldMainWindow::onToResetValue()
 {
     addNumberForWifi = 0;
 }
 
-void MainWindow::onWifiSwitchChange()
+void OldMainWindow::onWifiSwitchChange()
 {
     if (is_btnWifiList_clicked) {
         //this->ksnm->execGetWifiList();
@@ -4056,7 +4056,7 @@ void MainWindow::onWifiSwitchChange()
 }
 
 //处理外界对wifi开关的打开与关闭
-void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
+void OldMainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
 {
     if (!is_stop_check_net_state) {
         is_stop_check_net_state = 1;
@@ -4078,7 +4078,7 @@ void MainWindow::onExternalWifiSwitchChange(bool wifiEnabled)
 ///////////////////////////////////////////////////////////////////////////////
 //循环处理部分，目前仅on_checkWifiListChanged 与on_setNetSpeed两个函数在运行
 
-void MainWindow::onRequestScanAccesspoint()
+void OldMainWindow::onRequestScanAccesspoint()
 {
     if (isHuaWeiPC) {
         numberForWifiScan += 1;
@@ -4145,7 +4145,7 @@ void MainWindow::onRequestScanAccesspoint()
     }
 }
 
-void MainWindow::toScanWifi(bool isShow)
+void OldMainWindow::toScanWifi(bool isShow)
 {
     QtConcurrent::run([=](){
         BackThread *loop_bt = new BackThread();
@@ -4174,19 +4174,19 @@ void MainWindow::toScanWifi(bool isShow)
     });
 }
 
-void MainWindow::onRefreshWifiListAfterScan()
+void OldMainWindow::onRefreshWifiListAfterScan()
 {
     current_wifi_list_state = REFRESH_WIFI;
     this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC); //更新wifi列表
 }
 
-void MainWindow::onRequestReconnecWifi()
+void OldMainWindow::onRequestReconnecWifi()
 {
     qDebug() << "Receive request reconnect wifi signal, then to reconnect wifi";
     toReconnectWifi();
 }
 
-void MainWindow::on_setNetSpeeds(qulonglong rx, qulonglong tx)
+void OldMainWindow::on_setNetSpeeds(qulonglong rx, qulonglong tx)
 {
     long int delta_rcv = rx/1024;
     long int delta_tx = tx/1024;
@@ -4236,7 +4236,7 @@ void MainWindow::on_setNetSpeeds(qulonglong rx, qulonglong tx)
     return;
 }
 
-void MainWindow::on_setNetSpeed()
+void OldMainWindow::on_setNetSpeed()
 {
     if (this->isVisible() && is_stop_check_net_state==0) {
         if (is_btnWifiList_clicked == 1) {
@@ -4308,7 +4308,7 @@ void MainWindow::on_setNetSpeed()
     }
 }
 
-void MainWindow::connLanDone(int connFlag)
+void OldMainWindow::connLanDone(int connFlag)
 {
     emit this->waitLanStop(); //停止加载动画
 
@@ -4403,7 +4403,7 @@ void MainWindow::connLanDone(int connFlag)
     this->is_stop_check_net_state = 0;
 }
 
-void MainWindow::connWifiDone(int connFlag)
+void OldMainWindow::connWifiDone(int connFlag)
 {
     // Wifi连接结果，0点击连接成功 1失败 2没有配置文件 3开机启动网络工具时已经连接 4密码错误 5找不到已保存的网络
     if (connFlag == 0) {
@@ -4455,13 +4455,13 @@ void MainWindow::connWifiDone(int connFlag)
     is_stop_check_net_state = 0;
 }
 
-void MainWindow::onRequestRefreshWifiList()
+void OldMainWindow::onRequestRefreshWifiList()
 {
     this->ksnm->execGetWifiList(this->wcardname, this->isHuaWeiPC);
 }
 
 //重新绘制背景色
-void MainWindow::paintEvent(QPaintEvent *event)
+void OldMainWindow::paintEvent(QPaintEvent *event)
 {
     double trans = objKyDBus->getTransparentData();
 
@@ -4477,7 +4477,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 }
 
-bool MainWindow::event(QEvent *event)
+bool OldMainWindow::event(QEvent *event)
 {
     if (event->type() == QEvent::ActivationChange) {
         if (QApplication::activeWindow() != this) {
@@ -4491,7 +4491,7 @@ bool MainWindow::event(QEvent *event)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-QPixmap MainWindow::drawSymbolicColoredPixmap(const QPixmap &source)
+QPixmap OldMainWindow::drawSymbolicColoredPixmap(const QPixmap &source)
 {
     QColor gray(128,128,128);
     QColor standard (31,32,34);
@@ -4519,7 +4519,7 @@ QPixmap MainWindow::drawSymbolicColoredPixmap(const QPixmap &source)
     return QPixmap::fromImage(img);
 }
 
-QPixmap MainWindow::drawSymbolicBlackColoredPixmap(const QPixmap &source)
+QPixmap OldMainWindow::drawSymbolicBlackColoredPixmap(const QPixmap &source)
 {
     QImage img = source.toImage();
     for (int x = 0; x < img.width(); x++) {
@@ -4538,7 +4538,7 @@ QPixmap MainWindow::drawSymbolicBlackColoredPixmap(const QPixmap &source)
     return QPixmap::fromImage(img);
 }
 
-const QPixmap MainWindow::loadSvg(const QString &fileName, const int size)
+const QPixmap OldMainWindow::loadSvg(const QString &fileName, const int size)
 {
     QPixmap pixmap(size, size);
     QSvgRenderer renderer(fileName);
@@ -4552,7 +4552,7 @@ const QPixmap MainWindow::loadSvg(const QString &fileName, const int size)
     return pixmap;
 }
 
-void MainWindow::getSystemFontFamily()
+void OldMainWindow::getSystemFontFamily()
 {
     qDebug()<<"Init Font Gsettings...";
     const QByteArray id("org.ukui.style");
@@ -4570,7 +4570,7 @@ void MainWindow::getSystemFontFamily()
 
 ///////////////////////////////////////////////////////////////////////////////
 //解决双屏幕问题用到的dbus方法
-void MainWindow::PrimaryManager()
+void OldMainWindow::PrimaryManager()
 {
     qDebug()<<"Init primary settings...";
     //QDBusConnection conn = QDBusConnection::sessionBus();
@@ -4608,7 +4608,7 @@ void MainWindow::PrimaryManager()
             this, SLOT(priScreenChanged(int,int,int,int)));
 }
 
-void MainWindow::toStart()
+void OldMainWindow::toStart()
 {
     qDebug()<<"Init geometry...";
     m_priX = getScreenGeometry("x");
@@ -4626,7 +4626,7 @@ void MainWindow::toStart()
     //qDebug("Start: Primary screen geometry is x=%d, y=%d, windth=%d, height=%d", m_priX, m_priY, m_priWid, m_priHei);
 }
 
-int MainWindow::getScreenGeometry(QString methodName)
+int OldMainWindow::getScreenGeometry(QString methodName)
 {
     int res = 0;
     QDBusMessage message = QDBusMessage::createMethodCall(DBUS_NAME,
@@ -4648,7 +4648,7 @@ int MainWindow::getScreenGeometry(QString methodName)
     return res;
 }
 
-void MainWindow::requestRefreshWifiList()
+void OldMainWindow::requestRefreshWifiList()
 {
     if (isHuaWeiPC) {
         QtConcurrent::run([=](){
@@ -4665,7 +4665,7 @@ void MainWindow::requestRefreshWifiList()
 }
 
 /* get primary screen changed */
-void MainWindow::priScreenChanged(int x, int y, int width, int height)
+void OldMainWindow::priScreenChanged(int x, int y, int width, int height)
 {
     m_priX = x;
     m_priY = y;
@@ -4676,7 +4676,7 @@ void MainWindow::priScreenChanged(int x, int y, int width, int height)
 }
 
 // 通过kds的dbus发现rfkill状态变化
-void MainWindow::onRfkillStatusChanged()
+void OldMainWindow::onRfkillStatusChanged()
 {
     if (canExecHandleWifiSwitchChange) {
         canExecHandleWifiSwitchChange = false;
@@ -4733,7 +4733,7 @@ void MainWindow::onRfkillStatusChanged()
 }
 
 //wifi开关关闭
-void MainWindow::rfkillDisableWifiDone()
+void OldMainWindow::rfkillDisableWifiDone()
 {
     canExecHandleWifiSwitchChange = true;
     if (is_btnWifiList_clicked)
@@ -4747,7 +4747,7 @@ void MainWindow::rfkillDisableWifiDone()
 }
 
 //wifi开关打开
-void MainWindow::rfkillEnableWifiDone()
+void OldMainWindow::rfkillEnableWifiDone()
 {
     canExecHandleWifiSwitchChange = true;
     if (is_btnWifiList_clicked) {
@@ -4770,7 +4770,7 @@ void MainWindow::rfkillEnableWifiDone()
     }
 }
 
-void MainWindow::showPb(QString type, QString name)
+void OldMainWindow::showPb(QString type, QString name)
 {
     bShowPb = false;
     if (type != "wifi") {

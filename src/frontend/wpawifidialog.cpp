@@ -60,7 +60,7 @@ void UpConnThread::run() {
     emit connRes(res);
 }
 
-WpaWifiDialog::WpaWifiDialog(QWidget *parent, MainWindow *mainWindow, QString conname) :
+WpaWifiDialog::WpaWifiDialog(QWidget *parent, OldMainWindow *mainWindow, QString conname) :
     QDialog(parent),
     ui(new Ui::WpaWifiDialog)
 {
@@ -99,7 +99,7 @@ WpaWifiDialog::WpaWifiDialog(QWidget *parent, MainWindow *mainWindow, QString co
     checkConnectBtnIsEnabled();
 }
 
-WpaWifiDialog::WpaWifiDialog(QWidget *parent, MainWindow *mw, WifiConfig *wifiConfig)
+WpaWifiDialog::WpaWifiDialog(QWidget *parent, OldMainWindow *mw, WifiConfig *wifiConfig)
 {
     if (wifiConfig) {
         m_wifiConfig = wifiConfig;

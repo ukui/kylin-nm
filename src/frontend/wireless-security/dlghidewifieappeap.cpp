@@ -25,7 +25,7 @@
 #include <QStandardItemModel>
 #include <QDir>
 
-DlgHideWifiEapPeap::DlgHideWifiEapPeap(int type, int beUsed, MainWindow *mainWindow, QWidget *parent) :
+DlgHideWifiEapPeap::DlgHideWifiEapPeap(int type, int beUsed, OldMainWindow *mainWindow, QWidget *parent) :
     WepOrWpa(type),
     isUsed(beUsed),
     QDialog(parent),

@@ -123,13 +123,13 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class OldMainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit OldMainWindow(QWidget *parent = 0);
+    ~OldMainWindow();
 
     void justShowTrayIcon();
 

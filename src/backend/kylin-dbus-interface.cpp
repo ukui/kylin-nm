@@ -44,7 +44,7 @@ void quitThread(QThread *thread)
 
 } // namespace
 
-KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
+KylinDBus::KylinDBus(OldMainWindow *mainWindow, QObject *parent) :QObject(parent)
 {
     this->mw = mainWindow;
 

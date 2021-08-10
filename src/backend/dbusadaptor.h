@@ -29,7 +29,7 @@ QT_END_NAMESPACE
  * Adaptor class for interface com.kylin.weather
  */
 
-#include "mainwindow.h"//added the code manually by lixiang
+#include "new-mainwindow.h"//added the code manually by lixiang
 
 class DbusAdaptor: public QDBusAbstractAdaptor
 {

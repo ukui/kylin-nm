@@ -52,7 +52,7 @@
 #define Y_LINE_BIG_EXTEND 137
 #define X_LINE_BIG_EXTEND 2
 
-class MainWindow;
+class OldMainWindow;
 
 namespace Ui {
 class OneConnForm;
@@ -63,7 +63,7 @@ class OneConnForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit OneConnForm(QWidget *parent = 0, MainWindow *mw = 0, ConfForm *confForm = 0, KSimpleNM *ksnm = 0);
+    explicit OneConnForm(QWidget *parent = 0, OldMainWindow *mw = 0, ConfForm *confForm = 0, KSimpleNM *ksnm = 0);
     ~OneConnForm();
 
     // category:1->normal protocol 1->wifi 6 2->wifi 6+
@@ -157,7 +157,7 @@ private:
     bool m_connWithPwd = true; //是否使用密码连接
 
     Ui::OneConnForm *ui = nullptr;
-    MainWindow *mw = nullptr;
+    OldMainWindow *mw = nullptr;
     ConfForm *cf = nullptr;
     KSimpleNM *ks = nullptr;
     bool hasPwd;

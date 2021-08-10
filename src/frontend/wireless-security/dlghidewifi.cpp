@@ -31,7 +31,7 @@
 #include <QStandardItemModel>
 #include <QDir>
 
-DlgHideWifi::DlgHideWifi(int type, MainWindow *mainWindow, QWidget *parent) :
+DlgHideWifi::DlgHideWifi(int type, OldMainWindow *mainWindow, QWidget *parent) :
     isUsed(type),
     QDialog(parent),
     ui(new Ui::DlgHideWifi)

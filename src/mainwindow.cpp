@@ -25,6 +25,7 @@
 #include "wireless-security/dlghidewifi.h"
 #include "sysdbusregister.h"
 #include "kylinwiredwidget.h"
+#include "nmdemo.h"
 
 #include <algorithm>//sort函数包含的头文件
 
@@ -139,6 +140,9 @@ void MainWindow::secondaryStart()
 
     qDebug()<<"Init ksnm...";
     this->ksnm = new KSimpleNM();
+
+    NmDemo* a = new NmDemo(this);
+    a->show();
 #if 0
     connect(ksnm, SIGNAL(getLanListFinished(QStringList)), this, SLOT(getLanListDone(QStringList)));
     connect(ksnm, SIGNAL(getWifiListFinished(QStringList)), this, SLOT(getWifiListDone(QStringList)));

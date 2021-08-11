@@ -69,8 +69,19 @@ void KyWiredConnectOperation::createWiredConnect(KyConnectSetting &connectSettin
 void KyWiredConnectOperation::updateWiredConnect(const QString &connectUuid, const KyConnectSetting &connectSettingsInfo)
 {
     qDebug()<<"update connect"<<connectUuid;
+    NetworkManager::Connection::Ptr connectPtr =
+            NetworkManager::findConnectionByUuid(connectUuid);
+    if (nullptr == connectPtr) {
+        QString errorMessage = tr("it can not find connection") + connectUuid;
+        qWarning()<<errorMessage;
+        emit updateConnectionError(errorMessage);
+        return;
+    }
 
-    updateConnect(connectUuid, connectSettingsInfo);
+    NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
+    updateConnect(connectSettingPtr, connectSettingsInfo);
+
+    connectPtr->update(connectSettingPtr->toMap());
 
     return ;
 }
@@ -84,9 +95,9 @@ void KyWiredConnectOperation::deleteWiredConnect(const QString &connectUuid)
     return ;
 }
 
-void KyWiredConnectOperation::activateWiredConnection(const QString connectUuid)
+void KyWiredConnectOperation::activateWiredConnection(const QString connectUuid, const QString devName)
 {
-    activateConnection(connectUuid);
+    activateConnection(connectUuid, devName);
     return ;
 }
 

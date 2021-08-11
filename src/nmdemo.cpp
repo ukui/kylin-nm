@@ -33,8 +33,9 @@ NmDemo::NmDemo(QWidget *parent) : QDialog(parent)
 
     //init ptr
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
-    m_wco = new KyWirelessConnectOperation();
+    m_wco = new KyWirelessConnectOperation(this);
     m_wnr = new KyWirelessNetResource(this);
+    m_acr = new KyActiveConnectResourse(this);
     m_timer = new QTimer(this);
 
     initUi();
@@ -132,8 +133,14 @@ void NmDemo::initConnect()
     connect(enableButton,       &QPushButton::clicked, this, &NmDemo::onEnableClick);
     connect(disableButton,      &QPushButton::clicked, this, &NmDemo::onDisableClick);
     //连接变化
-    connect(m_wco, &KyWirelessConnectOperation::connectFail,      this, &NmDemo::onWcoSignals);
-    connect(m_wco, &KyWirelessConnectOperation::disConnectFail,    this, &NmDemo::onWcoSignals);
+
+
+    connect(m_wco, &KyWirelessConnectOperation::createConnectionError,      this, &NmDemo::onWcoSignals);
+    connect(m_wco, &KyWirelessConnectOperation::updateConnectionError,    this, &NmDemo::onWcoSignals);
+    connect(m_wco, &KyWirelessConnectOperation::deleteConnectionError,      this, &NmDemo::onWcoSignals);
+    connect(m_wco, &KyWirelessConnectOperation::activateConnectionError,    this, &NmDemo::onWcoSignals);
+    connect(m_wco, &KyWirelessConnectOperation::deactivateConnectionError,      this, &NmDemo::onWcoSignals);
+    connect(m_wco, &KyWirelessConnectOperation::andAndActivateConnectionError,    this, &NmDemo::onWcoSignals);
 
     //列表变化
     connect(m_wnr, &KyWirelessNetResource::bssidChange,             this ,&NmDemo::onBssidChange);
@@ -145,10 +152,11 @@ void NmDemo::initConnect()
     connect(m_wnr, &KyWirelessNetResource::wifiNetworkAdd,   this ,&NmDemo::onWifiNetworkAdd);
     connect(m_wnr, &KyWirelessNetResource::wifiNetworkRemove,   this ,&NmDemo::onWifiNetworkRemove);
 
-    //connect(m_networkResourceInstance, &KyNetworkResourceManager::activeConnectionAdd, this, &NmDemo::onActiveConnectionAdd);
-    //connect(m_networkResourceInstance, &KyNetworkResourceManager::activeConnectionUpdate, this, &NmDemo::onActiveConnectionUpdate);
-    //connect(m_networkResourceInstance, &KyNetworkResourceManager::activeConnectionRemove, this, &NmDemo::onActiveConnectionRemove);
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::activeConnectionsReset, this, &NmDemo::onActiveConnectionsReset);
+    connect(m_acr, &KyActiveConnectResourse::stateChangeReason, this, [this](QString uuid,
+            NetworkManager::ActiveConnection::State state,
+            NetworkManager::ActiveConnection::Reason reason){
+        appendDebugLog(QString("%1 %2 %3").arg(uuid).arg(state).arg(reason));
+    });
 }
 
 void NmDemo::initTimer()
@@ -163,9 +171,9 @@ void NmDemo::initTimer()
 }
 
 
-void NmDemo::onWcoSignals(QString ssid, QString devIFace, QString reason)
+void NmDemo::onWcoSignals(QString errorMessage)
 {
-    appendDebugLog(ssid + " connect or disconnect faild because " + reason);
+    appendDebugLog(errorMessage);
 }
 
 void NmDemo::onBssidChange(QString devIface, QString ssid, QString bssid)
@@ -245,10 +253,11 @@ void NmDemo::onConnectClicked()
     }
     if (isEnterPirse)
     {
+        qDebug() <<"EnterPrice";
+        return;
         if(!isNew)
         {
             KyEapMethodPeapInfo a;
-            a.connName = ssid;
             a.phase2AuthMethod = AuthEapMethodPeapMschapv2;
             a.userName = "steve";
             a.userPWD = "testing";
@@ -263,31 +272,35 @@ void NmDemo::onConnectClicked()
             return;
         } else {
             KyEapMethodTtlsInfo c;
-            c.connName = ssid;
             c.authType = AUTH_NO_EAP;
             c.authNoEapMethod = AuthMethodTtlsMschapv2;
             c.userName = "steve";
             c.userPWD = "testing";
             appendDebugLog("addAndActiveWirelessEnterPriseTtlsConnect...");
             qDebug() << "addAndActiveWirelessEnterPriseTtlsConnect";
-            m_wco->addAndActiveWirelessEnterPriseTtlsConnect(c, devIface, isHidden, true, 0);
+//            m_wco->addAndActiveWirelessEnterPriseTtlsConnect(c, devIface, isHidden, true, 0);
             return;
         }
-    }
-    KySecuType secuType = WPA_AND_WPA2_PERSONAL;
-    if (isHidden)
-    {
-        appendDebugLog("addAndActiveWirelessHiddenConnect...");
-        m_wco->addAndActiveWirelessHiddenConnect(secuType, ssid, devIface, pwd, true, 0);
-        return;
     }
     if (isNew)
     {
         appendDebugLog("addAndActiveWirelessConnect...");
-        m_wco->addAndActiveWirelessConnect(ssid, devIface, pwd, true, 0);
+        KyWirelessConnectSetting a;
+        a.m_connectName = ssid;
+        a.m_ssid = ssid;
+        a.isAutoConnect = true;
+        a.m_psk = pwd;
+        a.m_secretFlag = NetworkManager::Setting::None;
+        a.m_type = WpaPsk;
+
+
+        m_wco->addAndActiveWirelessConnect(devIface,a, isHidden);
     } else {
-        appendDebugLog("activeWirelessConnectWithPwd...");
-        m_wco->activeWirelessConnect(devIface,uuid);
+        NetworkManager::Setting::SecretFlags c;
+        m_wco->getConnSecretFlags(uuid, c);
+        appendDebugLog(QString("%1").arg(c));
+//        appendDebugLog("activeWirelessConnect...");
+//        m_wco->activeWirelessConnect(devIface,uuid);
     }
 }
 
@@ -319,7 +332,7 @@ void NmDemo::onDisConnectClicked()
         return;
     }
     appendDebugLog("deActiveWirelessConnect " + ssid);
-    m_wco->deActiveWirelessConnect(uuid);
+    m_wco->deActivateWirelessConnection(ssid, uuid);
 }
 
 void NmDemo::onModifyClicked()

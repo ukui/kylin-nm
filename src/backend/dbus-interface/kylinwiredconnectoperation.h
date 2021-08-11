@@ -16,7 +16,7 @@ public:
     void  createWiredConnect(KyConnectSetting &connectSettingsInfo);
     void  updateWiredConnect(const QString &connectUuid, const KyConnectSetting &connectSettingsInfo);
     void  deleteWiredConnect(const QString &connectUuid);
-    void  activateWiredConnection(const QString connectUuid);
+    void  activateWiredConnection(const QString connectUuid, const QString devName);
     void  activateVpnConnection(const QString connectUuid);
     void  deactivateWiredConnection(const QString activeConnectName, const QString &activeConnectUuid);
 };

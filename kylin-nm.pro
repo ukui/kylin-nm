@@ -70,6 +70,7 @@ SOURCES += \
     src/backend/dbus-interface/kylinnetworkresourcemanager.cpp \
     src/backend/dbus-interface/kylinvpnconnectitem.cpp \
     src/backend/dbus-interface/kylinwiredconnectoperation.cpp \
+    src/backend/dbus-interface/kylinwirelessconnectsetting.cpp \
     src/backend/dbus-interface/kywirelessconnectoperation.cpp \
     src/backend/dbus-interface/kywirelessnetitem.cpp \
     src/backend/dbus-interface/kywirelessnetresource.cpp \
@@ -121,6 +122,7 @@ HEADERS += \
     src/backend/dbus-interface/kylinnetworkresourcemanager.h \
     src/backend/dbus-interface/kylinvpnconnectitem.h \
     src/backend/dbus-interface/kylinwiredconnectoperation.h \
+    src/backend/dbus-interface/kylinwirelessconnectsetting.h \
     src/backend/dbus-interface/kywirelessconnectoperation.h \
     src/backend/dbus-interface/kywirelessnetitem.h \
     src/backend/dbus-interface/kywirelessnetresource.h \

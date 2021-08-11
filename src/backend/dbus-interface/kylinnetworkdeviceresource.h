@@ -37,5 +37,6 @@ private:
     KyWiredConnectOperation wiredOperation;
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     QStringList m_activeConnectUuidList;
+    QMap<QString , QString> m_activeConnectUuidMap;
 };
 #endif // KYLINNETORKDEVICERESOURCE_H

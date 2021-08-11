@@ -11,6 +11,8 @@
 #include "backend/dbus-interface/kylinnetworkresourcemanager.h"
 #include "backend/dbus-interface/kywirelessconnectoperation.h"
 #include "backend/dbus-interface/kywirelessnetresource.h"
+#include "backend/dbus-interface/kylinwirelessconnectsetting.h"
+#include "backend/dbus-interface/kylinactiveconnectresource.h"
 
 class NmDemo : public QDialog
 {
@@ -37,6 +39,7 @@ public:
     KyNetworkResourceManager   *m_networkResourceInstance = nullptr;
     KyWirelessConnectOperation *m_wco;
     KyWirelessNetResource      *m_wnr;
+    KyActiveConnectResourse    *m_acr;
 
 private:
     QTimer      *m_timer;
@@ -53,7 +56,7 @@ private:
     void getWifiList();
 
 public slots:
-    void onWcoSignals(QString, QString, QString);
+    void onWcoSignals(QString);
     void onBssidChange(QString, QString, QString);
     void onSecuTypeChange(QString, QString, QString);
     void onSignalStrengthChange(QString, QString, int);

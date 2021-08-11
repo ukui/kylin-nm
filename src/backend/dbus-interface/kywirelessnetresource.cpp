@@ -49,6 +49,25 @@ bool KyWirelessNetResource::getDeviceWifiNetwork(QString devIfaceName, QList<KyW
     }
 }
 
+bool KyWirelessNetResource::getWifiNetwork(QString &devIfaceName,QString &ssid, KyWirelessNetItem &KyWirelessNetResource)
+{
+    onWifiNetworkDeviceDisappear();
+    if (!m_WifiNetworkList.contains(devIfaceName))
+    {
+        return false;
+    } else {
+        for (int index = 0; m_WifiNetworkList[devIfaceName].size(); index ++)
+        {
+            if (m_WifiNetworkList[devIfaceName].at(index).m_NetSsid  == ssid)
+            {
+                KyWirelessNetResource = m_WifiNetworkList[devIfaceName].at(index);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 bool KyWirelessNetResource::getWirelessActiveConnection(QMap<QString,QStringList> &map)
 {
     int index = 0;
@@ -379,7 +398,6 @@ bool KyWirelessNetResource::modifyEnterPriseInfoPeap(QString &uuid, KyEapMethodP
         return false;
     }
 
-    info.connName = conn->name();
     info.phase2AuthMethod = (KyEapMethodPeapAuth)setting->phase2AuthEapMethod();
     info.userName = setting->identity();
     info.userPWD = setting->password();
@@ -414,7 +432,6 @@ bool KyWirelessNetResource::getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeap
         return false;
     }
 
-    info.connName = conn->name();
     info.phase2AuthMethod = (KyEapMethodPeapAuth)setting->phase2AuthEapMethod();
     info.userName = setting->identity();
     info.userPWD = setting->password();
@@ -503,7 +520,6 @@ bool KyWirelessNetResource::getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtls
         return false;
     }
 
-    info.connName = conn->name();
     info.authEapMethod = (KyEapMethodTtlsAuth)setting->phase2AuthEapMethod();
     info.authNoEapMethod = (KyNoEapMethodTtlsAuth)setting->phase2AuthMethod();
 

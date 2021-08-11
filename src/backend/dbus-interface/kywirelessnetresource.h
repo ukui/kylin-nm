@@ -17,16 +17,17 @@ public:
     ~KyWirelessNetResource();
 
     //ui层调用接口
+    bool getWifiNetwork(QString &devIfaceName,QString &ssid, KyWirelessNetItem &KyWirelessNetResource);
     bool getAllDeviceWifiNetwork(QMap<QString,QList<KyWirelessNetItem> > &map);
     bool getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &KyWirelessNetResource);
 
-    bool modifyEnterPriseInfoTls(QString &, KyEapMethodTlsInfo &);
-    bool modifyEnterPriseInfoPeap(QString &, KyEapMethodPeapInfo &);
-    bool modifyEnterPriseInfoTtls(QString &, KyEapMethodTtlsInfo &);
+    bool modifyEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info);
+    bool modifyEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info);
+    bool modifyEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);
 
-    bool getEnterPriseInfoTls(QString &, KyEapMethodTlsInfo &);
-    bool getEnterPriseInfoPeap(QString &, KyEapMethodPeapInfo &);
-    bool getEnterPriseInfoTtls(QString &, KyEapMethodTtlsInfo &);
+    bool getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info);
+    bool getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info);
+    bool getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);
 
     bool getWirelessActiveConnection(QMap<QString, QStringList> &map);
 

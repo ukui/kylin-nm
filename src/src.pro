@@ -17,7 +17,7 @@ CONFIG += qt warn_on
 #CONFIG += release
 CONFIG += link_pkgconfig
 
-PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm
+PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 

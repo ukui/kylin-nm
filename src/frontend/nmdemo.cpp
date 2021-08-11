@@ -296,11 +296,11 @@ void NmDemo::onConnectClicked()
 
         m_wco->addAndActiveWirelessConnect(devIface,a, isHidden);
     } else {
-        NetworkManager::Setting::SecretFlags c;
-        m_wco->getConnSecretFlags(uuid, c);
-        appendDebugLog(QString("%1").arg(c));
-//        appendDebugLog("activeWirelessConnect...");
-//        m_wco->activeWirelessConnect(devIface,uuid);
+//        NetworkManager::Setting::SecretFlags c;
+//        m_wco->getConnSecretFlags(uuid, c);
+//        appendDebugLog(QString("%1").arg(c));
+        appendDebugLog("activeWirelessConnect...");
+        m_wco->activeWirelessConnect(devIface,uuid);
     }
 }
 

@@ -20,7 +20,7 @@
 #include "dlghidewifieapleap.h"
 #include "ui_dlghidewifieapleap.h"
 #include "kylinheadfile.h"
-#include "src/kylin-dbus-interface.h"
+#include "kylin-dbus-interface.h"
 
 DlgHideWifiEapLeap::DlgHideWifiEapLeap(int type, QWidget *parent) :
     WepOrWpa(type),

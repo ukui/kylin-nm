@@ -3,6 +3,8 @@ INCLUDEPATH += $$PWD
 HEADERS += \
     $$PWD/kyenterpricesettinginfo.h \
     $$PWD/kylinactiveconnectresource.h \
+    $$PWD/kylinagent.h \
+    $$PWD/kylinagentinterface.h \
     $$PWD/kylinbluetoothconnectitem.h \
     $$PWD/kylinconnectitem.h \
     $$PWD/kylinconnectoperation.h \
@@ -19,6 +21,8 @@ HEADERS += \
 SOURCES += \
     $$PWD/kyenterpricesettinginfo.cpp \
     $$PWD/kylinactiveconnectresource.cpp \
+    $$PWD/kylinagent.c \
+    $$PWD/kylinagentinterface.c \
     $$PWD/kylinbluetoothconnectitem.cpp \
     $$PWD/kylinconnectitem.cpp \
     $$PWD/kylinconnectoperation.cpp \

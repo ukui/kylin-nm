@@ -116,7 +116,6 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.setProperty("useStyleWindowManager", false); //禁用拖动
-    w.show();
     //设置窗口无边框，阴影
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
     MotifWmHints window_hints;

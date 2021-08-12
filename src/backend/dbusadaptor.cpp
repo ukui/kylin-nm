@@ -26,12 +26,8 @@ DbusAdaptor::DbusAdaptor(MainWindow *parent)
 {
     // constructor
     qDBusRegisterMetaType<QVector<QStringList>>();
+    //setAutoRelaySignals(true)后会自动转发mainwindow发出的同名信号，因此不必再额外写一个转发
     setAutoRelaySignals(true);
-    //setAutoRelaySignals(true)后会自动转发同名信号，因此不必再额外像如下代码一样写一个转发
-//    connect(parent, &MainWindow::getWifiListFinished, this, [ = ]() {
-//        QDBusMessage msg = QDBusMessage::createSignal("/com/kylin/network",  "com.kylin.network", "getWifiListFinished");
-//        QDBusConnection::sessionBus().send(msg);
-//    });
 }
 
 DbusAdaptor::~DbusAdaptor()
@@ -41,7 +37,7 @@ DbusAdaptor::~DbusAdaptor()
 
 void DbusAdaptor::showMainWindow()
 {
-    parent()->show();
+    parent()->showMainwindow();
 }
 
 void DbusAdaptor::showPb(QString type, QString name)

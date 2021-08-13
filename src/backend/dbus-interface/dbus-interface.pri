@@ -14,7 +14,6 @@ HEADERS += \
     $$PWD/kylinnetworkresourcemanager.h \
     $$PWD/kylinvpnconnectitem.h \
     $$PWD/kylinwiredconnectoperation.h \
-    $$PWD/kylinwirelessconnectsetting.h \
     $$PWD/kywirelessconnectoperation.h \
     $$PWD/kywirelessnetitem.h \
     $$PWD/kywirelessnetresource.h
@@ -33,7 +32,6 @@ SOURCES += \
     $$PWD/kylinnetworkresourcemanager.cpp \
     $$PWD/kylinvpnconnectitem.cpp \
     $$PWD/kylinwiredconnectoperation.cpp \
-    $$PWD/kylinwirelessconnectsetting.cpp \
     $$PWD/kywirelessconnectoperation.cpp \
     $$PWD/kywirelessnetitem.cpp \
     $$PWD/kywirelessnetresource.cpp

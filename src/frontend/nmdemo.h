@@ -11,7 +11,8 @@
 #include "backend/dbus-interface/kylinnetworkresourcemanager.h"
 #include "backend/dbus-interface/kywirelessconnectoperation.h"
 #include "backend/dbus-interface/kywirelessnetresource.h"
-#include "backend/dbus-interface/kylinwirelessconnectsetting.h"
+#include "backend/dbus-interface/kylinactiveconnectresource.h"
+#include "backend/dbus-interface/kylinconnectresource.h"
 #include "backend/dbus-interface/kylinactiveconnectresource.h"
 
 class NmDemo : public QDialog
@@ -25,6 +26,7 @@ public:
     QPushButton *modifyButton;
     QPushButton *enableButton;
     QPushButton *disableButton;
+    QPushButton *addButton;
     QTextEdit   *wifiList;
     QTextEdit   *debugLog;
     QLabel      *ssidLabel;
@@ -40,6 +42,7 @@ public:
     KyWirelessConnectOperation *m_wco;
     KyWirelessNetResource      *m_wnr;
     KyActiveConnectResourse    *m_acr;
+    KyConnectResourse          *m_cr;
 
 private:
     QTimer      *m_timer;
@@ -54,6 +57,8 @@ private:
     void initTimer();
     void appendDebugLog(QString);
     void getWifiList();
+
+    void showIpv4Ipv6DnsInfo(const QString &uuid, KyConnectSetting &sett);
 
 public slots:
     void onWcoSignals(QString);
@@ -71,6 +76,7 @@ public slots:
     void onModifyClicked();
     void onEnableClick();
     void onDisableClick();
+    void onAddClick();
 
     void onActiveConnectionAdd(NetworkManager::ActiveConnection::Ptr conn);
     void onActiveConnectionUpdate(NetworkManager::ActiveConnection * conn);

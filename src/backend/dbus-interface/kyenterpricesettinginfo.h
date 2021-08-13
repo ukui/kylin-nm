@@ -20,46 +20,38 @@ public:
     bool    bChanged;
 };
 
+typedef enum {
+    KyAuthEapMethodUnknown = 0,
+    KyAuthEapMethodMd5,
+    KyAuthEapMethodMschapv2,
+    KyAuthEapMethodOtp,
+    KyAuthEapMethodGtc,
+    KyAuthEapMethodTls
+} KyEapMethodAuth;
+
 typedef enum{
-    AuthEapMethodPeapUnknown = 0,
-    AuthEapMethodPeapMd5,
-    AuthEapMethodPeapMschapv2,
-    AuthEapMethodPeapOtp,
-    AuthEapMethodPeapGtc,
-    AuthEapMethodPeapTls
-} KyEapMethodPeapAuth;
+    KyAuthMethodUnknown = 0,
+    KyAuthMethodPap,
+    KyAuthMethodChap,
+    KyAuthMethodMschap,
+    KyAuthMethodMschapv2,
+    KyAuthMethodGtc,
+    KyAuthMethodOtp,
+    KyAuthMethodMd5,
+    KyAuthMethodTls
+} KyNoEapMethodAuth;
+
 
 class KyEapMethodPeapInfo
 {
 public:
-    KyEapMethodPeapAuth phase2AuthMethod;
+    KyNoEapMethodAuth phase2AuthMethod;
     QString userName;
     QString userPWD;
     NetworkManager::Setting::SecretFlags m_passwdFlag;
     // only valid when update
     bool    bChanged;
 };
-
-typedef enum {
-    AuthEapMethodTtlsUnknown = 0,
-    AuthEapMethodTtlsMd5,
-    AuthEapMethodTtlsMschapv2,
-    AuthEapMethodTtlsOtp,
-    AuthEapMethodTtlsGtc,
-    AuthEapMethodTtlsTls
-} KyEapMethodTtlsAuth;
-
-typedef enum{
-    AuthMethodTtlsUnknown = 0,
-    AuthMethodTtlsPap,
-    AuthMethodTtlsChap,
-    AuthMethodTtlsMschap,
-    AuthMethodTtlsMschapv2,
-    AuthMethodTtlsGtc,
-    AuthMethodTtlsOtp,
-    AuthMethodTtlsMd5,
-    AuthMethodTtlsTls
-} KyNoEapMethodTtlsAuth;
 
 enum KyTtlsAuthMethod
 {
@@ -71,8 +63,8 @@ class KyEapMethodTtlsInfo
 {
 public:
     KyTtlsAuthMethod authType;
-    KyEapMethodTtlsAuth authEapMethod;
-    KyNoEapMethodTtlsAuth authNoEapMethod;
+    KyEapMethodAuth authEapMethod;
+    KyNoEapMethodAuth authNoEapMethod;
     QString userName;
     QString userPWD;
     NetworkManager::Setting::SecretFlags m_passwdFlag;

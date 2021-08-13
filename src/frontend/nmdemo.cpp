@@ -36,6 +36,7 @@ NmDemo::NmDemo(QWidget *parent) : QDialog(parent)
     m_wco = new KyWirelessConnectOperation(this);
     m_wnr = new KyWirelessNetResource(this);
     m_acr = new KyActiveConnectResourse(this);
+    m_cr = new KyConnectResourse(this);
     m_timer = new QTimer(this);
 
     initUi();
@@ -72,6 +73,8 @@ void NmDemo::initUi()
     enableButton->setText("Enable");
     disableButton    = new QPushButton(this);
     disableButton->setText("Disable");
+    addButton = new QPushButton(this);
+    addButton->setText("Add");
     wifiList         = new QTextEdit(this);
     debugLog         = new QTextEdit(this);
     ssidText         = new QLineEdit(this);
@@ -90,6 +93,7 @@ void NmDemo::initUi()
     refreshButton->setGeometry( 5, 5, 80, 30);
     connectButton->setGeometry(105, 5, 80, 30);
     disConnectButton->setGeometry(205, 5, 80, 30);
+    addButton->setGeometry(305, 5 ,80 ,30);
     modifyButton->setGeometry(5, 55, 80, 30);
     enableButton->setGeometry(105, 55, 80, 30);
     disableButton->setGeometry(205, 55, 80, 30);
@@ -132,6 +136,8 @@ void NmDemo::initConnect()
     connect(modifyButton,       &QPushButton::clicked, this, &NmDemo::onModifyClicked);
     connect(enableButton,       &QPushButton::clicked, this, &NmDemo::onEnableClick);
     connect(disableButton,      &QPushButton::clicked, this, &NmDemo::onDisableClick);
+    connect(addButton,          &QPushButton::clicked, this, &NmDemo::onAddClick);
+
     //连接变化
 
 
@@ -258,22 +264,18 @@ void NmDemo::onConnectClicked()
         if(!isNew)
         {
             KyEapMethodPeapInfo a;
-            a.phase2AuthMethod = AuthEapMethodPeapMschapv2;
+            a.phase2AuthMethod = KyAuthMethodMschapv2;
             a.userName = "steve";
             a.userPWD = "testing";
             appendDebugLog("modifyEnterPriseInfoPeap");
-            if (!(m_wnr->modifyEnterPriseInfoPeap(uuid,a)))
-            {
-                appendDebugLog("modifyEnterPriseInfoPeap fail");
-                return;
-            }
+
             appendDebugLog("activeWirelessConnect...");
             m_wco->activeWirelessConnect(devIface,uuid);
             return;
         } else {
             KyEapMethodTtlsInfo c;
             c.authType = AUTH_NO_EAP;
-            c.authNoEapMethod = AuthMethodTtlsMschapv2;
+            c.authNoEapMethod = KyAuthMethodMschapv2;
             c.userName = "steve";
             c.userPWD = "testing";
             appendDebugLog("addAndActiveWirelessEnterPriseTtlsConnect...");
@@ -290,7 +292,6 @@ void NmDemo::onConnectClicked()
         a.m_ssid = ssid;
         a.isAutoConnect = true;
         a.m_psk = pwd;
-        a.m_secretFlag = NetworkManager::Setting::None;
         a.m_type = WpaPsk;
 
 
@@ -338,7 +339,111 @@ void NmDemo::onDisConnectClicked()
 void NmDemo::onModifyClicked()
 {
     appendDebugLog("onModifyClicked...");
-    //TODO
+    QString ssid = ssidText->text();
+    QString devIface = ifaceNameText->text();
+    QString uuid;
+    bool isFind = false;
+    QList<KyWirelessNetItem> list;
+    m_wnr->getDeviceWifiNetwork(devIface, list);
+    QList<KyWirelessNetItem>::iterator iter = list.begin();
+    while (iter != list.end())
+    {
+        if (iter->m_NetSsid == ssid)
+        {
+            if (iter->m_isConfigured == true)
+            {
+                isFind = true;
+                uuid = iter->m_connectUuid;
+                break;
+            }
+        }
+        iter++;
+    }
+    if (!isFind)
+    {
+        return;
+    }
+    QString psk = m_wco->getPsk(uuid);
+    appendDebugLog(ssid +" getPsk  is " + psk);
+    return;
+
+    appendDebugLog("getConnectKeyMgmt" + QString::number(m_wco->getConnectKeyMgmt(uuid)));
+
+    KyWirelessConnectSetting wcs;
+    wcs.m_type = SAE;
+    m_wco->updateWirelessPersonalConnect(uuid, wcs ,true);
+    appendDebugLog("getConnectKeyMgmt" + QString::number(m_wco->getConnectKeyMgmt(uuid)));
+    return;
+
+    m_wco->setWirelessAutoConnect(uuid, false);
+    return;
+
+    KyConnectSetting sett;
+    showIpv4Ipv6DnsInfo(uuid, sett);
+
+    sett.m_ipv4ConfigIpType = CONFIG_IP_MANUAL;
+    sett.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
+    sett.m_ipv4Address.clear();
+    QStringList ipv4DnsList;
+    ipv4DnsList << "1.1.1.1";
+    QString a("192.168.1.17"),b("255.255.255.0"),c("192.168.1.0");
+    sett.ipv4AddressConstruct(a, b, c, ipv4DnsList);
+
+//    sett.setIpConfigType(IPADDRESS_V6, CONFIG_IP_MANUAL);
+//    QStringList ipv6DnsList;
+//    ipv6DnsList << "1.1.1.1";
+//    QString d("1.1.1.1"),e("1.1.1.1"),f("1.1.1.1");
+//    sett.ipv6AddressConstruct(d, e, f, ipv6DnsList);
+
+    m_wco->updateIpv4AndIpv6SettingInfo(uuid, sett);
+
+    showIpv4Ipv6DnsInfo(uuid, sett);
+}
+
+void NmDemo::showIpv4Ipv6DnsInfo(const QString &uuid, KyConnectSetting &settInfo)
+{
+    m_cr->getConnectionSetting(uuid, settInfo);
+    appendDebugLog("connect setting info:");
+    appendDebugLog("connect name " + settInfo.m_connectName);
+    appendDebugLog("iface name " + settInfo.m_ifaceName);
+    appendDebugLog("ipv4 type " + QString::number(settInfo.m_ipv4ConfigIpType));
+
+    for (int index = 0 ; index < settInfo.m_ipv4Address.size(); index++) {
+        appendDebugLog("ipv4 address " + settInfo.m_ipv4Address.at(index).ip().toString());
+        appendDebugLog("ipv4 gate way " + settInfo.m_ipv4Address.at(index).gateway().toString());
+        appendDebugLog("ipv4 net mask " + settInfo.m_ipv4Address.at(index).netmask().toString());
+    }
+
+    for (int index = 0; index < settInfo.m_ipv4Dns.size(); ++index) {
+        appendDebugLog("ipv4 dns " + settInfo.m_ipv4Dns.at(index).toString());
+    }
+
+    appendDebugLog("ipv6 type " + QString::number(settInfo.m_ipv6ConfigIpType));
+
+    for (int index = 0 ; index < settInfo.m_ipv6Address.size(); index++) {
+        appendDebugLog("ipv6 address " + settInfo.m_ipv6Address.at(index).ip().toString());
+        appendDebugLog("ipv6 gate way " + settInfo.m_ipv6Address.at(index).gateway().toString());
+        appendDebugLog("ipv6 net mask " + settInfo.m_ipv6Address.at(index).netmask().toString());
+    }
+
+    for (int index = 0; index < settInfo.m_ipv6Dns.size(); ++index) {
+        appendDebugLog("ipv6 dns " + settInfo.m_ipv6Dns.at(index).toString());
+    }
+    QString ipv4,ipv6;
+    QList<QHostAddress> ipv4Dns,ipv6Dns;
+    ipv4Dns.clear();
+    ipv6Dns.clear();
+    m_acr->getActiveConnectIpInfo(uuid, ipv4, ipv6);
+    appendDebugLog("Dynamic ipv4 address " + ipv4);
+    appendDebugLog("Dynamic ipv6 address " + ipv6);
+    m_acr->getActiveConnectDnsInfo(uuid, ipv4Dns, ipv6Dns);
+    appendDebugLog(QString::number(ipv4Dns.size()) + QString::number(ipv6Dns.size()));
+    for (int index = 0 ; index < ipv4Dns.size(); index++) {
+        appendDebugLog("Dynamic ipv4 dns " + ipv4Dns.at(index).toString());
+    }
+    for (int index = 0 ; index < ipv6Dns.size(); index++) {
+        appendDebugLog("Dynamic ipv6 dns " + ipv6Dns.at(index).toString());
+    }
 }
 
 void NmDemo::onEnableClick()
@@ -351,6 +456,29 @@ void NmDemo::onDisableClick()
 {
     appendDebugLog("onDisableClick...");
     m_wco->setWirelessEnabled(false);
+}
+
+void NmDemo::onAddClick()
+{
+    appendDebugLog("onAddClick...");
+    KyWirelessConnectSetting sett;
+    sett.m_connectName = "zsx";
+    sett.m_ssid = "zsxsz";
+    sett.isAutoConnect = false;
+    sett.m_psk = "123456zsx";
+    sett.m_type = Wep;
+    //ipv4
+    sett.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
+    QString ipv4Address("192.168.1.17"), ipv4NetMask("255.255.255.0"), ipv4GateWay("192.168.1.0");
+    QStringList list;
+    list << "127.17.50.100";
+    sett.ipv4AddressConstruct(ipv4Address, ipv4NetMask, ipv4GateWay, list);
+//    m_wco->addConnect(sett);
+    KyEapMethodPeapInfo peap;
+    peap.phase2AuthMethod = KyAuthMethodMschapv2;
+    peap.userName = "steve";
+    peap.userPWD = "testing";
+    m_wco->addPeapConnect(sett,peap);
 }
 
 void NmDemo::appendDebugLog(QString log)

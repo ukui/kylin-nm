@@ -206,6 +206,21 @@ KyWiredConnectItem *KyActiveConnectResourse::getWiredActiveConnectItem(NetworkMa
 
 #endif
 
+void KyActiveConnectResourse::getActiveConnectIpInfo(
+                        const QString &connectUuid,
+                        QString &ipv4Address,
+                        QString &ipv6Address)
+{
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr =
+            m_networkResourceInstance->getActiveConnect(connectUuid);
+
+    if (activeConnectPtr.isNull()) {
+        qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< connectUuid;
+        return;
+    }
+    getActiveConnectIp(activeConnectPtr, ipv4Address, ipv6Address);
+}
+
 void KyActiveConnectResourse::getActiveConnectIp(
                         NetworkManager::ActiveConnection::Ptr activeConnectPtr,
                         QString &ipv4Address,
@@ -240,13 +255,28 @@ void KyActiveConnectResourse::getActiveConnectIp(
     return;
 }
 
+void KyActiveConnectResourse::getActiveConnectDnsInfo(
+                        const QString &connectUuid,
+                        QList<QHostAddress> &ipv4Dns,
+                        QList<QHostAddress> &ipv6Dns)
+{
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr =
+            m_networkResourceInstance->getActiveConnect(connectUuid);
+
+    if (activeConnectPtr.isNull()) {
+        qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< connectUuid;
+        return;
+    }
+    getActiveConnectDns(activeConnectPtr, ipv4Dns, ipv6Dns);
+}
+
 void KyActiveConnectResourse::getActiveConnectDns(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
                          QList<QHostAddress> &ipv4Dns,
                          QList<QHostAddress> &ipv6Dns)
 {
     qDebug()<<"[KyActiveConnectResourse]"<<"get active connect nameservice info";
 
-    NetworkManager::IpConfig ipv4Config =activeConnectPtr->ipV4Config();
+    NetworkManager::IpConfig ipv4Config = activeConnectPtr->ipV4Config();
     if (ipv4Config.isValid()) {
         ipv4Dns = ipv4Config.nameservers();
     } else {

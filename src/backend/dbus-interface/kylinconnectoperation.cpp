@@ -65,6 +65,7 @@ void KyConnectOperation::ipv6SettingSet(
 
     if (CONFIG_IP_DHCP == connectSettingsInfo.m_ipv6ConfigIpType) {
         ipv6Setting->setMethod(NetworkManager::Ipv6Setting::Automatic);
+        ipv6Setting->setPrivacy(NetworkManager::Ipv6Setting::Disabled);
         return;
     }
 
@@ -76,6 +77,8 @@ void KyConnectOperation::ipv6SettingSet(
     if (!connectSettingsInfo.m_ipv6Address.empty()) {
         ipv6Setting->setAddresses(connectSettingsInfo.m_ipv6Address);
     }
+
+
 
     return ;
 }
@@ -91,8 +94,13 @@ void KyConnectOperation::connectSettingSet(
     if (!connectSettingsInfo.m_ifaceName.isEmpty()) {
         connectionSettings->setInterfaceName(connectSettingsInfo.m_ifaceName);
     }
-
     return;
+}
+
+void KyConnectOperation::setAutoConnect(NetworkManager::ConnectionSettings::Ptr &connectSetting,
+                     bool bAutoConnect)
+{
+    connectSetting->setAutoconnect(bAutoConnect);
 }
 
 void KyConnectOperation::createConnect(KyConnectSetting &connectSettingsInfo)

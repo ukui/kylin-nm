@@ -41,7 +41,7 @@ void assembleEapMethodPeapSettings(NetworkManager::ConnectionSettings::Ptr connS
     list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodPeap);
     wifi_8021x_sett->setInitialized(true);
     wifi_8021x_sett->setEapMethods(list);
-    wifi_8021x_sett->setPhase2AuthEapMethod((NetworkManager::Security8021xSetting::AuthEapMethod)info.phase2AuthMethod);
+    wifi_8021x_sett->setPhase2AuthMethod((NetworkManager::Security8021xSetting::AuthMethod)info.phase2AuthMethod);
     wifi_8021x_sett->setIdentity(info.userName);
     wifi_8021x_sett->setPassword(info.userPWD);
     wifi_8021x_sett->setPasswordFlags(info.m_passwdFlag);
@@ -126,7 +126,7 @@ void modifyEapMethodPeapSettings(NetworkManager::ConnectionSettings::Ptr connSet
     list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodPeap);
     wifi_8021x_sett->setInitialized(true);
     wifi_8021x_sett->setEapMethods(list);
-    wifi_8021x_sett->setPhase2AuthEapMethod((NetworkManager::Security8021xSetting::AuthEapMethod)peapInfo.phase2AuthMethod);
+    wifi_8021x_sett->setPhase2AuthMethod((NetworkManager::Security8021xSetting::AuthMethod)peapInfo.phase2AuthMethod);
     wifi_8021x_sett->setIdentity(peapInfo.userName);
     if(peapInfo.bChanged)
     {

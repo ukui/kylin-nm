@@ -26,6 +26,8 @@ public:
                          const KyConnectSetting &connectSettingsInfo);
     void ipv6SettingSet(NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
                          const KyConnectSetting &connectSettingsInfo);
+    void setAutoConnect(NetworkManager::ConnectionSettings::Ptr &connectSetting,
+                         bool bAutoConnect);
     inline void errorProcess(QString errorMessage);
 
 signals:

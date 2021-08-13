@@ -283,50 +283,6 @@ void KyWirelessNetResource::onWifiNetworkDeviceDisappear()
     kyWirelessNetItemListInit();
 }
 
-bool KyWirelessNetResource::modifyEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info)
-{
-    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
-    if (conn.isNull())
-    {
-        qDebug() << "modifyEnterPriseInfoTls connection missing";
-        return false;
-    }
-    NetworkManager::WirelessSecuritySetting::Ptr security_sett
-        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    if (security_sett.isNull())
-    {
-        qDebug() << "don't have WirelessSecurity connection";
-        return false;
-    }
-    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap)
-    {
-        return false;
-    }
-    NetworkManager::Security8021xSetting::Ptr setting = conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
-    if (setting.isNull())
-    {
-        qDebug() << "don't have Security8021x connection";
-        return false;
-    }
-
-    QList<NetworkManager::Security8021xSetting::EapMethod> list;
-    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodTls);
-    setting->setEapMethods(list);
-    setting->setIdentity(info.identity);
-    if(!info.domain.isEmpty())
-    {
-        setting->setDomainSuffixMatch(info.domain);
-    }
-    setting->setCaPath(info.caCertPath);
-    setting->setClientCertificate(info.clientCertPath.toLocal8Bit());
-    setting->setPrivateKey(info.clientPrivateKey.toLocal8Bit());
-    setting->setPrivateKeyPassword(info.clientPrivateKeyPWD);
-
-    conn->update(conn->settings()->toMap());
-
-    return true;
-}
-
 bool KyWirelessNetResource::getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info)
 {
     NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
@@ -371,46 +327,12 @@ bool KyWirelessNetResource::getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsIn
     return true;
 }
 
-bool KyWirelessNetResource::modifyEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info)
-{
-    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
-    if (conn.isNull())
-    {
-        qDebug() << "modifyEnterPriseInfoPeap connection missing";
-        return false;
-    }
-    NetworkManager::WirelessSecuritySetting::Ptr security_sett
-        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    if (security_sett.isNull())
-    {
-        qDebug() << "don't have WirelessSecurity connection";
-        return false;
-    }
-    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap)
-    {
-        qDebug() << "keyMgmt not WpaEap " << security_sett->keyMgmt();
-        return false;
-    }
-    NetworkManager::Security8021xSetting::Ptr setting = conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
-    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodTls))
-    {
-        qDebug() << "don't have Security8021x connection";
-        return false;
-    }
-
-    info.phase2AuthMethod = (KyEapMethodPeapAuth)setting->phase2AuthEapMethod();
-    info.userName = setting->identity();
-    info.userPWD = setting->password();
-
-    return true;
-}
-
 bool KyWirelessNetResource::getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info)
 {
     NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
     if (conn.isNull())
     {
-        qDebug() << "modifyEnterPriseInfoPeap connection missing";
+        qDebug() << "getEnterPriseInfoPeap connection missing";
         return false;
     }
     NetworkManager::WirelessSecuritySetting::Ptr security_sett
@@ -432,62 +354,10 @@ bool KyWirelessNetResource::getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeap
         return false;
     }
 
-    info.phase2AuthMethod = (KyEapMethodPeapAuth)setting->phase2AuthEapMethod();
+    info.phase2AuthMethod = (KyNoEapMethodAuth)setting->phase2AuthMethod();
     info.userName = setting->identity();
     info.userPWD = setting->password();
 
-    return true;
-}
-
-bool KyWirelessNetResource::modifyEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info)
-{
-    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
-    if (conn.isNull())
-    {
-        qDebug() << "modifyEnterPriseInfoTtls connection missing";
-        return false;
-    }
-
-    NetworkManager::WirelessSecuritySetting::Ptr security_sett
-        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    if (security_sett.isNull())
-    {
-        qDebug() << "don't have WirelessSecurity connection";
-        return false;
-    }
-    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap)
-    {
-        qDebug() << "not wpaeap"<<security_sett->keyMgmt();
-        return false;
-    }
-
-    NetworkManager::Security8021xSetting::Ptr setting = conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
-    if (setting.isNull())
-    {
-        qDebug() << "don't have Security8021x connection";
-        return false;
-    }
-
-    qDebug() << setting->identity() << setting->eapMethods() << setting->password() << setting->phase2AuthEapMethod();
-
-    QList<NetworkManager::Security8021xSetting::EapMethod> list;
-    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodTtls);
-    setting->setEapMethods(list);
-    if (info.authType == KyTtlsAuthMethod::AUTH_EAP)
-    {
-        setting->setPhase2AuthEapMethod((NetworkManager::Security8021xSetting::AuthEapMethod)info.authEapMethod);//gtc md5 mschapv2 otp tls
-        setting->setPhase2AuthMethod(NetworkManager::Security8021xSetting::AuthMethod::AuthMethodUnknown);
-    } else if (info.authType == KyTtlsAuthMethod::AUTH_NO_EAP) {
-        setting->setPhase2AuthMethod((NetworkManager::Security8021xSetting::AuthMethod)info.authNoEapMethod);//chap md5 mschapv2 pap gtc mschap otp tls
-        setting->setPhase2AuthEapMethod(NetworkManager::Security8021xSetting::AuthEapMethod::AuthEapMethodUnknown);
-    }
-    setting->setIdentity(info.userName);
-    setting->setPassword(info.userPWD);
-
-    conn->update(conn->settings()->toMap());
-
-    qDebug() << setting->identity() << setting->eapMethods() << setting->password() << setting->phase2AuthEapMethod();
-    qDebug() << "set success";
     return true;
 }
 
@@ -520,11 +390,11 @@ bool KyWirelessNetResource::getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtls
         return false;
     }
 
-    info.authEapMethod = (KyEapMethodTtlsAuth)setting->phase2AuthEapMethod();
-    info.authNoEapMethod = (KyNoEapMethodTtlsAuth)setting->phase2AuthMethod();
+    info.authEapMethod = (KyEapMethodAuth)setting->phase2AuthEapMethod();
+    info.authNoEapMethod = (KyNoEapMethodAuth)setting->phase2AuthMethod();
 
     info.authType = KyTtlsAuthMethod::AUTH_EAP;
-    if (info.authEapMethod != AuthEapMethodTtlsUnknown)
+    if (info.authEapMethod != KyAuthEapMethodUnknown)
     {
         info.authType = KyTtlsAuthMethod::AUTH_EAP;
     } else {

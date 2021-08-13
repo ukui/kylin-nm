@@ -4,7 +4,6 @@
 #include <QObject>
 #include "kyenterpricesettinginfo.h"
 #include "kylinconnectoperation.h"
-#include "kylinwirelessconnectsetting.h"
 #include "kyenterpricesettinginfo.h"
 
 enum KySecuType {
@@ -13,6 +12,36 @@ enum KySecuType {
     WPA_AND_WPA2_ENTERPRISE,
     WPA2_AND_WPA3_PERSONAL
 };
+
+enum KyKeyMgmt {
+    Unknown = -1,
+    Wep, Ieee8021x,
+    WpaNone,
+    WpaPsk,
+    WpaEap,
+    SAE
+};
+
+enum KyEapMethodType {
+    TLS,
+    PEAP,
+    TTLS,
+};
+
+class KyWirelessConnectSetting : public KyConnectSetting
+{
+//    Q_OBJECT
+
+public:
+    QString m_ssid;
+    bool isAutoConnect;
+    QString m_psk;
+    NetworkManager::Setting::SecretFlags m_secretFlag;
+    KyKeyMgmt m_type;
+    //only if m_type == WpaEap
+    KyEapMethodType m_eapMethodType;
+};
+
 
 class KyWirelessConnectOperation : public KyConnectOperation
 {
@@ -27,6 +56,9 @@ public:
 
     //获取密码保存策略
     bool getConnSecretFlags(QString &connUuid, NetworkManager::Setting::SecretFlags &);
+
+    //获取KeyMgmt
+    KyKeyMgmt getConnectKeyMgmt(const QString &uuid);
 
     //激活连接
     void activeWirelessConnect(QString , QString);
@@ -51,12 +83,22 @@ public:
     void addAndActiveWirelessEnterPriseTtlsConnect(KyEapMethodTtlsInfo &info, KyWirelessConnectSetting &connSettingInfo,
                                                    QString & devIface, bool isHidden);
 
+
+    //属性页 page1 AutoConnect
+    void setWirelessAutoConnect(const QString &uuid, bool bAutoConnect);
+    //属性页 page2 page3 ipv6
+    void updateIpv4AndIpv6SettingInfo(const QString &uuid, const KyConnectSetting &connectSettingsInfo);
+    //属性页 page4 wifi Security
     //连接修改(安全改为个人/None)
     void updateWirelessPersonalConnect(const QString &uuid, const KyWirelessConnectSetting &connSettingInfo, bool bPwdChange);
     //连接修改(安全改为改为企业)
-    void updateWirelessEnterPriseTlsConnect(const QString &uuid, const KyEapMethodTlsInfo &tlsinfo, const KyWirelessConnectSetting &connSettingInfo);
-    void updateWirelessEnterPrisePeapConnect(const QString &uuid, const KyEapMethodPeapInfo &peapInfo, const KyWirelessConnectSetting &connSettingInfo);
-    void updateWirelessEnterPriseTtlsConnect(const QString &uuid, const KyEapMethodTtlsInfo &ttlsInfo, const KyWirelessConnectSetting &connSettingInfo);
+    void updateWirelessEnterPriseTlsConnect(const QString &uuid, const KyEapMethodTlsInfo &tlsinfo);
+    void updateWirelessEnterPrisePeapConnect(const QString &uuid, const KyEapMethodPeapInfo &peapInfo);
+    void updateWirelessEnterPriseTtlsConnect(const QString &uuid, const KyEapMethodTtlsInfo &ttlsInfo);
+    //忘记
+    void deleteWirelessConnect(const QString &connectUuid);
+    //获取密码
+    QString getPsk(const QString &connectUuid);
 
     //申请扫描
     void requestWirelessScan();
@@ -68,7 +110,8 @@ signals:
 private:
     NetworkManager::WirelessNetwork::Ptr checkWifiNetExist(QString ssid, QString devName);
     void updateWirelessSecu(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyWirelessConnectSetting &connSettingInfo, bool bPwdChange = false);
-    KyKeyMgmt getConnectKeyMgmt(NetworkManager::ConnectionSettings::Ptr connSettingPtr);
+    void setIpv4AndIpv6Setting(NetworkManager::ConnectionSettings::Ptr connSetting, const KyConnectSetting &connSettingInfo);
+    void setWirelessSecuWpaXEap(NetworkManager::ConnectionSettings::Ptr connSettingPtr);
 
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
 

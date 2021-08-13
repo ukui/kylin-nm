@@ -21,10 +21,6 @@ public:
     bool getAllDeviceWifiNetwork(QMap<QString,QList<KyWirelessNetItem> > &map);
     bool getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &KyWirelessNetResource);
 
-    bool modifyEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info);
-    bool modifyEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info);
-    bool modifyEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);
-
     bool getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info);
     bool getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info);
     bool getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);

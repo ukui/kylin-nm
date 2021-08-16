@@ -23,14 +23,14 @@ signals:
 public slots:
 
 protected:
-    void keyPressEvent(QKeyEvent *);
-    bool eventFilter(QObject *, QEvent *) override;
+    void keyPressEvent(QKeyEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     void firstlyStart(); //一级启动
     void secondaryStart(); //二级启动
-    bool m_load_finished = false; //是否二级启动已执行完
-    QTimer * m_secondary_start_timer = nullptr; //执行二级启动的倒计时
+    bool m_loadFinished = false; //是否二级启动已执行完
+    QTimer * m_secondaryStartTimer = nullptr; //执行二级启动的倒计时
     void initWindowProperties();
     void initUI();
     void initTrayIcon();
@@ -40,25 +40,26 @@ private:
     void showControlCenter();
 
     //主窗口的主要构成控件
-    QTabWidget * m_central_widget = nullptr;
+    QTabWidget * m_centralWidget = nullptr;
 
     //监听主题的Gsettings
-    QGSettings * m_style_gsettings = nullptr;
+    QGSettings * m_styleGsettings = nullptr;
 
     //获取和重置窗口位置
     void resetWindowPosition();
-    QDBusInterface * m_position_interface = nullptr;
+    QDBusInterface * m_positionInterface = nullptr;
 
     //托盘图标，托盘图标右键菜单
-    QSystemTrayIcon * m_tray_icon = nullptr;
-    QMenu * m_tray_icon_menu = nullptr;
-    QAction * m_show_mainwindow_action = nullptr;
-    QAction * m_show_settings_action = nullptr;
+    QSystemTrayIcon * m_trayIcon = nullptr;
+    QMenu * m_trayIconMenu = nullptr;
+    QAction * m_showMainwindowAction = nullptr;
+    QAction * m_showSettingsAction = nullptr;
 
 private slots:
     void onTrayIconActivated();
     void onShowMainwindowActionTriggled();
     void onShowSettingsActionTriggled();
+    void onThemeChanged(const QString &key);
 };
 
 #endif // MAINWINDOW_H

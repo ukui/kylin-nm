@@ -9,7 +9,7 @@ public:
     ~Divider() = default;
 
 protected:
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // DIVIDER_H

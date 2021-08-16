@@ -74,7 +74,8 @@ namespace UKUI {
 class Decoration;
 }
 
-class XAtomHelper : public QObject {
+class XAtomHelper : public QObject
+{
     // friend class UKUI::Decoration;
     Q_OBJECT
 public:

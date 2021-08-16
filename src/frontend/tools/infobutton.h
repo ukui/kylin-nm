@@ -13,9 +13,9 @@ private:
     void initUI();
 
 protected:
-    virtual void enterEvent(QEvent *);
-    virtual void leaveEvent(QEvent *);
-    bool eventFilter(QObject *, QEvent *);
+    virtual void enterEvent(QEvent *event);
+    virtual void leaveEvent(QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event);
 };
 
 #endif // INFOBUTTON_H

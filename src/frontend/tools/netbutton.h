@@ -23,8 +23,8 @@ signals:
     void requestStopLoading();
 
 private:
-    bool m_is_activated = INACTIVATED;
-    QLabel * m_icon_label = nullptr;
+    bool m_isActivated = INACTIVATED;
+    QLabel * m_iconLabel = nullptr;
 
 private slots:
     void onLoadingStarted();

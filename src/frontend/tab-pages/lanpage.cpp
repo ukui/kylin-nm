@@ -18,77 +18,77 @@ LanPage::LanPage(QWidget *parent) : QWidget(parent)
 
 LanPage::~LanPage()
 {
-    delete m_title_divider;
-    delete m_activated_lan_divider;
-    delete m_inactivated_lan_divider;
+    delete m_titleDivider;
+    delete m_activatedLanDivider;
+    delete m_inactivatedLanDivider;
 }
 
 void LanPage::initUI()
 {
-    m_main_layout = new QVBoxLayout(this);
-    m_main_layout->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_main_layout->setSpacing(MAIN_LAYOUT_SPACING);
-    this->setLayout(m_main_layout);
+    m_mainLayout = new QVBoxLayout(this);
+    m_mainLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
+    m_mainLayout->setSpacing(MAIN_LAYOUT_SPACING);
+    this->setLayout(m_mainLayout);
 
-    m_title_frame = new QFrame(this);
-    m_title_frame->setFixedHeight(TITLE_FRAME_HEIGHT);
-    m_title_layout = new QHBoxLayout(m_title_frame);
-    m_title_layout->setContentsMargins(TITLE_LAYOUT_MARGINS);
-    m_title_label = new QLabel(m_title_frame);
-    m_title_label->setText(tr("LAN"));
-    m_lan_switch = new SwitchButton(m_title_frame);
-    m_title_layout->addWidget(m_title_label);
-    m_title_layout->addStretch();
-    m_title_layout->addWidget(m_lan_switch);
-    m_title_divider = new Divider(this);
+    m_titleFrame = new QFrame(this);
+    m_titleFrame->setFixedHeight(TITLE_FRAME_HEIGHT);
+    m_titleLayout = new QHBoxLayout(m_titleFrame);
+    m_titleLayout->setContentsMargins(TITLE_LAYOUT_MARGINS);
+    m_titleLabel = new QLabel(m_titleFrame);
+    m_titleLabel->setText(tr("LAN"));
+    m_lanSwitch = new SwitchButton(m_titleFrame);
+    m_titleLayout->addWidget(m_titleLabel);
+    m_titleLayout->addStretch();
+    m_titleLayout->addWidget(m_lanSwitch);
+    m_titleDivider = new Divider(this);
 
-    m_activated_lan_frame = new QFrame(this);
-    m_activated_lan_layout = new QVBoxLayout(m_activated_lan_frame);
-    m_activated_lan_layout->setContentsMargins(LAN_LAYOUT_MARGINS);
-    m_activated_lan_layout->setSpacing(LAN_LAYOUT_SPACING);
-    m_activated_lan_label = new QLabel(m_activated_lan_frame);
-    m_activated_lan_label->setContentsMargins(TEXT_MARGINS);
-    m_activated_lan_label->setText(tr("Activated LAN"));
-    m_activated_lan_list_widget = new QListWidget(m_activated_lan_frame);
-    m_activated_lan_list_widget->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_activated_lan_list_widget->setSpacing(LAN_LIST_SPACING);
-    m_activated_lan_layout->addWidget(m_activated_lan_label);
-    m_activated_lan_layout->addWidget(m_activated_lan_list_widget);
-    m_activated_lan_divider = new Divider(this);
+    m_activatedLanFrame = new QFrame(this);
+    m_activatedLanLayout = new QVBoxLayout(m_activatedLanFrame);
+    m_activatedLanLayout->setContentsMargins(LAN_LAYOUT_MARGINS);
+    m_activatedLanLayout->setSpacing(LAN_LAYOUT_SPACING);
+    m_activatedLanLabel = new QLabel(m_activatedLanFrame);
+    m_activatedLanLabel->setContentsMargins(TEXT_MARGINS);
+    m_activatedLanLabel->setText(tr("Activated LAN"));
+    m_activatedLanListWidget = new QListWidget(m_activatedLanFrame);
+    m_activatedLanListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
+    m_activatedLanListWidget->setSpacing(LAN_LIST_SPACING);
+    m_activatedLanLayout->addWidget(m_activatedLanLabel);
+    m_activatedLanLayout->addWidget(m_activatedLanListWidget);
+    m_activatedLanDivider = new Divider(this);
 
-    m_inactivated_lan_frame = new QFrame(this);
-    m_inactivated_lan_layout = new QVBoxLayout(m_inactivated_lan_frame);
-    m_inactivated_lan_layout->setContentsMargins(LAN_LAYOUT_MARGINS);
-    m_inactivated_lan_layout->setSpacing(LAN_LAYOUT_SPACING);
-    m_inactivated_lan_frame->setLayout(m_inactivated_lan_layout);
-    m_inactivated_lan_label = new QLabel(m_inactivated_lan_frame);
-    m_inactivated_lan_label->setContentsMargins(TEXT_MARGINS);
-    m_inactivated_lan_label->setText(tr("Inactivated LAN"));
-    m_inactivated_lan_list_area = new QScrollArea(m_inactivated_lan_frame);
-    m_inactivated_lan_list_widget = new QListWidget(m_inactivated_lan_list_area);
-    m_inactivated_lan_list_area->setWidget(m_inactivated_lan_list_widget);
-    m_inactivated_lan_list_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_inactivated_lan_list_area->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_inactivated_lan_list_widget->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_inactivated_lan_list_widget->setSpacing(LAN_LIST_SPACING);
+    m_inactivatedLanFrame = new QFrame(this);
+    m_inactivatedLanLayout = new QVBoxLayout(m_inactivatedLanFrame);
+    m_inactivatedLanLayout->setContentsMargins(LAN_LAYOUT_MARGINS);
+    m_inactivatedLanLayout->setSpacing(LAN_LAYOUT_SPACING);
+    m_inactivatedLanFrame->setLayout(m_inactivatedLanLayout);
+    m_inactivatedLanLabel = new QLabel(m_inactivatedLanFrame);
+    m_inactivatedLanLabel->setContentsMargins(TEXT_MARGINS);
+    m_inactivatedLanLabel->setText(tr("Inactivated LAN"));
+    m_inactivatedLanListArea = new QScrollArea(m_inactivatedLanFrame);
+    m_inactivatedLanListWidget = new QListWidget(m_inactivatedLanListArea);
+    m_inactivatedLanListArea->setWidget(m_inactivatedLanListWidget);
+    m_inactivatedLanListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_inactivatedLanListArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_inactivatedLanListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
+    m_inactivatedLanListWidget->setSpacing(LAN_LIST_SPACING);
 //    m_inactivated_lan_list_area->setFixedHeight(SCROLL_AREA_HEIGHT);
-    m_inactivated_lan_layout->addWidget(m_inactivated_lan_label);
-    m_inactivated_lan_layout->addWidget(m_inactivated_lan_list_area);
-    m_inactivated_lan_divider = new Divider(this);
+    m_inactivatedLanLayout->addWidget(m_inactivatedLanLabel);
+    m_inactivatedLanLayout->addWidget(m_inactivatedLanListArea);
+    m_inactivatedLanDivider = new Divider(this);
 
-    m_settings_frame = new QFrame(this);
-    m_settings_layout = new QHBoxLayout(m_settings_frame);
-    m_settings_layout->setContentsMargins(SETTINGS_LAYOUT_MARGINS);
-    m_settings_label = new QLabel(m_settings_frame);
-    m_settings_label->setText(tr("Settings"));
-    m_settings_layout->addWidget(m_settings_label);
-    m_settings_frame->setLayout(m_settings_layout);
+    m_settingsFrame = new QFrame(this);
+    m_settingsLayout = new QHBoxLayout(m_settingsFrame);
+    m_settingsLayout->setContentsMargins(SETTINGS_LAYOUT_MARGINS);
+    m_settingsLabel = new QLabel(m_settingsFrame);
+    m_settingsLabel->setText(tr("Settings"));
+    m_settingsLayout->addWidget(m_settingsLabel);
+    m_settingsFrame->setLayout(m_settingsLayout);
 
-    m_main_layout->addWidget(m_title_frame);
-    m_main_layout->addWidget(m_title_divider);
-    m_main_layout->addWidget(m_activated_lan_frame);
-    m_main_layout->addWidget(m_activated_lan_divider);
-    m_main_layout->addWidget(m_inactivated_lan_frame);
-    m_main_layout->addWidget(m_inactivated_lan_divider);
-    m_main_layout->addWidget(m_settings_frame);
+    m_mainLayout->addWidget(m_titleFrame);
+    m_mainLayout->addWidget(m_titleDivider);
+    m_mainLayout->addWidget(m_activatedLanFrame);
+    m_mainLayout->addWidget(m_activatedLanDivider);
+    m_mainLayout->addWidget(m_inactivatedLanFrame);
+    m_mainLayout->addWidget(m_inactivatedLanDivider);
+    m_mainLayout->addWidget(m_settingsFrame);
 }

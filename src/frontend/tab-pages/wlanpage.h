@@ -19,38 +19,38 @@ public:
 signals:
 
 protected:
-    bool eventFilter(QObject *, QEvent *);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     void initUI();
-    QVBoxLayout * m_main_layout = nullptr;
-    QFrame * m_title_frame = nullptr;
-    QHBoxLayout * m_title_layout = nullptr;
-    QLabel * m_title_label = nullptr;
-    SwitchButton * m_lan_switch = nullptr;
-    Divider * m_title_divider = nullptr;
+    QVBoxLayout * m_mainLayout = nullptr;
+    QFrame * m_titleFrame = nullptr;
+    QHBoxLayout * m_titleLayout = nullptr;
+    QLabel * m_titleLabel = nullptr;
+    SwitchButton * m_lanSwitch = nullptr;
+    Divider * m_titleDivider = nullptr;
 
-    QFrame * m_activated_wlan_frame = nullptr;
-    QVBoxLayout * m_activated_wlan_layout = nullptr;
-    QLabel * m_activated_wlan_label = nullptr;
-    QListWidget * m_activated_wlan_list_widget = nullptr;
-    Divider * m_activated_wlan_divider = nullptr;
+    QFrame * m_activatedWlanFrame = nullptr;
+    QVBoxLayout * m_activatedWlanLayout = nullptr;
+    QLabel *m_activatedWlanLabel = nullptr;
+    QListWidget * m_activatedWlanListWidget = nullptr;
+    Divider * m_activatedWlanDivider = nullptr;
 
-    QFrame * m_inactivated_wlan_frame = nullptr;
-    QVBoxLayout * m_inactivated_wlan_layout = nullptr;
-    QLabel * m_inactivated_wlan_label = nullptr;
-    QScrollArea * m_inactivated_wlan_list_area = nullptr;
-    QFrame * m_inactivated_wlan_list_area_central_widget = nullptr;
-    QVBoxLayout * m_inactivated_wlan_list_area_layout = nullptr;
-    QListWidget * m_inactivated_wlan_list_widget = nullptr;
-    QFrame * m_hidden_wlan_widget = nullptr;
-    QHBoxLayout * m_hidden_wlan_layout = nullptr;
-    QLabel * m_hidden_wlan_label = nullptr;
-    Divider * m_inactivated_wlan_divider = nullptr;
+    QFrame * m_inactivatedWlanFrame = nullptr;
+    QVBoxLayout * m_inactivatedWlanLayout = nullptr;
+    QLabel * m_inactivatedWlanLabel = nullptr;
+    QScrollArea * m_inactivatedWlanListArea = nullptr;
+    QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;
+    QVBoxLayout * m_inactivatedWlanListAreaLayout = nullptr;
+    QListWidget * m_inactivatedWlanListWidget = nullptr;
+    QFrame * m_hiddenWlanWidget = nullptr;
+    QHBoxLayout * m_hiddenWlanLayout = nullptr;
+    QLabel * m_hiddenWlanLabel = nullptr;
+    Divider * m_inactivatedWlanDivider = nullptr;
 
-    QFrame * m_settings_frame = nullptr;
-    QHBoxLayout * m_settings_layout = nullptr;
-    QLabel * m_settings_label = nullptr;
+    QFrame * m_settingsFrame = nullptr;
+    QHBoxLayout * m_settingsLayout = nullptr;
+    QLabel * m_settingsLabel = nullptr;
 };
 
 #endif // WLANPAGE_H

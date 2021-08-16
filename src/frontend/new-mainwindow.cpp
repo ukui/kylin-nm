@@ -24,8 +24,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
  */
 void MainWindow::showMainwindow()
 {
-    if (!m_load_finished) {
-        m_secondary_start_timer->stop();
+    if (!m_loadFinished) {
+        m_secondaryStartTimer->stop();
         secondaryStart();
     }
     this->resetWindowPosition();
@@ -52,12 +52,12 @@ void MainWindow::firstlyStart()
     initWindowTheme();
     initTrayIcon();
     installEventFilter(this);
-    m_secondary_start_timer = new QTimer(this);
-    connect(m_secondary_start_timer, &QTimer::timeout, this, [ = ]() {
-        m_secondary_start_timer->stop();
+    m_secondaryStartTimer = new QTimer(this);
+    connect(m_secondaryStartTimer, &QTimer::timeout, this, [ = ]() {
+        m_secondaryStartTimer->stop();
         secondaryStart();//满足条件后执行比较耗时的二级启动
     });
-    m_secondary_start_timer->start(5 * 1000);
+    m_secondaryStartTimer->start(5 * 1000);
 }
 
 /**
@@ -65,9 +65,9 @@ void MainWindow::firstlyStart()
  */
 void MainWindow::secondaryStart()
 {
-    if (m_load_finished)
+    if (m_loadFinished)
         return;
-    m_load_finished = true;
+    m_loadFinished = true;
 }
 
 /**
@@ -91,13 +91,13 @@ void MainWindow::initWindowProperties()
  */
 void MainWindow::initUI()
 {
-    m_central_widget = new QTabWidget(this);
-    this->setCentralWidget(m_central_widget);
-    m_central_widget->tabBar()->setFixedWidth(this->width());
-    LanPage * m_lanWidget = new LanPage(m_central_widget);
-    WlanPage * m_wlanWidget = new WlanPage(m_central_widget);
-    m_central_widget->addTab(m_lanWidget, QIcon::fromTheme("network-wired-connected-symbolic", QIcon::fromTheme("network-wired-symbolic", QIcon(":/res/l/network-online.svg"))), tr("LAN"));
-    m_central_widget->addTab(m_wlanWidget, QIcon::fromTheme("network-wireless-signal-excellent-symbolic", QIcon(":/res/x/wifi-list-bg.svg")), tr("WLAN"));
+    m_centralWidget = new QTabWidget(this);
+    this->setCentralWidget(m_centralWidget);
+    m_centralWidget->tabBar()->setFixedWidth(this->width());
+    LanPage * m_lanWidget = new LanPage(m_centralWidget);
+    WlanPage * m_wlanWidget = new WlanPage(m_centralWidget);
+    m_centralWidget->addTab(m_lanWidget, QIcon::fromTheme("network-wired-connected-symbolic", QIcon::fromTheme("network-wired-symbolic", QIcon(":/res/l/network-online.svg"))), tr("LAN"));
+    m_centralWidget->addTab(m_wlanWidget, QIcon::fromTheme("network-wireless-signal-excellent-symbolic", QIcon(":/res/x/wifi-list-bg.svg")), tr("WLAN"));
 }
 
 /**
@@ -105,22 +105,22 @@ void MainWindow::initUI()
  */
 void MainWindow::initTrayIcon()
 {
-    m_tray_icon = new QSystemTrayIcon();
-    m_tray_icon_menu = new QMenu();
-    m_show_mainwindow_action = new QAction(tr("Show MainWindow"),this);
-    m_show_settings_action = new QAction(tr("Settings"),this);
+    m_trayIcon = new QSystemTrayIcon();
+    m_trayIconMenu = new QMenu();
+    m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
+    m_showSettingsAction = new QAction(tr("Settings"),this);
 
-    m_tray_icon->setToolTip(QString(tr("kylin-nm")));
-    m_show_settings_action->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
-    m_tray_icon_menu->addAction(m_show_mainwindow_action);
-    m_tray_icon_menu->addAction(m_show_settings_action);
-    m_tray_icon->setContextMenu(m_tray_icon_menu);
-    m_tray_icon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
+    m_trayIcon->setToolTip(QString(tr("kylin-nm")));
+    m_showSettingsAction->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
+    m_trayIconMenu->addAction(m_showMainwindowAction);
+    m_trayIconMenu->addAction(m_showSettingsAction);
+    m_trayIcon->setContextMenu(m_trayIconMenu);
+    m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
 
-    connect(m_tray_icon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
-    connect(m_show_mainwindow_action, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
-    connect(m_show_settings_action, &QAction::triggered, this, &MainWindow::onShowSettingsActionTriggled);
-    m_tray_icon->show();
+    connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
+    connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
+    connect(m_showSettingsAction, &QAction::triggered, this, &MainWindow::onShowSettingsActionTriggled);
+    m_trayIcon->show();
 }
 
 /**
@@ -129,15 +129,19 @@ void MainWindow::initTrayIcon()
 void MainWindow::resetWindowPosition()
 {
 #define MARGIN 4
-    if (!m_position_interface) {
-        m_position_interface = new QDBusInterface("org.ukui.panel",
+#define PANEL_TOP 1
+#define PANEL_LEFT 2
+#define PANEL_RIGHT 3
+//#define PANEL_BOTTOM 4
+    if (!m_positionInterface) {
+        m_positionInterface = new QDBusInterface("org.ukui.panel",
                             "/panel/position",
                             "org.ukui.panel",
                             QDBusConnection::sessionBus());
     }
-    QDBusReply<QVariantList> reply = m_position_interface->call("GetPrimaryScreenGeometry");
+    QDBusReply<QVariantList> reply = m_positionInterface->call("GetPrimaryScreenGeometry");
     //reply获取的参数共5个，分别是 主屏可用区域的起点x坐标，主屏可用区域的起点y坐标，主屏可用区域的宽度，主屏可用区域高度，任务栏位置
-    if (!m_position_interface->isValid() || !reply.isValid() || reply.value().size() < 5) {
+    if (!m_positionInterface->isValid() || !reply.isValid() || reply.value().size() < 5) {
         qCritical() << QDBusConnection::sessionBus().lastError().message();
         this->setGeometry(0, 0, this->width(), this->height());
         return;
@@ -145,20 +149,20 @@ void MainWindow::resetWindowPosition()
     QVariantList position_list = reply.value();
     int position = position_list.at(4).toInt();
     switch(position){
-    case 1:
+    case PANEL_TOP:
         //任务栏位于上方
         this->setGeometry(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
                           position_list.at(1).toInt() + MARGIN,
                           this->width(), this->height());
         break;
         //任务栏位于左边
-    case 2:
+    case PANEL_LEFT:
         this->setGeometry(position_list.at(0).toInt() + MARGIN,
                           position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
                           this->width(), this->height());
         break;
         //任务栏位于右边
-    case 3:
+    case PANEL_RIGHT:
         this->setGeometry(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
                           position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
                           this->width(), this->height());
@@ -205,14 +209,9 @@ void MainWindow::initWindowTheme()
 {
     const QByteArray style_id(THEME_SCHAME);
     if (QGSettings::isSchemaInstalled(style_id)) {
-        m_style_gsettings = new QGSettings(style_id);
+        m_styleGsettings = new QGSettings(style_id);
         resetWindowTheme();
-        connect(m_style_gsettings, &QGSettings::changed, this, [ = ](const QString &key) {
-            if (key == COLOR_THEME) {
-                qDebug() << "Received signal of theme changed, will reset theme." << Q_FUNC_INFO << __LINE__;
-                resetWindowTheme();
-            }
-        });
+        connect(m_styleGsettings, &QGSettings::changed, this, &MainWindow::onThemeChanged);
     } else {
         qWarning() << "Gsettings interface \"org.ukui.style\" is not exist!" << Q_FUNC_INFO << __LINE__;
     }
@@ -223,8 +222,8 @@ void MainWindow::initWindowTheme()
  */
 void MainWindow::resetWindowTheme()
 {
-    if (!m_style_gsettings) return;
-    QString currentTheme = m_style_gsettings->get(COLOR_THEME).toString();
+    if (!m_styleGsettings) { return; }
+    QString currentTheme = m_styleGsettings->get(COLOR_THEME).toString();
     auto app = static_cast<QApplication*>(QCoreApplication::instance());
     if(currentTheme == "ukui-dark" || currentTheme == "ukui-black"){
         app->setStyle(new CustomStyle("ukui-dark"));
@@ -267,6 +266,16 @@ void MainWindow::onShowMainwindowActionTriggled()
 void MainWindow::onShowSettingsActionTriggled()
 {
     showControlCenter();
+}
+
+void MainWindow::onThemeChanged(const QString &key)
+{
+    if (key == COLOR_THEME) {
+        qDebug() << "Received signal of theme changed, will reset theme." << Q_FUNC_INFO << __LINE__;
+        resetWindowTheme();
+    } else {
+        qDebug() << "Received signal of theme changed, key=" << key << " will do nothing." << Q_FUNC_INFO << __LINE__;
+    }
 }
 
 /**

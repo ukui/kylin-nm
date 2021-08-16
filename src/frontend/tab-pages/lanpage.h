@@ -20,29 +20,29 @@ signals:
 
 private:
     void initUI();
-    QVBoxLayout * m_main_layout = nullptr;
-    QFrame * m_title_frame = nullptr;
-    QHBoxLayout * m_title_layout = nullptr;
-    QLabel * m_title_label = nullptr;
-    SwitchButton * m_lan_switch = nullptr;
-    Divider * m_title_divider = nullptr;
+    QVBoxLayout * m_mainLayout = nullptr;
+    QFrame * m_titleFrame = nullptr;
+    QHBoxLayout * m_titleLayout = nullptr;
+    QLabel * m_titleLabel = nullptr;
+    SwitchButton * m_lanSwitch = nullptr;
+    Divider * m_titleDivider = nullptr;
 
-    QFrame * m_activated_lan_frame = nullptr;
-    QVBoxLayout * m_activated_lan_layout = nullptr;
-    QLabel * m_activated_lan_label = nullptr;
-    QListWidget * m_activated_lan_list_widget = nullptr;
-    Divider * m_activated_lan_divider = nullptr;
+    QFrame * m_activatedLanFrame = nullptr;
+    QVBoxLayout * m_activatedLanLayout = nullptr;
+    QLabel * m_activatedLanLabel = nullptr;
+    QListWidget * m_activatedLanListWidget = nullptr;
+    Divider * m_activatedLanDivider = nullptr;
 
-    QFrame * m_inactivated_lan_frame = nullptr;
-    QVBoxLayout * m_inactivated_lan_layout = nullptr;
-    QLabel * m_inactivated_lan_label = nullptr;
-    QScrollArea * m_inactivated_lan_list_area = nullptr;
-    QListWidget * m_inactivated_lan_list_widget = nullptr;
-    Divider * m_inactivated_lan_divider = nullptr;
+    QFrame * m_inactivatedLanFrame = nullptr;
+    QVBoxLayout * m_inactivatedLanLayout = nullptr;
+    QLabel * m_inactivatedLanLabel = nullptr;
+    QScrollArea * m_inactivatedLanListArea = nullptr;
+    QListWidget * m_inactivatedLanListWidget = nullptr;
+    Divider * m_inactivatedLanDivider = nullptr;
 
-    QFrame * m_settings_frame = nullptr;
-    QHBoxLayout * m_settings_layout = nullptr;
-    QLabel * m_settings_label = nullptr;
+    QFrame * m_settingsFrame = nullptr;
+    QHBoxLayout * m_settingsLayout = nullptr;
+    QLabel * m_settingsLabel = nullptr;
 };
 
 #endif // LANPAGE_H

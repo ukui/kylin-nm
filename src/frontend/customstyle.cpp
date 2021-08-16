@@ -12,16 +12,27 @@ QSize CustomStyle::sizeFromContents(QStyle::ContentsType type, const QStyleOptio
             QSize size(0,40);
             if (const QStyleOptionTab *tab= qstyleoption_cast<const QStyleOptionTab *>(option)) {
                 switch (tab->shape) {
-                    case QTabBar::RoundedNorth: case QTabBar::RoundedSouth:
+                    case QTabBar::RoundedNorth:
+                    case QTabBar::RoundedSouth: {
                         return size + QSize(50,0);
-                    case QTabBar::RoundedWest: case QTabBar::RoundedEast:
+                        break;
+                    }
+                    case QTabBar::RoundedWest:
+                    case QTabBar::RoundedEast: {
                         return size + QSize(0,50);
-                    default: break;
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
             }
             return size;
-        } break;
-        default: break;
+            break;
+        }
+        default: {
+            break;
+        }
     }
     return QProxyStyle::sizeFromContents(type, option, contentsSize, widget);
 }
@@ -38,7 +49,9 @@ void CustomStyle::drawControl(QStyle::ControlElement element, const QStyleOption
 //            }
 //            break;
 //        }
-//        default: break;
+//        default: {
+//            break;
+//        }
 //    }
     return QProxyStyle::drawControl(element, option, painter, widget);
 }

@@ -25,6 +25,9 @@
 #include "wireless-security/dlghidewifi.h"
 #include "sysdbusregister.h"
 #include "kylinwiredwidget.h"
+#include "nmdemo.h"
+
+#include "../backend/dbus-interface/kylinagentinterface.h"
 
 #include <algorithm>//sort函数包含的头文件
 
@@ -139,6 +142,9 @@ void MainWindow::secondaryStart()
 
     qDebug()<<"Init ksnm...";
     this->ksnm = new KSimpleNM();
+
+    NmDemo* a = new NmDemo(this);
+    a->show();
 #if 0
     connect(ksnm, SIGNAL(getLanListFinished(QStringList)), this, SLOT(getLanListDone(QStringList)));
     connect(ksnm, SIGNAL(getWifiListFinished(QStringList)), this, SLOT(getWifiListDone(QStringList)));
@@ -197,6 +203,8 @@ void MainWindow::secondaryStart()
     ui->btnWifiList->setAttribute(Qt::WA_Hover,true);
     ui->btnWifiList->installEventFilter(this);
     hasWifiConnected = false;
+
+    agent_init();
 
     //检查有线网络的个数是否为0,如果是0，则新建一个有线网络
     checkIfWiredNetExist();

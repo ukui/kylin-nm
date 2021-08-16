@@ -21,7 +21,7 @@
 
 #include <QStringList>
 #include <QString>
-#include <QObject>
+//#include <QObject>
 
 #include <NetworkManagerQt/AdslDevice>
 #include <NetworkManagerQt/WiredDevice>
@@ -39,11 +39,11 @@ typedef enum {
     IPADDRESS_V6,
 }KyIpAddressType;
 
-class KyConnectSetting : public QObject
+class KyConnectSetting/* : public QObject*/
 {
-    Q_OBJECT
+//    Q_OBJECT
 public:
-    explicit KyConnectSetting(QObject *parent = nullptr);
+/*    explicit*/ KyConnectSetting(/*QObject *parent = nullptr*/);
     ~KyConnectSetting();
 
 public:

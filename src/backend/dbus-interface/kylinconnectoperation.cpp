@@ -65,6 +65,7 @@ void KyConnectOperation::ipv6SettingSet(
 
     if (CONFIG_IP_DHCP == connectSettingsInfo.m_ipv6ConfigIpType) {
         ipv6Setting->setMethod(NetworkManager::Ipv6Setting::Automatic);
+        ipv6Setting->setPrivacy(NetworkManager::Ipv6Setting::Disabled);
         return;
     }
 
@@ -76,6 +77,8 @@ void KyConnectOperation::ipv6SettingSet(
     if (!connectSettingsInfo.m_ipv6Address.empty()) {
         ipv6Setting->setAddresses(connectSettingsInfo.m_ipv6Address);
     }
+
+
 
     return ;
 }
@@ -91,8 +94,13 @@ void KyConnectOperation::connectSettingSet(
     if (!connectSettingsInfo.m_ifaceName.isEmpty()) {
         connectionSettings->setInterfaceName(connectSettingsInfo.m_ifaceName);
     }
-
     return;
+}
+
+void KyConnectOperation::setAutoConnect(NetworkManager::ConnectionSettings::Ptr &connectSetting,
+                     bool bAutoConnect)
+{
+    connectSetting->setAutoconnect(bAutoConnect);
 }
 
 void KyConnectOperation::createConnect(KyConnectSetting &connectSettingsInfo)
@@ -101,21 +109,9 @@ void KyConnectOperation::createConnect(KyConnectSetting &connectSettingsInfo)
     return;
 }
 
-void KyConnectOperation::updateConnect(const QString &connectUuid, const KyConnectSetting &connectSettingsInfo)
+void KyConnectOperation::updateConnect(NetworkManager::ConnectionSettings::Ptr connectionSettings, const KyConnectSetting &connectSettingsInfo)
 {
-    qDebug()<<"update connect"<<connectUuid;
-    NetworkManager::Connection::Ptr connectPtr =
-            NetworkManager::findConnectionByUuid(connectUuid);
-    if (nullptr == connectPtr) {
-        QString errorMessage = tr("it can not find connection") + connectUuid;
-        qWarning()<<errorMessage;
-        Q_EMIT updateConnectionError(errorMessage);
-        return;
-    }
-
-    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
-    connectionSettings->setId(connectSettingsInfo.m_connectName);
-    connectionSettings->setInterfaceName(connectSettingsInfo.m_ifaceName);
+    qDebug()<<"update connect"<<connectionSettings->uuid();
 
     NetworkManager::Ipv4Setting::Ptr ipv4Setting = connectionSettings->setting(NetworkManager::Setting::Ipv4).dynamicCast<NetworkManager::Ipv4Setting>();
     ipv4SettingSet(ipv4Setting, connectSettingsInfo);
@@ -125,8 +121,6 @@ void KyConnectOperation::updateConnect(const QString &connectUuid, const KyConne
 
 //    NetworkManager::WiredSetting::Ptr wiredSetting = connectionSettings->setting(NetworkManager::Setting::Wired).dynamicCast<NetworkManager::WiredSetting>();
 //    wiredSetting->setInitialized(true);
-
-    connectPtr->update(connectionSettings->toMap());
 
     return ;
 }
@@ -149,12 +143,11 @@ void KyConnectOperation::deleteConnect(const QString &connectUuid)
     return ;
 }
 
-void KyConnectOperation::activateConnection(const QString connectUuid)
+void KyConnectOperation::activateConnection(const QString connectUuid, const QString deviceName)
 {
     QString connectPath = "";
     QString deviceIdentifier = "";
     QString connectName = "";
-    QString deviceName = "";
     QString specificObject = "";
     NetworkManager::Connection::Ptr connectPtr = nullptr;
 
@@ -178,24 +171,23 @@ void KyConnectOperation::activateConnection(const QString connectUuid)
 #endif
     connectPath = connectPtr->path();
     connectName = connectPtr->name();
-    deviceName = connectPtr->settings()->interfaceName();
+//    deviceName = connectPtr->settings()->interfaceName();
 
-    for (auto const & dev : m_networkResourceInstance->m_devices) {
-        for (auto const & dev_conn : dev->availableConnections()) {
-            if (dev_conn == connectPtr) {
-                deviceIdentifier = dev->uni();
-                deviceName = dev->interfaceName();
-                break;
-            }
-        }
+//    for (auto const & dev : m_networkResourceInstance->m_devices) {
+//        for (auto const & dev_conn : dev->availableConnections()) {
+//            if (dev_conn == connectPtr) {
+//                deviceIdentifier = dev->uni();
+//                deviceName = dev->interfaceName();
+//                break;
+//            }
+//        }
+//    }
+
+    auto dev = m_networkResourceInstance->findDeviceInterface(deviceName);
+    if (!dev.isNull()) {
+        deviceIdentifier = dev->uni();
     }
 
-    if (deviceIdentifier.isEmpty() && !deviceName.isEmpty()) {
-        auto dev = m_networkResourceInstance->findDeviceInterface(deviceName);
-        if (!dev.isNull()) {
-            deviceIdentifier = dev->uni();
-        }
-    }
 
     if (deviceIdentifier.isEmpty()) {
         QString errorMessage = tr("device Identifier is empty, its name") + deviceName;

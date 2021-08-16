@@ -5,7 +5,8 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
 
-    m_activeConnectUuidList.clear();
+//    m_activeConnectUuidList.clear();
+    m_activeConnectUuidMap.clear();
     //TODO::get uuid from settings for system reboot;
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceAdd, this, &KyNetworkDeviceResourse::deviceAdd);
@@ -155,7 +156,8 @@ void KyNetworkDeviceResourse::disconnectDevice()
         return;
     }
 
-    m_activeConnectUuidList.clear();
+//    m_activeConnectUuidList.clear();
+    m_activeConnectUuidMap.clear();
 
     for (int index = 0; index < networkDeviceList.size(); ++index) {
         NetworkManager::Device::Ptr networkDevicePtr = networkDeviceList.at(index);
@@ -164,7 +166,8 @@ void KyNetworkDeviceResourse::disconnectDevice()
             NetworkManager::ActiveConnection::Ptr activeConnectPtr = networkDevicePtr->activeConnection();
             QString activeConnectUuid = activeConnectPtr->uuid();
             if (!activeConnectUuid.isEmpty()) {
-                m_activeConnectUuidList<<activeConnectUuid;
+//                m_activeConnectUuidList<<activeConnectUuid;
+                m_activeConnectUuidMap.insert(networkDevicePtr->interfaceName(),activeConnectUuid);
                 //TODO:save uuid for system reboot.
             }
             networkDevicePtr->disconnectInterface();
@@ -185,10 +188,13 @@ void KyNetworkDeviceResourse::setDeviceAutoConnect()
         return;
     }
 
-    for (int index = 0; index < m_activeConnectUuidList.size(); ++index) {
-        QString connectUuid = m_activeConnectUuidList.at(index);
-        wiredOperation.activateConnection(connectUuid);
-        qDebug()<<"[KyNetworkDeviceResourse]" << "active connect uuid"<< connectUuid;
+    QMap<QString, QString>::iterator iter = m_activeConnectUuidMap.begin();
+    while (iter != m_activeConnectUuidMap.end())
+    {
+        qDebug() << "Iterator " << iter.key() << ":" << iter.value();
+        wiredOperation.activateConnection(iter.key(), iter.value());
+        qDebug()<<"[KyNetworkDeviceResourse]" << "active connect uuid "<< iter.key() << " device " << iter.value();
+        iter++;
     }
 
     for (int index = 0; index < networkDeviceList.size(); ++index) {

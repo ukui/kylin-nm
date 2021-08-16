@@ -53,7 +53,7 @@
 #define Y_LINE_EXTEND 161
 #define X_LINE_EXTEND 2
 
-class MainWindow;
+class OldMainWindow;
 
 namespace Ui {
 class OneLancForm;
@@ -121,7 +121,7 @@ private:
     int countCurrentTime;
 
     Ui::OneLancForm *ui = nullptr;
-    MainWindow *mw = nullptr;
+    OldMainWindow *mw = nullptr;
     ConfForm *cf = nullptr;
     KSimpleNM *ks = nullptr;
     KyWiredConnectOperation *m_wiredConnectOperation = nullptr;

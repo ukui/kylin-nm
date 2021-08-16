@@ -22,7 +22,7 @@
 #include <QDialog>
 #include <QMouseEvent>
 
-class MainWindow;
+class OldMainWindow;
 
 namespace Ui {
 class DlgHideWifiEapPeap;
@@ -34,7 +34,7 @@ class DlgHideWifiEapPeap : public QDialog
 
 public:
     //type: 0是动态 WEP， 1是企业wpa, beUsed:是否是之前已经连接过多网络
-    explicit DlgHideWifiEapPeap(int type, int beUsed, MainWindow *mw = 0, QWidget *parent = 0);
+    explicit DlgHideWifiEapPeap(int type, int beUsed, OldMainWindow *mw = 0, QWidget *parent = 0);
     ~DlgHideWifiEapPeap();
 
 protected:
@@ -74,7 +74,7 @@ private:
     Ui::DlgHideWifiEapPeap *ui;
     int WepOrWpa = 0;//0 WEP;1 WPA
     int isUsed;//=0 current wifi not used before; >=1 used
-    MainWindow *mw;
+    OldMainWindow *mw;
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

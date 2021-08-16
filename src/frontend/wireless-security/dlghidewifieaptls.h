@@ -22,7 +22,7 @@
 #include <QDialog>
 #include <QMouseEvent>
 
-class MainWindow;
+class OldMainWindow;
 
 namespace Ui {
 class DlgHideWifiEapTls;
@@ -33,7 +33,7 @@ class DlgHideWifiEapTls : public QDialog
     Q_OBJECT
 
 public:
-    explicit DlgHideWifiEapTls(int type, int beUsed, MainWindow *mw = 0, QWidget *parent = 0);
+    explicit DlgHideWifiEapTls(int type, int beUsed, OldMainWindow *mw = 0, QWidget *parent = 0);
     ~DlgHideWifiEapTls();
 
 protected:
@@ -77,7 +77,7 @@ private:
     Ui::DlgHideWifiEapTls *ui;
     int WepOrWpa = 0;//0 WEP;1WPA
     int isUsed;//=0 current wifi not used before; >=1 used
-    MainWindow *mw;
+    OldMainWindow *mw;
 
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

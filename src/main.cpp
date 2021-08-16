@@ -16,19 +16,21 @@
  *
  */
 
-#include "mainwindow.h"
+//#include "mainwindow.h"
+#include "new-mainwindow.h" //ZJP_TODO 载入新的主窗口
 #include "ksimplenm.h"
 #include "kylin-network-interface.h"
 #include "wireless-security/dlghidewifi.h"
 #include "dbusadaptor.h"
 #include <QTranslator>
 #include <QLocale>
-//#include <QApplication>
 #include "qt-single-application.h"
 #include <QDebug>
 #include <QDesktopWidget>
-#include <X11/Xlib.h>
 #include <QFile>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+#include "xatom-helper.h"
+#endif
 
 #define LOG_IDENT "ukui_kylin_nm"
 
@@ -97,13 +99,6 @@ int main(int argc, char *argv[])
 
     qDebug()<<"Kylin Network Manager Is Already Launched";
 
-    int loopNum = 0;
-    while (!QSystemTrayIcon::isSystemTrayAvailable()) {
-        if (loopNum == 15) return 1;
-        qDebug()<<"I couldn't detect any system tray on this system now";
-        loopNum += 1;
-        sleep(1);
-    }
     QApplication::setQuitOnLastWindowClosed(false);
 
     // Internationalization
@@ -111,7 +106,6 @@ int main(int argc, char *argv[])
     QTranslator trans_global;
     if (locale == "zh_CN") {
         trans_global.load(":/translations/kylin-nm_zh_CN.qm");
-        //trans_global.load(":/translations/kylin-nm_bo.qm");
         a.installTranslator(&trans_global);
     }
     if (locale == "tr_TR") {
@@ -121,7 +115,17 @@ int main(int argc, char *argv[])
     qDebug()<<"Translations Are Already Loaded";
 
     MainWindow w;
-    qDebug()<<"Mainwindow is Already Registered";
+    w.setProperty("useStyleWindowManager", false); //禁用拖动
+    //设置窗口无边框，阴影
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+    MotifWmHints window_hints;
+    window_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
+    window_hints.functions = MWM_FUNC_ALL;
+    window_hints.decorations = MWM_DECOR_BORDER;
+    XAtomHelper::getInstance()->setWindowMotifHint(w.winId(), window_hints);
+#else
+    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+#endif
 
     DbusAdaptor adaptor(&w);
     Q_UNUSED(adaptor);
@@ -130,16 +134,6 @@ int main(int argc, char *argv[])
     if (!connection.registerService("com.kylin.network") || !connection.registerObject("/com/kylin/network", &w)) {
         qCritical() << "QDbus register service failed reason:" << connection.lastError();
     }
-//        QDBusInterface iface("com.kylin.network",
-//                                       "/com/kylin/network",
-//                                       "com.kylin.network",
-//                                       connection);
-//        iface.call("showMainWindow");
-
-//        return 0;
-//    }
-
-    w.justShowTrayIcon();
 
     return a.exec();
 }

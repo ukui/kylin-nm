@@ -31,7 +31,7 @@
 #include <QtConcurrent>
 #include <QFuture>
 
-DlgHideWifiWpa::DlgHideWifiWpa(int type, MainWindow *mainWindow, QWidget *parent) :
+DlgHideWifiWpa::DlgHideWifiWpa(int type, OldMainWindow *mainWindow, QWidget *parent) :
     isUsed(type),
     QDialog(parent),
     ui(new Ui::DlgHideWifiWpa)

@@ -34,7 +34,7 @@
 #include <QDBusObjectPath>
 #include <QtConcurrent>
 
-OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *confForm, KSimpleNM *ksnm) :
+OneConnForm::OneConnForm(QWidget *parent, OldMainWindow *mainWindow, ConfForm *confForm, KSimpleNM *ksnm) :
     QWidget(parent),
     ui(new Ui::OneConnForm)
 {
@@ -154,7 +154,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
     this->waitTimer = new QTimer(this);
     connect(waitTimer, SIGNAL(timeout()), this, SLOT(waitAnimStep()));
 
-    connect(mw, &MainWindow::reConnectWifi, this, [ = ](const QString& uuid) {
+    connect(mw, &OldMainWindow::reConnectWifi, this, [ = ](const QString& uuid) {
         if (isActive) {
             QThread *t = new QThread();
             BackThread *bt = new BackThread();
@@ -168,12 +168,12 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
         }
     });
 
-    connect(mw, &MainWindow::startReconnectWifi, this, [ = ](const QString &ssid) {
+    connect(mw, &OldMainWindow::startReconnectWifi, this, [ = ](const QString &ssid) {
         if (ssid == this->wifiName && !this->isWaiting) {
             this->startWifiWaiting(true);
         }
     });
-    connect(mw, &MainWindow::stopReconnectWifi, this, [ = ](const QString &ssid, const int &result) {
+    connect(mw, &OldMainWindow::stopReconnectWifi, this, [ = ](const QString &ssid, const int &result) {
         if (ssid == this->wifiName) {
             qDebug()<<"Reconnect "<<ssid<<" finished. result="<<result;
             if (result != 0) {
@@ -184,7 +184,7 @@ OneConnForm::OneConnForm(QWidget *parent, MainWindow *mainWindow, ConfForm *conf
         }
     });
 
-    connect(mw, &MainWindow::wifiClicked, this, [ = ](QString name) {
+    connect(mw, &OldMainWindow::wifiClicked, this, [ = ](QString name) {
         if (QString::compare(name, this->wifiName) == 0 && !this->isActive) {
             on_btnConn_clicked();
         }

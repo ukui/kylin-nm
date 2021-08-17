@@ -1,5 +1,7 @@
 
 #include "kylinconnectresource.h"
+#include "kywirelessconnectoperation.h"
+
 #include <NetworkManagerQt/Ipv4Setting>
 #include <NetworkManagerQt/Ipv6Setting>
 #include <NetworkManagerQt/VpnConnection>
@@ -479,9 +481,10 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
     apConnectItem->m_connectUuid = connectPtr->uuid();
     apConnectItem->m_ifaceName = settingPtr->interfaceName();
 
-    NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
-        = settingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    apConnectItem->m_password = wirelessSecuritySetting->psk();
+    //NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
+    //    = settingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    KyWirelessConnectOperation wirelessOperation;
+    apConnectItem->m_password = wirelessOperation.getPsk(apConnectItem->m_connectUuid);// wirelessSecuritySetting->psk();
 
     return apConnectItem;
 }

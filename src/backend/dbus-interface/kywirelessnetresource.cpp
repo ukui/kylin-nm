@@ -27,8 +27,7 @@ KyWirelessNetResource::~KyWirelessNetResource()
 bool KyWirelessNetResource::getAllDeviceWifiNetwork(QMap<QString,QList<KyWirelessNetItem> > &map)
 {
     onWifiNetworkDeviceDisappear();
-    if (m_WifiNetworkList.isEmpty())
-    {
+    if (m_WifiNetworkList.isEmpty()) {
         return false;
     } else {
         map = m_WifiNetworkList;
@@ -37,16 +36,34 @@ bool KyWirelessNetResource::getAllDeviceWifiNetwork(QMap<QString,QList<KyWireles
 }
 
 
-bool KyWirelessNetResource::getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &list)
+bool KyWirelessNetResource::getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &wirelessNetResource)
 {
     onWifiNetworkDeviceDisappear();
-    if (!m_WifiNetworkList.contains(devIfaceName))
-    {
+
+    if (!m_WifiNetworkList.contains(devIfaceName)) {
         return false;
     } else {
-        list = m_WifiNetworkList[devIfaceName];
+        wirelessNetResource = m_WifiNetworkList[devIfaceName];
         return true;
     }
+}
+
+bool KyWirelessNetResource::getWifiNetwork(QString &devIfaceName, QString &ssid, KyWirelessNetItem &wirelessNetResource)
+{
+    onWifiNetworkDeviceDisappear();
+
+    if (!m_WifiNetworkList.contains(devIfaceName)) {
+        return false;
+    } else {
+        for (int index = 0; m_WifiNetworkList[devIfaceName].size(); index ++){
+            if (m_WifiNetworkList[devIfaceName].at(index).m_NetSsid  == ssid) {
+                wirelessNetResource = m_WifiNetworkList[devIfaceName].at(index);
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 bool KyWirelessNetResource::getWirelessActiveConnection(QMap<QString,QStringList> &map)
@@ -77,8 +94,7 @@ bool KyWirelessNetResource::getWirelessActiveConnection(QMap<QString,QStringList
         }
         QString ssid;
         QString ifaceName = getDeviceIFace(activeConnectionPtr,ssid);
-        if (map.contains(ifaceName))
-        {
+        if (map.contains(ifaceName)) {
             map[ifaceName].append(ssid);
         } else {
             QStringList list;
@@ -89,30 +105,30 @@ bool KyWirelessNetResource::getWirelessActiveConnection(QMap<QString,QStringList
     return true;
 }
 
-QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::Ptr actConn, QString &ssid)
+QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::Ptr actConn,
+                                              QString &wirelessNetResourcessid)
 {
-    if (actConn.isNull())
-    {
+    if (actConn.isNull()) {
         return "";
     }
+
     NetworkManager::Connection::Ptr conn = actConn->connection();
     NetworkManager::ConnectionSettings::Ptr sett = conn->settings();
-    ssid = sett->id();
+    wirelessNetResourcessid = sett->id();
+
     return sett->interfaceName();
 }
 
 void KyWirelessNetResource::kyWirelessNetItemListInit()
 {
     qDebug() << m_networkResourceInstance->m_wifiNets.size();
-    for (auto const & net : m_networkResourceInstance->m_wifiNets)
-    {
+    for (auto const & net : m_networkResourceInstance->m_wifiNets) {
         QString devIface = getDeviceIFace(net);
-        if (devIface.isEmpty())
-        {
+        if (devIface.isEmpty()) {
             continue;
         }
-        if (!m_WifiNetworkList.contains(devIface))
-        {
+
+        if (!m_WifiNetworkList.contains(devIface)){
             QList<KyWirelessNetItem> list;
             KyWirelessNetItem item(net);
             list.append(item);
@@ -122,6 +138,8 @@ void KyWirelessNetResource::kyWirelessNetItemListInit()
             m_WifiNetworkList[devIface].append(item);
         }
     }
+
+    return;
 }
 
 QString KyWirelessNetResource::getDeviceIFace(NetworkManager::WirelessNetwork::Ptr net)
@@ -195,7 +213,8 @@ void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssi
         list.append(item);
         m_WifiNetworkList.insert(devIfaceName,list);
     }
-    emit wifiNetworkAdd(devIfaceName,item);
+
+    emit wifiNetworkAdd(devIfaceName, item);
 }
 
 void KyWirelessNetResource::onWifiNetworkRemoved(QString devIfaceName, QString ssid)
@@ -221,36 +240,38 @@ void KyWirelessNetResource::onWifiNetworkRemoved(QString devIfaceName, QString s
 
 void KyWirelessNetResource::onWifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net)
 {
-    if (nullptr == net)
-    {
+    if (nullptr == net) {
         return;
     }
+
     QString devIface = m_networkResourceInstance->findDeviceUni(net->device())->interfaceName();
     if (m_WifiNetworkList.contains(devIface))
     {
         QList<KyWirelessNetItem>::iterator iter = m_WifiNetworkList[devIface].begin();
          while (iter != m_WifiNetworkList[devIface].end())
          {
-
              if (iter->m_NetSsid == net->ssid())
              {
-                 qDebug() << iter->m_NetSsid;
+                 qDebug()<<"recive properity changed signal, sender is" << iter->m_NetSsid;
                  if (iter->m_signalStrength != net->signalStrength())
                  {
                      iter->m_signalStrength = net->signalStrength();
                      emit signalStrengthChange(devIface, net->ssid(), iter->m_signalStrength);
                  }
+
                  if (iter->m_bssid != net->referenceAccessPoint()->hardwareAddress())
                  {
                      iter->m_bssid = net->referenceAccessPoint()->hardwareAddress();
                      emit bssidChange(devIface, net->ssid(), iter->m_bssid);
                  }
+
                  QString secuType = enumToQstring(net->referenceAccessPoint()->capabilities(), net->referenceAccessPoint()->wpaFlags(), net->referenceAccessPoint()->rsnFlags());
                  if (iter->m_secuType != secuType)
                  {
                      iter->m_secuType = secuType;
                      emit secuTypeChange(devIface, net->ssid(), secuType);
                  }
+
                  break;
              }
              iter++;
@@ -264,50 +285,6 @@ void KyWirelessNetResource::onWifiNetworkDeviceDisappear()
     kyWirelessNetItemListInit();
 }
 
-bool KyWirelessNetResource::modifyEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info)
-{
-    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
-    if (conn.isNull())
-    {
-        qDebug() << "modifyEnterPriseInfoTls connection missing";
-        return false;
-    }
-    NetworkManager::WirelessSecuritySetting::Ptr security_sett
-        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    if (security_sett.isNull())
-    {
-        qDebug() << "don't have WirelessSecurity connection";
-        return false;
-    }
-    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap)
-    {
-        return false;
-    }
-    NetworkManager::Security8021xSetting::Ptr setting = conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
-    if (setting.isNull())
-    {
-        qDebug() << "don't have Security8021x connection";
-        return false;
-    }
-
-    QList<NetworkManager::Security8021xSetting::EapMethod> list;
-    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodTls);
-    setting->setEapMethods(list);
-    setting->setIdentity(info.identity);
-    if(!info.domain.isEmpty())
-    {
-        setting->setDomainSuffixMatch(info.domain);
-    }
-    setting->setCaPath(info.caCertPath);
-    setting->setClientCertificate(info.clientCertPath.toLocal8Bit());
-    setting->setPrivateKey(info.clientPrivateKey.toLocal8Bit());
-    setting->setPrivateKeyPassword(info.clientPrivateKeyPWD);
-
-    conn->update(conn->settings()->toMap());
-
-    return true;
-}
-
 bool KyWirelessNetResource::getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info)
 {
     NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
@@ -316,6 +293,7 @@ bool KyWirelessNetResource::getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsIn
         qDebug() << "modifyEnterPriseInfoTls connection missing";
         return false;
     }
+
     NetworkManager::WirelessSecuritySetting::Ptr security_sett
         = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
     if (security_sett.isNull())
@@ -348,41 +326,6 @@ bool KyWirelessNetResource::getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsIn
     setting->setPrivateKeyPassword(info.clientPrivateKeyPWD);
 
     conn->update(conn->settings()->toMap());
-
-    return true;
-}
-
-bool KyWirelessNetResource::modifyEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info)
-{
-    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
-    if (conn.isNull())
-    {
-        qDebug() << "modifyEnterPriseInfoPeap connection missing";
-        return false;
-    }
-    NetworkManager::WirelessSecuritySetting::Ptr security_sett
-        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    if (security_sett.isNull())
-    {
-        qDebug() << "don't have WirelessSecurity connection";
-        return false;
-    }
-    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap)
-    {
-        qDebug() << "keyMgmt not WpaEap " << security_sett->keyMgmt();
-        return false;
-    }
-    NetworkManager::Security8021xSetting::Ptr setting = conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
-    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodTls))
-    {
-        qDebug() << "don't have Security8021x connection";
-        return false;
-    }
-
-    info.connName = conn->name();
-    info.phase2AuthMethod = (KyEapMethodPeapAuth)setting->phase2AuthEapMethod();
-    info.userName = setting->identity();
-    info.userPWD = setting->password();
 
     return true;
 }
@@ -392,7 +335,7 @@ bool KyWirelessNetResource::getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeap
     NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
     if (conn.isNull())
     {
-        qDebug() << "modifyEnterPriseInfoPeap connection missing";
+        qDebug() << "getEnterPriseInfoPeap connection missing";
         return false;
     }
     NetworkManager::WirelessSecuritySetting::Ptr security_sett
@@ -414,63 +357,10 @@ bool KyWirelessNetResource::getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeap
         return false;
     }
 
-    info.connName = conn->name();
-    info.phase2AuthMethod = (KyEapMethodPeapAuth)setting->phase2AuthEapMethod();
+    info.phase2AuthMethod = (KyNoEapMethodAuth)setting->phase2AuthMethod();
     info.userName = setting->identity();
     info.userPWD = setting->password();
 
-    return true;
-}
-
-bool KyWirelessNetResource::modifyEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info)
-{
-    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
-    if (conn.isNull())
-    {
-        qDebug() << "modifyEnterPriseInfoTtls connection missing";
-        return false;
-    }
-
-    NetworkManager::WirelessSecuritySetting::Ptr security_sett
-        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    if (security_sett.isNull())
-    {
-        qDebug() << "don't have WirelessSecurity connection";
-        return false;
-    }
-    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap)
-    {
-        qDebug() << "not wpaeap"<<security_sett->keyMgmt();
-        return false;
-    }
-
-    NetworkManager::Security8021xSetting::Ptr setting = conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
-    if (setting.isNull())
-    {
-        qDebug() << "don't have Security8021x connection";
-        return false;
-    }
-
-    qDebug() << setting->identity() << setting->eapMethods() << setting->password() << setting->phase2AuthEapMethod();
-
-    QList<NetworkManager::Security8021xSetting::EapMethod> list;
-    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodTtls);
-    setting->setEapMethods(list);
-    if (info.authType == KyTtlsAuthMethod::AUTH_EAP)
-    {
-        setting->setPhase2AuthEapMethod((NetworkManager::Security8021xSetting::AuthEapMethod)info.authEapMethod);//gtc md5 mschapv2 otp tls
-        setting->setPhase2AuthMethod(NetworkManager::Security8021xSetting::AuthMethod::AuthMethodUnknown);
-    } else if (info.authType == KyTtlsAuthMethod::AUTH_NO_EAP) {
-        setting->setPhase2AuthMethod((NetworkManager::Security8021xSetting::AuthMethod)info.authNoEapMethod);//chap md5 mschapv2 pap gtc mschap otp tls
-        setting->setPhase2AuthEapMethod(NetworkManager::Security8021xSetting::AuthEapMethod::AuthEapMethodUnknown);
-    }
-    setting->setIdentity(info.userName);
-    setting->setPassword(info.userPWD);
-
-    conn->update(conn->settings()->toMap());
-
-    qDebug() << setting->identity() << setting->eapMethods() << setting->password() << setting->phase2AuthEapMethod();
-    qDebug() << "set success";
     return true;
 }
 
@@ -503,12 +393,11 @@ bool KyWirelessNetResource::getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtls
         return false;
     }
 
-    info.connName = conn->name();
-    info.authEapMethod = (KyEapMethodTtlsAuth)setting->phase2AuthEapMethod();
-    info.authNoEapMethod = (KyNoEapMethodTtlsAuth)setting->phase2AuthMethod();
+    info.authEapMethod = (KyEapMethodAuth)setting->phase2AuthEapMethod();
+    info.authNoEapMethod = (KyNoEapMethodAuth)setting->phase2AuthMethod();
 
     info.authType = KyTtlsAuthMethod::AUTH_EAP;
-    if (info.authEapMethod != AuthEapMethodTtlsUnknown)
+    if (info.authEapMethod != KyAuthEapMethodUnknown)
     {
         info.authType = KyTtlsAuthMethod::AUTH_EAP;
     } else {

@@ -13,9 +13,9 @@ public:
 
 public:
     void  createConnect(KyConnectSetting &connectSettingsInfo);
-    void  updateConnect(const QString &connectUuid, const KyConnectSetting &connectSettingsInfo);
+    void  updateConnect(NetworkManager::ConnectionSettings::Ptr connectionSettings, const KyConnectSetting &connectSettingsInfo);
     void  deleteConnect(const QString &connectUuid);
-    void  activateConnection(const QString connectUuid);
+    void  activateConnection(const QString connectUuid, const QString deviceName);
     void  deactivateConnection(const QString activeConnectName, const QString &activeConnectUuid);
 
 public:
@@ -26,6 +26,8 @@ public:
                          const KyConnectSetting &connectSettingsInfo);
     void ipv6SettingSet(NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
                          const KyConnectSetting &connectSettingsInfo);
+    void setAutoConnect(NetworkManager::ConnectionSettings::Ptr &connectSetting,
+                         bool bAutoConnect);
     inline void errorProcess(QString errorMessage);
 
 signals:

@@ -17,16 +17,13 @@ public:
     ~KyWirelessNetResource();
 
     //ui层调用接口
-    bool getAllDeviceWifiNetwork(QMap<QString,QList<KyWirelessNetItem> > &map);
-    bool getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &KyWirelessNetResource);
+    bool getWifiNetwork(QString &devIfaceName, QString &ssid, KyWirelessNetItem &wirelessNetResource);
+    bool getAllDeviceWifiNetwork(QMap<QString, QList<KyWirelessNetItem> > &map);
+    bool getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &wirelessNetResource);
 
-    bool modifyEnterPriseInfoTls(QString &, KyEapMethodTlsInfo &);
-    bool modifyEnterPriseInfoPeap(QString &, KyEapMethodPeapInfo &);
-    bool modifyEnterPriseInfoTtls(QString &, KyEapMethodTtlsInfo &);
-
-    bool getEnterPriseInfoTls(QString &, KyEapMethodTlsInfo &);
-    bool getEnterPriseInfoPeap(QString &, KyEapMethodPeapInfo &);
-    bool getEnterPriseInfoTtls(QString &, KyEapMethodTtlsInfo &);
+    bool getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info);
+    bool getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info);
+    bool getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);
 
     bool getWirelessActiveConnection(QMap<QString, QStringList> &map);
 
@@ -34,7 +31,7 @@ public:
 private:
     void kyWirelessNetItemListInit();
     QString getDeviceIFace(NetworkManager::WirelessNetwork::Ptr net);
-    QString getDeviceIFace(NetworkManager::ActiveConnection::Ptr actConn, QString &KyWirelessNetResourcessid);
+    QString getDeviceIFace(NetworkManager::ActiveConnection::Ptr actConn, QString &wirelessNetResourcessid);
 
 public slots:
     void onWifiNetworkAdded(QString, QString);
@@ -56,7 +53,7 @@ signals:
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
-    QMap<QString,QList<KyWirelessNetItem> >      m_WifiNetworkList;
+    QMap<QString, QList<KyWirelessNetItem> >      m_WifiNetworkList;
 
 };
 

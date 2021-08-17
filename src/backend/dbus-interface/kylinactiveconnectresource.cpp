@@ -1,5 +1,6 @@
 
 #include "kylinactiveconnectresource.h"
+#include "kywirelessconnectoperation.h"
 
 #include <NetworkManagerQt/IpConfig>
 #include <NetworkManagerQt/Dhcp4Config>
@@ -206,6 +207,21 @@ KyWiredConnectItem *KyActiveConnectResourse::getWiredActiveConnectItem(NetworkMa
 
 #endif
 
+void KyActiveConnectResourse::getActiveConnectIpInfo(
+                        const QString &connectUuid,
+                        QString &ipv4Address,
+                        QString &ipv6Address)
+{
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr =
+            m_networkResourceInstance->getActiveConnect(connectUuid);
+
+    if (activeConnectPtr.isNull()) {
+        qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< connectUuid;
+        return;
+    }
+    getActiveConnectIp(activeConnectPtr, ipv4Address, ipv6Address);
+}
+
 void KyActiveConnectResourse::getActiveConnectIp(
                         NetworkManager::ActiveConnection::Ptr activeConnectPtr,
                         QString &ipv4Address,
@@ -240,13 +256,28 @@ void KyActiveConnectResourse::getActiveConnectIp(
     return;
 }
 
+void KyActiveConnectResourse::getActiveConnectDnsInfo(
+                        const QString &connectUuid,
+                        QList<QHostAddress> &ipv4Dns,
+                        QList<QHostAddress> &ipv6Dns)
+{
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr =
+            m_networkResourceInstance->getActiveConnect(connectUuid);
+
+    if (activeConnectPtr.isNull()) {
+        qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< connectUuid;
+        return;
+    }
+    getActiveConnectDns(activeConnectPtr, ipv4Dns, ipv6Dns);
+}
+
 void KyActiveConnectResourse::getActiveConnectDns(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
                          QList<QHostAddress> &ipv4Dns,
                          QList<QHostAddress> &ipv6Dns)
 {
     qDebug()<<"[KyActiveConnectResourse]"<<"get active connect nameservice info";
 
-    NetworkManager::IpConfig ipv4Config =activeConnectPtr->ipV4Config();
+    NetworkManager::IpConfig ipv4Config = activeConnectPtr->ipV4Config();
     if (ipv4Config.isValid()) {
         ipv4Dns = ipv4Config.nameservers();
     } else {
@@ -440,9 +471,10 @@ KyApConnectItem *KyActiveConnectResourse::getApActiveConnectItem(NetworkManager:
     apConnectItem->m_connectUuid = activeConnectPtr->uuid();
     apConnectItem->m_ifaceName = settingPtr->interfaceName();
 
-    NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
-        = settingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    apConnectItem->m_password = wirelessSecuritySetting->psk();
+    //NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
+    //    = settingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    KyWirelessConnectOperation wirelessOperation;
+    apConnectItem->m_password = wirelessOperation.getPsk(apConnectItem->m_connectUuid);
 
     return apConnectItem;
 }

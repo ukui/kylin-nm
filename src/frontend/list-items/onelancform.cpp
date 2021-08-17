@@ -477,8 +477,8 @@ void OneLancForm::toConnectWiredNetwork()
     connect(bt, SIGNAL(btFinish()), t, SLOT(quit()));
     t->start();
     */
-
-    m_wiredConnectOperation->activateWiredConnection(uuidName);
+    QString devName = "enp2s0";
+    m_wiredConnectOperation->activateWiredConnection(uuidName, devName);
 }
 
 //点击列表中item扩展后显示信息的位置时，执行该函数，用于显示网络配置界面

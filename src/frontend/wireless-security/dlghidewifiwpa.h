@@ -24,7 +24,7 @@
 #include <QThread>
 #include <QProcess>
 
-class MainWindow;
+class OldMainWindow;
 
 namespace Ui {
 class DlgHideWifiWpa;
@@ -35,7 +35,7 @@ class DlgHideWifiWpa : public QDialog
     Q_OBJECT
 
 public:
-    explicit DlgHideWifiWpa(int type, MainWindow *mw = 0, QWidget *parent = 0);
+    explicit DlgHideWifiWpa(int type, OldMainWindow *mw = 0, QWidget *parent = 0);
     ~DlgHideWifiWpa();
 
 protected:
@@ -74,7 +74,7 @@ signals:
 private:
     Ui::DlgHideWifiWpa *ui;
     int isUsed;//=0 current wifi not used before; >=1 used
-    MainWindow *mw;
+    OldMainWindow *mw;
     QString strWifiname;
     QString strWifiPassword;
 

@@ -25,7 +25,7 @@
 #include <QTimer>
 #include <QFile>
 
-class MainWindow;
+class OldMainWindow;
 
 namespace Ui {
 class DlgHideWifi;
@@ -36,7 +36,7 @@ class DlgHideWifi : public QDialog
     Q_OBJECT
 
 public:
-    explicit DlgHideWifi(int type, MainWindow *mw = 0, QWidget *parent = 0);
+    explicit DlgHideWifi(int type, OldMainWindow *mw = 0, QWidget *parent = 0);
     ~DlgHideWifi();
 
 protected:
@@ -67,7 +67,7 @@ signals:
 private:
     Ui::DlgHideWifi *ui;
     int isUsed;//=0 current wifi not used before; >=1 used
-    MainWindow *mw;
+    OldMainWindow *mw;
     QString strWifiname;
 //    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss;
 

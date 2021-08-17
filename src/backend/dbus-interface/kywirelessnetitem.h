@@ -23,12 +23,14 @@ public:
     QString                                 m_bssid;
     int                                     m_signalStrength;
     uint                                    m_frequency;
+    QString                                 m_secuType;
+
+    //only for m_isConfiged = true
     bool                                    m_isConfigured;
     QString                                 m_connName;
     QString                                 m_connDbusPath;
-    QString                                 m_secuType;
-//    NetworkManager::AccessPoint::WpaFlags    m_wpaFlag;
-//    NetworkManager::AccessPoint::WpaFlags    m_rsnFlag;
+
+
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;

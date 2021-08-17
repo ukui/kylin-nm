@@ -21,12 +21,13 @@ public:
     void getActiveConnectionList(QString deviceName,
                                  NetworkManager::ConnectionSettings::ConnectionType connectionType,
                                  QList<KyConnectItem *> &connectItemList);
-    void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
+    void getActiveConnectIpInfo(const QString &uuid,
                             QString &ipv4Address,
                             QString &ipv6Address);
-    void getActiveConnectDns(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
+    void getActiveConnectDnsInfo(const QString &uuid,
                              QList<QHostAddress> &ipv4Dns,
                              QList<QHostAddress> &ipv6Dns);
+
     //void getWiredActivateConnect(QList<KyWiredConnectItem *> &wiredActiveConnectItemList);
     void getVpnActivateConnect(QList<KyVpnConnectItem *> &vpnActiveConnectItemList);
     void getBtActivateConnect(QList<KyBluetoothConnectItem *> &btActiveConnectItemList);
@@ -34,6 +35,13 @@ public:
     void getApActivateConnect(QList<KyApConnectItem *> &apConnectItemList);
 
 private:
+    void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
+                            QString &ipv4Address,
+                            QString &ipv6Address);
+    void getActiveConnectDns(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
+                             QList<QHostAddress> &ipv4Dns,
+                             QList<QHostAddress> &ipv6Dns);
+
     KyConnectItem *getActiveConnectionItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
 
    // KyWiredConnectItem *getWiredActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);

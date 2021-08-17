@@ -37,14 +37,14 @@
 #define WIFI_CONNECTED 2
 #define WIFI_DISCONNECTED 3
 
-class MainWindow;
+class OldMainWindow;
 class Utils;
 
 class KylinDBus : public QObject
 {
     Q_OBJECT
 public:
-    explicit KylinDBus(MainWindow *mw = 0, QObject *parent = nullptr);
+    explicit KylinDBus(OldMainWindow *mw = 0, QObject *parent = nullptr);
     ~KylinDBus();
 
     void getObjectPath();
@@ -134,7 +134,7 @@ public slots:
     void requestScanWifi();
 
 private:
-    MainWindow *mw;
+    OldMainWindow *mw;
     Utils *mUtils;
     QThread *mUtilsThread;
 

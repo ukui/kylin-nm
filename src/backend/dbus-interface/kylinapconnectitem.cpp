@@ -1,0 +1,16 @@
+
+#include "kylinapconnectitem.h"
+
+KyApConnectItem::KyApConnectItem(QObject *parent) : QObject(parent)
+{
+    m_connectName = "";
+    m_connectUuid = "";
+    m_ifaceName = "";
+    m_password = "";
+}
+
+
+KyApConnectItem::~KyApConnectItem()
+{
+
+}

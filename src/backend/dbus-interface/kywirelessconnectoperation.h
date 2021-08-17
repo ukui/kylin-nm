@@ -82,8 +82,6 @@ public:
                                                    QString & devIface, bool isHidden);
     void addAndActiveWirelessEnterPriseTtlsConnect(KyEapMethodTtlsInfo &info, KyWirelessConnectSetting &connSettingInfo,
                                                    QString & devIface, bool isHidden);
-
-
     //属性页 page1 AutoConnect
     void setWirelessAutoConnect(const QString &uuid, bool bAutoConnect);
     //属性页 page2 page3 ipv6
@@ -102,6 +100,16 @@ public:
 
     //申请扫描
     void requestWirelessScan();
+
+    void activeWirelessAp(const QString apUuid, const QString apName, const QString apPassword, const QString apDevice);
+    void deactiveWirelessAp(const QString apName, const QString apUuid);
+
+private:
+    NetworkManager::ConnectionSettings::Ptr createWirelessApSetting(const QString apSsid, const QString apPassword, const QString apDevice);
+    void updateWirelessApSetting(NetworkManager::Connection::Ptr apConnectPtr,
+            const QString apName, const QString apPassword, const QString apDevice);
+
+
 
 signals:
     void wifinEnabledChanged(bool);

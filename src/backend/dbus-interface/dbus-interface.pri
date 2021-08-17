@@ -5,6 +5,7 @@ HEADERS += \
     $$PWD/kylinactiveconnectresource.h \
     $$PWD/kylinagent.h \
     $$PWD/kylinagentinterface.h \
+    $$PWD/kylinapconnectitem.h \
     $$PWD/kylinbluetoothconnectitem.h \
     $$PWD/kylinconnectitem.h \
     $$PWD/kylinconnectoperation.h \
@@ -23,6 +24,7 @@ SOURCES += \
     $$PWD/kylinactiveconnectresource.cpp \
     $$PWD/kylinagent.c \
     $$PWD/kylinagentinterface.c \
+    $$PWD/kylinapconnectitem.cpp \
     $$PWD/kylinbluetoothconnectitem.cpp \
     $$PWD/kylinconnectitem.cpp \
     $$PWD/kylinconnectoperation.cpp \

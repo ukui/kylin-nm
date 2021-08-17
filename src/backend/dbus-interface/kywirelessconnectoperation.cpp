@@ -416,6 +416,7 @@ qDebug() << dev_uni;
             qDebug() << "addAndActiveWirelessConnect not support";
             break;
         }
+
         qDebug() << "finish assemble";
     } else {
         qDebug() << "start assembleWirelessSettings";
@@ -645,6 +646,116 @@ bool KyWirelessConnectOperation::getConnSecretFlags(QString &connUuid, NetworkMa
             = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
     flag = security_sett->pskFlags();
     return true;
+}
+
+NetworkManager::ConnectionSettings::Ptr
+    KyWirelessConnectOperation::createWirelessApSetting(const QString apSsid, const QString apPassword, const QString apDevice)
+{
+    NetworkManager::ConnectionSettings::Ptr connectionSettings =
+                NetworkManager::ConnectionSettings::Ptr(new NetworkManager::ConnectionSettings(NetworkManager::ConnectionSettings::Wireless));
+    connectionSettings->setId(apSsid);
+    connectionSettings->setUuid(NetworkManager::ConnectionSettings::createNewUuid());
+    connectionSettings->setAutoconnect(true);
+    connectionSettings->setAutoconnectPriority(0);
+    connectionSettings->setInterfaceName(apDevice);
+    //Note: workaround for wrongly (randomly) initialized gateway-ping-timeout
+    connectionSettings->setGatewayPingTimeout(0);
+
+    NetworkManager::Ipv4Setting::Ptr ipv4Setting = connectionSettings->setting(NetworkManager::Setting::Ipv4).dynamicCast<NetworkManager::Ipv4Setting>();
+    ipv4Setting->setInitialized(true);
+    ipv4Setting->setMethod(NetworkManager::Ipv4Setting::Shared);
+
+    NetworkManager::Ipv6Setting::Ptr ipv6Setting = connectionSettings->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
+    ipv6Setting->setInitialized(true);
+    ipv6Setting->setMethod(NetworkManager::Ipv6Setting::Ignored);
+
+    NetworkManager::WirelessSetting::Ptr wirelessSetting
+        = connectionSettings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    wirelessSetting->setInitialized(true);
+    wirelessSetting->setSsid(apSsid.toUtf8());
+    wirelessSetting->setMode(NetworkManager::WirelessSetting::NetworkMode::Ap);
+    wirelessSetting->setSecurity("802-11-wireless-security");
+
+    NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
+        = connectionSettings->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    wirelessSecuritySetting->setInitialized(true);
+    if (apPassword.isEmpty()) {
+        wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaNone);
+    } else {
+        wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaPsk);
+        wirelessSecuritySetting->setPsk(apPassword);
+    }
+
+    return connectionSettings;
+}
+
+void KyWirelessConnectOperation::updateWirelessApSetting(
+        NetworkManager::Connection::Ptr apConnectPtr,
+        const QString apName, const QString apPassword, const QString apDevice)
+{
+    NetworkManager::ConnectionSettings::Ptr apConnectSettingPtr = apConnectPtr->settings();
+    apConnectSettingPtr->setId(apName);
+    apConnectSettingPtr->setInterfaceName(apDevice);
+
+    NetworkManager::WirelessSetting::Ptr wirelessSetting
+        = apConnectSettingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    wirelessSetting->setInitialized(true);
+    wirelessSetting->setSsid(apName.toUtf8());
+
+    NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
+        = apConnectSettingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    wirelessSecuritySetting->setInitialized(true);
+    if (apPassword.isEmpty()) {
+        wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaNone);
+    } else {
+        wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaPsk);
+        wirelessSecuritySetting->setPsk(apPassword);
+    }
+
+    apConnectPtr->update(apConnectSettingPtr->toMap());
+}
+
+void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QString apName,
+                                                  const QString apPassword, const QString apDevice)
+{
+    //1、检查连接是否存在
+    NetworkManager::Connection::Ptr connectPtr = m_networkResourceInstance->getConnect(apUuid);
+    if (nullptr == connectPtr) {
+        NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceInterface(apDevice);
+        if (devicePtr.isNull()) {
+            QString errorMsg ="active wifi ap failed," + apDevice + "is not existed";
+            qWarning()<< errorMsg;
+            emit andAndActivateConnectionError(errorMsg);
+            return;
+        }
+
+        QString deviceIdentifier = devicePtr->uni();
+
+        NetworkManager::ConnectionSettings::Ptr apConnectSettingPtr =
+                                createWirelessApSetting(apName, apPassword, apDevice);
+        QString specificObject = "";
+        QDBusPendingCallWatcher * watcher;
+        watcher = new QDBusPendingCallWatcher{NetworkManager::addAndActivateConnection(apConnectSettingPtr->toMap(), deviceIdentifier, specificObject), this};
+        connect(watcher, &QDBusPendingCallWatcher::finished, [&] (QDBusPendingCallWatcher * watcher) {
+            if (watcher->isError() || !watcher->isValid()) {
+                QString errorMsg = "activation connection failed," + watcher->error().message();
+                qWarning() << errorMsg;
+                emit andAndActivateConnectionError(errorMsg);
+            }
+             watcher->deleteLater();
+        });
+    } else {
+        updateWirelessApSetting(connectPtr, apName, apPassword, apDevice);
+        activateConnection(apUuid, apDevice);
+    }
+
+    return;
+}
+
+void KyWirelessConnectOperation::deactiveWirelessAp(const QString apName, const QString apUuid)
+{
+    deactivateConnection(apName, apUuid);
+    return;
 }
 
 //private

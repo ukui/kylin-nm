@@ -456,3 +456,68 @@ void KyConnectResourse::getBluetoothConnections(QList<KyBluetoothConnectItem *> 
 
     return;
 }
+
+
+KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection::Ptr connectPtr)
+{
+    if (nullptr == connectPtr) {
+        qWarning()<<"[KyConnectResourse]"<<"get bluetooth connection item failed, the connect is empty";
+        return nullptr;
+    }
+
+    NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
+    NetworkManager::WirelessSetting::Ptr wirelessSetting
+        = settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    if (NetworkManager::WirelessSetting::NetworkMode::Ap
+                                    != wirelessSetting->mode()) {
+        qDebug() << "[KyConnectResourse]" <<"get ap item failed, the active connect mode is not ap.";
+        return nullptr;
+    }
+
+    KyApConnectItem *apConnectItem = new KyApConnectItem();
+    apConnectItem->m_connectName = connectPtr->name();
+    apConnectItem->m_connectUuid = connectPtr->uuid();
+    apConnectItem->m_ifaceName = settingPtr->interfaceName();
+
+    NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
+        = settingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    apConnectItem->m_password = wirelessSecuritySetting->psk();
+
+    return apConnectItem;
+}
+
+void KyConnectResourse::getApConnections(QList<KyApConnectItem *> &apConnectItemList)
+{
+    int index = 0;
+    NetworkManager::Connection::List connectList;
+
+    qDebug()<<"[KyConnectResourse]"<<"get ap connections";
+
+    connectList.clear();
+    connectList = m_networkResourceInstance->getConnectList();
+
+    if (connectList.empty()) {
+        qWarning()<<"[KyConnectResourse]"<<"get ap connections failed, the connect list is empty";
+        return;
+    }
+
+    NetworkManager::Connection::Ptr connectPtr = nullptr;
+    for (index = 0; index < connectList.size(); index++) {
+        connectPtr = connectList.at(index);
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wireless
+                != connectPtr->settings()->connectionType()) {
+            qDebug()<<"[KyConnectResourse]"<<"connect name:" << connectPtr->name()
+                   <<"connect type:"<<connectPtr->settings()->connectionType();
+            continue;
+        }
+
+        KyApConnectItem *connectItem = getApConnectItem(connectPtr);
+        if (nullptr != connectItem) {
+            apConnectItemList << connectItem;
+        }
+
+        connectPtr = nullptr;
+    }
+
+    return;
+}

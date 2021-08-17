@@ -410,3 +410,72 @@ void KyActiveConnectResourse::getBtActivateConnect(QList<KyBluetoothConnectItem 
     return;
 }
 
+KyApConnectItem *KyActiveConnectResourse::getApActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr)
+{
+    qDebug()<<"[KyActiveConnectResourse]"<<"get wireless ap active connect item";
+
+    if (nullptr == activeConnectPtr) {
+        qWarning()<<"[KyActiveConnectResourse]"<<"get wireless ap item failed, the active connect is empty";
+        return nullptr;
+    }
+
+    if (NetworkManager::ActiveConnection::State::Activated != activeConnectPtr->state()) {
+        qWarning()<<"[KyActiveConnectResourse]"<<"get ap item failed, the active connect is not activated"
+                 <<activeConnectPtr->connection()->name() << activeConnectPtr->state();
+        return nullptr;
+    }
+
+    NetworkManager::Connection::Ptr connectPtr = activeConnectPtr->connection();
+    NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
+    NetworkManager::WirelessSetting::Ptr wirelessSetting
+        = settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    if (NetworkManager::WirelessSetting::NetworkMode::Ap
+                                    != wirelessSetting->mode()) {
+        qDebug() << "[KyActiveConnectResourse]" <<"get ap item failed, the active connect mode is not ap.";
+        return nullptr;
+    }
+
+    KyApConnectItem *apConnectItem = new KyApConnectItem();
+    apConnectItem->m_connectName = connectPtr->name();
+    apConnectItem->m_connectUuid = activeConnectPtr->uuid();
+    apConnectItem->m_ifaceName = settingPtr->interfaceName();
+
+    NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
+        = settingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    apConnectItem->m_password = wirelessSecuritySetting->psk();
+
+    return apConnectItem;
+}
+
+void KyActiveConnectResourse::getApActivateConnect(QList<KyApConnectItem *> &apConnectItemList)
+{
+    int index = 0;
+    NetworkManager::ActiveConnection::List activeConnectList;
+
+    activeConnectList.clear();
+    activeConnectList = m_networkResourceInstance->getActiveConnectList();
+
+    if (activeConnectList.empty()) {
+        qWarning()<<"[KyActiveConnectResourse]"
+                 <<"get ap active connect failed, the active connect list is empty";
+        return;
+    }
+
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr = nullptr;
+    for (index = 0; index < activeConnectList.size(); index++) {
+        activeConnectPtr = activeConnectList.at(index);
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wireless
+                != activeConnectPtr->type()) {
+            continue;
+        }
+
+        KyApConnectItem *apConnectItem = getApActiveConnectItem(activeConnectPtr);
+        if (nullptr != apConnectItem) {
+            apConnectItemList << apConnectItem;
+        }
+
+        activeConnectPtr = nullptr;
+    }
+
+    return;
+}

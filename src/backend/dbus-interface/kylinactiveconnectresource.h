@@ -7,6 +7,7 @@
 #include "kylinnetworkdeviceresource.h"
 #include "kylinvpnconnectitem.h"
 #include "kylinbluetoothconnectitem.h"
+#include "kylinapconnectitem.h"
 
 class KyActiveConnectResourse : public QObject
 {
@@ -30,12 +31,15 @@ public:
     void getVpnActivateConnect(QList<KyVpnConnectItem *> &vpnActiveConnectItemList);
     void getBtActivateConnect(QList<KyBluetoothConnectItem *> &btActiveConnectItemList);
 
+    void getApActivateConnect(QList<KyApConnectItem *> &apConnectItemList);
+
 private:
     KyConnectItem *getActiveConnectionItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
 
    // KyWiredConnectItem *getWiredActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
     KyVpnConnectItem *getVpnActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
     KyBluetoothConnectItem *getBtActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
+    KyApConnectItem *getApActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
 
 signals:
     void activeConnectAdd(QString activeConnectUuid);

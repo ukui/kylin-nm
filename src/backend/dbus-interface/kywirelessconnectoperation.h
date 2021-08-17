@@ -39,6 +39,14 @@ public:
     void addAndActiveWirelessEnterPrisePeapConnect(KyEapMethodPeapInfo &, QString &, bool, bool, NetworkManager::Setting::SecretFlags flags = 0);
     void addAndActiveWirelessEnterPriseTtlsConnect(KyEapMethodTtlsInfo &, QString &, bool, bool, NetworkManager::Setting::SecretFlags flags = 0);
 
+    void activeWirelessAp(const QString apUuid, const QString apName, const QString apPassword, const QString apDevice);
+    void deactiveWirelessAp(const QString apName, const QString apUuid);
+
+private:
+    NetworkManager::ConnectionSettings::Ptr createWirelessApSetting(const QString apSsid, const QString apPassword, const QString apDevice);
+    void updateWirelessApSetting(NetworkManager::Connection::Ptr apConnectPtr,
+            const QString apName, const QString apPassword, const QString apDevice);
+
 
 signals:
     void connectFail(QString, QString, QString);//连接失败信号

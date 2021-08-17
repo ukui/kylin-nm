@@ -8,6 +8,7 @@
 #include "kylinbluetoothconnectitem.h"
 #include "kylinnetworkdeviceresource.h"
 #include "kylinconnectsetting.h"
+#include "kylinapconnectitem.h"
 
 class KyConnectResourse : public QObject
 {
@@ -24,6 +25,7 @@ public:
  //   void getWiredConnections(QList<KyWiredConnectItem *> &wiredConnectItemList);
     void getVpnConnections(QList<KyVpnConnectItem *> &vpnConnectItemList);
     void getBluetoothConnections(QList<KyBluetoothConnectItem *> &bluetoothConnectItemList);
+    void getApConnections(QList<KyApConnectItem *> &apConnectItemList);
     void getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting);
 
 private:
@@ -36,8 +38,8 @@ private:
     void getVpnConnectData(NetworkManager::ConnectionSettings::Ptr settingPtr,
                            KyVpnConnectItem *vpnItem);
     KyVpnConnectItem *getVpnConnectItem(NetworkManager::Connection::Ptr connectPtr);
-
     KyBluetoothConnectItem *getBluetoothConnectItem(NetworkManager::Connection::Ptr connectPtr);
+    KyApConnectItem *getApConnectItem(NetworkManager::Connection::Ptr connectPtr);
 
     void getIpv4ConnectSetting(NetworkManager::Ipv4Setting::Ptr &ipv4Setting,
                             KyConnectSetting &connectSetting);

@@ -1,6 +1,9 @@
 #ifndef KYENTERPRICESETTINGINFO_H
 #define KYENTERPRICESETTINGINFO_H
 
+#include <NetworkManagerQt/Ipv4Setting>
+#include <NetworkManagerQt/Ipv6Setting>
+
 #include "kylinnetworkresourcemanager.h"
 #include <QObject>
 

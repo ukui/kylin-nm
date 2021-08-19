@@ -259,8 +259,6 @@ void NmDemo::onConnectClicked()
     }
     if (isEnterPirse)
     {
-        qDebug() <<"EnterPrice";
-        return;
         if(!isNew)
         {
             KyEapMethodPeapInfo a;
@@ -273,14 +271,22 @@ void NmDemo::onConnectClicked()
             m_wco->activeWirelessConnect(devIface,uuid);
             return;
         } else {
-            KyEapMethodTtlsInfo c;
-            c.authType = AUTH_NO_EAP;
-            c.authNoEapMethod = KyAuthMethodMschapv2;
+            KyEapMethodPeapInfo c;
+            c.m_passwdFlag = NetworkManager::Setting::SecretFlagType::None;
+            c.phase2AuthMethod = KyAuthMethodMschapv2;
             c.userName = "steve";
             c.userPWD = "testing";
+
+            KyWirelessConnectSetting a;
+            a.m_connectName = ssid;
+            a.m_ssid = ssid;
+            a.isAutoConnect = true;
+            a.m_type = WpaEap;
+
             appendDebugLog("addAndActiveWirelessEnterPriseTtlsConnect...");
             qDebug() << "addAndActiveWirelessEnterPriseTtlsConnect";
 //            m_wco->addAndActiveWirelessEnterPriseTtlsConnect(c, devIface, isHidden, true, 0);
+            m_wco->addAndActiveWirelessEnterPrisePeapConnect(c, a, devIface, false);
             return;
         }
     }
@@ -292,7 +298,7 @@ void NmDemo::onConnectClicked()
         a.m_ssid = ssid;
         a.isAutoConnect = true;
         a.m_psk = pwd;
-        a.m_type = WpaPsk;
+        a.m_type = WpaNone;
 
 
         m_wco->addAndActiveWirelessConnect(devIface,a, isHidden);
@@ -363,14 +369,19 @@ void NmDemo::onModifyClicked()
     {
         return;
     }
-    QString psk = m_wco->getPsk(uuid);
-    appendDebugLog(ssid +" getPsk  is " + psk);
-    return;
+
+//    KyEapMethodTtlsInfo info;
+//    m_wco->updateWirelessEnterPriseTtlsConnect(uuid, info);
+
+//    QString psk = m_wco->getPsk(uuid);
+//    appendDebugLog(ssid +" getPsk  is " + psk);
+//    return;
 
     appendDebugLog("getConnectKeyMgmt" + QString::number(m_wco->getConnectKeyMgmt(uuid)));
 
     KyWirelessConnectSetting wcs;
-    wcs.m_type = SAE;
+    wcs.m_type = WpaPsk;
+    wcs.m_psk = "123456zsx";
     m_wco->updateWirelessPersonalConnect(uuid, wcs ,true);
     appendDebugLog("getConnectKeyMgmt" + QString::number(m_wco->getConnectKeyMgmt(uuid)));
     return;
@@ -462,17 +473,17 @@ void NmDemo::onAddClick()
 {
     appendDebugLog("onAddClick...");
     KyWirelessConnectSetting sett;
-    sett.m_connectName = "zsx";
-    sett.m_ssid = "zsxsz";
+    sett.m_connectName = "test";
+    sett.m_ssid = "test";
     sett.isAutoConnect = false;
-    sett.m_psk = "123456zsx";
-    sett.m_type = Wep;
-    //ipv4
-    sett.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
-    QString ipv4Address("192.168.1.17"), ipv4NetMask("255.255.255.0"), ipv4GateWay("192.168.1.0");
-    QStringList list;
-    list << "127.17.50.100";
-    sett.ipv4AddressConstruct(ipv4Address, ipv4NetMask, ipv4GateWay, list);
+    sett.m_psk = "";
+    sett.m_type = WpaEap;
+//    //ipv4
+    sett.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
+//    QString ipv4Address("192.168.1.17"), ipv4NetMask("255.255.255.0"), ipv4GateWay("192.168.1.0");
+//    QStringList list;
+//    list << "127.17.50.100";
+//    sett.ipv4AddressConstruct(ipv4Address, ipv4NetMask, ipv4GateWay, list);
 //    m_wco->addConnect(sett);
     KyEapMethodPeapInfo peap;
     peap.phase2AuthMethod = KyAuthMethodMschapv2;

@@ -634,7 +634,7 @@ void KyNetworkResourceManager::onDeviceAdded(QString const & uni)
 
     if (0 > m_devices.indexOf(networkDevice)) {
         addDevice(networkDevice);
-        emit deviceAdd(networkDevice->interfaceName());
+        emit deviceAdd(networkDevice->interfaceName(), networkDevice->type());
     } else {
         qWarning() << networkDevice->interfaceName() <<"the device is exist in network device list.";
     }

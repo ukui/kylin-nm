@@ -23,7 +23,9 @@ KyNetworkDeviceResourse::~KyNetworkDeviceResourse()
     m_networkResourceInstance = nullptr;
 }
 
-void KyNetworkDeviceResourse::getNetworkDeviceList(QStringList &networkDeviceList)
+void KyNetworkDeviceResourse::getNetworkDeviceList(
+                NetworkManager::Device::Type deviceType,
+                QStringList &networkDeviceList)
 {
     qDebug()<<"[KyNetworkDeviceResourse]"<<"get device list";
     NetworkManager::Device::List deviceList
@@ -37,7 +39,9 @@ void KyNetworkDeviceResourse::getNetworkDeviceList(QStringList &networkDeviceLis
     NetworkManager::Device::Ptr devicePtr = nullptr;
     for (int index = 0; index < deviceList.size(); ++index) {
         devicePtr = deviceList.at(index);
-        networkDeviceList<<devicePtr->interfaceName();
+        if (devicePtr->type() == deviceType) {
+            networkDeviceList<<devicePtr->interfaceName();
+        }
     }
 
     return;

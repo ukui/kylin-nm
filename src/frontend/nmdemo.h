@@ -70,6 +70,7 @@ public slots:
     void onConnectionAdd(QString, QString);
     void onWifiNetworkAdd(QString, KyWirelessNetItem&);
     void onWifiNetworkRemove(QString, QString);
+    void onWifiNetworkUpdate();
 
     void onConnectClicked();
     void onDisConnectClicked();

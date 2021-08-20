@@ -127,8 +127,9 @@ void NmDemo::initConnect()
 
     //ui button
     connect(refreshButton, &QPushButton::clicked, [=](){
-        appendDebugLog("init refreshButton clicked...");
-        m_wco->requestWirelessScan();
+//        appendDebugLog("init refreshButton clicked...");
+//        m_wco->requestWirelessScan();
+        getWifiList();
     });
 
     connect(connectButton,      &QPushButton::clicked, this, &NmDemo::onConnectClicked);
@@ -153,8 +154,11 @@ void NmDemo::initConnect()
     connect(m_wnr, &KyWirelessNetResource::secuTypeChange,          this ,&NmDemo::onSecuTypeChange);
     connect(m_wnr, &KyWirelessNetResource::signalStrengthChange,    this ,&NmDemo::onSignalStrengthChange);
 
+
+
     connect(m_wnr, &KyWirelessNetResource::connectionRemove,   this ,&NmDemo::onConnectionRemove);
     connect(m_wnr, &KyWirelessNetResource::connectionAdd,   this ,&NmDemo::onConnectionAdd);
+    connect(m_wnr, &KyWirelessNetResource::wifiNetworkUpadte,   this ,&NmDemo::onWifiNetworkUpdate);
     connect(m_wnr, &KyWirelessNetResource::wifiNetworkAdd,   this ,&NmDemo::onWifiNetworkAdd);
     connect(m_wnr, &KyWirelessNetResource::wifiNetworkRemove,   this ,&NmDemo::onWifiNetworkRemove);
 
@@ -221,6 +225,12 @@ void NmDemo::onWifiNetworkRemove(QString devIface, QString ssid)
     getWifiList();
 }
 
+void NmDemo::onWifiNetworkUpdate()
+{
+    appendDebugLog("onWifiNetworkUpdate...");
+    getWifiList();
+}
+
 void NmDemo::onConnectClicked()
 {
     appendDebugLog("onConnectClicked...");
@@ -259,8 +269,6 @@ void NmDemo::onConnectClicked()
     }
     if (isEnterPirse)
     {
-        qDebug() <<"EnterPrice";
-        return;
         if(!isNew)
         {
             KyEapMethodPeapInfo a;
@@ -273,14 +281,22 @@ void NmDemo::onConnectClicked()
             m_wco->activeWirelessConnect(devIface,uuid);
             return;
         } else {
-            KyEapMethodTtlsInfo c;
-            c.authType = AUTH_NO_EAP;
-            c.authNoEapMethod = KyAuthMethodMschapv2;
+            KyEapMethodPeapInfo c;
+            c.m_passwdFlag = NetworkManager::Setting::SecretFlagType::None;
+            c.phase2AuthMethod = KyAuthMethodMschapv2;
             c.userName = "steve";
             c.userPWD = "testing";
+
+            KyWirelessConnectSetting a;
+            a.m_connectName = ssid;
+            a.m_ssid = ssid;
+            a.isAutoConnect = true;
+            a.m_type = WpaEap;
+
             appendDebugLog("addAndActiveWirelessEnterPriseTtlsConnect...");
             qDebug() << "addAndActiveWirelessEnterPriseTtlsConnect";
 //            m_wco->addAndActiveWirelessEnterPriseTtlsConnect(c, devIface, isHidden, true, 0);
+            m_wco->addAndActiveWirelessEnterPrisePeapConnect(c, a, devIface, false);
             return;
         }
     }
@@ -292,7 +308,7 @@ void NmDemo::onConnectClicked()
         a.m_ssid = ssid;
         a.isAutoConnect = true;
         a.m_psk = pwd;
-        a.m_type = WpaPsk;
+        a.m_type = WpaNone;
 
 
         m_wco->addAndActiveWirelessConnect(devIface,a, isHidden);
@@ -363,14 +379,19 @@ void NmDemo::onModifyClicked()
     {
         return;
     }
-    QString psk = m_wco->getPsk(uuid);
-    appendDebugLog(ssid +" getPsk  is " + psk);
-    return;
+
+//    KyEapMethodTtlsInfo info;
+//    m_wco->updateWirelessEnterPriseTtlsConnect(uuid, info);
+
+//    QString psk = m_wco->getPsk(uuid);
+//    appendDebugLog(ssid +" getPsk  is " + psk);
+//    return;
 
     appendDebugLog("getConnectKeyMgmt" + QString::number(m_wco->getConnectKeyMgmt(uuid)));
 
     KyWirelessConnectSetting wcs;
-    wcs.m_type = SAE;
+    wcs.m_type = WpaPsk;
+    wcs.m_psk = "123456zsx";
     m_wco->updateWirelessPersonalConnect(uuid, wcs ,true);
     appendDebugLog("getConnectKeyMgmt" + QString::number(m_wco->getConnectKeyMgmt(uuid)));
     return;
@@ -462,17 +483,17 @@ void NmDemo::onAddClick()
 {
     appendDebugLog("onAddClick...");
     KyWirelessConnectSetting sett;
-    sett.m_connectName = "zsx";
-    sett.m_ssid = "zsxsz";
+    sett.m_connectName = "test";
+    sett.m_ssid = "test";
     sett.isAutoConnect = false;
-    sett.m_psk = "123456zsx";
-    sett.m_type = Wep;
-    //ipv4
-    sett.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
-    QString ipv4Address("192.168.1.17"), ipv4NetMask("255.255.255.0"), ipv4GateWay("192.168.1.0");
-    QStringList list;
-    list << "127.17.50.100";
-    sett.ipv4AddressConstruct(ipv4Address, ipv4NetMask, ipv4GateWay, list);
+    sett.m_psk = "";
+    sett.m_type = WpaEap;
+//    //ipv4
+    sett.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
+//    QString ipv4Address("192.168.1.17"), ipv4NetMask("255.255.255.0"), ipv4GateWay("192.168.1.0");
+//    QStringList list;
+//    list << "127.17.50.100";
+//    sett.ipv4AddressConstruct(ipv4Address, ipv4NetMask, ipv4GateWay, list);
 //    m_wco->addConnect(sett);
     KyEapMethodPeapInfo peap;
     peap.phase2AuthMethod = KyAuthMethodMschapv2;
@@ -530,21 +551,44 @@ void NmDemo::getWifiList()
     qDebug() << "getWifiList";
     wifiList->clear();
     QMap<QString,QStringList> actMap;
-    if (!m_wnr->getWirelessActiveConnection(actMap))
-    {
-        return;
-    }
+    m_wnr->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activated, actMap);
+    appendDebugLog("getWirelessActiveConnection Activated " +QString::number(actMap.size()));
+
     QMap<QString,QStringList>::iterator iter1 = actMap.begin();
     while (iter1 != actMap.end())
     {
         wifiList->append(iter1.key());
         for (int i = 0; i < iter1->size(); i++)
         {
-            wifiList->append(iter1->at(i));
+            wifiList->append("Activated" +  iter1->at(i));
         }
         wifiList->append("====================================");
         iter1++;
     }
+
+    m_wnr->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activating, actMap);
+    appendDebugLog("getWirelessActiveConnection Activating " +QString::number(actMap.size()));
+
+    QMap<QString,QStringList>::iterator iter2 = actMap.begin();
+    while (iter2 != actMap.end())
+    {
+        wifiList->append(iter2.key());
+        for (int i = 0; i < iter2->size(); i++)
+        {
+            wifiList->append("Activating" + iter2->at(i));
+        }
+        wifiList->append("====================================");
+        iter2++;
+    }
+
+    m_wnr->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Deactivating, actMap);
+    appendDebugLog("getWirelessActiveConnection Deactivating " +QString::number(actMap.size()));
+
+    m_wnr->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Deactivated, actMap);
+    appendDebugLog("getWirelessActiveConnection Deactivated " +QString::number(actMap.size()));
+
+    return;
+
     QMap<QString, QList<KyWirelessNetItem> > map;
     if (!m_wnr->getAllDeviceWifiNetwork(map))
     {
@@ -553,6 +597,7 @@ void NmDemo::getWifiList()
     QMap<QString, QList<KyWirelessNetItem> >::iterator iter = map.begin();
     while (iter != map.end())
     {
+        qDebug() << iter.key() << iter.value().size();
         for (int i = 0; i < iter.value().size(); i++)
         {
             qDebug() << iter.value().at(i).m_NetSsid;

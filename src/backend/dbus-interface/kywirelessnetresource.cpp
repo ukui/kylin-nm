@@ -5,6 +5,7 @@ KyWirelessNetResource::KyWirelessNetResource(QObject *parent)
 {
     qDebug()<<"KyWirelessNetResource";
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
+    m_connectResource = new KyConnectResourse(this);
 
     kyWirelessNetItemListInit();
 
@@ -14,8 +15,9 @@ KyWirelessNetResource::KyWirelessNetResource(QObject *parent)
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkPropertyChange, this, &KyWirelessNetResource::onWifiNetworkPropertyChange);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkDeviceDisappear, this, &KyWirelessNetResource::onWifiNetworkDeviceDisappear);
 
-    //connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionAdd, this, &KyWirelessNetResource::onConnectionAdd);
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionRemove, this, &KyWirelessNetResource::onConnectionRemove);
+    connect(m_connectResource, &KyConnectResourse::connectionAdd, this, &KyWirelessNetResource::onConnectionAdd);
+    connect(m_connectResource, &KyConnectResourse::connectionRemove, this, &KyWirelessNetResource::onConnectionRemove);
+    connect(m_connectResource, &KyConnectResourse::connectionUpdate, this, &KyWirelessNetResource::onConnectionUpdate);
 
 }
 
@@ -26,7 +28,7 @@ KyWirelessNetResource::~KyWirelessNetResource()
 
 bool KyWirelessNetResource::getAllDeviceWifiNetwork(QMap<QString,QList<KyWirelessNetItem> > &map)
 {
-    onWifiNetworkDeviceDisappear();
+//    onWifiNetworkDeviceDisappear();
     if (m_WifiNetworkList.isEmpty()) {
         return false;
     } else {
@@ -38,7 +40,7 @@ bool KyWirelessNetResource::getAllDeviceWifiNetwork(QMap<QString,QList<KyWireles
 
 bool KyWirelessNetResource::getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &wirelessNetResource)
 {
-    onWifiNetworkDeviceDisappear();
+//    onWifiNetworkDeviceDisappear();
 
     if (!m_WifiNetworkList.contains(devIfaceName)) {
         return false;
@@ -50,7 +52,7 @@ bool KyWirelessNetResource::getDeviceWifiNetwork(QString devIfaceName, QList<KyW
 
 bool KyWirelessNetResource::getWifiNetwork(QString &devIfaceName, QString &ssid, KyWirelessNetItem &wirelessNetResource)
 {
-    onWifiNetworkDeviceDisappear();
+//    onWifiNetworkDeviceDisappear();
 
     if (!m_WifiNetworkList.contains(devIfaceName)) {
         return false;
@@ -66,9 +68,10 @@ bool KyWirelessNetResource::getWifiNetwork(QString &devIfaceName, QString &ssid,
     return false;
 }
 
-bool KyWirelessNetResource::getWirelessActiveConnection(QMap<QString,QStringList> &map)
+void KyWirelessNetResource::getWirelessActiveConnection(NetworkManager::ActiveConnection::State state, QMap<QString,QStringList> &map)
 {
     int index = 0;
+    map.clear();
     NetworkManager::ActiveConnection::List activeConnectionList;
 
     map.clear();
@@ -76,8 +79,7 @@ bool KyWirelessNetResource::getWirelessActiveConnection(QMap<QString,QStringList
     activeConnectionList = m_networkResourceInstance->m_activeConns;
     if (activeConnectionList.isEmpty())
     {
-        map.clear();
-        return true;
+        return;
     }
 
     NetworkManager::ActiveConnection::Ptr activeConnectionPtr = nullptr;
@@ -88,7 +90,7 @@ bool KyWirelessNetResource::getWirelessActiveConnection(QMap<QString,QStringList
         {
             continue;
         }
-        if (NetworkManager::ActiveConnection::Activated != activeConnectionPtr->state())
+        if (state != activeConnectionPtr->state())
         {
             continue;
         }
@@ -102,7 +104,7 @@ bool KyWirelessNetResource::getWirelessActiveConnection(QMap<QString,QStringList
             map.insert(ifaceName,list);
         }
     }
-    return true;
+    return;
 }
 
 QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::Ptr actConn,
@@ -114,7 +116,8 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::
 
     NetworkManager::Connection::Ptr conn = actConn->connection();
     NetworkManager::ConnectionSettings::Ptr sett = conn->settings();
-    wirelessNetResourcessid = sett->id();
+    NetworkManager::WirelessSetting::Ptr wireless_sett = sett->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    wirelessNetResourcessid = wireless_sett->ssid();
 
     return sett->interfaceName();
 }
@@ -410,13 +413,13 @@ bool KyWirelessNetResource::getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtls
 }
 
 
-void KyWirelessNetResource::onConnectionAdd(NetworkManager::Connection::Ptr conn)
+void KyWirelessNetResource::onConnectionAdd(QString uuid)
 {
-    qDebug() << "onConnectionAdd add " << conn->name();
-    QString devIfaceName;
-    QString ssid;
+    qDebug() << "onConnectionAdd " << uuid;
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
     if (conn.isNull())
     {
+        qDebug() << "onConnectionAdd can not find connection" << uuid;
         return;
     }
     NetworkManager::ConnectionSettings::Ptr sett= conn->settings();
@@ -425,15 +428,14 @@ void KyWirelessNetResource::onConnectionAdd(NetworkManager::Connection::Ptr conn
         return;
     }
     NetworkManager::WirelessSetting::Ptr wireless_sett = sett->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
-    bool isFind = false;
+    QMap<QString, QString> map;
+    map.clear();
     QMap<QString, QList<KyWirelessNetItem> >::iterator iter = m_WifiNetworkList.begin();
-    while (iter != m_WifiNetworkList.end())
-    {
-        for(int i = 0; i < iter.value().size(); i++)
-        {
-            if (iter.value().at(i).m_NetSsid == wireless_sett->ssid())
-            {
-                isFind = true;
+    while (iter != m_WifiNetworkList.end()) {
+        for(int i = 0; i < iter.value().size(); i++) {
+            if (iter.value().at(i).m_NetSsid == wireless_sett->ssid() && (sett->interfaceName() == iter.key() || sett->interfaceName().isEmpty())) {
+                QString devIfaceName;
+                QString ssid;
                 m_WifiNetworkList[iter.key()][i].m_isConfigured = true;
                 m_WifiNetworkList[iter.key()][i].m_connName = conn->name();
                 m_WifiNetworkList[iter.key()][i].m_connectUuid = conn->uuid();
@@ -441,22 +443,27 @@ void KyWirelessNetResource::onConnectionAdd(NetworkManager::Connection::Ptr conn
 
                 devIfaceName = sett->interfaceName();
                 ssid = iter.value().at(i).m_NetSsid;
+                map.insert(devIfaceName, ssid);
+
+                break;
             }
         }
         iter++;
     }
-    if (isFind)
-    {
-        emit connectionAdd(devIfaceName, ssid);
+    if (!map.isEmpty()) {
+        for(auto var = map.cbegin(); var != map.cend(); var++) {
+            QString devIfaceName = var.key();
+            QString ssid = var.value();
+            emit connectionAdd(devIfaceName, ssid);
+        }
     }
 }
 
 void KyWirelessNetResource::onConnectionRemove(QString path)
 {
     qDebug() << "onConnectionRemove remove " << path;
-    bool isFind = false;
-    QString devIfaceName;
-    QString ssid;
+    QMap<QString, QString> map;
+    map.clear();
 
     QMap<QString, QList<KyWirelessNetItem> >::iterator iter = m_WifiNetworkList.begin();
     while (iter != m_WifiNetworkList.end())
@@ -467,7 +474,8 @@ void KyWirelessNetResource::onConnectionRemove(QString path)
             qDebug() << iter.value().at(i).m_connDbusPath;
             if (iter.value().at(i).m_connDbusPath == path)
             {
-                isFind = true;
+                QString devIfaceName;
+                QString ssid;
                 m_WifiNetworkList[iter.key()][i].m_isConfigured = false;
                 m_WifiNetworkList[iter.key()][i].m_connName = "";
                 m_WifiNetworkList[iter.key()][i].m_connectUuid = "";
@@ -475,14 +483,38 @@ void KyWirelessNetResource::onConnectionRemove(QString path)
 
                 devIfaceName = iter.key();
                 ssid = iter.value().at(i).m_NetSsid;
+                map.insert(devIfaceName, ssid);
                 break;
             }
         }
         iter++;
+    } 
+    if (!map.isEmpty()) {
+        for(auto var = map.cbegin(); var != map.cend(); var++) {
+            QString devIfaceName = var.key();
+            QString ssid = var.value();
+            emit connectionRemove(devIfaceName, ssid);
+        }
     }
 
-    if (isFind)
+}
+
+
+void KyWirelessNetResource::onConnectionUpdate(QString uuid)
+{
+    qDebug() << "onConnectionUpdate " << uuid;
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
+    if (conn.isNull())
     {
-        emit connectionRemove(devIfaceName, ssid);
+        qDebug() << "onConnectionAdd can not find connection" << uuid;
+        return;
     }
+    NetworkManager::ConnectionSettings::Ptr sett= conn->settings();
+    if (sett->connectionType() != NetworkManager::ConnectionSettings::ConnectionType::Wireless)
+    {
+        return;
+    }
+    m_WifiNetworkList.clear();
+    kyWirelessNetItemListInit();
+    emit wifiNetworkUpadte();
 }

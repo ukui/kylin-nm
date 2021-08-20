@@ -5,6 +5,7 @@
 #include "kywirelessnetitem.h"
 #include "kylinnetworkresourcemanager.h"
 #include "kyenterpricesettinginfo.h"
+#include "kylinconnectresource.h"
 
 
 //class KyWirelessNetItem;
@@ -25,7 +26,7 @@ public:
     bool getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info);
     bool getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);
 
-    bool getWirelessActiveConnection(QMap<QString, QStringList> &map);
+    void getWirelessActiveConnection(NetworkManager::ActiveConnection::State state, QMap<QString, QStringList> &map);
 
 
 private:
@@ -39,7 +40,8 @@ public slots:
     void onWifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net);
     void onWifiNetworkDeviceDisappear();
 
-    void onConnectionAdd(NetworkManager::Connection::Ptr conn);
+    void onConnectionAdd(QString uuid);
+    void onConnectionUpdate(QString uuid);
     void onConnectionRemove(QString);
 
 signals:
@@ -48,11 +50,13 @@ signals:
     void secuTypeChange(QString, QString, QString);
     void connectionRemove(QString, QString);
     void connectionAdd(QString, QString);
+    void wifiNetworkUpadte();
     void wifiNetworkAdd(QString, KyWirelessNetItem&);
     void wifiNetworkRemove(QString, QString);
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
+    KyConnectResourse        *m_connectResource = nullptr;
     QMap<QString, QList<KyWirelessNetItem> >      m_WifiNetworkList;
 
 };

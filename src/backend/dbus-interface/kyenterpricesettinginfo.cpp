@@ -124,7 +124,6 @@ void modifyEapMethodPeapSettings(NetworkManager::ConnectionSettings::Ptr connSet
 
     QList<NetworkManager::Security8021xSetting::EapMethod> list;
     list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodPeap);
-    wifi_8021x_sett->setInitialized(true);
     wifi_8021x_sett->setEapMethods(list);
     wifi_8021x_sett->setPhase2AuthMethod((NetworkManager::Security8021xSetting::AuthMethod)peapInfo.phase2AuthMethod);
     wifi_8021x_sett->setIdentity(peapInfo.userName);

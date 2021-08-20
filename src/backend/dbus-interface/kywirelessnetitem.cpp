@@ -36,6 +36,7 @@ KyWirelessNetItem::KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net)
     m_connName = "";
     m_connDbusPath = "";
     m_secuType = "";
+    m_device = "";
 
     init(net);
 }
@@ -57,6 +58,7 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
     NetworkManager::AccessPoint::WpaFlags rsnFlag = net->referenceAccessPoint()->rsnFlags();
     m_secuType = enumToQstring(cap, wpaFlag, rsnFlag);
     m_bssid = net->referenceAccessPoint()->hardwareAddress();
+    m_device = net->device();
     initInfoBySsid();
 }
 
@@ -71,19 +73,13 @@ void KyWirelessNetItem::initInfoBySsid()
         }
         NetworkManager::WirelessSetting::Ptr wifi_sett
             = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
-        if (wifi_sett->ssid() == m_NetSsid)
+        QString devName = m_networkResourceInstance->findDeviceUni(m_device)->interfaceName();
+        if (wifi_sett->ssid() == m_NetSsid && (settings->interfaceName().compare(devName) == 0 || settings->interfaceName().isEmpty()))
         {
             m_connectUuid = settings->uuid();
             m_connName    = conn->name();
             m_connDbusPath = conn->path();
             m_isConfigured = true;
-
-            if(wifi_sett->ssid() == "NewWifi")
-            {
-                NetworkManager::WirelessSecuritySetting::Ptr security_sett
-                    = settings->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-                qDebug() << security_sett->keyMgmt();
-            }
             return;
         }
     }

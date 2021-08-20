@@ -34,6 +34,7 @@ public:
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
+    QString                                 m_device;
 
 };
 

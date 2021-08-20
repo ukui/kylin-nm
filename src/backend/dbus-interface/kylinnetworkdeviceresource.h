@@ -14,7 +14,7 @@ public:
     ~KyNetworkDeviceResourse();
 
 signals:
-    void deviceAdd(QString deviceName);
+    void deviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void deviceUpdate(QString deviceName);
     void deviceRemove(QString deviceName);
 
@@ -24,7 +24,7 @@ signals:
     void deviceMacAddressChanaged(QString deviceName, const QString &hwAddress);
 
 public:
-    void getNetworkDeviceList(QStringList &networkDeviceList);
+    void getNetworkDeviceList(NetworkManager::Device::Type deviceType, QStringList &networkDeviceList);
     void getHardwareInfo(QString ifaceName, QString &hardAddress, int &bandWith);
     NetworkManager::Device::State getDeviceState(QString deviceName);
     bool wiredDeviceCarriered(QString deviceName);

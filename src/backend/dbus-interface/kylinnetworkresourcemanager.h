@@ -105,7 +105,7 @@ signals:
     void connectionUpdate(QString uuid);
     void connectionRemove(QString path);
 
-    void deviceAdd(QString deviceName);
+    void deviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void deviceUpdate(NetworkManager::Device * dev);
     void deviceRemove(QString deviceName);
 

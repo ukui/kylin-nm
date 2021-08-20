@@ -91,7 +91,7 @@ int KyIpv4Arping::sendIpv4Packet()
     memcpy(p, &p_me->sll_addr, ah->ar_hln);
     p += p_me->sll_halen;
 
-    qWarning()<<"m_src address:" << inet_ntoa(m_srcAddress);
+    qWarning()<<"[KyIpv4Arping]" <<"m_src address:" << inet_ntoa(m_srcAddress);
     memcpy(p, &m_srcAddress, 4);
     p += 4;
 
@@ -237,7 +237,7 @@ int KyIpv4Arping::ipv4EventLoop()
             case POLLFD_TIMER:
                 bytes = read(tfd, &exp, sizeof(uint64_t));
                 if (bytes != sizeof(uint64_t)) {
-                    qWarning() << "could not read timerfd";
+                    qWarning() <<"[KyIpv4Arping]" << "could not read timerfd";
                     continue;
                 }
 
@@ -254,7 +254,7 @@ int KyIpv4Arping::ipv4EventLoop()
                 bytes = recvfrom(m_ipv4Socket, packet, sizeof(packet), 0,
                                         (struct sockaddr *)&from, &addr_len);
                 if (bytes < 0) {
-                    qWarning() << "recvfrom function failed, errno" << errno;
+                    qWarning()<<"[KyIpv4Arping]" << "recvfrom function failed, errno" << errno;
                     continue;
                 }
                 if (ipv4PacketProcess(packet, bytes, (struct sockaddr_ll *)&from) == FINAL_PACKS) {
@@ -263,7 +263,7 @@ int KyIpv4Arping::ipv4EventLoop()
                 }
                 break;
             default:
-                qWarning()<<"the fd index is undefine" << index;
+                qWarning()<<"[KyIpv4Arping]" <<"the fd index is undefine" << index;
                 break;
             }
         }
@@ -278,12 +278,12 @@ int KyIpv4Arping::ipv4EventLoop()
 int KyIpv4Arping::checkIfflags(unsigned int ifflags)
 {
     if (!(ifflags & IFF_UP)) {
-        qWarning()<<"the iface" << m_ifaceName <<" is down.";
+        qWarning()<<"[KyIpv4Arping]" <<"the iface" << m_ifaceName <<" is down.";
         return -1;
     }
 
     if (ifflags & (IFF_NOARP | IFF_LOOPBACK)) {
-        qWarning()<< "Interface" << m_ifaceName << "is not ARPable.";
+        qWarning()<<"[KyIpv4Arping]" << "Interface" << m_ifaceName << "is not ARPable.";
         return -1;
     }
 

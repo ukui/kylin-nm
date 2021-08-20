@@ -127,8 +127,9 @@ void NmDemo::initConnect()
 
     //ui button
     connect(refreshButton, &QPushButton::clicked, [=](){
-        appendDebugLog("init refreshButton clicked...");
-        m_wco->requestWirelessScan();
+//        appendDebugLog("init refreshButton clicked...");
+//        m_wco->requestWirelessScan();
+        getWifiList();
     });
 
     connect(connectButton,      &QPushButton::clicked, this, &NmDemo::onConnectClicked);
@@ -153,8 +154,11 @@ void NmDemo::initConnect()
     connect(m_wnr, &KyWirelessNetResource::secuTypeChange,          this ,&NmDemo::onSecuTypeChange);
     connect(m_wnr, &KyWirelessNetResource::signalStrengthChange,    this ,&NmDemo::onSignalStrengthChange);
 
+
+
     connect(m_wnr, &KyWirelessNetResource::connectionRemove,   this ,&NmDemo::onConnectionRemove);
     connect(m_wnr, &KyWirelessNetResource::connectionAdd,   this ,&NmDemo::onConnectionAdd);
+    connect(m_wnr, &KyWirelessNetResource::wifiNetworkUpadte,   this ,&NmDemo::onWifiNetworkUpdate);
     connect(m_wnr, &KyWirelessNetResource::wifiNetworkAdd,   this ,&NmDemo::onWifiNetworkAdd);
     connect(m_wnr, &KyWirelessNetResource::wifiNetworkRemove,   this ,&NmDemo::onWifiNetworkRemove);
 
@@ -218,6 +222,12 @@ void NmDemo::onWifiNetworkAdd(QString devIface, KyWirelessNetItem& item)
 void NmDemo::onWifiNetworkRemove(QString devIface, QString ssid)
 {
     appendDebugLog("onWifiNetworkRemove..." + devIface + " " + ssid);
+    getWifiList();
+}
+
+void NmDemo::onWifiNetworkUpdate()
+{
+    appendDebugLog("onWifiNetworkUpdate...");
     getWifiList();
 }
 
@@ -541,21 +551,44 @@ void NmDemo::getWifiList()
     qDebug() << "getWifiList";
     wifiList->clear();
     QMap<QString,QStringList> actMap;
-    if (!m_wnr->getWirelessActiveConnection(actMap))
-    {
-        return;
-    }
+    m_wnr->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activated, actMap);
+    appendDebugLog("getWirelessActiveConnection Activated " +QString::number(actMap.size()));
+
     QMap<QString,QStringList>::iterator iter1 = actMap.begin();
     while (iter1 != actMap.end())
     {
         wifiList->append(iter1.key());
         for (int i = 0; i < iter1->size(); i++)
         {
-            wifiList->append(iter1->at(i));
+            wifiList->append("Activated" +  iter1->at(i));
         }
         wifiList->append("====================================");
         iter1++;
     }
+
+    m_wnr->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activating, actMap);
+    appendDebugLog("getWirelessActiveConnection Activating " +QString::number(actMap.size()));
+
+    QMap<QString,QStringList>::iterator iter2 = actMap.begin();
+    while (iter2 != actMap.end())
+    {
+        wifiList->append(iter2.key());
+        for (int i = 0; i < iter2->size(); i++)
+        {
+            wifiList->append("Activating" + iter2->at(i));
+        }
+        wifiList->append("====================================");
+        iter2++;
+    }
+
+    m_wnr->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Deactivating, actMap);
+    appendDebugLog("getWirelessActiveConnection Deactivating " +QString::number(actMap.size()));
+
+    m_wnr->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Deactivated, actMap);
+    appendDebugLog("getWirelessActiveConnection Deactivated " +QString::number(actMap.size()));
+
+    return;
+
     QMap<QString, QList<KyWirelessNetItem> > map;
     if (!m_wnr->getAllDeviceWifiNetwork(map))
     {
@@ -564,6 +597,7 @@ void NmDemo::getWifiList()
     QMap<QString, QList<KyWirelessNetItem> >::iterator iter = map.begin();
     while (iter != map.end())
     {
+        qDebug() << iter.key() << iter.value().size();
         for (int i = 0; i < iter.value().size(); i++)
         {
             qDebug() << iter.value().at(i).m_NetSsid;

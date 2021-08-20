@@ -1,4 +1,5 @@
 #include "listitem.h"
+#include <QEvent>
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
@@ -8,6 +9,7 @@
 ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
     initUI();
+    initConnection();
 }
 
 ListItem::~ListItem()
@@ -17,6 +19,15 @@ ListItem::~ListItem()
 
     delete m_infoButton;
     m_infoButton = NULL;
+}
+
+bool ListItem::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == this) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            this->onNetButtonClicked();
+        }
+    }
 }
 
 void ListItem::setName(const QString &name)
@@ -47,4 +58,20 @@ void ListItem::initUI()
     m_hItemLayout->addWidget(m_infoButton);
 
     m_mainLayout->addWidget(m_itemFrame);
+}
+
+void ListItem::initConnection()
+{
+    connect(this->m_netButton, &NetButton::clicked, this, &ListItem::onNetButtonClicked);
+    connect(this->m_infoButton, &InfoButton::clicked, this, &ListItem::onInfoButtonClicked);
+}
+
+void ListItem::onInfoButtonClicked()
+{
+
+}
+
+void ListItem::onNetButtonClicked()
+{
+
 }

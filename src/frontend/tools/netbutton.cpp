@@ -39,6 +39,7 @@ void NetButton::setReleased()
 void NetButton::setButtonIcon(QIcon *icon)
 {
     if (!icon) { return; }
+    //ZJP_TODO 绘制圆形按钮
     m_iconLabel->setPixmap(icon->pixmap(this->size()));
 }
 

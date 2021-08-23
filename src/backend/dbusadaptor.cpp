@@ -17,6 +17,62 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 
+const QByteArray GSETTINGS_SCHEMA_SCREENSAVER = "org.ukui.kylin-nm.switch";
+const QString    KEY_WIRELESS_SWITCH          = "wirelessswitch";
+const QString    KEY_WIRED_SWITCH             = "wiredswitch";
+const QString    CONFIG_FILE_PATH             = QDir::homePath() + "/.config/ukui/kylin-nm.conf";
+
+void saveDeviceEnableState(QString deviceName, bool enable)
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("CARDEABLE");
+    m_settings->setValue(deviceName, enable);
+    m_settings->endGroup();
+    m_settings->sync();
+    delete m_settings;
+    m_settings = nullptr;
+    return;
+}
+
+bool getDeviceEnableState(QMap<QString, bool> &map)
+{
+    if (!QFile::exists(CONFIG_FILE_PATH)) {
+        return false;
+    }
+    map.clear();
+
+    KyNetworkDeviceResourse * kdr = new KyNetworkDeviceResourse();
+    QStringList wiredDevList,wirelessDevList;
+    wiredDevList.clear();
+    wirelessDevList.clear();
+
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("CARDEABLE");
+
+    kdr->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
+    if (!wiredDevList.isEmpty()) {
+        for (int i = 0; i < wiredDevList.size(); ++i) {
+            bool enable = m_settings->value(wiredDevList.at(i), true).toBool();
+            map.insert(wiredDevList.at(i), enable);
+        }
+    }
+
+    kdr->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
+    if (!wirelessDevList.isEmpty()) {
+        for (int i = 0; i < wirelessDevList.size(); ++i) {
+            bool enable = m_settings->value(wirelessDevList.at(i), true).toBool();
+            map.insert(wirelessDevList.at(i), enable);
+        }
+    }
+
+    m_settings->endGroup();
+    delete m_settings;
+    m_settings = nullptr;
+    delete kdr;
+    kdr = nullptr;
+    return true;
+}
+
 /*
  * Implementation of adaptor class DbusAdaptor
  */
@@ -25,7 +81,11 @@ DbusAdaptor::DbusAdaptor(MainWindow *parent)
     : QDBusAbstractAdaptor(parent)
 {
     // constructor
-    qDBusRegisterMetaType<QVector<QStringList>>();
+    qDBusRegisterMetaType<QMap<QString, bool> >();
+    qDBusRegisterMetaType<WirelessInfo>();
+    qDBusRegisterMetaType<WiredInfo>();
+    qDBusRegisterMetaType<QList<WirelessInfo> >();
+    qDBusRegisterMetaType<QList<WiredInfo> >();
     //setAutoRelaySignals(true)后会自动转发mainwindow发出的同名信号，因此不必再额外写一个转发
     setAutoRelaySignals(true);
 }
@@ -35,21 +95,133 @@ DbusAdaptor::~DbusAdaptor()
     // destructor
 }
 
-void DbusAdaptor::showMainWindow()
+//无线列表
+QList<WirelessInfo> DbusAdaptor::getWirelessList(QString devName)
 {
-    parent()->showMainwindow();
+
 }
 
-void DbusAdaptor::showPb(QString type, QString name)
+//有线列表
+QList<WiredInfo>  DbusAdaptor::getWiredList(QString devName)
 {
+
 }
 
-void DbusAdaptor::requestRefreshWifiList()
+//有线开关
+void DbusAdaptor::setWiredSwitchEnable(bool enable)
 {
+    //todo mainwindow调用backend 对开关 打开/关闭
+    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_SCREENSAVER)) {
+        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_SCREENSAVER);
+        gsetting->set(KEY_WIRED_SWITCH, enable);
+    } else {
+        qDebug()<<"isSchemaInstalled false";
+    }
 }
 
-QVector<QStringList> DbusAdaptor::getWifiList()
+//无线开关
+void DbusAdaptor::setWirelessSwitchEnable(bool enable)
 {
-    return QVector<QStringList>();
+    //todo mainwindow调用backend 对开关 打开/关闭
+    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_SCREENSAVER)) {
+        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_SCREENSAVER);
+        gsetting->set(KEY_WIRELESS_SWITCH, enable);
+        delete gsetting;
+        gsetting = nullptr;
+    } else {
+        qDebug()<<"isSchemaInstalled false";
+    }
+}
+
+//启用/禁用网卡
+void DbusAdaptor::setDeviceEnable(QString devName, bool enable)
+{
+    saveDeviceEnableState(devName, enable);
+}
+
+//设置默认网卡
+void DbusAdaptor::setDefaultWiredDevice(QString deviceName)
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    QString key("wired");
+    m_settings->setValue(key, deviceName);
+    m_settings->endGroup();
+    m_settings->sync();
+    delete m_settings;
+    m_settings = nullptr;
+    return;
+}
+
+QString DbusAdaptor::getDefaultWiredDevice()
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    QString key("wired");
+    QString deviceName = m_settings->value(key, "").toString();
+    m_settings->endGroup();
+    delete m_settings;
+    m_settings = nullptr;
+    return deviceName;
+}
+
+void DbusAdaptor::setDefaultWirelessDevice(QString deviceName)
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    QString key("wireless");
+    m_settings->setValue(key, deviceName);
+    m_settings->endGroup();
+    m_settings->sync();
+    delete m_settings;
+    m_settings = nullptr;
+    return;
+}
+
+QString  DbusAdaptor::getDefaultWirelessDevice()
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    QString key("wireless");
+    QString deviceName = m_settings->value(key, "").toString();
+    m_settings->endGroup();
+    delete m_settings;
+    m_settings = nullptr;
+    return deviceName;
+}
+
+//连接 根据网卡类型 参数2 为ssid/uuid
+void DbusAdaptor::activateConnect(QString devName, QString ssid)
+{
+
+}
+
+//断开连接 根据网卡类型 参数2 为ssid/uuid
+void DbusAdaptor::deActivateConnect(QString devName, QString ssid)
+{
+
+}
+
+//获取设备列表和启用/禁用状态
+QMap<QString, bool> DbusAdaptor::getDeviceListAndEnabled()
+{
+    QMap<QString, bool> map;
+    map.clear();
+    getDeviceEnableState(map);
+    return map;
+}
+
+//唤起属性页 根据网卡类型 参数2 为ssid/uuid
+void DbusAdaptor::showPropertyWidget(QString devName, QString ssid)
+{
+    //todo
+    //parent()->showPropertyWidget(devName,ssid);
+}
+
+//唤起新建有线连接界面
+void DbusAdaptor::showCreateWiredConnectWidget(QString devName, QString connectionName)
+{
+    //todo
+    //parent()->showCreateWiredConnectWidget(devName,connectionName);
 }
 

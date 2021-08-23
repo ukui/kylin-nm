@@ -587,8 +587,6 @@ void NmDemo::getWifiList()
     m_wnr->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Deactivated, actMap);
     appendDebugLog("getWirelessActiveConnection Deactivated " +QString::number(actMap.size()));
 
-    return;
-
     QMap<QString, QList<KyWirelessNetItem> > map;
     if (!m_wnr->getAllDeviceWifiNetwork(map))
     {

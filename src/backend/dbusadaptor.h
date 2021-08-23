@@ -15,6 +15,8 @@
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
 #include <QtDBus/QDBusMetaType>
+
+#include "../dbus-interface/kylinnetworkdeviceresource.h"
 QT_BEGIN_NAMESPACE
 class QByteArray;
 //template<class T> class QList;
@@ -31,28 +33,61 @@ QT_END_NAMESPACE
 
 #include "new-mainwindow.h"
 
+class WiredInfo
+{
+    QString connName;
+    QString uuid;
+
+    friend QDBusArgument&operator <<(QDBusArgument&argument, const WiredInfo&arg)
+    {
+        argument.beginStructure();
+        argument << arg.connName;
+        argument << arg.uuid;
+        argument.endStructure();
+        return argument;
+    }
+    friend const QDBusArgument &operator >>(const QDBusArgument &argument, WiredInfo &arg)
+    {
+        argument.beginStructure();
+        argument >> arg.connName;
+        argument >> arg.uuid;
+        argument.endStructure();
+        return argument;
+    }
+};
+Q_DECLARE_METATYPE(WiredInfo)
+
+class WirelessInfo
+{
+    QString ssid;
+    uint    signalStrength;
+    bool    bSecu;
+
+    friend QDBusArgument&operator <<(QDBusArgument&argument, const WirelessInfo&arg)
+    {
+        argument.beginStructure();
+        argument << arg.ssid;
+        argument << arg.signalStrength;
+        argument << arg.bSecu;
+        argument.endStructure();
+        return argument;
+    }
+    friend const QDBusArgument &operator >>(const QDBusArgument&argument, WirelessInfo&arg)
+    {
+        argument.beginStructure();
+        argument >> arg.ssid;
+        argument >> arg.signalStrength;
+        argument >> arg.bSecu;
+        argument.endStructure();
+        return argument;
+    }
+};
+Q_DECLARE_METATYPE(WirelessInfo)
+
 class DbusAdaptor: public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.kylin.network")
-    Q_CLASSINFO("D-Bus Introspection", ""
-"  <interface name=\"com.kylin.network\">\n"
-"    <method name=\"showMainWindow\"/>\n"
-"    <method name=\"requestRefreshWifiList\"/>\n"
-"    <method name=\"getWifiList\">\n"
-"       <arg type=\"av\" direction=\"out\"/>\n"
-"    </method>\n"
-"    <method name=\"showPb\">\n"
-"       <arg direction=\"in\" name=\"type\" type=\"s\"/>\n"
-"       <arg direction=\"in\" name=\"name\" type=\"s\"/>\n"
-"    </method>\n"
-"    <signal name=\"getWifiListFinished\"/>\n"
-"    <signal name=\"configurationChanged\"/>\n"
-"    <signal name=\"wiredConnectionAdded\"/>\n"
-"    <signal name=\"wiredConnectionRemoved\"/>\n"
-"    <signal name=\"actWiredConnectionChanged\"/>\n"
-"  </interface>\n"
-        "")
 public:
     DbusAdaptor(MainWindow *parent);
     virtual ~DbusAdaptor();
@@ -62,16 +97,36 @@ public:
 
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
-    void showMainWindow();
-    void showPb(QString type, QString name);
-    void requestRefreshWifiList();
-    QVector<QStringList> getWifiList();
+    //无线列表
+    QList<WirelessInfo> getWirelessList(QString devName);
+    //有线列表
+    QList<WiredInfo>  getWiredList(QString devName);
+    //有线开关
+    Q_NOREPLY void setWiredSwitchEnable(bool enable);
+    //无线开关
+    Q_NOREPLY void setWirelessSwitchEnable(bool enable);
+    //启用/禁用网卡
+    Q_NOREPLY void setDeviceEnable(QString devName, bool enable);
+    //设置默认网卡
+    Q_NOREPLY void setDefaultWiredDevice(QString deviceName);
+    QString getDefaultWiredDevice();
+    Q_NOREPLY void setDefaultWirelessDevice(QString deviceName);
+    QString  getDefaultWirelessDevice();
+    //连接 根据网卡类型 参数2 为ssid/uuid
+    Q_NOREPLY void activateConnect(QString devName, QString ssid);
+    //断开连接 根据网卡类型 参数2 为ssid/uuid
+    Q_NOREPLY void deActivateConnect(QString devName, QString ssid);
+    //获取设备列表和启用/禁用状态
+    QMap<QString, bool> getDeviceListAndEnabled();
+    //唤起属性页 根据网卡类型 参数2 为ssid/uuid
+    Q_NOREPLY void showPropertyWidget(QString devName, QString ssid);
+    //唤起新建有线连接界面
+    Q_NOREPLY void showCreateWiredConnectWidget(QString devName, QString connectionName);
 Q_SIGNALS: // SIGNALS
-    void getWifiListFinished();
-    void configurationChanged();
-    void wiredConnectionAdded();
-    void wiredConnectionRemoved();
-    void actWiredConnectionChanged();
+    void listUpdate(QString devName);
+    void deviceUpdate();
+    //仅失败，若成功直接发listUpdate
+    void activateFinish(QString devName, QString ssid);
 };
 
 #endif

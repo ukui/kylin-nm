@@ -1,26 +1,26 @@
-#include "netbutton.h"
+#include "radioitembutton.h"
 
-NetButton::NetButton(bool isActivated, QWidget *parent) : QPushButton(parent)
+RadioItemButton::RadioItemButton(bool isActivated, QWidget *parent) : QPushButton(parent)
 {
-    connect(this, &NetButton::requestStartLoading, this, &NetButton::onLoadingStarted);
-    connect(this, &NetButton::requestStopLoading, this, &NetButton::onLoadingStopped);
+    connect(this, &RadioItemButton::requestStartLoading, this, &RadioItemButton::onLoadingStarted);
+    connect(this, &RadioItemButton::requestStopLoading, this, &RadioItemButton::onLoadingStopped);
     m_isActivated = isActivated;
     this->setAutoFillBackground(false);
     m_iconLabel = new QLabel(this);
     m_iconLabel->setScaledContents(true);
 }
 
-void NetButton::startLoading()
+void RadioItemButton::startLoading()
 {
     emit this->requestStartLoading();
 }
 
-void NetButton::stopLoading()
+void RadioItemButton::stopLoading()
 {
     emit this->requestStopLoading();
 }
 
-void NetButton::setPressed()
+void RadioItemButton::setPressed()
 {
     //ZJP_TODO 设置颜色为点击颜色，注意区分已连接/未连接
     if (m_isActivated)
@@ -28,7 +28,7 @@ void NetButton::setPressed()
     ;
 }
 
-void NetButton::setReleased()
+void RadioItemButton::setReleased()
 {
     //ZJP_TODO 设置颜色为未点击颜色，注意区分已连接/未连接
     if (m_isActivated)
@@ -36,19 +36,19 @@ void NetButton::setReleased()
     ;
 }
 
-void NetButton::setButtonIcon(QIcon *icon)
+void RadioItemButton::setButtonIcon(QIcon *icon)
 {
     if (!icon) { return; }
     //ZJP_TODO 绘制圆形按钮
     m_iconLabel->setPixmap(icon->pixmap(this->size()));
 }
 
-void NetButton::onLoadingStarted()
+void RadioItemButton::onLoadingStarted()
 {
     //ZJP_TODO 开始播放转圈动画
 }
 
-void NetButton::onLoadingStopped()
+void RadioItemButton::onLoadingStopped()
 {
     //ZJP_TODO 停止播放转圈动画
 }

@@ -6,12 +6,12 @@
 #define ACTIVATED true
 #define INACTIVATED false
 
-class NetButton : public QPushButton
+class RadioItemButton : public QPushButton
 {
     Q_OBJECT
 public:
-    NetButton(bool isActivated = INACTIVATED, QWidget * parent = nullptr);
-    ~NetButton() = default;
+    RadioItemButton(bool isActivated = INACTIVATED, QWidget * parent = nullptr);
+    ~RadioItemButton() = default;
     void startLoading();
     void stopLoading();
     void setPressed();

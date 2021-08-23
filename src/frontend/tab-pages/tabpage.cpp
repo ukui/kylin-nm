@@ -37,6 +37,7 @@ void TabPage::initUI()
     m_activatedNetLabel = new QLabel(m_activatedNetFrame);
     m_activatedNetLabel->setContentsMargins(TEXT_MARGINS);
     m_activatedNetListWidget = new QListWidget(m_activatedNetFrame);
+    m_activatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_activatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_activatedNetListWidget->setSpacing(NET_LIST_SPACING);
     m_activatedNetLayout->addWidget(m_activatedNetLabel);
@@ -51,13 +52,8 @@ void TabPage::initUI()
     m_inactivatedNetLabel = new QLabel(m_inactivatedNetFrame);
     m_inactivatedNetLabel->setContentsMargins(TEXT_MARGINS);
     m_inactivatedNetListArea = new QScrollArea(m_inactivatedNetFrame);
-    m_inactivatedNetListWidget = new QListWidget(m_inactivatedNetListArea);
-    m_inactivatedNetListArea->setWidget(m_inactivatedNetListWidget);
-    m_inactivatedNetListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_inactivatedNetListArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_inactivatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);
-//    m_inactivated_Net_list_area->setFixedHeight(SCROLL_AREA_HEIGHT);
+    m_inactivatedNetListArea->setFrameShape(QFrame::Shape::NoFrame);
+    m_inactivatedNetListArea->setWidgetResizable(true);
     m_inactivatedNetLayout->addWidget(m_inactivatedNetLabel);
     m_inactivatedNetLayout->addWidget(m_inactivatedNetListArea);
     m_inactivatedNetDivider = new Divider(this);

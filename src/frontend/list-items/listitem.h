@@ -2,7 +2,7 @@
 #define LISTITEM_H
 #include <QFrame>
 #include <QHBoxLayout>
-#include "netbutton.h"
+#include "radioitembutton.h"
 #include "infobutton.h"
 
 class ListItem : public QFrame
@@ -20,7 +20,7 @@ protected:
     QVBoxLayout * m_mainLayout = nullptr;
     QFrame * m_itemFrame = nullptr;
     QHBoxLayout * m_hItemLayout = nullptr;
-    NetButton * m_netButton = nullptr;
+    RadioItemButton * m_netButton = nullptr;
     QLabel * m_nameLabel = nullptr;
     InfoButton * m_infoButton = nullptr;
 

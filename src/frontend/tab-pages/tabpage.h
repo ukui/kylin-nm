@@ -8,6 +8,8 @@
 #include <QLabel>
 #include <QScrollArea>
 #include <QListWidget>
+#include <QDir>
+#include "kylinnetworkdeviceresource.h"
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
@@ -21,6 +23,8 @@
 #define SETTINGS_LAYOUT_MARGINS 24,16,24,16
 #define TRANSPARENT_COLOR QColor(0,0,0,0)
 
+const QString    CONFIG_FILE_PATH             = QDir::homePath() + "/.config/ukui/kylin-nm.conf";
+
 class TabPage : public QWidget
 {
     Q_OBJECT
@@ -28,10 +32,14 @@ public:
     explicit TabPage(QWidget *parent = nullptr);
     ~TabPage();
 
+    void updateDefaultDevice(QString &deviceName);
+    QString getDefaultDevice();
+
 signals:
 
 protected:
     void initUI();
+    virtual void initDevice() = 0;//初始化默认设备
     QVBoxLayout * m_mainLayout = nullptr;
     QFrame * m_titleFrame = nullptr;
     QHBoxLayout * m_titleLayout = nullptr;
@@ -55,6 +63,8 @@ protected:
     QFrame * m_settingsFrame = nullptr;
     QHBoxLayout * m_settingsLayout = nullptr;
     QLabel * m_settingsLabel = nullptr;
+
+    QString defaultDevice = "";
 
 };
 

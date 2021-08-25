@@ -1,0 +1,14 @@
+<schemalist gettext-domain="kylin-nm">
+  <schema id="org.ukui.kylin-nm.switch" path="/org/ukui/kylin-nm/switch/">
+    <key type="b" name="wirelessswitch">
+      <default>true</default>
+      <summary>wireless switch</summary>
+      <description>Wireless switch.true is open,false is close.</description>
+    </key>
+    <key type="b" name="wiredswitch">
+      <default>true</default>
+      <summary>wired switch</summary>
+      <description>Wired switch.true is open,false is close.</description>
+    </key>
+  </schema>
+</schemalist>

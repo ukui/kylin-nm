@@ -365,7 +365,9 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
 
     NetworkManager::WirelessNetwork::Ptr wifiNet = checkWifiNetExist(connSettingInfo.m_ssid, devIface);
     if (!isHidden && wifiNet.isNull()) {
-        qDebug() << "addAndActiveWirelessConnect can not find " << connSettingInfo.m_ssid << " in " << devIface;
+        QString errorMessage = "the ssid " + connSettingInfo.m_ssid + " is not exsit in " + devIface;
+        qWarning()<<errorMessage;
+        Q_EMIT activateConnectionError(errorMessage);
         return;
     }
 
@@ -456,7 +458,9 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTlsConnect(KyEapM
     if (!isHidden) {
         NetworkManager::WirelessNetwork::Ptr wifiNet = checkWifiNetExist(connSettingInfo.m_ssid, devIface);
         if (wifiNet.isNull()) {
-            qDebug() << "addAndActiveWirelessEnterPriseTlsConnect can not find " << connSettingInfo.m_ssid << " in " << devIface;
+            QString errorMessage = "the ssid " + connSettingInfo.m_ssid + " is not exsit in " + devIface;
+            qWarning()<<errorMessage;
+            Q_EMIT activateConnectionError(errorMessage);
             return;
         }
 
@@ -510,7 +514,9 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPrisePeapConnect(KyEap
     {
         NetworkManager::WirelessNetwork::Ptr wifiNet = checkWifiNetExist(connSettingInfo.m_ssid, devIface);
         if (wifiNet.isNull()) {
-            qDebug() << "addAndActiveWirelessEnterPrisePeapConnect can not find " << connSettingInfo.m_ssid << " in " << devIface;
+            QString errorMessage = "the ssid " + connSettingInfo.m_ssid + " is not exsit in " + devIface;
+            qWarning()<<errorMessage;
+            Q_EMIT activateConnectionError(errorMessage);
             return;
         }
 
@@ -562,7 +568,9 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
     if (!isHidden) {
         NetworkManager::WirelessNetwork::Ptr wifiNet = checkWifiNetExist(connSettingInfo.m_ssid, devIface);
         if (wifiNet.isNull()) {
-            qDebug() << "addAndActiveWirelessEnterPriseTtlsConnect can not find " << connSettingInfo.m_ssid << " in " << devIface;
+            QString errorMessage = "the ssid " + connSettingInfo.m_ssid + " is not exsit in " + devIface;
+            qWarning()<<errorMessage;
+            Q_EMIT activateConnectionError(errorMessage);
             return;
         }
 

@@ -4,10 +4,13 @@
 #include <QEvent>
 #include <QDateTime>
 #include <QDebug>
+#include <QSettings>
 
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
     m_resource = new KyWirelessNetResource(this);
+    m_device   = new KyNetworkDeviceResourse(this);
+    initDevice();
     initWlanUI();
     initConnections();
     getActiveWlan();
@@ -73,6 +76,34 @@ void WlanPage::initConnections()
     connect(m_resource, &KyWirelessNetResource::wifiNetworkAdd, this, &WlanPage::onWlanAdded);
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
     connect(m_resource, &KyWirelessNetResource::wifiNetworkUpdate, this, &WlanPage::onWlanUpdated);
+}
+
+/**
+ * @brief WlanPage::initDevice 初始化默认网卡
+ */
+void WlanPage::initDevice()
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    QString key("wireless");
+    QString deviceName = m_settings->value(key, "").toString();
+    if (deviceName.isEmpty()) {
+        qDebug() << "initDevice but  defalut wireless card is null";
+        QStringList list;
+        list.empty();
+        m_device->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
+        if (!list.isEmpty()) {
+            deviceName = list.at(0);
+            m_settings->setValue(key, deviceName);
+        }
+    }
+    updateDefaultDevice(deviceName);
+    qDebug() << "[WlanPage] initDevice defaultDevice = " << deviceName;
+    m_settings->endGroup();
+    m_settings->sync();
+    delete m_settings;
+    m_settings = nullptr;
+
 }
 
 /**

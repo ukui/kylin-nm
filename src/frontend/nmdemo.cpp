@@ -158,7 +158,7 @@ void NmDemo::initConnect()
 
     connect(m_wnr, &KyWirelessNetResource::connectionRemove,   this ,&NmDemo::onConnectionRemove);
     connect(m_wnr, &KyWirelessNetResource::connectionAdd,   this ,&NmDemo::onConnectionAdd);
-    connect(m_wnr, &KyWirelessNetResource::wifiNetworkUpadte,   this ,&NmDemo::onWifiNetworkUpdate);
+    connect(m_wnr, &KyWirelessNetResource::wifiNetworkUpdate,   this ,&NmDemo::onWifiNetworkUpdate);
     connect(m_wnr, &KyWirelessNetResource::wifiNetworkAdd,   this ,&NmDemo::onWifiNetworkAdd);
     connect(m_wnr, &KyWirelessNetResource::wifiNetworkRemove,   this ,&NmDemo::onWifiNetworkRemove);
 

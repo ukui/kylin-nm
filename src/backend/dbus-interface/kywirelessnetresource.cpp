@@ -516,5 +516,5 @@ void KyWirelessNetResource::onConnectionUpdate(QString uuid)
     }
     m_WifiNetworkList.clear();
     kyWirelessNetItemListInit();
-    emit wifiNetworkUpadte();
+    emit wifiNetworkUpdate();
 }

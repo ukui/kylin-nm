@@ -72,7 +72,7 @@ void WlanPage::initConnections()
 {
     connect(m_resource, &KyWirelessNetResource::wifiNetworkAdd, this, &WlanPage::onWlanAdded);
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
-    connect(m_resource, &KyWirelessNetResource::wifiNetworkUpadte, this, &WlanPage::onWlanUpdated);
+    connect(m_resource, &KyWirelessNetResource::wifiNetworkUpdate, this, &WlanPage::onWlanUpdated);
 }
 
 /**
@@ -130,7 +130,9 @@ void WlanPage::getAllWlan()
     }
     int height = 0;
     foreach (auto itemData, wlanList) {
-        if (itemData.m_NetSsid == this->m_activatedWlanSSid) { continue; }
+        if (itemData.m_NetSsid == this->m_activatedWlanSSid) {
+            continue;
+        }
 
         KyWirelessNetItem *data = new KyWirelessNetItem(itemData);
         WlanListItem *wlanItemWidget = new WlanListItem(m_resource, data);
@@ -139,7 +141,9 @@ void WlanPage::getAllWlan()
         wlanItem->setSizeHint(QSize(m_inactivatedNetListWidget->width(), wlanItemWidget->height()));
         m_inactivatedNetListWidget->addItem(wlanItem);
         m_inactivatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
-        if (height == 0) height += wlanItemWidget->height();
+        if (height == 0) {
+            height += wlanItemWidget->height();
+        }
         height += wlanItemWidget->height() + NET_LIST_SPACING;
     }
     m_inactivatedNetListWidget->setFixedHeight(height);

@@ -50,7 +50,7 @@ signals:
     void secuTypeChange(QString, QString, QString);
     void connectionRemove(QString, QString);
     void connectionAdd(QString, QString);
-    void wifiNetworkUpadte();
+    void wifiNetworkUpdate();
     void wifiNetworkAdd(QString, KyWirelessNetItem&);
     void wifiNetworkRemove(QString, QString);
 

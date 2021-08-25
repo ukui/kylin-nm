@@ -93,7 +93,6 @@ void KyWirelessNetResource::getWirelessActiveConnection(NetworkManager::ActiveCo
     map.clear();
     NetworkManager::ActiveConnection::List activeConnectionList;
 
-    map.clear();
     activeConnectionList.clear();
     activeConnectionList = m_networkResourceInstance->m_activeConns;
     if (activeConnectionList.isEmpty()) {

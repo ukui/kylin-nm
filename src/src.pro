@@ -17,7 +17,7 @@ CONFIG += qt warn_on
 #CONFIG += release
 CONFIG += link_pkgconfig
 
-PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0
+PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 
@@ -27,9 +27,12 @@ target.path = /usr/bin
 target.source += $$TARGET
 desktop.path = /etc/xdg/autostart/
 desktop.files = kylin-nm.desktop
+gschema.files = org.ukui.kylin-nm.switch.gschema.xml
+gschema.path = /usr/share/glib-2.0/schemas/
 
 INSTALLS += target \
         desktop \
+        gschema \
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -63,3 +66,6 @@ unix {
     MOC_DIR = .moc
     OBJECTS_DIR = .obj
 }
+
+DISTFILES += \
+    org.ukui.kylin-nm.switch.gschema.xml

@@ -2,6 +2,9 @@
 #define WLANPAGE_H
 
 #include "tabpage.h"
+#include "kywirelessnetresource.h"
+//#define SCROLLAREA_HEIGHT 150
+#define MORE_TEXT_MARGINS 16,0,0,0
 
 class WlanPage : public TabPage
 {
@@ -17,11 +20,24 @@ protected:
 
 private:
     void initWlanUI();
+    void initConnections();
+    void getActiveWlan();
+    void getAllWlan();
+    QMap<QString, QListWidgetItem*> m_itemsMap;
     QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;
     QVBoxLayout * m_inactivatedWlanListAreaLayout = nullptr;
     QFrame * m_hiddenWlanWidget = nullptr;
     QHBoxLayout * m_hiddenWlanLayout = nullptr;
     QLabel * m_hiddenWlanLabel = nullptr;
+
+    QString m_activatedWlanSSid;
+
+    KyWirelessNetResource *m_resource = nullptr;
+
+private slots:
+    void onWlanAdded(QString interface, KyWirelessNetItem &item);
+    void onWlanRemoved(QString interface, QString ssid);
+    void onWlanUpdated();
 };
 
 #endif // WLANPAGE_H

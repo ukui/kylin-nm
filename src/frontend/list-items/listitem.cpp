@@ -48,7 +48,7 @@ void ListItem::initUI()
     m_hItemLayout->setContentsMargins(ITEM_FRAME_MARGINS);
     m_hItemLayout->setSpacing(ITEM_FRAME_SPACING);
 
-    m_netButton = new NetButton(m_itemFrame);
+    m_netButton = new RadioItemButton(m_itemFrame);
     m_nameLabel = new QLabel(m_itemFrame);
     m_infoButton = new InfoButton(m_itemFrame);
 
@@ -62,7 +62,7 @@ void ListItem::initUI()
 
 void ListItem::initConnection()
 {
-    connect(this->m_netButton, &NetButton::clicked, this, &ListItem::onNetButtonClicked);
+    connect(this->m_netButton, &RadioItemButton::clicked, this, &ListItem::onNetButtonClicked);
     connect(this->m_infoButton, &InfoButton::clicked, this, &ListItem::onInfoButtonClicked);
 }
 

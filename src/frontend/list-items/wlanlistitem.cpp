@@ -9,6 +9,14 @@ WlanListItem::WlanListItem(KyWirelessNetResource *resource, KyWirelessNetItem *d
     initWlanConnection();
 }
 
+WlanListItem::WlanListItem(QWidget *parent) : ListItem(parent)
+{
+    m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic", QIcon(":/res/w/wifi-none.png")));
+    const QString str="未连接任何wifi";
+    setExpanded(false);
+    this->setName(str);
+}
+
 WlanListItem::~WlanListItem()
 {
     disconnect(m_resource, &KyWirelessNetResource::secuTypeChange, this, &WlanListItem::onSecurityChanged);
@@ -108,6 +116,7 @@ void WlanListItem::onNetButtonClicked()
 {
     //ZJP_TODO 点击连接/断开
     qDebug() << "On wlan clicked! ssid = " << m_data->m_NetSsid << "; name = " << m_data->m_connName << "." <<Q_FUNC_INFO << __LINE__;
+
 }
 
 void WlanListItem::onSecurityChanged(QString interface, QString ssid, QString securityType)

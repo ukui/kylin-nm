@@ -3,6 +3,7 @@
 
 #include "tabpage.h"
 #include "kywirelessnetresource.h"
+#include "kylinactiveconnectresource.h"
 //#define SCROLLAREA_HEIGHT 150
 #define MORE_TEXT_MARGINS 16,0,0,0
 
@@ -21,6 +22,8 @@ protected:
 private:
     void initWlanUI();
     void initConnections();
+    QString m_wlanDevice; //临时用来存储网卡名
+    void getDevice();  //一个临时用于获取网卡的函数
     void getActiveWlan();
     void getAllWlan();
     QMap<QString, QListWidgetItem*> m_itemsMap;
@@ -33,11 +36,15 @@ private:
     QString m_activatedWlanSSid;
 
     KyWirelessNetResource *m_resource = nullptr;
+    KyActiveConnectResourse *m_connectResource = nullptr;
 
 private slots:
     void onWlanAdded(QString interface, KyWirelessNetItem &item);
     void onWlanRemoved(QString interface, QString ssid);
     void onWlanUpdated();
+    void onActivatedWlanChanged(QString uuid,
+                                NetworkManager::ActiveConnection::State state,
+                                NetworkManager::ActiveConnection::Reason reason);
 };
 
 #endif // WLANPAGE_H

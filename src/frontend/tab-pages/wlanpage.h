@@ -21,6 +21,7 @@ protected:
 private:
     void initWlanUI();
     void initConnections();
+    void getActiveWlan();
     void getAllWlan();
     QMap<QString, QListWidgetItem*> m_itemsMap;
     QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;
@@ -28,7 +29,8 @@ private:
     QFrame * m_hiddenWlanWidget = nullptr;
     QHBoxLayout * m_hiddenWlanLayout = nullptr;
     QLabel * m_hiddenWlanLabel = nullptr;
-    QMap<QString, QListWidgetItem *> m_itemMap;
+
+    QString m_activatedWlanSSid;
 
     KyWirelessNetResource *m_resource = nullptr;
 

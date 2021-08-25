@@ -11,6 +11,7 @@ class KyWirelessNetItem
 {
 public:
     KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net);
+    KyWirelessNetItem() {;}
     ~KyWirelessNetItem();
 
 private:

@@ -18,7 +18,7 @@ public:
     ~KyWirelessNetResource();
 
     //ui层调用接口
-    bool getWifiNetwork(QString &devIfaceName, QString &ssid, KyWirelessNetItem &wirelessNetResource);
+    bool getWifiNetwork(const QString &devIfaceName, const QString &ssid, KyWirelessNetItem &wirelessNetResource);
     bool getAllDeviceWifiNetwork(QMap<QString, QList<KyWirelessNetItem> > &map);
     bool getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &wirelessNetResource);
 

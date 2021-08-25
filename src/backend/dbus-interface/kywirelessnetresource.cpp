@@ -50,7 +50,7 @@ bool KyWirelessNetResource::getDeviceWifiNetwork(QString devIfaceName, QList<KyW
     }
 }
 
-bool KyWirelessNetResource::getWifiNetwork(QString &devIfaceName, QString &ssid, KyWirelessNetItem &wirelessNetResource)
+bool KyWirelessNetResource::getWifiNetwork(const QString &devIfaceName, const QString &ssid, KyWirelessNetItem &wirelessNetResource)
 {
 //    onWifiNetworkDeviceDisappear();
 

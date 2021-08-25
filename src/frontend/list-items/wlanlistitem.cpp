@@ -36,7 +36,7 @@ void WlanListItem::initWlanUI()
 {
     m_hasPwd = (m_data->m_secuType.isEmpty() || m_data->m_secuType == "") ? false : true;
     //设置显示的Wlan名称
-    this->setName(m_data->m_NetSsid);
+    this->setName((m_data->m_connName != "") ? m_data->m_connName : m_data->m_NetSsid);
     //刷新左侧按钮图标
     refreshIcon();
 }

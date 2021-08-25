@@ -2,6 +2,7 @@
 #define LANPAGE_H
 
 #include "tabpage.h"
+#include "kylinnetworkdeviceresource.h"
 
 class LanPage : public TabPage
 {
@@ -10,10 +11,11 @@ public:
     explicit LanPage(QWidget *parent = nullptr);
     ~LanPage()=default;
 
-signals:
-
 private:
+    KyNetworkDeviceResourse *m_device = nullptr;
+
     void initLanUI();
+    void initDevice();//初始化默认设备
 };
 
 #endif // LANPAGE_H

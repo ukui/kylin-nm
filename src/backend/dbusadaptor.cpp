@@ -17,10 +17,9 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 
-const QByteArray GSETTINGS_SCHEMA_SCREENSAVER = "org.ukui.kylin-nm.switch";
+const QByteArray GSETTINGS_SCHEMA_KYLIN_NM = "org.ukui.kylin-nm.switch";
 const QString    KEY_WIRELESS_SWITCH          = "wirelessswitch";
 const QString    KEY_WIRED_SWITCH             = "wiredswitch";
-const QString    CONFIG_FILE_PATH             = QDir::homePath() + "/.config/ukui/kylin-nm.conf";
 
 void saveDeviceEnableState(QString deviceName, bool enable)
 {
@@ -111,8 +110,8 @@ QList<WiredInfo>  DbusAdaptor::getWiredList(QString devName)
 void DbusAdaptor::setWiredSwitchEnable(bool enable)
 {
     //todo mainwindow调用backend 对开关 打开/关闭
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_SCREENSAVER)) {
-        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_SCREENSAVER);
+    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
+        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
         gsetting->set(KEY_WIRED_SWITCH, enable);
     } else {
         qDebug()<<"isSchemaInstalled false";
@@ -123,8 +122,8 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
 void DbusAdaptor::setWirelessSwitchEnable(bool enable)
 {
     //todo mainwindow调用backend 对开关 打开/关闭
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_SCREENSAVER)) {
-        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_SCREENSAVER);
+    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
+        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
         gsetting->set(KEY_WIRELESS_SWITCH, enable);
         delete gsetting;
         gsetting = nullptr;
@@ -150,6 +149,7 @@ void DbusAdaptor::setDefaultWiredDevice(QString deviceName)
     m_settings->sync();
     delete m_settings;
     m_settings = nullptr;
+    parent()->setWiredDefaultDevice(deviceName);
     return;
 }
 
@@ -175,6 +175,7 @@ void DbusAdaptor::setDefaultWirelessDevice(QString deviceName)
     m_settings->sync();
     delete m_settings;
     m_settings = nullptr;
+    parent()->setWirelessDefaultDevice(deviceName);
     return;
 }
 

@@ -309,19 +309,13 @@ bool KyWirelessNetResource::getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsIn
         return false;
     }
 
-    QList<NetworkManager::Security8021xSetting::EapMethod> list;
-    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodTls);
-    setting->setEapMethods(list);
-    setting->setIdentity(info.identity);
-    if(!info.domain.isEmpty()) {
-        setting->setDomainSuffixMatch(info.domain);
-    }
-    setting->setCaPath(info.caCertPath);
-    setting->setClientCertificate(info.clientCertPath.toLocal8Bit());
-    setting->setPrivateKey(info.clientPrivateKey.toLocal8Bit());
-    setting->setPrivateKeyPassword(info.clientPrivateKeyPWD);
+    info.identity = setting->identity();
+    info.domain = setting->domainSuffixMatch();
 
-    conn->update(conn->settings()->toMap());
+    info.caCertPath = setting->caPath();
+    info.clientCertPath = setting->clientCertificate();
+    info.clientPrivateKey = QString(setting->privateKey());
+    info.clientPrivateKeyPWD = setting->privateKeyPassword();
 
     return true;
 }

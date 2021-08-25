@@ -28,6 +28,7 @@ bool ListItem::eventFilter(QObject *watched, QEvent *event)
             this->onNetButtonClicked();
         }
     }
+    return QFrame::eventFilter(watched, event);
 }
 
 void ListItem::setName(const QString &name)

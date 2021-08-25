@@ -9,7 +9,9 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
     m_resource = new KyWirelessNetResource(this);
     m_connectResource = new KyActiveConnectResourse();
-    getDevice();
+    m_networkResourceInstance = KyNetworkResourceManager::getInstance();
+    m_netDeviceResource=new KyNetworkDeviceResourse(this);
+    getWirelessIface();
     initWlanUI();
     initConnections();
     getActiveWlan();
@@ -78,18 +80,20 @@ void WlanPage::initConnections()
     connect(m_connectResource, &KyActiveConnectResourse::stateChangeReason, this, &WlanPage::onActivatedWlanChanged);
 }
 
-void WlanPage::getDevice()
+void WlanPage::getWirelessIface()
 {
-    QMap<QString, QList<KyWirelessNetItem> > map;
-    if (!m_resource->getAllDeviceWifiNetwork(map)) {
-        return;
-    }
-    m_wlanDevice = map.begin().key();
-    if (m_wlanDevice.isEmpty()) {
+    QStringList netDeviceList;//临时存储网卡列表
+
+    m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, netDeviceList);
+    if (netDeviceList.isEmpty()) {
         m_wlanDevice = "wlx5841207b85f0";
+        qDebug() << "Wlan device is not exist." << Q_FUNC_INFO << __LINE__;
     } else {
+        m_wlanDevice=netDeviceList.at(0);
         qDebug() << "Get device successfully, its name is " << m_wlanDevice <<Q_FUNC_INFO << __LINE__;
     }
+
+    return;
 }
 
 /**

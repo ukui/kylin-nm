@@ -18,7 +18,7 @@ void LanListItem::refreshIcon()
 void LanListItem::onInfoButtonClicked()
 {
     //ZJP_TODO 呼出有线详情页
-    qDebug() << "On lan info button clicked! name = " << m_data->m_connectName << "; uuid = " << m_data->m_connectUuid << "." <<Q_FUNC_INFO << __LINE__;
+        qDebug() << "On lan info button clicked! name = " << m_data->m_connectName << "; uuid = " << m_data->m_connectUuid << "." <<Q_FUNC_INFO << __LINE__;
 }
 
 void LanListItem::onNetButtonClicked()

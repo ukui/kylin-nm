@@ -203,10 +203,9 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
 {
     if (!m_itemsMap.contains(ssid)) { return; }
     qDebug() << "A Wlan Removed! interface = " << interface << "; ssid = " << ssid << Q_FUNC_INFO <<__LINE__;
-    m_inactivatedNetListWidget->removeItemWidget(m_itemsMap.value(ssid));
-    m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height() -
-                                               m_inactivatedNetListWidget->itemWidget(m_itemsMap.value(ssid))->height() -
-                                               NET_LIST_SPACING);
+    int height = m_inactivatedNetListWidget->itemWidget(m_itemsMap.value(ssid))->height();
+    m_inactivatedNetListWidget->takeItem(m_inactivatedNetListWidget->row(m_itemsMap.value(ssid)));
+    m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height() - height - NET_LIST_SPACING);
     m_inactivatedWlanListAreaCentralWidget->setFixedHeight(m_inactivatedNetListWidget->height() + m_hiddenWlanLabel->height());
     m_itemsMap.remove(ssid);
 }

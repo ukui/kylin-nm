@@ -10,17 +10,21 @@
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
     m_resource = new KyWirelessNetResource(this);
-    m_device   = new KyNetworkDeviceResourse(this);
+    m_connectResource = new KyActiveConnectResourse();
+    m_networkResourceInstance = KyNetworkResourceManager::getInstance();
+    m_netDeviceResource=new KyNetworkDeviceResourse(this);
     devList.empty();
+
     initDevice();
+    getWirelessIface();
     initWlanUI();
     initConnections();
     getActiveWlan();
     getAllWlan();
 
-    connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this, &WlanPage::onDeviceAdd);
-    connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this, &WlanPage::onDeviceRemove);
-    connect(m_device, &KyNetworkDeviceResourse::deviceNameUpdate, this, &WlanPage::onDeviceNameUpdate);
+    connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceAdd, this, &WlanPage::onDeviceAdd);
+    connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceRemove, this, &WlanPage::onDeviceRemove);
+    connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceNameUpdate, this, &WlanPage::onDeviceNameUpdate);
 }
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
@@ -81,7 +85,24 @@ void WlanPage::initConnections()
 {
     connect(m_resource, &KyWirelessNetResource::wifiNetworkAdd, this, &WlanPage::onWlanAdded);
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
-    connect(m_resource, &KyWirelessNetResource::wifiNetworkUpdate, this, &WlanPage::onWlanUpdated);
+//    connect(m_resource, &KyWirelessNetResource::wifiNetworkUpdate, this, &WlanPage::onWlanUpdated);
+    connect(m_connectResource, &KyActiveConnectResourse::stateChangeReason, this, &WlanPage::onActivatedWlanChanged);
+}
+
+void WlanPage::getWirelessIface()
+{
+    QStringList netDeviceList;//临时存储网卡列表
+
+    m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, netDeviceList);
+    if (netDeviceList.isEmpty()) {
+        m_wlanDevice = "wlx5841207b85f0";
+        qDebug() << "Wlan device is not exist." << Q_FUNC_INFO << __LINE__;
+    } else {
+        m_wlanDevice=netDeviceList.at(0);
+        qDebug() << "Get device successfully, its name is " << m_wlanDevice <<Q_FUNC_INFO << __LINE__;
+    }
+
+    return;
 }
 
 /**
@@ -93,7 +114,7 @@ void WlanPage::initDevice()
     m_settings->beginGroup("DEFAULTCARD");
     QString key("wireless");
     QString deviceName = m_settings->value(key, "").toString();
-    m_device->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList);
+    m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList);
     if (deviceName.isEmpty()) {
         qDebug() << "initDevice but  defalut wireless card is null";
         if (!devList.isEmpty()) {
@@ -121,12 +142,12 @@ void WlanPage::getActiveWlan()
     QMap<QString,QStringList>::iterator iter = actMap.begin();
     int height = 0;
     while (iter != actMap.end()) {
-        if (iter.key() == "wlp3s0" && !iter.value().isEmpty()) {
+        if (iter.key() == m_wlanDevice && !iter.value().isEmpty()) {
             QString ssid = iter.value().at(0);
             m_activatedWlanSSid = ssid;
 
             KyWirelessNetItem data;
-            if (!m_resource->getWifiNetwork("wlp3s0", ssid, data)) {
+            if (!m_resource->getWifiNetwork(m_wlanDevice, ssid, data)) {
                 return;
             }
             KyWirelessNetItem *item_data = new KyWirelessNetItem(data);
@@ -146,6 +167,13 @@ void WlanPage::getActiveWlan()
     } else {
         //ZJP_TODO 未连接任何WiFi的情况
         m_activatedWlanSSid.clear();
+        WlanListItem *wlanItemWidget = new WlanListItem();
+        qDebug() << "There is no activated wlan." << Q_FUNC_INFO << __LINE__ ;
+        QListWidgetItem *wlanItem = new QListWidgetItem(m_activatedNetListWidget);
+        wlanItem->setSizeHint(QSize(m_activatedNetListWidget->width(), wlanItemWidget->height()));
+        m_activatedNetListWidget->addItem(wlanItem);
+        m_activatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
+        height += wlanItemWidget->height();
     }
 }
 
@@ -159,7 +187,7 @@ void WlanPage::getAllWlan()
     m_itemsMap.clear();
     QList<KyWirelessNetItem> wlanList;
 //    if (!m_resource->getAllDeviceWifiNetwork(map))
-    if (!m_resource->getDeviceWifiNetwork("wlp3s0", wlanList)) //ZJP_TODO 获取默认网卡并传入
+    if (!m_resource->getDeviceWifiNetwork(m_wlanDevice, wlanList)) //ZJP_TODO 获取默认网卡并传入
     {
         return;
     }
@@ -217,6 +245,7 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
 void WlanPage::onWlanUpdated()
 {
     //ZJP_TODO 某些特定情况下不可重绘整个列表，此处代码需要修改
+    getActiveWlan();
     getAllWlan();
 }
 
@@ -244,7 +273,7 @@ void WlanPage::onDeviceRemove(QString deviceName)
         QStringList list;
         QString newDefaultDevice = "";
         list.empty();
-        m_device->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
+        m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
         if (!list.isEmpty()) {
             newDefaultDevice = list.at(0);
         }
@@ -270,4 +299,11 @@ void WlanPage::onDeviceNameUpdate(QString oldName, QString newName)
        qDebug() << "WlanPage emit deviceNameUpdate "  << oldName << newName;
        emit deviceNameChanged(oldName, newName);
    }
+}
+
+void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
+{
+    qDebug()<< "Activated wlan changed, uuid = " << uuid << "; state = " << state << "; reason = " << reason << Q_FUNC_INFO <<__LINE__;
+    onWlanUpdated();
+
 }

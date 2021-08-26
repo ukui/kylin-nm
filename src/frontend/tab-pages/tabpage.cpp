@@ -40,6 +40,7 @@ void TabPage::initUI()
     m_activatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_activatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_activatedNetListWidget->setSpacing(NET_LIST_SPACING);
+    m_activatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_activatedNetLayout->addWidget(m_activatedNetLabel);
     m_activatedNetLayout->addWidget(m_activatedNetListWidget);
     m_activatedNetDivider = new Divider(this);

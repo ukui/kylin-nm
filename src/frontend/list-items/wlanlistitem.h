@@ -12,6 +12,7 @@ class WlanListItem : public ListItem
     Q_OBJECT
 public:
     WlanListItem(KyWirelessNetResource *resource, KyWirelessNetItem *data, QWidget *parent = nullptr);
+    WlanListItem(QWidget *parent = nullptr);
     ~WlanListItem();
 
 public:

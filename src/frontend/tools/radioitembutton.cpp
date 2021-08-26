@@ -1,4 +1,5 @@
 #include "radioitembutton.h"
+#define BUTTON_SIZE 32,32
 
 RadioItemButton::RadioItemButton(bool isActivated, QWidget *parent) : QPushButton(parent)
 {
@@ -8,6 +9,7 @@ RadioItemButton::RadioItemButton(bool isActivated, QWidget *parent) : QPushButto
     this->setAutoFillBackground(false);
     m_iconLabel = new QLabel(this);
     m_iconLabel->setScaledContents(true);
+    this->setFixedSize(BUTTON_SIZE);
 }
 
 void RadioItemButton::startLoading()

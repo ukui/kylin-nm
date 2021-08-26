@@ -15,10 +15,6 @@ public:
     explicit WlanPage(QWidget *parent = nullptr);
     ~WlanPage() = default;
 
-    void setDefaultDevice(QString deviceName) {defaultDevice = deviceName;}
-
-signals:
-
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
@@ -36,7 +32,6 @@ private:
     QLabel * m_hiddenWlanLabel = nullptr;
 
     QString m_activatedWlanSSid;
-    QString defaultDevice = "";
 
     KyWirelessNetResource *m_resource = nullptr;
     KyNetworkDeviceResourse *m_device = nullptr;

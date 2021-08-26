@@ -36,6 +36,7 @@ public:
     QString getDefaultDevice();
 
 signals:
+    void deviceStatusChanged();
 
 protected:
     void initUI();

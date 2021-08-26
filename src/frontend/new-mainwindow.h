@@ -23,6 +23,7 @@ public:
     void setWiredDefaultDevice(QString deviceName);
     void setWirelessDefaultDevice(QString deviceName);
 signals:
+    void deviceStatusChanged();
 
 public slots:
 

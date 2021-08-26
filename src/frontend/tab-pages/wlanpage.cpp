@@ -1,6 +1,7 @@
 #include "wlanpage.h"
 #include "wlanlistitem.h"
 #include "kywirelessnetitem.h"
+#include "dbusadaptor.h"
 #include <QEvent>
 #include <QDateTime>
 #include <QDebug>
@@ -15,6 +16,34 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     initConnections();
     getActiveWlan();
     getAllWlan();
+
+    connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this , [=](QString deviceName, NetworkManager::Device::Type deviceType) {
+        if (deviceType !=  NetworkManager::Device::Type::Wifi) {
+            return;
+        }
+        if (getDefaultDevice().isEmpty())
+        {
+            updateDefaultDevice(deviceName);
+            setDefaultDevice(WIRELESS, deviceName);
+        }
+        emit deviceStatusChanged();
+    });
+    connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this , [=](QString deviceName) {
+        //todo:check device type
+        if (getDefaultDevice() == deviceName)
+        {
+            QStringList list;
+            QString newDefaultDevice = "";
+            list.empty();
+            m_device->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
+            if (!list.isEmpty()) {
+                newDefaultDevice = list.at(0);
+            }
+            updateDefaultDevice(newDefaultDevice);
+            setDefaultDevice(WIRELESS, newDefaultDevice);
+        }
+        emit deviceStatusChanged();
+    });
 }
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)

@@ -1,11 +1,43 @@
 #include "lanpage.h"
 #include <QSettings>
+#include "dbusadaptor.h"
 
 LanPage::LanPage(QWidget *parent) : TabPage(parent)
 {
     m_device = new KyNetworkDeviceResourse(this);
     initDevice();
     initLanUI();
+
+    connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this , [=](QString deviceName, NetworkManager::Device::Type deviceType) {
+        qDebug() << "deviceAdd";
+        if (deviceType !=  NetworkManager::Device::Type::Ethernet) {
+            return;
+        }
+        if (getDefaultDevice().isEmpty())
+        {
+            updateDefaultDevice(deviceName);
+            setDefaultDevice(WIRED, deviceName);
+        }
+        emit deviceStatusChanged();
+
+    });
+    connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this , [=](QString deviceName) {
+       //todo:check device type
+        if (getDefaultDevice() == deviceName)
+        {
+            QStringList list;
+            QString newDefaultDevice = "";
+            list.empty();
+            m_device->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, list);
+            if (!list.isEmpty()) {
+                newDefaultDevice = list.at(0);
+            }
+            updateDefaultDevice(newDefaultDevice);
+            setDefaultDevice(WIRED, newDefaultDevice);
+        }
+        emit deviceStatusChanged();
+    });
+
 }
 
 

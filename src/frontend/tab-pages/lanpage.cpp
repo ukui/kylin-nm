@@ -3,6 +3,7 @@
 
 LanPage::LanPage(QWidget *parent) : TabPage(parent)
 {
+    m_device = new KyNetworkDeviceResourse(this);
     initDevice();
     initLanUI();
 }

@@ -43,8 +43,11 @@ KyConnectItem *KyConnectResourse::getConnectionItem(NetworkManager::Connection::
     connectionItem->m_ifaceName = settingPtr->interfaceName();
     connectionItem->m_itemType = settingPtr->connectionType();
 
-    connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
-
+    if (m_networkResourceInstance->isActivatingConnection(connectPtr->uuid())) {
+        connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Deactivating;
+    } else {
+        connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
+    }
     return connectionItem;
 }
 

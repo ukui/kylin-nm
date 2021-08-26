@@ -1,21 +1,63 @@
 #ifndef LANPAGE_H
 #define LANPAGE_H
 
-#include "tabpage.h"
-#include "kylinnetworkdeviceresource.h"
+#include "divider.h"
+#include "switchbutton.h"
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QScrollArea>
+#include <QListWidget>
+#include <QMap>
+
+#include "list-items/listitem.h"
+#include "list-items/lanlistitem.h"
+#include "tab-pages/tabpage.h"
 
 class LanPage : public TabPage
 {
     Q_OBJECT
 public:
     explicit LanPage(QWidget *parent = nullptr);
-    ~LanPage()=default;
+    ~LanPage();
+
+signals:
+
+private:
+    void initUI();
+    void initList();
+    bool eventFilter(QObject *watched, QEvent *event);
+    void initDevice();//初始化默认设备
 
 private:
     KyNetworkDeviceResourse *m_device = nullptr;
 
-    void initLanUI();
-    void initDevice();//初始化默认设备
+    QListWidget * m_activatedLanListWidget = nullptr;
+    QListWidget * m_inactivatedLanListWidget = nullptr;
+
+    LanListItem * m_testLanItem = nullptr;
+    LanListItem * activeConnectItem = nullptr;
+    LanListItem * deactiveConnectItem = nullptr;
+    LanListItem * m_activeItem = nullptr;
+    LanListItem * m_deactiveItem = nullptr;
+
+    QListWidgetItem *m_listWidgetItem = nullptr;
+
+    KyNetworkDeviceResourse * m_deviceSource = nullptr;
+    KyActiveConnectResourse *m_activeResourse = nullptr;
+
+    KyConnectResourse *m_connectResourse = nullptr;
+
+    QList<KyConnectItem *> m_activedList;
+    QList<KyConnectItem *> m_deactivedList;
+
+    QMap<KyConnectItem *, QListWidgetItem *> m_deactiveMap;
+    QMap<KyConnectItem *, QListWidgetItem *> m_activeMap;
+    QString deviceName;
+private slots:
+    void updateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason);
+    void addConnectionSlot(QString uuid);
+    void RemoveConnectionSlot(QString path);
 };
 
 #endif // LANPAGE_H

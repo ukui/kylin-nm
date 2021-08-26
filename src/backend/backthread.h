@@ -24,14 +24,16 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QDir>
 #include <QTimer>
 #include <QProcess>
 #include <QDBusInterface>
 #include <QDBusMessage>
 #include <QDBusArgument>
 #include <QSettings>
+#include "tab-pages/tabpage.h"
 
-#define CONFIG_FILE_PATH QDir::homePath() + "/.config/ukui/kylin-nm.conf"
+//#define CONFIG_FILE_PATH QDir::homePath() + "/.config/ukui/kylin-nm.conf"
 #define WIFI_SWITCH_OPENED "wifi_switch_opened"
 #define LAN_SWITCH_OPENED "lan_switch_opened"
 

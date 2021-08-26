@@ -62,8 +62,12 @@ void WlanPage::initWlanUI()
     m_inactivatedWlanListAreaLayout->addWidget(m_inactivatedNetListWidget);
     m_inactivatedWlanListAreaLayout->addWidget(m_hiddenWlanLabel);
     m_inactivatedWlanListAreaLayout->addStretch();
-
+    m_activatedNetListWidget = new QListWidget(m_activatedNetFrame);
+    m_activatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
+    m_activatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
+    m_activatedNetListWidget->setSpacing(NET_LIST_SPACING);
     m_activatedNetListWidget->setFixedHeight(NORMAL_HEIGHT);
+    m_activatedNetLayout->addWidget(m_activatedNetListWidget);
 //    m_inactivatedNetListArea->setFixedHeight(SCROLLAREA_HEIGHT);
     m_inactivatedNetListArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }

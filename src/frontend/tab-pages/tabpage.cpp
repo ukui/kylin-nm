@@ -36,12 +36,7 @@ void TabPage::initUI()
     m_activatedNetLayout->setSpacing(NET_LAYOUT_SPACING);
     m_activatedNetLabel = new QLabel(m_activatedNetFrame);
     m_activatedNetLabel->setContentsMargins(TEXT_MARGINS);
-    m_activatedNetListWidget = new QListWidget(m_activatedNetFrame);
-    m_activatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
-    m_activatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_activatedNetListWidget->setSpacing(NET_LIST_SPACING);
     m_activatedNetLayout->addWidget(m_activatedNetLabel);
-    m_activatedNetLayout->addWidget(m_activatedNetListWidget);
     m_activatedNetDivider = new Divider(this);
 
     m_inactivatedNetFrame = new QFrame(this);

@@ -11,39 +11,16 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
     m_resource = new KyWirelessNetResource(this);
     m_device   = new KyNetworkDeviceResourse(this);
+    devList.empty();
     initDevice();
     initWlanUI();
     initConnections();
     getActiveWlan();
     getAllWlan();
 
-    connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this , [=](QString deviceName, NetworkManager::Device::Type deviceType) {
-        if (deviceType !=  NetworkManager::Device::Type::Wifi) {
-            return;
-        }
-        if (getDefaultDevice().isEmpty())
-        {
-            updateDefaultDevice(deviceName);
-            setDefaultDevice(WIRELESS, deviceName);
-        }
-        emit deviceStatusChanged();
-    });
-    connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this , [=](QString deviceName) {
-        //todo:check device type
-        if (getDefaultDevice() == deviceName)
-        {
-            QStringList list;
-            QString newDefaultDevice = "";
-            list.empty();
-            m_device->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
-            if (!list.isEmpty()) {
-                newDefaultDevice = list.at(0);
-            }
-            updateDefaultDevice(newDefaultDevice);
-            setDefaultDevice(WIRELESS, newDefaultDevice);
-        }
-        emit deviceStatusChanged();
-    });
+    connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this, &WlanPage::onDeviceAdd);
+    connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this, &WlanPage::onDeviceRemove);
+    connect(m_device, &KyNetworkDeviceResourse::deviceNameUpdate, this, &WlanPage::onDeviceNameUpdate);
 }
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
@@ -116,13 +93,11 @@ void WlanPage::initDevice()
     m_settings->beginGroup("DEFAULTCARD");
     QString key("wireless");
     QString deviceName = m_settings->value(key, "").toString();
+    m_device->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList);
     if (deviceName.isEmpty()) {
         qDebug() << "initDevice but  defalut wireless card is null";
-        QStringList list;
-        list.empty();
-        m_device->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
-        if (!list.isEmpty()) {
-            deviceName = list.at(0);
+        if (!devList.isEmpty()) {
+            deviceName = devList.at(0);
             m_settings->setValue(key, deviceName);
         }
     }
@@ -243,4 +218,56 @@ void WlanPage::onWlanUpdated()
 {
     //ZJP_TODO 某些特定情况下不可重绘整个列表，此处代码需要修改
     getAllWlan();
+}
+
+
+void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
+{
+    qDebug() << "deviceAdd" << deviceName;
+    if (deviceType !=  NetworkManager::Device::Type::Wifi) {
+        return;
+    }
+    devList << deviceName;
+    if (getDefaultDevice().isEmpty())
+    {
+        updateDefaultDevice(deviceName);
+        setDefaultDevice(WIRELESS, deviceName);
+    }
+    emit deviceStatusChanged();
+}
+
+void WlanPage::onDeviceRemove(QString deviceName)
+{
+    qDebug() << "deviceRemove" << deviceName;
+    if (getDefaultDevice() == deviceName)
+    {
+        QStringList list;
+        QString newDefaultDevice = "";
+        list.empty();
+        m_device->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
+        if (!list.isEmpty()) {
+            newDefaultDevice = list.at(0);
+        }
+        updateDefaultDevice(newDefaultDevice);
+        setDefaultDevice(WIRELESS, newDefaultDevice);
+    }
+    if (devList.contains(deviceName)) {
+        devList.removeOne(deviceName);
+        emit deviceStatusChanged();
+    }
+}
+
+void WlanPage::onDeviceNameUpdate(QString oldName, QString newName)
+{
+   if (getDefaultDevice() == oldName) {
+       updateDefaultDevice(newName);
+       setDefaultDevice(WIRELESS, newName);
+   }
+
+   if (devList.contains(oldName)) {
+       devList.removeOne(oldName);
+       devList.append(newName);
+       qDebug() << "WlanPage emit deviceNameUpdate "  << oldName << newName;
+       emit deviceNameChanged(oldName, newName);
+   }
 }

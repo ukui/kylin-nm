@@ -97,6 +97,29 @@ void setDefaultDevice(KyDeviceType deviceType, QString deviceName)
     return;
 }
 
+bool checkDeviceExist(KyDeviceType deviceType, QString deviceName)
+{
+    NetworkManager::Device::Type type;
+    switch (deviceType) {
+    case WIRED:
+        type = NetworkManager::Device::Type::Ethernet;
+        break;
+    case WIRELESS:
+        type = NetworkManager::Device::Type::Wifi;
+        break;
+    default:
+        return false;
+        break;
+    }
+
+    KyNetworkDeviceResourse * kdr = new KyNetworkDeviceResourse();
+    QStringList devList;
+    devList.clear();
+
+    kdr->getNetworkDeviceList(type, devList);
+    return devList.contains(deviceName);
+}
+
 /*
  * Implementation of adaptor class DbusAdaptor
  */
@@ -166,6 +189,9 @@ void DbusAdaptor::setDeviceEnable(QString devName, bool enable)
 //设置默认网卡
 void DbusAdaptor::setDefaultWiredDevice(QString deviceName)
 {
+    if (!checkDeviceExist(WIRED, deviceName)) {
+        return;
+    }
     setDefaultDevice(WIRED, deviceName);
     parent()->setWiredDefaultDevice(deviceName);
     return;
@@ -185,6 +211,9 @@ QString DbusAdaptor::getDefaultWiredDevice()
 
 void DbusAdaptor::setDefaultWirelessDevice(QString deviceName)
 {
+    if (!checkDeviceExist(WIRED, deviceName)) {
+        return;
+    }
     setDefaultDevice(WIRELESS, deviceName);
     parent()->setWirelessDefaultDevice(deviceName);
     return;

@@ -24,6 +24,7 @@ public:
     void setWirelessDefaultDevice(QString deviceName);
 signals:
     void deviceStatusChanged();
+    void deviceNameChanged(QString oldName, QString newName);
 
 public slots:
 

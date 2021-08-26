@@ -37,6 +37,7 @@ public:
 
 signals:
     void deviceStatusChanged();
+    void deviceNameChanged(QString oldName, QString newName);
 
 protected:
     void initUI();

@@ -32,14 +32,20 @@ private:
     QLabel * m_hiddenWlanLabel = nullptr;
 
     QString m_activatedWlanSSid;
+    QStringList devList;
 
     KyWirelessNetResource *m_resource = nullptr;
     KyNetworkDeviceResourse *m_device = nullptr;
+
 
 private slots:
     void onWlanAdded(QString interface, KyWirelessNetItem &item);
     void onWlanRemoved(QString interface, QString ssid);
     void onWlanUpdated();
+
+    void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
+    void onDeviceRemove(QString deviceName);
+    void onDeviceNameUpdate(QString oldName, QString newName);
 };
 
 #endif // WLANPAGE_H

@@ -90,6 +90,7 @@ enum KyDeviceType
     WIRELESS
 };
 
+bool checkDeviceExist(KyDeviceType deviceType, QString deviceName);
 void setDefaultDevice(KyDeviceType deviceType, QString deviceName);
 
 class DbusAdaptor: public QDBusAbstractAdaptor
@@ -137,6 +138,7 @@ Q_SIGNALS: // SIGNALS
     void activateFinish(QString devName, QString ssid);
     //设备插拔
     void deviceStatusChanged();
+    void deviceNameUpdate(QString oldName, QString newName);
 };
 
 #endif

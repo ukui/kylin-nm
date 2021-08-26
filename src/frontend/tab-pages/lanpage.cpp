@@ -1,9 +1,12 @@
 #include "lanpage.h"
+#include <QSettings>
 
 LanPage::LanPage(QWidget *parent) : TabPage(parent)
 {
+    initDevice();
     initLanUI();
 }
+
 
 void LanPage::initLanUI()
 {
@@ -18,4 +21,34 @@ void LanPage::initLanUI()
     m_inactivatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);
     m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
+}
+
+
+/**
+ * @brief WlanPage::initDevice 初始化默认网卡
+ */
+void LanPage::initDevice()
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    QString key("wired");
+    QString deviceName = m_settings->value(key, "").toString();
+    if (deviceName.isEmpty()) {
+        qDebug() << "initDevice but  defalut wired card is null";
+        QStringList list;
+        list.empty();
+        m_device->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, list);
+        if (!list.isEmpty()) {
+            deviceName = list.at(0);
+            m_settings->setValue(key, deviceName);
+        }
+    }
+    updateDefaultDevice(deviceName);
+    qDebug() << "[LanPage] initDevice defaultDevice = " << deviceName;
+
+    m_settings->endGroup();
+    m_settings->sync();
+    delete m_settings;
+    m_settings = nullptr;
+
 }

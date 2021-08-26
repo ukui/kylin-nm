@@ -5,6 +5,7 @@
 #include "kywirelessnetresource.h"
 #include "kylinactiveconnectresource.h"
 #include "kylinnetworkdeviceresource.h"
+
 //#define SCROLLAREA_HEIGHT 150
 #define MORE_TEXT_MARGINS 16,0,0,0
 
@@ -14,6 +15,8 @@ class WlanPage : public TabPage
 public:
     explicit WlanPage(QWidget *parent = nullptr);
     ~WlanPage() = default;
+
+    void setDefaultDevice(QString deviceName) {defaultDevice = deviceName;}
 
 signals:
 
@@ -35,6 +38,7 @@ private:
     QLabel * m_hiddenWlanLabel = nullptr;
 
     QString m_activatedWlanSSid;
+    QString defaultDevice = "";
 
     KyWirelessNetResource *m_resource = nullptr;
     KyActiveConnectResourse *m_connectResource = nullptr;

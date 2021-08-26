@@ -1,7 +1,5 @@
 #include "new-mainwindow.h"
 #include "customstyle.h"
-#include "lanpage.h"
-#include "wlanpage.h"
 #include <KWindowEffects>
 #include <QApplication>
 #include <QDebug>
@@ -40,6 +38,22 @@ void MainWindow::showMainwindow()
 void MainWindow::hideMainwindow()
 {
     this->hide();
+}
+
+/**
+ * @brief MainWindow::setWiredDefaultDevice 设置有线设备默认网卡
+ */
+void MainWindow::setWiredDefaultDevice(QString deviceName)
+{
+    m_lanWidget->updateDefaultDevice(deviceName);
+}
+
+/**
+ * @brief MainWindow::hideMainwindow 设置无线设备默认网卡
+ */
+void MainWindow::setWirelessDefaultDevice(QString deviceName)
+{
+    m_wlanWidget->updateDefaultDevice(deviceName);
 }
 
 /**
@@ -94,8 +108,8 @@ void MainWindow::initUI()
     m_centralWidget = new QTabWidget(this);
     this->setCentralWidget(m_centralWidget);
     m_centralWidget->tabBar()->setFixedWidth(this->width());
-    LanPage * m_lanWidget = new LanPage(m_centralWidget);
-    WlanPage * m_wlanWidget = new WlanPage(m_centralWidget);
+    m_lanWidget = new LanPage(m_centralWidget);
+    m_wlanWidget = new WlanPage(m_centralWidget);
     m_centralWidget->addTab(m_lanWidget, QIcon::fromTheme("network-wired-connected-symbolic", QIcon::fromTheme("network-wired-symbolic", QIcon(":/res/l/network-online.svg"))), tr("LAN"));
     m_centralWidget->addTab(m_wlanWidget, QIcon::fromTheme("network-wireless-signal-excellent-symbolic", QIcon(":/res/x/wifi-list-bg.svg")), tr("WLAN"));
 }

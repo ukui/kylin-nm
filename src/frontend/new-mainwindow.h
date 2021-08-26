@@ -9,6 +9,8 @@
 #include <QMenu>
 #include <QAction>
 #include <QDBusInterface>
+#include "lanpage.h"
+#include "wlanpage.h"
 
 class MainWindow : public QMainWindow
 {
@@ -18,6 +20,8 @@ public:
     void showMainwindow();
     void hideMainwindow();
 
+    void setWiredDefaultDevice(QString deviceName);
+    void setWirelessDefaultDevice(QString deviceName);
 signals:
 
 public slots:
@@ -41,6 +45,9 @@ private:
 
     //主窗口的主要构成控件
     QTabWidget * m_centralWidget = nullptr;
+
+    LanPage * m_lanWidget = nullptr;
+    WlanPage * m_wlanWidget = nullptr;
 
     //监听主题的Gsettings
     QGSettings * m_styleGsettings = nullptr;

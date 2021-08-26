@@ -75,3 +75,15 @@ void TabPage::initUI()
     m_mainLayout->addWidget(m_inactivatedNetDivider);
     m_mainLayout->addWidget(m_settingsFrame);
 }
+
+void TabPage::updateDefaultDevice(QString &deviceName)
+{
+    qDebug() << "updateDefaultDevice" << deviceName;
+    defaultDevice = deviceName;
+}
+
+QString TabPage::getDefaultDevice()
+{
+    qDebug() << "getDefaultDevice" << defaultDevice;
+    return defaultDevice;
+}

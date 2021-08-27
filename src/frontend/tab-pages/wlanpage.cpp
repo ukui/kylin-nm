@@ -1,6 +1,7 @@
 #include "wlanpage.h"
 #include "wlanlistitem.h"
 #include "kywirelessnetitem.h"
+#include "dbusadaptor.h"
 #include <QEvent>
 #include <QDateTime>
 #include <QDebug>
@@ -12,11 +13,18 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     m_connectResource = new KyActiveConnectResourse();
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
     m_netDeviceResource=new KyNetworkDeviceResourse(this);
+    devList.empty();
+
+    initDevice();
     getWirelessIface();
     initWlanUI();
     initConnections();
     getActiveWlan();
     getAllWlan();
+
+    connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceAdd, this, &WlanPage::onDeviceAdd);
+    connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceRemove, this, &WlanPage::onDeviceRemove);
+    connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceNameUpdate, this, &WlanPage::onDeviceNameUpdate);
 }
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
@@ -106,13 +114,11 @@ void WlanPage::initDevice()
     m_settings->beginGroup("DEFAULTCARD");
     QString key("wireless");
     QString deviceName = m_settings->value(key, "").toString();
+    m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList);
     if (deviceName.isEmpty()) {
         qDebug() << "initDevice but  defalut wireless card is null";
-        QStringList list;
-        list.empty();
-        m_device->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
-        if (!list.isEmpty()) {
-            deviceName = list.at(0);
+        if (!devList.isEmpty()) {
+            deviceName = devList.at(0);
             m_settings->setValue(key, deviceName);
         }
     }
@@ -243,8 +249,61 @@ void WlanPage::onWlanUpdated()
     getAllWlan();
 }
 
+
+void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
+{
+    qDebug() << "deviceAdd" << deviceName;
+    if (deviceType !=  NetworkManager::Device::Type::Wifi) {
+        return;
+    }
+    devList << deviceName;
+    if (getDefaultDevice().isEmpty())
+    {
+        updateDefaultDevice(deviceName);
+        setDefaultDevice(WIRELESS, deviceName);
+    }
+    emit deviceStatusChanged();
+}
+
+void WlanPage::onDeviceRemove(QString deviceName)
+{
+    qDebug() << "deviceRemove" << deviceName;
+    if (getDefaultDevice() == deviceName)
+    {
+        QStringList list;
+        QString newDefaultDevice = "";
+        list.empty();
+        m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
+        if (!list.isEmpty()) {
+            newDefaultDevice = list.at(0);
+        }
+        updateDefaultDevice(newDefaultDevice);
+        setDefaultDevice(WIRELESS, newDefaultDevice);
+    }
+    if (devList.contains(deviceName)) {
+        devList.removeOne(deviceName);
+        emit deviceStatusChanged();
+    }
+}
+
+void WlanPage::onDeviceNameUpdate(QString oldName, QString newName)
+{
+   if (getDefaultDevice() == oldName) {
+       updateDefaultDevice(newName);
+       setDefaultDevice(WIRELESS, newName);
+   }
+
+   if (devList.contains(oldName)) {
+       devList.removeOne(oldName);
+       devList.append(newName);
+       qDebug() << "WlanPage emit deviceNameUpdate "  << oldName << newName;
+       emit deviceNameChanged(oldName, newName);
+   }
+}
+
 void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
 {
     qDebug()<< "Activated wlan changed, uuid = " << uuid << "; state = " << state << "; reason = " << reason << Q_FUNC_INFO <<__LINE__;
     onWlanUpdated();
+
 }

@@ -7,10 +7,20 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
 
 //    m_activeConnectUuidList.clear();
     m_activeConnectUuidMap.clear();
+    m_deviceMap.clear();
     //TODO::get uuid from settings for system reboot;
 
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceAdd, this, &KyNetworkDeviceResourse::deviceAdd);
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceRemove, this, &KyNetworkDeviceResourse::deviceRemove);
+    initDeviceMap();
+
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceAdd, this, [=](QString deviceName, QString uni, NetworkManager::Device::Type deviceType) {
+        m_deviceMap.insert(uni,deviceName);
+        emit deviceAdd(deviceName, deviceType);
+    });
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceRemove, this, [=](QString deviceName, QString uni) {
+        m_deviceMap.remove(uni);
+        emit deviceRemove(deviceName);
+    });
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceUpdate, this, &KyNetworkDeviceResourse::onDeviceUpdate);
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceCarrierChanage, this, &KyNetworkDeviceResourse::carrierChanage);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceBitRateChanage, this, &KyNetworkDeviceResourse::deviceBitRateChanage);
@@ -21,6 +31,22 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
 KyNetworkDeviceResourse::~KyNetworkDeviceResourse()
 {
     m_networkResourceInstance = nullptr;
+}
+
+void KyNetworkDeviceResourse::initDeviceMap()
+{
+    NetworkManager::Device::List deviceList
+            = m_networkResourceInstance->getNetworkDeviceList();
+
+    if (deviceList.isEmpty()) {;
+        return;
+    }
+
+    NetworkManager::Device::Ptr devicePtr = nullptr;
+    for (int index = 0; index < deviceList.size(); ++index) {
+        devicePtr = deviceList.at(index);
+        m_deviceMap.insert(devicePtr->uni(), devicePtr->interfaceName());
+    }
 }
 
 void KyNetworkDeviceResourse::getNetworkDeviceList(
@@ -213,3 +239,15 @@ void KyNetworkDeviceResourse::setDeviceAutoConnect()
     return;
 }
 
+void KyNetworkDeviceResourse::onDeviceUpdate(NetworkManager::Device * dev)
+{
+    QString dbusPath = dev->uni();
+    QString interface = dev->interfaceName();
+    if (m_deviceMap.contains(dbusPath)) {
+        if (m_deviceMap[dbusPath] != interface) {
+            QString oldName = m_deviceMap[dbusPath];
+            m_deviceMap[dbusPath] = interface;
+            emit deviceNameUpdate(oldName, interface);
+        }
+    }
+}

@@ -16,16 +16,13 @@ public:
     explicit WlanPage(QWidget *parent = nullptr);
     ~WlanPage() = default;
 
-    void setDefaultDevice(QString deviceName) {defaultDevice = deviceName;}
-
-signals:
-
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     void initWlanUI();
     void initConnections();
+    void initDevice();//初始化默认设备
     QString m_wlanDevice; //临时用来存储网卡名
     void getWirelessIface();  //一个临时用于获取网卡的函数
     void getActiveWlan();
@@ -38,17 +35,22 @@ private:
     QLabel * m_hiddenWlanLabel = nullptr;
 
     QString m_activatedWlanSSid;
-    QString defaultDevice = "";
+    QStringList devList;
 
     KyWirelessNetResource *m_resource = nullptr;
     KyActiveConnectResourse *m_connectResource = nullptr;
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     KyNetworkDeviceResourse *m_netDeviceResource=nullptr;
 
+
 private slots:
     void onWlanAdded(QString interface, KyWirelessNetItem &item);
     void onWlanRemoved(QString interface, QString ssid);
     void onWlanUpdated();
+
+    void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
+    void onDeviceRemove(QString deviceName);
+    void onDeviceNameUpdate(QString oldName, QString newName);
     void onActivatedWlanChanged(QString uuid,
                                 NetworkManager::ActiveConnection::State state,
                                 NetworkManager::ActiveConnection::Reason reason);

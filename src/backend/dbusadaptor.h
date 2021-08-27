@@ -84,6 +84,15 @@ class WirelessInfo
 };
 Q_DECLARE_METATYPE(WirelessInfo)
 
+enum KyDeviceType
+{
+    WIRED,
+    WIRELESS
+};
+
+bool checkDeviceExist(KyDeviceType deviceType, QString deviceName);
+void setDefaultDevice(KyDeviceType deviceType, QString deviceName);
+
 class DbusAdaptor: public QDBusAbstractAdaptor
 {
     Q_OBJECT
@@ -127,6 +136,9 @@ Q_SIGNALS: // SIGNALS
     void deviceUpdate();
     //仅失败，若成功直接发listUpdate
     void activateFinish(QString devName, QString ssid);
+    //设备插拔
+    void deviceStatusChanged();
+    void deviceNameUpdate(QString oldName, QString newName);
 };
 
 #endif

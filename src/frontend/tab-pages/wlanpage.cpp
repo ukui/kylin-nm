@@ -1,6 +1,6 @@
 #include "wlanpage.h"
-#include "wlanlistitem.h"
 #include "kywirelessnetitem.h"
+#include "dbusadaptor.h"
 #include <QEvent>
 #include <QDateTime>
 #include <QDebug>
@@ -9,13 +9,26 @@
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
     m_resource = new KyWirelessNetResource(this);
-    m_device   = new KyNetworkDeviceResourse(this);
+    m_connectResource = new KyActiveConnectResourse();
+    m_networkResourceInstance = KyNetworkResourceManager::getInstance();
+    m_netDeviceResource=new KyNetworkDeviceResourse(this);
+    devList.empty();
     initDevice();
+    m_wirelessConnectOpreation = new KyWirelessConnectOperation(this);
     initWlanUI();
     initConnections();
     getActiveWlan();
     getAllWlan();
+
+    connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceAdd, this, &WlanPage::onDeviceAdd);
+    connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceRemove, this, &WlanPage::onDeviceRemove);
+    connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceNameUpdate, this, &WlanPage::onDeviceNameUpdate);
 }
+
+//QString WlanPage::getSsidFromUuid(const QString &uuid)
+//{
+
+//}
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
 {
@@ -79,7 +92,8 @@ void WlanPage::initConnections()
 {
     connect(m_resource, &KyWirelessNetResource::wifiNetworkAdd, this, &WlanPage::onWlanAdded);
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
-    connect(m_resource, &KyWirelessNetResource::wifiNetworkUpdate, this, &WlanPage::onWlanUpdated);
+//    connect(m_resource, &KyWirelessNetResource::wifiNetworkUpdate, this, &WlanPage::onWlanUpdated);
+    connect(m_connectResource, &KyActiveConnectResourse::stateChangeReason, this, &WlanPage::onActivatedWlanChanged);
 }
 
 /**
@@ -91,13 +105,11 @@ void WlanPage::initDevice()
     m_settings->beginGroup("DEFAULTCARD");
     QString key("wireless");
     QString deviceName = m_settings->value(key, "").toString();
+    m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList);
     if (deviceName.isEmpty()) {
         qDebug() << "initDevice but  defalut wireless card is null";
-        QStringList list;
-        list.empty();
-        m_device->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
-        if (!list.isEmpty()) {
-            deviceName = list.at(0);
+        if (!devList.isEmpty()) {
+            deviceName = devList.at(0);
             m_settings->setValue(key, deviceName);
         }
     }
@@ -121,22 +133,9 @@ void WlanPage::getActiveWlan()
     QMap<QString,QStringList>::iterator iter = actMap.begin();
     int height = 0;
     while (iter != actMap.end()) {
-        if (iter.key() == "wlp3s0" && !iter.value().isEmpty()) {
+        if (iter.key() == defaultDevice && !iter.value().isEmpty()) {
             QString ssid = iter.value().at(0);
-            m_activatedWlanSSid = ssid;
-
-            KyWirelessNetItem data;
-            if (!m_resource->getWifiNetwork("wlp3s0", ssid, data)) {
-                return;
-            }
-            KyWirelessNetItem *item_data = new KyWirelessNetItem(data);
-            WlanListItem *wlanItemWidget = new WlanListItem(m_resource, item_data);
-            qDebug() << "Activated wlan: ssid = " << item_data->m_NetSsid;
-            QListWidgetItem *wlanItem = new QListWidgetItem(m_activatedNetListWidget);
-            wlanItem->setSizeHint(QSize(m_activatedNetListWidget->width(), wlanItemWidget->height()));
-            m_activatedNetListWidget->addItem(wlanItem);
-            m_activatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
-            height += wlanItemWidget->height();
+            appendActiveWlan(ssid, height);
             break;
         }
         iter ++;
@@ -144,9 +143,36 @@ void WlanPage::getActiveWlan()
     if (height > 0) {
         m_activatedNetListWidget->setFixedHeight(height);
     } else {
-        //ZJP_TODO 未连接任何WiFi的情况
+        //未连接任何WiFi的情况
         m_activatedWlanSSid.clear();
+        WlanListItem *wlanItemWidget = new WlanListItem();
+        qDebug() << "There is no activated wlan." << Q_FUNC_INFO << __LINE__ ;
+        QListWidgetItem *wlanItem = new QListWidgetItem(m_activatedNetListWidget);
+        wlanItem->setSizeHint(QSize(m_activatedNetListWidget->width(), wlanItemWidget->height()));
+        m_activatedNetListWidget->addItem(wlanItem);
+        m_activatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
+        height += wlanItemWidget->height();
     }
+}
+
+void WlanPage::appendActiveWlan(const QString &ssid, int &height)
+{
+    m_activatedWlanSSid = ssid;
+
+    KyWirelessNetItem data;
+    if (!m_resource->getWifiNetwork(defaultDevice, ssid, data)) {
+        return;
+    }
+    KyWirelessNetItem *item_data = new KyWirelessNetItem(data);
+    WlanListItem *wlanItemWidget = new WlanListItem(m_resource, item_data, defaultDevice);
+    wlanItemWidget->setActivated(true);
+    qDebug() << "Activated wlan: ssid = " << item_data->m_NetSsid;
+    QListWidgetItem *wlanItem = new QListWidgetItem(m_activatedNetListWidget);
+    wlanItem->setSizeHint(QSize(m_activatedNetListWidget->width(), wlanItemWidget->height()));
+    m_activatedNetListWidget->addItem(wlanItem);
+    m_activatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
+
+    height += wlanItemWidget->height();
 }
 
 /**
@@ -159,7 +185,7 @@ void WlanPage::getAllWlan()
     m_itemsMap.clear();
     QList<KyWirelessNetItem> wlanList;
 //    if (!m_resource->getAllDeviceWifiNetwork(map))
-    if (!m_resource->getDeviceWifiNetwork("wlp3s0", wlanList)) //ZJP_TODO 获取默认网卡并传入
+    if (!m_resource->getDeviceWifiNetwork(defaultDevice, wlanList)) //ZJP_TODO 获取默认网卡并传入
     {
         return;
     }
@@ -170,8 +196,10 @@ void WlanPage::getAllWlan()
         }
 
         KyWirelessNetItem *data = new KyWirelessNetItem(itemData);
-        WlanListItem *wlanItemWidget = new WlanListItem(m_resource, data);
+        WlanListItem *wlanItemWidget = new WlanListItem(m_resource, data, defaultDevice);
         QListWidgetItem *wlanItem = new QListWidgetItem(m_inactivatedNetListWidget);
+        connect(wlanItemWidget, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+        connect(wlanItemWidget, &WlanListItem::connectButtonClicked, this, &WlanPage::onConnectButtonClicked);
         m_itemsMap.insert(data->m_NetSsid, wlanItem);
         wlanItem->setSizeHint(QSize(m_inactivatedNetListWidget->width(), wlanItemWidget->height()));
         m_inactivatedNetListWidget->addItem(wlanItem);
@@ -191,7 +219,8 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
     qDebug() << "A Wlan Added! interface = " << interface << "; ssid = " << item.m_NetSsid << Q_FUNC_INFO <<__LINE__;
 
     KyWirelessNetItem *data = new KyWirelessNetItem(item);
-    WlanListItem *wlanItemWidget = new WlanListItem(m_resource, data);
+    WlanListItem *wlanItemWidget = new WlanListItem(m_resource, data, defaultDevice);
+    connect(wlanItemWidget, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     QListWidgetItem *wlanItem = new QListWidgetItem(m_inactivatedNetListWidget);
     wlanItem->setSizeHint(QSize(m_inactivatedNetListWidget->width(), wlanItemWidget->height()));
     m_inactivatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
@@ -206,11 +235,11 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 void WlanPage::onWlanRemoved(QString interface, QString ssid)
 {
     if (!m_itemsMap.contains(ssid)) { return; }
+    if (m_expandedItem == m_itemsMap.value(ssid)) { m_expandedItem = nullptr; }
     qDebug() << "A Wlan Removed! interface = " << interface << "; ssid = " << ssid << Q_FUNC_INFO <<__LINE__;
-    m_inactivatedNetListWidget->removeItemWidget(m_itemsMap.value(ssid));
-    m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height() -
-                                               m_inactivatedNetListWidget->itemWidget(m_itemsMap.value(ssid))->height() -
-                                               NET_LIST_SPACING);
+    int height = m_inactivatedNetListWidget->itemWidget(m_itemsMap.value(ssid))->height();
+    m_inactivatedNetListWidget->takeItem(m_inactivatedNetListWidget->row(m_itemsMap.value(ssid)));
+    m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height() - height - NET_LIST_SPACING);
     m_inactivatedWlanListAreaCentralWidget->setFixedHeight(m_inactivatedNetListWidget->height() + m_hiddenWlanLabel->height());
     m_itemsMap.remove(ssid);
 }
@@ -218,5 +247,104 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
 void WlanPage::onWlanUpdated()
 {
     //ZJP_TODO 某些特定情况下不可重绘整个列表，此处代码需要修改
+    m_expandedItem = nullptr;
+    getActiveWlan();
     getAllWlan();
+}
+
+
+void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
+{
+    qDebug() << "deviceAdd" << deviceName;
+    if (deviceType !=  NetworkManager::Device::Type::Wifi) {
+        return;
+    }
+    devList << deviceName;
+    if (getDefaultDevice().isEmpty())
+    {
+        updateDefaultDevice(deviceName);
+        setDefaultDevice(WIRELESS, deviceName);
+
+    }
+    emit deviceStatusChanged();
+}
+
+void WlanPage::onDeviceRemove(QString deviceName)
+{
+    qDebug() << "deviceRemove" << deviceName;
+    if (getDefaultDevice() == deviceName)
+    {
+        QStringList list;
+        QString newDefaultDevice = "";
+        list.empty();
+        m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
+        if (!list.isEmpty()) {
+            newDefaultDevice = list.at(0);
+        }
+        updateDefaultDevice(newDefaultDevice);
+        setDefaultDevice(WIRELESS, newDefaultDevice);
+    }
+    if (devList.contains(deviceName)) {
+        devList.removeOne(deviceName);
+        emit deviceStatusChanged();
+    }
+}
+
+void WlanPage::onDeviceNameUpdate(QString oldName, QString newName)
+{
+   if (getDefaultDevice() == oldName) {
+       updateDefaultDevice(newName);
+       setDefaultDevice(WIRELESS, newName);
+   }
+
+   if (devList.contains(oldName)) {
+       devList.removeOne(oldName);
+       devList.append(newName);
+       qDebug() << "WlanPage emit deviceNameUpdate "  << oldName << newName;
+       emit deviceNameChanged(oldName, newName);
+   }
+}
+
+void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
+{
+    qDebug()<< "Activated wlan changed, uuid = " << uuid << "; state = " << state << "; reason = " << reason << Q_FUNC_INFO <<__LINE__;
+
+    if (state == NetworkManager::ActiveConnection::State::Activated) {
+        //onWlanRemoved(m_wlanDevice, ssid);
+        QString ssid;
+        m_resource->getSsidByUuid(uuid, ssid);
+        m_activatedNetListWidget->clear();
+        int height = 0;
+        appendActiveWlan(ssid, height);
+        onWlanRemoved(defaultDevice, ssid);
+    } else {
+        onWlanUpdated();
+    }
+}
+
+void WlanPage::onItemHeightChanged(const QString &ssid)
+{
+    if (!m_itemsMap.contains(ssid)) { return; }
+    QListWidgetItem *item = m_itemsMap.value(ssid);
+
+    if (m_expandedItem && m_expandedItem != item) {
+        QSize size(m_inactivatedNetListWidget->itemWidget(m_expandedItem)->size().width(), NORMAL_HEIGHT);
+        //旧的收起
+        m_expandedItem->setSizeHint(size);
+        m_inactivatedNetListWidget->itemWidget(m_expandedItem)->setFixedHeight(NORMAL_HEIGHT);
+        //新的展开
+        m_expandedItem = item;
+        item->setSizeHint(m_inactivatedNetListWidget->itemWidget(item)->size());
+    } else if (!m_expandedItem) {
+        m_expandedItem = item;
+        m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height() + m_inactivatedNetListWidget->itemWidget(item)->height() - item->sizeHint().height());
+        m_inactivatedWlanListAreaCentralWidget->setFixedHeight(m_inactivatedNetListWidget->height() + m_hiddenWlanLabel->height());
+        item->setSizeHint(m_inactivatedNetListWidget->itemWidget(item)->size());
+    }
+}
+
+void WlanPage::onConnectButtonClicked(KyWirelessConnectSetting &connSettingInfo, const bool &isHidden)
+{
+    qDebug() << "Received signal of connecting wlan, ssid = " << connSettingInfo.m_ssid << Q_FUNC_INFO << __LINE__;
+    m_wirelessConnectOpreation->addAndActiveWirelessConnect(defaultDevice, connSettingInfo, isHidden);
 }

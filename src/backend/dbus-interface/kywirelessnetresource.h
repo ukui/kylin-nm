@@ -28,6 +28,8 @@ public:
 
     void getWirelessActiveConnection(NetworkManager::ActiveConnection::State state, QMap<QString, QStringList> &map);
 
+    void getSsidByUuid(const QString uuid, QString &ssid);
+
 
 private:
     void kyWirelessNetItemListInit();

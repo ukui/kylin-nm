@@ -106,9 +106,9 @@ signals:
     void connectionUpdate(QString uuid);
     void connectionRemove(QString path);
 
-    void deviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
+    void deviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType);
     void deviceUpdate(NetworkManager::Device * dev);
-    void deviceRemove(QString deviceName);
+    void deviceRemove(QString deviceName, QString uni);
 
     void deviceCarrierChanage(QString deviceName, bool pluged);
     void deviceBitRateChanage(QString deviceName, int bitRate);

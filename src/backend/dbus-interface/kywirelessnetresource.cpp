@@ -76,7 +76,7 @@ bool KyWirelessNetResource::getWifiNetwork(const QString &devIfaceName, const QS
     if (!m_WifiNetworkList.contains(devIfaceName)) {
         return false;
     } else {
-        for (int index = 0; m_WifiNetworkList[devIfaceName].size(); index ++){
+        for (int index = 0; index < m_WifiNetworkList[devIfaceName].size(); index ++){
             if (m_WifiNetworkList[devIfaceName].at(index).m_NetSsid  == ssid) {
                 wirelessNetResource = m_WifiNetworkList[devIfaceName].at(index);
                 return true;

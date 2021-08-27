@@ -99,6 +99,7 @@ public:
     NetworkManager::Connection::List getConnectList();
     NetworkManager::Device::List getNetworkDeviceList();
     bool isActiveConnection(QString uuid);
+    bool isActivatingConnection(QString uuid);
 
 signals:
     void connectionAdd(QString uuid);

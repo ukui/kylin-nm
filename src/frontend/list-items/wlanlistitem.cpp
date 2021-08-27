@@ -14,7 +14,7 @@ WlanListItem::WlanListItem(KyWirelessNetResource *resource, KyWirelessNetItem *d
 
 WlanListItem::WlanListItem(QWidget *parent) : ListItem(parent)
 {
-    m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic", QIcon(":/res/w/wifi-none.png")));
+    m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic"));
     const QString str="未连接任何wifi";
     setExpanded(false);
     this->setName(str);

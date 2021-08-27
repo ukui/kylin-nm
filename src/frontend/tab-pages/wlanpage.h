@@ -42,6 +42,7 @@ private:
     QVBoxLayout * m_inactivatedWlanListAreaLayout = nullptr;
     QFrame * m_hiddenWlanWidget = nullptr;
     QHBoxLayout * m_hiddenWlanLayout = nullptr;
+    QListWidget * m_activatedNetListWidget = nullptr;
     QLabel * m_hiddenWlanLabel = nullptr;
 
     QString m_activatedWlanSSid;

@@ -14,32 +14,32 @@ RadioItemButton::RadioItemButton(bool isActivated, QWidget *parent) : QPushButto
     m_iconLabel->setScaledContents(true);
     this->setFixedSize(BUTTON_SIZE);
 
-    this->switchTimer = new QTimer(this); //QTimer对象，控制等待动画播放
+//    this->switchTimer = new QTimer(this); //QTimer对象，控制等待动画播放
 
     this->raise();
     this->hide();
 }
 
-void RadioItemButton::switchAnimStep()
-{
-    //另外一种加载方法
-    QString qpmQss = ":/res/s/conning-b/";
-    qpmQss.append(QString::number(this->currentPage));
-    qpmQss.append(".png");
-    m_iconLabel->setPixmap(QPixmap(qpmQss));
-    m_iconLabel->setProperty("useIconHighlightEffect", true);
-    m_iconLabel->setProperty("iconHighlightEffectMode", true);
+//void RadioItemButton::switchAnimStep()
+//{
+//    //另外一种加载方法
+//    QString qpmQss = ":/res/s/conning-b/";
+//    qpmQss.append(QString::number(this->currentPage));
+//    qpmQss.append(".png");
+//    m_iconLabel->setPixmap(QPixmap(qpmQss));
+//    m_iconLabel->setProperty("useIconHighlightEffect", true);
+//    m_iconLabel->setProperty("iconHighlightEffectMode", true);
 
-    this->currentPage --;
+//    this->currentPage --;
 
-    if (this->currentPage < 1) {
-        this->currentPage = 12; //循环播放
-    }
-    this->countCurrentTime += FRAMESPEED;
-    if (this->countCurrentTime >= ALLTIME) {
-        emit this->toStopLoading(); //发出信号停止主界面和托盘区的等待动画
-    }
-}
+//    if (this->currentPage < 1) {
+//        this->currentPage = 12; //循环播放
+//    }
+//    this->countCurrentTime += FRAMESPEED;
+//    if (this->countCurrentTime >= ALLTIME) {
+//        emit this->toStopLoading(); //发出信号停止主界面和托盘区的等待动画
+//    }
+//}
 
 void RadioItemButton::startLoading()
 {
@@ -79,18 +79,18 @@ void RadioItemButton::setButtonIcon(QIcon *icon)
 void RadioItemButton::onLoadingStarted()
 {
     //ZJP_TODO 开始播放转圈动画
-    this->currentPage = 12;
-    this->countCurrentTime = 0;
-    this->switchTimer->start(FRAMESPEED);
-    this->show();
-    if (this->countCurrentTime >= ALLTIME) {
-        emit this->requestStopLoading(); //发出信号停止主界面和托盘区的等待动画
-    }
+//    this->currentPage = 12;
+//    this->countCurrentTime = 0;
+//    this->switchTimer->start(FRAMESPEED);
+//    this->show();
+//    if (this->countCurrentTime >= ALLTIME) {
+//        emit this->requestStopLoading(); //发出信号停止主界面和托盘区的等待动画
+//    }
 }
 
 void RadioItemButton::onLoadingStopped()
 {
     //ZJP_TODO 停止播放转圈动画
-    this->switchTimer->stop();
-    this->hide();
+//    this->switchTimer->stop();
+//    this->hide();
 }

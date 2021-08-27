@@ -1,15 +1,16 @@
 #include "listitem.h"
-#include <QEvent>
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
 #define ITEM_FRAME_MARGINS 16,6,16,6
 #define ITEM_FRAME_SPACING 10
 
+#define INFO_ICON_WIDTH 16
+#define INFO_ICON_HEIGHT 16
+
 ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
     initUI();
-    initConnection();
 }
 
 ListItem::~ListItem()
@@ -19,16 +20,6 @@ ListItem::~ListItem()
 
     delete m_infoButton;
     m_infoButton = NULL;
-}
-
-bool ListItem::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == this) {
-        if (event->type() == QEvent::MouseButtonPress) {
-            this->onNetButtonClicked();
-        }
-    }
-    return QFrame::eventFilter(watched, event);
 }
 
 void ListItem::setName(const QString &name)
@@ -49,9 +40,10 @@ void ListItem::initUI()
     m_hItemLayout->setContentsMargins(ITEM_FRAME_MARGINS);
     m_hItemLayout->setSpacing(ITEM_FRAME_SPACING);
 
-    m_netButton = new RadioItemButton(m_itemFrame);
+    m_netButton = new NetButton(m_itemFrame);
     m_nameLabel = new QLabel(m_itemFrame);
     m_infoButton = new InfoButton(m_itemFrame);
+    m_infoButton->setIconSize(QSize(INFO_ICON_WIDTH,INFO_ICON_HEIGHT));
 
     m_hItemLayout->addWidget(m_netButton);
     m_hItemLayout->addWidget(m_nameLabel);
@@ -60,25 +52,3 @@ void ListItem::initUI()
 
     m_mainLayout->addWidget(m_itemFrame);
 }
-
-void ListItem::initConnection()
-{
-    connect(this->m_netButton, &RadioItemButton::clicked, this, &ListItem::onNetButtonClicked);
-    connect(this->m_infoButton, &InfoButton::clicked, this, &ListItem::onInfoButtonClicked);
-    //connect(this->m_nameLabel, &QLabel::)
-}
-
-void ListItem::onInfoButtonClicked()
-{
-
-}
-
-void ListItem::onNetButtonClicked()
-{
-
-}
-
-//void ListItem::onNameLableClicked()
-//{
-
-//}

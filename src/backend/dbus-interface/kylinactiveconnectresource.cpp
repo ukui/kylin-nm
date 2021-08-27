@@ -22,7 +22,7 @@ KyActiveConnectResourse::KyActiveConnectResourse(QObject *parent) : QObject(pare
 KyActiveConnectResourse::~KyActiveConnectResourse()
 {
     m_networkResourceInstance = nullptr;
-    if (nullptr == m_networkdevice) {
+    if (nullptr != m_networkdevice) {
         delete m_networkdevice;
         m_networkdevice = nullptr;
     }

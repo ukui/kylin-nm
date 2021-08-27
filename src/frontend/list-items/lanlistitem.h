@@ -1,26 +1,30 @@
 #ifndef LANLISTITEM_H
 #define LANLISTITEM_H
 #include "listitem.h"
-#include "kylinconnectitem.h"
+#include "kylinwiredwidget.h"
+#include "kylinactiveconnectresource.h"
+
+#include <QDBusInterface>
+#include <QEvent>
 
 class LanListItem : public ListItem
 {
     Q_OBJECT
+
 public:
-    LanListItem(KyConnectItem *data, QWidget *parent = nullptr);
+    LanListItem(KyConnectItem *data, QString deviceName, QWidget *parent = nullptr);
     ~LanListItem() = default;
+
 protected:
+    void setIcon(bool isOn);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
-    KyConnectItem * m_data = nullptr;
+    KyConnectItem *m_data = nullptr;
+    KyWiredConnectOperation *m_connectOperation = nullptr;
 
-private:
-    void initLanUI();
-    void refreshIcon();
-
-private slots:
-    void onInfoButtonClicked();
-    void onNetButtonClicked();
+    bool m_activated = false;
+    QString deviceName = nullptr;
 };
 
 #endif // LANLISTITEM_H

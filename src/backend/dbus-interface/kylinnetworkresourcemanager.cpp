@@ -464,6 +464,26 @@ bool KyNetworkResourceManager::isActiveConnection(QString uuid)
     return false;
 }
 
+bool KyNetworkResourceManager::isActivatingConnection(QString uuid)
+{
+    int index = 0;
+    NetworkManager::ActiveConnection::Ptr activateConnectPtr = nullptr;
+
+    if (uuid.isEmpty()) {
+        return false;
+    }
+
+    for (index = 0; index < m_activeConns.size(); ++index) {
+        activateConnectPtr = m_activeConns.at(index);
+        if (activateConnectPtr->uuid() == uuid
+             && NetworkManager::ActiveConnection::State::Activating == activateConnectPtr->state()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void KyNetworkResourceManager::requestScan(NetworkManager::WirelessDevice * dev)
 {
     qDebug() <<"[KyNetworkResourceManager]"<< dev->interfaceName()<<"start scan wifi ap";

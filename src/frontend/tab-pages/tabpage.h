@@ -23,7 +23,7 @@
 #define SETTINGS_LAYOUT_MARGINS 24,16,24,16
 #define TRANSPARENT_COLOR QColor(0,0,0,0)
 
-const QString    CONFIG_FILE_PATH             = QDir::homePath() + "/.config/ukui/kylin-nm.conf";
+const QString    CONFIG_FILE_PATH   =  QDir::homePath() + "/.config/ukui/kylin-nm.conf";
 
 class TabPage : public QWidget
 {
@@ -52,7 +52,6 @@ protected:
     QFrame * m_activatedNetFrame = nullptr;
     QVBoxLayout * m_activatedNetLayout = nullptr;
     QLabel * m_activatedNetLabel = nullptr;
-    QListWidget * m_activatedNetListWidget = nullptr;
     Divider * m_activatedNetDivider = nullptr;
 
     QFrame * m_inactivatedNetFrame = nullptr;

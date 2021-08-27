@@ -31,6 +31,7 @@ private:
 protected slots:
     virtual void onInfoButtonClicked();
     virtual void onNetButtonClicked();
+//    virtual void onNameLableClicked();
 };
 
 #endif // LISTITEM_H

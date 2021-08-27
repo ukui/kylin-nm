@@ -16,6 +16,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     initDevice();
     m_wirelessConnectOpreation = new KyWirelessConnectOperation(this);
     initWlanUI();
+    //要在initUI之后调用，保证UI的信号槽顺利绑定
     initConnections();
     getActiveWlan();
     getAllWlan();
@@ -80,6 +81,7 @@ void WlanPage::initWlanUI()
     m_activatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_activatedNetListWidget->setSpacing(NET_LIST_SPACING);
     m_activatedNetListWidget->setFixedHeight(NORMAL_HEIGHT);
+    m_activatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_activatedNetLayout->addWidget(m_activatedNetListWidget);
 //    m_inactivatedNetListArea->setFixedHeight(SCROLLAREA_HEIGHT);
     m_inactivatedNetListArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -94,6 +96,21 @@ void WlanPage::initConnections()
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
 //    connect(m_resource, &KyWirelessNetResource::wifiNetworkUpdate, this, &WlanPage::onWlanUpdated);
     connect(m_connectResource, &KyActiveConnectResourse::stateChangeReason, this, &WlanPage::onActivatedWlanChanged);
+    connect(m_netSwitch, &SwitchButton::clicked, this, &WlanPage::onWlanSwitchClicked);
+    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+        m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
+        if (m_switchGsettings->keys().contains(WIRELESS_SWITCH)) {
+            m_netSwitch->setSwitchStatus(m_switchGsettings->get(WIRELESS_SWITCH).toBool());
+            connect(m_switchGsettings, &QGSettings::changed, this, [ = ](const QString &key) {
+                if (key == WIRELESS_SWITCH) {
+                    onWlanSwitchStatusChanged(m_switchGsettings->get(WIRELESS_SWITCH).toBool());
+                }
+            });
+            return;
+        }
+    }
+    qDebug()<<"isSchemaInstalled false" << Q_FUNC_INFO << __LINE__;
+    m_netSwitch->setSwitchStatus(m_wirelessConnectOpreation->getWirelessEnabled());
 }
 
 /**
@@ -347,4 +364,20 @@ void WlanPage::onConnectButtonClicked(KyWirelessConnectSetting &connSettingInfo,
 {
     qDebug() << "Received signal of connecting wlan, ssid = " << connSettingInfo.m_ssid << Q_FUNC_INFO << __LINE__;
     m_wirelessConnectOpreation->addAndActiveWirelessConnect(defaultDevice, connSettingInfo, isHidden);
+}
+
+/**
+ * @brief WlanPage::onWlanSwitchClicked 点击无线网开关
+ */
+void WlanPage::onWlanSwitchClicked()
+{
+    qDebug() << "On wlan switch button clicked! old state = " << !m_netSwitch->getSwitchStatus() << Q_FUNC_INFO << __LINE__;
+    m_wirelessConnectOpreation->setWirelessEnabled(m_netSwitch->getSwitchStatus());
+}
+
+void WlanPage::onWlanSwitchStatusChanged(const bool &checked)
+{
+    m_netSwitch->setSwitchStatus(checked);
+    qDebug() << "On wlan switch status changed! new state = " << m_netSwitch->getSwitchStatus() << Q_FUNC_INFO << __LINE__;
+    onWlanUpdated();
 }

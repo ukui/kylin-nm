@@ -11,6 +11,7 @@
 ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
     initUI();
+    initConnection();
 }
 
 ListItem::~ListItem()

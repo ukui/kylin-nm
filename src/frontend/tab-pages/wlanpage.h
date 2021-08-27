@@ -7,6 +7,7 @@
 #include "kylinnetworkdeviceresource.h"
 #include "kywirelessconnectoperation.h"
 #include "wlanlistitem.h"
+#include <QGSettings>
 
 //#define SCROLLAREA_HEIGHT 150
 #define MORE_TEXT_MARGINS 16,0,0,0
@@ -53,6 +54,7 @@ private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyWirelessConnectOperation * m_wirelessConnectOpreation = nullptr;
+    QGSettings *m_switchGsettings = nullptr;
 
 
 private slots:
@@ -68,6 +70,8 @@ private slots:
                                 NetworkManager::ActiveConnection::Reason reason);
     void onItemHeightChanged(const QString &ssid);
     void onConnectButtonClicked(KyWirelessConnectSetting &connSettingInfo, const bool &isHidden);
+    void onWlanSwitchClicked();
+    void onWlanSwitchStatusChanged(const bool &checked);
 };
 
 #endif // WLANPAGE_H

@@ -93,9 +93,8 @@ void KyWirelessNetResource::getWirelessActiveConnection(NetworkManager::ActiveCo
     map.clear();
     NetworkManager::ActiveConnection::List activeConnectionList;
 
-    map.clear();
     activeConnectionList.clear();
-    activeConnectionList = m_networkResourceInstance->m_activeConns;
+    activeConnectionList = m_networkResourceInstance->getActiveConnectList();
     if (activeConnectionList.isEmpty()) {
         return;
     }
@@ -103,14 +102,23 @@ void KyWirelessNetResource::getWirelessActiveConnection(NetworkManager::ActiveCo
     NetworkManager::ActiveConnection::Ptr activeConnectionPtr = nullptr;
     for (; index < activeConnectionList.size(); index++) {
         activeConnectionPtr = activeConnectionList.at(index);
+        if (activeConnectionPtr.isNull()) {
+            continue;
+        }
+
         if (NetworkManager::ConnectionSettings::ConnectionType::Wireless != activeConnectionPtr->type()) {
             continue;
         }
+
         if (state != activeConnectionPtr->state()) {
             continue;
         }
+
         QString ssid;
         QString ifaceName = getDeviceIFace(activeConnectionPtr,ssid);
+        if(ifaceName.isEmpty() || ssid.isNull()) {
+            continue;
+        }
         if (map.contains(ifaceName)) {
             map[ifaceName].append(ssid);
         } else {
@@ -130,11 +138,40 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::
     }
 
     NetworkManager::Connection::Ptr conn = actConn->connection();
+    if (conn.isNull()) {
+        return "";
+    }
+
     NetworkManager::ConnectionSettings::Ptr sett = conn->settings();
+    if (sett.isNull()) {
+        return "";
+    }
+
     NetworkManager::WirelessSetting::Ptr wireless_sett = sett->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    if (wireless_sett.isNull()) {
+        return "";
+    }
     wirelessNetResourcessid = wireless_sett->ssid();
 
     return sett->interfaceName();
+}
+
+void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid)
+{
+    ssid.clear();
+    NetworkManager::Connection::Ptr connectPtr = m_networkResourceInstance->getConnect(uuid);
+    if (connectPtr.isNull()) {
+        return;
+    }
+    NetworkManager::WirelessSetting::Ptr wireless_sett
+        = connectPtr->settings()->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    if (wireless_sett.isNull()) {
+        qDebug() << "don't have WirelessSetting connection";
+        return;
+    }
+    ssid = wireless_sett->ssid();
+
+    return;
 }
 
 void KyWirelessNetResource::kyWirelessNetItemListInit()

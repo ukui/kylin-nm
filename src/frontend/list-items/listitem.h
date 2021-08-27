@@ -20,10 +20,9 @@ protected:
     NetButton * m_netButton = nullptr;
     InfoButton * m_infoButton = nullptr;
 
-private:
+public:
     QVBoxLayout * m_mainLayout = nullptr;
     QHBoxLayout * m_hItemLayout = nullptr;
-
 
 private:
     void initUI();

@@ -654,7 +654,7 @@ void KyNetworkResourceManager::onDeviceAdded(QString const & uni)
 
     if (0 > m_devices.indexOf(networkDevice)) {
         addDevice(networkDevice);
-        emit deviceAdd(networkDevice->interfaceName(), networkDevice->type());
+        emit deviceAdd(networkDevice->interfaceName(), networkDevice->uni(), networkDevice->type());
     } else {
         qWarning() << networkDevice->interfaceName() <<"the device is exist in network device list.";
     }
@@ -676,7 +676,7 @@ void KyNetworkResourceManager::onDeviceRemoved(QString const & uni)
     if (m_devices.cend() != index) {
         const int pos = index - m_devices.cbegin();
         removeDevice(pos);
-        emit deviceRemove(networkDevice->interfaceName());
+        emit deviceRemove(networkDevice->interfaceName(), networkDevice->uni());
     }
 
     return;

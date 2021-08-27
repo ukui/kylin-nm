@@ -24,10 +24,12 @@ public:
 signals:
 
 private:
+    void initDevice();//初始化默认设备
     void initUI();
     void initList();
     bool eventFilter(QObject *watched, QEvent *event);
-    void initDevice();//初始化默认设备
+    void addNewItem(KyConnectItem *itemData, QListWidget *listWidget);
+
 
 private:
     KyNetworkDeviceResourse *m_device = nullptr;
@@ -44,20 +46,20 @@ private:
     QListWidgetItem *m_listWidgetItem = nullptr;
 
     KyNetworkDeviceResourse * m_deviceSource = nullptr;
-    KyActiveConnectResourse *m_activeResourse = nullptr;
-
-    KyConnectResourse *m_connectResourse = nullptr;
+    KyActiveConnectResourse *m_activeResourse = nullptr;     //激活的连接
+    KyConnectResourse *m_connectResourse = nullptr;          //未激活的连接
 
     QList<KyConnectItem *> m_activedList;
     QList<KyConnectItem *> m_deactivedList;
 
     QMap<KyConnectItem *, QListWidgetItem *> m_deactiveMap;
     QMap<KyConnectItem *, QListWidgetItem *> m_activeMap;
-    QString deviceName;
+    QString m_deviceName;
+
 private slots:
     void updateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason);
     void addConnectionSlot(QString uuid);
-    void RemoveConnectionSlot(QString path);
+    void removeConnectionSlot(QString path);
 };
 
 #endif // LANPAGE_H

@@ -14,14 +14,16 @@ public:
     void setName(const QString &name);
 
 protected:
-    QLabel * m_nameLabel = nullptr;
     QFrame * m_itemFrame = nullptr;
+
+    QLabel * m_nameLabel = nullptr;
     NetButton * m_netButton = nullptr;
+    InfoButton * m_infoButton = nullptr;
 
 private:
     QVBoxLayout * m_mainLayout = nullptr;
     QHBoxLayout * m_hItemLayout = nullptr;
-    InfoButton * m_infoButton = nullptr;
+
 
 private:
     void initUI();

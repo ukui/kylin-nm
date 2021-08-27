@@ -29,12 +29,12 @@ void ListItem::setName(const QString &name)
 
 void ListItem::initUI()
 {
-    m_mainLayout = new QVBoxLayout;
+    m_mainLayout = new QVBoxLayout(this);
     m_mainLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_mainLayout->setSpacing(MAIN_LAYOUT_SPACING);
     this->setLayout(m_mainLayout);
 
-    m_itemFrame = new QFrame;
+    m_itemFrame = new QFrame(this);
 
     m_hItemLayout = new QHBoxLayout(m_itemFrame);
     m_hItemLayout->setContentsMargins(ITEM_FRAME_MARGINS);

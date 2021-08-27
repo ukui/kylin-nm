@@ -13,7 +13,7 @@
 
 #define NORMAL_HEIGHT 48
 #define EXPANDED_HEIGHT 120
-
+#define PWD_LENGTH_LIMIT 8
 
 class WlanListItem : public ListItem
 {

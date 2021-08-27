@@ -222,8 +222,9 @@ void WlanListItem::onNetButtonClicked()
     while (iter != actMap.end()) {
         if (iter.key() == m_wlanDevice && !iter.value().isEmpty()) {
             activedssid = iter.value().at(0);
+            break;
         }
-        break;
+        iter ++;
     }
     qDebug()<<"Get activated wlan succeed! ssid = " << activedssid <<Q_FUNC_INFO << __LINE__;
 
@@ -283,8 +284,10 @@ void WlanListItem::onSecurityChanged(QString interface, QString ssid, QString se
 
 void WlanListItem::onPwdEditorTextChanged()
 {
-    if (!m_pwdLineEdit || !m_connectButton) { return; }
-    if (m_pwdLineEdit->text().length() < 6) {
+    if (!m_pwdLineEdit || !m_connectButton) {
+        return;
+    }
+    if (m_pwdLineEdit->text().length() < PWD_LENGTH_LIMIT) {
         m_connectButton->setEnabled(false);
     } else {
         m_connectButton->setEnabled(true);
@@ -308,7 +311,9 @@ void WlanListItem::onShowPwdButtonClicked()
 
 void WlanListItem::onConnectButtonClicked()
 {
-    if (!m_connectButton->isEnabled() || !m_data) { return; }
+    if (!m_connectButton->isEnabled() || !m_data) {
+        return;
+    }
     KyWirelessConnectSetting settings;
     settings.m_connectName = m_data->m_NetSsid;
     settings.m_ssid = m_data->m_NetSsid;
@@ -319,7 +324,7 @@ void WlanListItem::onConnectButtonClicked()
     } else if (m_data->m_secuType.contains("WPA1") || m_data->m_secuType.contains("WPA2")) {
         settings.m_type = WpaPsk;
     } else if (m_data->m_secuType.contains("WPA3")) {
-        settings.m_type = WpaEap;
+        settings.m_type = SAE;
     }
     qDebug() << "On button connect clicked, will connect wlan. ssid = " << m_data->m_NetSsid << Q_FUNC_INFO <<__LINE__;
 
@@ -328,7 +333,9 @@ void WlanListItem::onConnectButtonClicked()
 
 void WlanListItem::onConnectionAdd(QString deviceName, QString ssid)
 {
-    if (!m_data) { return; }
+    if (!m_data) {
+        return;
+    }
     if (ssid == m_data->m_NetSsid) {
         m_data->m_isConfigured = true;
     }
@@ -336,7 +343,9 @@ void WlanListItem::onConnectionAdd(QString deviceName, QString ssid)
 
 void WlanListItem::onConnectionRemove(QString deviceName, QString ssid)
 {
-    if (!m_data) { return; }
+    if (!m_data) {
+        return;
+    }
     if (ssid == m_data->m_NetSsid) {
         m_data->m_isConfigured = false;
     }

@@ -5,9 +5,12 @@
 #include "kywirelessnetresource.h"
 #include "kylinactiveconnectresource.h"
 #include "kylinnetworkdeviceresource.h"
+#include "kywirelessconnectoperation.h"
+#include "wlanlistitem.h"
 
 //#define SCROLLAREA_HEIGHT 150
 #define MORE_TEXT_MARGINS 16,0,0,0
+#define SCROLLAREA_HEIGHT 200
 
 class WlanPage : public TabPage
 {
@@ -16,18 +19,25 @@ public:
     explicit WlanPage(QWidget *parent = nullptr);
     ~WlanPage() = default;
 
+    //static QString getSsidFromUuid(const QString &uuid);
+
+signals:
+    void oneItemExpanded(const QString &ssid);
+
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     void initWlanUI();
     void initConnections();
+
     void initDevice();//初始化默认设备
-    QString m_wlanDevice; //临时用来存储网卡名
-    void getWirelessIface();  //一个临时用于获取网卡的函数
+
     void getActiveWlan();
+    void appendActiveWlan(const QString &ssid, int &height);
     void getAllWlan();
     QMap<QString, QListWidgetItem*> m_itemsMap;
+    QListWidgetItem *m_expandedItem = nullptr;
     QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;
     QVBoxLayout * m_inactivatedWlanListAreaLayout = nullptr;
     QFrame * m_hiddenWlanWidget = nullptr;
@@ -40,7 +50,8 @@ private:
     KyWirelessNetResource *m_resource = nullptr;
     KyActiveConnectResourse *m_connectResource = nullptr;
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
-    KyNetworkDeviceResourse *m_netDeviceResource=nullptr;
+    KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
+    KyWirelessConnectOperation * m_wirelessConnectOpreation = nullptr;
 
 
 private slots:
@@ -54,6 +65,8 @@ private slots:
     void onActivatedWlanChanged(QString uuid,
                                 NetworkManager::ActiveConnection::State state,
                                 NetworkManager::ActiveConnection::Reason reason);
+    void onItemHeightChanged(const QString &ssid);
+    void onConnectButtonClicked(KyWirelessConnectSetting &connSettingInfo, const bool &isHidden);
 };
 
 #endif // WLANPAGE_H

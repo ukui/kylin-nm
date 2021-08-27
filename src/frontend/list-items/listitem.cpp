@@ -65,6 +65,7 @@ void ListItem::initConnection()
 {
     connect(this->m_netButton, &RadioItemButton::clicked, this, &ListItem::onNetButtonClicked);
     connect(this->m_infoButton, &InfoButton::clicked, this, &ListItem::onInfoButtonClicked);
+    //connect(this->m_nameLabel, &QLabel::)
 }
 
 void ListItem::onInfoButtonClicked()
@@ -76,3 +77,8 @@ void ListItem::onNetButtonClicked()
 {
 
 }
+
+//void ListItem::onNameLableClicked()
+//{
+
+//}

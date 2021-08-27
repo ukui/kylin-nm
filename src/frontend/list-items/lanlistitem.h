@@ -21,9 +21,8 @@ protected:
 
 private:
     KyConnectItem *m_data = nullptr;
-    KyActiveConnectResourse  *m_wiredActivatelist = nullptr;
-    KyWiredConnectOperation *m_connect_operation = nullptr;
-    bool m_flag = false;       //用户点击连接与否
+    KyWiredConnectOperation *m_connectOperation = nullptr;
+
     bool m_activated = false;
     QString deviceName = nullptr;
 };

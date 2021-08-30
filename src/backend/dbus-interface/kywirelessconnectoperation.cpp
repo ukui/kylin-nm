@@ -613,6 +613,12 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
 void KyWirelessConnectOperation::setWirelessEnabled(bool enabled)
 {
     NetworkManager::setWirelessEnabled(enabled);
+    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA);
+        gsetting->set(WIRELESS_SWITCH, enabled);
+    } else {
+        qDebug()<<"isSchemaInstalled false";
+    }
 }
 
 bool KyWirelessConnectOperation::getWirelessEnabled()

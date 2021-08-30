@@ -2,9 +2,13 @@
 #define KYWIRELESSCONNECTOPERATION_H
 
 #include <QObject>
+#include <QGSettings>
 #include "kyenterpricesettinginfo.h"
 #include "kylinconnectoperation.h"
 #include "kyenterpricesettinginfo.h"
+
+const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
+const QString    WIRELESS_SWITCH          = "wirelessswitch";
 
 enum KySecuType {
     NONE = 0,

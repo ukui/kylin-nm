@@ -47,7 +47,7 @@ void WlanPage::initWlanUI()
 {
     m_titleLabel->setText(tr("WLAN"));
     m_activatedNetLabel->setText(tr("Activated WLAN"));
-    m_inactivatedNetLabel->setText(tr("Inactivated WLAN"));
+    m_inactivatedNetLabel->setText(tr("Other WLAN"));
 
     //一些独有控件
     m_inactivatedWlanListAreaCentralWidget = new QFrame(m_inactivatedNetListArea);

@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <QIcon>
 #include <QLabel>
+#include<QTimer>
 #define ACTIVATED true
 #define INACTIVATED false
 
@@ -16,15 +17,20 @@ public:
     void stopLoading();
     void setPressed();
     void setReleased();
-    void setButtonIcon(QIcon *);
+    void setButtonIcon(const QIcon &icon);
 
 signals:
     void requestStartLoading();
     void requestStopLoading();
 
 private:
+    void paintEvent(QPaintEvent *event);
     bool m_isActivated = INACTIVATED;
     QLabel * m_iconLabel = nullptr;
+    QTimer * switchTimer = nullptr;
+
+    int currentPage;
+    int countCurrentTime;
 
 private slots:
     void onLoadingStarted();

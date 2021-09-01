@@ -21,6 +21,7 @@ protected:
     virtual void enterEvent(QEvent *event) override;
     virtual void leaveEvent(QEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // INFOBUTTON_H

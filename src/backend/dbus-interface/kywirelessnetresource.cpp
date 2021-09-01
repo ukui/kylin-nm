@@ -170,7 +170,7 @@ void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid)
         return;
     }
     ssid = wireless_sett->ssid();
-
+    qDebug() << "getSsidByUuid success " << ssid;
     return;
 }
 

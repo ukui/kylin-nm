@@ -129,10 +129,8 @@ DbusAdaptor::DbusAdaptor(MainWindow *parent)
 {
     // constructor
     qDBusRegisterMetaType<QMap<QString, bool> >();
-    qDBusRegisterMetaType<WirelessInfo>();
-    qDBusRegisterMetaType<WiredInfo>();
-    qDBusRegisterMetaType<QList<WirelessInfo> >();
-    qDBusRegisterMetaType<QList<WiredInfo> >();
+    qDBusRegisterMetaType<QVector<QStringList> >();
+    qDBusRegisterMetaType<QMap<QString, QVector<QStringList> >>();
     //setAutoRelaySignals(true)后会自动转发mainwindow发出的同名信号，因此不必再额外写一个转发
     setAutoRelaySignals(true);
 }
@@ -143,15 +141,19 @@ DbusAdaptor::~DbusAdaptor()
 }
 
 //无线列表
-QList<WirelessInfo> DbusAdaptor::getWirelessList(QString devName)
+QMap<QString, QVector<QStringList> > DbusAdaptor::getWirelessList()
 {
-
+    QMap<QString, QVector<QStringList> > map;
+    parent()->getWirelessList(map);
+    return map;
 }
 
 //有线列表
-QList<WiredInfo>  DbusAdaptor::getWiredList(QString devName)
+QMap<QString, QVector<QStringList>> DbusAdaptor::getWiredList()
 {
-
+    QMap<QString, QVector<QStringList>> map;
+    parent()->getWiredList(map);
+    return map;
 }
 
 //有线开关
@@ -231,16 +233,28 @@ QString  DbusAdaptor::getDefaultWirelessDevice()
     return deviceName;
 }
 
-//连接 根据网卡类型 参数2 为ssid/uuid
-void DbusAdaptor::activateConnect(QString devName, QString ssid)
+//连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
+void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
 {
-
+    if (type == 0) {
+        parent()->activateWired(devName,ssid);
+    } else if (type == 1) {
+        parent()->activateWireless(devName,ssid);
+    } else {
+        qDebug() << "[DbusAdaptor] activateConnect type is invalid";
+    }
 }
 
-//断开连接 根据网卡类型 参数2 为ssid/uuid
-void DbusAdaptor::deActivateConnect(QString devName, QString ssid)
+//断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
+void DbusAdaptor::deActivateConnect(int type, QString devName, QString ssid)
 {
-
+    if (type == 0) {
+        parent()->deactivateWired(devName,ssid);
+    } else if (type == 1) {
+        parent()->deactivateWireless(devName,ssid);
+    } else {
+        qDebug() << "[DbusAdaptor] deactivateConnect type is invalid";
+    }
 }
 
 //获取设备列表和启用/禁用状态
@@ -266,3 +280,14 @@ void DbusAdaptor::showCreateWiredConnectWidget(QString devName, QString connecti
     //parent()->showCreateWiredConnectWidget(devName,connectionName);
 }
 
+//开启热点
+void DbusAdaptor::activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+{
+    parent()->activeWirelessAp(apName, apPassword, apDevice);
+}
+
+//断开热点
+void DbusAdaptor::deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+{
+    parent()->deactiveWirelessAp(apName, apPassword, apDevice);
+}

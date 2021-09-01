@@ -117,7 +117,7 @@ private:
 
 signals:
     void wifinEnabledChanged(bool);
-    void andAndActivateConnectionError(QString errorMessage);
+    void addAndActivateConnectionError(QString errorMessage);
 
 private:
     NetworkManager::WirelessNetwork::Ptr checkWifiNetExist(QString ssid, QString devName);

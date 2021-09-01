@@ -38,6 +38,9 @@ public:
 signals:
     void deviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName);
+    void activateFailed(QString errorMessage);
+    void deactivateFailed(QString errorMessage);
+    void listUpdate(QString devName);
 
 protected:
     void initUI();

@@ -22,9 +22,33 @@ public:
 
     void setWiredDefaultDevice(QString deviceName);
     void setWirelessDefaultDevice(QString deviceName);
+
+    //for dbus
+    void getWirelessList(QMap<QString, QVector<QStringList> > &map);
+    void getWiredList(QMap<QString, QVector<QStringList>> &map);
+    //开启热点
+    void activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    //断开热点
+    void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    //有线连接断开
+    void activateWired(const QString& devName, const QString& connName);
+    void deactivateWired(const QString& devName, const QString& connName);
+    //无线连接断开
+    void activateWireless(const QString& devName, const QString& ssid);
+    void deactivateWireless(const QString& devName, const QString& ssid);
+
 signals:
+    //设备插拔
     void deviceStatusChanged();
+    //设备名称变化
     void deviceNameChanged(QString oldName, QString newName);
+    //设备有线无线列表更新（有线增删、无线增加减少）
+    void listUpdate(QString devName);
+    //控制面板连接中
+    void wiredActivating(QString devName, QString ssid);
+    void wirelessActivating(QString devName, QString ssid);
+    void activateFailed(QString errorMessage);
+    void deactivateFailed(QString errorMessage);
 
 public slots:
 
@@ -39,6 +63,7 @@ private:
     QTimer * m_secondaryStartTimer = nullptr; //执行二级启动的倒计时
     void initWindowProperties();
     void initUI();
+    void initDbusConnnect();
     void initTrayIcon();
     void resetTrayIconTool();
     void initWindowTheme();

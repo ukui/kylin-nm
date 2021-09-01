@@ -21,7 +21,13 @@ public:
     explicit LanPage(QWidget *parent = nullptr);
     ~LanPage();
 
+    //for dbus
+    void getWiredList(QMap<QString, QVector<QStringList> > &map);
+    void activateWired(const QString& devName, const QString& connUuid);
+    void deactivateWired(const QString& devName, const QString& connUuid);
+
 signals:
+    void wiredActivating(QString devName, QString ssid);
 
 private:
     void initDevice();//初始化默认设备

@@ -46,6 +46,11 @@ void LanPage::removeConnectionSlot(QString path)            //删除时后端会
             m_inactivatedLanListWidget->removeItemWidget(iters.value());
             delete(iters.value());
             m_deactiveMap.erase(iters);
+
+            //for dbus
+            qDebug() << "[LanPage] because removeConnectionSlot " << item->m_ifaceName;
+            emit listUpdate(item->m_ifaceName);
+
             break;
         }
     }
@@ -65,6 +70,10 @@ void LanPage::addConnectionSlot(QString uuid)               //新增一个有线
         m_inactivatedLanListWidget->addItem(m_listWidgetItem);
         m_inactivatedLanListWidget->setItemWidget(m_listWidgetItem, newListItem);
         m_deactiveMap.insert(newItem, m_listWidgetItem);
+
+        //for dbus
+        qDebug() << "[LanPage] because addConnectionSlot " << newItem->m_ifaceName;
+        emit listUpdate(newItem->m_ifaceName);
     } else {
         qDebug()<<"[LanPage] GetConnectionItemByUuid is empty when add a new!";
     }
@@ -176,6 +185,32 @@ void LanPage::initList()       //程序拉起，初始化显示
 void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
 {
     qDebug()<<"[LanPage] State change slot:"<<state;
+
+    QString devName;
+    NetworkManager::ConnectionSettings::ConnectionType type;
+    if(m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
+
+        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
+            qDebug() << "[LanPage] updateLanlist but type is not wired";
+            return;
+        }
+    } else {
+        qDebug() << "[LanPage] updateLanlist but uuid is invalid";
+    }
+
+
+
+    if (state == NetworkManager::ActiveConnection::State::Activating) {
+        qDebug() << "[LanPage] wiredActivating " << devName;
+        emit wiredActivating(devName,uuid);
+    }
+
+    if (state == NetworkManager::ActiveConnection::State::Activated || state == NetworkManager::ActiveConnection::State::Deactivated)
+    {
+        qDebug() << "[LanPage] because updateLanlist " <<devName;
+        emit listUpdate(devName);
+    }
+
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         qDebug()<<"Get an actived connection, begin to move it from deactive to avtive!";
         QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;                                                           //在未激活列表里删除
@@ -262,3 +297,43 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
+
+void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
+{
+    QStringList devlist;
+    m_device->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, devlist);
+    if (devlist.isEmpty()) {
+        return;
+    }
+
+    foreach (auto deviceName, devlist) {
+        QList<KyConnectItem *> activedList;
+        QList<KyConnectItem *> deactivedList;
+        QVector<QStringList> vector;
+        m_activeResourse->getActiveConnectionList(deviceName,NetworkManager::ConnectionSettings::Wired,activedList);
+        if (!activedList.isEmpty()) {
+            vector.append(QStringList()<<activedList.at(0)->m_connectName<<activedList.at(0)->m_connectUuid);
+        } else {
+            vector.append(QStringList()<<("--"));
+        }
+
+        m_connectResourse->getConnectionList(deviceName, NetworkManager::ConnectionSettings::Wired, deactivedList);      //未激活列表的显示
+        if (!deactivedList.isEmpty()) {
+            for (int i = 0; i < deactivedList.size(); i++) {
+                vector.append(QStringList()<<deactivedList.at(i)->m_connectName<<deactivedList.at(i)->m_connectUuid);
+            }
+        }
+        map.insert(deviceName, vector);
+    }
+    return;
+}
+
+void LanPage::activateWired(const QString& devName, const QString& connUuid)
+{
+    //todo:
+}
+
+void LanPage::deactivateWired(const QString& devName, const QString& connUuid)
+{
+    //todo:
+}

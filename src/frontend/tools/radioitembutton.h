@@ -4,30 +4,32 @@
 #include <QIcon>
 #include <QLabel>
 #include<QTimer>
-#define ACTIVATED true
-#define INACTIVATED false
 
 class RadioItemButton : public QPushButton
 {
     Q_OBJECT
 public:
-    RadioItemButton(bool isActivated = INACTIVATED, QWidget * parent = nullptr);
+    RadioItemButton(QWidget * parent = nullptr);
     ~RadioItemButton() = default;
     void startLoading();
     void stopLoading();
-    void setPressed();
-    void setReleased();
     void setButtonIcon(const QIcon &icon);
+    void setActive(const bool &isActive);
 
 signals:
     void requestStartLoading();
     void requestStopLoading();
 
-private:
+protected:
     void paintEvent(QPaintEvent *event);
-    bool m_isActivated = INACTIVATED;
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
+private:
+    bool m_isActivated = false;
     QLabel * m_iconLabel = nullptr;
     QTimer * switchTimer = nullptr;
+    QColor m_backgroundColor;
 
     int currentPage;
     int countCurrentTime;

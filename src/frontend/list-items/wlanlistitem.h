@@ -27,7 +27,6 @@ public:
     void setWlanSignal(const int &signal);
     void setWlanState(const int &state);
     void setExpanded(const bool &expanded);
-    void setActivated(bool activated);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -46,7 +45,6 @@ private:
     KyWirelessNetItem *m_data = nullptr;
     KyWirelessConnectOperation *m_connoperation = nullptr;
     bool m_hasPwd = true;
-    bool m_isActivated = false;
     QString m_wlanDevice;
 
     //密码输入区域的UI

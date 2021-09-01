@@ -146,13 +146,16 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
 
     connect(m_wlanWidget, &WlanPage::activateFailed, this, &MainWindow::activateFailed);
-    connect(m_wlanWidget, &WlanPage::deactivateFailed, this, &MainWindow::activateFailed);
+    connect(m_wlanWidget, &WlanPage::deactivateFailed, this, &MainWindow::deactivateFailed);
 
     connect(m_lanWidget, &LanPage::listUpdate, this, &MainWindow::listUpdate);
     connect(m_wlanWidget, &WlanPage::listUpdate, this, &MainWindow::listUpdate);
 
     connect(m_lanWidget, &LanPage::wiredActivating, this, &MainWindow::wiredActivating);
     connect(m_wlanWidget, &WlanPage::wirelessActivating, this, &MainWindow::wirelessActivating);
+
+    connect(m_wlanWidget, &WlanPage::hotPotDeactivated, this, &MainWindow::hotPotDeactivated);
+    connect(m_wlanWidget, &WlanPage::hotPotActivated, this, &MainWindow::hotPotActivated);
 }
 
 /**

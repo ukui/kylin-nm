@@ -358,6 +358,34 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
         emit listUpdate(devName);
     }
 
+    if (state == NetworkManager::ActiveConnection::State::Deactivated) {
+        QList<KyApConnectItem *> apConnectItemList;
+        m_apConnectResource->getApConnections(apConnectItemList);
+        if (!apConnectItemList.isEmpty()) {
+            foreach (auto item, apConnectItemList) {
+                if (item->m_connectUuid == uuid) {
+                    qDebug() << "[WlanPage] hotpot Deactivated";
+                    emit hotPotDeactivated(item->m_ifaceName, ssid);
+                    break;
+                }
+            }
+        }
+    }
+
+    if (state == NetworkManager::ActiveConnection::State::Activated) {
+        QList<KyApConnectItem *> apConnectItemList;
+        m_apConnectResource->getApConnections(apConnectItemList);
+        if (!apConnectItemList.isEmpty()) {
+            foreach (auto item, apConnectItemList) {
+                if (item->m_connectUuid == uuid) {
+                    qDebug() << "[WlanPage] hotpot Deactivated";
+                    emit hotPotActivated(item->m_ifaceName, ssid);
+                    break;
+                }
+            }
+        }
+    }
+
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         //onWlanRemoved(m_wlanDevice, ssid);
         m_activatedNetListWidget->clear();
@@ -472,6 +500,7 @@ void WlanPage::deactiveWirelessAp(const QString apName, const QString apPassword
         m_wirelessConnectOpreation->deactiveWirelessAp(apName, uuid);
     } else {
         qDebug() << "[WlanPage] deactiveWirelessAp can not find apName " << apName;
+        emit deactivateFailed("invalid info");
     }
 }
 

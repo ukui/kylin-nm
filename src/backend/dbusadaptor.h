@@ -94,6 +94,10 @@ Q_SIGNALS: // SIGNALS
     //设备插拔
     void deviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName);
+    //热点断开
+    void hotPotDeactivated(QString devName, QString ssid);
+    //热点连接
+    void hotPotActivated(QString devName, QString ssid);
 };
 
 #endif

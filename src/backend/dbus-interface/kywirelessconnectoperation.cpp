@@ -670,10 +670,10 @@ NetworkManager::ConnectionSettings::Ptr
 
     NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
         = connectionSettings->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    wirelessSecuritySetting->setInitialized(true);
     if (apPassword.isEmpty()) {
-        wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaNone);
+        wirelessSecuritySetting->setInitialized(false);
     } else {
+        wirelessSecuritySetting->setInitialized(true);
         wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaPsk);
         wirelessSecuritySetting->setPsk(apPassword);
     }
@@ -715,7 +715,7 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
     if (nullptr == connectPtr) {
         NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceInterface(apDevice);
         if (devicePtr.isNull()) {
-            QString errorMsg ="active wifi ap failed," + apDevice + "is not existed";
+            QString errorMsg ="Create hotpot faild. " + apDevice + " is not existed";
             qWarning()<< errorMsg;
             emit addAndActivateConnectionError(errorMsg);
             return;
@@ -730,15 +730,15 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
         watcher = new QDBusPendingCallWatcher{NetworkManager::addAndActivateConnection(apConnectSettingPtr->toMap(), deviceIdentifier, specificObject), this};
         connect(watcher, &QDBusPendingCallWatcher::finished, [&] (QDBusPendingCallWatcher * watcher) {
             if (watcher->isError() || !watcher->isValid()) {
-                QString errorMsg = "activation connection failed," + watcher->error().message();
+                QString errorMsg = "Create hotpot faild. " + watcher->error().message();
                 qWarning() << errorMsg;
                 emit addAndActivateConnectionError(errorMsg);
             }
              watcher->deleteLater();
         });
     } else {
-        updateWirelessApSetting(connectPtr, apName, apPassword, apDevice);
-        activateConnection(apUuid, apDevice);
+//        updateWirelessApSetting(connectPtr, apName, apPassword, apDevice);
+        activateApConnectionByUuid(apUuid, apDevice, connectPtr);
     }
 
     return;
@@ -822,4 +822,45 @@ void KyWirelessConnectOperation::setIpv4AndIpv6Setting(NetworkManager::Connectio
 
     NetworkManager::Ipv6Setting::Ptr ipv6Setting = connSetting->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
     ipv6SettingSet(ipv6Setting, connSettingInfo);
+}
+
+void KyWirelessConnectOperation::activateApConnectionByUuid(const QString apUuid, const QString apDevice, NetworkManager::Connection::Ptr connectPtr)
+{
+    QString connectPath = "";
+    QString deviceIdentifier = "";
+    QString connectName = "";
+    QString specificObject = "";
+
+    qDebug()<<"it will activate hotpot connect"<<apUuid;
+
+    connectPath = connectPtr->path();
+    connectName = connectPtr->name();
+
+    auto dev = m_networkResourceInstance->findDeviceInterface(apDevice);
+    if (!dev.isNull()) {
+        deviceIdentifier = dev->uni();
+    }
+
+    if (deviceIdentifier.isEmpty()) {
+        QString errorMessage = tr("Create hotpot faild.Device Identifier is empty, its name") + apDevice;
+        qWarning() << errorMessage;
+        Q_EMIT activateConnectionError(errorMessage);
+        return ;
+    }
+
+    QDBusPendingCallWatcher * watcher;
+    watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
+    connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName, apDevice] (QDBusPendingCallWatcher * watcher) {
+        if (watcher->isError() || !watcher->isValid()) {
+            QString errorMessage = tr("Create hotpot faild. ") + watcher->error().message();
+            qWarning()<<errorMessage;
+            emit this->activateConnectionError(errorMessage);
+         } else {
+            qWarning()<<"active wired connect complete.";
+         }
+
+         watcher->deleteLater();
+    });
+
+    return ;
 }

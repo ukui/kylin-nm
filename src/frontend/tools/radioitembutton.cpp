@@ -114,5 +114,4 @@ void RadioItemButton::paintEvent(QPaintEvent *event)
 //    painter.drawPixmap(iconRect, pixmap);
 
 //    return QPushButton::paintEvent(event);
->>>>>>> Stashed changes
 }

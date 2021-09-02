@@ -156,16 +156,16 @@ void WlanListItem::refreshIcon()
         switch (m_data->m_signalStrength / STEP + 1) {
         case FULL_SIGNAL:
         case EXCELLENT_SIGNAL:
-            m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic", QIcon(":/res/w/wifi-full.png")));
+            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic", QIcon(":/res/w/wifi-full.png")));
             break;
         case GOOD_SIGNAL:
-            m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-good-symbolic", QIcon(":/res/w/wifi-high.png")));
+            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-good-symbolic", QIcon(":/res/w/wifi-high.png")));
             break;
         case OK_SIGNAL:
-            m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-ok", QIcon(":/res/w/wifi-medium.png")));
+            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-ok", QIcon(":/res/w/wifi-medium.png")));
             break;
         case LOW_SIGNAL:
-            m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-low", QIcon(":/res/w/wifi-low.png")));
+            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-low", QIcon(":/res/w/wifi-low.png")));
             break;
         default:
             qDebug() << "Set wlan(without passwd) icon failed, signal = " << m_data->m_signalStrength << Q_FUNC_INFO << __LINE__;
@@ -176,16 +176,16 @@ void WlanListItem::refreshIcon()
         switch (m_data->m_signalStrength / STEP + 1) {
         case FULL_SIGNAL:
         case EXCELLENT_SIGNAL:
-            m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-secure-symbolic", QIcon(":/res/w/wifi-full-pwd.png")));
+            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-excellent-secure-symbolic", QIcon(":/res/w/wifi-full-pwd.png")));
             break;
         case GOOD_SIGNAL:
-            m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-good-secure-symbolic", QIcon(":/res/w/wifi-high-pwd.png")));
+            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-good-secure-symbolic", QIcon(":/res/w/wifi-high-pwd.png")));
             break;
         case OK_SIGNAL:
-            m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-ok-secure-symbolic", QIcon(":/res/w/wifi-medium-pwd.png")));
+            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-ok-secure-symbolic", QIcon(":/res/w/wifi-medium-pwd.png")));
             break;
         case LOW_SIGNAL:
-            m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-low-secure-symbolic", QIcon(":/res/w/wifi-low-pwd.png")));
+            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-low-secure-symbolic", QIcon(":/res/w/wifi-low-pwd.png")));
             break;
         default:
             qDebug() << "Set wlan(with passwd) icon failed, signal = " << m_data->m_signalStrength << Q_FUNC_INFO << __LINE__;
@@ -237,6 +237,7 @@ void WlanListItem::onNetButtonClicked()
 
     if (m_data->m_isConfigured) {
         m_connoperation->activeWirelessConnect(m_wlanDevice,m_data->m_connectUuid);
+//        m_netButton->startLoading();
         qDebug()<<"Has configuration, will be activated. ssid = " << m_data->m_NetSsid << Q_FUNC_INFO << __LINE__;
         return;
     }

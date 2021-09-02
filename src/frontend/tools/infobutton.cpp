@@ -53,3 +53,9 @@ bool InfoButton::eventFilter(QObject *w, QEvent *e)
     }
     return QPushButton::eventFilter(w, e);
 }
+
+void InfoButton::paintEvent(QPaintEvent *event)
+{
+
+    return QPushButton::paintEvent(event);
+}

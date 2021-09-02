@@ -30,6 +30,7 @@ public:
     bool                                    m_isConfigured;
     QString                                 m_connName;
     QString                                 m_connDbusPath;
+    uint                                    m_channel;
 
 
 

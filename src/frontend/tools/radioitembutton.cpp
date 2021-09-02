@@ -1,8 +1,8 @@
 #include "radioitembutton.h"
 #include <QPainter>
 #include <QStyle>
-#define BUTTON_SIZE 32,32
 #define ICON_SIZE 16,16
+#define BUTTON_SIZE 36,36
 
 RadioItemButton::RadioItemButton(bool isActivated, QWidget *parent) : QPushButton(parent)
 {

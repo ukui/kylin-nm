@@ -1,4 +1,5 @@
 #include "tabpage.h"
+#include <qsettings.h>
 
 TabPage::TabPage(QWidget *parent) : QWidget(parent)
 {
@@ -32,7 +33,7 @@ void TabPage::initUI()
 
     m_activatedNetFrame = new QFrame(this);
     m_activatedNetLayout = new QVBoxLayout(m_activatedNetFrame);
-    m_activatedNetLayout->setContentsMargins(NET_LAYOUT_MARGINS);
+    m_activatedNetLayout->setContentsMargins(ACTIVE_NET_LAYOUT_MARGINS);
     m_activatedNetLayout->setSpacing(NET_LAYOUT_SPACING);
     m_activatedNetLabel = new QLabel(m_activatedNetFrame);
     m_activatedNetLabel->setContentsMargins(TEXT_MARGINS);
@@ -80,4 +81,52 @@ QString TabPage::getDefaultDevice()
 {
     qDebug() << "getDefaultDevice" << defaultDevice;
     return defaultDevice;
+}
+
+void setDefaultDevice(KyDeviceType deviceType, QString deviceName)
+{
+    QString key;
+    switch (deviceType) {
+    case WIRED:
+        key = "wired";
+        break;
+    case WIRELESS:
+        key = "wireless";
+        break;
+    default:
+        return;
+        break;
+    }
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    m_settings->setValue(key, deviceName);
+    m_settings->endGroup();
+    m_settings->sync();
+    delete m_settings;
+    m_settings = nullptr;
+    return;
+}
+
+bool checkDeviceExist(KyDeviceType deviceType, QString deviceName)
+{
+    NetworkManager::Device::Type type;
+    switch (deviceType) {
+    case WIRED:
+        type = NetworkManager::Device::Type::Ethernet;
+        break;
+    case WIRELESS:
+        type = NetworkManager::Device::Type::Wifi;
+        break;
+    default:
+        return false;
+        break;
+    }
+
+    KyNetworkDeviceResourse * kdr = new KyNetworkDeviceResourse();
+    QStringList devList;
+    devList.clear();
+
+    kdr->getNetworkDeviceList(type, devList);
+    delete kdr;
+    return devList.contains(deviceName);
 }

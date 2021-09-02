@@ -45,8 +45,8 @@ bool LanListItem::eventFilter(QObject *watched, QEvent *event)
 void LanListItem::setIcon(bool isOn)
 {
     if (isOn) {
-        m_netButton->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
+        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
     } else {
-        m_netButton->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
     }
 }

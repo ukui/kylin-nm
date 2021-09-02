@@ -16,6 +16,7 @@
 #include <QtDBus/QtDBus>
 #include <QtDBus/QDBusMetaType>
 
+#include "tabpage.h"
 #include "../dbus-interface/kylinnetworkdeviceresource.h"
 QT_BEGIN_NAMESPACE
 class QByteArray;
@@ -83,15 +84,6 @@ class WirelessInfo
     }
 };
 Q_DECLARE_METATYPE(WirelessInfo)
-
-enum KyDeviceType
-{
-    WIRED,
-    WIRELESS
-};
-
-bool checkDeviceExist(KyDeviceType deviceType, QString deviceName);
-void setDefaultDevice(KyDeviceType deviceType, QString deviceName);
 
 class DbusAdaptor: public QDBusAbstractAdaptor
 {

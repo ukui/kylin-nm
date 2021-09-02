@@ -1,8 +1,11 @@
 #include "infobutton.h"
 #include <QEvent>
 
+#define BUTTON_SIZE 36,36
+
 InfoButton::InfoButton(QWidget *parent) : QPushButton(parent)
 {
+    this->setFixedSize(BUTTON_SIZE);
     initUI();
     installEventFilter(this);
 }

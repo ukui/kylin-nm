@@ -291,3 +291,12 @@ void DbusAdaptor::deactiveWirelessAp(const QString apName, const QString apPassw
 {
     parent()->deactiveWirelessAp(apName, apPassword, apDevice);
 }
+
+//获取热点
+QStringList DbusAdaptor::getStoredApInfo()
+{
+    QStringList list;
+    list.clear();
+    parent()->getStoredApInfo(list);
+    return list;
+}

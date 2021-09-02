@@ -737,7 +737,7 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
              watcher->deleteLater();
         });
     } else {
-//        updateWirelessApSetting(connectPtr, apName, apPassword, apDevice);
+        updateWirelessApSetting(connectPtr, apName, apPassword, apDevice);
         activateApConnectionByUuid(apUuid, apDevice, connectPtr);
     }
 

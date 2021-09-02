@@ -26,6 +26,8 @@ public:
     void activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
     //断开热点
     void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    //获取热点
+    void getStoredApInfo(QStringList &list);
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
 signals:
@@ -46,7 +48,6 @@ private:
     void getActiveWlan();
     void appendActiveWlan(const QString &ssid, int &height);
     void getAllWlan();
-    void getApUuid(const QString apName, const QString apPassword, const QString apDevice, QString &uuid);
     QMap<QString, QListWidgetItem*> m_itemsMap;
     QListWidgetItem *m_expandedItem = nullptr;
     QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;

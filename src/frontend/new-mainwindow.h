@@ -30,6 +30,8 @@ public:
     void activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
     //断开热点
     void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    //获取热点
+    void getStoredApInfo(QStringList &list);
     //有线连接断开
     void activateWired(const QString& devName, const QString& connName);
     void deactivateWired(const QString& devName, const QString& connName);

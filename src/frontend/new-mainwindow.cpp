@@ -385,6 +385,14 @@ void MainWindow::deactiveWirelessAp(const QString apName, const QString apPasswo
     m_wlanWidget->deactiveWirelessAp(apName, apPassword, apDevice);
 }
 
+/**
+ * @brief MainWindow::activeWirelessAp 获取热点，供dbus调用
+ * @param list
+ */
+void MainWindow::getStoredApInfo(QStringList &list)
+{
+    m_wlanWidget->getStoredApInfo(list);
+}
 
 //有线连接断开
 void MainWindow::activateWired(const QString& devName, const QString& connName)

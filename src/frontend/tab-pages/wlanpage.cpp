@@ -486,39 +486,48 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
 //开启热点
 void WlanPage::activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
 {
-    QString uuid;
-    getApUuid(apName, apPassword, apDevice, uuid);
+    QString uuid("");
+    QList<KyApConnectItem *> apConnectItemList;
+    m_apConnectResource->getApConnections(apConnectItemList);
+    if (!apConnectItemList.isEmpty()) {
+        uuid = apConnectItemList.at(0)->m_connectUuid;
+    }
     m_wirelessConnectOpreation->activeWirelessAp(uuid, apName, apPassword, apDevice);
 }
 
 //断开热点
 void WlanPage::deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
 {
-    QString uuid;
-    getApUuid(apName, apPassword, apDevice, uuid);
-    if (!uuid.isEmpty()) {
-        m_wirelessConnectOpreation->deactiveWirelessAp(apName, uuid);
-    } else {
-        qDebug() << "[WlanPage] deactiveWirelessAp can not find apName " << apName;
-        emit deactivateFailed("invalid info");
-    }
-}
-
-void WlanPage::getApUuid(const QString apName, const QString apPassword, const QString apDevice, QString &uuid)
-{
-    uuid.clear();
+    QString uuid("");
     QList<KyApConnectItem *> apConnectItemList;
     m_apConnectResource->getApConnections(apConnectItemList);
     if (!apConnectItemList.isEmpty()) {
         foreach (auto item, apConnectItemList) {
-            if (item->m_connectName == apName && item->m_password == apPassword
-                    && item->m_ifaceName == apDevice) {
+            if (apName == item->m_connectName && apPassword == item->m_password && apDevice == item->m_ifaceName) {
                 uuid = item->m_connectUuid;
+                qDebug() << "[WlanPage] deactiveWirelessAp uuid = " << uuid;
                 break;
             }
         }
     }
-    return;
+    if (!uuid.isEmpty()) {
+        m_wirelessConnectOpreation->deactiveWirelessAp(apName, uuid);
+    } else {
+        qDebug() << "[WlanPage] deactiveWirelessAp can not find apName " << apName;
+        emit deactivateFailed("Deactivate hotpot failed.Don't exist");
+    }
+}
+
+void WlanPage::getStoredApInfo(QStringList &list)
+{
+    list.clear();
+    QList<KyApConnectItem *> apConnectItemList;
+    m_apConnectResource->getApConnections(apConnectItemList);
+    if (!apConnectItemList.isEmpty()) {
+        list << apConnectItemList.at(0)->m_connectName;
+        list << apConnectItemList.at(0)->m_password;
+        list << apConnectItemList.at(0)->m_ifaceName;
+    }
 }
 
 void WlanPage::activateWireless(const QString& devName, const QString& ssid)

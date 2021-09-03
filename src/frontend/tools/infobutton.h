@@ -10,18 +10,19 @@ public:
     explicit InfoButton(QWidget * parent = nullptr);
     ~InfoButton() = default;
 
+protected:
+    void paintEvent(QPaintEvent *event);
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
 private:
     void initUI();
-    QIcon info_img;
-    QIcon info_imgHover;
-    QIcon info_imgPressed;
 
-protected:
-    bool event(QEvent *event);
-    virtual void enterEvent(QEvent *event) override;
-    virtual void leaveEvent(QEvent *event);
-    bool eventFilter(QObject *watched, QEvent *event);
-    void paintEvent(QPaintEvent *event);
+private:
+    QColor m_backgroundColor;
+    QColor m_foregroundColor;
 };
 
 #endif // INFOBUTTON_H

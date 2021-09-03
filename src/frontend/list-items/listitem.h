@@ -4,7 +4,6 @@
 #include <QEvent>
 #include <QHBoxLayout>
 #include "radioitembutton.h"
-#include "netbutton.h"
 #include "infobutton.h"
 class ListItem : public QFrame
 {
@@ -13,6 +12,7 @@ public:
     ListItem(QWidget *parent = nullptr);
     ~ListItem();
     void setName(const QString &name);
+    void setActive(const bool &isActive);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -23,6 +23,8 @@ protected:
     QLabel * m_nameLabel = nullptr;
     RadioItemButton * m_netButton = nullptr;
     InfoButton * m_infoButton = nullptr;
+
+    bool m_isActive = false;
 
 public:
     QVBoxLayout * m_mainLayout = nullptr;

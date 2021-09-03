@@ -17,14 +17,16 @@ public:
 
 protected:
     void setIcon(bool isOn);
-    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     KyConnectItem *m_data = nullptr;
     KyWiredConnectOperation *m_connectOperation = nullptr;
 
-    bool m_activated = false;
     QString deviceName = nullptr;
+
+private slots:
+    void onInfoButtonClicked();
+    void onNetButtonClicked();
 };
 
 #endif // LANLISTITEM_H

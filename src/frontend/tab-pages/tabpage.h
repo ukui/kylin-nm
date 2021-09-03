@@ -22,6 +22,7 @@
 //#define SCROLL_AREA_HEIGHT 200
 #define SETTINGS_LAYOUT_MARGINS 24,16,24,16
 #define TRANSPARENT_COLOR QColor(0,0,0,0)
+#define INACTIVE_AREA_MIN_HEIGHT 200
 
 const QString    CONFIG_FILE_PATH   =  QDir::homePath() + "/.config/ukui/kylin-nm.conf";
 

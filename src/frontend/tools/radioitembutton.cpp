@@ -1,6 +1,7 @@
 #include "radioitembutton.h"
 #include <QPainter>
 #include <QStyle>
+
 #define BUTTON_SIZE 36,36
 #define ICON_SIZE 16,16
 #define BACKGROUND_COLOR QColor(0,0,0,0)

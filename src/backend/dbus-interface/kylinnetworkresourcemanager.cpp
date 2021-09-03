@@ -166,7 +166,7 @@ void KyNetworkResourceManager::addActiveConnection(NetworkManager::ActiveConnect
     connect(conn.data(), &NetworkManager::ActiveConnection::masterChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::specificObjectChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::stateChangedReason, this, &KyNetworkResourceManager::onActiveConnectionChangedReason);
-    connect(conn.data(), &NetworkManager::ActiveConnection::stateChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
+    connect(conn.data(), &NetworkManager::ActiveConnection::stateChanged, this, &KyNetworkResourceManager::onActiveConnectionChanged);
     connect(conn.data(), &NetworkManager::ActiveConnection::vpnChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::uuidChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::devicesChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
@@ -536,6 +536,21 @@ void KyNetworkResourceManager::onActiveConnectionChangedReason(
         qDebug()<<"the active connect state"<<state;
         qDebug()<<"the active connect state chanager reason:"<<reason;
         emit activeConnectStateChangeReason(activeConnect->uuid(), state, reason);
+    } else {
+
+    }
+
+    return;
+}
+
+void KyNetworkResourceManager::onActiveConnectionChanged(
+                                      NetworkManager::ActiveConnection::State state)
+{
+    NetworkManager::ActiveConnection * activeConnect =
+        qobject_cast<NetworkManager::ActiveConnection *>(sender());
+    if (activeConnect->isValid()) {
+        qDebug()<<"!New state change activate connect"<<activeConnect->uuid();
+        qDebug()<<"!New the active connect state"<<state;
     } else {
 
     }

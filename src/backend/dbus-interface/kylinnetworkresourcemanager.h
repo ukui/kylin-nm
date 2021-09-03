@@ -145,6 +145,8 @@ private slots:
     void onActiveConnectionUpdated();
     void onActiveConnectionChangedReason(NetworkManager::ActiveConnection::State state,
                                           NetworkManager::ActiveConnection::Reason reason);
+
+    void onActiveConnectionChanged(NetworkManager::ActiveConnection::State state);
     void onVpnActiveConnectChanagedReason(NetworkManager::VpnConnection::State state,
                                           NetworkManager::VpnConnection::StateChangeReason reason);
 

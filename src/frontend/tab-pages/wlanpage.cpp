@@ -1,10 +1,10 @@
 #include "wlanpage.h"
 #include "kywirelessnetitem.h"
-#include "dbusadaptor.h"
 #include <QEvent>
 #include <QDateTime>
 #include <QDebug>
 #include <QSettings>
+#include <QScrollBar>
 
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
@@ -63,6 +63,7 @@ void WlanPage::initWlanUI()
     m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);
     m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_inactivatedNetListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);     //用了SCrollArea的滚动条
 
     m_hiddenWlanWidget = new QFrame(m_inactivatedWlanListAreaCentralWidget);
     m_hiddenWlanLayout = new QHBoxLayout(m_hiddenWlanWidget);

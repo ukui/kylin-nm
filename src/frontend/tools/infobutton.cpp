@@ -12,8 +12,11 @@
 #define INNER_PATH 9,9,14,14
 #define TEXT_POS 14,5,16,16,0
 
+#define BUTTON_SIZE 36,36
+
 InfoButton::InfoButton(QWidget *parent) : QPushButton(parent)
 {
+    this->setFixedSize(BUTTON_SIZE);
     initUI();
 }
 

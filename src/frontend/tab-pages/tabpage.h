@@ -14,17 +14,26 @@
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
 #define TITLE_FRAME_HEIGHT 52
-#define TITLE_LAYOUT_MARGINS 24,0,0,0
-#define NET_LAYOUT_MARGINS 8,8,8,8
+#define TITLE_LAYOUT_MARGINS 24,0,24,0
+#define ACTIVE_NET_LAYOUT_MARGINS 8,8,8,8
+#define NET_LAYOUT_MARGINS 8,8,0,8
 #define NET_LAYOUT_SPACING 8
-#define NET_LIST_SPACING 1
+#define NET_LIST_SPACING 2
 #define TEXT_MARGINS 16,0,0,0
 //#define SCROLL_AREA_HEIGHT 200
 #define SETTINGS_LAYOUT_MARGINS 24,16,24,16
 #define TRANSPARENT_COLOR QColor(0,0,0,0)
 #define INACTIVE_AREA_MIN_HEIGHT 200
 
-const QString    CONFIG_FILE_PATH   =  QDir::homePath() + "/.config/ukui/kylin-nm.conf";
+enum KyDeviceType
+{
+    WIRED,
+    WIRELESS
+};
+
+const QString CONFIG_FILE_PATH   =  QDir::homePath() + "/.config/ukui/kylin-nm.conf";
+bool checkDeviceExist(KyDeviceType deviceType, QString deviceName);
+void setDefaultDevice(KyDeviceType deviceType, QString deviceName);
 
 class TabPage : public QWidget
 {

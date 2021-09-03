@@ -72,54 +72,6 @@ bool getDeviceEnableState(QMap<QString, bool> &map)
     return true;
 }
 
-//设置默认网卡
-void setDefaultDevice(KyDeviceType deviceType, QString deviceName)
-{
-    QString key;
-    switch (deviceType) {
-    case WIRED:
-        key = "wired";
-        break;
-    case WIRELESS:
-        key = "wireless";
-        break;
-    default:
-        return;
-        break;
-    }
-    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
-    m_settings->beginGroup("DEFAULTCARD");
-    m_settings->setValue(key, deviceName);
-    m_settings->endGroup();
-    m_settings->sync();
-    delete m_settings;
-    m_settings = nullptr;
-    return;
-}
-
-bool checkDeviceExist(KyDeviceType deviceType, QString deviceName)
-{
-    NetworkManager::Device::Type type;
-    switch (deviceType) {
-    case WIRED:
-        type = NetworkManager::Device::Type::Ethernet;
-        break;
-    case WIRELESS:
-        type = NetworkManager::Device::Type::Wifi;
-        break;
-    default:
-        return false;
-        break;
-    }
-
-    KyNetworkDeviceResourse * kdr = new KyNetworkDeviceResourse();
-    QStringList devList;
-    devList.clear();
-
-    kdr->getNetworkDeviceList(type, devList);
-    return devList.contains(deviceName);
-}
-
 /*
  * Implementation of adaptor class DbusAdaptor
  */

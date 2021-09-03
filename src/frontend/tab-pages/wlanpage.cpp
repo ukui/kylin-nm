@@ -183,12 +183,12 @@ void WlanPage::appendActiveWlan(const QString &ssid, int &height)
     }
     KyWirelessNetItem *item_data = new KyWirelessNetItem(data);
     WlanListItem *wlanItemWidget = new WlanListItem(m_resource, item_data, defaultDevice);
-    wlanItemWidget->setActivated(true);
     qDebug() << "Activated wlan: ssid = " << item_data->m_NetSsid;
     QListWidgetItem *wlanItem = new QListWidgetItem(m_activatedNetListWidget);
     wlanItem->setSizeHint(QSize(m_activatedNetListWidget->width(), wlanItemWidget->height()));
     m_activatedNetListWidget->addItem(wlanItem);
     m_activatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
+    wlanItemWidget->setActive(true);
 
     height += wlanItemWidget->height();
 }

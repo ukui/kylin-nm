@@ -1,4 +1,5 @@
 #include "listitem.h"
+#include <QDebug>
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
@@ -12,6 +13,7 @@ ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
     initUI();
     initConnection();
+    m_itemFrame->installEventFilter(this);
 }
 
 ListItem::~ListItem()
@@ -23,20 +25,26 @@ ListItem::~ListItem()
     m_infoButton = NULL;
 }
 
-bool ListItem::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == this) {
-        if (event->type() == QEvent::MouseButtonPress) {
-            this->onNetButtonClicked();
-        }
-    }
-    return QFrame::eventFilter(watched, event);
-}
-
-
 void ListItem::setName(const QString &name)
 {
     m_nameLabel->setText(name);
+}
+
+//仅无线调用，有线自己获取
+void ListItem::setActive(const bool &isActive)
+{
+    m_netButton->setActive(isActive);
+    m_isActive = isActive;
+}
+
+bool ListItem::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_itemFrame) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            onNetButtonClicked();
+        }
+    }
+    return QFrame::eventFilter(watched, event);
 }
 
 void ListItem::initUI()
@@ -82,4 +90,3 @@ void ListItem::onNetButtonClicked()
 {
 
 }
-

@@ -41,6 +41,7 @@ void TabPage::initUI()
     m_activatedNetDivider = new Divider(this);
 
     m_inactivatedNetFrame = new QFrame(this);
+    m_inactivatedNetFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT);
     m_inactivatedNetLayout = new QVBoxLayout(m_inactivatedNetFrame);
     m_inactivatedNetLayout->setContentsMargins(NET_LAYOUT_MARGINS);
     m_inactivatedNetLayout->setSpacing(NET_LAYOUT_SPACING);

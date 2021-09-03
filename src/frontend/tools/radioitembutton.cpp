@@ -1,14 +1,19 @@
 #include "radioitembutton.h"
 #include <QPainter>
 #include <QStyle>
-#define ICON_SIZE 16,16
-#define BUTTON_SIZE 36,36
 
-RadioItemButton::RadioItemButton(bool isActivated, QWidget *parent) : QPushButton(parent)
+#define BUTTON_SIZE 36,36
+#define ICON_SIZE 16,16
+#define BACKGROUND_COLOR QColor(0,0,0,0)
+#define FOREGROUND_COLOR_NORMAL_INACTIVE QColor(230,230,230,255)
+#define FOREGROUND_COLOR_PRESS_INACTIVE QColor(217,217,217,255)
+#define FOREGROUND_COLOR_NORMAL_ACTIVE QColor(55,144,250,255)
+#define FOREGROUND_COLOR_PRESS_ACTIVE QColor(36,109,212,255)
+
+RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
 {
     connect(this, &RadioItemButton::requestStartLoading, this, &RadioItemButton::onLoadingStarted);
     connect(this, &RadioItemButton::requestStopLoading, this, &RadioItemButton::onLoadingStopped);
-    m_isActivated = isActivated;
     this->setAutoFillBackground(false);
     m_iconLabel = new QLabel(this);
 
@@ -16,6 +21,7 @@ RadioItemButton::RadioItemButton(bool isActivated, QWidget *parent) : QPushButto
     m_iconLabel->setFixedSize(BUTTON_SIZE);
     m_iconLabel->setAlignment(Qt::AlignCenter);
 
+    setActive(false);
     //JXJ_TODO loading动画
 //    switchTimer = new QTimer(this);
 //    connect(switchTimer, &QTimer::timeout, this, &RadioItemButton::onLoadingStarted);
@@ -31,22 +37,6 @@ void RadioItemButton::stopLoading()
     emit this->requestStopLoading();
 }
 
-void RadioItemButton::setPressed()
-{
-    //ZJP_TODO 设置颜色为点击颜色，注意区分已连接/未连接
-    if (m_isActivated)
-        ;
-    ;
-}
-
-void RadioItemButton::setReleased()
-{
-    //ZJP_TODO 设置颜色为未点击颜色，注意区分已连接/未连接
-    if (m_isActivated)
-        ;
-    ;
-}
-
 void RadioItemButton::setButtonIcon(const QIcon &icon)
 {
     if (icon.isNull()) {
@@ -54,6 +44,12 @@ void RadioItemButton::setButtonIcon(const QIcon &icon)
     }
     //ZJP_TODO 绘制圆形按钮
     m_iconLabel->setPixmap(icon.pixmap(ICON_SIZE));
+}
+
+void RadioItemButton::setActive(const bool &isActive)
+{
+    m_isActivated = isActive;
+    m_backgroundColor = m_isActivated? FOREGROUND_COLOR_NORMAL_ACTIVE : FOREGROUND_COLOR_NORMAL_INACTIVE;
 }
 void RadioItemButton::onLoadingStarted()
 {
@@ -88,8 +84,8 @@ void RadioItemButton::onLoadingStopped()
 void RadioItemButton::paintEvent(QPaintEvent *event)
 {
     QPalette pal = this->palette();
-    pal.setColor(QPalette::Base, QColor(0,0,0,0));
-    pal.setColor(QPalette::Text, QColor(230,230,230,255));
+    pal.setColor(QPalette::Base, BACKGROUND_COLOR);
+    pal.setColor(QPalette::Text, m_backgroundColor);
 
     QPainterPath cPath;
     cPath.addRect(0, 0, this->width(), this->height());
@@ -106,12 +102,18 @@ void RadioItemButton::paintEvent(QPaintEvent *event)
     painter.drawPath(cPath);
 
     painter.fillPath(innerPath, pal.color(QPalette::Text));
+}
 
-//    QRect iconRect;
-//    iconRect = this->rect();
-//    iconRect.adjust(8,8,-8,-8);
-//    QPixmap pixmap = this->icon().pixmap(32,32);
-//    painter.drawPixmap(iconRect, pixmap);
+void RadioItemButton::mousePressEvent(QMouseEvent *event)
+{
+    m_backgroundColor = m_isActivated? FOREGROUND_COLOR_PRESS_ACTIVE : FOREGROUND_COLOR_PRESS_INACTIVE;
+    this->repaint();
+    return QPushButton::mousePressEvent(event);
+}
 
-//    return QPushButton::paintEvent(event);
+void RadioItemButton::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_backgroundColor = m_isActivated? FOREGROUND_COLOR_NORMAL_ACTIVE : FOREGROUND_COLOR_NORMAL_INACTIVE;
+    this->repaint();
+    return QPushButton::mouseReleaseEvent(event);
 }

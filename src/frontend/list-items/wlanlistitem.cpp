@@ -54,11 +54,6 @@ void WlanListItem::setExpanded(const bool &expanded)
     emit this->itemHeightChanged(m_data->m_NetSsid);
 }
 
-void WlanListItem::setActivated(bool activated)
-{
-    this->m_isActivated = activated;
-}
-
 void WlanListItem::resizeEvent(QResizeEvent *event)
 {
     this->blockSignals(true);
@@ -212,24 +207,9 @@ void WlanListItem::onNetButtonClicked()
         qDebug() << "On wlan  clicked! But there is no wlan connect!" << Q_FUNC_INFO << __LINE__;
         return;
     }
-    qDebug() << "On wlan clicked! ssid = " << m_data->m_NetSsid << "; name = " << m_data->m_connName << "." << Q_FUNC_INFO << __LINE__;
-
-    //判断当前item处于连接还是断开对比activessid
-    QString activedssid;
-    QMap<QString,QStringList> actMap;
-    m_resource->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activated, actMap);
-    QMap<QString,QStringList>::iterator iter = actMap.begin();
-    while (iter != actMap.end()) {
-        if (iter.key() == m_wlanDevice && !iter.value().isEmpty()) {
-            activedssid = iter.value().at(0);
-            break;
-        }
-        iter ++;
-    }
-    qDebug()<<"Get activated wlan succeed! ssid = " << activedssid <<Q_FUNC_INFO << __LINE__;
 
     //执行连接或断开
-    if (m_data->m_NetSsid == activedssid) {
+    if (m_isActive) {
         m_connoperation->deActivateWirelessConnection(m_wlanDevice,m_data->m_connectUuid);
         qDebug()<<"Clicked on connected wifi, it will be inactivated. ssid = " << m_data->m_NetSsid << Q_FUNC_INFO << __LINE__;
         return;

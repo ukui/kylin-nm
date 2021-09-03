@@ -505,6 +505,7 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
     apConnectItem->m_connectName = connectPtr->name();
     apConnectItem->m_connectUuid = connectPtr->uuid();
     apConnectItem->m_ifaceName = settingPtr->interfaceName();
+    apConnectItem->m_isActivated = m_networkResourceInstance->isActiveConnection(connectPtr->uuid());
 
     //NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
     //    = settingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();

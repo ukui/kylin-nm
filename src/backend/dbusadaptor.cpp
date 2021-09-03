@@ -33,12 +33,16 @@ void saveDeviceEnableState(QString deviceName, bool enable)
     return;
 }
 
-bool getDeviceEnableState(QMap<QString, bool> &map)
+void getDeviceEnableState(int type, QMap<QString, bool> &map)
 {
-    if (!QFile::exists(CONFIG_FILE_PATH)) {
-        return false;
-    }
     map.clear();
+    if (!QFile::exists(CONFIG_FILE_PATH)) {
+        return;
+    }
+    if (type != 0 && type != 1) {
+        qDebug() << "getDeviceEnableState but wrong type";
+        return;
+    }
 
     KyNetworkDeviceResourse * kdr = new KyNetworkDeviceResourse();
     QStringList wiredDevList,wirelessDevList;
@@ -48,19 +52,21 @@ bool getDeviceEnableState(QMap<QString, bool> &map)
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
     m_settings->beginGroup("CARDEABLE");
 
-    kdr->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
-    if (!wiredDevList.isEmpty()) {
-        for (int i = 0; i < wiredDevList.size(); ++i) {
-            bool enable = m_settings->value(wiredDevList.at(i), true).toBool();
-            map.insert(wiredDevList.at(i), enable);
+    if (type == 0) {
+        kdr->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
+        if (!wiredDevList.isEmpty()) {
+            for (int i = 0; i < wiredDevList.size(); ++i) {
+                bool enable = m_settings->value(wiredDevList.at(i), true).toBool();
+                map.insert(wiredDevList.at(i), enable);
+            }
         }
-    }
-
-    kdr->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
-    if (!wirelessDevList.isEmpty()) {
-        for (int i = 0; i < wirelessDevList.size(); ++i) {
-            bool enable = m_settings->value(wirelessDevList.at(i), true).toBool();
-            map.insert(wirelessDevList.at(i), enable);
+    } else if (type == 1) {
+        kdr->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
+        if (!wirelessDevList.isEmpty()) {
+            for (int i = 0; i < wirelessDevList.size(); ++i) {
+                bool enable = m_settings->value(wirelessDevList.at(i), true).toBool();
+                map.insert(wirelessDevList.at(i), enable);
+            }
         }
     }
 
@@ -69,7 +75,7 @@ bool getDeviceEnableState(QMap<QString, bool> &map)
     m_settings = nullptr;
     delete kdr;
     kdr = nullptr;
-    return true;
+    return;
 }
 
 //设置默认网卡
@@ -258,11 +264,11 @@ void DbusAdaptor::deActivateConnect(int type, QString devName, QString ssid)
 }
 
 //获取设备列表和启用/禁用状态
-QMap<QString, bool> DbusAdaptor::getDeviceListAndEnabled()
+QMap<QString, bool> DbusAdaptor::getDeviceListAndEnabled(int devType)
 {
     QMap<QString, bool> map;
     map.clear();
-    getDeviceEnableState(map);
+    getDeviceEnableState(devType, map);
     return map;
 }
 

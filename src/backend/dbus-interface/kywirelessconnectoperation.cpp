@@ -244,6 +244,9 @@ QString KyWirelessConnectOperation::getPsk(const QString &connectUuid)
         return "";
     }
     QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PSK_SETTING_NAME);
+    if(!reply.isValid()) {
+        return "";
+    }
     QMap<QString,QVariantMap> map(reply.value());
     if (map.contains("802-11-wireless-security") && map.value("802-11-wireless-security").contains("psk"))
     {
@@ -696,10 +699,10 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
 
     NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
         = apConnectSettingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    wirelessSecuritySetting->setInitialized(true);
     if (apPassword.isEmpty()) {
-        wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaNone);
+        wirelessSecuritySetting->setInitialized(false);
     } else {
+        wirelessSecuritySetting->setInitialized(true);
         wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaPsk);
         wirelessSecuritySetting->setPsk(apPassword);
     }
@@ -715,7 +718,7 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
     if (nullptr == connectPtr) {
         NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceInterface(apDevice);
         if (devicePtr.isNull()) {
-            QString errorMsg ="Create hotpot faild. " + apDevice + " is not existed";
+            QString errorMsg ="Create hotspot faild. " + apDevice + " is not existed";
             qWarning()<< errorMsg;
             emit addAndActivateConnectionError(errorMsg);
             return;
@@ -730,7 +733,7 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
         watcher = new QDBusPendingCallWatcher{NetworkManager::addAndActivateConnection(apConnectSettingPtr->toMap(), deviceIdentifier, specificObject), this};
         connect(watcher, &QDBusPendingCallWatcher::finished, [&] (QDBusPendingCallWatcher * watcher) {
             if (watcher->isError() || !watcher->isValid()) {
-                QString errorMsg = "Create hotpot faild. " + watcher->error().message();
+                QString errorMsg = "Create hotspot faild. " + watcher->error().message();
                 qWarning() << errorMsg;
                 emit addAndActivateConnectionError(errorMsg);
             }
@@ -831,7 +834,7 @@ void KyWirelessConnectOperation::activateApConnectionByUuid(const QString apUuid
     QString connectName = "";
     QString specificObject = "";
 
-    qDebug()<<"it will activate hotpot connect"<<apUuid;
+    qDebug()<<"it will activate hotspot connect"<<apUuid;
 
     connectPath = connectPtr->path();
     connectName = connectPtr->name();
@@ -842,7 +845,7 @@ void KyWirelessConnectOperation::activateApConnectionByUuid(const QString apUuid
     }
 
     if (deviceIdentifier.isEmpty()) {
-        QString errorMessage = tr("Create hotpot faild.Device Identifier is empty, its name") + apDevice;
+        QString errorMessage = tr("Create hotspot faild.Device Identifier is empty, its name") + apDevice;
         qWarning() << errorMessage;
         Q_EMIT activateConnectionError(errorMessage);
         return ;
@@ -852,7 +855,7 @@ void KyWirelessConnectOperation::activateApConnectionByUuid(const QString apUuid
     watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
     connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName, apDevice] (QDBusPendingCallWatcher * watcher) {
         if (watcher->isError() || !watcher->isValid()) {
-            QString errorMessage = tr("Create hotpot faild. ") + watcher->error().message();
+            QString errorMessage = tr("Create hotspot faild. ") + watcher->error().message();
             qWarning()<<errorMessage;
             emit this->activateConnectionError(errorMessage);
          } else {

@@ -75,7 +75,7 @@ public Q_SLOTS: // METHODS
     //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void deActivateConnect(int type, QString devName, QString ssid);
     //获取设备列表和启用/禁用状态
-    QMap<QString, bool> getDeviceListAndEnabled();
+    QMap<QString, bool> getDeviceListAndEnabled(int devType);
     //唤起属性页 根据网卡类型 参数2 为ssid/uuid
     Q_NOREPLY void showPropertyWidget(QString devName, QString ssid);
     //唤起新建有线连接界面
@@ -97,9 +97,9 @@ Q_SIGNALS: // SIGNALS
     void deviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName);
     //热点断开
-    void hotPotDeactivated(QString devName, QString ssid);
+    void hotspotDeactivated(QString devName, QString ssid);
     //热点连接
-    void hotPotActivated(QString devName, QString ssid);
+    void hotspotActivated(QString devName, QString ssid);
 };
 
 #endif

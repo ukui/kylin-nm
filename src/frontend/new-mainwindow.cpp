@@ -154,8 +154,8 @@ void MainWindow::initDbusConnnect()
     connect(m_lanWidget, &LanPage::wiredActivating, this, &MainWindow::wiredActivating);
     connect(m_wlanWidget, &WlanPage::wirelessActivating, this, &MainWindow::wirelessActivating);
 
-    connect(m_wlanWidget, &WlanPage::hotPotDeactivated, this, &MainWindow::hotPotDeactivated);
-    connect(m_wlanWidget, &WlanPage::hotPotActivated, this, &MainWindow::hotPotActivated);
+    connect(m_wlanWidget, &WlanPage::hotspotDeactivated, this, &MainWindow::hotspotDeactivated);
+    connect(m_wlanWidget, &WlanPage::hotspotActivated, this, &MainWindow::hotspotActivated);
 }
 
 /**

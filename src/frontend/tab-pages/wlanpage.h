@@ -33,8 +33,8 @@ public:
 signals:
     void oneItemExpanded(const QString &ssid);
     void wirelessActivating(QString devName, QString ssid);
-    void hotPotDeactivated(QString devName, QString ssid);
-    void hotPotActivated(QString devName, QString ssid);
+    void hotspotDeactivated(QString devName, QString ssid);
+    void hotspotActivated(QString devName, QString ssid);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);

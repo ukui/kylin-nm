@@ -52,8 +52,8 @@ signals:
     void activateFailed(QString errorMessage);
     void deactivateFailed(QString errorMessage);
     //热点断开
-    void hotPotDeactivated(QString devName, QString ssid);
-    void hotPotActivated(QString devName, QString ssid);
+    void hotspotDeactivated(QString devName, QString ssid);
+    void hotspotActivated(QString devName, QString ssid);
 public slots:
 
 protected:

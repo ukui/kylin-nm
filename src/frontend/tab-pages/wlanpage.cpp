@@ -364,8 +364,8 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
         if (!apConnectItemList.isEmpty()) {
             foreach (auto item, apConnectItemList) {
                 if (item->m_connectUuid == uuid) {
-                    qDebug() << "[WlanPage] hotpot Deactivated";
-                    emit hotPotDeactivated(item->m_ifaceName, ssid);
+                    qDebug() << "[WlanPage] hotspot Deactivated";
+                    emit hotspotDeactivated(item->m_ifaceName, ssid);
                     break;
                 }
             }
@@ -378,8 +378,8 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
         if (!apConnectItemList.isEmpty()) {
             foreach (auto item, apConnectItemList) {
                 if (item->m_connectUuid == uuid) {
-                    qDebug() << "[WlanPage] hotpot Deactivated";
-                    emit hotPotActivated(item->m_ifaceName, ssid);
+                    qDebug() << "[WlanPage] hotspot Deactivated";
+                    emit hotspotActivated(item->m_ifaceName, ssid);
                     break;
                 }
             }
@@ -514,7 +514,7 @@ void WlanPage::deactiveWirelessAp(const QString apName, const QString apPassword
         m_wirelessConnectOpreation->deactiveWirelessAp(apName, uuid);
     } else {
         qDebug() << "[WlanPage] deactiveWirelessAp can not find apName " << apName;
-        emit deactivateFailed("Deactivate hotpot failed.Don't exist");
+        emit deactivateFailed("Deactivate hotspot failed.Don't exist " + apName);
     }
 }
 
@@ -527,6 +527,7 @@ void WlanPage::getStoredApInfo(QStringList &list)
         list << apConnectItemList.at(0)->m_connectName;
         list << apConnectItemList.at(0)->m_password;
         list << apConnectItemList.at(0)->m_ifaceName;
+        list << (apConnectItemList.at(0)->m_isActivated? "true":"false");
     }
 }
 

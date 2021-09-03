@@ -77,12 +77,7 @@ void ListItem::initUI()
 void ListItem::initConnection()
 {
     connect(this->m_netButton, &RadioItemButton::clicked, this, &ListItem::onNetButtonClicked);
-    connect(this->m_infoButton, &InfoButton::clicked, this, &ListItem::onInfoButtonClicked);
-}
-
-void ListItem::onInfoButtonClicked()
-{
-
+//    connect(this->m_infoButton, &InfoButton::clicked, this, &ListItem::onInfoButtonClicked);
 }
 
 void ListItem::onNetButtonClicked()

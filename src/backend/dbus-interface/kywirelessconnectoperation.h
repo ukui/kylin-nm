@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QGSettings>
+#include <QTimer>
 #include "kyenterpricesettinginfo.h"
 #include "kylinconnectoperation.h"
 #include "kyenterpricesettinginfo.h"
@@ -124,7 +125,7 @@ private:
     void updateWirelessSecu(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyWirelessConnectSetting &connSettingInfo, bool bPwdChange = false);
     void setIpv4AndIpv6Setting(NetworkManager::ConnectionSettings::Ptr connSetting, const KyConnectSetting &connSettingInfo);
     void setWirelessSecuWpaXEap(NetworkManager::ConnectionSettings::Ptr connSettingPtr);
-    void activateApConnectionByUuid(const QString apUuid, const QString apDevice, NetworkManager::Connection::Ptr connectPtr);
+    void activateApConnectionByUuid(const QString apUuid, const QString apDevice);
 
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
 

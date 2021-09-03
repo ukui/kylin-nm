@@ -741,7 +741,9 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
         });
     } else {
         updateWirelessApSetting(connectPtr, apName, apPassword, apDevice);
-        activateApConnectionByUuid(apUuid, apDevice, connectPtr);
+        QTimer::singleShot(500, this, [=](){
+            activateApConnectionByUuid(apUuid, apDevice);
+        });
     }
 
     return;
@@ -827,7 +829,7 @@ void KyWirelessConnectOperation::setIpv4AndIpv6Setting(NetworkManager::Connectio
     ipv6SettingSet(ipv6Setting, connSettingInfo);
 }
 
-void KyWirelessConnectOperation::activateApConnectionByUuid(const QString apUuid, const QString apDevice, NetworkManager::Connection::Ptr connectPtr)
+void KyWirelessConnectOperation::activateApConnectionByUuid(const QString apUuid, const QString apDevice)
 {
     QString connectPath = "";
     QString deviceIdentifier = "";
@@ -836,6 +838,14 @@ void KyWirelessConnectOperation::activateApConnectionByUuid(const QString apUuid
 
     qDebug()<<"it will activate hotspot connect"<<apUuid;
 
+    NetworkManager::Connection::Ptr  connectPtr = m_networkResourceInstance->getConnect(apUuid);
+    if (connectPtr.isNull())
+    {
+        QString errorMessage = tr("Create hotspot faild.UUID is empty, its name") + apUuid;
+        qWarning() << errorMessage;
+        Q_EMIT activateConnectionError(errorMessage);
+        return;
+    }
     connectPath = connectPtr->path();
     connectName = connectPtr->name();
 

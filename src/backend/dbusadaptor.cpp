@@ -21,11 +21,6 @@ const QByteArray GSETTINGS_SCHEMA_KYLIN_NM = "org.ukui.kylin-nm.switch";
 const QString    KEY_WIRELESS_SWITCH          = "wirelessswitch";
 const QString    KEY_WIRED_SWITCH             = "wiredswitch";
 
-enum KyDeviceType{
-    WIRED = 0,
-    WIRELESS,
-};
-
 void saveDeviceEnableState(QString deviceName, bool enable)
 {
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
@@ -44,7 +39,7 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
     if (!QFile::exists(CONFIG_FILE_PATH)) {
         return;
     }
-    if (type != 0 && type != 1) {
+    if (type != WIRED && type != WIRELESS) {
         qDebug() << "getDeviceEnableState but wrong type";
         return;
     }
@@ -57,7 +52,7 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
     m_settings->beginGroup("CARDEABLE");
 
-    if (type == 0) {
+    if (type == WIRED) {
         kdr->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
         if (!wiredDevList.isEmpty()) {
             for (int i = 0; i < wiredDevList.size(); ++i) {
@@ -65,7 +60,7 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
                 map.insert(wiredDevList.at(i), enable);
             }
         }
-    } else if (type == 1) {
+    } else if (type == WIRELESS) {
         kdr->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
         if (!wirelessDevList.isEmpty()) {
             for (int i = 0; i < wirelessDevList.size(); ++i) {
@@ -247,9 +242,9 @@ QString  DbusAdaptor::getDefaultWirelessDevice()
 //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
 void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
 {
-    if (type == 0) {
+    if (type == WIRED) {
         parent()->activateWired(devName,ssid);
-    } else if (type == 1) {
+    } else if (type == WIRELESS) {
         parent()->activateWireless(devName,ssid);
     } else {
         qDebug() << "[DbusAdaptor] activateConnect type is invalid";

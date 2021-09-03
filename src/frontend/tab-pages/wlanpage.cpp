@@ -1,10 +1,10 @@
 #include "wlanpage.h"
 #include "kywirelessnetitem.h"
-#include "dbusadaptor.h"
 #include <QEvent>
 #include <QDateTime>
 #include <QDebug>
 #include <QSettings>
+#include <QScrollBar>
 
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
@@ -68,6 +68,7 @@ void WlanPage::initWlanUI()
     m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);
     m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_inactivatedNetListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);     //用了SCrollArea的滚动条
 
     m_hiddenWlanWidget = new QFrame(m_inactivatedWlanListAreaCentralWidget);
     m_hiddenWlanLayout = new QHBoxLayout(m_hiddenWlanWidget);
@@ -189,12 +190,12 @@ void WlanPage::appendActiveWlan(const QString &ssid, int &height)
     }
     KyWirelessNetItem *item_data = new KyWirelessNetItem(data);
     WlanListItem *wlanItemWidget = new WlanListItem(m_resource, item_data, defaultDevice);
-    wlanItemWidget->setActivated(true);
     qDebug() << "Activated wlan: ssid = " << item_data->m_NetSsid;
     QListWidgetItem *wlanItem = new QListWidgetItem(m_activatedNetListWidget);
     wlanItem->setSizeHint(QSize(m_activatedNetListWidget->width(), wlanItemWidget->height()));
     m_activatedNetListWidget->addItem(wlanItem);
     m_activatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
+    wlanItemWidget->setActive(true);
 
     height += wlanItemWidget->height();
 }

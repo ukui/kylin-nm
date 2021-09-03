@@ -21,6 +21,11 @@ const QByteArray GSETTINGS_SCHEMA_KYLIN_NM = "org.ukui.kylin-nm.switch";
 const QString    KEY_WIRELESS_SWITCH          = "wirelessswitch";
 const QString    KEY_WIRED_SWITCH             = "wiredswitch";
 
+enum KyDeviceType{
+    WIRED = 0,
+    WIRELESS,
+};
+
 void saveDeviceEnableState(QString deviceName, bool enable)
 {
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
@@ -254,9 +259,9 @@ void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
 //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
 void DbusAdaptor::deActivateConnect(int type, QString devName, QString ssid)
 {
-    if (type == 0) {
+    if (type == WIRED) {
         parent()->deactivateWired(devName,ssid);
-    } else if (type == 1) {
+    } else if (type == WIRELESS) {
         parent()->deactivateWireless(devName,ssid);
     } else {
         qDebug() << "[DbusAdaptor] deactivateConnect type is invalid";

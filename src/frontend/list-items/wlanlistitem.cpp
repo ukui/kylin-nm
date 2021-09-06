@@ -27,6 +27,7 @@ WlanListItem::~WlanListItem()
     disconnect(m_resource, &KyWirelessNetResource::secuTypeChange, this, &WlanListItem::onSecurityChanged);
     disconnect(m_resource, &KyWirelessNetResource::connectionAdd, this, &WlanListItem::onConnectionAdd);
     disconnect(m_resource, &KyWirelessNetResource::connectionRemove, this, &WlanListItem::onConnectionRemove);
+    disconnect(this->m_infoButton, &InfoButton::clicked, this, &WlanListItem::onInfoButtonClicked);
 }
 
 void WlanListItem::setWlanSignal(const int &signal)
@@ -135,6 +136,7 @@ void WlanListItem::initWlanConnection()
     connect(m_resource, &KyWirelessNetResource::secuTypeChange, this, &WlanListItem::onSecurityChanged);
     connect(m_resource, &KyWirelessNetResource::connectionAdd, this, &WlanListItem::onConnectionAdd);
     connect(m_resource, &KyWirelessNetResource::connectionRemove, this, &WlanListItem::onConnectionRemove);
+    connect(this->m_infoButton, &InfoButton::clicked, this, &WlanListItem::onInfoButtonClicked);
 }
 
 void WlanListItem::refreshIcon()
@@ -193,7 +195,10 @@ void WlanListItem::onInfoButtonClicked()
 {
     //ZJP_TODO 呼出无线详情页
     if(m_data){
+        qDebug()<<"Net active or not:"<<m_isActive;
         qDebug() << "On wlan info button clicked! ssid = " << m_data->m_NetSsid << "; name = " << m_data->m_connName << "." <<Q_FUNC_INFO << __LINE__;
+        NetDetail *netDetail = new NetDetail(m_data->m_NetSsid, m_data->m_connectUuid,m_isActive, true, false);
+        netDetail->show();
     }
     else{
         qDebug() << "On wlan info button clicked! But there is no wlan connect " ;
@@ -331,3 +336,4 @@ void WlanListItem::onConnectionRemove(QString deviceName, QString ssid)
         m_data->m_isConfigured = false;
     }
 }
+

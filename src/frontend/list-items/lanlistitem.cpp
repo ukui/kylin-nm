@@ -22,12 +22,7 @@ LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *paren
     }
     m_netButton->setActive(m_isActive);
     m_itemFrame->installEventFilter(this);
-
-}
-
-void LanListItem::onInfoButtonClicked()
-{
-
+    connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
 }
 
 void LanListItem::onNetButtonClicked()
@@ -51,5 +46,18 @@ void LanListItem::setIcon(bool isOn)
         m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
     } else {
         m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+    }
+}
+
+void LanListItem::onInfoButtonClicked()
+{
+    if(m_data){
+        qDebug()<<"Net active or not:"<<m_isActive;
+        qDebug() << "On lan info button clicked! uuid = " << m_data->m_connectUuid << "; name = " << m_data->m_connectName << "." <<Q_FUNC_INFO << __LINE__;
+        NetDetail *netDetail = new NetDetail(m_data->m_connectName, m_data->m_connectUuid, m_isActive,false, false);
+        netDetail->show();
+    }
+    else{
+        qDebug() << "On lan info button clicked! But there is no wlan connect " ;
     }
 }

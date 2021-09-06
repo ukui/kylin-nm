@@ -3,8 +3,11 @@
 #include <QFrame>
 #include <QEvent>
 #include <QHBoxLayout>
+#include <QDebug>
 #include "radioitembutton.h"
 #include "infobutton.h"
+#include "netdetails/netdetail.h"
+
 class ListItem : public QFrame
 {
     Q_OBJECT
@@ -29,13 +32,11 @@ protected:
 public:
     QVBoxLayout * m_mainLayout = nullptr;
     QHBoxLayout * m_hItemLayout = nullptr;
-
 private:
     void initUI();
     void initConnection();
 
-protected slots:
-    virtual void onInfoButtonClicked();
+public slots:
     virtual void onNetButtonClicked();
 };
 

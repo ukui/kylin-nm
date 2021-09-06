@@ -1,27 +1,26 @@
 #include "ipv4page.h"
 #include "netdetail.h"
-
-Ipv4Page::Ipv4Page(bool isWlan)
-    : isWlan(isWlan)
+Ipv4Page::Ipv4Page(bool isWlan, QWidget *parent)
+    : isWlan(isWlan), QFrame(parent)
 {
     initUI();
     initComponent();
 }
 
 void Ipv4Page::initUI() {
-    ipv4ConfigCombox = new QComboBox;
-    ipv4addressEdit = new QLineEdit;
-    netMaskCombox = new QComboBox;
-    gateWayEdit = new QLineEdit;
-    firstDnsEidt = new QLineEdit;
-    secondDnsEidt = new QLineEdit;
+    ipv4ConfigCombox = new QComboBox(this);
+    ipv4addressEdit = new QLineEdit(this);
+    netMaskCombox = new QComboBox(this);
+    gateWayEdit = new QLineEdit(this);
+    firstDnsEidt = new QLineEdit(this);
+    secondDnsEidt = new QLineEdit(this);
 
-    m_configLabel = new QLabel;
-    m_addressLabel = new QLabel;
-    m_maskLabel = new QLabel;
-    m_gateWayLabel = new QLabel;
-    m_dnsLabel = new QLabel;
-    m_secDnsLabel = new QLabel;
+    m_configLabel = new QLabel(this);
+    m_addressLabel = new QLabel(this);
+    m_maskLabel = new QLabel(this);
+    m_gateWayLabel = new QLabel(this);
+    m_dnsLabel = new QLabel(this);
+    m_secDnsLabel = new QLabel(this);
 
     m_configLabel->setText(tr("Ipv4Config"));
     m_addressLabel->setText(tr("Address"));
@@ -57,9 +56,9 @@ void Ipv4Page::initUI() {
 }
 
 void Ipv4Page::initComponent() {
-    if (ipv4ConfigCombox->currentIndex() == 0) {
+    if (ipv4ConfigCombox->currentIndex() == AUTO_CONFIG) {
         setLineEnabled(false);
-    } else if (ipv4ConfigCombox->currentIndex() == 1) {
+    } else if (ipv4ConfigCombox->currentIndex() == MANUAL_CONFIG) {
         setLineEnabled(true);
     }
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(configChanged(int)));
@@ -68,10 +67,10 @@ void Ipv4Page::initComponent() {
 
 void Ipv4Page::setIpv4Config(const QString &ipv4Config)
 {
-    if (ipv4Config ==  "0") {
-        ipv4ConfigCombox->setCurrentIndex(1);
+    if (ipv4Config.toInt() ==  AUTO_CONFIG) {
+        ipv4ConfigCombox->setCurrentIndex(MANUAL_CONFIG);
     } else {
-        ipv4ConfigCombox->setCurrentIndex(0);
+        ipv4ConfigCombox->setCurrentIndex(AUTO_CONFIG);
     }
 }
 
@@ -96,10 +95,10 @@ void Ipv4Page::setGateWay(const QString &gateWay)
 }
 
 void Ipv4Page::configChanged(int index) {
-    if (index == 0) {
+    if (index == AUTO_CONFIG) {
         setLineEnabled(false);
     }
-    if (index == 1) {
+    if (index == MANUAL_CONFIG) {
         setLineEnabled(true);
     }
 }

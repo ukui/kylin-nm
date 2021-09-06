@@ -52,12 +52,12 @@ void LanListItem::setIcon(bool isOn)
 void LanListItem::onInfoButtonClicked()
 {
     if(m_data){
-        qDebug()<<"是否激活："<<m_isActive;
+        qDebug()<<"Net active or not:"<<m_isActive;
         qDebug() << "On lan info button clicked! uuid = " << m_data->m_connectUuid << "; name = " << m_data->m_connectName << "." <<Q_FUNC_INFO << __LINE__;
         NetDetail *netDetail = new NetDetail(m_data->m_connectName, m_data->m_connectUuid, m_isActive,false, false);
         netDetail->show();
     }
     else{
-        qDebug() << "On wlan info button clicked! But there is no wlan connect " ;
+        qDebug() << "On lan info button clicked! But there is no wlan connect " ;
     }
 }

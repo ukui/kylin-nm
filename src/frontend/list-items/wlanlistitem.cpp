@@ -195,9 +195,8 @@ void WlanListItem::onInfoButtonClicked()
 {
     //ZJP_TODO 呼出无线详情页
     if(m_data){
-        qDebug()<<"是否已激活："<<m_isActive;
+        qDebug()<<"Net active or not:"<<m_isActive;
         qDebug() << "On wlan info button clicked! ssid = " << m_data->m_NetSsid << "; name = " << m_data->m_connName << "." <<Q_FUNC_INFO << __LINE__;
-        qDebug()<<m_data->m_connName<<m_data->m_NetSsid;
         NetDetail *netDetail = new NetDetail(m_data->m_NetSsid, m_data->m_connectUuid,m_isActive, true, false);
         netDetail->show();
     }

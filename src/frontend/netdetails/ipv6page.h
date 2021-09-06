@@ -16,7 +16,7 @@ class Ipv6Page : public QFrame
 {
     Q_OBJECT
 public:
-    Ipv6Page(bool isWlan);
+    Ipv6Page(bool isWlan, QWidget *parent = nullptr);
     void setIpv6Config(const QString &ipv6Config);
     void setIpv6(const QString &ipv4);
     void setIpv6FirDns(const QString &ipv6FirDns);
@@ -30,15 +30,14 @@ public:
     QLineEdit *gateWayEdit;
     QLineEdit *firstDnsEdit;
     QLineEdit *secondDnsEdit;
-
-    QLabel *mConfigLabel;
-    QLabel *mAddressLabel;
-    QLabel *mSubnetLabel;
-    QLabel *mGateWayLabel;
-    QLabel *mDnsLabel;
-    QLabel *mSecDnsLabel;
 private:
-    QFormLayout *mDetailLayout;
+    QFormLayout *m_detailLayout;
+    QLabel *m_configLabel;
+    QLabel *m_addressLabel;
+    QLabel *m_subnetLabel;
+    QLabel *m_gateWayLabel;
+    QLabel *m_dnsLabel;
+    QLabel *m_secDnsLabel;
 private:
     bool isWlan;
 private:

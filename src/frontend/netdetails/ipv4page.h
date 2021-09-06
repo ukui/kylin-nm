@@ -28,7 +28,7 @@ class Ipv4Page : public QFrame
 {
     Q_OBJECT
 public:
-    Ipv4Page(bool isWlan);
+    Ipv4Page(bool isWlan, QWidget *parent = nullptr);
     void setIpv4Config(const QString &ipv4Config);
     void setIpv4(const QString &ipv4);
     void setIpv4FirDns(const QString &ipv4FirDns);
@@ -42,16 +42,15 @@ public:
     QLineEdit *firstDnsEidt;
     QLineEdit *secondDnsEidt;
 
+private:
+    QFormLayout *m_detailLayout;
+    QVBoxLayout *mvBoxLayout;
     QLabel *m_configLabel;
     QLabel *m_addressLabel;
     QLabel *m_maskLabel;
     QLabel *m_gateWayLabel;
     QLabel *m_dnsLabel;
     QLabel *m_secDnsLabel;
-
-private:
-    QFormLayout *m_detailLayout;
-    QVBoxLayout *mvBoxLayout;
     bool isWlan;
 private:
     void initUI();

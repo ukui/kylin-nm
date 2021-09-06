@@ -1,7 +1,7 @@
 #include "ipv6page.h"
-
-Ipv6Page::Ipv6Page(bool isWlan)
-    :isWlan(isWlan)
+#include "netdetail.h"
+Ipv6Page::Ipv6Page(bool isWlan, QWidget *parent)
+    :isWlan(isWlan), QFrame(parent)
 {
     initUI();
     initComponent();
@@ -9,10 +9,10 @@ Ipv6Page::Ipv6Page(bool isWlan)
 
 void Ipv6Page::setIpv6Config(const QString &ipv6Config)
 {
-    if (ipv6Config ==  "0") {
-        ipv6ConfigCombox->setCurrentIndex(1);
+    if (ipv6Config.toInt() ==  AUTO_CONFIG) {
+        ipv6ConfigCombox->setCurrentIndex(MANUAL_CONFIG);
     } else {
-        ipv6ConfigCombox->setCurrentIndex(0);
+        ipv6ConfigCombox->setCurrentIndex(AUTO_CONFIG);
     }
 }
 
@@ -37,36 +37,36 @@ void Ipv6Page::setGateWay(const QString &gateWay)
 }
 
 void Ipv6Page::initUI() {
-    ipv6ConfigCombox = new QComboBox;
-    ipv6AddressEdit = new QLineEdit;
-    lengthEdit = new QLineEdit;
-    gateWayEdit = new QLineEdit;
-    firstDnsEdit = new QLineEdit;
-    secondDnsEdit = new QLineEdit;
+    ipv6ConfigCombox = new QComboBox(this);
+    ipv6AddressEdit = new QLineEdit(this);
+    lengthEdit = new QLineEdit(this);
+    gateWayEdit = new QLineEdit(this);
+    firstDnsEdit = new QLineEdit(this);
+    secondDnsEdit = new QLineEdit(this);
 
-    mConfigLabel = new QLabel;
-    mAddressLabel = new QLabel;
-    mSubnetLabel = new QLabel;
-    mGateWayLabel = new QLabel;
-    mDnsLabel = new QLabel;
-    mSecDnsLabel = new QLabel;
-
-
-    mConfigLabel->setText(tr("Ipv6Config"));
-    mAddressLabel->setText(tr("Address"));
-    mSubnetLabel->setText(tr("Subnet prefix Length"));
-    mGateWayLabel->setText(tr("Default Gateway"));
-    mDnsLabel->setText(tr("Prefs DNS"));
-    mSecDnsLabel->setText(tr("Alternative DNS"));
+    m_configLabel = new QLabel(this);
+    m_addressLabel = new QLabel(this);
+    m_subnetLabel = new QLabel(this);
+    m_gateWayLabel = new QLabel(this);
+    m_dnsLabel = new QLabel(this);
+    m_secDnsLabel = new QLabel(this);
 
 
-    mDetailLayout = new QFormLayout(this);
-    mDetailLayout->addRow(mConfigLabel,ipv6ConfigCombox);
-    mDetailLayout->addRow(mAddressLabel,ipv6AddressEdit);
-    mDetailLayout->addRow(mSubnetLabel,lengthEdit);
-    mDetailLayout->addRow(mGateWayLabel,gateWayEdit);
-    mDetailLayout->addRow(mDnsLabel,firstDnsEdit);
-    mDetailLayout->addRow(mSecDnsLabel,secondDnsEdit);
+    m_configLabel->setText(tr("Ipv6Config"));
+    m_addressLabel->setText(tr("Address"));
+    m_subnetLabel->setText(tr("Subnet prefix Length"));
+    m_gateWayLabel->setText(tr("Default Gateway"));
+    m_dnsLabel->setText(tr("Prefs DNS"));
+    m_secDnsLabel->setText(tr("Alternative DNS"));
+
+
+    m_detailLayout = new QFormLayout(this);
+    m_detailLayout->addRow(m_configLabel,ipv6ConfigCombox);
+    m_detailLayout->addRow(m_addressLabel,ipv6AddressEdit);
+    m_detailLayout->addRow(m_subnetLabel,lengthEdit);
+    m_detailLayout->addRow(m_gateWayLabel,gateWayEdit);
+    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
+    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
 
     ipv6ConfigCombox->addItem(tr("Auto(DHCP)")); //"自动(DHCP)"
     ipv6ConfigCombox->addItem(tr("Manual")); //"手动"
@@ -76,33 +76,33 @@ void Ipv6Page::initUI() {
 }
 
 void Ipv6Page::initComponent() {
-    if (ipv6ConfigCombox->currentIndex() == 0) {
+    if (ipv6ConfigCombox->currentIndex() == MANUAL_CONFIG) {
         setControlEnabled(false);
-    } else if (ipv6ConfigCombox->currentIndex() == 1) {
+    } else if (ipv6ConfigCombox->currentIndex() == MANUAL_CONFIG) {
         setControlEnabled(true);
     }
     connect(ipv6ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(configChanged(int)));
 }
 
 void Ipv6Page::configChanged(int index) {
-    if (index == 0) {
+    if (index == AUTO_CONFIG) {
         setControlEnabled(false);
     }
-    if (index == 1) {
+    if (index == MANUAL_CONFIG) {
         setControlEnabled(true);
     }
 }
 
 void Ipv6Page::setControlEnabled(bool check) {
-    mAddressLabel->setEnabled(check);
-    mSubnetLabel->setEnabled(check);
+    m_addressLabel->setEnabled(check);
+    m_subnetLabel->setEnabled(check);
     lengthEdit->setEnabled(check);
-    mGateWayLabel->setEnabled(check);
-    mDnsLabel->setEnabled(check);
-    mSecDnsLabel->setEnabled(check);
+    m_gateWayLabel->setEnabled(check);
+    m_dnsLabel->setEnabled(check);
+    m_secDnsLabel->setEnabled(check);
 
     ipv6AddressEdit->setEnabled(check);
-    mSubnetLabel->setEnabled(check);
+    m_subnetLabel->setEnabled(check);
     gateWayEdit->setEnabled(check);
     firstDnsEdit->setEnabled(check);
     secondDnsEdit->setEnabled(check);

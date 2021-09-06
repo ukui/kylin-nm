@@ -1,17 +1,32 @@
 #include "netdetail.h"
 
+#define  WINDOW_WIDTH  540
+#define  WINDOW_HEIGHT 574
+#define  BUTTON_SIZE 30
+#define  ICON_SIZE 22,22
+#define  TITLE_LAYOUT_MARGINS 9,9,0,0
+#define  LAYOUT_MARGINS 24,0,24,0
+#define  BOTTOM_LAYOUT_SPACING 16
+#define  PAGE_LAYOUT_SPACING 1
+#define  DETAIL_PAGE_NUM 0
+#define  IPV4_PAGE_NUM 1
+#define  IPV6_PAGE_NUM 2
+#define  SECURITY_PAGE_NUM 3
+#define  CREATE_NET_PAGE_NUM 4
+#define  PAGE_MIN_HEIGHT 40
 
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
 NetDetail::NetDetail(QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent)
-    :name(name), uuid(uuid), isActive(isActive), isWlan(isWlan), isCreateNet(isCreateNet), QDialog(parent)
+    :m_name(name), m_uuid(uuid), isActive(isActive), isWlan(isWlan), isCreateNet(isCreateNet), QDialog(parent)
 {
     setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_DeleteOnClose);
-    setFixedSize(540,574);
-    m_netDeviceResource = new KyNetworkDeviceResourse;
+    setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
     centerToScreen();
+
+    m_netDeviceResource = new KyNetworkDeviceResourse(this);
     initWifiDevice();
     initLanDevice();
     initUI();
@@ -38,14 +53,14 @@ void NetDetail::centerToScreen()
 
 void NetDetail::initUI()
 {
-    QVBoxLayout *vboxLayout = new QVBoxLayout(this);
-    vboxLayout->setContentsMargins(9,9,14,24);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(9,9,14,24);
 
-    detailPage = new DetailPage(isWlan);
-    ipv4Page = new Ipv4Page(isWlan);
-    ipv6Page = new Ipv6Page(isWlan);
-    securityWidget = new SecurityPage;
-    createNetPage = new CreatNetPage;
+    detailPage = new DetailPage(isWlan,this);
+    ipv4Page = new Ipv4Page(isWlan,this);
+    ipv6Page = new Ipv6Page(isWlan,this);
+    securityWidget = new SecurityPage(this);
+    createNetPage = new CreatNetPage(this);
 //    addLanWidget = new AddLanWidget;
 
     titleWidget = new QWidget(this);
@@ -59,73 +74,73 @@ void NetDetail::initUI()
     stackWidget->addWidget(securityWidget);
     stackWidget->addWidget(createNetPage);
 
-    vboxLayout->addWidget(titleWidget);
-    vboxLayout->addWidget(centerWidget);
-    vboxLayout->addWidget(bottomWidget);
+    mainLayout->addWidget(titleWidget);
+    mainLayout->addWidget(centerWidget);
+    mainLayout->addWidget(bottomWidget);
 
-    titleWidget->setMinimumHeight(40);
-    bottomWidget->setMinimumHeight(40);
+    titleWidget->setMinimumHeight(PAGE_MIN_HEIGHT);
+    bottomWidget->setMinimumHeight(PAGE_MIN_HEIGHT);
 
     QHBoxLayout *titleLayout = new QHBoxLayout(titleWidget);
-    titleLayout->setContentsMargins(9,9,0,0);
+    titleLayout->setContentsMargins(TITLE_LAYOUT_MARGINS);
     pageFrame = new QFrame(this);
+
     QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
-    pageLayout->setSpacing(1);
+    pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
 
     detailBtn = new QPushButton(this);
     detailBtn->setText(tr("Detail"));
 
-    Ipv4Btn = new QPushButton(this);
-    Ipv4Btn->setText(tr("Ipv4"));
+    ipv4Btn = new QPushButton(this);
+    ipv4Btn->setText(tr("Ipv4"));
 
-    Ipv6Btn = new QPushButton(this);
-    Ipv6Btn->setText(tr("Ipv6"));
+    ipv6Btn = new QPushButton(this);
+    ipv6Btn->setText(tr("Ipv6"));
 
-    SecurityBtn = new QPushButton(this);
-    SecurityBtn->setText(tr("Security"));
+    securityBtn = new QPushButton(this);
+    securityBtn->setText(tr("Security"));
 
     pageLayout->addStretch();
     pageLayout->addWidget(detailBtn);
-    pageLayout->addWidget(Ipv4Btn);
-    pageLayout->addWidget(Ipv6Btn);
-    pageLayout->addWidget(SecurityBtn);
+    pageLayout->addWidget(ipv4Btn);
+    pageLayout->addWidget(ipv6Btn);
+    pageLayout->addWidget(securityBtn);
     pageLayout->addStretch();
 
-    closeBtn  = new QPushButton;
-    closeBtn->setFixedSize(30,30);
+    closeBtn  = new QPushButton(this);
+    closeBtn->setFixedSize(BUTTON_SIZE,BUTTON_SIZE);
     closeBtn->setToolTip(tr("Close"));
     closeBtn->setProperty("isWindowButton", 0x02);
     closeBtn->setProperty("useIconHighlightEffect", 0x08);
     closeBtn->setFlat(true);
     closeBtn->setIcon(QIcon::fromTheme("window-close-symbolic"));
 
-    confimBtn = new QPushButton;
+    confimBtn = new QPushButton(this);
     confimBtn->setText(tr("Confirm"));
 
-    cancelBtn = new QPushButton;
+    cancelBtn = new QPushButton(this);
     cancelBtn->setText(tr("Cancel"));
 
-    forgetBtn = new QPushButton;
+    forgetBtn = new QPushButton(this);
     forgetBtn->setText(tr("Forget this network"));
 
-    titleLabel = new QLabel;
-    titleLabel->setMinimumHeight(20);
+    titleLabel = new QLabel(this);
 
-    iconLabel = new QLabel;
-    iconLabel->setFixedSize(22,22);
+    iconLabel = new QLabel(this);
+    iconLabel->setFixedSize(ICON_SIZE);
     titleLayout->addWidget(iconLabel);
     titleLayout->addWidget(titleLabel);
     titleLayout->addStretch();
     titleLayout->addWidget(closeBtn);
 
-    QVBoxLayout *layout = new QVBoxLayout(centerWidget);
-    layout->setContentsMargins(24,0,24,0);
-    layout->addWidget(pageFrame);
-    layout->addWidget(stackWidget);
+    QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
+    centerlayout->setContentsMargins(LAYOUT_MARGINS);
+    centerlayout->addWidget(pageFrame);
+    centerlayout->addWidget(stackWidget);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout(bottomWidget);
-    bottomLayout->setContentsMargins(24,0,24,0);
-    bottomLayout->setSpacing(16);
+    bottomLayout->setContentsMargins(LAYOUT_MARGINS);
+    bottomLayout->setSpacing(BOTTOM_LAYOUT_SPACING);
     bottomLayout->addWidget(forgetBtn);
     bottomLayout->addStretch();
     bottomLayout->addWidget(cancelBtn);
@@ -138,16 +153,16 @@ void NetDetail::loadPage()
     //判断是否创建网络
     if (isCreateNet) {
         pageFrame->hide();
-        stackWidget->setCurrentIndex(4);
+        stackWidget->setCurrentIndex(CREATE_NET_PAGE_NUM);
         titleLabel->setText(tr("Add Connect"));
     } else {
-        stackWidget->setCurrentIndex(0);
-        titleLabel->setText(name);
+        stackWidget->setCurrentIndex(DETAIL_PAGE_NUM);
+        titleLabel->setText(m_name);
     }
     if (!isWlan) {
-        SecurityBtn->hide();
+        securityBtn->hide();
     } else {
-        SecurityBtn->show();
+        securityBtn->show();
     }
 }
 
@@ -160,16 +175,16 @@ void NetDetail::initComponent()
         close();
     });
     connect(detailBtn, &QPushButton::clicked, this, [=] {
-        stackWidget->setCurrentIndex(0);
+        stackWidget->setCurrentIndex(DETAIL_PAGE_NUM);
     });
-    connect(Ipv4Btn, &QPushButton::clicked, this, [=] {
-        stackWidget->setCurrentIndex(1);
+    connect(ipv4Btn, &QPushButton::clicked, this, [=] {
+        stackWidget->setCurrentIndex(IPV4_PAGE_NUM);
     });
-    connect(Ipv6Btn, &QPushButton::clicked, this, [=] {
-        stackWidget->setCurrentIndex(2);
+    connect(ipv6Btn, &QPushButton::clicked, this, [=] {
+        stackWidget->setCurrentIndex(IPV6_PAGE_NUM);
     });
-    connect(SecurityBtn, &QPushButton::clicked, this, [=] {
-        stackWidget->setCurrentIndex(3);
+    connect(securityBtn, &QPushButton::clicked, this, [=] {
+        stackWidget->setCurrentIndex(SECURITY_PAGE_NUM);
     });
     connect(confimBtn, SIGNAL(clicked()), this, SLOT(on_btnConfirm_clicked()));
 }
@@ -204,7 +219,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
         }
         //ipv4页面填充
         if (!netInfo.strConName.compare(netName, Qt::CaseInsensitive)) {
-            if (netInfo.strIPV4ConfigType == "0") {
+            if (netInfo.strIPV4ConfigType.toInt() == AUTO_CONFIG) {
                 ipv4Page->setIpv4Config(netInfo.strIPV4ConfigType);
                 ipv4Page->setIpv4(netInfo.strIPV4Address);
                 ipv4Page->setIpv4FirDns(netInfo.strIPV4FirDns);
@@ -216,7 +231,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
         }
         //ipv6页面填充
         if (!netInfo.strConName.compare(netName, Qt::CaseInsensitive)) {
-            if (netInfo.strIPV4ConfigType == "0") {
+            if (netInfo.strIPV4ConfigType.toInt() == AUTO_CONFIG) {
                 ipv6Page->setIpv6Config(netInfo.strIPV6ConfigType);
                 ipv6Page->setIpv6(netInfo.strIPV4Address);
                 ipv6Page->setIpv6FirDns(netInfo.strIPV6FirDns);
@@ -258,11 +273,11 @@ void NetDetail::initWifiDevice()
     m_settings->beginGroup("DEFAULTCARD");
     QString key("wireless");
     QString deviceName = m_settings->value(key, "").toString();
-    m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList);
+    m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, m_devList);
     if (deviceName.isEmpty()) {
         qDebug() << "initDevice but  defalut wireless card is null";
-        if (!devList.isEmpty()) {
-            deviceName = devList.at(0);
+        if (!m_devList.isEmpty()) {
+            deviceName = m_devList.at(0);
             m_settings->setValue(key, deviceName);
         }
     }
@@ -287,17 +302,17 @@ void NetDetail::getConInfo(QList<ConInfo>& qlConInfo)
     QString hardAddress;
     int bandWith;
 
-    if (!devList.isEmpty()) {
-        deviceName = devList.at(0);
+    if (!m_devList.isEmpty()) {
+        deviceName = m_devList.at(0);
     }
     if(isWlan) {
-        if (!m_resource->getWifiNetwork(deviceName, name, kyWirelessNetItem)) {
+        if (!m_resource->getWifiNetwork(deviceName, m_name, kyWirelessNetItem)) {
             return;
         }
     }
-    kyConnectResourse->getConnectionSetting(uuid,connetSetting);
+    kyConnectResourse->getConnectionSetting(m_uuid,connetSetting);
 
-    conInfo.strConUUID = uuid;
+    conInfo.strConUUID = m_uuid;
     conInfo.strIPV4ConfigType = QString("%1").arg(connetSetting.m_ipv4ConfigIpType);
     conInfo.strIPV6ConfigType = QString("%1").arg(connetSetting.m_ipv6ConfigIpType);
     qDebug()<<"conInfo.strConUUID:"<<conInfo.strConUUID<<"conInfo.strSecType"<<conInfo.strSecType;
@@ -323,11 +338,11 @@ void NetDetail::getConInfo(QList<ConInfo>& qlConInfo)
         KyActiveConnectResourse *activeResourse = new KyActiveConnectResourse;
         QString ipv4,ipv6;
         QList<QHostAddress> ipv4Dns,ipv6Dns;
-        activeResourse->getActiveConnectIpInfo(uuid,ipv4,ipv6);
-        activeResourse->getActiveConnectDnsInfo(uuid,ipv4Dns,ipv6Dns);
+        activeResourse->getActiveConnectIpInfo(m_uuid,ipv4,ipv6);
+        activeResourse->getActiveConnectDnsInfo(m_uuid,ipv4Dns,ipv6Dns);
         m_netDeviceResource->getHardwareInfo(deviceName, hardAddress, bandWith);
 
-        qDebug()<<"802-11-wireless : "<<"deviceName:"<<deviceName<<",ssid:"<<ssid<<",uuid:"<<uuid;
+        qDebug()<<"802-11-wireless : "<<"deviceName:"<<deviceName<<",ssid:"<<m_ssid<<",uuid:"<<m_uuid;
 
         if (ipv4Dns.length() == 1) {
             conInfo.strIPV4FirDns = ipv4Dns.at(0).toString();
@@ -363,8 +378,8 @@ void NetDetail::getConInfo(QList<ConInfo>& qlConInfo)
         conInfo.strConType = "802-11-wireless";
     } else {
         conInfo.strConType = "802-3-ethernet";
-        qDebug()<<"802-11-ethernet : "<<"deviceName:"<<m_deviceName<<",ssid:"<<ssid<<",uuid:"<<uuid;
-        conInfo.strConName = name;
+        qDebug()<<"802-11-ethernet : "<<"deviceName:"<<m_deviceName<<",ssid:"<<m_ssid<<",uuid:"<<m_uuid;
+        conInfo.strConName = m_name;
         qDebug()<<"conInfo.strConName :aaaaaa"<<conInfo.strConName;
         m_netDeviceResource->getHardwareInfo(m_deviceName, hardAddress, bandWith);
         if (connetSetting.m_ipv4Dns.length() == 1) {

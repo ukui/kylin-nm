@@ -30,6 +30,9 @@
 #include "kywirelessnetresource.h"
 #include "tab-pages/tabpage.h"
 
+static int AUTO_CONFIG = 0;
+static int MANUAL_CONFIG = 1;
+
 typedef struct ConInfo_s {
     QString strConName;
     QString strConUUID;
@@ -102,15 +105,15 @@ private:
     QPushButton  * confimBtn;
 
     QPushButton  * detailBtn;
-    QPushButton  * Ipv4Btn;
-    QPushButton  * Ipv6Btn;
-    QPushButton  * SecurityBtn;
+    QPushButton  * ipv4Btn;
+    QPushButton  * ipv6Btn;
+    QPushButton  * securityBtn;
     QFrame       * pageFrame;
 
-    QString      name;
-    QString      uuid;
-    QString      ssid;
-    QStringList  devList;
+    QString      m_name;
+    QString      m_uuid;
+    QString      m_ssid;
+    QStringList  m_devList;
     QString      m_deviceName;
 
     bool         isWlan;

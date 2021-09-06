@@ -55,62 +55,62 @@ void DetailPage::initUI() {
     forgetNetBox = new QCheckBox(this);
     layout = new QVBoxLayout(this);
 
-    mDetailLayout = new QFormLayout;
+    mDetailLayout = new QFormLayout(this);
 
     mSSID      = new QLabel(this);
-    QHBoxLayout *mSSIDLayout = new QHBoxLayout;
+    QHBoxLayout *mSSIDLayout = new QHBoxLayout(this);
     mSSIDLayout->addStretch();
     mSSIDLayout->addWidget(mSSID);
 
     mProtocol  = new QLabel(this);
-    QHBoxLayout *mProtocolLayout = new QHBoxLayout;
+    QHBoxLayout *mProtocolLayout = new QHBoxLayout(this);
     mProtocolLayout->addStretch();
     mProtocolLayout->addWidget(mProtocol);
 
     mSecType   = new QLabel(this);
-    QHBoxLayout *mSecTypeLayout = new QHBoxLayout;
+    QHBoxLayout *mSecTypeLayout = new QHBoxLayout(this);
     mSecTypeLayout->addStretch();
     mSecTypeLayout->addWidget(mSecType);
 
     mHz        = new QLabel(this);
-    QHBoxLayout *mHzLayout = new QHBoxLayout;
+    QHBoxLayout *mHzLayout = new QHBoxLayout(this);
     mHzLayout->addStretch();
     mHzLayout->addWidget(mHz);
 
     mChan      = new QLabel(this);
-    QHBoxLayout *mChanLayout = new QHBoxLayout;
+    QHBoxLayout *mChanLayout = new QHBoxLayout(this);
     mChanLayout->addStretch();
     mChanLayout->addWidget(mChan);
 
     mBandWidth = new QLabel(this);
-    QHBoxLayout *mBandWidthLayout = new QHBoxLayout;
+    QHBoxLayout *mBandWidthLayout = new QHBoxLayout(this);
     mBandWidthLayout->addStretch();
     mBandWidthLayout->addWidget(mBandWidth);
 
     mIPV4      = new QLabel(this);
-    QHBoxLayout *mIPV4Layout = new QHBoxLayout;
+    QHBoxLayout *mIPV4Layout = new QHBoxLayout(this);
     mIPV4Layout->addStretch();
     mIPV4Layout->addWidget(mIPV4);
 
     mIPV4Dns   = new QLabel(this);
-    QHBoxLayout *mIPV4DnsLayout = new QHBoxLayout;
+    QHBoxLayout *mIPV4DnsLayout = new QHBoxLayout(this);
     mIPV4DnsLayout->addStretch();
     mIPV4DnsLayout->addWidget(mIPV4Dns);
 
     mIPV6      = new QLabel(this);
-    QHBoxLayout *mIPV6Layout = new QHBoxLayout;
+    QHBoxLayout *mIPV6Layout = new QHBoxLayout(this);
     mIPV6Layout->addStretch();
     mIPV6Layout->addWidget(mIPV6);
 
     mMac       = new QLabel(this);
-    QHBoxLayout *mMacLayout = new QHBoxLayout;
+    QHBoxLayout *mMacLayout = new QHBoxLayout(this);
     mMacLayout->addStretch();
     mMacLayout->addWidget(mMac);
 
     autoConnect = new QLabel(this);
 
     autoConnect->setText(tr("Auto Connection"));
-    mAutoLayout = new QHBoxLayout;
+    mAutoLayout = new QHBoxLayout(this);
     QSpacerItem *horizontalSpacer;
     horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 

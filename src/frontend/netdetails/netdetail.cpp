@@ -295,8 +295,8 @@ void NetDetail::getConInfo(QList<ConInfo>& qlConInfo)
     ConInfo conInfo;
     KyConnectSetting  connetSetting;
     KyWirelessNetItem kyWirelessNetItem;
-    KyWirelessNetResource *m_resource = new KyWirelessNetResource;
-    KyConnectResourse *kyConnectResourse = new KyConnectResourse;
+    KyWirelessNetResource *m_resource = new KyWirelessNetResource(this);
+    KyConnectResourse *kyConnectResourse = new KyConnectResourse(this);
 
     QString deviceName;
     QString hardAddress;
@@ -335,7 +335,7 @@ void NetDetail::getConInfo(QList<ConInfo>& qlConInfo)
 
     if (isWlan && isActive) {
         conInfo.strConType = "802-11-wireless";
-        KyActiveConnectResourse *activeResourse = new KyActiveConnectResourse;
+        KyActiveConnectResourse *activeResourse = new KyActiveConnectResourse(this);
         QString ipv4,ipv6;
         QList<QHostAddress> ipv4Dns,ipv6Dns;
         activeResourse->getActiveConnectIpInfo(m_uuid,ipv4,ipv6);

@@ -4,6 +4,7 @@ include(wireless-security/wireless-security.pri)
 include(xatom/xatom.pri)
 include(tab-pages/tab-pages.pri)
 include(list-items/list-items.pri)
+include(netdetails.pri)
 
 FORMS += \
     $$PWD/confform.ui \

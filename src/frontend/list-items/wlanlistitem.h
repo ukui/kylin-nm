@@ -27,7 +27,6 @@ public:
     void setWlanSignal(const int &signal);
     void setWlanState(const int &state);
     void setExpanded(const bool &expanded);
-
 protected:
     void resizeEvent(QResizeEvent *event);
 
@@ -67,9 +66,11 @@ private:
 //    QFrame * m_itemFrame = nullptr;
 //    QHBoxLayout * m_hItemLayout = nullptr;
 //    QLineEdit * m_lineEdit = nullptr;
+protected slots:
+    void onInfoButtonClicked();
 
 private slots:
-    void onInfoButtonClicked();
+//    void onInfoButtonClicked();
     void onNetButtonClicked();
 //    void onNameLableClicked();
     void onSecurityChanged(QString interface, QString ssid, QString securityType);

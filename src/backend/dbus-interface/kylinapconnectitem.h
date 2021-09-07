@@ -16,6 +16,7 @@ public:
     QString  m_connectUuid;
     QString  m_ifaceName;
     QString  m_password;
+    bool  m_isActivated;
 };
 
 #endif // KYLINAPCONNECTITEM_H

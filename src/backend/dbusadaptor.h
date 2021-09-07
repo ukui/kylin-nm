@@ -34,57 +34,6 @@ QT_END_NAMESPACE
 
 #include "new-mainwindow.h"
 
-class WiredInfo
-{
-    QString connName;
-    QString uuid;
-
-    friend QDBusArgument&operator <<(QDBusArgument&argument, const WiredInfo&arg)
-    {
-        argument.beginStructure();
-        argument << arg.connName;
-        argument << arg.uuid;
-        argument.endStructure();
-        return argument;
-    }
-    friend const QDBusArgument &operator >>(const QDBusArgument &argument, WiredInfo &arg)
-    {
-        argument.beginStructure();
-        argument >> arg.connName;
-        argument >> arg.uuid;
-        argument.endStructure();
-        return argument;
-    }
-};
-Q_DECLARE_METATYPE(WiredInfo)
-
-class WirelessInfo
-{
-    QString ssid;
-    uint    signalStrength;
-    bool    bSecu;
-
-    friend QDBusArgument&operator <<(QDBusArgument&argument, const WirelessInfo&arg)
-    {
-        argument.beginStructure();
-        argument << arg.ssid;
-        argument << arg.signalStrength;
-        argument << arg.bSecu;
-        argument.endStructure();
-        return argument;
-    }
-    friend const QDBusArgument &operator >>(const QDBusArgument&argument, WirelessInfo&arg)
-    {
-        argument.beginStructure();
-        argument >> arg.ssid;
-        argument >> arg.signalStrength;
-        argument >> arg.bSecu;
-        argument.endStructure();
-        return argument;
-    }
-};
-Q_DECLARE_METATYPE(WirelessInfo)
-
 class DbusAdaptor: public QDBusAbstractAdaptor
 {
     Q_OBJECT
@@ -99,9 +48,9 @@ public:
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
     //无线列表
-    QList<WirelessInfo> getWirelessList(QString devName);
+    QMap<QString, QVector<QStringList> > getWirelessList();
     //有线列表
-    QList<WiredInfo>  getWiredList(QString devName);
+    QMap<QString, QVector<QStringList>> getWiredList();
     //有线开关
     Q_NOREPLY void setWiredSwitchEnable(bool enable);
     //无线开关
@@ -113,24 +62,36 @@ public Q_SLOTS: // METHODS
     QString getDefaultWiredDevice();
     Q_NOREPLY void setDefaultWirelessDevice(QString deviceName);
     QString  getDefaultWirelessDevice();
-    //连接 根据网卡类型 参数2 为ssid/uuid
-    Q_NOREPLY void activateConnect(QString devName, QString ssid);
-    //断开连接 根据网卡类型 参数2 为ssid/uuid
-    Q_NOREPLY void deActivateConnect(QString devName, QString ssid);
+    //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
+    Q_NOREPLY void activateConnect(int type, QString devName, QString ssid);
+    //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
+    Q_NOREPLY void deActivateConnect(int type, QString devName, QString ssid);
     //获取设备列表和启用/禁用状态
-    QMap<QString, bool> getDeviceListAndEnabled();
+    QMap<QString, bool> getDeviceListAndEnabled(int devType);
     //唤起属性页 根据网卡类型 参数2 为ssid/uuid
     Q_NOREPLY void showPropertyWidget(QString devName, QString ssid);
     //唤起新建有线连接界面
     Q_NOREPLY void showCreateWiredConnectWidget(QString devName, QString connectionName);
+    //开启热点
+    void activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    //断开热点
+    void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    //获取热点
+    QStringList getStoredApInfo();
 Q_SIGNALS: // SIGNALS
+    void wirelessActivating(QString devName, QString ssid);
+    void wiredActivating(QString devName, QString ssid);
     void listUpdate(QString devName);
-    void deviceUpdate();
     //仅失败，若成功直接发listUpdate
-    void activateFinish(QString devName, QString ssid);
+    void activateFailed(QString errorMessage);
+    void deactivateFailed(QString errorMessage);
     //设备插拔
     void deviceStatusChanged();
-    void deviceNameUpdate(QString oldName, QString newName);
+    void deviceNameChanged(QString oldName, QString newName);
+    //热点断开
+    void hotspotDeactivated(QString devName, QString ssid);
+    //热点连接
+    void hotspotActivated(QString devName, QString ssid);
 };
 
 #endif

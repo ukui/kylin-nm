@@ -20,10 +20,21 @@ public:
     explicit WlanPage(QWidget *parent = nullptr);
     ~WlanPage() = default;
 
-    //static QString getSsidFromUuid(const QString &uuid);
-
+    //for dbus
+    void getWirelessList(QMap<QString, QVector<QStringList> > &map);
+    //开启热点
+    void activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    //断开热点
+    void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    //获取热点
+    void getStoredApInfo(QStringList &list);
+    void activateWireless(const QString& devName, const QString& ssid);
+    void deactivateWireless(const QString& devName, const QString& ssid);
 signals:
     void oneItemExpanded(const QString &ssid);
+    void wirelessActivating(QString devName, QString ssid);
+    void hotspotDeactivated(QString devName, QString ssid);
+    void hotspotActivated(QString devName, QString ssid);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -54,6 +65,7 @@ private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyWirelessConnectOperation * m_wirelessConnectOpreation = nullptr;
+    KyConnectResourse * m_apConnectResource = nullptr;
     QGSettings *m_switchGsettings = nullptr;
 
 

@@ -27,6 +27,7 @@ public:
     void getBluetoothConnections(QList<KyBluetoothConnectItem *> &bluetoothConnectItemList);
     void getApConnections(QList<KyApConnectItem *> &apConnectItemList);
     void getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting);
+    bool getInterfaceByUuid(QString &deviceName, NetworkManager::ConnectionSettings::ConnectionType &type, const QString connUuid);
 
 private:
     KyConnectItem *getConnectionItem(NetworkManager::Connection::Ptr connectPtr);

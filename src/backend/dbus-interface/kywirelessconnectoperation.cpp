@@ -22,22 +22,20 @@ NetworkManager::ConnectionSettings::Ptr assembleWpaXPskSettings(NetworkManager::
     NetworkManager::WirelessSecuritySetting::Ptr security_sett
         = settings->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
     security_sett->setInitialized(true);
-    if (NetworkManager::AccessPoint::Adhoc == accessPoint->mode())
-    {
+    if (NetworkManager::AccessPoint::Adhoc == accessPoint->mode()) {
         wifi_sett->setMode(NetworkManager::WirelessSetting::Adhoc);
         security_sett->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaNone);
-    } else
-    {
+    } else {
         security_sett->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaPsk);
     }
-    if (!psk.isEmpty())
-    {
+    if (!psk.isEmpty()) {
         security_sett->setPsk(psk);
     }
+
     return settings;
 }
 
-NetworkManager::ConnectionSettings::Ptr assembleWirelessSettings(const KyWirelessConnectSetting &connSettingInfo)
+NetworkManager::ConnectionSettings::Ptr assembleWirelessSettings(const KyWirelessConnectSetting &connSettingInfo, bool isHidden)
 {
     NetworkManager::ConnectionSettings::Ptr settings{new NetworkManager::ConnectionSettings{NetworkManager::ConnectionSettings::Wireless}};
     settings->setId(connSettingInfo.m_connectName);
@@ -51,6 +49,7 @@ NetworkManager::ConnectionSettings::Ptr assembleWirelessSettings(const KyWireles
     wifi_sett->setInitialized(true);
     wifi_sett->setSsid(connSettingInfo.m_ssid.toUtf8());
     wifi_sett->setSecurity("802-11-wireless-security");
+    wifi_sett->setHidden(isHidden);
 
     if (connSettingInfo.m_type != KyKeyMgmt::WpaNone && connSettingInfo.m_type != KyKeyMgmt::Unknown)
     {
@@ -125,7 +124,7 @@ void KyWirelessConnectOperation::deActivateWirelessConnection(const QString acti
 //普通wifi
 void KyWirelessConnectOperation::addConnect(const KyWirelessConnectSetting &connSettingInfo)
 {
-    NetworkManager::ConnectionSettings::Ptr connSetting = assembleWirelessSettings(connSettingInfo);
+    NetworkManager::ConnectionSettings::Ptr connSetting = assembleWirelessSettings(connSettingInfo, false);
     setIpv4AndIpv6Setting(connSetting, connSettingInfo);
 
     QDBusPendingCallWatcher * watcher;
@@ -146,7 +145,7 @@ void KyWirelessConnectOperation::addConnect(const KyWirelessConnectSetting &conn
 //tls
 void KyWirelessConnectOperation::addTlsConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodTlsInfo &tlsInfo)
 {
-    NetworkManager::ConnectionSettings::Ptr connSetting = assembleWirelessSettings(connSettingInfo);
+    NetworkManager::ConnectionSettings::Ptr connSetting = assembleWirelessSettings(connSettingInfo, false);
     setIpv4AndIpv6Setting(connSetting, connSettingInfo);
     assembleEapMethodTlsSettings(connSetting, tlsInfo);
 
@@ -168,7 +167,7 @@ void KyWirelessConnectOperation::addTlsConnect(const KyWirelessConnectSetting &c
 //peap
 void KyWirelessConnectOperation::addPeapConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodPeapInfo &peapInfo)
 {
-    NetworkManager::ConnectionSettings::Ptr connSetting = assembleWirelessSettings(connSettingInfo);
+    NetworkManager::ConnectionSettings::Ptr connSetting = assembleWirelessSettings(connSettingInfo, false);
     setIpv4AndIpv6Setting(connSetting, connSettingInfo);
     assembleEapMethodPeapSettings(connSetting, peapInfo);
 
@@ -190,7 +189,7 @@ void KyWirelessConnectOperation::addPeapConnect(const KyWirelessConnectSetting &
 
 void KyWirelessConnectOperation::addTtlsConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodTtlsInfo &ttlsInfo)
 {
-    NetworkManager::ConnectionSettings::Ptr connSetting = assembleWirelessSettings(connSettingInfo);
+    NetworkManager::ConnectionSettings::Ptr connSetting = assembleWirelessSettings(connSettingInfo, false);
     setIpv4AndIpv6Setting(connSetting, connSettingInfo);
     assembleEapMethodTtlsSettings(connSetting, ttlsInfo);
 
@@ -245,6 +244,9 @@ QString KyWirelessConnectOperation::getPsk(const QString &connectUuid)
         return "";
     }
     QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PSK_SETTING_NAME);
+    if(!reply.isValid()) {
+        return "";
+    }
     QMap<QString,QVariantMap> map(reply.value());
     if (map.contains("802-11-wireless-security") && map.value("802-11-wireless-security").contains("psk"))
     {
@@ -375,7 +377,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
 
     auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
     if (dev.isNull()) {
-        emit andAndActivateConnectionError("can not find device");
+        emit addAndActivateConnectionError("can not find device");
         return;
     }
 
@@ -420,7 +422,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
         qDebug() << "finish assemble";
     } else {
         qDebug() << "start assembleWirelessSettings";
-        map_settings = assembleWirelessSettings(connSettingInfo)->toMap();
+        map_settings = assembleWirelessSettings(connSettingInfo, isHidden)->toMap();
         qDebug() << "finish assembleWirelessSettings";
     }
 
@@ -430,7 +432,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = watcher->error().message();
             qDebug() << "activation of connection failed " << errorMessage;
-            emit andAndActivateConnectionError(errorMessage);
+            emit addAndActivateConnectionError(errorMessage);
         }
         watcher->deleteLater();
     });
@@ -472,12 +474,12 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTlsConnect(KyEapM
 
     auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
     if (dev.isNull()) {
-        emit andAndActivateConnectionError("can not find device");
+        emit addAndActivateConnectionError("can not find device");
         return;
     }
     dev_uni = dev->uni();
 
-    NetworkManager::ConnectionSettings::Ptr settings = assembleWirelessSettings(connSettingInfo);
+    NetworkManager::ConnectionSettings::Ptr settings = assembleWirelessSettings(connSettingInfo, isHidden);
     assembleEapMethodTlsSettings(settings, info);
 
     if(settings.isNull()) {
@@ -493,7 +495,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTlsConnect(KyEapM
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = watcher->error().message();
             qDebug() << "addAndActiveWirelessEnterPriseTlsConnect failed " << errorMessage;
-            emit andAndActivateConnectionError(errorMessage);
+            emit addAndActivateConnectionError(errorMessage);
         }
         watcher->deleteLater();
     });
@@ -529,12 +531,12 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPrisePeapConnect(KyEap
 
     auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
     if (dev.isNull()) {
-        emit andAndActivateConnectionError("can not find device");
+        emit addAndActivateConnectionError("can not find device");
         return;
     }
     dev_uni = dev->uni();
 
-    NetworkManager::ConnectionSettings::Ptr settings = assembleWirelessSettings(connSettingInfo);
+    NetworkManager::ConnectionSettings::Ptr settings = assembleWirelessSettings(connSettingInfo, isHidden);
     assembleEapMethodPeapSettings(settings, info);
 
     if(settings.isNull()) {
@@ -549,7 +551,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPrisePeapConnect(KyEap
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = watcher->error().message();
             qDebug() << "addAndActiveWirelessEnterPrisePeapConnect failed " << errorMessage;
-            emit andAndActivateConnectionError(errorMessage);
+            emit addAndActivateConnectionError(errorMessage);
         }
         watcher->deleteLater();
     });
@@ -582,12 +584,12 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
 
     auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
     if (dev.isNull()) {
-        emit andAndActivateConnectionError("can not find device");
+        emit addAndActivateConnectionError("can not find device");
         return;
     }
     dev_uni = dev->uni();
 
-    NetworkManager::ConnectionSettings::Ptr settings = assembleWirelessSettings(connSettingInfo);
+    NetworkManager::ConnectionSettings::Ptr settings = assembleWirelessSettings(connSettingInfo, isHidden);
     assembleEapMethodTtlsSettings(settings, info);
 
     if(settings.isNull()) {
@@ -603,7 +605,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = watcher->error().message();
             qDebug() << "addAndActiveWirelessEnterPriseTtlsConnect failed " << errorMessage;
-            emit andAndActivateConnectionError(errorMessage);
+            emit addAndActivateConnectionError(errorMessage);
         }
         watcher->deleteLater();
     });
@@ -671,10 +673,10 @@ NetworkManager::ConnectionSettings::Ptr
 
     NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
         = connectionSettings->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    wirelessSecuritySetting->setInitialized(true);
     if (apPassword.isEmpty()) {
-        wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaNone);
+        wirelessSecuritySetting->setInitialized(false);
     } else {
+        wirelessSecuritySetting->setInitialized(true);
         wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaPsk);
         wirelessSecuritySetting->setPsk(apPassword);
     }
@@ -697,10 +699,10 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
 
     NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
         = apConnectSettingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
-    wirelessSecuritySetting->setInitialized(true);
     if (apPassword.isEmpty()) {
-        wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaNone);
+        wirelessSecuritySetting->setInitialized(false);
     } else {
+        wirelessSecuritySetting->setInitialized(true);
         wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaPsk);
         wirelessSecuritySetting->setPsk(apPassword);
     }
@@ -716,9 +718,9 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
     if (nullptr == connectPtr) {
         NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceInterface(apDevice);
         if (devicePtr.isNull()) {
-            QString errorMsg ="active wifi ap failed," + apDevice + "is not existed";
+            QString errorMsg ="Create hotspot faild. " + apDevice + " is not existed";
             qWarning()<< errorMsg;
-            emit andAndActivateConnectionError(errorMsg);
+            emit addAndActivateConnectionError(errorMsg);
             return;
         }
 
@@ -731,15 +733,17 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
         watcher = new QDBusPendingCallWatcher{NetworkManager::addAndActivateConnection(apConnectSettingPtr->toMap(), deviceIdentifier, specificObject), this};
         connect(watcher, &QDBusPendingCallWatcher::finished, [&] (QDBusPendingCallWatcher * watcher) {
             if (watcher->isError() || !watcher->isValid()) {
-                QString errorMsg = "activation connection failed," + watcher->error().message();
+                QString errorMsg = "Create hotspot faild. " + watcher->error().message();
                 qWarning() << errorMsg;
-                emit andAndActivateConnectionError(errorMsg);
+                emit addAndActivateConnectionError(errorMsg);
             }
              watcher->deleteLater();
         });
     } else {
         updateWirelessApSetting(connectPtr, apName, apPassword, apDevice);
-        activateConnection(apUuid, apDevice);
+        QTimer::singleShot(500, this, [=](){
+            activateApConnectionByUuid(apUuid, apDevice);
+        });
     }
 
     return;
@@ -823,4 +827,53 @@ void KyWirelessConnectOperation::setIpv4AndIpv6Setting(NetworkManager::Connectio
 
     NetworkManager::Ipv6Setting::Ptr ipv6Setting = connSetting->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
     ipv6SettingSet(ipv6Setting, connSettingInfo);
+}
+
+void KyWirelessConnectOperation::activateApConnectionByUuid(const QString apUuid, const QString apDevice)
+{
+    QString connectPath = "";
+    QString deviceIdentifier = "";
+    QString connectName = "";
+    QString specificObject = "";
+
+    qDebug()<<"it will activate hotspot connect"<<apUuid;
+
+    NetworkManager::Connection::Ptr  connectPtr = m_networkResourceInstance->getConnect(apUuid);
+    if (connectPtr.isNull())
+    {
+        QString errorMessage = tr("Create hotspot faild.UUID is empty, its name") + apUuid;
+        qWarning() << errorMessage;
+        Q_EMIT activateConnectionError(errorMessage);
+        return;
+    }
+    connectPath = connectPtr->path();
+    connectName = connectPtr->name();
+
+    auto dev = m_networkResourceInstance->findDeviceInterface(apDevice);
+    if (!dev.isNull()) {
+        deviceIdentifier = dev->uni();
+    }
+
+    if (deviceIdentifier.isEmpty()) {
+        QString errorMessage = tr("Create hotspot faild.Device Identifier is empty, its name") + apDevice;
+        qWarning() << errorMessage;
+        Q_EMIT activateConnectionError(errorMessage);
+        return ;
+    }
+
+    QDBusPendingCallWatcher * watcher;
+    watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
+    connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName, apDevice] (QDBusPendingCallWatcher * watcher) {
+        if (watcher->isError() || !watcher->isValid()) {
+            QString errorMessage = tr("Create hotspot faild. ") + watcher->error().message();
+            qWarning()<<errorMessage;
+            emit this->activateConnectionError(errorMessage);
+         } else {
+            qWarning()<<"active wired connect complete.";
+         }
+
+         watcher->deleteLater();
+    });
+
+    return ;
 }

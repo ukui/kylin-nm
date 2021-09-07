@@ -63,6 +63,7 @@ void MainWindow::firstlyStart()
 {
     initWindowProperties();
     initUI();
+    initDbusConnnect();
     initWindowTheme();
     initTrayIcon();
     installEventFilter(this);
@@ -112,11 +113,6 @@ void MainWindow::initUI()
     m_wlanWidget = new WlanPage(m_centralWidget);
     m_centralWidget->addTab(m_lanWidget, QIcon::fromTheme("network-wired-connected-symbolic", QIcon::fromTheme("network-wired-symbolic", QIcon(":/res/l/network-online.svg"))), tr("LAN"));
     m_centralWidget->addTab(m_wlanWidget, QIcon::fromTheme("network-wireless-signal-excellent-symbolic", QIcon(":/res/x/wifi-list-bg.svg")), tr("WLAN"));
-
-    connect(m_lanWidget, &LanPage::deviceStatusChanged, this, &MainWindow::deviceStatusChanged);
-    connect(m_lanWidget, &LanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
-    connect(m_wlanWidget, &WlanPage::deviceStatusChanged, this, &MainWindow::deviceStatusChanged);
-    connect(m_wlanWidget, &WlanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
 }
 
 /**
@@ -140,6 +136,26 @@ void MainWindow::initTrayIcon()
     connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
     connect(m_showSettingsAction, &QAction::triggered, this, &MainWindow::onShowSettingsActionTriggled);
     m_trayIcon->show();
+}
+
+void MainWindow::initDbusConnnect()
+{
+    connect(m_lanWidget, &LanPage::deviceStatusChanged, this, &MainWindow::deviceStatusChanged);
+    connect(m_lanWidget, &LanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
+    connect(m_wlanWidget, &WlanPage::deviceStatusChanged, this, &MainWindow::deviceStatusChanged);
+    connect(m_wlanWidget, &WlanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
+
+    connect(m_wlanWidget, &WlanPage::activateFailed, this, &MainWindow::activateFailed);
+    connect(m_wlanWidget, &WlanPage::deactivateFailed, this, &MainWindow::deactivateFailed);
+
+    connect(m_lanWidget, &LanPage::listUpdate, this, &MainWindow::listUpdate);
+    connect(m_wlanWidget, &WlanPage::listUpdate, this, &MainWindow::listUpdate);
+
+    connect(m_lanWidget, &LanPage::wiredActivating, this, &MainWindow::wiredActivating);
+    connect(m_wlanWidget, &WlanPage::wirelessActivating, this, &MainWindow::wirelessActivating);
+
+    connect(m_wlanWidget, &WlanPage::hotspotDeactivated, this, &MainWindow::hotspotDeactivated);
+    connect(m_wlanWidget, &WlanPage::hotspotActivated, this, &MainWindow::hotspotActivated);
 }
 
 /**
@@ -323,4 +339,79 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         }
     }
     return QMainWindow::eventFilter(watched,event);
+}
+
+/**
+ * @brief MainWindow::getWirelessList 获取wifi列表，供dbus调用
+ * @param map
+ */
+void MainWindow::getWirelessList(QMap<QString, QVector<QStringList> > &map)
+{
+    map.clear();
+    if (nullptr != m_wlanWidget) {
+        m_wlanWidget->getWirelessList(map);
+    }
+}
+
+/**
+ * @brief MainWindow::getWiredList 获取lan列表，供dbus调用
+ * @param map
+ */
+void MainWindow::getWiredList(QMap<QString, QVector<QStringList>> &map)
+{
+    map.clear();
+    if (nullptr != m_lanWidget) {
+        m_lanWidget->getWiredList(map);
+    }
+}
+
+/**
+ * @brief MainWindow::activeWirelessAp 开启热点，供dbus调用
+ * @param apName
+ * @param apPassword
+ * @param apDevice
+ */
+void MainWindow::activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+{
+    m_wlanWidget->activeWirelessAp(apName, apPassword, apDevice);
+}
+
+/**
+ * @brief MainWindow::activeWirelessAp 断开热点，供dbus调用
+ * @param apName
+ */
+void MainWindow::deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+{
+    m_wlanWidget->deactiveWirelessAp(apName, apPassword, apDevice);
+}
+
+/**
+ * @brief MainWindow::activeWirelessAp 获取热点，供dbus调用
+ * @param list
+ */
+void MainWindow::getStoredApInfo(QStringList &list)
+{
+    m_wlanWidget->getStoredApInfo(list);
+}
+
+//有线连接断开
+void MainWindow::activateWired(const QString& devName, const QString& connName)
+{
+
+}
+
+void MainWindow::deactivateWired(const QString& devName, const QString& connName)
+{
+
+}
+
+//无线连接断开
+void MainWindow::activateWireless(const QString& devName, const QString& ssid)
+{
+
+}
+
+void MainWindow::deactivateWireless(const QString& devName, const QString& ssid)
+{
+
 }

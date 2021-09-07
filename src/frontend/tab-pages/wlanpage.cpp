@@ -12,6 +12,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     m_connectResource = new KyActiveConnectResourse();
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
     m_netDeviceResource=new KyNetworkDeviceResourse(this);
+    m_apConnectResource = new KyConnectResourse(this);
     devList.empty();
     initDevice();
     m_wirelessConnectOpreation = new KyWirelessConnectOperation(this);
@@ -24,6 +25,10 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceAdd, this, &WlanPage::onDeviceAdd);
     connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceRemove, this, &WlanPage::onDeviceRemove);
     connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceNameUpdate, this, &WlanPage::onDeviceNameUpdate);
+
+    connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::activateConnectionError, this, &WlanPage::activateFailed);
+    connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::addAndActivateConnectionError, this, &WlanPage::activateFailed);
+    connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::deactivateConnectionError, this, &WlanPage::deactivateFailed);
 }
 
 //QString WlanPage::getSsidFromUuid(const QString &uuid)
@@ -95,6 +100,8 @@ void WlanPage::initConnections()
 {
     connect(m_resource, &KyWirelessNetResource::wifiNetworkAdd, this, &WlanPage::onWlanAdded);
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
+    connect(m_resource, &KyWirelessNetResource::wifiNetworkAdd, this, &WlanPage::listUpdate);
+    connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::listUpdate);
 //    connect(m_resource, &KyWirelessNetResource::wifiNetworkUpdate, this, &WlanPage::onWlanUpdated);
     connect(m_connectResource, &KyActiveConnectResourse::stateChangeReason, this, &WlanPage::onActivatedWlanChanged);
     connect(m_netSwitch, &SwitchButton::clicked, this, &WlanPage::onWlanSwitchClicked);
@@ -327,10 +334,61 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
 {
     qDebug()<< "Activated wlan changed, uuid = " << uuid << "; state = " << state << "; reason = " << reason << Q_FUNC_INFO <<__LINE__;
 
+    QString ssid,devName;
+    NetworkManager::ConnectionSettings::ConnectionType type;
+
+    if(m_apConnectResource->getInterfaceByUuid(devName, type, uuid)) {
+        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wireless) {
+            qDebug() << "[WLanPage] updateLanlist but type is not Wireless";
+            return;
+        }
+    } else {
+        qDebug() << "[WlanPage] onActivatedWlanChanged but uuid is invalid";
+    }
+
+    m_resource->getSsidByUuid(uuid, ssid);
+
+    if (state == NetworkManager::ActiveConnection::State::Activating) {
+        qDebug() << "[WlanPage] wirelessActivating" << devName << ssid;
+        emit wirelessActivating(devName, ssid);
+    }
+
+    if (state == NetworkManager::ActiveConnection::State::Activated || state == NetworkManager::ActiveConnection::State::Deactivated)
+    {
+        qDebug() << "[WlanPage] because ActivatedWlanChanged " << devName;
+        emit listUpdate(devName);
+    }
+
+    if (state == NetworkManager::ActiveConnection::State::Deactivated) {
+        QList<KyApConnectItem *> apConnectItemList;
+        m_apConnectResource->getApConnections(apConnectItemList);
+        if (!apConnectItemList.isEmpty()) {
+            foreach (auto item, apConnectItemList) {
+                if (item->m_connectUuid == uuid) {
+                    qDebug() << "[WlanPage] hotspot Deactivated";
+                    emit hotspotDeactivated(item->m_ifaceName, ssid);
+                    break;
+                }
+            }
+        }
+    }
+
+    if (state == NetworkManager::ActiveConnection::State::Activated) {
+        QList<KyApConnectItem *> apConnectItemList;
+        m_apConnectResource->getApConnections(apConnectItemList);
+        if (!apConnectItemList.isEmpty()) {
+            foreach (auto item, apConnectItemList) {
+                if (item->m_connectUuid == uuid) {
+                    qDebug() << "[WlanPage] hotspot Deactivated";
+                    emit hotspotActivated(item->m_ifaceName, ssid);
+                    break;
+                }
+            }
+        }
+    }
+
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         //onWlanRemoved(m_wlanDevice, ssid);
-        QString ssid;
-        m_resource->getSsidByUuid(uuid, ssid);
         m_activatedNetListWidget->clear();
         int height = 0;
         appendActiveWlan(ssid, height);
@@ -381,4 +439,105 @@ void WlanPage::onWlanSwitchStatusChanged(const bool &checked)
     m_netSwitch->setSwitchStatus(checked);
     qDebug() << "On wlan switch status changed! new state = " << m_netSwitch->getSwitchStatus() << Q_FUNC_INFO << __LINE__;
     onWlanUpdated();
+}
+
+
+//for dbus
+void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
+{
+    QMap<QString,QStringList> actMap;
+    m_resource->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activated, actMap);
+
+    QMap<QString, QList<KyWirelessNetItem> > wlanMap;
+    if (!m_resource->getAllDeviceWifiNetwork(wlanMap))
+    {
+        return;
+    }
+
+    QMap<QString, QList<KyWirelessNetItem> >::iterator iter = wlanMap.begin();
+    while (iter != wlanMap.end()) {
+        QVector<QStringList> vector;
+        QString activeSsid ;
+        //先是已连接
+        if (actMap.contains(iter.key())) {
+            KyWirelessNetItem data;
+            if (m_resource->getWifiNetwork(iter.key(), actMap[iter.key()].at(0), data)) {
+                vector.append(QStringList()<<data.m_NetSsid<<QString::number(data.m_signalStrength)<<data.m_secuType);
+                activeSsid = data.m_NetSsid;
+            }
+
+        } else {
+            vector.append(QStringList("--"));
+        }
+        //未连接
+        foreach (auto itemData, iter.value()) {
+            if (itemData.m_NetSsid == activeSsid) {
+                continue;
+            }
+            vector.append(QStringList()<<itemData.m_NetSsid<<QString::number(itemData.m_signalStrength)<<itemData.m_secuType);
+        }
+
+        map.insert(iter.key(), vector);
+        iter++;
+    }
+
+    return;
+}
+
+//开启热点
+void WlanPage::activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+{
+    QString uuid("");
+    QList<KyApConnectItem *> apConnectItemList;
+    m_apConnectResource->getApConnections(apConnectItemList);
+    if (!apConnectItemList.isEmpty()) {
+        uuid = apConnectItemList.at(0)->m_connectUuid;
+    }
+    m_wirelessConnectOpreation->activeWirelessAp(uuid, apName, apPassword, apDevice);
+}
+
+//断开热点
+void WlanPage::deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+{
+    QString uuid("");
+    QList<KyApConnectItem *> apConnectItemList;
+    m_apConnectResource->getApConnections(apConnectItemList);
+    if (!apConnectItemList.isEmpty()) {
+        foreach (auto item, apConnectItemList) {
+            if (apName == item->m_connectName && apPassword == item->m_password && apDevice == item->m_ifaceName) {
+                uuid = item->m_connectUuid;
+                qDebug() << "[WlanPage] deactiveWirelessAp uuid = " << uuid;
+                break;
+            }
+        }
+    }
+    if (!uuid.isEmpty()) {
+        m_wirelessConnectOpreation->deactiveWirelessAp(apName, uuid);
+    } else {
+        qDebug() << "[WlanPage] deactiveWirelessAp can not find apName " << apName;
+        emit deactivateFailed("Deactivate hotspot failed.Don't exist " + apName);
+    }
+}
+
+void WlanPage::getStoredApInfo(QStringList &list)
+{
+    list.clear();
+    QList<KyApConnectItem *> apConnectItemList;
+    m_apConnectResource->getApConnections(apConnectItemList);
+    if (!apConnectItemList.isEmpty()) {
+        list << apConnectItemList.at(0)->m_connectName;
+        list << apConnectItemList.at(0)->m_password;
+        list << apConnectItemList.at(0)->m_ifaceName;
+        list << (apConnectItemList.at(0)->m_isActivated? "true":"false");
+    }
+}
+
+void WlanPage::activateWireless(const QString& devName, const QString& ssid)
+{
+    //todo
+}
+
+void WlanPage::deactivateWireless(const QString& devName, const QString& ssid)
+{
+    //todo
 }

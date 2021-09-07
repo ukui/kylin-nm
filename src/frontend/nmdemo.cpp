@@ -147,7 +147,7 @@ void NmDemo::initConnect()
     connect(m_wco, &KyWirelessConnectOperation::deleteConnectionError,      this, &NmDemo::onWcoSignals);
     connect(m_wco, &KyWirelessConnectOperation::activateConnectionError,    this, &NmDemo::onWcoSignals);
     connect(m_wco, &KyWirelessConnectOperation::deactivateConnectionError,      this, &NmDemo::onWcoSignals);
-    connect(m_wco, &KyWirelessConnectOperation::andAndActivateConnectionError,    this, &NmDemo::onWcoSignals);
+    connect(m_wco, &KyWirelessConnectOperation::addAndActivateConnectionError,    this, &NmDemo::onWcoSignals);
 
     //列表变化
     connect(m_wnr, &KyWirelessNetResource::bssidChange,             this ,&NmDemo::onBssidChange);

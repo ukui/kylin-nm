@@ -37,6 +37,7 @@ KyWirelessNetItem::KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net)
     m_connDbusPath = "";
     m_secuType = "";
     m_device = "";
+    m_channel = 0;
 
     init(net);
 }
@@ -80,6 +81,7 @@ void KyWirelessNetItem::initInfoBySsid()
             m_connName    = conn->name();
             m_connDbusPath = conn->path();
             m_isConfigured = true;
+            m_channel = wifi_sett->channel();
             return;
         }
     }

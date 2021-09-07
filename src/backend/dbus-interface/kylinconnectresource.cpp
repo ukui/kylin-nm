@@ -305,6 +305,28 @@ void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetti
     return;
 }
 
+bool KyConnectResourse::getInterfaceByUuid(QString &deviceName, NetworkManager::ConnectionSettings::ConnectionType &type, const QString connUuid)
+{
+    deviceName.clear();
+    NetworkManager::Connection::Ptr connectPtr =
+            m_networkResourceInstance->getConnect(connUuid);
+
+    if (nullptr == connectPtr) {
+        qWarning()<<"getInterfaceByUuid failed, connect uuid"<<connUuid;
+        return false;
+    }
+    NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
+
+    if (connectSettingPtr.isNull()) {
+        qWarning()<<"getInterfaceByUuid failed, connect uuid"<<connUuid;
+        return false;
+    }
+    type = connectPtr->settings()->connectionType();
+    deviceName = connectPtr->settings()->interfaceName();
+    qDebug() << "getInterfaceByUuid success " << deviceName;
+    return true;
+}
+
 void KyConnectResourse::getVpnConnectData(NetworkManager::ConnectionSettings::Ptr settingsPtr,
                        KyVpnConnectItem *vpnItem)
 {
@@ -483,6 +505,7 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
     apConnectItem->m_connectName = connectPtr->name();
     apConnectItem->m_connectUuid = connectPtr->uuid();
     apConnectItem->m_ifaceName = settingPtr->interfaceName();
+    apConnectItem->m_isActivated = m_networkResourceInstance->isActiveConnection(connectPtr->uuid());
 
     //NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
     //    = settingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();

@@ -33,12 +33,16 @@ void saveDeviceEnableState(QString deviceName, bool enable)
     return;
 }
 
-bool getDeviceEnableState(QMap<QString, bool> &map)
+void getDeviceEnableState(int type, QMap<QString, bool> &map)
 {
-    if (!QFile::exists(CONFIG_FILE_PATH)) {
-        return false;
-    }
     map.clear();
+    if (!QFile::exists(CONFIG_FILE_PATH)) {
+        return;
+    }
+    if (type != WIRED && type != WIRELESS) {
+        qDebug() << "getDeviceEnableState but wrong type";
+        return;
+    }
 
     KyNetworkDeviceResourse * kdr = new KyNetworkDeviceResourse();
     QStringList wiredDevList,wirelessDevList;
@@ -48,19 +52,21 @@ bool getDeviceEnableState(QMap<QString, bool> &map)
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
     m_settings->beginGroup("CARDEABLE");
 
-    kdr->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
-    if (!wiredDevList.isEmpty()) {
-        for (int i = 0; i < wiredDevList.size(); ++i) {
-            bool enable = m_settings->value(wiredDevList.at(i), true).toBool();
-            map.insert(wiredDevList.at(i), enable);
+    if (type == WIRED) {
+        kdr->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
+        if (!wiredDevList.isEmpty()) {
+            for (int i = 0; i < wiredDevList.size(); ++i) {
+                bool enable = m_settings->value(wiredDevList.at(i), true).toBool();
+                map.insert(wiredDevList.at(i), enable);
+            }
         }
-    }
-
-    kdr->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
-    if (!wirelessDevList.isEmpty()) {
-        for (int i = 0; i < wirelessDevList.size(); ++i) {
-            bool enable = m_settings->value(wirelessDevList.at(i), true).toBool();
-            map.insert(wirelessDevList.at(i), enable);
+    } else if (type == WIRELESS) {
+        kdr->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
+        if (!wirelessDevList.isEmpty()) {
+            for (int i = 0; i < wirelessDevList.size(); ++i) {
+                bool enable = m_settings->value(wirelessDevList.at(i), true).toBool();
+                map.insert(wirelessDevList.at(i), enable);
+            }
         }
     }
 
@@ -69,7 +75,7 @@ bool getDeviceEnableState(QMap<QString, bool> &map)
     m_settings = nullptr;
     delete kdr;
     kdr = nullptr;
-    return true;
+    return;
 }
 
 /*
@@ -81,10 +87,8 @@ DbusAdaptor::DbusAdaptor(MainWindow *parent)
 {
     // constructor
     qDBusRegisterMetaType<QMap<QString, bool> >();
-    qDBusRegisterMetaType<WirelessInfo>();
-    qDBusRegisterMetaType<WiredInfo>();
-    qDBusRegisterMetaType<QList<WirelessInfo> >();
-    qDBusRegisterMetaType<QList<WiredInfo> >();
+    qDBusRegisterMetaType<QVector<QStringList> >();
+    qDBusRegisterMetaType<QMap<QString, QVector<QStringList> >>();
     //setAutoRelaySignals(true)后会自动转发mainwindow发出的同名信号，因此不必再额外写一个转发
     setAutoRelaySignals(true);
 }
@@ -95,15 +99,19 @@ DbusAdaptor::~DbusAdaptor()
 }
 
 //无线列表
-QList<WirelessInfo> DbusAdaptor::getWirelessList(QString devName)
+QMap<QString, QVector<QStringList> > DbusAdaptor::getWirelessList()
 {
-
+    QMap<QString, QVector<QStringList> > map;
+    parent()->getWirelessList(map);
+    return map;
 }
 
 //有线列表
-QList<WiredInfo>  DbusAdaptor::getWiredList(QString devName)
+QMap<QString, QVector<QStringList>> DbusAdaptor::getWiredList()
 {
-
+    QMap<QString, QVector<QStringList>> map;
+    parent()->getWiredList(map);
+    return map;
 }
 
 //有线开关
@@ -183,24 +191,36 @@ QString  DbusAdaptor::getDefaultWirelessDevice()
     return deviceName;
 }
 
-//连接 根据网卡类型 参数2 为ssid/uuid
-void DbusAdaptor::activateConnect(QString devName, QString ssid)
+//连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
+void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
 {
-
+    if (type == WIRED) {
+        parent()->activateWired(devName,ssid);
+    } else if (type == WIRELESS) {
+        parent()->activateWireless(devName,ssid);
+    } else {
+        qDebug() << "[DbusAdaptor] activateConnect type is invalid";
+    }
 }
 
-//断开连接 根据网卡类型 参数2 为ssid/uuid
-void DbusAdaptor::deActivateConnect(QString devName, QString ssid)
+//断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
+void DbusAdaptor::deActivateConnect(int type, QString devName, QString ssid)
 {
-
+    if (type == WIRED) {
+        parent()->deactivateWired(devName,ssid);
+    } else if (type == WIRELESS) {
+        parent()->deactivateWireless(devName,ssid);
+    } else {
+        qDebug() << "[DbusAdaptor] deactivateConnect type is invalid";
+    }
 }
 
 //获取设备列表和启用/禁用状态
-QMap<QString, bool> DbusAdaptor::getDeviceListAndEnabled()
+QMap<QString, bool> DbusAdaptor::getDeviceListAndEnabled(int devType)
 {
     QMap<QString, bool> map;
     map.clear();
-    getDeviceEnableState(map);
+    getDeviceEnableState(devType, map);
     return map;
 }
 
@@ -218,3 +238,23 @@ void DbusAdaptor::showCreateWiredConnectWidget(QString devName, QString connecti
     //parent()->showCreateWiredConnectWidget(devName,connectionName);
 }
 
+//开启热点
+void DbusAdaptor::activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+{
+    parent()->activeWirelessAp(apName, apPassword, apDevice);
+}
+
+//断开热点
+void DbusAdaptor::deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+{
+    parent()->deactiveWirelessAp(apName, apPassword, apDevice);
+}
+
+//获取热点
+QStringList DbusAdaptor::getStoredApInfo()
+{
+    QStringList list;
+    list.clear();
+    parent()->getStoredApInfo(list);
+    return list;
+}

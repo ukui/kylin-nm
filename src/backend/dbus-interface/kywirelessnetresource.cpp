@@ -170,7 +170,7 @@ void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid)
         return;
     }
     ssid = wireless_sett->ssid();
-
+    qDebug() << "getSsidByUuid success " << ssid;
     return;
 }
 
@@ -453,6 +453,7 @@ void KyWirelessNetResource::onConnectionAdd(QString uuid)
                 m_WifiNetworkList[iter.key()][i].m_connName = conn->name();
                 m_WifiNetworkList[iter.key()][i].m_connectUuid = conn->uuid();
                 m_WifiNetworkList[iter.key()][i].m_connDbusPath = conn->path();
+                m_WifiNetworkList[iter.key()][i].m_channel = wireless_sett->channel();
 
                 devIfaceName = sett->interfaceName();
                 ssid = iter.value().at(i).m_NetSsid;
@@ -492,6 +493,7 @@ void KyWirelessNetResource::onConnectionRemove(QString path)
                 m_WifiNetworkList[iter.key()][i].m_connName = "";
                 m_WifiNetworkList[iter.key()][i].m_connectUuid = "";
                 m_WifiNetworkList[iter.key()][i].m_connDbusPath = "";
+                m_WifiNetworkList[iter.key()][i].m_channel = 0;
 
                 devIfaceName = iter.key();
                 ssid = iter.value().at(i).m_NetSsid;

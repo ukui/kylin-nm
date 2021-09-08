@@ -44,6 +44,7 @@ private:
     void initConnections();
 
     void initDevice();//初始化默认设备
+    void initDeviceCombox();
 
     void getActiveWlan();
     void appendActiveWlan(const QString &ssid, int &height);
@@ -84,6 +85,7 @@ private slots:
     void onConnectButtonClicked(KyWirelessConnectSetting &connSettingInfo, const bool &isHidden);
     void onWlanSwitchClicked();
     void onWlanSwitchStatusChanged(const bool &checked);
+    void onDeviceComboxIndexChanged(int currentIndex);
 };
 
 #endif // WLANPAGE_H

@@ -34,10 +34,11 @@ void TabPage::initUI()
     //临时增加的下拉框选择网卡区域
     m_deviceFrame = new QFrame(this);
     m_deviceLayout = new QHBoxLayout(m_deviceFrame);
-    m_deviceLayout->setContentsMargins(TITLE_LAYOUT_MARGINS);
+    m_deviceLayout->setContentsMargins(DEVICE_LAYOUT_MARGINS);
     m_deviceFrame->setLayout(m_deviceLayout);
     m_deviceLabel = new QLabel(m_deviceFrame);
     m_deviceComboBox = new QComboBox(m_deviceFrame);
+    m_deviceComboBox->setFixedWidth(DEVICE_COMBOBOX_WIDTH);
     m_deviceLabel->setText(tr("Current Device"));
     m_deviceLayout->addWidget(m_deviceLabel);
     m_deviceLayout->addStretch();

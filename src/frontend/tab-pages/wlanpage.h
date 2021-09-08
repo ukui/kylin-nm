@@ -30,11 +30,15 @@ public:
     void getStoredApInfo(QStringList &list);
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
+
 signals:
     void oneItemExpanded(const QString &ssid);
     void wirelessActivating(QString devName, QString ssid);
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid);
+
+public slots:
+    void onMainWindowVisibleChanged(const bool &visible);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -42,6 +46,10 @@ protected:
 private:
     void initWlanUI();
     void initConnections();
+
+    //定时触发扫描的定时器
+    void initTimer();
+    QTimer * m_scanTimer = nullptr;
 
     void initDevice();//初始化默认设备
     void initDeviceCombox();
@@ -86,6 +94,7 @@ private slots:
     void onWlanSwitchClicked();
     void onWlanSwitchStatusChanged(const bool &checked);
     void onDeviceComboxIndexChanged(int currentIndex);
+    void requestScan();
 };
 
 #endif // WLANPAGE_H

@@ -20,6 +20,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     initDeviceCombox();
     //要在initUI之后调用，保证UI的信号槽顺利绑定
     initConnections();
+    initTimer();
     getActiveWlan();
     getAllWlan();
 
@@ -120,6 +121,13 @@ void WlanPage::initConnections()
     }
     qDebug()<<"isSchemaInstalled false" << Q_FUNC_INFO << __LINE__;
     m_netSwitch->setSwitchStatus(m_wirelessConnectOpreation->getWirelessEnabled());
+}
+
+void WlanPage::initTimer()
+{
+    m_scanTimer = new QTimer(this);
+    connect(m_scanTimer, &QTimer::timeout, this, &WlanPage::requestScan);
+//    m_scanTimer->start(10 * 1000);
 }
 
 /**
@@ -452,6 +460,15 @@ void WlanPage::onDeviceComboxIndexChanged(int currentIndex)
     //TODO 设备变更时更新设备和列表
 }
 
+//申请触发扫描，初始化执行&定时执行
+void WlanPage::requestScan()
+{
+    if (!m_wirelessConnectOpreation) {
+        qWarning() << "Scan failed! m_wirelessConnectOpreation is nullptr!" << Q_FUNC_INFO << __LINE__;
+    }
+    m_wirelessConnectOpreation->requestWirelessScan();
+}
+
 
 //for dbus
 void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
@@ -551,4 +568,24 @@ void WlanPage::activateWireless(const QString& devName, const QString& ssid)
 void WlanPage::deactivateWireless(const QString& devName, const QString& ssid)
 {
     //todo
+}
+
+void WlanPage::onMainWindowVisibleChanged(const bool &visible)
+{
+    qDebug() << "Received signal of mainwindow visible changed. cur_state = " << visible << Q_FUNC_INFO << __LINE__;
+    if (visible) {
+        //打开页面时先触发一次扫描
+        requestScan();
+    }
+
+    if (!m_scanTimer) {
+        qWarning() << "No QTimer!" << Q_FUNC_INFO << __LINE__;
+        return;
+    }
+    //若页面打开，开始扫描倒计时，若关闭，停止扫描倒计时
+    if (visible) {
+        m_scanTimer->start(10 * 1000);
+    } else {
+        m_scanTimer->stop();
+    }
 }

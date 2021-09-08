@@ -26,6 +26,7 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
 
     initDevice();
     initUI();
+    initDeviceCombox();
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
             m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
             initNetSwitch();
@@ -144,7 +145,12 @@ void LanPage::initDevice()
     m_settings = nullptr;
     for (int i = 0; i < devList.size(); ++i) {
             qDebug() << "[LanPage] Device: " << devList.at(i);
-        }
+    }
+}
+
+void LanPage::initDeviceCombox()
+{
+    //TODO 获取设备列表，单设备时隐藏下拉框，多设备时添加到下拉框
 }
 
 void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
@@ -196,6 +202,11 @@ void LanPage::onDeviceNameUpdate(QString oldName, QString newName)
        qDebug() << "LanPage emit deviceNameUpdate "  << oldName << newName;
        emit deviceNameChanged(oldName, newName);
    }
+}
+
+void LanPage::onDeviceComboxIndexChanged(int currentIndex)
+{
+    //TODO 设备变更时更新设备和列表
 }
 
 void LanPage::initUI()

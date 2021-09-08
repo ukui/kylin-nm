@@ -17,6 +17,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     initDevice();
     m_wirelessConnectOpreation = new KyWirelessConnectOperation(this);
     initWlanUI();
+    initDeviceCombox();
     //要在initUI之后调用，保证UI的信号槽顺利绑定
     initConnections();
     getActiveWlan();
@@ -145,6 +146,11 @@ void WlanPage::initDevice()
     delete m_settings;
     m_settings = nullptr;
 
+}
+
+void WlanPage::initDeviceCombox()
+{
+    //TODO 获取设备列表，单设备时隐藏下拉框，多设备时添加到下拉框
 }
 
 /**
@@ -439,6 +445,11 @@ void WlanPage::onWlanSwitchStatusChanged(const bool &checked)
     m_netSwitch->setSwitchStatus(checked);
     qDebug() << "On wlan switch status changed! new state = " << m_netSwitch->getSwitchStatus() << Q_FUNC_INFO << __LINE__;
     onWlanUpdated();
+}
+
+void WlanPage::onDeviceComboxIndexChanged(int currentIndex)
+{
+    //TODO 设备变更时更新设备和列表
 }
 
 

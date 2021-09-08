@@ -31,6 +31,19 @@ void TabPage::initUI()
     m_titleLayout->addWidget(m_netSwitch);
     m_titleDivider = new Divider(this);
 
+    //临时增加的下拉框选择网卡区域
+    m_deviceFrame = new QFrame(this);
+    m_deviceLayout = new QHBoxLayout(m_deviceFrame);
+    m_deviceLayout->setContentsMargins(TITLE_LAYOUT_MARGINS);
+    m_deviceFrame->setLayout(m_deviceLayout);
+    m_deviceLabel = new QLabel(m_deviceFrame);
+    m_deviceComboBox = new QComboBox(m_deviceFrame);
+    m_deviceLabel->setText(tr("Current Device"));
+    m_deviceLayout->addWidget(m_deviceLabel);
+    m_deviceLayout->addStretch();
+    m_deviceLayout->addWidget(m_deviceComboBox);
+    connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TabPage::onDeviceComboxIndexChanged);
+
     m_activatedNetFrame = new QFrame(this);
     m_activatedNetLayout = new QVBoxLayout(m_activatedNetFrame);
     m_activatedNetLayout->setContentsMargins(ACTIVE_NET_LAYOUT_MARGINS);
@@ -64,6 +77,8 @@ void TabPage::initUI()
     m_settingsFrame->setLayout(m_settingsLayout);
 
     m_mainLayout->addWidget(m_titleFrame);
+    //临时增加的设备选择区域
+    m_mainLayout->addWidget(m_deviceFrame);
     m_mainLayout->addWidget(m_titleDivider);
     m_mainLayout->addWidget(m_activatedNetFrame);
     m_mainLayout->addWidget(m_activatedNetDivider);

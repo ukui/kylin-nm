@@ -37,7 +37,7 @@ private:
     void initConnection();
 
 public slots:
-    virtual void onNetButtonClicked();
+    virtual void onNetButtonClicked() = 0;
 };
 
 #endif // LISTITEM_H

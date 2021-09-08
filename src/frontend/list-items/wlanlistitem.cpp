@@ -14,10 +14,10 @@ WlanListItem::WlanListItem(KyWirelessNetResource *resource, KyWirelessNetItem *d
 
 WlanListItem::WlanListItem(QWidget *parent) : ListItem(parent)
 {
-    m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic"));
-    const QString str="未连接任何wifi";
+    m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic"));
+    const QString name = tr("Not connected");
     setExpanded(false);
-    this->setName(str);
+    this->setName(name);
     this->m_netButton->setEnabled(false);
     this->m_infoButton->hide();
 }

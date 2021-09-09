@@ -67,7 +67,7 @@ private:
     QLabel * m_hiddenWlanLabel = nullptr;
 
     QString m_activatedWlanSSid;
-    QStringList devList;
+    QStringList m_devList;
 
     KyWirelessNetResource *m_resource = nullptr;
     KyActiveConnectResourse *m_connectResource = nullptr;

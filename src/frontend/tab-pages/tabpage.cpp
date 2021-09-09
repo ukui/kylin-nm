@@ -46,6 +46,7 @@ void TabPage::initUI()
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TabPage::onDeviceComboxIndexChanged);
 
     m_activatedNetFrame = new QFrame(this);
+    m_activatedNetFrame->setMaximumHeight(ACTIVE_AREA_MAX_HEIGHT);
     m_activatedNetLayout = new QVBoxLayout(m_activatedNetFrame);
     m_activatedNetLayout->setContentsMargins(ACTIVE_NET_LAYOUT_MARGINS);
     m_activatedNetLayout->setSpacing(NET_LAYOUT_SPACING);

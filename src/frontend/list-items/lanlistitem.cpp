@@ -49,6 +49,11 @@ void LanListItem::setIcon(bool isOn)
     }
 }
 
+void LanListItem::onRightButtonClicked()
+{
+    //右键点击事件
+}
+
 void LanListItem::onInfoButtonClicked()
 {
     if(m_data){

@@ -7,7 +7,9 @@
 #include "kylinnetworkdeviceresource.h"
 #include "kywirelessconnectoperation.h"
 #include "wlanlistitem.h"
+#include "kylinconnectoperation.h"
 #include <QGSettings>
+#include "netdetails/netdetail.h"
 
 //#define SCROLLAREA_HEIGHT 150
 #define MORE_TEXT_MARGINS 16,0,0,0
@@ -36,6 +38,7 @@ signals:
     void wirelessActivating(QString devName, QString ssid);
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid);
+    void hiddenWlanClicked();
 
 public slots:
     void onMainWindowVisibleChanged(const bool &visible);
@@ -74,6 +77,7 @@ private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyWirelessConnectOperation * m_wirelessConnectOpreation = nullptr;
+    KyConnectOperation *m_connectoperation = nullptr;
     KyConnectResourse * m_apConnectResource = nullptr;
     QGSettings *m_switchGsettings = nullptr;
 
@@ -95,6 +99,7 @@ private slots:
     void onWlanSwitchStatusChanged(const bool &checked);
     void onDeviceComboxIndexChanged(int currentIndex);
     void requestScan();
+    void onHiddenWlanClicked();
 };
 
 #endif // WLANPAGE_H

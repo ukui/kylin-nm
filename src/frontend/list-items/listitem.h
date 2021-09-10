@@ -4,6 +4,7 @@
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QDebug>
+#include <QMouseEvent>
 #include "radioitembutton.h"
 #include "infobutton.h"
 #include "netdetails/netdetail.h"
@@ -16,9 +17,12 @@ public:
     ~ListItem();
     void setName(const QString &name);
     void setActive(const bool &isActive);
+    static void showDesktopNotify(const QString &message);
 
 protected:
-    bool eventFilter(QObject *watched, QEvent *event);
+//    bool eventFilter(QObject *watched, QEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    virtual void onRightButtonClicked() = 0;
 
 protected:
     QFrame * m_itemFrame = nullptr;

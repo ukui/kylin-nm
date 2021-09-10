@@ -1,5 +1,6 @@
 #include "tabpage.h"
 #include <qsettings.h>
+#include <QDBusInterface>
 
 TabPage::TabPage(QWidget *parent) : QWidget(parent)
 {

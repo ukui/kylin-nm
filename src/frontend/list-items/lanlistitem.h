@@ -17,6 +17,7 @@ public:
 
 protected:
     void setIcon(bool isOn);
+    void onRightButtonClicked();
 
 private:
     KyConnectItem *m_data = nullptr;

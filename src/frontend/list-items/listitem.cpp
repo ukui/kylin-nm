@@ -13,7 +13,7 @@ ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
     initUI();
     initConnection();
-    m_itemFrame->installEventFilter(this);
+//    m_itemFrame->installEventFilter(this);
 }
 
 ListItem::~ListItem()
@@ -37,15 +37,43 @@ void ListItem::setActive(const bool &isActive)
     m_isActive = isActive;
 }
 
-bool ListItem::eventFilter(QObject *watched, QEvent *event)
+void ListItem::showDesktopNotify(const QString &message)
 {
-    if (watched == m_itemFrame) {
-        if (event->type() == QEvent::MouseButtonPress) {
-            onNetButtonClicked();
-        }
-    }
-    return QFrame::eventFilter(watched, event);
+    QDBusInterface iface("org.freedesktop.Notifications",
+                         "/org/freedesktop/Notifications",
+                         "org.freedesktop.Notifications",
+                         QDBusConnection::sessionBus());
+    QList<QVariant> args;
+    args<<(tr("Kylin NM"))
+       <<((unsigned int) 0)
+      <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+     <<tr("kylin network applet desktop message") //显示的是什么类型的信息
+    <<message //显示的具体信息
+    <<QStringList()
+    <<QVariantMap()
+    <<(int)-1;
+    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
+
+void ListItem::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        onNetButtonClicked();
+    } else if (event->button() == Qt::RightButton) {
+        onRightButtonClicked();
+    }
+    return QFrame::mousePressEvent(event);
+}
+
+//bool ListItem::eventFilter(QObject *watched, QEvent *event)
+//{
+//    if (watched == m_itemFrame) {
+//        if (event->type() == QEvent::MouseButtonPress) {
+//            onNetButtonClicked();
+//        }
+//    }
+//    return QFrame::eventFilter(watched, event);
+//}
 
 void ListItem::initUI()
 {

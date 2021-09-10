@@ -54,6 +54,5 @@ signals:
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
-    KyNetworkDeviceResourse  *m_networkdevice = nullptr;
 };
 #endif // KYLINCONNECTRESOURCE_H

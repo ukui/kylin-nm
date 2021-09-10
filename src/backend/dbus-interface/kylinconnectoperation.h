@@ -37,7 +37,7 @@ signals:
     void activateConnectionError(QString errorMessage);
     void deactivateConnectionError(QString errorMessage);
 
-private:
+protected:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
 };
 

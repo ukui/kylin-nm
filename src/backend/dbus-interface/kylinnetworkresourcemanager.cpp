@@ -411,7 +411,6 @@ NetworkManager::Connection::Ptr KyNetworkResourceManager::getConnect(const QStri
     if (connectUuid.isEmpty()) {
         return nullptr;
     }
-
     for (index = 0; index < m_connections.size(); ++index) {
         connectPtr = m_connections.at(index);
         if (connectPtr->uuid() == connectUuid) {
@@ -549,8 +548,8 @@ void KyNetworkResourceManager::onActiveConnectionChanged(
     NetworkManager::ActiveConnection * activeConnect =
         qobject_cast<NetworkManager::ActiveConnection *>(sender());
     if (activeConnect->isValid()) {
-        qDebug()<<"!New state change activate connect"<<activeConnect->uuid();
-        qDebug()<<"!New the active connect state"<<state;
+//        qDebug()<<"!New state change activate connect"<<activeConnect->uuid();
+//        qDebug()<<"!New the active connect state"<<state;
     } else {
 
     }

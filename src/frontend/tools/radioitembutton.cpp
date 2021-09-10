@@ -1,7 +1,8 @@
 #include "radioitembutton.h"
 #include <QPainter>
 #include <QStyle>
-
+#define FRAMESPEED 100
+#define ALLTIME 10000
 #define BUTTON_SIZE 36,36
 #define ICON_SIZE 16,16
 #define BACKGROUND_COLOR QColor(0,0,0,0)
@@ -20,11 +21,16 @@ RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
     this->setFixedSize(BUTTON_SIZE);
     m_iconLabel->setFixedSize(BUTTON_SIZE);
     m_iconLabel->setAlignment(Qt::AlignCenter);
+    countCurrentTime=0;
+    currentPage=10;
+
 
     setActive(false);
     //JXJ_TODO loading动画
-//    switchTimer = new QTimer(this);
-//    connect(switchTimer, &QTimer::timeout, this, &RadioItemButton::onLoadingStarted);
+    switchTimer = new QTimer(this);
+    connect(switchTimer, &QTimer::timeout, this, &RadioItemButton::onLoadingStarted);
+    connect(this, &RadioItemButton::requestStartLoading, this, &RadioItemButton::onLoadingStarted);
+    connect(this , &RadioItemButton::requestStopLoading, this, &RadioItemButton::onLoadingStopped);
 }
 
 void RadioItemButton::startLoading()
@@ -54,31 +60,32 @@ void RadioItemButton::setActive(const bool &isActive)
 void RadioItemButton::onLoadingStarted()
 {
     //ZJP_TODO 开始播放转圈动画
-//        switchTimer->start(FRAMESPEED);
-//        QString qpmQss = ":/res/s/conning-b/";
-//        qpmQss.append(QString::number(this->currentPage));
-//        qpmQss.append(".png");
-//        m_iconLabel->setPixmap(QPixmap(qpmQss));
-////        m_iconLabel->setProperty("useIconHighlightEffect", true);
-////        m_iconLabel->setProperty("iconHighlightEffectMode", true);
+        switchTimer->start(FRAMESPEED);
+        QString qpmQss = ":/res/s/conning-s/";
+        qpmQss.append(QString::number(this->currentPage));
+        qpmQss.append(".png");
+        m_iconLabel->setPixmap(QPixmap(qpmQss));
+//        m_iconLabel->setProperty("useIconHighlightEffect",true);
+//        m_iconLabel->setProperty("iconHighlightEffectMode",true);
 
-//        this->currentPage --;
+        this->currentPage --;
 
-//        if (this->currentPage < 1) {
-//            this->currentPage = 12; //循环播放
-//        }
-//        this->countCurrentTime += FRAMESPEED;
-//        //达到一定的时间退出。应该是收到连接成功或者失败的信号断开
-//        if (this->countCurrentTime >= ALLTIME) {
-//            emit this->onLoadingStopped();
-//        }
+        if (this->currentPage < 1) {
+            this->currentPage = 10; //循环播放
+        }
+        this->countCurrentTime += FRAMESPEED;
+        //达到一定的时间退出。应该是收到连接成功或者失败的信号断开
+        if (this->countCurrentTime >= ALLTIME) {
+            countCurrentTime=0;
+            emit this->onLoadingStopped();
+        }
 }
 
 void RadioItemButton::onLoadingStopped()
 {
     //ZJP_TODO 停止播放转圈动画
     this->switchTimer->stop();
-
+//    this->m_iconLabel->hide();
 }
 
 void RadioItemButton::paintEvent(QPaintEvent *event)

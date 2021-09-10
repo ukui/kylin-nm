@@ -13,16 +13,21 @@ class LanListItem : public ListItem
 
 public:
     LanListItem(KyConnectItem *data, QString deviceName, QWidget *parent = nullptr);
+    LanListItem(QWidget *parent = nullptr);
     ~LanListItem() = default;
 
-protected:
-    void setIcon(bool isOn);
-
-private:
     KyConnectItem *m_data = nullptr;
     KyWiredConnectOperation *m_connectOperation = nullptr;
 
     QString deviceName = nullptr;
+    void refreshIcon();
+
+protected:
+    void setIcon(bool isOn);
+
+
+private:
+
 
 private slots:
     void onInfoButtonClicked();

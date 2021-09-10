@@ -40,3 +40,4 @@ private slots:
 };
 
 #endif // NETBUTTON_H
+

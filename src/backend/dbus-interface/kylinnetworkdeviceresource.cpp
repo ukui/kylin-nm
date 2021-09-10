@@ -180,6 +180,7 @@ void KyNetworkDeviceResourse::disconnectDevice()
 {
     NetworkManager::Device::List networkDeviceList =
                         m_networkResourceInstance->getNetworkDeviceList();
+    qDebug() << "[KyNetworkDeviceResourse]:disconnectDevice" << networkDeviceList.size();
 
     if (networkDeviceList.isEmpty()) {
         qDebug()<<"[KyNetworkDeviceResourse]"<<"the network device is empty, no need disconnect.";
@@ -190,21 +191,29 @@ void KyNetworkDeviceResourse::disconnectDevice()
     m_activeConnectUuidMap.clear();
 
     for (int index = 0; index < networkDeviceList.size(); ++index) {
+        qDebug() << "[KyNetworkDeviceResourse]:disconnectDevice" << index;
         NetworkManager::Device::Ptr networkDevicePtr = networkDeviceList.at(index);
         if (networkDevicePtr->isValid() &&
                 NetworkManager::Device::Type::Ethernet == networkDevicePtr->type()) {
             NetworkManager::ActiveConnection::Ptr activeConnectPtr = networkDevicePtr->activeConnection();
+            if (nullptr == activeConnectPtr) {
+                continue;
+            }
+
             QString activeConnectUuid = activeConnectPtr->uuid();
             if (!activeConnectUuid.isEmpty()) {
 //                m_activeConnectUuidList<<activeConnectUuid;
                 m_activeConnectUuidMap.insert(networkDevicePtr->interfaceName(),activeConnectUuid);
                 //TODO:save uuid for system reboot.
             }
+
             networkDevicePtr->disconnectInterface();
         }
+
         networkDevicePtr = nullptr;
     }
 
+     qDebug() << "[KyNetworkDeviceResourse]:disconnectDevice finished.";
     return;
 }
 

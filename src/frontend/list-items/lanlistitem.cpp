@@ -97,6 +97,11 @@ void LanListItem::refreshIcon()
     }
 }
 
+void LanListItem::onRightButtonClicked()
+{
+    //右键点击事件
+}
+
 void LanListItem::onInfoButtonClicked()
 {
     if(m_data){

@@ -54,6 +54,7 @@ signals:
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid);
+    void mainWindowVisibleChanged(const bool &visible);
 public slots:
 
 protected:

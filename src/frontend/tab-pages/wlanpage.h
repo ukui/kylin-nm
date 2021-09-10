@@ -7,7 +7,9 @@
 #include "kylinnetworkdeviceresource.h"
 #include "kywirelessconnectoperation.h"
 #include "wlanlistitem.h"
+#include "kylinconnectoperation.h"
 #include <QGSettings>
+#include "netdetails/netdetail.h"
 
 //#define SCROLLAREA_HEIGHT 150
 #define MORE_TEXT_MARGINS 16,0,0,0
@@ -30,11 +32,16 @@ public:
     void getStoredApInfo(QStringList &list);
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
+
 signals:
     void oneItemExpanded(const QString &ssid);
     void wirelessActivating(QString devName, QString ssid);
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid);
+    void hiddenWlanClicked();
+
+public slots:
+    void onMainWindowVisibleChanged(const bool &visible);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -42,6 +49,10 @@ protected:
 private:
     void initWlanUI();
     void initConnections();
+
+    //定时触发扫描的定时器
+    void initTimer();
+    QTimer * m_scanTimer = nullptr;
 
     void initDevice();//初始化默认设备
     void initDeviceCombox();
@@ -59,13 +70,14 @@ private:
     QLabel * m_hiddenWlanLabel = nullptr;
 
     QString m_activatedWlanSSid;
-    QStringList devList;
+    QStringList m_devList;
 
     KyWirelessNetResource *m_resource = nullptr;
     KyActiveConnectResourse *m_connectResource = nullptr;
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyWirelessConnectOperation * m_wirelessConnectOpreation = nullptr;
+    KyConnectOperation *m_connectoperation = nullptr;
     KyConnectResourse * m_apConnectResource = nullptr;
     QGSettings *m_switchGsettings = nullptr;
 
@@ -86,6 +98,8 @@ private slots:
     void onWlanSwitchClicked();
     void onWlanSwitchStatusChanged(const bool &checked);
     void onDeviceComboxIndexChanged(int currentIndex);
+    void requestScan();
+    void onHiddenWlanClicked();
 };
 
 #endif // WLANPAGE_H

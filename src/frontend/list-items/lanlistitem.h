@@ -24,6 +24,7 @@ public:
 
 protected:
     void setIcon(bool isOn);
+    void onRightButtonClicked();
 
 
 private:

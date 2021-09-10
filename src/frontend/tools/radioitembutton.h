@@ -28,15 +28,16 @@ protected:
 private:
     bool m_isActivated = false;
     QLabel * m_iconLabel = nullptr;
-    QTimer * switchTimer = nullptr;
+    QTimer * m_loadingTimer = nullptr;
+    QTimer * m_timeoutTimer = nullptr;
     QColor m_backgroundColor;
 
-    int currentPage;
-    int countCurrentTime;
+    int currentPage = 8;
 
 private slots:
     void onLoadingStarted();
     void onLoadingStopped();
+    void onLoadingTimerTimeout();
 };
 
 #endif // NETBUTTON_H

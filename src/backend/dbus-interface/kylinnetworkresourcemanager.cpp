@@ -548,8 +548,10 @@ void KyNetworkResourceManager::onActiveConnectionChanged(
     NetworkManager::ActiveConnection * activeConnect =
         qobject_cast<NetworkManager::ActiveConnection *>(sender());
     if (activeConnect->isValid()) {
-//        qDebug()<<"!New state change activate connect"<<activeConnect->uuid();
-//        qDebug()<<"!New the active connect state"<<state;
+        qDebug()<<"!New state change activate connect"<<activeConnect->uuid();
+        qDebug()<<"!New the active connect state"<<state;
+        emit activeConnectStateChangeReason(activeConnect->uuid(), state,
+                                            NetworkManager::ActiveConnection::Reason::UknownReason);
     } else {
 
     }

@@ -1,6 +1,7 @@
 #include "radioitembutton.h"
 #include <QPainter>
 #include <QStyle>
+#include <QDebug>
 #define FLASH_SPEED 100
 #define TIMEOUT_TIMER 90*1000
 #define BUTTON_SIZE 36,36
@@ -19,8 +20,6 @@ RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
     this->setFixedSize(BUTTON_SIZE);
     m_iconLabel->setFixedSize(BUTTON_SIZE);
     m_iconLabel->setAlignment(Qt::AlignCenter);
-    countCurrentTime=0;
-    currentPage=10;
 
 
     setActive(false);

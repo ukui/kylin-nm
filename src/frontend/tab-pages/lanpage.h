@@ -32,6 +32,7 @@ signals:
 
 private:
     void initDevice();//初始化默认设备
+    void initDeviceCombox();
     void initUI();
     void initList();
     void addNewItem(KyConnectItem *itemData, QListWidget *listWidget);
@@ -66,6 +67,7 @@ private slots:
     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName);
     void onDeviceNameUpdate(QString oldName, QString newName);
+    void onDeviceComboxIndexChanged(int currentIndex);
 };
 
 #endif // LANPAGE_H

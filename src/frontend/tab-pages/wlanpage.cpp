@@ -13,12 +13,13 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
     m_netDeviceResource=new KyNetworkDeviceResourse(this);
     m_apConnectResource = new KyConnectResourse(this);
-    devList.empty();
+    m_devList.empty();
     initDevice();
     m_wirelessConnectOpreation = new KyWirelessConnectOperation(this);
     initWlanUI();
     //要在initUI之后调用，保证UI的信号槽顺利绑定
     initConnections();
+    initTimer();
     getActiveWlan();
     getAllWlan();
 
@@ -121,6 +122,13 @@ void WlanPage::initConnections()
     m_netSwitch->setSwitchStatus(m_wirelessConnectOpreation->getWirelessEnabled());
 }
 
+void WlanPage::initTimer()
+{
+    m_scanTimer = new QTimer(this);
+    connect(m_scanTimer, &QTimer::timeout, this, &WlanPage::requestScan);
+//    m_scanTimer->start(10 * 1000);
+}
+
 /**
  * @brief WlanPage::initDevice 初始化默认网卡
  */
@@ -130,11 +138,11 @@ void WlanPage::initDevice()
     m_settings->beginGroup("DEFAULTCARD");
     QString key("wireless");
     QString deviceName = m_settings->value(key, "").toString();
-    m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList);
+    m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, m_devList);
     if (deviceName.isEmpty()) {
         qDebug() << "initDevice but  defalut wireless card is null";
-        if (!devList.isEmpty()) {
-            deviceName = devList.at(0);
+        if (!m_devList.isEmpty()) {
+            deviceName = m_devList.at(0);
             m_settings->setValue(key, deviceName);
         }
     }
@@ -144,7 +152,21 @@ void WlanPage::initDevice()
     m_settings->sync();
     delete m_settings;
     m_settings = nullptr;
+    //获取完m_devList后调用，减少重复获取
+    initDeviceCombox();
+}
 
+void WlanPage::initDeviceCombox()
+{
+    //TODO 获取设备列表，单设备时隐藏下拉框，多设备时添加到下拉框
+    if (m_devList.length() <= 1) {
+        m_deviceFrame->hide();
+    } else {
+        m_deviceFrame->show();
+        foreach (QString device, m_devList) {
+            m_deviceComboBox->addItem(device, device);
+        }
+    }
 }
 
 /**
@@ -152,6 +174,9 @@ void WlanPage::initDevice()
  */
 void WlanPage::getActiveWlan()
 {
+    if (!m_activatedNetListWidget) {
+        return;
+    }
     QMap<QString,QStringList> actMap;
     m_activatedNetListWidget->clear();
     m_resource->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activated, actMap);
@@ -205,6 +230,9 @@ void WlanPage::appendActiveWlan(const QString &ssid, int &height)
  */
 void WlanPage::getAllWlan()
 {
+    if (!m_inactivatedNetListWidget) {
+        return;
+    }
     qDebug() << "Started loading wlan list! time=" << QDateTime::currentDateTime().toString("hh:mm:ss.zzzz");
     m_inactivatedNetListWidget->clear();
     m_itemsMap.clear();
@@ -284,13 +312,22 @@ void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devi
     if (deviceType !=  NetworkManager::Device::Type::Wifi) {
         return;
     }
-    devList << deviceName;
+    m_devList << deviceName;
     if (getDefaultDevice().isEmpty())
     {
         updateDefaultDevice(deviceName);
         setDefaultDevice(WIRELESS, deviceName);
 
     }
+
+    //往下拉框添加新的网卡
+    if (m_deviceComboBox->findData(deviceName) == -1) {
+        if (m_devList.length() > 1 && !m_deviceFrame->isVisible()) {
+            m_deviceFrame->show();
+        }
+        m_deviceComboBox->addItem(deviceName, deviceName);
+    }
+
     emit deviceStatusChanged();
 }
 
@@ -309,10 +346,20 @@ void WlanPage::onDeviceRemove(QString deviceName)
         updateDefaultDevice(newDefaultDevice);
         setDefaultDevice(WIRELESS, newDefaultDevice);
     }
-    if (devList.contains(deviceName)) {
-        devList.removeOne(deviceName);
+
+    if (m_devList.contains(deviceName)) {
+        m_devList.removeOne(deviceName);
         emit deviceStatusChanged();
     }
+
+    //从下拉框删除已消失的网卡
+    if (m_deviceComboBox->findData(deviceName) != -1) {
+        if (m_devList.length() <= 1 && m_deviceFrame->isVisible()) {
+            m_deviceFrame->hide();
+        }
+        m_deviceComboBox->removeItem(m_deviceComboBox->findData(deviceName));
+    }
+
 }
 
 void WlanPage::onDeviceNameUpdate(QString oldName, QString newName)
@@ -322,11 +369,16 @@ void WlanPage::onDeviceNameUpdate(QString oldName, QString newName)
        setDefaultDevice(WIRELESS, newName);
    }
 
-   if (devList.contains(oldName)) {
-       devList.removeOne(oldName);
-       devList.append(newName);
+   if (m_devList.contains(oldName)) {
+       m_devList.removeOne(oldName);
+       m_devList.append(newName);
        qDebug() << "WlanPage emit deviceNameUpdate "  << oldName << newName;
        emit deviceNameChanged(oldName, newName);
+   }
+
+   if (m_deviceComboBox->findData(oldName) != -1) {
+       m_deviceComboBox->removeItem(m_deviceComboBox->findData(oldName));
+       m_deviceComboBox->addItem(newName, newName);
    }
 }
 
@@ -441,6 +493,28 @@ void WlanPage::onWlanSwitchStatusChanged(const bool &checked)
     onWlanUpdated();
 }
 
+void WlanPage::onDeviceComboxIndexChanged(int currentIndex)
+{
+    if (!m_deviceComboBox || currentIndex < 0) {
+        return;
+    }
+    //TODO 设备变更时更新设备和列表
+    QString currentDevice = m_deviceComboBox->itemText(currentIndex);
+    qDebug() << "Current device changed! device = " << currentDevice << Q_FUNC_INFO << __LINE__;
+    defaultDevice = currentDevice;
+    getActiveWlan();
+    getAllWlan();
+}
+
+//申请触发扫描，初始化执行&定时执行
+void WlanPage::requestScan()
+{
+    if (!m_wirelessConnectOpreation) {
+        qWarning() << "Scan failed! m_wirelessConnectOpreation is nullptr!" << Q_FUNC_INFO << __LINE__;
+    }
+    m_wirelessConnectOpreation->requestWirelessScan();
+}
+
 
 //for dbus
 void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
@@ -540,4 +614,24 @@ void WlanPage::activateWireless(const QString& devName, const QString& ssid)
 void WlanPage::deactivateWireless(const QString& devName, const QString& ssid)
 {
     //todo
+}
+
+void WlanPage::onMainWindowVisibleChanged(const bool &visible)
+{
+    qDebug() << "Received signal of mainwindow visible changed. cur_state = " << visible << Q_FUNC_INFO << __LINE__;
+    if (visible) {
+        //打开页面时先触发一次扫描
+        requestScan();
+    }
+
+    if (!m_scanTimer) {
+        qWarning() << "No QTimer!" << Q_FUNC_INFO << __LINE__;
+        return;
+    }
+    //若页面打开，开始扫描倒计时，若关闭，停止扫描倒计时
+    if (visible) {
+        m_scanTimer->start(10 * 1000);
+    } else {
+        m_scanTimer->stop();
+    }
 }

@@ -30,6 +30,7 @@ void MainWindow::showMainwindow()
     this->showNormal();
     this->raise();
     this->activateWindow();
+    emit this->mainWindowVisibleChanged(true);
 }
 
 /**
@@ -38,6 +39,7 @@ void MainWindow::showMainwindow()
 void MainWindow::hideMainwindow()
 {
     this->hide();
+    emit this->mainWindowVisibleChanged(false);
 }
 
 /**
@@ -111,6 +113,7 @@ void MainWindow::initUI()
     m_centralWidget->tabBar()->setFixedWidth(this->width());
     m_lanWidget = new LanPage(m_centralWidget);
     m_wlanWidget = new WlanPage(m_centralWidget);
+    connect(this, &MainWindow::mainWindowVisibleChanged, m_wlanWidget, &WlanPage::onMainWindowVisibleChanged);
     m_centralWidget->addTab(m_lanWidget, QIcon::fromTheme("network-wired-connected-symbolic", QIcon::fromTheme("network-wired-symbolic", QIcon(":/res/l/network-online.svg"))), tr("LAN"));
     m_centralWidget->addTab(m_wlanWidget, QIcon::fromTheme("network-wireless-signal-excellent-symbolic", QIcon(":/res/x/wifi-list-bg.svg")), tr("WLAN"));
 }

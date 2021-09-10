@@ -9,12 +9,15 @@
 #include <QScrollArea>
 #include <QListWidget>
 #include <QDir>
+#include <QComboBox>
 #include "kylinnetworkdeviceresource.h"
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
 #define TITLE_FRAME_HEIGHT 52
 #define TITLE_LAYOUT_MARGINS 24,0,24,0
+#define DEVICE_LAYOUT_MARGINS 24,0,24,8
+#define DEVICE_COMBOBOX_WIDTH 150
 #define ACTIVE_NET_LAYOUT_MARGINS 8,8,8,8
 #define NET_LAYOUT_MARGINS 8,8,0,8
 #define NET_LAYOUT_SPACING 8
@@ -23,7 +26,8 @@
 //#define SCROLL_AREA_HEIGHT 200
 #define SETTINGS_LAYOUT_MARGINS 24,16,24,16
 #define TRANSPARENT_COLOR QColor(0,0,0,0)
-#define INACTIVE_AREA_MIN_HEIGHT 200
+#define INACTIVE_AREA_MIN_HEIGHT 150
+#define ACTIVE_AREA_MAX_HEIGHT 100
 
 enum KyDeviceType
 {
@@ -55,6 +59,7 @@ signals:
 protected:
     void initUI();
     virtual void initDevice() = 0;//初始化默认设备
+    virtual void initDeviceCombox() = 0;//初始化设备选择下拉框
     QVBoxLayout * m_mainLayout = nullptr;
     QFrame * m_titleFrame = nullptr;
     QHBoxLayout * m_titleLayout = nullptr;
@@ -79,6 +84,15 @@ protected:
     QLabel * m_settingsLabel = nullptr;
 
     QString defaultDevice = "";
+
+    //临时增加的下拉框选择网卡区域
+    QFrame * m_deviceFrame = nullptr;
+    QHBoxLayout * m_deviceLayout = nullptr;
+    QLabel * m_deviceLabel = nullptr;
+    QComboBox * m_deviceComboBox = nullptr;
+
+public slots:
+    virtual void onDeviceComboxIndexChanged(int currentIndex) = 0;
 
 };
 

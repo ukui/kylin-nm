@@ -42,7 +42,6 @@ void RadioItemButton::setButtonIcon(const QIcon &icon)
     if (icon.isNull()) {
         return;
     }
-    //ZJP_TODO 绘制圆形按钮
     m_iconLabel->setPixmap(icon.pixmap(ICON_SIZE));
 }
 

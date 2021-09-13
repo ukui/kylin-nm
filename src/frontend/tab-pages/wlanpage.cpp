@@ -16,6 +16,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     m_devList.empty();
     initDevice();
     m_wirelessConnectOpreation = new KyWirelessConnectOperation(this);
+    m_connectoperation = new KyConnectOperation(this);
     initWlanUI();
     //要在initUI之后调用，保证UI的信号槽顺利绑定
     initConnections();
@@ -30,6 +31,8 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::activateConnectionError, this, &WlanPage::activateFailed);
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::addAndActivateConnectionError, this, &WlanPage::activateFailed);
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::deactivateConnectionError, this, &WlanPage::deactivateFailed);
+
+    connect(this, &WlanPage::hiddenWlanClicked, this, &WlanPage::onHiddenWlanClicked);
 }
 
 //QString WlanPage::getSsidFromUuid(const QString &uuid)
@@ -42,6 +45,7 @@ bool WlanPage::eventFilter(QObject *w, QEvent *e)
     if (e->type() == QEvent::MouseButtonPress) {
         if (w == m_hiddenWlanLabel) {
             //ZJP_TODO 打开隐藏WiFi添加弹窗
+            emit this->hiddenWlanClicked();
         } else if (w == m_settingsLabel) {
             //ZJP_TODO 打开控制面板
         }
@@ -77,6 +81,7 @@ void WlanPage::initWlanUI()
     m_hiddenWlanLabel = new QLabel(m_hiddenWlanWidget);
     m_hiddenWlanLabel->setText(tr("More..."));
     m_hiddenWlanLabel->setContentsMargins(MORE_TEXT_MARGINS);
+    m_hiddenWlanLabel->installEventFilter(this);
     m_hiddenWlanLayout->addWidget(m_hiddenWlanLabel);
     m_hiddenWlanLayout->addStretch();
 
@@ -105,6 +110,10 @@ void WlanPage::initConnections()
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::listUpdate);
 //    connect(m_resource, &KyWirelessNetResource::wifiNetworkUpdate, this, &WlanPage::onWlanUpdated);
     connect(m_connectResource, &KyActiveConnectResourse::stateChangeReason, this, &WlanPage::onActivatedWlanChanged);
+//    connect(m_connectoperation, &KyConnectOperation::activateConnectionError, this, &WlanPage::showDesktopNotify);
+//    connect(m_connectoperation, &KyConnectOperation::createConnectionError, this, &WlanPage::showDesktopNotify);
+//    connect(m_connectoperation, &KyConnectOperation::deactivateConnectionError, this, &WlanPage::showDesktopNotify);
+//    connect(m_connectoperation, &KyConnectOperation::deleteConnectionError, this, &WlanPage::showDesktopNotify);
     connect(m_netSwitch, &SwitchButton::clicked, this, &WlanPage::onWlanSwitchClicked);
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
@@ -455,6 +464,10 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
         int height = 0;
         appendActiveWlan(ssid, height);
         onWlanRemoved(defaultDevice, ssid);
+//        this->showDesktopNotify(tr("Connect WLAN succeed"));
+    } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
+        onWlanUpdated();
+//        this->showDesktopNotify(tr("Disconnect WLAN succeed"));
     } else {
         onWlanUpdated();
     }
@@ -523,6 +536,13 @@ void WlanPage::requestScan()
         qWarning() << "Scan failed! m_wirelessConnectOpreation is nullptr!" << Q_FUNC_INFO << __LINE__;
     }
     m_wirelessConnectOpreation->requestWirelessScan();
+}
+
+void WlanPage::onHiddenWlanClicked()
+{
+    qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
+    NetDetail *netDetail = new NetDetail("", "", false, true, false);
+    netDetail->show();
 }
 
 

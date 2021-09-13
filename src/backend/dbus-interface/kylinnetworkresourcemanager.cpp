@@ -411,7 +411,6 @@ NetworkManager::Connection::Ptr KyNetworkResourceManager::getConnect(const QStri
     if (connectUuid.isEmpty()) {
         return nullptr;
     }
-
     for (index = 0; index < m_connections.size(); ++index) {
         connectPtr = m_connections.at(index);
         if (connectPtr->uuid() == connectUuid) {

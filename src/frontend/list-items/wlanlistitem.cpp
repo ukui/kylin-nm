@@ -7,9 +7,13 @@ WlanListItem::WlanListItem(KyWirelessNetResource *resource, KyWirelessNetItem *d
     m_resource = resource;
     m_wlanDevice = device;
     m_connoperation = new KyWirelessConnectOperation(this);
+    m_connectResource = new KyActiveConnectResourse();
     initWlanUI();
     setExpanded(false);
     initWlanConnection();
+
+    m_menu = new QMenu();//右键菜单
+    connect(m_menu, &QMenu::triggered, this, &WlanListItem::onMenuTriggered);
 }
 
 WlanListItem::WlanListItem(QWidget *parent) : ListItem(parent)
@@ -65,6 +69,23 @@ void WlanListItem::resizeEvent(QResizeEvent *event)
     }
     this->blockSignals(false);
     return ListItem::resizeEvent(event);
+}
+
+void WlanListItem::onRightButtonClicked()
+{
+    m_menu->clear();
+    if (!this->m_data) {
+        return;
+    }
+    if (this->m_isActive) {
+        m_menu->addAction(new QAction(tr("Disconnect"), this));
+    } else {
+        m_menu->addAction(new QAction(tr("Connect"), this));
+    }
+    if (m_data->m_isConfigured)
+        m_menu->addAction(new QAction(tr("Forget"), this));
+    m_menu->move(cursor().pos());
+    m_menu->show();
 }
 
 void WlanListItem::initWlanUI()
@@ -137,6 +158,7 @@ void WlanListItem::initWlanConnection()
     connect(m_resource, &KyWirelessNetResource::connectionAdd, this, &WlanListItem::onConnectionAdd);
     connect(m_resource, &KyWirelessNetResource::connectionRemove, this, &WlanListItem::onConnectionRemove);
     connect(this->m_infoButton, &InfoButton::clicked, this, &WlanListItem::onInfoButtonClicked);
+    connect(m_connectResource, &KyActiveConnectResourse::stateChangeReason, this, &WlanListItem::onWlanStatusChange);
 }
 
 void WlanListItem::refreshIcon()
@@ -222,7 +244,6 @@ void WlanListItem::onNetButtonClicked()
 
     if (m_data->m_isConfigured) {
         m_connoperation->activeWirelessConnect(m_wlanDevice,m_data->m_connectUuid);
-//        m_netButton->startLoading();
         qDebug()<<"Has configuration, will be activated. ssid = " << m_data->m_NetSsid << Q_FUNC_INFO << __LINE__;
         return;
     }
@@ -334,6 +355,58 @@ void WlanListItem::onConnectionRemove(QString deviceName, QString ssid)
     }
     if (ssid == m_data->m_NetSsid && deviceName == m_wlanDevice) {
         m_resource->getWifiNetwork(deviceName, ssid, *m_data);
+    }
+}
+
+void WlanListItem::onWlanStatusChange(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
+{
+    QString ssid;
+    m_resource->getSsidByUuid(uuid,ssid);
+    if (m_data->m_NetSsid == ssid) {
+        qDebug() << "[WlanPage] State changed to :" << state << Q_FUNC_INFO <<__LINE__;
+        if (state == NetworkManager::ActiveConnection::State::Activating) {
+            m_netButton->startLoading();
+        } else {
+            m_netButton->stopLoading();
+        }
+    }
+
+    //TODO 网络状态改变的通知
+//    if (state == NetworkManager::ActiveConnection::State::Activated) {
+////        this->showDesktopNotify(tr("WLAN Connected Successfully"));
+//    } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
+//        switch (reason) {
+//        case NetworkManager::ActiveConnection::Reason::UserDisconnected:
+//            this->showDesktopNotify(tr("WLAN Disconnected Successfully"));
+//            break;
+//        case NetworkManager::ActiveConnection::Reason::ServiceStopped:
+//            this->showDesktopNotify(tr("The service providing the VPN connection was stopped"));
+//            break;
+//        case NetworkManager::ActiveConnection::Reason::IpConfigInvalid:
+//            this->showDesktopNotify(tr("The IP config of the active connection was invalid"));
+//            break;
+//        case NetworkManager::ActiveConnection::Reason::ConnectTimeout:
+//            this->showDesktopNotify(tr("The connection attempt to the VPN service timed out"));
+//            break;
+//        case NetworkManager::ActiveConnection::Reason::NoSecrets:
+//            this->showDesktopNotify(tr("Necessary secrets for the connection were not provided"));
+//            break;
+//        case NetworkManager::ActiveConnection::Reason::LoginFailed:
+//            this->showDesktopNotify(tr("Authentication to the server failed"));
+//            break;
+//        default:
+//            qDebug() << "Wlan disconnected with unkown reason." << Q_FUNC_INFO << __LINE__;
+//            break;
+//        }
+//    }
+}
+
+void WlanListItem::onMenuTriggered(QAction *action)
+{
+    if (action->text() == tr("Disconnect") || action->text() == tr("Connect")) {
+        this->onNetButtonClicked();
+    } else if (action->text() == tr("Forget")) {
+        m_connoperation->deleteWirelessConnect(m_data->m_connectUuid);
     }
 }
 

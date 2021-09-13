@@ -11,13 +11,28 @@ LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *paren
     m_data = data;
     m_nameLabel->setText(m_data->m_connectName);
 
+//    if (m_data != nullptr) {
+//        if (m_data->m_connectState == NetworkManager::ActiveConnection::State::Activated) {
+//            setIcon(true);
+//            m_isActive = true;
+//        } else {
+//            setIcon(false);
+//            m_isActive = false;
+//        }
+//    }
     if (m_data != nullptr) {
         if (m_data->m_connectState == NetworkManager::ActiveConnection::State::Activated) {
+            m_netButton->stopLoading();
             setIcon(true);
             m_isActive = true;
-        } else {
+        } else if (m_data->m_connectState == NetworkManager::ActiveConnection::State::Deactivated)
+        {
+            m_netButton->stopLoading();
             setIcon(false);
             m_isActive = false;
+        } else
+        {
+//            m_netButton->startLoading();
         }
     }
     m_netButton->setActive(m_isActive);
@@ -25,17 +40,34 @@ LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *paren
     connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
 }
 
+LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
+{
+    m_isActive = false;
+    m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic"));
+    const QString str="Not connected";
+    m_nameLabel->setText(str);
+    this->m_infoButton->hide();
+}
+
 void LanListItem::onNetButtonClicked()
 {
+    if(!m_data){
+        qDebug() << "A nullItem clicked!" << Q_FUNC_INFO << __LINE__;
+        return;
+    }
     if (!m_isActive) {
         //未连接,点击后连
         m_connectOperation->activateWiredConnection(m_data->m_connectUuid, deviceName);
         qDebug() << m_data->m_connectName << "Connect after user clicked!";
+//        m_data->m_connectState = NetworkManager::ActiveConnection::State::Activating;
+//        refreshIcon();
         m_isActive = true;
     } else {
         //连接，点击后断开
         m_connectOperation->deactivateWiredConnection(m_data->m_connectName, m_data->m_connectUuid);
         qDebug() << m_data->m_connectName << "Disconnect after user clicked!";
+//        m_data->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
+//        refreshIcon();
         m_isActive = false;
     }
 }
@@ -47,6 +79,27 @@ void LanListItem::setIcon(bool isOn)
     } else {
         m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
     }
+}
+void LanListItem::refreshIcon()
+{
+    switch (m_data->m_connectState) {
+    case NetworkManager::ActiveConnection::State::Activated:
+        m_netButton->stopLoading();
+        setIcon(true);
+        break;
+    case NetworkManager::ActiveConnection::State::Activating:
+        m_netButton->startLoading();
+        break;
+    case NetworkManager::ActiveConnection::State::Deactivated:
+        m_netButton->stopLoading();
+        setIcon(false);
+        break;
+    }
+}
+
+void LanListItem::onRightButtonClicked()
+{
+    //右键点击事件
 }
 
 void LanListItem::onInfoButtonClicked()

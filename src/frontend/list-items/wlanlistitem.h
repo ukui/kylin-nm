@@ -6,6 +6,9 @@
 #include "wlanpage.h"
 #include "kywirelessconnectoperation.h"
 #include <QCheckBox>
+#include "kylinactiveconnectresource.h"
+#include <QMenu>
+#include <QAction>
 
 #include <networkmanagerqt/wirelesssecuritysetting.h>
 
@@ -29,6 +32,7 @@ public:
     void setExpanded(const bool &expanded);
 protected:
     void resizeEvent(QResizeEvent *event);
+    void onRightButtonClicked();
 
 signals:
     void itemHeightChanged(const QString &ssid);
@@ -43,6 +47,7 @@ private:
     KyWirelessNetResource *m_resource = nullptr;
     KyWirelessNetItem *m_data = nullptr;
     KyWirelessConnectOperation *m_connoperation = nullptr;
+    KyActiveConnectResourse *m_connectResource = nullptr;
     bool m_hasPwd = true;
     QString m_wlanDevice;
 
@@ -62,6 +67,10 @@ private:
     QCheckBox *m_autoConnectCheckBox = nullptr;
     QLabel *m_autoConnectLabel = nullptr;
 
+    QMenu *m_menu = nullptr;
+
+    NetworkManager::ActiveConnection::State m_state;
+
 //    QVBoxLayout * m_mainLayout = nullptr;
 //    QFrame * m_itemFrame = nullptr;
 //    QHBoxLayout * m_hItemLayout = nullptr;
@@ -79,6 +88,10 @@ private slots:
     void onConnectButtonClicked();
     void onConnectionAdd(QString deviceName, QString ssid);
     void onConnectionRemove(QString deviceName, QString ssid);
+    void onWlanStatusChange(QString uuid,
+                          NetworkManager::ActiveConnection::State state,
+                          NetworkManager::ActiveConnection::Reason reason);
+    void onMenuTriggered(QAction *action);
 };
 
 #endif // WLANLISTITEM_H

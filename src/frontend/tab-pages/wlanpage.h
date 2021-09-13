@@ -39,6 +39,8 @@ signals:
     void wirelessActivating(QString devName, QString ssid);
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid);
+    void signalStrengthChange(QString devName, QString ssid, int strength);
+    void secuTypeChange(QString devName, QString ssid, QString secuType);
     void hiddenWlanClicked();
 
 public slots:

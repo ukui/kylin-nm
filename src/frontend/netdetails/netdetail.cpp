@@ -183,6 +183,9 @@ void NetDetail::loadPage()
             securityBtn->hide();
         } else {
             securityBtn->show();
+            if (m_name.isEmpty()) {
+                titleLabel->setText(tr("connect hiddin wlan"));
+            }
         }
     }
 }
@@ -700,23 +703,43 @@ bool NetDetail::createWirelessConnect()
     if (secuType == WPA_AND_WPA2_ENTERPRISE) {
         connetSetting.m_type = SAE;
         if (enterpriseType == TLS) {
-            qDebug() << "add new TLS connect";
             m_info.tlsInfo.devIfaceName = m_deviceName;
             securityPage->updateTlsChange(m_info.tlsInfo);
-            m_wirelessConnOpration->addTlsConnect(connetSetting, m_info.tlsInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new TLS connect";
+                m_wirelessConnOpration->addTlsConnect(connetSetting, m_info.tlsInfo);
+            } else {
+                qDebug() << "addAndConnect TLS connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPriseTlsConnect(m_info.tlsInfo, connetSetting, m_deviceName, true);
+            }
         } else if (enterpriseType == PEAP) {
-            qDebug() << "add new PEAP connect";
             securityPage->updatePeapChange(m_info.peapInfo);
-            m_wirelessConnOpration->addPeapConnect(connetSetting, m_info.peapInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new PEAP connect";
+                m_wirelessConnOpration->addPeapConnect(connetSetting, m_info.peapInfo);
+            } else {
+                qDebug() << "addAndConnect PEAP connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPrisePeapConnect(m_info.peapInfo, connetSetting, m_deviceName, true);
+            }
         } else if (enterpriseType == TTLS) {
-            qDebug() << "add new TTLS connect";
             securityPage->updateTtlsChange(m_info.ttlsInfo);
-            m_wirelessConnOpration->addTtlsConnect(connetSetting, m_info.ttlsInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new TTLS connect";
+                m_wirelessConnOpration->addTtlsConnect(connetSetting, m_info.ttlsInfo);
+            } else {
+                qDebug() << "addAndConnect TTLS connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, true);
+            }
         }
     } else {
-        qDebug() << "add new personal connect";
         securityPage->updateSecurityChange(connetSetting);
-        m_wirelessConnOpration->addConnect(connetSetting);
+        if (!m_name.isEmpty()) {
+            qDebug() << "add new personal connect";
+            m_wirelessConnOpration->addConnect(connetSetting);
+        } else {
+            qDebug() << "addAndConnect personal connect";
+            m_wirelessConnOpration->addAndActiveWirelessConnect(m_deviceName, connetSetting, true);
+        }
     }
     return true;
 }

@@ -108,6 +108,9 @@ void WlanPage::initConnections()
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
     connect(m_resource, &KyWirelessNetResource::wifiNetworkAdd, this, &WlanPage::listUpdate);
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::listUpdate);
+    connect(m_resource, &KyWirelessNetResource::signalStrengthChange, this, &WlanPage::signalStrengthChange);
+    connect(m_resource, &KyWirelessNetResource::secuTypeChange, this, &WlanPage::secuTypeChange);
+
 //    connect(m_resource, &KyWirelessNetResource::wifiNetworkUpdate, this, &WlanPage::onWlanUpdated);
     connect(m_connectResource, &KyActiveConnectResourse::stateChangeReason, this, &WlanPage::onActivatedWlanChanged);
 //    connect(m_connectoperation, &KyConnectOperation::activateConnectionError, this, &WlanPage::showDesktopNotify);
@@ -288,8 +291,11 @@ void WlanPage::getAllWlan()
 
 void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 {
+    emit listUpdate(interface);
     qDebug() << "A Wlan Added! interface = " << interface << "; ssid = " << item.m_NetSsid << Q_FUNC_INFO <<__LINE__;
-
+    if (interface != defaultDevice) {
+        qDebug() << "wlan add interface not equal defaultdevice,ignore";
+    }
     KyWirelessNetItem *data = new KyWirelessNetItem(item);
     WlanListItem *wlanItemWidget = new WlanListItem(m_resource, data, defaultDevice);
     connect(wlanItemWidget, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
@@ -306,9 +312,13 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 
 void WlanPage::onWlanRemoved(QString interface, QString ssid)
 {
+    emit listUpdate(interface);
     if (!m_itemsMap.contains(ssid)) { return; }
     if (m_expandedItem == m_itemsMap.value(ssid)) { m_expandedItem = nullptr; }
     qDebug() << "A Wlan Removed! interface = " << interface << "; ssid = " << ssid << Q_FUNC_INFO <<__LINE__;
+    if (interface != defaultDevice) {
+        qDebug() << "wlan remove interface not equal defaultdevice,ignore";
+    }
     int height = m_inactivatedNetListWidget->itemWidget(m_itemsMap.value(ssid))->height();
     m_inactivatedNetListWidget->takeItem(m_inactivatedNetListWidget->row(m_itemsMap.value(ssid)));
     m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height() - height - NET_LIST_SPACING);
@@ -541,7 +551,7 @@ void WlanPage::requestScan()
 void WlanPage::onHiddenWlanClicked()
 {
     qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
-    NetDetail *netDetail = new NetDetail("", "", false, true, false);
+    NetDetail *netDetail = new NetDetail(defaultDevice, "", "", false, true, true, this);
     netDetail->show();
 }
 

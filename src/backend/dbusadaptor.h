@@ -92,6 +92,11 @@ Q_SIGNALS: // SIGNALS
     void hotspotDeactivated(QString devName, QString ssid);
     //热点连接
     void hotspotActivated(QString devName, QString ssid);
+
+    //信号强度变化
+    void signalStrengthChange(QString devName, QString ssid, int strength);
+    //安全性变化
+    void secuTypeChange(QString devName, QString ssid, QString secuType);
 };
 
 #endif

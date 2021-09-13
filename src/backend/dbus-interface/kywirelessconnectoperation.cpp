@@ -68,7 +68,6 @@ NetworkManager::ConnectionSettings::Ptr assembleWirelessSettings(const KyWireles
 
 KyWirelessConnectOperation::KyWirelessConnectOperation(QObject *parent) : KyConnectOperation(parent)
 {
-    m_networkResourceInstance = KyNetworkResourceManager::getInstance();
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifinEnabledChanged, this, &KyWirelessConnectOperation::wifinEnabledChanged);
 }
 

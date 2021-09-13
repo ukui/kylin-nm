@@ -26,7 +26,8 @@ public:
     void getWiredList(QMap<QString, QVector<QStringList> > &map);
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
-
+    void showDetailPage(QString devName, QString uuid);
+    void setWiredDeviceEnable(const QString& devName, bool enable);
 signals:
     void wiredActivating(QString devName, QString ssid);
 

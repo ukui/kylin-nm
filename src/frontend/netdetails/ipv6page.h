@@ -12,16 +12,21 @@
 #include <QComboBox>
 #include <QLineEdit>
 
+//#include "kylinconnectsetting.h"
+#include "coninfo.h"
+
 class Ipv6Page : public QFrame
 {
     Q_OBJECT
 public:
-    Ipv6Page(bool isWlan, QWidget *parent = nullptr);
-    void setIpv6Config(const QString &ipv6Config);
+    Ipv6Page(QWidget *parent = nullptr);
+    void setIpv6Config(KyIpConfigType ipv6Config);
     void setIpv6(const QString &ipv4);
     void setIpv6FirDns(const QString &ipv6FirDns);
     void setIpv6SecDns(const QString &ipv6SecDns);
     void setGateWay(const QString &gateWay);
+
+    bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
 
 public:
     QComboBox *ipv6ConfigCombox;
@@ -39,14 +44,21 @@ private:
     QLabel *m_dnsLabel;
     QLabel *m_secDnsLabel;
 private:
-    bool isWlan;
-private:
     void initUI();
     void initComponent();
     void setControlEnabled(bool check);
 
-public slots:
+    bool getIpv6EditState(QString text);
+
+    bool checkConnectBtnIsEnabled();
+
+
+private slots:
     void configChanged(int index);
+    void setEnableOfSaveBtn();
+
+signals:
+    void setIpv6PageState(bool);
 };
 
 #endif // IPV6PAGE_H

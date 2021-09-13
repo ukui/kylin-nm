@@ -11,6 +11,7 @@
 #include <QDBusInterface>
 #include "lanpage.h"
 #include "wlanpage.h"
+#include "netdetails/netdetail.h"
 
 class MainWindow : public QMainWindow
 {
@@ -38,6 +39,13 @@ public:
     //无线连接断开
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
+
+    void setWiredDeviceEnable(const QString& devName, bool enable);
+
+    //唤起属性页 根据网卡类型 参数2 为ssid/uuid
+    void showPropertyWidget(QString devName, QString ssid);
+    //唤起新建有线连接界面
+    void showCreateWiredConnectWidget(const QString devName);
 
 signals:
     //设备插拔

@@ -295,6 +295,7 @@ void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetti
 
     NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
     connectSetting.m_ifaceName = connectionSettings->interfaceName();
+    connectSetting.m_isAutoConnect = connectionSettings->autoconnect();
 
     NetworkManager::Ipv4Setting::Ptr ipv4Setting = connectionSettings->setting(NetworkManager::Setting::Ipv4).dynamicCast<NetworkManager::Ipv4Setting>();
     getIpv4ConnectSetting(ipv4Setting, connectSetting);

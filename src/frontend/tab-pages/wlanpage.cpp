@@ -112,6 +112,8 @@ void WlanPage::initConnections()
             m_netSwitch->setSwitchStatus(m_switchGsettings->get(WIRELESS_SWITCH).toBool());
             connect(m_switchGsettings, &QGSettings::changed, this, [ = ](const QString &key) {
                 if (key == WIRELESS_SWITCH) {
+                    bool status = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
+                    m_wirelessConnectOpreation->setWirelessEnabled(status);
                     onWlanSwitchStatusChanged(m_switchGsettings->get(WIRELESS_SWITCH).toBool());
                 }
             });
@@ -159,14 +161,21 @@ void WlanPage::initDevice()
 void WlanPage::initDeviceCombox()
 {
     //TODO 获取设备列表，单设备时隐藏下拉框，多设备时添加到下拉框
+    disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &WlanPage::onDeviceComboxIndexChanged);
     if (m_devList.length() <= 1) {
         m_deviceFrame->hide();
     } else {
         m_deviceFrame->show();
         foreach (QString device, m_devList) {
+            //空时addItem 会触发currentIndexChanged
             m_deviceComboBox->addItem(device, device);
         }
+        int index = m_deviceComboBox->findData(defaultDevice);
+        qDebug() << index;
+        m_deviceComboBox->setCurrentIndex(index);
     }
+    connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &WlanPage::onDeviceComboxIndexChanged);
+
 }
 
 /**
@@ -251,6 +260,7 @@ void WlanPage::getAllWlan()
         KyWirelessNetItem *data = new KyWirelessNetItem(itemData);
         WlanListItem *wlanItemWidget = new WlanListItem(m_resource, data, defaultDevice);
         QListWidgetItem *wlanItem = new QListWidgetItem(m_inactivatedNetListWidget);
+        qDebug() << itemData.m_NetSsid << itemData.m_isConfigured;
         connect(wlanItemWidget, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
         connect(wlanItemWidget, &WlanListItem::connectButtonClicked, this, &WlanPage::onConnectButtonClicked);
         m_itemsMap.insert(data->m_NetSsid, wlanItem);
@@ -634,4 +644,23 @@ void WlanPage::onMainWindowVisibleChanged(const bool &visible)
     } else {
         m_scanTimer->stop();
     }
+}
+void WlanPage::showDetailPage(QString devName, QString ssid)
+{
+    KyWirelessNetItem data;
+    if (!m_resource->getWifiNetwork(devName, ssid, data)) {
+        qDebug()<<"[WlanPage] " << ssid << " is missing when showDetailPage";
+        return;
+    }
+
+    QMap<QString,QStringList> actMap;
+    m_resource->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activated, actMap);
+    if (!actMap.contains(devName)) {
+        qDebug()<<"[WlanPage] " << devName << " is missing when showDetailPage";
+        return;
+    }
+
+    bool isActive = actMap[devName].contains(ssid);
+    NetDetail *netDetail = new NetDetail(devName, ssid, data.m_connectUuid, isActive, true, false, this);
+    netDetail->show();
 }

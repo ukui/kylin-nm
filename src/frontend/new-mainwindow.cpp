@@ -7,6 +7,8 @@
 #include <QKeyEvent>
 #include <QProcess>
 
+#include "kylinnetworkdeviceresource.h"
+
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 456
 #define THEME_SCHAME "org.ukui.style"
@@ -395,6 +397,46 @@ void MainWindow::deactiveWirelessAp(const QString apName, const QString apPasswo
 void MainWindow::getStoredApInfo(QStringList &list)
 {
     m_wlanWidget->getStoredApInfo(list);
+}
+
+
+void MainWindow::setWiredDeviceEnable(const QString& devName, bool enable)
+{
+    m_lanWidget->setWiredDeviceEnable(devName, enable);
+}
+void MainWindow::showPropertyWidget(QString devName, QString ssid)
+{
+    KyNetworkDeviceResourse *devResourse = new KyNetworkDeviceResourse();
+    QStringList wiredDeviceList;
+    wiredDeviceList.clear();
+    devResourse->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDeviceList);
+    if (wiredDeviceList.contains(devName)) {
+      qDebug() <<   "showPropertyWidget device type wired device name " << devName << " uuid " << ssid;
+      m_lanWidget->showDetailPage(devName, ssid);
+      delete devResourse;
+      devResourse = nullptr;
+      return;
+    }
+
+    QStringList wirelessDeviceList;
+    wirelessDeviceList.clear();
+    devResourse->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDeviceList);
+    if (wirelessDeviceList.contains(devName)) {
+      qDebug() <<   "showPropertyWidget device type wireless device name " << devName << " ssid " << ssid;
+      m_wlanWidget->showDetailPage(devName, ssid);
+      delete devResourse;
+      devResourse = nullptr;
+      return;
+    }
+
+    qDebug() <<   "showPropertyWidget no such device " << devName;
+}
+
+void MainWindow::showCreateWiredConnectWidget(const QString devName)
+{
+    qDebug() << "showCreateWiredConnectWidget! devName = " << devName;
+    NetDetail *netDetail = new NetDetail(devName, "", "", false, false, true, this);
+    netDetail->show();
 }
 
 //有线连接断开

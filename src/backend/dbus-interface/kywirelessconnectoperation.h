@@ -15,7 +15,7 @@ enum KySecuType {
     NONE = 0,
     WPA_AND_WPA2_PERSONAL,
     WPA_AND_WPA2_ENTERPRISE,
-    WPA2_AND_WPA3_PERSONAL
+    WPA3_PERSONAL,
 };
 
 enum KyKeyMgmt {
@@ -25,12 +25,6 @@ enum KyKeyMgmt {
     WpaPsk,
     WpaEap,
     SAE
-};
-
-enum KyEapMethodType {
-    TLS,
-    PEAP,
-    TTLS,
 };
 
 class KyWirelessConnectSetting : public KyConnectSetting
@@ -64,6 +58,9 @@ public:
 
     //获取KeyMgmt
     KyKeyMgmt getConnectKeyMgmt(const QString &uuid);
+
+    //获取企业网类型
+    bool getEnterpiseEapMethod(const QString &uuid, KyEapMethodType &type);
 
     //激活连接
     void activeWirelessConnect(QString , QString);
@@ -102,6 +99,8 @@ public:
     void deleteWirelessConnect(const QString &connectUuid);
     //获取密码
     QString getPsk(const QString &connectUuid);
+    QString getPrivateKeyPassword(const QString &connectUuid);
+    QString get8021xPassword(const QString &connectUuid);
 
     //申请扫描
     void requestWirelessScan();

@@ -1,0 +1,61 @@
+#ifndef CONINFO_H
+#define CONINFO_H
+
+#include <QString>
+#include "kywirelessnetitem.h"
+#include "kylinconnectresource.h"
+#include "kylinactiveconnectresource.h"
+#include "kywirelessconnectoperation.h"
+#include "kywirelessnetresource.h"
+#include "kyenterpricesettinginfo.h"
+
+#define AUTO_CONFIG  0
+#define MANUAL_CONFIG  1
+
+enum TtlsInnerType
+{
+    PAP = 0,
+    MSCHAP,
+    MSCHAPV2_EAP,
+    MSCHAPV2,
+    CHAP,
+    MD5_EAP,
+    GTC_EAP
+};
+
+class ConInfo {
+public:
+    QString strConName;
+    QString strConType;
+    QString strSecType;
+    KySecuType secType = WPA_AND_WPA2_PERSONAL;
+    QString strPassword;
+    QString strChan;
+    QString strMac;
+    QString strHz;
+    QString strBandWidth;
+    QString strDynamicIpv4;
+    QString strDynamicIpv6;
+    QString strDynamicIpv4Dns;
+    bool    isAutoConnect = false;
+
+    KyIpConfigType ipv4ConfigType = CONFIG_IP_DHCP;
+    QString strIPV4Address;
+    QString strIPV4NetMask;
+    QString strIPV4FirDns;
+    QString strIPV4SecDns;
+    QString strIPV4GateWay;
+
+    KyIpConfigType ipv6ConfigType = CONFIG_IP_DHCP;
+    QString strIPV6Address;
+    QString strIPV6Prefix;
+    QString strIPV6FirDns;
+    QString strIPV6SecDns;
+    QString strIPV6GateWay;
+
+    KyEapMethodType enterpriseType;
+    KyEapMethodTlsInfo tlsInfo;
+    KyEapMethodPeapInfo peapInfo;
+    KyEapMethodTtlsInfo ttlsInfo;
+};
+#endif // CONINFO_H

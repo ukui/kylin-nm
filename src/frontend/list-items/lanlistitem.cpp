@@ -54,7 +54,7 @@ void LanListItem::onInfoButtonClicked()
     if(m_data){
         qDebug()<<"Net active or not:"<<m_isActive;
         qDebug() << "On lan info button clicked! uuid = " << m_data->m_connectUuid << "; name = " << m_data->m_connectName << "." <<Q_FUNC_INFO << __LINE__;
-        NetDetail *netDetail = new NetDetail(m_data->m_connectName, m_data->m_connectUuid, m_isActive,false, false);
+        NetDetail *netDetail = new NetDetail(deviceName, m_data->m_connectName, m_data->m_connectUuid, m_isActive,false, false, this);
         netDetail->show();
     }
     else{

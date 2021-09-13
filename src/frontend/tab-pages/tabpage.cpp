@@ -148,3 +148,60 @@ bool checkDeviceExist(KyDeviceType deviceType, QString deviceName)
     delete kdr;
     return devList.contains(deviceName);
 }
+
+void saveDeviceEnableState(QString deviceName, bool enable)
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("CARDEABLE");
+    m_settings->setValue(deviceName, enable);
+    m_settings->endGroup();
+    m_settings->sync();
+    delete m_settings;
+    m_settings = nullptr;
+    return;
+}
+
+void getDeviceEnableState(int type, QMap<QString, bool> &map)
+{
+    map.clear();
+    if (!QFile::exists(CONFIG_FILE_PATH)) {
+        return;
+    }
+    if (type != WIRED && type != WIRELESS) {
+        qDebug() << "getDeviceEnableState but wrong type";
+        return;
+    }
+
+    KyNetworkDeviceResourse * kdr = new KyNetworkDeviceResourse();
+    QStringList wiredDevList,wirelessDevList;
+    wiredDevList.clear();
+    wirelessDevList.clear();
+
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("CARDEABLE");
+
+    if (type == WIRED) {
+        kdr->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
+        if (!wiredDevList.isEmpty()) {
+            for (int i = 0; i < wiredDevList.size(); ++i) {
+                bool enable = m_settings->value(wiredDevList.at(i), true).toBool();
+                map.insert(wiredDevList.at(i), enable);
+            }
+        }
+    } else if (type == WIRELESS) {
+        kdr->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
+        if (!wirelessDevList.isEmpty()) {
+            for (int i = 0; i < wirelessDevList.size(); ++i) {
+                bool enable = m_settings->value(wirelessDevList.at(i), true).toBool();
+                map.insert(wirelessDevList.at(i), enable);
+            }
+        }
+    }
+
+    m_settings->endGroup();
+    delete m_settings;
+    m_settings = nullptr;
+    delete kdr;
+    kdr = nullptr;
+    return;
+}

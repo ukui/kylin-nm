@@ -15,7 +15,7 @@
 #define ITEM_HEIGHT 48
 
 const QString WIRED_SWITCH = "wiredswitch";
-const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
+//const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 
 LanPage::LanPage(QWidget *parent) : TabPage(parent)
 {
@@ -407,6 +407,11 @@ void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
     return;
 }
 
+void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
+{
+    //todo:
+}
+
 void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
     //todo:
@@ -415,4 +420,25 @@ void LanPage::activateWired(const QString& devName, const QString& connUuid)
 void LanPage::deactivateWired(const QString& devName, const QString& connUuid)
 {
     //todo:
+}
+
+void LanPage::showDetailPage(QString devName, QString uuid)
+{
+    KyConnectItem *item = nullptr;
+    bool isActive = true;
+    item = m_activeResourse->getActiveConnectionByUuid(uuid, devName);
+    if (nullptr == item) {
+        item = m_connectResourse->getConnectionItemByUuid(uuid, devName);
+        isActive= false;
+    }
+
+    if (nullptr == item) {
+        qDebug()<<"[LanPage] GetConnectionItemByUuid is empty when showDetailPage";
+        return;
+    }
+
+    NetDetail *netDetail = new NetDetail(devName, item->m_connectName, uuid, isActive, false, false, this);
+    netDetail->show();
+    delete item;
+    item = nullptr;
 }

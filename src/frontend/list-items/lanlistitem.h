@@ -22,7 +22,7 @@ private:
     KyConnectItem *m_data = nullptr;
     KyWiredConnectOperation *m_connectOperation = nullptr;
 
-    QString deviceName = nullptr;
+    QString deviceName = "";
 
 private slots:
     void onInfoButtonClicked();

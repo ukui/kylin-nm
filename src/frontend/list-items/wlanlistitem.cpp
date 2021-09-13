@@ -197,7 +197,7 @@ void WlanListItem::onInfoButtonClicked()
     if(m_data){
         qDebug()<<"Net active or not:"<<m_isActive;
         qDebug() << "On wlan info button clicked! ssid = " << m_data->m_NetSsid << "; name = " << m_data->m_connName << "." <<Q_FUNC_INFO << __LINE__;
-        NetDetail *netDetail = new NetDetail(m_data->m_NetSsid, m_data->m_connectUuid,m_isActive, true, false);
+        NetDetail *netDetail = new NetDetail(m_wlanDevice, m_data->m_NetSsid, m_data->m_connectUuid, m_isActive, true, !m_data->m_isConfigured, this);
         netDetail->show();
     }
     else{
@@ -322,8 +322,8 @@ void WlanListItem::onConnectionAdd(QString deviceName, QString ssid)
     if (!m_data) {
         return;
     }
-    if (ssid == m_data->m_NetSsid) {
-        m_data->m_isConfigured = true;
+    if (ssid == m_data->m_NetSsid && deviceName == m_wlanDevice) {
+        m_resource->getWifiNetwork(deviceName, ssid, *m_data);
     }
 }
 
@@ -332,8 +332,8 @@ void WlanListItem::onConnectionRemove(QString deviceName, QString ssid)
     if (!m_data) {
         return;
     }
-    if (ssid == m_data->m_NetSsid) {
-        m_data->m_isConfigured = false;
+    if (ssid == m_data->m_NetSsid && deviceName == m_wlanDevice) {
+        m_resource->getWifiNetwork(deviceName, ssid, *m_data);
     }
 }
 

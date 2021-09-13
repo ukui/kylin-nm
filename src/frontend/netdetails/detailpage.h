@@ -7,11 +7,14 @@
 #include <QCheckBox>
 #include <QSpacerItem>
 #include <QDebug>
+
+#include "coninfo.h"
+
 class DetailPage : public QFrame
 {
     Q_OBJECT
 public:
-    DetailPage(bool isWlan, QWidget *parent = nullptr);
+    DetailPage(bool isWlan, bool isCreate = false, QWidget *parent = nullptr);
 
     void setSSID(const QString &ssid);
     void setProtocol(const QString &protocol);
@@ -23,13 +26,17 @@ public:
     void setIpv4Dns(const QString &ipv4Dns);
     void setIpv6(const QString &ipv6);
     void setMac(const QString &mac);
+    void setAutoConnect(bool flag);
+
+    bool checkIsChanged(const ConInfo info);
+
+    void getSsid(QString &ssid);
 
 private:
     void initUI();
-    void initComponent();
 
 public:
-    QLabel *mSSID;
+    QLineEdit *mSSID;
     QLabel *mProtocol;
     QLabel *mSecType;
     QLabel *mHz;
@@ -48,8 +55,12 @@ private:
     QHBoxLayout *mAutoLayout;
     QCheckBox *forgetNetBox;
     bool mIsWlan;
+    bool isCreate;
 private slots:
-    void setNetStatus(bool checked);
+    void setEnableOfSaveBtn();
+
+signals:
+     void setDetailPageState(bool);
 
 };
 

@@ -31,6 +31,7 @@ public:
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
 
+    void showDetailPage(QString devName, QString uuid);
 signals:
     void oneItemExpanded(const QString &ssid);
     void wirelessActivating(QString devName, QString ssid);

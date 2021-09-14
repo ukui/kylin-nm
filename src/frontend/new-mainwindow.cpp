@@ -442,23 +442,23 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
 }
 
 //有线连接断开
-void MainWindow::activateWired(const QString& devName, const QString& connName)
+void MainWindow::activateWired(const QString& devName, const QString& connUuid)
 {
-
+    m_lanWidget->activateWired(devName, connUuid);
 }
 
-void MainWindow::deactivateWired(const QString& devName, const QString& connName)
+void MainWindow::deactivateWired(const QString& devName, const QString& connUuid)
 {
-
+    m_lanWidget->deactivateWired(devName, connUuid);
 }
 
 //无线连接断开
 void MainWindow::activateWireless(const QString& devName, const QString& ssid)
 {
-
+    m_wlanWidget->activateWireless(devName, ssid);
 }
 
 void MainWindow::deactivateWireless(const QString& devName, const QString& ssid)
 {
-
+    m_wlanWidget->deactivateWireless(devName, ssid);
 }

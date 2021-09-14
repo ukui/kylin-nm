@@ -140,7 +140,6 @@ void WlanPage::initTimer()
 {
     m_scanTimer = new QTimer(this);
     connect(m_scanTimer, &QTimer::timeout, this, &WlanPage::requestScan);
-//    m_scanTimer->start(10 * 1000);
 }
 
 /**
@@ -648,12 +647,42 @@ void WlanPage::getStoredApInfo(QStringList &list)
 
 void WlanPage::activateWireless(const QString& devName, const QString& ssid)
 {
-    //todo
+    KyWirelessNetItem data;
+    if (!m_resource->getWifiNetwork(devName, ssid, data)) {
+        qDebug() << "no such wifi " << ssid << " in " << devName;
+        return;
+    }
+
+    if (data.m_isConfigured) {
+        m_wirelessConnectOpreation->activeWirelessConnect(devName, data.m_connectUuid);
+    } else {
+        //todo: 显示界面输入密码 （无需密码的wifi？）
+    }
 }
 
 void WlanPage::deactivateWireless(const QString& devName, const QString& ssid)
 {
-    //todo
+    KyWirelessNetItem data;
+    if (!m_resource->getWifiNetwork(devName, ssid, data)) {
+        qDebug() << "no such wifi " << ssid << " in " << devName;
+        return;
+    }
+
+    QMap<QString,QStringList> actMap;
+    m_resource->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activated, actMap);
+    QMap<QString,QStringList>::iterator iter = actMap.begin();
+    if (!actMap.contains(devName)) {
+        qDebug() << "no such device" << devName;
+        return;
+    }
+
+    if (!actMap[devName].contains(ssid)) {
+        qDebug() << "no such actived wifi" << ssid;
+        return;
+    }
+
+    qDebug() << "deActivateWirelessConnection" << devName << ssid;
+    m_wirelessConnectOpreation->deActivateWirelessConnection(data.m_connName, data.m_connectUuid);
 }
 
 void WlanPage::onMainWindowVisibleChanged(const bool &visible)
@@ -670,7 +699,7 @@ void WlanPage::onMainWindowVisibleChanged(const bool &visible)
     }
     //若页面打开，开始扫描倒计时，若关闭，停止扫描倒计时
     if (visible) {
-        m_scanTimer->start(10 * 1000);
+        m_scanTimer->start(20 * 1000);
     } else {
         m_scanTimer->stop();
     }

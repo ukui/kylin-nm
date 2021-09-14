@@ -25,16 +25,15 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     m_device = new KyNetworkDeviceResourse;
     devList.empty();
     m_nullLanItem = new LanListItem();
-
-    initDevice();
     initUI();
-    initDeviceCombox();
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
             m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
             initNetSwitch();
-        } else {
+    } else {
             qDebug()<<"[LanPage] org.ukui.kylin-nm.switch is not installed!";
-        }
+    }
+    initDevice();
+    initDeviceCombox();
     initList(m_deviceName);
     connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &LanPage::updateLanlist);
     connect(m_connectResourse, &KyConnectResourse::connectionAdd, this, &LanPage::addConnectionSlot);
@@ -212,18 +211,32 @@ void LanPage::initDevice()
 void LanPage::initDeviceCombox()
 {
     //TODO 获取设备列表，单设备时隐藏下拉框，多设备时添加到下拉框
+    QMap<QString, bool> enableMap;
+    getDeviceEnableState(0,enableMap);
     m_deviceComboBox->clear();
     m_deviceMap.clear();
     getWiredList(m_deviceMap);
-//    if (m_deactiveMap.count() <= 1) {
-//        m_deviceFrame->hide();
-//    } else{
-        m_deviceFrame->show();
-        QMap<QString, QVector<QStringList> >::iterator iter;
-        for (iter = m_deviceMap.begin(); iter != m_deviceMap.constEnd(); ++iter) {
+    m_deviceFrame->show();
+    QMap<QString, QVector<QStringList> >::iterator iter;
+    for (iter = m_deviceMap.begin(); iter != m_deviceMap.constEnd(); ++iter) {
+        if (enableMap.contains(iter.key())) {
+            if (enableMap[iter.key()]) {
+                m_deviceComboBox->addItem(iter.key());
+            }
+        } else {
             m_deviceComboBox->addItem(iter.key());
+            saveDeviceEnableState(iter.key(), true);
         }
-//    }
+    }
+    if (m_deviceComboBox->currentText().isEmpty()) {
+        if (m_switchGsettings->get(WIRED_SWITCH).toBool()) {
+            m_switchGsettings->set(WIRED_SWITCH,false);
+        }
+    } else {
+        if (!m_switchGsettings->get(WIRED_SWITCH).toBool()) {
+            m_switchGsettings->set(WIRED_SWITCH,true);
+        }
+    }
 
     qDebug() << "[LanPage]current:" << m_deviceComboBox->currentText();
 }
@@ -514,17 +527,30 @@ void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
 
 void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
 {
-    //todo:
+    saveDeviceEnableState(devName, enable);
+    initDeviceCombox();
 }
 
 void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
-    //todo:
+    qDebug() << "activateWired" << devName << connUuid;
+    KyWiredConnectOperation a;
+    a.activateConnection(connUuid, devName);
 }
 
 void LanPage::deactivateWired(const QString& devName, const QString& connUuid)
 {
-    //todo:
+    qDebug() << "deactivateWired" << devName << connUuid;
+    KyConnectItem *item = nullptr;
+    item = m_activeResourse->getActiveConnectionByUuid(connUuid, devName);
+    if (nullptr == item) {
+        //todo: 通知桌面
+        qDebug() << "not ActiveConnection";
+        return;
+    }
+
+    KyWiredConnectOperation a;
+    a.deactivateWiredConnection(item->m_connectName, connUuid);
 }
 
 void LanPage::showDetailPage(QString devName, QString uuid)

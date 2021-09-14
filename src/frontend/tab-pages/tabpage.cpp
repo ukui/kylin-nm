@@ -34,6 +34,7 @@ void TabPage::initUI()
 
     //临时增加的下拉框选择网卡区域
     m_deviceFrame = new QFrame(this);
+    m_deviceFrame->setFixedHeight(TITLE_FRAME_HEIGHT);
     m_deviceLayout = new QHBoxLayout(m_deviceFrame);
     m_deviceLayout->setContentsMargins(DEVICE_LAYOUT_MARGINS);
     m_deviceFrame->setLayout(m_deviceLayout);
@@ -57,7 +58,7 @@ void TabPage::initUI()
     m_activatedNetDivider = new Divider(this);
 
     m_inactivatedNetFrame = new QFrame(this);
-    m_inactivatedNetFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT);
+//    m_inactivatedNetFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT);
     m_inactivatedNetLayout = new QVBoxLayout(m_inactivatedNetFrame);
     m_inactivatedNetLayout->setContentsMargins(NET_LAYOUT_MARGINS);
     m_inactivatedNetLayout->setSpacing(NET_LAYOUT_SPACING);

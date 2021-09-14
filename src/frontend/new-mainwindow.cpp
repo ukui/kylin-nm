@@ -114,8 +114,19 @@ void MainWindow::initUI()
     m_lanWidget = new LanPage(m_centralWidget);
     m_wlanWidget = new WlanPage(m_centralWidget);
     connect(this, &MainWindow::mainWindowVisibleChanged, m_wlanWidget, &WlanPage::onMainWindowVisibleChanged);
-    m_centralWidget->addTab(m_lanWidget, QIcon::fromTheme("network-wired-connected-symbolic", QIcon::fromTheme("network-wired-symbolic", QIcon(":/res/l/network-online.svg"))), tr("LAN"));
-    m_centralWidget->addTab(m_wlanWidget, QIcon::fromTheme("network-wireless-signal-excellent-symbolic", QIcon(":/res/x/wifi-list-bg.svg")), tr("WLAN"));
+//    m_centralWidget->addTab(m_lanWidget, QIcon::fromTheme("network-wired-connected-symbolic", QIcon::fromTheme("network-wired-symbolic", QIcon(":/res/l/network-online.svg"))), tr("LAN"));
+//    m_centralWidget->addTab(m_wlanWidget, QIcon::fromTheme("network-wireless-signal-excellent-symbolic", QIcon(":/res/x/wifi-list-bg.svg")), tr("WLAN"));
+
+    m_centralWidget->addTab(m_lanWidget, tr(""));
+    m_centralWidget->addTab(m_wlanWidget,tr(""));
+    m_tabBarLayout = new QHBoxLayout(this);
+    m_lanLabel = new QLabel(tr("LAN"));
+    m_lanLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
+    m_wlanLabel = new QLabel(tr("WLAN"));
+    m_wlanLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
+    m_tabBarLayout->addWidget(m_lanLabel);
+    m_tabBarLayout->addWidget(m_wlanLabel);
+    m_centralWidget->tabBar()->setLayout(m_tabBarLayout);
 }
 
 /**

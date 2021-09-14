@@ -11,15 +11,6 @@ LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *paren
     m_data = data;
     m_nameLabel->setText(m_data->m_connectName);
 
-//    if (m_data != nullptr) {
-//        if (m_data->m_connectState == NetworkManager::ActiveConnection::State::Activated) {
-//            setIcon(true);
-//            m_isActive = true;
-//        } else {
-//            setIcon(false);
-//            m_isActive = false;
-//        }
-//    }
     if (m_data != nullptr) {
         if (m_data->m_connectState == NetworkManager::ActiveConnection::State::Activated) {
             m_netButton->stopLoading();
@@ -58,14 +49,14 @@ void LanListItem::onNetButtonClicked()
     if (!m_isActive) {
         //未连接,点击后连
         m_connectOperation->activateWiredConnection(m_data->m_connectUuid, deviceName);
-        qDebug() << m_data->m_connectName << "Connect after user clicked!";
+        qDebug() << m_data->m_connectName << "Connect after user clicked!" << deviceName;
 //        m_data->m_connectState = NetworkManager::ActiveConnection::State::Activating;
 //        refreshIcon();
         m_isActive = true;
     } else {
         //连接，点击后断开
         m_connectOperation->deactivateWiredConnection(m_data->m_connectName, m_data->m_connectUuid);
-        qDebug() << m_data->m_connectName << "Disconnect after user clicked!";
+        qDebug() << m_data->m_connectName << "Disconnect after user clicked!" << deviceName;
 //        m_data->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
 //        refreshIcon();
         m_isActive = false;

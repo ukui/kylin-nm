@@ -77,6 +77,9 @@ private:
 
     //主窗口的主要构成控件
     QTabWidget * m_centralWidget = nullptr;
+    QHBoxLayout * m_tabBarLayout = nullptr;
+    QLabel * m_lanLabel = nullptr;
+    QLabel * m_wlanLabel = nullptr;
 
     LanPage * m_lanWidget = nullptr;
     WlanPage * m_wlanWidget = nullptr;

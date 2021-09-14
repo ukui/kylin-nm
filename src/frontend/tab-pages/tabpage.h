@@ -58,7 +58,7 @@ signals:
 
 protected:
     void initUI();
-    virtual void initDevice() = 0;//初始化默认设备
+//    virtual void initDevice() = 0;//初始化默认设备
     virtual void initDeviceCombox() = 0;//初始化设备选择下拉框
     QVBoxLayout * m_mainLayout = nullptr;
     QFrame * m_titleFrame = nullptr;

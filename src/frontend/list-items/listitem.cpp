@@ -8,11 +8,14 @@
 #define FRAME_WIDTH 395
 #define INFO_ICON_WIDTH 16
 #define INFO_ICON_HEIGHT 16
+#define LIGHT_HOVER_COLOR QColor(240,240,240,255)
+#define DARK_HOVER_COLOR QColor(15,15,15,255)
 
 ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
     initUI();
     initConnection();
+    connect(qApp, &QApplication::paletteChanged, this, &ListItem::onPaletteChanged);
 //    m_itemFrame->installEventFilter(this);
 }
 
@@ -65,6 +68,37 @@ void ListItem::mousePressEvent(QMouseEvent *event)
     return QFrame::mousePressEvent(event);
 }
 
+void ListItem::enterEvent(QEvent *event)
+{
+    QPalette pal = qApp->palette();
+    QColor baseColor = qApp->palette().base().color();
+    if (baseColor.red() > MIDDLE_COLOR) {
+        pal.setColor(QPalette::Window, LIGHT_HOVER_COLOR);
+    } else {
+        pal.setColor(QPalette::Window, DARK_HOVER_COLOR);
+    }
+    this->setPalette(pal);
+    return QFrame::enterEvent(event);
+}
+
+void ListItem::leaveEvent(QEvent *event)
+{
+    QPalette pal = qApp->palette();
+    pal.setColor(QPalette::Window, qApp->palette().base().color());
+    this->setPalette(pal);
+    return QFrame::leaveEvent(event);
+}
+
+void ListItem::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing); //反锯齿
+    painter.setBrush(this->palette().brush(QPalette::Window));
+    painter.setPen(Qt::transparent);
+    painter.drawRoundedRect(this->rect(), 8, 8);
+    return QFrame::paintEvent(event);
+}
+
 //bool ListItem::eventFilter(QObject *watched, QEvent *event)
 //{
 //    if (watched == m_itemFrame) {
@@ -100,11 +134,24 @@ void ListItem::initUI()
     m_hItemLayout->addWidget(m_infoButton);
 
     m_mainLayout->addWidget(m_itemFrame);
+
+    this->setAutoFillBackground(true);
+    this->setBackgroundRole(QPalette::Base);
+    QPalette pal = qApp->palette();
+    pal.setColor(QPalette::Window, qApp->palette().base().color());
+    this->setPalette(pal);
 }
 
 
 void ListItem::initConnection()
 {
     connect(this->m_netButton, &RadioItemButton::clicked, this, &ListItem::onNetButtonClicked);
-//    connect(this->m_infoButton, &InfoButton::clicked, this, &ListItem::onInfoButtonClicked);
+    //    connect(this->m_infoButton, &InfoButton::clicked, this, &ListItem::onInfoButtonClicked);
+}
+
+void ListItem::onPaletteChanged()
+{
+    QPalette pal = qApp->palette();
+    pal.setColor(QPalette::Window, qApp->palette().base().color());
+    this->setPalette(pal);
 }

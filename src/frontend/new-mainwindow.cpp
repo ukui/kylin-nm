@@ -266,10 +266,12 @@ void MainWindow::resetWindowTheme()
     if(currentTheme == "ukui-dark" || currentTheme == "ukui-black"){
         app->setStyle(new CustomStyle("ukui-dark"));
         qDebug() << "Has set color theme to ukui-dark." << Q_FUNC_INFO << __LINE__;
+        emit qApp->paletteChanged(qApp->palette());
         return;
     }
     app->setStyle(new CustomStyle("ukui-light"));
     qDebug() << "Has set color theme to ukui-light." << Q_FUNC_INFO << __LINE__;
+    emit qApp->paletteChanged(qApp->palette());
     return;
 }
 

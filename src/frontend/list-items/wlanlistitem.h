@@ -33,6 +33,8 @@ public:
 protected:
     void resizeEvent(QResizeEvent *event);
     void onRightButtonClicked();
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
 
 signals:
     void itemHeightChanged(const QString &ssid);

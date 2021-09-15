@@ -16,6 +16,7 @@ KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionAdd, this, &KyConnectResourse::connectionAdd);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionRemove, this, &KyConnectResourse::connectionRemove);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionUpdate, this, &KyConnectResourse::connectionUpdate);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectivityChanged, this, &KyConnectResourse::connectivityChanged);
 }
 
 KyConnectResourse::~KyConnectResourse()
@@ -276,6 +277,11 @@ void KyConnectResourse::getIpv6ConnectSetting(
     connectSetting.m_ipv6Dns = ipv6Setting->dns();
 
     return;
+}
+
+void KyConnectResourse::getConnectivity(NetworkManager::Connectivity &connectivity)
+{
+    m_networkResourceInstance->getConnectivity(connectivity);
 }
 
 void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting)

@@ -165,112 +165,20 @@ void SecurityPage::initConnect()
     //EAP方式变化
     connect(eapTypeCombox, &QComboBox::currentTextChanged, this, &SecurityPage::onEapTypeComboxIndexChanged);
 
-    connect(caNeedBox, &QCheckBox::clicked, this, [&](){
-       if (caNeedBox->isChecked()) {
-           caCertPathCombox->setEnabled(false);
-       }  else {
-           caCertPathCombox->setEnabled(true);
-       }
-    });
+    connect(caNeedBox, &QCheckBox::clicked, this, &SecurityPage::onCaNeedBoxClicked);
 
-    connect(pwdBox, &QCheckBox::clicked, this, [&]() {
-        if (pwdEdit->echoMode() == QLineEdit::Password) {
-            pwdBox->setChecked(true);
-            pwdEdit->setEchoMode(QLineEdit::Normal);
-        } else {
-            pwdBox->setChecked(false);
-            pwdEdit->setEchoMode(QLineEdit::Password);
-        }
+    connect(pwdBox, &QCheckBox::clicked, this, &SecurityPage::onPwdBoxClicked);
+    connect(userPwdBox, &QCheckBox::clicked, this, &SecurityPage::onUserPwdBox);
+    connect(privateKeyBox, &QCheckBox::clicked, this, &SecurityPage::onPrivateKeyBoxClicked);
 
-    });
+    connect(caCertPathCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
+            this, &SecurityPage::onCaCertPathComboxIndexChanged);
 
-    connect(userPwdBox, &QCheckBox::clicked, this, [&]() {
-        if (userPwdEdit->echoMode() == QLineEdit::Password) {
-            userPwdBox->setChecked(true);
-            userPwdEdit->setEchoMode(QLineEdit::Normal);
-        } else {
-            userPwdBox->setChecked(false);
-            userPwdEdit->setEchoMode(QLineEdit::Password);
-        }
+    connect(clientCertPathCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
+            this, &SecurityPage::onClientCertPathComboxIndexChanged);
 
-    });
-
-    connect(privateKeyBox, &QCheckBox::clicked, this, [&]() {
-        if (clientPrivateKeyPwdEdit->echoMode() == QLineEdit::Password) {
-            privateKeyBox->setChecked(true);
-            clientPrivateKeyPwdEdit->setEchoMode(QLineEdit::Normal);
-        } else {
-            privateKeyBox->setChecked(false);
-            clientPrivateKeyPwdEdit->setEchoMode(QLineEdit::Password);
-        }
-
-    });
-
-    connect(caCertPathCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged), this, [=] (const QString &str) {
-            if (str.contains("Choose from file...") || str.contains("从文件选择..."))
-            {
-                QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
-                                                                tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
-                if (!fileName.isNull()) {
-                    QStringList nameList = fileName.split("/");
-                    caCertPathCombox->blockSignals(true);
-                    caCertPathCombox->setItemText(0, fileName);
-                    caCertPathCombox->setCurrentIndex(0);
-                    caCertPathCombox->blockSignals(false);
-                } else {
-                    caCertPathCombox->blockSignals(true);
-                    caCertPathCombox->setItemText(0, tr("None"));
-                    caCertPathCombox->setCurrentIndex(0);
-                    caCertPathCombox->blockSignals(false);
-                }
-            } else {
-                qWarning() << "Choose file is null or unvalible";
-        }
-    });
-
-    connect(clientCertPathCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged), this, [=] (const QString &str) {
-            if (str.contains("Choose from file...") || str.contains("从文件选择..."))
-            {
-                QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
-                                                                tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
-                if (!fileName.isNull()) {
-//                    QStringList nameList = fileName.split("/");
-                    clientCertPathCombox->blockSignals(true);
-                    clientCertPathCombox->setItemText(0, fileName);
-                    clientCertPathCombox->setCurrentIndex(0);
-                    clientCertPathCombox->blockSignals(false);
-                } else {
-                    clientCertPathCombox->blockSignals(true);
-                    clientCertPathCombox->setItemText(0, tr("None"));
-                    clientCertPathCombox->setCurrentIndex(0);
-                    clientCertPathCombox->blockSignals(false);
-                }
-            } else {
-                qWarning() << "Choose file is null or unvalible";
-        }
-    });
-
-    connect(clientPrivateKeyCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged), this, [=] (const QString &str) {
-            if (str.contains("Choose from file...") || str.contains("从文件选择..."))
-            {
-                QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
-                                                                tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
-                if (!fileName.isNull()) {
-                    QStringList nameList = fileName.split("/");
-                    clientPrivateKeyCombox->blockSignals(true);
-                    clientPrivateKeyCombox->setItemText(0, fileName);
-                    clientPrivateKeyCombox->setCurrentIndex(0);
-                    clientPrivateKeyCombox->blockSignals(false);
-                } else {
-                    clientPrivateKeyCombox->blockSignals(true);
-                    clientPrivateKeyCombox->setItemText(0, tr("None"));
-                    clientPrivateKeyCombox->setCurrentIndex(0);
-                    clientPrivateKeyCombox->blockSignals(false);
-                }
-            } else {
-                qWarning() << "Choose file is null or unvalible";
-        }
-    });
+    connect(clientPrivateKeyCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
+            this, &SecurityPage::onClientPrivateKeyComboxIndexChanged);
 
     connect(secuTypeCombox, SIGNAL(currentIndexChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(pwdEdit, &QLineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
@@ -738,5 +646,116 @@ void SecurityPage::onEapTypeComboxIndexChanged()
         eapMethodCombox->addItem("chap", CHAP);
         eapMethodCombox->addItem("md5(eap)", MD5_EAP);
         eapMethodCombox->addItem("gtc(eap)", GTC_EAP);
+    }
+}
+
+void SecurityPage::onCaNeedBoxClicked()
+{
+    if (caNeedBox->isChecked()) {
+        caCertPathCombox->setEnabled(false);
+    }  else {
+        caCertPathCombox->setEnabled(true);
+    }
+}
+
+void SecurityPage::onPwdBoxClicked()
+{
+    if (pwdEdit->echoMode() == QLineEdit::Password) {
+        pwdBox->setChecked(true);
+        pwdEdit->setEchoMode(QLineEdit::Normal);
+    } else {
+        pwdBox->setChecked(false);
+        pwdEdit->setEchoMode(QLineEdit::Password);
+    }
+}
+
+void SecurityPage::onUserPwdBox()
+{
+    if (userPwdEdit->echoMode() == QLineEdit::Password) {
+        userPwdBox->setChecked(true);
+        userPwdEdit->setEchoMode(QLineEdit::Normal);
+    } else {
+        userPwdBox->setChecked(false);
+        userPwdEdit->setEchoMode(QLineEdit::Password);
+    }
+
+}
+
+void SecurityPage::onPrivateKeyBoxClicked()
+{
+    if (clientPrivateKeyPwdEdit->echoMode() == QLineEdit::Password) {
+        privateKeyBox->setChecked(true);
+        clientPrivateKeyPwdEdit->setEchoMode(QLineEdit::Normal);
+    } else {
+        privateKeyBox->setChecked(false);
+        clientPrivateKeyPwdEdit->setEchoMode(QLineEdit::Password);
+    }
+}
+
+void SecurityPage::onCaCertPathComboxIndexChanged(QString str)
+{
+    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+    {
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
+                                                        tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
+        if (!fileName.isNull()) {
+            QStringList nameList = fileName.split("/");
+            caCertPathCombox->blockSignals(true);
+            caCertPathCombox->setItemText(0, fileName);
+            caCertPathCombox->setCurrentIndex(0);
+            caCertPathCombox->blockSignals(false);
+        } else {
+            caCertPathCombox->blockSignals(true);
+            caCertPathCombox->setItemText(0, tr("None"));
+            caCertPathCombox->setCurrentIndex(0);
+            caCertPathCombox->blockSignals(false);
+        }
+    } else {
+        qWarning() << "Choose file is null or unvalible";
+    }
+}
+
+void SecurityPage::onClientCertPathComboxIndexChanged(QString str)
+{
+    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+    {
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
+                                                        tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
+        if (!fileName.isNull()) {
+            clientCertPathCombox->blockSignals(true);
+            clientCertPathCombox->setItemText(0, fileName);
+            clientCertPathCombox->setCurrentIndex(0);
+            clientCertPathCombox->blockSignals(false);
+        } else {
+            clientCertPathCombox->blockSignals(true);
+            clientCertPathCombox->setItemText(0, tr("None"));
+            clientCertPathCombox->setCurrentIndex(0);
+            clientCertPathCombox->blockSignals(false);
+        }
+    } else {
+        qWarning() << "Choose file is null or unvalible";
+    }
+}
+
+void SecurityPage::onClientPrivateKeyComboxIndexChanged(QString str)
+{
+    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+    {
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
+                                                        tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
+        if (!fileName.isNull()) {
+            QStringList nameList = fileName.split("/");
+            clientPrivateKeyCombox->blockSignals(true);
+            clientPrivateKeyCombox->setItemText(0, fileName);
+            clientPrivateKeyCombox->setCurrentIndex(0);
+            clientPrivateKeyCombox->blockSignals(false);
+        } else {
+            clientPrivateKeyCombox->blockSignals(true);
+            clientPrivateKeyCombox->setItemText(0, tr("None"));
+            clientPrivateKeyCombox->setCurrentIndex(0);
+            clientPrivateKeyCombox->blockSignals(false);
+        }
+    } else {
+        qWarning() << "Choose file is null or unvalible";
     }
 }

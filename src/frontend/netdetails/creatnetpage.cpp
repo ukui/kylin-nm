@@ -165,7 +165,9 @@ void CreatNetPage::constructIpv4Info(KyConnectSetting &setting)
     QString ipv4address =ipv4addressEdit->text();
     QString netMask = netMaskEdit->text();
     QString gateWay = gateWayEdit->text();
-    qDebug() << ipv4address << netMask << gateWay;
+    qDebug() << "constructIpv4Info: " << "ipv4address " << ipv4address
+             << " netMask " << netMask
+             << " gateWay " << gateWay;
 
     QStringList dnsList;
     dnsList.empty();

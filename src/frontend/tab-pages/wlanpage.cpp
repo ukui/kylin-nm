@@ -106,8 +106,6 @@ void WlanPage::initConnections()
 {
     connect(m_resource, &KyWirelessNetResource::wifiNetworkAdd, this, &WlanPage::onWlanAdded);
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
-    connect(m_resource, &KyWirelessNetResource::wifiNetworkAdd, this, &WlanPage::listUpdate);
-    connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::listUpdate);
     connect(m_resource, &KyWirelessNetResource::signalStrengthChange, this, &WlanPage::signalStrengthChange);
     connect(m_resource, &KyWirelessNetResource::secuTypeChange, this, &WlanPage::secuTypeChange);
 
@@ -290,7 +288,12 @@ void WlanPage::getAllWlan()
 
 void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 {
-    emit listUpdate(interface);
+    //for dbus
+    QStringList info;
+    info <<item.m_NetSsid<<QString::number(item.m_signalStrength)<<item.m_secuType;
+    emit wlanAdd(interface, info);
+
+
     qDebug() << "A Wlan Added! interface = " << interface << "; ssid = " << item.m_NetSsid << Q_FUNC_INFO <<__LINE__;
     if (interface != defaultDevice) {
         qDebug() << "wlan add interface not equal defaultdevice,ignore";
@@ -311,7 +314,7 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 
 void WlanPage::onWlanRemoved(QString interface, QString ssid)
 {
-    emit listUpdate(interface);
+    emit wlanRemove(interface, ssid);
     if (!m_itemsMap.contains(ssid)) { return; }
     if (m_expandedItem == m_itemsMap.value(ssid)) { m_expandedItem = nullptr; }
     qDebug() << "A Wlan Removed! interface = " << interface << "; ssid = " << ssid << Q_FUNC_INFO <<__LINE__;
@@ -428,16 +431,8 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
 
     m_resource->getSsidByUuid(uuid, ssid);
 
-    if (state == NetworkManager::ActiveConnection::State::Activating) {
-        qDebug() << "[WlanPage] wirelessActivating" << devName << ssid;
-        emit wirelessActivating(devName, ssid);
-    }
-
-    if (state == NetworkManager::ActiveConnection::State::Activated || state == NetworkManager::ActiveConnection::State::Deactivated)
-    {
-        qDebug() << "[WlanPage] because ActivatedWlanChanged " << devName;
-        emit listUpdate(devName);
-    }
+    qDebug() << "emit wlanActiveConnectionStateChanged" << devName << ssid << state;
+    emit wlanActiveConnectionStateChanged(devName, ssid, state);
 
     if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         QList<KyApConnectItem *> apConnectItemList;

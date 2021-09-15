@@ -101,6 +101,8 @@ public:
     bool isActiveConnection(QString uuid);
     bool isActivatingConnection(QString uuid);
 
+    void getConnectivity(NetworkManager::Connectivity &connectivity);
+
 signals:
     void connectionAdd(QString uuid);
     void connectionUpdate(QString uuid);
@@ -135,6 +137,8 @@ signals:
     void vpnActiveConnectStateChangeReason(QString uuid,
                                            NetworkManager::VpnConnection::State state,
                                            NetworkManager::VpnConnection::StateChangeReason reason);
+
+    void connectivityChanged(NetworkManager::Connectivity connectivity);
 
 private slots:
     //connection

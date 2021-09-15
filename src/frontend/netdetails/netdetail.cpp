@@ -524,11 +524,9 @@ void NetDetail::on_btnForget_clicked()
 
 void NetDetail::setConfirmEnable()
 {
-    qDebug() << isCreateNet << isWlan;
     if (isCreateNet && !isWlan) {
             isConfirmBtnEnable = isCreateOk;
     } else {
-        qDebug() << isDetailOk << isIpv4Ok << isIpv6Ok << isSecuOk;
         if (isDetailOk && isIpv4Ok && isIpv6Ok) {
             if (isWlan && !isSecuOk) {
                 isConfirmBtnEnable = false;
@@ -551,7 +549,7 @@ bool NetDetail::checkIpv4Conflict(QString ipv4Address)
     if (ipv4Arping->ipv4ConflictCheck() >= 0) {
         isConflict =  ipv4Arping->ipv4IsConflict();
     } else {
-        qDebug() << "checkIpv4Conflict internal error";
+        qWarning() << "checkIpv4Conflict internal error";
     }
 
     delete ipv4Arping;
@@ -567,7 +565,7 @@ bool NetDetail::checkIpv6Conflict(QString ipv6address)
     if (ipv46rping->ipv6ConflictCheck() >= 0) {
         isConflict =  ipv46rping->ipv6IsConflict();
     } else {
-        qDebug() << "checkIpv6Conflict internal error";
+        qWarning() << "checkIpv6Conflict internal error";
     }
 
     delete ipv46rping;
@@ -580,7 +578,6 @@ void NetDetail::updateWirelessPersonalConnect()
     KyWirelessConnectSetting setting;
     securityPage->updateSecurityChange(setting);
     bool isPwdChanged = !(m_info.strPassword == setting.m_psk);
-    qDebug() << setting.m_psk << isPwdChanged;
     m_wirelessConnOpration->updateWirelessPersonalConnect(m_uuid, setting, isPwdChanged);
 }
 

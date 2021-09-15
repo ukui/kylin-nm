@@ -96,6 +96,15 @@ private slots:
     void onEapTypeComboxIndexChanged();
     void setEnableOfSaveBtn();
 
+    void onCaNeedBoxClicked();
+    void onPwdBoxClicked();
+    void onUserPwdBox();
+    void onPrivateKeyBoxClicked();
+
+    void onCaCertPathComboxIndexChanged(QString str);
+    void onClientCertPathComboxIndexChanged(QString str);
+    void onClientPrivateKeyComboxIndexChanged(QString str);
+
 signals:
     void setSecuPageState(bool);
 };

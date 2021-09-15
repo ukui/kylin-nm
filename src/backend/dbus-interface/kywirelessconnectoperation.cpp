@@ -247,8 +247,8 @@ QString KyWirelessConnectOperation::getPsk(const QString &connectUuid)
     }
     QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PSK_SETTING_NAME);
     QMap<QString,QVariantMap> map(reply.value());
-    if (map.contains("802-11-wireless-security") && map.value("802-11-wireless-security").contains("psk"))
-    {
+    if (map.contains("802-11-wireless-security")
+            && map.value("802-11-wireless-security").contains("psk"))     {
         QString psk = map.value("802-11-wireless-security").value("psk").toString();
         return  psk;
     }
@@ -267,8 +267,8 @@ QString KyWirelessConnectOperation::getPrivateKeyPassword(const QString &connect
     }
     QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PSK_SETTING_NAME);
     QMap<QString,QVariantMap> map(reply.value());
-    if (map.contains("802-1x") && map.value("802-1x").contains("private-key-password"))
-    {
+    if (map.contains("802-1x")
+            && map.value("802-1x").contains("private-key-password")) {
         QString psk = map.value("802-1x").value("private-key-password").toString();
         return  psk;
     }
@@ -825,8 +825,7 @@ KyKeyMgmt KyWirelessConnectOperation::getConnectKeyMgmt(const QString &uuid)
     NetworkManager::WirelessSecuritySetting::Ptr security_sett
             = connectPtr->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
 
-    if(security_sett.isNull())
-    {
+    if(security_sett.isNull()) {
         return KyKeyMgmt::Unknown;
     }
     return (KyKeyMgmt)security_sett->keyMgmt();
@@ -848,7 +847,6 @@ void KyWirelessConnectOperation::updateWirelessSecu(NetworkManager::ConnectionSe
     }
     security_sett->setKeyMgmt((NetworkManager::WirelessSecuritySetting::KeyMgmt)type);
     if (bPwdChange) {
-        qDebug() << "set psk " << connSettingInfo.m_psk;
         security_sett->setPsk(connSettingInfo.m_psk);
     }
     return;
@@ -927,13 +925,13 @@ bool KyWirelessConnectOperation::getEnterpiseEapMethod(const QString &uuid, KyEa
     NetworkManager::Connection::Ptr connectPtr =
             NetworkManager::findConnectionByUuid(uuid);
     if (connectPtr.isNull()) {
-        qDebug() << "getEnterpiseEapMethod faild.Can't find uuid = " << uuid;
+        qWarning() << "getEnterpiseEapMethod faild.Can't find uuid = " << uuid;
         return false;
     }
 
     KyKeyMgmt keyMgmt = getConnectKeyMgmt(uuid);
     if (keyMgmt != WpaEap) {
-        qDebug() << "getEnterpiseEapMethod but not WpaEap.it's " << keyMgmt;
+        qWarning() << "getEnterpiseEapMethod but not WpaEap.it's " << keyMgmt;
         return false;
     }
 

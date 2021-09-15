@@ -38,6 +38,7 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &LanPage::updateLanlist);
     connect(m_connectResourse, &KyConnectResourse::connectionAdd, this, &LanPage::addConnectionSlot);
     connect(m_connectResourse, &KyConnectResourse::connectionRemove, this, &LanPage::removeConnectionSlot);
+    connect(m_connectResourse, &KyConnectResourse::connectionUpdate, this, &LanPage::connectionUpdateSlot);
     connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this, &LanPage::onDeviceAdd);
     connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this, &LanPage::onDeviceRemove);
     connect(m_device, &KyNetworkDeviceResourse::deviceNameUpdate, this, &LanPage::onDeviceNameUpdate);
@@ -121,6 +122,10 @@ void LanPage::onLanSwitchClicked()
 
 void LanPage::removeConnectionSlot(QString path)            //删除时后端会自动断开激活，将其从未激活列表中删除
 {
+    //for dbus
+    qDebug() << "[LanPage] emit lanRemove because removeConnectionSlot " << path;
+    emit lanRemove(path);
+
     qDebug()<<"[LanPage] Removing a connection, path:"<<path;
     bool isLan = false;
     QEventLoop loop;
@@ -135,20 +140,8 @@ void LanPage::removeConnectionSlot(QString path)            //删除时后端会
             delete(iters.value());
             m_deactiveMap.erase(iters);
             isLan = true;
-            //for dbus
-            qDebug() << "[LanPage] because removeConnectionSlot " << item->m_ifaceName;
-            emit listUpdate(item->m_ifaceName);
 
             break;
-        }
-    }
-    if (!isLan) {
-        //removeConnection不是当前设备的，可能是其他有线设备或无线设备，保险起见发送信号更新
-        for (int index = 0; index < devList.size(); ++index) {
-            if (devList.at(index) == m_deviceName) {
-                continue;
-            }
-            emit listUpdate(devList.at(index));
         }
     }
 }
@@ -167,8 +160,14 @@ void LanPage::addConnectionSlot(QString uuid)               //新增一个有线
     }
 
     //for dbus
-    qDebug() << "[LanPage] emit listUpdate because addConnection " << devName;
-    emit listUpdate(devName);
+    KyConnectItem *item = nullptr;
+    item = m_connectResourse->getConnectionItemByUuid(uuid, devName);
+    if (nullptr != item) {
+        QStringList info;
+        info << item->m_connectName << uuid << item->m_connectPath;
+        qDebug() << "[LanPage] emit lanAdd because addConnection " << devName;
+        emit lanAdd(devName, info);
+    }
 
     KyConnectItem * newItem = m_connectResourse->getConnectionItemByUuid(uuid, m_deviceName);
     if (newItem != nullptr) {
@@ -180,6 +179,41 @@ void LanPage::addConnectionSlot(QString uuid)               //新增一个有线
 
     } else {
         qDebug()<<"[LanPage] GetConnectionItemByUuid is empty when add a new!";
+    }
+}
+void LanPage::connectionUpdateSlot(QString uuid)
+{
+    //for dbus
+    QStringList devNameList;
+    if (m_activeResourse->isActiveConnection(uuid, devNameList)) {
+        for (int i = 0; i < devNameList.size(); ++i) {
+            KyConnectItem *item = nullptr;
+            item = m_activeResourse->getActiveConnectionByUuid(uuid, devNameList.at(i));
+            if (nullptr != item) {
+                if (item->m_itemType != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
+                    return;
+                }
+                QStringList info;
+                info << item->m_connectName << uuid << item->m_connectPath;
+                emit lanUpdate(devNameList.at(i), info);
+            }
+        }
+    } else {
+        QString devName;
+        NetworkManager::ConnectionSettings::ConnectionType type;
+        if (!m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
+            return;
+        }
+        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
+            return;
+        }
+        KyConnectItem *item = nullptr;
+        item = m_connectResourse->getConnectionItemByUuid(uuid, devName);
+        if (nullptr != item) {
+            QStringList info;
+            info << item->m_connectName << uuid << item->m_connectPath;
+            emit lanUpdate(devName, info);
+        }
     }
 }
 
@@ -413,16 +447,23 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
         qDebug() << "[LanPage] updateLanlist but uuid is invalid";
     }
 
-    if (state == NetworkManager::ActiveConnection::State::Activating) {
-        qDebug() << "[LanPage] wiredActivating " << devName;
-        emit wiredActivating(devName,uuid);
+    QStringList devNameList;
+    if (m_activeResourse->isActiveConnection(uuid, devNameList)) {
+        for (int i = 0; i < devNameList.size(); ++i) {
+            KyConnectItem *item = nullptr;
+            item = m_activeResourse->getActiveConnectionByUuid(uuid, devNameList.at(i));
+            if (nullptr != item) {
+                QStringList info;
+                info << item->m_connectName << uuid << item->m_connectPath;
+                emit lanActiveConnectionStateChanged(devNameList.at(i), uuid, state);
+            }
+        }
+    } else {
+        qDebug() << "emit lanActiveConnectionStateChanged" << devName << uuid << state;
+        emit lanActiveConnectionStateChanged(devName, uuid, state);
     }
 
-    if (state == NetworkManager::ActiveConnection::State::Activated || state == NetworkManager::ActiveConnection::State::Deactivated)
-    {
-        qDebug() << "[LanPage] because updateLanlist " <<devName;
-        emit listUpdate(devName);
-    }
+
 
     if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         qDebug()<<"Get a deactivate, begin to remove it from activeList";
@@ -509,7 +550,7 @@ void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
         QVector<QStringList> vector;
         m_activeResourse->getActiveConnectionList(deviceName,NetworkManager::ConnectionSettings::Wired,activedList);
         if (!activedList.isEmpty()) {
-            vector.append(QStringList()<<activedList.at(0)->m_connectName<<activedList.at(0)->m_connectUuid);
+            vector.append(QStringList() << activedList.at(0)->m_connectName << activedList.at(0)->m_connectUuid << activedList.at(0)->m_connectPath);
         } else {
             vector.append(QStringList()<<("--"));
         }
@@ -560,12 +601,11 @@ void LanPage::showDetailPage(QString devName, QString uuid)
     item = m_activeResourse->getActiveConnectionByUuid(uuid, devName);
     if (nullptr == item) {
         item = m_connectResourse->getConnectionItemByUuid(uuid, devName);
+        if (nullptr == item) {
+            qWarning()<<"[LanPage] GetConnectionItemByUuid is empty when showDetailPage";
+            return;
+        }
         isActive= false;
-    }
-
-    if (nullptr == item) {
-        qDebug()<<"[LanPage] GetConnectionItemByUuid is empty when showDetailPage";
-        return;
     }
 
     NetDetail *netDetail = new NetDetail(devName, item->m_connectName, uuid, isActive, false, false, this);

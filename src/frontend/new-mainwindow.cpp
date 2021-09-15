@@ -153,12 +153,15 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::activateFailed, this, &MainWindow::activateFailed);
     connect(m_wlanWidget, &WlanPage::deactivateFailed, this, &MainWindow::deactivateFailed);
 
-    connect(m_lanWidget, &LanPage::listUpdate, this, &MainWindow::listUpdate);
-    connect(m_wlanWidget, &WlanPage::listUpdate, this, &MainWindow::listUpdate);
+    connect(m_lanWidget, &LanPage::lanAdd, this, &MainWindow::lanAdd);
+    connect(m_lanWidget, &LanPage::lanRemove, this, &MainWindow::lanRemove);
+    connect(m_lanWidget, &LanPage::lanUpdate, this, &MainWindow::lanUpdate);
+    connect(m_lanWidget, &LanPage::lanActiveConnectionStateChanged, this, &MainWindow::lanActiveConnectionStateChanged);
 
-    connect(m_lanWidget, &LanPage::wiredActivating, this, &MainWindow::wiredActivating);
-    connect(m_wlanWidget, &WlanPage::wirelessActivating, this, &MainWindow::wirelessActivating);
 
+    connect(m_wlanWidget, &WlanPage::wlanAdd, this, &MainWindow::wlanAdd);
+    connect(m_wlanWidget, &WlanPage::wlanRemove, this, &MainWindow::wlanRemove);
+    connect(m_wlanWidget, &WlanPage::wlanActiveConnectionStateChanged, this, &MainWindow::wlanactiveConnectionStateChanged);
     connect(m_wlanWidget, &WlanPage::hotspotDeactivated, this, &MainWindow::hotspotDeactivated);
     connect(m_wlanWidget, &WlanPage::hotspotActivated, this, &MainWindow::hotspotActivated);
     connect(m_wlanWidget, &WlanPage::secuTypeChange, this, &MainWindow::secuTypeChange);
@@ -431,7 +434,9 @@ void MainWindow::showPropertyWidget(QString devName, QString ssid)
       return;
     }
 
-    qDebug() <<   "showPropertyWidget no such device " << devName;
+    qWarning() <<   "showPropertyWidget no such device " << devName;
+    delete devResourse;
+    devResourse = nullptr;
 }
 
 void MainWindow::showCreateWiredConnectWidget(const QString devName)

@@ -34,6 +34,8 @@ public:
 
     void getApActivateConnect(QList<KyApConnectItem *> &apConnectItemList);
 
+    bool isActiveConnection(QString uuid, QStringList &devName);
+
 private:
     void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
                             QString &ipv4Address,

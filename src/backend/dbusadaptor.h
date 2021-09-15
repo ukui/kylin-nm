@@ -79,9 +79,15 @@ public Q_SLOTS: // METHODS
     //获取热点
     QStringList getStoredApInfo();
 Q_SIGNALS: // SIGNALS
-    void wirelessActivating(QString devName, QString ssid);
-    void wiredActivating(QString devName, QString ssid);
-    void listUpdate(QString devName);
+//    void wirelessActivating(QString devName, QString ssid);
+//    void wiredActivating(QString devName, QString ssid);
+    void lanAdd(QString devName, QStringList info);
+    void lanRemove(QString dbusPath);
+    void lanUpdate(QString devName, QStringList info);
+    void wlanAdd(QString devName, QStringList info);
+    void wlanRemove(QString devName,QString ssid);
+    void wlanactiveConnectionStateChanged(QString devName, QString ssid, int status);
+    void lanActiveConnectionStateChanged(QString devName, QString uuid, int status);
     //仅失败，若成功直接发listUpdate
     void activateFailed(QString errorMessage);
     void deactivateFailed(QString errorMessage);

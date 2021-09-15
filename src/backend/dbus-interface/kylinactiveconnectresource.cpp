@@ -75,6 +75,9 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
         if (devicePtr->interfaceName() == deviceName) {
             KyConnectItem *activeConnectItem =
                    getActiveConnectionItem(activeConnectPtr);
+            if (nullptr == activeConnectItem) {
+                return nullptr;
+            }
             activeConnectItem->m_ifaceName = deviceName;
             activeConnectItem->m_itemType = activeConnectPtr->type();
             return activeConnectItem;

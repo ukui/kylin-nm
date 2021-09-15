@@ -164,3 +164,92 @@ void KyWiredConnectOperation::activateVpnConnection(const QString connectUuid)
 
     return;
 }
+
+void KyWiredConnectOperation::saveActiveConnection(QString &deviceName, QString &connectUuid)
+{
+    QSettings *p_settings = new QSettings(WIRED_NETWORK_STATE_CONF_FILE, QSettings::IniFormat);
+
+    QString settingValue = p_settings->value(deviceName).toString();
+    if (settingValue.isEmpty()) {
+        p_settings->setValue(deviceName, connectUuid);
+        p_settings->sync();
+    }
+
+    delete p_settings;
+    p_settings = nullptr;
+
+    return;
+}
+
+void KyWiredConnectOperation::getActiveConnection(QString &deviceName, QString &connectUuid)
+{
+    QSettings *p_settings = new QSettings(WIRED_NETWORK_STATE_CONF_FILE, QSettings::IniFormat);
+
+    connectUuid = p_settings->value(deviceName).toString();
+    p_settings->remove(deviceName);
+
+    delete p_settings;
+    p_settings = nullptr;
+
+    return;
+}
+
+int KyWiredConnectOperation::closeWiredNetworkWithDevice(QString deviceName)
+{
+    NetworkManager::Device::Ptr wiredDevicePtr =
+                            m_networkResourceInstance->findDeviceInterface(deviceName);
+
+    if (!wiredDevicePtr->isValid()) {
+        qWarning()<<"[KyWiredConnectOperation]"<<"the network device" << deviceName <<"is not exist.";
+        return -ENXIO;
+    }
+
+    if (NetworkManager::Device::Type::Ethernet != wiredDevicePtr->type()) {
+        qWarning()<<"[KyWiredConnectOperation]"<<"the device type"
+                  << wiredDevicePtr->type() <<"is not Ethernet.";
+        return -EINVAL;
+    }
+
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr = wiredDevicePtr->activeConnection();
+    if (nullptr != activeConnectPtr) {
+        QString activeConnectUuid = activeConnectPtr->uuid();
+        if (!activeConnectUuid.isEmpty()) {
+            qDebug()<<"[KyWiredConnectOperation]" <<"close wired network save connection uuid"
+                   << activeConnectUuid <<"device name " << deviceName;
+            saveActiveConnection(deviceName, activeConnectUuid);
+        }
+    }
+
+    wiredDevicePtr->disconnectInterface();
+
+    return 0;
+}
+
+int KyWiredConnectOperation::openWiredNetworkWithDevice(QString deviceName)
+{
+    NetworkManager::Device::Ptr wiredDevicePtr =
+                            m_networkResourceInstance->findDeviceInterface(deviceName);
+
+    if (!wiredDevicePtr->isValid()) {
+        qWarning()<<"[KyWiredConnectOperation]"<<"the network device" << deviceName <<"is not exist.";
+        return -ENXIO;
+    }
+
+    if (NetworkManager::Device::Type::Ethernet != wiredDevicePtr->type()) {
+        qWarning()<<"[KyWiredConnectOperation]"<<"the device type"
+                  << wiredDevicePtr->type() <<"is not Ethernet.";
+        return -EINVAL;
+    }
+
+    QString connectUuid;
+    getActiveConnection(deviceName, connectUuid);
+    if (!connectUuid.isEmpty()) {
+        qDebug()<<"[KyWiredConnectOperation]" << "open wired network active connection"
+               << connectUuid <<"device name" << deviceName;
+        activateConnection(connectUuid, deviceName);
+    }
+
+    wiredDevicePtr->setAutoconnect(true);
+
+    return 0;
+}

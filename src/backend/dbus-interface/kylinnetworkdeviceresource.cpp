@@ -6,7 +6,7 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
 
 //    m_activeConnectUuidList.clear();
-    m_activeConnectUuidMap.clear();
+    //m_activeConnectUuidMap.clear();
     m_deviceMap.clear();
     //TODO::get uuid from settings for system reboot;
 
@@ -173,8 +173,6 @@ void KyNetworkDeviceResourse::DeviceSpeed(QString deviceName, KyConnectItem *wir
 
     return;
 }
-#endif
-
 
 void KyNetworkDeviceResourse::disconnectDevice()
 {
@@ -247,6 +245,8 @@ void KyNetworkDeviceResourse::setDeviceAutoConnect()
 
     return;
 }
+
+#endif
 
 void KyNetworkDeviceResourse::onDeviceUpdate(NetworkManager::Device * dev)
 {

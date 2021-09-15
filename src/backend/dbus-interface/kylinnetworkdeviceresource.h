@@ -34,14 +34,14 @@ public:
     bool wiredDeviceCarriered(QString deviceName);
     //void DeviceSpeed(QString deviceName, KyWiredConnectItem *wiredItem);
     void setDeviceRefreshRate(QString deviceName, int ms);
-    void disconnectDevice();
-    void setDeviceAutoConnect();
+   // void disconnectDevice();
+    //void setDeviceAutoConnect();
 
 private:
     KyWiredConnectOperation wiredOperation;
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     QStringList m_activeConnectUuidList;
-    QMap<QString, QString> m_activeConnectUuidMap;
+   // QMap<QString, QString> m_activeConnectUuidMap;
     QMap<QString, QString> m_deviceMap;
 
     void initDeviceMap();

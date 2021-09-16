@@ -147,14 +147,11 @@ void WlanPage::initDevice()
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
     m_settings->beginGroup("DEFAULTCARD");
     QString key("wireless");
-    QString deviceName = m_settings->value(key, "").toString();
+    QString deviceName;
     m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, m_devList);
-    if (deviceName.isEmpty()) {
-        qDebug() << "initDevice but  defalut wireless card is null";
-        if (!m_devList.isEmpty()) {
-            deviceName = m_devList.at(0);
-            m_settings->setValue(key, deviceName);
-        }
+    if (!m_devList.isEmpty()) {
+        deviceName = m_devList.at(0);
+        m_settings->setValue(key, deviceName);
     }
     updateDefaultDevice(deviceName);
     qDebug() << "[WlanPage] initDevice defaultDevice = " << deviceName;

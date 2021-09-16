@@ -430,7 +430,7 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
         qDebug() << "[WlanPage] onActivatedWlanChanged but uuid is invalid";
     }
 
-    m_resource->getSsidByUuid(uuid, ssid);
+    m_resource->getSsidByUuid(uuid, ssid, devName);
 
     qDebug() << "emit wlanActiveConnectionStateChanged" << devName << ssid << state;
     emit wlanActiveConnectionStateChanged(devName, ssid, state);
@@ -463,7 +463,7 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
         }
     }
 
-    if (state == NetworkManager::ActiveConnection::State::Activated) {
+    if (state == NetworkManager::ActiveConnection::State::Activated && defaultDevice == devName) {
         //onWlanRemoved(m_wlanDevice, ssid);
         m_activatedNetListWidget->clear();
         int height = 0;

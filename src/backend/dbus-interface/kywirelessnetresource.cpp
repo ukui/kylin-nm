@@ -159,9 +159,10 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::
     return sett->interfaceName();
 }
 
-void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid)
+void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid, QString &devName)
 {
     ssid.clear();
+    devName.clear();
     NetworkManager::Connection::Ptr connectPtr = m_networkResourceInstance->getConnect(uuid);
     if (connectPtr.isNull()) {
         return;
@@ -173,6 +174,7 @@ void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid)
         return;
     }
     ssid = wireless_sett->ssid();
+    devName = connectPtr->settings()->interfaceName();
     qDebug() << "getSsidByUuid success " << ssid;
     return;
 }

@@ -382,13 +382,14 @@ void WlanListItem::onConnectionRemove(QString deviceName, QString ssid)
 
 void WlanListItem::onWlanStatusChange(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
 {
-    QString ssid;
-    m_resource->getSsidByUuid(uuid,ssid);
+    QString ssid, devName;
+    m_resource->getSsidByUuid(uuid, ssid, devName);
     if (m_data->m_NetSsid == ssid) {
         qDebug() << "[WlanPage] State changed to :" << state << Q_FUNC_INFO <<__LINE__;
-        if (state == NetworkManager::ActiveConnection::State::Activating) {
+        if ((state == NetworkManager::ActiveConnection::State::Activating || state == NetworkManager::ActiveConnection::State::Deactivating)
+                && devName == m_wlanDevice) {
             m_netButton->startLoading();
-        } else {
+        } else if (){
             m_netButton->stopLoading();
         }
     }

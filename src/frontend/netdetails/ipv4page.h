@@ -12,35 +12,29 @@
 #include <QLineEdit>
 #include <QDebug>
 
-struct ConnProperties
-{
-    QString uuidName; //uuid
-    QString v4method; //
-    QString v4addr;   //ipv4地址
-    QString mask;     //
-    QString gateway;  //网关
-    QString dns;      //DNS
-    bool isActConf;   //
-    QString type;     //网络类型
-};
+//#include "kylinconnectsetting.h"
+#include "coninfo.h"
 
 class Ipv4Page : public QFrame
 {
     Q_OBJECT
 public:
-    Ipv4Page(bool isWlan, QWidget *parent = nullptr);
-    void setIpv4Config(const QString &ipv4Config);
+    Ipv4Page(QWidget *parent = nullptr);
+    void setIpv4Config(KyIpConfigType ipv4Config);
     void setIpv4(const QString &ipv4);
+    void setNetMask(const QString &netMask);
     void setIpv4FirDns(const QString &ipv4FirDns);
     void setIpv4SecDns(const QString &ipv4SecDns);
     void setGateWay(const QString &gateWay);
-public:
+
+    bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
+private:
     QComboBox *ipv4ConfigCombox;
     QLineEdit *ipv4addressEdit;
-    QComboBox *netMaskCombox;
+    QLineEdit *netMaskEdit;
     QLineEdit *gateWayEdit;
-    QLineEdit *firstDnsEidt;
-    QLineEdit *secondDnsEidt;
+    QLineEdit *firstDnsEdit;
+    QLineEdit *secondDnsEdit;
 
 private:
     QFormLayout *m_detailLayout;
@@ -51,19 +45,19 @@ private:
     QLabel *m_gateWayLabel;
     QLabel *m_dnsLabel;
     QLabel *m_secDnsLabel;
-    bool isWlan;
 private:
     void initUI();
     void initComponent();
-    void setEnableOfSaveBtn();
     void setLineEnabled(bool check);
     void configSave();
+    bool getTextEditState(QString text);
+    bool checkConnectBtnIsEnabled();
 
-
-public slots:
+private slots:
+    void setEnableOfSaveBtn();
     void configChanged(int index);
 Q_SIGNALS:
-//    void setBtnEnableFalse();
+    void setIpv4PageState(bool);
 
 };
 

@@ -30,6 +30,8 @@ KyConnectSetting::KyConnectSetting(/*QObject *parent) : QObject(parent*/)
     m_ipv6ConfigIpType = CONFIG_IP_DHCP;
     m_ipv6Address.clear();
     m_ipv6Dns.clear();
+
+    m_isAutoConnect = true;
 }
 
 KyConnectSetting::~KyConnectSetting()
@@ -74,8 +76,10 @@ void KyConnectSetting::ipv4AddressConstruct(QString &ipv4Address, QString &ipv4N
     nmIpv4Address.setIp(QHostAddress(ipv4Address));
     nmIpv4Address.setGateway(QHostAddress(ipv4GateWay));
     nmIpv4Address.setNetmask(QHostAddress(ipv4NetMask));
+    m_ipv4Address.clear();
     m_ipv4Address << nmIpv4Address;
 
+    m_ipv4Dns.clear();
     for (int index = 0; index < ipv4Dns.size(); ++index) {
         qDebug()<<"dns"<<ipv4Dns[index];
         m_ipv4Dns << QHostAddress(ipv4Dns[index]);
@@ -89,8 +93,10 @@ void KyConnectSetting::ipv6AddressConstruct(QString &ipv6Address, QString &ipv6N
     nmIpv6Address.setIp(QHostAddress(ipv6Address));
     nmIpv6Address.setGateway(QHostAddress(ipv6GateWay));
     nmIpv6Address.setPrefixLength(ipv6NetMask.toInt());
+    m_ipv6Address.clear();
     m_ipv6Address << nmIpv6Address;
 
+    m_ipv6Dns.clear();
     for (int index = 0; index < ipv6Dns.size(); index++) {
         m_ipv6Dns << QHostAddress(ipv6Dns[index]);
     }
@@ -104,7 +110,7 @@ void KyConnectSetting::dumpInfo()
     qDebug()<<"connect name"<< m_connectName;
     qDebug()<<"iface name" << m_ifaceName;
 
-    for (int index = 0 ; index << m_ipv4Address.size(); index++) {
+    for (int index = 0 ; index < m_ipv4Address.size(); index++) {
         qDebug()<<"ipv4 address" << m_ipv4Address.at(index).ip().toString();
         qDebug()<<"ipv4 gate way" << m_ipv4Address.at(index).gateway().toString();
         qDebug()<<"ipv4 net mask" << m_ipv4Address.at(index).netmask().toString();

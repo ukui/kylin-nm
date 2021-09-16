@@ -6,6 +6,7 @@
 #include "kylinnetworkresourcemanager.h"
 #include "kyenterpricesettinginfo.h"
 #include "kylinconnectresource.h"
+#include "kywirelessconnectoperation.h"
 
 
 //class KyWirelessNetItem;
@@ -59,6 +60,7 @@ signals:
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     KyConnectResourse        *m_connectResource = nullptr;
+    KyWirelessConnectOperation  *m_operation = nullptr;
     QMap<QString, QList<KyWirelessNetItem> >      m_WifiNetworkList;
 
 };

@@ -38,6 +38,8 @@ enum KyDeviceType
 const QString CONFIG_FILE_PATH   =  QDir::homePath() + "/.config/ukui/kylin-nm.conf";
 bool checkDeviceExist(KyDeviceType deviceType, QString deviceName);
 void setDefaultDevice(KyDeviceType deviceType, QString deviceName);
+void saveDeviceEnableState(QString deviceName, bool enable);
+void getDeviceEnableState(int type, QMap<QString, bool> &map);
 
 class TabPage : public QWidget
 {
@@ -54,7 +56,6 @@ signals:
     void deviceNameChanged(QString oldName, QString newName);
     void activateFailed(QString errorMessage);
     void deactivateFailed(QString errorMessage);
-    void listUpdate(QString devName);
 
 protected:
     void initUI();

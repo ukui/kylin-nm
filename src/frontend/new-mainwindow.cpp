@@ -7,6 +7,8 @@
 #include <QKeyEvent>
 #include <QProcess>
 
+#include "kylinnetworkdeviceresource.h"
+
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 456
 #define THEME_SCHAME "org.ukui.style"
@@ -162,14 +164,19 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::activateFailed, this, &MainWindow::activateFailed);
     connect(m_wlanWidget, &WlanPage::deactivateFailed, this, &MainWindow::deactivateFailed);
 
-    connect(m_lanWidget, &LanPage::listUpdate, this, &MainWindow::listUpdate);
-    connect(m_wlanWidget, &WlanPage::listUpdate, this, &MainWindow::listUpdate);
+    connect(m_lanWidget, &LanPage::lanAdd, this, &MainWindow::lanAdd);
+    connect(m_lanWidget, &LanPage::lanRemove, this, &MainWindow::lanRemove);
+    connect(m_lanWidget, &LanPage::lanUpdate, this, &MainWindow::lanUpdate);
+    connect(m_lanWidget, &LanPage::lanActiveConnectionStateChanged, this, &MainWindow::lanActiveConnectionStateChanged);
 
-    connect(m_lanWidget, &LanPage::wiredActivating, this, &MainWindow::wiredActivating);
-    connect(m_wlanWidget, &WlanPage::wirelessActivating, this, &MainWindow::wirelessActivating);
 
+    connect(m_wlanWidget, &WlanPage::wlanAdd, this, &MainWindow::wlanAdd);
+    connect(m_wlanWidget, &WlanPage::wlanRemove, this, &MainWindow::wlanRemove);
+    connect(m_wlanWidget, &WlanPage::wlanActiveConnectionStateChanged, this, &MainWindow::wlanactiveConnectionStateChanged);
     connect(m_wlanWidget, &WlanPage::hotspotDeactivated, this, &MainWindow::hotspotDeactivated);
     connect(m_wlanWidget, &WlanPage::hotspotActivated, this, &MainWindow::hotspotActivated);
+    connect(m_wlanWidget, &WlanPage::secuTypeChange, this, &MainWindow::secuTypeChange);
+    connect(m_wlanWidget, &WlanPage::signalStrengthChange, this, &MainWindow::signalStrengthChange);
 }
 
 /**
@@ -277,10 +284,12 @@ void MainWindow::resetWindowTheme()
     if(currentTheme == "ukui-dark" || currentTheme == "ukui-black"){
         app->setStyle(new CustomStyle("ukui-dark"));
         qDebug() << "Has set color theme to ukui-dark." << Q_FUNC_INFO << __LINE__;
+        emit qApp->paletteChanged(qApp->palette());
         return;
     }
     app->setStyle(new CustomStyle("ukui-light"));
     qDebug() << "Has set color theme to ukui-light." << Q_FUNC_INFO << __LINE__;
+    emit qApp->paletteChanged(qApp->palette());
     return;
 }
 
@@ -408,24 +417,66 @@ void MainWindow::getStoredApInfo(QStringList &list)
     m_wlanWidget->getStoredApInfo(list);
 }
 
-//有线连接断开
-void MainWindow::activateWired(const QString& devName, const QString& connName)
-{
 
+void MainWindow::setWiredDeviceEnable(const QString& devName, bool enable)
+{
+    m_lanWidget->setWiredDeviceEnable(devName, enable);
+}
+void MainWindow::showPropertyWidget(QString devName, QString ssid)
+{
+    KyNetworkDeviceResourse *devResourse = new KyNetworkDeviceResourse();
+    QStringList wiredDeviceList;
+    wiredDeviceList.clear();
+    devResourse->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDeviceList);
+    if (wiredDeviceList.contains(devName)) {
+      qDebug() <<   "showPropertyWidget device type wired device name " << devName << " uuid " << ssid;
+      m_lanWidget->showDetailPage(devName, ssid);
+      delete devResourse;
+      devResourse = nullptr;
+      return;
+    }
+
+    QStringList wirelessDeviceList;
+    wirelessDeviceList.clear();
+    devResourse->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDeviceList);
+    if (wirelessDeviceList.contains(devName)) {
+      qDebug() <<   "showPropertyWidget device type wireless device name " << devName << " ssid " << ssid;
+      m_wlanWidget->showDetailPage(devName, ssid);
+      delete devResourse;
+      devResourse = nullptr;
+      return;
+    }
+
+    qWarning() <<   "showPropertyWidget no such device " << devName;
+    delete devResourse;
+    devResourse = nullptr;
 }
 
-void MainWindow::deactivateWired(const QString& devName, const QString& connName)
+void MainWindow::showCreateWiredConnectWidget(const QString devName)
 {
+    qDebug() << "showCreateWiredConnectWidget! devName = " << devName;
+    NetDetail *netDetail = new NetDetail(devName, "", "", false, false, true, this);
+    netDetail->show();
+}
 
+//有线连接断开
+void MainWindow::activateWired(const QString& devName, const QString& connUuid)
+{
+    m_lanWidget->activateWired(devName, connUuid);
+}
+
+void MainWindow::deactivateWired(const QString& devName, const QString& connUuid)
+{
+    m_lanWidget->deactivateWired(devName, connUuid);
 }
 
 //无线连接断开
 void MainWindow::activateWireless(const QString& devName, const QString& ssid)
 {
-
+    m_wlanWidget->activateWireless(devName, ssid);
 }
 
 void MainWindow::deactivateWireless(const QString& devName, const QString& ssid)
 {
-
+    m_wlanWidget->deactivateWireless(devName, ssid);
 }

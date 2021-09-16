@@ -19,7 +19,7 @@ public:
     KyConnectItem *m_data = nullptr;
     KyWiredConnectOperation *m_connectOperation = nullptr;
 
-    QString deviceName = nullptr;
+    QString deviceName = "";
     void refreshIcon();
 
 protected:
@@ -28,7 +28,6 @@ protected:
 
 
 private:
-
 
 private slots:
     void onInfoButtonClicked();

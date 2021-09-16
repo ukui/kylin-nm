@@ -1,15 +1,15 @@
 #include "ipv6page.h"
 #include "netdetail.h"
-Ipv6Page::Ipv6Page(bool isWlan, QWidget *parent)
-    :isWlan(isWlan), QFrame(parent)
+
+Ipv6Page::Ipv6Page(QWidget *parent):QFrame(parent)
 {
     initUI();
     initComponent();
 }
 
-void Ipv6Page::setIpv6Config(const QString &ipv6Config)
+void Ipv6Page::setIpv6Config(KyIpConfigType ipv6Config)
 {
-    if (ipv6Config.toInt() ==  AUTO_CONFIG) {
+    if (ipv6Config ==  CONFIG_IP_MANUAL) {
         ipv6ConfigCombox->setCurrentIndex(MANUAL_CONFIG);
     } else {
         ipv6ConfigCombox->setCurrentIndex(AUTO_CONFIG);
@@ -34,6 +34,48 @@ void Ipv6Page::setIpv6SecDns(const QString &ipv6SecDns)
 void Ipv6Page::setGateWay(const QString &gateWay)
 {
     gateWayEdit->setText(gateWay);
+}
+
+bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
+{
+    bool isChanged = false;
+    if (ipv6ConfigCombox->currentIndex() == AUTO_CONFIG) {
+        if (info.ipv6ConfigType != CONFIG_IP_DHCP) {
+            qDebug() << "ipv6ConfigType change to Auto";
+            setting.setIpConfigType(IPADDRESS_V6, CONFIG_IP_DHCP);
+            isChanged = true;
+        }
+    } else {
+        if (info.ipv6ConfigType != CONFIG_IP_MANUAL) {
+            qDebug() << "ipv6ConfigType change to Manual";
+            setting.setIpConfigType(IPADDRESS_V6, CONFIG_IP_MANUAL);
+            isChanged =  true;
+        }
+        if(info.strIPV6Address != ipv6AddressEdit->text()
+                || info.strIPV6Prefix != lengthEdit->text()
+                || info.strIPV6GateWay != gateWayEdit->text()
+                || info.strIPV6FirDns  != firstDnsEdit->text()
+                || info.strIPV6SecDns  != secondDnsEdit->text()) {
+
+            qDebug() << "ipv6 info changed";
+            QStringList dnsList;
+            dnsList.empty();
+            if (!firstDnsEdit->text().isEmpty()) {
+                dnsList << firstDnsEdit->text();
+                if (!secondDnsEdit->text().isEmpty()) {
+                    dnsList << secondDnsEdit->text();
+                }
+            }
+
+            QString ipv6address =ipv6AddressEdit->text();
+            QString prefix = lengthEdit->text();
+            QString gateWay = gateWayEdit->text();
+            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay, dnsList);
+            setting.dumpInfo();
+            isChanged =  true;
+        }
+    }
+    return isChanged;
 }
 
 void Ipv6Page::initUI() {
@@ -73,15 +115,27 @@ void Ipv6Page::initUI() {
 
     QRegExp ipv6_rx("^\\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?\\s*$");
     ipv6AddressEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
+    gateWayEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
+    firstDnsEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
+    secondDnsEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
+
+    QRegExp prefix_rx("\\b(?:(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\.){3}(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\b");
+    lengthEdit->setValidator(new QRegExpValidator(prefix_rx,this));
 }
 
 void Ipv6Page::initComponent() {
-    if (ipv6ConfigCombox->currentIndex() == MANUAL_CONFIG) {
+    if (ipv6ConfigCombox->currentIndex() == AUTO_CONFIG) {
         setControlEnabled(false);
     } else if (ipv6ConfigCombox->currentIndex() == MANUAL_CONFIG) {
         setControlEnabled(true);
     }
     connect(ipv6ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(configChanged(int)));
+
+    connect(ipv6ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
+    connect(lengthEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+    connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
 }
 
 void Ipv6Page::configChanged(int index) {
@@ -93,17 +147,76 @@ void Ipv6Page::configChanged(int index) {
     }
 }
 
-void Ipv6Page::setControlEnabled(bool check) {
-    m_addressLabel->setEnabled(check);
-    m_subnetLabel->setEnabled(check);
-    lengthEdit->setEnabled(check);
-    m_gateWayLabel->setEnabled(check);
-    m_dnsLabel->setEnabled(check);
-    m_secDnsLabel->setEnabled(check);
-
+void Ipv6Page::setControlEnabled(bool check)
+{
     ipv6AddressEdit->setEnabled(check);
-    m_subnetLabel->setEnabled(check);
+    lengthEdit->setEnabled(check);
     gateWayEdit->setEnabled(check);
     firstDnsEdit->setEnabled(check);
     secondDnsEdit->setEnabled(check);
+
+    if (!check) {
+        ipv6AddressEdit->clear();
+        lengthEdit->clear();
+        gateWayEdit->clear();
+        firstDnsEdit->clear();
+        secondDnsEdit->clear();
+    }
 }
+
+void Ipv6Page::setEnableOfSaveBtn()
+{
+    emit setIpv6PageState(checkConnectBtnIsEnabled());
+}
+
+bool Ipv6Page::checkConnectBtnIsEnabled()
+{
+    if (ipv6ConfigCombox->currentIndex() == AUTO_CONFIG) {
+        return true;
+    } else {
+        if (ipv6AddressEdit->text().isEmpty() || !getIpv6EditState(ipv6AddressEdit->text())) {
+            qDebug() << "ipv6address empty or invalid";
+            return false;
+        }
+
+        if (lengthEdit->text().isEmpty()) {
+            qDebug() << "ipv6 prefix length empty";
+            return false;
+        }
+
+        if (gateWayEdit->text().isEmpty() || !getIpv6EditState(gateWayEdit->text())) {
+            qDebug() << "ipv6 gateway empty or invalid";
+            return false;
+        }
+
+        if (firstDnsEdit->text().isEmpty() && !secondDnsEdit->text().isEmpty()) {
+            qDebug() << "ipv6 dns sort invalid";
+            return false;
+        }
+
+        if (!getIpv6EditState(firstDnsEdit->text())) {
+            qDebug() << "ipv6 first dns invalid";
+            return false;
+        }
+
+        if (!getIpv6EditState(secondDnsEdit->text())) {
+            qDebug() << "ipv6 second dns invalid";
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Ipv6Page::getIpv6EditState(QString text)
+{
+    if (text.isEmpty()) {
+        return true;
+    }
+    QRegExp rx("^\\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?\\s*$");
+
+    bool match = false;
+    match = rx.exactMatch(text);
+
+    return match;
+}
+

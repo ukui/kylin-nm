@@ -34,7 +34,7 @@ LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *paren
 LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
 {
     m_isActive = false;
-    m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic"));
+    m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic"));
     const QString str="Not connected";
     m_nameLabel->setText(str);
     this->m_infoButton->hide();
@@ -98,7 +98,7 @@ void LanListItem::onInfoButtonClicked()
     if(m_data){
         qDebug()<<"Net active or not:"<<m_isActive;
         qDebug() << "On lan info button clicked! uuid = " << m_data->m_connectUuid << "; name = " << m_data->m_connectName << "." <<Q_FUNC_INFO << __LINE__;
-        NetDetail *netDetail = new NetDetail(m_data->m_connectName, m_data->m_connectUuid, m_isActive,false, false);
+        NetDetail *netDetail = new NetDetail(deviceName, m_data->m_connectName, m_data->m_connectUuid, m_isActive,false, false, this);
         netDetail->show();
     }
     else{

@@ -11,6 +11,7 @@
 #include <QDBusInterface>
 #include "lanpage.h"
 #include "wlanpage.h"
+#include "netdetails/netdetail.h"
 
 class MainWindow : public QMainWindow
 {
@@ -33,27 +34,41 @@ public:
     //获取热点
     void getStoredApInfo(QStringList &list);
     //有线连接断开
-    void activateWired(const QString& devName, const QString& connName);
-    void deactivateWired(const QString& devName, const QString& connName);
+    void activateWired(const QString& devName, const QString& connUuid);
+    void deactivateWired(const QString& devName, const QString& connUuid);
     //无线连接断开
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
+
+    void setWiredDeviceEnable(const QString& devName, bool enable);
+
+    //唤起属性页 根据网卡类型 参数2 为ssid/uuid
+    void showPropertyWidget(QString devName, QString ssid);
+    //唤起新建有线连接界面
+    void showCreateWiredConnectWidget(const QString devName);
 
 signals:
     //设备插拔
     void deviceStatusChanged();
     //设备名称变化
     void deviceNameChanged(QString oldName, QString newName);
-    //设备有线无线列表更新（有线增删、无线增加减少）
-    void listUpdate(QString devName);
-    //控制面板连接中
-    void wiredActivating(QString devName, QString ssid);
-    void wirelessActivating(QString devName, QString ssid);
+    //有线无线列表更新（有线增删、无线增加减少）
+    void lanAdd(QString devName, QStringList info);
+    void lanRemove(QString dbusPath);
+    void lanUpdate(QString devName, QStringList info);
+    void wlanAdd(QString devName, QStringList info);
+    void wlanRemove(QString devName,QString ssid);
+    void wlanactiveConnectionStateChanged(QString devName, QString ssid, int status);
+    void lanActiveConnectionStateChanged(QString devName, QString uuid, int status);
     void activateFailed(QString errorMessage);
     void deactivateFailed(QString errorMessage);
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid);
+    //信号强度变化
+    void signalStrengthChange(QString devName, QString ssid, int strength);
+    //安全性变化
+    void secuTypeChange(QString devName, QString ssid, QString secuType);
     void mainWindowVisibleChanged(const bool &visible);
 public slots:
 

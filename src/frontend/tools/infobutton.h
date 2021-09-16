@@ -23,6 +23,9 @@ private:
 private:
     QColor m_backgroundColor;
     QColor m_foregroundColor;
+
+private slots:
+    void onPaletteChanged();
 };
 
 #endif // INFOBUTTON_H

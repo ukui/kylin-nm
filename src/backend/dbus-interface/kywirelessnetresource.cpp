@@ -19,6 +19,7 @@ KyWirelessNetResource::KyWirelessNetResource(QObject *parent)
     qDebug()<<"KyWirelessNetResource";
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
     m_connectResource = new KyConnectResourse(this);
+    m_operation = new KyWirelessConnectOperation(this);
 
     kyWirelessNetItemListInit();
 
@@ -74,16 +75,18 @@ bool KyWirelessNetResource::getWifiNetwork(const QString &devIfaceName, const QS
 //    onWifiNetworkDeviceDisappear();
 
     if (!m_WifiNetworkList.contains(devIfaceName)) {
+         qDebug() << "getWifiNetwork fail,not contain " << devIfaceName;
         return false;
     } else {
         for (int index = 0; index < m_WifiNetworkList[devIfaceName].size(); index ++){
             if (m_WifiNetworkList[devIfaceName].at(index).m_NetSsid  == ssid) {
                 wirelessNetResource = m_WifiNetworkList[devIfaceName].at(index);
+                qDebug() << "getWifiNetwork success";
                 return true;
             }
         }
     }
-
+    qDebug() << "getWifiNetwork fail,not contain " << ssid;
     return false;
 }
 
@@ -346,13 +349,13 @@ bool KyWirelessNetResource::getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsIn
         return false;
     }
 
+
     info.identity = setting->identity();
     info.domain = setting->domainSuffixMatch();
-
     info.caCertPath = setting->caPath();
     info.clientCertPath = setting->clientCertificate();
     info.clientPrivateKey = QString(setting->privateKey());
-    info.clientPrivateKeyPWD = setting->privateKeyPassword();
+    info.clientPrivateKeyPWD = m_operation->getPrivateKeyPassword(conn->uuid());
 
     return true;
 }
@@ -382,7 +385,7 @@ bool KyWirelessNetResource::getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeap
 
     info.phase2AuthMethod = (KyNoEapMethodAuth)setting->phase2AuthMethod();
     info.userName = setting->identity();
-    info.userPWD = setting->password();
+    info.userPWD = m_operation->get8021xPassword(conn->uuid());
 
     return true;
 }
@@ -422,7 +425,8 @@ bool KyWirelessNetResource::getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtls
         info.authType = KyTtlsAuthMethod::AUTH_NO_EAP;
     }
     info.userName = setting->identity();
-    info.userPWD = setting->password();
+    info.userPWD = m_operation->get8021xPassword(conn->uuid());
+
 
     return true;
 }

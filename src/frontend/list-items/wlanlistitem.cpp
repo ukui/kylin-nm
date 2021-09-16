@@ -57,6 +57,11 @@ void WlanListItem::setExpanded(const bool &expanded)
     m_pwdFrame->setVisible(expanded);
     m_autoConnectFrame->setVisible(expanded);
     emit this->itemHeightChanged(m_data->m_NetSsid);
+    if (!expanded) {
+        QPalette pal = qApp->palette();
+        pal.setColor(QPalette::Window, qApp->palette().base().color());
+        this->setPalette(pal);
+    }
 }
 
 void WlanListItem::resizeEvent(QResizeEvent *event)
@@ -86,6 +91,23 @@ void WlanListItem::onRightButtonClicked()
         m_menu->addAction(new QAction(tr("Forget"), this));
     m_menu->move(cursor().pos());
     m_menu->show();
+}
+
+void WlanListItem::enterEvent(QEvent *event)
+{
+    if (m_data) {
+        return ListItem::enterEvent(event);
+    } else {
+        return QFrame::enterEvent(event);
+    }
+}
+
+void WlanListItem::leaveEvent(QEvent *event)
+{
+    if (m_pwdFrame && m_pwdFrame->isVisible()) {
+        return QFrame::leaveEvent(event);
+    }
+    return ListItem::leaveEvent(event);
 }
 
 void WlanListItem::initWlanUI()
@@ -219,7 +241,7 @@ void WlanListItem::onInfoButtonClicked()
     if(m_data){
         qDebug()<<"Net active or not:"<<m_isActive;
         qDebug() << "On wlan info button clicked! ssid = " << m_data->m_NetSsid << "; name = " << m_data->m_connName << "." <<Q_FUNC_INFO << __LINE__;
-        NetDetail *netDetail = new NetDetail(m_data->m_NetSsid, m_data->m_connectUuid,m_isActive, true, false);
+        NetDetail *netDetail = new NetDetail(m_wlanDevice, m_data->m_NetSsid, m_data->m_connectUuid, m_isActive, true, !m_data->m_isConfigured, this);
         netDetail->show();
     }
     else{
@@ -343,8 +365,8 @@ void WlanListItem::onConnectionAdd(QString deviceName, QString ssid)
     if (!m_data) {
         return;
     }
-    if (ssid == m_data->m_NetSsid) {
-        m_data->m_isConfigured = true;
+    if (ssid == m_data->m_NetSsid && deviceName == m_wlanDevice) {
+        m_resource->getWifiNetwork(deviceName, ssid, *m_data);
     }
 }
 
@@ -353,8 +375,8 @@ void WlanListItem::onConnectionRemove(QString deviceName, QString ssid)
     if (!m_data) {
         return;
     }
-    if (ssid == m_data->m_NetSsid) {
-        m_data->m_isConfigured = false;
+    if (ssid == m_data->m_NetSsid && deviceName == m_wlanDevice) {
+        m_resource->getWifiNetwork(deviceName, ssid, *m_data);
     }
 }
 

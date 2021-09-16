@@ -7,6 +7,12 @@
 #include "kylinnetworkresourcemanager.h"
 #include <QObject>
 
+enum KyEapMethodType {
+    TLS = 0,
+    PEAP,
+    TTLS,
+};
+
 class KyEapMethodTlsInfo
 {
 public:
@@ -21,6 +27,23 @@ public:
     NetworkManager::Setting::SecretFlags m_privateKeyPWDFlag;
     // only valid when update
     bool    bChanged;
+
+    inline bool operator == (const KyEapMethodTlsInfo& info) const
+    {
+        if (this->identity == info.identity
+                && this->domain == info.domain
+//                && this->devIfaceName == info.devIfaceName
+                && this->caCertPath == info.caCertPath
+                && this->bNeedCa == info.bNeedCa
+                && this->clientCertPath == info.clientCertPath
+                && this->clientPrivateKey == info.clientPrivateKey
+                && this->clientPrivateKeyPWD == info.clientPrivateKeyPWD
+                /*&& this->m_privateKeyPWDFlag == info.m_privateKeyPWDFlag*/) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 };
 
 typedef enum {
@@ -54,6 +77,18 @@ public:
     NetworkManager::Setting::SecretFlags m_passwdFlag;
     // only valid when update
     bool    bChanged;
+
+    inline bool operator == (const KyEapMethodPeapInfo& info) const
+    {
+        if (this->phase2AuthMethod == info.phase2AuthMethod
+                && this->userName == info.userName
+                && this->userPWD == info.userPWD
+                /*&& this->m_passwdFlag == info.m_passwdFlag*/) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 };
 
 enum KyTtlsAuthMethod
@@ -73,6 +108,31 @@ public:
     NetworkManager::Setting::SecretFlags m_passwdFlag;
     // only valid when update
     bool    bChanged;
+
+    inline bool operator == (const KyEapMethodTtlsInfo& info) const
+    {
+        if (this->authType == info.authType) {
+            if (authType == AUTH_EAP) {
+               if (this->authEapMethod == info.authEapMethod
+                && this ->userName == info.userName
+                && this->userPWD == info.userPWD
+                /*&& this->m_passwdFlag == info.m_passwdFlag*/) {
+                    return true;
+                }
+            } else {
+                if (authType == AUTH_EAP) {
+                   if (this->authNoEapMethod == info.authNoEapMethod
+                    && this ->userName == info.userName
+                    && this->userPWD == info.userPWD
+                    /*&& this->m_passwdFlag == info.m_passwdFlag*/) {
+                        return true;
+                    }
+                }
+            }
+
+        }
+        return false;
+    }
 };
 
 void assembleEapMethodTlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTlsInfo &tlsInfo);

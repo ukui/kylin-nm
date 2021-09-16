@@ -389,7 +389,7 @@ void WlanListItem::onWlanStatusChange(QString uuid, NetworkManager::ActiveConnec
         if ((state == NetworkManager::ActiveConnection::State::Activating || state == NetworkManager::ActiveConnection::State::Deactivating)
                 && devName == m_wlanDevice) {
             m_netButton->startLoading();
-        } else if (){
+        } else {
             m_netButton->stopLoading();
         }
     }

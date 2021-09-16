@@ -19,7 +19,7 @@ const QString WIRED_SWITCH = "wiredswitch";
 
 LanPage::LanPage(QWidget *parent) : TabPage(parent)
 {
-<<<<<<< HEAD
+
     m_activeResourse = new KyActiveConnectResourse(this);
     m_connectResourse = new KyConnectResourse(this);
     m_device = new KyNetworkDeviceResourse(this);
@@ -36,41 +36,16 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
         qDebug()<<"[LanPage] org.ukui.kylin-nm.switch is not installed!";
     }
 
-=======
-    //释放问题
-    m_activeResourse = new KyActiveConnectResourse;
-    m_connectResourse = new KyConnectResourse;
-    m_device = new KyNetworkDeviceResourse;
-    devList.empty();
-    m_nullLanItem = new LanListItem();
-    initUI();
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
-            m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
-            initNetSwitch();
-    } else {
-            qDebug()<<"[LanPage] org.ukui.kylin-nm.switch is not installed!";
-    }
-    initDevice();
->>>>>>> 636ec6af4c89576d5c6536da19ab208c4e5e7583
     initDeviceCombox();
     initList(m_deviceName);
 
     connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &LanPage::updateLanlist);
     connect(m_connectResourse, &KyConnectResourse::connectionAdd, this, &LanPage::addConnectionSlot);
     connect(m_connectResourse, &KyConnectResourse::connectionRemove, this, &LanPage::removeConnectionSlot);
-<<<<<<< HEAD
 
     connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this, &LanPage::onDeviceAdd);
     connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this, &LanPage::onDeviceRemove);
     connect(m_device, &KyNetworkDeviceResourse::deviceNameUpdate, this, &LanPage::onDeviceNameUpdate);
-=======
-    connect(m_connectResourse, &KyConnectResourse::connectionUpdate, this, &LanPage::connectionUpdateSlot);
-    connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this, &LanPage::onDeviceAdd);
-    connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this, &LanPage::onDeviceRemove);
-    connect(m_device, &KyNetworkDeviceResourse::deviceNameUpdate, this, &LanPage::onDeviceNameUpdate);
-    //为什么同一个类中要用信号槽
-    connect(this, &LanPage::deviceStatusChanged, this, &LanPage::onDeviceChanged);
->>>>>>> 636ec6af4c89576d5c6536da19ab208c4e5e7583
 }
 
 LanPage::~LanPage()
@@ -275,7 +250,6 @@ void LanPage::initDeviceCombox()
     QMap<QString, bool> enableMap;
     getDeviceEnableState(0,enableMap);
     m_deviceComboBox->clear();
-<<<<<<< HEAD
     m_devList.clear();
 
     bool isOn = m_switchGsettings->get(WIRED_SWITCH).toBool();
@@ -294,32 +268,6 @@ void LanPage::initDeviceCombox()
                 m_deviceComboBox->addItem(m_devList.at(i));
             }
         }
-=======
-    m_deviceMap.clear();
-    getWiredList(m_deviceMap);
-    m_deviceFrame->show();
-    QMap<QString, QVector<QStringList> >::iterator iter;
-    for (iter = m_deviceMap.begin(); iter != m_deviceMap.constEnd(); ++iter) {
-        if (enableMap.contains(iter.key())) {
-            if (enableMap[iter.key()]) {
-                m_deviceComboBox->addItem(iter.key());
-            }
-        } else {
-            m_deviceComboBox->addItem(iter.key());
-            saveDeviceEnableState(iter.key(), true);
-        }
-    }
-    if (m_deviceComboBox->currentText().isEmpty()) {
-        if (m_switchGsettings->get(WIRED_SWITCH).toBool()) {
-            m_switchGsettings->set(WIRED_SWITCH,false);
-        }
-    } else {
-        if (!m_switchGsettings->get(WIRED_SWITCH).toBool()) {
-            m_switchGsettings->set(WIRED_SWITCH,true);
-        }
-    }
->>>>>>> 636ec6af4c89576d5c6536da19ab208c4e5e7583
-
         qDebug() << "[LanPage]Current device:" << m_deviceComboBox->currentText();
         m_deviceName = m_deviceComboBox->currentText();
         initList(m_deviceName);
@@ -374,17 +322,11 @@ void LanPage::onDeviceNameUpdate(QString oldName, QString newName)
        setDefaultDevice(WIRED, newName);
    }
 
-<<<<<<< HEAD
-   if (m_devList.contains(oldName)) {
-       m_devList.removeOne(oldName);
-       m_devList.append(newName);
-       qDebug() << "LanPage emit deviceNameUpdate "  << oldName << newName;
-=======
    if (devList.contains(oldName)) {
        devList.removeOne(oldName);
        devList.append(newName);
        qDebug() << "[LanPage] emit deviceNameUpdate "  << oldName << newName;
->>>>>>> 636ec6af4c89576d5c6536da19ab208c4e5e7583
+
        emit deviceNameChanged(oldName, newName);
        initDeviceCombox();
    }
@@ -512,12 +454,8 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
         emit lanActiveConnectionStateChanged(devName, uuid, state);
     }
 
-<<<<<<< HEAD
     qDebug() << "[LanPage] Update Device Name:" << m_deviceName;
-=======
 
-
->>>>>>> 636ec6af4c89576d5c6536da19ab208c4e5e7583
     if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         qDebug()<<"Get a deactivate, begin to remove it from activeList";
         QMap<KyConnectItem *, QListWidgetItem *>::iterator i;

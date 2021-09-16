@@ -111,15 +111,28 @@ void NetDetail::initUI()
 
     detailBtn = new QPushButton(this);
     detailBtn->setText(tr("Detail"));
+    detailBtn->setCheckable(true);
+    detailBtn->setChecked(true);
 
     ipv4Btn = new QPushButton(this);
     ipv4Btn->setText(tr("Ipv4"));
+    ipv4Btn->setCheckable(true);
 
     ipv6Btn = new QPushButton(this);
     ipv6Btn->setText(tr("Ipv6"));
+    ipv6Btn->setCheckable(true);
 
     securityBtn = new QPushButton(this);
     securityBtn->setText(tr("Security"));
+    securityBtn->setCheckable(true);
+
+    group = new QButtonGroup(this);
+    group->addButton(detailBtn);
+    group->addButton(ipv4Btn);
+    group->addButton(ipv6Btn);
+    if (isWlan) {
+        group->addButton(securityBtn);
+    }
 
     pageLayout->addStretch();
     pageLayout->addWidget(detailBtn);
@@ -360,9 +373,7 @@ void NetDetail::getBaseInfo(ConInfo &conInfo)
             qDebug() << "KeyMgmt not support now " << type;
         }
         conInfo.strHz = QString::number(item.m_frequency);
-        if (item.m_isConfigured) {
-            conInfo.strChan = QString::number(item.m_channel);
-        }
+        conInfo.strChan = QString::number(item.m_channel);
 
         initSecuData();
     }

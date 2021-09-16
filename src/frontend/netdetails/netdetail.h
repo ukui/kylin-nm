@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QSettings>
+#include <QButtonGroup>
 
 #include <QDBusMessage>
 #include <QDBusObjectPath>
@@ -118,6 +119,8 @@ private:
     bool         isConfirmBtnEnable;
 
     ConInfo      m_info;
+
+    QButtonGroup *group;
 
 private slots:
     void on_btnConfirm_clicked();

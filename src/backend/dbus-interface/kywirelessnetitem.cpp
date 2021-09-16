@@ -54,6 +54,7 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
     m_NetSsid = net->ssid();
     m_signalStrength = net->signalStrength();
     m_frequency = net->referenceAccessPoint()->frequency();
+    m_channel = NetworkManager::findChannel(m_frequency);
     NetworkManager::AccessPoint::Capabilities cap = net->referenceAccessPoint()->capabilities();
     NetworkManager::AccessPoint::WpaFlags wpaFlag = net->referenceAccessPoint()->wpaFlags();
     NetworkManager::AccessPoint::WpaFlags rsnFlag = net->referenceAccessPoint()->rsnFlags();
@@ -81,7 +82,6 @@ void KyWirelessNetItem::initInfoBySsid()
             m_connName    = conn->name();
             m_connDbusPath = conn->path();
             m_isConfigured = true;
-            m_channel = wifi_sett->channel();
             return;
         }
     }

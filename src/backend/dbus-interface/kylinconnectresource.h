@@ -28,6 +28,7 @@ public:
     void getApConnections(QList<KyApConnectItem *> &apConnectItemList);
     void getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting);
     bool getInterfaceByUuid(QString &deviceName, NetworkManager::ConnectionSettings::ConnectionType &type, const QString connUuid);
+    void getConnectivity(NetworkManager::Connectivity &connectivity);
 
 private:
     KyConnectItem *getConnectionItem(NetworkManager::Connection::Ptr connectPtr);
@@ -51,6 +52,7 @@ signals:
     void connectionAdd(QString uuid);
     void connectionUpdate(QString uuid);
     void connectionRemove(QString path);
+    void connectivityChanged(NetworkManager::Connectivity connectivity);
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;

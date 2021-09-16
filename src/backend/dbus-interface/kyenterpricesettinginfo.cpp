@@ -13,11 +13,16 @@ void assembleEapMethodTlsSettings(NetworkManager::ConnectionSettings::Ptr connSe
     if (!info.domain.isEmpty()){
         wifi_8021x_sett->setDomainSuffixMatch(info.domain);
     }
-    QByteArray caCerEndWithNull(info.caCertPath.toUtf8() + '\0');
-    wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
-    QByteArray cliCertEndWithNull(info.clientCertPath.toUtf8() + '\0');
+    if (info.bNeedCa) {
+        QByteArray caCerEndWithNull("file://" + info.caCertPath.toUtf8() + '\0');
+        wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
+    } else {
+        QByteArray caCerEndWithNull("");
+        wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
+    }
+    QByteArray cliCertEndWithNull("file://" + info.clientCertPath.toUtf8() + '\0');
     wifi_8021x_sett->setClientCertificate(cliCertEndWithNull);
-    QByteArray cliPriKeyEndWithNull(info.clientPrivateKey.toUtf8() + '\0');
+    QByteArray cliPriKeyEndWithNull("file://" + info.clientPrivateKey.toUtf8() + '\0');
     wifi_8021x_sett->setPrivateKey(cliPriKeyEndWithNull);
     wifi_8021x_sett->setPrivateKeyPassword(info.clientPrivateKeyPWD);
     wifi_8021x_sett->setPrivateKeyPasswordFlags(info.m_privateKeyPWDFlag);
@@ -98,13 +103,16 @@ void modifyEapMethodTlsSettings(NetworkManager::ConnectionSettings::Ptr connSett
     }
     if (tlsInfo.bNeedCa)
     {
-        QByteArray caCerEndWithNull(tlsInfo.caCertPath.toUtf8() + '\0');
+        QByteArray caCerEndWithNull("file://" + tlsInfo.caCertPath.toUtf8() + '\0');
+        setting->setCaCertificate(caCerEndWithNull);
+    } else {
+        QByteArray caCerEndWithNull("");
         setting->setCaCertificate(caCerEndWithNull);
     }
 
-    QByteArray cliCertEndWithNull(tlsInfo.clientCertPath.toUtf8() + '\0');
+    QByteArray cliCertEndWithNull("file://" + tlsInfo.clientCertPath.toUtf8() + '\0');
     setting->setClientCertificate(cliCertEndWithNull);
-    QByteArray cliPriKeyEndWithNull(tlsInfo.clientPrivateKey.toUtf8() + '\0');
+    QByteArray cliPriKeyEndWithNull("file://" + tlsInfo.clientPrivateKey.toUtf8() + '\0');
     setting->setPrivateKey(cliPriKeyEndWithNull);
     setting->setPrivateKeyPasswordFlags(tlsInfo.m_privateKeyPWDFlag);
     if(tlsInfo.bChanged)
@@ -133,6 +141,9 @@ void modifyEapMethodPeapSettings(NetworkManager::ConnectionSettings::Ptr connSet
     }
     wifi_8021x_sett->setPasswordFlags(peapInfo.m_passwdFlag);
 
+    QByteArray caCerEndWithNull("");
+    wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
+
     return;
 }
 
@@ -158,5 +169,8 @@ void modifyEapMethodTtlsSettings(NetworkManager::ConnectionSettings::Ptr connSet
         wifi_8021x_sett->setPassword(ttlsInfo.userPWD);
     }
     wifi_8021x_sett->setPasswordFlags(ttlsInfo.m_passwdFlag);
+
+    QByteArray caCerEndWithNull("");
+    wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
     return;
 }

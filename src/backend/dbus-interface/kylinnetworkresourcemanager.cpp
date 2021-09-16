@@ -51,6 +51,7 @@ KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(pa
     connect(NetworkManager::settingsNotifier(), &NetworkManager::SettingsNotifier::connectionAdded, this, &KyNetworkResourceManager::onConnectionAdded);
     connect(NetworkManager::settingsNotifier(), &NetworkManager::SettingsNotifier::connectionRemoved, this, static_cast<void (KyNetworkResourceManager::*)(QString const &)>(&KyNetworkResourceManager::onConnectionRemoved));
 
+    connect(NetworkManager::notifier(), &NetworkManager::Notifier::connectivityChanged, this, &KyNetworkResourceManager::connectivityChanged);
     //todo wifi开关信号
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::wirelessEnabledChanged, this, &KyNetworkResourceManager::wifinEnabledChanged);
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::wirelessHardwareEnabledChanged, [=](){
@@ -481,6 +482,11 @@ bool KyNetworkResourceManager::isActivatingConnection(QString uuid)
     }
 
     return false;
+}
+
+void KyNetworkResourceManager::getConnectivity(NetworkManager::Connectivity &connectivity)
+{
+    connectivity = NetworkManager::connectivity();
 }
 
 void KyNetworkResourceManager::requestScan(NetworkManager::WirelessDevice * dev)

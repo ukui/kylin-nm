@@ -43,6 +43,7 @@ NetworkManager::ConnectionSettings::Ptr assembleWirelessSettings(const KyWireles
     settings->setAutoconnect(connSettingInfo.isAutoConnect);
     //Note: workaround for wrongly (randomly) initialized gateway-ping-timeout
     settings->setGatewayPingTimeout(0);
+    settings->setInterfaceName(connSettingInfo.m_ifaceName);
 
     NetworkManager::WirelessSetting::Ptr wifi_sett
         = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
@@ -235,6 +236,7 @@ void KyWirelessConnectOperation::deleteWirelessConnect(const QString &connectUui
 
 QString KyWirelessConnectOperation::getPsk(const QString &connectUuid)
 {
+    qDebug() << "getPsk" << connectUuid;
     NetworkManager::Connection::Ptr connectPtr =
             NetworkManager::findConnectionByUuid(connectUuid);
     if (connectPtr.isNull()) {
@@ -243,13 +245,50 @@ QString KyWirelessConnectOperation::getPsk(const QString &connectUuid)
         return "";
     }
     QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PSK_SETTING_NAME);
-    if(!reply.isValid()) {
+    QMap<QString,QVariantMap> map(reply.value());
+    if (map.contains("802-11-wireless-security")
+            && map.value("802-11-wireless-security").contains("psk"))     {
+        QString psk = map.value("802-11-wireless-security").value("psk").toString();
+        return  psk;
+    }
+    return "";
+}
+
+QString KyWirelessConnectOperation::getPrivateKeyPassword(const QString &connectUuid)
+{
+    qDebug() << "getPsk" << connectUuid;
+    NetworkManager::Connection::Ptr connectPtr =
+            NetworkManager::findConnectionByUuid(connectUuid);
+    if (connectPtr.isNull()) {
+        QString errorMessage = tr("it can not find connection") + connectUuid;
+        qWarning()<<errorMessage;
         return "";
     }
+    QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PSK_SETTING_NAME);
     QMap<QString,QVariantMap> map(reply.value());
-    if (map.contains("802-11-wireless-security") && map.value("802-11-wireless-security").contains("psk"))
+    if (map.contains("802-1x")
+            && map.value("802-1x").contains("private-key-password")) {
+        QString psk = map.value("802-1x").value("private-key-password").toString();
+        return  psk;
+    }
+    return "";
+}
+
+QString KyWirelessConnectOperation::get8021xPassword(const QString &connectUuid)
+{
+    qDebug() << "getPsk" << connectUuid;
+    NetworkManager::Connection::Ptr connectPtr =
+            NetworkManager::findConnectionByUuid(connectUuid);
+    if (connectPtr.isNull()) {
+        QString errorMessage = tr("it can not find connection") + connectUuid;
+        qWarning()<<errorMessage;
+        return "";
+    }
+    QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PSK_SETTING_NAME);
+    QMap<QString,QVariantMap> map(reply.value());
+    if (map.contains("802-1x") && map.value("802-1x").contains("password"))
     {
-        QString psk = map.value("802-11-wireless-security").value("psk").toString();
+        QString psk = map.value("802-1x").value("password").toString();
         return  psk;
     }
     return "";
@@ -616,7 +655,9 @@ void KyWirelessConnectOperation::setWirelessEnabled(bool enabled)
     NetworkManager::setWirelessEnabled(enabled);
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA);
-        gsetting->set(WIRELESS_SWITCH, enabled);
+        if (gsetting->get(WIRELESS_SWITCH).toBool() != enabled) {
+            gsetting->set(WIRELESS_SWITCH, enabled);
+        }
     } else {
         qDebug()<<"isSchemaInstalled false";
     }
@@ -776,14 +817,16 @@ KyKeyMgmt KyWirelessConnectOperation::getConnectKeyMgmt(const QString &uuid)
 {
     NetworkManager::Connection::Ptr connectPtr =
             NetworkManager::findConnectionByUuid(uuid);
+    if (connectPtr.isNull()) {
+        return KyKeyMgmt::Unknown;
+    }
 
     NetworkManager::WirelessSecuritySetting::Ptr security_sett
             = connectPtr->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
 
-//    if(security_sett.isNull())
-//    {
-//        return KyKeyMgmt::Unknown;
-//    }
+    if(security_sett.isNull()) {
+        return KyKeyMgmt::Unknown;
+    }
     return (KyKeyMgmt)security_sett->keyMgmt();
 }
 
@@ -803,7 +846,6 @@ void KyWirelessConnectOperation::updateWirelessSecu(NetworkManager::ConnectionSe
     }
     security_sett->setKeyMgmt((NetworkManager::WirelessSecuritySetting::KeyMgmt)type);
     if (bPwdChange) {
-        qDebug() << "get psk " << security_sett->psk();
         security_sett->setPsk(connSettingInfo.m_psk);
     }
     return;
@@ -875,4 +917,37 @@ void KyWirelessConnectOperation::activateApConnectionByUuid(const QString apUuid
     });
 
     return ;
+}
+
+bool KyWirelessConnectOperation::getEnterpiseEapMethod(const QString &uuid, KyEapMethodType &type)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            NetworkManager::findConnectionByUuid(uuid);
+    if (connectPtr.isNull()) {
+        qWarning() << "getEnterpiseEapMethod faild.Can't find uuid = " << uuid;
+        return false;
+    }
+
+    KyKeyMgmt keyMgmt = getConnectKeyMgmt(uuid);
+    if (keyMgmt != WpaEap) {
+        qWarning() << "getEnterpiseEapMethod but not WpaEap.it's " << keyMgmt;
+        return false;
+    }
+
+    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
+
+    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
+            = connectionSettings->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+
+    QList<NetworkManager::Security8021xSetting::EapMethod> list = wifi_8021x_sett->eapMethods();
+
+    if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodTls)) {
+        type = TLS;
+    } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodPeap)) {
+        type = PEAP;
+    } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodTtls)) {
+        type = TTLS;
+    }
+
+    return true;
 }

@@ -21,63 +21,6 @@ const QByteArray GSETTINGS_SCHEMA_KYLIN_NM = "org.ukui.kylin-nm.switch";
 const QString    KEY_WIRELESS_SWITCH          = "wirelessswitch";
 const QString    KEY_WIRED_SWITCH             = "wiredswitch";
 
-void saveDeviceEnableState(QString deviceName, bool enable)
-{
-    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
-    m_settings->beginGroup("CARDEABLE");
-    m_settings->setValue(deviceName, enable);
-    m_settings->endGroup();
-    m_settings->sync();
-    delete m_settings;
-    m_settings = nullptr;
-    return;
-}
-
-void getDeviceEnableState(int type, QMap<QString, bool> &map)
-{
-    map.clear();
-    if (!QFile::exists(CONFIG_FILE_PATH)) {
-        return;
-    }
-    if (type != WIRED && type != WIRELESS) {
-        qDebug() << "getDeviceEnableState but wrong type";
-        return;
-    }
-
-    KyNetworkDeviceResourse * kdr = new KyNetworkDeviceResourse();
-    QStringList wiredDevList,wirelessDevList;
-    wiredDevList.clear();
-    wirelessDevList.clear();
-
-    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
-    m_settings->beginGroup("CARDEABLE");
-
-    if (type == WIRED) {
-        kdr->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
-        if (!wiredDevList.isEmpty()) {
-            for (int i = 0; i < wiredDevList.size(); ++i) {
-                bool enable = m_settings->value(wiredDevList.at(i), true).toBool();
-                map.insert(wiredDevList.at(i), enable);
-            }
-        }
-    } else if (type == WIRELESS) {
-        kdr->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
-        if (!wirelessDevList.isEmpty()) {
-            for (int i = 0; i < wirelessDevList.size(); ++i) {
-                bool enable = m_settings->value(wirelessDevList.at(i), true).toBool();
-                map.insert(wirelessDevList.at(i), enable);
-            }
-        }
-    }
-
-    m_settings->endGroup();
-    delete m_settings;
-    m_settings = nullptr;
-    delete kdr;
-    kdr = nullptr;
-    return;
-}
-
 /*
  * Implementation of adaptor class DbusAdaptor
  */
@@ -143,6 +86,7 @@ void DbusAdaptor::setWirelessSwitchEnable(bool enable)
 //启用/禁用网卡
 void DbusAdaptor::setDeviceEnable(QString devName, bool enable)
 {
+    parent()->setWiredDeviceEnable(devName, enable);
     saveDeviceEnableState(devName, enable);
 }
 
@@ -227,15 +171,13 @@ QMap<QString, bool> DbusAdaptor::getDeviceListAndEnabled(int devType)
 //唤起属性页 根据网卡类型 参数2 为ssid/uuid
 void DbusAdaptor::showPropertyWidget(QString devName, QString ssid)
 {
-    //todo
-    //parent()->showPropertyWidget(devName,ssid);
+    parent()->showPropertyWidget(devName,ssid);
 }
 
 //唤起新建有线连接界面
-void DbusAdaptor::showCreateWiredConnectWidget(QString devName, QString connectionName)
+void DbusAdaptor::showCreateWiredConnectWidget(QString devName)
 {
-    //todo
-    //parent()->showCreateWiredConnectWidget(devName,connectionName);
+    parent()->showCreateWiredConnectWidget(devName);
 }
 
 //开启热点

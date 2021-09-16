@@ -2,13 +2,15 @@
 
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
-DetailPage::DetailPage(bool isWlan, QWidget *parent)
-    : mIsWlan(isWlan), QFrame(parent)
+DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
+    : mIsWlan(isWlan), isCreate(isCreate), QFrame(parent)
 {
     this->setFrameShape(QFrame::Shape::StyledPanel);
     this->setMaximumWidth(960);
     initUI();
-    initComponent();
+    if (isCreate) {
+     connect(mSSID, &QLineEdit::textEdited, this, &DetailPage::setEnableOfSaveBtn);
+    }
 }
 
 void DetailPage::setSSID(const QString &ssid) {
@@ -51,16 +53,39 @@ void DetailPage::setMac(const QString &mac) {
     this->mMac->setText(mac);
 }
 
+void DetailPage::setAutoConnect(bool flag)
+{
+    this->forgetNetBox->setChecked(flag);
+}
+
+void DetailPage::getSsid(QString &ssid)
+{
+    ssid = mSSID->text();
+}
+
+bool DetailPage::checkIsChanged(const ConInfo info)
+{
+    if (info.isAutoConnect != forgetNetBox->isChecked()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void DetailPage::initUI() {
     forgetNetBox = new QCheckBox(this);
     layout = new QVBoxLayout(this);
 
     mDetailLayout = new QFormLayout(this);
 
-    mSSID      = new QLabel(this);
-    QHBoxLayout *mSSIDLayout = new QHBoxLayout(this);
-    mSSIDLayout->addStretch();
-    mSSIDLayout->addWidget(mSSID);
+    mSSID      = new QLineEdit(this);
+    mSSID->setAlignment(Qt::AlignRight);
+    if (!isCreate) {
+        mSSID->setStyleSheet("background:transparent;border-width:0;border-style:outset");
+        mSSID->setFocusPolicy(Qt::NoFocus);
+    } else {
+        mSSID->setStyleSheet("border-width:0;border-style:outset");
+    }
 
     mProtocol  = new QLabel(this);
     QHBoxLayout *mProtocolLayout = new QHBoxLayout(this);
@@ -118,7 +143,7 @@ void DetailPage::initUI() {
     mAutoLayout->addWidget(autoConnect);
     mAutoLayout->addSpacerItem(horizontalSpacer);
 
-    mDetailLayout->addRow(tr("SSID:"), mSSIDLayout);
+    mDetailLayout->addRow(tr("SSID:"), mSSID);
     mDetailLayout->addRow(tr("Protocol:"), mProtocolLayout);
     if (mIsWlan) {
         mDetailLayout->addRow(tr("Security Type:"), mSecTypeLayout);
@@ -136,10 +161,7 @@ void DetailPage::initUI() {
     layout->addLayout(mAutoLayout);
 
 }
-void DetailPage::initComponent() {
-    connect(forgetNetBox, SIGNAL(toggled(bool)), this, SLOT(setNetStatus(bool)));
-}
 
-void DetailPage::setNetStatus(bool checked) {
-
+void DetailPage::setEnableOfSaveBtn() {
+    emit setDetailPageState(!mSSID->text().isEmpty());
 }

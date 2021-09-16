@@ -57,6 +57,11 @@ void WlanListItem::setExpanded(const bool &expanded)
     m_pwdFrame->setVisible(expanded);
     m_autoConnectFrame->setVisible(expanded);
     emit this->itemHeightChanged(m_data->m_NetSsid);
+    if (!expanded) {
+        QPalette pal = qApp->palette();
+        pal.setColor(QPalette::Window, qApp->palette().base().color());
+        this->setPalette(pal);
+    }
 }
 
 void WlanListItem::resizeEvent(QResizeEvent *event)
@@ -86,6 +91,23 @@ void WlanListItem::onRightButtonClicked()
         m_menu->addAction(new QAction(tr("Forget"), this));
     m_menu->move(cursor().pos());
     m_menu->show();
+}
+
+void WlanListItem::enterEvent(QEvent *event)
+{
+    if (m_data) {
+        return ListItem::enterEvent(event);
+    } else {
+        return QFrame::enterEvent(event);
+    }
+}
+
+void WlanListItem::leaveEvent(QEvent *event)
+{
+    if (m_pwdFrame && m_pwdFrame->isVisible()) {
+        return QFrame::leaveEvent(event);
+    }
+    return ListItem::leaveEvent(event);
 }
 
 void WlanListItem::initWlanUI()

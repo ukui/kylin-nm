@@ -1,11 +1,12 @@
 #include "infobutton.h"
 #include <QEvent>
 #include <QPainter>
+#include <QApplication>
 
 #define BUTTON_SIZE 36,36
 #define ICON_SIZE 16,16
 #define BACKGROUND_COLOR QColor(0,0,0,0)
-#define FOREGROUND_COLOR_NORMAL QColor(0,0,0,255)
+#define FOREGROUND_COLOR_NORMAL qApp->palette().text().color()
 #define FOREGROUND_COLOR_HOVER QColor(55,144,250,255)
 #define FOREGROUND_COLOR_PRESS QColor(36,109,212,255)
 #define OUTER_PATH 8,8,16,16
@@ -18,6 +19,7 @@ InfoButton::InfoButton(QWidget *parent) : QPushButton(parent)
 {
     this->setFixedSize(BUTTON_SIZE);
     initUI();
+    connect(qApp, &QApplication::paletteChanged, this, &InfoButton::onPaletteChanged);
 }
 
 void InfoButton::initUI()
@@ -25,6 +27,12 @@ void InfoButton::initUI()
     this->setFixedSize(BUTTON_SIZE);
     m_backgroundColor = BACKGROUND_COLOR;
     m_foregroundColor = FOREGROUND_COLOR_NORMAL;
+}
+
+void InfoButton::onPaletteChanged()
+{
+    m_foregroundColor = FOREGROUND_COLOR_NORMAL;
+    this->repaint();
 }
 
 void InfoButton::paintEvent(QPaintEvent *event)

@@ -11,7 +11,6 @@
 KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
-    m_networkdevice = new KyNetworkDeviceResourse();
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionAdd, this, &KyConnectResourse::connectionAdd);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionRemove, this, &KyConnectResourse::connectionRemove);
@@ -22,10 +21,6 @@ KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
 KyConnectResourse::~KyConnectResourse()
 {
     m_networkResourceInstance = nullptr;
-    if (nullptr != m_networkdevice) {
-        delete m_networkdevice;
-        m_networkdevice = nullptr;
-    }
 }
 
 KyConnectItem *KyConnectResourse::getConnectionItem(NetworkManager::Connection::Ptr connectPtr)
@@ -45,7 +40,7 @@ KyConnectItem *KyConnectResourse::getConnectionItem(NetworkManager::Connection::
     connectionItem->m_itemType = settingPtr->connectionType();
 
     if (m_networkResourceInstance->isActivatingConnection(connectPtr->uuid())) {
-        connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Deactivating;
+        connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Activating;
     } else {
         connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
     }
@@ -58,7 +53,7 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, 
             m_networkResourceInstance->getConnect(connectUuid);
 
     if (nullptr == connectPtr) {
-        qWarning()<<"get connect failed, connect uuid"<<connectUuid;
+        qWarning()<< "[KyConnectResourse]" <<"get connect failed, connect uuid"<<connectUuid;
         return nullptr;
     }
 

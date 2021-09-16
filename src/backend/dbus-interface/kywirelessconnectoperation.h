@@ -125,9 +125,6 @@ private:
     void setIpv4AndIpv6Setting(NetworkManager::ConnectionSettings::Ptr connSetting, const KyConnectSetting &connSettingInfo);
     void setWirelessSecuWpaXEap(NetworkManager::ConnectionSettings::Ptr connSettingPtr);
     void activateApConnectionByUuid(const QString apUuid, const QString apDevice);
-
-    KyNetworkResourceManager *m_networkResourceInstance = nullptr;
-
 };
 
 #endif // KYWIRELESSCONNECTOPERATION_H

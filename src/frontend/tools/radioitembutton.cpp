@@ -33,6 +33,11 @@ RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
     connect(qApp, &QApplication::paletteChanged, this, &RadioItemButton::onPaletteChanged);
 }
 
+RadioItemButton::~RadioItemButton()
+{
+
+}
+
 void RadioItemButton::startLoading()
 {
     emit this->requestStartLoading();
@@ -72,50 +77,40 @@ void RadioItemButton::setActive(const bool &isActive)
 }
 void RadioItemButton::onLoadingStarted()
 {
-    if (!m_loadingTimer) {
-        m_loadingTimer = new QTimer();
-        connect(m_loadingTimer, &QTimer::timeout, this, &RadioItemButton::onLoadingTimerTimeout);
+#define ANIMATION_SPEED 0.5*1000
+#define START_ROTATION 0
+#define END_ROTATION 360
+#define ANIMATION_LOOP -1 //无限旋转
+    if (!m_iconLabel) {
+        qWarning() << "Start loading failed, iconLabel is null pointer!" << Q_FUNC_INFO << __LINE__;
     }
-    if (!m_timeoutTimer) {
-        m_timeoutTimer = new QTimer();
-        connect(m_timeoutTimer, &QTimer::timeout, this, &RadioItemButton::onLoadingStopped);
+    if (!m_animation) {
+        m_animation = new QVariantAnimation(m_iconLabel);
     }
-    if (m_loadingTimer->isActive()) {
-        return;
-    }
-    m_loadingTimer->start(FLASH_SPEED);
-    m_timeoutTimer->stop();
-    m_timeoutTimer->start(TIMEOUT_TIMER);
+    m_animation->setDuration(ANIMATION_SPEED);
+    m_animation->setStartValue(START_ROTATION);
+    m_animation->setEndValue(END_ROTATION);
+    m_animation->setLoopCount(ANIMATION_LOOP);
+    connect(m_animation, &QVariantAnimation::valueChanged, this, &RadioItemButton::onAnimationValueChanged);
+    m_animation->start();
 }
 
 void RadioItemButton::onLoadingStopped()
 {
-    //ZJP_TODO 停止播放转圈动画
-    if (this->m_loadingTimer) {
-        this->m_loadingTimer->stop();
+    if (!m_animation) {
+        qWarning() << "Stop loading failed, m_animation is null pointer!" << Q_FUNC_INFO << __LINE__;
+        return;
     } else {
-        qWarning() << "Stop loading failed, m_loadingTimer is nullptr." << Q_FUNC_INFO << __LINE__;
+        m_animation->stop();
     }
-    if (this->m_timeoutTimer) {
-        this->m_timeoutTimer->stop();
+
+    if (!m_iconLabel) {
+        qWarning() << "Stop loading failed, iconLabel is null pointer!" << Q_FUNC_INFO << __LINE__;
+        return;
     } else {
-        qWarning() << "Stop timeout_timer failed, m_timeoutTimer is nullptr." << Q_FUNC_INFO << __LINE__;
+        m_iconLabel->setPixmap(m_pixmap);
     }
-}
-
-void RadioItemButton::onLoadingTimerTimeout()
-{
-    QString qpmQss = ":/res/s/conning-a/";
-    qpmQss.append(QString::number(this->currentPage));
-    qpmQss.append(".png");
-    qDebug()<<qpmQss;
-    m_iconLabel->setPixmap(QPixmap(qpmQss));
-
-    this->currentPage --;
-
-    if (this->currentPage < 1) {
-        this->currentPage = 8; //循环播放
-    }
+    qDebug() << "Stop loading succeed!" << Q_FUNC_INFO << __LINE__;
 }
 
 void RadioItemButton::onPaletteChanged()
@@ -127,6 +122,16 @@ void RadioItemButton::onPaletteChanged()
         m_backgroundColor = FOREGROUND_COLOR_NORMAL_INACTIVE_DARK;
         m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
     }
+}
+
+void RadioItemButton::onAnimationValueChanged(const QVariant& value)
+{
+    if (!m_iconLabel) {
+        return;
+    }
+    QTransform t;
+    t.rotate(value.toReal());
+    m_iconLabel->setPixmap(QIcon(":/res/s/conning-a/1.png").pixmap(ICON_SIZE).transformed(t));
 }
 
 void RadioItemButton::paintEvent(QPaintEvent *event)

@@ -82,6 +82,7 @@ void WlanPage::initWlanUI()
     m_hiddenWlanLabel->setText(tr("More..."));
     m_hiddenWlanLabel->setContentsMargins(MORE_TEXT_MARGINS);
     m_hiddenWlanLabel->installEventFilter(this);
+    m_hiddenWlanLabel->setCursor(Qt::PointingHandCursor);
     m_hiddenWlanLayout->addWidget(m_hiddenWlanLabel);
     m_hiddenWlanLayout->addStretch();
 

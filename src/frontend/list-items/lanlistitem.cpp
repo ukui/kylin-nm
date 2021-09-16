@@ -43,7 +43,7 @@ LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *paren
 LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
 {
     m_isActive = false;
-    m_netButton->setIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic"));
+    m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic"));
     const QString str="Not connected";
     m_nameLabel->setText(str);
     this->m_infoButton->hide();

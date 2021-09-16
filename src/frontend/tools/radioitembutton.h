@@ -5,6 +5,8 @@
 #include <QLabel>
 #include<QTimer>
 
+#define MIDDLE_COLOR 178
+
 class RadioItemButton : public QPushButton
 {
     Q_OBJECT
@@ -15,6 +17,13 @@ public:
     void stopLoading();
     void setButtonIcon(const QIcon &icon);
     void setActive(const bool &isActive);
+    enum PixmapColor {
+        WHITE = 0,
+        BLACK,
+        GRAY,
+        BLUE,
+    };
+    const QPixmap loadSvg(const QPixmap &source, const PixmapColor &color);
 
 signals:
     void requestStartLoading();
@@ -33,11 +42,13 @@ private:
     QColor m_backgroundColor;
 
     int currentPage = 8;
+    QPixmap m_pixmap;
 
 private slots:
     void onLoadingStarted();
     void onLoadingStopped();
     void onLoadingTimerTimeout();
+    void onPaletteChanged();
 };
 
 #endif // NETBUTTON_H

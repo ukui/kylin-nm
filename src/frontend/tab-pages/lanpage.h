@@ -79,6 +79,7 @@ private slots:
     void onDeviceRemove(QString deviceName);
     void onDeviceNameUpdate(QString oldName, QString newName);
     void onDeviceComboxIndexChanged(int currentIndex);
+    void onLanDataChange(QString uuid);
 };
 
 #endif // LANPAGE_H

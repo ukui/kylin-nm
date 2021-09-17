@@ -108,7 +108,7 @@ void RadioItemButton::onLoadingTimerTimeout()
     QString qpmQss = ":/res/s/conning-a/";
     qpmQss.append(QString::number(this->currentPage));
     qpmQss.append(".png");
-    qDebug()<<qpmQss;
+//    qDebug()<<qpmQss;
     m_iconLabel->setPixmap(QPixmap(qpmQss));
 
     this->currentPage --;

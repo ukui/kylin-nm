@@ -8,27 +8,25 @@ LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *paren
     : m_data(data), deviceName(deviceName), ListItem(parent)    //item数据传入
 {
     m_connectOperation = new KyWiredConnectOperation;
+    m_activeConnectResource = new KyActiveConnectResourse;
+    m_connectResource = new KyConnectResourse;
     m_data = data;
     m_nameLabel->setText(m_data->m_connectName);
 
     if (m_data != nullptr) {
         if (m_data->m_connectState == NetworkManager::ActiveConnection::State::Activated) {
-            m_netButton->stopLoading();
             setIcon(true);
             m_isActive = true;
-        } else if (m_data->m_connectState == NetworkManager::ActiveConnection::State::Deactivated)
-        {
-            m_netButton->stopLoading();
-            setIcon(false);
-            m_isActive = false;
         } else
         {
-//            m_netButton->startLoading();
+            setIcon(false);
+            m_isActive = false;
         }
     }
     m_netButton->setActive(m_isActive);
     m_itemFrame->installEventFilter(this);
     connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
+    connect(m_activeConnectResource, &KyActiveConnectResourse::stateChangeReason, this, &LanListItem::onLanStatusChange);
 }
 
 LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
@@ -38,6 +36,15 @@ LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
     const QString str="Not connected";
     m_nameLabel->setText(str);
     this->m_infoButton->hide();
+}
+
+void LanListItem::setIcon(bool isOn)
+{
+    if (isOn) {
+        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
+    } else {
+        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+    }
 }
 
 void LanListItem::onNetButtonClicked()
@@ -51,40 +58,13 @@ void LanListItem::onNetButtonClicked()
         m_connectOperation->activateWiredConnection(m_data->m_connectUuid, deviceName);
         qDebug() << m_data->m_connectName << "Connect after user clicked!" << deviceName;
 //        m_data->m_connectState = NetworkManager::ActiveConnection::State::Activating;
-//        refreshIcon();
         m_isActive = true;
     } else {
         //连接，点击后断开
         m_connectOperation->deactivateWiredConnection(m_data->m_connectName, m_data->m_connectUuid);
         qDebug() << m_data->m_connectName << "Disconnect after user clicked!" << deviceName;
 //        m_data->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
-//        refreshIcon();
         m_isActive = false;
-    }
-}
-
-void LanListItem::setIcon(bool isOn)
-{
-    if (isOn) {
-        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
-    } else {
-        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
-    }
-}
-void LanListItem::refreshIcon()
-{
-    switch (m_data->m_connectState) {
-    case NetworkManager::ActiveConnection::State::Activated:
-        m_netButton->stopLoading();
-        setIcon(true);
-        break;
-    case NetworkManager::ActiveConnection::State::Activating:
-        m_netButton->startLoading();
-        break;
-    case NetworkManager::ActiveConnection::State::Deactivated:
-        m_netButton->stopLoading();
-        setIcon(false);
-        break;
     }
 }
 
@@ -103,5 +83,26 @@ void LanListItem::onInfoButtonClicked()
     }
     else{
         qDebug() << "On lan info button clicked! But there is no wlan connect " ;
+    }
+}
+
+void LanListItem::onLanStatusChange(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
+{
+    qDebug() <<"[LanListItem]:Connection State Change to:" << state;
+    if (m_data->m_connectUuid == uuid) {
+        if (state == NetworkManager::ActiveConnection::State::Activating || state == NetworkManager::ActiveConnection::State::Deactivating) {
+            qDebug() << "[LanListItem]:Activating!Loading!" << state;
+            m_netButton->startLoading();
+        }
+        else {
+            qDebug() << "[LanListItem]:Stop!" << state;
+            m_netButton->stopLoading();
+            if (state == NetworkManager::ActiveConnection::State::Activated) {
+                setIcon(true);
+            }
+            else {
+                setIcon(false);
+            }
+        }
     }
 }

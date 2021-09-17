@@ -43,6 +43,8 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_connectResourse, &KyConnectResourse::connectionAdd, this, &LanPage::addConnectionSlot);
     connect(m_connectResourse, &KyConnectResourse::connectionRemove, this, &LanPage::removeConnectionSlot);
 
+    connect(m_connectResourse, &KyConnectResourse::connectionUpdate, this, &LanPage::onLanDataChange);
+
     connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this, &LanPage::onDeviceAdd);
     connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this, &LanPage::onDeviceRemove);
     connect(m_device, &KyNetworkDeviceResourse::deviceNameUpdate, this, &LanPage::onDeviceNameUpdate);
@@ -322,9 +324,9 @@ void LanPage::onDeviceNameUpdate(QString oldName, QString newName)
        setDefaultDevice(WIRED, newName);
    }
 
-   if (devList.contains(oldName)) {
-       devList.removeOne(oldName);
-       devList.append(newName);
+   if (m_devList.contains(oldName)) {
+       m_devList.removeOne(oldName);
+       m_devList.append(newName);
        qDebug() << "[LanPage] emit deviceNameUpdate "  << oldName << newName;
 
        emit deviceNameChanged(oldName, newName);
@@ -382,6 +384,7 @@ void LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
     m_testLanItem = new LanListItem(itemData, m_deviceName);
     qDebug() << "[LanPage] addNewItem, connection: " << itemData->m_connectName << "deviceName: " << m_deviceName;
     listWidget->setItemWidget(m_listWidgetItem, m_testLanItem);
+    qDebug() << "??????????";
 }
 
 void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显示
@@ -512,8 +515,13 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
             }
         }
     }
-    else if (state == NetworkManager::ActiveConnection::State::Activating){
+    else{
+//        QMap<KyConnectItem *, QListWidgetItem *>::iterator i;
+//        for (i = m_deactiveMap.begin(); i != m_deactiveMap.constEnd(); ++i) {
+//            KyConnectItem *m_item = i.key();
+//            if (m_item->m_connectUuid == uuid) {
 
+//            }
     }
 
     if (m_activeMap.count() <= 0) {
@@ -555,6 +563,36 @@ void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
         map.insert(deviceName, vector);
     }
     return;
+}
+
+void LanPage::onLanDataChange(QString uuid)
+{
+    QString devName;
+    NetworkManager::ConnectionSettings::ConnectionType type;
+
+    if(m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
+        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
+            qDebug() << "[LanPage] Connection data changed but type is not Wired";
+            return;
+        }
+        else {
+            qDebug() << "[LanPage] Connection data changed!";
+            QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;
+            for (iter = m_deactiveMap.begin(); iter != m_deactiveMap.constEnd(); ++iter) {
+                KyConnectItem *m_item = iter.key();
+                if (m_item->m_connectUuid == uuid) {
+                    m_inactivatedLanListWidget->removeItemWidget(iter.value());
+                    delete iter.value();
+                    m_deactiveMap.erase(iter);
+                    KyConnectItem *m_itemData = new KyConnectItem(this);
+                    m_itemData = m_connectResourse->getConnectionItemByUuid(uuid, devName);
+                    m_deactiveMap.insert(m_itemData, m_listWidgetItem);
+                    addNewItem(m_itemData, m_inactivatedLanListWidget);
+                    break;
+                }
+             }
+        }
+    }
 }
 
 void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)

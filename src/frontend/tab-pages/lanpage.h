@@ -52,6 +52,7 @@ private:
     QListWidgetItem *m_listWidgetItem = nullptr;
 
     KyNetworkDeviceResourse *m_device = nullptr;
+    KyWiredConnectOperation *m_wiredConnectOperation = nullptr;
     KyActiveConnectResourse *m_activeResourse = nullptr;     //激活的连接
     KyConnectResourse *m_connectResourse = nullptr;          //未激活的连接
 

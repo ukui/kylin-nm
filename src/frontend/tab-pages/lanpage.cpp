@@ -20,9 +20,10 @@ const QString WIRED_SWITCH = "wiredswitch";
 LanPage::LanPage(QWidget *parent) : TabPage(parent)
 {
     //释放问题
-    m_activeResourse = new KyActiveConnectResourse;
-    m_connectResourse = new KyConnectResourse;
-    m_device = new KyNetworkDeviceResourse;
+    m_activeResourse = new KyActiveConnectResourse(this);
+    m_connectResourse = new KyConnectResourse(this);
+    m_device = new KyNetworkDeviceResourse(this);
+    m_wiredConnectOperation =  new KyWiredConnectOperation(this);
     devList.empty();
     m_nullLanItem = new LanListItem();
     initUI();
@@ -42,6 +43,11 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this, &LanPage::onDeviceAdd);
     connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this, &LanPage::onDeviceRemove);
     connect(m_device, &KyNetworkDeviceResourse::deviceNameUpdate, this, &LanPage::onDeviceNameUpdate);
+
+    connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &LanPage::activateFailed);
+    connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &LanPage::deactivateFailed);
+
+
     //为什么同一个类中要用信号槽
     connect(this, &LanPage::deviceStatusChanged, this, &LanPage::onDeviceChanged);
 }
@@ -260,15 +266,6 @@ void LanPage::initDeviceCombox()
         } else {
             m_deviceComboBox->addItem(iter.key());
             saveDeviceEnableState(iter.key(), true);
-        }
-    }
-    if (m_deviceComboBox->currentText().isEmpty()) {
-        if (m_switchGsettings->get(WIRED_SWITCH).toBool()) {
-            m_switchGsettings->set(WIRED_SWITCH,false);
-        }
-    } else {
-        if (!m_switchGsettings->get(WIRED_SWITCH).toBool()) {
-            m_switchGsettings->set(WIRED_SWITCH,true);
         }
     }
 
@@ -575,23 +572,26 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
 void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "activateWired" << devName << connUuid;
-    KyWiredConnectOperation a;
-    a.activateConnection(connUuid, devName);
+    m_wiredConnectOperation->activateConnection(connUuid, devName);
 }
 
 void LanPage::deactivateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "deactivateWired" << devName << connUuid;
-    KyConnectItem *item = nullptr;
-    item = m_activeResourse->getActiveConnectionByUuid(connUuid, devName);
-    if (nullptr == item) {
-        //todo: 通知桌面
-        qDebug() << "not ActiveConnection";
-        return;
-    }
-
-    KyWiredConnectOperation a;
-    a.deactivateWiredConnection(item->m_connectName, connUuid);
+//    KyConnectItem *item = nullptr;
+//    item = m_activeResourse->getActiveConnectionByUuid(connUuid, devName);
+//    if (nullptr == item) {
+//        qDebug() << "not ActiveConnection";
+//        item = m_connectResourse->getConnectionItemByUuid(connUuid, devName);
+//        if (nullptr == item) {
+//            QString errorMessage = tr("it can not find the activate connect" + tr("uuid") + connUuid;
+//            qWarning()<<errorMessage;
+//            emit deactivateFailed(errorMessage);
+//            return;
+//        }
+//    }
+    QString name("");
+    m_wiredConnectOperation->deactivateWiredConnection(name, connUuid);
 }
 
 void LanPage::showDetailPage(QString devName, QString uuid)

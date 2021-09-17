@@ -15,6 +15,7 @@ KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionAdd, this, &KyConnectResourse::connectionAdd);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionRemove, this, &KyConnectResourse::connectionRemove);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionUpdate, this, &KyConnectResourse::connectionUpdate);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectivityChanged, this, &KyConnectResourse::connectivityChanged);
 }
 
 KyConnectResourse::~KyConnectResourse()
@@ -273,6 +274,11 @@ void KyConnectResourse::getIpv6ConnectSetting(
     return;
 }
 
+void KyConnectResourse::getConnectivity(NetworkManager::Connectivity &connectivity)
+{
+    m_networkResourceInstance->getConnectivity(connectivity);
+}
+
 void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting)
 {
     qDebug() <<"[KyConnectResourse]" << connectUuid <<"get connect setting info, connect uuid";
@@ -290,6 +296,7 @@ void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetti
 
     NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
     connectSetting.m_ifaceName = connectionSettings->interfaceName();
+    connectSetting.m_isAutoConnect = connectionSettings->autoconnect();
 
     NetworkManager::Ipv4Setting::Ptr ipv4Setting = connectionSettings->setting(NetworkManager::Setting::Ipv4).dynamicCast<NetworkManager::Ipv4Setting>();
     getIpv4ConnectSetting(ipv4Setting, connectSetting);

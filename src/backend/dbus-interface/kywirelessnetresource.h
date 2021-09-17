@@ -6,6 +6,7 @@
 #include "kylinnetworkresourcemanager.h"
 #include "kyenterpricesettinginfo.h"
 #include "kylinconnectresource.h"
+#include "kywirelessconnectoperation.h"
 
 
 //class KyWirelessNetItem;
@@ -28,7 +29,7 @@ public:
 
     void getWirelessActiveConnection(NetworkManager::ActiveConnection::State state, QMap<QString, QStringList> &map);
 
-    void getSsidByUuid(const QString uuid, QString &ssid);
+    void getSsidByUuid(const QString uuid, QString &ssid, QString &devName);
 
 
 private:
@@ -59,6 +60,7 @@ signals:
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     KyConnectResourse        *m_connectResource = nullptr;
+    KyWirelessConnectOperation  *m_operation = nullptr;
     QMap<QString, QList<KyWirelessNetItem> >      m_WifiNetworkList;
 
 };

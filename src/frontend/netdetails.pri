@@ -1,4 +1,5 @@
 HEADERS += \
+    $$PWD/netdetails/coninfo.h \
     $$PWD/netdetails/creatnetpage.h \
     $$PWD/netdetails/customtabstyle.h \
     $$PWD/netdetails/detailpage.h \

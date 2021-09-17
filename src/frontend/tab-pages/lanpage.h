@@ -26,10 +26,13 @@ public:
     void getWiredList(QMap<QString, QVector<QStringList> > &map);
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
-
+    void showDetailPage(QString devName, QString uuid);
+    void setWiredDeviceEnable(const QString& devName, bool enable);
 signals:
-    void wiredActivating(QString devName, QString ssid);
-
+    void lanAdd(QString devName, QStringList info);
+    void lanRemove(QString dbusPath);
+    void lanUpdate(QString devName, QStringList info);
+    void lanActiveConnectionStateChanged(QString interface, QString uuid, int status);
 private:
     void initDevice();//初始化默认设备
     void initDeviceCombox();
@@ -71,6 +74,7 @@ private slots:
     void updateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason);
     void addConnectionSlot(QString uuid);
     void removeConnectionSlot(QString path);
+    void connectionUpdateSlot(QString uuid);
     void onSwithGsettingsChanged(const QString &key);
     void onLanSwitchClicked();
     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);

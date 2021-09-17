@@ -65,6 +65,8 @@ public:
     KyIpConfigType  m_ipv6ConfigIpType;
     QList<NetworkManager::IpAddress> m_ipv6Address;
     QList<QHostAddress> m_ipv6Dns;
+
+    bool m_isAutoConnect;
 };
 
 #endif // KYLINCONNECTSETTING_H

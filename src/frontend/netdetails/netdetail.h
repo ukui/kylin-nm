@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QSettings>
+#include <QButtonGroup>
 
 #include <QDBusMessage>
 #include <QDBusObjectPath>
@@ -24,73 +25,64 @@
 #include "ipv6page.h"
 #include "securitypage.h"
 #include "creatnetpage.h"
-#include "kywirelessnetitem.h"
-#include "kylinconnectresource.h"
-#include "kylinactiveconnectresource.h"
-#include "kywirelessnetresource.h"
+#include "coninfo.h"
 #include "tab-pages/tabpage.h"
-
-static int AUTO_CONFIG = 0;
-static int MANUAL_CONFIG = 1;
-
-typedef struct ConInfo_s {
-    QString strConName;
-    QString strConUUID;
-    QString strConType;
-    QString strSecType;
-    QString strChan;
-    QString strMac;
-    QString strHz;
-    QString strBandWidth;
-
-    QString strIPV4ConfigType;
-    QString strIPV4Address;
-    QString strIPV4Prefix;
-    QString strIPV4FirDns;
-    QString strIPV4SecDns;
-    QString strIPV4GateWay;
-
-    QString strIPV6ConfigType;
-    QString strIPV6Address;
-    QString strIPV6FirDns;
-    QString strIPV6SecDns;
-    QString strIPV6GateWay;
-    QString strIPV6Prefix;
-}ConInfo;
-
 
 class NetDetail : public QDialog
 {
     Q_OBJECT
 
 public:
-    NetDetail(QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent = nullptr);
+    NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent = nullptr);
     ~NetDetail();
 protected:
     void paintEvent(QPaintEvent *event);
 
 private:
     void initUI();
-    void initWifiDevice();//初始化无线默认设备
-    void initLanDevice();//初始化有线默认设备
     void centerToScreen();
     void initComponent();
-    void getConInfo(QList<ConInfo>& qlConInfo);
-    bool checkConfig();
+    void getConInfo(ConInfo &conInfo);
     void loadPage();
     void pagePadding(QString netName, bool isWlan);
+    void initSecuData();
 
+    void initTlsInfo(ConInfo &conInfo);
+    void initPeapInfo(ConInfo &conInfo);
+    void initTtlsInfo(ConInfo &conInfo);
+
+    void updateWirelessPersonalConnect();
+    void updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType);
+
+    //详情ssid 带宽 物理地址 无线额外(安全性 频带 通道)
+    void getBaseInfo(ConInfo &conInfo);
+    //详情ipv4 ipv6 ipv4Dns
+    void getDynamicIpInfo(ConInfo &conInfo, bool bActived);
+    //ipv4+ipv6页面
+    void getStaticIpInfo(ConInfo &conInfo, bool bActived);
+
+    void setConfirmEnable();
+
+    bool checkIpv4Conflict(QString ipv4Address);
+    bool checkIpv6Conflict(QString ipv6Address);
+
+    bool createWiredConnect();
+    bool createWirelessConnect();
+    bool updateConnect();
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
+    KyConnectOperation* m_connectOperation = nullptr;
+    KyWirelessConnectOperation *m_wirelessConnOpration = nullptr;
+    KyWiredConnectOperation *m_wiredConnOperation = nullptr;
+    KyWirelessNetResource *m_resource = nullptr;
 
     QStackedWidget * stackWidget;
 
     DetailPage     * detailPage;
     Ipv4Page       * ipv4Page;
     Ipv6Page       * ipv6Page;
-    SecurityPage   * securityWidget;
+    SecurityPage   * securityPage;
     CreatNetPage   * createNetPage;
-//    AddLanWidget   * addLanWidget;
 
     QWidget      * titleWidget;
     QWidget      * centerWidget;
@@ -112,18 +104,26 @@ private:
 
     QString      m_name;
     QString      m_uuid;
-    QString      m_ssid;
-    QStringList  m_devList;
     QString      m_deviceName;
 
     bool         isWlan;
     bool         isCreateNet;
     bool         isActive;
+    bool         isHideWlan;
 
-    QList<ConInfo> mInfo;
+    bool         isCreateOk;
+    bool         isDetailOk;
+    bool         isIpv4Ok;
+    bool         isIpv6Ok;
+    bool         isSecuOk;
+    bool         isConfirmBtnEnable;
+
+    ConInfo      m_info;
+
+    QButtonGroup *m_group;
 
 private slots:
     void on_btnConfirm_clicked();
-
+    void on_btnForget_clicked();
 };
 #endif // NETDETAIL_H

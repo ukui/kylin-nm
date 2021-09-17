@@ -75,6 +75,9 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
         if (devicePtr->interfaceName() == deviceName) {
             KyConnectItem *activeConnectItem =
                    getActiveConnectionItem(activeConnectPtr);
+            if (nullptr == activeConnectItem) {
+                return nullptr;
+            }
             activeConnectItem->m_ifaceName = deviceName;
             activeConnectItem->m_itemType = activeConnectPtr->type();
             return activeConnectItem;
@@ -510,4 +513,25 @@ void KyActiveConnectResourse::getApActivateConnect(QList<KyApConnectItem *> &apC
     }
 
     return;
+}
+
+bool KyActiveConnectResourse::isActiveConnection(QString uuid, QStringList &devName)
+{
+    if (!m_networkResourceInstance->isActiveConnection(uuid)) {
+        return false;
+    } else {
+        NetworkManager::ActiveConnection::Ptr actPtr = m_networkResourceInstance->getActiveConnect(uuid);
+        if (actPtr.isNull()) {
+            return false;
+        } else {
+            QStringList interfaces = actPtr->devices();
+            for (int index = 0; index < interfaces.size(); ++index) {
+                QString ifaceUni = interfaces.at(index);
+                NetworkManager::Device:: Ptr devicePtr =
+                            m_networkResourceInstance->findDeviceUni(ifaceUni);
+                devName <<devicePtr->interfaceName();
+            }
+            return true;
+        }
+    }
 }

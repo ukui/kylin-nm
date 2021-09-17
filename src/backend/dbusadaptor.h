@@ -51,11 +51,11 @@ public Q_SLOTS: // METHODS
     QMap<QString, QVector<QStringList> > getWirelessList();
     //有线列表
     QMap<QString, QVector<QStringList>> getWiredList();
-    //有线开关
+    //有线总开关
     Q_NOREPLY void setWiredSwitchEnable(bool enable);
-    //无线开关
+    //无线总开关
     Q_NOREPLY void setWirelessSwitchEnable(bool enable);
-    //启用/禁用网卡
+    //有线网卡开关
     Q_NOREPLY void setDeviceEnable(QString devName, bool enable);
     //设置默认网卡
     Q_NOREPLY void setDefaultWiredDevice(QString deviceName);
@@ -71,7 +71,7 @@ public Q_SLOTS: // METHODS
     //唤起属性页 根据网卡类型 参数2 为ssid/uuid
     Q_NOREPLY void showPropertyWidget(QString devName, QString ssid);
     //唤起新建有线连接界面
-    Q_NOREPLY void showCreateWiredConnectWidget(QString devName, QString connectionName);
+    Q_NOREPLY void showCreateWiredConnectWidget(QString devName);
     //开启热点
     void activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
     //断开热点
@@ -79,9 +79,15 @@ public Q_SLOTS: // METHODS
     //获取热点
     QStringList getStoredApInfo();
 Q_SIGNALS: // SIGNALS
-    void wirelessActivating(QString devName, QString ssid);
-    void wiredActivating(QString devName, QString ssid);
-    void listUpdate(QString devName);
+//    void wirelessActivating(QString devName, QString ssid);
+//    void wiredActivating(QString devName, QString ssid);
+    void lanAdd(QString devName, QStringList info);
+    void lanRemove(QString dbusPath);
+    void lanUpdate(QString devName, QStringList info);
+    void wlanAdd(QString devName, QStringList info);
+    void wlanRemove(QString devName,QString ssid);
+    void wlanactiveConnectionStateChanged(QString devName, QString ssid, int status);
+    void lanActiveConnectionStateChanged(QString devName, QString uuid, int status);
     //仅失败，若成功直接发listUpdate
     void activateFailed(QString errorMessage);
     void deactivateFailed(QString errorMessage);
@@ -92,6 +98,11 @@ Q_SIGNALS: // SIGNALS
     void hotspotDeactivated(QString devName, QString ssid);
     //热点连接
     void hotspotActivated(QString devName, QString ssid);
+
+    //信号强度变化
+    void signalStrengthChange(QString devName, QString ssid, int strength);
+    //安全性变化
+    void secuTypeChange(QString devName, QString ssid, QString secuType);
 };
 
 #endif

@@ -93,13 +93,13 @@ void TabPage::initUI()
 void TabPage::updateDefaultDevice(QString &deviceName)
 {
     qDebug() << "updateDefaultDevice" << deviceName;
-    defaultDevice = deviceName;
+    m_defaultDevice = deviceName;
 }
 
 QString TabPage::getDefaultDevice()
 {
-    qDebug() << "getDefaultDevice" << defaultDevice;
-    return defaultDevice;
+    qDebug() << "getDefaultDevice" << m_defaultDevice;
+    return m_defaultDevice;
 }
 
 void setDefaultDevice(KyDeviceType deviceType, QString deviceName)

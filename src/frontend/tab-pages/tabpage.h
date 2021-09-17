@@ -84,7 +84,7 @@ protected:
     QHBoxLayout * m_settingsLayout = nullptr;
     QLabel * m_settingsLabel = nullptr;
 
-    QString defaultDevice = "";
+    QString m_defaultDevice = "";
 
     //临时增加的下拉框选择网卡区域
     QFrame * m_deviceFrame = nullptr;

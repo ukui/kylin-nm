@@ -126,12 +126,12 @@ void NetDetail::initUI()
     securityBtn->setText(tr("Security"));
     securityBtn->setCheckable(true);
 
-    group = new QButtonGroup(this);
-    group->addButton(detailBtn);
-    group->addButton(ipv4Btn);
-    group->addButton(ipv6Btn);
+    m_group = new QButtonGroup(this);
+    m_group->addButton(detailBtn);
+    m_group->addButton(ipv4Btn);
+    m_group->addButton(ipv6Btn);
     if (isWlan) {
-        group->addButton(securityBtn);
+        m_group->addButton(securityBtn);
     }
 
     pageLayout->addStretch();

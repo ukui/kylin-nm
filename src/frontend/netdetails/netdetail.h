@@ -120,7 +120,7 @@ private:
 
     ConInfo      m_info;
 
-    QButtonGroup *group;
+    QButtonGroup *m_group;
 
 private slots:
     void on_btnConfirm_clicked();

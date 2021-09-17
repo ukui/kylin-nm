@@ -117,16 +117,17 @@ void KyWirelessNetResource::getWirelessActiveConnection(NetworkManager::ActiveCo
             continue;
         }
 
+        qDebug() << "getWirelessActiveConnection " << activeConnectionPtr->uuid();
         QString ssid;
         QString ifaceName = getDeviceIFace(activeConnectionPtr,ssid);
         if(ifaceName.isEmpty() || ssid.isNull()) {
             continue;
         }
         if (map.contains(ifaceName)) {
-            map[ifaceName].append(ssid);
+            map[ifaceName].append(activeConnectionPtr->uuid());
         } else {
             QStringList list;
-            list.append(ssid);
+            list.append(activeConnectionPtr->uuid());
             map.insert(ifaceName,list);
         }
     }
@@ -159,9 +160,10 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::
     return sett->interfaceName();
 }
 
-void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid)
+void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid, QString &devName)
 {
     ssid.clear();
+    devName.clear();
     NetworkManager::Connection::Ptr connectPtr = m_networkResourceInstance->getConnect(uuid);
     if (connectPtr.isNull()) {
         return;
@@ -173,6 +175,7 @@ void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid)
         return;
     }
     ssid = wireless_sett->ssid();
+    devName = connectPtr->settings()->interfaceName();
     qDebug() << "getSsidByUuid success " << ssid;
     return;
 }

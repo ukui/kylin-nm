@@ -78,6 +78,9 @@ void WlanListItem::resizeEvent(QResizeEvent *event)
 
 void WlanListItem::onRightButtonClicked()
 {
+    if (!m_menu) {
+        return;
+    }
     m_menu->clear();
     if (!this->m_data) {
         return;
@@ -122,8 +125,8 @@ void WlanListItem::initWlanUI()
 #define CONNECT_BUTTON_WIDTH 96
 #define FRAME_CONTENT_MARGINS 56,4,16,4
 #define FRAME_SPACING 8
-#define PWD_CONTENT_MARGINS 8,0,32,0
-#define SHOW_PWD_BUTTON_SIZE 16,16
+#define PWD_CONTENT_MARGINS 8,0,34,0
+#define SHOW_PWD_BUTTON_SIZE 24,24
 #define PWD_LAYOUT_MARGINS 8,0,8,0
     //密码输入区域的UI
     m_pwdFrame = new QFrame(this);
@@ -136,11 +139,15 @@ void WlanListItem::initWlanUI()
         connect(m_pwdLineEdit, &QLineEdit::textChanged, this, &WlanListItem::onPwdEditorTextChanged);
         m_pwdLineEdit->setFixedHeight(PWD_AREA_HEIGHT);
         m_pwdLineEdit->setEchoMode(QLineEdit::EchoMode::Password);
+        m_pwdLineEdit->setTextMargins(PWD_CONTENT_MARGINS);
         m_pwdLineEditLyt = new QHBoxLayout(m_pwdLineEdit);
         m_pwdLineEditLyt->setContentsMargins(PWD_LAYOUT_MARGINS);
         m_pwdLineEdit->setLayout(m_pwdLineEditLyt);
         m_showPwdButton = new QPushButton(m_pwdLineEdit);
         m_showPwdButton->setFixedSize(SHOW_PWD_BUTTON_SIZE);
+        m_showPwdButton->setAutoFillBackground(false);
+        m_showPwdButton->setIcon(QIcon(":/res/h/hide-pwd.png"));
+        m_showPwdButton->setCursor(Qt::PointingHandCursor);
         connect(m_showPwdButton, &QPushButton::clicked, this, &WlanListItem::onShowPwdButtonClicked);
         m_pwdLineEditLyt->addStretch();
         m_pwdLineEditLyt->addWidget(m_showPwdButton);
@@ -329,11 +336,10 @@ void WlanListItem::onShowPwdButtonClicked()
         return;
     }
     if (m_pwdLineEdit->echoMode() == QLineEdit::EchoMode::Password) {
-        //TODO 按钮图标要发生改变
-
+        m_showPwdButton->setIcon(QIcon(":/res/h/show-pwd.png"));
         m_pwdLineEdit->setEchoMode(QLineEdit::EchoMode::Normal);
     } else {
-        //TODO 按钮图标要发生改变
+        m_showPwdButton->setIcon(QIcon(":/res/h/hide-pwd.png"));
         m_pwdLineEdit->setEchoMode(QLineEdit::EchoMode::Password);
     }
 }
@@ -382,11 +388,12 @@ void WlanListItem::onConnectionRemove(QString deviceName, QString ssid)
 
 void WlanListItem::onWlanStatusChange(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
 {
-    QString ssid;
-    m_resource->getSsidByUuid(uuid,ssid);
+    QString ssid, devName;
+    m_resource->getSsidByUuid(uuid, ssid, devName);
     if (m_data->m_NetSsid == ssid) {
         qDebug() << "[WlanPage] State changed to :" << state << Q_FUNC_INFO <<__LINE__;
-        if (state == NetworkManager::ActiveConnection::State::Activating) {
+        if ((state == NetworkManager::ActiveConnection::State::Activating || state == NetworkManager::ActiveConnection::State::Deactivating)
+                && devName == m_wlanDevice) {
             m_netButton->startLoading();
         } else {
             m_netButton->stopLoading();

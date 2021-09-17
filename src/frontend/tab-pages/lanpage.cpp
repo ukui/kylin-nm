@@ -558,7 +558,7 @@ void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
         m_connectResourse->getConnectionList(deviceName, NetworkManager::ConnectionSettings::Wired, deactivedList);      //未激活列表的显示
         if (!deactivedList.isEmpty()) {
             for (int i = 0; i < deactivedList.size(); i++) {
-                vector.append(QStringList()<<deactivedList.at(i)->m_connectName<<deactivedList.at(i)->m_connectUuid);
+                vector.append(QStringList()<<deactivedList.at(i)->m_connectName<<deactivedList.at(i)->m_connectUuid << deactivedList.at(i)->m_connectPath);
             }
         }
         map.insert(deviceName, vector);

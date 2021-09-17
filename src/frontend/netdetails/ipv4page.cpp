@@ -114,6 +114,13 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
         if (info.ipv4ConfigType != CONFIG_IP_DHCP) {
             qDebug() << "ipv4ConfigType change to Auto";
             setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
+            QString ipv4address("");
+            QString netMask("");
+            QString gateWay("");
+            QStringList dnsList;
+            dnsList.empty();
+            qDebug() << ipv4address << netMask << gateWay;
+            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay, dnsList);
             isChanged = true;
         }
     } else {

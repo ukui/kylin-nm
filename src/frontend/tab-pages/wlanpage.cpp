@@ -191,8 +191,8 @@ void WlanPage::getActiveWlan()
     int height = 0;
     while (iter != actMap.end()) {
         if (iter.key() == m_defaultDevice && !iter.value().isEmpty()) {
-            QString ssid = iter.value().at(0);
-            appendActiveWlan(ssid, height);
+            QString uuid = iter.value().at(0);
+            appendActiveWlan(uuid, height);
             break;
         }
         iter ++;
@@ -202,6 +202,7 @@ void WlanPage::getActiveWlan()
     } else {
         //未连接任何WiFi的情况
         m_activatedWlanSSid.clear();
+        m_activatedWlanUuid.clear();
         WlanListItem *wlanItemWidget = new WlanListItem();
         qDebug() << "There is no activated wlan." << Q_FUNC_INFO << __LINE__ ;
         QListWidgetItem *wlanItem = new QListWidgetItem(m_activatedNetListWidget);
@@ -212,12 +213,15 @@ void WlanPage::getActiveWlan()
     }
 }
 
-void WlanPage::appendActiveWlan(const QString &ssid, int &height)
+void WlanPage::appendActiveWlan(const QString &uuid, int &height)
 {
-    m_activatedWlanSSid = ssid;
+    qDebug() << "appendActiveWlan" << uuid;
+    m_activatedWlanUuid = uuid;
+    m_resource->getSsidByUuid(uuid, m_activatedWlanSSid);
 
     KyWirelessNetItem data;
-    if (!m_resource->getWifiNetwork(m_defaultDevice, ssid, data)) {
+    if (!m_resource->getWifiNetwork(m_defaultDevice, m_activatedWlanSSid, data)) {
+        qWarning() << "Get activated wlan failed! ssid = " << m_activatedWlanSSid <<"; device = " << m_defaultDevice << "; uuid = " << m_activatedWlanUuid;
         return;
     }
     KyWirelessNetItem *item_data = new KyWirelessNetItem(data);
@@ -450,10 +454,10 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
         //onWlanRemoved(m_wlanDevice, ssid);
         m_activatedNetListWidget->clear();
         int height = 0;
-        appendActiveWlan(ssid, height);
+        appendActiveWlan(uuid, height);
         onWlanRemoved(m_defaultDevice, ssid);
 //        this->showDesktopNotify(tr("Connect WLAN succeed"));
-    } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
+    } else if (state == NetworkManager::ActiveConnection::State::Deactivated && (uuid.isEmpty() || (!uuid.isEmpty() && uuid == m_activatedWlanUuid))) {
         QString oldActWlanSsid = m_activatedWlanSSid;
         getActiveWlan();
         QString newActWlanSsid = m_activatedWlanSSid;

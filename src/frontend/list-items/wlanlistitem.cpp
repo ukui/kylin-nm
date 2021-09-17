@@ -78,6 +78,9 @@ void WlanListItem::resizeEvent(QResizeEvent *event)
 
 void WlanListItem::onRightButtonClicked()
 {
+    if (!m_menu) {
+        return;
+    }
     m_menu->clear();
     if (!this->m_data) {
         return;

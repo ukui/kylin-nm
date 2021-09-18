@@ -1,6 +1,7 @@
 #include "tabpage.h"
 #include <qsettings.h>
 #include <QDBusInterface>
+#include <QLabel>
 
 TabPage::TabPage(QWidget *parent) : QWidget(parent)
 {
@@ -39,12 +40,15 @@ void TabPage::initUI()
     m_deviceLayout->setContentsMargins(DEVICE_LAYOUT_MARGINS);
     m_deviceFrame->setLayout(m_deviceLayout);
     m_deviceLabel = new QLabel(m_deviceFrame);
+    m_deviceLabel->setText(tr("Current Device"));
     m_deviceComboBox = new QComboBox(m_deviceFrame);
     m_deviceComboBox->setFixedWidth(DEVICE_COMBOBOX_WIDTH);
-    m_deviceLabel->setText(tr("Current Device"));
+    m_tipsLabel = new QLabel(m_deviceFrame);
+    m_tipsLabel->setText(tr("Devices Closed!"));
     m_deviceLayout->addWidget(m_deviceLabel);
     m_deviceLayout->addStretch();
     m_deviceLayout->addWidget(m_deviceComboBox);
+    m_deviceLayout->addWidget(m_tipsLabel);
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TabPage::onDeviceComboxIndexChanged);
 
     m_activatedNetFrame = new QFrame(this);
@@ -167,7 +171,7 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
 {
     map.clear();
     if (!QFile::exists(CONFIG_FILE_PATH)) {
-        return;
+        qDebug() << "CONFIG_FILE_PATH not exist";
     }
     if (type != WIRED && type != WIRELESS) {
         qDebug() << "getDeviceEnableState but wrong type";
@@ -186,6 +190,9 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
         kdr->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
         if (!wiredDevList.isEmpty()) {
             for (int i = 0; i < wiredDevList.size(); ++i) {
+                if (!m_settings->contains(wiredDevList.at(i))) {
+                    saveDeviceEnableState(wiredDevList.at(i),true);
+                }
                 bool enable = m_settings->value(wiredDevList.at(i), true).toBool();
                 map.insert(wiredDevList.at(i), enable);
             }

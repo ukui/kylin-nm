@@ -7,9 +7,9 @@
 LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *parent)
     : m_data(data), deviceName(deviceName), ListItem(parent)    //item数据传入
 {
-    m_connectOperation = new KyWiredConnectOperation;
-    m_activeConnectResource = new KyActiveConnectResourse;
-    m_connectResource = new KyConnectResourse;
+    m_connectOperation = new KyWiredConnectOperation(this);
+    m_activeConnectResource = new KyActiveConnectResourse(this);
+    m_connectResource = new KyConnectResourse(this);
     m_data = data;
     m_nameLabel->setText(m_data->m_connectName);
 
@@ -93,14 +93,12 @@ void LanListItem::onLanStatusChange(QString uuid, NetworkManager::ActiveConnecti
         if (state == NetworkManager::ActiveConnection::State::Activating || state == NetworkManager::ActiveConnection::State::Deactivating) {
             qDebug() << "[LanListItem]:Activating!Loading!" << state;
             m_netButton->startLoading();
-        }
-        else {
+        } else {
             qDebug() << "[LanListItem]:Stop!" << state;
             m_netButton->stopLoading();
             if (state == NetworkManager::ActiveConnection::State::Activated) {
                 setIcon(true);
-            }
-            else {
+            } else {
                 setIcon(false);
             }
         }

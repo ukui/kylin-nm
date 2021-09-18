@@ -199,7 +199,7 @@ int KyWiredConnectOperation::closeWiredNetworkWithDevice(QString deviceName)
     NetworkManager::Device::Ptr wiredDevicePtr =
                             m_networkResourceInstance->findDeviceInterface(deviceName);
 
-    if (!wiredDevicePtr->isValid()) {
+    if (wiredDevicePtr.isNull()) {
         qWarning()<<"[KyWiredConnectOperation]"<<"the network device" << deviceName <<"is not exist.";
         return -ENXIO;
     }

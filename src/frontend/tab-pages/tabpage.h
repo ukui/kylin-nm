@@ -91,6 +91,7 @@ protected:
     QHBoxLayout * m_deviceLayout = nullptr;
     QLabel * m_deviceLabel = nullptr;
     QComboBox * m_deviceComboBox = nullptr;
+    QLabel * m_tipsLabel = nullptr;
 
 public slots:
     virtual void onDeviceComboxIndexChanged(int currentIndex) = 0;

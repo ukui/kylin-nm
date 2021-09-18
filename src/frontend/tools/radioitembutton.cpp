@@ -104,13 +104,6 @@ void RadioItemButton::onLoadingStopped()
         m_animation->stop();
     }
 
-    if (!m_iconLabel) {
-        qWarning() << "Stop loading failed, iconLabel is null pointer!" << Q_FUNC_INFO << __LINE__;
-        return;
-    } else {
-        m_iconLabel->setPixmap(m_pixmap);
-    }
-    qDebug() << "Stop loading succeed!" << Q_FUNC_INFO << __LINE__;
 }
 
 void RadioItemButton::onPaletteChanged()

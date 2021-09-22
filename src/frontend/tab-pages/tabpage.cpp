@@ -77,6 +77,7 @@ void TabPage::initUI()
     m_inactivatedNetDivider = new Divider(this);
 
     m_settingsFrame = new QFrame(this);
+    m_settingsFrame->setFixedHeight(TITLE_FRAME_HEIGHT);
     m_settingsLayout = new QHBoxLayout(m_settingsFrame);
     m_settingsLayout->setContentsMargins(SETTINGS_LAYOUT_MARGINS);
     m_settingsLabel = new QLabel(m_settingsFrame);
@@ -92,6 +93,7 @@ void TabPage::initUI()
     m_mainLayout->addWidget(m_activatedNetDivider);
     m_mainLayout->addWidget(m_inactivatedNetFrame);
     m_mainLayout->addWidget(m_inactivatedNetDivider);
+    m_mainLayout->addStretch();
     m_mainLayout->addWidget(m_settingsFrame);
 }
 

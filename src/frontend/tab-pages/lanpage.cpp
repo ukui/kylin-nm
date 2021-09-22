@@ -81,17 +81,13 @@ void LanPage::onSwithGsettingsChanged(const QString &key)
                 qDebug()<<"[LanPage] open wired device "<< m_devList.at(index);
                 wiredOperation.openWiredNetworkWithDevice(m_devList.at(index));
             }
-
-            m_inactivatedLanListWidget->show();
-            initDeviceCombox();
         } else {
             for (int index = 0; index < m_devList.size(); ++index) {
                 qDebug()<<"[LanPage] close wired device "<< m_devList.at(index);
                 wiredOperation.closeWiredNetworkWithDevice(m_devList.at(index));
             }
-            m_inactivatedLanListWidget->hide();
-            m_deviceFrame->hide();
         }
+        initDeviceCombox();
         m_netSwitch->setSwitchStatus(isOn);
         m_netSwitch->blockSignals(false);
     }
@@ -188,6 +184,10 @@ void LanPage::initDeviceCombox()
     bool isOn = m_switchGsettings->get(WIRED_SWITCH).toBool();
     if (!isOn) {
         m_deviceFrame->hide();
+        m_activatedNetFrame->hide();
+        m_inactivatedNetFrame->hide();
+        m_activatedNetDivider->hide();
+        m_inactivatedNetDivider->hide();
     } else {
         m_device->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
         for (int i=0; i<m_devList.size(); ++i) {

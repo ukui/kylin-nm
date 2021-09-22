@@ -18,9 +18,10 @@ public:
 
     KyConnectItem *m_data = nullptr;
     KyWiredConnectOperation *m_connectOperation = nullptr;
+    KyActiveConnectResourse *m_activeConnectResource = nullptr;
+    KyConnectResourse *m_connectResource = nullptr;
 
     QString deviceName = "";
-    void refreshIcon();
 
 protected:
     void setIcon(bool isOn);
@@ -32,6 +33,7 @@ private:
 private slots:
     void onInfoButtonClicked();
     void onNetButtonClicked();
+    void onLanStatusChange(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason);
 };
 
 #endif // LANLISTITEM_H

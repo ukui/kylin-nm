@@ -1421,7 +1421,7 @@ void OldMainWindow::onBtnLanClicked(int flag)
     switch (flag) {
     case 0: {
         qDebug()<<"On btnWired clicked! will close switch button----------------------------";
-        m_networkDevice.disconnectDevice();
+       // m_networkDevice.disconnectDevice();
         emit this->onWiredDeviceChanged(false);
 #if 0
         QtConcurrent::run([=]() {
@@ -1439,7 +1439,7 @@ void OldMainWindow::onBtnLanClicked(int flag)
     }
     case 1: {
         qDebug()<<"On btnWired clicked! will open switch button++++++++++++++++++++++++++++";
-        m_networkDevice.setDeviceAutoConnect();
+        //m_networkDevice.setDeviceAutoConnect();
          emit this->onWiredDeviceChanged(true);
 #if 0
         QtConcurrent::run([=]() {

@@ -3,16 +3,18 @@
 #include <QPushButton>
 #include <QIcon>
 #include <QLabel>
-#include<QTimer>
+#include <QTimer>
+#include <QVariantAnimation>
 
 #define MIDDLE_COLOR 178
 
 class RadioItemButton : public QPushButton
 {
     Q_OBJECT
+
 public:
     RadioItemButton(QWidget * parent = nullptr);
-    ~RadioItemButton() = default;
+    ~RadioItemButton();
     void startLoading();
     void stopLoading();
     void setButtonIcon(const QIcon &icon);
@@ -37,18 +39,16 @@ protected:
 private:
     bool m_isActivated = false;
     QLabel * m_iconLabel = nullptr;
-    QTimer * m_loadingTimer = nullptr;
-    QTimer * m_timeoutTimer = nullptr;
     QColor m_backgroundColor;
+    QVariantAnimation * m_animation = nullptr;
 
-    int currentPage = 8;
     QPixmap m_pixmap;
 
 private slots:
     void onLoadingStarted();
     void onLoadingStopped();
-    void onLoadingTimerTimeout();
     void onPaletteChanged();
+    void onAnimationValueChanged(const QVariant& value);
 };
 
 #endif // NETBUTTON_H

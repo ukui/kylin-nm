@@ -117,16 +117,17 @@ void KyWirelessNetResource::getWirelessActiveConnection(NetworkManager::ActiveCo
             continue;
         }
 
+        qDebug() << "getWirelessActiveConnection " << activeConnectionPtr->uuid();
         QString ssid;
         QString ifaceName = getDeviceIFace(activeConnectionPtr,ssid);
         if(ifaceName.isEmpty() || ssid.isNull()) {
             continue;
         }
         if (map.contains(ifaceName)) {
-            map[ifaceName].append(ssid);
+            map[ifaceName].append(activeConnectionPtr->uuid());
         } else {
             QStringList list;
-            list.append(ssid);
+            list.append(activeConnectionPtr->uuid());
             map.insert(ifaceName,list);
         }
     }

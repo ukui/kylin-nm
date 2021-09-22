@@ -19,7 +19,6 @@ const QString WIRED_SWITCH = "wiredswitch";
 
 LanPage::LanPage(QWidget *parent) : TabPage(parent)
 {
-
     m_activeResourse = new KyActiveConnectResourse(this);
     m_connectResourse = new KyConnectResourse(this);
     m_device = new KyNetworkDeviceResourse(this);
@@ -49,6 +48,9 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this, &LanPage::onDeviceAdd);
     connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this, &LanPage::onDeviceRemove);
     connect(m_device, &KyNetworkDeviceResourse::deviceNameUpdate, this, &LanPage::onDeviceNameUpdate);
+
+    connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &LanPage::activateFailed);
+    connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &LanPage::deactivateFailed);
 }
 
 LanPage::~LanPage()

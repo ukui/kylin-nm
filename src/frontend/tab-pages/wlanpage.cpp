@@ -724,10 +724,6 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
 
     QMap<QString,QStringList> actMap;
     m_resource->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activated, actMap);
-    if (!actMap.contains(devName)) {
-        qDebug()<<"[WlanPage] " << devName << " is missing when showDetailPage";
-        return;
-    }
 
     bool isActive = actMap[devName].contains(ssid);
     NetDetail *netDetail = new NetDetail(devName, ssid, data.m_connectUuid, isActive, true, false, this);

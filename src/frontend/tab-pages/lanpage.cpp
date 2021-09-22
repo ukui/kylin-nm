@@ -51,7 +51,6 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
 
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &LanPage::activateFailed);
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &LanPage::deactivateFailed);
-
 }
 
 LanPage::~LanPage()

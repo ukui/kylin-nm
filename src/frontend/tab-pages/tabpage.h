@@ -10,6 +10,9 @@
 #include <QListWidget>
 #include <QDir>
 #include <QComboBox>
+#include <QEvent>
+#include <QProcess>
+#include <QDebug>
 #include "kylinnetworkdeviceresource.h"
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
@@ -50,6 +53,7 @@ public:
 
     void updateDefaultDevice(QString &deviceName);
     QString getDefaultDevice();
+    static void showDesktopNotify(const QString &message);
 
 signals:
     void deviceStatusChanged();

@@ -21,6 +21,7 @@ class LanPage : public TabPage
 public:
     explicit LanPage(QWidget *parent = nullptr);
     ~LanPage();
+    bool lanIsConnected = false;
 
     //for dbus
     void getWiredList(QMap<QString, QVector<QStringList> > &map);
@@ -33,6 +34,7 @@ signals:
     void lanRemove(QString dbusPath);
     void lanUpdate(QString devName, QStringList info);
     void lanActiveConnectionStateChanged(QString interface, QString uuid, int status);
+    void lanConnectChanged();
 private:
     void initDeviceCombox();
     void initUI();
@@ -81,6 +83,9 @@ private slots:
     void onDeviceNameUpdate(QString oldName, QString newName);
     void onDeviceComboxIndexChanged(int currentIndex);
     void onLanDataChange(QString uuid);
+    void getLanConnectStatus(QString uuid,
+                             NetworkManager::ActiveConnection::State state,
+                             NetworkManager::ActiveConnection::Reason reason);
 };
 
 #endif // LANPAGE_H

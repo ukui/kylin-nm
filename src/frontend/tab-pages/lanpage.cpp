@@ -394,6 +394,7 @@ void LanPage::initUI()
 //    m_inactivatedLanListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);   //用了listwidget的滚动条
 
     inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
+    emit this->lanConnectChanged();
 }
 
 void LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
@@ -423,6 +424,7 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
         for (int i = 0; i < m_activedList.size(); i++) {
             KyConnectItem *activeItemData = m_activedList.at(i);
             addNewItem(activeItemData, m_activatedLanListWidget);
+            emit this->lanConnectChanged();
 
             m_activeMap.insert(activeItemData, m_listWidgetItem);
         }
@@ -487,6 +489,7 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
             if (m_item->m_connectUuid == uuid) {
                 m_activatedLanListWidget->removeItemWidget(i.value());
                 delete(i.value());
+                emit this->lanConnectChanged();
                 break;
             }
         }
@@ -610,6 +613,11 @@ void LanPage::onLanDataChange(QString uuid)
 //            }
 //         }
     }
+}
+
+void LanPage::getLanConnectStatus(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
+{
+
 }
 
 void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)

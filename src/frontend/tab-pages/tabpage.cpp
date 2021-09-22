@@ -107,6 +107,24 @@ QString TabPage::getDefaultDevice()
     return m_defaultDevice;
 }
 
+void TabPage::showDesktopNotify(const QString &message)
+{
+    QDBusInterface iface("org.freedesktop.Notifications",
+                         "/org/freedesktop/Notifications",
+                         "org.freedesktop.Notifications",
+                         QDBusConnection::sessionBus());
+    QList<QVariant> args;
+    args<<(tr("Kylin NM"))
+       <<((unsigned int) 0)
+      <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+     <<tr("kylin network applet desktop message") //显示的是什么类型的信息
+    <<message //显示的具体信息
+    <<QStringList()
+    <<QVariantMap()
+    <<(int)-1;
+    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+}
+
 void setDefaultDevice(KyDeviceType deviceType, QString deviceName)
 {
     QString key;
@@ -172,6 +190,7 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
     map.clear();
     if (!QFile::exists(CONFIG_FILE_PATH)) {
         qDebug() << "CONFIG_FILE_PATH not exist";
+        return;
     }
     if (type != WIRED && type != WIRELESS) {
         qDebug() << "getDeviceEnableState but wrong type";

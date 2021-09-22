@@ -22,6 +22,7 @@ public:
     KyConnectResourse *m_connectResource = nullptr;
 
     QString deviceName = "";
+    void refreshIcon();
 
 protected:
     void setIcon(bool isOn);

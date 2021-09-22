@@ -570,7 +570,7 @@ void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
         m_connectResourse->getConnectionList(deviceName, NetworkManager::ConnectionSettings::Wired, deactivedList);      //未激活列表的显示
         if (!deactivedList.isEmpty()) {
             for (int i = 0; i < deactivedList.size(); i++) {
-                vector.append(QStringList()<<deactivedList.at(i)->m_connectName<<deactivedList.at(i)->m_connectUuid);
+                vector.append(QStringList()<<deactivedList.at(i)->m_connectName<<deactivedList.at(i)->m_connectUuid << deactivedList.at(i)->m_connectPath);
             }
         }
         map.insert(deviceName, vector);
@@ -625,23 +625,26 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
 void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "activateWired" << devName << connUuid;
-    KyWiredConnectOperation a;
-    a.activateConnection(connUuid, devName);
+    m_wiredConnectOperation->activateConnection(connUuid, devName);
 }
 
 void LanPage::deactivateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "deactivateWired" << devName << connUuid;
-    KyConnectItem *item = nullptr;
-    item = m_activeResourse->getActiveConnectionByUuid(connUuid, devName);
-    if (nullptr == item) {
-        //todo: 通知桌面
-        qDebug() << "not ActiveConnection";
-        return;
-    }
-
-    KyWiredConnectOperation a;
-    a.deactivateWiredConnection(item->m_connectName, connUuid);
+//    KyConnectItem *item = nullptr;
+//    item = m_activeResourse->getActiveConnectionByUuid(connUuid, devName);
+//    if (nullptr == item) {
+//        qDebug() << "not ActiveConnection";
+//        item = m_connectResourse->getConnectionItemByUuid(connUuid, devName);
+//        if (nullptr == item) {
+//            QString errorMessage = tr("it can not find the activate connect" + tr("uuid") + connUuid;
+//            qWarning()<<errorMessage;
+//            emit deactivateFailed(errorMessage);
+//            return;
+//        }
+//    }
+    QString name("");
+    m_wiredConnectOperation->deactivateWiredConnection(name, connUuid);
 }
 
 void LanPage::showDetailPage(QString devName, QString uuid)

@@ -43,6 +43,12 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
         if (info.ipv6ConfigType != CONFIG_IP_DHCP) {
             qDebug() << "ipv6ConfigType change to Auto";
             setting.setIpConfigType(IPADDRESS_V6, CONFIG_IP_DHCP);
+            QString ipv6address("");
+            QString prefix("");
+            QString gateWay("");
+            QStringList dnsList;
+            dnsList.empty();
+            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay, dnsList);
             isChanged = true;
         }
     } else {

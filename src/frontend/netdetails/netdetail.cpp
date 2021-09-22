@@ -656,10 +656,12 @@ bool NetDetail::createWiredConnect()
     KyWirelessConnectSetting connetSetting;
     connetSetting.setIfaceName(m_deviceName);
     createNetPage->constructIpv4Info(connetSetting);
-    if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
-        qDebug() << "ipv4 conflict";
-        //todo desktop notify
-        return false;
+    if (connetSetting.m_ipv4ConfigIpType != CONFIG_IP_DHCP) {
+        if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
+            qDebug() << "ipv4 conflict";
+            //todo desktop notify
+            return false;
+        }
     }
     m_wiredConnOperation->createWiredConnect(connetSetting);
     return true;

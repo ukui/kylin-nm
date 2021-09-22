@@ -163,6 +163,8 @@ void MainWindow::initDbusConnnect()
 
     connect(m_wlanWidget, &WlanPage::activateFailed, this, &MainWindow::activateFailed);
     connect(m_wlanWidget, &WlanPage::deactivateFailed, this, &MainWindow::deactivateFailed);
+    connect(m_lanWidget, &LanPage::activateFailed, this, &MainWindow::activateFailed);
+    connect(m_lanWidget, &LanPage::deactivateFailed, this, &MainWindow::deactivateFailed);
 
     connect(m_lanWidget, &LanPage::lanAdd, this, &MainWindow::lanAdd);
     connect(m_lanWidget, &LanPage::lanRemove, this, &MainWindow::lanRemove);

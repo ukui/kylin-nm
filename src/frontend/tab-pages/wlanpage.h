@@ -63,7 +63,7 @@ private:
     void initDeviceCombox();
 
     void getActiveWlan();
-    void appendActiveWlan(const QString &ssid, int &height);
+    void appendActiveWlan(const QString &uuid, int &height);
     void getAllWlan();
     QMap<QString, QListWidgetItem*> m_itemsMap;
     QListWidgetItem *m_expandedItem = nullptr;
@@ -75,6 +75,7 @@ private:
     QLabel * m_hiddenWlanLabel = nullptr;
 
     QString m_activatedWlanSSid;
+    QString m_activatedWlanUuid;
     QStringList m_devList;
 
     KyWirelessNetResource *m_resource = nullptr;

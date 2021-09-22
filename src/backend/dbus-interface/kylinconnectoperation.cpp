@@ -39,6 +39,7 @@ void KyConnectOperation::ipv4SettingSet(
         const KyConnectSetting &connectSettingsInfo)
 {
     ipv4Setting->setInitialized(true);
+    ipv4Setting->setDns(connectSettingsInfo.m_ipv4Dns);
 
     if (CONFIG_IP_DHCP == connectSettingsInfo.m_ipv4ConfigIpType) {
         ipv4Setting->setMethod(NetworkManager::Ipv4Setting::Automatic);
@@ -46,14 +47,7 @@ void KyConnectOperation::ipv4SettingSet(
     } else {
         ipv4Setting->setMethod(NetworkManager::Ipv4Setting::Manual);
     }
-
-    if (!connectSettingsInfo.m_ipv4Dns.empty()) {
-        ipv4Setting->setDns(connectSettingsInfo.m_ipv4Dns);
-    }
-
-    if (!connectSettingsInfo.m_ipv4Address.empty()) {
-        ipv4Setting->setAddresses(connectSettingsInfo.m_ipv4Address);
-    }
+    ipv4Setting->setAddresses(connectSettingsInfo.m_ipv4Address);
 
     return;
 }
@@ -62,6 +56,7 @@ void KyConnectOperation::ipv6SettingSet(
         const KyConnectSetting &connectSettingsInfo)
 {
     ipv6Setting->setInitialized(true);
+    ipv6Setting->setDns(connectSettingsInfo.m_ipv6Dns);
 
     if (CONFIG_IP_DHCP == connectSettingsInfo.m_ipv6ConfigIpType) {
         ipv6Setting->setMethod(NetworkManager::Ipv6Setting::Automatic);
@@ -70,15 +65,7 @@ void KyConnectOperation::ipv6SettingSet(
     }
 
     ipv6Setting->setMethod(NetworkManager::Ipv6Setting::Manual);
-    if (!connectSettingsInfo.m_ipv6Dns.empty()) {
-        ipv6Setting->setDns(connectSettingsInfo.m_ipv6Dns);
-    }
-
-    if (!connectSettingsInfo.m_ipv6Address.empty()) {
-        ipv6Setting->setAddresses(connectSettingsInfo.m_ipv6Address);
-    }
-
-
+    ipv6Setting->setAddresses(connectSettingsInfo.m_ipv6Address);
 
     return ;
 }

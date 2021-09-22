@@ -82,6 +82,9 @@ void KyNetworkDeviceResourse::getHardwareInfo(QString ifaceName, QString &hardAd
 
     if (nullptr == connectDevice || !connectDevice->isValid()) {
         qWarning()<<"[KyNetworkDeviceResourse]"<<"get hardware info failed, the device" << ifaceName << "is not existed";
+        hardAddress.clear();
+        bandWith = 0;
+        return;
     }
 
     switch (connectDevice->type()) {

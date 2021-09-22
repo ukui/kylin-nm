@@ -63,7 +63,11 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
     //todo mainwindow调用backend 对开关 打开/关闭
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
         QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
-        gsetting->set(KEY_WIRED_SWITCH, enable);
+        if (gsetting->get(KEY_WIRED_SWITCH).toBool() != enable) {
+            gsetting->set(KEY_WIRED_SWITCH, enable);
+        }
+        delete gsetting;
+        gsetting = nullptr;
     } else {
         qDebug()<<"isSchemaInstalled false";
     }
@@ -75,7 +79,9 @@ void DbusAdaptor::setWirelessSwitchEnable(bool enable)
     //todo mainwindow调用backend 对开关 打开/关闭
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
         QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
-        gsetting->set(KEY_WIRELESS_SWITCH, enable);
+        if (gsetting->get(KEY_WIRELESS_SWITCH).toBool() != enable) {
+            gsetting->set(KEY_WIRELESS_SWITCH, enable);
+        }
         delete gsetting;
         gsetting = nullptr;
     } else {
@@ -151,6 +157,7 @@ void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
 void DbusAdaptor::deActivateConnect(int type, QString devName, QString ssid)
 {
     if (type == WIRED) {
+        qDebug()  << "deactivateWired";
         parent()->deactivateWired(devName,ssid);
     } else if (type == WIRELESS) {
         parent()->deactivateWireless(devName,ssid);

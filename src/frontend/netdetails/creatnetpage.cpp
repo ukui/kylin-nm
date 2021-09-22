@@ -43,8 +43,8 @@ void CreatNetPage::initUI()
     m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
     m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
 
-    ipv4ConfigCombox->addItem(tr("Auto(DHCP)")); //"自动(DHCP)"
-    ipv4ConfigCombox->addItem(tr("Manual")); //"手动"
+    ipv4ConfigCombox->addItem(tr("Auto(DHCP)"), AUTO_CONFIG); //"自动(DHCP)"
+    ipv4ConfigCombox->addItem(tr("Manual"), MANUAL_CONFIG); //"手动"
 
 
     // IP的正则格式限制

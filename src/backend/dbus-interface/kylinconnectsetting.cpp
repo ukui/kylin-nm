@@ -109,6 +109,7 @@ void KyConnectSetting::dumpInfo()
     qDebug()<<"connect setting info:";
     qDebug()<<"connect name"<< m_connectName;
     qDebug()<<"iface name" << m_ifaceName;
+    qDebug()<<"ipv4 method" <<m_ipv4ConfigIpType;
 
     for (int index = 0 ; index < m_ipv4Address.size(); index++) {
         qDebug()<<"ipv4 address" << m_ipv4Address.at(index).ip().toString();

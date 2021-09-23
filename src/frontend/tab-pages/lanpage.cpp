@@ -394,7 +394,7 @@ void LanPage::initUI()
 //    m_inactivatedLanListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);   //用了listwidget的滚动条
 
     inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
-    emit this->lanConnectChanged();
+//    emit this->lanConnectChanged();
 }
 
 void LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
@@ -617,7 +617,21 @@ void LanPage::onLanDataChange(QString uuid)
 
 void LanPage::getLanConnectStatus(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
 {
-
+    //lanpage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
+    QString devName;
+    NetworkManager::ConnectionSettings::ConnectionType type;
+    if (m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
+        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
+            return;
+        }
+    }
+    if (NetworkManager::ActiveConnection::State::Activated == state){
+        lanIsConnected = true;
+        qDebug() << "[lanpage]lanIsConnected status : "  << lanIsConnected << Q_FUNC_INFO << __LINE__ ;
+    } else {
+        lanIsConnected = false;
+        qDebug() << "=[lanpage]lanIsConnected status : "  << lanIsConnected << Q_FUNC_INFO << __LINE__ ;
+    }
 }
 
 void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)

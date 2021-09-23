@@ -229,8 +229,7 @@ void WlanPage::getActiveWlan()
         QListWidgetItem *wlanItem = new QListWidgetItem(m_activatedNetListWidget);
         wlanItem->setSizeHint(QSize(m_activatedNetListWidget->width(), wlanItemWidget->height()));
         m_activatedNetListWidget->addItem(wlanItem);
-        emit this->wlanConnectChanged();
-        qDebug() << "[wlanpage]emit wlanConnectChanged()" << Q_FUNC_INFO << __LINE__ ;
+//        emit this->wlanConnectChanged();
         m_activatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
         height += wlanItemWidget->height();
     }
@@ -269,7 +268,7 @@ void WlanPage::getAllWlan()
     if (!m_inactivatedNetListWidget) {
         return;
     }
-    qDebug() << "Started loading wlan list! time=我的getallwlah" << QDateTime::currentDateTime().toString("hh:mm:ss.zzzz");
+    qDebug() << "Started loading wlan list!" << QDateTime::currentDateTime().toString("hh:mm:ss.zzzz");
     m_inactivatedNetListWidget->clear();
     m_itemsMap.clear();
     QList<KyWirelessNetItem> wlanList;
@@ -488,7 +487,7 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
         m_activatedNetListWidget->clear();
         int height = 0;
         appendActiveWlan(uuid, height);
-        emit this->wlanConnectChanged();
+//        emit this->wlanConnectChanged();
         onWlanRemoved(m_defaultDevice, ssid);
 //        this->showDesktopNotify(tr("Connect WLAN succeed"));
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated && (uuid.isEmpty() || (!uuid.isEmpty() && uuid == m_activatedWlanUuid))) {
@@ -547,7 +546,6 @@ void WlanPage::onWlanSwitchClicked()
     qDebug() << "On wlan switch button clicked! old state = " << !m_netSwitch->getSwitchStatus() << Q_FUNC_INFO << __LINE__;
     //应该先检测是否有无线网卡可用，才改变开关状态
     m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, m_devList);
-    qDebug()<< "------------应该先检测是否有无线网卡可用，才改变开关状态-------------" <<m_devList.isEmpty();
     if (m_devList.isEmpty()) {
         qDebug() << "have no device to use "  << Q_FUNC_INFO << __LINE__;
         //检测不到无线网卡不再触发click信号
@@ -584,9 +582,7 @@ void WlanPage::requestScan()
         qWarning() << "Scan failed! m_wirelessConnectOpreation is nullptr!" << Q_FUNC_INFO << __LINE__;
         return;
     }
-    qWarning() << "Scan ------requestScan------刷新列表-----------------------------------" << Q_FUNC_INFO << __LINE__;
     m_wirelessConnectOpreation->requestWirelessScan();
-    getAllWlan();
 }
 
 void WlanPage::onHiddenWlanClicked()
@@ -614,17 +610,16 @@ void WlanPage::getWlanConnectStatus(QString uuid, NetworkManager::ActiveConnecti
     }
     if(NetworkManager::ActiveConnection::State::Activated == state){
         wlanIsConnected = true;
-        qDebug() << "111111111111[wlanpage]------------"  << wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
+        qDebug() << "[wlanpage] wlanIsConnected status : "  << wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
     } else {
         wlanIsConnected = false;
-        qDebug() << "1111111111111[wlanpage]--------------"  << wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
+        qDebug() << "[wlanpage] wlanIsConnected status : "  << wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
     }
 }
 
 void WlanPage::onWifinEnabledChanged(bool isWifiOn)
 {
 //监听外部命令导致wifi状态变化，更新界面
-    qDebug() <<"------------------------------监听外部命令导致wifi状态变化，更新界面-----------------------------------------";
     //应该先检测是否有无线网卡可用，才改变开关状态
     m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, m_devList);
     if (m_devList.isEmpty()) {
@@ -635,7 +630,6 @@ void WlanPage::onWifinEnabledChanged(bool isWifiOn)
         return;
     }else{
         //m_wirelessConnectOpreation->setWirelessEnabled(isWifiOn);
-        qDebug() << "have no device to use++++++++++++++++ "  << Q_FUNC_INFO << __LINE__;
         m_netSwitch->setSwitchStatus(isWifiOn);
         //外部命令导致连接状态发生变化，通知主界面刷新图标
         emit this->wlanConnectChanged();

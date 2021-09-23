@@ -348,13 +348,10 @@ void MainWindow::onThemeChanged(const QString &key)
 void MainWindow::onGetConnectChangedIcon()
 {
     if (m_lanWidget->lanIsConnected == true){
-        qDebug()<<"11111111111111111111111111";
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
     } else if (m_wlanWidget->wlanIsConnected == true && m_lanWidget->lanIsConnected == false){
-        qDebug()<<"2222222222222222222";
         m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
     } else if (m_wlanWidget->wlanIsConnected == false && m_lanWidget->lanIsConnected == false){
-        qDebug()<<"333333333333333333333333";
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
     }
 }

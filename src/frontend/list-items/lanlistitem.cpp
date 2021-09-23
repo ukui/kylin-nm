@@ -10,6 +10,7 @@ LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *paren
     m_connectOperation = new KyWiredConnectOperation(this);
     m_activeConnectResource = new KyActiveConnectResourse(this);
     m_connectResource = new KyConnectResourse(this);
+    m_deviceResource = new KyNetworkDeviceResourse(this);
     m_data = data;
     m_nameLabel->setText(m_data->m_connectName);
 
@@ -55,15 +56,19 @@ void LanListItem::onNetButtonClicked()
     }
     if (!m_isActive) {
         //未连接,点击后连
-        m_connectOperation->activateWiredConnection(m_data->m_connectUuid, deviceName);
-        qDebug() << m_data->m_connectName << "Connect after user clicked!" << deviceName;
-//        m_data->m_connectState = NetworkManager::ActiveConnection::State::Activating;
-        m_isActive = true;
+        if (m_deviceResource->wiredDeviceCarriered(deviceName)) {
+            m_connectOperation->activateWiredConnection(m_data->m_connectUuid, deviceName);
+            qDebug() << m_data->m_connectName << "Connect after user clicked!" << deviceName;
+            m_isActive = true;
+        }
+        else {
+            qDebug() << "[LanListItem] Wired Device not carried";
+            m_isActive = false;
+        }
     } else {
         //连接，点击后断开
         m_connectOperation->deactivateWiredConnection(m_data->m_connectName, m_data->m_connectUuid);
         qDebug() << m_data->m_connectName << "Disconnect after user clicked!" << deviceName;
-//        m_data->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
         m_isActive = false;
     }
 }

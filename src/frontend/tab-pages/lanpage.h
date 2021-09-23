@@ -83,9 +83,6 @@ private slots:
     void onDeviceNameUpdate(QString oldName, QString newName);
     void onDeviceComboxIndexChanged(int currentIndex);
     void onLanDataChange(QString uuid);
-    void getLanConnectStatus(QString uuid,
-                             NetworkManager::ActiveConnection::State state,
-                             NetworkManager::ActiveConnection::Reason reason);
 };
 
 #endif // LANPAGE_H

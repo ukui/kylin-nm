@@ -450,9 +450,24 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
 
 void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
 {
-    qDebug()<<"[LanPage] State change slot:"<<state;
+    //lanpage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
     QString devName;
     NetworkManager::ConnectionSettings::ConnectionType type;
+    if (m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
+        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
+            return;
+        }
+    }
+    if (NetworkManager::ActiveConnection::State::Activated == state){
+        lanIsConnected = true;
+        qDebug() << "[lanpage]lanIsConnected status : "  << lanIsConnected << Q_FUNC_INFO << __LINE__ ;
+    } else {
+        lanIsConnected = false;
+        qDebug() << "=[lanpage]lanIsConnected status : "  << lanIsConnected << Q_FUNC_INFO << __LINE__ ;
+    }
+    qDebug()<<"[LanPage] State change slot:"<<state;
+//    QString devName;
+//    NetworkManager::ConnectionSettings::ConnectionType type;
 
     if(m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
         if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
@@ -612,25 +627,6 @@ void LanPage::onLanDataChange(QString uuid)
 //                break;
 //            }
 //         }
-    }
-}
-
-void LanPage::getLanConnectStatus(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
-{
-    //lanpage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
-    QString devName;
-    NetworkManager::ConnectionSettings::ConnectionType type;
-    if (m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
-        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
-            return;
-        }
-    }
-    if (NetworkManager::ActiveConnection::State::Activated == state){
-        lanIsConnected = true;
-        qDebug() << "[lanpage]lanIsConnected status : "  << lanIsConnected << Q_FUNC_INFO << __LINE__ ;
-    } else {
-        lanIsConnected = false;
-        qDebug() << "=[lanpage]lanIsConnected status : "  << lanIsConnected << Q_FUNC_INFO << __LINE__ ;
     }
 }
 

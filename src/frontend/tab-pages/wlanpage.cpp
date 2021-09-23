@@ -37,7 +37,6 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(this, &WlanPage::hiddenWlanClicked, this, &WlanPage::onHiddenWlanClicked);
     connect(this, &WlanPage::settingsClicked, this, &WlanPage::showControlCenter);
     connect(m_connectResource, &KyActiveConnectResourse::stateChangeReason, this, &WlanPage::onWlanStatusChange);
-    connect(m_connectResource, &KyActiveConnectResourse::stateChangeReason, this, &WlanPage::getWlanConnectStatus);
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::wifinEnabledChanged, this, &WlanPage::onWifinEnabledChanged);
 }
 
@@ -597,26 +596,6 @@ void WlanPage::showControlCenter()
     QProcess process;
     process.startDetached("ukui-control-center --wlanconnect");
 }
-
-void WlanPage::getWlanConnectStatus(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
-{
-    //wlanpage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
-    QString devName;
-    NetworkManager::ConnectionSettings::ConnectionType type;
-    if(m_apConnectResource->getInterfaceByUuid(devName, type, uuid)) {
-        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wireless) {
-            return;
-        }
-    }
-    if(NetworkManager::ActiveConnection::State::Activated == state){
-        wlanIsConnected = true;
-        qDebug() << "[wlanpage] wlanIsConnected status : "  << wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
-    } else {
-        wlanIsConnected = false;
-        qDebug() << "[wlanpage] wlanIsConnected status : "  << wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
-    }
-}
-
 void WlanPage::onWifinEnabledChanged(bool isWifiOn)
 {
 //监听外部命令导致wifi状态变化，更新界面
@@ -808,7 +787,7 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
 
 void WlanPage::onWlanStatusChange(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
 {
-    //弹窗显示wifi连接状况
+    //wlanpage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
     QString devName;
     NetworkManager::ConnectionSettings::ConnectionType type;
     if(m_apConnectResource->getInterfaceByUuid(devName, type, uuid)) {
@@ -816,6 +795,21 @@ void WlanPage::onWlanStatusChange(QString uuid, NetworkManager::ActiveConnection
             return;
         }
     }
+    if(NetworkManager::ActiveConnection::State::Activated == state){
+        wlanIsConnected = true;
+        qDebug() << "[wlanpage] wlanIsConnected status : "  << wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
+    } else {
+        wlanIsConnected = false;
+        qDebug() << "[wlanpage] wlanIsConnected status : "  << wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
+    }
+    //弹窗显示wifi连接状况
+//    QString devName;
+//    NetworkManager::ConnectionSettings::ConnectionType type;
+//    if(m_apConnectResource->getInterfaceByUuid(devName, type, uuid)) {
+//        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wireless) {
+//            return;
+//        }
+//    }
     qDebug() << "[WlanPage] State changed to :"  << state <<  reason << Q_FUNC_INFO <<__LINE__;
     QString ssid;
     m_resource->getSsidByUuid(uuid, ssid, m_defaultDevice);

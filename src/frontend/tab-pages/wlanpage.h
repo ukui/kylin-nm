@@ -120,9 +120,6 @@ private slots:
     void requestScan();
     void onHiddenWlanClicked();
     void showControlCenter();
-    void getWlanConnectStatus(QString uuid,
-                              NetworkManager::ActiveConnection::State state,
-                              NetworkManager::ActiveConnection::Reason reason);
     void onWifinEnabledChanged(bool isWifiOn);
 };
 

@@ -170,7 +170,7 @@ void MainWindow::initDbusConnnect()
     connect(m_lanWidget, &LanPage::lanRemove, this, &MainWindow::lanRemove);
     connect(m_lanWidget, &LanPage::lanUpdate, this, &MainWindow::lanUpdate);
     connect(m_lanWidget, &LanPage::lanActiveConnectionStateChanged, this, &MainWindow::lanActiveConnectionStateChanged);
-    connect(m_lanWidget, &LanPage::lanConnectChanged, this, &MainWindow::onGetConnectChangedIcon);
+    connect(m_lanWidget, &LanPage::lanConnectChanged, this, &MainWindow::onRefreshTrayIcon);
 
 
     connect(m_wlanWidget, &WlanPage::wlanAdd, this, &MainWindow::wlanAdd);
@@ -180,7 +180,7 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::hotspotActivated, this, &MainWindow::hotspotActivated);
     connect(m_wlanWidget, &WlanPage::secuTypeChange, this, &MainWindow::secuTypeChange);
     connect(m_wlanWidget, &WlanPage::signalStrengthChange, this, &MainWindow::signalStrengthChange);
-    connect(m_wlanWidget, &WlanPage::wlanConnectChanged, this, &MainWindow::onGetConnectChangedIcon);
+    connect(m_wlanWidget, &WlanPage::wlanConnectChanged, this, &MainWindow::onRefreshTrayIcon);
 }
 
 /**
@@ -303,11 +303,10 @@ void MainWindow::resetWindowTheme()
 void MainWindow::showControlCenter()
 {
     QProcess process;
-    if(m_lanWidget->lanIsConnected == false && m_wlanWidget->wlanIsConnected == true){
-    process.startDetached("ukui-control-center --wlanconnect");
-    }
-    else{
-    process.startDetached("ukui-control-center --wiredconnect");
+    if (m_lanWidget->lanIsConnected == false && m_wlanWidget->wlanIsConnected == true){
+        process.startDetached("ukui-control-center --wlanconnect");
+    } else {
+        process.startDetached("ukui-control-center --wiredconnect");
     }
 }
 
@@ -345,8 +344,9 @@ void MainWindow::onThemeChanged(const QString &key)
     }
 }
 
-void MainWindow::onGetConnectChangedIcon()
+void MainWindow::onRefreshTrayIcon()
 {
+    //更新托盘图标显示
     if (m_lanWidget->lanIsConnected == true){
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
     } else if (m_wlanWidget->wlanIsConnected == true && m_lanWidget->lanIsConnected == false){

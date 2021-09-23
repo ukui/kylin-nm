@@ -117,7 +117,7 @@ private slots:
     void onShowMainwindowActionTriggled();
     void onShowSettingsActionTriggled();
     void onThemeChanged(const QString &key);
-    void onGetConnectChangedIcon();
+    void onRefreshTrayIcon();
 };
 
 #endif // MAINWINDOW_H

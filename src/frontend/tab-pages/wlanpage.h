@@ -53,9 +53,6 @@ signals:
 
 public slots:
     void onMainWindowVisibleChanged(const bool &visible);
-    void onWlanStatusChange(QString uuid,
-                          NetworkManager::ActiveConnection::State state,
-                          NetworkManager::ActiveConnection::Reason reason);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -63,10 +60,10 @@ protected:
 private:
     void initWlanUI();
     void initConnections();
-    QString activessid;
-    QString deactinguuid;
-    int deacting;
-    bool deactingflag = false;
+    QString m_activedssid;
+    QString m_disconectuuid;
+    int m_disconecting;
+    bool m_disconectingflag = false;
 
     //定时触发扫描的定时器
     void initTimer();
@@ -120,7 +117,7 @@ private slots:
     void requestScan();
     void onHiddenWlanClicked();
     void showControlCenter();
-    void onWifinEnabledChanged(bool isWifiOn);
+    void onWifiEnabledChanged(bool isWifiOn);
 };
 
 #endif // WLANPAGE_H

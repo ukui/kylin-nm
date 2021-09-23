@@ -21,7 +21,7 @@ class LanPage : public TabPage
 public:
     explicit LanPage(QWidget *parent = nullptr);
     ~LanPage();
-    bool lanIsConnected = false;
+    bool m_isLanConnected = false;
 
     //for dbus
     void getWiredList(QMap<QString, QVector<QStringList> > &map);

@@ -463,12 +463,12 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
         }
     }
     if (state == NetworkManager::ActiveConnection::State::Deactivating){
-        m_disconectuuid = uuid;
-        m_disconectingflag = true;
+        m_disconnectuuid = uuid;
+        m_disconnectingflag = true;
     }
-    if (state == NetworkManager::ActiveConnection::State::Deactivated && m_disconectuuid == uuid){
-        if(m_disconectingflag){
-            m_disconectingflag = false;
+    if (state == NetworkManager::ActiveConnection::State::Deactivated && m_disconnectuuid == uuid){
+        if(m_disconnectingflag){
+            m_disconnectingflag = false;
             this->showDesktopNotify(tr("WLAN Disconnected Successfully"));
             qDebug() << "clear the activessid"  << Q_FUNC_INFO <<__LINE__;
             m_activedssid = "";

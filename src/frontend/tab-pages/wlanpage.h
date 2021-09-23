@@ -61,9 +61,9 @@ private:
     void initWlanUI();
     void initConnections();
     QString m_activedssid;
-    QString m_disconectuuid;
-    int m_disconecting;
-    bool m_disconectingflag = false;
+    QString m_disconnectuuid;
+    int m_disconnecting;
+    bool m_disconnectingflag = false;
 
     //定时触发扫描的定时器
     void initTimer();

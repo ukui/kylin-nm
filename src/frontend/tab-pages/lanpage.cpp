@@ -459,11 +459,11 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
         }
     }
     if (NetworkManager::ActiveConnection::State::Activated == state){
-        lanIsConnected = true;
-        qDebug() << "[lanpage]lanIsConnected status : "  << lanIsConnected << Q_FUNC_INFO << __LINE__ ;
+        m_isLanConnected = true;
+        qDebug() << "[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
     } else {
-        lanIsConnected = false;
-        qDebug() << "=[lanpage]lanIsConnected status : "  << lanIsConnected << Q_FUNC_INFO << __LINE__ ;
+        m_isLanConnected = false;
+        qDebug() << "=[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
     }
     qDebug()<<"[LanPage] State change slot:"<<state;
 //    QString devName;

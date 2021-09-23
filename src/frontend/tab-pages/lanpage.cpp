@@ -15,7 +15,6 @@
 #define ITEM_HEIGHT 48
 
 const QString WIRED_SWITCH = "wiredswitch";
-//const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 
 LanPage::LanPage(QWidget *parent) : TabPage(parent)
 {
@@ -297,7 +296,7 @@ void LanPage::onDeviceComboxIndexChanged(int currentIndex)
 {
     //TODO 设备变更时更新设备和列表
     m_deviceName = m_deviceComboBox->currentText();
-    qDebug() << "[LanPage]Device Changed:" << m_deviceName;
+    qDebug() << "[LanPage]Current Device Changed to:" << m_deviceName;
     initList(m_deviceName);
 }
 
@@ -360,7 +359,6 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
     if (!m_activedList.isEmpty()) {
         for (int i = 0; i < m_activedList.size(); i++) {
             KyConnectItem *activeItemData = m_activedList.at(i);
-            qDebug() << "[??????]" << activeItemData->m_connectName;
             addNewItem(activeItemData, m_activatedLanListWidget);
 
             m_activeMap.insert(activeItemData, m_listWidgetItem);
@@ -525,7 +523,7 @@ void LanPage::connectionUpdateSlot(QString uuid)
     bool isCurrentDevice = false;
     KyConnectItem *item = nullptr;
 
-    qDebug() << "[LanPage]:Connection Changed" << Q_FUNC_INFO << __LINE__;
+    qDebug() << "[LanPage]:Connection Changed !" << Q_FUNC_INFO << __LINE__;
 
     if (m_activeResourse->isActiveConnection(uuid, devNameList)) {           //从activeResourse里找
         for (int i = 0; i < devNameList.size(); ++i) {
@@ -577,8 +575,8 @@ void LanPage::connectionUpdateSlot(QString uuid)
                 qDebug() << "[LanPage]:Deactive Connection's device change, remove it" << Q_FUNC_INFO << __LINE__;
                 return;
             } else {
-                if (m_item->m_connectState == item->m_connectState) {    //当前未激活连接的其他数据改变(除了激活状态外)
-                    qDebug() << "[LanPage]:Deactive Connection's data change expect for ConnectState" << Q_FUNC_INFO << __LINE__;
+                if (m_item->m_connectName != item->m_connectName || m_item->m_connectPath != item->m_connectPath) {    //当前未激活连接的其他数据改变(除了激活状态外)
+                    qDebug() << "[LanPage]:Deactive Connection's name or path changed." << Q_FUNC_INFO << __LINE__;
                     qDebug() << "new:" << item->m_connectUuid << item->m_connectName << item->m_connectPath << item->m_connectState << item->m_ifaceName;
                     qDebug() << "old:" << m_item->m_connectUuid << m_item->m_connectName << m_item->m_connectPath << m_item->m_connectState << m_item->m_ifaceName;
                     m_inactivatedLanListWidget->removeItemWidget(iter.value());
@@ -603,8 +601,8 @@ void LanPage::connectionUpdateSlot(QString uuid)
                 qDebug() << "[LanPage]:Active Connection's device change, remove it" << Q_FUNC_INFO << __LINE__;
                 return;
             } else {
-                if (m_item->m_connectState == item->m_connectState) {   //当前激活连接的其他数据改变(除了激活状态外)
-                    qDebug() << "[LanPage]:Active Connection's data change expect for ConnectState" << Q_FUNC_INFO << __LINE__;
+                if (m_item->m_connectName != item->m_connectName || m_item->m_connectPath != item->m_connectPath) {   //当前激活连接的其他数据改变(除了激活状态外)
+                    qDebug() << "[LanPage]:Active Connection's name or path changed." << Q_FUNC_INFO << __LINE__;
                     qDebug() << "new:" << item->m_connectUuid << item->m_connectName << item->m_connectPath << item->m_connectState << item->m_ifaceName;
                     qDebug() << "old:" << m_item->m_connectUuid << m_item->m_connectName << m_item->m_connectPath << m_item->m_connectState << m_item->m_ifaceName;
                     m_activatedLanListWidget->removeItemWidget(iters.value());

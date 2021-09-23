@@ -88,13 +88,13 @@ void LanListItem::onInfoButtonClicked()
 
 void LanListItem::onLanStatusChange(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
 {
-    qDebug() <<"[LanListItem]:Connection State Change to:" << state;
+    qDebug() <<"[LanListItem]Connection State Change to:" << state;
     if (m_data->m_connectUuid == uuid) {
         if (state == NetworkManager::ActiveConnection::State::Activating || state == NetworkManager::ActiveConnection::State::Deactivating) {
-            qDebug() << "[LanListItem]:Activating!Loading!" << state;
+            qDebug() << "[LanListItem]Activating!Loading!" << state;
             m_netButton->startLoading();
         } else {
-            qDebug() << "[LanListItem]:Stop!" << state;
+            qDebug() << "[LanListItem]Stop!" << state;
             m_netButton->stopLoading();
             if (state == NetworkManager::ActiveConnection::State::Activated) {
                 setIcon(true);

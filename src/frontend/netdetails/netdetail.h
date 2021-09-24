@@ -69,6 +69,8 @@ private:
     bool createWiredConnect();
     bool createWirelessConnect();
     bool updateConnect();
+
+    void showDesktopNotify(const QString &message);
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyConnectOperation* m_connectOperation = nullptr;

@@ -331,6 +331,12 @@ void LanPage::onDeviceComboxIndexChanged(int currentIndex)
     }
 }
 
+void LanPage::showControlCenter()
+{
+    QProcess process;
+    process.startDetached("ukui-control-center --wiredconnect");
+}
+
 void LanPage::initUI()
 {
     m_titleLabel->setText(tr("LAN"));
@@ -362,6 +368,8 @@ void LanPage::initUI()
 //    m_inactivatedLanListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);   //用了listwidget的滚动条
 
     inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
+    m_settingsLabel->installEventFilter(this);
+//    emit this->lanConnectChanged();
 }
 
 void LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
@@ -684,6 +692,16 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
     }
 
     initDeviceCombox();
+}
+
+bool LanPage::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_settingsLabel) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            showControlCenter();
+        }
+    }
+    return QWidget::eventFilter(watched, event);
 }
 
 void LanPage::activateWired(const QString& devName, const QString& connUuid)

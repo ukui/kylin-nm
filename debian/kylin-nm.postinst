@@ -10,5 +10,5 @@ fi
 
 echo "kylin nm set cap success"
 
-exit(0)
+exit 0
 

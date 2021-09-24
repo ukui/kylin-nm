@@ -30,6 +30,9 @@ public:
     void showDetailPage(QString devName, QString uuid);
     void setWiredDeviceEnable(const QString& devName, bool enable);
 
+protected:
+    bool eventFilter(QObject *watched, QEvent *event);
+
 signals:
     void lanAdd(QString devName, QStringList info);
     void lanRemove(QString dbusPath);
@@ -86,6 +89,7 @@ private slots:
     void onDeviceRemove(QString deviceName);
     void onDeviceNameUpdate(QString oldName, QString newName);
     void onDeviceComboxIndexChanged(int currentIndex);
+    void showControlCenter();
 //    void onLanDataChange(QString uuid);
 };
 

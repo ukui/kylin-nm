@@ -270,8 +270,8 @@ void WlanListItem::onNetButtonClicked()
         qDebug()<<"Clicked on connected wifi, it will be inactivated. ssid = " << m_data->m_NetSsid << Q_FUNC_INFO << __LINE__;
         return;
     }
-
-    if (m_data->m_isConfigured) {
+//有配置或者无密码的wifi直接连接
+    if (m_data->m_isConfigured || m_hasPwd == false) {
         m_connoperation->activeWirelessConnect(m_wlanDevice,m_data->m_connectUuid);
         qDebug()<<"Has configuration, will be activated. ssid = " << m_data->m_NetSsid << Q_FUNC_INFO << __LINE__;
         return;
@@ -399,35 +399,6 @@ void WlanListItem::onWlanStatusChange(QString uuid, NetworkManager::ActiveConnec
             m_netButton->stopLoading();
         }
     }
-
-    //TODO 网络状态改变的通知
-//    if (state == NetworkManager::ActiveConnection::State::Activated) {
-////        this->showDesktopNotify(tr("WLAN Connected Successfully"));
-//    } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
-//        switch (reason) {
-//        case NetworkManager::ActiveConnection::Reason::UserDisconnected:
-//            this->showDesktopNotify(tr("WLAN Disconnected Successfully"));
-//            break;
-//        case NetworkManager::ActiveConnection::Reason::ServiceStopped:
-//            this->showDesktopNotify(tr("The service providing the VPN connection was stopped"));
-//            break;
-//        case NetworkManager::ActiveConnection::Reason::IpConfigInvalid:
-//            this->showDesktopNotify(tr("The IP config of the active connection was invalid"));
-//            break;
-//        case NetworkManager::ActiveConnection::Reason::ConnectTimeout:
-//            this->showDesktopNotify(tr("The connection attempt to the VPN service timed out"));
-//            break;
-//        case NetworkManager::ActiveConnection::Reason::NoSecrets:
-//            this->showDesktopNotify(tr("Necessary secrets for the connection were not provided"));
-//            break;
-//        case NetworkManager::ActiveConnection::Reason::LoginFailed:
-//            this->showDesktopNotify(tr("Authentication to the server failed"));
-//            break;
-//        default:
-//            qDebug() << "Wlan disconnected with unkown reason." << Q_FUNC_INFO << __LINE__;
-//            break;
-//        }
-//    }
 }
 
 void WlanListItem::onMenuTriggered(QAction *action)

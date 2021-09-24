@@ -20,8 +20,10 @@ public:
     KyWiredConnectOperation *m_connectOperation = nullptr;
     KyActiveConnectResourse *m_activeConnectResource = nullptr;
     KyConnectResourse *m_connectResource = nullptr;
+    KyNetworkDeviceResourse *m_deviceResource = nullptr;
 
     QString deviceName = "";
+    void refreshIcon();
 
 protected:
     void setIcon(bool isOn);

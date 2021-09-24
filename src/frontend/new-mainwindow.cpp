@@ -146,7 +146,7 @@ void MainWindow::initTrayIcon()
     m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);
     m_trayIcon->setContextMenu(m_trayIconMenu);
-    m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
+    m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
 
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
     connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
@@ -170,6 +170,7 @@ void MainWindow::initDbusConnnect()
     connect(m_lanWidget, &LanPage::lanRemove, this, &MainWindow::lanRemove);
     connect(m_lanWidget, &LanPage::lanUpdate, this, &MainWindow::lanUpdate);
     connect(m_lanWidget, &LanPage::lanActiveConnectionStateChanged, this, &MainWindow::lanActiveConnectionStateChanged);
+    connect(m_lanWidget, &LanPage::lanConnectChanged, this, &MainWindow::onRefreshTrayIcon);
 
 
     connect(m_wlanWidget, &WlanPage::wlanAdd, this, &MainWindow::wlanAdd);
@@ -179,6 +180,7 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::hotspotActivated, this, &MainWindow::hotspotActivated);
     connect(m_wlanWidget, &WlanPage::secuTypeChange, this, &MainWindow::secuTypeChange);
     connect(m_wlanWidget, &WlanPage::signalStrengthChange, this, &MainWindow::signalStrengthChange);
+    connect(m_wlanWidget, &WlanPage::wlanConnectChanged, this, &MainWindow::onRefreshTrayIcon);
 }
 
 /**
@@ -301,7 +303,11 @@ void MainWindow::resetWindowTheme()
 void MainWindow::showControlCenter()
 {
     QProcess process;
-    process.startDetached("ukui-control-center --netconnect");
+    if (m_lanWidget->m_isLanConnected == false && m_wlanWidget->wlanIsConnected == true){
+        process.startDetached("ukui-control-center --wlanconnect");
+    } else {
+        process.startDetached("ukui-control-center --wiredconnect");
+    }
 }
 
 /**
@@ -335,6 +341,18 @@ void MainWindow::onThemeChanged(const QString &key)
         resetWindowTheme();
     } else {
         qDebug() << "Received signal of theme changed, key=" << key << " will do nothing." << Q_FUNC_INFO << __LINE__;
+    }
+}
+
+void MainWindow::onRefreshTrayIcon()
+{
+    //更新托盘图标显示
+    if (m_lanWidget->m_isLanConnected == true){
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+    } else if (m_wlanWidget->wlanIsConnected == true && m_lanWidget->m_isLanConnected == false){
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
+    } else if (m_wlanWidget->wlanIsConnected == false && m_lanWidget->m_isLanConnected == false){
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
     }
 }
 
@@ -466,7 +484,6 @@ void MainWindow::activateWired(const QString& devName, const QString& connUuid)
 {
     m_lanWidget->activateWired(devName, connUuid);
 }
-
 void MainWindow::deactivateWired(const QString& devName, const QString& connUuid)
 {
     m_lanWidget->deactivateWired(devName, connUuid);

@@ -188,7 +188,6 @@ void LanPage::initDeviceCombox()
 {
     //TODO 获取设备列表，单设备时隐藏下拉框，多设备时添加到下拉框;m_devList记录插入的所有设备，deviceMap记录设备状态
     QMap<QString, bool> deviceMap;
-    getDeviceEnableState(0,deviceMap);
 
     m_deviceComboBox->clear();
     m_devList.clear();

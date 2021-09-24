@@ -333,6 +333,7 @@ void LanPage::initUI()
 //    m_inactivatedLanListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);   //用了listwidget的滚动条
 
     inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
+//    emit this->lanConnectChanged();
 }
 
 void LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
@@ -362,6 +363,7 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
         for (int i = 0; i < m_activedList.size(); i++) {
             KyConnectItem *activeItemData = m_activedList.at(i);
             addNewItem(activeItemData, m_activatedLanListWidget);
+            emit this->lanConnectChanged();
 
             m_activeMap.insert(activeItemData, m_listWidgetItem);
         }
@@ -387,9 +389,24 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
 
 void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
 {
-    qDebug()<<"[LanPage] State change slot:"<<state;
+    //lanpage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
     QString devName;
     NetworkManager::ConnectionSettings::ConnectionType type;
+    if (m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
+        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
+            return;
+        }
+    }
+    if (NetworkManager::ActiveConnection::State::Activated == state){
+        m_isLanConnected = true;
+        qDebug() << "[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
+    } else {
+        m_isLanConnected = false;
+        qDebug() << "=[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
+    }
+    qDebug()<<"[LanPage] State change slot:"<<state;
+//    QString devName;
+//    NetworkManager::ConnectionSettings::ConnectionType type;
 
     if(m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
         if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
@@ -426,6 +443,7 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
             if (m_item->m_connectUuid == uuid) {
                 m_activatedLanListWidget->removeItemWidget(i.value());
                 delete(i.value());
+                emit this->lanConnectChanged();
                 break;
             }
         }

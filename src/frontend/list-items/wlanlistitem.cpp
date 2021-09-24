@@ -278,7 +278,7 @@ void WlanListItem::onNetButtonClicked()
         return;
     }
     if (!this->m_connectButton->isVisible() && m_data->m_secuType != "") {
-        if (m_data->m_secuType.contains("wpa", Qt::CaseInsensitive)) {
+        if (m_data->m_secuType.contains("802.1x", Qt::CaseInsensitive)) {
             EnterpriseWlanDialog *enterpriseWlanDialog = new EnterpriseWlanDialog(m_data, m_wlanDevice, this);
             enterpriseWlanDialog->show();
         } else {

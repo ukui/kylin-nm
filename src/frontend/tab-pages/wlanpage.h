@@ -10,6 +10,9 @@
 #include "kylinconnectoperation.h"
 #include <QGSettings>
 #include "netdetails/netdetail.h"
+#include <QProcess>
+#include "kylinactiveconnectresource.h"
+#include "kywirelessnetresource.h"
 
 //#define SCROLLAREA_HEIGHT 150
 #define MORE_TEXT_MARGINS 16,0,0,0
@@ -21,6 +24,7 @@ class WlanPage : public TabPage
 public:
     explicit WlanPage(QWidget *parent = nullptr);
     ~WlanPage() = default;
+    bool wlanIsConnected = false;
 
     //for dbus
     void getWirelessList(QMap<QString, QVector<QStringList> > &map);
@@ -44,6 +48,8 @@ signals:
     void signalStrengthChange(QString devName, QString ssid, int strength);
     void secuTypeChange(QString devName, QString ssid, QString secuType);
     void hiddenWlanClicked();
+    void settingsClicked();
+    void wlanConnectChanged();
 
 public slots:
     void onMainWindowVisibleChanged(const bool &visible);
@@ -54,6 +60,10 @@ protected:
 private:
     void initWlanUI();
     void initConnections();
+    QString m_activedssid;
+    QString m_disconnectuuid;
+    int m_disconnecting;
+    bool m_disconnectingflag = false;
 
     //定时触发扫描的定时器
     void initTimer();
@@ -106,6 +116,8 @@ private slots:
     void onDeviceComboxIndexChanged(int currentIndex);
     void requestScan();
     void onHiddenWlanClicked();
+    void showControlCenter();
+    void onWifiEnabledChanged(bool isWifiOn);
 };
 
 #endif // WLANPAGE_H

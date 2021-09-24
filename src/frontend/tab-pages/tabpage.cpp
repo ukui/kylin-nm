@@ -62,7 +62,7 @@ void TabPage::initUI()
     m_activatedNetDivider = new Divider(this);
 
     m_inactivatedNetFrame = new QFrame(this);
-//    m_inactivatedNetFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT);
+    m_inactivatedNetFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT);
     m_inactivatedNetLayout = new QVBoxLayout(m_inactivatedNetFrame);
     m_inactivatedNetLayout->setContentsMargins(NET_LAYOUT_MARGINS);
     m_inactivatedNetLayout->setSpacing(NET_LAYOUT_SPACING);
@@ -81,6 +81,7 @@ void TabPage::initUI()
     m_settingsLayout = new QHBoxLayout(m_settingsFrame);
     m_settingsLayout->setContentsMargins(SETTINGS_LAYOUT_MARGINS);
     m_settingsLabel = new QLabel(m_settingsFrame);
+    m_settingsLabel->setCursor(Qt::PointingHandCursor);
     m_settingsLabel->setText(tr("Settings"));
     m_settingsLayout->addWidget(m_settingsLabel);
     m_settingsFrame->setLayout(m_settingsLayout);

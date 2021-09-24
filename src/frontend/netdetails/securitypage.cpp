@@ -288,6 +288,20 @@ void SecurityPage::setTtlsInfo(KyEapMethodTtlsInfo &info)
     }
 }
 
+void SecurityPage::setSecurityVisible(const bool &visible)
+{
+    if (secuTypeLabel) {
+        secuTypeLabel->setVisible(visible);
+    } else {
+        qWarning() << "Set visible of secuTypeLabel failed because of null pointer" << Q_FUNC_INFO << __LINE__;
+    }
+    if (secuTypeCombox) {
+        secuTypeCombox->setVisible(visible);
+    } else {
+        qWarning() << "Set visible of secuTypeCombox failed because of null pointer" << Q_FUNC_INFO << __LINE__;
+    }
+}
+
 void SecurityPage::updateTlsChange(KyEapMethodTlsInfo &info)
 {
     KyEapMethodTlsInfo tlsInfo = assembleTlsInfo();
@@ -630,12 +644,14 @@ void SecurityPage::onEapTypeComboxIndexChanged()
     int index = eapTypeCombox->currentData().toInt();
     if (index == TLS) {
         showTls();
+        emit this->eapTypeChanged(TLS);
     } else if (index == PEAP) {
         showPeapOrTtls();
         eapMethodCombox->clear();
         eapMethodCombox->addItem("MSCHAPv2", KyAuthMethodMschapv2);
         eapMethodCombox->addItem("MD5", KyAuthMethodMd5);
         eapMethodCombox->addItem("GTC", KyAuthMethodGtc);
+        emit this->eapTypeChanged(PEAP);
     } else if (index == TTLS) {
         showPeapOrTtls();
         eapMethodCombox->clear();
@@ -646,6 +662,7 @@ void SecurityPage::onEapTypeComboxIndexChanged()
         eapMethodCombox->addItem("chap", CHAP);
         eapMethodCombox->addItem("md5(eap)", MD5_EAP);
         eapMethodCombox->addItem("gtc(eap)", GTC_EAP);
+        emit this->eapTypeChanged(TTLS);
     }
 }
 

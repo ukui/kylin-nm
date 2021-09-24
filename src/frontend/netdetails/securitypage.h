@@ -22,6 +22,7 @@ public:
     void setTlsInfo(KyEapMethodTlsInfo &info);
     void setPeapInfo(KyEapMethodPeapInfo &info);
     void setTtlsInfo(KyEapMethodTtlsInfo &info);
+    void setSecurityVisible(const bool &visible);
 
     bool checkIsChanged(const ConInfo info);
     void updateSecurityChange(KyWirelessConnectSetting &setting);
@@ -107,6 +108,7 @@ private slots:
 
 signals:
     void setSecuPageState(bool);
+    void eapTypeChanged(const KyEapMethodType &type);
 };
 
 #endif // SECURITYWIDGET_H

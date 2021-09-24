@@ -23,6 +23,7 @@ public:
     KyNetworkDeviceResourse *m_deviceResource = nullptr;
 
     QString deviceName = "";
+    void refreshIcon();
 
 protected:
     void setIcon(bool isOn);

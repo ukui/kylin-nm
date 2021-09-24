@@ -40,6 +40,7 @@ private:
     void initUI();
     void initList(QString m_deviceName);
     void addNewItem(KyConnectItem *itemData, QListWidget *listWidget);
+    void addNUllItem(QListWidget *listWidget);
     void initNetSwitch();
 
 private:
@@ -69,6 +70,7 @@ private:
 
     QString m_deviceName;
     QStringList m_devList;
+    QStringList enableDevice;
     QGSettings * m_switchGsettings = nullptr;
 
 private slots:

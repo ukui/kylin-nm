@@ -137,7 +137,7 @@ bool KyNetworkDeviceResourse::wiredDeviceCarriered(QString deviceName)
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(deviceName);
     if (connectDevice->isValid()
-            && NetworkManager::Ethernet == connectDevice->type()) {
+            && NetworkManager::Device::Type::Ethernet == connectDevice->type()) {
         NetworkManager::WiredDevice *wiredDevicePtr =
             qobject_cast<NetworkManager::WiredDevice *>(connectDevice.data());
         return wiredDevicePtr->carrier();

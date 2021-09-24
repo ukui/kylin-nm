@@ -111,7 +111,14 @@ void WlanPage::initWlanUI()
 void WlanPage::initConnections()
 {
     connect(m_resource, &KyWirelessNetResource::wifiNetworkAdd, this, &WlanPage::onWlanAdded);
+    connect(m_resource, &KyWirelessNetResource::wifiNetworkAdd, this, [=](QString interface, KyWirelessNetItem &item){
+        //for dbus
+        QStringList info;
+        info <<item.m_NetSsid<<QString::number(item.m_signalStrength)<<item.m_secuType;
+        emit wlanAdd(interface, info);
+    });
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
+    connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::wlanRemove);
     connect(m_resource, &KyWirelessNetResource::signalStrengthChange, this, &WlanPage::signalStrengthChange);
     connect(m_resource, &KyWirelessNetResource::secuTypeChange, this, &WlanPage::secuTypeChange);
 
@@ -302,10 +309,6 @@ void WlanPage::getAllWlan()
 
 void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 {
-    //for dbus
-    QStringList info;
-    info <<item.m_NetSsid<<QString::number(item.m_signalStrength)<<item.m_secuType;
-    emit wlanAdd(interface, info);
     qDebug() << "A Wlan Added! interface = " << interface << "; ssid = " << item.m_NetSsid << Q_FUNC_INFO <<__LINE__;
     if (interface != m_defaultDevice) {
         qDebug() << "wlan add interface not equal defaultdevice,ignore";
@@ -327,7 +330,6 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 
 void WlanPage::onWlanRemoved(QString interface, QString ssid)
 {
-    emit wlanRemove(interface, ssid);
     if (!m_itemsMap.contains(ssid)) { return; }
     if (m_expandedItem == m_itemsMap.value(ssid)) { m_expandedItem = nullptr; }
     qDebug() << "A Wlan Removed! interface = " << interface << "; ssid = " << ssid << Q_FUNC_INFO <<__LINE__;

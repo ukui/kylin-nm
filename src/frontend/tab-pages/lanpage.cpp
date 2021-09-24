@@ -18,7 +18,6 @@ const QString WIRED_SWITCH = "wiredswitch";
 
 LanPage::LanPage(QWidget *parent) : TabPage(parent)
 {
-
     m_activeResourse = new KyActiveConnectResourse(this);
     m_connectResourse = new KyConnectResourse(this);
     m_device = new KyNetworkDeviceResourse(this);
@@ -49,6 +48,9 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this, &LanPage::onDeviceAdd);
     connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this, &LanPage::onDeviceRemove);
     connect(m_device, &KyNetworkDeviceResourse::deviceNameUpdate, this, &LanPage::onDeviceNameUpdate);
+
+    connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &LanPage::activateFailed);
+    connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &LanPage::deactivateFailed);
 }
 
 LanPage::~LanPage()
@@ -335,6 +337,7 @@ void LanPage::initUI()
 //    m_inactivatedLanListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);   //用了listwidget的滚动条
 
     inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
+//    emit this->lanConnectChanged();
 }
 
 void LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
@@ -362,6 +365,26 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
     m_deactiveMap.clear();
     m_activedList.clear();
     m_deactivedList.clear();
+
+    m_activeResourse->getActiveConnectionList(m_deviceName,
+                               NetworkManager::ConnectionSettings::Wired, m_activedList);      //激活列表的显示
+    qDebug() << "[LanPage]init list! Active list:" << m_activedList.size() << "Deactive list:" << m_deactivedList.size();
+    if (!m_activedList.isEmpty()) {
+        for (int i = 0; i < m_activedList.size(); i++) {
+            KyConnectItem *activeItemData = m_activedList.at(i);
+            addNewItem(activeItemData, m_activatedLanListWidget);
+            emit this->lanConnectChanged();
+
+            m_activeMap.insert(activeItemData, m_listWidgetItem);
+        }
+    } else {
+        m_nullItem = new QListWidgetItem(m_activatedLanListWidget);
+        m_nullItem->setSizeHint(QSize(m_activatedLanListWidget->width(),ITEM_HEIGHT));
+        m_activatedLanListWidget->addItem(m_nullItem);
+
+        m_nullLanItem = new LanListItem();
+        m_activatedLanListWidget->setItemWidget(m_nullItem, m_nullLanItem);
+    }
 
     m_connectResourse->getConnectionList(m_deviceName, NetworkManager::ConnectionSettings::Wired, m_deactivedList);      //未激活列表的显示
     if (!m_deactivedList.isEmpty()) {
@@ -400,9 +423,24 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
 
 void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
 {
-    qDebug()<<"[LanPage] State change slot:"<<state;
+    //lanpage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
     QString devName;
     NetworkManager::ConnectionSettings::ConnectionType type;
+    if (m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
+        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
+            return;
+        }
+    }
+    if (NetworkManager::ActiveConnection::State::Activated == state){
+        m_isLanConnected = true;
+        qDebug() << "[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
+    } else {
+        m_isLanConnected = false;
+        qDebug() << "=[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
+    }
+    qDebug()<<"[LanPage] State change slot:"<<state;
+//    QString devName;
+//    NetworkManager::ConnectionSettings::ConnectionType type;
 
     if(m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
         if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
@@ -439,6 +477,7 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
             if (m_item->m_connectUuid == uuid) {
                 m_activatedLanListWidget->removeItemWidget(i.value());
                 delete(i.value());
+                emit this->lanConnectChanged();
                 break;
             }
         }

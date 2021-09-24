@@ -117,6 +117,7 @@ private slots:
     void onShowMainwindowActionTriggled();
     void onShowSettingsActionTriggled();
     void onThemeChanged(const QString &key);
+    void onRefreshTrayIcon();
 };
 
 #endif // MAINWINDOW_H

@@ -459,21 +459,8 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
     //lanpage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
     QString devName;
     NetworkManager::ConnectionSettings::ConnectionType type;
-    if (m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
-        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
-            return;
-        }
-    }
-    if (NetworkManager::ActiveConnection::State::Activated == state){
-        m_isLanConnected = true;
-        qDebug() << "[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
-    } else {
-        m_isLanConnected = false;
-        qDebug() << "=[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
-    }
+
     qDebug()<<"[LanPage] State change slot:"<<state;
-//    QString devName;
-//    NetworkManager::ConnectionSettings::ConnectionType type;
 
     if(m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
         if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
@@ -502,6 +489,7 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
 
     qDebug() << "[LanPage] Update Device Name:" << m_deviceName;
 
+    m_isLanConnected = false;
     if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         qDebug()<<"Get a deactivate, begin to remove it from activeList";
         QMap<KyConnectItem *, QListWidgetItem *>::iterator i;
@@ -540,6 +528,7 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
             }
         }
     } else if (state == NetworkManager::ActiveConnection::State::Activated) {
+        m_isLanConnected = true;
         qDebug()<<"Get an actived connection, begin to move it from deactive to avtive!";
         QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;                              //在未激活列表里删除
         for (iter = m_deactiveMap.begin(); iter != m_deactiveMap.constEnd(); ++iter) {

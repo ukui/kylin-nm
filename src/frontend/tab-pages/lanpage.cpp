@@ -169,6 +169,7 @@ void LanPage::addConnectionSlot(QString uuid)               //新增一个有线
 void LanPage::initDeviceCombox()
 {
     //TODO 获取设备列表，单设备时隐藏下拉框，多设备时添加到下拉框;m_devList记录插入的所有设备，deviceMap记录设备状态
+    disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LanPage::onDeviceComboxIndexChanged);
     QMap<QString, bool> deviceMap;
     getDeviceEnableState(0,deviceMap);
 
@@ -234,6 +235,7 @@ void LanPage::initDeviceCombox()
         m_deviceName = m_deviceComboBox->currentText();
         initList(m_deviceName);
     }
+    connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LanPage::onDeviceComboxIndexChanged);
 }
 
 void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
@@ -297,11 +299,13 @@ void LanPage::onDeviceNameUpdate(QString oldName, QString newName)
 void LanPage::onDeviceComboxIndexChanged(int currentIndex)
 {
     //TODO 设备变更时更新设备和列表
-    if (enableDevice.count() == m_deviceComboBox->count()) {
+//    if (enableDevice.count() == m_deviceComboBox->count()) {
+
         m_deviceName = m_deviceComboBox->currentText();
         qDebug() << "[LanPage]Current Device Changed to:" << m_deviceName;
         initList(m_deviceName);
-    }
+
+//    }
 }
 
 void LanPage::initUI()
@@ -341,7 +345,8 @@ void LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
 {
     m_listWidgetItem = new QListWidgetItem(listWidget);
     m_listWidgetItem->setSizeHint(QSize(listWidget->width(),ITEM_HEIGHT));
-    listWidget->addItem(m_listWidgetItem);
+//    listWidget->addItem(m_listWidgetItem);
+    listWidget->insertItem(0,m_listWidgetItem);
 
     if (itemData != nullptr) {
         m_testLanItem = new LanListItem(itemData, m_deviceName);
@@ -469,7 +474,7 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
         }
     } else if (state == NetworkManager::ActiveConnection::State::Activated) {
         qDebug()<<"Get an actived connection, begin to move it from deactive to avtive!";
-        QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;                                                           //在未激活列表里删除
+        QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;                              //在未激活列表里删除
         for (iter = m_deactiveMap.begin(); iter != m_deactiveMap.constEnd(); ++iter) {
             KyConnectItem *m_item = iter.key();
             if (m_item->m_connectUuid == uuid) {

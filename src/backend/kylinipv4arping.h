@@ -20,7 +20,7 @@
 #include <sys/signalfd.h>
 #include <sys/timerfd.h>
 #include <unistd.h>
-
+#include "kylinarping.h"
 
 #include <QString>
 #include <QDebug>

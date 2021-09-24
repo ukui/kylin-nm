@@ -8,6 +8,7 @@ HEADERS += \
     $$PWD/ksimplenm.h \
     $$PWD/kylin-dbus-interface.h \
     $$PWD/kylin-network-interface.h \
+    $$PWD/kylinarping.h \
     $$PWD/kylinipv4arping.h \
     $$PWD/kylinipv6arping.h \
     $$PWD/sysdbusregister.h \

@@ -375,13 +375,17 @@ void KyIpv4Arping::findBroadcastAddress()
 
 int KyIpv4Arping::ipv4ConflictCheck()
 {
+    limit_capabilities();
+
     int ret = checkDevice();
     if (ret < 0) {
         qWarning()<<"[KyIpv4Arping]"<<"the device is invalid" << m_ifaceName;
         return -1;
     }
 
+    enable_capability_raw();
     m_ipv4Socket = socket(PF_PACKET, SOCK_DGRAM, 0);
+    disable_capability_raw();
     if (m_ipv4Socket < 0) {
         qWarning()<<"[KyIpv4Arping]" << "create ipv4 socket failed, errno" << errno;
         return -1;
@@ -418,6 +422,8 @@ int KyIpv4Arping::ipv4ConflictCheck()
     m_he = m_me;
 
     findBroadcastAddress();
+
+    drop_capabilities();
 
     ret = ipv4EventLoop();
     close(m_ipv4Socket);

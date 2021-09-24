@@ -35,7 +35,6 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::deactivateConnectionError, this, &WlanPage::deactivateFailed);
 
     connect(this, &WlanPage::hiddenWlanClicked, this, &WlanPage::onHiddenWlanClicked);
-    connect(this, &WlanPage::settingsClicked, this, &WlanPage::showControlCenter);
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::wifinEnabledChanged, this, &WlanPage::onWifiEnabledChanged);
 }
 
@@ -52,7 +51,7 @@ bool WlanPage::eventFilter(QObject *w, QEvent *e)
             emit this->hiddenWlanClicked();
         } else if (w == m_settingsLabel) {
             //ZJP_TODO 打开控制面板
-            emit this->settingsClicked();
+            showControlCenter();
         }
     }
     return QWidget::eventFilter(w,e);
@@ -188,6 +187,9 @@ void WlanPage::initDeviceCombox()
     disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &WlanPage::onDeviceComboxIndexChanged);
     if (m_devList.length() <= 1) {
         m_deviceFrame->hide();
+        foreach (QString device, m_devList) {
+            m_deviceComboBox->addItem(device, device);
+        }
     } else {
         m_deviceFrame->show();
         foreach (QString device, m_devList) {

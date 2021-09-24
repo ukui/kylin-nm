@@ -48,7 +48,6 @@ signals:
     void signalStrengthChange(QString devName, QString ssid, int strength);
     void secuTypeChange(QString devName, QString ssid, QString secuType);
     void hiddenWlanClicked();
-    void settingsClicked();
     void wlanConnectChanged();
 
 public slots:

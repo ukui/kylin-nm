@@ -3,6 +3,7 @@
 #include <sys/times.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
+#include "kylinarping.h"
 
 KyIpv6Arping::KyIpv6Arping(QString ifaceName, QString ipAddress, int retryCount, int timeout, QObject *parent) : QObject(parent)
 {
@@ -310,7 +311,11 @@ int KyIpv6Arping::ipv6ConflictCheck()
     struct icmp6_filter filter;
     int retry = 0;
 
+    limit_capabilities();
+
+    enable_capability_raw();
     m_ipv6Socket = socket (PF_INET6, SOCK_RAW, IPPROTO_ICMPV6);
+    disable_capability_raw();
     if (m_ipv6Socket < 0) {
         qDebug()<<"[KyIpv6Arping]" <<"create ipv6 socket failed:";
         return -1;
@@ -321,6 +326,8 @@ int KyIpv6Arping::ipv6ConflictCheck()
     /* set ICMPv6 filter */
     ICMP6_FILTER_SETBLOCKALL (&filter);
     ICMP6_FILTER_SETPASS (ND_NEIGHBOR_ADVERT, &filter);
+
+    enable_capability_raw();
     setsockopt (m_ipv6Socket, IPPROTO_ICMPV6, ICMP6_FILTER, &filter, sizeof (filter));
 
     int soDontRoute = 1;
@@ -338,6 +345,10 @@ int KyIpv6Arping::ipv6ConflictCheck()
     int recvHopLimit = 1;
     setsockopt(m_ipv6Socket, IPPROTO_IPV6, IPV6_RECVHOPLIMIT,
                &recvHopLimit, sizeof (recvHopLimit));
+
+    disable_capability_raw();
+
+    drop_capabilities();
 
     /* resolves target's IPv6 address */
     int ret = getIpv6ByName(&tgt);

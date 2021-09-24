@@ -29,13 +29,16 @@ public:
     void deactivateWired(const QString& devName, const QString& connUuid);
     void showDetailPage(QString devName, QString uuid);
     void setWiredDeviceEnable(const QString& devName, bool enable);
+
 signals:
     void lanAdd(QString devName, QStringList info);
     void lanRemove(QString dbusPath);
     void lanUpdate(QString devName, QStringList info);
     void lanActiveConnectionStateChanged(QString interface, QString uuid, int status);
     void lanConnectChanged();
+
 private:
+    void initDeviceState();
     void initDeviceCombox();
     void initUI();
     void initList(QString m_deviceName);
@@ -48,7 +51,6 @@ private:
     QListWidget * m_inactivatedLanListWidget = nullptr;
 
     LanListItem * m_nullLanItem = nullptr;
-    LanListItem * m_testLanItem = nullptr;
     QListWidgetItem *m_nullItem = nullptr;
     QListWidgetItem *m_listWidgetItem = nullptr;
 

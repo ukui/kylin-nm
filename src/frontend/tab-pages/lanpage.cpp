@@ -399,26 +399,6 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
     m_activedList.clear();
     m_deactivedList.clear();
 
-    m_activeResourse->getActiveConnectionList(m_deviceName,
-                               NetworkManager::ConnectionSettings::Wired, m_activedList);      //激活列表的显示
-    qDebug() << "[LanPage]init list! Active list:" << m_activedList.size() << "Deactive list:" << m_deactivedList.size();
-    if (!m_activedList.isEmpty()) {
-        for (int i = 0; i < m_activedList.size(); i++) {
-            KyConnectItem *activeItemData = m_activedList.at(i);
-            addNewItem(activeItemData, m_activatedLanListWidget);
-            emit this->lanConnectChanged();
-
-            m_activeMap.insert(activeItemData, m_listWidgetItem);
-        }
-    } else {
-        m_nullItem = new QListWidgetItem(m_activatedLanListWidget);
-        m_nullItem->setSizeHint(QSize(m_activatedLanListWidget->width(),ITEM_HEIGHT));
-        m_activatedLanListWidget->addItem(m_nullItem);
-
-        m_nullLanItem = new LanListItem();
-        m_activatedLanListWidget->setItemWidget(m_nullItem, m_nullLanItem);
-    }
-
     m_connectResourse->getConnectionList(m_deviceName, NetworkManager::ConnectionSettings::Wired, m_deactivedList);      //未激活列表的显示
     if (!m_deactivedList.isEmpty()) {
         for (int i = 0; i < m_deactivedList.size(); i++) {
@@ -442,6 +422,7 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
                 if (isCarriered) {
                     addNewItem(activeItemData, m_activatedLanListWidget);
                     m_activeMap.insert(activeItemData, m_listWidgetItem);
+                    emit this->lanConnectChanged();
                 } else {
                     addNewItem(activeItemData, m_inactivatedLanListWidget);
                     m_deactiveMap.insert(activeItemData, m_listWidgetItem);
@@ -450,8 +431,6 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
     } else {
         addNewItem(nullptr, m_activatedLanListWidget);       //显示一个未激活任何连接的item
     }
-
-
 }
 
 void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
@@ -472,8 +451,6 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
         qDebug() << "=[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
     }
     qDebug()<<"[LanPage] State change slot:"<<state;
-//    QString devName;
-//    NetworkManager::ConnectionSettings::ConnectionType type;
 
     if(m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
         if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
@@ -492,7 +469,7 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
             if (nullptr != item) {
                 QStringList info;
                 info << item->m_connectName << uuid << item->m_connectPath;
-                emit lanActiveConnectionStateChanged(devNameList.at(i), uuid, state);                
+                emit lanActiveConnectionStateChanged(devNameList.at(i), uuid, state);
             }
         }
     } else {
@@ -536,9 +513,11 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
 
                 m_deactiveMap.insert(m_item, m_listWidgetItem);
                 m_activeMap.erase(iters);
+                this->showDesktopNotify(tr("LAN Disconnected Successfully"));
                 break;
             }
         }
+
     } else if (state == NetworkManager::ActiveConnection::State::Activated) {
         qDebug()<<"Get an actived connection, begin to move it from deactive to avtive!";
         QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;                                                           //在未激活列表里删除
@@ -555,9 +534,11 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
 
                 m_activeMap.insert(m_item, m_listWidgetItem);
                 m_deactiveMap.erase(iter);
+                this->showDesktopNotify(tr("LAN Connected Successfully"));
                 break;
             }
         }
+
     } else {
 
     }
@@ -771,3 +752,4 @@ void LanPage::showDetailPage(QString devName, QString uuid)
     delete item;
     item = nullptr;
 }
+

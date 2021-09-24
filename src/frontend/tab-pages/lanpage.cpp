@@ -414,6 +414,7 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
                 if (isCarriered) {
                     addNewItem(activeItemData, m_activatedLanListWidget);
                     m_activeMap.insert(activeItemData, m_listWidgetItem);
+                    emit this->lanConnectChanged();
                 } else {
                     addNewItem(activeItemData, m_inactivatedLanListWidget);
                     m_deactiveMap.insert(activeItemData, m_listWidgetItem);

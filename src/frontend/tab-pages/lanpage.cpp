@@ -189,10 +189,6 @@ void LanPage::initDeviceCombox()
     //TODO 获取设备列表，单设备时隐藏下拉框，多设备时添加到下拉框;m_devList记录插入的所有设备，deviceMap记录设备状态
     QMap<QString, bool> deviceMap;
 
-    m_deviceComboBox->clear();
-    m_devList.clear();
-    enableDevice.clear();
-
     if (!m_switchGsettings) {
         qDebug() << "[LanPage]:m_switchGsettings is null" << Q_FUNC_INFO << __LINE__;
         return;

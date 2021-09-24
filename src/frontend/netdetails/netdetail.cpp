@@ -19,6 +19,24 @@
 
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
+void NetDetail::showDesktopNotify(const QString &message)
+{
+    QDBusInterface iface("org.freedesktop.Notifications",
+                         "/org/freedesktop/Notifications",
+                         "org.freedesktop.Notifications",
+                         QDBusConnection::sessionBus());
+    QList<QVariant> args;
+    args<<(tr("Kylin NM"))
+       <<((unsigned int) 0)
+       <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+       <<tr("kylin network desktop message") //显示的是什么类型的信息
+       <<message //显示的具体信息
+       <<QStringList()
+       <<QVariantMap()
+       <<(int)-1;
+    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+}
+
 NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent)
     :m_deviceName(interface),
      m_name(name),
@@ -554,6 +572,7 @@ void NetDetail::setConfirmEnable()
 
 bool NetDetail::checkIpv4Conflict(QString ipv4Address)
 {
+    showDesktopNotify(tr("start check ipv4 address conflict"));
     bool isConflict = false;
     KyIpv4Arping* ipv4Arping = new KyIpv4Arping(m_deviceName, ipv4Address);
 
@@ -570,6 +589,7 @@ bool NetDetail::checkIpv4Conflict(QString ipv4Address)
 
 bool NetDetail::checkIpv6Conflict(QString ipv6address)
 {
+    showDesktopNotify(tr("start check ipv6 address conflict"));
     bool isConflict = false;
     KyIpv6Arping* ipv46rping = new KyIpv6Arping(m_deviceName, ipv6address);
 
@@ -659,7 +679,7 @@ bool NetDetail::createWiredConnect()
     if (connetSetting.m_ipv4ConfigIpType != CONFIG_IP_DHCP) {
         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
             qDebug() << "ipv4 conflict";
-            //todo desktop notify
+            showDesktopNotify(tr("ipv4 address conflict!"));
             return false;
         }
     }
@@ -694,7 +714,7 @@ bool NetDetail::createWirelessConnect()
     if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
             qDebug() << "ipv4 conflict";
-            //todo desktop notify
+            showDesktopNotify(tr("ipv4 address conflict!"));
             return false;
         }
     }
@@ -702,7 +722,7 @@ bool NetDetail::createWirelessConnect()
     if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
             qDebug() << "ipv6 conflict";
-            //todo desktop notify
+            showDesktopNotify(tr("ipv6 address conflict!"));
             return false;
         }
     }
@@ -772,7 +792,7 @@ bool NetDetail::updateConnect()
     if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
             qDebug() << "ipv4 conflict";
-            //todo desktop notify
+            showDesktopNotify(tr("ipv4 address conflict!"));
             return false;
         }
     }
@@ -780,7 +800,7 @@ bool NetDetail::updateConnect()
     if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
             qDebug() << "ipv6 conflict";
-            //todo desktop notify
+            showDesktopNotify(tr("ipv6 address conflict!"));
             return false;
         }
     }

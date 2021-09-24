@@ -187,12 +187,7 @@ void LanPage::addConnectionSlot(QString uuid)               //新增一个有线
 void LanPage::initDeviceCombox()
 {
     //TODO 获取设备列表，单设备时隐藏下拉框，多设备时添加到下拉框;m_devList记录插入的所有设备，deviceMap记录设备状态
-    disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LanPage::onDeviceComboxIndexChanged);
     QMap<QString, bool> deviceMap;
-
-    m_deviceComboBox->clear();
-    m_devList.clear();
-    enableDevice.clear();
 
     if (!m_switchGsettings) {
         qDebug() << "[LanPage]:m_switchGsettings is null" << Q_FUNC_INFO << __LINE__;
@@ -264,7 +259,8 @@ void LanPage::initDeviceCombox()
             initList(m_deviceName);
         }
     }
-    connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LanPage::onDeviceComboxIndexChanged);
+
+    return;
 }
 
 void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
@@ -328,13 +324,11 @@ void LanPage::onDeviceNameUpdate(QString oldName, QString newName)
 void LanPage::onDeviceComboxIndexChanged(int currentIndex)
 {
     //TODO 设备变更时更新设备和列表
-//    if (enableDevice.count() == m_deviceComboBox->count()) {
-
+    if (enableDevice.count() == m_deviceComboBox->count()) {
         m_deviceName = m_deviceComboBox->currentText();
         qDebug() << "[LanPage]Current Device Changed to:" << m_deviceName;
         initList(m_deviceName);
-
-//    }
+    }
 }
 
 void LanPage::initUI()
@@ -368,15 +362,13 @@ void LanPage::initUI()
 //    m_inactivatedLanListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);   //用了listwidget的滚动条
 
     inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
-//    emit this->lanConnectChanged();
 }
 
 void LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
 {
     m_listWidgetItem = new QListWidgetItem(listWidget);
     m_listWidgetItem->setSizeHint(QSize(listWidget->width(),ITEM_HEIGHT));
-//    listWidget->addItem(m_listWidgetItem);
-    listWidget->insertItem(0,m_listWidgetItem);
+    listWidget->addItem(m_listWidgetItem);
 
     LanListItem *p_lanItem = nullptr;
     if (itemData != nullptr) {
@@ -398,26 +390,6 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
     m_deactiveMap.clear();
     m_activedList.clear();
     m_deactivedList.clear();
-
-    m_activeResourse->getActiveConnectionList(m_deviceName,
-                               NetworkManager::ConnectionSettings::Wired, m_activedList);      //激活列表的显示
-    qDebug() << "[LanPage]init list! Active list:" << m_activedList.size() << "Deactive list:" << m_deactivedList.size();
-    if (!m_activedList.isEmpty()) {
-        for (int i = 0; i < m_activedList.size(); i++) {
-            KyConnectItem *activeItemData = m_activedList.at(i);
-            addNewItem(activeItemData, m_activatedLanListWidget);
-            emit this->lanConnectChanged();
-
-            m_activeMap.insert(activeItemData, m_listWidgetItem);
-        }
-    } else {
-        m_nullItem = new QListWidgetItem(m_activatedLanListWidget);
-        m_nullItem->setSizeHint(QSize(m_activatedLanListWidget->width(),ITEM_HEIGHT));
-        m_activatedLanListWidget->addItem(m_nullItem);
-
-        m_nullLanItem = new LanListItem();
-        m_activatedLanListWidget->setItemWidget(m_nullItem, m_nullLanItem);
-    }
 
     m_connectResourse->getConnectionList(m_deviceName, NetworkManager::ConnectionSettings::Wired, m_deactivedList);      //未激活列表的显示
     if (!m_deactivedList.isEmpty()) {
@@ -450,8 +422,6 @@ void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显
     } else {
         addNewItem(nullptr, m_activatedLanListWidget);       //显示一个未激活任何连接的item
     }
-
-
 }
 
 void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
@@ -459,7 +429,18 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
     //lanpage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
     QString devName;
     NetworkManager::ConnectionSettings::ConnectionType type;
-
+    if (m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
+        if (type != NetworkManager::ConnectionSettings::ConnectionType::Wired) {
+            return;
+        }
+    }
+    if (NetworkManager::ActiveConnection::State::Activated == state){
+        m_isLanConnected = true;
+        qDebug() << "[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
+    } else {
+        m_isLanConnected = false;
+        qDebug() << "=[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
+    }
     qDebug()<<"[LanPage] State change slot:"<<state;
 
     if(m_connectResourse->getInterfaceByUuid(devName, type, uuid)) {
@@ -479,7 +460,7 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
             if (nullptr != item) {
                 QStringList info;
                 info << item->m_connectName << uuid << item->m_connectPath;
-                emit lanActiveConnectionStateChanged(devNameList.at(i), uuid, state);                
+                emit lanActiveConnectionStateChanged(devNameList.at(i), uuid, state);
             }
         }
     } else {
@@ -489,7 +470,6 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
 
     qDebug() << "[LanPage] Update Device Name:" << m_deviceName;
 
-    m_isLanConnected = false;
     if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         qDebug()<<"Get a deactivate, begin to remove it from activeList";
         QMap<KyConnectItem *, QListWidgetItem *>::iterator i;
@@ -524,13 +504,14 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
 
                 m_deactiveMap.insert(m_item, m_listWidgetItem);
                 m_activeMap.erase(iters);
+                this->showDesktopNotify(tr("LAN Disconnected Successfully"));
                 break;
             }
         }
+
     } else if (state == NetworkManager::ActiveConnection::State::Activated) {
-        m_isLanConnected = true;
         qDebug()<<"Get an actived connection, begin to move it from deactive to avtive!";
-        QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;                              //在未激活列表里删除
+        QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;                                                           //在未激活列表里删除
         for (iter = m_deactiveMap.begin(); iter != m_deactiveMap.constEnd(); ++iter) {
             KyConnectItem *m_item = iter.key();
             if (m_item->m_connectUuid == uuid) {
@@ -544,9 +525,11 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
 
                 m_activeMap.insert(m_item, m_listWidgetItem);
                 m_deactiveMap.erase(iter);
+                this->showDesktopNotify(tr("LAN Connected Successfully"));
                 break;
             }
         }
+
     } else {
 
     }
@@ -750,3 +733,4 @@ void LanPage::showDetailPage(QString devName, QString uuid)
     delete item;
     item = nullptr;
 }
+

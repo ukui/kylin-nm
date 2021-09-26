@@ -37,6 +37,9 @@ WlanListItem::~WlanListItem()
 
 void WlanListItem::setWlanSignal(const int &signal)
 {
+    if (!m_data){
+        return;
+    }
     m_data->m_signalStrength = signal;
     refreshIcon();
 }

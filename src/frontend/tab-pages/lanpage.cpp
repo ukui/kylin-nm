@@ -446,9 +446,11 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
     if (NetworkManager::ActiveConnection::State::Activated == state){
         m_isLanConnected = true;
         qDebug() << "[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
+        emit this->lanConnectChanged();
     } else {
         m_isLanConnected = false;
-        qDebug() << "=[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
+        qDebug() << "[lanpage]lanIsConnected status : "  << m_isLanConnected << Q_FUNC_INFO << __LINE__ ;
+        emit this->lanConnectChanged();
     }
     qDebug()<<"[LanPage] State change slot:"<<state;
 
@@ -487,7 +489,6 @@ void LanPage::updateLanlist(QString uuid, NetworkManager::ActiveConnection::Stat
             if (m_item->m_connectUuid == uuid) {
                 m_activatedLanListWidget->removeItemWidget(i.value());
                 delete(i.value());
-                emit this->lanConnectChanged();
                 break;
             }
         }
@@ -708,6 +709,7 @@ void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "activateWired" << devName << connUuid;
     m_wiredConnectOperation->activateConnection(connUuid, devName);
+    emit this->lanConnectChanged();
 }
 
 void LanPage::deactivateWired(const QString& devName, const QString& connUuid)

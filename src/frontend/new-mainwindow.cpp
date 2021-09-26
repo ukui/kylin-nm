@@ -303,7 +303,7 @@ void MainWindow::resetWindowTheme()
 void MainWindow::showControlCenter()
 {
     QProcess process;
-    if (m_lanWidget->m_isLanConnected == false && m_wlanWidget->wlanIsConnected == true){
+    if (m_lanWidget->m_isLanConnected == false && m_wlanWidget->m_wlanIsConnected == true){
         process.startDetached("ukui-control-center --wlanconnect");
     } else {
         process.startDetached("ukui-control-center --wiredconnect");
@@ -350,9 +350,9 @@ void MainWindow::onRefreshTrayIcon()
     //更新托盘图标显示
     if (m_lanWidget->m_isLanConnected == true){
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
-    } else if (m_wlanWidget->wlanIsConnected == true && m_lanWidget->m_isLanConnected == false){
+    } else if (m_wlanWidget->m_wlanIsConnected == true && m_lanWidget->m_isLanConnected == false){
         m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
-    } else if (m_wlanWidget->wlanIsConnected == false && m_lanWidget->m_isLanConnected == false){
+    } else if (m_wlanWidget->m_wlanIsConnected == false && m_lanWidget->m_isLanConnected == false){
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
     }
 }

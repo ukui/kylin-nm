@@ -121,7 +121,11 @@ private slots:
     void onHiddenWlanClicked();
     void showControlCenter();
     void onWifiEnabledChanged(bool isWifiOn);
+
     void onRefreshIconTimer();
+
+//    void onsignalStrengthChange(QString, QString, int);
+
 };
 
 #endif // WLANPAGE_H

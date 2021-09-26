@@ -119,6 +119,9 @@ void WlanPage::initConnections()
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
     connect(m_resource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::wlanRemove);
     connect(m_resource, &KyWirelessNetResource::signalStrengthChange, this, &WlanPage::signalStrengthChange);
+
+//    connect(m_resource, &KyWirelessNetResource::signalStrengthChange, this, &WlanPage::onsignalStrengthChange);
+
     connect(m_resource, &KyWirelessNetResource::secuTypeChange, this, &WlanPage::secuTypeChange);
 
 //    connect(m_resource, &KyWirelessNetResource::wifiNetworkUpdate, this, &WlanPage::onWlanUpdated);
@@ -324,7 +327,7 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
     QListWidgetItem *wlanItem = new QListWidgetItem(m_inactivatedNetListWidget);
     wlanItem->setSizeHint(QSize(m_inactivatedNetListWidget->width(), wlanItemWidget->height()));
     m_inactivatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
-//    m_inactivatedNetListWidget->insertItem(N, wlanItem);
+//        m_inactivatedNetListWidget->insertItem(N, wlanItem);
     m_inactivatedNetListWidget->addItem(wlanItem); //ZJP_TODO 目前会添加到列表尾部
     m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height() + wlanItemWidget->height() + NET_LIST_SPACING);
     m_inactivatedWlanListAreaCentralWidget->setFixedHeight(m_inactivatedNetListWidget->height() + m_hiddenWlanLabel->height());

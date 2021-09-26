@@ -28,7 +28,6 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     initUI();
     initNetSwitch();
     initDeviceCombox();
-    initList(m_deviceName);
 
     connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &LanPage::updateLanlist);
 
@@ -392,6 +391,7 @@ void LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
 
 void LanPage::initList(QString m_deviceName)       //程序拉起，初始化显示
 {
+    qDebug() << "initList";
     m_activatedLanListWidget->clear();
     m_inactivatedLanListWidget->clear();
     m_activeMap.clear();

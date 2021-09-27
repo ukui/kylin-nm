@@ -30,6 +30,9 @@ public:
     void showDetailPage(QString devName, QString uuid);
     void setWiredDeviceEnable(const QString& devName, bool enable);
 
+protected:
+    bool eventFilter(QObject *watched, QEvent *event);
+
 private:
     void initDeviceState();
     void initUI();
@@ -90,6 +93,8 @@ private slots:
     void onDeviceNameUpdate(QString oldName, QString newName);
 
     void onDeviceComboxIndexChanged(int currentIndex);
+
+    void onShowControlCenter();
 
 private:
     QListWidget * m_activatedLanListWidget = nullptr;

@@ -94,15 +94,15 @@ void MainWindow::secondaryStart()
  */
 void MainWindow::initWindowProperties()
 {
-    this->setAttribute(Qt::WA_TranslucentBackground, true);
     this->setWindowTitle(tr("kylin-nm"));
     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")));
-    //绘制毛玻璃特效
     this->setFixedSize(MAINWINDOW_WIDTH, MAINWINDOW_HEIGHT);
-    QPainterPath path;
-    auto rect = this->rect();
-    path.addRoundedRect(rect, 6, 6);
-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+//    //绘制毛玻璃特效
+//    this->setAttribute(Qt::WA_TranslucentBackground, true);
+//    QPainterPath path;
+//    auto rect = this->rect();
+//    path.addRoundedRect(rect, 6, 6);
+//    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
 }
 
 /**
@@ -270,7 +270,7 @@ void MainWindow::initWindowTheme()
     const QByteArray style_id(THEME_SCHAME);
     if (QGSettings::isSchemaInstalled(style_id)) {
         m_styleGsettings = new QGSettings(style_id);
-        resetWindowTheme();
+//        resetWindowTheme();
         connect(m_styleGsettings, &QGSettings::changed, this, &MainWindow::onThemeChanged);
     } else {
         qWarning() << "Gsettings interface \"org.ukui.style\" is not exist!" << Q_FUNC_INFO << __LINE__;
@@ -292,7 +292,7 @@ void MainWindow::resetWindowTheme()
         return;
     }
     app->setStyle(new CustomStyle("ukui-light"));
-    qDebug() << "Has set color theme to ukui-light." << Q_FUNC_INFO << __LINE__;
+    qDebug() << "Has set color theme to " << currentTheme << Q_FUNC_INFO << __LINE__;
     emit qApp->paletteChanged(qApp->palette());
     return;
 }
@@ -303,7 +303,7 @@ void MainWindow::resetWindowTheme()
 void MainWindow::showControlCenter()
 {
     QProcess process;
-    if (m_lanWidget->m_isLanConnected == false && m_wlanWidget->wlanIsConnected == true){
+    if (m_lanWidget->m_isLanConnected == false && m_wlanWidget->m_wlanIsConnected == true){
         process.startDetached("ukui-control-center --wlanconnect");
     } else {
         process.startDetached("ukui-control-center --wiredconnect");
@@ -338,7 +338,8 @@ void MainWindow::onThemeChanged(const QString &key)
 {
     if (key == COLOR_THEME) {
         qDebug() << "Received signal of theme changed, will reset theme." << Q_FUNC_INFO << __LINE__;
-        resetWindowTheme();
+//        resetWindowTheme();
+        emit qApp->paletteChanged(qApp->palette());
     } else {
         qDebug() << "Received signal of theme changed, key=" << key << " will do nothing." << Q_FUNC_INFO << __LINE__;
     }
@@ -349,9 +350,9 @@ void MainWindow::onRefreshTrayIcon()
     //更新托盘图标显示
     if (m_lanWidget->m_isLanConnected == true){
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
-    } else if (m_wlanWidget->wlanIsConnected == true && m_lanWidget->m_isLanConnected == false){
+    } else if (m_wlanWidget->m_wlanIsConnected == true && m_lanWidget->m_isLanConnected == false){
         m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
-    } else if (m_wlanWidget->wlanIsConnected == false && m_lanWidget->m_isLanConnected == false){
+    } else if (m_wlanWidget->m_wlanIsConnected == false && m_lanWidget->m_isLanConnected == false){
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
     }
 }

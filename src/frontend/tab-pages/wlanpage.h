@@ -18,13 +18,15 @@
 #define MORE_TEXT_MARGINS 16,0,0,0
 #define SCROLLAREA_HEIGHT 200
 
+class WlanListItem;
+
 class WlanPage : public TabPage
 {
     Q_OBJECT
 public:
     explicit WlanPage(QWidget *parent = nullptr);
     ~WlanPage() = default;
-    bool wlanIsConnected = false;
+    bool m_wlanIsConnected = false;
 
     //for dbus
     void getWirelessList(QMap<QString, QVector<QStringList> > &map);
@@ -48,7 +50,6 @@ signals:
     void signalStrengthChange(QString devName, QString ssid, int strength);
     void secuTypeChange(QString devName, QString ssid, QString secuType);
     void hiddenWlanClicked();
-    void settingsClicked();
     void wlanConnectChanged();
 
 public slots:
@@ -68,6 +69,7 @@ private:
     //定时触发扫描的定时器
     void initTimer();
     QTimer * m_scanTimer = nullptr;
+    QTimer * m_refreshIconTimer = nullptr;
 
     void initDevice();//初始化默认设备
     void initDeviceCombox();
@@ -75,7 +77,8 @@ private:
     void getActiveWlan();
     void appendActiveWlan(const QString &uuid, int &height);
     void getAllWlan();
-    QMap<QString, QListWidgetItem*> m_itemsMap;
+
+    QMap<QString, QPair<QListWidgetItem*, WlanListItem*>> m_itemsMap;
     QListWidgetItem *m_expandedItem = nullptr;
     QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;
     QVBoxLayout * m_inactivatedWlanListAreaLayout = nullptr;
@@ -118,6 +121,7 @@ private slots:
     void onHiddenWlanClicked();
     void showControlCenter();
     void onWifiEnabledChanged(bool isWifiOn);
+    void onRefreshIconTimer();
 };
 
 #endif // WLANPAGE_H

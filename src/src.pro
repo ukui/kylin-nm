@@ -8,16 +8,13 @@ QT       += core gui x11extras dbus KWindowSystem svg concurrent network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = kylin-nm
+TARGET = kylin-network-manager
 TEMPLATE = app
-LANGUAGE = C++
 
-CONFIG += c++14
-CONFIG += qt warn_on
+CONFIG += c++14 qt warn_on link_pkgconfig
 #CONFIG += release
-CONFIG += link_pkgconfig
 
-PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt
+PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 

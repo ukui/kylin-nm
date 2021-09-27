@@ -604,6 +604,12 @@ void LanPage::onDeviceComboxIndexChanged(int currentIndex)
     initLanArea();
 }
 
+void LanPage::onShowControlCenter()
+{
+    QProcess process;
+    process.startDetached("ukui-control-center --wiredconnect");
+}
+
 void LanPage::initUI()
 {
     m_titleLabel->setText(tr("LAN"));
@@ -635,6 +641,7 @@ void LanPage::initUI()
 //    m_inactivatedLanListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);   //用了listwidget的滚动条
 
     inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
+    m_settingsLabel->installEventFilter(this);
 //    emit this->lanConnectChanged();
 }
 
@@ -686,7 +693,6 @@ void LanPage::updateActivatedConnectionArea(QString uuid)
         qDebug()<<"[LanPage]update active connection item"<<p_newItem->m_connectName;
         QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_activatedLanListWidget);
         m_activeMap.insert(p_newItem, p_listWidgetItem);
-
     } else {
         //释放内存
         delete p_newItem;
@@ -714,6 +720,7 @@ void LanPage::updateConnectionArea(QString uuid)
         if (m_activeMap.count() <= 0) {
             addEmptyConnectItem(m_activeMap, m_activatedLanListWidget);
         }
+
 
         if (connectionItemIsExist(m_deactiveMap, uuid)) {
             delete p_newItem;
@@ -811,7 +818,7 @@ void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem)
         KyConnectItem *p_item = iter.key();
         if (p_item->m_connectUuid == p_connectItem->m_connectUuid) {
             if (p_connectItem->m_ifaceName != ""
-                    && m_currentDeviceName != p_connectItem->m_ifaceName) {                                      //当前未激活连接的设备改变
+                    && m_currentDeviceName != p_connectItem->m_ifaceName) {
                 LanListItem *p_lanItem = (LanListItem *)m_inactivatedLanListWidget->itemWidget(iter.value());
 
                 m_inactivatedLanListWidget->removeItemWidget(iter.value());
@@ -826,7 +833,7 @@ void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem)
                 p_item = nullptr;
             } else {
                 if (p_connectItem->m_connectName != p_item->m_connectName
-                        || p_connectItem->m_connectPath != p_item->m_connectPath) {    //当前未激活连接的其他数据改变(除了激活状态外)
+                        || p_connectItem->m_connectPath != p_item->m_connectPath) {
                     LanListItem *p_lanItem = (LanListItem *)m_inactivatedLanListWidget->itemWidget(iter.value());
 
                     m_inactivatedLanListWidget->removeItemWidget(iter.value());
@@ -912,7 +919,7 @@ void LanPage::onUpdateConnection(QString uuid)
         p_newItem = m_activeResourse->getActiveConnectionByUuid(uuid);
         if (nullptr == p_newItem) {
             qWarning()<<"[LanPage] get item failed, when update activate connection."
-                      <<"connection uuid"<<uuid;
+                      <<"connection uuid" << uuid;
             return;
         }
 
@@ -952,10 +959,21 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
     initDeviceCombox();
 }
 
+bool LanPage::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_settingsLabel) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            onShowControlCenter();
+        }
+    }
+    return QWidget::eventFilter(watched, event);
+}
+
 void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "[LanPage] activateWired" << devName << connUuid;
     m_wiredConnectOperation->activateConnection(connUuid, devName);
+    emit this->lanConnectChanged();
 }
 
 void LanPage::deactivateWired(const QString& devName, const QString& connUuid)
@@ -991,3 +1009,4 @@ void LanPage::showDetailPage(QString devName, QString uuid)
     delete p_item;
     p_item = nullptr;
 }
+

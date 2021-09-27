@@ -1,5 +1,6 @@
 #include "wlanlistitem.h"
 #include <QResizeEvent>
+#include "enterprisewlandialog.h"
 
 WlanListItem::WlanListItem(KyWirelessNetResource *resource, KyWirelessNetItem *data, QString device, QWidget *parent) : ListItem(parent)
 {
@@ -36,6 +37,9 @@ WlanListItem::~WlanListItem()
 
 void WlanListItem::setWlanSignal(const int &signal)
 {
+    if (!m_data){
+        return;
+    }
     m_data->m_signalStrength = signal;
     refreshIcon();
 }
@@ -266,18 +270,23 @@ void WlanListItem::onNetButtonClicked()
 
     //执行连接或断开
     if (m_isActive) {
-        m_connoperation->deActivateWirelessConnection(m_wlanDevice,m_data->m_connectUuid);
+        m_connoperation->deActivateWirelessConnection(m_wlanDevice, m_data->m_connectUuid);
         qDebug()<<"Clicked on connected wifi, it will be inactivated. ssid = " << m_data->m_NetSsid << Q_FUNC_INFO << __LINE__;
         return;
     }
 //有配置或者无密码的wifi直接连接
     if (m_data->m_isConfigured || m_hasPwd == false) {
-        m_connoperation->activeWirelessConnect(m_wlanDevice,m_data->m_connectUuid);
+        m_connoperation->activeWirelessConnect(m_wlanDevice, m_data->m_connectUuid);
         qDebug()<<"Has configuration, will be activated. ssid = " << m_data->m_NetSsid << Q_FUNC_INFO << __LINE__;
         return;
     }
     if (!this->m_connectButton->isVisible() && m_data->m_secuType != "") {
-        this->setExpanded(true);
+        if (m_data->m_secuType.contains("802.1x", Qt::CaseInsensitive)) {
+            EnterpriseWlanDialog *enterpriseWlanDialog = new EnterpriseWlanDialog(m_data, m_wlanDevice, this);
+            enterpriseWlanDialog->show();
+        } else {
+            this->setExpanded(true);
+        }
     } else {
         onConnectButtonClicked();
     }

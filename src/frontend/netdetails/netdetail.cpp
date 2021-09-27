@@ -1,6 +1,7 @@
 #include "netdetail.h"
 #include "backend/kylinipv4arping.h"
 #include "backend/kylinipv6arping.h"
+#include "xatom/xatom-helper.h"
 
 #define  WINDOW_WIDTH  540
 #define  WINDOW_HEIGHT 574
@@ -17,7 +18,25 @@
 #define  CREATE_NET_PAGE_NUM 4
 #define  PAGE_MIN_HEIGHT 40
 
-extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
+//extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
+
+void NetDetail::showDesktopNotify(const QString &message)
+{
+    QDBusInterface iface("org.freedesktop.Notifications",
+                         "/org/freedesktop/Notifications",
+                         "org.freedesktop.Notifications",
+                         QDBusConnection::sessionBus());
+    QList<QVariant> args;
+    args<<(tr("Kylin NM"))
+       <<((unsigned int) 0)
+       <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+       <<tr("kylin network desktop message") //显示的是什么类型的信息
+       <<message //显示的具体信息
+       <<QStringList()
+       <<QVariantMap()
+       <<(int)-1;
+    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+}
 
 NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent)
     :m_deviceName(interface),
@@ -28,8 +47,19 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
      isCreateNet(isCreateNet),
      QDialog(parent)
 {
-    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint );
-    setAttribute(Qt::WA_TranslucentBackground);
+    //设置窗口无边框，阴影
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+    MotifWmHints window_hints;
+    window_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
+    window_hints.functions = MWM_FUNC_ALL;
+    window_hints.decorations = MWM_DECOR_BORDER;
+    XAtomHelper::getInstance()->setWindowMotifHint(this->winId(), window_hints);
+#else
+    this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+#endif
+//    this->setProperty("useStyleWindowManager", false); //禁用拖动
+//    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint );
+//    setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_DeleteOnClose);
     setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
     centerToScreen();
@@ -60,6 +90,11 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
 NetDetail::~NetDetail()
 {
 
+}
+
+void NetDetail::paintEvent(QPaintEvent *event)
+{
+    return QDialog::paintEvent(event);
 }
 
 void NetDetail::centerToScreen()
@@ -554,6 +589,7 @@ void NetDetail::setConfirmEnable()
 
 bool NetDetail::checkIpv4Conflict(QString ipv4Address)
 {
+    showDesktopNotify(tr("start check ipv4 address conflict"));
     bool isConflict = false;
     KyIpv4Arping* ipv4Arping = new KyIpv4Arping(m_deviceName, ipv4Address);
 
@@ -570,6 +606,7 @@ bool NetDetail::checkIpv4Conflict(QString ipv4Address)
 
 bool NetDetail::checkIpv6Conflict(QString ipv6address)
 {
+    showDesktopNotify(tr("start check ipv6 address conflict"));
     bool isConflict = false;
     KyIpv6Arping* ipv46rping = new KyIpv6Arping(m_deviceName, ipv6address);
 
@@ -607,50 +644,6 @@ void NetDetail::updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType)
     }
 }
 
-
-
-void NetDetail::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event)
-
-    QPainter p(this);
-    p.setRenderHint(QPainter::Antialiasing);
-    QPainterPath rectPath;
-    rectPath.addRoundedRect(this->rect().adjusted(12, 12, -12, -12), 12, 12);
-
-    // 画一个黑底
-    QPixmap pixmap(this->rect().size());
-    pixmap.fill(Qt::transparent);
-    QPainter pixmapPainter(&pixmap);
-    pixmapPainter.setRenderHint(QPainter::Antialiasing);
-    pixmapPainter.setPen(Qt::transparent);
-    pixmapPainter.setBrush(Qt::black);
-    pixmapPainter.setOpacity(0.65);
-    pixmapPainter.drawPath(rectPath);
-    pixmapPainter.end();
-
-    // 模糊这个黑底
-    QImage img = pixmap.toImage();
-    qt_blurImage(img, 10, false, false);
-
-    // 挖掉中心
-    pixmap = QPixmap::fromImage(img);
-    QPainter pixmapPainter2(&pixmap);
-    pixmapPainter2.setRenderHint(QPainter::Antialiasing);
-    pixmapPainter2.setCompositionMode(QPainter::CompositionMode_Clear);
-    pixmapPainter2.setPen(Qt::transparent);
-    pixmapPainter2.setBrush(Qt::transparent);
-    pixmapPainter2.drawPath(rectPath);
-
-    // 绘制阴影
-    p.drawPixmap(this->rect(), pixmap, pixmap.rect());
-
-    // 绘制一个背景
-    p.save();
-    p.fillPath(rectPath, palette().color(QPalette::Base));
-    p.restore();
-}
-
 bool NetDetail::createWiredConnect()
 {
     KyWirelessConnectSetting connetSetting;
@@ -659,7 +652,7 @@ bool NetDetail::createWiredConnect()
     if (connetSetting.m_ipv4ConfigIpType != CONFIG_IP_DHCP) {
         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
             qDebug() << "ipv4 conflict";
-            //todo desktop notify
+            showDesktopNotify(tr("ipv4 address conflict!"));
             return false;
         }
     }
@@ -682,7 +675,9 @@ bool NetDetail::createWirelessConnect()
     }
     qDebug() << "isAutoConnect" << connetSetting.isAutoConnect;
     connetSetting.m_ssid = ssid;
-    connetSetting.m_secretFlag = NetworkManager::Setting::None;
+//    connetSetting.m_secretFlag = NetworkManager::Setting::None;
+    //由于X.h的None与此处的None有歧义，此处直接使用值
+    connetSetting.m_secretFlag = 0;
 
     //ipv4 & ipv6
     bool ipv4Change = ipv4Page->checkIsChanged(m_info, connetSetting);
@@ -694,7 +689,7 @@ bool NetDetail::createWirelessConnect()
     if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
             qDebug() << "ipv4 conflict";
-            //todo desktop notify
+            showDesktopNotify(tr("ipv4 address conflict!"));
             return false;
         }
     }
@@ -702,7 +697,7 @@ bool NetDetail::createWirelessConnect()
     if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
             qDebug() << "ipv6 conflict";
-            //todo desktop notify
+            showDesktopNotify(tr("ipv6 address conflict!"));
             return false;
         }
     }
@@ -711,7 +706,7 @@ bool NetDetail::createWirelessConnect()
     KyEapMethodType enterpriseType;
     securityPage->getSecuType(secuType, enterpriseType);
     if (secuType == WPA_AND_WPA2_ENTERPRISE) {
-        connetSetting.m_type = SAE;
+        connetSetting.m_type = WpaEap;
         if (enterpriseType == TLS) {
             m_info.tlsInfo.devIfaceName = m_deviceName;
             securityPage->updateTlsChange(m_info.tlsInfo);
@@ -772,7 +767,7 @@ bool NetDetail::updateConnect()
     if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
             qDebug() << "ipv4 conflict";
-            //todo desktop notify
+            showDesktopNotify(tr("ipv4 address conflict!"));
             return false;
         }
     }
@@ -780,7 +775,7 @@ bool NetDetail::updateConnect()
     if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
             qDebug() << "ipv6 conflict";
-            //todo desktop notify
+            showDesktopNotify(tr("ipv6 address conflict!"));
             return false;
         }
     }

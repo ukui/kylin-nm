@@ -187,6 +187,18 @@ void saveDeviceEnableState(QString deviceName, bool enable)
     return;
 }
 
+void deleteDeviceEnableState(QString deviceName)
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("CARDEABLE");
+    m_settings->remove(deviceName);
+    m_settings->endGroup();
+    m_settings->sync();
+    delete m_settings;
+    m_settings = nullptr;
+    return;
+}
+
 void getDeviceEnableState(int type, QMap<QString, bool> &map)
 {
     map.clear();

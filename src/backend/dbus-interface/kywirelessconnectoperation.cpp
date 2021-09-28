@@ -690,7 +690,7 @@ NetworkManager::ConnectionSettings::Ptr
                 NetworkManager::ConnectionSettings::Ptr(new NetworkManager::ConnectionSettings(NetworkManager::ConnectionSettings::Wireless));
     connectionSettings->setId(apSsid);
     connectionSettings->setUuid(NetworkManager::ConnectionSettings::createNewUuid());
-    connectionSettings->setAutoconnect(true);
+    connectionSettings->setAutoconnect(false);
     connectionSettings->setAutoconnectPriority(0);
     connectionSettings->setInterfaceName(apDevice);
     //Note: workaround for wrongly (randomly) initialized gateway-ping-timeout
@@ -731,6 +731,7 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
     NetworkManager::ConnectionSettings::Ptr apConnectSettingPtr = apConnectPtr->settings();
     apConnectSettingPtr->setId(apName);
     apConnectSettingPtr->setInterfaceName(apDevice);
+    apConnectSettingPtr->setAutoconnect(false);
 
     NetworkManager::WirelessSetting::Ptr wirelessSetting
         = apConnectSettingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();

@@ -195,7 +195,14 @@ void NetDetail::initUI()
 
     titleLabel = new QLabel(this);
 
+
     iconLabel = new QLabel(this);
+    if (!QIcon::fromTheme("preferences-system-network-symbolic").isNull()) {
+        iconLabel->setPixmap(QIcon::fromTheme("preferences-system-network-symbolic").pixmap(ICON_SIZE));
+        iconLabel->setProperty("useIconHighlightEffect", 0x10);
+    } else {
+        qDebug() << "can't find preferences-system-network-symbolic in theme";
+    }
     iconLabel->setFixedSize(ICON_SIZE);
     titleLayout->addWidget(iconLabel);
     titleLayout->addWidget(titleLabel);

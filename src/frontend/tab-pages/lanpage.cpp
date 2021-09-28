@@ -24,7 +24,6 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
 
     initDeviceState();
 
-
     initUI();
     initNetSwitch();
     initDeviceCombox();

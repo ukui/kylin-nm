@@ -61,6 +61,8 @@ protected:
 private:
     void initWlanUI();
     void initConnections();
+    int getIndexByStrength(QString interface, QString ssid);
+    void updateByStrength();
     QString m_activedssid;
     QString m_disconnectuuid;
     int m_disconnecting;

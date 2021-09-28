@@ -30,6 +30,8 @@ public:
     void setWlanSignal(const int &signal);
     void setWlanState(const int &state);
     void setExpanded(const bool &expanded);
+    QString getSsid();
+    KyWirelessNetItem *m_data = nullptr;
 protected:
     void resizeEvent(QResizeEvent *event);
     void onRightButtonClicked();
@@ -47,7 +49,7 @@ private:
 
 private:
     KyWirelessNetResource *m_resource = nullptr;
-    KyWirelessNetItem *m_data = nullptr;
+
     KyWirelessConnectOperation *m_connoperation = nullptr;
     KyActiveConnectResourse *m_connectResource = nullptr;
     bool m_hasPwd = true;

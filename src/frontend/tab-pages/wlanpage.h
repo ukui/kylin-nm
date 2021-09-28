@@ -124,7 +124,7 @@ private slots:
     void showControlCenter();
     void onWifiEnabledChanged(bool isWifiOn);
 
-    void onRefreshIconTimer();
+//    void onRefreshIconTimer();
 
 //    void onsignalStrengthChange(QString, QString, int);
 

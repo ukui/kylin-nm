@@ -195,7 +195,14 @@ void NetDetail::initUI()
 
     titleLabel = new QLabel(this);
 
+
     iconLabel = new QLabel(this);
+    if (!QIcon::fromTheme("preferences-system-network-symbolic").isNull()) {
+        iconLabel->setPixmap(QIcon::fromTheme("preferences-system-network-symbolic").pixmap(ICON_SIZE));
+        iconLabel->setProperty("useIconHighlightEffect", 0x10);
+    } else {
+        qDebug() << "can't find preferences-system-network-symbolic in theme";
+    }
     iconLabel->setFixedSize(ICON_SIZE);
     titleLayout->addWidget(iconLabel);
     titleLayout->addWidget(titleLabel);
@@ -383,17 +390,28 @@ void NetDetail::getBaseInfo(ConInfo &conInfo)
         }
     } else {
         conInfo.strConType = "802-11-wireless";
-        KyWirelessNetItem item;
-        if (!m_resource->getWifiNetwork(m_deviceName, m_name, item)) {
-            qDebug() << "getWifiNetWork failed device:" << m_deviceName << " name:" << m_name;
-            return;
+        if (!isActive) {
+            KyWirelessNetItem item;
+            if (!m_resource->getWifiNetwork(m_deviceName, m_name, item)) {
+                qDebug() << "getWifiNetWork failed device:" << m_deviceName << " name:" << m_name;
+                return;
+            } else {
+
+                    conInfo.strMac = item.m_bssid;
+                    conInfo.strHz = QString::number(item.m_frequency);
+                    conInfo.strChan = QString::number(item.m_channel);
+                    //无线特有
+                    conInfo.strSecType = item.m_secuType;
+            }
         } else {
-            conInfo.strMac = item.m_bssid;
+            uint iHz,iChan;
+            m_netDeviceResource->getDeviceActiveAPInfo(m_deviceName, conInfo.strMac, iHz, iChan, conInfo.strSecType);
+            conInfo.strHz = QString::number(iHz);
+            conInfo.strChan = QString::number(iChan);
+
         }
 
-        //无线特有
-        conInfo.strSecType = item.m_secuType;
-        qDebug() << conInfo.strSecType;
+
 
         KyKeyMgmt type = m_wirelessConnOpration->getConnectKeyMgmt(m_uuid);
         if (type == WpaNone || type == Unknown) {
@@ -407,8 +425,6 @@ void NetDetail::getBaseInfo(ConInfo &conInfo)
         } else {
             qDebug() << "KeyMgmt not support now " << type;
         }
-        conInfo.strHz = QString::number(item.m_frequency);
-        conInfo.strChan = QString::number(item.m_channel);
 
         initSecuData();
     }

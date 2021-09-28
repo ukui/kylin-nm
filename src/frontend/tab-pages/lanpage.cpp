@@ -21,12 +21,14 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     m_activeResourse = new KyActiveConnectResourse(this);
     m_connectResourse = new KyConnectResourse(this);
     m_device = new KyNetworkDeviceResourse(this);
+    m_wiredConnectOperation = new KyWiredConnectOperation(this);
 
     initDeviceState();
 
     initUI();
     initNetSwitch();
     initDeviceCombox();
+//    initList(m_deviceName);
 
     connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &LanPage::updateLanlist);
 

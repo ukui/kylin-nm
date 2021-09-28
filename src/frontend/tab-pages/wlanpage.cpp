@@ -852,7 +852,12 @@ void WlanPage::deactivateWireless(const QString& devName, const QString& ssid)
         return;
     }
 
-    if (!actMap[devName].contains(ssid)) {
+    QString uuid = actMap[devName].at(0);
+    QString actSsid;
+    QString devInterface = devName;
+    m_resource->getSsidByUuid(uuid, actSsid, devInterface);
+
+    if (actSsid != ssid) {
         qDebug() << "no such actived wifi" << ssid;
         return;
     }

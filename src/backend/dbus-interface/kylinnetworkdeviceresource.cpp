@@ -1,5 +1,6 @@
 
 #include "kylinnetworkdeviceresource.h"
+#include "kywirelessnetitem.h"
 
 KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(parent)
 {
@@ -159,6 +160,46 @@ void KyNetworkDeviceResourse::setDeviceRefreshRate(QString deviceName, int ms)
     }
 
     return;
+}
+
+void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QString &strMac, uint &iHz, uint &iChan, QString &secuType)
+{
+    strMac.clear();
+    iHz = 0;
+    iChan = 0;
+    secuType.clear();
+
+    NetworkManager::Device::Ptr connectDevice =
+                        m_networkResourceInstance->getNetworkDevice(devName);
+
+    if (nullptr == connectDevice || !connectDevice->isValid()) {
+        qWarning()<<"[KyNetworkDeviceResourse]"<<"getDeviceActiveAPInfo failed, the device" << devName << "is not existed";
+        return;
+    }
+
+    switch (connectDevice->type()) {
+        case NetworkManager::Device::Wifi:
+        {
+            NetworkManager::WirelessDevice *wirelessDevicePtr =
+                qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
+            NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();
+            if (apPtr.isNull()) {
+                break;
+            }
+            strMac = apPtr->hardwareAddress();
+            iHz = apPtr->frequency();
+            iChan = NetworkManager::findChannel(iHz);
+            NetworkManager::AccessPoint::Capabilities cap = apPtr->capabilities();
+            NetworkManager::AccessPoint::WpaFlags wpaFlag = apPtr->wpaFlags();
+            NetworkManager::AccessPoint::WpaFlags rsnFlag = apPtr->rsnFlags();
+            secuType = enumToQstring(cap, wpaFlag, rsnFlag);
+            break;
+        }
+        case NetworkManager::Device::Ethernet:
+            break;
+        default:
+            break;
+    }
 }
 
 #if 0

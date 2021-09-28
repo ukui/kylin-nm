@@ -61,6 +61,8 @@ protected:
 private:
     void initWlanUI();
     void initConnections();
+    int getIndexByStrength(QString interface, QString ssid);
+    void updateByStrength();
     QString m_activedssid;
     QString m_disconnectuuid;
     int m_disconnecting;
@@ -121,7 +123,11 @@ private slots:
     void onHiddenWlanClicked();
     void showControlCenter();
     void onWifiEnabledChanged(bool isWifiOn);
-    void onRefreshIconTimer();
+
+//    void onRefreshIconTimer();
+
+//    void onsignalStrengthChange(QString, QString, int);
+
 };
 
 #endif // WLANPAGE_H

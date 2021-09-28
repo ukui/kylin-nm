@@ -68,6 +68,15 @@ void WlanListItem::setExpanded(const bool &expanded)
     }
 }
 
+QString WlanListItem::getSsid()
+{
+    if (!m_data) {
+        return QString();
+    } else {
+        return m_data->m_NetSsid;
+    }
+}
+
 void WlanListItem::resizeEvent(QResizeEvent *event)
 {
     this->blockSignals(true);

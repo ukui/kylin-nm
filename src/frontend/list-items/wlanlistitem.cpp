@@ -285,8 +285,9 @@ void WlanListItem::onNetButtonClicked()
     }
 //有配置或者无密码的wifi直接连接
     if (m_data->m_isConfigured || m_hasPwd == false) {
-        m_connoperation->activeWirelessConnect(m_wlanDevice, m_data->m_connectUuid);
-        qDebug()<<"Has configuration, will be activated. ssid = " << m_data->m_NetSsid << Q_FUNC_INFO << __LINE__;
+        this->onConnectButtonClicked();
+//        m_connoperation->activeWirelessConnect(m_wlanDevice, m_data->m_connectUuid);//初始化没有uuid只有激活一次才有uuid
+        qDebug() << "Has configuration, will be activated. ssid = " << m_data->m_NetSsid << m_wlanDevice << m_data->m_connectUuid << Q_FUNC_INFO << __LINE__;
         return;
     }
     if (!this->m_connectButton->isVisible() && m_data->m_secuType != "") {
@@ -364,7 +365,9 @@ void WlanListItem::onShowPwdButtonClicked()
 
 void WlanListItem::onConnectButtonClicked()
 {
-    if (!m_connectButton->isEnabled() || !m_data) {
+    if (m_data->m_secuType.isEmpty() || m_data->m_secuType == "") {
+        qDebug() << "connect to no password wifi" << Q_FUNC_INFO << __LINE__;
+    } else if (!m_connectButton->isEnabled() || !m_data) {
         return;
     }
     KyWirelessConnectSetting settings;

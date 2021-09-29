@@ -8,6 +8,7 @@
 #include <QProcess>
 
 #include "kylinnetworkdeviceresource.h"
+#include "../backend/dbus-interface/kylinagentinterface.h"
 
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 456
@@ -77,6 +78,9 @@ void MainWindow::firstlyStart()
         secondaryStart();//满足条件后执行比较耗时的二级启动
     });
     m_secondaryStartTimer->start(5 * 1000);
+
+    //加载key ring
+    agent_init();
 }
 
 /**

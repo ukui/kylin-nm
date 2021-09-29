@@ -64,6 +64,9 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
     centerToScreen();
 
+    if (isCreateNet && !uuid.isEmpty()) {
+        isCreateNet = false;
+    }
     m_netDeviceResource = new KyNetworkDeviceResourse(this);
     m_wirelessConnOpration = new KyWirelessConnectOperation(this);
     m_resource = new KyWirelessNetResource(this);

@@ -317,7 +317,7 @@ void WlanPage::getAllWlan()
 
 void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 {
-    qDebug() << "A Wlan Added! interface = " << interface << "; ssid = " << item.m_NetSsid << Q_FUNC_INFO <<__LINE__;
+    qDebug() << "A Wlan Added! interface = " << interface << "; ssid = " << item.m_NetSsid << "interface" << interface << Q_FUNC_INFO <<__LINE__;
     if (interface != m_defaultDevice) {
         qDebug() << "wlan add interface not equal defaultdevice,ignore";
     }
@@ -904,8 +904,11 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
         return;
     }
 
-    bool isActive = actMap[devName].contains(ssid);
-    NetDetail *netDetail = new NetDetail(devName, ssid, data.m_connectUuid, isActive, true, false, this);
+    QString actSsid;
+    m_resource->getSsidByUuid(actMap[devName].at(0), actSsid, devName);
+
+    bool isActive = !actSsid.compare(ssid);
+    NetDetail *netDetail = new NetDetail(devName, ssid, data.m_connectUuid, isActive, true, true, this);
     netDetail->show();
 }
 

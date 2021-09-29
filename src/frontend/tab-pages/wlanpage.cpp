@@ -906,7 +906,8 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
 
     QString actSsid;
     m_resource->getSsidByUuid(actMap[devName].at(0), actSsid, devName);
-    bool isActive = (actSsid == ssid);
+
+    bool isActive = !actSsid.compare(ssid);
     NetDetail *netDetail = new NetDetail(devName, ssid, data.m_connectUuid, isActive, true, true, this);
     netDetail->show();
 }

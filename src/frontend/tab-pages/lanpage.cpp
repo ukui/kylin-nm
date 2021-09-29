@@ -23,13 +23,9 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     m_connectResourse = new KyConnectResourse(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
 
-    m_devList.clear();
-    m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
-
-    initDeviceState();
-
     initUI();
     initNetSwitch();
+    initLanDevice();
     initDeviceCombox();
     initLanArea();
 
@@ -53,20 +49,45 @@ LanPage::~LanPage()
 
 }
 
-void LanPage::initDeviceState()
+void LanPage::initLanDevice()
 {
-    QMap<QString, bool> deviceStateMap;
+    m_devList.clear();
+    m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
 
+    m_currentDeviceName = getDefaultDeviceName(WIRED);
+
+    QMap<QString, bool> deviceStateMap;
     getDeviceEnableState(WIRED, deviceStateMap);
 
-    KyWiredConnectOperation wiredOperation;
-    QMap<QString, bool>::iterator iter = deviceStateMap.begin();
-    while (iter != deviceStateMap.end()) {
-        if (!iter.value()) {
-            wiredOperation.closeWiredNetworkWithDevice(iter.key());
+    QStringList disableDeviceList;
+    disableDeviceList.clear();
+    m_enableDeviceList.clear();
+    for (int index = 0; index < m_devList.count(); ++index) {
+        QString deviceName = m_devList.at(index);
+        if (deviceStateMap.contains(deviceName)) {
+            if (deviceStateMap[deviceName]) {
+                m_enableDeviceList<<deviceName;
+            } else {
+                disableDeviceList<<deviceName;
+            }
+        } else {
+            saveDeviceEnableState(deviceName, true);
+            m_enableDeviceList<<deviceName;
         }
-        iter++;
     }
+
+    KyWiredConnectOperation wiredOperation;
+    if (m_wiredSwitch) {
+        for (int index = 0; index < disableDeviceList.count(); ++index) {
+            wiredOperation.closeWiredNetworkWithDevice(disableDeviceList.at(index));
+        }
+    } else {
+        for (int index = 0; index < m_devList.count(); ++index) {
+            wiredOperation.closeWiredNetworkWithDevice(m_devList.at(index));
+        }
+    }
+
+    return;
 }
 
 void LanPage::initNetSwitch()
@@ -94,24 +115,14 @@ void LanPage::onSwithGsettingsChanged(const QString &key)
 
         KyWiredConnectOperation wiredOperation;
         if (m_wiredSwitch) {
-            QStringList disabledDevices;
-            disabledDevices.clear();
-            getDisabledDevices(disabledDevices);
-
-            for (int index = 0; index < disabledDevices.size(); ++index) {
-                qDebug()<<"[LanPage] open wired device "<< disabledDevices.at(index);
-                wiredOperation.openWiredNetworkWithDevice(disabledDevices.at(index));
-                saveDeviceEnableState(disabledDevices.at(index), true);
+            for (int index = 0; index < m_enableDeviceList.size(); ++index) {
+                qDebug()<<"[LanPage] open wired device "<< m_enableDeviceList.at(index);
+                wiredOperation.openWiredNetworkWithDevice(m_enableDeviceList.at(index));
             }
         } else {
-            QStringList enableDevices;
-            enableDevices.clear();
-            getEnabledDevice(enableDevices);
-
-            for (int index = 0; index < enableDevices.size(); ++index) {
-                qDebug()<<"[LanPage] close wired device "<< enableDevices.at(index);
-                wiredOperation.closeWiredNetworkWithDevice(enableDevices.at(index));
-                saveDeviceEnableState(enableDevices.at(index), false);
+            for (int index = 0; index < m_enableDeviceList.size(); ++index) {
+                qDebug()<<"[LanPage] close wired device "<< m_enableDeviceList.at(index);
+                wiredOperation.closeWiredNetworkWithDevice(m_enableDeviceList.at(index));
             }
         }
 
@@ -185,27 +196,38 @@ void LanPage::getDisabledDevices(QStringList &disableDeviceList)
 void LanPage::initDeviceCombox()
 {
     //TODO 获取设备列表，单设备时隐藏下拉框，多设备时添加到下拉框;m_devList记录插入的所有设备，deviceMap记录设备状态
+    disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                                this, &LanPage::onDeviceComboxIndexChanged);
+
     m_deviceComboBox->clear();
 
     if (m_wiredSwitch) {
-        QStringList enableDevices;
-        enableDevices.clear();
-        getEnabledDevice(enableDevices);
-
-        int enableDeviceCount = enableDevices.count();
+        int enableDeviceCount = m_enableDeviceList.count();
         if (enableDeviceCount > 1) {
             for (int index = 0; index < enableDeviceCount; ++index) {
-                m_deviceComboBox->addItem(enableDevices.at(index));
+                m_deviceComboBox->addItem(m_enableDeviceList.at(index));
             }
 
             m_deviceFrame->show();
             m_tipsLabel->hide();
             m_deviceComboBox->show();
 
-            m_currentDeviceName = m_deviceComboBox->currentText();
+            if (m_currentDeviceName != m_deviceComboBox->currentText()) {
+                if (m_enableDeviceList.contains(m_currentDeviceName)) {
+                    m_deviceComboBox->setCurrentText(m_currentDeviceName);
+                } else {
+                    m_currentDeviceName = m_deviceComboBox->currentText();
+                    setDefaultDevice(WIRED, m_currentDeviceName);
+                }
+            }
+
         } else if (enableDeviceCount == 1) {
             m_deviceFrame->hide();
-            m_currentDeviceName = enableDevices.at(0);
+
+            if (m_currentDeviceName != m_enableDeviceList.at(0)) {
+                m_currentDeviceName = m_enableDeviceList.at(0);
+                setDefaultDevice(WIRED, m_currentDeviceName);
+            }
         } else {
             m_deviceFrame->show();
             m_deviceComboBox->hide();
@@ -217,6 +239,8 @@ void LanPage::initDeviceCombox()
         m_currentDeviceName = "";
     }
 
+    connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &LanPage::onDeviceComboxIndexChanged);
     return;
 }
 
@@ -363,16 +387,18 @@ void LanPage::constructConnectionArea()
 void LanPage::initLanArea()
 {
     if (!m_wiredSwitch || m_currentDeviceName.isEmpty()) {
-        m_activatedNetFrame->hide();
-        m_inactivatedNetFrame->hide();
         m_activatedNetDivider->hide();
+        m_activatedNetFrame->hide();
+
         m_inactivatedNetDivider->hide();
+        m_inactivatedNetFrame->hide();
     } else {
-        m_activatedNetFrame->show();
-        m_inactivatedNetFrame->show();
         m_activatedNetDivider->show();
-        m_inactivatedNetDivider->show();
+        m_activatedNetFrame->show();
         constructActiveConnectionArea();
+
+        m_inactivatedNetDivider->show();
+        m_inactivatedNetFrame->show();
         constructConnectionArea();
     }
 
@@ -441,15 +467,16 @@ void LanPage::onAddConnection(QString uuid)               //新增一个有线�
 
 void LanPage::addDeviceForCombox(QString deviceName)
 {
-    disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LanPage::onDeviceComboxIndexChanged);
+    disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                        this, &LanPage::onDeviceComboxIndexChanged);
+
     if (m_wiredSwitch) {
-        saveDeviceEnableState(deviceName, true);
-        if (m_currentDeviceName.isEmpty()) {
+        if (1 == m_enableDeviceList.count()) {
             //1、从无到有添加第一块有线网卡
             //2、有多快网卡，但是没有使能
             m_deviceFrame->hide();
             m_currentDeviceName = deviceName;
-        } else if (m_deviceComboBox->count() == 0) {
+        } else if (2 == m_enableDeviceList.count()) {
             //3、现在有且只有一块网卡，并已使能
             //4、有多快网卡，且使能了其中一块
             m_deviceComboBox->addItem(m_currentDeviceName);
@@ -458,12 +485,10 @@ void LanPage::addDeviceForCombox(QString deviceName)
             m_deviceFrame->show();
             m_tipsLabel->hide();
             m_deviceComboBox->show();
-        } else if (m_deviceComboBox->count() > 0) {
+        } else if (m_enableDeviceList.count() > 2) {
             //5、有多快网卡且使能了多块网卡
             m_deviceComboBox->addItem(deviceName);
         }
-    } else {
-        saveDeviceEnableState(deviceName, false);
     }
 
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -484,8 +509,12 @@ void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devic
     qDebug() << "[LanPage] Begin add device:" << deviceName;
 
     m_devList << deviceName;
+    saveDeviceEnableState(deviceName, true);
+    m_enableDeviceList<<deviceName;
+
     addDeviceForCombox(deviceName);
     if (m_currentDeviceName == deviceName) {
+        setDefaultDevice(WIRED, m_currentDeviceName);
         initLanArea();
     }
 
@@ -500,10 +529,10 @@ void LanPage::deleteDeviceFromCombox(QString deviceName)
                this, &LanPage::onDeviceComboxIndexChanged);
 
     if (m_wiredSwitch) {
-        if (m_currentDeviceName.isEmpty()) {
+        if (0 == m_enableDeviceList.count()) {
             //1、没有使能任何网卡
             goto l_out;
-        } else if (m_deviceComboBox->count() == 0) {
+        } else if (1 == m_enableDeviceList.count()) {
              //2、使能了一个网卡，且当前网卡是要删除的网卡
             if (m_currentDeviceName == deviceName) {
                 m_deviceFrame->show();
@@ -511,7 +540,7 @@ void LanPage::deleteDeviceFromCombox(QString deviceName)
                 m_tipsLabel->show();
                 m_currentDeviceName = "";
             }
-        } else if (m_deviceComboBox->count() == 2) {
+        } else if (2 == m_enableDeviceList.count()) {
             //3、使能了两个网卡，且包括要删除的网卡，有可能是要删除的网卡
             if (m_deviceComboBox->findText(deviceName) != -1) {
                 for (int index = m_deviceComboBox->count() - 1; index >= 0; index--) {
@@ -542,8 +571,6 @@ l_out:
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LanPage::onDeviceComboxIndexChanged);
 
-    deleteDeviceEnableState(deviceName);
-
     return;
 }
 
@@ -556,13 +583,17 @@ void LanPage::onDeviceRemove(QString deviceName)
     qDebug() << "[LanPage] deviceRemove:" << deviceName;
 
     QString nowDevice = m_currentDeviceName;
-
-    m_devList.removeOne(deviceName);
     deleteDeviceFromCombox(deviceName);
-
     if (nowDevice == deviceName) {
+        setDefaultDevice(WIRED, m_currentDeviceName);
         initLanArea();
     }
+
+    m_devList.removeOne(deviceName);
+    if (m_enableDeviceList.contains(deviceName)) {
+        m_enableDeviceList.removeOne(deviceName);
+    }
+    deleteDeviceEnableState(deviceName);
 
     emit deviceStatusChanged();
 
@@ -573,6 +604,7 @@ void LanPage::updateDeviceCombox(QString oldDeviceName, QString newDeviceName)
 {   
     if (m_currentDeviceName == oldDeviceName) {
         m_currentDeviceName = newDeviceName;
+        setDefaultDevice(WIRED, m_currentDeviceName);
     }
 
     int index = m_deviceComboBox->findText(oldDeviceName);
@@ -588,6 +620,11 @@ void LanPage::onDeviceNameUpdate(QString oldName, QString newName)
     if (m_devList.contains(oldName)) {
         m_devList.removeOne(oldName);
         m_devList.append(newName);
+
+        if (m_enableDeviceList.contains(oldName)) {
+            m_enableDeviceList.removeOne(oldName);
+            m_enableDeviceList.append(newName);
+        }
         qDebug() << "[LanPage] emit deviceNameUpdate "  << oldName << newName;
 
         updateDeviceCombox(oldName, newName);
@@ -952,11 +989,30 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
     KyWiredConnectOperation wiredOperation;
     if (enable) {
         wiredOperation.openWiredNetworkWithDevice(devName);
+
+        m_enableDeviceList<<devName;
+
+        addDeviceForCombox(devName);
+        if (m_currentDeviceName == devName) {
+            setDefaultDevice(WIRED, m_currentDeviceName);
+            initLanArea();
+        }
     } else {
         wiredOperation.closeWiredNetworkWithDevice(devName);
+
+        QString nowDeviceName = m_currentDeviceName;
+        deleteDeviceFromCombox(devName);
+        if (nowDeviceName == devName) {
+            setDefaultDevice(WIRED, m_currentDeviceName);
+            initLanArea();
+        }
+
+        if (m_enableDeviceList.contains(devName)) {
+            m_enableDeviceList.removeOne(devName);
+        }
     }
 
-    initDeviceCombox();
+    return;
 }
 
 bool LanPage::eventFilter(QObject *watched, QEvent *event)

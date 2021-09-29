@@ -34,7 +34,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
 private:
-    void initDeviceState();
+    void initLanDevice();
     void initUI();
     void initLanArea();
     void initNetSwitch();
@@ -110,6 +110,8 @@ private:
 
     QString m_currentDeviceName;
     QStringList m_devList;
+    QStringList m_enableDeviceList;
+
     QGSettings *m_switchGsettings = nullptr;
 
     bool m_wiredSwitch = true;

@@ -40,6 +40,7 @@ enum KyDeviceType
 
 const QString CONFIG_FILE_PATH   =  QDir::homePath() + "/.config/ukui/kylin-nm.conf";
 bool checkDeviceExist(KyDeviceType deviceType, QString deviceName);
+QString getDefaultDeviceName(KyDeviceType deviceType);
 void setDefaultDevice(KyDeviceType deviceType, QString deviceName);
 void saveDeviceEnableState(QString deviceName, bool enable);
 void deleteDeviceEnableState(QString deviceName);

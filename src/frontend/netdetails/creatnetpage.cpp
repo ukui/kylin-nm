@@ -1,6 +1,6 @@
 #include "creatnetpage.h"
 
-
+#define MAX_NAME_LENGTH 32
 
 CreatNetPage::CreatNetPage(QWidget *parent):QFrame(parent)
 {
@@ -11,6 +11,7 @@ CreatNetPage::CreatNetPage(QWidget *parent):QFrame(parent)
 void CreatNetPage::initUI()
 {
     connNameEdit = new QLineEdit(this);
+    connNameEdit->setMaxLength(MAX_NAME_LENGTH);
     ipv4ConfigCombox = new QComboBox(this);
     ipv4addressEdit = new QLineEdit(this);
     netMaskEdit = new QLineEdit(this);

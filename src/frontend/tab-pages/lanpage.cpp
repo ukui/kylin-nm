@@ -753,15 +753,13 @@ void LanPage::updateConnectionArea(QString uuid)
 
     emit lanActiveConnectionStateChanged(p_newItem->m_ifaceName, uuid, p_newItem->m_connectState);
 
+    deleteConnectionMapItem(m_activeMap, m_activatedLanListWidget, uuid);
+    if (m_activeMap.count() <= 0) {
+        addEmptyConnectItem(m_activeMap, m_activatedLanListWidget);
+    }
+
     if (p_newItem->m_ifaceName == m_currentDeviceName || p_newItem->m_ifaceName == "") {
         qDebug()<<"[LanPage] update connection area"<<p_newItem->m_connectName;
-
-        deleteConnectionMapItem(m_activeMap, m_activatedLanListWidget, uuid);
-        if (m_activeMap.count() <= 0) {
-            addEmptyConnectItem(m_activeMap, m_activatedLanListWidget);
-        }
-
-
         if (connectionItemIsExist(m_deactiveMap, uuid)) {
             delete p_newItem;
             p_newItem = nullptr;

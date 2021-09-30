@@ -604,7 +604,6 @@ void LanPage::updateDeviceCombox(QString oldDeviceName, QString newDeviceName)
 {   
     if (m_currentDeviceName == oldDeviceName) {
         m_currentDeviceName = newDeviceName;
-        setDefaultDevice(WIRED, m_currentDeviceName);
     }
 
     int index = m_deviceComboBox->findText(oldDeviceName);
@@ -628,6 +627,10 @@ void LanPage::onDeviceNameUpdate(QString oldName, QString newName)
         qDebug() << "[LanPage] emit deviceNameUpdate "  << oldName << newName;
 
         updateDeviceCombox(oldName, newName);
+        if (m_currentDeviceName == newName) {
+            setDefaultDevice(WIRED, m_currentDeviceName);
+            initLanArea();
+        }
 
         emit deviceNameChanged(oldName, newName);
     }

@@ -34,18 +34,18 @@ void KyWiredWidget::constructWiredActiveConnectList()
     m_activeConnectResource->getActiveConnectionList("enp2s0",
                                                      NetworkManager::ConnectionSettings::ConnectionType::Wired,
                                                      wiredActiveConnect);
-    if (wiredActiveConnect.isEmpty()) {
-        OneLancForm *activeWiredForm = new OneLancForm(this, nullptr);
-        activeWiredForm->constructActiveConnectionEmptyItem();
-        m_wiredActiveFormlist<<activeWiredForm;
-    } else {
-        for (int index = 0; index < wiredActiveConnect.size(); ++index) {
-            resize(width(), height() + H_NORMAL_ITEM * index);
-            OneLancForm *activeWiredForm = new OneLancForm(this, wiredActiveConnect.at(index));
-            activeWiredForm->constructActiveConnectionItem(index);
-            m_wiredActiveFormlist<<activeWiredForm;
-        }
-    }
+//    if (wiredActiveConnect.isEmpty()) {
+//        LanListItem *activeWiredForm = new LanListItem(this, nullptr);
+//        activeWiredForm->constructActiveConnectionEmptyItem();
+//        m_wiredActiveFormlist<<activeWiredForm;
+//    } else {
+//        for (int index = 0; index < wiredActiveConnect.size(); ++index) {
+//            resize(width(), height() + H_NORMAL_ITEM * index);
+//            LanListItem *activeWiredForm = new LanListItem(this, wiredActiveConnect.at(index));
+//            activeWiredForm->constructActiveConnectionItem(index);
+//            m_wiredActiveFormlist<<activeWiredForm;
+//        }
+//    }
 
     return;
 }
@@ -62,14 +62,14 @@ void KyWiredWidget::constructWiredConnectList()
     m_connectResource->getConnectionList("enp2s0",
                                          NetworkManager::ConnectionSettings::ConnectionType::Wired,
                                          wiredConnections);
-    if (!wiredConnections.isEmpty()) {
-        for (int index = 0; index < wiredConnections.size(); ++index) {
-            resize(W_LIST_WIDGET, height() + H_NORMAL_ITEM);
-            OneLancForm *wiredForm = new OneLancForm(this, wiredConnections.at(index));
-            wiredForm->constructConnectionItem(index);
-            m_wiredFormlist<<wiredForm;
-        }
-    }
+//    if (!wiredConnections.isEmpty()) {
+//        for (int index = 0; index < wiredConnections.size(); ++index) {
+//            resize(W_LIST_WIDGET, height() + H_NORMAL_ITEM);
+//            OneLancForm *wiredForm = new OneLancForm(this, wiredConnections.at(index));
+//            wiredForm->constructConnectionItem(index);
+//            m_wiredFormlist<<wiredForm;
+//        }
+//    }
 
     return;
 }
@@ -78,7 +78,7 @@ void KyWiredWidget::updateWiredActiveConnection()
 {
     qDebug()<<"updateWiredActiveConnection......";
     while (!m_wiredActiveFormlist.empty()) {
-        OneLancForm *wiredActiveForm = m_wiredActiveFormlist.at(0);
+        LanListItem *wiredActiveForm = m_wiredActiveFormlist.at(0);
         m_wiredActiveFormlist.removeAt(0);
         delete wiredActiveForm;
         wiredActiveForm = nullptr;
@@ -91,9 +91,8 @@ void KyWiredWidget::updateWiredConnection()
 {
     qDebug()<<"updateWiredConnection........";
     while (!m_wiredFormlist.empty()) {
-        OneLancForm *wiredForm = m_wiredFormlist.at(0);
+        LanListItem *wiredForm = m_wiredFormlist.at(0);
         m_wiredFormlist.removeAt(0);
-        qDebug()<<"delete item"<< wiredForm->uuidName;
         delete wiredForm;
         wiredForm = nullptr;
     }

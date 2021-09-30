@@ -3,11 +3,7 @@ include(hotspot/hotspot.pri)
 include(dbus-interface/dbus-interface.pri)
 
 HEADERS += \
-    $$PWD/backthread.h \
     $$PWD/dbusadaptor.h \
-    $$PWD/ksimplenm.h \
-    $$PWD/kylin-dbus-interface.h \
-    $$PWD/kylin-network-interface.h \
     $$PWD/kylinarping.h \
     $$PWD/kylinipv4arping.h \
     $$PWD/kylinipv6arping.h \
@@ -16,11 +12,7 @@ HEADERS += \
     $$PWD/wifi-auth-thread.h
 
 SOURCES += \
-    $$PWD/backthread.cpp \
     $$PWD/dbusadaptor.cpp \
-    $$PWD/ksimplenm.cpp \
-    $$PWD/kylin-dbus-interface.cpp \
-    $$PWD/kylin-network-interface.c \
     $$PWD/kylinipv4arping.cpp \
     $$PWD/kylinipv6arping.cpp \
     $$PWD/sysdbusregister.cpp \

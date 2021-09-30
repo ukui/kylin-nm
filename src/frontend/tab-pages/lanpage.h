@@ -15,6 +15,8 @@
 #include "list-items/lanlistitem.h"
 #include "tab-pages/tabpage.h"
 
+class LanListItem;
+
 class LanPage : public TabPage
 {
     Q_OBJECT

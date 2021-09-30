@@ -17,10 +17,7 @@
  */
 
 //#include "mainwindow.h"
-#include "new-mainwindow.h" //ZJP_TODO 载入新的主窗口
-#include "ksimplenm.h"
-#include "kylin-network-interface.h"
-#include "wireless-security/dlghidewifi.h"
+#include "mainwindow.h"
 #include "dbusadaptor.h"
 #include <QTranslator>
 #include <QLocale>

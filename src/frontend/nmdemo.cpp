@@ -1,5 +1,4 @@
 #include "nmdemo.h"
-#include "../wireless-security/dlghidewifi.h"
 #include <QTime>
 #include <QTimeZone>
 

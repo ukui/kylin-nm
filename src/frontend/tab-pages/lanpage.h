@@ -55,8 +55,8 @@ private:
     void updateConnectionArea(QString uuid);
     void updateActivatedConnectionArea(QString uuid);
 
-    void updateActiveConnectionProperty(KyConnectItem *p_connectItem);
-    void updateConnectionProperty(KyConnectItem *p_connectItem);
+    void updateActiveConnectionProperty(KyConnectItem *p_connectItem, bool &needDeleteItem);
+    void updateConnectionProperty(KyConnectItem *p_connectItem, bool &needDeleteItem);
 
     void sendLanUpdateSignal(KyConnectItem *p_connectItem);
     void sendLanAddSignal(KyConnectItem *p_connectItem);

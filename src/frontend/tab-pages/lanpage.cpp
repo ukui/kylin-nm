@@ -851,7 +851,7 @@ void LanPage::sendLanAddSignal(KyConnectItem *p_connectItem)
     return;
 }
 
-void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem)
+void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem, bool &needDeleteItem)
 {
     QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;
     for (iter = m_deactiveMap.begin(); iter != m_deactiveMap.constEnd(); ++iter) {
@@ -889,17 +889,17 @@ void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem)
 
                     QListWidgetItem *p_listWidgetItem = addNewItem(p_connectItem, m_inactivatedLanListWidget);
                     m_deactiveMap.insert(p_connectItem, p_listWidgetItem);
-                    p_connectItem = nullptr;
+                    needDeleteItem = false;
                 }
             }
-        }
-        break;
+            break;
+        }     
     }
 
     return;
 }
 
-void LanPage::updateActiveConnectionProperty(KyConnectItem *p_connectItem)
+void LanPage::updateActiveConnectionProperty(KyConnectItem *p_connectItem, bool &needDeleteItem)
 {
     QMap<KyConnectItem *, QListWidgetItem *>::iterator iters;
     for (iters = m_activeMap.begin(); iters != m_activeMap.constEnd(); ++iters) {
@@ -935,7 +935,7 @@ void LanPage::updateActiveConnectionProperty(KyConnectItem *p_connectItem)
 
                     QListWidgetItem *p_listWidgetItem = addNewItem(p_connectItem, m_activatedLanListWidget);
                     m_activeMap.insert(p_connectItem, p_listWidgetItem);
-                    p_connectItem = nullptr;
+                    needDeleteItem = false;
                 }
             }
             break;
@@ -952,9 +952,10 @@ void LanPage::onUpdateConnection(QString uuid)
         return;
     }
 
-    qDebug() << "[LanPage]:Connection Changed !" << Q_FUNC_INFO << __LINE__;
+    qDebug() << "[LanPage]:Connection property Changed." << Q_FUNC_INFO << __LINE__;
 
     KyConnectItem *p_newItem = nullptr;
+    bool needDeleteNewItem = true;
     if (m_connectResourse->isActivatedConnection(uuid)) {
         p_newItem = m_activeResourse->getActiveConnectionByUuid(uuid);
         if (nullptr == p_newItem) {
@@ -964,7 +965,7 @@ void LanPage::onUpdateConnection(QString uuid)
         }
 
         sendLanUpdateSignal(p_newItem);
-        updateActiveConnectionProperty(p_newItem);
+        updateActiveConnectionProperty(p_newItem, needDeleteNewItem);
     } else {
         p_newItem = m_connectResourse->getConnectionItemByUuid(uuid);
         if (nullptr == p_newItem) {
@@ -974,10 +975,11 @@ void LanPage::onUpdateConnection(QString uuid)
         }
 
         sendLanUpdateSignal(p_newItem);
-        updateConnectionProperty(p_newItem);
+        updateConnectionProperty(p_newItem, needDeleteNewItem);
     }
 
-    if (p_newItem != nullptr) {
+    if (needDeleteNewItem) {
+        qDebug()<<"[LanPage] the new item is not used, so is deleted.";
         delete p_newItem;
         p_newItem = nullptr;
     }

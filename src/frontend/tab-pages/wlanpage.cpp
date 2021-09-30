@@ -138,6 +138,19 @@ void WlanPage::initConnections()
             connect(m_switchGsettings, &QGSettings::changed, this, [ = ](const QString &key) {
                 if (key == WIRELESS_SWITCH) {
                     bool status = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
+                    if (!status) {
+//                        m_deviceFrame->hide();
+                        m_activatedNetFrame->hide();
+                        m_inactivatedNetFrame->hide();
+                        m_activatedNetDivider->hide();
+                        m_inactivatedNetDivider->hide();
+                    } else {
+//                        m_deviceFrame->show();
+                        m_activatedNetFrame->show();
+                        m_inactivatedNetFrame->show();
+                        m_activatedNetDivider->show();
+                        m_inactivatedNetDivider->show();
+                    }
                     m_wirelessConnectOpreation->setWirelessEnabled(status);
                     m_netSwitch->setSwitchStatus(m_switchGsettings->get(WIRELESS_SWITCH).toBool());
                     onWlanSwitchStatusChanged(m_switchGsettings->get(WIRELESS_SWITCH).toBool());
@@ -684,6 +697,10 @@ void WlanPage::onWifiEnabledChanged(bool isWifiOn)
 
 void WlanPage::updateByStrength()
 {
+    if (m_expandedItem) {
+        qDebug() << "Has expanded item and forbid refresh wifi strength" << Q_FUNC_INFO << __LINE__;
+        return;
+    }
     qDebug() << "Will update Wlan list by strength." << Q_FUNC_INFO << __LINE__;
     QList<KyWirelessNetItem> wlanList;
     if (!m_resource->getDeviceWifiNetwork(m_defaultDevice, wlanList)) {
@@ -718,6 +735,8 @@ void WlanPage::updateByStrength()
         } else {//找到了该位置的wifi而且与现在的排序不符，需要调整
             KyWirelessNetItem *data = new KyWirelessNetItem(wlanList.at(i));
             WlanListItem * currentWlan = new WlanListItem(m_resource, data, m_defaultDevice);
+            connect(currentWlan, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+            connect(currentWlan, &WlanListItem::connectButtonClicked, this, &WlanPage::onConnectButtonClicked);
             QPair<QListWidgetItem*, WlanListItem*> newPair;
             newPair.first = m_itemsMap.value(lastWlan->getSsid()).first;
             newPair.second = currentWlan;

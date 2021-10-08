@@ -213,12 +213,12 @@
     <message>
         <location filename="frontend/tab-pages/lanpage.cpp" line="507"/>
         <source>LAN Disconnected Successfully</source>
-        <translation>有线连接断开成功</translation>
+        <translation>有线网络断开</translation>
     </message>
     <message>
         <location filename="frontend/tab-pages/lanpage.cpp" line="528"/>
         <source>LAN Connected Successfully</source>
-        <translation>有线连接激活成功</translation>
+        <translation>连接有线网络成功</translation>
     </message>
 </context>
 <context>
@@ -532,12 +532,12 @@
     <message>
         <location filename="frontend/tab-pages/wlanpage.cpp" line="464"/>
         <source>WLAN Connected Successfully</source>
-        <translation>无线网络连接成功</translation>
+        <translation>连接无线网络成功</translation>
     </message>
     <message>
         <location filename="frontend/tab-pages/wlanpage.cpp" line="474"/>
         <source>WLAN Disconnected Successfully</source>
-        <translation>无线连接断开成功</translation>
+        <translation>断开无线网络</translation>
     </message>
 </context>
 </TS>

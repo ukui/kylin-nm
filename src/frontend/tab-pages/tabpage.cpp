@@ -93,8 +93,8 @@ void TabPage::initUI()
     m_mainLayout->addWidget(m_activatedNetFrame);
     m_mainLayout->addWidget(m_activatedNetDivider);
     m_mainLayout->addWidget(m_inactivatedNetFrame);
-    m_mainLayout->addWidget(m_inactivatedNetDivider);
     m_mainLayout->addStretch();
+    m_mainLayout->addWidget(m_inactivatedNetDivider);
     m_mainLayout->addWidget(m_settingsFrame);
 }
 

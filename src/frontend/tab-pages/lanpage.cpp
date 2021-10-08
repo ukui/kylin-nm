@@ -390,14 +390,12 @@ void LanPage::initLanArea()
         m_activatedNetDivider->hide();
         m_activatedNetFrame->hide();
 
-        m_inactivatedNetDivider->hide();
         m_inactivatedNetFrame->hide();
     } else {
         m_activatedNetDivider->show();
         m_activatedNetFrame->show();
         constructActiveConnectionArea();
 
-        m_inactivatedNetDivider->show();
         m_inactivatedNetFrame->show();
         constructConnectionArea();
     }
@@ -851,10 +849,12 @@ void LanPage::sendLanAddSignal(KyConnectItem *p_connectItem)
 
 void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem, bool &needDeleteItem)
 {
+    bool inCurrentMap = false;
     QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;
     for (iter = m_deactiveMap.begin(); iter != m_deactiveMap.constEnd(); ++iter) {
         KyConnectItem *p_item = iter.key();
         if (p_item->m_connectUuid == p_connectItem->m_connectUuid) {
+            inCurrentMap = true;
             if (p_connectItem->m_ifaceName != ""
                     && m_currentDeviceName != p_connectItem->m_ifaceName) {
                 LanListItem *p_lanItem = (LanListItem *)m_inactivatedLanListWidget->itemWidget(iter.value());
@@ -893,7 +893,13 @@ void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem, bool &needD
             break;
         }     
     }
-
+    if (!inCurrentMap) {
+        if (p_connectItem->m_ifaceName == m_currentDeviceName) {
+            QListWidgetItem *p_listWidgetItem = addNewItem(p_connectItem, m_inactivatedLanListWidget);
+            m_deactiveMap.insert(p_connectItem, p_listWidgetItem);
+            needDeleteItem = false;
+        }
+    }
     return;
 }
 

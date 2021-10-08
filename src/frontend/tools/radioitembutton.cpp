@@ -102,6 +102,7 @@ void RadioItemButton::onLoadingStopped()
         return;
     } else {
         m_animation->stop();
+        emit this->animationStoped();
     }
 
 }

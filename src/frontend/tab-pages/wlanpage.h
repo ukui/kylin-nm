@@ -123,6 +123,7 @@ private slots:
     void onHiddenWlanClicked();
     void showControlCenter();
     void onWifiEnabledChanged(bool isWifiOn);
+    void onActiveFailed(QString errorMessage);
 
 //    void onRefreshIconTimer();
 

@@ -102,6 +102,8 @@ void WlanPage::initWlanUI()
     m_activatedNetLayout->addWidget(m_activatedNetListWidget);
 //    m_inactivatedNetListArea->setFixedHeight(SCROLLAREA_HEIGHT);
     m_inactivatedNetListArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    m_tipsLabel->hide(); //设备关闭的label，要用的话可以放出来
 }
 
 /**
@@ -297,6 +299,7 @@ void WlanPage::getAllWlan()
     qDebug() << "Started loading wlan list!" << QDateTime::currentDateTime().toString("hh:mm:ss.zzzz");
     m_inactivatedNetListWidget->clear();
     m_itemsMap.clear();
+    m_expandedItem = nullptr; //每次重绘整个列表时要清空扩展项，否则会导致再展开某一项item的时候进程崩溃
     QList<KyWirelessNetItem> wlanList;
 //    if (!m_resource->getAllDeviceWifiNetwork(map))
     if (!m_resource->getDeviceWifiNetwork(m_defaultDevice, wlanList)) { //ZJP_TODO 获取默认网卡并传入

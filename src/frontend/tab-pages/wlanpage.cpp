@@ -333,6 +333,7 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
     qDebug() << "A Wlan Added! interface = " << interface << "; ssid = " << item.m_NetSsid << "interface" << interface << Q_FUNC_INFO <<__LINE__;
     if (interface != m_defaultDevice) {
         qDebug() << "wlan add interface not equal defaultdevice,ignore";
+        return;
     }
     KyWirelessNetItem *data = new KyWirelessNetItem(item);
     WlanListItem *wlanItemWidget = new WlanListItem(m_resource, data, m_defaultDevice);
@@ -495,7 +496,8 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
     //弹窗显示wifi连接状况
     qDebug() << "[WlanPage] State changed to :"  << state <<  reason << Q_FUNC_INFO <<__LINE__;
     //QString ssid;
-    m_resource->getSsidByUuid(uuid, ssid, m_defaultDevice);
+    QString device = m_defaultDevice;
+    m_resource->getSsidByUuid(uuid, ssid, device);
     if (m_activatedWlanSSid == ssid && state == NetworkManager::ActiveConnection::State::Activated) {
         if(m_activedssid != m_activatedWlanSSid){
             m_activedssid = m_activatedWlanSSid;
@@ -573,6 +575,7 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
         QString oldActWlanSsid = m_activatedWlanSSid;
         getActiveWlan();
         QString newActWlanSsid = m_activatedWlanSSid;
+        qDebug() << "Refresh active wlan succeed, old ssid = " << oldActWlanSsid << "; new ssid = " << newActWlanSsid << Q_FUNC_INFO << __LINE__;
         if (oldActWlanSsid != newActWlanSsid) {
             if (!oldActWlanSsid.isEmpty()) {
                 KyWirelessNetItem item;
@@ -613,7 +616,7 @@ void WlanPage::onItemHeightChanged(const QString &ssid)
 
 void WlanPage::onConnectButtonClicked(KyWirelessConnectSetting &connSettingInfo, const bool &isHidden)
 {
-    qDebug() << "Received signal of connecting wlan, ssid = " << connSettingInfo.m_ssid << Q_FUNC_INFO << __LINE__;
+    qDebug() << "Received signal of connecting wlan, ssid = " << connSettingInfo.m_ssid << "device name = " << m_defaultDevice << Q_FUNC_INFO << __LINE__;
     m_wirelessConnectOpreation->addAndActiveWirelessConnect(m_defaultDevice, connSettingInfo, isHidden);
 }
 

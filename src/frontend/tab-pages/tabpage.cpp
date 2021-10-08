@@ -128,6 +128,33 @@ void TabPage::showDesktopNotify(const QString &message)
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
 
+QString getDefaultDeviceName(KyDeviceType deviceType)
+{
+    QString defaultDevice = "";
+
+    QString key;
+    switch (deviceType) {
+    case WIRED:
+        key = "wired";
+        break;
+    case WIRELESS:
+        key = "wireless";
+        break;
+    default:
+        return defaultDevice;
+    }
+
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("DEFAULTCARD");
+    defaultDevice = m_settings->value(key).toString();
+    m_settings->endGroup();
+
+    delete m_settings;
+    m_settings = nullptr;
+
+    return defaultDevice;
+}
+
 void setDefaultDevice(KyDeviceType deviceType, QString deviceName)
 {
     QString key;
@@ -140,15 +167,17 @@ void setDefaultDevice(KyDeviceType deviceType, QString deviceName)
         break;
     default:
         return;
-        break;
     }
+
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
     m_settings->beginGroup("DEFAULTCARD");
     m_settings->setValue(key, deviceName);
     m_settings->endGroup();
     m_settings->sync();
+
     delete m_settings;
     m_settings = nullptr;
+
     return;
 }
 
@@ -181,6 +210,18 @@ void saveDeviceEnableState(QString deviceName, bool enable)
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
     m_settings->beginGroup("CARDEABLE");
     m_settings->setValue(deviceName, enable);
+    m_settings->endGroup();
+    m_settings->sync();
+    delete m_settings;
+    m_settings = nullptr;
+    return;
+}
+
+void deleteDeviceEnableState(QString deviceName)
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    m_settings->beginGroup("CARDEABLE");
+    m_settings->remove(deviceName);
     m_settings->endGroup();
     m_settings->sync();
     delete m_settings;

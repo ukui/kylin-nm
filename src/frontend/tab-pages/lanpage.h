@@ -33,64 +33,88 @@ public:
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
+private:
+    void initLanDevice();
+    void initUI();
+    void initLanArea();
+    void initNetSwitch();
+
+    void initDeviceCombox();
+    void updateDeviceCombox(QString oldDeviceName, QString newDeviceName);
+    void deleteDeviceFromCombox(QString deviceName);
+    void addDeviceForCombox(QString deviceName);
+
+    QListWidgetItem *addNewItem(KyConnectItem *itemData, QListWidget *listWidget);
+
+    void getEnabledDevice(QStringList &enableDeviceList);
+    void getDisabledDevices(QStringList &disableDeviceList);
+
+    void constructConnectionArea();
+    void constructActiveConnectionArea();
+
+    void updateConnectionArea(QString uuid);
+    void updateActivatedConnectionArea(QString uuid);
+
+    void updateActiveConnectionProperty(KyConnectItem *p_connectItem, bool &needDeleteItem);
+    void updateConnectionProperty(KyConnectItem *p_connectItem, bool &needDeleteItem);
+
+    void sendLanUpdateSignal(KyConnectItem *p_connectItem);
+    void sendLanAddSignal(KyConnectItem *p_connectItem);
+
+    void addEmptyConnectItem(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+                                           QListWidget *lanListWidget);
+    void clearConnectionMap(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+                            QListWidget *lanListWidget);
+    void deleteConnectionMapItem(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+                                 QListWidget *lanListWidget, QString uuid);
+    bool connectionItemIsExist(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+                                       QString uuid);
+
 signals:
     void lanAdd(QString devName, QStringList info);
     void lanRemove(QString dbusPath);
     void lanUpdate(QString devName, QStringList info);
+
     void lanActiveConnectionStateChanged(QString interface, QString uuid, int status);
     void lanConnectChanged();
 
-private:
-    void initDeviceState();
-    void initDeviceCombox();
-    void initUI();
-    void initList(QString m_deviceName);
-    void addNewItem(KyConnectItem *itemData, QListWidget *listWidget);
-    void addNUllItem(QListWidget *listWidget);
-    void initNetSwitch();
+private slots:
+    void onUpdateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason);
+
+    void onAddConnection(QString uuid);
+    void onRemoveConnection(QString path);
+    void onUpdateConnection(QString uuid);
+
+    void onSwithGsettingsChanged(const QString &key);
+    void onLanSwitchClicked();
+
+    void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
+    void onDeviceRemove(QString deviceName);
+    void onDeviceNameUpdate(QString oldName, QString newName);
+
+    void onDeviceComboxIndexChanged(int currentIndex);
+
+    void onShowControlCenter();
 
 private:
     QListWidget * m_activatedLanListWidget = nullptr;
     QListWidget * m_inactivatedLanListWidget = nullptr;
 
-    LanListItem * m_nullLanItem = nullptr;
-    QListWidgetItem *m_nullItem = nullptr;
-    QListWidgetItem *m_listWidgetItem = nullptr;
-
-    KyNetworkDeviceResourse *m_device = nullptr;
+    KyNetworkDeviceResourse *m_deviceResource = nullptr;
     KyWiredConnectOperation *m_wiredConnectOperation = nullptr;
     KyActiveConnectResourse *m_activeResourse = nullptr;     //激活的连接
-    KyConnectResourse *m_connectResourse = nullptr;          //未激活的连接
-
-    QList<KyConnectItem *> m_activedList;
-    QList<KyConnectItem *> m_deactivedList;
-
-//    QMap<QString, QVector<QStringList> > m_deviceMap;
+    KyConnectResourse *m_connectResourse = nullptr;          //未激活的连接 
 
     QMap<KyConnectItem *, QListWidgetItem *> m_deactiveMap;
     QMap<KyConnectItem *, QListWidgetItem *> m_activeMap;
 
-//    QMap<LanListItem *, QListWidgetItem *> m_deactiveMap;
-//    QMap<LanListItem *, QListWidgetItem *> m_activeMap;
-
-    QString m_deviceName;
+    QString m_currentDeviceName;
     QStringList m_devList;
-    QStringList enableDevice;
-    QGSettings * m_switchGsettings = nullptr;
+    QStringList m_enableDeviceList;
 
-private slots:
-    void updateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason);
-    void addConnectionSlot(QString uuid);
-    void removeConnectionSlot(QString path);
-    void connectionUpdateSlot(QString uuid);
-    void onSwithGsettingsChanged(const QString &key);
-    void onLanSwitchClicked();
-    void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
-    void onDeviceRemove(QString deviceName);
-    void onDeviceNameUpdate(QString oldName, QString newName);
-    void onDeviceComboxIndexChanged(int currentIndex);
-    void showControlCenter();
-//    void onLanDataChange(QString uuid);
+    QGSettings *m_switchGsettings = nullptr;
+
+    bool m_wiredSwitch = true;
 };
 
 #endif // LANPAGE_H

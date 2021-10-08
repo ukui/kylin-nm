@@ -21,11 +21,16 @@ ListItem::ListItem(QWidget *parent) : QFrame(parent)
 
 ListItem::~ListItem()
 {
-    delete m_netButton;
-    m_netButton = NULL;
+    if (nullptr != m_netButton) {
+        delete m_netButton;
+        m_netButton = nullptr;
+    }
 
-    delete m_infoButton;
-    m_infoButton = NULL;
+    if (nullptr != m_infoButton) {
+        delete m_infoButton;
+        m_infoButton = nullptr;
+    }
+
 }
 
 void ListItem::setName(const QString &name)

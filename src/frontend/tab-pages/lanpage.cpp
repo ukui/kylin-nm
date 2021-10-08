@@ -195,7 +195,7 @@ void LanPage::initDeviceCombox()
     }
 
     m_deviceComboBox->clear();
-    m_devList.clear();
+    m_devList.clear();          //!!!!
     enableDevice.clear();
 
     getDeviceEnableState(WIRED, deviceMap);
@@ -206,7 +206,6 @@ void LanPage::initDeviceCombox()
         m_activatedNetFrame->hide();
         m_inactivatedNetFrame->hide();
         m_activatedNetDivider->hide();
-        m_inactivatedNetDivider->hide();
         m_deviceName = "";
     } else {
         m_device->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
@@ -229,7 +228,6 @@ void LanPage::initDeviceCombox()
             m_activatedNetFrame->hide();
             m_inactivatedNetFrame->hide();
             m_activatedNetDivider->hide();
-            m_inactivatedNetDivider->hide();
             m_deviceName = "";
             return;
         }
@@ -237,7 +235,6 @@ void LanPage::initDeviceCombox()
         m_activatedNetFrame->show();
         m_inactivatedNetFrame->show();
         m_activatedNetDivider->show();
-        m_inactivatedNetDivider->show();
 
         if (enableDevice.count() == 1) {
             m_deviceFrame->hide();

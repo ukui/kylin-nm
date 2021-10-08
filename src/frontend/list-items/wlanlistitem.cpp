@@ -421,7 +421,8 @@ void WlanListItem::onWlanStatusChange(QString uuid, NetworkManager::ActiveConnec
 {
     QString ssid, devName;
     m_resource->getSsidByUuid(uuid, ssid, devName);
-    if (m_data->m_NetSsid == ssid) {
+    //有可能配置被删了，获取不到ssid,所以也可以按uuid判断（解决连接中点忘记网络，图标还在loading的问题）
+    if (m_data->m_NetSsid == ssid || m_data->m_connectUuid == uuid) {
         qDebug() << "[WlanPage] State changed to :" << state << Q_FUNC_INFO <<__LINE__;
         m_state = state;
         if ((state == NetworkManager::ActiveConnection::State::Activating || state == NetworkManager::ActiveConnection::State::Deactivating)

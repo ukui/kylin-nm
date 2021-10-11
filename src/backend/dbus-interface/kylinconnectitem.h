@@ -14,6 +14,8 @@ public:
 public:
     void dumpInfo();
 
+    void setConnectUuid(QString uuid);
+
 public:
     QString m_connectName;
     QString m_connectUuid;

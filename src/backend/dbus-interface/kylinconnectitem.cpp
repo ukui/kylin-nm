@@ -18,6 +18,11 @@ KyConnectItem::~KyConnectItem()
 
 }
 
+void KyConnectItem::setConnectUuid(QString uuid)
+{
+    m_connectUuid = uuid;
+}
+
 void KyConnectItem::dumpInfo()
 {
     qDebug()<<"wired connection item info:";

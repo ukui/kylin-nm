@@ -56,6 +56,31 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionItem(NetworkManager::
     return activeConnectItem;
 }
 
+KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connectUuid)
+{
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr =
+            m_networkResourceInstance->getActiveConnect(connectUuid);
+
+    if (nullptr == activeConnectPtr) {
+        qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< connectUuid;
+        return nullptr;
+    }
+
+    KyConnectItem *activeConnectItem = getActiveConnectionItem(activeConnectPtr);
+    if (nullptr == activeConnectItem) {
+        return nullptr;
+    }
+
+    QStringList interfaces = activeConnectPtr->devices();
+    QString ifaceUni = interfaces.at(0);
+    NetworkManager::Device:: Ptr devicePtr =
+                m_networkResourceInstance->findDeviceUni(ifaceUni);
+    activeConnectItem->m_ifaceName = devicePtr->interfaceName();
+    activeConnectItem->m_itemType = activeConnectPtr->type();
+
+    return activeConnectItem;
+}
+
 KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connectUuid,
                                                                   QString deviceName)
 {

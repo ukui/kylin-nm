@@ -24,7 +24,6 @@ LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *paren
             m_isActive = false;
         }
     }
-    m_netButton->setActive(m_isActive);
     m_itemFrame->installEventFilter(this);
     connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
     connect(m_activeConnectResource, &KyActiveConnectResourse::stateChangeReason, this, &LanListItem::onLanStatusChange);
@@ -43,8 +42,10 @@ void LanListItem::setIcon(bool isOn)
 {
     if (isOn) {
         m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
+        m_netButton->setActive(true);               //设置图标显示不同颜色
     } else {
         m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+        m_netButton->setActive(false);
     }
 }
 
@@ -63,6 +64,7 @@ void LanListItem::onNetButtonClicked()
         }
         else {
             qDebug() << "[LanListItem] Wired Device not carried";
+            this->showDesktopNotify(tr("Wired Device not carried"));
             m_isActive = false;
         }
     } else {
@@ -93,9 +95,11 @@ void LanListItem::onInfoButtonClicked()
 
 void LanListItem::onLanStatusChange(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
 {
-    qDebug() <<"[LanListItem]Connection State Change to:" << state;
+    qDebug() <<"[LanListItem] Connection State Change to:" << state << uuid;
+
     if (m_data->m_connectUuid == uuid) {
-        if (state == NetworkManager::ActiveConnection::State::Activating || state == NetworkManager::ActiveConnection::State::Deactivating) {
+        if (state == NetworkManager::ActiveConnection::State::Activating
+                || state == NetworkManager::ActiveConnection::State::Deactivating) {
             qDebug() << "[LanListItem]Activating!Loading!" << state;
             m_netButton->startLoading();
         } else {

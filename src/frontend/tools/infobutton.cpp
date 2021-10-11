@@ -61,6 +61,8 @@ void InfoButton::paintEvent(QPaintEvent *event)
 
     painter.fillPath(outerPath, pal.color(QPalette::Text));
     painter.setPen(m_foregroundColor);
+    QFont font("Noto Sans CJK SC", 11, QFont::Normal, false);
+    painter.setFont(font);
     painter.drawText(TEXT_POS, "i");
 }
 

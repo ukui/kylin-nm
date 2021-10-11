@@ -32,6 +32,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::activateConnectionError, this, &WlanPage::activateFailed);
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::addAndActivateConnectionError, this, &WlanPage::activateFailed);
+    connect(this, &WlanPage::activateFailed, this, &WlanPage::onActiveFailed);
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::deactivateConnectionError, this, &WlanPage::deactivateFailed);
 
     connect(this, &WlanPage::hiddenWlanClicked, this, &WlanPage::onHiddenWlanClicked);
@@ -138,6 +139,19 @@ void WlanPage::initConnections()
             connect(m_switchGsettings, &QGSettings::changed, this, [ = ](const QString &key) {
                 if (key == WIRELESS_SWITCH) {
                     bool status = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
+                    if (!status) {
+//                        m_deviceFrame->hide();
+                        m_activatedNetFrame->hide();
+                        m_inactivatedNetFrame->hide();
+                        m_activatedNetDivider->hide();
+                        m_inactivatedNetDivider->hide();
+                    } else {
+//                        m_deviceFrame->show();
+                        m_activatedNetFrame->show();
+                        m_inactivatedNetFrame->show();
+                        m_activatedNetDivider->show();
+                        m_inactivatedNetDivider->show();
+                    }
                     m_wirelessConnectOpreation->setWirelessEnabled(status);
                     m_netSwitch->setSwitchStatus(m_switchGsettings->get(WIRELESS_SWITCH).toBool());
                     onWlanSwitchStatusChanged(m_switchGsettings->get(WIRELESS_SWITCH).toBool());
@@ -389,6 +403,7 @@ void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devi
     m_devList << deviceName;
     if (getDefaultDevice().isEmpty())
     {
+        m_devList.clear();
         updateDefaultDevice(deviceName);
         setDefaultDevice(WIRELESS, deviceName);
 
@@ -682,8 +697,17 @@ void WlanPage::onWifiEnabledChanged(bool isWifiOn)
     }
 }
 
+void WlanPage::onActiveFailed(QString errorMessage)
+{
+    qDebug() << "active failed and the message is: " << errorMessage << Q_FUNC_INFO << __LINE__;
+}
+
 void WlanPage::updateByStrength()
 {
+    if (m_expandedItem) {
+        qDebug() << "Has expanded item and forbid refresh wifi strength" << Q_FUNC_INFO << __LINE__;
+        return;
+    }
     qDebug() << "Will update Wlan list by strength." << Q_FUNC_INFO << __LINE__;
     QList<KyWirelessNetItem> wlanList;
     if (!m_resource->getDeviceWifiNetwork(m_defaultDevice, wlanList)) {
@@ -718,6 +742,8 @@ void WlanPage::updateByStrength()
         } else {//找到了该位置的wifi而且与现在的排序不符，需要调整
             KyWirelessNetItem *data = new KyWirelessNetItem(wlanList.at(i));
             WlanListItem * currentWlan = new WlanListItem(m_resource, data, m_defaultDevice);
+            connect(currentWlan, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+            connect(currentWlan, &WlanListItem::connectButtonClicked, this, &WlanPage::onConnectButtonClicked);
             QPair<QListWidgetItem*, WlanListItem*> newPair;
             newPair.first = m_itemsMap.value(lastWlan->getSsid()).first;
             newPair.second = currentWlan;

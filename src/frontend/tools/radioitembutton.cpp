@@ -101,7 +101,9 @@ void RadioItemButton::onLoadingStopped()
         qWarning() << "Stop loading failed, m_animation is null pointer!" << Q_FUNC_INFO << __LINE__;
         return;
     } else {
+        m_iconLabel->setPixmap(m_pixmap);
         m_animation->stop();
+        emit this->animationStoped();
     }
 
 }

@@ -32,6 +32,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::activateConnectionError, this, &WlanPage::activateFailed);
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::addAndActivateConnectionError, this, &WlanPage::activateFailed);
+    connect(this, &WlanPage::activateFailed, this, &WlanPage::onActiveFailed);
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::deactivateConnectionError, this, &WlanPage::deactivateFailed);
 
     connect(this, &WlanPage::hiddenWlanClicked, this, &WlanPage::onHiddenWlanClicked);
@@ -406,6 +407,7 @@ void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devi
     m_devList << deviceName;
     if (getDefaultDevice().isEmpty())
     {
+        m_devList.clear();
         updateDefaultDevice(deviceName);
         setDefaultDevice(WIRELESS, deviceName);
 
@@ -699,6 +701,11 @@ void WlanPage::onWifiEnabledChanged(bool isWifiOn)
         //外部命令导致连接状态发生变化，通知主界面刷新图标
         emit this->wlanConnectChanged();
     }
+}
+
+void WlanPage::onActiveFailed(QString errorMessage)
+{
+    qDebug() << "active failed and the message is: " << errorMessage << Q_FUNC_INFO << __LINE__;
 }
 
 void WlanPage::updateByStrength()

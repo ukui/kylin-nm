@@ -201,6 +201,7 @@ void WlanListItem::initWlanConnection()
     connect(m_resource, &KyWirelessNetResource::connectionRemove, this, &WlanListItem::onConnectionRemove);
     connect(this->m_infoButton, &InfoButton::clicked, this, &WlanListItem::onInfoButtonClicked);
     connect(m_connectResource, &KyActiveConnectResourse::stateChangeReason, this, &WlanListItem::onWlanStatusChange);
+    connect(m_netButton, &RadioItemButton::animationStoped, this, &WlanListItem::refreshIcon);
 }
 
 void WlanListItem::refreshIcon()
@@ -369,8 +370,9 @@ void WlanListItem::onShowPwdButtonClicked()
 
 void WlanListItem::onConnectButtonClicked()
 {
-    if ((m_connectButton->isVisible() && !m_connectButton->isEnabled()) || !m_data) {
-        qWarning() << "Connect wlan failed because of null pointer or button state!" << Q_FUNC_INFO << __LINE__;
+    if (m_data->m_secuType.isEmpty() || m_data->m_secuType == "") {
+        qDebug() << "connect to no password wifi" << Q_FUNC_INFO << __LINE__;
+    } else if ((!m_connectButton->isEnabled()&&m_connectButton->isVisible()) || !m_data) {
         return;
     }
 

@@ -47,6 +47,30 @@ KyConnectItem *KyConnectResourse::getConnectionItem(NetworkManager::Connection::
     return connectionItem;
 }
 
+KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            m_networkResourceInstance->getConnect(connectUuid);
+
+    if (nullptr == connectPtr) {
+        qWarning()<< "[KyConnectResourse]" <<"get connect failed, connect uuid"<<connectUuid;
+        return nullptr;
+    }
+
+    if (m_networkResourceInstance->isActiveConnection(connectPtr->uuid())) {
+        qDebug()<<"[KyConnectResourse]"<<connectPtr->name()<<"is active connection";
+        return nullptr;
+    }
+
+    KyConnectItem *connectItem = getConnectionItem(connectPtr);
+    if (nullptr != connectItem) {
+        connectItem->dumpInfo();
+        return connectItem;
+    }
+
+    return nullptr;
+}
+
 KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, QString deviceName)
 {
     NetworkManager::Connection::Ptr connectPtr =
@@ -551,4 +575,54 @@ void KyConnectResourse::getApConnections(QList<KyApConnectItem *> &apConnectItem
     }
 
     return;
+}
+
+
+bool KyConnectResourse::isWiredConnection(QString uuid)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            m_networkResourceInstance->getConnect(uuid);
+
+    if (connectPtr->isValid()) {
+        NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
+
+        if (connectSettingPtr.isNull()) {
+            qWarning()<<"[KyConnectResourse]"<<"get connect setting failed, connect uuid"<<uuid;
+            return false;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wired ==
+                connectPtr->settings()->connectionType()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool KyConnectResourse::isWirelessConnection(QString uuid)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            m_networkResourceInstance->getConnect(uuid);
+
+    if (connectPtr->isValid()) {
+        NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
+
+        if (connectSettingPtr.isNull()) {
+            qWarning()<<"[KyConnectResourse]"<<"get connect setting failed, connect uuid"<<uuid;
+            return false;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wireless ==
+                connectPtr->settings()->connectionType()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool KyConnectResourse::isActivatedConnection(QString uuid)
+{
+    return m_networkResourceInstance->isActiveConnection(uuid);
 }

@@ -11,108 +11,139 @@
 <context>
     <name>ConfForm</name>
     <message>
-        <location filename="../src/confform.cpp" line="39"/>
+        <location filename="../src/frontend/confform.cpp" line="40"/>
         <source>edit network</source>
         <translation>Ağı düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="83"/>
+        <location filename="../src/frontend/confform.cpp" line="95"/>
         <source>LAN name: </source>
         <translation type="unfinished">LAN adı: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="84"/>
+        <location filename="../src/frontend/confform.cpp" line="96"/>
+        <location filename="../src/frontend/confform.cpp" line="745"/>
+        <location filename="../src/frontend/confform.cpp" line="748"/>
         <source>Method: </source>
         <translation>Yöntem: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="85"/>
+        <location filename="../src/frontend/confform.cpp" line="97"/>
         <source>Address: </source>
         <translation>Adres: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="86"/>
+        <location filename="../src/frontend/confform.cpp" line="98"/>
         <source>Netmask: </source>
         <translation>Netmask: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="87"/>
+        <location filename="../src/frontend/confform.cpp" line="99"/>
         <source>Gateway: </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="88"/>
+        <location filename="../src/frontend/confform.cpp" line="100"/>
         <source>DNS 1: </source>
         <translation>DNS 1: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="89"/>
+        <location filename="../src/frontend/confform.cpp" line="101"/>
         <source>DNS 2: </source>
         <translation>DNS 2: </translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="91"/>
+        <location filename="../src/frontend/confform.cpp" line="102"/>
+        <source>Ipv6 Address: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/confform.cpp" line="104"/>
         <source>Edit Conn</source>
         <translation>Bağ. Düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="92"/>
+        <location filename="../src/frontend/confform.cpp" line="105"/>
         <source>Auto(DHCP)</source>
         <translation>Oto(DHCP)</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="93"/>
+        <location filename="../src/frontend/confform.cpp" line="106"/>
         <source>Manual</source>
         <translation>Elle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="103"/>
+        <location filename="../src/frontend/confform.cpp" line="118"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="104"/>
+        <location filename="../src/frontend/confform.cpp" line="119"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="105"/>
+        <location filename="../src/frontend/confform.cpp" line="120"/>
         <source>Ok</source>
         <translation type="unfinished">Tamam</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="207"/>
-        <location filename="../src/confform.cpp" line="247"/>
+        <location filename="../src/frontend/confform.cpp" line="272"/>
         <source>Can not create new wired network for without wired card</source>
         <translation type="unfinished">Kablolu kart olmadan yeni kablolu ağ oluşturulamıyor</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="232"/>
+        <location filename="../src/frontend/confform.cpp" line="295"/>
         <source>New network already created</source>
         <translation type="unfinished">Yeni ağ zaten oluşturuldu</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="283"/>
+        <location filename="../src/frontend/confform.cpp" line="313"/>
+        <source>Wireless card not exist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/confform.cpp" line="330"/>
+        <source>Can not save wired network for without wired card</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/confform.cpp" line="353"/>
         <source>New network settings already finished</source>
         <translation type="unfinished">Yeni ağ ayarları zaten tamamlandı</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="328"/>
+        <location filename="../src/frontend/confform.cpp" line="383"/>
+        <source>kylin-nm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/confform.cpp" line="386"/>
+        <source>kylin network applet desktop message</source>
+        <translation type="unfinished">Kylin ağ uygulaması masaüstü mesajı</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/confform.cpp" line="403"/>
         <source>Will check the IP address conflict</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="359"/>
-        <source>IP address conflict, Please change IP</source>
+        <location filename="../src/frontend/confform.cpp" line="438"/>
+        <source>IPV4 address conflict, Please change IP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="386"/>
+        <location filename="../src/frontend/confform.cpp" line="495"/>
+        <source>IPV6 address conflict, Please change IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/confform.cpp" line="523"/>
         <source>Edit Network</source>
         <translation type="unfinished">Ağı Düzenle</translation>
     </message>
     <message>
-        <location filename="../src/confform.cpp" line="424"/>
+        <location filename="../src/frontend/confform.cpp" line="560"/>
         <source>Add Wired Network</source>
         <translation type="unfinished">Kablolu Ağ Ekle</translation>
     </message>
@@ -130,66 +161,172 @@
     </message>
 </context>
 <context>
+    <name>CreatNetPage</name>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="30"/>
+        <source>Connection Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="31"/>
+        <source>Ipv4Config</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="32"/>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="33"/>
+        <source>Netmask</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="34"/>
+        <source>Default Gateway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="35"/>
+        <source>Prefs DNS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="36"/>
+        <source>Alternative DNS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="47"/>
+        <source>Auto(DHCP)</source>
+        <translation type="unfinished">Oto(DHCP)</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="48"/>
+        <source>Manual</source>
+        <translation type="unfinished">Elle</translation>
+    </message>
+</context>
+<context>
+    <name>DetailPage</name>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="137"/>
+        <source>Auto Connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="146"/>
+        <source>SSID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="147"/>
+        <source>Protocol:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="149"/>
+        <source>Security Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="150"/>
+        <source>Hz:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="151"/>
+        <source>Chan:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="153"/>
+        <source>BandWidth:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="154"/>
+        <source>IPV6:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="155"/>
+        <source>IPV4:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="156"/>
+        <source>IPV4 Dns:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="157"/>
+        <source>Mac:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DlgHideWifi</name>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="61"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="63"/>
         <source>Add Hidden WLAN</source>
         <translation type="unfinished">Gizli WLAN Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="62"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="64"/>
         <source>Connection</source>
         <translation>Bağlantı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="63"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="65"/>
         <source>WLAN name</source>
         <translation type="unfinished">WLAN adı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="64"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="66"/>
         <source>WLAN security</source>
         <translation>WLAN güvenlik</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="65"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="67"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="66"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="68"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlantı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="68"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="73"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="89"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="82"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="90"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="83"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="91"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="84"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="175"/>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="260"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="165"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="250"/>
         <source>Conn WLAN Success</source>
         <translation type="unfinished">WLAN Bağlantısı Başarılı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="180"/>
-        <location filename="../wireless-security/dlghidewifi.cpp" line="265"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="170"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.cpp" line="255"/>
         <source>Confirm your WLAN password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
@@ -214,7 +351,7 @@
         <translation type="vanished">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifi.ui" line="14"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifi.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
         <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
@@ -222,93 +359,93 @@
 <context>
     <name>DlgHideWifiEapFast</name>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.ui" line="14"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
         <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="83"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="83"/>
         <source>Add hidden WLAN</source>
         <translation type="unfinished">Gizli WLAN Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="84"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="84"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="85"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="85"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="86"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="86"/>
         <source>WLAN security</source>
         <translation type="unfinished">WLAN güvenliği</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="87"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="87"/>
         <source>Authentication</source>
         <translation>Kimlik Doğrulama</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="88"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="88"/>
         <source>Anonymous identity</source>
         <translation>Anonim kimlik</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="89"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="89"/>
         <source>Allow automatic PAC pro_visioning</source>
         <translation>Otomatik PAC pro_visioning&apos;e izin ver</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="90"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="90"/>
         <source>PAC file</source>
         <translation>PAC dosyası</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="91"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="91"/>
         <source>Inner authentication</source>
         <translation>İç kimlik doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="92"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="92"/>
         <source>Username</source>
         <translation type="unfinished">Kullanıcı adı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="93"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="93"/>
         <source>Password</source>
         <translation type="unfinished">Parola</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="94"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="94"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="95"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="95"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="100"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="100"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="118"/>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="148"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="118"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="148"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="119"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="119"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="124"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="124"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -317,17 +454,17 @@
         <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="120"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="120"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="121"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="121"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="123"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="123"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
@@ -336,27 +473,27 @@
         <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="136"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="136"/>
         <source>Tunneled TLS</source>
         <translation>Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="137"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="137"/>
         <source>Protected EAP (PEAP)</source>
         <translation>Korumalı EAP (PEAP)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="143"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="143"/>
         <source>Anonymous</source>
         <translation>Anonim</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="144"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="144"/>
         <source>Authenticated</source>
         <translation>Doğrulanmış</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapfast.cpp" line="145"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapfast.cpp" line="145"/>
         <source>Both</source>
         <translation>Her ikisi de</translation>
     </message>
@@ -364,72 +501,72 @@
 <context>
     <name>DlgHideWifiEapLeap</name>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.ui" line="14"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
         <translation>Gizli WLAN ağına bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="73"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="73"/>
         <source>Add hidden WLAN</source>
         <translation type="unfinished">Gizli WLAN ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="74"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="74"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="75"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="75"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="76"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="76"/>
         <source>WLAN security</source>
         <translation type="unfinished">WLAN güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="77"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="77"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="78"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="78"/>
         <source>Username</source>
         <translation type="unfinished">Kullanıcı adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="79"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="79"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="80"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="80"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="81"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="81"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="83"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="83"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="101"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="101"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="102"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="102"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="107"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="107"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -438,17 +575,17 @@
         <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="103"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="103"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="104"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="104"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="106"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="106"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
@@ -457,12 +594,12 @@
         <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="119"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="119"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapleap.cpp" line="120"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapleap.cpp" line="120"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">Korumalı EAP (PEAP)</translation>
     </message>
@@ -470,103 +607,103 @@
 <context>
     <name>DlgHideWifiEapPeap</name>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.ui" line="14"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
         <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="61"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="59"/>
         <source>Add hidden WLAN</source>
         <translation type="unfinished">Gizli WLAN ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="62"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="60"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="63"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="61"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="64"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="62"/>
         <source>WLAN security</source>
         <translation type="unfinished">WLAN güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="65"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="63"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="66"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="64"/>
         <source>Anonymous identity</source>
         <translation type="unfinished">Anonim kimlik:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="67"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="65"/>
         <source>Domain</source>
         <translation>Domain:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="68"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="66"/>
         <source>CA certificate</source>
         <translation>CA sertifikası:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="69"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="67"/>
         <source>CA certificate password</source>
         <translation>CA sertifika şifresi:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="70"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="68"/>
         <source>No CA certificate is required</source>
         <translation>CA sertifikası gerekmez</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="71"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="69"/>
         <source>PEAP version</source>
         <translation>PEAP sürümü:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="72"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="70"/>
         <source>Inner authentication</source>
         <translation type="unfinished">İç kimlik doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="73"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="71"/>
         <source>Username</source>
         <translation type="unfinished">Kullanıcı adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="74"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="72"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="75"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="73"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="76"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="74"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="97"/>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="121"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="97"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="121"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="98"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="98"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="99"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="99"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -595,27 +732,27 @@
         <translation type="obsolete">Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="117"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="117"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">Korumalı EAP (PEAP)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="122"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="122"/>
         <source>Choose from file</source>
         <translation>Dosyadan seçin...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="125"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="125"/>
         <source>Automatic</source>
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="126"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="126"/>
         <source>Version 0</source>
         <translation>Sürüm 0</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappeap.cpp" line="127"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappeap.cpp" line="127"/>
         <source>Version 1</source>
         <translation>Sürüm 1</translation>
     </message>
@@ -623,72 +760,72 @@
 <context>
     <name>DlgHideWifiEapPwd</name>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.ui" line="14"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
         <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="74"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="74"/>
         <source>Add hidden WLAN</source>
         <translation type="unfinished">Gizli WLAN ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="75"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="75"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="76"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="76"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="77"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="77"/>
         <source>WLAN security</source>
         <translation type="unfinished">WLAN güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="78"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="78"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="79"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="79"/>
         <source>Username</source>
         <translation type="unfinished">Kullanıcı adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="80"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="80"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="81"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="81"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="82"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="82"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="84"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="84"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="102"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="102"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="103"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="103"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="108"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="108"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -697,17 +834,17 @@
         <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="104"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="104"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="105"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="105"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="107"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="107"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
@@ -716,12 +853,12 @@
         <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="120"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="120"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieappwd.cpp" line="121"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieappwd.cpp" line="121"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">Korumalı EAP (PEAP)</translation>
     </message>
@@ -729,103 +866,102 @@
 <context>
     <name>DlgHideWifiEapTTLS</name>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>Gizli WLAN Ağına Bağlan</translation>
+        <translation type="vanished">Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="89"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="89"/>
         <source>Add hidden WLAN</source>
         <translation type="unfinished">Gizli WLAN ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="90"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="90"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="91"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="91"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="92"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="92"/>
         <source>WLAN security</source>
         <translation type="unfinished">WLAN Güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="93"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="93"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="94"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="94"/>
         <source>Anonymous identity</source>
         <translation type="unfinished">Anonim kimlik:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="95"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="95"/>
         <source>Domain</source>
         <translation type="unfinished">Domain:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="96"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="96"/>
         <source>CA certificate</source>
         <translation type="unfinished">CA Sertifikası:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="97"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="97"/>
         <source>CA certificate password</source>
         <translation type="unfinished">CA sertifika şifresi:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="98"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="98"/>
         <source>No CA certificate is required</source>
         <translation>CA sertifikası gerekmez</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="99"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="99"/>
         <source>Inner authentication</source>
         <translation type="unfinished">İç kimlik doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="100"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="100"/>
         <source>Username</source>
         <translation type="unfinished">Kullanıcı adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="101"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="101"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="102"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="102"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="103"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="103"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="105"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="105"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="123"/>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="146"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="123"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="146"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="124"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="124"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="129"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="129"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -834,17 +970,17 @@
         <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="125"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="125"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="126"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="126"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="128"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="128"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
@@ -853,128 +989,133 @@
         <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="141"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="141"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="142"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="142"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">Korumalı EAP (PEAP)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieapttls.cpp" line="147"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.cpp" line="147"/>
         <source>Choose from file</source>
         <translation type="unfinished">Dosyadan seçiniz...</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifieapttls.ui" line="14"/>
+        <source>Connect to Hidden Wi-Fi Network</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DlgHideWifiEapTls</name>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.ui" line="14"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
         <translation>Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="60"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="58"/>
         <source>Add hidden WLAN</source>
         <translation type="unfinished">Gizli WLAN ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="61"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="59"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="62"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="60"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="63"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="61"/>
         <source>WLAN security</source>
         <translation type="unfinished">WLAN güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="64"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="62"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="65"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="63"/>
         <source>Identity</source>
         <translation>Kimlik:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="66"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="64"/>
         <source>Domain</source>
         <translation type="unfinished">Domain:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="67"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="65"/>
         <source>CA certificate</source>
         <translation type="unfinished">CA sertifikası:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="68"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="66"/>
         <source>CA certificate password</source>
         <translation type="unfinished">CA sertifika şifresi:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="69"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="67"/>
         <source>No CA certificate is required</source>
         <translation>CA sertifikası gerekmez</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="70"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="68"/>
         <source>User certificate</source>
         <translation>Kullanıcı sertifikası:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="71"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="69"/>
         <source>User certificate password</source>
         <translation>Kullanıcı sertifikası şifresi:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="72"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="70"/>
         <source>User private key</source>
         <translation>Kullanıcı özel anahtarı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="73"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="71"/>
         <source>User key password</source>
         <translation>Kullanıcı anahtarı şifresi:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="74"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="72"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="75"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="73"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="77"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="77"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="96"/>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="119"/>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="123"/>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="127"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="96"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="119"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="123"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="127"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="97"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="97"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="98"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="98"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -999,19 +1140,19 @@
         <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="114"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="114"/>
         <source>Tunneled TLS</source>
         <translation type="unfinished">Tünelli TLS</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="115"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="115"/>
         <source>Protected EAP (PEAP)</source>
         <translation type="unfinished">Korumalı EAP (PEAP)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="120"/>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="124"/>
-        <location filename="../wireless-security/dlghidewifieaptls.cpp" line="128"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="120"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="124"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifieaptls.cpp" line="128"/>
         <source>Choose from file</source>
         <translation type="unfinished">Dosyadan seç...</translation>
     </message>
@@ -1019,67 +1160,74 @@
 <context>
     <name>DlgHideWifiLeap</name>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>Gizli WLAN Ağına Bağlan</translation>
+        <translation type="vanished">Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="68"/>
         <source>Add hidden WLAN</source>
-        <translation type="unfinished">Gizli WLAN Ekle</translation>
+        <translation type="obsolete">Gizli WLAN Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="69"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="69"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="70"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="70"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="71"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN Güvenlik</translation>
+        <translation type="obsolete">WLAN Güvenlik</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="72"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="68"/>
+        <source>Add hidden Wi-Fi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="71"/>
+        <source>Wi-Fi security</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="72"/>
         <source>Username</source>
         <translation>Kullanıcı adı</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="73"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="73"/>
         <source>Password</source>
         <translation>Parola</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="74"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="74"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="75"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="75"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="77"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="77"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="95"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="95"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="96"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="96"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="101"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="101"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1088,17 +1236,17 @@
         <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="97"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="97"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="98"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="98"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifileap.cpp" line="100"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.cpp" line="100"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">Dinamik WEP (802.1X)</translation>
     </message>
@@ -1106,76 +1254,88 @@
         <source>WPA &amp; WPA2 Enterprise</source>
         <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifileap.ui" line="14"/>
+        <source>Connect to Hidden Wi-Fi Network</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DlgHideWifiWep</name>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>Gizli WLAN Ağına Bağlan</translation>
+        <translation type="vanished">Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="73"/>
         <source>Add hidden WLAN</source>
-        <translation type="unfinished">Gizli WLAN Ekle</translation>
+        <translation type="obsolete">Gizli WLAN Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="74"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="74"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="75"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="75"/>
         <source>Network name</source>
         <translation type="unfinished">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="76"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN Güvenliği:</translation>
+        <translation type="obsolete">WLAN Güvenliği:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="77"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="73"/>
+        <source>Add hidden Wi-Fi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="76"/>
+        <source>Wi-Fi security</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="77"/>
         <source>Key</source>
         <translation>Anahtar</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="78"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="78"/>
         <source>WEP index</source>
         <translation>WEP index</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="79"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="79"/>
         <source>Authentication</source>
         <translation type="unfinished">Kimlik Doğrulama:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="80"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="80"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="81"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="81"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="83"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="83"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="101"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="101"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="102"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="102"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="107"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="107"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1184,17 +1344,17 @@
         <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="103"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="103"/>
         <source>WEP 40/128-bit Key (Hex or ASCII)</source>
         <translation type="unfinished">WEP 40/128-bit Key (Hex veya ASCII)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="104"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="104"/>
         <source>WEP 128-bit Passphrase</source>
         <translation type="unfinished">WEP 128-bit Passphrase</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="106"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="106"/>
         <source>Dynamic WEP (802.1X)</source>
         <translation type="unfinished">Dinamik WEP (802.1x)</translation>
     </message>
@@ -1203,99 +1363,118 @@
         <translation type="obsolete">WPA &amp; WPA2 Enterprise</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="115"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="115"/>
         <source>1(default)</source>
         <translation>1(default)</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="121"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="121"/>
         <source>Open System</source>
         <translation>Sistemi aç</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwep.cpp" line="122"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.cpp" line="122"/>
         <source>Shared Key</source>
         <translation>Paylaşılan Anahtar</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwep.ui" line="14"/>
+        <source>Connect to Hidden Wi-Fi Network</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DlgHideWifiWpa</name>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.ui" line="14"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>Gizli WLAN Ağına Bağlan</translation>
+        <translation type="vanished">Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="66"/>
         <source>Add Hidden WLAN</source>
-        <translation type="unfinished">Gizli WLAN Ekle</translation>
+        <translation type="obsolete">Gizli WLAN Ekle</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="67"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="68"/>
         <source>Connection</source>
         <translation type="unfinished">Bağlantı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="68"/>
         <source>WLAN name</source>
-        <translation type="unfinished">WLAN adı:</translation>
+        <translation type="obsolete">WLAN adı:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="69"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN güvenlik:</translation>
+        <translation type="obsolete">WLAN güvenlik:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="70"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="67"/>
+        <source>Add Hidden Wi-Fi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="69"/>
+        <source>Wi-Fi name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="70"/>
+        <source>Wi-Fi security</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="71"/>
         <source>Password</source>
         <translation type="unfinished">Parola:</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="71"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="72"/>
         <source>Cancel</source>
         <translation type="unfinished">İptal</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="72"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="73"/>
         <source>Connect</source>
         <translation type="unfinished">Bağlan</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="74"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="77"/>
         <source>C_reate…</source>
         <translation type="unfinished">Oluştur...</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="97"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="86"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="98"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="87"/>
         <source>WPA and WPA2 Personal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="99"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="88"/>
         <source>WPA and WPA2 Enterprise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="187"/>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="276"/>
-        <source>Conn WLAN Success</source>
-        <translation type="unfinished">WLAN Bağlantısı Başarılı</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="192"/>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="281"/>
-        <source>Confirm your WLAN password or usable of wireless card</source>
-        <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
-    </message>
-    <message>
-        <location filename="../wireless-security/dlghidewifiwpa.cpp" line="379"/>
-        <source>Selected WLAN has not been scanned.</source>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="174"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="261"/>
+        <source>Conn Wifi Success</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="179"/>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.cpp" line="266"/>
+        <source>Confirm your Wi-Fi password or usable of wireless card</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Conn WLAN Success</source>
+        <translation type="obsolete">WLAN Bağlantısı Başarılı</translation>
+    </message>
+    <message>
+        <source>Confirm your WLAN password or usable of wireless card</source>
+        <translation type="obsolete">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
     <message>
         <source>WPA &amp; WPA2 Personal</source>
@@ -1313,57 +1492,154 @@
         <source>Dynamic WEP (802.1X)</source>
         <translation type="obsolete">Dinamik WEP (802.1x)</translation>
     </message>
+    <message>
+        <location filename="../src/frontend/wireless-security/dlghidewifiwpa.ui" line="14"/>
+        <source>Connect to Hidden Wi-Fi Network</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DlgHotspotCreate</name>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="46"/>
         <source>Create Hotspot</source>
-        <translation type="unfinished">Etkin Nokta Oluştur</translation>
+        <translation type="obsolete">Etkin Nokta Oluştur</translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="47"/>
         <source>Network name</source>
-        <translation type="unfinished">Ağ adı:</translation>
+        <translation type="obsolete">Ağ adı:</translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="48"/>
         <source>WLAN security</source>
-        <translation type="unfinished">WLAN Güvenlik:</translation>
+        <translation type="obsolete">WLAN Güvenlik:</translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="49"/>
         <source>Password</source>
-        <translation type="unfinished">Parola:</translation>
+        <translation type="obsolete">Parola:</translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="50"/>
         <source>Cancel</source>
-        <translation type="unfinished">İptal</translation>
+        <translation type="obsolete">İptal</translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="51"/>
         <source>Ok</source>
-        <translation type="unfinished">Tamam</translation>
+        <translation type="obsolete">Tamam</translation>
     </message>
     <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="54"/>
         <source>None</source>
-        <translation type="unfinished">Yok</translation>
-    </message>
-    <message>
-        <location filename="../hot-spot/dlghotspotcreate.cpp" line="55"/>
-        <source>WPA and WPA2 Personal</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Yok</translation>
     </message>
     <message>
         <source>WPA &amp; WPA2 Personal</source>
         <translation type="obsolete">WPA &amp; WPA2 Kişisel</translation>
+    </message>
+</context>
+<context>
+    <name>EnterpriseWlanDialog</name>
+    <message>
+        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="58"/>
+        <source>Connect Enterprise WLAN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="61"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="92"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="93"/>
+        <source>Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Ipv4Page</name>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="25"/>
+        <source>Ipv4Config</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="26"/>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="27"/>
+        <source>Netmask</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="28"/>
+        <source>Default Gateway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="29"/>
+        <source>Prefs DNS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="30"/>
+        <source>Alternative DNS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="40"/>
+        <source>Auto(DHCP)</source>
+        <translation type="unfinished">Oto(DHCP)</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="41"/>
+        <source>Manual</source>
+        <translation type="unfinished">Elle</translation>
+    </message>
+</context>
+<context>
+    <name>Ipv6Page</name>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="103"/>
+        <source>Ipv6Config</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="104"/>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="105"/>
+        <source>Subnet prefix Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="106"/>
+        <source>Default Gateway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="107"/>
+        <source>Prefs DNS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="108"/>
+        <source>Alternative DNS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="119"/>
+        <source>Auto(DHCP)</source>
+        <translation type="unfinished">Oto(DHCP)</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="120"/>
+        <source>Manual</source>
+        <translation type="unfinished">Elle</translation>
     </message>
 </context>
 <context>
@@ -1374,10 +1650,52 @@
     </message>
 </context>
 <context>
+    <name>LanPage</name>
+    <message>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="342"/>
+        <source>LAN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="345"/>
+        <source>Activated LAN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="353"/>
+        <source>Inactivated LAN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="518"/>
+        <source>LAN Disconnected Successfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="539"/>
+        <source>LAN Connected Successfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListItem</name>
+    <message>
+        <location filename="../src/frontend/list-items/listitem.cpp" line="50"/>
+        <source>Kylin NM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/listitem.cpp" line="53"/>
+        <source>kylin network applet desktop message</source>
+        <translation type="unfinished">Kylin ağ uygulaması masaüstü mesajı</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/mainwindow.ui" line="14"/>
-        <location filename="../src/mainwindow.cpp" line="564"/>
+        <location filename="../src/frontend/mainwindow.ui" line="14"/>
+        <location filename="../src/frontend/new-mainwindow.cpp" line="101"/>
+        <location filename="../src/frontend/new-mainwindow.cpp" line="148"/>
         <source>kylin-nm</source>
         <translation></translation>
     </message>
@@ -1386,27 +1704,31 @@
         <translation type="vanished">Ağ</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="391"/>
-        <location filename="../src/mainwindow.cpp" line="569"/>
         <source>Advanced</source>
-        <translation>Gelişmiş</translation>
+        <translation type="vanished">Gelişmiş</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="338"/>
-        <location filename="../src/mainwindow.cpp" line="1205"/>
-        <location filename="../src/mainwindow.cpp" line="2422"/>
         <source>Ethernet</source>
-        <translation>Kablolu Ağ</translation>
+        <translation type="vanished">Kablolu Ağ</translation>
     </message>
     <message>
         <source>Connect Hide Network</source>
         <translation type="vanished">Gizli Ağı Bağlan</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="352"/>
-        <location filename="../src/mainwindow.cpp" line="1256"/>
+        <location filename="../src/frontend/new-mainwindow.cpp" line="129"/>
+        <source>LAN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/new-mainwindow.cpp" line="131"/>
         <source>WLAN</source>
         <translation>WLAN</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/new-mainwindow.cpp" line="146"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Enabled</source>
@@ -1417,160 +1739,65 @@
         <translation type="vanished">Pasif</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="371"/>
         <source>HotSpot</source>
-        <translation>HotSpot</translation>
+        <translation type="vanished">HotSpot</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="381"/>
-        <source>FlyMode</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="568"/>
+        <location filename="../src/frontend/new-mainwindow.cpp" line="145"/>
         <source>Show MainWindow</source>
         <translation>Ana Pencereyi Göster</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1178"/>
-        <source>No wireless card detected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="1284"/>
-        <location filename="../src/mainwindow.cpp" line="1310"/>
-        <location filename="../src/mainwindow.cpp" line="1375"/>
-        <location filename="../src/mainwindow.cpp" line="1609"/>
-        <location filename="../src/mainwindow.cpp" line="2436"/>
-        <location filename="../src/mainwindow.cpp" line="2509"/>
         <source>Not connected</source>
-        <translation>Bağlanamadı</translation>
+        <translation type="vanished">Bağlanamadı</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1288"/>
-        <location filename="../src/mainwindow.cpp" line="1313"/>
-        <location filename="../src/mainwindow.cpp" line="1377"/>
-        <location filename="../src/mainwindow.cpp" line="1519"/>
-        <location filename="../src/mainwindow.cpp" line="1520"/>
-        <location filename="../src/mainwindow.cpp" line="1612"/>
-        <location filename="../src/mainwindow.cpp" line="1724"/>
-        <location filename="../src/mainwindow.cpp" line="1897"/>
-        <location filename="../src/mainwindow.cpp" line="2438"/>
-        <location filename="../src/mainwindow.cpp" line="2511"/>
         <source>Disconnected</source>
-        <translation>Bağlantı Kesildi</translation>
+        <translation type="vanished">Bağlantı Kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1477"/>
-        <source>NetOn,IfName:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="1543"/>
         <source>No Other Wired Network Scheme</source>
-        <translation type="unfinished">Başka Kablolu Ağ Düzeni Yok</translation>
+        <translation type="obsolete">Başka Kablolu Ağ Düzeni Yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1746"/>
         <source>No Other Wireless Network Scheme</source>
-        <translation type="unfinished">Başka Kablosuz Ağ Düzeni Yok</translation>
+        <translation type="obsolete">Başka Kablosuz Ağ Düzeni Yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1920"/>
-        <location filename="../src/mainwindow.cpp" line="1924"/>
-        <location filename="../src/mainwindow.cpp" line="1929"/>
-        <location filename="../src/mainwindow.cpp" line="1933"/>
-        <source>Wired connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="1938"/>
-        <location filename="../src/mainwindow.cpp" line="1942"/>
-        <location filename="../src/mainwindow.cpp" line="1947"/>
-        <location filename="../src/mainwindow.cpp" line="1951"/>
-        <source>Ethernet connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="2359"/>
         <source>Wired net is disconnected</source>
-        <translation type="unfinished">Kablolu ağ bağlantısı kesildi</translation>
+        <translation type="obsolete">Kablolu ağ bağlantısı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2385"/>
         <source>WLAN is disconnected</source>
-        <translation type="unfinished">Kablosuz bağlantı kesildi</translation>
+        <translation type="obsolete">Kablosuz bağlantı kesildi</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2706"/>
-        <source>Without Lan Cable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="2727"/>
-        <source>MAC Address Mismatch</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="2735"/>
-        <source>Connection Be Killed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="2743"/>
-        <source>Connect Wired Network Failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="4009"/>
-        <source>Connect VPN Network Failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="2719"/>
-        <source>IP configuration could not be reserved</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="2763"/>
         <source>Confirm your WLAN password or usable of wireless card</source>
-        <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
+        <translation type="obsolete">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2768"/>
         <source>Confirm your WLAN password</source>
-        <translation type="unfinished">WLAN parolasını doğrula</translation>
+        <translation type="obsolete">WLAN parolasını doğrula</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="216"/>
         <source>Ethernet Networks</source>
-        <translation>Ethernet Ağları</translation>
+        <translation type="vanished">Ethernet Ağları</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="226"/>
         <source>New LAN</source>
-        <translation type="unfinished">Yeni LAN</translation>
+        <translation type="obsolete">Yeni LAN</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="250"/>
         <source>Hide WLAN</source>
-        <translation>Gizli WLAN</translation>
+        <translation type="vanished">Gizli WLAN</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="280"/>
         <source>No usable network in the list</source>
-        <translation type="unfinished">Listede kullanılabilir ağ yok</translation>
+        <translation type="obsolete">Listede kullanılabilir ağ yok</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1471"/>
-        <location filename="../src/mainwindow.cpp" line="1702"/>
-        <source>NetOn,</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="240"/>
         <source>WLAN Networks</source>
-        <translation>WLAN Ağları</translation>
+        <translation type="vanished">WLAN Ağları</translation>
     </message>
     <message>
         <source>None</source>
@@ -1597,18 +1824,109 @@
         <translation type="vanished">Kablosuz listesini şimdi güncelle</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2697"/>
         <source>Conn Ethernet Success</source>
-        <translation>Ethernet Bağlantısı Başarılı</translation>
+        <translation type="vanished">Ethernet Bağlantısı Başarılı</translation>
     </message>
     <message>
         <source>Conn Ethernet Fail</source>
         <translation type="vanished">Ethernet Bağlantısı Hatası</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="2757"/>
         <source>Conn WLAN Success</source>
-        <translation>WLAN Bağlantısı Başarılı</translation>
+        <translation type="vanished">WLAN Bağlantısı Başarılı</translation>
+    </message>
+</context>
+<context>
+    <name>NetDetail</name>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="30"/>
+        <source>Kylin NM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="33"/>
+        <source>kylin network desktop message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="151"/>
+        <source>Detail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="156"/>
+        <source>Ipv4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="160"/>
+        <source>Ipv6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="164"/>
+        <source>Security</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="184"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="191"/>
+        <source>Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="194"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="197"/>
+        <source>Forget this network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="236"/>
+        <source>Add Lan Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="245"/>
+        <source>connect hiddin wlan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="505"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="506"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="507"/>
+        <source>Auto</source>
+        <translation type="unfinished">Oto</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="611"/>
+        <source>start check ipv4 address conflict</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="628"/>
+        <source>start check ipv6 address conflict</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="674"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="711"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="789"/>
+        <source>ipv4 address conflict!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="719"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="797"/>
+        <source>ipv6 address conflict!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1619,9 +1937,216 @@
     </message>
 </context>
 <context>
+    <name>OldMainWindow</name>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="311"/>
+        <source>Ethernet Networks</source>
+        <translation type="unfinished">Ethernet Ağları</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="321"/>
+        <source>New LAN</source>
+        <translation type="unfinished">Yeni LAN</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="336"/>
+        <source>WLAN Networks</source>
+        <translation type="unfinished">WLAN Ağları</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="345"/>
+        <source>Hide WLAN</source>
+        <translation type="unfinished">Gizli WLAN</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="378"/>
+        <source>No usable network in the list</source>
+        <translation type="unfinished">Listede kullanılabilir ağ yok</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="441"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="1534"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3782"/>
+        <source>Ethernet</source>
+        <translation type="unfinished">Kablolu Ağ</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="484"/>
+        <source>HotSpot</source>
+        <translation type="unfinished">HotSpot</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="494"/>
+        <source>FlyMode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="504"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="715"/>
+        <source>Advanced</source>
+        <translation type="unfinished">Gelişmiş</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="710"/>
+        <source>kylin-nm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="714"/>
+        <source>Show MainWindow</source>
+        <translation type="unfinished">Ana Pencereyi Göster</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="1146"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3727"/>
+        <source>Wired net is disconnected</source>
+        <translation type="unfinished">Kablolu ağ bağlantısı kesildi</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="1406"/>
+        <source>No wireless card detected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="1661"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="1782"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="2735"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3799"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3876"/>
+        <source>Not connected</source>
+        <translation type="unfinished">Bağlanamadı</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="1664"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="1784"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="1954"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="1955"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="2738"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="2950"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3184"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3801"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3878"/>
+        <source>Disconnected</source>
+        <translation type="unfinished">Bağlantı Kesildi</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="1888"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="2905"/>
+        <source>NetOn,</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="1894"/>
+        <source>NetOn,IfName:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="1978"/>
+        <source>No Other Wired Network Scheme</source>
+        <translation type="unfinished">Başka Kablolu Ağ Düzeni Yok</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="2984"/>
+        <source>No Other Wireless Network Scheme</source>
+        <translation type="unfinished">Başka Kablosuz Ağ Düzeni Yok</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="3216"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3220"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3225"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3229"/>
+        <source>Wired connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="3234"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3238"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3243"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="3247"/>
+        <source>Ethernet connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="3750"/>
+        <source>WLAN is disconnected</source>
+        <translation type="unfinished">Kablosuz bağlantı kesildi</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4329"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="4346"/>
+        <source>Conn Ethernet Success</source>
+        <translation type="unfinished">Ethernet Bağlantısı Başarılı</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4338"/>
+        <source>Without Lan Cable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4359"/>
+        <source>IP configuration could not be reserved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4367"/>
+        <source>MAC Address Mismatch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4375"/>
+        <source>Connection Be Killed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4383"/>
+        <source>Connect Bluetooth Network Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4391"/>
+        <source>Carrier/link changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4399"/>
+        <source>Connect Wired Network Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4406"/>
+        <source>Connect VPN Network Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4429"/>
+        <source>Conn WLAN Success</source>
+        <translation type="unfinished">WLAN Bağlantısı Başarılı</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4437"/>
+        <source>Confirm your WLAN password or usable of wireless card</source>
+        <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4445"/>
+        <source>Confirm your WLAN password</source>
+        <translation type="unfinished">WLAN parolasını doğrula</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4451"/>
+        <source>Selected WLAN has not been scanned.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/mainwindow.cpp" line="4457"/>
+        <source>Connect Hidden WLAN Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>OneConnForm</name>
     <message>
-        <location filename="../src/oneconnform.ui" line="14"/>
+        <location filename="../src/frontend/list-items/oneconnform.ui" line="14"/>
         <source>Form</source>
         <translation>--</translation>
     </message>
@@ -1634,15 +2159,19 @@
         <translation type="vanished">Ayar</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="43"/>
-        <location filename="../src/oneconnform.cpp" line="44"/>
-        <location filename="../src/oneconnform.cpp" line="45"/>
-        <location filename="../src/oneconnform.cpp" line="47"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="43"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="44"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="45"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="47"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="264"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="295"/>
         <source>Connect</source>
         <translation>Bağlan</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="46"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="46"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="262"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="292"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı Kes</translation>
     </message>
@@ -1651,12 +2180,11 @@
         <translation type="obsolete">Parola gir...</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="376"/>
         <source>Connect to Hidden WLAN Network</source>
-        <translation>Gizli WLAN Ağına Bağlan</translation>
+        <translation type="vanished">Gizli WLAN Ağına Bağlan</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="469"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="629"/>
         <source>Signal：</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1669,22 +2197,38 @@
         <translation type="vanished">Güvenli</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="48"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="48"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="387"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="130"/>
+        <source>Property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="216"/>
+        <source>Password Incorrect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="267"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="298"/>
+        <source>Forget</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="528"/>
         <source>Rate</source>
         <translation>Oran</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="466"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="626"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="468"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="628"/>
         <source>WLAN Security：</source>
         <translation type="unfinished">WLAN güvenliği:</translation>
     </message>
@@ -1693,17 +2237,17 @@
         <translation type="obsolete">Sinyal gücü:</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="470"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="630"/>
         <source>MAC：</source>
         <translation type="unfinished">Fiziksel adres:</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="546"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="797"/>
         <source>Conn WLAN Success</source>
         <translation type="unfinished">WLAN Bağlantısı Başarılı</translation>
     </message>
     <message>
-        <location filename="../src/oneconnform.cpp" line="551"/>
+        <location filename="../src/frontend/list-items/oneconnform.cpp" line="802"/>
         <source>Confirm your WLAN password or usable of wireless card</source>
         <translation type="unfinished">Kablosuz şifrenizi veya kablosuz kart kullanılabilirliğini onaylayın</translation>
     </message>
@@ -1715,7 +2259,7 @@
 <context>
     <name>OneLancForm</name>
     <message>
-        <location filename="../src/onelancform.ui" line="14"/>
+        <location filename="../src/frontend/list-items/onelancform.ui" line="14"/>
         <source>Form</source>
         <translation>--</translation>
     </message>
@@ -1724,51 +2268,72 @@
         <translation type="vanished">Ayar</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="31"/>
-        <location filename="../src/onelancform.cpp" line="32"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="32"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="33"/>
         <source>Connect</source>
         <translation>Bağlan</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="33"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="34"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı Kes</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="34"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="35"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="249"/>
-        <location filename="../src/onelancform.cpp" line="253"/>
-        <location filename="../src/onelancform.cpp" line="254"/>
-        <location filename="../src/onelancform.cpp" line="258"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="129"/>
+        <source>Not connected</source>
+        <translation type="unfinished">Bağlanamadı</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="131"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="167"/>
+        <source>Disconnected</source>
+        <translation type="unfinished">Bağlantı Kesildi</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="143"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="161"/>
+        <source>Ethernet</source>
+        <translation type="unfinished">Kablolu Ağ</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="149"/>
+        <source>NetOn,</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="321"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="325"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="330"/>
         <source>No Configuration</source>
         <translation type="unfinished">Yapılandırma Yok</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="259"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="331"/>
         <source>No IfName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="262"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="334"/>
         <source>IPv4：</source>
         <translation type="unfinished">IPv4 adresi:</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="263"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="335"/>
         <source>IPv6：</source>
         <translation type="unfinished">IPv6 adresi:</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="264"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="336"/>
         <source>BandWidth：</source>
         <translation type="unfinished">Bant genişliği:</translation>
     </message>
     <message>
-        <location filename="../src/onelancform.cpp" line="265"/>
+        <location filename="../src/frontend/list-items/onelancform.cpp" line="337"/>
         <source>MAC：</source>
         <translation type="unfinished">Fiziksel adres:</translation>
     </message>
@@ -1778,88 +2343,411 @@
     </message>
 </context>
 <context>
-    <name>Utils</name>
+    <name>SecurityPage</name>
     <message>
-        <location filename="../src/utils.cpp" line="84"/>
-        <source>kylin-nm</source>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="71"/>
+        <source>Security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/utils.cpp" line="87"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="72"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="87"/>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="74"/>
+        <source>EAP type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="76"/>
+        <source>Identity</source>
+        <translation type="unfinished">Kimlik:</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="77"/>
+        <source>Domain</source>
+        <translation type="unfinished">Domain:</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="78"/>
+        <source>CA certficate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="79"/>
+        <source>no need for CA certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="80"/>
+        <source>User certificate</source>
+        <translation type="unfinished">Kullanıcı sertifikası:</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="81"/>
+        <source>User private key</source>
+        <translation type="unfinished">Kullanıcı özel anahtarı:</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="82"/>
+        <source>User key password</source>
+        <translation type="unfinished">Kullanıcı anahtarı şifresi:</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="85"/>
+        <source>Ineer authentication</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="86"/>
+        <source>Usename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="88"/>
+        <source>Ask pwd each query</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="90"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="100"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="103"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="106"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="726"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="748"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="771"/>
+        <source>None</source>
+        <translation type="unfinished">Yok</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="91"/>
+        <source>WPA&amp;WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="92"/>
+        <source>WPA&amp;WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="93"/>
+        <source>WPA3 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="101"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="104"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="107"/>
+        <source>Choose from file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="716"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="739"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="761"/>
+        <source>Choose a CA certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="717"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="740"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="762"/>
+        <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TabPage</name>
+    <message>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="43"/>
+        <source>Current Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="47"/>
+        <source>Devices Closed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="85"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="120"/>
+        <source>Kylin NM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="123"/>
         <source>kylin network applet desktop message</source>
         <translation type="unfinished">Kylin ağ uygulaması masaüstü mesajı</translation>
     </message>
 </context>
 <context>
-    <name>WpaWifiDialog</name>
+    <name>Utils</name>
     <message>
-        <location filename="../src/wpawifidialog.ui" line="26"/>
+        <source>kylin network applet desktop message</source>
+        <translation type="obsolete">Kylin ağ uygulaması masaüstü mesajı</translation>
+    </message>
+</context>
+<context>
+    <name>WiFiConfigDialog</name>
+    <message>
+        <location filename="../src/frontend/wificonfigdialog.ui" line="14"/>
         <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="100"/>
-        <source>Connect WLAN</source>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="21"/>
+        <source>WLAN Authentication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="113"/>
-        <source>Connection name</source>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="32"/>
+        <source>Input WLAN Information Please</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="134"/>
-        <source>Security</source>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="33"/>
+        <source>WLAN ID：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="153"/>
-        <source>EAP type</source>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="34"/>
+        <source>WLAN Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="166"/>
-        <source>inner authentication</source>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="35"/>
+        <source>Password：</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="179"/>
-        <source>Username</source>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="36"/>
+        <source>Cancl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="196"/>
-        <source>Password</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="37"/>
+        <source>Ok</source>
+        <translation type="unfinished">Tamam</translation>
+    </message>
+</context>
+<context>
+    <name>WlanListItem</name>
+    <message>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="23"/>
+        <source>Not connected</source>
+        <translation type="unfinished">Bağlanamadı</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="210"/>
-        <source>Show password</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="102"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="428"/>
+        <source>Disconnect</source>
+        <translation type="unfinished">Bağlantıyı Kes</translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="223"/>
-        <source>Ask pwd each query</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/wpawifidialog.cpp" line="241"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/wpawifidialog.cpp" line="242"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="104"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="170"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="428"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/wpawifidialog.cpp" line="268"/>
-        <source>WPA &amp; WPA2</source>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="107"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="430"/>
+        <source>Forget</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="186"/>
+        <source>Auto Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WlanPage</name>
+    <message>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="63"/>
+        <source>WLAN</source>
+        <translation type="unfinished">WLAN</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="64"/>
+        <source>Activated WLAN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="65"/>
+        <source>Other WLAN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="87"/>
+        <source>More...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="504"/>
+        <source>WLAN Connected Successfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="514"/>
+        <source>WLAN Disconnected Successfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WpaWifiDialog</name>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.ui" line="26"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="140"/>
+        <source>Connect WLAN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="174"/>
+        <source>Security</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="193"/>
+        <source>EAP type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="153"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="207"/>
+        <source>Inner auth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="220"/>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="237"/>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="252"/>
+        <source>Show password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="266"/>
+        <source>Ask pwd each query</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="284"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="285"/>
+        <source>Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="315"/>
+        <source>WPA and WPA2 Personal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="316"/>
+        <source>WPA and WPA2 Enterprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="384"/>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="407"/>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="430"/>
+        <source>Choose from file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="389"/>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="412"/>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="435"/>
+        <source>Choose a CA certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="390"/>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="413"/>
+        <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="436"/>
+        <source>CA Files (*.pem *.der *.p12 *.crt *.key *.cer *.pfx)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="963"/>
+        <source>Identity</source>
+        <translation type="unfinished">Kimlik:</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="979"/>
+        <source>Anonymous Identity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="995"/>
+        <source>Domain</source>
+        <translation type="unfinished">Domain:</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="1011"/>
+        <source>CA certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="1027"/>
+        <source>no need for CA certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="1047"/>
+        <source>User Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="1062"/>
+        <source>User Private Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="1077"/>
+        <source>User Private Key password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="314"/>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="383"/>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="397"/>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="406"/>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="420"/>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="429"/>
+        <location filename="../src/frontend/wpawifidialog.cpp" line="443"/>
         <source>None</source>
-        <translation type="obsolete">Yok</translation>
+        <translation type="unfinished">Yok</translation>
     </message>
 </context>
 </TS>

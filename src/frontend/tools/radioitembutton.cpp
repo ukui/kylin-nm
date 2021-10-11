@@ -103,6 +103,7 @@ void RadioItemButton::onLoadingStopped()
     } else {
         m_iconLabel->setPixmap(m_pixmap);
         m_animation->stop();
+        emit this->animationStoped();
     }
 
 }

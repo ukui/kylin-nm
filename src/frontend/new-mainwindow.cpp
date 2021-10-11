@@ -357,7 +357,7 @@ void MainWindow::onRefreshTrayIcon()
     } else if (m_wlanWidget->m_wlanIsConnected == true && m_lanWidget->m_isLanConnected == false){
         m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
     } else if (m_wlanWidget->m_wlanIsConnected == false && m_lanWidget->m_isLanConnected == false){
-        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
     }
 }
 

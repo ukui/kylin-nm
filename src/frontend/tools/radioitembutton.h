@@ -30,6 +30,7 @@ public:
 signals:
     void requestStartLoading();
     void requestStopLoading();
+    void animationStoped();
 
 protected:
     void paintEvent(QPaintEvent *event);

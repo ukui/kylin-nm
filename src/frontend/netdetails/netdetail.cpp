@@ -44,7 +44,7 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
      m_uuid(uuid),
      isActive(isActive),
      isWlan(isWlan),
-     isCreateNet(isCreateNet),
+     m_isCreateNet(isCreateNet),
      QDialog(parent)
 {
     //设置窗口无边框，阴影
@@ -64,9 +64,11 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
     centerToScreen();
 
-    if (isCreateNet && !uuid.isEmpty()) {
-        isCreateNet = false;
+    qDebug() << m_isCreateNet << name;
+    if (m_isCreateNet && !name.isEmpty()) {
+        m_isCreateNet = false;
     }
+    qDebug() << m_isCreateNet;
     m_netDeviceResource = new KyNetworkDeviceResourse(this);
     m_wirelessConnOpration = new KyWirelessConnectOperation(this);
     m_resource = new KyWirelessNetResource(this);
@@ -79,13 +81,13 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     pagePadding(name,isWlan);
 
 
-    isCreateOk = !(isCreateNet && !isWlan);
+    isCreateOk = !(m_isCreateNet && !isWlan);
     isDetailOk = !(m_name.isEmpty());
     isIpv4Ok = true;
     isIpv6Ok = true;
     isSecuOk = true;
 
-    qDebug() << interface << name << uuid <<  "isWlan" << isWlan << "isCreateNet" <<isCreateNet;
+    qDebug() << interface << name << uuid <<  "isWlan" << isWlan << "isCreateNet" <<m_isCreateNet;
 
     setConfirmEnable();
 }
@@ -116,7 +118,7 @@ void NetDetail::initUI()
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(9,9,14,24);
 
-    detailPage = new DetailPage(isWlan, isCreateNet, this);
+    detailPage = new DetailPage(isWlan, m_isCreateNet, this);
     ipv4Page = new Ipv4Page(this);
     ipv6Page = new Ipv6Page(this);
     securityPage = new SecurityPage(this);
@@ -230,7 +232,7 @@ void NetDetail::initUI()
 void NetDetail::loadPage()
 {
     //判断是否创建网络页面
-    if (isCreateNet && !isWlan) {
+    if (m_isCreateNet && !isWlan) {
         pageFrame->hide();
         stackWidget->setCurrentIndex(CREATE_NET_PAGE_NUM);
         titleLabel->setText(tr("Add Lan Connect"));
@@ -305,7 +307,7 @@ void NetDetail::initComponent()
 void NetDetail::pagePadding(QString netName, bool isWlan)
 {
     //网络详情页填充
-    if(isCreateNet && !isWlan) {
+    if(m_isCreateNet && !isWlan) {
         return;
     }
 
@@ -363,7 +365,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 //获取网路详情信息
 void NetDetail::getConInfo(ConInfo &conInfo)
 {
-    if (isCreateNet && !isWlan) {
+    if (m_isCreateNet && !isWlan) {
         return;
     }
     getBaseInfo(conInfo);
@@ -555,7 +557,7 @@ void NetDetail::initTtlsInfo(ConInfo &conInfo)
 //点击了保存更改网络设置的按钮
 void NetDetail::on_btnConfirm_clicked()
 {
-    if (isCreateNet) {
+    if (m_isCreateNet) {
         if (!isWlan) {
             //新建有线连接
             qDebug() << "Confirm create wired connect";
@@ -589,7 +591,7 @@ void NetDetail::on_btnForget_clicked()
 
 void NetDetail::setConfirmEnable()
 {
-    if (isCreateNet && !isWlan) {
+    if (m_isCreateNet && !isWlan) {
             isConfirmBtnEnable = isCreateOk;
     } else {
         if (isDetailOk && isIpv4Ok && isIpv6Ok) {

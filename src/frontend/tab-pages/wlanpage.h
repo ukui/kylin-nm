@@ -44,7 +44,7 @@ signals:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);
     void wlanRemove(QString devName,QString ssid);
-    void wlanActiveConnectionStateChanged(QString interface, QString ssid, int status);
+    void wlanActiveConnectionStateChanged(QString interface, QString ssid, QString uuid, int status);
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid);
     void signalStrengthChange(QString devName, QString ssid, int strength);

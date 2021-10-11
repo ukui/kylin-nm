@@ -583,7 +583,7 @@ bool KyConnectResourse::isWiredConnection(QString uuid)
     NetworkManager::Connection::Ptr connectPtr =
             m_networkResourceInstance->getConnect(uuid);
 
-    if (connectPtr->isValid()) {
+    if (!connectPtr.isNull()) {
         NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
 
         if (connectSettingPtr.isNull()) {
@@ -605,7 +605,7 @@ bool KyConnectResourse::isWirelessConnection(QString uuid)
     NetworkManager::Connection::Ptr connectPtr =
             m_networkResourceInstance->getConnect(uuid);
 
-    if (connectPtr->isValid()) {
+    if (connectPtr.isNull()) {
         NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
 
         if (connectSettingPtr.isNull()) {

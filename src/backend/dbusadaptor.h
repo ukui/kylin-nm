@@ -86,7 +86,7 @@ Q_SIGNALS: // SIGNALS
     void lanUpdate(QString devName, QStringList info);
     void wlanAdd(QString devName, QStringList info);
     void wlanRemove(QString devName,QString ssid);
-    void wlanactiveConnectionStateChanged(QString devName, QString ssid, int status);
+    void wlanactiveConnectionStateChanged(QString devName, QString ssid, QString uuid, int status);
     void lanActiveConnectionStateChanged(QString devName, QString uuid, int status);
     //仅失败，若成功直接发listUpdate
     void activateFailed(QString errorMessage);

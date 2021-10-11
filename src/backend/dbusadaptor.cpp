@@ -178,12 +178,14 @@ QMap<QString, bool> DbusAdaptor::getDeviceListAndEnabled(int devType)
 //唤起属性页 根据网卡类型 参数2 为ssid/uuid
 void DbusAdaptor::showPropertyWidget(QString devName, QString ssid)
 {
+    qDebug() << "showPropertyWidget";
     parent()->showPropertyWidget(devName,ssid);
 }
 
 //唤起新建有线连接界面
 void DbusAdaptor::showCreateWiredConnectWidget(QString devName)
 {
+    qDebug() << "showCreateWiredConnectWidget";
     parent()->showCreateWiredConnectWidget(devName);
 }
 

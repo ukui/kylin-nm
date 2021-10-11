@@ -6,8 +6,10 @@
 #include "backend/dbus-interface/kylinconnectresource.h"
 #include "backend/dbus-interface/kylinnetworkdeviceresource.h"
 #include "backend/dbus-interface/kylinconnectitem.h"
-#include "onelancform.h"
+#include "lanlistitem.h"
 #include "mainwindow.h"
+
+class LanListItem;
 
 typedef enum{
     ACTIVECONNECTION,
@@ -56,8 +58,8 @@ private:
     KyConnectResourse        *m_connectResource = nullptr;
     KyNetworkDeviceResourse  *m_deviceResource = nullptr;
 
-    QList<OneLancForm*> m_wiredActiveFormlist;
-    QList<OneLancForm*> m_wiredFormlist;
+    QList<LanListItem*> m_wiredActiveFormlist;
+    QList<LanListItem*> m_wiredFormlist;
 };
 
 #endif // KYLINWIREDWIDGET_H

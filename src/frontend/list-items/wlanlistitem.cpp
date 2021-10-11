@@ -288,10 +288,10 @@ void WlanListItem::onNetButtonClicked()
         qDebug()<<"Clicked on connected wifi, it will be inactivated. ssid = " << m_data->m_NetSsid << Q_FUNC_INFO << __LINE__;
         return;
     }
-//有配置或者无密码的wifi直接连接
-    if (m_data->m_isConfigured || m_hasPwd == false) {
-        this->onConnectButtonClicked();
-//        m_connoperation->activeWirelessConnect(m_wlanDevice, m_data->m_connectUuid);//初始化没有uuid只有激活一次才有uuid
+//有配置的wifi直接连接
+    if (m_data->m_isConfigured) {
+//        this->onConnectButtonClicked();
+        m_connoperation->activeWirelessConnect(m_wlanDevice, m_data->m_connectUuid);//初始化没有uuid只有激活一次才有uuid
         qDebug() << "Has configuration, will be activated. ssid = " << m_data->m_NetSsid << m_wlanDevice << m_data->m_connectUuid << Q_FUNC_INFO << __LINE__;
         return;
     }
@@ -302,7 +302,7 @@ void WlanListItem::onNetButtonClicked()
         } else {
             this->setExpanded(true);
         }
-    } else {
+    } else { //无密码的情况
         onConnectButtonClicked();
     }
 }
@@ -387,6 +387,7 @@ void WlanListItem::onConnectButtonClicked()
     settings.isAutoConnect = m_autoConnectCheckBox->isChecked();
     settings.m_psk = m_pwdLineEdit->text();
     if (m_data->m_secuType.isEmpty() || m_data->m_secuType == "") {
+        qDebug() << "connect to no password wifi" << Q_FUNC_INFO << __LINE__;
         settings.m_type = WpaNone;
     } else if (m_data->m_secuType.contains("WPA1") || m_data->m_secuType.contains("WPA2")) {
         settings.m_type = WpaPsk;
@@ -422,7 +423,8 @@ void WlanListItem::onWlanStatusChange(QString uuid, NetworkManager::ActiveConnec
 {
     QString ssid, devName;
     m_resource->getSsidByUuid(uuid, ssid, devName);
-    if (m_data->m_NetSsid == ssid) {
+    //有可能配置被删了，获取不到ssid,所以也可以按uuid判断（解决连接中点忘记网络，图标还在loading的问题）
+    if (m_data->m_NetSsid == ssid || m_data->m_connectUuid == uuid) {
         qDebug() << "[WlanPage] State changed to :" << state << Q_FUNC_INFO <<__LINE__;
         m_state = state;
         if ((state == NetworkManager::ActiveConnection::State::Activating || state == NetworkManager::ActiveConnection::State::Deactivating)

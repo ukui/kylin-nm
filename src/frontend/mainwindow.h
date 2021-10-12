@@ -49,6 +49,8 @@ public:
     //唤起新建有线连接界面
     void showCreateWiredConnectWidget(const QString devName);
 
+    void rescan();
+
 signals:
     //设备插拔
     void deviceStatusChanged();
@@ -60,7 +62,7 @@ signals:
     void lanUpdate(QString devName, QStringList info);
     void wlanAdd(QString devName, QStringList info);
     void wlanRemove(QString devName,QString ssid);
-    void wlanactiveConnectionStateChanged(QString devName, QString ssid, int status);
+    void wlanactiveConnectionStateChanged(QString devName, QString ssid, QString uuid, int status);
     void lanActiveConnectionStateChanged(QString devName, QString uuid, int status);
     void activateFailed(QString errorMessage);
     void deactivateFailed(QString errorMessage);

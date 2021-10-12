@@ -78,6 +78,8 @@ public Q_SLOTS: // METHODS
     void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
     //获取热点
     QStringList getStoredApInfo();
+    //wifi扫描
+    void reScan();
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);
 //    void wiredActivating(QString devName, QString ssid);
@@ -86,7 +88,7 @@ Q_SIGNALS: // SIGNALS
     void lanUpdate(QString devName, QStringList info);
     void wlanAdd(QString devName, QStringList info);
     void wlanRemove(QString devName,QString ssid);
-    void wlanactiveConnectionStateChanged(QString devName, QString ssid, int status);
+    void wlanactiveConnectionStateChanged(QString devName, QString ssid, QString uuid, int status);
     void lanActiveConnectionStateChanged(QString devName, QString uuid, int status);
     //仅失败，若成功直接发listUpdate
     void activateFailed(QString errorMessage);

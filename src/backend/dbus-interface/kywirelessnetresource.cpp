@@ -33,6 +33,10 @@ KyWirelessNetResource::KyWirelessNetResource(QObject *parent)
     connect(m_connectResource, &KyConnectResourse::connectionRemove, this, &KyWirelessNetResource::onConnectionRemove);
     connect(m_connectResource, &KyConnectResourse::connectionUpdate, this, &KyWirelessNetResource::onConnectionUpdate);
 
+    connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this, &KyWirelessNetResource::onDeviceAdd);
+    connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this, &KyWirelessNetResource::onDeviceRemove);
+    connect(m_device, &KyNetworkDeviceResourse::deviceNameUpdate, this, &KyWirelessNetResource::onDeviceNameUpdate);
+
 }
 
 KyWirelessNetResource::~KyWirelessNetResource()
@@ -537,4 +541,35 @@ void KyWirelessNetResource::onConnectionUpdate(QString uuid)
     m_WifiNetworkList.clear();
     kyWirelessNetItemListInit();
     emit wifiNetworkUpdate();
+}
+
+
+void KyWirelessNetResource::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
+{
+    if(deviceType == NetworkManager::Device::Type::Wifi) {
+        if (!m_WifiNetworkList.contains(deviceName)) {
+            m_WifiNetworkList.insert(deviceName,QList<KyWirelessNetItem>());
+        }
+    }
+}
+
+void KyWirelessNetResource::onDeviceRemove(QString deviceName)
+{
+    if (m_WifiNetworkList.contains(deviceName)) {
+        m_WifiNetworkList.remove(deviceName);
+    }
+}
+
+void KyWirelessNetResource::onDeviceNameUpdate(QString oldName, QString newName)
+{
+    if (!m_WifiNetworkList.contains(oldName)) {
+        return;
+    }
+
+    QMap<QString, QList<KyWirelessNetItem> >      newWifiNetworkList(m_WifiNetworkList);
+    QList<KyWirelessNetItem> list = m_WifiNetworkList[oldName];
+    newWifiNetworkList.remove(oldName);
+    newWifiNetworkList.insert(newName,list);
+    m_WifiNetworkList = newWifiNetworkList;
+
 }

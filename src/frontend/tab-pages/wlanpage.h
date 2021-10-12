@@ -40,11 +40,12 @@ public:
     void deactivateWireless(const QString& devName, const QString& ssid);
 
     void showDetailPage(QString devName, QString uuid);
+
 signals:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);
     void wlanRemove(QString devName,QString ssid);
-    void wlanActiveConnectionStateChanged(QString interface, QString ssid, int status);
+    void wlanActiveConnectionStateChanged(QString interface, QString ssid, QString uuid, int status);
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid);
     void signalStrengthChange(QString devName, QString ssid, int strength);
@@ -54,6 +55,7 @@ signals:
 
 public slots:
     void onMainWindowVisibleChanged(const bool &visible);
+    void requestScan();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -119,7 +121,6 @@ private slots:
     void onWlanSwitchClicked();
     void onWlanSwitchStatusChanged(const bool &checked);
     void onDeviceComboxIndexChanged(int currentIndex);
-    void requestScan();
     void onHiddenWlanClicked();
     void showControlCenter();
     void onWifiEnabledChanged(bool isWifiOn);

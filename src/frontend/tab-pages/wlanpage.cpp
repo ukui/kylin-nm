@@ -538,7 +538,7 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
     m_resource->getSsidByUuid(uuid, ssid, devName);
 
     qDebug() << "emit wlanActiveConnectionStateChanged" << devName << ssid << state;
-    emit wlanActiveConnectionStateChanged(devName, ssid, state);
+    emit wlanActiveConnectionStateChanged(devName, ssid,uuid, state);
 
     if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         QList<KyApConnectItem *> apConnectItemList;
@@ -781,9 +781,14 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
         QString activeSsid ;
         //先是已连接
         if (actMap.contains(iter.key())) {
+            qDebug() << "find " <<iter.key();
             KyWirelessNetItem data;
-            if (m_resource->getWifiNetwork(iter.key(), actMap[iter.key()].at(0), data)) {
-                vector.append(QStringList()<<data.m_NetSsid<<QString::number(data.m_signalStrength)<<data.m_secuType);
+            QString ssid ="";
+            QString devName = iter.key();
+            m_resource->getSsidByUuid(actMap[iter.key()].at(0), ssid, devName);
+            if (m_resource->getWifiNetwork(iter.key(), ssid, data)) {
+                qDebug() << data.m_NetSsid << data.m_signalStrength << data.m_secuType << data.m_connectUuid;
+                vector.append(QStringList()<<data.m_NetSsid<<QString::number(data.m_signalStrength)<<data.m_secuType<<data.m_connectUuid);
                 activeSsid = data.m_NetSsid;
             }
 
@@ -924,6 +929,7 @@ void WlanPage::onMainWindowVisibleChanged(const bool &visible)
 void WlanPage::showDetailPage(QString devName, QString ssid)
 {
     KyWirelessNetItem data;
+    bool isActive;
     if (!m_resource->getWifiNetwork(devName, ssid, data)) {
         qDebug()<<"[WlanPage] " << ssid << " is missing when showDetailPage";
         return;
@@ -931,15 +937,15 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
 
     QMap<QString,QStringList> actMap;
     m_resource->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activated, actMap);
-    if (!actMap.contains(devName)) {
-        qDebug()<<"[WlanPage] " << devName << " is missing when showDetailPage";
-        return;
+    if (actMap.empty() || !actMap.contains(devName)) {
+        qDebug()<<"[WlanPage] " << devName << " is missing in active device when showDetailPage";
+        isActive = false;
+    } else {
+        QString actSsid;
+        m_resource->getSsidByUuid(actMap[devName].at(0), actSsid, devName);
+        isActive = !actSsid.compare(ssid);
     }
 
-    QString actSsid;
-    m_resource->getSsidByUuid(actMap[devName].at(0), actSsid, devName);
-
-    bool isActive = !actSsid.compare(ssid);
     NetDetail *netDetail = new NetDetail(devName, ssid, data.m_connectUuid, isActive, true, true, this);
     netDetail->show();
 }

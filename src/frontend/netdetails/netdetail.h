@@ -109,7 +109,7 @@ private:
     QString      m_deviceName;
 
     bool         isWlan;
-    bool         isCreateNet;
+    bool         m_isCreateNet;
     bool         isActive;
     bool         isHideWlan;
 

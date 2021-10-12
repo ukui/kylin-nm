@@ -1,4 +1,5 @@
 #include "detailpage.h"
+#include <QPainter>
 
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -86,6 +87,9 @@ void DetailPage::initUI() {
     } else {
         mSSID->setStyleSheet("border-width:0;border-style:outset");
     }
+    QHBoxLayout *mSsidLayout = new QHBoxLayout(this);
+    mSsidLayout->addStretch();
+    mSsidLayout->addWidget(mSSID);
 
     mProtocol  = new QLabel(this);
     QHBoxLayout *mProtocolLayout = new QHBoxLayout(this);
@@ -143,7 +147,7 @@ void DetailPage::initUI() {
     mAutoLayout->addWidget(autoConnect);
     mAutoLayout->addSpacerItem(horizontalSpacer);
 
-    mDetailLayout->addRow(tr("SSID:"), mSSID);
+    mDetailLayout->addRow(tr("SSID:"), mSsidLayout);
     mDetailLayout->addRow(tr("Protocol:"), mProtocolLayout);
     if (mIsWlan) {
         mDetailLayout->addRow(tr("Security Type:"), mSecTypeLayout);

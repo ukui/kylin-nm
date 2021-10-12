@@ -504,3 +504,8 @@ void MainWindow::deactivateWireless(const QString& devName, const QString& ssid)
 {
     m_wlanWidget->deactivateWireless(devName, ssid);
 }
+
+void MainWindow::rescan()
+{
+    m_wlanWidget->requestScan();
+}

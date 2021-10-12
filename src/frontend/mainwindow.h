@@ -49,6 +49,8 @@ public:
     //唤起新建有线连接界面
     void showCreateWiredConnectWidget(const QString devName);
 
+    void rescan();
+
 signals:
     //设备插拔
     void deviceStatusChanged();

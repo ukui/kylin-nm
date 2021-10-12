@@ -815,6 +815,10 @@ bool NetDetail::updateConnect()
         } else {
             updateWirelessPersonalConnect();
         }
+        if (isActive) {
+            //安全性变化 断开-重连
+            m_wirelessConnOpration->activateConnection(m_uuid, m_deviceName);
+        }
     }
     return true;
 }

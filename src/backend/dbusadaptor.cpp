@@ -209,3 +209,10 @@ QStringList DbusAdaptor::getStoredApInfo()
     parent()->getStoredApInfo(list);
     return list;
 }
+
+
+//扫描
+void DbusAdaptor::reScan()
+{
+    parent()->rescan();
+}

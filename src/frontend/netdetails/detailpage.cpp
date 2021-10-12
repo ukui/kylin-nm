@@ -81,7 +81,6 @@ void DetailPage::initUI() {
 
     mSSID      = new QLineEdit(this);
     mSSID->setAlignment(Qt::AlignRight);
-    qDebug() << "DetailPage" << isCreate;
     if (!isCreate) {
         mSSID->setStyleSheet("background:transparent;border-width:0;border-style:outset");
         mSSID->setFocusPolicy(Qt::NoFocus);

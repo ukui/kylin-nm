@@ -78,6 +78,8 @@ public Q_SLOTS: // METHODS
     void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
     //获取热点
     QStringList getStoredApInfo();
+    //wifi扫描
+    void reScan();
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);
 //    void wiredActivating(QString devName, QString ssid);

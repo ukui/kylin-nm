@@ -151,6 +151,7 @@ void MainWindow::initTrayIcon()
     m_trayIconMenu->addAction(m_showSettingsAction);
     m_trayIcon->setContextMenu(m_trayIconMenu);
     m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+    onRefreshTrayIcon();
 
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
 //    connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);

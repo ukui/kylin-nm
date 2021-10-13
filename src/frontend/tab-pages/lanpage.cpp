@@ -766,8 +766,6 @@ void LanPage::updateConnectionArea(QString uuid)
         qDebug()<<"[LanPage] update connection item"<<p_newItem->m_connectName;
         QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_inactivatedLanListWidget);
         m_deactiveMap.insert(p_newItem, p_listWidgetItem);
-
-        emit this->lanConnectChanged();
     } else {
         delete p_newItem;
         p_newItem = nullptr;
@@ -790,8 +788,12 @@ void LanPage::onUpdateLanlist(QString uuid,
 
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         updateActivatedConnectionArea(uuid);
+        m_isLanConnected = true;
+        emit this->lanConnectChanged();
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         updateConnectionArea(uuid);
+        m_isLanConnected = false;
+        emit this->lanConnectChanged();
     }
 
     return;
@@ -1040,7 +1042,6 @@ void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "[LanPage] activateWired" << devName << connUuid;
     m_wiredConnectOperation->activateConnection(connUuid, devName);
-    emit this->lanConnectChanged();
 }
 
 void LanPage::deactivateWired(const QString& devName, const QString& connUuid)

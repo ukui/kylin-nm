@@ -254,6 +254,8 @@ void WlanPage::getActiveWlan()
         m_activatedWlanSSid.clear();
         m_activatedWlanUuid.clear();
         WlanListItem *wlanItemWidget = new WlanListItem();
+        connect(wlanItemWidget, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+        connect(wlanItemWidget, &WlanListItem::connectButtonClicked, this, &WlanPage::onConnectButtonClicked);
         qDebug() << "There is no activated wlan." << Q_FUNC_INFO << __LINE__ ;
         QListWidgetItem *wlanItem = new QListWidgetItem();
         wlanItem->setSizeHint(QSize(m_activatedNetListWidget->width(), wlanItemWidget->height()));
@@ -277,11 +279,12 @@ void WlanPage::appendActiveWlan(const QString &uuid, int &height)
     }
     KyWirelessNetItem *item_data = new KyWirelessNetItem(data);
     WlanListItem *wlanItemWidget = new WlanListItem(m_resource, item_data, m_defaultDevice);
+    connect(wlanItemWidget, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+    connect(wlanItemWidget, &WlanListItem::connectButtonClicked, this, &WlanPage::onConnectButtonClicked);
     qDebug() << "Activated wlan: ssid = " << item_data->m_NetSsid;
     QListWidgetItem *wlanItem = new QListWidgetItem();
     wlanItem->setSizeHint(QSize(m_activatedNetListWidget->width(), wlanItemWidget->height()));
     m_activatedNetListWidget->addItem(wlanItem);
-    emit this->wlanConnectChanged();
     qDebug() << "[wlanpage]emit wlanConnectChanged()" << Q_FUNC_INFO << __LINE__ ;
     m_activatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
     wlanItemWidget->setActive(true);
@@ -493,9 +496,11 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
     if(NetworkManager::ActiveConnection::State::Activated == state){
         m_wlanIsConnected = true;
         qDebug() << "[wlanpage] wlanIsConnected status : "  << m_wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
+        emit this->wlanConnectChanged();
     } else {
         m_wlanIsConnected = false;
         qDebug() << "[wlanpage] wlanIsConnected status : "  << m_wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
+        emit this->wlanConnectChanged();
     }
 
     //弹窗显示wifi连接状况

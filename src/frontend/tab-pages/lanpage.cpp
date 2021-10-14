@@ -22,6 +22,7 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     m_activeResourse = new KyActiveConnectResourse(this);
     m_connectResourse = new KyConnectResourse(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
+    m_wiredConnectOperation = new KyWiredConnectOperation(this);
 
     initUI();
     initNetSwitch();
@@ -679,7 +680,6 @@ void LanPage::initUI()
 
     inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
     m_settingsLabel->installEventFilter(this);
-//    emit this->lanConnectChanged();
 }
 
 QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)

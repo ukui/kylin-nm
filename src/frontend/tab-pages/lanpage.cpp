@@ -22,6 +22,7 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     m_activeResourse = new KyActiveConnectResourse(this);
     m_connectResourse = new KyConnectResourse(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
+    m_wiredConnectOperation = new KyWiredConnectOperation(this);
 
     initUI();
     initNetSwitch();
@@ -792,10 +793,18 @@ void LanPage::onUpdateLanlist(QString uuid,
         updateActivatedConnectionArea(uuid);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         updateConnectionArea(uuid);
+    } else if (state == NetworkManager::ActiveConnection::State::Activating
+               || state == NetworkManager::ActiveConnection::State::Deactivating) {
+        QString devName = m_activeResourse->getDeviceOfActivateConnect(uuid);
+        if (devName.isEmpty()) {
+            NetworkManager::ConnectionSettings::ConnectionType type = NetworkManager::ConnectionSettings::Wired;
+            m_connectResourse->getInterfaceByUuid(devName, type, uuid);
+        }
+        emit lanActiveConnectionStateChanged(devName, uuid, state);
     }
-
     return;
 }
+
 
 void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
 {

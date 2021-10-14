@@ -560,3 +560,23 @@ bool KyActiveConnectResourse::isActiveConnection(QString uuid, QStringList &devN
         }
     }
 }
+
+QString KyActiveConnectResourse::getDeviceOfActivateConnect(QString conUuid)
+{
+  QString deviceName = "";
+
+  NetworkManager::ActiveConnection::Ptr activeConnectPtr =
+          m_networkResourceInstance->getActiveConnect(conUuid);
+
+  if (nullptr == activeConnectPtr) {
+      qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< conUuid;
+      return deviceName;
+  }
+
+  QStringList interfaces = activeConnectPtr->devices();
+  QString ifaceUni = interfaces.at(0);
+  NetworkManager::Device:: Ptr devicePtr =
+              m_networkResourceInstance->findDeviceUni(ifaceUni);
+  deviceName = devicePtr->interfaceName();
+  return deviceName;
+}

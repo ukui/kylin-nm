@@ -8,6 +8,22 @@
 #include <NetworkManagerQt/VpnPlugin>
 #include <NetworkManagerQt/VpnSetting>
 
+static bool subLanListSort(const KyConnectItem* info1, const KyConnectItem* info2)
+{
+    QString  name1 = info1->m_connectName;
+    QString  name2 = info2->m_connectName;
+    bool result = true;
+    if (QString::compare(name1, name2, Qt::CaseInsensitive) > 0) {
+        result =  false;
+    }
+    return result;
+}
+
+static void lanListSort(QList<KyConnectItem *> &list)
+{
+    qSort(list.begin(), list.end(), subLanListSort);
+}
+
 KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
@@ -152,6 +168,9 @@ void KyConnectResourse::getConnectionList(QString deviceName,
         connectPtr = nullptr;
     }
 
+    if (connectItemList.size() > 1) {
+        lanListSort(connectItemList);
+    }
     return;    
 }
 

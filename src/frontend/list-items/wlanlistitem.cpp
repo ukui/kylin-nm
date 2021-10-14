@@ -58,14 +58,20 @@ void WlanListItem::setExpanded(const bool &expanded)
     }
     this->setFixedHeight(expanded ? EXPANDED_HEIGHT : NORMAL_HEIGHT);
 
-    m_pwdFrame->setVisible(expanded);
-    m_autoConnectFrame->setVisible(expanded);
+//    m_pwdFrame->setVisible(false);
+//    m_autoConnectFrame->setVisible(false);
     emit this->itemHeightChanged(m_data->m_NetSsid);
     if (!expanded) {
         QPalette pal = qApp->palette();
         pal.setColor(QPalette::Window, qApp->palette().base().color());
         this->setPalette(pal);
     }
+}
+
+void WlanListItem::setWlanItemPwdVisible(const bool &expanded)
+{
+        m_pwdFrame->setVisible(expanded);
+        m_autoConnectFrame->setVisible(expanded);
 }
 
 QString WlanListItem::getSsid()

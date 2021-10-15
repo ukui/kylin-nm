@@ -797,7 +797,7 @@ void LanPage::onUpdateLanlist(QString uuid,
                || state == NetworkManager::ActiveConnection::State::Deactivating) {
         QString devName = m_activeResourse->getDeviceOfActivateConnect(uuid);
         if (devName.isEmpty()) {
-            NetworkManager::ConnectionSettings::ConnectionType type = NetworkManager::ConnectionSettings::Wired;
+            NetworkManager::ConnectionSettings::ConnectionType type;
             m_connectResourse->getInterfaceByUuid(devName, type, uuid);
         }
         emit lanActiveConnectionStateChanged(devName, uuid, state);

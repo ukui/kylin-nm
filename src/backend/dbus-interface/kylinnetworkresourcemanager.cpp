@@ -17,6 +17,8 @@
  */
 
 #include "kylinnetworkresourcemanager.h"
+#define SIGNAL_DELAY 80000
+#define EMIT_DELAY 10000
 
 KyNetworkResourceManager* KyNetworkResourceManager::m_pInstance = nullptr;
 
@@ -556,9 +558,10 @@ void KyNetworkResourceManager::onActiveConnectionChanged(
     if (activeConnect->isValid()) {
         qDebug()<<"!New state change activate connect"<<activeConnect->uuid();
         qDebug()<<"!New the active connect state"<<state;
+        ::usleep(SIGNAL_DELAY);
         while(activeConnect->state() != state) {
             qDebug()<<"connect real state"<<activeConnect->state() <<"change state"<<state;
-            ::usleep(10000);
+            ::usleep(EMIT_DELAY);
         }
         emit activeConnectStateChangeReason(activeConnect->uuid(), state,
                                             NetworkManager::ActiveConnection::Reason::UknownReason);

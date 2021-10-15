@@ -23,6 +23,7 @@ Rules-Requires-Root: no
 Homepage: https://github.com/ukui/kylin-nm
 Vcs-Git: https://github.com/ukui/kylin-nm.git
 Vcs-Browser: https://github.com/ukui/kylin-nm
+
 Package: kylin-nm
 Architecture: any
 Depends: network-manager (>=1.2.6),

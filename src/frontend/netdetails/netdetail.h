@@ -129,9 +129,9 @@ private:
 private slots:
     void on_btnConfirm_clicked();
     void on_btnForget_clicked();
+    void onPaletteChanged();
 
 signals:
     void detailPageClose(bool on);
-    void onPaletteChanged();
 };
 #endif // NETDETAIL_H

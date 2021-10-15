@@ -87,6 +87,7 @@ private:
 
     QMap<QString, QPair<QListWidgetItem*, WlanListItem*>> m_itemsMap;
     QListWidgetItem *m_expandedItem = nullptr;
+    WlanListItem *m_wlanExpandedItem = nullptr;
     QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;
     QVBoxLayout * m_inactivatedWlanListAreaLayout = nullptr;
     QFrame * m_hiddenWlanWidget = nullptr;

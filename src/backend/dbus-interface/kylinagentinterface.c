@@ -81,6 +81,32 @@ free_wifi_info (SecretsRequest *req)
     }
 }
 
+
+void
+applet_secrets_request_free (SecretsRequest *req)
+{
+    g_return_if_fail (req != NULL);
+
+    if (req->free_func)
+        req->free_func (req);
+
+    secrets_reqs = g_slist_remove (secrets_reqs, req);
+
+    g_object_unref (req->connection);
+    g_free (req->setting_name);
+    g_strfreev (req->hints);
+    memset (req, 0, req->totsize);
+    g_free (req);
+}
+
+void
+applet_secrets_request_complete (SecretsRequest *req,
+                                  GVariant *settings,
+                                  GError *error)
+{
+    req->callback (req->agent, error ? NULL : settings, error, req->callback_data);
+}
+
 static void
 get_secrets_dialog_response_cb (GtkDialog *foo,
                                 gint response,
@@ -230,24 +256,6 @@ l_out:
     //return 0;
 }
 
-
-void
-applet_secrets_request_free (SecretsRequest *req)
-{
-    g_return_if_fail (req != NULL);
-
-    if (req->free_func)
-        req->free_func (req);
-
-    secrets_reqs = g_slist_remove (secrets_reqs, req);
-
-    g_object_unref (req->connection);
-    g_free (req->setting_name);
-    g_strfreev (req->hints);
-    memset (req, 0, req->totsize);
-    g_free (req);
-}
-
 static SecretsRequest *
 applet_secrets_request_new (size_t totsize,
                             NMConnection *connection,
@@ -276,15 +284,6 @@ applet_secrets_request_new (size_t totsize,
     req->agent = agent;
     return req;
 }
-
-void
-applet_secrets_request_complete (SecretsRequest *req,
-                                  GVariant *settings,
-                                  GError *error)
-{
-    req->callback (req->agent, error ? NULL : settings, error, req->callback_data);
-}
-
 
 static void
 get_existing_secrets_cb (NMSecretAgentOld *agent,

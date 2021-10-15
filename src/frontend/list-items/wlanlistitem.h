@@ -30,6 +30,7 @@ public:
     void setWlanSignal(const int &signal);
     void setWlanState(const int &state);
     void setExpanded(const bool &expanded);
+    void setWlanItemPwdVisible(const bool &expanded);
     QString getSsid();
     KyWirelessNetItem *m_data = nullptr;
 protected:

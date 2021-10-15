@@ -39,6 +39,7 @@ protected:
 public:
     QVBoxLayout * m_mainLayout = nullptr;
     QHBoxLayout * m_hItemLayout = nullptr;
+    bool isDetailShow;
 private:
     void initUI();
     void initConnection();
@@ -46,6 +47,10 @@ private:
 public slots:
     virtual void onNetButtonClicked() = 0;
     void onPaletteChanged();
+    void onDetailShow(bool isShow);
+
+signals:
+    void detailShow(bool isShow); 
 };
 
 #endif // LISTITEM_H

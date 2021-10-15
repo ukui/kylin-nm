@@ -19,6 +19,7 @@
 #include <QDBusObjectPath>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include <QCloseEvent>
 
 #include "detailpage.h"
 #include "ipv4page.h"
@@ -37,6 +38,7 @@ public:
     ~NetDetail();
 protected:
     void paintEvent(QPaintEvent *event);
+    void closeEvent(QCloseEvent *event);
 
 private:
     void initUI();
@@ -127,6 +129,9 @@ private:
 private slots:
     void on_btnConfirm_clicked();
     void on_btnForget_clicked();
+
+signals:
+    void detailPageClose(bool on);
     void onPaletteChanged();
 };
 #endif // NETDETAIL_H

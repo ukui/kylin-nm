@@ -277,11 +277,12 @@ void WlanPage::appendActiveWlan(const QString &uuid, int &height)
     }
     KyWirelessNetItem *item_data = new KyWirelessNetItem(data);
     WlanListItem *wlanItemWidget = new WlanListItem(m_resource, item_data, m_defaultDevice);
+    connect(wlanItemWidget, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+    connect(wlanItemWidget, &WlanListItem::connectButtonClicked, this, &WlanPage::onConnectButtonClicked);
     qDebug() << "Activated wlan: ssid = " << item_data->m_NetSsid;
     QListWidgetItem *wlanItem = new QListWidgetItem();
     wlanItem->setSizeHint(QSize(m_activatedNetListWidget->width(), wlanItemWidget->height()));
     m_activatedNetListWidget->addItem(wlanItem);
-    emit this->wlanConnectChanged();
     qDebug() << "[wlanpage]emit wlanConnectChanged()" << Q_FUNC_INFO << __LINE__ ;
     m_activatedNetListWidget->setItemWidget(wlanItem, wlanItemWidget);
     wlanItemWidget->setActive(true);
@@ -383,6 +384,10 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
         int height = m_itemsMap.value(ssid).second->height();
         m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height() - height - NET_LIST_SPACING);
         m_inactivatedWlanListAreaCentralWidget->setFixedHeight(m_inactivatedNetListWidget->height() + m_hiddenWlanLabel->height());
+        QListWidgetItem * aItem = (m_itemsMap.value(ssid)).first;
+        delete aItem;
+        WlanListItem * awItem = (m_itemsMap.value(ssid)).second;
+        delete awItem;
     }
     m_itemsMap.remove(ssid);
 }
@@ -493,9 +498,11 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
     if(NetworkManager::ActiveConnection::State::Activated == state){
         m_wlanIsConnected = true;
         qDebug() << "[wlanpage] wlanIsConnected status : "  << m_wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
+        emit this->wlanConnectChanged();
     } else {
         m_wlanIsConnected = false;
         qDebug() << "[wlanpage] wlanIsConnected status : "  << m_wlanIsConnected << Q_FUNC_INFO << __LINE__ ;
+        emit this->wlanConnectChanged();
     }
 
     //弹窗显示wifi连接状况
@@ -600,22 +607,32 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
 
 void WlanPage::onItemHeightChanged(const QString &ssid)
 {
+    qDebug() << "onItemHeightChanged" << __LINE__;
     if (!m_itemsMap.contains(ssid)) { return; }
+    //新的展开item
     QListWidgetItem *item = (m_itemsMap.value(ssid)).first;
+    WlanListItem * m_item = (m_itemsMap.value(ssid)).second;
 
     if (m_expandedItem && m_expandedItem != item) {
+        qDebug() << "onItemHeightChanged : the old fold and the new expanded" << m_expandedItem << item << __LINE__;
         QSize size(m_inactivatedNetListWidget->itemWidget(m_expandedItem)->size().width(), NORMAL_HEIGHT);
         //旧的收起
         m_expandedItem->setSizeHint(size);
         m_inactivatedNetListWidget->itemWidget(m_expandedItem)->setFixedHeight(NORMAL_HEIGHT);
+        m_wlanExpandedItem->setWlanItemPwdVisible(false);
         //新的展开
         m_expandedItem = item;
+        m_wlanExpandedItem = m_item;
         item->setSizeHint(m_inactivatedNetListWidget->itemWidget(item)->size());
+        m_item->setWlanItemPwdVisible(true);
     } else if (!m_expandedItem) {
+        qDebug() << "onItemHeightChanged : only expanded the new one " << m_expandedItem << item << __LINE__;
         m_expandedItem = item;
+        m_wlanExpandedItem = m_item;
         m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height() + m_inactivatedNetListWidget->itemWidget(item)->height() - item->sizeHint().height());
         m_inactivatedWlanListAreaCentralWidget->setFixedHeight(m_inactivatedNetListWidget->height() + m_hiddenWlanLabel->height());
         item->setSizeHint(m_inactivatedNetListWidget->itemWidget(item)->size());
+        m_item->setWlanItemPwdVisible(true);
     }
 }
 

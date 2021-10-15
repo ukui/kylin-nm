@@ -8,6 +8,25 @@
 #include <NetworkManagerQt/VpnPlugin>
 #include <NetworkManagerQt/VpnSetting>
 
+const QString str2GBand = "2.4Ghz";
+const QString str5GBand = "5Ghz";
+
+static bool subLanListSort(const KyConnectItem* info1, const KyConnectItem* info2)
+{
+    QString  name1 = info1->m_connectName;
+    QString  name2 = info2->m_connectName;
+    bool result = true;
+    if (QString::compare(name1, name2, Qt::CaseInsensitive) > 0) {
+        result =  false;
+    }
+    return result;
+}
+
+static void lanListSort(QList<KyConnectItem *> &list)
+{
+    qSort(list.begin(), list.end(), subLanListSort);
+}
+
 KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
@@ -152,6 +171,9 @@ void KyConnectResourse::getConnectionList(QString deviceName,
         connectPtr = nullptr;
     }
 
+    if (connectItemList.size() > 1) {
+        lanListSort(connectItemList);
+    }
     return;    
 }
 
@@ -530,6 +552,11 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
     KyApConnectItem *apConnectItem = new KyApConnectItem();
     apConnectItem->m_connectName = connectPtr->name();
     apConnectItem->m_connectUuid = connectPtr->uuid();
+    if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::A) {
+        apConnectItem->m_band = str2GBand;
+    } else if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::Bg) {
+        apConnectItem->m_band = str5GBand;
+    }
     apConnectItem->m_ifaceName = settingPtr->interfaceName();
     apConnectItem->m_isActivated = m_networkResourceInstance->isActiveConnection(connectPtr->uuid());
 

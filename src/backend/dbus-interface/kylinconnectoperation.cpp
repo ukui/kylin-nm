@@ -211,6 +211,7 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
     NetworkManager::ActiveConnection::Ptr activateConnectPtr = nullptr;
 
     qDebug()<<"deactivetate connect name"<<activeConnectName<<"uuid"<<activeConnectUuid;
+
     activateConnectPtr = m_networkResourceInstance->getActiveConnect(activeConnectUuid);
     if (nullptr == activateConnectPtr) {
         QString errorMessage = tr("it can not find the activate connect")

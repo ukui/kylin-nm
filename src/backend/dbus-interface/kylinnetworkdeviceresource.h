@@ -37,6 +37,7 @@ public:
    // void disconnectDevice();
     //void setDeviceAutoConnect();
     void getDeviceActiveAPInfo(const QString devName, QString &strMac, uint &iHz, uint &iChan, QString &secuType);
+    int getWirelessDeviceCapability(const QString deviceName);
 
 private:
     KyWiredConnectOperation wiredOperation;

@@ -31,9 +31,9 @@ public:
     //for dbus
     void getWirelessList(QMap<QString, QVector<QStringList> > &map);
     //开启热点
-    void activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    void activeWirelessAp(const QString apName, const QString apPassword, const QString wirelessBand, const QString apDevice);
     //断开热点
-    void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    void deactiveWirelessAp(const QString apName, const QString uuid);
     //获取热点
     void getStoredApInfo(QStringList &list);
     void activateWireless(const QString& devName, const QString& ssid);
@@ -41,13 +41,15 @@ public:
 
     void showDetailPage(QString devName, QString uuid);
 
+    void getWirelessDeviceCap(QMap<QString, int> &map);
+
 signals:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);
     void wlanRemove(QString devName,QString ssid);
     void wlanActiveConnectionStateChanged(QString interface, QString ssid, QString uuid, int status);
     void hotspotDeactivated(QString devName, QString ssid);
-    void hotspotActivated(QString devName, QString ssid);
+    void hotspotActivated(QString devName, QString ssid, QString uuid);
     void signalStrengthChange(QString devName, QString ssid, int strength);
     void secuTypeChange(QString devName, QString ssid, QString secuType);
     void hiddenWlanClicked();

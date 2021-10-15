@@ -9,7 +9,10 @@
 #include "kyenterpricesettinginfo.h"
 
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
-const QString    WIRELESS_SWITCH          = "wirelessswitch";
+const QString    WIRELESS_SWITCH  = "wirelessswitch";
+
+const QString    WIFI_BAND_2_4GHZ = "2.4Ghz";
+const QString    WIFI_BAND_5GHZ   = "5Ghz";
 
 enum KySecuType {
     NONE = 0,
@@ -105,13 +108,22 @@ public:
     //申请扫描
     void requestWirelessScan();
 
-    void activeWirelessAp(const QString apUuid, const QString apName, const QString apPassword, const QString apDevice);
+    void activeWirelessAp(const QString apUuid, const QString apName,
+                              const QString apPassword, const QString apDevice,
+                              const QString wirelessBand);
     void deactiveWirelessAp(const QString apName, const QString apUuid);
 
 private:
-    NetworkManager::ConnectionSettings::Ptr createWirelessApSetting(const QString apSsid, const QString apPassword, const QString apDevice);
+    NetworkManager::ConnectionSettings::Ptr createWirelessApSetting(const QString apSsid,
+                                                                        const QString apPassword,
+                                                                        const QString apDevice,
+                                                                        const QString wirelessBand);
     void updateWirelessApSetting(NetworkManager::Connection::Ptr apConnectPtr,
-            const QString apName, const QString apPassword, const QString apDevice);
+                                                                  const QString apName,
+                                                                  const QString apPassword,
+                                                                  const QString apDevice,
+                                                                  const QString wirelessBand);
+
 
 
 

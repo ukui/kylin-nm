@@ -561,7 +561,7 @@ void WlanPage::onActivatedWlanChanged(QString uuid, NetworkManager::ActiveConnec
             foreach (auto item, apConnectItemList) {
                 if (item->m_connectUuid == uuid) {
                     qDebug() << "[WlanPage] hotspot Deactivated";
-                    emit hotspotActivated(item->m_ifaceName, ssid);
+                    emit hotspotActivated(item->m_ifaceName, ssid, uuid);
                     break;
                 }
             }
@@ -686,6 +686,8 @@ void WlanPage::showControlCenter()
 }
 void WlanPage::onWifiEnabledChanged(bool isWifiOn)
 {
+    qDebug() << "[WlanPage]onWifiEnabledChanged====================================" << isWifiOn;
+    qDebug() << "realstatus" << m_wirelessConnectOpreation->getWirelessEnabled();
 //监听外部命令导致wifi状态变化，更新界面
     //应该先检测是否有无线网卡可用，才改变开关状态
     m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, m_devList);
@@ -811,7 +813,7 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
 }
 
 //开启热点
-void WlanPage::activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+void WlanPage::activeWirelessAp(const QString apName, const QString apPassword, const QString wirelessBand, const QString apDevice)
 {
     QString uuid("");
     QList<KyApConnectItem *> apConnectItemList;
@@ -819,29 +821,14 @@ void WlanPage::activeWirelessAp(const QString apName, const QString apPassword, 
     if (!apConnectItemList.isEmpty()) {
         uuid = apConnectItemList.at(0)->m_connectUuid;
     }
-    m_wirelessConnectOpreation->activeWirelessAp(uuid, apName, apPassword, apDevice);
+    m_wirelessConnectOpreation->activeWirelessAp(uuid, apName, apPassword, apDevice, wirelessBand);
 }
 
 //断开热点
-void WlanPage::deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+void WlanPage::deactiveWirelessAp(const QString apName, const QString uuid)
 {
-    QString uuid("");
-    QList<KyApConnectItem *> apConnectItemList;
-    m_apConnectResource->getApConnections(apConnectItemList);
-    if (!apConnectItemList.isEmpty()) {
-        foreach (auto item, apConnectItemList) {
-            if (apName == item->m_connectName && apPassword == item->m_password && apDevice == item->m_ifaceName) {
-                uuid = item->m_connectUuid;
-                qDebug() << "[WlanPage] deactiveWirelessAp uuid = " << uuid;
-                break;
-            }
-        }
-    }
     if (!uuid.isEmpty()) {
         m_wirelessConnectOpreation->deactiveWirelessAp(apName, uuid);
-    } else {
-        qDebug() << "[WlanPage] deactiveWirelessAp can not find apName " << apName;
-        emit deactivateFailed("Deactivate hotspot failed.Don't exist " + apName);
     }
 }
 
@@ -948,5 +935,13 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
 
     NetDetail *netDetail = new NetDetail(devName, ssid, data.m_connectUuid, isActive, true, true, this);
     netDetail->show();
+}
+
+void WlanPage::getWirelessDeviceCap(QMap<QString, int> &map)
+{
+    for (int i = 0; i < m_devList.size(); ++i) {
+        QString devName = m_devList.at(i);
+        map.insert(devName, m_netDeviceResource->getWirelessDeviceCapability(devName));
+    }
 }
 

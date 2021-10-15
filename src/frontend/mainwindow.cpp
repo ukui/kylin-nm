@@ -419,18 +419,18 @@ void MainWindow::getWiredList(QMap<QString, QVector<QStringList>> &map)
  * @param apPassword
  * @param apDevice
  */
-void MainWindow::activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+void MainWindow::activeWirelessAp(const QString apName, const QString apPassword, const QString band, const QString apDevice)
 {
-    m_wlanWidget->activeWirelessAp(apName, apPassword, apDevice);
+    m_wlanWidget->activeWirelessAp(apName, apPassword, band, apDevice);
 }
 
 /**
  * @brief MainWindow::activeWirelessAp 断开热点，供dbus调用
  * @param apName
  */
-void MainWindow::deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+void MainWindow::deactiveWirelessAp(const QString apName, const QString uuid)
 {
-    m_wlanWidget->deactiveWirelessAp(apName, apPassword, apDevice);
+    m_wlanWidget->deactiveWirelessAp(apName, uuid);
 }
 
 /**
@@ -482,6 +482,11 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
     qDebug() << "showCreateWiredConnectWidget! devName = " << devName;
     NetDetail *netDetail = new NetDetail(devName, "", "", false, false, true, this);
     netDetail->show();
+}
+
+void MainWindow::getWirelessDeviceCap(QMap<QString, int> &map)
+{
+    m_wlanWidget->getWirelessDeviceCap(map);
 }
 
 //有线连接断开

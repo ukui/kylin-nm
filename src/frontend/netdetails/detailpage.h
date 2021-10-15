@@ -7,7 +7,10 @@
 #include <QCheckBox>
 #include <QSpacerItem>
 #include <QDebug>
+#include <QListWidget>
+#include <QApplication>
 
+#include "detailwidget.h"
 #include "coninfo.h"
 
 class DetailPage : public QFrame
@@ -34,8 +37,21 @@ public:
 
 private:
     void initUI();
+    void addDetailItem(QListWidget *listWidget, DetailWidget *detailWidget);
 
 public:
+    QListWidget * m_listWidget = nullptr;
+    DetailWidget * m_ssidWidget = nullptr;
+    DetailWidget * m_protocolWidget = nullptr;
+    DetailWidget * m_secTypeWidget = nullptr;
+    DetailWidget * m_hzWidget = nullptr;
+    DetailWidget * m_chanelWidget = nullptr;
+    DetailWidget * m_bandwidthWidget = nullptr;
+    DetailWidget * m_ipv4Widget = nullptr;
+    DetailWidget * m_ipv4DnsWidget = nullptr;
+    DetailWidget * m_ipv6Widget = nullptr;
+    DetailWidget * m_macWidget = nullptr;
+
     QLineEdit *mSSID;
     QLabel *mProtocol;
     QLabel *mSecType;
@@ -51,7 +67,7 @@ public:
 //    QWidget *autoFrame;
 private:
     QVBoxLayout *layout;
-    QFormLayout *mDetailLayout;
+    QVBoxLayout *mDetailLayout;
     QHBoxLayout *mAutoLayout;
     QCheckBox *forgetNetBox;
     bool mIsWlan;

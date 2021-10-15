@@ -219,6 +219,14 @@ QStringList DbusAdaptor::getStoredApInfo()
     return list;
 }
 
+QStringList DbusAdaptor::getApInfoBySsid(QString devName, QString ssid)
+{
+    QStringList list;
+    list.clear();
+    parent()->getApInfoBySsid(devName, ssid, list);
+    return list;
+}
+
 
 //扫描
 void DbusAdaptor::reScan()

@@ -36,6 +36,7 @@ public:
     void deactiveWirelessAp(const QString apName, const QString uuid);
     //获取热点
     void getStoredApInfo(QStringList &list);
+    void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
 

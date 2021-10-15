@@ -437,11 +437,15 @@ void MainWindow::deactiveWirelessAp(const QString apName, const QString uuid)
  * @brief MainWindow::activeWirelessAp 获取热点，供dbus调用
  * @param list
  */
+void MainWindow::getApInfoBySsid(QString devName, QString ssid, QStringList &list)
+{
+    m_wlanWidget->getApInfoBySsid(devName, ssid, list);
+}
+
 void MainWindow::getStoredApInfo(QStringList &list)
 {
     m_wlanWidget->getStoredApInfo(list);
 }
-
 
 void MainWindow::setWiredDeviceEnable(const QString& devName, bool enable)
 {

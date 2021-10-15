@@ -842,6 +842,22 @@ void WlanPage::getStoredApInfo(QStringList &list)
         list << apConnectItemList.at(0)->m_password;
         list << apConnectItemList.at(0)->m_ifaceName;
         list << (apConnectItemList.at(0)->m_isActivated? "true":"false");
+        list << apConnectItemList.at(0)->m_connectUuid;
+        list << apConnectItemList.at(0)->m_band;
+    }
+}
+
+void WlanPage::getApInfoBySsid(QString devName, QString ssid, QStringList &list)
+{
+    list.clear();
+    QList<KyApConnectItem *> apConnectItemList;
+    m_apConnectResource->getApConnections(apConnectItemList);
+    for (int i = 0; i < apConnectItemList.size(); i++) {
+        if (apConnectItemList.at(i)->m_connectName == ssid
+                && apConnectItemList.at(i)->m_ifaceName == devName) {
+            list << apConnectItemList.at(i)->m_password;
+            list << apConnectItemList.at(i)->m_band;
+        }
     }
 }
 

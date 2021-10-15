@@ -680,14 +680,13 @@ void LanPage::initUI()
 
     inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
     m_settingsLabel->installEventFilter(this);
-//    emit this->lanConnectChanged();
 }
 
 QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
 {
-    QListWidgetItem *p_listWidgetItem = new QListWidgetItem(listWidget);
+    QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setSizeHint(QSize(listWidget->width(),ITEM_HEIGHT));
-    listWidget->addItem(p_listWidgetItem);
+    listWidget->insertItem(0, p_listWidgetItem);
 
     LanListItem *p_lanItem = nullptr;
     if (itemData != nullptr) {

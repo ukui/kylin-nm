@@ -254,8 +254,6 @@ void WlanPage::getActiveWlan()
         m_activatedWlanSSid.clear();
         m_activatedWlanUuid.clear();
         WlanListItem *wlanItemWidget = new WlanListItem();
-        connect(wlanItemWidget, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
-        connect(wlanItemWidget, &WlanListItem::connectButtonClicked, this, &WlanPage::onConnectButtonClicked);
         qDebug() << "There is no activated wlan." << Q_FUNC_INFO << __LINE__ ;
         QListWidgetItem *wlanItem = new QListWidgetItem();
         wlanItem->setSizeHint(QSize(m_activatedNetListWidget->width(), wlanItemWidget->height()));

@@ -82,11 +82,17 @@ void LanListItem::onRightButtonClicked()
 
 void LanListItem::onInfoButtonClicked()
 {
+    if(isDetailShow){
+        qDebug() << "has show the detail page,and do not show again" << Q_FUNC_INFO << __LINE__;
+        return;
+    }
     if(m_data){
         qDebug()<<"Net active or not:"<<m_isActive;
         qDebug() << "On lan info button clicked! uuid = " << m_data->m_connectUuid << "; name = " << m_data->m_connectName << "." <<Q_FUNC_INFO << __LINE__;
         NetDetail *netDetail = new NetDetail(deviceName, m_data->m_connectName, m_data->m_connectUuid, m_isActive,false, false, this);
+        connect(netDetail, &NetDetail::detailPageClose, this, &LanListItem::onDetailShow);
         netDetail->show();
+        emit this->detailShow(true);
     }
     else{
         qDebug() << "On lan info button clicked! But there is no wlan connect " ;

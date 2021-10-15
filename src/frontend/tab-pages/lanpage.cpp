@@ -789,12 +789,11 @@ void LanPage::onUpdateLanlist(QString uuid,
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         updateActivatedConnectionArea(uuid);
         m_isLanConnected = true;
-        emit this->lanConnectChanged();
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         updateConnectionArea(uuid);
         m_isLanConnected = false;
-        emit this->lanConnectChanged();
     }
+    emit this->lanConnectChanged();
 
     return;
 }

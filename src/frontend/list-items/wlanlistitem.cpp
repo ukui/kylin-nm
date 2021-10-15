@@ -265,11 +265,17 @@ void WlanListItem::refreshIcon()
 void WlanListItem::onInfoButtonClicked()
 {
     //ZJP_TODO 呼出无线详情页
+    if(isDetailShow){
+        qDebug() << "has show the detail page,and do not show again" << Q_FUNC_INFO << __LINE__;
+        return;
+    }
     if(m_data){
         qDebug()<<"Net active or not:"<<m_isActive;
         qDebug() << "On wlan info button clicked! ssid = " << m_data->m_NetSsid << "; name = " << m_data->m_connName << "." <<Q_FUNC_INFO << __LINE__;
         NetDetail *netDetail = new NetDetail(m_wlanDevice, m_data->m_NetSsid, m_data->m_connectUuid, m_isActive, true, !m_data->m_isConfigured, this);
+        connect(netDetail, &NetDetail::detailPageClose, this, &WlanListItem::onDetailShow);
         netDetail->show();
+        emit this->detailShow(true);
     }
     else{
         qDebug() << "On wlan info button clicked! But there is no wlan connect " ;

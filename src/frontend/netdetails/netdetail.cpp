@@ -102,6 +102,12 @@ void NetDetail::paintEvent(QPaintEvent *event)
     return QDialog::paintEvent(event);
 }
 
+void NetDetail::closeEvent(QCloseEvent *event)
+{
+    emit this->detailPageClose(false);
+    return QDialog::closeEvent(event);
+}
+
 void NetDetail::centerToScreen()
 {
     QDesktopWidget* m = QApplication::desktop();

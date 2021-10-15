@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
     QtSingleApplication a(id, argc, argv);
     qInstallMessageHandler(messageOutput);
     if (a.isRunning()) {
+        qInfo() << "Kylin-Network-Manager Is Already Launched, just show";
         auto connection = QDBusConnection::sessionBus();
         QDBusInterface iface("com.kylin.network",
                                        "/com/kylin/network",
@@ -94,22 +95,19 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    qDebug()<<"Kylin Network Manager Is Already Launched";
-
     QApplication::setQuitOnLastWindowClosed(false);
 
     // Internationalization
     QString locale = QLocale::system().name();
     QTranslator trans_global;
-    if (locale == "zh_CN") {
-        trans_global.load(":/translations/kylin-nm_zh_CN.qm");
+    qDebug() << "QLocale " << QLocale();
+    if (trans_global.load(QLocale(), "kylin-nm", "_", ":/translations/"))
+    {
         a.installTranslator(&trans_global);
+        qDebug()<<"Translations load success";
+    } else {
+        qWarning() << "Translations load fail";
     }
-    if (locale == "tr_TR") {
-        trans_global.load(":/translations/kylin-nm_tr.qm");
-        a.installTranslator(&trans_global);
-    }
-    qDebug()<<"Translations Are Already Loaded";
 
     MainWindow w;
     w.setProperty("useStyleWindowManager", false); //禁用拖动

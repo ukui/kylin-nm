@@ -3,8 +3,8 @@
 #include "backend/kylinipv6arping.h"
 #include "xatom/xatom-helper.h"
 
-#define  WINDOW_WIDTH  540
-#define  WINDOW_HEIGHT 574
+#define  WINDOW_WIDTH  520
+#define  WINDOW_HEIGHT 590
 #define  BUTTON_SIZE 30
 #define  ICON_SIZE 22,22
 #define  TITLE_LAYOUT_MARGINS 9,9,0,0
@@ -80,6 +80,7 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     getConInfo(m_info);
     pagePadding(name,isWlan);
 
+    connect(qApp, &QApplication::paletteChanged, this, &NetDetail::onPaletteChanged);
 
     isCreateOk = !(m_isCreateNet && !isWlan);
     isDetailOk = !(m_name.isEmpty());
@@ -94,6 +95,20 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
 
 NetDetail::~NetDetail()
 {
+
+}
+
+void NetDetail::onPaletteChanged()
+{
+    QPalette pal = qApp->palette();
+    pal.setColor(QPalette::Window, qApp->palette().base().color());
+    this->setPalette(pal);
+
+    QPalette listwidget_pal(detailPage->m_listWidget->palette());
+    listwidget_pal.setColor(QPalette::Base, qApp->palette().base().color());
+    listwidget_pal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
+    detailPage->m_listWidget->setAlternatingRowColors(true);
+    detailPage->m_listWidget->setPalette(listwidget_pal);
 
 }
 
@@ -227,6 +242,10 @@ void NetDetail::initUI()
     bottomLayout->addWidget(cancelBtn);
     bottomLayout->addWidget(confimBtn);
 
+    QPalette pal(this->palette());
+    pal.setColor(QPalette::Background, qApp->palette().base().color());
+    this->setAutoFillBackground(true);
+    this->setPalette(pal);
 }
 
 void NetDetail::loadPage()

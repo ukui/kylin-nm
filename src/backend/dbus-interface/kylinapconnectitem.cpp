@@ -7,6 +7,7 @@ KyApConnectItem::KyApConnectItem(QObject *parent) : QObject(parent)
     m_connectUuid = "";
     m_ifaceName = "";
     m_password = "";
+    m_band = "";
     m_isActivated = false;
 }
 

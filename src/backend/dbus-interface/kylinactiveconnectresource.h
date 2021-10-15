@@ -37,6 +37,8 @@ public:
 
     bool isActiveConnection(QString uuid, QStringList &devName);
 
+    QString getDeviceOfActivateConnect(QString conUuid);
+
 private:
     void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
                             QString &ipv4Address,

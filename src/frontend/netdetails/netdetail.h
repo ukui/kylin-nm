@@ -132,5 +132,6 @@ private slots:
 
 signals:
     void detailPageClose(bool on);
+    void onPaletteChanged();
 };
 #endif // NETDETAIL_H

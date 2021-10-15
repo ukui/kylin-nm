@@ -684,7 +684,10 @@ bool KyWirelessConnectOperation::getConnSecretFlags(QString &connUuid, NetworkMa
 }
 
 NetworkManager::ConnectionSettings::Ptr
-    KyWirelessConnectOperation::createWirelessApSetting(const QString apSsid, const QString apPassword, const QString apDevice)
+    KyWirelessConnectOperation::createWirelessApSetting(const QString apSsid,
+                                                        const QString apPassword,
+                                                        const QString apDevice,
+                                                        const QString wirelessBand)
 {
     NetworkManager::ConnectionSettings::Ptr connectionSettings =
                 NetworkManager::ConnectionSettings::Ptr(new NetworkManager::ConnectionSettings(NetworkManager::ConnectionSettings::Wireless));
@@ -710,6 +713,15 @@ NetworkManager::ConnectionSettings::Ptr
     wirelessSetting->setSsid(apSsid.toUtf8());
     wirelessSetting->setMode(NetworkManager::WirelessSetting::NetworkMode::Ap);
     wirelessSetting->setSecurity("802-11-wireless-security");
+    if (wirelessBand == WIFI_BAND_2_4GHZ) {
+        wirelessSetting->setBand(NetworkManager::WirelessSetting::FrequencyBand::Bg);
+    } else if (wirelessBand == WIFI_BAND_5GHZ) {
+        wirelessSetting->setBand(NetworkManager::WirelessSetting::FrequencyBand::A);
+    } else {
+        qWarning()<<"[KyWirelessConnectOperation] the band type undefined"<<wirelessBand;
+        wirelessSetting->setBand(NetworkManager::WirelessSetting::FrequencyBand::Automatic);
+    }
+
 
     NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
         = connectionSettings->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
@@ -726,7 +738,9 @@ NetworkManager::ConnectionSettings::Ptr
 
 void KyWirelessConnectOperation::updateWirelessApSetting(
         NetworkManager::Connection::Ptr apConnectPtr,
-        const QString apName, const QString apPassword, const QString apDevice)
+        const QString apName, const QString apPassword,
+        const QString apDevice, const QString wirelessBand)
+
 {
     NetworkManager::ConnectionSettings::Ptr apConnectSettingPtr = apConnectPtr->settings();
     apConnectSettingPtr->setId(apName);
@@ -737,6 +751,15 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
         = apConnectSettingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
     wirelessSetting->setInitialized(true);
     wirelessSetting->setSsid(apName.toUtf8());
+    if (wirelessBand == WIFI_BAND_2_4GHZ) {
+        wirelessSetting->setBand(NetworkManager::WirelessSetting::FrequencyBand::Bg);
+    } else if (wirelessBand == WIFI_BAND_5GHZ) {
+        wirelessSetting->setBand(NetworkManager::WirelessSetting::FrequencyBand::A);
+    } else {
+        qWarning()<<"[KyWirelessConnectOperation] the band type undefined"<<wirelessBand;
+        wirelessSetting->setBand(NetworkManager::WirelessSetting::FrequencyBand::Automatic);
+    }
+
 
     NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
         = apConnectSettingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
@@ -752,8 +775,11 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
 }
 
 void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QString apName,
-                                                  const QString apPassword, const QString apDevice)
+                                                  const QString apPassword, const QString apDevice,
+                                                  const QString wirelessBand)
+
 {
+    qDebug() << "activeWirelessAp]" << apUuid << apName << apPassword << apDevice << wirelessBand;
     //1、检查连接是否存在
     NetworkManager::Connection::Ptr connectPtr = m_networkResourceInstance->getConnect(apUuid);
     if (nullptr == connectPtr) {
@@ -768,7 +794,7 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
         QString deviceIdentifier = devicePtr->uni();
 
         NetworkManager::ConnectionSettings::Ptr apConnectSettingPtr =
-                                createWirelessApSetting(apName, apPassword, apDevice);
+                                createWirelessApSetting(apName, apPassword, apDevice, wirelessBand);
         QString specificObject = "";
         QDBusPendingCallWatcher * watcher;
         watcher = new QDBusPendingCallWatcher{NetworkManager::addAndActivateConnection(apConnectSettingPtr->toMap(), deviceIdentifier, specificObject), this};
@@ -781,7 +807,7 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
              watcher->deleteLater();
         });
     } else {
-        updateWirelessApSetting(connectPtr, apName, apPassword, apDevice);
+        updateWirelessApSetting(connectPtr, apName, apPassword, apDevice, wirelessBand);
         QTimer::singleShot(500, this, [=](){
             activateApConnectionByUuid(apUuid, apDevice);
         });

@@ -792,11 +792,20 @@ void LanPage::onUpdateLanlist(QString uuid,
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         updateConnectionArea(uuid);
         m_isLanConnected = false;
+    } else if (state == NetworkManager::ActiveConnection::State::Activating
+               || state == NetworkManager::ActiveConnection::State::Deactivating) {
+        QString devName = m_activeResourse->getDeviceOfActivateConnect(uuid);
+        if (devName.isEmpty()) {
+            NetworkManager::ConnectionSettings::ConnectionType type;
+            m_connectResourse->getInterfaceByUuid(devName, type, uuid);
+        }
+        emit lanActiveConnectionStateChanged(devName, uuid, state);
     }
-    emit this->lanConnectChanged();
 
+    emit this->lanConnectChanged();
     return;
 }
+
 
 void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
 {

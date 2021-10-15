@@ -68,16 +68,19 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void deActivateConnect(int type, QString devName, QString ssid);
     //获取设备列表和启用/禁用状态
     QMap<QString, bool> getDeviceListAndEnabled(int devType);
+    //获取无线设备能力
+    QMap<QString, int> getWirelessDeviceCap();
     //唤起属性页 根据网卡类型 参数2 为ssid/uuid
     Q_NOREPLY void showPropertyWidget(QString devName, QString ssid);
     //唤起新建有线连接界面
     Q_NOREPLY void showCreateWiredConnectWidget(QString devName);
     //开启热点
-    void activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    void activeWirelessAp(const QString apName, const QString apPassword, const QString band, const QString apDevice);
     //断开热点
-    void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    void deactiveWirelessAp(const QString apName, const QString uuid);
     //获取热点
     QStringList getStoredApInfo();
+    QStringList getApInfoBySsid(QString devName, QString ssid);
     //wifi扫描
     void reScan();
 Q_SIGNALS: // SIGNALS
@@ -99,7 +102,7 @@ Q_SIGNALS: // SIGNALS
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
     //热点连接
-    void hotspotActivated(QString devName, QString ssid);
+    void hotspotActivated(QString devName, QString ssid, QString uuid);
 
     //信号强度变化
     void signalStrengthChange(QString devName, QString ssid, int strength);

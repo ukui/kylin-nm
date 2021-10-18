@@ -970,6 +970,21 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
     netDetail->show();
 }
 
+void WlanPage::setWirelessSwitchEnable(bool enable)
+{
+    qDebug() << "dbus setWirelessSwitchEnable = " << enable << __LINE__;
+    //应该先检测是否有无线网卡可用，才改变开关状态
+    m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, m_devList);
+    if (m_devList.isEmpty()) {
+        qDebug() << "have no device to use "  << Q_FUNC_INFO << __LINE__;
+        //检测不到无线网卡不再触发click信号
+        m_netSwitch->setSwitchStatus(false);
+        m_netSwitch->setEnabled(false);
+    }else{
+        m_wirelessConnectOpreation->setWirelessEnabled(enable);
+    }
+}
+
 void WlanPage::getWirelessDeviceCap(QMap<QString, int> &map)
 {
     for (int i = 0; i < m_devList.size(); ++i) {

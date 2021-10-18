@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 //    QApplication a(argc, argv);
     QString id = QString("kylin-nm"+ QLatin1String(getenv("DISPLAY")));
     QtSingleApplication a(id, argc, argv);
-    qInstallMessageHandler(messageOutput);
+//    qInstallMessageHandler(messageOutput);
     if (a.isRunning()) {
         qInfo() << "Kylin-Network-Manager Is Already Launched, just show";
         auto connection = QDBusConnection::sessionBus();

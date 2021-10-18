@@ -35,6 +35,37 @@ NetworkManager::ConnectionSettings::Ptr assembleWpaXPskSettings(NetworkManager::
     return settings;
 }
 
+NetworkManager::ConnectionSettings::Ptr assembleSaeSettings(NetworkManager::AccessPoint::Ptr accessPoint, QString &psk, bool isAutoConnect)
+{
+    NetworkManager::ConnectionSettings::Ptr settings{new NetworkManager::ConnectionSettings{NetworkManager::ConnectionSettings::Wireless}};
+    settings->setId(accessPoint->ssid());
+    settings->setUuid(NetworkManager::ConnectionSettings::createNewUuid());
+    settings->setAutoconnect(isAutoConnect);
+    //Note: workaround for wrongly (randomly) initialized gateway-ping-timeout
+    settings->setGatewayPingTimeout(0);
+
+    NetworkManager::WirelessSetting::Ptr wifi_sett
+        = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    wifi_sett->setInitialized(true);
+    wifi_sett->setSsid(accessPoint->ssid().toUtf8());
+    wifi_sett->setSecurity("802-11-wireless-security");
+
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+        = settings->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    security_sett->setInitialized(true);
+    if (NetworkManager::AccessPoint::Adhoc == accessPoint->mode()) {
+        wifi_sett->setMode(NetworkManager::WirelessSetting::Adhoc);
+        security_sett->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaNone);
+    } else {
+        security_sett->setKeyMgmt(NetworkManager::WirelessSecuritySetting::SAE);
+    }
+    if (!psk.isEmpty()) {
+        security_sett->setPsk(psk);
+    }
+
+    return settings;
+}
+
 NetworkManager::ConnectionSettings::Ptr assembleWirelessSettings(const KyWirelessConnectSetting &connSettingInfo, bool isHidden)
 {
     NetworkManager::ConnectionSettings::Ptr settings{new NetworkManager::ConnectionSettings{NetworkManager::ConnectionSettings::Wireless}};
@@ -452,6 +483,14 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
             }
             break;
             //TODO: other types...
+        case NetworkManager::SAE:
+            if (NetworkManager::ConnectionSettings::Ptr settings = assembleSaeSettings(access_point, connSettingInfo.m_psk, connSettingInfo.isAutoConnect)) {
+                map_settings = settings->toMap();
+            } else {
+                qWarning() << QStringLiteral("connection settings assembly for '%1' failed, abandoning activation...").arg(conn_name);
+                return;
+            }
+            break;
         default:
             qDebug() << "addAndActiveWirelessConnect not support";
             break;

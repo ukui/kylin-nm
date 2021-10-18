@@ -78,16 +78,17 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
 void DbusAdaptor::setWirelessSwitchEnable(bool enable)
 {
     //todo mainwindow调用backend 对开关 打开/关闭
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
-        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
-        if (gsetting->get(KEY_WIRELESS_SWITCH).toBool() != enable) {
-            gsetting->set(KEY_WIRELESS_SWITCH, enable);
-        }
-        delete gsetting;
-        gsetting = nullptr;
-    } else {
-        qDebug()<<"isSchemaInstalled false";
-    }
+//    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
+//        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
+//        if (gsetting->get(KEY_WIRELESS_SWITCH).toBool() != enable) {
+//            gsetting->set(KEY_WIRELESS_SWITCH, enable);
+//        }
+//        delete gsetting;
+//        gsetting = nullptr;
+//    } else {
+//        qDebug()<<"isSchemaInstalled false";
+//    }
+    parent()->setWirelessSwitchEnable(enable);
 }
 
 //启用/禁用网卡

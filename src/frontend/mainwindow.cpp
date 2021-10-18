@@ -448,6 +448,12 @@ void MainWindow::getStoredApInfo(QStringList &list)
     m_wlanWidget->getStoredApInfo(list);
 }
 
+//无线开关
+void MainWindow::setWirelessSwitchEnable(bool enable)
+{
+    m_wlanWidget->setWirelessSwitchEnable(enable);
+}
+
 void MainWindow::setWiredDeviceEnable(const QString& devName, bool enable)
 {
     m_lanWidget->setWiredDeviceEnable(devName, enable);

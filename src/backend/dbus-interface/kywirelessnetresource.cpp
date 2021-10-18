@@ -119,7 +119,7 @@ void KyWirelessNetResource::getWirelessActiveConnection(NetworkManager::ActiveCo
 
         qDebug() << "getWirelessActiveConnection " << activeConnectionPtr->uuid();
         QString ssid;
-        QString ifaceName = getDeviceIFace(activeConnectionPtr,ssid);
+        QString ifaceName = getDeviceIFace(activeConnectionPtr, ssid);
         if(ifaceName.isEmpty() || ssid.isNull()) {
             continue;
         }
@@ -132,6 +132,69 @@ void KyWirelessNetResource::getWirelessActiveConnection(NetworkManager::ActiveCo
         }
     }
     return;
+}
+
+QString KyWirelessNetResource::getActiveConnectSsidByDevice(QString deviceName)
+{
+    QString ssid = "";
+
+    NetworkManager::ActiveConnection::List activeConnectionList;
+    activeConnectionList.clear();
+    activeConnectionList = m_networkResourceInstance->getActiveConnectList();
+    if (activeConnectionList.isEmpty()) {
+        return ssid;
+    }
+
+    NetworkManager::ActiveConnection::Ptr activeConnectionPtr = nullptr;
+    for (int index; index < activeConnectionList.size(); index++) {
+        activeConnectionPtr = activeConnectionList.at(index);
+        if (activeConnectionPtr.isNull()) {
+            continue;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wireless != activeConnectionPtr->type()) {
+            continue;
+        }
+
+        if (NetworkManager::ActiveConnection::State::Activated != activeConnectionPtr->state()) {
+            continue;
+        }
+
+        NetworkManager::Connection::Ptr connectPtr = activeConnectionPtr->connection();
+        NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
+        if (deviceName != settingPtr->interfaceName()) {
+            continue;
+        }
+
+        NetworkManager::WirelessSetting::Ptr wirelessSettingPtr =
+                settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+        ssid = wirelessSettingPtr->ssid();
+    }
+
+    return ssid;
+}
+
+bool KyWirelessNetResource::getActiveWirelessNetItem(QString deviceName, KyWirelessNetItem &wirelessNetItem)
+{
+    if (!m_WifiNetworkList.contains(deviceName)) {
+         qDebug() << "getWifiNetwork fail,not contain " << deviceName;
+        return false;
+    }
+
+    QString ssid = getActiveConnectSsidByDevice(deviceName);
+    if (ssid.isEmpty()) {
+        return false;
+    }
+
+    for (int index = 0; index < m_WifiNetworkList[deviceName].size(); index ++){
+        if (m_WifiNetworkList[deviceName].at(index).m_NetSsid  == ssid) {
+            wirelessNetItem = m_WifiNetworkList[deviceName].at(index);
+            qDebug() << "getWifiNetwork success";
+            return true;
+        }
+    }
+
+    return false;
 }
 
 QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::Ptr actConn,
@@ -160,23 +223,38 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::
     return sett->interfaceName();
 }
 
-void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid, QString &devName)
+void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid)
 {
     ssid.clear();
-    devName.clear();
     NetworkManager::Connection::Ptr connectPtr = m_networkResourceInstance->getConnect(uuid);
     if (connectPtr.isNull()) {
         return;
     }
+
     NetworkManager::WirelessSetting::Ptr wireless_sett
         = connectPtr->settings()->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
     if (wireless_sett.isNull()) {
         qDebug() << "don't have WirelessSetting connection";
         return;
     }
+
     ssid = wireless_sett->ssid();
-    devName = connectPtr->settings()->interfaceName();
     qDebug() << "getSsidByUuid success " << ssid;
+
+    return;
+}
+
+void KyWirelessNetResource::getDeviceByUuid(const QString uuid, QString &deviceName)
+{
+    deviceName.clear();
+
+    NetworkManager::Connection::Ptr connectPtr = m_networkResourceInstance->getConnect(uuid);
+    if (connectPtr.isNull()) {
+        return;
+    }
+
+    deviceName = connectPtr->settings()->interfaceName();
+
     return;
 }
 

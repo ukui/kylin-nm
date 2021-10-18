@@ -112,7 +112,7 @@ void NmDemo::initUi()
 
 void NmDemo::initConnect()
 {
-    connect(m_wco, &KyWirelessConnectOperation::wifinEnabledChanged,[=](bool status){
+    connect(m_wco, &KyWirelessConnectOperation::wifiEnabledChanged,[=](bool status){
         QString temp;
         temp.sprintf("wifinEnabledChanged %d",status);
         appendDebugLog(temp);

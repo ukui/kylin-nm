@@ -5,7 +5,7 @@
 #define MAIN_SIZE_EXPAND 400,500
 #define MAIN_SIZE_NARROW 400,400
 
-EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem *data, QString device, QWidget *parent) : QDialog(parent)
+EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent) : QDialog(parent)
 {
     //设置窗口无边框，阴影
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
@@ -19,7 +19,7 @@ EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem *data, QString devi
 #endif
     this->setAttribute(Qt::WA_DeleteOnClose);
 
-    m_data = data;
+    m_wirelessNetItem = wirelessNetItem;
     m_deviceName = device;
     m_connectOperation = new KyWirelessConnectOperation();
     m_resource = new KyWirelessNetResource();
@@ -72,11 +72,8 @@ void EnterpriseWlanDialog::initUI()
     m_ssidTitleLabel = new QLabel(this);
     m_ssidTitleLabel->setText("SSID");
     m_ssidLabel = new QLabel(this);
-    if (m_data) {
-        m_ssidLabel->setText(m_data->m_NetSsid);
-    } else {
-        qWarning() << "Get SSID failed because of null pointer!" << Q_FUNC_INFO << __LINE__;
-    }
+    m_ssidLabel->setText(m_wirelessNetItem.m_NetSsid);
+
     m_ssidLayout->addWidget(m_ssidTitleLabel);
     m_ssidLayout->addStretch();
     m_ssidLayout->addWidget(m_ssidLabel);
@@ -130,9 +127,9 @@ void EnterpriseWlanDialog::initConnections()
 
 void EnterpriseWlanDialog::initData()
 {
-    if (m_data && m_data->m_isConfigured) {
+    if (m_wirelessNetItem.m_isConfigured) {
         KyEapMethodType type;
-        m_connectOperation->getEnterpiseEapMethod(m_data->m_connectUuid, type);
+        m_connectOperation->getEnterpiseEapMethod(m_wirelessNetItem.m_connectUuid, type);
         if (type) {
             onEapTypeChanged(type);
         } else {
@@ -143,20 +140,18 @@ void EnterpriseWlanDialog::initData()
 
 void EnterpriseWlanDialog::onBtnConnectClicked()
 {
-    if (!m_data) {
-        qWarning() << "Connect enterprise WLAN failed because of null pointer m_data!" << Q_FUNC_INFO << __LINE__;
-    }
-    qDebug() << "Clicked connectBtn, will connect enterprise WLAN, ssid = " << m_data->m_NetSsid << "." << Q_FUNC_INFO << __LINE__;
+    qDebug() << "Clicked connectBtn, will connect enterprise WLAN, ssid = "
+             << m_wirelessNetItem.m_NetSsid << "." << Q_FUNC_INFO << __LINE__;
     KySecuType secuType;
     KyEapMethodType eapType;
     m_securityPage->getSecuType(secuType, eapType);
 
     KyWirelessConnectSetting connetSetting;
-    connetSetting.setConnectName(m_data->m_NetSsid);
+    connetSetting.setConnectName(m_wirelessNetItem.m_NetSsid);
     connetSetting.setIfaceName(m_deviceName);
     connetSetting.isAutoConnect = true; //ZJP_TODO 自动连接选项
     connetSetting.m_type = KyKeyMgmt::WpaEap;
-    connetSetting.m_ssid = m_data->m_NetSsid;
+    connetSetting.m_ssid = m_wirelessNetItem.m_NetSsid;
     connetSetting.m_secretFlag = 0;
     connetSetting.dumpInfo();
 
@@ -179,22 +174,22 @@ void EnterpriseWlanDialog::onEapTypeChanged(const KyEapMethodType &type)
 {
     switch (type) {
     case KyEapMethodType::TLS:
-        if (m_data && !m_data->m_connectUuid.isEmpty()) {
-            m_resource->getEnterPriseInfoTls(m_data->m_connectUuid, m_info.tlsInfo);
+        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
+            m_resource->getEnterPriseInfoTls(m_wirelessNetItem.m_connectUuid, m_info.tlsInfo);
             m_securityPage->setTlsInfo(m_info.tlsInfo);
         }
         this->setFixedSize(MAIN_SIZE_EXPAND);
         break;
     case KyEapMethodType::PEAP:
-        if (m_data && !m_data->m_connectUuid.isEmpty()) {
-            m_resource->getEnterPriseInfoPeap(m_data->m_connectUuid, m_info.peapInfo);
+        if (m_wirelessNetItem.m_connectUuid.isEmpty()) {
+            m_resource->getEnterPriseInfoPeap(m_wirelessNetItem.m_connectUuid, m_info.peapInfo);
             m_securityPage->setPeapInfo(m_info.peapInfo);
             }
         this->setFixedSize(MAIN_SIZE_NARROW);
         break;
     case KyEapMethodType::TTLS:
-        if (m_data && !m_data->m_connectUuid.isEmpty()) {
-            m_resource->getEnterPriseInfoTtls(m_data->m_connectUuid, m_info.ttlsInfo);
+        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
+            m_resource->getEnterPriseInfoTtls(m_wirelessNetItem.m_connectUuid, m_info.ttlsInfo);
             m_securityPage->setTtlsInfo(m_info.ttlsInfo);
         }
         this->setFixedSize(MAIN_SIZE_NARROW);

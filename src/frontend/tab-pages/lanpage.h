@@ -23,7 +23,6 @@ class LanPage : public TabPage
 public:
     explicit LanPage(QWidget *parent = nullptr);
     ~LanPage();
-    bool m_isLanConnected = false;
 
     //for dbus
     void getWiredList(QMap<QString, QVector<QStringList> > &map);
@@ -31,6 +30,8 @@ public:
     void deactivateWired(const QString& devName, const QString& connUuid);
     void showDetailPage(QString devName, QString uuid);
     void setWiredDeviceEnable(const QString& devName, bool enable);
+
+    bool lanIsConnected();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);

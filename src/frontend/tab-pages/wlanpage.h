@@ -26,7 +26,6 @@ class WlanPage : public TabPage
 public:
     explicit WlanPage(QWidget *parent = nullptr);
     ~WlanPage() = default;
-    bool m_wlanIsConnected = false;
 
     //for dbus
     void getWirelessList(QMap<QString, QVector<QStringList> > &map);
@@ -36,10 +35,13 @@ public:
     void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
     //获取热点
     void getStoredApInfo(QStringList &list);
-    void activateWireless(const QString& devName, const QString& ssid);
-    void deactivateWireless(const QString& devName, const QString& ssid);
+    void activateWirelessConnection(const QString& devName, const QString& ssid);
+    void deactivateWirelessConnection(const QString& devName, const QString& ssid);
 
     void showDetailPage(QString devName, QString uuid);
+
+    bool wlanIsConnected();
+
 signals:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);
@@ -54,81 +56,108 @@ signals:
 
 public slots:
     void onMainWindowVisibleChanged(const bool &visible);
-
-protected:
-    bool eventFilter(QObject *watched, QEvent *event);
-
-private:
-    void initWlanUI();
-    void initConnections();
-    int getIndexByStrength(QString interface, QString ssid);
-    void updateByStrength();
-    QString m_activedssid;
-    QString m_disconnectuuid;
-    int m_disconnecting;
-    bool m_disconnectingflag = false;
-
-    //定时触发扫描的定时器
-    void initTimer();
-    QTimer * m_scanTimer = nullptr;
-    QTimer * m_refreshIconTimer = nullptr;
-
-    void initDevice();//初始化默认设备
-    void initDeviceCombox();
-
-    void getActiveWlan();
-    void appendActiveWlan(const QString &uuid, int &height);
-    void getAllWlan();
-
-    QMap<QString, QPair<QListWidgetItem*, WlanListItem*>> m_itemsMap;
-    QListWidgetItem *m_expandedItem = nullptr;
-    QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;
-    QVBoxLayout * m_inactivatedWlanListAreaLayout = nullptr;
-    QFrame * m_hiddenWlanWidget = nullptr;
-    QHBoxLayout * m_hiddenWlanLayout = nullptr;
-    QListWidget * m_activatedNetListWidget = nullptr;
-    QLabel * m_hiddenWlanLabel = nullptr;
-
-    QString m_activatedWlanSSid;
-    QString m_activatedWlanUuid;
-    QStringList m_devList;
-
-    KyWirelessNetResource *m_resource = nullptr;
-    KyActiveConnectResourse *m_connectResource = nullptr;
-    KyNetworkResourceManager *m_networkResourceInstance = nullptr;
-    KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
-    KyWirelessConnectOperation * m_wirelessConnectOpreation = nullptr;
-    KyConnectOperation *m_connectoperation = nullptr;
-    KyConnectResourse * m_apConnectResource = nullptr;
-    QGSettings *m_switchGsettings = nullptr;
-
+    void onSecurityTypeChange(QString devName, QString ssid, QString secuType);
 
 private slots:
     void onWlanAdded(QString interface, KyWirelessNetItem &item);
     void onWlanRemoved(QString interface, QString ssid);
-    void onWlanUpdated();
+
+    void onConnectionAdd(QString deviceName, QString ssid);
+    void onConnectionRemove(QString deviceName, QString ssid);
 
     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName);
     void onDeviceNameUpdate(QString oldName, QString newName);
-    void onActivatedWlanChanged(QString uuid,
+
+    void onConnectionStateChanged(QString uuid,
                                 NetworkManager::ActiveConnection::State state,
                                 NetworkManager::ActiveConnection::Reason reason);
-    void onItemHeightChanged(const QString &ssid);
-    void onConnectButtonClicked(KyWirelessConnectSetting &connSettingInfo, const bool &isHidden);
+    void onItemHeightChanged(const bool isExpanded, const QString &ssid);
+
     void onWlanSwitchClicked();
-    void onWlanSwitchStatusChanged(const bool &checked);
+    void onWlanSwithGsettingsChanged(const QString &key);
+
     void onDeviceComboxIndexChanged(int currentIndex);
     void requestScan();
     void onHiddenWlanClicked();
     void showControlCenter();
     void onWifiEnabledChanged(bool isWifiOn);
-    void onActiveFailed(QString errorMessage);
+    void onRefreshIconTimer();
 
-//    void onRefreshIconTimer();
+protected:
+    bool eventFilter(QObject *watched, QEvent *event);
 
-//    void onsignalStrengthChange(QString, QString, int);
+private:
+    //定时触发扫描的定时器
+    void initTimer();
+    void initWlanUI();
+    void initConnections();
+    void initDevice();//初始化默认设备
+    void initDeviceCombox();
+    void initWlanSwitchState();
+    void initWlanArea();
 
+    QListWidgetItem *addEmptyItem(QListWidget *wirelessListWidget);
+    QListWidgetItem *addNewItem(KyWirelessNetItem &wirelessNetItem,
+                                          QListWidget *wirelessListWidget);
+    QListWidgetItem *insertNewItem(KyWirelessNetItem &wirelessNetItem,
+                                             QListWidget *wirelessListWidget,
+                                             int row);
+
+    void clearWirelessNetItemMap(QMap<QString, QListWidgetItem*> &wirelessNetItem,
+                                           QListWidget *wirelessListWidget);
+    void deleteWirelessItemFormMap(QMap<QString, QListWidgetItem*> &wirelessNetItemMap,
+                                             QListWidget *wirelessListWidget, QString ssid);
+
+    void updateWlanItemState(QListWidget *p_wirelessListWidget,
+                                       QListWidgetItem *p_listWidgetItem,
+                                       ConnectState state);
+    void updateWlanListItem(QString ssid);
+
+    void constructWirelessNetArea();
+    void constructActivateConnectionArea();
+
+    void updateActivatedArea(QString uuid, QString ssid, QString devName);
+    void updateWirelessNetArea(QString uuid, QString ssid, QString devName);
+
+    void addDeviceToCombox(QString deviceName);
+    void deleteDeviceFromCombox(QString deviceName);
+    void updateDeviceForCombox(QString oldDeviceName, QString newDeviceName);
+
+    void sendApStateChangeSignal(QString uuid, QString ssid, QString deviceName,
+                                     NetworkManager::ActiveConnection::State state);
+    void wlanShowNotify(NetworkManager::ActiveConnection::State state,
+                                  NetworkManager::ActiveConnection::Reason reason);
+
+private:
+    QMap<QString, QListWidgetItem*> m_wirelessNetItemMap;
+    QMap<QString, QListWidgetItem*> m_activateConnectionItemMap;
+
+    QListWidgetItem *m_expandedItem = nullptr;
+
+    QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;
+    QVBoxLayout * m_inactivatedWlanListAreaLayout = nullptr;
+
+    QFrame * m_hiddenWlanWidget = nullptr;
+    QHBoxLayout * m_hiddenWlanLayout = nullptr;
+    QLabel * m_hiddenWlanLabel = nullptr;
+
+    QListWidget * m_activatedNetListWidget = nullptr;
+
+    QStringList m_devList;
+    QString m_currentDevice;
+
+    KyWirelessNetResource *m_wirelessNetResource = nullptr;
+    KyActiveConnectResourse *m_activatedConnectResource = nullptr;
+    KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
+    KyWirelessConnectOperation * m_wirelessConnectOpreation = nullptr;
+    KyConnectResourse * m_connectResource = nullptr;
+
+    QGSettings *m_switchGsettings = nullptr;
+    bool m_wlanSwitchEnable = true;
+
+    QTimer *m_scanTimer = nullptr;
+    QTimer *m_refreshIconTimer = nullptr;
 };
 
 #endif // WLANPAGE_H

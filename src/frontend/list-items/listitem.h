@@ -9,6 +9,14 @@
 #include "infobutton.h"
 #include "netdetails/netdetail.h"
 
+typedef enum{
+    UnknownState = 0, /**< The active connection is in an unknown state */
+    Activating, /**< The connection is activating */
+    Activated, /**< The connection is activated */
+    Deactivating, /**< The connection is being torn down and cleaned up */
+    Deactivated /**< The connection is no longer active */
+}ConnectState;
+
 class ListItem : public QFrame
 {
     Q_OBJECT
@@ -17,6 +25,7 @@ public:
     ~ListItem();
     void setName(const QString &name);
     void setActive(const bool &isActive);
+    void setConnectState(ConnectState state);
     static void showDesktopNotify(const QString &message);
 
 protected:
@@ -35,6 +44,7 @@ protected:
     InfoButton * m_infoButton = nullptr;
 
     bool m_isActive = false;
+    ConnectState m_connectState;
 
 public:
     QVBoxLayout * m_mainLayout = nullptr;

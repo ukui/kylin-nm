@@ -53,7 +53,7 @@ KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(pa
 
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::connectivityChanged, this, &KyNetworkResourceManager::connectivityChanged);
     //todo wifi开关信号
-    connect(NetworkManager::notifier(), &NetworkManager::Notifier::wirelessEnabledChanged, this, &KyNetworkResourceManager::wifinEnabledChanged);
+    connect(NetworkManager::notifier(), &NetworkManager::Notifier::wirelessEnabledChanged, this, &KyNetworkResourceManager::wifiEnabledChanged);
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::wirelessHardwareEnabledChanged, [=](){
 
     });
@@ -208,8 +208,13 @@ void KyNetworkResourceManager::addConnection(NetworkManager::Connection::Ptr con
 
 void KyNetworkResourceManager::insertConnections()
 {
-    for (auto const & conn : NetworkManager::listConnections())
-        addConnection(conn);
+    for (auto const & connectPtr : NetworkManager::listConnections()) {
+        if (connectPtr->name().isEmpty() || connectPtr->uuid().isEmpty()) {
+            qWarning() <<"[KyNetworkResourceManager]" << " the name of connection is empty.";
+            continue;
+        }
+        addConnection(connectPtr);
+     }
 }
 
 void KyNetworkResourceManager::removeDevice(int pos)
@@ -770,6 +775,11 @@ void KyNetworkResourceManager::onConnectionAdded(QString const & path)
     }
 
     qDebug() <<"[KyNetworkResourceManager]" <<"add connect "<< connectPtr->name() << connectPtr->path();
+
+    if (connectPtr->name().isEmpty() || connectPtr->uuid().isEmpty()) {
+        qWarning() <<"[KyNetworkResourceManager]" << "the name or uuid of connection is empty";
+        return;
+    }
 
     if (0 > m_connections.indexOf(connectPtr)) {
         addConnection(connectPtr);

@@ -19,6 +19,7 @@
 #include <QDBusObjectPath>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include <QCloseEvent>
 
 #include "detailpage.h"
 #include "ipv4page.h"
@@ -37,6 +38,7 @@ public:
     ~NetDetail();
 protected:
     void paintEvent(QPaintEvent *event);
+    void closeEvent(QCloseEvent *event);
 
 private:
     void initUI();
@@ -109,7 +111,7 @@ private:
     QString      m_deviceName;
 
     bool         isWlan;
-    bool         isCreateNet;
+    bool         m_isCreateNet;
     bool         isActive;
     bool         isHideWlan;
 
@@ -127,5 +129,9 @@ private:
 private slots:
     void on_btnConfirm_clicked();
     void on_btnForget_clicked();
+    void onPaletteChanged();
+
+signals:
+    void detailPageClose(bool on);
 };
 #endif // NETDETAIL_H

@@ -30,7 +30,7 @@ public:
     KyApConnectItem *getApConnectionByUuid(QString connectUuid);
 
     void getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting);
-    bool getInterfaceByUuid(QString &deviceName, NetworkManager::ConnectionSettings::ConnectionType &type, const QString connUuid);
+    bool getInterfaceByUuid(QString &deviceName, const QString connUuid);
     void getConnectivity(NetworkManager::Connectivity &connectivity);
 
     bool isWiredConnection(QString uuid);

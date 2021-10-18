@@ -30,11 +30,12 @@ public:
     //for dbus
     void getWirelessList(QMap<QString, QVector<QStringList> > &map);
     //开启热点
-    void activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    void activeWirelessAp(const QString apName, const QString apPassword, const QString wirelessBand, const QString apDevice);
     //断开热点
-    void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    void deactiveWirelessAp(const QString apName, const QString uuid);
     //获取热点
     void getStoredApInfo(QStringList &list);
+
     void activateWirelessConnection(const QString& devName, const QString& ssid);
     void deactivateWirelessConnection(const QString& devName, const QString& ssid);
 
@@ -42,13 +43,18 @@ public:
 
     bool wlanIsConnected();
 
+    void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
+    //无线总开关
+    void setWirelessSwitchEnable(bool enable);
+    void getWirelessDeviceCap(QMap<QString, int> &map);
+
 signals:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);
     void wlanRemove(QString devName,QString ssid);
-    void wlanActiveConnectionStateChanged(QString interface, QString ssid, int status);
+    void wlanActiveConnectionStateChanged(QString interface, QString ssid, QString uuid, int status);
     void hotspotDeactivated(QString devName, QString ssid);
-    void hotspotActivated(QString devName, QString ssid);
+    void hotspotActivated(QString devName, QString ssid, QString uuid);
     void signalStrengthChange(QString devName, QString ssid, int strength);
     void secuTypeChange(QString devName, QString ssid, QString secuType);
     void hiddenWlanClicked();
@@ -57,6 +63,7 @@ signals:
 public slots:
     void onMainWindowVisibleChanged(const bool &visible);
     void onSecurityTypeChange(QString devName, QString ssid, QString secuType);
+    void requestScan();
 
 private slots:
     void onWlanAdded(QString interface, KyWirelessNetItem &item);
@@ -78,7 +85,6 @@ private slots:
     void onWlanSwithGsettingsChanged(const QString &key);
 
     void onDeviceComboxIndexChanged(int currentIndex);
-    void requestScan();
     void onHiddenWlanClicked();
     void showControlCenter();
     void onWifiEnabledChanged(bool isWifiOn);

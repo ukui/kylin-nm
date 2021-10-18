@@ -3,8 +3,8 @@
 #include "backend/kylinipv6arping.h"
 #include "xatom/xatom-helper.h"
 
-#define  WINDOW_WIDTH  540
-#define  WINDOW_HEIGHT 574
+#define  WINDOW_WIDTH  520
+#define  WINDOW_HEIGHT 590
 #define  BUTTON_SIZE 30
 #define  ICON_SIZE 22,22
 #define  TITLE_LAYOUT_MARGINS 9,9,0,0
@@ -44,7 +44,7 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
      m_uuid(uuid),
      isActive(isActive),
      isWlan(isWlan),
-     isCreateNet(isCreateNet),
+     m_isCreateNet(isCreateNet),
      QDialog(parent)
 {
     //设置窗口无边框，阴影
@@ -64,9 +64,11 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
     centerToScreen();
 
-    if (isCreateNet && !uuid.isEmpty()) {
-        isCreateNet = false;
+    qDebug() << m_isCreateNet << name;
+    if (m_isCreateNet && !name.isEmpty()) {
+        m_isCreateNet = false;
     }
+    qDebug() << m_isCreateNet;
     m_netDeviceResource = new KyNetworkDeviceResourse(this);
     m_wirelessConnOpration = new KyWirelessConnectOperation(this);
     m_resource = new KyWirelessNetResource(this);
@@ -78,14 +80,15 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     getConInfo(m_info);
     pagePadding(name,isWlan);
 
+    connect(qApp, &QApplication::paletteChanged, this, &NetDetail::onPaletteChanged);
 
-    isCreateOk = !(isCreateNet && !isWlan);
+    isCreateOk = !(m_isCreateNet && !isWlan);
     isDetailOk = !(m_name.isEmpty());
     isIpv4Ok = true;
     isIpv6Ok = true;
     isSecuOk = true;
 
-    qDebug() << interface << name << uuid <<  "isWlan" << isWlan << "isCreateNet" <<isCreateNet;
+    qDebug() << interface << name << uuid <<  "isWlan" << isWlan << "isCreateNet" <<m_isCreateNet;
 
     setConfirmEnable();
 }
@@ -95,9 +98,29 @@ NetDetail::~NetDetail()
 
 }
 
+void NetDetail::onPaletteChanged()
+{
+    QPalette pal = qApp->palette();
+    pal.setColor(QPalette::Window, qApp->palette().base().color());
+    this->setPalette(pal);
+
+    QPalette listwidget_pal(detailPage->m_listWidget->palette());
+    listwidget_pal.setColor(QPalette::Base, qApp->palette().base().color());
+    listwidget_pal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
+    detailPage->m_listWidget->setAlternatingRowColors(true);
+    detailPage->m_listWidget->setPalette(listwidget_pal);
+
+}
+
 void NetDetail::paintEvent(QPaintEvent *event)
 {
     return QDialog::paintEvent(event);
+}
+
+void NetDetail::closeEvent(QCloseEvent *event)
+{
+    emit this->detailPageClose(false);
+    return QDialog::closeEvent(event);
 }
 
 void NetDetail::centerToScreen()
@@ -116,7 +139,7 @@ void NetDetail::initUI()
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(9,9,14,24);
 
-    detailPage = new DetailPage(isWlan, isCreateNet, this);
+    detailPage = new DetailPage(isWlan, m_isCreateNet, this);
     ipv4Page = new Ipv4Page(this);
     ipv6Page = new Ipv6Page(this);
     securityPage = new SecurityPage(this);
@@ -225,12 +248,16 @@ void NetDetail::initUI()
     bottomLayout->addWidget(cancelBtn);
     bottomLayout->addWidget(confimBtn);
 
+    QPalette pal(this->palette());
+    pal.setColor(QPalette::Background, qApp->palette().base().color());
+    this->setAutoFillBackground(true);
+    this->setPalette(pal);
 }
 
 void NetDetail::loadPage()
 {
     //判断是否创建网络页面
-    if (isCreateNet && !isWlan) {
+    if (m_isCreateNet && !isWlan) {
         pageFrame->hide();
         stackWidget->setCurrentIndex(CREATE_NET_PAGE_NUM);
         titleLabel->setText(tr("Add Lan Connect"));
@@ -305,7 +332,7 @@ void NetDetail::initComponent()
 void NetDetail::pagePadding(QString netName, bool isWlan)
 {
     //网络详情页填充
-    if(isCreateNet && !isWlan) {
+    if(m_isCreateNet && !isWlan) {
         return;
     }
 
@@ -363,7 +390,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 //获取网路详情信息
 void NetDetail::getConInfo(ConInfo &conInfo)
 {
-    if (isCreateNet && !isWlan) {
+    if (m_isCreateNet && !isWlan) {
         return;
     }
     getBaseInfo(conInfo);
@@ -555,7 +582,7 @@ void NetDetail::initTtlsInfo(ConInfo &conInfo)
 //点击了保存更改网络设置的按钮
 void NetDetail::on_btnConfirm_clicked()
 {
-    if (isCreateNet) {
+    if (m_isCreateNet) {
         if (!isWlan) {
             //新建有线连接
             qDebug() << "Confirm create wired connect";
@@ -589,7 +616,7 @@ void NetDetail::on_btnForget_clicked()
 
 void NetDetail::setConfirmEnable()
 {
-    if (isCreateNet && !isWlan) {
+    if (m_isCreateNet && !isWlan) {
             isConfirmBtnEnable = isCreateOk;
     } else {
         if (isDetailOk && isIpv4Ok && isIpv6Ok) {
@@ -804,14 +831,25 @@ bool NetDetail::updateConnect()
         m_wiredConnOperation->updateWiredConnect(m_uuid, connetSetting);
     }
 
-    if (isWlan && securityPage->checkIsChanged(m_info)) {
-        KySecuType secuType;
-        KyEapMethodType enterpriseType;
-        securityPage->getSecuType(secuType, enterpriseType);
-        if (secuType == WPA_AND_WPA2_ENTERPRISE) {
-            updateWirelessEnterPriseConnect(enterpriseType);
-        } else {
-            updateWirelessPersonalConnect();
+    bool securityChange = false;
+    if (isWlan) {
+        securityChange = securityPage->checkIsChanged(m_info);
+        if (securityChange) {
+            KySecuType secuType;
+            KyEapMethodType enterpriseType;
+            securityPage->getSecuType(secuType, enterpriseType);
+            if (secuType == WPA_AND_WPA2_ENTERPRISE) {
+                updateWirelessEnterPriseConnect(enterpriseType);
+            } else {
+                updateWirelessPersonalConnect();
+            }
+        }
+    }
+
+    if (ipv4Change || ipv6Change || securityChange) {
+        if (isActive) {
+            //信息变化 断开-重连
+            m_wirelessConnOpration->activateConnection(m_uuid, m_deviceName);
         }
     }
     return true;

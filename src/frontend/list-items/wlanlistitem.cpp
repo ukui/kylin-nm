@@ -4,12 +4,13 @@
 
 #define EMPTY_SSID "EMPTY_SSID"
 #define LOG_FLAG "[WlanListItem]"
-#define WAIT_US  70*1000
+#define WAIT_US  10*1000
 
 WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent) : ListItem(parent)
 {
     m_wlanDevice = device;
     m_wirelessNetItem = wirelessNetItem;
+    m_forgetConnection = false;
 
     qDebug()<<"[WlanPage] wlan list item is created." << m_wirelessNetItem.m_NetSsid;
 
@@ -27,7 +28,9 @@ WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, Q
 WlanListItem::WlanListItem(QWidget *parent) : ListItem(parent)
 {
     m_wirelessNetItem.m_NetSsid = EMPTY_SSID;
+
     qDebug()<<"[WlanPage] wlan list item is created." << m_wirelessNetItem.m_NetSsid;
+
     m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic"));
     const QString name = tr("Not connected");
     setExpanded(false);
@@ -304,6 +307,12 @@ void WlanListItem::refreshIcon()
 
 void WlanListItem::onInfoButtonClicked()
 {
+    //ZJP_TODO 呼出无线详情页
+    if(isDetailShow){
+        qDebug() << "has show the detail page,and do not show again" << Q_FUNC_INFO << __LINE__;
+        return;
+    }
+
     qDebug() << LOG_FLAG << "Net active or not:"<< m_connectState;
     qDebug() << LOG_FLAG << "On wlan info button clicked! ssid = "
              << m_wirelessNetItem.m_NetSsid << "; name = "
@@ -314,11 +323,13 @@ void WlanListItem::onInfoButtonClicked()
     if (Activated == m_connectState) {
         isActive = true;
     }
+
     NetDetail *netDetail = new NetDetail(m_wlanDevice, m_wirelessNetItem.m_NetSsid,
                                          m_wirelessNetItem.m_connectUuid, isActive, true,
                                          !m_wirelessNetItem.m_isConfigured, this);
+    connect(netDetail, &NetDetail::detailPageClose, this, &WlanListItem::onDetailShow);
     netDetail->show();
-
+    emit this->detailShow(true);
 }
 
 void WlanListItem::onNetButtonClicked()
@@ -457,23 +468,25 @@ void WlanListItem::onConnectButtonClicked()
     return;
 }
 
-void WlanListItem::connectStateIsChanging()
+ConnectState WlanListItem::getConnectionState()
 {
-    m_netButton->startLoading();
-
-    return;
-}
-
-void WlanListItem::connectStateChanged()
-{
-    m_netButton->stopLoading();
-
-    return;
+    return m_connectState;
 }
 
 void WlanListItem::updateConnectState(ConnectState state)
 {
     m_connectState = state;
+
+    if (m_forgetConnection) {
+        /*
+        * 如果是要删除链接而导致的状态变化的话，等断开连接后，删除该链接
+        */
+        if (state == Deactivated) {
+            m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
+            m_forgetConnection = false;
+        }
+    }
+
     if (Deactivated == state || Activated == state) {
         m_netButton->stopLoading();
     } else {
@@ -488,12 +501,15 @@ void WlanListItem::onMenuTriggered(QAction *action)
     if (action->text() == tr("Disconnect") || action->text() == tr("Connect")) {
         this->onNetButtonClicked();
     } else if (action->text() == tr("Forget")) {
+        /*
+        *对于激活的链接，忘记密码时，需要先断开连接，然后再删除链接。
+        */
         if (Activated == m_connectState) {
+            m_forgetConnection = true;
             m_wirelessConnectOperation->deActivateWirelessConnection(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
-            ::usleep(WAIT_US);
+        } else {
+            m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
         }
-
-        m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
     }
 
     return;

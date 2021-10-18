@@ -7,6 +7,7 @@
 #include "kyenterpricesettinginfo.h"
 #include "kylinconnectresource.h"
 #include "kywirelessconnectoperation.h"
+#include "kylinnetworkdeviceresource.h"
 
 
 //class KyWirelessNetItem;
@@ -50,6 +51,10 @@ public slots:
     void onConnectionUpdate(QString uuid);
     void onConnectionRemove(QString);
 
+    void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
+    void onDeviceRemove(QString deviceName);
+    void onDeviceNameUpdate(QString oldName, QString newName);
+
 signals:
     void signalStrengthChange(QString, QString, int);
     void bssidChange(QString, QString, QString);
@@ -64,6 +69,7 @@ private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     KyConnectResourse        *m_connectResource = nullptr;
     KyWirelessConnectOperation  *m_operation = nullptr;
+    KyNetworkDeviceResourse  *m_device = nullptr;
     QMap<QString, QList<KyWirelessNetItem> >      m_WifiNetworkList;
 
 };

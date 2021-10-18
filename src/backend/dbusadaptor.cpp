@@ -30,6 +30,7 @@ DbusAdaptor::DbusAdaptor(MainWindow *parent)
 {
     // constructor
     qDBusRegisterMetaType<QMap<QString, bool> >();
+    qDBusRegisterMetaType<QMap<QString, int> >();
     qDBusRegisterMetaType<QVector<QStringList> >();
     qDBusRegisterMetaType<QMap<QString, QVector<QStringList> >>();
     //setAutoRelaySignals(true)后会自动转发mainwindow发出的同名信号，因此不必再额外写一个转发
@@ -77,16 +78,17 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
 void DbusAdaptor::setWirelessSwitchEnable(bool enable)
 {
     //todo mainwindow调用backend 对开关 打开/关闭
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
-        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
-        if (gsetting->get(KEY_WIRELESS_SWITCH).toBool() != enable) {
-            gsetting->set(KEY_WIRELESS_SWITCH, enable);
-        }
-        delete gsetting;
-        gsetting = nullptr;
-    } else {
-        qDebug()<<"isSchemaInstalled false";
-    }
+//    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
+//        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
+//        if (gsetting->get(KEY_WIRELESS_SWITCH).toBool() != enable) {
+//            gsetting->set(KEY_WIRELESS_SWITCH, enable);
+//        }
+//        delete gsetting;
+//        gsetting = nullptr;
+//    } else {
+//        qDebug()<<"isSchemaInstalled false";
+//    }
+    parent()->setWirelessSwitchEnable(enable);
 }
 
 //启用/禁用网卡
@@ -175,28 +177,38 @@ QMap<QString, bool> DbusAdaptor::getDeviceListAndEnabled(int devType)
     return map;
 }
 
+//获取无线设备能力
+QMap<QString, int> DbusAdaptor::getWirelessDeviceCap()
+{
+    QMap<QString, int> map;
+    parent()->getWirelessDeviceCap(map);
+    return map;
+}
+
 //唤起属性页 根据网卡类型 参数2 为ssid/uuid
 void DbusAdaptor::showPropertyWidget(QString devName, QString ssid)
 {
+    qDebug() << "showPropertyWidget";
     parent()->showPropertyWidget(devName,ssid);
 }
 
 //唤起新建有线连接界面
 void DbusAdaptor::showCreateWiredConnectWidget(QString devName)
 {
+    qDebug() << "showCreateWiredConnectWidget";
     parent()->showCreateWiredConnectWidget(devName);
 }
 
 //开启热点
-void DbusAdaptor::activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+void DbusAdaptor::activeWirelessAp(const QString apName, const QString apPassword, const QString band, const QString apDevice)
 {
-    parent()->activeWirelessAp(apName, apPassword, apDevice);
+    parent()->activeWirelessAp(apName, apPassword, band, apDevice);
 }
 
 //断开热点
-void DbusAdaptor::deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+void DbusAdaptor::deactiveWirelessAp(const QString apName, const QString uuid)
 {
-    parent()->deactiveWirelessAp(apName, apPassword, apDevice);
+    parent()->deactiveWirelessAp(apName, uuid);
 }
 
 //获取热点
@@ -206,4 +218,19 @@ QStringList DbusAdaptor::getStoredApInfo()
     list.clear();
     parent()->getStoredApInfo(list);
     return list;
+}
+
+QStringList DbusAdaptor::getApInfoBySsid(QString devName, QString ssid)
+{
+    QStringList list;
+    list.clear();
+    parent()->getApInfoBySsid(devName, ssid, list);
+    return list;
+}
+
+
+//扫描
+void DbusAdaptor::reScan()
+{
+    parent()->rescan();
 }

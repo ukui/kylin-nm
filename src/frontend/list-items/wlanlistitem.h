@@ -33,10 +33,9 @@ public:
     void setWlanState(const int &state);
     void setExpanded(const bool &expanded);
 
-    void connectStateIsChanging();
-    void connectStateChanged();
-
+    ConnectState getConnectionState();
     void updateConnectState(ConnectState state);
+
     void updateWirelessNetSecurity(QString ssid, QString securityType);
     void updateWirelessNetItem(KyWirelessNetItem &wirelessNetItem);
 
@@ -80,6 +79,8 @@ private:
 
     bool m_focusIsOut = true;
     bool m_mouseIsOut = true;
+
+    bool m_forgetConnection = false;
 
 protected slots:
     void onInfoButtonClicked();

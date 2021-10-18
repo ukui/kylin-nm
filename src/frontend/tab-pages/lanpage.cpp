@@ -22,6 +22,7 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     m_activeResourse = new KyActiveConnectResourse(this);
     m_connectResourse = new KyConnectResourse(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
+    m_wiredConnectOperation = new KyWiredConnectOperation(this);
 
     initUI();
     initNetSwitch();
@@ -679,14 +680,13 @@ void LanPage::initUI()
 
     inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
     m_settingsLabel->installEventFilter(this);
-//    emit this->lanConnectChanged();
 }
 
 QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
 {
-    QListWidgetItem *p_listWidgetItem = new QListWidgetItem(listWidget);
+    QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setSizeHint(QSize(listWidget->width(),ITEM_HEIGHT));
-    listWidget->addItem(p_listWidgetItem);
+    listWidget->insertItem(0, p_listWidgetItem);
 
     LanListItem *p_lanItem = nullptr;
     if (itemData != nullptr) {
@@ -766,8 +766,6 @@ void LanPage::updateConnectionArea(QString uuid)
         qDebug()<<"[LanPage] update connection item"<<p_newItem->m_connectName;
         QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_inactivatedLanListWidget);
         m_deactiveMap.insert(p_newItem, p_listWidgetItem);
-
-        emit this->lanConnectChanged();
     } else {
         delete p_newItem;
         p_newItem = nullptr;
@@ -792,10 +790,19 @@ void LanPage::onUpdateLanlist(QString uuid,
         updateActivatedConnectionArea(uuid);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         updateConnectionArea(uuid);
+    } else if (state == NetworkManager::ActiveConnection::State::Activating
+               || state == NetworkManager::ActiveConnection::State::Deactivating) {
+        QString devName = m_activeResourse->getDeviceOfActivateConnect(uuid);
+        if (devName.isEmpty()) {
+            m_connectResourse->getInterfaceByUuid(devName, uuid);
+        }
+        emit lanActiveConnectionStateChanged(devName, uuid, state);
     }
 
+    emit this->lanConnectChanged();
     return;
 }
+
 
 void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
 {
@@ -1040,7 +1047,6 @@ void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "[LanPage] activateWired" << devName << connUuid;
     m_wiredConnectOperation->activateConnection(connUuid, devName);
-    emit this->lanConnectChanged();
 }
 
 void LanPage::deactivateWired(const QString& devName, const QString& connUuid)

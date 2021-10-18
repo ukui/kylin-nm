@@ -202,6 +202,33 @@ void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QStri
     }
 }
 
+int KyNetworkDeviceResourse::getWirelessDeviceCapability(const QString deviceName)
+{
+    NetworkManager::Device::Ptr connectDevice =
+                        m_networkResourceInstance->findDeviceInterface(deviceName);
+    if (connectDevice->isValid()
+            && NetworkManager::Device::Type::Wifi == connectDevice->type()) {
+        NetworkManager::WirelessDevice *wirelessDevicePtr =
+            qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
+
+        int cap = 0;
+        if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::ApCap) {
+            cap = cap | 0x01;
+        }
+        if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::Freq2Ghz) {
+            cap = cap | 0x02;
+        }
+        if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::Freq5Ghz) {
+            cap = cap | 0x04;
+        }
+        return cap;
+    } else {
+        qWarning()<<"[KyNetworkDeviceResourse]"<<deviceName<<" is not valid or not wireless.";
+    }
+
+    return 0;
+}
+
 #if 0
 void KyNetworkDeviceResourse::DeviceSpeed(QString deviceName, KyConnectItem *wiredItem)
 {

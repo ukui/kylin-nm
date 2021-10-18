@@ -147,13 +147,14 @@ void MainWindow::initTrayIcon()
 
     m_trayIcon->setToolTip(QString(tr("kylin-nm")));
     m_showSettingsAction->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
-    m_trayIconMenu->addAction(m_showMainwindowAction);
+//    m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);
     m_trayIcon->setContextMenu(m_trayIconMenu);
     m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+    onRefreshTrayIcon();
 
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
-    connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
+//    connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
     connect(m_showSettingsAction, &QAction::triggered, this, &MainWindow::onShowSettingsActionTriggled);
     m_trayIcon->show();
 }
@@ -419,29 +420,39 @@ void MainWindow::getWiredList(QMap<QString, QVector<QStringList>> &map)
  * @param apPassword
  * @param apDevice
  */
-void MainWindow::activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+void MainWindow::activeWirelessAp(const QString apName, const QString apPassword, const QString band, const QString apDevice)
 {
-    m_wlanWidget->activeWirelessAp(apName, apPassword, apDevice);
+    m_wlanWidget->activeWirelessAp(apName, apPassword, band, apDevice);
 }
 
 /**
  * @brief MainWindow::activeWirelessAp 断开热点，供dbus调用
  * @param apName
  */
-void MainWindow::deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice)
+void MainWindow::deactiveWirelessAp(const QString apName, const QString uuid)
 {
-    m_wlanWidget->deactiveWirelessAp(apName, apPassword, apDevice);
+    m_wlanWidget->deactiveWirelessAp(apName, uuid);
 }
 
 /**
  * @brief MainWindow::activeWirelessAp 获取热点，供dbus调用
  * @param list
  */
+void MainWindow::getApInfoBySsid(QString devName, QString ssid, QStringList &list)
+{
+    m_wlanWidget->getApInfoBySsid(devName, ssid, list);
+}
+
 void MainWindow::getStoredApInfo(QStringList &list)
 {
     m_wlanWidget->getStoredApInfo(list);
 }
 
+//无线开关
+void MainWindow::setWirelessSwitchEnable(bool enable)
+{
+    m_wlanWidget->setWirelessSwitchEnable(enable);
+}
 
 void MainWindow::setWiredDeviceEnable(const QString& devName, bool enable)
 {
@@ -484,6 +495,11 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
     netDetail->show();
 }
 
+void MainWindow::getWirelessDeviceCap(QMap<QString, int> &map)
+{
+    m_wlanWidget->getWirelessDeviceCap(map);
+}
+
 //有线连接断开
 void MainWindow::activateWired(const QString& devName, const QString& connUuid)
 {
@@ -503,4 +519,9 @@ void MainWindow::activateWireless(const QString& devName, const QString& ssid)
 void MainWindow::deactivateWireless(const QString& devName, const QString& ssid)
 {
     m_wlanWidget->deactivateWirelessConnection(devName, ssid);
+}
+
+void MainWindow::rescan()
+{
+    m_wlanWidget->requestScan();
 }

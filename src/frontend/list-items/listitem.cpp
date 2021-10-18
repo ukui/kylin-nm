@@ -14,9 +14,12 @@
 ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
     m_connectState = UnknownState;
+    isDetailShow = false;
     initUI();
     initConnection();
     connect(qApp, &QApplication::paletteChanged, this, &ListItem::onPaletteChanged);
+    connect(this, &ListItem::detailShow, this, &ListItem::onDetailShow);
+//    m_itemFrame->installEventFilter(this);
 }
 
 ListItem::~ListItem()
@@ -165,4 +168,9 @@ void ListItem::onPaletteChanged()
     QPalette pal = qApp->palette();
     pal.setColor(QPalette::Window, qApp->palette().base().color());
     this->setPalette(pal);
+}
+
+void ListItem::onDetailShow(bool isShow)
+{
+    isDetailShow = isShow;
 }

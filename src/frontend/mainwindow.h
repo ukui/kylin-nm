@@ -30,17 +30,20 @@ public:
     void getWirelessList(QMap<QString, QVector<QStringList> > &map);
     void getWiredList(QMap<QString, QVector<QStringList>> &map);
     //开启热点
-    void activeWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    void activeWirelessAp(const QString apName, const QString apPassword, const QString wirelessBand, const QString apDevice);
     //断开热点
-    void deactiveWirelessAp(const QString apName, const QString apPassword, const QString apDevice);
+    void deactiveWirelessAp(const QString apName, const QString uuid);
     //获取热点
     void getStoredApInfo(QStringList &list);
+    void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
     //无线连接断开
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
+    //无线总开关
+    void setWirelessSwitchEnable(bool enable);
 
     void setWiredDeviceEnable(const QString& devName, bool enable);
 
@@ -48,6 +51,10 @@ public:
     void showPropertyWidget(QString devName, QString ssid);
     //唤起新建有线连接界面
     void showCreateWiredConnectWidget(const QString devName);
+
+    void getWirelessDeviceCap(QMap<QString, int> &map);
+
+    void rescan();
 
 signals:
     //设备插拔
@@ -60,13 +67,13 @@ signals:
     void lanUpdate(QString devName, QStringList info);
     void wlanAdd(QString devName, QStringList info);
     void wlanRemove(QString devName,QString ssid);
-    void wlanactiveConnectionStateChanged(QString devName, QString ssid, int status);
+    void wlanactiveConnectionStateChanged(QString devName, QString ssid, QString uuid, int status);
     void lanActiveConnectionStateChanged(QString devName, QString uuid, int status);
     void activateFailed(QString errorMessage);
     void deactivateFailed(QString errorMessage);
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
-    void hotspotActivated(QString devName, QString ssid);
+    void hotspotActivated(QString devName, QString ssid, QString uuid);
     //信号强度变化
     void signalStrengthChange(QString devName, QString ssid, int strength);
     //安全性变化

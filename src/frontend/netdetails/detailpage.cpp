@@ -1,4 +1,6 @@
 #include "detailpage.h"
+#include <QPainter>
+#include <QListWidget>
 
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -72,65 +74,78 @@ bool DetailPage::checkIsChanged(const ConInfo info)
     }
 }
 
+void DetailPage::addDetailItem(QListWidget *listWidget, DetailWidget *detailWidget)
+{
+    QListWidgetItem *listWidgetItem = new QListWidgetItem(listWidget);
+    listWidgetItem->setSizeHint(QSize(listWidget->width(),36));
+    listWidgetItem->setFlags(Qt::NoItemFlags);
+    listWidget->addItem(listWidgetItem);
+    listWidget->setItemWidget(listWidgetItem, detailWidget);
+}
+
 void DetailPage::initUI() {
     forgetNetBox = new QCheckBox(this);
     layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0,0,0,0);
 
-    mDetailLayout = new QFormLayout(this);
+    QWidget *mDetailFrame = new QFrame(this);
+    mDetailLayout = new QVBoxLayout(mDetailFrame);
+    mDetailLayout->setContentsMargins(0,0,0,0);
+
+    m_listWidget = new QListWidget(mDetailFrame);
+    m_listWidget->setFrameShape(QFrame::Shape::NoFrame);
+    m_listWidget->setBackgroundRole(QPalette::Base);
+    m_listWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+    mDetailLayout->addWidget(m_listWidget);
 
     mSSID      = new QLineEdit(this);
     mSSID->setAlignment(Qt::AlignRight);
     if (!isCreate) {
-        mSSID->setStyleSheet("background:transparent;border-width:0;border-style:outset");
+        mSSID->setStyleSheet("background:transparent;border-width:0px;border-style:none");
         mSSID->setFocusPolicy(Qt::NoFocus);
     } else {
-        mSSID->setStyleSheet("border-width:0;border-style:outset");
+//        mSSID->setStyleSheet("border-width:1px;;border-style:solid;border-color:black;border-radius:2px");
+        mSSID->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;");
+        mSSID->setPlaceholderText(tr("Please input SSID:"));
     }
+    m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(mSSID), m_listWidget);
+    m_ssidWidget->setKey(tr("SSID:"));
 
-    mProtocol  = new QLabel(this);
-    QHBoxLayout *mProtocolLayout = new QHBoxLayout(this);
-    mProtocolLayout->addStretch();
-    mProtocolLayout->addWidget(mProtocol);
+    mProtocol = new QLabel(this);
+    m_protocolWidget = new DetailWidget(qobject_cast<QWidget *>(mProtocol), m_listWidget);
+    m_protocolWidget->setKey(tr("Protocol:"));
 
-    mSecType   = new QLabel(this);
-    QHBoxLayout *mSecTypeLayout = new QHBoxLayout(this);
-    mSecTypeLayout->addStretch();
-    mSecTypeLayout->addWidget(mSecType);
+    mSecType = new QLabel(this);
+    m_secTypeWidget = new DetailWidget(qobject_cast<QWidget *>(mSecType));
+    m_secTypeWidget->setKey(tr("Security Type:"));
 
-    mHz        = new QLabel(this);
-    QHBoxLayout *mHzLayout = new QHBoxLayout(this);
-    mHzLayout->addStretch();
-    mHzLayout->addWidget(mHz);
+    mHz = new QLabel(this);
+    m_hzWidget = new DetailWidget(qobject_cast<QWidget *>(mHz));
+    m_hzWidget->setKey(tr("Hz:"));
 
-    mChan      = new QLabel(this);
-    QHBoxLayout *mChanLayout = new QHBoxLayout(this);
-    mChanLayout->addStretch();
-    mChanLayout->addWidget(mChan);
+    mChan = new QLabel(this);
+    m_chanelWidget = new DetailWidget(qobject_cast<QWidget *>(mChan));
+    m_chanelWidget->setKey(tr("Chan:"));
 
     mBandWidth = new QLabel(this);
-    QHBoxLayout *mBandWidthLayout = new QHBoxLayout(this);
-    mBandWidthLayout->addStretch();
-    mBandWidthLayout->addWidget(mBandWidth);
+    m_bandwidthWidget = new DetailWidget(qobject_cast<QWidget *>(mBandWidth), m_listWidget);
+    m_bandwidthWidget->setKey(tr("BandWidth:"));
 
-    mIPV4      = new QLabel(this);
-    QHBoxLayout *mIPV4Layout = new QHBoxLayout(this);
-    mIPV4Layout->addStretch();
-    mIPV4Layout->addWidget(mIPV4);
+    mIPV4 = new QLabel(this);
+    m_ipv4Widget = new DetailWidget(qobject_cast<QWidget *>(mIPV4), m_listWidget);
+    m_ipv4Widget->setKey(tr("IPV4:"));
 
-    mIPV4Dns   = new QLabel(this);
-    QHBoxLayout *mIPV4DnsLayout = new QHBoxLayout(this);
-    mIPV4DnsLayout->addStretch();
-    mIPV4DnsLayout->addWidget(mIPV4Dns);
+    mIPV4Dns = new QLabel(this);
+    m_ipv4DnsWidget = new DetailWidget(qobject_cast<QWidget *>(mIPV4Dns), m_listWidget);
+    m_ipv4DnsWidget->setKey(tr("IPV4 Dns:"));
 
-    mIPV6      = new QLabel(this);
-    QHBoxLayout *mIPV6Layout = new QHBoxLayout(this);
-    mIPV6Layout->addStretch();
-    mIPV6Layout->addWidget(mIPV6);
+    mIPV6 = new QLabel(this);
+    m_ipv6Widget = new DetailWidget(qobject_cast<QWidget *>(mIPV6), m_listWidget);
+    m_ipv6Widget->setKey(tr("IPV6:"));
 
-    mMac       = new QLabel(this);
-    QHBoxLayout *mMacLayout = new QHBoxLayout(this);
-    mMacLayout->addStretch();
-    mMacLayout->addWidget(mMac);
+    mMac = new QLabel(this);
+    m_macWidget = new DetailWidget(qobject_cast<QWidget *>(mMac), m_listWidget);
+    m_macWidget->setKey(tr("Mac:"));
 
     autoConnect = new QLabel(this);
 
@@ -143,23 +158,28 @@ void DetailPage::initUI() {
     mAutoLayout->addWidget(autoConnect);
     mAutoLayout->addSpacerItem(horizontalSpacer);
 
-    mDetailLayout->addRow(tr("SSID:"), mSSID);
-    mDetailLayout->addRow(tr("Protocol:"), mProtocolLayout);
+    this->addDetailItem(m_listWidget, m_ssidWidget);
+    this->addDetailItem(m_listWidget, m_protocolWidget);
     if (mIsWlan) {
-        mDetailLayout->addRow(tr("Security Type:"), mSecTypeLayout);
-        mDetailLayout->addRow(tr("Hz:"), mHzLayout);
-        mDetailLayout->addRow(tr("Chan:"), mChanLayout);
+        this->addDetailItem(m_listWidget, m_secTypeWidget);
+        this->addDetailItem(m_listWidget, m_hzWidget);
+        this->addDetailItem(m_listWidget, m_chanelWidget);
     }
-    mDetailLayout->addRow(tr("BandWidth:"), mBandWidthLayout);
-    mDetailLayout->addRow(tr("IPV6:"), mIPV6Layout);
-    mDetailLayout->addRow(tr("IPV4:"), mIPV4Layout);
-    mDetailLayout->addRow(tr("IPV4 Dns:"), mIPV4DnsLayout);
-    mDetailLayout->addRow(tr("Mac:"), mMacLayout);
+    this->addDetailItem(m_listWidget, m_bandwidthWidget);
+    this->addDetailItem(m_listWidget, m_ipv6Widget);
+    this->addDetailItem(m_listWidget, m_ipv4Widget);
+    this->addDetailItem(m_listWidget, m_ipv4DnsWidget);
+    this->addDetailItem(m_listWidget, m_macWidget);
 
-    layout->addLayout(mDetailLayout);
-    layout->addStretch();
+    QPalette mpal(m_listWidget->palette());
+    mpal.setColor(QPalette::Base, qApp->palette().base().color());
+    mpal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
+    m_listWidget->setAlternatingRowColors(true);
+//    m_listWidget->setAutoFillBackground(true);
+    m_listWidget->setPalette(mpal);
+
+    layout->addWidget(mDetailFrame);
     layout->addLayout(mAutoLayout);
-
 }
 
 void DetailPage::setEnableOfSaveBtn() {

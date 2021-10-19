@@ -537,15 +537,37 @@ KyEapMethodPeapInfo SecurityPage::assemblePeapInfo()
 KyEapMethodTtlsInfo SecurityPage::assembleTtlsInfo()
 {
     KyEapMethodTtlsInfo info;
-    if (eapMethodCombox->currentData().toInt() == PAP
-            || eapMethodCombox->currentData().toInt() == MSCHAP
-            || eapMethodCombox->currentData().toInt() == MSCHAPV2
-            || eapMethodCombox->currentData().toInt() == CHAP) {
+    switch (eapMethodCombox->currentData().toInt()) {
+    case PAP:
         info.authType = AUTH_NO_EAP;
-        info.authEapMethod = (KyEapMethodAuth)eapMethodCombox->currentData().toInt();
-    } else {
+        info.authNoEapMethod = KyAuthMethodPap;
+        break;
+    case MSCHAP:
+        info.authType = AUTH_NO_EAP;
+        info.authNoEapMethod = KyAuthMethodChap;
+        break;
+    case MSCHAPV2_EAP:
         info.authType = AUTH_EAP;
-        info.authNoEapMethod = (KyNoEapMethodAuth)eapMethodCombox->currentData().toInt();
+        info.authEapMethod = KyAuthEapMethodMschapv2;
+        break;
+    case MSCHAPV2:
+        info.authType = AUTH_NO_EAP;
+        info.authNoEapMethod = KyAuthMethodMschapv2;
+        break;
+    case CHAP:
+        info.authType = AUTH_NO_EAP;
+        info.authNoEapMethod = KyAuthMethodChap;
+        break;
+    case MD5_EAP:
+        info.authType = AUTH_EAP;
+        info.authEapMethod = KyAuthEapMethodMd5;
+        break;
+    case GTC_EAP:
+        info.authType = AUTH_EAP;
+        info.authEapMethod = KyAuthEapMethodGtc;
+        break;
+    default:
+        break;
     }
     info.userName = userNameEdit->text();
     info.userPWD = userPwdEdit->text();

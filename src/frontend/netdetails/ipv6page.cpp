@@ -16,9 +16,14 @@ void Ipv6Page::setIpv6Config(KyIpConfigType ipv6Config)
     }
 }
 
-void Ipv6Page::setIpv6(const QString &ipv4)
+void Ipv6Page::setIpv6(const QString &ipv6)
 {
-    ipv6AddressEdit->setText(ipv4);
+    ipv6AddressEdit->setText(ipv6);
+}
+
+void Ipv6Page::setIpv6Perfix(const int &ipv6Perfix)
+{
+    lengthEdit->setText(QString::number(ipv6Perfix));
 }
 
 void Ipv6Page::setIpv6FirDns(const QString &ipv6FirDns)
@@ -58,7 +63,7 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
             isChanged =  true;
         }
         if(info.strIPV6Address != ipv6AddressEdit->text()
-                || info.strIPV6Prefix != lengthEdit->text()
+                || info.iIPV6Prefix != lengthEdit->text().toInt()
                 || info.strIPV6GateWay != gateWayEdit->text()
                 || info.strIPV6FirDns  != firstDnsEdit->text()
                 || info.strIPV6SecDns  != secondDnsEdit->text()) {
@@ -224,5 +229,28 @@ bool Ipv6Page::getIpv6EditState(QString text)
     match = rx.exactMatch(text);
 
     return match;
+}
+
+int Ipv6Page::getPerfixLength(QString text)
+{
+    qDebug() << "getPerfixLength" << text;
+    int length = 0;
+    QStringList list= text.split(":");
+    for (int i = 0; i < list.size(); ++i) {
+        QString temp = list.at(i);
+        if (temp.isEmpty()) {
+            continue;
+        }
+        bool ok;
+        unsigned int val = temp.toUInt(&ok, 16);
+        temp = temp.setNum(val,2);
+        for(int j = 0; j < temp.length(); ++j) {
+            if (temp.at(j) == "1") {
+                length++;
+            }
+        }
+    }
+    qDebug() << "getPerfixLength" << length;
+    return length;
 }
 

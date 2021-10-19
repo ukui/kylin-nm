@@ -57,6 +57,7 @@ bool WlanPage::eventFilter(QObject *w, QEvent *e)
             emit this->hiddenWlanClicked();
         } else if (w == m_settingsLabel) {
             //ZJP_TODO 打开控制面板
+            qDebug() << LOG_FLAG <<"recive event show control center";
             showControlCenter();
         }
     }
@@ -537,6 +538,9 @@ void WlanPage::onConnectionRemove(QString deviceName, QString ssid)
 {
     qDebug() << LOG_FLAG << "one connection is removed, it's ssid " << ssid << "device name"<< deviceName;
     if (deviceName == m_currentDevice) {
+        if (m_activateConnectionItemMap.contains(ssid)) {
+            updateWirelessNetArea(nullptr, ssid, deviceName);
+        }
         updateWlanListItem(ssid);
     }
 
@@ -547,6 +551,8 @@ void WlanPage::onSecurityTypeChange(QString devName, QString ssid, QString secuT
 {
     QListWidgetItem *p_listWidgetItem = nullptr;
     WlanListItem *p_wlanItem = nullptr;
+
+    qDebug()<< LOG_FLAG << "security type is chenged";
 
     if (m_wirelessNetItemMap.contains(ssid)) {
         p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
@@ -626,9 +632,9 @@ void WlanPage::deleteDeviceFromCombox(QString deviceName)
 
     if (m_wlanSwitchEnable) {
         if (0 == m_devList.count()) {
-            m_deviceFrame->show();
-            m_tipsLabel->show();
-            m_deviceComboBox->hide();
+            m_deviceFrame->hide();
+            //m_tipsLabel->show();
+            //m_deviceComboBox->hide();
             m_currentDevice = "";
             setDefaultDevice(WIRELESS, m_currentDevice);
         } else if (1 == m_devList.count()) {
@@ -736,7 +742,7 @@ void WlanPage::sendApStateChangeSignal(QString uuid,
     return;
 }
 
-void WlanPage::wlanShowNotify(NetworkManager::ActiveConnection::State state,
+void WlanPage::wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::State state,
                               NetworkManager::ActiveConnection::Reason reason)
 {
     if (state == NetworkManager::ActiveConnection::State::Deactivated) {
@@ -775,7 +781,6 @@ void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
     deleteWirelessItemFormMap(m_activateConnectionItemMap, m_activatedNetListWidget, EMPTY_SSID);
     QListWidgetItem *p_listWidgetItem = addNewItem(wirelessNetItem, m_activatedNetListWidget);
     m_activateConnectionItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
-    updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Activated);
 
     m_activatedNetListWidget->setFixedHeight(p_listWidgetItem->sizeHint().height());
 
@@ -795,14 +800,6 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
         return;
     }
 
-    /*
-    *此处更新状态是针对激活的链接忘记密码的操作。
-    */
-    QListWidgetItem *p_activelistItem = m_activateConnectionItemMap.value(ssid);
-    if (nullptr != p_activelistItem) {
-        updateWlanItemState(m_activatedNetListWidget, p_activelistItem, Deactivated);
-    }
-
     deleteWirelessItemFormMap(m_activateConnectionItemMap, m_activatedNetListWidget, ssid);
     QListWidgetItem *p_activeListWidgetItem = addEmptyItem(m_activatedNetListWidget);
     m_activateConnectionItemMap.insert(EMPTY_SSID, p_activeListWidgetItem);
@@ -810,7 +807,6 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
 
     QListWidgetItem *p_listWidgetItem = addNewItem(wirelessNetItem, m_inactivatedNetListWidget);
     m_wirelessNetItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
-    updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
 
     m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height()
                                                + p_listWidgetItem->sizeHint().height() + NET_LIST_SPACING);
@@ -842,7 +838,7 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     emit wlanActiveConnectionStateChanged(devName, ssid,uuid, state);
 
     sendApStateChangeSignal(uuid, ssid, devName, state);
-    wlanShowNotify(state, reason);
+    wlanShowNotify(ssid, state, reason);
 
     if (devName != m_currentDevice) {
         return;
@@ -852,19 +848,25 @@ void WlanPage::onConnectionStateChanged(QString uuid,
             << "; state = " << state << "; reason = " << reason << Q_FUNC_INFO <<__LINE__;
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         updateActivatedArea(uuid, ssid, devName);
+        if (m_activateConnectionItemMap.contains(ssid)) {
+            QListWidgetItem *p_listWidgetItem = m_activateConnectionItemMap.value(ssid);
+            updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Activated);
+        }
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         updateWirelessNetArea(uuid, ssid, devName);
+        if (m_wirelessNetItemMap.contains(ssid)) {
+            QListWidgetItem *p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
+            updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
+        }
     } else if (state == NetworkManager::ActiveConnection::State::Deactivating){
         if (m_activateConnectionItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_activateConnectionItemMap.value(ssid);
-            WlanListItem *p_wlanItem = (WlanListItem*)m_activatedNetListWidget->itemWidget(p_listWidgetItem);
-            p_wlanItem->updateConnectState(Deactivating);
+            updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Deactivating);
         }
     } else if (state == NetworkManager::ActiveConnection::State::Activating) {
         if (m_wirelessNetItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
-            WlanListItem *p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
-            p_wlanItem->updateConnectState(Activating);
+            updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Activating);
         }
     }
 
@@ -947,8 +949,12 @@ void WlanPage::onHiddenWlanClicked()
 
 void WlanPage::showControlCenter()
 {
+    qDebug() << LOG_FLAG <<"show control center";
+
     QProcess process;
     process.startDetached("ukui-control-center --wlanconnect");
+
+    return;
 }
 
 void WlanPage::onWifiEnabledChanged(bool isWifiOn)
@@ -1022,8 +1028,8 @@ void WlanPage::onRefreshIconTimer()
                 WlanListItem *p_sortWlanItem = new WlanListItem(sortItem, m_currentDevice);
                 connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
                 m_inactivatedNetListWidget->insertItem(sortRow, p_sortListWidgetItem);
-                p_sortWlanItem->updateConnectState(Deactivated);
                 m_inactivatedNetListWidget->setItemWidget(p_sortListWidgetItem, p_sortWlanItem);
+                updateWlanItemState(m_inactivatedNetListWidget, p_sortListWidgetItem, Deactivated);
                 sortRow++;
                 continue;
             }

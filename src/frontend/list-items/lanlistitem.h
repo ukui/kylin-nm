@@ -1,7 +1,6 @@
 #ifndef LANLISTITEM_H
 #define LANLISTITEM_H
 #include "listitem.h"
-#include "kylinwiredwidget.h"
 #include "kylinactiveconnectresource.h"
 
 #include <QDBusInterface>

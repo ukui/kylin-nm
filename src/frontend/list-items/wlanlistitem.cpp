@@ -10,7 +10,6 @@ WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, Q
 {
     m_wlanDevice = device;
     m_wirelessNetItem = wirelessNetItem;
-    m_forgetConnection = false;
 
     qDebug()<<"[WlanPage] wlan list item is created." << m_wirelessNetItem.m_NetSsid;
 
@@ -132,14 +131,14 @@ void WlanListItem::onRightButtonClicked()
 
 void WlanListItem::enterEvent(QEvent *event)
 {
-    qDebug()<< LOG_FLAG <<"enterEvent" << m_wirelessNetItem.m_NetSsid;
+    //qDebug()<< LOG_FLAG <<"enterEvent" << m_wirelessNetItem.m_NetSsid;
     m_mouseIsOut = false;
     return ListItem::enterEvent(event);
 }
 
 void WlanListItem::leaveEvent(QEvent *event)
 {
-    qDebug()<< LOG_FLAG <<"leaveEvent"<< m_wirelessNetItem.m_NetSsid;
+    //qDebug()<< LOG_FLAG <<"leaveEvent"<< m_wirelessNetItem.m_NetSsid;
     m_mouseIsOut = true;
     if (m_pwdFrame && m_pwdFrame->isVisible()) {
         if (m_focusIsOut) {
@@ -156,12 +155,12 @@ bool WlanListItem::eventFilter(QObject *watched, QEvent *event)
     if (watched == m_pwdLineEdit) {
         if (event->type() == QEvent::FocusOut) {
             m_focusIsOut = true;
-            qDebug()<< LOG_FLAG <<"focusOutEvent" << m_wirelessNetItem.m_NetSsid;
+            //qDebug()<< LOG_FLAG <<"focusOutEvent" << m_wirelessNetItem.m_NetSsid;
             if (m_mouseIsOut) {
                 setExpanded(false);
             }
         } else if (event->type() == QEvent::FocusIn) {
-            qDebug()<< LOG_FLAG <<"focusInEvent" << m_wirelessNetItem.m_NetSsid;
+            //qDebug()<< LOG_FLAG <<"focusInEvent" << m_wirelessNetItem.m_NetSsid;
             m_focusIsOut = false;
         }
     }
@@ -477,16 +476,6 @@ void WlanListItem::updateConnectState(ConnectState state)
 {
     m_connectState = state;
 
-    if (m_forgetConnection) {
-        /*
-        * 如果是要删除链接而导致的状态变化的话，等断开连接后，删除该链接
-        */
-        if (state == Deactivated) {
-            m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
-            m_forgetConnection = false;
-        }
-    }
-
     if (Deactivated == state || Activated == state) {
         m_netButton->stopLoading();
     } else {
@@ -501,15 +490,7 @@ void WlanListItem::onMenuTriggered(QAction *action)
     if (action->text() == tr("Disconnect") || action->text() == tr("Connect")) {
         this->onNetButtonClicked();
     } else if (action->text() == tr("Forget")) {
-        /*
-        *对于激活的链接，忘记密码时，需要先断开连接，然后再删除链接。
-        */
-        if (Activated == m_connectState) {
-            m_forgetConnection = true;
-            m_wirelessConnectOperation->deActivateWirelessConnection(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
-        } else {
-            m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
-        }
+        m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
     }
 
     return;

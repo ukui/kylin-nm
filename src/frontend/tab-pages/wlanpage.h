@@ -132,7 +132,7 @@ private:
 
     void sendApStateChangeSignal(QString uuid, QString ssid, QString deviceName,
                                      NetworkManager::ActiveConnection::State state);
-    void wlanShowNotify(NetworkManager::ActiveConnection::State state,
+    void wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::State state,
                                   NetworkManager::ActiveConnection::Reason reason);
 
 private:

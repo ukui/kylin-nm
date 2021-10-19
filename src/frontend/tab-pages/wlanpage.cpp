@@ -828,14 +828,15 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     QString devName, ssid;
     m_wirelessNetResource->getSsidByUuid(uuid, ssid);
     m_wirelessNetResource->getDeviceByUuid(uuid, devName);
+
+    qDebug()<< LOG_FLAG << "emit wlanActiveConnectionStateChanged" << devName << ssid << state;
+    emit wlanActiveConnectionStateChanged(devName, ssid, uuid, state);
+
     if (ssid.isEmpty() || devName.isEmpty()) {
         qDebug()<< LOG_FLAG << "ssid or devicename is empty"
                 << "devicename"<< devName <<"ssid"<<ssid;
         return;
     }
-
-    qDebug()<< LOG_FLAG << "emit wlanActiveConnectionStateChanged" << devName << ssid << state;
-    emit wlanActiveConnectionStateChanged(devName, ssid,uuid, state);
 
     sendApStateChangeSignal(uuid, ssid, devName, state);
     wlanShowNotify(ssid, state, reason);
@@ -1075,8 +1076,11 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
             QString ssid ="";
             m_wirelessNetResource->getSsidByUuid(actMap[iter.key()].at(0), ssid);
             if (m_wirelessNetResource->getWifiNetwork(iter.key(), ssid, data)) {
-                vector.append(QStringList()<<data.m_NetSsid<<QString::number(data.m_signalStrength)<<data.m_secuType);
+                vector.append(QStringList()<<data.m_NetSsid
+                              <<QString::number(data.m_signalStrength)<<data.m_secuType<<data.m_connectUuid);
                 activeSsid = data.m_NetSsid;
+            } else {
+                vector.append(QStringList("--"));
             }
         } else {
             vector.append(QStringList("--"));

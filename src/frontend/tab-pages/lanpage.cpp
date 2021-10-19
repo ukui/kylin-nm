@@ -52,9 +52,6 @@ LanPage::~LanPage()
 
 void LanPage::initLanDevice()
 {
-    m_devList.clear();
-    m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
-
     m_currentDeviceName = getDefaultDeviceName(WIRED);
 
     QMap<QString, bool> deviceStateMap;
@@ -93,11 +90,18 @@ void LanPage::initLanDevice()
 
 void LanPage::initNetSwitch()
 {
+    m_devList.clear();
+    m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
+
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
         if (m_switchGsettings->keys().contains(WIRED_SWITCH)) {
             m_wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
-            m_netSwitch->setSwitchStatus(m_wiredSwitch);
+            if (m_wiredSwitch && m_devList.count() > 0) {
+                m_netSwitch->setSwitchStatus(true);
+            } else {
+                m_netSwitch->setSwitchStatus(false);
+            }
             connect(m_switchGsettings, &QGSettings::changed, this, &LanPage::onSwithGsettingsChanged);
         }
         connect(m_netSwitch, &SwitchButton::clicked, this, &LanPage::onLanSwitchClicked);
@@ -141,7 +145,9 @@ void LanPage::onLanSwitchClicked()
     qDebug()<<"[LanPage] On lan switch button clicked! Status:" <<m_netSwitch->getSwitchStatus();
 
     if (m_netSwitch->getSwitchStatus()) {
-        m_switchGsettings->set(WIRED_SWITCH, true);
+        if (m_devList.count() > 0) {
+            m_switchGsettings->set(WIRED_SWITCH, true);
+        }
     } else {
         m_switchGsettings->set(WIRED_SWITCH, false);
     }
@@ -526,6 +532,11 @@ void LanPage::deleteDeviceFromCombox(QString deviceName)
     disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
                this, &LanPage::onDeviceComboxIndexChanged);
 
+    if (m_devList.count() == 0) {
+        m_netSwitch->setSwitchStatus(false);
+        m_switchGsettings->set(WIRED_SWITCH, false);
+    }
+
     if (m_wiredSwitch) {
         if (0 == m_enableDeviceList.count()) {
             //1、没有使能任何网卡
@@ -580,6 +591,7 @@ void LanPage::onDeviceRemove(QString deviceName)
 
     qDebug() << "[LanPage] deviceRemove:" << deviceName;
 
+    m_devList.removeOne(deviceName);
     QString nowDevice = m_currentDeviceName;
     deleteDeviceFromCombox(deviceName);
     if (nowDevice == deviceName) {
@@ -587,7 +599,6 @@ void LanPage::onDeviceRemove(QString deviceName)
         initLanArea();
     }
 
-    m_devList.removeOne(deviceName);
     if (m_enableDeviceList.contains(deviceName)) {
         m_enableDeviceList.removeOne(deviceName);
     }
@@ -677,6 +688,8 @@ void LanPage::initUI()
     m_inactivatedLanListWidget->setSpacing(LAN_LIST_SPACING);
     m_inactivatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    m_inactivatedLanListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);   //用了listwidget的滚动条
+//    m_inactivatedLanListWidget->setSortingEnabled(true);
+//    m_inactivatedLanListWidget->sortItems(Qt::AscendingOrder);
 
     inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
     m_settingsLabel->installEventFilter(this);
@@ -686,7 +699,8 @@ QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listW
 {
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setSizeHint(QSize(listWidget->width(),ITEM_HEIGHT));
-    listWidget->insertItem(0, p_listWidgetItem);
+//    listWidget->insertItem(0, p_listWidgetItem);
+    listWidget->addItem(p_listWidgetItem);
 
     LanListItem *p_lanItem = nullptr;
     if (itemData != nullptr) {

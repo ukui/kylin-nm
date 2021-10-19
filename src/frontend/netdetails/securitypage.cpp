@@ -338,7 +338,6 @@ void SecurityPage::getSecuType(KySecuType &secuType, KyEapMethodType &enterprise
 
 bool SecurityPage::checkIsChanged(const ConInfo info)
 {
-    qDebug() << "SecurityPage checkIsChanged";
     if (info.secType != secuTypeCombox->currentData().toInt()) {
         return true;
     } else {

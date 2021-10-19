@@ -170,7 +170,7 @@ bool Ipv4Page::checkConnectBtnIsEnabled()
             return false;
         }
 
-        if (netMaskEdit->text().isEmpty() || !getNetMaskState(netMaskEdit->text())) {
+        if (netMaskEdit->text().isEmpty() || !netMaskIsValide(netMaskEdit->text())) {
             qDebug() << "ipv4 netMask empty or invalid";
             return false;
         }

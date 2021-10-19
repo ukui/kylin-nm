@@ -161,6 +161,7 @@ void DetailPage::initUI() {
         QSpacerItem *horizontalSpacer;
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
+        mAutoLayout->addSpacing(20);
         mAutoLayout->addWidget(forgetNetBox);
         mAutoLayout->addWidget(autoConnect);
         mAutoLayout->addSpacerItem(horizontalSpacer);

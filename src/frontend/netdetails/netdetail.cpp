@@ -832,6 +832,7 @@ bool NetDetail::updateConnect()
     bool securityChange = false;
     if (isWlan) {
         securityChange = securityPage->checkIsChanged(m_info);
+        qDebug() << "securityChange" << securityChange;
         if (securityChange) {
             KySecuType secuType;
             KyEapMethodType enterpriseType;

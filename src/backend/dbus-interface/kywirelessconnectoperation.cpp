@@ -476,7 +476,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
             break;
         case NetworkManager::WpaPsk:
         case NetworkManager::Wpa2Psk:
-            settings = assembleWpaXPskSettings(access_point, connSettingInfo.m_psk, connSettingInfo.isAutoConnect;
+            settings = assembleWpaXPskSettings(access_point, connSettingInfo.m_psk, connSettingInfo.isAutoConnect);
             if (nullptr != settings) {
                 map_settings = settings->toMap();
             } else {
@@ -486,7 +486,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
             break;
             //TODO: other types...
         case NetworkManager::SAE:
-            settings = assembleSaeSettings(access_point, connSettingInfo.m_psk, connSettingInfo.isAutoConnect;
+            settings = assembleSaeSettings(access_point, connSettingInfo.m_psk, connSettingInfo.isAutoConnect);
             if (nullptr != settings) {
                 map_settings = settings->toMap();
             } else {

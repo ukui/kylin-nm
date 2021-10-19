@@ -42,6 +42,8 @@ public:
     //无线连接断开
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
+    //无线总开关
+    void setWirelessSwitchEnable(bool enable);
 
     void setWiredDeviceEnable(const QString& devName, bool enable);
 

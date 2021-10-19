@@ -15,6 +15,9 @@
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
+#include <kwindowsystem.h>
+#include <kwindowsystem_export.h>
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     firstlyStart();
@@ -29,6 +32,15 @@ void MainWindow::showMainwindow()
         m_secondaryStartTimer->stop();
         secondaryStart();
     }
+
+    /**
+     * 设置主界面跳过任务栏和分页器的属性，隐藏再次展示有可能辉冲刷掉该属性，需要展示时重新设置
+     */
+    const KWindowInfo info(this->winId(), NET::WMState);
+    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
+        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+    }
+
     this->resetWindowPosition();
     this->showNormal();
     this->raise();
@@ -446,6 +458,12 @@ void MainWindow::getApInfoBySsid(QString devName, QString ssid, QStringList &lis
 void MainWindow::getStoredApInfo(QStringList &list)
 {
     m_wlanWidget->getStoredApInfo(list);
+}
+
+//无线开关
+void MainWindow::setWirelessSwitchEnable(bool enable)
+{
+    m_wlanWidget->setWirelessSwitchEnable(enable);
 }
 
 void MainWindow::setWiredDeviceEnable(const QString& devName, bool enable)

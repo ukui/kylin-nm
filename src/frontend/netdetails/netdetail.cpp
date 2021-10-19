@@ -831,17 +831,24 @@ bool NetDetail::updateConnect()
         m_wiredConnOperation->updateWiredConnect(m_uuid, connetSetting);
     }
 
-    if (isWlan && securityPage->checkIsChanged(m_info)) {
-        KySecuType secuType;
-        KyEapMethodType enterpriseType;
-        securityPage->getSecuType(secuType, enterpriseType);
-        if (secuType == WPA_AND_WPA2_ENTERPRISE) {
-            updateWirelessEnterPriseConnect(enterpriseType);
-        } else {
-            updateWirelessPersonalConnect();
+    bool securityChange = false;
+    if (isWlan) {
+        securityChange = securityPage->checkIsChanged(m_info);
+        if (securityChange) {
+            KySecuType secuType;
+            KyEapMethodType enterpriseType;
+            securityPage->getSecuType(secuType, enterpriseType);
+            if (secuType == WPA_AND_WPA2_ENTERPRISE) {
+                updateWirelessEnterPriseConnect(enterpriseType);
+            } else {
+                updateWirelessPersonalConnect();
+            }
         }
+    }
+
+    if (ipv4Change || ipv6Change || securityChange) {
         if (isActive) {
-            //安全性变化 断开-重连
+            //信息变化 断开-重连
             m_wirelessConnOpration->activateConnection(m_uuid, m_deviceName);
         }
     }

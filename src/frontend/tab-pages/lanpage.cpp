@@ -415,10 +415,6 @@ void LanPage::onRemoveConnection(QString path)            //删除时后端会�
     qDebug() << "[LanPage] emit lanRemove because onRemoveConnection " << path;
     emit lanRemove(path);
 
-    QEventLoop loop;
-    QTimer::singleShot(200, &loop, SLOT(quit()));
-    loop.exec();
-
     QMap<KyConnectItem *, QListWidgetItem *>::iterator iters;
     for (iters = m_deactiveMap.begin(); iters != m_deactiveMap.end(); ++iters) {
         KyConnectItem *p_item = iters.key();
@@ -438,10 +434,34 @@ void LanPage::onRemoveConnection(QString path)            //删除时后端会�
             delete p_item;
             p_item = nullptr;
 
+            return;
+        }
+    }
+    QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;
+    for (iter = m_activeMap.begin(); iter != m_activeMap.end(); ++iter) {
+        KyConnectItem *p_item = iter.key();
+        if (p_item->m_connectPath == path) {
+            qDebug()<<"[LanPage] Remove a connection from active list";
+
+            LanListItem *p_lanItem = (LanListItem *)m_activatedLanListWidget->itemWidget(iter.value());
+
+            m_activatedLanListWidget->removeItemWidget(iter.value());
+
+            delete p_lanItem;
+            p_lanItem = nullptr;
+
+            delete(iter.value());
+            m_activeMap.erase(iter);
+
+            delete p_item;
+            p_item = nullptr;
+
             break;
         }
     }
-
+    if (m_activeMap.count() <= 0) {
+        addEmptyConnectItem(m_activeMap, m_activatedLanListWidget);
+    }
     return;
 }
 
@@ -508,6 +528,11 @@ void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devic
 
     if (m_devList.contains(deviceName)) {
         return;
+    }
+
+    if (m_devList.count() == 0) {                     // 有线网卡从无到有，打开开关
+        m_netSwitch->setSwitchStatus(true);
+        m_switchGsettings->set(WIRED_SWITCH, true);
     }
 
     qDebug() << "[LanPage] Begin add device:" << deviceName;
@@ -744,6 +769,7 @@ void LanPage::updateActivatedConnectionArea(QString uuid)
         qDebug()<<"[LanPage]update active connection item"<<p_newItem->m_connectName;
         QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_activatedLanListWidget);
         m_activeMap.insert(p_newItem, p_listWidgetItem);
+        this->showDesktopNotify(tr("LAN Connected Successfully"));
     } else {
         //释放内存
         delete p_newItem;
@@ -780,6 +806,7 @@ void LanPage::updateConnectionArea(QString uuid)
         qDebug()<<"[LanPage] update connection item"<<p_newItem->m_connectName;
         QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_inactivatedLanListWidget);
         m_deactiveMap.insert(p_newItem, p_listWidgetItem);
+        this->showDesktopNotify(tr("LAN Disconnected Successfully"));
     } else {
         delete p_newItem;
         p_newItem = nullptr;
@@ -794,6 +821,7 @@ void LanPage::onUpdateLanlist(QString uuid,
 {
     //lanpage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
     if (!m_connectResourse->isWiredConnection(uuid)) {
+        qDebug() << "[LanPage] connection state change signal but not wired";
         return;
     }
 

@@ -41,6 +41,7 @@ private:
     void initUI();
     void initLanArea();
     void initNetSwitch();
+    void initLanDeviceState();
 
     void initDeviceCombox();
     void updateDeviceCombox(QString oldDeviceName, QString newDeviceName);
@@ -48,6 +49,8 @@ private:
     void addDeviceForCombox(QString deviceName);
 
     QListWidgetItem *addNewItem(KyConnectItem *itemData, QListWidget *listWidget);
+    bool removeConnectionItem(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+                              QListWidget *lanListWidget, QString path);
 
     void getEnabledDevice(QStringList &enableDeviceList);
     void getDisabledDevices(QStringList &disableDeviceList);
@@ -118,6 +121,7 @@ private:
     QGSettings *m_switchGsettings = nullptr;
 
     bool m_wiredSwitch = true;
+    QMap<QString, bool> m_deviceStateMap;
 };
 
 #endif // LANPAGE_H

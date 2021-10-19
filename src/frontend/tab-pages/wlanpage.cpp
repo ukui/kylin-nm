@@ -1072,7 +1072,9 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
         if (actMap.contains(iter.key())) {
             qDebug() << "find " <<iter.key();
             KyWirelessNetItem data;
-            if (m_wirelessNetResource->getWifiNetwork(iter.key(), actMap[iter.key()].at(0), data)) {
+            QString ssid ="";
+            m_wirelessNetResource->getSsidByUuid(actMap[iter.key()].at(0), ssid);
+            if (m_wirelessNetResource->getWifiNetwork(iter.key(), ssid, data)) {
                 vector.append(QStringList()<<data.m_NetSsid<<QString::number(data.m_signalStrength)<<data.m_secuType);
                 activeSsid = data.m_NetSsid;
             }

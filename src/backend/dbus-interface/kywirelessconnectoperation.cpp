@@ -100,7 +100,8 @@ NetworkManager::ConnectionSettings::Ptr assembleWirelessSettings(const KyWireles
 
 KyWirelessConnectOperation::KyWirelessConnectOperation(QObject *parent) : KyConnectOperation(parent)
 {
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifinEnabledChanged, this, &KyWirelessConnectOperation::wifinEnabledChanged);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiEnabledChanged,
+                                        this, &KyWirelessConnectOperation::wifiEnabledChanged);
 }
 
 KyWirelessConnectOperation::~KyWirelessConnectOperation()
@@ -695,14 +696,6 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
 void KyWirelessConnectOperation::setWirelessEnabled(bool enabled)
 {
     NetworkManager::setWirelessEnabled(enabled);
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
-        QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA);
-        if (gsetting->get(WIRELESS_SWITCH).toBool() != enabled) {
-            gsetting->set(WIRELESS_SWITCH, enabled);
-        }
-    } else {
-        qDebug()<<"isSchemaInstalled false";
-    }
 }
 
 bool KyWirelessConnectOperation::getWirelessEnabled()

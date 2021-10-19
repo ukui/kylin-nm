@@ -22,37 +22,41 @@ class WlanListItem : public ListItem
 {
     Q_OBJECT
 public:
-    WlanListItem(KyWirelessNetResource *resource, KyWirelessNetItem *data, QString device, QWidget *parent = nullptr);
+    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent = nullptr);
     WlanListItem(QWidget *parent = nullptr);
     ~WlanListItem();
 
 public:
+    QString getSsid();
+
     void setWlanSignal(const int &signal);
     void setWlanState(const int &state);
     void setExpanded(const bool &expanded);
-    void setWlanItemPwdVisible(const bool &expanded);
-    QString getSsid();
-    KyWirelessNetItem *m_data = nullptr;
+
+    ConnectState getConnectionState();
+    void updateConnectState(ConnectState state);
+
+    void updateWirelessNetSecurity(QString ssid, QString securityType);
+    void updateWirelessNetItem(KyWirelessNetItem &wirelessNetItem);
+
 protected:
     void resizeEvent(QResizeEvent *event);
     void onRightButtonClicked();
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 signals:
-    void itemHeightChanged(const QString &ssid);
-    void connectButtonClicked(KyWirelessConnectSetting &connSettingInfo, const bool &isHidden);
+    void itemHeightChanged(const bool isExpanded, const QString &ssid);
 
 private:
     void initWlanUI();
-    void initWlanConnection();
     void refreshIcon();
 
 private:
-    KyWirelessNetResource *m_resource = nullptr;
+    KyWirelessNetItem m_wirelessNetItem;
+    KyWirelessConnectOperation *m_wirelessConnectOperation = nullptr;
 
-    KyWirelessConnectOperation *m_connoperation = nullptr;
-    KyActiveConnectResourse *m_connectResource = nullptr;
     bool m_hasPwd = true;
     QString m_wlanDevice;
 
@@ -63,7 +67,6 @@ private:
     QLineEdit * m_pwdLineEdit = nullptr;
     QHBoxLayout *m_pwdLineEditLyt = nullptr;
     QPushButton *m_showPwdButton = nullptr;
-
     QPushButton *m_connectButton = nullptr;
 
     //自动连接选择区域UI
@@ -74,28 +77,19 @@ private:
 
     QMenu *m_menu = nullptr;
 
-    NetworkManager::ActiveConnection::State m_state;
+    bool m_focusIsOut = true;
+    bool m_mouseIsOut = true;
 
-//    QVBoxLayout * m_mainLayout = nullptr;
-//    QFrame * m_itemFrame = nullptr;
-//    QHBoxLayout * m_hItemLayout = nullptr;
-//    QLineEdit * m_lineEdit = nullptr;
+    bool m_forgetConnection = false;
+
 protected slots:
     void onInfoButtonClicked();
 
 private slots:
-//    void onInfoButtonClicked();
     void onNetButtonClicked();
-//    void onNameLableClicked();
-    void onSecurityChanged(QString interface, QString ssid, QString securityType);
     void onPwdEditorTextChanged();
     void onShowPwdButtonClicked();
     void onConnectButtonClicked();
-    void onConnectionAdd(QString deviceName, QString ssid);
-    void onConnectionRemove(QString deviceName, QString ssid);
-    void onWlanStatusChange(QString uuid,
-                          NetworkManager::ActiveConnection::State state,
-                          NetworkManager::ActiveConnection::Reason reason);
     void onMenuTriggered(QAction *action);
 };
 

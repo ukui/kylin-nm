@@ -13,6 +13,7 @@
 
 ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
+    m_connectState = UnknownState;
     isDetailShow = false;
     initUI();
     initConnection();
@@ -47,6 +48,11 @@ void ListItem::setActive(const bool &isActive)
     m_isActive = isActive;
 }
 
+void ListItem::setConnectState(ConnectState state)
+{
+    m_connectState = state;
+}
+
 void ListItem::showDesktopNotify(const QString &message)
 {
     QDBusInterface iface("org.freedesktop.Notifications",
@@ -67,6 +73,7 @@ void ListItem::showDesktopNotify(const QString &message)
 
 void ListItem::mousePressEvent(QMouseEvent *event)
 {
+    qDebug()<<"[WlanListItem]"<<"mousePressEvent";
     if (event->button() == Qt::LeftButton) {
         onNetButtonClicked();
     } else if (event->button() == Qt::RightButton) {

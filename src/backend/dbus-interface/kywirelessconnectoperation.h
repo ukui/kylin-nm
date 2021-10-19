@@ -128,7 +128,7 @@ private:
 
 
 signals:
-    void wifinEnabledChanged(bool);
+    void wifiEnabledChanged(bool);
     void addAndActivateConnectionError(QString errorMessage);
 
 private:

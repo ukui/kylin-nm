@@ -11,14 +11,10 @@ FORMS += \
 
 HEADERS += \
     $$PWD/customstyle.h \
-    $$PWD/kylinwiredwidget.h \
     $$PWD/mainwindow.h \
-    $$PWD/nmdemo.h \
     $$PWD/wificonfigdialog.h
 
 SOURCES += \
     $$PWD/customstyle.cpp \
-    $$PWD/kylinwiredwidget.cpp \
     $$PWD/mainwindow.cpp \
-    $$PWD/nmdemo.cpp \
     $$PWD/wificonfigdialog.cpp

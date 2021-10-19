@@ -10,7 +10,7 @@ class EnterpriseWlanDialog : public QDialog
 {
     Q_OBJECT
 public:
-    EnterpriseWlanDialog(KyWirelessNetItem *data, QString device, QWidget *parent = nullptr);
+    EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent = nullptr);
     ~EnterpriseWlanDialog();
 
 private:
@@ -20,7 +20,7 @@ private:
     void initData();
 
 private:
-    KyWirelessNetItem *m_data = nullptr;
+    KyWirelessNetItem m_wirelessNetItem;
     ConInfo m_info;
     QString m_deviceName;
     KyWirelessConnectOperation *m_connectOperation = nullptr;

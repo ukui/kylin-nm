@@ -125,7 +125,7 @@ signals:
     void wifiNetworkAdded(QString, QString);
     void wifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net);
     void wifiNetworkDeviceDisappear();
-    void wifinEnabledChanged(bool);
+    void wifiEnabledChanged(bool);
 
     void activeConnectionsReset();
     void activeConnectionAdd(QString uuid);

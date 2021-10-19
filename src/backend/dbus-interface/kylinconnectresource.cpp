@@ -315,6 +315,7 @@ void KyConnectResourse::getIpv6ConnectSetting(
     connectSetting.m_ipv6ConfigIpType = CONFIG_IP_MANUAL;
 
     connectSetting.m_ipv6Address = ipv6Setting->addresses();
+
     connectSetting.m_ipv6Dns = ipv6Setting->dns();
 
     return;

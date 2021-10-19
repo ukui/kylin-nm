@@ -241,7 +241,7 @@ bool Ipv4Page::getTextEditState(QString text)
     return match;
 }
 
-bool Ipv4Page::getNetMaskState(QString text)
+bool Ipv4Page::netMaskIsValide(QString text)
 {
     if (getTextEditState(text)) {
         return true;

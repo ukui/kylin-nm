@@ -51,7 +51,7 @@ private:
     void setLineEnabled(bool check);
     void configSave();
     bool getTextEditState(QString text);
-    bool getNetMaskState(QString text);
+    bool netMaskIsValide(QString text);
     QString getNetMaskText(QString text);
     bool checkConnectBtnIsEnabled();
 

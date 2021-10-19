@@ -57,6 +57,9 @@ void DetailPage::setMac(const QString &mac) {
 
 void DetailPage::setAutoConnect(bool flag)
 {
+    if (!mIsWlan) {
+        return;
+    }
     this->forgetNetBox->setChecked(flag);
 }
 
@@ -67,6 +70,9 @@ void DetailPage::getSsid(QString &ssid)
 
 bool DetailPage::checkIsChanged(const ConInfo info)
 {
+    if (!mIsWlan) {
+        return false;
+    }
     if (info.isAutoConnect != forgetNetBox->isChecked()) {
         return true;
     } else {
@@ -84,7 +90,6 @@ void DetailPage::addDetailItem(QListWidget *listWidget, DetailWidget *detailWidg
 }
 
 void DetailPage::initUI() {
-    forgetNetBox = new QCheckBox(this);
     layout = new QVBoxLayout(this);
     layout->setContentsMargins(0,0,0,0);
 
@@ -147,16 +152,19 @@ void DetailPage::initUI() {
     m_macWidget = new DetailWidget(qobject_cast<QWidget *>(mMac), m_listWidget);
     m_macWidget->setKey(tr("Mac:"));
 
-    autoConnect = new QLabel(this);
+    if (mIsWlan) {
+        autoConnect = new QLabel(this);
+        forgetNetBox = new QCheckBox(this);
 
-    autoConnect->setText(tr("Auto Connection"));
-    mAutoLayout = new QHBoxLayout(this);
-    QSpacerItem *horizontalSpacer;
-    horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        autoConnect->setText(tr("Auto Connection"));
+        mAutoLayout = new QHBoxLayout(this);
+        QSpacerItem *horizontalSpacer;
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    mAutoLayout->addWidget(forgetNetBox);
-    mAutoLayout->addWidget(autoConnect);
-    mAutoLayout->addSpacerItem(horizontalSpacer);
+        mAutoLayout->addWidget(forgetNetBox);
+        mAutoLayout->addWidget(autoConnect);
+        mAutoLayout->addSpacerItem(horizontalSpacer);
+    }
 
     this->addDetailItem(m_listWidget, m_ssidWidget);
     this->addDetailItem(m_listWidget, m_protocolWidget);
@@ -179,7 +187,9 @@ void DetailPage::initUI() {
     m_listWidget->setPalette(mpal);
 
     layout->addWidget(mDetailFrame);
-    layout->addLayout(mAutoLayout);
+    if (mIsWlan) {
+        layout->addLayout(mAutoLayout);
+    }
 }
 
 void DetailPage::setEnableOfSaveBtn() {

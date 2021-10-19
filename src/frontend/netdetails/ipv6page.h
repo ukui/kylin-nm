@@ -22,11 +22,14 @@ public:
     Ipv6Page(QWidget *parent = nullptr);
     void setIpv6Config(KyIpConfigType ipv6Config);
     void setIpv6(const QString &ipv4);
+    void setIpv6Perfix(const int &ipv6Perfix);
     void setIpv6FirDns(const QString &ipv6FirDns);
     void setIpv6SecDns(const QString &ipv6SecDns);
     void setGateWay(const QString &gateWay);
 
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
+
+    int getPerfixLength(QString text);
 
 public:
     QComboBox *ipv6ConfigCombox;
@@ -51,7 +54,6 @@ private:
     bool getIpv6EditState(QString text);
 
     bool checkConnectBtnIsEnabled();
-
 
 private slots:
     void configChanged(int index);

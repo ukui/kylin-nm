@@ -48,7 +48,7 @@ public:
 
     KyIpConfigType ipv6ConfigType = CONFIG_IP_DHCP;
     QString strIPV6Address;
-    QString strIPV6Prefix;
+    int iIPV6Prefix;
     QString strIPV6FirDns;
     QString strIPV6SecDns;
     QString strIPV6GateWay;

@@ -466,6 +466,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
 
         qDebug() << "findBestWirelessSecurity type "<< sec_type;
 
+        NetworkManager::ConnectionSettings::Ptr settings = nullptr;
         switch (sec_type)
         {
         case NetworkManager::UnknownSecurity:
@@ -475,7 +476,8 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
             break;
         case NetworkManager::WpaPsk:
         case NetworkManager::Wpa2Psk:
-            if (NetworkManager::ConnectionSettings::Ptr settings = assembleWpaXPskSettings(access_point, connSettingInfo.m_psk, connSettingInfo.isAutoConnect)) {
+            settings = assembleWpaXPskSettings(access_point, connSettingInfo.m_psk, connSettingInfo.isAutoConnect;
+            if (nullptr != settings) {
                 map_settings = settings->toMap();
             } else {
                 qWarning() << QStringLiteral("connection settings assembly for '%1' failed, abandoning activation...").arg(conn_name);
@@ -484,7 +486,8 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
             break;
             //TODO: other types...
         case NetworkManager::SAE:
-            if (NetworkManager::ConnectionSettings::Ptr settings = assembleSaeSettings(access_point, connSettingInfo.m_psk, connSettingInfo.isAutoConnect)) {
+            settings = assembleSaeSettings(access_point, connSettingInfo.m_psk, connSettingInfo.isAutoConnect;
+            if (nullptr != settings) {
                 map_settings = settings->toMap();
             } else {
                 qWarning() << QStringLiteral("connection settings assembly for '%1' failed, abandoning activation...").arg(conn_name);

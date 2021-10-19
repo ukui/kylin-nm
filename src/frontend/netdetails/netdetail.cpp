@@ -296,7 +296,7 @@ void NetDetail::initComponent()
         stackWidget->setCurrentIndex(SECURITY_PAGE_NUM);
     });
     connect(confimBtn, SIGNAL(clicked()), this, SLOT(on_btnConfirm_clicked()));
-    if (!m_uuid.isEmpty()) {
+    if (isWlan && !m_uuid.isEmpty()) {
         forgetBtn->show();
         connect(forgetBtn, SIGNAL(clicked()), this, SLOT(on_btnForget_clicked()));
     } else {
@@ -362,10 +362,11 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     //ipv6页面填充
     if (m_info.ipv6ConfigType == CONFIG_IP_MANUAL) {
         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
-        ipv6Page->setIpv6(m_info.strIPV4Address);
+        ipv6Page->setIpv6(m_info.strIPV6Address);
+        ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
         ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
-        ipv6Page->setIpv6SecDns(m_info.strIPV4SecDns);
-        ipv6Page->setGateWay(m_info.strIPV4GateWay);
+        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
+        ipv6Page->setGateWay(m_info.strIPV6GateWay);
     } else {
         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
     }
@@ -411,13 +412,11 @@ void NetDetail::getBaseInfo(ConInfo &conInfo)
 
     if (!hardAddress.isEmpty()) {
         conInfo.strBandWidth = QString("%1").arg(bandWith/1000) + "Mbps";
+        conInfo.strMac = hardAddress;
     }
 
     if (!isWlan) {
         conInfo.strConType = "802-3-ethernet";
-        if (!hardAddress.isEmpty()) {
-            conInfo.strMac = hardAddress;
-        }
     } else {
         conInfo.strConType = "802-11-wireless";
         if (!isActive) {
@@ -426,8 +425,6 @@ void NetDetail::getBaseInfo(ConInfo &conInfo)
                 qDebug() << "getWifiNetWork failed device:" << m_deviceName << " name:" << m_name;
                 return;
             } else {
-
-                    conInfo.strMac = item.m_bssid;
                     conInfo.strHz = QString::number(item.m_frequency);
                     conInfo.strChan = QString::number(item.m_channel);
                     //无线特有
@@ -494,6 +491,7 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
     KyConnectResourse *kyConnectResourse = new KyConnectResourse(this);
     KyConnectSetting  connetSetting;
     kyConnectResourse->getConnectionSetting(m_uuid,connetSetting);
+    connetSetting.dumpInfo();
 
     conInfo.ipv4ConfigType = connetSetting.m_ipv4ConfigIpType;
     conInfo.ipv6ConfigType = connetSetting.m_ipv6ConfigIpType;
@@ -516,7 +514,7 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
     if (connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
         if (connetSetting.m_ipv6Address.size() > 0) {
             conInfo.strIPV6Address = connetSetting.m_ipv6Address.at(0).ip().toString();
-            conInfo.strIPV6Prefix = connetSetting.m_ipv6Address.at(0).netmask().toString();
+            conInfo.iIPV6Prefix = ipv6Page->getPerfixLength(connetSetting.m_ipv6Address.at(0).netmask().toString());
             conInfo.strIPV6GateWay = connetSetting.m_ipv6Address.at(0).gateway().toString();
         }
 

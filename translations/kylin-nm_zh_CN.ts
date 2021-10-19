@@ -508,12 +508,14 @@
         <translation>未激活</translation>
     </message>
     <message>
+        <location filename="frontend/tab-pages/lanpage.cpp" line="795"/>
         <source>LAN Disconnected Successfully</source>
-        <translation type="vanished">有线网络断开</translation>
+        <translation>有线网络已断开</translation>
     </message>
     <message>
+        <location filename="frontend/tab-pages/lanpage.cpp" line="790"/>
         <source>LAN Connected Successfully</source>
-        <translation type="vanished">连接有线网络成功</translation>
+        <translation>有线网络已连接</translation>
     </message>
 </context>
 <context>
@@ -970,12 +972,12 @@
     <message>
         <location filename="frontend/tab-pages/wlanpage.cpp" line="510"/>
         <source>WLAN Connected Successfully</source>
-        <translation>连接无线网络成功</translation>
+        <translation>无线网络已连接</translation>
     </message>
     <message>
         <location filename="frontend/tab-pages/wlanpage.cpp" line="520"/>
         <source>WLAN Disconnected Successfully</source>
-        <translation>断开无线网络</translation>
+        <translation>无线网络已断开</translation>
     </message>
 </context>
 <context>

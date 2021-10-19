@@ -1,5 +1,6 @@
 #include "ipv4page.h"
 #include "netdetail.h"
+#include "math.h"
 
 Ipv4Page::Ipv4Page(QWidget *parent):QFrame(parent)
 {
@@ -129,8 +130,9 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
             setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
             isChanged =  true;
         }
+        qDebug() << "ipv4 netmask " << getNetMaskText(netMaskEdit->text());
         if(info.strIPV4Address != ipv4addressEdit->text()
-                || info.strIPV4NetMask != netMaskEdit->text()
+                || info.strIPV4NetMask != /*netMaskEdit->text()*/getNetMaskText(netMaskEdit->text())
                 || info.strIPV4GateWay != gateWayEdit->text()
                 || info.strIPV4FirDns  != firstDnsEdit->text()
                 || info.strIPV4SecDns  != secondDnsEdit->text()) {
@@ -146,7 +148,7 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
             }
 
             QString ipv4address =ipv4addressEdit->text();
-            QString netMask = netMaskEdit->text();
+            QString netMask = getNetMaskText(netMaskEdit->text());
             QString gateWay = gateWayEdit->text();
             qDebug() << ipv4address << netMask << gateWay;
             setting.ipv4AddressConstruct(ipv4address, netMask, gateWay, dnsList);
@@ -168,7 +170,7 @@ bool Ipv4Page::checkConnectBtnIsEnabled()
             return false;
         }
 
-        if (netMaskEdit->text().isEmpty() || !getTextEditState(netMaskEdit->text())) {
+        if (netMaskEdit->text().isEmpty() || !netMaskIsValide(netMaskEdit->text())) {
             qDebug() << "ipv4 netMask empty or invalid";
             return false;
         }
@@ -239,3 +241,39 @@ bool Ipv4Page::getTextEditState(QString text)
     return match;
 }
 
+bool Ipv4Page::netMaskIsValide(QString text)
+{
+    if (getTextEditState(text)) {
+        return true;
+    } else {
+        if (text.length() > 0 && text.length() < 3) {
+            int num = text.toInt();
+            if (num > 0 && num < 33) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+QString Ipv4Page::getNetMaskText(QString text)
+{
+    if (text.length() > 2) {
+        return text;
+    }
+
+    int num = text.toInt();
+    QStringList list;
+    list << "0" << "0" << "0" << "0";
+    int count = 0;
+    while (num - 8 >= 0) {
+        list[count] = "255";
+        num = num - 8;
+        count ++;
+    }
+    if (num > 0) {
+        int size = pow(2, 8) - pow(2,(8-num));
+        list[count] = QString::number(size);
+    }
+    return QString("%1.%2.%3.%4").arg(list[0],list[1],list[2],list[3]);
+}

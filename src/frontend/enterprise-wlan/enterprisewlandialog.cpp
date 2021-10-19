@@ -162,14 +162,12 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
 
     if (eapType  == KyEapMethodType::TLS) {
         m_info.tlsInfo.devIfaceName = m_deviceName;
-        m_securityPage->updateTlsChange(m_info.tlsInfo);
-        m_connectOperation->addAndActiveWirelessEnterPriseTlsConnect(m_info.tlsInfo, connetSetting, m_deviceName, true);
+        m_connectOperation->addAndActiveWirelessEnterPriseTlsConnect(m_info.tlsInfo, connetSetting, m_deviceName, false);
     } else if (eapType == KyEapMethodType::PEAP) {
-        m_securityPage->updatePeapChange(m_info.peapInfo);
-        m_connectOperation->addAndActiveWirelessEnterPrisePeapConnect(m_info.peapInfo, connetSetting, m_deviceName, true);
+        m_connectOperation->addAndActiveWirelessEnterPrisePeapConnect(m_info.peapInfo, connetSetting, m_deviceName, false);
     } else if (eapType == KyEapMethodType::TTLS) {
         m_securityPage->updateTtlsChange(m_info.ttlsInfo);
-        m_connectOperation->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, true);
+        m_connectOperation->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, false);
     } else {
         qWarning() << "Connect enterprise wlan failed!(Unknown eap type)" << Q_FUNC_INFO << __LINE__;
     }

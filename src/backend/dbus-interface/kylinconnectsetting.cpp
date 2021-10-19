@@ -121,8 +121,7 @@ void KyConnectSetting::dumpInfo()
         qDebug()<<"ipv4 dns" << m_ipv4Dns.at(index).toString();
     }
 
-    /*
-    for (int index = 0 ; index << m_ipv6Address.size(); index++) {
+    for (int index = 0 ; index < m_ipv6Address.size(); index++) {
         qDebug()<<"ipv6 address" << m_ipv6Address.at(index).ip().toString();
         qDebug()<<"ipv6 gate way" << m_ipv6Address.at(index).gateway().toString();
         qDebug()<<"ipv6 net mask" << m_ipv6Address.at(index).netmask().toString();
@@ -131,5 +130,4 @@ void KyConnectSetting::dumpInfo()
     for (int index = 0; index < m_ipv6Dns.size(); ++index) {
         qDebug()<<"ipv6 dns" << m_ipv6Dns.at(index).toString();
     }
-    */
 }

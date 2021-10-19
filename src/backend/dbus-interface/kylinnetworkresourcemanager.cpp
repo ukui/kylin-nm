@@ -55,7 +55,7 @@ KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(pa
 
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::connectivityChanged, this, &KyNetworkResourceManager::connectivityChanged);
     //todo wifi开关信号
-    connect(NetworkManager::notifier(), &NetworkManager::Notifier::wirelessEnabledChanged, this, &KyNetworkResourceManager::wifinEnabledChanged);
+    connect(NetworkManager::notifier(), &NetworkManager::Notifier::wirelessEnabledChanged, this, &KyNetworkResourceManager::wifiEnabledChanged);
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::wirelessHardwareEnabledChanged, [=](){
 
     });
@@ -210,8 +210,13 @@ void KyNetworkResourceManager::addConnection(NetworkManager::Connection::Ptr con
 
 void KyNetworkResourceManager::insertConnections()
 {
-    for (auto const & conn : NetworkManager::listConnections())
-        addConnection(conn);
+    for (auto const & connectPtr : NetworkManager::listConnections()) {
+        if (connectPtr->name().isEmpty() || connectPtr->uuid().isEmpty()) {
+            qWarning() <<"[KyNetworkResourceManager]" << " the name of connection is empty.";
+            continue;
+        }
+        addConnection(connectPtr);
+     }
 }
 
 void KyNetworkResourceManager::removeDevice(int pos)
@@ -556,8 +561,8 @@ void KyNetworkResourceManager::onActiveConnectionChanged(
     NetworkManager::ActiveConnection * activeConnect =
         qobject_cast<NetworkManager::ActiveConnection *>(sender());
     if (activeConnect->isValid()) {
-        qDebug()<<"!New state change activate connect"<<activeConnect->uuid();
-        qDebug()<<"!New the active connect state"<<state;
+        qDebug()<< "[KyNetworkResourceManager]" <<"!New state change activate connect"<<activeConnect->uuid();
+        qDebug()<< "[KyNetworkResourceManager]" <<"!New the active connect state"<<state;
         ::usleep(SIGNAL_DELAY);
         while(activeConnect->state() != state) {
             qDebug()<<"connect real state"<<activeConnect->state() <<"change state"<<state;
@@ -773,6 +778,11 @@ void KyNetworkResourceManager::onConnectionAdded(QString const & path)
     }
 
     qDebug() <<"[KyNetworkResourceManager]" <<"add connect "<< connectPtr->name() << connectPtr->path();
+
+    if (connectPtr->name().isEmpty() || connectPtr->uuid().isEmpty()) {
+        qWarning() <<"[KyNetworkResourceManager]" << "the name or uuid of connection is empty";
+        return;
+    }
 
     if (0 > m_connections.indexOf(connectPtr)) {
         addConnection(connectPtr);

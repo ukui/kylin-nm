@@ -29,8 +29,11 @@ public:
     bool getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);
 
     void getWirelessActiveConnection(NetworkManager::ActiveConnection::State state, QMap<QString, QStringList> &map);
+    bool getActiveWirelessNetItem(QString deviceName, KyWirelessNetItem &wirelessNetItem);
 
-    void getSsidByUuid(const QString uuid, QString &ssid, QString &devName);
+    QString getActiveConnectSsidByDevice(QString deviceName);
+    void getSsidByUuid(const QString uuid, QString &ssid);
+    void getDeviceByUuid(const QString uuid, QString &deviceName);
 
 
 private:

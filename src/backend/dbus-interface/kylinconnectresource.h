@@ -27,13 +27,16 @@ public:
     void getVpnConnections(QList<KyVpnConnectItem *> &vpnConnectItemList);
     void getBluetoothConnections(QList<KyBluetoothConnectItem *> &bluetoothConnectItemList);
     void getApConnections(QList<KyApConnectItem *> &apConnectItemList);
+    KyApConnectItem *getApConnectionByUuid(QString connectUuid);
+
     void getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting);
-    bool getInterfaceByUuid(QString &deviceName, NetworkManager::ConnectionSettings::ConnectionType &type, const QString connUuid);
+    bool getInterfaceByUuid(QString &deviceName, const QString connUuid);
     void getConnectivity(NetworkManager::Connectivity &connectivity);
 
     bool isWiredConnection(QString uuid);
     bool isWirelessConnection(QString uuid);
     bool isActivatedConnection(QString uuid);
+    bool isApConnection(QString uuid);
 
 private:
     KyConnectItem *getConnectionItem(NetworkManager::Connection::Ptr connectPtr);

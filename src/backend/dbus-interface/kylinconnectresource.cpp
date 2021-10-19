@@ -354,7 +354,7 @@ void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetti
     return;
 }
 
-bool KyConnectResourse::getInterfaceByUuid(QString &deviceName, NetworkManager::ConnectionSettings::ConnectionType &type, const QString connUuid)
+bool KyConnectResourse::getInterfaceByUuid(QString &deviceName, const QString connUuid)
 {
     deviceName.clear();
     NetworkManager::Connection::Ptr connectPtr =
@@ -370,7 +370,7 @@ bool KyConnectResourse::getInterfaceByUuid(QString &deviceName, NetworkManager::
         qWarning()<<"getInterfaceByUuid failed, connect uuid"<<connUuid;
         return false;
     }
-    type = connectPtr->settings()->connectionType();
+
     deviceName = connectPtr->settings()->interfaceName();
     qDebug() << "getInterfaceByUuid success " << deviceName;
     return true;
@@ -569,6 +569,25 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
     return apConnectItem;
 }
 
+KyApConnectItem *KyConnectResourse::getApConnectionByUuid(QString connectUuid)
+{
+    NetworkManager::Connection::Ptr connectPtr = nullptr;
+
+    connectPtr = m_networkResourceInstance->getConnect(connectUuid);
+    if (nullptr == connectPtr) {
+        return nullptr;
+    }
+
+    if (NetworkManager::ConnectionSettings::ConnectionType::Wireless
+            != connectPtr->settings()->connectionType()) {
+        return nullptr;
+    }
+
+    KyApConnectItem *connectItem = getApConnectItem(connectPtr);
+
+    return connectItem;
+}
+
 void KyConnectResourse::getApConnections(QList<KyApConnectItem *> &apConnectItemList)
 {
     int index = 0;
@@ -609,7 +628,11 @@ void KyConnectResourse::getApConnections(QList<KyApConnectItem *> &apConnectItem
 bool KyConnectResourse::isWiredConnection(QString uuid)
 {
     NetworkManager::Connection::Ptr connectPtr =
-            m_networkResourceInstance->getConnect(uuid);
+                      m_networkResourceInstance->getConnect(uuid);
+    if (connectPtr.isNull()) {
+        qWarning()<<"[KyConnectResourse]"<<"can not find wired connection"<<uuid;
+        return false;
+    }
 
     if (!connectPtr.isNull()) {
         NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
@@ -631,9 +654,14 @@ bool KyConnectResourse::isWiredConnection(QString uuid)
 bool KyConnectResourse::isWirelessConnection(QString uuid)
 {
     NetworkManager::Connection::Ptr connectPtr =
-            m_networkResourceInstance->getConnect(uuid);
-
+                        m_networkResourceInstance->getConnect(uuid);
     if (connectPtr.isNull()) {
+        qWarning()<<"[KyConnectResourse]"<<"can not find wireless connection"<<uuid;
+        return false;
+    }
+
+
+    if (connectPtr->isValid()) {
         NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
 
         if (connectSettingPtr.isNull()) {
@@ -653,4 +681,29 @@ bool KyConnectResourse::isWirelessConnection(QString uuid)
 bool KyConnectResourse::isActivatedConnection(QString uuid)
 {
     return m_networkResourceInstance->isActiveConnection(uuid);
+}
+
+bool KyConnectResourse::isApConnection(QString uuid)
+{
+    NetworkManager::Connection::Ptr connectPtr = nullptr;
+
+    connectPtr = m_networkResourceInstance->getConnect(uuid);
+    if (nullptr == connectPtr) {
+        return false;
+    }
+
+    if (NetworkManager::ConnectionSettings::ConnectionType::Wireless
+            != connectPtr->settings()->connectionType()) {
+        return false;
+    }
+
+    NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
+    NetworkManager::WirelessSetting::Ptr wirelessSetting
+        = settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    if (NetworkManager::WirelessSetting::NetworkMode::Ap
+                                    != wirelessSetting->mode()) {
+        return false;
+    }
+
+    return true;
 }

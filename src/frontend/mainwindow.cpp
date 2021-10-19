@@ -320,7 +320,7 @@ void MainWindow::resetWindowTheme()
 void MainWindow::showControlCenter()
 {
     QProcess process;
-    if (m_lanWidget->m_isLanConnected == false && m_wlanWidget->m_wlanIsConnected == true){
+    if (!m_lanWidget->lanIsConnected() && m_wlanWidget->wlanIsConnected()){
         process.startDetached("ukui-control-center --wlanconnect");
     } else {
         process.startDetached("ukui-control-center --wiredconnect");
@@ -365,12 +365,12 @@ void MainWindow::onThemeChanged(const QString &key)
 void MainWindow::onRefreshTrayIcon()
 {
     //更新托盘图标显示
-    if (m_lanWidget->m_isLanConnected == true){
+    if (m_lanWidget->lanIsConnected()) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
-    } else if (m_wlanWidget->m_wlanIsConnected == true && m_lanWidget->m_isLanConnected == false){
+    } else if (m_wlanWidget->wlanIsConnected()){
         m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
-    } else if (m_wlanWidget->m_wlanIsConnected == false && m_lanWidget->m_isLanConnected == false){
-        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+    } else {
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
     }
 }
 
@@ -525,12 +525,12 @@ void MainWindow::deactivateWired(const QString& devName, const QString& connUuid
 //无线连接断开
 void MainWindow::activateWireless(const QString& devName, const QString& ssid)
 {
-    m_wlanWidget->activateWireless(devName, ssid);
+    m_wlanWidget->activateWirelessConnection(devName, ssid);
 }
 
 void MainWindow::deactivateWireless(const QString& devName, const QString& ssid)
 {
-    m_wlanWidget->deactivateWireless(devName, ssid);
+    m_wlanWidget->deactivateWirelessConnection(devName, ssid);
 }
 
 void MainWindow::rescan()

@@ -474,6 +474,7 @@ void LanPage::addDeviceForCombox(QString deviceName)
             //2、有多快网卡，但是没有使能
             m_deviceFrame->hide();
             m_currentDeviceName = deviceName;
+            setDefaultDevice(WIRED, m_currentDeviceName);
         } else if (2 == m_enableDeviceList.count()) {
             //3、现在有且只有一块网卡，并已使能
             //4、有多快网卡，且使能了其中一块
@@ -512,7 +513,6 @@ void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devic
 
     addDeviceForCombox(deviceName);
     if (m_currentDeviceName == deviceName) {
-        setDefaultDevice(WIRED, m_currentDeviceName);
         initLanArea();
     }
 
@@ -788,16 +788,13 @@ void LanPage::onUpdateLanlist(QString uuid,
 
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         updateActivatedConnectionArea(uuid);
-        m_isLanConnected = true;
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         updateConnectionArea(uuid);
-        m_isLanConnected = false;
     } else if (state == NetworkManager::ActiveConnection::State::Activating
                || state == NetworkManager::ActiveConnection::State::Deactivating) {
         QString devName = m_activeResourse->getDeviceOfActivateConnect(uuid);
         if (devName.isEmpty()) {
-            NetworkManager::ConnectionSettings::ConnectionType type;
-            m_connectResourse->getInterfaceByUuid(devName, type, uuid);
+            m_connectResourse->getInterfaceByUuid(devName, uuid);
         }
         emit lanActiveConnectionStateChanged(devName, uuid, state);
     }
@@ -1086,3 +1083,16 @@ void LanPage::showDetailPage(QString devName, QString uuid)
     p_item = nullptr;
 }
 
+bool LanPage::lanIsConnected()
+{
+    if (m_activeMap.isEmpty()) {
+        return false;
+    } else {
+        KyConnectItem *p_connectItem = m_activeMap.firstKey();
+        if (p_connectItem->m_connectUuid == INVALID_CONNECT_UUID) {
+            return false;
+        }
+    }
+
+    return true;
+}

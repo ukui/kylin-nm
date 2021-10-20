@@ -152,6 +152,21 @@ void MainWindow::initUI()
  */
 void MainWindow::initTrayIcon()
 {
+    loadIcons.append(QIcon::fromTheme("kylin-network-1"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-2"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-3"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-4"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-5"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-6"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-7"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-8"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-9"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-10"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-11"));
+    loadIcons.append(QIcon::fromTheme("kylin-network-12"));
+    iconTimer = new QTimer(this);
+    connect(iconTimer, &QTimer::timeout, this, &MainWindow::onSetTrayIconLoading);
+
     m_trayIcon = new QSystemTrayIcon();
     m_trayIconMenu = new QMenu();
     m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
@@ -187,17 +202,17 @@ void MainWindow::initDbusConnnect()
     connect(m_lanWidget, &LanPage::lanRemove, this, &MainWindow::lanRemove);
     connect(m_lanWidget, &LanPage::lanUpdate, this, &MainWindow::lanUpdate);
     connect(m_lanWidget, &LanPage::lanActiveConnectionStateChanged, this, &MainWindow::lanActiveConnectionStateChanged);
-    connect(m_lanWidget, &LanPage::lanConnectChanged, this, &MainWindow::onRefreshTrayIcon);
+    connect(m_lanWidget, &LanPage::lanConnectChanged, this, &MainWindow::onLanConnectStatusToChangeTrayIcon);
 
 
     connect(m_wlanWidget, &WlanPage::wlanAdd, this, &MainWindow::wlanAdd);
     connect(m_wlanWidget, &WlanPage::wlanRemove, this, &MainWindow::wlanRemove);
     connect(m_wlanWidget, &WlanPage::wlanActiveConnectionStateChanged, this, &MainWindow::wlanactiveConnectionStateChanged);
+    connect(m_wlanWidget, &WlanPage::wlanConnectChanged, this, &MainWindow::onWlanConnectStatusToChangeTrayIcon);
     connect(m_wlanWidget, &WlanPage::hotspotDeactivated, this, &MainWindow::hotspotDeactivated);
     connect(m_wlanWidget, &WlanPage::hotspotActivated, this, &MainWindow::hotspotActivated);
     connect(m_wlanWidget, &WlanPage::secuTypeChange, this, &MainWindow::secuTypeChange);
     connect(m_wlanWidget, &WlanPage::signalStrengthChange, this, &MainWindow::signalStrengthChange);
-    connect(m_wlanWidget, &WlanPage::wlanConnectChanged, this, &MainWindow::onRefreshTrayIcon);
 }
 
 /**
@@ -366,11 +381,43 @@ void MainWindow::onRefreshTrayIcon()
 {
     //更新托盘图标显示
     if (m_lanWidget->lanIsConnected()) {
+        iconTimer->stop();
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
     } else if (m_wlanWidget->wlanIsConnected()){
+        iconTimer->stop();
         m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
     } else {
-        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+        iconTimer->stop();
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+    }
+}
+
+void MainWindow::onSetTrayIconLoading()
+{
+    if (currentIconIndex > 11) {
+        currentIconIndex = 0;
+    }
+    m_trayIcon->setIcon(loadIcons.at(currentIconIndex));
+    currentIconIndex ++;
+}
+
+void MainWindow::onLanConnectStatusToChangeTrayIcon(int state)
+{
+    qDebug() << "lan state:" << state << Q_FUNC_INFO << __LINE__;
+    if (state==1 || state==3){
+        iconTimer->start(60);
+    } else {
+        onRefreshTrayIcon();
+    }
+}
+
+void MainWindow::onWlanConnectStatusToChangeTrayIcon(int state)
+{
+    qDebug() << "wlan state:" << state << Q_FUNC_INFO << __LINE__;
+    if (state==1 || state==3){
+        iconTimer->start(60);
+    } else {
+        onRefreshTrayIcon();
     }
 }
 

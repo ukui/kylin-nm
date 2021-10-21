@@ -13,6 +13,7 @@
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 476
 #define LAYOUT_MARGINS 0,0,0,0
+#define LOADING_TRAYICON_TIMER_MS 60
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
@@ -382,14 +383,12 @@ void MainWindow::onThemeChanged(const QString &key)
 void MainWindow::onRefreshTrayIcon()
 {
     //更新托盘图标显示
+    iconTimer->stop();
     if (m_lanWidget->lanIsConnected()) {
-        iconTimer->stop();
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
     } else if (m_wlanWidget->wlanIsConnected()){
-        iconTimer->stop();
         m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
     } else {
-        iconTimer->stop();
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
     }
 }
@@ -407,7 +406,7 @@ void MainWindow::onLanConnectStatusToChangeTrayIcon(int state)
 {
     qDebug() << "lan state:" << state << Q_FUNC_INFO << __LINE__;
     if (state==1 || state==3){
-        iconTimer->start(60);
+        iconTimer->start(LOADING_TRAYICON_TIMER_MS);
     } else {
         onRefreshTrayIcon();
     }
@@ -417,7 +416,7 @@ void MainWindow::onWlanConnectStatusToChangeTrayIcon(int state)
 {
     qDebug() << "wlan state:" << state << Q_FUNC_INFO << __LINE__;
     if (state==1 || state==3){
-        iconTimer->start(60);
+        iconTimer->start(LOADING_TRAYICON_TIMER_MS);
     } else {
         onRefreshTrayIcon();
     }

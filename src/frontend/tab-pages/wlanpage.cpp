@@ -1224,7 +1224,7 @@ bool WlanPage::wlanIsConnected()
 {
     if (m_activateConnectionItemMap.isEmpty()) {
         return false;
-    } else if (m_activateConnectionItemMap.contains(EMPTY_SSID)) {;
+    } else if (m_activateConnectionItemMap.contains(EMPTY_SSID)) {
         return false;
     }
     return true;

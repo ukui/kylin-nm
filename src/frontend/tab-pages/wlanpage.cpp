@@ -429,14 +429,12 @@ void WlanPage::initWlanArea()
         constructActivateConnectionArea();
 
         m_inactivatedNetFrame->show();
-        m_inactivatedNetDivider->show();
         constructWirelessNetArea();
     } else {
         m_activatedNetFrame->hide();
         m_activatedNetDivider->hide();
 
         m_inactivatedNetFrame->hide();
-        m_inactivatedNetDivider->hide();
     }
 
     return;
@@ -870,7 +868,7 @@ void WlanPage::onConnectionStateChanged(QString uuid,
             updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Activating);
         }
     }
-
+    emit this->wlanConnectChanged(state);
     return;
 }
 
@@ -975,7 +973,7 @@ void WlanPage::onWifiEnabledChanged(bool isWifiOn)
         //m_netSwitch->setSwitchStatus(isWifiOn);
         //m_netSwitch->setEnabled(isWifiOn);
         m_switchGsettings->set(WIRELESS_SWITCH, isWifiOn);
-        emit this->wlanConnectChanged();
+//        emit this->wlanConnectChanged();
     }
 
     return;
@@ -1229,7 +1227,6 @@ bool WlanPage::wlanIsConnected()
     } else if (m_activateConnectionItemMap.contains(EMPTY_SSID)) {
         return false;
     }
-
     return true;
 }
 

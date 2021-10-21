@@ -841,7 +841,7 @@ void LanPage::onUpdateLanlist(QString uuid,
         emit lanActiveConnectionStateChanged(devName, uuid, state);
     }
 
-    emit this->lanConnectChanged();
+    emit this->lanConnectChanged(state);
     return;
 }
 

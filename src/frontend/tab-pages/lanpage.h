@@ -82,7 +82,7 @@ signals:
     void lanUpdate(QString devName, QStringList info);
 
     void lanActiveConnectionStateChanged(QString interface, QString uuid, int status);
-    void lanConnectChanged();
+    void lanConnectChanged(int state);
 
 private slots:
     void onUpdateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason);

@@ -98,6 +98,9 @@ private:
     void initWindowTheme();
     void resetWindowTheme();
     void showControlCenter();
+    int currentIconIndex=0;
+    QList<QIcon> loadIcons;
+    QTimer *iconTimer = nullptr;
 
     //主窗口的主要构成控件
     QTabWidget * m_centralWidget = nullptr;
@@ -127,6 +130,9 @@ private slots:
     void onShowSettingsActionTriggled();
     void onThemeChanged(const QString &key);
     void onRefreshTrayIcon();
+    void onSetTrayIconLoading();
+    void onLanConnectStatusToChangeTrayIcon(int state);
+    void onWlanConnectStatusToChangeTrayIcon(int state);
 };
 
 #endif // MAINWINDOW_H

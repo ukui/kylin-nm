@@ -5,7 +5,7 @@
 #define MAIN_LAYOUT_SPACING 0
 #define TITLE_FRAME_HEIGHT 52
 #define TITLE_LAYOUT_MARGINS 24,0,24,0
-#define LAN_LIST_SPACING 2
+#define LAN_LIST_SPACING 0
 #define TEXT_MARGINS 16,0,0,0
 #define SETTINGS_LAYOUT_MARGINS 24,16,24,16
 #define TRANSPARENT_COLOR QColor(0,0,0,0)
@@ -692,7 +692,7 @@ void LanPage::initUI()
     m_activatedNetLabel->setText(tr("Activated LAN"));
     m_activatedLanListWidget = new QListWidget(m_activatedNetFrame);
     m_activatedLanListWidget->setFrameShape(QFrame::Shape::NoFrame);
-    m_activatedLanListWidget->setSpacing(LAN_LIST_SPACING);
+//    m_activatedLanListWidget->setSpacing(LAN_LIST_SPACING);
     m_activatedLanListWidget->setFixedHeight(ITEM_HEIGHT);              //active区域固定高度,只显示一个条目
     m_activatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_activatedNetLayout->addWidget(m_activatedLanListWidget);

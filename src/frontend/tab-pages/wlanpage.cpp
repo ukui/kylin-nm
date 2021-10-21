@@ -944,7 +944,7 @@ void WlanPage::requestScan()
 void WlanPage::onHiddenWlanClicked()
 {
     qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
-    NetDetail *netDetail = new NetDetail(m_defaultDevice, "", "", false, true, true, this);
+    NetDetail *netDetail = new NetDetail(m_currentDevice, "", "", false, true, true, this);
     netDetail->show();
 }
 
@@ -1127,7 +1127,7 @@ void WlanPage::getStoredApInfo(QStringList &list)
     QList<KyApConnectItem *> apConnectItemList;
     m_connectResource->getApConnections(apConnectItemList);
     if (!apConnectItemList.isEmpty()) {
-        list << apConnectItemList.at(0)->m_connectName;
+        list << apConnectItemList.at(0)->m_connectSsid;
         list << apConnectItemList.at(0)->m_password;
         list << apConnectItemList.at(0)->m_ifaceName;
         list << (apConnectItemList.at(0)->m_isActivated? "true":"false");
@@ -1142,7 +1142,7 @@ void WlanPage::getApInfoBySsid(QString devName, QString ssid, QStringList &list)
     QList<KyApConnectItem *> apConnectItemList;
     m_connectResource->getApConnections(apConnectItemList);
     for (int i = 0; i < apConnectItemList.size(); i++) {
-        if (apConnectItemList.at(i)->m_connectName == ssid
+        if (apConnectItemList.at(i)->m_connectSsid == ssid
                 && apConnectItemList.at(i)->m_ifaceName == devName) {
             list << apConnectItemList.at(i)->m_password;
             list << apConnectItemList.at(i)->m_band;
@@ -1164,8 +1164,28 @@ void WlanPage::activateWirelessConnection(const QString& devName, const QString&
         m_wirelessConnectOpreation->activeWirelessConnect(devName, wirelessNetItem.m_connectUuid);
     } else {
         //todo: 显示界面输入密码 （无需密码的wifi？）
-    }
+# if 0
+        if (devName != m_currentDevice) {
+            //todo
+        } else {
+            QListWidgetItem *p_listWidgetItem = nullptr;
+            WlanListItem *p_wlanItem = nullptr;
 
+            if (m_wirelessNetItemMap.contains(ssid)) {
+                p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
+                p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
+                int row = m_inactivatedNetListWidget->row(p_listWidgetItem);
+
+                //                        m_inactivatedNetListArea->scrollToItem(p_listWidgetItem, QAbstractItemView::EnsureVisible);
+                m_inactivatedNetListArea->verticalScrollBar()->setValue((p_listWidgetItem->sizeHint().height()*(row+1)/m_inactivatedNetListWidget->height())*m_inactivatedNetListArea->verticalScrollBar()->maximumHeight());
+
+                bool a = true;
+                p_wlanItem->setExpanded(a);
+                emit showMainWindow();
+            }
+        }
+#endif
+    }
     return;
 }
 

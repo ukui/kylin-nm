@@ -38,6 +38,7 @@ public:
     //void setDeviceAutoConnect();
     void getDeviceActiveAPInfo(const QString devName, QString &strMac, uint &iHz, uint &iChan, QString &secuType);
     int getWirelessDeviceCapability(const QString deviceName);
+    bool checkWirelessDeviceExist(const QString devName);
 
 private:
     KyWiredConnectOperation wiredOperation;

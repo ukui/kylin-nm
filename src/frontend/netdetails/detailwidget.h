@@ -5,6 +5,22 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
+//文本长自动省略并添加悬浮
+class FixLabel : public QLabel
+{
+
+    Q_OBJECT
+public:
+    FixLabel(QWidget *parent = nullptr);
+    ~FixLabel();
+    void setText(const QString &text, bool saveTextFlag = true);
+private:
+    void paintEvent(QPaintEvent *event);
+
+private:
+    QString mStr;
+};
+
 class DetailWidget : public QWidget
 {
     Q_OBJECT

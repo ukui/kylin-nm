@@ -331,3 +331,10 @@ void KyNetworkDeviceResourse::onDeviceUpdate(NetworkManager::Device * dev)
         }
     }
 }
+
+bool KyNetworkDeviceResourse::checkWirelessDeviceExist(const QString devName)
+{
+    QStringList list;
+    getNetworkDeviceList(NetworkManager::Device::Type::Wifi, list);
+    return list.contains(devName);
+}

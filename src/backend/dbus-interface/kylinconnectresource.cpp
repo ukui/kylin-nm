@@ -544,14 +544,23 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
     NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
     NetworkManager::WirelessSetting::Ptr wirelessSetting
         = settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    QString name = wirelessSetting->ssid();
+    qDebug() << name << settingPtr->interfaceName();
     if (NetworkManager::WirelessSetting::NetworkMode::Ap
                                     != wirelessSetting->mode()) {
         qDebug() << "[KyConnectResourse]" <<"get ap item failed, the active connect mode is not ap.";
         return nullptr;
     }
 
+    KyNetworkDeviceResourse deviceResource;
+    if (!deviceResource.checkWirelessDeviceExist(settingPtr->interfaceName())) {
+        qDebug() << "[KyConnectResourse]" <<"get ap item failed, the ap device is not exist yet";
+        return nullptr;
+    }
+
     KyApConnectItem *apConnectItem = new KyApConnectItem();
     apConnectItem->m_connectName = connectPtr->name();
+    apConnectItem->m_connectSsid = wirelessSetting->ssid();
     apConnectItem->m_connectUuid = connectPtr->uuid();
     if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::A) {
         apConnectItem->m_band = str2GBand;
@@ -590,6 +599,8 @@ KyApConnectItem *KyConnectResourse::getApConnectionByUuid(QString connectUuid)
 
 void KyConnectResourse::getApConnections(QList<KyApConnectItem *> &apConnectItemList)
 {
+    QList<KyApConnectItem *> apActiveConnectItemList;
+    QList<KyApConnectItem *> apDeactiveConnectItemList;
     int index = 0;
     NetworkManager::Connection::List connectList;
 
@@ -615,11 +626,17 @@ void KyConnectResourse::getApConnections(QList<KyApConnectItem *> &apConnectItem
 
         KyApConnectItem *connectItem = getApConnectItem(connectPtr);
         if (nullptr != connectItem) {
-            apConnectItemList << connectItem;
+            if (connectItem->m_isActivated) {
+                apActiveConnectItemList << connectItem;
+            } else {
+                apDeactiveConnectItemList << connectItem;
+            }
         }
 
         connectPtr = nullptr;
     }
+
+    apConnectItemList << apActiveConnectItemList << apDeactiveConnectItemList;
 
     return;
 }

@@ -62,7 +62,7 @@ void MainWindow::hideMainwindow()
  */
 void MainWindow::setWiredDefaultDevice(QString deviceName)
 {
-    m_lanWidget->updateDefaultDevice(deviceName);
+//    m_lanWidget->updateDefaultDevice(deviceName);
 }
 
 /**
@@ -70,7 +70,7 @@ void MainWindow::setWiredDefaultDevice(QString deviceName)
  */
 void MainWindow::setWirelessDefaultDevice(QString deviceName)
 {
-    m_wlanWidget->updateDefaultDevice(deviceName);
+//    m_wlanWidget->updateDefaultDevice(deviceName);
 }
 
 /**

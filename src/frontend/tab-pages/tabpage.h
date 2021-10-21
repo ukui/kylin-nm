@@ -53,8 +53,8 @@ public:
     explicit TabPage(QWidget *parent = nullptr);
     ~TabPage();
 
-    void updateDefaultDevice(QString &deviceName);
-    QString getDefaultDevice();
+//    void updateDefaultDevice(QString &deviceName);
+//    QString getDefaultDevice();
     static void showDesktopNotify(const QString &message);
 
 signals:
@@ -89,8 +89,6 @@ protected:
     QFrame * m_settingsFrame = nullptr;
     QHBoxLayout * m_settingsLayout = nullptr;
     QLabel * m_settingsLabel = nullptr;
-
-    QString m_defaultDevice = "";
 
     //临时增加的下拉框选择网卡区域
     QFrame * m_deviceFrame = nullptr;

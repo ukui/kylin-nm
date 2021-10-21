@@ -65,8 +65,8 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     centerToScreen();
 
     qDebug() << m_isCreateNet << name;
-    if (m_isCreateNet && !name.isEmpty()) {
-        m_isCreateNet = false;
+    if (!m_isCreateNet && name.isEmpty()) {
+        m_isCreateNet = true;
     }
     qDebug() << m_isCreateNet;
     m_netDeviceResource = new KyNetworkDeviceResourse(this);
@@ -139,7 +139,7 @@ void NetDetail::initUI()
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(9,9,14,24);
 
-    detailPage = new DetailPage(isWlan, m_isCreateNet, this);
+    detailPage = new DetailPage(isWlan, m_name.isEmpty(), this);
     ipv4Page = new Ipv4Page(this);
     ipv6Page = new Ipv6Page(this);
     securityPage = new SecurityPage(this);
@@ -432,7 +432,8 @@ void NetDetail::getBaseInfo(ConInfo &conInfo)
             }
         } else {
             uint iHz,iChan;
-            m_netDeviceResource->getDeviceActiveAPInfo(m_deviceName, conInfo.strMac, iHz, iChan, conInfo.strSecType);
+            QString strMac;
+            m_netDeviceResource->getDeviceActiveAPInfo(m_deviceName, strMac, iHz, iChan, conInfo.strSecType);
             conInfo.strHz = QString::number(iHz);
             conInfo.strChan = QString::number(iChan);
 
@@ -709,7 +710,11 @@ bool NetDetail::createWirelessConnect()
     KyWirelessConnectSetting connetSetting;
     //基本信息
     QString ssid;
-    detailPage->getSsid(ssid);
+    if (m_name.isEmpty()) {
+        detailPage->getSsid(ssid);
+    } else {
+        ssid = m_name;
+    }
     connetSetting.setConnectName(ssid);
     connetSetting.setIfaceName(m_deviceName);
     if (detailPage->checkIsChanged(m_info)) {
@@ -786,7 +791,7 @@ bool NetDetail::createWirelessConnect()
             qDebug() << "add new personal connect";
             m_wirelessConnOpration->addConnect(connetSetting);
         } else {
-            qDebug() << "addAndConnect personal connect";
+            qDebug() << "addAndConnect personal connect" << m_deviceName;
             m_wirelessConnOpration->addAndActiveWirelessConnect(m_deviceName, connetSetting, true);
         }
     }
@@ -847,8 +852,9 @@ bool NetDetail::updateConnect()
 
     if (ipv4Change || ipv6Change || securityChange) {
         if (isActive) {
-            //信息变化 断开-重连
-            m_wirelessConnOpration->activateConnection(m_uuid, m_deviceName);
+            //信息变化 断开-重连 更新需要時間 不可以立即重連
+           sleep(1);
+           m_wirelessConnOpration->activateConnection(m_uuid, m_deviceName);
         }
     }
     return true;

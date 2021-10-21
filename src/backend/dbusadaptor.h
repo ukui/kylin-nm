@@ -58,10 +58,10 @@ public Q_SLOTS: // METHODS
     //有线网卡开关
     Q_NOREPLY void setDeviceEnable(QString devName, bool enable);
     //设置默认网卡
-    Q_NOREPLY void setDefaultWiredDevice(QString deviceName);
-    QString getDefaultWiredDevice();
-    Q_NOREPLY void setDefaultWirelessDevice(QString deviceName);
-    QString  getDefaultWirelessDevice();
+//    Q_NOREPLY void setDefaultWiredDevice(QString deviceName);
+//    QString getDefaultWiredDevice();
+//    Q_NOREPLY void setDefaultWirelessDevice(QString deviceName);
+//    QString  getDefaultWirelessDevice();
     //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void activateConnect(int type, QString devName, QString ssid);
     //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid

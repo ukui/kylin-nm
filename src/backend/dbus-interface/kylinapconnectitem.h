@@ -13,6 +13,7 @@ public:
 
 public:
     QString  m_connectName;
+    QString  m_connectSsid;
     QString  m_connectUuid;
     QString  m_ifaceName;
     QString  m_password;

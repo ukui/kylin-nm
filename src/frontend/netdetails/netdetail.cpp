@@ -581,17 +581,21 @@ void NetDetail::initTtlsInfo(ConInfo &conInfo)
 //点击了保存更改网络设置的按钮
 void NetDetail::on_btnConfirm_clicked()
 {
+    qDebug() << "on_btnConfirm_clicked";
+    setEnabled(false);
     if (m_isCreateNet) {
         if (!isWlan) {
             //新建有线连接
             qDebug() << "Confirm create wired connect";
             if (!createWiredConnect()) {
+                setEnabled(true);
                 return;
             }
         } else {
             //新建无线连接
             qDebug() << "Confirm create wireless connect";
             if (!createWirelessConnect()) {
+                setEnabled(true);
                 return;
             }
         }
@@ -599,6 +603,7 @@ void NetDetail::on_btnConfirm_clicked()
         //更新连接
         qDebug() << "Confirm update connect";
         if (!updateConnect()) {
+            setEnabled(true);
             return;
         }
     }
@@ -853,8 +858,11 @@ bool NetDetail::updateConnect()
     if (ipv4Change || ipv6Change || securityChange) {
         if (isActive) {
             //信息变化 断开-重连 更新需要時間 不可以立即重連
-           sleep(1);
-           m_wirelessConnOpration->activateConnection(m_uuid, m_deviceName);
+//            sleep(1);
+            QEventLoop eventloop;
+            QTimer::singleShot(1000, &eventloop, SLOT(quit()));
+            eventloop.exec();
+            m_wirelessConnOpration->activateConnection(m_uuid, m_deviceName);
         }
     }
     return true;

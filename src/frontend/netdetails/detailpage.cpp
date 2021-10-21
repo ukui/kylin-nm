@@ -71,9 +71,9 @@ void DetailPage::setAutoConnect(bool flag)
 void DetailPage::getSsid(QString &ssid)
 {
     if (isCreate) {
-        ssid = mSSIDLabel->text();
-    } else {
         ssid = mSSIDEdit->text();
+    } else {
+        ssid = mSSIDLabel->text();
     }
 }
 

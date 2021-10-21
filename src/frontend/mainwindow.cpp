@@ -11,7 +11,8 @@
 #include "../backend/dbus-interface/kylinagentinterface.h"
 
 #define MAINWINDOW_WIDTH 420
-#define MAINWINDOW_HEIGHT 456
+#define MAINWINDOW_HEIGHT 476
+#define LAYOUT_MARGINS 0,0,0,0
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
@@ -138,6 +139,7 @@ void MainWindow::initUI()
     m_centralWidget->addTab(m_lanWidget, tr(""));
     m_centralWidget->addTab(m_wlanWidget,tr(""));
     m_tabBarLayout = new QHBoxLayout(this);
+    m_tabBarLayout->setContentsMargins(LAYOUT_MARGINS);
     m_lanLabel = new QLabel(tr("LAN"));
     m_lanLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
     m_wlanLabel = new QLabel(tr("WLAN"));

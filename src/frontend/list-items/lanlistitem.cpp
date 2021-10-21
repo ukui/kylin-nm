@@ -15,6 +15,7 @@ LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *paren
     m_nameLabel->setText(m_data->m_connectName);
 
     if (m_data != nullptr) {
+        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
         if (m_data->m_connectState == NetworkManager::ActiveConnection::State::Activated) {
             setIcon(true);
             m_isActive = true;
@@ -41,10 +42,10 @@ LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
 void LanListItem::setIcon(bool isOn)
 {
     if (isOn) {
-        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
+//        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
         m_netButton->setActive(true);               //设置图标显示不同颜色
     } else {
-        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+//        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
         m_netButton->setActive(false);
     }
 }

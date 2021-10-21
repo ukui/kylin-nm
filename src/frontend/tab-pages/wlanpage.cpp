@@ -836,8 +836,11 @@ void WlanPage::onConnectionStateChanged(QString uuid,
         return;
     }
 
-    sendApStateChangeSignal(uuid, ssid, devName, state);
-    wlanShowNotify(ssid, state, reason);
+    if (m_connectResource->isApConnection(uuid)) {
+        sendApStateChangeSignal(uuid, ssid, devName, state);
+    } else {
+        wlanShowNotify(ssid, state, reason);
+    }
 
     if (devName != m_currentDevice) {
         return;

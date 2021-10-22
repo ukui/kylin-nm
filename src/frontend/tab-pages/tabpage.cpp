@@ -102,17 +102,17 @@ void TabPage::initUI()
     m_mainLayout->addWidget(m_settingsFrame);
 }
 
-void TabPage::updateDefaultDevice(QString &deviceName)
-{
-    qDebug() << "updateDefaultDevice" << deviceName;
-    m_defaultDevice = deviceName;
-}
+//void TabPage::updateDefaultDevice(QString &deviceName)
+//{
+//    qDebug() << "updateDefaultDevice" << deviceName;
+//    m_defaultDevice = deviceName;
+//}
 
-QString TabPage::getDefaultDevice()
-{
-    qDebug() << "getDefaultDevice" << m_defaultDevice;
-    return m_defaultDevice;
-}
+//QString TabPage::getDefaultDevice()
+//{
+//    qDebug() << "getDefaultDevice" << m_defaultDevice;
+//    return m_defaultDevice;
+//}
 
 void TabPage::showDesktopNotify(const QString &message)
 {

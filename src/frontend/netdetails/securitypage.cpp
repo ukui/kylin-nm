@@ -161,9 +161,11 @@ void SecurityPage::initUI()
 void SecurityPage::initConnect()
 {
     //安全类型变化
-    connect(secuTypeCombox, &QComboBox::currentTextChanged, this, &SecurityPage::onSecuTypeComboxIndexChanged);
+//    connect(secuTypeCombox, &QComboBox::currentTextChanged, this, &SecurityPage::onSecuTypeComboxIndexChanged);
+    connect(secuTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onSecuTypeComboxIndexChanged);
     //EAP方式变化
-    connect(eapTypeCombox, &QComboBox::currentTextChanged, this, &SecurityPage::onEapTypeComboxIndexChanged);
+//    connect(eapTypeCombox, &QComboBox::currentTextChanged, this, &SecurityPage::onEapTypeComboxIndexChanged);
+    connect(eapTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onEapTypeComboxIndexChanged);
 
     connect(caNeedBox, &QCheckBox::clicked, this, &SecurityPage::onCaNeedBoxClicked);
 
@@ -519,7 +521,7 @@ KyEapMethodTlsInfo SecurityPage::assembleTlsInfo()
     info.clientCertPath = clientCertPathCombox->currentText();
     info.clientPrivateKey = clientPrivateKeyCombox->currentText();
     info.clientPrivateKeyPWD = clientPrivateKeyPwdEdit->text();
-    info.m_privateKeyPWDFlag = (privateKeyBox->isChecked() ? NetworkManager::Setting::NotSaved : NetworkManager::Setting::None);
+    info.m_privateKeyPWDFlag = NetworkManager::Setting::None;
 
     return info;
 }
@@ -530,7 +532,7 @@ KyEapMethodPeapInfo SecurityPage::assemblePeapInfo()
     info.phase2AuthMethod = (KyNoEapMethodAuth)eapMethodCombox->currentData().toInt();
     info.userName = userNameEdit->text();
     info.userPWD = userPwdEdit->text();
-    info.m_passwdFlag = (userPwdBox->isChecked() ? NetworkManager::Setting::NotSaved : NetworkManager::Setting::None);
+    info.m_passwdFlag = (userPwdFlagBox->isChecked() ? NetworkManager::Setting::NotSaved : NetworkManager::Setting::None);
 
     return info;
 }
@@ -571,7 +573,7 @@ KyEapMethodTtlsInfo SecurityPage::assembleTtlsInfo()
     }
     info.userName = userNameEdit->text();
     info.userPWD = userPwdEdit->text();
-    info.m_passwdFlag = (userPwdBox->isChecked() ? NetworkManager::Setting::NotSaved : NetworkManager::Setting::None);
+    info.m_passwdFlag = (userPwdFlagBox->isChecked() ? NetworkManager::Setting::NotSaved : NetworkManager::Setting::None);
     return info;
 }
 
@@ -650,7 +652,6 @@ void SecurityPage::setEnableOfSaveBtn()
 void SecurityPage::onSecuTypeComboxIndexChanged()
 {
     int index = secuTypeCombox->currentData().toInt();
-    qDebug() << "onSecuTypeComboxIndexChanged" << index;
     if (index == WPA_AND_WPA2_PERSONAL || index == WPA3_PERSONAL) {
         showPsk();
     } else if (index == WPA_AND_WPA2_ENTERPRISE) {
@@ -662,6 +663,7 @@ void SecurityPage::onSecuTypeComboxIndexChanged()
 
 void SecurityPage::onEapTypeComboxIndexChanged()
 {
+    qDebug() << "onEapTypeComboxIndexChanged";
     int index = eapTypeCombox->currentData().toInt();
     if (index == TLS) {
         showTls();

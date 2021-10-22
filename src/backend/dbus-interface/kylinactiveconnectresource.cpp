@@ -496,6 +496,7 @@ KyApConnectItem *KyActiveConnectResourse::getApActiveConnectItem(NetworkManager:
 
     KyApConnectItem *apConnectItem = new KyApConnectItem();
     apConnectItem->m_connectName = connectPtr->name();
+    apConnectItem->m_connectSsid = wirelessSetting->ssid();
     apConnectItem->m_connectUuid = activeConnectPtr->uuid();
     apConnectItem->m_ifaceName = settingPtr->interfaceName();
 

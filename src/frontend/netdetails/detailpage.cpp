@@ -2,6 +2,8 @@
 #include <QPainter>
 #include <QListWidget>
 
+#define MAX_NAME_LENGTH 32
+#define MAX_LABEL_WIDTH 276
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
 DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
@@ -11,12 +13,15 @@ DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
     this->setMaximumWidth(960);
     initUI();
     if (isCreate) {
-     connect(mSSID, &QLineEdit::textEdited, this, &DetailPage::setEnableOfSaveBtn);
+     connect(mSSIDEdit, &QLineEdit::textEdited, this, &DetailPage::setEnableOfSaveBtn);
     }
 }
 
 void DetailPage::setSSID(const QString &ssid) {
-    this->mSSID->setText(ssid);
+    if (isCreate) {
+        return;
+    }
+    this->mSSIDLabel->setText(ssid);
 }
 
 void DetailPage::setProtocol(const QString &protocol) {
@@ -65,7 +70,11 @@ void DetailPage::setAutoConnect(bool flag)
 
 void DetailPage::getSsid(QString &ssid)
 {
-    ssid = mSSID->text();
+    if (isCreate) {
+        ssid = mSSIDEdit->text();
+    } else {
+        ssid = mSSIDLabel->text();
+    }
 }
 
 bool DetailPage::checkIsChanged(const ConInfo info)
@@ -103,17 +112,24 @@ void DetailPage::initUI() {
     m_listWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     mDetailLayout->addWidget(m_listWidget);
 
-    mSSID      = new QLineEdit(this);
-    mSSID->setAlignment(Qt::AlignRight);
     if (!isCreate) {
-        mSSID->setStyleSheet("background:transparent;border-width:0px;border-style:none");
-        mSSID->setFocusPolicy(Qt::NoFocus);
+        mSSIDLabel = new FixLabel(this);
+        mSSIDLabel->setFixedWidth(MAX_LABEL_WIDTH);
+        mSSIDLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(mSSIDLabel), m_listWidget);
+
+//        mSSID->setStyleSheet("background:transparent;border-width:0px;border-style:none");
+//        mSSID->setFocusPolicy(Qt::NoFocus);
     } else {
 //        mSSID->setStyleSheet("border-width:1px;;border-style:solid;border-color:black;border-radius:2px");
-        mSSID->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;");
-        mSSID->setPlaceholderText(tr("Please input SSID:"));
+        mSSIDEdit = new QLineEdit(this);
+        mSSIDEdit->setMaximumWidth(MAX_LABEL_WIDTH);
+        mSSIDEdit->setAlignment(Qt::AlignRight);
+        mSSIDEdit->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;");
+        mSSIDEdit->setPlaceholderText(tr("Please input SSID:"));
+        mSSIDEdit->setMaxLength(MAX_NAME_LENGTH);
+        m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(mSSIDEdit), m_listWidget);
     }
-    m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(mSSID), m_listWidget);
     m_ssidWidget->setKey(tr("SSID:"));
 
     mProtocol = new QLabel(this);
@@ -194,5 +210,9 @@ void DetailPage::initUI() {
 }
 
 void DetailPage::setEnableOfSaveBtn() {
-    emit setDetailPageState(!mSSID->text().isEmpty());
+    bool saveEnable = true;
+    if (isCreate) {
+        saveEnable = !mSSIDEdit->text().isEmpty();
+    }
+    emit setDetailPageState(saveEnable);
 }

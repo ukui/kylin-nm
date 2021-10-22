@@ -157,8 +157,10 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
 
     if (eapType  == KyEapMethodType::TLS) {
         m_info.tlsInfo.devIfaceName = m_deviceName;
+         m_securityPage->updateTlsChange(m_info.tlsInfo);
         m_connectOperation->addAndActiveWirelessEnterPriseTlsConnect(m_info.tlsInfo, connetSetting, m_deviceName, false);
     } else if (eapType == KyEapMethodType::PEAP) {
+        m_securityPage->updatePeapChange(m_info.peapInfo);
         m_connectOperation->addAndActiveWirelessEnterPrisePeapConnect(m_info.peapInfo, connetSetting, m_deviceName, false);
     } else if (eapType == KyEapMethodType::TTLS) {
         m_securityPage->updateTtlsChange(m_info.ttlsInfo);
@@ -174,21 +176,18 @@ void EnterpriseWlanDialog::onEapTypeChanged(const KyEapMethodType &type)
     case KyEapMethodType::TLS:
         if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
             m_resource->getEnterPriseInfoTls(m_wirelessNetItem.m_connectUuid, m_info.tlsInfo);
-            m_securityPage->setTlsInfo(m_info.tlsInfo);
         }
         this->setFixedSize(MAIN_SIZE_EXPAND);
         break;
     case KyEapMethodType::PEAP:
         if (m_wirelessNetItem.m_connectUuid.isEmpty()) {
             m_resource->getEnterPriseInfoPeap(m_wirelessNetItem.m_connectUuid, m_info.peapInfo);
-            m_securityPage->setPeapInfo(m_info.peapInfo);
             }
         this->setFixedSize(MAIN_SIZE_NARROW);
         break;
     case KyEapMethodType::TTLS:
         if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
             m_resource->getEnterPriseInfoTtls(m_wirelessNetItem.m_connectUuid, m_info.ttlsInfo);
-            m_securityPage->setTtlsInfo(m_info.ttlsInfo);
         }
         this->setFixedSize(MAIN_SIZE_NARROW);
         break;

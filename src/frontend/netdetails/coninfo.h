@@ -12,6 +12,13 @@
 #define AUTO_CONFIG  0
 #define MANUAL_CONFIG  1
 
+enum PeapInnerType
+{
+    MSCHAPV2_PEAP = 0,
+    MD5_PEAP,
+    GTC_PEAP,
+};
+
 enum TtlsInnerType
 {
     PAP = 0,

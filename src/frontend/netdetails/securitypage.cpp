@@ -242,10 +242,16 @@ void SecurityPage::setPeapInfo(KyEapMethodPeapInfo &info)
     showPeapOrTtls();
     eapTypeCombox->setCurrentIndex(PEAP);
     onEapTypeComboxIndexChanged();
-    eapMethodCombox->setCurrentIndex(info.phase2AuthMethod);
+    if (info.phase2AuthMethod == KyAuthMethodMschapv2) {
+        eapMethodCombox->setCurrentIndex(MSCHAPV2_PEAP);
+    } else if (info.phase2AuthMethod == KyAuthMethodMd5){
+        eapMethodCombox->setCurrentIndex(MD5_PEAP);
+    } else if (info.phase2AuthMethod == KyAuthMethodGtc) {
+        eapMethodCombox->setCurrentIndex(GTC_PEAP);
+    }
     userNameEdit->setText(info.userName);
     userPwdEdit->setText(info.userPWD);
-    if (info.m_passwdFlag & NetworkManager::Setting::NotSaved) {
+    if (info.m_passwdFlag) {
         userPwdFlagBox->setChecked(true);
     } else {
         userPwdFlagBox->setChecked(false);
@@ -283,7 +289,7 @@ void SecurityPage::setTtlsInfo(KyEapMethodTtlsInfo &info)
     }
     userNameEdit->setText(info.userName);
     userPwdEdit->setText(info.userPWD);
-    if (info.m_passwdFlag & NetworkManager::Setting::NotSaved) {
+    if (info.m_passwdFlag) {
         userPwdFlagBox->setChecked(true);
     } else {
         userPwdFlagBox->setChecked(false);
@@ -307,9 +313,9 @@ void SecurityPage::setSecurityVisible(const bool &visible)
 void SecurityPage::updateTlsChange(KyEapMethodTlsInfo &info)
 {
     KyEapMethodTlsInfo tlsInfo = assembleTlsInfo();
-//    if (tlsInfo.clientPrivateKeyPWD != info.clientPrivateKeyPWD) {
+    if (tlsInfo.clientPrivateKeyPWD != info.clientPrivateKeyPWD) {
         tlsInfo.bChanged = true;
-//    }
+    }
     tlsInfo.devIfaceName = info.devIfaceName;
     info = tlsInfo;
 }
@@ -317,18 +323,18 @@ void SecurityPage::updateTlsChange(KyEapMethodTlsInfo &info)
 void SecurityPage::updatePeapChange(KyEapMethodPeapInfo &info)
 {
     KyEapMethodPeapInfo peapInfo = assemblePeapInfo();
-//    if (peapInfo.userPWD != info.userPWD) {
+    if (peapInfo.userPWD != info.userPWD) {
         peapInfo.bChanged = true;
-//    }
+    }
     info = peapInfo;
 }
 
 void SecurityPage::updateTtlsChange(KyEapMethodTtlsInfo &info)
 {
     KyEapMethodTtlsInfo ttlsInfo = assembleTtlsInfo();
-//    if (ttlsInfo.userPWD != info.userPWD) {
+    if (ttlsInfo.userPWD != info.userPWD) {
         ttlsInfo.bChanged = true;
-//    }
+    }
     info = ttlsInfo;
 }
 
@@ -529,7 +535,20 @@ KyEapMethodTlsInfo SecurityPage::assembleTlsInfo()
 KyEapMethodPeapInfo SecurityPage::assemblePeapInfo()
 {
     KyEapMethodPeapInfo info;
-    info.phase2AuthMethod = (KyNoEapMethodAuth)eapMethodCombox->currentData().toInt();
+//    info.phase2AuthMethod = (KyNoEapMethodAuth)eapMethodCombox->currentData().toInt();
+    switch (eapMethodCombox->currentIndex()) {
+    case 0:
+        info.phase2AuthMethod = KyAuthMethodMschapv2;
+        break;
+    case 1:
+        info.phase2AuthMethod = KyAuthMethodMd5;
+        break;
+    case 2:
+        info.phase2AuthMethod = KyAuthMethodGtc;
+        break;
+    default:
+        break;
+    }
     info.userName = userNameEdit->text();
     info.userPWD = userPwdEdit->text();
     info.m_passwdFlag = (userPwdFlagBox->isChecked() ? NetworkManager::Setting::NotSaved : NetworkManager::Setting::None);
@@ -539,7 +558,7 @@ KyEapMethodPeapInfo SecurityPage::assemblePeapInfo()
 KyEapMethodTtlsInfo SecurityPage::assembleTtlsInfo()
 {
     KyEapMethodTtlsInfo info;
-    switch (eapMethodCombox->currentData().toInt()) {
+    switch (eapMethodCombox->currentIndex()) {
     case PAP:
         info.authType = AUTH_NO_EAP;
         info.authNoEapMethod = KyAuthMethodPap;
@@ -671,9 +690,9 @@ void SecurityPage::onEapTypeComboxIndexChanged()
     } else if (index == PEAP) {
         showPeapOrTtls();
         eapMethodCombox->clear();
-        eapMethodCombox->addItem("MSCHAPv2", KyAuthMethodMschapv2);
-        eapMethodCombox->addItem("MD5", KyAuthMethodMd5);
-        eapMethodCombox->addItem("GTC", KyAuthMethodGtc);
+        eapMethodCombox->addItem("MSCHAPv2", MSCHAPV2_PEAP);
+        eapMethodCombox->addItem("MD5", MD5_PEAP);
+        eapMethodCombox->addItem("GTC", GTC_PEAP);
         emit this->eapTypeChanged(PEAP);
     } else if (index == TTLS) {
         showPeapOrTtls();

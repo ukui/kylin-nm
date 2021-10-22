@@ -38,7 +38,7 @@ public:
                 && this->clientCertPath == info.clientCertPath
                 && this->clientPrivateKey == info.clientPrivateKey
                 && this->clientPrivateKeyPWD == info.clientPrivateKeyPWD
-                /*&& this->m_privateKeyPWDFlag == info.m_privateKeyPWDFlag*/) {
+                && this->m_privateKeyPWDFlag == info.m_privateKeyPWDFlag) {
             return true;
         } else {
             return false;
@@ -83,7 +83,7 @@ public:
         if (this->phase2AuthMethod == info.phase2AuthMethod
                 && this->userName == info.userName
                 && this->userPWD == info.userPWD
-                /*&& this->m_passwdFlag == info.m_passwdFlag*/) {
+                && this->m_passwdFlag == info.m_passwdFlag) {
             return true;
         } else {
             return false;
@@ -116,7 +116,7 @@ public:
                if (this->authEapMethod == info.authEapMethod
                 && this ->userName == info.userName
                 && this->userPWD == info.userPWD
-                /*&& this->m_passwdFlag == info.m_passwdFlag*/) {
+                && this->m_passwdFlag == info.m_passwdFlag) {
                     return true;
                 }
             } else {
@@ -124,7 +124,7 @@ public:
                    if (this->authNoEapMethod == info.authNoEapMethod
                     && this ->userName == info.userName
                     && this->userPWD == info.userPWD
-                    /*&& this->m_passwdFlag == info.m_passwdFlag*/) {
+                    && this->m_passwdFlag == info.m_passwdFlag) {
                         return true;
                     }
                 }

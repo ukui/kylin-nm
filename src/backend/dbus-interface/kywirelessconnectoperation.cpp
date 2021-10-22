@@ -3,6 +3,7 @@
 #include <networkmanagerqt/wirelesssecuritysetting.h>
 
 #define PSK_SETTING_NAME "802-11-wireless-security"
+#define PRIVATE_PSK_SETTING_NAME "802-1x"
 
 NetworkManager::ConnectionSettings::Ptr assembleWpaXPskSettings(NetworkManager::AccessPoint::Ptr accessPoint, QString &psk, bool isAutoConnect)
 {
@@ -296,7 +297,7 @@ QString KyWirelessConnectOperation::getPrivateKeyPassword(const QString &connect
         qWarning()<<errorMessage;
         return "";
     }
-    QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PSK_SETTING_NAME);
+    QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PRIVATE_PSK_SETTING_NAME);
     QMap<QString,QVariantMap> map(reply.value());
     if (map.contains("802-1x")
             && map.value("802-1x").contains("private-key-password")) {
@@ -316,7 +317,7 @@ QString KyWirelessConnectOperation::get8021xPassword(const QString &connectUuid)
         qWarning()<<errorMessage;
         return "";
     }
-    QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PSK_SETTING_NAME);
+    QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PRIVATE_PSK_SETTING_NAME);
     QMap<QString,QVariantMap> map(reply.value());
     if (map.contains("802-1x") && map.value("802-1x").contains("password"))
     {
@@ -909,6 +910,8 @@ void KyWirelessConnectOperation::updateWirelessSecu(NetworkManager::ConnectionSe
     security_sett->setKeyMgmt((NetworkManager::WirelessSecuritySetting::KeyMgmt)type);
     if (bPwdChange) {
         security_sett->setPsk(connSettingInfo.m_psk);
+        NetworkManager::Setting::SecretFlags flag = NetworkManager::Setting::None;
+        security_sett->setPskFlags(flag);
     }
     return;
 }

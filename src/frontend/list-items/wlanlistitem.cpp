@@ -476,8 +476,12 @@ void WlanListItem::updateConnectState(ConnectState state)
 {
     m_connectState = state;
 
-    if (Deactivated == state || Activated == state) {
+    if (Activated == state) {
         m_netButton->stopLoading();
+        m_netButton->setActive(true);
+    } else if(Deactivated == state) {
+        m_netButton->stopLoading();
+        m_netButton->setActive(false);
     } else {
         m_netButton->startLoading();
     }

@@ -756,14 +756,7 @@ void WlanPage::wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::St
 
 void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
 {
-    KyWirelessNetItem wirelessNetItem;
-    bool ret = m_wirelessNetResource->getWifiNetwork(devName, ssid, wirelessNetItem);
-    if (!ret) {
-        qWarning()<<"[WlanPage] get wireless item failed, when update activated connection area.";
-        return;
-    }
-
-    if (m_activateConnectionItemMap.contains(wirelessNetItem.m_NetSsid)) {
+    if (m_activateConnectionItemMap.contains(ssid)) {
         return;
     }
 
@@ -776,6 +769,13 @@ void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
                                     m_inactivatedNetListWidget->height()
                                     + m_hiddenWlanLabel->height());
 
+    KyWirelessNetItem wirelessNetItem;
+    bool ret = m_wirelessNetResource->getWifiNetwork(devName, ssid, wirelessNetItem);
+    if (!ret) {
+        qWarning()<<"[WlanPage] get wireless item failed, when update activated connection area.";
+        return;
+    }
+
     deleteWirelessItemFormMap(m_activateConnectionItemMap, m_activatedNetListWidget, EMPTY_SSID);
     QListWidgetItem *p_listWidgetItem = addNewItem(wirelessNetItem, m_activatedNetListWidget);
     m_activateConnectionItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
@@ -787,14 +787,7 @@ void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
 
 void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName)
 {
-    KyWirelessNetItem wirelessNetItem;
-    bool ret = m_wirelessNetResource->getWifiNetwork(devName, ssid, wirelessNetItem);
-    if (!ret) {
-        qWarning()<<"[WlanPage] get wireless item failed, when update wireless area.";
-        return;
-    }
-
-    if(m_wirelessNetItemMap.contains(wirelessNetItem.m_NetSsid)) {
+    if(m_wirelessNetItemMap.contains(ssid)) {
         return;
     }
 
@@ -802,6 +795,13 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
     QListWidgetItem *p_activeListWidgetItem = addEmptyItem(m_activatedNetListWidget);
     m_activateConnectionItemMap.insert(EMPTY_SSID, p_activeListWidgetItem);
     m_activatedNetListWidget->setFixedHeight(p_activeListWidgetItem->sizeHint().height());
+
+    KyWirelessNetItem wirelessNetItem;
+    bool ret = m_wirelessNetResource->getWifiNetwork(devName, ssid, wirelessNetItem);
+    if (!ret) {
+        qWarning()<<"[WlanPage] get wireless item failed, when update wireless area.";
+        return;
+    }
 
     QListWidgetItem *p_listWidgetItem = addNewItem(wirelessNetItem, m_inactivatedNetListWidget);
     m_wirelessNetItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
@@ -836,8 +836,11 @@ void WlanPage::onConnectionStateChanged(QString uuid,
         return;
     }
 
-    sendApStateChangeSignal(uuid, ssid, devName, state);
-    wlanShowNotify(ssid, state, reason);
+    if (m_connectResource->isApConnection(uuid)) {
+        sendApStateChangeSignal(uuid, ssid, devName, state);
+    } else {
+        wlanShowNotify(ssid, state, reason);
+    }
 
     if (devName != m_currentDevice) {
         return;

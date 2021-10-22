@@ -353,7 +353,7 @@ void WlanListItem::onNetButtonClicked()
     }
 
     //有配置或者无密码的wifi直接连接
-    if (m_wirelessNetItem.m_isConfigured || m_hasPwd == false) {
+    if (m_wirelessNetItem.m_isConfigured) {
         m_wirelessConnectOperation->activeWirelessConnect(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
         qDebug()<<"[WlanListItem] Has configuration, will be activated. ssid = "
                << m_wirelessNetItem.m_NetSsid << Q_FUNC_INFO << __LINE__;
@@ -436,13 +436,14 @@ void WlanListItem::onShowPwdButtonClicked()
 void WlanListItem::onConnectButtonClicked()
 {
     qDebug()<< LOG_FLAG << "onConnectButtonClicked";
-    if (!m_connectButton->isEnabled()) {
-        return;
-    }
-
     if ((Activating == m_connectState || Deactivating == m_connectState)) {
         qDebug() << LOG_FLAG << "On wlan  clicked! But there is nothing to do because it is already activating/deactivating!"
                  << Q_FUNC_INFO << __LINE__;
+        return;
+    }
+
+    if (m_connectButton->isVisible() && !m_connectButton->isEnabled()) {
+        qWarning() << "Connect wlan failed because of null pointer or button state!" << Q_FUNC_INFO << __LINE__;
         return;
     }
 

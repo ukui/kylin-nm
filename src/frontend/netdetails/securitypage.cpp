@@ -251,7 +251,7 @@ void SecurityPage::setPeapInfo(KyEapMethodPeapInfo &info)
     }
     userNameEdit->setText(info.userName);
     userPwdEdit->setText(info.userPWD);
-    if (info.m_passwdFlag & NetworkManager::Setting::NotSaved) {
+    if (info.m_passwdFlag) {
         userPwdFlagBox->setChecked(true);
     } else {
         userPwdFlagBox->setChecked(false);
@@ -289,7 +289,7 @@ void SecurityPage::setTtlsInfo(KyEapMethodTtlsInfo &info)
     }
     userNameEdit->setText(info.userName);
     userPwdEdit->setText(info.userPWD);
-    if (info.m_passwdFlag & NetworkManager::Setting::NotSaved) {
+    if (info.m_passwdFlag) {
         userPwdFlagBox->setChecked(true);
     } else {
         userPwdFlagBox->setChecked(false);
@@ -313,9 +313,9 @@ void SecurityPage::setSecurityVisible(const bool &visible)
 void SecurityPage::updateTlsChange(KyEapMethodTlsInfo &info)
 {
     KyEapMethodTlsInfo tlsInfo = assembleTlsInfo();
-//    if (tlsInfo.clientPrivateKeyPWD != info.clientPrivateKeyPWD) {
+    if (tlsInfo.clientPrivateKeyPWD != info.clientPrivateKeyPWD) {
         tlsInfo.bChanged = true;
-//    }
+    }
     tlsInfo.devIfaceName = info.devIfaceName;
     info = tlsInfo;
 }
@@ -323,18 +323,18 @@ void SecurityPage::updateTlsChange(KyEapMethodTlsInfo &info)
 void SecurityPage::updatePeapChange(KyEapMethodPeapInfo &info)
 {
     KyEapMethodPeapInfo peapInfo = assemblePeapInfo();
-//    if (peapInfo.userPWD != info.userPWD) {
+    if (peapInfo.userPWD != info.userPWD) {
         peapInfo.bChanged = true;
-//    }
+    }
     info = peapInfo;
 }
 
 void SecurityPage::updateTtlsChange(KyEapMethodTtlsInfo &info)
 {
     KyEapMethodTtlsInfo ttlsInfo = assembleTtlsInfo();
-//    if (ttlsInfo.userPWD != info.userPWD) {
+    if (ttlsInfo.userPWD != info.userPWD) {
         ttlsInfo.bChanged = true;
-//    }
+    }
     info = ttlsInfo;
 }
 

@@ -438,8 +438,17 @@ bool KyWirelessNetResource::getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsIn
     info.identity = setting->identity();
     info.domain = setting->domainSuffixMatch();
     info.caCertPath = setting->caPath();
+    if (info.caCertPath.left(7) == "file://") {
+        info.caCertPath = info.caCertPath.mid(7);
+    }
     info.clientCertPath = setting->clientCertificate();
+    if (info.clientCertPath.left(7) == "file://") {
+        info.clientCertPath = info.clientCertPath.mid(7);
+    }
     info.clientPrivateKey = QString(setting->privateKey());
+    if (info.clientPrivateKey.left(7) == "file://") {
+        info.clientPrivateKey = info.clientPrivateKey.mid(7);
+    }
     info.m_privateKeyPWDFlag = setting->privateKeyPasswordFlags();
     if (!info.m_privateKeyPWDFlag) {
         info.clientPrivateKeyPWD = m_operation->getPrivateKeyPassword(conn->uuid());

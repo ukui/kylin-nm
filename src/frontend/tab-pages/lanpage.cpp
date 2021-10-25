@@ -111,6 +111,7 @@ void LanPage::initLanDeviceState()
 
 void LanPage::initNetSwitch()
 {
+//    m_devList.clear();
     m_wiredSwitch = true;
 
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
@@ -124,8 +125,13 @@ void LanPage::initNetSwitch()
     }
 
     if (m_devList.count() == 0) {
+        qDebug() << "[wiredSwitch]:init not enable when no device";
         m_wiredSwitch = false;
+        m_netSwitch->setSwitchStatus(m_wiredSwitch);
+        m_netSwitch->setEnabled(false);
     }
+
+    qDebug() << "[wiredSwitch]:init state:" << m_wiredSwitch;
 
     m_netSwitch->setSwitchStatus(m_wiredSwitch);
 
@@ -168,15 +174,27 @@ void LanPage::onLanSwitchClicked()
 {
     qDebug()<<"[LanPage] On lan switch button clicked! Status:" <<m_netSwitch->getSwitchStatus();
 
-    if (m_netSwitch->getSwitchStatus()) {
-        if (m_devList.count() > 0) {
+    if (m_devList.count() == 0) {
+        this->showDesktopNotify(tr("No ethernet device avaliable"));
+    } else {
+        if (m_netSwitch->getSwitchStatus()) {
+            qDebug() << "[wiredSwitch]set true after clicked";
             m_switchGsettings->set(WIRED_SWITCH, true);
         } else {
-            this->showDesktopNotify(tr("No ethernet device avaliable"));
+            qDebug() << "[wiredSwitch]set false after clicked";
+            m_switchGsettings->set(WIRED_SWITCH,false);
         }
-    } else {
-        m_switchGsettings->set(WIRED_SWITCH, false);
     }
+
+//    if (m_netSwitch->getSwitchStatus()) {
+//        if (m_devList.count() > 0) {
+//            m_switchGsettings->set(WIRED_SWITCH, true);
+//        } else {
+//            this->showDesktopNotify(tr("No ethernet device avaliable"));
+//        }
+//    } else {
+//        m_switchGsettings->set(WIRED_SWITCH, false);
+//    }
 }
 
 void LanPage::getEnabledDevice(QStringList &enableDeviceList)
@@ -516,6 +534,8 @@ void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devic
     }
 
     if (m_devList.count() == 0) {// 有线网卡从无到有，打开开关
+        qDebug() << "[wiredSwitch]: set enable when add only one device";
+        m_netSwitch->setEnabled(true);
         m_wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
         m_netSwitch->setSwitchStatus(m_wiredSwitch);
     }
@@ -600,7 +620,10 @@ void LanPage::onDeviceRemove(QString deviceName)
 
     m_devList.removeOne(deviceName);
     if (m_devList.count() == 0) {
-        m_netSwitch->setSwitchStatus(false);
+        m_wiredSwitch = false;
+        m_netSwitch->setSwitchStatus(m_wiredSwitch);
+        m_netSwitch->setEnabled(false);
+        qDebug() << "[wiredSwitch]set not enable after device remove";
     }
 
     QString nowDevice = m_currentDeviceName;

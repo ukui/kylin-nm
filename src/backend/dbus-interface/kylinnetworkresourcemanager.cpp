@@ -157,6 +157,7 @@ void KyNetworkResourceManager::clearActiveConnections()
 void KyNetworkResourceManager::addActiveConnection(NetworkManager::ActiveConnection::Ptr conn)
 {
     m_activeConns.push_back(conn);
+#if 0
     connect(conn.data(), &NetworkManager::ActiveConnection::connectionChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::default4Changed, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::default6Changed, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
@@ -168,11 +169,14 @@ void KyNetworkResourceManager::addActiveConnection(NetworkManager::ActiveConnect
     connect(conn.data(), &NetworkManager::ActiveConnection::typeChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::masterChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::specificObjectChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
+#endif
     //connect(conn.data(), &NetworkManager::ActiveConnection::stateChangedReason, this, &KyNetworkResourceManager::onActiveConnectionChangedReason);
     connect(conn.data(), &NetworkManager::ActiveConnection::stateChanged, this, &KyNetworkResourceManager::onActiveConnectionChanged);
+#if 0
     connect(conn.data(), &NetworkManager::ActiveConnection::vpnChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::uuidChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
     connect(conn.data(), &NetworkManager::ActiveConnection::devicesChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
+#endif
     if (conn->vpn()) {
         connect(qobject_cast<NetworkManager::VpnConnection *>(conn.data()), &NetworkManager::VpnConnection::bannerChanged, this, &KyNetworkResourceManager::onActiveConnectionUpdated);
         connect(qobject_cast<NetworkManager::VpnConnection *>(conn.data()), &NetworkManager::VpnConnection::stateChanged, this, &KyNetworkResourceManager::onVpnActiveConnectChanagedReason);
@@ -236,6 +240,7 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
 {
     m_devices.push_back(device);
     //device signals
+#if 0
     //connect(device.data(), &NetworkManager::Device::stateChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::activeConnectionChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::autoconnectChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
@@ -249,7 +254,11 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
     connect(device.data(), &NetworkManager::Device::driverVersionChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::firmwareMissingChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::firmwareVersionChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
+#endif
+
     connect(device.data(), &NetworkManager::Device::interfaceNameChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
+
+#if 0
     connect(device.data(), &NetworkManager::Device::ipV4AddressChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::ipV4ConfigChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::ipV6ConfigChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
@@ -261,18 +270,21 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
     connect(device.data(), &NetworkManager::Device::meteredChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::connectionStateChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::stateReasonChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
+
     connect(device.data(), &NetworkManager::Device::stateChanged, this, &KyNetworkResourceManager::onDeviceStateChanged);
     connect(device.data(), &NetworkManager::Device::udiChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
+#endif
     switch (device->type())
     {
         case NetworkManager::Ethernet:
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::bitRateChanged, this, &KyNetworkResourceManager::onDeviceBitRateChanage);
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::carrierChanged, this, &KyNetworkResourceManager::onDeviceCarrierChanage);
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::hardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceMacAddressChanaged);
-            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::permanentHardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
+           // connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::permanentHardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
             break;
 
         case NetworkManager::Device::Wifi:
+#if 0
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::bitRateChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::activeAccessPointChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::modeChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
@@ -282,6 +294,7 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::wirelessPropertiesChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::accessPointAppeared, this, &KyNetworkResourceManager::onDeviceUpdated);
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::accessPointDisappeared, this, &KyNetworkResourceManager::onDeviceUpdated);
+#endif
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::networkAppeared, this, &KyNetworkResourceManager::onWifiNetworkAppeared);
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::networkDisappeared, this, &KyNetworkResourceManager::onWifiNetworkDisappeared);
             break;
@@ -561,17 +574,16 @@ void KyNetworkResourceManager::onActiveConnectionChanged(
     NetworkManager::ActiveConnection * activeConnect =
         qobject_cast<NetworkManager::ActiveConnection *>(sender());
     if (activeConnect->isValid()) {
-        qDebug()<< "[KyNetworkResourceManager]" <<"!New state change activate connect"<<activeConnect->uuid();
-        qDebug()<< "[KyNetworkResourceManager]" <<"!New the active connect state"<<state;
-        ::usleep(SIGNAL_DELAY);
+        qDebug()<< "[KyNetworkResourceManager]"<<activeConnect->uuid()
+                <<"New the active connect state"<<state;
+        //::usleep(SIGNAL_DELAY);
         while(activeConnect->state() != state) {
-            qDebug()<<"connect real state"<<activeConnect->state() <<"change state"<<state;
+            qDebug() << "[KyNetworkResourceManager]"
+                     <<"connect real state"<<activeConnect->state() <<"change state"<<state;
             ::usleep(EMIT_DELAY);
         }
         emit activeConnectStateChangeReason(activeConnect->uuid(), state,
                                             NetworkManager::ActiveConnection::Reason::UknownReason);
-    } else {
-
     }
 
     return;

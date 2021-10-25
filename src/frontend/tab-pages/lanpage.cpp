@@ -13,7 +13,9 @@
 #define SWITCH_HEIGHT 24
 #define ITEM_HEIGHT 48
 
-const QString INVALID_CONNECT_UUID = "emptyconnect";
+#define LOG_FLAG "[LanPage]"
+
+const QString EMPTY_CONNECT_UUID = "emptyconnect";
 
 const QString WIRED_SWITCH = "wiredswitch";
 
@@ -32,7 +34,7 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     initDeviceCombox();
     initLanArea();
 
-    connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &LanPage::onUpdateLanlist);
+    connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &LanPage::onConnectionStateChange);
 
     connect(m_connectResourse, &KyConnectResourse::connectionAdd, this, &LanPage::onAddConnection);
     connect(m_connectResourse, &KyConnectResourse::connectionRemove, this, &LanPage::onRemoveConnection);
@@ -58,19 +60,31 @@ void LanPage::initLanDevice()
 
     m_devList.clear();
     m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
+    if (m_currentDeviceName.isEmpty()) {
+        for (int index = 0; index < m_devList.size(); ++index) {
+            if (m_deviceResource->wiredDeviceCarriered(m_devList.at(index))) {
+                m_currentDeviceName = m_devList.at(index);
+                setDefaultDevice(WIRED, m_currentDeviceName);
+                break;
+            }
+        }
+    }
+
+    return;
 }
 
 void LanPage::initLanDeviceState()
 {
-    getDeviceEnableState(WIRED, m_deviceStateMap);
+    QMap<QString, bool> deviceStateMap;
+    getDeviceEnableState(WIRED, deviceStateMap);
 
     QStringList disableDeviceList;
     disableDeviceList.clear();
     m_enableDeviceList.clear();
     for (int index = 0; index < m_devList.count(); ++index) {
         QString deviceName = m_devList.at(index);
-        if (m_deviceStateMap.contains(deviceName)) {
-            if (m_deviceStateMap[deviceName]) {
+        if (deviceStateMap.contains(deviceName)) {
+            if (deviceStateMap[deviceName]) {
                 m_enableDeviceList<<deviceName;
             } else {
                 disableDeviceList<<deviceName;
@@ -236,7 +250,6 @@ void LanPage::initDeviceCombox()
                     m_deviceComboBox->setCurrentText(m_currentDeviceName);
                 } else {
                     m_currentDeviceName = m_deviceComboBox->currentText();
-                    setDefaultDevice(WIRED, m_currentDeviceName);
                 }
             }
 
@@ -245,7 +258,6 @@ void LanPage::initDeviceCombox()
 
             if (m_currentDeviceName != m_enableDeviceList.at(0)) {
                 m_currentDeviceName = m_enableDeviceList.at(0);
-                setDefaultDevice(WIRED, m_currentDeviceName);
             }
         } else {
             m_deviceFrame->show();
@@ -256,88 +268,54 @@ void LanPage::initDeviceCombox()
     } else {
         m_deviceFrame->hide();
         m_currentDeviceName = "";
+
     }
 
+    setDefaultDevice(WIRED, m_currentDeviceName);
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LanPage::onDeviceComboxIndexChanged);
     return;
 }
 
-bool LanPage::connectionItemIsExist(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
-                                   QString uuid)
-{
-    QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;
-    for (iter = connectMap.begin(); iter != connectMap.end(); ++iter) {           //检查其是否已经在未激活列表中
-        KyConnectItem *p_item = iter.key();
-        if (p_item->m_connectUuid == uuid) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void LanPage::addEmptyConnectItem(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+void LanPage::addEmptyConnectItem(QMap<QString, QListWidgetItem *> &connectMap,
                                        QListWidget *lanListWidget)
 {
-    KyConnectItem *p_nullItem = new KyConnectItem();
-    p_nullItem->setConnectUuid(INVALID_CONNECT_UUID);
     QListWidgetItem *p_listWidgetItem = addNewItem(nullptr, lanListWidget);
-    connectMap.insert(p_nullItem, p_listWidgetItem);
+    connectMap.insert(EMPTY_CONNECT_UUID, p_listWidgetItem);
 
     return;
 }
 
 
-void LanPage::deleteConnectionMapItem(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+void LanPage::deleteConnectionMapItem(QMap<QString, QListWidgetItem *> &connectMap,
                              QListWidget *lanListWidget, QString uuid)
 {     
-    QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;
+    QListWidgetItem *p_listWidgetItem = connectMap.value(uuid);
+    if (p_listWidgetItem) {
+        connectMap.remove(uuid);
+        LanListItem *p_lanItem = (LanListItem *)lanListWidget->itemWidget(p_listWidgetItem);
+        lanListWidget->removeItemWidget(p_listWidgetItem);
 
-    iter = connectMap.begin();
-    while (iter != connectMap.end()) {
-        KyConnectItem *p_item = iter.key();
-        if (p_item->m_connectUuid == uuid
-                || INVALID_CONNECT_UUID == p_item->m_connectUuid) {
-            qDebug()<<"[LanPage] delete connection map item"
-                    << p_item->m_connectName << p_item->m_connectUuid;
-            QListWidgetItem *p_widgetItem = iter.value();
-            LanListItem *p_lanItem = (LanListItem *)lanListWidget->itemWidget(p_widgetItem);
+        delete p_lanItem;
+        p_lanItem = nullptr;
 
-            lanListWidget->removeItemWidget(p_widgetItem);
-
-            delete p_lanItem;
-            p_lanItem = nullptr;
-
-            delete p_widgetItem;
-            p_widgetItem = nullptr;
-
-            iter = connectMap.erase(iter);
-
-            delete p_item;
-            p_item = nullptr;
-
-            continue;
-        }
-
-        iter++;
+        delete p_listWidgetItem;
+        p_listWidgetItem = nullptr;
     }
 
     return;
 }
 
-void LanPage::clearConnectionMap(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+void LanPage::clearConnectionMap(QMap<QString, QListWidgetItem *> &connectMap,
                                  QListWidget *lanListWidget)
 {
-    QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;
+    QMap<QString, QListWidgetItem *>::iterator iter;
 
     iter = connectMap.begin();
     while (iter != connectMap.end()) {
-        KyConnectItem *p_connectItem = iter.key();
+        qDebug()<<"[LanPage] clear connection map item"<< iter.key();
+
         QListWidgetItem *p_widgetItem = iter.value();
-
-        qDebug()<<"[LanPage] clear connection map item"<<p_connectItem->m_connectName;
-
         LanListItem *p_lanItem = (LanListItem *)lanListWidget->itemWidget(p_widgetItem);
         lanListWidget->removeItemWidget(p_widgetItem);
 
@@ -346,9 +324,6 @@ void LanPage::clearConnectionMap(QMap<KyConnectItem *, QListWidgetItem *> &conne
 
         delete p_widgetItem;
         p_widgetItem = nullptr;
-
-        delete p_connectItem;
-        p_connectItem = nullptr;
 
         iter = connectMap.erase(iter);
     }
@@ -361,21 +336,25 @@ void LanPage::constructActiveConnectionArea()
     QList<KyConnectItem *> activedList;
 
     activedList.clear();
-    clearConnectionMap(m_activeMap, m_activatedLanListWidget);
+    clearConnectionMap(m_activeConnectionMap, m_activatedLanListWidget);
 
     m_activeResourse->getActiveConnectionList(m_currentDeviceName,
                                NetworkManager::ConnectionSettings::Wired, activedList);      //激活列表的显示
     qDebug() << "[LanPage] construct active connection area get Active list size:" << activedList.size();
     if (!activedList.isEmpty()) {
         for (int index = 0; index < activedList.size(); index++) {
-            KyConnectItem *activeItemData = activedList.at(index);
-            qDebug()<<"[LanPage] construct active connection area add active item"<<activeItemData->m_connectName;
-            QListWidgetItem *p_listWidgetItem = addNewItem(activeItemData, m_activatedLanListWidget);
-            m_activeMap.insert(activeItemData, p_listWidgetItem);
+            KyConnectItem *p_activeConnectionItem = activedList.at(index);
+            qDebug() << "[LanPage] construct active connection area. add active item"
+                     << p_activeConnectionItem->m_connectName;
+            QListWidgetItem *p_listWidgetItem = addNewItem(p_activeConnectionItem, m_activatedLanListWidget);
+            m_activeConnectionMap.insert(p_activeConnectionItem->m_connectUuid, p_listWidgetItem);
+
+            delete p_activeConnectionItem;
+            p_activeConnectionItem = nullptr;
         }
     } else {
         qDebug()<<"[LanPage] there is not active";
-        addEmptyConnectItem(m_activeMap, m_activatedLanListWidget);
+        addEmptyConnectItem(m_activeConnectionMap, m_activatedLanListWidget);
     }
 
     return;
@@ -386,16 +365,19 @@ void LanPage::constructConnectionArea()
     QList<KyConnectItem *> deactivedList;
 
     deactivedList.clear();
-    clearConnectionMap(m_deactiveMap, m_inactivatedLanListWidget);
+    clearConnectionMap(m_inactiveConnectionMap, m_inactivatedLanListWidget);
 
     m_connectResourse->getConnectionList(m_currentDeviceName, NetworkManager::ConnectionSettings::Wired, deactivedList);      //未激活列表的显示
     qDebug() << "[LanPage]construct connection area get connection list size:" << deactivedList.size();
     if (!deactivedList.isEmpty()) {
         for (int index = 0; index < deactivedList.size(); index++) {
-            KyConnectItem *deactiveItemData = deactivedList.at(index);
-            qDebug()<<"[LanPage] construct connection area add deactive item"<<deactiveItemData->m_connectName;
-            QListWidgetItem *p_listWidgetItem = addNewItem(deactiveItemData, m_inactivatedLanListWidget);
-            m_deactiveMap.insert(deactiveItemData, p_listWidgetItem);
+            KyConnectItem *p_deactiveConnectionItem = deactivedList.at(index);
+            qDebug()<<"[LanPage] construct connection area add deactive item"<<p_deactiveConnectionItem->m_connectName;
+            QListWidgetItem *p_listWidgetItem = addNewItem(p_deactiveConnectionItem, m_inactivatedLanListWidget);
+            m_inactiveConnectionMap.insert(p_deactiveConnectionItem->m_connectUuid, p_listWidgetItem);
+
+            delete p_deactiveConnectionItem;
+            p_deactiveConnectionItem = nullptr;
         }
     }
 
@@ -421,31 +403,30 @@ void LanPage::initLanArea()
     return;
 }
 
-bool LanPage::removeConnectionItem(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+bool LanPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
                           QListWidget *lanListWidget, QString path)
 {
-    QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;
+    QMap<QString, QListWidgetItem *>::iterator iter;
     for (iter = connectMap.begin(); iter != connectMap.end(); ++iter) {
-        KyConnectItem *p_item = iter.key();
-        if (p_item->m_connectPath == path) {
+        QListWidgetItem *p_listWidgetItem = iter.value();
+        LanListItem *p_lanItem = (LanListItem*)lanListWidget->itemWidget(p_listWidgetItem);
+        if (p_lanItem->getConnectionPath() == path) {
             qDebug()<<"[LanPage] Remove a connection from list";
 
-            LanListItem *p_lanItem = (LanListItem *)lanListWidget->itemWidget(iter.value());
-
-            lanListWidget->removeItemWidget(iter.value());
+            lanListWidget->removeItemWidget(p_listWidgetItem);
 
             delete p_lanItem;
             p_lanItem = nullptr;
 
-            delete(iter.value());
-            connectMap.erase(iter);
+            delete p_listWidgetItem;
+            p_listWidgetItem = nullptr;
 
-            delete p_item;
-            p_item = nullptr;
+            iter = connectMap.erase(iter);
 
             return true;
         }
     }
+
     return false;
 }
 
@@ -455,12 +436,12 @@ void LanPage::onRemoveConnection(QString path)            //删除时后端会�
     qDebug() << "[LanPage] emit lanRemove because onRemoveConnection " << path;
     emit lanRemove(path);
 
-    if (removeConnectionItem(m_deactiveMap, m_inactivatedLanListWidget, path)) {
+    if (removeConnectionItem(m_inactiveConnectionMap, m_inactivatedLanListWidget, path)) {
         return;
     } else {
-        removeConnectionItem(m_activeMap, m_activatedLanListWidget, path);
-        if (m_activeMap.count() <= 0) {
-            addEmptyConnectItem(m_activeMap, m_activatedLanListWidget);
+        removeConnectionItem(m_activeConnectionMap, m_activatedLanListWidget, path);
+        if (m_activeConnectionMap.count() <= 0) {
+            addEmptyConnectItem(m_activeConnectionMap, m_activatedLanListWidget);
         }
         return;
     }
@@ -474,18 +455,20 @@ void LanPage::onAddConnection(QString uuid)               //新增一个有线�
 
     KyConnectItem *p_newItem = nullptr;
     p_newItem = m_connectResourse->getConnectionItemByUuid(uuid);
-    if (nullptr != p_newItem) {
-        sendLanAddSignal(p_newItem);
+    if (nullptr == p_newItem) {
+        return;
     }
+
+    sendLanAddSignal(p_newItem);
 
     if (p_newItem->m_ifaceName == m_currentDeviceName || p_newItem->m_ifaceName == "") {
         qDebug()<<"[LanPage] Add a new connection, name:"<<p_newItem->m_connectName;
-        QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_inactivatedLanListWidget);
-        m_deactiveMap.insert(p_newItem, p_listWidgetItem);
-    } else {
-        delete p_newItem;
-        p_newItem = nullptr;
+        QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_inactivatedLanListWidget);
+        m_inactiveConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
     }
+
+    delete p_newItem;
+    p_newItem = nullptr;
 
     return;
 }
@@ -569,6 +552,7 @@ void LanPage::deleteDeviceFromCombox(QString deviceName)
                 m_deviceComboBox->hide();
                 m_tipsLabel->show();
                 m_currentDeviceName = "";
+                setDefaultDevice(WIRED, m_currentDeviceName);
             }
         } else if (2 == m_enableDeviceList.count()) {
             //3、使能了两个网卡，且包括要删除的网卡，有可能是要删除的网卡
@@ -577,6 +561,7 @@ void LanPage::deleteDeviceFromCombox(QString deviceName)
                     if (m_currentDeviceName == deviceName
                             && m_deviceComboBox->itemText(index) != deviceName) {
                         m_currentDeviceName = m_deviceComboBox->itemText(index);
+                        setDefaultDevice(WIRED, m_currentDeviceName);
                     }
                     m_deviceComboBox->removeItem(index);
                 }
@@ -592,6 +577,7 @@ void LanPage::deleteDeviceFromCombox(QString deviceName)
                 m_deviceComboBox->removeItem(index);
                 if (m_currentDeviceName == deviceName) {
                     m_currentDeviceName = m_deviceComboBox->currentText();
+                    setDefaultDevice(WIRED, m_currentDeviceName);
                 }
             }
         }
@@ -638,6 +624,7 @@ void LanPage::updateDeviceCombox(QString oldDeviceName, QString newDeviceName)
 {   
     if (m_currentDeviceName == oldDeviceName) {
         m_currentDeviceName = newDeviceName;
+        setDefaultDevice(WIRED, m_currentDeviceName);
     }
 
     int index = m_deviceComboBox->findText(oldDeviceName);
@@ -662,7 +649,6 @@ void LanPage::onDeviceNameUpdate(QString oldName, QString newName)
 
         updateDeviceCombox(oldName, newName);
         if (m_currentDeviceName == newName) {
-            setDefaultDevice(WIRED, m_currentDeviceName);
             initLanArea();
         }
 
@@ -720,19 +706,44 @@ void LanPage::initUI()
     m_settingsLabel->installEventFilter(this);
 }
 
+QListWidgetItem *LanPage::insertNewItem(KyConnectItem *itemData, QListWidget *listWidget)
+{
+    int index = 0;
+
+    for(index = 0; index < m_inactivatedLanListWidget->count(); index++) {
+        QListWidgetItem *p_listWidgetItem = m_inactivatedLanListWidget->item(index);
+        LanListItem *p_lanItem = (LanListItem *)m_inactivatedLanListWidget->itemWidget(p_listWidgetItem);
+        QString name1 = p_lanItem->getConnectionName();
+        QString name2 = itemData->m_connectName;
+        if (QString::compare(name1, name2, Qt::CaseInsensitive) > 0) {
+            break;
+        }
+    }
+
+    QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
+    p_sortListWidgetItem->setSizeHint(QSize(listWidget->width(),ITEM_HEIGHT));
+
+    listWidget->insertItem(index, p_sortListWidgetItem);
+
+    LanListItem *p_sortLanItem = nullptr;
+    p_sortLanItem = new LanListItem(itemData, m_currentDeviceName);
+    listWidget->setItemWidget(p_sortListWidgetItem, p_sortLanItem);
+
+    return p_sortListWidgetItem;
+}
+
 QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
 {
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
-    p_listWidgetItem->setSizeHint(QSize(listWidget->width(),ITEM_HEIGHT));
-//    listWidget->insertItem(0, p_listWidgetItem);
+    p_listWidgetItem->setSizeHint(QSize(listWidget->width(), ITEM_HEIGHT));
     listWidget->addItem(p_listWidgetItem);
 
     LanListItem *p_lanItem = nullptr;
     if (itemData != nullptr) {
         p_lanItem = new LanListItem(itemData, m_currentDeviceName);
-        qDebug() << "[LanPage] addNewItem, connection: " << itemData->m_connectName << "deviceName: " << m_currentDeviceName;
-    }
-    else {
+        qDebug() << "[LanPage] addNewItem, connection: "
+                 << itemData->m_connectName << "deviceName: " << m_currentDeviceName;
+    } else {
         p_lanItem = new LanListItem();
         qDebug() << "[LanPage] Add nullItem!";
     }
@@ -742,80 +753,73 @@ QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listW
     return p_listWidgetItem;
 }
 
-void LanPage::updateActivatedConnectionArea(QString uuid)
+void LanPage::updateActivatedConnectionArea(KyConnectItem *p_newItem)
 {
-    KyConnectItem *p_newItem = nullptr;
-    p_newItem = m_activeResourse->getActiveConnectionByUuid(uuid);
-    if (nullptr == p_newItem) {
-        qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;
+    if (m_activeConnectionMap.contains(p_newItem->m_connectUuid)) {
         return;
     }
 
-    //发送通知给控制面板
-    emit lanActiveConnectionStateChanged(p_newItem->m_ifaceName, uuid, p_newItem->m_connectState);
+    deleteConnectionMapItem(m_inactiveConnectionMap, m_inactivatedLanListWidget, p_newItem->m_connectUuid);
 
     if (p_newItem->m_ifaceName == m_currentDeviceName) {
-        qDebug()<<"[LanPage] update active connection area delete connection item "
-               << p_newItem->m_connectName;
-        deleteConnectionMapItem(m_deactiveMap, m_inactivatedLanListWidget, uuid);
-
-        deleteConnectionMapItem(m_activeMap, m_activatedLanListWidget, INVALID_CONNECT_UUID);
-        if (connectionItemIsExist(m_activeMap, uuid)) {
-            delete p_newItem;
-            p_newItem = nullptr;
-            return;
-        }
-
         qDebug()<<"[LanPage]update active connection item"<<p_newItem->m_connectName;
+        deleteConnectionMapItem(m_activeConnectionMap, m_activatedLanListWidget, EMPTY_CONNECT_UUID);
         QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_activatedLanListWidget);
-        m_activeMap.insert(p_newItem, p_listWidgetItem);
+        m_activeConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
         this->showDesktopNotify(tr("LAN Connected Successfully"));
-    } else {
-        //释放内存
-        delete p_newItem;
-        p_newItem = nullptr;
     }
 
     return;
 }
 
-void LanPage::updateConnectionArea(QString uuid)
+void LanPage::updateConnectionArea(KyConnectItem *p_newItem)
 {
-    KyConnectItem *p_newItem = nullptr;
-    p_newItem = m_connectResourse->getConnectionItemByUuid(uuid);
-    if (nullptr == p_newItem) {
-        qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;
+    if (m_inactiveConnectionMap.contains(p_newItem->m_connectUuid)) {
         return;
     }
 
-    emit lanActiveConnectionStateChanged(p_newItem->m_ifaceName, uuid, p_newItem->m_connectState);
-
-    deleteConnectionMapItem(m_activeMap, m_activatedLanListWidget, uuid);
-    if (m_activeMap.count() <= 0) {
-        addEmptyConnectItem(m_activeMap, m_activatedLanListWidget);
+    deleteConnectionMapItem(m_activeConnectionMap, m_activatedLanListWidget, p_newItem->m_connectUuid);
+    if (m_activeConnectionMap.count() <= 0) {
+        addEmptyConnectItem(m_activeConnectionMap, m_activatedLanListWidget);
     }
 
     if (p_newItem->m_ifaceName == m_currentDeviceName || p_newItem->m_ifaceName == "") {
-        qDebug()<<"[LanPage] update connection area"<<p_newItem->m_connectName;
-        if (connectionItemIsExist(m_deactiveMap, uuid)) {
-            delete p_newItem;
-            p_newItem = nullptr;
-            return;
-        }
-
         qDebug()<<"[LanPage] update connection item"<<p_newItem->m_connectName;
-        QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_inactivatedLanListWidget);
-        m_deactiveMap.insert(p_newItem, p_listWidgetItem);
+        QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_inactivatedLanListWidget);
+        m_inactiveConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
         this->showDesktopNotify(tr("LAN Disconnected Successfully"));
-    } else {
-        delete p_newItem;
-        p_newItem = nullptr;
     }
 
     return;
 }
 
-void LanPage::onUpdateLanlist(QString uuid,
+void LanPage::updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap,
+                                    QListWidget *lanListWidget, QString uuid, ConnectState state)
+{
+    qDebug() << LOG_FLAG << "update connection state";
+
+    QListWidgetItem *p_listWidgetItem = connectMap.value(uuid);
+    if (p_listWidgetItem) {
+        LanListItem *p_lanItem = (LanListItem *)lanListWidget->itemWidget(p_listWidgetItem);
+        p_lanItem->updateConnectionState(state);
+    }
+
+    return;
+}
+
+QString LanPage::getConnectionDevice(QString uuid)
+{
+    QString deviceName = "";
+
+    deviceName = m_activeResourse->getDeviceOfActivateConnect(uuid);
+    if (deviceName.isEmpty()) {
+        m_connectResourse->getInterfaceByUuid(deviceName, uuid);
+    }
+
+    return deviceName;
+}
+
+void LanPage::onConnectionStateChange(QString uuid,
                               NetworkManager::ActiveConnection::State state,
                               NetworkManager::ActiveConnection::Reason reason)
 {
@@ -828,20 +832,46 @@ void LanPage::onUpdateLanlist(QString uuid,
     qDebug()<<"[LanPage] connection uuid"<< uuid
             << "state change slot:"<< state;
 
+    KyConnectItem *p_newItem = nullptr;
+    QString deviceName = "";
+
     if (state == NetworkManager::ActiveConnection::State::Activated) {
-        updateActivatedConnectionArea(uuid);
-    } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
-        updateConnectionArea(uuid);
-    } else if (state == NetworkManager::ActiveConnection::State::Activating
-               || state == NetworkManager::ActiveConnection::State::Deactivating) {
-        QString devName = m_activeResourse->getDeviceOfActivateConnect(uuid);
-        if (devName.isEmpty()) {
-            m_connectResourse->getInterfaceByUuid(devName, uuid);
+        p_newItem = m_activeResourse->getActiveConnectionByUuid(uuid);
+        if (nullptr == p_newItem) {
+            qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;
+            return;
         }
-        emit lanActiveConnectionStateChanged(devName, uuid, state);
+
+        deviceName = p_newItem->m_ifaceName;
+        updateActivatedConnectionArea(p_newItem);
+        updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
+    } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
+        p_newItem = m_connectResourse->getConnectionItemByUuid(uuid);
+        if (nullptr == p_newItem) {
+            qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;
+            return;
+        }
+
+        deviceName = p_newItem->m_ifaceName;
+        updateConnectionArea(p_newItem);
+        updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
+    } else if (state == NetworkManager::ActiveConnection::State::Activating) {
+        updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
+        deviceName = getConnectionDevice(uuid);
+    } else if (state == NetworkManager::ActiveConnection::State::Deactivating) {
+        updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
+        deviceName = getConnectionDevice(uuid);
+    }
+
+    emit lanActiveConnectionStateChanged(deviceName, uuid, state);
+
+    if (p_newItem) {
+        delete p_newItem;
+        p_newItem = nullptr;
     }
 
     emit this->lanConnectChanged(state);
+
     return;
 }
 
@@ -895,105 +925,74 @@ void LanPage::sendLanAddSignal(KyConnectItem *p_connectItem)
     return;
 }
 
-void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem, bool &needDeleteItem)
+void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem)
 {
-    bool inCurrentMap = false;
+    QString newUuid = p_connectItem->m_connectUuid;
 
-    QMap<KyConnectItem *, QListWidgetItem *>::iterator iter;
-    for (iter = m_deactiveMap.begin(); iter != m_deactiveMap.constEnd(); ++iter) {
-        KyConnectItem *p_item = iter.key();
-        if (p_item->m_connectUuid == p_connectItem->m_connectUuid) {
-            inCurrentMap = true;
-            if (p_connectItem->m_ifaceName != ""
-                    && m_currentDeviceName != p_connectItem->m_ifaceName) {
-                LanListItem *p_lanItem = (LanListItem *)m_inactivatedLanListWidget->itemWidget(iter.value());
+    if (m_inactiveConnectionMap.contains(newUuid)) {
+        QListWidgetItem *p_listWidgetItem = m_inactiveConnectionMap.value(newUuid);
+        LanListItem *p_lanItem = (LanListItem*)m_inactivatedLanListWidget->itemWidget(p_listWidgetItem);
+        if (p_connectItem->m_ifaceName != ""
+                && m_currentDeviceName != p_connectItem->m_ifaceName) {
+            m_inactivatedLanListWidget->removeItemWidget(p_listWidgetItem);
 
-                m_inactivatedLanListWidget->removeItemWidget(iter.value());
+            delete p_listWidgetItem;
+            p_listWidgetItem = nullptr;
 
-                delete p_lanItem;
-                p_lanItem = nullptr;
+            delete p_lanItem;
+            p_lanItem = nullptr;
 
-                delete iter.value();
-                m_deactiveMap.erase(iter);
-
-                delete p_item;
-                p_item = nullptr;
-            } else {
-                if (p_connectItem->m_connectName != p_item->m_connectName
-                        || p_connectItem->m_connectPath != p_item->m_connectPath) {
-                    LanListItem *p_lanItem = (LanListItem *)m_inactivatedLanListWidget->itemWidget(iter.value());
-
-                    m_inactivatedLanListWidget->removeItemWidget(iter.value());
-
-                    delete p_lanItem;
-                    p_lanItem = nullptr;
-
-                    delete iter.value();
-                    m_deactiveMap.erase(iter);
-
-                    delete p_item;
-                    p_item = nullptr;
-
-                    QListWidgetItem *p_listWidgetItem = addNewItem(p_connectItem, m_inactivatedLanListWidget);
-                    m_deactiveMap.insert(p_connectItem, p_listWidgetItem);
-                    needDeleteItem = false;
-                }
+            m_inactiveConnectionMap.remove(newUuid);
+        } else {
+            if (p_connectItem->m_connectName != p_lanItem->getConnectionName()){
+                //只要名字改变就要删除，重新插入，主要是为了排序
+                deleteConnectionMapItem(m_inactiveConnectionMap, m_inactivatedLanListWidget, newUuid);
+                QListWidgetItem *p_sortListWidgetItem = insertNewItem(p_connectItem, m_inactivatedLanListWidget);
+                m_inactiveConnectionMap.insert(newUuid, p_sortListWidgetItem);
+            } else if (p_connectItem->m_connectPath != p_lanItem->getConnectionPath()) {
+                p_lanItem->updateConnectionPath(p_connectItem->m_connectPath);
             }
-            break;
-        }     
-    }
+        }
 
-    if (!inCurrentMap) {
-        if (p_connectItem->m_ifaceName == m_currentDeviceName) {
-            QListWidgetItem *p_listWidgetItem = addNewItem(p_connectItem, m_inactivatedLanListWidget);
-            m_deactiveMap.insert(p_connectItem, p_listWidgetItem);
-            needDeleteItem = false;
+    } else {
+        if (p_connectItem->m_ifaceName == m_currentDeviceName
+                || p_connectItem->m_ifaceName.isEmpty()) {
+            QListWidgetItem *p_listWidgetItem = insertNewItem(p_connectItem, m_inactivatedLanListWidget);
+            m_inactiveConnectionMap.insert(newUuid, p_listWidgetItem);
         }
     }
 
     return;
 }
 
-void LanPage::updateActiveConnectionProperty(KyConnectItem *p_connectItem, bool &needDeleteItem)
+void LanPage::updateActiveConnectionProperty(KyConnectItem *p_connectItem)
 {
-    QMap<KyConnectItem *, QListWidgetItem *>::iterator iters;
-    for (iters = m_activeMap.begin(); iters != m_activeMap.constEnd(); ++iters) {
-        KyConnectItem *p_item = iters.key();
-        if (p_item->m_connectUuid == p_connectItem->m_connectUuid) {
-            if (m_currentDeviceName != p_connectItem->m_ifaceName) {  //当前激活连接的设备改变
-                LanListItem *p_lanItem = (LanListItem *)m_activatedLanListWidget->itemWidget(iters.value());
-                m_activatedLanListWidget->removeItemWidget(iters.value());
+    QString newUuid = p_connectItem->m_connectUuid;
 
-                delete p_lanItem;
-                p_lanItem = nullptr;
+    if (m_activeConnectionMap.contains(newUuid)) {
+        QListWidgetItem *p_listWidgetItem = m_activeConnectionMap.value(newUuid);
+        LanListItem *p_lanItem = (LanListItem *)m_activatedLanListWidget->itemWidget(p_listWidgetItem);
+        if (m_currentDeviceName != p_connectItem->m_ifaceName) {
+            m_activeConnectionMap.remove(newUuid);
+            int takeRow = m_activatedLanListWidget->row(p_listWidgetItem);
+            m_activatedLanListWidget->takeItem(takeRow);
 
-                delete iters.value();
-                m_activeMap.erase(iters);
+            delete p_lanItem;
+            p_lanItem = nullptr;
 
-                delete p_item;
-                p_item = nullptr;
-
-            } else {
-                if (p_item->m_connectName != p_connectItem->m_connectName
-                        || p_item->m_connectPath != p_connectItem->m_connectPath) {   //当前激活连接的其他数据改变(除了激活状态外)
-                    LanListItem *p_lanItem = (LanListItem *)m_activatedLanListWidget->itemWidget(iters.value());
-                    m_activatedLanListWidget->removeItemWidget(iters.value());
-
-                    delete p_lanItem;
-                    p_lanItem = nullptr;
-
-                    delete iters.value();
-                    m_activeMap.erase(iters);
-
-                    delete p_item;
-                    p_item = nullptr;
-
-                    QListWidgetItem *p_listWidgetItem = addNewItem(p_connectItem, m_activatedLanListWidget);
-                    m_activeMap.insert(p_connectItem, p_listWidgetItem);
-                    needDeleteItem = false;
-                }
+            p_lanItem = new LanListItem();
+            m_activatedLanListWidget->addItem(p_listWidgetItem);
+            m_activatedLanListWidget->setItemWidget(p_listWidgetItem, p_lanItem);
+            m_activeConnectionMap.insert(EMPTY_CONNECT_UUID, p_listWidgetItem);
+        } else {
+            if (p_lanItem->getConnectionName() != p_connectItem->m_connectName) {
+                p_lanItem->updateConnectionName(p_connectItem->m_connectName);
             }
-            break;
+
+            if (p_lanItem->getConnectionName() != p_connectItem->m_connectPath) {
+                p_lanItem->updateConnectionPath(p_connectItem->m_connectPath);
+            }
+
         }
     }
 
@@ -1002,7 +1001,6 @@ void LanPage::updateActiveConnectionProperty(KyConnectItem *p_connectItem, bool 
 
 void LanPage::onUpdateConnection(QString uuid)
 {
-
     if (!m_connectResourse->isWiredConnection(uuid)) {
         return;
     }
@@ -1010,7 +1008,6 @@ void LanPage::onUpdateConnection(QString uuid)
     qDebug() << "[LanPage]:Connection property Changed." << Q_FUNC_INFO << __LINE__;
 
     KyConnectItem *p_newItem = nullptr;
-    bool needDeleteNewItem = true;
     if (m_connectResourse->isActivatedConnection(uuid)) {
         p_newItem = m_activeResourse->getActiveConnectionByUuid(uuid);
         if (nullptr == p_newItem) {
@@ -1019,8 +1016,7 @@ void LanPage::onUpdateConnection(QString uuid)
             return;
         }
 
-        sendLanUpdateSignal(p_newItem);
-        updateActiveConnectionProperty(p_newItem, needDeleteNewItem);
+        updateActiveConnectionProperty(p_newItem);
     } else {
         p_newItem = m_connectResourse->getConnectionItemByUuid(uuid);
         if (nullptr == p_newItem) {
@@ -1029,15 +1025,13 @@ void LanPage::onUpdateConnection(QString uuid)
             return;
         }
 
-        sendLanUpdateSignal(p_newItem);
-        updateConnectionProperty(p_newItem, needDeleteNewItem);
+        updateConnectionProperty(p_newItem);
     }
 
-    if (needDeleteNewItem) {
-        qDebug()<<"[LanPage] the new item is not used, so is deleted.";
-        delete p_newItem;
-        p_newItem = nullptr;
-    }
+    sendLanUpdateSignal(p_newItem);
+
+    delete p_newItem;
+    p_newItem = nullptr;
 
     return;
 }
@@ -1054,7 +1048,6 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
 
         addDeviceForCombox(devName);
         if (m_currentDeviceName == devName) {
-            setDefaultDevice(WIRED, m_currentDeviceName);
             initLanArea();
         }
     } else {
@@ -1063,7 +1056,6 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
         QString nowDeviceName = m_currentDeviceName;
         deleteDeviceFromCombox(devName);
         if (nowDeviceName == devName) {
-            setDefaultDevice(WIRED, m_currentDeviceName);
             initLanArea();
         }
 
@@ -1082,6 +1074,7 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
             onShowControlCenter();
         }
     }
+
     return QWidget::eventFilter(watched, event);
 }
 
@@ -1127,11 +1120,11 @@ void LanPage::showDetailPage(QString devName, QString uuid)
 
 bool LanPage::lanIsConnected()
 {
-    if (m_activeMap.isEmpty()) {
+    if (m_activeConnectionMap.isEmpty()) {
         return false;
     } else {
-        KyConnectItem *p_connectItem = m_activeMap.firstKey();
-        if (p_connectItem->m_connectUuid == INVALID_CONNECT_UUID) {
+        QString connectionUuid= m_activeConnectionMap.firstKey();
+        if (connectionUuid == EMPTY_CONNECT_UUID) {
             return false;
         }
     }

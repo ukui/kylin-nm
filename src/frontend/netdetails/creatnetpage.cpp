@@ -1,4 +1,5 @@
 #include "creatnetpage.h"
+#include "math.h"
 
 #define MAX_NAME_LENGTH 32
 
@@ -89,7 +90,7 @@ bool CreatNetPage::checkConnectBtnIsEnabled()
             return false;
         }
 
-        if (netMaskEdit->text().isEmpty() || !getTextEditState(netMaskEdit->text())) {
+        if (netMaskEdit->text().isEmpty() || !netMaskIsValide(netMaskEdit->text())) {
             qDebug() << "create ipv4 netMask empty or invalid";
             return false;
         }
@@ -164,7 +165,7 @@ void CreatNetPage::constructIpv4Info(KyConnectSetting &setting)
 {
     setting.m_connectName = connNameEdit->text();
     QString ipv4address =ipv4addressEdit->text();
-    QString netMask = netMaskEdit->text();
+    QString netMask = getNetMaskText(netMaskEdit->text());
     QString gateWay = gateWayEdit->text();
     qDebug() << "constructIpv4Info: " << "ipv4address " << ipv4address
              << " netMask " << netMask
@@ -186,3 +187,41 @@ void CreatNetPage::constructIpv4Info(KyConnectSetting &setting)
     }
 
 }
+
+bool CreatNetPage::netMaskIsValide(QString text)
+{
+    if (getTextEditState(text)) {
+        return true;
+    } else {
+        if (text.length() > 0 && text.length() < 3) {
+            int num = text.toInt();
+            if (num > 0 && num < 33) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+QString CreatNetPage::getNetMaskText(QString text)
+{
+    if (text.length() > 2) {
+        return text;
+    }
+
+    int num = text.toInt();
+    QStringList list;
+    list << "0" << "0" << "0" << "0";
+    int count = 0;
+    while (num - 8 >= 0) {
+        list[count] = "255";
+        num = num - 8;
+        count ++;
+    }
+    if (num > 0) {
+        int size = pow(2, 8) - pow(2,(8-num));
+        list[count] = QString::number(size);
+    }
+    return QString("%1.%2.%3.%4").arg(list[0],list[1],list[2],list[3]);
+}
+

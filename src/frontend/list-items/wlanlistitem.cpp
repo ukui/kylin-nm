@@ -172,7 +172,8 @@ void WlanListItem::initWlanUI()
 {
     m_hasPwd = (m_wirelessNetItem.m_secuType.isEmpty() || m_wirelessNetItem.m_secuType == "") ? false : true;
     //设置显示的Wlan名称
-    this->setName((m_wirelessNetItem.m_connName != "") ? m_wirelessNetItem.m_connName : m_wirelessNetItem.m_NetSsid);
+//    this->setName((m_wirelessNetItem.m_connName != "") ? m_wirelessNetItem.m_connName : m_wirelessNetItem.m_NetSsid);
+    this->setName(m_wirelessNetItem.m_NetSsid);
     //刷新左侧按钮图标
     refreshIcon();
 

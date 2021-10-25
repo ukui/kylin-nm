@@ -2,7 +2,7 @@
  
 set -e
  
-PROGRAM=$(dpkg-divert --truename /usr/bin/kylin-network-manager)
+PROGRAM=$(dpkg-divert --truename /usr/bin/kylin-nm)
 
 if setcap cap_net_raw+ep $PROGRAM; then
     chmod u-s $PROGRAM

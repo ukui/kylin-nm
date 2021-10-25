@@ -3,32 +3,30 @@
 
 #include <QDebug>
 
+#define LOG_FLAG "[LanListItem]"
 
-LanListItem::LanListItem(KyConnectItem *data, QString deviceName, QWidget *parent)
-    : m_data(data), deviceName(deviceName), ListItem(parent)    //item数据传入
+LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
+                         const QString &deviceName, QWidget *parent):ListItem(parent)
 {
     m_connectOperation = new KyWiredConnectOperation(this);
-    m_activeConnectResource = new KyActiveConnectResourse(this);
-    m_connectResource = new KyConnectResourse(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
-    m_data = data;
-    m_nameLabel->setText(m_data->m_connectName);
 
-    if (m_data != nullptr) {
-        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
-        if (m_data->m_connectState == NetworkManager::ActiveConnection::State::Activated) {
-            setIcon(true);
-            m_isActive = true;
-        } else
-        {
-            setIcon(false);
-            m_isActive = false;
-        }
+    connectItemCopy(lanConnectItem);
+    m_deviceName = deviceName;
+
+    m_nameLabel->setText(m_lanConnectItem.m_connectName);
+
+    m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
+    if (m_lanConnectItem.m_connectState == NetworkManager::ActiveConnection::State::Activated) {
+        setIcon(true);
+    } else {
+        setIcon(false);
     }
+
     m_itemFrame->installEventFilter(this);
     connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
-    connect(m_activeConnectResource, &KyActiveConnectResourse::stateChangeReason, this, &LanListItem::onLanStatusChange);
 }
+
 
 LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
 {
@@ -50,30 +48,57 @@ void LanListItem::setIcon(bool isOn)
     }
 }
 
+void LanListItem::connectItemCopy(const KyConnectItem *lanConnectItem)
+{
+    if (lanConnectItem) {
+        m_lanConnectItem.m_connectName = lanConnectItem->m_connectName;
+        m_lanConnectItem.m_connectPath = lanConnectItem->m_connectPath;
+        m_lanConnectItem.m_connectState = lanConnectItem->m_connectState;
+        m_lanConnectItem.m_connectUuid = lanConnectItem->m_connectUuid;
+        m_lanConnectItem.m_ifaceName = lanConnectItem->m_ifaceName;
+        m_lanConnectItem.m_itemType = lanConnectItem->m_itemType;
+    } else {
+        qDebug() << LOG_FLAG <<"the connect item is nullptr";
+        m_lanConnectItem.m_connectName = "";
+        m_lanConnectItem.m_connectPath = "";
+        m_lanConnectItem.m_connectState = NetworkManager::ActiveConnection::State::Unknown;
+        m_lanConnectItem.m_connectUuid = "";
+        m_lanConnectItem.m_ifaceName = "";
+        m_lanConnectItem.m_itemType = NetworkManager::ConnectionSettings::ConnectionType::Unknown;
+    }
+
+    return;
+}
+
 void LanListItem::onNetButtonClicked()
 {
-    if(!m_data){
-        qDebug() << "A nullItem clicked!" << Q_FUNC_INFO << __LINE__;
+    if (m_lanConnectItem.m_connectUuid.isEmpty()) {
+        qDebug() << LOG_FLAG << "connect is empty, so can not connect or disconnect.";
         return;
     }
-    if (!m_isActive) {
-        //未连接,点击后连
-        if (m_deviceResource->wiredDeviceCarriered(deviceName)) {
-            m_connectOperation->activateWiredConnection(m_data->m_connectUuid, deviceName);
-            qDebug() << m_data->m_connectName << "Connect after user clicked!" << deviceName;
-            m_isActive = true;
-        }
-        else {
-            qDebug() << "[LanListItem] Wired Device not carried";
+
+    if (Activated == m_lanConnectItem.m_connectState) {
+        //已连接接，点击后断开
+        m_connectOperation->deactivateWiredConnection(m_lanConnectItem.m_connectName, m_lanConnectItem.m_connectUuid);
+        qDebug() << LOG_FLAG << "it will disconnect connection" << m_lanConnectItem.m_connectName
+                 << ". it's device is" << m_deviceName;
+    } else if (Deactivated == m_lanConnectItem.m_connectState) {
+        //断开的连接，点击激活连接
+        if (m_deviceResource->wiredDeviceCarriered(m_deviceName)) {
+            m_connectOperation->activateWiredConnection(m_lanConnectItem.m_connectUuid, m_deviceName);
+            qDebug() << LOG_FLAG << "it will activate connection" << m_lanConnectItem.m_connectName
+                     << ". it's device is" << m_deviceName;
+        } else {
+            qDebug() << LOG_FLAG << m_deviceName << "is not carried, so can not activate connection";
             this->showDesktopNotify(tr("Wired Device not carried"));
-            m_isActive = false;
         }
     } else {
-        //连接，点击后断开
-        m_connectOperation->deactivateWiredConnection(m_data->m_connectName, m_data->m_connectUuid);
-        qDebug() << m_data->m_connectName << "Disconnect after user clicked!" << deviceName;
-        m_isActive = false;
+        qDebug() << LOG_FLAG <<"the connection" << m_lanConnectItem.m_connectName
+                 << "is activing or deactiving, so it can not be operation.";
     }
+
+    return;
+
 }
 
 void LanListItem::onRightButtonClicked()
@@ -83,40 +108,70 @@ void LanListItem::onRightButtonClicked()
 
 void LanListItem::onInfoButtonClicked()
 {
-    if(isDetailShow){
-        qDebug() << "has show the detail page,and do not show again" << Q_FUNC_INFO << __LINE__;
+    if (m_lanConnectItem.m_connectUuid.isEmpty()) {
+        qDebug() << LOG_FLAG << "connect is empty, so can not show detail info.";
         return;
     }
-    if(m_data){
-        qDebug()<<"Net active or not:"<<m_isActive;
-        qDebug() << "On lan info button clicked! uuid = " << m_data->m_connectUuid << "; name = " << m_data->m_connectName << "." <<Q_FUNC_INFO << __LINE__;
-        NetDetail *netDetail = new NetDetail(deviceName, m_data->m_connectName, m_data->m_connectUuid, m_isActive,false, false, this);
-        connect(netDetail, &NetDetail::detailPageClose, this, &LanListItem::onDetailShow);
-        netDetail->show();
-        emit this->detailShow(true);
+
+    if(isDetailShow){
+        qDebug()<< LOG_FLAG << "the detail page has be shown , so do not show again" << Q_FUNC_INFO << __LINE__;
+        return;
     }
-    else{
-        qDebug() << "On lan info button clicked! But there is no wlan connect " ;
+
+    qDebug()<< LOG_FLAG << "the info button of lan is clicked! uuid = "
+            << m_lanConnectItem.m_connectUuid << "; name = " << m_lanConnectItem.m_connectName
+            << "." <<Q_FUNC_INFO << __LINE__;
+
+    bool isActivated = false;
+    if (Activated == m_lanConnectItem.m_connectState) {
+        isActivated = true;
     }
+
+    NetDetail *netDetail = new NetDetail(m_deviceName, m_lanConnectItem.m_connectName,
+                                         m_lanConnectItem.m_connectUuid, isActivated,false, false, this);
+    connect(netDetail, &NetDetail::detailPageClose, this, &LanListItem::onDetailShow);
+    netDetail->show();
+    emit this->detailShow(true);
+
+    return;
 }
 
-void LanListItem::onLanStatusChange(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason)
+void LanListItem::updateConnectionState(ConnectState state)
 {
-    qDebug() <<"[LanListItem] Connection State Change to:" << state << uuid;
+    m_lanConnectItem.m_connectState = (NetworkManager::ActiveConnection::State)state;
 
-    if (m_data->m_connectUuid == uuid) {
-        if (state == NetworkManager::ActiveConnection::State::Activating
-                || state == NetworkManager::ActiveConnection::State::Deactivating) {
-            qDebug() << "[LanListItem]Activating!Loading!" << state;
-            m_netButton->startLoading();
+    if (Deactivated == state || Activated == state) {
+        m_netButton->stopLoading();
+        if (state == Activated) {
+            setIcon(true);
         } else {
-            qDebug() << "[LanListItem]Stop!" << state;
-            m_netButton->stopLoading();
-            if (state == NetworkManager::ActiveConnection::State::Activated) {
-                setIcon(true);
-            } else {
-                setIcon(false);
-            }
+            setIcon(false);
         }
+    } else {
+        m_netButton->startLoading();
     }
+
+    return;
+}
+
+QString LanListItem::getConnectionName()
+{
+    return m_lanConnectItem.m_connectName;
+}
+
+void LanListItem::updateConnectionName(QString connectionName)
+{
+    m_lanConnectItem.m_connectName = connectionName;
+    m_nameLabel->setText(m_lanConnectItem.m_connectName);
+    return;
+}
+
+QString LanListItem::getConnectionPath()
+{
+    return m_lanConnectItem.m_connectPath;
+}
+
+void LanListItem::updateConnectionPath(QString connectionPath)
+{
+    m_lanConnectItem.m_connectPath = connectionPath;
 }

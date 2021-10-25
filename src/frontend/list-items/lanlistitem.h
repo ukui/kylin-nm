@@ -11,29 +11,38 @@ class LanListItem : public ListItem
     Q_OBJECT
 
 public:
-    LanListItem(KyConnectItem *data, QString deviceName, QWidget *parent = nullptr);
+    LanListItem(const KyConnectItem *lanConnectItem, const QString &deviceName, QWidget *parent = nullptr);
     LanListItem(QWidget *parent = nullptr);
+
     ~LanListItem() = default;
 
-    KyConnectItem *m_data = nullptr;
-    KyWiredConnectOperation *m_connectOperation = nullptr;
-    KyActiveConnectResourse *m_activeConnectResource = nullptr;
-    KyConnectResourse *m_connectResource = nullptr;
-    KyNetworkDeviceResourse *m_deviceResource = nullptr;
+public:
+    void updateConnectionState(ConnectState state);
 
-    QString deviceName = "";
+    QString getConnectionName();
+    void updateConnectionName(QString connectionName);
+
+    QString getConnectionPath();
+    void updateConnectionPath(QString connectionPath);
 
 protected:
     void setIcon(bool isOn);
     void onRightButtonClicked();
 
-
 private:
+    void connectItemCopy(const KyConnectItem *lanConnectItem);
 
 private slots:
     void onInfoButtonClicked();
     void onNetButtonClicked();
-    void onLanStatusChange(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason);
+
+private:
+    KyConnectItem m_lanConnectItem;
+
+    KyWiredConnectOperation *m_connectOperation = nullptr;
+    KyNetworkDeviceResourse *m_deviceResource = nullptr;
+
+    QString m_deviceName = "";
 };
 
 #endif // LANLISTITEM_H

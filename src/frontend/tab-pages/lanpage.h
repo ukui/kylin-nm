@@ -48,8 +48,9 @@ private:
     void deleteDeviceFromCombox(QString deviceName);
     void addDeviceForCombox(QString deviceName);
 
+    QListWidgetItem *insertNewItem(KyConnectItem *itemData, QListWidget *listWidget);
     QListWidgetItem *addNewItem(KyConnectItem *itemData, QListWidget *listWidget);
-    bool removeConnectionItem(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+    bool removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
                               QListWidget *lanListWidget, QString path);
 
     void getEnabledDevice(QStringList &enableDeviceList);
@@ -58,23 +59,24 @@ private:
     void constructConnectionArea();
     void constructActiveConnectionArea();
 
-    void updateConnectionArea(QString uuid);
-    void updateActivatedConnectionArea(QString uuid);
+    void updateConnectionArea(KyConnectItem *p_newItem);
+    void updateActivatedConnectionArea(KyConnectItem *p_newItem);
+    void updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap,
+                                        QListWidget *lanListWidget, QString uuid, ConnectState state);
+    QString getConnectionDevice(QString uuid);
 
-    void updateActiveConnectionProperty(KyConnectItem *p_connectItem, bool &needDeleteItem);
-    void updateConnectionProperty(KyConnectItem *p_connectItem, bool &needDeleteItem);
+    void updateActiveConnectionProperty(KyConnectItem *p_connectItem);
+    void updateConnectionProperty(KyConnectItem *p_connectItem);
 
     void sendLanUpdateSignal(KyConnectItem *p_connectItem);
     void sendLanAddSignal(KyConnectItem *p_connectItem);
 
-    void addEmptyConnectItem(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+    void addEmptyConnectItem(QMap<QString, QListWidgetItem *> &connectMap,
                                            QListWidget *lanListWidget);
-    void clearConnectionMap(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+    void clearConnectionMap(QMap<QString, QListWidgetItem *> &connectMap,
                             QListWidget *lanListWidget);
-    void deleteConnectionMapItem(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
+    void deleteConnectionMapItem(QMap<QString, QListWidgetItem *> &connectMap,
                                  QListWidget *lanListWidget, QString uuid);
-    bool connectionItemIsExist(QMap<KyConnectItem *, QListWidgetItem *> &connectMap,
-                                       QString uuid);
 
 signals:
     void lanAdd(QString devName, QStringList info);
@@ -85,7 +87,8 @@ signals:
     void lanConnectChanged(int state);
 
 private slots:
-    void onUpdateLanlist(QString uuid, NetworkManager::ActiveConnection::State state, NetworkManager::ActiveConnection::Reason reason);
+    void onConnectionStateChange(QString uuid, NetworkManager::ActiveConnection::State state,
+                                 NetworkManager::ActiveConnection::Reason reason);
 
     void onAddConnection(QString uuid);
     void onRemoveConnection(QString path);
@@ -111,8 +114,8 @@ private:
     KyActiveConnectResourse *m_activeResourse = nullptr;     //激活的连接
     KyConnectResourse *m_connectResourse = nullptr;          //未激活的连接 
 
-    QMap<KyConnectItem *, QListWidgetItem *> m_deactiveMap;
-    QMap<KyConnectItem *, QListWidgetItem *> m_activeMap;
+    QMap<QString, QListWidgetItem *> m_inactiveConnectionMap;
+    QMap<QString, QListWidgetItem *> m_activeConnectionMap;
 
     QString m_currentDeviceName;
     QStringList m_devList;
@@ -121,7 +124,6 @@ private:
     QGSettings *m_switchGsettings = nullptr;
 
     bool m_wiredSwitch = true;
-    QMap<QString, bool> m_deviceStateMap;
 };
 
 #endif // LANPAGE_H

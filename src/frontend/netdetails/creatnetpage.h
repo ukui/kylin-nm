@@ -48,6 +48,9 @@ private:
     bool getTextEditState(QString text);
     bool checkConnectBtnIsEnabled();
 
+    bool netMaskIsValide(QString text);
+    QString getNetMaskText(QString text);
+
 private slots:
     void setEnableOfSaveBtn();
     void configChanged(int index);

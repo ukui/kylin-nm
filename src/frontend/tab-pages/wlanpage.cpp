@@ -1237,7 +1237,7 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
 
     bool isActive = m_connectResource->isActivatedConnection(wirelessNetItem.m_connectUuid);
 
-    NetDetail *netDetail = new NetDetail(devName, ssid, wirelessNetItem.m_connectUuid, isActive, true, false, this);
+    NetDetail *netDetail = new NetDetail(devName, ssid, wirelessNetItem.m_connectUuid, isActive, true, !wirelessNetItem.m_isConfigured, this);
     netDetail->show();
 
     return;

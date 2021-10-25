@@ -60,7 +60,7 @@ signals:
     //设备插拔
     void deviceStatusChanged();
     //设备名称变化
-    void deviceNameChanged(QString oldName, QString newName);
+    void deviceNameChanged(QString oldName, QString newName, int type);
     //有线无线列表更新（有线增删、无线增加减少）
     void lanAdd(QString devName, QStringList info);
     void lanRemove(QString dbusPath);

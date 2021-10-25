@@ -666,7 +666,7 @@ void LanPage::onDeviceNameUpdate(QString oldName, QString newName)
             initLanArea();
         }
 
-        emit deviceNameChanged(oldName, newName);
+        emit deviceNameChanged(oldName, newName, WIRED);
     }
 }
 

@@ -715,7 +715,7 @@ void WlanPage::onDeviceNameUpdate(QString oldName, QString newName)
         initWlanArea();
     }
 
-    emit deviceNameChanged(oldName, newName);
+    emit deviceNameChanged(oldName, newName, WIRELESS);
 }
 
 void WlanPage::sendApStateChangeSignal(QString uuid,

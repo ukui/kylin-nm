@@ -82,9 +82,9 @@ void WlanPage::initWlanUI()
     m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_inactivatedWlanListAreaLayout->addWidget(m_inactivatedNetListWidget);
-
     addWlanMoreItem();
+
+    m_inactivatedWlanListAreaLayout->addWidget(m_inactivatedNetListWidget);
 
     m_activatedNetListWidget = new QListWidget(m_activatedNetFrame);
     m_activatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
@@ -305,8 +305,7 @@ void WlanPage::deleteWirelessItemFormMap(QMap<QString, QListWidgetItem*> &wirele
     }
 
     WlanListItem *p_wlanItem = (WlanListItem *)wirelessListWidget->itemWidget(p_listWidgetItem);
-    if (nullptr == p_wlanItem)
-    {
+    if (nullptr == p_wlanItem) {
         qWarning() << LOG_FLAG << "p_wlanItem is null";
         return;
     }
@@ -782,6 +781,9 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
     QListWidgetItem *p_listWidgetItem = addNewItem(wirelessNetItem, m_inactivatedNetListWidget);
     m_wirelessNetItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
 
+    // 更新‘更多’条目，以保证其处于listwidget的最底部
+    addWlanMoreItem();
+
     return;
 }
 
@@ -977,7 +979,7 @@ void WlanPage::onRefreshIconTimer()
 
             if (nullptr == p_wlanItem) {
                 qDebug() << LOG_FLAG << "p_wlanItem is null continue";
-                continue;
+                continue;//暂时先保持continue，后续讨论是否使用break直接跳出循环
             }
 
             // 该item是‘更多’条目，不需要更新

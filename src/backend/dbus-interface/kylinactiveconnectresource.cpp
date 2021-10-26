@@ -579,5 +579,6 @@ QString KyActiveConnectResourse::getDeviceOfActivateConnect(QString conUuid)
   NetworkManager::Device:: Ptr devicePtr =
               m_networkResourceInstance->findDeviceUni(ifaceUni);
   deviceName = devicePtr->interfaceName();
+
   return deviceName;
 }

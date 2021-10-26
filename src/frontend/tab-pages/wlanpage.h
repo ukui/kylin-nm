@@ -7,6 +7,7 @@
 #include "kylinnetworkdeviceresource.h"
 #include "kywirelessconnectoperation.h"
 #include "wlanlistitem.h"
+#include "wlanmoreitem.h"
 #include "kylinconnectoperation.h"
 #include <QGSettings>
 #include "netdetails/netdetail.h"
@@ -102,6 +103,7 @@ private:
     void initDeviceCombox();
     void initWlanSwitchState();
     void initWlanArea();
+    void addWlanMoreItem();
 
     QListWidgetItem *addEmptyItem(QListWidget *wirelessListWidget);
     QListWidgetItem *addNewItem(KyWirelessNetItem &wirelessNetItem,
@@ -144,9 +146,8 @@ private:
     QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;
     QVBoxLayout * m_inactivatedWlanListAreaLayout = nullptr;
 
-    QFrame * m_hiddenWlanWidget = nullptr;
-    QHBoxLayout * m_hiddenWlanLayout = nullptr;
-    QLabel * m_hiddenWlanLabel = nullptr;
+    WlanMoreItem * m_hiddenWlanWidget = nullptr;
+    QListWidgetItem *m_hiddenItem = nullptr;
 
     QListWidget * m_activatedNetListWidget = nullptr;
 

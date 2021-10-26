@@ -152,7 +152,7 @@ QString KyWirelessNetResource::getActiveConnectSsidByDevice(QString deviceName)
     }
 
     NetworkManager::ActiveConnection::Ptr activeConnectionPtr = nullptr;
-    for (int index; index < activeConnectionList.size(); index++) {
+    for (int index = 0; index < activeConnectionList.size(); index++) {
         activeConnectionPtr = activeConnectionList.at(index);
         if (activeConnectionPtr.isNull()) {
             continue;
@@ -179,6 +179,7 @@ QString KyWirelessNetResource::getActiveConnectSsidByDevice(QString deviceName)
         NetworkManager::WirelessSetting::Ptr wirelessSettingPtr =
                 settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
         ssid = wirelessSettingPtr->ssid();
+        break;
     }
 
     return ssid;

@@ -31,6 +31,7 @@ WlanListItem::WlanListItem(QWidget *parent) : ListItem(parent)
     qDebug()<<"[WlanPage] wlan list item is created." << m_wirelessNetItem.m_NetSsid;
 
     m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-none-symbolic"));
+    m_netButton->setDefaultPixmap();
     const QString name = tr("Not connected");
     setExpanded(false);
     this->setName(name);
@@ -303,6 +304,7 @@ void WlanListItem::refreshIcon()
             break;
         }
     }
+    m_netButton->setActive(false);
 }
 
 void WlanListItem::onInfoButtonClicked()

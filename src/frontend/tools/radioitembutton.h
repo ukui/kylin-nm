@@ -18,6 +18,7 @@ public:
     void startLoading();
     void stopLoading();
     void setButtonIcon(const QIcon &icon);
+    void setDefaultPixmap();
     void setActive(const bool &isActive);
     enum PixmapColor {
         WHITE = 0,

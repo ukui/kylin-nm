@@ -25,7 +25,6 @@ RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
     m_iconLabel->setFixedSize(BUTTON_SIZE);
     m_iconLabel->setAlignment(Qt::AlignCenter);
 
-
     setActive(false);
     //JXJ_TODO loading动画
     connect(this, &RadioItemButton::requestStartLoading, this, &RadioItemButton::onLoadingStarted);
@@ -47,16 +46,21 @@ void RadioItemButton::stopLoading()
 {
     emit this->requestStopLoading();
 }
-
+//设置图标
 void RadioItemButton::setButtonIcon(const QIcon &icon)
 {
     if (icon.isNull()) {
         return;
     }
     m_pixmap = icon.pixmap(ICON_SIZE);
+//    m_iconLabel->setPixmap(m_pixmap);
+}
+//显示默认图标
+void RadioItemButton::setDefaultPixmap()
+{
     m_iconLabel->setPixmap(m_pixmap);
 }
-
+//根据连接状态更改图标颜色
 void RadioItemButton::setActive(const bool &isActive)
 {
     m_isActivated = isActive;

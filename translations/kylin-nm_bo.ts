@@ -52,32 +52,37 @@
 <context>
     <name>DetailPage</name>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="137"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="175"/>
         <source>Auto Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="146"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="133"/>
         <source>SSID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="147"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="129"/>
+        <source>Please input SSID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="137"/>
         <source>Protocol:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="149"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="141"/>
         <source>Security Type:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="150"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="145"/>
         <source>Hz:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="151"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="149"/>
         <source>Chan:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -87,22 +92,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="154"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="165"/>
         <source>IPV6:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="155"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="157"/>
         <source>IPV4:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="156"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="161"/>
         <source>IPV4 Dns:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="157"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="169"/>
         <source>Mac:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -120,12 +125,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="92"/>
+        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="89"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="93"/>
+        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="90"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -133,42 +138,42 @@
 <context>
     <name>Ipv4Page</name>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="25"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="26"/>
         <source>Ipv4Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="26"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="27"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="27"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="28"/>
         <source>Netmask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="28"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="29"/>
         <source>Default Gateway</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="29"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="30"/>
         <source>Prefs DNS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="30"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="31"/>
         <source>Alternative DNS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="40"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="41"/>
         <source>Auto(DHCP)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="41"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="42"/>
         <source>Manual</source>
         <translation type="unfinished"></translation>
     </message>
@@ -176,42 +181,42 @@
 <context>
     <name>Ipv6Page</name>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="103"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="108"/>
         <source>Ipv6Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="104"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="109"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="105"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="110"/>
         <source>Subnet prefix Length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="106"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="111"/>
         <source>Default Gateway</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="107"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="112"/>
         <source>Prefs DNS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="108"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="113"/>
         <source>Alternative DNS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="119"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="124"/>
         <source>Auto(DHCP)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="120"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="125"/>
         <source>Manual</source>
         <translation type="unfinished"></translation>
     </message>
@@ -219,7 +224,12 @@
 <context>
     <name>LanListItem</name>
     <message>
-        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="67"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="37"/>
+        <source>Not connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="68"/>
         <source>Wired Device not carried</source>
         <translation type="unfinished"></translation>
     </message>
@@ -227,30 +237,45 @@
 <context>
     <name>LanPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="652"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="161"/>
+        <source>No ethernet device avaliable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="689"/>
         <source>LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="655"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="692"/>
         <source>Activated LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="663"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="700"/>
         <source>Inactivated LAN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="772"/>
+        <source>LAN Connected Successfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="809"/>
+        <source>LAN Disconnected Successfully</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ListItem</name>
     <message>
-        <location filename="../src/frontend/list-items/listitem.cpp" line="55"/>
+        <location filename="../src/frontend/list-items/listitem.cpp" line="63"/>
         <source>Kylin NM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/listitem.cpp" line="58"/>
+        <location filename="../src/frontend/list-items/listitem.cpp" line="66"/>
         <source>kylin network applet desktop message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -258,28 +283,28 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="101"/>
-        <location filename="../src/frontend/mainwindow.cpp" line="148"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="115"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="178"/>
         <source>kylin-nm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="129"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="144"/>
         <source>LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="131"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="146"/>
         <source>WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="146"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="176"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="145"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="175"/>
         <source>Show MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
@@ -297,82 +322,82 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="151"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="174"/>
         <source>Detail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="156"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="179"/>
         <source>Ipv4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="160"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="183"/>
         <source>Ipv6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="164"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="187"/>
         <source>Security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="184"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="207"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="191"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="214"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="194"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="217"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="197"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="220"/>
         <source>Forget this network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="236"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="263"/>
         <source>Add Lan Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="245"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="272"/>
         <source>connect hiddin wlan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="505"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="506"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="507"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="531"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="532"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="533"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="611"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="642"/>
         <source>start check ipv4 address conflict</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="628"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="659"/>
         <source>start check ipv6 address conflict</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="674"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="711"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="789"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="705"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="746"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="824"/>
         <source>ipv4 address conflict!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="719"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="797"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="754"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="832"/>
         <source>ipv6 address conflict!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -466,9 +491,9 @@
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="100"/>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="103"/>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="106"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="726"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="748"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="771"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="768"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="790"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="813"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
@@ -495,16 +520,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="716"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="739"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="761"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="758"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="781"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="803"/>
         <source>Choose a CA certificate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="717"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="740"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="762"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="759"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="782"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="804"/>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -512,27 +537,27 @@
 <context>
     <name>TabPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="43"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="45"/>
         <source>Current Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="47"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="49"/>
         <source>Devices Closed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="85"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="89"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="120"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="124"/>
         <source>Kylin NM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="123"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="127"/>
         <source>kylin network applet desktop message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -583,31 +608,31 @@
 <context>
     <name>WlanListItem</name>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="23"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="34"/>
         <source>Not connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="102"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="441"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="115"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="495"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="104"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="170"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="441"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="117"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="216"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="495"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="107"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="443"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="123"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="497"/>
         <source>Forget</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="186"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="235"/>
         <source>Auto Connect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -615,32 +640,37 @@
 <context>
     <name>WlanPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="63"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="69"/>
         <source>WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="64"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="70"/>
         <source>Activated WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="65"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="71"/>
         <source>Other WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="87"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="94"/>
         <source>More...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="510"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="142"/>
+        <source>No wireless network card detected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="752"/>
         <source>WLAN Connected Successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="520"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="748"/>
         <source>WLAN Disconnected Successfully</source>
         <translation type="unfinished"></translation>
     </message>

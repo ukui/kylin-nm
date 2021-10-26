@@ -121,6 +121,7 @@ void WlanPage::onWlanSwitchClicked()
 
     if (m_devList.isEmpty()) {
         qDebug() << "[WlanPage] have no device to use "  << Q_FUNC_INFO << __LINE__;
+        showDesktopNotify(tr("No wireless network card detected"));
         //检测不到无线网卡不再触发click信号
         m_netSwitch->setSwitchStatus(false);
         //m_netSwitch->setEnabled(false);

@@ -98,7 +98,7 @@ Q_SIGNALS: // SIGNALS
     void deactivateFailed(QString errorMessage);
     //设备插拔
     void deviceStatusChanged();
-    void deviceNameChanged(QString oldName, QString newName);
+    void deviceNameChanged(QString oldName, QString newName, int type);
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
     //热点连接

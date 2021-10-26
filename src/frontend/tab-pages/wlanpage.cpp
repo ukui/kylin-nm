@@ -45,17 +45,13 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::addAndActivateConnectionError, this, &WlanPage::activateFailed);
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::deactivateConnectionError, this, &WlanPage::deactivateFailed);
 
-    connect(this, &WlanPage::hiddenWlanClicked, this, &WlanPage::onHiddenWlanClicked);
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::wifiEnabledChanged, this, &WlanPage::onWifiEnabledChanged);
 }
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
 {
     if (e->type() == QEvent::MouseButtonPress) {
-        if (w == m_hiddenWlanLabel) {
-            //ZJP_TODO 打开隐藏WiFi添加弹窗
-            emit this->hiddenWlanClicked();
-        } else if (w == m_settingsLabel) {
+        if (w == m_settingsLabel) {
             //ZJP_TODO 打开控制面板
             qDebug() << LOG_FLAG <<"recive event show control center";
             showControlCenter();
@@ -71,38 +67,24 @@ void WlanPage::initWlanUI()
     m_inactivatedNetLabel->setText(tr("Other WLAN"));
 
     //一些独有控件
-    m_inactivatedWlanListAreaCentralWidget = new QFrame(m_inactivatedNetListArea);
     m_inactivatedNetListArea->setBackgroundRole(QPalette::Base);
-    m_inactivatedNetListArea->setWidget(m_inactivatedWlanListAreaCentralWidget);
     m_inactivatedNetListArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_inactivatedNetListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_inactivatedWlanListAreaLayout = new QVBoxLayout(m_inactivatedWlanListAreaCentralWidget);
+    m_inactivatedWlanListAreaLayout = new QVBoxLayout(m_inactivatedNetListArea);
     m_inactivatedWlanListAreaLayout->setSpacing(MAIN_LAYOUT_SPACING);
     m_inactivatedWlanListAreaLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_inactivatedWlanListAreaCentralWidget->setLayout(m_inactivatedWlanListAreaLayout);
+    m_inactivatedNetListArea->setLayout(m_inactivatedWlanListAreaLayout);
 
-    m_inactivatedNetListWidget = new QListWidget(m_inactivatedWlanListAreaCentralWidget);
+    m_inactivatedNetListWidget = new QListWidget(m_inactivatedNetListArea);
     m_inactivatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);
     m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_inactivatedNetListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);     //用了SCrollArea的滚动条
+
     m_inactivatedWlanListAreaLayout->addWidget(m_inactivatedNetListWidget);
 
-    m_hiddenWlanWidget = new QFrame(m_inactivatedWlanListAreaCentralWidget);    
-    m_hiddenWlanLabel = new QLabel(m_hiddenWlanWidget);
-    m_hiddenWlanLabel->setText(tr("More..."));
-    m_hiddenWlanLabel->setContentsMargins(MORE_TEXT_MARGINS);
-    m_hiddenWlanLabel->installEventFilter(this);
-    m_hiddenWlanLabel->setCursor(Qt::PointingHandCursor);
-
-    m_hiddenWlanLayout = new QHBoxLayout(m_hiddenWlanWidget);
-    m_hiddenWlanLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_hiddenWlanLayout->addWidget(m_hiddenWlanLabel);
-    m_hiddenWlanLayout->addStretch();
-
-    m_inactivatedWlanListAreaLayout->addWidget(m_hiddenWlanLabel);
-    m_inactivatedWlanListAreaLayout->addStretch();
+    addWlanMoreItem();
 
     m_activatedNetListWidget = new QListWidget(m_activatedNetFrame);
     m_activatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
@@ -294,6 +276,10 @@ void WlanPage::clearWirelessNetItemMap(QMap<QString, QListWidgetItem*> &wireless
     iter = wirelessNetItem.begin();
     while (iter != wirelessNetItem.end()) {
         QListWidgetItem *p_listWidgetItem = iter.value();
+        if (p_listWidgetItem == m_hiddenItem) {
+            continue;
+        }
+
         WlanListItem *p_wlanItem = (WlanListItem *)wirelessListWidget->itemWidget(p_listWidgetItem);
         wirelessListWidget->removeItemWidget(p_listWidgetItem);
 
@@ -319,7 +305,11 @@ void WlanPage::deleteWirelessItemFormMap(QMap<QString, QListWidgetItem*> &wirele
     }
 
     WlanListItem *p_wlanItem = (WlanListItem *)wirelessListWidget->itemWidget(p_listWidgetItem);
-    int height = p_wlanItem->height();
+    if (nullptr == p_wlanItem)
+    {
+        qWarning() << LOG_FLAG << "p_wlanItem is null";
+        return;
+    }
 
     wirelessNetItemMap.remove(ssid);
 
@@ -330,8 +320,6 @@ void WlanPage::deleteWirelessItemFormMap(QMap<QString, QListWidgetItem*> &wirele
 
     delete p_listWidgetItem;
     p_listWidgetItem = nullptr;
-
-    wirelessListWidget->setFixedHeight(wirelessListWidget->height() - height - NET_LIST_SPACING);
 
     return;
 }
@@ -404,16 +392,13 @@ void WlanPage::constructWirelessNetArea()
         m_wirelessNetItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
         updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
 
-
         if (height == 0) {
             height += p_listWidgetItem->sizeHint().height();
         }
         height += p_listWidgetItem->sizeHint().height() + NET_LIST_SPACING;
     }
 
-    m_inactivatedNetListWidget->setFixedHeight(height);
-    m_inactivatedWlanListAreaCentralWidget->setFixedHeight(m_inactivatedNetListWidget->height()
-                                                           + m_hiddenWlanLabel->height());
+    addWlanMoreItem();
 
     qDebug() << "[WlanPage] Stopped loading wireless net list! time="
              << QDateTime::currentDateTime().toString("hh:mm:ss.zzzz");
@@ -463,10 +448,7 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
     m_wirelessNetItemMap.insert(item.m_NetSsid, p_listWidgetItem);
     updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
 
-    m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height()
-                                               + p_listWidgetItem->sizeHint().height() + NET_LIST_SPACING);
-    m_inactivatedWlanListAreaCentralWidget->setFixedHeight(
-                            m_inactivatedNetListWidget->height() + m_hiddenWlanLabel->height());
+    addWlanMoreItem();
 
     return;
 }
@@ -498,9 +480,6 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
     deleteWirelessItemFormMap(m_wirelessNetItemMap,
                                       m_inactivatedNetListWidget, ssid);
 
-    m_inactivatedWlanListAreaCentralWidget->setFixedHeight(
-                                    m_inactivatedNetListWidget->height()
-                                    + m_hiddenWlanLabel->height());
     return;
 }
 
@@ -765,9 +744,6 @@ void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
     }
     deleteWirelessItemFormMap(m_wirelessNetItemMap,
                                       m_inactivatedNetListWidget, ssid);
-    m_inactivatedWlanListAreaCentralWidget->setFixedHeight(
-                                    m_inactivatedNetListWidget->height()
-                                    + m_hiddenWlanLabel->height());
 
     KyWirelessNetItem wirelessNetItem;
     bool ret = m_wirelessNetResource->getWifiNetwork(devName, ssid, wirelessNetItem);
@@ -805,11 +781,6 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
 
     QListWidgetItem *p_listWidgetItem = addNewItem(wirelessNetItem, m_inactivatedNetListWidget);
     m_wirelessNetItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
-
-    m_inactivatedNetListWidget->setFixedHeight(m_inactivatedNetListWidget->height()
-                                               + p_listWidgetItem->sizeHint().height() + NET_LIST_SPACING);
-    m_inactivatedWlanListAreaCentralWidget->setFixedHeight(
-                            m_inactivatedNetListWidget->height() + m_hiddenWlanLabel->height());
 
     return;
 }
@@ -893,12 +864,9 @@ void WlanPage::onItemHeightChanged(const bool isExpanded, const QString &ssid)
             qDebug()<<LOG_FLAG << "expanded wlan item";
             m_expandedItem = p_listWidgetItem;
             QSize expandedSize(width, EXPANDED_HEIGHT);
-            int wlanAreaHeight = m_inactivatedNetListWidget->height() - height + EXPANDED_HEIGHT;
-            m_inactivatedNetListWidget->setFixedHeight(wlanAreaHeight);
-            m_inactivatedWlanListAreaCentralWidget->setFixedHeight(m_inactivatedNetListWidget->height() + m_hiddenWlanLabel->height());
             p_listWidgetItem->setSizeHint(expandedSize);
         }
-
+        m_inactivatedNetListWidget->scrollToItem(p_listWidgetItem, QAbstractItemView::QAbstractItemView::EnsureVisible);
     } else {
         m_expandedItem = nullptr;
 
@@ -906,9 +874,6 @@ void WlanPage::onItemHeightChanged(const bool isExpanded, const QString &ssid)
             qDebug()<<LOG_FLAG<<"do not expanded";
             QSize normalSize(width, NORMAL_HEIGHT);
             p_listWidgetItem->setSizeHint(normalSize);
-            int wlanAreaHeight = m_inactivatedNetListWidget->height() + NORMAL_HEIGHT - height;
-            m_inactivatedNetListWidget->setFixedHeight(wlanAreaHeight);
-            m_inactivatedWlanListAreaCentralWidget->setFixedHeight(m_inactivatedNetListWidget->height() + m_hiddenWlanLabel->height());
         }
     }
 
@@ -1009,6 +974,18 @@ void WlanPage::onRefreshIconTimer()
         QListWidgetItem *p_listWidgetItem = m_inactivatedNetListWidget->item(sortRow);
         if (p_listWidgetItem) {
             WlanListItem *p_wlanItem = (WlanListItem *)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
+
+            if (nullptr == p_wlanItem) {
+                qDebug() << LOG_FLAG << "p_wlanItem is null continue";
+                continue;
+            }
+
+            // 该item是‘更多’条目，不需要更新
+            if (WMI_OB_NAME == p_wlanItem->objectName()) {
+                qDebug() << LOG_FLAG << "p_wlanItem is WlanMoreItem";
+                continue;
+            }
+
             qDebug()<< LOG_FLAG << "row" << sortRow << "item ssid" << p_wlanItem->getSsid();
             if (sortSsid == p_wlanItem->getSsid()) {
                 qDebug()<< LOG_FLAG << "sort wlan set signal strength." << Q_FUNC_INFO << __LINE__;
@@ -1020,6 +997,10 @@ void WlanPage::onRefreshIconTimer()
             QListWidgetItem *p_sortListWidgetItem = m_wirelessNetItemMap.value(sortSsid);
             if (p_sortListWidgetItem) {
                 WlanListItem *p_wlanItem = (WlanListItem *)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
+                if (p_wlanItem == nullptr) {
+                    continue;
+                }
+
                 if (Deactivated != p_wlanItem->getConnectionState()) {
                     continue;
                 }
@@ -1042,11 +1023,6 @@ void WlanPage::onRefreshIconTimer()
         m_wirelessNetItemMap.insert(sortItem.m_NetSsid, p_newListWidgetItem);
         updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
 
-        int height = m_inactivatedNetListWidget->height() +
-                                p_newListWidgetItem->sizeHint().height() + NET_LIST_SPACING;
-        m_inactivatedNetListWidget->setFixedHeight(height);
-        m_inactivatedWlanListAreaCentralWidget->setFixedHeight(m_inactivatedNetListWidget->height()
-                                                               + m_hiddenWlanLabel->height());
         sortRow++;
     }
 
@@ -1273,4 +1249,33 @@ void WlanPage::getWirelessDeviceCap(QMap<QString, int> &map)
         QString devName = m_devList.at(i);
         map.insert(devName, m_netDeviceResource->getWirelessDeviceCapability(devName));
     }
+}
+
+/**
+ * @brief WlanPage::addWlanMoreItem
+ * 添加‘更多网络’的条目
+ */
+void WlanPage::addWlanMoreItem()
+{
+    if (m_hiddenItem) {
+        m_inactivatedNetListWidget->takeItem(m_inactivatedNetListWidget->row(m_hiddenItem));
+        delete m_hiddenItem;
+        m_hiddenItem = nullptr;
+    }
+
+    if (m_hiddenWlanWidget) {
+//        disconnect(m_hiddenWlanWidget, &WlanMoreItem::hiddenWlanClicked, this, &WlanPage::onHiddenWlanClicked);
+        m_hiddenWlanWidget->setParent(nullptr);
+        delete m_hiddenWlanWidget;
+        m_hiddenWlanWidget = nullptr;
+    }
+
+    m_hiddenWlanWidget = new WlanMoreItem(this);
+    connect(m_hiddenWlanWidget, &WlanMoreItem::hiddenWlanClicked, this, &WlanPage::onHiddenWlanClicked);
+    m_hiddenWlanWidget->setFixedHeight(NORMAL_HEIGHT);
+
+    m_hiddenItem = new QListWidgetItem(m_inactivatedNetListWidget);
+    m_inactivatedNetListWidget->addItem(m_hiddenItem);
+    m_inactivatedNetListWidget->setItemWidget(m_hiddenItem, m_hiddenWlanWidget);
+    return;
 }

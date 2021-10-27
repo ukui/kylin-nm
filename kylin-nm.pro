@@ -4,6 +4,7 @@ CONFIG += ordered \
     qt
 
 SUBDIRS = \
+    plugins/plugin.pro \
         src \
 
 TRANSLATIONS += \

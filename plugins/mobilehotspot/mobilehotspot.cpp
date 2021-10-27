@@ -36,6 +36,8 @@ MobileHotspot::MobileHotspot() :  mFirstLoad(true) {
     qDebug() << pluginName;
     pluginType = NETWORK;
 
+    qDBusRegisterMetaType<QMap<QString, bool> >();
+    qDBusRegisterMetaType<QMap<QString, int> >();
     needLoad = isExitWirelessDevice();
 }
 
@@ -73,6 +75,7 @@ const QString MobileHotspot::name() const {
 
 bool MobileHotspot::isEnable() const
 {
+    qDebug() << needLoad;
     return needLoad;
 }
 

@@ -26,7 +26,7 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
     m_itemFrame->installEventFilter(this);
     connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
 
-    m_menu = new QMenu();//右键菜单
+    m_menu = new QMenu(this);//右键菜单
     connect(m_menu, &QMenu::triggered, this, &LanListItem::onMenuTriggered);
 }
 
@@ -39,6 +39,11 @@ LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
     const QString str=tr("Not connected");
     m_nameLabel->setText(str);
     this->m_infoButton->hide();
+}
+
+LanListItem::~LanListItem()
+{
+    qDebug()<<"[LanPage] lan list item is deleted." << m_lanConnectItem.m_connectName;
 }
 
 void LanListItem::setIcon(bool isOn)

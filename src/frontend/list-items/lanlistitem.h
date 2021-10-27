@@ -16,7 +16,7 @@ public:
     LanListItem(const KyConnectItem *lanConnectItem, const QString &deviceName, QWidget *parent = nullptr);
     LanListItem(QWidget *parent = nullptr);
 
-    ~LanListItem() = default;
+    ~LanListItem();
 
 public:
     void updateConnectionState(ConnectState state);

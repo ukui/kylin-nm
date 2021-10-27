@@ -18,7 +18,7 @@ WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, Q
 
     connect(this->m_infoButton, &InfoButton::clicked, this, &WlanListItem::onInfoButtonClicked);
 
-    m_menu = new QMenu();//右键菜单
+    m_menu = new QMenu(this);//右键菜单
     connect(m_menu, &QMenu::triggered, this, &WlanListItem::onMenuTriggered);
 
     m_wirelessConnectOperation = new KyWirelessConnectOperation(this);

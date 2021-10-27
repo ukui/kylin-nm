@@ -5,6 +5,8 @@
 
 #include <QDBusInterface>
 #include <QEvent>
+#include <QMenu>
+#include <QAction>
 
 class LanListItem : public ListItem
 {
@@ -35,6 +37,7 @@ private:
 private slots:
     void onInfoButtonClicked();
     void onNetButtonClicked();
+    void onMenuTriggered(QAction *action);
 
 private:
     KyConnectItem m_lanConnectItem;
@@ -43,6 +46,7 @@ private:
     KyNetworkDeviceResourse *m_deviceResource = nullptr;
 
     QString m_deviceName = "";
+    QMenu *m_menu = nullptr;
 };
 
 #endif // LANLISTITEM_H

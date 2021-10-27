@@ -112,10 +112,11 @@ void WlanListItem::onRightButtonClicked()
 
     m_menu->clear();
 
-    if (Activated == m_connectState) {
+    if (Activated == m_connectState || Activating == m_connectState) {
         m_menu->addAction(new QAction(tr("Disconnect"), this));
     } else if (Deactivated == m_connectState) {
         m_menu->addAction(new QAction(tr("Connect"), this));
+        qDebug() << "add connect action";
     } else {
         return;
     }
@@ -341,17 +342,9 @@ void WlanListItem::onNetButtonClicked()
         return;
     }
 
-    if ((Activating == m_connectState || Deactivating == m_connectState)) {
-        qDebug() << LOG_FLAG << "On wlan  clicked! But there is nothing to do because it is already activating/deactivating!"
-                 << Q_FUNC_INFO << __LINE__;
-        return;
-    }
-
-    //执行连接或断开
-    if (Activated == m_connectState) {
-        m_wirelessConnectOperation->deActivateWirelessConnection(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
-        qDebug()<<"[WlanListItem] Clicked on connected wifi, it will be inactivated. ssid = "
-                << m_wirelessNetItem.m_NetSsid << Q_FUNC_INFO << __LINE__;
+    if (Deactivated != m_connectState) {
+        qDebug() << LOG_FLAG <<"the connection" << m_wirelessNetItem.m_connName
+                 << "is not deactived, so it can not be operation." << Q_FUNC_INFO << __LINE__;
         return;
     }
 
@@ -484,9 +477,11 @@ void WlanListItem::updateConnectState(ConnectState state)
         m_netButton->stopLoading();
         m_netButton->setActive(true);
     } else if(Deactivated == state) {
+        qDebug() << "[WlanListItem] stop loading connect state:" << state;
         m_netButton->stopLoading();
         m_netButton->setActive(false);
     } else {
+        qDebug() << "[WlanListItem] start loading connect state:" << state;
         m_netButton->startLoading();
     }
 
@@ -495,8 +490,12 @@ void WlanListItem::updateConnectState(ConnectState state)
 
 void WlanListItem::onMenuTriggered(QAction *action)
 {
-    if (action->text() == tr("Disconnect") || action->text() == tr("Connect")) {
+    if (action->text() == tr("Connect")) {
         this->onNetButtonClicked();
+    } else if (action->text() == tr("Disconnect")) {
+        m_wirelessConnectOperation->deActivateWirelessConnection(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
+        qDebug()<<"[WlanListItem] Clicked on connected wifi, it will be inactivated. ssid = "
+                        << m_wirelessNetItem.m_NetSsid << Q_FUNC_INFO << __LINE__;
     } else if (action->text() == tr("Forget")) {
         m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
     }

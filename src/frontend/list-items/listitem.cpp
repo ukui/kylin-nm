@@ -73,7 +73,7 @@ void ListItem::showDesktopNotify(const QString &message)
 
 void ListItem::mousePressEvent(QMouseEvent *event)
 {
-    qDebug()<<"[WlanListItem]"<<"mousePressEvent";
+    qDebug()<<"[ListItem]"<<"mousePressEvent";
     if (event->button() == Qt::LeftButton) {
         onNetButtonClicked();
     } else if (event->button() == Qt::RightButton) {

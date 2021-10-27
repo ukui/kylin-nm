@@ -35,47 +35,47 @@
 <context>
     <name>CreatNetPage</name>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="30"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="31"/>
         <source>Connection Name</source>
         <translation>网络名称</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="31"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="32"/>
         <source>Ipv4Config</source>
         <translation>Ipv4配置</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="32"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="33"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="33"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="34"/>
         <source>Netmask</source>
         <translation>子网掩码</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="34"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="35"/>
         <source>Default Gateway</source>
         <translation>默认网关</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="35"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="36"/>
         <source>Prefs DNS</source>
         <translation>首选DNS</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="36"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="37"/>
         <source>Alternative DNS</source>
         <translation>备选DNS</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="47"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="48"/>
         <source>Auto(DHCP)</source>
         <translation>自动(DHCP)</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="48"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="49"/>
         <source>Manual</source>
         <translation>手动</translation>
     </message>
@@ -485,45 +485,57 @@
 <context>
     <name>LanListItem</name>
     <message>
-        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="37"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="39"/>
         <source>Not connected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="68"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="92"/>
         <source>Wired Device not carried</source>
         <translation>未插入网线</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="113"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="129"/>
+        <source>Disconnect</source>
+        <translation>断开</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="115"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="127"/>
+        <source>Connect</source>
+        <translation>连接</translation>
     </message>
 </context>
 <context>
     <name>LanPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="161"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="178"/>
         <source>No ethernet device avaliable</source>
         <translation>未检测到有线设备</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="689"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="698"/>
         <source>LAN</source>
         <translation>有线网络</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="692"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="701"/>
         <source>Activated LAN</source>
         <translation>已激活</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="700"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="709"/>
         <source>Inactivated LAN</source>
         <translation>未激活</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="809"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="813"/>
         <source>LAN Disconnected Successfully</source>
         <translation>有线网络已断开</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="772"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="792"/>
         <source>LAN Connected Successfully</source>
         <translation>有线网络已连接</translation>
     </message>
@@ -545,29 +557,29 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/frontend/mainwindow.cpp" line="115"/>
-        <location filename="../src/frontend/mainwindow.cpp" line="178"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="180"/>
         <source>kylin-nm</source>
         <translation>麒麟网络工具</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="144"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="146"/>
         <source>LAN</source>
         <translatorcomment>有线网络</translatorcomment>
         <translation>有线网络</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="146"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="148"/>
         <source>WLAN</source>
         <translatorcomment>无线局域网</translatorcomment>
         <translation>无线局域网</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="175"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="177"/>
         <source>Show MainWindow</source>
         <translation>打开网络工具</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="176"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="178"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
         <translation>设置网络项</translation>
@@ -686,7 +698,7 @@
     <message>
         <location filename="../src/frontend/list-items/oneconnform.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Connect</source>
@@ -714,7 +726,7 @@
     <message>
         <location filename="../src/frontend/list-items/onelancform.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Connect</source>
@@ -857,27 +869,27 @@
 <context>
     <name>TabPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="45"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="48"/>
         <source>Current Device</source>
         <translation>当前网卡</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="49"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="52"/>
         <source>Devices Closed!</source>
         <translation>设备关闭！</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="89"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="92"/>
         <source>Settings</source>
         <translation>网络设置</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="124"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="127"/>
         <source>Kylin NM</source>
         <translation>麒麟网络工具</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="127"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="130"/>
         <source>kylin network applet desktop message</source>
         <translation>网络提示消息</translation>
     </message>
@@ -887,7 +899,7 @@
     <message>
         <location filename="../src/frontend/wificonfigdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/frontend/wificonfigdialog.cpp" line="21"/>
@@ -928,69 +940,76 @@
 <context>
     <name>WlanListItem</name>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="34"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="35"/>
         <source>Not connected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="115"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="116"/>
         <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="495"/>
         <source>Disconnect</source>
         <translation>断开</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="117"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="216"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="495"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="118"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="219"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="493"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="123"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="497"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="125"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="499"/>
         <source>Forget</source>
         <translation>忘记此网络</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="235"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="238"/>
         <source>Auto Connect</source>
         <translation>自动连接</translation>
     </message>
 </context>
 <context>
+    <name>WlanMoreItem</name>
+    <message>
+        <location filename="../src/frontend/list-items/wlanmoreitem.cpp" line="8"/>
+        <source>More...</source>
+        <translation>更多...</translation>
+    </message>
+</context>
+<context>
     <name>WlanPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="69"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="65"/>
         <source>WLAN</source>
         <translation>无线局域网</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="142"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="124"/>
         <source>No wireless network card detected</source>
         <translation>未检测到无线网卡</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="70"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="66"/>
         <source>Activated WLAN</source>
         <translation>已激活</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="71"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="67"/>
         <source>Other WLAN</source>
         <translation>其他</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="94"/>
         <source>More...</source>
-        <translation>更多...</translation>
+        <translation type="vanished">更多...</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="752"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="731"/>
         <source>WLAN Connected Successfully</source>
         <translation>无线网络已连接</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="748"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="727"/>
         <source>WLAN Disconnected Successfully</source>
         <translation>无线网络已断开</translation>
     </message>

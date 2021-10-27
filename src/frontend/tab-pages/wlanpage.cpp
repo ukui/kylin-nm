@@ -922,7 +922,7 @@ void WlanPage::showControlCenter()
     qDebug() << LOG_FLAG <<"show control center";
 
     QProcess process;
-    process.startDetached("ukui-control-center --wlanconnect");
+    process.startDetached("ukui-control-center -m wlanconnect");
 
     return;
 }

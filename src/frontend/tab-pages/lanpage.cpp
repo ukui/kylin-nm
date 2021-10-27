@@ -111,7 +111,6 @@ void LanPage::initLanDeviceState()
 
 void LanPage::initNetSwitch()
 {
-//    m_devList.clear();
     m_wiredSwitch = true;
 
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {

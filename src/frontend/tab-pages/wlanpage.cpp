@@ -29,8 +29,10 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 
     connect(m_wirelessNetResource, &KyWirelessNetResource::wifiNetworkAdd, this, &WlanPage::onWlanAdded);
     connect(m_wirelessNetResource, &KyWirelessNetResource::wifiNetworkRemove, this, &WlanPage::onWlanRemoved);
+
     connect(m_wirelessNetResource, &KyWirelessNetResource::signalStrengthChange, this, &WlanPage::signalStrengthChange);
     connect(m_wirelessNetResource, &KyWirelessNetResource::secuTypeChange, this, &WlanPage::onSecurityTypeChange);
+
     connect(m_wirelessNetResource, &KyWirelessNetResource::connectionAdd, this, &WlanPage::onConnectionAdd);
     connect(m_wirelessNetResource, &KyWirelessNetResource::connectionRemove, this, &WlanPage::onConnectionRemove);
 
@@ -232,7 +234,7 @@ void WlanPage::initDeviceCombox()
 QListWidgetItem *WlanPage::addEmptyItem(QListWidget *wirelessListWidget)
 {
     WlanListItem *p_wlanItem = new WlanListItem();
-    QListWidgetItem *p_listWidgetItem = new QListWidgetItem(wirelessListWidget);
+    QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->addItem(p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
@@ -246,7 +248,7 @@ QListWidgetItem *WlanPage::addNewItem(KyWirelessNetItem &wirelessNetItem,
     WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
 
-    QListWidgetItem *p_listWidgetItem = new QListWidgetItem(wirelessListWidget);
+    QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->addItem(p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
@@ -261,12 +263,58 @@ QListWidgetItem *WlanPage::insertNewItem(KyWirelessNetItem &wirelessNetItem,
     WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
 
-    QListWidgetItem *p_listWidgetItem = new QListWidgetItem(wirelessListWidget);
+    QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->insertItem(row, p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
 
     return p_listWidgetItem;
+}
+
+QListWidgetItem *WlanPage::insertNewItemWithSort(KyWirelessNetItem &wirelessNetItem,
+                                         QListWidget *p_ListWidget)
+{
+    int row = 0;
+
+  //  qDebug()<< "insertNewItemWithSort" << wirelessNetItem.m_NetSsid
+  //          <<"sort item config" << wirelessNetItem.m_isConfigured
+  //         << "signal strength" << wirelessNetItem.m_signalStrength;
+    WlanListItem *p_sortWlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
+    connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+
+    QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
+    p_sortListWidgetItem->setSizeHint(QSize(p_ListWidget->width(), p_sortWlanItem->height()));
+
+   // qDebug() << "insertNewItemWithSort, count" << p_ListWidget->count();
+    for (row = 0; row < p_ListWidget->count() - 1; ++row) {
+        QListWidgetItem *p_listWidgetItem = p_ListWidget->item(row);
+        WlanListItem *p_wlanItem = (WlanListItem *)p_ListWidget->itemWidget(p_listWidgetItem);
+
+        if (WMI_OB_NAME == p_wlanItem->objectName()) {
+            qDebug() << "insertNewItemWithSort" << "p_wlanItem is WlanMoreItem";
+            continue;
+        }
+
+        // qDebug()<< "insertNewItemWithSort" << p_wlanItem->getSsid()
+        //         <<"item config" << p_wlanItem->isConfigured()
+        //        << "signal strength" << p_wlanItem->getSignalStrength();
+
+        if (wirelessNetItem.m_isConfigured == p_wlanItem->isConfigured()) {
+            if (wirelessNetItem.m_signalStrength > p_wlanItem->getSignalStrength()) {
+                break;
+            }
+        } else {
+            if (wirelessNetItem.m_isConfigured) {
+                break;
+            }
+        }
+    }
+
+    p_ListWidget->insertItem(row, p_sortListWidgetItem);
+    p_ListWidget->setItemWidget(p_sortListWidgetItem, p_sortWlanItem);
+
+    //qDebug()<< "insertNewItemWithSort" << "insert sort item finished. row" << row;
+    return p_sortListWidgetItem;
 }
 
 void WlanPage::clearWirelessNetItemMap(QMap<QString, QListWidgetItem*> &wirelessNetItem,
@@ -382,7 +430,6 @@ void WlanPage::constructWirelessNetArea()
 
     QString activateSsid = m_activateConnectionItemMap.firstKey();
 
-    int height = 0;
     foreach (auto wirelessNetItem, wirelessNetItemList) {
         if (wirelessNetItem.m_NetSsid == activateSsid) {
             continue;
@@ -391,11 +438,6 @@ void WlanPage::constructWirelessNetArea()
         QListWidgetItem *p_listWidgetItem = addNewItem(wirelessNetItem, m_inactivatedNetListWidget);
         m_wirelessNetItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
         updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
-
-        if (height == 0) {
-            height += p_listWidgetItem->sizeHint().height();
-        }
-        height += p_listWidgetItem->sizeHint().height() + NET_LIST_SPACING;
     }
 
     addWlanMoreItem();
@@ -444,7 +486,7 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
     qDebug() << "[WlanPage] A Wlan Added! interface = "
              << interface << "; ssid = " << item.m_NetSsid << Q_FUNC_INFO <<__LINE__;
 
-    QListWidgetItem *p_listWidgetItem = addNewItem(item, m_inactivatedNetListWidget);
+    QListWidgetItem *p_listWidgetItem = insertNewItemWithSort(item, m_inactivatedNetListWidget);
     m_wirelessNetItemMap.insert(item.m_NetSsid, p_listWidgetItem);
     updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
 
@@ -779,7 +821,7 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
         return;
     }
 
-    QListWidgetItem *p_listWidgetItem = addNewItem(wirelessNetItem, m_inactivatedNetListWidget);
+    QListWidgetItem *p_listWidgetItem = insertNewItemWithSort(wirelessNetItem, m_inactivatedNetListWidget);
     m_wirelessNetItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
 
     // 更新‘更多’条目，以保证其处于listwidget的最底部
@@ -957,8 +999,6 @@ void WlanPage::onRefreshIconTimer()
         return;
     }
 
-    //qDebug()<< LOG_FLAG << "Will update Wlan list by strength." << Q_FUNC_INFO << __LINE__;
-
     QList<KyWirelessNetItem> wlanList;
     if (!m_wirelessNetResource->getDeviceWifiNetwork(m_currentDevice, wlanList)) {
         return;
@@ -969,7 +1009,7 @@ void WlanPage::onRefreshIconTimer()
     for (int index = 0; index < wlanList.length(); index++) {
         KyWirelessNetItem sortItem = wlanList.at(index);
         QString sortSsid = sortItem.m_NetSsid; //应该在第currentRow行的新的WiFi名称
-        qDebug()<< LOG_FLAG << "sort ssid"<< sortSsid << "active ssid" << activateSsid << "sort row"<< sortRow;
+        //qDebug()<< LOG_FLAG << "sort ssid"<< sortSsid << "active ssid" << activateSsid << "sort row"<< sortRow;
         if (sortSsid == activateSsid) { //排除已连接WiFi
             continue;
         }
@@ -991,8 +1031,8 @@ void WlanPage::onRefreshIconTimer()
 
             qDebug()<< LOG_FLAG << "row" << sortRow << "item ssid" << p_wlanItem->getSsid();
             if (sortSsid == p_wlanItem->getSsid()) {
-                qDebug()<< LOG_FLAG << "sort wlan set signal strength." << Q_FUNC_INFO << __LINE__;
-                p_wlanItem->setWlanSignal(sortItem.m_signalStrength);
+               // qDebug()<< LOG_FLAG << "sort wlan set signal strength." << Q_FUNC_INFO << __LINE__;
+                p_wlanItem->setSignalStrength(sortItem.m_signalStrength);
                 sortRow++;
                 continue;
             }
@@ -1007,7 +1047,7 @@ void WlanPage::onRefreshIconTimer()
                 if (Deactivated != p_wlanItem->getConnectionState()) {
                     continue;
                 }
-                qDebug()<< LOG_FLAG << "sort wlan update position." << sortSsid << Q_FUNC_INFO << __LINE__;
+               // qDebug()<< LOG_FLAG << "sort wlan update position." << sortSsid << Q_FUNC_INFO << __LINE__;
                 int takeRow = m_inactivatedNetListWidget->row(p_sortListWidgetItem);
                 m_inactivatedNetListWidget->takeItem(takeRow);
 
@@ -1021,7 +1061,7 @@ void WlanPage::onRefreshIconTimer()
             }
         }
 
-        qDebug()<< LOG_FLAG << "sort wlan add new item." << Q_FUNC_INFO << __LINE__;
+        //qDebug()<< LOG_FLAG << "sort wlan add new item." << Q_FUNC_INFO << __LINE__;
         QListWidgetItem *p_newListWidgetItem = insertNewItem(sortItem, m_inactivatedNetListWidget, sortRow);
         m_wirelessNetItemMap.insert(sortItem.m_NetSsid, p_newListWidgetItem);
         updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
@@ -1029,7 +1069,7 @@ void WlanPage::onRefreshIconTimer()
         sortRow++;
     }
 
-    qDebug()<< LOG_FLAG << "sort wlan finished." << Q_FUNC_INFO << __LINE__;
+   // qDebug()<< LOG_FLAG << "sort wlan finished." << Q_FUNC_INFO << __LINE__;
 
     return;
 }

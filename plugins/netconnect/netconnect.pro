@@ -3,6 +3,7 @@ TEMPLATE = lib
 CONFIG += plugin
 
 include(../component/switchbutton.pri)
+include(../component/infobutton.pri)
 
 TARGET = $$qtLibraryTarget(netconnect)
 DESTDIR = ../..

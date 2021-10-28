@@ -10,7 +10,7 @@
 #include <QDebug>
 #include <QImage>
 #include "fixlabel.h"
-#include "infobutton.h"
+#include "../component/InfoButton/infobutton.h"
 
 class LanItem : public QPushButton
 {

@@ -465,6 +465,7 @@ void NetConnect::addDeviceFrame(QString devName)
     } else {
         itemFrame->lanItemFrame->hide();
         itemFrame->deviceFrame->dropDownLabel->hide();
+        itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(false);
     }
     deviceFrameMap.insert(devName, itemFrame);
     qDebug() << "[NetConnect]deviceFrameMap insert" << devName;

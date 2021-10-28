@@ -835,6 +835,15 @@ void WlanConnect::removeDeviceFrame(QString devName)
     qDebug() << "[WlanConnect]removeDeviceFrame " << devName;
     if (deviceFrameMap.contains(devName)) {
         ItemFrame *item = deviceFrameMap[devName];
+        if (item->lanItemFrame->layout() != NULL) {
+            QLayoutItem* layoutItem;
+            while ((layoutItem = item->lanItemFrame->layout()->takeAt(0)) != NULL) {
+                delete layoutItem->widget();
+                delete layoutItem;
+                item = nullptr;
+            }
+            item->itemMap.clear();
+        }
         delete item;
         item = nullptr;
         deviceFrameMap.remove(devName);

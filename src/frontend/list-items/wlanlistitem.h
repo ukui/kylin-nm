@@ -29,7 +29,11 @@ public:
 public:
     QString getSsid();
 
-    void setWlanSignal(const int &signal);
+    void setSignalStrength(const int &signal);
+    int  getSignalStrength();
+
+    bool isConfigured();
+
     void setWlanState(const int &state);
     void setExpanded(const bool &expanded);
 

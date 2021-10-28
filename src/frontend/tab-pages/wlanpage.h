@@ -111,6 +111,8 @@ private:
     QListWidgetItem *insertNewItem(KyWirelessNetItem &wirelessNetItem,
                                              QListWidget *wirelessListWidget,
                                              int row);
+    QListWidgetItem *insertNewItemWithSort(KyWirelessNetItem &wirelessNetItem,
+                                             QListWidget *p_ListWidget);
 
     void clearWirelessNetItemMap(QMap<QString, QListWidgetItem*> &wirelessNetItem,
                                            QListWidget *wirelessListWidget);

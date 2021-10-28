@@ -49,11 +49,23 @@ QString WlanListItem::getSsid()
     return m_wirelessNetItem.m_NetSsid;
 }
 
-void WlanListItem::setWlanSignal(const int &signal)
+void WlanListItem::setSignalStrength(const int &signal)
 {
     m_wirelessNetItem.m_signalStrength = signal;
 
     refreshIcon();
+
+    return;
+}
+
+int WlanListItem::getSignalStrength()
+{
+    return m_wirelessNetItem.m_signalStrength;
+}
+
+bool WlanListItem::isConfigured()
+{
+    return m_wirelessNetItem.m_isConfigured;
 }
 
 void WlanListItem::setWlanState(const int &state)

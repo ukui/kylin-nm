@@ -86,9 +86,11 @@ void SwitchButton::startAnimation() { //滑动按钮动作播放
 /* 按钮按下处理 */
 void SwitchButton::mousePressEvent(QMouseEvent *event) {
     Q_UNUSED(event);
-    if (!m_enabled)
-        return QWidget::mousePressEvent(event);
-    m_bIsOn = !m_bIsOn;
+//    if (!m_enabled)
+//        return QWidget::mousePressEvent(event);
+    if (m_enabled) {
+        m_bIsOn = !m_bIsOn;
+    }
 
     Q_EMIT clicked(m_bIsOn);
 

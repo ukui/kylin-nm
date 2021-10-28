@@ -66,23 +66,29 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
 
 void KyWirelessNetItem::initInfoBySsid()
 {
-    for (auto const & conn : m_networkResourceInstance->m_connections)
-    {
+    for (auto const & conn : m_networkResourceInstance->m_connections) {
         NetworkManager::ConnectionSettings::Ptr settings = conn->settings();
-        if (settings->connectionType() != NetworkManager::ConnectionSettings::Wireless)
-        {
+        if (settings->connectionType() != NetworkManager::ConnectionSettings::Wireless) {
             continue;
         }
+
         NetworkManager::WirelessSetting::Ptr wifi_sett
             = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
         QString devName = m_networkResourceInstance->findDeviceUni(m_device)->interfaceName();
-        if (wifi_sett->ssid() == m_NetSsid && (settings->interfaceName().compare(devName) == 0 || settings->interfaceName().isEmpty()))
-        {
+        if (wifi_sett->ssid() == m_NetSsid
+                && (settings->interfaceName().compare(devName) == 0 || settings->interfaceName().isEmpty())) {
             m_connectUuid = settings->uuid();
             m_connName    = conn->name();
             m_connDbusPath = conn->path();
             m_isConfigured = true;
-            return;
+            /*
+            * 如果有激活的链接，则取激活的链接，没有则取最后一个，因为一个热点可以创建多个链接
+            */
+            if (nullptr != m_networkResourceInstance->getActiveConnect(m_connectUuid)) {
+                break;
+            }
         }
     }
+
+    return;
 }

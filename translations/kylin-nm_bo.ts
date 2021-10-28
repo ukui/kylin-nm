@@ -4,47 +4,47 @@
 <context>
     <name>CreatNetPage</name>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="30"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="31"/>
         <source>Connection Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="31"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="32"/>
         <source>Ipv4Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="32"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="33"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="33"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="34"/>
         <source>Netmask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="34"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="35"/>
         <source>Default Gateway</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="35"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="36"/>
         <source>Prefs DNS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="36"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="37"/>
         <source>Alternative DNS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="47"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="48"/>
         <source>Auto(DHCP)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="48"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="49"/>
         <source>Manual</source>
         <translation type="unfinished"></translation>
     </message>
@@ -224,45 +224,57 @@
 <context>
     <name>LanListItem</name>
     <message>
-        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="37"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="39"/>
         <source>Not connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="68"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="92"/>
         <source>Wired Device not carried</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="113"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="129"/>
+        <source>Disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="115"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="127"/>
+        <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>LanPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="161"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="178"/>
         <source>No ethernet device avaliable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="689"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="698"/>
         <source>LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="692"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="701"/>
         <source>Activated LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="700"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="709"/>
         <source>Inactivated LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="772"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="792"/>
         <source>LAN Connected Successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="809"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="813"/>
         <source>LAN Disconnected Successfully</source>
         <translation type="unfinished"></translation>
     </message>
@@ -284,27 +296,27 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/frontend/mainwindow.cpp" line="115"/>
-        <location filename="../src/frontend/mainwindow.cpp" line="178"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="180"/>
         <source>kylin-nm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="144"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="146"/>
         <source>LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="146"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="148"/>
         <source>WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="176"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="178"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="175"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="177"/>
         <source>Show MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
@@ -537,27 +549,27 @@
 <context>
     <name>TabPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="45"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="48"/>
         <source>Current Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="49"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="52"/>
         <source>Devices Closed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="89"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="92"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="124"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="127"/>
         <source>Kylin NM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="127"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="130"/>
         <source>kylin network applet desktop message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -608,69 +620,72 @@
 <context>
     <name>WlanListItem</name>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="34"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="35"/>
         <source>Not connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="115"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="116"/>
         <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="495"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="117"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="216"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="495"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="118"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="219"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="493"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="123"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="497"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="125"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="499"/>
         <source>Forget</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="235"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="238"/>
         <source>Auto Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WlanMoreItem</name>
+    <message>
+        <location filename="../src/frontend/list-items/wlanmoreitem.cpp" line="8"/>
+        <source>More...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WlanPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="69"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="65"/>
         <source>WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="70"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="66"/>
         <source>Activated WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="71"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="67"/>
         <source>Other WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="94"/>
-        <source>More...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="142"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="124"/>
         <source>No wireless network card detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="752"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="731"/>
         <source>WLAN Connected Successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="748"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="727"/>
         <source>WLAN Disconnected Successfully</source>
         <translation type="unfinished"></translation>
     </message>

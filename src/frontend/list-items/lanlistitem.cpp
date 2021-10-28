@@ -25,6 +25,9 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
 
     m_itemFrame->installEventFilter(this);
     connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
+
+    m_menu = new QMenu(this);//右键菜单
+    connect(m_menu, &QMenu::triggered, this, &LanListItem::onMenuTriggered);
 }
 
 
@@ -36,6 +39,11 @@ LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
     const QString str=tr("Not connected");
     m_nameLabel->setText(str);
     this->m_infoButton->hide();
+}
+
+LanListItem::~LanListItem()
+{
+    qDebug()<<"[LanPage] lan list item is deleted." << m_lanConnectItem.m_connectName;
 }
 
 void LanListItem::setIcon(bool isOn)
@@ -78,12 +86,7 @@ void LanListItem::onNetButtonClicked()
         return;
     }
 
-    if (Activated == m_lanConnectItem.m_connectState) {
-        //已连接接，点击后断开
-        m_connectOperation->deactivateWiredConnection(m_lanConnectItem.m_connectName, m_lanConnectItem.m_connectUuid);
-        qDebug() << LOG_FLAG << "it will disconnect connection" << m_lanConnectItem.m_connectName
-                 << ". it's device is" << m_deviceName;
-    } else if (Deactivated == m_lanConnectItem.m_connectState) {
+    if (Deactivated == m_lanConnectItem.m_connectState) {
         //断开的连接，点击激活连接
         if (m_deviceResource->wiredDeviceCarriered(m_deviceName)) {
             m_connectOperation->activateWiredConnection(m_lanConnectItem.m_connectUuid, m_deviceName);
@@ -95,7 +98,7 @@ void LanListItem::onNetButtonClicked()
         }
     } else {
         qDebug() << LOG_FLAG <<"the connection" << m_lanConnectItem.m_connectName
-                 << "is activing or deactiving, so it can not be operation.";
+                 << "is not deactived, so it can not be operation.";
     }
 
     return;
@@ -105,7 +108,37 @@ void LanListItem::onNetButtonClicked()
 void LanListItem::onRightButtonClicked()
 {
     //右键点击事件
+    qDebug()<< LOG_FLAG <<"onRightButtonClicked";
+    if (!m_menu) {
+        return;
+    }
+
+    m_menu->clear();
+    if (Activated == m_lanConnectItem.m_connectState || Activating == m_lanConnectItem.m_connectState) {
+        m_menu->addAction(new QAction(tr("Disconnect"), this));
+    } else if (Deactivated == m_lanConnectItem.m_connectState) {
+        m_menu->addAction(new QAction(tr("Connect"), this));
+    } else {
+        return;
+    }
+
+    m_menu->move(cursor().pos());
+    m_menu->show();
+    return;
 }
+
+void LanListItem::onMenuTriggered(QAction *action)
+{
+    if (action->text() == tr("Connect")) {
+        this->onNetButtonClicked();
+    } else if (action->text() == tr("Disconnect")) {
+        m_connectOperation->deactivateWiredConnection(m_lanConnectItem.m_connectName, m_lanConnectItem.m_connectUuid);
+        qDebug() << LOG_FLAG << "it will disconnect connection" << m_lanConnectItem.m_connectName
+                 << ". it's device is" << m_deviceName;
+    }
+    return;
+}
+
 
 void LanListItem::onInfoButtonClicked()
 {

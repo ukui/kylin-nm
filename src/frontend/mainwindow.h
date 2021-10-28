@@ -133,6 +133,7 @@ private slots:
     void onSetTrayIconLoading();
     void onLanConnectStatusToChangeTrayIcon(int state);
     void onWlanConnectStatusToChangeTrayIcon(int state);
+    void onShowByWlanPage();
 };
 
 #endif // MAINWINDOW_H

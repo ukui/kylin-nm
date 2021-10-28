@@ -17,6 +17,9 @@
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
+#define LAN_PAGE_INDEX 0
+#define WLAN_PAGE_INDEX 1
+
 #include <kwindowsystem.h>
 #include <kwindowsystem_export.h>
 
@@ -216,6 +219,7 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::hotspotActivated, this, &MainWindow::hotspotActivated);
     connect(m_wlanWidget, &WlanPage::secuTypeChange, this, &MainWindow::secuTypeChange);
     connect(m_wlanWidget, &WlanPage::signalStrengthChange, this, &MainWindow::signalStrengthChange);
+    connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowByWlanPage);
 }
 
 /**
@@ -419,6 +423,19 @@ void MainWindow::onWlanConnectStatusToChangeTrayIcon(int state)
         iconTimer->start(LOADING_TRAYICON_TIMER_MS);
     } else {
         onRefreshTrayIcon();
+    }
+}
+
+void MainWindow::onShowByWlanPage()
+{
+    m_centralWidget->setCurrentIndex(WLAN_PAGE_INDEX);
+
+    if(QApplication::activeWindow() != this) {
+        this->resetWindowPosition();
+        this->showNormal();
+        this->raise();
+        this->activateWindow();
+        emit this->mainWindowVisibleChanged(true);
     }
 }
 

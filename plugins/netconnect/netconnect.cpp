@@ -848,6 +848,10 @@ int NetConnect::getInsertPos(QString connName, QString deviceName)
         auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
         QMap<QString, QVector<QStringList>> variantList;
         dbusArg >> variantList;
+        if (!variantList.contains(deviceName)) {
+            qDebug() << "[NetConnect] getInsertPos but " << deviceName << "not exist";
+            return 0;
+        }
         for (int i = 0; i < variantList[deviceName].size(); ++i ) {
             if (variantList[deviceName].at(i).at(0) == connName) {
                 qDebug() << "pos in kylin-nm is " << i;

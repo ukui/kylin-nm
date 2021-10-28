@@ -1104,7 +1104,12 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
 void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "[LanPage] activateWired" << devName << connUuid;
-    m_wiredConnectOperation->activateConnection(connUuid, devName);
+    if (!m_deviceResource->wiredDeviceCarriered(devName)) {
+        qDebug() << LOG_FLAG << devName << "is not carried, so can not activate connection";
+        this->showDesktopNotify(tr("Wired Device not carried"));
+    } else {
+        m_wiredConnectOperation->activateConnection(connUuid, devName);
+    }
 }
 
 void LanPage::deactivateWired(const QString& devName, const QString& connUuid)

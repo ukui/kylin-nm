@@ -141,7 +141,7 @@ private:
 //    DeviceWlanlistInfo   deviceWlanlistInfo;
 
     QTimer * m_scanTimer = nullptr;
-    QTimer * m_updateTimer = nullptr;
+//    QTimer * m_updateTimer = nullptr;
 private:
     SwitchButton       *wifiSwtch;
     bool               mFirstLoad;

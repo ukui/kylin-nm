@@ -219,6 +219,7 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::hotspotActivated, this, &MainWindow::hotspotActivated);
     connect(m_wlanWidget, &WlanPage::secuTypeChange, this, &MainWindow::secuTypeChange);
     connect(m_wlanWidget, &WlanPage::signalStrengthChange, this, &MainWindow::signalStrengthChange);
+    connect(m_wlanWidget, &WlanPage::timeToUpdate , this, &MainWindow::timeToUpdate);
     connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowByWlanPage);
 }
 
@@ -343,9 +344,9 @@ void MainWindow::showControlCenter()
 {
     QProcess process;
     if (!m_lanWidget->lanIsConnected() && m_wlanWidget->wlanIsConnected()){
-        process.startDetached("ukui-control-center --wlanconnect");
+        process.startDetached("ukui-control-center -m wlanconnect");
     } else {
-        process.startDetached("ukui-control-center --wiredconnect");
+        process.startDetached("ukui-control-center -m netconnect");
     }
 }
 

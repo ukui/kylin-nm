@@ -214,6 +214,7 @@ void WlanConnect::initComponent() {
     //网卡name处理
     connect(m_interface, SIGNAL(deviceNameChanged(QString, QString, int)), this, SLOT(onDeviceNameChanged(QString, QString, int)), Qt::QueuedConnection);
     
+    connect(m_interface, SIGNAL(timeToUpdate()), this, SLOT(updateList()), Qt::QueuedConnection);
     //高级设置
     connect(ui->detailBtn, &QPushButton::clicked, this, [=](bool checked) {
         Q_UNUSED(checked)
@@ -226,9 +227,9 @@ void WlanConnect::initComponent() {
     connect(m_scanTimer, &QTimer::timeout, this, &WlanConnect::reScan, Qt::QueuedConnection);
     reScan();
 
-    m_updateTimer = new QTimer(this);
-    m_updateTimer->start(UPDATETIMER);
-    connect(m_scanTimer, &QTimer::timeout, this, &WlanConnect::updateList, Qt::QueuedConnection);
+//    m_updateTimer = new QTimer(this);
+//    m_updateTimer->start(UPDATETIMER);
+
 }
 
 void WlanConnect::reScan()
@@ -241,7 +242,7 @@ void WlanConnect::reScan()
     }
 }
 
-//定时5秒更新列表顺序
+//更新列表顺序
 void WlanConnect::updateList()
 {
     if (!wifiSwtch->isChecked()) {

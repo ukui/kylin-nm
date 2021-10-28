@@ -168,6 +168,7 @@ void WlanPage::initTimer()
 
     m_refreshIconTimer = new QTimer(this);
     connect(m_refreshIconTimer, &QTimer::timeout, this, &WlanPage::onRefreshIconTimer);
+    m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
 }
 
 /**
@@ -952,7 +953,14 @@ void WlanPage::onWifiEnabledChanged(bool isWifiOn)
 }
 
 void WlanPage::onRefreshIconTimer()
-{
+{  
+    emit timeToUpdate();
+
+    if(!this->isVisible()) {
+        return;
+    }
+    qDebug() << "onRefreshIconTimer";
+
     if (m_expandedItem) {
         qDebug()<< LOG_FLAG << "Has expanded item and forbid refresh wifi strength" << Q_FUNC_INFO << __LINE__;
         return;
@@ -1197,11 +1205,11 @@ void WlanPage::onMainWindowVisibleChanged(const bool &visible)
         //打开页面时先触发一次扫描，然后定时扫描wifi热点和刷新icon
         requestScan();
         m_scanTimer->start(AP_SCAN_INTERVAL);
-        m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
+//        m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
     } else {
         //界面关闭的时候，停止wifi扫描和刷新
         m_scanTimer->stop();
-        m_refreshIconTimer->stop();
+//        m_refreshIconTimer->stop();
     }
 
     return;

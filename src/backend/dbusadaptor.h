@@ -108,6 +108,8 @@ Q_SIGNALS: // SIGNALS
     void signalStrengthChange(QString devName, QString ssid, int strength);
     //安全性变化
     void secuTypeChange(QString devName, QString ssid, QString secuType);
+    //列表排序
+    void timeToUpdate();
 };
 
 #endif

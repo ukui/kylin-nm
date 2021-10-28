@@ -538,6 +538,7 @@ void WlanPage::updateWlanListItem(QString ssid)
             WlanListItem *p_wlanItem = (WlanListItem *)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
             p_wlanItem->updateWirelessNetItem(wirelessNetItem);
             p_wlanItem->updateConnectState(Deactivated);
+            emit this->wlanConnectChanged(Deactivated);
         }
     }
 

@@ -268,11 +268,15 @@ void KyWirelessNetResource::getDeviceByUuid(const QString uuid, QString &deviceN
     NetworkManager::ActiveConnection::Ptr activeConnectionPtr = m_networkResourceInstance->getActiveConnect(uuid);
     if (!activeConnectionPtr.isNull()) {
         QStringList interfaces = activeConnectionPtr->devices();
-        QString ifaceUni = interfaces.at(0);
-        NetworkManager::Device:: Ptr devicePtr =
+        if (interfaces.size() > 0) {
+            QString ifaceUni = interfaces.at(0);
+            NetworkManager::Device:: Ptr devicePtr =
                     m_networkResourceInstance->findDeviceUni(ifaceUni);
-        deviceName = devicePtr->interfaceName();
-        return;
+            deviceName = devicePtr->interfaceName();
+            return;
+        } else {
+            qDebug() << LOG_FLAG << "get device of active connection failed.";
+        }
     }
 
     NetworkManager::Connection::Ptr connectPtr = m_networkResourceInstance->getConnect(uuid);
@@ -407,7 +411,7 @@ void KyWirelessNetResource::onWifiNetworkPropertyChange(NetworkManager::Wireless
         QList<KyWirelessNetItem>::iterator iter = m_WifiNetworkList[devIface].begin();
          while (iter != m_WifiNetworkList[devIface].end()) {
              if (iter->m_NetSsid == net->ssid()) {
-                 qDebug()<< LOG_FLAG <<"recive properity changed signal, sender is" << iter->m_NetSsid;
+//                 qDebug()<< LOG_FLAG <<"recive properity changed signal, sender is" << iter->m_NetSsid;
                  if (iter->m_signalStrength != net->signalStrength()) {
                      iter->m_signalStrength = net->signalStrength();
                      emit signalStrengthChange(devIface, net->ssid(), iter->m_signalStrength);

@@ -171,7 +171,8 @@ void LanPage::onSwithGsettingsChanged(const QString &key)
 
 void LanPage::onLanSwitchClicked()
 {
-    qDebug()<<"[LanPage] On lan switch button clicked! Status:" <<m_netSwitch->getSwitchStatus();
+    qDebug()<<"[LanPage] On lan switch button clicked! Status:" <<m_netSwitch->getSwitchStatus()
+            <<"devices count:"<<m_devList.count();
 
     if (m_devList.count() == 0) {
         this->showDesktopNotify(tr("No ethernet device avaliable"));
@@ -184,16 +185,6 @@ void LanPage::onLanSwitchClicked()
             m_switchGsettings->set(WIRED_SWITCH,false);
         }
     }
-
-//    if (m_netSwitch->getSwitchStatus()) {
-//        if (m_devList.count() > 0) {
-//            m_switchGsettings->set(WIRED_SWITCH, true);
-//        } else {
-//            this->showDesktopNotify(tr("No ethernet device avaliable"));
-//        }
-//    } else {
-//        m_switchGsettings->set(WIRED_SWITCH, false);
-//    }
 }
 
 void LanPage::getEnabledDevice(QStringList &enableDeviceList)

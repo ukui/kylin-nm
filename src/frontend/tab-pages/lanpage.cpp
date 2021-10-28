@@ -689,7 +689,7 @@ void LanPage::onDeviceComboxIndexChanged(int currentIndex)
 void LanPage::onShowControlCenter()
 {
     QProcess process;
-    process.startDetached("ukui-control-center --wiredconnect");
+    process.startDetached("ukui-control-center -m netconnect");
 }
 
 void LanPage::initUI()

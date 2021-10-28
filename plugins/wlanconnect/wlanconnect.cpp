@@ -214,6 +214,7 @@ void WlanConnect::initComponent() {
     //网卡name处理
     connect(m_interface, SIGNAL(deviceNameChanged(QString, QString, int)), this, SLOT(onDeviceNameChanged(QString, QString, int)), Qt::QueuedConnection);
     
+    connect(m_interface, SIGNAL(timeToUpdate()), this, SLOT(updateList()), Qt::QueuedConnection);
     //高级设置
     connect(ui->detailBtn, &QPushButton::clicked, this, [=](bool checked) {
         Q_UNUSED(checked)
@@ -226,9 +227,9 @@ void WlanConnect::initComponent() {
     connect(m_scanTimer, &QTimer::timeout, this, &WlanConnect::reScan, Qt::QueuedConnection);
     reScan();
 
-    m_updateTimer = new QTimer(this);
-    m_updateTimer->start(UPDATETIMER);
-    connect(m_scanTimer, &QTimer::timeout, this, &WlanConnect::updateList, Qt::QueuedConnection);
+//    m_updateTimer = new QTimer(this);
+//    m_updateTimer->start(UPDATETIMER);
+
 }
 
 void WlanConnect::reScan()
@@ -241,7 +242,7 @@ void WlanConnect::reScan()
     }
 }
 
-//定时5秒更新列表顺序
+//更新列表顺序
 void WlanConnect::updateList()
 {
     if (!wifiSwtch->isChecked()) {
@@ -300,6 +301,19 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
         }
     } else {
         qDebug() << " no active connection when resort";
+        if (!frame->uuid.isEmpty()) {
+            QMap<QString, WlanItem*>::iterator itemIter;
+            for (itemIter = frame->itemMap.begin(); itemIter != frame->itemMap.end(); itemIter++) {
+                if (itemIter.value()->uuid == frame->uuid ) {
+                    WlanItem * item= nullptr;
+                    item = itemIter.value();
+                    qDebug() << "a active connect missing when resort";
+                    itemIter.value()->uuid.clear();
+                    itemActiveConnectionStatusChanged(item, DEACTIVATED);
+                    break;
+                }
+            }
+        }
         frame->uuid.clear();
     }
 
@@ -469,7 +483,7 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
     }
     WlanItem * item= nullptr;
     //device ssid 有可能均为空
-    if (deviceName.isEmpty() && ssid.isEmpty()) {
+    if (deviceName.isEmpty() || ssid.isEmpty()) {
         if (status == ACTIVATING || status == ACTIVATED) {
             return;
         }
@@ -490,9 +504,6 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
             }
         }
     } else {
-        if (deviceName.isEmpty() || ssid.isEmpty()) {
-            return;
-        }
         if (!deviceFrameMap.contains(deviceName)) {
             return;
         }
@@ -834,6 +845,15 @@ void WlanConnect::removeDeviceFrame(QString devName)
     qDebug() << "[WlanConnect]removeDeviceFrame " << devName;
     if (deviceFrameMap.contains(devName)) {
         ItemFrame *item = deviceFrameMap[devName];
+        if (item->lanItemFrame->layout() != NULL) {
+            QLayoutItem* layoutItem;
+            while ((layoutItem = item->lanItemFrame->layout()->takeAt(0)) != NULL) {
+                delete layoutItem->widget();
+                delete layoutItem;
+                item = nullptr;
+            }
+            item->itemMap.clear();
+        }
         delete item;
         item = nullptr;
         deviceFrameMap.remove(devName);

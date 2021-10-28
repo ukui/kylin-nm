@@ -79,6 +79,8 @@ signals:
     //安全性变化
     void secuTypeChange(QString devName, QString ssid, QString secuType);
     void mainWindowVisibleChanged(const bool &visible);
+    //列表排序
+    void timeToUpdate();
 public slots:
 
 protected:
@@ -133,6 +135,7 @@ private slots:
     void onSetTrayIconLoading();
     void onLanConnectStatusToChangeTrayIcon(int state);
     void onWlanConnectStatusToChangeTrayIcon(int state);
+    void onShowByWlanPage();
 };
 
 #endif // MAINWINDOW_H

@@ -170,7 +170,6 @@ void NetConnect::initComponent() {
         wiredSwitch->blockSignals(true);
         wiredSwitch->setChecked(true);
         wiredSwitch->blockSignals(false);
-        initNet();
         qDebug()<<"[Netconnect] org.ukui.kylin-nm.switch is not installed!";
     }
 
@@ -182,7 +181,7 @@ void NetConnect::initComponent() {
     }
     initNet();
 
-    if (deviceStatusMap.isEmpty() || !m_interface->isValid()) {
+    if (!wiredSwitch->isChecked() || deviceStatusMap.isEmpty() || !m_interface->isValid()) {
         hideLayout(ui->availableLayout);
     }
 
@@ -313,9 +312,7 @@ void NetConnect::initNet()
     }
     //再填充每个设备的列表
     for (int i = 0; i < deviceList.size(); ++i) {
-        if (deviceStatusMap[deviceList.at(i)]) {
-            initNetListFromDevice(deviceList.at(i));
-        }
+        initNetListFromDevice(deviceList.at(i));
     }
 }
 
@@ -343,10 +340,6 @@ void NetConnect::deActiveConnect(QString ssid, QString deviceName, int type) {
 void NetConnect::initNetListFromDevice(QString deviceName)
 {
     qDebug() << "[NetConnect]initNetListFromDevice " << deviceName;
-    if (!wiredSwitch->isChecked()) {
-         qDebug() << "[NetConnect]initNetListFromDevice " << deviceName << " switch off";
-        return;
-    }
     if (!deviceFrameMap.contains(deviceName)) {
         qDebug() << "[NetConnect]initNetListFromDevice " << deviceName << " not exist";
         return;
@@ -468,8 +461,11 @@ void NetConnect::addDeviceFrame(QString devName)
     itemFrame->deviceFrame->deviceSwitch->setChecked(enable);
     if (enable) {
         itemFrame->lanItemFrame->show();
+        itemFrame->deviceFrame->dropDownLabel->show();
     } else {
         itemFrame->lanItemFrame->hide();
+        itemFrame->deviceFrame->dropDownLabel->hide();
+        itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(false);
     }
     deviceFrameMap.insert(devName, itemFrame);
     qDebug() << "[NetConnect]deviceFrameMap insert" << devName;
@@ -481,20 +477,13 @@ void NetConnect::addDeviceFrame(QString devName)
         if (checked) {
             qDebug() << "[NetConnect]set " << devName << "status" << true;
             itemFrame->lanItemFrame->show();
-            initNetListFromDevice(devName);
+            itemFrame->deviceFrame->dropDownLabel->show();
+            itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(true);
             deviceStatusMap[devName] = true;
         } else {
             qDebug() << "[NetConnect]set " << devName << "status" << false;
-            if (itemFrame->lanItemFrame->layout() != NULL) {
-                QLayoutItem* item;
-                while ((item = itemFrame->lanItemFrame->layout()->takeAt(0)) != NULL) {
-                    delete item->widget();
-                    delete item;
-                    item = nullptr;
-                }
-                itemFrame->itemMap.clear();
-            }
-
+            itemFrame->lanItemFrame->hide();
+            itemFrame->deviceFrame->dropDownLabel->hide();
             deviceStatusMap[devName] = false;
         }
     });
@@ -514,6 +503,15 @@ void NetConnect::removeDeviceFrame(QString devName)
     qDebug() << "[NetConnect]removeDeviceFrame " << devName;
     if (deviceFrameMap.contains(devName)) {
         ItemFrame *item = deviceFrameMap[devName];
+        if (item->lanItemFrame->layout() != NULL) {
+            QLayoutItem* layoutItem;
+            while ((layoutItem = item->lanItemFrame->layout()->takeAt(0)) != NULL) {
+                delete layoutItem->widget();
+                delete layoutItem;
+                layoutItem = nullptr;
+            }
+            item->itemMap.clear();
+        }
         delete item;
         item = nullptr;
         deviceFrameMap.remove(devName);
@@ -560,9 +558,7 @@ void NetConnect::onDeviceStatusChanged()
     for (int i = 0; i < addList.size(); ++i) {
         qDebug() << "add a device " << addList.at(i) << "status" << map[addList.at(i)];
         addDeviceFrame(addList.at(i));
-        if (map[addList.at(i)]) {
-            initNetListFromDevice(addList.at(i));
-        }
+        initNetListFromDevice(addList.at(i));
     }
     deviceStatusMap = map;
     if (deviceStatusMap.isEmpty()) {
@@ -606,9 +602,6 @@ void NetConnect::onDeviceNameChanged(QString oldName, QString newName, int type)
 void NetConnect::onLanAdd(QString deviceName, QStringList lanInfo)
 {
     qDebug()<<"[NetConnect]onLanAdd "<< deviceName << " " << lanInfo;
-    if(!wiredSwitch->isChecked()) {
-        return;
-    }
 
     if (!deviceName.isEmpty() && !deviceStatusMap.contains(deviceName)) {
         return;
@@ -737,10 +730,6 @@ void NetConnect::removeOneLanFrame(ItemFrame *frame, QString deviceName, QString
 //activeconnect status change
 void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int status)
 {
-    if (!wiredSwitch->isChecked()) {
-        qDebug() << "[NetConnect]onActiveConnectionChanged but wiredSwitch is off";
-        return;
-    }
     if (uuid.isEmpty()) {
         qDebug() << "[NetConnect]onActiveConnectionChanged but uuid is empty";
         return;
@@ -848,6 +837,10 @@ int NetConnect::getInsertPos(QString connName, QString deviceName)
         auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
         QMap<QString, QVector<QStringList>> variantList;
         dbusArg >> variantList;
+        if (!variantList.contains(deviceName)) {
+            qDebug() << "[NetConnect] getInsertPos but " << deviceName << "not exist";
+            return 0;
+        }
         for (int i = 0; i < variantList[deviceName].size(); ++i ) {
             if (variantList[deviceName].at(i).at(0) == connName) {
                 qDebug() << "pos in kylin-nm is " << i;

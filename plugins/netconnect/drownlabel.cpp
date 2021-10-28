@@ -22,9 +22,9 @@ void DrownLabel::setDropDownStatus(bool status)
 void DrownLabel::loadPixmap(bool isChecked)
 {
     if (isChecked) {
-        setPixmap(QIcon::fromTheme("ukui-up-symbolic", QIcon(":/img/plugins/netconnect/up.svg")).pixmap(ICONSIZE));
+        setPixmap(QIcon::fromTheme("ukui-up-symbolic").pixmap(ICONSIZE));
     } else {
-        setPixmap(QIcon::fromTheme("ukui-down-symbolic", QIcon(":/img/plugins/netconnect/down.svg")).pixmap(ICONSIZE));
+        setPixmap(QIcon::fromTheme("ukui-down-symbolic").pixmap(ICONSIZE));
     }
 }
 

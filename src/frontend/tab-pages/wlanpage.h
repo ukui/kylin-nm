@@ -60,6 +60,9 @@ signals:
     void secuTypeChange(QString devName, QString ssid, QString secuType);
     void hiddenWlanClicked();
     void wlanConnectChanged(int state);
+    void timeToUpdate();
+
+    void showMainWindow();
 
 public slots:
     void onMainWindowVisibleChanged(const bool &visible);

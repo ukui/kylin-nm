@@ -170,6 +170,7 @@ void WlanPage::initTimer()
 
     m_refreshIconTimer = new QTimer(this);
     connect(m_refreshIconTimer, &QTimer::timeout, this, &WlanPage::onRefreshIconTimer);
+    m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
 }
 
 /**
@@ -227,7 +228,7 @@ void WlanPage::initDeviceCombox()
     }
 
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
-                                            this, &WlanPage::onDeviceComboxIndexChanged);
+                                            this, &WlanPage::onDeviceComboxIndexChanged, Qt::DirectConnection);
     return;
 }
 
@@ -927,6 +928,7 @@ void WlanPage::onItemHeightChanged(const bool isExpanded, const QString &ssid)
 
 void WlanPage::onDeviceComboxIndexChanged(int currentIndex)
 {
+    qDebug() << "onDeviceComboxIndexChanged";
     if (!m_deviceComboBox || currentIndex < 0) {
         return;
     }
@@ -993,7 +995,14 @@ void WlanPage::onWifiEnabledChanged(bool isWifiOn)
 }
 
 void WlanPage::onRefreshIconTimer()
-{
+{  
+    emit timeToUpdate();
+
+    if(!this->isVisible()) {
+        return;
+    }
+    qDebug() << "onRefreshIconTimer";
+
     if (m_expandedItem) {
         qDebug()<< LOG_FLAG << "Has expanded item and forbid refresh wifi strength" << Q_FUNC_INFO << __LINE__;
         return;
@@ -1180,31 +1189,31 @@ void WlanPage::activateWirelessConnection(const QString& devName, const QString&
         return;
     }
 
-    if (wirelessNetItem.m_isConfigured) {
-        m_wirelessConnectOpreation->activeWirelessConnect(devName, wirelessNetItem.m_connectUuid);
-    } else {
-        //todo: 显示界面输入密码 （无需密码的wifi？）
-# if 0
-        if (devName != m_currentDevice) {
-            //todo
+    if (devName != m_currentDevice) {
+        int index = m_deviceComboBox->findText(devName);
+        if (index >= 0) {
+            m_deviceComboBox->setCurrentIndex(index);
         } else {
-            QListWidgetItem *p_listWidgetItem = nullptr;
-            WlanListItem *p_wlanItem = nullptr;
-
-            if (m_wirelessNetItemMap.contains(ssid)) {
-                p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
-                p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
-                int row = m_inactivatedNetListWidget->row(p_listWidgetItem);
-
-                //                        m_inactivatedNetListArea->scrollToItem(p_listWidgetItem, QAbstractItemView::EnsureVisible);
-                m_inactivatedNetListArea->verticalScrollBar()->setValue((p_listWidgetItem->sizeHint().height()*(row+1)/m_inactivatedNetListWidget->height())*m_inactivatedNetListArea->verticalScrollBar()->maximumHeight());
-
-                bool a = true;
-                p_wlanItem->setExpanded(a);
-                emit showMainWindow();
-            }
+            qDebug() << "[WlanPage]activateWirelessConnection no such " << devName;
+            return;
         }
-#endif
+    }
+
+    QListWidgetItem *p_listWidgetItem = nullptr;
+    WlanListItem *p_wlanItem = nullptr;
+
+    if (m_wirelessNetItemMap.contains(ssid)) {
+        p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
+        p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
+
+        m_inactivatedNetListWidget->scrollToItem(p_listWidgetItem, QAbstractItemView::EnsureVisible);
+
+
+        QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+        QApplication::postEvent(p_wlanItem, event);
+        emit showMainWindow();
+    } else {
+        qDebug() << "[WlanPage]activateWirelessConnection no such " << ssid << "in" << devName;
     }
     return;
 }
@@ -1236,11 +1245,11 @@ void WlanPage::onMainWindowVisibleChanged(const bool &visible)
         //打开页面时先触发一次扫描，然后定时扫描wifi热点和刷新icon
         requestScan();
         m_scanTimer->start(AP_SCAN_INTERVAL);
-        m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
+//        m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
     } else {
         //界面关闭的时候，停止wifi扫描和刷新
         m_scanTimer->stop();
-        m_refreshIconTimer->stop();
+//        m_refreshIconTimer->stop();
     }
 
     return;

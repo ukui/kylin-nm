@@ -301,6 +301,19 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
         }
     } else {
         qDebug() << " no active connection when resort";
+        if (!frame->uuid.isEmpty()) {
+            QMap<QString, WlanItem*>::iterator itemIter;
+            for (itemIter = frame->itemMap.begin(); itemIter != frame->itemMap.end(); itemIter++) {
+                if (itemIter.value()->uuid == frame->uuid ) {
+                    WlanItem * item= nullptr;
+                    item = itemIter.value();
+                    qDebug() << "a active connect missing when resort";
+                    itemIter.value()->uuid.clear();
+                    itemActiveConnectionStatusChanged(item, DEACTIVATED);
+                    break;
+                }
+            }
+        }
         frame->uuid.clear();
     }
 
@@ -470,7 +483,7 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
     }
     WlanItem * item= nullptr;
     //device ssid 有可能均为空
-    if (deviceName.isEmpty() && ssid.isEmpty()) {
+    if (deviceName.isEmpty() || ssid.isEmpty()) {
         if (status == ACTIVATING || status == ACTIVATED) {
             return;
         }
@@ -491,9 +504,6 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
             }
         }
     } else {
-        if (deviceName.isEmpty() || ssid.isEmpty()) {
-            return;
-        }
         if (!deviceFrameMap.contains(deviceName)) {
             return;
         }

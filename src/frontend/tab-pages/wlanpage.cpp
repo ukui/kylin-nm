@@ -800,10 +800,14 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
         return;
     }
 
-    deleteWirelessItemFormMap(m_activateConnectionItemMap, m_activatedNetListWidget, ssid);
-    QListWidgetItem *p_activeListWidgetItem = addEmptyItem(m_activatedNetListWidget);
-    m_activateConnectionItemMap.insert(EMPTY_SSID, p_activeListWidgetItem);
-    m_activatedNetListWidget->setFixedHeight(p_activeListWidgetItem->sizeHint().height());
+    if (m_activateConnectionItemMap.contains(ssid)) {
+        deleteWirelessItemFormMap(m_activateConnectionItemMap, m_activatedNetListWidget, ssid);
+        QListWidgetItem *p_activeListWidgetItem = addEmptyItem(m_activatedNetListWidget);
+        m_activateConnectionItemMap.insert(EMPTY_SSID, p_activeListWidgetItem);
+        m_activatedNetListWidget->setFixedHeight(p_activeListWidgetItem->sizeHint().height());
+    } else {
+        qDebug() << LOG_FLAG << ssid << "is not in activeconnection map";
+    }
 
     KyWirelessNetItem wirelessNetItem;
     bool ret = m_wirelessNetResource->getWifiNetwork(devName, ssid, wirelessNetItem);

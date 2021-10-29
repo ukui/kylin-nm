@@ -168,6 +168,8 @@ private:
     QGSettings *m_switchGsettings = nullptr;
     bool m_wlanSwitchEnable = true;
 
+    bool m_updateStrength = true;
+
     QTimer *m_scanTimer = nullptr;
     QTimer *m_refreshIconTimer = nullptr;
 };

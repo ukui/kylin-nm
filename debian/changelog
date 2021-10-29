@@ -1,3 +1,27 @@
+kylin-nm (3.1.1-2021+1029.2) v101; urgency=medium
+
+  * BUG号：无
+  * 需求号：无
+  * 其他改动：增加libsecret-1 libgtk-3-dev依赖
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 29 Oct 2021 10:28:03 +0800
+
+kylin-nm (3.1.1-2021+1029.1) v101; urgency=medium
+
+  * BUG号：无
+  * 需求号：无
+  * 其他改动：增加libnma-dev依赖
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 29 Oct 2021 09:59:49 +0800
+
+kylin-nm (3.1.1-2021+1029) v101; urgency=medium
+
+  * BUG号：无
+  * 其他改动：全新基于3.1设计的重构版本
+  * 影响域：任务栏网络+控制面板网络插件全部功能 
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 29 Oct 2021 08:59:01 +0800
+
 kylin-nm (3.0.1-1kylin54) v101; urgency=medium
 
   * BUG号：#57502 #61141 #61356

@@ -81,10 +81,9 @@ void WlanPage::initWlanUI()
     m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);
     m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
     addWlanMoreItem();
-
     m_inactivatedAreaLayout->addWidget(m_inactivatedNetListWidget);
+
     m_settingsLabel->installEventFilter(this);
 }
 

@@ -698,8 +698,8 @@ void LanPage::initUI()
     m_inactivatedLanListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedLanListWidget->setSpacing(LAN_LIST_SPACING);
     m_inactivatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
     m_inactivatedAreaLayout->addWidget(m_inactivatedLanListWidget);
+
     m_settingsLabel->installEventFilter(this);
 }
 

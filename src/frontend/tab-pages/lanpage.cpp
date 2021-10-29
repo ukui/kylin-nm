@@ -9,8 +9,6 @@
 #define TEXT_MARGINS 16,0,0,0
 #define SETTINGS_LAYOUT_MARGINS 24,16,24,16
 #define TRANSPARENT_COLOR QColor(0,0,0,0)
-#define SWITCH_WIDTH 48
-#define SWITCH_HEIGHT 24
 #define ITEM_HEIGHT 48
 
 #define LOG_FLAG "[LanPage]"
@@ -686,36 +684,22 @@ void LanPage::onShowControlCenter()
 void LanPage::initUI()
 {
     m_titleLabel->setText(tr("LAN"));
-    m_netSwitch->resize(SWITCH_WIDTH, SWITCH_HEIGHT);
 
     m_activatedNetLabel->setText(tr("Activated LAN"));
     m_activatedLanListWidget = new QListWidget(m_activatedNetFrame);
     m_activatedLanListWidget->setFrameShape(QFrame::Shape::NoFrame);
-//    m_activatedLanListWidget->setSpacing(LAN_LIST_SPACING);
+    m_activatedLanListWidget->setSpacing(LAN_LIST_SPACING);
     m_activatedLanListWidget->setFixedHeight(ITEM_HEIGHT);              //active区域固定高度,只显示一个条目
     m_activatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_activatedNetLayout->addWidget(m_activatedLanListWidget);
 
     m_inactivatedNetLabel->setText(tr("Inactivated LAN"));
-
-    m_inactivatedNetListArea->setBackgroundRole(QPalette::Base);
-    m_inactivatedNetListArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_inactivatedNetListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    m_inactivatedNetListArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-
-    QVBoxLayout *inactiveLanListLayout = new QVBoxLayout(m_inactivatedNetListArea);
-    inactiveLanListLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    inactiveLanListLayout->setSpacing(MAIN_LAYOUT_SPACING);
-
     m_inactivatedLanListWidget = new QListWidget(m_inactivatedNetListArea);
     m_inactivatedLanListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedLanListWidget->setSpacing(LAN_LIST_SPACING);
     m_inactivatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    m_inactivatedLanListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);   //用了listwidget的滚动条
-//    m_inactivatedLanListWidget->setSortingEnabled(true);
-//    m_inactivatedLanListWidget->sortItems(Qt::AscendingOrder);
 
-    inactiveLanListLayout->addWidget(m_inactivatedLanListWidget);
+    m_inactivatedAreaLayout->addWidget(m_inactivatedLanListWidget);
     m_settingsLabel->installEventFilter(this);
 }
 
@@ -860,6 +844,7 @@ void LanPage::onConnectionStateChange(QString uuid,
         updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         p_newItem = m_connectResourse->getConnectionItemByUuid(uuid);
+        qDebug() << "[LanPage] deactivated reason" << reason;
         if (nullptr == p_newItem) {
             qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;
             return;

@@ -17,6 +17,9 @@ TabPage::~TabPage()
 
 void TabPage::initUI()
 {
+//    this->setAutoFillBackground(false);
+//    this->setAttribute(Qt::WA_TranslucentBackground, true);
+//    this->setStyleSheet("background:transparent");
     m_mainLayout = new QVBoxLayout(this);
     m_mainLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_mainLayout->setSpacing(MAIN_LAYOUT_SPACING);
@@ -70,14 +73,25 @@ void TabPage::initUI()
     m_inactivatedNetLayout->setContentsMargins(NET_LAYOUT_MARGINS);
 //    m_inactivatedNetLayout->setSpacing(NET_LAYOUT_SPACING);
     m_inactivatedNetFrame->setLayout(m_inactivatedNetLayout);
+
     m_inactivatedNetLabel = new QLabel(m_inactivatedNetFrame);
     m_inactivatedNetLabel->setContentsMargins(TEXT_MARGINS);
     m_inactivatedNetLabel->setFixedHeight(LABEL_HEIGHT);
+
     m_inactivatedNetListArea = new QScrollArea(m_inactivatedNetFrame);
     m_inactivatedNetListArea->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedNetListArea->setWidgetResizable(true);
+    m_inactivatedNetListArea->setBackgroundRole(QPalette::Base);
+    m_inactivatedNetListArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_inactivatedNetListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_inactivatedAreaLayout = new QVBoxLayout(m_inactivatedNetListArea);
+    m_inactivatedAreaLayout->setSpacing(MAIN_LAYOUT_SPACING);
+    m_inactivatedAreaLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
+    m_inactivatedNetListArea->setLayout(m_inactivatedAreaLayout);
+
     m_inactivatedNetLayout->addWidget(m_inactivatedNetLabel);
     m_inactivatedNetLayout->addWidget(m_inactivatedNetListArea);
+
     m_inactivatedNetDivider = new Divider(this);
 
     m_settingsFrame = new QFrame(this);
@@ -101,18 +115,6 @@ void TabPage::initUI()
     m_mainLayout->addWidget(m_inactivatedNetDivider);
     m_mainLayout->addWidget(m_settingsFrame);
 }
-
-//void TabPage::updateDefaultDevice(QString &deviceName)
-//{
-//    qDebug() << "updateDefaultDevice" << deviceName;
-//    m_defaultDevice = deviceName;
-//}
-
-//QString TabPage::getDefaultDevice()
-//{
-//    qDebug() << "getDefaultDevice" << m_defaultDevice;
-//    return m_defaultDevice;
-//}
 
 void TabPage::showDesktopNotify(const QString &message)
 {

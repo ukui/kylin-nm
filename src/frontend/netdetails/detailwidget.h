@@ -32,7 +32,7 @@ public:
 
 private:
     QHBoxLayout * m_mainLayout = nullptr;
-    QLabel * m_keyLabel = nullptr;
+    FixLabel * m_keyLabel = nullptr;
     QWidget * m_valueWidget = nullptr;
 
     void initUI();

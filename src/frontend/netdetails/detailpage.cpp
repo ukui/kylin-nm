@@ -3,7 +3,7 @@
 #include <QListWidget>
 
 #define MAX_NAME_LENGTH 32
-#define MAX_LABEL_WIDTH 276
+#define MAX_LABEL_WIDTH 250
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
 DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
@@ -160,7 +160,9 @@ void DetailPage::initUI() {
     m_ipv4DnsWidget = new DetailWidget(qobject_cast<QWidget *>(mIPV4Dns), m_listWidget);
     m_ipv4DnsWidget->setKey(tr("IPV4 Dns:"));
 
-    mIPV6 = new QLabel(this);
+    mIPV6 = new FixLabel(this);
+    mIPV6->setFixedWidth(MAX_LABEL_WIDTH);
+    mIPV6->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_ipv6Widget = new DetailWidget(qobject_cast<QWidget *>(mIPV6), m_listWidget);
     m_ipv6Widget->setKey(tr("IPV6:"));
 

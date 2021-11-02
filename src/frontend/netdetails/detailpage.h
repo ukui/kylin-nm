@@ -61,7 +61,7 @@ public:
     QLabel *mBandWidth;
     QLabel *mIPV4;
     QLabel *mIPV4Dns;
-    QLabel *mIPV6;
+    FixLabel *mIPV6;
     QLabel *mMac;
     QLabel *autoConnect;
 

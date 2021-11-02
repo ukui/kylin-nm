@@ -5,6 +5,8 @@
 #define ITEM_HEIGHT 36
 #define ITEM_MARGINS 18,0,16,0
 
+#define MAX_LABEL_WIDTH 138
+
 FixLabel::FixLabel(QWidget *parent):
     QLabel(parent)
 {
@@ -56,7 +58,9 @@ void DetailWidget::initUI()
     m_mainLayout = new QHBoxLayout(this);
     m_mainLayout->setContentsMargins(ITEM_MARGINS);
 
-    m_keyLabel = new QLabel(this);
+    m_keyLabel = new FixLabel(this);
+    m_keyLabel->setMaximumWidth(MAX_LABEL_WIDTH);
+    m_keyLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_mainLayout->addWidget(m_keyLabel);
     m_mainLayout->addStretch();
     m_mainLayout->addWidget(m_valueWidget);

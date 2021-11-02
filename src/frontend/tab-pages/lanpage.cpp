@@ -826,6 +826,8 @@ void LanPage::onConnectionStateChange(QString uuid,
         return;
     }
 
+    emit this->lanConnectChanged(state);
+
     qDebug()<<"[LanPage] connection uuid"<< uuid
             << "state change slot:"<< state;
 
@@ -867,8 +869,6 @@ void LanPage::onConnectionStateChange(QString uuid,
         delete p_newItem;
         p_newItem = nullptr;
     }
-
-    emit this->lanConnectChanged(state);
 
     return;
 }
@@ -1123,14 +1123,9 @@ void LanPage::showDetailPage(QString devName, QString uuid)
 
 bool LanPage::lanIsConnected()
 {
-    if (m_activeConnectionMap.isEmpty()) {
-        return false;
+    if (m_activeResourse->wiredConnectIsActived()) {
+        return true;
     } else {
-        QString connectionUuid= m_activeConnectionMap.firstKey();
-        if (connectionUuid == EMPTY_CONNECT_UUID) {
-            return false;
-        }
+        return false;
     }
-
-    return true;
 }

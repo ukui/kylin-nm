@@ -847,6 +847,8 @@ void WlanPage::onConnectionStateChanged(QString uuid,
         return;
     }
 
+    emit this->wlanConnectChanged(state);
+
     if (m_connectResource->isApConnection(uuid)) {
         sendApStateChangeSignal(uuid, ssid, devName, state);
     } else {
@@ -886,7 +888,6 @@ void WlanPage::onConnectionStateChanged(QString uuid,
             updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Activating);
         }
     }
-    emit this->wlanConnectChanged(state);
     return;
 }
 
@@ -1275,12 +1276,11 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
 
 bool WlanPage::wlanIsConnected()
 {
-    if (m_activateConnectionItemMap.isEmpty()) {
-        return false;
-    } else if (m_activateConnectionItemMap.contains(EMPTY_SSID)) {
+    if (m_activatedConnectResource->wirelessConnectIsActived()) {
+        return true;
+    } else {
         return false;
     }
-    return true;
 }
 
 void WlanPage::setWirelessSwitchEnable(bool enable)

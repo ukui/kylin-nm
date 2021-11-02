@@ -860,23 +860,27 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     qDebug()<< "[WlanPage] wlan state changed, ssid = " << ssid
             << "; state = " << state << "; reason = " << reason << Q_FUNC_INFO <<__LINE__;
     if (state == NetworkManager::ActiveConnection::State::Activated) {
+        m_updateStrength = true;
         updateActivatedArea(uuid, ssid, devName);
         if (m_activateConnectionItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_activateConnectionItemMap.value(ssid);
             updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Activated);
         }
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
+        m_updateStrength = true;
         updateWirelessNetArea(uuid, ssid, devName);
         if (m_wirelessNetItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
             updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
         }
     } else if (state == NetworkManager::ActiveConnection::State::Deactivating){
+        m_updateStrength = false;
         if (m_activateConnectionItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_activateConnectionItemMap.value(ssid);
             updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Deactivating);
         }
     } else if (state == NetworkManager::ActiveConnection::State::Activating) {
+        m_updateStrength = false;
         if (m_wirelessNetItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
             updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Activating);
@@ -1004,6 +1008,10 @@ void WlanPage::onRefreshIconTimer()
 
     QList<KyWirelessNetItem> wlanList;
     if (!m_wirelessNetResource->getDeviceWifiNetwork(m_currentDevice, wlanList)) {
+        return;
+    }
+
+    if (!m_updateStrength) {
         return;
     }
 

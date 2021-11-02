@@ -429,6 +429,9 @@ void NetDetail::getBaseInfo(ConInfo &conInfo)
                     conInfo.strChan = QString::number(item.m_channel);
                     //无线特有
                     conInfo.strSecType = item.m_secuType;
+                    if (conInfo.strSecType.isEmpty()) {
+                        conInfo.strSecType = "None";
+                    }
             }
         } else {
             uint iHz,iChan;
@@ -536,14 +539,21 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
 
 void NetDetail::initSecuData()
 {
-    QString password;
+    QString password("");
     int type = m_info.secType;
     switch (type) {
     case NONE:
         break;
     case WPA_AND_WPA2_PERSONAL:
     case WPA3_PERSONAL:
-        password = m_wirelessConnOpration->getPsk(m_uuid);
+        if (!m_uuid.isEmpty()) {
+            NetworkManager::Setting::SecretFlags flag;
+            if (m_wirelessConnOpration->getConnSecretFlags(m_uuid, flag)) {
+                if (!flag) {
+                    password = m_wirelessConnOpration->getPsk(m_uuid);
+                }
+            }
+        }
         m_info.strPassword = password;
         securityPage->setPsk(password);
         break;

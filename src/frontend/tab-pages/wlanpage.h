@@ -148,13 +148,11 @@ private:
 
     QListWidgetItem *m_expandedItem = nullptr;
 
-    QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;
-    QVBoxLayout * m_inactivatedWlanListAreaLayout = nullptr;
-
     WlanMoreItem * m_hiddenWlanWidget = nullptr;
     QListWidgetItem *m_hiddenItem = nullptr;
 
     QListWidget * m_activatedNetListWidget = nullptr;
+    QListWidget * m_inactivatedNetListWidget = nullptr;
 
     QStringList m_devList;
     QString m_currentDevice;

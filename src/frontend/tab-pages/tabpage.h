@@ -84,7 +84,8 @@ protected:
     QVBoxLayout * m_inactivatedNetLayout = nullptr;
     QLabel * m_inactivatedNetLabel = nullptr;
     QScrollArea * m_inactivatedNetListArea = nullptr;
-    QListWidget * m_inactivatedNetListWidget = nullptr;
+    QVBoxLayout * m_inactivatedAreaLayout = nullptr;
+
     Divider * m_inactivatedNetDivider = nullptr;
 
     QFrame * m_settingsFrame = nullptr;

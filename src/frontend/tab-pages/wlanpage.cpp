@@ -65,29 +65,8 @@ bool WlanPage::eventFilter(QObject *w, QEvent *e)
 void WlanPage::initWlanUI()
 {
     m_titleLabel->setText(tr("WLAN"));
-    m_activatedNetLabel->setText(tr("Activated WLAN"));
-    m_inactivatedNetLabel->setText(tr("Other WLAN"));
 
-    //一些独有控件
-    m_inactivatedNetListArea->setBackgroundRole(QPalette::Base);
-    m_inactivatedNetListArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_inactivatedNetListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    m_inactivatedWlanListAreaLayout = new QVBoxLayout(m_inactivatedNetListArea);
-    m_inactivatedWlanListAreaLayout->setSpacing(MAIN_LAYOUT_SPACING);
-    m_inactivatedWlanListAreaLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_inactivatedNetListArea->setLayout(m_inactivatedWlanListAreaLayout);
-
-    m_inactivatedNetListWidget = new QListWidget(m_inactivatedNetListArea);
-    m_inactivatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);
-    m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
-    m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    addWlanMoreItem();
-
-    m_inactivatedWlanListAreaLayout->addWidget(m_inactivatedNetListWidget);
-
+    m_activatedNetLabel->setText(tr("Activated WLAN"));  
     m_activatedNetListWidget = new QListWidget(m_activatedNetFrame);
     m_activatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_activatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
@@ -95,6 +74,15 @@ void WlanPage::initWlanUI()
     m_activatedNetListWidget->setFixedHeight(NORMAL_HEIGHT);
     m_activatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_activatedNetLayout->addWidget(m_activatedNetListWidget);
+
+    m_inactivatedNetLabel->setText(tr("Other WLAN"));
+    m_inactivatedNetListWidget = new QListWidget(m_inactivatedNetListArea);
+    m_inactivatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
+    m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);
+    m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
+    m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    addWlanMoreItem();
+    m_inactivatedAreaLayout->addWidget(m_inactivatedNetListWidget);
 
     m_settingsLabel->installEventFilter(this);
 }

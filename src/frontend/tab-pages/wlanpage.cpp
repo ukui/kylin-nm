@@ -829,8 +829,6 @@ void WlanPage::onConnectionStateChanged(QString uuid,
                                       NetworkManager::ActiveConnection::State state,
                                       NetworkManager::ActiveConnection::Reason reason)
 {
-    emit this->wlanConnectChanged(state);
-
     QString devName, ssid;
     m_wirelessNetResource->getSsidByUuid(uuid, ssid);
     m_wirelessNetResource->getDeviceByUuid(uuid, devName);
@@ -848,6 +846,8 @@ void WlanPage::onConnectionStateChanged(QString uuid,
          qDebug()<< LOG_FLAG << "it is not wireless connection" << uuid;
         return;
     }
+
+    emit this->wlanConnectChanged(state);
 
     if (m_connectResource->isApConnection(uuid)) {
         sendApStateChangeSignal(uuid, ssid, devName, state);

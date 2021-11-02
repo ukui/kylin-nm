@@ -582,3 +582,72 @@ QString KyActiveConnectResourse::getDeviceOfActivateConnect(QString conUuid)
 
   return deviceName;
 }
+
+bool KyActiveConnectResourse::wiredConnectIsActived()
+{
+    int index = 0;
+    NetworkManager::ActiveConnection::List activeConnectList;
+
+    activeConnectList.clear();
+    activeConnectList = m_networkResourceInstance->getActiveConnectList();
+
+    if (activeConnectList.empty()) {
+        qWarning()<<"[KyActiveConnectResourse]"
+                 <<"get active connect failed, the active connect list is empty";
+        return false;
+    }
+
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr = nullptr;
+    for (index = 0; index < activeConnectList.size(); index++) {
+        activeConnectPtr = activeConnectList.at(index);
+        if (activeConnectPtr.isNull()) {
+            continue;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wired
+                != activeConnectPtr->type()) {
+            continue;
+        }
+
+        if (activeConnectPtr->state() == NetworkManager::ActiveConnection::State::Activated) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool KyActiveConnectResourse::wirelessConnectIsActived()
+{
+    int index = 0;
+    NetworkManager::ActiveConnection::List activeConnectList;
+
+    activeConnectList.clear();
+    activeConnectList = m_networkResourceInstance->getActiveConnectList();
+
+    if (activeConnectList.empty()) {
+        qWarning()<<"[KyActiveConnectResourse]"
+                 <<"get active connect failed, the active connect list is empty";
+        return false;
+    }
+
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr = nullptr;
+    for (index = 0; index < activeConnectList.size(); index++) {
+        activeConnectPtr = activeConnectList.at(index);
+        if (activeConnectPtr.isNull()) {
+            continue;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wireless
+                != activeConnectPtr->type()) {
+            continue;
+        }
+
+        if (activeConnectPtr->state() == NetworkManager::ActiveConnection::State::Activated) {
+            return true;
+        }
+    }
+
+    return false;
+
+}

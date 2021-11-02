@@ -820,6 +820,7 @@ void LanPage::onConnectionStateChange(QString uuid,
                               NetworkManager::ActiveConnection::State state,
                               NetworkManager::ActiveConnection::Reason reason)
 {
+    emit this->lanConnectChanged(state);
     //lanpage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
     if (!m_connectResourse->isWiredConnection(uuid)) {
         qDebug() << "[LanPage] connection state change signal but not wired";
@@ -867,8 +868,6 @@ void LanPage::onConnectionStateChange(QString uuid,
         delete p_newItem;
         p_newItem = nullptr;
     }
-
-    emit this->lanConnectChanged(state);
 
     return;
 }
@@ -1123,14 +1122,9 @@ void LanPage::showDetailPage(QString devName, QString uuid)
 
 bool LanPage::lanIsConnected()
 {
-    if (m_activeConnectionMap.isEmpty()) {
-        return false;
+    if (m_activeResourse->wiredConnectIsActived()) {
+        return true;
     } else {
-        QString connectionUuid= m_activeConnectionMap.firstKey();
-        if (connectionUuid == EMPTY_CONNECT_UUID) {
-            return false;
-        }
+        return false;
     }
-
-    return true;
 }

@@ -167,7 +167,7 @@ void NetConnect::initComponent() {
     ui->openWIifLayout->addWidget(wiredSwitch);
     ui->detailLayOut->setContentsMargins(MAIN_LAYOUT_MARGINS);
 
-    connect(wiredSwitch, &SwitchButton::disabledClick, this, []() {
+    connect(wiredSwitch, &SwitchButton::disabledClick, this, [=]() {
         showDesktopNotify(tr("No ethernet device avaliable"));
     });
 

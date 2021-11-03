@@ -178,7 +178,7 @@ void WlanConnect::initComponent() {
     ui->openWIifLayout->addWidget(wifiSwtch);
     ui->detailLayOut_3->setContentsMargins(MAIN_LAYOUT_MARGINS);
 
-    connect(wifiSwtch, &SwitchButton::disabledClick, this, []() {
+    connect(wifiSwtch, &SwitchButton::disabledClick, this, [=]() {
         showDesktopNotify(tr("No wireless network card detected"));
     });
 

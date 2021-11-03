@@ -5,7 +5,6 @@
 
 #include <QDBusInterface>
 #include <QEvent>
-#include <QMenu>
 #include <QAction>
 
 class LanListItem : public ListItem

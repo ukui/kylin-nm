@@ -7,7 +7,6 @@
 #include "kywirelessconnectoperation.h"
 #include <QCheckBox>
 #include "kylinactiveconnectresource.h"
-#include <QMenu>
 #include <QAction>
 
 #include <networkmanagerqt/wirelesssecuritysetting.h>

@@ -783,6 +783,16 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int
                 }
                 itemActiveConnectionStatusChanged(item, status);
             }
+        } else {
+            if (status == ACTIVATED || status == DEACTIVATED) {
+                //虚拟网卡处理
+                QMap<QString, ItemFrame *>::iterator iters;
+                for (iters = deviceFrameMap.begin(); iters != deviceFrameMap.end(); iters++) {
+                    if (iters.value()->itemMap.contains(uuid)) {
+                        removeOneLanFrame(iters.value(), iters.key(), uuid);
+                     }
+                }
+            }
         }
     }
 }

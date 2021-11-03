@@ -168,6 +168,7 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
     } else {
         qWarning() << "Connect enterprise wlan failed!(Unknown eap type)" << Q_FUNC_INFO << __LINE__;
     }
+    close();
 }
 
 void EnterpriseWlanDialog::onEapTypeChanged(const KyEapMethodType &type)

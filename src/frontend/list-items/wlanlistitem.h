@@ -43,6 +43,8 @@ public:
     void updateWirelessNetSecurity(QString ssid, QString securityType);
     void updateWirelessNetItem(KyWirelessNetItem &wirelessNetItem);
 
+    void forgetPwd();
+
 protected:
     void resizeEvent(QResizeEvent *event);
     void onRightButtonClicked();
@@ -78,8 +80,6 @@ private:
     QHBoxLayout *m_autoConnectFrameLyt = nullptr;
     QCheckBox *m_autoConnectCheckBox = nullptr;
     QLabel *m_autoConnectLabel = nullptr;
-
-    QMenu *m_menu = nullptr;
 
     bool m_focusIsOut = true;
     bool m_mouseIsOut = true;

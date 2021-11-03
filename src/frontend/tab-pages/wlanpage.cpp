@@ -59,6 +59,7 @@ bool WlanPage::eventFilter(QObject *w, QEvent *e)
             showControlCenter();
         }
     }
+
     return QWidget::eventFilter(w,e);
 }
 
@@ -544,6 +545,7 @@ void WlanPage::onConnectionAdd(QString deviceName, QString ssid)
 
     return;
 }
+
 void WlanPage::onConnectionRemove(QString deviceName, QString ssid)
 {
     qDebug() << LOG_FLAG << "one connection is removed, it's ssid " << ssid << "device name"<< deviceName;
@@ -1253,8 +1255,32 @@ void WlanPage::onMainWindowVisibleChanged(const bool &visible)
         //界面关闭的时候，停止wifi扫描和刷新
         m_scanTimer->stop();
 //        m_refreshIconTimer->stop();
+        qDebug() << "wlanpage not visible";
+        showNonePwd();
     }
 
+    return;
+}
+
+void WlanPage::onWlanPageVisibleChanged(int index)
+{
+    if (index == 0) {
+        qDebug() << "wlanpage not visible";
+        showNonePwd();
+    }
+}
+
+void WlanPage::showNonePwd()
+{
+    QMap<QString, QListWidgetItem*>::iterator iter;
+    for(iter=m_wirelessNetItemMap.begin();iter!= m_wirelessNetItemMap.end();iter++)
+    {
+        if(iter.value() != nullptr) {
+            QListWidgetItem *p_listWidgetItem = iter.value();
+            WlanListItem *p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
+            p_wlanItem->forgetPwd();
+        }
+    }
     return;
 }
 

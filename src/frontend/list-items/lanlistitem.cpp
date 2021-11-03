@@ -25,8 +25,6 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
 
     m_itemFrame->installEventFilter(this);
     connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
-
-    m_menu = new QMenu(this);//右键菜单
     connect(m_menu, &QMenu::triggered, this, &LanListItem::onMenuTriggered);
 }
 
@@ -49,10 +47,8 @@ LanListItem::~LanListItem()
 void LanListItem::setIcon(bool isOn)
 {
     if (isOn) {
-//        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
         m_netButton->setActive(true);               //设置图标显示不同颜色
     } else {
-//        m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
         m_netButton->setActive(false);
     }
 }

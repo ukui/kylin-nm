@@ -46,7 +46,6 @@ private:
     KyNetworkDeviceResourse *m_deviceResource = nullptr;
 
     QString m_deviceName = "";
-    QMenu *m_menu = nullptr;
 };
 
 #endif // LANLISTITEM_H

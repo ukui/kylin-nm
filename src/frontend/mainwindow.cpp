@@ -119,11 +119,14 @@ void MainWindow::initWindowProperties()
     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")));
     this->setFixedSize(MAINWINDOW_WIDTH, MAINWINDOW_HEIGHT);
 //    //绘制毛玻璃特效
-//    this->setAttribute(Qt::WA_TranslucentBackground, true);
-//    QPainterPath path;
-//    auto rect = this->rect();
-//    path.addRoundedRect(rect, 6, 6);
-//    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));
+//    this->setStyleSheet("background:transparent");   //透明
+//    this->setAttribute(Qt::WA_TranslucentBackground, true);  //半透明
+    this->setWindowOpacity(0.8);
+
+    QPainterPath path;
+    auto rect = this->rect();
+    path.addRoundedRect(rect, 6, 6);
+    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
 }
 
 /**
@@ -151,6 +154,7 @@ void MainWindow::initUI()
     m_tabBarLayout->addWidget(m_lanLabel);
     m_tabBarLayout->addWidget(m_wlanLabel);
     m_centralWidget->tabBar()->setLayout(m_tabBarLayout);
+    connect(m_centralWidget, &QTabWidget::currentChanged, m_wlanWidget, &WlanPage::onWlanPageVisibleChanged);
 }
 
 /**

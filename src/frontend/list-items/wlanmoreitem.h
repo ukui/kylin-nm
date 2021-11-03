@@ -18,6 +18,7 @@ public:
     ~WlanMoreItem();
 
     void onNetButtonClicked();
+    void onMenuTriggered(QAction *action);
 signals:
     void hiddenWlanClicked();
 };

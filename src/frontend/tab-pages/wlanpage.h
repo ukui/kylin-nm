@@ -68,6 +68,7 @@ public slots:
     void onMainWindowVisibleChanged(const bool &visible);
     void onSecurityTypeChange(QString devName, QString ssid, QString secuType);
     void requestScan();
+    void onWlanPageVisibleChanged(int index);
 
 private slots:
     void onWlanAdded(QString interface, KyWirelessNetItem &item);
@@ -107,6 +108,8 @@ private:
     void initWlanSwitchState();
     void initWlanArea();
     void addWlanMoreItem();
+
+    void showNonePwd();
 
     QListWidgetItem *addEmptyItem(QListWidget *wirelessListWidget);
     QListWidgetItem *addNewItem(KyWirelessNetItem &wirelessNetItem,

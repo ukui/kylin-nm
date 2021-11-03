@@ -145,7 +145,7 @@ private:
     QTimer * m_scanTimer = nullptr;
 //    QTimer * m_updateTimer = nullptr;
 private:
-    SwitchButton       *wifiSwtch;
+    SwitchButton       *wifiSwitch;
     bool               mFirstLoad;
 
 private slots:

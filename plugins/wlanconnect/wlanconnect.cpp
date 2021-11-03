@@ -174,22 +174,22 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
 }
 
 void WlanConnect::initComponent() {
-    wifiSwtch = new SwitchButton(pluginWidget, false);
-    ui->openWIifLayout->addWidget(wifiSwtch);
+    wifiSwitch = new SwitchButton(pluginWidget, false);
+    ui->openWIifLayout->addWidget(wifiSwitch);
     ui->detailLayOut_3->setContentsMargins(MAIN_LAYOUT_MARGINS);
 
-    connect(wifiSwtch, &SwitchButton::disabledClick, this, [=]() {
+    connect(wifiSwitch, &SwitchButton::disabledClick, this, [=]() {
         showDesktopNotify(tr("No wireless network card detected"));
     });
 
     //开关
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
-        connect(wifiSwtch, &SwitchButton::checkedChanged, this, [=] (bool checked) {
+        connect(wifiSwitch, &SwitchButton::checkedChanged, this, [=] (bool checked) {
             if (!m_interface->isValid()) {
                 return;
             }
-            if (wifiSwtch->getDisabledFlag()) {
+            if (wifiSwitch->getDisabledFlag()) {
                 return;
             }
             qDebug() << "[WlanConnect]call setWirelessSwitchEnable " << checked << __LINE__;
@@ -203,9 +203,9 @@ void WlanConnect::initComponent() {
             }
         });
     } else {
-        wifiSwtch->blockSignals(true);
-        wifiSwtch->setChecked(true);
-        wifiSwtch->blockSignals(false);
+        wifiSwitch->blockSignals(true);
+        wifiSwitch->setChecked(true);
+        wifiSwitch->blockSignals(false);
         qDebug()<<"[netconnect] org.ukui.kylin-nm.switch is not installed!";
     }
 
@@ -213,8 +213,8 @@ void WlanConnect::initComponent() {
     getDeviceList(deviceList);
     if (deviceList.isEmpty()) {
         qDebug() << "[WlanConnect]no device exist when init, set switch disable";
-        wifiSwtch->setDisabledFlag(true);
-        wifiSwtch->setChecked(false);
+        wifiSwitch->setDisabledFlag(true);
+        wifiSwitch->setChecked(false);
     }
     initNet();
 
@@ -266,7 +266,7 @@ void WlanConnect::reScan()
 //更新列表顺序
 void WlanConnect::updateList()
 {
-    if (!wifiSwtch->isChecked()) {
+    if (!wifiSwitch->isChecked()) {
         return;
     }
     qDebug() << "update list";
@@ -384,7 +384,7 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
 //void WlanConnect::updateStrengthList(QString deviceName, QString ssid, int strength)
 //{
 //    return;
-//    if(!wifiSwtch->isChecked()) {
+//    if(!wifiSwitch->isChecked()) {
 //        return;
 //    }
 //    qDebug()<<"[WlanConnect]Update wireless network signal strength：" << deviceName <<ssid << strength;
@@ -460,10 +460,10 @@ void WlanConnect::onDeviceStatusChanged()
     }
     deviceList = list;
     if (deviceList.isEmpty()) {
-        wifiSwtch->setDisabledFlag(true);
-        wifiSwtch->setChecked(false);
+        wifiSwitch->setDisabledFlag(true);
+        wifiSwitch->setChecked(false);
     } else {
-        wifiSwtch->setDisabledFlag(false);
+        wifiSwitch->setDisabledFlag(false);
         setSwitchStatus();
     }
 }
@@ -496,7 +496,7 @@ void WlanConnect::onDeviceNameChanged(QString oldName, QString newName, int type
 //activeconnect status change
 void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status)
 {
-    if (!wifiSwtch->isChecked()) {
+    if (!wifiSwitch->isChecked()) {
         return;
     }
     if (uuid.isEmpty()) {
@@ -555,7 +555,7 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
 void WlanConnect::onNetworkAdd(QString deviceName, QStringList wlanInfo)
 {
     qDebug()<<"[WlanConnect]onNetworkAdd "<< deviceName << " " << wlanInfo;
-    if(!wifiSwtch->isChecked() || deviceName.isEmpty()) {
+    if(!wifiSwitch->isChecked() || deviceName.isEmpty()) {
         return;
     }
 
@@ -587,7 +587,7 @@ void WlanConnect::onNetworkAdd(QString deviceName, QStringList wlanInfo)
 void WlanConnect::onNetworkRemove(QString deviceName, QString wlannName)
 {
     //开关已关闭 忽略
-//    if (!wifiSwtch->isChecked()) {
+//    if (!wifiSwitch->isChecked()) {
 //        qDebug() << "[WlanConnect]recieve network remove,but wireless switch is off";
 //        return;
 //    }
@@ -629,17 +629,17 @@ void WlanConnect::getDeviceList(QStringList &list)
 void WlanConnect::setSwitchStatus()
 {
 //    if (deviceList.size() == 0) {
-//        wifiSwtch->blockSignals(true);
-//        wifiSwtch->setChecked(false);
-//        wifiSwtch->blockSignals(false);
+//        wifiSwitch->blockSignals(true);
+//        wifiSwitch->setChecked(false);
+//        wifiSwitch->blockSignals(false);
 //        return;
 //    }
     bool status = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
     qDebug() << "[WlanConnect]setSwitchStatus" << status;
-    wifiSwtch->blockSignals(true);
-    wifiSwtch->setChecked(status);
-    wifiSwtch->blockSignals(false);
-    if (!wifiSwtch->isChecked()) {
+    wifiSwitch->blockSignals(true);
+    wifiSwitch->setChecked(status);
+    wifiSwitch->blockSignals(false);
+    if (!wifiSwitch->isChecked()) {
         hideLayout(ui->availableLayout);
     } else {
         showLayout(ui->availableLayout);
@@ -663,7 +663,7 @@ void WlanConnect::initNet() {
 void WlanConnect::initNetListFromDevice(QString deviceName)
 {
     qDebug() << "[WlanConnect]initNetListFromDevice " << deviceName;
-    if (!wifiSwtch->isChecked()) {
+    if (!wifiSwitch->isChecked()) {
          qDebug() << "[WlanConnect]initNetListFromDevice " << deviceName << " switch off";
         return;
     }

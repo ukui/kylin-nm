@@ -148,13 +148,11 @@ private:
 
     QListWidgetItem *m_expandedItem = nullptr;
 
-    QFrame * m_inactivatedWlanListAreaCentralWidget = nullptr;
-    QVBoxLayout * m_inactivatedWlanListAreaLayout = nullptr;
-
     WlanMoreItem * m_hiddenWlanWidget = nullptr;
     QListWidgetItem *m_hiddenItem = nullptr;
 
     QListWidget * m_activatedNetListWidget = nullptr;
+    QListWidget * m_inactivatedNetListWidget = nullptr;
 
     QStringList m_devList;
     QString m_currentDevice;
@@ -167,6 +165,8 @@ private:
 
     QGSettings *m_switchGsettings = nullptr;
     bool m_wlanSwitchEnable = true;
+
+    bool m_updateStrength = true;
 
     QTimer *m_scanTimer = nullptr;
     QTimer *m_refreshIconTimer = nullptr;

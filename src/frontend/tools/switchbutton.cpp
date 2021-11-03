@@ -16,11 +16,13 @@
  *
  */
 #include "switchbutton.h"
+#define SWITCH_WIDTH 48
+#define SWITCH_HEIGHT 24
 
 SwitchButton::SwitchButton(QWidget *parent) : QWidget(parent)
 {
 
-    setFixedSize(50,24);
+    setFixedSize(SWITCH_WIDTH,SWITCH_HEIGHT);
     m_fWidth = (float)width();
     m_fHeight = (float)height();
     m_cTimer = new QTimer(this);

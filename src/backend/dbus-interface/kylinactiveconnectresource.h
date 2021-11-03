@@ -39,6 +39,9 @@ public:
 
     QString getDeviceOfActivateConnect(QString conUuid);
 
+    bool wiredConnectIsActived();
+    bool wirelessConnectIsActived();
+
 private:
     void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
                             QString &ipv4Address,

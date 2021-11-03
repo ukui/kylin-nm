@@ -65,29 +65,8 @@ bool WlanPage::eventFilter(QObject *w, QEvent *e)
 void WlanPage::initWlanUI()
 {
     m_titleLabel->setText(tr("WLAN"));
-    m_activatedNetLabel->setText(tr("Activated WLAN"));
-    m_inactivatedNetLabel->setText(tr("Other WLAN"));
 
-    //一些独有控件
-    m_inactivatedNetListArea->setBackgroundRole(QPalette::Base);
-    m_inactivatedNetListArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_inactivatedNetListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    m_inactivatedWlanListAreaLayout = new QVBoxLayout(m_inactivatedNetListArea);
-    m_inactivatedWlanListAreaLayout->setSpacing(MAIN_LAYOUT_SPACING);
-    m_inactivatedWlanListAreaLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_inactivatedNetListArea->setLayout(m_inactivatedWlanListAreaLayout);
-
-    m_inactivatedNetListWidget = new QListWidget(m_inactivatedNetListArea);
-    m_inactivatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);
-    m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
-    m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    addWlanMoreItem();
-
-    m_inactivatedWlanListAreaLayout->addWidget(m_inactivatedNetListWidget);
-
+    m_activatedNetLabel->setText(tr("Activated WLAN"));  
     m_activatedNetListWidget = new QListWidget(m_activatedNetFrame);
     m_activatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_activatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
@@ -95,6 +74,15 @@ void WlanPage::initWlanUI()
     m_activatedNetListWidget->setFixedHeight(NORMAL_HEIGHT);
     m_activatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_activatedNetLayout->addWidget(m_activatedNetListWidget);
+
+    m_inactivatedNetLabel->setText(tr("Other WLAN"));
+    m_inactivatedNetListWidget = new QListWidget(m_inactivatedNetListArea);
+    m_inactivatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
+    m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);
+    m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
+    m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    addWlanMoreItem();
+    m_inactivatedAreaLayout->addWidget(m_inactivatedNetListWidget);
 
     m_settingsLabel->installEventFilter(this);
 }
@@ -859,6 +847,8 @@ void WlanPage::onConnectionStateChanged(QString uuid,
         return;
     }
 
+    emit this->wlanConnectChanged(state);
+
     if (m_connectResource->isApConnection(uuid)) {
         sendApStateChangeSignal(uuid, ssid, devName, state);
     } else {
@@ -872,29 +862,32 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     qDebug()<< "[WlanPage] wlan state changed, ssid = " << ssid
             << "; state = " << state << "; reason = " << reason << Q_FUNC_INFO <<__LINE__;
     if (state == NetworkManager::ActiveConnection::State::Activated) {
+        m_updateStrength = true;
         updateActivatedArea(uuid, ssid, devName);
         if (m_activateConnectionItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_activateConnectionItemMap.value(ssid);
             updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Activated);
         }
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
+        m_updateStrength = true;
         updateWirelessNetArea(uuid, ssid, devName);
         if (m_wirelessNetItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
             updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
         }
     } else if (state == NetworkManager::ActiveConnection::State::Deactivating){
+        m_updateStrength = false;
         if (m_activateConnectionItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_activateConnectionItemMap.value(ssid);
             updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Deactivating);
         }
     } else if (state == NetworkManager::ActiveConnection::State::Activating) {
+        m_updateStrength = false;
         if (m_wirelessNetItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
             updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Activating);
         }
     }
-    emit this->wlanConnectChanged(state);
     return;
 }
 
@@ -1016,6 +1009,10 @@ void WlanPage::onRefreshIconTimer()
 
     QList<KyWirelessNetItem> wlanList;
     if (!m_wirelessNetResource->getDeviceWifiNetwork(m_currentDevice, wlanList)) {
+        return;
+    }
+
+    if (!m_updateStrength) {
         return;
     }
 
@@ -1279,12 +1276,11 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
 
 bool WlanPage::wlanIsConnected()
 {
-    if (m_activateConnectionItemMap.isEmpty()) {
-        return false;
-    } else if (m_activateConnectionItemMap.contains(EMPTY_SSID)) {
+    if (m_activatedConnectResource->wirelessConnectIsActived()) {
+        return true;
+    } else {
         return false;
     }
-    return true;
 }
 
 void WlanPage::setWirelessSwitchEnable(bool enable)

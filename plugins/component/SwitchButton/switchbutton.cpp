@@ -203,6 +203,7 @@ void SwitchButton::mousePressEvent(QMouseEvent *){
     }
     if(disabled){
         mEndX = 0;
+        Q_EMIT disabledClick();
         return ;
     }else{
         checked = !checked;

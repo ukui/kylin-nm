@@ -62,6 +62,23 @@ bool intThan(int sign1, int sign2)
     return sign1 < sign2;
 }
 
+void WlanConnect::showDesktopNotify(const QString &message)
+{
+    QDBusInterface iface("org.freedesktop.Notifications",
+                         "/org/freedesktop/Notifications",
+                         "org.freedesktop.Notifications",
+                         QDBusConnection::sessionBus());
+    QList<QVariant> args;
+    args<<(tr("ukui control center"))
+       <<((unsigned int) 0)
+       <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+       <<tr("ukui control center desktop message") //显示的是什么类型的信息
+       <<message //显示的具体信息
+       <<QStringList()
+       <<QVariantMap()
+       <<(int)-1;
+    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+}
 
 WlanConnect::WlanConnect() :  mFirstLoad(true) {
 
@@ -160,6 +177,10 @@ void WlanConnect::initComponent() {
     wifiSwtch = new SwitchButton(pluginWidget, false);
     ui->openWIifLayout->addWidget(wifiSwtch);
     ui->detailLayOut_3->setContentsMargins(MAIN_LAYOUT_MARGINS);
+
+    connect(wifiSwtch, &SwitchButton::disabledClick, this, []() {
+        showDesktopNotify(tr("No wireless network card detected"));
+    });
 
     //开关
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {

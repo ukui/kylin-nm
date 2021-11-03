@@ -87,6 +87,8 @@ private:
     void initComponent();
     void runExternalApp();
 
+    void showDesktopNotify(const QString &message);
+
 
     //开关相关
     void setSwitchStatus();

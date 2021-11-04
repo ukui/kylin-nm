@@ -60,7 +60,7 @@ void LanPage::initLanDevice()
     m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
     if (m_currentDeviceName.isEmpty()) {
         for (int index = 0; index < m_devList.size(); ++index) {
-            if (m_deviceResource->wiredDeviceCarriered(m_devList.at(index))) {
+            if (m_deviceResource->wiredDeviceIsCarriered(m_devList.at(index))) {
                 m_currentDeviceName = m_devList.at(index);
                 setDefaultDevice(WIRED, m_currentDeviceName);
                 break;
@@ -513,7 +513,7 @@ void LanPage::addDeviceForCombox(QString deviceName)
 
 void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
 {
-    if (deviceType !=  NetworkManager::Device::Type::Ethernet) {
+    if (!m_deviceResource->deviceIsWired(deviceName)) {
         return;
     }
 
@@ -522,7 +522,6 @@ void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devic
     }
 
     if (m_devList.count() == 0) {// 有线网卡从无到有，打开开关
-        qDebug() << "[wiredSwitch]: set enable when add only one device";
         m_netSwitch->setEnabled(true);
         m_wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
         m_netSwitch->setSwitchStatus(m_wiredSwitch);
@@ -1079,7 +1078,7 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
 void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "[LanPage] activateWired" << devName << connUuid;
-    if (!m_deviceResource->wiredDeviceCarriered(devName)) {
+    if (!m_deviceResource->wiredDeviceIsCarriered(devName)) {
         qDebug() << LOG_FLAG << devName << "is not carried, so can not activate connection";
         this->showDesktopNotify(tr("Wired Device not carried"));
     } else {

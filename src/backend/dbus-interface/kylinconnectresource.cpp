@@ -553,7 +553,7 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
     }
 
     KyNetworkDeviceResourse deviceResource;
-    if (!deviceResource.checkWirelessDeviceExist(settingPtr->interfaceName())) {
+    if (!deviceResource.wirelessDeviceIsExist(settingPtr->interfaceName())) {
         qDebug() << "[KyConnectResourse]" <<"get ap item failed, the ap device is not exist yet";
         return nullptr;
     }

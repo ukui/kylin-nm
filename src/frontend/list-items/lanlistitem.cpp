@@ -88,7 +88,7 @@ void LanListItem::onNetButtonClicked()
 
     if (Deactivated == m_lanConnectItem.m_connectState) {
         //断开的连接，点击激活连接
-        if (m_deviceResource->wiredDeviceCarriered(m_deviceName)) {
+        if (m_deviceResource->wiredDeviceIsCarriered(m_deviceName)) {
             m_connectOperation->activateWiredConnection(m_lanConnectItem.m_connectUuid, m_deviceName);
             qDebug() << LOG_FLAG << "it will activate connection" << m_lanConnectItem.m_connectName
                      << ". it's device is" << m_deviceName;

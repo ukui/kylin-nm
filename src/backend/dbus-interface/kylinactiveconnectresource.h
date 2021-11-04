@@ -35,10 +35,9 @@ public:
 
     void getApActivateConnect(QList<KyApConnectItem *> &apConnectItemList);
 
-    bool isActiveConnection(QString uuid, QStringList &devName);
-
     QString getDeviceOfActivateConnect(QString conUuid);
 
+    bool connectionIsVirtual(QString uuid);
     bool wiredConnectIsActived();
     bool wirelessConnectIsActived();
 

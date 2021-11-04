@@ -825,7 +825,7 @@ void LanPage::onConnectionStateChange(QString uuid,
         return;
     }
 
-    emit this->lanConnectChanged(state);
+    sendLanStateChangeSignal(uuid, (ConnectState)state);
 
     qDebug()<<"[LanPage] connection uuid"<< uuid
             << "state change slot:"<< state;
@@ -855,11 +855,15 @@ void LanPage::onConnectionStateChange(QString uuid,
         updateConnectionArea(p_newItem);
         updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
     } else if (state == NetworkManager::ActiveConnection::State::Activating) {
-        updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
         deviceName = getConnectionDevice(uuid);
+        if (deviceName == m_currentDeviceName) {
+            updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
+        }
     } else if (state == NetworkManager::ActiveConnection::State::Deactivating) {
-        updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
         deviceName = getConnectionDevice(uuid);
+        if (deviceName == m_currentDeviceName) {
+            updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
+        }
     }
 
     emit lanActiveConnectionStateChanged(deviceName, uuid, state);
@@ -918,6 +922,19 @@ void LanPage::sendLanAddSignal(KyConnectItem *p_connectItem)
     info << p_connectItem->m_connectName << p_connectItem->m_connectUuid << p_connectItem->m_connectPath;
     qDebug() << "[LanPage] emit lanAdd because addConnection ";
     emit lanAdd(p_connectItem->m_ifaceName, info);
+
+    return;
+}
+
+void LanPage::sendLanStateChangeSignal(QString uuid, ConnectState state)
+{
+    if (state == Activating || state == Deactivating) {
+        if (m_activeResourse->connectionIsVirtual(uuid)) {
+            return;
+        }
+    }
+
+    emit this->lanConnectChanged(state);
 
     return;
 }

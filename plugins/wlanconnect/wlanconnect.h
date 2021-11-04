@@ -75,6 +75,8 @@ private:
     void runExternalApp();
     void initSearchText();
 
+    void showDesktopNotify(const QString &message);
+
     //点击item 连接/断开
     void activeConnect(QString netName, QString deviceName, int type);
     void deActiveConnect(QString netName, QString deviceName, int type);
@@ -143,8 +145,8 @@ private:
     QTimer * m_scanTimer = nullptr;
 //    QTimer * m_updateTimer = nullptr;
 private:
-    SwitchButton       *wifiSwtch;
-    bool               mFirstLoad;
+    SwitchButton       *m_wifiSwitch;
+    bool               m_firstLoad;
 
 private slots:
 

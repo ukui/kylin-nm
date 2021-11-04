@@ -115,7 +115,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void checkedChanged(bool checked);
-
+    void disabledClick();
 };
 
 #endif // SWITCHBUTTON_H

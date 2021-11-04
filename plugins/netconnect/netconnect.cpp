@@ -49,6 +49,26 @@ const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 bool sortByVal(const QPair<QString, int> &l, const QPair<QString, int> &r) {
     return (l.second < r.second);
 }
+
+void NetConnect::showDesktopNotify(const QString &message)
+{
+    QDBusInterface iface("org.freedesktop.Notifications",
+                         "/org/freedesktop/Notifications",
+                         "org.freedesktop.Notifications",
+                         QDBusConnection::sessionBus());
+    QList<QVariant> args;
+    args<<(tr("ukui control center"))
+       <<((unsigned int) 0)
+       <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+       <<tr("ukui control center desktop message") //显示的是什么类型的信息
+       <<message //显示的具体信息
+       <<QStringList()
+       <<QVariantMap()
+       <<(int)-1;
+    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+}
+
+
 NetConnect::NetConnect() :  mFirstLoad(true) {
     QTranslator* translator = new QTranslator(this);
     translator->load("/usr/share/kylin-nm/netconnect/" + QLocale::system().name());
@@ -146,6 +166,10 @@ void NetConnect::initComponent() {
     wiredSwitch = new SwitchButton(pluginWidget, false);
     ui->openWIifLayout->addWidget(wiredSwitch);
     ui->detailLayOut->setContentsMargins(MAIN_LAYOUT_MARGINS);
+
+    connect(wiredSwitch, &SwitchButton::disabledClick, this, [=]() {
+        showDesktopNotify(tr("No ethernet device avaliable"));
+    });
 
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
@@ -782,6 +806,16 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int
                     deviceFrameMap[deviceName]->lanItemLayout->insertWidget(index,item);
                 }
                 itemActiveConnectionStatusChanged(item, status);
+            }
+        } else {
+            if (status == ACTIVATED || status == DEACTIVATED) {
+                //虚拟网卡处理
+                QMap<QString, ItemFrame *>::iterator iters;
+                for (iters = deviceFrameMap.begin(); iters != deviceFrameMap.end(); iters++) {
+                    if (iters.value()->itemMap.contains(uuid)) {
+                        removeOneLanFrame(iters.value(), iters.key(), uuid);
+                     }
+                }
             }
         }
     }

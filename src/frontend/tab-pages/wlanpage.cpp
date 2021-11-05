@@ -10,6 +10,7 @@
 #define ICON_REFRESH_INTERVAL (5*1000)
 #define EMPTY_SSID "emptyssid"
 #define LOG_FLAG  "[WlanPage]"
+#define LAN_PAGE_INDEX 0
 
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
@@ -1264,7 +1265,7 @@ void WlanPage::onMainWindowVisibleChanged(const bool &visible)
 
 void WlanPage::onWlanPageVisibleChanged(int index)
 {
-    if (index == 0) {
+    if (index == LAN_PAGE_INDEX) {
         qDebug() << "wlanpage not visible";
         showNonePwd();
     }

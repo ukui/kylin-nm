@@ -515,7 +515,7 @@ void WlanListItem::onMenuTriggered(QAction *action)
 
 void WlanListItem::forgetPwd()
 {
-    if (!m_wirelessNetItem.m_isConfigured) {
+    if (!this->isConfigured()) {
         m_pwdLineEdit->setText("");
         return;
     }

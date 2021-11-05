@@ -70,6 +70,7 @@ private:
 
     void sendLanUpdateSignal(KyConnectItem *p_connectItem);
     void sendLanAddSignal(KyConnectItem *p_connectItem);
+    void sendLanStateChangeSignal(QString uuid, ConnectState state);
 
     void addEmptyConnectItem(QMap<QString, QListWidgetItem *> &connectMap,
                                            QListWidget *lanListWidget);

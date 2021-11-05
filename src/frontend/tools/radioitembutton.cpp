@@ -121,6 +121,10 @@ void RadioItemButton::onPaletteChanged()
         m_backgroundColor = FOREGROUND_COLOR_NORMAL_INACTIVE_DARK;
         m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
     }
+    if (m_isActivated) {
+        m_backgroundColor = FOREGROUND_COLOR_NORMAL_ACTIVE;
+        m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
+        }
 }
 
 void RadioItemButton::onAnimationValueChanged(const QVariant& value)

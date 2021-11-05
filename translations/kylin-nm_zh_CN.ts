@@ -550,7 +550,7 @@
     <message>
         <location filename="../src/frontend/list-items/listitem.cpp" line="63"/>
         <source>Kylin NM</source>
-        <translation>麒麟网络工具</translation>
+        <translation>麒麟网络设置工具</translation>
     </message>
     <message>
         <location filename="../src/frontend/list-items/listitem.cpp" line="66"/>
@@ -595,7 +595,7 @@
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="30"/>
         <source>Kylin NM</source>
-        <translation>麒麟网络工具</translation>
+        <translation>麒麟网络设置工具</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="33"/>
@@ -891,7 +891,7 @@
     <message>
         <location filename="../src/frontend/tab-pages/tabpage.cpp" line="127"/>
         <source>Kylin NM</source>
-        <translation>麒麟网络工具</translation>
+        <translation>麒麟网络设置工具</translation>
     </message>
     <message>
         <location filename="../src/frontend/tab-pages/tabpage.cpp" line="130"/>

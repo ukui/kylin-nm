@@ -5,7 +5,6 @@
 
 #include <QDBusInterface>
 #include <QEvent>
-#include <QMenu>
 #include <QAction>
 
 class LanListItem : public ListItem
@@ -46,7 +45,6 @@ private:
     KyNetworkDeviceResourse *m_deviceResource = nullptr;
 
     QString m_deviceName = "";
-    QMenu *m_menu = nullptr;
 };
 
 #endif // LANLISTITEM_H

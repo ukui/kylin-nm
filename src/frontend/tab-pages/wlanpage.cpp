@@ -995,6 +995,10 @@ void WlanPage::onWifiEnabledChanged(bool isWifiOn)
 
 void WlanPage::onRefreshIconTimer()
 {  
+    if (!m_updateStrength) {
+        return;
+    }
+
     emit timeToUpdate();
 
     if(!this->isVisible()) {
@@ -1012,9 +1016,6 @@ void WlanPage::onRefreshIconTimer()
         return;
     }
 
-    if (!m_updateStrength) {
-        return;
-    }
 
     QString activateSsid = m_activateConnectionItemMap.firstKey();
     int sortRow = 0;

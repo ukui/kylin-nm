@@ -515,7 +515,7 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
                 for (itemIter = iter.value()->itemMap.begin(); itemIter != iter.value()->itemMap.end(); itemIter++) {
                     if (itemIter.value()->uuid == uuid ) {
                         item = itemIter.value();
-                        if (status == 4) {
+                        if (status == DEACTIVATED) {
                             itemIter.value()->uuid.clear();
                         }
                         break;
@@ -531,12 +531,14 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
         for (int i = 0; i < deviceFrameMap[deviceName]->itemMap.size(); ++i) {
             if (deviceFrameMap[deviceName]->itemMap.contains(ssid)) {
                 item = deviceFrameMap[deviceName]->itemMap[ssid];
-                if (status == 2) {
+                if (status == ACTIVATED || status == ACTIVATING) {
                     deviceFrameMap[deviceName]->itemMap[ssid]->uuid = uuid;
                     deviceFrameMap[deviceName]->uuid = uuid;
-                    deviceFrameMap[deviceName]->lanItemLayout->removeWidget(item);
-                    deviceFrameMap[deviceName]->lanItemLayout->insertWidget(0,item);
-                } else if (status == 4) {
+                    if (status == ACTIVATED) {
+                        deviceFrameMap[deviceName]->lanItemLayout->removeWidget(item);
+                        deviceFrameMap[deviceName]->lanItemLayout->insertWidget(0,item);
+                    }
+                } else if (status == DEACTIVATED) {
                     deviceFrameMap[deviceName]->itemMap[ssid]->uuid.clear();
                     deviceFrameMap[deviceName]->uuid.clear();
                     //todo 断开后排序 现在等下次更新列表 自动排序

@@ -50,8 +50,12 @@ QString WlanListItem::getSsid()
 void WlanListItem::setSignalStrength(const int &signal)
 {
     m_wirelessNetItem.m_signalStrength = signal;
-
-    refreshIcon();
+    if (Activated == m_connectState) {
+        refreshIcon(true);
+    }
+    else if (Deactivated == m_connectState) {
+        refreshIcon(false);
+    }
 
     return;
 }
@@ -69,7 +73,7 @@ bool WlanListItem::isConfigured()
 void WlanListItem::setWlanState(const int &state)
 {
 //    m_wirelessNetItem.m_state = state; //ZJP_TODO 后端接口待补全
-    refreshIcon();
+    refreshIcon(false);
 }
 
 void WlanListItem::setExpanded(const bool &expanded)
@@ -187,7 +191,7 @@ void WlanListItem::initWlanUI()
 //    this->setName((m_wirelessNetItem.m_connName != "") ? m_wirelessNetItem.m_connName : m_wirelessNetItem.m_NetSsid);
     this->setName(m_wirelessNetItem.m_NetSsid);
     //刷新左侧按钮图标
-    refreshIcon();
+    refreshIcon(false);
 
 #define PWD_AREA_HEIGHT 36
 #define CONNECT_BUTTON_WIDTH 96
@@ -256,7 +260,7 @@ void WlanListItem::initWlanUI()
     m_autoConnectFrame->hide();
 }
 
-void WlanListItem::refreshIcon()
+void WlanListItem::refreshIcon(bool isActivated)
 {
 #define FULL_SIGNAL 5
 #define EXCELLENT_SIGNAL 4
@@ -315,7 +319,7 @@ void WlanListItem::refreshIcon()
             break;
         }
     }
-    m_netButton->setActive(false);
+    m_netButton->setActive(isActivated);
 }
 
 void WlanListItem::onInfoButtonClicked()
@@ -393,7 +397,7 @@ void WlanListItem::updateWirelessNetSecurity(QString ssid, QString securityType)
     bool newSecu = (m_wirelessNetItem.m_secuType.isEmpty() || m_wirelessNetItem.m_secuType == "") ? false : true;
     if (m_hasPwd^newSecu) {
         m_hasPwd = newSecu;
-        refreshIcon();
+        refreshIcon(false);
     }
 
     return;

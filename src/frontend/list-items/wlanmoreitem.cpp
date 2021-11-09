@@ -19,3 +19,7 @@ void WlanMoreItem::onNetButtonClicked() {
 void WlanMoreItem::onRightButtonClicked() {
     // Todo
 }
+
+void WlanMoreItem::onMenuTriggered(QAction *action) {
+
+}

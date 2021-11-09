@@ -15,6 +15,7 @@ ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
     m_connectState = UnknownState;
     isDetailShow = false;
+
     initUI();
     initConnection();
     connect(qApp, &QApplication::paletteChanged, this, &ListItem::onPaletteChanged);
@@ -125,6 +126,11 @@ void ListItem::paintEvent(QPaintEvent *event)
 
 void ListItem::initUI()
 {
+    m_menu = new QMenu(this);//右键菜单
+    m_menu->setStyleSheet("QMenu::item{border:3px; border-radius:3px}");
+    m_menu->setStyleSheet("QMenu{border-radius:3px; margin:3px 3px 3px 3px}");
+    connect(m_menu, &QMenu::triggered, this, &ListItem::onMenuTriggered);
+
     m_mainLayout = new QVBoxLayout(this);
     m_mainLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_mainLayout->setSpacing(MAIN_LAYOUT_SPACING);

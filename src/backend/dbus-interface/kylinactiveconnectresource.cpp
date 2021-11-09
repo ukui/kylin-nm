@@ -541,27 +541,6 @@ void KyActiveConnectResourse::getApActivateConnect(QList<KyApConnectItem *> &apC
     return;
 }
 
-bool KyActiveConnectResourse::isActiveConnection(QString uuid, QStringList &devName)
-{
-    if (!m_networkResourceInstance->isActiveConnection(uuid)) {
-        return false;
-    } else {
-        NetworkManager::ActiveConnection::Ptr actPtr = m_networkResourceInstance->getActiveConnect(uuid);
-        if (actPtr.isNull()) {
-            return false;
-        } else {
-            QStringList interfaces = actPtr->devices();
-            for (int index = 0; index < interfaces.size(); ++index) {
-                QString ifaceUni = interfaces.at(index);
-                NetworkManager::Device:: Ptr devicePtr =
-                            m_networkResourceInstance->findDeviceUni(ifaceUni);
-                devName <<devicePtr->interfaceName();
-            }
-            return true;
-        }
-    }
-}
-
 QString KyActiveConnectResourse::getDeviceOfActivateConnect(QString conUuid)
 {
   QString deviceName = "";
@@ -581,6 +560,26 @@ QString KyActiveConnectResourse::getDeviceOfActivateConnect(QString conUuid)
   deviceName = devicePtr->interfaceName();
 
   return deviceName;
+}
+
+bool KyActiveConnectResourse::connectionIsVirtual(QString uuid)
+{
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr =
+                    m_networkResourceInstance->getActiveConnect(uuid);
+
+    if (activeConnectPtr.isNull()) {
+        return false;
+    }
+
+    QStringList interfaces = activeConnectPtr->devices();
+    QString ifaceUni = interfaces.at(0);
+    NetworkManager::Device:: Ptr devicePtr =
+                m_networkResourceInstance->findDeviceUni(ifaceUni);
+    if (devicePtr.isNull()) {
+        return false;
+    }
+
+    return !m_networkdevice->deviceIsWired(devicePtr->interfaceName());
 }
 
 bool KyActiveConnectResourse::wiredConnectIsActived()
@@ -606,6 +605,10 @@ bool KyActiveConnectResourse::wiredConnectIsActived()
 
         if (NetworkManager::ConnectionSettings::ConnectionType::Wired
                 != activeConnectPtr->type()) {
+            continue;
+        }
+
+        if (connectionIsVirtual(activeConnectPtr->uuid())) {
             continue;
         }
 

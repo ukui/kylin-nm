@@ -7,7 +7,6 @@
 #include "kywirelessconnectoperation.h"
 #include <QCheckBox>
 #include "kylinactiveconnectresource.h"
-#include <QMenu>
 #include <QAction>
 
 #include <networkmanagerqt/wirelesssecuritysetting.h>
@@ -42,6 +41,8 @@ public:
 
     void updateWirelessNetSecurity(QString ssid, QString securityType);
     void updateWirelessNetItem(KyWirelessNetItem &wirelessNetItem);
+
+    void forgetPwd();
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -78,8 +79,6 @@ private:
     QHBoxLayout *m_autoConnectFrameLyt = nullptr;
     QCheckBox *m_autoConnectCheckBox = nullptr;
     QLabel *m_autoConnectLabel = nullptr;
-
-    QMenu *m_menu = nullptr;
 
     bool m_focusIsOut = true;
     bool m_mouseIsOut = true;

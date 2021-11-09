@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QMouseEvent>
+#include <QMenu>
 #include "radioitembutton.h"
 #include "infobutton.h"
 #include "netdetails/netdetail.h"
@@ -46,6 +47,7 @@ protected:
     bool m_isActive = false;
     ConnectState m_connectState;
 
+    QMenu *m_menu = nullptr;
 public:
     QVBoxLayout * m_mainLayout = nullptr;
     QHBoxLayout * m_hItemLayout = nullptr;
@@ -58,6 +60,7 @@ public slots:
     virtual void onNetButtonClicked() = 0;
     void onPaletteChanged();
     void onDetailShow(bool isShow);
+    virtual void onMenuTriggered(QAction *action)=0;
 
 signals:
     void detailShow(bool isShow); 

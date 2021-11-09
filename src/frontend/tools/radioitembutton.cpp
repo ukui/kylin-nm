@@ -64,20 +64,7 @@ void RadioItemButton::setDefaultPixmap()
 void RadioItemButton::setActive(const bool &isActive)
 {
     m_isActivated = isActive;
-//    m_backgroundColor = m_isActivated? FOREGROUND_COLOR_NORMAL_ACTIVE : FOREGROUND_COLOR_NORMAL_INACTIVE;
-    if (m_isActivated) {
-        m_backgroundColor = FOREGROUND_COLOR_NORMAL_ACTIVE;
-//        m_iconLabel->setProperty("useIconHighlightEffect", 0x08);
-        m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
-    } else {
-        if (qApp->palette().base().color().red() > MIDDLE_COLOR) {
-            m_backgroundColor = FOREGROUND_COLOR_NORMAL_INACTIVE_LIGHT;
-            m_iconLabel->setPixmap(m_pixmap);
-        } else {
-            m_backgroundColor = FOREGROUND_COLOR_NORMAL_INACTIVE_DARK;
-            m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
-        }
-    }
+    refreshButtonIcon();
 }
 void RadioItemButton::onLoadingStarted()
 {
@@ -114,13 +101,7 @@ void RadioItemButton::onLoadingStopped()
 
 void RadioItemButton::onPaletteChanged()
 {
-    if (qApp->palette().base().color().red() > MIDDLE_COLOR) {
-        m_backgroundColor = FOREGROUND_COLOR_NORMAL_INACTIVE_LIGHT;
-        m_iconLabel->setPixmap(m_pixmap);
-    } else {
-        m_backgroundColor = FOREGROUND_COLOR_NORMAL_INACTIVE_DARK;
-        m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
-    }
+    refreshButtonIcon();
 }
 
 void RadioItemButton::onAnimationValueChanged(const QVariant& value)
@@ -174,6 +155,24 @@ void RadioItemButton::mouseReleaseEvent(QMouseEvent *event)
                                             FOREGROUND_COLOR_NORMAL_INACTIVE_DARK);
     this->repaint();
     return QPushButton::mouseReleaseEvent(event);
+}
+
+void RadioItemButton::refreshButtonIcon()
+{
+    if (m_isActivated) {
+        m_backgroundColor = FOREGROUND_COLOR_NORMAL_ACTIVE;
+        m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
+    } else {
+        if (qApp->palette().base().color().red() > MIDDLE_COLOR) {
+            m_backgroundColor = FOREGROUND_COLOR_NORMAL_INACTIVE_LIGHT;
+            m_iconLabel->setPixmap(m_pixmap);
+        } else {
+            m_backgroundColor = FOREGROUND_COLOR_NORMAL_INACTIVE_DARK;
+            m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
+        }
+    }
+
+    return;
 }
 
 const QPixmap RadioItemButton::loadSvg(const QPixmap &source, const PixmapColor &cgColor)

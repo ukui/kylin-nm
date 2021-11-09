@@ -17,8 +17,6 @@ WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, Q
     setExpanded(false);
 
     connect(this->m_infoButton, &InfoButton::clicked, this, &WlanListItem::onInfoButtonClicked);
-
-    m_menu = new QMenu(this);//右键菜单
     connect(m_menu, &QMenu::triggered, this, &WlanListItem::onMenuTriggered);
 
     m_wirelessConnectOperation = new KyWirelessConnectOperation(this);
@@ -514,4 +512,13 @@ void WlanListItem::onMenuTriggered(QAction *action)
 
     return;
 }
+
+void WlanListItem::forgetPwd()
+{
+    if (!this->isConfigured()) {
+        m_pwdLineEdit->setText("");
+        return;
+    }
+}
+
 

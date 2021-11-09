@@ -60,7 +60,7 @@ void LanPage::initLanDevice()
     m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
     if (m_currentDeviceName.isEmpty()) {
         for (int index = 0; index < m_devList.size(); ++index) {
-            if (m_deviceResource->wiredDeviceCarriered(m_devList.at(index))) {
+            if (m_deviceResource->wiredDeviceIsCarriered(m_devList.at(index))) {
                 m_currentDeviceName = m_devList.at(index);
                 setDefaultDevice(WIRED, m_currentDeviceName);
                 break;
@@ -513,7 +513,7 @@ void LanPage::addDeviceForCombox(QString deviceName)
 
 void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
 {
-    if (deviceType !=  NetworkManager::Device::Type::Ethernet) {
+    if (!m_deviceResource->deviceIsWired(deviceName)) {
         return;
     }
 
@@ -522,7 +522,6 @@ void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devic
     }
 
     if (m_devList.count() == 0) {// 有线网卡从无到有，打开开关
-        qDebug() << "[wiredSwitch]: set enable when add only one device";
         m_netSwitch->setEnabled(true);
         m_wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
         m_netSwitch->setSwitchStatus(m_wiredSwitch);
@@ -826,7 +825,7 @@ void LanPage::onConnectionStateChange(QString uuid,
         return;
     }
 
-    emit this->lanConnectChanged(state);
+    sendLanStateChangeSignal(uuid, (ConnectState)state);
 
     qDebug()<<"[LanPage] connection uuid"<< uuid
             << "state change slot:"<< state;
@@ -856,11 +855,15 @@ void LanPage::onConnectionStateChange(QString uuid,
         updateConnectionArea(p_newItem);
         updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
     } else if (state == NetworkManager::ActiveConnection::State::Activating) {
-        updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
         deviceName = getConnectionDevice(uuid);
+        if (deviceName == m_currentDeviceName) {
+            updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
+        }
     } else if (state == NetworkManager::ActiveConnection::State::Deactivating) {
-        updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
         deviceName = getConnectionDevice(uuid);
+        if (deviceName == m_currentDeviceName) {
+            updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
+        }
     }
 
     emit lanActiveConnectionStateChanged(deviceName, uuid, state);
@@ -919,6 +922,19 @@ void LanPage::sendLanAddSignal(KyConnectItem *p_connectItem)
     info << p_connectItem->m_connectName << p_connectItem->m_connectUuid << p_connectItem->m_connectPath;
     qDebug() << "[LanPage] emit lanAdd because addConnection ";
     emit lanAdd(p_connectItem->m_ifaceName, info);
+
+    return;
+}
+
+void LanPage::sendLanStateChangeSignal(QString uuid, ConnectState state)
+{
+    if (state == Activating || state == Deactivating) {
+        if (m_activeResourse->connectionIsVirtual(uuid)) {
+            return;
+        }
+    }
+
+    emit this->lanConnectChanged(state);
 
     return;
 }
@@ -1079,7 +1095,7 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
 void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "[LanPage] activateWired" << devName << connUuid;
-    if (!m_deviceResource->wiredDeviceCarriered(devName)) {
+    if (!m_deviceResource->wiredDeviceIsCarriered(devName)) {
         qDebug() << LOG_FLAG << devName << "is not carried, so can not activate connection";
         this->showDesktopNotify(tr("Wired Device not carried"));
     } else {

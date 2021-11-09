@@ -46,6 +46,8 @@ private:
 
     QPixmap m_pixmap;
 
+    void refreshButtonIcon();
+
 private slots:
     void onLoadingStarted();
     void onLoadingStopped();

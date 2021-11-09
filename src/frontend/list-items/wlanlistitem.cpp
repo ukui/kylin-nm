@@ -167,6 +167,12 @@ void WlanListItem::leaveEvent(QEvent *event)
 
 bool WlanListItem::eventFilter(QObject *watched, QEvent *event)
 {
+    if (watched == m_showPwdButton || watched == m_autoConnectCheckBox) {
+        if (event->type() == QEvent::FocusIn) {
+            m_pwdLineEdit->setFocus();
+        }
+    }
+
     if (watched == m_pwdLineEdit) {
         if (event->type() == QEvent::FocusOut) {
             m_focusIsOut = true;
@@ -219,6 +225,7 @@ void WlanListItem::initWlanUI()
     m_pwdLineEdit->setLayout(m_pwdLineEditLyt);
 
     m_showPwdButton = new QPushButton(m_pwdLineEdit);
+    m_showPwdButton->installEventFilter(this);
     m_showPwdButton->setFixedSize(SHOW_PWD_BUTTON_SIZE);
     m_showPwdButton->setAutoFillBackground(false);
     m_showPwdButton->setIcon(QIcon(":/res/h/hide-pwd.png"));
@@ -243,6 +250,7 @@ void WlanListItem::initWlanUI()
     m_autoConnectFrame->setLayout(m_autoConnectFrameLyt);
 
     m_autoConnectCheckBox = new QCheckBox(m_autoConnectFrame);
+    m_autoConnectCheckBox->installEventFilter(this);
     m_autoConnectCheckBox->setChecked(true);
     m_autoConnectCheckBox->setFixedSize(SHOW_PWD_BUTTON_SIZE);
     m_autoConnectFrameLyt->addWidget(m_autoConnectCheckBox);

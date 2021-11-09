@@ -52,8 +52,7 @@ void WlanListItem::setSignalStrength(const int &signal)
     m_wirelessNetItem.m_signalStrength = signal;
     if (Activated == m_connectState) {
         refreshIcon(true);
-    }
-    else if (Deactivated == m_connectState) {
+    } else if (Deactivated == m_connectState) {
         refreshIcon(false);
     }
 

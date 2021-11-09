@@ -56,7 +56,7 @@ signals:
 
 private:
     void initWlanUI();
-    void refreshIcon();
+    void refreshIcon(bool isActivated);
 
 private:
     KyWirelessNetItem m_wirelessNetItem;

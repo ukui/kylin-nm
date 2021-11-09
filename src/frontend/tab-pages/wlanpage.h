@@ -129,6 +129,7 @@ private:
                                        QListWidgetItem *p_listWidgetItem,
                                        ConnectState state);
     void updateWlanListItem(QString ssid);
+    void refreshActiveConnectionIcon(QString ssid, const int &signal);
 
     void constructWirelessNetArea();
     void constructActivateConnectionArea();

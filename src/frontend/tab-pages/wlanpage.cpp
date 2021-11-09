@@ -996,6 +996,18 @@ void WlanPage::onWifiEnabledChanged(bool isWifiOn)
     return;
 }
 
+void WlanPage::refreshActiveConnectionIcon(QString ssid, const int &signal)
+{
+    QListWidgetItem *p_listWidgetItem = m_activateConnectionItemMap.value(ssid);
+    if (p_listWidgetItem) {
+        WlanListItem *p_wlanItem = (WlanListItem *)m_activatedNetListWidget->itemWidget(p_listWidgetItem);
+        if (nullptr != p_wlanItem) {
+            p_wlanItem->setSignalStrength(signal);
+            return;
+        }
+    }
+}
+
 void WlanPage::onRefreshIconTimer()
 {  
     if (!m_updateStrength) {
@@ -1027,6 +1039,7 @@ void WlanPage::onRefreshIconTimer()
         QString sortSsid = sortItem.m_NetSsid; //应该在第currentRow行的新的WiFi名称
         //qDebug()<< LOG_FLAG << "sort ssid"<< sortSsid << "active ssid" << activateSsid << "sort row"<< sortRow;
         if (sortSsid == activateSsid) { //排除已连接WiFi
+            refreshActiveConnectionIcon(activateSsid, sortItem.m_signalStrength);
             continue;
         }
 

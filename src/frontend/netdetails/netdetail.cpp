@@ -728,21 +728,7 @@ bool NetDetail::createWirelessConnect()
     KyEapMethodType enterpriseType;
     securityPage->getSecuType(secuType, enterpriseType);
     //类型判断
-    if (secuType == WPA_AND_WPA2_ENTERPRISE) {
-        if(m_info.strSecType.indexOf("802.1X") < 0) {
-            showDesktopNotify(tr("this wifi no support enterprise type"));
-            return false;
-        }
-    } else if (secuType == NONE && m_info.strSecType != "None") {
-        showDesktopNotify(tr("this wifi no support None type"));
-        return false;
-    } else if (secuType == WPA_AND_WPA2_PERSONAL
-               && (m_info.strSecType.indexOf("WPA1") < 0 ||
-                   m_info.strSecType.indexOf("WPA2") < 0)) {
-        showDesktopNotify(tr("this wifi no support WPA1 WPA2 type"));
-        return false;
-    } else if (secuType == WPA3_PERSONAL && m_info.strSecType.indexOf("WPA3") < 0) {
-        showDesktopNotify(tr("this wifi no support WPA3 type"));
+    if (!checkWirelessSecurity(secuType)) {
         return false;
     }
 
@@ -846,24 +832,8 @@ bool NetDetail::updateConnect()
         securityChange = securityPage->checkIsChanged(m_info);
         if(securityChange) {
             securityPage->getSecuType(secuType, enterpriseType);
-            if (secuType == WPA_AND_WPA2_ENTERPRISE) {
-                if(m_info.strSecType.indexOf("802.1X") < 0) {
-                    showDesktopNotify(tr("this wifi no support enterprise type"));
-                    return false;
-                }
-            } else {
-                if (secuType == NONE && m_info.strSecType != "None") {
-                    showDesktopNotify(tr("this wifi no support None type"));
-                    return false;
-                } else if (secuType == WPA_AND_WPA2_PERSONAL
-                           && (m_info.strSecType.indexOf("WPA1") < 0 ||
-                               m_info.strSecType.indexOf("WPA2") < 0)) {
-                    showDesktopNotify(tr("this wifi no support WPA2 type"));
-                    return false;
-                } else if (secuType == WPA3_PERSONAL && m_info.strSecType.indexOf("WPA3") < 0) {
-                    showDesktopNotify(tr("this wifi no support WPA3 type"));
-                    return false;
-                }
+            if (!checkWirelessSecurity(secuType)) {
+                return false;
             }
         }
     }
@@ -918,4 +888,27 @@ bool NetDetail::updateConnect()
         }
     }
     return true;
+}
+
+bool NetDetail::checkWirelessSecurity(KySecuType secuType)
+{
+    if (secuType == WPA_AND_WPA2_ENTERPRISE) {
+        if(m_info.strSecType.indexOf("802.1X") < 0) {
+            showDesktopNotify(tr("this wifi no support enterprise type"));
+            return false;
+        }
+    } else {
+        if (secuType == NONE && m_info.strSecType != "None") {
+            showDesktopNotify(tr("this wifi no support None type"));
+            return false;
+        } else if (secuType == WPA_AND_WPA2_PERSONAL
+                   && (m_info.strSecType.indexOf("WPA1") < 0 ||
+                       m_info.strSecType.indexOf("WPA2") < 0)) {
+            showDesktopNotify(tr("this wifi no support WPA2 type"));
+            return false;
+        } else if (secuType == WPA3_PERSONAL && m_info.strSecType.indexOf("WPA3") < 0) {
+            showDesktopNotify(tr("this wifi no support WPA3 type"));
+            return false;
+        }
+    }
 }

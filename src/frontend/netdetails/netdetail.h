@@ -72,6 +72,8 @@ private:
     bool createWirelessConnect();
     bool updateConnect();
 
+    bool checkWirelessSecurity(KySecuType secuType);
+
     void showDesktopNotify(const QString &message);
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;

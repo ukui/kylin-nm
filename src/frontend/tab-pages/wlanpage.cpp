@@ -497,7 +497,7 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
         return;
     }
 
-    if (!m_wirelessNetItemMap.contains(ssid)) {
+    if (!m_wirelessNetItemMap.contains(ssid) && !m_activateConnectionItemMap.contains(ssid)) {
         return;
     }
 
@@ -509,9 +509,16 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
              << "; ssid = " << ssid << Q_FUNC_INFO <<__LINE__;
 
 
+    if (m_wirelessNetItemMap.contains(ssid)) {
+        deleteWirelessItemFormMap(m_wirelessNetItemMap,
+                                  m_inactivatedNetListWidget, ssid);
+    } else {
+        deleteWirelessItemFormMap(m_activateConnectionItemMap,
+                                  m_activatedNetListWidget, ssid);
 
-    deleteWirelessItemFormMap(m_wirelessNetItemMap,
-                                      m_inactivatedNetListWidget, ssid);
+        QListWidgetItem *p_listWidgetItem = addEmptyItem(m_activatedNetListWidget);
+        m_activateConnectionItemMap.insert(EMPTY_SSID, p_listWidgetItem);
+    }
 
     return;
 }

@@ -430,13 +430,16 @@ void NetDetail::getBaseInfo(ConInfo &conInfo)
                     //无线特有
                     conInfo.strSecType = item.m_secuType;
                     if (conInfo.strSecType.isEmpty()) {
-                        conInfo.strSecType = "None";
+                        conInfo.strSecType = tr("None");
                     }
             }
         } else {
             uint iHz,iChan;
             QString strMac;
             m_netDeviceResource->getDeviceActiveAPInfo(m_deviceName, strMac, iHz, iChan, conInfo.strSecType);
+            if (conInfo.strSecType.isEmpty()) {
+                conInfo.strSecType = tr("None");
+            }
             conInfo.strHz = QString::number(iHz);
             conInfo.strChan = QString::number(iChan);
 
@@ -723,6 +726,14 @@ bool NetDetail::createWiredConnect()
 bool NetDetail::createWirelessConnect()
 {
     KyWirelessConnectSetting connetSetting;
+    KySecuType secuType;
+    KyEapMethodType enterpriseType;
+    securityPage->getSecuType(secuType, enterpriseType);
+    //类型判断
+    if (!checkWirelessSecurity(secuType)) {
+        return false;
+    }
+
     //基本信息
     QString ssid;
     if (m_name.isEmpty()) {
@@ -766,9 +777,6 @@ bool NetDetail::createWirelessConnect()
         }
     }
     //wifi安全性
-    KySecuType secuType;
-    KyEapMethodType enterpriseType;
-    securityPage->getSecuType(secuType, enterpriseType);
     if (secuType == WPA_AND_WPA2_ENTERPRISE) {
         connetSetting.m_type = WpaEap;
         if (enterpriseType == TLS) {
@@ -817,7 +825,20 @@ bool NetDetail::updateConnect()
 {
     KyConnectResourse *kyConnectResourse = new KyConnectResourse(this);
     KyConnectSetting  connetSetting;
+    KySecuType secuType;
+    KyEapMethodType enterpriseType;
     kyConnectResourse->getConnectionSetting(m_uuid,connetSetting);
+
+    bool securityChange = false;
+    if (isWlan) {
+        securityChange = securityPage->checkIsChanged(m_info);
+        if(securityChange) {
+            securityPage->getSecuType(secuType, enterpriseType);
+            if (!checkWirelessSecurity(secuType)) {
+                return false;
+            }
+        }
+    }
 
     if(!m_uuid.isEmpty() && detailPage->checkIsChanged(m_info)) {
         m_wirelessConnOpration->setWirelessAutoConnect(m_uuid, !m_info.isAutoConnect);
@@ -849,19 +870,12 @@ bool NetDetail::updateConnect()
         m_wiredConnOperation->updateWiredConnect(m_uuid, connetSetting);
     }
 
-    bool securityChange = false;
-    if (isWlan) {
-        securityChange = securityPage->checkIsChanged(m_info);
-        qDebug() << "securityChange" << securityChange;
-        if (securityChange) {
-            KySecuType secuType;
-            KyEapMethodType enterpriseType;
-            securityPage->getSecuType(secuType, enterpriseType);
-            if (secuType == WPA_AND_WPA2_ENTERPRISE) {
-                updateWirelessEnterPriseConnect(enterpriseType);
-            } else {
-                updateWirelessPersonalConnect();
-            }
+    qDebug() << "securityChange" << securityChange;
+    if (securityChange) {
+        if (secuType == WPA_AND_WPA2_ENTERPRISE) {
+            updateWirelessEnterPriseConnect(enterpriseType);
+        } else {
+            updateWirelessPersonalConnect();
         }
     }
 
@@ -873,6 +887,30 @@ bool NetDetail::updateConnect()
             QTimer::singleShot(1000, &eventloop, SLOT(quit()));
             eventloop.exec();
             m_wirelessConnOpration->activateConnection(m_uuid, m_deviceName);
+        }
+    }
+    return true;
+}
+
+bool NetDetail::checkWirelessSecurity(KySecuType secuType)
+{
+    if (secuType == WPA_AND_WPA2_ENTERPRISE) {
+        if(m_info.strSecType.indexOf("802.1X") < 0) {
+            showDesktopNotify(tr("this wifi no support enterprise type"));
+            return false;
+        }
+    } else {
+        if (secuType == NONE && m_info.strSecType != "None") {
+            showDesktopNotify(tr("this wifi no support None type"));
+            return false;
+        } else if (secuType == WPA_AND_WPA2_PERSONAL
+                   && (m_info.strSecType.indexOf("WPA1") < 0 ||
+                       m_info.strSecType.indexOf("WPA2") < 0)) {
+            showDesktopNotify(tr("this wifi no support WPA2 type"));
+            return false;
+        } else if (secuType == WPA3_PERSONAL && m_info.strSecType.indexOf("WPA3") < 0) {
+            showDesktopNotify(tr("this wifi no support WPA3 type"));
+            return false;
         }
     }
     return true;

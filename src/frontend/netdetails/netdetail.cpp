@@ -429,15 +429,17 @@ void NetDetail::getBaseInfo(ConInfo &conInfo)
                     conInfo.strChan = QString::number(item.m_channel);
                     //无线特有
                     conInfo.strSecType = item.m_secuType;
-                    qDebug() << "[NetDetail] strSecType = " << conInfo.strSecType;
                     if (conInfo.strSecType.isEmpty()) {
-                        conInfo.strSecType = "None";
+                        conInfo.strSecType = tr("None");
                     }
             }
         } else {
             uint iHz,iChan;
             QString strMac;
             m_netDeviceResource->getDeviceActiveAPInfo(m_deviceName, strMac, iHz, iChan, conInfo.strSecType);
+            if (conInfo.strSecType.isEmpty()) {
+                conInfo.strSecType = tr("None");
+            }
             conInfo.strHz = QString::number(iHz);
             conInfo.strChan = QString::number(iChan);
 

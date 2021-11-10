@@ -911,4 +911,5 @@ bool NetDetail::checkWirelessSecurity(KySecuType secuType)
             return false;
         }
     }
+    return true;
 }

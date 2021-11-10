@@ -415,9 +415,13 @@ void MainWindow::onLanConnectStatusToChangeTrayIcon(int state)
 {
     qDebug() << "lan state:" << state << Q_FUNC_INFO << __LINE__;
     if (state==1 || state==3){
+        m_lanIsLoading = true;
         iconTimer->start(LOADING_TRAYICON_TIMER_MS);
     } else {
-        onRefreshTrayIcon();
+        m_lanIsLoading = false;
+        if (m_wlanIsLoading == false) {
+            onRefreshTrayIcon();
+        }
     }
 }
 
@@ -425,9 +429,13 @@ void MainWindow::onWlanConnectStatusToChangeTrayIcon(int state)
 {
     qDebug() << "wlan state:" << state << Q_FUNC_INFO << __LINE__;
     if (state==1 || state==3){
+        m_wlanIsLoading = true;
         iconTimer->start(LOADING_TRAYICON_TIMER_MS);
     } else {
-        onRefreshTrayIcon();
+        m_wlanIsLoading = false;
+        if (m_lanIsLoading == false) {
+            onRefreshTrayIcon();
+        }
     }
 }
 

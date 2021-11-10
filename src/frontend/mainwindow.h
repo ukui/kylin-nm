@@ -126,6 +126,9 @@ private:
     QAction * m_showMainwindowAction = nullptr;
     QAction * m_showSettingsAction = nullptr;
 
+    bool m_lanIsLoading = false;
+    bool m_wlanIsLoading = false;
+
 private slots:
     void onTrayIconActivated();
     void onShowMainwindowActionTriggled();

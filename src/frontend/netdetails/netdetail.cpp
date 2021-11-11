@@ -730,8 +730,10 @@ bool NetDetail::createWirelessConnect()
     KyEapMethodType enterpriseType;
     securityPage->getSecuType(secuType, enterpriseType);
     //类型判断
-    if (!checkWirelessSecurity(secuType)) {
-        return false;
+    if (!m_name.isEmpty()) {
+        if (!checkWirelessSecurity(secuType)) {
+            return false;
+        }
     }
 
     //基本信息

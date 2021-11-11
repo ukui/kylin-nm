@@ -6,8 +6,8 @@ DrownLabel::DrownLabel(QString devName, QWidget * parent) : QLabel(parent)
 {
     m_devName = devName;
     setFixedSize(36,36);
-//    setFlat(true);
     loadPixmap(isChecked);
+    this->setProperty("useIconHighlightEffect", 0x2);
 }
 
 DrownLabel::~DrownLabel()

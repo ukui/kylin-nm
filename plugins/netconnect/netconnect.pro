@@ -4,6 +4,7 @@ CONFIG += plugin
 
 include(../component/switchbutton.pri)
 include(../component/infobutton.pri)
+include(../component/drownlabel.pri)
 
 TARGET = $$qtLibraryTarget(netconnect)
 DESTDIR = ../..
@@ -29,7 +30,7 @@ PKGCONFIG += gsettings-qt \
 SOURCES += \
     addnetbtn.cpp \
     deviceframe.cpp \
-    drownlabel.cpp \
+#    drownlabel.cpp \
     itemframe.cpp \
     lanitem.cpp \
     netconnect.cpp
@@ -37,7 +38,7 @@ SOURCES += \
 HEADERS += \
     addnetbtn.h \
     deviceframe.h \
-    drownlabel.h \
+#    drownlabel.h \
     itemframe.h \
     lanitem.h \
     netconnect.h

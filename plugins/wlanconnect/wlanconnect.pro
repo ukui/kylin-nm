@@ -4,6 +4,7 @@ CONFIG += plugin
 
 include(../component/switchbutton.pri)
 include(../component/infobutton.pri)
+include(../component/drownlabel.pri)
 
 TARGET = $$qtLibraryTarget(wlanconnect)
 DESTDIR = ../..
@@ -28,14 +29,14 @@ PKGCONFIG += gsettings-qt \
 
 SOURCES += \
     deviceframe.cpp \
-    drownlabel.cpp \
+#    drownlabel.cpp \
     itemframe.cpp \
     wlanconnect.cpp \
     wlanitem.cpp
 
 HEADERS += \
     deviceframe.h \
-    drownlabel.h \
+#    drownlabel.h \
     itemframe.h \
     wlanconnect.h \
     wlanitem.h

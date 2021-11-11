@@ -6,7 +6,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QDebug>
-#include "drownlabel.h"
+#include "../component/DrownLabel/drownlabel.h"
 
 class DeviceFrame : public QFrame
 {

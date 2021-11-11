@@ -142,6 +142,10 @@ void KyConnectResourse::getConnectionList(QString deviceName,
     NetworkManager::Connection::Ptr connectPtr = nullptr;
     for (int index = 0; index < connectList.size(); index++) {
         connectPtr = connectList.at(index);
+        if (connectPtr.isNull()) {
+            continue;
+        }
+
         if (connectionType != connectPtr->settings()->connectionType()) {
             qDebug()<<"[KyConnectResourse]"<<"connect name:" << connectPtr->name()
                    <<"connect type:"<<connectPtr->settings()->connectionType();
@@ -436,6 +440,10 @@ void KyConnectResourse::getVpnConnections(QList<KyVpnConnectItem *> &vpnConnectI
     NetworkManager::Connection::Ptr connectPtr = nullptr;
     for (index = 0; index < connectList.size(); index++) {
         connectPtr = connectList.at(index);
+        if (connectPtr.isNull()) {
+            continue;
+        }
+
         if (NetworkManager::ConnectionSettings::ConnectionType::Vpn
                 != connectPtr->settings()->connectionType()) {
             qDebug()<<"[KyConnectResourse]"<<"connect name:" << connectPtr->name()
@@ -509,6 +517,10 @@ void KyConnectResourse::getBluetoothConnections(QList<KyBluetoothConnectItem *> 
     NetworkManager::Connection::Ptr connectPtr = nullptr;
     for (index = 0; index < connectList.size(); index++) {
         connectPtr = connectList.at(index);
+        if (connectPtr.isNull()) {
+            continue;
+        }
+
         if (NetworkManager::ConnectionSettings::ConnectionType::Bluetooth
                 != connectPtr->settings()->connectionType()) {
             qDebug()<<"[KyConnectResourse]"<<"connect name:" << connectPtr->name()

@@ -162,11 +162,16 @@ private slots:
     void onDeviceStateChanged(NetworkManager::Device::State newstate,
                       NetworkManager::Device::State oldstate,
                       NetworkManager::Device::StateChangeReason reason);
+
+    void onWifiNetworkAdd(NetworkManager::Device * dev, QString const & ssid);
+    void onWifiNetworkUpdate(NetworkManager::WirelessNetwork * net);
+    void onWifiNetworkRemove(NetworkManager::Device * dev, QString const & ssid);
+
     void onWifiNetworkAppeared(QString const & ssid);
     void onWifiNetworkDisappeared(QString const & ssid);
 
     //wifi network
-    void onWifiNetworkUpdated();
+    void onUpdateWirelessNet();
 
     //notifier
     void onDeviceAdded(QString const & uni);

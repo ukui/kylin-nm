@@ -1,10 +1,12 @@
 #include "kylinagentinterface.h"
 #include "kylinagent.h"
+#include "kylinvpnrequest.h"
 
 #include <gtk/gtk.h>
 #include <libnma/nma-wifi-dialog.h>
 
 GSList *        secrets_reqs;
+#if 0
 typedef struct _SecretsRequest SecretsRequest;
 typedef void (*SecretsRequestFreeFunc) (SecretsRequest *req);
 
@@ -23,7 +25,7 @@ struct _SecretsRequest {
          /* Class-specific stuff */
          SecretsRequestFreeFunc free_func;
 };
-
+#endif
 typedef struct {
         SecretsRequest req;
         GtkWidget *dialog;
@@ -330,7 +332,6 @@ applet_agent_get_secrets_cb (AppletAgent *agent,
     s_con = nm_connection_get_setting_connection (connection);
     g_return_if_fail (s_con != NULL);
 
-#if 0
     /* VPN secrets get handled a bit differently */
     if (!strcmp (nm_setting_connection_get_connection_type (s_con), NM_SETTING_VPN_SETTING_NAME)) {
         req = applet_secrets_request_new (applet_vpn_request_get_secrets_size (),
@@ -341,14 +342,14 @@ applet_agent_get_secrets_cb (AppletAgent *agent,
                                           flags,
                                           callback,
                                           callback_data,
-                                          applet);
+                                          agent);
         if (!applet_vpn_request_get_secrets (req, &error))
             goto error;
 
-        applet->secrets_reqs = g_slist_prepend (applet->secrets_reqs, req);
+        secrets_reqs = g_slist_prepend (secrets_reqs, req);
         return;
     }
- #endif
+
 
     req = applet_secrets_request_new (sizeof (NMWifiInfo),
                                       connection,

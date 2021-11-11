@@ -1,6 +1,7 @@
 INCLUDEPATH += $$PWD
 
 HEADERS += \
+    $$PWD/gsystem-local-alloc.h \
     $$PWD/kyenterpricesettinginfo.h \
     $$PWD/kylinactiveconnectresource.h \
     $$PWD/kylinagent.h \
@@ -14,10 +15,12 @@ HEADERS += \
     $$PWD/kylinnetworkdeviceresource.h \
     $$PWD/kylinnetworkresourcemanager.h \
     $$PWD/kylinvpnconnectitem.h \
+    $$PWD/kylinvpnrequest.h \
     $$PWD/kylinwiredconnectoperation.h \
     $$PWD/kywirelessconnectoperation.h \
     $$PWD/kywirelessnetitem.h \
-    $$PWD/kywirelessnetresource.h
+    $$PWD/kywirelessnetresource.h \
+    $$PWD/nm-macros-internal.h
 
 SOURCES += \
     $$PWD/kyenterpricesettinginfo.cpp \
@@ -33,6 +36,7 @@ SOURCES += \
     $$PWD/kylinnetworkdeviceresource.cpp \
     $$PWD/kylinnetworkresourcemanager.cpp \
     $$PWD/kylinvpnconnectitem.cpp \
+    $$PWD/kylinvpnrequest.c \
     $$PWD/kylinwiredconnectoperation.cpp \
     $$PWD/kywirelessconnectoperation.cpp \
     $$PWD/kywirelessnetitem.cpp \

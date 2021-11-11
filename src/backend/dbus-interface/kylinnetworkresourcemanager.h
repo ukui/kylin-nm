@@ -116,10 +116,6 @@ signals:
     void deviceBitRateChanage(QString deviceName, int bitRate);
     void deviceMacAddressChanaged(QString deviceName, const QString &hwAddress);
 
-    void wifiNetworkAdd(NetworkManager::Device * dev, QString const & ssid);
-    void wifiNetworkUpdate(NetworkManager::WirelessNetwork * net);
-    void wifiNetworkRemove(NetworkManager::Device * dev, QString const & ssid);
-
     //to KyWirelessNetResource
     void wifiNetworkRemoved(QString, QString);
     void wifiNetworkAdded(QString, QString);
@@ -163,10 +159,6 @@ private slots:
                       NetworkManager::Device::State oldstate,
                       NetworkManager::Device::StateChangeReason reason);
 
-    void onWifiNetworkAdd(NetworkManager::Device * dev, QString const & ssid);
-    void onWifiNetworkUpdate(NetworkManager::WirelessNetwork * net);
-    void onWifiNetworkRemove(NetworkManager::Device * dev, QString const & ssid);
-
     void onWifiNetworkAppeared(QString const & ssid);
     void onWifiNetworkDisappeared(QString const & ssid);
 
@@ -182,6 +174,11 @@ private slots:
     //settings notifier
     void onConnectionAdded(QString const & path);
     void onConnectionRemoved(QString const & path);
+
+private:
+    void onWifiNetworkAdd(NetworkManager::Device * dev, QString const & ssid);
+    void onWifiNetworkUpdate(NetworkManager::WirelessNetwork * net);
+    void onWifiNetworkRemove(NetworkManager::Device * dev, QString const & ssid);
 
 public:
     static KyNetworkResourceManager* m_pInstance;

@@ -58,17 +58,10 @@ KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(pa
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::connectivityChanged, this, &KyNetworkResourceManager::connectivityChanged);
     //todo wifi开关信号
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::wirelessEnabledChanged, this, &KyNetworkResourceManager::wifiEnabledChanged);
-//    connect(NetworkManager::notifier(), &NetworkManager::Notifier::wirelessHardwareEnabledChanged, [=](){
-
-//    });
 
     // Note: the connectionRemoved is never emitted in case network-manager service stop,
     // we need remove the connections manually.
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::serviceDisappeared, this, &KyNetworkResourceManager::clearConnections);
-
-    connect(this, &KyNetworkResourceManager::wifiNetworkAdd, this, &KyNetworkResourceManager::onWifiNetworkAdd);
-    connect(this, &KyNetworkResourceManager::wifiNetworkUpdate, this, &KyNetworkResourceManager::onWifiNetworkUpdate);
-    connect(this, &KyNetworkResourceManager::wifiNetworkRemove, this, &KyNetworkResourceManager::onWifiNetworkRemove);
 
     qDebug() <<"[KyNetworkResourceManager]"
             << "active connections:" << m_activeConns.size()
@@ -669,7 +662,7 @@ void KyNetworkResourceManager::onWifiNetworkAdd(NetworkManager::Device * dev, QS
             addWifiNetwork(net);
         } else {
             //TODO: onWifiNetworkUpdate
-            qDebug() << "add but already exist";
+            qDebug()<< LOG_FLAG << "add but already exist";
         }
 
         emit wifiNetworkAdded(dev->interfaceName(), ssid);
@@ -742,7 +735,7 @@ void KyNetworkResourceManager::onWifiNetworkAppeared(QString const & ssid)
 {
     NetworkManager::Device * dev = qobject_cast<NetworkManager::Device *>(sender());
     if (nullptr != dev) {
-        emit wifiNetworkAdd(dev, ssid);
+        onWifiNetworkAdd(dev, ssid);
         emit deviceUpdate(dev);
     } else {
         qWarning()<< LOG_FLAG << "onWifiNetworkAppeared failed.";
@@ -755,7 +748,7 @@ void KyNetworkResourceManager::onWifiNetworkDisappeared(QString const & ssid)
 {
     NetworkManager::Device * dev = qobject_cast<NetworkManager::Device *>(sender());
     if (nullptr != dev) {
-        emit wifiNetworkRemove(dev, ssid);
+        onWifiNetworkRemove(dev, ssid);
         emit deviceUpdate(dev);
     } else {
         qWarning()<< LOG_FLAG << "onWifiNetworkDisappeared failed.";
@@ -766,7 +759,13 @@ void KyNetworkResourceManager::onWifiNetworkDisappeared(QString const & ssid)
 
 void KyNetworkResourceManager::onUpdateWirelessNet()
 {
-    emit wifiNetworkUpdate(qobject_cast<NetworkManager::WirelessNetwork *>(sender()));
+    NetworkManager::WirelessNetwork *p_wirelessNet =
+                    qobject_cast<NetworkManager::WirelessNetwork *>(sender());
+    if (nullptr != p_wirelessNet) {
+        onWifiNetworkUpdate(p_wirelessNet);
+    }
+
+    return;
 }
 
 void KyNetworkResourceManager::onDeviceAdded(QString const & uni)

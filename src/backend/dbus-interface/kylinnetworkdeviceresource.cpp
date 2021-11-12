@@ -41,6 +41,10 @@ void KyNetworkDeviceResourse::initDeviceMap()
     NetworkManager::Device::Ptr devicePtr = nullptr;
     for (int index = 0; index < deviceList.size(); ++index) {
         devicePtr = deviceList.at(index);
+        if (devicePtr.isNull()) {
+            continue;
+        }
+
         m_deviceMap.insert(devicePtr->uni(), devicePtr->interfaceName());
     }
 
@@ -62,6 +66,10 @@ void KyNetworkDeviceResourse::getNetworkDeviceList(
     NetworkManager::Device::Ptr devicePtr = nullptr;
     for (int index = 0; index < deviceList.size(); ++index) {
         devicePtr = deviceList.at(index);
+        if (devicePtr.isNull()) {
+            continue;
+        }
+
         if (devicePtr->type() == deviceType) {
             if (NetworkManager::Device::Type::Ethernet == deviceType) {
                 //为了区分有线网卡和虚拟网卡
@@ -123,7 +131,7 @@ NetworkManager::Device::State KyNetworkDeviceResourse::getDeviceState(QString de
 {
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(deviceName);
-    if (connectDevice->isValid()) {
+    if (!connectDevice.isNull() && connectDevice->isValid()) {
         return connectDevice->state();
     }
 
@@ -136,6 +144,12 @@ bool KyNetworkDeviceResourse::wiredDeviceIsCarriered(QString deviceName)
 {
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(deviceName);
+    if (connectDevice.isNull()) {
+        qDebug()<< LOG_FLAG << "check device carriered failed.";
+        return false;
+    }
+
+
     if (connectDevice->isValid()
             && NetworkManager::Device::Type::Ethernet == connectDevice->type()) {
         NetworkManager::WiredDevice *wiredDevicePtr =
@@ -152,6 +166,10 @@ void KyNetworkDeviceResourse::setDeviceRefreshRate(QString deviceName, int ms)
 {
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(deviceName);
+    if (connectDevice.isNull()) {
+        return;
+    }
+
     if (connectDevice->isValid()) {
         NetworkManager::DeviceStatistics::Ptr deviceStatistics = connectDevice->deviceStatistics();
         deviceStatistics->setRefreshRateMs(ms);

@@ -6,6 +6,8 @@
 #include <NetworkManagerQt/Dhcp4Config>
 #include <NetworkManagerQt/Dhcp6Config>
 
+#define LOG_FLAG "[KyActiveConnectResourse]"
+
 KyActiveConnectResourse::KyActiveConnectResourse(QObject *parent) : QObject(parent)
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
@@ -97,6 +99,10 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
         QString ifaceUni = interfaces.at(index);
         NetworkManager::Device:: Ptr devicePtr =
                     m_networkResourceInstance->findDeviceUni(ifaceUni);
+        if (devicePtr.isNull()) {
+            continue;
+        }
+
         if (devicePtr->interfaceName() == deviceName) {
             KyConnectItem *activeConnectItem =
                    getActiveConnectionItem(activeConnectPtr);
@@ -131,6 +137,10 @@ void KyActiveConnectResourse::getActiveConnectionList(QString deviceName,
     NetworkManager::ActiveConnection::Ptr activeConnectPtr = nullptr;
     for (int index = 0; index < activeConnectList.size(); index++) {
         activeConnectPtr = activeConnectList.at(index);
+        if (activeConnectPtr.isNull()) {
+            continue;
+        }
+
         if (connectionType != activeConnectPtr->type()) {
             qDebug()<<"[KyActiveConnectResourse]" <<"the connect type " << activeConnectPtr->type()
                    <<"connect name" << activeConnectPtr->connection()->name();
@@ -383,6 +393,10 @@ void KyActiveConnectResourse::getVpnActivateConnect(QList<KyVpnConnectItem *> &v
     NetworkManager::ActiveConnection::Ptr activeConnectPtr = nullptr;
     for (index = 0; index < activeConnectList.size(); index++) {
         activeConnectPtr = activeConnectList.at(index);
+        if (activeConnectPtr.isNull()) {
+            continue;
+        }
+
         if (!activeConnectPtr->vpn()) {
             continue;
         }
@@ -453,6 +467,10 @@ void KyActiveConnectResourse::getBtActivateConnect(QList<KyBluetoothConnectItem 
     NetworkManager::ActiveConnection::Ptr activeConnectPtr = nullptr;
     for (index = 0; index < activeConnectList.size(); index++) {
         activeConnectPtr = activeConnectList.at(index);
+        if (activeConnectPtr.isNull()) {
+            continue;
+        }
+
         if (NetworkManager::ConnectionSettings::ConnectionType::Bluetooth
                 != activeConnectPtr->type()) {
             continue;
@@ -525,6 +543,10 @@ void KyActiveConnectResourse::getApActivateConnect(QList<KyApConnectItem *> &apC
     NetworkManager::ActiveConnection::Ptr activeConnectPtr = nullptr;
     for (index = 0; index < activeConnectList.size(); index++) {
         activeConnectPtr = activeConnectList.at(index);
+        if (activeConnectPtr.isNull()) {
+            continue;
+        }
+
         if (NetworkManager::ConnectionSettings::ConnectionType::Wireless
                 != activeConnectPtr->type()) {
             continue;
@@ -568,6 +590,7 @@ bool KyActiveConnectResourse::connectionIsVirtual(QString uuid)
                     m_networkResourceInstance->getActiveConnect(uuid);
 
     if (activeConnectPtr.isNull()) {
+        qWarning()<< LOG_FLAG << "check connection virtual is failed.";
         return false;
     }
 

@@ -361,6 +361,10 @@ void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssi
 {
     NetworkManager::WirelessNetwork::Ptr wifi = nullptr;
     for (auto const & net : m_networkResourceInstance->m_wifiNets) {
+        if (net.isNull()) {
+            continue;
+        }
+
         if (net->ssid() == ssid && m_networkResourceInstance->findDeviceUni(net->device())->interfaceName() == devIfaceName) {
             wifi = net;
         }

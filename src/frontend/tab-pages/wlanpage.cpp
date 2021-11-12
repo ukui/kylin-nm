@@ -11,6 +11,7 @@
 #define EMPTY_SSID "emptyssid"
 #define LOG_FLAG  "[WlanPage]"
 #define LAN_PAGE_INDEX 0
+#define SCROLL_STEP 4
 
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
@@ -83,6 +84,9 @@ void WlanPage::initWlanUI()
     m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);
     m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_inactivatedNetListWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+    m_inactivatedNetListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
+
     addWlanMoreItem();
     m_inactivatedAreaLayout->addWidget(m_inactivatedNetListWidget);
 
@@ -1377,6 +1381,7 @@ void WlanPage::addWlanMoreItem()
     m_hiddenWlanWidget->setFixedHeight(NORMAL_HEIGHT);
 
     m_hiddenItem = new QListWidgetItem(m_inactivatedNetListWidget);
+    m_hiddenItem->setSizeHint(QSize(m_inactivatedNetListWidget->width(), m_hiddenWlanWidget->height()));
     m_inactivatedNetListWidget->addItem(m_hiddenItem);
     m_inactivatedNetListWidget->setItemWidget(m_hiddenItem, m_hiddenWlanWidget);
     return;

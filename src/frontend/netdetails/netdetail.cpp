@@ -906,7 +906,7 @@ bool NetDetail::checkWirelessSecurity(KySecuType secuType)
             showDesktopNotify(tr("this wifi no support None type"));
             return false;
         } else if (secuType == WPA_AND_WPA2_PERSONAL
-                   && (m_info.strSecType.indexOf("WPA1") < 0 ||
+                   && (m_info.strSecType.indexOf("WPA1") < 0 &&
                        m_info.strSecType.indexOf("WPA2") < 0)) {
             showDesktopNotify(tr("this wifi no support WPA2 type"));
             return false;

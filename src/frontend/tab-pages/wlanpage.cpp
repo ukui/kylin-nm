@@ -1305,6 +1305,7 @@ void WlanPage::showNonePwd()
             QListWidgetItem *p_listWidgetItem = iter.value();
             WlanListItem *p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
             p_wlanItem->forgetPwd();
+            p_wlanItem->setExpanded(false);
         }
     }
     return;

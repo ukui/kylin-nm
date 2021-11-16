@@ -11,7 +11,6 @@
 #define EMPTY_SSID "emptyssid"
 #define LOG_FLAG  "[WlanPage]"
 #define LAN_PAGE_INDEX 0
-#define SCROLL_STEP 4
 
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {

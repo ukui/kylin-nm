@@ -33,6 +33,8 @@
 #define ACTIVE_AREA_MAX_HEIGHT 92
 #define LABEL_HEIGHT 20
 
+#define SCROLL_STEP 4
+
 enum KyDeviceType
 {
     WIRED,

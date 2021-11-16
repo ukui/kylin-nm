@@ -50,6 +50,8 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::deactivateConnectionError, this, &WlanPage::deactivateFailed);
 
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::wifiEnabledChanged, this, &WlanPage::onWifiEnabledChanged);
+
+    connect(m_connectResource, &KyConnectResourse::connectivityChanged, this, &WlanPage::connectivityChanged);
 }
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
@@ -1355,6 +1357,11 @@ void WlanPage::getWirelessDeviceCap(QMap<QString, int> &map)
         QString devName = m_devList.at(i);
         map.insert(devName, m_netDeviceResource->getWirelessDeviceCapability(devName));
     }
+}
+
+void WlanPage::getConnectivity(NetworkManager::Connectivity &connectivity)
+{
+    m_connectResource->getConnectivity(connectivity);
 }
 
 /**

@@ -188,6 +188,7 @@ void MainWindow::initTrayIcon()
     m_trayIconMenu->addAction(m_showSettingsAction);
     m_trayIcon->setContextMenu(m_trayIconMenu);
     m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+    iconStatus = IconActiveType::LAN_CONNECTED;
     onRefreshTrayIcon();
 
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
@@ -225,6 +226,7 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::signalStrengthChange, this, &MainWindow::signalStrengthChange);
     connect(m_wlanWidget, &WlanPage::timeToUpdate , this, &MainWindow::timeToUpdate);
     connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowByWlanPage);
+    connect(m_wlanWidget, &WlanPage::connectivityChanged, this, &MainWindow::onConnectivityChanged);
 }
 
 /**
@@ -395,10 +397,26 @@ void MainWindow::onRefreshTrayIcon()
     iconTimer->stop();
     if (m_lanWidget->lanIsConnected()) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+        iconStatus = IconActiveType::LAN_CONNECTED;
     } else if (m_wlanWidget->wlanIsConnected()){
         m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
+        iconStatus = IconActiveType::WLAN_CONNECTED;
     } else {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+        iconStatus = IconActiveType::NOT_CONNECTED;
+    }
+
+    NetworkManager::Connectivity connecttivity;
+    m_wlanWidget->getConnectivity(connecttivity);
+    if (connecttivity == NetworkManager::Connectivity::Portal || connecttivity == NetworkManager::Connectivity::Limited) {
+        if (iconStatus == IconActiveType::LAN_CONNECTED) {
+            m_trayIcon->setIcon(QIcon::fromTheme("network-error-symbolic"));
+            iconStatus = IconActiveType::LAN_CONNECTED_LIMITED;
+        } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
+            //todo 信号强度
+            m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-error-symbolic"));
+            iconStatus = IconActiveType::WLAN_CONNECTED_LIMITED;
+        }
     }
 }
 
@@ -408,6 +426,7 @@ void MainWindow::onSetTrayIconLoading()
         currentIconIndex = 0;
     }
     m_trayIcon->setIcon(loadIcons.at(currentIconIndex));
+    iconStatus = IconActiveType::ACTIVATING;
     currentIconIndex ++;
 }
 
@@ -450,6 +469,19 @@ void MainWindow::onShowByWlanPage()
         this->activateWindow();
         emit this->mainWindowVisibleChanged(true);
     }
+}
+
+void MainWindow::onConnectivityChanged(NetworkManager::Connectivity connectivity)
+{
+    if (!m_trayIcon) {
+        return;
+    }
+
+    if (iconStatus == ACTIVATING) {
+        return;
+    }
+
+    onRefreshTrayIcon();
 }
 
 /**

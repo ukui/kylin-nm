@@ -50,6 +50,7 @@ protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 
 signals:
     void itemHeightChanged(const bool isExpanded, const QString &ssid);

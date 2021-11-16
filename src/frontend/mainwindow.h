@@ -13,6 +13,15 @@
 #include "wlanpage.h"
 #include "netdetails/netdetail.h"
 
+enum IconActiveType {
+    NOT_CONNECTED = 0,
+    LAN_CONNECTED,
+    WLAN_CONNECTED,
+    LAN_CONNECTED_LIMITED,
+    WLAN_CONNECTED_LIMITED,
+    ACTIVATING,
+};
+
 class LanPage;
 
 class MainWindow : public QMainWindow
@@ -129,6 +138,8 @@ private:
     bool m_lanIsLoading = false;
     bool m_wlanIsLoading = false;
 
+    IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
+
 private slots:
     void onTrayIconActivated();
     void onShowMainwindowActionTriggled();
@@ -139,6 +150,7 @@ private slots:
     void onLanConnectStatusToChangeTrayIcon(int state);
     void onWlanConnectStatusToChangeTrayIcon(int state);
     void onShowByWlanPage();
+    void onConnectivityChanged(NetworkManager::Connectivity connectivity);
 };
 
 #endif // MAINWINDOW_H

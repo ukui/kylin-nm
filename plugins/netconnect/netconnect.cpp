@@ -130,7 +130,7 @@ bool NetConnect::isEnable() const
 
 bool NetConnect::isShowOnHomePage() const
 {
-    return true;
+    return false;
 }
 
 QIcon NetConnect::icon() const

@@ -167,6 +167,11 @@ QString KyWirelessNetResource::getActiveConnectSsidByDevice(QString deviceName)
         }
 
         QStringList interfaces = activeConnectionPtr->devices();
+        if(interfaces.isEmpty()) {
+            qWarning()<< LOG_FLAG <<"get active device failed.";
+            continue;
+        }
+
         QString ifaceUni = interfaces.at(0);
         NetworkManager::Device:: Ptr devicePtr =
                     m_networkResourceInstance->findDeviceUni(ifaceUni);
@@ -233,6 +238,10 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::
     wirelessNetResourcessid = wireless_sett->ssid();
 
     QStringList interfaces = actConn->devices();
+    if (interfaces.isEmpty()) {
+        return "";
+    }
+
     QString ifaceUni = interfaces.at(0);
     NetworkManager::Device:: Ptr devicePtr =
                 m_networkResourceInstance->findDeviceUni(ifaceUni);

@@ -74,6 +74,11 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
     }
 
     QStringList interfaces = activeConnectPtr->devices();
+    if (interfaces.isEmpty()) {
+        qWarning()<< LOG_FLAG << "get active connection device failed.";
+        return nullptr;
+    }
+
     QString ifaceUni = interfaces.at(0);
     NetworkManager::Device:: Ptr devicePtr =
                 m_networkResourceInstance->findDeviceUni(ifaceUni);
@@ -565,23 +570,28 @@ void KyActiveConnectResourse::getApActivateConnect(QList<KyApConnectItem *> &apC
 
 QString KyActiveConnectResourse::getDeviceOfActivateConnect(QString conUuid)
 {
-  QString deviceName = "";
+    QString deviceName = "";
 
-  NetworkManager::ActiveConnection::Ptr activeConnectPtr =
-          m_networkResourceInstance->getActiveConnect(conUuid);
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr =
+                                    m_networkResourceInstance->getActiveConnect(conUuid);
 
-  if (nullptr == activeConnectPtr) {
-      qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< conUuid;
-      return deviceName;
-  }
+    if (nullptr == activeConnectPtr) {
+        qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< conUuid;
+        return deviceName;
+    }
 
-  QStringList interfaces = activeConnectPtr->devices();
-  QString ifaceUni = interfaces.at(0);
-  NetworkManager::Device:: Ptr devicePtr =
-              m_networkResourceInstance->findDeviceUni(ifaceUni);
-  deviceName = devicePtr->interfaceName();
+    QStringList interfaces = activeConnectPtr->devices();
+    if (interfaces.isEmpty()) {
+        qWarning()<< LOG_FLAG << "get device of active connection failed.";
+        return deviceName;
+    }
 
-  return deviceName;
+    QString ifaceUni = interfaces.at(0);
+    NetworkManager::Device:: Ptr devicePtr =
+          m_networkResourceInstance->findDeviceUni(ifaceUni);
+    deviceName = devicePtr->interfaceName();
+
+    return deviceName;
 }
 
 bool KyActiveConnectResourse::connectionIsVirtual(QString uuid)
@@ -595,6 +605,11 @@ bool KyActiveConnectResourse::connectionIsVirtual(QString uuid)
     }
 
     QStringList interfaces = activeConnectPtr->devices();
+    if (interfaces.isEmpty()) {
+        qWarning()<< LOG_FLAG << "active connection get device failed.";
+        return false;
+    }
+
     QString ifaceUni = interfaces.at(0);
     NetworkManager::Device:: Ptr devicePtr =
                 m_networkResourceInstance->findDeviceUni(ifaceUni);

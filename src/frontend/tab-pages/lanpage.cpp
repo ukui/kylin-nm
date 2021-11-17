@@ -971,12 +971,14 @@ void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem)
             }
         }
 
-    } else {
+    } else if (!m_activeConnectionMap.contains(newUuid)){
         if (p_connectItem->m_ifaceName == m_currentDeviceName
                 || p_connectItem->m_ifaceName.isEmpty()) {
             QListWidgetItem *p_listWidgetItem = insertNewItem(p_connectItem, m_inactivatedLanListWidget);
             m_inactiveConnectionMap.insert(newUuid, p_listWidgetItem);
         }
+    } else {
+        qWarning() << LOG_FLAG << newUuid <<" is in activemap, so not process.";
     }
 
     return;

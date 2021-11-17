@@ -11,7 +11,6 @@
 #define EMPTY_SSID "emptyssid"
 #define LOG_FLAG  "[WlanPage]"
 #define LAN_PAGE_INDEX 0
-#define SCROLL_STEP 4
 
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
@@ -521,6 +520,7 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
     } else {
         deleteWirelessItemFormMap(m_activateConnectionItemMap,
                                   m_activatedNetListWidget, ssid);
+        showDesktopNotify(tr("WLAN Disconnected Successfully"));
 
         QListWidgetItem *p_listWidgetItem = addEmptyItem(m_activatedNetListWidget);
         m_activateConnectionItemMap.insert(EMPTY_SSID, p_listWidgetItem);
@@ -868,7 +868,12 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     if (m_connectResource->isApConnection(uuid)) {
         sendApStateChangeSignal(uuid, ssid, devName, state);
     } else {
-        wlanShowNotify(ssid, state, reason);
+        if (state == NetworkManager::ActiveConnection::State::Deactivated &&
+                !m_activateConnectionItemMap.contains(ssid)) {
+            qDebug() << "wlan remove before deactivated";
+        } else {
+            wlanShowNotify(ssid, state, reason);
+        }
     }
 
     if (devName != m_currentDevice) {

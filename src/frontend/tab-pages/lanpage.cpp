@@ -1,5 +1,6 @@
 #include "lanpage.h"
 #include <QDebug>
+#include <QScrollBar>
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
@@ -697,6 +698,8 @@ void LanPage::initUI()
     m_inactivatedLanListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedLanListWidget->setSpacing(LAN_LIST_SPACING);
     m_inactivatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_inactivatedLanListWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+    m_inactivatedLanListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
     m_inactivatedAreaLayout->addWidget(m_inactivatedLanListWidget);
 
     m_settingsLabel->installEventFilter(this);

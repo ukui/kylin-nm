@@ -31,6 +31,7 @@ public:
     void     setSwitchStatus(bool check);
     bool     getSwitchStatus();
     void     setEnabled(bool enabled);
+    bool     getEnabled();
 
 private:
     int             m_bIsOn = 1;
@@ -45,6 +46,7 @@ private:
 Q_SIGNALS:
     void clicked(int check);
     void switchStatusChanged();
+
 private Q_SLOTS:
     void startAnimation();
 

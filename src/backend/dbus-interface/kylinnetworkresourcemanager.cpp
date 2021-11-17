@@ -17,6 +17,8 @@
  */
 
 #include "kylinnetworkresourcemanager.h"
+#include <QMetaType>
+
 #define SIGNAL_DELAY 80000
 #define EMIT_DELAY 10000
 
@@ -42,6 +44,14 @@ void KyNetworkResourceManager::Release()
 
 KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(parent)
 {
+    qRegisterMetaType<NetworkManager::ActiveConnection::State>("NetworkManager::ActiveConnection::State");
+    qRegisterMetaType<NetworkManager::Connectivity>("NetworkManager::Connectivity");
+    qRegisterMetaType<NetworkManager::ActiveConnection::Reason>("NetworkManager::ActiveConnection::Reason");
+    qRegisterMetaType<NetworkManager::Device::Type>("NetworkManager::Device::Type");
+}
+
+void KyNetworkResourceManager::onInitNetwork()
+{
     insertActiveConnections();
     insertConnections();
     insertDevices();
@@ -64,7 +74,7 @@ KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(pa
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::serviceDisappeared, this, &KyNetworkResourceManager::clearConnections);
 
     qDebug() <<"[KyNetworkResourceManager]"
-            << "active connections:" << m_activeConns.size()
+             << "active connections:" << m_activeConns.size()
              << "connections:" << m_connections.size()
              << "network device:" << m_devices.size();
 }
@@ -924,6 +934,10 @@ void KyNetworkResourceManager::removeConnection(QString const & uuid)
     }
 }
 
+void KyNetworkResourceManager::setWirelessNetworkEnabled(bool enabled)
+{
+    NetworkManager::setWirelessEnabled(enabled);
+}
 
 void KyNetworkResourceManager::connectionDump()
 {

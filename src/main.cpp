@@ -29,6 +29,8 @@
 #include "xatom-helper.h"
 #endif
 
+#include "threaddriver.h"
+
 #define LOG_IDENT "ukui_kylin_nm"
 
 void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -96,6 +98,14 @@ int main(int argc, char *argv[])
     }
 
     QApplication::setQuitOnLastWindowClosed(false);
+
+    ThreadDriver networkManagerDiver;
+    QThread thread;
+    KyNetworkResourceManager *p_networkResource = KyNetworkResourceManager::getInstance();
+    p_networkResource->moveToThread(&thread);
+    QObject::connect(&networkManagerDiver, SIGNAL(initSignal()), p_networkResource, SLOT(onInitNetwork()));
+    thread.start();
+    networkManagerDiver.emitSignal();
 
     // Internationalization
     QString locale = QLocale::system().name();

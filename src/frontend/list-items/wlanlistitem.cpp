@@ -374,6 +374,7 @@ void WlanListItem::onNetButtonClicked()
         m_wirelessConnectOperation->activeWirelessConnect(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
         qDebug()<<"[WlanListItem] Has configuration, will be activated. ssid = "
                << m_wirelessNetItem.m_NetSsid << Q_FUNC_INFO << __LINE__;
+        m_netButton->startLoading();
         return;
     }
 
@@ -482,6 +483,7 @@ void WlanListItem::onConnectButtonClicked()
 
     m_wirelessConnectOperation->addAndActiveWirelessConnect(m_wlanDevice, settings, false);
     setExpanded(false);
+    m_netButton->startLoading();
     return;
 }
 
@@ -517,6 +519,7 @@ void WlanListItem::onMenuTriggered(QAction *action)
         m_wirelessConnectOperation->deActivateWirelessConnection(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
         qDebug()<<"[WlanListItem] Clicked on connected wifi, it will be inactivated. ssid = "
                         << m_wirelessNetItem.m_NetSsid << Q_FUNC_INFO << __LINE__;
+        m_netButton->startLoading();
     } else if (action->text() == tr("Forget")) {
         m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
     }

@@ -34,7 +34,8 @@ SwitchButton::SwitchButton(QWidget *parent) : QWidget(parent)
     else {
         m_fCurrentValue = 4;
     }
-    connect(m_cTimer,SIGNAL(timeout()),this,SLOT(startAnimation()));
+
+    connect(m_cTimer, SIGNAL(timeout()), this, SLOT(startAnimation()));
 
 
 }
@@ -42,12 +43,15 @@ SwitchButton::SwitchButton(QWidget *parent) : QWidget(parent)
 void SwitchButton::setSwitchStatus(bool check) {
     if (!m_enabled)
         return;
+
     if(check == true) {
         m_bIsOn = 1;
     } else {
         m_bIsOn = 0;
     }
+
     emit this->switchStatusChanged();
+
     m_cTimer->start(); //开始播放动画
 }
 
@@ -61,9 +65,15 @@ bool SwitchButton::getSwitchStatus()
 void SwitchButton::setEnabled(bool enabled)
 {
     m_enabled = enabled;
+    update();
+
+    return;
 }
 
-
+bool SwitchButton::getEnabled()
+{
+    return m_enabled;
+}
 /* 播放按钮开启关闭动画 */
 void SwitchButton::startAnimation() { //滑动按钮动作播放
     int pos = 4;
@@ -74,7 +84,6 @@ void SwitchButton::startAnimation() { //滑动按钮动作播放
             m_fCurrentValue = size - pos;
             m_cTimer->stop();
         }
-
     } else {
         m_fCurrentValue --;
         if(m_fCurrentValue <= pos) {             //到达最小值，停止继续前进
@@ -88,13 +97,11 @@ void SwitchButton::startAnimation() { //滑动按钮动作播放
 /* 按钮按下处理 */
 void SwitchButton::mousePressEvent(QMouseEvent *event) {
     Q_UNUSED(event);
-//    if (!m_enabled)
-//        return QWidget::mousePressEvent(event);
+
     if (m_enabled) {
         m_bIsOn = !m_bIsOn;
+        Q_EMIT clicked(m_bIsOn);
     }
-
-    Q_EMIT clicked(m_bIsOn);
 
     return QWidget::mousePressEvent(event);
 }
@@ -122,7 +129,11 @@ void SwitchButton::paintEvent(QPaintEvent *event) {
     }
     painter.restore();
     painter.save();
-    painter.setBrush(Qt::white);
+    if (!m_enabled) {
+        painter.setBrush(Qt::darkGray);
+    } else {
+        painter.setBrush(Qt::white);
+    }
     painter.drawEllipse(m_fCurrentValue,4, 16, 16);
     painter.restore();
 }

@@ -136,6 +136,10 @@ signals:
 
     void connectivityChanged(NetworkManager::Connectivity connectivity);
 
+public slots:
+    void onInitNetwork();
+    void setWirelessNetworkEnabled(bool enabled);
+
 private slots:
     //connection
     void onConnectionUpdated();

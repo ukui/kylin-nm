@@ -13,13 +13,19 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
 
     initDeviceMap();
 
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceAdd, this, &KyNetworkDeviceResourse::onDeviceAdd);
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceRemove, this, &KyNetworkDeviceResourse::onDeviceRemove);
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceUpdate, this, &KyNetworkDeviceResourse::onDeviceUpdate);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceAdd,
+                                       this, &KyNetworkDeviceResourse::onDeviceAdd, Qt::ConnectionType::DirectConnection);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceRemove,
+                                       this, &KyNetworkDeviceResourse::onDeviceRemove, Qt::ConnectionType::DirectConnection);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceUpdate,
+                                       this, &KyNetworkDeviceResourse::onDeviceUpdate, Qt::ConnectionType::DirectConnection);
 
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceCarrierChanage, this, &KyNetworkDeviceResourse::carrierChanage);
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceBitRateChanage, this, &KyNetworkDeviceResourse::deviceBitRateChanage);
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceMacAddressChanaged, this, &KyNetworkDeviceResourse::deviceMacAddressChanaged);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceCarrierChanage,
+                                       this, &KyNetworkDeviceResourse::carrierChanage);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceBitRateChanage,
+                                       this, &KyNetworkDeviceResourse::deviceBitRateChanage);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceMacAddressChanaged,
+                                       this, &KyNetworkDeviceResourse::deviceMacAddressChanaged);
 
 }
 

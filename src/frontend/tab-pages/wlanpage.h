@@ -49,6 +49,8 @@ public:
     void setWirelessSwitchEnable(bool enable);
     void getWirelessDeviceCap(QMap<QString, int> &map);
 
+    void getConnectivity(NetworkManager::Connectivity &connectivity);
+
 signals:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);
@@ -63,6 +65,8 @@ signals:
     void timeToUpdate();
 
     void showMainWindow();
+
+    void connectivityChanged(NetworkManager::Connectivity connectivity);
 
 public slots:
     void onMainWindowVisibleChanged(const bool &visible);

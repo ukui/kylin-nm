@@ -1,5 +1,6 @@
 #include "lanpage.h"
 #include <QDebug>
+#include <QScrollBar>
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
@@ -697,6 +698,8 @@ void LanPage::initUI()
     m_inactivatedLanListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedLanListWidget->setSpacing(LAN_LIST_SPACING);
     m_inactivatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_inactivatedLanListWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+    m_inactivatedLanListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
     m_inactivatedAreaLayout->addWidget(m_inactivatedLanListWidget);
 
     m_settingsLabel->installEventFilter(this);
@@ -968,12 +971,14 @@ void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem)
             }
         }
 
-    } else {
+    } else if (!m_activeConnectionMap.contains(newUuid)){
         if (p_connectItem->m_ifaceName == m_currentDeviceName
                 || p_connectItem->m_ifaceName.isEmpty()) {
             QListWidgetItem *p_listWidgetItem = insertNewItem(p_connectItem, m_inactivatedLanListWidget);
             m_inactiveConnectionMap.insert(newUuid, p_listWidgetItem);
         }
+    } else {
+        qWarning() << LOG_FLAG << newUuid <<" is in activemap, so not process.";
     }
 
     return;

@@ -116,7 +116,7 @@ void SwitchButton::paintEvent(QPaintEvent *event) {
     QColor colorActive(61,107,229);
     QColor colorInactive(190,190,190);
     colorInactive.setAlphaF(0.12);
-    if(m_bIsOn) {
+    if(m_bIsOn && m_enabled) {
         painter.save();
         painter.setBrush(colorActive);
         QRectF active_rect = QRectF(0,0,m_fWidth,m_fHeight);

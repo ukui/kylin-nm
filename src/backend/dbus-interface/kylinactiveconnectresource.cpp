@@ -579,7 +579,7 @@ QString KyActiveConnectResourse::getDeviceOfActivateConnect(QString conUuid)
     QString deviceName = "";
 
     NetworkManager::ActiveConnection::Ptr activeConnectPtr =
-          m_networkResourceInstance->getActiveConnect(conUuid);
+                                    m_networkResourceInstance->getActiveConnect(conUuid);
 
     if (nullptr == activeConnectPtr) {
         qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< conUuid;

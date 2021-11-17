@@ -82,7 +82,7 @@ bool MobileHotspot::isEnable() const
 
 bool MobileHotspot::isShowOnHomePage() const
 {
-    return true;
+    return false;
 }
 
 QIcon MobileHotspot::icon() const

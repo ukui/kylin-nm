@@ -189,6 +189,16 @@ bool WlanListItem::eventFilter(QObject *watched, QEvent *event)
     return QFrame::eventFilter(watched, event);
 }
 
+void WlanListItem::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        if (m_pwdFrame && m_pwdFrame->isVisible() && m_pwdLineEdit->text().length() >= PWD_LENGTH_LIMIT) {
+            onConnectButtonClicked();
+        }
+    }
+    return QFrame::keyPressEvent(event);
+}
+
 void WlanListItem::initWlanUI()
 {
     m_hasPwd = (m_wirelessNetItem.m_secuType.isEmpty() || m_wirelessNetItem.m_secuType == "") ? false : true;

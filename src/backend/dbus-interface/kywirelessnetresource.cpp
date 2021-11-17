@@ -180,6 +180,7 @@ QString KyWirelessNetResource::getActiveConnectSsidByDevice(QString deviceName)
             qWarning()<< LOG_FLAG <<"get active device failed.";
             continue;
         }
+
         QString ifaceUni = interfaces.at(0);
         NetworkManager::Device:: Ptr devicePtr =
                     m_networkResourceInstance->findDeviceUni(ifaceUni);

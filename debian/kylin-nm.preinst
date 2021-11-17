@@ -2,5 +2,5 @@
   
 set -e
 
-path="`qmake -query "QT_INSTALL_LIBS"`/ukui-control-center/libnetconnect.so"
+path="/usr/lib/`/usr/bin/dpkg-architecture -qDEB_TARGET_MULTIARCH`/ukui-control-center/libnetconnect.so"
 dpkg-divert --package kylin-nm  --rename --divert "$path"".old" --add $path

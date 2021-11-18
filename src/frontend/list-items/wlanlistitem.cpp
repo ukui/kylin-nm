@@ -6,6 +6,13 @@
 #define LOG_FLAG "[WlanListItem]"
 #define WAIT_US  10*1000
 
+WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, QWidget *parent)
+    : WlanListItem(wirelessNetItem, device, parent)
+{
+    m_isApMode = isApMode;
+    refreshIcon(false); // 额外刷新一次图标，因为WlanListItem执行时，m_isApMode尚未赋值
+}
+
 WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent) : ListItem(parent)
 {
     m_wlanDevice = device;
@@ -285,6 +292,12 @@ void WlanListItem::refreshIcon(bool isActivated)
 #define OK_SIGNAL 2
 #define LOW_SIGNAL 1
 #define STEP 25
+    if (m_isApMode) {
+        m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-hotspot-symbolic", QIcon(":/res/w/wifi-full.png")));
+        m_netButton->setActive(isActivated);
+        return;
+    }
+
     if (!m_hasPwd) {
         //ZJP_TODO 无加密 注意信号格数计算方式，可能需要修改
         switch (m_wirelessNetItem.m_signalStrength / STEP + 1) {

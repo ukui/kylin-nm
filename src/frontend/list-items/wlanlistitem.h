@@ -21,6 +21,7 @@ class WlanListItem : public ListItem
 {
     Q_OBJECT
 public:
+    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, QWidget *parent = nullptr);
     WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent = nullptr);
     WlanListItem(QWidget *parent = nullptr);
     ~WlanListItem();
@@ -85,6 +86,7 @@ private:
     bool m_mouseIsOut = true;
 
     bool m_forgetConnection = false;
+    bool m_isApMode = false;
 
 protected slots:
     void onInfoButtonClicked();

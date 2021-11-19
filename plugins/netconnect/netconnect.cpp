@@ -616,9 +616,7 @@ void NetConnect::onDeviceNameChanged(QString oldName, QString newName, int type)
     getDeviceStatusMap(deviceStatusMap);
     if (deviceStatusMap.contains(newName)) {
         addDeviceFrame(newName);
-        if (deviceStatusMap[newName]) {
-            initNetListFromDevice(newName);
-        }
+        initNetListFromDevice(newName);
     }
 }
 
@@ -634,16 +632,12 @@ void NetConnect::onLanAdd(QString deviceName, QStringList lanInfo)
     QMap<QString, ItemFrame *>::iterator iter;
     for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
         if (deviceName.isEmpty()) {
-            if (deviceStatusMap[iter.key()]) {
                 qDebug() << "[NetConnect]onLanAdd every list" << iter.key();
                 addOneLanFrame(iter.value(), iter.key(), lanInfo);
-            }
         } else if (deviceName == iter.key()) {
-            if (deviceStatusMap[deviceName]) {
                 qDebug() << "[NetConnect]onLanAdd "<< deviceName;
                 addOneLanFrame(iter.value(), deviceName, lanInfo);
                 break;
-            }
         }
     }
 }
@@ -784,9 +778,7 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int
             QMap<QString, ItemFrame *>::iterator iter;
             for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
                 if (!iter.value()->itemMap.contains(uuid)) {
-                    if (deviceStatusMap[iter.key()]) {
-                        addOneLanFrame(iter.value(), iter.key(), infoList);
-                    }
+                    addOneLanFrame(iter.value(), iter.key(), infoList);
                 }
             }
         }

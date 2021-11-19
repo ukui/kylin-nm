@@ -66,6 +66,3 @@ unix {
 
 DISTFILES += \
     org.ukui.kylin-nm.switch.gschema.xml
-
-HEADERS += \
-    threaddriver.h

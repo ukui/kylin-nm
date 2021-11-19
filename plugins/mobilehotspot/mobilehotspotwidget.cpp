@@ -107,6 +107,10 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                     showDesktopNotify(tr("hotpots name or device is invalid"));
                     return true;
                 }
+                if (m_pwdNameLine->text().toUtf8().length() > AP_NAME_MAX_LENGTH) {
+                    showDesktopNotify(tr("hotpots name length is too long!"));
+                    return true;
+                }
                 if (m_pwdNameLine->text().length() < 8) {
                     showDesktopNotify(tr("can not  create hotspot with password length less than eight!"));
                     return true;
@@ -193,7 +197,25 @@ void MobileHotspotWidget::initDbusConnect()
         onGsettingChanged(WIRELESS_SWITCH);
         connect(m_switchGsettings, &QGSettings::changed, this, &MobileHotspotWidget::onGsettingChanged, Qt::QueuedConnection);
     }
+
+    connect(m_apNameLine, &QLineEdit::textEdited, this, &MobileHotspotWidget::onApLineEditTextEdit);
 }
+
+void MobileHotspotWidget::onApLineEditTextEdit(QString text)
+{
+    int count = 0;
+    int i = 0;
+
+    for ( ; i < text.length(); ++i) {
+        count += text.mid(i,1).toLocal8Bit().length();
+        if (count > AP_NAME_MAX_LENGTH) {
+            break;
+        }
+    }
+
+    m_apNameLine->setText(text.left(i));
+}
+
 
 void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status)
 {

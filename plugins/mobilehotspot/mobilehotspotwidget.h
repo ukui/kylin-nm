@@ -112,7 +112,7 @@ private slots:
 
     void onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status);
 
-
+    void onApLineEditTextEdit(QString text);
 
 };
 

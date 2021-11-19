@@ -107,10 +107,6 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                     showDesktopNotify(tr("hotpots name or device is invalid"));
                     return true;
                 }
-                if (m_pwdNameLine->text().toUtf8().length() > AP_NAME_MAX_LENGTH) {
-                    showDesktopNotify(tr("hotpots name length is too long!"));
-                    return true;
-                }
                 if (m_pwdNameLine->text().length() < 8) {
                     showDesktopNotify(tr("can not  create hotspot with password length less than eight!"));
                     return true;

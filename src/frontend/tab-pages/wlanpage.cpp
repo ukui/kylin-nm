@@ -241,7 +241,10 @@ QListWidgetItem *WlanPage::addEmptyItem(QListWidget *wirelessListWidget)
 QListWidgetItem *WlanPage::addNewItem(KyWirelessNetItem &wirelessNetItem,
                                       QListWidget *wirelessListWidget)
 {
-    WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
+    WlanListItem *p_wlanItem = new WlanListItem(
+                wirelessNetItem,
+                m_currentDevice,
+                m_connectResource->isApConnection(wirelessNetItem.m_connectUuid));
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();

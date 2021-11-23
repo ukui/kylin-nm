@@ -93,14 +93,16 @@ void TabPage::initUI()
     m_inactivatedNetLayout->addWidget(m_inactivatedNetListArea);
 
     m_inactivatedNetDivider = new Divider(this);
-
     m_settingsFrame = new QFrame(this);
     m_settingsFrame->setFixedHeight(TITLE_FRAME_HEIGHT);
+
     m_settingsLayout = new QHBoxLayout(m_settingsFrame);
     m_settingsLayout->setContentsMargins(SETTINGS_LAYOUT_MARGINS);
     m_settingsLabel = new QLabel(m_settingsFrame);
     m_settingsLabel->setCursor(Qt::PointingHandCursor);
     m_settingsLabel->setText(tr("Settings"));
+    m_settingsLabel->setScaledContents(true);
+
     m_settingsLayout->addWidget(m_settingsLabel);
     m_settingsFrame->setLayout(m_settingsLayout);
 

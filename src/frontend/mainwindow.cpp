@@ -396,10 +396,10 @@ void MainWindow::onRefreshTrayIcon()
     //更新托盘图标显示
     iconTimer->stop();
     if (m_lanWidget->lanIsConnected()) {
-        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
         iconStatus = IconActiveType::LAN_CONNECTED;
     } else if (m_wlanWidget->wlanIsConnected()){
-        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic"));
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
         iconStatus = IconActiveType::WLAN_CONNECTED;
     } else {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));

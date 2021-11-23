@@ -42,7 +42,7 @@ KyConnectResourse::~KyConnectResourse()
     m_networkResourceInstance = nullptr;
 }
 
-KyConnectItem *KyConnectResourse::getConnectionItem(NetworkManager::Connection::Ptr connectPtr)
+KyConnectItem *KyConnectResourse::getConnectionItem(NetworkManager::Connection::Ptr connectPtr, QString devName)
 {
     if (nullptr == connectPtr) {
         qWarning()<<"[KyConnectResourse]"<<"the connect is empty";
@@ -58,23 +58,23 @@ KyConnectItem *KyConnectResourse::getConnectionItem(NetworkManager::Connection::
     connectionItem->m_ifaceName = settingPtr->interfaceName();
     connectionItem->m_itemType = settingPtr->connectionType();
 
-    QString devName = getDeviceOfConnect(connectionItem->m_connectUuid);
     if (m_networkResourceInstance->isActivatingConnection(connectPtr->uuid())) {
-       if (connectionItem->m_ifaceName != "") {
-           connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Activating;
-       } else if (connectionItem->m_ifaceName == "" && devName != "") {
-           connectionItem->m_ifaceName = devName;
-           connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Activating;
-       }  else {
-            connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
-       }
+        if (connectionItem->m_ifaceName == "" && devName != "") {
+            if (isActiveDevice(connectionItem->m_connectUuid, devName)) {
+                connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Activating;
+            } else {
+                connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
+            }
+        } else {
+            connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Activating;
+        }
     } else {
         connectionItem->m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
     }
     return connectionItem;
 }
 
-QString KyConnectResourse::getDeviceOfConnect(QString conUuid)
+bool KyConnectResourse::isActiveDevice(QString conUuid, QString devName)
 {
     QString deviceName = "";
 
@@ -83,21 +83,26 @@ QString KyConnectResourse::getDeviceOfConnect(QString conUuid)
 
     if (nullptr == activeConnectPtr) {
         qWarning()<< "[KyConnectResourse]" <<"it can not find activating connect "<< conUuid;
-        return deviceName;
+        return false;
     }
 
     QStringList interfaces = activeConnectPtr->devices();
     if (interfaces.isEmpty()) {
         qWarning()<< "[KyConnectResourse]" << "get device of activing connection failed.";
-        return deviceName;
+        return false;
     }
 
-    QString ifaceUni = interfaces.at(0);
-    NetworkManager::Device:: Ptr devicePtr =
-          m_networkResourceInstance->findDeviceUni(ifaceUni);
-    deviceName = devicePtr->interfaceName();
-
-    return deviceName;
+    QString ifaceUni = "";
+    for (int index=0; index < interfaces.size(); index++) {
+        ifaceUni = interfaces.at(index);
+        NetworkManager::Device:: Ptr devicePtr =
+              m_networkResourceInstance->findDeviceUni(ifaceUni);
+        deviceName = devicePtr->interfaceName();
+        if (deviceName == devName) {
+            return true;
+        }
+    }
+    return false;
 }
 
 KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
@@ -115,7 +120,7 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
         return nullptr;
     }
 
-    KyConnectItem *connectItem = getConnectionItem(connectPtr);
+    KyConnectItem *connectItem = getConnectionItem(connectPtr, "");
     if (nullptr != connectItem) {
         connectItem->dumpInfo();
         return connectItem;
@@ -147,7 +152,7 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, 
         return nullptr;
     }
 
-    KyConnectItem *connectItem = getConnectionItem(connectPtr);
+    KyConnectItem *connectItem = getConnectionItem(connectPtr, deviceName);
     if (nullptr != connectItem) {
         connectItem->dumpInfo();
         return connectItem;
@@ -199,7 +204,7 @@ void KyConnectResourse::getConnectionList(QString deviceName,
             continue;
         }
 
-        KyConnectItem *connectItem = getConnectionItem(connectPtr);
+        KyConnectItem *connectItem = getConnectionItem(connectPtr, deviceName);
         if (nullptr != connectItem) {
            // connectItem->m_itemType = connectionType;
             connectItemList << connectItem;

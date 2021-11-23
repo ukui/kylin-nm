@@ -42,12 +42,12 @@
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="32"/>
         <source>Ipv4Config</source>
-        <translation>Ipv4配置</translation>
+        <translation>IPV4配置</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="33"/>
         <source>Address</source>
-        <translation>地址</translation>
+        <translation>IPV4地址</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="34"/>
@@ -997,7 +997,7 @@
     <message>
         <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="259"/>
         <source>Auto Connect</source>
-        <translation>自动连接</translation>
+        <translation>自动加入该网络</translation>
     </message>
 </context>
 <context>

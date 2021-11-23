@@ -15,12 +15,22 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
     m_deviceName = deviceName;
 
     m_nameLabel->setText(m_lanConnectItem.m_connectName);
-
     m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
-    if (m_lanConnectItem.m_connectState == NetworkManager::ActiveConnection::State::Activated) {
-        setIcon(true);
+
+    if (m_deviceName != m_lanConnectItem.m_ifaceName) {
+        m_lanConnectItem.m_connectState = NetworkManager::ActiveConnection::State::Deactivated;
+    }
+    qDebug() << "LanListItem init:" << m_lanConnectItem.m_connectName << m_lanConnectItem.m_connectState << m_lanConnectItem.m_ifaceName;
+
+    if (Deactivated == m_lanConnectItem.m_connectState || Activated == m_lanConnectItem.m_connectState) {
+        m_netButton->stopLoading();
+        if (m_lanConnectItem.m_connectState == Activated) {
+            setIcon(true);
+        } else {
+            setIcon(false);
+        }
     } else {
-        setIcon(false);
+        m_netButton->startLoading();
     }
 
     m_itemFrame->installEventFilter(this);

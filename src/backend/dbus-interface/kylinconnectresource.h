@@ -39,6 +39,7 @@ public:
     bool isApConnection(QString uuid);
 
 private:
+    QString getDeviceOfConnect(QString conUuid);
     KyConnectItem *getConnectionItem(NetworkManager::Connection::Ptr connectPtr);
     void getConnectIp(NetworkManager::ConnectionSettings::Ptr settingPtr,
                       QString &ipv4Address,

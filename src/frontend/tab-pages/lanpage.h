@@ -102,6 +102,8 @@ private slots:
     void onDeviceRemove(QString deviceName);
     void onDeviceNameUpdate(QString oldName, QString newName);
 
+    void onDeviceCarriered(QString deviceName, bool pluged);
+
     void onDeviceComboxIndexChanged(int currentIndex);
 
     void onShowControlCenter();

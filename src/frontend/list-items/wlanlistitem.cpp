@@ -230,6 +230,7 @@ void WlanListItem::initWlanUI()
     m_pwdFrame->setLayout(m_pwdFrameLyt);
 
     m_pwdLineEdit  = new QLineEdit(m_pwdFrame);
+    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
     m_pwdLineEdit->installEventFilter(this);
     connect(m_pwdLineEdit, &QLineEdit::textChanged, this, &WlanListItem::onPwdEditorTextChanged);
     m_pwdLineEdit->setFixedHeight(PWD_AREA_HEIGHT);
@@ -242,6 +243,7 @@ void WlanListItem::initWlanUI()
     m_pwdLineEdit->setLayout(m_pwdLineEditLyt);
 
     m_showPwdButton = new QPushButton(m_pwdLineEdit);
+    m_showPwdButton->setStyleSheet("QPushButton{color:white; background-color:transparent;}");
     m_showPwdButton->installEventFilter(this);
     m_showPwdButton->setFixedSize(SHOW_PWD_BUTTON_SIZE);
     m_showPwdButton->setAutoFillBackground(false);

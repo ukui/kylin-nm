@@ -231,7 +231,7 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
 #endif
     switch (device->type())
     {
-        case NetworkManager::Ethernet:
+        case NetworkManager::Device::Ethernet:
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::bitRateChanged, this, &KyNetworkResourceManager::onDeviceBitRateChanage);
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::carrierChanged, this, &KyNetworkResourceManager::onDeviceCarrierChanage);
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::hardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceMacAddressChanaged);

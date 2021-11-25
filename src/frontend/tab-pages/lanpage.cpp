@@ -43,6 +43,8 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceRemove, this, &LanPage::onDeviceRemove);
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceNameUpdate, this, &LanPage::onDeviceNameUpdate);
 
+    connect(m_deviceResource, &KyNetworkDeviceResourse::carrierChanage, this, &LanPage::onDeviceCarriered);
+
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &LanPage::activateFailed);
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &LanPage::deactivateFailed);
 
@@ -671,6 +673,19 @@ void LanPage::onDeviceNameUpdate(QString oldName, QString newName)
 
         emit deviceNameChanged(oldName, newName, WIRED);
     }
+}
+
+void LanPage::onDeviceCarriered(QString deviceName, bool pluged)
+{
+    if (!pluged) {
+        return;
+    }
+
+    if (!m_wiredSwitch || !m_enableDeviceList.contains(deviceName)) {
+        m_wiredConnectOperation->closeWiredNetworkWithDevice(deviceName);
+    }
+
+    return;
 }
 
 void LanPage::onDeviceComboxIndexChanged(int currentIndex)

@@ -39,11 +39,11 @@ KyWirelessNetResource::KyWirelessNetResource(QObject *parent)
                      this, &KyWirelessNetResource::onWifiNetworkDeviceDisappear, Qt::ConnectionType::DirectConnection);
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionAdd,
-                     this, &KyWirelessNetResource::onConnectionAdd, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onConnectionAdd);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionRemove,
-                     this, &KyWirelessNetResource::onConnectionRemove, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onConnectionRemove);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionUpdate,
-                     this, &KyWirelessNetResource::onConnectionUpdate, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onConnectionUpdate);
 
     connect(m_networkDevice, &KyNetworkDeviceResourse::deviceAdd, this, &KyWirelessNetResource::onDeviceAdd);
     connect(m_networkDevice, &KyNetworkDeviceResourse::deviceRemove, this, &KyWirelessNetResource::onDeviceRemove);

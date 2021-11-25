@@ -83,7 +83,7 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
 
     KyConnectItem *connectItem = getConnectionItem(connectPtr);
     if (nullptr != connectItem) {
-        connectItem->dumpInfo();
+        //connectItem->dumpInfo();
         return connectItem;
     }
 
@@ -115,7 +115,7 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, 
 
     KyConnectItem *connectItem = getConnectionItem(connectPtr);
     if (nullptr != connectItem) {
-        connectItem->dumpInfo();
+        //connectItem->dumpInfo();
         return connectItem;
     }
 
@@ -169,7 +169,7 @@ void KyConnectResourse::getConnectionList(QString deviceName,
         if (nullptr != connectItem) {
            // connectItem->m_itemType = connectionType;
             connectItemList << connectItem;
-            connectItem->dumpInfo();
+            //connectItem->dumpInfo();
         }
 
         connectPtr = nullptr;

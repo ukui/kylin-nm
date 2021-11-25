@@ -113,21 +113,22 @@ void WlanPage::onWlanSwithGsettingsChanged(const QString &key)
  */
 void WlanPage::onWlanSwitchClicked()
 {
-    qDebug() <<"[WlanPage] On wlan switch button clicked! old state = "
-            << !m_netSwitch->getSwitchStatus() << Q_FUNC_INFO << __LINE__;
-
     if (m_devList.isEmpty()) {
-        qDebug() << "[WlanPage] have no device to use "  << Q_FUNC_INFO << __LINE__;
         showDesktopNotify(tr("No wireless network card detected"));
         //检测不到无线网卡不再触发click信号
         m_netSwitch->setSwitchStatus(false);
-        //m_netSwitch->setEnabled(false);
     } else {
         bool switchEnable = m_netSwitch->getSwitchStatus();
         if (m_wlanSwitchEnable != switchEnable) {
             qDebug()<< LOG_FLAG << "wlan switch state " << switchEnable;
             m_wirelessConnectOpreation->setWirelessEnabled(switchEnable);
-            //m_switchGsettings->set(WIRELESS_SWITCH, switchEnable);
+            if (!switchEnable) {
+                m_netSwitch->setEnabled(false);
+                m_activatedNetFrame->hide();
+                m_activatedNetDivider->hide();
+                m_inactivatedNetFrame->hide();
+                m_deviceFrame->hide();
+            }
         }
     }
 
@@ -1008,10 +1009,10 @@ void WlanPage::onWifiEnabledChanged(bool isWifiOn)
     if (m_wlanSwitchEnable == isWifiOn) {
         return;
     } else {
-        //m_netSwitch->setSwitchStatus(isWifiOn);
-        //m_netSwitch->setEnabled(isWifiOn);
+        if (!m_netSwitch->getEnabled()) {
+            m_netSwitch->setEnabled(true);
+        }
         m_switchGsettings->set(WIRELESS_SWITCH, isWifiOn);
-//        emit this->wlanConnectChanged();
     }
 
     return;
@@ -1040,7 +1041,7 @@ void WlanPage::onRefreshIconTimer()
     if(!this->isVisible()) {
         return;
     }
-    qDebug() << "onRefreshIconTimer";
+    //qDebug() << "onRefreshIconTimer";
 
     if (m_expandedItem) {
         qDebug()<< LOG_FLAG << "Has expanded item and forbid refresh wifi strength" << Q_FUNC_INFO << __LINE__;
@@ -1079,7 +1080,7 @@ void WlanPage::onRefreshIconTimer()
                 continue;
             }
 
-            qDebug()<< LOG_FLAG << "row" << sortRow << "item ssid" << p_wlanItem->getSsid();
+            //qDebug()<< LOG_FLAG << "row" << sortRow << "item ssid" << p_wlanItem->getSsid();
             if (sortSsid == p_wlanItem->getSsid()) {
                // qDebug()<< LOG_FLAG << "sort wlan set signal strength." << Q_FUNC_INFO << __LINE__;
                 p_wlanItem->setSignalStrength(sortItem.m_signalStrength);
@@ -1357,6 +1358,13 @@ void WlanPage::setWirelessSwitchEnable(bool enable)
         //m_netSwitch->setEnabled(false);
     }else{
         m_wirelessConnectOpreation->setWirelessEnabled(enable);
+        if (!enable) {
+            m_netSwitch->setEnabled(false);
+            m_activatedNetFrame->hide();
+            m_activatedNetDivider->hide();
+            m_inactivatedNetFrame->hide();
+            m_deviceFrame->hide();
+        }
     }
 }
 

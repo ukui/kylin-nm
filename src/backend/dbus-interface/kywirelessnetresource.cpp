@@ -18,27 +18,36 @@ static void wifiListSort(QList<KyWirelessNetItem> &list)
 KyWirelessNetResource::KyWirelessNetResource(QObject *parent)
     : QObject(parent)
 {
-    qDebug()<<"KyWirelessNetResource";
+    qDebug()<< LOG_FLAG <<"KyWirelessNetResource";
+
+    qRegisterMetaType<KyWirelessNetItem>("KyWirelessNetItem&");
+
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
-    m_connectResource = new KyConnectResourse(this);
     m_operation = new KyWirelessConnectOperation(this);
+    m_networkDevice = new KyNetworkDeviceResourse(this);
 
     kyWirelessNetItemListInit();
 
     //TODO:connect device signal
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkAdded, this, &KyWirelessNetResource::onWifiNetworkAdded);
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkRemoved, this, &KyWirelessNetResource::onWifiNetworkRemoved);
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkPropertyChange, this, &KyWirelessNetResource::onWifiNetworkPropertyChange);
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkDeviceDisappear, this, &KyWirelessNetResource::onWifiNetworkDeviceDisappear);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkAdded,
+                     this, &KyWirelessNetResource::onWifiNetworkAdded, Qt::ConnectionType::DirectConnection);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkRemoved,
+                     this, &KyWirelessNetResource::onWifiNetworkRemoved, Qt::ConnectionType::DirectConnection);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkPropertyChange,
+                     this, &KyWirelessNetResource::onWifiNetworkPropertyChange, Qt::ConnectionType::DirectConnection);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkDeviceDisappear,
+                     this, &KyWirelessNetResource::onWifiNetworkDeviceDisappear, Qt::ConnectionType::DirectConnection);
 
-    connect(m_connectResource, &KyConnectResourse::connectionAdd, this, &KyWirelessNetResource::onConnectionAdd);
-    connect(m_connectResource, &KyConnectResourse::connectionRemove, this, &KyWirelessNetResource::onConnectionRemove);
-    connect(m_connectResource, &KyConnectResourse::connectionUpdate, this, &KyWirelessNetResource::onConnectionUpdate);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionAdd,
+                     this, &KyWirelessNetResource::onConnectionAdd);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionRemove,
+                     this, &KyWirelessNetResource::onConnectionRemove);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionUpdate,
+                     this, &KyWirelessNetResource::onConnectionUpdate);
 
-    connect(m_device, &KyNetworkDeviceResourse::deviceAdd, this, &KyWirelessNetResource::onDeviceAdd);
-    connect(m_device, &KyNetworkDeviceResourse::deviceRemove, this, &KyWirelessNetResource::onDeviceRemove);
-    connect(m_device, &KyNetworkDeviceResourse::deviceNameUpdate, this, &KyWirelessNetResource::onDeviceNameUpdate);
-
+    connect(m_networkDevice, &KyNetworkDeviceResourse::deviceAdd, this, &KyWirelessNetResource::onDeviceAdd);
+    connect(m_networkDevice, &KyNetworkDeviceResourse::deviceRemove, this, &KyWirelessNetResource::onDeviceRemove);
+    connect(m_networkDevice, &KyNetworkDeviceResourse::deviceNameUpdate, this, &KyWirelessNetResource::onDeviceNameUpdate);
 }
 
 KyWirelessNetResource::~KyWirelessNetResource()

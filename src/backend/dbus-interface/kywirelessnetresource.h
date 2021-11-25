@@ -21,7 +21,7 @@ public:
 
     //ui层调用接口
     bool getWifiNetwork(const QString &devIfaceName, const QString &ssid, KyWirelessNetItem &wirelessNetResource);
-    bool getAllDeviceWifiNetwork(QMap<QString, QList<KyWirelessNetItem> > &map);
+    bool getAllDeviceWifiNetwork(QMap<QString, QList<KyWirelessNetItem>> &map);
     bool getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &wirelessNetResource);
 
     bool getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info);
@@ -67,9 +67,8 @@ signals:
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
-    KyConnectResourse        *m_connectResource = nullptr;
     KyWirelessConnectOperation  *m_operation = nullptr;
-    KyNetworkDeviceResourse  *m_device = nullptr;
+    KyNetworkDeviceResourse  *m_networkDevice = nullptr;
     QMap<QString, QList<KyWirelessNetItem> >      m_WifiNetworkList;
 
 };

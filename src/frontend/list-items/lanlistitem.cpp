@@ -95,6 +95,7 @@ void LanListItem::onNetButtonClicked()
             m_connectOperation->activateWiredConnection(m_lanConnectItem.m_connectUuid, m_deviceName);
             qDebug() << LOG_FLAG << "it will activate connection" << m_lanConnectItem.m_connectName
                      << ". it's device is" << m_deviceName;
+            m_netButton->startLoading();
         } else {
             qDebug() << LOG_FLAG << m_deviceName << "is not carried, so can not activate connection";
             this->showDesktopNotify(tr("Wired Device not carried"));
@@ -138,6 +139,7 @@ void LanListItem::onMenuTriggered(QAction *action)
         m_connectOperation->deactivateWiredConnection(m_lanConnectItem.m_connectName, m_lanConnectItem.m_connectUuid);
         qDebug() << LOG_FLAG << "it will disconnect connection" << m_lanConnectItem.m_connectName
                  << ". it's device is" << m_deviceName;
+        m_netButton->startLoading();
     }
     return;
 }

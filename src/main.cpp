@@ -97,6 +97,12 @@ int main(int argc, char *argv[])
 
     QApplication::setQuitOnLastWindowClosed(false);
 
+    QThread thread;
+    KyNetworkResourceManager *p_networkResource = KyNetworkResourceManager::getInstance();
+    p_networkResource->moveToThread(&thread);
+    QObject::connect(&thread, SIGNAL(started()), p_networkResource, SLOT(onInitNetwork()));
+    thread.start();
+
     // Internationalization
     QString locale = QLocale::system().name();
     QTranslator trans_global;

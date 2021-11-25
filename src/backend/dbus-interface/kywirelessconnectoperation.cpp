@@ -103,6 +103,8 @@ KyWirelessConnectOperation::KyWirelessConnectOperation(QObject *parent) : KyConn
 {
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiEnabledChanged,
                                         this, &KyWirelessConnectOperation::wifiEnabledChanged);
+    connect(this, &KyWirelessConnectOperation::enabledWirelessNetwork,
+                  m_networkResourceInstance, &KyNetworkResourceManager::setWirelessNetworkEnabled, Qt::ConnectionType::QueuedConnection);
 }
 
 KyWirelessConnectOperation::~KyWirelessConnectOperation()
@@ -696,7 +698,9 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
 //无线网络开关设置
 void KyWirelessConnectOperation::setWirelessEnabled(bool enabled)
 {
-    NetworkManager::setWirelessEnabled(enabled);
+    emit enabledWirelessNetwork(enabled);
+
+    return;
 }
 
 bool KyWirelessConnectOperation::getWirelessEnabled()

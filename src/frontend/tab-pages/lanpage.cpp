@@ -381,6 +381,9 @@ void LanPage::constructConnectionArea()
             KyConnectItem *p_deactiveConnectionItem = deactivedList.at(index);
             qDebug()<<"[LanPage] construct connection area add deactive item"<<p_deactiveConnectionItem->m_connectName;
             QListWidgetItem *p_listWidgetItem = addNewItem(p_deactiveConnectionItem, m_inactivatedLanListWidget);
+            if (m_inactiveConnectionMap.contains(p_deactiveConnectionItem->m_connectUuid)) {
+                qDebug()<<LOG_FLAG << "has contain uuid" << p_deactiveConnectionItem->m_connectUuid;
+            }
             m_inactiveConnectionMap.insert(p_deactiveConnectionItem->m_connectUuid, p_listWidgetItem);
 
             delete p_deactiveConnectionItem;
@@ -471,6 +474,9 @@ void LanPage::onAddConnection(QString uuid)               //新增一个有线�
     if (p_newItem->m_ifaceName == m_currentDeviceName || p_newItem->m_ifaceName == "") {
         qDebug()<<"[LanPage] Add a new connection, name:"<<p_newItem->m_connectName;
         QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_inactivatedLanListWidget);
+        if (m_inactiveConnectionMap.contains(p_newItem->m_connectUuid)) {
+            qDebug()<<LOG_FLAG << "the connection is exsit" << p_newItem->m_connectUuid;
+        }
         m_inactiveConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
     }
 
@@ -965,6 +971,9 @@ void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem)
                 //只要名字改变就要删除，重新插入，主要是为了排序
                 deleteConnectionMapItem(m_inactiveConnectionMap, m_inactivatedLanListWidget, newUuid);
                 QListWidgetItem *p_sortListWidgetItem = insertNewItem(p_connectItem, m_inactivatedLanListWidget);
+                if (m_inactiveConnectionMap.contains(newUuid)) {
+                    qDebug()<<LOG_FLAG << "has contained connection" << newUuid;
+                }
                 m_inactiveConnectionMap.insert(newUuid, p_sortListWidgetItem);
             } else if (p_connectItem->m_connectPath != p_lanItem->getConnectionPath()) {
                 p_lanItem->updateConnectionPath(p_connectItem->m_connectPath);
@@ -975,6 +984,9 @@ void LanPage::updateConnectionProperty(KyConnectItem *p_connectItem)
         if (p_connectItem->m_ifaceName == m_currentDeviceName
                 || p_connectItem->m_ifaceName.isEmpty()) {
             QListWidgetItem *p_listWidgetItem = insertNewItem(p_connectItem, m_inactivatedLanListWidget);
+            if (m_inactiveConnectionMap.contains(newUuid)) {
+                qDebug()<<LOG_FLAG << "has contained connection uuid" << newUuid;
+            }
             m_inactiveConnectionMap.insert(newUuid, p_listWidgetItem);
         }
     } else {

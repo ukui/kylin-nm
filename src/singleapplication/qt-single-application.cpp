@@ -49,6 +49,7 @@
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include <QMainWindow>
 #include "../mainwindow.h"
 
 
@@ -286,10 +287,10 @@ QString QtSingleApplication::id() const {
 void QtSingleApplication::setActivationWindow(QWidget* aw, bool activateOnMessage) {
     actWin = aw;
     //目前不需要用到此处的置顶方法，故此信号槽暂时注释掉，若后续需要根据新起进程传递的信号执行部分操作时可以把这里放开
-//    if (activateOnMessage)
-//        connect(peer, &QtLocalPeer::messageReceived, this, &QtSingleApplication::activateWindow);
-//    else
-//        disconnect(peer, &QtLocalPeer::messageReceived, this, &QtSingleApplication::activateWindow);
+    if (activateOnMessage)
+        connect(peer, &QtLocalPeer::messageReceived, this, &QtSingleApplication::activateWindow);
+    else
+        disconnect(peer, &QtLocalPeer::messageReceived, this, &QtSingleApplication::activateWindow);
 }
 
 
@@ -320,23 +321,21 @@ QWidget* QtSingleApplication::activationWindow() const {
 */
 void QtSingleApplication::activateWindow() {
     //单例置顶策略，由于bootOptionsFilter in mainwindow自带置顶策略，故注掉此处
-//    if (actWin) {
-//        if(this->applicationState() & Qt::ApplicationInactive)
-//        {
-//            MainWindow* w=qobject_cast<MainWindow*>(actWin);
-////            w->loadMainWindow();
-//            w->clearSearchResult();
-//            actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
-//            actWin->raise();
-//            actWin->showNormal();
-//            actWin->activateWindow();
-//        }
-//        else {
-//            actWin->setWindowState(actWin->windowState() & Qt::WindowMinimized);
-//            actWin->hide();
-//        }
-
-//    }
+    if (actWin) {
+        if(this->applicationState() & Qt::ApplicationInactive)
+        {
+            MainWindow* w=qobject_cast<MainWindow*>(actWin);
+            w->showMainwindow();
+            actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
+            actWin->raise();
+            actWin->showNormal();
+            actWin->activateWindow();
+        }
+        else {
+            actWin->setWindowState(actWin->windowState() & Qt::WindowMinimized);
+            actWin->hide();
+        }
+    }
 }
 
 

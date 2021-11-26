@@ -85,14 +85,8 @@ int main(int argc, char *argv[])
     QtSingleApplication a(id, argc, argv);
     qInstallMessageHandler(messageOutput);
     if (a.isRunning()) {
-        qInfo() << "Kylin-Network-Manager Is Already Launched, just show";
-        auto connection = QDBusConnection::sessionBus();
-        QDBusInterface iface("com.kylin.network",
-                                       "/com/kylin/network",
-                                       "com.kylin.network",
-                                       connection);
-        iface.call("showMainWindow");
-        return 0;
+        a.sendMessage("raise_window_noop");
+        return EXIT_SUCCESS;
     }
 
     QApplication::setQuitOnLastWindowClosed(false);
@@ -116,6 +110,7 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w;
+    a.setActivationWindow(&w);
     w.setProperty("useStyleWindowManager", false); //禁用拖动
     //设置窗口无边框，阴影
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))

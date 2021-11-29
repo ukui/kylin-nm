@@ -141,7 +141,7 @@ private:
 
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
 
-    QMap<QString, NetDetail*> createPageMap;
+    QMap<QString, NetDetail*> m_createPagePtrMap;
 
 private slots:
     void onTrayIconActivated();

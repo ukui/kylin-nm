@@ -96,7 +96,7 @@ void MainWindow::firstlyStart()
     });
     m_secondaryStartTimer->start(5 * 1000);
 
-    createPageMap.clear();
+    m_createPagePtrMap.clear();
 
     //加载key ring
     agent_init();
@@ -615,22 +615,21 @@ void MainWindow::showPropertyWidget(QString devName, QString ssid)
 void MainWindow::showCreateWiredConnectWidget(const QString devName)
 {
     qDebug() << "showCreateWiredConnectWidget! devName = " << devName;
-    if (createPageMap.contains(devName)) {
-        if (createPageMap[devName] != nullptr) {
+    if (m_createPagePtrMap.contains(devName)) {
+        if (m_createPagePtrMap[devName] != nullptr) {
             qDebug() << "showCreateWiredConnectWidget" << devName << "already create,just raise";
 
-            KWindowSystem::raiseWindow(createPageMap[devName]->winId());
+            KWindowSystem::raiseWindow(m_createPagePtrMap[devName]->winId());
             return;
         }
     }
     NetDetail *netDetail = new NetDetail(devName, "", "", false, false, true, this);
     connect(netDetail, &NetDetail::createPageClose, [&](QString interfaceName){
-        qDebug() << interfaceName;
-        if (createPageMap.contains(interfaceName)) {
-            createPageMap[interfaceName] = nullptr;
+        if (m_createPagePtrMap.contains(interfaceName)) {
+            m_createPagePtrMap[interfaceName] = nullptr;
         }
     });
-    createPageMap.insert(devName, netDetail);
+    m_createPagePtrMap.insert(devName, netDetail);
     netDetail->show();
 }
 

@@ -67,6 +67,7 @@ void Ipv4Page::initComponent() {
     }
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(configChanged(int)));
 
+    connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));

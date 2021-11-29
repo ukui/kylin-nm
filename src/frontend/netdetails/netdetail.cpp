@@ -120,6 +120,7 @@ void NetDetail::paintEvent(QPaintEvent *event)
 void NetDetail::closeEvent(QCloseEvent *event)
 {
     emit this->detailPageClose(false);
+    emit this->createPageClose(m_deviceName);
     return QDialog::closeEvent(event);
 }
 

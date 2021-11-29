@@ -135,5 +135,6 @@ private slots:
 
 signals:
     void detailPageClose(bool on);
+    void createPageClose(QString);
 };
 #endif // NETDETAIL_H

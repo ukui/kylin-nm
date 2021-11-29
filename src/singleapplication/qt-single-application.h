@@ -102,8 +102,8 @@ Q_SIGNALS:
 
 private:
     void sysInit(const QString &appId = QString());
-    QtLocalPeer *peer;
-    QWidget *actWin;
+    QtLocalPeer *m_peer;
+    QWidget *m_activateWindow;
 };
 
 #endif // QTSINGLEAPPLICATION_H

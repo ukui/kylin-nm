@@ -143,10 +143,9 @@
 
 
 void QtSingleApplication::sysInit(const QString &appId) {
-    actWin = 0;
-    peer = new QtLocalPeer(this, appId);
-//    connect(peer, SIGNAL(messageReceived(const QString&)), SIGNAL(messageReceived(const QString&)));
-    connect(peer, &QtLocalPeer::messageReceived, this, &QtSingleApplication::messageReceived);
+    m_activateWindow = 0;
+    m_peer = new QtLocalPeer(this, appId);
+    connect(m_peer, &QtLocalPeer::messageReceived, this, &QtSingleApplication::messageReceived);
 }
 
 
@@ -241,7 +240,7 @@ QtSingleApplication::QtSingleApplication(Display* dpy, const QString &appId, int
 */
 
 bool QtSingleApplication::isRunning() {
-    return peer->isClient();
+    return m_peer->isClient();
 }
 
 
@@ -259,7 +258,7 @@ bool QtSingleApplication::isRunning() {
     \sa isRunning(), messageReceived()
 */
 bool QtSingleApplication::sendMessage(const QString &message, int timeout) {
-    return peer->sendMessage(message, timeout);
+    return m_peer->sendMessage(message, timeout);
 }
 
 
@@ -268,7 +267,7 @@ bool QtSingleApplication::sendMessage(const QString &message, int timeout) {
     identifier will be regarded as instances of the same application.
 */
 QString QtSingleApplication::id() const {
-    return peer->applicationId();
+    return m_peer->applicationId();
 }
 
 
@@ -285,12 +284,11 @@ QString QtSingleApplication::id() const {
 */
 
 void QtSingleApplication::setActivationWindow(QWidget* aw, bool activateOnMessage) {
-    actWin = aw;
-    //目前不需要用到此处的置顶方法，故此信号槽暂时注释掉，若后续需要根据新起进程传递的信号执行部分操作时可以把这里放开
+    m_activateWindow = aw;
     if (activateOnMessage)
-        connect(peer, &QtLocalPeer::messageReceived, this, &QtSingleApplication::activateWindow);
+        connect(m_peer, &QtLocalPeer::messageReceived, this, &QtSingleApplication::activateWindow);
     else
-        disconnect(peer, &QtLocalPeer::messageReceived, this, &QtSingleApplication::activateWindow);
+        disconnect(m_peer, &QtLocalPeer::messageReceived, this, &QtSingleApplication::activateWindow);
 }
 
 
@@ -301,7 +299,7 @@ void QtSingleApplication::setActivationWindow(QWidget* aw, bool activateOnMessag
     \sa setActivationWindow()
 */
 QWidget* QtSingleApplication::activationWindow() const {
-    return actWin;
+    return m_activateWindow;
 }
 
 
@@ -320,20 +318,19 @@ QWidget* QtSingleApplication::activationWindow() const {
   \sa setActivationWindow(), messageReceived(), initialize()
 */
 void QtSingleApplication::activateWindow() {
-    //单例置顶策略，由于bootOptionsFilter in mainwindow自带置顶策略，故注掉此处
-    if (actWin) {
+    if (m_activateWindow) {
         if(this->applicationState() & Qt::ApplicationInactive)
         {
-            MainWindow* w=qobject_cast<MainWindow*>(actWin);
+            MainWindow* w=qobject_cast<MainWindow*>(m_activateWindow);
             w->showMainwindow();
-            actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
-            actWin->raise();
-            actWin->showNormal();
-            actWin->activateWindow();
+            m_activateWindow->setWindowState(m_activateWindow->windowState() & ~Qt::WindowMinimized);
+            m_activateWindow->raise();
+            m_activateWindow->showNormal();
+            m_activateWindow->activateWindow();
         }
         else {
-            actWin->setWindowState(actWin->windowState() & Qt::WindowMinimized);
-            actWin->hide();
+            m_activateWindow->setWindowState(m_activateWindow->windowState() & Qt::WindowMinimized);
+            m_activateWindow->hide();
         }
     }
 }

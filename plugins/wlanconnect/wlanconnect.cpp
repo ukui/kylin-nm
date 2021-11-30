@@ -55,6 +55,7 @@ const QString NoNetSymbolic     = ":/img/plugins/netconnect/nonet.svg";
 #define DEACTIVATING 3
 #define DEACTIVATED  4
 
+#define NO_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_MARGINS 0,0,0,8
 
 bool intThan(int sign1, int sign2)
@@ -177,6 +178,7 @@ void WlanConnect::initComponent() {
     m_wifiSwitch = new SwitchButton(pluginWidget, false);
     ui->openWIifLayout->addWidget(m_wifiSwitch);
     ui->detailLayOut_3->setContentsMargins(MAIN_LAYOUT_MARGINS);
+    ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
 
     connect(m_wifiSwitch, &SwitchButton::disabledClick, this, [=]() {
         showDesktopNotify(tr("No wireless network card detected"));

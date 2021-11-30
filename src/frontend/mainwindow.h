@@ -9,6 +9,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QDBusInterface>
+#include <QMap>
 #include "lanpage.h"
 #include "wlanpage.h"
 #include "netdetails/netdetail.h"
@@ -140,6 +141,8 @@ private:
     bool m_wlanIsLoading = false;
 
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
+
+    QMap<QString, NetDetail*> m_createPagePtrMap;
 
 private slots:
     void onTrayIconActivated();

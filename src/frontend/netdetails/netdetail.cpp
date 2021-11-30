@@ -1,7 +1,9 @@
 #include "netdetail.h"
 #include "backend/kylinipv4arping.h"
 #include "backend/kylinipv6arping.h"
-#include "xatom/xatom-helper.h"
+//#include "xatom/xatom-helper.h"
+
+#include <QEvent>
 
 #define  WINDOW_WIDTH  520
 #define  WINDOW_HEIGHT 590
@@ -48,15 +50,15 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
      QDialog(parent)
 {
     //设置窗口无边框，阴影
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
-    MotifWmHints window_hints;
-    window_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
-    window_hints.functions = MWM_FUNC_ALL;
-    window_hints.decorations = MWM_DECOR_BORDER;
-    XAtomHelper::getInstance()->setWindowMotifHint(this->winId(), window_hints);
-#else
+//#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+//    MotifWmHints window_hints;
+//    window_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
+//    window_hints.functions = MWM_FUNC_ALL;
+//    window_hints.decorations = MWM_DECOR_BORDER;
+//    XAtomHelper::getInstance()->setWindowMotifHint(this->winId(), window_hints);
+//#else
     this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
-#endif
+//#endif
 //    this->setProperty("useStyleWindowManager", false); //禁用拖动
 //    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint );
 //    setAttribute(Qt::WA_TranslucentBackground);
@@ -120,6 +122,7 @@ void NetDetail::paintEvent(QPaintEvent *event)
 void NetDetail::closeEvent(QCloseEvent *event)
 {
     emit this->detailPageClose(false);
+    emit this->createPageClose(m_deviceName);
     return QDialog::closeEvent(event);
 }
 
@@ -144,6 +147,12 @@ void NetDetail::initUI()
     ipv6Page = new Ipv6Page(this);
     securityPage = new SecurityPage(this);
     createNetPage = new CreatNetPage(this);
+
+    detailPage->installEventFilter(this);
+    ipv4Page->installEventFilter(this);
+    ipv6Page->installEventFilter(this);
+    securityPage->installEventFilter(this);
+    createNetPage->installEventFilter(this);
 
     titleWidget = new QWidget(this);
     centerWidget = new QWidget(this);
@@ -916,4 +925,20 @@ bool NetDetail::checkWirelessSecurity(KySecuType secuType)
         }
     }
     return true;
+}
+
+bool NetDetail::eventFilter(QObject *w, QEvent *event)
+{
+   // 回车键触发确定按钮点击事件
+   if (event->type() == QEvent::KeyPress) {
+       QKeyEvent *mEvent = static_cast<QKeyEvent *>(event);
+       if (mEvent->key() == Qt::Key_Enter || mEvent->key() == Qt::Key_Return) {
+           if (confimBtn->isEnabled()) {
+               emit confimBtn->clicked();
+           }
+           return true;
+       }
+
+   }
+   return QDialog::eventFilter(w, event);
 }

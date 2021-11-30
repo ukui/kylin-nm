@@ -39,6 +39,7 @@ public:
 protected:
     void paintEvent(QPaintEvent *event);
     void closeEvent(QCloseEvent *event);
+    bool eventFilter(QObject *w, QEvent *event);
 
 private:
     void initUI();
@@ -135,5 +136,6 @@ private slots:
 
 signals:
     void detailPageClose(bool on);
+    void createPageClose(QString);
 };
 #endif // NETDETAIL_H

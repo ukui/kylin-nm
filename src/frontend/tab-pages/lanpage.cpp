@@ -34,6 +34,9 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     initLanArea();
 
     connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &LanPage::onConnectionStateChange);
+    connect(m_activeResourse, &KyActiveConnectResourse::activeConnectRemove, this, [=] (QString activeConnectUuid) {
+        sendLanStateChangeSignal(activeConnectUuid,Deactivated);
+    } );
 
     connect(m_connectResourse, &KyConnectResourse::connectionAdd, this, &LanPage::onAddConnection);
     connect(m_connectResourse, &KyConnectResourse::connectionRemove, this, &LanPage::onRemoveConnection);

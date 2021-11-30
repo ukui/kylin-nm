@@ -95,6 +95,7 @@ public slots:
 protected:
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void paintEvent(QPaintEvent *event);
 
 private:
     void firstlyStart(); //一级启动

@@ -13,6 +13,9 @@ public:
     EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent = nullptr);
     ~EnterpriseWlanDialog();
 
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private:
     void initUI(); //初始化UI界面
     void centerToScreen();
@@ -53,6 +56,9 @@ private:
 private slots:
     void onBtnConnectClicked();
     void onEapTypeChanged(const KyEapMethodType &type);
+
+signals:
+    void enterpriseWlanDialogClose(bool);
 };
 
 #endif // ENTERPRISEWLANDIALOG_H

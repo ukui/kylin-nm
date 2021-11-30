@@ -67,6 +67,8 @@ private:
     bool m_hasPwd = true;
     QString m_wlanDevice;
 
+    bool isEnterpriseWlanDialogShow = false;
+
     //密码输入区域的UI
     QFrame *m_pwdFrame = nullptr;
     QHBoxLayout *m_pwdFrameLyt = nullptr;

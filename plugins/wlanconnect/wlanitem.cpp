@@ -1,7 +1,9 @@
 #include "wlanitem.h"
+#include <QPainter>
 #define FRAME_SPEED 150
 #define LIMIT_TIME 60*1000
 #define TOTAL_PAGE 8
+#define RADIUS 6.0
 
 #define THEME_QT_SCHEMA  "org.ukui.style"
 #define MODE_QT_KEY      "style-name"
@@ -90,3 +92,24 @@ void WlanItem::waitAnimStep()
     }
 }
 
+void WlanItem::paintEvent(QPaintEvent *event)
+{
+    QPalette pal = this->palette();
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(pal.color(QPalette::Base));
+
+    QRect rect = this->rect();
+    if (!useHalfFillet) {
+        painter.drawRect(rect);
+    } else {
+        QPainterPath path;
+        path.addRoundedRect (rect, RADIUS, RADIUS);
+        QRect temp_rect(rect.left(), rect.top(), rect.width(), rect.height()/2);
+        path.addRect(temp_rect);
+        painter.drawPath(path);
+    }
+    QPushButton::paintEvent(event);
+}

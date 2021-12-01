@@ -25,6 +25,8 @@ public:
     int waitPage;
     int countCurrentTime;
     QString uuid = "";
+
+    void setHalfFillet(bool flag) {useHalfFillet = flag; repaint();}
 public:
     void startLoading();
     void setWaitPage(int waitPage);
@@ -34,9 +36,16 @@ public:
     bool isAcitve = false;
     bool loading = false;
     bool isLock = false;
+
+
+
+protected:
+    void paintEvent(QPaintEvent *event);
+
 private:
     QTimer *waitTimer = nullptr;
     QGSettings *themeGsettings = nullptr;
+    bool useHalfFillet = false;
 
 };
 

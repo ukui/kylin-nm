@@ -17,6 +17,7 @@ public:
 protected:
     virtual void leaveEvent(QEvent * event);
     virtual void enterEvent(QEvent * event);
+    void paintEvent(QPaintEvent *event);
 
 Q_SIGNALS:
     void enterWidget();

@@ -91,3 +91,18 @@ void LanItem::waitAnimStep()
     }
 }
 
+void LanItem::paintEvent(QPaintEvent *event)
+{
+    QPalette pal = this->palette();
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(pal.color(QPalette::Base));
+
+    QRect rect = this->rect();
+
+    painter.drawRect(rect);
+    QPushButton::paintEvent(event);
+}
+

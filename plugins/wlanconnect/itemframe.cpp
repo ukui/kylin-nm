@@ -1,4 +1,6 @@
 #include "itemframe.h"
+#include <QPainter>
+
 #define LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_MARGINS 0,0,0,8
 ItemFrame::ItemFrame(QString devName, QWidget *parent)
@@ -38,5 +40,22 @@ void ItemFrame::onDrownLabelClicked()
     } else {
         lanItemFrame->hide();
         deviceFrame->dropDownLabel->setDropDownStatus(false);
+    }
+}
+
+void ItemFrame::filletStyleChange()
+{
+    if (lanItemLayout->isEmpty()) {
+        return;
+    }
+
+    for (int i = 0; i < lanItemLayout->count(); ++i) {
+        QLayoutItem *it = lanItemLayout->itemAt(i);
+        WlanItem *itemFrame = (WlanItem*)(it->widget());
+        if (i != lanItemLayout->count()-1) {
+            itemFrame->setHalfFillet(false);
+        } else {
+            itemFrame->setHalfFillet(true);
+        }
     }
 }

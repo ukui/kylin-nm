@@ -410,9 +410,7 @@ void WlanListItem::onNetButtonClicked()
                 return;
             } else {
                 EnterpriseWlanDialog *enterpriseWlanDialog = new EnterpriseWlanDialog(m_wirelessNetItem, m_wlanDevice, this);
-                connect(enterpriseWlanDialog, &EnterpriseWlanDialog::enterpriseWlanDialogClose, this, [=](bool isShow) {
-                    isEnterpriseWlanDialogShow = isShow;
-                });
+                connect(enterpriseWlanDialog, &EnterpriseWlanDialog::enterpriseWlanDialogClose, this, &WlanListItem::onEnterpriseWlanDialogClose);
                 enterpriseWlanDialog->show();
                 isEnterpriseWlanDialogShow = true;
             }
@@ -557,6 +555,13 @@ void WlanListItem::onMenuTriggered(QAction *action)
     } else if (action->text() == tr("Forget")) {
         m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
     }
+
+    return;
+}
+
+void WlanListItem::onEnterpriseWlanDialogClose(bool isShow)
+{
+    isEnterpriseWlanDialogShow = isShow;
 
     return;
 }

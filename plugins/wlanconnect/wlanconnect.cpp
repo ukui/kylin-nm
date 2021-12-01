@@ -540,6 +540,7 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
                     if (status == ACTIVATED) {
                         deviceFrameMap[deviceName]->lanItemLayout->removeWidget(item);
                         deviceFrameMap[deviceName]->lanItemLayout->insertWidget(0,item);
+                        deviceFrameMap[deviceName]->filletStyleChange();
                     }
                 } else if (status == DEACTIVATED) {
                     deviceFrameMap[deviceName]->itemMap[ssid]->uuid.clear();

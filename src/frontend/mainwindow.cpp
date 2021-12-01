@@ -122,13 +122,22 @@ void MainWindow::initWindowProperties()
     this->setFixedSize(MAINWINDOW_WIDTH, MAINWINDOW_HEIGHT);
 //    //绘制毛玻璃特效
 //    this->setStyleSheet("background:transparent");   //透明
-//    this->setAttribute(Qt::WA_TranslucentBackground, true);  //半透明
+//    this->setAttribute(Qt::WA_TranslucentBackground, true);  //透明
     this->setWindowOpacity(0.8);
 
     QPainterPath path;
     auto rect = this->rect();
     path.addRoundedRect(rect, 6, 6);
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
+}
+
+void MainWindow::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
+    painter.setPen(Qt::transparent);
+    auto rect = this->rect();
+    painter.drawRoundedRect(rect, 6, 6);      //窗口圆角
 }
 
 /**
@@ -139,6 +148,7 @@ void MainWindow::initUI()
     m_centralWidget = new QTabWidget(this);
     this->setCentralWidget(m_centralWidget);
     m_centralWidget->tabBar()->setFixedWidth(this->width());
+    m_centralWidget->tabBar()->setStyleSheet("QTabBar::tab{min-height:40px}");
     m_lanWidget = new LanPage(m_centralWidget);
     m_wlanWidget = new WlanPage(m_centralWidget);
     connect(this, &MainWindow::mainWindowVisibleChanged, m_wlanWidget, &WlanPage::onMainWindowVisibleChanged);
@@ -157,6 +167,7 @@ void MainWindow::initUI()
     m_tabBarLayout->addWidget(m_wlanLabel);
     m_centralWidget->tabBar()->setLayout(m_tabBarLayout);
     connect(m_centralWidget, &QTabWidget::currentChanged, m_wlanWidget, &WlanPage::onWlanPageVisibleChanged);
+//    m_centralWidget->hide();
 }
 
 /**

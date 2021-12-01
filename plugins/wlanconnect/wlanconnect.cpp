@@ -296,6 +296,7 @@ void WlanConnect::updateList()
             if (deviceFrameMap.contains(iter.key())) {
                 QVector<QStringList> wifiList = iter.value();
                 resortWifiList(deviceFrameMap[iter.key()], wifiList);
+                deviceFrameMap[iter.key()]->filletStyleChange();
             }
         }
     }
@@ -941,6 +942,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     }
     qDebug()<<"insert " << name << " to " << deviceName << " list, postion " << index;
     frame->lanItemLayout->insertWidget(index, wlanItem);
+    frame->filletStyleChange();
 }
 
 //减少ap
@@ -955,6 +957,7 @@ void WlanConnect::removeOneWlanFrame(ItemFrame *frame, QString deviceName, QStri
         frame->lanItemLayout->removeWidget(frame->itemMap[ssid]);
         delete frame->itemMap[ssid];
         frame->itemMap.remove(ssid);
+        frame->filletStyleChange();
     }
 }
 

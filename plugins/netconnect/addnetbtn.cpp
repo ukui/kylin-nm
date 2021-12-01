@@ -3,6 +3,10 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QVariant>
+#include <QPainter>
+#include <QPainterPath>
+
+#define RADIUS 6.0
 
 AddNetBtn::AddNetBtn(QWidget *parent) : QPushButton(parent)
 {
@@ -45,4 +49,22 @@ void AddNetBtn::leaveEvent(QEvent *event){
     Q_EMIT leaveWidget();
 
     QPushButton::leaveEvent(event);
+}
+
+void AddNetBtn::paintEvent(QPaintEvent *event)
+{
+    QPalette pal = this->palette();
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(pal.color(QPalette::Base));
+
+    QRect rect = this->rect();
+    QPainterPath path;
+    path.addRoundedRect (rect, RADIUS, RADIUS);
+    QRect temp_rect(rect.left(), rect.top(), rect.width(), rect.height()/2);
+    path.addRect(temp_rect);
+    painter.drawPath(path);
+    QPushButton::paintEvent(event);
 }

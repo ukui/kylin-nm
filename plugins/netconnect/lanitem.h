@@ -9,6 +9,7 @@
 #include <QGSettings>
 #include <QDebug>
 #include <QImage>
+#include <QPainter>
 #include "fixlabel.h"
 #include "../component/InfoButton/infobutton.h"
 
@@ -36,6 +37,10 @@ public:
 
     QString uuid;
     QString dbusPath;
+
+protected:
+    void paintEvent(QPaintEvent *);
+
 private:
     QTimer *waitTimer = nullptr;
     QGSettings *themeGsettings = nullptr;

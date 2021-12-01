@@ -21,6 +21,9 @@ public:
     SwitchButton * deviceSwitch = nullptr;
     DrownLabel *dropDownLabel = nullptr;
 
+protected:
+    void paintEvent(QPaintEvent *event);
+
 private:
     bool isDropDown = false;
     int frameSize;

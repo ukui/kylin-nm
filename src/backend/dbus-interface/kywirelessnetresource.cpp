@@ -6,7 +6,7 @@ static bool subWifiListSort(const KyWirelessNetItem info1, const KyWirelessNetIt
 {
     if (info1.m_isConfigured == info2.m_isConfigured) {
         if (info1.m_signalStrength != info2.m_signalStrength) {
-            return info1.m_signalStrength >info2.m_signalStrength;
+            return info1.m_signalStrength > info2.m_signalStrength;
         } else {
             if (QString::compare(info1.m_NetSsid, info2.m_NetSsid, Qt::CaseInsensitive) > 0) {
                 return false;

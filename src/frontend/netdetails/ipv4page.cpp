@@ -6,6 +6,8 @@ Ipv4Page::Ipv4Page(QWidget *parent):QFrame(parent)
 {
     initUI();
     initComponent();
+    QList<QLineEdit *> lineEditList = this->findChildren<QLineEdit *>();
+    setLineEditMenuPolicy(this);
 }
 
 void Ipv4Page::initUI() {

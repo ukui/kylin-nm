@@ -103,6 +103,8 @@ public:
 
     void getConnectivity(NetworkManager::Connectivity &connectivity);
 
+    bool NetworkManagerIsInited();
+
 signals:
     void connectionAdd(QString uuid);
     void connectionUpdate(QString uuid);
@@ -183,6 +185,9 @@ private:
     void onWifiNetworkAdd(NetworkManager::Device * dev, QString const & ssid);
     void onWifiNetworkUpdate(NetworkManager::WirelessNetwork * net);
     void onWifiNetworkRemove(NetworkManager::Device * dev, QString const & ssid);
+
+private:
+    bool m_initFinished = false;
 
 public:
     static KyNetworkResourceManager* m_pInstance;

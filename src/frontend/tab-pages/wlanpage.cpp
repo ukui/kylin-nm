@@ -71,6 +71,7 @@ void WlanPage::initWlanUI()
     m_titleLabel->setText(tr("WLAN"));
 
     m_activatedNetLabel->setText(tr("Activated WLAN"));  
+    m_activatedNetLabel->setDisabled(true);
     m_activatedNetListWidget = new QListWidget(m_activatedNetFrame);
     m_activatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_activatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);

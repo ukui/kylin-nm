@@ -7,6 +7,8 @@ CreatNetPage::CreatNetPage(QWidget *parent):QFrame(parent)
 {
     initUI();
     initComponent();
+    QList<QLineEdit *> lineEditList = this->findChildren<QLineEdit *>();
+    setLineEditMenuPolicy(this);
 }
 
 void CreatNetPage::initUI()

@@ -5,6 +5,7 @@ Ipv6Page::Ipv6Page(QWidget *parent):QFrame(parent)
 {
     initUI();
     initComponent();
+    setLineEditMenuPolicy(this);
 }
 
 void Ipv6Page::setIpv6Config(KyIpConfigType ipv6Config)

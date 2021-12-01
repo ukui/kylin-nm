@@ -120,12 +120,6 @@ void NetDetail::onPaletteChanged()
 
     this->setPalette(pal);
 
-
-
-
-
-
-
     QPalette listwidget_pal(detailPage->m_listWidget->palette());
     listwidget_pal.setColor(QPalette::Base, this->palette().base().color());
     listwidget_pal.setColor(QPalette::AlternateBase, this->palette().alternateBase().color());

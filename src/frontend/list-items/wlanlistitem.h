@@ -8,6 +8,7 @@
 #include <QCheckBox>
 #include "kylinactiveconnectresource.h"
 #include <QAction>
+#include "enterprisewlandialog.h"
 
 #include <networkmanagerqt/wirelesssecuritysetting.h>
 
@@ -63,6 +64,7 @@ private:
 private:
     KyWirelessNetItem m_wirelessNetItem;
     KyWirelessConnectOperation *m_wirelessConnectOperation = nullptr;
+    EnterpriseWlanDialog *enterpriseWlanDialog = nullptr;
 
     bool m_hasPwd = true;
     QString m_wlanDevice;

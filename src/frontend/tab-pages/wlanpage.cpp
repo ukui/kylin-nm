@@ -1287,6 +1287,7 @@ void WlanPage::onMainWindowVisibleChanged(const bool &visible)
         //打开页面时先触发一次扫描，然后定时扫描wifi热点和刷新icon
         requestScan();
         m_scanTimer->start(AP_SCAN_INTERVAL);
+        onRefreshIconTimer();
 //        m_refreshIconTimer->start(ICON_REFRESH_INTERVAL);
     } else {
         //界面关闭的时候，停止wifi扫描和刷新

@@ -40,6 +40,12 @@ EnterpriseWlanDialog::~EnterpriseWlanDialog() {
     }
 }
 
+void EnterpriseWlanDialog::closeEvent(QCloseEvent *event)
+{
+    emit this->enterpriseWlanDialogClose(false);
+    return QDialog::closeEvent(event);
+}
+
 void EnterpriseWlanDialog::initUI()
 {
 #define MAIN_LAYOUT_MARGINS 8,8,8,8

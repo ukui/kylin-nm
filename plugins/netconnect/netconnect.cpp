@@ -45,7 +45,7 @@ const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 #define DEACTIVATED  4
 
 #define NO_MARGINS 0,0,0,0
-#define TOP_MARGINS 0,0,0,0
+#define TOP_MARGINS 0,8,0,0
 #define MAIN_LAYOUT_MARGINS 0,0,0,8
 #define SPACING 8
 

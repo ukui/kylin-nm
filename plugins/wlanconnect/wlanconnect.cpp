@@ -32,6 +32,9 @@
 
 #define SCANTIMER  20 * 1000
 #define UPDATETIMER 5 * 1000
+
+#define SPACING 8
+
 const QString WIRELESS_SWITCH = "wirelessswitch";
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 
@@ -179,6 +182,7 @@ void WlanConnect::initComponent() {
     ui->openWIifLayout->addWidget(m_wifiSwitch);
     ui->detailLayOut_3->setContentsMargins(MAIN_LAYOUT_MARGINS);
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
+    ui->availableLayout->setSpacing(SPACING);
 
     connect(m_wifiSwitch, &SwitchButton::disabledClick, this, [=]() {
         showDesktopNotify(tr("No wireless network card detected"));

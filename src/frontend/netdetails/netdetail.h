@@ -76,6 +76,8 @@ private:
     bool checkWirelessSecurity(KySecuType secuType);
 
     void showDesktopNotify(const QString &message);
+
+    QPalette lightPalette() const;
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyConnectOperation* m_connectOperation = nullptr;
@@ -91,14 +93,9 @@ private:
     SecurityPage   * securityPage;
     CreatNetPage   * createNetPage;
 
-    QWidget      * titleWidget;
     QWidget      * centerWidget;
     QWidget      * bottomWidget;
 
-    QLabel       * titleLabel;
-    QLabel       * iconLabel;
-
-    QPushButton  * closeBtn;
     QPushButton  * cancelBtn;
     QPushButton  * forgetBtn;
     QPushButton  * confimBtn;

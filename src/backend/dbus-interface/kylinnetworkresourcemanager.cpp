@@ -77,6 +77,9 @@ void KyNetworkResourceManager::onInitNetwork()
              << "active connections:" << m_activeConns.size()
              << "connections:" << m_connections.size()
              << "network device:" << m_devices.size();
+    m_initFinished = true;
+
+    return;
 }
 
 KyNetworkResourceManager::~KyNetworkResourceManager()
@@ -495,6 +498,11 @@ bool KyNetworkResourceManager::isActivatingConnection(QString uuid)
 void KyNetworkResourceManager::getConnectivity(NetworkManager::Connectivity &connectivity)
 {
     connectivity = NetworkManager::connectivity();
+}
+
+bool KyNetworkResourceManager::NetworkManagerIsInited()
+{
+    return m_initFinished;
 }
 
 void KyNetworkResourceManager::requestScan(NetworkManager::WirelessDevice * dev)

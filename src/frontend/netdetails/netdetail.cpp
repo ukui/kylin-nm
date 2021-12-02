@@ -3,6 +3,10 @@
 #include "backend/kylinipv6arping.h"
 //#include "xatom/xatom-helper.h"
 
+
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME "styleName"
+
 #include <QEvent>
 
 #define  WINDOW_WIDTH  520
@@ -57,7 +61,7 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
 //    window_hints.decorations = MWM_DECOR_BORDER;
 //    XAtomHelper::getInstance()->setWindowMotifHint(this->winId(), window_hints);
 //#else
-    this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    this->setWindowFlags(Qt::Dialog /*| Qt::FramelessWindowHint*/);
 //#endif
 //    this->setProperty("useStyleWindowManager", false); //禁用拖动
 //    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint );
@@ -103,12 +107,22 @@ NetDetail::~NetDetail()
 void NetDetail::onPaletteChanged()
 {
     QPalette pal = qApp->palette();
-    pal.setColor(QPalette::Window, qApp->palette().base().color());
+
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = lightPalette();
+       }
+    }
+
     this->setPalette(pal);
 
     QPalette listwidget_pal(detailPage->m_listWidget->palette());
-    listwidget_pal.setColor(QPalette::Base, qApp->palette().base().color());
-    listwidget_pal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
+    listwidget_pal.setColor(QPalette::Base, this->palette().base().color());
+    listwidget_pal.setColor(QPalette::AlternateBase, this->palette().alternateBase().color());
     detailPage->m_listWidget->setAlternatingRowColors(true);
     detailPage->m_listWidget->setPalette(listwidget_pal);
 
@@ -154,7 +168,6 @@ void NetDetail::initUI()
     securityPage->installEventFilter(this);
     createNetPage->installEventFilter(this);
 
-    titleWidget = new QWidget(this);
     centerWidget = new QWidget(this);
     bottomWidget = new QWidget(this);
 
@@ -165,15 +178,11 @@ void NetDetail::initUI()
     stackWidget->addWidget(securityPage);
     stackWidget->addWidget(createNetPage);
 
-    mainLayout->addWidget(titleWidget);
     mainLayout->addWidget(centerWidget);
     mainLayout->addWidget(bottomWidget);
 
-    titleWidget->setMinimumHeight(PAGE_MIN_HEIGHT);
     bottomWidget->setMinimumHeight(PAGE_MIN_HEIGHT);
 
-    QHBoxLayout *titleLayout = new QHBoxLayout(titleWidget);
-    titleLayout->setContentsMargins(TITLE_LAYOUT_MARGINS);
     pageFrame = new QFrame(this);
 
     QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
@@ -211,14 +220,6 @@ void NetDetail::initUI()
     pageLayout->addWidget(securityBtn);
     pageLayout->addStretch();
 
-    closeBtn  = new QPushButton(this);
-    closeBtn->setFixedSize(BUTTON_SIZE,BUTTON_SIZE);
-    closeBtn->setToolTip(tr("Close"));
-    closeBtn->setProperty("isWindowButton", 0x02);
-    closeBtn->setProperty("useIconHighlightEffect", 0x08);
-    closeBtn->setFlat(true);
-    closeBtn->setIcon(QIcon::fromTheme("window-close-symbolic"));
-
     confimBtn = new QPushButton(this);
     confimBtn->setText(tr("Confirm"));
 
@@ -228,21 +229,7 @@ void NetDetail::initUI()
     forgetBtn = new QPushButton(this);
     forgetBtn->setText(tr("Forget this network"));
 
-    titleLabel = new QLabel(this);
-
-
-    iconLabel = new QLabel(this);
-    if (!QIcon::fromTheme("kylin-network").isNull()) {
-        iconLabel->setPixmap(QIcon::fromTheme("kylin-network").pixmap(ICON_SIZE));
-        iconLabel->setProperty("useIconHighlightEffect", 0x10);
-    } else {
-        qDebug() << "can't find preferences-system-network-symbolic in theme";
-    }
-    iconLabel->setFixedSize(ICON_SIZE);
-    titleLayout->addWidget(iconLabel);
-    titleLayout->addWidget(titleLabel);
-    titleLayout->addStretch();
-    titleLayout->addWidget(closeBtn);
+    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
 
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
     centerlayout->setContentsMargins(LAYOUT_MARGINS);
@@ -257,10 +244,11 @@ void NetDetail::initUI()
     bottomLayout->addWidget(cancelBtn);
     bottomLayout->addWidget(confimBtn);
 
-    QPalette pal(this->palette());
-    pal.setColor(QPalette::Background, qApp->palette().base().color());
+//    QPalette pal(this->palette());
+//    pal.setColor(QPalette::Background, qApp->palette().base().color());
     this->setAutoFillBackground(true);
-    this->setPalette(pal);
+//    this->setPalette(pal);
+        onPaletteChanged();
 }
 
 void NetDetail::loadPage()
@@ -269,16 +257,16 @@ void NetDetail::loadPage()
     if (m_isCreateNet && !isWlan) {
         pageFrame->hide();
         stackWidget->setCurrentIndex(CREATE_NET_PAGE_NUM);
-        titleLabel->setText(tr("Add Lan Connect"));
+        this->setWindowTitle(tr("Add Lan Connect"));
     } else {
         stackWidget->setCurrentIndex(DETAIL_PAGE_NUM);
-        titleLabel->setText(m_name);
+        this->setWindowTitle(m_name);
         if (!isWlan) {
             securityBtn->hide();
         } else {
             securityBtn->show();
             if (m_name.isEmpty()) {
-                titleLabel->setText(tr("connect hiddin wlan"));
+                this->setWindowTitle(tr("connect hiddin wlan"));
             }
         }
     }
@@ -286,9 +274,6 @@ void NetDetail::loadPage()
 
 void NetDetail::initComponent()
 {
-    connect(closeBtn, &QPushButton::clicked, this, [=] {
-       close();
-    });
     connect(cancelBtn, &QPushButton::clicked, this, [=] {
         close();
     });
@@ -941,4 +926,80 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
 
    }
    return QDialog::eventFilter(w, event);
+}
+
+QPalette NetDetail::lightPalette() const
+{
+    auto palette = this->palette();
+    //ukui-light
+    QColor  window_bg(245 , 245, 245),
+            window_no_bg(237 ,237, 237),
+            base_bg(255, 255, 255),
+            base_no_bg(245, 245, 245),
+            font_bg(0,0,0),
+            font_br_bg(255,255,255),
+            font_di_bg(0, 0, 0, 76),
+            button_bg(230, 230, 230),
+            button_di_bg(233,233,233),
+            highlight_bg(55,144,250),
+            highlight_dis(233, 233, 233),
+            tip_bg(248,248,248),
+            tip_font(22,22,22),
+            alternateBase(248,248,248),
+            midlight_bg(217, 217, 217),
+            midlight_dis(230, 230, 230);
+
+    palette.setBrush(QPalette::Active, QPalette::Window, window_bg);
+    palette.setBrush(QPalette::Inactive, QPalette::Window, window_bg);
+    palette.setBrush(QPalette::Disabled, QPalette::Window, window_no_bg);
+
+    palette.setBrush(QPalette::WindowText,font_bg);
+    palette.setBrush(QPalette::Active,QPalette::WindowText,font_bg);
+    palette.setBrush(QPalette::Inactive,QPalette::WindowText,font_bg);
+    palette.setBrush(QPalette::Disabled,QPalette::WindowText,font_di_bg);
+
+    palette.setBrush(QPalette::Active, QPalette::Base, base_bg);
+    palette.setBrush(QPalette::Inactive, QPalette::Base, base_bg);
+    palette.setBrush(QPalette::Disabled, QPalette::Base, base_no_bg);
+
+    palette.setBrush(QPalette::Text,font_bg);
+    palette.setBrush(QPalette::Active,QPalette::Text,font_bg);
+    palette.setBrush(QPalette::Disabled,QPalette::Text,font_di_bg);
+
+    //Cursor placeholder
+#if (QT_VERSION >= QT_VERSION_CHECK(5,12,0))
+    palette.setBrush(QPalette::PlaceholderText,font_di_bg);
+#endif
+
+    palette.setBrush(QPalette::ToolTipBase,tip_bg);
+    palette.setBrush(QPalette::ToolTipText,tip_font);
+
+    palette.setBrush(QPalette::Active, QPalette::Highlight, highlight_bg);
+    palette.setBrush(QPalette::Inactive, QPalette::Highlight, highlight_bg);
+    palette.setBrush(QPalette::Disabled, QPalette::Highlight, highlight_dis);
+
+    palette.setBrush(QPalette::HighlightedText,font_br_bg);
+
+    palette.setBrush(QPalette::BrightText,font_br_bg);
+    palette.setBrush(QPalette::Active,QPalette::BrightText,font_br_bg);
+    palette.setBrush(QPalette::Inactive,QPalette::BrightText,font_br_bg);
+    palette.setBrush(QPalette::Disabled,QPalette::BrightText,font_di_bg);
+
+    palette.setBrush(QPalette::Active, QPalette::Button, button_bg);
+    palette.setBrush(QPalette::Inactive, QPalette::Button, button_bg);
+    palette.setBrush(QPalette::Disabled, QPalette::Button, button_di_bg);
+
+    palette.setBrush(QPalette::ButtonText,font_bg);
+    palette.setBrush(QPalette::Inactive,QPalette::ButtonText,font_bg);
+    palette.setBrush(QPalette::Disabled,QPalette::ButtonText,font_di_bg);
+
+    palette.setBrush(QPalette::AlternateBase,alternateBase);
+    palette.setBrush(QPalette::Inactive,QPalette::AlternateBase,alternateBase);
+    palette.setBrush(QPalette::Disabled,QPalette::AlternateBase,button_di_bg);
+
+    palette.setBrush(QPalette::Active, QPalette::Midlight, midlight_bg);
+    palette.setBrush(QPalette::Inactive, QPalette::Midlight, midlight_bg);
+    palette.setBrush(QPalette::Disabled, QPalette::Midlight, midlight_dis);
+
+    return palette;
 }

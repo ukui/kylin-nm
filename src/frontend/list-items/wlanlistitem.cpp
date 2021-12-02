@@ -1,6 +1,7 @@
 #include "wlanlistitem.h"
 #include <QResizeEvent>
-#include "enterprisewlandialog.h"
+#include <kwindowsystem.h>
+#include <kwindowsystem_export.h>
 
 #define EMPTY_SSID "EMPTY_SSID"
 #define LOG_FLAG "[WlanListItem]"
@@ -405,8 +406,16 @@ void WlanListItem::onNetButtonClicked()
 
     if (!this->m_connectButton->isVisible() && m_wirelessNetItem.m_secuType != "") {
         if (m_wirelessNetItem.m_secuType.contains("802.1x", Qt::CaseInsensitive)) {
-            EnterpriseWlanDialog *enterpriseWlanDialog = new EnterpriseWlanDialog(m_wirelessNetItem, m_wlanDevice, this);
-            enterpriseWlanDialog->show();
+            if (isEnterpriseWlanDialogShow && enterpriseWlanDialog != nullptr) {
+                qDebug() <<  LOG_FLAG <<"EnterpriseWlanDialog is show do not show again!";
+                KWindowSystem::raiseWindow(enterpriseWlanDialog->winId());
+                return;
+            } else {
+                enterpriseWlanDialog = new EnterpriseWlanDialog(m_wirelessNetItem, m_wlanDevice, this);
+                connect(enterpriseWlanDialog, &EnterpriseWlanDialog::enterpriseWlanDialogClose, this, &WlanListItem::onEnterpriseWlanDialogClose);
+                enterpriseWlanDialog->show();
+                isEnterpriseWlanDialogShow = true;
+            }
         } else {
             this->setExpanded(true);
         }
@@ -548,6 +557,13 @@ void WlanListItem::onMenuTriggered(QAction *action)
     } else if (action->text() == tr("Forget")) {
         m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
     }
+
+    return;
+}
+
+void WlanListItem::onEnterpriseWlanDialogClose(bool isShow)
+{
+    isEnterpriseWlanDialogShow = isShow;
 
     return;
 }

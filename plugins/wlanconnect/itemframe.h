@@ -24,6 +24,8 @@ public:
     //已激活uuid
     QString uuid = "";
 
+    void filletStyleChange();
+
 private slots:
     void onDrownLabelClicked();
 };

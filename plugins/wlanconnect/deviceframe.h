@@ -19,6 +19,9 @@ public:
     QLabel * deviceLabel = nullptr;
     DrownLabel *dropDownLabel = nullptr;
 
+protected:
+    void paintEvent(QPaintEvent *event);
+
 private:
     int frameSize;
 

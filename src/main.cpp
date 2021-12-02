@@ -109,6 +109,10 @@ int main(int argc, char *argv[])
         qWarning() << "Translations load fail";
     }
 
+    while (!p_networkResource->NetworkManagerIsInited()) {
+        ::usleep(1000);
+    }
+
     MainWindow w;
     a.setActivationWindow(&w);
     w.setProperty("useStyleWindowManager", false); //禁用拖动

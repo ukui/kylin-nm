@@ -45,7 +45,9 @@ const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 #define DEACTIVATED  4
 
 #define NO_MARGINS 0,0,0,0
+#define TOP_MARGINS 0,8,0,0
 #define MAIN_LAYOUT_MARGINS 0,0,0,8
+#define SPACING 8
 
 bool sortByVal(const QPair<QString, int> &l, const QPair<QString, int> &r) {
     return (l.second < r.second);
@@ -168,6 +170,8 @@ void NetConnect::initComponent() {
     ui->openWIifLayout->addWidget(wiredSwitch);
     ui->detailLayOut->setContentsMargins(MAIN_LAYOUT_MARGINS);
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
+    ui->availableLayout->setSpacing(SPACING);
+    ui->horizontalLayout->setContentsMargins(TOP_MARGINS);
 
     connect(wiredSwitch, &SwitchButton::disabledClick, this, [=]() {
         showDesktopNotify(tr("No ethernet device avaliable"));

@@ -1,8 +1,10 @@
 #include "deviceframe.h"
+#include <QPainter>
 
 #define LAYOUT_MARGINS 18,0,8,0
 #define FRAME_HEIGHT 58
 #define LAYOUT_SPACING 16
+#define RADIUS 6.0
 
 DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
 {
@@ -24,5 +26,23 @@ DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
 DeviceFrame::~DeviceFrame()
 {
 
+}
+
+void DeviceFrame::paintEvent(QPaintEvent *event)
+{
+    QPalette pal = this->palette();
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(pal.color(QPalette::Base));
+
+    QRect rect = this->rect();
+    QPainterPath path;
+    path.addRoundedRect (rect, RADIUS, RADIUS);
+    QRect temp_rect(rect.left(), rect.top() + rect.height()/2, rect.width(), rect.height()/2);
+    path.addRect(temp_rect);
+    painter.drawPath(path);
+    QFrame::paintEvent(event);
 }
 

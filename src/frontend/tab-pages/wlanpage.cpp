@@ -88,6 +88,7 @@ void WlanPage::initWlanUI()
     m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_inactivatedNetListWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
     m_inactivatedNetListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
+    m_inactivatedNetListWidget->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 
     addWlanMoreItem();
     m_inactivatedAreaLayout->addWidget(m_inactivatedNetListWidget);

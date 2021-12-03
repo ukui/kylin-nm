@@ -84,7 +84,9 @@ static void setFramePalette(QFrame *widget, QPalette &pal) {
     QList<QComboBox *> comboBoxList = widget->findChildren<QComboBox *>();
     for (int i = 0; i < comboBoxList.count(); ++i) {
         comboBoxList.at(i)->setPalette(pal);
-        comboBoxList.at(i)->view()->setPalette(pal);
+	if (comboBoxList.at(i)->view()) {
+            comboBoxList.at(i)->view()->setPalette(pal);
+        }
     }
 }
 

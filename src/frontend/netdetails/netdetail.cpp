@@ -120,6 +120,12 @@ void NetDetail::onPaletteChanged()
 
     this->setPalette(pal);
 
+    setFramePalette(detailPage, pal);
+    setFramePalette(ipv4Page, pal);
+    setFramePalette(ipv6Page, pal);
+    setFramePalette(securityPage, pal);
+    setFramePalette(createNetPage, pal);
+
     QPalette listwidget_pal(detailPage->m_listWidget->palette());
     listwidget_pal.setColor(QPalette::Base, this->palette().base().color());
     listwidget_pal.setColor(QPalette::AlternateBase, this->palette().alternateBase().color());

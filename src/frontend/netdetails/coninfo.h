@@ -2,6 +2,9 @@
 #define CONINFO_H
 
 #include <QString>
+#include <QPalette>
+#include <QComboBox>
+#include <QAbstractItemView>
 #include "kywirelessnetitem.h"
 #include "kylinconnectresource.h"
 #include "kylinactiveconnectresource.h"
@@ -72,4 +75,17 @@ static void setLineEditMenuPolicy(QFrame *widget) {
         lineEditList.at(i)->setContextMenuPolicy(Qt::NoContextMenu);
     }
 }
+
+static void setFramePalette(QFrame *widget, QPalette &pal) {
+    QList<QLineEdit *> lineEditList = widget->findChildren<QLineEdit *>();
+    for (int i = 0; i < lineEditList.count(); ++i) {
+        lineEditList.at(i)->setPalette(pal);
+    }
+    QList<QComboBox *> comboBoxList = widget->findChildren<QComboBox *>();
+    for (int i = 0; i < comboBoxList.count(); ++i) {
+        comboBoxList.at(i)->setPalette(pal);
+        comboBoxList.at(i)->view()->setPalette(pal);
+    }
+}
+
 #endif // CONINFO_H

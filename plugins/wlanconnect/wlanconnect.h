@@ -84,7 +84,7 @@ private:
 
 
     int  sortWlanNet(QString deviceName, QString name, QString signal);
-    void updateIcon(WlanItem *item, QString signalStrength, QString security);
+    void updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection);
     void resortWifiList(ItemFrame *frame, QVector<QStringList> list);
 
 
@@ -113,7 +113,7 @@ private:
     //减少设备
     void removeDeviceFrame(QString devName);
     //增加ap
-    void addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type);
+    void addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection);
     //减少ap
     void removeOneWlanFrame(ItemFrame *frame, QString deviceName, QString ssid);
 

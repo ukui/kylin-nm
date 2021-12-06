@@ -472,7 +472,10 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 {
     //for dbus
     QStringList info;
-    info <<item.m_NetSsid<<QString::number(item.m_signalStrength)<<item.m_secuType;
+    info << item.m_NetSsid
+         << QString::number(item.m_signalStrength)
+         << item.m_secuType
+         << (m_connectResource->isApConnection(item.m_connectUuid) ? "1" : "0");
     emit wlanAdd(interface, info);
 
     if (interface != m_currentDevice) {
@@ -1148,8 +1151,11 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
             QString ssid ="";
             m_wirelessNetResource->getSsidByUuid(actMap[iter.key()].at(0), ssid);
             if (m_wirelessNetResource->getWifiNetwork(iter.key(), ssid, data)) {
-                vector.append(QStringList()<<data.m_NetSsid
-                              <<QString::number(data.m_signalStrength)<<data.m_secuType<<data.m_connectUuid);
+                vector.append(QStringList() << data.m_NetSsid
+                              << QString::number(data.m_signalStrength)
+                              << data.m_secuType
+                              << data.m_connectUuid
+                              << (m_connectResource->isApConnection(data.m_connectUuid) ? "1" : "0"));
                 activeSsid = data.m_NetSsid;
             } else {
                 vector.append(QStringList("--"));
@@ -1162,7 +1168,10 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
             if (itemData.m_NetSsid == activeSsid) {
                 continue;
             }
-            vector.append(QStringList()<<itemData.m_NetSsid<<QString::number(itemData.m_signalStrength)<<itemData.m_secuType);
+            vector.append(QStringList()<<itemData.m_NetSsid
+                          << QString::number(itemData.m_signalStrength)
+                          << itemData.m_secuType
+                          << (m_connectResource->isApConnection(itemData.m_connectUuid) ? "1" : "0"));
         }
 
         map.insert(iter.key(), vector);

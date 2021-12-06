@@ -725,6 +725,7 @@ void LanPage::initUI()
     m_inactivatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_inactivatedLanListWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
     m_inactivatedLanListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
+    m_inactivatedLanListWidget->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     m_inactivatedAreaLayout->addWidget(m_inactivatedLanListWidget);
 
     m_settingsLabel->installEventFilter(this);

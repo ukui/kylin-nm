@@ -60,20 +60,21 @@ LanPage::~LanPage()
 
 void LanPage::initLanDevice()
 {
-    m_currentDeviceName = getDefaultDeviceName(WIRED);
-
     m_devList.clear();
     m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
-    if (m_currentDeviceName.isEmpty()) {
-        for (int index = 0; index < m_devList.size(); ++index) {
-            if (m_deviceResource->wiredDeviceIsCarriered(m_devList.at(index))) {
-                m_currentDeviceName = m_devList.at(index);
-                setDefaultDevice(WIRED, m_currentDeviceName);
-                break;
-            }
+
+    for (int index = 0; index < m_devList.size(); ++index) {
+        if (m_deviceResource->wiredDeviceIsCarriered(m_devList.at(index))) {
+            m_currentDeviceName = m_devList.at(index);
+            return;
         }
     }
 
+    m_currentDeviceName = getDefaultDeviceName(WIRED);
+    if (m_currentDeviceName.isEmpty()) {
+        m_currentDeviceName = m_devList.at(0);
+        setDefaultDevice(WIRED, m_currentDeviceName);
+    }
     return;
 }
 
@@ -686,8 +687,11 @@ void LanPage::onDeviceCarriered(QString deviceName, bool pluged)
 
     if (!m_wiredSwitch || !m_enableDeviceList.contains(deviceName)) {
         m_wiredConnectOperation->closeWiredNetworkWithDevice(deviceName);
+    } else {
+        m_wiredConnectOperation->openWiredNetworkWithDevice(deviceName);
+        int index = m_deviceComboBox->findText(deviceName);
+        m_deviceComboBox->setCurrentIndex(index);
     }
-
     return;
 }
 

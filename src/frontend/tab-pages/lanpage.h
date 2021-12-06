@@ -79,6 +79,8 @@ private:
     void deleteConnectionMapItem(QMap<QString, QListWidgetItem *> &connectMap,
                                  QListWidget *lanListWidget, QString uuid);
 
+    void updateCurrentDevice(QString deviceName);
+
 signals:
     void lanAdd(QString devName, QStringList info);
     void lanRemove(QString dbusPath);

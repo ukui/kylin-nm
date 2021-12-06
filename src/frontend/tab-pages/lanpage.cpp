@@ -62,6 +62,16 @@ void LanPage::initLanDevice()
 {
     m_devList.clear();
     m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
+    QList<KyConnectItem *> activedList;
+
+    for (int index = 0; index < m_devList.size(); ++index) {
+        m_activeResourse->getActiveConnectionList(m_devList.at(index),
+                                   NetworkManager::ConnectionSettings::Wired, activedList);
+        if (!activedList.isEmpty()) {
+            m_currentDeviceName = m_devList.at(index);
+            return;
+        }
+    }
 
     for (int index = 0; index < m_devList.size(); ++index) {
         if (m_deviceResource->wiredDeviceIsCarriered(m_devList.at(index))) {
@@ -689,8 +699,7 @@ void LanPage::onDeviceCarriered(QString deviceName, bool pluged)
         m_wiredConnectOperation->closeWiredNetworkWithDevice(deviceName);
     } else {
         m_wiredConnectOperation->openWiredNetworkWithDevice(deviceName);
-        int index = m_deviceComboBox->findText(deviceName);
-        m_deviceComboBox->setCurrentIndex(index);
+        updateCurrentDevice(deviceName);
     }
     return;
 }
@@ -847,6 +856,20 @@ QString LanPage::getConnectionDevice(QString uuid)
     return deviceName;
 }
 
+void LanPage::updateCurrentDevice(QString deviceName)
+{
+    if (m_currentDeviceName != deviceName) {
+        int index = m_deviceComboBox->findText(deviceName);
+        if (index < 0) {
+            index = 0;
+        }
+        m_deviceComboBox->setCurrentIndex(index);
+        return;
+    }
+    return;
+
+}
+
 void LanPage::onConnectionStateChange(QString uuid,
                               NetworkManager::ActiveConnection::State state,
                               NetworkManager::ActiveConnection::Reason reason)
@@ -873,6 +896,7 @@ void LanPage::onConnectionStateChange(QString uuid,
         }
 
         deviceName = p_newItem->m_ifaceName;
+        updateCurrentDevice(deviceName);
         updateActivatedConnectionArea(p_newItem);
         updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {

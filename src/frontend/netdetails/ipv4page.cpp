@@ -177,10 +177,10 @@ bool Ipv4Page::checkConnectBtnIsEnabled()
             return false;
         }
 
-        if (gateWayEdit->text().isEmpty() || !getTextEditState(gateWayEdit->text())) {
-            qDebug() << "ipv4 gateway empty or invalid";
-            return false;
-        }
+//        if (gateWayEdit->text().isEmpty() || !getTextEditState(gateWayEdit->text())) {
+//            qDebug() << "ipv4 gateway empty or invalid";
+//            return false;
+//        }
 
         if (firstDnsEdit->text().isEmpty() && !secondDnsEdit->text().isEmpty()) {
             qDebug() << "ipv4 dns sort invalid";

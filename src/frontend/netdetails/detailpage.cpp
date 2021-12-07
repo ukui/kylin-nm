@@ -12,7 +12,6 @@ DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
     this->setFrameShape(QFrame::Shape::StyledPanel);
     this->setMaximumWidth(960);
     initUI();
-    setLineEditMenuPolicy(this);
     if (isCreate) {
      connect(mSSIDEdit, &QLineEdit::textEdited, this, &DetailPage::setEnableOfSaveBtn);
     }

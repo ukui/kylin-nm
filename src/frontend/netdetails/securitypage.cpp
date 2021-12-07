@@ -7,7 +7,6 @@ SecurityPage::SecurityPage(QWidget *parent) : QFrame(parent)
 {
     initUI();
     initConnect();
-    setLineEditMenuPolicy(this);
 }
 
 void SecurityPage::initUI()

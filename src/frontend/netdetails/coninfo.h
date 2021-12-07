@@ -69,13 +69,6 @@ public:
     KyEapMethodTtlsInfo ttlsInfo;
 };
 
-static void setLineEditMenuPolicy(QFrame *widget) {
-    QList<QLineEdit *> lineEditList = widget->findChildren<QLineEdit *>();
-    for (int i = 0; i < lineEditList.count(); ++i) {
-        lineEditList.at(i)->setContextMenuPolicy(Qt::NoContextMenu);
-    }
-}
-
 static void setFramePalette(QFrame *widget, QPalette &pal) {
     QList<QLineEdit *> lineEditList = widget->findChildren<QLineEdit *>();
     for (int i = 0; i < lineEditList.count(); ++i) {

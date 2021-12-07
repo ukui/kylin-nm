@@ -40,7 +40,7 @@ LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
 {
     m_isActive = false;
     m_netButton->setButtonIcon(QIcon::fromTheme("network-offline-symbolic"));
-    m_netButton->setDefaultPixmap();
+    setIcon(false);
     const QString str=tr("Not connected");
     m_nameLabel->setText(str);
     this->m_infoButton->hide();

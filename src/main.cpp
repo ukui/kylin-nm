@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     }
 
     QTranslator qtBaseTranslator;
-    if (qtBaseTranslator.load(QLocale(), "qt", "_", "/usr/share/qt5/translations//"))
+    if (qtBaseTranslator.load(QLocale(), "qt", "_", "/usr/share/qt5/translations/"))
     {
         a.installTranslator(&qtBaseTranslator);
         qDebug()<<"QtBase Translations load success";

@@ -719,6 +719,7 @@ void LanPage::initUI()
     m_activatedNetLayout->addWidget(m_activatedLanListWidget);
 
     m_inactivatedNetLabel->setText(tr("Inactivated LAN"));
+    m_inactivatedNetLabel->setDisabled(true);
     m_inactivatedLanListWidget = new QListWidget(m_inactivatedNetListArea);
     m_inactivatedLanListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedLanListWidget->setSpacing(LAN_LIST_SPACING);

@@ -6,7 +6,7 @@
 #include "kywirelessnetitem.h"
 #include "coninfo.h"
 
-class EnterpriseWlanDialog : public QDialog
+class EnterpriseWlanDialog : public QWidget
 {
     Q_OBJECT
 public:

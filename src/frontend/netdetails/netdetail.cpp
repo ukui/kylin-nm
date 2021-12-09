@@ -51,7 +51,7 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
      isActive(isActive),
      isWlan(isWlan),
      m_isCreateNet(isCreateNet),
-     QDialog(parent)
+     QWidget(parent)
 {
     //设置窗口无边框，阴影
 //#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
@@ -61,7 +61,8 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
 //    window_hints.decorations = MWM_DECOR_BORDER;
 //    XAtomHelper::getInstance()->setWindowMotifHint(this->winId(), window_hints);
 //#else
-    this->setWindowFlags(Qt::Dialog /*| Qt::FramelessWindowHint*/);
+//    this->setWindowFlags(Qt::Dialog /*| Qt::FramelessWindowHint*/);
+    this->setWindowFlag(Qt::Window);
 //#endif
 //    this->setProperty("useStyleWindowManager", false); //禁用拖动
 //    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint );
@@ -136,14 +137,14 @@ void NetDetail::onPaletteChanged()
 
 void NetDetail::paintEvent(QPaintEvent *event)
 {
-    return QDialog::paintEvent(event);
+    return QWidget::paintEvent(event);
 }
 
 void NetDetail::closeEvent(QCloseEvent *event)
 {
     emit this->detailPageClose(false);
     emit this->createPageClose(m_deviceName);
-    return QDialog::closeEvent(event);
+    return QWidget::closeEvent(event);
 }
 
 void NetDetail::centerToScreen()
@@ -931,7 +932,7 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        }
 
    }
-   return QDialog::eventFilter(w, event);
+   return QWidget::eventFilter(w, event);
 }
 
 QPalette NetDetail::lightPalette() const

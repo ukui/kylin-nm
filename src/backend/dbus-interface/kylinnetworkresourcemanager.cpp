@@ -210,9 +210,8 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
     connect(device.data(), &NetworkManager::Device::firmwareMissingChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::firmwareVersionChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
 #endif
-
+    connect(device.data(), &NetworkManager::Device::activeConnectionChanged, this, &KyNetworkResourceManager::onDeviceActiveChanage);
     connect(device.data(), &NetworkManager::Device::interfaceNameChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
-
 #if 0
     connect(device.data(), &NetworkManager::Device::ipV4AddressChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
     connect(device.data(), &NetworkManager::Device::ipV4ConfigChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
@@ -234,7 +233,7 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
         case NetworkManager::Device::Ethernet:
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::bitRateChanged, this, &KyNetworkResourceManager::onDeviceBitRateChanage);
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::carrierChanged, this, &KyNetworkResourceManager::onDeviceCarrierChanage);
-            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::hardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceMacAddressChanaged);
+            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::hardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceMacAddressChanage);
            // connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::permanentHardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
             break;
 
@@ -598,9 +597,38 @@ void KyNetworkResourceManager::onVpnActiveConnectChanagedReason(NetworkManager::
     return;
 }
 
+void KyNetworkResourceManager::onDeviceActiveChanage()
+{
+    NetworkManager::Device *p_device = qobject_cast<NetworkManager::Device *>(sender());
+    if (nullptr == p_device) {
+        return;
+    }
+
+    QString deviceName = p_device->interfaceName();
+    //此处需要取反，因为激活连接的网卡状态是false，断开连接的网卡状态是true
+    bool isActive = !p_device->isActive();
+
+    qDebug()<< LOG_FLAG << "device active change, device name " << deviceName
+            << "active state" << isActive;
+
+    emit deviceActiveChanage(deviceName, isActive);
+
+    return;
+}
+
 void KyNetworkResourceManager::onDeviceUpdated()
 {
-    emit deviceUpdate(qobject_cast<NetworkManager::Device *>(sender()));
+    NetworkManager::Device *p_device = qobject_cast<NetworkManager::Device *>(sender());
+    if (nullptr == p_device) {
+        return;
+    }
+
+    QString deviceName = p_device->interfaceName();
+    QString deviceUni = p_device->uni();
+
+    emit deviceUpdate(deviceName, deviceUni);
+
+    return;
 }
 
 void KyNetworkResourceManager::onDeviceCarrierChanage(bool pluged)
@@ -633,13 +661,13 @@ void KyNetworkResourceManager::onDeviceBitRateChanage(int bitRate)
     return;
 }
 
-void KyNetworkResourceManager::onDeviceMacAddressChanaged(const QString &hwAddress)
+void KyNetworkResourceManager::onDeviceMacAddressChanage(const QString &hwAddress)
 {
     NetworkManager::WiredDevice * networkDevice
             = qobject_cast<NetworkManager::WiredDevice *>(sender());
 
     if (nullptr !=networkDevice && networkDevice->isValid()) {
-        emit deviceMacAddressChanaged(networkDevice->interfaceName(), hwAddress);
+        emit deviceMacAddressChanage(networkDevice->interfaceName(), hwAddress);
     } else {
         qWarning()<< LOG_FLAG <<"the device is not invalid with mac" << hwAddress;
     }
@@ -743,10 +771,14 @@ void KyNetworkResourceManager::onWifiNetworkRemove(NetworkManager::Device * dev,
 
 void KyNetworkResourceManager::onWifiNetworkAppeared(QString const & ssid)
 {
-    NetworkManager::Device * dev = qobject_cast<NetworkManager::Device *>(sender());
-    if (nullptr != dev) {
-        onWifiNetworkAdd(dev, ssid);
-        emit deviceUpdate(dev);
+    NetworkManager::Device * p_device = qobject_cast<NetworkManager::Device *>(sender());
+    if (nullptr != p_device) {
+        onWifiNetworkAdd(p_device, ssid);
+
+        QString deviceName = p_device->interfaceName();
+        QString deviceUni = p_device->uni();
+
+        emit deviceUpdate(deviceName, deviceUni);
     } else {
         qWarning()<< LOG_FLAG << "onWifiNetworkAppeared failed.";
     }
@@ -756,10 +788,14 @@ void KyNetworkResourceManager::onWifiNetworkAppeared(QString const & ssid)
 
 void KyNetworkResourceManager::onWifiNetworkDisappeared(QString const & ssid)
 {
-    NetworkManager::Device * dev = qobject_cast<NetworkManager::Device *>(sender());
-    if (nullptr != dev) {
-        onWifiNetworkRemove(dev, ssid);
-        emit deviceUpdate(dev);
+    NetworkManager::Device *p_device = qobject_cast<NetworkManager::Device *>(sender());
+    if (nullptr != p_device) {
+        onWifiNetworkRemove(p_device, ssid);
+
+        QString deviceName = p_device->interfaceName();
+        QString deviceUni = p_device->uni();
+
+        emit deviceUpdate(deviceName, deviceUni);
     } else {
         qWarning()<< LOG_FLAG << "onWifiNetworkDisappeared failed.";
     }

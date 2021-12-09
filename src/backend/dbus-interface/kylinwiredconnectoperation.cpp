@@ -220,6 +220,7 @@ int KyWiredConnectOperation::closeWiredNetworkWithDevice(QString deviceName)
         }
     }
 
+    //wiredDevicePtr->setAutoconnect(false);
     wiredDevicePtr->disconnectInterface();
 
     return 0;

@@ -23,12 +23,13 @@ signals:
 
     void carrierChanage(QString deviceName, bool pluged);
     void deviceBitRateChanage(QString deviceName, int bitRate);
-    void deviceMacAddressChanaged(QString deviceName, const QString &hwAddress);
+    void deviceMacAddressChanage(QString deviceName, const QString &hwAddress);
+    void deviceActiveChanage(QString deviceName, bool deivceActive);
 
 public slots:
     void onDeviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName, QString uni);
-    void onDeviceUpdate(NetworkManager::Device * dev);
+    void onDeviceUpdate(QString interface, QString dbusPath);
 
 public:
     void getNetworkDeviceList(NetworkManager::Device::Type deviceType, QStringList &networkDeviceList);

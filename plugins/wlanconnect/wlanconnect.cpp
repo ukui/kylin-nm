@@ -54,6 +54,8 @@ const QString NoNetSymbolic     = ":/img/plugins/netconnect/nonet.svg";
 
 const QString KApSymbolic       = "network-wireless-hotspot-symbolic";
 
+const QString IsApConnection    = "1";
+
 
 #define ACTIVATING   1
 #define ACTIVATED    2
@@ -382,7 +384,7 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
     }
 
     QString iconamePath;
-    if (isApConnection == "1") {
+    if (isApConnection == IsApConnection) {
         iconamePath = KApSymbolic;
     } else {
         iconamePath = wifiIcon(isLock, sign);
@@ -906,7 +908,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
         return;
     }
 
-    bool bApConnection = (isApConnection == "1");
+    bool bApConnection = (isApConnection == IsApConnection);
 
     if (frame->itemMap.contains(name)) {
             qDebug() << "[WlanConnect]Already exist a wifi " << name << " in " << deviceName;

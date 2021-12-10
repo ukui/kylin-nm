@@ -12,6 +12,9 @@
 #define LOG_FLAG  "[WlanPage]"
 #define LAN_PAGE_INDEX 0
 
+const QString NotApConnection   = "0";
+const QString IsApConnection    = "1";
+
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
     m_wirelessNetResource = new KyWirelessNetResource(this);
@@ -475,7 +478,7 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
     info << item.m_NetSsid
          << QString::number(item.m_signalStrength)
          << item.m_secuType
-         << (m_connectResource->isApConnection(item.m_connectUuid) ? "1" : "0");
+         << (m_connectResource->isApConnection(item.m_connectUuid) ? IsApConnection : NotApConnection);
     emit wlanAdd(interface, info);
 
     if (interface != m_currentDevice) {
@@ -1155,7 +1158,7 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
                               << QString::number(data.m_signalStrength)
                               << data.m_secuType
                               << data.m_connectUuid
-                              << (m_connectResource->isApConnection(data.m_connectUuid) ? "1" : "0"));
+                              << (m_connectResource->isApConnection(data.m_connectUuid) ? IsApConnection : NotApConnection));
                 activeSsid = data.m_NetSsid;
             } else {
                 vector.append(QStringList("--"));
@@ -1171,7 +1174,7 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
             vector.append(QStringList()<<itemData.m_NetSsid
                           << QString::number(itemData.m_signalStrength)
                           << itemData.m_secuType
-                          << (m_connectResource->isApConnection(itemData.m_connectUuid) ? "1" : "0"));
+                          << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection));
         }
 
         map.insert(iter.key(), vector);

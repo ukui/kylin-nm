@@ -48,6 +48,13 @@ void TabPage::initUI()
     m_deviceLabel->setText(tr("Current Device"));
     m_deviceComboBox = new QComboBox(m_deviceFrame);
     m_deviceComboBox->setFixedWidth(DEVICE_COMBOBOX_WIDTH);
+    if (m_deviceComboBox->view()) {
+        QPalette view_pal = m_deviceComboBox->view()->palette();
+        QColor view_color = m_deviceComboBox->palette().color(QPalette::Active, QPalette::Button);
+        view_pal.setColor(QPalette::Base, view_color);
+        m_deviceComboBox->setPalette(view_pal);
+        m_deviceComboBox->view()->setPalette(view_pal);
+    }
     m_tipsLabel = new QLabel(m_deviceFrame);
     m_tipsLabel->setText(tr("Devices Closed!"));
     m_deviceLayout->addWidget(m_deviceLabel);

@@ -1,6 +1,7 @@
 
 #include "kylinconnectresource.h"
 #include "kywirelessconnectoperation.h"
+#include "kylinutil.h"
 
 #include <NetworkManagerQt/Ipv4Setting>
 #include <NetworkManagerQt/Ipv6Setting>
@@ -702,18 +703,16 @@ bool KyConnectResourse::isWiredConnection(QString uuid)
         return false;
     }
 
-    if (!connectPtr.isNull()) {
-        NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
+    /*
+    * 由于通过NetworkManager库获取的连接类型，准确的说是判断有线连接类型有时候是不准确的，因为该库
+    * 对连接类型支持的不全，对于不支持的类型默认是有线连接类型，比如说wifi-p2p的投屏，所以需要通过
+    * networkmanager的dbus接口获取。
+    */
 
-        if (connectSettingPtr.isNull()) {
-            qWarning()<<"[KyConnectResourse]"<<"get connect setting failed, connect uuid"<<uuid;
-            return false;
-        }
-
-        if (NetworkManager::ConnectionSettings::ConnectionType::Wired ==
-                connectPtr->settings()->connectionType()) {
-            return true;
-        }
+    QString connectPath = connectPtr->path();
+    QString connectionType = getConnectTypeByDbus(connectPath);
+    if (ETHERNET_TYPE == connectionType) {
+        return true;
     }
 
     return false;

@@ -128,15 +128,15 @@ int main(int argc, char *argv[])
     a.setActivationWindow(&w);
     w.setProperty("useStyleWindowManager", false); //禁用拖动
     //设置窗口无边框，阴影
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+
     MotifWmHints window_hints;
     window_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
     window_hints.functions = MWM_FUNC_ALL;
     window_hints.decorations = MWM_DECOR_BORDER;
     XAtomHelper::getInstance()->setWindowMotifHint(w.winId(), window_hints);
-#else
-    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
-#endif
+
+//    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+
 
     DbusAdaptor adaptor(&w);
     Q_UNUSED(adaptor);

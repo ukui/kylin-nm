@@ -84,6 +84,7 @@ void MainWindow::setWirelessDefaultDevice(QString deviceName)
 void MainWindow::firstlyStart()
 {
     initWindowProperties();
+    initTransparency();
     initUI();
     initDbusConnnect();
     initWindowTheme();
@@ -121,13 +122,12 @@ void MainWindow::initWindowProperties()
     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")));
     this->setFixedSize(MAINWINDOW_WIDTH, MAINWINDOW_HEIGHT);
 //    //绘制毛玻璃特效
-//    this->setStyleSheet("background:transparent");   //透明
-//    this->setAttribute(Qt::WA_TranslucentBackground, true);  //透明
-    this->setWindowOpacity(0.8);
+    this->setAttribute(Qt::WA_TranslucentBackground, true);  //透明
+    this->setFocusPolicy(Qt::NoFocus);
 
     QPainterPath path;
     auto rect = this->rect();
-    path.addRoundedRect(rect, 6, 6);
+    path.addRoundedRect(rect, 12, 12);
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
 }
 
@@ -137,7 +137,44 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     painter.setPen(Qt::transparent);
     auto rect = this->rect();
-    painter.drawRoundedRect(rect, 6, 6);      //窗口圆角
+    painter.drawRoundedRect(rect, 12, 12);      //窗口圆角
+}
+
+void MainWindow::initTransparency()
+{
+    if(QGSettings::isSchemaInstalled(TRANSPARENCY_GSETTINGS)) {
+        m_transGsettings = new QGSettings(TRANSPARENCY_GSETTINGS);
+        if(m_transGsettings->keys().contains(QString("transparency"))) {
+            m_transparency=m_transGsettings->get("transparency").toDouble() + 0.15;
+            m_transparency = (m_transparency > 1) ? 1 : m_transparency;
+            connect(m_transGsettings, &QGSettings::changed, this, &MainWindow::onTransChanged);
+        }
+    }
+}
+
+void MainWindow::onTransChanged()
+{
+    m_transparency = m_transGsettings->get("transparency").toDouble() + 0.15;
+    m_transparency = (m_transparency > 1) ? 1 : m_transparency;
+    paintWithTrans();
+}
+
+void MainWindow::paintWithTrans()
+{
+    QPalette pal = m_centralWidget->palette();
+    QColor color = m_centralWidget->palette().base().color();
+    color.setAlphaF(m_transparency);
+    pal.setColor(QPalette::Base, color);
+    m_centralWidget->setPalette(pal);
+
+    QPalette tabPal = m_centralWidget->tabBar()->palette();
+    tabPal.setColor(QPalette::Base, color);
+
+    QColor inactiveColor = pal.color(QPalette::Window);
+    inactiveColor.setAlphaF(0.75 *m_transparency);
+    pal.setColor(QPalette::Window, inactiveColor);
+
+    m_centralWidget->tabBar()->setPalette(pal);
 }
 
 /**
@@ -167,7 +204,7 @@ void MainWindow::initUI()
     m_tabBarLayout->addWidget(m_wlanLabel);
     m_centralWidget->tabBar()->setLayout(m_tabBarLayout);
     connect(m_centralWidget, &QTabWidget::currentChanged, m_wlanWidget, &WlanPage::onWlanPageVisibleChanged);
-//    m_centralWidget->hide();
+    paintWithTrans();
 }
 
 /**

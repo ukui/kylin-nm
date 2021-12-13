@@ -85,33 +85,33 @@ void ListItem::mousePressEvent(QMouseEvent *event)
 
 void ListItem::enterEvent(QEvent *event)
 {
-    QPalette pal = qApp->palette();
-    QColor baseColor = qApp->palette().base().color();
-    if (baseColor.red() > MIDDLE_COLOR) {
-        pal.setColor(QPalette::Window, LIGHT_HOVER_COLOR);
-    } else {
-        pal.setColor(QPalette::Window, DARK_HOVER_COLOR);
-    }
-    this->setPalette(pal);
-    return QFrame::enterEvent(event);
+//    QPalette pal = qApp->palette();
+//    QColor baseColor = qApp->palette().base().color();
+//    if (baseColor.red() > MIDDLE_COLOR) {
+//        pal.setColor(QPalette::Window, LIGHT_HOVER_COLOR);
+//    } else {
+//        pal.setColor(QPalette::Window, DARK_HOVER_COLOR);
+//    }
+//    this->setPalette(pal);
+//    return QFrame::enterEvent(event);
 }
 
 void ListItem::leaveEvent(QEvent *event)
 {
-    QPalette pal = qApp->palette();
-    pal.setColor(QPalette::Window, qApp->palette().base().color());
-    this->setPalette(pal);
-    return QFrame::leaveEvent(event);
+//    QPalette pal = qApp->palette();
+//    pal.setColor(QPalette::Window, qApp->palette().base().color());
+//    this->setPalette(pal);
+//    return QFrame::leaveEvent(event);
 }
 
 void ListItem::paintEvent(QPaintEvent *event)
 {
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing); //反锯齿
-    painter.setBrush(this->palette().brush(QPalette::Window));
-    painter.setPen(Qt::transparent);
-    painter.drawRoundedRect(this->rect(), 8, 8);
-    return QFrame::paintEvent(event);
+//    QPainter painter(this);
+//    painter.setRenderHint(QPainter::Antialiasing); //反锯齿
+//    painter.setBrush(this->palette().brush(QPalette::Window));
+//    painter.setPen(Qt::transparent);
+//    painter.drawRoundedRect(this->rect(), 8, 8);
+//    return QFrame::paintEvent(event);
 }
 
 //bool ListItem::eventFilter(QObject *watched, QEvent *event)
@@ -127,8 +127,8 @@ void ListItem::paintEvent(QPaintEvent *event)
 void ListItem::initUI()
 {
     m_menu = new QMenu(this);//右键菜单
-    m_menu->setStyleSheet("QMenu::item{border:3px; border-radius:3px}");
-    m_menu->setStyleSheet("QMenu{border-radius:3px; margin:3px 3px 3px 3px}");
+//    m_menu->setStyleSheet("QMenu::item{border:3px; border-radius:3px}");
+//    m_menu->setStyleSheet("QMenu{border-radius:6px; margin:6px 6px 6px 6px}");
     connect(m_menu, &QMenu::triggered, this, &ListItem::onMenuTriggered);
 
     m_mainLayout = new QVBoxLayout(this);
@@ -155,11 +155,11 @@ void ListItem::initUI()
 
     m_mainLayout->addWidget(m_itemFrame);
 
-    this->setAutoFillBackground(true);
-    this->setBackgroundRole(QPalette::Base);
-    QPalette pal = qApp->palette();
-    pal.setColor(QPalette::Window, qApp->palette().base().color());
-    this->setPalette(pal);
+//    this->setAutoFillBackground(true);
+//    this->setBackgroundRole(QPalette::Base);
+//    QPalette pal = qApp->palette();
+//    pal.setColor(QPalette::Window, qApp->palette().base().color());
+//    this->setPalette(pal);
 }
 
 
@@ -171,9 +171,9 @@ void ListItem::initConnection()
 
 void ListItem::onPaletteChanged()
 {
-    QPalette pal = qApp->palette();
-    pal.setColor(QPalette::Window, qApp->palette().base().color());
-    this->setPalette(pal);
+//    QPalette pal = qApp->palette();
+//    pal.setColor(QPalette::Window, qApp->palette().base().color());
+//    this->setPalette(pal);
 }
 
 void ListItem::onDetailShow(bool isShow)

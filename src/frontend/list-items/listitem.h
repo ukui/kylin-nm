@@ -30,7 +30,6 @@ public:
     static void showDesktopNotify(const QString &message);
 
 protected:
-//    bool eventFilter(QObject *watched, QEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);

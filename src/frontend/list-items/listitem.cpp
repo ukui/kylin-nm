@@ -114,16 +114,6 @@ void ListItem::paintEvent(QPaintEvent *event)
 //    return QFrame::paintEvent(event);
 }
 
-//bool ListItem::eventFilter(QObject *watched, QEvent *event)
-//{
-//    if (watched == m_itemFrame) {
-//        if (event->type() == QEvent::MouseButtonPress) {
-//            onNetButtonClicked();
-//        }
-//    }
-//    return QFrame::eventFilter(watched, event);
-//}
-
 void ListItem::initUI()
 {
     m_menu = new QMenu(this);//右键菜单

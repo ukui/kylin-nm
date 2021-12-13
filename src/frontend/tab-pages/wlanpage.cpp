@@ -12,6 +12,9 @@
 #define LOG_FLAG  "[WlanPage]"
 #define LAN_PAGE_INDEX 0
 
+const QString NotApConnection   = "0";
+const QString IsApConnection    = "1";
+
 WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 {
     m_wirelessNetResource = new KyWirelessNetResource(this);
@@ -474,7 +477,10 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 {
     //for dbus
     QStringList info;
-    info <<item.m_NetSsid<<QString::number(item.m_signalStrength)<<item.m_secuType;
+    info << item.m_NetSsid
+         << QString::number(item.m_signalStrength)
+         << item.m_secuType
+         << (m_connectResource->isApConnection(item.m_connectUuid) ? IsApConnection : NotApConnection);
     emit wlanAdd(interface, info);
 
     if (interface != m_currentDevice) {
@@ -1150,8 +1156,11 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
             QString ssid ="";
             m_wirelessNetResource->getSsidByUuid(actMap[iter.key()].at(0), ssid);
             if (m_wirelessNetResource->getWifiNetwork(iter.key(), ssid, data)) {
-                vector.append(QStringList()<<data.m_NetSsid
-                              <<QString::number(data.m_signalStrength)<<data.m_secuType<<data.m_connectUuid);
+                vector.append(QStringList() << data.m_NetSsid
+                              << QString::number(data.m_signalStrength)
+                              << data.m_secuType
+                              << data.m_connectUuid
+                              << (m_connectResource->isApConnection(data.m_connectUuid) ? IsApConnection : NotApConnection));
                 activeSsid = data.m_NetSsid;
             } else {
                 vector.append(QStringList("--"));
@@ -1164,7 +1173,10 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
             if (itemData.m_NetSsid == activeSsid) {
                 continue;
             }
-            vector.append(QStringList()<<itemData.m_NetSsid<<QString::number(itemData.m_signalStrength)<<itemData.m_secuType);
+            vector.append(QStringList()<<itemData.m_NetSsid
+                          << QString::number(itemData.m_signalStrength)
+                          << itemData.m_secuType
+                          << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection));
         }
 
         map.insert(iter.key(), vector);

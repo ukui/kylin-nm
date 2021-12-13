@@ -31,6 +31,8 @@
 
 #define LOG_IDENT "ukui_kylin_nm"
 
+const QString QT_TRANSLATE_FILE = "/usr/share/qt5/translations/qt_zh_CN.qm";
+
 void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QByteArray localMsg = msg.toLocal8Bit();
@@ -107,6 +109,15 @@ int main(int argc, char *argv[])
         qDebug()<<"Translations load success";
     } else {
         qWarning() << "Translations load fail";
+    }
+
+    QTranslator qtBaseTranslator;
+    if (qtBaseTranslator.load(QLocale(), "qt", "_", "/usr/share/qt5/translations/"))
+    {
+        a.installTranslator(&qtBaseTranslator);
+        qDebug()<<"QtBase Translations load success";
+    } else {
+        qWarning() << "QtBase Translations load fail";
     }
 
     while (!p_networkResource->NetworkManagerIsInited()) {

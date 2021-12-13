@@ -6,7 +6,6 @@ Ipv4Page::Ipv4Page(QWidget *parent):QFrame(parent)
 {
     initUI();
     initComponent();
-    setLineEditMenuPolicy(this);
 }
 
 void Ipv4Page::initUI() {

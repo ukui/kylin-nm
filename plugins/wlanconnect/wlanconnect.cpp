@@ -52,6 +52,10 @@ const QString KWifiLockNone     = "network-wireless-secure-signal-none";
 const QString KLanSymbolic      = ":/img/plugins/netconnect/eth.svg";
 const QString NoNetSymbolic     = ":/img/plugins/netconnect/nonet.svg";
 
+const QString KApSymbolic       = "network-wireless-hotspot-symbolic";
+
+const QString IsApConnection    = "1";
+
 
 #define ACTIVATING   1
 #define ACTIVATED    2
@@ -324,7 +328,7 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
             frame->itemMap[list.at(0).at(0)]->uuid = list.at(0).at(3);
             frame->uuid = list.at(0).at(3);
             frame->itemMap[list.at(0).at(0)]->statusLabel->setText(tr("connected"));
-            updateIcon(frame->itemMap[list.at(0).at(0)], list.at(0).at(1), list.at(0).at(2));
+            updateIcon(frame->itemMap[list.at(0).at(0)], list.at(0).at(1), list.at(0).at(2), list.at(0).at(4));
             frameIndex ++;
         }
     } else {
@@ -358,7 +362,7 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
                 frame->itemMap[list.at(listIndex).at(0)]->uuid.clear();
                 frame->itemMap[list.at(listIndex).at(0)]->statusLabel->setText("");
             }
-            updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2));
+            updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2), list.at(listIndex).at(3));
             frameIndex++;
         } else {
             qDebug() << "not find " << list.at(listIndex).at(0) << " in current list, ignore";
@@ -367,9 +371,10 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
     qDebug() << "resort finish";
 }
 
-void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString security)
+void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection)
 {
     qDebug() << "updateIcon" << item->titileLabel->text();
+
     int sign = setSignal(signalStrength);
     bool isLock = true;
     if (security.isEmpty()) {
@@ -378,7 +383,12 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
         isLock = true;
     }
 
-    QString iconamePath = wifiIcon(isLock, sign);
+    QString iconamePath;
+    if (isApConnection == IsApConnection) {
+        iconamePath = KApSymbolic;
+    } else {
+        iconamePath = wifiIcon(isLock, sign);
+    }
     QIcon searchIcon = QIcon::fromTheme(iconamePath);
     if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
         item->iconLabel->setProperty("useIconHighlightEffect", 0x10);
@@ -587,7 +597,7 @@ void WlanConnect::onNetworkAdd(QString deviceName, QStringList wlanInfo)
     QMap<QString, ItemFrame *>::iterator iter;
     for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
         if (deviceName == iter.key()) {
-            addOneWlanFrame(iter.value(), deviceName, wlanInfo.at(0), wlanInfo.at(1), "", isLock, false, WIRELESS_TYPE);
+            addOneWlanFrame(iter.value(), deviceName, wlanInfo.at(0), wlanInfo.at(1), "", isLock, false, WIRELESS_TYPE, wlanInfo.at(3));
         }
     }
 
@@ -842,7 +852,7 @@ void WlanConnect::addActiveItem(ItemFrame *frame, QString devName, QStringList i
     } else {
         isLock = true;
     }
-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), infoList.at(3), isLock, true, WIRELESS_TYPE);
+    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), infoList.at(3), isLock, true, WIRELESS_TYPE, infoList.at(4));
 }
 
 //处理列表 未连接
@@ -857,7 +867,7 @@ void WlanConnect::addCustomItem(ItemFrame *frame, QString devName, QStringList i
     } else {
         isLock = true;
     }
-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE);
+    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3));
 }
 
 //增加设备
@@ -892,11 +902,13 @@ void WlanConnect::removeDeviceFrame(QString devName)
 }
 
 //增加ap
-void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type)
+void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection)
 {
     if (nullptr == frame) {
         return;
     }
+
+    bool bApConnection = (isApConnection == IsApConnection);
 
     if (frame->itemMap.contains(name)) {
             qDebug() << "[WlanConnect]Already exist a wifi " << name << " in " << deviceName;
@@ -904,12 +916,17 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     }
     //设置单项的信息
     int sign = setSignal(signal);
-    QString iconamePath = wifiIcon(isLock, sign);
-    WlanItem * wlanItem = new WlanItem(status, isLock, pluginWidget);
-    QIcon searchIcon = QIcon::fromTheme(iconamePath);
+    WlanItem * wlanItem = new WlanItem(status, isLock, pluginWidget); 
+    QString iconamePath;
+    if (bApConnection) {
+        iconamePath = KApSymbolic;
+    } else {
+        iconamePath = wifiIcon(isLock, sign);
+    }
     if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
         wlanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
     }
+    QIcon searchIcon = QIcon::fromTheme(iconamePath);
     wlanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
     wlanItem->titileLabel->setText(name);
     if (status) {

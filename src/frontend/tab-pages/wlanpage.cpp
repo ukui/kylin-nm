@@ -81,6 +81,7 @@ void WlanPage::initWlanUI()
     m_activatedNetLayout->addWidget(m_activatedNetListWidget);
 
     m_inactivatedNetLabel->setText(tr("Other WLAN"));
+    m_inactivatedNetLabel->setDisabled(true);
     m_inactivatedNetListWidget = new QListWidget(m_inactivatedNetListArea);
     m_inactivatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_inactivatedNetListWidget->setSpacing(NET_LIST_SPACING);

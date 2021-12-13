@@ -29,7 +29,7 @@
 #include "coninfo.h"
 #include "tab-pages/tabpage.h"
 
-class NetDetail : public QDialog
+class NetDetail : public QWidget
 {
     Q_OBJECT
 

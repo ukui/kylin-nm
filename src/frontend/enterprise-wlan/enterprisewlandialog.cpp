@@ -5,7 +5,7 @@
 #define MAIN_SIZE_EXPAND 400,500
 #define MAIN_SIZE_NARROW 400,400
 
-EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent) : QDialog(parent)
+EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent) : QWidget(parent)
 {
     //设置窗口无边框，阴影
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
@@ -18,6 +18,7 @@ EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, Q
     this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
 #endif
     this->setAttribute(Qt::WA_DeleteOnClose);
+    this->setWindowFlag(Qt::Window);
 
     m_wirelessNetItem = wirelessNetItem;
     m_deviceName = device;
@@ -43,7 +44,7 @@ EnterpriseWlanDialog::~EnterpriseWlanDialog() {
 void EnterpriseWlanDialog::closeEvent(QCloseEvent *event)
 {
     emit this->enterpriseWlanDialogClose(false);
-    return QDialog::closeEvent(event);
+    return QWidget::closeEvent(event);
 }
 
 void EnterpriseWlanDialog::initUI()

@@ -1430,6 +1430,7 @@ void WlanPage::addWlanMoreItem()
     m_hiddenWlanWidget->setFixedHeight(NORMAL_HEIGHT);
 
     m_hiddenItem = new QListWidgetItem(m_inactivatedNetListWidget);
+    m_hiddenItem->setFlags(m_hiddenItem->flags() & (~Qt::ItemIsSelectable));
     m_hiddenItem->setSizeHint(QSize(m_inactivatedNetListWidget->width(), m_hiddenWlanWidget->height()));
     m_inactivatedNetListWidget->addItem(m_hiddenItem);
     m_inactivatedNetListWidget->setItemWidget(m_hiddenItem, m_hiddenWlanWidget);

@@ -220,6 +220,7 @@ int KyWiredConnectOperation::closeWiredNetworkWithDevice(QString deviceName)
         }
     }
 
+    //wiredDevicePtr->setAutoconnect(false);
     wiredDevicePtr->disconnectInterface();
 
     return 0;
@@ -241,12 +242,17 @@ int KyWiredConnectOperation::openWiredNetworkWithDevice(QString deviceName)
         return -EINVAL;
     }
 
-    QString connectUuid;
-    getActiveConnection(deviceName, connectUuid);
-    if (!connectUuid.isEmpty()) {
-        qDebug()<<"[KyWiredConnectOperation]" << "open wired network active connection"
-               << connectUuid <<"device name" << deviceName;
-        activateConnection(connectUuid, deviceName);
+    NetworkManager::WiredDevice *p_wiredDevice =
+        qobject_cast<NetworkManager::WiredDevice *>(wiredDevicePtr.data());
+
+    if (p_wiredDevice->carrier()) {
+        QString connectUuid;
+        getActiveConnection(deviceName, connectUuid);
+        if (!connectUuid.isEmpty()) {
+            qDebug()<<"[KyWiredConnectOperation]" << "open wired network active connection"
+                   << connectUuid <<"device name" << deviceName;
+            activateConnection(connectUuid, deviceName);
+        }
     }
 
     wiredDevicePtr->setAutoconnect(true);

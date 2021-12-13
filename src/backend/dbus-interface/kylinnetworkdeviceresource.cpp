@@ -24,8 +24,10 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
                                        this, &KyNetworkDeviceResourse::carrierChanage);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceBitRateChanage,
                                        this, &KyNetworkDeviceResourse::deviceBitRateChanage);
-    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceMacAddressChanaged,
-                                       this, &KyNetworkDeviceResourse::deviceMacAddressChanaged);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceMacAddressChanage,
+                                       this, &KyNetworkDeviceResourse::deviceMacAddressChanage);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceActiveChanage,
+                                       this, &KyNetworkDeviceResourse::deviceActiveChanage);
 
 }
 
@@ -269,11 +271,8 @@ void KyNetworkDeviceResourse::onDeviceRemove(QString deviceName, QString uni)
     return;
 }
 
-void KyNetworkDeviceResourse::onDeviceUpdate(NetworkManager::Device * dev)
+void KyNetworkDeviceResourse::onDeviceUpdate(QString interface, QString dbusPath)
 {
-    QString dbusPath = dev->uni();
-    QString interface = dev->interfaceName();
-
     if (m_deviceMap.contains(dbusPath)) {
         if (m_deviceMap[dbusPath] != interface) {
             QString oldName = m_deviceMap[dbusPath];

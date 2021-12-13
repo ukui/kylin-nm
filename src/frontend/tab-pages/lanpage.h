@@ -105,6 +105,7 @@ private slots:
     void onDeviceNameUpdate(QString oldName, QString newName);
 
     void onDeviceCarriered(QString deviceName, bool pluged);
+    void onDeviceActiveChanage(QString deviceName, bool deviceActive);
 
     void onDeviceComboxIndexChanged(int currentIndex);
 

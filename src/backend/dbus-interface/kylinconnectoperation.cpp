@@ -87,7 +87,13 @@ void KyConnectOperation::connectSettingSet(
 void KyConnectOperation::setAutoConnect(NetworkManager::ConnectionSettings::Ptr &connectSetting,
                      bool bAutoConnect)
 {
+    if (connectSetting.isNull()) {
+        return;
+    }
+
     connectSetting->setAutoconnect(bAutoConnect);
+
+    return;
 }
 
 void KyConnectOperation::createConnect(KyConnectSetting &connectSettingsInfo)

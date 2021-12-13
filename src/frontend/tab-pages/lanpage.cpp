@@ -47,6 +47,7 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceNameUpdate, this, &LanPage::onDeviceNameUpdate);
 
     connect(m_deviceResource, &KyNetworkDeviceResourse::carrierChanage, this, &LanPage::onDeviceCarriered);
+    connect(m_deviceResource, &KyNetworkDeviceResourse::deviceActiveChanage, this, &LanPage::onDeviceActiveChanage);
 
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &LanPage::activateFailed);
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &LanPage::deactivateFailed);
@@ -182,10 +183,10 @@ void LanPage::onLanSwitchClicked()
         this->showDesktopNotify(tr("No ethernet device avaliable"));
     } else {
         if (m_netSwitch->getSwitchStatus()) {
-            qDebug() << "[wiredSwitch]set true after clicked";
+            //qDebug() << "[wiredSwitch]set true after clicked";
             m_switchGsettings->set(WIRED_SWITCH, true);
         } else {
-            qDebug() << "[wiredSwitch]set false after clicked";
+            //qDebug() << "[wiredSwitch]set false after clicked";
             m_switchGsettings->set(WIRED_SWITCH,false);
         }
     }
@@ -684,12 +685,29 @@ void LanPage::onDeviceCarriered(QString deviceName, bool pluged)
         return;
     }
 
-    if (!m_wiredSwitch || !m_enableDeviceList.contains(deviceName)) {
-        m_wiredConnectOperation->closeWiredNetworkWithDevice(deviceName);
+    if (m_enableDeviceList.contains(deviceName)) {
+        m_wiredConnectOperation->openWiredNetworkWithDevice(deviceName);
     }
 
     return;
 }
+
+void LanPage::onDeviceActiveChanage(QString deviceName, bool deviceActive)
+{
+    if (!m_devList.contains(deviceName)) {
+        return;
+    }
+
+    if (deviceActive) {
+        if (!m_wiredSwitch || !m_enableDeviceList.contains(deviceName)) {
+            qDebug()<< LOG_FLAG << "close disabled device";
+            m_wiredConnectOperation->closeWiredNetworkWithDevice(deviceName);
+        }
+    }
+
+    return;
+}
+
 
 void LanPage::onDeviceComboxIndexChanged(int currentIndex)
 {

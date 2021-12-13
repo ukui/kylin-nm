@@ -111,12 +111,13 @@ signals:
     void connectionRemove(QString path);
 
     void deviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType);
-    void deviceUpdate(NetworkManager::Device * dev);
+    void deviceUpdate(QString deviceName, QString deviceUni);
     void deviceRemove(QString deviceName, QString uni);
 
+    void deviceActiveChanage(QString deviceName, bool deviceActive);
     void deviceCarrierChanage(QString deviceName, bool pluged);
     void deviceBitRateChanage(QString deviceName, int bitRate);
-    void deviceMacAddressChanaged(QString deviceName, const QString &hwAddress);
+    void deviceMacAddressChanage(QString deviceName, const QString &hwAddress);
 
     //to KyWirelessNetResource
     void wifiNetworkRemoved(QString, QString);
@@ -157,10 +158,13 @@ private slots:
                                           NetworkManager::VpnConnection::StateChangeReason reason);
 
     //device
+
+    void onDeviceActiveChanage();
+
     void onDeviceUpdated();
     void onDeviceCarrierChanage(bool pluged);
     void onDeviceBitRateChanage(int bitRate);
-    void onDeviceMacAddressChanaged(const QString &hwAddress);
+    void onDeviceMacAddressChanage(const QString &hwAddress);
     void onDeviceStateChanged(NetworkManager::Device::State newstate,
                       NetworkManager::Device::State oldstate,
                       NetworkManager::Device::StateChangeReason reason);

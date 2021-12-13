@@ -61,20 +61,39 @@ LanPage::~LanPage()
 
 void LanPage::initLanDevice()
 {
-    m_currentDeviceName = getDefaultDeviceName(WIRED);
-
     m_devList.clear();
     m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, m_devList);
-    if (m_currentDeviceName.isEmpty()) {
-        for (int index = 0; index < m_devList.size(); ++index) {
-            if (m_deviceResource->wiredDeviceIsCarriered(m_devList.at(index))) {
-                m_currentDeviceName = m_devList.at(index);
-                setDefaultDevice(WIRED, m_currentDeviceName);
-                break;
-            }
+
+    m_currentDeviceName = getDefaultDeviceName(WIRED);
+    bool getDefault = !m_currentDeviceName.isEmpty();
+    if (getDefault) {
+        if (m_deviceResource->wiredDeviceIsCarriered(m_currentDeviceName)) {
+            return;
         }
     }
 
+    QList<KyConnectItem *> activedList;
+    for (int index = 0; index < m_devList.size(); ++index) {
+        m_activeResourse->getActiveConnectionList(m_devList.at(index),
+                                   NetworkManager::ConnectionSettings::Wired, activedList);
+        if (!activedList.isEmpty()) {
+            m_currentDeviceName = m_devList.at(index);
+            if (!getDefault) {
+                setDefaultDevice(WIRED, m_currentDeviceName);
+            }
+            return;
+        }
+    }
+
+    for (int index = 0; index < m_devList.size(); ++index) {
+        if (m_deviceResource->wiredDeviceIsCarriered(m_devList.at(index))) {
+            m_currentDeviceName = m_devList.at(index);
+            if (!getDefault) {
+                setDefaultDevice(WIRED, m_currentDeviceName);
+            }
+            return;
+        }
+    }
     return;
 }
 
@@ -302,7 +321,7 @@ void LanPage::addEmptyConnectItem(QMap<QString, QListWidgetItem *> &connectMap,
 
 void LanPage::deleteConnectionMapItem(QMap<QString, QListWidgetItem *> &connectMap,
                              QListWidget *lanListWidget, QString uuid)
-{     
+{
     QListWidgetItem *p_listWidgetItem = connectMap.value(uuid);
     if (p_listWidgetItem) {
         connectMap.remove(uuid);
@@ -644,7 +663,7 @@ void LanPage::onDeviceRemove(QString deviceName)
 }
 
 void LanPage::updateDeviceCombox(QString oldDeviceName, QString newDeviceName)
-{   
+{
     if (m_currentDeviceName == oldDeviceName) {
         m_currentDeviceName = newDeviceName;
         setDefaultDevice(WIRED, m_currentDeviceName);
@@ -684,11 +703,10 @@ void LanPage::onDeviceCarriered(QString deviceName, bool pluged)
     if (!pluged) {
         return;
     }
-
     if (m_enableDeviceList.contains(deviceName)) {
         m_wiredConnectOperation->openWiredNetworkWithDevice(deviceName);
+        updateCurrentDevice(deviceName);
     }
-
     return;
 }
 
@@ -861,6 +879,19 @@ QString LanPage::getConnectionDevice(QString uuid)
     }
 
     return deviceName;
+}
+
+void LanPage::updateCurrentDevice(QString deviceName)
+{
+    if (m_currentDeviceName != deviceName) {
+        int index = m_deviceComboBox->findText(deviceName);
+        if (index < 0) {
+            index = 0;
+        }
+        m_deviceComboBox->setCurrentIndex(index);
+        return;
+    }
+    return;
 }
 
 void LanPage::onConnectionStateChange(QString uuid,

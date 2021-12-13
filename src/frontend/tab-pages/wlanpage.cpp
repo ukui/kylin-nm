@@ -91,11 +91,16 @@ void WlanPage::initWlanUI()
     m_inactivatedNetListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_inactivatedNetListWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+    m_inactivatedNetListWidget->verticalScrollBar()->setProperty("drawScrollBarGroove",false); //去除滚动条的外侧黑框
     m_inactivatedNetListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
     m_inactivatedNetListWidget->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
-
     addWlanMoreItem();
     m_inactivatedAreaLayout->addWidget(m_inactivatedNetListWidget);
+
+    QPalette pal = m_activatedNetListWidget->palette();
+    pal.setBrush(QPalette::Base, QColor(0,0,0,0));       //背景透明
+    m_activatedNetListWidget->setPalette(pal);
+    m_inactivatedNetListWidget->setPalette(pal);
 
     m_settingsLabel->installEventFilter(this);
 }
@@ -238,6 +243,7 @@ QListWidgetItem *WlanPage::addEmptyItem(QListWidget *wirelessListWidget)
 {
     WlanListItem *p_wlanItem = new WlanListItem();
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
+    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));   //设置不可被选中
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->addItem(p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
@@ -255,6 +261,7 @@ QListWidgetItem *WlanPage::addNewItem(KyWirelessNetItem &wirelessNetItem,
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
+    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->addItem(p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
@@ -270,6 +277,7 @@ QListWidgetItem *WlanPage::insertNewItem(KyWirelessNetItem &wirelessNetItem,
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
+    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->insertItem(row, p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
@@ -289,6 +297,7 @@ QListWidgetItem *WlanPage::insertNewItemWithSort(KyWirelessNetItem &wirelessNetI
     connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
 
     QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
+    p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_sortListWidgetItem->setSizeHint(QSize(p_ListWidget->width(), p_sortWlanItem->height()));
 
    // qDebug() << "insertNewItemWithSort, count" << p_ListWidget->count();
@@ -1421,6 +1430,7 @@ void WlanPage::addWlanMoreItem()
     m_hiddenWlanWidget->setFixedHeight(NORMAL_HEIGHT);
 
     m_hiddenItem = new QListWidgetItem(m_inactivatedNetListWidget);
+    m_hiddenItem->setFlags(m_hiddenItem->flags() & (~Qt::ItemIsSelectable));
     m_hiddenItem->setSizeHint(QSize(m_inactivatedNetListWidget->width(), m_hiddenWlanWidget->height()));
     m_inactivatedNetListWidget->addItem(m_hiddenItem);
     m_inactivatedNetListWidget->setItemWidget(m_hiddenItem, m_hiddenWlanWidget);

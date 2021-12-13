@@ -17,9 +17,6 @@ TabPage::~TabPage()
 
 void TabPage::initUI()
 {
-//    this->setAutoFillBackground(false);
-//    this->setAttribute(Qt::WA_TranslucentBackground, true);
-//    this->setStyleSheet("background:transparent");
     m_mainLayout = new QVBoxLayout(this);
     m_mainLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_mainLayout->setSpacing(MAIN_LAYOUT_SPACING);
@@ -123,6 +120,8 @@ void TabPage::initUI()
     m_mainLayout->addStretch();
     m_mainLayout->addWidget(m_inactivatedNetDivider);
     m_mainLayout->addWidget(m_settingsFrame);
+
+    m_inactivatedNetListArea->setStyleSheet("QScrollArea{background-color:transparent;}");    //背景透明
 }
 
 void TabPage::showDesktopNotify(const QString &message)

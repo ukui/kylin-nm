@@ -23,6 +23,8 @@ enum IconActiveType {
     ACTIVATING,
 };
 
+const QByteArray TRANSPARENCY_GSETTINGS = "org.ukui.control-center.personalise";
+
 class LanPage;
 
 class MainWindow : public QMainWindow
@@ -104,6 +106,8 @@ private:
     bool m_loadFinished = false; //是否二级启动已执行完
     QTimer * m_secondaryStartTimer = nullptr; //执行二级启动的倒计时
     void initWindowProperties();
+    void initTransparency();
+    void paintWithTrans();
     void initUI();
     void initDbusConnnect();
     void initTrayIcon();
@@ -111,6 +115,8 @@ private:
     void initWindowTheme();
     void resetWindowTheme();
     void showControlCenter();
+    double m_transparency=0.0;  //透明度
+    QGSettings * m_transGsettings;   //透明度配置文件
     int currentIconIndex=0;
     QList<QIcon> loadIcons;
     QTimer *iconTimer = nullptr;
@@ -145,6 +151,7 @@ private:
     QMap<QString, NetDetail*> m_createPagePtrMap;
 
 private slots:
+    void onTransChanged();
     void onTrayIconActivated();
     void onShowMainwindowActionTriggled();
     void onShowSettingsActionTriggled();

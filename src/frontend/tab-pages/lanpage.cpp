@@ -761,9 +761,15 @@ void LanPage::initUI()
     m_inactivatedLanListWidget->setSpacing(LAN_LIST_SPACING);
     m_inactivatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_inactivatedLanListWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+    m_inactivatedLanListWidget->verticalScrollBar()->setProperty("drawScrollBarGroove",false); //去除滚动条的外侧黑框
     m_inactivatedLanListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
     m_inactivatedLanListWidget->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     m_inactivatedAreaLayout->addWidget(m_inactivatedLanListWidget);
+
+    QPalette pal = m_activatedLanListWidget->palette();
+    pal.setBrush(QPalette::Base, QColor(0,0,0,0));        //背景透明
+    m_activatedLanListWidget->setPalette(pal);
+    m_inactivatedLanListWidget->setPalette(pal);
 
     m_settingsLabel->installEventFilter(this);
 }
@@ -783,6 +789,7 @@ QListWidgetItem *LanPage::insertNewItem(KyConnectItem *itemData, QListWidget *li
     }
 
     QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
+    p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));   //设置不可被选中
     p_sortListWidgetItem->setSizeHint(QSize(listWidget->width(),ITEM_HEIGHT));
 
     listWidget->insertItem(index, p_sortListWidgetItem);
@@ -797,6 +804,7 @@ QListWidgetItem *LanPage::insertNewItem(KyConnectItem *itemData, QListWidget *li
 QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
 {
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
+    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_listWidgetItem->setSizeHint(QSize(listWidget->width(), ITEM_HEIGHT));
     listWidget->addItem(p_listWidgetItem);
 

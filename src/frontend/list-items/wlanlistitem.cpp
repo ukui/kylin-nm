@@ -232,6 +232,12 @@ void WlanListItem::initWlanUI()
 
     m_pwdLineEdit  = new QLineEdit(m_pwdFrame);
     m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
+    m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
+
+    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
+    QRegExpValidator *latitude = new QRegExpValidator(rx, this);
+    m_pwdLineEdit->setValidator(latitude);
+
     m_pwdLineEdit->installEventFilter(this);
     connect(m_pwdLineEdit, &QLineEdit::textChanged, this, &WlanListItem::onPwdEditorTextChanged);
     m_pwdLineEdit->setFixedHeight(PWD_AREA_HEIGHT);

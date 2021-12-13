@@ -125,7 +125,7 @@ void DetailPage::initUI() {
         mSSIDEdit = new QLineEdit(this);
         mSSIDEdit->setMaximumWidth(MAX_LABEL_WIDTH);
         mSSIDEdit->setAlignment(Qt::AlignRight);
-        mSSIDEdit->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;");
+        mSSIDEdit->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;background:transparent");
         mSSIDEdit->setPlaceholderText(tr("Please input SSID:"));
         mSSIDEdit->setMaxLength(MAX_NAME_LENGTH);
         m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(mSSIDEdit), m_listWidget);

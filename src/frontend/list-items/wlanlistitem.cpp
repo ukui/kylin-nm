@@ -254,7 +254,7 @@ void WlanListItem::initWlanUI()
     m_showPwdButton->installEventFilter(this);
     m_showPwdButton->setFixedSize(SHOW_PWD_BUTTON_SIZE);
     m_showPwdButton->setAutoFillBackground(false);
-    m_showPwdButton->setIcon(QIcon(":/res/h/hide-pwd.png"));
+    m_showPwdButton->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
     m_showPwdButton->setCursor(Qt::PointingHandCursor);
     connect(m_showPwdButton, &QPushButton::clicked, this, &WlanListItem::onShowPwdButtonClicked);
     m_pwdLineEditLyt->addStretch();
@@ -481,10 +481,10 @@ void WlanListItem::onShowPwdButtonClicked()
     }
 
     if (m_pwdLineEdit->echoMode() == QLineEdit::EchoMode::Password) {
-        m_showPwdButton->setIcon(QIcon(":/res/h/show-pwd.png"));
+        m_showPwdButton->setIcon(QIcon::fromTheme("ukui-eye-display-symbolic"));
         m_pwdLineEdit->setEchoMode(QLineEdit::EchoMode::Normal);
     } else {
-        m_showPwdButton->setIcon(QIcon(":/res/h/hide-pwd.png"));
+        m_showPwdButton->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
         m_pwdLineEdit->setEchoMode(QLineEdit::EchoMode::Password);
     }
 

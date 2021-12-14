@@ -169,6 +169,7 @@ void NetDetail::initUI()
     securityPage = new SecurityPage(this);
     createNetPage = new CreatNetPage(this);
 
+    this->installEventFilter(this);
     detailPage->installEventFilter(this);
     ipv4Page->installEventFilter(this);
     ipv6Page->installEventFilter(this);
@@ -929,8 +930,10 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
                emit confimBtn->clicked();
            }
            return true;
+       } else if (mEvent->key() == Qt::Key_Escape) {
+            close();
+            return true;
        }
-
    }
    return QWidget::eventFilter(w, event);
 }

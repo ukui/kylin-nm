@@ -234,3 +234,13 @@ void DbusAdaptor::reScan()
 {
     parent()->rescan();
 }
+
+void DbusAdaptor::keyRingInit()
+{
+    parent()->keyRingInit();
+}
+
+void DbusAdaptor::keyRingClear()
+{
+    parent()->keyRingClear();
+}

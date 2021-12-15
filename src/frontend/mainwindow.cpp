@@ -711,3 +711,13 @@ void MainWindow::rescan()
 {
     m_wlanWidget->requestScan();
 }
+
+void MainWindow::keyRingInit()
+{
+    agent_init();
+}
+
+void MainWindow::keyRingClear()
+{
+    agent_clear();
+}

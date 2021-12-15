@@ -83,6 +83,9 @@ public Q_SLOTS: // METHODS
     QStringList getApInfoBySsid(QString devName, QString ssid);
     //wifi扫描
     void reScan();
+    //keyring
+    void keyRingInit();
+    void keyRingClear();
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);
 //    void wiredActivating(QString devName, QString ssid);

@@ -170,11 +170,6 @@ void NetDetail::initUI()
     createNetPage = new CreatNetPage(this);
 
     this->installEventFilter(this);
-    detailPage->installEventFilter(this);
-    ipv4Page->installEventFilter(this);
-    ipv6Page->installEventFilter(this);
-    securityPage->installEventFilter(this);
-    createNetPage->installEventFilter(this);
 
     centerWidget = new QWidget(this);
     bottomWidget = new QWidget(this);

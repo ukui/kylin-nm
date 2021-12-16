@@ -27,7 +27,6 @@ void TabPage::initUI()
     m_titleLayout = new QHBoxLayout(m_titleFrame);
     m_titleLayout->setContentsMargins(TITLE_LAYOUT_MARGINS);
     m_titleLabel = new QLabel(m_titleFrame);
-    m_titleLabel->setFixedHeight(LABEL_HEIGHT);
     m_netSwitch = new SwitchButton(m_titleFrame);
     m_titleLayout->addWidget(m_titleLabel);
     m_titleLayout->addStretch();
@@ -41,7 +40,6 @@ void TabPage::initUI()
     m_deviceLayout->setContentsMargins(DEVICE_LAYOUT_MARGINS);
     m_deviceFrame->setLayout(m_deviceLayout);
     m_deviceLabel = new QLabel(m_deviceFrame);
-    m_deviceLabel->setFixedHeight(LABEL_HEIGHT);
     m_deviceLabel->setText(tr("Current Device"));
     m_deviceComboBox = new QComboBox(m_deviceFrame);
     m_deviceComboBox->setFixedWidth(DEVICE_COMBOBOX_WIDTH);
@@ -67,7 +65,6 @@ void TabPage::initUI()
 //    m_activatedNetLayout->setSpacing(NET_LAYOUT_SPACING);
     m_activatedNetLabel = new QLabel(m_activatedNetFrame);
     m_activatedNetLabel->setContentsMargins(TEXT_MARGINS);
-    m_activatedNetLabel->setFixedHeight(LABEL_HEIGHT);
     m_activatedNetLayout->addWidget(m_activatedNetLabel);
     m_activatedNetDivider = new Divider(this);
 
@@ -80,7 +77,6 @@ void TabPage::initUI()
 
     m_inactivatedNetLabel = new QLabel(m_inactivatedNetFrame);
     m_inactivatedNetLabel->setContentsMargins(TEXT_MARGINS);
-    m_inactivatedNetLabel->setFixedHeight(LABEL_HEIGHT);
 
     m_inactivatedNetListArea = new QScrollArea(m_inactivatedNetFrame);
     m_inactivatedNetListArea->setFrameShape(QFrame::Shape::NoFrame);

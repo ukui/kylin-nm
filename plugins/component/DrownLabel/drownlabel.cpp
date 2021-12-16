@@ -1,7 +1,7 @@
 #include "drownlabel.h"
 #include "deviceframe.h"
 
-#define ICONSIZE 12,12
+#define ICONSIZE 16,16
 DrownLabel::DrownLabel(QString devName, QWidget * parent) : QLabel(parent)
 {
     m_devName = devName;

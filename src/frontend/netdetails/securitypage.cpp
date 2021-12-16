@@ -155,6 +155,16 @@ void SecurityPage::initUI()
     clientPrivateKeyPwdEdit->setLayout(pPrivateKeyPwdLayout);
     clientPrivateKeyPwdEdit->setEchoMode(QLineEdit::Password);
 
+    pwdEdit->setContextMenuPolicy(Qt::NoContextMenu);
+    clientPrivateKeyPwdEdit->setContextMenuPolicy(Qt::NoContextMenu);
+    userPwdEdit->setContextMenuPolicy(Qt::NoContextMenu);
+
+    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
+    QRegExpValidator *latitude = new QRegExpValidator(rx, this);
+    pwdEdit->setValidator(latitude);
+    clientPrivateKeyPwdEdit->setValidator(latitude);
+    userPwdEdit->setValidator(latitude);
+
     showNone();
 }
 

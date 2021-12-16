@@ -403,6 +403,9 @@ applet_agent_cancel_secrets_cb (AppletAgent *agent,
 
 void agent_init()
 {
+    if (NULL != kylinAgent) {
+        return;
+    }
     GError *error = NULL;
     kylinAgent = applet_agent_new (&error);
 
@@ -413,4 +416,13 @@ void agent_init()
 
 
     return;
+}
+
+void agent_clear()
+{
+    if (NULL == kylinAgent) {
+        return;
+    }
+    g_clear_object (&kylinAgent);
+    kylinAgent = NULL;
 }

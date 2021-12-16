@@ -68,6 +68,9 @@ public:
 
     void rescan();
 
+    void keyRingInit();
+    void keyRingClear();
+
 signals:
     //设备插拔
     void deviceStatusChanged();

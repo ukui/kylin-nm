@@ -86,6 +86,10 @@ MobileHotspotWidget::~MobileHotspotWidget()
 
 bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
 {
+    if (event->type() == QEvent::MouseButtonDblClick && watched == m_switchBtn) {
+        return true;
+    }
+
     if (event->type() == QEvent::MouseButtonPress) {
         if (watched == m_switchBtn) {
             if (!m_interface->isValid()) {
@@ -97,7 +101,7 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
             }
             if (m_switchBtn->isChecked()) {
                 showDesktopNotify(tr("start to close hotspot"));
-                QDBusReply<void> reply = m_interface->call("deactiveWirelessAp", m_apNameLabel->text(), m_uuid);
+                QDBusReply<void> reply = m_interface->call("deactiveWirelessAp", m_apNameLine->text(), m_uuid);
                 if (!reply.isValid()) {
                     qDebug() << "[MobileHotspotWidget] call deactiveWirelessAp failed ";
                     return true;

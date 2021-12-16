@@ -121,7 +121,9 @@ void TabPage::initUI()
     m_mainLayout->addWidget(m_inactivatedNetDivider);
     m_mainLayout->addWidget(m_settingsFrame);
 
-    m_inactivatedNetListArea->setStyleSheet("QScrollArea{background-color:transparent;}");    //背景透明
+    QPalette pal = m_inactivatedNetListArea->palette();
+    pal.setBrush(QPalette::Base, QColor(0,0,0,0));     //背景透明
+    m_inactivatedNetListArea->setPalette(pal);
 }
 
 void TabPage::showDesktopNotify(const QString &message)

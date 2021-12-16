@@ -644,7 +644,7 @@
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="266"/>
         <source>Add Lan Connect</source>
-        <translation>添加有线连接</translation>
+        <translation>添加有线网络</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="275"/>

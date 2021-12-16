@@ -363,7 +363,7 @@ void MobileHotspotWidget::setSwitchFrame()
 
     m_switchLabel = new QLabel(tr("Open"), this);
     m_switchLabel->setMinimumWidth(LABLE_MIN_WIDTH);
-    m_switchBtn = new SwitchButton(this, false);
+    m_switchBtn = new SwitchButton(this);
     switchLayout->addSpacing(LAYOUT_LEFT_MARGINS);
     switchLayout->addWidget(m_switchLabel);
     switchLayout->addStretch();

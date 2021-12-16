@@ -2,8 +2,6 @@ QT       += widgets network dbus gui core
 TEMPLATE = lib
 CONFIG += plugin
 
-include(../component/switchbutton.pri)
-
 TARGET = $$qtLibraryTarget(mobilehotspot)
 DESTDIR = ../..
 target.path = $$[QT_INSTALL_LIBS]/ukui-control-center

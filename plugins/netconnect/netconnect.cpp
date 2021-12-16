@@ -166,7 +166,7 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
 }
 
 void NetConnect::initComponent() {
-    wiredSwitch = new SwitchButton(pluginWidget, false);
+    wiredSwitch = new SwitchButton(pluginWidget);
     ui->openWIifLayout->addWidget(wiredSwitch);
     ui->detailLayOut->setContentsMargins(MAIN_LAYOUT_MARGINS);
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);

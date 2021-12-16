@@ -33,7 +33,7 @@
 #include <QDBusMetaType>
 
 #include "interface.h"
-#include "../component/SwitchButton/switchbutton.h"
+#include "switchbutton.h"
 #include "hoverbtn.h"
 #include "mobilehotspotwidget.h"
 

@@ -2,7 +2,6 @@ QT       += widgets network dbus gui core
 TEMPLATE = lib
 CONFIG += plugin
 
-include(../component/switchbutton.pri)
 include(../component/infobutton.pri)
 include(../component/drownlabel.pri)
 

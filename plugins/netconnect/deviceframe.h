@@ -7,7 +7,7 @@
 #include <QLabel>
 #include <QTimer>
 #include <QDebug>
-#include "../component/SwitchButton/switchbutton.h"
+#include "switchbutton.h"
 #include "../component/DrownLabel/drownlabel.h"
 
 class DeviceFrame : public QFrame

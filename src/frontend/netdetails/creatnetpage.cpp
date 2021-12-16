@@ -11,14 +11,14 @@ CreatNetPage::CreatNetPage(QWidget *parent):QFrame(parent)
 
 void CreatNetPage::initUI()
 {
-    connNameEdit = new QLineEdit(this);
+    connNameEdit = new LineEdit(this);
     connNameEdit->setMaxLength(MAX_NAME_LENGTH);
     ipv4ConfigCombox = new QComboBox(this);
-    ipv4addressEdit = new QLineEdit(this);
-    netMaskEdit = new QLineEdit(this);
-    gateWayEdit = new QLineEdit(this);
-    firstDnsEdit = new QLineEdit(this);
-    secondDnsEdit = new QLineEdit(this);
+    ipv4addressEdit = new LineEdit(this);
+    netMaskEdit = new LineEdit(this);
+    gateWayEdit = new LineEdit(this);
+    firstDnsEdit = new LineEdit(this);
+    secondDnsEdit = new LineEdit(this);
 
     m_connNameLabel = new QLabel(this);
     m_configLabel = new QLabel(this);

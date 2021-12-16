@@ -10,11 +10,11 @@ Ipv4Page::Ipv4Page(QWidget *parent):QFrame(parent)
 
 void Ipv4Page::initUI() {
     ipv4ConfigCombox = new QComboBox(this);
-    ipv4addressEdit = new QLineEdit(this);
-    netMaskEdit = new QLineEdit(this);
-    gateWayEdit = new QLineEdit(this);
-    firstDnsEdit = new QLineEdit(this);
-    secondDnsEdit = new QLineEdit(this);
+    ipv4addressEdit = new LineEdit(this);
+    netMaskEdit = new LineEdit(this);
+    gateWayEdit = new LineEdit(this);
+    firstDnsEdit = new LineEdit(this);
+    secondDnsEdit = new LineEdit(this);
 
     m_configLabel = new QLabel(this);
     m_addressLabel = new QLabel(this);

@@ -91,11 +91,11 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
 
 void Ipv6Page::initUI() {
     ipv6ConfigCombox = new QComboBox(this);
-    ipv6AddressEdit = new QLineEdit(this);
-    lengthEdit = new QLineEdit(this);
-    gateWayEdit = new QLineEdit(this);
-    firstDnsEdit = new QLineEdit(this);
-    secondDnsEdit = new QLineEdit(this);
+    ipv6AddressEdit = new LineEdit(this);
+    lengthEdit = new LineEdit(this);
+    gateWayEdit = new LineEdit(this);
+    firstDnsEdit = new LineEdit(this);
+    secondDnsEdit = new LineEdit(this);
 
     m_configLabel = new QLabel(this);
     m_addressLabel = new QLabel(this);

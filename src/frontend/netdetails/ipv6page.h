@@ -33,11 +33,11 @@ public:
 
 public:
     QComboBox *ipv6ConfigCombox;
-    QLineEdit *ipv6AddressEdit;
-    QLineEdit *lengthEdit;
-    QLineEdit *gateWayEdit;
-    QLineEdit *firstDnsEdit;
-    QLineEdit *secondDnsEdit;
+    LineEdit *ipv6AddressEdit;
+    LineEdit *lengthEdit;
+    LineEdit *gateWayEdit;
+    LineEdit *firstDnsEdit;
+    LineEdit *secondDnsEdit;
 private:
     QFormLayout *m_detailLayout;
     QLabel *m_configLabel;

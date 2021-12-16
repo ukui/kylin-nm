@@ -10,7 +10,6 @@
 
 #include "coninfo.h"
 
-
 class SecurityPage : public QFrame
 {
     Q_OBJECT
@@ -57,21 +56,21 @@ private:
     QLabel *userPwdFlagLabel;
 
     QComboBox *secuTypeCombox;
-    QLineEdit *pwdEdit;
+    LineEdit *pwdEdit;
     QComboBox *eapTypeCombox;
     //TLS
-    QLineEdit *identityEdit;
-    QLineEdit *domainEdit;
+    LineEdit *identityEdit;
+    LineEdit *domainEdit;
     QComboBox *caCertPathCombox;
     QCheckBox *caNeedBox;
     QComboBox *clientCertPathCombox;
     QComboBox *clientPrivateKeyCombox;
-    QLineEdit *clientPrivateKeyPwdEdit;
+    LineEdit *clientPrivateKeyPwdEdit;
 
     //PEAP && TTLS
     QComboBox *eapMethodCombox;
-    QLineEdit *userNameEdit;
-    QLineEdit *userPwdEdit;
+    LineEdit *userNameEdit;
+    LineEdit *userPwdEdit;
     QCheckBox *userPwdFlagBox;
 
     QCheckBox *pwdBox;

@@ -33,21 +33,21 @@ void SecurityPage::initUI()
     userPwdFlagLabel = new QLabel(this);
 
     secuTypeCombox = new QComboBox(this);
-    pwdEdit = new QLineEdit(this);
+    pwdEdit = new LineEdit(this);
     eapTypeCombox = new QComboBox(this);
     //TLS
-    identityEdit = new QLineEdit(this);
-    domainEdit = new QLineEdit(this);
+    identityEdit = new LineEdit(this);
+    domainEdit = new LineEdit(this);
     caCertPathCombox = new QComboBox(this);
     caNeedBox = new QCheckBox(this);
     clientCertPathCombox = new QComboBox(this);
     clientPrivateKeyCombox = new QComboBox(this);
-    clientPrivateKeyPwdEdit = new QLineEdit(this);
+    clientPrivateKeyPwdEdit = new LineEdit(this);
 
     //PEAP && TTLS
     eapMethodCombox = new QComboBox(this);
-    userNameEdit = new QLineEdit(this);
-    userPwdEdit = new QLineEdit(this);
+    userNameEdit = new LineEdit(this);
+    userPwdEdit = new LineEdit(this);
     userPwdFlagBox = new QCheckBox(this);
 
 
@@ -193,17 +193,17 @@ void SecurityPage::initConnect()
             this, &SecurityPage::onClientPrivateKeyComboxIndexChanged);
 
     connect(secuTypeCombox, SIGNAL(currentIndexChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-    connect(pwdEdit, &QLineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
+    connect(pwdEdit, &LineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
     connect(eapTypeCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
-    connect(identityEdit, &QLineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
+    connect(identityEdit, &LineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
     connect(caCertPathCombox, SIGNAL(currentTextChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(caNeedBox, &QCheckBox::stateChanged, this, &SecurityPage::setEnableOfSaveBtn);
     connect(clientCertPathCombox, SIGNAL(currentTextChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(clientPrivateKeyCombox, SIGNAL(currentTextChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-    connect(clientPrivateKeyPwdEdit, &QLineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
+    connect(clientPrivateKeyPwdEdit, &LineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
     connect(eapMethodCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
-    connect(userNameEdit, &QLineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
-    connect(userPwdEdit, &QLineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
+    connect(userNameEdit, &LineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
+    connect(userPwdEdit, &LineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
 
 }
 

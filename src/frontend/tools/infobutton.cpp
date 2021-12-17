@@ -69,25 +69,25 @@ void InfoButton::paintEvent(QPaintEvent *event)
 void InfoButton::enterEvent(QEvent *event)
 {
     m_foregroundColor = FOREGROUND_COLOR_HOVER;
-    this->repaint();
+    this->update();
 }
 
 void InfoButton::leaveEvent(QEvent *event)
 {
     m_foregroundColor = FOREGROUND_COLOR_NORMAL;
-    this->repaint();
+    this->update();
 }
 
 void InfoButton::mousePressEvent(QMouseEvent *event)
 {
     m_foregroundColor = FOREGROUND_COLOR_PRESS;
-    this->repaint();
+    this->update();
     return QPushButton::mousePressEvent(event);
 }
 
 void InfoButton::mouseReleaseEvent(QMouseEvent *event)
 {
     m_foregroundColor = FOREGROUND_COLOR_HOVER;
-    this->repaint();
+    this->update();
     return QPushButton::mouseReleaseEvent(event);
 }

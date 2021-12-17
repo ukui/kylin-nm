@@ -435,6 +435,7 @@ void MainWindow::onThemeChanged(const QString &key)
     if (key == COLOR_THEME) {
         qDebug() << "Received signal of theme changed, will reset theme." << Q_FUNC_INFO << __LINE__;
 //        resetWindowTheme();
+        paintWithTrans();
         emit qApp->paletteChanged(qApp->palette());
     } else {
         qDebug() << "Received signal of theme changed, key=" << key << " will do nothing." << Q_FUNC_INFO << __LINE__;

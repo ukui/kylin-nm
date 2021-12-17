@@ -13,7 +13,7 @@ DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
     this->setMaximumWidth(960);
     initUI();
     if (isCreate) {
-     connect(mSSIDEdit, &QLineEdit::textEdited, this, &DetailPage::setEnableOfSaveBtn);
+     connect(mSSIDEdit, &LineEdit::textEdited, this, &DetailPage::setEnableOfSaveBtn);
     }
 }
 
@@ -122,7 +122,7 @@ void DetailPage::initUI() {
 //        mSSID->setFocusPolicy(Qt::NoFocus);
     } else {
 //        mSSID->setStyleSheet("border-width:1px;;border-style:solid;border-color:black;border-radius:2px");
-        mSSIDEdit = new QLineEdit(this);
+        mSSIDEdit = new LineEdit(this);
         mSSIDEdit->setMaximumWidth(MAX_LABEL_WIDTH);
         mSSIDEdit->setAlignment(Qt::AlignRight);
         mSSIDEdit->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;background:transparent");

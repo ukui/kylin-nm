@@ -182,7 +182,7 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
 }
 
 void WlanConnect::initComponent() {
-    m_wifiSwitch = new SwitchButton(pluginWidget, false);
+    m_wifiSwitch = new SwitchButton(pluginWidget);
     ui->openWIifLayout->addWidget(m_wifiSwitch);
     ui->detailLayOut_3->setContentsMargins(MAIN_LAYOUT_MARGINS);
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);

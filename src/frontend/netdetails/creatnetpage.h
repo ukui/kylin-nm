@@ -22,13 +22,13 @@ public:
 
     void constructIpv4Info(KyConnectSetting &setting);
 private:
-    QLineEdit *connNameEdit;
+    LineEdit *connNameEdit;
     QComboBox *ipv4ConfigCombox;
-    QLineEdit *ipv4addressEdit;
-    QLineEdit *netMaskEdit;
-    QLineEdit *gateWayEdit;
-    QLineEdit *firstDnsEdit;
-    QLineEdit *secondDnsEdit;
+    LineEdit *ipv4addressEdit;
+    LineEdit *netMaskEdit;
+    LineEdit *gateWayEdit;
+    LineEdit *firstDnsEdit;
+    LineEdit *secondDnsEdit;
 
 private:
     QFormLayout *m_detailLayout;

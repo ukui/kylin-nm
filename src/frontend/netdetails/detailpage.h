@@ -52,7 +52,7 @@ public:
     DetailWidget * m_ipv6Widget = nullptr;
     DetailWidget * m_macWidget = nullptr;
 
-    QLineEdit *mSSIDEdit;
+    LineEdit *mSSIDEdit;
     FixLabel *mSSIDLabel;
     QLabel *mProtocol;
     QLabel *mSecType;

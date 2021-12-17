@@ -5,6 +5,8 @@
 #include <QPalette>
 #include <QComboBox>
 #include <QAbstractItemView>
+#include <QMenu>
+#include <QContextMenuEvent>
 #include "kywirelessnetitem.h"
 #include "kylinconnectresource.h"
 #include "kylinactiveconnectresource.h"
@@ -31,6 +33,23 @@ enum TtlsInnerType
     CHAP,
     MD5_EAP,
     GTC_EAP
+};
+
+class LineEdit : public QLineEdit
+{
+    Q_OBJECT
+
+public:
+    explicit LineEdit(QWidget *parent = nullptr) : QLineEdit(parent) {}
+    ~LineEdit() {}
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *event) {
+        QMenu *menu = createStandardContextMenu();//默认的标准右键菜单，如果不需要刻意完全自己实现
+        menu->setPalette(this->palette());
+        menu->exec(event->globalPos());
+        delete menu;
+    }
 };
 
 class ConInfo {
@@ -70,9 +89,10 @@ public:
 };
 
 static void setFramePalette(QFrame *widget, QPalette &pal) {
-    QList<QLineEdit *> lineEditList = widget->findChildren<QLineEdit *>();
+    QList<LineEdit *> lineEditList = widget->findChildren<LineEdit *>();
     for (int i = 0; i < lineEditList.count(); ++i) {
         lineEditList.at(i)->setPalette(pal);
+        lineEditList.at(i)->setContextMenuPolicy(Qt::DefaultContextMenu);
     }
     QList<QComboBox *> comboBoxList = widget->findChildren<QComboBox *>();
     for (int i = 0; i < comboBoxList.count(); ++i) {

@@ -48,7 +48,7 @@
 #include "interface.h"
 #include "addbtn.h"
 #include "fixlabel.h"
-#include "../component/SwitchButton/switchbutton.h"
+#include "switchbutton.h"
 #include "hoverbtn.h"
 #include "lanitem.h"
 #include "deviceframe.h"

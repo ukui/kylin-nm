@@ -19,7 +19,7 @@
 #include <QDBusReply>
 #include <QDBusMetaType>
 
-#include "../component/SwitchButton/switchbutton.h"
+#include "switchbutton.h"
 #include "titlelabel.h"
 
 class MobileHotspotWidget : public QWidget

@@ -8,6 +8,7 @@
 #define COLOR_THEME "styleName"
 
 #include <QEvent>
+#include <QMenu>
 
 #define  WINDOW_WIDTH  520
 #define  WINDOW_HEIGHT 590

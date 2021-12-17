@@ -209,7 +209,6 @@ void WlanListItem::keyPressEvent(QKeyEvent *event)
 
 void WlanListItem::initWlanUI()
 {
-    qDebug() << "new init";
     m_hasPwd = (m_wirelessNetItem.m_secuType.isEmpty() || m_wirelessNetItem.m_secuType == "") ? false : true;
     //设置显示的Wlan名称
 //    this->setName((m_wirelessNetItem.m_connName != "") ? m_wirelessNetItem.m_connName : m_wirelessNetItem.m_NetSsid);

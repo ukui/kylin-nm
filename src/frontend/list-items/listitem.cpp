@@ -110,7 +110,7 @@ void ListItem::paintEvent(QPaintEvent *event)
 //    painter.setRenderHint(QPainter::Antialiasing); //反锯齿
 //    painter.setBrush(this->palette().brush(QPalette::Window));
 //    painter.setPen(Qt::transparent);
-//    painter.drawRoundedRect(this->rect(), 8, 8);
+//    painter.drawRoundedRect(this->rect(), 6, 6);
 //    return QFrame::paintEvent(event);
 }
 
@@ -134,7 +134,7 @@ void ListItem::initUI()
 //    m_hItemLayout->setSpacing(ITEM_FRAME_SPACING);
 
     m_netButton = new RadioItemButton(m_itemFrame);
-    m_nameLabel = new QLabel(m_itemFrame);
+    m_nameLabel = new FixLabel(m_itemFrame);
     m_infoButton = new InfoButton(m_itemFrame);
     m_infoButton->setIconSize(QSize(INFO_ICON_WIDTH,INFO_ICON_HEIGHT));
 

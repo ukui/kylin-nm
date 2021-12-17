@@ -39,7 +39,7 @@ protected:
 protected:
     QFrame * m_itemFrame = nullptr;
 
-    QLabel * m_nameLabel = nullptr;
+    FixLabel * m_nameLabel = nullptr;
     RadioItemButton * m_netButton = nullptr;
     InfoButton * m_infoButton = nullptr;
 

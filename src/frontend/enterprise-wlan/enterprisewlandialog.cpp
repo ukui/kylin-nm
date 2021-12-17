@@ -19,6 +19,7 @@ EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, Q
 #endif
     this->setAttribute(Qt::WA_DeleteOnClose);
     this->setWindowFlag(Qt::Window);
+    this->setWindowTitle(tr("Connect Enterprise WLAN"));
 
     m_wirelessNetItem = wirelessNetItem;
     m_deviceName = device;
@@ -53,26 +54,11 @@ void EnterpriseWlanDialog::initUI()
 #define SSID_LAYOUT_MARGINS 8,8,8,0
 #define MAIN_LAYOUT_SPACING 0
 #define BUTTON_SPACING 8
-#define CLOSE_BUTTON_SIZE 24,24
 
     m_mainLayout = new QVBoxLayout(this);
     this->setLayout(m_mainLayout);
     m_mainLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_mainLayout->setSpacing(MAIN_LAYOUT_SPACING);
-
-    m_titleLayout = new QHBoxLayout();
-    m_titleLabel = new QLabel(this);
-    m_titleLabel->setText(tr("Connect Enterprise WLAN"));
-    m_closeBtn = new QPushButton(this);
-    m_closeBtn->setFixedSize(CLOSE_BUTTON_SIZE);
-    m_closeBtn->setToolTip(tr("Close"));
-    m_closeBtn->setProperty("isWindowButton", 0x02);
-    m_closeBtn->setProperty("useIconHighlightEffect", 0x08);
-    m_closeBtn->setFlat(true);
-    m_closeBtn->setIcon(QIcon::fromTheme("window-close-symbolic"));
-    m_titleLayout->addWidget(m_titleLabel);
-    m_titleLayout->addStretch();
-    m_titleLayout->addWidget(m_closeBtn);
 
     m_ssidLayout = new QHBoxLayout();
     m_ssidLayout->setContentsMargins(SSID_LAYOUT_MARGINS);
@@ -99,8 +85,6 @@ void EnterpriseWlanDialog::initUI()
     m_btnLayout->addStretch();
     m_btnLayout->addWidget(m_cancelBtn);
     m_btnLayout->addWidget(m_connectBtn);
-
-    m_mainLayout->addLayout(m_titleLayout);
     m_mainLayout->addLayout(m_ssidLayout);
     m_mainLayout->addWidget(m_securityPage);
     m_mainLayout->addLayout(m_btnLayout);

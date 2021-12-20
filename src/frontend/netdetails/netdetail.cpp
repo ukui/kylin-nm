@@ -47,14 +47,14 @@ void NetDetail::showDesktopNotify(const QString &message)
 
 void NetDetail::setNetdetailSomeEnable(bool on)
 {
-        detailPage->setEnabled(on);
-        ipv4Page->setEnabled(on);
-        ipv6Page->setEnabled(on);
-        securityPage->setEnabled(on);
-        createNetPage->setEnabled(on);
-        cancelBtn->setEnabled(on);
-        forgetBtn->setEnabled(on);
-        confimBtn->setEnabled(on);
+    detailPage->setEnabled(on);
+    ipv4Page->setEnabled(on);
+    ipv6Page->setEnabled(on);
+    securityPage->setEnabled(on);
+    createNetPage->setEnabled(on);
+    cancelBtn->setEnabled(on);
+    forgetBtn->setEnabled(on);
+    confimBtn->setEnabled(on);
 }
 
 NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent)

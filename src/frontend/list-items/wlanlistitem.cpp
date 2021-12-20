@@ -220,6 +220,7 @@ void WlanListItem::initWlanUI()
 #define CONNECT_BUTTON_WIDTH 96
 #define FRAME_CONTENT_MARGINS 56,0,16,4
 #define FRAME_SPACING 8
+#define LINEEDIT_WIDTH 220
 #define PWD_CONTENT_MARGINS 8,0,34,0
 #define SHOW_PWD_BUTTON_SIZE 24,24
 #define PWD_LAYOUT_MARGINS 8,0,8,0
@@ -231,6 +232,7 @@ void WlanListItem::initWlanUI()
     m_pwdFrame->setLayout(m_pwdFrameLyt);
 
     m_pwdLineEdit  = new QLineEdit(m_pwdFrame);
+    m_pwdLineEdit->setFixedWidth(LINEEDIT_WIDTH);
     m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
     m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
@@ -266,6 +268,7 @@ void WlanListItem::initWlanUI()
     m_connectButton->setEnabled(false);
     connect(m_connectButton, &QPushButton::clicked, this, &WlanListItem::onConnectButtonClicked);
     m_pwdFrameLyt->addWidget(m_connectButton);
+    m_pwdFrameLyt->addStretch();
 
     //自动连接选择区域UI
     m_autoConnectFrame = new QFrame(this);

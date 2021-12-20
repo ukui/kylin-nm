@@ -45,6 +45,18 @@ void NetDetail::showDesktopNotify(const QString &message)
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
 
+void NetDetail::setNetdetailSomeEnable(bool on)
+{
+    detailPage->setEnabled(on);
+    ipv4Page->setEnabled(on);
+    ipv6Page->setEnabled(on);
+    securityPage->setEnabled(on);
+    createNetPage->setEnabled(on);
+    cancelBtn->setEnabled(on);
+    forgetBtn->setEnabled(on);
+    confimBtn->setEnabled(on);
+}
+
 NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent)
     :m_deviceName(interface),
      m_name(name),
@@ -593,20 +605,20 @@ void NetDetail::initTtlsInfo(ConInfo &conInfo)
 void NetDetail::on_btnConfirm_clicked()
 {
     qDebug() << "on_btnConfirm_clicked";
-    setEnabled(false);
+    setNetdetailSomeEnable(false);
     if (m_isCreateNet) {
         if (!isWlan) {
             //新建有线连接
             qDebug() << "Confirm create wired connect";
             if (!createWiredConnect()) {
-                setEnabled(true);
+                setNetdetailSomeEnable(true);
                 return;
             }
         } else {
             //新建无线连接
             qDebug() << "Confirm create wireless connect";
             if (!createWirelessConnect()) {
-                setEnabled(true);
+                setNetdetailSomeEnable(true);
                 return;
             }
         }
@@ -614,7 +626,7 @@ void NetDetail::on_btnConfirm_clicked()
         //更新连接
         qDebug() << "Confirm update connect";
         if (!updateConnect()) {
-            setEnabled(true);
+            setNetdetailSomeEnable(true);
             return;
         }
     }

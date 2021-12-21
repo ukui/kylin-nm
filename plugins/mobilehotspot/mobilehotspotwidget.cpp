@@ -623,6 +623,7 @@ void MobileHotspotWidget::setWidgetHidden(bool isHidden)
     } else {
         m_switchBtn->setDisabledFlag(false);
     }
+    onGsettingChanged(WIRELESS_SWITCH);
 }
 
 void MobileHotspotWidget::updateBandCombox()

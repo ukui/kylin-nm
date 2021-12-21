@@ -102,6 +102,7 @@ protected:
 
 public slots:
     virtual void onDeviceComboxIndexChanged(int currentIndex) = 0;
+    void onPaletteChanged();
 
 };
 

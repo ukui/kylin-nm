@@ -118,7 +118,7 @@ private:
     void initWindowTheme();
     void resetWindowTheme();
     void showControlCenter();
-    double m_transparency=0.0;  //透明度
+    double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
     int currentIconIndex=0;
     QList<QIcon> loadIcons;

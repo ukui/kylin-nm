@@ -746,7 +746,6 @@ void LanPage::initUI()
     m_titleLabel->setText(tr("LAN"));
 
     m_activatedNetLabel->setText(tr("Activated LAN"));
-    m_activatedNetLabel->setDisabled(true);
     m_activatedLanListWidget = new QListWidget(m_activatedNetFrame);
     m_activatedLanListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_activatedLanListWidget->setSpacing(LAN_LIST_SPACING);
@@ -755,7 +754,6 @@ void LanPage::initUI()
     m_activatedNetLayout->addWidget(m_activatedLanListWidget);
 
     m_inactivatedNetLabel->setText(tr("Inactivated LAN"));
-    m_inactivatedNetLabel->setDisabled(true);
     m_inactivatedLanListWidget = new QListWidget(m_inactivatedNetListArea);
     m_inactivatedLanListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_inactivatedLanListWidget->setSpacing(LAN_LIST_SPACING);

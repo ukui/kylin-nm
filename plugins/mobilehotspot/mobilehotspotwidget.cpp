@@ -556,7 +556,6 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
             m_interfaceComboBox->setCurrentIndex(index);
             m_switchBtn->setChecked(true);
             m_switchBtn->setDisabledFlag(false);
-            onGsettingChanged(WIRELESS_SWITCH);
             m_pwdNameLine->setText(info.at(0));
             m_interfaceName = devName;
             updateBandCombox();

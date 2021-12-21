@@ -173,9 +173,9 @@ void NetConnect::initComponent() {
     ui->availableLayout->setSpacing(SPACING);
     ui->horizontalLayout->setContentsMargins(TOP_MARGINS);
 
-//    connect(wiredSwitch, &SwitchButton::disabledClick, this, [=]() {
-//        showDesktopNotify(tr("No ethernet device avaliable"));
-//    });
+    connect(wiredSwitch, &SwitchButton::disabledClick, this, [=]() {
+        showDesktopNotify(tr("No ethernet device avaliable"));
+    });
 
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);

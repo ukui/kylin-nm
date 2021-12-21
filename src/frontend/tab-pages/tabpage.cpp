@@ -2,10 +2,12 @@
 #include <qsettings.h>
 #include <QDBusInterface>
 #include <QLabel>
+#include <QApplication>
 
 TabPage::TabPage(QWidget *parent) : QWidget(parent)
 {
     initUI();
+    connect(qApp, &QApplication::paletteChanged, this, &TabPage::onPaletteChanged);
 }
 
 TabPage::~TabPage()
@@ -43,13 +45,7 @@ void TabPage::initUI()
     m_deviceLabel->setText(tr("Current Device"));
     m_deviceComboBox = new QComboBox(m_deviceFrame);
     m_deviceComboBox->setFixedWidth(DEVICE_COMBOBOX_WIDTH);
-    if (m_deviceComboBox->view()) {
-        QPalette view_pal = m_deviceComboBox->view()->palette();
-        QColor view_color = m_deviceComboBox->palette().color(QPalette::Active, QPalette::Button);
-        view_pal.setColor(QPalette::Base, view_color);
-        m_deviceComboBox->setPalette(view_pal);
-        m_deviceComboBox->view()->setPalette(view_pal);
-    }
+
     m_tipsLabel = new QLabel(m_deviceFrame);
     m_tipsLabel->setText(tr("Devices Closed!"));
     m_deviceLayout->addWidget(m_deviceLabel);
@@ -121,11 +117,24 @@ void TabPage::initUI()
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));     //背景透明
     m_inactivatedNetListArea->setPalette(pal);
 
+    onPaletteChanged();
+}
+
+void TabPage::onPaletteChanged()
+{
     QPalette labPal = m_activatedNetLabel->palette();
     QColor color = labPal.color(QPalette::PlaceholderText);
     labPal.setColor(QPalette::WindowText, color);
     m_activatedNetLabel->setPalette(labPal);
     m_inactivatedNetLabel->setPalette(labPal);
+
+    if (m_deviceComboBox->view()) {
+        QPalette view_pal = m_deviceComboBox->view()->palette();
+        QColor view_color = m_deviceComboBox->palette().color(QPalette::Active, QPalette::Button);
+        view_pal.setColor(QPalette::Base, view_color);
+        m_deviceComboBox->setPalette(view_pal);
+        m_deviceComboBox->view()->setPalette(view_pal);
+    }
 }
 
 void TabPage::showDesktopNotify(const QString &message)

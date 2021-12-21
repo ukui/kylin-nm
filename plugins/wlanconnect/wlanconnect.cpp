@@ -188,9 +188,9 @@ void WlanConnect::initComponent() {
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
     ui->availableLayout->setSpacing(SPACING);
 
-    connect(m_wifiSwitch, &SwitchButton::disabledClick, this, [=]() {
-        showDesktopNotify(tr("No wireless network card detected"));
-    });
+//    connect(m_wifiSwitch, &SwitchButton::disabledClick, this, [=]() {
+//        showDesktopNotify(tr("No wireless network card detected"));
+//    });
 
     //开关
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {

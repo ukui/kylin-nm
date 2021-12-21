@@ -120,6 +120,12 @@ void TabPage::initUI()
     QPalette pal = m_inactivatedNetListArea->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));     //背景透明
     m_inactivatedNetListArea->setPalette(pal);
+
+    QPalette labPal = m_activatedNetLabel->palette();
+    QColor color = labPal.color(QPalette::PlaceholderText);
+    labPal.setColor(QPalette::WindowText, color);
+    m_activatedNetLabel->setPalette(labPal);
+    m_inactivatedNetLabel->setPalette(labPal);
 }
 
 void TabPage::showDesktopNotify(const QString &message)

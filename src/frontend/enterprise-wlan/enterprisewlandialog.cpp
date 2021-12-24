@@ -5,6 +5,9 @@
 #define MAIN_SIZE_EXPAND 400,500
 #define MAIN_SIZE_NARROW 400,400
 
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME "styleName"
+
 EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent) : QWidget(parent)
 {
     //设置窗口无边框，阴影
@@ -92,6 +95,7 @@ void EnterpriseWlanDialog::initUI()
 
     this->setFixedSize(MAIN_SIZE_EXPAND);
     initConnections();
+    onPaletteChanged();
 }
 
 void EnterpriseWlanDialog::centerToScreen()
@@ -114,6 +118,27 @@ void EnterpriseWlanDialog::initConnections()
     connect(m_securityPage, &SecurityPage::setSecuPageState, this, [ = ](bool status) {
        m_connectBtn->setEnabled(status);
     });
+
+    connect(qApp, &QApplication::paletteChanged, this, &EnterpriseWlanDialog::onPaletteChanged);
+}
+
+void EnterpriseWlanDialog::onPaletteChanged()
+{
+    QPalette pal = qApp->palette();
+
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = lightPalette(this);
+       }
+    }
+
+    this->setPalette(pal);
+
+    setFramePalette(m_securityPage, pal);
 }
 
 void EnterpriseWlanDialog::initData()

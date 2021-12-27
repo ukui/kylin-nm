@@ -252,10 +252,9 @@ void WlanListItem::initWlanUI()
     m_pwdLineEdit->setLayout(m_pwdLineEditLyt);
 
     m_showPwdButton = new QPushButton(m_pwdLineEdit);
-    m_showPwdButton->setStyleSheet("QPushButton{color:white; background-color:transparent;}");
+    m_showPwdButton->setFlat(true);     //去除边框
     m_showPwdButton->installEventFilter(this);
     m_showPwdButton->setFixedSize(SHOW_PWD_BUTTON_SIZE);
-    m_showPwdButton->setAutoFillBackground(false);
     m_showPwdButton->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
     m_showPwdButton->setCursor(Qt::PointingHandCursor);
     connect(m_showPwdButton, &QPushButton::clicked, this, &WlanListItem::onShowPwdButtonClicked);

@@ -522,12 +522,12 @@
     <message>
         <location filename="../src/frontend/tab-pages/lanpage.cpp" line="712"/>
         <source>Activated LAN</source>
-        <translation>已激活</translation>
+        <translation>我的网络</translation>
     </message>
     <message>
         <location filename="../src/frontend/tab-pages/lanpage.cpp" line="721"/>
         <source>Inactivated LAN</source>
-        <translation>未激活</translation>
+        <translation>其他网络</translation>
     </message>
     <message>
         <location filename="../src/frontend/tab-pages/lanpage.cpp" line="814"/>
@@ -1026,12 +1026,12 @@
     <message>
         <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="73"/>
         <source>Activated WLAN</source>
-        <translation>已激活</translation>
+        <translation>我的网络</translation>
     </message>
     <message>
         <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="83"/>
         <source>Other WLAN</source>
-        <translation>其他</translation>
+        <translation>其他网络</translation>
     </message>
     <message>
         <source>More...</source>

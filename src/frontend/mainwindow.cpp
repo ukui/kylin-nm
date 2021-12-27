@@ -162,7 +162,7 @@ void MainWindow::onTransChanged()
 void MainWindow::paintWithTrans()
 {
     QPalette pal = m_centralWidget->palette();
-    QColor color = m_centralWidget->palette().base().color();
+    QColor color = qApp->palette().base().color();
     color.setAlphaF(m_transparency);
     pal.setColor(QPalette::Base, color);
     m_centralWidget->setPalette(pal);
@@ -170,11 +170,11 @@ void MainWindow::paintWithTrans()
     QPalette tabPal = m_centralWidget->tabBar()->palette();
     tabPal.setColor(QPalette::Base, color);
 
-    QColor inactiveColor = pal.color(QPalette::Window);
+    QColor inactiveColor = qApp->palette().window().color();
     inactiveColor.setAlphaF(0.75 *m_transparency);
-    pal.setColor(QPalette::Window, inactiveColor);
+    tabPal.setColor(QPalette::Window, inactiveColor);
 
-    m_centralWidget->tabBar()->setPalette(pal);
+    m_centralWidget->tabBar()->setPalette(tabPal);
 }
 
 /**

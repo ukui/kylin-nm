@@ -129,6 +129,7 @@ void SecurityPage::initUI()
                                        "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
     userPwdBox->setCursor(Qt::PointingHandCursor);
     userPwdBox->setFixedSize(30, userPwdEdit->height());
+    userPwdBox->setFocusPolicy(Qt::NoFocus);
     //防止文本框输入内容位于按钮之下
     userPwdEdit->setTextMargins(margins.left(), margins.top(), userPwdBox->width(), margins.bottom());
     QHBoxLayout *puserPwdLayout = new QHBoxLayout();

@@ -1177,7 +1177,7 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
 bool LanPage::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_settingsLabel) {
-        if (event->type() == QEvent::MouseButtonPress) {
+        if (event->type() == QEvent::MouseButtonRelease) {
             onShowControlCenter();
         }
     }

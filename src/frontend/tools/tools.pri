@@ -5,7 +5,8 @@ HEADERS += \
     $$PWD/infobutton.h \
     $$PWD/loadingdiv.h \
     $$PWD/radioitembutton.h \
-    $$PWD/switchbutton.h
+    $$PWD/switchbutton.h \
+    $$PWD/kylable.h
 
 
 SOURCES += \
@@ -13,4 +14,5 @@ SOURCES += \
     $$PWD/infobutton.cpp \
     $$PWD/loadingdiv.cpp \
     $$PWD/radioitembutton.cpp \
-    $$PWD/switchbutton.cpp
+    $$PWD/switchbutton.cpp \
+    $$PWD/kylable.cpp

@@ -3,6 +3,7 @@
 
 #include "divider.h"
 #include "switchbutton.h"
+#include "kylable.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -91,7 +92,7 @@ protected:
 
     QFrame * m_settingsFrame = nullptr;
     QHBoxLayout * m_settingsLayout = nullptr;
-    QLabel * m_settingsLabel = nullptr;
+    KyLable * m_settingsLabel = nullptr;
 
     //临时增加的下拉框选择网卡区域
     QFrame * m_deviceFrame = nullptr;

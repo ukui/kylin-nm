@@ -56,6 +56,7 @@ private:
 private slots:
     void onBtnConnectClicked();
     void onEapTypeChanged(const KyEapMethodType &type);
+    void onPaletteChanged();
 
 signals:
     void enterpriseWlanDialogClose(bool);

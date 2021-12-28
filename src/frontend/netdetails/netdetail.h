@@ -78,8 +78,6 @@ private:
     void showDesktopNotify(const QString &message);
 
     void setNetdetailSomeEnable(bool on);
-
-    QPalette lightPalette() const;
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyConnectOperation* m_connectOperation = nullptr;

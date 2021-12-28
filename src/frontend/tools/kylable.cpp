@@ -4,8 +4,32 @@
 #include <QApplication>
 
 #define FOREGROUND_COLOR_NORMAL qApp->palette().text().color()
-#define FOREGROUND_COLOR_HOVER qApp->palette().brightText().color()
-#define FOREGROUND_COLOR_PRESS qApp->palette().brightText().color()
+
+static inline qreal mixQreal(qreal a, qreal b, qreal bias)
+{
+    return a + (b - a) * bias;
+}
+
+
+QColor mixColor(const QColor &c1, const QColor &c2, qreal bias)
+{
+    if (bias <= 0.0) {
+        return c1;
+    }
+    if (bias >= 1.0) {
+        return c2;
+    }
+    if (qIsNaN(bias)) {
+        return c1;
+    }
+
+    qreal r = mixQreal(c1.redF(),   c2.redF(),   bias);
+    qreal g = mixQreal(c1.greenF(), c2.greenF(), bias);
+    qreal b = mixQreal(c1.blueF(),  c2.blueF(),  bias);
+    qreal a = mixQreal(c1.alphaF(), c2.alphaF(), bias);
+
+    return QColor::fromRgbF(r, g, b, a);
+}
 
 KyLable::KyLable(QWidget *parent) : QLabel(parent)
 {
@@ -21,16 +45,16 @@ void KyLable::onPaletteChanged()
 
 void KyLable::setPressColor()
 {
-    QColor color = FOREGROUND_COLOR_HOVER;
-    color.setAlphaF(0.2);
-    m_foregroundColor = color;
+    QColor hightlight = this->palette().color(QPalette::Active,QPalette::Highlight);
+    QColor mix = this->palette().color(QPalette::Active,QPalette::BrightText);
+    m_foregroundColor = mixColor(hightlight, mix, 0.05);
 }
 
 void KyLable::setHoverColor()
 {
-    QColor color = FOREGROUND_COLOR_HOVER;
-    color.setAlphaF(0.05);
-    m_foregroundColor = color;
+    QColor hightlight = this->palette().color(QPalette::Active,QPalette::Highlight);
+    QColor mix = this->palette().color(QPalette::Active,QPalette::BrightText);
+    m_foregroundColor = mixColor(hightlight, mix, 0.2);
 }
 
 void KyLable::setNormalColor()
@@ -40,7 +64,7 @@ void KyLable::setNormalColor()
 
 void KyLable::paintEvent(QPaintEvent *event)
 {
-    QPalette pal = qApp->palette();
+    QPalette pal = this->palette();
     pal.setColor(QPalette::WindowText, m_foregroundColor);
     this->setPalette(pal);
     return QLabel::paintEvent(event);

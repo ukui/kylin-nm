@@ -37,6 +37,8 @@ protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
 
 private:
     bool m_isActivated = false;
@@ -45,6 +47,7 @@ private:
     QVariantAnimation * m_animation = nullptr;
 
     QPixmap m_pixmap;
+    QIcon m_icon;
 
     void refreshButtonIcon();
 

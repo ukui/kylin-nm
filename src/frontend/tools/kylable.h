@@ -21,6 +21,10 @@ protected:
 private:
     QColor m_foregroundColor;
 
+    void setPressColor();
+    void setHoverColor();
+    void setNormalColor();
+
 private slots:
     void onPaletteChanged();
 

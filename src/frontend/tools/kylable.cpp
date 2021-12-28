@@ -4,8 +4,8 @@
 #include <QApplication>
 
 #define FOREGROUND_COLOR_NORMAL qApp->palette().text().color()
-#define FOREGROUND_COLOR_HOVER QColor(55,144,250,255)
-#define FOREGROUND_COLOR_PRESS QColor(36,109,212,255)
+#define FOREGROUND_COLOR_HOVER qApp->palette().brightText().color()
+#define FOREGROUND_COLOR_PRESS qApp->palette().brightText().color()
 
 KyLable::KyLable(QWidget *parent) : QLabel(parent)
 {
@@ -19,6 +19,25 @@ void KyLable::onPaletteChanged()
     this->repaint();
 }
 
+void KyLable::setPressColor()
+{
+    QColor color = FOREGROUND_COLOR_HOVER;
+    color.setAlphaF(0.2);
+    m_foregroundColor = color;
+}
+
+void KyLable::setHoverColor()
+{
+    QColor color = FOREGROUND_COLOR_HOVER;
+    color.setAlphaF(0.05);
+    m_foregroundColor = color;
+}
+
+void KyLable::setNormalColor()
+{
+    m_foregroundColor = FOREGROUND_COLOR_NORMAL;
+}
+
 void KyLable::paintEvent(QPaintEvent *event)
 {
     QPalette pal = qApp->palette();
@@ -29,26 +48,26 @@ void KyLable::paintEvent(QPaintEvent *event)
 
 void KyLable::enterEvent(QEvent *event)
 {
-    m_foregroundColor = FOREGROUND_COLOR_HOVER;
+    setHoverColor();
     this->update();
 }
 
 void KyLable::leaveEvent(QEvent *event)
 {
-    m_foregroundColor = FOREGROUND_COLOR_NORMAL;
+    setNormalColor();
     this->update();
 }
 
 void KyLable::mousePressEvent(QMouseEvent *event)
 {
-    m_foregroundColor = FOREGROUND_COLOR_PRESS;
+    setPressColor();
     this->update();
     return QLabel::mousePressEvent(event);
 }
 
 void KyLable::mouseReleaseEvent(QMouseEvent *event)
 {
-    m_foregroundColor = FOREGROUND_COLOR_HOVER;
+    setHoverColor();
     this->update();
     return QLabel::mouseReleaseEvent(event);
 }

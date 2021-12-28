@@ -58,7 +58,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
 {
-    if (e->type() == QEvent::MouseButtonPress) {
+    if (e->type() == QEvent::MouseButtonRelease) {
         if (w == m_settingsLabel) {
             //ZJP_TODO 打开控制面板
             qDebug() << LOG_FLAG <<"recive event show control center";

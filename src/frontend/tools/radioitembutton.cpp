@@ -139,35 +139,63 @@ void RadioItemButton::paintEvent(QPaintEvent *event)
 
 void RadioItemButton::mousePressEvent(QMouseEvent *event)
 {
-    m_backgroundColor = m_isActivated? FOREGROUND_COLOR_PRESS_ACTIVE :
-                                       (qApp->palette().base().color().red() > MIDDLE_COLOR ?
-                                            FOREGROUND_COLOR_PRESS_INACTIVE_LIGHT :
-                                            FOREGROUND_COLOR_PRESS_INACTIVE_DARK);
-    this->repaint();
+    if (m_isActivated) {
+        m_backgroundColor = qApp->palette().highlight().color();
+    } else {
+        m_backgroundColor = qApp->palette().brightText().color();
+        m_backgroundColor.setAlphaF(0.21);
+    }
+    this->update();
     return QPushButton::mousePressEvent(event);
 }
 
 void RadioItemButton::mouseReleaseEvent(QMouseEvent *event)
 {
-    m_backgroundColor = m_isActivated? FOREGROUND_COLOR_NORMAL_ACTIVE :
-                                       (qApp->palette().base().color().red() > MIDDLE_COLOR ?
-                                            FOREGROUND_COLOR_NORMAL_INACTIVE_LIGHT :
-                                            FOREGROUND_COLOR_NORMAL_INACTIVE_DARK);
-    this->repaint();
+    if (m_isActivated) {
+        m_backgroundColor = qApp->palette().highlight().color();
+    } else {
+        m_backgroundColor = qApp->palette().brightText().color();
+        m_backgroundColor.setAlphaF(0.18);
+    }
+    this->update();
     return QPushButton::mouseReleaseEvent(event);
+}
+
+void RadioItemButton::enterEvent(QEvent *event)
+{
+    if (m_isActivated) {
+        m_backgroundColor = qApp->palette().highlight().color();
+    } else {
+        m_backgroundColor = qApp->palette().brightText().color();
+        m_backgroundColor.setAlphaF(0.32);
+    }
+    this->update();
+    return QPushButton::enterEvent(event);
+}
+
+void RadioItemButton::leaveEvent(QEvent *event)
+{
+    if (m_isActivated) {
+        m_backgroundColor = qApp->palette().highlight().color();
+    } else {
+        m_backgroundColor = qApp->palette().brightText().color();
+        m_backgroundColor.setAlphaF(0.18);
+    }
+    this->update();
+    return QPushButton::leaveEvent(event);
 }
 
 void RadioItemButton::refreshButtonIcon()
 {
     if (m_isActivated) {
-        m_backgroundColor = FOREGROUND_COLOR_NORMAL_ACTIVE;
+        m_backgroundColor = qApp->palette().highlight().color();
         m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
     } else {
+        m_backgroundColor = qApp->palette().brightText().color();
+        m_backgroundColor.setAlphaF(0.18);
         if (qApp->palette().base().color().red() > MIDDLE_COLOR) {
-            m_backgroundColor = FOREGROUND_COLOR_NORMAL_INACTIVE_LIGHT;
             m_iconLabel->setPixmap(m_pixmap);
         } else {
-            m_backgroundColor = FOREGROUND_COLOR_NORMAL_INACTIVE_DARK;
             m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
         }
     }

@@ -47,7 +47,6 @@ private:
     QVariantAnimation * m_animation = nullptr;
 
     QPixmap m_pixmap;
-    QIcon m_icon;
 
     void refreshButtonIcon();
 

@@ -145,7 +145,7 @@ void RadioItemButton::mousePressEvent(QMouseEvent *event)
         m_backgroundColor = qApp->palette().brightText().color();
         m_backgroundColor.setAlphaF(0.21);
     }
-    this->repaint();
+    this->update();
     return QPushButton::mousePressEvent(event);
 }
 
@@ -157,7 +157,7 @@ void RadioItemButton::mouseReleaseEvent(QMouseEvent *event)
         m_backgroundColor = qApp->palette().brightText().color();
         m_backgroundColor.setAlphaF(0.18);
     }
-    this->repaint();
+    this->update();
     return QPushButton::mouseReleaseEvent(event);
 }
 
@@ -169,7 +169,7 @@ void RadioItemButton::enterEvent(QEvent *event)
         m_backgroundColor = qApp->palette().brightText().color();
         m_backgroundColor.setAlphaF(0.32);
     }
-    this->repaint();
+    this->update();
     return QPushButton::enterEvent(event);
 }
 
@@ -181,7 +181,7 @@ void RadioItemButton::leaveEvent(QEvent *event)
         m_backgroundColor = qApp->palette().brightText().color();
         m_backgroundColor.setAlphaF(0.18);
     }
-    this->repaint();
+    this->update();
     return QPushButton::leaveEvent(event);
 }
 

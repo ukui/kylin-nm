@@ -79,6 +79,7 @@ void WlanPage::initWlanUI()
     m_activatedNetListWidget->setContentsMargins(MAIN_LAYOUT_MARGINS);
     m_activatedNetListWidget->setSpacing(NET_LIST_SPACING);
     m_activatedNetListWidget->setFixedHeight(NORMAL_HEIGHT);
+    m_activatedNetListWidget->setFixedWidth(383);
     m_activatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_activatedNetLayout->addWidget(m_activatedNetListWidget);
 
@@ -382,6 +383,9 @@ void WlanPage::deleteWirelessItemFormMap(QMap<QString, QListWidgetItem*> &wirele
     delete p_listWidgetItem;
     p_listWidgetItem = nullptr;
 
+    if (m_inactivatedNetListWidget->count() < 4) {
+        m_inactivatedNetListWidget->setFixedWidth(383);
+    }
     return;
 }
 
@@ -457,7 +461,11 @@ void WlanPage::constructWirelessNetArea()
 
     qDebug() << "[WlanPage] Stopped loading wireless net list! time="
              << QDateTime::currentDateTime().toString("hh:mm:ss.zzzz");
-
+    if (m_inactivatedNetListWidget->count() < 4) {
+        m_inactivatedNetListWidget->setFixedWidth(383);
+    } else {
+        m_inactivatedNetListWidget->setFixedWidth(400);
+    }
     return;
 }
 
@@ -507,7 +515,9 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
     updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
 
     addWlanMoreItem();
-
+    if (m_inactivatedNetListWidget->count() >= 4) {
+        m_inactivatedNetListWidget->setFixedWidth(400);
+    }
     return;
 }
 
@@ -826,7 +836,9 @@ void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
     m_activateConnectionItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
 
     m_activatedNetListWidget->setFixedHeight(p_listWidgetItem->sizeHint().height());
-
+    if (m_inactivatedNetListWidget->count() < 4) {
+        m_inactivatedNetListWidget->setFixedWidth(383);
+    }
     return;
 }
 
@@ -857,7 +869,11 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
 
     // 更新‘更多’条目，以保证其处于listwidget的最底部
     addWlanMoreItem();
-
+    if (m_inactivatedNetListWidget->count() < 4) {
+        m_inactivatedNetListWidget->setFixedWidth(383);
+    } else {
+        m_inactivatedNetListWidget->setFixedWidth(400);
+    }
     return;
 }
 

@@ -18,10 +18,18 @@
 #include "switchbutton.h"
 #define SWITCH_WIDTH 48
 #define SWITCH_HEIGHT 24
+#define COLOR_ACTIVE QColor(55,144,250,255)
+#define COLOR_INACTIVE QColor(55,55,55,255)
+#define COLOR_ACTIVE_HOVER QColor(95,166,251,255)
+#define COLOR_INACTIVE_HOVER QColor(95,95,95,255)
+#define COLOR_ACTIVE_PRESS QColor(65,150,250,255)
+#define COLOR_INACTIVE_PRESS QColor(65,65,65,255)
+#define COLOR_UNABLE QColor(76,76,79,255)
 
 SwitchButton::SwitchButton(QWidget *parent) : QWidget(parent)
 {
-
+    m_colorActive = COLOR_ACTIVE;
+    m_colorInactive = COLOR_INACTIVE;
     setFixedSize(SWITCH_WIDTH,SWITCH_HEIGHT);
     m_fWidth = (float)width();
     m_fHeight = (float)height();
@@ -34,7 +42,6 @@ SwitchButton::SwitchButton(QWidget *parent) : QWidget(parent)
     else {
         m_fCurrentValue = 4;
     }
-
     connect(m_cTimer, SIGNAL(timeout()), this, SLOT(startAnimation()));
 
 
@@ -49,7 +56,6 @@ void SwitchButton::setSwitchStatus(bool check) {
     } else {
         m_bIsOn = 0;
     }
-
     emit this->switchStatusChanged();
 
     m_cTimer->start(); //开始播放动画
@@ -106,6 +112,30 @@ void SwitchButton::mousePressEvent(QMouseEvent *event) {
     return QWidget::mousePressEvent(event);
 }
 
+void SwitchButton::enterEvent(QEvent *event)
+{
+    if (m_enabled && m_bIsOn) {
+        m_colorActive = COLOR_ACTIVE_HOVER;
+    }
+    else if (m_enabled && !m_bIsOn) {
+        m_colorInactive = COLOR_INACTIVE_HOVER;
+    }
+    this->update();
+    return QWidget::enterEvent(event);
+}
+
+void SwitchButton::leaveEvent(QEvent *event)
+{
+    if (m_enabled && m_bIsOn) {
+        m_colorActive = COLOR_ACTIVE;
+    }
+    else if (m_enabled && !m_bIsOn) {
+        m_colorInactive = COLOR_INACTIVE;
+    }
+    this->update();
+    return QWidget::leaveEvent(event);
+}
+
 /* 绘制滑动按钮主体 */
 void SwitchButton::paintEvent(QPaintEvent *event) {
     Q_UNUSED(event);
@@ -113,28 +143,28 @@ void SwitchButton::paintEvent(QPaintEvent *event) {
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
     painter.setRenderHint(QPainter::Antialiasing); //抗锯齿效果
     painter.setPen(Qt::NoPen);
-    QColor colorActive(61,107,229);
-    QColor colorInactive(190,190,190);
-    colorInactive.setAlphaF(0.12);
     if(m_bIsOn && m_enabled) {
         painter.save();
-        painter.setBrush(colorActive);
+        painter.setBrush(m_colorActive);
         QRectF active_rect = QRectF(0,0,m_fWidth,m_fHeight);
         painter.drawRoundedRect(active_rect, 0.5 * m_fHeight, 0.5 * m_fHeight); //画开启状态
     } else {
         painter.save();
-        painter.setBrush(colorInactive);
+        painter.setBrush(m_colorInactive);
         QRectF inactive_rect = QRectF(0 ,0,m_fWidth,m_fHeight);
         painter.drawRoundedRect(inactive_rect, 0.5 * m_fHeight, 0.5 * m_fHeight); //画关闭状态
     }
     painter.restore();
     painter.save();
     if (!m_enabled) {
-        painter.setBrush(Qt::darkGray);
+        painter.setBrush(COLOR_UNABLE);
+//        QRectF enableRect = QRectF(30, 10, 8, 4);
+//        painter.drawRoundedRect(enableRect, 2, 2);
     } else {
         painter.setBrush(Qt::white);
     }
     painter.drawEllipse(m_fCurrentValue,4, 16, 16);
+
     painter.restore();
 }
 

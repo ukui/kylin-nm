@@ -34,6 +34,8 @@ public:
     bool     getEnabled();
 
 private:
+    QColor          m_colorActive;
+    QColor          m_colorInactive;
     int             m_bIsOn = 1;
     QTimer          *m_cTimer;
     float           m_fWidth;
@@ -41,6 +43,8 @@ private:
     float           m_fCurrentValue;
     void            paintEvent(QPaintEvent *event);
     void            mousePressEvent(QMouseEvent *event);
+    void            enterEvent(QEvent *event);
+    void            leaveEvent(QEvent *event);
     bool            m_enabled = true;
 
 Q_SIGNALS:

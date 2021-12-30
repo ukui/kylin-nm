@@ -116,11 +116,12 @@ void SwitchButton::enterEvent(QEvent *event)
 {
     if (m_enabled && m_bIsOn) {
         m_colorActive = COLOR_ACTIVE_HOVER;
-    }
-    else if (m_enabled && !m_bIsOn) {
+    } else if (m_enabled && !m_bIsOn) {
         m_colorInactive = COLOR_INACTIVE_HOVER;
     }
+
     this->update();
+
     return QWidget::enterEvent(event);
 }
 
@@ -131,7 +132,9 @@ void SwitchButton::leaveEvent(QEvent *event)
     } else if (m_enabled && !m_bIsOn) {
         m_colorInactive = COLOR_INACTIVE;
     }
+
     this->update();
+
     return QWidget::leaveEvent(event);
 }
 

@@ -620,10 +620,12 @@ void MobileHotspotWidget::setWidgetHidden(bool isHidden)
         m_switchBtn->setChecked(false);
         m_switchBtn->setDisabledFlag(true);
         m_interfaceName = "";
+        m_uuid = "";
     } else {
         m_switchBtn->setDisabledFlag(false);
+        onGsettingChanged(WIRELESS_SWITCH);
     }
-    onGsettingChanged(WIRELESS_SWITCH);
+
 }
 
 void MobileHotspotWidget::updateBandCombox()

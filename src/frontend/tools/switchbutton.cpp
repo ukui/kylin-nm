@@ -128,8 +128,7 @@ void SwitchButton::leaveEvent(QEvent *event)
 {
     if (m_enabled && m_bIsOn) {
         m_colorActive = COLOR_ACTIVE;
-    }
-    else if (m_enabled && !m_bIsOn) {
+    } else if (m_enabled && !m_bIsOn) {
         m_colorInactive = COLOR_INACTIVE;
     }
     this->update();

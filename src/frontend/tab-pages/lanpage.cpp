@@ -413,9 +413,14 @@ void LanPage::constructConnectionArea()
 
             delete p_deactiveConnectionItem;
             p_deactiveConnectionItem = nullptr;
+
         }
     }
-
+    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+        m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
+    } else {
+        m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);
+    }
     return;
 }
 
@@ -457,7 +462,9 @@ bool LanPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
             p_listWidgetItem = nullptr;
 
             iter = connectMap.erase(iter);
-
+            if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+                m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
+            }
             return true;
         }
     }
@@ -478,6 +485,7 @@ void LanPage::onRemoveConnection(QString path)            //删除时后端会�
         if (m_activeConnectionMap.count() <= 0) {
             addEmptyConnectItem(m_activeConnectionMap, m_activatedLanListWidget);
         }
+
         return;
     }
 }
@@ -507,7 +515,9 @@ void LanPage::onAddConnection(QString uuid)               //新增一个有线�
 
     delete p_newItem;
     p_newItem = nullptr;
-
+    if (m_inactivatedLanListWidget->count() >= MAX_ITEMS) {
+        m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);
+    }
     return;
 }
 
@@ -750,6 +760,7 @@ void LanPage::initUI()
     m_activatedLanListWidget->setFrameShape(QFrame::Shape::NoFrame);
     m_activatedLanListWidget->setSpacing(LAN_LIST_SPACING);
     m_activatedLanListWidget->setFixedHeight(ITEM_HEIGHT);              //active区域固定高度,只显示一个条目
+    m_activatedLanListWidget->setFixedWidth(MIN_WIDTH);
     m_activatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_activatedNetLayout->addWidget(m_activatedLanListWidget);
 
@@ -805,7 +816,6 @@ QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listW
     p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_listWidgetItem->setSizeHint(QSize(listWidget->width(), ITEM_HEIGHT));
     listWidget->addItem(p_listWidgetItem);
-
     LanListItem *p_lanItem = nullptr;
     if (itemData != nullptr) {
         p_lanItem = new LanListItem(itemData, m_currentDeviceName);
@@ -817,7 +827,6 @@ QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listW
     }
 
     listWidget->setItemWidget(p_listWidgetItem, p_lanItem);
-
     return p_listWidgetItem;
 }
 
@@ -828,13 +837,15 @@ void LanPage::updateActivatedConnectionArea(KyConnectItem *p_newItem)
     }
 
     deleteConnectionMapItem(m_inactiveConnectionMap, m_inactivatedLanListWidget, p_newItem->m_connectUuid);
-
     if (p_newItem->m_ifaceName == m_currentDeviceName) {
         qDebug()<<"[LanPage]update active connection item"<<p_newItem->m_connectName;
         deleteConnectionMapItem(m_activeConnectionMap, m_activatedLanListWidget, EMPTY_CONNECT_UUID);
         QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_activatedLanListWidget);
         m_activeConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
         this->showDesktopNotify(tr("LAN Connected Successfully"));
+    }
+    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+        m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
     }
 
     return;
@@ -856,6 +867,11 @@ void LanPage::updateConnectionArea(KyConnectItem *p_newItem)
         QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_inactivatedLanListWidget);
         m_inactiveConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
         this->showDesktopNotify(tr("LAN Disconnected Successfully"));
+    }
+    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+        m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
+    } else {
+        m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);
     }
 
     return;

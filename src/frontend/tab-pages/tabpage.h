@@ -33,6 +33,10 @@
 #define INACTIVE_AREA_MIN_HEIGHT 170
 #define ACTIVE_AREA_MAX_HEIGHT 92
 
+#define MAX_ITEMS 4
+#define MAX_WIDTH 400
+#define MIN_WIDTH 383
+
 #define SCROLL_STEP 4
 
 enum KyDeviceType

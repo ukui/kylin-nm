@@ -203,8 +203,9 @@ void MainWindow::initUI()
     m_tabBarLayout->addWidget(m_lanLabel);
     m_tabBarLayout->addWidget(m_wlanLabel);
     m_centralWidget->tabBar()->setLayout(m_tabBarLayout);
+    m_centralWidget->tabBar()->setProperty("useTabbarSeparateLine", false);     // 去掉中间的分割线
+    m_centralWidget->setAttribute(Qt::WA_TranslucentBackground, true);          // 背景透明 解决切换黑屏问题
     connect(m_centralWidget, &QTabWidget::currentChanged, m_wlanWidget, &WlanPage::onWlanPageVisibleChanged);
-    m_centralWidget->setAttribute(Qt::WA_TranslucentBackground, true);
     paintWithTrans();
 }
 

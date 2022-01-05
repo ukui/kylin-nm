@@ -106,9 +106,8 @@ void SwitchButton::mousePressEvent(QMouseEvent *event) {
 
     if (m_enabled) {
         m_bIsOn = !m_bIsOn;
-        Q_EMIT clicked(m_bIsOn);
     }
-
+    Q_EMIT clicked();
     return QWidget::mousePressEvent(event);
 }
 

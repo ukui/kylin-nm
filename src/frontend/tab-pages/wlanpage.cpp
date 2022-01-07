@@ -125,8 +125,9 @@ void WlanPage::onWlanSwitchClicked()
 {
     if (m_devList.isEmpty()) {
         showDesktopNotify(tr("No wireless network card detected"));
-        //检测不到无线网卡不再触发click信号
+        //检测不到无线网卡不再触发click信号       
         m_netSwitch->setSwitchStatus(false);
+        m_netSwitch->setEnabled(false);
     } else {
         bool switchEnable = m_netSwitch->getSwitchStatus();
         if (m_wlanSwitchEnable != switchEnable) {
@@ -154,15 +155,16 @@ void WlanPage::initWlanSwitchState()
         if (m_switchGsettings->keys().contains(WIRELESS_SWITCH)) {
             if (m_devList.isEmpty()) {
                 m_wlanSwitchEnable = false;
+                m_netSwitch->setSwitchStatus(m_wlanSwitchEnable);
+                m_netSwitch->setEnabled(false);
             } else {
                 m_wlanSwitchEnable = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
             }
             connect(m_switchGsettings, &QGSettings::changed, this, &WlanPage::onWlanSwithGsettingsChanged);
         }
     }
-
     m_netSwitch->setSwitchStatus(m_wlanSwitchEnable);
-    //m_netSwitch->setEnabled(m_wlanSwitchEnable);
+
 
     connect(m_netSwitch, &SwitchButton::clicked, this, &WlanPage::onWlanSwitchClicked);
 
@@ -188,7 +190,6 @@ void WlanPage::initDevice()
     m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, m_devList);
 
     m_currentDevice = getDefaultDeviceName(WIRELESS);
-
     return;
 }
 
@@ -229,8 +230,8 @@ void WlanPage::initDeviceCombox()
         }
     } else {
         m_deviceFrame->hide();
-        //m_currentDevice = "";
-        //setDefaultDevice(WIRELESS, m_currentDevice);
+        m_currentDevice = "";
+        setDefaultDevice(WIRELESS, m_currentDevice);
     }
 
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -655,7 +656,7 @@ void WlanPage::addDeviceToCombox(QString deviceName)
 
 void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
 {
-    qDebug() << LOG_FLAG << "deviceAdd" << deviceName;
+    qDebug() << LOG_FLAG << "currentDevice" << m_currentDevice << "deviceAdd" << deviceName;
     if (deviceType !=  NetworkManager::Device::Type::Wifi) {
         return;
     }
@@ -666,7 +667,7 @@ void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devi
 
     if (m_devList.isEmpty()) {
         m_wlanSwitchEnable = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
-        //m_netSwitch->setEnabled(m_wlanSwitchEnable);
+        m_netSwitch->setEnabled(true);
         m_netSwitch->setSwitchStatus(m_wlanSwitchEnable);
     }
 
@@ -728,8 +729,8 @@ void WlanPage::onDeviceRemove(QString deviceName)
 
     if (m_devList.isEmpty()) {
         m_wlanSwitchEnable = false;
-        //m_netSwitch->setEnabled(m_wlanSwitchEnable);
         m_netSwitch->setSwitchStatus(m_wlanSwitchEnable);
+        m_netSwitch->setEnabled(false);
     }
 
     if (originalDeviceName == deviceName) {

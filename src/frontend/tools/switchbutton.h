@@ -48,7 +48,7 @@ private:
     bool            m_enabled = true;
 
 Q_SIGNALS:
-    void clicked(int check);
+    void clicked();
     void switchStatusChanged();
 
 private Q_SLOTS:

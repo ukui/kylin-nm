@@ -106,7 +106,10 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     isDetailOk = !(m_name.isEmpty());
     isIpv4Ok = true;
     isIpv6Ok = true;
-    isSecuOk = true;
+    isSecuOk = false;
+    if (!m_uuid.isEmpty() || (m_uuid.isEmpty() && m_info.secType == NONE)) {
+        isSecuOk = true;
+    }
 
     qDebug() << interface << name << uuid <<  "isWlan" << isWlan << "isCreateNet" <<m_isCreateNet;
 
@@ -442,6 +445,10 @@ void NetDetail::getBaseInfo(ConInfo &conInfo)
                     if (conInfo.strSecType.isEmpty()) {
                         conInfo.strSecType = tr("None");
                     }
+
+                    if (!item.m_isConfigured) {
+                        conInfo.secType = item.m_kySecuType;
+                    }
             }
         } else {
             uint iHz,iChan;
@@ -458,16 +465,19 @@ void NetDetail::getBaseInfo(ConInfo &conInfo)
 
 
         KyKeyMgmt type = m_wirelessConnOpration->getConnectKeyMgmt(m_uuid);
-        if (type == WpaNone || type == Unknown) {
-            conInfo.secType = NONE;
-        } else if (type == WpaPsk) {
-            conInfo.secType = WPA_AND_WPA2_PERSONAL;
-        } else if (type == SAE) {
-            conInfo.secType = WPA3_PERSONAL;
-        } else if (type == WpaEap) {
-            conInfo.secType = WPA_AND_WPA2_ENTERPRISE;
-        } else {
-            qDebug() << "KeyMgmt not support now " << type;
+        if (!m_uuid.isEmpty()) {
+            KyKeyMgmt type = m_wirelessConnOpration->getConnectKeyMgmt(m_uuid);
+            if (type == WpaNone || type == Unknown) {
+                conInfo.secType = NONE;
+            } else if (type == WpaPsk) {
+                conInfo.secType = WPA_AND_WPA2_PERSONAL;
+            } else if (type == SAE) {
+                conInfo.secType = WPA3_PERSONAL;
+            } else if (type == WpaEap) {
+                conInfo.secType = WPA_AND_WPA2_ENTERPRISE;
+            } else {
+                qDebug() << "KeyMgmt not support now " << type;
+            }
         }
 
         initSecuData();

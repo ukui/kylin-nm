@@ -4,6 +4,7 @@
 #include <QString>
 
 #include "kylinnetworkresourcemanager.h"
+#include "kywirelessconnectoperation.h"
 
 QString enumToQstring(NetworkManager::AccessPoint::Capabilities, NetworkManager::AccessPoint::WpaFlags, NetworkManager::AccessPoint::WpaFlags);
 
@@ -25,6 +26,7 @@ public:
     int                                     m_signalStrength;
     uint                                    m_frequency;
     QString                                 m_secuType;
+    KySecuType                              m_kySecuType;
 
     //only for m_isConfiged = true
     bool                                    m_isConfigured;

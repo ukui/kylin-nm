@@ -28,8 +28,18 @@ WlanItem::WlanItem(bool bAcitve, bool isLock, QWidget *parent)
     mLanLyt->addStretch();
     mLanLyt->addWidget(statusLabel);
     mLanLyt->addWidget(infoLabel);
+
+    loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-3-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-4-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-5-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-6-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
+
     waitTimer = new QTimer(this);
-    connect(waitTimer, &QTimer::timeout, this, &WlanItem::waitAnimStep);
+    connect(waitTimer, &QTimer::timeout, this, &WlanItem::updateIcon);
+
 }
 
 WlanItem::~WlanItem()
@@ -37,14 +47,13 @@ WlanItem::~WlanItem()
 
 }
 
-void WlanItem::setWaitPage(int waitPage)
+void WlanItem::updateIcon()
 {
-    this->waitPage = waitPage;
-}
-
-void WlanItem::setCountCurrentTime(int countCurrentTime)
-{
-    this->countCurrentTime = countCurrentTime;
+    if (currentIconIndex > 6) {
+        currentIconIndex = 0;
+    }
+    statusLabel->setPixmap(loadIcons.at(currentIconIndex).pixmap(16,16));
+    currentIconIndex ++;
 }
 
 void WlanItem::startLoading()
@@ -56,40 +65,6 @@ void WlanItem::startLoading()
 void WlanItem::stopLoading(){
     waitTimer->stop();
     loading = false;
-}
-
-void WlanItem::waitAnimStep()
-{
-    QString qpmQss = "QLabel{background-image:url(':/img/plugins/netconnect/";
-    qpmQss.append(QString::number(this->waitPage));
-    QString imgPath = ":/img/plugins/netconnect/";
-    imgPath.append(QString::number(this->waitPage));
-
-    const QByteArray id(THEME_QT_SCHEMA);
-    themeGsettings = new QGSettings(id, QByteArray(), this);
-    if (themeGsettings->get(MODE_QT_KEY).toString() == "ukui-default") {
-        qpmQss.append("-black.png');}");
-        imgPath.append("-black.png");
-    } else {
-        qpmQss.append(".png');}");
-        imgPath.append(".png");
-
-    }
-    QImage img;
-    img.load(imgPath);
-    statusLabel->setText("");
-    statusLabel->setFixedSize(img.size());
-    statusLabel->setProperty("useIconHighlightEffect", 0x10);
-
-    statusLabel->setStyleSheet(qpmQss);
-    this->waitPage ++;
-    if (this->waitPage > TOTAL_PAGE) {
-        this->waitPage = 1; //循环播放8张图片
-    }
-    this->countCurrentTime += FRAME_SPEED;
-    if (this->countCurrentTime >= LIMIT_TIME) {
-        this->stopLoading(); //动画超出时间限制，强制停止动画
-    }
 }
 
 void WlanItem::paintEvent(QPaintEvent *event)

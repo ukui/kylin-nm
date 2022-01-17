@@ -986,26 +986,21 @@ void WlanConnect::removeOneWlanFrame(ItemFrame *frame, QString deviceName, QStri
 void WlanConnect::itemActiveConnectionStatusChanged(WlanItem *item, int status)
 {
     if (status == ACTIVATING) {
-        item->setCountCurrentTime(0);
-        item->setWaitPage(1);
         item->startLoading();
     } else if (status == ACTIVATED) {
         item->stopLoading();
-        item->statusLabel->setStyleSheet("");
+        item->statusLabel->clear();
         item->statusLabel->setMinimumSize(36,36);
         item->statusLabel->setMaximumSize(16777215,16777215);
         item->statusLabel->setText(tr("connected"));
         item->isAcitve = true;
     } else if (status == DEACTIVATING) {
-        item->setCountCurrentTime(0);
-        item->setWaitPage(1);
         item->startLoading();
     } else if (status == DEACTIVATED) {
         item->stopLoading();
-        item->statusLabel->setStyleSheet("");
+        item->statusLabel->clear();
         item->statusLabel->setMinimumSize(36,36);
         item->statusLabel->setMaximumSize(16777215,16777215);
-        item->statusLabel->setText("");
         item->isAcitve = false;
     }
 }

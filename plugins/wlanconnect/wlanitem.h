@@ -22,16 +22,11 @@ public:
     InfoButton * infoLabel = nullptr;
     FixLabel * titileLabel = nullptr;
     QLabel * statusLabel = nullptr;
-    int waitPage;
-    int countCurrentTime;
     QString uuid = "";
 
     void setHalfFillet(bool flag) {useHalfFillet = flag; repaint();}
 public:
     void startLoading();
-    void setWaitPage(int waitPage);
-    void setCountCurrentTime(int countCurrentTime);
-    void waitAnimStep();
     void stopLoading();
     bool isAcitve = false;
     bool loading = false;
@@ -46,6 +41,11 @@ private:
     QTimer *waitTimer = nullptr;
     QGSettings *themeGsettings = nullptr;
     bool useHalfFillet = false;
+    QList<QIcon> loadIcons;
+    int currentIconIndex=0;
+
+private slots:
+    void updateIcon();
 
 };
 

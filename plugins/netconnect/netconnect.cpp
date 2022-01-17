@@ -823,27 +823,22 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
 {
 //    QString iconPath = NoNetSymbolic;
     if (status == ACTIVATING) {
-        item->setCountCurrentTime(0);
-        item->setWaitPage(1);
         item->startLoading();
     } else if (status == ACTIVATED) {
         item->stopLoading();
 //        iconPath = KLanSymbolic;
-        item->statusLabel->setStyleSheet("");
+        item->statusLabel->clear();
         item->statusLabel->setMinimumSize(36,36);
         item->statusLabel->setMaximumSize(16777215,16777215);
         item->statusLabel->setText(tr("connected"));
         item->isAcitve = true;
     } else if (status == DEACTIVATING) {
-        item->setCountCurrentTime(0);
-        item->setWaitPage(1);
         item->startLoading();
     } else {
         item->stopLoading();
-        item->statusLabel->setStyleSheet("");
         item->statusLabel->setMinimumSize(36,36);
         item->statusLabel->setMaximumSize(16777215,16777215);
-        item->statusLabel->setText("");
+        item->statusLabel->clear();
         item->isAcitve = false;
     }
 

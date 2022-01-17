@@ -81,7 +81,29 @@ void KyWiredConnectOperation::updateWiredConnect(const QString &connectUuid, con
     NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
     updateConnect(connectSettingPtr, connectSettingsInfo);
 
-    connectPtr->update(connectSettingPtr->toMap());
+    NMVariantMapMap mapmap1 = connectSettingPtr->toMap();
+    if (mapmap1.contains("ipv4")) {
+        QVariantMap map1 = mapmap1.value(QLatin1String("ipv4"));
+        bool isAuto = false;
+        if (map1.contains("method") && map1["method"] == "auto") {
+            qDebug() << "[KyWiredConnectOperation] set ipv4 method auto, clear address-data && addresses && gateway";
+            isAuto = true;
+        }
+        if (isAuto) {
+            if (map1.contains("address-data")) {
+                map1.remove("address-data");
+            }
+            if (map1.contains("addresses")) {
+                map1.remove("addresses");
+            }
+            if (map1.contains("gateway")) {
+                map1.remove("gateway");
+            }
+        }
+        mapmap1["ipv4"] = map1;
+    }
+
+    connectPtr->update(mapmap1);
 
     return ;
 }

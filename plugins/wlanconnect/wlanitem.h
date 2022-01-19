@@ -10,7 +10,7 @@
 #include <QGSettings>
 #include <QImage>
 #include "fixlabel.h"
-#include "../component/InfoButton/infobutton.h"
+#include "infobutton.h"
 
 class WlanItem : public QPushButton
 {

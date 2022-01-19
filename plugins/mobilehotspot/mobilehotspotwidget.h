@@ -46,7 +46,7 @@ private:
     QLabel *m_interfaceLabel;
 
 
-    QCheckBox *m_pwdShowBox;
+    QPushButton *m_pwdShowBox;
 
     QFrame *switchAndApNameLine;
     QFrame *apNameAndPwdLine;

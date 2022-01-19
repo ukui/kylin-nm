@@ -11,7 +11,7 @@
 #include <QImage>
 #include <QPainter>
 #include "fixlabel.h"
-#include "../component/InfoButton/infobutton.h"
+#include "infobutton.h"
 
 class LanItem : public QPushButton
 {

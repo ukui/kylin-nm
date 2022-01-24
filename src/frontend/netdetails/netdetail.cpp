@@ -922,7 +922,7 @@ bool NetDetail::checkWirelessSecurity(KySecuType secuType)
             return false;
         }
     } else {
-        if (secuType == NONE && m_info.strSecType != "None") {
+        if (secuType == NONE && m_info.strSecType != tr("None")) {
             showDesktopNotify(tr("this wifi no support None type"));
             return false;
         } else if (secuType == WPA_AND_WPA2_PERSONAL

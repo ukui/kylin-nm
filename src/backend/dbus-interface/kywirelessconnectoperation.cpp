@@ -462,7 +462,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
         auto access_point = wifiNet->referenceAccessPoint();
         conn_uni = access_point->uni();
         conn_name = access_point->ssid();
-        spec_object = conn_uni;
+//        spec_object = conn_uni;
     qDebug() << "start findBestWirelessSecurity";
         NetworkManager::WirelessSecurityType sec_type = NetworkManager::findBestWirelessSecurity(spec_dev->wirelessCapabilities()
                                                                                                  , true, (spec_dev->mode() == NetworkManager::WirelessDevice::Adhoc)
@@ -553,7 +553,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTlsConnect(KyEapM
         auto access_point = wifiNet->referenceAccessPoint();
         conn_uni = access_point->uni();
         conn_name = access_point->ssid();
-        spec_object = conn_uni;
+//        spec_object = conn_uni;
     }
 
     auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
@@ -610,7 +610,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPrisePeapConnect(KyEap
 
         conn_uni = access_point->uni();
         conn_name = access_point->ssid();
-        spec_object = conn_uni;
+//        spec_object = conn_uni;
     }
 
     auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
@@ -663,7 +663,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
         auto access_point = wifiNet->referenceAccessPoint();
         conn_uni = access_point->uni();
         conn_name = access_point->ssid();
-        spec_object = conn_uni;
+//        spec_object = conn_uni;
     }
 
     auto dev = m_networkResourceInstance->findDeviceInterface(devIface);

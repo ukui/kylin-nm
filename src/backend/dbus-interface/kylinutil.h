@@ -15,5 +15,6 @@
 #define  ETHERNET_TYPE    "802-3-ethernet"
 
 QString getConnectTypeByDbus(QString &connectPath);
+QString getSsidFromByteArray(QByteArray &rawSsid);
 
 #endif // KYLINUTIL_H

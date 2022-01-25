@@ -1,4 +1,4 @@
-
+#include "kylinutil.h"
 #include "kylinactiveconnectresource.h"
 #include "kywirelessconnectoperation.h"
 
@@ -525,12 +525,13 @@ KyApConnectItem *KyActiveConnectResourse::getApActiveConnectItem(NetworkManager:
 
     KyApConnectItem *apConnectItem = new KyApConnectItem();
     apConnectItem->m_connectName = connectPtr->name();
-    apConnectItem->m_connectSsid = wirelessSetting->ssid();
     apConnectItem->m_connectUuid = activeConnectPtr->uuid();
     apConnectItem->m_ifaceName = settingPtr->interfaceName();
 
-    //NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
-    //    = settingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    QByteArray rawSsid = wirelessSetting->ssid();
+    apConnectItem->m_connectSsid = getSsidFromByteArray(rawSsid);
+
+
     KyWirelessConnectOperation wirelessOperation;
     apConnectItem->m_password = wirelessOperation.getPsk(apConnectItem->m_connectUuid);
 

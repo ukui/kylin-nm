@@ -18,6 +18,7 @@
 
 #include "kylinnetworkresourcemanager.h"
 #include <QMetaType>
+#include "kylinutil.h"
 
 #define SIGNAL_DELAY 80000
 #define EMIT_DELAY 10000
@@ -711,7 +712,10 @@ void KyNetworkResourceManager::onWifiNetworkAdd(NetworkManager::Device * dev, QS
             qDebug()<< LOG_FLAG << "add but already exist";
         }
 
-        emit wifiNetworkAdded(dev->interfaceName(), ssid);
+        NetworkManager::AccessPoint::Ptr accessPoitPtr = net->referenceAccessPoint();
+        QByteArray rawSsid = accessPoitPtr->rawSsid();
+        QString wifiSsid = getSsidFromByteArray(rawSsid);
+        emit wifiNetworkAdded(dev->interfaceName(), wifiSsid);
     }
 
     return;
@@ -746,7 +750,10 @@ void KyNetworkResourceManager::onWifiNetworkUpdate(NetworkManager::WirelessNetwo
                 emit wifiNetworkDeviceDisappear();
             } else {
                 qDebug()<< LOG_FLAG  << "wifiNetwork disappear" << net << net->ssid();
-                emit wifiNetworkRemoved(devIface,net->ssid());
+                NetworkManager::AccessPoint::Ptr accessPoitPtr = net->referenceAccessPoint();
+                QByteArray rawSsid = accessPoitPtr->rawSsid();
+                QString wifiSsid = getSsidFromByteArray(rawSsid);
+                emit wifiNetworkRemoved(devIface, wifiSsid);
             }
         } else {
             qDebug()<< LOG_FLAG  << "wifiNetworkPropertyChange " << net << net->ssid();
@@ -770,7 +777,10 @@ void KyNetworkResourceManager::onWifiNetworkRemove(NetworkManager::Device * dev,
         auto pos = m_wifiNets.indexOf(net);
         if (0 <= pos) {
             removeWifiNetwork(pos);
-            emit wifiNetworkRemoved(dev->interfaceName(), ssid);
+            NetworkManager::AccessPoint::Ptr accessPoitPtr = net->referenceAccessPoint();
+            QByteArray rawSsid = accessPoitPtr->rawSsid();
+            QString wifiSsid = getSsidFromByteArray(rawSsid);
+            emit wifiNetworkRemoved(dev->interfaceName(), wifiSsid);
         }
     }
 

@@ -596,8 +596,7 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
     NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
     NetworkManager::WirelessSetting::Ptr wirelessSetting
         = settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
-    QString name = wirelessSetting->ssid();
-    qDebug() << name << settingPtr->interfaceName();
+
     if (NetworkManager::WirelessSetting::NetworkMode::Ap
                                     != wirelessSetting->mode()) {
         qDebug() << "[KyConnectResourse]" <<"get ap item failed, the active connect mode is not ap.";
@@ -610,9 +609,11 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
         return nullptr;
     }
 
+    QByteArray rawSsid = wirelessSetting->ssid();
+
     KyApConnectItem *apConnectItem = new KyApConnectItem();
     apConnectItem->m_connectName = connectPtr->name();
-    apConnectItem->m_connectSsid = wirelessSetting->ssid();
+    apConnectItem->m_connectSsid = getSsidFromByteArray(rawSsid);
     apConnectItem->m_connectUuid = connectPtr->uuid();
     if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::A) {
         apConnectItem->m_band = str2GBand;

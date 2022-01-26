@@ -1,5 +1,6 @@
 #include "kywirelessnetitem.h"
 #include <NetworkManagerQt/Connection>
+#include "kylinutil.h"
 
 QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags)
 {
@@ -51,7 +52,12 @@ KyWirelessNetItem::~KyWirelessNetItem()
 
 void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
 {
-    m_NetSsid = net->ssid();
+   // m_NetSsid = net->ssid();
+
+    NetworkManager::AccessPoint::Ptr accessPointPtr = net->referenceAccessPoint();
+    QByteArray rawSsid = accessPointPtr->rawSsid();
+    m_NetSsid = getSsidFromByteArray(rawSsid);
+
     m_signalStrength = net->signalStrength();
     m_frequency = net->referenceAccessPoint()->frequency();
     m_channel = NetworkManager::findChannel(m_frequency);
@@ -75,7 +81,9 @@ void KyWirelessNetItem::initInfoBySsid()
         NetworkManager::WirelessSetting::Ptr wifi_sett
             = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
         QString devName = m_networkResourceInstance->findDeviceUni(m_device)->interfaceName();
-        if (wifi_sett->ssid() == m_NetSsid
+        QByteArray rawSsid = wifi_sett->ssid();
+        QString wifiSsid = getSsidFromByteArray(rawSsid);
+        if (wifiSsid == m_NetSsid
                 && (settings->interfaceName().compare(devName) == 0 || settings->interfaceName().isEmpty())) {
             m_connectUuid = settings->uuid();
             m_connName    = conn->name();

@@ -144,8 +144,10 @@ void KyNetworkResourceManager::insertActiveConnections()
 void KyNetworkResourceManager::removeConnection(int pos)
 {
     //connections signals
+    QString path = m_connections.at(pos)->path();
     NetworkManager::Connection::Ptr conn = m_connections.takeAt(pos);
     conn->disconnect(this);
+    emit connectionRemove(path);
 }
 
 void KyNetworkResourceManager::clearConnections()
@@ -969,7 +971,6 @@ void KyNetworkResourceManager::onConnectionRemoved(QString const & path)
         connectionPtr = m_connections.at(index);
         if (connectionPtr->path() == path) {
             removeConnection(index);
-            emit connectionRemove(path);
             return;
         }
     }

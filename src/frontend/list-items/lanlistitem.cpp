@@ -152,8 +152,8 @@ void LanListItem::onInfoButtonClicked()
         return;
     }
 
-    if(isDetailShow){
-        qDebug()<< LOG_FLAG << "the detail page has be shown , so do not show again" << Q_FUNC_INFO << __LINE__;
+    if(netDetail != nullptr){
+        netDetail->activateWindow();
         return;
     }
 
@@ -166,9 +166,15 @@ void LanListItem::onInfoButtonClicked()
         isActivated = true;
     }
 
-    NetDetail *netDetail = new NetDetail(m_deviceName, m_lanConnectItem.m_connectName,
+    netDetail = new NetDetail(m_deviceName, m_lanConnectItem.m_connectName,
                                          m_lanConnectItem.m_connectUuid, isActivated,false, false, this);
-    connect(netDetail, &NetDetail::detailPageClose, this, &LanListItem::onDetailShow);
+
+    connect(netDetail, &NetDetail::destroyed, [&](){
+        if (netDetail != nullptr) {
+            netDetail = nullptr;
+        }
+    });
+
     netDetail->show();
     emit this->detailShow(true);
 

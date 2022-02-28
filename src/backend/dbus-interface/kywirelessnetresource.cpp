@@ -602,15 +602,17 @@ void KyWirelessNetResource::onConnectionAdd(QString uuid)
         qDebug()<< LOG_FLAG << uuid << " is not wireless connection";
         return;
     }
-
     NetworkManager::WirelessSetting::Ptr wireless_sett =
             sett->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+
+    QByteArray rawSsid = wireless_sett->ssid();
+    QString wifiSsid = getSsidFromByteArray(rawSsid);
     QMap<QString, QString> map;
     map.clear();
     QMap<QString, QList<KyWirelessNetItem> >::iterator iter = m_WifiNetworkList.begin();
     while (iter != m_WifiNetworkList.end()) {
         for(int i = 0; i < iter.value().size(); i++) {
-            if (iter.value().at(i).m_NetSsid == wireless_sett->ssid()
+            if (iter.value().at(i).m_NetSsid == wifiSsid
                     && (sett->interfaceName() == iter.key() || sett->interfaceName().isEmpty())) {
                 QString devIfaceName;
                 QString ssid;

@@ -43,7 +43,9 @@ QString getConnectTypeByDbus(QString &connectPath)
 
 QString getSsidFromByteArray(QByteArray &rawSsid)
 {
-    QString wifiSsid = "";
+    QString wifiSsid = rawSsid;
+
+#if 0
 
     if (rawSsid.isEmpty()) {
         qWarning() << LOG_FLAG << "wifi raw ssid is empty";
@@ -69,6 +71,6 @@ QString getSsidFromByteArray(QByteArray &rawSsid)
 //        qDebug()<< LOG_FLAG <<" UTF-8 ssid: " <<wifiSsid;
 //        //qDebug()<< "-------------> UTF-8 " << bytearray;
 //    }
-
+#endif
     return wifiSsid;
 }

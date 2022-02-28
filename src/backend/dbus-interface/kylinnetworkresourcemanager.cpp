@@ -714,10 +714,10 @@ void KyNetworkResourceManager::onWifiNetworkAdd(NetworkManager::Device * dev, QS
             qDebug()<< LOG_FLAG << "add but already exist";
         }
 
-        NetworkManager::AccessPoint::Ptr accessPoitPtr = net->referenceAccessPoint();
-        QByteArray rawSsid = accessPoitPtr->rawSsid();
-        QString wifiSsid = getSsidFromByteArray(rawSsid);
-        emit wifiNetworkAdded(dev->interfaceName(), wifiSsid);
+//        NetworkManager::AccessPoint::Ptr accessPoitPtr = net->referenceAccessPoint();
+//        QByteArray rawSsid = accessPoitPtr->rawSsid();
+//        QString wifiSsid = getSsidFromByteArray(rawSsid);
+        emit wifiNetworkAdded(dev->interfaceName(), ssid);
     }
 
     return;

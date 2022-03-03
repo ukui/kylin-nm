@@ -1,4 +1,5 @@
 #include "kywirelessnetresource.h"
+#include "kylinutil.h"
 
 #define LOG_FLAG "[KyWirelessNetResource]"
 
@@ -91,7 +92,9 @@ bool KyWirelessNetResource::getDeviceWifiNetwork(QString devIfaceName, QList<KyW
     }
 }
 
-bool KyWirelessNetResource::getWifiNetwork(const QString &devIfaceName, const QString &ssid, KyWirelessNetItem &wirelessNetResource)
+bool KyWirelessNetResource::getWifiNetwork(const QString &devIfaceName,
+                                           const QString &ssid,
+                                           KyWirelessNetItem &wirelessNetResource)
 {
     if (!m_WifiNetworkList.contains(devIfaceName)) {
          qDebug()<< LOG_FLAG << "getWifiNetwork fail, not contain " << devIfaceName;
@@ -200,7 +203,10 @@ QString KyWirelessNetResource::getActiveConnectSsidByDevice(QString deviceName)
         NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
         NetworkManager::WirelessSetting::Ptr wirelessSettingPtr =
                 settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
-        ssid = wirelessSettingPtr->ssid();
+
+        QByteArray rawSsid = wirelessSettingPtr->ssid();
+        ssid = getSsidFromByteArray(rawSsid);
+
         break;
     }
 
@@ -252,7 +258,8 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::
         return "";
     }
 
-    wirelessNetResourcessid = wireless_sett->ssid();
+    QByteArray rawSsid = wireless_sett->ssid();
+    wirelessNetResourcessid = getSsidFromByteArray(rawSsid);
 
     QStringList interfaces = actConn->devices();
     if (interfaces.isEmpty()) {
@@ -281,7 +288,9 @@ void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid)
         return;
     }
 
-    ssid = wireless_sett->ssid();
+    QByteArray rawSsid = wireless_sett->ssid();
+    ssid = getSsidFromByteArray(rawSsid);
+
     qDebug()<< LOG_FLAG << "getSsidByUuid success " << ssid;
 
     return;
@@ -353,36 +362,6 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::WirelessNetwork::P
     return dev->interfaceName();
 }
 
-//void KyWirelessNetResource::onWifiNetworkChange(QString devIfaceName)
-//{
-//    //创建新加入的的device key
-//    if(!m_WifiNetworkList.contains(devIfaceName))
-//    {
-//        QList<KyWirelessNetItem> list;
-//        m_WifiNetworkList.insert(devIfaceName,list);
-//    }
-
-//    //清空重新append
-//    m_WifiNetworkList[devIfaceName].clear();
-//    for (auto const & net : m_networkResourceInstance->m_wifiNets)
-//    {
-//        if (m_networkResourceInstance->findDeviceUni(net->device())->interfaceName() == devIfaceName)
-//        {
-//            qDebug() << net->ssid();
-//            KyWirelessNetItem item(net);
-//            m_WifiNetworkList[devIfaceName].append(item);
-//        }
-//    }
-
-//    //若仍为空则remove
-//    if (m_WifiNetworkList.value(devIfaceName).isEmpty())
-//    {
-//        m_WifiNetworkList.remove(devIfaceName);
-//    }
-
-//    emit updateWifiNetworkList(devIfaceName);
-//}
-
 void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssid)
 {
     NetworkManager::WirelessNetwork::Ptr wifi = nullptr;
@@ -391,7 +370,11 @@ void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssi
             continue;
         }
 
-        if (net->ssid() == ssid && m_networkResourceInstance->findDeviceUni(net->device())->interfaceName() == devIfaceName) {
+        NetworkManager::AccessPoint::Ptr accessPointPtr = net->referenceAccessPoint();
+        QByteArray rawSsid = accessPointPtr->rawSsid();
+        QString wifiSsid = getSsidFromByteArray(rawSsid);
+
+        if (wifiSsid == ssid && m_networkResourceInstance->findDeviceUni(net->device())->interfaceName() == devIfaceName) {
             wifi = net;
         }
     }
@@ -436,27 +419,32 @@ void KyWirelessNetResource::onWifiNetworkPropertyChange(NetworkManager::Wireless
         return;
     }
 
+    NetworkManager::AccessPoint::Ptr accessPointPtr = net->referenceAccessPoint();
+    QByteArray rawSsid = accessPointPtr->rawSsid();
+    QString wifiSsid = getSsidFromByteArray(rawSsid);
+
     QString devIface = m_networkResourceInstance->findDeviceUni(net->device())->interfaceName();
     if (m_WifiNetworkList.contains(devIface)) {
         QList<KyWirelessNetItem>::iterator iter = m_WifiNetworkList[devIface].begin();
          while (iter != m_WifiNetworkList[devIface].end()) {
-             if (iter->m_NetSsid == net->ssid()) {
+             if (iter->m_NetSsid == wifiSsid) {
 //                 qDebug()<< LOG_FLAG <<"recive properity changed signal, sender is" << iter->m_NetSsid;
                  if (iter->m_signalStrength != net->signalStrength()) {
                      iter->m_signalStrength = net->signalStrength();
-                     emit signalStrengthChange(devIface, net->ssid(), iter->m_signalStrength);
+                     emit signalStrengthChange(devIface, wifiSsid, iter->m_signalStrength);
                  }
 
-                 if (iter->m_bssid != net->referenceAccessPoint()->hardwareAddress()) {
-                     iter->m_bssid = net->referenceAccessPoint()->hardwareAddress();
-                     emit bssidChange(devIface, net->ssid(), iter->m_bssid);
+                 if (iter->m_bssid != accessPointPtr->hardwareAddress()) {
+                     iter->m_bssid = accessPointPtr->hardwareAddress();
+                     emit bssidChange(devIface, wifiSsid, iter->m_bssid);
                  }
 
-                 QString secuType = enumToQstring(net->referenceAccessPoint()->capabilities(),
-                                                  net->referenceAccessPoint()->wpaFlags(), net->referenceAccessPoint()->rsnFlags());
+                 QString secuType = enumToQstring(accessPointPtr->capabilities(),
+                                                  accessPointPtr->wpaFlags(),
+                                                  accessPointPtr->rsnFlags());
                  if (iter->m_secuType != secuType) {
                      iter->m_secuType = secuType;
-                     emit secuTypeChange(devIface, net->ssid(), secuType);
+                     emit secuTypeChange(devIface, wifiSsid, secuType);
                  }
 
                  break;

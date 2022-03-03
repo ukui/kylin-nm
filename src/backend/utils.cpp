@@ -83,7 +83,7 @@ void Utils::onRequestSendDesktopNotify(QString message)
     QList<QVariant> args;
     args<<(tr("Kylin NM"))
        <<((unsigned int) 0)
-      <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+      <<QString("gnome-dev-ethernet")
      <<tr("kylin network applet desktop message") //显示的是什么类型的信息
     <<message //显示的具体信息
     <<QStringList()

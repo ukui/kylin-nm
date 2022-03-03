@@ -62,7 +62,7 @@ void NetConnect::showDesktopNotify(const QString &message)
     QList<QVariant> args;
     args<<(tr("ukui control center"))
        <<((unsigned int) 0)
-       <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+       <<QString("gnome-dev-ethernet")
        <<tr("ukui control center desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
        <<QStringList()

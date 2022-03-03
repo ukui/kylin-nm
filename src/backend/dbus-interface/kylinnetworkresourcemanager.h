@@ -73,7 +73,6 @@ public:
 
     void removeWifiNetwork(int pos);
     void clearWifiNetworks();
-    void insertWifiNetworks();
     void addWifiNetwork(NetworkManager::WirelessNetwork::Ptr net);
 
     NetworkManager::ActiveConnection::Ptr findActiveConnection(QString const & path);
@@ -144,6 +143,8 @@ public slots:
     void setWirelessNetworkEnabled(bool enabled);
 
 private slots:
+    void insertWifiNetworks();
+    void onServiceAppear(QString, QString, QString);
     //connection
     void onConnectionUpdated();
     //void onConnectionRemoved();

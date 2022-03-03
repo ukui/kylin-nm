@@ -18,6 +18,7 @@
 
 #include "kylinnetworkresourcemanager.h"
 #include <QMetaType>
+#include <QTimer>
 #include "kylinutil.h"
 
 #define SIGNAL_DELAY 80000
@@ -49,6 +50,11 @@ KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(pa
     qRegisterMetaType<NetworkManager::Connectivity>("NetworkManager::Connectivity");
     qRegisterMetaType<NetworkManager::ActiveConnection::Reason>("NetworkManager::ActiveConnection::Reason");
     qRegisterMetaType<NetworkManager::Device::Type>("NetworkManager::Device::Type");
+
+    QDBusConnection::systemBus().connect(QString("org.freedesktop.DBus"),
+                                             QString("/org/freedesktop/DBus"),
+                                             QString("org.freedesktop.DBus"),
+                                             QString("NameOwnerChanged"), this, SLOT(onServiceAppear(QString,QString,QString)));
 }
 
 void KyNetworkResourceManager::onInitNetwork()
@@ -73,6 +79,7 @@ void KyNetworkResourceManager::onInitNetwork()
     // Note: the connectionRemoved is never emitted in case network-manager service stop,
     // we need remove the connections manually.
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::serviceDisappeared, this, &KyNetworkResourceManager::clearConnections);
+    connect(NetworkManager::notifier(), &NetworkManager::Notifier::serviceDisappeared, this, &KyNetworkResourceManager::clearWifiNetworks);
 
     qDebug() <<"[KyNetworkResourceManager]"
              << "active connections:" << m_activeConns.size()
@@ -301,8 +308,6 @@ void KyNetworkResourceManager::addWifiNetwork(NetworkManager::WirelessNetwork::P
 
 void KyNetworkResourceManager::insertWifiNetworks()
 {
-    int count = 0;
-
     for (auto const & device : m_devices) {
         if (device.isNull()) {
             continue;
@@ -313,13 +318,11 @@ void KyNetworkResourceManager::insertWifiNetworks()
             for (auto const & net : w_dev->networks()) {
                 if (!net.isNull()) {
                     addWifiNetwork(net);
-                    count++;
+                    emit wifiNetworkAdded(device->interfaceName(),net->ssid());
                 }
             }
         }
     }
-
-    qDebug() << "insertWifiNetworks" << count;
 }
 
 NetworkManager::ActiveConnection::Ptr KyNetworkResourceManager::findActiveConnection(QString const & path)
@@ -530,6 +533,15 @@ void KyNetworkResourceManager::requestScan(NetworkManager::WirelessDevice * dev)
     return;
 }
 
+void KyNetworkResourceManager::onServiceAppear(QString interface, QString oldOwner, QString newOwner)
+{
+    if (interface == "org.freedesktop.NetworkManager"
+            && oldOwner.isEmpty() && !newOwner.isEmpty()) {
+        qDebug() << LOG_FLAG << "org.freedesktop.NetworkManager start";
+        QTimer::singleShot(500,this,&KyNetworkResourceManager::insertWifiNetworks);
+    }
+}
+
 void KyNetworkResourceManager::onConnectionUpdated()
 {
     NetworkManager::Connection *connectPtr =
@@ -714,10 +726,10 @@ void KyNetworkResourceManager::onWifiNetworkAdd(NetworkManager::Device * dev, QS
             qDebug()<< LOG_FLAG << "add but already exist";
         }
 
-//        NetworkManager::AccessPoint::Ptr accessPoitPtr = net->referenceAccessPoint();
-//        QByteArray rawSsid = accessPoitPtr->rawSsid();
-//        QString wifiSsid = getSsidFromByteArray(rawSsid);
-        emit wifiNetworkAdded(dev->interfaceName(), ssid);
+        NetworkManager::AccessPoint::Ptr accessPoitPtr = net->referenceAccessPoint();
+        QByteArray rawSsid = accessPoitPtr->rawSsid();
+        QString wifiSsid = getSsidFromByteArray(rawSsid);
+        emit wifiNetworkAdded(dev->interfaceName(), wifiSsid);
     }
 
     return;

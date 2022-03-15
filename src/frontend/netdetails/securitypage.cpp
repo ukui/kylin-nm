@@ -226,11 +226,11 @@ void SecurityPage::setTlsInfo(KyEapMethodTlsInfo &info)
     domainEdit->setText(info.domain);
     if (info.caCertPath.isEmpty()) {
         caCertPathCombox->setItemText(0, QString(tr("None")));
-        caNeedBox->setChecked(false);
+        caNeedBox->setChecked(true);
         caCertPathCombox->setEnabled(false);
     } else {
         caCertPathCombox->setItemText(0, info.caCertPath);
-        caNeedBox->setChecked(true);
+        caNeedBox->setChecked(false);
         caCertPathCombox->setEnabled(true);
     }
 

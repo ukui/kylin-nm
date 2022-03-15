@@ -401,7 +401,7 @@ void MainWindow::resetWindowTheme()
 void MainWindow::showControlCenter()
 {
     QProcess process;
-    if (!m_lanWidget->lanIsConnected() && m_wlanWidget->wlanIsConnected()){
+    if (!m_lanWidget->lanIsConnected() && m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
         process.startDetached("ukui-control-center -m wlanconnect");
     } else {
         process.startDetached("ukui-control-center -m netconnect");
@@ -411,15 +411,19 @@ void MainWindow::showControlCenter()
 /**
  * @brief MainWindow::onTrayIconActivated 点击托盘图标的槽函数
  */
-void MainWindow::onTrayIconActivated()
+void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    if (this->isVisible()) {
-        qDebug() << "Received signal of tray icon activated, will hide mainwindow." << Q_FUNC_INFO << __LINE__;
-        hideMainwindow();
-        return;
+    if (reason == QSystemTrayIcon::ActivationReason::Context) {
+            m_trayIconMenu->popup(QCursor::pos());
+    } else {
+        if (this->isVisible()) {
+            qDebug() << "Received signal of tray icon activated, will hide mainwindow." << Q_FUNC_INFO << __LINE__;
+            hideMainwindow();
+            return;
+        }
+        qDebug() << "Received signal of tray icon activated, will show mainwindow." << Q_FUNC_INFO << __LINE__;
+        this->showMainwindow();
     }
-    qDebug() << "Received signal of tray icon activated, will show mainwindow." << Q_FUNC_INFO << __LINE__;
-    this->showMainwindow();
 }
 
 void MainWindow::onShowMainwindowActionTriggled()
@@ -451,7 +455,7 @@ void MainWindow::onRefreshTrayIcon()
     if (m_lanWidget->lanIsConnected()) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
         iconStatus = IconActiveType::LAN_CONNECTED;
-    } else if (m_wlanWidget->wlanIsConnected()){
+    } else if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
         m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
         iconStatus = IconActiveType::WLAN_CONNECTED;
     } else {
@@ -461,7 +465,7 @@ void MainWindow::onRefreshTrayIcon()
 
     NetworkManager::Connectivity connecttivity;
     m_wlanWidget->getConnectivity(connecttivity);
-    if (connecttivity == NetworkManager::Connectivity::Portal || connecttivity == NetworkManager::Connectivity::Limited) {
+    if (connecttivity != NetworkManager::Connectivity::Full) {
         if (iconStatus == IconActiveType::LAN_CONNECTED) {
             m_trayIcon->setIcon(QIcon::fromTheme("network-error-symbolic"));
             iconStatus = IconActiveType::LAN_CONNECTED_LIMITED;
@@ -504,6 +508,9 @@ void MainWindow::onWlanConnectStatusToChangeTrayIcon(int state)
         m_wlanIsLoading = true;
         iconTimer->start(LOADING_TRAYICON_TIMER_MS);
     } else {
+        if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activating)) {
+            return;
+        }
         m_wlanIsLoading = false;
         if (m_lanIsLoading == false) {
             onRefreshTrayIcon();

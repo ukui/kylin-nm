@@ -665,7 +665,7 @@ bool KyActiveConnectResourse::wiredConnectIsActived()
     return false;
 }
 
-bool KyActiveConnectResourse::wirelessConnectIsActived()
+bool KyActiveConnectResourse::checkWirelessStatus(NetworkManager::ActiveConnection::State state)
 {
     int index = 0;
     NetworkManager::ActiveConnection::List activeConnectList;
@@ -691,7 +691,7 @@ bool KyActiveConnectResourse::wirelessConnectIsActived()
             continue;
         }
 
-        if (activeConnectPtr->state() == NetworkManager::ActiveConnection::State::Activated) {
+        if (activeConnectPtr->state() == state) {
             return true;
         }
     }

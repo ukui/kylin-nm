@@ -155,7 +155,7 @@ private:
 
 private slots:
     void onTransChanged();
-    void onTrayIconActivated();
+    void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void onShowMainwindowActionTriggled();
     void onShowSettingsActionTriggled();
     void onThemeChanged(const QString &key);

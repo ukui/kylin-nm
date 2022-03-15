@@ -42,7 +42,7 @@ public:
 
     void showDetailPage(QString devName, QString uuid);
 
-    bool wlanIsConnected();
+    bool checkWlanStatus(NetworkManager::ActiveConnection::State state);
 
     void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
     //无线总开关

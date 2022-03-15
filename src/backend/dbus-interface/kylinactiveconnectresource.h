@@ -39,7 +39,7 @@ public:
 
     bool connectionIsVirtual(QString uuid);
     bool wiredConnectIsActived();
-    bool wirelessConnectIsActived();
+    bool checkWirelessStatus(NetworkManager::ActiveConnection::State state);
 
 private:
     void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,

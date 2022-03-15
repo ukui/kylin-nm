@@ -1380,7 +1380,16 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
 
 bool WlanPage::wlanIsConnected()
 {
-    if (m_activatedConnectResource->wirelessConnectIsActived()) {
+    if (m_activatedConnectResource->checkWirelessStatus(NetworkManager::ActiveConnection::State::Activated)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool WlanPage::wlanIsConnecting()
+{
+    if (m_activatedConnectResource->checkWirelessStatus(NetworkManager::ActiveConnection::State::Activating)) {
         return true;
     } else {
         return false;

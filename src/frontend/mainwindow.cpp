@@ -461,7 +461,7 @@ void MainWindow::onRefreshTrayIcon()
 
     NetworkManager::Connectivity connecttivity;
     m_wlanWidget->getConnectivity(connecttivity);
-    if (connecttivity == NetworkManager::Connectivity::Portal || connecttivity == NetworkManager::Connectivity::Limited) {
+    if (connecttivity != NetworkManager::Connectivity::Full) {
         if (iconStatus == IconActiveType::LAN_CONNECTED) {
             m_trayIcon->setIcon(QIcon::fromTheme("network-error-symbolic"));
             iconStatus = IconActiveType::LAN_CONNECTED_LIMITED;
@@ -504,6 +504,9 @@ void MainWindow::onWlanConnectStatusToChangeTrayIcon(int state)
         m_wlanIsLoading = true;
         iconTimer->start(LOADING_TRAYICON_TIMER_MS);
     } else {
+        if (m_wlanWidget->wlanIsConnecting()) {
+            return;
+        }
         m_wlanIsLoading = false;
         if (m_lanIsLoading == false) {
             onRefreshTrayIcon();

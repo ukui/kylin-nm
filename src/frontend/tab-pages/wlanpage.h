@@ -43,6 +43,7 @@ public:
     void showDetailPage(QString devName, QString uuid);
 
     bool wlanIsConnected();
+    bool wlanIsConnecting();
 
     void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
     //无线总开关

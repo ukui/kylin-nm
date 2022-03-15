@@ -11,7 +11,7 @@
 #include <QImage>
 #include <QPainter>
 #include "fixlabel.h"
-#include "../component/InfoButton/infobutton.h"
+#include "infobutton.h"
 
 class LanItem : public QPushButton
 {
@@ -23,13 +23,9 @@ public:
     InfoButton * infoLabel = nullptr;
     FixLabel * titileLabel = nullptr;
     QLabel * statusLabel = nullptr;
-    int waitPage;
-    int countCurrentTime;
+
 public:
     void startLoading();
-    void setWaitPage(int waitPage);
-    void setCountCurrentTime(int countCurrentTime);
-    void waitAnimStep();
     void stopLoading();
 
     bool loading = false;
@@ -44,6 +40,11 @@ protected:
 private:
     QTimer *waitTimer = nullptr;
     QGSettings *themeGsettings = nullptr;
+    QList<QIcon> loadIcons;
+        int currentIconIndex=0;
+
+private slots:
+        void updateIcon();
 
 };
 

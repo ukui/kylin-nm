@@ -62,7 +62,7 @@ void NetConnect::showDesktopNotify(const QString &message)
     QList<QVariant> args;
     args<<(tr("ukui control center"))
        <<((unsigned int) 0)
-       <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+       <<QString("gnome-dev-ethernet")
        <<tr("ukui control center desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
        <<QStringList()
@@ -823,27 +823,22 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
 {
 //    QString iconPath = NoNetSymbolic;
     if (status == ACTIVATING) {
-        item->setCountCurrentTime(0);
-        item->setWaitPage(1);
         item->startLoading();
     } else if (status == ACTIVATED) {
         item->stopLoading();
 //        iconPath = KLanSymbolic;
-        item->statusLabel->setStyleSheet("");
+        item->statusLabel->clear();
         item->statusLabel->setMinimumSize(36,36);
         item->statusLabel->setMaximumSize(16777215,16777215);
         item->statusLabel->setText(tr("connected"));
         item->isAcitve = true;
     } else if (status == DEACTIVATING) {
-        item->setCountCurrentTime(0);
-        item->setWaitPage(1);
         item->startLoading();
     } else {
         item->stopLoading();
-        item->statusLabel->setStyleSheet("");
         item->statusLabel->setMinimumSize(36,36);
         item->statusLabel->setMaximumSize(16777215,16777215);
-        item->statusLabel->setText("");
+        item->statusLabel->clear();
         item->isAcitve = false;
     }
 

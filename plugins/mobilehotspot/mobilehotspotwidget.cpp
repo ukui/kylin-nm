@@ -11,6 +11,7 @@
 #define LINE_MAX_SIZE 16777215, 1
 #define LINE_MIN_SIZE 0, 1
 #define LAYOUT_LEFT_MARGINS 8
+#define ICON_SIZE   24,24
 
 #define WIRELESS   1
 
@@ -28,7 +29,7 @@ void MobileHotspotWidget::showDesktopNotify(const QString &message)
     QList<QVariant> args;
     args<<(tr("ukui control center"))
        <<((unsigned int) 0)
-       <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+       <<QString("gnome-dev-ethernet")
        <<tr("ukui control center desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
        <<QStringList()
@@ -72,9 +73,11 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
     });
     connect(m_pwdShowBox, &QCheckBox::clicked, this, [=]() {
         if (m_pwdNameLine->echoMode() == QLineEdit::Password) {
+            m_pwdShowBox->setIcon(QIcon::fromTheme("ukui-eye-display-symbolic"));
             m_pwdNameLine->setEchoMode(QLineEdit::Normal);
         } else {
             m_pwdNameLine->setEchoMode(QLineEdit::Password);
+            m_pwdShowBox->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
         }
     });
 }
@@ -415,20 +418,19 @@ void MobileHotspotWidget::setPasswordFrame()
 
     m_passwordFrame->setLayout(passwordHLayout);
 
-    m_pwdShowBox = new QCheckBox(this);
-    m_pwdShowBox->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
-                                       "QCheckBox::indicator:checked {image: url(:/img/plugins/mobilehotspot/show-pwd.png);}"
-                                       "QCheckBox::indicator:unchecked {image: url(:/img/plugins/mobilehotspot/hide-pwd.png);}");
+    m_pwdShowBox = new QPushButton(this);
+    m_pwdShowBox->setFlat(true);
+    m_pwdShowBox->setFixedSize(ICON_SIZE);
+    m_pwdShowBox->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
     m_pwdShowBox->setCursor(Qt::PointingHandCursor);
-    m_pwdShowBox->setFixedSize(30, m_pwdNameLine->height());
     //防止文本框输入内容位于按钮之下
     QMargins margins = m_pwdNameLine->textMargins();
-    m_pwdNameLine->setTextMargins(margins.left(), margins.top(), m_pwdShowBox->width(), margins.bottom());
+    m_pwdNameLine->setTextMargins(margins.left(), margins.top(), m_pwdShowBox->width() + 10, margins.bottom());
     QHBoxLayout *pSearchLayout = new QHBoxLayout();
     pSearchLayout->addStretch();
     pSearchLayout->addWidget(m_pwdShowBox);
     pSearchLayout->setSpacing(0);
-    pSearchLayout->setContentsMargins(0, 0, 0, 0);
+    pSearchLayout->setContentsMargins(0, 0, 10, 0);
     m_pwdNameLine->setLayout(pSearchLayout);
     m_pwdNameLine->setEchoMode(QLineEdit::Password);
 }
@@ -592,15 +594,15 @@ void MobileHotspotWidget::setUiEnabled(bool enable)
 {
     qDebug() << "switch mode change to " << enable;
     if (enable) {
-        m_pwdNameLine->setFocusPolicy(Qt::NoFocus);
+        m_pwdNameLine->setEnabled(false);
         m_freqBandComboBox->setEnabled(false);
         m_interfaceComboBox->setEnabled(false);
-        m_apNameLine->setFocusPolicy(Qt::NoFocus);
+        m_apNameLine->setEnabled(false);
     } else {
-        m_pwdNameLine->setFocusPolicy(Qt::ClickFocus);
+        m_pwdNameLine->setEnabled(true);
         m_freqBandComboBox->setEnabled(true);
         m_interfaceComboBox->setEnabled(true);
-        m_apNameLine->setFocusPolicy(Qt::ClickFocus);
+        m_apNameLine->setEnabled(true);
     }
 }
 

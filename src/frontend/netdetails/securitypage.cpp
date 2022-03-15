@@ -225,11 +225,13 @@ void SecurityPage::setTlsInfo(KyEapMethodTlsInfo &info)
     identityEdit->setText(info.identity);
     domainEdit->setText(info.domain);
     if (info.caCertPath.isEmpty()) {
-        caCertPathCombox->setItemText(0, "");
+        caCertPathCombox->setItemText(0, QString(tr("None")));
         caNeedBox->setChecked(true);
+        caCertPathCombox->setEnabled(false);
     } else {
         caCertPathCombox->setItemText(0, info.caCertPath);
         caNeedBox->setChecked(false);
+        caCertPathCombox->setEnabled(true);
     }
 
     if (info.clientCertPath.isEmpty()) {
@@ -722,6 +724,7 @@ void SecurityPage::onEapTypeComboxIndexChanged()
 void SecurityPage::onCaNeedBoxClicked()
 {
     if (caNeedBox->isChecked()) {
+        caCertPathCombox->setItemText(0, QString(tr("None")));
         caCertPathCombox->setEnabled(false);
     }  else {
         caCertPathCombox->setEnabled(true);

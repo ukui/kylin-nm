@@ -2,6 +2,10 @@
 #include <NetworkManagerQt/Connection>
 #include "kylinutil.h"
 
+const QString ENTERPRICE_TYPE = "802.1X";
+const QString WPA1_AND_WPA2 = "WPA";
+const QString WPA3 = "WPA3";
+
 QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags)
 {
     QString out;
@@ -37,6 +41,7 @@ KyWirelessNetItem::KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net)
     m_connName = "";
     m_connDbusPath = "";
     m_secuType = "";
+    m_kySecuType = NONE;
     m_device = "";
     m_channel = 0;
 
@@ -65,6 +70,13 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
     NetworkManager::AccessPoint::WpaFlags wpaFlag = net->referenceAccessPoint()->wpaFlags();
     NetworkManager::AccessPoint::WpaFlags rsnFlag = net->referenceAccessPoint()->rsnFlags();
     m_secuType = enumToQstring(cap, wpaFlag, rsnFlag);
+    if (m_secuType.indexOf(ENTERPRICE_TYPE) >= 0) {
+            m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
+        } else if (m_secuType.indexOf(WPA3) >= 0) {
+            m_kySecuType = WPA3_PERSONAL;
+        } else if ( m_secuType.indexOf(WPA1_AND_WPA2) >= 0) {
+            m_kySecuType = WPA_AND_WPA2_PERSONAL;
+    }
     m_bssid = net->referenceAccessPoint()->hardwareAddress();
     m_device = net->device();
     initInfoBySsid();

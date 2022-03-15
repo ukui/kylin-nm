@@ -2,7 +2,6 @@ QT       += widgets network dbus gui core
 TEMPLATE = lib
 CONFIG += plugin
 
-include(../component/infobutton.pri)
 include(../component/drownlabel.pri)
 
 TARGET = $$qtLibraryTarget(netconnect)

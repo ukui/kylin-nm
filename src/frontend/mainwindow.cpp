@@ -411,15 +411,19 @@ void MainWindow::showControlCenter()
 /**
  * @brief MainWindow::onTrayIconActivated 点击托盘图标的槽函数
  */
-void MainWindow::onTrayIconActivated()
+void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    if (this->isVisible()) {
-        qDebug() << "Received signal of tray icon activated, will hide mainwindow." << Q_FUNC_INFO << __LINE__;
-        hideMainwindow();
-        return;
+    if (reason == QSystemTrayIcon::ActivationReason::Context) {
+            m_trayIconMenu->popup(QCursor::pos());
+    } else {
+        if (this->isVisible()) {
+            qDebug() << "Received signal of tray icon activated, will hide mainwindow." << Q_FUNC_INFO << __LINE__;
+            hideMainwindow();
+            return;
+        }
+        qDebug() << "Received signal of tray icon activated, will show mainwindow." << Q_FUNC_INFO << __LINE__;
+        this->showMainwindow();
     }
-    qDebug() << "Received signal of tray icon activated, will show mainwindow." << Q_FUNC_INFO << __LINE__;
-    this->showMainwindow();
 }
 
 void MainWindow::onShowMainwindowActionTriggled()

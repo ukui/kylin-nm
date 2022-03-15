@@ -1378,18 +1378,9 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
     return;
 }
 
-bool WlanPage::wlanIsConnected()
+bool WlanPage::checkWlanStatus(NetworkManager::ActiveConnection::State state)
 {
-    if (m_activatedConnectResource->checkWirelessStatus(NetworkManager::ActiveConnection::State::Activated)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool WlanPage::wlanIsConnecting()
-{
-    if (m_activatedConnectResource->checkWirelessStatus(NetworkManager::ActiveConnection::State::Activating)) {
+    if (m_activatedConnectResource->checkWirelessStatus(state)) {
         return true;
     } else {
         return false;

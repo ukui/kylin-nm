@@ -50,7 +50,8 @@ protected:
 public:
     QVBoxLayout * m_mainLayout = nullptr;
     QHBoxLayout * m_hItemLayout = nullptr;
-    bool isDetailShow;
+
+    NetDetail *netDetail = nullptr;
 private:
     void initUI();
     void initConnection();
@@ -58,7 +59,6 @@ private:
 public slots:
     virtual void onNetButtonClicked() = 0;
     void onPaletteChanged();
-    void onDetailShow(bool isShow);
     virtual void onMenuTriggered(QAction *action)=0;
 
 signals:

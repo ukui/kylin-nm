@@ -367,8 +367,8 @@ void WlanListItem::refreshIcon(bool isActivated)
 void WlanListItem::onInfoButtonClicked()
 {
     //ZJP_TODO 呼出无线详情页
-    if(isDetailShow){
-        qDebug() << "has show the detail page,and do not show again" << Q_FUNC_INFO << __LINE__;
+    if(netDetail != nullptr){
+        netDetail->activateWindow();
         return;
     }
 
@@ -383,10 +383,14 @@ void WlanListItem::onInfoButtonClicked()
         isActive = true;
     }
 
-    NetDetail *netDetail = new NetDetail(m_wlanDevice, m_wirelessNetItem.m_NetSsid,
+    netDetail = new NetDetail(m_wlanDevice, m_wirelessNetItem.m_NetSsid,
                                          m_wirelessNetItem.m_connectUuid, isActive, true,
                                          !m_wirelessNetItem.m_isConfigured, this);
-    connect(netDetail, &NetDetail::detailPageClose, this, &WlanListItem::onDetailShow);
+    connect(netDetail, &NetDetail::destroyed, [&](){
+        if (netDetail != nullptr) {
+            netDetail = nullptr;
+        }
+    });
     netDetail->show();
     emit this->detailShow(true);
 }

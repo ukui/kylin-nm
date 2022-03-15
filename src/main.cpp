@@ -36,7 +36,7 @@ const QString QT_TRANSLATE_FILE = "/usr/share/qt5/translations/qt_zh_CN.qm";
 void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QByteArray localMsg = msg.toLocal8Bit();
-    QByteArray currentTime = QTime::currentTime().toString().toLocal8Bit();
+    QByteArray currentDateTime = QDateTime::currentDateTime().toString().toLocal8Bit();
 
     bool showDebug = true;
     QString logFilePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.config/ukui/kylin-nm.log";
@@ -57,19 +57,19 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
         if (!log_file) {
             break;
         }
-        fprintf(log_file, "Debug: %s: %s (%s:%u, %s)\n", currentTime.constData(), localMsg.constData(), file, context.line, function);
+        fprintf(log_file, "Debug: %s: %s (%s:%u, %s)\n", currentDateTime.constData(), localMsg.constData(), file, context.line, function);
         break;
     case QtInfoMsg:
-        fprintf(log_file? log_file: stdout, "Info: %s: %s (%s:%u, %s)\n", currentTime.constData(), localMsg.constData(), file, context.line, function);
+        fprintf(log_file? log_file: stdout, "Info: %s: %s (%s:%u, %s)\n", currentDateTime.constData(), localMsg.constData(), file, context.line, function);
         break;
     case QtWarningMsg:
-        fprintf(log_file? log_file: stderr, "Warning: %s: %s (%s:%u, %s)\n", currentTime.constData(), localMsg.constData(), file, context.line, function);
+        fprintf(log_file? log_file: stderr, "Warning: %s: %s (%s:%u, %s)\n", currentDateTime.constData(), localMsg.constData(), file, context.line, function);
         break;
     case QtCriticalMsg:
-        fprintf(log_file? log_file: stderr, "Critical: %s: %s (%s:%u, %s)\n", currentTime.constData(), localMsg.constData(), file, context.line, function);
+        fprintf(log_file? log_file: stderr, "Critical: %s: %s (%s:%u, %s)\n", currentDateTime.constData(), localMsg.constData(), file, context.line, function);
         break;
     case QtFatalMsg:
-        fprintf(log_file? log_file: stderr, "Fatal: %s: %s (%s:%u, %s)\n", currentTime.constData(), localMsg.constData(), file, context.line, function);
+        fprintf(log_file? log_file: stderr, "Fatal: %s: %s (%s:%u, %s)\n", currentDateTime.constData(), localMsg.constData(), file, context.line, function);
         break;
     }
 

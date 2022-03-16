@@ -60,26 +60,42 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionItem(NetworkManager::
 
 KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connectUuid)
 {
-    NetworkManager::ActiveConnection::Ptr activeConnectPtr =
-            m_networkResourceInstance->getActiveConnect(connectUuid);
+    NetworkManager::ActiveConnection::List activeConnectList;
+    activeConnectList.clear();
+    activeConnectList = m_networkResourceInstance->getActiveConnectList();
 
-    if (nullptr == activeConnectPtr) {
-        qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< connectUuid;
+    if (activeConnectList.empty()) {
+        qWarning()<<"[KyActiveConnectResourse]"<<"the active connect list is empty";
+        return nullptr;
+    }
+    //可能存在已无效的ActiveConnection，所以使用uuid遍历处理需要满足device不为空且ActiveConnection状态为已连接
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr = nullptr;
+    KyConnectItem *activeConnectItem = nullptr;
+    bool isFind = false;
+    for (int index = 0; index < activeConnectList.size(); index++) {
+        activeConnectPtr = activeConnectList.at(index);
+        if (activeConnectPtr.isNull()) {
+            continue;
+        }
+
+        if (connectUuid != activeConnectPtr->uuid()) {
+            continue;
+        }
+
+        activeConnectItem = getActiveConnectionItem(activeConnectPtr);
+
+        if (nullptr == activeConnectItem || activeConnectPtr->devices().isEmpty()) {
+            continue;
+        } else {
+           isFind = true;
+        }
+    }
+
+    if (!isFind) {
         return nullptr;
     }
 
-    KyConnectItem *activeConnectItem = getActiveConnectionItem(activeConnectPtr);
-    if (nullptr == activeConnectItem) {
-        return nullptr;
-    }
-
-    QStringList interfaces = activeConnectPtr->devices();
-    if (interfaces.isEmpty()) {
-        qWarning()<< LOG_FLAG << "get active connection device failed.";
-        return nullptr;
-    }
-
-    QString ifaceUni = interfaces.at(0);
+    QString ifaceUni = activeConnectPtr->devices().at(0);
     NetworkManager::Device:: Ptr devicePtr =
                 m_networkResourceInstance->findDeviceUni(ifaceUni);
     activeConnectItem->m_ifaceName = devicePtr->interfaceName();

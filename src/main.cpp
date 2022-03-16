@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QFile>
+#include <ukui-log4qt.h>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 #include "xatom-helper.h"
 #endif
@@ -79,13 +80,15 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
 
 int main(int argc, char *argv[])
 {
+    initUkuiLog4qt("kylin-nm");
+
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
 //    QApplication a(argc, argv);
     QString id = QString("kylin-nm"+ QLatin1String(getenv("DISPLAY")));
     QtSingleApplication a(id, argc, argv);
-    qInstallMessageHandler(messageOutput);
+//    qInstallMessageHandler(messageOutput);
     if (a.isRunning()) {
         a.sendMessage("raise_window_noop");
         return EXIT_SUCCESS;

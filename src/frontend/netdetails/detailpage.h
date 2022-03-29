@@ -37,11 +37,12 @@ public:
 
 private:
     void initUI();
-    void addDetailItem(QListWidget *listWidget, DetailWidget *detailWidget);
+    void addDetailItem(QListWidget *listWidget, QWidget *detailWidget);
 
 public:
     QListWidget * m_listWidget = nullptr;
-    DetailWidget * m_ssidWidget = nullptr;
+    FirstDetailWidget * m_ssidWidget = nullptr;
+
     DetailWidget * m_protocolWidget = nullptr;
     DetailWidget * m_secTypeWidget = nullptr;
     DetailWidget * m_hzWidget = nullptr;
@@ -53,7 +54,8 @@ public:
     DetailWidget * m_macWidget = nullptr;
 
     LineEdit *mSSIDEdit;
-    FixLabel *mSSIDLabel;
+//    FixLabel *mSSIDLabel;
+    QLabel *mSSIDLabel;
     QLabel *mProtocol;
     QLabel *mSecType;
     QLabel *mHz;

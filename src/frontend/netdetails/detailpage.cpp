@@ -21,7 +21,7 @@ void DetailPage::setSSID(const QString &ssid) {
     if (isCreate) {
         return;
     }
-    this->mSSIDLabel->setText(ssid);
+    this->mSSIDLabel->setText(fontMetrics().elidedText(ssid, Qt::ElideRight, 136, Qt::TextShowMnemonic));
 }
 
 void DetailPage::setProtocol(const QString &protocol) {
@@ -89,7 +89,7 @@ bool DetailPage::checkIsChanged(const ConInfo info)
     }
 }
 
-void DetailPage::addDetailItem(QListWidget *listWidget, DetailWidget *detailWidget)
+void DetailPage::addDetailItem(QListWidget *listWidget, QWidget *detailWidget)
 {
     QListWidgetItem *listWidgetItem = new QListWidgetItem(listWidget);
     listWidgetItem->setSizeHint(QSize(listWidget->width(),36));
@@ -113,11 +113,10 @@ void DetailPage::initUI() {
     mDetailLayout->addWidget(m_listWidget);
 
     if (!isCreate) {
-        mSSIDLabel = new FixLabel(this);
-        mSSIDLabel->setFixedWidth(MAX_LABEL_WIDTH);
+        mSSIDLabel = new QLabel(this);
+        mSSIDLabel->adjustSize();
         mSSIDLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(mSSIDLabel), m_listWidget);
-
+        m_ssidWidget = new FirstDetailWidget(qobject_cast<QWidget *>(mSSIDLabel), m_listWidget);
 //        mSSID->setStyleSheet("background:transparent;border-width:0px;border-style:none");
 //        mSSID->setFocusPolicy(Qt::NoFocus);
     } else {
@@ -128,7 +127,8 @@ void DetailPage::initUI() {
         mSSIDEdit->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;background:transparent");
         mSSIDEdit->setPlaceholderText(tr("Please input SSID:"));
         mSSIDEdit->setMaxLength(MAX_NAME_LENGTH);
-        m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(mSSIDEdit), m_listWidget);
+        m_ssidWidget = new FirstDetailWidget(qobject_cast<QWidget *>(mSSIDEdit), m_listWidget);
+
     }
     m_ssidWidget->setKey(tr("SSID:"));
 

@@ -1,5 +1,5 @@
-##kylin-nm介绍
-###简介
+## kylin-nm介绍
+### 简介
   麒麟网络工具（kylin-network-manager，简称kylin-nm）是操作系统的网络前端，其主要功能有：  
   1、托盘栏图标及右键菜单  
      查看当前网络状态  
@@ -30,20 +30,20 @@
      深色与浅色窗口样式切换  
      调节网络工具窗口透明度  
      普通窗口与具有毛玻璃效果的窗口的切换  
-###运行
+### 运行
   麒麟网络工具的进程为kylin-nm，默认开机自启，依赖NetworkManger  
-###命令行和dbus接口
+### 命令行和dbus接口
 
   kylin-nm进程的命令行如下：  
   Usage: kylin-nm  
 
-####dbus接口：  
+#### dbus接口：  
   DBUS类型：SESSION BUS  
   DBUS名称：com.kylin.network   
   OBJECT路径：/  
   接口名称：com.kylin.network  
 
-####dbus方法  
+#### dbus方法  
   getWirelessList  
     参数：无  
     返回值：QMap<QString, QVector<QStringList>>  
@@ -148,24 +148,24 @@
     功能： 断开移动热点  
 
 
-###原理与主要使用的技术
+### 原理与主要使用的技术
   kylin-nm主要与NetworkManager进行交互，通过对应的dbus信号驱动UI界面的更新。并通过提供的dbus方法来进行网络相关功能的调用。  
                            
   麒麟网络工具按照功能划分成两层：UI层和逻辑层。UI层实现网络资源的显示，以及用户的交互，逻辑层通过NetworkManager提供的Dbus接口，完成网络资源的管理及其配置。  
-###配置文件
+### 配置文件
   kylin-nm的配置文件保存在如下路径：  
     ~/.config/ukui/kylin-nm.conf				        有线无线开关状态 设备状态  
     org.ukui.kylin-nm.switch						对应的gsetting值 （有线无线开关状态）  
-###编译
+### 编译
   cd kylin-nm  
   mkdir build  
   cd build  
   qmake ..  
   make  
   sudo make install   
-###运行命令
+### 运行命令
   ./kylin-nm  
-###调试
+### 调试
   kylin-nm目前并采用ukui-log4qt模块的日志功能。日志默认保存在~/.log/kylin-nm.log中  
 
 

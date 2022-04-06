@@ -7,7 +7,11 @@
 #include <QPushButton>
 #include <QEvent>
 
-#include <QToolButton>
+#include "kwidget.h"
+#include "ktabbar.h"
+#include "kballontip.h"
+
+using namespace kdk;
 
 //文本长自动省略并添加悬浮
 class FixLabel : public QLabel
@@ -34,8 +38,6 @@ public:
 
     void setKey(const QString &keyLabel);
 
-//    void firstDetailWidget();
-
 private:
     QHBoxLayout * m_mainLayout = nullptr;
     FixLabel * m_keyLabel = nullptr;
@@ -51,7 +53,7 @@ class FirstDetailWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit FirstDetailWidget(QWidget *valueWidget = nullptr, QWidget *parent = nullptr);
+    explicit FirstDetailWidget(QWidget *valueWidget = nullptr, QWidget *button = nullptr, QWidget *parent = nullptr);
     ~FirstDetailWidget();
 
     void setKey(const QString &keyLabel);
@@ -60,12 +62,9 @@ private:
     QHBoxLayout * m_mainLayout = nullptr;
     FixLabel * m_keyLabel = nullptr;
     QWidget * m_valueWidget = nullptr;
+    QWidget *m_copyButton;
 
     void initUI();
-
-signals:
-    void sig_click();
-
 };
 
 class CopyButton : public QPushButton
@@ -75,13 +74,20 @@ public:
     explicit CopyButton();
     ~CopyButton();
 
+public:
+    KBallonTip * m_copiedTip = nullptr;
+
+private:
+    QPoint m_mousePosition;
+    QPalette btnPal;
+    QColor color;
+
 protected:
-//    void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
-    bool event(QEvent *e);
 };
+
 
 #endif // DetailWidget_H

@@ -66,3 +66,13 @@ unix {
 
 DISTFILES += \
     org.ukui.kylin-nm.switch.gschema.xml
+
+
+
+CONFIG += link_pkgconfig
+PKGCONFIG += kysdk-qtwidgets
+
+INCLUDEPATH += \
+/usr/include/kysdk/kysdk-base/ \
+/usr/lib/kysdk/kysdk-base/
+LIBS += -L/usr/lib/kysdk/kysdk-base/ -lkylog -lkyconf -lpthread -lsystemd

@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <QListWidget>
 #include <QApplication>
+#include <QPushButton>
+#include <QClipboard>
 
 #include "detailwidget.h"
 #include "coninfo.h"
@@ -53,6 +55,7 @@ public:
     DetailWidget * m_ipv6Widget = nullptr;
     DetailWidget * m_macWidget = nullptr;
 
+    CopyButton  * m_netCopyButton;
     LineEdit *mSSIDEdit;
 //    FixLabel *mSSIDLabel;
     QLabel *mSSIDLabel;
@@ -75,8 +78,30 @@ private:
     QCheckBox *forgetNetBox;
     bool mIsWlan;
     bool isCreate;
+
+
+    QClipboard   * m_clipboard ;
+    QStringList  m_netDetailList;
+    QString      m_formerlSsid;
+    QString      m_formerIPV6;
+
+    QString      m_ssidCopy = tr("SSID:");
+    QString      m_protocolCopy = tr("Protocol:");
+    QString      m_securityCopy = tr("Security Type:");
+    QString      m_hzCopy= tr ("Hz:");
+    QString      m_chanCopy= tr ("Chan:");
+    QString      m_bandwithCopy = tr("BandWidth:");
+    QString      m_ipv4Copy = tr("IPV4:");
+    QString      m_ipv4dnsCopy = tr("IPV4 Dns:");
+    QString      m_ipv6Copy = tr("IPV6:");
+    QString      m_macCopy = tr("Mac:");
+    QString      m_netDetailCopyText;
+
+    bool         isCopyOk = false;
+
 private slots:
     void setEnableOfSaveBtn();
+    void on_btnCopyNetDetail_clicked();
 
 signals:
      void setDetailPageState(bool);

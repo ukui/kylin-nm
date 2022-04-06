@@ -53,7 +53,7 @@
     </message>
     <message>
         <location filename="../netconnect.cpp" line="426"/>
-        <location filename="../netconnect.cpp" line="835"/>
+        <location filename="../netconnect.cpp" line="833"/>
         <source>connected</source>
         <translation type="unfinished"></translation>
     </message>

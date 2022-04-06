@@ -100,6 +100,19 @@
     </message>
 </context>
 <context>
+    <name>CopyButton</name>
+    <message>
+        <location filename="../src/frontend/netdetails/detailwidget.cpp" line="133"/>
+        <source>Copied successfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailwidget.cpp" line="140"/>
+        <source>Copy all</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CreatNetPage</name>
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="31"/>
@@ -156,16 +169,18 @@
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="138"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="86"/>
         <source>SSID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="133"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="129"/>
         <source>Please input SSID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="142"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="87"/>
         <source>Protocol:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -176,36 +191,43 @@
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="150"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="89"/>
         <source>Hz:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="154"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="90"/>
         <source>Chan:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="158"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="91"/>
         <source>BandWidth:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="172"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="94"/>
         <source>IPV6:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="162"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="92"/>
         <source>IPV4:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="166"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="93"/>
         <source>IPV4 Dns:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="176"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="95"/>
         <source>Mac:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1466,160 +1488,115 @@
 <context>
     <name>NetDetail</name>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="37"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="38"/>
         <source>Kylin NM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="40"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="41"/>
         <source>kylin network desktop message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="217"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="213"/>
         <source>Detail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="222"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="218"/>
         <source>Ipv4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="226"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="222"/>
         <source>Ipv6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="230"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="226"/>
         <source>Security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="249"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="245"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="252"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="248"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="255"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="251"/>
         <source>Forget this network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="285"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="281"/>
         <source>Add Lan Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="294"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="290"/>
         <source>connect hiddin wlan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="452"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="464"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="931"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="448"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="460"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="927"/>
         <source>None</source>
         <translation type="unfinished">Yok</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="563"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="564"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="565"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="559"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="560"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="561"/>
         <source>Auto</source>
         <translation type="unfinished">Oto</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="681"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="677"/>
         <source>start check ipv4 address conflict</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="698"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="694"/>
         <source>start check ipv6 address conflict</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="744"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="795"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="883"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="740"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="791"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="879"/>
         <source>ipv4 address conflict!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="803"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="891"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="799"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="887"/>
         <source>ipv6 address conflict!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="927"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="923"/>
         <source>this wifi no support enterprise type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="932"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="928"/>
         <source>this wifi no support None type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="937"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="933"/>
         <source>this wifi no support WPA2 type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="940"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="936"/>
         <source>this wifi no support WPA3 type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/netdetails/netdetail.h" line="112"/>
-        <source>SSID:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/netdetails/netdetail.h" line="113"/>
-        <source>Protocol:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/netdetails/netdetail.h" line="115"/>
-        <source>Hz:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/netdetails/netdetail.h" line="116"/>
-        <source>Chan:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/netdetails/netdetail.h" line="117"/>
-        <source>BandWidth:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/netdetails/netdetail.h" line="118"/>
-        <source>IPV4:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/netdetails/netdetail.h" line="119"/>
-        <source>IPV4 Dns:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/netdetails/netdetail.h" line="120"/>
-        <source>IPV6:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/netdetails/netdetail.h" line="121"/>
-        <source>Mac:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

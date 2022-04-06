@@ -21,8 +21,6 @@
 #include <QDBusReply>
 #include <QCloseEvent>
 
-#include <QClipboard>
-
 #include "detailpage.h"
 #include "ipv4page.h"
 #include "ipv6page.h"
@@ -108,23 +106,9 @@ private:
     QPushButton  * securityBtn;
     QFrame       * pageFrame;
 
-    QClipboard   * m_clipboard ;
-    QStringList  m_netDetailList;
-
     QString      m_name;
     QString      m_uuid;
     QString      m_deviceName;
-    QString      m_ssidCopy=tr("SSID:");
-    QString      m_protocolCopy=tr("Protocol:");
-    QString      m_securityCopy;
-    QString      m_hzCopy=tr("Hz:");
-    QString      m_chanCopy=tr("Chan:");
-    QString      m_bandwithCopy=tr("BandWidth:");
-    QString      m_ipv4Copy=tr("IPV4:");
-    QString      m_ipv4dnsCopy=tr("IPV4 Dns:");
-    QString      m_ipv6Copy=tr("IPV6:");
-    QString      m_macCopy=tr("Mac:");
-    QString      m_netDetailCopyText;
 
     bool         isWlan;
     bool         m_isCreateNet;
@@ -138,8 +122,6 @@ private:
     bool         isSecuOk;
     bool         isConfirmBtnEnable;
 
-    bool         isCopyOk = false;
-
     ConInfo      m_info;
 
     QButtonGroup *m_group;
@@ -148,7 +130,6 @@ private slots:
     void on_btnConfirm_clicked();
     void on_btnForget_clicked();
     void onPaletteChanged();
-    void on_BtnCopyNetDetail_clicked();
 
 signals:
     void detailPageClose(bool on);

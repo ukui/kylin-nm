@@ -21,6 +21,8 @@ void DetailPage::setSSID(const QString &ssid) {
     if (isCreate) {
         return;
     }
+//    this->mSSIDLabel->setText(ssid);
+    m_formerlSsid = ssid;
     this->mSSIDLabel->setText(fontMetrics().elidedText(ssid, Qt::ElideRight, 136, Qt::TextShowMnemonic));
 }
 
@@ -53,6 +55,7 @@ void DetailPage::setIpv4Dns(const QString &ipv4Dns) {
 }
 
 void DetailPage::setIpv6(const QString &ipv6) {
+    m_formerIPV6 = ipv6;
     this->mIPV6->setText(ipv6);
 }
 
@@ -116,7 +119,8 @@ void DetailPage::initUI() {
         mSSIDLabel = new QLabel(this);
         mSSIDLabel->adjustSize();
         mSSIDLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        m_ssidWidget = new FirstDetailWidget(qobject_cast<QWidget *>(mSSIDLabel), m_listWidget);
+        m_netCopyButton = new CopyButton();
+        m_ssidWidget = new FirstDetailWidget(qobject_cast<QWidget *>(mSSIDLabel), m_netCopyButton, m_listWidget);
 //        mSSID->setStyleSheet("background:transparent;border-width:0px;border-style:none");
 //        mSSID->setFocusPolicy(Qt::NoFocus);
     } else {
@@ -127,9 +131,12 @@ void DetailPage::initUI() {
         mSSIDEdit->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;background:transparent");
         mSSIDEdit->setPlaceholderText(tr("Please input SSID:"));
         mSSIDEdit->setMaxLength(MAX_NAME_LENGTH);
-        m_ssidWidget = new FirstDetailWidget(qobject_cast<QWidget *>(mSSIDEdit), m_listWidget);
-
+        m_ssidWidget = new FirstDetailWidget(qobject_cast<QWidget *>(mSSIDEdit), m_netCopyButton, m_listWidget);
     }
+
+    m_netCopyButton->setIcon(QIcon::fromTheme("edit-copy-symbolic"));
+    connect(m_netCopyButton, &QPushButton::clicked, this, &DetailPage::on_btnCopyNetDetail_clicked);
+
     m_ssidWidget->setKey(tr("SSID:"));
 
     mProtocol = new QLabel(this);
@@ -218,3 +225,39 @@ void DetailPage::setEnableOfSaveBtn() {
     }
     emit setDetailPageState(saveEnable);
 }
+
+//获取列表信息
+void DetailPage::on_btnCopyNetDetail_clicked()
+{
+    if (!isCopyOk) {
+        m_ssidCopy += m_formerlSsid;
+        m_protocolCopy += this->mProtocol->text();
+        m_netDetailList << m_ssidCopy << m_protocolCopy;
+
+        if(mIsWlan)
+        {
+            m_securityCopy += this->mSecType->text();
+            m_hzCopy += this->mHz->text();
+            m_chanCopy += this->mChan->text();
+            m_netDetailList << m_securityCopy << m_hzCopy << m_chanCopy;
+        }
+
+        m_bandwithCopy += this->mBandWidth->text();       
+        m_ipv6Copy += m_formerIPV6;
+        m_ipv4Copy += this->mIPV4->text();
+        m_ipv4dnsCopy += this->mIPV4Dns->text();
+        m_macCopy += this->mMac->text();
+        m_netDetailList << m_bandwithCopy << m_ipv4Copy << m_ipv4dnsCopy << m_ipv6Copy << m_macCopy;
+
+        isCopyOk = true;
+    }
+
+    qDebug() << m_netDetailList;
+
+    //设置剪贴板内容
+    m_netDetailCopyText = m_netDetailList.join("\n");
+    m_clipboard = QApplication::clipboard();
+    m_clipboard->setText(m_netDetailCopyText);
+
+}
+

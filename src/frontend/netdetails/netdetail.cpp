@@ -143,6 +143,7 @@ void NetDetail::onPaletteChanged()
     setFramePalette(ipv6Page, pal);
     setFramePalette(securityPage, pal);
     setFramePalette(createNetPage, pal);
+//    setFramePalette(detailPage->m_netCopyButton->m_copiedTip, pal);
 
     QPalette listwidget_pal(detailPage->m_listWidget->palette());
     listwidget_pal.setColor(QPalette::Base, this->palette().base().color());
@@ -181,8 +182,6 @@ void NetDetail::initUI()
     mainLayout->setContentsMargins(9,9,14,24);
 
     detailPage = new DetailPage(isWlan, m_name.isEmpty(), this);
-
-    connect(detailPage->m_ssidWidget,&FirstDetailWidget::sig_click,this,&NetDetail::on_BtnCopyNetDetail_clicked);
 
     ipv4Page = new Ipv4Page(this);
     ipv6Page = new Ipv6Page(this);
@@ -958,39 +957,4 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        }
    }
    return QWidget::eventFilter(w, event);
-}
-
-//获取列表信息
-void NetDetail::on_BtnCopyNetDetail_clicked()
-{
-    if (!isCopyOk) {
-        m_ssidCopy += m_name;
-        m_protocolCopy += m_info.strConType;
-        m_netDetailList << m_ssidCopy << m_protocolCopy;
-
-        if(isWlan)
-        {
-            m_securityCopy += m_info.strSecType;
-            m_hzCopy += m_info.strHz;
-            m_chanCopy += m_info.strChan;
-            m_netDetailList << m_securityCopy << m_hzCopy << m_chanCopy;
-        }
-
-        m_bandwithCopy += m_info.strBandWidth;
-        m_ipv4Copy += m_info.strDynamicIpv4;
-        m_ipv4dnsCopy += m_info.strDynamicIpv4Dns;
-        m_ipv6Copy += m_info.strDynamicIpv6;
-        m_macCopy += m_info.strMac;
-        m_netDetailList << m_bandwithCopy << m_ipv4Copy << m_ipv4dnsCopy << m_ipv6Copy << m_macCopy;
-
-        isCopyOk = true;
-    }
-
-    qDebug() << m_netDetailList;
-
-    //设置剪贴板内容
-    m_netDetailCopyText = m_netDetailList.join("\n");
-    m_clipboard = QApplication::clipboard();
-    m_clipboard->setText(m_netDetailCopyText);
-
 }

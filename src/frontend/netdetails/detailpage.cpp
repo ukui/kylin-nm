@@ -120,6 +120,7 @@ void DetailPage::initUI() {
         mSSIDLabel->adjustSize();
         mSSIDLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         m_netCopyButton = new CopyButton();
+
         m_ssidWidget = new FirstDetailWidget(qobject_cast<QWidget *>(mSSIDLabel), m_netCopyButton, m_listWidget);
 //        mSSID->setStyleSheet("background:transparent;border-width:0px;border-style:none");
 //        mSSID->setFocusPolicy(Qt::NoFocus);
@@ -216,6 +217,10 @@ void DetailPage::initUI() {
     if (mIsWlan) {
         layout->addLayout(mAutoLayout);
     }
+
+//    //复制按钮位置
+//    QPoint m_copyBtnPosition = m_netCopyButton->mapToGlobal(m_netCopyButton->pos());
+//    m_netCopyButton->m_copyTip->move(m_copyBtnPosition.x() - 100, m_copyBtnPosition.y() + 12);
 }
 
 void DetailPage::setEnableOfSaveBtn() {

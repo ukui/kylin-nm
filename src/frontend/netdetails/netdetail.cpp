@@ -143,7 +143,6 @@ void NetDetail::onPaletteChanged()
     setFramePalette(ipv6Page, pal);
     setFramePalette(securityPage, pal);
     setFramePalette(createNetPage, pal);
-//    setFramePalette(detailPage->m_netCopyButton->m_copiedTip, pal);
 
     QPalette listwidget_pal(detailPage->m_listWidget->palette());
     listwidget_pal.setColor(QPalette::Base, this->palette().base().color());

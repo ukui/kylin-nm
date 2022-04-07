@@ -62,6 +62,8 @@ private:
     QHBoxLayout * m_mainLayout = nullptr;
     FixLabel * m_keyLabel = nullptr;
     QWidget * m_valueWidget = nullptr;
+
+public:
     QWidget *m_copyButton;
 
     void initUI();
@@ -75,12 +77,12 @@ public:
     ~CopyButton();
 
 public:
-    KBallonTip * m_copiedTip = nullptr;
-
+    KBallonTip * m_copyTip = nullptr;
 private:
+
+    KBallonTip * m_copiedTip = nullptr;
     QPoint m_mousePosition;
-    QPalette btnPal;
-    QColor color;
+    QPoint m_enterPosition;
 
 protected:
     void mousePressEvent(QMouseEvent *event);

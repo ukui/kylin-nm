@@ -79,25 +79,8 @@ private:
     bool mIsWlan;
     bool isCreate;
 
-
-    QClipboard   * m_clipboard ;
-    QStringList  m_netDetailList;
     QString      m_formerSsid;
     QString      m_formerIPV6;
-
-    QString      m_ssidCopy = tr("SSID:");
-    QString      m_protocolCopy = tr("Protocol:");
-    QString      m_securityCopy = tr("Security Type:");
-    QString      m_hzCopy= tr ("Hz:");
-    QString      m_chanCopy= tr ("Chan:");
-    QString      m_bandwithCopy = tr("BandWidth:");
-    QString      m_ipv4Copy = tr("IPV4:");
-    QString      m_ipv4dnsCopy = tr("IPV4 Dns:");
-    QString      m_ipv6Copy = tr("IPV6:");
-    QString      m_macCopy = tr("Mac:");
-    QString      m_netDetailCopyText;
-
-    bool         isCopyOk = false;
 
 private slots:
     void setEnableOfSaveBtn();

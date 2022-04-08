@@ -23,7 +23,15 @@ void DetailPage::setSSID(const QString &ssid) {
     }
 //    this->mSSIDLabel->setText(ssid);
     m_formerSsid = ssid;
-    this->mSSIDLabel->setText(fontMetrics().elidedText(ssid, Qt::ElideRight, 90, Qt::TextShowMnemonic));
+    QFontMetrics fontMetrics(this->font());
+    int fontSize = fontMetrics.width(ssid);
+    if (fontSize > this->width()) {
+        this->mSSIDLabel->setText(fontMetrics.elidedText(ssid, Qt::ElideRight, this->width()));
+        this->setToolTip(ssid);
+    } else {
+        this->mSSIDLabel->setText(ssid);
+        this->setToolTip("");
+    }
 }
 
 void DetailPage::setProtocol(const QString &protocol) {
@@ -230,6 +238,20 @@ void DetailPage::setEnableOfSaveBtn() {
 //获取列表信息
 void DetailPage::on_btnCopyNetDetail_clicked()
 {
+    QStringList  m_netDetailList;
+    QString      m_ssidCopy = tr("SSID:");
+    QString      m_protocolCopy = tr("Protocol:");
+    QString      m_securityCopy = tr("Security Type:");
+    QString      m_hzCopy= tr ("Hz:");
+    QString      m_chanCopy= tr ("Chan:");
+    QString      m_bandwithCopy = tr("BandWidth:");
+    QString      m_ipv4Copy = tr("IPV4:");
+    QString      m_ipv4dnsCopy = tr("IPV4 Dns:");
+    QString      m_ipv6Copy = tr("IPV6:");
+    QString      m_macCopy = tr("Mac:");
+    QString      m_netDetailCopyText;
+    bool         isCopyOk = false;
+
     if (!isCopyOk) {
         m_ssidCopy += m_formerSsid;
         m_protocolCopy += this->mProtocol->text();
@@ -257,7 +279,7 @@ void DetailPage::on_btnCopyNetDetail_clicked()
 
     //设置剪贴板内容
     m_netDetailCopyText = m_netDetailList.join("\n");
-    m_clipboard = QApplication::clipboard();
+    QClipboard *m_clipboard = QApplication::clipboard();
     m_clipboard->setText(m_netDetailCopyText);
 
 }

@@ -126,15 +126,6 @@ CopyButton::CopyButton()
     btnPal.setColor(QPalette::Button, color);
     this->setPalette(btnPal);
 
-//    //设置“复制全部”消息提示
-//    m_copyTip = new KBallonTip();
-//    m_copyTip->setTipType(Nothing);
-//    m_copyTip->setFixedSize(90, 38);
-//    m_copyTip->setWindowFlags(Qt::FramelessWindowHint);
-//    m_copyTip->setAttribute(Qt::WA_TranslucentBackground, true);
-//    m_copyTip->setContentsMargins(15, 7, 0, 7);
-//    m_copyTip->setText(tr("Copy all"));
-
     //设置“复制成功”消息弹窗格式
     m_copiedTip = new KBallonTip();
     m_copiedTip->setTipType(Normal);
@@ -146,11 +137,6 @@ CopyButton::CopyButton()
 
 CopyButton::~CopyButton()
 {
-    if (m_copyTip != nullptr)
-    {
-        m_copyTip = nullptr;
-        delete m_copyTip;
-    }
     if (m_copiedTip != nullptr)
     {
         m_copiedTip = nullptr;
@@ -182,9 +168,8 @@ void CopyButton::mousePressEvent(QMouseEvent *event)
 void CopyButton::mouseReleaseEvent(QMouseEvent *event)
 {
     //设置弹窗位置并显示
-//    QPoint m_mousePosition = event->globalPos();
     QPoint m_copyBtnPosition = this->mapToGlobal(this->pos());
-    m_copiedTip->move(m_copyBtnPosition.x() - 500, m_copyBtnPosition.y() + 130);
+    m_copiedTip->move(m_copyBtnPosition.x() - 490, m_copyBtnPosition.y() + 130);
     QPalette pal = GetTheme();
     m_copiedTip->setPalette(pal);
     //    m_copiedTip->setTipTime(1500);
@@ -198,21 +183,11 @@ void CopyButton::enterEvent(QEvent *event)
     palette = GetTheme();
     QToolTip::setPalette(palette);
     this->setToolTip(tr("Copy all"));
-    //设置弹窗位置并显示
-//    m_copyBtnPosition = this->mapToGlobal(this->pos());
-//    m_copyTip->move(m_copyBtnPosition.x() - 395, m_copyBtnPosition.y() + 35);
-//    QPalette pal = GetTheme();
-//    m_copyTip->setPalette(pal);
-//    m_copyTip->setTipTime(2000);
-//    m_copyTip->showInfo();
     return QPushButton::enterEvent(event);
 }
 
 void CopyButton::leaveEvent(QEvent *event)
 {
-    if (m_copyTip != nullptr) {
-        m_copyTip->hide();
-    }
     if (m_copiedTip != nullptr) {
         m_copiedTip->hide();
     }

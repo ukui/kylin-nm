@@ -80,7 +80,7 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
 
 int main(int argc, char *argv[])
 {
-//    initUkuiLog4qt("kylin-nm");
+    initUkuiLog4qt("kylin-nm");
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);

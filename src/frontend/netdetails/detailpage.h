@@ -82,7 +82,7 @@ private:
 
     QClipboard   * m_clipboard ;
     QStringList  m_netDetailList;
-    QString      m_formerlSsid;
+    QString      m_formerSsid;
     QString      m_formerIPV6;
 
     QString      m_ssidCopy = tr("SSID:");

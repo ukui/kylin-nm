@@ -22,8 +22,8 @@ void DetailPage::setSSID(const QString &ssid) {
         return;
     }
 //    this->mSSIDLabel->setText(ssid);
-    m_formerlSsid = ssid;
-    this->mSSIDLabel->setText(fontMetrics().elidedText(ssid, Qt::ElideRight, 136, Qt::TextShowMnemonic));
+    m_formerSsid = ssid;
+    this->mSSIDLabel->setText(fontMetrics().elidedText(ssid, Qt::ElideRight, 90, Qt::TextShowMnemonic));
 }
 
 void DetailPage::setProtocol(const QString &protocol) {
@@ -231,7 +231,7 @@ void DetailPage::setEnableOfSaveBtn() {
 void DetailPage::on_btnCopyNetDetail_clicked()
 {
     if (!isCopyOk) {
-        m_ssidCopy += m_formerlSsid;
+        m_ssidCopy += m_formerSsid;
         m_protocolCopy += this->mProtocol->text();
         m_netDetailList << m_ssidCopy << m_protocolCopy;
 

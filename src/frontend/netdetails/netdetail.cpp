@@ -24,7 +24,6 @@
 #define  SECURITY_PAGE_NUM 3
 #define  CREATE_NET_PAGE_NUM 4
 #define  PAGE_MIN_HEIGHT 40
-#define  SSID_LENGTH_LIMIT 10
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 

@@ -79,9 +79,7 @@ public:
     QPalette GetTheme();
 
 private:
-    KBallonTip * m_copyTip = nullptr;
     KBallonTip * m_copiedTip = nullptr;
-//    QPoint m_copyBtnPosition;
 
 protected:
     void mousePressEvent(QMouseEvent *event);

@@ -35,12 +35,16 @@
 <context>
     <name>CopyButton</name>
     <message>
-        <location filename="../src/frontend/netdetails/detailwidget.cpp" line="133"/>
         <source>Copied successfully</source>
-        <translation>复制成功</translation>
+        <translation type="vanished">复制成功</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailwidget.cpp" line="140"/>
+        <location filename="../src/frontend/netdetails/detailwidget.cpp" line="143"/>
+        <source>Copied successfully!</source>
+        <translation>复制成功！</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/detailwidget.cpp" line="196"/>
         <source>Copy all</source>
         <translation>复制全部</translation>
     </message>
@@ -96,71 +100,72 @@
 <context>
     <name>DetailPage</name>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="182"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="185"/>
         <source>Auto Connection</source>
         <translation>自动连接</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="138"/>
-        <location filename="../src/frontend/netdetails/detailpage.h" line="86"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="141"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="88"/>
         <source>SSID:</source>
         <translation>SSID：</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="129"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="133"/>
         <source>Please input SSID:</source>
         <translation>请输入SSID:</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="142"/>
-        <location filename="../src/frontend/netdetails/detailpage.h" line="87"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="145"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="89"/>
         <source>Protocol:</source>
         <translation>协议：</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="146"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="149"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="90"/>
         <source>Security Type:</source>
         <translation>安全类型：</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="150"/>
-        <location filename="../src/frontend/netdetails/detailpage.h" line="89"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="153"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="91"/>
         <source>Hz:</source>
         <translation>网络频带：</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="154"/>
-        <location filename="../src/frontend/netdetails/detailpage.h" line="90"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="157"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="92"/>
         <source>Chan:</source>
         <translation>网络通道：</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="158"/>
-        <location filename="../src/frontend/netdetails/detailpage.h" line="91"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="161"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="93"/>
         <source>BandWidth:</source>
         <translation>带宽：</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="172"/>
-        <location filename="../src/frontend/netdetails/detailpage.h" line="94"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="175"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="96"/>
         <source>IPV6:</source>
         <translation>本地链接IPV6地址：</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="162"/>
-        <location filename="../src/frontend/netdetails/detailpage.h" line="92"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="165"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="94"/>
         <source>IPV4:</source>
         <translation>IPV4地址：</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="166"/>
-        <location filename="../src/frontend/netdetails/detailpage.h" line="93"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="169"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="95"/>
         <source>IPV4 Dns:</source>
         <translation>IPV4 DNS服务器：</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="176"/>
-        <location filename="../src/frontend/netdetails/detailpage.h" line="95"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="179"/>
+        <location filename="../src/frontend/netdetails/detailpage.h" line="97"/>
         <source>Mac:</source>
         <translation>物理地址：</translation>
     </message>

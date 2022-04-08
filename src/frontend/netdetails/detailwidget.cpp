@@ -2,6 +2,7 @@
 #include <QFontMetrics>
 #include <QDebug>
 #include <QApplication>
+#include <QToolTip>
 
 #include "coninfo.h"
 #define THEME_SCHAME "org.ukui.style"
@@ -125,39 +126,22 @@ CopyButton::CopyButton()
     btnPal.setColor(QPalette::Button, color);
     this->setPalette(btnPal);
 
-    //获取当前主题的颜色
-    QPalette pal = qApp->palette();
-    QGSettings * styleGsettings = nullptr;
-    const QByteArray style_id(THEME_SCHAME);
-    if (QGSettings::isSchemaInstalled(style_id)) {
-       styleGsettings = new QGSettings(style_id);
-       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
-       if(currentTheme == "ukui-default"){
-           pal = lightPalette(this);
-       }
-    }
-
-    //设置“复制全部”消息提示
-    m_copyTip = new KBallonTip();
-    m_copyTip->setTipType(Nothing);
-    m_copyTip->setFixedSize(90, 38);
-    m_copyTip->setWindowFlags(Qt::FramelessWindowHint);
-    m_copyTip->setAttribute(Qt::WA_TranslucentBackground, true);
-    m_copyTip->setContentsMargins(15, 7, 0, 7);
-    m_copyTip->setText(tr("Copy all"));
-//    m_copyTip->setTipTime(5500);
-    m_copyTip->setPalette(pal);
-//    m_copyTip->setFocusPolicy(Qt::NoFocus);
+//    //设置“复制全部”消息提示
+//    m_copyTip = new KBallonTip();
+//    m_copyTip->setTipType(Nothing);
+//    m_copyTip->setFixedSize(90, 38);
+//    m_copyTip->setWindowFlags(Qt::FramelessWindowHint);
+//    m_copyTip->setAttribute(Qt::WA_TranslucentBackground, true);
+//    m_copyTip->setContentsMargins(15, 7, 0, 7);
+//    m_copyTip->setText(tr("Copy all"));
 
     //设置“复制成功”消息弹窗格式
     m_copiedTip = new KBallonTip();
     m_copiedTip->setTipType(Normal);
-    m_copiedTip->setFixedSize(145, 55);
+    m_copiedTip->setFixedSize(158, 58);
     m_copiedTip->setWindowFlags(Qt::FramelessWindowHint);
     m_copiedTip->setAttribute(Qt::WA_TranslucentBackground, true);
-    m_copiedTip->setText(tr("Copied successfully"));
-//    m_copiedTip->setTipTime(1500);
-    m_copiedTip->setPalette(pal);
+    m_copiedTip->setText(tr("Copied successfully!"));
 }
 
 CopyButton::~CopyButton()
@@ -174,6 +158,22 @@ CopyButton::~CopyButton()
     }
 }
 
+QPalette CopyButton::GetTheme()
+{
+    //获取当前主题的颜色
+    QPalette pal = qApp->palette();
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = lightPalette(this);
+       }
+    }
+    return pal;
+}
+
 void CopyButton::mousePressEvent(QMouseEvent *event)
 {
     return QPushButton:: mousePressEvent(event);
@@ -182,22 +182,29 @@ void CopyButton::mousePressEvent(QMouseEvent *event)
 void CopyButton::mouseReleaseEvent(QMouseEvent *event)
 {
     //设置弹窗位置并显示
-    m_mousePosition = event->globalPos();
-    m_copiedTip->move(m_mousePosition.x() - 195, m_mousePosition.y() + 130);
-
+//    QPoint m_mousePosition = event->globalPos();
+    QPoint m_copyBtnPosition = this->mapToGlobal(this->pos());
+    m_copiedTip->move(m_copyBtnPosition.x() - 500, m_copyBtnPosition.y() + 130);
+    QPalette pal = GetTheme();
+    m_copiedTip->setPalette(pal);
+    //    m_copiedTip->setTipTime(1500);
     m_copiedTip->showInfo();
     return QPushButton::mouseReleaseEvent(event);
 }
 
 void CopyButton::enterEvent(QEvent *event)
 {
-//    this->setToolTip(tr("Copy all"));
-
-    QPoint m_enterPosition = cursor().pos();
-    m_copyTip->move(m_enterPosition.x() - 120, m_enterPosition.y() + 12);
-    m_copyTip->showInfo();
-
-    //信号
+    QPalette palette = QToolTip::palette();
+    palette = GetTheme();
+    QToolTip::setPalette(palette);
+    this->setToolTip(tr("Copy all"));
+    //设置弹窗位置并显示
+//    m_copyBtnPosition = this->mapToGlobal(this->pos());
+//    m_copyTip->move(m_copyBtnPosition.x() - 395, m_copyBtnPosition.y() + 35);
+//    QPalette pal = GetTheme();
+//    m_copyTip->setPalette(pal);
+//    m_copyTip->setTipTime(2000);
+//    m_copyTip->showInfo();
     return QPushButton::enterEvent(event);
 }
 

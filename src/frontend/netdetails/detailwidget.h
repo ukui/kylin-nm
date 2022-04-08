@@ -76,13 +76,12 @@ public:
     explicit CopyButton();
     ~CopyButton();
 
-public:
-    KBallonTip * m_copyTip = nullptr;
-private:
+    QPalette GetTheme();
 
+private:
+    KBallonTip * m_copyTip = nullptr;
     KBallonTip * m_copiedTip = nullptr;
-    QPoint m_mousePosition;
-    QPoint m_enterPosition;
+//    QPoint m_copyBtnPosition;
 
 protected:
     void mousePressEvent(QMouseEvent *event);

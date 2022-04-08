@@ -217,10 +217,6 @@ void DetailPage::initUI() {
     if (mIsWlan) {
         layout->addLayout(mAutoLayout);
     }
-
-//    //复制按钮位置
-//    QPoint m_copyBtnPosition = m_netCopyButton->mapToGlobal(m_netCopyButton->pos());
-//    m_netCopyButton->m_copyTip->move(m_copyBtnPosition.x() - 100, m_copyBtnPosition.y() + 12);
 }
 
 void DetailPage::setEnableOfSaveBtn() {

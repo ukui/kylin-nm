@@ -127,9 +127,11 @@ void DetailPage::initUI() {
         mSSIDLabel = new QLabel(this);
         mSSIDLabel->adjustSize();
         mSSIDLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        m_netCopyButton = new CopyButton();
+        m_netCopyButton = new CopyButton(this);
+        m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(mSSIDLabel), m_listWidget, m_netCopyButton);
+        m_netCopyButton->setIcon(QIcon::fromTheme("edit-copy-symbolic"));
+        connect(m_netCopyButton, &QPushButton::clicked, this, &DetailPage::on_btnCopyNetDetail_clicked);
 
-        m_ssidWidget = new FirstDetailWidget(qobject_cast<QWidget *>(mSSIDLabel), m_netCopyButton, m_listWidget);
 //        mSSID->setStyleSheet("background:transparent;border-width:0px;border-style:none");
 //        mSSID->setFocusPolicy(Qt::NoFocus);
     } else {
@@ -140,11 +142,9 @@ void DetailPage::initUI() {
         mSSIDEdit->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;background:transparent");
         mSSIDEdit->setPlaceholderText(tr("Please input SSID:"));
         mSSIDEdit->setMaxLength(MAX_NAME_LENGTH);
-        m_ssidWidget = new FirstDetailWidget(qobject_cast<QWidget *>(mSSIDEdit), m_netCopyButton, m_listWidget);
+        m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(mSSIDEdit), m_listWidget);
     }
 
-    m_netCopyButton->setIcon(QIcon::fromTheme("edit-copy-symbolic"));
-    connect(m_netCopyButton, &QPushButton::clicked, this, &DetailPage::on_btnCopyNetDetail_clicked);
 
     m_ssidWidget->setKey(tr("SSID:"));
 
@@ -238,49 +238,44 @@ void DetailPage::setEnableOfSaveBtn() {
 //获取列表信息
 void DetailPage::on_btnCopyNetDetail_clicked()
 {
-    QStringList  m_netDetailList;
-    QString      m_ssidCopy = tr("SSID:");
-    QString      m_protocolCopy = tr("Protocol:");
-    QString      m_securityCopy = tr("Security Type:");
-    QString      m_hzCopy= tr ("Hz:");
-    QString      m_chanCopy= tr ("Chan:");
-    QString      m_bandwithCopy = tr("BandWidth:");
-    QString      m_ipv4Copy = tr("IPV4:");
-    QString      m_ipv4dnsCopy = tr("IPV4 Dns:");
-    QString      m_ipv6Copy = tr("IPV6:");
-    QString      m_macCopy = tr("Mac:");
-    QString      m_netDetailCopyText;
-    bool         isCopyOk = false;
+    QStringList  netDetailList;
+    QString      ssidCopy = tr("SSID:");
+    QString      protocolCopy = tr("Protocol:");
+    QString      securityCopy = tr("Security Type:");
+    QString      hzCopy= tr ("Hz:");
+    QString      chanCopy= tr ("Chan:");
+    QString      bandwithCopy = tr("BandWidth:");
+    QString      ipv4Copy = tr("IPV4:");
+    QString      ipv4dnsCopy = tr("IPV4 Dns:");
+    QString      ipv6Copy = tr("IPV6:");
+    QString      macCopy = tr("Mac:");
+    QString      netDetailCopyText;
 
-    if (!isCopyOk) {
-        m_ssidCopy += m_formerSsid;
-        m_protocolCopy += this->mProtocol->text();
-        m_netDetailList << m_ssidCopy << m_protocolCopy;
+    ssidCopy += m_formerSsid;
+    protocolCopy += this->mProtocol->text();
+    netDetailList << ssidCopy << protocolCopy;
 
-        if(mIsWlan)
-        {
-            m_securityCopy += this->mSecType->text();
-            m_hzCopy += this->mHz->text();
-            m_chanCopy += this->mChan->text();
-            m_netDetailList << m_securityCopy << m_hzCopy << m_chanCopy;
-        }
-
-        m_bandwithCopy += this->mBandWidth->text();       
-        m_ipv6Copy += m_formerIPV6;
-        m_ipv4Copy += this->mIPV4->text();
-        m_ipv4dnsCopy += this->mIPV4Dns->text();
-        m_macCopy += this->mMac->text();
-        m_netDetailList << m_bandwithCopy << m_ipv4Copy << m_ipv4dnsCopy << m_ipv6Copy << m_macCopy;
-
-        isCopyOk = true;
+    if(mIsWlan)
+    {
+        securityCopy += this->mSecType->text();
+        hzCopy += this->mHz->text();
+        chanCopy += this->mChan->text();
+        netDetailList << securityCopy << hzCopy << chanCopy;
     }
 
-    qDebug() << m_netDetailList;
+    bandwithCopy += this->mBandWidth->text();
+    ipv6Copy += m_formerIPV6;
+    ipv4Copy += this->mIPV4->text();
+    ipv4dnsCopy += this->mIPV4Dns->text();
+    macCopy += this->mMac->text();
+    netDetailList << bandwithCopy << ipv4Copy << ipv4dnsCopy << ipv6Copy << macCopy;
+
+    qDebug() << netDetailList;
 
     //设置剪贴板内容
-    m_netDetailCopyText = m_netDetailList.join("\n");
+    netDetailCopyText = netDetailList.join("\n");
     QClipboard *m_clipboard = QApplication::clipboard();
-    m_clipboard->setText(m_netDetailCopyText);
+    m_clipboard->setText(netDetailCopyText);
 
 }
 

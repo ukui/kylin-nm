@@ -43,7 +43,7 @@ private:
 
 public:
     QListWidget * m_listWidget = nullptr;
-    FirstDetailWidget * m_ssidWidget = nullptr;
+    DetailWidget * m_ssidWidget = nullptr;
 
     DetailWidget * m_protocolWidget = nullptr;
     DetailWidget * m_secTypeWidget = nullptr;

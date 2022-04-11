@@ -46,11 +46,15 @@ void FixLabel::setText(const QString & text, bool saveTextFlag)
     QLabel::setText(text);
 }
 
-DetailWidget::DetailWidget(QWidget *valueWidget, QWidget *parent)
-    : m_valueWidget(valueWidget) , QWidget(parent)
+DetailWidget::DetailWidget(QWidget *valueWidget, QWidget *parent, QWidget *buttonWidget)
+    : m_valueWidget(valueWidget) , QWidget(parent) , m_copyButton(buttonWidget)
 {
 //    m_valueWidget = valueWidget;
-    initUI();
+    if (buttonWidget != nullptr) {
+        initCopyButtonUI();
+    }else{
+        initUI();
+    }
 }
 
 DetailWidget::~DetailWidget()
@@ -67,34 +71,16 @@ void DetailWidget::initUI()
     m_keyLabel = new FixLabel(this);
     m_keyLabel->setMaximumWidth(MAX_LABEL_WIDTH);
     m_keyLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
     m_mainLayout->addWidget(m_keyLabel);
     m_mainLayout->addStretch();
     m_mainLayout->addWidget(m_valueWidget);
     m_valueWidget->setMaximumWidth(100000000000);
 }
 
-void DetailWidget::setKey(const QString &keyLabel)
-{
-    m_keyLabel->setText(keyLabel);
-}
-
-
-
-FirstDetailWidget::FirstDetailWidget(QWidget *valueWidget,QWidget *button, QWidget *parent)
-    : m_valueWidget(valueWidget) , m_copyButton (button) ,QWidget(parent)
-{
-    initUI();
-}
-
-FirstDetailWidget::~FirstDetailWidget()
-{
-
-}
-
-void FirstDetailWidget::initUI()
+void DetailWidget::initCopyButtonUI()
 {
     this->setFixedHeight(ITEM_HEIGHT);
-
     m_mainLayout = new QHBoxLayout(this);
     m_mainLayout->setContentsMargins(ITEM_MARGINS);
 
@@ -112,12 +98,13 @@ void FirstDetailWidget::initUI()
     m_valueWidget->setMaximumWidth(1000);
 }
 
-void FirstDetailWidget::setKey(const QString &keyLabel)
+void DetailWidget::setKey(const QString &keyLabel)
 {
     m_keyLabel->setText(keyLabel);
 }
 
-CopyButton::CopyButton()
+CopyButton::CopyButton(QWidget *parent)
+    :QPushButton(parent)
 {
     //设置按钮背景颜色-透明
     QPalette btnPal = this->palette();

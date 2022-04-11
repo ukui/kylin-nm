@@ -33,7 +33,7 @@ class DetailWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DetailWidget(QWidget *valueWidget = nullptr, QWidget *parent = nullptr);
+    explicit DetailWidget(QWidget *valueWidget = nullptr, QWidget *parent = nullptr, QWidget *buttonWidget = nullptr);
     ~DetailWidget();
 
     void setKey(const QString &keyLabel);
@@ -42,38 +42,20 @@ private:
     QHBoxLayout * m_mainLayout = nullptr;
     FixLabel * m_keyLabel = nullptr;
     QWidget * m_valueWidget = nullptr;
-
-    void initUI();
-
-signals:
-
-};
-
-class FirstDetailWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit FirstDetailWidget(QWidget *valueWidget = nullptr, QWidget *button = nullptr, QWidget *parent = nullptr);
-    ~FirstDetailWidget();
-
-    void setKey(const QString &keyLabel);
-
-private:
-    QHBoxLayout * m_mainLayout = nullptr;
-    FixLabel * m_keyLabel = nullptr;
-    QWidget * m_valueWidget = nullptr;
-
-public:
     QWidget *m_copyButton;
 
     void initUI();
+    void initCopyButtonUI();
+
+signals:
+
 };
 
 class CopyButton : public QPushButton
 {
     Q_OBJECT
 public:
-    explicit CopyButton();
+    explicit CopyButton(QWidget *parent = nullptr);
     ~CopyButton();
 
     QPalette GetTheme();

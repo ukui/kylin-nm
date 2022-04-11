@@ -10,6 +10,7 @@
 #include <QAction>
 #include <QDBusInterface>
 #include <QMap>
+#include <QScreen>
 #include "lanpage.h"
 #include "wlanpage.h"
 #include "netdetails/netdetail.h"
@@ -153,6 +154,9 @@ private:
 
     QMap<QString, NetDetail*> m_createPagePtrMap;
 
+public slots:
+    void onShowMainWindow(int type);
+
 private slots:
     void onTransChanged();
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
@@ -163,8 +167,8 @@ private slots:
     void onSetTrayIconLoading();
     void onLanConnectStatusToChangeTrayIcon(int state);
     void onWlanConnectStatusToChangeTrayIcon(int state);
-    void onShowByWlanPage();
     void onConnectivityChanged(NetworkManager::Connectivity connectivity);
+    void onTabletModeChanged(QVariant mode);
 };
 
 #endif // MAINWINDOW_H

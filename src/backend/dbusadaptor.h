@@ -86,6 +86,8 @@ public Q_SLOTS: // METHODS
     //keyring
     void keyRingInit();
     void keyRingClear();
+    //just show
+    void showKylinNM(int type);
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);
 //    void wiredActivating(QString devName, QString ssid);

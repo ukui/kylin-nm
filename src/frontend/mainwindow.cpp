@@ -17,9 +17,6 @@
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
-#define LAN_PAGE_INDEX 0
-#define WLAN_PAGE_INDEX 1
-
 #include <kwindowsystem.h>
 #include <kwindowsystem_export.h>
 
@@ -277,8 +274,14 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::secuTypeChange, this, &MainWindow::secuTypeChange);
     connect(m_wlanWidget, &WlanPage::signalStrengthChange, this, &MainWindow::signalStrengthChange);
     connect(m_wlanWidget, &WlanPage::timeToUpdate , this, &MainWindow::timeToUpdate);
-    connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowByWlanPage);
+    connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowMainWindow);
     connect(m_wlanWidget, &WlanPage::connectivityChanged, this, &MainWindow::onConnectivityChanged);
+
+    //模式切换
+    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interfacer"),
+                                         QString("/"),
+                                         QString("com.kylin.statusmanager.interface"),
+                                         QString("mode_change_signal"), this, SLOT(onTabletModeChanged(QVariant) ) );
 }
 
 /**
@@ -286,6 +289,12 @@ void MainWindow::initDbusConnnect()
  */
 void MainWindow::resetWindowPosition()
 {
+
+
+    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+    this->move((availableGeometry.width() - this->width())/2, (availableGeometry.height() - this->height())/2);
+    return;
+
 #define MARGIN 4
 #define PANEL_TOP 1
 #define PANEL_LEFT 2
@@ -518,16 +527,19 @@ void MainWindow::onWlanConnectStatusToChangeTrayIcon(int state)
     }
 }
 
-void MainWindow::onShowByWlanPage()
+void MainWindow::onTabletModeChanged(QVariant mode)
 {
-    m_centralWidget->setCurrentIndex(WLAN_PAGE_INDEX);
+    Q_UNUSED(mode)
+    //模式切换时，隐藏主界面
+    hideMainwindow();
+}
+
+void MainWindow::onShowMainWindow(int type)
+{
+    m_centralWidget->setCurrentIndex(type);
 
     if(QApplication::activeWindow() != this) {
-        this->resetWindowPosition();
-        this->showNormal();
-        this->raise();
-        this->activateWindow();
-        emit this->mainWindowVisibleChanged(true);
+        this->showMainwindow();
     }
 }
 

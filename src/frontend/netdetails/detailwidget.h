@@ -4,14 +4,6 @@
 #include <QWidget>
 #include <QLabel>
 #include <QHBoxLayout>
-#include <QPushButton>
-#include <QEvent>
-
-#include "kwidget.h"
-#include "ktabbar.h"
-#include "kballontip.h"
-
-using namespace kdk;
 
 //文本长自动省略并添加悬浮
 class FixLabel : public QLabel
@@ -45,30 +37,9 @@ private:
     QWidget *m_copyButton;
 
     void initUI();
-    void initCopyButtonUI();
 
 signals:
 
 };
-
-class CopyButton : public QPushButton
-{
-    Q_OBJECT
-public:
-    explicit CopyButton(QWidget *parent = nullptr);
-    ~CopyButton();
-
-    QPalette GetTheme();
-
-private:
-    KBallonTip * m_copiedTip = nullptr;
-
-protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
-};
-
 
 #endif // DetailWidget_H

@@ -14,6 +14,13 @@
 
 #include "detailwidget.h"
 #include "coninfo.h"
+#include "kwidget.h"
+#include "ktabbar.h"
+#include "kballontip.h"
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME "styleName"
+
+using namespace kdk;
 
 class DetailPage : public QFrame
 {
@@ -40,6 +47,8 @@ public:
 private:
     void initUI();
     void addDetailItem(QListWidget *listWidget, QWidget *detailWidget);
+    void newCopiedTip();
+    QPalette GetTheme();
 
 public:
     QListWidget * m_listWidget = nullptr;
@@ -55,7 +64,7 @@ public:
     DetailWidget * m_ipv6Widget = nullptr;
     DetailWidget * m_macWidget = nullptr;
 
-    CopyButton  * m_netCopyButton;
+    QPushButton  * m_netCopyButton;
     LineEdit *mSSIDEdit;
 //    FixLabel *mSSIDLabel;
     QLabel *mSSIDLabel;
@@ -69,6 +78,7 @@ public:
     FixLabel *mIPV6;
     QLabel *mMac;
     QLabel *autoConnect;
+    KBallonTip *m_copiedTip;
 
 //    QWidget *autoFrame;
 private:

@@ -113,7 +113,7 @@ void DetailPage::newCopiedTip()
     //设置“复制成功”消息弹窗格式
     m_copiedTip = new KBallonTip();
     m_copiedTip->setTipType(Normal);
-    m_copiedTip->setFixedSize(225, 58);
+    m_copiedTip->setFixedSize(158, 58);
     m_copiedTip->setWindowFlags(Qt::FramelessWindowHint);
     m_copiedTip->setAttribute(Qt::WA_TranslucentBackground, true);
     m_copiedTip->setText(tr("Copied successfully!"));
@@ -313,17 +313,17 @@ void DetailPage::on_btnCopyNetDetail_clicked()
 
     //设置剪贴板内容
     netDetailCopyText = netDetailList.join("\n");
-    QClipboard *m_clipboard = QApplication::clipboard();
-    m_clipboard->setText(netDetailCopyText);
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(netDetailCopyText);
 
     //设置“复制成功”弹窗位置并显示
     if (m_copiedTip != nullptr) {
         delete m_copiedTip;
         newCopiedTip();
     }
-    QPoint m_copyBtnPosition = m_ssidWidget->mapToGlobal(this->pos());
+    QPoint position = m_ssidWidget->mapToGlobal(this->pos());
     double x = 0.5 * (m_ssidWidget->width() - m_copiedTip->width());
-    m_copiedTip->move(m_copyBtnPosition.x() + x, m_copyBtnPosition.y() + 150);
+    m_copiedTip->move(position.x() + x, position.y() + 150);
     QPalette pal = GetTheme();
     m_copiedTip->setPalette(pal);
     m_copiedTip->showInfo();

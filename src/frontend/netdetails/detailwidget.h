@@ -31,10 +31,10 @@ public:
     void setKey(const QString &keyLabel);
 
 private:
-    QHBoxLayout * m_mainLayout = nullptr;
-    FixLabel * m_keyLabel = nullptr;
-    QWidget * m_valueWidget = nullptr;
-    QWidget *m_copyButton;
+    QHBoxLayout *m_mainLayout = nullptr;
+    FixLabel    *m_keyLabel = nullptr;
+    QWidget     *m_valueWidget = nullptr;
+    QWidget     *m_copyButton;
 
     void initUI();
 

@@ -14,6 +14,7 @@
 #include "lanpage.h"
 #include "wlanpage.h"
 #include "netdetails/netdetail.h"
+#include <ukuisdk/kylin-com4cxx.h>
 
 enum IconActiveType {
     NOT_CONNECTED = 0,
@@ -109,6 +110,7 @@ private:
     void secondaryStart(); //二级启动
     bool m_loadFinished = false; //是否二级启动已执行完
     QTimer * m_secondaryStartTimer = nullptr; //执行二级启动的倒计时
+    void initPlatform();
     void initWindowProperties();
     void initTransparency();
     void paintWithTrans();
@@ -150,6 +152,8 @@ private:
     bool m_lanIsLoading = false;
     bool m_wlanIsLoading = false;
 
+    bool m_isShowInCenter = false;
+
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
 
     QMap<QString, NetDetail*> m_createPagePtrMap;
@@ -168,7 +172,7 @@ private slots:
     void onLanConnectStatusToChangeTrayIcon(int state);
     void onWlanConnectStatusToChangeTrayIcon(int state);
     void onConnectivityChanged(NetworkManager::Connectivity connectivity);
-    void onTabletModeChanged(QVariant mode);
+    void onTabletModeChanged(bool mode);
 };
 
 #endif // MAINWINDOW_H

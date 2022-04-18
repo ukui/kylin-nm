@@ -17,6 +17,11 @@
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
+const QString v10Sp1 = "V10SP1";
+const QString intel = "V10SP1-edu";
+
+#define KEY_PRODUCT_FEATURES "PRODUCT_FEATURES"
+
 #include <kwindowsystem.h>
 #include <kwindowsystem_export.h>
 
@@ -86,6 +91,7 @@ void MainWindow::firstlyStart()
     initDbusConnnect();
     initWindowTheme();
     initTrayIcon();
+    initPlatform();
     installEventFilter(this);
     m_secondaryStartTimer = new QTimer(this);
     connect(m_secondaryStartTimer, &QTimer::timeout, this, [ = ]() {
@@ -108,6 +114,23 @@ void MainWindow::secondaryStart()
     if (m_loadFinished)
         return;
     m_loadFinished = true;
+}
+
+/**
+ * @brief MainWindow::initWindowProperties 初始化平台信息
+ */
+void MainWindow::initPlatform()
+{
+    if(v10Sp1.compare(KDKGetPrjCodeName().c_str(),Qt::CaseInsensitive) == 0) {
+        QString feature = KDKGetOSRelease(KEY_PRODUCT_FEATURES).c_str();
+        if (feature.toInt() == 3) {
+            m_isShowInCenter = true;
+        }
+    } else if (intel.compare(KDKGetPrjCodeName().c_str(),Qt::CaseInsensitive) == 0) {
+        m_isShowInCenter = true;
+    }
+
+    qDebug() << KDKGetPrjCodeName().c_str() << KDKGetOSRelease(KEY_PRODUCT_FEATURES).c_str() <<  "m_isShowInCenter" << m_isShowInCenter;
 }
 
 /**
@@ -281,7 +304,7 @@ void MainWindow::initDbusConnnect()
     QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interfacer"),
                                          QString("/"),
                                          QString("com.kylin.statusmanager.interface"),
-                                         QString("mode_change_signal"), this, SLOT(onTabletModeChanged(QVariant) ) );
+                                         QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
 }
 
 /**
@@ -290,10 +313,11 @@ void MainWindow::initDbusConnnect()
 void MainWindow::resetWindowPosition()
 {
 
-
-    QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
-    this->move((availableGeometry.width() - this->width())/2, (availableGeometry.height() - this->height())/2);
-    return;
+    if (m_isShowInCenter) {
+        QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+        this->move((availableGeometry.width() - this->width())/2, (availableGeometry.height() - this->height())/2);
+        return;
+    }
 
 #define MARGIN 4
 #define PANEL_TOP 1
@@ -527,8 +551,9 @@ void MainWindow::onWlanConnectStatusToChangeTrayIcon(int state)
     }
 }
 
-void MainWindow::onTabletModeChanged(QVariant mode)
+void MainWindow::onTabletModeChanged(bool mode)
 {
+    qDebug() << "TabletMode change" << mode;
     Q_UNUSED(mode)
     //模式切换时，隐藏主界面
     hideMainwindow();

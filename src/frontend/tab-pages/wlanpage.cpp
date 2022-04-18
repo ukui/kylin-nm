@@ -1292,7 +1292,7 @@ void WlanPage::activateWirelessConnection(const QString& devName, const QString&
 
         QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
         QApplication::postEvent(p_wlanItem, event);
-        emit showMainWindow();
+        emit showMainWindow(WLAN_PAGE_INDEX);
     } else {
         qDebug() << "[WlanPage]activateWirelessConnection no such " << ssid << "in" << devName;
     }

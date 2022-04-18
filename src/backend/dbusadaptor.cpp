@@ -228,6 +228,10 @@ QStringList DbusAdaptor::getApInfoBySsid(QString devName, QString ssid)
     return list;
 }
 
+void DbusAdaptor::showKylinNM(int type)
+{
+    parent()->onShowMainWindow(type);
+}
 
 //扫描
 void DbusAdaptor::reScan()

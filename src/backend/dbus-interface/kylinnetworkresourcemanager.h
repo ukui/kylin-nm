@@ -197,10 +197,10 @@ private:
 public:
     static KyNetworkResourceManager* m_pInstance;
 
-    NetworkManager::ActiveConnection::List m_activeConns;
-    NetworkManager::Connection::List m_connections;
-    NetworkManager::Device::List m_devices;
-    NetworkManager::WirelessNetwork::List m_wifiNets;
+    NetworkManager::ActiveConnection::List m_activeConns; //已连接资源类
+    NetworkManager::Connection::List m_connections;  //配置文件资源类
+    NetworkManager::Device::List m_devices;  //设备类
+    NetworkManager::WirelessNetwork::List m_wifiNets; //无线热点类
 };
 
 

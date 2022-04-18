@@ -234,7 +234,7 @@ void WlanListItem::initWlanUI()
 
     m_pwdLineEdit  = new QLineEdit(m_pwdFrame);
     m_pwdLineEdit->setFixedWidth(LINEEDIT_WIDTH);
-    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
+//    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
     m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
     QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");

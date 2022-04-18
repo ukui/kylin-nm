@@ -23,6 +23,7 @@ Build-Depends: debhelper (>=9),
 	       libgtk-3-dev,
                libukcc-dev (>= 3.1.1+1217),
                libukui-log4qt-dev,
+               libukui-common-dev,
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: https://github.com/ukui/kylin-nm

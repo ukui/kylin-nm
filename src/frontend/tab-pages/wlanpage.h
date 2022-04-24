@@ -19,6 +19,9 @@
 #define MORE_TEXT_MARGINS 16,0,0,0
 #define SCROLLAREA_HEIGHT 200
 
+#define LAN_PAGE_INDEX 0
+#define WLAN_PAGE_INDEX 1
+
 class WlanListItem;
 
 class WlanPage : public TabPage
@@ -64,7 +67,7 @@ signals:
     void wlanConnectChanged(int state);
     void timeToUpdate();
 
-    void showMainWindow();
+    void showMainWindow(int type);
 
     void connectivityChanged(NetworkManager::Connectivity connectivity);
 

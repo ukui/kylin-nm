@@ -17,8 +17,10 @@
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
-#define LAN_PAGE_INDEX 0
-#define WLAN_PAGE_INDEX 1
+const QString v10Sp1 = "V10SP1";
+const QString intel = "V10SP1-edu";
+
+#define KEY_PRODUCT_FEATURES "PRODUCT_FEATURES"
 
 #include <kwindowsystem.h>
 #include <kwindowsystem_export.h>
@@ -89,6 +91,7 @@ void MainWindow::firstlyStart()
     initDbusConnnect();
     initWindowTheme();
     initTrayIcon();
+    initPlatform();
     installEventFilter(this);
     m_secondaryStartTimer = new QTimer(this);
     connect(m_secondaryStartTimer, &QTimer::timeout, this, [ = ]() {
@@ -111,6 +114,23 @@ void MainWindow::secondaryStart()
     if (m_loadFinished)
         return;
     m_loadFinished = true;
+}
+
+/**
+ * @brief MainWindow::initWindowProperties 初始化平台信息
+ */
+void MainWindow::initPlatform()
+{
+    if(v10Sp1.compare(KDKGetPrjCodeName().c_str(),Qt::CaseInsensitive) == 0) {
+        QString feature = KDKGetOSRelease(KEY_PRODUCT_FEATURES).c_str();
+        if (feature.toInt() == 3) {
+            m_isShowInCenter = true;
+        }
+    } else if (intel.compare(KDKGetPrjCodeName().c_str(),Qt::CaseInsensitive) == 0) {
+        m_isShowInCenter = true;
+    }
+
+    qDebug() << KDKGetPrjCodeName().c_str() << KDKGetOSRelease(KEY_PRODUCT_FEATURES).c_str() <<  "m_isShowInCenter" << m_isShowInCenter;
 }
 
 /**
@@ -277,8 +297,14 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::secuTypeChange, this, &MainWindow::secuTypeChange);
     connect(m_wlanWidget, &WlanPage::signalStrengthChange, this, &MainWindow::signalStrengthChange);
     connect(m_wlanWidget, &WlanPage::timeToUpdate , this, &MainWindow::timeToUpdate);
-    connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowByWlanPage);
+    connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowMainWindow);
     connect(m_wlanWidget, &WlanPage::connectivityChanged, this, &MainWindow::onConnectivityChanged);
+
+    //模式切换
+    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interfacer"),
+                                         QString("/"),
+                                         QString("com.kylin.statusmanager.interface"),
+                                         QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
 }
 
 /**
@@ -286,6 +312,13 @@ void MainWindow::initDbusConnnect()
  */
 void MainWindow::resetWindowPosition()
 {
+
+    if (m_isShowInCenter) {
+        QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+        this->move((availableGeometry.width() - this->width())/2, (availableGeometry.height() - this->height())/2);
+        return;
+    }
+
 #define MARGIN 4
 #define PANEL_TOP 1
 #define PANEL_LEFT 2
@@ -518,16 +551,20 @@ void MainWindow::onWlanConnectStatusToChangeTrayIcon(int state)
     }
 }
 
-void MainWindow::onShowByWlanPage()
+void MainWindow::onTabletModeChanged(bool mode)
 {
-    m_centralWidget->setCurrentIndex(WLAN_PAGE_INDEX);
+    qDebug() << "TabletMode change" << mode;
+    Q_UNUSED(mode)
+    //模式切换时，隐藏主界面
+    hideMainwindow();
+}
+
+void MainWindow::onShowMainWindow(int type)
+{
+    m_centralWidget->setCurrentIndex(type);
 
     if(QApplication::activeWindow() != this) {
-        this->resetWindowPosition();
-        this->showNormal();
-        this->raise();
-        this->activateWindow();
-        emit this->mainWindowVisibleChanged(true);
+        this->showMainwindow();
     }
 }
 

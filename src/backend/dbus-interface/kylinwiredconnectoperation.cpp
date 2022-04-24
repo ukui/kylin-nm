@@ -103,6 +103,27 @@ void KyWiredConnectOperation::updateWiredConnect(const QString &connectUuid, con
         mapmap1["ipv4"] = map1;
     }
 
+    if (mapmap1.contains("ipv6")) {
+        QVariantMap map2 = mapmap1.value(QLatin1String("ipv6"));
+        bool isAuto = false;
+        if (map2.contains("method") && map2["method"] == "auto") {
+            qDebug() << "[KyWiredConnectOperation] set ipv6 method auto, clear address-data && addresses && gateway";
+            isAuto = true;
+        }
+        if (isAuto) {
+            if (map2.contains("address-data")) {
+                map2.remove("address-data");
+            }
+            if (map2.contains("addresses")) {
+                map2.remove("addresses");
+            }
+            if (map2.contains("gateway")) {
+                map2.remove("gateway");
+            }
+        }
+        mapmap1["ipv6"] = map2;
+    }
+
     connectPtr->update(mapmap1);
 
     return ;

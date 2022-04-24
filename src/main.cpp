@@ -88,13 +88,34 @@ int main(int argc, char *argv[])
 //    QApplication a(argc, argv);
     QString id = QString("kylin-nm"+ QLatin1String(getenv("DISPLAY")));
     QtSingleApplication a(id, argc, argv);
-//    qInstallMessageHandler(messageOutput);
-    if (a.isRunning()) {
-        a.sendMessage("raise_window_noop");
-        return EXIT_SUCCESS;
-    }
 
     QApplication::setQuitOnLastWindowClosed(false);
+
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription(QCoreApplication::translate("main", "kylinnm"));
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    QCommandLineOption swOption(QStringLiteral("sw"),QCoreApplication::translate("main", "show kylin-nm wifi page"));
+    QCommandLineOption snOption(QStringLiteral("sn"),QCoreApplication::translate("main", "show kylin-nm lan page"));
+
+    parser.addOptions({swOption,snOption});
+    parser.process(a);
+
+    QDBusInterface interface("com.kylin.network",
+                                                   "/com/kylin/network",
+                                                   "com.kylin.network",
+                                                   QDBusConnection::sessionBus());
+    if(interface.isValid()) {
+        if (parser.isSet(swOption))
+        {
+            interface.call(QStringLiteral("showKylinNM"),1);
+        } else {
+            interface.call(QStringLiteral("showKylinNM"),0);
+        }
+        return 0;
+    }
 
     QThread thread;
     KyNetworkResourceManager *p_networkResource = KyNetworkResourceManager::getInstance();

@@ -9,6 +9,7 @@
 
 #include <QEvent>
 #include <QMenu>
+#include <QToolTip>
 
 #define  WINDOW_WIDTH  520
 #define  WINDOW_HEIGHT 590
@@ -142,6 +143,7 @@ void NetDetail::onPaletteChanged()
     setFramePalette(ipv6Page, pal);
     setFramePalette(securityPage, pal);
     setFramePalette(createNetPage, pal);
+    QToolTip::setPalette(pal);
 
     QPalette listwidget_pal(detailPage->m_listWidget->palette());
     listwidget_pal.setColor(QPalette::Base, this->palette().base().color());
@@ -149,6 +151,10 @@ void NetDetail::onPaletteChanged()
     detailPage->m_listWidget->setAlternatingRowColors(true);
     detailPage->m_listWidget->setPalette(listwidget_pal);
 
+    if (styleGsettings != nullptr) {
+        delete styleGsettings;
+        styleGsettings = nullptr;
+    }
 }
 
 void NetDetail::paintEvent(QPaintEvent *event)
@@ -180,6 +186,7 @@ void NetDetail::initUI()
     mainLayout->setContentsMargins(9,9,14,24);
 
     detailPage = new DetailPage(isWlan, m_name.isEmpty(), this);
+
     ipv4Page = new Ipv4Page(this);
     ipv6Page = new Ipv6Page(this);
     securityPage = new SecurityPage(this);

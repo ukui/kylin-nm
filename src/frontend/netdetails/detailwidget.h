@@ -25,17 +25,19 @@ class DetailWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DetailWidget(QWidget *valueWidget = nullptr, QWidget *parent = nullptr);
+    explicit DetailWidget(QWidget *valueWidget = nullptr, QWidget *parent = nullptr, QWidget *buttonWidget = nullptr);
     ~DetailWidget();
 
     void setKey(const QString &keyLabel);
 
 private:
-    QHBoxLayout * m_mainLayout = nullptr;
-    FixLabel * m_keyLabel = nullptr;
-    QWidget * m_valueWidget = nullptr;
+    QHBoxLayout *m_mainLayout = nullptr;
+    FixLabel    *m_keyLabel = nullptr;
+    QWidget     *m_valueWidget = nullptr;
+    QWidget     *m_copyButton;
 
     void initUI();
+
 signals:
 
 };

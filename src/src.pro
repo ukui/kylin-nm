@@ -14,7 +14,7 @@ TEMPLATE = app
 CONFIG += c++14 qt warn_on link_pkgconfig
 #CONFIG += release
 
-PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap
+PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 

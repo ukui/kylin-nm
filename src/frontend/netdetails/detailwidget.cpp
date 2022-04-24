@@ -40,8 +40,8 @@ void FixLabel::setText(const QString & text, bool saveTextFlag)
     QLabel::setText(text);
 }
 
-DetailWidget::DetailWidget(QWidget *valueWidget, QWidget *parent)
-    : m_valueWidget(valueWidget) , QWidget(parent)
+DetailWidget::DetailWidget(QWidget *valueWidget, QWidget *parent, QWidget *buttonWidget)
+    : m_valueWidget(valueWidget) , QWidget(parent) , m_copyButton(buttonWidget)
 {
 //    m_valueWidget = valueWidget;
     initUI();
@@ -61,13 +61,22 @@ void DetailWidget::initUI()
     m_keyLabel = new FixLabel(this);
     m_keyLabel->setMaximumWidth(MAX_LABEL_WIDTH);
     m_keyLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
     m_mainLayout->addWidget(m_keyLabel);
     m_mainLayout->addStretch();
+    if (m_copyButton != nullptr) {
+        m_copyButton->setMaximumWidth(ITEM_HEIGHT-8);
+        m_copyButton->setMaximumHeight(ITEM_HEIGHT-8);
+        m_mainLayout->addWidget(m_copyButton);
+    }
     m_mainLayout->addWidget(m_valueWidget);
-//    m_valueWidget->setMaximumWidth(100000000000);
+    m_valueWidget->setMaximumWidth(100000000000);
 }
 
 void DetailWidget::setKey(const QString &keyLabel)
 {
     m_keyLabel->setText(keyLabel);
 }
+
+
+

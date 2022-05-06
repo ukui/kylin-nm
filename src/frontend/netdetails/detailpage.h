@@ -76,7 +76,7 @@ public:
     FixLabel     *m_IPV6;
     QLabel       *m_Mac;
     QLabel       *m_autoConnect;
-    KBallonTip   *m_copiedTip;
+    KBallonTip   *m_copiedTip = nullptr;
 
 //    QWidget *autoFrame;
 private:

@@ -25,6 +25,7 @@ Build-Depends: debhelper (>=9),
                libukui-log4qt-dev,
                libkysdk-qtwidgets-dev,
                libukui-common-dev,
+               libkysec-dev,
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: https://github.com/ukui/kylin-nm

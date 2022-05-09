@@ -11,7 +11,6 @@
 #include "../backend/dbus-interface/kylinagentinterface.h"
 
 
-
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 476
 #define LAYOUT_MARGINS 0,0,0,0
@@ -62,6 +61,13 @@ void MainWindow::showMainwindow()
         }
         if (nullptr != m_lanWidget) {
             m_lanWidget->hideSetting();
+        }
+    } else {
+        if (nullptr != m_wlanWidget) {
+            m_wlanWidget->showSetting();
+        }
+        if (nullptr != m_lanWidget) {
+            m_lanWidget->showSetting();
         }
     }
 #endif

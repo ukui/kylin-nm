@@ -16,6 +16,11 @@
 #include "netdetails/netdetail.h"
 #include <ukuisdk/kylin-com4cxx.h>
 
+#ifdef WITHKYSEC
+#include <kysec/libkysec.h>
+#include <kysec/status.h>
+#endif
+
 enum IconActiveType {
     NOT_CONNECTED = 0,
     LAN_CONNECTED,

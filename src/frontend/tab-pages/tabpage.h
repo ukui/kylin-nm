@@ -64,6 +64,12 @@ public:
 //    QString getDefaultDevice();
     static void showDesktopNotify(const QString &message);
 
+    void hideSetting() {
+        if (nullptr != m_settingsFrame && m_settingsFrame->isVisible()) {
+            m_settingsFrame->hide();
+        }
+    }
+
 signals:
     void deviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName, int type);
@@ -104,6 +110,8 @@ protected:
     QLabel * m_deviceLabel = nullptr;
     QComboBox * m_deviceComboBox = nullptr;
     QLabel * m_tipsLabel = nullptr;
+
+
 
 public slots:
     virtual void onDeviceComboxIndexChanged(int currentIndex) = 0;

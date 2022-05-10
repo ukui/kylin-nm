@@ -64,6 +64,21 @@ public:
 //    QString getDefaultDevice();
     static void showDesktopNotify(const QString &message);
 
+    void hideSetting() {
+        if (nullptr != m_settingsFrame) {
+            m_settingsFrame->hide();
+            m_inactivatedNetDivider->hide();
+            m_inactivatedNetFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT + 100);
+        }
+    }
+    void showSetting() {
+        if (nullptr != m_settingsFrame) {
+            m_inactivatedNetFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT);
+            m_settingsFrame->show();
+            m_inactivatedNetDivider->show();
+        }
+    }
+
 signals:
     void deviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName, int type);
@@ -104,6 +119,8 @@ protected:
     QLabel * m_deviceLabel = nullptr;
     QComboBox * m_deviceComboBox = nullptr;
     QLabel * m_tipsLabel = nullptr;
+
+
 
 public slots:
     virtual void onDeviceComboxIndexChanged(int currentIndex) = 0;

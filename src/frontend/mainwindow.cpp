@@ -10,6 +10,7 @@
 #include "kylinnetworkdeviceresource.h"
 #include "../backend/dbus-interface/kylinagentinterface.h"
 
+
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 476
 #define LAYOUT_MARGINS 0,0,0,0
@@ -53,6 +54,24 @@ void MainWindow::showMainwindow()
     this->raise();
     this->activateWindow();
     emit this->mainWindowVisibleChanged(true);
+#ifdef WITHKYSEC
+    if (!kysec_is_disabled() && kysec_get_3adm_status() && (getuid() || geteuid())){
+        if (nullptr != m_wlanWidget) {
+            m_wlanWidget->hideSetting();
+        }
+        if (nullptr != m_lanWidget) {
+            m_lanWidget->hideSetting();
+        }
+    } else {
+        if (nullptr != m_wlanWidget) {
+            m_wlanWidget->showSetting();
+        }
+        if (nullptr != m_lanWidget) {
+            m_lanWidget->showSetting();
+        }
+    }
+#endif
+
 }
 
 /**

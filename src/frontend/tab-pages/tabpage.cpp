@@ -157,8 +157,8 @@ void TabPage::showDesktopNotify(const QString &message, QString soundName)
        <<QString("gnome-dev-ethernet")
        <<tr("kylin network applet desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
-       <<QStringList()
-       <<QVariantMap()
+       <<actions
+       <<hints
        <<(int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }

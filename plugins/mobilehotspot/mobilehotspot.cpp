@@ -87,7 +87,7 @@ bool MobileHotspot::isShowOnHomePage() const
 
 QIcon MobileHotspot::icon() const
 {
-    return QIcon();
+    return QIcon::fromTheme("ukui-hotspot-symbolic");
 }
 
 QString MobileHotspot::translationPath() const

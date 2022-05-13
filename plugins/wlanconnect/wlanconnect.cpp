@@ -154,7 +154,7 @@ bool WlanConnect::isShowOnHomePage() const
 
 QIcon WlanConnect::icon() const
 {
-    return QIcon();
+    return QIcon::fromTheme("network-wireless-signal-excellent-symbolic");
 }
 
 QString WlanConnect::translationPath() const

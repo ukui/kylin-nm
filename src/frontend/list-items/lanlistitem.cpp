@@ -98,7 +98,7 @@ void LanListItem::onNetButtonClicked()
             m_netButton->startLoading();
         } else {
             qDebug() << LOG_FLAG << m_deviceName << "is not carried, so can not activate connection";
-            this->showDesktopNotify(tr("Wired Device not carried"));
+            this->showDesktopNotify(tr("Wired Device not carried"), "networkwrong");
         }
     } else {
         qDebug() << LOG_FLAG <<"the connection" << m_lanConnectItem.m_connectName

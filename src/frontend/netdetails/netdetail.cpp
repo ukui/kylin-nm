@@ -28,20 +28,27 @@
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
-void NetDetail::showDesktopNotify(const QString &message)
+void NetDetail::showDesktopNotify(const QString &message, QString soundName)
 {
     QDBusInterface iface("org.freedesktop.Notifications",
                          "/org/freedesktop/Notifications",
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
+    QStringList actions;  //跳转动作
+    actions.append("kylin-nm");
+    actions.append("default");          //默认动作：点击消息体时打开麒麟录音
+    QMap<QString, QVariant> hints;
+    if (!soundName.isEmpty()) {
+        hints.insert("sound-name", soundName); //添加声音
+    }
     QList<QVariant> args;
     args<<(tr("Kylin NM"))
        <<((unsigned int) 0)
        <<QString("gnome-dev-ethernet")
        <<tr("kylin network desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
-       <<QStringList()
-       <<QVariantMap()
+       <<actions
+       <<hints
        <<(int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
@@ -679,7 +686,7 @@ void NetDetail::setConfirmEnable()
 
 bool NetDetail::checkIpv4Conflict(QString ipv4Address)
 {
-    showDesktopNotify(tr("start check ipv4 address conflict"));
+    showDesktopNotify(tr("start check ipv4 address conflict"), "networkwrong");
     bool isConflict = false;
     KyIpv4Arping* ipv4Arping = new KyIpv4Arping(m_deviceName, ipv4Address);
 
@@ -696,7 +703,7 @@ bool NetDetail::checkIpv4Conflict(QString ipv4Address)
 
 bool NetDetail::checkIpv6Conflict(QString ipv6address)
 {
-    showDesktopNotify(tr("start check ipv6 address conflict"));
+    showDesktopNotify(tr("start check ipv6 address conflict"), "networkwrong");
     bool isConflict = false;
     KyIpv6Arping* ipv46rping = new KyIpv6Arping(m_deviceName, ipv6address);
 
@@ -742,7 +749,7 @@ bool NetDetail::createWiredConnect()
     if (connetSetting.m_ipv4ConfigIpType != CONFIG_IP_DHCP) {
         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
             qDebug() << "ipv4 conflict";
-            showDesktopNotify(tr("ipv4 address conflict!"));
+            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
             return false;
         }
     }
@@ -793,7 +800,7 @@ bool NetDetail::createWirelessConnect()
     if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
             qDebug() << "ipv4 conflict";
-            showDesktopNotify(tr("ipv4 address conflict!"));
+            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
             return false;
         }
     }
@@ -801,7 +808,7 @@ bool NetDetail::createWirelessConnect()
     if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
             qDebug() << "ipv6 conflict";
-            showDesktopNotify(tr("ipv6 address conflict!"));
+            showDesktopNotify(tr("ipv6 address conflict!"), "networkwrong");
             return false;
         }
     }
@@ -881,7 +888,7 @@ bool NetDetail::updateConnect()
     if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
             qDebug() << "ipv4 conflict";
-            showDesktopNotify(tr("ipv4 address conflict!"));
+            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
             return false;
         }
     }
@@ -889,7 +896,7 @@ bool NetDetail::updateConnect()
     if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
         if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
             qDebug() << "ipv6 conflict";
-            showDesktopNotify(tr("ipv6 address conflict!"));
+            showDesktopNotify(tr("ipv6 address conflict!"), "networkwrong");
             return false;
         }
     }
@@ -925,20 +932,20 @@ bool NetDetail::checkWirelessSecurity(KySecuType secuType)
 {
     if (secuType == WPA_AND_WPA2_ENTERPRISE) {
         if(m_info.strSecType.indexOf("802.1X") < 0) {
-            showDesktopNotify(tr("this wifi no support enterprise type"));
+            showDesktopNotify(tr("this wifi no support enterprise type"), "networkwrong");
             return false;
         }
     } else {
         if (secuType == NONE && m_info.strSecType != tr("None")) {
-            showDesktopNotify(tr("this wifi no support None type"));
+            showDesktopNotify(tr("this wifi no support None type"), "networkwrong");
             return false;
         } else if (secuType == WPA_AND_WPA2_PERSONAL
                    && (m_info.strSecType.indexOf("WPA1") < 0 &&
                        m_info.strSecType.indexOf("WPA2") < 0)) {
-            showDesktopNotify(tr("this wifi no support WPA2 type"));
+            showDesktopNotify(tr("this wifi no support WPA2 type"), "networkwrong");
             return false;
         } else if (secuType == WPA3_PERSONAL && m_info.strSecType.indexOf("WPA3") < 0) {
-            showDesktopNotify(tr("this wifi no support WPA3 type"));
+            showDesktopNotify(tr("this wifi no support WPA3 type"), "networkwrong");
             return false;
         }
     }

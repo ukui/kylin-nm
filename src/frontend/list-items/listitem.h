@@ -27,7 +27,7 @@ public:
     void setName(const QString &name);
     void setActive(const bool &isActive);
     void setConnectState(ConnectState state);
-    static void showDesktopNotify(const QString &message);
+    static void showDesktopNotify(const QString &message, QString soundName);
 
 protected:
     void mousePressEvent(QMouseEvent *event);

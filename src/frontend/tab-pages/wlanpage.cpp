@@ -124,7 +124,7 @@ void WlanPage::onWlanSwithGsettingsChanged(const QString &key)
 void WlanPage::onWlanSwitchClicked()
 {
     if (m_devList.isEmpty()) {
-        showDesktopNotify(tr("No wireless network card detected"));
+        showDesktopNotify(tr("No wireless network card detected"), "networkwrong");
         //检测不到无线网卡不再触发click信号       
         m_netSwitch->setSwitchStatus(false);
         m_netSwitch->setEnabled(false);
@@ -551,7 +551,7 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
     } else {
         deleteWirelessItemFormMap(m_activateConnectionItemMap,
                                   m_activatedNetListWidget, ssid);
-        showDesktopNotify(tr("WLAN Disconnected Successfully"));
+        showDesktopNotify(tr("WLAN Disconnected Successfully"), "networkdisconnected");
 
         QListWidgetItem *p_listWidgetItem = addEmptyItem(m_activatedNetListWidget);
         m_activateConnectionItemMap.insert(EMPTY_SSID, p_listWidgetItem);
@@ -803,11 +803,11 @@ void WlanPage::wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::St
                               NetworkManager::ActiveConnection::Reason reason)
 {
     if (state == NetworkManager::ActiveConnection::State::Deactivated) {
-        showDesktopNotify(tr("WLAN Disconnected Successfully"));
+        showDesktopNotify(tr("WLAN Disconnected Successfully"), "networkdisconnected");
         qDebug() << "[WlanPage] wlan disconnected successfully"  << Q_FUNC_INFO <<__LINE__;
     } else if (state == NetworkManager::ActiveConnection::State::Activated) {
         qDebug() << "[WlanPage] wlan connected successfully" << Q_FUNC_INFO <<__LINE__;
-        this->showDesktopNotify(tr("WLAN Connected Successfully"));
+        this->showDesktopNotify(tr("WLAN Connected Successfully"), "networkconnected");
     }
 
     return;

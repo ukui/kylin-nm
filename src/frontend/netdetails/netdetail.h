@@ -75,7 +75,7 @@ private:
 
     bool checkWirelessSecurity(KySecuType secuType);
 
-    void showDesktopNotify(const QString &message);
+    void showDesktopNotify(const QString &message, QString soundName);
 
     void setNetdetailSomeEnable(bool on);
 private:

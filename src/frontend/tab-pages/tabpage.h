@@ -62,7 +62,7 @@ public:
 
 //    void updateDefaultDevice(QString &deviceName);
 //    QString getDefaultDevice();
-    static void showDesktopNotify(const QString &message);
+    static void showDesktopNotify(const QString &message, QString soundName);
 
     void hideSetting() {
         if (nullptr != m_settingsFrame) {

@@ -99,9 +99,6 @@ void WlanListItem::setExpanded(const bool &expanded)
         setFixedHeight(EXPANDED_HEIGHT);
     } else {
         setFixedHeight(NORMAL_HEIGHT);
-        QPalette pal = qApp->palette();
-        pal.setColor(QPalette::Window, qApp->palette().base().color());
-        this->setPalette(pal);
     }
 
     emit this->itemHeightChanged(expanded, m_wirelessNetItem.m_NetSsid);

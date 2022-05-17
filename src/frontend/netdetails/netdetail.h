@@ -28,6 +28,10 @@
 #include "creatnetpage.h"
 #include "coninfo.h"
 #include "tab-pages/tabpage.h"
+#include "kwidget.h"
+#include "ktabbar.h"
+
+using namespace kdk;
 
 class NetDetail : public QWidget
 {
@@ -100,11 +104,12 @@ private:
     QPushButton  * forgetBtn;
     QPushButton  * confimBtn;
 
-    QPushButton  * detailBtn;
-    QPushButton  * ipv4Btn;
-    QPushButton  * ipv6Btn;
-    QPushButton  * securityBtn;
+//    QPushButton  * detailBtn;
+//    QPushButton  * ipv4Btn;
+//    QPushButton  * ipv6Btn;
+//    QPushButton  * securityBtn;
     QFrame       * pageFrame;
+    KTabBar *m_netTabBar = nullptr;
 
     QString      m_name;
     QString      m_uuid;
@@ -131,9 +136,13 @@ private slots:
     void on_btnForget_clicked();
     void onPaletteChanged();
 
+protected slots:
+    void currentRowChangeSlot(int row);
+
 signals:
     void detailPageClose(bool on);
     void createPageClose(QString);
+    void currentChanged(int);
 };
 
 

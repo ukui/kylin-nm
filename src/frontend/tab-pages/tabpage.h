@@ -17,6 +17,7 @@
 #include "kylinnetworkdeviceresource.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
+#include "kborderlessbutton.h"
 
 using namespace kdk;
 
@@ -115,7 +116,8 @@ protected:
 
     QFrame * m_settingsFrame = nullptr;
     QHBoxLayout * m_settingsLayout = nullptr;
-    KyLable * m_settingsLabel = nullptr;
+//    KyLable * m_settingsLabel = nullptr;
+    KBorderlessButton *m_settingsBtn = nullptr;
 
     //临时增加的下拉框选择网卡区域
     QFrame * m_deviceFrame = nullptr;

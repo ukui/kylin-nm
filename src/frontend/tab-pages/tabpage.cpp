@@ -94,12 +94,17 @@ void TabPage::initUI()
 
     m_settingsLayout = new QHBoxLayout(m_settingsFrame);
     m_settingsLayout->setContentsMargins(SETTINGS_LAYOUT_MARGINS);
-    m_settingsLabel = new KyLable(m_settingsFrame);
-    m_settingsLabel->setCursor(Qt::PointingHandCursor);
-    m_settingsLabel->setText(tr("Settings"));
-    m_settingsLabel->setScaledContents(true);
 
-    m_settingsLayout->addWidget(m_settingsLabel);
+//    m_settingsLabel = new KyLable(m_settingsFrame);
+//    m_settingsLabel->setCursor(Qt::PointingHandCursor);
+//    m_settingsLabel->setText(tr("Settings"));
+//    m_settingsLabel->setScaledContents(true);
+//    m_settingsLayout->addWidget(m_settingsLabel);
+
+    m_settingsBtn = new KBorderlessButton(m_settingsFrame);
+    m_settingsBtn->setText(tr("Settings"));
+
+    m_settingsLayout->addWidget(m_settingsBtn);
     m_settingsLayout->addStretch();
     m_settingsFrame->setLayout(m_settingsLayout);
 

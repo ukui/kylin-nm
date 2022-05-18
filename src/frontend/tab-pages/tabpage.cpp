@@ -29,7 +29,7 @@ void TabPage::initUI()
     m_titleLayout = new QHBoxLayout(m_titleFrame);
     m_titleLayout->setContentsMargins(TITLE_LAYOUT_MARGINS);
     m_titleLabel = new QLabel(m_titleFrame);
-    m_netSwitch = new SwitchButton(m_titleFrame);
+    m_netSwitch = new KSwitchButton(m_titleFrame);
     m_titleLayout->addWidget(m_titleLabel);
     m_titleLayout->addStretch();
     m_titleLayout->addWidget(m_netSwitch);

@@ -109,7 +109,7 @@ private:
 //    QPushButton  * ipv6Btn;
 //    QPushButton  * securityBtn;
     QFrame       * pageFrame;
-    KTabBar *m_netTabBar = nullptr;
+    KTabBar      *m_netTabBar = nullptr;
 
     QString      m_name;
     QString      m_uuid;

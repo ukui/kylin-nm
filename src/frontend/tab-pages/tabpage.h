@@ -15,6 +15,10 @@
 #include <QProcess>
 #include <QDebug>
 #include "kylinnetworkdeviceresource.h"
+#include "kwidget.h"
+#include "kswitchbutton.h"
+
+using namespace kdk;
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
@@ -93,7 +97,7 @@ protected:
     QFrame * m_titleFrame = nullptr;
     QHBoxLayout * m_titleLayout = nullptr;
     QLabel * m_titleLabel = nullptr;
-    SwitchButton * m_netSwitch = nullptr;
+    KSwitchButton * m_netSwitch = nullptr;
     Divider * m_titleDivider = nullptr;
 
     QFrame * m_activatedNetFrame = nullptr;

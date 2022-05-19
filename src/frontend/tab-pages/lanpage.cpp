@@ -1188,10 +1188,8 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
             } else {
                 m_netSwitch->setCheckable(true);
                 if (m_netSwitch->isChecked()) {
-//                    qDebug() << "[wiredSwitch]set true after clicked";
                     m_switchGsettings->set(WIRED_SWITCH, false);
                 } else {
-//                    qDebug() << "[wiredSwitch]set false after clicked";
                     m_switchGsettings->set(WIRED_SWITCH,true);
                 }
             }

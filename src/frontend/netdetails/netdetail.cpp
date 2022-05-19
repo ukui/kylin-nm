@@ -230,40 +230,6 @@ void NetDetail::initUI()
     QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
     pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
 
-#if 0
-    detailBtn = new QPushButton(this);
-    detailBtn->setText(tr("Detail"));
-    detailBtn->setCheckable(true);
-    detailBtn->setChecked(true);
-
-    ipv4Btn = new QPushButton(this);
-    ipv4Btn->setText(tr("Ipv4"));
-    ipv4Btn->setCheckable(true);
-
-    ipv6Btn = new QPushButton(this);
-    ipv6Btn->setText(tr("Ipv6"));
-    ipv6Btn->setCheckable(true);
-
-    securityBtn = new QPushButton(this);
-    securityBtn->setText(tr("Security"));
-    securityBtn->setCheckable(true);
-
-    m_group = new QButtonGroup(this);
-    m_group->addButton(detailBtn);
-    m_group->addButton(ipv4Btn);
-    m_group->addButton(ipv6Btn);
-    if (isWlan) {
-        m_group->addButton(securityBtn);
-    }
-
-    pageLayout->addStretch();
-    pageLayout->addWidget(detailBtn);
-    pageLayout->addWidget(ipv4Btn);
-    pageLayout->addWidget(ipv6Btn);
-    pageLayout->addWidget(securityBtn);
-    pageLayout->addStretch();
-#endif
-
     // TabBar
     m_netTabBar = new KTabBar(KTabBarStyle::SegmentDark, this);
     m_netTabBar->addTab(tr("Detail")); //详情
@@ -312,7 +278,7 @@ void NetDetail::initUI()
 //    pal.setColor(QPalette::Background, qApp->palette().base().color());
     this->setAutoFillBackground(true);
 //    this->setPalette(pal);
-        onPaletteChanged();
+    onPaletteChanged();
 }
 
 void NetDetail::loadPage()
@@ -325,16 +291,6 @@ void NetDetail::loadPage()
     } else {
         stackWidget->setCurrentIndex(DETAIL_PAGE_NUM);
         this->setWindowTitle(m_name);
-#if 0
-        if (!isWlan) {
-            securityBtn->hide();
-        } else {
-            securityBtn->show();
-            if (m_name.isEmpty()) {
-                this->setWindowTitle(tr("connect hiddin wlan"));
-            }
-        }
-#endif
         if (isWlan && m_name.isEmpty()) {
             this->setWindowTitle(tr("connect hiddin wlan"));
         }
@@ -346,18 +302,7 @@ void NetDetail::initComponent()
     connect(cancelBtn, &QPushButton::clicked, this, [=] {
         close();
     });
-//    connect(detailBtn, &QPushButton::clicked, this, [=] {
-//        stackWidget->setCurrentIndex(DETAIL_PAGE_NUM);
-//    });
-//    connect(ipv4Btn, &QPushButton::clicked, this, [=] {
-//        stackWidget->setCurrentIndex(IPV4_PAGE_NUM);
-//    });
-//    connect(ipv6Btn, &QPushButton::clicked, this, [=] {
-//        stackWidget->setCurrentIndex(IPV6_PAGE_NUM);
-//    });
-//    connect(securityBtn, &QPushButton::clicked, this, [=] {
-//        stackWidget->setCurrentIndex(SECURITY_PAGE_NUM);
-//    });
+
     connect(confimBtn, SIGNAL(clicked()), this, SLOT(on_btnConfirm_clicked()));
     if (isWlan && !m_uuid.isEmpty()) {
         forgetBtn->show();

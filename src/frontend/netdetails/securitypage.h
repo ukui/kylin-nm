@@ -60,7 +60,6 @@ private:
     QLabel *userPwdFlagLabel;
 
     QComboBox *secuTypeCombox;
-//    LineEdit *pwdEdit;
     KPasswordEdit *pwdEdit = nullptr;
     QComboBox *eapTypeCombox;
     //TLS
@@ -70,19 +69,13 @@ private:
     QCheckBox *caNeedBox;
     QComboBox *clientCertPathCombox;
     QComboBox *clientPrivateKeyCombox;
-//    LineEdit *clientPrivateKeyPwdEdit;
     KPasswordEdit *clientPrivateKeyPwdEdit = nullptr;
 
     //PEAP && TTLS
     QComboBox *eapMethodCombox;
     LineEdit *userNameEdit;
-//    LineEdit *userPwdEdit;
     KPasswordEdit *userPwdEdit = nullptr;
     QCheckBox *userPwdFlagBox;
-
-//    QCheckBox *pwdBox;
-//    QCheckBox *userPwdBox;
-//    QCheckBox *privateKeyBox;
 
     void showNone();
     void showPsk();
@@ -104,9 +97,6 @@ private slots:
     void setEnableOfSaveBtn();
 
     void onCaNeedBoxClicked();
-//    void onPwdBoxClicked();
-//    void onUserPwdBox();
-//    void onPrivateKeyBoxClicked();
 
     void onCaCertPathComboxIndexChanged(QString str);
     void onClientCertPathComboxIndexChanged(QString str);

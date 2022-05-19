@@ -2,8 +2,6 @@
 #define TABPAGE_H
 
 #include "divider.h"
-//#include "switchbutton.h"
-//#include "kylable.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -116,7 +114,6 @@ protected:
 
     QFrame * m_settingsFrame = nullptr;
     QHBoxLayout * m_settingsLayout = nullptr;
-//    KyLable * m_settingsLabel = nullptr;
     KBorderlessButton *m_settingsBtn = nullptr;
 
     //临时增加的下拉框选择网卡区域
@@ -125,8 +122,6 @@ protected:
     QLabel * m_deviceLabel = nullptr;
     QComboBox * m_deviceComboBox = nullptr;
     QLabel * m_tipsLabel = nullptr;
-
-
 
 public slots:
     virtual void onDeviceComboxIndexChanged(int currentIndex) = 0;

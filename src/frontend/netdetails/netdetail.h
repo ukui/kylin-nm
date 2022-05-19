@@ -13,7 +13,6 @@
 #include <QApplication>
 #include <QDebug>
 #include <QSettings>
-#include <QButtonGroup>
 
 #include <QDBusMessage>
 #include <QDBusObjectPath>
@@ -104,10 +103,6 @@ private:
     QPushButton  * forgetBtn;
     QPushButton  * confimBtn;
 
-//    QPushButton  * detailBtn;
-//    QPushButton  * ipv4Btn;
-//    QPushButton  * ipv6Btn;
-//    QPushButton  * securityBtn;
     QFrame       * pageFrame;
     KTabBar      *m_netTabBar = nullptr;
 
@@ -128,8 +123,6 @@ private:
     bool         isConfirmBtnEnable;
 
     ConInfo      m_info;
-
-    QButtonGroup *m_group;
 
 private slots:
     void on_btnConfirm_clicked();

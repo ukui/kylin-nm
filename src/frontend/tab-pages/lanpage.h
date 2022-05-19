@@ -2,7 +2,6 @@
 #define LANPAGE_H
 
 #include "divider.h"
-//#include "switchbutton.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>

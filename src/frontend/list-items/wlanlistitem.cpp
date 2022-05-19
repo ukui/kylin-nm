@@ -229,9 +229,9 @@ void WlanListItem::initWlanUI()
     m_pwdFrameLyt->setSpacing(FRAME_SPACING);
     m_pwdFrame->setLayout(m_pwdFrameLyt);
 
-//    m_pwdLineEdit  = new QLineEdit(m_pwdFrame);
     m_pwdLineEdit  = new KPasswordEdit(m_pwdFrame);
     m_pwdLineEdit->setFixedWidth(LINEEDIT_WIDTH);
+    m_pwdLineEdit->setClearButtonEnabled(false); //禁用ClearBtn按钮
 //    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
 //    m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
@@ -242,23 +242,7 @@ void WlanListItem::initWlanUI()
     m_pwdLineEdit->installEventFilter(this);
     connect(m_pwdLineEdit, &QLineEdit::textChanged, this, &WlanListItem::onPwdEditorTextChanged);
     m_pwdLineEdit->setFixedHeight(PWD_AREA_HEIGHT);
-//    m_pwdLineEdit->setEchoMode(QLineEdit::EchoMode::Password);
-//    m_pwdLineEdit->setTextMargins(PWD_CONTENT_MARGINS);
     m_pwdFrameLyt->addWidget(m_pwdLineEdit);
-
-//    m_pwdLineEditLyt = new QHBoxLayout(m_pwdLineEdit);
-//    m_pwdLineEditLyt->setContentsMargins(PWD_LAYOUT_MARGINS);
-//    m_pwdLineEdit->setLayout(m_pwdLineEditLyt);
-
-//    m_showPwdButton = new QPushButton(m_pwdLineEdit);
-//    m_showPwdButton->setFlat(true);     //去除边框
-//    m_showPwdButton->installEventFilter(this);
-//    m_showPwdButton->setFixedSize(SHOW_PWD_BUTTON_SIZE);
-//    m_showPwdButton->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
-//    m_showPwdButton->setCursor(Qt::PointingHandCursor);
-//    connect(m_showPwdButton, &QPushButton::clicked, this, &WlanListItem::onShowPwdButtonClicked);
-//    m_pwdLineEditLyt->addStretch();
-//    m_pwdLineEditLyt->addWidget(m_showPwdButton);
 
     m_connectButton = new QPushButton(m_pwdFrame);
     m_connectButton->setFixedSize(CONNECT_BUTTON_WIDTH, PWD_AREA_HEIGHT);
@@ -477,24 +461,6 @@ void WlanListItem::onPwdEditorTextChanged()
 
     return;
 }
-
-//void WlanListItem::onShowPwdButtonClicked()
-//{
-//    qDebug()<< LOG_FLAG << "onShowPwdButtonClicked";
-//    if (!m_pwdLineEdit) {
-//        return;
-//    }
-
-//    if (m_pwdLineEdit->echoMode() == QLineEdit::EchoMode::Password) {
-//        m_showPwdButton->setIcon(QIcon::fromTheme("ukui-eye-display-symbolic"));
-//        m_pwdLineEdit->setEchoMode(QLineEdit::EchoMode::Normal);
-//    } else {
-//        m_showPwdButton->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
-//        m_pwdLineEdit->setEchoMode(QLineEdit::EchoMode::Password);
-//    }
-
-//    return;
-//}
 
 void WlanListItem::onConnectButtonClicked()
 {

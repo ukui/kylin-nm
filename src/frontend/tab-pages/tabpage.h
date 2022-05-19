@@ -2,8 +2,8 @@
 #define TABPAGE_H
 
 #include "divider.h"
-#include "switchbutton.h"
-#include "kylable.h"
+//#include "switchbutton.h"
+//#include "kylable.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>

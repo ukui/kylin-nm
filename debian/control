@@ -1,0 +1,45 @@
+Source: kylin-nm
+Section: utils
+Priority: optional
+Maintainer: Kylin Team <team+kylin@tracker.debian.org>
+Uploaders: handsome_feng <jianfengli@ubuntukylin.com>
+Build-Depends: debhelper (>=9),
+               libcap-dev,
+               libgsettings-qt-dev,
+               libgtk-3-dev,
+               libkf5networkmanagerqt-dev (>= 5.36.0),
+               libkf5windowsystem-dev,
+               libkysdk-qtwidgets-dev,
+               libkysec-dev,
+               libnm-dev,
+               libnma-dev,
+               libqt5svg5-dev,
+               libqt5x11extras5-dev,
+               libsecret-1-dev,
+               libukcc-dev (>= 3.1.1+1217),
+               libukui-common-dev,
+               libukui-log4qt-dev,
+               libx11-dev,
+               qt5-qmake,
+               qtbase5-dev,
+               qtbase5-dev-tools,
+               qtchooser,
+               qtscript5-dev,
+               qttools5-dev-tools
+Standards-Version: 4.5.0
+Rules-Requires-Root: no
+Homepage: https://github.com/ukui/kylin-nm
+Vcs-Git: https://github.com/ukui/kylin-nm.git
+Vcs-Browser: https://github.com/ukui/kylin-nm
+
+Package: kylin-nm
+Architecture: any
+Depends: libkysdk-qtwidgets,
+         network-manager (>=1.2.6),
+         ukui-control-center (>= 3.1.1+1217),
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: Gui Applet tool for display and edit network simply
+ Kylin NM is a Applet tool for managing network settings simply.
+ It has beautiful UI and very comfortable to use.
+ It's better work together with UKUI.

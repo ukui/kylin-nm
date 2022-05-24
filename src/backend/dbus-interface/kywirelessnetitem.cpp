@@ -79,6 +79,7 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
     }
     m_bssid = net->referenceAccessPoint()->hardwareAddress();
     m_device = net->device();
+    m_uni = net->referenceAccessPoint()->uni();
     initInfoBySsid();
 }
 
@@ -111,4 +112,23 @@ void KyWirelessNetItem::initInfoBySsid()
     }
 
     return;
+}
+
+int KyWirelessNetItem::getCategory(QString uni)
+{
+
+    QDBusInterface interface( "org.freedesktop.NetworkManager", uni, "org.freedesktop.DBus.Properties", QDBusConnection::systemBus() );
+    if (!interface.isValid()) {
+        qDebug() << Q_FUNC_INFO << "dbus is invalid";
+        return -1;
+    }
+
+    QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Category");
+    if (!reply.isValid()) {
+        //qDebug()<<"can not get the attribute 'Category' in func getCategory()";
+        return 0;
+    } else {
+        return reply.value().toInt();
+    }
+
 }

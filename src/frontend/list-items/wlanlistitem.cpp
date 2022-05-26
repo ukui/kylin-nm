@@ -304,7 +304,6 @@ QString getIcon(bool isEncrypted, int signalStrength, int category) {
         iconNameFirst = "ukui-wifi6+-";
     }
     if (!isEncrypted) {
-        //ZJP_TODO 无加密 注意信号格数计算方式，可能需要修改
         if (signalStrength > EXCELLENT_SIGNAL){
             if (category == 0) {
                 iconNameLast = "excellent-symbolic";

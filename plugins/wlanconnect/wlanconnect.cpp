@@ -370,7 +370,9 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
             frame->itemMap[list.at(0).at(0)]->uuid = list.at(0).at(3);
             frame->uuid = list.at(0).at(3);
             frame->itemMap[list.at(0).at(0)]->statusLabel->setText(tr("connected"));
-            updateIcon(frame->itemMap[list.at(0).at(0)], list.at(0).at(1), list.at(0).at(2), list.at(0).at(4), list.at(0).at(5).toInt());
+            if (list.at(0).size() > 5) {
+                updateIcon(frame->itemMap[list.at(0).at(0)], list.at(0).at(1), list.at(0).at(2), list.at(0).at(4), list.at(0).at(5).toInt());
+            }
             frameIndex ++;
         }
     } else {
@@ -404,7 +406,9 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
                 frame->itemMap[list.at(listIndex).at(0)]->uuid.clear();
                 frame->itemMap[list.at(listIndex).at(0)]->statusLabel->setText("");
             }
-            updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2), list.at(listIndex).at(3), list.at(listIndex).at(4).toInt());
+            if (list.at(listIndex).size() > 4) {
+                updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2), list.at(listIndex).at(3), list.at(listIndex).at(4).toInt());
+            }
             frameIndex++;
         } else {
             qDebug() << "not find " << list.at(listIndex).at(0) << " in current list, ignore";

@@ -162,11 +162,22 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
         if (w->findChild<QWidget*>())
             w->findChild<QWidget*>()->setStyleSheet("QWidget{background: palette(base);border-radius:4px;}");
     }
-    if (w == wiredSwitch && e->type() == QMouseEvent::MouseButtonPress) {
-        if (!wiredSwitch->isCheckable()) {
-            showDesktopNotify(tr("No ethernet device avaliable"));
+    if (w == wiredSwitch) {
+        if (e->type() == QMouseEvent::MouseButtonRelease) {
+            if (!wiredSwitch->isCheckable()) {
+                showDesktopNotify(tr("No ethernet device avaliable"));
+            } else {
+                if (deviceStatusMap.count() == 0) {
+                    wiredSwitch->setCheckable(false);
+                    wiredSwitch->setChecked(false);
+                } else {
+                    m_interface->call(QStringLiteral("setWiredSwitchEnable"), !wiredSwitch->isChecked());
+                }
+                return true;
+            }
         }
     }
+
     return QObject::eventFilter(w,e);
 }
 
@@ -182,18 +193,9 @@ void NetConnect::initComponent() {
 
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
-        connect(wiredSwitch, &KSwitchButton::stateChanged, this, [=] (bool checked) {
-            if (!m_interface->isValid()) {
-                return;
-            }
-            if (!wiredSwitch->isCheckable()) {
-                return;
-            }
-            qDebug() << "[NetConnect]call setWiredSwitchEnable" << checked << __LINE__;
-            m_interface->call(QStringLiteral("setWiredSwitchEnable"),checked);
-            qDebug() << "[NetConnect]call setWiredSwitchEnable Respond"  << __LINE__;
-        });
+
         setSwitchStatus();
+
         connect(m_switchGsettings, &QGSettings::changed, this, [=] (const QString &key) {
             if (key == WIRED_SWITCH) {
                 setSwitchStatus();

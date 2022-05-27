@@ -220,11 +220,23 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
         if (w->findChild<QWidget*>())
             w->findChild<QWidget*>()->setStyleSheet("QWidget{background: palette(base);border-radius:4px;}");
     }
-    if (w == m_wifiSwitch && e->type() == QMouseEvent::MouseButtonPress) {
-        if (!m_wifiSwitch->isCheckable()) {
-            showDesktopNotify(tr("No wireless network card detected"));
+
+    if (w == m_wifiSwitch) {
+        if (e->type() == QMouseEvent::MouseButtonRelease) {
+            if (!m_wifiSwitch->isCheckable()) {
+                showDesktopNotify(tr("No wireless network card detected"));
+            } else {
+                if (deviceList.isEmpty()) {
+                    m_wifiSwitch->setCheckable(false);
+                    m_wifiSwitch->setChecked(false);
+                } else {
+                    m_interface->call(QStringLiteral("setWirelessSwitchEnable"), !m_wifiSwitch->isChecked());
+                }
+                return true;
+            }
         }
     }
+
     return QObject::eventFilter(w,e);
 }
 
@@ -241,18 +253,8 @@ void WlanConnect::initComponent() {
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
 
-        connect(m_wifiSwitch, &KSwitchButton::stateChanged, this, [=] (bool checked) {
-            if (!m_interface->isValid()) {
-                return;
-            }
-            if (!m_wifiSwitch->isCheckable()) {
-                return;
-            }
-            qDebug() << "[WlanConnect]call setWirelessSwitchEnable " << checked << __LINE__;
-            m_interface->call(QStringLiteral("setWirelessSwitchEnable"),checked);
-            qDebug() << "[WlanConnect]call setWirelessSwitchEnable respond" << __LINE__;
-        });
         setSwitchStatus();
+
         connect(m_switchGsettings, &QGSettings::changed, this, [=] (const QString &key) {
             if (key == WIRELESS_SWITCH) {
                 setSwitchStatus();

@@ -162,28 +162,31 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
         if (w->findChild<QWidget*>())
             w->findChild<QWidget*>()->setStyleSheet("QWidget{background: palette(base);border-radius:4px;}");
     }
+    if (w == wiredSwitch && e->type() == QMouseEvent::MouseButtonPress) {
+        if (!wiredSwitch->isCheckable()) {
+            showDesktopNotify(tr("No ethernet device avaliable"));
+        }
+    }
     return QObject::eventFilter(w,e);
 }
 
 void NetConnect::initComponent() {
-    wiredSwitch = new SwitchButton(pluginWidget);
+    wiredSwitch = new KSwitchButton(pluginWidget);
     ui->openWIifLayout->addWidget(wiredSwitch);
     ui->detailLayOut->setContentsMargins(MAIN_LAYOUT_MARGINS);
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
     ui->availableLayout->setSpacing(SPACING);
     ui->horizontalLayout->setContentsMargins(TOP_MARGINS);
 
-    connect(wiredSwitch, &SwitchButton::disabledClick, this, [=]() {
-        showDesktopNotify(tr("No ethernet device avaliable"));
-    });
+    wiredSwitch->installEventFilter(this);
 
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
-        connect(wiredSwitch, &SwitchButton::checkedChanged, this, [=] (bool checked) {
+        connect(wiredSwitch, &KSwitchButton::stateChanged, this, [=] (bool checked) {
             if (!m_interface->isValid()) {
                 return;
             }
-            if (wiredSwitch->getDisabledFlag()) {
+            if (!wiredSwitch->isCheckable()) {
                 return;
             }
             qDebug() << "[NetConnect]call setWiredSwitchEnable" << checked << __LINE__;
@@ -206,7 +209,7 @@ void NetConnect::initComponent() {
     getDeviceStatusMap(deviceStatusMap);
     if (deviceStatusMap.isEmpty()) {
         qDebug() << "[Netconnect] no device exist when init, set switch disable";
-        wiredSwitch->setDisabledFlag(true);
+        wiredSwitch->setCheckable(false);
         wiredSwitch->setChecked(false);
     }
     initNet();
@@ -592,10 +595,10 @@ void NetConnect::onDeviceStatusChanged()
     }
     deviceStatusMap = map;
     if (deviceStatusMap.isEmpty()) {
-        wiredSwitch->setDisabledFlag(true);
+        wiredSwitch->setCheckable(false);
         wiredSwitch->setChecked(false);
     } else {
-        wiredSwitch->setDisabledFlag(false);
+        wiredSwitch->setCheckable(true);
         setSwitchStatus();
     }
 

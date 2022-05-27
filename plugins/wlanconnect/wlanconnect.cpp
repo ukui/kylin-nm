@@ -188,20 +188,12 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
 
 void WlanConnect::initComponent() {
     m_wifiSwitch = new KSwitchButton(pluginWidget);
-    m_wifiSwitch->installEventFilter(this);
     ui->openWIifLayout->addWidget(m_wifiSwitch);
     ui->detailLayOut_3->setContentsMargins(MAIN_LAYOUT_MARGINS);
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
     ui->availableLayout->setSpacing(SPACING);
 
-//    connect(m_wifiSwitch, &SwitchButton::disabledClick, this, [=]() {
-//        showDesktopNotify(tr("No wireless network card detected"));
-//    });
-    connect(m_wifiSwitch, &KSwitchButton::isCheckable, this, [=]() {
-        if (!m_wifiSwitch->isCheckable()) {
-            showDesktopNotify(tr("No wireless network card detected"));
-        }
-    });
+    m_wifiSwitch->installEventFilter(this);
 
     //开关
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
@@ -235,7 +227,6 @@ void WlanConnect::initComponent() {
     getDeviceList(deviceList);
     if (deviceList.isEmpty()) {
         qDebug() << "[WlanConnect]no device exist when init, set switch disable";
-//        m_wifiSwitch->setDisabledFlag(true);
         m_wifiSwitch->setCheckable(false);
         m_wifiSwitch->setChecked(false);
     }
@@ -490,11 +481,9 @@ void WlanConnect::onDeviceStatusChanged()
     }
     deviceList = list;
     if (deviceList.isEmpty()) {
-//        m_wifiSwitch->setDisabledFlag(true);
         m_wifiSwitch->setCheckable(false);
         m_wifiSwitch->setChecked(false);
     } else {
-//        m_wifiSwitch->setDisabledFlag(false);
         m_wifiSwitch->setCheckable(true);
         setSwitchStatus();
     }

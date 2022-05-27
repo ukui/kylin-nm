@@ -503,7 +503,7 @@ void NetConnect::addDeviceFrame(QString devName)
     deviceFrameMap.insert(devName, itemFrame);
     qDebug() << "[NetConnect]deviceFrameMap insert" << devName;
 
-    connect(itemFrame->deviceFrame->deviceSwitch, &SwitchButton::checkedChanged, this, [=] (bool checked) {
+    connect(itemFrame->deviceFrame->deviceSwitch, &KSwitchButton::stateChanged, this, [=] (bool checked) {
         qDebug() << "[NetConnect]call setDeviceEnable" << devName << checked << __LINE__;
         m_interface->call(QStringLiteral("setDeviceEnable"), devName, checked);
         qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;

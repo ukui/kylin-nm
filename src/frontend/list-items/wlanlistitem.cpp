@@ -28,6 +28,7 @@ WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, Q
     connect(m_menu, &QMenu::triggered, this, &WlanListItem::onMenuTriggered);
 
     m_wirelessConnectOperation = new KyWirelessConnectOperation(this);
+    m_deviceResource = new KyNetworkDeviceResourse(this);
 }
 
 WlanListItem::WlanListItem(QWidget *parent) : ListItem(parent)
@@ -293,72 +294,106 @@ void WlanListItem::initWlanUI()
     m_autoConnectFrame->hide();
 }
 
+QString getIcon(bool isEncrypted, int signalStrength, int category) {
+    QString iconNameFirst,iconNameLast;
+    if (category == 0){
+        iconNameFirst = "network-wireless-signal-";
+    } else if (category == 1) {
+        iconNameFirst = "ukui-wifi6-";
+    } else {
+        iconNameFirst = "ukui-wifi6+-";
+    }
+    if (!isEncrypted) {
+        if (signalStrength > EXCELLENT_SIGNAL){
+            if (category == 0) {
+                iconNameLast = "excellent-symbolic";
+            } else {
+                iconNameLast = "full-symbolic";
+            }
+        } else if (signalStrength > GOOD_SIGNAL) {
+            if (category == 0) {
+                iconNameLast = "good-symbolic";
+            } else {
+                iconNameLast = "high-symbolic";
+            }
+        } else if (signalStrength > OK_SIGNAL) {
+            if (category == 0) {
+                iconNameLast = "ok-symbolic";
+            } else {
+                iconNameLast = "medium-symbolic";
+            }
+       } else if (signalStrength > LOW_SIGNAL) {
+            if (category == 0) {
+                iconNameLast = "weak-symbolic";
+            } else {
+                iconNameLast = "low-symbolic";
+            }
+       } else {
+            iconNameLast = "none-symbolic";
+        }
+    } else {
+        if (signalStrength > EXCELLENT_SIGNAL){
+            if (category == 0) {
+                iconNameLast = "excellent-secure-symbolic";
+            } else {
+                iconNameLast = "full-pwd-symbolic";
+            }
+        } else if (signalStrength > GOOD_SIGNAL) {
+            if (category == 0) {
+                iconNameLast = "good-secure-symbolic";
+            } else {
+                iconNameLast = "high-pwd-symbolic";
+            }
+        } else if (signalStrength > OK_SIGNAL) {
+            if (category == 0) {
+                iconNameLast = "ok-secure-symbolic";
+            } else {
+                iconNameLast = "medium-pwd-symbolic";
+            }
+       } else if (signalStrength > LOW_SIGNAL) {
+            if (category == 0) {
+                iconNameLast = "weak-secure-symbolic";
+            } else {
+                iconNameLast = "low-pwd-symbolic";
+            }
+       } else {
+            if (category == 0) {
+                iconNameLast = "none-secure-symbolic";
+            } else {
+                iconNameLast = "none-pwd-symbolic";
+            }
+        }
+    }
+    return iconNameFirst + iconNameLast;
+}
+
 void WlanListItem::refreshIcon(bool isActivated)
 {
-#define FULL_SIGNAL 5
-#define EXCELLENT_SIGNAL 4
-#define GOOD_SIGNAL 3
-#define OK_SIGNAL 2
-#define LOW_SIGNAL 1
-#define STEP 25
     if (m_isApMode) {
         m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-hotspot-symbolic", QIcon(":/res/w/wifi-full.png")));
         m_netButton->setActive(isActivated);
         return;
     }
 
-    if (!m_hasPwd) {
-        //ZJP_TODO 无加密 注意信号格数计算方式，可能需要修改
-        switch (m_wirelessNetItem.m_signalStrength / STEP + 1) {
-        case FULL_SIGNAL:
-        case EXCELLENT_SIGNAL:
-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic",
-                                                        QIcon(":/res/w/wifi-full.png")));
-            break;
-        case GOOD_SIGNAL:
-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-good-symbolic",
-                                                        QIcon(":/res/w/wifi-high.png")));
-            break;
-        case OK_SIGNAL:
-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-ok",
-                                                        QIcon(":/res/w/wifi-medium.png")));
-            break;
-        case LOW_SIGNAL:
-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-low",
-                                                        QIcon(":/res/w/wifi-low.png")));
-            break;
-        default:
-            qDebug() << "Set wlan(without passwd) icon failed, signal = "
-                     << m_wirelessNetItem.m_signalStrength << Q_FUNC_INFO << __LINE__;
-            break;
-        }
-    } else {
-        //ZJP_TODO 有加密
-        switch (m_wirelessNetItem.m_signalStrength / STEP + 1) {
-        case FULL_SIGNAL:
-        case EXCELLENT_SIGNAL:
-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-excellent-secure-symbolic",
-                                                        QIcon(":/res/w/wifi-full-pwd.png")));
-            break;
-        case GOOD_SIGNAL:
-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-good-secure-symbolic",
-                                                        QIcon(":/res/w/wifi-high-pwd.png")));
-            break;
-        case OK_SIGNAL:
-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-ok-secure-symbolic",
-                                                        QIcon(":/res/w/wifi-medium-pwd.png")));
-            break;
-        case LOW_SIGNAL:
-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-low-secure-symbolic",
-                                                        QIcon(":/res/w/wifi-low-pwd.png")));
-            break;
-        default:
-            qDebug() << "Set wlan(with passwd) icon failed, signal = "
-                     << m_wirelessNetItem.m_signalStrength << Q_FUNC_INFO << __LINE__;
-            break;
+    int category = 0;
+    int signalStrength = 0;
+    QString uni = "";
+    QString secuType = "";
+    category = m_wirelessNetItem.getCategory(m_wirelessNetItem.m_uni);
+    signalStrength = m_wirelessNetItem.m_signalStrength;
+
+    if (isActivated) {
+        if (m_deviceResource->getActiveConnectionInfo(m_wlanDevice, signalStrength, uni, secuType)) {
+            category = m_wirelessNetItem.getCategory(uni);
+            m_hasPwd = (secuType.isEmpty() || secuType == "") ? false : true;
         }
     }
+
+    QString iconPath = getIcon(m_hasPwd, signalStrength, category);
+    m_netButton->setButtonIcon(QIcon::fromTheme(iconPath));
+
     m_netButton->setActive(isActivated);
+    qDebug() << "refreshIcon" << m_wirelessNetItem.m_NetSsid << "isActivated" << isActivated << "path" << iconPath;
 }
 
 void WlanListItem::onInfoButtonClicked()

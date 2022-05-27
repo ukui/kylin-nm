@@ -167,12 +167,7 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
             if (!wiredSwitch->isCheckable()) {
                 showDesktopNotify(tr("No ethernet device avaliable"));
             } else {
-                if (deviceStatusMap.count() == 0) {
-                    wiredSwitch->setCheckable(false);
-                    wiredSwitch->setChecked(false);
-                } else {
-                    m_interface->call(QStringLiteral("setWiredSwitchEnable"), !wiredSwitch->isChecked());
-                }
+                m_interface->call(QStringLiteral("setWiredSwitchEnable"), !wiredSwitch->isChecked());
                 return true;
             }
         }

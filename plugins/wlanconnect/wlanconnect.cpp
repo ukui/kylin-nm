@@ -226,12 +226,7 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
             if (!m_wifiSwitch->isCheckable()) {
                 showDesktopNotify(tr("No wireless network card detected"));
             } else {
-                if (deviceList.isEmpty()) {
-                    m_wifiSwitch->setCheckable(false);
-                    m_wifiSwitch->setChecked(false);
-                } else {
-                    m_interface->call(QStringLiteral("setWirelessSwitchEnable"), !m_wifiSwitch->isChecked());
-                }
+                m_interface->call(QStringLiteral("setWirelessSwitchEnable"), !m_wifiSwitch->isChecked());
                 return true;
             }
         }

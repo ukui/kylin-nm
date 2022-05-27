@@ -42,10 +42,15 @@
 #include <QDBusReply>
 
 #include <interface.h>
-#include "switchbutton.h"
+//#include "switchbutton.h"
 #include "hoverbtn.h"
 #include "itemframe.h"
 #include "wlanitem.h"
+#include "kwidget.h"
+#include "kswitchbutton.h"
+
+using namespace kdk;
+
 namespace Ui {
 class WlanConnect;
 }
@@ -145,7 +150,7 @@ private:
     QTimer * m_scanTimer = nullptr;
 //    QTimer * m_updateTimer = nullptr;
 private:
-    SwitchButton       *m_wifiSwitch;
+    KSwitchButton      *m_wifiSwitch;
     bool               m_firstLoad;
 
 private slots:

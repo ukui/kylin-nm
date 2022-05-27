@@ -35,6 +35,18 @@
 
 #define SPACING 8
 
+#define EXCELLENT_SIGNAL 80
+#define GOOD_SIGNAL 55
+#define OK_SIGNAL 30
+#define LOW_SIGNAL 5
+#define NONE_SIGNAL 0
+
+#define SIGNAL_EXCELLENT 1
+#define SIGNAL_GOOD      2
+#define SIGNAL_OK        3
+#define SIGNAL_LOW       4
+#define SIGNAL_NONE      5
+
 const QString WIRELESS_SWITCH = "wirelessswitch";
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 
@@ -48,6 +60,36 @@ const QString KWifiLow          = "network-wireless-signal-low";
 const QString KWifiLockLow      = "network-wireless-secure-signal-low";
 const QString KWifiNone         = "network-wireless-signal-none";
 const QString KWifiLockNone     = "network-wireless-secure-signal-none";
+
+const QString KWifi6Symbolic        = "ukui-wifi6-full-symbolic";
+const QString KWifi6PlusSymbolic    = "ukui-wifi6+-full-symbolic";
+
+const QString KWifi6LockSymbolic    = "ukui-wifi6-full-pwd-symbolic";
+const QString KWifi6PlusLockSymbolic= "ukui-wifi6+-full-pwd-symbolic";
+
+const QString KWifi6Good            = "ukui-wifi6-high-symbolic";
+const QString KWifi6PlusGood        = "ukui-wifi6+-high-symbolic";
+
+const QString KWifi6LockGood        = "ukui-wifi6-high-pwd-symbolic";
+const QString KWifi6PlusLockGood    = "ukui-wifi6+-high-pwd-symbolic";
+
+const QString KWifi6OK              = "ukui-wifi6-medium-symbolic";
+const QString KWifi6PlusOK          = "ukui-wifi6-high+-medium-symbolic";
+
+const QString KWifi6LockOK          = "ukui-wifi6-medium-pwd-symbolic";
+const QString KWifi6PlusLockOK      = "ukui-wifi6+-medium-pwd-symbolic";
+
+const QString KWifi6Low             = "ukui-wifi6-low-symbolic";
+const QString KWifi6PlusLow         = "ukui-wifi6+-low-symbolic";
+
+const QString KWifi6LockLow         = "ukui-wifi6-low-pwd-symbolic";
+const QString KWifi6PlusLockLow     = "ukui-wifi6+-low-pwd-symbolic";
+
+const QString KWifi6None            = "ukui-wifi6-none-symbolic";
+const QString KWifi6PlusNone        = "ukui-wifi6+-none-symbolic";
+
+const QString KWifi6LockNone        = "ukui-wifi6-none-pwd-symbolic";
+const QString KWifi6PlusLockNone    = "ukui-wifi6+-none-pwd-symbolic";
 
 const QString KLanSymbolic      = ":/img/plugins/netconnect/eth.svg";
 const QString NoNetSymbolic     = ":/img/plugins/netconnect/nonet.svg";
@@ -332,7 +374,9 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
             frame->itemMap[list.at(0).at(0)]->uuid = list.at(0).at(3);
             frame->uuid = list.at(0).at(3);
             frame->itemMap[list.at(0).at(0)]->statusLabel->setText(tr("connected"));
-            updateIcon(frame->itemMap[list.at(0).at(0)], list.at(0).at(1), list.at(0).at(2), list.at(0).at(4));
+            if (list.at(0).size() > 5) {
+                updateIcon(frame->itemMap[list.at(0).at(0)], list.at(0).at(1), list.at(0).at(2), list.at(0).at(4), list.at(0).at(5).toInt());
+            }
             frameIndex ++;
         }
     } else {
@@ -366,7 +410,9 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
                 frame->itemMap[list.at(listIndex).at(0)]->uuid.clear();
                 frame->itemMap[list.at(listIndex).at(0)]->statusLabel->setText("");
             }
-            updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2), list.at(listIndex).at(3));
+            if (list.at(listIndex).size() > 4) {
+                updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2), list.at(listIndex).at(3), list.at(listIndex).at(4).toInt());
+            }
             frameIndex++;
         } else {
             qDebug() << "not find " << list.at(listIndex).at(0) << " in current list, ignore";
@@ -375,7 +421,7 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
     qDebug() << "resort finish";
 }
 
-void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection)
+void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection, int category)
 {
     qDebug() << "updateIcon" << item->titileLabel->text();
 
@@ -391,7 +437,7 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
     if (isApConnection == IsApConnection) {
         iconamePath = KApSymbolic;
     } else {
-        iconamePath = wifiIcon(isLock, sign);
+        iconamePath = wifiIcon(isLock, sign, category);
     }
     QIcon searchIcon = QIcon::fromTheme(iconamePath);
     if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
@@ -601,7 +647,7 @@ void WlanConnect::onNetworkAdd(QString deviceName, QStringList wlanInfo)
     QMap<QString, ItemFrame *>::iterator iter;
     for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
         if (deviceName == iter.key()) {
-            addOneWlanFrame(iter.value(), deviceName, wlanInfo.at(0), wlanInfo.at(1), "", isLock, false, WIRELESS_TYPE, wlanInfo.at(3));
+            addOneWlanFrame(iter.value(), deviceName, wlanInfo.at(0), wlanInfo.at(1), "", isLock, false, WIRELESS_TYPE, wlanInfo.at(3), wlanInfo.at(3).toInt());
         }
     }
 
@@ -739,21 +785,53 @@ void WlanConnect::runExternalApp() {
 }
 
 //根据信号强度分级+安全性分图标
-QString WlanConnect::wifiIcon(bool isLock, int strength) {
-    switch (strength) {
-    case 1:
-        return isLock ? KWifiLockSymbolic : KWifiSymbolic;
-    case 2:
-        return isLock ? KWifiLockGood : KWifiGood;
-    case 3:
-        return isLock ? KWifiLockOK : KWifiOK;
-    case 4:
-        return isLock ? KWifiLockLow : KWifiLow;
-    case 5:
-        return isLock ? KWifiLockNone : KWifiNone;
-    default:
-        return "";
-    }
+QString WlanConnect::wifiIcon(bool isLock, int strength, int category) {
+    if (category == 0) {
+        switch (strength) {
+        case SIGNAL_EXCELLENT:
+            return isLock ? KWifiLockSymbolic : KWifiSymbolic;
+        case SIGNAL_GOOD:
+            return isLock ? KWifiLockGood : KWifiGood;
+        case SIGNAL_OK:
+            return isLock ? KWifiLockOK : KWifiOK;
+        case SIGNAL_LOW:
+            return isLock ? KWifiLockLow : KWifiLow;
+        case SIGNAL_NONE:
+            return isLock ? KWifiLockNone : KWifiNone;
+        default:
+            return "";
+        }
+    } else if (category == 1) {
+        switch (strength) {
+        case SIGNAL_EXCELLENT:
+            return isLock ? KWifi6LockSymbolic : KWifi6Symbolic;
+        case SIGNAL_GOOD:
+            return isLock ? KWifi6LockGood : KWifi6Good;
+        case SIGNAL_OK:
+            return isLock ? KWifi6LockOK : KWifi6OK;
+        case SIGNAL_LOW:
+            return isLock ? KWifi6LockLow : KWifi6Low;
+        case SIGNAL_NONE:
+            return isLock ? KWifi6LockNone : KWifi6None;
+        default:
+            return "";
+        }
+    } else {
+            switch (strength) {
+            case SIGNAL_EXCELLENT:
+                return isLock ? KWifi6PlusLockSymbolic : KWifi6PlusSymbolic;
+            case SIGNAL_GOOD:
+                return isLock ? KWifi6PlusLockGood : KWifi6PlusGood;
+            case SIGNAL_OK:
+                return isLock ? KWifi6PlusLockOK : KWifi6PlusOK;
+            case SIGNAL_LOW:
+                return isLock ? KWifi6PlusLockLow : KWifi6PlusLow;
+            case SIGNAL_NONE:
+                return isLock ? KWifi6PlusLockNone : KWifi6PlusNone;
+            default:
+                return "";
+            }
+        }
 }
 
 //根据信号强度分级
@@ -761,15 +839,15 @@ int WlanConnect::setSignal(QString lv) {
     int signal = lv.toInt();
     int signalLv = 0;
 
-    if (signal > 75) {
+    if (signal > EXCELLENT_SIGNAL) {
         signalLv = 1;
-    } else if (signal > 55 && signal <= 75) {
+    } else if (signal > GOOD_SIGNAL) {
         signalLv = 2;
-    } else if (signal > 35 && signal <= 55) {
+    } else if (signal > OK_SIGNAL) {
         signalLv = 3;
-    } else if (signal > 15 && signal  <= 35) {
+    } else if (signal > LOW_SIGNAL) {
         signalLv = 4;
-    } else if (signal <= 15) {
+    } else {
         signalLv = 5;
     }
     return signalLv;
@@ -856,7 +934,7 @@ void WlanConnect::addActiveItem(ItemFrame *frame, QString devName, QStringList i
     } else {
         isLock = true;
     }
-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), infoList.at(3), isLock, true, WIRELESS_TYPE, infoList.at(4));
+    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), infoList.at(3), isLock, true, WIRELESS_TYPE, infoList.at(4), infoList.at(5).toInt());
 }
 
 //处理列表 未连接
@@ -871,7 +949,7 @@ void WlanConnect::addCustomItem(ItemFrame *frame, QString devName, QStringList i
     } else {
         isLock = true;
     }
-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3));
+    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(4).toInt());
 }
 
 //增加设备
@@ -906,7 +984,7 @@ void WlanConnect::removeDeviceFrame(QString devName)
 }
 
 //增加ap
-void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection)
+void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category)
 {
     if (nullptr == frame) {
         return;
@@ -925,7 +1003,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     if (bApConnection) {
         iconamePath = KApSymbolic;
     } else {
-        iconamePath = wifiIcon(isLock, sign);
+        iconamePath = wifiIcon(isLock, sign, category);
     }
     if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
         wlanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);

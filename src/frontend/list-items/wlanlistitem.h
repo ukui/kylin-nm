@@ -18,6 +18,12 @@
 #define EXPANDED_HEIGHT 120
 #define PWD_LENGTH_LIMIT 8
 
+#define EXCELLENT_SIGNAL 80
+#define GOOD_SIGNAL 55
+#define OK_SIGNAL 30
+#define LOW_SIGNAL 5
+#define NONE_SIGNAL 0
+
 class WlanListItem : public ListItem
 {
     Q_OBJECT
@@ -65,6 +71,7 @@ private:
     KyWirelessNetItem m_wirelessNetItem;
     KyWirelessConnectOperation *m_wirelessConnectOperation = nullptr;
     EnterpriseWlanDialog *enterpriseWlanDialog = nullptr;
+    KyNetworkDeviceResourse *m_deviceResource = nullptr;
 
     bool m_hasPwd = true;
     QString m_wlanDevice;

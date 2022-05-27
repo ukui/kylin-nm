@@ -27,6 +27,7 @@ public:
     uint                                    m_frequency;
     QString                                 m_secuType;
     KySecuType                              m_kySecuType;
+    QString                                 m_uni;
 
     //only for m_isConfiged = true
     bool                                    m_isConfigured;
@@ -34,7 +35,7 @@ public:
     QString                                 m_connDbusPath;
     uint                                    m_channel;
 
-
+    int getCategory(QString uni);
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;

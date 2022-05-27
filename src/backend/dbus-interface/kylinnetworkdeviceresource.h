@@ -37,6 +37,7 @@ public:
     void getDeviceActiveAPInfo(const QString devName, QString &strMac, uint &iHz, uint &iChan, QString &secuType);
     int getWirelessDeviceCapability(const QString deviceName);
     NetworkManager::Device::State getDeviceState(QString deviceName);
+    bool getActiveConnectionInfo(const QString devName, int &signalStrength, QString &uni, QString &secuType);
 
     bool wiredDeviceIsCarriered(QString deviceName);
     bool wirelessDeviceIsExist(const QString devName);

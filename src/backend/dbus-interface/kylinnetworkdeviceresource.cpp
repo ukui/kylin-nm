@@ -186,6 +186,37 @@ void KyNetworkDeviceResourse::setDeviceRefreshRate(QString deviceName, int ms)
     return;
 }
 
+bool KyNetworkDeviceResourse::getActiveConnectionInfo(const QString devName, int &signalStrength, QString &uni, QString &secuType)
+{
+    signalStrength = 0;
+    uni = "";
+    NetworkManager::Device::Ptr connectDevice =
+                        m_networkResourceInstance->getNetworkDevice(devName);
+
+    if (nullptr == connectDevice || !connectDevice->isValid()) {
+        qWarning()<< LOG_FLAG <<"getDeviceActiveAPInfo failed, the device" << devName << "is not existed";
+        return false;
+    }
+
+    if (connectDevice->type() == NetworkManager::Device::Wifi) {
+        NetworkManager::WirelessDevice *wirelessDevicePtr =
+            qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
+        NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();
+        if (apPtr.isNull()) {
+            return false;
+        }
+        signalStrength = apPtr->signalStrength();
+        uni = apPtr->uni();
+        NetworkManager::AccessPoint::Capabilities cap = apPtr->capabilities();
+        NetworkManager::AccessPoint::WpaFlags wpaFlag = apPtr->wpaFlags();
+        NetworkManager::AccessPoint::WpaFlags rsnFlag = apPtr->rsnFlags();
+        secuType = enumToQstring(cap, wpaFlag, rsnFlag);
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QString &strMac, uint &iHz, uint &iChan, QString &secuType)
 {
     strMac.clear();

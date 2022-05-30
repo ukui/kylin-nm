@@ -93,7 +93,6 @@ private slots:
                                 NetworkManager::ActiveConnection::Reason reason);
     void onItemHeightChanged(const bool isExpanded, const QString &ssid);
 
-    void onWlanSwitchClicked();
     void onWlanSwithGsettingsChanged(const QString &key);
 
     void onDeviceComboxIndexChanged(int currentIndex);

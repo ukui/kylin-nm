@@ -12,6 +12,11 @@
 
 #include <networkmanagerqt/wirelesssecuritysetting.h>
 
+#include "kwidget.h"
+#include "kpasswordedit.h"
+
+using namespace kdk;
+
 #define PSK_SETTING_NAME "802-11-wireless-security"
 
 #define NORMAL_HEIGHT 48
@@ -81,10 +86,7 @@ private:
     //密码输入区域的UI
     QFrame *m_pwdFrame = nullptr;
     QHBoxLayout *m_pwdFrameLyt = nullptr;
-
-    QLineEdit * m_pwdLineEdit = nullptr;
-    QHBoxLayout *m_pwdLineEditLyt = nullptr;
-    QPushButton *m_showPwdButton = nullptr;
+    KPasswordEdit *m_pwdLineEdit = nullptr;
     QPushButton *m_connectButton = nullptr;
 
     //自动连接选择区域UI
@@ -105,7 +107,6 @@ protected slots:
 private slots:
     void onNetButtonClicked();
     void onPwdEditorTextChanged();
-    void onShowPwdButtonClicked();
     void onConnectButtonClicked();
     void onMenuTriggered(QAction *action);
     void onEnterpriseWlanDialogClose(bool isShow);

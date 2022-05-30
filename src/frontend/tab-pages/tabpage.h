@@ -2,8 +2,6 @@
 #define TABPAGE_H
 
 #include "divider.h"
-#include "switchbutton.h"
-#include "kylable.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -15,6 +13,11 @@
 #include <QProcess>
 #include <QDebug>
 #include "kylinnetworkdeviceresource.h"
+#include "kwidget.h"
+#include "kswitchbutton.h"
+#include "kborderlessbutton.h"
+
+using namespace kdk;
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
@@ -93,7 +96,7 @@ protected:
     QFrame * m_titleFrame = nullptr;
     QHBoxLayout * m_titleLayout = nullptr;
     QLabel * m_titleLabel = nullptr;
-    SwitchButton * m_netSwitch = nullptr;
+    KSwitchButton * m_netSwitch = nullptr;
     Divider * m_titleDivider = nullptr;
 
     QFrame * m_activatedNetFrame = nullptr;
@@ -111,7 +114,7 @@ protected:
 
     QFrame * m_settingsFrame = nullptr;
     QHBoxLayout * m_settingsLayout = nullptr;
-    KyLable * m_settingsLabel = nullptr;
+    KBorderlessButton *m_settingsBtn = nullptr;
 
     //临时增加的下拉框选择网卡区域
     QFrame * m_deviceFrame = nullptr;
@@ -119,8 +122,6 @@ protected:
     QLabel * m_deviceLabel = nullptr;
     QComboBox * m_deviceComboBox = nullptr;
     QLabel * m_tipsLabel = nullptr;
-
-
 
 public slots:
     virtual void onDeviceComboxIndexChanged(int currentIndex) = 0;

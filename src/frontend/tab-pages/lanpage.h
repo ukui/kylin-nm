@@ -2,7 +2,6 @@
 #define LANPAGE_H
 
 #include "divider.h"
-#include "switchbutton.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -98,7 +97,6 @@ private slots:
     void onUpdateConnection(QString uuid);
 
     void onSwithGsettingsChanged(const QString &key);
-    void onLanSwitchClicked();
 
     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName);
@@ -129,7 +127,6 @@ private:
 
     QGSettings *m_switchGsettings = nullptr;
 
-    bool m_wiredSwitch = true;
 };
 
 #endif // LANPAGE_H

@@ -66,7 +66,7 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
     initInterfaceInfo();
     getApInfo();
 
-    connect(m_switchBtn, &SwitchButton::checkedChanged, this, &MobileHotspotWidget::setUiEnabled);
+    connect(m_switchBtn, &KSwitchButton::stateChanged, this, &MobileHotspotWidget::setUiEnabled);
     connect(m_interfaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=]() {
         m_interfaceName = m_interfaceComboBox->currentText();
         updateBandCombox();
@@ -93,12 +93,12 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
         return true;
     }
 
-    if (event->type() == QEvent::MouseButtonPress) {
+    if (event->type() == QEvent::MouseButtonRelease) {
         if (watched == m_switchBtn) {
             if (!m_interface->isValid()) {
                 return true;
             }
-            if (m_switchBtn->getDisabledFlag()) {
+            if (!m_switchBtn->isCheckable()) {
                 showDesktopNotify(tr("wirless switch is close or no wireless device"));
                 return true;
             }
@@ -250,9 +250,9 @@ void MobileHotspotWidget::onGsettingChanged(const QString &key)
 //                        }
             m_switchBtn->setChecked(status);
             m_uuid.clear();
-            m_switchBtn->setDisabledFlag(true);
+            m_switchBtn->setCheckable(false);
         } else {
-            m_switchBtn->setDisabledFlag(false);
+            m_switchBtn->setCheckable(true);
         }
     }
 }
@@ -284,7 +284,7 @@ void MobileHotspotWidget::initInterfaceInfo()
     if (devMap.isEmpty()) {
         qDebug() << "no wireless device";
         setWidgetHidden(true);
-        m_switchBtn->setDisabledFlag(true);
+        m_switchBtn->setCheckable(false);
     } else {
         QMap<QString, bool>::Iterator iter = devMap.begin();
         while (iter != devMap.end()) {
@@ -366,7 +366,7 @@ void MobileHotspotWidget::setSwitchFrame()
 
     m_switchLabel = new QLabel(tr("Open"), this);
     m_switchLabel->setMinimumWidth(LABLE_MIN_WIDTH);
-    m_switchBtn = new SwitchButton(this);
+    m_switchBtn = new KSwitchButton(this);
     switchLayout->addSpacing(LAYOUT_LEFT_MARGINS);
     switchLayout->addWidget(m_switchLabel);
     switchLayout->addStretch();
@@ -557,7 +557,7 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
             m_apNameLine->setText(ssid);
             m_interfaceComboBox->setCurrentIndex(index);
             m_switchBtn->setChecked(true);
-            m_switchBtn->setDisabledFlag(false);
+            m_switchBtn->setCheckable(true);
             m_pwdNameLine->setText(info.at(0));
             m_interfaceName = devName;
             updateBandCombox();
@@ -620,11 +620,11 @@ void MobileHotspotWidget::setWidgetHidden(bool isHidden)
 
     if (isHidden) {
         m_switchBtn->setChecked(false);
-        m_switchBtn->setDisabledFlag(true);
+        m_switchBtn->setCheckable(false);
         m_interfaceName = "";
         m_uuid = "";
     } else {
-        m_switchBtn->setDisabledFlag(false);
+        m_switchBtn->setCheckable(true);
         onGsettingChanged(WIRELESS_SWITCH);
     }
 

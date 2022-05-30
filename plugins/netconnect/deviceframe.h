@@ -7,8 +7,11 @@
 #include <QLabel>
 #include <QTimer>
 #include <QDebug>
-#include "switchbutton.h"
 #include "../component/DrownLabel/drownlabel.h"
+#include "kwidget.h"
+#include "kswitchbutton.h"
+
+using namespace kdk;
 
 class DeviceFrame : public QFrame
 {
@@ -18,7 +21,7 @@ public:
     ~DeviceFrame();
 public:
     QLabel * deviceLabel = nullptr;
-    SwitchButton * deviceSwitch = nullptr;
+    KSwitchButton * deviceSwitch = nullptr;
     DrownLabel *dropDownLabel = nullptr;
 
 protected:

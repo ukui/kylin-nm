@@ -19,8 +19,11 @@
 #include <QDBusReply>
 #include <QDBusMetaType>
 
-#include "switchbutton.h"
 #include "titlelabel.h"
+#include "kwidget.h"
+#include "kswitchbutton.h"
+
+using namespace kdk;
 
 class MobileHotspotWidget : public QWidget
 {
@@ -36,7 +39,7 @@ private:
     QFrame *m_freqBandFrame = nullptr;        //频带
     QFrame *m_interfaceFrame = nullptr;       //网卡
 
-    SwitchButton *m_switchBtn;
+    KSwitchButton *m_switchBtn;
 
     TitleLabel *m_hotspotTitleLabel;
     QLabel *m_switchLabel;

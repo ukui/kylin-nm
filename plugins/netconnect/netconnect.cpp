@@ -48,6 +48,7 @@ const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 #define TOP_MARGINS 0,8,0,0
 #define MAIN_LAYOUT_MARGINS 0,0,0,8
 #define SPACING 8
+#define ICON_SIZE 16,16
 
 bool sortByVal(const QPair<QString, int> &l, const QPair<QString, int> &r) {
     return (l.second < r.second);
@@ -431,7 +432,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
 //        lanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
 //    }
-    lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
+    lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     lanItem->titileLabel->setText(infoList.at(0));
 
     lanItem->uuid = infoList.at(1);
@@ -700,7 +701,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
 //        lanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
 //    }
-    lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
+    lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     lanItem->titileLabel->setText(connName);
 
     lanItem->uuid = connUuid;

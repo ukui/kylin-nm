@@ -1,0 +1,76 @@
+#ifndef KYWIRELESSNETRESOURCE_H
+#define KYWIRELESSNETRESOURCE_H
+
+#include <QObject>
+#include "kywirelessnetitem.h"
+#include "kylinnetworkresourcemanager.h"
+#include "kyenterpricesettinginfo.h"
+#include "kylinconnectresource.h"
+#include "kywirelessconnectoperation.h"
+#include "kylinnetworkdeviceresource.h"
+
+
+//class KyWirelessNetItem;
+
+class KyWirelessNetResource : public QObject
+{
+    Q_OBJECT
+public:
+    explicit KyWirelessNetResource(QObject *parent = nullptr);
+    ~KyWirelessNetResource();
+
+    //ui层调用接口
+    bool getWifiNetwork(const QString &devIfaceName, const QString &ssid, KyWirelessNetItem &wirelessNetResource);
+    bool getAllDeviceWifiNetwork(QMap<QString, QList<KyWirelessNetItem>> &map);
+    bool getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &wirelessNetResource);
+
+    bool getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info);
+    bool getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info);
+    bool getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);
+
+    void getWirelessActiveConnection(NetworkManager::ActiveConnection::State state, QMap<QString, QStringList> &map);
+    bool getActiveWirelessNetItem(QString deviceName, KyWirelessNetItem &wirelessNetItem);
+
+    QString getActiveConnectSsidByDevice(QString deviceName);
+    void getSsidByUuid(const QString uuid, QString &ssid);
+    void getDeviceByUuid(const QString uuid, QString &deviceName);
+
+
+private:
+    void kyWirelessNetItemListInit();
+    QString getDeviceIFace(NetworkManager::WirelessNetwork::Ptr net);
+    QString getDeviceIFace(NetworkManager::ActiveConnection::Ptr actConn, QString &wirelessNetResourcessid);
+
+public slots:
+    void onWifiNetworkAdded(QString, QString);
+    void onWifiNetworkRemoved(QString, QString);
+    void onWifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net);
+    void onWifiNetworkDeviceDisappear();
+
+    void onConnectionAdd(QString uuid);
+    void onConnectionUpdate(QString uuid);
+    void onConnectionRemove(QString);
+
+    void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
+    void onDeviceRemove(QString deviceName);
+    void onDeviceNameUpdate(QString oldName, QString newName);
+
+signals:
+    void signalStrengthChange(QString, QString, int);
+    void bssidChange(QString, QString, QString);
+    void secuTypeChange(QString, QString, QString);
+    void connectionRemove(QString, QString);
+    void connectionAdd(QString, QString);
+    void wifiNetworkUpdate();
+    void wifiNetworkAdd(QString, KyWirelessNetItem&);
+    void wifiNetworkRemove(QString, QString);
+
+private:
+    KyNetworkResourceManager *m_networkResourceInstance = nullptr;
+    KyWirelessConnectOperation  *m_operation = nullptr;
+    KyNetworkDeviceResourse  *m_networkDevice = nullptr;
+    QMap<QString, QList<KyWirelessNetItem> >      m_WifiNetworkList;
+
+};
+
+#endif // KYWIRELESSNETRESOURCE_H

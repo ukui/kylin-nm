@@ -1,0 +1,732 @@
+#include "kywirelessnetresource.h"
+#include "kylinutil.h"
+
+#define LOG_FLAG "[KyWirelessNetResource]"
+
+static bool subWifiListSort(const KyWirelessNetItem info1, const KyWirelessNetItem info2)
+{
+    if (info1.m_isConfigured == info2.m_isConfigured) {
+        if (info1.m_signalStrength != info2.m_signalStrength) {
+            return info1.m_signalStrength > info2.m_signalStrength;
+        } else {
+            if (QString::compare(info1.m_NetSsid, info2.m_NetSsid, Qt::CaseInsensitive) > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+    return info1.m_isConfigured;
+}
+
+static void wifiListSort(QList<KyWirelessNetItem> &list)
+{
+    qSort(list.begin(), list.end(), subWifiListSort);
+}
+
+KyWirelessNetResource::KyWirelessNetResource(QObject *parent)
+    : QObject(parent)
+{
+    qDebug()<< LOG_FLAG <<"KyWirelessNetResource";
+
+    qRegisterMetaType<KyWirelessNetItem>("KyWirelessNetItem&");
+
+    m_networkResourceInstance = KyNetworkResourceManager::getInstance();
+    m_operation = new KyWirelessConnectOperation(this);
+    m_networkDevice = new KyNetworkDeviceResourse(this);
+
+    kyWirelessNetItemListInit();
+
+    //TODO:connect device signal
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkAdded,
+                     this, &KyWirelessNetResource::onWifiNetworkAdded, Qt::ConnectionType::DirectConnection);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkRemoved,
+                     this, &KyWirelessNetResource::onWifiNetworkRemoved, Qt::ConnectionType::DirectConnection);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkPropertyChange,
+                     this, &KyWirelessNetResource::onWifiNetworkPropertyChange, Qt::ConnectionType::DirectConnection);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkDeviceDisappear,
+                     this, &KyWirelessNetResource::onWifiNetworkDeviceDisappear, Qt::ConnectionType::DirectConnection);
+
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionAdd,
+                     this, &KyWirelessNetResource::onConnectionAdd);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionRemove,
+                     this, &KyWirelessNetResource::onConnectionRemove);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionUpdate,
+                     this, &KyWirelessNetResource::onConnectionUpdate);
+
+    connect(m_networkDevice, &KyNetworkDeviceResourse::deviceAdd, this, &KyWirelessNetResource::onDeviceAdd);
+    connect(m_networkDevice, &KyNetworkDeviceResourse::deviceRemove, this, &KyWirelessNetResource::onDeviceRemove);
+    connect(m_networkDevice, &KyNetworkDeviceResourse::deviceNameUpdate, this, &KyWirelessNetResource::onDeviceNameUpdate);
+}
+
+KyWirelessNetResource::~KyWirelessNetResource()
+{
+    m_networkResourceInstance = nullptr;
+}
+
+bool KyWirelessNetResource::getAllDeviceWifiNetwork(QMap<QString, QList<KyWirelessNetItem>> &map)
+{
+//    onWifiNetworkDeviceDisappear();
+    if (m_WifiNetworkList.isEmpty()) {
+        return false;
+    } else {
+        QMap<QString, QList<KyWirelessNetItem> >::iterator iter = m_WifiNetworkList.begin();
+        while (iter != m_WifiNetworkList.end()) {
+            wifiListSort(m_WifiNetworkList[iter.key()]);
+            iter++;
+        }
+        map = m_WifiNetworkList;
+        return true;
+    }
+}
+
+
+bool KyWirelessNetResource::getDeviceWifiNetwork(QString devIfaceName, QList<KyWirelessNetItem> &wirelessNetResource)
+{
+   if (!m_WifiNetworkList.contains(devIfaceName)) {
+        return false;
+    } else {
+        wifiListSort(m_WifiNetworkList[devIfaceName]);
+        wirelessNetResource = m_WifiNetworkList[devIfaceName];
+        return true;
+    }
+}
+
+bool KyWirelessNetResource::getWifiNetwork(const QString &devIfaceName,
+                                           const QString &ssid,
+                                           KyWirelessNetItem &wirelessNetResource)
+{
+    if (!m_WifiNetworkList.contains(devIfaceName)) {
+         qDebug()<< LOG_FLAG << "getWifiNetwork fail, not contain " << devIfaceName;
+        return false;
+    } else {
+        for (int index = 0; index < m_WifiNetworkList[devIfaceName].size(); index++){
+            if (m_WifiNetworkList[devIfaceName].at(index).m_NetSsid == ssid) {
+                wirelessNetResource = m_WifiNetworkList[devIfaceName].at(index);
+                qDebug()<< LOG_FLAG << "getWifiNetwork success";
+                return true;
+            }
+        }
+    }
+
+    qDebug()<< LOG_FLAG << "getWifiNetwork fail, not contain " << ssid;
+
+    return false;
+}
+
+void KyWirelessNetResource::getWirelessActiveConnection(NetworkManager::ActiveConnection::State state, QMap<QString, QStringList> &map)
+{
+    int index = 0;
+    map.clear();
+    NetworkManager::ActiveConnection::List activeConnectionList;
+
+    activeConnectionList.clear();
+    activeConnectionList = m_networkResourceInstance->getActiveConnectList();
+    if (activeConnectionList.isEmpty()) {
+        return;
+    }
+
+    NetworkManager::ActiveConnection::Ptr activeConnectionPtr = nullptr;
+    for (; index < activeConnectionList.size(); index++) {
+        activeConnectionPtr = activeConnectionList.at(index);
+        if (activeConnectionPtr.isNull()) {
+            continue;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wireless != activeConnectionPtr->type()) {
+            continue;
+        }
+
+        if (state != activeConnectionPtr->state()) {
+            continue;
+        }
+
+        qDebug()<< LOG_FLAG << "getWirelessActiveConnection " << activeConnectionPtr->uuid();
+        QString ssid;
+        QString ifaceName = getDeviceIFace(activeConnectionPtr, ssid);
+        if(ifaceName.isEmpty() || ssid.isNull()) {
+            continue;
+        }
+
+        if (map.contains(ifaceName)) {
+            map[ifaceName].append(activeConnectionPtr->uuid());
+        } else {
+            QStringList list;
+            list.append(activeConnectionPtr->uuid());
+            map.insert(ifaceName,list);
+        }
+    }
+
+    return;
+}
+
+QString KyWirelessNetResource::getActiveConnectSsidByDevice(QString deviceName)
+{
+    QString ssid = "";
+
+    NetworkManager::ActiveConnection::List activeConnectionList;
+    activeConnectionList.clear();
+    activeConnectionList = m_networkResourceInstance->getActiveConnectList();
+    if (activeConnectionList.isEmpty()) {
+        return ssid;
+    }
+
+    NetworkManager::ActiveConnection::Ptr activeConnectionPtr = nullptr;
+    for (int index = 0; index < activeConnectionList.size(); index++) {
+        activeConnectionPtr = activeConnectionList.at(index);
+        if (activeConnectionPtr.isNull()) {
+            continue;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wireless != activeConnectionPtr->type()) {
+            continue;
+        }
+
+        if (NetworkManager::ActiveConnection::State::Activated != activeConnectionPtr->state()) {
+            continue;
+        }
+
+        QStringList interfaces = activeConnectionPtr->devices();
+        if(interfaces.isEmpty()) {
+            qWarning()<< LOG_FLAG <<"get active device failed.";
+            continue;
+        }
+
+        QString ifaceUni = interfaces.at(0);
+        NetworkManager::Device:: Ptr devicePtr =
+                    m_networkResourceInstance->findDeviceUni(ifaceUni);
+        if (deviceName != devicePtr->interfaceName()) {
+            continue;
+        }
+
+        NetworkManager::Connection::Ptr connectPtr = activeConnectionPtr->connection();
+        NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
+        NetworkManager::WirelessSetting::Ptr wirelessSettingPtr =
+                settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+
+        QByteArray rawSsid = wirelessSettingPtr->ssid();
+        ssid = getSsidFromByteArray(rawSsid);
+
+        break;
+    }
+
+    return ssid;
+}
+
+bool KyWirelessNetResource::getActiveWirelessNetItem(QString deviceName, KyWirelessNetItem &wirelessNetItem)
+{
+    if (!m_WifiNetworkList.contains(deviceName)) {
+         qDebug() << "getWifiNetwork fail,not contain " << deviceName;
+        return false;
+    }
+
+    QString ssid = getActiveConnectSsidByDevice(deviceName);
+    if (ssid.isEmpty()) {
+        return false;
+    }
+
+    for (int index = 0; index < m_WifiNetworkList[deviceName].size(); index ++) {
+        if (m_WifiNetworkList[deviceName].at(index).m_NetSsid  == ssid) {
+            wirelessNetItem = m_WifiNetworkList[deviceName].at(index);
+            qDebug()<< LOG_FLAG << "getWifiNetwork success";
+            return true;
+        }
+    }
+
+    return false;
+}
+
+QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::Ptr actConn,
+                                              QString &wirelessNetResourcessid)
+{
+    if (actConn.isNull()) {
+        return "";
+    }
+
+    NetworkManager::Connection::Ptr conn = actConn->connection();
+    if (conn.isNull()) {
+        return "";
+    }
+
+    NetworkManager::ConnectionSettings::Ptr sett = conn->settings();
+    if (sett.isNull()) {
+        return "";
+    }
+
+    NetworkManager::WirelessSetting::Ptr wireless_sett = sett->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    if (wireless_sett.isNull()) {
+        return "";
+    }
+
+    QByteArray rawSsid = wireless_sett->ssid();
+    wirelessNetResourcessid = getSsidFromByteArray(rawSsid);
+
+    QStringList interfaces = actConn->devices();
+    if (interfaces.isEmpty()) {
+        return "";
+    }
+
+    QString ifaceUni = interfaces.at(0);
+    NetworkManager::Device:: Ptr devicePtr =
+                m_networkResourceInstance->findDeviceUni(ifaceUni);
+
+    return devicePtr->interfaceName();
+}
+
+void KyWirelessNetResource::getSsidByUuid(const QString uuid, QString &ssid)
+{
+    ssid.clear();
+    NetworkManager::Connection::Ptr connectPtr = m_networkResourceInstance->getConnect(uuid);
+    if (connectPtr.isNull()) {
+        return;
+    }
+
+    NetworkManager::WirelessSetting::Ptr wireless_sett
+        = connectPtr->settings()->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+    if (wireless_sett.isNull()) {
+        qDebug()<< LOG_FLAG << "don't have WirelessSetting connection";
+        return;
+    }
+
+    QByteArray rawSsid = wireless_sett->ssid();
+    ssid = getSsidFromByteArray(rawSsid);
+
+    qDebug()<< LOG_FLAG << "getSsidByUuid success " << ssid;
+
+    return;
+}
+
+void KyWirelessNetResource::getDeviceByUuid(const QString uuid, QString &deviceName)
+{
+    deviceName.clear();
+
+    NetworkManager::ActiveConnection::Ptr activeConnectionPtr = m_networkResourceInstance->getActiveConnect(uuid);
+    if (!activeConnectionPtr.isNull()) {
+        QStringList interfaces = activeConnectionPtr->devices();
+        if (interfaces.size() > 0) {
+            QString ifaceUni = interfaces.at(0);
+            NetworkManager::Device:: Ptr devicePtr =
+                    m_networkResourceInstance->findDeviceUni(ifaceUni);
+            deviceName = devicePtr->interfaceName();
+            return;
+        } else {
+            qDebug() << LOG_FLAG << "get device of active connection failed.";
+        }
+    }
+
+    NetworkManager::Connection::Ptr connectPtr = m_networkResourceInstance->getConnect(uuid);
+    if (connectPtr.isNull()) {
+        return;
+    }
+
+    deviceName = connectPtr->settings()->interfaceName();
+
+    return;
+}
+
+void KyWirelessNetResource::kyWirelessNetItemListInit()
+{
+    qDebug()<< LOG_FLAG << "wireless net size:" << m_networkResourceInstance->m_wifiNets.size();
+    for (auto const & net : m_networkResourceInstance->m_wifiNets) {
+        QString devIface = getDeviceIFace(net);
+        if (devIface.isEmpty()) {
+            continue;
+        }
+
+        KyWirelessNetItem item(net);
+        if (!m_WifiNetworkList.contains(devIface)){
+            QList<KyWirelessNetItem> list;
+            list.append(item);
+            m_WifiNetworkList.insert(devIface,list);
+        } else {
+            m_WifiNetworkList[devIface].append(item);
+        }
+    }
+
+    return;
+}
+
+QString KyWirelessNetResource::getDeviceIFace(NetworkManager::WirelessNetwork::Ptr net)
+{
+    if (net.isNull()) {
+        return "";
+    }
+
+    QString devUni = net->device();
+    NetworkManager::Device::Ptr dev = m_networkResourceInstance->findDeviceUni(devUni);
+    if (dev.isNull()) {
+        qDebug()<< LOG_FLAG << "KyWirelessNetResource: can't find " << net->ssid() << " find in device list";
+        return "";
+    }
+
+    return dev->interfaceName();
+}
+
+void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssid)
+{
+
+    NetworkManager::Device::Ptr dev = m_networkResourceInstance->findDeviceInterface(devIfaceName);
+    if (dev.isNull()) {
+        return;
+    }
+
+    NetworkManager::WirelessDevice* w_dev = qobject_cast<NetworkManager::WirelessDevice*>(dev.data());
+    NetworkManager::WirelessNetwork::Ptr wifi = w_dev->findNetwork(ssid);
+
+    if (wifi.isNull()) {
+        return;
+    }
+
+    KyWirelessNetItem item(wifi);
+
+    if (m_WifiNetworkList.contains(devIfaceName)) {
+        m_WifiNetworkList[devIfaceName].append(item);
+    } else {
+        QList<KyWirelessNetItem> list;
+        list.append(item);
+        m_WifiNetworkList.insert(devIfaceName,list);
+    }
+
+    emit wifiNetworkAdd(devIfaceName, item);
+}
+
+void KyWirelessNetResource::onWifiNetworkRemoved(QString devIfaceName, QString ssid)
+{
+    if (m_WifiNetworkList.contains(devIfaceName)) {
+        int index = 0;
+        for ( ; index < m_WifiNetworkList.value(devIfaceName).size(); index++) {
+            if ( m_WifiNetworkList[devIfaceName].at(index).m_NetSsid == ssid) {
+                m_WifiNetworkList[devIfaceName].removeAt(index);
+            }
+        }
+        //remove后为空则删除
+        if (m_WifiNetworkList.value(devIfaceName).isEmpty()) {
+            m_WifiNetworkList.remove(devIfaceName);
+        }
+        emit wifiNetworkRemove(devIfaceName,ssid);
+    }
+}
+
+void KyWirelessNetResource::onWifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net)
+{
+    if (nullptr == net) {
+        return;
+    }
+
+    NetworkManager::AccessPoint::Ptr accessPointPtr = net->referenceAccessPoint();
+    QByteArray rawSsid = accessPointPtr->rawSsid();
+    QString wifiSsid = getSsidFromByteArray(rawSsid);
+
+    if (net->device().isEmpty()) {
+        return;
+    }
+
+    QString devIface = m_networkResourceInstance->findDeviceUni(net->device())->interfaceName();
+    if (m_WifiNetworkList.contains(devIface)) {
+        QList<KyWirelessNetItem>::iterator iter = m_WifiNetworkList[devIface].begin();
+         while (iter != m_WifiNetworkList[devIface].end()) {
+             if (iter->m_NetSsid == wifiSsid) {
+//                 qDebug()<< LOG_FLAG <<"recive properity changed signal, sender is" << iter->m_NetSsid;
+                 if (iter->m_signalStrength != net->signalStrength()) {
+                     iter->m_signalStrength = net->signalStrength();
+                     emit signalStrengthChange(devIface, wifiSsid, iter->m_signalStrength);
+                 }
+
+                 if (iter->m_bssid != accessPointPtr->hardwareAddress()) {
+                     iter->m_bssid = accessPointPtr->hardwareAddress();
+                     emit bssidChange(devIface, wifiSsid, iter->m_bssid);
+                 }
+
+                 QString secuType = enumToQstring(accessPointPtr->capabilities(),
+                                                  accessPointPtr->wpaFlags(),
+                                                  accessPointPtr->rsnFlags());
+                 if (iter->m_secuType != secuType) {
+                     iter->m_secuType = secuType;
+                     emit secuTypeChange(devIface, wifiSsid, secuType);
+                 }
+
+                 break;
+             }
+             iter++;
+         }
+    }
+}
+
+void KyWirelessNetResource::onWifiNetworkDeviceDisappear()
+{
+    m_WifiNetworkList.clear();
+    kyWirelessNetItemListInit();
+}
+
+bool KyWirelessNetResource::getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info)
+{
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
+    if (conn.isNull()) {
+        qDebug()<< LOG_FLAG << "modifyEnterPriseInfoTls connection missing";
+        return false;
+    }
+
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett =
+            conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    if (security_sett.isNull()) {
+        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
+        return false;
+    }
+    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
+        return false;
+    }
+    NetworkManager::Security8021xSetting::Ptr setting =
+            conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    if (setting.isNull()) {
+        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
+        return false;
+    }
+
+
+    info.identity = setting->identity();
+    info.domain = setting->domainSuffixMatch();
+    info.caCertPath = setting->caPath();
+    if (info.caCertPath.left(7) == "file://") {
+        info.caCertPath = info.caCertPath.mid(7);
+    }
+
+    info.clientCertPath = setting->clientCertificate();
+    if (info.clientCertPath.left(7) == "file://") {
+        info.clientCertPath = info.clientCertPath.mid(7);
+    }
+
+    info.clientPrivateKey = QString(setting->privateKey());
+    if (info.clientPrivateKey.left(7) == "file://") {
+        info.clientPrivateKey = info.clientPrivateKey.mid(7);
+    }
+
+    info.m_privateKeyPWDFlag = setting->privateKeyPasswordFlags();
+    if (!info.m_privateKeyPWDFlag) {
+        info.clientPrivateKeyPWD = m_operation->getPrivateKeyPassword(conn->uuid());
+    }
+
+    return true;
+}
+
+bool KyWirelessNetResource::getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info)
+{
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
+    if (conn.isNull()) {
+        qDebug()<< LOG_FLAG << "getEnterPriseInfoPeap connection missing";
+        return false;
+    }
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    if (security_sett.isNull()) {
+        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
+        return false;
+    }
+
+    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
+        qDebug()<< LOG_FLAG << "keyMgmt not WpaEap " << security_sett->keyMgmt();
+        return false;
+    }
+
+    NetworkManager::Security8021xSetting::Ptr setting =
+            conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodPeap)) {
+        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
+        return false;
+    }
+
+    info.phase2AuthMethod = (KyNoEapMethodAuth)setting->phase2AuthMethod();
+    info.userName = setting->identity();
+    info.m_passwdFlag = setting->passwordFlags();
+    if (!info.m_passwdFlag) {
+        info.userPWD = m_operation->get8021xPassword(conn->uuid());
+    }
+
+    return true;
+}
+
+bool KyWirelessNetResource::getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info)
+{
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
+    if (conn.isNull()) {
+        qDebug()<< LOG_FLAG << "modifyEnterPriseInfoTtls connection missing";
+        return false;
+    }
+
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    if (security_sett.isNull()) {
+        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
+        return false;
+    }
+    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
+        qDebug()<< LOG_FLAG << "not wpaeap"<<security_sett->keyMgmt();
+        return false;
+    }
+
+    NetworkManager::Security8021xSetting::Ptr setting = conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodTtls)) {
+        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
+        return false;
+    }
+
+    info.authEapMethod = (KyEapMethodAuth)setting->phase2AuthEapMethod();
+    info.authNoEapMethod = (KyNoEapMethodAuth)setting->phase2AuthMethod();
+
+    info.authType = KyTtlsAuthMethod::AUTH_EAP;
+    if (info.authEapMethod != KyAuthEapMethodUnknown) {
+        info.authType = KyTtlsAuthMethod::AUTH_EAP;
+    } else {
+        info.authType = KyTtlsAuthMethod::AUTH_NO_EAP;
+    }
+
+    info.userName = setting->identity();
+    info.m_passwdFlag = setting->passwordFlags();
+    if (!info.m_passwdFlag) {
+        info.userPWD = m_operation->get8021xPassword(conn->uuid());
+    }
+
+    return true;
+}
+
+void KyWirelessNetResource::onConnectionAdd(QString uuid)
+{
+    qDebug() << LOG_FLAG << "onConnectionAdd " << uuid;
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
+    if (conn.isNull()) {
+        qDebug()<< LOG_FLAG << "onConnectionAdd can not find connection" << uuid;
+        return;
+    }
+
+    NetworkManager::ConnectionSettings::Ptr sett = conn->settings();
+    if (sett->connectionType() != NetworkManager::ConnectionSettings::ConnectionType::Wireless) {
+        qDebug()<< LOG_FLAG << uuid << " is not wireless connection";
+        return;
+    }
+    NetworkManager::WirelessSetting::Ptr wireless_sett =
+            sett->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+
+    QByteArray rawSsid = wireless_sett->ssid();
+    QString wifiSsid = getSsidFromByteArray(rawSsid);
+    QMap<QString, QString> map;
+    map.clear();
+    QMap<QString, QList<KyWirelessNetItem> >::iterator iter = m_WifiNetworkList.begin();
+    while (iter != m_WifiNetworkList.end()) {
+        for(int i = 0; i < iter.value().size(); i++) {
+            if (iter.value().at(i).m_NetSsid == wifiSsid
+                    && (sett->interfaceName() == iter.key() || sett->interfaceName().isEmpty())) {
+                QString devIfaceName;
+                QString ssid;
+                m_WifiNetworkList[iter.key()][i].m_isConfigured = true;
+                m_WifiNetworkList[iter.key()][i].m_connName = conn->name();
+                m_WifiNetworkList[iter.key()][i].m_connectUuid = conn->uuid();
+                m_WifiNetworkList[iter.key()][i].m_connDbusPath = conn->path();
+                m_WifiNetworkList[iter.key()][i].m_channel = wireless_sett->channel();
+
+                devIfaceName = iter.key();
+                ssid = iter.value().at(i).m_NetSsid;
+                map.insert(devIfaceName, ssid);
+
+                break;
+            }
+        }
+        iter++;
+    }
+
+    if (!map.isEmpty()) {
+        for(auto var = map.cbegin(); var != map.cend(); var++) {
+            QString devIfaceName = var.key();
+            QString ssid = var.value();
+            emit connectionAdd(devIfaceName, ssid);
+        }
+    }
+}
+
+void KyWirelessNetResource::onConnectionRemove(QString path)
+{
+    qDebug()<< LOG_FLAG << "onConnectionRemove remove " << path;
+    QMap<QString, QString> map;
+    map.clear();
+
+    QMap<QString, QList<KyWirelessNetItem> >::iterator iter = m_WifiNetworkList.begin();
+    while (iter != m_WifiNetworkList.end()) {
+        qDebug()<< LOG_FLAG <<"wifi network list key:" << iter.key();
+        for(int i = 0; i < iter.value().size(); i++) {
+            qDebug() << LOG_FLAG << "connection path" << iter.value().at(i).m_connDbusPath;
+            if (iter.value().at(i).m_connDbusPath == path) {
+                QString devIfaceName;
+                QString ssid;
+                m_WifiNetworkList[iter.key()][i].m_isConfigured = false;
+                m_WifiNetworkList[iter.key()][i].m_connName = "";
+                m_WifiNetworkList[iter.key()][i].m_connectUuid = "";
+                m_WifiNetworkList[iter.key()][i].m_connDbusPath = "";
+                m_WifiNetworkList[iter.key()][i].m_channel = 0;
+
+                devIfaceName = iter.key();
+                ssid = iter.value().at(i).m_NetSsid;
+                map.insert(devIfaceName, ssid);
+                break;
+            }
+        }
+        iter++;
+    } 
+
+    if (!map.isEmpty()) {
+        for(auto var = map.cbegin(); var != map.cend(); var++) {
+            QString devIfaceName = var.key();
+            QString ssid = var.value();
+            emit connectionRemove(devIfaceName, ssid);
+        }
+    }
+
+}
+
+
+void KyWirelessNetResource::onConnectionUpdate(QString uuid)
+{
+    qDebug()<< LOG_FLAG << "onConnectionUpdate " << uuid;
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
+    if (conn.isNull()) {
+        qDebug()<< LOG_FLAG  << "onConnectionAdd can not find connection" << uuid;
+        return;
+    }
+
+    NetworkManager::ConnectionSettings::Ptr sett= conn->settings();
+    if (sett->connectionType() != NetworkManager::ConnectionSettings::ConnectionType::Wireless) {
+        return;
+    }
+
+    m_WifiNetworkList.clear();
+    kyWirelessNetItemListInit();
+    emit wifiNetworkUpdate();
+}
+
+
+void KyWirelessNetResource::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
+{
+    if(deviceType == NetworkManager::Device::Type::Wifi) {
+        if (!m_WifiNetworkList.contains(deviceName)) {
+            m_WifiNetworkList.insert(deviceName,QList<KyWirelessNetItem>());
+        }
+    }
+}
+
+void KyWirelessNetResource::onDeviceRemove(QString deviceName)
+{
+    if (m_WifiNetworkList.contains(deviceName)) {
+        m_WifiNetworkList.remove(deviceName);
+    }
+}
+
+void KyWirelessNetResource::onDeviceNameUpdate(QString oldName, QString newName)
+{
+    if (!m_WifiNetworkList.contains(oldName)) {
+        return;
+    }
+
+    QMap<QString, QList<KyWirelessNetItem>> newWifiNetworkList(m_WifiNetworkList);
+    QList<KyWirelessNetItem> list = m_WifiNetworkList[oldName];
+    newWifiNetworkList.remove(oldName);
+    newWifiNetworkList.insert(newName,list);
+    m_WifiNetworkList = newWifiNetworkList;
+
+}

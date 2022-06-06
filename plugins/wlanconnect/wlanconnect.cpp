@@ -46,6 +46,7 @@
 #define SIGNAL_OK        3
 #define SIGNAL_LOW       4
 #define SIGNAL_NONE      5
+#define ICON_SIZE 16,16
 
 const QString WIRELESS_SWITCH = "wirelessswitch";
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
@@ -440,7 +441,7 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
     if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
         item->iconLabel->setProperty("useIconHighlightEffect", 0x10);
     }
-    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
+    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     qDebug() << "updateIcon" << item->titileLabel->text() << " finish";
 }
 
@@ -1006,7 +1007,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
         wlanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
     }
     QIcon searchIcon = QIcon::fromTheme(iconamePath);
-    wlanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
+    wlanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     wlanItem->titileLabel->setText(name);
     if (status) {
         wlanItem->statusLabel->setText(tr("connected"));

@@ -166,7 +166,8 @@ void MainWindow::initWindowProperties()
 
     QPainterPath path;
     auto rect = this->rect();
-    path.addRoundedRect(rect, 12, 12);
+//    path.addRoundedRect(rect, 12, 12);
+    path.addRect(rect);
     KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
 }
 
@@ -175,8 +176,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     painter.setPen(Qt::transparent);
-    auto rect = this->rect();
-    painter.drawRoundedRect(rect, 12, 12);      //窗口圆角
+//    auto rect = this->rect();
+//    painter.drawRoundedRect(rect, 12, 12);      //窗口圆角
 }
 
 void MainWindow::initTransparency()

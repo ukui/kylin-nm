@@ -13,9 +13,8 @@ AddNetBtn::AddNetBtn(QWidget *parent) : QPushButton(parent)
     this->setObjectName("this");
     this->setMinimumSize(QSize(580, 60));
     this->setMaximumSize(QSize(16777215, 60));
-    this->setStyleSheet("QPushButton:!checked{background-color: palette(base)}");
     this->setProperty("useButtonPalette", true);
-
+    this->setFlat(true);
     QHBoxLayout *addLyt = new QHBoxLayout;
 
     QLabel *iconLabel = new QLabel();
@@ -62,9 +61,18 @@ void AddNetBtn::paintEvent(QPaintEvent *event)
 
     QRect rect = this->rect();
     QPainterPath path;
-    path.addRoundedRect (rect, RADIUS, RADIUS);
-    QRect temp_rect(rect.left(), rect.top(), rect.width(), rect.height()/2);
-    path.addRect(temp_rect);
+
+    //设置起点
+    path.moveTo(rect.topLeft().x(), rect.topLeft().y());
+    path.lineTo(rect.bottomLeft().x(), rect.bottomLeft().y() - RADIUS);
+    //绘制圆角 圆弧以外切圆的270度位置为起点，逆时针画圆弧运行90度结束
+    path.arcTo(QRect(QPoint(rect.bottomLeft().x(), rect.bottomLeft().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 180, 90);
+    path.lineTo(rect.bottomRight().x()  - RADIUS, rect.bottomRight().y());
+    //画圆弧
+    path.arcTo(QRect(QPoint(rect.bottomRight().x() - (RADIUS * 2), rect.bottomRight().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 270, 90);
+    path.lineTo(rect.topRight());
+    path.lineTo(rect.topLeft());
+
     painter.drawPath(path);
     QPushButton::paintEvent(event);
 }

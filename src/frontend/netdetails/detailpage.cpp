@@ -4,6 +4,8 @@
 
 #define MAX_NAME_LENGTH 32
 #define MAX_LABEL_WIDTH 250
+#define MAINWINDOW_HEIGHT 476
+
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
 DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
@@ -121,7 +123,8 @@ void DetailPage::newCopiedTip()
     //设置“复制成功”消息弹窗格式
     m_copiedTip = new KBallonTip();
     m_copiedTip->setTipType(Normal);
-    m_copiedTip->setFixedSize(158, 58);
+    m_copiedTip->setContentsMargins(16, 0, 16, 0);
+    m_copiedTip->setFixedHeight(48);
     m_copiedTip->setWindowFlags(Qt::FramelessWindowHint);
     m_copiedTip->setAttribute(Qt::WA_TranslucentBackground, true);
     m_copiedTip->setText(tr("Copied successfully!"));
@@ -337,8 +340,9 @@ void DetailPage::on_btnCopyNetDetail_clicked()
         newCopiedTip();
     }
     QPoint position = m_ssidWidget->mapToGlobal(this->pos());
-    double x = 0.5 * (m_ssidWidget->width() - m_copiedTip->width());
-    m_copiedTip->move(position.x() + x, position.y() + 150);
+    double x = (this->width() - 0.5 * m_copiedTip->width());
+    qDebug() << "x???" << x << position<<m_ssidWidget->width()<<m_copiedTip->width();
+    m_copiedTip->move(position.x() + x, position.y() + this->height() * 0.3);
     QPalette pal = getTheme();
     m_copiedTip->setPalette(pal);
     m_copiedTip->showInfo();

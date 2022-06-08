@@ -4,7 +4,6 @@
 
 #define MAX_NAME_LENGTH 32
 #define MAX_LABEL_WIDTH 250
-#define MAINWINDOW_HEIGHT 476
 
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -341,7 +340,6 @@ void DetailPage::on_btnCopyNetDetail_clicked()
     }
     QPoint position = m_ssidWidget->mapToGlobal(this->pos());
     double x = (this->width() - 0.5 * m_copiedTip->width());
-    qDebug() << "x???" << x << position<<m_ssidWidget->width()<<m_copiedTip->width();
     m_copiedTip->move(position.x() + x, position.y() + this->height() * 0.3);
     QPalette pal = getTheme();
     m_copiedTip->setPalette(pal);

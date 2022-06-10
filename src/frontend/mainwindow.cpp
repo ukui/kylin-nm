@@ -748,6 +748,28 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
     netDetail->show();
 }
 
+void MainWindow::showAddOtherWlanWidget(QString devName)
+{
+    qDebug() << "showAddOtherWlanWidget! devName = " << devName;
+        if (m_addOtherPagePtrMap.contains(devName)) {
+            if (m_addOtherPagePtrMap[devName] != nullptr) {
+                qDebug() << "showAddOtherWlanWidget" << devName << "already create,just raise";
+
+                KWindowSystem::raiseWindow(m_addOtherPagePtrMap[devName]->winId());
+                return;
+            }
+        }
+        NetDetail *netDetail = new NetDetail(devName, "", "", false, true, true, this);
+        connect(netDetail, &NetDetail::createPageClose, [&](QString interfaceName){
+            if (m_addOtherPagePtrMap.contains(interfaceName)) {
+                m_addOtherPagePtrMap[interfaceName] = nullptr;
+            }
+        });
+        m_addOtherPagePtrMap.insert(devName, netDetail);
+        netDetail->show();
+
+}
+
 void MainWindow::getWirelessDeviceCap(QMap<QString, int> &map)
 {
     m_wlanWidget->getWirelessDeviceCap(map);

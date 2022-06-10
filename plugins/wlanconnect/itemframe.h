@@ -3,6 +3,7 @@
 #include <QFrame>
 #include <QVBoxLayout>
 #include "deviceframe.h"
+#include "../component/AddBtn/addnetbtn.h"
 #include "wlanitem.h"
 
 class ItemFrame : public QFrame
@@ -23,7 +24,8 @@ public:
     QMap<QString, WlanItem *> itemMap;
     //已激活uuid
     QString uuid = "";
-
+    //新建无线连接
+    AddNetBtn * addWlanWidget = nullptr;
     void filletStyleChange();
 
 private slots:

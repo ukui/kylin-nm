@@ -3,6 +3,7 @@ TEMPLATE = lib
 CONFIG += plugin
 
 include(../component/drownlabel.pri)
+include(../component/addbtn.pri)
 
 TARGET = $$qtLibraryTarget(netconnect)
 DESTDIR = ../..
@@ -27,7 +28,6 @@ PKGCONFIG += gsettings-qt \
 #DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
-    addnetbtn.cpp \
     deviceframe.cpp \
 #    drownlabel.cpp \
     itemframe.cpp \
@@ -35,7 +35,6 @@ SOURCES += \
     netconnect.cpp
 
 HEADERS += \
-    addnetbtn.h \
     deviceframe.h \
 #    drownlabel.h \
     itemframe.h \

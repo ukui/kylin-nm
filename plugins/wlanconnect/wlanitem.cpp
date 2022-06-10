@@ -77,6 +77,8 @@ void WlanItem::paintEvent(QPaintEvent *event)
     painter.setBrush(pal.color(QPalette::Base));
 
     QRect rect = this->rect();
+
+#if 0
     if (!useHalfFillet) {
         painter.drawRect(rect);
     } else {
@@ -96,5 +98,8 @@ void WlanItem::paintEvent(QPaintEvent *event)
         path.lineTo(rect.topLeft());
         painter.drawPath(path);
     }
+#endif
+
+    painter.drawRect(rect);
     QPushButton::paintEvent(event);
 }

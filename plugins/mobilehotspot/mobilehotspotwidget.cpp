@@ -410,31 +410,15 @@ void MobileHotspotWidget::setPasswordFrame()
 
     m_pwdLabel = new QLabel(tr("Password"), this);
     m_pwdLabel->setMinimumWidth(LABLE_MIN_WIDTH);
-    m_pwdNameLine = new QLineEdit(this);
+    m_pwdNameLine = new KPasswordEdit(this);
+    m_pwdNameLine->setClearButtonEnabled(false);//禁用ClearBtn按钮X
     m_pwdNameLine->setMinimumWidth(COMBOBOX_MIN_WIDTH);
-    m_pwdNameLine->setEchoMode(QLineEdit::Password);
     passwordHLayout->setContentsMargins(ITEM_MARGINS);
     passwordHLayout->setSpacing(0);
     passwordHLayout->addWidget(m_pwdLabel);
     passwordHLayout->addWidget(m_pwdNameLine);
 
     m_passwordFrame->setLayout(passwordHLayout);
-
-    m_pwdShowBox = new QPushButton(this);
-    m_pwdShowBox->setFlat(true);
-    m_pwdShowBox->setFixedSize(ICON_SIZE);
-    m_pwdShowBox->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
-    m_pwdShowBox->setCursor(Qt::PointingHandCursor);
-    //防止文本框输入内容位于按钮之下
-    QMargins margins = m_pwdNameLine->textMargins();
-    m_pwdNameLine->setTextMargins(margins.left(), margins.top(), m_pwdShowBox->width() + 10, margins.bottom());
-    QHBoxLayout *pSearchLayout = new QHBoxLayout();
-    pSearchLayout->addStretch();
-    pSearchLayout->addWidget(m_pwdShowBox);
-    pSearchLayout->setSpacing(0);
-    pSearchLayout->setContentsMargins(0, 0, 10, 0);
-    m_pwdNameLine->setLayout(pSearchLayout);
-    m_pwdNameLine->setEchoMode(QLineEdit::Password);
 }
 
 void MobileHotspotWidget::setFreqBandFrame()

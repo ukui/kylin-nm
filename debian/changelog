@@ -1,3 +1,9 @@
+kylin-nm (3.14.0.0+0512-0k3) yangtze; urgency=medium
+
+  * Fix build error
+
+ -- Kevin Duan <duankaiwen@kylinos.cn>  Tue, 14 Jun 2022 15:32:23 +0800
+
 kylin-nm (3.14.0.0+0512-0k2) yangtze; urgency=medium
 
   * Fix build error

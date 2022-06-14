@@ -1,0 +1,21 @@
+From: cckylin-cibot <cckylin-cibot@kylinos.cn>
+Date: Tue, 14 Jun 2022 05:57:57 +0000
+Subject: fix build depend
+
+---
+ src/src.pro | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/src.pro b/src/src.pro
+index 603befd..883a464 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -35,7 +35,7 @@ INSTALLS += target \
+ # any feature of Qt which has been marked as deprecated (the exact warnings
+ # depend on your compiler). Please consult the documentation of the
+ # deprecated API in order to know how to port your code away from it.
+-DEFINES += QT_DEPRECATED_WARNINGS WITHKYSEC
++DEFINES += QT_DEPRECATED_WARNINGS
+ 
+ # You can also make your code fail to compile if you use deprecated APIs.
+ # In order to do so, uncomment the following line.

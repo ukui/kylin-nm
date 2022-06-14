@@ -1,0 +1,109 @@
+From: cckylin-cibot <cckylin-cibot@kylinos.cn>
+Date: Tue, 14 Jun 2022 06:58:05 +0000
+Subject: fix build errors
+
+---
+ plugins/component/InfoButton/infobutton.cpp | 1 +
+ plugins/netconnect/deviceframe.cpp          | 2 ++
+ plugins/wlanconnect/deviceframe.cpp         | 1 +
+ plugins/wlanconnect/wlanitem.cpp            | 1 +
+ src/frontend/mainwindow.cpp                 | 2 ++
+ src/frontend/tools/infobutton.cpp           | 1 +
+ src/frontend/tools/radioitembutton.cpp      | 1 +
+ src/frontend/wificonfigdialog.cpp           | 2 ++
+ 8 files changed, 11 insertions(+)
+
+diff --git a/plugins/component/InfoButton/infobutton.cpp b/plugins/component/InfoButton/infobutton.cpp
+index e434c0f..26ac05a 100644
+--- a/plugins/component/InfoButton/infobutton.cpp
++++ b/plugins/component/InfoButton/infobutton.cpp
+@@ -1,6 +1,7 @@
+ #include "infobutton.h"
+ #include <QEvent>
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QApplication>
+ #include <QDebug>
+ 
+diff --git a/plugins/netconnect/deviceframe.cpp b/plugins/netconnect/deviceframe.cpp
+index 12b59f6..0df1278 100644
+--- a/plugins/netconnect/deviceframe.cpp
++++ b/plugins/netconnect/deviceframe.cpp
+@@ -1,4 +1,6 @@
+ #include "deviceframe.h"
++#include <QPainterPath>
++#include <QPainter>
+ 
+ #define LAYOUT_MARGINS 18,0,24,0
+ #define FRAME_HEIGHT 58
+diff --git a/plugins/wlanconnect/deviceframe.cpp b/plugins/wlanconnect/deviceframe.cpp
+index a616d65..9765fae 100644
+--- a/plugins/wlanconnect/deviceframe.cpp
++++ b/plugins/wlanconnect/deviceframe.cpp
+@@ -1,5 +1,6 @@
+ #include "deviceframe.h"
+ #include <QPainter>
++#include <QPainterPath>
+ 
+ #define LAYOUT_MARGINS 18,0,8,0
+ #define FRAME_HEIGHT 58
+diff --git a/plugins/wlanconnect/wlanitem.cpp b/plugins/wlanconnect/wlanitem.cpp
+index 5d1bbf3..d380610 100644
+--- a/plugins/wlanconnect/wlanitem.cpp
++++ b/plugins/wlanconnect/wlanitem.cpp
+@@ -1,5 +1,6 @@
+ #include "wlanitem.h"
+ #include <QPainter>
++#include <QPainterPath>
+ #define FRAME_SPEED 150
+ #define LIMIT_TIME 60*1000
+ #define TOTAL_PAGE 8
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index 1372a8f..fc4ad02 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -6,6 +6,8 @@
+ #include <QDBusReply>
+ #include <QKeyEvent>
+ #include <QProcess>
++#include <QPainter>
++#include <QPainterPath>
+ 
+ #include "kylinnetworkdeviceresource.h"
+ #include "../backend/dbus-interface/kylinagentinterface.h"
+diff --git a/src/frontend/tools/infobutton.cpp b/src/frontend/tools/infobutton.cpp
+index 0dd16cd..399ed4a 100644
+--- a/src/frontend/tools/infobutton.cpp
++++ b/src/frontend/tools/infobutton.cpp
+@@ -1,6 +1,7 @@
+ #include "infobutton.h"
+ #include <QEvent>
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QApplication>
+ 
+ #define BUTTON_SIZE 36,36
+diff --git a/src/frontend/tools/radioitembutton.cpp b/src/frontend/tools/radioitembutton.cpp
+index 0efbf38..fb40863 100644
+--- a/src/frontend/tools/radioitembutton.cpp
++++ b/src/frontend/tools/radioitembutton.cpp
+@@ -1,5 +1,6 @@
+ #include "radioitembutton.h"
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QSvgRenderer>
+ #include <QApplication>
+ #include <QStyle>
+diff --git a/src/frontend/wificonfigdialog.cpp b/src/frontend/wificonfigdialog.cpp
+index 23d2d24..310d501 100644
+--- a/src/frontend/wificonfigdialog.cpp
++++ b/src/frontend/wificonfigdialog.cpp
+@@ -8,6 +8,8 @@
+ #include <KWindowEffects>
+ 
+ #include <QtConcurrent>
++#include <QPainter>
++#include <QPainterPath>
+ 
+ WiFiConfigDialog::WiFiConfigDialog(QWidget *parent) :
+     QDialog(parent),

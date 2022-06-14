@@ -22,6 +22,7 @@
 #include "titlelabel.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
+#include "kpasswordedit.h"
 
 using namespace kdk;
 
@@ -59,7 +60,7 @@ private:
     QVBoxLayout *mVlayout;
 
     QLineEdit *m_apNameLine;
-    QLineEdit *m_pwdNameLine;
+    KPasswordEdit *m_pwdNameLine;
 
     QComboBox *m_freqBandComboBox;
     QComboBox *m_interfaceComboBox;

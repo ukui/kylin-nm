@@ -15,7 +15,7 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
     lanItemLayout = new QVBoxLayout(this);
     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
     lanItemLayout->setSpacing(1);
-    addLanWidget = new AddNetBtn(this);
+    addLanWidget = new AddNetBtn(false, this);
 
     deviceLanLayout->setSpacing(1);
     setLayout(deviceLanLayout);

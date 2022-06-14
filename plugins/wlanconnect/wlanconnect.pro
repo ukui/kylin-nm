@@ -3,6 +3,7 @@ TEMPLATE = lib
 CONFIG += plugin
 
 include(../component/drownlabel.pri)
+include(../component/addbtn.pri)
 
 TARGET = $$qtLibraryTarget(wlanconnect)
 DESTDIR = ../..

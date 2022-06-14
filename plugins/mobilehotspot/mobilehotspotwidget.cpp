@@ -3,14 +3,14 @@
 
 #define LABEL_RECT 17, 0, 105, 23
 #define CONTENTS_MARGINS 0, 0, 0, 0
+#define ITEM_MARGINS 16, 0, 16, 0
 #define FRAME_MIN_SIZE 550, 60
 #define FRAME_MAX_SIZE 16777215, 16777215
 #define CONTECT_FRAME_MAX_SIZE 16777215, 60
-#define LABLE_MIN_WIDTH 140
+#define LABLE_MIN_WIDTH 188
 #define COMBOBOX_MIN_WIDTH 200
 #define LINE_MAX_SIZE 16777215, 1
 #define LINE_MIN_SIZE 0, 1
-#define LAYOUT_LEFT_MARGINS 8
 #define ICON_SIZE   24,24
 
 #define WIRELESS   1
@@ -367,7 +367,7 @@ void MobileHotspotWidget::setSwitchFrame()
     m_switchLabel = new QLabel(tr("Open"), this);
     m_switchLabel->setMinimumWidth(LABLE_MIN_WIDTH);
     m_switchBtn = new KSwitchButton(this);
-    switchLayout->addSpacing(LAYOUT_LEFT_MARGINS);
+    switchLayout->setContentsMargins(ITEM_MARGINS);
     switchLayout->addWidget(m_switchLabel);
     switchLayout->addStretch();
     switchLayout->addWidget(m_switchBtn);
@@ -390,7 +390,8 @@ void MobileHotspotWidget::setApNameFrame()
     m_apNameLine = new QLineEdit(this);
     m_apNameLine->setMinimumWidth(COMBOBOX_MIN_WIDTH);
     m_apNameLine->setMaxLength(AP_NAME_MAX_LENGTH);
-    apNameHLayout->addSpacing(LAYOUT_LEFT_MARGINS);
+    apNameHLayout->setContentsMargins(ITEM_MARGINS);
+    apNameHLayout->setSpacing(0);
     apNameHLayout->addWidget(m_apNameLabel);
     apNameHLayout->addWidget(m_apNameLine);
     m_ApNameFrame->setLayout(apNameHLayout);
@@ -409,30 +410,15 @@ void MobileHotspotWidget::setPasswordFrame()
 
     m_pwdLabel = new QLabel(tr("Password"), this);
     m_pwdLabel->setMinimumWidth(LABLE_MIN_WIDTH);
-    m_pwdNameLine = new QLineEdit(this);
+    m_pwdNameLine = new KPasswordEdit(this);
+    m_pwdNameLine->setClearButtonEnabled(false);//禁用ClearBtn按钮X
     m_pwdNameLine->setMinimumWidth(COMBOBOX_MIN_WIDTH);
-    m_pwdNameLine->setEchoMode(QLineEdit::Password);
-    passwordHLayout->addSpacing(LAYOUT_LEFT_MARGINS);
+    passwordHLayout->setContentsMargins(ITEM_MARGINS);
+    passwordHLayout->setSpacing(0);
     passwordHLayout->addWidget(m_pwdLabel);
     passwordHLayout->addWidget(m_pwdNameLine);
 
     m_passwordFrame->setLayout(passwordHLayout);
-
-    m_pwdShowBox = new QPushButton(this);
-    m_pwdShowBox->setFlat(true);
-    m_pwdShowBox->setFixedSize(ICON_SIZE);
-    m_pwdShowBox->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
-    m_pwdShowBox->setCursor(Qt::PointingHandCursor);
-    //防止文本框输入内容位于按钮之下
-    QMargins margins = m_pwdNameLine->textMargins();
-    m_pwdNameLine->setTextMargins(margins.left(), margins.top(), m_pwdShowBox->width() + 10, margins.bottom());
-    QHBoxLayout *pSearchLayout = new QHBoxLayout();
-    pSearchLayout->addStretch();
-    pSearchLayout->addWidget(m_pwdShowBox);
-    pSearchLayout->setSpacing(0);
-    pSearchLayout->setContentsMargins(0, 0, 10, 0);
-    m_pwdNameLine->setLayout(pSearchLayout);
-    m_pwdNameLine->setEchoMode(QLineEdit::Password);
 }
 
 void MobileHotspotWidget::setFreqBandFrame()
@@ -453,7 +439,8 @@ void MobileHotspotWidget::setFreqBandFrame()
     m_freqBandComboBox->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     m_freqBandComboBox->addItem("2.4Ghz");
     m_freqBandComboBox->addItem("5Ghz");
-    freqBandHLayout->addSpacing(LAYOUT_LEFT_MARGINS);
+    freqBandHLayout->setContentsMargins(ITEM_MARGINS);
+    freqBandHLayout->setSpacing(0);
     freqBandHLayout->addWidget(m_freqBandLabel);
     freqBandHLayout->addWidget(m_freqBandComboBox);
 
@@ -476,7 +463,8 @@ void MobileHotspotWidget::setInterFaceFrame()
     m_interfaceComboBox->setInsertPolicy(QComboBox::NoInsert);
     m_interfaceComboBox->setMinimumWidth(COMBOBOX_MIN_WIDTH);
     m_interfaceComboBox->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    interfaceHLayout->addSpacing(LAYOUT_LEFT_MARGINS);
+    interfaceHLayout->setContentsMargins(ITEM_MARGINS);
+    interfaceHLayout->setSpacing(0);
     interfaceHLayout->addWidget(m_interfaceLabel);
     interfaceHLayout->addWidget(m_interfaceComboBox);
 

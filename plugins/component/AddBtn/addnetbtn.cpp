@@ -8,7 +8,7 @@
 
 #define RADIUS 6.0
 
-AddNetBtn::AddNetBtn(QWidget *parent) : QPushButton(parent)
+AddNetBtn::AddNetBtn(bool isWlan, QWidget *parent) : QPushButton(parent)
 {
     this->setObjectName("this");
     this->setMinimumSize(QSize(580, 60));
@@ -18,16 +18,24 @@ AddNetBtn::AddNetBtn(QWidget *parent) : QPushButton(parent)
     QHBoxLayout *addLyt = new QHBoxLayout;
 
     QLabel *iconLabel = new QLabel();
-    QLabel *textLabel = new QLabel(tr("Add WiredNetork"));
+    QLabel *textLabel = new QLabel();
 
-    QIcon mAddIcon = QIcon::fromTheme("list-add-symbolic");
-    iconLabel->setPixmap(mAddIcon.pixmap(mAddIcon.actualSize(QSize(24, 24))));
-    iconLabel->setProperty("useIconHighlightEffect", true);
-    iconLabel->setProperty("iconHighlightEffectMode", 1);
+    if (isWlan) {
+        textLabel->setText(tr("Add Others"));
+        addLyt->addSpacing(8);
+        addLyt->addWidget(textLabel);
+    } else {
+        textLabel->setText(tr("Add WiredNetork"));
+        QIcon mAddIcon = QIcon::fromTheme("list-add-symbolic");
+        iconLabel->setPixmap(mAddIcon.pixmap(mAddIcon.actualSize(QSize(24, 24))));
+        iconLabel->setProperty("useIconHighlightEffect", true);
+        iconLabel->setProperty("iconHighlightEffectMode", 1);
 
-    addLyt->addStretch();
-    addLyt->addWidget(iconLabel);
-    addLyt->addWidget(textLabel);
+        addLyt->addStretch();
+        addLyt->addWidget(iconLabel);
+        addLyt->addWidget(textLabel);
+    }
+
     addLyt->addStretch();
     this->setLayout(addLyt);
 

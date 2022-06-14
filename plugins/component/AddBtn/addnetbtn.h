@@ -11,7 +11,7 @@ class AddNetBtn : public QPushButton
 {
     Q_OBJECT
 public:
-    AddNetBtn(QWidget *parent = nullptr);
+    AddNetBtn(bool isWlan, QWidget *parent = nullptr);
     ~AddNetBtn();
 
 protected:

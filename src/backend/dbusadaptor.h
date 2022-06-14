@@ -74,6 +74,8 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void showPropertyWidget(QString devName, QString ssid);
     //唤起新建有线连接界面
     Q_NOREPLY void showCreateWiredConnectWidget(QString devName);
+    //唤起加入其他无线网络界面
+    Q_NOREPLY void showAddOtherWlanWidget(QString devName);
     //开启热点
     void activeWirelessAp(const QString apName, const QString apPassword, const QString band, const QString apDevice);
     //断开热点

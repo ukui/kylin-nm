@@ -14,6 +14,7 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent)
     lanItemLayout = new QVBoxLayout(this);
     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
     lanItemLayout->setSpacing(1);
+    addWlanWidget = new AddNetBtn(true, this);
 
     deviceLanLayout->setSpacing(1);
     setLayout(deviceLanLayout);
@@ -22,6 +23,7 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent)
     deviceFrame = new DeviceFrame(devName, this);
     deviceLanLayout->addWidget(deviceFrame);
     deviceLanLayout->addWidget(lanItemFrame);
+    deviceLanLayout->addWidget(addWlanWidget);
 
     //下拉按钮
     connect(deviceFrame->dropDownLabel, &DrownLabel::labelClicked, this, &ItemFrame::onDrownLabelClicked);

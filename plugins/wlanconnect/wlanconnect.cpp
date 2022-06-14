@@ -958,6 +958,15 @@ void WlanConnect::addDeviceFrame(QString devName)
     ui->availableLayout->addWidget(itemFrame);
     itemFrame->deviceFrame->deviceLabel->setText(tr("card")+/*QString("%1").arg(count)+*/"："+devName);
     deviceFrameMap.insert(devName, itemFrame);
+
+    connect(itemFrame->addWlanWidget, &AddNetBtn::clicked, this, [=](){
+        if (m_interface->isValid()) {
+            qDebug() << "[NetConnect]call showAddOtherWlanWidget" << devName  << __LINE__;
+            m_interface->call(QStringLiteral("showAddOtherWlanWidget"), devName);
+            qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
+        }
+    });
+
 }
 
 //减少设备

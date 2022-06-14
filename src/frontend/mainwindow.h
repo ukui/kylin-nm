@@ -70,6 +70,8 @@ public:
     void showPropertyWidget(QString devName, QString ssid);
     //唤起新建有线连接界面
     void showCreateWiredConnectWidget(const QString devName);
+    //唤起加入其他无线网络界面
+    void showAddOtherWlanWidget(QString devName);
 
     void getWirelessDeviceCap(QMap<QString, int> &map);
 
@@ -163,6 +165,7 @@ private:
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
 
     QMap<QString, NetDetail*> m_createPagePtrMap;
+    QMap<QString, NetDetail*> m_addOtherPagePtrMap;
 
 public slots:
     void onShowMainWindow(int type);

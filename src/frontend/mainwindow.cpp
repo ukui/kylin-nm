@@ -10,6 +10,9 @@
 #include "kylinnetworkdeviceresource.h"
 #include "../backend/dbus-interface/kylinagentinterface.h"
 
+#include "ukuistylehelper/ukuistylehelper.h"
+#include "windowmanager/windowmanager.h"
+
 
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 476
@@ -49,8 +52,7 @@ void MainWindow::showMainwindow()
         KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
     }
 
-    this->resetWindowPosition();
-    this->showNormal();
+    this->showByWaylandHelper();
     this->raise();
     this->activateWindow();
     emit this->mainWindowVisibleChanged(true);
@@ -335,7 +337,10 @@ void MainWindow::resetWindowPosition()
 
     if (m_isShowInCenter) {
         QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
-        this->move((availableGeometry.width() - this->width())/2, (availableGeometry.height() - this->height())/2);
+        QRect rect((availableGeometry.width() - this->width())/2, (availableGeometry.height() - this->height())/2,
+                   this->width(), this->height());
+        kdk::WindowManager::setGeometry(this->windowHandle(), rect);
+
         return;
     }
 
@@ -350,11 +355,12 @@ void MainWindow::resetWindowPosition()
                             "org.ukui.panel",
                             QDBusConnection::sessionBus());
     }
+    QRect rect;
     QDBusReply<QVariantList> reply = m_positionInterface->call("GetPrimaryScreenGeometry");
     //reply获取的参数共5个，分别是 主屏可用区域的起点x坐标，主屏可用区域的起点y坐标，主屏可用区域的宽度，主屏可用区域高度，任务栏位置
     if (!m_positionInterface->isValid() || !reply.isValid() || reply.value().size() < 5) {
         qCritical() << QDBusConnection::sessionBus().lastError().message();
-        this->setGeometry(0, 0, this->width(), this->height());
+        kdk::WindowManager::setGeometry(this->windowHandle(), QRect(0, 0, this->width(), this->height()));
         return;
     }
     QVariantList position_list = reply.value();
@@ -362,29 +368,30 @@ void MainWindow::resetWindowPosition()
     switch(position){
     case PANEL_TOP:
         //任务栏位于上方
-        this->setGeometry(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
-                          position_list.at(1).toInt() + MARGIN,
-                          this->width(), this->height());
+        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
+                     position_list.at(1).toInt() + MARGIN,
+                     this->width(), this->height());
         break;
         //任务栏位于左边
     case PANEL_LEFT:
-        this->setGeometry(position_list.at(0).toInt() + MARGIN,
-                          position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
-                          this->width(), this->height());
+        rect = QRect(position_list.at(0).toInt() + MARGIN,
+                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
+                     this->width(), this->height());
         break;
         //任务栏位于右边
     case PANEL_RIGHT:
-        this->setGeometry(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
-                          position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
-                          this->width(), this->height());
+        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
+                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
+                     this->width(), this->height());
         break;
         //任务栏位于下方
     default:
-        this->setGeometry(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
-                          position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
-                          this->width(), this->height());
+        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
+                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
+                     this->width(), this->height());
         break;
     }
+    kdk::WindowManager::setGeometry(this->windowHandle(), rect);
     qDebug() << " Position of ukui-panel is " << position << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
 }
 
@@ -459,6 +466,16 @@ void MainWindow::showControlCenter()
     } else {
         process.startDetached("ukui-control-center -m netconnect");
     }
+}
+
+void MainWindow::showByWaylandHelper()
+{
+    //去除窗管标题栏，传入参数为QWidget*
+    kdk::UkuiStyleHelper::self()->removeHeader(this);
+    this->show();
+    resetWindowPosition();
+    //设置窗体位置，传入参数为QWindow*，QRect
+
 }
 
 /**

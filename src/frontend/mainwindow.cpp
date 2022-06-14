@@ -6,6 +6,8 @@
 #include <QDBusReply>
 #include <QKeyEvent>
 #include <QProcess>
+#include <QPainter>
+#include <QPainterPath>
 
 #include "kylinnetworkdeviceresource.h"
 #include "../backend/dbus-interface/kylinagentinterface.h"

@@ -1,6 +1,7 @@
 #include "infobutton.h"
 #include <QEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QApplication>
 #include <QDebug>
 

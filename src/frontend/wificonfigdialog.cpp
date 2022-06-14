@@ -8,6 +8,8 @@
 #include <KWindowEffects>
 
 #include <QtConcurrent>
+#include <QPainter>
+#include <QPainterPath>
 
 WiFiConfigDialog::WiFiConfigDialog(QWidget *parent) :
     QDialog(parent),

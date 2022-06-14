@@ -1,5 +1,6 @@
 #include "wlanitem.h"
 #include <QPainter>
+#include <QPainterPath>
 #define FRAME_SPEED 150
 #define LIMIT_TIME 60*1000
 #define TOTAL_PAGE 8

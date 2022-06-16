@@ -139,7 +139,7 @@ bool NetConnect::isShowOnHomePage() const
 
 QIcon NetConnect::icon() const
 {
-    return QIcon::fromTheme("network-wired-acquiring-symbolic");
+    return QIcon::fromTheme("network-wired-symbolic");
 }
 
 QString NetConnect::translationPath() const

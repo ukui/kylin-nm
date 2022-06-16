@@ -47,9 +47,13 @@ void MainWindow::showMainwindow()
     /**
      * 设置主界面跳过任务栏和分页器的属性，隐藏再次展示有可能辉冲刷掉该属性，需要展示时重新设置
      */
-    const KWindowInfo info(this->winId(), NET::WMState);
-    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
-        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+    QString platform = QGuiApplication::platformName();
+    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
+    {
+        const KWindowInfo info(this->winId(), NET::WMState);
+        if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
+            KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+        }
     }
 
     this->showByWaylandHelper();
@@ -166,11 +170,15 @@ void MainWindow::initWindowProperties()
     this->setAttribute(Qt::WA_TranslucentBackground, true);  //透明
     this->setFocusPolicy(Qt::NoFocus);
 
-    QPainterPath path;
-    auto rect = this->rect();
-//    path.addRoundedRect(rect, 12, 12);
-    path.addRect(rect);
-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
+    QString platform = QGuiApplication::platformName();
+    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
+    {
+        QPainterPath path;
+        auto rect = this->rect();
+        //    path.addRoundedRect(rect, 12, 12);
+        path.addRect(rect);
+        KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
+    }
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)

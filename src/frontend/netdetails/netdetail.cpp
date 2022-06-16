@@ -11,6 +11,8 @@
 #include <QMenu>
 #include <QToolTip>
 
+#include "windowmanager/windowmanager.h"
+
 #define  WINDOW_WIDTH  520
 #define  WINDOW_HEIGHT 590
 #define  BUTTON_SIZE 30
@@ -195,6 +197,10 @@ void NetDetail::centerToScreen()
     int x = this->width();
     int y = this->height();
     this->move(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top());
+//    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(desk_x / 2 - x / 2 + desk_rect.left(),
+//                                                                desk_y / 2 - y / 2 + desk_rect.top(),
+//                                                                this->width(),
+//                                                                this->height()));
 }
 
 void NetDetail::initUI()

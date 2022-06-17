@@ -42,10 +42,14 @@
 #include <QDBusReply>
 
 #include <interface.h>
-#include "switchbutton.h"
 #include "hoverbtn.h"
 #include "itemframe.h"
 #include "wlanitem.h"
+#include "kwidget.h"
+#include "kswitchbutton.h"
+
+using namespace kdk;
+
 namespace Ui {
 class WlanConnect;
 }
@@ -84,13 +88,13 @@ private:
 
 
     int  sortWlanNet(QString deviceName, QString name, QString signal);
-    void updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection);
+    void updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection, int category);
     void resortWifiList(ItemFrame *frame, QVector<QStringList> list);
 
 
     //单wifi图标
     int  setSignal(QString lv);
-    QString wifiIcon(bool isLock, int strength);
+    QString wifiIcon(bool isLock, int strength, int category);
 
 
     //开关相关
@@ -113,7 +117,7 @@ private:
     //减少设备
     void removeDeviceFrame(QString devName);
     //增加ap
-    void addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection);
+    void addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category);
     //减少ap
     void removeOneWlanFrame(ItemFrame *frame, QString deviceName, QString ssid);
 
@@ -145,7 +149,7 @@ private:
     QTimer * m_scanTimer = nullptr;
 //    QTimer * m_updateTimer = nullptr;
 private:
-    SwitchButton       *m_wifiSwitch;
+    KSwitchButton      *m_wifiSwitch;
     bool               m_firstLoad;
 
 private slots:

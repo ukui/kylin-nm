@@ -199,6 +199,13 @@ void DbusAdaptor::showCreateWiredConnectWidget(QString devName)
     parent()->showCreateWiredConnectWidget(devName);
 }
 
+//唤起加入其他无线网络界面
+void DbusAdaptor::showAddOtherWlanWidget(QString devName)
+{
+    qDebug() << "showAddOtherWlanWidget";
+    parent()->showAddOtherWlanWidget(devName);
+}
+
 //开启热点
 void DbusAdaptor::activeWirelessAp(const QString apName, const QString apPassword, const QString band, const QString apDevice)
 {

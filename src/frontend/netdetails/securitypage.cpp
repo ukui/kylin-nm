@@ -33,7 +33,7 @@ void SecurityPage::initUI()
     userPwdFlagLabel = new QLabel(this);
 
     secuTypeCombox = new QComboBox(this);
-    pwdEdit = new LineEdit(this);
+    pwdEdit = new KPasswordEdit(this);
     eapTypeCombox = new QComboBox(this);
     //TLS
     identityEdit = new LineEdit(this);
@@ -42,12 +42,12 @@ void SecurityPage::initUI()
     caNeedBox = new QCheckBox(this);
     clientCertPathCombox = new QComboBox(this);
     clientPrivateKeyCombox = new QComboBox(this);
-    clientPrivateKeyPwdEdit = new LineEdit(this);
+    clientPrivateKeyPwdEdit = new KPasswordEdit(this);
 
     //PEAP && TTLS
     eapMethodCombox = new QComboBox(this);
     userNameEdit = new LineEdit(this);
-    userPwdEdit = new LineEdit(this);
+    userPwdEdit = new KPasswordEdit(this);
     userPwdFlagBox = new QCheckBox(this);
 
 
@@ -106,59 +106,10 @@ void SecurityPage::initUI()
     clientPrivateKeyCombox->addItem(tr("None"), QString(tr("None"))); //无
     clientPrivateKeyCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
 
-    pwdBox = new QCheckBox(this);
-    pwdBox->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
-                                       "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
-                                       "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
-    pwdBox->setCursor(Qt::PointingHandCursor);
-    pwdBox->setFixedSize(30, pwdEdit->height());
-    //防止文本框输入内容位于按钮之下
-    QMargins margins = pwdEdit->textMargins();
-    pwdEdit->setTextMargins(margins.left(), margins.top(), pwdBox->width(), margins.bottom());
-    QHBoxLayout *pPwdLayout = new QHBoxLayout();
-    pPwdLayout->addStretch();
-    pPwdLayout->addWidget(pwdBox);
-    pPwdLayout->setSpacing(0);
-    pPwdLayout->setContentsMargins(0, 0, 0, 0);
-    pwdEdit->setLayout(pPwdLayout);
-    pwdEdit->setEchoMode(QLineEdit::Password);
-
-    userPwdBox = new QCheckBox(this);
-    userPwdBox->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
-                                       "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
-                                       "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
-    userPwdBox->setCursor(Qt::PointingHandCursor);
-    userPwdBox->setFixedSize(30, userPwdEdit->height());
-    userPwdBox->setFocusPolicy(Qt::NoFocus);
-    //防止文本框输入内容位于按钮之下
-    userPwdEdit->setTextMargins(margins.left(), margins.top(), userPwdBox->width(), margins.bottom());
-    QHBoxLayout *puserPwdLayout = new QHBoxLayout();
-    puserPwdLayout->addStretch();
-    puserPwdLayout->addWidget(userPwdBox);
-    puserPwdLayout->setSpacing(0);
-    puserPwdLayout->setContentsMargins(0, 0, 0, 0);
-    userPwdEdit->setLayout(puserPwdLayout);
-    userPwdEdit->setEchoMode(QLineEdit::Password);
-
-    privateKeyBox = new QCheckBox(this);
-    privateKeyBox->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
-                                       "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
-                                       "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
-    privateKeyBox->setCursor(Qt::PointingHandCursor);
-    privateKeyBox->setFixedSize(30, clientPrivateKeyPwdEdit->height());
-    //防止文本框输入内容位于按钮之下
-    clientPrivateKeyPwdEdit->setTextMargins(margins.left(), margins.top(), privateKeyBox->width(), margins.bottom());
-    QHBoxLayout *pPrivateKeyPwdLayout = new QHBoxLayout();
-    pPrivateKeyPwdLayout->addStretch();
-    pPrivateKeyPwdLayout->addWidget(privateKeyBox);
-    pPrivateKeyPwdLayout->setSpacing(0);
-    pPrivateKeyPwdLayout->setContentsMargins(0, 0, 0, 0);
-    clientPrivateKeyPwdEdit->setLayout(pPrivateKeyPwdLayout);
-    clientPrivateKeyPwdEdit->setEchoMode(QLineEdit::Password);
-
-    pwdEdit->setContextMenuPolicy(Qt::NoContextMenu);
-    clientPrivateKeyPwdEdit->setContextMenuPolicy(Qt::NoContextMenu);
-    userPwdEdit->setContextMenuPolicy(Qt::NoContextMenu);
+    //禁用ClearBtn按钮
+    pwdEdit->setClearButtonEnabled(false);
+    clientPrivateKeyPwdEdit->setClearButtonEnabled(false);
+    userPwdEdit->setClearButtonEnabled(false);
 
     QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
     QRegExpValidator *latitude = new QRegExpValidator(rx, this);
@@ -179,10 +130,6 @@ void SecurityPage::initConnect()
     connect(eapTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onEapTypeComboxIndexChanged);
 
     connect(caNeedBox, &QCheckBox::clicked, this, &SecurityPage::onCaNeedBoxClicked);
-
-    connect(pwdBox, &QCheckBox::clicked, this, &SecurityPage::onPwdBoxClicked);
-    connect(userPwdBox, &QCheckBox::clicked, this, &SecurityPage::onUserPwdBox);
-    connect(privateKeyBox, &QCheckBox::clicked, this, &SecurityPage::onPrivateKeyBoxClicked);
 
     connect(caCertPathCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
             this, &SecurityPage::onCaCertPathComboxIndexChanged);
@@ -728,40 +675,6 @@ void SecurityPage::onCaNeedBoxClicked()
         caCertPathCombox->setEnabled(false);
     }  else {
         caCertPathCombox->setEnabled(true);
-    }
-}
-
-void SecurityPage::onPwdBoxClicked()
-{
-    if (pwdEdit->echoMode() == QLineEdit::Password) {
-        pwdBox->setChecked(true);
-        pwdEdit->setEchoMode(QLineEdit::Normal);
-    } else {
-        pwdBox->setChecked(false);
-        pwdEdit->setEchoMode(QLineEdit::Password);
-    }
-}
-
-void SecurityPage::onUserPwdBox()
-{
-    if (userPwdEdit->echoMode() == QLineEdit::Password) {
-        userPwdBox->setChecked(true);
-        userPwdEdit->setEchoMode(QLineEdit::Normal);
-    } else {
-        userPwdBox->setChecked(false);
-        userPwdEdit->setEchoMode(QLineEdit::Password);
-    }
-
-}
-
-void SecurityPage::onPrivateKeyBoxClicked()
-{
-    if (clientPrivateKeyPwdEdit->echoMode() == QLineEdit::Password) {
-        privateKeyBox->setChecked(true);
-        clientPrivateKeyPwdEdit->setEchoMode(QLineEdit::Normal);
-    } else {
-        privateKeyBox->setChecked(false);
-        clientPrivateKeyPwdEdit->setEchoMode(QLineEdit::Password);
     }
 }
 

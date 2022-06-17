@@ -12,11 +12,22 @@
 
 #include <networkmanagerqt/wirelesssecuritysetting.h>
 
+#include "kwidget.h"
+#include "kpasswordedit.h"
+
+using namespace kdk;
+
 #define PSK_SETTING_NAME "802-11-wireless-security"
 
 #define NORMAL_HEIGHT 48
 #define EXPANDED_HEIGHT 120
 #define PWD_LENGTH_LIMIT 8
+
+#define EXCELLENT_SIGNAL 80
+#define GOOD_SIGNAL 55
+#define OK_SIGNAL 30
+#define LOW_SIGNAL 5
+#define NONE_SIGNAL 0
 
 class WlanListItem : public ListItem
 {
@@ -65,6 +76,7 @@ private:
     KyWirelessNetItem m_wirelessNetItem;
     KyWirelessConnectOperation *m_wirelessConnectOperation = nullptr;
     EnterpriseWlanDialog *enterpriseWlanDialog = nullptr;
+    KyNetworkDeviceResourse *m_deviceResource = nullptr;
 
     bool m_hasPwd = true;
     QString m_wlanDevice;
@@ -74,10 +86,7 @@ private:
     //密码输入区域的UI
     QFrame *m_pwdFrame = nullptr;
     QHBoxLayout *m_pwdFrameLyt = nullptr;
-
-    QLineEdit * m_pwdLineEdit = nullptr;
-    QHBoxLayout *m_pwdLineEditLyt = nullptr;
-    QPushButton *m_showPwdButton = nullptr;
+    KPasswordEdit *m_pwdLineEdit = nullptr;
     QPushButton *m_connectButton = nullptr;
 
     //自动连接选择区域UI
@@ -98,7 +107,6 @@ protected slots:
 private slots:
     void onNetButtonClicked();
     void onPwdEditorTextChanged();
-    void onShowPwdButtonClicked();
     void onConnectButtonClicked();
     void onMenuTriggered(QAction *action);
     void onEnterpriseWlanDialogClose(bool isShow);

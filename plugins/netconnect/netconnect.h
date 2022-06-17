@@ -48,11 +48,14 @@
 #include "interface.h"
 #include "addbtn.h"
 #include "fixlabel.h"
-#include "switchbutton.h"
 #include "hoverbtn.h"
 #include "lanitem.h"
 #include "deviceframe.h"
 #include "itemframe.h"
+#include "kwidget.h"
+#include "kswitchbutton.h"
+
+using namespace kdk;
 
 enum {
     DISCONNECTED,
@@ -131,7 +134,7 @@ private:
     QWidget            *pluginWidget;
 
     QDBusInterface     *m_interface = nullptr;
-    SwitchButton       *wiredSwitch;
+    KSwitchButton       *wiredSwitch;
 
     bool               mFirstLoad;
     QGSettings         *m_switchGsettings;

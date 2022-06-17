@@ -13,7 +13,6 @@
 #include <QApplication>
 #include <QDebug>
 #include <QSettings>
-#include <QButtonGroup>
 
 #include <QDBusMessage>
 #include <QDBusObjectPath>
@@ -28,6 +27,10 @@
 #include "creatnetpage.h"
 #include "coninfo.h"
 #include "tab-pages/tabpage.h"
+#include "kwidget.h"
+#include "ktabbar.h"
+
+using namespace kdk;
 
 class NetDetail : public QWidget
 {
@@ -75,7 +78,7 @@ private:
 
     bool checkWirelessSecurity(KySecuType secuType);
 
-    void showDesktopNotify(const QString &message);
+    void showDesktopNotify(const QString &message, QString soundName);
 
     void setNetdetailSomeEnable(bool on);
 private:
@@ -100,11 +103,8 @@ private:
     QPushButton  * forgetBtn;
     QPushButton  * confimBtn;
 
-    QPushButton  * detailBtn;
-    QPushButton  * ipv4Btn;
-    QPushButton  * ipv6Btn;
-    QPushButton  * securityBtn;
     QFrame       * pageFrame;
+    KTabBar      *m_netTabBar = nullptr;
 
     QString      m_name;
     QString      m_uuid;
@@ -124,16 +124,18 @@ private:
 
     ConInfo      m_info;
 
-    QButtonGroup *m_group;
-
 private slots:
     void on_btnConfirm_clicked();
     void on_btnForget_clicked();
     void onPaletteChanged();
 
+protected slots:
+    void currentRowChangeSlot(int row);
+
 signals:
     void detailPageClose(bool on);
     void createPageClose(QString);
+    void currentChanged(int);
 };
 
 

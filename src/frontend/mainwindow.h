@@ -70,6 +70,8 @@ public:
     void showPropertyWidget(QString devName, QString ssid);
     //唤起新建有线连接界面
     void showCreateWiredConnectWidget(const QString devName);
+    //唤起加入其他无线网络界面
+    void showAddOtherWlanWidget(QString devName);
 
     void getWirelessDeviceCap(QMap<QString, int> &map);
 
@@ -126,6 +128,7 @@ private:
     void initWindowTheme();
     void resetWindowTheme();
     void showControlCenter();
+    void showByWaylandHelper();
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
     int currentIconIndex=0;
@@ -162,6 +165,7 @@ private:
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
 
     QMap<QString, NetDetail*> m_createPagePtrMap;
+    QMap<QString, NetDetail*> m_addOtherPagePtrMap;
 
 public slots:
     void onShowMainWindow(int type);

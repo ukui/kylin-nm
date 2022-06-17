@@ -20,6 +20,7 @@ CONFIG += c++11 \
           link_pkgconfig \
 
 PKGCONFIG += gsettings-qt \
+             kysdk-qtwidgets \
 
 #DEFINES += QT_DEPRECATED_WARNINGS
 

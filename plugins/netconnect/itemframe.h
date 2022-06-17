@@ -4,7 +4,7 @@
 #include <QVBoxLayout>
 #include "deviceframe.h"
 #include <addbtn.h>
-#include "addnetbtn.h"
+#include "../component/AddBtn/addnetbtn.h"
 #include "lanitem.h"
 
 class ItemFrame : public QFrame

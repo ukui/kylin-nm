@@ -16,7 +16,7 @@ DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
 
     deviceLabel = new QLabel(this);
     dropDownLabel = new DrownLabel(devName, this);
-    deviceSwitch = new SwitchButton(this);
+    deviceSwitch = new KSwitchButton(this);
 
     deviceLayout->addWidget(deviceLabel);
     deviceLayout->addStretch();

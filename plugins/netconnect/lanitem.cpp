@@ -11,7 +11,8 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
 {
     this->setMinimumSize(550, 58);
     this->setProperty("useButtonPalette", true);
-    setStyleSheet("QPushButton:!checked{background-color: palette(base)}");
+    this->setFlat(true);
+//    setStyleSheet("QPushButton:!checked{background-color: palette(base)}");
     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
     mLanLyt->setContentsMargins(16,0,16,0);
     mLanLyt->setSpacing(16);

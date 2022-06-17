@@ -52,20 +52,27 @@ void ListItem::setConnectState(ConnectState state)
     m_connectState = state;
 }
 
-void ListItem::showDesktopNotify(const QString &message)
+void ListItem::showDesktopNotify(const QString &message, QString soundName)
 {
     QDBusInterface iface("org.freedesktop.Notifications",
                          "/org/freedesktop/Notifications",
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
+    QStringList actions;  //跳转动作
+    actions.append("kylin-nm");
+    actions.append("default");          //默认动作：点击消息体时打开麒麟录音
+    QMap<QString, QVariant> hints;
+    if (!soundName.isEmpty()) {
+        hints.insert("sound-name",soundName); //添加声音
+    }
     QList<QVariant> args;
     args<<(tr("Kylin NM"))
        <<((unsigned int) 0)
       <<QString("gnome-dev-ethernet")
      <<tr("kylin network applet desktop message") //显示的是什么类型的信息
     <<message //显示的具体信息
-    <<QStringList()
-    <<QVariantMap()
+    <<actions
+    <<hints
     <<(int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }

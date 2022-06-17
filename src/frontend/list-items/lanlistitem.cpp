@@ -167,7 +167,7 @@ void LanListItem::onInfoButtonClicked()
     }
 
     netDetail = new NetDetail(m_deviceName, m_lanConnectItem.m_connectName,
-                                         m_lanConnectItem.m_connectUuid, isActivated,false, false, this);
+                                         m_lanConnectItem.m_connectUuid, isActivated,false, false);
 
     connect(netDetail, &NetDetail::destroyed, [&](){
         if (netDetail != nullptr) {

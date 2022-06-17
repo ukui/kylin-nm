@@ -1239,7 +1239,7 @@ void LanPage::showDetailPage(QString devName, QString uuid)
        return;
     }
 
-    NetDetail *netDetail = new NetDetail(devName, p_item->m_connectName, uuid, isActive, false, false, this);
+    NetDetail *netDetail = new NetDetail(devName, p_item->m_connectName, uuid, isActive, false, false);
     netDetail->show();
 
     delete p_item;

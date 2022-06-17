@@ -1,26 +1,74 @@
-kylin-nm (3.14.0.0+0512-0k3) yangtze; urgency=medium
+kylin-nm (3.20.1.3-0k1) yangtz; urgency=medium
 
-  * Fix build error
+  * BUG号：无
+  * 需求号：无
+  * 其他改动：支持wayland显示
+  * 影响域：主界面位置 标题栏
 
- -- Kevin Duan <duankaiwen@kylinos.cn>  Tue, 14 Jun 2022 15:32:23 +0800
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 17 Jun 2022 11:46:09 +0800
 
-kylin-nm (3.14.0.0+0512-0k2) yangtze; urgency=medium
+kylin-nm (3.20.0.3-0k0) yangtz; urgency=medium
 
-  * Fix build error
+  *  Fix build depend &&  Fix build error
 
- -- Kevin Duan <duankaiwen@kylinos.cn>  Tue, 14 Jun 2022 14:36:20 +0800
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 17 Jun 2022 11:44:59 +0800
 
-kylin-nm (3.14.0.0+0512-0k1) yangtze; urgency=medium
+kylin-nm (3.20.0.3) v101; urgency=medium
 
-  * Fix build depend
+  * BUG号：
+       - #124417 【输入法】【PC/TM】连接无线网界面无法使用软键盘
+  * 需求号：无
+  * 其他改动：无
+  * 影响域：无线界面密码框输入法
 
- -- Kevin Duan <duankaiwen@kylinos.cn>  Tue, 14 Jun 2022 13:55:32 +0800
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 16 Jun 2022 21:08:00 +0800
 
-kylin-nm (3.14.0.0+0512-0k0) v101; urgency=medium
+kylin-nm (3.20.0.2) v101; urgency=medium
 
-  * 修改为quilt格式
+  * BUG号：
+       - #115022 【设计】【控制面板-无线局域网】需要显示添加其他网络入口
+       - #120218 【设计】可用网络默认状态与设计稿不一致
+       - #120786 【设计】【任务栏】网络图标颜色不符合浅色主题要求
+       - #121231 【无线网络】鼠标滑动设置-网络-无线局域网界面的WIFI底色显示为红色
+       - #123287 【设计】网络-属性复制成功提示文字显示不全
+       - #123614 【设计】设置-有线网络导航图标调用错误
+  * 需求号：无
+  * 其他改动：无
+  * 影响域：控制面板导航栏 控制面板有线无线界面 网络详情页复制
 
- -- Xie Wei <xiewei@kylinos.cn>  Mon, 23 May 2022 18:49:51 +0800
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Tue, 14 Jun 2022 10:33:53 +0800
+
+kylin-nm (3.20.0.1+0606) v101; urgency=medium
+
+  * BUG号：
+       - #122763 【网络】有线网络和无线局域网模块在设备模块下
+  * 需求号：
+  * 其他改动：无
+  * 影响域：控制面板导航栏（本次无修改，仅配合控制面板重编）
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Mon, 06 Jun 2022 09:50:44 +0800
+
+kylin-nm (3.20.0.0+0530) v101; urgency=medium
+
+  * BUG号：
+       - #114878 【设计】【主题框架】switch按钮交互状态缺失
+       - #115427 【设计】【网络连接】switch按钮交互状态缺失
+  * 需求号：#13563 系统支持wifi6信号连接及区分
+  * 其他改动：无
+  * 影响域：UI 有线开关 无线开关
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Mon, 30 May 2022 15:16:41 +0800
+
+kylin-nm (3.14.1.1+0517) v101; urgency=medium
+
+  * BUG号: #118214 【UI】【WIFI】切换到深色主题或浅色主题首次打开任务栏WIFI界面，WIFI名称显示不清晰
+           #115808 【侧边栏】【网络】【PC/TM】点击侧边栏通知无法跳转到网络页面
+           #91326 【控制面板】-首页图标、左侧导航线性图标可以跟随主题切换
+  * 需求号：#12664 增加寻光音效（控制面板需要配合）
+  * 其他改动：
+  * 影响域：无影响
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Tue, 17 May 2022 14:08:22 +0800
 
 kylin-nm (3.14.0.0+0512) v101; urgency=medium
 

@@ -1,0 +1,3525 @@
+From: cckylin-cibot <cckylin-cibot@kylinos.cn>
+Date: Fri, 17 Jun 2022 10:49:11 +0000
+Subject: !1 update 3.20 code && wayland
+
+---
+ plugins/component/AddBtn/addnetbtn.cpp             |  86 +++++++++
+ plugins/component/AddBtn/addnetbtn.h               |  27 +++
+ plugins/component/addbtn.pri                       |   9 +
+ plugins/mobilehotspot/mobilehotspot.cpp            |   2 +-
+ plugins/mobilehotspot/mobilehotspot.pro            |   1 +
+ plugins/mobilehotspot/mobilehotspotwidget.cpp      |  58 +++---
+ plugins/mobilehotspot/mobilehotspotwidget.h        |  10 +-
+ plugins/netconnect/deviceframe.cpp                 |   2 +-
+ plugins/netconnect/deviceframe.h                   |   7 +-
+ plugins/netconnect/itemframe.cpp                   |   2 +-
+ plugins/netconnect/itemframe.h                     |   2 +-
+ plugins/netconnect/lanitem.cpp                     |   3 +-
+ plugins/netconnect/netconnect.cpp                  |  45 ++---
+ plugins/netconnect/netconnect.h                    |   7 +-
+ plugins/netconnect/netconnect.pro                  |   4 +-
+ plugins/wlanconnect/itemframe.cpp                  |   2 +
+ plugins/wlanconnect/itemframe.h                    |   4 +-
+ plugins/wlanconnect/translations/bo.ts             |  35 ++--
+ plugins/wlanconnect/translations/tr.ts             |  35 ++--
+ plugins/wlanconnect/translations/zh_CN.qm          | Bin 604 -> 664 bytes
+ plugins/wlanconnect/translations/zh_CN.ts          |  35 ++--
+ plugins/wlanconnect/wlanconnect.cpp                | 189 ++++++++++++++------
+ plugins/wlanconnect/wlanconnect.h                  |  14 +-
+ plugins/wlanconnect/wlanconnect.pro                |   2 +
+ plugins/wlanconnect/wlanitem.cpp                   |  23 ++-
+ .../dbus-interface/kylinnetworkdeviceresource.cpp  |  31 ++++
+ .../dbus-interface/kylinnetworkdeviceresource.h    |   1 +
+ src/backend/dbus-interface/kywirelessnetitem.cpp   |  20 +++
+ src/backend/dbus-interface/kywirelessnetitem.h     |   3 +-
+ src/backend/dbusadaptor.cpp                        |   7 +
+ src/backend/dbusadaptor.h                          |   2 +
+ src/frontend/list-items/lanlistitem.cpp            |   4 +-
+ src/frontend/list-items/listitem.cpp               |  13 +-
+ src/frontend/list-items/listitem.h                 |   2 +-
+ src/frontend/list-items/wlanlistitem.cpp           | 194 ++++++++++-----------
+ src/frontend/list-items/wlanlistitem.h             |  18 +-
+ src/frontend/mainwindow.cpp                        |  98 ++++++++---
+ src/frontend/mainwindow.h                          |   4 +
+ src/frontend/netdetails/detailpage.cpp             |   8 +-
+ src/frontend/netdetails/netdetail.cpp              | 116 ++++++------
+ src/frontend/netdetails/netdetail.h                |  18 +-
+ src/frontend/netdetails/securitypage.cpp           | 101 +----------
+ src/frontend/netdetails/securitypage.h             |  17 +-
+ src/frontend/tab-pages/lanpage.cpp                 | 106 +++++------
+ src/frontend/tab-pages/lanpage.h                   |   3 -
+ src/frontend/tab-pages/tabpage.cpp                 |  24 ++-
+ src/frontend/tab-pages/tabpage.h                   |  15 +-
+ src/frontend/tab-pages/wlanpage.cpp                | 128 +++++++-------
+ src/frontend/tab-pages/wlanpage.h                  |   1 -
+ src/main.cpp                                       |  10 +-
+ src/src.pro                                        |   2 +-
+ 51 files changed, 929 insertions(+), 621 deletions(-)
+ create mode 100644 plugins/component/AddBtn/addnetbtn.cpp
+ create mode 100644 plugins/component/AddBtn/addnetbtn.h
+ create mode 100644 plugins/component/addbtn.pri
+
+diff --git a/plugins/component/AddBtn/addnetbtn.cpp b/plugins/component/AddBtn/addnetbtn.cpp
+new file mode 100644
+index 0000000..dd02645
+--- /dev/null
++++ b/plugins/component/AddBtn/addnetbtn.cpp
+@@ -0,0 +1,86 @@
++#include "addnetbtn.h"
++#include <QEvent>
++#include <QHBoxLayout>
++#include <QLabel>
++#include <QVariant>
++#include <QPainter>
++#include <QPainterPath>
++
++#define RADIUS 6.0
++
++AddNetBtn::AddNetBtn(bool isWlan, QWidget *parent) : QPushButton(parent)
++{
++    this->setObjectName("this");
++    this->setMinimumSize(QSize(580, 60));
++    this->setMaximumSize(QSize(16777215, 60));
++    this->setProperty("useButtonPalette", true);
++    this->setFlat(true);
++    QHBoxLayout *addLyt = new QHBoxLayout;
++
++    QLabel *iconLabel = new QLabel();
++    QLabel *textLabel = new QLabel();
++
++    if (isWlan) {
++        textLabel->setText(tr("Add Others"));
++        addLyt->addSpacing(8);
++        addLyt->addWidget(textLabel);
++    } else {
++        textLabel->setText(tr("Add WiredNetork"));
++        QIcon mAddIcon = QIcon::fromTheme("list-add-symbolic");
++        iconLabel->setPixmap(mAddIcon.pixmap(mAddIcon.actualSize(QSize(24, 24))));
++        iconLabel->setProperty("useIconHighlightEffect", true);
++        iconLabel->setProperty("iconHighlightEffectMode", 1);
++
++        addLyt->addStretch();
++        addLyt->addWidget(iconLabel);
++        addLyt->addWidget(textLabel);
++    }
++
++    addLyt->addStretch();
++    this->setLayout(addLyt);
++
++}
++
++AddNetBtn::~AddNetBtn()
++{
++
++}
++
++void AddNetBtn::enterEvent(QEvent *event){
++    Q_EMIT enterWidget();
++
++    QPushButton::enterEvent(event);
++}
++
++void AddNetBtn::leaveEvent(QEvent *event){
++    Q_EMIT leaveWidget();
++
++    QPushButton::leaveEvent(event);
++}
++
++void AddNetBtn::paintEvent(QPaintEvent *event)
++{
++    QPalette pal = this->palette();
++
++    QPainter painter(this);
++    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
++    painter.setPen(Qt::NoPen);
++    painter.setBrush(pal.color(QPalette::Base));
++
++    QRect rect = this->rect();
++    QPainterPath path;
++
++    //设置起点
++    path.moveTo(rect.topLeft().x(), rect.topLeft().y());
++    path.lineTo(rect.bottomLeft().x(), rect.bottomLeft().y() - RADIUS);
++    //绘制圆角 圆弧以外切圆的270度位置为起点，逆时针画圆弧运行90度结束
++    path.arcTo(QRect(QPoint(rect.bottomLeft().x(), rect.bottomLeft().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 180, 90);
++    path.lineTo(rect.bottomRight().x()  - RADIUS, rect.bottomRight().y());
++    //画圆弧
++    path.arcTo(QRect(QPoint(rect.bottomRight().x() - (RADIUS * 2), rect.bottomRight().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 270, 90);
++    path.lineTo(rect.topRight());
++    path.lineTo(rect.topLeft());
++
++    painter.drawPath(path);
++    QPushButton::paintEvent(event);
++}
+diff --git a/plugins/component/AddBtn/addnetbtn.h b/plugins/component/AddBtn/addnetbtn.h
+new file mode 100644
+index 0000000..7b7c8d4
+--- /dev/null
++++ b/plugins/component/AddBtn/addnetbtn.h
+@@ -0,0 +1,27 @@
++#ifndef ADDNETBTN_H
++#define ADDNETBTN_H
++
++#include <QObject>
++#include <QWidget>
++#include <QPushButton>
++#include <QTranslator>
++#include <QApplication>
++
++class AddNetBtn : public QPushButton
++{
++    Q_OBJECT
++public:
++    AddNetBtn(bool isWlan, QWidget *parent = nullptr);
++    ~AddNetBtn();
++
++protected:
++    virtual void leaveEvent(QEvent * event);
++    virtual void enterEvent(QEvent * event);
++    void paintEvent(QPaintEvent *event);
++
++Q_SIGNALS:
++    void enterWidget();
++    void leaveWidget();
++};
++
++#endif // ADDNETBTN_H
+diff --git a/plugins/component/addbtn.pri b/plugins/component/addbtn.pri
+new file mode 100644
+index 0000000..c22c6e7
+--- /dev/null
++++ b/plugins/component/addbtn.pri
+@@ -0,0 +1,9 @@
++#LIBINTERFACE_NAME = $$qtLibraryTarget(addnetbtn)
++
++SOURCES += \
++    $$PWD/AddBtn/addnetbtn.cpp \
++
++HEADERS += \
++    $$PWD/AddBtn/addnetbtn.h \
++
++
+diff --git a/plugins/mobilehotspot/mobilehotspot.cpp b/plugins/mobilehotspot/mobilehotspot.cpp
+index 2a45622..46bd440 100644
+--- a/plugins/mobilehotspot/mobilehotspot.cpp
++++ b/plugins/mobilehotspot/mobilehotspot.cpp
+@@ -87,7 +87,7 @@ bool MobileHotspot::isShowOnHomePage() const
+ 
+ QIcon MobileHotspot::icon() const
+ {
+-    return QIcon();
++    return QIcon::fromTheme("ukui-hotspot-symbolic");
+ }
+ 
+ QString MobileHotspot::translationPath() const
+diff --git a/plugins/mobilehotspot/mobilehotspot.pro b/plugins/mobilehotspot/mobilehotspot.pro
+index a9fde8d..c4916f4 100644
+--- a/plugins/mobilehotspot/mobilehotspot.pro
++++ b/plugins/mobilehotspot/mobilehotspot.pro
+@@ -20,6 +20,7 @@ CONFIG += c++11 \
+           link_pkgconfig \
+ 
+ PKGCONFIG += gsettings-qt \
++             kysdk-qtwidgets \
+ 
+ #DEFINES += QT_DEPRECATED_WARNINGS
+ 
+diff --git a/plugins/mobilehotspot/mobilehotspotwidget.cpp b/plugins/mobilehotspot/mobilehotspotwidget.cpp
+index 9d4abdd..6d6162f 100644
+--- a/plugins/mobilehotspot/mobilehotspotwidget.cpp
++++ b/plugins/mobilehotspot/mobilehotspotwidget.cpp
+@@ -3,14 +3,14 @@
+ 
+ #define LABEL_RECT 17, 0, 105, 23
+ #define CONTENTS_MARGINS 0, 0, 0, 0
++#define ITEM_MARGINS 16, 0, 16, 0
+ #define FRAME_MIN_SIZE 550, 60
+ #define FRAME_MAX_SIZE 16777215, 16777215
+ #define CONTECT_FRAME_MAX_SIZE 16777215, 60
+-#define LABLE_MIN_WIDTH 140
++#define LABLE_MIN_WIDTH 188
+ #define COMBOBOX_MIN_WIDTH 200
+ #define LINE_MAX_SIZE 16777215, 1
+ #define LINE_MIN_SIZE 0, 1
+-#define LAYOUT_LEFT_MARGINS 8
+ #define ICON_SIZE   24,24
+ 
+ #define WIRELESS   1
+@@ -66,7 +66,7 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
+     initInterfaceInfo();
+     getApInfo();
+ 
+-    connect(m_switchBtn, &SwitchButton::checkedChanged, this, &MobileHotspotWidget::setUiEnabled);
++    connect(m_switchBtn, &KSwitchButton::stateChanged, this, &MobileHotspotWidget::setUiEnabled);
+     connect(m_interfaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=]() {
+         m_interfaceName = m_interfaceComboBox->currentText();
+         updateBandCombox();
+@@ -93,12 +93,12 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
+         return true;
+     }
+ 
+-    if (event->type() == QEvent::MouseButtonPress) {
++    if (event->type() == QEvent::MouseButtonRelease) {
+         if (watched == m_switchBtn) {
+             if (!m_interface->isValid()) {
+                 return true;
+             }
+-            if (m_switchBtn->getDisabledFlag()) {
++            if (!m_switchBtn->isCheckable()) {
+                 showDesktopNotify(tr("wirless switch is close or no wireless device"));
+                 return true;
+             }
+@@ -250,9 +250,9 @@ void MobileHotspotWidget::onGsettingChanged(const QString &key)
+ //                        }
+             m_switchBtn->setChecked(status);
+             m_uuid.clear();
+-            m_switchBtn->setDisabledFlag(true);
++            m_switchBtn->setCheckable(false);
+         } else {
+-            m_switchBtn->setDisabledFlag(false);
++            m_switchBtn->setCheckable(true);
+         }
+     }
+ }
+@@ -284,7 +284,7 @@ void MobileHotspotWidget::initInterfaceInfo()
+     if (devMap.isEmpty()) {
+         qDebug() << "no wireless device";
+         setWidgetHidden(true);
+-        m_switchBtn->setDisabledFlag(true);
++        m_switchBtn->setCheckable(false);
+     } else {
+         QMap<QString, bool>::Iterator iter = devMap.begin();
+         while (iter != devMap.end()) {
+@@ -366,8 +366,8 @@ void MobileHotspotWidget::setSwitchFrame()
+ 
+     m_switchLabel = new QLabel(tr("Open"), this);
+     m_switchLabel->setMinimumWidth(LABLE_MIN_WIDTH);
+-    m_switchBtn = new SwitchButton(this);
+-    switchLayout->addSpacing(LAYOUT_LEFT_MARGINS);
++    m_switchBtn = new KSwitchButton(this);
++    switchLayout->setContentsMargins(ITEM_MARGINS);
+     switchLayout->addWidget(m_switchLabel);
+     switchLayout->addStretch();
+     switchLayout->addWidget(m_switchBtn);
+@@ -390,7 +390,8 @@ void MobileHotspotWidget::setApNameFrame()
+     m_apNameLine = new QLineEdit(this);
+     m_apNameLine->setMinimumWidth(COMBOBOX_MIN_WIDTH);
+     m_apNameLine->setMaxLength(AP_NAME_MAX_LENGTH);
+-    apNameHLayout->addSpacing(LAYOUT_LEFT_MARGINS);
++    apNameHLayout->setContentsMargins(ITEM_MARGINS);
++    apNameHLayout->setSpacing(0);
+     apNameHLayout->addWidget(m_apNameLabel);
+     apNameHLayout->addWidget(m_apNameLine);
+     m_ApNameFrame->setLayout(apNameHLayout);
+@@ -409,30 +410,15 @@ void MobileHotspotWidget::setPasswordFrame()
+ 
+     m_pwdLabel = new QLabel(tr("Password"), this);
+     m_pwdLabel->setMinimumWidth(LABLE_MIN_WIDTH);
+-    m_pwdNameLine = new QLineEdit(this);
++    m_pwdNameLine = new KPasswordEdit(this);
++    m_pwdNameLine->setClearButtonEnabled(false);//禁用ClearBtn按钮X
+     m_pwdNameLine->setMinimumWidth(COMBOBOX_MIN_WIDTH);
+-    m_pwdNameLine->setEchoMode(QLineEdit::Password);
+-    passwordHLayout->addSpacing(LAYOUT_LEFT_MARGINS);
++    passwordHLayout->setContentsMargins(ITEM_MARGINS);
++    passwordHLayout->setSpacing(0);
+     passwordHLayout->addWidget(m_pwdLabel);
+     passwordHLayout->addWidget(m_pwdNameLine);
+ 
+     m_passwordFrame->setLayout(passwordHLayout);
+-
+-    m_pwdShowBox = new QPushButton(this);
+-    m_pwdShowBox->setFlat(true);
+-    m_pwdShowBox->setFixedSize(ICON_SIZE);
+-    m_pwdShowBox->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
+-    m_pwdShowBox->setCursor(Qt::PointingHandCursor);
+-    //防止文本框输入内容位于按钮之下
+-    QMargins margins = m_pwdNameLine->textMargins();
+-    m_pwdNameLine->setTextMargins(margins.left(), margins.top(), m_pwdShowBox->width() + 10, margins.bottom());
+-    QHBoxLayout *pSearchLayout = new QHBoxLayout();
+-    pSearchLayout->addStretch();
+-    pSearchLayout->addWidget(m_pwdShowBox);
+-    pSearchLayout->setSpacing(0);
+-    pSearchLayout->setContentsMargins(0, 0, 10, 0);
+-    m_pwdNameLine->setLayout(pSearchLayout);
+-    m_pwdNameLine->setEchoMode(QLineEdit::Password);
+ }
+ 
+ void MobileHotspotWidget::setFreqBandFrame()
+@@ -453,7 +439,8 @@ void MobileHotspotWidget::setFreqBandFrame()
+     m_freqBandComboBox->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+     m_freqBandComboBox->addItem("2.4Ghz");
+     m_freqBandComboBox->addItem("5Ghz");
+-    freqBandHLayout->addSpacing(LAYOUT_LEFT_MARGINS);
++    freqBandHLayout->setContentsMargins(ITEM_MARGINS);
++    freqBandHLayout->setSpacing(0);
+     freqBandHLayout->addWidget(m_freqBandLabel);
+     freqBandHLayout->addWidget(m_freqBandComboBox);
+ 
+@@ -476,7 +463,8 @@ void MobileHotspotWidget::setInterFaceFrame()
+     m_interfaceComboBox->setInsertPolicy(QComboBox::NoInsert);
+     m_interfaceComboBox->setMinimumWidth(COMBOBOX_MIN_WIDTH);
+     m_interfaceComboBox->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+-    interfaceHLayout->addSpacing(LAYOUT_LEFT_MARGINS);
++    interfaceHLayout->setContentsMargins(ITEM_MARGINS);
++    interfaceHLayout->setSpacing(0);
+     interfaceHLayout->addWidget(m_interfaceLabel);
+     interfaceHLayout->addWidget(m_interfaceComboBox);
+ 
+@@ -557,7 +545,7 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
+             m_apNameLine->setText(ssid);
+             m_interfaceComboBox->setCurrentIndex(index);
+             m_switchBtn->setChecked(true);
+-            m_switchBtn->setDisabledFlag(false);
++            m_switchBtn->setCheckable(true);
+             m_pwdNameLine->setText(info.at(0));
+             m_interfaceName = devName;
+             updateBandCombox();
+@@ -620,11 +608,11 @@ void MobileHotspotWidget::setWidgetHidden(bool isHidden)
+ 
+     if (isHidden) {
+         m_switchBtn->setChecked(false);
+-        m_switchBtn->setDisabledFlag(true);
++        m_switchBtn->setCheckable(false);
+         m_interfaceName = "";
+         m_uuid = "";
+     } else {
+-        m_switchBtn->setDisabledFlag(false);
++        m_switchBtn->setCheckable(true);
+         onGsettingChanged(WIRELESS_SWITCH);
+     }
+ 
+diff --git a/plugins/mobilehotspot/mobilehotspotwidget.h b/plugins/mobilehotspot/mobilehotspotwidget.h
+index cd21d00..b755b6b 100644
+--- a/plugins/mobilehotspot/mobilehotspotwidget.h
++++ b/plugins/mobilehotspot/mobilehotspotwidget.h
+@@ -19,8 +19,12 @@
+ #include <QDBusReply>
+ #include <QDBusMetaType>
+ 
+-#include "switchbutton.h"
+ #include "titlelabel.h"
++#include "kwidget.h"
++#include "kswitchbutton.h"
++#include "kpasswordedit.h"
++
++using namespace kdk;
+ 
+ class MobileHotspotWidget : public QWidget
+ {
+@@ -36,7 +40,7 @@ private:
+     QFrame *m_freqBandFrame = nullptr;        //频带
+     QFrame *m_interfaceFrame = nullptr;       //网卡
+ 
+-    SwitchButton *m_switchBtn;
++    KSwitchButton *m_switchBtn;
+ 
+     TitleLabel *m_hotspotTitleLabel;
+     QLabel *m_switchLabel;
+@@ -56,7 +60,7 @@ private:
+     QVBoxLayout *mVlayout;
+ 
+     QLineEdit *m_apNameLine;
+-    QLineEdit *m_pwdNameLine;
++    KPasswordEdit *m_pwdNameLine;
+ 
+     QComboBox *m_freqBandComboBox;
+     QComboBox *m_interfaceComboBox;
+diff --git a/plugins/netconnect/deviceframe.cpp b/plugins/netconnect/deviceframe.cpp
+index 0df1278..88f8fc0 100644
+--- a/plugins/netconnect/deviceframe.cpp
++++ b/plugins/netconnect/deviceframe.cpp
+@@ -16,7 +16,7 @@ DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
+ 
+     deviceLabel = new QLabel(this);
+     dropDownLabel = new DrownLabel(devName, this);
+-    deviceSwitch = new SwitchButton(this);
++    deviceSwitch = new KSwitchButton(this);
+ 
+     deviceLayout->addWidget(deviceLabel);
+     deviceLayout->addStretch();
+diff --git a/plugins/netconnect/deviceframe.h b/plugins/netconnect/deviceframe.h
+index 5834b62..2807f06 100644
+--- a/plugins/netconnect/deviceframe.h
++++ b/plugins/netconnect/deviceframe.h
+@@ -7,8 +7,11 @@
+ #include <QLabel>
+ #include <QTimer>
+ #include <QDebug>
+-#include "switchbutton.h"
+ #include "../component/DrownLabel/drownlabel.h"
++#include "kwidget.h"
++#include "kswitchbutton.h"
++
++using namespace kdk;
+ 
+ class DeviceFrame : public QFrame
+ {
+@@ -18,7 +21,7 @@ public:
+     ~DeviceFrame();
+ public:
+     QLabel * deviceLabel = nullptr;
+-    SwitchButton * deviceSwitch = nullptr;
++    KSwitchButton * deviceSwitch = nullptr;
+     DrownLabel *dropDownLabel = nullptr;
+ 
+ protected:
+diff --git a/plugins/netconnect/itemframe.cpp b/plugins/netconnect/itemframe.cpp
+index c144e80..9fbea20 100644
+--- a/plugins/netconnect/itemframe.cpp
++++ b/plugins/netconnect/itemframe.cpp
+@@ -15,7 +15,7 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
+     lanItemLayout = new QVBoxLayout(this);
+     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
+     lanItemLayout->setSpacing(1);
+-    addLanWidget = new AddNetBtn(this);
++    addLanWidget = new AddNetBtn(false, this);
+ 
+     deviceLanLayout->setSpacing(1);
+     setLayout(deviceLanLayout);
+diff --git a/plugins/netconnect/itemframe.h b/plugins/netconnect/itemframe.h
+index 20b2393..360b9e6 100644
+--- a/plugins/netconnect/itemframe.h
++++ b/plugins/netconnect/itemframe.h
+@@ -4,7 +4,7 @@
+ #include <QVBoxLayout>
+ #include "deviceframe.h"
+ #include <addbtn.h>
+-#include "addnetbtn.h"
++#include "../component/AddBtn/addnetbtn.h"
+ #include "lanitem.h"
+ 
+ class ItemFrame : public QFrame
+diff --git a/plugins/netconnect/lanitem.cpp b/plugins/netconnect/lanitem.cpp
+index 5d33d98..0fac38e 100644
+--- a/plugins/netconnect/lanitem.cpp
++++ b/plugins/netconnect/lanitem.cpp
+@@ -11,7 +11,8 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
+ {
+     this->setMinimumSize(550, 58);
+     this->setProperty("useButtonPalette", true);
+-    setStyleSheet("QPushButton:!checked{background-color: palette(base)}");
++    this->setFlat(true);
++//    setStyleSheet("QPushButton:!checked{background-color: palette(base)}");
+     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
+     mLanLyt->setContentsMargins(16,0,16,0);
+     mLanLyt->setSpacing(16);
+diff --git a/plugins/netconnect/netconnect.cpp b/plugins/netconnect/netconnect.cpp
+index b4c0c24..2341ccb 100644
+--- a/plugins/netconnect/netconnect.cpp
++++ b/plugins/netconnect/netconnect.cpp
+@@ -48,6 +48,7 @@ const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
+ #define TOP_MARGINS 0,8,0,0
+ #define MAIN_LAYOUT_MARGINS 0,0,0,8
+ #define SPACING 8
++#define ICON_SIZE 16,16
+ 
+ bool sortByVal(const QPair<QString, int> &l, const QPair<QString, int> &r) {
+     return (l.second < r.second);
+@@ -138,7 +139,7 @@ bool NetConnect::isShowOnHomePage() const
+ 
+ QIcon NetConnect::icon() const
+ {
+-    return QIcon();
++    return QIcon::fromTheme("network-wired-symbolic");
+ }
+ 
+ QString NetConnect::translationPath() const
+@@ -162,35 +163,35 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
+         if (w->findChild<QWidget*>())
+             w->findChild<QWidget*>()->setStyleSheet("QWidget{background: palette(base);border-radius:4px;}");
+     }
++    if (w == wiredSwitch) {
++        if (e->type() == QMouseEvent::MouseButtonRelease) {
++            if (!wiredSwitch->isCheckable()) {
++                showDesktopNotify(tr("No ethernet device avaliable"));
++            } else {
++                m_interface->call(QStringLiteral("setWiredSwitchEnable"), !wiredSwitch->isChecked());
++                return true;
++            }
++        }
++    }
++
+     return QObject::eventFilter(w,e);
+ }
+ 
+ void NetConnect::initComponent() {
+-    wiredSwitch = new SwitchButton(pluginWidget);
++    wiredSwitch = new KSwitchButton(pluginWidget);
+     ui->openWIifLayout->addWidget(wiredSwitch);
+     ui->detailLayOut->setContentsMargins(MAIN_LAYOUT_MARGINS);
+     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
+     ui->availableLayout->setSpacing(SPACING);
+     ui->horizontalLayout->setContentsMargins(TOP_MARGINS);
+ 
+-    connect(wiredSwitch, &SwitchButton::disabledClick, this, [=]() {
+-        showDesktopNotify(tr("No ethernet device avaliable"));
+-    });
++    wiredSwitch->installEventFilter(this);
+ 
+     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
+-        connect(wiredSwitch, &SwitchButton::checkedChanged, this, [=] (bool checked) {
+-            if (!m_interface->isValid()) {
+-                return;
+-            }
+-            if (wiredSwitch->getDisabledFlag()) {
+-                return;
+-            }
+-            qDebug() << "[NetConnect]call setWiredSwitchEnable" << checked << __LINE__;
+-            m_interface->call(QStringLiteral("setWiredSwitchEnable"),checked);
+-            qDebug() << "[NetConnect]call setWiredSwitchEnable Respond"  << __LINE__;
+-        });
++
+         setSwitchStatus();
++
+         connect(m_switchGsettings, &QGSettings::changed, this, [=] (const QString &key) {
+             if (key == WIRED_SWITCH) {
+                 setSwitchStatus();
+@@ -206,7 +207,7 @@ void NetConnect::initComponent() {
+     getDeviceStatusMap(deviceStatusMap);
+     if (deviceStatusMap.isEmpty()) {
+         qDebug() << "[Netconnect] no device exist when init, set switch disable";
+-        wiredSwitch->setDisabledFlag(true);
++        wiredSwitch->setCheckable(false);
+         wiredSwitch->setChecked(false);
+     }
+     initNet();
+@@ -431,7 +432,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
+ //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
+ //        lanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
+ //    }
+-    lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
++    lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
+     lanItem->titileLabel->setText(infoList.at(0));
+ 
+     lanItem->uuid = infoList.at(1);
+@@ -500,7 +501,7 @@ void NetConnect::addDeviceFrame(QString devName)
+     deviceFrameMap.insert(devName, itemFrame);
+     qDebug() << "[NetConnect]deviceFrameMap insert" << devName;
+ 
+-    connect(itemFrame->deviceFrame->deviceSwitch, &SwitchButton::checkedChanged, this, [=] (bool checked) {
++    connect(itemFrame->deviceFrame->deviceSwitch, &KSwitchButton::stateChanged, this, [=] (bool checked) {
+         qDebug() << "[NetConnect]call setDeviceEnable" << devName << checked << __LINE__;
+         m_interface->call(QStringLiteral("setDeviceEnable"), devName, checked);
+         qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
+@@ -592,10 +593,10 @@ void NetConnect::onDeviceStatusChanged()
+     }
+     deviceStatusMap = map;
+     if (deviceStatusMap.isEmpty()) {
+-        wiredSwitch->setDisabledFlag(true);
++        wiredSwitch->setCheckable(false);
+         wiredSwitch->setChecked(false);
+     } else {
+-        wiredSwitch->setDisabledFlag(false);
++        wiredSwitch->setCheckable(true);
+         setSwitchStatus();
+     }
+ 
+@@ -700,7 +701,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
+ //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
+ //        lanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
+ //    }
+-    lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
++    lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
+     lanItem->titileLabel->setText(connName);
+ 
+     lanItem->uuid = connUuid;
+diff --git a/plugins/netconnect/netconnect.h b/plugins/netconnect/netconnect.h
+index 2126c39..f991540 100644
+--- a/plugins/netconnect/netconnect.h
++++ b/plugins/netconnect/netconnect.h
+@@ -48,11 +48,14 @@
+ #include "interface.h"
+ #include "addbtn.h"
+ #include "fixlabel.h"
+-#include "switchbutton.h"
+ #include "hoverbtn.h"
+ #include "lanitem.h"
+ #include "deviceframe.h"
+ #include "itemframe.h"
++#include "kwidget.h"
++#include "kswitchbutton.h"
++
++using namespace kdk;
+ 
+ enum {
+     DISCONNECTED,
+@@ -131,7 +134,7 @@ private:
+     QWidget            *pluginWidget;
+ 
+     QDBusInterface     *m_interface = nullptr;
+-    SwitchButton       *wiredSwitch;
++    KSwitchButton       *wiredSwitch;
+ 
+     bool               mFirstLoad;
+     QGSettings         *m_switchGsettings;
+diff --git a/plugins/netconnect/netconnect.pro b/plugins/netconnect/netconnect.pro
+index c6245ad..539f2f9 100644
+--- a/plugins/netconnect/netconnect.pro
++++ b/plugins/netconnect/netconnect.pro
+@@ -3,6 +3,7 @@ TEMPLATE = lib
+ CONFIG += plugin
+ 
+ include(../component/drownlabel.pri)
++include(../component/addbtn.pri)
+ 
+ TARGET = $$qtLibraryTarget(netconnect)
+ DESTDIR = ../..
+@@ -22,11 +23,11 @@ CONFIG += c++11 \
+           link_pkgconfig \
+ 
+ PKGCONFIG += gsettings-qt \
++             kysdk-qtwidgets \
+ 
+ #DEFINES += QT_DEPRECATED_WARNINGS
+ 
+ SOURCES += \
+-    addnetbtn.cpp \
+     deviceframe.cpp \
+ #    drownlabel.cpp \
+     itemframe.cpp \
+@@ -34,7 +35,6 @@ SOURCES += \
+     netconnect.cpp
+ 
+ HEADERS += \
+-    addnetbtn.h \
+     deviceframe.h \
+ #    drownlabel.h \
+     itemframe.h \
+diff --git a/plugins/wlanconnect/itemframe.cpp b/plugins/wlanconnect/itemframe.cpp
+index 572de52..05112f2 100644
+--- a/plugins/wlanconnect/itemframe.cpp
++++ b/plugins/wlanconnect/itemframe.cpp
+@@ -14,6 +14,7 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent)
+     lanItemLayout = new QVBoxLayout(this);
+     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
+     lanItemLayout->setSpacing(1);
++    addWlanWidget = new AddNetBtn(true, this);
+ 
+     deviceLanLayout->setSpacing(1);
+     setLayout(deviceLanLayout);
+@@ -22,6 +23,7 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent)
+     deviceFrame = new DeviceFrame(devName, this);
+     deviceLanLayout->addWidget(deviceFrame);
+     deviceLanLayout->addWidget(lanItemFrame);
++    deviceLanLayout->addWidget(addWlanWidget);
+ 
+     //下拉按钮
+     connect(deviceFrame->dropDownLabel, &DrownLabel::labelClicked, this, &ItemFrame::onDrownLabelClicked);
+diff --git a/plugins/wlanconnect/itemframe.h b/plugins/wlanconnect/itemframe.h
+index 02e7887..4a98092 100644
+--- a/plugins/wlanconnect/itemframe.h
++++ b/plugins/wlanconnect/itemframe.h
+@@ -3,6 +3,7 @@
+ #include <QFrame>
+ #include <QVBoxLayout>
+ #include "deviceframe.h"
++#include "../component/AddBtn/addnetbtn.h"
+ #include "wlanitem.h"
+ 
+ class ItemFrame : public QFrame
+@@ -23,7 +24,8 @@ public:
+     QMap<QString, WlanItem *> itemMap;
+     //已激活uuid
+     QString uuid = "";
+-
++    //新建无线连接
++    AddNetBtn * addWlanWidget = nullptr;
+     void filletStyleChange();
+ 
+ private slots:
+diff --git a/plugins/wlanconnect/translations/bo.ts b/plugins/wlanconnect/translations/bo.ts
+index 5ffad5e..f8fab3a 100644
+--- a/plugins/wlanconnect/translations/bo.ts
++++ b/plugins/wlanconnect/translations/bo.ts
+@@ -1,58 +1,71 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <!DOCTYPE TS>
+ <TS version="2.1">
++<context>
++    <name>AddNetBtn</name>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="24"/>
++        <source>Add Others</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="27"/>
++        <source>Add WiredNetork</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
+ <context>
+     <name>WlanConnect</name>
+     <message>
+         <location filename="../wlanconnect.ui" line="14"/>
+-        <location filename="../wlanconnect.cpp" line="97"/>
++        <location filename="../wlanconnect.cpp" line="140"/>
+         <source>WlanConnect</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="35"/>
+-        <location filename="../wlanconnect.cpp" line="168"/>
++        <location filename="../wlanconnect.cpp" line="211"/>
+         <source>WLAN</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="94"/>
+-        <location filename="../wlanconnect.cpp" line="170"/>
++        <location filename="../wlanconnect.cpp" line="213"/>
+         <source>open</source>
+         <translation type="unfinished"></translation>
+         <extra-contents_path>/wlanconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="147"/>
+-        <location filename="../wlanconnect.cpp" line="167"/>
++        <location filename="../wlanconnect.cpp" line="210"/>
+         <source>Advanced settings</source>
+         <translation type="unfinished"></translation>
+         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="80"/>
++        <location filename="../wlanconnect.cpp" line="123"/>
+         <source>ukui control center</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="83"/>
++        <location filename="../wlanconnect.cpp" line="126"/>
+         <source>ukui control center desktop message</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="192"/>
++        <location filename="../wlanconnect.cpp" line="228"/>
+         <source>No wireless network card detected</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="330"/>
+-        <location filename="../wlanconnect.cpp" line="933"/>
+-        <location filename="../wlanconnect.cpp" line="995"/>
++        <location filename="../wlanconnect.cpp" line="374"/>
++        <location filename="../wlanconnect.cpp" line="1022"/>
++        <location filename="../wlanconnect.cpp" line="1084"/>
+         <source>connected</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="879"/>
++        <location filename="../wlanconnect.cpp" line="959"/>
+         <source>card</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff --git a/plugins/wlanconnect/translations/tr.ts b/plugins/wlanconnect/translations/tr.ts
+index 5ffad5e..f8fab3a 100644
+--- a/plugins/wlanconnect/translations/tr.ts
++++ b/plugins/wlanconnect/translations/tr.ts
+@@ -1,58 +1,71 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <!DOCTYPE TS>
+ <TS version="2.1">
++<context>
++    <name>AddNetBtn</name>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="24"/>
++        <source>Add Others</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="27"/>
++        <source>Add WiredNetork</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
+ <context>
+     <name>WlanConnect</name>
+     <message>
+         <location filename="../wlanconnect.ui" line="14"/>
+-        <location filename="../wlanconnect.cpp" line="97"/>
++        <location filename="../wlanconnect.cpp" line="140"/>
+         <source>WlanConnect</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="35"/>
+-        <location filename="../wlanconnect.cpp" line="168"/>
++        <location filename="../wlanconnect.cpp" line="211"/>
+         <source>WLAN</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="94"/>
+-        <location filename="../wlanconnect.cpp" line="170"/>
++        <location filename="../wlanconnect.cpp" line="213"/>
+         <source>open</source>
+         <translation type="unfinished"></translation>
+         <extra-contents_path>/wlanconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="147"/>
+-        <location filename="../wlanconnect.cpp" line="167"/>
++        <location filename="../wlanconnect.cpp" line="210"/>
+         <source>Advanced settings</source>
+         <translation type="unfinished"></translation>
+         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="80"/>
++        <location filename="../wlanconnect.cpp" line="123"/>
+         <source>ukui control center</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="83"/>
++        <location filename="../wlanconnect.cpp" line="126"/>
+         <source>ukui control center desktop message</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="192"/>
++        <location filename="../wlanconnect.cpp" line="228"/>
+         <source>No wireless network card detected</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="330"/>
+-        <location filename="../wlanconnect.cpp" line="933"/>
+-        <location filename="../wlanconnect.cpp" line="995"/>
++        <location filename="../wlanconnect.cpp" line="374"/>
++        <location filename="../wlanconnect.cpp" line="1022"/>
++        <location filename="../wlanconnect.cpp" line="1084"/>
+         <source>connected</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="879"/>
++        <location filename="../wlanconnect.cpp" line="959"/>
+         <source>card</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff --git a/plugins/wlanconnect/translations/zh_CN.qm b/plugins/wlanconnect/translations/zh_CN.qm
+index 7d9a021..79c6584 100644
+--- a/plugins/wlanconnect/translations/zh_CN.qm
++++ b/plugins/wlanconnect/translations/zh_CN.qm
+@@ -1,4 +1,5 @@
+-<�d��!�`���B   H �^   � ��   � f�  D9s  �K��  ���   9f?�    
+-c�   ���  li  �   ��~���n       Advanced settings   WlanConnect   g*h�mKR0e�~�QSa       !No wireless network card detected   WlanConnect   
++<�d��!�`���B   P �^   � ��  ! f�  x9s  �K��  In��    ���   mf?�   4
++c�   ���  �i  .   R�QeQv[�Q~�       
++Add Others   	AddNetBtn   ��~���n       Advanced settings   WlanConnect   g*h�mKR0e�~�QSa       !No wireless network card detected   WlanConnect   
+ e�~�\@W�Q       WLAN   WlanConnect   
+ e�~�\@W�Q       WlanConnect   WlanConnect   QSa       card   WlanConnect   ]��c�       	connected   WlanConnect   _ T/       open   WlanConnect   c�R6�bg       ukui control center   WlanConnect   c�R6�bghL�b�w�       #ukui control center desktop message   WlanConnect
+\ No newline at end of file
+diff --git a/plugins/wlanconnect/translations/zh_CN.ts b/plugins/wlanconnect/translations/zh_CN.ts
+index a96e660..a62ddac 100644
+--- a/plugins/wlanconnect/translations/zh_CN.ts
++++ b/plugins/wlanconnect/translations/zh_CN.ts
+@@ -1,58 +1,71 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <!DOCTYPE TS>
+ <TS version="2.1" language="zh_CN">
++<context>
++    <name>AddNetBtn</name>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="24"/>
++        <source>Add Others</source>
++        <translation>加入其它网络</translation>
++    </message>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="27"/>
++        <source>Add WiredNetork</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
+ <context>
+     <name>WlanConnect</name>
+     <message>
+         <location filename="../wlanconnect.ui" line="14"/>
+-        <location filename="../wlanconnect.cpp" line="97"/>
++        <location filename="../wlanconnect.cpp" line="140"/>
+         <source>WlanConnect</source>
+         <translation>无线局域网</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="35"/>
+-        <location filename="../wlanconnect.cpp" line="168"/>
++        <location filename="../wlanconnect.cpp" line="211"/>
+         <source>WLAN</source>
+         <translation>无线局域网</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="94"/>
+-        <location filename="../wlanconnect.cpp" line="170"/>
++        <location filename="../wlanconnect.cpp" line="213"/>
+         <source>open</source>
+         <translation>开启</translation>
+         <extra-contents_path>/wlanconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="147"/>
+-        <location filename="../wlanconnect.cpp" line="167"/>
++        <location filename="../wlanconnect.cpp" line="210"/>
+         <source>Advanced settings</source>
+         <translation>高级设置</translation>
+         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="80"/>
++        <location filename="../wlanconnect.cpp" line="123"/>
+         <source>ukui control center</source>
+         <translation>控制面板</translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="83"/>
++        <location filename="../wlanconnect.cpp" line="126"/>
+         <source>ukui control center desktop message</source>
+         <translation>控制面板桌面通知</translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="192"/>
++        <location filename="../wlanconnect.cpp" line="228"/>
+         <source>No wireless network card detected</source>
+         <translation>未检测到无线网卡</translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="330"/>
+-        <location filename="../wlanconnect.cpp" line="933"/>
+-        <location filename="../wlanconnect.cpp" line="995"/>
++        <location filename="../wlanconnect.cpp" line="374"/>
++        <location filename="../wlanconnect.cpp" line="1022"/>
++        <location filename="../wlanconnect.cpp" line="1084"/>
+         <source>connected</source>
+         <translation>已连接</translation>
+     </message>
+     <message>
+-        <location filename="../wlanconnect.cpp" line="879"/>
++        <location filename="../wlanconnect.cpp" line="959"/>
+         <source>card</source>
+         <translation>网卡</translation>
+     </message>
+diff --git a/plugins/wlanconnect/wlanconnect.cpp b/plugins/wlanconnect/wlanconnect.cpp
+index 7c41517..67cc3a8 100644
+--- a/plugins/wlanconnect/wlanconnect.cpp
++++ b/plugins/wlanconnect/wlanconnect.cpp
+@@ -35,6 +35,19 @@
+ 
+ #define SPACING 8
+ 
++#define EXCELLENT_SIGNAL 80
++#define GOOD_SIGNAL 55
++#define OK_SIGNAL 30
++#define LOW_SIGNAL 5
++#define NONE_SIGNAL 0
++
++#define SIGNAL_EXCELLENT 1
++#define SIGNAL_GOOD      2
++#define SIGNAL_OK        3
++#define SIGNAL_LOW       4
++#define SIGNAL_NONE      5
++#define ICON_SIZE 16,16
++
+ const QString WIRELESS_SWITCH = "wirelessswitch";
+ const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
+ 
+@@ -49,6 +62,36 @@ const QString KWifiLockLow      = "network-wireless-secure-signal-low";
+ const QString KWifiNone         = "network-wireless-signal-none";
+ const QString KWifiLockNone     = "network-wireless-secure-signal-none";
+ 
++const QString KWifi6Symbolic        = "ukui-wifi6-full-symbolic";
++const QString KWifi6PlusSymbolic    = "ukui-wifi6+-full-symbolic";
++
++const QString KWifi6LockSymbolic    = "ukui-wifi6-full-pwd-symbolic";
++const QString KWifi6PlusLockSymbolic= "ukui-wifi6+-full-pwd-symbolic";
++
++const QString KWifi6Good            = "ukui-wifi6-high-symbolic";
++const QString KWifi6PlusGood        = "ukui-wifi6+-high-symbolic";
++
++const QString KWifi6LockGood        = "ukui-wifi6-high-pwd-symbolic";
++const QString KWifi6PlusLockGood    = "ukui-wifi6+-high-pwd-symbolic";
++
++const QString KWifi6OK              = "ukui-wifi6-medium-symbolic";
++const QString KWifi6PlusOK          = "ukui-wifi6-high+-medium-symbolic";
++
++const QString KWifi6LockOK          = "ukui-wifi6-medium-pwd-symbolic";
++const QString KWifi6PlusLockOK      = "ukui-wifi6+-medium-pwd-symbolic";
++
++const QString KWifi6Low             = "ukui-wifi6-low-symbolic";
++const QString KWifi6PlusLow         = "ukui-wifi6+-low-symbolic";
++
++const QString KWifi6LockLow         = "ukui-wifi6-low-pwd-symbolic";
++const QString KWifi6PlusLockLow     = "ukui-wifi6+-low-pwd-symbolic";
++
++const QString KWifi6None            = "ukui-wifi6-none-symbolic";
++const QString KWifi6PlusNone        = "ukui-wifi6+-none-symbolic";
++
++const QString KWifi6LockNone        = "ukui-wifi6-none-pwd-symbolic";
++const QString KWifi6PlusLockNone    = "ukui-wifi6+-none-pwd-symbolic";
++
+ const QString KLanSymbolic      = ":/img/plugins/netconnect/eth.svg";
+ const QString NoNetSymbolic     = ":/img/plugins/netconnect/nonet.svg";
+ 
+@@ -154,7 +197,7 @@ bool WlanConnect::isShowOnHomePage() const
+ 
+ QIcon WlanConnect::icon() const
+ {
+-    return QIcon();
++    return QIcon::fromTheme("network-wireless-signal-excellent-symbolic");
+ }
+ 
+ QString WlanConnect::translationPath() const
+@@ -178,35 +221,36 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
+         if (w->findChild<QWidget*>())
+             w->findChild<QWidget*>()->setStyleSheet("QWidget{background: palette(base);border-radius:4px;}");
+     }
++
++    if (w == m_wifiSwitch) {
++        if (e->type() == QMouseEvent::MouseButtonRelease) {
++            if (!m_wifiSwitch->isCheckable()) {
++                showDesktopNotify(tr("No wireless network card detected"));
++            } else {
++                m_interface->call(QStringLiteral("setWirelessSwitchEnable"), !m_wifiSwitch->isChecked());
++                return true;
++            }
++        }
++    }
++
+     return QObject::eventFilter(w,e);
+ }
+ 
+ void WlanConnect::initComponent() {
+-    m_wifiSwitch = new SwitchButton(pluginWidget);
++    m_wifiSwitch = new KSwitchButton(pluginWidget);
+     ui->openWIifLayout->addWidget(m_wifiSwitch);
+     ui->detailLayOut_3->setContentsMargins(MAIN_LAYOUT_MARGINS);
+     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
+     ui->availableLayout->setSpacing(SPACING);
+ 
+-    connect(m_wifiSwitch, &SwitchButton::disabledClick, this, [=]() {
+-        showDesktopNotify(tr("No wireless network card detected"));
+-    });
++    m_wifiSwitch->installEventFilter(this);
+ 
+     //开关
+     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
+-        connect(m_wifiSwitch, &SwitchButton::checkedChanged, this, [=] (bool checked) {
+-            if (!m_interface->isValid()) {
+-                return;
+-            }
+-            if (m_wifiSwitch->getDisabledFlag()) {
+-                return;
+-            }
+-            qDebug() << "[WlanConnect]call setWirelessSwitchEnable " << checked << __LINE__;
+-            m_interface->call(QStringLiteral("setWirelessSwitchEnable"),checked);
+-            qDebug() << "[WlanConnect]call setWirelessSwitchEnable respond" << __LINE__;
+-        });
++
+         setSwitchStatus();
++
+         connect(m_switchGsettings, &QGSettings::changed, this, [=] (const QString &key) {
+             if (key == WIRELESS_SWITCH) {
+                 setSwitchStatus();
+@@ -223,7 +267,7 @@ void WlanConnect::initComponent() {
+     getDeviceList(deviceList);
+     if (deviceList.isEmpty()) {
+         qDebug() << "[WlanConnect]no device exist when init, set switch disable";
+-        m_wifiSwitch->setDisabledFlag(true);
++        m_wifiSwitch->setCheckable(false);
+         m_wifiSwitch->setChecked(false);
+     }
+     initNet();
+@@ -328,7 +372,9 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
+             frame->itemMap[list.at(0).at(0)]->uuid = list.at(0).at(3);
+             frame->uuid = list.at(0).at(3);
+             frame->itemMap[list.at(0).at(0)]->statusLabel->setText(tr("connected"));
+-            updateIcon(frame->itemMap[list.at(0).at(0)], list.at(0).at(1), list.at(0).at(2), list.at(0).at(4));
++            if (list.at(0).size() > 5) {
++                updateIcon(frame->itemMap[list.at(0).at(0)], list.at(0).at(1), list.at(0).at(2), list.at(0).at(4), list.at(0).at(5).toInt());
++            }
+             frameIndex ++;
+         }
+     } else {
+@@ -362,7 +408,9 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
+                 frame->itemMap[list.at(listIndex).at(0)]->uuid.clear();
+                 frame->itemMap[list.at(listIndex).at(0)]->statusLabel->setText("");
+             }
+-            updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2), list.at(listIndex).at(3));
++            if (list.at(listIndex).size() > 4) {
++                updateIcon(frame->itemMap[list.at(listIndex).at(0)], list.at(listIndex).at(1), list.at(listIndex).at(2), list.at(listIndex).at(3), list.at(listIndex).at(4).toInt());
++            }
+             frameIndex++;
+         } else {
+             qDebug() << "not find " << list.at(listIndex).at(0) << " in current list, ignore";
+@@ -371,7 +419,7 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
+     qDebug() << "resort finish";
+ }
+ 
+-void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection)
++void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection, int category)
+ {
+     qDebug() << "updateIcon" << item->titileLabel->text();
+ 
+@@ -387,13 +435,13 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
+     if (isApConnection == IsApConnection) {
+         iconamePath = KApSymbolic;
+     } else {
+-        iconamePath = wifiIcon(isLock, sign);
++        iconamePath = wifiIcon(isLock, sign, category);
+     }
+     QIcon searchIcon = QIcon::fromTheme(iconamePath);
+     if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
+         item->iconLabel->setProperty("useIconHighlightEffect", 0x10);
+     }
+-    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
++    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
+     qDebug() << "updateIcon" << item->titileLabel->text() << " finish";
+ }
+ 
+@@ -477,10 +525,10 @@ void WlanConnect::onDeviceStatusChanged()
+     }
+     deviceList = list;
+     if (deviceList.isEmpty()) {
+-        m_wifiSwitch->setDisabledFlag(true);
++        m_wifiSwitch->setCheckable(false);
+         m_wifiSwitch->setChecked(false);
+     } else {
+-        m_wifiSwitch->setDisabledFlag(false);
++        m_wifiSwitch->setCheckable(true);
+         setSwitchStatus();
+     }
+ }
+@@ -597,7 +645,7 @@ void WlanConnect::onNetworkAdd(QString deviceName, QStringList wlanInfo)
+     QMap<QString, ItemFrame *>::iterator iter;
+     for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
+         if (deviceName == iter.key()) {
+-            addOneWlanFrame(iter.value(), deviceName, wlanInfo.at(0), wlanInfo.at(1), "", isLock, false, WIRELESS_TYPE, wlanInfo.at(3));
++            addOneWlanFrame(iter.value(), deviceName, wlanInfo.at(0), wlanInfo.at(1), "", isLock, false, WIRELESS_TYPE, wlanInfo.at(3), wlanInfo.at(3).toInt());
+         }
+     }
+ 
+@@ -735,21 +783,53 @@ void WlanConnect::runExternalApp() {
+ }
+ 
+ //根据信号强度分级+安全性分图标
+-QString WlanConnect::wifiIcon(bool isLock, int strength) {
+-    switch (strength) {
+-    case 1:
+-        return isLock ? KWifiLockSymbolic : KWifiSymbolic;
+-    case 2:
+-        return isLock ? KWifiLockGood : KWifiGood;
+-    case 3:
+-        return isLock ? KWifiLockOK : KWifiOK;
+-    case 4:
+-        return isLock ? KWifiLockLow : KWifiLow;
+-    case 5:
+-        return isLock ? KWifiLockNone : KWifiNone;
+-    default:
+-        return "";
+-    }
++QString WlanConnect::wifiIcon(bool isLock, int strength, int category) {
++    if (category == 0) {
++        switch (strength) {
++        case SIGNAL_EXCELLENT:
++            return isLock ? KWifiLockSymbolic : KWifiSymbolic;
++        case SIGNAL_GOOD:
++            return isLock ? KWifiLockGood : KWifiGood;
++        case SIGNAL_OK:
++            return isLock ? KWifiLockOK : KWifiOK;
++        case SIGNAL_LOW:
++            return isLock ? KWifiLockLow : KWifiLow;
++        case SIGNAL_NONE:
++            return isLock ? KWifiLockNone : KWifiNone;
++        default:
++            return "";
++        }
++    } else if (category == 1) {
++        switch (strength) {
++        case SIGNAL_EXCELLENT:
++            return isLock ? KWifi6LockSymbolic : KWifi6Symbolic;
++        case SIGNAL_GOOD:
++            return isLock ? KWifi6LockGood : KWifi6Good;
++        case SIGNAL_OK:
++            return isLock ? KWifi6LockOK : KWifi6OK;
++        case SIGNAL_LOW:
++            return isLock ? KWifi6LockLow : KWifi6Low;
++        case SIGNAL_NONE:
++            return isLock ? KWifi6LockNone : KWifi6None;
++        default:
++            return "";
++        }
++    } else {
++            switch (strength) {
++            case SIGNAL_EXCELLENT:
++                return isLock ? KWifi6PlusLockSymbolic : KWifi6PlusSymbolic;
++            case SIGNAL_GOOD:
++                return isLock ? KWifi6PlusLockGood : KWifi6PlusGood;
++            case SIGNAL_OK:
++                return isLock ? KWifi6PlusLockOK : KWifi6PlusOK;
++            case SIGNAL_LOW:
++                return isLock ? KWifi6PlusLockLow : KWifi6PlusLow;
++            case SIGNAL_NONE:
++                return isLock ? KWifi6PlusLockNone : KWifi6PlusNone;
++            default:
++                return "";
++            }
++        }
+ }
+ 
+ //根据信号强度分级
+@@ -757,15 +837,15 @@ int WlanConnect::setSignal(QString lv) {
+     int signal = lv.toInt();
+     int signalLv = 0;
+ 
+-    if (signal > 75) {
++    if (signal > EXCELLENT_SIGNAL) {
+         signalLv = 1;
+-    } else if (signal > 55 && signal <= 75) {
++    } else if (signal > GOOD_SIGNAL) {
+         signalLv = 2;
+-    } else if (signal > 35 && signal <= 55) {
++    } else if (signal > OK_SIGNAL) {
+         signalLv = 3;
+-    } else if (signal > 15 && signal  <= 35) {
++    } else if (signal > LOW_SIGNAL) {
+         signalLv = 4;
+-    } else if (signal <= 15) {
++    } else {
+         signalLv = 5;
+     }
+     return signalLv;
+@@ -852,7 +932,7 @@ void WlanConnect::addActiveItem(ItemFrame *frame, QString devName, QStringList i
+     } else {
+         isLock = true;
+     }
+-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), infoList.at(3), isLock, true, WIRELESS_TYPE, infoList.at(4));
++    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), infoList.at(3), isLock, true, WIRELESS_TYPE, infoList.at(4), infoList.at(5).toInt());
+ }
+ 
+ //处理列表 未连接
+@@ -867,7 +947,7 @@ void WlanConnect::addCustomItem(ItemFrame *frame, QString devName, QStringList i
+     } else {
+         isLock = true;
+     }
+-    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3));
++    addOneWlanFrame(frame, devName, infoList.at(0), infoList.at(1), "", isLock, false, WIRELESS_TYPE, infoList.at(3), infoList.at(4).toInt());
+ }
+ 
+ //增加设备
+@@ -878,6 +958,15 @@ void WlanConnect::addDeviceFrame(QString devName)
+     ui->availableLayout->addWidget(itemFrame);
+     itemFrame->deviceFrame->deviceLabel->setText(tr("card")+/*QString("%1").arg(count)+*/"："+devName);
+     deviceFrameMap.insert(devName, itemFrame);
++
++    connect(itemFrame->addWlanWidget, &AddNetBtn::clicked, this, [=](){
++        if (m_interface->isValid()) {
++            qDebug() << "[NetConnect]call showAddOtherWlanWidget" << devName  << __LINE__;
++            m_interface->call(QStringLiteral("showAddOtherWlanWidget"), devName);
++            qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
++        }
++    });
++
+ }
+ 
+ //减少设备
+@@ -902,7 +991,7 @@ void WlanConnect::removeDeviceFrame(QString devName)
+ }
+ 
+ //增加ap
+-void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection)
++void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category)
+ {
+     if (nullptr == frame) {
+         return;
+@@ -921,13 +1010,13 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString
+     if (bApConnection) {
+         iconamePath = KApSymbolic;
+     } else {
+-        iconamePath = wifiIcon(isLock, sign);
++        iconamePath = wifiIcon(isLock, sign, category);
+     }
+     if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
+         wlanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
+     }
+     QIcon searchIcon = QIcon::fromTheme(iconamePath);
+-    wlanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
++    wlanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
+     wlanItem->titileLabel->setText(name);
+     if (status) {
+         wlanItem->statusLabel->setText(tr("connected"));
+diff --git a/plugins/wlanconnect/wlanconnect.h b/plugins/wlanconnect/wlanconnect.h
+index 12550bb..0a7800d 100644
+--- a/plugins/wlanconnect/wlanconnect.h
++++ b/plugins/wlanconnect/wlanconnect.h
+@@ -42,10 +42,14 @@
+ #include <QDBusReply>
+ 
+ #include <interface.h>
+-#include "switchbutton.h"
+ #include "hoverbtn.h"
+ #include "itemframe.h"
+ #include "wlanitem.h"
++#include "kwidget.h"
++#include "kswitchbutton.h"
++
++using namespace kdk;
++
+ namespace Ui {
+ class WlanConnect;
+ }
+@@ -84,13 +88,13 @@ private:
+ 
+ 
+     int  sortWlanNet(QString deviceName, QString name, QString signal);
+-    void updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection);
++    void updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection, int category);
+     void resortWifiList(ItemFrame *frame, QVector<QStringList> list);
+ 
+ 
+     //单wifi图标
+     int  setSignal(QString lv);
+-    QString wifiIcon(bool isLock, int strength);
++    QString wifiIcon(bool isLock, int strength, int category);
+ 
+ 
+     //开关相关
+@@ -113,7 +117,7 @@ private:
+     //减少设备
+     void removeDeviceFrame(QString devName);
+     //增加ap
+-    void addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection);
++    void addOneWlanFrame(ItemFrame *frame, QString deviceName, QString name, QString signal, QString uuid, bool isLock, bool status, int type, QString isApConnection, int category);
+     //减少ap
+     void removeOneWlanFrame(ItemFrame *frame, QString deviceName, QString ssid);
+ 
+@@ -145,7 +149,7 @@ private:
+     QTimer * m_scanTimer = nullptr;
+ //    QTimer * m_updateTimer = nullptr;
+ private:
+-    SwitchButton       *m_wifiSwitch;
++    KSwitchButton      *m_wifiSwitch;
+     bool               m_firstLoad;
+ 
+ private slots:
+diff --git a/plugins/wlanconnect/wlanconnect.pro b/plugins/wlanconnect/wlanconnect.pro
+index 86fef53..f6da053 100644
+--- a/plugins/wlanconnect/wlanconnect.pro
++++ b/plugins/wlanconnect/wlanconnect.pro
+@@ -3,6 +3,7 @@ TEMPLATE = lib
+ CONFIG += plugin
+ 
+ include(../component/drownlabel.pri)
++include(../component/addbtn.pri)
+ 
+ TARGET = $$qtLibraryTarget(wlanconnect)
+ DESTDIR = ../..
+@@ -22,6 +23,7 @@ CONFIG += c++11 \
+           link_pkgconfig \
+ 
+ PKGCONFIG += gsettings-qt \
++             kysdk-qtwidgets \
+ 
+ #DEFINES += QT_DEPRECATED_WARNINGS
+ 
+diff --git a/plugins/wlanconnect/wlanitem.cpp b/plugins/wlanconnect/wlanitem.cpp
+index d380610..5e07643 100644
+--- a/plugins/wlanconnect/wlanitem.cpp
++++ b/plugins/wlanconnect/wlanitem.cpp
+@@ -14,7 +14,7 @@ WlanItem::WlanItem(bool bAcitve, bool isLock, QWidget *parent)
+ {
+     this->setMinimumSize(550, 58);
+     this->setProperty("useButtonPalette", true);
+-    setStyleSheet("QPushButton:!checked{background-color: palette(base)}");
++    this->setFlat(true);
+     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
+     mLanLyt->setContentsMargins(16,0,16,0);
+     mLanLyt->setSpacing(16);
+@@ -78,14 +78,29 @@ void WlanItem::paintEvent(QPaintEvent *event)
+     painter.setBrush(pal.color(QPalette::Base));
+ 
+     QRect rect = this->rect();
++
++#if 0
+     if (!useHalfFillet) {
+         painter.drawRect(rect);
+     } else {
+         QPainterPath path;
+-        path.addRoundedRect (rect, RADIUS, RADIUS);
+-        QRect temp_rect(rect.left(), rect.top(), rect.width(), rect.height()/2);
+-        path.addRect(temp_rect);
++//        path.addRoundedRect (rect, RADIUS, RADIUS);
++//        QRect temp_rect(rect.left(), rect.top(), rect.width(), rect.height()/2);
++//        path.addRect(temp_rect);
++        //设置起点
++        path.moveTo(rect.topLeft().x(), rect.topLeft().y());
++        path.lineTo(rect.bottomLeft().x(), rect.bottomLeft().y() - RADIUS);
++        //绘制圆角 圆弧以外切圆的270度位置为起点，逆时针画圆弧运行90度结束
++        path.arcTo(QRect(QPoint(rect.bottomLeft().x(), rect.bottomLeft().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 180, 90);
++        path.lineTo(rect.bottomRight().x()  - RADIUS, rect.bottomRight().y());
++        //画圆弧
++        path.arcTo(QRect(QPoint(rect.bottomRight().x() - (RADIUS * 2), rect.bottomRight().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 270, 90);
++        path.lineTo(rect.topRight());
++        path.lineTo(rect.topLeft());
+         painter.drawPath(path);
+     }
++#endif
++
++    painter.drawRect(rect);
+     QPushButton::paintEvent(event);
+ }
+diff --git a/src/backend/dbus-interface/kylinnetworkdeviceresource.cpp b/src/backend/dbus-interface/kylinnetworkdeviceresource.cpp
+index d6d3ebd..f534fb4 100644
+--- a/src/backend/dbus-interface/kylinnetworkdeviceresource.cpp
++++ b/src/backend/dbus-interface/kylinnetworkdeviceresource.cpp
+@@ -186,6 +186,37 @@ void KyNetworkDeviceResourse::setDeviceRefreshRate(QString deviceName, int ms)
+     return;
+ }
+ 
++bool KyNetworkDeviceResourse::getActiveConnectionInfo(const QString devName, int &signalStrength, QString &uni, QString &secuType)
++{
++    signalStrength = 0;
++    uni = "";
++    NetworkManager::Device::Ptr connectDevice =
++                        m_networkResourceInstance->getNetworkDevice(devName);
++
++    if (nullptr == connectDevice || !connectDevice->isValid()) {
++        qWarning()<< LOG_FLAG <<"getDeviceActiveAPInfo failed, the device" << devName << "is not existed";
++        return false;
++    }
++
++    if (connectDevice->type() == NetworkManager::Device::Wifi) {
++        NetworkManager::WirelessDevice *wirelessDevicePtr =
++            qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
++        NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();
++        if (apPtr.isNull()) {
++            return false;
++        }
++        signalStrength = apPtr->signalStrength();
++        uni = apPtr->uni();
++        NetworkManager::AccessPoint::Capabilities cap = apPtr->capabilities();
++        NetworkManager::AccessPoint::WpaFlags wpaFlag = apPtr->wpaFlags();
++        NetworkManager::AccessPoint::WpaFlags rsnFlag = apPtr->rsnFlags();
++        secuType = enumToQstring(cap, wpaFlag, rsnFlag);
++        return true;
++    } else {
++        return false;
++    }
++}
++
+ void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QString &strMac, uint &iHz, uint &iChan, QString &secuType)
+ {
+     strMac.clear();
+diff --git a/src/backend/dbus-interface/kylinnetworkdeviceresource.h b/src/backend/dbus-interface/kylinnetworkdeviceresource.h
+index e3283c6..638b00e 100644
+--- a/src/backend/dbus-interface/kylinnetworkdeviceresource.h
++++ b/src/backend/dbus-interface/kylinnetworkdeviceresource.h
+@@ -37,6 +37,7 @@ public:
+     void getDeviceActiveAPInfo(const QString devName, QString &strMac, uint &iHz, uint &iChan, QString &secuType);
+     int getWirelessDeviceCapability(const QString deviceName);
+     NetworkManager::Device::State getDeviceState(QString deviceName);
++    bool getActiveConnectionInfo(const QString devName, int &signalStrength, QString &uni, QString &secuType);
+ 
+     bool wiredDeviceIsCarriered(QString deviceName);
+     bool wirelessDeviceIsExist(const QString devName);
+diff --git a/src/backend/dbus-interface/kywirelessnetitem.cpp b/src/backend/dbus-interface/kywirelessnetitem.cpp
+index a1d4606..78ef649 100644
+--- a/src/backend/dbus-interface/kywirelessnetitem.cpp
++++ b/src/backend/dbus-interface/kywirelessnetitem.cpp
+@@ -79,6 +79,7 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
+     }
+     m_bssid = net->referenceAccessPoint()->hardwareAddress();
+     m_device = net->device();
++    m_uni = net->referenceAccessPoint()->uni();
+     initInfoBySsid();
+ }
+ 
+@@ -112,3 +113,22 @@ void KyWirelessNetItem::initInfoBySsid()
+ 
+     return;
+ }
++
++int KyWirelessNetItem::getCategory(QString uni)
++{
++
++    QDBusInterface interface( "org.freedesktop.NetworkManager", uni, "org.freedesktop.DBus.Properties", QDBusConnection::systemBus() );
++    if (!interface.isValid()) {
++        qDebug() << Q_FUNC_INFO << "dbus is invalid";
++        return -1;
++    }
++
++    QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Category");
++    if (!reply.isValid()) {
++        //qDebug()<<"can not get the attribute 'Category' in func getCategory()";
++        return 0;
++    } else {
++        return reply.value().toInt();
++    }
++
++}
+diff --git a/src/backend/dbus-interface/kywirelessnetitem.h b/src/backend/dbus-interface/kywirelessnetitem.h
+index 6f7b105..fcb03af 100644
+--- a/src/backend/dbus-interface/kywirelessnetitem.h
++++ b/src/backend/dbus-interface/kywirelessnetitem.h
+@@ -27,6 +27,7 @@ public:
+     uint                                    m_frequency;
+     QString                                 m_secuType;
+     KySecuType                              m_kySecuType;
++    QString                                 m_uni;
+ 
+     //only for m_isConfiged = true
+     bool                                    m_isConfigured;
+@@ -34,7 +35,7 @@ public:
+     QString                                 m_connDbusPath;
+     uint                                    m_channel;
+ 
+-
++    int getCategory(QString uni);
+ 
+ private:
+     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
+diff --git a/src/backend/dbusadaptor.cpp b/src/backend/dbusadaptor.cpp
+index cb637e8..e7063e3 100644
+--- a/src/backend/dbusadaptor.cpp
++++ b/src/backend/dbusadaptor.cpp
+@@ -199,6 +199,13 @@ void DbusAdaptor::showCreateWiredConnectWidget(QString devName)
+     parent()->showCreateWiredConnectWidget(devName);
+ }
+ 
++//唤起加入其他无线网络界面
++void DbusAdaptor::showAddOtherWlanWidget(QString devName)
++{
++    qDebug() << "showAddOtherWlanWidget";
++    parent()->showAddOtherWlanWidget(devName);
++}
++
+ //开启热点
+ void DbusAdaptor::activeWirelessAp(const QString apName, const QString apPassword, const QString band, const QString apDevice)
+ {
+diff --git a/src/backend/dbusadaptor.h b/src/backend/dbusadaptor.h
+index 439851f..65be958 100644
+--- a/src/backend/dbusadaptor.h
++++ b/src/backend/dbusadaptor.h
+@@ -74,6 +74,8 @@ public Q_SLOTS: // METHODS
+     Q_NOREPLY void showPropertyWidget(QString devName, QString ssid);
+     //唤起新建有线连接界面
+     Q_NOREPLY void showCreateWiredConnectWidget(QString devName);
++    //唤起加入其他无线网络界面
++    Q_NOREPLY void showAddOtherWlanWidget(QString devName);
+     //开启热点
+     void activeWirelessAp(const QString apName, const QString apPassword, const QString band, const QString apDevice);
+     //断开热点
+diff --git a/src/frontend/list-items/lanlistitem.cpp b/src/frontend/list-items/lanlistitem.cpp
+index 18e8e4e..a311dbc 100644
+--- a/src/frontend/list-items/lanlistitem.cpp
++++ b/src/frontend/list-items/lanlistitem.cpp
+@@ -98,7 +98,7 @@ void LanListItem::onNetButtonClicked()
+             m_netButton->startLoading();
+         } else {
+             qDebug() << LOG_FLAG << m_deviceName << "is not carried, so can not activate connection";
+-            this->showDesktopNotify(tr("Wired Device not carried"));
++            this->showDesktopNotify(tr("Wired Device not carried"), "networkwrong");
+         }
+     } else {
+         qDebug() << LOG_FLAG <<"the connection" << m_lanConnectItem.m_connectName
+@@ -167,7 +167,7 @@ void LanListItem::onInfoButtonClicked()
+     }
+ 
+     netDetail = new NetDetail(m_deviceName, m_lanConnectItem.m_connectName,
+-                                         m_lanConnectItem.m_connectUuid, isActivated,false, false, this);
++                                         m_lanConnectItem.m_connectUuid, isActivated,false, false);
+ 
+     connect(netDetail, &NetDetail::destroyed, [&](){
+         if (netDetail != nullptr) {
+diff --git a/src/frontend/list-items/listitem.cpp b/src/frontend/list-items/listitem.cpp
+index 1c459ce..88c8d72 100644
+--- a/src/frontend/list-items/listitem.cpp
++++ b/src/frontend/list-items/listitem.cpp
+@@ -52,20 +52,27 @@ void ListItem::setConnectState(ConnectState state)
+     m_connectState = state;
+ }
+ 
+-void ListItem::showDesktopNotify(const QString &message)
++void ListItem::showDesktopNotify(const QString &message, QString soundName)
+ {
+     QDBusInterface iface("org.freedesktop.Notifications",
+                          "/org/freedesktop/Notifications",
+                          "org.freedesktop.Notifications",
+                          QDBusConnection::sessionBus());
++    QStringList actions;  //跳转动作
++    actions.append("kylin-nm");
++    actions.append("default");          //默认动作：点击消息体时打开麒麟录音
++    QMap<QString, QVariant> hints;
++    if (!soundName.isEmpty()) {
++        hints.insert("sound-name",soundName); //添加声音
++    }
+     QList<QVariant> args;
+     args<<(tr("Kylin NM"))
+        <<((unsigned int) 0)
+       <<QString("gnome-dev-ethernet")
+      <<tr("kylin network applet desktop message") //显示的是什么类型的信息
+     <<message //显示的具体信息
+-    <<QStringList()
+-    <<QVariantMap()
++    <<actions
++    <<hints
+     <<(int)-1;
+     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+ }
+diff --git a/src/frontend/list-items/listitem.h b/src/frontend/list-items/listitem.h
+index c78c279..19acb44 100644
+--- a/src/frontend/list-items/listitem.h
++++ b/src/frontend/list-items/listitem.h
+@@ -27,7 +27,7 @@ public:
+     void setName(const QString &name);
+     void setActive(const bool &isActive);
+     void setConnectState(ConnectState state);
+-    static void showDesktopNotify(const QString &message);
++    static void showDesktopNotify(const QString &message, QString soundName);
+ 
+ protected:
+     void mousePressEvent(QMouseEvent *event);
+diff --git a/src/frontend/list-items/wlanlistitem.cpp b/src/frontend/list-items/wlanlistitem.cpp
+index d0acd7d..7847796 100644
+--- a/src/frontend/list-items/wlanlistitem.cpp
++++ b/src/frontend/list-items/wlanlistitem.cpp
+@@ -28,6 +28,7 @@ WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, Q
+     connect(m_menu, &QMenu::triggered, this, &WlanListItem::onMenuTriggered);
+ 
+     m_wirelessConnectOperation = new KyWirelessConnectOperation(this);
++    m_deviceResource = new KyNetworkDeviceResourse(this);
+ }
+ 
+ WlanListItem::WlanListItem(QWidget *parent) : ListItem(parent)
+@@ -99,9 +100,6 @@ void WlanListItem::setExpanded(const bool &expanded)
+         setFixedHeight(EXPANDED_HEIGHT);
+     } else {
+         setFixedHeight(NORMAL_HEIGHT);
+-        QPalette pal = qApp->palette();
+-        pal.setColor(QPalette::Window, qApp->palette().base().color());
+-        this->setPalette(pal);
+     }
+ 
+     emit this->itemHeightChanged(expanded, m_wirelessNetItem.m_NetSsid);
+@@ -176,7 +174,7 @@ void WlanListItem::leaveEvent(QEvent *event)
+ 
+ bool WlanListItem::eventFilter(QObject *watched, QEvent *event)
+ {
+-    if (watched == m_showPwdButton || watched == m_autoConnectCheckBox) {
++    if (watched == m_autoConnectCheckBox) {
+         if (event->type() == QEvent::FocusIn) {
+             m_pwdLineEdit->setFocus();
+         }
+@@ -232,10 +230,12 @@ void WlanListItem::initWlanUI()
+     m_pwdFrameLyt->setSpacing(FRAME_SPACING);
+     m_pwdFrame->setLayout(m_pwdFrameLyt);
+ 
+-    m_pwdLineEdit  = new QLineEdit(m_pwdFrame);
++    m_pwdLineEdit  = new KPasswordEdit(m_pwdFrame);
+     m_pwdLineEdit->setFixedWidth(LINEEDIT_WIDTH);
++    m_pwdLineEdit->setClearButtonEnabled(false); //禁用ClearBtn按钮
++    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, true);   //打开输入法
+ //    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
+-    m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
++//    m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
+ 
+     QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
+     QRegExpValidator *latitude = new QRegExpValidator(rx, this);
+@@ -244,24 +244,8 @@ void WlanListItem::initWlanUI()
+     m_pwdLineEdit->installEventFilter(this);
+     connect(m_pwdLineEdit, &QLineEdit::textChanged, this, &WlanListItem::onPwdEditorTextChanged);
+     m_pwdLineEdit->setFixedHeight(PWD_AREA_HEIGHT);
+-    m_pwdLineEdit->setEchoMode(QLineEdit::EchoMode::Password);
+-    m_pwdLineEdit->setTextMargins(PWD_CONTENT_MARGINS);
+     m_pwdFrameLyt->addWidget(m_pwdLineEdit);
+ 
+-    m_pwdLineEditLyt = new QHBoxLayout(m_pwdLineEdit);
+-    m_pwdLineEditLyt->setContentsMargins(PWD_LAYOUT_MARGINS);
+-    m_pwdLineEdit->setLayout(m_pwdLineEditLyt);
+-
+-    m_showPwdButton = new QPushButton(m_pwdLineEdit);
+-    m_showPwdButton->setFlat(true);     //去除边框
+-    m_showPwdButton->installEventFilter(this);
+-    m_showPwdButton->setFixedSize(SHOW_PWD_BUTTON_SIZE);
+-    m_showPwdButton->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
+-    m_showPwdButton->setCursor(Qt::PointingHandCursor);
+-    connect(m_showPwdButton, &QPushButton::clicked, this, &WlanListItem::onShowPwdButtonClicked);
+-    m_pwdLineEditLyt->addStretch();
+-    m_pwdLineEditLyt->addWidget(m_showPwdButton);
+-
+     m_connectButton = new QPushButton(m_pwdFrame);
+     m_connectButton->setFixedSize(CONNECT_BUTTON_WIDTH, PWD_AREA_HEIGHT);
+     m_connectButton->setText(tr("Connect"));
+@@ -296,72 +280,106 @@ void WlanListItem::initWlanUI()
+     m_autoConnectFrame->hide();
+ }
+ 
++QString getIcon(bool isEncrypted, int signalStrength, int category) {
++    QString iconNameFirst,iconNameLast;
++    if (category == 0){
++        iconNameFirst = "network-wireless-signal-";
++    } else if (category == 1) {
++        iconNameFirst = "ukui-wifi6-";
++    } else {
++        iconNameFirst = "ukui-wifi6+-";
++    }
++    if (!isEncrypted) {
++        if (signalStrength > EXCELLENT_SIGNAL){
++            if (category == 0) {
++                iconNameLast = "excellent-symbolic";
++            } else {
++                iconNameLast = "full-symbolic";
++            }
++        } else if (signalStrength > GOOD_SIGNAL) {
++            if (category == 0) {
++                iconNameLast = "good-symbolic";
++            } else {
++                iconNameLast = "high-symbolic";
++            }
++        } else if (signalStrength > OK_SIGNAL) {
++            if (category == 0) {
++                iconNameLast = "ok-symbolic";
++            } else {
++                iconNameLast = "medium-symbolic";
++            }
++       } else if (signalStrength > LOW_SIGNAL) {
++            if (category == 0) {
++                iconNameLast = "weak-symbolic";
++            } else {
++                iconNameLast = "low-symbolic";
++            }
++       } else {
++            iconNameLast = "none-symbolic";
++        }
++    } else {
++        if (signalStrength > EXCELLENT_SIGNAL){
++            if (category == 0) {
++                iconNameLast = "excellent-secure-symbolic";
++            } else {
++                iconNameLast = "full-pwd-symbolic";
++            }
++        } else if (signalStrength > GOOD_SIGNAL) {
++            if (category == 0) {
++                iconNameLast = "good-secure-symbolic";
++            } else {
++                iconNameLast = "high-pwd-symbolic";
++            }
++        } else if (signalStrength > OK_SIGNAL) {
++            if (category == 0) {
++                iconNameLast = "ok-secure-symbolic";
++            } else {
++                iconNameLast = "medium-pwd-symbolic";
++            }
++       } else if (signalStrength > LOW_SIGNAL) {
++            if (category == 0) {
++                iconNameLast = "weak-secure-symbolic";
++            } else {
++                iconNameLast = "low-pwd-symbolic";
++            }
++       } else {
++            if (category == 0) {
++                iconNameLast = "none-secure-symbolic";
++            } else {
++                iconNameLast = "none-pwd-symbolic";
++            }
++        }
++    }
++    return iconNameFirst + iconNameLast;
++}
++
+ void WlanListItem::refreshIcon(bool isActivated)
+ {
+-#define FULL_SIGNAL 5
+-#define EXCELLENT_SIGNAL 4
+-#define GOOD_SIGNAL 3
+-#define OK_SIGNAL 2
+-#define LOW_SIGNAL 1
+-#define STEP 25
+     if (m_isApMode) {
+         m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-hotspot-symbolic", QIcon(":/res/w/wifi-full.png")));
+         m_netButton->setActive(isActivated);
+         return;
+     }
+ 
+-    if (!m_hasPwd) {
+-        //ZJP_TODO 无加密 注意信号格数计算方式，可能需要修改
+-        switch (m_wirelessNetItem.m_signalStrength / STEP + 1) {
+-        case FULL_SIGNAL:
+-        case EXCELLENT_SIGNAL:
+-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-excellent-symbolic",
+-                                                        QIcon(":/res/w/wifi-full.png")));
+-            break;
+-        case GOOD_SIGNAL:
+-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-good-symbolic",
+-                                                        QIcon(":/res/w/wifi-high.png")));
+-            break;
+-        case OK_SIGNAL:
+-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-ok",
+-                                                        QIcon(":/res/w/wifi-medium.png")));
+-            break;
+-        case LOW_SIGNAL:
+-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-low",
+-                                                        QIcon(":/res/w/wifi-low.png")));
+-            break;
+-        default:
+-            qDebug() << "Set wlan(without passwd) icon failed, signal = "
+-                     << m_wirelessNetItem.m_signalStrength << Q_FUNC_INFO << __LINE__;
+-            break;
+-        }
+-    } else {
+-        //ZJP_TODO 有加密
+-        switch (m_wirelessNetItem.m_signalStrength / STEP + 1) {
+-        case FULL_SIGNAL:
+-        case EXCELLENT_SIGNAL:
+-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-excellent-secure-symbolic",
+-                                                        QIcon(":/res/w/wifi-full-pwd.png")));
+-            break;
+-        case GOOD_SIGNAL:
+-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-good-secure-symbolic",
+-                                                        QIcon(":/res/w/wifi-high-pwd.png")));
+-            break;
+-        case OK_SIGNAL:
+-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-ok-secure-symbolic",
+-                                                        QIcon(":/res/w/wifi-medium-pwd.png")));
+-            break;
+-        case LOW_SIGNAL:
+-            m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-signal-low-secure-symbolic",
+-                                                        QIcon(":/res/w/wifi-low-pwd.png")));
+-            break;
+-        default:
+-            qDebug() << "Set wlan(with passwd) icon failed, signal = "
+-                     << m_wirelessNetItem.m_signalStrength << Q_FUNC_INFO << __LINE__;
+-            break;
++    int category = 0;
++    int signalStrength = 0;
++    QString uni = "";
++    QString secuType = "";
++    category = m_wirelessNetItem.getCategory(m_wirelessNetItem.m_uni);
++    signalStrength = m_wirelessNetItem.m_signalStrength;
++
++    if (isActivated) {
++        if (m_deviceResource->getActiveConnectionInfo(m_wlanDevice, signalStrength, uni, secuType)) {
++            category = m_wirelessNetItem.getCategory(uni);
++            m_hasPwd = (secuType.isEmpty() || secuType == "") ? false : true;
+         }
+     }
++
++    QString iconPath = getIcon(m_hasPwd, signalStrength, category);
++    m_netButton->setButtonIcon(QIcon::fromTheme(iconPath));
++
+     m_netButton->setActive(isActivated);
++    qDebug() << "refreshIcon" << m_wirelessNetItem.m_NetSsid << "isActivated" << isActivated << "path" << iconPath;
+ }
+ 
+ void WlanListItem::onInfoButtonClicked()
+@@ -385,7 +403,7 @@ void WlanListItem::onInfoButtonClicked()
+ 
+     netDetail = new NetDetail(m_wlanDevice, m_wirelessNetItem.m_NetSsid,
+                                          m_wirelessNetItem.m_connectUuid, isActive, true,
+-                                         !m_wirelessNetItem.m_isConfigured, this);
++                                         !m_wirelessNetItem.m_isConfigured);
+     connect(netDetail, &NetDetail::destroyed, [&](){
+         if (netDetail != nullptr) {
+             netDetail = nullptr;
+@@ -424,7 +442,7 @@ void WlanListItem::onNetButtonClicked()
+                 KWindowSystem::raiseWindow(enterpriseWlanDialog->winId());
+                 return;
+             } else {
+-                enterpriseWlanDialog = new EnterpriseWlanDialog(m_wirelessNetItem, m_wlanDevice, this);
++                enterpriseWlanDialog = new EnterpriseWlanDialog(m_wirelessNetItem, m_wlanDevice);
+                 connect(enterpriseWlanDialog, &EnterpriseWlanDialog::enterpriseWlanDialogClose, this, &WlanListItem::onEnterpriseWlanDialogClose);
+                 enterpriseWlanDialog->show();
+                 isEnterpriseWlanDialogShow = true;
+@@ -480,24 +498,6 @@ void WlanListItem::onPwdEditorTextChanged()
+     return;
+ }
+ 
+-void WlanListItem::onShowPwdButtonClicked()
+-{
+-    qDebug()<< LOG_FLAG << "onShowPwdButtonClicked";
+-    if (!m_pwdLineEdit) {
+-        return;
+-    }
+-
+-    if (m_pwdLineEdit->echoMode() == QLineEdit::EchoMode::Password) {
+-        m_showPwdButton->setIcon(QIcon::fromTheme("ukui-eye-display-symbolic"));
+-        m_pwdLineEdit->setEchoMode(QLineEdit::EchoMode::Normal);
+-    } else {
+-        m_showPwdButton->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
+-        m_pwdLineEdit->setEchoMode(QLineEdit::EchoMode::Password);
+-    }
+-
+-    return;
+-}
+-
+ void WlanListItem::onConnectButtonClicked()
+ {
+     qDebug()<< LOG_FLAG << "onConnectButtonClicked";
+diff --git a/src/frontend/list-items/wlanlistitem.h b/src/frontend/list-items/wlanlistitem.h
+index 641af74..ff0e26b 100644
+--- a/src/frontend/list-items/wlanlistitem.h
++++ b/src/frontend/list-items/wlanlistitem.h
+@@ -12,12 +12,23 @@
+ 
+ #include <networkmanagerqt/wirelesssecuritysetting.h>
+ 
++#include "kwidget.h"
++#include "kpasswordedit.h"
++
++using namespace kdk;
++
+ #define PSK_SETTING_NAME "802-11-wireless-security"
+ 
+ #define NORMAL_HEIGHT 48
+ #define EXPANDED_HEIGHT 120
+ #define PWD_LENGTH_LIMIT 8
+ 
++#define EXCELLENT_SIGNAL 80
++#define GOOD_SIGNAL 55
++#define OK_SIGNAL 30
++#define LOW_SIGNAL 5
++#define NONE_SIGNAL 0
++
+ class WlanListItem : public ListItem
+ {
+     Q_OBJECT
+@@ -65,6 +76,7 @@ private:
+     KyWirelessNetItem m_wirelessNetItem;
+     KyWirelessConnectOperation *m_wirelessConnectOperation = nullptr;
+     EnterpriseWlanDialog *enterpriseWlanDialog = nullptr;
++    KyNetworkDeviceResourse *m_deviceResource = nullptr;
+ 
+     bool m_hasPwd = true;
+     QString m_wlanDevice;
+@@ -74,10 +86,7 @@ private:
+     //密码输入区域的UI
+     QFrame *m_pwdFrame = nullptr;
+     QHBoxLayout *m_pwdFrameLyt = nullptr;
+-
+-    QLineEdit * m_pwdLineEdit = nullptr;
+-    QHBoxLayout *m_pwdLineEditLyt = nullptr;
+-    QPushButton *m_showPwdButton = nullptr;
++    KPasswordEdit *m_pwdLineEdit = nullptr;
+     QPushButton *m_connectButton = nullptr;
+ 
+     //自动连接选择区域UI
+@@ -98,7 +107,6 @@ protected slots:
+ private slots:
+     void onNetButtonClicked();
+     void onPwdEditorTextChanged();
+-    void onShowPwdButtonClicked();
+     void onConnectButtonClicked();
+     void onMenuTriggered(QAction *action);
+     void onEnterpriseWlanDialogClose(bool isShow);
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index fc4ad02..3a519c6 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -12,6 +12,9 @@
+ #include "kylinnetworkdeviceresource.h"
+ #include "../backend/dbus-interface/kylinagentinterface.h"
+ 
++#include "ukuistylehelper/ukuistylehelper.h"
++#include "windowmanager/windowmanager.h"
++
+ 
+ #define MAINWINDOW_WIDTH 420
+ #define MAINWINDOW_HEIGHT 476
+@@ -46,13 +49,16 @@ void MainWindow::showMainwindow()
+     /**
+      * 设置主界面跳过任务栏和分页器的属性，隐藏再次展示有可能辉冲刷掉该属性，需要展示时重新设置
+      */
+-    const KWindowInfo info(this->winId(), NET::WMState);
+-    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
+-        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
++    QString platform = QGuiApplication::platformName();
++    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
++    {
++        const KWindowInfo info(this->winId(), NET::WMState);
++        if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
++            KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
++        }
+     }
+ 
+-    this->resetWindowPosition();
+-    this->showNormal();
++    this->showByWaylandHelper();
+     this->raise();
+     this->activateWindow();
+     emit this->mainWindowVisibleChanged(true);
+@@ -166,10 +172,15 @@ void MainWindow::initWindowProperties()
+     this->setAttribute(Qt::WA_TranslucentBackground, true);  //透明
+     this->setFocusPolicy(Qt::NoFocus);
+ 
+-    QPainterPath path;
+-    auto rect = this->rect();
+-    path.addRoundedRect(rect, 12, 12);
+-    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
++    QString platform = QGuiApplication::platformName();
++    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
++    {
++        QPainterPath path;
++        auto rect = this->rect();
++        //    path.addRoundedRect(rect, 12, 12);
++        path.addRect(rect);
++        KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
++    }
+ }
+ 
+ void MainWindow::paintEvent(QPaintEvent *event)
+@@ -177,8 +188,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
+     QPainter painter(this);
+     painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
+     painter.setPen(Qt::transparent);
+-    auto rect = this->rect();
+-    painter.drawRoundedRect(rect, 12, 12);      //窗口圆角
++//    auto rect = this->rect();
++//    painter.drawRoundedRect(rect, 12, 12);      //窗口圆角
+ }
+ 
+ void MainWindow::initTransparency()
+@@ -336,7 +347,10 @@ void MainWindow::resetWindowPosition()
+ 
+     if (m_isShowInCenter) {
+         QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
+-        this->move((availableGeometry.width() - this->width())/2, (availableGeometry.height() - this->height())/2);
++        QRect rect((availableGeometry.width() - this->width())/2, (availableGeometry.height() - this->height())/2,
++                   this->width(), this->height());
++        kdk::WindowManager::setGeometry(this->windowHandle(), rect);
++
+         return;
+     }
+ 
+@@ -351,11 +365,12 @@ void MainWindow::resetWindowPosition()
+                             "org.ukui.panel",
+                             QDBusConnection::sessionBus());
+     }
++    QRect rect;
+     QDBusReply<QVariantList> reply = m_positionInterface->call("GetPrimaryScreenGeometry");
+     //reply获取的参数共5个，分别是 主屏可用区域的起点x坐标，主屏可用区域的起点y坐标，主屏可用区域的宽度，主屏可用区域高度，任务栏位置
+     if (!m_positionInterface->isValid() || !reply.isValid() || reply.value().size() < 5) {
+         qCritical() << QDBusConnection::sessionBus().lastError().message();
+-        this->setGeometry(0, 0, this->width(), this->height());
++        kdk::WindowManager::setGeometry(this->windowHandle(), QRect(0, 0, this->width(), this->height()));
+         return;
+     }
+     QVariantList position_list = reply.value();
+@@ -363,29 +378,30 @@ void MainWindow::resetWindowPosition()
+     switch(position){
+     case PANEL_TOP:
+         //任务栏位于上方
+-        this->setGeometry(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
+-                          position_list.at(1).toInt() + MARGIN,
+-                          this->width(), this->height());
++        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
++                     position_list.at(1).toInt() + MARGIN,
++                     this->width(), this->height());
+         break;
+         //任务栏位于左边
+     case PANEL_LEFT:
+-        this->setGeometry(position_list.at(0).toInt() + MARGIN,
+-                          position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
+-                          this->width(), this->height());
++        rect = QRect(position_list.at(0).toInt() + MARGIN,
++                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
++                     this->width(), this->height());
+         break;
+         //任务栏位于右边
+     case PANEL_RIGHT:
+-        this->setGeometry(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
+-                          position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
+-                          this->width(), this->height());
++        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
++                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
++                     this->width(), this->height());
+         break;
+         //任务栏位于下方
+     default:
+-        this->setGeometry(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
+-                          position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
+-                          this->width(), this->height());
++        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
++                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
++                     this->width(), this->height());
+         break;
+     }
++    kdk::WindowManager::setGeometry(this->windowHandle(), rect);
+     qDebug() << " Position of ukui-panel is " << position << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
+ }
+ 
+@@ -462,6 +478,16 @@ void MainWindow::showControlCenter()
+     }
+ }
+ 
++void MainWindow::showByWaylandHelper()
++{
++    //去除窗管标题栏，传入参数为QWidget*
++    kdk::UkuiStyleHelper::self()->removeHeader(this);
++    this->show();
++    resetWindowPosition();
++    //设置窗体位置，传入参数为QWindow*，QRect
++
++}
++
+ /**
+  * @brief MainWindow::onTrayIconActivated 点击托盘图标的槽函数
+  */
+@@ -749,6 +775,28 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
+     netDetail->show();
+ }
+ 
++void MainWindow::showAddOtherWlanWidget(QString devName)
++{
++    qDebug() << "showAddOtherWlanWidget! devName = " << devName;
++        if (m_addOtherPagePtrMap.contains(devName)) {
++            if (m_addOtherPagePtrMap[devName] != nullptr) {
++                qDebug() << "showAddOtherWlanWidget" << devName << "already create,just raise";
++
++                KWindowSystem::raiseWindow(m_addOtherPagePtrMap[devName]->winId());
++                return;
++            }
++        }
++        NetDetail *netDetail = new NetDetail(devName, "", "", false, true, true, this);
++        connect(netDetail, &NetDetail::createPageClose, [&](QString interfaceName){
++            if (m_addOtherPagePtrMap.contains(interfaceName)) {
++                m_addOtherPagePtrMap[interfaceName] = nullptr;
++            }
++        });
++        m_addOtherPagePtrMap.insert(devName, netDetail);
++        netDetail->show();
++
++}
++
+ void MainWindow::getWirelessDeviceCap(QMap<QString, int> &map)
+ {
+     m_wlanWidget->getWirelessDeviceCap(map);
+diff --git a/src/frontend/mainwindow.h b/src/frontend/mainwindow.h
+index 95ccf4a..83110ab 100644
+--- a/src/frontend/mainwindow.h
++++ b/src/frontend/mainwindow.h
+@@ -70,6 +70,8 @@ public:
+     void showPropertyWidget(QString devName, QString ssid);
+     //唤起新建有线连接界面
+     void showCreateWiredConnectWidget(const QString devName);
++    //唤起加入其他无线网络界面
++    void showAddOtherWlanWidget(QString devName);
+ 
+     void getWirelessDeviceCap(QMap<QString, int> &map);
+ 
+@@ -126,6 +128,7 @@ private:
+     void initWindowTheme();
+     void resetWindowTheme();
+     void showControlCenter();
++    void showByWaylandHelper();
+     double m_transparency=1.0;  //透明度
+     QGSettings * m_transGsettings;   //透明度配置文件
+     int currentIconIndex=0;
+@@ -162,6 +165,7 @@ private:
+     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
+ 
+     QMap<QString, NetDetail*> m_createPagePtrMap;
++    QMap<QString, NetDetail*> m_addOtherPagePtrMap;
+ 
+ public slots:
+     void onShowMainWindow(int type);
+diff --git a/src/frontend/netdetails/detailpage.cpp b/src/frontend/netdetails/detailpage.cpp
+index 381b913..92c0665 100644
+--- a/src/frontend/netdetails/detailpage.cpp
++++ b/src/frontend/netdetails/detailpage.cpp
+@@ -4,6 +4,7 @@
+ 
+ #define MAX_NAME_LENGTH 32
+ #define MAX_LABEL_WIDTH 250
++
+ extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
+ 
+ DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
+@@ -121,7 +122,8 @@ void DetailPage::newCopiedTip()
+     //设置“复制成功”消息弹窗格式
+     m_copiedTip = new KBallonTip();
+     m_copiedTip->setTipType(Normal);
+-    m_copiedTip->setFixedSize(158, 58);
++    m_copiedTip->setContentsMargins(16, 0, 16, 0);
++    m_copiedTip->setFixedHeight(48);
+     m_copiedTip->setWindowFlags(Qt::FramelessWindowHint);
+     m_copiedTip->setAttribute(Qt::WA_TranslucentBackground, true);
+     m_copiedTip->setText(tr("Copied successfully!"));
+@@ -337,8 +339,8 @@ void DetailPage::on_btnCopyNetDetail_clicked()
+         newCopiedTip();
+     }
+     QPoint position = m_ssidWidget->mapToGlobal(this->pos());
+-    double x = 0.5 * (m_ssidWidget->width() - m_copiedTip->width());
+-    m_copiedTip->move(position.x() + x, position.y() + 150);
++    double x = (this->width() - 0.5 * m_copiedTip->width());
++    m_copiedTip->move(position.x() + x, position.y() + this->height() * 0.3);
+     QPalette pal = getTheme();
+     m_copiedTip->setPalette(pal);
+     m_copiedTip->showInfo();
+diff --git a/src/frontend/netdetails/netdetail.cpp b/src/frontend/netdetails/netdetail.cpp
+index 2c27640..6752904 100644
+--- a/src/frontend/netdetails/netdetail.cpp
++++ b/src/frontend/netdetails/netdetail.cpp
+@@ -11,6 +11,8 @@
+ #include <QMenu>
+ #include <QToolTip>
+ 
++#include "windowmanager/windowmanager.h"
++
+ #define  WINDOW_WIDTH  520
+ #define  WINDOW_HEIGHT 590
+ #define  BUTTON_SIZE 30
+@@ -25,23 +27,32 @@
+ #define  SECURITY_PAGE_NUM 3
+ #define  CREATE_NET_PAGE_NUM 4
+ #define  PAGE_MIN_HEIGHT 40
++#define  LAN_TAB_WIDTH 300
++#define  WLAN_TAB_WIDTH 400
+ 
+ //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
+ 
+-void NetDetail::showDesktopNotify(const QString &message)
++void NetDetail::showDesktopNotify(const QString &message, QString soundName)
+ {
+     QDBusInterface iface("org.freedesktop.Notifications",
+                          "/org/freedesktop/Notifications",
+                          "org.freedesktop.Notifications",
+                          QDBusConnection::sessionBus());
++    QStringList actions;  //跳转动作
++    actions.append("kylin-nm");
++    actions.append("default");          //默认动作：点击消息体时打开麒麟录音
++    QMap<QString, QVariant> hints;
++    if (!soundName.isEmpty()) {
++        hints.insert("sound-name", soundName); //添加声音
++    }
+     QList<QVariant> args;
+     args<<(tr("Kylin NM"))
+        <<((unsigned int) 0)
+        <<QString("gnome-dev-ethernet")
+        <<tr("kylin network desktop message") //显示的是什么类型的信息
+        <<message //显示的具体信息
+-       <<QStringList()
+-       <<QVariantMap()
++       <<actions
++       <<hints
+        <<(int)-1;
+     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+ }
+@@ -155,6 +166,14 @@ void NetDetail::onPaletteChanged()
+         delete styleGsettings;
+         styleGsettings = nullptr;
+     }
++
++    QColor colorTabBar = pal.color(QPalette::Disabled, QPalette::Highlight);
++    m_netTabBar->setBackgroundColor(colorTabBar);
++}
++
++void NetDetail::currentRowChangeSlot(int row)
++{
++    stackWidget->setCurrentIndex(row);
+ }
+ 
+ void NetDetail::paintEvent(QPaintEvent *event)
+@@ -178,6 +197,10 @@ void NetDetail::centerToScreen()
+     int x = this->width();
+     int y = this->height();
+     this->move(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top());
++//    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(desk_x / 2 - x / 2 + desk_rect.left(),
++//                                                                desk_y / 2 - y / 2 + desk_rect.top(),
++//                                                                this->width(),
++//                                                                this->height()));
+ }
+ 
+ void NetDetail::initUI()
+@@ -210,42 +233,29 @@ void NetDetail::initUI()
+     bottomWidget->setMinimumHeight(PAGE_MIN_HEIGHT);
+ 
+     pageFrame = new QFrame(this);
+-
+     QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
+     pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
+ 
+-    detailBtn = new QPushButton(this);
+-    detailBtn->setText(tr("Detail"));
+-    detailBtn->setCheckable(true);
+-    detailBtn->setChecked(true);
+-
+-    ipv4Btn = new QPushButton(this);
+-    ipv4Btn->setText(tr("Ipv4"));
+-    ipv4Btn->setCheckable(true);
+-
+-    ipv6Btn = new QPushButton(this);
+-    ipv6Btn->setText(tr("Ipv6"));
+-    ipv6Btn->setCheckable(true);
+-
+-    securityBtn = new QPushButton(this);
+-    securityBtn->setText(tr("Security"));
+-    securityBtn->setCheckable(true);
+-
+-    m_group = new QButtonGroup(this);
+-    m_group->addButton(detailBtn);
+-    m_group->addButton(ipv4Btn);
+-    m_group->addButton(ipv6Btn);
++    // TabBar
++    m_netTabBar = new KTabBar(KTabBarStyle::SegmentDark, this);
++    m_netTabBar->addTab(tr("Detail")); //详情
++    m_netTabBar->addTab(tr("Ipv4"));//Ipv4
++    m_netTabBar->addTab(tr("Ipv6"));//Ipv6
+     if (isWlan) {
+-        m_group->addButton(securityBtn);
++        m_netTabBar->addTab(tr("Security"));//安全
++        m_netTabBar->setFixedWidth(WLAN_TAB_WIDTH);
++    } else {
++        m_netTabBar->setFixedWidth(LAN_TAB_WIDTH);
+     }
+ 
+     pageLayout->addStretch();
+-    pageLayout->addWidget(detailBtn);
+-    pageLayout->addWidget(ipv4Btn);
+-    pageLayout->addWidget(ipv6Btn);
+-    pageLayout->addWidget(securityBtn);
++    pageLayout->addWidget(m_netTabBar);
+     pageLayout->addStretch();
+ 
++    // TabBar关联选项卡页面
++    connect(m_netTabBar, SIGNAL(currentChanged(int)), this, SLOT(currentRowChangeSlot(int)));
++
++
+     confimBtn = new QPushButton(this);
+     confimBtn->setText(tr("Confirm"));
+ 
+@@ -274,7 +284,7 @@ void NetDetail::initUI()
+ //    pal.setColor(QPalette::Background, qApp->palette().base().color());
+     this->setAutoFillBackground(true);
+ //    this->setPalette(pal);
+-        onPaletteChanged();
++    onPaletteChanged();
+ }
+ 
+ void NetDetail::loadPage()
+@@ -287,13 +297,8 @@ void NetDetail::loadPage()
+     } else {
+         stackWidget->setCurrentIndex(DETAIL_PAGE_NUM);
+         this->setWindowTitle(m_name);
+-        if (!isWlan) {
+-            securityBtn->hide();
+-        } else {
+-            securityBtn->show();
+-            if (m_name.isEmpty()) {
+-                this->setWindowTitle(tr("connect hiddin wlan"));
+-            }
++        if (isWlan && m_name.isEmpty()) {
++            this->setWindowTitle(tr("connect hiddin wlan"));
+         }
+     }
+ }
+@@ -303,18 +308,7 @@ void NetDetail::initComponent()
+     connect(cancelBtn, &QPushButton::clicked, this, [=] {
+         close();
+     });
+-    connect(detailBtn, &QPushButton::clicked, this, [=] {
+-        stackWidget->setCurrentIndex(DETAIL_PAGE_NUM);
+-    });
+-    connect(ipv4Btn, &QPushButton::clicked, this, [=] {
+-        stackWidget->setCurrentIndex(IPV4_PAGE_NUM);
+-    });
+-    connect(ipv6Btn, &QPushButton::clicked, this, [=] {
+-        stackWidget->setCurrentIndex(IPV6_PAGE_NUM);
+-    });
+-    connect(securityBtn, &QPushButton::clicked, this, [=] {
+-        stackWidget->setCurrentIndex(SECURITY_PAGE_NUM);
+-    });
++
+     connect(confimBtn, SIGNAL(clicked()), this, SLOT(on_btnConfirm_clicked()));
+     if (isWlan && !m_uuid.isEmpty()) {
+         forgetBtn->show();
+@@ -679,7 +673,7 @@ void NetDetail::setConfirmEnable()
+ 
+ bool NetDetail::checkIpv4Conflict(QString ipv4Address)
+ {
+-    showDesktopNotify(tr("start check ipv4 address conflict"));
++    showDesktopNotify(tr("start check ipv4 address conflict"), "networkwrong");
+     bool isConflict = false;
+     KyIpv4Arping* ipv4Arping = new KyIpv4Arping(m_deviceName, ipv4Address);
+ 
+@@ -696,7 +690,7 @@ bool NetDetail::checkIpv4Conflict(QString ipv4Address)
+ 
+ bool NetDetail::checkIpv6Conflict(QString ipv6address)
+ {
+-    showDesktopNotify(tr("start check ipv6 address conflict"));
++    showDesktopNotify(tr("start check ipv6 address conflict"), "networkwrong");
+     bool isConflict = false;
+     KyIpv6Arping* ipv46rping = new KyIpv6Arping(m_deviceName, ipv6address);
+ 
+@@ -742,7 +736,7 @@ bool NetDetail::createWiredConnect()
+     if (connetSetting.m_ipv4ConfigIpType != CONFIG_IP_DHCP) {
+         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
+             qDebug() << "ipv4 conflict";
+-            showDesktopNotify(tr("ipv4 address conflict!"));
++            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
+             return false;
+         }
+     }
+@@ -793,7 +787,7 @@ bool NetDetail::createWirelessConnect()
+     if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
+         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
+             qDebug() << "ipv4 conflict";
+-            showDesktopNotify(tr("ipv4 address conflict!"));
++            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
+             return false;
+         }
+     }
+@@ -801,7 +795,7 @@ bool NetDetail::createWirelessConnect()
+     if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
+         if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
+             qDebug() << "ipv6 conflict";
+-            showDesktopNotify(tr("ipv6 address conflict!"));
++            showDesktopNotify(tr("ipv6 address conflict!"), "networkwrong");
+             return false;
+         }
+     }
+@@ -881,7 +875,7 @@ bool NetDetail::updateConnect()
+     if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
+         if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
+             qDebug() << "ipv4 conflict";
+-            showDesktopNotify(tr("ipv4 address conflict!"));
++            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
+             return false;
+         }
+     }
+@@ -889,7 +883,7 @@ bool NetDetail::updateConnect()
+     if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
+         if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
+             qDebug() << "ipv6 conflict";
+-            showDesktopNotify(tr("ipv6 address conflict!"));
++            showDesktopNotify(tr("ipv6 address conflict!"), "networkwrong");
+             return false;
+         }
+     }
+@@ -925,20 +919,20 @@ bool NetDetail::checkWirelessSecurity(KySecuType secuType)
+ {
+     if (secuType == WPA_AND_WPA2_ENTERPRISE) {
+         if(m_info.strSecType.indexOf("802.1X") < 0) {
+-            showDesktopNotify(tr("this wifi no support enterprise type"));
++            showDesktopNotify(tr("this wifi no support enterprise type"), "networkwrong");
+             return false;
+         }
+     } else {
+         if (secuType == NONE && m_info.strSecType != tr("None")) {
+-            showDesktopNotify(tr("this wifi no support None type"));
++            showDesktopNotify(tr("this wifi no support None type"), "networkwrong");
+             return false;
+         } else if (secuType == WPA_AND_WPA2_PERSONAL
+                    && (m_info.strSecType.indexOf("WPA1") < 0 &&
+                        m_info.strSecType.indexOf("WPA2") < 0)) {
+-            showDesktopNotify(tr("this wifi no support WPA2 type"));
++            showDesktopNotify(tr("this wifi no support WPA2 type"), "networkwrong");
+             return false;
+         } else if (secuType == WPA3_PERSONAL && m_info.strSecType.indexOf("WPA3") < 0) {
+-            showDesktopNotify(tr("this wifi no support WPA3 type"));
++            showDesktopNotify(tr("this wifi no support WPA3 type"), "networkwrong");
+             return false;
+         }
+     }
+diff --git a/src/frontend/netdetails/netdetail.h b/src/frontend/netdetails/netdetail.h
+index c465527..5e99a72 100644
+--- a/src/frontend/netdetails/netdetail.h
++++ b/src/frontend/netdetails/netdetail.h
+@@ -13,7 +13,6 @@
+ #include <QApplication>
+ #include <QDebug>
+ #include <QSettings>
+-#include <QButtonGroup>
+ 
+ #include <QDBusMessage>
+ #include <QDBusObjectPath>
+@@ -28,6 +27,10 @@
+ #include "creatnetpage.h"
+ #include "coninfo.h"
+ #include "tab-pages/tabpage.h"
++#include "kwidget.h"
++#include "ktabbar.h"
++
++using namespace kdk;
+ 
+ class NetDetail : public QWidget
+ {
+@@ -75,7 +78,7 @@ private:
+ 
+     bool checkWirelessSecurity(KySecuType secuType);
+ 
+-    void showDesktopNotify(const QString &message);
++    void showDesktopNotify(const QString &message, QString soundName);
+ 
+     void setNetdetailSomeEnable(bool on);
+ private:
+@@ -100,11 +103,8 @@ private:
+     QPushButton  * forgetBtn;
+     QPushButton  * confimBtn;
+ 
+-    QPushButton  * detailBtn;
+-    QPushButton  * ipv4Btn;
+-    QPushButton  * ipv6Btn;
+-    QPushButton  * securityBtn;
+     QFrame       * pageFrame;
++    KTabBar      *m_netTabBar = nullptr;
+ 
+     QString      m_name;
+     QString      m_uuid;
+@@ -124,16 +124,18 @@ private:
+ 
+     ConInfo      m_info;
+ 
+-    QButtonGroup *m_group;
+-
+ private slots:
+     void on_btnConfirm_clicked();
+     void on_btnForget_clicked();
+     void onPaletteChanged();
+ 
++protected slots:
++    void currentRowChangeSlot(int row);
++
+ signals:
+     void detailPageClose(bool on);
+     void createPageClose(QString);
++    void currentChanged(int);
+ };
+ 
+ 
+diff --git a/src/frontend/netdetails/securitypage.cpp b/src/frontend/netdetails/securitypage.cpp
+index 70845e2..7be9f4e 100644
+--- a/src/frontend/netdetails/securitypage.cpp
++++ b/src/frontend/netdetails/securitypage.cpp
+@@ -33,7 +33,7 @@ void SecurityPage::initUI()
+     userPwdFlagLabel = new QLabel(this);
+ 
+     secuTypeCombox = new QComboBox(this);
+-    pwdEdit = new LineEdit(this);
++    pwdEdit = new KPasswordEdit(this);
+     eapTypeCombox = new QComboBox(this);
+     //TLS
+     identityEdit = new LineEdit(this);
+@@ -42,12 +42,12 @@ void SecurityPage::initUI()
+     caNeedBox = new QCheckBox(this);
+     clientCertPathCombox = new QComboBox(this);
+     clientPrivateKeyCombox = new QComboBox(this);
+-    clientPrivateKeyPwdEdit = new LineEdit(this);
++    clientPrivateKeyPwdEdit = new KPasswordEdit(this);
+ 
+     //PEAP && TTLS
+     eapMethodCombox = new QComboBox(this);
+     userNameEdit = new LineEdit(this);
+-    userPwdEdit = new LineEdit(this);
++    userPwdEdit = new KPasswordEdit(this);
+     userPwdFlagBox = new QCheckBox(this);
+ 
+ 
+@@ -106,59 +106,10 @@ void SecurityPage::initUI()
+     clientPrivateKeyCombox->addItem(tr("None"), QString(tr("None"))); //无
+     clientPrivateKeyCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+ 
+-    pwdBox = new QCheckBox(this);
+-    pwdBox->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
+-                                       "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
+-                                       "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
+-    pwdBox->setCursor(Qt::PointingHandCursor);
+-    pwdBox->setFixedSize(30, pwdEdit->height());
+-    //防止文本框输入内容位于按钮之下
+-    QMargins margins = pwdEdit->textMargins();
+-    pwdEdit->setTextMargins(margins.left(), margins.top(), pwdBox->width(), margins.bottom());
+-    QHBoxLayout *pPwdLayout = new QHBoxLayout();
+-    pPwdLayout->addStretch();
+-    pPwdLayout->addWidget(pwdBox);
+-    pPwdLayout->setSpacing(0);
+-    pPwdLayout->setContentsMargins(0, 0, 0, 0);
+-    pwdEdit->setLayout(pPwdLayout);
+-    pwdEdit->setEchoMode(QLineEdit::Password);
+-
+-    userPwdBox = new QCheckBox(this);
+-    userPwdBox->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
+-                                       "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
+-                                       "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
+-    userPwdBox->setCursor(Qt::PointingHandCursor);
+-    userPwdBox->setFixedSize(30, userPwdEdit->height());
+-    userPwdBox->setFocusPolicy(Qt::NoFocus);
+-    //防止文本框输入内容位于按钮之下
+-    userPwdEdit->setTextMargins(margins.left(), margins.top(), userPwdBox->width(), margins.bottom());
+-    QHBoxLayout *puserPwdLayout = new QHBoxLayout();
+-    puserPwdLayout->addStretch();
+-    puserPwdLayout->addWidget(userPwdBox);
+-    puserPwdLayout->setSpacing(0);
+-    puserPwdLayout->setContentsMargins(0, 0, 0, 0);
+-    userPwdEdit->setLayout(puserPwdLayout);
+-    userPwdEdit->setEchoMode(QLineEdit::Password);
+-
+-    privateKeyBox = new QCheckBox(this);
+-    privateKeyBox->setStyleSheet("QCheckBox::indicator {width: 18px; height: 9px;}"
+-                                       "QCheckBox::indicator:checked {image: url(:/res/h/show-pwd.png);}"
+-                                       "QCheckBox::indicator:unchecked {image: url(:/res/h/hide-pwd.png);}");
+-    privateKeyBox->setCursor(Qt::PointingHandCursor);
+-    privateKeyBox->setFixedSize(30, clientPrivateKeyPwdEdit->height());
+-    //防止文本框输入内容位于按钮之下
+-    clientPrivateKeyPwdEdit->setTextMargins(margins.left(), margins.top(), privateKeyBox->width(), margins.bottom());
+-    QHBoxLayout *pPrivateKeyPwdLayout = new QHBoxLayout();
+-    pPrivateKeyPwdLayout->addStretch();
+-    pPrivateKeyPwdLayout->addWidget(privateKeyBox);
+-    pPrivateKeyPwdLayout->setSpacing(0);
+-    pPrivateKeyPwdLayout->setContentsMargins(0, 0, 0, 0);
+-    clientPrivateKeyPwdEdit->setLayout(pPrivateKeyPwdLayout);
+-    clientPrivateKeyPwdEdit->setEchoMode(QLineEdit::Password);
+-
+-    pwdEdit->setContextMenuPolicy(Qt::NoContextMenu);
+-    clientPrivateKeyPwdEdit->setContextMenuPolicy(Qt::NoContextMenu);
+-    userPwdEdit->setContextMenuPolicy(Qt::NoContextMenu);
++    //禁用ClearBtn按钮
++    pwdEdit->setClearButtonEnabled(false);
++    clientPrivateKeyPwdEdit->setClearButtonEnabled(false);
++    userPwdEdit->setClearButtonEnabled(false);
+ 
+     QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
+     QRegExpValidator *latitude = new QRegExpValidator(rx, this);
+@@ -180,10 +131,6 @@ void SecurityPage::initConnect()
+ 
+     connect(caNeedBox, &QCheckBox::clicked, this, &SecurityPage::onCaNeedBoxClicked);
+ 
+-    connect(pwdBox, &QCheckBox::clicked, this, &SecurityPage::onPwdBoxClicked);
+-    connect(userPwdBox, &QCheckBox::clicked, this, &SecurityPage::onUserPwdBox);
+-    connect(privateKeyBox, &QCheckBox::clicked, this, &SecurityPage::onPrivateKeyBoxClicked);
+-
+     connect(caCertPathCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
+             this, &SecurityPage::onCaCertPathComboxIndexChanged);
+ 
+@@ -731,40 +678,6 @@ void SecurityPage::onCaNeedBoxClicked()
+     }
+ }
+ 
+-void SecurityPage::onPwdBoxClicked()
+-{
+-    if (pwdEdit->echoMode() == QLineEdit::Password) {
+-        pwdBox->setChecked(true);
+-        pwdEdit->setEchoMode(QLineEdit::Normal);
+-    } else {
+-        pwdBox->setChecked(false);
+-        pwdEdit->setEchoMode(QLineEdit::Password);
+-    }
+-}
+-
+-void SecurityPage::onUserPwdBox()
+-{
+-    if (userPwdEdit->echoMode() == QLineEdit::Password) {
+-        userPwdBox->setChecked(true);
+-        userPwdEdit->setEchoMode(QLineEdit::Normal);
+-    } else {
+-        userPwdBox->setChecked(false);
+-        userPwdEdit->setEchoMode(QLineEdit::Password);
+-    }
+-
+-}
+-
+-void SecurityPage::onPrivateKeyBoxClicked()
+-{
+-    if (clientPrivateKeyPwdEdit->echoMode() == QLineEdit::Password) {
+-        privateKeyBox->setChecked(true);
+-        clientPrivateKeyPwdEdit->setEchoMode(QLineEdit::Normal);
+-    } else {
+-        privateKeyBox->setChecked(false);
+-        clientPrivateKeyPwdEdit->setEchoMode(QLineEdit::Password);
+-    }
+-}
+-
+ void SecurityPage::onCaCertPathComboxIndexChanged(QString str)
+ {
+     if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+diff --git a/src/frontend/netdetails/securitypage.h b/src/frontend/netdetails/securitypage.h
+index 462b920..e3aaee4 100644
+--- a/src/frontend/netdetails/securitypage.h
++++ b/src/frontend/netdetails/securitypage.h
+@@ -9,6 +9,10 @@
+ #include <QCheckBox>
+ 
+ #include "coninfo.h"
++#include "kwidget.h"
++#include "kpasswordedit.h"
++
++using namespace kdk;
+ 
+ class SecurityPage : public QFrame
+ {
+@@ -56,7 +60,7 @@ private:
+     QLabel *userPwdFlagLabel;
+ 
+     QComboBox *secuTypeCombox;
+-    LineEdit *pwdEdit;
++    KPasswordEdit *pwdEdit = nullptr;
+     QComboBox *eapTypeCombox;
+     //TLS
+     LineEdit *identityEdit;
+@@ -65,18 +69,14 @@ private:
+     QCheckBox *caNeedBox;
+     QComboBox *clientCertPathCombox;
+     QComboBox *clientPrivateKeyCombox;
+-    LineEdit *clientPrivateKeyPwdEdit;
++    KPasswordEdit *clientPrivateKeyPwdEdit = nullptr;
+ 
+     //PEAP && TTLS
+     QComboBox *eapMethodCombox;
+     LineEdit *userNameEdit;
+-    LineEdit *userPwdEdit;
++    KPasswordEdit *userPwdEdit = nullptr;
+     QCheckBox *userPwdFlagBox;
+ 
+-    QCheckBox *pwdBox;
+-    QCheckBox *userPwdBox;
+-    QCheckBox *privateKeyBox;
+-
+     void showNone();
+     void showPsk();
+     void showTls();
+@@ -97,9 +97,6 @@ private slots:
+     void setEnableOfSaveBtn();
+ 
+     void onCaNeedBoxClicked();
+-    void onPwdBoxClicked();
+-    void onUserPwdBox();
+-    void onPrivateKeyBoxClicked();
+ 
+     void onCaCertPathComboxIndexChanged(QString str);
+     void onClientCertPathComboxIndexChanged(QString str);
+diff --git a/src/frontend/tab-pages/lanpage.cpp b/src/frontend/tab-pages/lanpage.cpp
+index 27799a9..830b966 100644
+--- a/src/frontend/tab-pages/lanpage.cpp
++++ b/src/frontend/tab-pages/lanpage.cpp
+@@ -120,7 +120,7 @@ void LanPage::initLanDeviceState()
+     }
+ 
+     KyWiredConnectOperation wiredOperation;
+-    if (m_wiredSwitch) {
++    if (m_netSwitch->isChecked()) {
+         for (int index = 0; index < disableDeviceList.count(); ++index) {
+             wiredOperation.closeWiredNetworkWithDevice(disableDeviceList.at(index));
+         }
+@@ -135,12 +135,12 @@ void LanPage::initLanDeviceState()
+ 
+ void LanPage::initNetSwitch()
+ {
+-    m_wiredSwitch = true;
++    bool wiredSwitch = true;
+ 
+     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
+         if (m_switchGsettings->keys().contains(WIRED_SWITCH)) {
+-            m_wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
++            wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
+             connect(m_switchGsettings, &QGSettings::changed, this, &LanPage::onSwithGsettingsChanged);
+         }
+     } else {
+@@ -149,16 +149,13 @@ void LanPage::initNetSwitch()
+ 
+     if (m_devList.count() == 0) {
+         qDebug() << "[wiredSwitch]:init not enable when no device";
+-        m_wiredSwitch = false;
+-        m_netSwitch->setSwitchStatus(m_wiredSwitch);
+-        m_netSwitch->setEnabled(false);
++        m_netSwitch->setChecked(false);
++        m_netSwitch->setCheckable(false);
+     }
+ 
+-    qDebug() << "[wiredSwitch]:init state:" << m_wiredSwitch;
++    qDebug() << "[wiredSwitch]:init state:" << wiredSwitch;
+ 
+-    m_netSwitch->setSwitchStatus(m_wiredSwitch);
+-
+-    connect(m_netSwitch, &SwitchButton::clicked, this, &LanPage::onLanSwitchClicked);
++    m_netSwitch->setChecked(wiredSwitch);
+ 
+     return;
+ }
+@@ -166,13 +163,16 @@ void LanPage::initNetSwitch()
+ void LanPage::onSwithGsettingsChanged(const QString &key)
+ {
+     if (key == WIRED_SWITCH) {
+-        m_netSwitch->blockSignals(true);
+ 
+-        m_wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
+-        qDebug()<<"[LanPage] SwitchButton statue changed to:" << m_wiredSwitch;
++        bool wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
++        qDebug()<<"[LanPage] SwitchButton statue changed to:" << wiredSwitch << m_netSwitch->isChecked();
++
++        if (wiredSwitch == m_netSwitch->isChecked()) {
++            return;
++        }
+ 
+         KyWiredConnectOperation wiredOperation;
+-        if (m_wiredSwitch) {
++        if (wiredSwitch) {
+             for (int index = 0; index < m_enableDeviceList.size(); ++index) {
+                 qDebug()<<"[LanPage] open wired device "<< m_enableDeviceList.at(index);
+                 wiredOperation.openWiredNetworkWithDevice(m_enableDeviceList.at(index));
+@@ -184,30 +184,10 @@ void LanPage::onSwithGsettingsChanged(const QString &key)
+             }
+         }
+ 
++        m_netSwitch->setChecked(wiredSwitch);
++
+         initDeviceCombox();
+         initLanArea();
+-
+-        m_netSwitch->setSwitchStatus(m_wiredSwitch);
+-
+-        m_netSwitch->blockSignals(false);
+-    }
+-}
+-
+-void LanPage::onLanSwitchClicked()
+-{
+-    qDebug()<<"[LanPage] On lan switch button clicked! Status:" <<m_netSwitch->getSwitchStatus()
+-            <<"devices count:"<<m_devList.count();
+-
+-    if (m_devList.count() == 0) {
+-        this->showDesktopNotify(tr("No ethernet device avaliable"));
+-    } else {
+-        if (m_netSwitch->getSwitchStatus()) {
+-            //qDebug() << "[wiredSwitch]set true after clicked";
+-            m_switchGsettings->set(WIRED_SWITCH, true);
+-        } else {
+-            //qDebug() << "[wiredSwitch]set false after clicked";
+-            m_switchGsettings->set(WIRED_SWITCH,false);
+-        }
+     }
+ }
+ 
+@@ -266,7 +246,7 @@ void LanPage::initDeviceCombox()
+ 
+     m_deviceComboBox->clear();
+ 
+-    if (m_wiredSwitch) {
++    if (m_netSwitch->isChecked()) {
+         int enableDeviceCount = m_enableDeviceList.count();
+         if (enableDeviceCount > 1) {
+             for (int index = 0; index < enableDeviceCount; ++index) {
+@@ -426,7 +406,7 @@ void LanPage::constructConnectionArea()
+ 
+ void LanPage::initLanArea()
+ {
+-    if (!m_wiredSwitch || m_currentDeviceName.isEmpty()) {
++    if (!m_netSwitch->isChecked() || m_currentDeviceName.isEmpty()) {
+         m_activatedNetDivider->hide();
+         m_activatedNetFrame->hide();
+ 
+@@ -526,7 +506,7 @@ void LanPage::addDeviceForCombox(QString deviceName)
+     disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                         this, &LanPage::onDeviceComboxIndexChanged);
+ 
+-    if (m_wiredSwitch) {
++    if (m_netSwitch->isChecked()) {
+         if (1 == m_enableDeviceList.count()) {
+             //1、从无到有添加第一块有线网卡
+             //2、有多快网卡，但是没有使能
+@@ -564,9 +544,9 @@ void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devic
+     }
+ 
+     if (m_devList.count() == 0) {// 有线网卡从无到有，打开开关
+-        m_netSwitch->setEnabled(true);
+-        m_wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
+-        m_netSwitch->setSwitchStatus(m_wiredSwitch);
++        bool wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
++        m_netSwitch->setCheckable(true);
++        m_netSwitch->setChecked(wiredSwitch);
+     }
+ 
+     qDebug() << "[LanPage] Begin add device:" << deviceName;
+@@ -590,7 +570,7 @@ void LanPage::deleteDeviceFromCombox(QString deviceName)
+     disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                this, &LanPage::onDeviceComboxIndexChanged);
+ 
+-    if (m_wiredSwitch) {
++    if (m_netSwitch->isChecked()) {
+         if (0 == m_enableDeviceList.count()) {
+             //1、没有使能任何网卡
+             goto l_out;
+@@ -649,9 +629,8 @@ void LanPage::onDeviceRemove(QString deviceName)
+ 
+     m_devList.removeOne(deviceName);
+     if (m_devList.count() == 0) {
+-        m_wiredSwitch = false;
+-        m_netSwitch->setSwitchStatus(m_wiredSwitch);
+-        m_netSwitch->setEnabled(false);
++        m_netSwitch->setCheckable(false);
++        m_netSwitch->setChecked(false);
+         qDebug() << "[wiredSwitch]set not enable after device remove";
+     }
+ 
+@@ -727,7 +706,7 @@ void LanPage::onDeviceActiveChanage(QString deviceName, bool deviceActive)
+     }
+ 
+     if (deviceActive) {
+-        if (!m_wiredSwitch || !m_enableDeviceList.contains(deviceName)) {
++        if (!m_netSwitch->isChecked() || !m_enableDeviceList.contains(deviceName)) {
+             qDebug()<< LOG_FLAG << "close disabled device";
+             m_wiredConnectOperation->closeWiredNetworkWithDevice(deviceName);
+         }
+@@ -780,7 +759,8 @@ void LanPage::initUI()
+     m_activatedLanListWidget->setPalette(pal);
+     m_inactivatedLanListWidget->setPalette(pal);
+ 
+-    m_settingsLabel->installEventFilter(this);
++    m_settingsBtn->installEventFilter(this);
++    m_netSwitch->installEventFilter(this);
+ }
+ 
+ QListWidgetItem *LanPage::insertNewItem(KyConnectItem *itemData, QListWidget *listWidget)
+@@ -842,7 +822,7 @@ void LanPage::updateActivatedConnectionArea(KyConnectItem *p_newItem)
+         deleteConnectionMapItem(m_activeConnectionMap, m_activatedLanListWidget, EMPTY_CONNECT_UUID);
+         QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_activatedLanListWidget);
+         m_activeConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
+-        this->showDesktopNotify(tr("LAN Connected Successfully"));
++        this->showDesktopNotify(tr("LAN Connected Successfully"), "networkconnected");
+     }
+     if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
+@@ -866,7 +846,7 @@ void LanPage::updateConnectionArea(KyConnectItem *p_newItem)
+         qDebug()<<"[LanPage] update connection item"<<p_newItem->m_connectName;
+         QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_inactivatedLanListWidget);
+         m_inactiveConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
+-        this->showDesktopNotify(tr("LAN Disconnected Successfully"));
++        this->showDesktopNotify(tr("LAN Disconnected Successfully"), "networkdisconnected");
+     }
+     if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
+@@ -1192,10 +1172,30 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
+ 
+ bool LanPage::eventFilter(QObject *watched, QEvent *event)
+ {
+-    if (watched == m_settingsLabel) {
++    if (watched == m_settingsBtn) {
+         if (event->type() == QEvent::MouseButtonRelease) {
+             onShowControlCenter();
+         }
++    } else if(watched == m_netSwitch){
++        if (event->type() == QEvent::MouseButtonRelease) {
++            qDebug()<<"[LanPage] On lan switch button clicked! Status:" <<m_netSwitch->isChecked()
++                   <<"devices count:"<<m_devList.count();
++
++            if (m_devList.count() == 0) {
++                this->showDesktopNotify(tr("No ethernet device avaliable"), "networkwrong");
++                m_netSwitch->setCheckable(false);
++                m_netSwitch->setChecked(false);
++            } else {
++                m_netSwitch->setCheckable(true);
++                if (m_netSwitch->isChecked()) {
++                    m_switchGsettings->set(WIRED_SWITCH, false);
++                } else {
++                    m_switchGsettings->set(WIRED_SWITCH,true);
++                }
++            }
++            return true;
++        }
++
+     }
+ 
+     return QWidget::eventFilter(watched, event);
+@@ -1206,7 +1206,7 @@ void LanPage::activateWired(const QString& devName, const QString& connUuid)
+     qDebug() << "[LanPage] activateWired" << devName << connUuid;
+     if (!m_deviceResource->wiredDeviceIsCarriered(devName)) {
+         qDebug() << LOG_FLAG << devName << "is not carried, so can not activate connection";
+-        this->showDesktopNotify(tr("Wired Device not carried"));
++        this->showDesktopNotify(tr("Wired Device not carried"), "networkwrong");
+     } else {
+         m_wiredConnectOperation->activateConnection(connUuid, devName);
+     }
+@@ -1239,7 +1239,7 @@ void LanPage::showDetailPage(QString devName, QString uuid)
+        return;
+     }
+ 
+-    NetDetail *netDetail = new NetDetail(devName, p_item->m_connectName, uuid, isActive, false, false, this);
++    NetDetail *netDetail = new NetDetail(devName, p_item->m_connectName, uuid, isActive, false, false);
+     netDetail->show();
+ 
+     delete p_item;
+diff --git a/src/frontend/tab-pages/lanpage.h b/src/frontend/tab-pages/lanpage.h
+index ee2d698..928a823 100644
+--- a/src/frontend/tab-pages/lanpage.h
++++ b/src/frontend/tab-pages/lanpage.h
+@@ -2,7 +2,6 @@
+ #define LANPAGE_H
+ 
+ #include "divider.h"
+-#include "switchbutton.h"
+ #include <QVBoxLayout>
+ #include <QHBoxLayout>
+ #include <QLabel>
+@@ -98,7 +97,6 @@ private slots:
+     void onUpdateConnection(QString uuid);
+ 
+     void onSwithGsettingsChanged(const QString &key);
+-    void onLanSwitchClicked();
+ 
+     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
+     void onDeviceRemove(QString deviceName);
+@@ -129,7 +127,6 @@ private:
+ 
+     QGSettings *m_switchGsettings = nullptr;
+ 
+-    bool m_wiredSwitch = true;
+ };
+ 
+ #endif // LANPAGE_H
+diff --git a/src/frontend/tab-pages/tabpage.cpp b/src/frontend/tab-pages/tabpage.cpp
+index b1d7330..e32f3fb 100644
+--- a/src/frontend/tab-pages/tabpage.cpp
++++ b/src/frontend/tab-pages/tabpage.cpp
+@@ -29,7 +29,7 @@ void TabPage::initUI()
+     m_titleLayout = new QHBoxLayout(m_titleFrame);
+     m_titleLayout->setContentsMargins(TITLE_LAYOUT_MARGINS);
+     m_titleLabel = new QLabel(m_titleFrame);
+-    m_netSwitch = new SwitchButton(m_titleFrame);
++    m_netSwitch = new KSwitchButton(m_titleFrame);
+     m_titleLayout->addWidget(m_titleLabel);
+     m_titleLayout->addStretch();
+     m_titleLayout->addWidget(m_netSwitch);
+@@ -94,12 +94,11 @@ void TabPage::initUI()
+ 
+     m_settingsLayout = new QHBoxLayout(m_settingsFrame);
+     m_settingsLayout->setContentsMargins(SETTINGS_LAYOUT_MARGINS);
+-    m_settingsLabel = new KyLable(m_settingsFrame);
+-    m_settingsLabel->setCursor(Qt::PointingHandCursor);
+-    m_settingsLabel->setText(tr("Settings"));
+-    m_settingsLabel->setScaledContents(true);
+ 
+-    m_settingsLayout->addWidget(m_settingsLabel);
++    m_settingsBtn = new KBorderlessButton(m_settingsFrame);
++    m_settingsBtn->setText(tr("Settings"));
++
++    m_settingsLayout->addWidget(m_settingsBtn);
+     m_settingsLayout->addStretch();
+     m_settingsFrame->setLayout(m_settingsLayout);
+ 
+@@ -138,20 +137,27 @@ void TabPage::onPaletteChanged()
+     }
+ }
+ 
+-void TabPage::showDesktopNotify(const QString &message)
++void TabPage::showDesktopNotify(const QString &message, QString soundName)
+ {
+     QDBusInterface iface("org.freedesktop.Notifications",
+                          "/org/freedesktop/Notifications",
+                          "org.freedesktop.Notifications",
+                          QDBusConnection::sessionBus());
++    QStringList actions;  //跳转动作
++    actions.append("kylin-nm");
++    actions.append("default");          //默认动作：点击消息体时打开麒麟录音
++    QMap<QString, QVariant> hints;
++    if (!soundName.isEmpty()) {
++        hints.insert("sound-name",soundName); //添加声音
++    }
+     QList<QVariant> args;
+     args<<(tr("Kylin NM"))
+        <<((unsigned int) 0)
+        <<QString("gnome-dev-ethernet")
+        <<tr("kylin network applet desktop message") //显示的是什么类型的信息
+        <<message //显示的具体信息
+-       <<QStringList()
+-       <<QVariantMap()
++       <<actions
++       <<hints
+        <<(int)-1;
+     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+ }
+diff --git a/src/frontend/tab-pages/tabpage.h b/src/frontend/tab-pages/tabpage.h
+index d8bd871..60d6319 100644
+--- a/src/frontend/tab-pages/tabpage.h
++++ b/src/frontend/tab-pages/tabpage.h
+@@ -2,8 +2,6 @@
+ #define TABPAGE_H
+ 
+ #include "divider.h"
+-#include "switchbutton.h"
+-#include "kylable.h"
+ #include <QVBoxLayout>
+ #include <QHBoxLayout>
+ #include <QLabel>
+@@ -15,6 +13,11 @@
+ #include <QProcess>
+ #include <QDebug>
+ #include "kylinnetworkdeviceresource.h"
++#include "kwidget.h"
++#include "kswitchbutton.h"
++#include "kborderlessbutton.h"
++
++using namespace kdk;
+ 
+ #define MAIN_LAYOUT_MARGINS 0,0,0,0
+ #define MAIN_LAYOUT_SPACING 0
+@@ -62,7 +65,7 @@ public:
+ 
+ //    void updateDefaultDevice(QString &deviceName);
+ //    QString getDefaultDevice();
+-    static void showDesktopNotify(const QString &message);
++    static void showDesktopNotify(const QString &message, QString soundName);
+ 
+     void hideSetting() {
+         if (nullptr != m_settingsFrame) {
+@@ -93,7 +96,7 @@ protected:
+     QFrame * m_titleFrame = nullptr;
+     QHBoxLayout * m_titleLayout = nullptr;
+     QLabel * m_titleLabel = nullptr;
+-    SwitchButton * m_netSwitch = nullptr;
++    KSwitchButton * m_netSwitch = nullptr;
+     Divider * m_titleDivider = nullptr;
+ 
+     QFrame * m_activatedNetFrame = nullptr;
+@@ -111,7 +114,7 @@ protected:
+ 
+     QFrame * m_settingsFrame = nullptr;
+     QHBoxLayout * m_settingsLayout = nullptr;
+-    KyLable * m_settingsLabel = nullptr;
++    KBorderlessButton *m_settingsBtn = nullptr;
+ 
+     //临时增加的下拉框选择网卡区域
+     QFrame * m_deviceFrame = nullptr;
+@@ -120,8 +123,6 @@ protected:
+     QComboBox * m_deviceComboBox = nullptr;
+     QLabel * m_tipsLabel = nullptr;
+ 
+-
+-
+ public slots:
+     virtual void onDeviceComboxIndexChanged(int currentIndex) = 0;
+     void onPaletteChanged();
+diff --git a/src/frontend/tab-pages/wlanpage.cpp b/src/frontend/tab-pages/wlanpage.cpp
+index 935c78f..8c8b688 100644
+--- a/src/frontend/tab-pages/wlanpage.cpp
++++ b/src/frontend/tab-pages/wlanpage.cpp
+@@ -59,10 +59,20 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
+ bool WlanPage::eventFilter(QObject *w, QEvent *e)
+ {
+     if (e->type() == QEvent::MouseButtonRelease) {
+-        if (w == m_settingsLabel) {
++        if (w == m_settingsBtn) {
+             //ZJP_TODO 打开控制面板
+             qDebug() << LOG_FLAG <<"recive event show control center";
+             showControlCenter();
++        } else if (w == m_netSwitch) {
++            if (m_devList.isEmpty()) {
++                showDesktopNotify(tr("No wireless network card detected"), "networkwrong");
++                //检测不到无线网卡不再触发click信号
++                m_netSwitch->setCheckable(false);
++                m_netSwitch->setChecked(false);
++            } else {
++                m_wirelessConnectOpreation->setWirelessEnabled(!m_netSwitch->isChecked());
++            }
++            return true;
+         }
+     }
+ 
+@@ -101,7 +111,8 @@ void WlanPage::initWlanUI()
+     m_activatedNetListWidget->setPalette(pal);
+     m_inactivatedNetListWidget->setPalette(pal);
+ 
+-    m_settingsLabel->installEventFilter(this);
++    m_settingsBtn->installEventFilter(this);
++    m_netSwitch->installEventFilter(this);
+ }
+ 
+ 
+@@ -110,37 +121,11 @@ void WlanPage::onWlanSwithGsettingsChanged(const QString &key)
+     if (key == WIRELESS_SWITCH) {
+         m_wlanSwitchEnable = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
+         qDebug() << LOG_FLAG << "wlan switch state" << m_wlanSwitchEnable;
+-        m_netSwitch->setSwitchStatus(m_wlanSwitchEnable);
+-        initDeviceCombox();
+-        initWlanArea();
+-    }
+ 
+-    return;
+-}
++        m_netSwitch->setChecked(m_wlanSwitchEnable);
+ 
+-/**
+- * @brief WlanPage::onWlanSwitchClicked 点击无线网开关
+- */
+-void WlanPage::onWlanSwitchClicked()
+-{
+-    if (m_devList.isEmpty()) {
+-        showDesktopNotify(tr("No wireless network card detected"));
+-        //检测不到无线网卡不再触发click信号       
+-        m_netSwitch->setSwitchStatus(false);
+-        m_netSwitch->setEnabled(false);
+-    } else {
+-        bool switchEnable = m_netSwitch->getSwitchStatus();
+-        if (m_wlanSwitchEnable != switchEnable) {
+-            qDebug()<< LOG_FLAG << "wlan switch state " << switchEnable;
+-            m_wirelessConnectOpreation->setWirelessEnabled(switchEnable);
+-            if (!switchEnable) {
+-                m_netSwitch->setEnabled(false);
+-                m_activatedNetFrame->hide();
+-                m_activatedNetDivider->hide();
+-                m_inactivatedNetFrame->hide();
+-                m_deviceFrame->hide();
+-            }
+-        }
++        initDeviceCombox();
++        initWlanArea();
+     }
+ 
+     return;
+@@ -148,27 +133,24 @@ void WlanPage::onWlanSwitchClicked()
+ 
+ void WlanPage::initWlanSwitchState()
+ {
+-    m_wlanSwitchEnable = m_wirelessConnectOpreation->getWirelessEnabled();
+-
+     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
+         if (m_switchGsettings->keys().contains(WIRELESS_SWITCH)) {
+             if (m_devList.isEmpty()) {
+-                m_wlanSwitchEnable = false;
+-                m_netSwitch->setSwitchStatus(m_wlanSwitchEnable);
+-                m_netSwitch->setEnabled(false);
++                m_netSwitch->setCheckable(false);
++                m_netSwitch->setChecked(false);
+             } else {
+-                m_wlanSwitchEnable = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
++                bool wiredGsetting = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
++                if (m_wirelessConnectOpreation->getWirelessEnabled()
++                        != wiredGsetting) {
++                    //以gsetting为准
++                    m_wirelessConnectOpreation->setWirelessEnabled(wiredGsetting);
++                }
++                m_netSwitch->setChecked(wiredGsetting);
+             }
+             connect(m_switchGsettings, &QGSettings::changed, this, &WlanPage::onWlanSwithGsettingsChanged);
+         }
+     }
+-    m_netSwitch->setSwitchStatus(m_wlanSwitchEnable);
+-
+-
+-    connect(m_netSwitch, &SwitchButton::clicked, this, &WlanPage::onWlanSwitchClicked);
+-
+-    return;
+ }
+ 
+ void WlanPage::initTimer()
+@@ -200,7 +182,7 @@ void WlanPage::initDeviceCombox()
+                                 this, &WlanPage::onDeviceComboxIndexChanged);
+     m_deviceComboBox->clear();
+ 
+-    if (m_wlanSwitchEnable) {
++    if (m_netSwitch->isChecked()) {
+         if (0 == m_devList.count()) {
+             m_deviceFrame->show();
+             m_tipsLabel->show();
+@@ -472,7 +454,7 @@ void WlanPage::constructWirelessNetArea()
+ 
+ void WlanPage::initWlanArea()
+ {
+-    if (m_wlanSwitchEnable) {
++    if (m_netSwitch->isChecked()) {
+         m_activatedNetFrame->show();
+         m_activatedNetDivider->show();
+         constructActivateConnectionArea();
+@@ -496,7 +478,8 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
+     info << item.m_NetSsid
+          << QString::number(item.m_signalStrength)
+          << item.m_secuType
+-         << (m_connectResource->isApConnection(item.m_connectUuid) ? IsApConnection : NotApConnection);
++         << (m_connectResource->isApConnection(item.m_connectUuid) ? IsApConnection : NotApConnection)
++         << QString::number(item.getCategory(item.m_uni));
+     emit wlanAdd(interface, info);
+ 
+     if (interface != m_currentDevice) {
+@@ -551,7 +534,7 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
+     } else {
+         deleteWirelessItemFormMap(m_activateConnectionItemMap,
+                                   m_activatedNetListWidget, ssid);
+-        showDesktopNotify(tr("WLAN Disconnected Successfully"));
++        showDesktopNotify(tr("WLAN Disconnected Successfully"), "networkdisconnected");
+ 
+         QListWidgetItem *p_listWidgetItem = addEmptyItem(m_activatedNetListWidget);
+         m_activateConnectionItemMap.insert(EMPTY_SSID, p_listWidgetItem);
+@@ -633,7 +616,7 @@ void WlanPage::addDeviceToCombox(QString deviceName)
+ {
+     disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                                 this, &WlanPage::onDeviceComboxIndexChanged);
+-    if (m_wlanSwitchEnable) {
++    if (m_netSwitch->isChecked()) {
+         if (m_currentDevice.isEmpty()){
+             m_deviceFrame->hide();
+             m_currentDevice = deviceName;
+@@ -666,9 +649,9 @@ void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devi
+     }
+ 
+     if (m_devList.isEmpty()) {
+-        m_wlanSwitchEnable = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
+-        m_netSwitch->setEnabled(true);
+-        m_netSwitch->setSwitchStatus(m_wlanSwitchEnable);
++        bool wlanSwitch = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
++        m_netSwitch->setCheckable(true);
++        m_netSwitch->setChecked(wlanSwitch);
+     }
+ 
+     m_devList << deviceName;
+@@ -687,7 +670,7 @@ void WlanPage::deleteDeviceFromCombox(QString deviceName)
+     disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                                 this, &WlanPage::onDeviceComboxIndexChanged);
+ 
+-    if (m_wlanSwitchEnable) {
++    if (m_netSwitch->isChecked()) {
+         if (0 == m_devList.count()) {
+             m_deviceFrame->hide();
+             //m_tipsLabel->show();
+@@ -728,9 +711,8 @@ void WlanPage::onDeviceRemove(QString deviceName)
+     deleteDeviceFromCombox(deviceName);
+ 
+     if (m_devList.isEmpty()) {
+-        m_wlanSwitchEnable = false;
+-        m_netSwitch->setSwitchStatus(m_wlanSwitchEnable);
+-        m_netSwitch->setEnabled(false);
++        m_netSwitch->setCheckable(false);
++        m_netSwitch->setChecked(false);
+     }
+ 
+     if (originalDeviceName == deviceName) {
+@@ -803,11 +785,11 @@ void WlanPage::wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::St
+                               NetworkManager::ActiveConnection::Reason reason)
+ {
+     if (state == NetworkManager::ActiveConnection::State::Deactivated) {
+-        showDesktopNotify(tr("WLAN Disconnected Successfully"));
++        showDesktopNotify(tr("WLAN Disconnected Successfully"), "networkdisconnected");
+         qDebug() << "[WlanPage] wlan disconnected successfully"  << Q_FUNC_INFO <<__LINE__;
+     } else if (state == NetworkManager::ActiveConnection::State::Activated) {
+         qDebug() << "[WlanPage] wlan connected successfully" << Q_FUNC_INFO <<__LINE__;
+-        this->showDesktopNotify(tr("WLAN Connected Successfully"));
++        this->showDesktopNotify(tr("WLAN Connected Successfully"), "networkconnected");
+     }
+ 
+     return;
+@@ -1014,7 +996,7 @@ void WlanPage::requestScan()
+ void WlanPage::onHiddenWlanClicked()
+ {
+     qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
+-    NetDetail *netDetail = new NetDetail(m_currentDevice, "", "", false, true, true, this);
++    NetDetail *netDetail = new NetDetail(m_currentDevice, "", "", false, true, true);
+     netDetail->show();
+ }
+ 
+@@ -1042,8 +1024,8 @@ void WlanPage::onWifiEnabledChanged(bool isWifiOn)
+     if (m_wlanSwitchEnable == isWifiOn) {
+         return;
+     } else {
+-        if (!m_netSwitch->getEnabled()) {
+-            m_netSwitch->setEnabled(true);
++        if (!m_netSwitch->isChecked()) {
++            m_netSwitch->setChecked(true);
+         }
+         m_switchGsettings->set(WIRELESS_SWITCH, isWifiOn);
+     }
+@@ -1180,11 +1162,19 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
+             QString ssid ="";
+             m_wirelessNetResource->getSsidByUuid(actMap[iter.key()].at(0), ssid);
+             if (m_wirelessNetResource->getWifiNetwork(iter.key(), ssid, data)) {
++                int category = 0;
++                int signalStrength;
++                QString uni,secuType;
++
++                if (m_netDeviceResource->getActiveConnectionInfo(iter.key(), signalStrength, uni, secuType)) {
++                    category = data.getCategory(uni);
++                }
+                 vector.append(QStringList() << data.m_NetSsid
+-                              << QString::number(data.m_signalStrength)
+-                              << data.m_secuType
++                              << QString::number(signalStrength)
++                              << secuType
+                               << data.m_connectUuid
+-                              << (m_connectResource->isApConnection(data.m_connectUuid) ? IsApConnection : NotApConnection));
++                              << (m_connectResource->isApConnection(data.m_connectUuid) ? IsApConnection : NotApConnection)
++                              << QString::number(category));
+                 activeSsid = data.m_NetSsid;
+             } else {
+                 vector.append(QStringList("--"));
+@@ -1200,7 +1190,8 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
+             vector.append(QStringList()<<itemData.m_NetSsid
+                           << QString::number(itemData.m_signalStrength)
+                           << itemData.m_secuType
+-                          << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection));
++                          << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection)
++                          << QString::number(itemData.getCategory(itemData.m_uni)));
+         }
+ 
+         map.insert(iter.key(), vector);
+@@ -1372,7 +1363,7 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
+ 
+     bool isActive = m_connectResource->isActivatedConnection(wirelessNetItem.m_connectUuid);
+ 
+-    NetDetail *netDetail = new NetDetail(devName, ssid, wirelessNetItem.m_connectUuid, isActive, true, !wirelessNetItem.m_isConfigured, this);
++    NetDetail *netDetail = new NetDetail(devName, ssid, wirelessNetItem.m_connectUuid, isActive, true, !wirelessNetItem.m_isConfigured);
+     netDetail->show();
+ 
+     return;
+@@ -1394,12 +1385,13 @@ void WlanPage::setWirelessSwitchEnable(bool enable)
+     if (m_devList.isEmpty()) {
+         qDebug() << "have no device to use "  << Q_FUNC_INFO << __LINE__;
+         //检测不到无线网卡不再触发click信号
+-        m_netSwitch->setSwitchStatus(false);
+-        //m_netSwitch->setEnabled(false);
++//        m_netSwitch->setSwitchStatus(false);
++        m_netSwitch->setEnabled(false);
+     }else{
+         m_wirelessConnectOpreation->setWirelessEnabled(enable);
+         if (!enable) {
+-            m_netSwitch->setEnabled(false);
++//            m_netSwitch->setEnabled(false);
++            m_netSwitch->setChecked(false);
+             m_activatedNetFrame->hide();
+             m_activatedNetDivider->hide();
+             m_inactivatedNetFrame->hide();
+diff --git a/src/frontend/tab-pages/wlanpage.h b/src/frontend/tab-pages/wlanpage.h
+index 270af21..b4cf4f8 100644
+--- a/src/frontend/tab-pages/wlanpage.h
++++ b/src/frontend/tab-pages/wlanpage.h
+@@ -93,7 +93,6 @@ private slots:
+                                 NetworkManager::ActiveConnection::Reason reason);
+     void onItemHeightChanged(const bool isExpanded, const QString &ssid);
+ 
+-    void onWlanSwitchClicked();
+     void onWlanSwithGsettingsChanged(const QString &key);
+ 
+     void onDeviceComboxIndexChanged(int currentIndex);
+diff --git a/src/main.cpp b/src/main.cpp
+index 836471f..9170d0c 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -153,11 +153,11 @@ int main(int argc, char *argv[])
+     w.setProperty("useStyleWindowManager", false); //禁用拖动
+     //设置窗口无边框，阴影
+ 
+-    MotifWmHints window_hints;
+-    window_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
+-    window_hints.functions = MWM_FUNC_ALL;
+-    window_hints.decorations = MWM_DECOR_BORDER;
+-    XAtomHelper::getInstance()->setWindowMotifHint(w.winId(), window_hints);
++//    MotifWmHints window_hints;
++//    window_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
++//    window_hints.functions = MWM_FUNC_ALL;
++//    window_hints.decorations = MWM_DECOR_BORDER;
++//    XAtomHelper::getInstance()->setWindowMotifHint(w.winId(), window_hints);
+ 
+ //    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+ 
+diff --git a/src/src.pro b/src/src.pro
+index 08d5a27..dd6be2b 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -14,7 +14,7 @@ TEMPLATE = app
+ CONFIG += c++14 qt warn_on link_pkgconfig
+ #CONFIG += release
+ 
+-PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets
++PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets kysdk-waylandhelper
+ 
+ INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
+ 

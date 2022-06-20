@@ -1,0 +1,156 @@
+#include "enterprisewlanpage.h"
+
+#include <QPainter>
+
+#define  MAIN_SIZE_EXPAND  480,550
+#define  MAIN_SIZE_NARROW  480,340
+#define  PAGE_LAYOUT_MARGINS  24,0,24,0
+#define  TOP_LAYOUT_MARGINS  0,14,0,0
+#define  BOTTOM_LAYOUT_MARGINS  0,24,0,24
+#define  LABEL_MIN_WIDTH  150
+
+EnterpriseWlanPage::EnterpriseWlanPage(KyWirelessNetItem &wirelessNetItem, QString device, bool isLockScreen, QWidget *parent)
+    : m_wirelessNetItem(wirelessNetItem), m_deviceName(device), QWidget(parent)
+{
+    initUI();
+    initConnections();
+    initData();
+
+    setAttribute(Qt::WA_DeleteOnClose);
+
+    if (isLockScreen) {
+        setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
+        setWindowFlags(Qt::FramelessWindowHint);   //设置无边框窗口
+    }
+
+    centerToScreen();
+}
+
+EnterpriseWlanPage::~EnterpriseWlanPage()
+{
+    if (m_entSecurityWidget) {
+        delete m_entSecurityWidget;
+        m_entSecurityWidget = nullptr;
+    }
+}
+
+void EnterpriseWlanPage::paintEvent(QPaintEvent *event)
+{
+    QPalette pal = qApp->palette();
+    QColor colorPal = pal.color(QPalette::Background);
+
+    //设置窗体为圆角
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing); // 反锯齿;
+    painter.setBrush(colorPal);
+    painter.setPen(Qt::transparent);
+    auto rect = this->rect();
+    painter.drawRoundedRect(rect, 12, 12);      //窗口圆角
+
+    return QWidget::paintEvent(event);
+}
+
+void EnterpriseWlanPage::initUI()
+{
+    m_ssidTitleLabel = new QLabel(this);
+    m_ssidTitleLabel->setMinimumWidth(LABEL_MIN_WIDTH);
+    m_ssidLabel = new QLabel(this);
+    m_entSecurityWidget = new EntSecurityWidget(this);
+    m_cancelBtn = new QPushButton(this);
+    m_connectBtn = new QPushButton(this);
+    m_connectBtn->setEnabled(false);
+    m_ssidWidget = new QWidget(this);
+    m_btnWidget = new QWidget(this);
+
+    m_mainLayout = new QVBoxLayout(this);
+    this->setLayout(m_mainLayout);
+    m_mainLayout->setContentsMargins(PAGE_LAYOUT_MARGINS);
+    m_mainLayout->setSpacing(0);
+    m_mainLayout->addWidget(m_ssidWidget);
+    m_mainLayout->addWidget(m_entSecurityWidget);
+    m_mainLayout->addStretch();
+    m_mainLayout->addWidget(m_btnWidget);
+
+    QHBoxLayout *ssidLayout = new QHBoxLayout(m_ssidWidget);
+    ssidLayout->setContentsMargins(TOP_LAYOUT_MARGINS);
+    ssidLayout->addWidget(m_ssidTitleLabel);
+    ssidLayout->addWidget(m_ssidLabel);
+    ssidLayout->addStretch();
+
+    QHBoxLayout *btnLayout = new QHBoxLayout(m_btnWidget);
+    btnLayout->setContentsMargins(BOTTOM_LAYOUT_MARGINS);
+    btnLayout->setSpacing(16);
+    btnLayout->addStretch();
+    btnLayout->addWidget(m_cancelBtn);
+    btnLayout->addWidget(m_connectBtn);
+
+    m_ssidTitleLabel->setText(tr("Network name(SSID)")); //网络名(SSID)
+    m_ssidLabel->setText(tr("Network name--(test)"));
+    m_cancelBtn->setText(tr("Cancel"));
+    m_connectBtn->setText(tr("Connect"));
+
+    this->setWindowTitle(tr("Connect Enterprise WLAN"));
+    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
+    this->setFixedSize(MAIN_SIZE_EXPAND);
+}
+
+void EnterpriseWlanPage::initConnections()
+{
+    connect(m_cancelBtn, &QPushButton::clicked, this, &EnterpriseWlanPage::close);
+    connect(m_connectBtn, &QPushButton::clicked, this, &EnterpriseWlanPage::onBtnConnectClicked);
+    connect(m_entSecurityWidget, &EntSecurityWidget::eapTypeChanged, this, &EnterpriseWlanPage::onEapTypeChanged);
+    connect(m_entSecurityWidget, &EntSecurityWidget::setSecuPageState, this, [ = ](bool status) {
+       m_connectBtn->setEnabled(status);
+    });
+
+    connect(m_entSecurityWidget, &EntSecurityWidget::setSecuPageState, this, [=](bool status) {
+       m_connectBtn->setEnabled(status);
+    });
+}
+
+void EnterpriseWlanPage::initData()
+{
+
+}
+
+void EnterpriseWlanPage::centerToScreen()
+{
+    QDesktopWidget* m = QApplication::desktop();
+    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
+    int desk_x = desk_rect.width();
+    int desk_y = desk_rect.height();
+    int x = this->width();
+    int y = this->height();
+    this->move((desk_x - x)/ 2 , (desk_y - y)/ 2);
+}
+
+void EnterpriseWlanPage::onBtnConnectClicked()
+{
+
+}
+
+void EnterpriseWlanPage::onEapTypeChanged(const KyEapMethodType &type)
+{
+    switch (type) {
+    case KyEapMethodType::TLS:
+//        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
+//            m_resource->getEnterPriseInfoTls(m_wirelessNetItem.m_connectUuid, m_info.tlsInfo);
+//        }
+        this->setFixedSize(MAIN_SIZE_EXPAND);
+        break;
+    case KyEapMethodType::PEAP:
+//        if (m_wirelessNetItem.m_connectUuid.isEmpty()) {
+//            m_resource->getEnterPriseInfoPeap(m_wirelessNetItem.m_connectUuid, m_info.peapInfo);
+//            }
+        this->setFixedSize(MAIN_SIZE_NARROW);
+        break;
+    case KyEapMethodType::TTLS:
+//        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
+//            m_resource->getEnterPriseInfoTtls(m_wirelessNetItem.m_connectUuid, m_info.ttlsInfo);
+//        }
+        this->setFixedSize(MAIN_SIZE_NARROW);
+        break;
+    default:
+        break;
+    }
+}

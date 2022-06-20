@@ -11,6 +11,7 @@
 #include <QCheckBox>
 
 #include "../component/InfoButton/infobutton.h"
+#include "../component/RadioItemButton/radioitembutton.h"
 #include "kpasswordedit.h"
 using namespace kdk;
 
@@ -28,12 +29,13 @@ public:
         return titileLabel->text();
     }
 
-    void setItemIcon(const QPixmap &pixmap) {
-        iconLabel->setPixmap(pixmap);
+    void setItemIcon(const QIcon &icon) {
+        radioBtn->setButtonIcon(icon);
     }
 
     void setStatus(bool isAcitve){
         m_isAcitve = isAcitve;
+        radioBtn->setActive(isAcitve);
     }
 
     bool getStatus(){
@@ -76,6 +78,10 @@ public:
         m_interface = interface;
     }
 
+    void setPasswordError(QString pwd) {
+        m_pwdLineEdit->setState(LoginFailed);
+        m_pwdLineEdit->setText(pwd);
+    }
 
     void startLoading();
     void stopLoading();
@@ -101,7 +107,7 @@ private:
     int currentIconIndex=0;
 
     QMenu *m_menu = nullptr;
-    QLabel * iconLabel = nullptr;
+    RadioItemButton* radioBtn = nullptr;
     InfoButton * infoLabel = nullptr;
     QLabel * titileLabel = nullptr;
 
@@ -128,6 +134,8 @@ private:
 
     QHBoxLayout* m_autoConnectFrameLyt = nullptr;
     QHBoxLayout* m_pwdFrameLyt = nullptr;
+
+    bool m_isIn = false;
 
 private Q_SLOTS:
     void updateIcon();

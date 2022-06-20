@@ -208,6 +208,7 @@ void NetConnect::initComponent() {
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
         setSwitchStatus();
+        Q_EMIT setWiredEnabled(!m_wiredSwitch->isChecked());
         connect(m_switchGsettings, &QGSettings::changed, this, [=] (const QString &key) {
             if (key == KEY_WIRED_SWITCH) {
                 setSwitchStatus();
@@ -255,7 +256,7 @@ void NetConnect::initConnect()
     connect(manager, &KyNetworkManager::connectionRemove, this, &NetConnect::onLanRemove);
 
     connect(manager, &KyNetworkManager::wiredDeviceAdd, this, &NetConnect::onDeviceAdd);
-    connect(manager, &KyNetworkManager::wiredDeviceRemove, this, &NetConnect::onDeviceRemove);
+    connect(manager, &KyNetworkManager::deviceRemove, this, &NetConnect::onDeviceRemove);
     connect(manager, &KyNetworkManager::wiredDeviceUpdate, this, &NetConnect::onDeviceNameChanged);
 
 
@@ -273,18 +274,25 @@ void NetConnect::initConnect()
 void NetConnect::getDeviceStatusMap(QMap<QString, bool> &map)
 {
     map.clear();
+    QStringList wiredDevList;
+    wiredDevList.clear();
+    manager->getNetworkDeviceList(DEVICE_TYPE_ETHERNET, wiredDevList);
+
     if (!QFile::exists(CONFIG_FILE_PATH)) {
-        qDebug() << "CONFIG_FILE_PATH not exist";
+        if (!wiredDevList.isEmpty()) {
+            for (int i = 0; i < wiredDevList.size(); ++i) {
+                map.insert(wiredDevList.at(i), true);
+            }
+        }
+        qWarning() << "CONFIG_FILE_PATH not exist";
         return;
     }
 
-    QStringList wiredDevList;
-    wiredDevList.clear();
+
 
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
     m_settings->beginGroup("CARDEABLE");
 
-    manager->getNetworkDeviceList(DEVICE_TYPE_ETHERNET, wiredDevList);
     if (!wiredDevList.isEmpty()) {
         for (int i = 0; i < wiredDevList.size(); ++i) {
             if (!m_settings->contains(wiredDevList.at(i))) {
@@ -313,10 +321,10 @@ void NetConnect::updateLanInfo(QString deviceName, QString connectUuid, QString 
                 lanInfo << connectName << connectUuid << connectPath;
                 addOneLanFrame(iter.value(), iter.key(), lanInfo);
             } else {
-                if (iter.value()->itemMap[connectUuid]->titileLabel->text() != connectName) {
+                if (iter.value()->itemMap[connectUuid]->getName() != connectName) {
                     qDebug() << "[NetConnect]" << iter.key()
-                             << iter.value()->itemMap[connectUuid]->titileLabel->text() << "change to" << connectName;
-                    iter.value()->itemMap[connectUuid]->titileLabel->setText(connectName);
+                             << iter.value()->itemMap[connectUuid]->getName() << "change to" << connectName;
+                    iter.value()->itemMap[connectUuid]->setName(connectName);
                     deviceFrameMap[iter.key()]->lanItemLayout->removeWidget(iter.value()->itemMap[connectUuid]);
                     int index = getInsertPos(connectName, deviceFrameMap[iter.key()]->lanItemLayout);
                     deviceFrameMap[iter.key()]->lanItemLayout->insertWidget(index,iter.value()->itemMap[connectUuid]);
@@ -334,9 +342,9 @@ void NetConnect::updateLanInfo(QString deviceName, QString connectUuid, QString 
                     addOneLanFrame(iter.value(), deviceName, lanInfo);
                 } else {
                     qDebug() << "[NetConnect]" << deviceName
-                             << iter.value()->itemMap[connectUuid]->titileLabel->text() << "change to" << connectName;
-                    if (iter.value()->itemMap[connectUuid]->titileLabel->text() != connectName) {
-                        iter.value()->itemMap[connectUuid]->titileLabel->setText(connectName);
+                             << iter.value()->itemMap[connectUuid]->getName() << "change to" << connectName;
+                    if (iter.value()->itemMap[connectUuid]->getName() != connectName) {
+                        iter.value()->itemMap[connectUuid]->setName(connectName);
                         deviceFrameMap[iter.key()]->lanItemLayout->removeWidget(iter.value()->itemMap[connectUuid]);
                         int index = getInsertPos(connectName, deviceFrameMap[iter.key()]->lanItemLayout);
                         deviceFrameMap[iter.key()]->lanItemLayout->insertWidget(index,iter.value()->itemMap[connectUuid]);
@@ -466,23 +474,23 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, KyWiredItem item)
     LanItem * lanItem = new LanItem(m_isSimpleMode, pluginWidget);
 
     QIcon searchIcon = QIcon::fromTheme(NoNetSymbolic);
-    lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
-    lanItem->titileLabel->setText(item.m_connectName);
+    lanItem->setItemIcon(searchIcon);
+    lanItem->setName(item.m_connectName);
 
-    lanItem->uuid = item.m_connectUuid;
-    lanItem->dbusPath = item.m_connectPath;
+    lanItem->setUuid(item.m_connectUuid);
+    lanItem->setPath(item.m_connectPath);
 
     //todo show detail page
-    connect(lanItem->infoLabel, &InfoButton::clicked, this, [=]{
+    connect(lanItem, &LanItem::infoButtonClick, this, [=]{
     });
 
-    lanItem->isAcitve = false;
+    lanItem->setStatus(false);
 
     connect(lanItem, &LanItem::itemClick, this, [=] {
-        if (lanItem->isAcitve || lanItem->loading) {
-            deActiveConnect(lanItem->uuid);
+        if (lanItem->getStatus() || lanItem->getIsLoading()) {
+            deActiveConnect(lanItem->getUuid());
         } else {
-            activeConnect(lanItem->uuid, devName);
+            activeConnect(lanItem->getUuid(), devName);
         }
     });
 
@@ -635,8 +643,8 @@ void NetConnect::onLanRemove(QString lanPath)
     for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
         QMap<QString, LanItem *>::iterator itemIter;
         for (itemIter = iter.value()->itemMap.begin(); itemIter != iter.value()->itemMap.end(); itemIter++) {
-            if (itemIter.value()->dbusPath == lanPath) {
-               qDebug()<<"[NetConnect]lan remove " << lanPath << " find in " << itemIter.value()->titileLabel->text();
+            if (itemIter.value()->getPath() == lanPath) {
+               qDebug()<<"[NetConnect]lan remove " << lanPath << " find in " << itemIter.value()->getName();
                QString key = itemIter.key();
                iter.value()->lanItemLayout->removeWidget(itemIter.value());
                delete itemIter.value();
@@ -666,23 +674,25 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     LanItem * lanItem = new LanItem(m_isSimpleMode, pluginWidget);
 
     QIcon searchIcon = QIcon::fromTheme(NoNetSymbolic);
-    lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
-    lanItem->titileLabel->setText(connName);
+    lanItem->setItemIcon(searchIcon);
+    lanItem->setName(connName);
 
-    lanItem->uuid = connUuid;
-    lanItem->dbusPath = connDbusPath;
+    lanItem->setUuid(connUuid);
+    lanItem->setPath(connDbusPath);
 
     // todo open landetail page
-    connect(lanItem->infoLabel, &InfoButton::clicked, this, [=]{
-    });
+    if (!m_isSimpleMode) {
+        connect(lanItem, &LanItem::infoButtonClick, this, [=]{
+        });
+    }
 
-    lanItem->isAcitve = false;
+    lanItem->setStatus(false);
 
     connect(lanItem, &LanItem::itemClick, this, [=] {
-        if (lanItem->isAcitve || lanItem->loading) {
-            deActiveConnect(lanItem->uuid);
+        if (lanItem->getStatus() || lanItem->getIsLoading()) {
+            deActiveConnect(lanItem->getUuid());
         } else {
-            activeConnect(lanItem->uuid, deviceName);
+            activeConnect(lanItem->getUuid(), deviceName);
         }
     });
 
@@ -730,11 +740,10 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, KyC
         for (iters = deviceFrameMap.begin(); iters != deviceFrameMap.end(); iters++) {
             if (iters.value()->itemMap.contains(uuid)) {
                 item = iters.value()->itemMap[uuid];
-                infoList << item->titileLabel->text() << item->uuid << item->dbusPath;
                 //为断开则重新插入
                 deviceFrameMap[iters.key()]->lanItemLayout->removeWidget(item);
-                int index = getInsertPos(item->titileLabel->text(), deviceFrameMap[iters.key()]->lanItemLayout);
-                qDebug() << "[NetConnect]reinsert" << item->titileLabel->text() << "pos" << index << "in" << iters.key() << "because status changes to deactive";
+                int index = getInsertPos(item->getName(), deviceFrameMap[iters.key()]->lanItemLayout);
+                qDebug() << "[NetConnect]reinsert" << item->getName() << "pos" << index << "in" << iters.key() << "because status changes to deactive";
                 deviceFrameMap[iters.key()]->lanItemLayout->insertWidget(index,item);
                 itemActiveConnectionStatusChanged(item, status);
             }
@@ -759,8 +768,8 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, KyC
                 } else if (status == CONNECT_STATE_DEACTIVATED) {
                     //为断开则重新插入
                     deviceFrameMap[deviceName]->lanItemLayout->removeWidget(item);
-                    int index = getInsertPos(item->titileLabel->text(), deviceFrameMap[deviceName]->lanItemLayout);
-                    qDebug() << "[NetConnect]reinsert" << item->titileLabel->text() << "pos" << index << "in" << deviceName << "because status changes to deactive";
+                    int index = getInsertPos(item->getName(), deviceFrameMap[deviceName]->lanItemLayout);
+                    qDebug() << "[NetConnect]reinsert" << item->getName() << "pos" << index << "in" << deviceName << "because status changes to deactive";
                     deviceFrameMap[deviceName]->lanItemLayout->insertWidget(index,item);
                 }
                 itemActiveConnectionStatusChanged(item, status);
@@ -786,15 +795,15 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, KyConnectState
     } else if (status == CONNECT_STATE_ACTIVATED) {
         item->stopLoading();
         QIcon searchIcon = QIcon::fromTheme(KLanSymbolic);
-        item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
-        item->isAcitve = true;
+        item->setItemIcon(searchIcon);
+        item->setStatus(true);
     } else if (status == CONNECT_STATE_DEACTIVATING) {
         item->startLoading();
     } else {
         item->stopLoading();
         QIcon searchIcon = QIcon::fromTheme(NoNetSymbolic);
-        item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
-        item->isAcitve = false;
+        item->setItemIcon(searchIcon);
+        item->setStatus(false);
     }
 }
 
@@ -833,11 +842,11 @@ int NetConnect::getInsertPos(QString connName, QVBoxLayout* layout)
     {
         QLayoutItem *it = layout->layout()->itemAt(index);
         LanItem *item = qobject_cast<LanItem *>(it->widget());
-        if (QString::compare(connName, item->titileLabel->text(), Qt::CaseInsensitive) > 0) {
-            qDebug() << "compare" << connName << item->titileLabel->text() << index;
+        if (QString::compare(connName, item->getName(), Qt::CaseInsensitive) > 0) {
+            qDebug() << "compare" << connName << item->getName() << index;
             continue;
         } else {
-            if (item->isAcitve) {
+            if (item->getStatus()) {
                 continue;
             }
             break;
@@ -859,5 +868,9 @@ void NetConnect::onDeviceAdd(QString deviceName)
 
 void NetConnect::onDeviceRemove(QString deviceName)
 {
+    qDebug() << "============onWirelessDeviceRemove" << deviceName;
+    if (!deviceFrameMap.contains(deviceName) || !deviceStatusMap.contains(deviceName)) {
+        return;
+    }
     removeDeviceFrame(deviceName);
 }

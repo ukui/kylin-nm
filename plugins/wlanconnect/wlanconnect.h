@@ -45,6 +45,7 @@ using namespace kdk;
 
 #include <kylin-nm/kylin-nm-interface.h>
 #include <kylin-nm/kylinnetworkmanager.h>
+#include <kylin-nm/kylin-agent/kylinagent.h>
 #include "../component/DeviceFrame/deviceframe.h"
 #include "itemframe.h"
 #include "wlanitem.h"
@@ -59,6 +60,7 @@ public:
 
 private:
     QVBoxLayout* layout;
+    QLabel* label;
     QPushButton* button;
 };
 
@@ -75,7 +77,7 @@ public:
 
     QWidget * pluginUi() Q_DECL_OVERRIDE;   // 插件主界面---setPluginType后调用
     void setPluginType(PluginType type) Q_DECL_OVERRIDE;     // 设置插件类型
-//    void setParentWidget(QWidget*);
+    void setParentWidget(QWidget*);
 
 private:
     bool m_isSimpleMode = true;
@@ -134,7 +136,7 @@ private:
     KyNetworkManager* manager;
     QThread*        thread;
 
-//    QWidget* parentWidget = nullptr;
+    QWidget* parentWidget = nullptr;
 
     QWidget            *pluginWidget;
 
@@ -187,6 +189,8 @@ Q_SIGNALS:
 //    void addAndActiveWirelessEnterPriseTtlsConnect(KyEapMethodTtlsInfo &info,
 //                                                     KyWirelessConnectSetting &connSettingInfo);
 
+    void deleteConnect(QString uuid);
+
 private Q_SLOTS:
     void onNetworkAdd(QString deviceName, KyWirelessNetItem wlanInfo);
     void onNetworkRemove(QString deviceName, QString wlannName);
@@ -207,6 +211,8 @@ private Q_SLOTS:
     void onWirelessConnectionUpdate(QString deviceName, QString ssid, QString uuid, QString dbusPath, KySecuType connectSecuType);
     void onWirelessDeviceAdd(QString deviceName);
     void onWirelessDeviceRemove(QString deviceName);
+
+    void onWirelessConnectPasswordError(QString devName, QString ssid, QVariantMap map);
 
 };
 #endif // WLANCONNECT_H

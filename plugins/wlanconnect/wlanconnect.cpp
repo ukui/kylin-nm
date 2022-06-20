@@ -62,11 +62,28 @@ bool intThan(int sign1, int sign2)
 
 testWidget::testWidget(QWidget *parent) : QWidget(parent)
 {
-    this->setFixedSize(400, 200);
+
+//        this->setWindowFlags(Qt::FramelessWindowHint);
+        this->setAttribute(Qt::WA_DeleteOnClose);
+    this->setWindowModality(Qt::ApplicationModal);
+//        this->setWindowFlag(Qt::Window);
+//        this->setWindowTitle("test");
+
+
+    this->setFixedSize(400, 400);
     layout = new QVBoxLayout(this);
     button = new QPushButton(this);
+    label = new QLabel(this);
+    label->setText("hahaha");
     layout->addWidget(button);
+    layout->addSpacing(50);
+    layout->addWidget(label);
     this->setLayout(layout);
+
+
+    QPalette pal = this->palette();
+    pal.setBrush(QPalette::Background, Qt::white);
+    this->setPalette(pal);
 }
 
 void WlanConnect::showDesktopNotify(const QString &message)
@@ -112,14 +129,19 @@ QWidget *WlanConnect::pluginUi() {
         initUi();
         initComponent();
         initConnect();
+        //停止keyring进程
+        //启动keyring
+
     }
     return pluginWidget;
 }
 
-//void WlanConnect::setParentWidget(QWidget* widget){
-//    parentWidget = widget;
-//    qDebug() << "setParentWidget!!!!";
-//}
+void WlanConnect::setParentWidget(QWidget* widget){
+    parentWidget = widget;
+    KylinAgent* agent = new KylinAgent(this);
+    agent->setParentWidget(parentWidget);
+    agent->startKylinAgent();
+}
 
 void WlanConnect::setPluginType(PluginType type)
 {
@@ -176,6 +198,7 @@ void WlanConnect::initUi()
     m_scrollArea->setBackgroundRole(QPalette::Base);
     m_scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scrollArea->setContentsMargins(MAIN_LAYOUT_MARGINS);
 
     m_scrollLayout->addWidget(m_scrollArea);
 
@@ -224,12 +247,10 @@ void WlanConnect::initUi()
 bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
     if (w == m_wirelessSwitch && e->type() == QEvent::MouseButtonRelease) {
 //        testWidget* cc = new testWidget(parentWidget);
-//                    cc->move((parentWidget->width() - cc->width())/2,
-//                        (parentWidget->height() - cc->height())/2);
+//        cc->move(0,0);
 
 //        cc->show();
 //        cc->raise();
-//        qDebug() << "show testWidget!!!!!!!!" << (parentWidget->width() - cc->width())/2 << (parentWidget->height() - cc->height())/2;
         if (!m_wirelessSwitch->isCheckable()) {
             showDesktopNotify(tr("No wireless device avaliable"));
         } else {
@@ -266,20 +287,6 @@ void WlanConnect::initComponent() {
         runExternalApp();
     });
 
-
-
-    //定时20s扫描
-    m_scanTimer = new QTimer(this);
-    m_scanTimer->start(SCANTIMER);
-    connect(m_scanTimer, &QTimer::timeout, this, &WlanConnect::reScan);
-    reScan();
-
-    //10s重新排序
-    m_updateTimer = new QTimer(this);
-    m_updateTimer->start(UPDATETIMER);
-    connect(m_updateTimer, &QTimer::timeout, this, &WlanConnect::updateList);
-    reScan();
-
 }
 
 void WlanConnect::initConnect()
@@ -292,7 +299,7 @@ void WlanConnect::initConnect()
     connect(manager, &KyNetworkManager::wirelessConnectionAdd, this, &WlanConnect::onWirelessConnectionAdd);
     connect(manager, &KyNetworkManager::wirelessConnectionUpdate, this, &WlanConnect::onWirelessConnectionUpdate);
     connect(manager, &KyNetworkManager::wirelessDeviceAdd, this, &WlanConnect::onWirelessDeviceAdd);
-    connect(manager, &KyNetworkManager::wirelessDeviceRemove, this, &WlanConnect::onWirelessDeviceRemove);
+    connect(manager, &KyNetworkManager::deviceRemove, this, &WlanConnect::onWirelessDeviceRemove);
     connect(manager, &KyNetworkManager::wirelessDeviceNameUpdate, this, &WlanConnect::onDeviceNameChanged);
     connect(manager, &KyNetworkManager::wifiNetworkAdd, this, &WlanConnect::onNetworkAdd);
     connect(manager, &KyNetworkManager::wifiNetworkRemove, this, &WlanConnect::onNetworkRemove);
@@ -303,6 +310,19 @@ void WlanConnect::initConnect()
     connect(this, &WlanConnect::deactivateConnection, manager, &KyNetworkManager::onDeactivateConnection);
     connect(this,&WlanConnect::addAndActivateNormalWifi, manager, &KyNetworkManager::onAddAndActivateNormalWifi);
     connect(this, &WlanConnect::setWirelessNetworkEnabled, manager, &KyNetworkManager::onSetWirelessNetworkEnabled);
+    connect(this, &WlanConnect::deleteConnect, manager, &KyNetworkManager::onDeleteConnect);
+
+    //定时20s扫描
+    m_scanTimer = new QTimer(this);
+    m_scanTimer->start(SCANTIMER);
+    connect(m_scanTimer, &QTimer::timeout, this, &WlanConnect::reScan);
+
+    //10s重新排序
+    m_updateTimer = new QTimer(this);
+    m_updateTimer->start(UPDATETIMER);
+    connect(m_updateTimer, &QTimer::timeout, this, &WlanConnect::updateList);
+
+    reScan();
 }
 
 void WlanConnect::reScan()
@@ -333,12 +353,9 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QString devName)
     int frameIndex = 0;
     QString activateSsid = "";
     QList<KyActivateItem> connectItemList;
-    qDebug() << "0";
     manager->getActiveConnectionList(devName, CONNECT_TYPE_WIRELESS, connectItemList);
-    qDebug() << "1";
     QList<KyWirelessNetItem> list;
     manager->getWifiNetworkList(devName, list);
-    qDebug() << "2";
     for (int i = 0; i < connectItemList.size(); ++i) {
         if (connectItemList.at(i).m_connStatus == CONNECT_STATE_ACTIVATED) {
             activateSsid = connectItemList.at(i).m_ssid;
@@ -400,7 +417,7 @@ void WlanConnect::updateIcon(WlanItem *item, int signalStrength, QString securit
     }
     QIcon searchIcon = QIcon::fromTheme(iconamePath);
 
-    item->setItemIcon(searchIcon.pixmap(searchIcon.actualSize(QSize(16,16))));
+    item->setItemIcon(searchIcon);
     qDebug() << "updateIcon" << item->getName() << " finish";
 }
 
@@ -412,6 +429,7 @@ void WlanConnect::onDeviceStatusChanged()
 
 void WlanConnect::onDeviceNameChanged(QString oldName, QString newName)
 {
+    qDebug() << "============onDeviceNameChanged" << oldName << newName;
     if (!deviceFrameMap.contains(oldName) || !deviceList.contains(oldName)) {
         qWarning() << "[WlanConnect]onDeviceNameChanged no such device " << oldName;
         return;
@@ -702,6 +720,13 @@ void WlanConnect::addDeviceFrame(QString devName)
     m_scrollAreaLayout->addWidget(itemFrame);
     itemFrame->deviceFrame->deviceLabel->setText(devName);
     deviceFrameMap.insert(devName, itemFrame);
+    if (deviceList.indexOf(devName) < 0) {
+        deviceList << devName;
+    }
+
+    connect(itemFrame, &ItemFrame::addNetItemClick , [=](){
+        //加入网络
+    });
 }
 
 //减少设备
@@ -748,7 +773,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, KyWirele
     }
 
     QIcon searchIcon = QIcon::fromTheme(iconamePath);
-    wlanItem->setItemIcon(searchIcon.pixmap(searchIcon.actualSize(QSize(16,16))));
+    wlanItem->setItemIcon(searchIcon);
     wlanItem->setName(wlanInfo.m_NetSsid);
     wlanItem->setSecuType(wlanInfo.m_secuType);
     wlanItem->setUuid(wlanInfo.m_connectUuid);
@@ -894,6 +919,7 @@ void WlanConnect::onWirelessConnectionUpdate(QString deviceName, QString ssid, Q
 
 void WlanConnect::onWirelessDeviceAdd(QString deviceName)
 {
+    qDebug() << "============onWirelessDeviceAdd" << deviceName;
     addDeviceFrame(deviceName);
     if (manager->getWirelessEnabled()) {
         setSwitchStatus(true);
@@ -903,11 +929,41 @@ void WlanConnect::onWirelessDeviceAdd(QString deviceName)
 
 void WlanConnect::onWirelessDeviceRemove(QString deviceName)
 {
+    qDebug() << "============onWirelessDeviceRemove" << deviceName;
+    if (!deviceFrameMap.contains(deviceName) || deviceList.indexOf(deviceName) < 0) {
+        return;
+    }
     removeDeviceFrame(deviceName);
     if (deviceList.isEmpty()) {
         setSwitchStatus(false);
         m_wirelessSwitch->setCheckable(false);
     }
+}
+//密码错误 重新展示
+void WlanConnect::onWirelessConnectPasswordError(QString devName, QString ssid, QVariantMap map)
+{
+    WlanItem *item = findItem(devName,ssid);
+    if (nullptr == item) {
+        return;
+    }
+    //删除原有配置 触发点击
+    QString uuid = item->getUuid();
+    item->setUuid("");
+    item->setPath("");
+    Q_EMIT deleteConnect(uuid);
+
+    if (1) {
+//        item->setPasswordError(password);
+//        Q_EMIT item->itemClick();
+    } else if (2) {
+        //弹出Peap界面
+    } else if (3) {
+        //弹出Peap界面
+    } else {
+        //暂不支持
+    }
+
+
 }
 
 WlanItem* WlanConnect::findItem(QString devName, QString ssid)

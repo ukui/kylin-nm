@@ -69,6 +69,7 @@ public:
 
     QWidget * pluginUi() Q_DECL_OVERRIDE;   // 插件主界面---setPluginType后调用
     void setPluginType(PluginType type) Q_DECL_OVERRIDE;     // 设置插件类型
+    void setParentWidget(QWidget*){;}
 
 private:
     bool m_isSimpleMode = true;

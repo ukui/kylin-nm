@@ -17,19 +17,18 @@ WlanItem::WlanItem(bool isSimple, QWidget *parent)
 {
     this->setFixedSize(404, UNEXPEND_HEIGHT);
     QVBoxLayout *m_mainLayout = new QVBoxLayout(this);
-    m_mainLayout->setContentsMargins(8,0,8,0);
+    m_mainLayout->setContentsMargins(16,0,0,0);
     m_mainLayout->setSpacing(0);
 
     //icon + name
     m_nameFrame = new QFrame(this);
     QHBoxLayout *lanLyt = new QHBoxLayout(m_nameFrame);
-    lanLyt->setContentsMargins(16,8,16,4);
+    lanLyt->setContentsMargins(0,8,16,4);
     lanLyt->setSpacing(0);
-    iconLabel = new QLabel(this);
-    iconLabel->setProperty("useIconHighlightEffect", 0x10);
+    radioBtn = new RadioItemButton(this);
     titileLabel = new QLabel(this);
 
-    lanLyt->addWidget(iconLabel);
+    lanLyt->addWidget(radioBtn);
     lanLyt->addSpacing(10);
     lanLyt->addWidget(titileLabel,Qt::AlignLeft);
     lanLyt->addStretch();
@@ -122,7 +121,7 @@ void WlanItem::updateIcon()
     if (currentIconIndex > 6) {
         currentIconIndex = 0;
     }
-    iconLabel->setPixmap(loadIcons.at(currentIconIndex).pixmap(16,16));
+    radioBtn->setButtonIcon(loadIcons.at(currentIconIndex));
     currentIconIndex ++;
 }
 
@@ -167,14 +166,35 @@ void WlanItem::mouseReleaseEvent(QMouseEvent *event)
 
 void WlanItem::enterEvent(QEvent *event)
 {
+    m_isIn = true;
+    update();
     return QFrame::enterEvent(event);
 }
 void WlanItem::leaveEvent(QEvent *event)
 {
+    m_isIn = false;
+    update();
     return QFrame::leaveEvent(event);
 }
 void WlanItem::paintEvent(QPaintEvent *event)
 {
+    QPalette pal = this->palette();
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
+    painter.setPen(Qt::NoPen);
+    if (m_isIn) {
+        QColor color(240, 240, 240);
+        color.setAlphaF(0.39);
+        painter.setBrush(color);
+    }
+    else
+        painter.setBrush(pal.color(QPalette::Base));
+
+    QRect rect = this->rect();
+    QPainterPath path;
+    path.addRoundedRect(rect, RADIUS, RADIUS);
+    painter.drawPath(path);
     return QFrame::paintEvent(event);
 }
 
@@ -187,6 +207,7 @@ void WlanItem::setExpend(bool enable)
         m_expendFrame->hide();
         this->setFixedHeight(UNEXPEND_HEIGHT);
         m_pwdLineEdit->clear();
+        m_pwdLineEdit->setState(Ordinary);
     }
 }
 

@@ -73,8 +73,8 @@ void KyNetworkIcon::initConnect()
         qDebug() << "connectivityChanged";
         updateIcon();
     });
-    connect(manager, &KyNetworkManager::primaryConnectionTypeChanged, [=](){
-        qDebug() << "primaryConnectionTypeChanged";
+    connect(manager, &KyNetworkManager::primaryConnectionTypeChanged, [=](KyConnectionType type){
+        qDebug() << "primaryConnectionTypeChanged" << type;
         updateIcon();
     });
 }
@@ -86,10 +86,10 @@ void KyNetworkIcon::updateIcon()
     KyConnectionType connectType;
     manager->getPrimaryConnectionType(connectType);
     qDebug() << "getPrimaryConnectionType" << connectType;
-    if (connectType == CONNECT_TYPE_WIRED) {
+    if (manager->wiredConnectIsActived()) {
         this->setIcon(QIcon::fromTheme("network-wired-symbolic"));
         iconStatus = IconActiveType::LAN_CONNECTED;
-    } else if (connectType == CONNECT_TYPE_WIRELESS) {
+    } else if (manager->wirelessConnectIsActived()) {
         signalStrength = manager->getAcivateWifiSignal();
         iconStatus = IconActiveType::WLAN_CONNECTED;
     } else {

@@ -5,6 +5,7 @@ CONFIG += plugin
 include(../component/infobutton.pri)
 include(../component/divider.pri)
 include(../component/deviceframe.pri)
+include(../component/RadioItemButton.pri)
 
 TARGET = $$qtLibraryTarget(wlanconnect)
 DESTDIR = ../..
@@ -14,7 +15,7 @@ INCLUDEPATH   +=  \
                  $$PROJECT_COMPONENTSOURCE \
                  $$PROJECT_ROOTDIR \
 
-LIBS          +=  -L$$[QT_INSTALL_LIBS]  -lkylin-nm-base
+LIBS          +=  -L$$[QT_INSTALL_LIBS]  -lkylin-nm-base -lkylin-keyring
 
 CONFIG += c++11 \
           link_pkgconfig \
@@ -22,7 +23,8 @@ CONFIG += c++11 \
 
 PKGCONFIG += gsettings-qt \
              kysdk-qtwidgets \
-             kylin-nm-base
+             kylin-nm-base \
+             libsecret-1
 
 #DEFINES += QT_DEPRECATED_WARNINGS
 

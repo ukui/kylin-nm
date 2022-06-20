@@ -1,0 +1,21 @@
+From: cckylin-cibot <cckylin-cibot@kylinos.cn>
+Date: Mon, 20 Jun 2022 09:42:04 +0000
+Subject: !2 set window frameless Merge pull request !2 from zhaoshixu/0620
+
+---
+ src/main.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main.cpp b/src/main.cpp
+index 9170d0c..f8d7122 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
+ //    window_hints.decorations = MWM_DECOR_BORDER;
+ //    XAtomHelper::getInstance()->setWindowMotifHint(w.winId(), window_hints);
+ 
+-//    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
++    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint/* | Qt::X11BypassWindowManagerHint*/);
+ 
+ 
+     DbusAdaptor adaptor(&w);

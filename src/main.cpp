@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 //    window_hints.decorations = MWM_DECOR_BORDER;
 //    XAtomHelper::getInstance()->setWindowMotifHint(w.winId(), window_hints);
 
-//    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint/* | Qt::X11BypassWindowManagerHint*/);
 
 
     DbusAdaptor adaptor(&w);

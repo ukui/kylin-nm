@@ -49,9 +49,6 @@ private:
     QLabel *m_freqBandLabel;
     QLabel *m_interfaceLabel;
 
-
-    QPushButton *m_pwdShowBox;
-
     QFrame *switchAndApNameLine;
     QFrame *apNameAndPwdLine;
     QFrame *pwdAndfreqBandLine;

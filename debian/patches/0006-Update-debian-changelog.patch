@@ -1,0 +1,98 @@
+From: cckylin-cibot <cckylin-cibot@kylinos.cn>
+Date: Wed, 22 Jun 2022 05:44:48 +0000
+Subject: Update debian/changelog.
+
+---
+ plugins/mobilehotspot/mobilehotspotwidget.cpp |  9 ---------
+ plugins/mobilehotspot/mobilehotspotwidget.h   |  3 ---
+ src/frontend/tab-pages/wlanpage.cpp           | 19 ++++++++++++-------
+ 3 files changed, 12 insertions(+), 19 deletions(-)
+
+diff --git a/plugins/mobilehotspot/mobilehotspotwidget.cpp b/plugins/mobilehotspot/mobilehotspotwidget.cpp
+index 6d6162f..0b3fc08 100644
+--- a/plugins/mobilehotspot/mobilehotspotwidget.cpp
++++ b/plugins/mobilehotspot/mobilehotspotwidget.cpp
+@@ -71,15 +71,6 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
+         m_interfaceName = m_interfaceComboBox->currentText();
+         updateBandCombox();
+     });
+-    connect(m_pwdShowBox, &QCheckBox::clicked, this, [=]() {
+-        if (m_pwdNameLine->echoMode() == QLineEdit::Password) {
+-            m_pwdShowBox->setIcon(QIcon::fromTheme("ukui-eye-display-symbolic"));
+-            m_pwdNameLine->setEchoMode(QLineEdit::Normal);
+-        } else {
+-            m_pwdNameLine->setEchoMode(QLineEdit::Password);
+-            m_pwdShowBox->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
+-        }
+-    });
+ }
+ 
+ MobileHotspotWidget::~MobileHotspotWidget()
+diff --git a/plugins/mobilehotspot/mobilehotspotwidget.h b/plugins/mobilehotspot/mobilehotspotwidget.h
+index b755b6b..8116811 100644
+--- a/plugins/mobilehotspot/mobilehotspotwidget.h
++++ b/plugins/mobilehotspot/mobilehotspotwidget.h
+@@ -49,9 +49,6 @@ private:
+     QLabel *m_freqBandLabel;
+     QLabel *m_interfaceLabel;
+ 
+-
+-    QPushButton *m_pwdShowBox;
+-
+     QFrame *switchAndApNameLine;
+     QFrame *apNameAndPwdLine;
+     QFrame *pwdAndfreqBandLine;
+diff --git a/src/frontend/tab-pages/wlanpage.cpp b/src/frontend/tab-pages/wlanpage.cpp
+index 8c8b688..feaff4a 100644
+--- a/src/frontend/tab-pages/wlanpage.cpp
++++ b/src/frontend/tab-pages/wlanpage.cpp
+@@ -58,12 +58,14 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
+ 
+ bool WlanPage::eventFilter(QObject *w, QEvent *e)
+ {
+-    if (e->type() == QEvent::MouseButtonRelease) {
+-        if (w == m_settingsBtn) {
++    if (w == m_settingsBtn) {
++        if (e->type() == QEvent::MouseButtonRelease) {
+             //ZJP_TODO 打开控制面板
+             qDebug() << LOG_FLAG <<"recive event show control center";
+             showControlCenter();
+-        } else if (w == m_netSwitch) {
++        }
++    } else if (w == m_netSwitch) {
++        if (e->type() == QEvent::MouseButtonRelease) {
+             if (m_devList.isEmpty()) {
+                 showDesktopNotify(tr("No wireless network card detected"), "networkwrong");
+                 //检测不到无线网卡不再触发click信号
+@@ -133,6 +135,7 @@ void WlanPage::onWlanSwithGsettingsChanged(const QString &key)
+ 
+ void WlanPage::initWlanSwitchState()
+ {
++    bool wirelessGsetting = true;
+     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
+         if (m_switchGsettings->keys().contains(WIRELESS_SWITCH)) {
+@@ -140,17 +143,19 @@ void WlanPage::initWlanSwitchState()
+                 m_netSwitch->setCheckable(false);
+                 m_netSwitch->setChecked(false);
+             } else {
+-                bool wiredGsetting = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
++                wirelessGsetting = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
+                 if (m_wirelessConnectOpreation->getWirelessEnabled()
+-                        != wiredGsetting) {
++                        != wirelessGsetting) {
+                     //以gsetting为准
+-                    m_wirelessConnectOpreation->setWirelessEnabled(wiredGsetting);
++                    m_wirelessConnectOpreation->setWirelessEnabled(wirelessGsetting);
+                 }
+-                m_netSwitch->setChecked(wiredGsetting);
++                m_netSwitch->setChecked(wirelessGsetting);
+             }
+             connect(m_switchGsettings, &QGSettings::changed, this, &WlanPage::onWlanSwithGsettingsChanged);
+         }
+     }
++    m_netSwitch->setChecked(wirelessGsetting);
++    m_wlanSwitchEnable = wirelessGsetting;
+ }
+ 
+ void WlanPage::initTimer()

@@ -58,12 +58,14 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
 {
-    if (e->type() == QEvent::MouseButtonRelease) {
-        if (w == m_settingsBtn) {
+    if (w == m_settingsBtn) {
+        if (e->type() == QEvent::MouseButtonRelease) {
             //ZJP_TODO 打开控制面板
             qDebug() << LOG_FLAG <<"recive event show control center";
             showControlCenter();
-        } else if (w == m_netSwitch) {
+        }
+    } else if (w == m_netSwitch) {
+        if (e->type() == QEvent::MouseButtonRelease) {
             if (m_devList.isEmpty()) {
                 showDesktopNotify(tr("No wireless network card detected"), "networkwrong");
                 //检测不到无线网卡不再触发click信号
@@ -133,6 +135,7 @@ void WlanPage::onWlanSwithGsettingsChanged(const QString &key)
 
 void WlanPage::initWlanSwitchState()
 {
+    bool wirelessGsetting = true;
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
         if (m_switchGsettings->keys().contains(WIRELESS_SWITCH)) {
@@ -140,17 +143,19 @@ void WlanPage::initWlanSwitchState()
                 m_netSwitch->setCheckable(false);
                 m_netSwitch->setChecked(false);
             } else {
-                bool wiredGsetting = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
+                wirelessGsetting = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
                 if (m_wirelessConnectOpreation->getWirelessEnabled()
-                        != wiredGsetting) {
+                        != wirelessGsetting) {
                     //以gsetting为准
-                    m_wirelessConnectOpreation->setWirelessEnabled(wiredGsetting);
+                    m_wirelessConnectOpreation->setWirelessEnabled(wirelessGsetting);
                 }
-                m_netSwitch->setChecked(wiredGsetting);
+                m_netSwitch->setChecked(wirelessGsetting);
             }
             connect(m_switchGsettings, &QGSettings::changed, this, &WlanPage::onWlanSwithGsettingsChanged);
         }
     }
+    m_netSwitch->setChecked(wirelessGsetting);
+    m_wlanSwitchEnable = wirelessGsetting;
 }
 
 void WlanPage::initTimer()

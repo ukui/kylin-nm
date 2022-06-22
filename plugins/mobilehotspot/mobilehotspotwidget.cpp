@@ -71,15 +71,6 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
         m_interfaceName = m_interfaceComboBox->currentText();
         updateBandCombox();
     });
-    connect(m_pwdShowBox, &QCheckBox::clicked, this, [=]() {
-        if (m_pwdNameLine->echoMode() == QLineEdit::Password) {
-            m_pwdShowBox->setIcon(QIcon::fromTheme("ukui-eye-display-symbolic"));
-            m_pwdNameLine->setEchoMode(QLineEdit::Normal);
-        } else {
-            m_pwdNameLine->setEchoMode(QLineEdit::Password);
-            m_pwdShowBox->setIcon(QIcon::fromTheme("ukui-eye-hidden-symbolic"));
-        }
-    });
 }
 
 MobileHotspotWidget::~MobileHotspotWidget()

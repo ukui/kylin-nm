@@ -1,3 +1,9 @@
+kylin-nm (3.14.0.0+0512-0k6) yangtz; urgency=medium
+
+  * Fix mobilehotspot segmentation fault and init wlanSwitchEnable status.
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 22 Jun 2022 09:44:33 +0800
+
 kylin-nm (3.14.0.0+0512-0k5) yangtz; urgency=medium
 
   * set window frameless.

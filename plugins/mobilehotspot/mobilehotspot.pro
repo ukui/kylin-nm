@@ -40,4 +40,9 @@ INSTALLS += target \
 TRANSLATIONS += \
         translations/zh_CN.ts \
         translations/tr.ts \
-        translations/bo.ts
+        translations/bo.ts\
+        translations/bo_CN.ts
+
+DISTFILES += \
+    translations/bo_CN.qm \
+    translations/bo_CN.ts

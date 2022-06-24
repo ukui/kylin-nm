@@ -10,7 +10,7 @@ extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int tran
 DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
     : m_IsWlan(isWlan), m_IsCreate(isCreate), QFrame(parent)
 {
-    this->setFrameShape(QFrame::Shape::StyledPanel);
+//    this->setFrameShape(QFrame::Shape::StyledPanel);
     this->setMaximumWidth(960);
     initUI();
     if (isCreate) {
@@ -133,27 +133,29 @@ QPalette DetailPage::getTheme()
 {
     //获取当前主题的颜色
     QPalette pal = qApp->palette();
-    QGSettings * styleGsettings = nullptr;
-    const QByteArray style_id(THEME_SCHAME);
-    if (QGSettings::isSchemaInstalled(style_id)) {
-       styleGsettings = new QGSettings(style_id);
-       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
-       if(currentTheme == "ukui-default"){
-           pal = lightPalette(this);
-       }
-    }
-    if (styleGsettings != nullptr) {
-        delete styleGsettings;
-        styleGsettings = nullptr;
-    }
+//    QGSettings * styleGsettings = nullptr;
+//    const QByteArray style_id(THEME_SCHAME);
+//    if (QGSettings::isSchemaInstalled(style_id)) {
+//       styleGsettings = new QGSettings(style_id);
+//       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+//       if(currentTheme == "ukui-default"){
+//           pal = lightPalette(this);
+//       }
+//    }
+//    if (styleGsettings != nullptr) {
+//        delete styleGsettings;
+//        styleGsettings = nullptr;
+//    }
     return pal;
 }
 
 void DetailPage::initUI() {
     m_layout = new QVBoxLayout(this);
     m_layout->setContentsMargins(0,0,0,0);
+    m_layout->setSpacing(0);
 
     QWidget *mDetailFrame = new QFrame(this);
+    mDetailFrame->setFixedHeight(362);
     m_DetailLayout = new QVBoxLayout(mDetailFrame);
     m_DetailLayout->setContentsMargins(0,0,0,0);
 
@@ -162,6 +164,8 @@ void DetailPage::initUI() {
     m_listWidget->setBackgroundRole(QPalette::Base);
     m_listWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     m_DetailLayout->addWidget(m_listWidget);
+
+    m_listWidget->setFrameShape(QFrame::Shape::StyledPanel);
 
     if (!m_IsCreate) {
         m_SSIDLabel = new QLabel(this);
@@ -241,7 +245,9 @@ void DetailPage::initUI() {
         m_forgetNetBox = new QCheckBox(this);
 
         m_autoConnect->setText(tr("Auto Connection"));
-        m_AutoLayout = new QHBoxLayout(this);
+
+        m_autoConWidget = new QWidget(this);
+        m_AutoLayout = new QHBoxLayout(m_autoConWidget);
         QSpacerItem *horizontalSpacer;
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -273,8 +279,10 @@ void DetailPage::initUI() {
 
     m_layout->addWidget(mDetailFrame);
     if (m_IsWlan) {
-        m_layout->addLayout(m_AutoLayout);
+//        m_layout->addLayout(m_AutoLayout);
+        m_layout->addWidget(m_autoConWidget);
     }
+    m_layout->addStretch();
 }
 
 void DetailPage::setEnableOfSaveBtn() {

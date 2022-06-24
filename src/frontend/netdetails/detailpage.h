@@ -87,6 +87,8 @@ private:
     bool         m_IsWlan;
     bool         m_IsCreate;
 
+    QWidget *m_autoConWidget;
+
     QString      m_formerSSID;
     QString      m_formerIPV6;
 

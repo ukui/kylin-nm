@@ -17,7 +17,7 @@
 #define  WINDOW_HEIGHT 562
 #define  ICON_SIZE 22,22
 #define  TITLE_LAYOUT_MARGINS 9,9,0,0
-#define  LAYOUT_MARGINS 24,0,24,0
+#define  LAYOUT_MARGINS 0,0,0,0
 #define  BOTTOM_LAYOUT_SPACING 16
 #define  PAGE_LAYOUT_SPACING 1
 #define  DETAIL_PAGE_NUM 0
@@ -211,7 +211,7 @@ void NetDetail::centerToScreen()
 void NetDetail::initUI()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(9,9,14,24);
+    mainLayout->setContentsMargins(24,9,24,24);
 
     detailPage = new DetailPage(isWlan, m_name.isEmpty(), this);
 
@@ -277,6 +277,7 @@ void NetDetail::initUI()
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
     centerlayout->setContentsMargins(LAYOUT_MARGINS);
     centerlayout->addWidget(pageFrame);
+    centerlayout->addSpacing(4);
     centerlayout->addWidget(stackWidget);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout(bottomWidget);

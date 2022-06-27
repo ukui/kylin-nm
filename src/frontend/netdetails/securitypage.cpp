@@ -52,6 +52,7 @@ void SecurityPage::initUI()
 
 
     mSecuLayout = new QFormLayout(this);
+    mSecuLayout->setContentsMargins(0, 0, 0, 0);
     mSecuLayout->addRow(secuTypeLabel, secuTypeCombox);
     mSecuLayout->addRow(pwdLabel, pwdEdit);
     mSecuLayout->addRow(eapTypeLabel, eapTypeCombox);

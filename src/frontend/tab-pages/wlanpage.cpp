@@ -54,19 +54,6 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::wifiEnabledChanged, this, &WlanPage::onWifiEnabledChanged);
 
     connect(m_connectResource, &KyConnectResourse::connectivityChanged, this, &WlanPage::connectivityChanged);
-
-
-//    QTimer::singleShot(10000, this, [=](){
-//        qDebug() << "KSwitchButton-----WlanPage::onDeviceRemove-before" <<m_netSwitch->isCheckable()
-//                    << "checked"<<m_netSwitch->isChecked();
-
-//        onDeviceRemove("wlp3s0");
-
-//        qDebug() << "KSwitchButton-----WlanPage::onDeviceRemove-after" <<m_netSwitch->isCheckable()
-//                    << "checked"<<m_netSwitch->isChecked();
-
-//    });
-
 }
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
@@ -84,8 +71,6 @@ bool WlanPage::eventFilter(QObject *w, QEvent *e)
                 //检测不到无线网卡不再触发click信号
                 m_netSwitch->setChecked(false);
                 m_netSwitch->setCheckable(false);
-                qDebug() << "KSwitchButton-----WlanPage::eventFilter" <<m_netSwitch->isCheckable()
-                            << "checked"<<m_netSwitch->isChecked();
             } else {
                 m_wirelessConnectOpreation->setWirelessEnabled(!m_netSwitch->isChecked());
             }
@@ -158,8 +143,6 @@ void WlanPage::initWlanSwitchState()
             if (m_devList.isEmpty()) {
                 m_netSwitch->setChecked(false);
                 m_netSwitch->setCheckable(false);
-                qDebug() << "KSwitchButton-----WlanPage::initWlanSwitchState" <<m_netSwitch->isCheckable()
-                            << "checked"<<m_netSwitch->isChecked();
             } else {
                 wirelessGsetting = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
                 if (m_wirelessConnectOpreation->getWirelessEnabled()
@@ -737,8 +720,6 @@ void WlanPage::onDeviceRemove(QString deviceName)
     if (m_devList.isEmpty()) {
         m_netSwitch->setChecked(false);
         m_netSwitch->setCheckable(false);
-        qDebug() << "KSwitchButton-----WlanPage::onDeviceRemove-after" <<m_netSwitch->isCheckable()
-                    << "checked"<<m_netSwitch->isChecked();
     }
 
     if (originalDeviceName == deviceName) {
@@ -1412,19 +1393,13 @@ void WlanPage::setWirelessSwitchEnable(bool enable)
     if (m_devList.isEmpty()) {
         qDebug() << "have no device to use "  << Q_FUNC_INFO << __LINE__;
         //检测不到无线网卡不再触发click信号
-//        m_netSwitch->setSwitchStatus(false);
         m_netSwitch->setChecked(false);
         m_netSwitch->setCheckable(false);
-        qDebug() << "KSwitchButton-----WlanPage::setWirelessSwitchEnable checkable" <<m_netSwitch->isCheckable()
-                 << "checked"<<m_netSwitch->isChecked();
     }else{
         m_wirelessConnectOpreation->setWirelessEnabled(enable);
         if (!enable) {
-//            m_netSwitch->setEnabled(false);
             m_netSwitch->setChecked(false);
             m_netSwitch->setCheckable(false);
-            qDebug() << "KSwitchButton-----WlanPage::setWirelessSwitchEnable2" <<m_netSwitch->isCheckable()
-                        << "checked"<<m_netSwitch->isChecked();;
             m_activatedNetFrame->hide();
             m_activatedNetDivider->hide();
             m_inactivatedNetFrame->hide();

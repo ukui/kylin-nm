@@ -269,8 +269,6 @@ void WlanConnect::initComponent() {
         qDebug() << "[WlanConnect]no device exist when init, set switch disable";
         m_wifiSwitch->setChecked(false);
         m_wifiSwitch->setCheckable(false);
-        qDebug() << "KSwitchButton-----WlanConnect::initComponent" <<m_wifiSwitch->isCheckable()
-                    << "checked"<<m_wifiSwitch->isChecked();
     }
     initNet();
 
@@ -529,8 +527,6 @@ void WlanConnect::onDeviceStatusChanged()
     if (deviceList.isEmpty()) {
         m_wifiSwitch->setChecked(false);
         m_wifiSwitch->setCheckable(false);
-        qDebug() << "KSwitchButton-----WlanConnect::onDeviceStatusChanged" <<m_wifiSwitch->isCheckable()
-                    << "checked"<<m_wifiSwitch->isChecked();
     } else {
         m_wifiSwitch->setCheckable(true);
         setSwitchStatus();

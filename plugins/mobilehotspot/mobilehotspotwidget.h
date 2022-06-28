@@ -46,6 +46,7 @@ private:
     QLabel *m_switchLabel;
     QLabel *m_apNameLabel;
     QLabel *m_pwdLabel;
+    QLabel *m_pwdHintLabel;
     QLabel *m_freqBandLabel;
     QLabel *m_interfaceLabel;
 

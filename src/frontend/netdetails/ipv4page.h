@@ -28,6 +28,10 @@ public:
     void setGateWay(const QString &gateWay);
 
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
+
+protected:
+    bool eventFilter(QObject *w, QEvent *e);
+
 private:
     QComboBox *ipv4ConfigCombox;
     LineEdit *ipv4addressEdit;
@@ -45,6 +49,12 @@ private:
     QLabel *m_gateWayLabel;
     QLabel *m_dnsLabel;
     QLabel *m_secDnsLabel;
+
+    QLabel *m_configEmptyLabel;
+    QLabel *m_addressHintLabel;
+    QLabel *m_maskHintLabel;
+    QLabel *m_gateWayEmptyLabel;
+    QLabel *m_firstDnsEmptyLabel;
 private:
     void initUI();
     void initComponent();

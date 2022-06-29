@@ -31,6 +31,9 @@ public:
 
     int getPerfixLength(QString text);
 
+protected:
+    bool eventFilter(QObject *w, QEvent *e);
+
 public:
     QComboBox *ipv6ConfigCombox;
     LineEdit *ipv6AddressEdit;
@@ -46,6 +49,12 @@ private:
     QLabel *m_gateWayLabel;
     QLabel *m_dnsLabel;
     QLabel *m_secDnsLabel;
+
+    QLabel *m_configEmptyLabel;
+    QLabel *m_addressHintLabel;
+    QLabel *m_subnetEmptyLabel;
+    QLabel *m_gateWayHintLabel;
+    QLabel *m_firstDnsEmptyLabel;
 private:
     void initUI();
     void initComponent();

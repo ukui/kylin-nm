@@ -124,8 +124,8 @@ void WlanPage::onWlanSwithGsettingsChanged(const QString &key)
         qDebug() << LOG_FLAG << "wlan switch state" << m_wlanSwitchEnable;
 
         if (m_wirelessConnectOpreation->getWirelessEnabled() != m_wlanSwitchEnable) {
+            // 根据Gsetting更新开关状态
             m_wirelessConnectOpreation->setWirelessEnabled(m_wlanSwitchEnable);
-            qDebug() <<"wlan switch state!=";
         }
 
         m_netSwitch->setChecked(m_wlanSwitchEnable);

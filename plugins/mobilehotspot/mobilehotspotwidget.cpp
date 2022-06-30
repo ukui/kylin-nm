@@ -15,7 +15,7 @@
 #define LINE_MAX_SIZE 16777215, 1
 #define LINE_MIN_SIZE 0, 1
 #define ICON_SIZE   24,24
-#define PASSWORD_FRAME_MIN_SIZE 550, 86
+#define PASSWORD_FRAME_MIN_SIZE 550, 60
 #define PASSWORD_FRAME_MAX_SIZE 16777215, 86
 #define PASSWORD_ITEM_MARGINS 16, 12, 16, 14
 
@@ -114,7 +114,7 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                     return true;
                 }
                 if (m_pwdNameLine->text().length() < 8) {
-                    showDesktopNotify(tr("can not  create hotspot with password length less than eight!"));
+//                    showDesktopNotify(tr("can not  create hotspot with password length less than eight!"));
                     return true;
                 }
                 showDesktopNotify(tr("start to open hotspot ") + m_apNameLine->text());
@@ -129,12 +129,6 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                 }
             }
             return true;
-        }
-    } else if (watched == m_pwdNameLine) {
-        if (m_pwdNameLine->text().length() < 8) {
-            m_pwdHintLabel->setText(tr("Contains at least 8 characters")); //至少包含8个字符
-        } else {
-            m_pwdHintLabel->clear();
         }
     }
     return QWidget::eventFilter(watched, event);
@@ -207,6 +201,7 @@ void MobileHotspotWidget::initDbusConnect()
     }
 
     connect(m_apNameLine, &QLineEdit::textEdited, this, &MobileHotspotWidget::onApLineEditTextEdit);
+    connect(m_pwdNameLine, SIGNAL(textChanged(QString)), this, SLOT(onPwdTextChanged()));
 }
 
 void MobileHotspotWidget::onApLineEditTextEdit(QString text)
@@ -222,6 +217,18 @@ void MobileHotspotWidget::onApLineEditTextEdit(QString text)
     }
 
     m_apNameLine->setText(text.left(i));
+}
+
+void MobileHotspotWidget::onPwdTextChanged()
+{
+    if (m_pwdNameLine->text().length() < 8) {
+        m_pwdHintLabel->show();
+        m_pwdHintLabel->setText(tr("Contains at least 8 characters")); //至少包含8个字符
+    } else {
+        m_pwdHintLabel->clear();
+        m_pwdHintLabel->hide();
+    }
+
 }
 
 

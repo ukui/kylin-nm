@@ -116,6 +116,8 @@ private slots:
 
     void onApLineEditTextEdit(QString text);
 
+    void onPwdTextChanged();
+
 };
 
 #endif // MOBILEHOTSPOTWIDGET_H

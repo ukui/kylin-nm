@@ -29,9 +29,6 @@ public:
 
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
 
-protected:
-    bool eventFilter(QObject *w, QEvent *e);
-
 private:
     QComboBox *ipv4ConfigCombox;
     LineEdit *ipv4addressEdit;
@@ -69,6 +66,9 @@ private:
 private slots:
     void setEnableOfSaveBtn();
     void configChanged(int index);
+    void onAddressTextChanged();
+    void onNetMaskTextChanged();
+
 Q_SIGNALS:
     void setIpv4PageState(bool);
 

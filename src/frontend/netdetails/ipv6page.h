@@ -31,9 +31,6 @@ public:
 
     int getPerfixLength(QString text);
 
-protected:
-    bool eventFilter(QObject *w, QEvent *e);
-
 public:
     QComboBox *ipv6ConfigCombox;
     LineEdit *ipv6AddressEdit;
@@ -67,6 +64,8 @@ private:
 private slots:
     void configChanged(int index);
     void setEnableOfSaveBtn();
+    void onAddressTextChanged();
+    void onGatewayTextChanged();
 
 signals:
     void setIpv6PageState(bool);

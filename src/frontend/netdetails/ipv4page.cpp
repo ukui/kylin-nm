@@ -13,21 +13,6 @@ Ipv4Page::Ipv4Page(QWidget *parent):QFrame(parent)
     initComponent();
 }
 
-bool Ipv4Page::eventFilter(QObject *w, QEvent *e)
-{
-    if (w == ipv4addressEdit) {
-        if (ipv4addressEdit->text().isEmpty() || getTextEditState(ipv4addressEdit->text())) {
-            m_addressHintLabel->clear();
-        }
-    } else if (w == netMaskEdit) {
-        if (netMaskEdit->text().isEmpty() || netMaskIsValide(netMaskEdit->text())) {
-            m_maskHintLabel->clear();
-        }
-    }
-
-    return QObject::eventFilter(w,e);
-}
-
 void Ipv4Page::initUI() {
     ipv4ConfigCombox = new QComboBox(this);
     ipv4addressEdit = new LineEdit(this);
@@ -132,6 +117,9 @@ void Ipv4Page::initComponent() {
     }
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(configChanged(int)));
 
+    connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(onAddressTextChanged()));
+    connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(onNetMaskTextChanged()));
+
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
@@ -231,23 +219,13 @@ bool Ipv4Page::checkConnectBtnIsEnabled()
     if (ipv4ConfigCombox->currentIndex() == AUTO_CONFIG) {
         return true;
     } else {
-        if (ipv4addressEdit->text().isEmpty()) {
-            qDebug() << "ipv4address empty";
-            return false;
-        }
-        if (!getTextEditState(ipv4addressEdit->text())) {
-            m_addressHintLabel->setText(tr("Invalid address"));
-            qDebug() << "ipv4address invalid";
+        if (ipv4addressEdit->text().isEmpty() || !getTextEditState(ipv4addressEdit->text())) {
+            qDebug() << "ipv4address empty or invalid";
             return false;
         }
 
-        if (netMaskEdit->text().isEmpty()) {
-            qDebug() << "ipv4 netMask empty";
-            return false;
-        }
-        if (!netMaskIsValide(netMaskEdit->text())) {
-            m_maskHintLabel->setText(tr("Invalid subnet mask"));
-            qDebug() << "ipv4 netMask invalid";
+        if (netMaskEdit->text().isEmpty() || !netMaskIsValide(netMaskEdit->text())) {
+            qDebug() << "ipv4 netMask empty or invalid";
             return false;
         }
 
@@ -280,6 +258,26 @@ void Ipv4Page::configChanged(int index) {
     }
     if (index == MANUAL_CONFIG) {
         setLineEnabled(true);
+    }
+}
+
+void Ipv4Page::onAddressTextChanged()
+{
+    if (!getTextEditState(ipv4addressEdit->text())) {
+        m_addressHintLabel->setText(tr("Invalid address"));
+        qDebug() << "ipv4address invalid";
+    } else {
+        m_addressHintLabel->clear();
+    }
+}
+
+void Ipv4Page::onNetMaskTextChanged()
+{
+    if (!netMaskIsValide(netMaskEdit->text())) {
+        m_maskHintLabel->setText(tr("Invalid subnet mask"));
+        qDebug() << "ipv4 netMask invalid";
+    } else {
+        m_maskHintLabel->clear();
     }
 }
 

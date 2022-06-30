@@ -6,6 +6,7 @@ include(../component/infobutton.pri)
 include(../component/divider.pri)
 include(../component/deviceframe.pri)
 include(../component/RadioItemButton.pri)
+include(../component/fixlabel.pri)
 
 TARGET = $$qtLibraryTarget(netconnect)
 DESTDIR = ../..

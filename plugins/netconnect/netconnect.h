@@ -68,19 +68,19 @@ public:
     ~NetConnect();
 
     QWidget * pluginUi() Q_DECL_OVERRIDE;   // 插件主界面---setPluginType后调用
-    void setPluginType(PluginType type) Q_DECL_OVERRIDE;     // 设置插件类型
+    void setPluginType(PluginType type, bool useSwitch = true) Q_DECL_OVERRIDE;     // 设置插件类型
     void setParentWidget(QWidget*){;}
 
 private:
     bool m_isSimpleMode = true;
+    bool m_useSwitch = true;
 
     void initUi();
     void initComponent();
     void initConnect();
     void runExternalApp();
 
-    void showDesktopNotify(const QString &message);
-
+//    void showDesktopNotify(const QString &message);
 
     //开关相关
     void setSwitchStatus();

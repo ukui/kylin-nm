@@ -38,12 +38,6 @@ enum TtlsInnerType
     GTC_EAP
 };
 
-//enum KyEapMethodType {
-//    TLS = 0,
-//    PEAP,
-//    TTLS,
-//};
-
 class LineEdit : public QLineEdit
 {
     Q_OBJECT
@@ -68,8 +62,7 @@ class LogHintDialog : public KDialog
     Q_OBJECT
 
 public:
-    LogHintDialog(KDialog *parent = nullptr);
-    ~LogHintDialog();
+    LogHintDialog(QWidget *parent = nullptr);
 
 private:
     QLabel * m_iconLabel = nullptr;
@@ -92,6 +85,8 @@ public:
 //    void setTlsInfo(KyEapMethodTlsInfo &info);
 //    void setPeapInfo(KyEapMethodPeapInfo &info);
 //    void setTtlsInfo(KyEapMethodTtlsInfo &info);
+    KyEapMethodPeapInfo assemblePeapInfo();
+    KyEapMethodTtlsInfo assembleTtlsInfo();
     void getEnterpriseType(KyEapMethodType &enterpriseType);
 
 private:
@@ -135,7 +130,7 @@ private:
     QComboBox *m_pwdOptionCombox;
 
     QWidget *m_tlsWidget;
-    LogHintDialog *m_loginHintDialog = nullptr;
+//    LogHintDialog *m_loginHintDialog = nullptr;
     bool m_isLockScreen;
 
     //PEAP && TTLS

@@ -13,23 +13,19 @@ class EnterpriseWlanPage : public QWidget
     Q_OBJECT
 
 public:
-    EnterpriseWlanPage(KyWirelessNetItem &wirelessNetItem, QString device, bool isLockScreen, QWidget *parent = nullptr);
-    ~EnterpriseWlanPage();
+    EnterpriseWlanPage(QString ssid, QString device, bool isLockScreen, QWidget *parent = nullptr);
+
 protected:
     void paintEvent(QPaintEvent *event);
 
 private:
     void initUI();
     void initConnections();
-    void initData();
     void centerToScreen();
 
 private:
-    KyWirelessNetItem m_wirelessNetItem;
-//    ConInfo m_info;
     QString m_deviceName;
-    KyWirelessConnectOperation *m_connectOperation = nullptr;
-    KyWirelessNetResource *m_resource = nullptr;
+    QString m_ssid;
 
     QLabel *m_ssidTitleLabel;
     QLabel *m_ssidLabel;
@@ -44,6 +40,10 @@ private:
 private Q_SLOTS:
     void onBtnConnectClicked();
     void onEapTypeChanged(const KyEapMethodType &type);
+
+Q_SIGNALS:
+    void connectPeapConnect(KyEapMethodPeapInfo info, KyWirelessConnectSetting connSettingInfo);
+    void connectTtlsConnect(KyEapMethodTtlsInfo info, KyWirelessConnectSetting connSettingInfo);
 
 };
 

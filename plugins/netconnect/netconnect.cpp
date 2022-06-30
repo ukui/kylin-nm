@@ -43,23 +43,23 @@ const QString    KEY_WIRED_SWITCH             = "wiredswitch";
 
 const QString CONFIG_FILE_PATH   =  QDir::homePath() + "/.config/ukui/kylin-nm.conf";
 
-void NetConnect::showDesktopNotify(const QString &message)
-{
-    QDBusInterface iface("org.freedesktop.Notifications",
-                         "/org/freedesktop/Notifications",
-                         "org.freedesktop.Notifications",
-                         QDBusConnection::sessionBus());
-    QList<QVariant> args;
-    args<<(tr("ukui control center"))
-       <<((unsigned int) 0)
-       <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
-       <<tr("ukui control center desktop message") //显示的是什么类型的信息
-       <<message //显示的具体信息
-       <<QStringList()
-       <<QVariantMap()
-       <<(int)-1;
-    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
-}
+//void NetConnect::showDesktopNotify(const QString &message)
+//{
+//    QDBusInterface iface("org.freedesktop.Notifications",
+//                         "/org/freedesktop/Notifications",
+//                         "org.freedesktop.Notifications",
+//                         QDBusConnection::sessionBus());
+//    QList<QVariant> args;
+//    args<<(tr("ukui control center"))
+//       <<((unsigned int) 0)
+//       <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
+//       <<tr("ukui control center desktop message") //显示的是什么类型的信息
+//       <<message //显示的具体信息
+//       <<QStringList()
+//       <<QVariantMap()
+//       <<(int)-1;
+//    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
+//}
 
 
 NetConnect::NetConnect() :  mFirstLoad(true) {
@@ -69,11 +69,15 @@ NetConnect::NetConnect() :  mFirstLoad(true) {
 }
 
 NetConnect::~NetConnect() {
-    if (!mFirstLoad) {
-        if (m_switchGsettings != nullptr) {
-            delete m_switchGsettings;
-            m_switchGsettings = nullptr;
-        }
+    if (m_switchGsettings != nullptr) {
+        delete m_switchGsettings;
+        m_switchGsettings = nullptr;
+    }
+
+    thread->quit();
+    if (nullptr !=pluginWidget) {
+        delete pluginWidget;
+        pluginWidget = nullptr;
     }
 }
 
@@ -91,23 +95,28 @@ QWidget *NetConnect::pluginUi() {
     return pluginWidget;
 }
 
-void NetConnect::setPluginType(PluginType type)
+void NetConnect::setPluginType(PluginType type, bool useSwitch)
 {
     if (type == SIMPLE) {
         m_isSimpleMode = true;
     } else {
         m_isSimpleMode = false;
     }
+    m_useSwitch = useSwitch;
 }
-
-
 
 void NetConnect::initUi()
 {
     thread = new QThread;
     manager = new KyNetworkManager();
     manager->moveToThread(thread);
+    connect(thread, &QThread::started, manager, &KyNetworkManager::kylinNetworkManagerInit);
+    connect(thread, &QThread::finished, manager, &KyNetworkManager::deleteLater);
     thread->start();
+
+    while (!manager->isInitFinished()) {
+        ::usleep(1000);
+    }
 
     m_mainLayout = new QVBoxLayout(pluginWidget);
     m_mainLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
@@ -193,11 +202,10 @@ void NetConnect::initUi()
 bool NetConnect::eventFilter(QObject *w, QEvent *e) {
     if (w == m_wiredSwitch && e->type() == QEvent::MouseButtonRelease) {
         if (!m_wiredSwitch->isCheckable()) {
-            showDesktopNotify(tr("No ethernet device avaliable"));
+//            showDesktopNotify(tr("No ethernet device avaliable"));
             qDebug() << "No ethernet device avaliable";
         } else {
             Q_EMIT setWiredEnabled(!m_wiredSwitch->isChecked());
-            qDebug() << "setWiredEnabled" << !m_wiredSwitch->isChecked();
         }
         return true;
     }
@@ -205,7 +213,7 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
 }
 
 void NetConnect::initComponent() {
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA) && m_useSwitch) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
         setSwitchStatus();
         Q_EMIT setWiredEnabled(!m_wiredSwitch->isChecked());

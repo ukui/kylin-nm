@@ -12,7 +12,9 @@
 
 #include "../component/InfoButton/infobutton.h"
 #include "../component/RadioItemButton/radioitembutton.h"
+#include "../component/FixLabel/fixlabel.h"
 #include "kpasswordedit.h"
+#include "hiddenwifi/enterprisewlanpage.h"
 using namespace kdk;
 
 class WlanItem : public QFrame
@@ -22,11 +24,11 @@ public:
     WlanItem(bool isSimple, QWidget *parent = nullptr);
 public:
     void setName(QString name) {
-        titileLabel->setText(name);
+        titileLabel->setLabelText(name);
     }
 
     QString getName() {
-        return titileLabel->text();
+        return titileLabel->getText();
     }
 
     void setItemIcon(const QIcon &icon) {
@@ -83,6 +85,8 @@ public:
         m_pwdLineEdit->setText(pwd);
     }
 
+    void showEnterPricePage(QString devName, QWidget *widget);
+
     void startLoading();
     void stopLoading();
 
@@ -109,7 +113,7 @@ private:
     QMenu *m_menu = nullptr;
     RadioItemButton* radioBtn = nullptr;
     InfoButton * infoLabel = nullptr;
-    QLabel * titileLabel = nullptr;
+    FixLabel * titileLabel = nullptr;
 
     bool isSimple;
     bool m_isAcitve = false;
@@ -135,6 +139,8 @@ private:
     QHBoxLayout* m_autoConnectFrameLyt = nullptr;
     QHBoxLayout* m_pwdFrameLyt = nullptr;
 
+    EnterpriseWlanPage* m_enterPirsePage = nullptr;
+
     bool m_isIn = false;
 
 private Q_SLOTS:
@@ -142,6 +148,10 @@ private Q_SLOTS:
 //    void onMenuTriggered(QAction *action);
     void onPwdEditorTextChanged();
     void onConnectButtonClicked();
+
+Q_SIGNALS:
+    void connectPeapConnect(KyEapMethodPeapInfo info, KyWirelessConnectSetting connSettingInfo);
+    void connectTtlsConnect(KyEapMethodTtlsInfo info, KyWirelessConnectSetting connSettingInfo);
 };
 
 #endif // WLANITEM_H

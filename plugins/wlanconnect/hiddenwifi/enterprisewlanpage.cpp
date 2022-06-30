@@ -9,12 +9,11 @@
 #define  BOTTOM_LAYOUT_MARGINS  0,24,0,24
 #define  LABEL_MIN_WIDTH  150
 
-EnterpriseWlanPage::EnterpriseWlanPage(KyWirelessNetItem &wirelessNetItem, QString device, bool isLockScreen, QWidget *parent)
-    : m_wirelessNetItem(wirelessNetItem), m_deviceName(device), QWidget(parent)
+EnterpriseWlanPage::EnterpriseWlanPage(QString ssid, QString device, bool isLockScreen, QWidget *parent)
+    : m_ssid(ssid), m_deviceName(device), QWidget(parent)
 {
     initUI();
     initConnections();
-    initData();
 
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -24,14 +23,6 @@ EnterpriseWlanPage::EnterpriseWlanPage(KyWirelessNetItem &wirelessNetItem, QStri
     }
 
     centerToScreen();
-}
-
-EnterpriseWlanPage::~EnterpriseWlanPage()
-{
-    if (m_entSecurityWidget) {
-        delete m_entSecurityWidget;
-        m_entSecurityWidget = nullptr;
-    }
 }
 
 void EnterpriseWlanPage::paintEvent(QPaintEvent *event)
@@ -85,7 +76,7 @@ void EnterpriseWlanPage::initUI()
     btnLayout->addWidget(m_connectBtn);
 
     m_ssidTitleLabel->setText(tr("Network name(SSID)")); //网络名(SSID)
-    m_ssidLabel->setText(tr("Network name--(test)"));
+    m_ssidLabel->setText(m_ssid);
     m_cancelBtn->setText(tr("Cancel"));
     m_connectBtn->setText(tr("Connect"));
 
@@ -108,11 +99,6 @@ void EnterpriseWlanPage::initConnections()
     });
 }
 
-void EnterpriseWlanPage::initData()
-{
-
-}
-
 void EnterpriseWlanPage::centerToScreen()
 {
     QDesktopWidget* m = QApplication::desktop();
@@ -126,29 +112,46 @@ void EnterpriseWlanPage::centerToScreen()
 
 void EnterpriseWlanPage::onBtnConnectClicked()
 {
+    KyWirelessConnectSetting connSettingInfo;
+    //基本信息
+    connSettingInfo.m_ssid = m_ssid;
+    connSettingInfo.setConnectName(m_ssid);
+    connSettingInfo.setIfaceName(m_deviceName);
+    connSettingInfo.m_isAutoConnect = true;
 
+    //ipv4 ipv6
+    connSettingInfo.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
+    connSettingInfo.setIpConfigType(IPADDRESS_V6, CONFIG_IP_DHCP);
+
+    KyEapMethodType eapType;
+    m_entSecurityWidget->getEnterpriseType(eapType);
+    if (eapType == PEAP) {
+        KyEapMethodPeapInfo info = m_entSecurityWidget->assemblePeapInfo();
+        Q_EMIT connectPeapConnect(info, connSettingInfo);
+    } else if (eapType = TTLS) {
+        KyEapMethodTtlsInfo info = m_entSecurityWidget->assembleTtlsInfo();
+        Q_EMIT connectTtlsConnect(info, connSettingInfo);
+    } else {
+        qWarning() << "unsupport now!!!";
+    }
+
+    close();
 }
 
 void EnterpriseWlanPage::onEapTypeChanged(const KyEapMethodType &type)
 {
     switch (type) {
     case KyEapMethodType::TLS:
-//        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
-//            m_resource->getEnterPriseInfoTls(m_wirelessNetItem.m_connectUuid, m_info.tlsInfo);
-//        }
         this->setFixedSize(MAIN_SIZE_EXPAND);
+        centerToScreen();
         break;
     case KyEapMethodType::PEAP:
-//        if (m_wirelessNetItem.m_connectUuid.isEmpty()) {
-//            m_resource->getEnterPriseInfoPeap(m_wirelessNetItem.m_connectUuid, m_info.peapInfo);
-//            }
         this->setFixedSize(MAIN_SIZE_NARROW);
+        centerToScreen();
         break;
     case KyEapMethodType::TTLS:
-//        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
-//            m_resource->getEnterPriseInfoTtls(m_wirelessNetItem.m_connectUuid, m_info.ttlsInfo);
-//        }
         this->setFixedSize(MAIN_SIZE_NARROW);
+        centerToScreen();
         break;
     default:
         break;

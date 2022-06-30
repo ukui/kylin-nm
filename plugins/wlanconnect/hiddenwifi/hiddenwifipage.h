@@ -18,22 +18,17 @@
 #include "kpasswordedit.h"
 #include "kborderlessbutton.h"
 #include "entsecuritywidget.h"
+#include "kylin-nm/depend/kywirelessconnectoperation.h"
 
 using namespace kdk;
 
-enum KySecuType {
-    NONE = 0,
-    WPA_AND_WPA2_PERSONAL,
-    WPA_AND_WPA2_ENTERPRISE,
-    WPA3_PERSONAL,
-};
 
 class HiddenWiFiPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    HiddenWiFiPage(QString interface, QString name, QString uuid, bool isLockScreen, QWidget *parent = nullptr);
+    HiddenWiFiPage(QString interface, bool isLockScreen, QWidget *parent = nullptr);
     ~HiddenWiFiPage();
 
     void getSecuType(KySecuType &secuType);
@@ -89,12 +84,14 @@ private:
     bool m_isSecuOk = false;
 
     QString      m_deviceName;
-    QString      m_name;
-    QString      m_uuid;
 
 private Q_SLOTS:
     void on_btnJoin_clicked();
     void onSecuTypeComboxIndexChanged();
 
+Q_SIGNALS:
+    void connectHidePeapConnect(KyEapMethodPeapInfo info, KyWirelessConnectSetting connSettingInfo);
+    void connectHideTtlsConnect(KyEapMethodTtlsInfo info, KyWirelessConnectSetting connSettingInfo);
+    void connectHideNormalConnect(KyWirelessConnectSetting connSettingInfo, KySecuType type);
 };
 #endif // HIDDENWIFIPAGE_H

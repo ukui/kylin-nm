@@ -2,9 +2,10 @@
 #define ITEMFRAME_H
 #include <QFrame>
 #include <QVBoxLayout>
-#include "../component/DeviceFrame/deviceframe.h"
+
 #include "lanitem.h"
 
+#include "../component/DeviceFrame/deviceframe.h"
 #include "../component/Divider/divider.h"
 
 class ItemFrame : public QFrame

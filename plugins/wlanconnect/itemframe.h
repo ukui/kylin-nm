@@ -2,10 +2,12 @@
 #define ITEMFRAME_H
 #include <QFrame>
 #include <QVBoxLayout>
-#include "../component/DeviceFrame/deviceframe.h"
+
 #include "wlanitem.h"
 
+#include "../component/DeviceFrame/deviceframe.h"
 #include "../component/Divider/divider.h"
+#include "hiddenwifi/hiddenwifipage.h"
 
 class AddNetItem : public QFrame
 {
@@ -47,9 +49,16 @@ public:
     AddNetItem * addNetItem = nullptr;
     //已激活uuid
     QString uuid = "";
+public Q_SLOTS:
+    void showJoinPage(QWidget *);
+private:
+    HiddenWiFiPage* joinPage = nullptr;
 
 Q_SIGNALS:
     void addNetItemClick();
+    void connectHidePeapConnect(KyEapMethodPeapInfo info, KyWirelessConnectSetting connSettingInfo);
+    void connectHideTtlsConnect(KyEapMethodTtlsInfo info, KyWirelessConnectSetting connSettingInfo);
+    void connectHideNormalConnect(KyWirelessConnectSetting connSettingInfo, KySecuType type);
 };
 
 #endif // ITEMFRAME_H

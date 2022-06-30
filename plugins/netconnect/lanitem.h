@@ -12,6 +12,7 @@
 
 #include "../component/InfoButton/infobutton.h"
 #include "../component/RadioItemButton/radioitembutton.h"
+#include "../component/FixLabel/fixlabel.h"
 
 class LanItem : public QFrame
 {
@@ -20,11 +21,11 @@ public:
     LanItem(bool isSimple, QWidget *parent = nullptr);
 
     void setName(QString name) {
-        titileLabel->setText(name);
+        titileLabel->setLabelText(name);
     }
 
     QString getName() {
-        return titileLabel->text();
+        return titileLabel->getText();
     }
 
     void setItemIcon(const QIcon &icon) {
@@ -84,7 +85,7 @@ private:
 
     RadioItemButton* radioBtn = nullptr;
     InfoButton * infoLabel = nullptr;
-    QLabel * titileLabel = nullptr;
+    FixLabel * titileLabel = nullptr;
 
     bool m_loading = false;
     bool m_isAcitve = false;
@@ -97,7 +98,6 @@ private:
 
 private Q_SLOTS:
     void updateIcon();
-//    void onMenuTriggered(QAction *action);
 };
 
 #endif // LANITEM_H

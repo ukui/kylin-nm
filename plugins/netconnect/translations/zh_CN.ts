@@ -1,66 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<TS version="2.1">
 <context>
-    <name>AddNetBtn</name>
+    <name>LanItem</name>
     <message>
-        <location filename="../addnetbtn.cpp" line="22"/>
-        <source>Add WiredNetork</source>
-        <translation>添加有线网络</translation>
+        <location filename="../lanitem.cpp" line="75"/>
+        <source>Disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lanitem.cpp" line="77"/>
+        <source>Connect</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>NetConnect</name>
     <message>
-        <location filename="../netconnect.ui" line="50"/>
-        <location filename="../netconnect.cpp" line="152"/>
-        <source>Wired Network</source>
-        <translation>有线网络</translation>
-    </message>
-    <message>
-        <location filename="../netconnect.ui" line="112"/>
-        <location filename="../netconnect.cpp" line="154"/>
-        <source>open</source>
-        <translation>开启</translation>
-        <extra-contents_path>/netconnect/open</extra-contents_path>
-    </message>
-    <message>
-        <location filename="../netconnect.ui" line="198"/>
-        <location filename="../netconnect.cpp" line="151"/>
-        <source>Advanced settings</source>
-        <translation>高级设置</translation>
-        <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
-    </message>
-    <message>
-        <location filename="../netconnect.cpp" line="63"/>
+        <location filename="../netconnect.cpp" line="53"/>
         <source>ukui control center</source>
-        <translation>控制面板</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="66"/>
+        <location filename="../netconnect.cpp" line="56"/>
         <source>ukui control center desktop message</source>
-        <translation>控制面板桌面通知</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="80"/>
-        <source>WiredConnect</source>
-        <translation>有线网络</translation>
+        <location filename="../netconnect.cpp" line="122"/>
+        <source>LAN</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="177"/>
+        <location filename="../netconnect.cpp" line="169"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="196"/>
         <source>No ethernet device avaliable</source>
-        <translation>未检测到有线设备</translation>
-    </message>
-    <message>
-        <location filename="../netconnect.cpp" line="426"/>
-        <location filename="../netconnect.cpp" line="835"/>
-        <source>connected</source>
-        <translation>已连接</translation>
-    </message>
-    <message>
-        <location filename="../netconnect.cpp" line="490"/>
-        <source>card</source>
-        <translation>网卡</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

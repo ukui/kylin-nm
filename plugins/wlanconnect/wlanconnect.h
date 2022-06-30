@@ -49,21 +49,7 @@ using namespace kdk;
 #include "../component/DeviceFrame/deviceframe.h"
 #include "itemframe.h"
 #include "wlanitem.h"
-namespace Ui {
-class WlanConnect;
-}
-
-class testWidget : public QWidget
-{
-public:
-    testWidget(QWidget *parent = nullptr);
-
-private:
-    QVBoxLayout* layout;
-    QLabel* label;
-    QPushButton* button;
-};
-
+#include "hiddenwifi/enterprisewlanpage.h"
 
 class WlanConnect : public QObject, Interface
 {
@@ -76,7 +62,7 @@ public:
     ~WlanConnect();
 
     QWidget * pluginUi() Q_DECL_OVERRIDE;   // 插件主界面---setPluginType后调用
-    void setPluginType(PluginType type) Q_DECL_OVERRIDE;     // 设置插件类型
+    void setPluginType(PluginType type, bool useSwitch = true) Q_DECL_OVERRIDE;     // 设置插件类型
     void setParentWidget(QWidget*);
 
 private:
@@ -88,13 +74,10 @@ private:
     void runExternalApp();
     void initSearchText();
 
-    void showDesktopNotify(const QString &message);
+//    void showDesktopNotify(const QString &message);
 
-
-    int  sortWlanNet(QString deviceName, QString name, QString signal);
     void updateIcon(WlanItem *item, int signalStrength, QString security, bool isApConnection);
-    void resortWifiList(ItemFrame *frame, QString devName);
-
+    void resortWifiList(ItemFrame *frame, QList<KyActivateItem> connectItemList, QList<KyWirelessNetItem> list);
 
     //单wifi图标
     int  setSignal(int lv);
@@ -138,9 +121,7 @@ private:
 
     QWidget* parentWidget = nullptr;
 
-    QWidget            *pluginWidget;
-
-//    QGSettings         *m_switchGsettings = nullptr;
+    QWidget* pluginWidget = nullptr;
 
     //设备列表
     QStringList deviceList;
@@ -197,7 +178,7 @@ private Q_SLOTS:
     void onNetworkUpdate(QString deviceName, QString wlannName, KyWirelessNetItem secuType);
     void onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, KyConnectState status);
 
-    void updateList();
+    void updateList(QString devName, QList<KyActivateItem> connectItemList, QList<KyWirelessNetItem> list);
     void onDeviceStatusChanged();
     void onDeviceNameChanged(QString, QString);
 
@@ -211,8 +192,5 @@ private Q_SLOTS:
     void onWirelessConnectionUpdate(QString deviceName, QString ssid, QString uuid, QString dbusPath, KySecuType connectSecuType);
     void onWirelessDeviceAdd(QString deviceName);
     void onWirelessDeviceRemove(QString deviceName);
-
-    void onWirelessConnectPasswordError(QString devName, QString ssid, QVariantMap map);
-
 };
 #endif // WLANCONNECT_H

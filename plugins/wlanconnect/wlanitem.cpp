@@ -1,13 +1,10 @@
-    #include "wlanitem.h"
+#include "wlanitem.h"
 #include <QPainter>
 #include <QRegExpValidator>
 #define FRAME_SPEED 150
 #define LIMIT_TIME 60*1000
 #define TOTAL_PAGE 8
 #define RADIUS 6.0
-
-#define THEME_QT_SCHEMA  "org.ukui.style"
-#define MODE_QT_KEY      "style-name"
 
 #define UNEXPEND_HEIGHT  48
 #define EXPEND_HEIGHT  120
@@ -26,7 +23,8 @@ WlanItem::WlanItem(bool isSimple, QWidget *parent)
     lanLyt->setContentsMargins(0,8,16,4);
     lanLyt->setSpacing(0);
     radioBtn = new RadioItemButton(this);
-    titileLabel = new QLabel(this);
+    titileLabel = new FixLabel(this);
+    titileLabel->setMinimumWidth(282);;
 
     lanLyt->addWidget(radioBtn);
     lanLyt->addSpacing(10);
@@ -123,6 +121,23 @@ void WlanItem::updateIcon()
     }
     radioBtn->setButtonIcon(loadIcons.at(currentIconIndex));
     currentIconIndex ++;
+}
+
+void WlanItem::showEnterPricePage(QString devName, QWidget *widget)
+{
+    if (nullptr != m_enterPirsePage) {
+        m_enterPirsePage->show();
+    } else {
+        QString ssid = getName();
+        m_enterPirsePage = new EnterpriseWlanPage(ssid, devName, true, widget);
+        connect(m_enterPirsePage, &EnterpriseWlanPage::destroyed, [=](){
+            m_enterPirsePage->disconnect(this);
+            m_enterPirsePage = nullptr;
+        });
+        connect(m_enterPirsePage, &EnterpriseWlanPage::connectPeapConnect, this, &WlanItem::connectPeapConnect);
+        connect(m_enterPirsePage, &EnterpriseWlanPage::connectTtlsConnect, this, &WlanItem::connectTtlsConnect);
+        m_enterPirsePage->show();
+    }
 }
 
 void WlanItem::startLoading()

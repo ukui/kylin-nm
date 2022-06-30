@@ -12,12 +12,13 @@ LanItem::LanItem(bool isSimple, QWidget *parent)
     mLanLyt->setContentsMargins(16,0,0,0);
     mLanLyt->setSpacing(0);
     radioBtn = new RadioItemButton(this);
-    titileLabel = new QLabel(this);
+    titileLabel = new FixLabel(this);
+    titileLabel->setMinimumWidth(282);
 
     mLanLyt->addWidget(radioBtn);
     mLanLyt->addSpacing(10);
     mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
-    mLanLyt->addStretch();
+//    mLanLyt->addStretch();
     if (!isSimple) {
         infoLabel = new InfoButton(this);
         mLanLyt->addSpacing(8);

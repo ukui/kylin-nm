@@ -1,5 +1,4 @@
 #include "kynetworkicon.h"
-//#include <QDBusArgument>
 
 #define EXCELLENT_SIGNAL 80
 #define GOOD_SIGNAL 55
@@ -23,13 +22,19 @@ KyNetworkIcon::KyNetworkIcon(QWidget *parent):
     QPushButton(parent)
 {
     qRegisterMetaType<KySecuType>("KyConnectState");
+    qRegisterMetaType<KySecuType>("KyConnectStatus");
     qRegisterMetaType<KyConnectionType>("KyConnectionType");
-
 
     thread = new QThread;
     manager = new KyNetworkManager();
     manager->moveToThread(thread);
+    connect(thread, &QThread::started, manager, &KyNetworkManager::kylinNetworkManagerInit);
+    connect(thread, &QThread::finished, manager, &KyNetworkManager::deleteLater);
     thread->start();
+
+    while (!manager->isInitFinished()) {
+        ::usleep(1000);
+    }
 
     loadIcons.append(QIcon::fromTheme("kylin-network-1"));
     loadIcons.append(QIcon::fromTheme("kylin-network-2"));
@@ -44,12 +49,12 @@ KyNetworkIcon::KyNetworkIcon(QWidget *parent):
     loadIcons.append(QIcon::fromTheme("kylin-network-11"));
     loadIcons.append(QIcon::fromTheme("kylin-network-12"));
 
-
-    updateIcon();
-    initConnect();
-
     loadingTimer = new QTimer(this);
     connect(loadingTimer, &QTimer::timeout, this, &KyNetworkIcon::onSetTrayIconLoading);
+
+    manager->getConnectStatus(iconStatus);
+    updateIcon();
+    initConnect();
 
     refreshTimer = new QTimer(this);
     connect(loadingTimer, &QTimer::timeout, this, &KyNetworkIcon::updateIcon);
@@ -69,46 +74,33 @@ void KyNetworkIcon::initConnect()
     connect(manager, &KyNetworkManager::wiredStateChange, this, &KyNetworkIcon::onWiredStateChange);
     connect(manager, &KyNetworkManager::wirelessStateChange, this, &KyNetworkIcon::onWirelessStateChange);
 
-    connect(manager, &KyNetworkManager::connectivityChanged, [=](){
-        qDebug() << "connectivityChanged";
-        updateIcon();
-    });
-    connect(manager, &KyNetworkManager::primaryConnectionTypeChanged, [=](KyConnectionType type){
-        qDebug() << "primaryConnectionTypeChanged" << type;
+    connect(manager, &KyNetworkManager::connectStatusChanged , [=](KyConnectStatus status){
+        iconStatus = status;
         updateIcon();
     });
 }
 
 void KyNetworkIcon::updateIcon()
 {
+    if (loadingTimer->isActive()) {
+        return;
+    }
     int signalStrength = 0;
 
-    KyConnectionType connectType;
-    manager->getPrimaryConnectionType(connectType);
-    qDebug() << "getPrimaryConnectionType" << connectType;
-    if (manager->wiredConnectIsActived()) {
+    if (iconStatus == LAN_CONNECTED) {
         this->setIcon(QIcon::fromTheme("network-wired-symbolic"));
-        iconStatus = IconActiveType::LAN_CONNECTED;
-    } else if (manager->wirelessConnectIsActived()) {
+        return;
+    } else if (iconStatus == WLAN_CONNECTED
+               || iconStatus == WLAN_CONNECTED_LIMITED) {
         signalStrength = manager->getAcivateWifiSignal();
-        iconStatus = IconActiveType::WLAN_CONNECTED;
-    } else {
+    } else if (iconStatus == NOT_CONNECTED) {
         this->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
-        iconStatus = IconActiveType::NOT_CONNECTED;
+        return;
+    } else if (iconStatus == LAN_CONNECTED_LIMITED) {
+        this->setIcon(QIcon::fromTheme("network-error-symbolic"));
     }
 
-    KyConnectivity connecttivity;
-    manager->getConnectivity(connecttivity);
-    if (connecttivity != CONNECTIVITY_FULL) {
-        if (iconStatus == IconActiveType::LAN_CONNECTED) {
-            this->setIcon(QIcon::fromTheme("network-error-symbolic"));
-            iconStatus = IconActiveType::LAN_CONNECTED_LIMITED;
-        } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
-            iconStatus = IconActiveType::WLAN_CONNECTED_LIMITED;
-        }
-    }
-
-    if (iconStatus == IconActiveType::WLAN_CONNECTED) {
+    if (iconStatus == WLAN_CONNECTED) {
         if (signalStrength > EXCELLENT_SIGNAL){
             this->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_ICON));
         } else if (signalStrength > GOOD_SIGNAL) {
@@ -120,7 +112,7 @@ void KyNetworkIcon::updateIcon()
        } else {
             this->setIcon(QIcon::fromTheme(NONE_SIGNAL_ICON));
        }
-    } else if (iconStatus == IconActiveType::WLAN_CONNECTED_LIMITED) {
+    } else if (iconStatus == WLAN_CONNECTED_LIMITED) {
         if (signalStrength > EXCELLENT_SIGNAL){
             this->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_LIMIT_ICON));
         } else if (signalStrength > GOOD_SIGNAL) {
@@ -133,13 +125,10 @@ void KyNetworkIcon::updateIcon()
             this->setIcon(QIcon::fromTheme(NONE_SIGNAL_LIMIT_ICON));
        }
     }
-
-    qDebug() << "iconStatus" << iconStatus;
 }
 
 void KyNetworkIcon::startLoading()
 {
-    qDebug() << "startLoading";
     if (!loadingTimer->isActive()) {
         loadingTimer->start(60);
     }
@@ -147,7 +136,6 @@ void KyNetworkIcon::startLoading()
 
 void KyNetworkIcon::stopLoading()
 {
-    qDebug() << "stopLoading";
     if (loadingTimer->isActive()) {
         loadingTimer->stop();
     }
@@ -166,7 +154,6 @@ void KyNetworkIcon::onWiredStateChange(QString deviceName, QString uuid, KyConne
 {
     Q_UNUSED(deviceName)
     Q_UNUSED(uuid)
-    qDebug() << "onWiredStateChange" << state;
     if (state == CONNECT_STATE_ACTIVATING
             || state == CONNECT_STATE_DEACTIVATING) {
         startLoading();
@@ -181,7 +168,6 @@ void KyNetworkIcon::onWirelessStateChange(QString deviceName, QString ssid, QStr
     Q_UNUSED(deviceName)
     Q_UNUSED(ssid)
     Q_UNUSED(uuid)
-    qDebug() << "onWirelessStateChange" << state;
     if (state == CONNECT_STATE_ACTIVATING
             || state == CONNECT_STATE_DEACTIVATING) {
         startLoading();

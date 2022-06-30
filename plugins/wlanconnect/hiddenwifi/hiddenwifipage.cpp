@@ -15,10 +15,8 @@
 #define  PEAP_SCRO_HEIGHT  348
 #define  TLS_SCRO_HEIGHT  540
 
-HiddenWiFiPage::HiddenWiFiPage(QString interface, QString name, QString uuid, bool isLockScreen, QWidget *parent)
+HiddenWiFiPage::HiddenWiFiPage(QString interface, bool isLockScreen, QWidget *parent)
     : m_deviceName(interface),
-      m_name(name),
-      m_uuid(uuid),
       QWidget(parent)
 {
     initUI();
@@ -313,8 +311,39 @@ void HiddenWiFiPage::setWindowWidth(KyEapMethodType eapType)
 void HiddenWiFiPage::on_btnJoin_clicked()
 {
     qDebug() << "on_btnJoin_clicked";
-    setBtnEnable(false);
 
+    KyWirelessConnectSetting connSettingInfo;
+    //基本信息
+    connSettingInfo.m_ssid = m_nameEdit->text();
+    connSettingInfo.setConnectName(connSettingInfo.m_ssid);
+    connSettingInfo.setIfaceName(m_deviceName);
+    connSettingInfo.isHidden = true;
+    connSettingInfo.m_isAutoConnect = m_rememberCheckBox->isChecked();
+    connSettingInfo.m_secretFlag = 0;
+
+    //ipv4 ipv6
+    connSettingInfo.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
+    connSettingInfo.setIpConfigType(IPADDRESS_V6, CONFIG_IP_DHCP);
+
+    int index = m_secuTypeCombox->currentData().toInt();
+    if (index == NONE) {
+        Q_EMIT connectHideNormalConnect(connSettingInfo, NONE);
+    } else if (index == WPA_AND_WPA2_PERSONAL || index == WPA3_PERSONAL) {
+        connSettingInfo.m_psk = m_pwdEdit->text();
+        Q_EMIT connectHideNormalConnect(connSettingInfo, (KySecuType)index);
+    } else if (index == WPA_AND_WPA2_ENTERPRISE) {
+        KyEapMethodType eapType;
+        m_secuWidget->getEnterpriseType(eapType);
+        if (eapType == PEAP) {
+            KyEapMethodPeapInfo info = m_secuWidget->assemblePeapInfo();
+            Q_EMIT connectHidePeapConnect(info, connSettingInfo);
+        } else if (eapType = TTLS) {
+            KyEapMethodTtlsInfo info = m_secuWidget->assembleTtlsInfo();
+            Q_EMIT connectHideTtlsConnect(info, connSettingInfo);
+        } else {
+            qWarning() << "unsupport now!!!";
+        }
+    }
 
     close();
 }

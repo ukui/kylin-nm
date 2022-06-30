@@ -16,9 +16,9 @@ EntSecurityWidget::EntSecurityWidget(bool isLockScreen, QWidget *parent)
 
 EntSecurityWidget::~EntSecurityWidget()
 {
-    if (m_loginHintDialog != nullptr) {
-        delete m_loginHintDialog;
-    }
+//    if (m_loginHintDialog != nullptr) {
+//        delete m_loginHintDialog;
+//    }
 }
 
 void EntSecurityWidget::getEnterpriseType(KyEapMethodType &enterpriseType)
@@ -51,7 +51,7 @@ void EntSecurityWidget::initUI()
     m_clientPrivateKeyPwdEdit = new KPasswordEdit(this);
     m_pwdOptionCombox = new QComboBox(this);
 
-    m_loginHintDialog = new LogHintDialog();
+//    m_loginHintDialog = new LogHintDialog(this->parentWidget());
 
     //PEAP TTLS共有
     m_eapMethodLabel = new QLabel(this);
@@ -152,13 +152,22 @@ void EntSecurityWidget::initUI()
 
     //TLS
     m_caCertPathCombox->addItem(tr("None"), QString(tr("None"))); //无
-    m_caCertPathCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    if (!m_isLockScreen)
+        m_caCertPathCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    else
+        m_caCertPathCombox->addItem(tr("Please log in to the system first."), QString(tr("Please log in to the system first.")));
 
     m_clientCertPathCombox->addItem(tr("None"), QString(tr("None"))); //无
-    m_clientCertPathCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    if (!m_isLockScreen)
+        m_clientCertPathCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    else
+        m_clientCertPathCombox->addItem(tr("Please log in to the system first."), QString(tr("Please log in to the system first.")));
 
     m_clientPrivateKeyCombox->addItem(tr("None"), QString(tr("None"))); //无
-    m_clientPrivateKeyCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    if (!m_isLockScreen)
+        m_clientPrivateKeyCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    else
+        m_clientPrivateKeyCombox->addItem(tr("Please log in to the system first."), QString(tr("Please log in to the system first.")));
 
     m_pwdOptionCombox->addItem(tr("Store passwords only for this user"), QString(tr("Store passwords only for this user"))); //仅为该用户存储密码
     m_pwdOptionCombox->addItem(tr("Store passwords for all users"), QString(tr("Store passwords for all users"))); //存储所有用户的密码
@@ -201,7 +210,7 @@ void EntSecurityWidget::initConnect()
     connect(m_userNameEdit, &LineEdit::textChanged, this, &EntSecurityWidget::setEnableOfSaveBtn);
     connect(m_userPwdEdit, &LineEdit::textChanged, this, &EntSecurityWidget::setEnableOfSaveBtn);
 
-    connect(m_loginHintDialog, &LogHintDialog::LogHintDialogClosed, this, &EntSecurityWidget::setComboxIndex);
+//    connect(m_loginHintDialog, &LogHintDialog::LogHintDialogClosed, this, &EntSecurityWidget::setComboxIndex);
 }
 
 void EntSecurityWidget::showTls()
@@ -242,6 +251,7 @@ bool EntSecurityWidget::checkConnectBtnIsEnabled()
 {
     int type = m_eapTypeCombox->currentData().toInt();
     if (type == TLS) {
+        return false;
         if (m_identityEdit->text().isEmpty()) {
             qDebug() << "tls identity is empty";
             return false;
@@ -324,7 +334,7 @@ void EntSecurityWidget::onCaCertPathComboxIndexChanged(QString str)
 {
     if (m_isLockScreen) {
         if (m_caCertPathCombox->isEnabled()) {
-            m_loginHintDialog->show();
+//            m_loginHintDialog->show();
         }
     } else {
         if (str.contains("Choose from file...") || str.contains("从文件选择..."))
@@ -353,7 +363,7 @@ void EntSecurityWidget::onClientCertPathComboxIndexChanged(QString str)
 {
     if (m_isLockScreen) {
         if (m_clientCertPathCombox->isEnabled()) {
-            m_loginHintDialog->show();
+//            m_loginHintDialog->show();
         }
     } else {
         if (str.contains("Choose from file...") || str.contains("从文件选择..."))
@@ -381,7 +391,7 @@ void EntSecurityWidget::onClientPrivateKeyComboxIndexChanged(QString str)
 {
     if (m_isLockScreen) {
         if (m_clientPrivateKeyCombox->isEnabled()) {
-            m_loginHintDialog->show();
+//            m_loginHintDialog->show();
         }
     } else {
         if (str.contains("Choose from file...") || str.contains("从文件选择..."))
@@ -408,7 +418,6 @@ void EntSecurityWidget::onClientPrivateKeyComboxIndexChanged(QString str)
 
 void EntSecurityWidget::setComboxIndex()
 {
-    qDebug() << "setComboxIndex None";
     if (m_caCertPathCombox->isEnabled()) {
         m_caCertPathCombox->setCurrentIndex(0);
     }
@@ -420,10 +429,104 @@ void EntSecurityWidget::setComboxIndex()
     }
 }
 
+KyEapMethodPeapInfo EntSecurityWidget::assemblePeapInfo()
+{
+    KyEapMethodPeapInfo info;
+    switch (m_eapMethodCombox->currentIndex()) {
+    case 0:
+        info.phase2AuthMethod = KyAuthMethodMschapv2;
+        break;
+    case 1:
+        info.phase2AuthMethod = KyAuthMethodMd5;
+        break;
+    case 2:
+        info.phase2AuthMethod = KyAuthMethodGtc;
+        break;
+    default:
+        break;
+    }
+    info.userName = m_userNameEdit->text();
+    info.userPWD = m_userPwdEdit->text();
+    info.m_passwdFlag = NetworkManager::Setting::None;
+//    switch (m_pwdOptionCombox->currentIndex()) {
+//        case 0:
+//            info.m_passwdFlag = NetworkManager::Setting::AgentOwned;
+//            info.userPWD = m_userPwdEdit->text();
+//        break;
+//        case 1:
+//            info.m_passwdFlag = NetworkManager::Setting::None;
+//            info.userPWD = m_userPwdEdit->text();
+//        break;
+//        case 2:
+//            info.m_passwdFlag = NetworkManager::Setting::NotSaved;
+//        break;
+//        default:
+//        break;
+//    }
+
+    return info;
+}
+KyEapMethodTtlsInfo EntSecurityWidget::assembleTtlsInfo()
+{
+    KyEapMethodTtlsInfo info;
+    switch (m_eapMethodCombox->currentIndex()) {
+    case PAP:
+        info.authType = AUTH_NO_EAP;
+        info.authNoEapMethod = KyAuthMethodPap;
+        break;
+    case MSCHAP:
+        info.authType = AUTH_NO_EAP;
+        info.authNoEapMethod = KyAuthMethodChap;
+        break;
+    case MSCHAPV2_EAP:
+        info.authType = AUTH_EAP;
+        info.authEapMethod = KyAuthEapMethodMschapv2;
+        break;
+    case MSCHAPV2:
+        info.authType = AUTH_NO_EAP;
+        info.authNoEapMethod = KyAuthMethodMschapv2;
+        break;
+    case CHAP:
+        info.authType = AUTH_NO_EAP;
+        info.authNoEapMethod = KyAuthMethodChap;
+        break;
+    case MD5_EAP:
+        info.authType = AUTH_EAP;
+        info.authEapMethod = KyAuthEapMethodMd5;
+        break;
+    case GTC_EAP:
+        info.authType = AUTH_EAP;
+        info.authEapMethod = KyAuthEapMethodGtc;
+        break;
+    default:
+        break;
+    }
+    info.userName = m_userNameEdit->text();
+    info.m_passwdFlag = NetworkManager::Setting::None;
+    info.userPWD = m_userPwdEdit->text();
+//    switch (m_pwdOptionCombox->currentIndex()) {
+//        case 0:
+//            info.m_passwdFlag = NetworkManager::Setting::AgentOwned;
+//            info.userPWD = m_userPwdEdit->text();
+//        break;
+//        case 1:
+//            info.m_passwdFlag = NetworkManager::Setting::None;
+//            info.userPWD = m_userPwdEdit->text();
+//        break;
+//        case 2:
+//            info.m_passwdFlag = NetworkManager::Setting::NotSaved;
+//        break;
+//        default:
+//        break;
+//    }
+    return info;
+}
+
+
 
 #define ICON_SIZE 16,16
 
-LogHintDialog::LogHintDialog(KDialog *parent) : KDialog(parent)
+LogHintDialog::LogHintDialog(QWidget *parent) : KDialog(parent)
 {
     //弹窗 TLS添加本地文件 登录系统提示
     m_iconLabel = new QLabel(this);
@@ -465,10 +568,5 @@ LogHintDialog::LogHintDialog(KDialog *parent) : KDialog(parent)
         Q_EMIT LogHintDialogClosed();
         close();
     });
-}
-
-LogHintDialog::~LogHintDialog()
-{
-
 }
 

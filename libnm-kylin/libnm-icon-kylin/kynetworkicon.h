@@ -10,14 +10,14 @@
 #include <QPushButton>
 #include <QThread>
 
-enum IconActiveType {
-    NOT_CONNECTED = 0,
-    LAN_CONNECTED,
-    WLAN_CONNECTED,
-    LAN_CONNECTED_LIMITED,
-    WLAN_CONNECTED_LIMITED,
-    ACTIVATING,
-};
+//enum IconActiveType {
+//    NOT_CONNECTED = 0,
+//    LAN_CONNECTED,
+//    WLAN_CONNECTED,
+//    LAN_CONNECTED_LIMITED,
+//    WLAN_CONNECTED_LIMITED,
+//    ACTIVATING,
+//};
 
 class LIBNMBASEKYLIN_EXPORT KyNetworkIcon : public QPushButton
 {
@@ -36,7 +36,7 @@ private:
     int currentIconIndex=0;
     QList<QIcon> loadIcons;
 
-    IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
+    KyConnectStatus iconStatus;
 
     void initConnect();
 

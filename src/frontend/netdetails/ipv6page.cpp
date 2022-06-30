@@ -1,10 +1,30 @@
 #include "ipv6page.h"
 #include "netdetail.h"
 
+#define  LAYOUT_MARGINS 0,0,0,0
+#define  LAYOUT_SPACING 0
+#define  HINT_TEXT_MARGINS 8, 1, 0, 3
+#define  LABEL_HEIGHT 24
+
 Ipv6Page::Ipv6Page(QWidget *parent):QFrame(parent)
 {
     initUI();
     initComponent();
+}
+
+bool Ipv6Page::eventFilter(QObject *w, QEvent *e)
+{
+    if (w == ipv6AddressEdit) {
+        if (ipv6AddressEdit->text().isEmpty() || getIpv6EditState(ipv6AddressEdit->text())) {
+            m_addressHintLabel->clear();
+        }
+    } else if (w == gateWayEdit) {
+        if (gateWayEdit->text().isEmpty() || getIpv6EditState(gateWayEdit->text())) {
+            m_gateWayHintLabel->clear();
+        }
+    }
+
+    return QObject::eventFilter(w,e);
 }
 
 void Ipv6Page::setIpv6Config(KyIpConfigType ipv6Config)
@@ -104,6 +124,23 @@ void Ipv6Page::initUI() {
     m_dnsLabel = new QLabel(this);
     m_secDnsLabel = new QLabel(this);
 
+    m_configEmptyLabel = new QLabel(this);
+    m_configEmptyLabel->setFixedHeight(LABEL_HEIGHT);
+
+    m_addressHintLabel = new QLabel(this);
+    m_addressHintLabel->setFixedHeight(LABEL_HEIGHT);
+    m_addressHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
+
+    m_gateWayHintLabel = new QLabel(this);
+    m_gateWayHintLabel->setFixedHeight(LABEL_HEIGHT);
+    m_gateWayHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
+
+    m_subnetEmptyLabel = new QLabel(this);
+    m_subnetEmptyLabel->setFixedHeight(LABEL_HEIGHT);
+
+    m_firstDnsEmptyLabel = new QLabel(this);
+    m_firstDnsEmptyLabel->setFixedHeight(LABEL_HEIGHT);
+
 
     m_configLabel->setText(tr("Ipv6Config"));
     m_addressLabel->setText(tr("Address"));
@@ -112,13 +149,36 @@ void Ipv6Page::initUI() {
     m_dnsLabel->setText(tr("Prefs DNS"));
     m_secDnsLabel->setText(tr("Alternative DNS"));
 
+    QPalette hintTextColor;
+    hintTextColor.setColor(QPalette::WindowText, Qt::red);
+    m_addressHintLabel->setPalette(hintTextColor);
+    m_gateWayHintLabel->setPalette(hintTextColor);
+
+    QWidget *addressWidget = new QWidget(this);
+    QVBoxLayout *addressLayout = new QVBoxLayout(addressWidget);
+    addressLayout->setContentsMargins(LAYOUT_MARGINS);
+    addressLayout->setSpacing(LAYOUT_SPACING);
+    addressLayout->addWidget(ipv6AddressEdit);
+    addressLayout->addWidget(m_addressHintLabel);
+
+    QWidget *gateWayWidget = new QWidget(this);
+    QVBoxLayout *gateWayLayout = new QVBoxLayout(gateWayWidget);
+    gateWayLayout->setContentsMargins(LAYOUT_MARGINS);
+    gateWayLayout->setSpacing(LAYOUT_SPACING);
+    gateWayLayout->addWidget(gateWayEdit);
+    gateWayLayout->addWidget(m_gateWayHintLabel);
 
     m_detailLayout = new QFormLayout(this);
+    m_detailLayout->setContentsMargins(0, 0, 0, 0);
+    m_detailLayout->setVerticalSpacing(0);
     m_detailLayout->addRow(m_configLabel,ipv6ConfigCombox);
-    m_detailLayout->addRow(m_addressLabel,ipv6AddressEdit);
+    m_detailLayout->addRow(m_configEmptyLabel);
+    m_detailLayout->addRow(m_addressLabel,addressWidget);
     m_detailLayout->addRow(m_subnetLabel,lengthEdit);
-    m_detailLayout->addRow(m_gateWayLabel,gateWayEdit);
+    m_detailLayout->addRow(m_subnetEmptyLabel);
+    m_detailLayout->addRow(m_gateWayLabel,gateWayWidget);
     m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
+    m_detailLayout->addRow(m_firstDnsEmptyLabel);
     m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
 
     ipv6ConfigCombox->addItem(tr("Auto(DHCP)")); //"自动(DHCP)"
@@ -132,6 +192,9 @@ void Ipv6Page::initUI() {
 
     QRegExp prefix_rx("\\b(?:(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\.){3}(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\b");
     lengthEdit->setValidator(new QRegExpValidator(prefix_rx,this));
+
+    ipv6AddressEdit->installEventFilter(this);
+    gateWayEdit->installEventFilter(this);
 }
 
 void Ipv6Page::initComponent() {
@@ -161,19 +224,27 @@ void Ipv6Page::configChanged(int index) {
 
 void Ipv6Page::setControlEnabled(bool check)
 {
-    ipv6AddressEdit->setEnabled(check);
-    lengthEdit->setEnabled(check);
-    gateWayEdit->setEnabled(check);
-    firstDnsEdit->setEnabled(check);
-    secondDnsEdit->setEnabled(check);
-
     if (!check) {
         ipv6AddressEdit->clear();
         lengthEdit->clear();
         gateWayEdit->clear();
         firstDnsEdit->clear();
         secondDnsEdit->clear();
+
+        ipv6AddressEdit->setPlaceholderText(" ");
+        lengthEdit->setPlaceholderText(" ");
+        gateWayEdit->setPlaceholderText(" ");
+    } else {
+        ipv6AddressEdit->setPlaceholderText(tr("Required")); //必填
+        lengthEdit->setPlaceholderText(tr("Required")); //必填
+        gateWayEdit->setPlaceholderText(tr("Required")); //必填
     }
+
+    ipv6AddressEdit->setEnabled(check);
+    lengthEdit->setEnabled(check);
+    gateWayEdit->setEnabled(check);
+    firstDnsEdit->setEnabled(check);
+    secondDnsEdit->setEnabled(check);
 }
 
 void Ipv6Page::setEnableOfSaveBtn()
@@ -186,8 +257,13 @@ bool Ipv6Page::checkConnectBtnIsEnabled()
     if (ipv6ConfigCombox->currentIndex() == AUTO_CONFIG) {
         return true;
     } else {
-        if (ipv6AddressEdit->text().isEmpty() || !getIpv6EditState(ipv6AddressEdit->text())) {
-            qDebug() << "ipv6address empty or invalid";
+        if (ipv6AddressEdit->text().isEmpty()) {
+            qDebug() << "ipv6address empty";
+            return false;
+        }
+        if (!getIpv6EditState(ipv6AddressEdit->text())) {
+            m_addressHintLabel->setText(tr("Invalid address"));
+            qDebug() << "ipv6address invalid";
             return false;
         }
 
@@ -196,8 +272,13 @@ bool Ipv6Page::checkConnectBtnIsEnabled()
             return false;
         }
 
-        if (gateWayEdit->text().isEmpty() || !getIpv6EditState(gateWayEdit->text())) {
-            qDebug() << "ipv6 gateway empty or invalid";
+        if (gateWayEdit->text().isEmpty()) {
+            qDebug() << "ipv6 gateway empty";
+            return false;
+        }
+        if (!getIpv6EditState(gateWayEdit->text())) {
+            m_gateWayHintLabel->setText(tr("Invalid gateway"));
+            qDebug() << "ipv6 gateway invalid";
             return false;
         }
 

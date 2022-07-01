@@ -86,6 +86,14 @@ WlanConnect::WlanConnect() :  m_firstLoad(true)
     qRegisterMetaType<QList<KyWirelessNetItem>>("QList<KyWirelessNetItem>");
     qRegisterMetaType<KyEapMethodPeapInfo>("KyEapMethodPeapInfo");
     qRegisterMetaType<KyEapMethodTtlsInfo>("KyEapMethodTtlsInfo");
+
+    QString locale = QLocale::system().name();
+    QTranslator* translator = new QTranslator(this);
+    if (translator->load(":/translations/"+ locale + ".qm")) {
+        QApplication::installTranslator(translator);
+    } else {
+        qWarning() << "Translations load fail";
+    }
 }
 
 WlanConnect::~WlanConnect()

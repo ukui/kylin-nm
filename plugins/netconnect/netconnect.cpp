@@ -63,9 +63,15 @@ const QString CONFIG_FILE_PATH   =  QDir::homePath() + "/.config/ukui/kylin-nm.c
 
 
 NetConnect::NetConnect() :  mFirstLoad(true) {
+
+    QString locale = QLocale::system().name();
     QTranslator* translator = new QTranslator(this);
-    translator->load("/usr/share/kylin-nm/netconnect/" + QLocale::system().name());
-    QApplication::installTranslator(translator);
+    if (translator->load(":/translations/"+ locale + ".qm"))
+    {
+        QApplication::installTranslator(translator);
+    } else {
+        qWarning() << "Translations load fail";
+    }
 }
 
 NetConnect::~NetConnect() {

@@ -233,12 +233,12 @@
 <context>
     <name>LogHintDialog</name>
     <message>
-        <location filename="../hiddenwifi/entsecuritywidget.cpp" line="541"/>
+        <location filename="../hiddenwifi/entsecuritywidget.cpp" line="543"/>
         <source>Please log in to the system first.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hiddenwifi/entsecuritywidget.cpp" line="542"/>
+        <location filename="../hiddenwifi/entsecuritywidget.cpp" line="544"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -246,46 +246,31 @@
 <context>
     <name>WlanConnect</name>
     <message>
-        <location filename="../wlanconnect.cpp" line="69"/>
-        <source>ukui control center</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../wlanconnect.cpp" line="72"/>
-        <source>ukui control center desktop message</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../wlanconnect.cpp" line="148"/>
+        <location filename="../wlanconnect.cpp" line="182"/>
         <source>WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="196"/>
+        <location filename="../wlanconnect.cpp" line="230"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../wlanconnect.cpp" line="223"/>
-        <source>No wireless device avaliable</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WlanItem</name>
     <message>
-        <location filename="../wlanitem.cpp" line="74"/>
-        <location filename="../wlanitem.cpp" line="171"/>
+        <location filename="../wlanitem.cpp" line="72"/>
+        <location filename="../wlanitem.cpp" line="169"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanitem.cpp" line="94"/>
+        <location filename="../wlanitem.cpp" line="92"/>
         <source>Auto Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanitem.cpp" line="169"/>
+        <location filename="../wlanitem.cpp" line="167"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>

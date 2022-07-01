@@ -46,3 +46,6 @@ TRANSLATIONS += \
         translations/zh_CN.ts \
         translations/tr.ts \
         translations/bo.ts
+
+RESOURCES += \
+    resource.qrc

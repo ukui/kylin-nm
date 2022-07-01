@@ -1,0 +1,15 @@
+#ifndef LIBNMEXTERNALKYLIN_GLOBAL_H
+#define LIBNMEXTERNALKYLIN_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+/*
+* 库中类对象如果要能够被其他的引用或者是库引用，需要通过如下的关键字导出
+*/
+#if defined(LIBNMEXTERNALKYLIN_LIBRARY)
+#  define LIBNMEXTERNALKYLIN_EXPORT Q_DECL_EXPORT
+#else
+#  define LIBNMEXTERNALKYLIN_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // LIBNMEXTERNALKYLIN_GLOBAL_H

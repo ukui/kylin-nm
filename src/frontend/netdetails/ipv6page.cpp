@@ -12,21 +12,6 @@ Ipv6Page::Ipv6Page(QWidget *parent):QFrame(parent)
     initComponent();
 }
 
-bool Ipv6Page::eventFilter(QObject *w, QEvent *e)
-{
-    if (w == ipv6AddressEdit) {
-        if (ipv6AddressEdit->text().isEmpty() || getIpv6EditState(ipv6AddressEdit->text())) {
-            m_addressHintLabel->clear();
-        }
-    } else if (w == gateWayEdit) {
-        if (gateWayEdit->text().isEmpty() || getIpv6EditState(gateWayEdit->text())) {
-            m_gateWayHintLabel->clear();
-        }
-    }
-
-    return QObject::eventFilter(w,e);
-}
-
 void Ipv6Page::setIpv6Config(KyIpConfigType ipv6Config)
 {
     if (ipv6Config ==  CONFIG_IP_MANUAL) {
@@ -205,6 +190,9 @@ void Ipv6Page::initComponent() {
     }
     connect(ipv6ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(configChanged(int)));
 
+    connect(ipv6AddressEdit, SIGNAL(textChanged(QString)), this, SLOT(onAddressTextChanged()));
+    connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(onGatewayTextChanged()));
+
     connect(ipv6ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
     connect(ipv6AddressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(lengthEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
@@ -252,18 +240,33 @@ void Ipv6Page::setEnableOfSaveBtn()
     emit setIpv6PageState(checkConnectBtnIsEnabled());
 }
 
+void Ipv6Page::onAddressTextChanged()
+{
+    if (!getIpv6EditState(ipv6AddressEdit->text())) {
+        m_addressHintLabel->setText(tr("Invalid address"));
+        qDebug() << "ipv6address invalid";
+    } else {
+        m_addressHintLabel->clear();
+    }
+}
+
+void Ipv6Page::onGatewayTextChanged()
+{
+    if (!getIpv6EditState(gateWayEdit->text())) {
+        m_gateWayHintLabel->setText(tr("Invalid gateway"));
+        qDebug() << "ipv6 gateway invalid";
+    } else {
+        m_gateWayHintLabel->clear();
+    }
+}
+
 bool Ipv6Page::checkConnectBtnIsEnabled()
 {
     if (ipv6ConfigCombox->currentIndex() == AUTO_CONFIG) {
         return true;
     } else {
-        if (ipv6AddressEdit->text().isEmpty()) {
-            qDebug() << "ipv6address empty";
-            return false;
-        }
-        if (!getIpv6EditState(ipv6AddressEdit->text())) {
-            m_addressHintLabel->setText(tr("Invalid address"));
-            qDebug() << "ipv6address invalid";
+        if (ipv6AddressEdit->text().isEmpty() || !getIpv6EditState(ipv6AddressEdit->text())) {
+            qDebug() << "ipv6address empty or invalid";
             return false;
         }
 
@@ -272,13 +275,8 @@ bool Ipv6Page::checkConnectBtnIsEnabled()
             return false;
         }
 
-        if (gateWayEdit->text().isEmpty()) {
-            qDebug() << "ipv6 gateway empty";
-            return false;
-        }
-        if (!getIpv6EditState(gateWayEdit->text())) {
-            m_gateWayHintLabel->setText(tr("Invalid gateway"));
-            qDebug() << "ipv6 gateway invalid";
+        if (gateWayEdit->text().isEmpty() || !getIpv6EditState(gateWayEdit->text())) {
+            qDebug() << "ipv6 gateway empty or invalid";
             return false;
         }
 

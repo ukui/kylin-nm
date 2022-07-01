@@ -64,7 +64,8 @@ unix {
                     kylin-agent/kylinpassworddialog.h \
                     kylin-agent/kylinsecretagent.h
 
-    INSTALLS += manager
+    INSTALLS += manager \
+                trans
 }
 !isEmpty(target.path): INSTALLS += target
 

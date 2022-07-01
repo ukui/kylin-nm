@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>authorize.svg</file>
+        <file>translations/kylin-keyring_zh_CN.qm</file>
     </qresource>
 </RCC>

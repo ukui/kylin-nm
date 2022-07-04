@@ -14,7 +14,7 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
     connectItemCopy(lanConnectItem);
     m_deviceName = deviceName;
 
-    m_nameLabel->setText(m_lanConnectItem.m_connectName);
+    m_nameLabel->setLabelText(m_lanConnectItem.m_connectName);
     m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
 
     qDebug() << "LanListItem init:" << m_lanConnectItem.m_connectName << m_lanConnectItem.m_connectState << m_lanConnectItem.m_ifaceName;
@@ -42,7 +42,7 @@ LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
     m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
     setIcon(false);
     const QString str=tr("Not connected");
-    m_nameLabel->setText(str);
+    m_nameLabel->setLabelText(str);
     this->m_infoButton->hide();
 }
 
@@ -207,7 +207,7 @@ QString LanListItem::getConnectionName()
 void LanListItem::updateConnectionName(QString connectionName)
 {
     m_lanConnectItem.m_connectName = connectionName;
-    m_nameLabel->setText(m_lanConnectItem.m_connectName);
+    m_nameLabel->setLabelText(m_lanConnectItem.m_connectName);
     return;
 }
 

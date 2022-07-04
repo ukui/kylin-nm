@@ -37,7 +37,7 @@ ListItem::~ListItem()
 
 void ListItem::setName(const QString &name)
 {
-    m_nameLabel->setText(name);
+    m_nameLabel->setLabelText(name);
 }
 
 //仅无线调用，有线自己获取
@@ -140,6 +140,7 @@ void ListItem::initUI()
 
     m_netButton = new RadioItemButton(m_itemFrame);
     m_nameLabel = new FixLabel(m_itemFrame);
+    m_nameLabel->setMinimumWidth(262);
     m_infoButton = new InfoButton(m_itemFrame);
     m_infoButton->setIconSize(QSize(INFO_ICON_WIDTH,INFO_ICON_HEIGHT));
 

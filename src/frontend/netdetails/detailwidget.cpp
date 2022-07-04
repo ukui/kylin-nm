@@ -1,44 +1,49 @@
 #include "detailwidget.h"
 #include <QFontMetrics>
 #include <QDebug>
+#include <QGSettings>
 
 #define ITEM_HEIGHT 36
 #define ITEM_MARGINS 18,0,16,0
 
 #define MAX_LABEL_WIDTH 138
 
-FixLabel::FixLabel(QWidget *parent):
+FixLabel::FixLabel(QWidget *parent) :
     QLabel(parent)
 {
-
+    const QByteArray id("org.ukui.style");
+    QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+    connect(fontSetting, &QGSettings::changed,[=](QString key) {
+        if ("systemFont" == key || "systemFontSize" ==key) {
+            changedLabelSlot();
+        }
+    });
 }
 
-FixLabel::~FixLabel()
-{
 
+void FixLabel::setLabelText(QString text) {
+
+    mStr = text;
+    changedLabelSlot();
 }
 
-void FixLabel::paintEvent(QPaintEvent *event)
-{
-    QFontMetrics fontMetrics(this->font());
+QString FixLabel::getText(){
+    return mStr;
+}
+
+void FixLabel::changedLabelSlot() {
+    QFontMetrics  fontMetrics(this->font());
     int fontSize = fontMetrics.width(mStr);
     if (fontSize > this->width()) {
-        this->setText(fontMetrics.elidedText(mStr, Qt::ElideRight, this->width()), false);
-        this->setToolTip(mStr);
+        setText(fontMetrics.elidedText(mStr, Qt::ElideRight, this->width()));
+        setToolTip(mStr);
     } else {
-        this->setText(mStr, false);
-        this->setToolTip("");
+        setText(mStr);
+        setToolTip("");
     }
-    QLabel::paintEvent(event);
 }
 
-void FixLabel::setText(const QString & text, bool saveTextFlag)
-{
-    if (saveTextFlag) {
-        mStr = text;
-    }
-    QLabel::setText(text);
-}
+
 
 DetailWidget::DetailWidget(QWidget *valueWidget, QWidget *parent, QWidget *buttonWidget)
     : m_valueWidget(valueWidget) , QWidget(parent) , m_copyButton(buttonWidget)

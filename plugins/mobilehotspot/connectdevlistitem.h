@@ -19,13 +19,9 @@ public:
     ~ConnectDevListItem();
 
 protected:
-    QFrame * m_itemFrame = nullptr;
-
-    QLabel * m_nameLabel = nullptr;
     KBorderlessButton *m_dragIntoBlackListBtn = nullptr;
 
     QString m_mac;
-    QString m_hostName;
     bool eventFilter(QObject *w, QEvent *e);
 
 signals:

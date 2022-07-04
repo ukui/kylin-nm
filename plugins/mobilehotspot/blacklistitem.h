@@ -19,13 +19,9 @@ public:
     ~BlacklistItem();
 
 protected:
-    QFrame * m_itemFrame = nullptr;
-
-    QLabel * m_nameLabel = nullptr;
     KBorderlessButton *m_removeFromBlacklistBtn = nullptr;
 
     QString m_mac;
-    QString m_hostName;
     bool eventFilter(QObject *w, QEvent *e);
 
 signals:

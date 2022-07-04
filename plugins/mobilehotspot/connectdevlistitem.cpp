@@ -18,15 +18,14 @@
 
 ConnectDevListItem::ConnectDevListItem(QString staMac, QString staName, QWidget *parent) :
     QFrame(parent),
-    m_mac(staMac),
-    m_hostName(staName)
+    m_mac(staMac)
 {
     this->setMinimumSize(FRAME_MIN_SIZE);
     this->setFixedHeight(60);
 
     QHBoxLayout *hItemLayout = new QHBoxLayout(this);
     hItemLayout->setContentsMargins(ITEM_MARGINS);
-    QLabel *nameLabel = new QLabel(m_hostName, this);
+    QLabel *nameLabel = new QLabel(staName, this);
     m_dragIntoBlackListBtn = new KBorderlessButton(this);
     m_dragIntoBlackListBtn->setText(tr("drag into blacklist"));
     hItemLayout->setSpacing(0);
@@ -35,19 +34,13 @@ ConnectDevListItem::ConnectDevListItem(QString staMac, QString staName, QWidget 
     hItemLayout->addWidget(m_dragIntoBlackListBtn, Qt::AlignRight);
 
     m_dragIntoBlackListBtn->installEventFilter(this);
-//    this->setLayout(hItemLayout);
-}
-
-ConnectDevListItem::~ConnectDevListItem()
-{
-
+    this->setLayout(hItemLayout);
 }
 
 bool ConnectDevListItem::eventFilter(QObject *w, QEvent *e)
 {
     if (e->type() == QEvent::MouseButtonRelease) {
         if (w == m_dragIntoBlackListBtn) {
-            qDebug() << "--cxc--" << Q_FUNC_INFO << __LINE__ <<m_mac;
             emit onBtnClicked(m_mac);
             return true;
         }

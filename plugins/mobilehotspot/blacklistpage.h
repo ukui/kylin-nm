@@ -31,7 +31,6 @@ public:
     }
 
 private:
-    void paintEvent(QPaintEvent *event);
 
     QFrame* myLine();
 

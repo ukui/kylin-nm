@@ -30,8 +30,6 @@ public:
     }
 
 private:
-    void paintEvent(QPaintEvent *event);
-
     QFrame* myLine();
 
     TitleLabel *m_titleLabel = nullptr;

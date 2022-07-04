@@ -18,16 +18,14 @@
 
 BlacklistItem::BlacklistItem(QString staMac, QString staName, QWidget *parent) :
     QFrame(parent),
-    m_mac(staMac),
-    m_hostName(staName)
+    m_mac(staMac)
 {
-    qDebug()<<"---CXC---"<<m_mac<<Q_FUNC_INFO<<__LINE__;
     this->setMinimumHeight(60);
     this->setFixedHeight(60);
 
     QHBoxLayout *hItemLayout = new QHBoxLayout(this);
     hItemLayout->setContentsMargins(ITEM_MARGINS);
-    QLabel *nameLabel = new QLabel(m_hostName, this);
+    QLabel *nameLabel = new QLabel(staName, this);
     m_removeFromBlacklistBtn = new KBorderlessButton(this);
     m_removeFromBlacklistBtn->setText(tr("Remove"));
     hItemLayout->setSpacing(0);
@@ -39,16 +37,10 @@ BlacklistItem::BlacklistItem(QString staMac, QString staName, QWidget *parent) :
     this->setLayout(hItemLayout);
 }
 
-BlacklistItem::~BlacklistItem()
-{
-
-}
-
 bool BlacklistItem::eventFilter(QObject *w, QEvent *e)
 {
     if (e->type() == QEvent::MouseButtonRelease) {
         if (w == m_removeFromBlacklistBtn) {
-            qDebug() << "--cxc--" << Q_FUNC_INFO << __LINE__ << m_mac;
             emit onBtnClicked(m_mac);
             return true;
         }

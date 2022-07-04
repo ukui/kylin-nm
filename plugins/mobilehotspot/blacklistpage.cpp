@@ -30,15 +30,6 @@ BlacklistPage::BlacklistPage(QWidget *parent) : QWidget(parent)
     Vlayout->addWidget(blacklistFrame);
 }
 
-BlacklistPage::~BlacklistPage()
-{
-}
-
-void BlacklistPage::paintEvent(QPaintEvent *event)
-{
-    QWidget::paintEvent(event);
-}
-
 QFrame* BlacklistPage::myLine()
 {
     QFrame *line = new QFrame(this);
@@ -107,11 +98,6 @@ void BlacklistPage::onsetStaIntoBlacklist(QString staMac)
         qWarning() << "[mobilehotspot]Getstainfo error:" << reply.errorMessage();
         return ;
     }
-    for (int i = 0; i < reply.arguments().size(); i++) {
-        if (reply.arguments().at(i).isValid()) {
-            qDebug() << "--cxc--" << Q_FUNC_INFO << __LINE__ << reply.arguments().at(i);
-        }
-    }
 
     refreshBlacklist();
     return ;
@@ -150,12 +136,6 @@ bool BlacklistPage::removeStaFromBlacklist(QString staMac)
         return false;
     }
 
-    for (int i = 0; i < reply.arguments().size(); i++) {
-        if (reply.arguments().at(i).isValid()) {
-            qDebug() << Q_FUNC_INFO << __LINE__ << reply.arguments().at(i);
-        }
-    }
-
     return true;
 }
 
@@ -187,11 +167,7 @@ void BlacklistPage::onRemoveFromBlacklistBtnClicked(QString staMac)
     if (staMac.isNull() || staMac.isEmpty()) {
         return;
     }
-
-    qDebug() << Q_FUNC_INFO << __LINE__ <<staMac;
     removeStaFromBlacklist(staMac);
-    /*if ()*/ {
-        refreshBlacklist();
-    }
+    refreshBlacklist();
 }
 

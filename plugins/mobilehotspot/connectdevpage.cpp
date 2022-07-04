@@ -31,15 +31,6 @@ ConnectdevPage::ConnectdevPage(QWidget *parent) :
     Vlayout->addWidget(staistFrame);
 }
 
-ConnectdevPage::~ConnectdevPage()
-{
-}
-
-void ConnectdevPage::paintEvent(QPaintEvent *event)
-{
-    QWidget::paintEvent(event);
-}
-
 QFrame* ConnectdevPage::myLine()
 {
     QFrame *line = new QFrame(this);
@@ -117,7 +108,6 @@ void ConnectdevPage::clearStaListLayout()
 void ConnectdevPage::onStaDevAdded(bool istrue, QString staMac, QString staName)
 {
     if (!m_staMap.keys().contains(staMac)) {
-        qDebug()<< Q_FUNC_INFO << __LINE__ << istrue << staMac << staName;
         onStaDevChanged(istrue, staMac, staName);
     }
 }
@@ -125,7 +115,6 @@ void ConnectdevPage::onStaDevAdded(bool istrue, QString staMac, QString staName)
 void ConnectdevPage::onStaDevRemoved(bool istrue, QString staMac, QString staName)
 {
     if (m_staMap.keys().contains(staMac)) {
-        qDebug()<< Q_FUNC_INFO << __LINE__ << istrue << staMac << staName;
         onStaDevChanged(istrue, staMac, staName);
     }
 }

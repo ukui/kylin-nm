@@ -46,8 +46,6 @@ private:
     void addBlacklistDevFrame(QString staMac, QString staName);
     void clearBlacklistLayout();
 
-signals:
-
 private slots:
     void onsetStaIntoBlacklist(QString staMac);
     void onRemoveFromBlacklistBtnClicked(QString staMac);

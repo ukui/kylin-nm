@@ -55,6 +55,11 @@ public:
     //获取热点
     void getStoredApInfo(QStringList &list);
     void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
+
+    //获取热点path
+    void getApConnectionPath(QString &path, QString uuid);
+    //获取热点ActivePath
+    void getActiveConnectionPath(QString &path, QString uuid);
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
@@ -97,7 +102,7 @@ signals:
     void deactivateFailed(QString errorMessage);
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
-    void hotspotActivated(QString devName, QString ssid, QString uuid);
+    void hotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath);
     //信号强度变化
     void signalStrengthChange(QString devName, QString ssid, int strength);
     //安全性变化

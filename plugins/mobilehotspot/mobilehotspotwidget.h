@@ -11,18 +11,22 @@
 
 #include <QTranslator>
 #include <QApplication>
-
+#include <QTimer>
 
 #include <QDBusMessage>
 #include <QDBusObjectPath>
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDBusMetaType>
+#include <QScrollArea>
 
 #include "titlelabel.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
 #include "kpasswordedit.h"
+#include "connectdevlistitem.h"
+#include "blacklistpage.h"
+#include "connectdevpage.h"
 
 using namespace kdk;
 
@@ -57,7 +61,7 @@ private:
     QFrame *pwdAndfreqBandLine;
     QFrame *freqBandAndInterfaceLine;
 
-    QVBoxLayout *mVlayout;
+    QVBoxLayout *m_Vlayout;
 
     QLineEdit *m_apNameLine;
     KPasswordEdit *m_pwdNameLine;
@@ -99,6 +103,22 @@ private:
 
     QFrame* myLine();
 
+    QDBusInterface  *m_activePathInterface = nullptr;
+    QDBusInterface  *m_settingPathInterface = nullptr;
+
+    ConnectdevPage * m_connectDevPage = nullptr;
+    BlacklistPage *m_blacklistPage = nullptr;
+
+    QString getActivePathByUuid();
+    QString getSettingPathByUuid();
+    void initNmDbus();
+    void initActivePathInterface(QString path);
+    void deleteActivePathInterface();
+    void initSettingPathInterface(QString path);
+    void deleteSettingPathInterface();
+    void initConnectDevPage();
+    void initBlackListPage();
+
 signals:
 
 private slots:
@@ -110,14 +130,13 @@ private slots:
     //热点断开
     void onHotspotDeactivated(QString devName, QString ssid);
     //热点连接
-    void onHotspotActivated(QString devName, QString ssid, QString uuid);
+    void onHotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath);
 
     void onGsettingChanged(const QString &key);
 
     void onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status);
 
     void onApLineEditTextEdit(QString text);
-
 };
 
 #endif // MOBILEHOTSPOTWIDGET_H

@@ -715,3 +715,15 @@ bool KyActiveConnectResourse::checkWirelessStatus(NetworkManager::ActiveConnecti
     return false;
 
 }
+
+QString KyActiveConnectResourse::getAcitveConnectionPathByUuid(QString connectUuid)
+{
+    NetworkManager::ActiveConnection::Ptr activeAonnectPtr = nullptr;
+
+    activeAonnectPtr = m_networkResourceInstance->getActiveConnect(connectUuid);
+    if (nullptr == activeAonnectPtr) {
+        return nullptr;
+    }
+
+    return activeAonnectPtr->path();
+}

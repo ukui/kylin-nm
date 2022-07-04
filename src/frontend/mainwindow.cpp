@@ -687,6 +687,16 @@ void MainWindow::getStoredApInfo(QStringList &list)
     m_wlanWidget->getStoredApInfo(list);
 }
 
+void MainWindow::getApConnectionPath(QString &path, QString uuid)
+{
+    m_wlanWidget->getApConnectionPath(path, uuid);
+}
+
+void MainWindow::getActiveConnectionPath(QString &path, QString uuid)
+{
+    m_wlanWidget->getActiveConnectionPath(path, uuid);
+}
+
 //无线开关
 void MainWindow::setWirelessSwitchEnable(bool enable)
 {

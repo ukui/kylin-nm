@@ -40,6 +40,7 @@ public:
     bool connectionIsVirtual(QString uuid);
     bool wiredConnectIsActived();
     bool checkWirelessStatus(NetworkManager::ActiveConnection::State state);
+    QString getAcitveConnectionPathByUuid(QString uuid);
 
 private:
     void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,

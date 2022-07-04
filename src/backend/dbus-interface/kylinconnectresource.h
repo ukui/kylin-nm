@@ -28,6 +28,8 @@ public:
     void getBluetoothConnections(QList<KyBluetoothConnectItem *> &bluetoothConnectItemList);
     void getApConnections(QList<KyApConnectItem *> &apConnectItemList);
     KyApConnectItem *getApConnectionByUuid(QString connectUuid);
+    QString getApConnectionPathByUuid(QString connectUuid);
+    QString getApAcitveConnectionPathByUuid(QString connectUuid);
 
     void getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting);
     bool getInterfaceByUuid(QString &deviceName, const QString connUuid);

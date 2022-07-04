@@ -25,10 +25,18 @@ PKGCONFIG += gsettings-qt \
 #DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
+    blacklistpage.cpp \
+    blacklistitem.cpp \
+    connectdevpage.cpp \
+    connectdevlistitem.cpp \
     mobilehotspot.cpp \
     mobilehotspotwidget.cpp
 
 HEADERS += \
+    blacklistpage.h \
+    blacklistitem.h \
+    connectdevpage.h \
+    connectdevlistitem.h \
     mobilehotspot.h \
     mobilehotspotwidget.h \
     libukcc_global.h

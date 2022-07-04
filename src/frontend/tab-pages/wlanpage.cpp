@@ -766,6 +766,7 @@ void WlanPage::sendApStateChangeSignal(QString uuid,
 {
     bool ret = false;
     ret = m_connectResource->isApConnection(uuid);
+
     if (!ret) {
         return;
     }
@@ -774,8 +775,12 @@ void WlanPage::sendApStateChangeSignal(QString uuid,
         qDebug() << "[WlanPage] hotspot Deactivated";
         emit hotspotDeactivated(deviceName, ssid);
     } else if (state == NetworkManager::ActiveConnection::State::Activated) {
-        qDebug() << "[WlanPage] hotspot activated";
-        emit hotspotActivated(deviceName, ssid, uuid);
+        QString activePath;
+        QString settingPath;
+        activePath = m_activatedConnectResource->getAcitveConnectionPathByUuid(uuid);
+        settingPath = m_connectResource->getApConnectionPathByUuid(uuid);
+        qDebug() << "[WlanPage] hotspot activated"<<deviceName<<ssid<<uuid<<activePath<<settingPath;
+        emit hotspotActivated(deviceName, ssid, uuid, activePath, settingPath);
     }
 
     return;
@@ -1235,6 +1240,18 @@ void WlanPage::getStoredApInfo(QStringList &list)
         list << apConnectItemList.at(0)->m_connectUuid;
         list << apConnectItemList.at(0)->m_band;
     }
+}
+
+void WlanPage::getApConnectionPath(QString &path, QString uuid)
+{
+    path.clear();
+    path = m_connectResource->getApConnectionPathByUuid(uuid);
+}
+
+void WlanPage::getActiveConnectionPath(QString &path, QString uuid)
+{
+    path.clear();
+    path = m_activatedConnectResource->getAcitveConnectionPathByUuid(uuid);
 }
 
 void WlanPage::getApInfoBySsid(QString devName, QString ssid, QStringList &list)

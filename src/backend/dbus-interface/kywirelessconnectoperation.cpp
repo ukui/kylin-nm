@@ -850,7 +850,7 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
                                                   const QString wirelessBand)
 
 {
-    qDebug() << "activeWirelessAp]" << apUuid << apName << apPassword << apDevice << wirelessBand;
+    qDebug() << "[activeWirelessAp]" << apUuid << apName << apPassword << apDevice << wirelessBand;
     //1、检查连接是否存在
     NetworkManager::Connection::Ptr connectPtr = m_networkResourceInstance->getConnect(apUuid);
     if (nullptr == connectPtr) {

@@ -650,6 +650,18 @@ KyApConnectItem *KyConnectResourse::getApConnectionByUuid(QString connectUuid)
     return connectItem;
 }
 
+QString KyConnectResourse::getApConnectionPathByUuid(QString connectUuid)
+{
+    NetworkManager::Connection::Ptr connectPtr = nullptr;
+
+    connectPtr = m_networkResourceInstance->getConnect(connectUuid);
+    if (nullptr == connectPtr) {
+        return nullptr;
+    }
+
+    return connectPtr->path();
+}
+
 void KyConnectResourse::getApConnections(QList<KyApConnectItem *> &apConnectItemList)
 {
     QList<KyApConnectItem *> apActiveConnectItemList;

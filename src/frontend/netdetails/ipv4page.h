@@ -28,6 +28,7 @@ public:
     void setGateWay(const QString &gateWay);
 
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
+
 private:
     QComboBox *ipv4ConfigCombox;
     LineEdit *ipv4addressEdit;
@@ -45,6 +46,12 @@ private:
     QLabel *m_gateWayLabel;
     QLabel *m_dnsLabel;
     QLabel *m_secDnsLabel;
+
+    QLabel *m_configEmptyLabel;
+    QLabel *m_addressHintLabel;
+    QLabel *m_maskHintLabel;
+    QLabel *m_gateWayEmptyLabel;
+    QLabel *m_firstDnsEmptyLabel;
 private:
     void initUI();
     void initComponent();
@@ -59,6 +66,9 @@ private:
 private slots:
     void setEnableOfSaveBtn();
     void configChanged(int index);
+    void onAddressTextChanged();
+    void onNetMaskTextChanged();
+
 Q_SIGNALS:
     void setIpv4PageState(bool);
 

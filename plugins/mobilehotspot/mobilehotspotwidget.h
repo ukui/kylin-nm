@@ -50,11 +50,9 @@ private:
     QLabel *m_switchLabel;
     QLabel *m_apNameLabel;
     QLabel *m_pwdLabel;
+    QLabel *m_pwdHintLabel;
     QLabel *m_freqBandLabel;
     QLabel *m_interfaceLabel;
-
-
-    QPushButton *m_pwdShowBox;
 
     QFrame *switchAndApNameLine;
     QFrame *apNameAndPwdLine;
@@ -137,6 +135,8 @@ private slots:
     void onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status);
 
     void onApLineEditTextEdit(QString text);
+
+    void onPwdTextChanged();
 };
 
 #endif // MOBILEHOTSPOTWIDGET_H

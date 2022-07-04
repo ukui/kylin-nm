@@ -1,5 +1,6 @@
 #include "mobilehotspotwidget.h"
 #include <QDebug>
+#include <QFormLayout>
 
 #define LABEL_RECT 17, 0, 105, 23
 #define CONTENTS_MARGINS 0, 0, 0, 0
@@ -7,11 +8,16 @@
 #define FRAME_MIN_SIZE 550, 60
 #define FRAME_MAX_SIZE 16777215, 16777215
 #define CONTECT_FRAME_MAX_SIZE 16777215, 60
+#define HINT_TEXT_MARGINS 8, 0, 0, 0
+#define FRAME_MIN_SIZE 550, 60
 #define LABLE_MIN_WIDTH 188
 #define COMBOBOX_MIN_WIDTH 200
 #define LINE_MAX_SIZE 16777215, 1
 #define LINE_MIN_SIZE 0, 1
 #define ICON_SIZE   24,24
+#define PASSWORD_FRAME_MIN_SIZE 550, 60
+#define PASSWORD_FRAME_MAX_SIZE 16777215, 86
+#define PASSWORD_ITEM_MARGINS 16, 12, 16, 14
 
 #define WIRELESS   1
 
@@ -86,7 +92,6 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
     m_connectDevPage->refreshStalist();
     m_blacklistPage->refreshBlacklist();
     this->update();
-
 }
 
 MobileHotspotWidget::~MobileHotspotWidget()
@@ -102,8 +107,9 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
         return true;
     }
 
-    if (event->type() == QEvent::MouseButtonRelease) {
-        if (watched == m_switchBtn) {
+
+    if (watched == m_switchBtn) {
+        if (event->type() == QEvent::MouseButtonRelease) {
             if (!m_interface->isValid()) {
                 return true;
             }
@@ -125,15 +131,15 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                     return true;
                 }
                 if (m_pwdNameLine->text().length() < 8) {
-                    showDesktopNotify(tr("can not  create hotspot with password length less than eight!"));
+//                    showDesktopNotify(tr("can not  create hotspot with password length less than eight!"));
                     return true;
                 }
                 showDesktopNotify(tr("start to open hotspot ") + m_apNameLine->text());
                 QDBusReply<void> reply = m_interface->call("activeWirelessAp",
-                                  m_apNameLine->text(),
-                                  m_pwdNameLine->text(),
-                                  m_freqBandComboBox->currentText(),
-                                  m_interfaceComboBox->currentText());
+                                                           m_apNameLine->text(),
+                                                           m_pwdNameLine->text(),
+                                                           m_freqBandComboBox->currentText(),
+                                                           m_interfaceComboBox->currentText());
                 if (!reply.isValid()) {
                     qDebug() << "[MobileHotspotWidget] call activeWirelessAp failed ";
                     return true;
@@ -226,6 +232,7 @@ void MobileHotspotWidget::initDbusConnect()
 
     connect(m_connectDevPage, SIGNAL(setStaIntoBlacklist(QString)), m_blacklistPage, SLOT(onsetStaIntoBlacklist(QString)));
 
+    connect(m_pwdNameLine, SIGNAL(textChanged(QString)), this, SLOT(onPwdTextChanged()));
 }
 
 void MobileHotspotWidget::onApLineEditTextEdit(QString text)
@@ -241,6 +248,18 @@ void MobileHotspotWidget::onApLineEditTextEdit(QString text)
     }
 
     m_apNameLine->setText(text.left(i));
+}
+
+void MobileHotspotWidget::onPwdTextChanged()
+{
+    if (m_pwdNameLine->text().length() < 8) {
+        m_pwdHintLabel->show();
+        m_pwdHintLabel->setText(tr("Contains at least 8 characters")); //至少包含8个字符
+    } else {
+        m_pwdHintLabel->clear();
+        m_pwdHintLabel->hide();
+    }
+
 }
 
 void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status)
@@ -425,8 +444,8 @@ void MobileHotspotWidget::setPasswordFrame()
     /* Password */
     m_passwordFrame = new QFrame(this);
     m_passwordFrame->setFrameShape(QFrame::Shape::NoFrame);
-    m_passwordFrame->setMinimumSize(FRAME_MIN_SIZE);
-    m_passwordFrame->setMaximumSize(CONTECT_FRAME_MAX_SIZE);
+    m_passwordFrame->setMinimumSize(PASSWORD_FRAME_MIN_SIZE);
+    m_passwordFrame->setMaximumSize(PASSWORD_FRAME_MAX_SIZE);
 
     QHBoxLayout *passwordHLayout = new QHBoxLayout(m_passwordFrame);
 
@@ -435,12 +454,27 @@ void MobileHotspotWidget::setPasswordFrame()
     m_pwdNameLine = new KPasswordEdit(this);
     m_pwdNameLine->setClearButtonEnabled(false);//禁用ClearBtn按钮X
     m_pwdNameLine->setMinimumWidth(COMBOBOX_MIN_WIDTH);
-    passwordHLayout->setContentsMargins(ITEM_MARGINS);
-    passwordHLayout->setSpacing(0);
-    passwordHLayout->addWidget(m_pwdLabel);
-    passwordHLayout->addWidget(m_pwdNameLine);
+    m_pwdHintLabel= new QLabel(this);
+    m_pwdHintLabel->setFixedHeight(20);
+    m_pwdHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
 
-    m_passwordFrame->setLayout(passwordHLayout);
+    QPalette hintTextColor;
+    hintTextColor.setColor(QPalette::WindowText, Qt::red);
+    m_pwdHintLabel->setPalette(hintTextColor);
+
+    QWidget *pwdInputWidget = new QWidget(this);
+    QVBoxLayout *pwdInputVLayout = new QVBoxLayout(pwdInputWidget);
+    pwdInputVLayout->setContentsMargins(CONTENTS_MARGINS);
+    pwdInputVLayout->setSpacing(0);
+    pwdInputVLayout->addWidget(m_pwdNameLine);
+    pwdInputVLayout->addWidget(m_pwdHintLabel);
+
+    QFormLayout *pwdLayout = new QFormLayout(m_passwordFrame);
+    pwdLayout->setContentsMargins(PASSWORD_ITEM_MARGINS);
+    pwdLayout->setSpacing(0);
+    pwdLayout->addRow(m_pwdLabel, pwdInputWidget);
+
+    m_pwdNameLine->installEventFilter(this);
 }
 
 void MobileHotspotWidget::setFreqBandFrame()

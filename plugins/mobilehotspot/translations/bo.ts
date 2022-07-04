@@ -4,7 +4,7 @@
 <context>
     <name>BlacklistItem</name>
     <message>
-        <location filename="../blacklistitem.cpp" line="30"/>
+        <location filename="../blacklistitem.cpp" line="32"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12,7 +12,7 @@
 <context>
     <name>BlacklistPage</name>
     <message>
-        <location filename="../blacklistpage.cpp" line="24"/>
+        <location filename="../blacklistpage.cpp" line="26"/>
         <source>Blacklist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20,7 +20,7 @@
 <context>
     <name>ConnectDevListItem</name>
     <message>
-        <location filename="../connectdevlistitem.cpp" line="30"/>
+        <location filename="../connectdevlistitem.cpp" line="31"/>
         <source>drag into blacklist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -28,7 +28,7 @@
 <context>
     <name>ConnectdevPage</name>
     <message>
-        <location filename="../connectdevpage.cpp" line="25"/>
+        <location filename="../connectdevpage.cpp" line="27"/>
         <source>Connect device</source>
         <translation type="unfinished"></translation>
     </message>
@@ -56,79 +56,79 @@
 <context>
     <name>MobileHotspotWidget</name>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="30"/>
+        <location filename="../mobilehotspotwidget.cpp" line="38"/>
         <source>ukui control center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="33"/>
+        <location filename="../mobilehotspotwidget.cpp" line="41"/>
         <source>ukui control center desktop message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="101"/>
+        <location filename="../mobilehotspotwidget.cpp" line="117"/>
         <source>wirless switch is close or no wireless device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="105"/>
+        <location filename="../mobilehotspotwidget.cpp" line="121"/>
         <source>start to close hotspot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="114"/>
+        <location filename="../mobilehotspotwidget.cpp" line="130"/>
         <source>hotpots name or device is invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="118"/>
-        <source>can not  create hotspot with password length less than eight!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mobilehotspotwidget.cpp" line="121"/>
+        <location filename="../mobilehotspotwidget.cpp" line="137"/>
         <source>start to open hotspot </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="154"/>
+        <location filename="../mobilehotspotwidget.cpp" line="257"/>
+        <source>Contains at least 8 characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mobilehotspotwidget.cpp" line="172"/>
         <source>Hotspot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="226"/>
-        <location filename="../mobilehotspotwidget.cpp" line="519"/>
+        <location filename="../mobilehotspotwidget.cpp" line="268"/>
+        <location filename="../mobilehotspotwidget.cpp" line="582"/>
         <source>hotspot already close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="366"/>
+        <location filename="../mobilehotspotwidget.cpp" line="408"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="387"/>
+        <location filename="../mobilehotspotwidget.cpp" line="429"/>
         <source>Wi-Fi Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="410"/>
+        <location filename="../mobilehotspotwidget.cpp" line="452"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="433"/>
+        <location filename="../mobilehotspotwidget.cpp" line="490"/>
         <source>Frequency band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="459"/>
+        <location filename="../mobilehotspotwidget.cpp" line="516"/>
         <source>Net card</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="535"/>
-        <location filename="../mobilehotspotwidget.cpp" line="543"/>
+        <location filename="../mobilehotspotwidget.cpp" line="611"/>
+        <location filename="../mobilehotspotwidget.cpp" line="619"/>
         <source>hotspot already open</source>
         <translation type="unfinished"></translation>
     </message>

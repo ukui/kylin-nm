@@ -11,12 +11,13 @@
 #include <QMenu>
 #include <QToolTip>
 
+#include "windowmanager/windowmanager.h"
+
 #define  WINDOW_WIDTH  520
-#define  WINDOW_HEIGHT 590
-#define  BUTTON_SIZE 30
+#define  WINDOW_HEIGHT 562
 #define  ICON_SIZE 22,22
 #define  TITLE_LAYOUT_MARGINS 9,9,0,0
-#define  LAYOUT_MARGINS 24,0,24,0
+#define  LAYOUT_MARGINS 0,0,0,0
 #define  BOTTOM_LAYOUT_SPACING 16
 #define  PAGE_LAYOUT_SPACING 1
 #define  DETAIL_PAGE_NUM 0
@@ -25,8 +26,8 @@
 #define  SECURITY_PAGE_NUM 3
 #define  CREATE_NET_PAGE_NUM 4
 #define  PAGE_MIN_HEIGHT 40
-#define  LAN_TAB_WIDTH 300
-#define  WLAN_TAB_WIDTH 400
+#define  LAN_TAB_WIDTH 180
+#define  WLAN_TAB_WIDTH 240
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -135,15 +136,15 @@ void NetDetail::onPaletteChanged()
 {
     QPalette pal = qApp->palette();
 
-    QGSettings * styleGsettings = nullptr;
-    const QByteArray style_id(THEME_SCHAME);
-    if (QGSettings::isSchemaInstalled(style_id)) {
-       styleGsettings = new QGSettings(style_id);
-       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
-       if(currentTheme == "ukui-default"){
-           pal = lightPalette(this);
-       }
-    }
+//    QGSettings * styleGsettings = nullptr;
+//    const QByteArray style_id(THEME_SCHAME);
+//    if (QGSettings::isSchemaInstalled(style_id)) {
+//       styleGsettings = new QGSettings(style_id);
+//       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+//       if(currentTheme == "ukui-default"){
+//           pal = lightPalette(this);
+//       }
+//    }
 
     this->setPalette(pal);
 
@@ -160,10 +161,10 @@ void NetDetail::onPaletteChanged()
     detailPage->m_listWidget->setAlternatingRowColors(true);
     detailPage->m_listWidget->setPalette(listwidget_pal);
 
-    if (styleGsettings != nullptr) {
-        delete styleGsettings;
-        styleGsettings = nullptr;
-    }
+//    if (styleGsettings != nullptr) {
+//        delete styleGsettings;
+//        styleGsettings = nullptr;
+//    }
 
     QColor colorTabBar = pal.color(QPalette::Disabled, QPalette::Highlight);
     m_netTabBar->setBackgroundColor(colorTabBar);
@@ -176,6 +177,12 @@ void NetDetail::currentRowChangeSlot(int row)
 
 void NetDetail::paintEvent(QPaintEvent *event)
 {
+    QPalette pal = qApp->palette();
+    QPainter painter(this);
+    painter.setBrush(pal.color(QPalette::Base));
+    painter.drawRect(this->rect());
+    painter.fillRect(rect(), QBrush(pal.color(QPalette::Base)));
+
     return QWidget::paintEvent(event);
 }
 
@@ -195,12 +202,16 @@ void NetDetail::centerToScreen()
     int x = this->width();
     int y = this->height();
     this->move(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top());
+//    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(desk_x / 2 - x / 2 + desk_rect.left(),
+//                                                                desk_y / 2 - y / 2 + desk_rect.top(),
+//                                                                this->width(),
+//                                                                this->height()));
 }
 
 void NetDetail::initUI()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(9,9,14,24);
+    mainLayout->setContentsMargins(24,9,24,24);
 
     detailPage = new DetailPage(isWlan, m_name.isEmpty(), this);
 
@@ -231,7 +242,9 @@ void NetDetail::initUI()
     pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
 
     // TabBar
-    m_netTabBar = new KTabBar(KTabBarStyle::SegmentDark, this);
+//    m_netTabBar = new KTabBar(KTabBarStyle::SegmentDark, this);
+    m_netTabBar = new NetTabBar(this);
+    m_netTabBar->setTabBarStyle(KTabBarStyle::SegmentDark);
     m_netTabBar->addTab(tr("Detail")); //详情
     m_netTabBar->addTab(tr("Ipv4"));//Ipv4
     m_netTabBar->addTab(tr("Ipv6"));//Ipv6
@@ -264,6 +277,7 @@ void NetDetail::initUI()
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
     centerlayout->setContentsMargins(LAYOUT_MARGINS);
     centerlayout->addWidget(pageFrame);
+    centerlayout->addSpacing(4);
     centerlayout->addWidget(stackWidget);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout(bottomWidget);
@@ -949,4 +963,25 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        }
    }
    return QWidget::eventFilter(w, event);
+}
+
+NetTabBar::NetTabBar(QWidget *parent)
+{
+
+}
+
+NetTabBar::~NetTabBar()
+{
+
+}
+
+QSize NetTabBar::sizeHint() const
+{
+    return QSize(TAB_WIDTH, TAB_HEIGHT);
+}
+
+QSize NetTabBar::minimumTabSizeHint(int index) const
+{
+    Q_UNUSED(index)
+    return QSize(TAB_WIDTH, TAB_HEIGHT);
 }

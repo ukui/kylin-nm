@@ -133,6 +133,7 @@ private:
     void initWindowTheme();
     void resetWindowTheme();
     void showControlCenter();
+    void showByWaylandHelper();
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
     int currentIconIndex=0;

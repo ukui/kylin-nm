@@ -629,8 +629,8 @@ void LanPage::onDeviceRemove(QString deviceName)
 
     m_devList.removeOne(deviceName);
     if (m_devList.count() == 0) {
-        m_netSwitch->setCheckable(false);
         m_netSwitch->setChecked(false);
+        m_netSwitch->setCheckable(false);     
         qDebug() << "[wiredSwitch]set not enable after device remove";
     }
 
@@ -1183,8 +1183,8 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
 
             if (m_devList.count() == 0) {
                 this->showDesktopNotify(tr("No ethernet device avaliable"), "networkwrong");
-                m_netSwitch->setCheckable(false);
                 m_netSwitch->setChecked(false);
+                m_netSwitch->setCheckable(false);
             } else {
                 m_netSwitch->setCheckable(true);
                 if (m_netSwitch->isChecked()) {
@@ -1239,7 +1239,7 @@ void LanPage::showDetailPage(QString devName, QString uuid)
        return;
     }
 
-    NetDetail *netDetail = new NetDetail(devName, p_item->m_connectName, uuid, isActive, false, false, this);
+    NetDetail *netDetail = new NetDetail(devName, p_item->m_connectName, uuid, isActive, false, false);
     netDetail->show();
 
     delete p_item;

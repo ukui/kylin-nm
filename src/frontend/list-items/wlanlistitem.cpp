@@ -233,6 +233,7 @@ void WlanListItem::initWlanUI()
     m_pwdLineEdit  = new KPasswordEdit(m_pwdFrame);
     m_pwdLineEdit->setFixedWidth(LINEEDIT_WIDTH);
     m_pwdLineEdit->setClearButtonEnabled(false); //禁用ClearBtn按钮
+    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, true);   //打开输入法
 //    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
 //    m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
@@ -402,7 +403,7 @@ void WlanListItem::onInfoButtonClicked()
 
     netDetail = new NetDetail(m_wlanDevice, m_wirelessNetItem.m_NetSsid,
                                          m_wirelessNetItem.m_connectUuid, isActive, true,
-                                         !m_wirelessNetItem.m_isConfigured, this);
+                                         !m_wirelessNetItem.m_isConfigured);
     connect(netDetail, &NetDetail::destroyed, [&](){
         if (netDetail != nullptr) {
             netDetail = nullptr;
@@ -441,7 +442,7 @@ void WlanListItem::onNetButtonClicked()
                 KWindowSystem::raiseWindow(enterpriseWlanDialog->winId());
                 return;
             } else {
-                enterpriseWlanDialog = new EnterpriseWlanDialog(m_wirelessNetItem, m_wlanDevice, this);
+                enterpriseWlanDialog = new EnterpriseWlanDialog(m_wirelessNetItem, m_wlanDevice);
                 connect(enterpriseWlanDialog, &EnterpriseWlanDialog::enterpriseWlanDialogClose, this, &WlanListItem::onEnterpriseWlanDialogClose);
                 enterpriseWlanDialog->show();
                 isEnterpriseWlanDialogShow = true;

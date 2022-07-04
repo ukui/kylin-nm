@@ -46,6 +46,12 @@ private:
     QLabel *m_gateWayLabel;
     QLabel *m_dnsLabel;
     QLabel *m_secDnsLabel;
+
+    QLabel *m_configEmptyLabel;
+    QLabel *m_addressHintLabel;
+    QLabel *m_subnetEmptyLabel;
+    QLabel *m_gateWayHintLabel;
+    QLabel *m_firstDnsEmptyLabel;
 private:
     void initUI();
     void initComponent();
@@ -58,6 +64,8 @@ private:
 private slots:
     void configChanged(int index);
     void setEnableOfSaveBtn();
+    void onAddressTextChanged();
+    void onGatewayTextChanged();
 
 signals:
     void setIpv6PageState(bool);

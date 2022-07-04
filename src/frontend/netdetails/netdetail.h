@@ -32,6 +32,20 @@
 
 using namespace kdk;
 
+#define  TAB_WIDTH  60
+#define  TAB_HEIGHT 36
+
+class NetTabBar : public KTabBar
+{
+    Q_OBJECT
+public:
+    explicit NetTabBar(QWidget *parent = nullptr);
+    ~NetTabBar();
+
+    QSize sizeHint() const;
+    QSize minimumTabSizeHint(int index) const;
+};
+
 class NetDetail : public QWidget
 {
     Q_OBJECT
@@ -104,7 +118,7 @@ private:
     QPushButton  * confimBtn;
 
     QFrame       * pageFrame;
-    KTabBar      *m_netTabBar = nullptr;
+    NetTabBar      *m_netTabBar = nullptr;
 
     QString      m_name;
     QString      m_uuid;

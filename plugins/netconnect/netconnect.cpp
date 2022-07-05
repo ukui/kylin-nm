@@ -66,8 +66,7 @@ NetConnect::NetConnect() :  mFirstLoad(true) {
 
     QString locale = QLocale::system().name();
     QTranslator* translator = new QTranslator(this);
-    if (translator->load(":/translations/"+ locale + ".qm"))
-    {
+    if (translator->load(":/translations/"+ locale + ".qm")) {
         QApplication::installTranslator(translator);
     } else {
         qWarning() << "Translations load fail";

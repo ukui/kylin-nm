@@ -43,9 +43,9 @@ HEADERS += \
 INSTALLS += target \
 
 TRANSLATIONS += \
-        translations/zh_CN.ts \
-        translations/tr.ts \
-        translations/bo.ts
+        translations/wlan_zh_CN.ts \
+        translations/wlan_tr.ts \
+        translations/wlan_bo.ts
 
 RESOURCES += \
     resource.qrc

@@ -89,7 +89,7 @@ WlanConnect::WlanConnect() :  m_firstLoad(true)
 
     QString locale = QLocale::system().name();
     QTranslator* translator = new QTranslator(this);
-    if (translator->load(":/translations/"+ locale + ".qm")) {
+    if (translator->load(":/translations/wlan_"+ locale + ".qm")) {
         QApplication::installTranslator(translator);
     } else {
         qWarning() << "Translations load fail";

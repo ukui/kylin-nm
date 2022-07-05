@@ -18,7 +18,6 @@ LanItem::LanItem(bool isSimple, QWidget *parent)
     mLanLyt->addWidget(radioBtn);
     mLanLyt->addSpacing(10);
     mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
-//    mLanLyt->addStretch();
     if (!isSimple) {
         infoLabel = new InfoButton(this);
         mLanLyt->addSpacing(8);

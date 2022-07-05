@@ -65,7 +65,7 @@ void BlacklistPage::getBlacklistDevice(QMap<QString, QString> &blacklistMap)
 {
     if (m_settingPathInterface == nullptr || !m_settingPathInterface->isValid()) {
         qDebug() << "dbus interface m_settingPathInterface is invaild";
-        return ;
+        return;
     }
 
     QDBusMessage reply = m_settingPathInterface->call("Getblacklist");
@@ -78,7 +78,7 @@ void BlacklistPage::getBlacklistDevice(QMap<QString, QString> &blacklistMap)
         || reply.arguments().at(0).toString() == ""
         || reply.arguments().at(1).toString() == "") {
         qDebug() << "Dbus interface call Getblacklist return is empty!";
-        return ;
+        return;
     }
 
     QStringList macList = reply.arguments().at(0).toString().split(";");
@@ -108,18 +108,17 @@ void BlacklistPage::onsetStaIntoBlacklist(QString staMac)
 {
     if (m_settingPathInterface == nullptr || !m_settingPathInterface->isValid()) {
         qDebug() << "dbus interface m_settingPathInterface is invaild";
-        return ;
+        return;
     }
 
     QDBusMessage reply = m_settingPathInterface->call("Addblacklist", staMac);
     if(reply.type() == QDBusMessage::ErrorMessage)
     {
         qWarning() << "[mobilehotspot]Getstainfo error:" << reply.errorMessage();
-        return ;
+        return;
     }
 
     refreshBlacklist();
-    return ;
 }
 
 void BlacklistPage::addBlacklistDevFrame(QString staMac, QString staName)

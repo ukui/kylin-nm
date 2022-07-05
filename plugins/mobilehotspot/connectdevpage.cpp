@@ -67,7 +67,7 @@ void ConnectdevPage::getConnectStaDevice(QMap<QString, QString> &staMap)
     staMap.clear();
     if (m_avtivePathInterface == nullptr || !m_avtivePathInterface->isValid()) {
         qDebug() << "dbus interface m_avtivePathInterface is invaild";
-        return ;
+        return;
     }
 
     QDBusMessage reply = m_avtivePathInterface->call("Getstainfo");
@@ -81,7 +81,7 @@ void ConnectdevPage::getConnectStaDevice(QMap<QString, QString> &staMap)
         || reply.arguments().at(0).toString() == "[Invalid UTF-8]"
         || reply.arguments().at(1).toString() == "") {
         qDebug() << "Dbus interface call Getstainfo return is empty!";
-        return ;
+        return;
     }
 
     QStringList macList = reply.arguments().at(0).toString().split(";");

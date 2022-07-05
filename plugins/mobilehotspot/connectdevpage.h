@@ -40,7 +40,6 @@ class ConnectdevPage : public QWidget
     Q_OBJECT
 public:
     explicit ConnectdevPage(QWidget *parent = nullptr);
-    ~ConnectdevPage();
 
     void refreshStalist();
 

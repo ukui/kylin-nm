@@ -35,7 +35,6 @@ class ConnectDevListItem : public QFrame
     Q_OBJECT
 public:
     ConnectDevListItem(QString staMac, QString staName, QWidget *parent = nullptr);
-    ~ConnectDevListItem();
 
 protected:
     KBorderlessButton *m_dragIntoBlackListBtn = nullptr;

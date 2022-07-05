@@ -24,20 +24,21 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-//文本长自动省略并添加悬浮
 class FixLabel : public QLabel
 {
-
     Q_OBJECT
 public:
-    FixLabel(QWidget *parent = nullptr);
-    ~FixLabel();
-    void setText(const QString &text, bool saveTextFlag = true);
-private:
-    void paintEvent(QPaintEvent *event);
+    explicit FixLabel(QWidget *parent = 0);
 
+public:
+    void setLabelText(QString text);
+    QString getText();
+
+private Q_SLOTS:
+    void changedLabelSlot();
 private:
     QString mStr;
+
 };
 
 class DetailWidget : public QWidget

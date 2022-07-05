@@ -200,8 +200,6 @@ void RowWidget::setKey(QString text)
 KyPasswordDialog::KyPasswordDialog(QString dialogType, QString connectionID, QWidget *parent)
     :connectionID(connectionID),dialogType(dialogType),QDialog(parent)
 {
-
-    qDebug() << "KyPasswordDialog";
     this->setAttribute(Qt::WA_QuitOnClose, false);
 //    this->setWindowFlags(Qt::Dialog);
 //    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
@@ -209,7 +207,6 @@ KyPasswordDialog::KyPasswordDialog(QString dialogType, QString connectionID, QWi
 
     initUI(dialogType);
     m_sdkPasswdEdit->installEventFilter(this);
-
     this->setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
 
     connect(qApp, &QApplication::paletteChanged, this, &KyPasswordDialog::onPaletteChanged);
@@ -492,11 +489,4 @@ void KyPasswordDialog::paintEvent(QPaintEvent *event)
 
 
     QDialog::paintEvent(event);
-}
-bool KyPasswordDialog::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == m_sdkPasswdEdit) {
-        qDebug() << "!!!!!" << event->type() << watched;
-    }
-    return QWidget::eventFilter(watched, event);
 }

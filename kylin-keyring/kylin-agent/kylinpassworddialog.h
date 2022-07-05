@@ -53,7 +53,6 @@ private:
 
 protected:
     void paintEvent(QPaintEvent *event);
-    bool eventFilter(QObject *watched, QEvent *event);
 
 public:
     void initUI(QString dialogType);

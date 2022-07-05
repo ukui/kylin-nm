@@ -198,6 +198,10 @@ void KylinSecretAgent::askSecretForPassword(QVariantMap &securityMap,
     KyPasswordDialog pwdDialog(tr(""), connectionID, parentWidget);
     pwdDialog.setPassword(secretValue);
     pwdDialog.InitConnect();
+    if (qgetenv("USER") == "lightdm") {
+        pwdDialog.show();
+        pwdDialog.activateWindow();
+    }
 
     if(pwdDialog.exec()==QDialog::Accepted){
         QString password = pwdDialog.getPassword();
@@ -289,8 +293,11 @@ void KylinSecretAgent::askSecretForWep(QVariantMap &wirelessSecurityMap,
     KyPasswordDialog pwdDialog("", connectionID, parentWidget);
     pwdDialog.setPassword(wepSecretValue);
     pwdDialog.InitConnect();
+    if (qgetenv("USER") == "lightdm") {
+        pwdDialog.show();
+        pwdDialog.activateWindow();
+    }
 
-//    pwdDialog.exec();
     if(pwdDialog.exec()==QDialog::Accepted){
         QString password = pwdDialog.getPassword();
         QVariantMap newSecretKeyMap = wirelessSecurityMap;
@@ -346,8 +353,11 @@ void KylinSecretAgent::askSecretForLeap(QVariantMap &wirelessSecurityMap,
     pwdDialog.setUserName(leapUserName);
     pwdDialog.setPassword(leapPassword);
     pwdDialog.InitConnect();
+    if (qgetenv("USER") == "lightdm") {
+        pwdDialog.show();
+        pwdDialog.activateWindow();
+    }
 
-    pwdDialog.exec();
     if(pwdDialog.exec()==QDialog::Accepted){
         QString password = pwdDialog.getPassword();
         QString userName = pwdDialog.getUserName();
@@ -456,8 +466,11 @@ void KylinSecretAgent::askSecretWithIdentityAndPassword(QVariantMap securityMap,
     pwdDialog.setUserName(userName);
     pwdDialog.setPassword(password);
     pwdDialog.InitConnect();
+    if (qgetenv("USER") == "lightdm") {
+        pwdDialog.show();
+        pwdDialog.activateWindow();
+    }
 
-//    pwdDialog.exec();
     if(pwdDialog.exec()==QDialog::Accepted){
         QString newPassword = pwdDialog.getPassword();
         QString newUserName = pwdDialog.getUserName();
@@ -515,8 +528,11 @@ void KylinSecretAgent::askSecretForTls(QVariantMap securityMap,
     pwdDialog.setUserName(identity);
     pwdDialog.setPassword(password);
     pwdDialog.InitConnect();
+    if (qgetenv("USER") == "lightdm") {
+        pwdDialog.show();
+        pwdDialog.activateWindow();
+    }
 
-//    pwdDialog.exec();
     if(pwdDialog.exec()==QDialog::Accepted){
         QString newPassword = pwdDialog.getPassword();
         QString newIdentity = pwdDialog.getUserName();
@@ -600,8 +616,11 @@ void KylinSecretAgent::askSecretForVpn(const NMVariantMapMap &connection,
     KyPasswordDialog pwdDialog("","", parentWidget);
     pwdDialog.setPassword(secretValue);
     pwdDialog.InitConnect();
+    if (qgetenv("USER") == "lightdm") {
+        pwdDialog.show();
+        pwdDialog.activateWindow();
+    }
 
-    pwdDialog.exec();
     if(pwdDialog.exec()==QDialog::Accepted){
         QString newPassword = pwdDialog.getPassword();
         newVpnSetingMap = vpnSetingMap;

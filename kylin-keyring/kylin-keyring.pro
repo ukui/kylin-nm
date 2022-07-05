@@ -9,8 +9,8 @@ DEFINES += LIBKYLIN_KEYRING_LIBRARY
 CONFIG += c++14 qt warn_on link_pkgconfig console
 CONFIG += no_keywords
 
-PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets
-
+PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1  gsettings-qt libcap kysdk-qtwidgets
+#gtk+-3.0
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 
 LIBS    +=  -L/usr/lib/ -lKF5NetworkManagerQt

@@ -177,9 +177,6 @@ void Ipv6Page::initUI() {
 
     QRegExp prefix_rx("\\b(?:(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\.){3}(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\b");
     lengthEdit->setValidator(new QRegExpValidator(prefix_rx,this));
-
-    ipv6AddressEdit->installEventFilter(this);
-    gateWayEdit->installEventFilter(this);
 }
 
 void Ipv6Page::initComponent() {
@@ -244,7 +241,6 @@ void Ipv6Page::onAddressTextChanged()
 {
     if (!getIpv6EditState(ipv6AddressEdit->text())) {
         m_addressHintLabel->setText(tr("Invalid address"));
-        qDebug() << "ipv6address invalid";
     } else {
         m_addressHintLabel->clear();
     }
@@ -254,7 +250,6 @@ void Ipv6Page::onGatewayTextChanged()
 {
     if (!getIpv6EditState(gateWayEdit->text())) {
         m_gateWayHintLabel->setText(tr("Invalid gateway"));
-        qDebug() << "ipv6 gateway invalid";
     } else {
         m_gateWayHintLabel->clear();
     }

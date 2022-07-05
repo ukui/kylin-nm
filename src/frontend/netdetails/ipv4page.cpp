@@ -104,9 +104,6 @@ void Ipv4Page::initUI() {
     netMaskEdit->setValidator(new QRegExpValidator(rx, this));
     firstDnsEdit->setValidator(new QRegExpValidator(rx, this));
     secondDnsEdit->setValidator(new QRegExpValidator(rx, this));
-
-    ipv4addressEdit->installEventFilter(this);
-    netMaskEdit->installEventFilter(this);
 }
 
 void Ipv4Page::initComponent() {
@@ -265,7 +262,6 @@ void Ipv4Page::onAddressTextChanged()
 {
     if (!getTextEditState(ipv4addressEdit->text())) {
         m_addressHintLabel->setText(tr("Invalid address"));
-        qDebug() << "ipv4address invalid";
     } else {
         m_addressHintLabel->clear();
     }
@@ -275,7 +271,6 @@ void Ipv4Page::onNetMaskTextChanged()
 {
     if (!netMaskIsValide(netMaskEdit->text())) {
         m_maskHintLabel->setText(tr("Invalid subnet mask"));
-        qDebug() << "ipv4 netMask invalid";
     } else {
         m_maskHintLabel->clear();
     }

@@ -227,6 +227,24 @@ QStringList DbusAdaptor::getStoredApInfo()
     return list;
 }
 
+//获取热点path
+QString DbusAdaptor::getApConnectionPath(QString uuid)
+{
+    QString path;
+    path.clear();
+    parent()->getApConnectionPath(path, uuid);
+    return path;
+}
+
+//获取热点path
+QString DbusAdaptor::getActiveConnectionPath(QString uuid)
+{
+    QString path;
+    path.clear();
+    parent()->getActiveConnectionPath(path, uuid);
+    return path;
+}
+
 QStringList DbusAdaptor::getApInfoBySsid(QString devName, QString ssid)
 {
     QStringList list;

@@ -17,22 +17,36 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-#ifndef CUSTOMTABSTYLE_H
-#define CUSTOMTABSTYLE_H
-
-#include <QPainter>
-#include <QProxyStyle>
-#include <QStyleOptionTab>
+#ifndef BLACKLISTITEM_H
+#define BLACKLISTITEM_H
+#include <QFrame>
+#include <QEvent>
+#include <QHBoxLayout>
 #include <QDebug>
-#include <QLayout>
-class CustomTabStyle : public QProxyStyle
-{
-public:
-    CustomTabStyle();
-    QSize sizeFromContents(ContentsType type, const QStyleOption *option,
-                const QSize &size, const QWidget *widget) const;
+#include <QMouseEvent>
+#include <QMenu>
+#include <QLabel>
+#include "kborderlessbutton.h"
 
-    void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const;
+using namespace kdk;
+
+class BlacklistItem : public QFrame
+{
+    Q_OBJECT
+public:
+    BlacklistItem(QString staMac, QString staName, QWidget *parent = nullptr);
+    ~BlacklistItem();
+
+protected:
+    KBorderlessButton *m_removeFromBlacklistBtn = nullptr;
+
+    QString m_mac;
+    bool eventFilter(QObject *w, QEvent *e);
+
+signals:
+    void onBtnClicked(QString blacklistMac);
+
+
 };
 
-#endif // CUSTOMTABSTYLE_H
+#endif // LISTITEM_H

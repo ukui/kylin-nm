@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -55,6 +74,11 @@ public:
     //获取热点
     void getStoredApInfo(QStringList &list);
     void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
+
+    //获取热点path
+    void getApConnectionPath(QString &path, QString uuid);
+    //获取热点ActivePath
+    void getActiveConnectionPath(QString &path, QString uuid);
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
@@ -97,7 +121,7 @@ signals:
     void deactivateFailed(QString errorMessage);
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
-    void hotspotActivated(QString devName, QString ssid, QString uuid);
+    void hotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath);
     //信号强度变化
     void signalStrengthChange(QString devName, QString ssid, int strength);
     //安全性变化

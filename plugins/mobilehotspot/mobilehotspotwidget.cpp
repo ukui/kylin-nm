@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #include "mobilehotspotwidget.h"
 #include <QDebug>
 #include <QFormLayout>
@@ -23,6 +42,8 @@
 
 #define AP_NAME_MAX_LENGTH 32
 
+#define REFRESH_MSEC 20*1000
+
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 const QString    WIRELESS_SWITCH          = "wirelessswitch";
 
@@ -46,8 +67,9 @@ void MobileHotspotWidget::showDesktopNotify(const QString &message)
 
 MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
 {
-    mVlayout = new QVBoxLayout(this);
-    mVlayout->setContentsMargins(CONTENTS_MARGINS);
+    m_Vlayout = new QVBoxLayout(this);
+    m_Vlayout->setContentsMargins(CONTENTS_MARGINS);
+    m_Vlayout->setSpacing(0);
 
     qDBusRegisterMetaType<QMap<QString, bool> >();
     qDBusRegisterMetaType<QMap<QString, int> >();
@@ -55,6 +77,9 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
     qDBusRegisterMetaType<QMap<QString, QVector<QStringList> >>();
 
     initUI();
+    initConnectDevPage();
+    initBlackListPage();
+
     m_switchBtn->installEventFilter(this);
     m_interface = new QDBusInterface("com.kylin.network", "/com/kylin/network",
                                      "com.kylin.network",
@@ -72,15 +97,26 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
     initInterfaceInfo();
     getApInfo();
 
+    initNmDbus();
+
+    this->setLayout(m_Vlayout);
+    m_Vlayout->addStretch();
+
     connect(m_switchBtn, &KSwitchButton::stateChanged, this, &MobileHotspotWidget::setUiEnabled);
     connect(m_interfaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=]() {
         m_interfaceName = m_interfaceComboBox->currentText();
         updateBandCombox();
     });
+
+    m_connectDevPage->refreshStalist();
+    m_blacklistPage->refreshBlacklist();
+    this->update();
 }
 
 MobileHotspotWidget::~MobileHotspotWidget()
 {
+    deleteActivePathInterface();
+    deleteSettingPathInterface();
     delete m_interface;
 }
 
@@ -124,9 +160,10 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                                                            m_freqBandComboBox->currentText(),
                                                            m_interfaceComboBox->currentText());
                 if (!reply.isValid()) {
-                    qDebug() << "[MobileHotspotWidget] call deactiveWirelessAp failed ";
+                    qDebug() << "[MobileHotspotWidget] call activeWirelessAp failed ";
                     return true;
                 }
+
             }
             return true;
         }
@@ -146,8 +183,9 @@ void MobileHotspotWidget::initUI()
     hotspotFrame->setMaximumSize(FRAME_MAX_SIZE);
     hotspotFrame->setFrameShape(QFrame::Box);
 
-    QVBoxLayout *hotspotLyt = new QVBoxLayout(hotspotFrame);
+    QVBoxLayout *hotspotLyt = new QVBoxLayout(this);
     hotspotLyt->setContentsMargins(0, 0, 0, 0);
+    hotspotFrame->setLayout(hotspotLyt);
 
     m_hotspotTitleLabel = new TitleLabel(this);
     m_hotspotTitleLabel->setText(tr("Hotspot"));
@@ -163,7 +201,6 @@ void MobileHotspotWidget::initUI()
     pwdAndfreqBandLine = myLine();
     freqBandAndInterfaceLine = myLine();
 
-    /* add widget */
     hotspotLyt->addWidget(m_switchFrame);
     hotspotLyt->addWidget(switchAndApNameLine);
     hotspotLyt->addWidget(m_ApNameFrame);
@@ -175,11 +212,21 @@ void MobileHotspotWidget::initUI()
     hotspotLyt->addWidget(m_interfaceFrame);
     hotspotLyt->setSpacing(0);
 
-    mVlayout->addWidget(m_hotspotTitleLabel);
-    mVlayout->setSpacing(8);
-    mVlayout->addWidget(hotspotFrame);
-    mVlayout->addStretch();
+    int height = 0;
+    for (int i = 0; i < hotspotLyt->count(); i ++) {
+        QWidget *w = hotspotLyt->itemAt(i)->widget();
+        if (w != nullptr) {
+            height += w->height();
+        }
+    }
+    hotspotFrame->setFixedHeight(height);
+
+    m_Vlayout->addWidget(m_hotspotTitleLabel);
+    m_Vlayout->addSpacing(8);
+    m_Vlayout->addWidget(hotspotFrame);
+
 }
+
 
 void MobileHotspotWidget::initDbusConnect()
 {
@@ -189,7 +236,7 @@ void MobileHotspotWidget::initDbusConnect()
         connect(m_interface,SIGNAL(deviceStatusChanged()), this, SLOT(onDeviceStatusChanged()), Qt::QueuedConnection);
         connect(m_interface,SIGNAL(deviceNameChanged(QString, QString, int)), this, SLOT(onDeviceNameChanged(QString, QString, int)), Qt::QueuedConnection);
         connect(m_interface,SIGNAL(hotspotDeactivated(QString, QString)), this, SLOT(onHotspotDeactivated(QString, QString)), Qt::QueuedConnection);
-        connect(m_interface,SIGNAL(hotspotActivated(QString, QString, QString)), this, SLOT(onHotspotActivated(QString, QString, QString)), Qt::QueuedConnection);
+        connect(m_interface,SIGNAL(hotspotActivated(QString, QString, QString, QString, QString)), this, SLOT(onHotspotActivated(QString, QString, QString, QString, QString)), Qt::QueuedConnection);
 
         connect(m_interface, SIGNAL(wlanactiveConnectionStateChanged(QString, QString, QString, int)), this, SLOT(onActiveConnectionChanged(QString, QString, QString, int)), Qt::QueuedConnection);
     }
@@ -201,6 +248,9 @@ void MobileHotspotWidget::initDbusConnect()
     }
 
     connect(m_apNameLine, &QLineEdit::textEdited, this, &MobileHotspotWidget::onApLineEditTextEdit);
+
+    connect(m_connectDevPage, SIGNAL(setStaIntoBlacklist(QString)), m_blacklistPage, SLOT(onsetStaIntoBlacklist(QString)));
+
     connect(m_pwdNameLine, SIGNAL(textChanged(QString)), this, SLOT(onPwdTextChanged()));
 }
 
@@ -230,7 +280,6 @@ void MobileHotspotWidget::onPwdTextChanged()
     }
 
 }
-
 
 void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status)
 {
@@ -373,7 +422,7 @@ void MobileHotspotWidget::setSwitchFrame()
     m_switchFrame->setMinimumSize(FRAME_MIN_SIZE);
     m_switchFrame->setMaximumSize(CONTECT_FRAME_MAX_SIZE);
 
-    QHBoxLayout *switchLayout = new QHBoxLayout();
+    QHBoxLayout *switchLayout = new QHBoxLayout(m_switchFrame);
 
     m_switchLabel = new QLabel(tr("Open"), this);
     m_switchLabel->setMinimumWidth(LABLE_MIN_WIDTH);
@@ -394,7 +443,7 @@ void MobileHotspotWidget::setApNameFrame()
     m_ApNameFrame->setMinimumSize(FRAME_MIN_SIZE);
     m_ApNameFrame->setMaximumSize(CONTECT_FRAME_MAX_SIZE);
 
-    QHBoxLayout *apNameHLayout = new QHBoxLayout();
+    QHBoxLayout *apNameHLayout = new QHBoxLayout(m_ApNameFrame);
 
     m_apNameLabel = new QLabel(tr("Wi-Fi Name"), this);
     m_apNameLabel->setMinimumWidth(LABLE_MIN_WIDTH);
@@ -416,6 +465,8 @@ void MobileHotspotWidget::setPasswordFrame()
     m_passwordFrame->setFrameShape(QFrame::Shape::NoFrame);
     m_passwordFrame->setMinimumSize(PASSWORD_FRAME_MIN_SIZE);
     m_passwordFrame->setMaximumSize(PASSWORD_FRAME_MAX_SIZE);
+
+    QHBoxLayout *passwordHLayout = new QHBoxLayout(m_passwordFrame);
 
     m_pwdLabel = new QLabel(tr("Password"), this);
     m_pwdLabel->setMinimumWidth(LABLE_MIN_WIDTH);
@@ -453,7 +504,7 @@ void MobileHotspotWidget::setFreqBandFrame()
     m_freqBandFrame->setMinimumSize(FRAME_MIN_SIZE);
     m_freqBandFrame->setMaximumSize(CONTECT_FRAME_MAX_SIZE);
 
-    QHBoxLayout *freqBandHLayout = new QHBoxLayout();
+    QHBoxLayout *freqBandHLayout = new QHBoxLayout(m_freqBandFrame);
 
     m_freqBandLabel = new QLabel(tr("Frequency band"), this);
     m_freqBandLabel->setMinimumWidth(LABLE_MIN_WIDTH);
@@ -479,7 +530,7 @@ void MobileHotspotWidget::setInterFaceFrame()
     m_interfaceFrame->setMinimumSize(FRAME_MIN_SIZE);
     m_interfaceFrame->setMaximumSize(CONTECT_FRAME_MAX_SIZE);
 
-    QHBoxLayout *interfaceHLayout = new QHBoxLayout;
+    QHBoxLayout *interfaceHLayout = new QHBoxLayout(m_interfaceFrame);
 
     m_interfaceLabel = new QLabel(tr("Net card"), this);
     m_interfaceLabel->setMinimumWidth(LABLE_MIN_WIDTH);
@@ -534,6 +585,12 @@ void MobileHotspotWidget::onDeviceNameChanged(QString oldName, QString newName, 
 //热点断开
 void MobileHotspotWidget::onHotspotDeactivated(QString devName, QString ssid)
 {
+    deleteActivePathInterface();
+    m_connectDevPage->setInterface(nullptr);
+    m_connectDevPage->refreshStalist();
+    m_blacklistPage->refreshBlacklist();
+    this->update();
+
     if (!m_switchBtn->isChecked()) {
         return;
     }
@@ -546,12 +603,25 @@ void MobileHotspotWidget::onHotspotDeactivated(QString devName, QString ssid)
 }
 
 //热点连接
-void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QString uuid)
+void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath)
 {
     qDebug() << "onHotspotActivated" <<devName << ssid << uuid;
     if (m_switchBtn->isChecked()) {
         return;
     }
+
+    if (activePath != nullptr) {
+        deleteActivePathInterface();
+        initActivePathInterface(activePath);
+    }
+    if (settingPath != nullptr) {
+        deleteSettingPathInterface();
+        initSettingPathInterface(settingPath);
+    }
+
+    m_connectDevPage->refreshStalist();
+    m_blacklistPage->refreshBlacklist();
+    this->update();
 
     if (devName == m_interfaceComboBox->currentText() && ssid == m_apNameLine->text()) {
         m_switchBtn->setChecked(true);
@@ -582,6 +652,8 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
             qDebug() << "no such device in combo box";
         }
     }
+
+
 }
 
 bool MobileHotspotWidget::getApInfoBySsid(QString devName, QString ssid, QStringList &info)
@@ -688,3 +760,120 @@ QString MobileHotspotWidget::getHostName()
     }
     return "default";
 }
+
+QString MobileHotspotWidget::getSettingPathByUuid()
+{
+    if (!m_interface->isValid()) {
+        return nullptr;
+    }
+
+    QDBusReply<QString> reply = m_interface->call("getApConnectionPath", m_uuid);
+    if (!reply.isValid()) {
+        return nullptr;
+    }
+    return reply.value();
+}
+
+QString MobileHotspotWidget::getActivePathByUuid()
+{
+    if (!m_interface->isValid()) {
+        return nullptr;
+    }
+
+    QDBusReply<QString> reply = m_interface->call("getActiveConnectionPath", m_uuid);
+    if (!reply.isValid()) {
+        return nullptr;
+    }
+    return reply.value();
+}
+
+void MobileHotspotWidget::initNmDbus()
+{
+    QString activePath = getActivePathByUuid();
+    QString settingPath = getSettingPathByUuid();
+
+    if (activePath != nullptr) {
+        m_activePathInterface = new QDBusInterface("org.freedesktop.NetworkManager",
+                                                    activePath,
+                                                    "org.freedesktop.NetworkManager.Connection.Active",
+                                                    QDBusConnection::systemBus());
+        if (m_activePathInterface->isValid()) {
+            m_connectDevPage->setInterface(m_activePathInterface);
+
+            connect(m_activePathInterface, SIGNAL(NewStaConnected(bool, QString, QString)), m_connectDevPage, SLOT(onStaDevAdded(bool, QString, QString)), Qt::QueuedConnection);
+            connect(m_activePathInterface, SIGNAL(StaRemoved(bool, QString, QString)), m_connectDevPage, SLOT(onStaDevRemoved(bool, QString, QString)), Qt::QueuedConnection);
+        }
+    }
+
+    if (settingPath != nullptr) {
+        m_settingPathInterface = new QDBusInterface("org.freedesktop.NetworkManager",
+                                                    settingPath,
+                                                    "org.freedesktop.NetworkManager.Settings.Connection",
+                                                    QDBusConnection::systemBus());
+        if (m_settingPathInterface->isValid()) {
+            m_blacklistPage->setInterface(m_settingPathInterface);
+        }
+    }
+}
+
+void MobileHotspotWidget::initActivePathInterface(QString path)
+{
+    if (path != nullptr){
+        m_activePathInterface = new QDBusInterface("org.freedesktop.NetworkManager",
+                                                    path,
+                                                    "org.freedesktop.NetworkManager.Connection.Active",
+                                                    QDBusConnection::systemBus());
+        if (m_activePathInterface->isValid()) {
+            m_connectDevPage->setInterface(m_activePathInterface);
+
+            connect(m_activePathInterface, SIGNAL(NewStaConnected(bool, QString, QString)), m_connectDevPage, SLOT(onStaDevAdded(bool, QString, QString)), Qt::QueuedConnection);
+            connect(m_activePathInterface, SIGNAL(StaRemoved(bool, QString, QString)), m_connectDevPage, SLOT(onStaDevRemoved(bool, QString, QString)), Qt::QueuedConnection);
+        }
+    }
+}
+
+void MobileHotspotWidget::deleteActivePathInterface()
+{
+    if (m_activePathInterface != nullptr){
+        disconnect(m_activePathInterface);
+        delete m_activePathInterface;
+        m_activePathInterface = nullptr;
+    }
+}
+
+void MobileHotspotWidget::initSettingPathInterface(QString path)
+{
+    if (path != nullptr){
+        m_settingPathInterface = new QDBusInterface("org.freedesktop.NetworkManager",
+                                                    path,
+                                                    "org.freedesktop.NetworkManager.Settings.Connection",
+                                                    QDBusConnection::systemBus());
+        if (m_settingPathInterface->isValid()) {
+            m_blacklistPage->setInterface(m_settingPathInterface);
+        }
+    }
+}
+
+void MobileHotspotWidget::deleteSettingPathInterface()
+{
+    if (m_settingPathInterface != nullptr){
+        disconnect(m_settingPathInterface);
+        delete m_settingPathInterface;
+        m_settingPathInterface = nullptr;
+    }
+}
+
+void MobileHotspotWidget::initConnectDevPage()
+{
+    m_connectDevPage = new ConnectdevPage(this);
+    m_Vlayout->addSpacing(32);
+    m_Vlayout->addWidget(m_connectDevPage);
+}
+
+void MobileHotspotWidget::initBlackListPage()
+{
+    m_blacklistPage = new BlacklistPage(this);
+    m_Vlayout->addSpacing(32);
+    m_Vlayout->addWidget(m_blacklistPage);
+}
+

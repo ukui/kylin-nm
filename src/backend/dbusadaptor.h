@@ -83,6 +83,8 @@ public Q_SLOTS: // METHODS
     //获取热点
     QStringList getStoredApInfo();
     QStringList getApInfoBySsid(QString devName, QString ssid);
+    QString getApConnectionPath(QString uuid);
+    QString getActiveConnectionPath(QString uuid);
     //wifi扫描
     void reScan();
     //keyring
@@ -109,7 +111,7 @@ Q_SIGNALS: // SIGNALS
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
     //热点连接
-    void hotspotActivated(QString devName, QString ssid, QString uuid);
+    void hotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath);
 
     //信号强度变化
     void signalStrengthChange(QString devName, QString ssid, int strength);

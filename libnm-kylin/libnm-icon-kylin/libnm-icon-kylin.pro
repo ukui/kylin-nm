@@ -1,4 +1,4 @@
-QT += core gui widgets dbus network
+QT += core gui widgets dbus network svg
 
 TEMPLATE = lib
 DEFINES += LIBNMICONKYLIN_LIBRARY
@@ -24,10 +24,12 @@ PKGCONFIG += kylin-nm-base
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    kynetworkicon.cpp
+    kynetworkicon.cpp \
+    imageutil.cpp
 
 HEADERS += \
-    kynetworkicon.h
+    kynetworkicon.h \
+    imageutil.h
 
 # Default rules for deployment.
 unix {

@@ -1,4 +1,5 @@
 #include "kynetworkicon.h"
+#include "imageutil.h"
 
 #define EXCELLENT_SIGNAL 80
 #define GOOD_SIGNAL 55
@@ -86,45 +87,54 @@ void KyNetworkIcon::updateIcon()
         return;
     }
     int signalStrength = 0;
+    QIcon icon;
 
     if (iconStatus == LAN_CONNECTED) {
-        this->setIcon(QIcon::fromTheme("network-wired-symbolic"));
+        QPixmap pixmap = QIcon::fromTheme("network-wired-symbolic").pixmap(32, 32);
+        QPixmap iconPixmap = ImageUtil::drawSymbolicColoredPixmap(pixmap, "white");
+        this->setIcon(iconPixmap);
         return;
     } else if (iconStatus == WLAN_CONNECTED
                || iconStatus == WLAN_CONNECTED_LIMITED) {
         signalStrength = manager->getAcivateWifiSignal();
     } else if (iconStatus == NOT_CONNECTED) {
-        this->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+        QPixmap pixmap = QIcon::fromTheme("network-wired-disconnected-symbolic").pixmap(32, 32);
+        QPixmap iconPixmap = ImageUtil::drawSymbolicColoredPixmap(pixmap, "white");
+        this->setIcon(iconPixmap);
         return;
     } else if (iconStatus == LAN_CONNECTED_LIMITED) {
-        this->setIcon(QIcon::fromTheme("network-error-symbolic"));
+        icon = QIcon::fromTheme("network-error-symbolic");
     }
 
     if (iconStatus == WLAN_CONNECTED) {
         if (signalStrength > EXCELLENT_SIGNAL){
-            this->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_ICON));
+            icon = QIcon::fromTheme(EXCELLENT_SIGNAL_ICON);
         } else if (signalStrength > GOOD_SIGNAL) {
-            this->setIcon(QIcon::fromTheme(GOOD_SIGNAL_ICON));
+            icon = QIcon::fromTheme(GOOD_SIGNAL_ICON);
         } else if (signalStrength > OK_SIGNAL) {
-            this->setIcon(QIcon::fromTheme(OK_SIGNAL_ICON));
+            icon = QIcon::fromTheme(OK_SIGNAL_ICON);
        } else if (signalStrength > LOW_SIGNAL) {
-            this->setIcon(QIcon::fromTheme(LOW_SIGNAL_ICON));
+            icon = QIcon::fromTheme(LOW_SIGNAL_ICON);
        } else {
-            this->setIcon(QIcon::fromTheme(NONE_SIGNAL_ICON));
+            icon = QIcon::fromTheme(NONE_SIGNAL_ICON);
        }
     } else if (iconStatus == WLAN_CONNECTED_LIMITED) {
         if (signalStrength > EXCELLENT_SIGNAL){
-            this->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_LIMIT_ICON));
+            icon = QIcon::fromTheme(EXCELLENT_SIGNAL_LIMIT_ICON);
         } else if (signalStrength > GOOD_SIGNAL) {
-            this->setIcon(QIcon::fromTheme(GOOD_SIGNAL_LIMIT_ICON));
+            icon = QIcon::fromTheme(GOOD_SIGNAL_LIMIT_ICON);
         } else if (signalStrength > OK_SIGNAL) {
-            this->setIcon(QIcon::fromTheme(OK_SIGNAL_LIMIT_ICON));
+            icon = QIcon::fromTheme(OK_SIGNAL_LIMIT_ICON);
        } else if (signalStrength > LOW_SIGNAL) {
-            this->setIcon(QIcon::fromTheme(LOW_SIGNAL_LIMIT_ICON));
+            icon = QIcon::fromTheme(LOW_SIGNAL_LIMIT_ICON);
        } else {
-            this->setIcon(QIcon::fromTheme(NONE_SIGNAL_LIMIT_ICON));
+            icon = QIcon::fromTheme(NONE_SIGNAL_LIMIT_ICON);
        }
     }
+
+    QPixmap pixmap = icon.pixmap(32, 32);
+    QPixmap iconPixmap = ImageUtil::drawSymbolicColoredPixmap(pixmap, "white");
+    this->setIcon(iconPixmap);
 }
 
 void KyNetworkIcon::startLoading()
@@ -146,7 +156,10 @@ void KyNetworkIcon::onSetTrayIconLoading()
     if (currentIconIndex > 11) {
         currentIconIndex = 0;
     }
-    this->setIcon(loadIcons.at(currentIconIndex));
+
+    QPixmap pixmap = loadIcons.at(currentIconIndex).pixmap(32,32);
+    QPixmap iconPixmap = ImageUtil::drawSymbolicColoredPixmap(pixmap, "white");
+    this->setIcon(iconPixmap);
     currentIconIndex ++;
 }
 

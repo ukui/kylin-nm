@@ -35,7 +35,6 @@ class BlacklistItem : public QFrame
     Q_OBJECT
 public:
     BlacklistItem(QString staMac, QString staName, QWidget *parent = nullptr);
-    ~BlacklistItem();
 
 protected:
     KBorderlessButton *m_removeFromBlacklistBtn = nullptr;

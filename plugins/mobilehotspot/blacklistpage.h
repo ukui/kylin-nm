@@ -40,7 +40,6 @@ class BlacklistPage : public QWidget
     Q_OBJECT
 public:
     explicit BlacklistPage(QWidget *parent = nullptr);
-    ~BlacklistPage();
 
     void refreshBlacklist();
     bool setStaIntoBlacklist(QString staMac);

@@ -813,6 +813,8 @@ void MainWindow::showAddOtherWlanWidget(QString devName)
                 return;
             }
         }
+
+#if 0
         NetDetail *netDetail = new NetDetail(devName, "", "", false, true, true, this);
         connect(netDetail, &NetDetail::createPageClose, [&](QString interfaceName){
             if (m_addOtherPagePtrMap.contains(interfaceName)) {
@@ -821,7 +823,17 @@ void MainWindow::showAddOtherWlanWidget(QString devName)
         });
         m_addOtherPagePtrMap.insert(devName, netDetail);
         netDetail->show();
+#endif
 
+        JoinHiddenWiFiPage *hiddenWiFi =new JoinHiddenWiFiPage(devName);
+        connect(hiddenWiFi, &JoinHiddenWiFiPage::hiddenWiFiPageClose, [&](QString interfaceName){
+            if (m_addOtherPagePtrMap.contains(interfaceName)) {
+                m_addOtherPagePtrMap[interfaceName] = nullptr;
+            }
+        });
+        m_addOtherPagePtrMap.insert(devName, hiddenWiFi);
+        connect(hiddenWiFi, &JoinHiddenWiFiPage::showWlanList, this, &MainWindow::onShowMainWindow);
+        hiddenWiFi->show();
 }
 
 void MainWindow::getWirelessDeviceCap(QMap<QString, int> &map)

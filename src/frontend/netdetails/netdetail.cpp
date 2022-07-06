@@ -33,7 +33,7 @@
 #include "windowmanager/windowmanager.h"
 
 #define  WINDOW_WIDTH  520
-#define  WINDOW_HEIGHT 562
+#define  WINDOW_HEIGHT 602
 #define  ICON_SIZE 22,22
 #define  TITLE_LAYOUT_MARGINS 9,9,0,0
 #define  LAYOUT_MARGINS 0,0,0,0

@@ -19,6 +19,7 @@
  */
 #include "wlanpage.h"
 #include "kywirelessnetitem.h"
+#include "netdetails/joinhiddenwifipage.h"
 #include <QEvent>
 #include <QDateTime>
 #include <QDebug>
@@ -1026,9 +1027,12 @@ void WlanPage::requestScan()
 
 void WlanPage::onHiddenWlanClicked()
 {
-    qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
-    NetDetail *netDetail = new NetDetail(m_currentDevice, "", "", false, true, true);
-    netDetail->show();
+//    qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
+//    NetDetail *netDetail = new NetDetail(m_currentDevice, "", "", false, true, true);
+//    netDetail->show();
+    JoinHiddenWiFiPage *hiddenWiFi =new JoinHiddenWiFiPage(m_currentDevice);
+    connect(hiddenWiFi, &JoinHiddenWiFiPage::showWlanList, this, &WlanPage::showMainWindow);
+    hiddenWiFi->show();
 }
 
 void WlanPage::showControlCenter()

@@ -37,7 +37,7 @@ class SecurityPage : public QFrame
 {
     Q_OBJECT
 public:
-    SecurityPage(QWidget *parent = nullptr);
+    SecurityPage(bool isNetDetailPage, QWidget *parent = nullptr);
 
     void setSecurity(KySecuType index);
     void setPsk(const QString &psk);
@@ -55,9 +55,10 @@ public:
     void getSecuType(KySecuType &secuType, KyEapMethodType &enterpriseType);
 
 private:
-    QFormLayout *mSecuLayout;
-
-private:
+    bool isDetailPage;
+//    QFormLayout *mSecuLayout;
+    QGridLayout *topLayout;
+    QGridLayout *bottomLayout;
 
     QLabel *secuTypeLabel;
     QLabel *pwdLabel;
@@ -71,6 +72,7 @@ private:
     QLabel *clientCertPathLabel;
     QLabel *clientPrivateKeyLabel;
     QLabel *clientPrivateKeyPwdLabel;
+    QLabel *pwdOptionLabel;
 
     //PEAP TTLS共有
     QLabel *eapMethodLabel;
@@ -89,6 +91,8 @@ private:
     QComboBox *clientCertPathCombox;
     QComboBox *clientPrivateKeyCombox;
     KPasswordEdit *clientPrivateKeyPwdEdit = nullptr;
+    QComboBox *pwdOptionCombox;
+    QWidget *tlsWidget;
 
     //PEAP && TTLS
     QComboBox *eapMethodCombox;
@@ -96,6 +100,10 @@ private:
     KPasswordEdit *userPwdEdit = nullptr;
     QCheckBox *userPwdFlagBox;
 
+    QString hintRequired = tr("Required"); //必填
+    QString emptyhint = tr(" ");
+
+private:
     void showNone();
     void showPsk();
     void showTls();
@@ -120,9 +128,12 @@ private slots:
     void onCaCertPathComboxIndexChanged(QString str);
     void onClientCertPathComboxIndexChanged(QString str);
     void onClientPrivateKeyComboxIndexChanged(QString str);
+    void onPwdOptionComboxIndexChanged(QString str);
+    void changeColumnWithWithSecuType();
 
 signals:
     void setSecuPageState(bool);
+    void secuTypeChanged(const KySecuType &type);
     void eapTypeChanged(const KyEapMethodType &type);
 };
 

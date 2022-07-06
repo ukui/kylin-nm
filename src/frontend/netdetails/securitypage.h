@@ -129,7 +129,7 @@ private slots:
     void onClientCertPathComboxIndexChanged(QString str);
     void onClientPrivateKeyComboxIndexChanged(QString str);
     void onPwdOptionComboxIndexChanged(QString str);
-    void changeColumnWithWithSecuType();
+    void changeColumnWidthWithSecuType();
 
 signals:
     void setSecuPageState(bool);

@@ -29,7 +29,8 @@
 #include <QGSettings>
 #include <QImage>
 #include "fixlabel.h"
-#include "infobutton.h"
+//#include "infobutton.h"
+#include "../component/AddBtn/grayinfobutton.h"
 
 class WlanItem : public QPushButton
 {
@@ -38,7 +39,7 @@ public:
     ~WlanItem();
 public:
     QLabel * iconLabel = nullptr;
-    InfoButton * infoLabel = nullptr;
+    GrayInfoButton * infoLabel = nullptr;
     FixLabel * titileLabel = nullptr;
     QLabel * statusLabel = nullptr;
     QString uuid = "";

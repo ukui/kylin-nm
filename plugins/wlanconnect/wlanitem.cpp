@@ -33,6 +33,11 @@ WlanItem::WlanItem(bool bAcitve, bool isLock, QWidget *parent)
     this->setMinimumSize(550, 58);
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
+    QPalette pal = this->palette();
+    QColor color = pal.color(QPalette::Button);
+    color.setAlphaF(0.5);
+    pal.setColor(QPalette::Button, color);
+    this->setPalette(pal);
     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
     mLanLyt->setContentsMargins(16,0,16,0);
     mLanLyt->setSpacing(16);
@@ -41,7 +46,7 @@ WlanItem::WlanItem(bool bAcitve, bool isLock, QWidget *parent)
     statusLabel = new QLabel(this);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 //    statusLabel->setMinimumSize(36,36);
-    infoLabel = new InfoButton(this);
+    infoLabel = new GrayInfoButton(this);
     mLanLyt->addWidget(iconLabel);
     mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
     mLanLyt->addStretch();

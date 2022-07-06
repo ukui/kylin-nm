@@ -57,6 +57,7 @@ public:
     ~MobileHotspotWidget();
 
 private:
+    QFrame *m_hotspotFrame = nullptr;
     QFrame *m_switchFrame = nullptr;          //开关
     QFrame *m_ApNameFrame = nullptr;          //wifi名称
     QFrame *m_passwordFrame = nullptr;        //密码
@@ -95,6 +96,7 @@ private:
     QString m_uuid = "";
     QString m_hostName = "";
 
+    void resetFreamSize();
     void initUI();
     void initDbusConnect();
     void initInterfaceInfo();

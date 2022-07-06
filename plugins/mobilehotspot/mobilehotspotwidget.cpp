@@ -34,6 +34,8 @@
 #define LINE_MAX_SIZE 16777215, 1
 #define LINE_MIN_SIZE 0, 1
 #define ICON_SIZE   24,24
+#define PASSWORD_FRAME_MIN_HIGHT 60
+#define PASSWORD_FRAME_FIX_HIGHT 80
 #define PASSWORD_FRAME_MIN_SIZE 550, 60
 #define PASSWORD_FRAME_MAX_SIZE 16777215, 86
 #define PASSWORD_ITEM_MARGINS 16, 12, 16, 14
@@ -176,16 +178,28 @@ void MobileHotspotWidget::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 }
 
+void MobileHotspotWidget::resetFreamSize()
+{
+    int height = 0;
+    for (int i = 0; i < m_hotspotFrame->layout()->count(); i ++) {
+        QWidget *w = m_hotspotFrame->layout()->itemAt(i)->widget();
+        if (w != nullptr) {
+            height += w->height();
+        }
+    }
+    m_hotspotFrame->setFixedHeight(height);
+}
+
 void MobileHotspotWidget::initUI()
 {
-    QFrame *hotspotFrame = new QFrame(this);
-    hotspotFrame->setMinimumSize(FRAME_MIN_SIZE);
-    hotspotFrame->setMaximumSize(FRAME_MAX_SIZE);
-    hotspotFrame->setFrameShape(QFrame::Box);
+    m_hotspotFrame = new QFrame(this);
+    m_hotspotFrame->setMinimumSize(FRAME_MIN_SIZE);
+    m_hotspotFrame->setMaximumSize(FRAME_MAX_SIZE);
+    m_hotspotFrame->setFrameShape(QFrame::Box);
 
     QVBoxLayout *hotspotLyt = new QVBoxLayout(this);
     hotspotLyt->setContentsMargins(0, 0, 0, 0);
-    hotspotFrame->setLayout(hotspotLyt);
+    m_hotspotFrame->setLayout(hotspotLyt);
 
     m_hotspotTitleLabel = new TitleLabel(this);
     m_hotspotTitleLabel->setText(tr("Hotspot"));
@@ -212,18 +226,11 @@ void MobileHotspotWidget::initUI()
     hotspotLyt->addWidget(m_interfaceFrame);
     hotspotLyt->setSpacing(0);
 
-    int height = 0;
-    for (int i = 0; i < hotspotLyt->count(); i ++) {
-        QWidget *w = hotspotLyt->itemAt(i)->widget();
-        if (w != nullptr) {
-            height += w->height();
-        }
-    }
-    hotspotFrame->setFixedHeight(height);
+    resetFreamSize();
 
     m_Vlayout->addWidget(m_hotspotTitleLabel);
     m_Vlayout->addSpacing(8);
-    m_Vlayout->addWidget(hotspotFrame);
+    m_Vlayout->addWidget(m_hotspotFrame);
 
 }
 
@@ -272,13 +279,14 @@ void MobileHotspotWidget::onApLineEditTextEdit(QString text)
 void MobileHotspotWidget::onPwdTextChanged()
 {
     if (m_pwdNameLine->text().length() < 8) {
+        m_passwordFrame->setFixedHeight(PASSWORD_FRAME_FIX_HIGHT);
         m_pwdHintLabel->show();
-        m_pwdHintLabel->setText(tr("Contains at least 8 characters")); //至少包含8个字符
     } else {
-        m_pwdHintLabel->clear();
+        m_passwordFrame->setFixedHeight(PASSWORD_FRAME_MIN_HIGHT);
         m_pwdHintLabel->hide();
     }
-
+    resetFreamSize();
+    this->update();
 }
 
 void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status)
@@ -466,8 +474,6 @@ void MobileHotspotWidget::setPasswordFrame()
     m_passwordFrame->setMinimumSize(PASSWORD_FRAME_MIN_SIZE);
     m_passwordFrame->setMaximumSize(PASSWORD_FRAME_MAX_SIZE);
 
-    QHBoxLayout *passwordHLayout = new QHBoxLayout(m_passwordFrame);
-
     m_pwdLabel = new QLabel(tr("Password"), this);
     m_pwdLabel->setMinimumWidth(LABLE_MIN_WIDTH);
     m_pwdNameLine = new KPasswordEdit(this);
@@ -480,8 +486,9 @@ void MobileHotspotWidget::setPasswordFrame()
     QPalette hintTextColor;
     hintTextColor.setColor(QPalette::WindowText, Qt::red);
     m_pwdHintLabel->setPalette(hintTextColor);
+    m_pwdHintLabel->setText(tr("Contains at least 8 characters")); //至少包含8个字符
 
-    QWidget *pwdInputWidget = new QWidget(this);
+    QWidget *pwdInputWidget = new QWidget(m_passwordFrame);
     QVBoxLayout *pwdInputVLayout = new QVBoxLayout(pwdInputWidget);
     pwdInputVLayout->setContentsMargins(CONTENTS_MARGINS);
     pwdInputVLayout->setSpacing(0);
@@ -492,6 +499,8 @@ void MobileHotspotWidget::setPasswordFrame()
     pwdLayout->setContentsMargins(PASSWORD_ITEM_MARGINS);
     pwdLayout->setSpacing(0);
     pwdLayout->addRow(m_pwdLabel, pwdInputWidget);
+
+    m_passwordFrame->setLayout(pwdLayout);
 
     m_pwdNameLine->installEventFilter(this);
 }

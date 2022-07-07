@@ -178,7 +178,7 @@ void MobileHotspotWidget::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 }
 
-void MobileHotspotWidget::resetFreamSize()
+void MobileHotspotWidget::resetFrameSize()
 {
     int height = 0;
     for (int i = 0; i < m_hotspotFrame->layout()->count(); i ++) {

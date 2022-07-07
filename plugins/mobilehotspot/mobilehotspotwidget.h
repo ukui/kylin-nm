@@ -96,7 +96,7 @@ private:
     QString m_uuid = "";
     QString m_hostName = "";
 
-    void resetFreamSize();
+    void resetFrameSize();
     void initUI();
     void initDbusConnect();
     void initInterfaceInfo();

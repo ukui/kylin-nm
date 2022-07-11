@@ -226,7 +226,7 @@ void MobileHotspotWidget::initUI()
     hotspotLyt->addWidget(m_interfaceFrame);
     hotspotLyt->setSpacing(0);
 
-    resetFreamSize();
+    resetFrameSize();
 
     m_Vlayout->addWidget(m_hotspotTitleLabel);
     m_Vlayout->addSpacing(8);
@@ -285,7 +285,7 @@ void MobileHotspotWidget::onPwdTextChanged()
         m_passwordFrame->setFixedHeight(PASSWORD_FRAME_MIN_HIGHT);
         m_pwdHintLabel->hide();
     }
-    resetFreamSize();
+    resetFrameSize();
     this->update();
 }
 

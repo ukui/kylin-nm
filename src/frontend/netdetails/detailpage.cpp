@@ -91,7 +91,7 @@ void DetailPage::setIpv4Dns(const QString &ipv4Dns) {
 
 void DetailPage::setIpv6(const QString &ipv6) {
     m_formerIPV6 = ipv6;
-    this->m_IPV6->setText(ipv6);
+    this->m_IPV6->setLabelText(ipv6);
 }
 
 void DetailPage::setMac(const QString &mac) {

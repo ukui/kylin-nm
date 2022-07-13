@@ -107,6 +107,7 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
             continue;
         } else {
            isFind = true;
+           break;
         }
     }
 

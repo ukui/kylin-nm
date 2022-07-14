@@ -255,9 +255,7 @@ void MobileHotspotWidget::initDbusConnect()
     }
 
     connect(m_apNameLine, &QLineEdit::textEdited, this, &MobileHotspotWidget::onApLineEditTextEdit);
-
     connect(m_connectDevPage, SIGNAL(setStaIntoBlacklist(QString)), m_blacklistPage, SLOT(onsetStaIntoBlacklist(QString)));
-
     connect(m_pwdNameLine, SIGNAL(textChanged(QString)), this, SLOT(onPwdTextChanged()));
 }
 
@@ -415,6 +413,7 @@ void MobileHotspotWidget::getApInfo()
             } else {
                 m_switchBtn->setChecked(false);
                 setUiEnabled(false);
+                m_uuid = apInfo.at(4);
             }
         } else {
             qDebug() << "no such interface " << apInfo.at(2);
@@ -618,7 +617,6 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
     if (m_switchBtn->isChecked()) {
         return;
     }
-
     if (activePath != nullptr) {
         deleteActivePathInterface();
         initActivePathInterface(activePath);
@@ -780,6 +778,7 @@ QString MobileHotspotWidget::getSettingPathByUuid()
     if (!reply.isValid()) {
         return nullptr;
     }
+
     return reply.value();
 }
 

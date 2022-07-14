@@ -1435,7 +1435,6 @@ void WlanPage::setWirelessSwitchEnable(bool enable)
         m_wirelessConnectOpreation->setWirelessEnabled(enable);
         if (!enable) {
             m_netSwitch->setChecked(false);
-            m_netSwitch->setCheckable(false);
             m_activatedNetFrame->hide();
             m_activatedNetDivider->hide();
             m_inactivatedNetFrame->hide();

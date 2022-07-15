@@ -67,7 +67,7 @@ void MobileHotspotWidget::showDesktopNotify(const QString &message)
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
 
-//#define HOTSPOT_CONTROL
+#define HOTSPOT_CONTROL
 
 MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
 {
@@ -154,6 +154,13 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                     qDebug() << "[MobileHotspotWidget] call deactiveWirelessAp failed ";
                     return true;
                 }
+#ifdef HOTSPOT_CONTROL
+                deleteActivePathInterface();
+                m_connectDevPage->setInterface(nullptr);
+                m_connectDevPage->refreshStalist();
+                m_blacklistPage->refreshBlacklist();
+#endif
+                this->update();
             } else {
                 if (m_apNameLine->text().isEmpty() || m_interfaceName.isEmpty())
                 {
@@ -604,14 +611,6 @@ void MobileHotspotWidget::onDeviceNameChanged(QString oldName, QString newName, 
 //热点断开
 void MobileHotspotWidget::onHotspotDeactivated(QString devName, QString ssid)
 {
-#ifdef HOTSPOT_CONTROL
-    deleteActivePathInterface();
-    m_connectDevPage->setInterface(nullptr);
-    m_connectDevPage->refreshStalist();
-    m_blacklistPage->refreshBlacklist();
-#endif
-    this->update();
-
     if (!m_switchBtn->isChecked()) {
         return;
     }

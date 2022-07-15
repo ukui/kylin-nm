@@ -44,7 +44,7 @@ public:
     void refreshStalist();
 
     inline void setInterface(QDBusInterface *activeInterface) {
-            m_avtivePathInterface = activeInterface;
+            m_activePathInterface = activeInterface;
     }
 
 private:
@@ -54,7 +54,7 @@ private:
     QVBoxLayout *m_staListLayout = nullptr;
     QMap<QString, QString> m_staMap;
 
-    QDBusInterface  *m_avtivePathInterface = nullptr;
+    QDBusInterface  *m_activePathInterface = nullptr;
 
     void getConnectStaDevice(QMap<QString, QString> &blacklistMap);
     bool removeStaFromBlacklist(QString staMac);

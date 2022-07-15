@@ -169,7 +169,6 @@ void MainWindow::initPlatform()
     QString strProjectName(projectName);
     free(projectName);
     projectName = NULL;
-    qDebug() << "!!!!" << kdk_system_get_projectName() << "!!!!" << kdk_system_get_projectSubName() << "!!!!" << kdk_system_get_productFeatures();
     if(v10Sp1.compare(strProjectName,Qt::CaseInsensitive) == 0) {
         unsigned int feature = kdk_system_get_productFeatures();
         if (feature == 3) {
@@ -178,6 +177,7 @@ void MainWindow::initPlatform()
     } else if (intel.compare(strProjectName,Qt::CaseInsensitive) == 0) {
         m_isShowInCenter = true;
     }
+    qDebug() << "projectName" << projectName << m_isShowInCenter;
 }
 
 /**

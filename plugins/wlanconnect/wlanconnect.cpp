@@ -1026,7 +1026,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
         wlanItem->statusLabel->setText("");
     }
 
-    connect(wlanItem->infoLabel, &InfoButton::clicked, this, [=]{
+    connect(wlanItem->infoLabel, &GrayInfoButton::clicked, this, [=]{
         // open detail page
         if (!m_interface->isValid()) {
             return;

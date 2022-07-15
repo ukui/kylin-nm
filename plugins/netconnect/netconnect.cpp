@@ -438,7 +438,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     lanItem->uuid = infoList.at(1);
     lanItem->dbusPath = infoList.at(2);
 
-    connect(lanItem->infoLabel, &InfoButton::clicked, this, [=]{
+    connect(lanItem->infoLabel, &GrayInfoButton::clicked, this, [=]{
         // open landetail page
         if (!m_interface->isValid()) {
             return;
@@ -707,7 +707,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     lanItem->uuid = connUuid;
     lanItem->dbusPath = connDbusPath;
 
-    connect(lanItem->infoLabel, &InfoButton::clicked, this, [=]{
+    connect(lanItem->infoLabel, &GrayInfoButton::clicked, this, [=]{
         // open landetail page
         if (!m_interface->isValid()) {
             return;

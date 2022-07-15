@@ -65,17 +65,18 @@ QFrame* ConnectdevPage::myLine()
 void ConnectdevPage::getConnectStaDevice(QMap<QString, QString> &staMap)
 {
     staMap.clear();
-    if (m_avtivePathInterface == nullptr || !m_avtivePathInterface->isValid()) {
-        qDebug() << "dbus interface m_avtivePathInterface is invaild";
+    if (m_activePathInterface == nullptr || !m_activePathInterface->isValid()) {
+        qDebug() << "dbus interface m_activePathInterface is invaild";
         return;
     }
 
-    QDBusMessage reply = m_avtivePathInterface->call("Getstainfo");
+    QDBusMessage reply = m_activePathInterface->call("Getstainfo");
     if(reply.type() == QDBusMessage::ErrorMessage)
     {
         qWarning() << "[mobilehotspot]Getstainfo error:" << reply.errorMessage();
         return;
     }
+
     if (reply.arguments().isEmpty()
         || reply.arguments().at(0).toString() == ""
         || reply.arguments().at(0).toString() == "[Invalid UTF-8]"
@@ -91,6 +92,7 @@ void ConnectdevPage::getConnectStaDevice(QMap<QString, QString> &staMap)
             staMap[macList.at(index)] = hostNameList.at(index);
         }
     }
+
 }
 
 void ConnectdevPage::initStaDev()

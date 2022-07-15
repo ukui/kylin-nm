@@ -67,6 +67,8 @@ void MobileHotspotWidget::showDesktopNotify(const QString &message)
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
 
+//#define HOTSPOT_CONTROL
+
 MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
 {
     m_Vlayout = new QVBoxLayout(this);
@@ -79,8 +81,11 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
     qDBusRegisterMetaType<QMap<QString, QVector<QStringList> >>();
 
     initUI();
+
+#ifdef HOTSPOT_CONTROL
     initConnectDevPage();
     initBlackListPage();
+#endif
 
     m_switchBtn->installEventFilter(this);
     m_interface = new QDBusInterface("com.kylin.network", "/com/kylin/network",
@@ -99,7 +104,9 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
     initInterfaceInfo();
     getApInfo();
 
+#ifdef HOTSPOT_CONTROL
     initNmDbus();
+#endif
 
     this->setLayout(m_Vlayout);
     m_Vlayout->addStretch();
@@ -110,8 +117,10 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
         updateBandCombox();
     });
 
+#ifdef HOTSPOT_CONTROL
     m_connectDevPage->refreshStalist();
     m_blacklistPage->refreshBlacklist();
+#endif
     this->update();
 }
 
@@ -255,7 +264,9 @@ void MobileHotspotWidget::initDbusConnect()
     }
 
     connect(m_apNameLine, &QLineEdit::textEdited, this, &MobileHotspotWidget::onApLineEditTextEdit);
+#ifdef HOTSPOT_CONTROL
     connect(m_connectDevPage, SIGNAL(setStaIntoBlacklist(QString)), m_blacklistPage, SLOT(onsetStaIntoBlacklist(QString)));
+#endif
     connect(m_pwdNameLine, SIGNAL(textChanged(QString)), this, SLOT(onPwdTextChanged()));
 }
 
@@ -593,10 +604,12 @@ void MobileHotspotWidget::onDeviceNameChanged(QString oldName, QString newName, 
 //热点断开
 void MobileHotspotWidget::onHotspotDeactivated(QString devName, QString ssid)
 {
+#ifdef HOTSPOT_CONTROL
     deleteActivePathInterface();
     m_connectDevPage->setInterface(nullptr);
     m_connectDevPage->refreshStalist();
     m_blacklistPage->refreshBlacklist();
+#endif
     this->update();
 
     if (!m_switchBtn->isChecked()) {
@@ -617,6 +630,7 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
     if (m_switchBtn->isChecked()) {
         return;
     }
+#ifdef HOTSPOT_CONTROL
     if (activePath != nullptr) {
         deleteActivePathInterface();
         initActivePathInterface(activePath);
@@ -628,6 +642,7 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
 
     m_connectDevPage->refreshStalist();
     m_blacklistPage->refreshBlacklist();
+#endif
     this->update();
 
     if (devName == m_interfaceComboBox->currentText() && ssid == m_apNameLine->text()) {

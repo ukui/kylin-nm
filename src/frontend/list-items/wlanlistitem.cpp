@@ -587,6 +587,9 @@ void WlanListItem::onMenuTriggered(QAction *action)
                         << m_wirelessNetItem.m_NetSsid << Q_FUNC_INFO << __LINE__;
         m_netButton->startLoading();
     } else if (action->text() == tr("Forget")) {
+        if (m_pwdLineEdit != nullptr) {
+            m_pwdLineEdit->clear();
+        }
         m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
     }
 

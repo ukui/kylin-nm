@@ -1,0 +1,36 @@
+From: zhaoshixu <zhaoshixu@kylinos.cn>
+Date: Mon, 18 Jul 2022 06:32:25 +0000
+Subject: !5 fix bug #128339 #127890
+
+---
+ plugins/wlanconnect/wlanconnect.cpp      | 2 +-
+ src/frontend/list-items/wlanlistitem.cpp | 3 +++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/plugins/wlanconnect/wlanconnect.cpp b/plugins/wlanconnect/wlanconnect.cpp
+index 67cc3a8..4f174a5 100644
+--- a/plugins/wlanconnect/wlanconnect.cpp
++++ b/plugins/wlanconnect/wlanconnect.cpp
+@@ -272,7 +272,7 @@ void WlanConnect::initComponent() {
+     }
+     initNet();
+ 
+-    if (deviceList.isEmpty() || !m_interface->isValid()) {
++    if (!m_wifiSwitch->isChecked() || deviceList.isEmpty() || !m_interface->isValid()) {
+         hideLayout(ui->availableLayout);
+     }
+ 
+diff --git a/src/frontend/list-items/wlanlistitem.cpp b/src/frontend/list-items/wlanlistitem.cpp
+index 7847796..1f1adfc 100644
+--- a/src/frontend/list-items/wlanlistitem.cpp
++++ b/src/frontend/list-items/wlanlistitem.cpp
+@@ -568,6 +568,9 @@ void WlanListItem::onMenuTriggered(QAction *action)
+                         << m_wirelessNetItem.m_NetSsid << Q_FUNC_INFO << __LINE__;
+         m_netButton->startLoading();
+     } else if (action->text() == tr("Forget")) {
++        if (m_pwdLineEdit != nullptr) {
++            m_pwdLineEdit->clear();
++        }
+         m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
+     }
+ 

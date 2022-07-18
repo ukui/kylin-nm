@@ -272,7 +272,7 @@ void WlanConnect::initComponent() {
     }
     initNet();
 
-    if (deviceList.isEmpty() || !m_interface->isValid()) {
+    if (!m_wifiSwitch->isChecked() || deviceList.isEmpty() || !m_interface->isValid()) {
         hideLayout(ui->availableLayout);
     }
 

@@ -17,40 +17,18 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-#ifndef INFOBUTTON_H
-#define INFOBUTTON_H
+#ifndef GRAYINFOBUTTON_H
+#define GRAYINFOBUTTON_H
+
 #include <QPushButton>
 #include <QIcon>
 
-class InfoButton : public QPushButton
+class GrayInfoButton : public QPushButton
 {
     Q_OBJECT
 public:
-    explicit InfoButton(QWidget * parent = nullptr);
-    ~InfoButton() = default;
-
-protected:
-    void paintEvent(QPaintEvent *event);
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-
-private:
-    void initUI();
-
-    static inline qreal mixQreal(qreal a, qreal b, qreal bias)
-        {
-            return a + (b - a) * bias;
-        }
-        QColor mixColor(const QColor &c1, const QColor &c2, qreal bias);
-
-private:
-    QColor m_backgroundColor;
-    QColor m_foregroundColor;
-
-private slots:
-    void onPaletteChanged();
+    explicit GrayInfoButton(QWidget * parent = nullptr);
+    ~GrayInfoButton() = default;
 };
 
-#endif // INFOBUTTON_H
+#endif // GRAYINFOBUTTON_H

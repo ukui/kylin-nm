@@ -26,8 +26,10 @@
 #define ICON_SIZE 16,16
 #define BACKGROUND_COLOR QColor(0,0,0,0)
 #define FOREGROUND_COLOR_NORMAL qApp->palette().text().color()
-#define FOREGROUND_COLOR_HOVER QColor(55,144,250,255)
-#define FOREGROUND_COLOR_PRESS QColor(36,109,212,255)
+//#define FOREGROUND_COLOR_HOVER QColor(55,144,250,255)
+//#define FOREGROUND_COLOR_PRESS QColor(36,109,212,255)
+#define FOREGROUND_COLOR_BRIGHTTEXT qApp->palette().brightText().color()
+#define FOREGROUND_COLOR_HIGHLIGHT qApp->palette().highlight().color()
 #define OUTER_PATH 8,8,16,16
 #define INNER_PATH 9,9,14,14
 #define TEXT_POS 14,5,16,16,0
@@ -52,6 +54,26 @@ void InfoButton::onPaletteChanged()
 {
     m_foregroundColor = FOREGROUND_COLOR_NORMAL;
     this->repaint();
+}
+
+QColor InfoButton::mixColor(const QColor &c1, const QColor &c2, qreal bias)
+{
+    if (bias <= 0.0) {
+         return c1;
+     }
+     if (bias >= 1.0) {
+         return c2;
+     }
+     if (qIsNaN(bias)) {
+         return c1;
+     }
+
+     qreal r = mixQreal(c1.redF(),   c2.redF(),   bias);
+     qreal g = mixQreal(c1.greenF(), c2.greenF(), bias);
+     qreal b = mixQreal(c1.blueF(),  c2.blueF(),  bias);
+     qreal a = mixQreal(c1.alphaF(), c2.alphaF(), bias);
+
+     return QColor::fromRgbF(r, g, b, a);
 }
 
 void InfoButton::paintEvent(QPaintEvent *event)
@@ -87,7 +109,8 @@ void InfoButton::paintEvent(QPaintEvent *event)
 
 void InfoButton::enterEvent(QEvent *event)
 {
-    m_foregroundColor = FOREGROUND_COLOR_HOVER;
+//    m_foregroundColor = FOREGROUND_COLOR_HOVER;
+    m_foregroundColor = FOREGROUND_COLOR_HIGHLIGHT;
     this->update();
 }
 
@@ -99,14 +122,16 @@ void InfoButton::leaveEvent(QEvent *event)
 
 void InfoButton::mousePressEvent(QMouseEvent *event)
 {
-    m_foregroundColor = FOREGROUND_COLOR_PRESS;
+//    m_foregroundColor = FOREGROUND_COLOR_PRESS;
+    m_foregroundColor = mixColor(FOREGROUND_COLOR_HIGHLIGHT, FOREGROUND_COLOR_BRIGHTTEXT, 0.2);
     this->update();
     return QPushButton::mousePressEvent(event);
 }
 
 void InfoButton::mouseReleaseEvent(QMouseEvent *event)
 {
-    m_foregroundColor = FOREGROUND_COLOR_HOVER;
+//    m_foregroundColor = FOREGROUND_COLOR_HOVER;
+    m_foregroundColor = mixColor(FOREGROUND_COLOR_HIGHLIGHT, FOREGROUND_COLOR_BRIGHTTEXT, 0.2);
     this->update();
     return QPushButton::mouseReleaseEvent(event);
 }

@@ -30,7 +30,8 @@
 #include <QImage>
 #include <QPainter>
 #include "fixlabel.h"
-#include "infobutton.h"
+//#include "infobutton.h"
+#include "../component/AddBtn/grayinfobutton.h"
 
 class LanItem : public QPushButton
 {
@@ -39,7 +40,7 @@ public:
     ~LanItem();
 public:
     QLabel * iconLabel = nullptr;
-    InfoButton * infoLabel = nullptr;
+    GrayInfoButton * infoLabel = nullptr;
     FixLabel * titileLabel = nullptr;
     QLabel * statusLabel = nullptr;
 

@@ -841,7 +841,7 @@ void LanPage::updateActivatedConnectionArea(KyConnectItem *p_newItem)
         deleteConnectionMapItem(m_activeConnectionMap, m_activatedLanListWidget, EMPTY_CONNECT_UUID);
         QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_activatedLanListWidget);
         m_activeConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
-        this->showDesktopNotify(tr("LAN Connected Successfully"), "networkconnected");
+//        this->showDesktopNotify(tr("LAN Connected Successfully"), "networkconnected");
     }
     if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
@@ -865,7 +865,7 @@ void LanPage::updateConnectionArea(KyConnectItem *p_newItem)
         qDebug()<<"[LanPage] update connection item"<<p_newItem->m_connectName;
         QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_inactivatedLanListWidget);
         m_inactiveConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
-        this->showDesktopNotify(tr("LAN Disconnected Successfully"), "networkdisconnected");
+//        this->showDesktopNotify(tr("LAN Disconnected Successfully"), "networkdisconnected");
     }
     if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);

@@ -1034,7 +1034,7 @@ void WlanPage::onHiddenWlanClicked()
         return;
     }
 
-    m_hiddenWiFi =new JoinHiddenWiFiPage(m_currentDevice);
+    m_hiddenWiFi = new JoinHiddenWiFiPage(m_currentDevice);
 
     connect(m_hiddenWiFi, &JoinHiddenWiFiPage::showWlanList, this, &WlanPage::showMainWindow);
     connect(m_hiddenWiFi, &JoinHiddenWiFiPage::destroyed, [&](){

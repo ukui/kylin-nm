@@ -1028,9 +1028,24 @@ void WlanPage::requestScan()
 
 void WlanPage::onHiddenWlanClicked()
 {
-    qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
-    NetDetail *netDetail = new NetDetail(m_currentDevice, "", "", false, true, true);
-    netDetail->show();
+//    qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
+//    NetDetail *netDetail = new NetDetail(m_currentDevice, "", "", false, true, true);
+//    netDetail->show();
+    if(m_hiddenWiFi != nullptr){
+        m_hiddenWiFi->activateWindow();
+        return;
+    }
+
+    m_hiddenWiFi = new JoinHiddenWiFiPage(m_currentDevice);
+
+    connect(m_hiddenWiFi, &JoinHiddenWiFiPage::showWlanList, this, &WlanPage::showMainWindow);
+    connect(m_hiddenWiFi, &JoinHiddenWiFiPage::destroyed, [&](){
+        if (m_hiddenWiFi != nullptr) {
+            m_hiddenWiFi = nullptr;
+        }
+    });
+
+    m_hiddenWiFi->show();
 }
 
 void WlanPage::showControlCenter()

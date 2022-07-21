@@ -33,6 +33,8 @@
 #include "lanpage.h"
 #include "wlanpage.h"
 #include "netdetails/netdetail.h"
+#include "netdetails/joinhiddenwifipage.h"
+#include <ukuisdk/kylin-com4cxx.h>
 
 #ifdef WITHKYSEC
 #include <kysec/libkysec.h>
@@ -188,7 +190,8 @@ private:
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
 
     QMap<QString, NetDetail*> m_createPagePtrMap;
-    QMap<QString, NetDetail*> m_addOtherPagePtrMap;
+//    QMap<QString, NetDetail*> m_addOtherPagePtrMap;
+    QMap<QString, JoinHiddenWiFiPage*> m_addOtherPagePtrMap;
 
 public slots:
     void onShowMainWindow(int type);

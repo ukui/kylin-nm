@@ -33,6 +33,7 @@
 #include <QProcess>
 #include "kylinactiveconnectresource.h"
 #include "kywirelessnetresource.h"
+#include "netdetails/joinhiddenwifipage.h"
 
 //#define SCROLLAREA_HEIGHT 150
 #define MORE_TEXT_MARGINS 16,0,0,0
@@ -201,6 +202,8 @@ private:
 
     QTimer *m_scanTimer = nullptr;
     QTimer *m_refreshIconTimer = nullptr;
+
+    JoinHiddenWiFiPage *m_hiddenWiFi = nullptr;
 };
 
 #endif // WLANPAGE_H

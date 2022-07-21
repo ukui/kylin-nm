@@ -15,11 +15,12 @@ CONFIG += c++14 qt warn_on link_pkgconfig
 #CONFIG += release
 
 PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets kysdk-waylandhelper
+PKGCONFIG +=kysdk-sysinfo
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 
-LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt -lukui-com4c -lukui-com4cxx -lkysec
-#LIBS  +=  -lkysec
+LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt -lkysec
+
 target.path = /usr/bin
 target.source += $$TARGET
 desktop.path = /etc/xdg/autostart/

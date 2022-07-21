@@ -560,7 +560,7 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
     } else {
         deleteWirelessItemFormMap(m_activateConnectionItemMap,
                                   m_activatedNetListWidget, ssid);
-        showDesktopNotify(tr("WLAN Disconnected Successfully"), "networkdisconnected");
+//        showDesktopNotify(tr("WLAN Disconnected Successfully"), "networkdisconnected");
 
         QListWidgetItem *p_listWidgetItem = addEmptyItem(m_activatedNetListWidget);
         m_activateConnectionItemMap.insert(EMPTY_SSID, p_listWidgetItem);
@@ -812,6 +812,7 @@ void WlanPage::sendApStateChangeSignal(QString uuid,
     return;
 }
 
+#if 0
 void WlanPage::wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::State state,
                               NetworkManager::ActiveConnection::Reason reason)
 {
@@ -825,6 +826,7 @@ void WlanPage::wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::St
 
     return;
 }
+#endif
 
 void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
 {
@@ -922,7 +924,7 @@ void WlanPage::onConnectionStateChanged(QString uuid,
                 !m_activateConnectionItemMap.contains(ssid)) {
             qDebug() << "wlan remove before deactivated";
         } else {
-            wlanShowNotify(ssid, state, reason);
+//            wlanShowNotify(ssid, state, reason);
         }
     }
 
@@ -1450,7 +1452,6 @@ void WlanPage::setWirelessSwitchEnable(bool enable)
         m_wirelessConnectOpreation->setWirelessEnabled(enable);
         if (!enable) {
             m_netSwitch->setChecked(false);
-            m_netSwitch->setCheckable(false);
             m_activatedNetFrame->hide();
             m_activatedNetDivider->hide();
             m_inactivatedNetFrame->hide();

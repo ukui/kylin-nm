@@ -34,6 +34,11 @@ AddNetBtn::AddNetBtn(bool isWlan, QWidget *parent) : QPushButton(parent)
     this->setMaximumSize(QSize(16777215, 60));
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
+    QPalette pal = this->palette();
+    QColor color = pal.color(QPalette::Button);
+    color.setAlphaF(0.5);
+    pal.setColor(QPalette::Button, color);
+    this->setPalette(pal);
     QHBoxLayout *addLyt = new QHBoxLayout;
 
     QLabel *iconLabel = new QLabel();

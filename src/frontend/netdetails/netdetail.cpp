@@ -21,6 +21,7 @@
 #include "backend/kylinipv4arping.h"
 #include "backend/kylinipv6arping.h"
 //#include "xatom/xatom-helper.h"
+#include "networkmodeconfig.h"
 
 
 #define THEME_SCHAME "org.ukui.style"
@@ -454,7 +455,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 
     //配置页面
     if (isActive) {
-        int configType = getNetworkModeConfig(m_uuid);
+        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
         if (configType == -1) {
             configPage->setConfigState(KSC_FIREWALL_PUBLIC);
         } else {
@@ -976,13 +977,13 @@ bool NetDetail::updateConnect()
     }
 
     if (configPage != nullptr) {
-        int configType = getNetworkModeConfig(m_uuid);
+        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
         bool configPageChange = configPage->checkIsChanged(configType);
         int currentConfigType = configPage->getConfigState();
 //        qDebug () << Q_FUNC_INFO << __LINE__<< configPageChange;
 
         if (configPageChange) {
-            setNetworkModeConfig(m_uuid, m_deviceName, m_name, currentConfigType);
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(m_uuid, m_deviceName, m_name, currentConfigType);
 //            qDebug () <<Q_FUNC_INFO << __LINE__ << m_uuid << m_deviceName << m_name << currentConfigType;
         }
     }
@@ -1013,64 +1014,6 @@ bool NetDetail::checkWirelessSecurity(KySecuType secuType)
     }
     return true;
 }
-
-int NetDetail::getNetworkModeConfig(QString uuid)
-{
-    if (uuid.isEmpty()) {
-           qWarning()<< /*LOG_FLAG <<*/ "uuid is empty, so can not get network mode config";
-           return -1;
-       }
-
-
-       QDBusInterface dbusInterface("com.ksc.defender",
-                                 "/firewall",
-                                 "com.ksc.defender.firewall",
-                                 QDBusConnection::systemBus());
-
-
-       QDBusReply<int> reply = dbusInterface.call("get_networkModeConfig", uuid);
-       if (reply.isValid()) {
-           return reply.value();
-       } else {
-           qWarning() << "call get_networkModeConfig failed" << reply.error().message();
-       }
-       return -1;
-}
-
-void NetDetail::setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode)
-{
-    QDBusInterface dbusInterface("com.ksc.defender",
-                                  "/firewall",
-                                  "com.ksc.defender.firewall",
-                                  QDBusConnection::systemBus());
-
-
-        QDBusReply<int> reply = dbusInterface.call("set_networkModeConfig", uuid, cardName, ssid, mode);
-        if (reply.isValid()) {
-            qDebug() << "set_networkModeConfig" << ssid << uuid << cardName << mode << ",result" << reply.value();
-        } else {
-            qWarning() << "call set_networkModeConfig" << reply.error().message();
-        }
-}
-
-int NetDetail::breakNetworkConnect(QString uuid, QString cardName, QString ssid)
-{
-    QDBusInterface dbusInterface("com.ksc.defender",
-                              "/firewall",
-                              "com.ksc.defender.firewall",
-                              QDBusConnection::systemBus());
-
-
-    QDBusReply<int> reply = dbusInterface.call("break_networkConnect", uuid, cardName, ssid);
-    if (reply.isValid()) {
-        qDebug() << "break_networkConnect" << ssid << uuid << cardName << ",result" << reply.value();
-        return reply.value();
-    } else {
-        qWarning() << "call break_networkConnect failed" << reply.error().message();
-        return -1;
-    }
-}
-
 
 bool NetDetail::eventFilter(QObject *w, QEvent *event)
 {

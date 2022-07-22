@@ -109,11 +109,11 @@ public:
     }
 
     //安全中心-获取网络模式配置
-    int getNetworkModeConfig(QString uuid);
+    static int getNetworkModeConfig(QString uuid);
     //安全中心-设置网络模式配置
-    void setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode);
+    static void setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode);
     //安全中心-解除连接（用于防火墙处从正在使用的网络中删除）
-    int breakNetworkConnect(QString uuid, QString cardName, QString ssid);
+    static int breakNetworkConnect(QString uuid, QString cardName, QString ssid);
 
 signals:
     void deviceStatusChanged();

@@ -21,6 +21,7 @@
 #include "backend/kylinipv4arping.h"
 #include "backend/kylinipv6arping.h"
 //#include "xatom/xatom-helper.h"
+#include "networkmodeconfig.h"
 
 
 #define THEME_SCHAME "org.ukui.style"
@@ -454,7 +455,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 
     //配置页面
     if (isActive) {
-        int configType = getNetworkModeConfig(m_uuid);
+        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
         if (configType == -1) {
             configPage->setConfigState(KSC_FIREWALL_PUBLIC);
         } else {
@@ -976,13 +977,13 @@ bool NetDetail::updateConnect()
     }
 
     if (configPage != nullptr) {
-        int configType = getNetworkModeConfig(m_uuid);
+        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
         bool configPageChange = configPage->checkIsChanged(configType);
         int currentConfigType = configPage->getConfigState();
 //        qDebug () << Q_FUNC_INFO << __LINE__<< configPageChange;
 
         if (configPageChange) {
-            setNetworkModeConfig(m_uuid, m_deviceName, m_name, currentConfigType);
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(m_uuid, m_deviceName, m_name, currentConfigType);
 //            qDebug () <<Q_FUNC_INFO << __LINE__ << m_uuid << m_deviceName << m_name << currentConfigType;
         }
     }

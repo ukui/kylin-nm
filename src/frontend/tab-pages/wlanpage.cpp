@@ -19,6 +19,7 @@
  */
 #include "wlanpage.h"
 #include "kywirelessnetitem.h"
+#include "networkmodeconfig.h"
 #include <QEvent>
 #include <QDateTime>
 #include <QDebug>
@@ -937,7 +938,7 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         m_updateStrength = true;
 
-        int configType = getNetworkModeConfig(uuid);
+        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
 
         if (configType == -1) {
             FirewallDialog *fireWallDiaglog = new FirewallDialog();
@@ -945,23 +946,23 @@ void WlanPage::onConnectionStateChanged(QString uuid,
 
             connect(fireWallDiaglog, &FirewallDialog::setPrivateNetMode, this, [=](){
                 fireWallDiaglog->close();
-                setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
             });
 
             connect(fireWallDiaglog, &FirewallDialog::setPublicNetMode, this, [=](){
                 fireWallDiaglog->close();
-                setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
             });
 
             connect(fireWallDiaglog, &FirewallDialog::close, this, [=](){
-                setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
             });
 
             fireWallDiaglog->show();
         } else if (configType == KSC_FIREWALL_PUBLIC) {
-            setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
         } else if (configType == KSC_FIREWALL_PRIVATE) {
-            setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
         }
 
         updateActivatedArea(uuid, ssid, devName);
@@ -976,7 +977,7 @@ void WlanPage::onConnectionStateChanged(QString uuid,
             QListWidgetItem *p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
             updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
         }
-        breakNetworkConnect(uuid, devName, ssid);
+        NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, devName, ssid);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivating){
         m_updateStrength = false;
         if (m_activateConnectionItemMap.contains(ssid)) {

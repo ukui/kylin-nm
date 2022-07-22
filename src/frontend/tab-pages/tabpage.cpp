@@ -402,7 +402,7 @@ void FirewallDialog::initUI()
     connect(m_NoBtn, &QPushButton::clicked, this, &FirewallDialog::setPublicNetMode);
 }
 
-int TabPage::getNetworkModeConfig(QString uuid)
+int getNetworkModeConfig(QString uuid)
 {
     if (uuid.isEmpty()) {
            qWarning()<< /*LOG_FLAG <<*/ "uuid is empty, so can not get network mode config";
@@ -425,7 +425,7 @@ int TabPage::getNetworkModeConfig(QString uuid)
        return -1;
 }
 
-void TabPage::setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode)
+void setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode)
 {
     QDBusInterface dbusInterface("com.ksc.defender",
                                   "/firewall",
@@ -441,7 +441,7 @@ void TabPage::setNetworkModeConfig(QString uuid, QString cardName, QString ssid,
         }
 }
 
-int TabPage::breakNetworkConnect(QString uuid, QString cardName, QString ssid)
+int breakNetworkConnect(QString uuid, QString cardName, QString ssid)
 {
     QDBusInterface dbusInterface("com.ksc.defender",
                               "/firewall",

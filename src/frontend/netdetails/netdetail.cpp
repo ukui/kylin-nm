@@ -454,7 +454,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 
     //配置页面
     if (isActive) {
-        int configType = TabPage::getNetworkModeConfig(m_uuid);
+        int configType = getNetworkModeConfig(m_uuid);
         if (configType == -1) {
             configPage->setConfigState(KSC_FIREWALL_PUBLIC);
         } else {
@@ -976,13 +976,13 @@ bool NetDetail::updateConnect()
     }
 
     if (configPage != nullptr) {
-        int configType = TabPage::getNetworkModeConfig(m_uuid);
+        int configType = getNetworkModeConfig(m_uuid);
         bool configPageChange = configPage->checkIsChanged(configType);
         int currentConfigType = configPage->getConfigState();
 //        qDebug () << Q_FUNC_INFO << __LINE__<< configPageChange;
 
         if (configPageChange) {
-            TabPage::setNetworkModeConfig(m_uuid, m_deviceName, m_name, currentConfigType);
+            setNetworkModeConfig(m_uuid, m_deviceName, m_name, currentConfigType);
 //            qDebug () <<Q_FUNC_INFO << __LINE__ << m_uuid << m_deviceName << m_name << currentConfigType;
         }
     }

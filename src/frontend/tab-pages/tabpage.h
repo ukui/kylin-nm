@@ -82,6 +82,13 @@ void saveDeviceEnableState(QString deviceName, bool enable);
 void deleteDeviceEnableState(QString deviceName);
 void getDeviceEnableState(int type, QMap<QString, bool> &map);
 
+//安全中心-获取网络模式配置
+int getNetworkModeConfig(QString uuid);
+//安全中心-设置网络模式配置
+void setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode);
+//安全中心-解除连接（用于防火墙处从正在使用的网络中删除）
+int breakNetworkConnect(QString uuid, QString cardName, QString ssid);
+
 class TabPage : public QWidget
 {
     Q_OBJECT
@@ -107,13 +114,6 @@ public:
             m_inactivatedNetDivider->show();
         }
     }
-
-    //安全中心-获取网络模式配置
-    static int getNetworkModeConfig(QString uuid);
-    //安全中心-设置网络模式配置
-    static void setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode);
-    //安全中心-解除连接（用于防火墙处从正在使用的网络中删除）
-    static int breakNetworkConnect(QString uuid, QString cardName, QString ssid);
 
 signals:
     void deviceStatusChanged();

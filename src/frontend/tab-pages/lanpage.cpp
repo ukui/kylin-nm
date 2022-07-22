@@ -932,6 +932,7 @@ void LanPage::onConnectionStateChange(QString uuid,
 
     KyConnectItem *p_newItem = nullptr;
     QString deviceName = "";
+    QString ssid = "";
 
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         p_newItem = m_activeResourse->getActiveConnectionByUuid(uuid);
@@ -941,6 +942,34 @@ void LanPage::onConnectionStateChange(QString uuid,
         }
 
         deviceName = p_newItem->m_ifaceName;
+        ssid = p_newItem->m_connectName;
+
+        int configType = getNetworkModeConfig(uuid);
+
+        if (configType == -1) {
+            FirewallDialog *fireWallDiaglog = new FirewallDialog();
+            fireWallDiaglog->setWindowTitle(p_newItem->m_connectName);
+
+            connect(fireWallDiaglog, &FirewallDialog::setPrivateNetMode, this, [=](){
+                fireWallDiaglog->close();
+                setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
+            });
+
+            connect(fireWallDiaglog, &FirewallDialog::setPublicNetMode, this, [=](){
+                fireWallDiaglog->close();
+                setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
+            });
+
+            connect(fireWallDiaglog, &FirewallDialog::close, this, [=](){
+                setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
+            });
+            fireWallDiaglog->show();
+        }  else if (configType == KSC_FIREWALL_PUBLIC) {
+            setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
+        } else if (configType == KSC_FIREWALL_PRIVATE) {
+            setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
+        }
+
         updateActivatedConnectionArea(p_newItem);
         updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
@@ -952,8 +981,10 @@ void LanPage::onConnectionStateChange(QString uuid,
         }
 
         deviceName = p_newItem->m_ifaceName;
+        ssid = p_newItem->m_connectName;
         updateConnectionArea(p_newItem);
         updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
+        breakNetworkConnect(uuid, deviceName, ssid);
     } else if (state == NetworkManager::ActiveConnection::State::Activating) {
         deviceName = getConnectionDevice(uuid);
         if (deviceName == m_currentDeviceName) {

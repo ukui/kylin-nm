@@ -44,6 +44,7 @@
 #include "ipv6page.h"
 #include "securitypage.h"
 #include "creatnetpage.h"
+#include "configpage.h"
 #include "coninfo.h"
 #include "tab-pages/tabpage.h"
 #include "kwidget.h"
@@ -72,6 +73,13 @@ class NetDetail : public QWidget
 public:
     NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent = nullptr);
     ~NetDetail();
+
+    //安全中心-获取网络模式配置
+    int getNetworkModeConfig(QString uuid);
+    //安全中心-设置网络模式配置
+    void setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode);
+    //安全中心-解除连接（用于防火墙处从正在使用的网络中删除）
+    int breakNetworkConnect(QString uuid, QString cardName, QString ssid);
 protected:
     void paintEvent(QPaintEvent *event);
     void closeEvent(QCloseEvent *event);
@@ -128,6 +136,7 @@ private:
     Ipv6Page       * ipv6Page;
     SecurityPage   * securityPage;
     CreatNetPage   * createNetPage;
+    ConfigPage     * configPage;
 
     QWidget      * centerWidget;
     QWidget      * bottomWidget;

@@ -33,6 +33,29 @@
     </message>
 </context>
 <context>
+    <name>ConfigPage</name>
+    <message>
+        <location filename="../src/frontend/netdetails/configpage.cpp" line="61"/>
+        <source>Network profile type</source>
+        <translation>网络配置文件类型</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/configpage.cpp" line="64"/>
+        <source>Public(recommended)  Your device can not be discovered on the network. In most cases, use this feature when connected to a network at home, work, or a public location.</source>
+        <translation>公用（推荐）无法在网络上发现你的设备。在大多数情况下，在家庭、工作或公共位置连接到网络时使用此功能。</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/configpage.cpp" line="68"/>
+        <source>Private  Your device can be discovered on the network. Select this if you require file sharing or use applications that communicate over this network. You should know and trust the people and devices on the network.</source>
+        <translation>专用 可在网络上发现你的设备。如果需要文件共享或使用通过此网络通信的应用，请选择此项。你应该了解并信任网络上的人员和设备。</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/configpage.cpp" line="73"/>
+        <source>Config firewall and security settings</source>
+        <translation>配置防火墙和安全设置</translation>
+    </message>
+</context>
+<context>
     <name>CopyButton</name>
     <message>
         <source>Copied successfully</source>
@@ -420,14 +443,37 @@
         <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="105"/>
+        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="104"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="106"/>
+        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="105"/>
         <source>Connect</source>
         <translation>连接</translation>
+    </message>
+</context>
+<context>
+    <name>FirewallDialog</name>
+    <message>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="389"/>
+        <source>Allow your computer to be discovered by other computers and devices on this network？</source>
+        <translation>是否允许你的电脑被此网络上的其他电脑和设备发现？</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="392"/>
+        <source>It is recommended that you enable this feature on your home and work networks rather than public networks.</source>
+        <translation>建议你在家庭和工作网络上而非公共网络上启用此功能。</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="395"/>
+        <source>Yse</source>
+        <translation>是</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="396"/>
+        <source>No</source>
+        <translation>否</translation>
     </message>
 </context>
 <context>
@@ -552,42 +598,42 @@
 <context>
     <name>JoinHiddenWiFiPage</name>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="123"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="142"/>
         <source>Please enter the network name and security type</source>
         <translation>请输入您想要加入网络的名称和安全类型</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="127"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="146"/>
         <source>Network name(SSID)</source>
         <translation>网络名(SSID)</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="128"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="147"/>
         <source>Remember the Network</source>
         <translation>记住该网络</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="129"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="148"/>
         <source>Show Network List</source>
         <translation>显示网络列表</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="130"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="149"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="131"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="150"/>
         <source>Join</source>
         <translation>加入</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="134"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="153"/>
         <source>Required</source>
         <translation>必填</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="139"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="158"/>
         <source>Find and Join Wi-Fi</source>
         <translation>查找并加入Wi-Fi</translation>
     </message>
@@ -620,7 +666,7 @@
 <context>
     <name>LanPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="1204"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="1235"/>
         <source>No ethernet device avaliable</source>
         <translation>未检测到有线设备</translation>
     </message>
@@ -640,19 +686,17 @@
         <translation>其他网络</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="868"/>
         <source>LAN Disconnected Successfully</source>
-        <translation>有线网络已断开</translation>
+        <translation type="vanished">有线网络已断开</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="1228"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="1259"/>
         <source>Wired Device not carried</source>
         <translation>未插入网线</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="844"/>
         <source>LAN Connected Successfully</source>
-        <translation>有线网络已连接</translation>
+        <translation type="vanished">有线网络已连接</translation>
     </message>
 </context>
 <context>
@@ -671,30 +715,30 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="185"/>
-        <location filename="../src/frontend/mainwindow.cpp" line="306"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="188"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="309"/>
         <source>kylin-nm</source>
         <translation>网络工具</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="268"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="271"/>
         <source>LAN</source>
         <translatorcomment>有线网络</translatorcomment>
         <translation>有线网络</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="270"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="273"/>
         <source>WLAN</source>
         <translatorcomment>无线局域网</translatorcomment>
         <translation>无线局域网</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="303"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="306"/>
         <source>Show MainWindow</source>
         <translation>打开网络工具</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="304"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="307"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
         <translation>设置网络项</translation>
@@ -703,32 +747,32 @@
 <context>
     <name>NetDetail</name>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="67"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="68"/>
         <source>Kylin NM</source>
         <translation>麒麟网络设置工具</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="70"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="71"/>
         <source>kylin network desktop message</source>
         <translation>网络提示消息</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="267"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="282"/>
         <source>Detail</source>
         <translation>详情</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="268"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="283"/>
         <source>Ipv4</source>
         <translation>Ipv4</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="269"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="284"/>
         <source>Ipv6</source>
         <translation>Ipv6</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="271"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="286"/>
         <source>Security</source>
         <translation>安全</translation>
     </message>
@@ -737,84 +781,90 @@
         <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="286"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="288"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="295"/>
+        <source>Config</source>
+        <translation>配置</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="311"/>
         <source>Confirm</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="289"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="314"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="292"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="317"/>
         <source>Forget this network</source>
         <translation>忘记此网络</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="323"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="348"/>
         <source>Add Lan Connect</source>
         <translation>添加有线网络</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="328"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="353"/>
         <source>connect hiddin wlan</source>
         <translation>连接到隐藏WLAN</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="474"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="486"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="953"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="509"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="521"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1001"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="585"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="586"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="587"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="620"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="621"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="622"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="703"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="738"/>
         <source>start check ipv4 address conflict</source>
         <translation>开始检测ipv4地址冲突</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="720"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="755"/>
         <source>start check ipv6 address conflict</source>
         <translation>开始检测ipv6地址冲突</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="766"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="817"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="905"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="801"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="852"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="940"/>
         <source>ipv4 address conflict!</source>
         <translation>ipv4地址冲突！</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="825"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="913"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="860"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="948"/>
         <source>ipv6 address conflict!</source>
         <translation>ipv6地址冲突！</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="949"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="997"/>
         <source>this wifi no support enterprise type</source>
         <translation>此wifi不支持企业网类型</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="954"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1002"/>
         <source>this wifi no support None type</source>
         <translation>此wifi不支持空类型</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="959"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1007"/>
         <source>this wifi no support WPA2 type</source>
         <translation>此wifi不支持WPA2类型</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="962"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1010"/>
         <source>this wifi no support WPA3 type</source>
         <translation>此wifi不支持WPA3类型</translation>
     </message>
@@ -1089,33 +1139,33 @@
     <message>
         <location filename="../src/frontend/netdetails/securitypage.h" line="104"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>TabPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="64"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="65"/>
         <source>Current Device</source>
         <translation>当前网卡</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="69"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="70"/>
         <source>Devices Closed!</source>
         <translation>设备关闭！</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="118"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="119"/>
         <source>Settings</source>
         <translation>网络设置</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="173"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="174"/>
         <source>Kylin NM</source>
         <translation>麒麟网络设置工具</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="176"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="177"/>
         <source>kylin network applet desktop message</source>
         <translation>网络提示消息</translation>
     </message>
@@ -1210,22 +1260,22 @@
 <context>
     <name>WlanPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="105"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="104"/>
         <source>WLAN</source>
         <translation>无线局域网</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="90"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="89"/>
         <source>No wireless network card detected</source>
         <translation>未检测到无线网卡</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="107"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="106"/>
         <source>Activated WLAN</source>
         <translation>我的网络</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="117"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="116"/>
         <source>Other WLAN</source>
         <translation>其他网络</translation>
     </message>
@@ -1239,7 +1289,6 @@
         <translation>无线网络已连接</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="564"/>
         <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="820"/>
         <source>WLAN Disconnected Successfully</source>
         <translation>无线网络已断开</translation>

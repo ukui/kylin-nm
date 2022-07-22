@@ -116,7 +116,7 @@ void ConnectdevPage::addStaDevFrame(QString staMac, QString staName)
 
 void ConnectdevPage::clearStaListLayout()
 {
-    m_staMap.clear();
+
     if (m_staListLayout->layout() != NULL) {
         QLayoutItem* layoutItem;
         while ((layoutItem = m_staListLayout->layout()->takeAt(0)) != NULL) {
@@ -128,30 +128,27 @@ void ConnectdevPage::clearStaListLayout()
 
 void ConnectdevPage::onStaDevAdded(bool istrue, QString staMac, QString staName)
 {
-    if (!m_staMap.keys().contains(staMac)) {
-        onStaDevChanged(istrue, staMac, staName);
+    if (!m_staMap.contains(staMac)) {
+        m_staMap.insert(staMac, staName);
+        clearStaListLayout();
+        initStaDev();
+        resetLayoutHight();
     }
 }
 
 void ConnectdevPage::onStaDevRemoved(bool istrue, QString staMac, QString staName)
 {
-    if (m_staMap.keys().contains(staMac)) {
-        onStaDevChanged(istrue, staMac, staName);
+    if (m_staMap.contains(staMac)) {
+        if (m_staMap.remove(staMac)) {
+            clearStaListLayout();
+            initStaDev();
+            resetLayoutHight();
+        }
     }
 }
 
-void ConnectdevPage::onStaDevChanged(bool istrue, QString staMac, QString staName)
+void ConnectdevPage::resetLayoutHight()
 {
-    if (istrue) {
-        refreshStalist();
-    }
-}
-
-void ConnectdevPage::refreshStalist()
-{
-    clearStaListLayout();
-    getConnectStaDevice(m_staMap);
-    initStaDev();
     int height = 0;
     for (int i = 0; i < m_staListLayout->count(); i ++) {
         QWidget *w = m_staListLayout->itemAt(i)->widget();
@@ -167,6 +164,15 @@ void ConnectdevPage::refreshStalist()
         this->show();
     }
     this->update();
+}
+
+void ConnectdevPage::refreshStalist()
+{
+    m_staMap.clear();
+    getConnectStaDevice(m_staMap);
+    clearStaListLayout();
+    initStaDev();
+    resetLayoutHight();
 }
 
 void ConnectdevPage::onDropIntoBlacklistBtnClicked(QString staMac)

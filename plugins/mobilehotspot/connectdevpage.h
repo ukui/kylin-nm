@@ -65,6 +65,7 @@ private:
     void initNmDbus(QDBusInterface *interface);
 
     void onStaDevChanged(bool istrue, QString staMac, QString staName);
+    void resetLayoutHight();
 
 signals:
     void setStaIntoBlacklist(QString staMac);

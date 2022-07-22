@@ -130,7 +130,6 @@ void BlacklistPage::addBlacklistDevFrame(QString staMac, QString staName)
 
 void BlacklistPage::clearBlacklistLayout()
 {
-    m_blacklistMap.clear();
     if (m_blacklistLayout->layout() != NULL) {
         QLayoutItem* layoutItem;
         while ((layoutItem = m_blacklistLayout->layout()->takeAt(0)) != NULL) {
@@ -157,12 +156,8 @@ bool BlacklistPage::removeStaFromBlacklist(QString staMac)
     return true;
 }
 
-void BlacklistPage::refreshBlacklist()
+void BlacklistPage::resetLayoutHight()
 {
-    clearBlacklistLayout();
-    getBlacklistDevice(m_blacklistMap);
-    initBlacklistDev();
-
     int height = 0;
     for (int i = 0; i < m_blacklistLayout->count(); i ++) {
         QWidget *w = m_blacklistLayout->itemAt(i)->widget();
@@ -172,12 +167,21 @@ void BlacklistPage::refreshBlacklist()
     }
     this->setFixedHeight(height + m_titleLabel->height() + 8);
 
-    if (!m_blacklistMap.isEmpty()) {
-        this->show();
-    } else {
+    if (m_blacklistMap.isEmpty()) {
         this->hide();
+    } else {
+        this->show();
     }
     this->update();
+}
+
+void BlacklistPage::refreshBlacklist()
+{
+    m_blacklistMap.clear();
+    getBlacklistDevice(m_blacklistMap);
+    clearBlacklistLayout();
+    initBlacklistDev();
+    resetLayoutHight();
 }
 
 void BlacklistPage::onRemoveFromBlacklistBtnClicked(QString staMac)

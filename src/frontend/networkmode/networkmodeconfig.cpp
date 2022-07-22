@@ -37,9 +37,6 @@ NetworkModeConfig::NetworkModeConfig(QObject *parent) : QObject(parent)
                        "/firewall",
                        "com.ksc.defender.firewall",
                        QDBusConnection::systemBus());
-    if(!m_dbusInterface->isValid()) {
-        qWarning ()<< "init com.ksc.defender dbus error";
-    }
 }
 
 int NetworkModeConfig::getNetworkModeConfig(QString uuid)
@@ -49,27 +46,39 @@ int NetworkModeConfig::getNetworkModeConfig(QString uuid)
            return -1;
        }
 
-       QDBusReply<int> reply = m_dbusInterface->call("get_networkModeConfig", uuid);
-       if (reply.isValid()) {
-           return reply.value();
-       } else {
-           qWarning() << "call get_networkModeConfig failed" << reply.error().message();
-       }
-       return -1;
+    if(!m_dbusInterface->isValid()) {
+        qWarning ()<< "init com.ksc.defender dbus error";
+    }
+
+    QDBusReply<int> reply = m_dbusInterface->call("get_networkModeConfig", uuid);
+    if (reply.isValid()) {
+        return reply.value();
+    } else {
+        qWarning() << "call get_networkModeConfig failed" << reply.error().message();
+    }
+    return -1;
 }
 
 void NetworkModeConfig::setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode)
 {
-        QDBusReply<int> reply = m_dbusInterface->call("set_networkModeConfig", uuid, cardName, ssid, mode);
-        if (reply.isValid()) {
-            qDebug() << "set_networkModeConfig" << ssid << uuid << cardName << mode << ",result" << reply.value();
-        } else {
-            qWarning() << "call set_networkModeConfig" << reply.error().message();
-        }
+    if(!m_dbusInterface->isValid()) {
+        qWarning ()<< "init com.ksc.defender dbus error";
+    }
+
+    QDBusReply<int> reply = m_dbusInterface->call("set_networkModeConfig", uuid, cardName, ssid, mode);
+    if (reply.isValid()) {
+        qDebug() << "set_networkModeConfig" << ssid << uuid << cardName << mode << ",result" << reply.value();
+    } else {
+        qWarning() << "call set_networkModeConfig" << reply.error().message();
+    }
 }
 
 int NetworkModeConfig::breakNetworkConnect(QString uuid, QString cardName, QString ssid)
 {
+    if(!m_dbusInterface->isValid()) {
+        qWarning ()<< "init com.ksc.defender dbus error";
+    }
+
     QDBusReply<int> reply = m_dbusInterface->call("break_networkConnect", uuid, cardName, ssid);
     if (reply.isValid()) {
         qDebug() << "break_networkConnect" << ssid << uuid << cardName << ",result" << reply.value();

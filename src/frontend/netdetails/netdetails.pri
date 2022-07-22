@@ -1,6 +1,7 @@
 INCLUDEPATH += $$PWD
 
 HEADERS += \
+    $$PWD/configpage.h \
     $$PWD/coninfo.h \
     $$PWD/creatnetpage.h \
     $$PWD/customtabstyle.h \
@@ -13,6 +14,7 @@ HEADERS += \
     $$PWD/securitypage.h
 
 SOURCES += \
+    $$PWD/configpage.cpp \
     $$PWD/creatnetpage.cpp \
     $$PWD/customtabstyle.cpp \
     $$PWD/detailpage.cpp \

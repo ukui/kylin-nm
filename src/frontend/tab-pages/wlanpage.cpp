@@ -936,6 +936,34 @@ void WlanPage::onConnectionStateChanged(QString uuid,
             << "; state = " << state << "; reason = " << reason << Q_FUNC_INFO <<__LINE__;
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         m_updateStrength = true;
+
+        int configType = getNetworkModeConfig(uuid);
+
+        if (configType == -1) {
+            FirewallDialog *fireWallDiaglog = new FirewallDialog();
+            fireWallDiaglog->setWindowTitle(ssid);
+
+            connect(fireWallDiaglog, &FirewallDialog::setPrivateNetMode, this, [=](){
+                fireWallDiaglog->close();
+                setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
+            });
+
+            connect(fireWallDiaglog, &FirewallDialog::setPublicNetMode, this, [=](){
+                fireWallDiaglog->close();
+                setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
+            });
+
+            connect(fireWallDiaglog, &FirewallDialog::close, this, [=](){
+                setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
+            });
+
+            fireWallDiaglog->show();
+        } else if (configType == KSC_FIREWALL_PUBLIC) {
+            setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
+        } else if (configType == KSC_FIREWALL_PRIVATE) {
+            setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
+        }
+
         updateActivatedArea(uuid, ssid, devName);
         if (m_activateConnectionItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_activateConnectionItemMap.value(ssid);
@@ -948,6 +976,7 @@ void WlanPage::onConnectionStateChanged(QString uuid,
             QListWidgetItem *p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
             updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
         }
+        breakNetworkConnect(uuid, devName, ssid);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivating){
         m_updateStrength = false;
         if (m_activateConnectionItemMap.contains(ssid)) {

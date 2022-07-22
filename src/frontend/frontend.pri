@@ -5,6 +5,7 @@ include(tab-pages/tab-pages.pri)
 include(list-items/list-items.pri)
 include(netdetails/netdetails.pri)
 include(enterprise-wlan/enterprise-wlan.pri)
+include(networkmode/networkmode.pri)
 
 FORMS += \
     $$PWD/wificonfigdialog.ui
@@ -18,3 +19,6 @@ SOURCES += \
     $$PWD/customstyle.cpp \
     $$PWD/mainwindow.cpp \
     $$PWD/wificonfigdialog.cpp
+
+DISTFILES += \
+    $$PWD/networkmode/networkmode.pri

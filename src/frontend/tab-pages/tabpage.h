@@ -33,10 +33,10 @@
 #include <QProcess>
 #include <QDebug>
 #include "kylinnetworkdeviceresource.h"
+#include "firewalldialog.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
 #include "kborderlessbutton.h"
-#include "kdialog.h"
 
 using namespace kdk;
 
@@ -108,13 +108,6 @@ public:
         }
     }
 
-    //安全中心-获取网络模式配置
-    int getNetworkModeConfig(QString uuid);
-    //安全中心-设置网络模式配置
-    void setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode);
-    //安全中心-解除连接（用于防火墙处从正在使用的网络中删除）
-    int breakNetworkConnect(QString uuid, QString cardName, QString ssid);
-
 signals:
     void deviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName, int type);
@@ -160,29 +153,6 @@ public slots:
     virtual void onDeviceComboxIndexChanged(int currentIndex) = 0;
     void onPaletteChanged();
 
-};
-
-
-class FirewallDialog : public KDialog
-{
-    Q_OBJECT
-public:
-    explicit FirewallDialog(KDialog *parent = nullptr);
-    ~FirewallDialog();
-
-private:
-    void initUI();
-
-    QLabel * m_iconLabel = nullptr;
-    QLabel * m_contentLabel = nullptr;
-    QLabel * m_suggestLabel = nullptr;
-    QVBoxLayout *m_dialogLayout = nullptr;
-    QPushButton *m_YesBtn = nullptr;
-    QPushButton *m_NoBtn = nullptr;
-
-signals:
-    void setPublicNetMode();
-    void setPrivateNetMode();
 };
 
 #endif // TABPAGE_H

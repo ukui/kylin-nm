@@ -34,7 +34,8 @@
 #include "wlanpage.h"
 #include "netdetails/netdetail.h"
 #include "netdetails/joinhiddenwifipage.h"
-#include <ukuisdk/kylin-com4cxx.h>
+//删除此头文件，别在添加
+//#include <ukuisdk/kylin-com4cxx.h>
 
 #ifdef WITHKYSEC
 #include <kysec/libkysec.h>

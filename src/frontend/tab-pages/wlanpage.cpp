@@ -918,7 +918,9 @@ void WlanPage::onConnectionStateChanged(QString uuid,
 
     emit this->wlanConnectChanged(state);
 
-    if (m_connectResource->isApConnection(uuid)) {
+    bool isApConnection = m_connectResource->isApConnection(uuid);
+
+    if (isApConnection) {
         sendApStateChangeSignal(uuid, ssid, devName, state);
     } else {
         if (state == NetworkManager::ActiveConnection::State::Deactivated &&
@@ -938,31 +940,32 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         m_updateStrength = true;
 
-        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
+        if (!isApConnection) {
+            int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
+                if (configType == -1) {
+                    FirewallDialog *fireWallDiaglog = new FirewallDialog();
+                    fireWallDiaglog->setWindowTitle(ssid);
+                connect(fireWallDiaglog, &FirewallDialog::setPrivateNetMode, this, [=](){
+                    fireWallDiaglog->close();
+                    NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
+                });
 
-        if (configType == -1) {
-            FirewallDialog *fireWallDiaglog = new FirewallDialog();
-            fireWallDiaglog->setWindowTitle(ssid);
+                connect(fireWallDiaglog, &FirewallDialog::setPublicNetMode, this, [=](){
+                    fireWallDiaglog->close();
+                    NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
+                });
 
-            connect(fireWallDiaglog, &FirewallDialog::setPrivateNetMode, this, [=](){
-                fireWallDiaglog->close();
+                connect(fireWallDiaglog, &FirewallDialog::close, this, [=](){
+                    NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
+                });
+
+                fireWallDiaglog->show();
+
+            } else if (configType == KSC_FIREWALL_PUBLIC) {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
+            } else if (configType == KSC_FIREWALL_PRIVATE) {
                 NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
-            });
-
-            connect(fireWallDiaglog, &FirewallDialog::setPublicNetMode, this, [=](){
-                fireWallDiaglog->close();
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
-            });
-
-            connect(fireWallDiaglog, &FirewallDialog::close, this, [=](){
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
-            });
-
-            fireWallDiaglog->show();
-        } else if (configType == KSC_FIREWALL_PUBLIC) {
-            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
-        } else if (configType == KSC_FIREWALL_PRIVATE) {
-            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
+            }
         }
 
         updateActivatedArea(uuid, ssid, devName);

@@ -63,6 +63,7 @@ private:
     void initBlacklistDev();
     void addBlacklistDevFrame(QString staMac, QString staName);
     void clearBlacklistLayout();
+    void resetLayoutHight();
 
 private slots:
     void onsetStaIntoBlacklist(QString staMac);

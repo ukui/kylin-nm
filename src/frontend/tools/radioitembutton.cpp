@@ -34,6 +34,10 @@
 #define FOREGROUND_COLOR_PRESS_INACTIVE_DARK QColor(70,70,70,255)
 #define FOREGROUND_COLOR_NORMAL_ACTIVE QColor(55,144,250,255)
 #define FOREGROUND_COLOR_PRESS_ACTIVE QColor(36,109,212,255)
+#define COLOR_BRIGHT_TEXT qApp->palette().brightText().color()
+#define COLOR_HIGH_LIGHT qApp->palette().highlight().color()
+
+QColor mixColor(const QColor &c1, const QColor &c2, qreal bias);
 
 RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
 {
@@ -159,9 +163,10 @@ void RadioItemButton::paintEvent(QPaintEvent *event)
 void RadioItemButton::mousePressEvent(QMouseEvent *event)
 {
     if (m_isActivated) {
-        m_backgroundColor = qApp->palette().highlight().color();
+//        m_backgroundColor = qApp->palette().highlight().color();
+        m_backgroundColor = mixColor(COLOR_HIGH_LIGHT, COLOR_BRIGHT_TEXT, 0.2);
     } else {
-        m_backgroundColor = qApp->palette().brightText().color();
+        m_backgroundColor = COLOR_BRIGHT_TEXT;
         m_backgroundColor.setAlphaF(0.21);
     }
     this->update();
@@ -171,10 +176,10 @@ void RadioItemButton::mousePressEvent(QMouseEvent *event)
 void RadioItemButton::mouseReleaseEvent(QMouseEvent *event)
 {
     if (m_isActivated) {
-        m_backgroundColor = qApp->palette().highlight().color();
+        m_backgroundColor = COLOR_HIGH_LIGHT;
     } else {
-        m_backgroundColor = qApp->palette().brightText().color();
-        m_backgroundColor.setAlphaF(0.18);
+        m_backgroundColor = COLOR_BRIGHT_TEXT;
+        m_backgroundColor.setAlphaF(0.12);
     }
     this->update();
     return QPushButton::mouseReleaseEvent(event);
@@ -183,10 +188,10 @@ void RadioItemButton::mouseReleaseEvent(QMouseEvent *event)
 void RadioItemButton::enterEvent(QEvent *event)
 {
     if (m_isActivated) {
-        m_backgroundColor = qApp->palette().highlight().color();
+        m_backgroundColor = COLOR_HIGH_LIGHT;
     } else {
-        m_backgroundColor = qApp->palette().brightText().color();
-        m_backgroundColor.setAlphaF(0.32);
+        m_backgroundColor = COLOR_BRIGHT_TEXT;
+        m_backgroundColor.setAlphaF(0.15);
     }
     this->update();
     return QPushButton::enterEvent(event);
@@ -195,10 +200,10 @@ void RadioItemButton::enterEvent(QEvent *event)
 void RadioItemButton::leaveEvent(QEvent *event)
 {
     if (m_isActivated) {
-        m_backgroundColor = qApp->palette().highlight().color();
+        m_backgroundColor = COLOR_HIGH_LIGHT;
     } else {
-        m_backgroundColor = qApp->palette().brightText().color();
-        m_backgroundColor.setAlphaF(0.18);
+        m_backgroundColor = COLOR_BRIGHT_TEXT;
+        m_backgroundColor.setAlphaF(0.12);
     }
     this->update();
     return QPushButton::leaveEvent(event);
@@ -207,10 +212,10 @@ void RadioItemButton::leaveEvent(QEvent *event)
 void RadioItemButton::refreshButtonIcon()
 {
     if (m_isActivated) {
-        m_backgroundColor = qApp->palette().highlight().color();
+        m_backgroundColor = COLOR_HIGH_LIGHT;
         m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
     } else {
-        m_backgroundColor = qApp->palette().brightText().color();
+        m_backgroundColor = COLOR_BRIGHT_TEXT;
         m_backgroundColor.setAlphaF(0.18);
         if (qApp->palette().base().color().red() > MIDDLE_COLOR) {
             m_iconLabel->setPixmap(m_pixmap);

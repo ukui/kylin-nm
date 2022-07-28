@@ -508,11 +508,27 @@ void MainWindow::showByWaylandHelper()
 
 }
 
+void MainWindow::setCentralWidgetType(IconActiveType iconStatus)
+{
+    if (iconStatus == WLAN_CONNECTED || iconStatus == WLAN_CONNECTED_LIMITED) {
+         m_centralWidget->setCurrentIndex(WLAN_PAGE_INDEX);
+     } else if (iconStatus == ACTIVATING) {
+         if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activating)) {
+             m_centralWidget->setCurrentIndex(WLAN_PAGE_INDEX);
+         } else {
+             m_centralWidget->setCurrentIndex(LAN_PAGE_INDEX);
+         }
+     } else {
+         m_centralWidget->setCurrentIndex(LAN_PAGE_INDEX);
+     }
+}
+
 /**
  * @brief MainWindow::onTrayIconActivated 点击托盘图标的槽函数
  */
 void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
+    setCentralWidgetType(iconStatus);
     if (reason == QSystemTrayIcon::ActivationReason::Context) {
             m_trayIconMenu->popup(QCursor::pos());
     } else {

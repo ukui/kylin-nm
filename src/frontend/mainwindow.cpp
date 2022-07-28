@@ -510,7 +510,7 @@ void MainWindow::showByWaylandHelper()
 
 void MainWindow::setCentralWidgetType(IconActiveType iconStatus)
 {
-    if (iconStatus == WLAN_CONNECTED || WLAN_CONNECTED_LIMITED) {
+    if (iconStatus == WLAN_CONNECTED || iconStatus == WLAN_CONNECTED_LIMITED) {
          m_centralWidget->setCurrentIndex(WLAN_PAGE_INDEX);
      } else if (iconStatus == ACTIVATING) {
          if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activating)) {

@@ -306,7 +306,7 @@ void MainWindow::initTrayIcon()
     m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
     m_showSettingsAction = new QAction(tr("Settings"),this);
 
-    m_trayIcon->setToolTip(QString(tr("kylin-nm")));
+    m_trayIcon->setToolTip(QString(tr("Network tool")));
     m_showSettingsAction->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
 //    m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);

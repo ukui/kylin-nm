@@ -71,15 +71,15 @@ void FirewallDialog::initUI()
     QFont font = m_contentLabel->font();
     font.setWeight(75);
     m_contentLabel->setFont(font);
-    //是否允许你的电脑被此网络上的其他电脑和设备发现？
-    m_contentLabel->setText(tr("Allow your computer to be discovered by other computers and devices on this network？"));
+    //是否允许此网络上的其他设备发现这台电脑？
+    m_contentLabel->setText(tr("Allow other devices on this network to discover this computer?"));
     m_contentLabel->setWordWrap(true);
-    //建议你在家庭和工作网络上而非公共网络上启用此功能。
-    m_suggestLabel->setText(tr("It is recommended that you enable this feature on your home and work networks rather than public networks."));
+    //不建议在公共网络上开启此功能
+    m_suggestLabel->setText(tr("It is not recommended to enable this feature on public networks"));
     m_suggestLabel->setWordWrap(true);
 
-    m_YesBtn->setText(tr("Yse"));
-    m_NoBtn->setText(tr("No"));
+    m_YesBtn->setText(tr("Not allowed (recommended)"));
+    m_NoBtn->setText(tr("Allowed"));
 
     this->closeButton();
     this->mainWidget()->setLayout(m_dialogLayout);

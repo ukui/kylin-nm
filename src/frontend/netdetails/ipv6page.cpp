@@ -24,6 +24,8 @@
 #define  LAYOUT_SPACING 0
 #define  HINT_TEXT_MARGINS 8, 1, 0, 3
 #define  LABEL_HEIGHT 24
+#define FRAME_SPEED 150
+#define ICON_SIZE 16,16
 
 Ipv6Page::Ipv6Page(QWidget *parent):QFrame(parent)
 {
@@ -134,6 +136,7 @@ void Ipv6Page::initUI() {
     m_addressHintLabel = new QLabel(this);
     m_addressHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_addressHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
+    initConflictHintLable();
 
     m_gateWayHintLabel = new QLabel(this);
     m_gateWayHintLabel->setFixedHeight(LABEL_HEIGHT);
@@ -152,6 +155,12 @@ void Ipv6Page::initUI() {
     m_gateWayLabel->setText(tr("Default Gateway"));
     m_dnsLabel->setText(tr("Prefs DNS"));
     m_secDnsLabel->setText(tr("Alternative DNS"));
+
+    m_statusLabel = new QLabel(this);
+    m_statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    QHBoxLayout *pPwdLayout = new QHBoxLayout(ipv6AddressEdit);
+    pPwdLayout->addStretch();
+    pPwdLayout->addWidget(m_statusLabel);
 
     QPalette hintTextColor;
     hintTextColor.setColor(QPalette::WindowText, Qt::red);
@@ -196,6 +205,8 @@ void Ipv6Page::initUI() {
 
     QRegExp prefix_rx("\\b(?:(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\.){3}(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\b");
     lengthEdit->setValidator(new QRegExpValidator(prefix_rx,this));
+
+    initLoadingIcon();
 }
 
 void Ipv6Page::initComponent() {
@@ -207,6 +218,7 @@ void Ipv6Page::initComponent() {
     connect(ipv6ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(configChanged(int)));
 
     connect(ipv6AddressEdit, SIGNAL(textChanged(QString)), this, SLOT(onAddressTextChanged()));
+    connect(ipv6AddressEdit, SIGNAL(editingFinished()), this, SLOT(onAddressEidtFinished()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(onGatewayTextChanged()));
 
     connect(ipv6ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
@@ -259,8 +271,12 @@ void Ipv6Page::setEnableOfSaveBtn()
 void Ipv6Page::onAddressTextChanged()
 {
     if (!getIpv6EditState(ipv6AddressEdit->text())) {
+        m_iconLabel->hide();
+        m_textLabel->hide();
         m_addressHintLabel->setText(tr("Invalid address"));
     } else {
+        m_iconLabel->hide();
+        m_textLabel->hide();
         m_addressHintLabel->clear();
     }
 }
@@ -271,6 +287,15 @@ void Ipv6Page::onGatewayTextChanged()
         m_gateWayHintLabel->setText(tr("Invalid gateway"));
     } else {
         m_gateWayHintLabel->clear();
+    }
+}
+
+void Ipv6Page::onAddressEidtFinished()
+{
+    if (ipv6AddressEdit->isModified()) {
+        if (!ipv6AddressEdit->text().isEmpty() && getIpv6EditState(ipv6AddressEdit->text())) {
+            Q_EMIT ipv6EditFinished(ipv6AddressEdit->text());
+        }
     }
 }
 
@@ -312,6 +337,23 @@ bool Ipv6Page::checkConnectBtnIsEnabled()
     return true;
 }
 
+void Ipv6Page::initConflictHintLable()
+{
+    QIcon icon = QIcon::fromTheme("dialog-warning");
+    m_iconLabel = new QLabel(m_addressHintLabel);
+    m_iconLabel->setPixmap(icon.pixmap(ICON_SIZE));
+    m_textLabel = new QLabel(m_addressHintLabel);
+    m_textLabel->setText(tr("Address conflict"));
+    QHBoxLayout *conflictHintLayout = new QHBoxLayout();
+    conflictHintLayout->setContentsMargins(0, 0, 0, 0);
+    conflictHintLayout->addWidget(m_iconLabel);
+    conflictHintLayout->addWidget(m_textLabel);
+    conflictHintLayout->addStretch();
+    m_addressHintLabel->setLayout(conflictHintLayout);
+    m_iconLabel->hide();
+    m_textLabel->hide();
+}
+
 bool Ipv6Page::getIpv6EditState(QString text)
 {
     if (text.isEmpty()) {
@@ -346,5 +388,49 @@ int Ipv6Page::getPerfixLength(QString text)
     }
     qDebug() << "getPerfixLength" << length;
     return length;
+}
+
+void Ipv6Page::initLoadingIcon()
+{
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-3-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-4-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-5-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-6-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
+    m_iconTimer = new QTimer(this);
+    connect(m_iconTimer, &QTimer::timeout, this, &Ipv6Page::updateIcon);
+}
+
+void Ipv6Page::updateIcon()
+{
+    if (m_currentIconIndex > 6) {
+        m_currentIconIndex = 0;
+    }
+    m_statusLabel->setPixmap(m_loadIcons.at(m_currentIconIndex).pixmap(ICON_SIZE));
+    m_currentIconIndex ++;
+}
+
+void Ipv6Page::startLoading()
+{
+    m_iconTimer->start(FRAME_SPEED);
+}
+
+void Ipv6Page::stopLoading()
+{
+    m_iconTimer->stop();
+    m_statusLabel->clear();
+}
+
+void Ipv6Page::showIpv6AddressConflict(bool isConflict)
+{
+    if (isConflict) {
+        m_iconLabel->show();
+        m_textLabel->show();
+    } else {
+        m_iconLabel->hide();
+        m_textLabel->hide();
+    }
 }
 

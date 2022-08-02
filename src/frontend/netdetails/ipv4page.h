@@ -48,6 +48,10 @@ public:
 
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
 
+    void startLoading();
+    void stopLoading();
+    void showIpv4AddressConflict(bool isConflict);
+
 private:
     QComboBox *ipv4ConfigCombox;
     LineEdit *ipv4addressEdit;
@@ -56,7 +60,6 @@ private:
     LineEdit *firstDnsEdit;
     LineEdit *secondDnsEdit;
 
-private:
     QFormLayout *m_detailLayout;
     QVBoxLayout *mvBoxLayout;
     QLabel *m_configLabel;
@@ -71,6 +74,15 @@ private:
     QLabel *m_maskHintLabel;
     QLabel *m_gateWayEmptyLabel;
     QLabel *m_firstDnsEmptyLabel;
+
+    QLabel *m_statusLabel = nullptr;
+    QList<QIcon> m_loadIcons;
+    QTimer *m_iconTimer = nullptr;
+    int m_currentIconIndex =0;
+
+    QLabel *m_iconLabel;
+    QLabel *m_textLabel;
+
 private:
     void initUI();
     void initComponent();
@@ -80,17 +92,20 @@ private:
     bool netMaskIsValide(QString text);
     QString getNetMaskText(QString text);
     bool checkConnectBtnIsEnabled();
-
+    void initConflictHintLable();
+    void initLoadingIcon();
 
 private slots:
     void setEnableOfSaveBtn();
     void configChanged(int index);
     void onAddressTextChanged();
     void onNetMaskTextChanged();
+    void onAddressEidtFinished();
+    void updateIcon();
 
 Q_SIGNALS:
     void setIpv4PageState(bool);
-
+    void ipv4EditFinished(const QString &address);
 };
 
 #endif // IPV4PAGE_H

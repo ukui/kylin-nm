@@ -1,6 +1,18 @@
+kylin-nm-dev (3.20.0.2) v101; urgency=medium
+
+  * 低版本libkysdk-qtwidgets缺少setEchoModeBtnVisible方法
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Tue, 05 Jul 2022 16:59:52 +0800
+
+kylin-nm-dev (3.20.0.1) v101; urgency=medium
+
+  * add libkysdk-qtwidgets-dev build-depends.
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Tue, 05 Jul 2022 16:20:02 +0800
+
 kylin-nm-dev (3.20.0.0) v101; urgency=medium
 
-  * new
+  * Init project.
 
  -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 08 Jun 2022 10:00:53 +0800
 

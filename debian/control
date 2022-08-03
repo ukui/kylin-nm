@@ -20,6 +20,7 @@ Build-Depends: debhelper (>=9),
                libcap-dev,
 	       libnma-dev,
 	       libsecret-1-dev,
+               libkysdk-qtwidgets-dev
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: https://github.com/ukui/kylin-nm

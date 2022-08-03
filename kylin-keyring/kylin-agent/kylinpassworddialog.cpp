@@ -320,7 +320,6 @@ void KyPasswordDialog::initUI(QString dialogType)
         m_sdkPasswdEdit->setFixedSize(DEFAULT_EDIT_SIZE);
     }
     m_sdkPasswdEdit->setClearButtonEnabled(false);
-    m_sdkPasswdEdit->setEchoModeBtnVisible(true);
     m_sdkPasswdEdit->setState(LoginFailed);
     m_sdkPasswdEdit->setAttribute(Qt::WA_InputMethodEnabled, true);
     QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");

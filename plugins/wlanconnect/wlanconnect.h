@@ -131,7 +131,7 @@ private:
     QTimer * m_scanTimer = nullptr;
     QTimer * m_updateTimer = nullptr;
 
-    bool            m_firstLoad;
+    bool            m_firstLoad = true;
 
     QVBoxLayout*    m_mainLayout = nullptr;
     QFrame*         m_titleFrame = nullptr;

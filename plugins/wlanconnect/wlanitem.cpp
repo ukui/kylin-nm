@@ -53,7 +53,7 @@ WlanItem::WlanItem(bool isSimple, QWidget *parent)
 
     m_pwdLineEdit = new KPasswordEdit(m_pwdFrame);
     m_pwdLineEdit->setState(Ordinary);
-    m_pwdLineEdit->setEchoModeBtnVisible(true);
+//    m_pwdLineEdit->setEchoModeBtnVisible(true);
     m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
     QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");

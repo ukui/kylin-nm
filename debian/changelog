@@ -1,6 +1,12 @@
+kylin-nm-plugin (3.20.0.1) v101; urgency=medium
+
+  * fix error. 
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Tue, 05 Jul 2022 17:59:52 +0800
+
 kylin-nm-plugin (3.20.0.0) v101; urgency=medium
 
-  * new
+  * Init project. 
 
  -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 08 Jun 2022 10:00:53 +0800
 

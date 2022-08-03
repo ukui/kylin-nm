@@ -239,11 +239,12 @@ void NetConnect::initComponent() {
     getDeviceStatusMap(deviceStatusMap);
     if (deviceStatusMap.isEmpty()) {
         qDebug() << "[Netconnect] no device exist when init, set switch disable";
-        m_wiredSwitch->setCheckable(false);
         m_wiredSwitch->setChecked(false);
+        m_wiredSwitch->setCheckable(false);
         qDebug() << "m_wiredSwitch  setCheckable setChecked" << false;
     }
     initNet();
+    setSwitchStatus();
 
     if (!m_wiredSwitch->isChecked() || deviceStatusMap.isEmpty()) {
         hideLayout(m_scrollAreaLayout);
@@ -375,10 +376,16 @@ void NetConnect::setSwitchStatus()
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         bool status = m_switchGsettings->get(KEY_WIRED_SWITCH).toBool();
         qDebug() << "setSwitchStatus" << status;
+        m_wiredSwitch->setCheckable(true);
         m_wiredSwitch->blockSignals(true);
         m_wiredSwitch->setChecked(status);
         qDebug() << "m_wiredSwitch setChecked" << status;
         m_wiredSwitch->blockSignals(false);
+        if (deviceFrameMap.keys().isEmpty()) {
+            m_wiredSwitch->setChecked(false);
+            m_wiredSwitch->setCheckable(false);
+            status = false;
+        }
         if (!status) {
             hideLayout(m_scrollAreaLayout);
             m_titleDivider->show();
@@ -622,6 +629,7 @@ void NetConnect::onDeviceNameChanged(QString oldName, QString newName)
     if (deviceStatusMap.contains(newName)) {
         addDeviceFrame(newName, deviceStatusMap[newName]);
         initNetListFromDevice(newName);
+        setSwitchStatus();
     }
 }
 
@@ -877,6 +885,7 @@ void NetConnect::onDeviceAdd(QString deviceName)
 {
     addDeviceFrame(deviceName, true);
     initNetListFromDevice(deviceName);
+    setSwitchStatus();
 }
 
 void NetConnect::onDeviceRemove(QString deviceName)
@@ -886,4 +895,5 @@ void NetConnect::onDeviceRemove(QString deviceName)
         return;
     }
     removeDeviceFrame(deviceName);
+    setSwitchStatus();
 }

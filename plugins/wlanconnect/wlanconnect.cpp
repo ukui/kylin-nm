@@ -272,8 +272,8 @@ void WlanConnect::initComponent() {
     getDeviceList(deviceList);
     if (deviceList.isEmpty()) {
         qDebug() << "[WlanConnect]no device exist when init, set switch disable";
-        m_wirelessSwitch->setCheckable(false);
         m_wirelessSwitch->setChecked(false);
+        m_wirelessSwitch->setCheckable(false);
         qDebug() << "m_wirelessSwitch  setCheckable setChecked" << false;
     }
 
@@ -444,6 +444,7 @@ void WlanConnect::onDeviceNameChanged(QString oldName, QString newName)
     if (deviceList.contains(newName)) {
         addDeviceFrame(newName);
         initNetListFromDevice(newName);
+        setSwitchStatus(manager->getWirelessEnabled());
     }
 }
 
@@ -579,10 +580,11 @@ void WlanConnect::getDeviceList(QStringList &list)
 //设置开关
 void WlanConnect::setSwitchStatus(bool status)
 {
+    m_wirelessSwitch->setCheckable(true);
     m_wirelessSwitch->blockSignals(true);
     m_wirelessSwitch->setChecked(status);
     m_wirelessSwitch->blockSignals(false);
-    if (!m_wirelessSwitch->isChecked()) {
+    if (!status) {
         hideLayout(m_scrollAreaLayout);
         m_titleDivider->show();
     } else {
@@ -732,7 +734,8 @@ void WlanConnect::removeDeviceFrame(QString devName)
         item->disconnect(this);
         deviceFrameMap.remove(devName);
     }
-    getDeviceList(deviceList);
+//    getDeviceList(deviceList);
+    deviceList.removeOne(devName);
 }
 
 //增加ap
@@ -908,10 +911,7 @@ void WlanConnect::onWirelessConnectionUpdate(QString deviceName, QString ssid, Q
 void WlanConnect::onWirelessDeviceAdd(QString deviceName)
 {
     addDeviceFrame(deviceName);
-    if (manager->getWirelessEnabled()) {
-        setSwitchStatus(true);
-        m_wirelessSwitch->setCheckable(true);
-    }
+    setSwitchStatus(manager->getWirelessEnabled());
 }
 
 void WlanConnect::onWirelessDeviceRemove(QString deviceName)

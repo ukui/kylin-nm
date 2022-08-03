@@ -136,6 +136,7 @@ void WlanPage::onWlanSwithGsettingsChanged(const QString &key)
 void WlanPage::initWlanSwitchState()
 {
     bool wirelessGsetting = true;
+    bool wirelessEnabled = m_wirelessConnectOpreation->getWirelessEnabled();
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
         if (m_switchGsettings->keys().contains(WIRELESS_SWITCH)) {
@@ -144,18 +145,18 @@ void WlanPage::initWlanSwitchState()
                 m_netSwitch->setChecked(false);
             } else {
                 wirelessGsetting = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
-                if (m_wirelessConnectOpreation->getWirelessEnabled()
+                if (wirelessEnabled
                         != wirelessGsetting) {
-                    //以gsetting为准
-                    m_wirelessConnectOpreation->setWirelessEnabled(wirelessGsetting);
+                    //以后端状态为准
+                    m_switchGsettings->set(WIRELESS_SWITCH, wirelessEnabled);
                 }
-                m_netSwitch->setChecked(wirelessGsetting);
+                m_netSwitch->setChecked(wirelessEnabled);
             }
             connect(m_switchGsettings, &QGSettings::changed, this, &WlanPage::onWlanSwithGsettingsChanged);
         }
     }
-    m_netSwitch->setChecked(wirelessGsetting);
-    m_wlanSwitchEnable = wirelessGsetting;
+    m_netSwitch->setChecked(wirelessEnabled);
+    m_wlanSwitchEnable = wirelessEnabled;
 }
 
 void WlanPage::initTimer()

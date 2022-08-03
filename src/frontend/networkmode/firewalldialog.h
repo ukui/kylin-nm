@@ -35,10 +35,13 @@ class FirewallDialog : public KDialog
 public:
     explicit FirewallDialog(KDialog *parent = nullptr);
     ~FirewallDialog();
+    void setUuid(QString uuid) {
+        m_uuid = uuid;
+    }
 
 private:
     void initUI();
-
+    QString m_uuid;
     QLabel * m_iconLabel = nullptr;
     QLabel * m_contentLabel = nullptr;
     QLabel * m_suggestLabel = nullptr;
@@ -49,5 +52,12 @@ private:
 signals:
     void setPublicNetMode();
     void setPrivateNetMode();
+
+public slots:
+    void closeMyself(QString uuid, int status) {
+        if (uuid == m_uuid && status == 4) {
+            this->close();
+        }
+    }
 };
 #endif // FIREWALLDIALOG_H

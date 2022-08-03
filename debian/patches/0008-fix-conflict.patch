@@ -1,0 +1,45 @@
+From: jzxc95 <907297917@qq.com>
+Date: Wed, 3 Aug 2022 16:24:54 +0800
+Subject: fix conflict
+
+---
+ src/frontend/tab-pages/wlanpage.cpp | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/src/frontend/tab-pages/wlanpage.cpp b/src/frontend/tab-pages/wlanpage.cpp
+index feaff4a..f968eae 100644
+--- a/src/frontend/tab-pages/wlanpage.cpp
++++ b/src/frontend/tab-pages/wlanpage.cpp
+@@ -136,6 +136,7 @@ void WlanPage::onWlanSwithGsettingsChanged(const QString &key)
+ void WlanPage::initWlanSwitchState()
+ {
+     bool wirelessGsetting = true;
++    bool wirelessEnabled = m_wirelessConnectOpreation->getWirelessEnabled();
+     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
+         if (m_switchGsettings->keys().contains(WIRELESS_SWITCH)) {
+@@ -144,18 +145,18 @@ void WlanPage::initWlanSwitchState()
+                 m_netSwitch->setChecked(false);
+             } else {
+                 wirelessGsetting = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
+-                if (m_wirelessConnectOpreation->getWirelessEnabled()
++                if (wirelessEnabled
+                         != wirelessGsetting) {
+-                    //以gsetting为准
+-                    m_wirelessConnectOpreation->setWirelessEnabled(wirelessGsetting);
++                    //以后端状态为准
++                    m_switchGsettings->set(WIRELESS_SWITCH, wirelessEnabled);
+                 }
+-                m_netSwitch->setChecked(wirelessGsetting);
++                m_netSwitch->setChecked(wirelessEnabled);
+             }
+             connect(m_switchGsettings, &QGSettings::changed, this, &WlanPage::onWlanSwithGsettingsChanged);
+         }
+     }
+-    m_netSwitch->setChecked(wirelessGsetting);
+-    m_wlanSwitchEnable = wirelessGsetting;
++    m_netSwitch->setChecked(wirelessEnabled);
++    m_wlanSwitchEnable = wirelessEnabled;
+ }
+ 
+ void WlanPage::initTimer()

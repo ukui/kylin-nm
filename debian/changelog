@@ -1,3 +1,9 @@
+kylin-nm (3.14.0.0+0512-0k9) yangtz; urgency=medium
+
+  * close-cd #131247 登录界面连接wifi后，登录桌面任务栏网络工具显示未连接，wifi依旧关闭状态
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 03 Aug 2022 16:12:40 +0800
+
 kylin-nm (3.14.0.0+0512-0k8) yangtz; urgency=medium
 
   * close-cd #127890 开启无线局域网后关闭，重新打开控制面板，无线局域网处显示网卡名称

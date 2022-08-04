@@ -39,12 +39,6 @@ protected:
 private:
     void initUI();
 
-    static inline qreal mixQreal(qreal a, qreal b, qreal bias)
-        {
-            return a + (b - a) * bias;
-        }
-        QColor mixColor(const QColor &c1, const QColor &c2, qreal bias);
-
 private:
     QColor m_backgroundColor;
     QColor m_foregroundColor;

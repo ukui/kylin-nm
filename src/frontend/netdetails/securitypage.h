@@ -59,6 +59,7 @@ private:
 //    QFormLayout *mSecuLayout;
     QGridLayout *topLayout;
     QGridLayout *bottomLayout;
+    QVBoxLayout *mainLayout;
 
     QLabel *secuTypeLabel;
     QLabel *pwdLabel;
@@ -99,6 +100,10 @@ private:
     LineEdit *userNameEdit;
     KPasswordEdit *userPwdEdit = nullptr;
     QCheckBox *userPwdFlagBox;
+
+    QLabel *m_emptyLabel = nullptr;
+    QLabel *m_checkLabel = nullptr;
+    QCheckBox *m_rememberCheckBox = nullptr;
 
     QString hintRequired = tr("Required"); //必填
     QString emptyhint = tr(" ");

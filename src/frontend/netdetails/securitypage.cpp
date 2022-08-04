@@ -24,7 +24,7 @@
 
 #define  DETAIL_MIN_LABEL_WIDTH  80
 #define  DETAIL_MIN_EDIT_WIDTH  390
-#define  MIN_LABEL_WIDTH  138
+#define  MIN_LABEL_WIDTH  146
 #define  MIN_EDIT_WIDTH  286
 
 SecurityPage::SecurityPage(bool isNetDetailPage, QWidget *parent) : isDetailPage(isNetDetailPage), QFrame(parent)
@@ -35,6 +35,7 @@ SecurityPage::SecurityPage(bool isNetDetailPage, QWidget *parent) : isDetailPage
 
 void SecurityPage::initUI()
 {
+    mainLayout = new QVBoxLayout(this);
     secuTypeLabel = new QLabel(this);
     pwdLabel = new QLabel(this);
     //企业wifi共有
@@ -82,6 +83,21 @@ void SecurityPage::initUI()
     queryLayout->addWidget(userPwdFlagLabel);
     queryLayout->addStretch();
 
+    //记住该网络复选框
+    m_emptyLabel = new QLabel(this);
+    m_emptyLabel->setMinimumWidth(MIN_LABEL_WIDTH - 8);
+    m_checkLabel = new QLabel(this);
+    m_checkLabel->setText(tr("Remember the Network")); //记住该网络
+    m_rememberCheckBox = new QCheckBox(this);
+    m_rememberCheckBox->setChecked(true);
+    QWidget *checkWidget = new QWidget(this);
+    QHBoxLayout *rememberLayout = new QHBoxLayout(checkWidget);
+    rememberLayout->setContentsMargins(0, 0, 0, 0);
+    rememberLayout->addWidget(m_emptyLabel);
+    rememberLayout->addWidget(m_rememberCheckBox);
+    rememberLayout->addWidget(m_checkLabel);
+    rememberLayout->addStretch();
+
 //    mSecuLayout = new QFormLayout(this);
 //    mSecuLayout->setContentsMargins(0, 0, 0, 0);
 //    mSecuLayout->addRow(secuTypeLabel, secuTypeCombox);
@@ -99,7 +115,7 @@ void SecurityPage::initUI()
 //    mSecuLayout->addRow(userPwdLabel, userPwdEdit);
 //    mSecuLayout->addRow(userPwdFlagBox, userPwdFlagLabel);
 
-    topLayout = new QGridLayout(this);
+    topLayout = new QGridLayout();
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setVerticalSpacing(16);
     // 安全 Label和选项框 第0行，第0列，第1列
@@ -159,18 +175,24 @@ void SecurityPage::initUI()
     bottomLayout->addWidget(pwdOptionLabel, 6, 0);
     bottomLayout->addWidget(pwdOptionCombox, 6, 1);
 
-    if(isDetailPage) {
+    if (isDetailPage) {
+        checkWidget->hide();
         topLayout->addWidget(queryWidget, 7, 1);
         changeColumnWidthWithSecuType();
     } else {
         queryWidget->hide();
         topLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH);
         topLayout->setColumnMinimumWidth(1, MIN_EDIT_WIDTH);
-        bottomLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH);
+        bottomLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH - 8);
     }
 
     topLayout->addWidget(tlsWidget, 7, 0, 6, 2);
 
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(0);
+    mainLayout->addLayout(topLayout);
+    mainLayout->addWidget(checkWidget);
+    mainLayout->addStretch();
 
     secuTypeLabel->setText(tr("Security"));
     pwdLabel->setText(tr("Password"));
@@ -667,6 +689,7 @@ void SecurityPage::updateSecurityChange(KyWirelessConnectSetting &setting)
     } else if (secuTypeCombox->currentData().toInt() == WPA3_PERSONAL) {
         setting.m_type = SAE;
     }
+    setting.isAutoConnect = m_rememberCheckBox->isChecked();
 }
 
 bool SecurityPage::checkConnectBtnIsEnabled()
@@ -872,7 +895,7 @@ void SecurityPage::changeColumnWidthWithSecuType()
             eapMethodCombox->currentData().toInt() == TLS) {
         topLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH);
         topLayout->setColumnMinimumWidth(1, MIN_EDIT_WIDTH);
-        bottomLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH);
+        bottomLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH - 8);
 
     } else {
         topLayout->setColumnMinimumWidth(0, DETAIL_MIN_LABEL_WIDTH);

@@ -65,16 +65,12 @@ private:
     QLabel *m_nameLabel;
     LineEdit *m_nameEdit;
 
-    QLabel *m_emptyLabel;
-    QLabel *m_checkLabel;
-    QCheckBox *m_rememberCheckBox = nullptr;
-
     Divider *m_bottomDivider = nullptr;
     KBorderlessButton *m_showListBtn;
     QPushButton *m_cancelBtn;
     QPushButton *m_joinBtn;
 
-    QScrollArea *m_scrollArea;
+    QScrollArea *m_hiddenWifiScrollArea;
     QVBoxLayout *m_pageLayout;
     QHBoxLayout *m_topLayout;
     QVBoxLayout *m_centerVBoxLayout;

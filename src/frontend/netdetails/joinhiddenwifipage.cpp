@@ -33,6 +33,7 @@
 #define  PSK_SCRO_HEIGHT  182
 #define  PEAP_SCRO_HEIGHT  340
 #define  TLS_SCRO_HEIGHT  560
+#define  MEDIUM_WEIGHT_VALUE  57
 
 JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
     :m_devName(devName),
@@ -72,24 +73,23 @@ void JoinHiddenWiFiPage::initUI()
     m_nameLabel = new QLabel(this);
     m_nameEdit =new LineEdit(this);
 
-    m_emptyLabel = new QLabel(this);
-    m_checkLabel = new QLabel(this);
-    m_rememberCheckBox = new QCheckBox(this);
-
     m_bottomDivider = new Divider(this);
     m_showListBtn = new KBorderlessButton(this);
     m_cancelBtn =new QPushButton(this);
     m_joinBtn =new QPushButton(this);
 
-    m_scrollArea = new QScrollArea(this);
-    m_scrollArea->setFrameShape(QFrame::NoFrame);
-    m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_hiddenWifiScrollArea = new QScrollArea(this);
+    m_hiddenWifiScrollArea->setFrameShape(QFrame::NoFrame);
+    m_hiddenWifiScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    QPalette pa = m_hiddenWifiScrollArea->palette();
+    pa.setBrush(QPalette::Window, Qt::transparent);
+    m_hiddenWifiScrollArea->setPalette(pa);
 
     m_pageLayout = new QVBoxLayout(this);
     m_pageLayout->setContentsMargins(LAYOUT_MARGINS);
     m_pageLayout->setSpacing(0);
     m_pageLayout->addWidget(m_topWidget);
-    m_pageLayout->addWidget(m_scrollArea);
+    m_pageLayout->addWidget(m_hiddenWifiScrollArea);
     m_pageLayout->addWidget(m_bottomDivider);
     m_pageLayout->addWidget(m_bottomWidget);
     this->mainWidget()->setLayout(m_pageLayout);
@@ -108,26 +108,14 @@ void JoinHiddenWiFiPage::initUI()
     ssidLayout->addWidget(m_nameLabel);
     ssidLayout->addWidget(m_nameEdit);
 
-    //记住该网络复选框
-    QWidget *checkWidget = new QWidget(this);
-    QHBoxLayout *checkLayout = new QHBoxLayout(checkWidget);
-    checkLayout->setContentsMargins(LAYOUT_MARGINS);
-    m_emptyLabel->setMinimumWidth(LABEL_MIN_WIDTH - 8);
-    m_rememberCheckBox->setChecked(true);
-    checkLayout->addWidget(m_emptyLabel);
-    checkLayout->addWidget(m_rememberCheckBox);
-    checkLayout->addWidget(m_checkLabel);
-    checkLayout->addStretch();
-
     m_centerVBoxLayout = new QVBoxLayout(m_centerWidget);
     m_centerVBoxLayout->setContentsMargins(CENTER_LAYOUT_MARGINS);
     m_centerVBoxLayout->setSpacing(0);
     m_centerVBoxLayout->addWidget(ssidWidget);
     m_centerVBoxLayout->addSpacing(LAYOUT_SPACING);
     m_centerVBoxLayout->addWidget(m_secuWidget);
-    m_centerVBoxLayout->addWidget(checkWidget);
     m_centerVBoxLayout->addStretch();
-    m_scrollArea->setWidget(m_centerWidget);
+    m_hiddenWifiScrollArea->setWidget(m_centerWidget);
 
     //底部按钮
     m_bottomLayout = new QHBoxLayout(m_bottomWidget);
@@ -141,10 +129,9 @@ void JoinHiddenWiFiPage::initUI()
     //请输入您想要加入网络的名称和安全类型
    m_descriptionLabel->setText(tr("Please enter the network name and security type"));
    QFont font = m_descriptionLabel->font();
-   font.setWeight(75);
+   font.setWeight(MEDIUM_WEIGHT_VALUE);
    m_descriptionLabel->setFont(font);
    m_nameLabel->setText(tr("Network name(SSID)")); //网络名(SSID)
-   m_checkLabel->setText(tr("Remember the Network")); //记住该网络
    m_showListBtn->setText(tr("Show Network List")); //显示网络列表
    m_cancelBtn->setText(tr("Cancel"));
    m_joinBtn->setText(tr("Join"));
@@ -152,9 +139,6 @@ void JoinHiddenWiFiPage::initUI()
    m_nameEdit->setMaxLength(MAX_NAME_LENGTH);
    m_nameEdit->setPlaceholderText(tr("Required")); //必填
 
-   QPalette pa = m_scrollArea->palette();
-   pa.setBrush(QPalette::Window, Qt::transparent);
-   m_scrollArea->setPalette(pa);
    this->setWindowTitle(tr("Find and Join Wi-Fi"));
    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
 
@@ -196,7 +180,6 @@ void JoinHiddenWiFiPage::onBtnJoinClicked()
     connSettingInfo.m_ssid = m_nameEdit->text();
     connSettingInfo.setConnectName(connSettingInfo.m_ssid);
     connSettingInfo.setIfaceName(m_devName);
-    connSettingInfo.m_isAutoConnect = m_rememberCheckBox->isChecked();
     connSettingInfo.m_secretFlag = 0;
 
     KySecuType secuType;

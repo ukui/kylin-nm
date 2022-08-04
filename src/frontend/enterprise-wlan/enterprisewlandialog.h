@@ -21,7 +21,11 @@
 #define ENTERPRISEWLANDIALOG_H
 #include <QDialog>
 #include <QPushButton>
+#include <QScrollArea>
+#include <QPainter>
+
 #include "securitypage.h"
+#include "divider.h"
 #include "kywirelessnetitem.h"
 #include "coninfo.h"
 
@@ -34,6 +38,7 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *event);
+    void paintEvent(QPaintEvent *event);
 
 private:
     void initUI(); //初始化UI界面
@@ -62,13 +67,16 @@ private:
     QLabel       *m_titleLabel = nullptr;
     QPushButton  *m_closeBtn = nullptr;
 
-    QHBoxLayout  *m_ssidLayout = nullptr;
-    QLabel       *m_ssidTitleLabel = nullptr;
+    QWidget      *m_centerWidget = nullptr;
+    QLabel       *m_descriptionLabel = nullptr;
     QLabel       *m_ssidLabel = nullptr;
 
     SecurityPage *m_securityPage = nullptr;
 
-    QHBoxLayout  *m_btnLayout = nullptr;
+    QScrollArea *m_enterWlanScrollArea = nullptr;
+
+    Divider *m_bottomDivider = nullptr;
+
     QPushButton  *m_cancelBtn = nullptr;
     QPushButton  *m_connectBtn = nullptr;
 

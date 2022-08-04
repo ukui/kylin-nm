@@ -36,6 +36,8 @@
 
 #define BUTTON_SIZE 36,36
 
+QColor mixColor(const QColor &c1, const QColor &c2, qreal bias);
+
 InfoButton::InfoButton(QWidget *parent) : QPushButton(parent)
 {
     this->setFixedSize(BUTTON_SIZE);
@@ -54,26 +56,6 @@ void InfoButton::onPaletteChanged()
 {
     m_foregroundColor = FOREGROUND_COLOR_NORMAL;
     this->repaint();
-}
-
-QColor InfoButton::mixColor(const QColor &c1, const QColor &c2, qreal bias)
-{
-    if (bias <= 0.0) {
-         return c1;
-     }
-     if (bias >= 1.0) {
-         return c2;
-     }
-     if (qIsNaN(bias)) {
-         return c1;
-     }
-
-     qreal r = mixQreal(c1.redF(),   c2.redF(),   bias);
-     qreal g = mixQreal(c1.greenF(), c2.greenF(), bias);
-     qreal b = mixQreal(c1.blueF(),  c2.blueF(),  bias);
-     qreal a = mixQreal(c1.alphaF(), c2.alphaF(), bias);
-
-     return QColor::fromRgbF(r, g, b, a);
 }
 
 void InfoButton::paintEvent(QPaintEvent *event)

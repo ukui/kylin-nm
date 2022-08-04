@@ -129,6 +129,7 @@ private slots:
     void onConnectButtonClicked();
     void onMenuTriggered(QAction *action);
     void onEnterpriseWlanDialogClose(bool isShow);
+    void setConnectButtonState();
 };
 
 #endif // WLANLISTITEM_H

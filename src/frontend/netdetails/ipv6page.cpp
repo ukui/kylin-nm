@@ -270,13 +270,12 @@ void Ipv6Page::setEnableOfSaveBtn()
 
 void Ipv6Page::onAddressTextChanged()
 {
+    m_iconLabel->hide();
+    m_textLabel->hide();
+
     if (!getIpv6EditState(ipv6AddressEdit->text())) {
-        m_iconLabel->hide();
-        m_textLabel->hide();
         m_addressHintLabel->setText(tr("Invalid address"));
     } else {
-        m_iconLabel->hide();
-        m_textLabel->hide();
         m_addressHintLabel->clear();
     }
 }
@@ -344,7 +343,7 @@ void Ipv6Page::initConflictHintLable()
     m_iconLabel->setPixmap(icon.pixmap(ICON_SIZE));
     m_textLabel = new QLabel(m_addressHintLabel);
     m_textLabel->setText(tr("Address conflict"));
-    QHBoxLayout *conflictHintLayout = new QHBoxLayout();
+    QHBoxLayout *conflictHintLayout = new QHBoxLayout(m_addressHintLabel);
     conflictHintLayout->setContentsMargins(0, 0, 0, 0);
     conflictHintLayout->addWidget(m_iconLabel);
     conflictHintLayout->addWidget(m_textLabel);

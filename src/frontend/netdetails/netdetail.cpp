@@ -37,7 +37,8 @@
 #define  WINDOW_HEIGHT 602
 #define  ICON_SIZE 22,22
 #define  TITLE_LAYOUT_MARGINS 9,9,0,0
-#define  LAYOUT_MARGINS 0,0,0,0
+#define  CENTER_LAYOUT_MARGINS 24,0,0,0
+#define  BOTTOM_LAYOUT_MARGINS 24,0,24,0
 #define  BOTTOM_LAYOUT_SPACING 16
 #define  PAGE_LAYOUT_SPACING 1
 #define  DETAIL_PAGE_NUM 0
@@ -49,6 +50,9 @@
 #define  PAGE_MIN_HEIGHT 40
 #define  LAN_TAB_WIDTH 180
 #define  WLAN_TAB_WIDTH 240
+#define  SCRO_WIDTH 472
+#define  PEAP_SCRO_HEIGHT  300
+#define  TLS_SCRO_HEIGHT  480
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -131,7 +135,7 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     initComponent();
     getConInfo(m_info);
     pagePadding(name,isWlan);
-
+    setSecuPageHeight();
     connect(qApp, &QApplication::paletteChanged, this, &NetDetail::onPaletteChanged);
 
     isCreateOk = !(m_isCreateNet && !isWlan);
@@ -244,7 +248,8 @@ void NetDetail::centerToScreen()
 void NetDetail::initUI()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(24,9,24,24);
+    mainLayout->setContentsMargins(0,9,0,24);
+    mainLayout->setSpacing(24);
 
     detailPage = new DetailPage(isWlan, m_name.isEmpty(), this);
 
@@ -259,11 +264,25 @@ void NetDetail::initUI()
     centerWidget = new QWidget(this);
     bottomWidget = new QWidget(this);
 
+    m_secuPageScrollArea = new QScrollArea(this);
+    m_secuPageScrollArea->setFrameShape(QFrame::NoFrame);
+    m_secuPageScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_secuPageScrollArea->setWidget(securityPage);
+    QPalette pal = m_secuPageScrollArea->palette();
+    pal.setBrush(QPalette::Window, Qt::transparent);
+    m_secuPageScrollArea->setPalette(pal);
+
+    detailPage->setFixedWidth(SCRO_WIDTH);
+    ipv4Page->setFixedWidth(SCRO_WIDTH);
+    ipv6Page->setFixedWidth(SCRO_WIDTH);
+    createNetPage->setFixedWidth(SCRO_WIDTH);
+    configPage->setFixedWidth(SCRO_WIDTH);
+
     stackWidget = new QStackedWidget(centerWidget);
     stackWidget->addWidget(detailPage);
     stackWidget->addWidget(ipv4Page);
     stackWidget->addWidget(ipv6Page);
-    stackWidget->addWidget(securityPage);
+    stackWidget->addWidget(m_secuPageScrollArea);
     stackWidget->addWidget(configPage);
     stackWidget->addWidget(createNetPage);
 
@@ -320,13 +339,13 @@ void NetDetail::initUI()
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
 
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
-    centerlayout->setContentsMargins(LAYOUT_MARGINS);
+    centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS);
     centerlayout->addWidget(pageFrame);
     centerlayout->addSpacing(4);
     centerlayout->addWidget(stackWidget);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout(bottomWidget);
-    bottomLayout->setContentsMargins(LAYOUT_MARGINS);
+    bottomLayout->setContentsMargins(BOTTOM_LAYOUT_MARGINS);
     bottomLayout->setSpacing(BOTTOM_LAYOUT_SPACING);
     bottomLayout->addWidget(forgetBtn);
     bottomLayout->addStretch();
@@ -393,6 +412,13 @@ void NetDetail::initComponent()
     connect(securityPage, &SecurityPage::setSecuPageState, this, [=](bool status) {
        isSecuOk = status;
        setConfirmEnable();
+    });
+
+    connect(securityPage, &SecurityPage::secuTypeChanged, this, [=]() {
+        setSecuPageHeight();
+    });
+    connect(securityPage, &SecurityPage::eapTypeChanged, this, [=]() {
+        setSecuPageHeight();
     });
 }
 
@@ -657,6 +683,22 @@ void NetDetail::initSecuData()
         break;
     default:
         break;
+    }
+}
+
+void NetDetail::setSecuPageHeight()
+{
+    KySecuType secuType;
+    KyEapMethodType eapType;
+    securityPage->getSecuType(secuType, eapType);
+    if (secuType == WPA_AND_WPA2_ENTERPRISE) {
+        if (eapType == TLS) {
+            securityPage->setFixedSize(SCRO_WIDTH, TLS_SCRO_HEIGHT);
+        } else {
+            securityPage->setFixedSize(SCRO_WIDTH, PEAP_SCRO_HEIGHT);
+        }
+    } else {
+        securityPage->setFixedSize(SCRO_WIDTH, PEAP_SCRO_HEIGHT);
     }
 }
 

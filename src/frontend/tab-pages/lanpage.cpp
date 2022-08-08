@@ -926,11 +926,11 @@ void LanPage::onConnectionStateChange(QString uuid,
         return;
     }
 
+    sendLanStateChangeSignal(uuid, (ConnectState)state);
+
     if (m_activeConnectionMap.keys().contains(uuid) && state == NetworkManager::ActiveConnection::State::Activated) {
         return;
     }
-
-    sendLanStateChangeSignal(uuid, (ConnectState)state);
 
     qDebug()<<"[LanPage] connection uuid"<< uuid
             << "state change slot:"<< state;

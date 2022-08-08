@@ -25,6 +25,8 @@
 #define EMPTY_SSID "EMPTY_SSID"
 #define LOG_FLAG "[WlanListItem]"
 #define WAIT_US  10*1000
+#define ENABLE_BUTTON_COLOR qApp->palette().highlight().color()
+#define UNABLE_BUTTON_COLOR qApp->palette().button().color()
 
 WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, QWidget *parent)
     : WlanListItem(wirelessNetItem, device, parent)
@@ -45,6 +47,7 @@ WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, Q
 
     connect(this->m_infoButton, &InfoButton::clicked, this, &WlanListItem::onInfoButtonClicked);
     connect(m_menu, &QMenu::triggered, this, &WlanListItem::onMenuTriggered);
+    connect(qApp, &QApplication::paletteChanged, this, &WlanListItem::setConnectButtonState);
 
     m_wirelessConnectOperation = new KyWirelessConnectOperation(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
@@ -513,6 +516,7 @@ void WlanListItem::onPwdEditorTextChanged()
     } else {
         m_connectButton->setEnabled(true);
     }
+    setConnectButtonState();
 
     return;
 }
@@ -611,4 +615,15 @@ void WlanListItem::forgetPwd()
     }
 }
 
+void WlanListItem::setConnectButtonState()
+{
+    QPalette btnPal;
+    if (m_connectButton->isEnabled()) {
+        btnPal.setColor(QPalette::Button, ENABLE_BUTTON_COLOR);
+        m_connectButton->setPalette(btnPal);
+    } else {
+        btnPal.setColor(QPalette::Button, UNABLE_BUTTON_COLOR);
+        m_connectButton->setPalette(btnPal);
+    }
+}
 

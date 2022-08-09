@@ -974,6 +974,11 @@
 </context>
 <context>
     <name>SecurityPage</name>
+        <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="90"/>
+        <source>Remember the Network</source>
+        <translation>记住该网络</translation>
+    </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="175"/>
         <source>Security</source>

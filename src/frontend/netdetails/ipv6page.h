@@ -50,6 +50,10 @@ public:
 
     int getPerfixLength(QString text);
 
+    void startLoading();
+    void stopLoading();
+    void showIpv6AddressConflict(bool isConflict);
+
 public:
     QComboBox *ipv6ConfigCombox;
     LineEdit *ipv6AddressEdit;
@@ -71,6 +75,14 @@ private:
     QLabel *m_subnetEmptyLabel;
     QLabel *m_gateWayHintLabel;
     QLabel *m_firstDnsEmptyLabel;
+
+    QLabel *m_statusLabel = nullptr;
+    QList<QIcon> m_loadIcons;
+    QTimer *m_iconTimer = nullptr;
+    int m_currentIconIndex =0;
+
+    QLabel *m_iconLabel;
+    QLabel *m_textLabel;
 private:
     void initUI();
     void initComponent();
@@ -80,14 +92,20 @@ private:
 
     bool checkConnectBtnIsEnabled();
 
+    void initConflictHintLable();
+    void initLoadingIcon();
+
 private slots:
     void configChanged(int index);
     void setEnableOfSaveBtn();
     void onAddressTextChanged();
     void onGatewayTextChanged();
+    void onAddressEidtFinished();
+    void updateIcon();
 
 signals:
     void setIpv6PageState(bool);
+    void ipv6EditFinished(const QString &address);
 };
 
 #endif // IPV6PAGE_H

@@ -32,6 +32,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QSettings>
+#include <QThread>
 
 #include <QDBusMessage>
 #include <QDBusObjectPath>
@@ -64,6 +65,25 @@ public:
 
     QSize sizeHint() const;
     QSize minimumTabSizeHint(int index) const;
+};
+class ThreadObject : public QObject
+{
+    Q_OBJECT
+public:
+    ThreadObject(QString deviceName, QObject *parent = nullptr);
+    ~ThreadObject();
+    void stop();
+private:
+    QString m_devName;
+    volatile bool m_isStop;
+
+public slots:
+    void checkIpv4ConflictThread(const QString &ipv4Address);
+    void checkIpv6ConflictThread(const QString &ipv6Address);
+
+signals:
+    bool ipv4IsConflict(bool isConflict);
+    bool ipv6IsConflict(bool isConflict);
 };
 
 class NetDetail : public QWidget
@@ -104,8 +124,8 @@ private:
 
     void setConfirmEnable();
 
-    bool checkIpv4Conflict(QString ipv4Address);
-    bool checkIpv6Conflict(QString ipv6Address);
+//    bool checkIpv4Conflict(QString ipv4Address);
+//    bool checkIpv6Conflict(QString ipv6Address);
 
     bool createWiredConnect();
     bool createWirelessConnect();
@@ -116,6 +136,8 @@ private:
     void showDesktopNotify(const QString &message, QString soundName);
 
     void setNetdetailSomeEnable(bool on);
+    void startObjectThread();
+
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyConnectOperation* m_connectOperation = nullptr;
@@ -161,6 +183,9 @@ private:
 
     ConInfo      m_info;
 
+    ThreadObject *m_object;
+    QThread *m_objectThread;
+
 private slots:
     void on_btnConfirm_clicked();
     void on_btnForget_clicked();
@@ -173,8 +198,8 @@ signals:
     void detailPageClose(bool on);
     void createPageClose(QString);
     void currentChanged(int);
+    void checkCurrentIpv4Conflict(const QString &address);
+    void checkCurrentIpv6Conflict(const QString &address);
 };
-
-
 
 #endif // NETDETAIL_H

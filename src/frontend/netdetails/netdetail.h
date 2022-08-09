@@ -86,6 +86,7 @@ private:
     void loadPage();
     void pagePadding(QString netName, bool isWlan);
     void initSecuData();
+    void setSecuPageHeight();
 
     void initTlsInfo(ConInfo &conInfo);
     void initPeapInfo(ConInfo &conInfo);
@@ -133,6 +134,7 @@ private:
 
     QWidget      * centerWidget;
     QWidget      * bottomWidget;
+    QScrollArea  * m_secuPageScrollArea;
 
     QPushButton  * cancelBtn;
     QPushButton  * forgetBtn;

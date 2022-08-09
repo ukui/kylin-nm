@@ -44,13 +44,18 @@ void SecurityPage::initUI()
     domainLable = new QLabel(this);
     caCertPathLabel = new QLabel(this);
     caNeedFlagLabel = new QLabel(this);
-    clientCertPathLabel = new QLabel(this);
-    clientPrivateKeyLabel = new QLabel(this);
-    clientPrivateKeyPwdLabel = new QLabel(this);
-    pwdOptionLabel = new QLabel(this);
+    clientCertPathLabel = new FixLabel(this);
+    clientCertPathLabel->setFixedWidth(MIN_LABEL_WIDTH);
+    clientPrivateKeyLabel = new FixLabel(this);
+    clientPrivateKeyLabel->setFixedWidth(MIN_LABEL_WIDTH);
+    clientPrivateKeyPwdLabel = new FixLabel(this);
+    clientPrivateKeyPwdLabel->setFixedWidth(MIN_LABEL_WIDTH);
+    pwdOptionLabel = new FixLabel(this);
+    pwdOptionLabel->setFixedWidth(MIN_LABEL_WIDTH);
 
     //PEAP TTLS共有
-    eapMethodLabel = new QLabel(this);
+    eapMethodLabel = new FixLabel(this);
+    eapMethodLabel->setFixedWidth(MIN_LABEL_WIDTH);
     userNameLabel = new QLabel(this);
     userPwdLabel = new QLabel(this);
     userPwdFlagLabel = new QLabel(this);
@@ -183,15 +188,15 @@ void SecurityPage::initUI()
     domainLable->setText(tr("Domain"));
     caCertPathLabel->setText(tr("CA certficate"));
     caNeedFlagLabel->setText(tr("no need for CA certificate"));
-    clientCertPathLabel->setText(tr("User certificate"));
-    clientPrivateKeyLabel->setText(tr("User private key"));
-    clientPrivateKeyPwdLabel->setText(tr("User key password"));
-    pwdOptionLabel->setText(tr("Password options"));
+    clientCertPathLabel->setLabelText(tr("User certificate"));
+    clientPrivateKeyLabel->setLabelText(tr("User private key"));
+    clientPrivateKeyPwdLabel->setLabelText(tr("User key password"));
+    pwdOptionLabel->setLabelText(tr("Password options"));
     identityEdit->setPlaceholderText(tr("Required"));
     clientPrivateKeyPwdEdit->setPlaceholderText(hintRequired);
 
     //PEAP TTLS共有
-    eapMethodLabel->setText(tr("Ineer authentication"));
+    eapMethodLabel->setLabelText(tr("Ineer authentication"));
     userNameLabel->setText(tr("Usename"));
     userPwdLabel->setText(tr("Password"));
     userPwdFlagLabel->setText(tr("Ask pwd each query"));

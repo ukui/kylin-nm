@@ -46,7 +46,7 @@ void FirewallDialog::initUI()
     QWidget *contentWidget = new QWidget(this);
     QGridLayout *contentLayout = new QGridLayout(contentWidget);
     contentLayout->setContentsMargins(0, 0, 0, 0);
-    contentLayout->addWidget(m_iconLabel, 0, 0, Qt::AlignTop);
+    contentLayout->addWidget(m_iconLabel, 0, 0, Qt::AlignVCenter);
     contentLayout->addWidget(m_contentLabel, 0, 1);
     contentLayout->addWidget(m_suggestLabel, 1, 1);
     m_iconLabel->setFixedWidth(16);
@@ -59,7 +59,7 @@ void FirewallDialog::initUI()
     btnLayout->addWidget(m_YesBtn);
     btnLayout->addWidget(m_NoBtn);
 
-    m_dialogLayout->setContentsMargins(24, 0, 24, 24);
+    m_dialogLayout->setContentsMargins(24, 16, 24, 24);
     m_dialogLayout->setSpacing(0);
     m_dialogLayout->addWidget(contentWidget);
     m_dialogLayout->addStretch();
@@ -69,7 +69,7 @@ void FirewallDialog::initUI()
     m_iconLabel->setPixmap(icon.pixmap(ICON_SIZE));
 
     QFont font = m_contentLabel->font();
-    font.setWeight(75);
+    font.setWeight(57);
     m_contentLabel->setFont(font);
     //是否允许你的电脑被此网络上的其他电脑和设备发现？
     m_contentLabel->setText(tr("Allow your computer to be discovered by other computers and devices on this network？"));

@@ -481,12 +481,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 
     //配置页面
     if (isActive) {
-        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
-        if (configType == -1) {
-            configPage->setConfigState(KSC_FIREWALL_PUBLIC);
-        } else {
-            configPage->setConfigState(configType);
-        }
+        configPage->setConfigState(NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid));
     }
 
 }

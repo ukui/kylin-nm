@@ -941,6 +941,10 @@ void LanPage::onConnectionStateChange(QString uuid,
 
     sendLanStateChangeSignal(uuid, (ConnectState)state);
 
+    if (m_activeConnectionMap.keys().contains(uuid) && state == NetworkManager::ActiveConnection::State::Activated) {
+        return;
+    }
+
     qDebug()<<"[LanPage] connection uuid"<< uuid
             << "state change slot:"<< state;
 
@@ -961,23 +965,24 @@ void LanPage::onConnectionStateChange(QString uuid,
         int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
 
         if (configType == -1) {
-            FirewallDialog *fireWallDiaglog = new FirewallDialog();
-            fireWallDiaglog->setWindowTitle(p_newItem->m_connectName);
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC); //默认公有配置
+            FirewallDialog *fireWallDialog = new FirewallDialog();
+            fireWallDialog->setUuid(uuid);
+            fireWallDialog->setWindowTitle(ssid);
 
-            connect(fireWallDiaglog, &FirewallDialog::setPrivateNetMode, this, [=](){
-                fireWallDiaglog->close();
+            connect(fireWallDialog, &FirewallDialog::setPrivateNetMode, this, [=](){
+                fireWallDialog->hide();
                 NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
             });
 
-            connect(fireWallDiaglog, &FirewallDialog::setPublicNetMode, this, [=](){
-                fireWallDiaglog->close();
+            connect(fireWallDialog, &FirewallDialog::setPublicNetMode, this, [=](){
+                fireWallDialog->hide();
                 NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
             });
 
-            connect(fireWallDiaglog, &FirewallDialog::close, this, [=](){
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
-            });
-            fireWallDiaglog->show();
+            connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, fireWallDialog, &FirewallDialog::closeMyself);
+
+            fireWallDialog->show();
         }  else if (configType == KSC_FIREWALL_PUBLIC) {
             NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
         } else if (configType == KSC_FIREWALL_PRIVATE) {

@@ -425,6 +425,19 @@ void WlanPage::constructActivateConnectionArea()
             m_activateConnectionItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
             updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Activated);
 
+            int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(wirelessNetItem.m_connectUuid);
+            if (configType == -1) {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(wirelessNetItem.m_connectUuid,
+                                                                       m_currentDevice,
+                                                                       wirelessNetItem.m_connName,
+                                                                       KSC_FIREWALL_PUBLIC);
+            } else {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(wirelessNetItem.m_connectUuid,
+                                                                       m_currentDevice,
+                                                                       wirelessNetItem.m_connName,
+                                                                       configType);
+            }
+
             height += p_listWidgetItem->sizeHint().height();
         }
     }
@@ -942,24 +955,25 @@ void WlanPage::onConnectionStateChanged(QString uuid,
 
         if (!isApConnection) {
             int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
-                if (configType == -1) {
-                    FirewallDialog *fireWallDiaglog = new FirewallDialog();
-                    fireWallDiaglog->setWindowTitle(ssid);
-                connect(fireWallDiaglog, &FirewallDialog::setPrivateNetMode, this, [=](){
-                    fireWallDiaglog->close();
+            if (configType == -1) {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC); //默认公有配置
+                FirewallDialog *fireWallDialog = new FirewallDialog(); //弹窗 供用户配置
+                fireWallDialog->setUuid(uuid);
+                fireWallDialog->setWindowTitle(ssid);
+
+                connect(fireWallDialog, &FirewallDialog::setPrivateNetMode, this, [=](){
+                    fireWallDialog->hide();
                     NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
                 });
 
-                connect(fireWallDiaglog, &FirewallDialog::setPublicNetMode, this, [=](){
-                    fireWallDiaglog->close();
+                connect(fireWallDialog, &FirewallDialog::setPublicNetMode, this, [=](){
+                    fireWallDialog->hide();
                     NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
                 });
 
-                connect(fireWallDiaglog, &FirewallDialog::close, this, [=](){
-                    NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
-                });
+                connect(m_activatedConnectResource, &KyActiveConnectResourse::stateChangeReason, fireWallDialog, &FirewallDialog::closeMyself);
 
-                fireWallDiaglog->show();
+                fireWallDialog->show();
 
             } else if (configType == KSC_FIREWALL_PUBLIC) {
                 NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);

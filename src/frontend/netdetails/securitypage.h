@@ -28,6 +28,7 @@
 #include <QCheckBox>
 
 #include "coninfo.h"
+#include "detailwidget.h"
 #include "kwidget.h"
 #include "kpasswordedit.h"
 
@@ -70,13 +71,13 @@ private:
     QLabel *domainLable;
     QLabel *caCertPathLabel;
     QLabel *caNeedFlagLabel;
-    QLabel *clientCertPathLabel;
-    QLabel *clientPrivateKeyLabel;
-    QLabel *clientPrivateKeyPwdLabel;
-    QLabel *pwdOptionLabel;
+    FixLabel *clientCertPathLabel;
+    FixLabel *clientPrivateKeyLabel;
+    FixLabel *clientPrivateKeyPwdLabel;
+    FixLabel *pwdOptionLabel;
 
     //PEAP TTLS共有
-    QLabel *eapMethodLabel;
+    FixLabel *eapMethodLabel;
     QLabel *userNameLabel;
     QLabel *userPwdLabel;
     QLabel *userPwdFlagLabel;

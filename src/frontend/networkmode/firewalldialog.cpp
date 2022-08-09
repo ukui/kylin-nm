@@ -46,7 +46,7 @@ void FirewallDialog::initUI()
     QWidget *contentWidget = new QWidget(this);
     QGridLayout *contentLayout = new QGridLayout(contentWidget);
     contentLayout->setContentsMargins(0, 0, 0, 0);
-    contentLayout->addWidget(m_iconLabel, 0, 0, Qt::AlignTop);
+    contentLayout->addWidget(m_iconLabel, 0, 0, Qt::AlignVCenter);
     contentLayout->addWidget(m_contentLabel, 0, 1);
     contentLayout->addWidget(m_suggestLabel, 1, 1);
     m_iconLabel->setFixedWidth(16);
@@ -59,7 +59,7 @@ void FirewallDialog::initUI()
     btnLayout->addWidget(m_YesBtn);
     btnLayout->addWidget(m_NoBtn);
 
-    m_dialogLayout->setContentsMargins(24, 0, 24, 24);
+    m_dialogLayout->setContentsMargins(24, 16, 24, 24);
     m_dialogLayout->setSpacing(0);
     m_dialogLayout->addWidget(contentWidget);
     m_dialogLayout->addStretch();
@@ -69,17 +69,17 @@ void FirewallDialog::initUI()
     m_iconLabel->setPixmap(icon.pixmap(ICON_SIZE));
 
     QFont font = m_contentLabel->font();
-    font.setWeight(75);
+    font.setWeight(57);
     m_contentLabel->setFont(font);
-    //是否允许你的电脑被此网络上的其他电脑和设备发现？
-    m_contentLabel->setText(tr("Allow your computer to be discovered by other computers and devices on this network？"));
+    //是否允许此网络上的其他设备发现这台电脑？
+    m_contentLabel->setText(tr("Allow other devices on this network to discover this computer?"));
     m_contentLabel->setWordWrap(true);
-    //建议你在家庭和工作网络上而非公共网络上启用此功能。
-    m_suggestLabel->setText(tr("It is recommended that you enable this feature on your home and work networks rather than public networks."));
+    //不建议在公共网络上开启此功能
+    m_suggestLabel->setText(tr("It is not recommended to enable this feature on public networks"));
     m_suggestLabel->setWordWrap(true);
 
-    m_YesBtn->setText(tr("Yse"));
-    m_NoBtn->setText(tr("No"));
+    m_YesBtn->setText(tr("Not allowed (recommended)"));
+    m_NoBtn->setText(tr("Allowed"));
 
     this->closeButton();
     this->mainWidget()->setLayout(m_dialogLayout);

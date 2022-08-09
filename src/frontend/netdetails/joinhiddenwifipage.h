@@ -62,7 +62,7 @@ private:
     SecurityPage *m_secuWidget;
 
     QLabel *m_descriptionLabel;
-    QLabel *m_nameLabel;
+    FixLabel *m_nameLabel;
     LineEdit *m_nameEdit;
 
     Divider *m_bottomDivider = nullptr;

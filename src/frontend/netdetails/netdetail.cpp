@@ -37,7 +37,8 @@
 #define  WINDOW_HEIGHT 602
 #define  ICON_SIZE 22,22
 #define  TITLE_LAYOUT_MARGINS 9,9,0,0
-#define  LAYOUT_MARGINS 0,0,0,0
+#define  CENTER_LAYOUT_MARGINS 24,0,0,0
+#define  BOTTOM_LAYOUT_MARGINS 24,0,24,0
 #define  BOTTOM_LAYOUT_SPACING 16
 #define  PAGE_LAYOUT_SPACING 1
 #define  DETAIL_PAGE_NUM 0
@@ -49,6 +50,9 @@
 #define  PAGE_MIN_HEIGHT 40
 #define  LAN_TAB_WIDTH 180
 #define  WLAN_TAB_WIDTH 240
+#define  SCRO_WIDTH 472
+#define  PEAP_SCRO_HEIGHT  300
+#define  TLS_SCRO_HEIGHT  480
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -87,6 +91,37 @@ void NetDetail::setNetdetailSomeEnable(bool on)
     cancelBtn->setEnabled(on);
     forgetBtn->setEnabled(on);
     confimBtn->setEnabled(on);
+}
+
+void NetDetail::startObjectThread()
+{
+    m_objectThread = new QThread();
+    m_object = new ThreadObject(m_deviceName);
+    m_object->moveToThread(m_objectThread);
+    connect(m_objectThread, &QThread::finished, m_objectThread, &QObject::deleteLater);
+    connect(m_objectThread, &QThread::finished, m_object, &QObject::deleteLater);
+    connect(ipv4Page, &Ipv4Page::ipv4EditFinished, this, [=](){
+        ipv4Page->startLoading();
+    });
+    connect(ipv6Page, &Ipv6Page::ipv6EditFinished, this, [=](){
+        ipv6Page->startLoading();
+    });
+
+    connect(ipv4Page, SIGNAL(ipv4EditFinished(const QString &)), m_object, SLOT(checkIpv4ConflictThread(const QString &)));
+    connect(ipv6Page, SIGNAL(ipv6EditFinished(const QString &)), m_object, SLOT(checkIpv6ConflictThread(const QString &)));
+    connect(this, SIGNAL(checkCurrentIpv4Conflict(const QString &)), m_object, SLOT(checkIpv4ConflictThread(const QString &)));
+    connect(this, SIGNAL(checkCurrentIpv6Conflict(const QString &)), m_object, SLOT(checkIpv6ConflictThread(const QString &)));
+
+    connect(m_object, &ThreadObject::ipv4IsConflict, this, [=](bool ipv4IsConf) {
+        ipv4Page->stopLoading();
+        ipv4Page->showIpv4AddressConflict(ipv4IsConf);
+    });
+    connect(m_object, &ThreadObject::ipv6IsConflict, this, [=](bool ipv6IsConf) {
+        ipv6Page->stopLoading();
+        ipv6Page->showIpv6AddressConflict(ipv6IsConf);
+    });
+
+    m_objectThread->start();
 }
 
 NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent)
@@ -130,8 +165,9 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     loadPage();
     initComponent();
     getConInfo(m_info);
+    startObjectThread();
     pagePadding(name,isWlan);
-
+    setSecuPageHeight();
     connect(qApp, &QApplication::paletteChanged, this, &NetDetail::onPaletteChanged);
 
     isCreateOk = !(m_isCreateNet && !isWlan);
@@ -150,7 +186,10 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
 
 NetDetail::~NetDetail()
 {
-
+    if (m_objectThread->isRunning()) {
+        m_objectThread->quit();
+        m_objectThread->wait();
+    }
 }
 
 void NetDetail::onPaletteChanged()
@@ -244,7 +283,8 @@ void NetDetail::centerToScreen()
 void NetDetail::initUI()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(24,9,24,24);
+    mainLayout->setContentsMargins(0,9,0,24);
+    mainLayout->setSpacing(24);
 
     detailPage = new DetailPage(isWlan, m_name.isEmpty(), this);
 
@@ -259,11 +299,25 @@ void NetDetail::initUI()
     centerWidget = new QWidget(this);
     bottomWidget = new QWidget(this);
 
+    m_secuPageScrollArea = new QScrollArea(this);
+    m_secuPageScrollArea->setFrameShape(QFrame::NoFrame);
+    m_secuPageScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_secuPageScrollArea->setWidget(securityPage);
+    QPalette pal = m_secuPageScrollArea->palette();
+    pal.setBrush(QPalette::Window, Qt::transparent);
+    m_secuPageScrollArea->setPalette(pal);
+
+    detailPage->setFixedWidth(SCRO_WIDTH);
+    ipv4Page->setFixedWidth(SCRO_WIDTH);
+    ipv6Page->setFixedWidth(SCRO_WIDTH);
+    createNetPage->setFixedWidth(SCRO_WIDTH);
+    configPage->setFixedWidth(SCRO_WIDTH);
+
     stackWidget = new QStackedWidget(centerWidget);
     stackWidget->addWidget(detailPage);
     stackWidget->addWidget(ipv4Page);
     stackWidget->addWidget(ipv6Page);
-    stackWidget->addWidget(securityPage);
+    stackWidget->addWidget(m_secuPageScrollArea);
     stackWidget->addWidget(configPage);
     stackWidget->addWidget(createNetPage);
 
@@ -320,13 +374,13 @@ void NetDetail::initUI()
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
 
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
-    centerlayout->setContentsMargins(LAYOUT_MARGINS);
+    centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS);
     centerlayout->addWidget(pageFrame);
     centerlayout->addSpacing(4);
     centerlayout->addWidget(stackWidget);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout(bottomWidget);
-    bottomLayout->setContentsMargins(LAYOUT_MARGINS);
+    bottomLayout->setContentsMargins(BOTTOM_LAYOUT_MARGINS);
     bottomLayout->setSpacing(BOTTOM_LAYOUT_SPACING);
     bottomLayout->addWidget(forgetBtn);
     bottomLayout->addStretch();
@@ -394,6 +448,13 @@ void NetDetail::initComponent()
        isSecuOk = status;
        setConfirmEnable();
     });
+
+    connect(securityPage, &SecurityPage::secuTypeChanged, this, [=]() {
+        setSecuPageHeight();
+    });
+    connect(securityPage, &SecurityPage::eapTypeChanged, this, [=]() {
+        setSecuPageHeight();
+    });
 }
 
 void NetDetail::pagePadding(QString netName, bool isWlan)
@@ -417,6 +478,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 
     //ipv4页面填充
     if (m_info.ipv4ConfigType == CONFIG_IP_MANUAL) {
+        emit checkCurrentIpv4Conflict(m_info.strIPV4Address);
         ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
         ipv4Page->setIpv4(m_info.strIPV4Address);
         ipv4Page->setNetMask(m_info.strIPV4NetMask);
@@ -428,6 +490,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     }
     //ipv6页面填充
     if (m_info.ipv6ConfigType == CONFIG_IP_MANUAL) {
+        emit checkCurrentIpv6Conflict(m_info.strIPV6Address);
         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
         ipv6Page->setIpv6(m_info.strIPV6Address);
         ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
@@ -455,12 +518,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 
     //配置页面
     if (isActive) {
-        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
-        if (configType == -1) {
-            configPage->setConfigState(KSC_FIREWALL_PUBLIC);
-        } else {
-            configPage->setConfigState(configType);
-        }
+        configPage->setConfigState(NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid));
     }
 
 }
@@ -660,6 +718,22 @@ void NetDetail::initSecuData()
     }
 }
 
+void NetDetail::setSecuPageHeight()
+{
+    KySecuType secuType;
+    KyEapMethodType eapType;
+    securityPage->getSecuType(secuType, eapType);
+    if (secuType == WPA_AND_WPA2_ENTERPRISE) {
+        if (eapType == TLS) {
+            securityPage->setFixedSize(SCRO_WIDTH, TLS_SCRO_HEIGHT);
+        } else {
+            securityPage->setFixedSize(SCRO_WIDTH, PEAP_SCRO_HEIGHT);
+        }
+    } else {
+        securityPage->setFixedSize(SCRO_WIDTH, PEAP_SCRO_HEIGHT);
+    }
+}
+
 void NetDetail::initTlsInfo(ConInfo &conInfo)
 {
     m_resource->getEnterPriseInfoTls(m_uuid, conInfo.tlsInfo);
@@ -734,6 +808,7 @@ void NetDetail::setConfirmEnable()
     confimBtn->setEnabled(isConfirmBtnEnable);
 }
 
+#if 0
 bool NetDetail::checkIpv4Conflict(QString ipv4Address)
 {
     showDesktopNotify(tr("start check ipv4 address conflict"), "networkwrong");
@@ -767,6 +842,7 @@ bool NetDetail::checkIpv6Conflict(QString ipv6address)
     ipv46rping = nullptr;
     return isConflict;
 }
+#endif
 
 void NetDetail::updateWirelessPersonalConnect()
 {
@@ -796,13 +872,13 @@ bool NetDetail::createWiredConnect()
     KyWirelessConnectSetting connetSetting;
     connetSetting.setIfaceName(m_deviceName);
     createNetPage->constructIpv4Info(connetSetting);
-    if (connetSetting.m_ipv4ConfigIpType != CONFIG_IP_DHCP) {
-        if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
-            qDebug() << "ipv4 conflict";
-            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
-            return false;
-        }
-    }
+//    if (connetSetting.m_ipv4ConfigIpType != CONFIG_IP_DHCP) {
+//        if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
+//            qDebug() << "ipv4 conflict";
+//            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
+//            return false;
+//        }
+//    }
     m_wiredConnOperation->createWiredConnect(connetSetting);
     return true;
 }
@@ -847,21 +923,21 @@ bool NetDetail::createWirelessConnect()
     connetSetting.dumpInfo();
 
     qDebug() << "ipv4Changed" << ipv4Change << "ipv6Change" << ipv6Change;
-    if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
-        if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
-            qDebug() << "ipv4 conflict";
-            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
-            return false;
-        }
-    }
+//    if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
+//        if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
+//            qDebug() << "ipv4 conflict";
+//            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
+//            return false;
+//        }
+//    }
 
-    if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
-        if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
-            qDebug() << "ipv6 conflict";
-            showDesktopNotify(tr("ipv6 address conflict!"), "networkwrong");
-            return false;
-        }
-    }
+//    if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
+//        if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
+//            qDebug() << "ipv6 conflict";
+//            showDesktopNotify(tr("ipv6 address conflict!"), "networkwrong");
+//            return false;
+//        }
+//    }
     //wifi安全性
     if (secuType == WPA_AND_WPA2_ENTERPRISE) {
         connetSetting.m_type = WpaEap;
@@ -935,21 +1011,21 @@ bool NetDetail::updateConnect()
 
     qDebug() << "ipv4Changed" << ipv4Change << "ipv6Change" << ipv6Change;
 
-    if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
-        if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
-            qDebug() << "ipv4 conflict";
-            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
-            return false;
-        }
-    }
+//    if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
+//        if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
+//            qDebug() << "ipv4 conflict";
+//            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
+//            return false;
+//        }
+//    }
 
-    if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
-        if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
-            qDebug() << "ipv6 conflict";
-            showDesktopNotify(tr("ipv6 address conflict!"), "networkwrong");
-            return false;
-        }
-    }
+//    if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
+//        if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
+//            qDebug() << "ipv6 conflict";
+//            showDesktopNotify(tr("ipv6 address conflict!"), "networkwrong");
+//            return false;
+//        }
+//    }
 
     if (ipv4Change || ipv6Change) {
         connetSetting.dumpInfo();
@@ -1052,4 +1128,58 @@ QSize NetTabBar::minimumTabSizeHint(int index) const
 {
     Q_UNUSED(index)
     return QSize(TAB_WIDTH, TAB_HEIGHT);
+}
+
+
+ThreadObject::ThreadObject(QString deviceName, QObject *parent)
+    :m_devName(deviceName), QObject(parent)
+{
+    m_isStop = false;
+}
+
+ThreadObject::~ThreadObject()
+{
+
+}
+
+void ThreadObject::stop()
+{
+     m_isStop = true;
+}
+
+void ThreadObject::checkIpv4ConflictThread(const QString &ipv4Address)
+{
+    if (m_isStop) {
+        return;
+    }
+    bool isConflict = false;
+    KyIpv4Arping* ipv4Arping = new KyIpv4Arping(m_devName, ipv4Address);
+    if (ipv4Arping->ipv4ConflictCheck() >= 0) {
+        isConflict =  ipv4Arping->ipv4IsConflict();
+    } else {
+        qWarning() << "checkIpv4Conflict internal error";
+    }
+
+    delete ipv4Arping;
+    ipv4Arping = nullptr;
+    emit ipv4IsConflict(isConflict);
+}
+
+void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
+{
+    if (m_isStop) {
+        return;
+    }
+    bool isConflict = false;
+    KyIpv6Arping* ipv6rping = new KyIpv6Arping(m_devName, ipv6Address);
+
+    if (ipv6rping->ipv6ConflictCheck() >= 0) {
+        isConflict =  ipv6rping->ipv6IsConflict();
+    } else {
+        qWarning() << "checkIpv6Conflict internal error";
+    }
+
+    delete ipv6rping;
+    ipv6rping = nullptr;
+    emit ipv6IsConflict(isConflict);
 }

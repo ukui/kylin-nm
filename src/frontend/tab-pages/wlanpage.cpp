@@ -425,6 +425,19 @@ void WlanPage::constructActivateConnectionArea()
             m_activateConnectionItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
             updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Activated);
 
+            int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(wirelessNetItem.m_connectUuid);
+            if (configType == -1) {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(wirelessNetItem.m_connectUuid,
+                                                                       m_currentDevice,
+                                                                       wirelessNetItem.m_connName,
+                                                                       KSC_FIREWALL_PUBLIC);
+            } else {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(wirelessNetItem.m_connectUuid,
+                                                                       m_currentDevice,
+                                                                       wirelessNetItem.m_connName,
+                                                                       configType);
+            }
+
             height += p_listWidgetItem->sizeHint().height();
         }
     }

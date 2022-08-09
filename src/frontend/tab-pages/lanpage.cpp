@@ -381,6 +381,19 @@ void LanPage::constructActiveConnectionArea()
             QListWidgetItem *p_listWidgetItem = addNewItem(p_activeConnectionItem, m_activatedLanListWidget);
             m_activeConnectionMap.insert(p_activeConnectionItem->m_connectUuid, p_listWidgetItem);
 
+            int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(p_activeConnectionItem->m_connectUuid);
+            if (configType == -1) {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(p_activeConnectionItem->m_connectUuid,
+                                                                       m_currentDeviceName,
+                                                                       p_activeConnectionItem->m_connectName,
+                                                                       KSC_FIREWALL_PUBLIC);
+            } else {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(p_activeConnectionItem->m_connectUuid,
+                                                                       m_currentDeviceName,
+                                                                       p_activeConnectionItem->m_connectName,
+                                                                       configType);
+            }
+
             delete p_activeConnectionItem;
             p_activeConnectionItem = nullptr;
         }

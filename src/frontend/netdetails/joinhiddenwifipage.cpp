@@ -69,7 +69,8 @@ void JoinHiddenWiFiPage::initUI()
     m_secuWidget->setSecurity(KySecuType::WPA_AND_WPA2_PERSONAL);
 
     m_descriptionLabel = new QLabel(this);
-    m_nameLabel = new QLabel(this);
+    m_nameLabel = new FixLabel(this);
+    m_nameLabel->setFixedWidth(LABEL_MIN_WIDTH);
     m_nameEdit =new LineEdit(this);
 
     m_emptyLabel = new QLabel(this);
@@ -143,7 +144,7 @@ void JoinHiddenWiFiPage::initUI()
    QFont font = m_descriptionLabel->font();
    font.setWeight(75);
    m_descriptionLabel->setFont(font);
-   m_nameLabel->setText(tr("Network name(SSID)")); //网络名(SSID)
+   m_nameLabel->setLabelText(tr("Network name(SSID)")); //网络名(SSID)
    m_checkLabel->setText(tr("Remember the Network")); //记住该网络
    m_showListBtn->setText(tr("Show Network List")); //显示网络列表
    m_cancelBtn->setText(tr("Cancel"));

@@ -25,7 +25,7 @@
 #define  DETAIL_MIN_LABEL_WIDTH  80
 #define  DETAIL_MIN_EDIT_WIDTH  390
 #define  MIN_LABEL_WIDTH  146
-#define  MIN_EDIT_WIDTH  286
+#define  MIN_EDIT_WIDTH  278
 
 SecurityPage::SecurityPage(bool isNetDetailPage, QWidget *parent) : isDetailPage(isNetDetailPage), QFrame(parent)
 {
@@ -159,6 +159,7 @@ void SecurityPage::initUI()
     bottomLayout = new QGridLayout(tlsWidget);
     bottomLayout->setContentsMargins(0, 0, 0, 0);
     bottomLayout->setVerticalSpacing(8);
+    bottomLayout->setHorizontalSpacing(0);
     // 域 Label和输入框 第0行，第0列，第1列
     bottomLayout->addWidget(domainLable, 0, 0);
     bottomLayout->addWidget(domainEdit, 0, 1);

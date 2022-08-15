@@ -9,6 +9,9 @@
 #define UNEXPEND_HEIGHT  48
 #define EXPEND_HEIGHT  120
 
+#define ENABLE_BUTTON_COLOR qApp->palette().highlight().color()
+#define UNABLE_BUTTON_COLOR qApp->palette().button().color()
+
 WlanItem::WlanItem(bool isSimple, QWidget *parent)
     : isSimple(isSimple), QFrame(parent)
 {
@@ -111,6 +114,7 @@ WlanItem::WlanItem(bool isSimple, QWidget *parent)
     connect(waitTimer, &QTimer::timeout, this, &WlanItem::updateIcon);
 
     m_menu = new QMenu(this);//右键菜单
+    m_menu->setWindowFlag(Qt::X11BypassWindowManagerHint);
     connect(m_menu, &QMenu::triggered, this, &WlanItem::itemClick);
 }
 
@@ -185,12 +189,24 @@ void WlanItem::enterEvent(QEvent *event)
     update();
     return QFrame::enterEvent(event);
 }
+
 void WlanItem::leaveEvent(QEvent *event)
 {
     m_isIn = false;
     update();
     return QFrame::leaveEvent(event);
 }
+
+void WlanItem::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        if (m_expendFrame && m_expendFrame->isVisible() && m_pwdLineEdit->text().length() >= 8) {
+            onConnectButtonClicked();
+        }
+    }
+    return QFrame::keyPressEvent(event);
+}
+
 void WlanItem::paintEvent(QPaintEvent *event)
 {
     QPalette pal = this->palette();
@@ -218,6 +234,7 @@ void WlanItem::setExpend(bool enable)
     if (enable) {
         this->setFixedHeight(EXPEND_HEIGHT);
         m_expendFrame->show();
+        m_pwdLineEdit->setFocus();
     } else {
         m_expendFrame->hide();
         this->setFixedHeight(UNEXPEND_HEIGHT);
@@ -233,10 +250,15 @@ bool WlanItem::getExpend()
 
 void WlanItem::onPwdEditorTextChanged()
 {
+    QPalette btnPal;
     if (m_pwdLineEdit->text().length() < 8) {
-        m_connectButton->setEnabled(false);
+        m_connectButton->setEnabled(false);     
+        btnPal.setColor(QPalette::Button, UNABLE_BUTTON_COLOR);
+        m_connectButton->setPalette(btnPal);
     } else {
         m_connectButton->setEnabled(true);
+        btnPal.setColor(QPalette::Button, ENABLE_BUTTON_COLOR);
+        m_connectButton->setPalette(btnPal);
     }
 }
 

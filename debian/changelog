@@ -1,3 +1,43 @@
+kylin-nm-plugin (3.20.0.5) v101; urgency=medium
+
+  * BUG号:
+       - #135232 【无线网络】【OOBE/登录/锁屏】输入wifi密码时，到8位后，连接按钮没有变成蓝色
+       - #135206 【OOBE/登录/锁屏】【无线网络】加入隐藏网络界面存在显示网络列表功能，且点击无响应，建议去除
+       - #135036 【无线网络】【登录界面】【锁屏界面】点击某一无线网络，输入框不是默认选中状态，建议是默认选中状态
+       - #134960 【OOBE/登录/锁屏】【无线网络】OOBE网络选择界面或者右下角或者登录锁屏界面，输入密码后不支持enter键直接连接，希望支持
+  * 需求号:无
+  * 其他改动: 无
+  * 影响域: 登录锁屏网络连接整体功能
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 12 Aug 2022 14:24:16 +0800
+
+kylin-nm-plugin (3.20.0.4) v101; urgency=medium
+
+  * BUG号:无
+  * 需求号:无
+  * 其他改动: 依赖从kylin-nm-dev为libkylin-nm-base
+  * 影响域:无
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Tue, 09 Aug 2022 11:17:19 +0800
+
+kylin-nm-plugin (3.20.0.3) v101; urgency=medium
+
+  * BUG号:无
+  * 需求号:无
+  * 其他改动: 修复登录界面段错误
+  * 影响域:登录锁屏网络界面
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 05 Aug 2022 18:03:23 +0800
+
+kylin-nm-plugin (3.20.0.2) v101; urgency=medium
+
+  * BUG号:无
+  * 需求号:无
+  * 其他改动:#90677 网络插件化 sdk开发
+  * 影响域:登录锁屏网络界面
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 03 Aug 2022 09:24:56 +0800
+
 kylin-nm-plugin (3.20.0.1) v101; urgency=medium
 
   * fix error. 

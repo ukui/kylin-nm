@@ -91,7 +91,7 @@ void HiddenWiFiPage::initUI()
 
     m_rememberCheckBox = new QCheckBox(this);
     m_bottomDivider = new Divider(this);
-    m_showListBtn = new KBorderlessButton(this);
+//    m_showListBtn = new KBorderlessButton(this);
     m_cancelBtn =new QPushButton(this);
     m_joinBtn =new QPushButton(this);
 
@@ -154,7 +154,7 @@ void HiddenWiFiPage::initUI()
     m_bottomLayout = new QHBoxLayout(m_bottomWidget);
     m_bottomLayout->setContentsMargins(BOTTOM_LAYOUT_MARGINS);
     m_bottomLayout->setSpacing(LAYOUT_SPACING);
-    m_bottomLayout->addWidget(m_showListBtn);
+//    m_bottomLayout->addWidget(m_showListBtn);
     m_bottomLayout->addStretch();
     m_bottomLayout->addWidget(m_cancelBtn);
     m_bottomLayout->addWidget(m_joinBtn);
@@ -173,7 +173,7 @@ void HiddenWiFiPage::initUI()
     m_secuTypeLabel->setText(tr("Security type")); //安全性
     m_pwdLabel->setText(tr("Password")); //密码
     m_checkLabel->setText(tr("Remember the Network")); //记住该网络
-    m_showListBtn->setText(tr("Show Network List")); //显示网络列表
+//    m_showListBtn->setText(tr("Show Network List")); //显示网络列表
     m_cancelBtn->setText(tr("Cancel"));
     m_joinBtn->setText(tr("Join"));
 

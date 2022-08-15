@@ -36,6 +36,7 @@ LanItem::LanItem(bool isSimple, QWidget *parent)
     connect(waitTimer, &QTimer::timeout, this, &LanItem::updateIcon);
 
     m_menu = new QMenu(this);//右键菜单
+    m_menu->setWindowFlag(Qt::X11BypassWindowManagerHint);
     connect(m_menu, &QMenu::triggered, this, &LanItem::itemClick);
 }
 

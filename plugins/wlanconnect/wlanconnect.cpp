@@ -126,6 +126,10 @@ QWidget *WlanConnect::pluginUi() {
             interface.call("keyRingClear");
         }
 
+        KylinAgent* agent = new KylinAgent(this);
+        agent->setParentWidget(parentWidget);
+        agent->startKylinAgent();
+
         pluginWidget = new QWidget;
         pluginWidget->setAttribute(Qt::WA_DeleteOnClose);
         pluginWidget->setFixedSize(420, 436);
@@ -138,9 +142,6 @@ QWidget *WlanConnect::pluginUi() {
 
 void WlanConnect::setParentWidget(QWidget* widget){
     parentWidget = widget;
-    KylinAgent* agent = new KylinAgent(this);
-    agent->setParentWidget(parentWidget);
-    agent->startKylinAgent();
 }
 
 void WlanConnect::setPluginType(PluginType type, bool useSwitch)
@@ -725,7 +726,6 @@ void WlanConnect::removeDeviceFrame(QString devName)
             while ((layoutItem = item->lanItemFrame->layout()->takeAt(0)) != NULL) {
                 delete layoutItem->widget();
                 delete layoutItem;
-                item = nullptr;
             }
             item->itemMap.clear();
         }

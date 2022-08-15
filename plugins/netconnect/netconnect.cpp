@@ -373,7 +373,7 @@ void NetConnect::updateLanInfo(QString deviceName, QString connectUuid, QString 
 //总开关
 void NetConnect::setSwitchStatus()
 {
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA) && m_useSwitch) {
         bool status = m_switchGsettings->get(KEY_WIRED_SWITCH).toBool();
         qDebug() << "setSwitchStatus" << status;
         m_wiredSwitch->setCheckable(true);

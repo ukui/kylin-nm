@@ -20,7 +20,7 @@ Build-Depends: debhelper (>=9),
                libcap-dev,
 	       libnma-dev,
 	       libsecret-1-dev,
-           kylin-nm-dev,
+               libkylin-nm-base,
                libkysdk-qtwidgets-dev,
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
@@ -32,6 +32,7 @@ Package: kylin-nm-plugin
 Architecture: any
 Depends: network-manager (>=1.2.6),
          libkysdk-qtwidgets,
+         libkylin-nm-base,
          ${shlibs:Depends},
          ${misc:Depends}
 Description: Gui Applet tool for display and edit network simply

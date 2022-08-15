@@ -70,7 +70,7 @@ private:
     QCheckBox *m_rememberCheckBox = nullptr;
 
     Divider *m_bottomDivider = nullptr;
-    KBorderlessButton *m_showListBtn;
+//    KBorderlessButton *m_showListBtn;
     QPushButton *m_cancelBtn;
     QPushButton *m_joinBtn;
 

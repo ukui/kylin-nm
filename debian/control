@@ -1,4 +1,4 @@
-Source: kylin-nm-dev
+Source: libkylin-nm-base
 Section: utils
 Priority: optional
 Maintainer: Kylin Team <team+kylin@tracker.debian.org>
@@ -27,7 +27,7 @@ Homepage: https://github.com/ukui/kylin-nm
 Vcs-Git: https://github.com/ukui/kylin-nm.git
 Vcs-Browser: https://github.com/ukui/kylin-nm
 
-Package: kylin-nm-dev
+Package: libkylin-nm-base
 Architecture: any
 Depends: network-manager (>=1.2.6),
          ${shlibs:Depends},

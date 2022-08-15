@@ -440,7 +440,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(KyWirelessConnectSe
     } else if (type == WPA_AND_WPA2_PERSONAL) {
         mgmt = WpaPsk;
     } else if (type == WPA3_PERSONAL) {
-        mgmt = WpaEap;
+        mgmt = SAE;
     } else {
         return;
     }

@@ -17,7 +17,7 @@ static const SecretSchema network_manager_secret_schema = {
         { KEYRING_UUID_TAG, SECRET_SCHEMA_ATTRIBUTE_STRING },
         { KEYRING_SN_TAG, SECRET_SCHEMA_ATTRIBUTE_STRING },
         { KEYRING_SK_TAG, SECRET_SCHEMA_ATTRIBUTE_STRING },
-        { NULL, 0 },
+        { NULL, SECRET_SCHEMA_ATTRIBUTE_STRING },
     }
 };
 

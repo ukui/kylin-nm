@@ -1,5 +1,5 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: kylin-nm-dev
+Upstream-Name: libkylin-nm-base
 Upstream-Contact: Kylin Team <ukui@kylinos.cn>
 Source: https://github.com/ukui/kylin-nm
 

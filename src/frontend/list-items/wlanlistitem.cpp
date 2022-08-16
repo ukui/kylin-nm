@@ -448,13 +448,34 @@ void WlanListItem::onNetButtonClicked()
         return;
     }
 
+    //获取有配置网络的安全类型
+    KyKeyMgmt type = m_wirelessConnectOperation->getConnectKeyMgmt(m_wirelessNetItem.m_connectUuid);
+    KySecuType kySecuType = NONE;
+    if (type == WpaNone || type == Unknown) {
+        kySecuType = NONE;
+    } else if (type == WpaPsk) {
+        kySecuType = WPA_AND_WPA2_PERSONAL;
+    } else if (type == SAE) {
+        kySecuType = WPA3_PERSONAL;
+    } else if (type == WpaEap) {
+        kySecuType = WPA_AND_WPA2_ENTERPRISE;
+    } else {
+        qDebug() << "KeyMgmt not support now " << type;
+    }
+
     //有配置或者无密码的wifi直接连接
     if (m_wirelessNetItem.m_isConfigured) {
-        m_wirelessConnectOperation->activeWirelessConnect(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
-        qDebug()<<"[WlanListItem] Has configuration, will be activated. ssid = "
-               << m_wirelessNetItem.m_NetSsid << Q_FUNC_INFO << __LINE__;
-        m_netButton->startLoading();
-        return;
+        if (m_wirelessNetItem.m_kySecuType == kySecuType) {
+            //安全类型不变直接连接
+            m_wirelessConnectOperation->activeWirelessConnect(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
+            qDebug()<<"[WlanListItem] Has configuration, will be activated. ssid = "
+                   << m_wirelessNetItem.m_NetSsid << Q_FUNC_INFO << __LINE__;
+            m_netButton->startLoading();
+            return;
+        } else {
+            //安全类型改变则删除连接
+            m_wirelessConnectOperation->deleteWirelessConnect(m_wirelessNetItem.m_connectUuid);
+        }
     }
 
     if (!this->m_connectButton->isVisible() && m_wirelessNetItem.m_secuType != "") {

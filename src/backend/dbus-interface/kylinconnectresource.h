@@ -18,7 +18,7 @@ public:
     ~KyConnectResourse();
 
 public:
-    KyConnectItem *getConnectionItemByUuid(QString connectUuid);
+    KyConnectItem *getConnectionItemByUuid(QString connectUuid, bool checkActive = true);
     KyConnectItem *getConnectionItemByUuid(QString connectUuid, QString deviceName);
     void getConnectionList(QString deviceName,
                            NetworkManager::ConnectionSettings::ConnectionType connectionType,

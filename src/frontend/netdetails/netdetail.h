@@ -30,6 +30,7 @@
 #include "kwidget.h"
 #include "ktabbar.h"
 
+#include <arpa/inet.h>
 using namespace kdk;
 
 class NetDetail : public QWidget
@@ -81,6 +82,8 @@ private:
     void showDesktopNotify(const QString &message, QString soundName);
 
     void setNetdetailSomeEnable(bool on);
+
+    void getIpv4Info(QString objPath, ConInfo &conInfo);
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyConnectOperation* m_connectOperation = nullptr;

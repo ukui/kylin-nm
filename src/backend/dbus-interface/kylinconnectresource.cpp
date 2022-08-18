@@ -106,7 +106,7 @@ bool KyConnectResourse::isActiveDevice(QString conUuid, QString devName)
     return false;
 }
 
-KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
+KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, bool checkActive)
 {
     NetworkManager::Connection::Ptr connectPtr =
             m_networkResourceInstance->getConnect(connectUuid);
@@ -116,7 +116,7 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
         return nullptr;
     }
 
-    if (m_networkResourceInstance->isActiveConnection(connectPtr->uuid())) {
+    if (checkActive && m_networkResourceInstance->isActiveConnection(connectPtr->uuid())) {
         qDebug()<<"[KyConnectResourse]"<<connectPtr->name()<<"is active connection";
         return nullptr;
     }

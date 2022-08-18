@@ -27,6 +27,8 @@ public:
     void setIpv4SecDns(const QString &ipv4SecDns);
     void setGateWay(const QString &gateWay);
 
+    QString getNetMaskText(QString text);
+
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
 private:
     QComboBox *ipv4ConfigCombox;
@@ -52,7 +54,7 @@ private:
     void configSave();
     bool getTextEditState(QString text);
     bool netMaskIsValide(QString text);
-    QString getNetMaskText(QString text);
+
     bool checkConnectBtnIsEnabled();
 
 

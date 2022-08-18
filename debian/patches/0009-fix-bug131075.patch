@@ -1,0 +1,232 @@
+From: jzxc95 <907297917@qq.com>
+Date: Thu, 18 Aug 2022 17:10:40 +0800
+Subject: fix bug131075
+
+---
+ .../dbus-interface/kylinconnectresource.cpp        |   4 +-
+ src/backend/dbus-interface/kylinconnectresource.h  |   2 +-
+ src/frontend/netdetails/ipv4page.h                 |   4 +-
+ src/frontend/netdetails/netdetail.cpp              | 124 ++++++++++++++++++---
+ src/frontend/netdetails/netdetail.h                |   3 +
+ 5 files changed, 120 insertions(+), 17 deletions(-)
+
+diff --git a/src/backend/dbus-interface/kylinconnectresource.cpp b/src/backend/dbus-interface/kylinconnectresource.cpp
+index 00d0570..deebf69 100644
+--- a/src/backend/dbus-interface/kylinconnectresource.cpp
++++ b/src/backend/dbus-interface/kylinconnectresource.cpp
+@@ -106,7 +106,7 @@ bool KyConnectResourse::isActiveDevice(QString conUuid, QString devName)
+     return false;
+ }
+ 
+-KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
++KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, bool checkActive)
+ {
+     NetworkManager::Connection::Ptr connectPtr =
+             m_networkResourceInstance->getConnect(connectUuid);
+@@ -116,7 +116,7 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
+         return nullptr;
+     }
+ 
+-    if (m_networkResourceInstance->isActiveConnection(connectPtr->uuid())) {
++    if (checkActive && m_networkResourceInstance->isActiveConnection(connectPtr->uuid())) {
+         qDebug()<<"[KyConnectResourse]"<<connectPtr->name()<<"is active connection";
+         return nullptr;
+     }
+diff --git a/src/backend/dbus-interface/kylinconnectresource.h b/src/backend/dbus-interface/kylinconnectresource.h
+index f79024a..d0db17b 100644
+--- a/src/backend/dbus-interface/kylinconnectresource.h
++++ b/src/backend/dbus-interface/kylinconnectresource.h
+@@ -18,7 +18,7 @@ public:
+     ~KyConnectResourse();
+ 
+ public:
+-    KyConnectItem *getConnectionItemByUuid(QString connectUuid);
++    KyConnectItem *getConnectionItemByUuid(QString connectUuid, bool checkActive = true);
+     KyConnectItem *getConnectionItemByUuid(QString connectUuid, QString deviceName);
+     void getConnectionList(QString deviceName,
+                            NetworkManager::ConnectionSettings::ConnectionType connectionType,
+diff --git a/src/frontend/netdetails/ipv4page.h b/src/frontend/netdetails/ipv4page.h
+index 25ef07a..ab06ce7 100644
+--- a/src/frontend/netdetails/ipv4page.h
++++ b/src/frontend/netdetails/ipv4page.h
+@@ -27,6 +27,8 @@ public:
+     void setIpv4SecDns(const QString &ipv4SecDns);
+     void setGateWay(const QString &gateWay);
+ 
++    QString getNetMaskText(QString text);
++
+     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
+ private:
+     QComboBox *ipv4ConfigCombox;
+@@ -52,7 +54,7 @@ private:
+     void configSave();
+     bool getTextEditState(QString text);
+     bool netMaskIsValide(QString text);
+-    QString getNetMaskText(QString text);
++
+     bool checkConnectBtnIsEnabled();
+ 
+ 
+diff --git a/src/frontend/netdetails/netdetail.cpp b/src/frontend/netdetails/netdetail.cpp
+index 6752904..3a83be4 100644
+--- a/src/frontend/netdetails/netdetail.cpp
++++ b/src/frontend/netdetails/netdetail.cpp
+@@ -521,22 +521,29 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
+     kyConnectResourse->getConnectionSetting(m_uuid,connetSetting);
+     connetSetting.dumpInfo();
+ 
+-    conInfo.ipv4ConfigType = connetSetting.m_ipv4ConfigIpType;
++//    conInfo.ipv4ConfigType = connetSetting.m_ipv4ConfigIpType;
+     conInfo.ipv6ConfigType = connetSetting.m_ipv6ConfigIpType;
+     conInfo.isAutoConnect  = connetSetting.m_isAutoConnect;
+ 
+-    if (connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
+-        if (connetSetting.m_ipv4Address.size() > 0) {
+-            conInfo.strIPV4Address = connetSetting.m_ipv4Address.at(0).ip().toString();
+-            conInfo.strIPV4NetMask = connetSetting.m_ipv4Address.at(0).netmask().toString();
+-            conInfo.strIPV4GateWay = connetSetting.m_ipv4Address.at(0).gateway().toString();
+-        }
+-        if (connetSetting.m_ipv4Dns.size() == 1) {
+-            conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
+-        } else if (connetSetting.m_ipv4Dns.size() > 1) {
+-            conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
+-            conInfo.strIPV4SecDns = connetSetting.m_ipv4Dns.at(1).toString();
+-        }
++//    if (connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
++//        if (connetSetting.m_ipv4Address.size() > 0) {
++//            conInfo.strIPV4Address = connetSetting.m_ipv4Address.at(0).ip().toString();
++//            conInfo.strIPV4NetMask = connetSetting.m_ipv4Address.at(0).netmask().toString();
++//            conInfo.strIPV4GateWay = connetSetting.m_ipv4Address.at(0).gateway().toString();
++//        }
++//        if (connetSetting.m_ipv4Dns.size() == 1) {
++//            conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
++//        } else if (connetSetting.m_ipv4Dns.size() > 1) {
++//            conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
++//            conInfo.strIPV4SecDns = connetSetting.m_ipv4Dns.at(1).toString();
++//        }
++//    }
++    //openkylin从第三方库读取有问题 改为ipv4信息直接通过dbus获取
++    KyConnectItem* item = kyConnectResourse->getConnectionItemByUuid(m_uuid, false);
++    if (item == nullptr) {
++        conInfo.ipv4ConfigType = CONFIG_IP_DHCP;
++    } else {
++        getIpv4Info(item->m_connectPath, conInfo);
+     }
+ 
+     if (connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
+@@ -956,3 +963,94 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
+    }
+    return QWidget::eventFilter(w, event);
+ }
++
++void NetDetail::getIpv4Info(QString objPath, ConInfo &conInfo)
++{
++    QDBusInterface m_interface("org.freedesktop.NetworkManager",
++                               objPath,
++                               "org.freedesktop.NetworkManager.Settings.Connection",
++                               QDBusConnection::systemBus());
++    QDBusMessage result = m_interface.call("GetSettings");
++
++    if (result.arguments().isEmpty()) { return; }
++    const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
++    QMap<QString,QMap<QString,QVariant>> map;
++    dbusArg1st >> map;
++
++    for (QString key : map.keys() ) {
++        QMap<QString,QVariant> innerMap = map.value(key);
++        if (key == "ipv4") {
++            for (QString inner_key : innerMap.keys()) {
++                if (inner_key == "address-data") {
++                    //ipv4地址 ipv4子网掩码
++                    const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
++                    QVector<QMap<QString,QVariant>> addressVector;
++
++                    dbusArg2nd.beginArray();
++
++                    while (!dbusArg2nd.atEnd()) {
++                        QMap<QString,QVariant> tempMap;
++                        dbusArg2nd >> tempMap;
++                        addressVector.append(tempMap);
++                    }
++                    dbusArg2nd.endArray();
++                    if (addressVector.size() >= 1) {
++                        conInfo.strIPV4Address = addressVector.at(0).value("address").toString();
++                        conInfo.strIPV4NetMask = ipv4Page->getNetMaskText(addressVector.at(0).value("prefix").toString());
++                    }
++                } else if (inner_key == "method") {
++                    //ipv4 method
++                    if (innerMap.value(inner_key).toString() == "auto")
++                        conInfo.ipv4ConfigType = CONFIG_IP_DHCP;
++                    else {
++                        conInfo.ipv4ConfigType = CONFIG_IP_MANUAL;
++                    }
++                } else if (inner_key == "dns") {
++                    //dns
++                    const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
++                    QList<uint> addressVector;
++
++                    dbusArg2nd.beginArray();
++                    while (!dbusArg2nd.atEnd()) {
++                        uint tempMap;
++                        dbusArg2nd >> tempMap;
++                        addressVector.append(tempMap);
++                    }
++                    dbusArg2nd.endArray();
++                    if (addressVector.size() == 1) {
++                        QString dns(inet_ntoa(*(struct in_addr *)&addressVector.at(0)));
++                        conInfo.strIPV4FirDns = dns;
++                    } else if (addressVector.size() > 1) {
++                        QString dns1(inet_ntoa(*(struct in_addr *)&addressVector.at(0)));
++                        QString dns2(inet_ntoa(*(struct in_addr *)&addressVector.at(1)));
++                        conInfo.strIPV4FirDns = dns1;
++                        conInfo.strIPV4SecDns = dns2;
++                    }
++
++                } else if (inner_key == "gateway") {
++                    //gateway
++                    conInfo.strIPV4GateWay = innerMap.value(inner_key).toString();
++                }
++            }
++        }
++        //        if (key == "ipv6") {
++        //            for (QString inner_key : innerMap.keys()) {
++        //                if (inner_key == "address-data"){
++        //                    const QDBusArgument &dbusArg2nd = innerMap.value(inner_key).value<QDBusArgument>();
++        //                    QMap<QString,QVariant> m_map;
++
++        //                    dbusArg2nd.beginArray();
++        //                    while (!dbusArg2nd.atEnd()) {
++        //                        dbusArg2nd >> m_map;// append map to a vector here if you want to keep it
++        //                    }
++        //                    dbusArg2nd.endArray();
++
++        //                    dbusWifiIpv6 = m_map.value("address").toString();
++        //                } else if (inner_key == "method") {
++        //                    dbusWifiIpv6Method = innerMap.value(inner_key).toString();
++        //                }
++        //            }
++        //        }
++    }
++
++}
+diff --git a/src/frontend/netdetails/netdetail.h b/src/frontend/netdetails/netdetail.h
+index 5e99a72..c3262c8 100644
+--- a/src/frontend/netdetails/netdetail.h
++++ b/src/frontend/netdetails/netdetail.h
+@@ -30,6 +30,7 @@
+ #include "kwidget.h"
+ #include "ktabbar.h"
+ 
++#include <arpa/inet.h>
+ using namespace kdk;
+ 
+ class NetDetail : public QWidget
+@@ -81,6 +82,8 @@ private:
+     void showDesktopNotify(const QString &message, QString soundName);
+ 
+     void setNetdetailSomeEnable(bool on);
++
++    void getIpv4Info(QString objPath, ConInfo &conInfo);
+ private:
+     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
+     KyConnectOperation* m_connectOperation = nullptr;

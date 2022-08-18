@@ -19,6 +19,10 @@
  */
 #include "joinhiddenwifipage.h"
 
+#include <QApplication>
+
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME "styleName"
 #define  WINDOW_WIDTH  480
 #define  MIN_WINDOW_HEIGHT  368
 #define  PEAP_WINDOW_HEIGHT  524
@@ -253,3 +257,25 @@ void JoinHiddenWiFiPage::onEapTypeChanged(const KyEapMethodType &type)
     }
 }
 
+void JoinHiddenWiFiPage::onPaletteChanged()
+{
+    QPalette pal = qApp->palette();
+
+    QGSettings * styleGsettings = nullptr;
+//    const QByteArray style_id(THEME_SCHAME);
+//    if (QGSettings::isSchemaInstalled(style_id)) {
+//       styleGsettings = new QGSettings(style_id);
+//       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+//       if(currentTheme == "ukui-default"){
+//           pal = lightPalette(this);
+//       }
+//    }
+    this->setPalette(pal);
+    setFramePalette(m_secuWidget, pal);
+    setFramePalette(m_hiddenWifiScrollArea, pal);
+
+    if (styleGsettings != nullptr) {
+        delete styleGsettings;
+        styleGsettings = nullptr;
+    }
+}

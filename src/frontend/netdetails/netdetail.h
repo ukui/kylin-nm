@@ -51,6 +51,7 @@
 #include "kwidget.h"
 #include "ktabbar.h"
 
+#include <arpa/inet.h>
 using namespace kdk;
 
 #define  TAB_WIDTH  60
@@ -146,6 +147,7 @@ private:
     void startObjectThread();
     void setNetTabToolTip();
 
+    void getIpv4Info(QString objPath, ConInfo &conInfo);
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyConnectOperation* m_connectOperation = nullptr;

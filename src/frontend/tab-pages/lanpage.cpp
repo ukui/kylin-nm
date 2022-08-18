@@ -151,7 +151,8 @@ void LanPage::initNetSwitch()
         qDebug()<<"[LanPage] org.ukui.kylin-nm.switch is not installed!";
     }
 
-    if (wiredSwitch != wiredEnable) {
+    if (m_switchGsettings != nullptr
+            &&wiredSwitch != wiredEnable) {
         m_switchGsettings->set(WIRED_SWITCH, wiredEnable);
     }
 

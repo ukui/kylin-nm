@@ -46,6 +46,8 @@ public:
     void setMulDns(const QList<QHostAddress> &dns);
     void setGateWay(const QString &gateWay);
 
+    QString getNetMaskText(QString text);
+
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
 
     void startLoading();
@@ -87,7 +89,7 @@ private:
     void configSave();
     bool getTextEditState(QString text);
     bool netMaskIsValide(QString text);
-    QString getNetMaskText(QString text);
+
     bool checkConnectBtnIsEnabled();
     void initConflictHintLable();
     void initLoadingIcon();

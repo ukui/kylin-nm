@@ -108,8 +108,10 @@ void VpnPage::constructActiveConnectionArea()
 {
     QList<KyConnectItem *> activedList;
     QList<KyConnectItem *> netList;
-    QGSettings vpnGsettings(GSETTINGS_VPNICON_VISIBLE);
-
+    QGSettings* vpnGsettings = nullptr;
+    if (QGSettings::isSchemaInstalled(GSETTINGS_VPNICON_VISIBLE)) {
+        vpnGsettings = new QGSettings(GSETTINGS_VPNICON_VISIBLE);
+    }
     activedList.clear();
     netList.clear();
     clearConnectionMap(m_activeConnectionMap, m_vpnListWidget);
@@ -137,12 +139,14 @@ void VpnPage::constructActiveConnectionArea()
             delete p_netConnectionItem;
             p_netConnectionItem = nullptr;
         }
-        if (vpnGsettings.keys().contains(QString(VISIBLE))) {
-            vpnGsettings.set(VISIBLE, true);
+        if (vpnGsettings != nullptr
+                && vpnGsettings->keys().contains(QString(VISIBLE))) {
+            vpnGsettings->set(VISIBLE, true);
         }
     } else {
-        if (vpnGsettings.keys().contains(QString(VISIBLE))) {
-            vpnGsettings.set(VISIBLE, false);
+        if (vpnGsettings != nullptr
+                && vpnGsettings->keys().contains(QString(VISIBLE))) {
+            vpnGsettings->set(VISIBLE, false);
         }
     }
 
@@ -154,6 +158,9 @@ void VpnPage::constructActiveConnectionArea()
         m_netListArea->setFixedHeight(MAX_ITEMS * ITEM_HEIGHT);
     }
     m_netFrame->setFixedHeight(37 + m_netListArea->height());
+
+    delete vpnGsettings;
+    vpnGsettings = nullptr;
 }
 
 void VpnPage::initVpnArea()

@@ -98,7 +98,6 @@ private:
 
 
     //开关相关
-    void setSwitchStatus();
     void hideLayout(QVBoxLayout * layout);
     void showLayout(QVBoxLayout * layout);
 
@@ -124,6 +123,33 @@ private:
 
     //单个wifi连接状态变化
     void itemActiveConnectionStatusChanged(WlanItem *item, int status);
+
+    void initSwtichState();
+    inline void setSwitchBtnEnable(bool state) {
+        if (m_wifiSwitch != nullptr) {
+            m_wifiSwitch->setCheckable(state);
+        }
+    }
+    inline bool getSwitchBtnEnable() {
+        if (m_wifiSwitch != nullptr) {
+            return m_wifiSwitch->isCheckable();
+        }
+    }
+
+    inline void setSwitchBtnState(bool state) {
+        if (m_wifiSwitch != nullptr) {
+            m_wifiSwitch->blockSignals(true);
+            m_wifiSwitch->setChecked(state);
+            m_wifiSwitch->blockSignals(false);
+        }
+    }
+    inline bool getSwitchBtnState() {
+        if (m_wifiSwitch != nullptr) {
+            return m_wifiSwitch->isChecked();
+        }
+    }
+
+
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 
@@ -135,8 +161,6 @@ private:
     QWidget            *pluginWidget;
 
     QDBusInterface     *m_interface = nullptr;
-
-    QGSettings         *m_switchGsettings = nullptr;
 
     //设备列表
     QStringList deviceList;
@@ -161,6 +185,8 @@ private slots:
     void updateList();
     void onDeviceStatusChanged();
     void onDeviceNameChanged(QString, QString, int);
+
+    void onSwitchBtnChanged(bool);
 
     void reScan();
 

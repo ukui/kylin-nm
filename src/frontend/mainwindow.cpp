@@ -327,6 +327,7 @@ void MainWindow::initDbusConnnect()
     connect(m_lanWidget, &LanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
     connect(m_wlanWidget, &WlanPage::deviceStatusChanged, this, &MainWindow::deviceStatusChanged);
     connect(m_wlanWidget, &WlanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
+    connect(m_wlanWidget, &WlanPage::wirelessSwitchBtnChanged, this, &MainWindow::wirelessSwitchBtnChanged);
 
     connect(m_wlanWidget, &WlanPage::activateFailed, this, &MainWindow::activateFailed);
     connect(m_wlanWidget, &WlanPage::deactivateFailed, this, &MainWindow::deactivateFailed);
@@ -701,6 +702,13 @@ void MainWindow::getWirelessList(QMap<QString, QVector<QStringList> > &map)
     map.clear();
     if (nullptr != m_wlanWidget) {
         m_wlanWidget->getWirelessList(map);
+    }
+}
+
+bool MainWindow::getWirelessSwitchBtnState()
+{
+    if (nullptr != m_wlanWidget) {
+        return m_wlanWidget->getWirelessSwitchBtnState();
     }
 }
 

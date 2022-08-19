@@ -79,6 +79,11 @@ QString WlanListItem::getSsid()
     return m_wirelessNetItem.m_NetSsid;
 }
 
+QString WlanListItem::getUuid()
+{
+    return m_wirelessNetItem.m_connectUuid;
+}
+
 void WlanListItem::setSignalStrength(const int &signal)
 {
     m_wirelessNetItem.m_signalStrength = signal;

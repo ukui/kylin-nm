@@ -879,10 +879,22 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
     }
 
     if (m_activateConnectionItemMap.contains(ssid)) {
-        deleteWirelessItemFormMap(m_activateConnectionItemMap, m_activatedNetListWidget, ssid);
-        QListWidgetItem *p_activeListWidgetItem = addEmptyItem(m_activatedNetListWidget);
-        m_activateConnectionItemMap.insert(EMPTY_SSID, p_activeListWidgetItem);
-        m_activatedNetListWidget->setFixedHeight(p_activeListWidgetItem->sizeHint().height());
+        QListWidgetItem *p_listWidgetItem = m_activateConnectionItemMap.value(ssid);
+        if (nullptr == p_listWidgetItem) {
+            qWarning()<< LOG_FLAG <<"wireless item is not exsit, it's ssid is " << ssid;
+            return;
+        }
+        WlanListItem *p_wlanItem = (WlanListItem *)m_activatedNetListWidget->itemWidget(p_listWidgetItem);
+        if (nullptr == p_wlanItem) {
+            qWarning() << LOG_FLAG << "p_wlanItem is null";
+            return;
+        }
+        if (p_wlanItem->getUuid() == uuid) {
+            deleteWirelessItemFormMap(m_activateConnectionItemMap, m_activatedNetListWidget, ssid);
+            QListWidgetItem *p_activeListWidgetItem = addEmptyItem(m_activatedNetListWidget);
+            m_activateConnectionItemMap.insert(EMPTY_SSID, p_activeListWidgetItem);
+            m_activatedNetListWidget->setFixedHeight(p_activeListWidgetItem->sizeHint().height());
+        }
     } else {
         qDebug() << LOG_FLAG << ssid << "is not in activeconnection map";
     }
@@ -918,7 +930,8 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     qDebug()<< LOG_FLAG << "emit wlanActiveConnectionStateChanged" << devName << ssid << state;
     emit wlanActiveConnectionStateChanged(devName, ssid, uuid, state);
 
-    if (ssid.isEmpty() || devName.isEmpty()) {
+    //解决通过高级设置添加的未指定网卡的无线连接无法断开的问题，去掉设备为空的判断
+    if (ssid.isEmpty()) {
         qDebug()<< LOG_FLAG << "ssid or devicename is empty"
                 << "devicename"<< devName <<"ssid"<<ssid;
         return;
@@ -944,7 +957,7 @@ void WlanPage::onConnectionStateChanged(QString uuid,
         }
     }
 
-    if (devName != m_currentDevice) {
+    if (!devName.isEmpty() && devName != m_currentDevice) {
         return;
     }
 
@@ -989,6 +1002,9 @@ void WlanPage::onConnectionStateChanged(QString uuid,
         }
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         m_updateStrength = true;
+        if (devName.isEmpty()) {
+            devName = m_currentDevice;
+        }
         updateWirelessNetArea(uuid, ssid, devName);
         if (m_wirelessNetItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_wirelessNetItemMap.value(ssid);

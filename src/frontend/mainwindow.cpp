@@ -686,7 +686,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::ActivationChange) {
         if(QApplication::activeWindow() != this) {
-//            hideMainwindow();
+            hideMainwindow();
         }
     }
     return QMainWindow::eventFilter(watched,event);

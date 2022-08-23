@@ -607,7 +607,6 @@ void NetConnect::onDeviceStatusChanged()
     QMap<QString, ItemFrame *>::iterator iter;
     for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
         if (deviceStatusMap.contains(iter.key())) {
-            qDebug() <<"======" << iter.key() << iter.value()->deviceFrame->deviceSwitch->isChecked()  <<deviceStatusMap[iter.key()];
             if (iter.value()->deviceFrame->deviceSwitch->isChecked() != deviceStatusMap[iter.key()]) {
                 iter.value()->deviceFrame->deviceSwitch->setChecked(deviceStatusMap[iter.key()]);
             }

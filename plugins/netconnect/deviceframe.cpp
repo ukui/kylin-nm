@@ -45,11 +45,13 @@ DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
 bool DeviceFrame::eventFilter(QObject *w,QEvent *e)
 {
     if (w == deviceSwitch) {
-        if (e->type() == QMouseEvent::MouseButtonRelease) {
+        if (e->type() == QEvent::MouseButtonPress) {
+            qDebug() << "~~~~~~~~~~~~~~~~~~~~";
             emit deviceSwitchClicked(!deviceSwitch->isChecked());
             return true;
         }
     }
+    return QFrame::eventFilter(w, e);
 }
 
 void DeviceFrame::paintEvent(QPaintEvent *event)

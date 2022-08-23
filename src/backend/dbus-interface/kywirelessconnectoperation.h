@@ -143,7 +143,7 @@ private:
                                                                   const QString apDevice,
                                                                   const QString wirelessBand);
 
-signals:
+Q_SIGNALS:
     void wifiEnabledChanged(bool);
     void enabledWirelessNetwork(bool enabled);
     void addAndActivateConnectionError(QString errorMessage);

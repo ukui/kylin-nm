@@ -78,7 +78,7 @@ void MainWindow::showMainwindow()
     this->showByWaylandHelper();
     this->raise();
     this->activateWindow();
-    emit this->mainWindowVisibleChanged(true);
+    Q_EMIT this->mainWindowVisibleChanged(true);
 #ifdef WITHKYSEC
     if (!kysec_is_disabled() && kysec_get_3adm_status() && (getuid() || geteuid())){
         if (nullptr != m_wlanWidget) {
@@ -105,7 +105,7 @@ void MainWindow::showMainwindow()
 void MainWindow::hideMainwindow()
 {
     this->hide();
-    emit this->mainWindowVisibleChanged(false);
+    Q_EMIT this->mainWindowVisibleChanged(false);
 }
 
 /**
@@ -476,12 +476,12 @@ void MainWindow::resetWindowTheme()
     if(currentTheme == "ukui-dark" || currentTheme == "ukui-black"){
         app->setStyle(new CustomStyle("ukui-dark"));
         qDebug() << "Has set color theme to ukui-dark." << Q_FUNC_INFO << __LINE__;
-        emit qApp->paletteChanged(qApp->palette());
+        Q_EMIT qApp->paletteChanged(qApp->palette());
         return;
     }
     app->setStyle(new CustomStyle("ukui-light"));
     qDebug() << "Has set color theme to " << currentTheme << Q_FUNC_INFO << __LINE__;
-    emit qApp->paletteChanged(qApp->palette());
+    Q_EMIT qApp->paletteChanged(qApp->palette());
     return;
 }
 
@@ -558,7 +558,7 @@ void MainWindow::onThemeChanged(const QString &key)
         qDebug() << "Received signal of theme changed, will reset theme." << Q_FUNC_INFO << __LINE__;
 //        resetWindowTheme();
         paintWithTrans();
-        emit qApp->paletteChanged(qApp->palette());
+        Q_EMIT qApp->paletteChanged(qApp->palette());
     } else {
         qDebug() << "Received signal of theme changed, key=" << key << " will do nothing." << Q_FUNC_INFO << __LINE__;
     }
@@ -686,7 +686,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::ActivationChange) {
         if(QApplication::activeWindow() != this) {
-            hideMainwindow();
+//            hideMainwindow();
         }
     }
     return QMainWindow::eventFilter(watched,event);

@@ -75,12 +75,12 @@ private:
     void initUI();
     void initConnection();
 
-public slots:
+public Q_SLOTS:
     virtual void onNetButtonClicked() = 0;
     void onPaletteChanged();
     virtual void onMenuTriggered(QAction *action)=0;
 
-signals:
+Q_SIGNALS:
     void detailShow(bool isShow); 
 };
 

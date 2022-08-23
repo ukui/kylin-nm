@@ -159,15 +159,15 @@ private:
 
     ConInfo      m_info;
 
-private slots:
+private Q_SLOTS:
     void on_btnConfirm_clicked();
     void on_btnForget_clicked();
     void onPaletteChanged();
 
-protected slots:
+protected Q_SLOTS:
     void currentRowChangeSlot(int row);
 
-signals:
+Q_SIGNALS:
     void detailPageClose(bool on);
     void createPageClose(QString);
     void currentChanged(int);

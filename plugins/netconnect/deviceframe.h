@@ -34,10 +34,9 @@ using namespace kdk;
 
 class DeviceFrame : public QFrame
 {
-
+    Q_OBJECT
 public:
     DeviceFrame(QString devName, QWidget *parent = nullptr);
-    ~DeviceFrame();
 public:
     QLabel * deviceLabel = nullptr;
     KSwitchButton * deviceSwitch = nullptr;
@@ -45,10 +44,14 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event);
+    bool eventFilter(QObject *w,QEvent *e);
 
 private:
     bool isDropDown = false;
     int frameSize;
+
+signals:
+    void deviceSwitchClicked(bool);
 
 };
 

@@ -106,7 +106,7 @@ public:
     void keyRingInit();
     void keyRingClear();
 
-signals:
+Q_SIGNALS:
     //设备插拔
     void deviceStatusChanged();
     //设备名称变化
@@ -131,7 +131,7 @@ signals:
     void mainWindowVisibleChanged(const bool &visible);
     //列表排序
     void timeToUpdate();
-public slots:
+public Q_SLOTS:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
@@ -195,10 +195,10 @@ private:
 //    QMap<QString, NetDetail*> m_addOtherPagePtrMap;
     QMap<QString, JoinHiddenWiFiPage*> m_addOtherPagePtrMap;
 
-public slots:
+public Q_SLOTS:
     void onShowMainWindow(int type);
 
-private slots:
+private Q_SLOTS:
     void onTransChanged();
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void onShowMainwindowActionTriggled();

@@ -78,8 +78,6 @@ const QString CONFIG_FILE_PATH   =  QDir::homePath() + "/.config/ukui/kylin-nm.c
 bool checkDeviceExist(KyDeviceType deviceType, QString deviceName);
 QString getDefaultDeviceName(KyDeviceType deviceType);
 void setDefaultDevice(KyDeviceType deviceType, QString deviceName);
-void saveDeviceEnableState(QString deviceName, bool enable);
-void deleteDeviceEnableState(QString deviceName);
 void getDeviceEnableState(int type, QMap<QString, bool> &map);
 
 class TabPage : public QWidget
@@ -108,7 +106,7 @@ public:
         }
     }
 
-signals:
+Q_SIGNALS:
     void deviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName, int type);
     void activateFailed(QString errorMessage);
@@ -149,7 +147,7 @@ protected:
     QComboBox * m_deviceComboBox = nullptr;
     QLabel * m_tipsLabel = nullptr;
 
-public slots:
+public Q_SLOTS:
     virtual void onDeviceComboxIndexChanged(int currentIndex) = 0;
     void onPaletteChanged();
 

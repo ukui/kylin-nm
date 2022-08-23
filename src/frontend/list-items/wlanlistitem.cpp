@@ -124,7 +124,7 @@ void WlanListItem::setExpanded(const bool &expanded)
         setFixedHeight(NORMAL_HEIGHT);
     }
 
-    emit this->itemHeightChanged(expanded, m_wirelessNetItem.m_NetSsid);
+    Q_EMIT this->itemHeightChanged(expanded, m_wirelessNetItem.m_NetSsid);
 
     return;
 }
@@ -432,7 +432,7 @@ void WlanListItem::onInfoButtonClicked()
         }
     });
     netDetail->show();
-    emit this->detailShow(true);
+    Q_EMIT this->detailShow(true);
 }
 
 void WlanListItem::onNetButtonClicked()

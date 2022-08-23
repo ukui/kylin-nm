@@ -66,7 +66,7 @@ EnterpriseWlanDialog::~EnterpriseWlanDialog() {
 
 void EnterpriseWlanDialog::closeEvent(QCloseEvent *event)
 {
-    emit this->enterpriseWlanDialogClose(false);
+    Q_EMIT this->enterpriseWlanDialogClose(false);
     return QWidget::closeEvent(event);
 }
 

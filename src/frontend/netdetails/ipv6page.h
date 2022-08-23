@@ -80,13 +80,13 @@ private:
 
     bool checkConnectBtnIsEnabled();
 
-private slots:
+private Q_SLOTS:
     void configChanged(int index);
     void setEnableOfSaveBtn();
     void onAddressTextChanged();
     void onGatewayTextChanged();
 
-signals:
+Q_SIGNALS:
     void setIpv6PageState(bool);
 };
 

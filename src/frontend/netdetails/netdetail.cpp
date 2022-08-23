@@ -221,8 +221,8 @@ void NetDetail::paintEvent(QPaintEvent *event)
 
 void NetDetail::closeEvent(QCloseEvent *event)
 {
-    emit this->detailPageClose(false);
-    emit this->createPageClose(m_deviceName);
+    Q_EMIT this->detailPageClose(false);
+    Q_EMIT this->createPageClose(m_deviceName);
     return QWidget::closeEvent(event);
 }
 
@@ -1022,7 +1022,7 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        QKeyEvent *mEvent = static_cast<QKeyEvent *>(event);
        if (mEvent->key() == Qt::Key_Enter || mEvent->key() == Qt::Key_Return) {
            if (confimBtn->isEnabled()) {
-               emit confimBtn->clicked();
+               Q_EMIT confimBtn->clicked();
            }
            return true;
        } else if (mEvent->key() == Qt::Key_Escape) {

@@ -85,7 +85,7 @@ void DlgHotspotCreate::mouseMoveEvent(QMouseEvent *event){
 void DlgHotspotCreate::on_btnCancel_clicked()
 {
     this->close();
-    emit btnHotspotState();
+    Q_EMIT btnHotspotState();
 }
 
 void DlgHotspotCreate::on_btnOk_clicked()
@@ -101,7 +101,7 @@ void DlgHotspotCreate::on_btnOk_clicked()
     Utils::m_system(str.toUtf8().data());
 
     this->close();
-    emit updateHotspotList();
+    Q_EMIT updateHotspotList();
 }
 
 void DlgHotspotCreate::on_checkBoxPwd_stateChanged(int arg1)

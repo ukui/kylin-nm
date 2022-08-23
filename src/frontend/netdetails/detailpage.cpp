@@ -309,7 +309,7 @@ void DetailPage::setEnableOfSaveBtn() {
     if (m_IsCreate) {
         saveEnable = !m_SSIDEdit->text().isEmpty();
     }
-    emit setDetailPageState(saveEnable);
+    Q_EMIT setDetailPageState(saveEnable);
 }
 
 //获取列表信息

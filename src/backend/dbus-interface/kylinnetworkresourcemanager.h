@@ -104,7 +104,7 @@ public:
 
     bool NetworkManagerIsInited();
 
-signals:
+Q_SIGNALS:
     void connectionAdd(QString uuid);
     void connectionUpdate(QString uuid);
     void connectionRemove(QString path);
@@ -112,6 +112,7 @@ signals:
     void deviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType);
     void deviceUpdate(QString deviceName, QString deviceUni);
     void deviceRemove(QString deviceName, QString uni);
+    void deviceManagedChange(QString deviceName, bool managed);
 
     void deviceActiveChanage(QString deviceName, bool deviceActive);
     void deviceCarrierChanage(QString deviceName, bool pluged);
@@ -124,6 +125,7 @@ signals:
     void wifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net);
     void wifiNetworkDeviceDisappear();
     void wifiEnabledChanged(bool);
+    void wiredEnabledChanged(bool);
 
     void activeConnectionsReset();
     void activeConnectionAdd(QString uuid);
@@ -138,13 +140,14 @@ signals:
 
     void connectivityChanged(NetworkManager::Connectivity connectivity);
 
-public slots:
+public Q_SLOTS:
     void onInitNetwork();
     void setWirelessNetworkEnabled(bool enabled);
 
-private slots:
+private Q_SLOTS:
     void insertWifiNetworks();
     void onServiceAppear(QString, QString, QString);
+    void onPropertiesChanged(QVariantMap qvm);
     //connection
     void onConnectionUpdated();
     //void onConnectionRemoved();
@@ -163,6 +166,7 @@ private slots:
     void onDeviceActiveChanage();
 
     void onDeviceUpdated();
+    void onDeviceManagedChange();
     void onDeviceCarrierChanage(bool pluged);
     void onDeviceBitRateChanage(int bitRate);
     void onDeviceMacAddressChanage(const QString &hwAddress);

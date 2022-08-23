@@ -76,7 +76,7 @@ public:
 
     void getConnectivity(NetworkManager::Connectivity &connectivity);
 
-signals:
+Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);
     void wlanRemove(QString devName,QString ssid);
@@ -93,13 +93,13 @@ signals:
 
     void connectivityChanged(NetworkManager::Connectivity connectivity);
 
-public slots:
+public Q_SLOTS:
     void onMainWindowVisibleChanged(const bool &visible);
     void onSecurityTypeChange(QString devName, QString ssid, QString secuType);
     void requestScan();
     void onWlanPageVisibleChanged(int index);
 
-private slots:
+private Q_SLOTS:
     void onWlanAdded(QString interface, KyWirelessNetItem &item);
     void onWlanRemoved(QString interface, QString ssid);
 

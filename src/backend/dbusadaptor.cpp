@@ -95,7 +95,6 @@ void DbusAdaptor::setWirelessSwitchEnable(bool enable)
 void DbusAdaptor::setDeviceEnable(QString devName, bool enable)
 {
     parent()->setWiredDeviceEnable(devName, enable);
-    saveDeviceEnableState(devName, enable);
 }
 
 //设置默认网卡

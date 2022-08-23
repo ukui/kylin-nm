@@ -84,13 +84,13 @@ private:
     bool m_isSecuOk = false;
     ConInfo      m_info;
 
-private slots:
+private Q_SLOTS:
     void onBtnJoinClicked();
     void onBtnShowListClicked();
     void onSecuTypeChanged(const KySecuType &type);
     void onEapTypeChanged(const KyEapMethodType &type);
 
-signals:
+Q_SIGNALS:
     void hiddenWiFiPageClose(QString);
     void showWlanList(int type);
 };

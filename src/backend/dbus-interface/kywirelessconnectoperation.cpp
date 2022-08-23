@@ -185,7 +185,7 @@ void KyWirelessConnectOperation::addConnect(const KyWirelessConnectSetting &conn
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = tr("create wireless connection failed: ") + watcher->error().message();
             qWarning()<<errorMessage;
-            emit this->createConnectionError(errorMessage);
+            Q_EMIT this->createConnectionError(errorMessage);
         } else {
             qDebug()<<"create wireless connect complete";
         }
@@ -219,7 +219,7 @@ void KyWirelessConnectOperation::addTlsConnect(const KyWirelessConnectSetting &c
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = tr("create wireless tls connection failed: ") + watcher->error().message();
             qWarning()<<errorMessage;
-            emit this->createConnectionError(errorMessage);
+            Q_EMIT this->createConnectionError(errorMessage);
         } else {
             qDebug()<<"create wireless connect complete";
         }
@@ -253,7 +253,7 @@ void KyWirelessConnectOperation::addPeapConnect(const KyWirelessConnectSetting &
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = tr("create wireless peap connection failed: ") + watcher->error().message();
             qWarning()<<errorMessage;
-            emit this->createConnectionError(errorMessage);
+            Q_EMIT this->createConnectionError(errorMessage);
         } else {
             qDebug()<<"create wireless connect complete";
         }
@@ -287,7 +287,7 @@ void KyWirelessConnectOperation::addTtlsConnect(const KyWirelessConnectSetting &
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = tr("create wireless ttls connection failed: ") + watcher->error().message();
             qWarning()<<errorMessage;
-            emit this->createConnectionError(errorMessage);
+            Q_EMIT this->createConnectionError(errorMessage);
         } else {
             qDebug()<<"create wireless connect complete";
         }
@@ -304,7 +304,7 @@ void KyWirelessConnectOperation::setWirelessAutoConnect(const QString &uuid, boo
     if (nullptr == connectPtr) {
         QString errorMessage = tr("it can not find connection") + uuid;
         qWarning()<<errorMessage;
-        emit updateConnectionError(errorMessage);
+        Q_EMIT updateConnectionError(errorMessage);
         return;
     }
     NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
@@ -391,7 +391,7 @@ void KyWirelessConnectOperation::updateIpv4AndIpv6SettingInfo(const QString &uui
     if (nullptr == connectPtr) {
         QString errorMessage = tr("it can not find connection") + uuid;
         qWarning()<<errorMessage;
-        emit updateConnectionError(errorMessage);
+        Q_EMIT updateConnectionError(errorMessage);
         return;
     }
     NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
@@ -408,7 +408,7 @@ void KyWirelessConnectOperation::updateWirelessPersonalConnect(const QString &uu
     if (nullptr == connectPtr) {
         QString errorMessage = tr("it can not find connection") + uuid;
         qWarning()<<errorMessage;
-        emit updateConnectionError(errorMessage);
+        Q_EMIT updateConnectionError(errorMessage);
         return;
     }
     NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
@@ -435,7 +435,7 @@ void KyWirelessConnectOperation::updateWirelessEnterPriseTlsConnect(const QStrin
     if (connectPtr.isNull()) {
         QString errorMessage = tr("it can not find connection") + uuid;
         qWarning()<<errorMessage;
-        emit updateConnectionError(errorMessage);
+        Q_EMIT updateConnectionError(errorMessage);
         return;
     }
     NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
@@ -453,7 +453,7 @@ void KyWirelessConnectOperation::updateWirelessEnterPrisePeapConnect(const QStri
     if (nullptr == connectPtr) {
         QString errorMessage = tr("it can not find connection") + uuid;
         qWarning()<<errorMessage;
-        emit updateConnectionError(errorMessage);
+        Q_EMIT updateConnectionError(errorMessage);
         return;
     }
     NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
@@ -471,7 +471,7 @@ void KyWirelessConnectOperation::updateWirelessEnterPriseTtlsConnect(const QStri
     if (nullptr == connectPtr) {
         QString errorMessage = tr("it can not find connection") + uuid;
         qWarning()<<errorMessage;
-        emit updateConnectionError(errorMessage);
+        Q_EMIT updateConnectionError(errorMessage);
         return;
     }
     NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
@@ -503,7 +503,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
 
     auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
     if (dev.isNull()) {
-        emit addAndActivateConnectionError("can not find device");
+        Q_EMIT addAndActivateConnectionError("can not find device");
         return;
     }
 
@@ -569,7 +569,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = watcher->error().message();
             qDebug() << "activation of connection failed " << errorMessage;
-            emit addAndActivateConnectionError(errorMessage);
+            Q_EMIT addAndActivateConnectionError(errorMessage);
         }
         watcher->deleteLater();
     });
@@ -610,7 +610,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTlsConnect(KyEapM
 
     auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
     if (dev.isNull()) {
-        emit addAndActivateConnectionError("can not find device");
+        Q_EMIT addAndActivateConnectionError("can not find device");
         return;
     }
     dev_uni = dev->uni();
@@ -631,7 +631,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTlsConnect(KyEapM
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = watcher->error().message();
             qDebug() << "addAndActiveWirelessEnterPriseTlsConnect failed " << errorMessage;
-            emit addAndActivateConnectionError(errorMessage);
+            Q_EMIT addAndActivateConnectionError(errorMessage);
         }
         watcher->deleteLater();
     });
@@ -664,7 +664,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPrisePeapConnect(KyEap
 
     auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
     if (dev.isNull()) {
-        emit addAndActivateConnectionError("can not find device");
+        Q_EMIT addAndActivateConnectionError("can not find device");
         return;
     }
     dev_uni = dev->uni();
@@ -685,7 +685,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPrisePeapConnect(KyEap
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = watcher->error().message();
             qDebug() << "addAndActiveWirelessEnterPrisePeapConnect failed " << errorMessage;
-            emit addAndActivateConnectionError(errorMessage);
+            Q_EMIT addAndActivateConnectionError(errorMessage);
         }
         watcher->deleteLater();
     });
@@ -717,7 +717,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
 
     auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
     if (dev.isNull()) {
-        emit addAndActivateConnectionError("can not find device");
+        Q_EMIT addAndActivateConnectionError("can not find device");
         return;
     }
     dev_uni = dev->uni();
@@ -739,7 +739,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = watcher->error().message();
             qDebug() << "addAndActiveWirelessEnterPriseTtlsConnect failed " << errorMessage;
-            emit addAndActivateConnectionError(errorMessage);
+            Q_EMIT addAndActivateConnectionError(errorMessage);
         }
         watcher->deleteLater();
     });
@@ -748,7 +748,7 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
 //无线网络开关设置
 void KyWirelessConnectOperation::setWirelessEnabled(bool enabled)
 {
-    emit enabledWirelessNetwork(enabled);
+    Q_EMIT enabledWirelessNetwork(enabled);
 
     return;
 }
@@ -877,7 +877,7 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
         if (devicePtr.isNull()) {
             QString errorMsg ="Create hotspot faild. " + apDevice + " is not existed";
             qWarning()<< errorMsg;
-            emit addAndActivateConnectionError(errorMsg);
+            Q_EMIT addAndActivateConnectionError(errorMsg);
             return;
         }
 
@@ -892,7 +892,7 @@ void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QS
             if (watcher->isError() || !watcher->isValid()) {
                 QString errorMsg = "Create hotspot faild. " + watcher->error().message();
                 qWarning() << errorMsg;
-                emit addAndActivateConnectionError(errorMsg);
+                Q_EMIT addAndActivateConnectionError(errorMsg);
             }
              watcher->deleteLater();
         });
@@ -1032,7 +1032,7 @@ void KyWirelessConnectOperation::activateApConnectionByUuid(const QString apUuid
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = tr("Create hotspot faild. ") + watcher->error().message();
             qWarning()<<errorMessage;
-            emit this->activateConnectionError(errorMessage);
+            Q_EMIT this->activateConnectionError(errorMessage);
          } else {
             qWarning()<<"active wired connect complete.";
          }

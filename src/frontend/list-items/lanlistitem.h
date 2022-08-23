@@ -52,7 +52,7 @@ protected:
 private:
     void connectItemCopy(const KyConnectItem *lanConnectItem);
 
-private slots:
+private Q_SLOTS:
     void onInfoButtonClicked();
     void onNetButtonClicked();
     void onMenuTriggered(QAction *action);

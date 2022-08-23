@@ -45,7 +45,7 @@ public:
 protected:
     void paintEvent(QPaintEvent *event);
 
-private slots:
+private Q_SLOTS:
     void on_btnCancel_clicked();
 
     void on_btnOk_clicked();

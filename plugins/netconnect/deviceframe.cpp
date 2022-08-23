@@ -34,6 +34,7 @@ DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
     deviceLabel = new QLabel(this);
     dropDownLabel = new DrownLabel(devName, this);
     deviceSwitch = new KSwitchButton(this);
+    deviceSwitch->installEventFilter(this);
 
     deviceLayout->addWidget(deviceLabel);
     deviceLayout->addStretch();
@@ -41,9 +42,14 @@ DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
     deviceLayout->addWidget(deviceSwitch);
 }
 
-DeviceFrame::~DeviceFrame()
+bool DeviceFrame::eventFilter(QObject *w,QEvent *e)
 {
-
+    if (w == deviceSwitch) {
+        if (e->type() == QMouseEvent::MouseButtonRelease) {
+            emit deviceSwitchClicked(!deviceSwitch->isChecked());
+            return true;
+        }
+    }
 }
 
 void DeviceFrame::paintEvent(QPaintEvent *event)

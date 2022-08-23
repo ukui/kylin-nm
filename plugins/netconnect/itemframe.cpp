@@ -49,11 +49,6 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
     connect(deviceFrame->dropDownLabel, &DrownLabel::labelClicked, this, &ItemFrame::onDrownLabelClicked);
 }
 
-ItemFrame::~ItemFrame()
-{
-
-}
-
 void ItemFrame::onDrownLabelClicked()
 {
     if (!deviceFrame->dropDownLabel->isChecked) {

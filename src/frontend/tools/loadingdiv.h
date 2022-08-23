@@ -32,10 +32,10 @@ class LoadingDiv : public QWidget
 public:
     explicit LoadingDiv(QWidget *parent = nullptr);
 
-signals:
+Q_SIGNALS:
     void toStopLoading();
 
-public slots:
+public Q_SLOTS:
     void switchAnimStep();
     void startLoading();
     void stopLoading();

@@ -20,6 +20,7 @@
 
 #include "kylinnetworkdeviceresource.h"
 #include "kywirelessnetitem.h"
+#include "kylinutil.h"
 
 #define VIRTURAL_DEVICE_PATH "/sys/devices/virtual/net"
 #define LOG_FLAG "KyNetworkDeviceResourse"
@@ -47,6 +48,8 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
                                        this, &KyNetworkDeviceResourse::deviceMacAddressChanage);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceActiveChanage,
                                        this, &KyNetworkDeviceResourse::deviceActiveChanage);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceManagedChange,
+                                       this, &KyNetworkDeviceResourse::deviceManagedChange);
 
 }
 
@@ -308,7 +311,7 @@ int KyNetworkDeviceResourse::getWirelessDeviceCapability(const QString deviceNam
 void KyNetworkDeviceResourse::onDeviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType)
 {
     m_deviceMap.insert(uni, deviceName);
-    emit deviceAdd(deviceName, deviceType);
+    Q_EMIT deviceAdd(deviceName, deviceType);
 
     return;
 }
@@ -316,7 +319,7 @@ void KyNetworkDeviceResourse::onDeviceAdd(QString deviceName, QString uni, Netwo
 void KyNetworkDeviceResourse::onDeviceRemove(QString deviceName, QString uni)
 {
     m_deviceMap.remove(uni);
-    emit deviceRemove(deviceName);
+    Q_EMIT deviceRemove(deviceName);
 
     return;
 }
@@ -327,7 +330,7 @@ void KyNetworkDeviceResourse::onDeviceUpdate(QString interface, QString dbusPath
         if (m_deviceMap[dbusPath] != interface) {
             QString oldName = m_deviceMap[dbusPath];
             m_deviceMap[dbusPath] = interface;
-            emit deviceNameUpdate(oldName, interface);
+            Q_EMIT deviceNameUpdate(oldName, interface);
         }
     }
 
@@ -357,4 +360,30 @@ bool KyNetworkDeviceResourse::deviceIsWired(QString deviceName)
     }
 
     return false;
+}
+
+void KyNetworkDeviceResourse::setDeviceManaged(QString devName, bool managed)
+{
+    QString dbusPath;
+    NetworkManager::Device::Ptr connectDevice =
+                        m_networkResourceInstance->findDeviceInterface(devName);
+    if (connectDevice->isValid()) {
+       dbusPath = connectDevice->uni();
+    } else {
+        qWarning()<<"[KyNetworkDeviceResourse] can not find device " << devName;
+        return;
+    }
+    setDeviceManagedByGDbus(dbusPath, managed);
+}
+
+bool KyNetworkDeviceResourse::getDeviceManaged(QString deviceName)
+{
+    NetworkManager::Device::Ptr connectDevice =
+                        m_networkResourceInstance->findDeviceInterface(deviceName);
+    if (connectDevice->isValid()) {
+       return connectDevice->managed();
+    } else {
+        qWarning()<<"[KyNetworkDeviceResourse] can not find device " << deviceName;
+        return false;
+    }
 }

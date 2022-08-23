@@ -253,7 +253,7 @@ void Ipv6Page::setControlEnabled(bool check)
 
 void Ipv6Page::setEnableOfSaveBtn()
 {
-    emit setIpv6PageState(checkConnectBtnIsEnabled());
+    Q_EMIT setIpv6PageState(checkConnectBtnIsEnabled());
 }
 
 void Ipv6Page::onAddressTextChanged()

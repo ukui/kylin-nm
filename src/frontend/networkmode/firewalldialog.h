@@ -46,7 +46,7 @@ private:
     QPushButton *m_YesBtn = nullptr;
     QPushButton *m_NoBtn = nullptr;
 
-signals:
+Q_SIGNALS:
     void setPublicNetMode();
     void setPrivateNetMode();
 };

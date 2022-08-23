@@ -32,7 +32,7 @@ public:
     explicit KyNetworkDeviceResourse(QObject *parent = nullptr);
     ~KyNetworkDeviceResourse();
 
-signals:
+Q_SIGNALS:
     void deviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void deviceRemove(QString deviceName);
     void deviceUpdate(QString deviceName);
@@ -44,8 +44,9 @@ signals:
     void deviceBitRateChanage(QString deviceName, int bitRate);
     void deviceMacAddressChanage(QString deviceName, const QString &hwAddress);
     void deviceActiveChanage(QString deviceName, bool deivceActive);
+    void deviceManagedChange(QString deviceName, bool managed);
 
-public slots:
+public Q_SLOTS:
     void onDeviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName, QString uni);
     void onDeviceUpdate(QString interface, QString dbusPath);
@@ -63,6 +64,9 @@ public:
     bool deviceIsWired(QString deviceName);
 
     void setDeviceRefreshRate(QString deviceName, int ms);
+
+    void setDeviceManaged(QString devName, bool managed);
+    bool getDeviceManaged(QString devName);
 
 private:
     KyWiredConnectOperation wiredOperation;

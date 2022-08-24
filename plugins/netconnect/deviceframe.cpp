@@ -46,7 +46,6 @@ bool DeviceFrame::eventFilter(QObject *w,QEvent *e)
 {
     if (w == deviceSwitch) {
         if (e->type() == QEvent::MouseButtonPress) {
-            qDebug() << "~~~~~~~~~~~~~~~~~~~~";
             emit deviceSwitchClicked(!deviceSwitch->isChecked());
             return true;
         }

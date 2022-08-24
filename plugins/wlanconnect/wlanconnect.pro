@@ -45,7 +45,11 @@ INSTALLS += target \
 TRANSLATIONS += \
         translations/wlan_zh_CN.ts \
         translations/wlan_tr.ts \
-        translations/wlan_bo.ts
+        translations/wlan_bo.ts \
+        translations/wlan_bo_CN.ts
 
 RESOURCES += \
     resource.qrc
+
+DISTFILES += \
+    translations/wlan_bo_CN.ts

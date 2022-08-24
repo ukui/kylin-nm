@@ -52,7 +52,8 @@ SOURCES += \
 TRANSLATIONS += \
     ./translations/kylin-keyring_zh_CN.ts \
     ./translations/kylin-keyring_tr.ts \
-    ./translations/kylin-keyring_bo.ts
+    ./translations/kylin-keyring_bo.ts \
+    ./translations/kylin-keyring_bo_CN.ts
 
 unix {
     target.path = /usr/lib/

@@ -429,7 +429,7 @@ void LanPage::constructConnectionArea()
 
         }
     }
-    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
     } else {
         m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);
@@ -475,7 +475,7 @@ bool LanPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
             p_listWidgetItem = nullptr;
 
             iter = connectMap.erase(iter);
-            if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+            if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
                 m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
             }
             return true;
@@ -528,7 +528,7 @@ void LanPage::onAddConnection(QString uuid)               //新增一个有线�
 
     delete p_newItem;
     p_newItem = nullptr;
-    if (m_inactivatedLanListWidget->count() >= MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() > MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);
     }
     return;
@@ -857,7 +857,7 @@ void LanPage::updateActivatedConnectionArea(KyConnectItem *p_newItem)
         m_activeConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
 //        this->showDesktopNotify(tr("LAN Connected Successfully"), "networkconnected");
     }
-    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
     }
 
@@ -881,7 +881,7 @@ void LanPage::updateConnectionArea(KyConnectItem *p_newItem)
         m_inactiveConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
 //        this->showDesktopNotify(tr("LAN Disconnected Successfully"), "networkdisconnected");
     }
-    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
     } else {
         m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);

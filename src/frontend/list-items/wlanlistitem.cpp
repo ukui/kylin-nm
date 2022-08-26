@@ -641,6 +641,7 @@ void WlanListItem::setConnectButtonState()
     QPalette btnPal;
     if (m_connectButton->isEnabled()) {
         btnPal.setColor(QPalette::Button, ENABLE_BUTTON_COLOR);
+        btnPal.setColor(QPalette::ButtonText, Qt::white);
         m_connectButton->setPalette(btnPal);
     } else {
         btnPal.setColor(QPalette::Button, UNABLE_BUTTON_COLOR);

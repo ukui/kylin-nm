@@ -44,6 +44,7 @@ signals:
     void deviceBitRateChanage(QString deviceName, int bitRate);
     void deviceMacAddressChanage(QString deviceName, const QString &hwAddress);
     void deviceActiveChanage(QString deviceName, bool deivceActive);
+    void stateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason);
 
 public slots:
     void onDeviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType);

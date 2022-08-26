@@ -76,6 +76,8 @@ public:
 
     void getConnectivity(NetworkManager::Connectivity &connectivity);
 
+    bool getWirelessSwitchBtnState();
+
 signals:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);
@@ -92,6 +94,8 @@ signals:
     void showMainWindow(int type);
 
     void connectivityChanged(NetworkManager::Connectivity connectivity);
+
+    void wirelessSwitchBtnChanged(bool state);
 
 public slots:
     void onMainWindowVisibleChanged(const bool &visible);
@@ -115,13 +119,13 @@ private slots:
                                 NetworkManager::ActiveConnection::Reason reason);
     void onItemHeightChanged(const bool isExpanded, const QString &ssid);
 
-    void onWlanSwithGsettingsChanged(const QString &key);
-
     void onDeviceComboxIndexChanged(int currentIndex);
     void onHiddenWlanClicked();
     void showControlCenter();
     void onWifiEnabledChanged(bool isWifiOn);
     void onRefreshIconTimer();
+
+    void onWlanStateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -174,6 +178,31 @@ private:
 //    void wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::State state,
 //                                  NetworkManager::ActiveConnection::Reason reason);
 
+    //是否存在可用的无线网卡
+    bool getWirelessDevieceUseable();
+    void setWirelessEnable(bool state);
+    bool getWirelessEnable();
+    inline void setSwitchBtnState(bool state) {
+        if (m_netSwitch != nullptr) {
+            m_netSwitch->setChecked(state);
+        }
+    }
+    inline bool getSwitchBtnState() {
+        if (m_netSwitch != nullptr) {
+            return m_netSwitch->isChecked();
+        }
+    }
+    inline void setSwitchBtnEnable(bool state) {
+        if (m_netSwitch != nullptr) {
+            m_netSwitch->setCheckable(state);
+        }
+    }
+    inline bool getSwitchBtnEnable() {
+        if (m_netSwitch != nullptr) {
+            return m_netSwitch->isCheckable();
+        }
+    }
+
 private:
     QMap<QString, QListWidgetItem*> m_wirelessNetItemMap;
     QMap<QString, QListWidgetItem*> m_activateConnectionItemMap;
@@ -194,9 +223,6 @@ private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyWirelessConnectOperation * m_wirelessConnectOpreation = nullptr;
     KyConnectResourse * m_connectResource = nullptr;
-
-    QGSettings *m_switchGsettings = nullptr;
-    bool m_wlanSwitchEnable = true;
 
     bool m_updateStrength = true;
 

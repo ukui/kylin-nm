@@ -137,6 +137,8 @@ signals:
                                            NetworkManager::VpnConnection::StateChangeReason reason);
 
     void connectivityChanged(NetworkManager::Connectivity connectivity);
+    void stateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason);
+
 
 public slots:
     void onInitNetwork();

@@ -4,7 +4,8 @@
 
 KylinAgent::KylinAgent(QObject *parent) : QObject(parent)
 {
-    QString locale = QLocale::system().name();
+    QLocale local;
+    QString locale = /*QLocale::system().*/local.name();
     QTranslator* translator = new QTranslator(this);
     if (translator->load(":/translations/kylin-keyring_"+ locale + ".qm")) {
         QApplication::installTranslator(translator);

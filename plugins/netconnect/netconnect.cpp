@@ -235,6 +235,8 @@ void NetConnect::initComponent() {
         Q_UNUSED(checked)
         runExternalApp();
     });
+
+    connect(this, SIGNAL(lanRemove(QString)), m_interface, SIGNAL(lanRemove(QString)));
 }
 
 //获取网卡列表
@@ -353,6 +355,12 @@ void NetConnect::runExternalApp() {
     process.startDetached(cmd);
 }
 
+//刪除
+void NetConnect::deleteOneLan(QString ssid)
+{
+    Q_EMIT lanRemove(ssid);
+}
+
 //激活
 void NetConnect::activeConnect(QString ssid, QString deviceName, int type) {
     qDebug() << "[NetConnect]call activateConnect" << __LINE__;
@@ -421,12 +429,12 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
         return;
     }
 
-    LanItem * lanItem = new LanItem(pluginWidget);
+    LanItem * lanItem = new LanItem(isActived, pluginWidget);
     QString iconPath = KLanSymbolic;
     if (isActived) {
         lanItem->statusLabel->setText(tr("connected"));
     } else {
-        lanItem->statusLabel->setText("");
+        lanItem->statusLabel->setText("not connected");
     }
     QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
@@ -456,6 +464,16 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
         } else {
             activeConnect(lanItem->uuid, devName, WIRED_TYPE);
         }
+    });
+
+    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
+            activeConnect(lanItem->uuid, devName, WIRED_TYPE);
+    });
+    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
+            deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
+    });
+    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
+            deleteOneLan(lanItem->dbusPath);
     });
 
     //记录到deviceFrame的itemMap中
@@ -695,7 +713,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
 
     QString iconPath;
     iconPath = KLanSymbolic;
-    lanItem->statusLabel->setText("");
+    lanItem->statusLabel->setText("not connected");
 
     QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
@@ -841,7 +859,9 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
         item->statusLabel->setMaximumSize(16777215,16777215);
         item->statusLabel->clear();
         item->isAcitve = false;
+        item->statusLabel->setText(tr("not connected"));
     }
+    item->setConnectActionText(item->isAcitve);
 
 //    QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));

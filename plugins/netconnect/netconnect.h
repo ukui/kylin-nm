@@ -152,6 +152,9 @@ private slots:
 
     void onDeviceStatusChanged();
     void onDeviceNameChanged(QString, QString, int);
+
+Q_SIGNALS:
+    void lanRemove(QString dbusPath);
 };
 
 Q_DECLARE_METATYPE(QList<QDBusObjectPath>);

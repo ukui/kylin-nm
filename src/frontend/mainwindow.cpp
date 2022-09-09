@@ -868,6 +868,12 @@ void MainWindow::getWirelessDeviceCap(QMap<QString, int> &map)
     m_wlanWidget->getWirelessDeviceCap(map);
 }
 
+//有线连接删除
+void MainWindow::deleteWired(const QString &connUuid)
+{
+    m_lanWidget->deleteWired(connUuid);
+}
+
 //有线连接断开
 void MainWindow::activateWired(const QString& devName, const QString& connUuid)
 {

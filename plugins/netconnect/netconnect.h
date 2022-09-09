@@ -101,7 +101,7 @@ private:
     int getInsertPos(QString connName, QString deviceName);
 
 
-    void deleteOneLan(QString ssid);
+    void deleteOneLan(QString ssid, int type);
     void activeConnect(QString ssid, QString deviceName, int type);
     void deActiveConnect(QString ssid, QString deviceName, int type);
 
@@ -153,8 +153,6 @@ private slots:
     void onDeviceStatusChanged();
     void onDeviceNameChanged(QString, QString, int);
 
-Q_SIGNALS:
-    void lanRemove(QString dbusPath);
 };
 
 Q_DECLARE_METATYPE(QList<QDBusObjectPath>);

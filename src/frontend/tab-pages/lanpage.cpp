@@ -1270,6 +1270,15 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
+void LanPage::deleteWired(const QString &connUuid)
+{
+    qDebug() << "[LanPage] deleteWired" << connUuid;
+    if (connUuid == nullptr) {
+        return;
+    }
+    m_wiredConnectOperation->deleteWiredConnect(connUuid);
+}
+
 void LanPage::activateWired(const QString& devName, const QString& connUuid)
 {
     qDebug() << "[LanPage] activateWired" << devName << connUuid;

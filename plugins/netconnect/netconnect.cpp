@@ -356,9 +356,11 @@ void NetConnect::runExternalApp() {
 }
 
 //刪除
-void NetConnect::deleteOneLan(QString ssid)
+void NetConnect::deleteOneLan(QString ssid, int type)
 {
-    Q_EMIT lanRemove(ssid);
+    qDebug() << "[NetConnect]call deleteConnect" << __LINE__;
+    m_interface->call(QStringLiteral("deleteConnect"), type, ssid);
+    qDebug() << "[NetConnect]call deleteConnect respond" << __LINE__;
 }
 
 //激活
@@ -457,6 +459,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     });
 
     lanItem->isAcitve = isActived;
+    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
         if (lanItem->isAcitve || lanItem->loading) {
@@ -473,7 +476,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
             deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
     });
     connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
-            deleteOneLan(lanItem->dbusPath);
+            deleteOneLan(lanItem->uuid, WIRED_TYPE);
     });
 
     //记录到deviceFrame的itemMap中
@@ -736,6 +739,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     });
 
     lanItem->isAcitve = false;
+    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
         if (lanItem->isAcitve || lanItem->loading) {
@@ -743,6 +747,16 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
         } else {
             activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
         }
+    });
+
+    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
+            activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
+    });
+    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
+            deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
+    });
+    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
+            deleteOneLan(lanItem->uuid, WIRED_TYPE);
     });
 
     //记录到deviceFrame的itemMap中

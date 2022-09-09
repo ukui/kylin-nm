@@ -235,8 +235,6 @@ void NetConnect::initComponent() {
         Q_UNUSED(checked)
         runExternalApp();
     });
-
-    connect(this, SIGNAL(lanRemove(QString)), m_interface, SIGNAL(lanRemove(QString)));
 }
 
 //获取网卡列表
@@ -436,7 +434,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     if (isActived) {
         lanItem->statusLabel->setText(tr("connected"));
     } else {
-        lanItem->statusLabel->setText("not connected");
+        lanItem->statusLabel->setText(tr("not connected"));
     }
     QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
@@ -716,7 +714,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
 
     QString iconPath;
     iconPath = KLanSymbolic;
-    lanItem->statusLabel->setText("not connected");
+    lanItem->statusLabel->setText(tr("not connected"));
 
     QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {

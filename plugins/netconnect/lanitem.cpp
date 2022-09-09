@@ -56,7 +56,7 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     m_moreButton->setIcon(QIcon::fromTheme("view-more-horizontal-symbolic"));
     m_moreMenu = new QMenu(m_moreButton);
     m_connectAction = new QAction(m_moreMenu);
-    m_deleteAction = new QAction("Delete", m_moreMenu);
+    m_deleteAction = new QAction(tr("Delete"), m_moreMenu);
     setConnectActionText(isAcitve);
 
     m_moreMenu->addAction(m_connectAction);

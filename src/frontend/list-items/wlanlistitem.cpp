@@ -28,6 +28,10 @@
 #define ENABLE_BUTTON_COLOR qApp->palette().highlight().color()
 #define UNABLE_BUTTON_COLOR qApp->palette().button().color()
 
+const QString ENTERPRICE_TYPE = "802.1X";
+const QString WPA1_AND_WPA2 = "WPA";
+const QString WPA3 = "WPA3";
+
 WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, QWidget *parent)
     : WlanListItem(wirelessNetItem, device, parent)
 {
@@ -82,6 +86,11 @@ QString WlanListItem::getSsid()
 QString WlanListItem::getUuid()
 {
     return m_wirelessNetItem.m_connectUuid;
+}
+
+QString WlanListItem::getPath()
+{
+    return m_wirelessNetItem.m_connDbusPath;
 }
 
 void WlanListItem::setSignalStrength(const int &signal)
@@ -467,7 +476,7 @@ void WlanListItem::onNetButtonClicked()
     } else {
         qDebug() << "KeyMgmt not support now " << type;
     }
-
+    //qDebug() << "!!!!" << m_wirelessNetItem.m_kySecuType << kySecuType;
     //有配置或者无密码的wifi直接连接
     if (m_wirelessNetItem.m_isConfigured) {
         if (m_wirelessNetItem.m_kySecuType == kySecuType) {
@@ -512,13 +521,23 @@ void WlanListItem::updateWirelessNetSecurity(QString ssid, QString securityType)
     }
 
     qDebug() << LOG_FLAG << "Security changed! ssid = " << m_wirelessNetItem.m_NetSsid
-             << "; security = " << m_wirelessNetItem.m_secuType << "." <<Q_FUNC_INFO << __LINE__;
+             << "; security = " << m_wirelessNetItem.m_secuType << "change to "<< securityType <<Q_FUNC_INFO << __LINE__;
 
     m_wirelessNetItem.m_secuType = securityType;
     bool newSecu = (m_wirelessNetItem.m_secuType.isEmpty() || m_wirelessNetItem.m_secuType == "") ? false : true;
     if (m_hasPwd^newSecu) {
         m_hasPwd = newSecu;
         refreshIcon(false);
+    }
+
+    if (securityType.indexOf(ENTERPRICE_TYPE) >= 0) {
+        m_wirelessNetItem.m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
+    } else if (securityType.indexOf(WPA3) >= 0) {
+        m_wirelessNetItem.m_kySecuType = WPA3_PERSONAL;
+    } else if ( securityType.indexOf(WPA1_AND_WPA2) >= 0) {
+        m_wirelessNetItem.m_kySecuType = WPA_AND_WPA2_PERSONAL;
+    } else {
+        m_wirelessNetItem.m_kySecuType = NONE;
     }
 
     return;

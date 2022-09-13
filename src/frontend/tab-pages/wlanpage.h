@@ -108,7 +108,7 @@ private slots:
     void onWlanRemoved(QString interface, QString ssid);
 
     void onConnectionAdd(QString deviceName, QString ssid);
-    void onConnectionRemove(QString deviceName, QString ssid);
+    void onConnectionRemove(QString deviceName, QString ssid, QString path);
 
     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName);
@@ -167,7 +167,7 @@ private:
     void constructActivateConnectionArea();
 
     void updateActivatedArea(QString uuid, QString ssid, QString devName);
-    void updateWirelessNetArea(QString uuid, QString ssid, QString devName);
+    void updateWirelessNetArea(QString uuid, QString ssid, QString devName, QString path);
 
     void addDeviceToCombox(QString deviceName);
     void deleteDeviceFromCombox(QString deviceName);

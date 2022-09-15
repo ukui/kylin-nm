@@ -445,15 +445,7 @@ void KyWirelessNetResource::onWifiNetworkSecuChange(NetworkManager::AccessPoint 
              if (itemIter->m_NetSsid == accessPointPtr->ssid()) {
                  QString devName = iter.key();
                  itemIter->m_secuType = secuType;
-                 if (secuType.indexOf(ENTERPRICE_TYPE) >= 0) {
-                     itemIter->m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
-                 } else if (secuType.indexOf(WPA3) >= 0) {
-                     itemIter->m_kySecuType = WPA3_PERSONAL;
-                 } else if (secuType.indexOf(WPA1_AND_WPA2) >= 0) {
-                     itemIter->m_kySecuType = WPA_AND_WPA2_PERSONAL;
-                 } else {
-                     itemIter->m_kySecuType = NONE;
-                 }
+                 itemIter->setKySecuType(secuType);
                  //qDebug() << "!!!!" << itemIter->m_NetSsid << itemIter->m_secuType << itemIter->m_kySecuType;
                  emit secuTypeChange(devName, accessPointPtr->ssid(), secuType);
                  break;
@@ -502,15 +494,8 @@ void KyWirelessNetResource::onWifiNetworkPropertyChange(NetworkManager::Wireless
                  if (iter->m_secuType != secuType) {
                      //qDebug() << "!!!!secuTypeChange" << wifiSsid << iter->m_secuType << "change to " << secuType;
                      iter->m_secuType = secuType;
-                     if (secuType.indexOf(ENTERPRICE_TYPE) >= 0) {
-                         iter->m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
-                     } else if (secuType.indexOf(WPA3) >= 0) {
-                         iter->m_kySecuType = WPA3_PERSONAL;
-                     } else if (secuType.indexOf(WPA1_AND_WPA2) >= 0) {
-                         iter->m_kySecuType = WPA_AND_WPA2_PERSONAL;
-                     } else {
-                         iter->m_kySecuType = NONE;
-                     }
+                     iter->setKySecuType(secuType);
+
                      emit secuTypeChange(devIface, wifiSsid, secuType);
                  }
 

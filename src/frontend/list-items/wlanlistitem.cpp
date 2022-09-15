@@ -530,15 +530,7 @@ void WlanListItem::updateWirelessNetSecurity(QString ssid, QString securityType)
         refreshIcon(false);
     }
 
-    if (securityType.indexOf(ENTERPRICE_TYPE) >= 0) {
-        m_wirelessNetItem.m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
-    } else if (securityType.indexOf(WPA3) >= 0) {
-        m_wirelessNetItem.m_kySecuType = WPA3_PERSONAL;
-    } else if ( securityType.indexOf(WPA1_AND_WPA2) >= 0) {
-        m_wirelessNetItem.m_kySecuType = WPA_AND_WPA2_PERSONAL;
-    } else {
-        m_wirelessNetItem.m_kySecuType = NONE;
-    }
+    m_wirelessNetItem.setKySecuType(securityType);
 
     return;
 }

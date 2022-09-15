@@ -178,6 +178,7 @@ private slots:
 
     //wifi network
     void onUpdateWirelessNet();
+    void onWifiNetworkSecuChang();
 
     //notifier
     void onDeviceAdded(QString const & uni);

@@ -89,13 +89,14 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
     NetworkManager::AccessPoint::WpaFlags wpaFlag = net->referenceAccessPoint()->wpaFlags();
     NetworkManager::AccessPoint::WpaFlags rsnFlag = net->referenceAccessPoint()->rsnFlags();
     m_secuType = enumToQstring(cap, wpaFlag, rsnFlag);
-    if (m_secuType.indexOf(ENTERPRICE_TYPE) >= 0) {
-            m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
-        } else if (m_secuType.indexOf(WPA3) >= 0) {
-            m_kySecuType = WPA3_PERSONAL;
-        } else if ( m_secuType.indexOf(WPA1_AND_WPA2) >= 0) {
-            m_kySecuType = WPA_AND_WPA2_PERSONAL;
-    }
+//    if (m_secuType.indexOf(ENTERPRICE_TYPE) >= 0) {
+//            m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
+//        } else if (m_secuType.indexOf(WPA3) >= 0) {
+//            m_kySecuType = WPA3_PERSONAL;
+//        } else if ( m_secuType.indexOf(WPA1_AND_WPA2) >= 0) {
+//            m_kySecuType = WPA_AND_WPA2_PERSONAL;
+//    }
+    setKySecuType(m_secuType);
     m_bssid = net->referenceAccessPoint()->hardwareAddress();
     m_device = net->device();
     m_uni = net->referenceAccessPoint()->uni();
@@ -150,4 +151,17 @@ int KyWirelessNetItem::getCategory(QString uni)
         return reply.value().toInt();
     }
 
+}
+
+void KyWirelessNetItem::setKySecuType(QString strSecuType)
+{
+    if (strSecuType.indexOf(ENTERPRICE_TYPE) >= 0) {
+        m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
+    } else if (strSecuType.indexOf(WPA3) >= 0) {
+        m_kySecuType = WPA3_PERSONAL;
+    } else if ( strSecuType.indexOf(WPA1_AND_WPA2) >= 0) {
+        m_kySecuType = WPA_AND_WPA2_PERSONAL;
+    } else {
+        m_kySecuType = NONE;
+    }
 }

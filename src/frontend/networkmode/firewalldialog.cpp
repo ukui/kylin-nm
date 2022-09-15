@@ -84,6 +84,6 @@ void FirewallDialog::initUI()
     this->closeButton();
     this->mainWidget()->setLayout(m_dialogLayout);
 
-    connect(m_YesBtn, &QPushButton::clicked, this, &FirewallDialog::setPrivateNetMode);
-    connect(m_NoBtn, &QPushButton::clicked, this, &FirewallDialog::setPublicNetMode);
+    connect(m_YesBtn, &QPushButton::clicked, this, &FirewallDialog::setPublicNetMode);
+    connect(m_NoBtn, &QPushButton::clicked, this, &FirewallDialog::setPrivateNetMode);
 }

@@ -21,6 +21,7 @@
 #define TABPAGE_H
 
 #include "divider.h"
+#include "kylable.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
@@ -36,7 +37,7 @@
 #include "firewalldialog.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
-#include "kborderlessbutton.h"
+//#include "kborderlessbutton.h"
 
 using namespace kdk;
 
@@ -141,7 +142,8 @@ protected:
 
     QFrame * m_settingsFrame = nullptr;
     QHBoxLayout * m_settingsLayout = nullptr;
-    KBorderlessButton *m_settingsBtn = nullptr;
+    KyLable * m_settingsLabel = nullptr;
+//    KBorderlessButton *m_settingsBtn = nullptr;
 
     //临时增加的下拉框选择网卡区域
     QFrame * m_deviceFrame = nullptr;

@@ -37,7 +37,7 @@
 #define  WINDOW_HEIGHT 602
 #define  ICON_SIZE 22,22
 #define  TITLE_LAYOUT_MARGINS 9,9,0,0
-#define  CENTER_LAYOUT_MARGINS 24,0,0,0
+#define  CENTER_LAYOUT_MARGINS 24,0,24,0
 #define  BOTTOM_LAYOUT_MARGINS 24,0,24,0
 #define  BOTTOM_LAYOUT_SPACING 16
 #define  PAGE_LAYOUT_SPACING 1
@@ -328,7 +328,7 @@ void NetDetail::initUI()
 
     pageFrame = new QFrame(this);
     QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
-    pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
+//    pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
 
     // TabBar
 //    m_netTabBar = new KTabBar(KTabBarStyle::SegmentDark, this);
@@ -354,9 +354,7 @@ void NetDetail::initUI()
         }
     }
 
-    pageLayout->addStretch();
-    pageLayout->addWidget(m_netTabBar);
-    pageLayout->addStretch();
+    pageLayout->addWidget(m_netTabBar, Qt::AlignCenter);
 
     // TabBar关联选项卡页面
     connect(m_netTabBar, SIGNAL(currentChanged(int)), this, SLOT(currentRowChangeSlot(int)));

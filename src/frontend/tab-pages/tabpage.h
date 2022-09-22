@@ -21,6 +21,7 @@
 #define TABPAGE_H
 
 #include "divider.h"
+#include "kylable.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
@@ -36,7 +37,7 @@
 #include "firewalldialog.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
-#include "kborderlessbutton.h"
+//#include "kborderlessbutton.h"
 
 using namespace kdk;
 
@@ -57,14 +58,14 @@ enum network_mode {
 #define NET_LIST_SPACING 0
 #define TEXT_MARGINS 16,0,0,0
 //#define SCROLL_AREA_HEIGHT 200
-#define SETTINGS_LAYOUT_MARGINS 24,0,24,0
+#define SETTINGS_LAYOUT_MARGINS 23,0,24,0
 #define TRANSPARENT_COLOR QColor(0,0,0,0)
 #define INACTIVE_AREA_MIN_HEIGHT 170
 #define ACTIVE_AREA_MAX_HEIGHT 92
 
 #define MAX_ITEMS 4
-#define MAX_WIDTH 408
-#define MIN_WIDTH 396
+#define MAX_WIDTH 412
+#define MIN_WIDTH 404
 
 #define SCROLL_STEP 4
 
@@ -141,7 +142,8 @@ protected:
 
     QFrame * m_settingsFrame = nullptr;
     QHBoxLayout * m_settingsLayout = nullptr;
-    KBorderlessButton *m_settingsBtn = nullptr;
+    KyLable * m_settingsLabel = nullptr;
+//    KBorderlessButton *m_settingsBtn = nullptr;
 
     //临时增加的下拉框选择网卡区域
     QFrame * m_deviceFrame = nullptr;

@@ -82,7 +82,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
 {
-    if (w == m_settingsBtn) {
+    if (w == m_settingsLabel) {
         if (e->type() == QEvent::MouseButtonRelease) {
             //ZJP_TODO 打开控制面板
             qDebug() << LOG_FLAG <<"recive event show control center";
@@ -134,7 +134,7 @@ void WlanPage::initWlanUI()
     m_activatedNetListWidget->setPalette(pal);
     m_inactivatedNetListWidget->setPalette(pal);
 
-    m_settingsBtn->installEventFilter(this);
+    m_settingsLabel->installEventFilter(this);
     m_netSwitch->installEventFilter(this);
 }
 

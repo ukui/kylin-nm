@@ -306,7 +306,12 @@ void KyNetworkResourceManager::addWifiNetwork(NetworkManager::WirelessNetwork::P
     //device signals
     connect(net.data(), &NetworkManager::WirelessNetwork::signalStrengthChanged, this, &KyNetworkResourceManager::onUpdateWirelessNet);
     connect(net.data(), &NetworkManager::WirelessNetwork::referenceAccessPointChanged, this, &KyNetworkResourceManager::onUpdateWirelessNet);
+    connect(net.data(), &NetworkManager::WirelessNetwork::referenceAccessPointChanged, this, &KyNetworkResourceManager::onReferenceAccessPointChanged);
     connect(net.data(), &NetworkManager::WirelessNetwork::disappeared, this, &KyNetworkResourceManager::onUpdateWirelessNet);
+    connect(net->referenceAccessPoint().data(), &NetworkManager::AccessPoint::wpaFlagsChanged, this, &KyNetworkResourceManager::onWifiNetworkSecuChang,
+            Qt::UniqueConnection);
+    connect(net->referenceAccessPoint().data(), &NetworkManager::AccessPoint::rsnFlagsChanged, this, &KyNetworkResourceManager::onWifiNetworkSecuChang,
+            Qt::UniqueConnection);
 }
 
 void KyNetworkResourceManager::insertWifiNetworks()
@@ -838,6 +843,31 @@ void KyNetworkResourceManager::onWifiNetworkDisappeared(QString const & ssid)
     return;
 }
 
+void KyNetworkResourceManager::onReferenceAccessPointChanged()
+{
+    NetworkManager::WirelessNetwork *p_wirelessNet =
+                    qobject_cast<NetworkManager::WirelessNetwork *>(sender());
+    if (nullptr != p_wirelessNet) {
+        onAccessPointUpdate(p_wirelessNet);
+    }
+}
+
+void KyNetworkResourceManager::onAccessPointUpdate(NetworkManager::WirelessNetwork * net)
+{
+    if (nullptr == net) {
+        return;
+    }
+    auto index = std::find(m_wifiNets.cbegin(), m_wifiNets.cend(), net);
+    if (m_wifiNets.cend() != index) {
+        if (!net->referenceAccessPoint().isNull()) {
+            connect(net->referenceAccessPoint().data(), &NetworkManager::AccessPoint::wpaFlagsChanged, this, &KyNetworkResourceManager::onWifiNetworkSecuChang,
+                    Qt::UniqueConnection);
+            connect(net->referenceAccessPoint().data(), &NetworkManager::AccessPoint::rsnFlagsChanged, this, &KyNetworkResourceManager::onWifiNetworkSecuChang,
+                    Qt::UniqueConnection);
+        }
+    }
+}
+
 void KyNetworkResourceManager::onUpdateWirelessNet()
 {
     NetworkManager::WirelessNetwork *p_wirelessNet =
@@ -847,6 +877,13 @@ void KyNetworkResourceManager::onUpdateWirelessNet()
     }
 
     return;
+}
+
+void KyNetworkResourceManager::onWifiNetworkSecuChang()
+{
+    NetworkManager::AccessPoint *p_wirelessNet =
+                    qobject_cast<NetworkManager::AccessPoint *>(sender());
+    emit wifiNetworkSecuChange(p_wirelessNet);
 }
 
 void KyNetworkResourceManager::onDeviceAdded(QString const & uni)

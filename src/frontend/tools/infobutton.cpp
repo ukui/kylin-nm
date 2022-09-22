@@ -30,9 +30,9 @@
 //#define FOREGROUND_COLOR_PRESS QColor(36,109,212,255)
 #define FOREGROUND_COLOR_BRIGHTTEXT qApp->palette().brightText().color()
 #define FOREGROUND_COLOR_HIGHLIGHT qApp->palette().highlight().color()
-#define OUTER_PATH 8,8,16,16
-#define INNER_PATH 9,9,14,14
-#define TEXT_POS 14,5,16,16,0
+#define OUTER_PATH 8,10,16,16
+#define INNER_PATH 9,11,14,14
+#define TEXT_POS 14,7,16,16,0
 
 #define BUTTON_SIZE 36,36
 

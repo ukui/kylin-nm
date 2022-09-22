@@ -81,6 +81,7 @@ void TabPage::initUI()
 //    m_activatedNetLayout->setSpacing(NET_LAYOUT_SPACING);
     m_activatedNetLabel = new QLabel(m_activatedNetFrame);
     m_activatedNetLabel->setContentsMargins(TEXT_MARGINS);
+    m_activatedNetLabel->setFixedHeight(TEXT_HEIGHT);
     m_activatedNetLayout->addWidget(m_activatedNetLabel);
     m_activatedNetDivider = new Divider(this);
 
@@ -93,6 +94,7 @@ void TabPage::initUI()
 
     m_inactivatedNetLabel = new QLabel(m_inactivatedNetFrame);
     m_inactivatedNetLabel->setContentsMargins(TEXT_MARGINS);
+    m_inactivatedNetLabel->setFixedHeight(TEXT_HEIGHT);
 
 //    m_inactivatedNetListArea = new QScrollArea(m_inactivatedNetFrame);
 //    m_inactivatedNetListArea->setFrameShape(QFrame::Shape::NoFrame);

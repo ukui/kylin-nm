@@ -311,6 +311,7 @@ void WlanListItem::initWlanUI()
 
     m_mainLayout->addWidget(m_pwdFrame);
     m_mainLayout->addWidget(m_autoConnectFrame);
+    m_mainLayout->addStretch();
 
     m_pwdFrame->hide();
     m_autoConnectFrame->hide();

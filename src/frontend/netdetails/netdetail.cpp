@@ -371,8 +371,6 @@ void NetDetail::initUI()
     forgetBtn = new QPushButton(this);
     forgetBtn->setText(tr("Forget this network"));
 
-    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
-
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
     centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS);
     centerlayout->addWidget(pageFrame);

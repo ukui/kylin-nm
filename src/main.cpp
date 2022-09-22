@@ -151,6 +151,7 @@ int main(int argc, char *argv[])
     MainWindow w;
     a.setActivationWindow(&w);
     w.setProperty("useStyleWindowManager", false); //禁用拖动
+    a.setWindowIcon(QIcon::fromTheme("kylin-network"));
     //设置窗口无边框，阴影
 
 //    MotifWmHints window_hints;

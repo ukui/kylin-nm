@@ -50,6 +50,8 @@ KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(pa
     qRegisterMetaType<NetworkManager::Connectivity>("NetworkManager::Connectivity");
     qRegisterMetaType<NetworkManager::ActiveConnection::Reason>("NetworkManager::ActiveConnection::Reason");
     qRegisterMetaType<NetworkManager::Device::Type>("NetworkManager::Device::Type");
+    qRegisterMetaType<NetworkManager::Device::State>("NetworkManager::Device::State");
+    qRegisterMetaType<NetworkManager::Device::StateChangeReason>("NetworkManager::Device::StateChangeReason");
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.DBus"),
                                              QString("/org/freedesktop/DBus"),
@@ -269,6 +271,7 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
 #endif
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::networkAppeared, this, &KyNetworkResourceManager::onWifiNetworkAppeared);
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::networkDisappeared, this, &KyNetworkResourceManager::onWifiNetworkDisappeared);
+            connect(device.data(), &NetworkManager::Device::stateChanged, this, &KyNetworkResourceManager::stateChanged);
             break;
         default:
             //TODO: other device types!

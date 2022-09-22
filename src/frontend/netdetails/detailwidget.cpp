@@ -24,8 +24,9 @@
 
 #define ITEM_HEIGHT 36
 #define ITEM_MARGINS 18,0,16,0
-
-#define MAX_LABEL_WIDTH 138
+#define MIN_LABEL_WIDTH 146
+#define MAX_LABEL_WIDTH 154
+#define MAX_WIDGET_WIDTH 270
 
 FixLabel::FixLabel(QWidget *parent) :
     QLabel(parent)
@@ -83,6 +84,7 @@ void DetailWidget::initUI()
     m_mainLayout->setContentsMargins(ITEM_MARGINS);
 
     m_keyLabel = new FixLabel(this);
+    m_keyLabel->setMinimumWidth(MIN_LABEL_WIDTH);
     m_keyLabel->setMaximumWidth(MAX_LABEL_WIDTH);
     m_keyLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
@@ -94,13 +96,10 @@ void DetailWidget::initUI()
         m_mainLayout->addWidget(m_copyButton);
     }
     m_mainLayout->addWidget(m_valueWidget);
-    m_valueWidget->setMaximumWidth(100000000000);
+    m_valueWidget->setMaximumWidth(MAX_WIDGET_WIDTH);
 }
 
 void DetailWidget::setKey(const QString &keyLabel)
 {
-    m_keyLabel->setText(keyLabel);
+    m_keyLabel->setLabelText(keyLabel);
 }
-
-
-

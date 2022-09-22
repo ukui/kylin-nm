@@ -50,6 +50,11 @@ QMap<QString, QVector<QStringList> > DbusAdaptor::getWirelessList()
     return map;
 }
 
+bool DbusAdaptor::getWirelessSwitchBtnState()
+{
+    return parent()->getWirelessSwitchBtnState();
+}
+
 //有线列表
 QMap<QString, QVector<QStringList>> DbusAdaptor::getWiredList()
 {

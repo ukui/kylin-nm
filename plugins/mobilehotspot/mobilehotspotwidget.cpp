@@ -538,8 +538,8 @@ void MobileHotspotWidget::setFreqBandFrame()
     m_freqBandComboBox->setInsertPolicy(QComboBox::NoInsert);
     m_freqBandComboBox->setMinimumWidth(COMBOBOX_MIN_WIDTH);
     m_freqBandComboBox->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    m_freqBandComboBox->addItem("2.4Ghz");
-    m_freqBandComboBox->addItem("5Ghz");
+    m_freqBandComboBox->addItem("2.4GHz");
+    m_freqBandComboBox->addItem("5GHz");
     freqBandHLayout->setContentsMargins(ITEM_MARGINS);
     freqBandHLayout->setSpacing(0);
     freqBandHLayout->addWidget(m_freqBandLabel);
@@ -746,10 +746,10 @@ void MobileHotspotWidget::updateBandCombox()
     }
     QMap<QString, int> devCapMap = capReply.value();
     if (devCapMap[m_interfaceName] & 0x02) {
-         m_freqBandComboBox->addItem("2.4Ghz");
+         m_freqBandComboBox->addItem("2.4GHz");
     }
     if (devCapMap[m_interfaceName] & 0x04) {
-        m_freqBandComboBox->addItem("5Ghz");
+        m_freqBandComboBox->addItem("5GHz");
     }
 }
 

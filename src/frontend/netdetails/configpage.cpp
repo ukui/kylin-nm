@@ -60,14 +60,13 @@ void ConfigPage::initUi()
     //网络配置文件类型
     m_descriptionLabel->setText(tr("Network profile type"));
     m_descriptionLabel->setAlignment(Qt::AlignLeft);
-    //公用（推荐）无法在网络上发现你的设备。在大多数情况下，在家庭、工作或公共位置连接到网络时使用此功能。
-    m_publicLabel->setText(tr("Public(recommended)  Your device can not be discovered on the network. In most cases, "
-                               "use this feature when connected to a network at home, work, or a public location."));
+    //公用（推荐） 网络中的设备不可发现此电脑。一般情况下适用于公共场所中的网络，如机场或咖啡店等等。
+    m_publicLabel->setText(tr("Public(recommended)  Devices on the network cannot discover this computer. Generally, "
+                               "it is suitable for networks in public places, such as airports or coffee shops, etc."));
     m_publicLabel->setWordWrap(true);
-    //专用 可在网络上发现你的设备。如果需要文件共享或使用通过此网络通信的应用，请选择此项。你应该了解并信任网络上的人员和设备。
-    m_privateLabel->setText(tr("Private  Your device can be discovered on the network. Select this if you require file "
-                                "sharing or use applications that communicate over this network. "
-                                "You should know and trust the people and devices on the network."));
+    //专用 网络中的设备可发现此电脑。一般情况下适用于家庭或工作单位的网络，您认识并信任网络上的个人和设备。
+    m_privateLabel->setText(tr("Devices on the network can discover this computer. Generally applicable to a network "
+                                "at home or work where you know and trust the individuals and devices on the network."));
     m_privateLabel->setWordWrap(true);
     //配置防火墙和安全设置
     m_congigBtn->setText(tr("Config firewall and security settings"));

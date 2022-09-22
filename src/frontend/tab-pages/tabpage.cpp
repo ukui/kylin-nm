@@ -94,16 +94,17 @@ void TabPage::initUI()
     m_inactivatedNetLabel = new QLabel(m_inactivatedNetFrame);
     m_inactivatedNetLabel->setContentsMargins(TEXT_MARGINS);
 
-    m_inactivatedNetListArea = new QScrollArea(m_inactivatedNetFrame);
-    m_inactivatedNetListArea->setFrameShape(QFrame::Shape::NoFrame);
-    m_inactivatedNetListArea->setWidgetResizable(true);
-    m_inactivatedNetListArea->setBackgroundRole(QPalette::Base);
-    m_inactivatedNetListArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_inactivatedNetListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    m_inactivatedNetListArea = new QScrollArea(m_inactivatedNetFrame);
+//    m_inactivatedNetListArea->setFrameShape(QFrame::Shape::NoFrame);
+//    m_inactivatedNetListArea->setWidgetResizable(true);
+//    m_inactivatedNetListArea->setBackgroundRole(QPalette::Base);
+//    m_inactivatedNetListArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    m_inactivatedNetListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_inactivatedNetListArea = new QWidget(m_inactivatedNetFrame);
     m_inactivatedAreaLayout = new QVBoxLayout(m_inactivatedNetListArea);
     m_inactivatedAreaLayout->setSpacing(MAIN_LAYOUT_SPACING);
     m_inactivatedAreaLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_inactivatedNetListArea->setLayout(m_inactivatedAreaLayout);
+//    m_inactivatedNetListArea->setLayout(m_inactivatedAreaLayout);
 
     m_inactivatedNetLayout->addWidget(m_inactivatedNetLabel);
     m_inactivatedNetLayout->addWidget(m_inactivatedNetListArea);
@@ -133,9 +134,9 @@ void TabPage::initUI()
     m_mainLayout->addWidget(m_inactivatedNetDivider);
     m_mainLayout->addWidget(m_settingsFrame);
 
-    QPalette pal = m_inactivatedNetListArea->palette();
-    pal.setBrush(QPalette::Base, QColor(0,0,0,0));     //背景透明
-    m_inactivatedNetListArea->setPalette(pal);
+//    QPalette pal = m_inactivatedNetListArea->palette();
+//    pal.setBrush(QPalette::Base, QColor(0,0,0,0));     //背景透明
+//    m_inactivatedNetListArea->setPalette(pal);
 
     onPaletteChanged();
 }

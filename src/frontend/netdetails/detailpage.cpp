@@ -141,7 +141,7 @@ void DetailPage::newCopiedTip()
     //设置“复制成功”消息弹窗格式
     m_copiedTip = new KBallonTip();
     m_copiedTip->setTipType(Normal);
-    m_copiedTip->setContentsMargins(16, 0, 16, 0);
+    m_copiedTip->setContentsMargins(16, 14, 16, 14);
     m_copiedTip->setFixedHeight(48);
     m_copiedTip->setWindowFlags(Qt::FramelessWindowHint);
     m_copiedTip->setAttribute(Qt::WA_TranslucentBackground, true);

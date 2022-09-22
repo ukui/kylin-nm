@@ -329,6 +329,19 @@ void LanPage::constructActiveConnectionArea()
             QListWidgetItem *p_listWidgetItem = addNewItem(p_activeConnectionItem, m_activatedLanListWidget);
             m_activeConnectionMap.insert(p_activeConnectionItem->m_connectUuid, p_listWidgetItem);
 
+            int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(p_activeConnectionItem->m_connectUuid);
+            if (configType == -1) {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(p_activeConnectionItem->m_connectUuid,
+                                                                       m_currentDeviceName,
+                                                                       p_activeConnectionItem->m_connectName,
+                                                                       KSC_FIREWALL_PUBLIC);
+            } else {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(p_activeConnectionItem->m_connectUuid,
+                                                                       m_currentDeviceName,
+                                                                       p_activeConnectionItem->m_connectName,
+                                                                       configType);
+            }
+
             delete p_activeConnectionItem;
             p_activeConnectionItem = nullptr;
         }
@@ -364,7 +377,7 @@ void LanPage::constructConnectionArea()
 
         }
     }
-    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
     } else {
         m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);
@@ -410,7 +423,7 @@ bool LanPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
             p_listWidgetItem = nullptr;
 
             iter = connectMap.erase(iter);
-            if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+            if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
                 m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
             }
             return true;
@@ -463,7 +476,7 @@ void LanPage::onAddConnection(QString uuid)               //新增一个有线�
 
     delete p_newItem;
     p_newItem = nullptr;
-    if (m_inactivatedLanListWidget->count() >= MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() > MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);
     }
 }
@@ -799,7 +812,7 @@ void LanPage::updateActivatedConnectionArea(KyConnectItem *p_newItem)
         m_activeConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
 //        this->showDesktopNotify(tr("LAN Connected Successfully"), "networkconnected");
     }
-    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
     }
 
@@ -823,7 +836,7 @@ void LanPage::updateConnectionArea(KyConnectItem *p_newItem)
         m_inactiveConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
 //        this->showDesktopNotify(tr("LAN Disconnected Successfully"), "networkdisconnected");
     }
-    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
     } else {
         m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);
@@ -883,6 +896,10 @@ void LanPage::onConnectionStateChange(QString uuid,
 
     sendLanStateChangeSignal(uuid, (ConnectState)state);
 
+    if (m_activeConnectionMap.keys().contains(uuid) && state == NetworkManager::ActiveConnection::State::Activated) {
+        return;
+    }
+
     qDebug()<<"[LanPage] connection uuid"<< uuid
             << "state change slot:"<< state;
 
@@ -903,23 +920,24 @@ void LanPage::onConnectionStateChange(QString uuid,
         int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
 
         if (configType == -1) {
-            FirewallDialog *fireWallDiaglog = new FirewallDialog();
-            fireWallDiaglog->setWindowTitle(p_newItem->m_connectName);
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC); //默认公有配置
+            FirewallDialog *fireWallDialog = new FirewallDialog();
+            fireWallDialog->setUuid(uuid);
+            fireWallDialog->setWindowTitle(ssid);
 
-            connect(fireWallDiaglog, &FirewallDialog::setPrivateNetMode, this, [=](){
-                fireWallDiaglog->close();
+            connect(fireWallDialog, &FirewallDialog::setPrivateNetMode, this, [=](){
+                fireWallDialog->hide();
                 NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
             });
 
-            connect(fireWallDiaglog, &FirewallDialog::setPublicNetMode, this, [=](){
-                fireWallDiaglog->close();
+            connect(fireWallDialog, &FirewallDialog::setPublicNetMode, this, [=](){
+                fireWallDialog->hide();
                 NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
             });
 
-            connect(fireWallDiaglog, &FirewallDialog::close, this, [=](){
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
-            });
-            fireWallDiaglog->show();
+            connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, fireWallDialog, &FirewallDialog::closeMyself);
+
+            fireWallDialog->show();
         }  else if (configType == KSC_FIREWALL_PUBLIC) {
             NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
         } else if (configType == KSC_FIREWALL_PRIVATE) {

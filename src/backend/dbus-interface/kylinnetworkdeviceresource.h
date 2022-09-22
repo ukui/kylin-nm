@@ -45,6 +45,7 @@ Q_SIGNALS:
     void deviceMacAddressChanage(QString deviceName, const QString &hwAddress);
     void deviceActiveChanage(QString deviceName, bool deivceActive);
     void deviceManagedChange(QString deviceName, bool managed);
+    void stateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason);
 
 public Q_SLOTS:
     void onDeviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType);

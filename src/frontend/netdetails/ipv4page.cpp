@@ -25,6 +25,8 @@
 #define  LAYOUT_SPACING 0
 #define  HINT_TEXT_MARGINS 8, 1, 0, 3
 #define  LABEL_HEIGHT 24
+#define FRAME_SPEED 150
+#define ICON_SIZE 16,16
 
 Ipv4Page::Ipv4Page(QWidget *parent):QFrame(parent)
 {
@@ -53,6 +55,7 @@ void Ipv4Page::initUI() {
     m_addressHintLabel = new QLabel(this);
     m_addressHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_addressHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
+    initConflictHintLable();
 
     m_maskHintLabel = new QLabel(this);
     m_maskHintLabel->setFixedHeight(LABEL_HEIGHT);
@@ -71,6 +74,12 @@ void Ipv4Page::initUI() {
     m_gateWayLabel->setText(tr("Default Gateway"));
     m_dnsLabel->setText(tr("Prefs DNS"));
     m_secDnsLabel->setText(tr("Alternative DNS"));
+
+    m_statusLabel = new QLabel(this);
+    m_statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    QHBoxLayout *pPwdLayout = new QHBoxLayout(ipv4addressEdit);
+    pPwdLayout->addStretch();
+    pPwdLayout->addWidget(m_statusLabel);
 
     QPalette hintTextColor;
     hintTextColor.setColor(QPalette::WindowText, Qt::red);
@@ -123,6 +132,8 @@ void Ipv4Page::initUI() {
     netMaskEdit->setValidator(new QRegExpValidator(rx, this));
     firstDnsEdit->setValidator(new QRegExpValidator(rx, this));
     secondDnsEdit->setValidator(new QRegExpValidator(rx, this));
+
+    initLoadingIcon();
 }
 
 void Ipv4Page::initComponent() {
@@ -134,6 +145,7 @@ void Ipv4Page::initComponent() {
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(configChanged(int)));
 
     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(onAddressTextChanged()));
+    connect(ipv4addressEdit, SIGNAL(editingFinished()), this, SLOT(onAddressEidtFinished()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(onNetMaskTextChanged()));
 
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
@@ -279,6 +291,9 @@ void Ipv4Page::configChanged(int index) {
 
 void Ipv4Page::onAddressTextChanged()
 {
+    m_iconLabel->hide();
+    m_textLabel->hide();
+
     if (!getTextEditState(ipv4addressEdit->text())) {
         m_addressHintLabel->setText(tr("Invalid address"));
     } else {
@@ -292,6 +307,15 @@ void Ipv4Page::onNetMaskTextChanged()
         m_maskHintLabel->setText(tr("Invalid subnet mask"));
     } else {
         m_maskHintLabel->clear();
+    }
+}
+
+void Ipv4Page::onAddressEidtFinished()
+{
+    if (ipv4addressEdit->isModified()) {
+        if (!ipv4addressEdit->text().isEmpty() && getTextEditState(ipv4addressEdit->text())) {
+            Q_EMIT ipv4EditFinished(ipv4addressEdit->text());
+        }
     }
 }
 
@@ -371,4 +395,66 @@ QString Ipv4Page::getNetMaskText(QString text)
         list[count] = QString::number(size);
     }
     return QString("%1.%2.%3.%4").arg(list[0],list[1],list[2],list[3]);
+}
+
+
+void Ipv4Page::initConflictHintLable()
+{
+    QIcon icon = QIcon::fromTheme("dialog-warning");
+    m_iconLabel = new QLabel(m_addressHintLabel);
+    m_iconLabel->setPixmap(icon.pixmap(ICON_SIZE));
+    m_textLabel = new QLabel(m_addressHintLabel);
+    m_textLabel->setText(tr("Address conflict"));
+    QHBoxLayout *conflictHintLayout = new QHBoxLayout(m_addressHintLabel);
+    conflictHintLayout->setContentsMargins(0, 0, 0, 0);
+    conflictHintLayout->addWidget(m_iconLabel);
+    conflictHintLayout->addWidget(m_textLabel);
+    conflictHintLayout->addStretch();
+    m_addressHintLabel->setLayout(conflictHintLayout);
+    m_iconLabel->hide();
+    m_textLabel->hide();
+}
+
+void Ipv4Page::initLoadingIcon()
+{
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-3-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-4-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-5-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-6-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
+    m_iconTimer = new QTimer(this);
+    connect(m_iconTimer, &QTimer::timeout, this, &Ipv4Page::updateIcon);
+}
+
+void Ipv4Page::updateIcon()
+{
+    if (m_currentIconIndex > 6) {
+        m_currentIconIndex = 0;
+    }
+    m_statusLabel->setPixmap(m_loadIcons.at(m_currentIconIndex).pixmap(ICON_SIZE));
+    m_currentIconIndex ++;
+}
+
+void Ipv4Page::startLoading()
+{
+    m_iconTimer->start(FRAME_SPEED);
+}
+
+void Ipv4Page::stopLoading()
+{
+    m_iconTimer->stop();
+    m_statusLabel->clear();
+}
+
+void Ipv4Page::showIpv4AddressConflict(bool isConflict)
+{
+    if (isConflict) {
+        m_iconLabel->show();
+        m_textLabel->show();
+    } else {
+        m_iconLabel->hide();
+        m_textLabel->hide();
+    }
 }

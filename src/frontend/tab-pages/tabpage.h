@@ -52,7 +52,7 @@ enum network_mode {
 #define DEVICE_LAYOUT_MARGINS 24,0,24,8
 #define DEVICE_COMBOBOX_WIDTH 180
 #define ACTIVE_NET_LAYOUT_MARGINS 8,8,8,8
-#define NET_LAYOUT_MARGINS 8,8,0,3
+#define NET_LAYOUT_MARGINS 8,8,0,1
 #define NET_LAYOUT_SPACING 8
 #define NET_LIST_SPACING 0
 #define TEXT_MARGINS 16,0,0,0
@@ -63,8 +63,8 @@ enum network_mode {
 #define ACTIVE_AREA_MAX_HEIGHT 92
 
 #define MAX_ITEMS 4
-#define MAX_WIDTH 400
-#define MIN_WIDTH 383
+#define MAX_WIDTH 408
+#define MIN_WIDTH 396
 
 #define SCROLL_STEP 4
 
@@ -131,7 +131,8 @@ protected:
     QFrame * m_inactivatedNetFrame = nullptr;
     QVBoxLayout * m_inactivatedNetLayout = nullptr;
     QLabel * m_inactivatedNetLabel = nullptr;
-    QScrollArea * m_inactivatedNetListArea = nullptr;
+//    QScrollArea * m_inactivatedNetListArea = nullptr;
+    QWidget * m_inactivatedNetListArea = nullptr;
     QVBoxLayout * m_inactivatedAreaLayout = nullptr;
 
     Divider * m_inactivatedNetDivider = nullptr;

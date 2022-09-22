@@ -92,6 +92,9 @@ public Q_SLOTS: // METHODS
     void keyRingClear();
     //just show
     void showKylinNM(int type);
+
+    bool getWirelessSwitchBtnState();
+
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);
 //    void wiredActivating(QString devName, QString ssid);
@@ -108,6 +111,7 @@ Q_SIGNALS: // SIGNALS
     //设备插拔
     void deviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName, int type);
+    void wirelessSwitchBtnChanged(bool state);
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
     //热点连接

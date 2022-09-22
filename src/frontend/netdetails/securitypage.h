@@ -28,6 +28,7 @@
 #include <QCheckBox>
 
 #include "coninfo.h"
+#include "detailwidget.h"
 #include "kwidget.h"
 #include "kpasswordedit.h"
 
@@ -59,6 +60,7 @@ private:
 //    QFormLayout *mSecuLayout;
     QGridLayout *topLayout;
     QGridLayout *bottomLayout;
+    QVBoxLayout *mainLayout;
 
     QLabel *secuTypeLabel;
     QLabel *pwdLabel;
@@ -69,13 +71,13 @@ private:
     QLabel *domainLable;
     QLabel *caCertPathLabel;
     QLabel *caNeedFlagLabel;
-    QLabel *clientCertPathLabel;
-    QLabel *clientPrivateKeyLabel;
-    QLabel *clientPrivateKeyPwdLabel;
-    QLabel *pwdOptionLabel;
+    FixLabel *clientCertPathLabel;
+    FixLabel *clientPrivateKeyLabel;
+    FixLabel *clientPrivateKeyPwdLabel;
+    FixLabel *pwdOptionLabel;
 
     //PEAP TTLS共有
-    QLabel *eapMethodLabel;
+    FixLabel *eapMethodLabel;
     QLabel *userNameLabel;
     QLabel *userPwdLabel;
     QLabel *userPwdFlagLabel;
@@ -99,6 +101,10 @@ private:
     LineEdit *userNameEdit;
     KPasswordEdit *userPwdEdit = nullptr;
     QCheckBox *userPwdFlagBox;
+
+    QLabel *m_emptyLabel = nullptr;
+    QLabel *m_checkLabel = nullptr;
+    QCheckBox *m_rememberCheckBox = nullptr;
 
     QString hintRequired = tr("Required"); //必填
     QString emptyhint = tr(" ");

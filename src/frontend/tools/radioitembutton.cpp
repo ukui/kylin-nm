@@ -62,12 +62,12 @@ RadioItemButton::~RadioItemButton()
 
 void RadioItemButton::startLoading()
 {
-    emit this->requestStartLoading();
+    Q_EMIT this->requestStartLoading();
 }
 
 void RadioItemButton::stopLoading()
 {
-    emit this->requestStopLoading();
+    Q_EMIT this->requestStopLoading();
 }
 //设置图标
 void RadioItemButton::setButtonIcon(const QIcon &icon)
@@ -117,7 +117,7 @@ void RadioItemButton::onLoadingStopped()
     } else {
         m_iconLabel->setPixmap(m_pixmap);
         m_animation->stop();
-        emit this->animationStoped();
+        Q_EMIT this->animationStoped();
     }
 
 }

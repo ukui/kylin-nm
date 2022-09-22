@@ -411,7 +411,7 @@ void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssi
         m_WifiNetworkList.insert(devIfaceName,list);
     }
 
-    emit wifiNetworkAdd(devIfaceName, item);
+    Q_EMIT wifiNetworkAdd(devIfaceName, item);
 }
 
 void KyWirelessNetResource::onWifiNetworkRemoved(QString devIfaceName, QString ssid)
@@ -427,7 +427,7 @@ void KyWirelessNetResource::onWifiNetworkRemoved(QString devIfaceName, QString s
         if (m_WifiNetworkList.value(devIfaceName).isEmpty()) {
             m_WifiNetworkList.remove(devIfaceName);
         }
-        emit wifiNetworkRemove(devIfaceName,ssid);
+        Q_EMIT wifiNetworkRemove(devIfaceName,ssid);
     }
 }
 
@@ -480,12 +480,12 @@ void KyWirelessNetResource::onWifiNetworkPropertyChange(NetworkManager::Wireless
 //                 qDebug()<< LOG_FLAG <<"recive properity changed signal, sender is" << iter->m_NetSsid;
                  if (iter->m_signalStrength != net->signalStrength()) {
                      iter->m_signalStrength = net->signalStrength();
-                     emit signalStrengthChange(devIface, wifiSsid, iter->m_signalStrength);
+                     Q_EMIT signalStrengthChange(devIface, wifiSsid, iter->m_signalStrength);
                  }
 
                  if (iter->m_bssid != accessPointPtr->hardwareAddress()) {
                      iter->m_bssid = accessPointPtr->hardwareAddress();
-                     emit bssidChange(devIface, wifiSsid, iter->m_bssid);
+                     Q_EMIT bssidChange(devIface, wifiSsid, iter->m_bssid);
                  }
 
                  QString secuType = enumToQstring(accessPointPtr->capabilities(),
@@ -493,10 +493,8 @@ void KyWirelessNetResource::onWifiNetworkPropertyChange(NetworkManager::Wireless
                                                   accessPointPtr->rsnFlags());
                  if (iter->m_secuType != secuType) {
                      //qDebug() << "!!!!secuTypeChange" << wifiSsid << iter->m_secuType << "change to " << secuType;
-                     iter->m_secuType = secuType;
                      iter->setKySecuType(secuType);
-
-                     emit secuTypeChange(devIface, wifiSsid, secuType);
+                     Q_EMIT secuTypeChange(devIface, wifiSsid, secuType);
                  }
 
                  break;
@@ -690,7 +688,7 @@ void KyWirelessNetResource::onConnectionAdd(QString uuid)
         for(auto var = map.cbegin(); var != map.cend(); var++) {
             QString devIfaceName = var.key();
             QString ssid = var.value();
-            emit connectionAdd(devIfaceName, ssid);
+            Q_EMIT connectionAdd(devIfaceName, ssid);
         }
     }
 }
@@ -728,7 +726,7 @@ void KyWirelessNetResource::onConnectionRemove(QString path)
         for(auto var = map.cbegin(); var != map.cend(); var++) {
             QString devIfaceName = var.key();
             QString ssid = var.value();
-            emit connectionRemove(devIfaceName, ssid, path);
+            Q_EMIT connectionRemove(devIfaceName, ssid, path);
         }
     }
 
@@ -751,7 +749,7 @@ void KyWirelessNetResource::onConnectionUpdate(QString uuid)
 
     m_WifiNetworkList.clear();
     kyWirelessNetItemListInit();
-    emit wifiNetworkUpdate();
+    Q_EMIT wifiNetworkUpdate();
 }
 
 

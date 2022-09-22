@@ -57,7 +57,7 @@ JoinHiddenWiFiPage::~JoinHiddenWiFiPage()
 
 void JoinHiddenWiFiPage::closeEvent(QCloseEvent *event)
 {
-    emit this->hiddenWiFiPageClose(m_devName);
+    Q_EMIT this->hiddenWiFiPageClose(m_devName);
     return QWidget::closeEvent(event);
 }
 
@@ -210,7 +210,7 @@ void JoinHiddenWiFiPage::onBtnJoinClicked()
 
 void JoinHiddenWiFiPage::onBtnShowListClicked()
 {
-    emit showWlanList(1); //WLAN_PAGE_INDEX
+    Q_EMIT showWlanList(1); //WLAN_PAGE_INDEX
 }
 
 void JoinHiddenWiFiPage::onSecuTypeChanged(const KySecuType &type)

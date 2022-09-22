@@ -47,7 +47,7 @@ public:
     };
     const QPixmap loadSvg(const QPixmap &source, const PixmapColor &color);
 
-signals:
+Q_SIGNALS:
     void requestStartLoading();
     void requestStopLoading();
     void animationStoped();
@@ -69,7 +69,7 @@ private:
 
     void refreshButtonIcon();
 
-private slots:
+private Q_SLOTS:
     void onLoadingStarted();
     void onLoadingStopped();
     void onPaletteChanged();

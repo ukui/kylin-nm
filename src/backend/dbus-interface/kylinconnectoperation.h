@@ -49,7 +49,7 @@ public:
                          bool bAutoConnect);
     inline void errorProcess(QString errorMessage);
 
-signals:
+Q_SIGNALS:
     void createConnectionError(QString errorMessage);
     void updateConnectionError(QString errorMessage);
     void deleteConnectionError(QString errorMessage);

@@ -76,7 +76,7 @@ private:
     KyBluetoothConnectItem *getBtActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
     KyApConnectItem *getApActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
 
-signals:
+Q_SIGNALS:
     void activeConnectAdd(QString activeConnectUuid);
     void updateActiveConnect(QString activeConnectUuid);
     void activeConnectRemove(QString activeConnectUuid);

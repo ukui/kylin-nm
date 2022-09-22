@@ -87,7 +87,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
-signals:
+Q_SIGNALS:
     void itemHeightChanged(const bool isExpanded, const QString &ssid);
 
 private:
@@ -123,10 +123,10 @@ private:
     bool m_forgetConnection = false;
     bool m_isApMode = false;
 
-protected slots:
+protected Q_SLOTS:
     void onInfoButtonClicked();
 
-private slots:
+private Q_SLOTS:
     void onNetButtonClicked();
     void onPwdEditorTextChanged();
     void onConnectButtonClicked();

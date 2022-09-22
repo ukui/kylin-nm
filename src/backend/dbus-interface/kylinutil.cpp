@@ -20,6 +20,11 @@
 #include "kylinutil.h"
 #include <QTextCodec>
 
+#include <dbus/dbus.h>
+#include <glib-2.0/glib.h>
+#include <dbus/dbus-glib.h>
+#include <gio/gio.h>
+
 #define  LOG_FLAG  "[kylin-util]"
 
 QString getConnectTypeByDbus(QString &connectPath)
@@ -54,10 +59,7 @@ QString getConnectTypeByDbus(QString &connectPath)
 
     connectType = connectMap.value(KEY_CONNECT_TYPE).toString();
 
-//    qDebug() << LOG_FLAG << "connection type" << connectType;
-
     return connectType;
-
 }
 
 QString getSsidFromByteArray(QByteArray &rawSsid)
@@ -87,18 +89,131 @@ QString getSsidFromByteArray(QByteArray &rawSsid)
     {
         wifiSsid = rawSsid;
     }
-
-//    if (!QString::fromUtf8(rawSsid).contains("?")) {
-//        QTextCodec *p_textGBK = QTextCodec::codecForName("GB2312");
-//        wifiSsid = p_textGBK->toUnicode(rawSsid);
-
-//        qDebug() << LOG_FLAG <<"gb2312  to string ssid" << wifiSsid;
-//        //qDebug() << LOG_FLAG << "-------------> GB2312 " << byteArrayGB;
-//    } else {
-//        wifiSsid = QString::fromUtf8(rawSsid);
-
-//        qDebug()<< LOG_FLAG <<" UTF-8 ssid: " <<wifiSsid;
-//        //qDebug()<< "-------------> UTF-8 " << bytearray;
-//    }
     return wifiSsid;
 }
+
+void setWiredEnabledByGDbus(bool enabled)
+{
+    GDBusProxy *props_proxy;
+    GVariant *ret = NULL;
+    GError *error = NULL;
+
+    /* Create a D-Bus object proxy for the active connection object's properties */
+    props_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
+                                                 G_DBUS_PROXY_FLAGS_NONE,
+                                                 NULL,
+                                                 "org.freedesktop.NetworkManager",
+                                                 "/org/freedesktop/NetworkManager",
+                                                 "org.freedesktop.DBus.Properties",
+                                                 NULL, NULL);
+    g_assert (props_proxy);
+
+    /* Get the object path of the Connection details */
+    ret = g_dbus_proxy_call_sync (props_proxy,
+                                  "Set",
+                                  g_variant_new ("(ssv)",
+                                                 "org.freedesktop.NetworkManager",
+                                                 "WiredEnabled",
+                                                 g_variant_new_boolean(enabled)),
+                                  G_DBUS_CALL_FLAGS_NONE, -1,
+                                  NULL, &error);
+    if (!ret) {
+        g_dbus_error_strip_remote_error (error);
+        qDebug() << "failed to setWiredEnabledByGDbus";
+        g_error_free (error);
+    }
+
+out:
+    if (ret)
+        g_variant_unref (ret);
+    g_object_unref (props_proxy);
+}
+
+bool getWiredEnabledByGDbus()
+{
+    GDBusProxy *props_proxy;
+    GVariant *ret = NULL, *path_value = NULL;
+    GError *error = NULL;
+    gboolean bRet = false;
+
+    /* Create a D-Bus object proxy for the active connection object's properties */
+    props_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
+                                                 G_DBUS_PROXY_FLAGS_NONE,
+                                                 NULL,
+                                                 "org.freedesktop.NetworkManager",
+                                                 "/org/freedesktop/NetworkManager",
+                                                 "org.freedesktop.DBus.Properties",
+                                                 NULL, NULL);
+    g_assert (props_proxy);
+
+    /* Get the object path of the Connection details */
+    ret = g_dbus_proxy_call_sync (props_proxy,
+                                  "Get",
+                                  g_variant_new ("(ss)",
+                                                 "org.freedesktop.NetworkManager",
+                                                 "WiredEnabled"),
+                                  G_DBUS_CALL_FLAGS_NONE, -1,
+                                  NULL, &error);
+    if (!ret) {
+        g_dbus_error_strip_remote_error (error);
+        qDebug() << "failed to setWiredEnabledByGDbus";
+        g_error_free (error);
+    }
+
+    g_variant_get (ret, "(v)", &path_value);
+    if (!g_variant_is_of_type (path_value, G_VARIANT_TYPE_BOOLEAN)) {
+        g_warning ("Unexpected type returned getting Connection property: %s",
+                   g_variant_get_type_string (path_value));
+        goto out;
+    }
+
+    bRet = g_variant_get_boolean (path_value);
+
+out:
+    if (path_value)
+        g_variant_unref (path_value);
+    if (ret)
+        g_variant_unref (ret);
+    g_object_unref (props_proxy);
+
+    return bRet;
+}
+
+
+void setDeviceManagedByGDbus(QString dbusPath, bool managed)
+{
+    GDBusProxy *props_proxy;
+    GVariant *ret = NULL;
+    GError *error = NULL;
+
+    /* Create a D-Bus object proxy for the active connection object's properties */
+    props_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
+                                                 G_DBUS_PROXY_FLAGS_NONE,
+                                                 NULL,
+                                                 "org.freedesktop.NetworkManager",
+                                                 dbusPath.toStdString().c_str(),
+                                                 "org.freedesktop.DBus.Properties",
+                                                 NULL, NULL);
+    g_assert (props_proxy);
+
+    /* Get the object path of the Connection details */
+    ret = g_dbus_proxy_call_sync (props_proxy,
+                                  "Set",
+                                  g_variant_new ("(ssv)",
+                                                 "org.freedesktop.NetworkManager.Device",
+                                                 "Managed",
+                                                 g_variant_new_boolean(managed)),
+                                  G_DBUS_CALL_FLAGS_NONE, -1,
+                                  NULL, &error);
+    if (!ret) {
+        g_dbus_error_strip_remote_error (error);
+        qDebug() << "failed to setWiredEnabledByGDbus";
+        g_error_free (error);
+    }
+
+out:
+    if (ret)
+        g_variant_unref (ret);
+    g_object_unref (props_proxy);
+}
+

@@ -44,7 +44,7 @@ private:
     void setHoverColor();
     void setNormalColor();
 
-private slots:
+private Q_SLOTS:
     void onPaletteChanged();
 
 };

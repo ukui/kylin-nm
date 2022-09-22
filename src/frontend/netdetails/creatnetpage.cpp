@@ -164,7 +164,7 @@ void CreatNetPage::setLineEnabled(bool check) {
 }
 
 void CreatNetPage::setEnableOfSaveBtn() {
-    emit setCreatePageState(checkConnectBtnIsEnabled());
+    Q_EMIT setCreatePageState(checkConnectBtnIsEnabled());
 }
 
 bool CreatNetPage::getTextEditState(QString text)

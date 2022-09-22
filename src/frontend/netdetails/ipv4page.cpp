@@ -344,7 +344,7 @@ void Ipv4Page::setLineEnabled(bool check) {
 }
 
 void Ipv4Page::setEnableOfSaveBtn() {
-    emit setIpv4PageState(checkConnectBtnIsEnabled());
+    Q_EMIT setIpv4PageState(checkConnectBtnIsEnabled());
 }
 
 bool Ipv4Page::getTextEditState(QString text)

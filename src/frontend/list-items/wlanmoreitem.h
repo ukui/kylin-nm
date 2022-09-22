@@ -38,7 +38,7 @@ public:
 
     void onNetButtonClicked();
     void onMenuTriggered(QAction *action);
-signals:
+Q_SIGNALS:
     void hiddenWlanClicked();
 };
 

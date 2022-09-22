@@ -52,11 +52,11 @@ private:
     QPushButton *m_YesBtn = nullptr;
     QPushButton *m_NoBtn = nullptr;
 
-signals:
+Q_SIGNALS:
     void setPublicNetMode();
     void setPrivateNetMode();
 
-public slots:
+public Q_SLOTS:
     void closeMyself(QString uuid, int status) {
         if (uuid == m_uuid && status == 4) {
             this->close();

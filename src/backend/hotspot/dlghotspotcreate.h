@@ -35,10 +35,10 @@ public:
     explicit DlgHotspotCreate(QString wiFiCardName, QWidget *parent = nullptr);
     ~DlgHotspotCreate();
 
-public slots:
+public Q_SLOTS:
     void changeDialog();
 
-private slots:
+private Q_SLOTS:
     void on_btnCancel_clicked();
 
     void on_btnOk_clicked();
@@ -61,7 +61,7 @@ private:
     QPoint winPos;
     QPoint dragPos;
 
-signals:
+Q_SIGNALS:
     void updateHotspotList();
     void btnHotspotState();
 };

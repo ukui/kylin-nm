@@ -95,7 +95,7 @@ private:
     void initConflictHintLable();
     void initLoadingIcon();
 
-private slots:
+private Q_SLOTS:
     void configChanged(int index);
     void setEnableOfSaveBtn();
     void onAddressTextChanged();
@@ -103,7 +103,7 @@ private slots:
     void onAddressEidtFinished();
     void updateIcon();
 
-signals:
+Q_SIGNALS:
     void setIpv6PageState(bool);
     void ipv6EditFinished(const QString &address);
 };

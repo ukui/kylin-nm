@@ -501,10 +501,14 @@ void NetConnect::addDeviceFrame(QString devName)
     deviceFrameMap.insert(devName, itemFrame);
     qDebug() << "[NetConnect]deviceFrameMap insert" << devName;
 
-    connect(itemFrame->deviceFrame->deviceSwitch, &KSwitchButton::stateChanged, this, [=] (bool checked) {
+    connect(itemFrame->deviceFrame, &DeviceFrame::deviceSwitchClicked ,this, [=] (bool checked) {
         qDebug() << "[NetConnect]call setDeviceEnable" << devName << checked << __LINE__;
         m_interface->call(QStringLiteral("setDeviceEnable"), devName, checked);
         qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
+    });
+
+    connect(itemFrame->deviceFrame->deviceSwitch, &KSwitchButton::stateChanged, this, [=] (bool checked) {
+
         if (checked) {
             qDebug() << "[NetConnect]set " << devName << "status" << true;
             itemFrame->lanItemFrame->show();
@@ -600,6 +604,14 @@ void NetConnect::onDeviceStatusChanged()
         setSwitchStatus();
     }
 
+    QMap<QString, ItemFrame *>::iterator iter;
+    for (iter = deviceFrameMap.begin(); iter != deviceFrameMap.end(); iter++) {
+        if (deviceStatusMap.contains(iter.key())) {
+            if (iter.value()->deviceFrame->deviceSwitch->isChecked() != deviceStatusMap[iter.key()]) {
+                iter.value()->deviceFrame->deviceSwitch->setChecked(deviceStatusMap[iter.key()]);
+            }
+        }
+    }
 }
 
 void NetConnect::onDeviceNameChanged(QString oldName, QString newName, int type)

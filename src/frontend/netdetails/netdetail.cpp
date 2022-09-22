@@ -260,8 +260,8 @@ void NetDetail::paintEvent(QPaintEvent *event)
 
 void NetDetail::closeEvent(QCloseEvent *event)
 {
-    emit this->detailPageClose(false);
-    emit this->createPageClose(m_deviceName);
+    Q_EMIT this->detailPageClose(false);
+    Q_EMIT this->createPageClose(m_deviceName);
     return QWidget::closeEvent(event);
 }
 
@@ -474,7 +474,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 
     //ipv4页面填充
     if (m_info.ipv4ConfigType == CONFIG_IP_MANUAL) {
-        emit checkCurrentIpv4Conflict(m_info.strIPV4Address);
+        Q_EMIT checkCurrentIpv4Conflict(m_info.strIPV4Address);
         ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
         ipv4Page->setIpv4(m_info.strIPV4Address);
         ipv4Page->setNetMask(m_info.strIPV4NetMask);
@@ -486,7 +486,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     }
     //ipv6页面填充
     if (m_info.ipv6ConfigType == CONFIG_IP_MANUAL) {
-        emit checkCurrentIpv6Conflict(m_info.strIPV6Address);
+        Q_EMIT checkCurrentIpv6Conflict(m_info.strIPV6Address);
         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
         ipv6Page->setIpv6(m_info.strIPV6Address);
         ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
@@ -1094,7 +1094,7 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        QKeyEvent *mEvent = static_cast<QKeyEvent *>(event);
        if (mEvent->key() == Qt::Key_Enter || mEvent->key() == Qt::Key_Return) {
            if (confimBtn->isEnabled()) {
-               emit confimBtn->clicked();
+               Q_EMIT confimBtn->clicked();
            }
            return true;
        } else if (mEvent->key() == Qt::Key_Escape) {
@@ -1158,7 +1158,7 @@ void ThreadObject::checkIpv4ConflictThread(const QString &ipv4Address)
 
     delete ipv4Arping;
     ipv4Arping = nullptr;
-    emit ipv4IsConflict(isConflict);
+    Q_EMIT ipv4IsConflict(isConflict);
 }
 
 void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
@@ -1177,5 +1177,5 @@ void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
 
     delete ipv6rping;
     ipv6rping = nullptr;
-    emit ipv6IsConflict(isConflict);
+    Q_EMIT ipv6IsConflict(isConflict);
 }

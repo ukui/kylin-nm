@@ -749,7 +749,7 @@ bool SecurityPage::checkConnectBtnIsEnabled()
 
 void SecurityPage::setEnableOfSaveBtn()
 {
-    emit setSecuPageState(checkConnectBtnIsEnabled());
+    Q_EMIT setSecuPageState(checkConnectBtnIsEnabled());
 }
 
 void SecurityPage::onSecuTypeComboxIndexChanged()
@@ -757,17 +757,17 @@ void SecurityPage::onSecuTypeComboxIndexChanged()
     int index = secuTypeCombox->currentData().toInt();
     if (index == WPA_AND_WPA2_PERSONAL) {
         showPsk();
-        emit this->secuTypeChanged(WPA_AND_WPA2_PERSONAL);
+        Q_EMIT this->secuTypeChanged(WPA_AND_WPA2_PERSONAL);
     }
     else if (index == WPA3_PERSONAL) {
         showPsk();
-        emit this->secuTypeChanged(WPA3_PERSONAL);
+        Q_EMIT this->secuTypeChanged(WPA3_PERSONAL);
     } else if (index == WPA_AND_WPA2_ENTERPRISE) {
         onEapTypeComboxIndexChanged();
-        emit this->secuTypeChanged(WPA_AND_WPA2_ENTERPRISE);
+        Q_EMIT this->secuTypeChanged(WPA_AND_WPA2_ENTERPRISE);
     } else if (index == NONE) {
         showNone();
-        emit this->secuTypeChanged(NONE);
+        Q_EMIT this->secuTypeChanged(NONE);
     }
 }
 
@@ -777,14 +777,14 @@ void SecurityPage::onEapTypeComboxIndexChanged()
     int index = eapTypeCombox->currentData().toInt();
     if (index == TLS) {
         showTls();
-        emit this->eapTypeChanged(TLS);
+        Q_EMIT this->eapTypeChanged(TLS);
     } else if (index == PEAP) {
         showPeapOrTtls();
         eapMethodCombox->clear();
         eapMethodCombox->addItem("MSCHAPv2", MSCHAPV2_PEAP);
         eapMethodCombox->addItem("MD5", MD5_PEAP);
         eapMethodCombox->addItem("GTC", GTC_PEAP);
-        emit this->eapTypeChanged(PEAP);
+        Q_EMIT this->eapTypeChanged(PEAP);
     } else if (index == TTLS) {
         showPeapOrTtls();
         eapMethodCombox->clear();
@@ -795,7 +795,7 @@ void SecurityPage::onEapTypeComboxIndexChanged()
         eapMethodCombox->addItem("chap", CHAP);
         eapMethodCombox->addItem("md5(eap)", MD5_EAP);
         eapMethodCombox->addItem("gtc(eap)", GTC_EAP);
-        emit this->eapTypeChanged(TTLS);
+        Q_EMIT this->eapTypeChanged(TTLS);
     }
 }
 

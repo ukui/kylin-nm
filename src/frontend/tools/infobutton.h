@@ -43,7 +43,7 @@ private:
     QColor m_backgroundColor;
     QColor m_foregroundColor;
 
-private slots:
+private Q_SLOTS:
     void onPaletteChanged();
 };
 

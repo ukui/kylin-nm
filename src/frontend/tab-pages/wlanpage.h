@@ -78,7 +78,7 @@ public:
 
     bool getWirelessSwitchBtnState();
 
-signals:
+Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);
     void wlanRemove(QString devName,QString ssid);
@@ -97,13 +97,13 @@ signals:
 
     void wirelessSwitchBtnChanged(bool state);
 
-public slots:
+public Q_SLOTS:
     void onMainWindowVisibleChanged(const bool &visible);
     void onSecurityTypeChange(QString devName, QString ssid, QString secuType);
     void requestScan();
     void onWlanPageVisibleChanged(int index);
 
-private slots:
+private Q_SLOTS:
     void onWlanAdded(QString interface, KyWirelessNetItem &item);
     void onWlanRemoved(QString interface, QString ssid);
 

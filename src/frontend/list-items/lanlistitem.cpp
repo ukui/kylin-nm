@@ -195,7 +195,7 @@ void LanListItem::onInfoButtonClicked()
     });
 
     netDetail->show();
-    emit this->detailShow(true);
+    Q_EMIT this->detailShow(true);
 
     return;
 }

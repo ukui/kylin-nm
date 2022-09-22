@@ -335,8 +335,8 @@ void NetDetail::initUI()
     m_netTabBar = new NetTabBar(this);
     m_netTabBar->setTabBarStyle(KTabBarStyle::SegmentDark);
     m_netTabBar->addTab(tr("Detail")); //详情
-    m_netTabBar->addTab(tr("Ipv4"));//Ipv4
-    m_netTabBar->addTab(tr("Ipv6"));//Ipv6
+    m_netTabBar->addTab(tr("IPv4"));//Ipv4
+    m_netTabBar->addTab(tr("IPv6"));//Ipv6
     if (isWlan) {
         m_netTabBar->addTab(tr("Security"));//安全
         if (isActive) {

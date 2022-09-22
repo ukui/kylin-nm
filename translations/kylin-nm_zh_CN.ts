@@ -24,11 +24,11 @@
         <translation type="vanished">正在检测ip地址冲突</translation>
     </message>
     <message>
-        <source>IPV4 address conflict, Please change IP</source>
+        <source>IPv4 address conflict, Please change IP</source>
         <translation type="vanished">ip地址冲突，请更改ip</translation>
     </message>
     <message>
-        <source>IPV6 address conflict, Please change IP</source>
+        <source>IPv6 address conflict, Please change IP</source>
         <translation type="obsolete">ip地址冲突，请更改ip {6 ?}</translation>
     </message>
 </context>
@@ -87,13 +87,13 @@
     </message>
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="51"/>
-        <source>Ipv4Config</source>
-        <translation>IPV4配置</translation>
+        <source>IPv4Config</source>
+        <translation>IPv4配置</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="52"/>
         <source>Address</source>
-        <translation>IPV4地址</translation>
+        <translation>IPv4地址</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="53"/>
@@ -187,20 +187,20 @@
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="256"/>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="327"/>
-        <source>IPV6:</source>
-        <translation>本地链接IPV6地址：</translation>
+        <source>IPv6:</source>
+        <translation>本地链接IPv6地址：</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="246"/>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="325"/>
-        <source>IPV4:</source>
-        <translation>IPV4地址：</translation>
+        <source>IPv4:</source>
+        <translation>IPv4地址：</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="250"/>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="326"/>
-        <source>IPV4 Dns:</source>
-        <translation>IPV4 DNS服务器：</translation>
+        <source>IPv4 Dns:</source>
+        <translation>IPv4 DNS服务器：</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="260"/>
@@ -518,8 +518,8 @@
     <name>Ipv4Page</name>
     <message>
         <location filename="../src/frontend/netdetails/ipv4page.cpp" line="71"/>
-        <source>Ipv4Config</source>
-        <translation>Ipv4配置</translation>
+        <source>IPv4Config</source>
+        <translation>IPv4配置</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/ipv4page.cpp" line="72"/>
@@ -582,8 +582,8 @@
     <name>Ipv6Page</name>
     <message>
         <location filename="../src/frontend/netdetails/ipv6page.cpp" line="152"/>
-        <source>Ipv6Config</source>
-        <translation>Ipv6配置</translation>
+        <source>IPv6Config</source>
+        <translation>IPv6配置</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/ipv6page.cpp" line="153"/>
@@ -814,13 +814,13 @@
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="338"/>
-        <source>Ipv4</source>
-        <translation>Ipv4</translation>
+        <source>IPv4</source>
+        <translation>IPv4</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="339"/>
-        <source>Ipv6</source>
-        <translation>Ipv6</translation>
+        <source>IPv6</source>
+        <translation>IPv6</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="341"/>
@@ -935,16 +935,16 @@
         <translation type="obsolete">带宽：</translation>
     </message>
     <message>
-        <source>IPV4:</source>
-        <translation type="obsolete">IPV4地址：</translation>
+        <source>IPv4:</source>
+        <translation type="obsolete">IPv4地址：</translation>
     </message>
     <message>
-        <source>IPV4 Dns:</source>
-        <translation type="obsolete">IPV4 DNS服务器：</translation>
+        <source>IPv4 Dns:</source>
+        <translation type="obsolete">IPv4 DNS服务器：</translation>
     </message>
     <message>
-        <source>IPV6:</source>
-        <translation type="obsolete">本地链接IPV6地址：</translation>
+        <source>IPv6:</source>
+        <translation type="obsolete">本地链接IPv6地址：</translation>
     </message>
     <message>
         <source>Mac:</source>

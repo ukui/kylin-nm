@@ -48,7 +48,7 @@ void CreatNetPage::initUI()
     m_secDnsLabel = new QLabel(this);
 
     m_connNameLabel->setText(tr("Connection Name"));
-    m_configLabel->setText(tr("Ipv4Config"));
+    m_configLabel->setText(tr("IPv4Config"));
     m_addressLabel->setText(tr("Address"));
     m_maskLabel->setText(tr("Netmask"));
     m_gateWayLabel->setText(tr("Default Gateway"));

@@ -57,6 +57,7 @@ enum network_mode {
 #define NET_LAYOUT_SPACING 8
 #define NET_LIST_SPACING 0
 #define TEXT_MARGINS 16,0,0,0
+#define TEXT_HEIGHT 20
 //#define SCROLL_AREA_HEIGHT 200
 #define SETTINGS_LAYOUT_MARGINS 23,0,24,0
 #define TRANSPARENT_COLOR QColor(0,0,0,0)

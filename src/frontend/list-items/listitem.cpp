@@ -22,7 +22,8 @@
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
-#define ITEM_FRAME_MARGINS 12,6,16,6
+#define ITEM_FRAME_MARGINS 12,4,16,4
+
 #define ITEM_FRAME_SPACING 8
 #define FRAME_WIDTH 404
 #define INFO_ICON_WIDTH 16
@@ -156,6 +157,7 @@ void ListItem::initUI()
     m_hItemLayout = new QHBoxLayout(m_itemFrame);
     m_hItemLayout->setContentsMargins(ITEM_FRAME_MARGINS);
     m_hItemLayout->setSpacing(ITEM_FRAME_SPACING);
+    m_hItemLayout->setAlignment(Qt::AlignHCenter);
 
     m_netButton = new RadioItemButton(m_itemFrame);
     m_nameLabel = new FixLabel(m_itemFrame);

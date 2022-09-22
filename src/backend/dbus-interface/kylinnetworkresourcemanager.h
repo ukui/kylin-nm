@@ -123,6 +123,7 @@ Q_SIGNALS:
     void wifiNetworkRemoved(QString, QString);
     void wifiNetworkAdded(QString, QString);
     void wifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net);
+    void wifiNetworkSecuChange(NetworkManager::AccessPoint *);
     void wifiNetworkDeviceDisappear();
     void wifiEnabledChanged(bool);
     void wiredEnabledChanged(bool);
@@ -181,6 +182,7 @@ private Q_SLOTS:
 
     //wifi network
     void onUpdateWirelessNet();
+    void onWifiNetworkSecuChang();
 
     //notifier
     void onDeviceAdded(QString const & uni);
@@ -196,6 +198,9 @@ private:
     void onWifiNetworkAdd(NetworkManager::Device * dev, QString const & ssid);
     void onWifiNetworkUpdate(NetworkManager::WirelessNetwork * net);
     void onWifiNetworkRemove(NetworkManager::Device * dev, QString const & ssid);
+
+    void onAccessPointUpdate(NetworkManager::WirelessNetwork * net);
+    void onReferenceAccessPointChanged();
 
 private:
     bool m_initFinished = false;

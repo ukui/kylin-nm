@@ -21,6 +21,9 @@
 #include "kylinutil.h"
 
 #define LOG_FLAG "[KyWirelessNetResource]"
+const QString ENTERPRICE_TYPE = "802.1X";
+const QString WPA1_AND_WPA2 = "WPA";
+const QString WPA3 = "WPA3";
 
 static bool subWifiListSort(const KyWirelessNetItem info1, const KyWirelessNetItem info2)
 {
@@ -63,6 +66,8 @@ KyWirelessNetResource::KyWirelessNetResource(QObject *parent)
                      this, &KyWirelessNetResource::onWifiNetworkRemoved, Qt::ConnectionType::DirectConnection);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkPropertyChange,
                      this, &KyWirelessNetResource::onWifiNetworkPropertyChange, Qt::ConnectionType::DirectConnection);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkSecuChange,
+                     this, &KyWirelessNetResource::onWifiNetworkSecuChange, Qt::ConnectionType::DirectConnection);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkDeviceDisappear,
                      this, &KyWirelessNetResource::onWifiNetworkDeviceDisappear, Qt::ConnectionType::DirectConnection);
 
@@ -426,12 +431,39 @@ void KyWirelessNetResource::onWifiNetworkRemoved(QString devIfaceName, QString s
     }
 }
 
+void KyWirelessNetResource::onWifiNetworkSecuChange(NetworkManager::AccessPoint *accessPointPtr)
+{
+    QString secuType = enumToQstring(accessPointPtr->capabilities(),
+                                     accessPointPtr->wpaFlags(),
+                                     accessPointPtr->rsnFlags());
+
+
+    QMap<QString, QList<KyWirelessNetItem> >::iterator iter = m_WifiNetworkList.begin();
+    while (iter != m_WifiNetworkList.end()) {
+        QList<KyWirelessNetItem>::iterator itemIter = iter.value().begin();
+         while (itemIter != iter.value().end()) {
+             if (itemIter->m_NetSsid == accessPointPtr->ssid()) {
+                 QString devName = iter.key();
+                 itemIter->m_secuType = secuType;
+                 itemIter->setKySecuType(secuType);
+                 //qDebug() << "!!!!" << itemIter->m_NetSsid << itemIter->m_secuType << itemIter->m_kySecuType;
+                 emit secuTypeChange(devName, accessPointPtr->ssid(), secuType);
+                 break;
+             }
+             itemIter++;
+         }
+        iter++;
+    }
+
+}
+
 void KyWirelessNetResource::onWifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net)
 {
     if (nullptr == net) {
         return;
     }
 
+    qDebug() << "onWifiNetworkPropertyChange" << net->ssid();
     NetworkManager::AccessPoint::Ptr accessPointPtr = net->referenceAccessPoint();
     QByteArray rawSsid = accessPointPtr->rawSsid();
     QString wifiSsid = getSsidFromByteArray(rawSsid);
@@ -460,7 +492,8 @@ void KyWirelessNetResource::onWifiNetworkPropertyChange(NetworkManager::Wireless
                                                   accessPointPtr->wpaFlags(),
                                                   accessPointPtr->rsnFlags());
                  if (iter->m_secuType != secuType) {
-                     iter->m_secuType = secuType;
+                     //qDebug() << "!!!!secuTypeChange" << wifiSsid << iter->m_secuType << "change to " << secuType;
+                     iter->setKySecuType(secuType);
                      Q_EMIT secuTypeChange(devIface, wifiSsid, secuType);
                  }
 
@@ -693,7 +726,7 @@ void KyWirelessNetResource::onConnectionRemove(QString path)
         for(auto var = map.cbegin(); var != map.cend(); var++) {
             QString devIfaceName = var.key();
             QString ssid = var.value();
-            Q_EMIT connectionRemove(devIfaceName, ssid);
+            Q_EMIT connectionRemove(devIfaceName, ssid, path);
         }
     }
 

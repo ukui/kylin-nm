@@ -82,7 +82,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
 {
-    if (w == m_settingsBtn) {
+    if (w == m_settingsLabel) {
         if (e->type() == QEvent::MouseButtonRelease) {
             //ZJP_TODO 打开控制面板
             qDebug() << LOG_FLAG <<"recive event show control center";
@@ -134,7 +134,7 @@ void WlanPage::initWlanUI()
     m_activatedNetListWidget->setPalette(pal);
     m_inactivatedNetListWidget->setPalette(pal);
 
-    m_settingsBtn->installEventFilter(this);
+    m_settingsLabel->installEventFilter(this);
     m_netSwitch->installEventFilter(this);
 }
 
@@ -606,12 +606,12 @@ void WlanPage::onConnectionAdd(QString deviceName, QString ssid)
     return;
 }
 
-void WlanPage::onConnectionRemove(QString deviceName, QString ssid)
+void WlanPage::onConnectionRemove(QString deviceName, QString ssid, QString path)
 {
     qDebug() << LOG_FLAG << "one connection is removed, it's ssid " << ssid << "device name"<< deviceName;
     if (deviceName == m_currentDevice) {
         if (m_activateConnectionItemMap.contains(ssid)) {
-            updateWirelessNetArea(nullptr, ssid, deviceName);
+            updateWirelessNetArea(nullptr, ssid, deviceName, path);
         }
         updateWlanListItem(ssid);
     }
@@ -872,7 +872,7 @@ void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
     return;
 }
 
-void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName)
+void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName, QString path)
 {
     if(m_wirelessNetItemMap.contains(ssid)) {
         return;
@@ -889,7 +889,12 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
             qWarning() << LOG_FLAG << "p_wlanItem is null";
             return;
         }
-        if (p_wlanItem->getUuid() == uuid) {
+
+        if (p_wlanItem->getUuid() == uuid || uuid.isEmpty()) {
+            if (uuid.isEmpty() && p_wlanItem->getPath() != path) {
+                return;
+            }
+
             deleteWirelessItemFormMap(m_activateConnectionItemMap, m_activatedNetListWidget, ssid);
             QListWidgetItem *p_activeListWidgetItem = addEmptyItem(m_activatedNetListWidget);
             m_activateConnectionItemMap.insert(EMPTY_SSID, p_activeListWidgetItem);
@@ -1005,7 +1010,9 @@ void WlanPage::onConnectionStateChanged(QString uuid,
         if (devName.isEmpty()) {
             devName = m_currentDevice;
         }
-        updateWirelessNetArea(uuid, ssid, devName);
+
+        updateWirelessNetArea(uuid, ssid, devName,"");
+
         if (m_wirelessNetItemMap.contains(ssid)) {
             QListWidgetItem *p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
             updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);

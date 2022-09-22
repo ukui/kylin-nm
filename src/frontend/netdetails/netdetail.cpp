@@ -37,7 +37,7 @@
 #define  WINDOW_HEIGHT 602
 #define  ICON_SIZE 22,22
 #define  TITLE_LAYOUT_MARGINS 9,9,0,0
-#define  CENTER_LAYOUT_MARGINS 24,0,0,0
+#define  CENTER_LAYOUT_MARGINS 24,0,24,0
 #define  BOTTOM_LAYOUT_MARGINS 24,0,24,0
 #define  BOTTOM_LAYOUT_SPACING 16
 #define  PAGE_LAYOUT_SPACING 1
@@ -328,15 +328,15 @@ void NetDetail::initUI()
 
     pageFrame = new QFrame(this);
     QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
-    pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
+//    pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
 
     // TabBar
 //    m_netTabBar = new KTabBar(KTabBarStyle::SegmentDark, this);
     m_netTabBar = new NetTabBar(this);
     m_netTabBar->setTabBarStyle(KTabBarStyle::SegmentDark);
     m_netTabBar->addTab(tr("Detail")); //详情
-    m_netTabBar->addTab(tr("Ipv4"));//Ipv4
-    m_netTabBar->addTab(tr("Ipv6"));//Ipv6
+    m_netTabBar->addTab(tr("IPv4"));//Ipv4
+    m_netTabBar->addTab(tr("IPv6"));//Ipv6
     if (isWlan) {
         m_netTabBar->addTab(tr("Security"));//安全
         if (isActive) {
@@ -354,9 +354,7 @@ void NetDetail::initUI()
         }
     }
 
-    pageLayout->addStretch();
-    pageLayout->addWidget(m_netTabBar);
-    pageLayout->addStretch();
+    pageLayout->addWidget(m_netTabBar, Qt::AlignCenter);
 
     // TabBar关联选项卡页面
     connect(m_netTabBar, SIGNAL(currentChanged(int)), this, SLOT(currentRowChangeSlot(int)));
@@ -370,8 +368,6 @@ void NetDetail::initUI()
 
     forgetBtn = new QPushButton(this);
     forgetBtn->setText(tr("Forget this network"));
-
-    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
 
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
     centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS);

@@ -61,6 +61,8 @@ public:
     QString getSsid();
     QString getUuid();
 
+    QString getPath();
+
     void setSignalStrength(const int &signal);
     int  getSignalStrength();
 

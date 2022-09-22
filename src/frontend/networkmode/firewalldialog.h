@@ -24,6 +24,8 @@
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include <QLabel>
+#include <QDesktopWidget>
+#include <QApplication>
 #include "kwidget.h"
 #include "kdialog.h"
 
@@ -41,6 +43,7 @@ public:
 
 private:
     void initUI();
+    void centerToScreen();
     QString m_uuid;
     QLabel * m_iconLabel = nullptr;
     QLabel * m_contentLabel = nullptr;

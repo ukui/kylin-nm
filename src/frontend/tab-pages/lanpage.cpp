@@ -747,7 +747,7 @@ void LanPage::initUI()
     m_activatedLanListWidget->setPalette(pal);
     m_inactivatedLanListWidget->setPalette(pal);
 
-    m_settingsBtn->installEventFilter(this);
+    m_settingsLabel->installEventFilter(this);
     m_netSwitch->installEventFilter(this);
 }
 
@@ -1170,7 +1170,7 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
 
 bool LanPage::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == m_settingsBtn) {
+    if (watched == m_settingsLabel) {
         if (event->type() == QEvent::MouseButtonRelease) {
             onShowControlCenter();
         }

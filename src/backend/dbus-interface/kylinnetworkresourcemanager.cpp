@@ -912,7 +912,7 @@ void KyNetworkResourceManager::onWifiNetworkSecuChang()
 {
     NetworkManager::AccessPoint *p_wirelessNet =
                     qobject_cast<NetworkManager::AccessPoint *>(sender());
-    emit wifiNetworkSecuChange(p_wirelessNet);
+    Q_EMIT wifiNetworkSecuChange(p_wirelessNet);
 }
 
 void KyNetworkResourceManager::onDeviceAdded(QString const & uni)

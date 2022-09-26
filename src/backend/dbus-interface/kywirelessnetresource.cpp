@@ -447,7 +447,7 @@ void KyWirelessNetResource::onWifiNetworkSecuChange(NetworkManager::AccessPoint 
                  itemIter->m_secuType = secuType;
                  itemIter->setKySecuType(secuType);
                  //qDebug() << "!!!!" << itemIter->m_NetSsid << itemIter->m_secuType << itemIter->m_kySecuType;
-                 emit secuTypeChange(devName, accessPointPtr->ssid(), secuType);
+                 Q_EMIT secuTypeChange(devName, accessPointPtr->ssid(), secuType);
                  break;
              }
              itemIter++;

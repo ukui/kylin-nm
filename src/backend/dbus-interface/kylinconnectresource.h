@@ -38,6 +38,7 @@ public:
 
 public:
     KyConnectItem *getConnectionItemByUuid(QString connectUuid);
+    KyConnectItem *getConnectionItemByUuidWithoutActivateChecking(QString connectUuid);
     KyConnectItem *getConnectionItemByUuid(QString connectUuid, QString deviceName);
     void getConnectionList(QString deviceName,
                            NetworkManager::ConnectionSettings::ConnectionType connectionType,

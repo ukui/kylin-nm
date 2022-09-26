@@ -1,2 +1,0 @@
-version=4
-https://github.com/ukui/kylin-nm/releases .*/kylin-nm_(\d\S+)\.orig\.tar\.gz

@@ -43,6 +43,10 @@
 const QString v10Sp1 = "V10SP1";
 const QString intel = "V10SP1-edu";
 
+#define LANPAGE 0
+#define WLANPAGE 1
+#define AUTOSELET 2
+
 #define KEY_PRODUCT_FEATURES "PRODUCT_FEATURES"
 
 #include <kwindowsystem.h>
@@ -645,10 +649,16 @@ void MainWindow::onTabletModeChanged(bool mode)
 
 void MainWindow::onShowMainWindow(int type)
 {
-    m_centralWidget->setCurrentIndex(type);
+    if (type == LANPAGE || type == WLANPAGE) {
+        m_centralWidget->setCurrentIndex(type);
 
-    if(QApplication::activeWindow() != this) {
-        this->showMainwindow();
+        if(QApplication::activeWindow() != this) {
+            this->showMainwindow();
+        }
+    } else if (type == AUTOSELET) {
+        onTrayIconActivated(QSystemTrayIcon::ActivationReason::Trigger);
+    } else {
+        qWarning() << "unsupport parameter";
     }
 }
 

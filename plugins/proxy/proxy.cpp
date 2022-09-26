@@ -847,7 +847,8 @@ bool Proxy::getAppProxyState()
 
     //获取应用代理开启状态
     qDebug() << "call QDBusInterface getProxyStateDbus";
-//    state = m_appProxyDbus->call("getProxyStateDbus");
+    QDBusReply<bool> reply = m_appProxyDbus->call("getProxyStateDbus");
+    state = reply;
     return state;
 }
 
@@ -860,7 +861,7 @@ void Proxy::setAppProxyState(bool state)
 
     //设置应用代理开启状态
     qDebug() << "call QDBusInterface setProxyStateDbus" << state;
-//    m_appProxyDbus->call("setProxyStateDbus", state);
+    m_appProxyDbus->call("setProxyStateDbus", state);
 }
 
 QStringList Proxy::getAppProxyConf()

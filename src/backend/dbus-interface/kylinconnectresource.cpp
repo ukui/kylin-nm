@@ -149,6 +149,25 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
     return nullptr;
 }
 
+KyConnectItem * KyConnectResourse::getConnectionItemByUuidWithoutActivateChecking(QString connectUuid)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            m_networkResourceInstance->getConnect(connectUuid);
+
+    if (nullptr == connectPtr) {
+        qWarning()<< "[KyConnectResourse]" <<"get connect failed, connect uuid"<<connectUuid;
+        return nullptr;
+    }
+
+    KyConnectItem *connectItem = getConnectionItem(connectPtr, "");
+    if (nullptr != connectItem) {
+        //connectItem->dumpInfo();
+        return connectItem;
+    }
+
+    return nullptr;
+}
+
 KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, QString deviceName)
 {
     NetworkManager::Connection::Ptr connectPtr =

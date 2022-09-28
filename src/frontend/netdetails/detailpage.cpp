@@ -23,6 +23,7 @@
 
 #define MAX_NAME_LENGTH 32
 #define MAX_LABEL_WIDTH 250
+#define MAX_SSID_WIDTH 133
 
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -50,10 +51,10 @@ void DetailPage::setSSID(const QString &ssid) {
         return;
     }
     m_formerSSID = ssid;
-    QFontMetrics fontMetrics(this->font());
+    QFontMetrics fontMetrics(m_SSIDLabel->font());
     int fontSize = fontMetrics.width(ssid);
-    if (fontSize > this->width()) {
-        this->m_SSIDLabel->setText(fontMetrics.elidedText(ssid, Qt::ElideRight, this->width()));
+    if (fontSize > MAX_SSID_WIDTH) {
+        this->m_SSIDLabel->setText(fontMetrics.elidedText(ssid, Qt::ElideRight, MAX_SSID_WIDTH));
         this->setToolTip(ssid);
     } else {
         this->m_SSIDLabel->setText(ssid);

@@ -1,8 +1,8 @@
-kylin-nm (3.20.1.6-ok0) v101; urgency=medium
+kylin-nm (3.20.1.6-ok1) v101; urgency=medium
 
-  * quilt format
+  * re upload
 
- -- kylin <kylin@kylin-vmwarevirtualplatform>  Fri, 30 Sep 2022 13:07:31 +0800
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 30 Sep 2022 13:07:31 +0800
 
 kylin-nm (3.20.1.6-ok0) v101; urgency=medium
 

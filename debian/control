@@ -35,7 +35,7 @@ Vcs-Browser: https://github.com/ukui/kylin-nm
 
 Package: kylin-nm
 Architecture: any
-Depends: network-manager (>= 1.22.10-1kylin29k3.6),
+Depends: network-manager (>= 1.22.10-1kylin29k3.5),
          ukui-control-center (>= 3.1.1+1217),
          libkysdk-qtwidgets(>= 1.2.0),
          libkysdk-waylandhelper(>= 1.2.0kylin2),

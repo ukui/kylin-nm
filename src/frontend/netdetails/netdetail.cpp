@@ -30,6 +30,7 @@
 #include <QEvent>
 #include <QMenu>
 #include <QToolTip>
+#include <QFontMetrics>
 
 #include "windowmanager/windowmanager.h"
 
@@ -53,6 +54,7 @@
 #define  SCRO_WIDTH 472
 #define  PEAP_SCRO_HEIGHT  300
 #define  TLS_SCRO_HEIGHT  480
+#define  MAX_TAB_TEXT_LENGTH 44
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -358,7 +360,7 @@ void NetDetail::initUI()
 
     // TabBar关联选项卡页面
     connect(m_netTabBar, SIGNAL(currentChanged(int)), this, SLOT(currentRowChangeSlot(int)));
-
+    setNetTabToolTip();
 
     confimBtn = new QPushButton(this);
     confimBtn->setText(tr("Confirm"));
@@ -450,6 +452,14 @@ void NetDetail::initComponent()
     });
     connect(securityPage, &SecurityPage::eapTypeChanged, this, [=]() {
         setSecuPageHeight();
+    });
+
+    const QByteArray id("org.ukui.style");
+    QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+    connect(fontSetting, &QGSettings::changed,[=](QString key) {
+        if ("systemFont" == key || "systemFontSize" ==key) {
+            setNetTabToolTip();
+        }
     });
 }
 
@@ -1103,6 +1113,20 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        }
    }
    return QWidget::eventFilter(w, event);
+}
+
+void NetDetail::setNetTabToolTip()
+{
+    int tabCount = m_netTabBar->count();
+    for (int i = 0; i< tabCount; ++i) {
+        QFontMetrics fontMetrics(m_netTabBar->font());
+        int fontSize = fontMetrics.width(m_netTabBar->tabText(i));
+        if (fontSize > MAX_TAB_TEXT_LENGTH) {
+            m_netTabBar->setTabToolTip(i, m_netTabBar->tabText(i));
+        } else {
+            m_netTabBar->setTabToolTip(i, "");
+        }
+    }
 }
 
 NetTabBar::NetTabBar(QWidget *parent)

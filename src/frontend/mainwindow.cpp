@@ -261,6 +261,7 @@ void MainWindow::initUI()
     m_centralWidget = new QTabWidget(this);
     this->setCentralWidget(m_centralWidget);
     m_centralWidget->tabBar()->setFixedWidth(this->width()+1);
+    m_centralWidget->tabBar()->setProperty("setRadius", 12);
 //    m_centralWidget->tabBar()->setStyleSheet("QTabBar::tab{min-height:40px}");
     m_lanWidget = new LanPage(m_centralWidget);
     m_wlanWidget = new WlanPage(m_centralWidget);

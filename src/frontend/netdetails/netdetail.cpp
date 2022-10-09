@@ -454,13 +454,15 @@ void NetDetail::initComponent()
         setSecuPageHeight();
     });
 
-    const QByteArray id("org.ukui.style");
-    QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
-    connect(fontSetting, &QGSettings::changed,[=](QString key) {
-        if ("systemFont" == key || "systemFontSize" ==key) {
-            setNetTabToolTip();
-        }
-    });
+    const QByteArray id(THEME_SCHAME);
+    if(QGSettings::isSchemaInstalled(id)){
+        QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+        connect(fontSetting, &QGSettings::changed,[=](QString key) {
+            if ("systemFont" == key || "systemFontSize" ==key) {
+                setNetTabToolTip();
+            }
+        });
+    }
 }
 
 void NetDetail::pagePadding(QString netName, bool isWlan)

@@ -204,11 +204,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hiddenwifi/hiddenwifipage.cpp" line="176"/>
-        <source>Show Network List</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../hiddenwifi/hiddenwifipage.cpp" line="177"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
@@ -246,12 +241,12 @@
 <context>
     <name>WlanConnect</name>
     <message>
-        <location filename="../wlanconnect.cpp" line="182"/>
+        <location filename="../wlanconnect.cpp" line="186"/>
         <source>WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="230"/>
+        <location filename="../wlanconnect.cpp" line="234"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -259,18 +254,18 @@
 <context>
     <name>WlanItem</name>
     <message>
-        <location filename="../wlanitem.cpp" line="72"/>
-        <location filename="../wlanitem.cpp" line="169"/>
+        <location filename="../wlanitem.cpp" line="75"/>
+        <location filename="../wlanitem.cpp" line="173"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanitem.cpp" line="92"/>
+        <location filename="../wlanitem.cpp" line="95"/>
         <source>Auto Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanitem.cpp" line="167"/>
+        <location filename="../wlanitem.cpp" line="171"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>

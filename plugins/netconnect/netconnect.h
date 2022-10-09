@@ -172,6 +172,9 @@ private Q_SLOTS:
     void onDeviceNameChanged(QString, QString);
     void onDeviceCarrierChange(QString deviceName, bool pluged);
 
+    void onDeviceManagedChange(QString, bool);
+    void onWiredEnabledChanged(bool);
+
     void onDeviceAdd(QString deviceName);
     void onDeviceRemove(QString deviceName);
 };

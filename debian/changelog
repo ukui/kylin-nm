@@ -1,3 +1,31 @@
+kylin-nm-plugin (3.20.0.8) v101; urgency=medium
+
+  * BUG号:#100325  在系统内关闭有线网络的开关后，注销到登录界面，有线网络仍然可以连接
+  * 需求号：无
+  * 其他改动：无
+  * 影响域：登录界面有线开关
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 23 Sep 2022 10:22:24 +0800
+
+kylin-nm-plugin (3.20.0.7) v101; urgency=medium
+
+  * BUG号: #113194 【登录选项】登录界面上网络界面，中英文界面切换异常
+  * 需求号:无
+  * 其他改动:无
+  * 影响域：翻译
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 08 Sep 2022 10:09:47 +0800
+
+kylin-nm-plugin (3.20.0.6) v101; urgency=medium
+
+  * BUG号：
+       - #137313 【藏文】【登录】【锁屏】登录锁屏中网络连接部分未完全藏化
+  * 需求号:无
+  * 其他改动: 无
+  * 影响域: 登录锁屏网络界面藏文适配
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 26 Aug 2022 11:04:20 +0800
+
 kylin-nm-plugin (3.20.0.5) v101; urgency=medium
 
   * BUG号:

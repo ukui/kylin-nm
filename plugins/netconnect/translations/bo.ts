@@ -17,12 +17,12 @@
 <context>
     <name>NetConnect</name>
     <message>
-        <location filename="../netconnect.cpp" line="131"/>
+        <location filename="../netconnect.cpp" line="136"/>
         <source>LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="178"/>
+        <location filename="../netconnect.cpp" line="183"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>

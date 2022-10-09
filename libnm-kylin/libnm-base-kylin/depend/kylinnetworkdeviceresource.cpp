@@ -14,6 +14,8 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
                                        this, &KyNetworkDeviceResourse::carrierChange);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceStateChange,
                                        this, &KyNetworkDeviceResourse::deviceStateChange);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceManagedChange,
+                                           this, &KyNetworkDeviceResourse::deviceManagedChange);
 //    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceBitRateChange,
 //                                       this, &KyNetworkDeviceResourse::deviceBitRateChange);
 //    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceMacAddressChange,
@@ -101,121 +103,6 @@ void KyNetworkDeviceResourse::getHardwareInfo(QString ifaceName, QString &hardAd
         }
     }
 }
-
-
-void KyNetworkDeviceResourse::setWiredDeviceEnable(const QString& devName, bool enable)
-{
-    saveDeviceEnableState(devName, enable);
-
-    KyNetworkDeviceResourse deviceResource;
-    if (enable) {
-        deviceResource.openWiredNetworkWithDevice(devName);
-    } else {
-        deviceResource.closeWiredNetworkWithDevice(devName);
-    }
-    Q_EMIT wiredDeviceEnableChange(devName, enable);
-}
-
-void KyNetworkDeviceResourse::getWiredDeviceEnableState(QMap<QString, bool> &map)
-{
-    getDeviceEnableState(map);
-}
-
-//用于有线开关回连处理 关闭调用
-void KyNetworkDeviceResourse::saveActiveConnection(QString &deviceName, QString &connectUuid)
-{
-    QSettings *p_settings = new QSettings(WIRED_NETWORK_STATE_CONF_FILE, QSettings::IniFormat);
-
-    QString settingValue = p_settings->value(deviceName).toString();
-    if (settingValue.isEmpty()) {
-        p_settings->setValue(deviceName, connectUuid);
-        p_settings->sync();
-    }
-
-    delete p_settings;
-    p_settings = nullptr;
-
-    return;
-}
-
-//用于有线开关回连处理 开启调用
-void KyNetworkDeviceResourse::getActiveConnection(QString &deviceName, QString &connectUuid)
-{
-    QSettings *p_settings = new QSettings(WIRED_NETWORK_STATE_CONF_FILE, QSettings::IniFormat);
-
-    connectUuid = p_settings->value(deviceName).toString();
-    p_settings->remove(deviceName);
-
-    delete p_settings;
-    p_settings = nullptr;
-
-    return;
-}
-
-//用于有线开关回连处理 关闭调用
-int KyNetworkDeviceResourse::closeWiredNetworkWithDevice(QString deviceName)
-{
-    NetworkManager::Device::Ptr wiredDevicePtr =
-                            m_networkResourceInstance->findDeviceByName(deviceName);
-
-    if (wiredDevicePtr.isNull()) {
-        qWarning()<<"[KyWiredConnectOperation]"<<"the network device" << deviceName <<"is not exist.";
-        return -ENXIO;
-    }
-
-    if (NetworkManager::Device::Type::Ethernet != wiredDevicePtr->type()) {
-        qWarning()<<"[KyWiredConnectOperation]"<<"the device type"
-                  << wiredDevicePtr->type() <<"is not Ethernet.";
-        return -EINVAL;
-    }
-
-    NetworkManager::ActiveConnection::Ptr activeConnectPtr = wiredDevicePtr->activeConnection();
-    if (nullptr != activeConnectPtr) {
-        QString activeConnectUuid = activeConnectPtr->uuid();
-        if (!activeConnectUuid.isEmpty()) {
-            qDebug()<<"[KyWiredConnectOperation]" <<"close wired network save connection uuid"
-                   << activeConnectUuid <<"device name " << deviceName;
-            saveActiveConnection(deviceName, activeConnectUuid);
-        }
-    }
-
-    wiredDevicePtr->disconnectInterface();
-
-    return 0;
-}
-
-//用于有线开关回连处理 开启调用
-int KyNetworkDeviceResourse::openWiredNetworkWithDevice(QString deviceName)
-{
-    NetworkManager::Device::Ptr wiredDevicePtr =
-                            m_networkResourceInstance->findDeviceByName(deviceName);
-
-    if (wiredDevicePtr.isNull() || !wiredDevicePtr->isValid()) {
-        qWarning()<<"[KyWiredConnectOperation]"<<"the network device" << deviceName <<"is not exist.";
-        return -ENXIO;
-    }
-
-    if (NetworkManager::Device::Type::Ethernet != wiredDevicePtr->type()) {
-        qWarning()<<"[KyWiredConnectOperation]"<<"the device type"
-                  << wiredDevicePtr->type() <<"is not Ethernet.";
-        return -EINVAL;
-    }
-
-    NetworkManager::WiredDevice *p_wiredDevice =
-        qobject_cast<NetworkManager::WiredDevice *>(wiredDevicePtr.data());
-
-    if (p_wiredDevice->carrier()) {
-        QString connectUuid;
-        getActiveConnection(deviceName, connectUuid);
-        if (!connectUuid.isEmpty()) {
-            KyConnectOperation operate;
-            operate.activateConnection(connectUuid, deviceName);
-        }
-    }
-
-    return 0;
-}
-
 
 KyDeviceState KyNetworkDeviceResourse::getDeviceState(QString deviceName)
 {
@@ -323,5 +210,31 @@ bool KyNetworkDeviceResourse::wirelessDeviceIsExist(const QString devName)
     QStringList list;
     getNetworkDeviceList(DEVICE_TYPE_WIFI, list);
     return list.contains(devName);
+}
+
+void KyNetworkDeviceResourse::setDeviceManaged(QString devName, bool managed)
+{
+    QString dbusPath;
+    NetworkManager::Device::Ptr connectDevice =
+                        m_networkResourceInstance->findDeviceByName(devName);
+    if (connectDevice->isValid()) {
+       dbusPath = connectDevice->uni();
+    } else {
+        qWarning()<<"[KyNetworkDeviceResourse] can not find device " << devName;
+        return;
+    }
+    setDeviceManagedByGDbus(dbusPath, managed);
+}
+
+bool KyNetworkDeviceResourse::getDeviceManaged(QString deviceName)
+{
+    NetworkManager::Device::Ptr connectDevice =
+                        m_networkResourceInstance->findDeviceByName(deviceName);
+    if (connectDevice->isValid()) {
+        return connectDevice->managed();
+    } else {
+        qWarning()<<"[KyNetworkDeviceResourse] can not find device " << deviceName;
+        return false;
+    }
 }
 

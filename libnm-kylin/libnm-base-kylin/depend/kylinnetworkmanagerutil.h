@@ -18,12 +18,13 @@
 #define  KEY_CONNECT_TYPE "type"
 #define  ETHERNET_TYPE    "802-3-ethernet"
 
-QString getConnectTypeByDbus(QString &connectPath);
+QString getConnectTypeByDbus(QString connectPath);
 QString getSsidFromByteArray(QByteArray &rawSsid);
 QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags);
 
+void setWiredEnabledByGDbus(bool enabled);
+void setDeviceManagedByGDbus(QString dbusPath, bool managed);
+bool getWiredEnabledByGDbus();
 
-void saveDeviceEnableState(QString deviceName, bool enable);
-void getDeviceEnableState(QMap<QString, bool> &map);
 
 #endif // KYLINUTIL_H

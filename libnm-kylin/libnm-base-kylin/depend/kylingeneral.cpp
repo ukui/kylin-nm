@@ -1,9 +1,7 @@
 #include "kylingeneral.h"
 #include "kylinnetworkdeviceresource.h"
 #include "kylinactiveconnectresource.h"
-
-const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
-const QString    KEY_WIRED_SWITCH             = "wiredswitch";
+#include "kylinnetworkmanagerutil.h"
 
 KylinGeneralOpration::KylinGeneralOpration(QObject *parent) : QObject(parent)
 {
@@ -17,24 +15,13 @@ KylinGeneralOpration::KylinGeneralOpration(QObject *parent) : QObject(parent)
                                         this, &KylinGeneralOpration::updateConnectStatus);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectivityChanged,
                                         this, &KylinGeneralOpration::updateConnectStatus);
-
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
-        gsettings = new QGSettings(GSETTINGS_SCHEMA);
-        if (gsettings->keys().contains(KEY_WIRED_SWITCH)) {
-            connect(gsettings, &QGSettings::changed, [&](QString key){
-                if (key == KEY_WIRED_SWITCH) {
-                    setWiredEnabled(gsettings->get(key).toBool());
-                }
-            });
-        }
-    }
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wiredEnabledChanged,
+                                            this, &KylinGeneralOpration::wiredEnabledChanged);
 }
 
 KylinGeneralOpration::~KylinGeneralOpration()
 {
     m_networkResourceInstance = nullptr;
-    delete gsettings;
-    gsettings = nullptr;
 }
 
 void KylinGeneralOpration::getConnectStatus(KyConnectStatus &status)
@@ -106,39 +93,10 @@ void KylinGeneralOpration::setNetworkingEnabled(bool enabled)
 
 void KylinGeneralOpration::setWiredEnabled(bool enabled)
 {
-    KyNetworkDeviceResourse devResource;
-    QStringList devList;
-    devResource.getNetworkDeviceList(DEVICE_TYPE_ETHERNET, devList);
-
-    if (!enabled) {
-        for (int i = 0; i < devList.size(); ++i) {
-            devResource.closeWiredNetworkWithDevice(devList.at(i));
-        }
-    } else {
-        QMap<QString, bool> stateMap;
-        devResource.getWiredDeviceEnableState(stateMap);
-        for (int i = 0; i < devList.size(); ++i) {
-            if (stateMap.contains(devList.at(i))
-                    && !stateMap[devList.at(i)]) {
-                //do nothing
-            } else {
-                qDebug() << "openWiredNetworkWithDevice" << devList.at(i);
-                devResource.openWiredNetworkWithDevice(devList.at(i));
-            }
-        }
-    }
-    updateGsetting(enabled);
+    setWiredEnabledByGDbus(enabled);
 }
 
-void KylinGeneralOpration::updateGsetting(bool enable)
+bool KylinGeneralOpration::getWiredEnabled()
 {
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
-        QGSettings *gsettings = new QGSettings(GSETTINGS_SCHEMA);
-        if (gsettings->keys().contains(KEY_WIRED_SWITCH)) {
-            if (enable != gsettings->get(KEY_WIRED_SWITCH).toBool()) {
-                qDebug() << "updateGsetting set " << enable;
-                gsettings->set(KEY_WIRED_SWITCH, enable);
-            }
-        }
-    }
+    return getWiredEnabledByGDbus();
 }

@@ -27,12 +27,8 @@ public:
     bool wiredDeviceIsCarriered(QString deviceName);
     bool wirelessDeviceIsExist(const QString devName);
 
-    //设置单个有线设备开关
-    void setWiredDeviceEnable(const QString& devName, bool enable);
-    void getWiredDeviceEnableState(QMap<QString, bool> &map);
-
-    int closeWiredNetworkWithDevice(QString deviceName);
-    int openWiredNetworkWithDevice(QString deviceName);
+    void setDeviceManaged(QString devName, bool managed);
+    bool getDeviceManaged(QString devName);
 
 private:
     void getActiveConnection(QString &deviceName, QString &connectUuid);
@@ -44,6 +40,7 @@ Q_SIGNALS:
     void carrierChange(QString deviceName, bool pluged);
 
     void wiredDeviceEnableChange(QString, bool);
+    void deviceManagedChange(QString deviceName, bool managed);
 
 //    void deviceBitRateChanage(QString deviceName, int bitRate);
 //    void deviceMacAddressChanage(QString deviceName, const QString &hwAddress);

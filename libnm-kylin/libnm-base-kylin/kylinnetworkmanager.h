@@ -45,9 +45,11 @@ Q_SIGNALS:
                      NetworkManager::Device::StateChangeReason reason);
     void carrierChange(QString deviceName, bool pluged);
     void deviceRemove(QString deviceName);
+    void deviceManagedChange(QString deviceName, bool managed);
 
     //general
     void wifiEnabledChanged(bool);
+    void wiredEnabledChanged(bool);
     void networkingEnabledChanged(bool);
     void connectStatusChanged(KyConnectStatus);
 
@@ -90,9 +92,11 @@ public:
 
     //device
     void getNetworkDeviceList(KyDeviceType deviceType, QStringList &networkDeviceList);
+    bool getDeviceManaged(QString devName);
 
     //general
     bool getWirelessEnabled();
+    bool getWiredEnabled();
     bool getNetworkingEnabled();
     void getConnectStatus(KyConnectStatus &status);
 
@@ -130,13 +134,12 @@ public Q_SLOTS:
     void onSetWirelessNetworkEnabled(bool enabled);
     void onSetNetworkingEnabled(bool enabled);
     void onSetWiredEnabled(bool enabled);
-
+    void onSetDeviceManaged(QString devName, bool managed);
+    void onSetWiredDeviceEnable(QString interface, bool enable);
     //有线无线公用
     void  onDeleteConnect(const QString &connectUuid);
     void  onActivateConnection(const QString connectUuid, const QString deviceName);
     void  onDeactivateConnection(const QString &activeConnectUuid);
-    //wired 单设备启用禁用
-    void  onSetWiredDeviceEnable(const QString &interface, bool enable);
     //wireless
     //申请扫描
     void onRequestWirelessScan();

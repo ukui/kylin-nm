@@ -852,6 +852,10 @@
         <source>Forget this network</source>
         <translation>忘记此网络</translation>
     </message>
+     <message>
+        <source>Delete this network</source>
+        <translation>删除此网络</translation>
+    </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="403"/>
         <source>Add Lan Connect</source>

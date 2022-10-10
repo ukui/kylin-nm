@@ -369,7 +369,6 @@ void NetDetail::initUI()
     cancelBtn->setText(tr("Cancel"));
 
     forgetBtn = new QPushButton(this);
-    forgetBtn->setText(tr("Forget this network"));
 
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
     centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS);
@@ -415,7 +414,12 @@ void NetDetail::initComponent()
     });
 
     connect(confimBtn, SIGNAL(clicked()), this, SLOT(on_btnConfirm_clicked()));
-    if (isWlan && !m_uuid.isEmpty()) {
+    if (!m_uuid.isEmpty()) {
+        if (isWlan) {
+            forgetBtn->setText(tr("Forget this network"));
+        } else {
+            forgetBtn->setText(tr("Delete this network"));
+        }
         forgetBtn->show();
         connect(forgetBtn, SIGNAL(clicked()), this, SLOT(on_btnForget_clicked()));
     } else {

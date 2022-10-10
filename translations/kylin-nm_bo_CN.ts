@@ -853,6 +853,10 @@
         <translation>དྲ་རྒྱ་འདི་བརྗེད་སོང་།</translation>
     </message>
     <message>
+        <source>Delete this network</source>
+        <translation>དྲ་རྒྱ་དེ་བསུབ་དགོས།</translation>
+    </message>
+    <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="403"/>
         <source>Add Lan Connect</source>
         <translation>སྐུད་ཡོད་དྲ་བ་ཁ་སྣོན་བྱ་དགོས།</translation>

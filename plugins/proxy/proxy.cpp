@@ -1001,9 +1001,9 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     proxyTypeLayout->setSpacing(FRAME_LAYOUT_SPACING);
     proxyTypeLayout->addWidget(m_proxyTypeLabel);
     proxyTypeLayout->addWidget(m_proxyTypeComboBox);
-    m_proxyTypeComboBox->addItem(tr("http")); //http
-    m_proxyTypeComboBox->addItem(tr("socks4")); //socks4
-    m_proxyTypeComboBox->addItem(tr("socks5")); //socks4
+    m_proxyTypeComboBox->addItem("http"); //http
+    m_proxyTypeComboBox->addItem("socks4"); //socks4
+    m_proxyTypeComboBox->addItem("socks5"); //socks4
 
     //IP地址ui布局
     m_ipAddressFrame = new QFrame(m_appProxyFrame);

@@ -357,6 +357,7 @@ void NetDetail::initUI()
     }
 
     pageLayout->addWidget(m_netTabBar, Qt::AlignCenter);
+    pageLayout->addSpacing(24);
 
     // TabBar关联选项卡页面
     connect(m_netTabBar, SIGNAL(currentChanged(int)), this, SLOT(currentRowChangeSlot(int)));
@@ -371,7 +372,7 @@ void NetDetail::initUI()
     forgetBtn = new QPushButton(this);
 
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
-    centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS);
+    centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS); // 右边距为0，为安全页滚动区域留出空间
     centerlayout->addWidget(pageFrame);
     centerlayout->addSpacing(4);
     centerlayout->addWidget(stackWidget);

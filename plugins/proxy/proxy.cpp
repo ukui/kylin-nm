@@ -848,7 +848,12 @@ bool Proxy::getAppProxyState()
     //获取应用代理开启状态
     qDebug() << "call QDBusInterface getProxyStateDbus";
     QDBusReply<bool> reply = m_appProxyDbus->call("getProxyStateDbus");
+
+    if (!reply.isValid()) {
+        return -1;
+    }
     state = reply;
+
     return state;
 }
 
@@ -881,6 +886,12 @@ QStringList Proxy::getAppProxyConf()
     //获取应用代理配置信息
     qDebug() << "call QDBusInterface getProxyConfig";
     QDBusReply<QStringList> reply = dbusInterface.call("getProxyConfig");
+
+    if (!reply.isValid()) {
+        qWarning ()<< "Return empty app proxy information, getProxyConfig reply is invalid";
+        return info;
+    }
+
     info =  reply.value();
 
     if (info.isEmpty()) {
@@ -911,18 +922,25 @@ QMap<QString, QStringList> Proxy::getAppListProxy()
     QMap<QString, QStringList> appList;
     appList.clear();
 
-    QDBusInterface *dbusInterface = new QDBusInterface("org.ukui.SettingsDaemon",
+    QDBusInterface dbusInterface("org.ukui.SettingsDaemon",
                        "/org/ukui/SettingsDaemon/AppProxy",
                        "org.ukui.SettingsDaemon.AppProxy",
                        QDBusConnection::sessionBus());
 
-    if(!dbusInterface->isValid()) {
+    if(!dbusInterface.isValid()) {
         qWarning ()<< "init AppProxy dbus error";
+        return appList;
     }
 
     //获取可以配置应用代理的应用信息
     qDebug() << "call QDBusInterface getAppProxy";
-    QDBusReply<QMap<QString, QStringList>> reply = dbusInterface->call("getAppProxy");
+    QDBusReply<QMap<QString, QStringList>> reply = dbusInterface.call("getAppProxy");
+
+    if (!reply.isValid()) {
+        qWarning ()<< "Return empty app list, getAppProxy reply is invalid";
+        return appList;
+    }
+
     appList =  reply.value();
     if (appList.isEmpty()) {
         qWarning() << "getAppProxy reply appList is empty";

@@ -992,6 +992,7 @@ void WlanPage::onConnectionStateChanged(QString uuid,
                 connect(m_activatedConnectResource, &KyActiveConnectResourse::stateChangeReason, fireWallDialog, &FirewallDialog::closeMyself);
 
                 fireWallDialog->show();
+                fireWallDialog->centerToScreen();
 
             } else if (configType == KSC_FIREWALL_PUBLIC) {
                 NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);

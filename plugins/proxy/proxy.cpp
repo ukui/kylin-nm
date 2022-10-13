@@ -850,7 +850,7 @@ bool Proxy::getAppProxyState()
     QDBusReply<bool> reply = m_appProxyDbus->call("getProxyStateDbus");
 
     if (!reply.isValid()) {
-        return -1;
+        return false;
     }
     state = reply;
 

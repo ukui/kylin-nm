@@ -938,6 +938,8 @@ void LanPage::onConnectionStateChange(QString uuid,
             connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, fireWallDialog, &FirewallDialog::closeMyself);
 
             fireWallDialog->show();
+            fireWallDialog->centerToScreen();
+
         }  else if (configType == KSC_FIREWALL_PUBLIC) {
             NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
         } else if (configType == KSC_FIREWALL_PRIVATE) {

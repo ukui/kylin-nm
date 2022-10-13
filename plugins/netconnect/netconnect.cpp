@@ -180,8 +180,10 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
 void NetConnect::initComponent() {
     wiredSwitch = new KSwitchButton(pluginWidget);
     ui->openWIifLayout->addWidget(wiredSwitch);
+    ui->openWIifLayout->setContentsMargins(0,0,8,0);
     ui->detailLayOut->setContentsMargins(MAIN_LAYOUT_MARGINS);
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
+    ui->verticalLayout_3->setSpacing(8);
     ui->availableLayout->setSpacing(SPACING);
     ui->horizontalLayout->setContentsMargins(TOP_MARGINS);
 

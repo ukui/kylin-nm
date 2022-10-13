@@ -947,7 +947,7 @@ void LanPage::onConnectionStateChange(QString uuid,
         updateActivatedConnectionArea(p_newItem);
         updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
-        p_newItem = m_connectResourse->getConnectionItemByUuid(uuid);
+        p_newItem = m_connectResourse->getConnectionItemByUuidWithoutActivateChecking(uuid);
         qDebug() << "[LanPage] deactivated reason" << reason;
         if (nullptr == p_newItem) {
             qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;

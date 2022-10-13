@@ -43,6 +43,10 @@
 const QString v10Sp1 = "V10SP1";
 const QString intel = "V10SP1-edu";
 
+#define LANPAGE 0
+#define WLANPAGE 1
+#define AUTOSELET 2
+
 #define KEY_PRODUCT_FEATURES "PRODUCT_FEATURES"
 
 #include <kwindowsystem.h>
@@ -257,6 +261,7 @@ void MainWindow::initUI()
     m_centralWidget = new QTabWidget(this);
     this->setCentralWidget(m_centralWidget);
     m_centralWidget->tabBar()->setFixedWidth(this->width()+1);
+    m_centralWidget->tabBar()->setProperty("setRadius", 12);
 //    m_centralWidget->tabBar()->setStyleSheet("QTabBar::tab{min-height:40px}");
     m_lanWidget = new LanPage(m_centralWidget);
     m_wlanWidget = new WlanPage(m_centralWidget);
@@ -645,10 +650,16 @@ void MainWindow::onTabletModeChanged(bool mode)
 
 void MainWindow::onShowMainWindow(int type)
 {
-    m_centralWidget->setCurrentIndex(type);
+    if (type == LANPAGE || type == WLANPAGE) {
+        m_centralWidget->setCurrentIndex(type);
 
-    if(QApplication::activeWindow() != this) {
-        this->showMainwindow();
+        if(QApplication::activeWindow() != this) {
+            this->showMainwindow();
+        }
+    } else if (type == AUTOSELET) {
+        onTrayIconActivated(QSystemTrayIcon::ActivationReason::Trigger);
+    } else {
+        qWarning() << "unsupport parameter";
     }
 }
 

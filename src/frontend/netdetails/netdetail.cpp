@@ -30,6 +30,7 @@
 #include <QEvent>
 #include <QMenu>
 #include <QToolTip>
+#include <QFontMetrics>
 
 #include "windowmanager/windowmanager.h"
 
@@ -37,7 +38,7 @@
 #define  WINDOW_HEIGHT 602
 #define  ICON_SIZE 22,22
 #define  TITLE_LAYOUT_MARGINS 9,9,0,0
-#define  CENTER_LAYOUT_MARGINS 24,0,24,0
+#define  CENTER_LAYOUT_MARGINS 24,0,0,0
 #define  BOTTOM_LAYOUT_MARGINS 24,0,24,0
 #define  BOTTOM_LAYOUT_SPACING 16
 #define  PAGE_LAYOUT_SPACING 1
@@ -53,6 +54,7 @@
 #define  SCRO_WIDTH 472
 #define  PEAP_SCRO_HEIGHT  300
 #define  TLS_SCRO_HEIGHT  480
+#define  MAX_TAB_TEXT_LENGTH 44
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -358,7 +360,7 @@ void NetDetail::initUI()
 
     // TabBar关联选项卡页面
     connect(m_netTabBar, SIGNAL(currentChanged(int)), this, SLOT(currentRowChangeSlot(int)));
-
+    setNetTabToolTip();
 
     confimBtn = new QPushButton(this);
     confimBtn->setText(tr("Confirm"));
@@ -367,7 +369,6 @@ void NetDetail::initUI()
     cancelBtn->setText(tr("Cancel"));
 
     forgetBtn = new QPushButton(this);
-    forgetBtn->setText(tr("Forget this network"));
 
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
     centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS);
@@ -413,7 +414,12 @@ void NetDetail::initComponent()
     });
 
     connect(confimBtn, SIGNAL(clicked()), this, SLOT(on_btnConfirm_clicked()));
-    if (isWlan && !m_uuid.isEmpty()) {
+    if (!m_uuid.isEmpty()) {
+        if (isWlan) {
+            forgetBtn->setText(tr("Forget this network"));
+        } else {
+            forgetBtn->setText(tr("Delete this network"));
+        }
         forgetBtn->show();
         connect(forgetBtn, SIGNAL(clicked()), this, SLOT(on_btnForget_clicked()));
     } else {
@@ -451,6 +457,16 @@ void NetDetail::initComponent()
     connect(securityPage, &SecurityPage::eapTypeChanged, this, [=]() {
         setSecuPageHeight();
     });
+
+    const QByteArray id(THEME_SCHAME);
+    if(QGSettings::isSchemaInstalled(id)){
+        QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+        connect(fontSetting, &QGSettings::changed,[=](QString key) {
+            if ("systemFont" == key || "systemFontSize" ==key) {
+                setNetTabToolTip();
+            }
+        });
+    }
 }
 
 void NetDetail::pagePadding(QString netName, bool isWlan)
@@ -1103,6 +1119,20 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        }
    }
    return QWidget::eventFilter(w, event);
+}
+
+void NetDetail::setNetTabToolTip()
+{
+    int tabCount = m_netTabBar->count();
+    for (int i = 0; i< tabCount; ++i) {
+        QFontMetrics fontMetrics(m_netTabBar->font());
+        int fontSize = fontMetrics.width(m_netTabBar->tabText(i));
+        if (fontSize > MAX_TAB_TEXT_LENGTH) {
+            m_netTabBar->setTabToolTip(i, m_netTabBar->tabText(i));
+        } else {
+            m_netTabBar->setTabToolTip(i, "");
+        }
+    }
 }
 
 NetTabBar::NetTabBar(QWidget *parent)

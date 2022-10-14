@@ -32,6 +32,7 @@
 #include <QDebug>
 
 #include "coninfo.h"
+#include "multiplednswidget.h"
 
 class CreatNetPage : public QFrame
 {
@@ -46,10 +47,9 @@ private:
     LineEdit *ipv4addressEdit;
     LineEdit *netMaskEdit;
     LineEdit *gateWayEdit;
-    LineEdit *firstDnsEdit;
-    LineEdit *secondDnsEdit;
+//    LineEdit *firstDnsEdit;
+//    LineEdit *secondDnsEdit;
 
-private:
     QFormLayout *m_detailLayout;
     QVBoxLayout *mvBoxLayout;
     QLabel *m_connNameLabel;
@@ -57,8 +57,10 @@ private:
     QLabel *m_addressLabel;
     QLabel *m_maskLabel;
     QLabel *m_gateWayLabel;
-    QLabel *m_dnsLabel;
-    QLabel *m_secDnsLabel;
+//    QLabel *m_dnsLabel;
+//    QLabel *m_secDnsLabel;
+    MultipleDnsWidget *m_dnsWidget = nullptr;
+
 private:
     void initUI();
     void initComponent();

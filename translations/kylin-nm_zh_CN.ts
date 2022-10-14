@@ -33,6 +33,14 @@
     </message>
 </context>
 <context>
+    <name>MultipleDnsWidget</name>
+    <message>
+        <location filename="../src/frontend/netdetails/multiplednswidget.cpp" line="42"/>
+        <source>DNS server:</source>
+        <translation>DNS服务器：</translation>
+    </message>
+</context>
+<context>
     <name>ConfigPage</name>
     <message>
         <location filename="../src/frontend/netdetails/configpage.cpp" line="61"/>

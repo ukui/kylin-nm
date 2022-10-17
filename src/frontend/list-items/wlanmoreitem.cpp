@@ -32,7 +32,7 @@ WlanMoreItem::~WlanMoreItem() {
 }
 
 void WlanMoreItem::onNetButtonClicked() {
-    emit hiddenWlanClicked();
+    Q_EMIT hiddenWlanClicked();
 }
 
 void WlanMoreItem::onRightButtonClicked() {

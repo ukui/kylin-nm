@@ -100,7 +100,7 @@ private:
 
     void updateCurrentDevice(QString deviceName);
 
-signals:
+Q_SIGNALS:
     void lanAdd(QString devName, QStringList info);
     void lanRemove(QString dbusPath);
     void lanUpdate(QString devName, QStringList info);
@@ -108,7 +108,7 @@ signals:
     void lanActiveConnectionStateChanged(QString interface, QString uuid, int status);
     void lanConnectChanged(int state);
 
-private slots:
+private Q_SLOTS:
     void onConnectionStateChange(QString uuid, NetworkManager::ActiveConnection::State state,
                                  NetworkManager::ActiveConnection::Reason reason);
 
@@ -121,6 +121,7 @@ private slots:
     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName);
     void onDeviceNameUpdate(QString oldName, QString newName);
+    void onDeviceManagedChange(QString deviceName, bool managed);
 
     void onDeviceCarriered(QString deviceName, bool pluged);
     void onDeviceActiveChanage(QString deviceName, bool deviceActive);
@@ -128,6 +129,8 @@ private slots:
     void onDeviceComboxIndexChanged(int currentIndex);
 
     void onShowControlCenter();
+
+    void onWiredEnabledChanged(bool);
 
 private:
     QListWidget * m_activatedLanListWidget = nullptr;
@@ -144,6 +147,7 @@ private:
     QString m_currentDeviceName;
     QStringList m_devList;
     QStringList m_enableDeviceList;
+    QStringList m_disableDeviceList;
 
     QGSettings *m_switchGsettings = nullptr;
 

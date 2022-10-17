@@ -68,7 +68,7 @@ void Ipv4Page::initUI() {
     m_firstDnsEmptyLabel->setFixedHeight(LABEL_HEIGHT);
 
 
-    m_configLabel->setText(tr("Ipv4Config"));
+    m_configLabel->setText(tr("IPv4Config"));
     m_addressLabel->setText(tr("Address"));
     m_maskLabel->setText(tr("Netmask"));
     m_gateWayLabel->setText(tr("Default Gateway"));
@@ -344,7 +344,7 @@ void Ipv4Page::setLineEnabled(bool check) {
 }
 
 void Ipv4Page::setEnableOfSaveBtn() {
-    emit setIpv4PageState(checkConnectBtnIsEnabled());
+    Q_EMIT setIpv4PageState(checkConnectBtnIsEnabled());
 }
 
 bool Ipv4Page::getTextEditState(QString text)

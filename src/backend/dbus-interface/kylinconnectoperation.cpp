@@ -201,7 +201,7 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = tr("activate connection failed: ") + watcher->error().message();
             qWarning()<<errorMessage;
-            emit this->activateConnectionError(errorMessage);
+            Q_EMIT this->activateConnectionError(errorMessage);
          } else {
             qWarning()<<"active wired connect complete.";
          }
@@ -237,7 +237,7 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
                         + watcher->error().message();
 
             qWarning()<<errorMessage;
-            emit this->deactivateConnectionError(errorMessage);
+            Q_EMIT this->deactivateConnectionError(errorMessage);
         } else {
             qWarning() << "deactive connect operation finished" << activateConnectPtr->connection()->name();
         }

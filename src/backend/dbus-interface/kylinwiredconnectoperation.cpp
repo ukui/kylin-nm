@@ -17,6 +17,7 @@
  */
 
 #include "kylinwiredconnectoperation.h"
+#include "kylinutil.h"
 
 #include <NetworkManagerQt/AdslDevice>
 #include <NetworkManagerQt/WiredDevice>
@@ -26,11 +27,22 @@
 
 KyWiredConnectOperation::KyWiredConnectOperation(QObject *parent) : KyConnectOperation(parent)
 {
-
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wiredEnabledChanged,
+                                        this, &KyWiredConnectOperation::wiredEnabledChanged);
 }
 
 KyWiredConnectOperation::~KyWiredConnectOperation()
 {
+}
+
+void KyWiredConnectOperation::setWiredEnabled(bool enabled)
+{
+    setWiredEnabledByGDbus(enabled);
+}
+
+bool KyWiredConnectOperation::getWiredEnabled()
+{
+    return getWiredEnabledByGDbus();
 }
 
 void KyWiredConnectOperation::createWiredConnect(KyConnectSetting &connectSettingsInfo)
@@ -56,7 +68,7 @@ void KyWiredConnectOperation::createWiredConnect(KyConnectSetting &connectSettin
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = tr("create wired connection failed: ") + watcher->error().message();
             qWarning()<<errorMessage;
-            emit this->createConnectionError(errorMessage);
+            Q_EMIT this->createConnectionError(errorMessage);
          } else {
             qDebug()<<"create wired connect complete";
          }
@@ -74,7 +86,7 @@ void KyWiredConnectOperation::updateWiredConnect(const QString &connectUuid, con
     if (nullptr == connectPtr) {
         QString errorMessage = tr("it can not find connection") + connectUuid;
         qWarning()<<errorMessage;
-        emit updateConnectionError(errorMessage);
+        Q_EMIT updateConnectionError(errorMessage);
         return;
     }
 
@@ -197,7 +209,7 @@ void KyWiredConnectOperation::activateVpnConnection(const QString connectUuid)
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = tr("activate vpn connection failed: ") + watcher->error().message();
             qWarning()<<errorMessage;
-            emit this->activateConnectionError(errorMessage);
+            Q_EMIT this->activateConnectionError(errorMessage);
          } else {
             qWarning()<<"active vpn connect complete.";
          }

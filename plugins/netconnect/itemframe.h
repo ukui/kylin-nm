@@ -31,7 +31,6 @@ class ItemFrame : public QFrame
     Q_OBJECT
 public:
     ItemFrame(QString devName, QWidget *parent = nullptr);
-    ~ItemFrame();
     //单设备整体layout
     QVBoxLayout * deviceLanLayout = nullptr;
     //单设备名称+下拉按钮Frame+d单设备开关

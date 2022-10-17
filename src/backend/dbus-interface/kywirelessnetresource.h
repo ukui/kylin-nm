@@ -60,10 +60,11 @@ private:
     QString getDeviceIFace(NetworkManager::WirelessNetwork::Ptr net);
     QString getDeviceIFace(NetworkManager::ActiveConnection::Ptr actConn, QString &wirelessNetResourcessid);
 
-public slots:
+public Q_SLOTS:
     void onWifiNetworkAdded(QString, QString);
     void onWifiNetworkRemoved(QString, QString);
     void onWifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net);
+    void onWifiNetworkSecuChange(NetworkManager::AccessPoint *accessPointPtr);
     void onWifiNetworkDeviceDisappear();
 
     void onConnectionAdd(QString uuid);
@@ -74,11 +75,11 @@ public slots:
     void onDeviceRemove(QString deviceName);
     void onDeviceNameUpdate(QString oldName, QString newName);
 
-signals:
+Q_SIGNALS:
     void signalStrengthChange(QString, QString, int);
     void bssidChange(QString, QString, QString);
     void secuTypeChange(QString, QString, QString);
-    void connectionRemove(QString, QString);
+    void connectionRemove(QString, QString, QString);
     void connectionAdd(QString, QString);
     void wifiNetworkUpdate();
     void wifiNetworkAdd(QString, KyWirelessNetItem&);

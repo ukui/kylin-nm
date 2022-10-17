@@ -70,7 +70,7 @@ private:
     bool netMaskIsValide(QString text);
     QString getNetMaskText(QString text);
 
-private slots:
+private Q_SLOTS:
     void setEnableOfSaveBtn();
     void configChanged(int index);
 Q_SIGNALS:

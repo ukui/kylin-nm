@@ -37,6 +37,10 @@ public:
     ~KyWiredConnectOperation();
 
 public:
+    //无线开关
+    void setWiredEnabled(bool enabled);
+    bool getWiredEnabled();
+
     void  createWiredConnect(KyConnectSetting &connectSettingsInfo);
     void  updateWiredConnect(const QString &connectUuid, const KyConnectSetting &connectSettingsInfo);
     void  deleteWiredConnect(const QString &connectUuid);
@@ -46,6 +50,9 @@ public:
 
     int closeWiredNetworkWithDevice(QString deviceName);
     int openWiredNetworkWithDevice(QString deviceName);
+
+Q_SIGNALS:
+    void wiredEnabledChanged(bool);
 
 private:
     void getActiveConnection(QString &deviceName, QString &connectUuid);

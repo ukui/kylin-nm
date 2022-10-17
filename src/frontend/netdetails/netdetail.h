@@ -77,11 +77,11 @@ private:
     QString m_devName;
     volatile bool m_isStop;
 
-public slots:
+public Q_SLOTS:
     void checkIpv4ConflictThread(const QString &ipv4Address);
     void checkIpv6ConflictThread(const QString &ipv6Address);
 
-signals:
+Q_SIGNALS:
     bool ipv4IsConflict(bool isConflict);
     bool ipv6IsConflict(bool isConflict);
 };
@@ -137,6 +137,7 @@ private:
 
     void setNetdetailSomeEnable(bool on);
     void startObjectThread();
+    void setNetTabToolTip();
 
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
@@ -186,15 +187,15 @@ private:
     ThreadObject *m_object;
     QThread *m_objectThread;
 
-private slots:
+private Q_SLOTS:
     void on_btnConfirm_clicked();
     void on_btnForget_clicked();
     void onPaletteChanged();
 
-protected slots:
+protected Q_SLOTS:
     void currentRowChangeSlot(int row);
 
-signals:
+Q_SIGNALS:
     void detailPageClose(bool on);
     void createPageClose(QString);
     void currentChanged(int);

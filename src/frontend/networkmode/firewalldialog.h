@@ -24,6 +24,8 @@
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include <QLabel>
+#include <QDesktopWidget>
+#include <QApplication>
 #include "kwidget.h"
 #include "kdialog.h"
 
@@ -33,14 +35,17 @@ class FirewallDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit FirewallDialog(KDialog *parent = nullptr);
+    FirewallDialog(QWidget *parent = nullptr);
     ~FirewallDialog();
     void setUuid(QString uuid) {
         m_uuid = uuid;
     }
 
+    void centerToScreen();
+
 private:
     void initUI();
+
     QString m_uuid;
     QLabel * m_iconLabel = nullptr;
     QLabel * m_contentLabel = nullptr;
@@ -49,11 +54,11 @@ private:
     QPushButton *m_YesBtn = nullptr;
     QPushButton *m_NoBtn = nullptr;
 
-signals:
+Q_SIGNALS:
     void setPublicNetMode();
     void setPrivateNetMode();
 
-public slots:
+public Q_SLOTS:
     void closeMyself(QString uuid, int status) {
         if (uuid == m_uuid && status == 4) {
             this->close();

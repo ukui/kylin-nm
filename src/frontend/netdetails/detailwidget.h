@@ -58,8 +58,6 @@ private:
 
     void initUI();
 
-signals:
-
 };
 
 #endif // DetailWidget_H

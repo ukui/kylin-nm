@@ -73,7 +73,7 @@ public:
 
     static int m_system(char *cmd);
 
-public slots:
+public Q_SLOTS:
     void onRequestSendDesktopNotify(QString message);
 
 };

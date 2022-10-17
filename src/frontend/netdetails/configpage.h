@@ -55,10 +55,10 @@ private:
     KBorderlessButton *m_congigBtn = nullptr;
     QVBoxLayout *m_vBoxLayout  = nullptr;
 
-private slots:
+private Q_SLOTS:
     void onConfigButtonClicked();
 
-signals:
+Q_SIGNALS:
     void publicConfig();
     void privateConfig();
 };

@@ -66,14 +66,15 @@ void KyLable::setPressColor()
 {
     QColor hightlight = this->palette().color(QPalette::Active,QPalette::Highlight);
     QColor mix = this->palette().color(QPalette::Active,QPalette::BrightText);
-    m_foregroundColor = mixColor(hightlight, mix, 0.05);
+    m_foregroundColor = mixColor(hightlight, mix, 0.2);
 }
 
 void KyLable::setHoverColor()
 {
-    QColor hightlight = this->palette().color(QPalette::Active,QPalette::Highlight);
-    QColor mix = this->palette().color(QPalette::Active,QPalette::BrightText);
-    m_foregroundColor = mixColor(hightlight, mix, 0.2);
+//    QColor hightlight = this->palette().color(QPalette::Active,QPalette::Highlight);
+//    QColor mix = this->palette().color(QPalette::Active,QPalette::BrightText);
+//    m_foregroundColor = mixColor(hightlight, mix, 0.2);
+    m_foregroundColor = this->palette().color(QPalette::Active,QPalette::Highlight);
 }
 
 void KyLable::setNormalColor()

@@ -81,6 +81,7 @@ void TabPage::initUI()
 //    m_activatedNetLayout->setSpacing(NET_LAYOUT_SPACING);
     m_activatedNetLabel = new QLabel(m_activatedNetFrame);
     m_activatedNetLabel->setContentsMargins(TEXT_MARGINS);
+    m_activatedNetLabel->setFixedHeight(TEXT_HEIGHT);
     m_activatedNetLayout->addWidget(m_activatedNetLabel);
     m_activatedNetDivider = new Divider(this);
 
@@ -93,6 +94,7 @@ void TabPage::initUI()
 
     m_inactivatedNetLabel = new QLabel(m_inactivatedNetFrame);
     m_inactivatedNetLabel->setContentsMargins(TEXT_MARGINS);
+    m_inactivatedNetLabel->setFixedHeight(TEXT_HEIGHT);
 
 //    m_inactivatedNetListArea = new QScrollArea(m_inactivatedNetFrame);
 //    m_inactivatedNetListArea->setFrameShape(QFrame::Shape::NoFrame);
@@ -116,10 +118,16 @@ void TabPage::initUI()
     m_settingsLayout = new QHBoxLayout(m_settingsFrame);
     m_settingsLayout->setContentsMargins(SETTINGS_LAYOUT_MARGINS);
 
-    m_settingsBtn = new KBorderlessButton(m_settingsFrame);
-    m_settingsBtn->setText(tr("Settings"));
+//    m_settingsBtn = new KBorderlessButton(m_settingsFrame);
+//    m_settingsBtn->setText(tr("Settings"));
+//    m_settingsLayout->addWidget(m_settingsBtn);
 
-    m_settingsLayout->addWidget(m_settingsBtn);
+    m_settingsLabel = new KyLable(m_settingsFrame);
+    m_settingsLabel->setCursor(Qt::PointingHandCursor);
+    m_settingsLabel->setText(tr("Settings"));
+    m_settingsLabel->setScaledContents(true);
+
+    m_settingsLayout->addWidget(m_settingsLabel);
     m_settingsLayout->addStretch();
     m_settingsFrame->setLayout(m_settingsLayout);
 
@@ -232,8 +240,6 @@ void setDefaultDevice(KyDeviceType deviceType, QString deviceName)
 
     delete m_settings;
     m_settings = nullptr;
-
-    return;
 }
 
 bool checkDeviceExist(KyDeviceType deviceType, QString deviceName)
@@ -260,37 +266,9 @@ bool checkDeviceExist(KyDeviceType deviceType, QString deviceName)
     return devList.contains(deviceName);
 }
 
-void saveDeviceEnableState(QString deviceName, bool enable)
-{
-    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
-    m_settings->beginGroup("CARDEABLE");
-    m_settings->setValue(deviceName, enable);
-    m_settings->endGroup();
-    m_settings->sync();
-    delete m_settings;
-    m_settings = nullptr;
-    return;
-}
-
-void deleteDeviceEnableState(QString deviceName)
-{
-    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
-    m_settings->beginGroup("CARDEABLE");
-    m_settings->remove(deviceName);
-    m_settings->endGroup();
-    m_settings->sync();
-    delete m_settings;
-    m_settings = nullptr;
-    return;
-}
-
 void getDeviceEnableState(int type, QMap<QString, bool> &map)
 {
     map.clear();
-    if (!QFile::exists(CONFIG_FILE_PATH)) {
-        qDebug() << "CONFIG_FILE_PATH not exist";
-        return;
-    }
     if (type != WIRED && type != WIRELESS) {
         qDebug() << "getDeviceEnableState but wrong type";
         return;
@@ -301,34 +279,24 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
     wiredDevList.clear();
     wirelessDevList.clear();
 
-    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
-    m_settings->beginGroup("CARDEABLE");
-
     if (type == WIRED) {
         kdr->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
         if (!wiredDevList.isEmpty()) {
             for (int i = 0; i < wiredDevList.size(); ++i) {
-                if (!m_settings->contains(wiredDevList.at(i))) {
-                    saveDeviceEnableState(wiredDevList.at(i),true);
-                }
-                bool enable = m_settings->value(wiredDevList.at(i), true).toBool();
-                map.insert(wiredDevList.at(i), enable);
+                QString devName = wiredDevList.at(i);
+                map.insert(devName, kdr->getDeviceManaged(devName));
             }
         }
     } else if (type == WIRELESS) {
         kdr->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
         if (!wirelessDevList.isEmpty()) {
             for (int i = 0; i < wirelessDevList.size(); ++i) {
-                bool enable = m_settings->value(wirelessDevList.at(i), true).toBool();
-                map.insert(wirelessDevList.at(i), enable);
+                QString devName = wirelessDevList.at(i);
+                map.insert(devName, kdr->getDeviceManaged(devName));
             }
         }
     }
 
-    m_settings->endGroup();
-    delete m_settings;
-    m_settings = nullptr;
     delete kdr;
     kdr = nullptr;
-    return;
 }

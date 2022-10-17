@@ -95,7 +95,7 @@ private:
     void initConflictHintLable();
     void initLoadingIcon();
 
-private slots:
+private Q_SLOTS:
     void setEnableOfSaveBtn();
     void configChanged(int index);
     void onAddressTextChanged();

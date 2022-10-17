@@ -43,6 +43,10 @@
 const QString v10Sp1 = "V10SP1";
 const QString intel = "V10SP1-edu";
 
+#define LANPAGE 0
+#define WLANPAGE 1
+#define AUTOSELET 2
+
 #define KEY_PRODUCT_FEATURES "PRODUCT_FEATURES"
 
 #include <kwindowsystem.h>
@@ -78,7 +82,7 @@ void MainWindow::showMainwindow()
     this->showByWaylandHelper();
     this->raise();
     this->activateWindow();
-    emit this->mainWindowVisibleChanged(true);
+    Q_EMIT this->mainWindowVisibleChanged(true);
 #ifdef WITHKYSEC
     if (!kysec_is_disabled() && kysec_get_3adm_status() && (getuid() || geteuid())){
         if (nullptr != m_wlanWidget) {
@@ -105,7 +109,7 @@ void MainWindow::showMainwindow()
 void MainWindow::hideMainwindow()
 {
     this->hide();
-    emit this->mainWindowVisibleChanged(false);
+    Q_EMIT this->mainWindowVisibleChanged(false);
 }
 
 /**
@@ -257,6 +261,7 @@ void MainWindow::initUI()
     m_centralWidget = new QTabWidget(this);
     this->setCentralWidget(m_centralWidget);
     m_centralWidget->tabBar()->setFixedWidth(this->width()+1);
+    m_centralWidget->tabBar()->setProperty("setRadius", 12);
 //    m_centralWidget->tabBar()->setStyleSheet("QTabBar::tab{min-height:40px}");
     m_lanWidget = new LanPage(m_centralWidget);
     m_wlanWidget = new WlanPage(m_centralWidget);
@@ -375,7 +380,7 @@ void MainWindow::resetWindowPosition()
         return;
     }
 
-#define MARGIN 4
+#define MARGIN 8
 #define PANEL_TOP 1
 #define PANEL_LEFT 2
 #define PANEL_RIGHT 3
@@ -477,12 +482,12 @@ void MainWindow::resetWindowTheme()
     if(currentTheme == "ukui-dark" || currentTheme == "ukui-black"){
         app->setStyle(new CustomStyle("ukui-dark"));
         qDebug() << "Has set color theme to ukui-dark." << Q_FUNC_INFO << __LINE__;
-        emit qApp->paletteChanged(qApp->palette());
+        Q_EMIT qApp->paletteChanged(qApp->palette());
         return;
     }
     app->setStyle(new CustomStyle("ukui-light"));
     qDebug() << "Has set color theme to " << currentTheme << Q_FUNC_INFO << __LINE__;
-    emit qApp->paletteChanged(qApp->palette());
+    Q_EMIT qApp->paletteChanged(qApp->palette());
     return;
 }
 
@@ -559,7 +564,7 @@ void MainWindow::onThemeChanged(const QString &key)
         qDebug() << "Received signal of theme changed, will reset theme." << Q_FUNC_INFO << __LINE__;
 //        resetWindowTheme();
         paintWithTrans();
-        emit qApp->paletteChanged(qApp->palette());
+        Q_EMIT qApp->paletteChanged(qApp->palette());
     } else {
         qDebug() << "Received signal of theme changed, key=" << key << " will do nothing." << Q_FUNC_INFO << __LINE__;
     }
@@ -645,10 +650,16 @@ void MainWindow::onTabletModeChanged(bool mode)
 
 void MainWindow::onShowMainWindow(int type)
 {
-    m_centralWidget->setCurrentIndex(type);
+    if (type == LANPAGE || type == WLANPAGE) {
+        m_centralWidget->setCurrentIndex(type);
 
-    if(QApplication::activeWindow() != this) {
-        this->showMainwindow();
+        if(QApplication::activeWindow() != this) {
+            this->showMainwindow();
+        }
+    } else if (type == AUTOSELET) {
+        onTrayIconActivated(QSystemTrayIcon::ActivationReason::Trigger);
+    } else {
+        qWarning() << "unsupport parameter";
     }
 }
 

@@ -80,12 +80,12 @@ private:
     QPushButton  *m_cancelBtn = nullptr;
     QPushButton  *m_connectBtn = nullptr;
 
-private slots:
+private Q_SLOTS:
     void onBtnConnectClicked();
     void onEapTypeChanged(const KyEapMethodType &type);
     void onPaletteChanged();
 
-signals:
+Q_SIGNALS:
     void enterpriseWlanDialogClose(bool);
 };
 

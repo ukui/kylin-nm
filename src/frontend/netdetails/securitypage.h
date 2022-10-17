@@ -124,7 +124,7 @@ private:
     bool checkConnectBtnIsEnabled();
 
 
-private slots:
+private Q_SLOTS:
     void onSecuTypeComboxIndexChanged();
     void onEapTypeComboxIndexChanged();
     void setEnableOfSaveBtn();
@@ -137,7 +137,7 @@ private slots:
     void onPwdOptionComboxIndexChanged(QString str);
     void changeColumnWidthWithSecuType();
 
-signals:
+Q_SIGNALS:
     void setSecuPageState(bool);
     void secuTypeChanged(const KySecuType &type);
     void eapTypeChanged(const KyEapMethodType &type);

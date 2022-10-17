@@ -38,6 +38,7 @@ public:
 
 public:
     KyConnectItem *getConnectionItemByUuid(QString connectUuid);
+    KyConnectItem *getConnectionItemByUuidWithoutActivateChecking(QString connectUuid);
     KyConnectItem *getConnectionItemByUuid(QString connectUuid, QString deviceName);
     void getConnectionList(QString deviceName,
                            NetworkManager::ConnectionSettings::ConnectionType connectionType,
@@ -78,7 +79,7 @@ private:
     void getIpv6ConnectSetting(NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
                             KyConnectSetting &connectSetting);
 
-signals:
+Q_SIGNALS:
     void connectionAdd(QString uuid);
     void connectionUpdate(QString uuid);
     void connectionRemove(QString path);

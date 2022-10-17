@@ -30,6 +30,7 @@
 #include <QEvent>
 #include <QMenu>
 #include <QToolTip>
+#include <QFontMetrics>
 
 #include "windowmanager/windowmanager.h"
 
@@ -53,6 +54,7 @@
 #define  SCRO_WIDTH 472
 #define  PEAP_SCRO_HEIGHT  300
 #define  TLS_SCRO_HEIGHT  480
+#define  MAX_TAB_TEXT_LENGTH 44
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -260,8 +262,8 @@ void NetDetail::paintEvent(QPaintEvent *event)
 
 void NetDetail::closeEvent(QCloseEvent *event)
 {
-    emit this->detailPageClose(false);
-    emit this->createPageClose(m_deviceName);
+    Q_EMIT this->detailPageClose(false);
+    Q_EMIT this->createPageClose(m_deviceName);
     return QWidget::closeEvent(event);
 }
 
@@ -328,15 +330,15 @@ void NetDetail::initUI()
 
     pageFrame = new QFrame(this);
     QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
-    pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
+//    pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
 
     // TabBar
 //    m_netTabBar = new KTabBar(KTabBarStyle::SegmentDark, this);
     m_netTabBar = new NetTabBar(this);
     m_netTabBar->setTabBarStyle(KTabBarStyle::SegmentDark);
     m_netTabBar->addTab(tr("Detail")); //详情
-    m_netTabBar->addTab(tr("Ipv4"));//Ipv4
-    m_netTabBar->addTab(tr("Ipv6"));//Ipv6
+    m_netTabBar->addTab(tr("IPv4"));//Ipv4
+    m_netTabBar->addTab(tr("IPv6"));//Ipv6
     if (isWlan) {
         m_netTabBar->addTab(tr("Security"));//安全
         if (isActive) {
@@ -354,13 +356,12 @@ void NetDetail::initUI()
         }
     }
 
-    pageLayout->addStretch();
-    pageLayout->addWidget(m_netTabBar);
-    pageLayout->addStretch();
+    pageLayout->addWidget(m_netTabBar, Qt::AlignCenter);
+    pageLayout->addSpacing(24);
 
     // TabBar关联选项卡页面
     connect(m_netTabBar, SIGNAL(currentChanged(int)), this, SLOT(currentRowChangeSlot(int)));
-
+    setNetTabToolTip();
 
     confimBtn = new QPushButton(this);
     confimBtn->setText(tr("Confirm"));
@@ -369,12 +370,9 @@ void NetDetail::initUI()
     cancelBtn->setText(tr("Cancel"));
 
     forgetBtn = new QPushButton(this);
-    forgetBtn->setText(tr("Forget this network"));
-
-    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
 
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
-    centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS);
+    centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS); // 右边距为0，为安全页滚动区域留出空间
     centerlayout->addWidget(pageFrame);
     centerlayout->addSpacing(4);
     centerlayout->addWidget(stackWidget);
@@ -417,7 +415,12 @@ void NetDetail::initComponent()
     });
 
     connect(confimBtn, SIGNAL(clicked()), this, SLOT(on_btnConfirm_clicked()));
-    if (isWlan && !m_uuid.isEmpty()) {
+    if (!m_uuid.isEmpty()) {
+        if (isWlan) {
+            forgetBtn->setText(tr("Forget this network"));
+        } else {
+            forgetBtn->setText(tr("Delete this network"));
+        }
         forgetBtn->show();
         connect(forgetBtn, SIGNAL(clicked()), this, SLOT(on_btnForget_clicked()));
     } else {
@@ -455,6 +458,16 @@ void NetDetail::initComponent()
     connect(securityPage, &SecurityPage::eapTypeChanged, this, [=]() {
         setSecuPageHeight();
     });
+
+    const QByteArray id(THEME_SCHAME);
+    if(QGSettings::isSchemaInstalled(id)){
+        QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+        connect(fontSetting, &QGSettings::changed,[=](QString key) {
+            if ("systemFont" == key || "systemFontSize" ==key) {
+                setNetTabToolTip();
+            }
+        });
+    }
 }
 
 void NetDetail::pagePadding(QString netName, bool isWlan)
@@ -478,7 +491,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
 
     //ipv4页面填充
     if (m_info.ipv4ConfigType == CONFIG_IP_MANUAL) {
-        emit checkCurrentIpv4Conflict(m_info.strIPV4Address);
+        Q_EMIT checkCurrentIpv4Conflict(m_info.strIPV4Address);
         ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
         ipv4Page->setIpv4(m_info.strIPV4Address);
         ipv4Page->setNetMask(m_info.strIPV4NetMask);
@@ -490,7 +503,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     }
     //ipv6页面填充
     if (m_info.ipv6ConfigType == CONFIG_IP_MANUAL) {
-        emit checkCurrentIpv6Conflict(m_info.strIPV6Address);
+        Q_EMIT checkCurrentIpv6Conflict(m_info.strIPV6Address);
         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
         ipv6Page->setIpv6(m_info.strIPV6Address);
         ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
@@ -1098,7 +1111,7 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        QKeyEvent *mEvent = static_cast<QKeyEvent *>(event);
        if (mEvent->key() == Qt::Key_Enter || mEvent->key() == Qt::Key_Return) {
            if (confimBtn->isEnabled()) {
-               emit confimBtn->clicked();
+               Q_EMIT confimBtn->clicked();
            }
            return true;
        } else if (mEvent->key() == Qt::Key_Escape) {
@@ -1107,6 +1120,20 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        }
    }
    return QWidget::eventFilter(w, event);
+}
+
+void NetDetail::setNetTabToolTip()
+{
+    int tabCount = m_netTabBar->count();
+    for (int i = 0; i< tabCount; ++i) {
+        QFontMetrics fontMetrics(m_netTabBar->font());
+        int fontSize = fontMetrics.width(m_netTabBar->tabText(i));
+        if (fontSize > MAX_TAB_TEXT_LENGTH) {
+            m_netTabBar->setTabToolTip(i, m_netTabBar->tabText(i));
+        } else {
+            m_netTabBar->setTabToolTip(i, "");
+        }
+    }
 }
 
 NetTabBar::NetTabBar(QWidget *parent)
@@ -1162,7 +1189,7 @@ void ThreadObject::checkIpv4ConflictThread(const QString &ipv4Address)
 
     delete ipv4Arping;
     ipv4Arping = nullptr;
-    emit ipv4IsConflict(isConflict);
+    Q_EMIT ipv4IsConflict(isConflict);
 }
 
 void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
@@ -1181,5 +1208,5 @@ void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
 
     delete ipv6rping;
     ipv6rping = nullptr;
-    emit ipv6IsConflict(isConflict);
+    Q_EMIT ipv6IsConflict(isConflict);
 }

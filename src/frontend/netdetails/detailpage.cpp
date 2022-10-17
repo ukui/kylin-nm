@@ -23,6 +23,7 @@
 
 #define MAX_NAME_LENGTH 32
 #define MAX_LABEL_WIDTH 250
+#define MAX_SSID_WIDTH 133
 
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -50,10 +51,10 @@ void DetailPage::setSSID(const QString &ssid) {
         return;
     }
     m_formerSSID = ssid;
-    QFontMetrics fontMetrics(this->font());
+    QFontMetrics fontMetrics(m_SSIDLabel->font());
     int fontSize = fontMetrics.width(ssid);
-    if (fontSize > this->width()) {
-        this->m_SSIDLabel->setText(fontMetrics.elidedText(ssid, Qt::ElideRight, this->width()));
+    if (fontSize > MAX_SSID_WIDTH) {
+        this->m_SSIDLabel->setText(fontMetrics.elidedText(ssid, Qt::ElideRight, MAX_SSID_WIDTH));
         this->setToolTip(ssid);
     } else {
         this->m_SSIDLabel->setText(ssid);
@@ -243,17 +244,17 @@ void DetailPage::initUI() {
 
     m_IPV4 = new QLabel(this);
     m_ipv4Widget = new DetailWidget(qobject_cast<QWidget *>(m_IPV4), m_listWidget);
-    m_ipv4Widget->setKey(tr("IPV4:"));
+    m_ipv4Widget->setKey(tr("IPv4:"));
 
     m_IPV4Dns = new QLabel(this);
     m_ipv4DnsWidget = new DetailWidget(qobject_cast<QWidget *>(m_IPV4Dns), m_listWidget);
-    m_ipv4DnsWidget->setKey(tr("IPV4 Dns:"));
+    m_ipv4DnsWidget->setKey(tr("IPv4 Dns:"));
 
     m_IPV6 = new FixLabel(this);
     m_IPV6->setFixedWidth(MAX_LABEL_WIDTH);
     m_IPV6->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_ipv6Widget = new DetailWidget(qobject_cast<QWidget *>(m_IPV6), m_listWidget);
-    m_ipv6Widget->setKey(tr("IPV6:"));
+    m_ipv6Widget->setKey(tr("IPv6:"));
 
     m_Mac = new QLabel(this);
     m_macWidget = new DetailWidget(qobject_cast<QWidget *>(m_Mac), m_listWidget);
@@ -309,7 +310,7 @@ void DetailPage::setEnableOfSaveBtn() {
     if (m_IsCreate) {
         saveEnable = !m_SSIDEdit->text().isEmpty();
     }
-    emit setDetailPageState(saveEnable);
+    Q_EMIT setDetailPageState(saveEnable);
 }
 
 //获取列表信息
@@ -322,9 +323,9 @@ void DetailPage::on_btnCopyNetDetail_clicked()
     QString      hzCopy= tr ("Hz:");
     QString      chanCopy= tr ("Chan:");
     QString      bandwithCopy = tr("BandWidth:");
-    QString      ipv4Copy = tr("IPV4:");
-    QString      ipv4dnsCopy = tr("IPV4 Dns:");
-    QString      ipv6Copy = tr("IPV6:");
+    QString      ipv4Copy = tr("IPv4:");
+    QString      ipv4dnsCopy = tr("IPv4 Dns:");
+    QString      ipv6Copy = tr("IPv6:");
     QString      macCopy = tr("Mac:");
     QString      netDetailCopyText;
 

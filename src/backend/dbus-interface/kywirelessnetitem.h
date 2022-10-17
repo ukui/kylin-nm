@@ -55,6 +55,7 @@ public:
     uint                                    m_channel;
 
     int getCategory(QString uni);
+    void setKySecuType(QString strSecuType);
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;

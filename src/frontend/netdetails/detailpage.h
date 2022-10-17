@@ -111,11 +111,11 @@ private:
     QString      m_formerSSID;
     QString      m_formerIPV6;
 
-private slots:
+private Q_SLOTS:
     void setEnableOfSaveBtn();
     void on_btnCopyNetDetail_clicked();
 
-signals:
+Q_SIGNALS:
      void setDetailPageState(bool);
 
 };

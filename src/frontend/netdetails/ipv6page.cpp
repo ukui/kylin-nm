@@ -149,7 +149,7 @@ void Ipv6Page::initUI() {
     m_firstDnsEmptyLabel->setFixedHeight(LABEL_HEIGHT);
 
 
-    m_configLabel->setText(tr("Ipv6Config"));
+    m_configLabel->setText(tr("IPv6Config"));
     m_addressLabel->setText(tr("Address"));
     m_subnetLabel->setText(tr("Subnet prefix Length"));
     m_gateWayLabel->setText(tr("Default Gateway"));
@@ -265,7 +265,7 @@ void Ipv6Page::setControlEnabled(bool check)
 
 void Ipv6Page::setEnableOfSaveBtn()
 {
-    emit setIpv6PageState(checkConnectBtnIsEnabled());
+    Q_EMIT setIpv6PageState(checkConnectBtnIsEnabled());
 }
 
 void Ipv6Page::onAddressTextChanged()

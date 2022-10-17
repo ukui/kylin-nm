@@ -60,6 +60,7 @@ void CreatNetPage::initUI()
 //    m_secDnsLabel->setText(tr("Alternative DNS"));
 
     m_detailLayout = new QFormLayout(this);
+    m_detailLayout->setContentsMargins(0, 0, 0, 0);
     m_detailLayout->setSpacing(24);
     m_detailLayout->addRow(m_connNameLabel,connNameEdit);
     m_detailLayout->addRow(m_configLabel,ipv4ConfigCombox);
@@ -115,12 +116,12 @@ bool CreatNetPage::checkConnectBtnIsEnabled()
             qDebug() << "create ipv4 netMask empty or invalid";
             return false;
         }
-
+#if 0
         if (gateWayEdit->text().isEmpty() || !getTextEditState(gateWayEdit->text())) {
             qDebug() << "create ipv4 gateway empty or invalid";
             return false;
         }
-#if 0
+
         if (firstDnsEdit->text().isEmpty() && !secondDnsEdit->text().isEmpty()) {
             qDebug() << "create ipv4 dns sort invalid";
             return false;
@@ -165,6 +166,12 @@ void CreatNetPage::setLineEnabled(bool check) {
         gateWayEdit->clear();
 //        firstDnsEdit->clear();
 //        secondDnsEdit->clear();
+
+        ipv4addressEdit->setPlaceholderText(" ");
+        netMaskEdit->setPlaceholderText(" ");
+    } else {
+        ipv4addressEdit->setPlaceholderText(tr("Required")); //必填
+        netMaskEdit->setPlaceholderText(tr("Required")); //必填
     }
 }
 

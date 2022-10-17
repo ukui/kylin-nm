@@ -133,6 +133,11 @@
         <source>Manual</source>
         <translation>ལག་དེབ།</translation>
     </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="173"/>
+        <source>Required</source>
+        <translation>ངེས་པར་དུ་སྐོང་དགོས།</translation>
+    </message>
 </context>
 <context>
     <name>DetailPage</name>

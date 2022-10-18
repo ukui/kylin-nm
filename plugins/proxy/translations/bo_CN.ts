@@ -75,25 +75,25 @@
     <message>
         <location filename="../proxy.cpp" line="448"/>
         <source>Http Proxy</source>
-        <translation>Http Proxy</translation>
+        <translation>HTTP ཚབ་བྱེད་མི་སྣ།</translation>
         <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="450"/>
         <source>Https Proxy</source>
-        <translation>Https Proxy</translation>
+        <translation>HTTPS ཚབ་བྱེད་མི་སྣ།</translation>
         <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="452"/>
         <source>Ftp Proxy</source>
-        <translation>Ftp ངོ་ཚབ་</translation>
+        <translation>FTP ཚབ་བྱེད་མི་སྣ།</translation>
         <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="454"/>
         <source>Socks Proxy</source>
-        <translation>རྐང་འབོབ་ཀྱི་ཚབ་བྱེད་མི་སྣ།</translation>
+        <translation>SOCKS ཚབ་བྱེད་མི་སྣ།</translation>
         <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
     </message>
     <message>
@@ -113,7 +113,7 @@
     <message>
         <location filename="../proxy.cpp" line="462"/>
         <source>Apt Proxy</source>
-        <translation>Apt Proxy</translation>
+        <translation>APT ཚབ་བྱེད་མི་སྣ།</translation>
         <extra-contents_path>/Proxy/Apt Proxy</extra-contents_path>
     </message>
     <message>

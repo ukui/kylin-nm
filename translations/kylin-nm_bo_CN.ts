@@ -33,6 +33,14 @@
     </message>
 </context>
 <context>
+    <name>MultipleDnsWidget</name>
+    <message>
+        <location filename="../src/frontend/netdetails/multiplednswidget.cpp" line="42"/>
+        <source>DNS server:</source>
+        <translation>DNSཞབས་ཞུ་བ།:</translation>
+    </message>
+</context>
+<context>
     <name>ConfigPage</name>
     <message>
         <location filename="../src/frontend/netdetails/configpage.cpp" line="61"/>
@@ -124,6 +132,11 @@
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="68"/>
         <source>Manual</source>
         <translation>ལག་དེབ།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="173"/>
+        <source>Required</source>
+        <translation>ངེས་པར་དུ་སྐོང་དགོས།</translation>
     </message>
 </context>
 <context>

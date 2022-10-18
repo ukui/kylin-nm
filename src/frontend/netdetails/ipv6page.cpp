@@ -52,6 +52,12 @@ void Ipv6Page::setIpv6Perfix(const int &ipv6Perfix)
     lengthEdit->setText(QString::number(ipv6Perfix));
 }
 
+void Ipv6Page::setMulDns(const QList<QHostAddress> &dns)
+{
+    m_dnsWidget->setDnsListText(dns);
+}
+
+#if 0
 void Ipv6Page::setIpv6FirDns(const QString &ipv6FirDns)
 {
     firstDnsEdit->setText(ipv6FirDns);
@@ -61,6 +67,7 @@ void Ipv6Page::setIpv6SecDns(const QString &ipv6SecDns)
 {
     secondDnsEdit->setText(ipv6SecDns);
 }
+#endif
 
 void Ipv6Page::setGateWay(const QString &gateWay)
 {
@@ -88,22 +95,31 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
             setting.setIpConfigType(IPADDRESS_V6, CONFIG_IP_MANUAL);
             isChanged =  true;
         }
+
+        QList<QHostAddress> ipv6dnsList;
+        ipv6dnsList.clear();
+        ipv6dnsList = m_dnsWidget->getDns();
         if(info.strIPV6Address != ipv6AddressEdit->text()
                 || info.iIPV6Prefix != lengthEdit->text().toInt()
                 || info.strIPV6GateWay != gateWayEdit->text()
-                || info.strIPV6FirDns  != firstDnsEdit->text()
-                || info.strIPV6SecDns  != secondDnsEdit->text()) {
+//                || info.strIPV6FirDns  != firstDnsEdit->text()
+//                || info.strIPV6SecDns  != secondDnsEdit->text()
+                || info.ipv6DnsList != ipv6dnsList) {
 
             qDebug() << "ipv6 info changed";
             QStringList dnsList;
-            dnsList.empty();
+            dnsList.clear();
+            for (QHostAddress str: ipv6dnsList) {
+                dnsList << str.toString();
+            }
+#if 0
             if (!firstDnsEdit->text().isEmpty()) {
                 dnsList << firstDnsEdit->text();
                 if (!secondDnsEdit->text().isEmpty()) {
                     dnsList << secondDnsEdit->text();
                 }
             }
-
+#endif
             QString ipv6address =ipv6AddressEdit->text();
             QString prefix = lengthEdit->text();
             QString gateWay = gateWayEdit->text();
@@ -120,15 +136,15 @@ void Ipv6Page::initUI() {
     ipv6AddressEdit = new LineEdit(this);
     lengthEdit = new LineEdit(this);
     gateWayEdit = new LineEdit(this);
-    firstDnsEdit = new LineEdit(this);
-    secondDnsEdit = new LineEdit(this);
+//    firstDnsEdit = new LineEdit(this);
+//    secondDnsEdit = new LineEdit(this);
 
     m_configLabel = new QLabel(this);
     m_addressLabel = new QLabel(this);
     m_subnetLabel = new QLabel(this);
     m_gateWayLabel = new QLabel(this);
-    m_dnsLabel = new QLabel(this);
-    m_secDnsLabel = new QLabel(this);
+//    m_dnsLabel = new QLabel(this);
+//    m_secDnsLabel = new QLabel(this);
 
     m_configEmptyLabel = new QLabel(this);
     m_configEmptyLabel->setFixedHeight(LABEL_HEIGHT);
@@ -145,16 +161,12 @@ void Ipv6Page::initUI() {
     m_subnetEmptyLabel = new QLabel(this);
     m_subnetEmptyLabel->setFixedHeight(LABEL_HEIGHT);
 
-    m_firstDnsEmptyLabel = new QLabel(this);
-    m_firstDnsEmptyLabel->setFixedHeight(LABEL_HEIGHT);
-
-
     m_configLabel->setText(tr("IPv6Config"));
     m_addressLabel->setText(tr("Address"));
     m_subnetLabel->setText(tr("Subnet prefix Length"));
     m_gateWayLabel->setText(tr("Default Gateway"));
-    m_dnsLabel->setText(tr("Prefs DNS"));
-    m_secDnsLabel->setText(tr("Alternative DNS"));
+//    m_dnsLabel->setText(tr("Prefs DNS"));
+//    m_secDnsLabel->setText(tr("Alternative DNS"));
 
     m_statusLabel = new QLabel(this);
     m_statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -181,6 +193,9 @@ void Ipv6Page::initUI() {
     gateWayLayout->addWidget(gateWayEdit);
     gateWayLayout->addWidget(m_gateWayHintLabel);
 
+    QRegExp ipv6_rx("^\\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?\\s*$");
+    m_dnsWidget = new MultipleDnsWidget(ipv6_rx, this);
+
     m_detailLayout = new QFormLayout(this);
     m_detailLayout->setContentsMargins(0, 0, 0, 0);
     m_detailLayout->setVerticalSpacing(0);
@@ -190,18 +205,17 @@ void Ipv6Page::initUI() {
     m_detailLayout->addRow(m_subnetLabel,lengthEdit);
     m_detailLayout->addRow(m_subnetEmptyLabel);
     m_detailLayout->addRow(m_gateWayLabel,gateWayWidget);
-    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
-    m_detailLayout->addRow(m_firstDnsEmptyLabel);
-    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
+//    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
+//    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
+    m_detailLayout->addRow(m_dnsWidget);
 
     ipv6ConfigCombox->addItem(tr("Auto(DHCP)")); //"自动(DHCP)"
     ipv6ConfigCombox->addItem(tr("Manual")); //"手动"
 
-    QRegExp ipv6_rx("^\\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?\\s*$");
     ipv6AddressEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
     gateWayEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
-    firstDnsEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
-    secondDnsEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
+//    firstDnsEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
+//    secondDnsEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
 
     QRegExp prefix_rx("\\b(?:(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\.){3}(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\b");
     lengthEdit->setValidator(new QRegExpValidator(prefix_rx,this));
@@ -225,8 +239,14 @@ void Ipv6Page::initComponent() {
     connect(ipv6AddressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(lengthEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+//    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+//    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
+        setIpv6PageState(false);
+    });
+    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
+        setIpv6PageState(true);
+    });
 }
 
 void Ipv6Page::configChanged(int index) {
@@ -244,8 +264,8 @@ void Ipv6Page::setControlEnabled(bool check)
         ipv6AddressEdit->clear();
         lengthEdit->clear();
         gateWayEdit->clear();
-        firstDnsEdit->clear();
-        secondDnsEdit->clear();
+//        firstDnsEdit->clear();
+//        secondDnsEdit->clear();
 
         ipv6AddressEdit->setPlaceholderText(" ");
         lengthEdit->setPlaceholderText(" ");
@@ -259,8 +279,9 @@ void Ipv6Page::setControlEnabled(bool check)
     ipv6AddressEdit->setEnabled(check);
     lengthEdit->setEnabled(check);
     gateWayEdit->setEnabled(check);
-    firstDnsEdit->setEnabled(check);
-    secondDnsEdit->setEnabled(check);
+//    firstDnsEdit->setEnabled(check);
+//    secondDnsEdit->setEnabled(check);
+    m_dnsWidget->setEditEnabled(check);
 }
 
 void Ipv6Page::setEnableOfSaveBtn()
@@ -317,7 +338,7 @@ bool Ipv6Page::checkConnectBtnIsEnabled()
             qDebug() << "ipv6 gateway empty or invalid";
             return false;
         }
-
+#if 0
         if (firstDnsEdit->text().isEmpty() && !secondDnsEdit->text().isEmpty()) {
             qDebug() << "ipv6 dns sort invalid";
             return false;
@@ -332,6 +353,7 @@ bool Ipv6Page::checkConnectBtnIsEnabled()
             qDebug() << "ipv6 second dns invalid";
             return false;
         }
+#endif
     }
     return true;
 }

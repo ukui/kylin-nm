@@ -95,6 +95,12 @@ void CreatNetPage::initComponent() {
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
 //    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
 //    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
+        setCreatePageState(false);
+    });
+    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
+        setCreatePageState(true);
+    });
 }
 
 bool CreatNetPage::checkConnectBtnIsEnabled()

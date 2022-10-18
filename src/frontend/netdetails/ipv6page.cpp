@@ -241,6 +241,12 @@ void Ipv6Page::initComponent() {
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
 //    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
 //    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
+        setIpv6PageState(false);
+    });
+    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
+        setIpv6PageState(true);
+    });
 }
 
 void Ipv6Page::configChanged(int index) {

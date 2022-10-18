@@ -151,6 +151,12 @@ void Ipv4Page::initComponent() {
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
 //    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
 //    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
+        setIpv4PageState(false);
+    });
+    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
+        setIpv4PageState(true);
+    });
 }
 
 void Ipv4Page::setIpv4Config(KyIpConfigType ipv4Config)

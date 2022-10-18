@@ -45,7 +45,7 @@ void MultipleDnsWidget::initUI()
     m_dnsListWidget->setBackgroundRole(QPalette::Base);
     m_dnsListWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     m_dnsListWidget->setFrameShape(QFrame::Shape::StyledPanel);
-    m_dnsListWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_dnsListWidget->setEditTriggers(QAbstractItemView::DoubleClicked);
     setDnsListWidgetStyle();
 
     m_addDnsBtn = new QPushButton(this);
@@ -80,6 +80,10 @@ void MultipleDnsWidget::initComponent()
         } else {
             m_removeDnsBtn->setEnabled(true);
         }
+    });
+    connect(m_dnsListWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) {
+        m_dnsListWidget->edit(m_dnsListWidget->currentIndex());
+        item->setFlags(item->flags() | Qt::ItemIsEditable);
     });
 }
 
@@ -132,6 +136,9 @@ void MultipleDnsWidget::AddOneDnsItem(QListWidget *listWidget)
     ListItemEdit *dnsListItemEdit = new ListItemEdit(m_regExp);
     listWidget->setItemDelegateForRow(listWidget->currentIndex().row() , dnsListItemEdit);
     listWidget->editItem(dnsListWidgetItem);
+
+    connect(dnsListItemEdit, SIGNAL(textChanged(QString)), this, SIGNAL(dnsTextChanged(QString)));
+    connect(dnsListItemEdit, SIGNAL(editingFinished()), this, SIGNAL(dnsEditingFinished()));
 }
 
 void MultipleDnsWidget::RemoveOneDnsItem(QListWidgetItem *aItem, QListWidget *listWidget)

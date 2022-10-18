@@ -29,8 +29,9 @@ ListItemEdit::ListItemEdit(const QRegExp &rx, QObject *parent)
 QWidget *ListItemEdit::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QLineEdit *editor = new QLineEdit(parent);
-
     editor->setValidator(new QRegExpValidator(m_regExp, parent));
+    connect(editor, SIGNAL(textChanged(QString)), this, SIGNAL(textChanged(QString)));
+    connect(editor, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
     return editor;
 }
 

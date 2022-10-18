@@ -47,11 +47,28 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 //    statusLabel->setMinimumSize(36,36);
     infoLabel = new GrayInfoButton(this);
+
+    //【更多】菜单
+    m_moreButton = new QToolButton(this);
+    m_moreButton->setProperty("useButtonPalette", true);
+    m_moreButton->setPopupMode(QToolButton::InstantPopup);
+    m_moreButton->setAutoRaise(true);
+    m_moreButton->setIcon(QIcon::fromTheme("view-more-horizontal-symbolic"));
+    m_moreMenu = new QMenu(m_moreButton);
+    m_connectAction = new QAction(m_moreMenu);
+    m_deleteAction = new QAction(tr("Delete"), m_moreMenu);
+    setConnectActionText(isAcitve);
+
+    m_moreMenu->addAction(m_connectAction);
+    m_moreMenu->addAction(m_deleteAction);
+    m_moreButton->setMenu(m_moreMenu);
+
     mLanLyt->addWidget(iconLabel);
     mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
     mLanLyt->addStretch();
     mLanLyt->addWidget(statusLabel);
     mLanLyt->addWidget(infoLabel);
+    mLanLyt->addWidget(m_moreButton);
 
     loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
     loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
@@ -62,6 +79,10 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
     waitTimer = new QTimer(this);
     connect(waitTimer, &QTimer::timeout, this, &LanItem::updateIcon);
+
+    connect(m_connectAction, &QAction::triggered, this, &LanItem::onConnectTriggered);
+    connect(m_deleteAction, &QAction::triggered, this, &LanItem::onDeletetTriggered);
+    m_moreMenu->installEventFilter(this);
 }
 
 LanItem::~LanItem()
@@ -89,6 +110,40 @@ void LanItem::stopLoading(){
     loading = false;
 }
 
+/**
+ * @brief LanItem::setConnectActionText
+ * 【更多】菜单状态切换 连接/断开
+ * @param isAcitve
+ */
+void LanItem::setConnectActionText(bool isAcitve)
+{
+    if (isAcitve) {
+        m_connectAction->setText(tr("Disconnect"));
+    } else {
+        m_connectAction->setText(tr("Connect"));
+    }
+}
+
+void LanItem::onConnectTriggered()
+{
+    if (!m_connectAction) {
+        return;
+    }
+    if (m_connectAction->text() == tr("Connect")) {
+        Q_EMIT connectActionTriggered();
+    } else if (m_connectAction->text() == tr("Disconnect")) {
+        Q_EMIT disconnectActionTriggered();
+    }
+}
+
+void LanItem::onDeletetTriggered()
+{
+    if (!m_deleteAction) {
+        return;
+    }
+    Q_EMIT deleteActionTriggered();
+}
+
 void LanItem::paintEvent(QPaintEvent *event)
 {
     QPalette pal = this->palette();
@@ -102,5 +157,20 @@ void LanItem::paintEvent(QPaintEvent *event)
 
     painter.drawRect(rect);
     QPushButton::paintEvent(event);
+}
+
+bool LanItem::eventFilter(QObject *watched, QEvent *event)
+{
+    //菜单右边界与按钮右边界对齐
+    if (event->type() == QEvent::Show && watched == m_moreMenu) {
+        int menuXPos = m_moreMenu->pos().x();
+        int menuWidth = m_moreMenu->size().width();
+        int btnWidth = m_moreButton->size().width();
+
+        QPoint pos = QPoint (menuXPos - menuWidth + btnWidth, m_moreMenu->pos().y());
+        m_moreMenu->move(pos);
+        return true;
+    }
+    return false;
 }
 

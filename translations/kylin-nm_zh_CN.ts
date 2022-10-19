@@ -94,6 +94,19 @@
         <source>Manual</source>
         <translation>手动</translation>
     </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="173"/>
+        <source>Required</source>
+        <translation>必填</translation>
+    </message>
+</context>
+<context>
+    <name>MultipleDnsWidget</name>
+    <message>
+        <location filename="../src/frontend/netdetails/multiplednswidget.cpp" line="42"/>
+        <source>DNS server:</source>
+        <translation>DNS服务器：</translation>
+    </message>
 </context>
 <context>
     <name>DetailPage</name>

@@ -1,3 +1,9 @@
+kylin-nm (3.14.0.0+0512-1k10) yangtz; urgency=medium
+
+  * 同步3.22需求
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 19 Oct 2022 10:01:07 +0800
+
 kylin-nm (3.14.0.0+0512-0k10) yangtz; urgency=medium
 
   * close-cd #131075 【网络】普通用户在详情界面修改网络IP信息时会弹出授权框，如果不进行授权详情界面也会显示修改成功，但是实际未修改

@@ -55,6 +55,8 @@ public:
     //获取热点
     void getStoredApInfo(QStringList &list);
     void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
+    //删除有线连接
+    void deleteWired(const QString& connUuid);
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);

@@ -137,6 +137,7 @@ private:
 
     void setNetdetailSomeEnable(bool on);
     void startObjectThread();
+    void setNetTabToolTip();
 
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;

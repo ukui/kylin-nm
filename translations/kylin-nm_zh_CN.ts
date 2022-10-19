@@ -33,6 +33,14 @@
     </message>
 </context>
 <context>
+    <name>MultipleDnsWidget</name>
+    <message>
+        <location filename="../src/frontend/netdetails/multiplednswidget.cpp" line="42"/>
+        <source>DNS server:</source>
+        <translation>DNS服务器：</translation>
+    </message>
+</context>
+<context>
     <name>ConfigPage</name>
     <message>
         <location filename="../src/frontend/netdetails/configpage.cpp" line="61"/>
@@ -124,6 +132,11 @@
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="68"/>
         <source>Manual</source>
         <translation>手动</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="173"/>
+        <source>Required</source>
+        <translation>必填</translation>
     </message>
 </context>
 <context>
@@ -851,6 +864,10 @@
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="372"/>
         <source>Forget this network</source>
         <translation>忘记此网络</translation>
+    </message>
+     <message>
+        <source>Delete this network</source>
+        <translation>删除此网络</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="403"/>

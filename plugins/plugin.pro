@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 SUBDIRS = \
     netconnect \
     wlanconnect \
-    mobilehotspot
+    mobilehotspot \
+    proxy

@@ -30,6 +30,7 @@
 #include <QEvent>
 #include <QMenu>
 #include <QToolTip>
+#include <QFontMetrics>
 
 #include "windowmanager/windowmanager.h"
 
@@ -37,7 +38,7 @@
 #define  WINDOW_HEIGHT 602
 #define  ICON_SIZE 22,22
 #define  TITLE_LAYOUT_MARGINS 9,9,0,0
-#define  CENTER_LAYOUT_MARGINS 24,0,24,0
+#define  CENTER_LAYOUT_MARGINS 24,0,0,0
 #define  BOTTOM_LAYOUT_MARGINS 24,0,24,0
 #define  BOTTOM_LAYOUT_SPACING 16
 #define  PAGE_LAYOUT_SPACING 1
@@ -53,6 +54,7 @@
 #define  SCRO_WIDTH 472
 #define  PEAP_SCRO_HEIGHT  300
 #define  TLS_SCRO_HEIGHT  480
+#define  MAX_TAB_TEXT_LENGTH 44
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -355,10 +357,11 @@ void NetDetail::initUI()
     }
 
     pageLayout->addWidget(m_netTabBar, Qt::AlignCenter);
+    pageLayout->addSpacing(24);
 
     // TabBar关联选项卡页面
     connect(m_netTabBar, SIGNAL(currentChanged(int)), this, SLOT(currentRowChangeSlot(int)));
-
+    setNetTabToolTip();
 
     confimBtn = new QPushButton(this);
     confimBtn->setText(tr("Confirm"));
@@ -367,10 +370,9 @@ void NetDetail::initUI()
     cancelBtn->setText(tr("Cancel"));
 
     forgetBtn = new QPushButton(this);
-    forgetBtn->setText(tr("Forget this network"));
 
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
-    centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS);
+    centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS); // 右边距为0，为安全页滚动区域留出空间
     centerlayout->addWidget(pageFrame);
     centerlayout->addSpacing(4);
     centerlayout->addWidget(stackWidget);
@@ -413,7 +415,12 @@ void NetDetail::initComponent()
     });
 
     connect(confimBtn, SIGNAL(clicked()), this, SLOT(on_btnConfirm_clicked()));
-    if (isWlan && !m_uuid.isEmpty()) {
+    if (!m_uuid.isEmpty()) {
+        if (isWlan) {
+            forgetBtn->setText(tr("Forget this network"));
+        } else {
+            forgetBtn->setText(tr("Delete this network"));
+        }
         forgetBtn->show();
         connect(forgetBtn, SIGNAL(clicked()), this, SLOT(on_btnForget_clicked()));
     } else {
@@ -451,6 +458,16 @@ void NetDetail::initComponent()
     connect(securityPage, &SecurityPage::eapTypeChanged, this, [=]() {
         setSecuPageHeight();
     });
+
+    const QByteArray id(THEME_SCHAME);
+    if(QGSettings::isSchemaInstalled(id)){
+        QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+        connect(fontSetting, &QGSettings::changed,[=](QString key) {
+            if ("systemFont" == key || "systemFontSize" ==key) {
+                setNetTabToolTip();
+            }
+        });
+    }
 }
 
 void NetDetail::pagePadding(QString netName, bool isWlan)
@@ -478,8 +495,9 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
         ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
         ipv4Page->setIpv4(m_info.strIPV4Address);
         ipv4Page->setNetMask(m_info.strIPV4NetMask);
-        ipv4Page->setIpv4FirDns(m_info.strIPV4FirDns);
-        ipv4Page->setIpv4SecDns(m_info.strIPV4SecDns);
+//        ipv4Page->setIpv4FirDns(m_info.strIPV4FirDns);
+//        ipv4Page->setIpv4SecDns(m_info.strIPV4SecDns);
+        ipv4Page->setMulDns(m_info.ipv4DnsList);
         ipv4Page->setGateWay(m_info.strIPV4GateWay);
     } else {
         ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
@@ -490,8 +508,9 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
         ipv6Page->setIpv6(m_info.strIPV6Address);
         ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
-        ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
-        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
+//        ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
+//        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
+        ipv6Page->setMulDns(m_info.ipv6DnsList);
         ipv6Page->setGateWay(m_info.strIPV6GateWay);
     } else {
         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
@@ -648,12 +667,16 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
             conInfo.strIPV4NetMask = connetSetting.m_ipv4Address.at(0).netmask().toString();
             conInfo.strIPV4GateWay = connetSetting.m_ipv4Address.at(0).gateway().toString();
         }
+        #if 0
         if (connetSetting.m_ipv4Dns.size() == 1) {
             conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
         } else if (connetSetting.m_ipv4Dns.size() > 1) {
             conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
             conInfo.strIPV4SecDns = connetSetting.m_ipv4Dns.at(1).toString();
         }
+        #endif
+
+        conInfo.ipv4DnsList = connetSetting.m_ipv4Dns;
     }
 
     if (connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
@@ -662,13 +685,16 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
             conInfo.iIPV6Prefix = ipv6Page->getPerfixLength(connetSetting.m_ipv6Address.at(0).netmask().toString());
             conInfo.strIPV6GateWay = connetSetting.m_ipv6Address.at(0).gateway().toString();
         }
-
+#if 0
         if (connetSetting.m_ipv6Dns.size() == 1) {
             conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
         } else if (connetSetting.m_ipv4Dns.size() > 1) {
             conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
             conInfo.strIPV6SecDns = connetSetting.m_ipv6Dns.at(1).toString();
         }
+#endif
+
+        conInfo.ipv6DnsList = connetSetting.m_ipv6Dns;
     }
 
     if (!bActived) {
@@ -1103,6 +1129,20 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        }
    }
    return QWidget::eventFilter(w, event);
+}
+
+void NetDetail::setNetTabToolTip()
+{
+    int tabCount = m_netTabBar->count();
+    for (int i = 0; i< tabCount; ++i) {
+        QFontMetrics fontMetrics(m_netTabBar->font());
+        int fontSize = fontMetrics.width(m_netTabBar->tabText(i));
+        if (fontSize > MAX_TAB_TEXT_LENGTH) {
+            m_netTabBar->setTabToolTip(i, m_netTabBar->tabText(i));
+        } else {
+            m_netTabBar->setTabToolTip(i, "");
+        }
+    }
 }
 
 NetTabBar::NetTabBar(QWidget *parent)

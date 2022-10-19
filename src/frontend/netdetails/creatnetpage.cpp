@@ -36,46 +36,49 @@ void CreatNetPage::initUI()
     ipv4addressEdit = new LineEdit(this);
     netMaskEdit = new LineEdit(this);
     gateWayEdit = new LineEdit(this);
-    firstDnsEdit = new LineEdit(this);
-    secondDnsEdit = new LineEdit(this);
+//    firstDnsEdit = new LineEdit(this);
+//    secondDnsEdit = new LineEdit(this);
 
     m_connNameLabel = new QLabel(this);
     m_configLabel = new QLabel(this);
     m_addressLabel = new QLabel(this);
     m_maskLabel = new QLabel(this);
     m_gateWayLabel = new QLabel(this);
-    m_dnsLabel = new QLabel(this);
-    m_secDnsLabel = new QLabel(this);
+//    m_dnsLabel = new QLabel(this);
+//    m_secDnsLabel = new QLabel(this);
+
+    // IP的正则格式限制
+    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+    m_dnsWidget = new MultipleDnsWidget(rx, this);
 
     m_connNameLabel->setText(tr("Connection Name"));
     m_configLabel->setText(tr("IPv4Config"));
     m_addressLabel->setText(tr("Address"));
     m_maskLabel->setText(tr("Netmask"));
     m_gateWayLabel->setText(tr("Default Gateway"));
-    m_dnsLabel->setText(tr("Prefs DNS"));
-    m_secDnsLabel->setText(tr("Alternative DNS"));
+//    m_dnsLabel->setText(tr("Prefs DNS"));
+//    m_secDnsLabel->setText(tr("Alternative DNS"));
 
     m_detailLayout = new QFormLayout(this);
+    m_detailLayout->setContentsMargins(0, 0, 0, 0);
+    m_detailLayout->setSpacing(24);
     m_detailLayout->addRow(m_connNameLabel,connNameEdit);
     m_detailLayout->addRow(m_configLabel,ipv4ConfigCombox);
     m_detailLayout->addRow(m_addressLabel,ipv4addressEdit);
     m_detailLayout->addRow(m_maskLabel,netMaskEdit);
     m_detailLayout->addRow(m_gateWayLabel,gateWayEdit);
-    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
-    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
+//    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
+//    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
+    m_detailLayout->addRow(m_dnsWidget);
 
     ipv4ConfigCombox->addItem(tr("Auto(DHCP)"), AUTO_CONFIG); //"自动(DHCP)"
     ipv4ConfigCombox->addItem(tr("Manual"), MANUAL_CONFIG); //"手动"
 
-
-    // IP的正则格式限制
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
-
     ipv4addressEdit->setValidator(new QRegExpValidator(rx, this));
     gateWayEdit->setValidator(new QRegExpValidator(rx, this));
     netMaskEdit->setValidator(new QRegExpValidator(rx, this));
-    firstDnsEdit->setValidator(new QRegExpValidator(rx, this));
-    secondDnsEdit->setValidator(new QRegExpValidator(rx, this));
+//    firstDnsEdit->setValidator(new QRegExpValidator(rx, this));
+//    secondDnsEdit->setValidator(new QRegExpValidator(rx, this));
 }
 
 void CreatNetPage::initComponent() {
@@ -90,8 +93,14 @@ void CreatNetPage::initComponent() {
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+//    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+//    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
+        setCreatePageState(false);
+    });
+    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
+        setCreatePageState(true);
+    });
 }
 
 bool CreatNetPage::checkConnectBtnIsEnabled()
@@ -113,7 +122,7 @@ bool CreatNetPage::checkConnectBtnIsEnabled()
             qDebug() << "create ipv4 netMask empty or invalid";
             return false;
         }
-
+#if 0
         if (gateWayEdit->text().isEmpty() || !getTextEditState(gateWayEdit->text())) {
             qDebug() << "create ipv4 gateway empty or invalid";
             return false;
@@ -133,6 +142,8 @@ bool CreatNetPage::checkConnectBtnIsEnabled()
             qDebug() << "create ipv4 second dns invalid";
             return false;
         }
+#endif
+
     }
     return true;
 }
@@ -151,15 +162,22 @@ void CreatNetPage::setLineEnabled(bool check) {
     ipv4addressEdit->setEnabled(check);
     netMaskEdit->setEnabled(check);
     gateWayEdit->setEnabled(check);
-    firstDnsEdit->setEnabled(check);
-    secondDnsEdit->setEnabled(check);
+//    firstDnsEdit->setEnabled(check);
+//    secondDnsEdit->setEnabled(check);
+    m_dnsWidget->setEditEnabled(check);
 
     if (!check) {
         ipv4addressEdit->clear();
         netMaskEdit->clear();
         gateWayEdit->clear();
-        firstDnsEdit->clear();
-        secondDnsEdit->clear();
+//        firstDnsEdit->clear();
+//        secondDnsEdit->clear();
+
+        ipv4addressEdit->setPlaceholderText(" ");
+        netMaskEdit->setPlaceholderText(" ");
+    } else {
+        ipv4addressEdit->setPlaceholderText(tr("Required")); //必填
+        netMaskEdit->setPlaceholderText(tr("Required")); //必填
     }
 }
 
@@ -191,13 +209,23 @@ void CreatNetPage::constructIpv4Info(KyConnectSetting &setting)
              << " gateWay " << gateWay;
 
     QStringList dnsList;
-    dnsList.empty();
+    dnsList.clear();
+#if 0
     if (!firstDnsEdit->text().isEmpty()) {
         dnsList << firstDnsEdit->text();
         if (!secondDnsEdit->text().isEmpty()) {
             dnsList << secondDnsEdit->text();
         }
     }
+#endif
+
+    QList<QHostAddress> ipv4dnsList;
+    ipv4dnsList.clear();
+    ipv4dnsList = m_dnsWidget->getDns();
+    for (QHostAddress str: ipv4dnsList) {
+        dnsList << str.toString();
+    }
+
     if (ipv4ConfigCombox->currentData() == AUTO_CONFIG) {
         setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
     } else {

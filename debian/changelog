@@ -1,3 +1,14 @@
+kylin-nm (3.20.1.6-ok2) v101; urgency=medium
+
+  * BUG号：
+    -#143364 【网络设置】任务栏点击网络图标，网络设置窗口显示在屏幕中央
+  * 需求号：
+    -#14187 【控制面板】网络状态显示、网络常用功能入口优化
+  * 其他改动：无
+  * 影响域: 控制面板 详情页dns
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 19 Oct 2022 10:25:47 +0800
+
 kylin-nm (3.20.1.6-ok1) v101; urgency=medium
 
   * re upload

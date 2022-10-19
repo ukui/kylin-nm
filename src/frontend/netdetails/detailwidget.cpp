@@ -33,11 +33,13 @@ FixLabel::FixLabel(QWidget *parent) :
 {
     const QByteArray id("org.ukui.style");
     QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
-    connect(fontSetting, &QGSettings::changed,[=](QString key) {
-        if ("systemFont" == key || "systemFontSize" ==key) {
-            changedLabelSlot();
-        }
-    });
+    if(QGSettings::isSchemaInstalled(id)){
+        connect(fontSetting, &QGSettings::changed,[=](QString key) {
+            if ("systemFont" == key || "systemFontSize" ==key) {
+                changedLabelSlot();
+            }
+        });
+    }
 }
 
 

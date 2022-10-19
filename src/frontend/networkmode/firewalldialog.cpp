@@ -21,13 +21,13 @@
 
 #define ICON_SIZE 16,16
 
-FirewallDialog::FirewallDialog(KDialog *parent)
+FirewallDialog::FirewallDialog(QWidget *parent): KDialog(parent)
 {
     initUI();
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
     this->setFixedSize(480, 204);
     setAttribute(Qt::WA_DeleteOnClose);
-    centerToScreen();
+//    centerToScreen();
 }
 
 FirewallDialog::~FirewallDialog()

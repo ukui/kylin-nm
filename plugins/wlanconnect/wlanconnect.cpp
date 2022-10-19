@@ -173,6 +173,7 @@ QWidget *WlanConnect::pluginUi() {
         if(!m_interface->isValid()) {
             qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
+        initSearchText();
         initComponent();
     }
     return pluginWidget;
@@ -238,8 +239,10 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
 void WlanConnect::initComponent() {
     m_wifiSwitch = new KSwitchButton(pluginWidget);
     ui->openWIifLayout->addWidget(m_wifiSwitch);
+    ui->openWIifLayout->setContentsMargins(0,0,8,0);
     ui->detailLayOut_3->setContentsMargins(MAIN_LAYOUT_MARGINS);
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
+    ui->verticalLayout_3->setSpacing(8);
     ui->availableLayout->setSpacing(SPACING);
 
     m_wifiSwitch->installEventFilter(this);

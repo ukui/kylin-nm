@@ -35,15 +35,17 @@ class FirewallDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit FirewallDialog(KDialog *parent = nullptr);
+    FirewallDialog(QWidget *parent = nullptr);
     ~FirewallDialog();
     void setUuid(QString uuid) {
         m_uuid = uuid;
     }
 
+    void centerToScreen();
+
 private:
     void initUI();
-    void centerToScreen();
+
     QString m_uuid;
     QLabel * m_iconLabel = nullptr;
     QLabel * m_contentLabel = nullptr;

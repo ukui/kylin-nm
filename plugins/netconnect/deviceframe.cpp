@@ -19,7 +19,7 @@
  */
 #include "deviceframe.h"
 
-#define LAYOUT_MARGINS 18,0,24,0
+#define LAYOUT_MARGINS 16,0,16,0
 #define FRAME_HEIGHT 58
 #define RADIUS 6.0
 

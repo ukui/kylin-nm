@@ -84,6 +84,10 @@ void MultipleDnsWidget::initComponent()
     connect(m_dnsListWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) {
         m_dnsListWidget->edit(m_dnsListWidget->currentIndex());
         item->setFlags(item->flags() | Qt::ItemIsEditable);
+        ListItemEdit *dnsListItemEdit = new ListItemEdit(m_regExp);
+        m_dnsListWidget ->setItemDelegateForRow(m_dnsListWidget->currentIndex().row(), dnsListItemEdit);
+        connect(dnsListItemEdit, SIGNAL(textChanged(QString)), this, SIGNAL(dnsTextChanged(QString)));
+        connect(dnsListItemEdit, SIGNAL(editingFinished()), this, SIGNAL(dnsEditingFinished()));
     });
 }
 

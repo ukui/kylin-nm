@@ -139,7 +139,6 @@ void MainWindow::firstlyStart()
     initDbusConnnect();
     initWindowTheme();
     initTrayIcon();
-    initPlatform();
     installEventFilter(this);
     m_secondaryStartTimer = new QTimer(this);
     connect(m_secondaryStartTimer, &QTimer::timeout, this, [ = ]() {
@@ -509,6 +508,7 @@ void MainWindow::showByWaylandHelper()
     //去除窗管标题栏，传入参数为QWidget*
     kdk::UkuiStyleHelper::self()->removeHeader(this);
     this->show();
+    initPlatform();
     resetWindowPosition();
     //设置窗体位置，传入参数为QWindow*，QRect
 

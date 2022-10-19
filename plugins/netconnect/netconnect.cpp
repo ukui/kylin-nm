@@ -180,8 +180,10 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
 void NetConnect::initComponent() {
     wiredSwitch = new KSwitchButton(pluginWidget);
     ui->openWIifLayout->addWidget(wiredSwitch);
+    ui->openWIifLayout->setContentsMargins(0,0,8,0);
     ui->detailLayOut->setContentsMargins(MAIN_LAYOUT_MARGINS);
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
+    ui->verticalLayout_3->setSpacing(8);
     ui->availableLayout->setSpacing(SPACING);
     ui->horizontalLayout->setContentsMargins(TOP_MARGINS);
 
@@ -353,6 +355,14 @@ void NetConnect::runExternalApp() {
     process.startDetached(cmd);
 }
 
+//刪除
+void NetConnect::deleteOneLan(QString ssid, int type)
+{
+    qDebug() << "[NetConnect]call deleteConnect" << __LINE__;
+    m_interface->call(QStringLiteral("deleteConnect"), type, ssid);
+    qDebug() << "[NetConnect]call deleteConnect respond" << __LINE__;
+}
+
 //激活
 void NetConnect::activeConnect(QString ssid, QString deviceName, int type) {
     qDebug() << "[NetConnect]call activateConnect" << __LINE__;
@@ -421,12 +431,12 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
         return;
     }
 
-    LanItem * lanItem = new LanItem(pluginWidget);
+    LanItem * lanItem = new LanItem(isActived, pluginWidget);
     QString iconPath = KLanSymbolic;
     if (isActived) {
         lanItem->statusLabel->setText(tr("connected"));
     } else {
-        lanItem->statusLabel->setText("");
+        lanItem->statusLabel->setText(tr("not connected"));
     }
     QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
@@ -449,6 +459,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     });
 
     lanItem->isAcitve = isActived;
+    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
         if (lanItem->isAcitve || lanItem->loading) {
@@ -456,6 +467,16 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
         } else {
             activeConnect(lanItem->uuid, devName, WIRED_TYPE);
         }
+    });
+
+    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
+            activeConnect(lanItem->uuid, devName, WIRED_TYPE);
+    });
+    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
+            deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
+    });
+    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
+            deleteOneLan(lanItem->uuid, WIRED_TYPE);
     });
 
     //记录到deviceFrame的itemMap中
@@ -707,7 +728,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
 
     QString iconPath;
     iconPath = KLanSymbolic;
-    lanItem->statusLabel->setText("");
+    lanItem->statusLabel->setText(tr("not connected"));
 
     QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
@@ -730,6 +751,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     });
 
     lanItem->isAcitve = false;
+    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
         if (lanItem->isAcitve || lanItem->loading) {
@@ -737,6 +759,16 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
         } else {
             activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
         }
+    });
+
+    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
+            activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
+    });
+    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
+            deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
+    });
+    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
+            deleteOneLan(lanItem->uuid, WIRED_TYPE);
     });
 
     //记录到deviceFrame的itemMap中
@@ -853,7 +885,9 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
         item->statusLabel->setMaximumSize(16777215,16777215);
         item->statusLabel->clear();
         item->isAcitve = false;
+        item->statusLabel->setText(tr("not connected"));
     }
+    item->setConnectActionText(item->isAcitve);
 
 //    QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));

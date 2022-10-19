@@ -938,6 +938,8 @@ void LanPage::onConnectionStateChange(QString uuid,
             connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, fireWallDialog, &FirewallDialog::closeMyself);
 
             fireWallDialog->show();
+            fireWallDialog->centerToScreen();
+
         }  else if (configType == KSC_FIREWALL_PUBLIC) {
             NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
         } else if (configType == KSC_FIREWALL_PRIVATE) {
@@ -947,7 +949,7 @@ void LanPage::onConnectionStateChange(QString uuid,
         updateActivatedConnectionArea(p_newItem);
         updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
-        p_newItem = m_connectResourse->getConnectionItemByUuid(uuid);
+        p_newItem = m_connectResourse->getConnectionItemByUuidWithoutActivateChecking(uuid);
         qDebug() << "[LanPage] deactivated reason" << reason;
         if (nullptr == p_newItem) {
             qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;
@@ -1198,6 +1200,15 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
     }
 
     return QWidget::eventFilter(watched, event);
+}
+
+void LanPage::deleteWired(const QString &connUuid)
+{
+    qDebug() << "[LanPage] deleteWired" << connUuid;
+    if (connUuid == nullptr) {
+        return;
+    }
+    m_wiredConnectOperation->deleteWiredConnect(connUuid);
 }
 
 void LanPage::onWiredEnabledChanged(bool enabled)

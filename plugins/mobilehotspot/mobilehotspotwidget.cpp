@@ -58,7 +58,7 @@ void MobileHotspotWidget::showDesktopNotify(const QString &message)
     QList<QVariant> args;
     args<<(tr("ukui control center"))
        <<((unsigned int) 0)
-       <<QString("gnome-dev-ethernet")
+       <<QString("ukui-control-center")
        <<tr("ukui control center desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
        <<QStringList()
@@ -148,7 +148,7 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                 return true;
             }
             if (m_switchBtn->isChecked()) {
-                showDesktopNotify(tr("start to close hotspot"));
+//                showDesktopNotify(tr("start to close hotspot"));
                 QDBusReply<void> reply = m_interface->call("deactiveWirelessAp", m_apNameLine->text(), m_uuid);
                 if (!reply.isValid()) {
                     qDebug() << "[MobileHotspotWidget] call deactiveWirelessAp failed ";
@@ -171,7 +171,7 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
 //                    showDesktopNotify(tr("can not  create hotspot with password length less than eight!"));
                     return true;
                 }
-                showDesktopNotify(tr("start to open hotspot ") + m_apNameLine->text());
+//                showDesktopNotify(tr("start to open hotspot ") + m_apNameLine->text());
                 QDBusReply<void> reply = m_interface->call("activeWirelessAp",
                                                            m_apNameLine->text(),
                                                            m_pwdNameLine->text(),

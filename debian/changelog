@@ -1,3 +1,13 @@
+kylin-nm (3.20.1.6-ok3) v101; urgency=medium
+
+  * iBUG号：
+  * 需求号：
+    -#16989 创建的VPN等虚拟网络可直接查看、操作连接
+  * 其他改动：无
+  * 影响域: 托盘vpn
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 20 Oct 2022 19:48:57 +0800
+
 kylin-nm (3.20.1.6-ok2) v101; urgency=medium
 
   * BUG号：

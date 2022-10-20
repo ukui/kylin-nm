@@ -14,6 +14,7 @@
 
 //#include "kylinconnectsetting.h"
 #include "coninfo.h"
+#include "multiplednswidget.h"
 
 class Ipv6Page : public QFrame
 {
@@ -23,29 +24,32 @@ public:
     void setIpv6Config(KyIpConfigType ipv6Config);
     void setIpv6(const QString &ipv4);
     void setIpv6Perfix(const int &ipv6Perfix);
-    void setIpv6FirDns(const QString &ipv6FirDns);
-    void setIpv6SecDns(const QString &ipv6SecDns);
+//    void setIpv6FirDns(const QString &ipv6FirDns);
+//    void setIpv6SecDns(const QString &ipv6SecDns);
+    void setMulDns(const QList<QHostAddress> &dns);
     void setGateWay(const QString &gateWay);
 
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
 
     int getPerfixLength(QString text);
 
-public:
+private:
     QComboBox *ipv6ConfigCombox;
     LineEdit *ipv6AddressEdit;
     LineEdit *lengthEdit;
     LineEdit *gateWayEdit;
-    LineEdit *firstDnsEdit;
-    LineEdit *secondDnsEdit;
+//    LineEdit *firstDnsEdit;
+//    LineEdit *secondDnsEdit;
 private:
     QFormLayout *m_detailLayout;
     QLabel *m_configLabel;
     QLabel *m_addressLabel;
     QLabel *m_subnetLabel;
     QLabel *m_gateWayLabel;
-    QLabel *m_dnsLabel;
-    QLabel *m_secDnsLabel;
+//    QLabel *m_dnsLabel;
+//    QLabel *m_secDnsLabel;
+
+    MultipleDnsWidget *m_dnsWidget = nullptr;
 private:
     void initUI();
     void initComponent();

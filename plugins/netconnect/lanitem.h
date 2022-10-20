@@ -10,11 +10,15 @@
 #include <QDebug>
 #include <QImage>
 #include <QPainter>
+#include <QToolButton>
+#include <QMenu>
+#include <QEvent>
 #include "fixlabel.h"
 #include "infobutton.h"
 
 class LanItem : public QPushButton
 {
+    Q_OBJECT
 public:
     LanItem(bool isAcitve, QWidget *parent = nullptr);
     ~LanItem();
@@ -23,10 +27,15 @@ public:
     InfoButton * infoLabel = nullptr;
     FixLabel * titileLabel = nullptr;
     QLabel * statusLabel = nullptr;
+    QToolButton* m_moreButton = nullptr;
+    QMenu* m_moreMenu = nullptr;
+    QAction* m_connectAction = nullptr;
+    QAction* m_deleteAction = nullptr;
 
 public:
     void startLoading();
     void stopLoading();
+    void setConnectActionText(bool isAcitve);
 
     bool loading = false;
     bool isAcitve = false;
@@ -36,15 +45,23 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     QTimer *waitTimer = nullptr;
     QGSettings *themeGsettings = nullptr;
     QList<QIcon> loadIcons;
-        int currentIconIndex=0;
+    int currentIconIndex=0;
 
 private slots:
-        void updateIcon();
+    void updateIcon();
+    void onConnectTriggered();
+    void onDeletetTriggered();
+
+Q_SIGNALS:
+    void connectActionTriggered();
+    void disconnectActionTriggered();
+    void deleteActionTriggered();
 
 };
 

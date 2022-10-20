@@ -14,6 +14,7 @@
 
 //#include "kylinconnectsetting.h"
 #include "coninfo.h"
+#include "multiplednswidget.h"
 
 class Ipv4Page : public QFrame
 {
@@ -23,8 +24,9 @@ public:
     void setIpv4Config(KyIpConfigType ipv4Config);
     void setIpv4(const QString &ipv4);
     void setNetMask(const QString &netMask);
-    void setIpv4FirDns(const QString &ipv4FirDns);
-    void setIpv4SecDns(const QString &ipv4SecDns);
+//    void setIpv4FirDns(const QString &ipv4FirDns);
+//    void setIpv4SecDns(const QString &ipv4SecDns);
+    void setMulDns(const QList<QHostAddress> &dns);
     void setGateWay(const QString &gateWay);
 
     QString getNetMaskText(QString text);
@@ -35,8 +37,8 @@ private:
     LineEdit *ipv4addressEdit;
     LineEdit *netMaskEdit;
     LineEdit *gateWayEdit;
-    LineEdit *firstDnsEdit;
-    LineEdit *secondDnsEdit;
+//    LineEdit *firstDnsEdit;
+//    LineEdit *secondDnsEdit;
 
 private:
     QFormLayout *m_detailLayout;
@@ -45,8 +47,9 @@ private:
     QLabel *m_addressLabel;
     QLabel *m_maskLabel;
     QLabel *m_gateWayLabel;
-    QLabel *m_dnsLabel;
-    QLabel *m_secDnsLabel;
+//    QLabel *m_dnsLabel;
+//    QLabel *m_secDnsLabel;
+    MultipleDnsWidget *m_dnsWidget = nullptr;
 private:
     void initUI();
     void initComponent();

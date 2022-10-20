@@ -9,7 +9,8 @@ HEADERS += \
     $$PWD/ipv4page.h \
     $$PWD/ipv6page.h \
     $$PWD/netdetail.h \
-    $$PWD/securitypage.h
+    $$PWD/securitypage.h \
+    $$PWD/multiplednswidget.h
 
 SOURCES += \
     $$PWD/creatnetpage.cpp \
@@ -19,4 +20,5 @@ SOURCES += \
     $$PWD/ipv4page.cpp \
     $$PWD/ipv6page.cpp \
     $$PWD/netdetail.cpp \
-    $$PWD/securitypage.cpp
+    $$PWD/securitypage.cpp \
+    $$PWD/multiplednswidget.cpp

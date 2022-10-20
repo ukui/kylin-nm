@@ -30,6 +30,7 @@ const QString intel = "V10SP1-edu";
 
 #include <kwindowsystem.h>
 #include <kwindowsystem_export.h>
+#include "kysdk/kysdk-system/libkysysinfo.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -148,16 +149,19 @@ void MainWindow::secondaryStart()
  */
 void MainWindow::initPlatform()
 {
-    if(v10Sp1.compare(KDKGetPrjCodeName().c_str(),Qt::CaseInsensitive) == 0) {
-        QString feature = KDKGetOSRelease(KEY_PRODUCT_FEATURES).c_str();
-        if (feature.toInt() == 3) {
+    char* projectName = kdk_system_get_projectName();
+    QString strProjectName(projectName);
+    free(projectName);
+    projectName = NULL;
+    if(v10Sp1.compare(strProjectName,Qt::CaseInsensitive) == 0) {
+        unsigned int feature = kdk_system_get_productFeatures();
+        if (feature == 3) {
             m_isShowInCenter = true;
         }
-    } else if (intel.compare(KDKGetPrjCodeName().c_str(),Qt::CaseInsensitive) == 0) {
+    } else if (intel.compare(strProjectName,Qt::CaseInsensitive) == 0) {
         m_isShowInCenter = true;
     }
-
-    qDebug() << KDKGetPrjCodeName().c_str() << KDKGetOSRelease(KEY_PRODUCT_FEATURES).c_str() <<  "m_isShowInCenter" << m_isShowInCenter;
+    qDebug() << "projectName" << projectName << m_isShowInCenter;
 }
 
 /**

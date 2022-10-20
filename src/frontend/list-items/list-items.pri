@@ -8,11 +8,13 @@ HEADERS += \
     $$PWD/lanlistitem.h \
     $$PWD/listitem.h \
     $$PWD/wlanlistitem.h \
-    $$PWD/wlanmoreitem.h
+    $$PWD/wlanmoreitem.h \
+    $$PWD/vpnlistitem.h
 
 SOURCES += \
     $$PWD/lanlistitem.cpp \
     $$PWD/listitem.cpp \
     $$PWD/wlanlistitem.cpp \
-    $$PWD/wlanmoreitem.cpp
+    $$PWD/wlanmoreitem.cpp \
+    $$PWD/vpnlistitem.cpp
 

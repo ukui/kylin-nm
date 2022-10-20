@@ -5,6 +5,7 @@ include(tab-pages/tab-pages.pri)
 include(list-items/list-items.pri)
 include(netdetails/netdetails.pri)
 include(enterprise-wlan/enterprise-wlan.pri)
+include(single-pages/single-pages.pri)
 
 FORMS += \
     $$PWD/wificonfigdialog.ui
@@ -12,9 +13,11 @@ FORMS += \
 HEADERS += \
     $$PWD/customstyle.h \
     $$PWD/mainwindow.h \
+    $$PWD/vpnmainwindow.h \
     $$PWD/wificonfigdialog.h
 
 SOURCES += \
     $$PWD/customstyle.cpp \
     $$PWD/mainwindow.cpp \
+    $$PWD/vpnmainwindow.cpp \
     $$PWD/wificonfigdialog.cpp

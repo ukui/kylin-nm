@@ -14,7 +14,6 @@
 #include "lanpage.h"
 #include "wlanpage.h"
 #include "netdetails/netdetail.h"
-#include <ukuisdk/kylin-com4cxx.h>
 
 #ifdef WITHKYSEC
 #include <kysec/libkysec.h>

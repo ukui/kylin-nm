@@ -1,3 +1,9 @@
+kylin-nm (3.14.0.0+0512-2k10) v101; urgency=medium
+
+  * 托盘vpn需求
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 20 Oct 2022 20:21:39 +0800
+
 kylin-nm (3.14.0.0+0512-1k10) yangtz; urgency=medium
 
   * 同步3.22需求

@@ -16,8 +16,8 @@
  *
  */
 
-//#include "mainwindow.h"
 #include "mainwindow.h"
+#include "vpnmainwindow.h"
 #include "dbusadaptor.h"
 #include <QTranslator>
 #include <QLocale>
@@ -147,6 +147,9 @@ int main(int argc, char *argv[])
     while (!p_networkResource->NetworkManagerIsInited()) {
         ::usleep(1000);
     }
+
+    vpnMainWindow vpnwindow;
+    vpnwindow.setProperty("useStyleWindowManager", false); //禁用拖动
 
     MainWindow w;
     a.setActivationWindow(&w);

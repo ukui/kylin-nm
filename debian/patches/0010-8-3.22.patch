@@ -1,0 +1,2018 @@
+From: zhaoshixu <zhaoshixu@kylinos.cn>
+Date: Thu, 20 Oct 2022 02:26:48 +0000
+Subject: =?utf-8?b?ITgg5ZCI5bm2My4yMiDpnIDmsYIgTWVyZ2UgcHVsbCByZXF1ZXN0ICE4?=
+ =?utf-8?b?IGZyb20gemhhb3NoaXh1LzMuMjI=?=
+
+---
+ plugins/netconnect/lanitem.cpp                |  68 +++++++++
+ plugins/netconnect/lanitem.h                  |  21 ++-
+ plugins/netconnect/netconnect.cpp             |  38 +++++-
+ plugins/netconnect/netconnect.h               |   2 +-
+ plugins/netconnect/translations/bo.ts         |  54 ++++++--
+ plugins/netconnect/translations/tr.ts         |  54 ++++++--
+ plugins/netconnect/translations/zh_CN.qm      | Bin 661 -> 922 bytes
+ plugins/netconnect/translations/zh_CN.ts      |  54 ++++++--
+ src/backend/dbusadaptor.cpp                   |  12 ++
+ src/backend/dbusadaptor.h                     |   2 +
+ src/frontend/mainwindow.cpp                   |   6 +
+ src/frontend/mainwindow.h                     |   2 +
+ src/frontend/netdetails/coninfo.h             |  10 +-
+ src/frontend/netdetails/creatnetpage.cpp      |  71 +++++++---
+ src/frontend/netdetails/creatnetpage.h        |  11 +-
+ src/frontend/netdetails/ipv4page.cpp          |  75 ++++++----
+ src/frontend/netdetails/ipv4page.h            |  15 +-
+ src/frontend/netdetails/ipv6page.cpp          |  73 ++++++----
+ src/frontend/netdetails/ipv6page.h            |  18 ++-
+ src/frontend/netdetails/multiplednswidget.cpp | 189 ++++++++++++++++++++++++++
+ src/frontend/netdetails/multiplednswidget.h   |  70 ++++++++++
+ src/frontend/netdetails/netdetail.cpp         |  32 ++---
+ src/frontend/netdetails/netdetails.pri        |   6 +-
+ src/frontend/tab-pages/lanpage.cpp            |   9 ++
+ src/frontend/tab-pages/lanpage.h              |   1 +
+ src/frontend/tools/listitemedit.cpp           |  55 ++++++++
+ src/frontend/tools/listitemedit.h             |  52 +++++++
+ src/frontend/tools/tools.pri                  |   2 +
+ translations/kylin-nm_zh_CN.qm                | Bin 7744 -> 7868 bytes
+ translations/kylin-nm_zh_CN.ts                |  13 ++
+ 30 files changed, 859 insertions(+), 156 deletions(-)
+ create mode 100644 src/frontend/netdetails/multiplednswidget.cpp
+ create mode 100644 src/frontend/netdetails/multiplednswidget.h
+ create mode 100644 src/frontend/tools/listitemedit.cpp
+ create mode 100644 src/frontend/tools/listitemedit.h
+
+diff --git a/plugins/netconnect/lanitem.cpp b/plugins/netconnect/lanitem.cpp
+index 0fac38e..f353609 100644
+--- a/plugins/netconnect/lanitem.cpp
++++ b/plugins/netconnect/lanitem.cpp
+@@ -23,11 +23,27 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
+     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+ //    statusLabel->setMinimumSize(36,36);
+     infoLabel = new InfoButton(this);
++    //„ÄêÊõ¥Â§ö„ÄëËèúÂçï
++    m_moreButton = new QToolButton(this);
++    m_moreButton->setProperty("useButtonPalette", true);
++    m_moreButton->setPopupMode(QToolButton::InstantPopup);
++    m_moreButton->setAutoRaise(true);
++    m_moreButton->setIcon(QIcon::fromTheme("view-more-horizontal-symbolic"));
++    m_moreMenu = new QMenu(m_moreButton);
++    m_connectAction = new QAction(m_moreMenu);
++    m_deleteAction = new QAction(tr("Delete"), m_moreMenu);
++    setConnectActionText(isAcitve);
++
++    m_moreMenu->addAction(m_connectAction);
++    m_moreMenu->addAction(m_deleteAction);
++    m_moreButton->setMenu(m_moreMenu);
++
+     mLanLyt->addWidget(iconLabel);
+     mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
+     mLanLyt->addStretch();
+     mLanLyt->addWidget(statusLabel);
+     mLanLyt->addWidget(infoLabel);
++    mLanLyt->addWidget(m_moreButton);
+ 
+     loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
+     loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
+@@ -38,6 +54,10 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
+     loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
+     waitTimer = new QTimer(this);
+     connect(waitTimer, &QTimer::timeout, this, &LanItem::updateIcon);
++
++    connect(m_connectAction, &QAction::triggered, this, &LanItem::onConnectTriggered);
++    connect(m_deleteAction, &QAction::triggered, this, &LanItem::onDeletetTriggered);
++    m_moreMenu->installEventFilter(this);
+ }
+ 
+ LanItem::~LanItem()
+@@ -65,6 +85,40 @@ void LanItem::stopLoading(){
+     loading = false;
+ }
+ 
++/**
++ * @brief LanItem::setConnectActionText
++ * „ÄêÊõ¥Â§ö„ÄëËèúÂçïÁä∂ÊÄÅÂàáÊç¢ ËøûÊé•/Êñ≠ÂºÄ
++ * @param isAcitve
++ */
++void LanItem::setConnectActionText(bool isAcitve)
++{
++    if (isAcitve) {
++        m_connectAction->setText(tr("Disconnect"));
++    } else {
++        m_connectAction->setText(tr("Connect"));
++    }
++}
++
++void LanItem::onConnectTriggered()
++{
++    if (!m_connectAction) {
++        return;
++    }
++    if (m_connectAction->text() == tr("Connect")) {
++        Q_EMIT connectActionTriggered();
++    } else if (m_connectAction->text() == tr("Disconnect")) {
++        Q_EMIT disconnectActionTriggered();
++    }
++}
++
++void LanItem::onDeletetTriggered()
++{
++    if (!m_deleteAction) {
++        return;
++    }
++    Q_EMIT deleteActionTriggered();
++}
++
+ void LanItem::paintEvent(QPaintEvent *event)
+ {
+     QPalette pal = this->palette();
+@@ -80,3 +134,17 @@ void LanItem::paintEvent(QPaintEvent *event)
+     QPushButton::paintEvent(event);
+ }
+ 
++bool LanItem::eventFilter(QObject *watched, QEvent *event)
++{
++    //ËèúÂçïÂè≥ËæπÁïå‰∏éÊåâÈíÆÂè≥ËæπÁïåÂØπÈΩê
++    if (event->type() == QEvent::Show && watched == m_moreMenu) {
++        int menuXPos = m_moreMenu->pos().x();
++        int menuWidth = m_moreMenu->size().width();
++        int btnWidth = m_moreButton->size().width();
++
++        QPoint pos = QPoint (menuXPos - menuWidth + btnWidth, m_moreMenu->pos().y());
++        m_moreMenu->move(pos);
++        return true;
++    }
++    return false;
++}
+diff --git a/plugins/netconnect/lanitem.h b/plugins/netconnect/lanitem.h
+index dbaacb0..e749ab5 100644
+--- a/plugins/netconnect/lanitem.h
++++ b/plugins/netconnect/lanitem.h
+@@ -10,11 +10,15 @@
+ #include <QDebug>
+ #include <QImage>
+ #include <QPainter>
++#include <QToolButton>
++#include <QMenu>
++#include <QEvent>
+ #include "fixlabel.h"
+ #include "infobutton.h"
+ 
+ class LanItem : public QPushButton
+ {
++    Q_OBJECT
+ public:
+     LanItem(bool isAcitve, QWidget *parent = nullptr);
+     ~LanItem();
+@@ -23,10 +27,15 @@ public:
+     InfoButton * infoLabel = nullptr;
+     FixLabel * titileLabel = nullptr;
+     QLabel * statusLabel = nullptr;
++    QToolButton* m_moreButton = nullptr;
++    QMenu* m_moreMenu = nullptr;
++    QAction* m_connectAction = nullptr;
++    QAction* m_deleteAction = nullptr;
+ 
+ public:
+     void startLoading();
+     void stopLoading();
++    void setConnectActionText(bool isAcitve);
+ 
+     bool loading = false;
+     bool isAcitve = false;
+@@ -36,15 +45,23 @@ public:
+ 
+ protected:
+     void paintEvent(QPaintEvent *);
++    bool eventFilter(QObject *watched, QEvent *event);
+ 
+ private:
+     QTimer *waitTimer = nullptr;
+     QGSettings *themeGsettings = nullptr;
+     QList<QIcon> loadIcons;
+-        int currentIconIndex=0;
++    int currentIconIndex=0;
+ 
+ private slots:
+-        void updateIcon();
++    void updateIcon();
++    void onConnectTriggered();
++    void onDeletetTriggered();
++
++Q_SIGNALS:
++    void connectActionTriggered();
++    void disconnectActionTriggered();
++    void deleteActionTriggered();
+ 
+ };
+ 
+diff --git a/plugins/netconnect/netconnect.cpp b/plugins/netconnect/netconnect.cpp
+index 2341ccb..da55d78 100644
+--- a/plugins/netconnect/netconnect.cpp
++++ b/plugins/netconnect/netconnect.cpp
+@@ -353,6 +353,14 @@ void NetConnect::runExternalApp() {
+     process.startDetached(cmd);
+ }
+ 
++//Âà™Èô§
++void NetConnect::deleteOneLan(QString ssid, int type)
++{
++    qDebug() << "[NetConnect]call deleteConnect" << __LINE__;
++    m_interface->call(QStringLiteral("deleteConnect"), type, ssid);
++    qDebug() << "[NetConnect]call deleteConnect respond" << __LINE__;
++}
++
+ //ÊøÄÊ¥ª
+ void NetConnect::activeConnect(QString ssid, QString deviceName, int type) {
+     qDebug() << "[NetConnect]call activateConnect" << __LINE__;
+@@ -421,12 +429,12 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
+         return;
+     }
+ 
+-    LanItem * lanItem = new LanItem(pluginWidget);
++    LanItem * lanItem = new LanItem(isActived, pluginWidget);
+     QString iconPath = KLanSymbolic;
+     if (isActived) {
+         lanItem->statusLabel->setText(tr("connected"));
+     } else {
+-        lanItem->statusLabel->setText("");
++        lanItem->statusLabel->setText(tr("not connected"));
+     }
+     QIcon searchIcon = QIcon::fromTheme(iconPath);
+ //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
+@@ -449,6 +457,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
+     });
+ 
+     lanItem->isAcitve = isActived;
++    lanItem->setConnectActionText(lanItem->isAcitve);
+ 
+     connect(lanItem, &QPushButton::clicked, this, [=] {
+         if (lanItem->isAcitve || lanItem->loading) {
+@@ -458,6 +467,16 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
+         }
+     });
+ 
++    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
++        activeConnect(lanItem->uuid, devName, WIRED_TYPE);
++    });
++    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
++        deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
++    });
++    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
++        deleteOneLan(lanItem->uuid, WIRED_TYPE);
++    });
++
+     //ËÆ∞ÂΩïÂà∞deviceFrameÁöÑitemMap‰∏≠
+     deviceFrameMap[devName]->itemMap.insert(infoList.at(1), lanItem);
+     qDebug()<<"insert " << infoList.at(1) << " to " << devName << " list";
+@@ -695,7 +714,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
+ 
+     QString iconPath;
+     iconPath = KLanSymbolic;
+-    lanItem->statusLabel->setText("");
++    lanItem->statusLabel->setText(tr("not connected"));
+ 
+     QIcon searchIcon = QIcon::fromTheme(iconPath);
+ //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
+@@ -718,6 +737,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
+     });
+ 
+     lanItem->isAcitve = false;
++    lanItem->setConnectActionText(lanItem->isAcitve);
+ 
+     connect(lanItem, &QPushButton::clicked, this, [=] {
+         if (lanItem->isAcitve || lanItem->loading) {
+@@ -727,6 +747,16 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
+         }
+     });
+ 
++    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
++        activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
++    });
++    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
++        deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
++    });
++    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
++        deleteOneLan(lanItem->uuid, WIRED_TYPE);
++    });
++
+     //ËÆ∞ÂΩïÂà∞deviceFrameÁöÑitemMap‰∏≠
+     deviceFrameMap[deviceName]->itemMap.insert(connUuid, lanItem);
+     int index = getInsertPos(connName, deviceName);
+@@ -841,7 +871,9 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
+         item->statusLabel->setMaximumSize(16777215,16777215);
+         item->statusLabel->clear();
+         item->isAcitve = false;
++        item->statusLabel->setText(tr("not connected"));
+     }
++    item->setConnectActionText(item->isAcitve);
+ 
+ //    QIcon searchIcon = QIcon::fromTheme(iconPath);
+ //    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
+diff --git a/plugins/netconnect/netconnect.h b/plugins/netconnect/netconnect.h
+index f991540..ad89998 100644
+--- a/plugins/netconnect/netconnect.h
++++ b/plugins/netconnect/netconnect.h
+@@ -101,7 +101,7 @@ private:
+     int getInsertPos(QString connName, QString deviceName);
+ 
+ 
+-    void deleteOneLan(QString ssid);
++    void deleteOneLan(QString ssid, int type);
+     void activeConnect(QString ssid, QString deviceName, int type);
+     void deActiveConnect(QString ssid, QString deviceName, int type);
+ 
+diff --git a/plugins/netconnect/translations/bo.ts b/plugins/netconnect/translations/bo.ts
+index 1691085..80bbd9f 100644
+--- a/plugins/netconnect/translations/bo.ts
++++ b/plugins/netconnect/translations/bo.ts
+@@ -4,61 +4,93 @@
+ <context>
+     <name>AddNetBtn</name>
+     <message>
+-        <location filename="../addnetbtn.cpp" line="22"/>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="24"/>
++        <source>Add Others</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="28"/>
+         <source>Add WiredNetork</source>
+         <translation type="unfinished"></translation>
+     </message>
+ </context>
++<context>
++    <name>LanItem</name>
++    <message>
++        <location filename="../lanitem.cpp" line="34"/>
++        <source>Delete</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../lanitem.cpp" line="96"/>
++        <location filename="../lanitem.cpp" line="109"/>
++        <source>Disconnect</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../lanitem.cpp" line="98"/>
++        <location filename="../lanitem.cpp" line="107"/>
++        <source>Connect</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
+ <context>
+     <name>NetConnect</name>
+     <message>
+         <location filename="../netconnect.ui" line="50"/>
+-        <location filename="../netconnect.cpp" line="152"/>
++        <location filename="../netconnect.cpp" line="153"/>
+         <source>Wired Network</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="112"/>
+-        <location filename="../netconnect.cpp" line="154"/>
++        <location filename="../netconnect.cpp" line="155"/>
+         <source>open</source>
+         <translation type="unfinished"></translation>
+         <extra-contents_path>/netconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="198"/>
+-        <location filename="../netconnect.cpp" line="151"/>
++        <location filename="../netconnect.cpp" line="152"/>
+         <source>Advanced settings</source>
+         <translation type="unfinished"></translation>
+         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="63"/>
++        <location filename="../netconnect.cpp" line="64"/>
+         <source>ukui control center</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="66"/>
++        <location filename="../netconnect.cpp" line="67"/>
+         <source>ukui control center desktop message</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="80"/>
++        <location filename="../netconnect.cpp" line="81"/>
+         <source>WiredConnect</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="177"/>
++        <location filename="../netconnect.cpp" line="169"/>
+         <source>No ethernet device avaliable</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="426"/>
+-        <location filename="../netconnect.cpp" line="833"/>
++        <location filename="../netconnect.cpp" line="435"/>
++        <location filename="../netconnect.cpp" line="864"/>
+         <source>connected</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="490"/>
++        <location filename="../netconnect.cpp" line="437"/>
++        <location filename="../netconnect.cpp" line="717"/>
++        <location filename="../netconnect.cpp" line="874"/>
++        <source>not connected</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../netconnect.cpp" line="510"/>
+         <source>card</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff --git a/plugins/netconnect/translations/tr.ts b/plugins/netconnect/translations/tr.ts
+index 1691085..80bbd9f 100644
+--- a/plugins/netconnect/translations/tr.ts
++++ b/plugins/netconnect/translations/tr.ts
+@@ -4,61 +4,93 @@
+ <context>
+     <name>AddNetBtn</name>
+     <message>
+-        <location filename="../addnetbtn.cpp" line="22"/>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="24"/>
++        <source>Add Others</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="28"/>
+         <source>Add WiredNetork</source>
+         <translation type="unfinished"></translation>
+     </message>
+ </context>
++<context>
++    <name>LanItem</name>
++    <message>
++        <location filename="../lanitem.cpp" line="34"/>
++        <source>Delete</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../lanitem.cpp" line="96"/>
++        <location filename="../lanitem.cpp" line="109"/>
++        <source>Disconnect</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../lanitem.cpp" line="98"/>
++        <location filename="../lanitem.cpp" line="107"/>
++        <source>Connect</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
+ <context>
+     <name>NetConnect</name>
+     <message>
+         <location filename="../netconnect.ui" line="50"/>
+-        <location filename="../netconnect.cpp" line="152"/>
++        <location filename="../netconnect.cpp" line="153"/>
+         <source>Wired Network</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="112"/>
+-        <location filename="../netconnect.cpp" line="154"/>
++        <location filename="../netconnect.cpp" line="155"/>
+         <source>open</source>
+         <translation type="unfinished"></translation>
+         <extra-contents_path>/netconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="198"/>
+-        <location filename="../netconnect.cpp" line="151"/>
++        <location filename="../netconnect.cpp" line="152"/>
+         <source>Advanced settings</source>
+         <translation type="unfinished"></translation>
+         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="63"/>
++        <location filename="../netconnect.cpp" line="64"/>
+         <source>ukui control center</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="66"/>
++        <location filename="../netconnect.cpp" line="67"/>
+         <source>ukui control center desktop message</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="80"/>
++        <location filename="../netconnect.cpp" line="81"/>
+         <source>WiredConnect</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="177"/>
++        <location filename="../netconnect.cpp" line="169"/>
+         <source>No ethernet device avaliable</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="426"/>
+-        <location filename="../netconnect.cpp" line="833"/>
++        <location filename="../netconnect.cpp" line="435"/>
++        <location filename="../netconnect.cpp" line="864"/>
+         <source>connected</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="490"/>
++        <location filename="../netconnect.cpp" line="437"/>
++        <location filename="../netconnect.cpp" line="717"/>
++        <location filename="../netconnect.cpp" line="874"/>
++        <source>not connected</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../netconnect.cpp" line="510"/>
+         <source>card</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff --git a/plugins/netconnect/translations/zh_CN.qm b/plugins/netconnect/translations/zh_CN.qm
+index 97f6e86..549add6 100644
+--- a/plugins/netconnect/translations/zh_CN.qm
++++ b/plugins/netconnect/translations/zh_CN.qm
+@@ -1,10 +1,15 @@
+-<∏d ÔúïÕ!ø`°Ω›B   P òÑ  # fæ  x9s  ŸK¿‘  Jf?Û   9	u'   q
+-√p´   ºÏ“  ü≈¿$   ˘õ    i  +   m˚R†g	~øQ~‹       Add WiredNetork   	AddNetBtn   öÿ~ßãæn       Advanced settings   
++<∏d ÔúïÕ!ø`°Ω›B   x òÑ  Œ fæ  U-¿Ñ  #9s  ∂¨,•   îK¿‘  ınñÛ    f?Û   ‰	u'  
++a˚4   ∫
++eK‰   m
++√p´  gÏ“  |≈¿$  õ˘õ   4i     R†QeQvN÷Q~‹       
++Add Others   	AddNetBtn   m˚R†g	~øQ~‹       Add WiredNetork   	AddNetBtn   èﬁc•       Connect   LanItem   R ñd       Delete   LanItem   e≠_        
++Disconnect   LanItem   öÿ~ßãæn       Advanced settings   
+ NetConnect   g*h¿mKR0g	~øãæY       No ethernet device avaliable   
+ NetConnect   g	~øQ~‹       Wired Network   
+ NetConnect   g	~øQ~‹       WiredConnect   
+ NetConnect   QSa       card   
+ NetConnect   ]Úèﬁc•       	connected   
++NetConnect   g*èﬁc•       not connected   
+ NetConnect   _ T/       open   
+ NetConnect   cßR6óbg       ukui control center   
+ NetConnect   cßR6óbghLóbêwÂ       #ukui control center desktop message   
+diff --git a/plugins/netconnect/translations/zh_CN.ts b/plugins/netconnect/translations/zh_CN.ts
+index 0424b7b..112fe9c 100644
+--- a/plugins/netconnect/translations/zh_CN.ts
++++ b/plugins/netconnect/translations/zh_CN.ts
+@@ -4,61 +4,93 @@
+ <context>
+     <name>AddNetBtn</name>
+     <message>
+-        <location filename="../addnetbtn.cpp" line="22"/>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="24"/>
++        <source>Add Others</source>
++        <translation>Âä†ÂÖ•ÂÖ∂‰ªñÁΩëÁªú</translation>
++    </message>
++    <message>
++        <location filename="../../component/AddBtn/addnetbtn.cpp" line="28"/>
+         <source>Add WiredNetork</source>
+         <translation>Ê∑ªÂä†ÊúâÁ∫øÁΩëÁªú</translation>
+     </message>
+ </context>
++<context>
++    <name>LanItem</name>
++    <message>
++        <location filename="../lanitem.cpp" line="34"/>
++        <source>Delete</source>
++        <translation>Âà†Èô§</translation>
++    </message>
++    <message>
++        <location filename="../lanitem.cpp" line="96"/>
++        <location filename="../lanitem.cpp" line="109"/>
++        <source>Disconnect</source>
++        <translation>Êñ≠ÂºÄ</translation>
++    </message>
++    <message>
++        <location filename="../lanitem.cpp" line="98"/>
++        <location filename="../lanitem.cpp" line="107"/>
++        <source>Connect</source>
++        <translation>ËøûÊé•</translation>
++    </message>
++</context>
+ <context>
+     <name>NetConnect</name>
+     <message>
+         <location filename="../netconnect.ui" line="50"/>
+-        <location filename="../netconnect.cpp" line="152"/>
++        <location filename="../netconnect.cpp" line="153"/>
+         <source>Wired Network</source>
+         <translation>ÊúâÁ∫øÁΩëÁªú</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="112"/>
+-        <location filename="../netconnect.cpp" line="154"/>
++        <location filename="../netconnect.cpp" line="155"/>
+         <source>open</source>
+         <translation>ÂºÄÂêØ</translation>
+         <extra-contents_path>/netconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../netconnect.ui" line="198"/>
+-        <location filename="../netconnect.cpp" line="151"/>
++        <location filename="../netconnect.cpp" line="152"/>
+         <source>Advanced settings</source>
+         <translation>È´òÁ∫ßËÆæÁΩÆ</translation>
+         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="63"/>
++        <location filename="../netconnect.cpp" line="64"/>
+         <source>ukui control center</source>
+         <translation>ÊéßÂà∂Èù¢Êùø</translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="66"/>
++        <location filename="../netconnect.cpp" line="67"/>
+         <source>ukui control center desktop message</source>
+         <translation>ÊéßÂà∂Èù¢ÊùøÊ°åÈù¢ÈÄöÁü•</translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="80"/>
++        <location filename="../netconnect.cpp" line="81"/>
+         <source>WiredConnect</source>
+         <translation>ÊúâÁ∫øÁΩëÁªú</translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="177"/>
++        <location filename="../netconnect.cpp" line="169"/>
+         <source>No ethernet device avaliable</source>
+         <translation>Êú™Ê£ÄÊµãÂà∞ÊúâÁ∫øËÆæÂ§á</translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="426"/>
+-        <location filename="../netconnect.cpp" line="833"/>
++        <location filename="../netconnect.cpp" line="435"/>
++        <location filename="../netconnect.cpp" line="864"/>
+         <source>connected</source>
+         <translation>Â∑≤ËøûÊé•</translation>
+     </message>
+     <message>
+-        <location filename="../netconnect.cpp" line="490"/>
++        <location filename="../netconnect.cpp" line="437"/>
++        <location filename="../netconnect.cpp" line="717"/>
++        <location filename="../netconnect.cpp" line="874"/>
++        <source>not connected</source>
++        <translation>Êú™ËøûÊé•</translation>
++    </message>
++    <message>
++        <location filename="../netconnect.cpp" line="510"/>
+         <source>card</source>
+         <translation>ÁΩëÂç°</translation>
+     </message>
+diff --git a/src/backend/dbusadaptor.cpp b/src/backend/dbusadaptor.cpp
+index e7063e3..7dd269c 100644
+--- a/src/backend/dbusadaptor.cpp
++++ b/src/backend/dbusadaptor.cpp
+@@ -143,6 +143,18 @@ void DbusAdaptor::setDeviceEnable(QString devName, bool enable)
+ //    return deviceName;
+ //}
+ 
++//Âà†Èô§
++void DbusAdaptor::deleteConnect(int type, QString ssid)
++{
++    if (type == WIRED) {
++        parent()->deleteWired(ssid);
++    } else if (type == WIRELESS) {
++        //ÂæÖÂÆûÁé∞
++    } else {
++        qDebug() << "[DbusAdaptor] deleteConnect type is invalid";
++    }
++}
++
+ //ËøûÊé• Ê†πÊçÆÁΩëÂç°Á±ªÂûã ÂèÇÊï∞1 0:lan 1:wlan ÂèÇÊï∞3 ‰∏∫ssid/uuid
+ void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
+ {
+diff --git a/src/backend/dbusadaptor.h b/src/backend/dbusadaptor.h
+index 65be958..c7bfa74 100644
+--- a/src/backend/dbusadaptor.h
++++ b/src/backend/dbusadaptor.h
+@@ -62,6 +62,8 @@ public Q_SLOTS: // METHODS
+ //    QString getDefaultWiredDevice();
+ //    Q_NOREPLY void setDefaultWirelessDevice(QString deviceName);
+ //    QString  getDefaultWirelessDevice();
++    //Âà™Èô§ Ê†πÊçÆÁΩëÁªúÂêçÁß∞ ÂèÇÊï∞1 0:lan 1:wlan ÂèÇÊï∞2 ‰∏∫ssid/uuid
++    Q_NOREPLY void deleteConnect(int type, QString ssid);
+     //ËøûÊé• Ê†πÊçÆÁΩëÂç°Á±ªÂûã ÂèÇÊï∞1 0:lan 1:wlan ÂèÇÊï∞3 ‰∏∫ssid/uuid
+     Q_NOREPLY void activateConnect(int type, QString devName, QString ssid);
+     //Êñ≠ÂºÄËøûÊé• Ê†πÊçÆÁΩëÂç°Á±ªÂûã ÂèÇÊï∞1 0:lan 1:wlan ÂèÇÊï∞3 ‰∏∫ssid/uuid
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index 3a519c6..b3947d6 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -802,6 +802,12 @@ void MainWindow::getWirelessDeviceCap(QMap<QString, int> &map)
+     m_wlanWidget->getWirelessDeviceCap(map);
+ }
+ 
++//ÊúâÁ∫øËøûÊé•Âà†Èô§
++void MainWindow::deleteWired(const QString &connUuid)
++{
++    m_lanWidget->deleteWired(connUuid);
++}
++
+ //ÊúâÁ∫øËøûÊé•Êñ≠ÂºÄ
+ void MainWindow::activateWired(const QString& devName, const QString& connUuid)
+ {
+diff --git a/src/frontend/mainwindow.h b/src/frontend/mainwindow.h
+index 83110ab..35035d3 100644
+--- a/src/frontend/mainwindow.h
++++ b/src/frontend/mainwindow.h
+@@ -55,6 +55,8 @@ public:
+     //Ëé∑ÂèñÁÉ≠ÁÇπ
+     void getStoredApInfo(QStringList &list);
+     void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
++    //Âà†Èô§ÊúâÁ∫øËøûÊé•
++    void deleteWired(const QString& connUuid);
+     //ÊúâÁ∫øËøûÊé•Êñ≠ÂºÄ
+     void activateWired(const QString& devName, const QString& connUuid);
+     void deactivateWired(const QString& devName, const QString& connUuid);
+diff --git a/src/frontend/netdetails/coninfo.h b/src/frontend/netdetails/coninfo.h
+index abb3608..cb8ee55 100644
+--- a/src/frontend/netdetails/coninfo.h
++++ b/src/frontend/netdetails/coninfo.h
+@@ -71,16 +71,18 @@ public:
+     KyIpConfigType ipv4ConfigType = CONFIG_IP_DHCP;
+     QString strIPV4Address;
+     QString strIPV4NetMask;
+-    QString strIPV4FirDns;
+-    QString strIPV4SecDns;
++//    QString strIPV4FirDns;
++//    QString strIPV4SecDns;
+     QString strIPV4GateWay;
++    QList<QHostAddress> ipv4DnsList;
+ 
+     KyIpConfigType ipv6ConfigType = CONFIG_IP_DHCP;
+     QString strIPV6Address;
+     int iIPV6Prefix;
+-    QString strIPV6FirDns;
+-    QString strIPV6SecDns;
++//    QString strIPV6FirDns;
++//    QString strIPV6SecDns;
+     QString strIPV6GateWay;
++    QList<QHostAddress> ipv6DnsList;
+ 
+     KyEapMethodType enterpriseType;
+     KyEapMethodTlsInfo tlsInfo;
+diff --git a/src/frontend/netdetails/creatnetpage.cpp b/src/frontend/netdetails/creatnetpage.cpp
+index 6034c50..89987a6 100644
+--- a/src/frontend/netdetails/creatnetpage.cpp
++++ b/src/frontend/netdetails/creatnetpage.cpp
+@@ -17,46 +17,49 @@ void CreatNetPage::initUI()
+     ipv4addressEdit = new LineEdit(this);
+     netMaskEdit = new LineEdit(this);
+     gateWayEdit = new LineEdit(this);
+-    firstDnsEdit = new LineEdit(this);
+-    secondDnsEdit = new LineEdit(this);
++//    firstDnsEdit = new LineEdit(this);
++//    secondDnsEdit = new LineEdit(this);
+ 
+     m_connNameLabel = new QLabel(this);
+     m_configLabel = new QLabel(this);
+     m_addressLabel = new QLabel(this);
+     m_maskLabel = new QLabel(this);
+     m_gateWayLabel = new QLabel(this);
+-    m_dnsLabel = new QLabel(this);
+-    m_secDnsLabel = new QLabel(this);
++//    m_dnsLabel = new QLabel(this);
++//    m_secDnsLabel = new QLabel(this);
+ 
+     m_connNameLabel->setText(tr("Connection Name"));
+     m_configLabel->setText(tr("Ipv4Config"));
+     m_addressLabel->setText(tr("Address"));
+     m_maskLabel->setText(tr("Netmask"));
+     m_gateWayLabel->setText(tr("Default Gateway"));
+-    m_dnsLabel->setText(tr("Prefs DNS"));
+-    m_secDnsLabel->setText(tr("Alternative DNS"));
++//    m_dnsLabel->setText(tr("Prefs DNS"));
++//    m_secDnsLabel->setText(tr("Alternative DNS"));
++
++    // IPÁöÑÊ≠£ÂàôÊ†ºÂºèÈôêÂà∂
++    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
++    m_dnsWidget = new MultipleDnsWidget(rx, this);
+ 
+     m_detailLayout = new QFormLayout(this);
++    m_detailLayout->setContentsMargins(0, 0, 0, 0);
++    m_detailLayout->setSpacing(24);
+     m_detailLayout->addRow(m_connNameLabel,connNameEdit);
+     m_detailLayout->addRow(m_configLabel,ipv4ConfigCombox);
+     m_detailLayout->addRow(m_addressLabel,ipv4addressEdit);
+     m_detailLayout->addRow(m_maskLabel,netMaskEdit);
+     m_detailLayout->addRow(m_gateWayLabel,gateWayEdit);
+-    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
+-    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
++//    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
++//    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
++    m_detailLayout->addRow(m_dnsWidget);
+ 
+     ipv4ConfigCombox->addItem(tr("Auto(DHCP)"), AUTO_CONFIG); //"Ëá™Âä®(DHCP)"
+     ipv4ConfigCombox->addItem(tr("Manual"), MANUAL_CONFIG); //"ÊâãÂä®"
+ 
+-
+-    // IPÁöÑÊ≠£ÂàôÊ†ºÂºèÈôêÂà∂
+-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+-
+     ipv4addressEdit->setValidator(new QRegExpValidator(rx, this));
+     gateWayEdit->setValidator(new QRegExpValidator(rx, this));
+     netMaskEdit->setValidator(new QRegExpValidator(rx, this));
+-    firstDnsEdit->setValidator(new QRegExpValidator(rx, this));
+-    secondDnsEdit->setValidator(new QRegExpValidator(rx, this));
++//    firstDnsEdit->setValidator(new QRegExpValidator(rx, this));
++//    secondDnsEdit->setValidator(new QRegExpValidator(rx, this));
+ }
+ 
+ void CreatNetPage::initComponent() {
+@@ -71,8 +74,14 @@ void CreatNetPage::initComponent() {
+     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
+     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
++//    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
++//    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
++    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
++        setCreatePageState(false);
++    });
++    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
++        setCreatePageState(true);
++    });
+ }
+ 
+ bool CreatNetPage::checkConnectBtnIsEnabled()
+@@ -99,7 +108,7 @@ bool CreatNetPage::checkConnectBtnIsEnabled()
+             qDebug() << "create ipv4 gateway empty or invalid";
+             return false;
+         }
+-
++#if 0
+         if (firstDnsEdit->text().isEmpty() && !secondDnsEdit->text().isEmpty()) {
+             qDebug() << "create ipv4 dns sort invalid";
+             return false;
+@@ -114,6 +123,7 @@ bool CreatNetPage::checkConnectBtnIsEnabled()
+             qDebug() << "create ipv4 second dns invalid";
+             return false;
+         }
++#endif
+     }
+     return true;
+ }
+@@ -132,15 +142,22 @@ void CreatNetPage::setLineEnabled(bool check) {
+     ipv4addressEdit->setEnabled(check);
+     netMaskEdit->setEnabled(check);
+     gateWayEdit->setEnabled(check);
+-    firstDnsEdit->setEnabled(check);
+-    secondDnsEdit->setEnabled(check);
++//    firstDnsEdit->setEnabled(check);
++//    secondDnsEdit->setEnabled(check);
++    m_dnsWidget->setEditEnabled(check);
+ 
+     if (!check) {
+         ipv4addressEdit->clear();
+         netMaskEdit->clear();
+         gateWayEdit->clear();
+-        firstDnsEdit->clear();
+-        secondDnsEdit->clear();
++//        firstDnsEdit->clear();
++//        secondDnsEdit->clear();
++
++        ipv4addressEdit->setPlaceholderText(" ");
++        netMaskEdit->setPlaceholderText(" ");
++    } else {
++        ipv4addressEdit->setPlaceholderText(tr("Required")); //ÂøÖÂ°´
++        netMaskEdit->setPlaceholderText(tr("Required")); //ÂøÖÂ°´
+     }
+ }
+ 
+@@ -172,13 +189,23 @@ void CreatNetPage::constructIpv4Info(KyConnectSetting &setting)
+              << " gateWay " << gateWay;
+ 
+     QStringList dnsList;
+-    dnsList.empty();
++    dnsList.clear();
++#if 0
+     if (!firstDnsEdit->text().isEmpty()) {
+         dnsList << firstDnsEdit->text();
+         if (!secondDnsEdit->text().isEmpty()) {
+             dnsList << secondDnsEdit->text();
+         }
+     }
++#endif
++
++    QList<QHostAddress> ipv4dnsList;
++    ipv4dnsList.clear();
++    ipv4dnsList = m_dnsWidget->getDns();
++    for (QHostAddress str: ipv4dnsList) {
++        dnsList << str.toString();
++    }
++
+     if (ipv4ConfigCombox->currentData() == AUTO_CONFIG) {
+         setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
+     } else {
+diff --git a/src/frontend/netdetails/creatnetpage.h b/src/frontend/netdetails/creatnetpage.h
+index b0809ba..5152535 100644
+--- a/src/frontend/netdetails/creatnetpage.h
++++ b/src/frontend/netdetails/creatnetpage.h
+@@ -13,6 +13,7 @@
+ #include <QDebug>
+ 
+ #include "coninfo.h"
++#include "multiplednswidget.h"
+ 
+ class CreatNetPage : public QFrame
+ {
+@@ -27,10 +28,9 @@ private:
+     LineEdit *ipv4addressEdit;
+     LineEdit *netMaskEdit;
+     LineEdit *gateWayEdit;
+-    LineEdit *firstDnsEdit;
+-    LineEdit *secondDnsEdit;
++//    LineEdit *firstDnsEdit;
++//    LineEdit *secondDnsEdit;
+ 
+-private:
+     QFormLayout *m_detailLayout;
+     QVBoxLayout *mvBoxLayout;
+     QLabel *m_connNameLabel;
+@@ -38,8 +38,9 @@ private:
+     QLabel *m_addressLabel;
+     QLabel *m_maskLabel;
+     QLabel *m_gateWayLabel;
+-    QLabel *m_dnsLabel;
+-    QLabel *m_secDnsLabel;
++//    QLabel *m_dnsLabel;
++//    QLabel *m_secDnsLabel;
++    MultipleDnsWidget *m_dnsWidget = nullptr;
+ private:
+     void initUI();
+     void initComponent();
+diff --git a/src/frontend/netdetails/ipv4page.cpp b/src/frontend/netdetails/ipv4page.cpp
+index 7cc11f5..1468e2d 100644
+--- a/src/frontend/netdetails/ipv4page.cpp
++++ b/src/frontend/netdetails/ipv4page.cpp
+@@ -13,30 +13,35 @@ void Ipv4Page::initUI() {
+     ipv4addressEdit = new LineEdit(this);
+     netMaskEdit = new LineEdit(this);
+     gateWayEdit = new LineEdit(this);
+-    firstDnsEdit = new LineEdit(this);
+-    secondDnsEdit = new LineEdit(this);
++//    firstDnsEdit = new LineEdit(this);
++//    secondDnsEdit = new LineEdit(this);
+ 
+     m_configLabel = new QLabel(this);
+     m_addressLabel = new QLabel(this);
+     m_maskLabel = new QLabel(this);
+     m_gateWayLabel = new QLabel(this);
+-    m_dnsLabel = new QLabel(this);
+-    m_secDnsLabel = new QLabel(this);
++//    m_dnsLabel = new QLabel(this);
++//    m_secDnsLabel = new QLabel(this);
+ 
+     m_configLabel->setText(tr("Ipv4Config"));
+     m_addressLabel->setText(tr("Address"));
+     m_maskLabel->setText(tr("Netmask"));
+     m_gateWayLabel->setText(tr("Default Gateway"));
+-    m_dnsLabel->setText(tr("Prefs DNS"));
+-    m_secDnsLabel->setText(tr("Alternative DNS"));
++//    m_dnsLabel->setText(tr("Prefs DNS"));
++//    m_secDnsLabel->setText(tr("Alternative DNS"));
++
++    // IPÁöÑÊ≠£ÂàôÊ†ºÂºèÈôêÂà∂
++    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
++    m_dnsWidget = new MultipleDnsWidget(rx, this);
+ 
+     m_detailLayout = new QFormLayout(this);
+     m_detailLayout->addRow(m_configLabel,ipv4ConfigCombox);
+     m_detailLayout->addRow(m_addressLabel,ipv4addressEdit);
+     m_detailLayout->addRow(m_maskLabel,netMaskEdit);
+     m_detailLayout->addRow(m_gateWayLabel,gateWayEdit);
+-    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
+-    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
++//    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
++//    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
++    m_detailLayout->addRow(m_dnsWidget);
+ 
+     ipv4ConfigCombox->addItem(tr("Auto(DHCP)")); //"Ëá™Âä®(DHCP)"
+     ipv4ConfigCombox->addItem(tr("Manual")); //"ÊâãÂä®"
+@@ -48,15 +53,11 @@ void Ipv4Page::initUI() {
+ //    netMaskCombox->addItem("255.255.0.0"); //16
+ //    netMaskCombox->addItem("255.0.0.0"); //8
+ 
+-
+-    // IPÁöÑÊ≠£ÂàôÊ†ºÂºèÈôêÂà∂
+-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+-
+     ipv4addressEdit->setValidator(new QRegExpValidator(rx, this));
+     gateWayEdit->setValidator(new QRegExpValidator(rx, this));
+     netMaskEdit->setValidator(new QRegExpValidator(rx, this));
+-    firstDnsEdit->setValidator(new QRegExpValidator(rx, this));
+-    secondDnsEdit->setValidator(new QRegExpValidator(rx, this));
++//    firstDnsEdit->setValidator(new QRegExpValidator(rx, this));
++//    secondDnsEdit->setValidator(new QRegExpValidator(rx, this));
+ }
+ 
+ void Ipv4Page::initComponent() {
+@@ -71,8 +72,14 @@ void Ipv4Page::initComponent() {
+     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
++//    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
++//    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
++    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
++        setIpv4PageState(false);
++    });
++    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
++        setIpv4PageState(true);
++    });
+ }
+ 
+ void Ipv4Page::setIpv4Config(KyIpConfigType ipv4Config)
+@@ -94,6 +101,11 @@ void Ipv4Page::setNetMask(const QString &netMask)
+     netMaskEdit->setText(netMask);
+ }
+ 
++void Ipv4Page::setMulDns(const QList<QHostAddress> &dns)
++{
++    m_dnsWidget->setDnsListText(dns);
++}
++#if 0
+ void Ipv4Page::setIpv4FirDns(const QString &ipv4FirDns)
+ {
+     firstDnsEdit->setText(ipv4FirDns);
+@@ -103,7 +115,7 @@ void Ipv4Page::setIpv4SecDns(const QString &ipv4SecDns)
+ {
+     secondDnsEdit->setText(ipv4SecDns);
+ }
+-
++#endif
+ void Ipv4Page::setGateWay(const QString &gateWay)
+ {
+     gateWayEdit->setText(gateWay);
+@@ -132,15 +144,25 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
+             isChanged =  true;
+         }
+         qDebug() << "ipv4 netmask " << getNetMaskText(netMaskEdit->text());
++
++        QList<QHostAddress> ipv4dnsList;
++        ipv4dnsList.clear();
++        ipv4dnsList = m_dnsWidget->getDns();
++
+         if(info.strIPV4Address != ipv4addressEdit->text()
+                 || info.strIPV4NetMask != /*netMaskEdit->text()*/getNetMaskText(netMaskEdit->text())
+                 || info.strIPV4GateWay != gateWayEdit->text()
+-                || info.strIPV4FirDns  != firstDnsEdit->text()
+-                || info.strIPV4SecDns  != secondDnsEdit->text()) {
++                //                || info.strIPV4FirDns  != firstDnsEdit->text()
++                //                || info.strIPV4SecDns  != secondDnsEdit->text()
++                || info.ipv4DnsList != ipv4dnsList) {
+ 
+             qDebug() << "ipv4 info changed";
+             QStringList dnsList;
+-            dnsList.empty();
++            dnsList.clear();
++            for (QHostAddress str: ipv4dnsList) {
++                dnsList << str.toString();
++            }
++#if 0
+             if (!firstDnsEdit->text().isEmpty()) {
+                 dnsList << firstDnsEdit->text();
+                 if (!secondDnsEdit->text().isEmpty()) {
+@@ -148,6 +170,7 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
+                 }
+             }
+ 
++#endif
+             QString ipv4address =ipv4addressEdit->text();
+             QString netMask = getNetMaskText(netMaskEdit->text());
+             QString gateWay = gateWayEdit->text();
+@@ -180,7 +203,7 @@ bool Ipv4Page::checkConnectBtnIsEnabled()
+ //            qDebug() << "ipv4 gateway empty or invalid";
+ //            return false;
+ //        }
+-
++#if 0
+         if (firstDnsEdit->text().isEmpty() && !secondDnsEdit->text().isEmpty()) {
+             qDebug() << "ipv4 dns sort invalid";
+             return false;
+@@ -195,6 +218,7 @@ bool Ipv4Page::checkConnectBtnIsEnabled()
+             qDebug() << "ipv4 second dns invalid";
+             return false;
+         }
++#endif
+     }
+     return true;
+ }
+@@ -213,15 +237,16 @@ void Ipv4Page::setLineEnabled(bool check) {
+     ipv4addressEdit->setEnabled(check);
+     netMaskEdit->setEnabled(check);
+     gateWayEdit->setEnabled(check);
+-    firstDnsEdit->setEnabled(check);
+-    secondDnsEdit->setEnabled(check);
++//    firstDnsEdit->setEnabled(check);
++//    secondDnsEdit->setEnabled(check);
++    m_dnsWidget->setEditEnabled(check);
+ 
+     if (!check) {
+         ipv4addressEdit->clear();
+         netMaskEdit->clear();
+         gateWayEdit->clear();
+-        firstDnsEdit->clear();
+-        secondDnsEdit->clear();
++//        firstDnsEdit->clear();
++//        secondDnsEdit->clear();
+     }
+ }
+ 
+diff --git a/src/frontend/netdetails/ipv4page.h b/src/frontend/netdetails/ipv4page.h
+index ab06ce7..6d9b4e9 100644
+--- a/src/frontend/netdetails/ipv4page.h
++++ b/src/frontend/netdetails/ipv4page.h
+@@ -14,6 +14,7 @@
+ 
+ //#include "kylinconnectsetting.h"
+ #include "coninfo.h"
++#include "multiplednswidget.h"
+ 
+ class Ipv4Page : public QFrame
+ {
+@@ -23,8 +24,9 @@ public:
+     void setIpv4Config(KyIpConfigType ipv4Config);
+     void setIpv4(const QString &ipv4);
+     void setNetMask(const QString &netMask);
+-    void setIpv4FirDns(const QString &ipv4FirDns);
+-    void setIpv4SecDns(const QString &ipv4SecDns);
++//    void setIpv4FirDns(const QString &ipv4FirDns);
++//    void setIpv4SecDns(const QString &ipv4SecDns);
++    void setMulDns(const QList<QHostAddress> &dns);
+     void setGateWay(const QString &gateWay);
+ 
+     QString getNetMaskText(QString text);
+@@ -35,8 +37,8 @@ private:
+     LineEdit *ipv4addressEdit;
+     LineEdit *netMaskEdit;
+     LineEdit *gateWayEdit;
+-    LineEdit *firstDnsEdit;
+-    LineEdit *secondDnsEdit;
++//    LineEdit *firstDnsEdit;
++//    LineEdit *secondDnsEdit;
+ 
+ private:
+     QFormLayout *m_detailLayout;
+@@ -45,8 +47,9 @@ private:
+     QLabel *m_addressLabel;
+     QLabel *m_maskLabel;
+     QLabel *m_gateWayLabel;
+-    QLabel *m_dnsLabel;
+-    QLabel *m_secDnsLabel;
++//    QLabel *m_dnsLabel;
++//    QLabel *m_secDnsLabel;
++    MultipleDnsWidget *m_dnsWidget = nullptr;
+ private:
+     void initUI();
+     void initComponent();
+diff --git a/src/frontend/netdetails/ipv6page.cpp b/src/frontend/netdetails/ipv6page.cpp
+index d7453be..a29a788 100644
+--- a/src/frontend/netdetails/ipv6page.cpp
++++ b/src/frontend/netdetails/ipv6page.cpp
+@@ -26,6 +26,11 @@ void Ipv6Page::setIpv6Perfix(const int &ipv6Perfix)
+     lengthEdit->setText(QString::number(ipv6Perfix));
+ }
+ 
++void Ipv6Page::setMulDns(const QList<QHostAddress> &dns)
++{
++    m_dnsWidget->setDnsListText(dns);
++}
++#if 0
+ void Ipv6Page::setIpv6FirDns(const QString &ipv6FirDns)
+ {
+     firstDnsEdit->setText(ipv6FirDns);
+@@ -35,7 +40,7 @@ void Ipv6Page::setIpv6SecDns(const QString &ipv6SecDns)
+ {
+     secondDnsEdit->setText(ipv6SecDns);
+ }
+-
++#endif
+ void Ipv6Page::setGateWay(const QString &gateWay)
+ {
+     gateWayEdit->setText(gateWay);
+@@ -62,22 +67,32 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
+             setting.setIpConfigType(IPADDRESS_V6, CONFIG_IP_MANUAL);
+             isChanged =  true;
+         }
++
++        QList<QHostAddress> ipv6dnsList;
++        ipv6dnsList.clear();
++        ipv6dnsList = m_dnsWidget->getDns();
++
+         if(info.strIPV6Address != ipv6AddressEdit->text()
+                 || info.iIPV6Prefix != lengthEdit->text().toInt()
+-                || info.strIPV6GateWay != gateWayEdit->text()
+-                || info.strIPV6FirDns  != firstDnsEdit->text()
+-                || info.strIPV6SecDns  != secondDnsEdit->text()) {
++                || info.strIPV6GateWay != gateWayEdit->text()              
++                //                || info.strIPV6FirDns  != firstDnsEdit->text()
++                //                || info.strIPV6SecDns  != secondDnsEdit->text()
++                || info.ipv6DnsList != ipv6dnsList) {
+ 
+             qDebug() << "ipv6 info changed";
+             QStringList dnsList;
+-            dnsList.empty();
++            dnsList.clear();
++            for (QHostAddress str: ipv6dnsList) {
++                dnsList << str.toString();
++            }
++#if 0
+             if (!firstDnsEdit->text().isEmpty()) {
+                 dnsList << firstDnsEdit->text();
+                 if (!secondDnsEdit->text().isEmpty()) {
+                     dnsList << secondDnsEdit->text();
+                 }
+             }
+-
++#endif
+             QString ipv6address =ipv6AddressEdit->text();
+             QString prefix = lengthEdit->text();
+             QString gateWay = gateWayEdit->text();
+@@ -94,41 +109,43 @@ void Ipv6Page::initUI() {
+     ipv6AddressEdit = new LineEdit(this);
+     lengthEdit = new LineEdit(this);
+     gateWayEdit = new LineEdit(this);
+-    firstDnsEdit = new LineEdit(this);
+-    secondDnsEdit = new LineEdit(this);
++//    firstDnsEdit = new LineEdit(this);
++//    secondDnsEdit = new LineEdit(this);
+ 
+     m_configLabel = new QLabel(this);
+     m_addressLabel = new QLabel(this);
+     m_subnetLabel = new QLabel(this);
+     m_gateWayLabel = new QLabel(this);
+-    m_dnsLabel = new QLabel(this);
+-    m_secDnsLabel = new QLabel(this);
++//    m_dnsLabel = new QLabel(this);
++//    m_secDnsLabel = new QLabel(this);
+ 
+ 
+     m_configLabel->setText(tr("Ipv6Config"));
+     m_addressLabel->setText(tr("Address"));
+     m_subnetLabel->setText(tr("Subnet prefix Length"));
+     m_gateWayLabel->setText(tr("Default Gateway"));
+-    m_dnsLabel->setText(tr("Prefs DNS"));
+-    m_secDnsLabel->setText(tr("Alternative DNS"));
++//    m_dnsLabel->setText(tr("Prefs DNS"));
++//    m_secDnsLabel->setText(tr("Alternative DNS"));
+ 
++    QRegExp ipv6_rx("^\\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?\\s*$");
++    m_dnsWidget = new MultipleDnsWidget(ipv6_rx, this);
+ 
+     m_detailLayout = new QFormLayout(this);
+     m_detailLayout->addRow(m_configLabel,ipv6ConfigCombox);
+     m_detailLayout->addRow(m_addressLabel,ipv6AddressEdit);
+     m_detailLayout->addRow(m_subnetLabel,lengthEdit);
+     m_detailLayout->addRow(m_gateWayLabel,gateWayEdit);
+-    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
+-    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
++//    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
++//    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
++    m_detailLayout->addRow(m_dnsWidget);
+ 
+     ipv6ConfigCombox->addItem(tr("Auto(DHCP)")); //"Ëá™Âä®(DHCP)"
+     ipv6ConfigCombox->addItem(tr("Manual")); //"ÊâãÂä®"
+ 
+-    QRegExp ipv6_rx("^\\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?\\s*$");
+     ipv6AddressEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
+     gateWayEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
+-    firstDnsEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
+-    secondDnsEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
++//    firstDnsEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
++//    secondDnsEdit->setValidator(new QRegExpValidator(ipv6_rx, this));
+ 
+     QRegExp prefix_rx("\\b(?:(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\.){3}(?:12[0-8]|1[0-1][0-9]|^[1-9][0-9]?$)\\b");
+     lengthEdit->setValidator(new QRegExpValidator(prefix_rx,this));
+@@ -146,8 +163,14 @@ void Ipv6Page::initComponent() {
+     connect(ipv6AddressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+     connect(lengthEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
++//    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
++//    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
++    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
++        setIpv6PageState(false);
++    });
++    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
++        setIpv6PageState(true);
++    });
+ }
+ 
+ void Ipv6Page::configChanged(int index) {
+@@ -164,15 +187,16 @@ void Ipv6Page::setControlEnabled(bool check)
+     ipv6AddressEdit->setEnabled(check);
+     lengthEdit->setEnabled(check);
+     gateWayEdit->setEnabled(check);
+-    firstDnsEdit->setEnabled(check);
+-    secondDnsEdit->setEnabled(check);
++    m_dnsWidget->setEditEnabled(check);
++//    firstDnsEdit->setEnabled(check);
++//    secondDnsEdit->setEnabled(check);
+ 
+     if (!check) {
+         ipv6AddressEdit->clear();
+         lengthEdit->clear();
+         gateWayEdit->clear();
+-        firstDnsEdit->clear();
+-        secondDnsEdit->clear();
++//        firstDnsEdit->clear();
++//        secondDnsEdit->clear();
+     }
+ }
+ 
+@@ -200,7 +224,7 @@ bool Ipv6Page::checkConnectBtnIsEnabled()
+             qDebug() << "ipv6 gateway empty or invalid";
+             return false;
+         }
+-
++#if 0
+         if (firstDnsEdit->text().isEmpty() && !secondDnsEdit->text().isEmpty()) {
+             qDebug() << "ipv6 dns sort invalid";
+             return false;
+@@ -215,6 +239,7 @@ bool Ipv6Page::checkConnectBtnIsEnabled()
+             qDebug() << "ipv6 second dns invalid";
+             return false;
+         }
++#endif
+     }
+     return true;
+ }
+diff --git a/src/frontend/netdetails/ipv6page.h b/src/frontend/netdetails/ipv6page.h
+index 5e8d430..178f5df 100644
+--- a/src/frontend/netdetails/ipv6page.h
++++ b/src/frontend/netdetails/ipv6page.h
+@@ -14,6 +14,7 @@
+ 
+ //#include "kylinconnectsetting.h"
+ #include "coninfo.h"
++#include "multiplednswidget.h"
+ 
+ class Ipv6Page : public QFrame
+ {
+@@ -23,29 +24,32 @@ public:
+     void setIpv6Config(KyIpConfigType ipv6Config);
+     void setIpv6(const QString &ipv4);
+     void setIpv6Perfix(const int &ipv6Perfix);
+-    void setIpv6FirDns(const QString &ipv6FirDns);
+-    void setIpv6SecDns(const QString &ipv6SecDns);
++//    void setIpv6FirDns(const QString &ipv6FirDns);
++//    void setIpv6SecDns(const QString &ipv6SecDns);
++    void setMulDns(const QList<QHostAddress> &dns);
+     void setGateWay(const QString &gateWay);
+ 
+     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
+ 
+     int getPerfixLength(QString text);
+ 
+-public:
++private:
+     QComboBox *ipv6ConfigCombox;
+     LineEdit *ipv6AddressEdit;
+     LineEdit *lengthEdit;
+     LineEdit *gateWayEdit;
+-    LineEdit *firstDnsEdit;
+-    LineEdit *secondDnsEdit;
++//    LineEdit *firstDnsEdit;
++//    LineEdit *secondDnsEdit;
+ private:
+     QFormLayout *m_detailLayout;
+     QLabel *m_configLabel;
+     QLabel *m_addressLabel;
+     QLabel *m_subnetLabel;
+     QLabel *m_gateWayLabel;
+-    QLabel *m_dnsLabel;
+-    QLabel *m_secDnsLabel;
++//    QLabel *m_dnsLabel;
++//    QLabel *m_secDnsLabel;
++
++    MultipleDnsWidget *m_dnsWidget = nullptr;
+ private:
+     void initUI();
+     void initComponent();
+diff --git a/src/frontend/netdetails/multiplednswidget.cpp b/src/frontend/netdetails/multiplednswidget.cpp
+new file mode 100644
+index 0000000..55aca59
+--- /dev/null
++++ b/src/frontend/netdetails/multiplednswidget.cpp
+@@ -0,0 +1,189 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
++ *
++ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
++ *
++ */
++#include "multiplednswidget.h"
++
++#include <QApplication>
++
++#define DNS_LISTWIDGET_HEIGHT 76
++#define BUTTON_SIZE 36,36
++#define ITEM_HEIGHT 36
++
++MultipleDnsWidget::MultipleDnsWidget(const QRegExp &rx, QWidget *parent)
++    : m_regExp(rx),
++      QWidget(parent)
++{
++    initUI();
++    initComponent();
++}
++
++void MultipleDnsWidget::initUI()
++{
++    QVBoxLayout *mulDnsVLayout = new QVBoxLayout(this);
++    mulDnsVLayout->setContentsMargins(0, 0, 0, 0);
++
++    m_mulDnsLabel = new QLabel(this);
++    m_mulDnsLabel->setText(tr("DNS server:")); //DNSÊúçÂä°Âô®Ôºö
++    m_dnsListWidget = new QListWidget(this);
++    m_dnsListWidget->setFixedHeight(DNS_LISTWIDGET_HEIGHT);
++    m_dnsListWidget->setBackgroundRole(QPalette::Base);
++    m_dnsListWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
++    m_dnsListWidget->setFrameShape(QFrame::Shape::StyledPanel);
++    m_dnsListWidget->setEditTriggers(QAbstractItemView::DoubleClicked);
++    setDnsListWidgetStyle();
++
++    m_addDnsBtn = new QPushButton(this);
++    m_addDnsBtn->setFixedSize(BUTTON_SIZE);
++    m_addDnsBtn->setProperty("useButtonPalette", true);
++    m_addDnsBtn->setIcon(QIcon::fromTheme("list-add-symbolic"));
++    m_removeDnsBtn = new QPushButton(this);
++    m_removeDnsBtn->setFixedSize(BUTTON_SIZE);
++    m_removeDnsBtn->setProperty("useButtonPalette", true);
++    m_removeDnsBtn->setIcon(QIcon::fromTheme("list-remove-symbolic"));
++    m_removeDnsBtn->setEnabled(false);
++    QHBoxLayout *btnHLayout = new QHBoxLayout();
++    btnHLayout->setContentsMargins(0, 0, 0, 0);
++    btnHLayout->setSpacing(1);
++    btnHLayout->setAlignment(Qt::AlignLeft);
++    btnHLayout->addWidget(m_addDnsBtn);
++    btnHLayout->addWidget(m_removeDnsBtn);
++
++    mulDnsVLayout->addWidget(m_mulDnsLabel, Qt::AlignLeft);
++    mulDnsVLayout->addWidget(m_dnsListWidget);
++    mulDnsVLayout->addLayout(btnHLayout);
++}
++
++void MultipleDnsWidget::initComponent()
++{
++    connect(qApp, &QApplication::paletteChanged, this, &MultipleDnsWidget::setDnsListWidgetStyle);
++    connect(m_addDnsBtn, &QPushButton::clicked, this, &MultipleDnsWidget::onAddBtnClicked);
++    connect(m_removeDnsBtn, &QPushButton::clicked, this, &MultipleDnsWidget::onRemoveBtnClicked);
++    connect(m_dnsListWidget, &QListWidget::itemClicked, this, [=]() {
++        if (m_dnsListWidget->count() < 1) {
++            m_removeDnsBtn->setEnabled(false);
++        } else {
++            m_removeDnsBtn->setEnabled(true);
++        }
++    });
++    connect(m_dnsListWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) {
++        m_dnsListWidget->edit(m_dnsListWidget->currentIndex());
++        item->setFlags(item->flags() | Qt::ItemIsEditable);
++        ListItemEdit *dnsListItemEdit = new ListItemEdit(m_regExp);
++        m_dnsListWidget ->setItemDelegateForRow(m_dnsListWidget->currentIndex().row(), dnsListItemEdit);
++        connect(dnsListItemEdit, SIGNAL(textChanged(QString)), this, SIGNAL(dnsTextChanged(QString)));
++        connect(dnsListItemEdit, SIGNAL(editingFinished()), this, SIGNAL(dnsEditingFinished()));
++    });
++}
++
++void MultipleDnsWidget::setEditEnabled(bool state)
++{
++    m_addDnsBtn->setEnabled(state);
++
++    if (!state) {
++        m_dnsListWidget->clear();
++    }
++}
++
++QList<QHostAddress> MultipleDnsWidget::getDns() const
++{
++    QStringList dnsList;
++    dnsList.clear();
++    QList<QHostAddress> ipv4dnsList;
++    ipv4dnsList.clear();
++    int row = 0;
++    QString aDns;
++    while (m_dnsListWidget->count() > row) {
++        aDns = m_dnsListWidget->item(row)->text();
++        if (!dnsList.contains(aDns)) {
++            dnsList << aDns;
++            ipv4dnsList << QHostAddress(aDns);
++        }
++        row ++;
++    }
++    return ipv4dnsList;
++}
++
++void MultipleDnsWidget::setDnsListText(const QList<QHostAddress> &dns)
++{
++    m_dnsListWidget->clear();
++    for (QHostAddress str: dns) {
++        QListWidgetItem *dnsListWidgetItem = new QListWidgetItem(m_dnsListWidget);
++        dnsListWidgetItem->setSizeHint(QSize(0,ITEM_HEIGHT));
++        dnsListWidgetItem->setText(str.toString());
++    }
++}
++
++void MultipleDnsWidget::AddOneDnsItem(QListWidget *listWidget)
++{
++    QListWidgetItem *dnsListWidgetItem = new QListWidgetItem(listWidget);
++    dnsListWidgetItem->setSizeHint(QSize(0,ITEM_HEIGHT));
++    dnsListWidgetItem->setFlags(dnsListWidgetItem->flags() | Qt::ItemIsEditable);
++    listWidget->addItem(dnsListWidgetItem);
++    listWidget->setCurrentItem(dnsListWidgetItem);
++
++    ListItemEdit *dnsListItemEdit = new ListItemEdit(m_regExp);
++    listWidget->setItemDelegateForRow(listWidget->currentIndex().row() , dnsListItemEdit);
++    listWidget->editItem(dnsListWidgetItem);
++
++    connect(dnsListItemEdit, SIGNAL(textChanged(QString)), this, SIGNAL(dnsTextChanged(QString)));
++    connect(dnsListItemEdit, SIGNAL(editingFinished()), this, SIGNAL(dnsEditingFinished()));
++}
++
++void MultipleDnsWidget::RemoveOneDnsItem(QListWidgetItem *aItem, QListWidget *listWidget)
++{
++    if (aItem) {
++        listWidget->removeItemWidget(aItem);
++        delete aItem;
++    }
++}
++
++void MultipleDnsWidget::setDnsListWidgetStyle()
++{
++    QPalette mpal(m_dnsListWidget->palette());
++    mpal.setColor(QPalette::Base, qApp->palette().base().color());
++    mpal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
++    m_dnsListWidget->setAlternatingRowColors(true);
++    m_dnsListWidget->setPalette(mpal);
++}
++
++void MultipleDnsWidget::onAddBtnClicked()
++{
++    //ÈÅøÂÖçÈáçÂ§çÊ∑ªÂä†Á©∫ÁôΩÈ°π
++    if (m_dnsListWidget->currentItem()) {
++        if (m_dnsListWidget->currentItem()->text().isEmpty()) {
++            m_dnsListWidget->removeItemWidget(m_dnsListWidget->currentItem());
++            delete m_dnsListWidget->currentItem();
++        }
++    }
++
++    AddOneDnsItem(m_dnsListWidget);
++    m_removeDnsBtn->setEnabled(true);
++}
++
++void MultipleDnsWidget::onRemoveBtnClicked()
++{
++    QListWidgetItem *aItem = m_dnsListWidget->currentItem();
++    if (!aItem) {
++        return;
++    }
++    RemoveOneDnsItem(aItem, m_dnsListWidget);
++    if (m_dnsListWidget->count()< 1) {
++        m_removeDnsBtn->setEnabled(false);
++    }
++}
+diff --git a/src/frontend/netdetails/multiplednswidget.h b/src/frontend/netdetails/multiplednswidget.h
+new file mode 100644
+index 0000000..8a4ef1c
+--- /dev/null
++++ b/src/frontend/netdetails/multiplednswidget.h
+@@ -0,0 +1,70 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
++ *
++ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
++ *
++ */
++#ifndef MULTIPLEDNSWIDGET_H
++#define MULTIPLEDNSWIDGET_H
++
++#include <QWidget>
++#include <QLabel>
++#include <QLayout>
++#include <QLineEdit>
++#include <QListWidget>
++#include <QPushButton>
++#include <QAbstractItemView>
++#include <QString>
++#include <QList>
++#include <QHostAddress>
++#include <QDebug>
++
++#include "listitemedit.h"
++
++class MultipleDnsWidget: public QWidget
++{
++    Q_OBJECT
++
++public:
++    MultipleDnsWidget(const QRegExp &rx, QWidget *parent = nullptr);
++    ~MultipleDnsWidget() = default;
++    void setEditEnabled(bool state);
++    QList<QHostAddress> getDns() const;
++    void setDnsListText(const QList<QHostAddress> &dns);
++
++private:
++    void initUI();
++    void initComponent();
++    void AddOneDnsItem(QListWidget *listWidget);
++    void RemoveOneDnsItem(QListWidgetItem *aItem, QListWidget *listWidget);
++
++    QLabel *m_mulDnsLabel;
++    QListWidget  *m_dnsListWidget = nullptr;
++    QPushButton *m_addDnsBtn;
++    QPushButton *m_removeDnsBtn;
++    QRegExp m_regExp;
++
++private Q_SLOTS:
++    void setDnsListWidgetStyle();
++    void onAddBtnClicked();
++    void onRemoveBtnClicked();
++
++Q_SIGNALS:
++    void dnsTextChanged(const QString &);
++    void dnsEditingFinished();
++};
++
++#endif // MULTIPLEDNSWIDGET_H
+diff --git a/src/frontend/netdetails/netdetail.cpp b/src/frontend/netdetails/netdetail.cpp
+index 3a83be4..2622e80 100644
+--- a/src/frontend/netdetails/netdetail.cpp
++++ b/src/frontend/netdetails/netdetail.cpp
+@@ -367,8 +367,9 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
+         ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
+         ipv4Page->setIpv4(m_info.strIPV4Address);
+         ipv4Page->setNetMask(m_info.strIPV4NetMask);
+-        ipv4Page->setIpv4FirDns(m_info.strIPV4FirDns);
+-        ipv4Page->setIpv4SecDns(m_info.strIPV4SecDns);
++//        ipv4Page->setIpv4FirDns(m_info.strIPV4FirDns);
++//        ipv4Page->setIpv4SecDns(m_info.strIPV4SecDns);
++        ipv4Page->setMulDns(m_info.ipv4DnsList);
+         ipv4Page->setGateWay(m_info.strIPV4GateWay);
+     } else {
+         ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
+@@ -378,8 +379,9 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
+         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
+         ipv6Page->setIpv6(m_info.strIPV6Address);
+         ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
+-        ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
+-        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
++//        ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
++//        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
++        ipv6Page->setMulDns(m_info.ipv6DnsList);
+         ipv6Page->setGateWay(m_info.strIPV6GateWay);
+     } else {
+         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
+@@ -553,18 +555,13 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
+             conInfo.strIPV6GateWay = connetSetting.m_ipv6Address.at(0).gateway().toString();
+         }
+ 
+-        if (connetSetting.m_ipv6Dns.size() == 1) {
+-            conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
+-        } else if (connetSetting.m_ipv4Dns.size() > 1) {
+-            conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
+-            conInfo.strIPV6SecDns = connetSetting.m_ipv6Dns.at(1).toString();
+-        }
++        conInfo.ipv6DnsList = connetSetting.m_ipv6Dns;
+     }
+ 
+     if (!bActived) {
+         conInfo.strDynamicIpv4 = conInfo.strIPV4Address.isEmpty() ? tr("Auto") : conInfo.strIPV4Address;
+         conInfo.strDynamicIpv6 = conInfo.strIPV6Address.isEmpty() ? tr("Auto") : conInfo.strIPV6Address;
+-        conInfo.strDynamicIpv4Dns = conInfo.strIPV4FirDns.isEmpty() ? tr("Auto") : conInfo.strIPV4FirDns;
++        conInfo.strDynamicIpv4Dns = conInfo.ipv4DnsList.isEmpty() ? tr("Auto") : conInfo.ipv4DnsList.at(0).toString();
+     }
+ }
+ 
+@@ -1014,19 +1011,10 @@ void NetDetail::getIpv4Info(QString objPath, ConInfo &conInfo)
+                     while (!dbusArg2nd.atEnd()) {
+                         uint tempMap;
+                         dbusArg2nd >> tempMap;
+-                        addressVector.append(tempMap);
++                        QString dns(inet_ntoa(*(struct in_addr *)&tempMap));
++                        conInfo.ipv4DnsList << QHostAddress(dns);
+                     }
+                     dbusArg2nd.endArray();
+-                    if (addressVector.size() == 1) {
+-                        QString dns(inet_ntoa(*(struct in_addr *)&addressVector.at(0)));
+-                        conInfo.strIPV4FirDns = dns;
+-                    } else if (addressVector.size() > 1) {
+-                        QString dns1(inet_ntoa(*(struct in_addr *)&addressVector.at(0)));
+-                        QString dns2(inet_ntoa(*(struct in_addr *)&addressVector.at(1)));
+-                        conInfo.strIPV4FirDns = dns1;
+-                        conInfo.strIPV4SecDns = dns2;
+-                    }
+-
+                 } else if (inner_key == "gateway") {
+                     //gateway
+                     conInfo.strIPV4GateWay = innerMap.value(inner_key).toString();
+diff --git a/src/frontend/netdetails/netdetails.pri b/src/frontend/netdetails/netdetails.pri
+index 720a66b..f207a80 100644
+--- a/src/frontend/netdetails/netdetails.pri
++++ b/src/frontend/netdetails/netdetails.pri
+@@ -9,7 +9,8 @@ HEADERS += \
+     $$PWD/ipv4page.h \
+     $$PWD/ipv6page.h \
+     $$PWD/netdetail.h \
+-    $$PWD/securitypage.h
++    $$PWD/securitypage.h \
++    $$PWD/multiplednswidget.h
+ 
+ SOURCES += \
+     $$PWD/creatnetpage.cpp \
+@@ -19,4 +20,5 @@ SOURCES += \
+     $$PWD/ipv4page.cpp \
+     $$PWD/ipv6page.cpp \
+     $$PWD/netdetail.cpp \
+-    $$PWD/securitypage.cpp
++    $$PWD/securitypage.cpp \
++    $$PWD/multiplednswidget.cpp
+diff --git a/src/frontend/tab-pages/lanpage.cpp b/src/frontend/tab-pages/lanpage.cpp
+index 830b966..564fd00 100644
+--- a/src/frontend/tab-pages/lanpage.cpp
++++ b/src/frontend/tab-pages/lanpage.cpp
+@@ -1170,6 +1170,15 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
+     return;
+ }
+ 
++void LanPage::deleteWired(const QString &connUuid)
++{
++    qDebug() << "[LanPage] deleteWired" << connUuid;
++    if (connUuid == nullptr) {
++        return;
++    }
++    m_wiredConnectOperation->deleteWiredConnect(connUuid);
++}
++
+ bool LanPage::eventFilter(QObject *watched, QEvent *event)
+ {
+     if (watched == m_settingsBtn) {
+diff --git a/src/frontend/tab-pages/lanpage.h b/src/frontend/tab-pages/lanpage.h
+index 928a823..83155e2 100644
+--- a/src/frontend/tab-pages/lanpage.h
++++ b/src/frontend/tab-pages/lanpage.h
+@@ -25,6 +25,7 @@ public:
+ 
+     //for dbus
+     void getWiredList(QMap<QString, QVector<QStringList> > &map);
++    void deleteWired(const QString& connUuid);
+     void activateWired(const QString& devName, const QString& connUuid);
+     void deactivateWired(const QString& devName, const QString& connUuid);
+     void showDetailPage(QString devName, QString uuid);
+diff --git a/src/frontend/tools/listitemedit.cpp b/src/frontend/tools/listitemedit.cpp
+new file mode 100644
+index 0000000..af23206
+--- /dev/null
++++ b/src/frontend/tools/listitemedit.cpp
+@@ -0,0 +1,55 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
++ *
++ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
++ *
++ */
++#include "listitemedit.h"
++
++ListItemEdit::ListItemEdit(const QRegExp &rx, QObject *parent)
++    : m_regExp(rx),
++      QStyledItemDelegate(parent)
++{
++
++}
++
++QWidget *ListItemEdit::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
++{
++    QLineEdit *editor = new QLineEdit(parent);
++    editor->setValidator(new QRegExpValidator(m_regExp, parent));
++    connect(editor, SIGNAL(textChanged(QString)), this, SIGNAL(textChanged(QString)));
++    connect(editor, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
++    return editor;
++}
++
++void ListItemEdit::setEditorData(QWidget *editor, const QModelIndex &index) const
++{
++    QLineEdit *lineEdit =  static_cast <QLineEdit*>(editor);
++    QString text = index.model()->data(index, Qt::EditRole).toString();
++    lineEdit->setText(text);
++}
++
++void ListItemEdit::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
++{
++    QLineEdit *lineEdit =  static_cast <QLineEdit*>(editor);
++    QString text = lineEdit->text();
++    model->setData(index, text, Qt::EditRole);
++}
++
++void ListItemEdit::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
++{
++    editor->setGeometry(option.rect);
++}
+diff --git a/src/frontend/tools/listitemedit.h b/src/frontend/tools/listitemedit.h
+new file mode 100644
+index 0000000..e661409
+--- /dev/null
++++ b/src/frontend/tools/listitemedit.h
+@@ -0,0 +1,52 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
++ *
++ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
++ *
++ */
++#ifndef LISTITEMEDIT_H
++#define LISTITEMEDIT_H
++
++#include <QWidget>
++#include <QStyledItemDelegate>
++#include <QLineEdit>
++
++class ListItemEdit: public QStyledItemDelegate
++{
++    Q_OBJECT
++public:
++    ListItemEdit(const QRegExp &rx, QObject *parent = nullptr);
++    ~ListItemEdit() = default;
++
++    //ÂàõÂª∫‰∏Ä‰∏™Êéß‰ª∂
++    virtual QWidget *createEditor (QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
++    //Â∞ÜÊï∞ÊçÆËÆæÁΩÆÂà∞Êéß‰ª∂‰∏≠
++    virtual void setEditorData (QWidget *editor, const QModelIndex &index) const;
++    //Â∞ÜÊéß‰ª∂‰∏≠ÁöÑÊï∞ÊçÆÊõ¥Êñ∞Âà∞ÂØπÂ∫îÁöÑmodel‰∏≠
++    virtual void setModelData (QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
++    //Êõ¥Êñ∞Êéß‰ª∂‰ΩçÁΩÆ
++    void updateEditorGeometry(QWidget *editor,
++                              const QStyleOptionViewItem &option,
++                              const QModelIndex &index) const override;
++private:
++    QRegExp m_regExp;
++
++Q_SIGNALS:
++    void textChanged(const QString &);
++    void editingFinished();
++};
++
++#endif // LISTITEMEDIT_H
+diff --git a/src/frontend/tools/tools.pri b/src/frontend/tools/tools.pri
+index 7863428..9c26126 100644
+--- a/src/frontend/tools/tools.pri
++++ b/src/frontend/tools/tools.pri
+@@ -3,6 +3,7 @@ INCLUDEPATH += $$PWD
+ HEADERS += \
+     $$PWD/divider.h \
+     $$PWD/infobutton.h \
++    $$PWD/listitemedit.h \
+     $$PWD/loadingdiv.h \
+     $$PWD/radioitembutton.h \
+     $$PWD/switchbutton.h \
+@@ -12,6 +13,7 @@ HEADERS += \
+ SOURCES += \
+     $$PWD/divider.cpp \
+     $$PWD/infobutton.cpp \
++    $$PWD/listitemedit.cpp \
+     $$PWD/loadingdiv.cpp \
+     $$PWD/radioitembutton.cpp \
+     $$PWD/switchbutton.cpp \
+diff --git a/translations/kylin-nm_zh_CN.qm b/translations/kylin-nm_zh_CN.qm
+index 8164222..97e9fc8 100644
+--- a/translations/kylin-nm_zh_CN.qm
++++ b/translations/kylin-nm_zh_CN.qm
+@@ -1,24 +1,23 @@
+-<∏d ÔúïÕ!ø`°Ω›B  »  O⁄  ﬁ  P^  	ë  P^  K åØ  u ÷ç  I ÷ç  m î  O ñ  y 7j  ∂ VE  Ÿ VE   ¿^  ‡ ¿^  § T  < <1  ∞ 0  
+-… 0  £ 0  ‚ 0}   IË  D NYz  J NYö  | X}z  R Çb¨  Æ ÷óâ  	¸ ﬁL  ˆ ¯ì™  Ä±y   ·±y  Ò±y  dP®ï   ©çñ  
+-˛çñ  BÃDô   nÃDô  ∆ÃDô  9’åé  Ù-¿§  ∏-¿§  ÄKWµ  ˆó‹y  ëÌW^  ıs  'Fí*  „ê©%  dòIº  ∑òIº  õ¨ß¸  ÏØÉW  é∂7˛  9À8À  {À8À  ÷çƒ  O¡  r8[|  P8[|  X8[|  ÀK%w  ¶g  –ÄäÑ  'ôì  ≠'ƒı  b{då  Øµ“j  $Ô·  ≠ã™~  ∆´å„    ´å„  h´å„  €ÄÑ  î4U  {P¯N  °Kg  °Kg  %™„‰  *ÏÄÑ  =	5]ÿ  "	d˚:  
+-	oÓ  ¥	u'  
+-C	…  Î	€2˙  	ËØ  ï	¯Ø  =
++<∏d ÔúïÕ!ø`°Ω›B  ÿ  O⁄    P^  	æ  P^  x åØ  · ÷ç  µ ÷ç  Ÿ î  ª ñ  Â 7j  „ VE  E VE  o ¿^   ¿^   T  ® <1   0  
++ˆ 0   0  N 0}  : IË  q NYz  w NYö  © X}z   Çb¨   ÷óâ  
++) ﬁL  b ¯ì™  ≠±y   ·±y  ±y  ëP®ï   ©çñ  +çñ  ÆÃDô   nÃDô  ÛÃDô  f’åé  `-¿§  Â-¿§  ÏKWµ  bó‹y  ˝ÌW^  as  ìFí*  ê©%  –òIº  ‰òIº  ¨ß¸  XØÉW  ˙∂7˛  •À8À  {À8À  ¨÷çƒ  ª¡  ü8[|  P8[|  Ö8[|  ¯K%w  ”g  <ÄäÑ  ìôì  'ƒı  Œ{då  ‹µ“j  QÔ·  ã™~  2´å„    ´å„  ï´å„  ÄÑ   4U  ÁP¯N  K°Kg  °Kg  R™„‰  ñÏÄÑ  ©	5]ÿ  O	d˚:  7	oÓ   	u'  
++p	Ä˘*  i	…  W	€2˙  B	ËØ  	¯Ø  ©
+ Iì   4
+-Iì  ê
+-Iì  
+-a˚4  ä
+-a˚4   
+-d–Õ  √
+-eK‰  Í
+-eK‰  _
+-eK‰  Ù
+-°Kg  ò
+-≈¥I  ïFóπ  d©E  2£ò≈  ¥¨ï)  ˝¨ï)  W’ ≥  ´’ ≥  ´’ ≥  Ú@Íæ  uúHe  Üªs  uªs  ’H…  +,û  	^\û  	-à2…  	∏àk…  œ˘u  u‚  Ì€  <1  jÈ˙‰  πÆBŒ  ﬂ∞≠$  Î∞≠$  
+-ãÎ§  Ìi  ^    I P V 4W0W@       Address   CreatNetPage   
++Iì  Ω
++Iì  0
++a˚4  ∑
++a˚4  å
++d–Õ  /
++eK‰  
++eK‰  å
++eK‰  `
++°Kg  ≈
++≈¥I  Fóπ  Åd©E  û£ò≈   ¨ï)  i¨ï)  √’ ≥  ´’ ≥  ÿ’ ≥  @Íæ  ·å4  ﬂúHe  Úªs  ¢ªs  Ç’H…  ó,û  	ã\û  	Zà2…  	Âàk…  ;˘u  ·‚  Y€  Ä<1  ÷È˙‰  %ÆBŒ  ∞≠$  	∞≠$  
++∏Î§  Yi       I P V 4W0W@       Address   CreatNetPage   
+ Yê	 D N S       Alternative DNS   CreatNetPage   ÅÍR® ( D H C P )       
+ Auto(DHCP)   CreatNetPage   Q~‹Ty       Connection Name   CreatNetPage   ûÿã§QQs       Default Gateway   CreatNetPage    I P V 4ëMn       
+ Ipv4Config   CreatNetPage   bKR®       Manual   CreatNetPage   [PQc©x       Netmask   CreatNetPage   
+-ôñê	 D N S       	Prefs DNS   CreatNetPage   ÅÍR®èﬁc•       Auto Connection   
++ôñê	 D N S       	Prefs DNS   CreatNetPage   _≈Xk       Required   CreatNetPage   ÅÍR®èﬁc•       Auto Connection   
+ DetailPage   ^&[Ωˇ       
+ BandWidth:   
+ DetailPage   
+@@ -58,7 +57,7 @@ MainWindow   bS_ Q~
+ MainWindow   
+ e‡~ø\@WﬂQ       WLAN   
+ MainWindow   Q~‹]ÂQw       kylin-nm   
+-MainWindow   m˚R†g	~øQ~‹       Add Lan Connect   	NetDetail   ÅÍR®       Auto   	NetDetail   S÷mà       Cancel   	NetDetail   xn[ö       Confirm   	NetDetail   ãÊ`≈       Detail   	NetDetail   
++MainWindow    D N SgR°Vhˇ       DNS server:   MultipleDnsWidget   m˚R†g	~øQ~‹       Add Lan Connect   	NetDetail   ÅÍR®       Auto   	NetDetail   S÷mà       Cancel   	NetDetail   xn[ö       Confirm   	NetDetail   ãÊ`≈       Detail   	NetDetail   
+ _ÿã∞kdQ~‹       Forget this network   	NetDetail    I p v 4       Ipv4   	NetDetail    I p v 6       Ipv6   	NetDetail   ûíûüQ~‹ãæn]ÂQw       Kylin NM   	NetDetail   e‡       None   	NetDetail   [âQh       Security   	NetDetail   èﬁc•R0ñêÖœ W L A N       connect hiddin wlan   	NetDetail    i p v 4W0W@Q≤zÅˇ       ipv4 address conflict!   	NetDetail    i p v 6W0W@Q≤zÅˇ       ipv6 address conflict!   	NetDetail   Q~‹c–y:mà`o       kylin network desktop message   	NetDetail   _ YÀh¿mK i p v 4W0W@Q≤zÅ       !start check ipv4 address conflict   	NetDetail   _ YÀh¿mK i p v 6W0W@Q≤zÅ       !start check ipv6 address conflict   	NetDetail   kd w i f iNe/czz|{Wã       this wifi no support None type   	NetDetail   kd w i f iNe/c W P A 2|{Wã       this wifi no support WPA2 type   	NetDetail   kd w i f iNe/c W P A 3|{Wã       this wifi no support WPA3 type   	NetDetail   kd w i f iNe/cONQ|{Wã       $this wifi no support enterprise type   	NetDetailˇˇˇˇ       Form   OneConnFormˇˇˇˇ       Form   OneLancForm   kœk!ã‚ïÓ[∆x       Ask pwd each query   SecurityPage   V C A  ã¡Nf   ( * . p e m   * . d e r   * . p 1 2   * . c r t   * . c e r   * . p f x )       .CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)   SecurityPage   
+  C A  ã¡Nf       CA certficate   SecurityPage   ê	bÈN N* C Aã¡Nf       Choose a CA certificate   SecurityPage   NŒeáNˆê	bÈ . . .       Choose from file...   SecurityPage   Wﬂ       Domain   SecurityPage   
+  E A Peπl’       EAP type   SecurityPage   S?Té´N˝       Identity   SecurityPage   QÖêËã§ã¡       Ineer authentication   SecurityPage   e‡       None   SecurityPage   [∆î•       Password   SecurityPage   [âQh`'       Security   SecurityPage   u(b7T       Usename   SecurityPage   u(b7ã¡Nf       User certificate   SecurityPage   u(b7[∆î•[∆x       User key password   SecurityPage   u(b7y¡î•       User private key   SecurityPage    W P A & W P A 2  ON       WPA&WPA2 Enterprise   SecurityPage    W P A & W P A 2  N*N∫       WPA&WPA2 Personal   SecurityPage    W P A 3  N*N∫       WPA3 Personal   SecurityPage   Nó âÅ C Aã¡Nf       no need for CA certificate   SecurityPage   _SRMQSa       Current Device   TabPage   
+diff --git a/translations/kylin-nm_zh_CN.ts b/translations/kylin-nm_zh_CN.ts
+index 6a9e870..eb1a1ba 100644
+--- a/translations/kylin-nm_zh_CN.ts
++++ b/translations/kylin-nm_zh_CN.ts
+@@ -94,6 +94,19 @@
+         <source>Manual</source>
+         <translation>ÊâãÂä®</translation>
+     </message>
++    <message>
++        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="173"/>
++        <source>Required</source>
++        <translation>ÂøÖÂ°´</translation>
++    </message>
++</context>
++<context>
++    <name>MultipleDnsWidget</name>
++    <message>
++        <location filename="../src/frontend/netdetails/multiplednswidget.cpp" line="42"/>
++        <source>DNS server:</source>
++        <translation>DNSÊúçÂä°Âô®Ôºö</translation>
++    </message>
+ </context>
+ <context>
+     <name>DetailPage</name>

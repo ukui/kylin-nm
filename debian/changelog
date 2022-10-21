@@ -1,3 +1,12 @@
+kylin-nm (3.20.1.6-ok7) v101; urgency=medium
+
+  * BUG号：无
+  * 需求号：无
+  * 其他改动：解决平板设备因插拔有线网卡造成的奔溃问题
+  * 影响域：VPN托盘区造成的崩溃问题
+
+ -- chenxuechao <chenxuechao@kylinos.cn>  Fri, 21 Oct 2022 15:17:54 +0800
+
 kylin-nm (3.20.1.6-ok6) v101; urgency=medium
 
   * BUG号：

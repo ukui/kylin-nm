@@ -1,0 +1,27 @@
+From: zhaoshixu <zhaoshixu@kylinos.cn>
+Date: Fri, 21 Oct 2022 08:49:23 +0000
+Subject: =?utf-8?b?ITEwIOino+WGs+WboOaciee6v+i/nuaOpeayoeacieaMh+Wumue9kQ==?=
+ =?utf-8?b?5Y2h6YCg5oiQ55qEVlBO5bSp5rqD6Zeu6aKYIE1lcmdlIHB1bGwgcmVxdWVzdCAh?=
+ =?utf-8?b?MTAgZnJvbSBjaGVueHVlY2hhby9vcGVua3lsaW4veWFuZ3R6ZS1mb3Jr?=
+
+---
+ src/backend/dbus-interface/kylinconnectresource.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/backend/dbus-interface/kylinconnectresource.cpp b/src/backend/dbus-interface/kylinconnectresource.cpp
+index 3b59d0a..a2d02a3 100644
+--- a/src/backend/dbus-interface/kylinconnectresource.cpp
++++ b/src/backend/dbus-interface/kylinconnectresource.cpp
+@@ -194,8 +194,10 @@ void KyConnectResourse::getVpnAndVirtualConnections(QList<KyConnectItem *> &conn
+         }
+         NetworkManager::Device::Ptr devicePtr = nullptr;
+         devicePtr = m_networkResourceInstance->findDeviceInterface(connectPtr->settings()->interfaceName());
+-        if (NetworkManager::ConnectionSettings::ConnectionType::Wired == connectPtr->settings()->connectionType() && !devicePtr->udi().startsWith("/sys/devices/virtual/net")) {
+-            continue;
++        if (NetworkManager::ConnectionSettings::ConnectionType::Wired == connectPtr->settings()->connectionType()) {
++            if (devicePtr == nullptr || !devicePtr->udi().startsWith("/sys/devices/virtual/net")) {
++                continue;
++            }
+         }
+         QString devName = "";
+         if (!devicePtr.isNull()) {

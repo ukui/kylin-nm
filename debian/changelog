@@ -1,3 +1,9 @@
+kylin-nm (3.14.0.0+0512-2k11) v101; urgency=medium
+
+  * 修改因有线连接未指定网卡造成VPN托盘崩溃的问题
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 21 Oct 2022 16:35:19 +0800
+
 kylin-nm (3.14.0.0+0512-2k10) v101; urgency=medium
 
   * 托盘vpn需求

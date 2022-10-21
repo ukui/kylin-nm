@@ -358,7 +358,7 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::connectivityChanged, this, &MainWindow::onConnectivityChanged);
 
     //模式切换
-    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interfacer"),
+    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interface"),
                                          QString("/"),
                                          QString("com.kylin.statusmanager.interface"),
                                          QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
@@ -531,14 +531,9 @@ void MainWindow::setCentralWidgetType(IconActiveType iconStatus)
 
 void MainWindow::getTabletMode()
 {
-    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interfacer"),
-                                         QString("/"),
-                                         QString("qt5-ukui-platformtheme"),
-                                         QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
-
-    QDBusInterface interface(QString("com.kylin.statusmanager.interfacer"),
+    QDBusInterface interface(QString("com.kylin.statusmanager.interface"),
                              QString("/"),
-                             QString("qt5-ukui-platformtheme"),
+                             QString("com.kylin.statusmanager.interface"),
                              QDBusConnection::sessionBus());
     if(!interface.isValid()) {
         m_isShowInCenter = true;

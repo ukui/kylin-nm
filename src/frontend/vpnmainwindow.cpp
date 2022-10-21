@@ -278,7 +278,7 @@ void vpnMainWindow::initDbusConnnect()
 //    connect(m_vpnPage, &LanPage::lanConnectChanged, this, &MainWindow::onLanConnectStatusToChangeTrayIcon);
 
 //    //模式切换
-//    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interfacer"),
+//    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interface"),
 //                                         QString("/"),
 //                                         QString("com.kylin.statusmanager.interface"),
 //                                         QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
@@ -450,14 +450,9 @@ void vpnMainWindow::setCentralWidgetType(IconActiveType iconStatus)
 
 void vpnMainWindow::getTabletMode()
 {
-    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interfacer"),
-                                         QString("/"),
-                                         QString("qt5-ukui-platformtheme"),
-                                         QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
-
-    QDBusInterface interface(QString("com.kylin.statusmanager.interfacer"),
+    QDBusInterface interface(QString("com.kylin.statusmanager.interface"),
                              QString("/"),
-                             QString("qt5-ukui-platformtheme"),
+                             QString("com.kylin.statusmanager.interface"),
                              QDBusConnection::sessionBus());
     if(!interface.isValid()) {
         m_isShowInCenter = true;

@@ -1,3 +1,12 @@
+libkylin-nm-base (3.20.0.9) v101; urgency=medium
+
+  * BUG号:#144103 【锁屏】连接好有线网络，进入锁屏页面，显示网络未连接
+  * 需求号：无
+  * 其他改动：无
+  * 影响域：登录/锁屏界面网络图标 
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 21 Oct 2022 11:33:43 +0800
+
 libkylin-nm-base (3.20.0.8) v101; urgency=medium
 
   * BUG号:#100325  在系统内关闭有线网络的开关后，注销到登录界面，有线网络仍然可以连接

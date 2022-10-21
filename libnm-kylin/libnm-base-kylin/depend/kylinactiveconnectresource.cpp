@@ -205,7 +205,7 @@ bool KyActiveConnectResourse::wiredConnectIsActived()
         }
 
         QString path = activeConnectPtr->connection()->path();
-        if (m_networkResourceInstance->isWiredConnect(path)) {
+        if (!m_networkResourceInstance->isWiredConnect(path)) {
             continue;
         }
 

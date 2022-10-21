@@ -232,8 +232,10 @@ void KyConnectResourse::getVpnAndVirtualConnections(QList<KyConnectItem *> &conn
         }
         NetworkManager::Device::Ptr devicePtr = nullptr;
         devicePtr = m_networkResourceInstance->findDeviceInterface(connectPtr->settings()->interfaceName());
-        if (NetworkManager::ConnectionSettings::ConnectionType::Wired == connectPtr->settings()->connectionType() && !devicePtr->udi().startsWith("/sys/devices/virtual/net")) {
-            continue;
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wired == connectPtr->settings()->connectionType()) {
+            if (devicePtr == nullptr || !devicePtr->udi().startsWith("/sys/devices/virtual/net")) {
+                continue;
+            }
         }
         QString devName = "";
         if (!devicePtr.isNull()) {

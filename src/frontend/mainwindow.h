@@ -140,7 +140,6 @@ public Q_SLOTS:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
-    bool eventFilter(QObject *watched, QEvent *event) override;
     void paintEvent(QPaintEvent *event);
 
 private:

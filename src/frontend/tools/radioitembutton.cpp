@@ -53,7 +53,7 @@ RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
 
     const QByteArray id(THEME_SCHAME);
     if (QGSettings::isSchemaInstalled(id)) {
-        m_styleGSettings = new QGSettings(id);
+        m_styleGSettings = new QGSettings(id, this);
         connect(m_styleGSettings, &QGSettings::changed, this, [=](QString key){
             if ("themeColor" == key) {
                 onPaletteChanged();

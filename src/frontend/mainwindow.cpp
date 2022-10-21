@@ -139,7 +139,6 @@ void MainWindow::firstlyStart()
     initDbusConnnect();
     initWindowTheme();
     initTrayIcon();
-    installEventFilter(this);
     m_secondaryStartTimer = new QTimer(this);
     connect(m_secondaryStartTimer, &QTimer::timeout, this, [ = ]() {
         m_secondaryStartTimer->stop();
@@ -362,6 +361,13 @@ void MainWindow::initDbusConnnect()
                                          QString("/"),
                                          QString("com.kylin.statusmanager.interface"),
                                          QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
+
+    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this,[&](WId activeWindowId){
+        if (activeWindowId != this->winId()) {
+            hideMainwindow();
+        }
+    });
+
 }
 
 /**
@@ -704,22 +710,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         hideMainwindow();
     }
     return QWidget::keyPressEvent(event);
-}
-
-/**
- * @brief MainWindow::eventFilter 事件过滤器
- * @param watched
- * @param event
- * @return
- */
-bool MainWindow::eventFilter(QObject *watched, QEvent *event)
-{
-    if (event->type() == QEvent::ActivationChange) {
-        if(QApplication::activeWindow() != this) {
-            hideMainwindow();
-        }
-    }
-    return QMainWindow::eventFilter(watched,event);
 }
 
 /**

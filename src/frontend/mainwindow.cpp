@@ -539,7 +539,7 @@ void MainWindow::getTabletMode()
     QDBusInterface interface(QString("com.kylin.statusmanager.interfacer"),
                              QString("/"),
                              QString("qt5-ukui-platformtheme"),
-                             QDBusConnection::sessionBus);
+                             QDBusConnection::sessionBus());
     if(!interface.isValid()) {
         m_isShowInCenter = true;
         return;

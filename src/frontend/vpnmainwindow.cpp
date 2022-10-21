@@ -463,7 +463,7 @@ void vpnMainWindow::getTabletMode()
         m_isShowInCenter = true;
         return;
     }
-    QDBusReply<bool> reply = interface->call("get_current_tabletmode");
+    QDBusReply<bool> reply = interface.call("get_current_tabletmode");
     if (!reply.isValid()) {
         m_isShowInCenter = true;
         return;

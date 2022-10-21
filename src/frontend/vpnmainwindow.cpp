@@ -120,7 +120,6 @@ void vpnMainWindow::firstlyStart()
     initDbusConnnect();
     initWindowTheme();
     initTrayIcon();
-    initPlatform();
     installEventFilter(this);
     m_secondaryStartTimer = new QTimer(this);
     connect(m_secondaryStartTimer, &QTimer::timeout, this, [ = ]() {
@@ -428,6 +427,7 @@ void vpnMainWindow::showByWaylandHelper()
     //去除窗管标题栏，传入参数为QWidget*
     kdk::UkuiStyleHelper::self()->removeHeader(this);
     this->show();
+    getTabletMode();
     resetWindowPosition();
     //设置窗体位置，传入参数为QWindow*，QRect
 
@@ -446,6 +446,29 @@ void vpnMainWindow::setCentralWidgetType(IconActiveType iconStatus)
      } else {
 //         m_vpnWidget->setCurrentIndex(LAN_PAGE_INDEX);
      }
+}
+
+void vpnMainWindow::getTabletMode()
+{
+    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interfacer"),
+                                         QString("/"),
+                                         QString("qt5-ukui-platformtheme"),
+                                         QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
+
+    QDBusInterface interface(QString("com.kylin.statusmanager.interfacer"),
+                             QString("/"),
+                             QString("qt5-ukui-platformtheme"),
+                             QDBusConnection::sessionBus);
+    if(!interface.isValid()) {
+        m_isShowInCenter = true;
+        return;
+    }
+    QDBusReply<bool> reply = interface->call("get_current_tabletmode");
+    if (!reply.isValid()) {
+        m_isShowInCenter = true;
+        return;
+    }
+    m_isShowInCenter = reply.value();
 }
 
 /**

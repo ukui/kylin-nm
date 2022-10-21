@@ -508,7 +508,7 @@ void MainWindow::showByWaylandHelper()
     //去除窗管标题栏，传入参数为QWidget*
     kdk::UkuiStyleHelper::self()->removeHeader(this);
     this->show();
-    initPlatform();
+    getTabletMode();
     resetWindowPosition();
     //设置窗体位置，传入参数为QWindow*，QRect
 
@@ -527,6 +527,29 @@ void MainWindow::setCentralWidgetType(IconActiveType iconStatus)
      } else {
          m_centralWidget->setCurrentIndex(LAN_PAGE_INDEX);
      }
+}
+
+void MainWindow::getTabletMode()
+{
+    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interfacer"),
+                                         QString("/"),
+                                         QString("qt5-ukui-platformtheme"),
+                                         QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
+
+    QDBusInterface interface(QString("com.kylin.statusmanager.interfacer"),
+                             QString("/"),
+                             QString("qt5-ukui-platformtheme"),
+                             QDBusConnection::sessionBus);
+    if(!interface.isValid()) {
+        m_isShowInCenter = true;
+        return;
+    }
+    QDBusReply<bool> reply = interface->call("get_current_tabletmode");
+    if (!reply.isValid()) {
+        m_isShowInCenter = true;
+        return;
+    }
+    m_isShowInCenter = reply.value();
 }
 
 /**

@@ -1,6 +1,16 @@
+kylin-nm (3.20.1.6-ok4) v101; urgency=medium
+
+  * BUG号：
+    -#143364 【网络设置】任务栏点击网络图标，网络设置窗口显示在屏幕中央
+  * 需求号：
+  * 其他改动：无
+  * 影响域：显示位置
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 21 Oct 2022 11:12:38 +0800
+
 kylin-nm (3.20.1.6-ok3) v101; urgency=medium
 
-  * iBUG号：
+  * BUG号：
   * 需求号：
     -#16989 创建的VPN等虚拟网络可直接查看、操作连接
   * 其他改动：无

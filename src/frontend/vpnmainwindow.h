@@ -111,6 +111,7 @@ private:
 //    void showControlCenter();
     void showByWaylandHelper();
     void setCentralWidgetType(IconActiveType iconStatus);
+    void getTabletMode();
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
     int m_currentIconIndex = 0;

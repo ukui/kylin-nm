@@ -495,6 +495,8 @@ void NetDetail::initComponent()
         connect(fontSetting, &QGSettings::changed,[=](QString key) {
             if ("systemFont" == key || "systemFontSize" ==key) {
                 setNetTabToolTip();
+            } else if ("themeColor" == key) {
+                onPaletteChanged();
             }
         });
     }

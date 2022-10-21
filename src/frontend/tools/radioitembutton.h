@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QTimer>
 #include <QVariantAnimation>
+#include <QGSettings>
 
 #define MIDDLE_COLOR 178
 
@@ -66,6 +67,7 @@ private:
     QVariantAnimation * m_animation = nullptr;
 
     QPixmap m_pixmap;
+    QGSettings *m_styleGSettings = nullptr;
 
     void refreshButtonIcon();
 

@@ -36,6 +36,7 @@
 #define FOREGROUND_COLOR_PRESS_ACTIVE QColor(36,109,212,255)
 #define COLOR_BRIGHT_TEXT qApp->palette().brightText().color()
 #define COLOR_HIGH_LIGHT qApp->palette().highlight().color()
+#define THEME_SCHAME  "org.ukui.style"
 
 QColor mixColor(const QColor &c1, const QColor &c2, qreal bias);
 
@@ -49,6 +50,17 @@ RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
     m_iconLabel->setAlignment(Qt::AlignCenter);
 
     setActive(false);
+
+    const QByteArray id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(id)) {
+        m_styleGSettings = new QGSettings(id);
+        connect(m_styleGSettings, &QGSettings::changed, this, [=](QString key){
+            if ("themeColor" == key) {
+                onPaletteChanged();
+            }
+        });
+    }
+
     //JXJ_TODO loading动画
     connect(this, &RadioItemButton::requestStartLoading, this, &RadioItemButton::onLoadingStarted);
     connect(this , &RadioItemButton::requestStopLoading, this, &RadioItemButton::onLoadingStopped);

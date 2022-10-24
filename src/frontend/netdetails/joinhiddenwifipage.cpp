@@ -175,6 +175,18 @@ void JoinHiddenWiFiPage::initComponent()
        setJoinBtnEnable();
     });
     connect(m_nameEdit, &LineEdit::textChanged, this, &JoinHiddenWiFiPage::setJoinBtnEnable);
+
+    connect(qApp, &QApplication::paletteChanged, this, &JoinHiddenWiFiPage::onPaletteChanged);
+
+    const QByteArray id(THEME_SCHAME);
+    if(QGSettings::isSchemaInstalled(id)){
+        QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+        connect(fontSetting, &QGSettings::changed,[=](QString key) {
+            if ("themeColor" == key) {
+                onPaletteChanged();
+            }
+        });
+    }
 }
 
 void JoinHiddenWiFiPage::setJoinBtnEnable()

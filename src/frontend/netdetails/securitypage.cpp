@@ -63,6 +63,7 @@ void SecurityPage::initUI()
 
     secuTypeCombox = new QComboBox(this);
     pwdEdit = new KPasswordEdit(this);
+    pwdEdit->setUseCustomPalette(true);
     eapTypeCombox = new QComboBox(this);
     //TLS
     identityEdit = new LineEdit(this);
@@ -72,6 +73,7 @@ void SecurityPage::initUI()
     clientCertPathCombox = new QComboBox(this);
     clientPrivateKeyCombox = new QComboBox(this);
     clientPrivateKeyPwdEdit = new KPasswordEdit(this);
+    clientPrivateKeyPwdEdit->setUseCustomPalette(true);
     pwdOptionCombox = new QComboBox(this);
     tlsWidget = new QWidget(this);
 
@@ -79,6 +81,7 @@ void SecurityPage::initUI()
     eapMethodCombox = new QComboBox(this);
     userNameEdit = new LineEdit(this);
     userPwdEdit = new KPasswordEdit(this);
+    userPwdEdit->setUseCustomPalette(true);
     userPwdFlagBox = new QCheckBox(this);
 
     QWidget *queryWidget = new QWidget(this);

@@ -47,8 +47,6 @@ private:
     LineEdit *ipv4addressEdit;
     LineEdit *netMaskEdit;
     LineEdit *gateWayEdit;
-//    LineEdit *firstDnsEdit;
-//    LineEdit *secondDnsEdit;
 
     QFormLayout *m_detailLayout;
     QVBoxLayout *mvBoxLayout;
@@ -57,8 +55,6 @@ private:
     QLabel *m_addressLabel;
     QLabel *m_maskLabel;
     QLabel *m_gateWayLabel;
-//    QLabel *m_dnsLabel;
-//    QLabel *m_secDnsLabel;
     MultipleDnsWidget *m_dnsWidget = nullptr;
 
 private:

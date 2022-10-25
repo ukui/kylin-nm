@@ -363,7 +363,7 @@ void MainWindow::initDbusConnnect()
                                          QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
 
     connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this,[&](WId activeWindowId){
-        if (activeWindowId != this->winId()) {
+        if (activeWindowId != this->winId() && activeWindowId != 0) {
             hideMainwindow();
         }
     });

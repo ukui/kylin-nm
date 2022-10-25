@@ -114,6 +114,7 @@ void WlanPage::initWlanUI()
     m_activatedNetListWidget->setFixedHeight(NORMAL_HEIGHT);
     m_activatedNetListWidget->setFixedWidth(MIN_WIDTH);
     m_activatedNetListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_activatedNetListWidget->setProperty("needTranslucent", true);
     m_activatedNetLayout->addWidget(m_activatedNetListWidget);
 
     m_inactivatedNetLabel->setText(tr("Other WLAN"));
@@ -126,6 +127,8 @@ void WlanPage::initWlanUI()
     m_inactivatedNetListWidget->verticalScrollBar()->setProperty("drawScrollBarGroove",false); //去除滚动条的外侧黑框
     m_inactivatedNetListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
     m_inactivatedNetListWidget->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
+    m_inactivatedNetListWidget->verticalScrollBar()->setProperty("needTranslucent", true);
+    m_inactivatedNetListWidget->setProperty("needTranslucent", true);
     addWlanMoreItem();
     m_inactivatedAreaLayout->addWidget(m_inactivatedNetListWidget);
 

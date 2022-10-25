@@ -283,6 +283,7 @@ void WlanListItem::initWlanUI()
     m_pwdFrameLyt->addWidget(m_pwdLineEdit);
 
     m_connectButton = new QPushButton(m_pwdFrame);
+    m_connectButton->setProperty("needTranslucent", true);
     m_connectButton->setFixedSize(CONNECT_BUTTON_WIDTH, PWD_AREA_HEIGHT);
     m_connectButton->setText(tr("Connect"));
     m_connectButton->setEnabled(false);
@@ -665,4 +666,3 @@ void WlanListItem::setConnectButtonState()
         m_connectButton->setPalette(btnPal);
     }
 }
-

@@ -729,6 +729,7 @@ void LanPage::initUI()
     m_activatedLanListWidget->setFixedHeight(ITEM_HEIGHT);              //active区域固定高度,只显示一个条目
     m_activatedLanListWidget->setFixedWidth(MIN_WIDTH);
     m_activatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_activatedLanListWidget->setProperty("needTranslucent", true);
     m_activatedNetLayout->addWidget(m_activatedLanListWidget);
 
     m_inactivatedNetLabel->setText(tr("Inactivated LAN"));
@@ -740,6 +741,8 @@ void LanPage::initUI()
     m_inactivatedLanListWidget->verticalScrollBar()->setProperty("drawScrollBarGroove",false); //去除滚动条的外侧黑框
     m_inactivatedLanListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
     m_inactivatedLanListWidget->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
+    m_inactivatedLanListWidget->verticalScrollBar()->setProperty("needTranslucent", true);
+    m_inactivatedLanListWidget->setProperty("needTranslucent", true);
     m_inactivatedAreaLayout->addWidget(m_inactivatedLanListWidget);
 
     QPalette pal = m_activatedLanListWidget->palette();

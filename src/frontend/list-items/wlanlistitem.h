@@ -86,6 +86,7 @@ protected:
     void leaveEvent(QEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void paintEvent(QPaintEvent *event);
 
 Q_SIGNALS:
     void itemHeightChanged(const bool isExpanded, const QString &ssid);
@@ -132,7 +133,6 @@ private Q_SLOTS:
     void onConnectButtonClicked();
     void onMenuTriggered(QAction *action);
     void onEnterpriseWlanDialogClose(bool isShow);
-    void setConnectButtonState();
 };
 
 #endif // WLANLISTITEM_H

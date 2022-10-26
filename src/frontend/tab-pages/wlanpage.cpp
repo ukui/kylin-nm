@@ -78,6 +78,10 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::wifiEnabledChanged, this, &WlanPage::onWifiEnabledChanged);
 
     connect(m_connectResource, &KyConnectResourse::connectivityChanged, this, &WlanPage::connectivityChanged);
+    connect(m_netSwitch, &KSwitchButton::clicked, this, [=](bool checked) {
+        m_netSwitch->setChecked(!checked);
+        setWirelessEnable(checked);
+    });
 }
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
@@ -93,10 +97,7 @@ bool WlanPage::eventFilter(QObject *w, QEvent *e)
             if (!getSwitchBtnEnable()) {
                 showDesktopNotify(tr("No wireless network card detected"), "networkwrong");
                 //检测不到无线网卡不再触发click信号
-            } else {
-                setWirelessEnable(!getSwitchBtnState());
             }
-            return true;
         }
     }
     return QWidget::eventFilter(w,e);

@@ -51,7 +51,6 @@ WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, Q
 
     connect(this->m_infoButton, &InfoButton::clicked, this, &WlanListItem::onInfoButtonClicked);
     connect(m_menu, &QMenu::triggered, this, &WlanListItem::onMenuTriggered);
-    connect(qApp, &QApplication::paletteChanged, this, &WlanListItem::setConnectButtonState);
 
     m_wirelessConnectOperation = new KyWirelessConnectOperation(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
@@ -242,6 +241,16 @@ void WlanListItem::keyPressEvent(QKeyEvent *event)
     return QFrame::keyPressEvent(event);
 }
 
+void WlanListItem::paintEvent(QPaintEvent *event)
+{
+    QPalette pal = qApp->palette();
+    if (m_pwdLineEdit != nullptr) {
+        m_pwdLineEdit->setPalette(pal);
+    }
+
+    return QWidget::paintEvent(event);
+}
+
 void WlanListItem::initWlanUI()
 {
     m_hasPwd = (m_wirelessNetItem.m_secuType.isEmpty() || m_wirelessNetItem.m_secuType == "") ? false : true;
@@ -268,6 +277,8 @@ void WlanListItem::initWlanUI()
 
     m_pwdLineEdit  = new KPasswordEdit(m_pwdFrame);
     m_pwdLineEdit->setFixedWidth(LINEEDIT_WIDTH);
+    m_pwdLineEdit->setProperty("needTranslucent", true);
+    m_pwdLineEdit->setUseCustomPalette(true);
     m_pwdLineEdit->setClearButtonEnabled(false); //禁用ClearBtn按钮
     m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, true);   //打开输入法
 //    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
@@ -283,6 +294,7 @@ void WlanListItem::initWlanUI()
     m_pwdFrameLyt->addWidget(m_pwdLineEdit);
 
     m_connectButton = new QPushButton(m_pwdFrame);
+    m_connectButton->setProperty("isImportant", true);
     m_connectButton->setProperty("needTranslucent", true);
     m_connectButton->setFixedSize(CONNECT_BUTTON_WIDTH, PWD_AREA_HEIGHT);
     m_connectButton->setText(tr("Connect"));
@@ -555,7 +567,6 @@ void WlanListItem::onPwdEditorTextChanged()
     } else {
         m_connectButton->setEnabled(true);
     }
-    setConnectButtonState();
 
     return;
 }
@@ -651,18 +662,5 @@ void WlanListItem::forgetPwd()
     if (!this->isConfigured()) {
         m_pwdLineEdit->setText("");
         return;
-    }
-}
-
-void WlanListItem::setConnectButtonState()
-{
-    QPalette btnPal;
-    if (m_connectButton->isEnabled()) {
-        btnPal.setColor(QPalette::Button, ENABLE_BUTTON_COLOR);
-        btnPal.setColor(QPalette::ButtonText, Qt::white);
-        m_connectButton->setPalette(btnPal);
-    } else {
-        btnPal.setColor(QPalette::Button, UNABLE_BUTTON_COLOR);
-        m_connectButton->setPalette(btnPal);
     }
 }

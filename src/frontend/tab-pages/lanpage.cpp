@@ -73,6 +73,10 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &LanPage::activateFailed);
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &LanPage::deactivateFailed);
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::wiredEnabledChanged, this, &LanPage::onWiredEnabledChanged);
+    connect(m_netSwitch, &KSwitchButton::clicked, this, [=](bool checked) {
+        m_netSwitch->setChecked(!checked);
+        m_wiredConnectOperation->setWiredEnabled(checked);
+    });
 }
 
 LanPage::~LanPage()
@@ -1188,16 +1192,7 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
                 this->showDesktopNotify(tr("No ethernet device avaliable"), "networkwrong");
                 m_netSwitch->setChecked(false);
                 m_netSwitch->setCheckable(false);
-            } else {
-                m_netSwitch->setCheckable(true);
-//                if (m_netSwitch->isChecked()) {
-//                    m_switchGsettings->set(WIRED_SWITCH, false);
-//                } else {
-//                    m_switchGsettings->set(WIRED_SWITCH,true);
-//                }
-                m_wiredConnectOperation->setWiredEnabled(!m_netSwitch->isChecked());
             }
-            return true;
         }
 
     }

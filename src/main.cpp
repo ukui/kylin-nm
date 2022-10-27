@@ -19,6 +19,7 @@
 #include "mainwindow.h"
 #include "vpnmainwindow.h"
 #include "dbusadaptor.h"
+#include "vpndbusadaptor.h"
 #include <QTranslator>
 #include <QLocale>
 #include "qt-single-application.h"
@@ -80,7 +81,7 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
 
 int main(int argc, char *argv[])
 {
-    initUkuiLog4qt("kylin-nm");
+//    initUkuiLog4qt("kylin-nm");
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -169,8 +170,13 @@ int main(int argc, char *argv[])
     DbusAdaptor adaptor(&w);
     Q_UNUSED(adaptor);
 
+    VpnDbusAdaptor vpnAdaptor(&vpnwindow);
+    Q_UNUSED(vpnAdaptor);
+
     auto connection = QDBusConnection::sessionBus();
-    if (!connection.registerService("com.kylin.network") || !connection.registerObject("/com/kylin/network", &w)) {
+    if (!connection.registerService("com.kylin.network")
+        || !connection.registerObject("/com/kylin/network", &w)
+        || !connection.registerObject("/com/kylin/vpnTool", &vpnwindow)) {
         qCritical() << "QDbus register service failed reason:" << connection.lastError();
     }
 

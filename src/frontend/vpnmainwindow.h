@@ -33,21 +33,7 @@
 #include "vpnpage.h"
 #include "mainwindow.h"
 
-#ifdef WITHKYSEC
-#include <kysec/libkysec.h>
-#include <kysec/status.h>
-#endif
-
-//enum IconActiveType {
-//    NOT_CONNECTED = 0,
-//    LAN_CONNECTED,
-//    WLAN_CONNECTED,
-//    LAN_CONNECTED_LIMITED,
-//    WLAN_CONNECTED_LIMITED,
-//    ACTIVATING,
-//};
-
-//const QByteArray TRANSPARENCY_GSETTINGS = "org.ukui.control-center.personalise";
+const QByteArray GSETTINGS_VPNICON_VISIBLE = "org.ukui.kylin-nm.vpnicon";
 
 class VpnPage;
 
@@ -61,35 +47,29 @@ public:
 
     void getVirtualList(QMap<QString, QVector<QStringList>> &map);
 
-//    void setWiredDefaultDevice(QString deviceName);
 
+    //Vpn连接删除
+    void deleteVpn(const QString &connUuid);
 //    //有线连接断开
     void activateVpn(const QString& connUuid);
     void deactivateVpn(const QString& connUuid);
 
-//    //唤起属性页 根据网卡类型 参数2 为ssid/uuid
-//    void showPropertyWidget(QString devName, QString ssid);
-//    //唤起新建有线连接界面
+    void initVpnIconVisible();
+
+    //唤起新建有线连接界面
 //    void showCreateWiredConnectWidget(const QString devName);
 
 Q_SIGNALS:
-//    //设备插拔
-//    void deviceStatusChanged();
-//    //设备名称变化
-//    void deviceNameChanged(QString oldName, QString newName, int type);
-    void vpnAdd(QString devName, QStringList info);
+    void vpnAdd(QStringList info);
     void vpnRemove(QString dbusPath);
-    void vpnUpdate(QString devName, QStringList info);
-    void vpnActiveConnectionStateChanged(QString devName, QString uuid, int status);
-//    void activateFailed(QString errorMessage);
-//    void deactivateFailed(QString errorMessage);
+    void vpnUpdate(QStringList info);
+    void vpnActiveConnectionStateChanged(QString uuid, int status);
+    void activateFailed(QString errorMessage);
+    void deactivateFailed(QString errorMessage);
     void mainWindowVisibleChanged(const bool &visible);
-//    //列表排序
-//    void timeToUpdate();
-public Q_SLOTS:
 
 protected:
-//    void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *watched, QEvent *event) override;
     void paintEvent(QPaintEvent *event);
 
@@ -105,23 +85,16 @@ private:
     void initUI();
     void initDbusConnnect();
     void initTrayIcon();
-//    void resetTrayIconTool();
     void initWindowTheme();
-//    void resetWindowTheme();
-//    void showControlCenter();
     void showByWaylandHelper();
-    void setCentralWidgetType(IconActiveType iconStatus);
     void getTabletMode();
+
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
-    int m_currentIconIndex = 0;
-    QList<QIcon> m_loadIcons;
-    QTimer *m_iconTimer = nullptr;
+    QGSettings * m_vpnGsettings;   //VPN配置文件
 
 //    //主窗口的主要构成控件
     QWidget * m_vpnWidget = nullptr;
-//    QHBoxLayout * m_tabBarLayout = nullptr;
-    QLabel * m_lanLabel = nullptr;
     VpnPage * m_vpnPage = nullptr;
     QVBoxLayout * m_vpnLayout = nullptr;
 
@@ -135,34 +108,22 @@ private:
 //    //托盘图标，托盘图标右键菜单
     QSystemTrayIcon * m_vpnTrayIcon = nullptr;
     QMenu * m_vpnTrayIconMenu = nullptr;
-//    QAction * m_showMainwindowAction = nullptr;
-//    QAction * m_showSettingsAction = nullptr;
-
-//    bool m_lanIsLoading = false;
 
     bool m_isShowInCenter = false;
 
     IconActiveType m_iconStatus = IconActiveType::NOT_CONNECTED;
 
     QMap<QString, NetDetail*> m_createPagePtrMap;
-////    QMap<QString, NetDetail*> m_addOtherPagePtrMap;
-//    QMap<QString, JoinHiddenWiFiPage*> m_addOtherPagePtrMap;
 
 public Q_SLOTS:
-//    void onShowMainWindow(int type);
+    void onShowMainWindow();
 
 private Q_SLOTS:
     void onTransChanged();
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
-//    void onShowMainwindowActionTriggled();
-//    void onShowSettingsActionTriggled();
     void onThemeChanged(const QString &key);
-    void onRefreshTrayIcon();
-//    void onSetTrayIconLoading();
-//    void onLanConnectStatusToChangeTrayIcon(int state);
-//    void onWlanConnectStatusToChangeTrayIcon(int state);
-//    void onConnectivityChanged(NetworkManager::Connectivity connectivity);
-//    void onTabletModeChanged(bool mode);
+    void onTabletModeChanged(bool mode);
+    void onVpnIconVisibleChanged();
 };
 
 #endif // MAINWINDOW_H

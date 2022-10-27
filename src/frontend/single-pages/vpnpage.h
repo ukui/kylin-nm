@@ -46,11 +46,10 @@ public:
 
     //for dbus
     void getVirtualList(QMap<QString, QVector<QStringList> > &map);
+    void deleteVpn(const QString &connUuid);
     void activateVpn(const QString& connUuid);
     void deactivateVpn(const QString& connUuid);
     void showDetailPage(QString devName, QString uuid);
-
-    bool vpnIsConnected();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -87,11 +86,11 @@ private:
                                  QListWidget *lanListWidget, QString uuid);
 
 Q_SIGNALS:
-    void vpnAdd(QString devName, QStringList info);
+    void vpnAdd(QStringList info);
     void vpnRemove(QString dbusPath);
-    void vpnUpdate(QString devName, QStringList info);
+    void vpnUpdate(QStringList info);
 
-    void vpnActiveConnectionStateChanged(QString interface, QString uuid, int status);
+    void vpnActiveConnectionStateChanged(QString uuid, int status);
     void vpnConnectChanged(int state);
 
 private Q_SLOTS:
@@ -110,7 +109,7 @@ private:
     QListWidget * m_vpnListWidget = nullptr;
 
 //    KyNetworkDeviceResourse *m_deviceResource = nullptr;
-//    KyWiredConnectOperation *m_wiredConnectOperation = nullptr;
+    KyWiredConnectOperation *m_wiredConnectOperation = nullptr;
     KyActiveConnectResourse *m_activeResourse = nullptr;     //激活的连接
     KyConnectResourse *m_connectResourse = nullptr;          //未激活的连接
 

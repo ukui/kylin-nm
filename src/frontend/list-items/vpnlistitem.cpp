@@ -107,10 +107,29 @@ void VpnListItem::connectItemCopy(const KyConnectItem *lanConnectItem)
 
 //}
 
+void VpnListItem::activeConnection()
+{
+    if (m_vpnConnectItem.m_connectUuid.isEmpty()) {
+        qDebug() << LOG_FLAG << "connect is empty, so can not connect or disconnect.";
+        return;
+    }
+
+    if (Deactivated == m_vpnConnectItem.m_connectState) {
+        //断开的连接，点击激活连接
+        m_connectOperation->activateVpnConnection(m_vpnConnectItem.m_connectUuid);
+        qDebug() << LOG_FLAG << "it will activate connection" << m_vpnConnectItem.m_connectName;
+        m_netButton->startLoading();
+    } else {
+        qDebug() << LOG_FLAG <<"the connection" << m_vpnConnectItem.m_connectName
+                 << "is not deactived, so it can not be operation.";
+    }
+
+    return;
+}
+
 void VpnListItem::onNetButtonClicked()
 {
     if (m_vpnConnectItem.m_connectUuid.isEmpty()) {
-        qDebug()<<"--cxc--"<<Q_FUNC_INFO<<__LINE__;
         qDebug() << LOG_FLAG << "connect is empty, so can not connect or disconnect.";
         return;
     }

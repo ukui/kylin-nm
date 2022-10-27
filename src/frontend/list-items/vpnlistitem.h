@@ -45,6 +45,8 @@ public:
     QString getConnectionPath();
     void updateConnectionPath(QString connectionPath);
 
+    void activeConnection();
+
 protected:
     void setIcon(bool isOn);
     void onRightButtonClicked();

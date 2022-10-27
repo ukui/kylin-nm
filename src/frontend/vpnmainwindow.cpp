@@ -93,7 +93,7 @@ void vpnMainWindow::showMainwindow()
 }
 
 /**
- * @brief MainWindow::hideMainwindow 隐藏主页面时要进行的操作，后续可以添加到此函数
+ * @brief vpnMainWindow::hideMainwindow 隐藏主页面时要进行的操作，后续可以添加到此函数
  */
 void vpnMainWindow::hideMainwindow()
 {
@@ -102,9 +102,9 @@ void vpnMainWindow::hideMainwindow()
 }
 
 ///**
-// * @brief MainWindow::setWiredDefaultDevice 设置有线设备默认网卡
+// * @brief vpnMainWindow::setWiredDefaultDevice 设置有线设备默认网卡
 // */
-//void MainWindow::setWiredDefaultDevice(QString deviceName)
+//void vpnMainWindow::setWiredDefaultDevice(QString deviceName)
 //{
 ////    m_vpnPage->updateDefaultDevice(deviceName);
 //}
@@ -170,6 +170,7 @@ void vpnMainWindow::initWindowProperties()
 //    this->setFixedSize(MAINWINDOW_WIDTH, MAINWINDOW_HEIGHT);
 //    //绘制毛玻璃特效
 //    this->setAttribute(Qt::WA_TranslucentBackground, true);  //透明
+    this->setProperty("needTranslucent", true);
     this->setFocusPolicy(Qt::NoFocus);
 
     QString platform = QGuiApplication::platformName();
@@ -188,8 +189,6 @@ void vpnMainWindow::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
     painter.setPen(Qt::transparent);
-//    auto rect = this->rect();
-//    painter.drawRoundedRect(rect, 12, 12);      //窗口圆角
 }
 
 void vpnMainWindow::initTransparency()
@@ -244,44 +243,27 @@ void vpnMainWindow::initUI()
 void vpnMainWindow::initTrayIcon()
 {
     m_vpnTrayIcon = new QSystemTrayIcon(this);
-    m_vpnTrayIconMenu = new QMenu();
-//    m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
-//    m_showSettingsAction = new QAction(tr("Settings"),this);
-
     m_vpnTrayIcon->setToolTip(QString(tr("vpn tool")));
     m_vpnTrayIcon->setIcon(QIcon::fromTheme("ukui-vpn-symbolic"));
-//    m_showSettingsAction->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
-////    m_vpnTrayIconMenu->addAction(m_showMainwindowAction);
-//    m_vpnTrayIconMenu->addAction(m_showSettingsAction);
-//    m_vpnTrayIcon->setContextMenu(m_vpnTrayIconMenu);
-//    m_vpnTrayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
-//    m_iconStatus = IconActiveType::LAN_CONNECTED;
-//    onRefreshTrayIcon();
-
+    initVpnIconVisible();
     connect(m_vpnTrayIcon, &QSystemTrayIcon::activated, this, &vpnMainWindow::onTrayIconActivated);
-////    connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
-//    connect(m_showSettingsAction, &QAction::triggered, this, &MainWindow::onShowSettingsActionTriggled);
-    m_vpnTrayIcon->show();
 }
 
 void vpnMainWindow::initDbusConnnect()
 {
-//    connect(m_vpnPage, &LanPage::deviceStatusChanged, this, &MainWindow::deviceStatusChanged);
-//    connect(m_vpnPage, &LanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
-//    connect(m_vpnPage, &LanPage::activateFailed, this, &MainWindow::activateFailed);
-//    connect(m_vpnPage, &LanPage::deactivateFailed, this, &MainWindow::deactivateFailed);
+    connect(m_vpnPage, &VpnPage::activateFailed, this, &vpnMainWindow::activateFailed);
+    connect(m_vpnPage, &VpnPage::deactivateFailed, this, &vpnMainWindow::deactivateFailed);
 
     connect(m_vpnPage, &VpnPage::vpnAdd, this, &vpnMainWindow::vpnAdd);
     connect(m_vpnPage, &VpnPage::vpnRemove, this, &vpnMainWindow::vpnRemove);
     connect(m_vpnPage, &VpnPage::vpnUpdate, this, &vpnMainWindow::vpnUpdate);
     connect(m_vpnPage, &VpnPage::vpnActiveConnectionStateChanged, this, &vpnMainWindow::vpnActiveConnectionStateChanged);
-//    connect(m_vpnPage, &LanPage::lanConnectChanged, this, &MainWindow::onLanConnectStatusToChangeTrayIcon);
 
-//    //模式切换
-//    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interface"),
-//                                         QString("/"),
-//                                         QString("com.kylin.statusmanager.interface"),
-//                                         QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
+    //模式切换
+    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interface"),
+                                         QString("/"),
+                                         QString("com.kylin.statusmanager.interface"),
+                                         QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
 }
 
 /**
@@ -350,31 +332,6 @@ void vpnMainWindow::resetWindowPosition()
     qDebug() << " Position of ukui-panel is " << position << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
 }
 
-///**
-// * @brief MainWindow::resetTrayIconTool 重新获取网络连接状态并重新设置图标和tooltip
-// */
-//void MainWindow::resetTrayIconTool()
-//{
-//    //ZJP_TODO 检测当前连接的是有线还是无线，是否可用，设置图标和tooltip,图标最好提前define
-////    int connectivity = objKyDBus->getNetworkConectivity();
-////    qDebug() << "Value of current network Connectivity property : "<< connectivity;
-////    switch (connectivity) {
-////    case UnknownConnectivity:
-////    case Portal:
-////    case Limited:
-////        setTrayIcon(iconLanOnlineNoInternet);
-////        trayIcon->setToolTip(QString(tr("Network Connected But Can Not Access Internet")));
-////        break;
-////    case NoConnectivity:
-////    case Full:
-////        setTrayIcon(iconLanOnline);
-////        trayIcon->setToolTip(QString(tr("kylin-nm")));
-////        break;
-////    }
-//    qDebug() << "Has set tray icon to be XXX." << Q_FUNC_INFO << __LINE__;
-//}
-
-
 /**
  * @brief vpnMainWindow::initWindowTheme 初始化窗口主题并创建信号槽
  */
@@ -390,29 +347,9 @@ void vpnMainWindow::initWindowTheme()
 }
 
 ///**
-// * @brief MainWindow::resetWindowTheme 读取和设置窗口主题
+// * @brief vpnMainWindow::showControlCenter 打开控制面板网络界面
 // */
-//void MainWindow::resetWindowTheme()
-//{
-//    if (!m_styleGsettings) { return; }
-//    QString currentTheme = m_styleGsettings->get(COLOR_THEME).toString();
-//    auto app = static_cast<QApplication*>(QCoreApplication::instance());
-//    if(currentTheme == "ukui-dark" || currentTheme == "ukui-black"){
-//        app->setStyle(new CustomStyle("ukui-dark"));
-//        qDebug() << "Has set color theme to ukui-dark." << Q_FUNC_INFO << __LINE__;
-//        Q_EMIT qApp->paletteChanged(qApp->palette());
-//        return;
-//    }
-//    app->setStyle(new CustomStyle("ukui-light"));
-//    qDebug() << "Has set color theme to " << currentTheme << Q_FUNC_INFO << __LINE__;
-//    Q_EMIT qApp->paletteChanged(qApp->palette());
-//    return;
-//}
-
-///**
-// * @brief MainWindow::showControlCenter 打开控制面板网络界面
-// */
-//void MainWindow::showControlCenter()
+//void vpnMainWindow::showControlCenter()
 //{
 //    QProcess process;
 //    if (!m_vpnPage->lanIsConnected() && m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
@@ -431,21 +368,6 @@ void vpnMainWindow::showByWaylandHelper()
     resetWindowPosition();
     //设置窗体位置，传入参数为QWindow*，QRect
 
-}
-
-void vpnMainWindow::setCentralWidgetType(IconActiveType iconStatus)
-{
-    if (iconStatus == WLAN_CONNECTED || iconStatus == WLAN_CONNECTED_LIMITED) {
-//         m_vpnWidget->setCurrentIndex(WLAN_PAGE_INDEX);
-     } else if (iconStatus == ACTIVATING) {
-//         if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activating)) {
-//             m_vpnWidget->setCurrentIndex(WLAN_PAGE_INDEX);
-//         } else {
-//             m_vpnWidget->setCurrentIndex(LAN_PAGE_INDEX);
-//         }
-     } else {
-//         m_vpnWidget->setCurrentIndex(LAN_PAGE_INDEX);
-     }
 }
 
 void vpnMainWindow::getTabletMode()
@@ -471,11 +393,10 @@ void vpnMainWindow::getTabletMode()
  */
 void vpnMainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    setCentralWidgetType(m_iconStatus);
     switch(reason) {
-        case QSystemTrayIcon::Context:
-            m_vpnTrayIconMenu->popup(QCursor::pos());
-            break;
+//        case QSystemTrayIcon::Context:
+//            m_vpnTrayIconMenu->popup(QCursor::pos());
+//            break;
         case QSystemTrayIcon::Trigger:
             if (this->isVisible()) {
                 qDebug() << "Received signal of tray icon activated, will hide mainwindow." << Q_FUNC_INFO << __LINE__;
@@ -489,28 +410,7 @@ void vpnMainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason
         default:
             break;
     }
-//    if (reason == QSystemTrayIcon::ActivationReason::Context) {
-//            m_vpnTrayIconMenu->popup(QCursor::pos());
-//    } else {
-//        if (this->isVisible()) {
-//            qDebug() << "Received signal of tray icon activated, will hide mainwindow." << Q_FUNC_INFO << __LINE__;
-//            hideMainwindow();
-//            return;
-//        }
-//        qDebug() << "Received signal of tray icon activated, will show mainwindow." << Q_FUNC_INFO << __LINE__;
-//        this->showMainwindow();
-//    }
 }
-
-//void MainWindow::onShowMainwindowActionTriggled()
-//{
-//    showMainwindow();
-//}
-
-//void MainWindow::onShowSettingsActionTriggled()
-//{
-//    showControlCenter();
-//}
 
 void vpnMainWindow::onThemeChanged(const QString &key)
 {
@@ -523,99 +423,39 @@ void vpnMainWindow::onThemeChanged(const QString &key)
     }
 }
 
-void vpnMainWindow::onRefreshTrayIcon()
+void vpnMainWindow::onTabletModeChanged(bool mode)
 {
-    //更新托盘图标显示
-//    m_iconTimer->stop();
-//    if (m_vpnPage->lanIsConnected()) {
-//        m_vpnTrayIcon->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
-//        m_iconStatus = IconActiveType::LAN_CONNECTED;
-//    } else {
-//        m_vpnTrayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
-//        m_iconStatus = IconActiveType::NOT_CONNECTED;
-//    }
+    qDebug() << "TabletMode change" << mode;
+    Q_UNUSED(mode)
+    //模式切换时，隐藏主界面
+    hideMainwindow();
+}
 
-    NetworkManager::Connectivity connecttivity;
-    if (connecttivity != NetworkManager::Connectivity::Full) {
-        if (m_iconStatus == IconActiveType::LAN_CONNECTED) {
-            m_vpnTrayIcon->setIcon(QIcon::fromTheme("network-error-symbolic"));
-            m_iconStatus = IconActiveType::LAN_CONNECTED_LIMITED;
-        }
+void vpnMainWindow::onShowMainWindow()
+{
+    if(QApplication::activeWindow() != this) {
+        this->showMainwindow();
     }
 }
 
-//void vpnMainWindow::onSetTrayIconLoading()
-//{
-//    if (m_currentIconIndex > 11) {
-//        m_currentIconIndex = 0;
-//    }
-//    m_vpnTrayIcon->setIcon(m_loadIcons.at(m_currentIconIndex));
-//    m_iconStatus = IconActiveType::ACTIVATING;
-//    m_currentIconIndex ++;
-//}
+/**
+ * @brief vpnMainWindow::keyPressEvent 按esc键关闭主界面
+ * @param event
+ */
+void vpnMainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape) {
+        hideMainwindow();
+    }
+    return QWidget::keyPressEvent(event);
+}
 
-//void MainWindow::onLanConnectStatusToChangeTrayIcon(int state)
-//{
-//    qDebug() << "lan state:" << state << Q_FUNC_INFO << __LINE__;
-//    if (state==1 || state==3){
-//        m_lanIsLoading = true;
-//        m_iconTimer->start(LOADING_TRAYICON_TIMER_MS);
-//    } else {
-//        m_lanIsLoading = false;
-//        if (m_wlanIsLoading == false) {
-//            onRefreshTrayIcon();
-//        }
-//    }
-//}
-
-//void MainWindow::onTabletModeChanged(bool mode)
-//{
-//    qDebug() << "TabletMode change" << mode;
-//    Q_UNUSED(mode)
-//    //模式切换时，隐藏主界面
-//    hideMainwindow();
-//}
-
-//void MainWindow::onShowMainWindow(int type)
-//{
-//    m_vpnWidget->setCurrentIndex(type);
-
-//    if(QApplication::activeWindow() != this) {
-//        this->showMainwindow();
-//    }
-//}
-
-//void MainWindow::onConnectivityChanged(NetworkManager::Connectivity connectivity)
-//{
-//    if (!m_vpnTrayIcon) {
-//        return;
-//    }
-
-//    if (m_iconStatus == ACTIVATING) {
-//        return;
-//    }
-
-//    onRefreshTrayIcon();
-//}
-
-///**
-// * @brief MainWindow::keyPressEvent 按esc键关闭主界面
-// * @param event
-// */
-//void MainWindow::keyPressEvent(QKeyEvent *event)
-//{
-//    if (event->key() == Qt::Key_Escape) {
-//        hideMainwindow();
-//    }
-//    return QWidget::keyPressEvent(event);
-//}
-
-///**
-// * @brief MainWindow::eventFilter 事件过滤器
-// * @param watched
-// * @param event
-// * @return
-// */
+/**
+ * @brief vpnMainWindow::eventFilter 事件过滤器
+ * @param watched
+ * @param event
+ * @return
+ */
 bool vpnMainWindow::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::ActivationChange) {
@@ -634,96 +474,13 @@ void vpnMainWindow::getVirtualList(QMap<QString, QVector<QStringList>> &map)
     }
 }
 
-//void MainWindow::setWiredDeviceEnable(const QString& devName, bool enable)
-//{
-//    m_vpnPage->setWiredDeviceEnable(devName, enable);
-//}
-//void MainWindow::showPropertyWidget(QString devName, QString ssid)
-//{
-//    KyNetworkDeviceResourse *devResourse = new KyNetworkDeviceResourse();
-//    QStringList wiredDeviceList;
-//    wiredDeviceList.clear();
-//    devResourse->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDeviceList);
-//    if (wiredDeviceList.contains(devName)) {
-//      qDebug() <<   "showPropertyWidget device type wired device name " << devName << " uuid " << ssid;
-//      m_vpnPage->showDetailPage(devName, ssid);
-//      delete devResourse;
-//      devResourse = nullptr;
-//      return;
-//    }
+//Vpn连接删除
+void vpnMainWindow::deleteVpn(const QString &connUuid)
+{
+    m_vpnPage->deleteVpn(connUuid);
+}
 
-//    QStringList wirelessDeviceList;
-//    wirelessDeviceList.clear();
-//    devResourse->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDeviceList);
-//    if (wirelessDeviceList.contains(devName)) {
-//      qDebug() <<   "showPropertyWidget device type wireless device name " << devName << " ssid " << ssid;
-//      m_wlanWidget->showDetailPage(devName, ssid);
-//      delete devResourse;
-//      devResourse = nullptr;
-//      return;
-//    }
-
-//    qWarning() <<   "showPropertyWidget no such device " << devName;
-//    delete devResourse;
-//    devResourse = nullptr;
-//}
-
-//void MainWindow::showCreateWiredConnectWidget(const QString devName)
-//{
-//    qDebug() << "showCreateWiredConnectWidget! devName = " << devName;
-//    if (m_createPagePtrMap.contains(devName)) {
-//        if (m_createPagePtrMap[devName] != nullptr) {
-//            qDebug() << "showCreateWiredConnectWidget" << devName << "already create,just raise";
-
-//            KWindowSystem::raiseWindow(m_createPagePtrMap[devName]->winId());
-//            return;
-//        }
-//    }
-//    NetDetail *netDetail = new NetDetail(devName, "", "", false, false, true, this);
-//    connect(netDetail, &NetDetail::createPageClose, [&](QString interfaceName){
-//        if (m_createPagePtrMap.contains(interfaceName)) {
-//            m_createPagePtrMap[interfaceName] = nullptr;
-//        }
-//    });
-//    m_createPagePtrMap.insert(devName, netDetail);
-//    netDetail->show();
-//}
-
-//void MainWindow::showAddOtherWlanWidget(QString devName)
-//{
-//    qDebug() << "showAddOtherWlanWidget! devName = " << devName;
-//        if (m_addOtherPagePtrMap.contains(devName)) {
-//            if (m_addOtherPagePtrMap[devName] != nullptr) {
-//                qDebug() << "showAddOtherWlanWidget" << devName << "already create,just raise";
-
-//                KWindowSystem::raiseWindow(m_addOtherPagePtrMap[devName]->winId());
-//                return;
-//            }
-//        }
-
-//#if 0
-//        NetDetail *netDetail = new NetDetail(devName, "", "", false, true, true, this);
-//        connect(netDetail, &NetDetail::createPageClose, [&](QString interfaceName){
-//            if (m_addOtherPagePtrMap.contains(interfaceName)) {
-//                m_addOtherPagePtrMap[interfaceName] = nullptr;
-//            }
-//        });
-//        m_addOtherPagePtrMap.insert(devName, netDetail);
-//        netDetail->show();
-//#endif
-
-//        JoinHiddenWiFiPage *hiddenWiFi =new JoinHiddenWiFiPage(devName);
-//        connect(hiddenWiFi, &JoinHiddenWiFiPage::hiddenWiFiPageClose, [&](QString interfaceName){
-//            if (m_addOtherPagePtrMap.contains(interfaceName)) {
-//                m_addOtherPagePtrMap[interfaceName] = nullptr;
-//            }
-//        });
-//        m_addOtherPagePtrMap.insert(devName, hiddenWiFi);
-//        connect(hiddenWiFi, &JoinHiddenWiFiPage::showWlanList, this, &MainWindow::onShowMainWindow);
-//        hiddenWiFi->show();
-//}
-
-//有线连接断开
+//Vpn连接断开
 void vpnMainWindow::activateVpn(const QString& connUuid)
 {
     m_vpnPage->activateVpn(connUuid);
@@ -732,4 +489,21 @@ void vpnMainWindow::deactivateVpn(const QString& connUuid)
 {
     m_vpnPage->deactivateVpn(connUuid);
 }
+
+void vpnMainWindow::onVpnIconVisibleChanged()
+{
+    m_vpnTrayIcon->setVisible(m_vpnGsettings->get("visible").toBool());
+}
+
+void vpnMainWindow::initVpnIconVisible()
+{
+    if(QGSettings::isSchemaInstalled(GSETTINGS_VPNICON_VISIBLE)) {
+        m_vpnGsettings = new QGSettings(GSETTINGS_VPNICON_VISIBLE);
+        if(m_vpnGsettings->keys().contains(QString("visible"))) {
+            connect(m_vpnGsettings, &QGSettings::changed, this, &vpnMainWindow::onVpnIconVisibleChanged);
+            m_vpnTrayIcon->setVisible(m_vpnGsettings->get("visible").toBool());
+        }
+    }
+}
+
 

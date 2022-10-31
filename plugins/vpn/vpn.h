@@ -59,6 +59,7 @@ public:
 
 public:
     void initComponent();
+    void initConnect();
 
     void runExternalApp();
 
@@ -72,6 +73,8 @@ private:
     int pluginType;
     QWidget * pluginWidget;
 
+    QDBusInterface  *m_interface = nullptr;
+
     QFrame *m_topFrame;
     QFrame *m_showFrame;
     QLabel *m_showLabel;
@@ -83,25 +86,33 @@ private:
     ItemFrame *m_listFrame;
 
     bool mFirstLoad;
+    QGSettings  *m_switchGsettings;
 
     QFrame* myLine();
 
     int getInsertPos(QString connName);
 
-    void deleteOneLan(QString uuid);
+    void deleteVpn(QString uuid);
     void activeConnect(QString uuid);
     void deActiveConnect(QString uuid);
 
     //获取设备列表
     void initNet();
-    //处理列表增加
-    void addLanItem(QStringList infoList, bool isActived);
     //增加一项
     void addOneVirtualItem(QStringList infoList);
     //减少一项
     void removeOneVirtualItem(QString uuid);
     //单个lan连接状态变化
     void itemActiveConnectionStatusChanged(VpnItem *item, int status);
+
+
+    void setShowSwitchStatus();
+
+private slots:
+    void onVpnAdd(QStringList);
+    void onVpnRemove(QString);
+    void onVpnUpdate(QStringList);
+    void onVpnActiveConnectionStateChanged(QString, int);
 
 };
 

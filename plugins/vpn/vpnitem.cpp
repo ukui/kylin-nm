@@ -27,8 +27,8 @@
 #define THEME_QT_SCHEMA  "org.ukui.style"
 #define MODE_QT_KEY      "style-name"
 
-VpnItem::VpnItem(bool bAcitve, bool isLock, QWidget *parent)
-    : isAcitve(bAcitve), isLock(isLock), QPushButton(parent)
+VpnItem::VpnItem(bool bAcitve, QWidget *parent)
+    : isAcitve(bAcitve), QPushButton(parent)
 {
     this->setMinimumSize(550, 58);
     this->setProperty("useButtonPalette", true);
@@ -42,16 +42,32 @@ VpnItem::VpnItem(bool bAcitve, bool isLock, QWidget *parent)
     mLanLyt->setContentsMargins(16,0,16,0);
     mLanLyt->setSpacing(16);
     iconLabel = new QLabel(this);
+    iconLabel->setProperty("useIconHighlightEffect", 0x2);
     titileLabel = new FixLabel(this);
     statusLabel = new QLabel(this);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-//    statusLabel->setMinimumSize(36,36);
 //    infoLabel = new GrayInfoButton(this);
+
+    m_moreButton = new QToolButton(this);
+    m_moreButton->setProperty("useButtonPalette", true);
+    m_moreButton->setPopupMode(QToolButton::InstantPopup);
+    m_moreButton->setAutoRaise(true);
+    m_moreButton->setIcon(QIcon::fromTheme("view-more-horizontal-symbolic"));
+    m_moreMenu = new QMenu(m_moreButton);
+    m_connectAction = new QAction(m_moreMenu);
+    m_deleteAction = new QAction(tr("Delete"), m_moreMenu);
+    setConnectActionText(isAcitve);
+
+    m_moreMenu->addAction(m_connectAction);
+    m_moreMenu->addAction(m_deleteAction);
+    m_moreButton->setMenu(m_moreMenu);
+
     mLanLyt->addWidget(iconLabel);
     mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
     mLanLyt->addStretch();
     mLanLyt->addWidget(statusLabel);
 //    mLanLyt->addWidget(infoLabel);
+    mLanLyt->addWidget(m_moreButton);
 
     loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
     loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
@@ -64,6 +80,9 @@ VpnItem::VpnItem(bool bAcitve, bool isLock, QWidget *parent)
     waitTimer = new QTimer(this);
     connect(waitTimer, &QTimer::timeout, this, &VpnItem::updateIcon);
 
+    connect(m_connectAction, &QAction::triggered, this, &VpnItem::onConnectTriggered);
+    connect(m_deleteAction, &QAction::triggered, this, &VpnItem::onDeletetTriggered);
+    m_moreMenu->installEventFilter(this);
 }
 
 void VpnItem::updateIcon()
@@ -84,6 +103,35 @@ void VpnItem::startLoading()
 void VpnItem::stopLoading(){
     waitTimer->stop();
     loading = false;
+}
+
+void VpnItem::setConnectActionText(bool isAcitve)
+{
+    if (isAcitve) {
+        m_connectAction->setText(tr("Disconnect"));
+    } else {
+        m_connectAction->setText(tr("Connect"));
+    }
+}
+
+void VpnItem::onConnectTriggered()
+{
+    if (!m_connectAction) {
+        return;
+    }
+    if (m_connectAction->text() == tr("Connect")) {
+        Q_EMIT connectActionTriggered();
+    } else if (m_connectAction->text() == tr("Disconnect")) {
+        Q_EMIT disconnectActionTriggered();
+    }
+}
+
+void VpnItem::onDeletetTriggered()
+{
+    if (!m_deleteAction) {
+        return;
+    }
+    Q_EMIT deleteActionTriggered();
 }
 
 void VpnItem::paintEvent(QPaintEvent *event)
@@ -121,4 +169,19 @@ void VpnItem::paintEvent(QPaintEvent *event)
 
     painter.drawRect(rect);
     QPushButton::paintEvent(event);
+}
+
+bool VpnItem::eventFilter(QObject *watched, QEvent *event)
+{
+    //菜单右边界与按钮右边界对齐
+    if (event->type() == QEvent::Show && watched == m_moreMenu) {
+        int menuXPos = m_moreMenu->pos().x();
+        int menuWidth = m_moreMenu->size().width();
+        int btnWidth = m_moreButton->size().width();
+
+        QPoint pos = QPoint (menuXPos - menuWidth + btnWidth, m_moreMenu->pos().y());
+        m_moreMenu->move(pos);
+        return true;
+    }
+    return false;
 }

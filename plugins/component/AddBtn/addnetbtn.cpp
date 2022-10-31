@@ -20,7 +20,6 @@
 #include "addnetbtn.h"
 #include <QEvent>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QVariant>
 #include <QPainter>
 #include <QPainterPath>
@@ -39,10 +38,10 @@ AddNetBtn::AddNetBtn(bool isWlan, QWidget *parent) : QPushButton(parent)
     color.setAlphaF(0.5);
     pal.setColor(QPalette::Button, color);
     this->setPalette(pal);
-    QHBoxLayout *addLyt = new QHBoxLayout;
+    QHBoxLayout *addLyt = new QHBoxLayout(this);
 
-    QLabel *iconLabel = new QLabel();
-    QLabel *textLabel = new QLabel();
+    QLabel *iconLabel = new QLabel(this);
+    textLabel = new QLabel(this);
 
     if (isWlan) {
         textLabel->setText(tr("Add Others"));

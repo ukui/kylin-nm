@@ -23,6 +23,13 @@
 #include <QProcess>
 #include <QMouseEvent>
 #include <QDebug>
+#include <QtDBus>
+#include <QDBusArgument>
+
+#define ACTIVATING   1
+#define ACTIVATED    2
+#define DEACTIVATING 3
+#define DEACTIVATED  4
 
 #define LABEL_RECT 17, 0, 105, 23
 #define CONTENTS_MARGINS 0, 0, 0, 0
@@ -45,6 +52,9 @@
 
 #define KVpnSymbolic "ukui-vpn-symbolic"
 
+const QString VISIBLE = "visible";
+const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.vpnicon";
+
 Vpn::Vpn() : mFirstLoad(true)
 {
     pluginName = tr("Vpn");
@@ -56,6 +66,8 @@ Vpn::~Vpn()
     if (!mFirstLoad) {
         delete ui;
         ui = nullptr;
+        delete m_interface;
+        delete m_switchGsettings;
     }
 }
 
@@ -75,7 +87,18 @@ QWidget *Vpn::pluginUi(){
         pluginWidget->setAttribute(Qt::WA_DeleteOnClose);
         ui->setupUi(pluginWidget);
 
+        qDBusRegisterMetaType<QVector<QStringList>>();
+        m_interface = new QDBusInterface("com.kylin.network",
+                                         "/com/kylin/vpnTool",
+                                         "com.kylin.vpnTool",
+                                         QDBusConnection::sessionBus());
+        if(!m_interface->isValid()) {
+            qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+        }
+
         initComponent();
+        initConnect();
+        initNet();
     }
     return pluginWidget;
 }
@@ -117,7 +140,7 @@ void Vpn::initComponent(){
     m_showFrame->setMinimumSize(FRAME_MIN_SIZE);
     m_showFrame->setMaximumSize(CONTECT_FRAME_MAX_SIZE);
     QHBoxLayout *showLayout = new QHBoxLayout(m_showFrame);
-    m_showLabel = new QLabel(tr("Open"), m_showFrame);
+    m_showLabel = new QLabel(tr("Show on Taskbar"), m_showFrame);
     m_showLabel->setMinimumWidth(LABLE_MIN_WIDTH);
     m_showBtn = new KSwitchButton(m_showFrame);
     showLayout->setContentsMargins(ITEM_MARGINS);
@@ -127,26 +150,26 @@ void Vpn::initComponent(){
 
     m_showFrame->setLayout(showLayout);
 
-    m_Line = myLine();
+//    m_Line = myLine();
 
-    m_timeFrame = new QFrame(m_topFrame);
-    m_timeFrame->setFrameShape(QFrame::Shape::NoFrame);
-    m_timeFrame->setMinimumSize(FRAME_MIN_SIZE);
-    m_timeFrame->setMaximumSize(CONTECT_FRAME_MAX_SIZE);
-    QHBoxLayout *timeLayout = new QHBoxLayout(m_timeFrame);
-    m_timeLabel = new QLabel(tr("Open"), m_timeFrame);
-    m_timeLabel->setMinimumWidth(LABLE_MIN_WIDTH);
-    m_timeBtn = new KSwitchButton(m_timeFrame);
-    timeLayout->setContentsMargins(ITEM_MARGINS);
-    timeLayout->addWidget(m_timeLabel);
-    timeLayout->addStretch();
-    timeLayout->addWidget(m_timeBtn);
+//    m_timeFrame = new QFrame(m_topFrame);
+//    m_timeFrame->setFrameShape(QFrame::Shape::NoFrame);
+//    m_timeFrame->setMinimumSize(FRAME_MIN_SIZE);
+//    m_timeFrame->setMaximumSize(CONTECT_FRAME_MAX_SIZE);
+//    QHBoxLayout *timeLayout = new QHBoxLayout(m_timeFrame);
+//    m_timeLabel = new QLabel(tr("Open"), m_timeFrame);
+//    m_timeLabel->setMinimumWidth(LABLE_MIN_WIDTH);
+//    m_timeBtn = new KSwitchButton(m_timeFrame);
+//    timeLayout->setContentsMargins(ITEM_MARGINS);
+//    timeLayout->addWidget(m_timeLabel);
+//    timeLayout->addStretch();
+//    timeLayout->addWidget(m_timeBtn);
 
-    m_timeFrame->setLayout(timeLayout);
+//    m_timeFrame->setLayout(timeLayout);
 
     hotspotLyt->addWidget(m_showFrame);
-    hotspotLyt->addWidget(m_Line);
-    hotspotLyt->addWidget(m_timeFrame);
+//    hotspotLyt->addWidget(m_Line);
+//    hotspotLyt->addWidget(m_timeFrame);
     hotspotLyt->setSpacing(0);
 
     //列表
@@ -158,6 +181,81 @@ void Vpn::initComponent(){
     connect(m_listFrame->addWlanWidget, &AddNetBtn::clicked, this, [=]() {
         runExternalApp();
     });
+
+    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+        m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
+        setShowSwitchStatus();
+
+        connect(m_switchGsettings, &QGSettings::changed, this, [=] (const QString &key) {
+            if (key == VISIBLE) {
+                setShowSwitchStatus();
+            }
+        });
+    } else {
+        m_showBtn->setChecked(false);
+        m_showBtn->setCheckable(false);
+        qDebug()<<"[Vpn] org.ukui.kylin-nm.visible is not installed!";
+    }
+
+    connect(m_showBtn, &KSwitchButton::stateChanged, this, [=](bool state){
+        if (m_switchGsettings != nullptr) {
+            m_switchGsettings->set(VISIBLE, state);
+        }
+    });
+
+//    connect(m_timeBtn, &KSwitchButton::stateChanged, this, [=](bool state){
+//        if (m_switchGsettings != nullptr) {
+//            m_switchGsettings->set(VISIBLE, state);
+//        }
+//    });
+    ui->pushButton->hide();
+}
+
+void Vpn::initConnect()
+{
+    connect(m_interface, SIGNAL(vpnAdd(QStringList)), this, SLOT(onVpnAdd(QStringList)));
+    connect(m_interface, SIGNAL(vpnRemove(QString)), this, SLOT(onVpnRemove(QString)));
+    connect(m_interface, SIGNAL(vpnUpdate(QStringList)), this, SLOT(onVpnUpdate(QStringList)));
+    connect(m_interface, SIGNAL(vpnActiveConnectionStateChanged(QString, int)),
+                this, SLOT(onVpnActiveConnectionStateChanged(QString, int)));
+}
+
+//初始化列表
+void Vpn::initNet()
+{
+    qDebug() << "[Vpn]initNet";
+    if (!m_interface->isValid()) {
+        return;
+    }
+    QDBusMessage result = m_interface->call(QStringLiteral("getVirtualList"));
+    if(result.type() == QDBusMessage::ErrorMessage)
+    {
+        qWarning() << "getVirtualList error:" << result.errorMessage();
+        return;
+    }
+    auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
+    QVector<QStringList> variantList;
+    dbusArg >> variantList;
+    if (variantList.size() == 0) {
+        qDebug() << "[Vpn]initNet list empty";
+        return;
+    }
+
+    for (int i = 0; i < variantList.size(); ++i) {
+        QStringList vpnInfo = variantList.at(i);
+        addOneVirtualItem(vpnInfo);
+    }
+    return;
+}
+
+void Vpn::setShowSwitchStatus()
+{
+    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+        bool status = m_switchGsettings->get(VISIBLE).toBool();
+        m_showBtn->setChecked(status);
+    } else {
+        qDebug()<<"[Vpn] org.ukui.kylin-nm.switch is not installed!";
+    }
 }
 
 void Vpn::runExternalApp(){
@@ -178,7 +276,21 @@ QFrame* Vpn::myLine()
     return line;
 }
 
+//刪除
+void Vpn::deleteVpn(QString uuid)
+{
+    m_interface->call(QStringLiteral("deleteVpn"), uuid);
+}
 
+//激活
+void Vpn::activeConnect(QString uuid) {
+    m_interface->call(QStringLiteral("activateVpn"), uuid);
+}
+
+//断开
+void Vpn::deActiveConnect(QString uuid) {
+    m_interface->call(QStringLiteral("deactivateVpn"), uuid);
+}
 
 
 //增加一项
@@ -189,22 +301,25 @@ void Vpn::addOneVirtualItem(QStringList infoList)
         return;
     }
 
-    qDebug() << "[Vpn]addOneVitualItem" << infoList.at(0);
+    qDebug() << "[Vpn]addOneVitualItem" << infoList.at(0) << infoList.at(3) ;
     QString connName = infoList.at(0);
     QString connUuid = infoList.at(1);
     QString connDbusPath = infoList.at(2);
-    VpnItem * lanItem = new VpnItem(pluginWidget);
+    int status = infoList.at(3).toInt(); //1-连接中 2-已连接 3-断开中 4-已断开
+    VpnItem * item = new VpnItem(pluginWidget);
 
-    QString iconPath;
-    iconPath = KVpnSymbolic;
-    lanItem->statusLabel->setText("");
+    item->statusLabel->setText(tr("not connected"));
 
-    QIcon searchIcon = QIcon::fromTheme(iconPath);
-    lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
-    lanItem->titileLabel->setText(connName);
+    QIcon searchIcon = QIcon::fromTheme(KVpnSymbolic);
+    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
+    item->titileLabel->setText(connName);
 
-    lanItem->uuid = connUuid;
-    lanItem->dbusPath = connDbusPath;
+    item->uuid = connUuid;
+    item->dbusPath = connDbusPath;
+
+    if (status == 1 || status == 3) {
+        item->startLoading();
+    }
 
 //    connect(lanItem->infoLabel, &GrayInfoButton::clicked, this, [=]{
 //        // open landetail page
@@ -216,33 +331,152 @@ void Vpn::addOneVirtualItem(QStringList infoList)
 //        qDebug() << "[NetConnect]call showPropertyWidget respond" << __LINE__;
 //    });
 
-    lanItem->isAcitve = false;
+    item->isAcitve = (status == 2);
+    item->setConnectActionText(item->isAcitve);
 
-    connect(lanItem, &QPushButton::clicked, this, [=] {
-        if (lanItem->isAcitve || lanItem->loading) {
-            deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
+    connect(item, &QPushButton::clicked, this, [=] {
+        if (item->isAcitve || item->loading) {
+            deActiveConnect(item->uuid);
         } else {
-            activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
+            activeConnect(item->uuid);
         }
     });
 
+    connect(item, &VpnItem::connectActionTriggered, this, [=] {
+        activeConnect(item->uuid);
+    });
+    connect(item, &VpnItem::disconnectActionTriggered, this, [=] {
+        deActiveConnect(item->uuid);
+    });
+    connect(item, &VpnItem::deleteActionTriggered, this, [=] {
+        deleteVpn(item->uuid);
+    });
+
     //记录到deviceFrame的itemMap中
-    m_listFrame->itemMap.insert(connUuid, lanItem);
+    m_listFrame->itemMap.insert(connUuid, item);
     int index = getInsertPos(connName);
-    qDebug()<<"[NetConnect]addOneVirtualItem " << connName << " to " << deviceName << " list at pos:" << index;
-    m_listFrame->lanItemLayout->insertWidget(index, lanItem);
+    qDebug()<<"[Vpn]addOneVirtualItem " << connName << " at pos:" << index;
+    m_listFrame->lanItemLayout->insertWidget(index, item);
 }
 
-void Vpn::removeOneVirtualItem(QString uuid)
+void Vpn::removeOneVirtualItem(QString dbusPath)
 {
-    if (!m_listFrame->itemMap.contains(uuid)) {
-            qDebug() << "[Vpn]not exist a virtual " << uuid;
-            return;
+   qDebug()<<"[Vpn]vpn remove dbus path:" << dbusPath;
+
+   QMap<QString, VpnItem *>::iterator itemIter;
+   for (itemIter = m_listFrame->itemMap.begin(); itemIter != m_listFrame->itemMap.end(); itemIter++) {
+       if (itemIter.value()->dbusPath == dbusPath) {
+           qDebug()<<"[Vpn]vpn remove " << dbusPath << " find in " << itemIter.value()->titileLabel->text();
+           QString key = itemIter.key();
+           m_listFrame->lanItemLayout->removeWidget(itemIter.value());
+           delete itemIter.value();
+           m_listFrame->itemMap.remove(key);
+           break;
+       }
+   }
+}
+
+//增加
+void Vpn::onVpnAdd(QStringList infoList)
+{
+    addOneVirtualItem(infoList);
+}
+
+//移出
+void Vpn::onVpnRemove(QString uuid)
+{
+    removeOneVirtualItem(uuid);
+}
+
+//名称变化
+void Vpn::onVpnUpdate(QStringList info)
+{
+    if (m_listFrame->itemMap.contains(info.at(1))) {
+        qDebug() << "[Vpn]" << m_listFrame->itemMap[info.at(1)]->titileLabel->text() << "change to" << info.at(0);
+        if (m_listFrame->itemMap[info.at(1)]->titileLabel->text() != info.at(0)) {
+            m_listFrame->itemMap[info.at(1)]->titileLabel->setText(info.at(0));
+        }
     }
+}
 
-   qDebug()<<"[Vpn]removeOneVirtualItem " << uuid;
+void Vpn::onVpnActiveConnectionStateChanged(QString uuid, int status)
+{
+    if (uuid.isEmpty()) {
+        qDebug() << "[Vpn]onActiveConnectionChanged but uuid is empty";
+        return;
+    }
+    qDebug() << "[Vpn]onActiveConnectionChanged " << uuid << status;
+    VpnItem * item= nullptr;
 
-   m_listFrame->lanItemLayout->removeWidget(m_listFrame->itemMap[uuid]);
-   delete m_listFrame->itemMap[uuid];
-   m_listFrame->itemMap.remove(uuid);
+    if (m_listFrame->itemMap.contains(uuid)) {
+        item = m_listFrame->itemMap[uuid];
+        if (status == ACTIVATED) {
+            //为已连接则放到第一个
+            m_listFrame->lanItemLayout->removeWidget(item);
+            m_listFrame->lanItemLayout->insertWidget(0,item);
+        } else if (status == DEACTIVATED) {
+            //为断开则重新插入
+            int index = getInsertPos(item->titileLabel->text());
+            qDebug() << "[Vpn]reinsert" << item->titileLabel->text() << "pos" << index  << "because status changes to deactive";
+            m_listFrame->lanItemLayout->removeWidget(item);
+            m_listFrame->lanItemLayout->insertWidget(index,item);
+        }
+        itemActiveConnectionStatusChanged(item, status);
+    }
+}
+
+void Vpn::itemActiveConnectionStatusChanged(VpnItem *item, int status)
+{
+//    QString iconPath = NoNetSymbolic;
+    if (status == ACTIVATING) {
+        item->startLoading();
+    } else if (status == ACTIVATED) {
+        item->stopLoading();
+//        iconPath = KLanSymbolic;
+        item->statusLabel->clear();
+        item->statusLabel->setMinimumSize(36,36);
+        item->statusLabel->setMaximumSize(16777215,16777215);
+        item->statusLabel->setText(tr("connected"));
+        item->isAcitve = true;
+    } else if (status == DEACTIVATING) {
+        item->startLoading();
+    } else {
+        item->stopLoading();
+        item->statusLabel->setMinimumSize(36,36);
+        item->statusLabel->setMaximumSize(16777215,16777215);
+        item->statusLabel->clear();
+        item->isAcitve = false;
+        item->statusLabel->setText(tr("not connected"));
+    }
+    item->setConnectActionText(item->isAcitve);
+}
+
+int Vpn::getInsertPos(QString connName)
+{
+    qDebug() << "[Vpn]getInsertPos" << connName;
+    int index = 0;
+    if(!m_interface->isValid()) {
+        index = 0;
+    } else {
+        QDBusMessage result = m_interface->call(QStringLiteral("getVirtualList"));
+        if(result.type() == QDBusMessage::ErrorMessage)
+        {
+            qWarning() << "getVirtualList error:" << result.errorMessage();
+            return 0;
+        }
+        auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
+        QVector<QStringList> variantList;
+        dbusArg >> variantList;
+        for (int i = 0; i < variantList.size(); ++i ) {
+            if (variantList.at(i).at(0) == connName) {
+                qDebug() << "pos in kylin-nm is " << i;
+                index = i;
+                break;
+            }
+        }
+        if (variantList.at(0).size() == 1) {
+            index--;
+        }
+    }
+    return index;
 }

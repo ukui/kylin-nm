@@ -456,17 +456,17 @@
     <message>
         <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="107"/>
         <source>Wi-Fi network requires authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Wi-Fiཡི་དྲ་རྒྱའི་བླང་བྱར་སྤྲོད་བྱ་རྒྱུའི་བླང་བྱ་བཏོན་ཡོད།</translation>
     </message>
     <message>
         <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="112"/>
         <source>Access to Wi-Fi network &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Wii-Fiབར་གྱི་དྲ་རྒྱར་འཚམས་འདྲི་གནང་བ་རེད།</translation>
     </message>
     <message>
         <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="114"/>
         <source>&quot; requires a password or encryption key.</source>
-        <translation type="unfinished"></translation>
+        <translation>གསང་གྲངས་དང་གསང་བའི་ལྡེ་མིག་དགོས།</translation>
     </message>
     <message>
         <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="143"/>

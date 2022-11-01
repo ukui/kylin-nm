@@ -168,19 +168,19 @@ void MainWindow::secondaryStart()
  */
 void MainWindow::initPlatform()
 {
-    char* projectName = kdk_system_get_projectName();
-    QString strProjectName(projectName);
-    free(projectName);
-    projectName = NULL;
-    if(v10Sp1.compare(strProjectName,Qt::CaseInsensitive) == 0) {
-        unsigned int feature = kdk_system_get_productFeatures();
-        if (feature == 3) {
-            m_isShowInCenter = true;
-        }
-    } else if (intel.compare(strProjectName,Qt::CaseInsensitive) == 0) {
-        m_isShowInCenter = true;
-    }
-    qDebug() << "projectName" << projectName << m_isShowInCenter;
+//    char* projectName = kdk_system_get_projectName();
+//    QString strProjectName(projectName);
+//    free(projectName);
+//    projectName = NULL;
+//    if(v10Sp1.compare(strProjectName,Qt::CaseInsensitive) == 0) {
+//        unsigned int feature = kdk_system_get_productFeatures();
+//        if (feature == 3) {
+//            m_isShowInCenter = true;
+//        }
+//    } else if (intel.compare(strProjectName,Qt::CaseInsensitive) == 0) {
+//        m_isShowInCenter = true;
+//    }
+//    qDebug() << "projectName" << projectName << m_isShowInCenter;
 }
 
 /**
@@ -531,20 +531,20 @@ void MainWindow::setCentralWidgetType(IconActiveType iconStatus)
 
 void MainWindow::getTabletMode()
 {
-    QDBusInterface interface(QString("com.kylin.statusmanager.interface"),
-                             QString("/"),
-                             QString("com.kylin.statusmanager.interface"),
-                             QDBusConnection::sessionBus());
-    if(!interface.isValid()) {
-        m_isShowInCenter = true;
-        return;
-    }
-    QDBusReply<bool> reply = interface.call("get_current_tabletmode");
-    if (!reply.isValid()) {
-        m_isShowInCenter = true;
-        return;
-    }
-    m_isShowInCenter = reply.value();
+//    QDBusInterface interface(QString("com.kylin.statusmanager.interface"),
+//                             QString("/"),
+//                             QString("com.kylin.statusmanager.interface"),
+//                             QDBusConnection::sessionBus());
+//    if(!interface.isValid()) {
+//        m_isShowInCenter = true;
+//        return;
+//    }
+//    QDBusReply<bool> reply = interface.call("get_current_tabletmode");
+//    if (!reply.isValid()) {
+//        m_isShowInCenter = true;
+//        return;
+//    }
+//    m_isShowInCenter = reply.value();
 }
 
 /**

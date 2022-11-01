@@ -45,7 +45,7 @@ public:
     void showMainwindow();
     void hideMainwindow();
 
-    void getVirtualList(QMap<QString, QVector<QStringList>> &map);
+    void getVirtualList(QVector<QStringList> &vector);
 
 
     //Vpn连接删除

@@ -466,11 +466,11 @@ bool vpnMainWindow::eventFilter(QObject *watched, QEvent *event)
     return QMainWindow::eventFilter(watched,event);
 }
 
-void vpnMainWindow::getVirtualList(QMap<QString, QVector<QStringList>> &map)
+void vpnMainWindow::getVirtualList(QVector<QStringList> &vector)
 {
-    map.clear();
+    vector.clear();
     if (nullptr != m_vpnPage) {
-        m_vpnPage->getVirtualList(map);
+        m_vpnPage->getVirtualList(vector);
     }
 }
 

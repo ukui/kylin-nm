@@ -49,7 +49,7 @@ VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
     initUI();
     initVpnArea();
 
-    connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &VpnPage::onConnectionStateChange);
+    connect(m_activeResourse, &KyActiveConnectResourse::vpnConnectChangeReason, this, &VpnPage::onConnectionStateChange);
     connect(m_activeResourse, &KyActiveConnectResourse::activeConnectRemove, this, [=] (QString activeConnectUuid) {
         sendVpnStateChangeSignal(activeConnectUuid,Deactivated);
     } );
@@ -356,12 +356,12 @@ void VpnPage::updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap
 }
 
 void VpnPage::onConnectionStateChange(QString uuid,
-                              NetworkManager::ActiveConnection::State state,
-                              NetworkManager::ActiveConnection::Reason reason)
+                                      NetworkManager::VpnConnection::State state,
+                                      NetworkManager::VpnConnection::StateChangeReason reason)
 {
     //VpnPage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
     if (!m_connectResourse->isVirtualConncection(uuid)) {
-        qDebug() << "[VpnPage] connection state change signal but not wired";
+        qDebug() << "[VpnPage] connection state change signal but not vpn";
         return;
     }
 
@@ -417,16 +417,17 @@ void VpnPage::onConnectionStateChange(QString uuid,
 }
 
 
-void VpnPage::getVirtualList(QMap<QString, QVector<QStringList> > &map)
+void VpnPage::getVirtualList(QVector<QStringList> &vector)
 {
     QList<KyConnectItem *> netConnectList;
-    QVector<QStringList> vector;
+    vector.clear();
     m_connectResourse->getVpnAndVirtualConnections(netConnectList);      //未激活列表的显示
     if (!netConnectList.isEmpty()) {
         for (int i = 0; i < netConnectList.size(); i++) {
-            vector.clear();
-            vector.append(QStringList()<<netConnectList.at(i)->m_connectName<<netConnectList.at(i)->m_connectUuid << netConnectList.at(i)->m_connectPath);
-            map.insert(netConnectList.at(i)->m_connectUuid, vector);
+            vector.append(QStringList() << netConnectList.at(i)->m_connectName
+                                        << netConnectList.at(i)->m_connectUuid
+                                        << netConnectList.at(i)->m_connectPath
+                                        << QString::number(netConnectList.at(i)->m_connectState));
         }
     }
     return;
@@ -444,7 +445,10 @@ void VpnPage::sendVpnUpdateSignal(KyConnectItem *p_connectItem)
 void VpnPage::sendVpnAddSignal(KyConnectItem *p_connectItem)
 {
     QStringList info;
-    info << p_connectItem->m_connectName << p_connectItem->m_connectUuid << p_connectItem->m_connectPath;
+    info << p_connectItem->m_connectName
+         << p_connectItem->m_connectUuid
+         << p_connectItem->m_connectPath
+         << QString::number(p_connectItem->m_connectState);
     qDebug() << "[VpnPage] emit vpnAdd because addConnection ";
     Q_EMIT vpnAdd(info);
 

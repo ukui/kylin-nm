@@ -928,6 +928,11 @@ void WlanPage::onConnectionStateChanged(QString uuid,
                                       NetworkManager::ActiveConnection::State state,
                                       NetworkManager::ActiveConnection::Reason reason)
 {
+    if (!m_connectResource->isWirelessConnection(uuid)) {
+         qDebug()<< LOG_FLAG << "it is not wireless connection" << uuid;
+        return;
+    }
+
     QString devName, ssid;
     m_wirelessNetResource->getSsidByUuid(uuid, ssid);
     m_wirelessNetResource->getDeviceByUuid(uuid, devName);
@@ -939,11 +944,6 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     if (ssid.isEmpty()) {
         qDebug()<< LOG_FLAG << "ssid or devicename is empty"
                 << "devicename"<< devName <<"ssid"<<ssid;
-        return;
-    }
-
-    if (!m_connectResource->isWirelessConnection(uuid)) {
-         qDebug()<< LOG_FLAG << "it is not wireless connection" << uuid;
         return;
     }
 

@@ -45,7 +45,7 @@ public:
     ~VpnPage();
 
     //for dbus
-    void getVirtualList(QMap<QString, QVector<QStringList> > &map);
+    void getVirtualList(QVector<QStringList> &vector);
     void deleteVpn(const QString &connUuid);
     void activateVpn(const QString& connUuid);
     void deactivateVpn(const QString& connUuid);
@@ -94,8 +94,9 @@ Q_SIGNALS:
     void vpnConnectChanged(int state);
 
 private Q_SLOTS:
-    void onConnectionStateChange(QString uuid, NetworkManager::ActiveConnection::State state,
-                                 NetworkManager::ActiveConnection::Reason reason);
+    void onConnectionStateChange(QString uuid,
+                                 NetworkManager::VpnConnection::State state,
+                                 NetworkManager::VpnConnection::StateChangeReason reason);
 
     void onAddConnection(QString uuid);
     void onRemoveConnection(QString path);

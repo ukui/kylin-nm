@@ -48,7 +48,7 @@ public:
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
     //虚拟连接列表
-    QMap<QString, QVector<QStringList> > getVirtualList();
+    QVector<QStringList> getVirtualList();
     //刪除 根据网络名称 参数1 0:lan 1:wlan 参数2 为ssid/uuid
     Q_NOREPLY void deleteVpn(QString uuid);
     //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid

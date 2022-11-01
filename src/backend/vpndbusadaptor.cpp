@@ -28,7 +28,6 @@ VpnDbusAdaptor::VpnDbusAdaptor(vpnMainWindow *parent)
     qDBusRegisterMetaType<QMap<QString, bool> >();
     qDBusRegisterMetaType<QMap<QString, int> >();
     qDBusRegisterMetaType<QVector<QStringList> >();
-    qDBusRegisterMetaType<QMap<QString, QVector<QStringList> >>();
     //setAutoRelaySignals(true)后会自动转发mainwindow发出的同名信号，因此不必再额外写一个转发
     setAutoRelaySignals(true);
 }
@@ -39,11 +38,11 @@ VpnDbusAdaptor::~VpnDbusAdaptor()
 }
 
 //虚拟连接列表
-QMap<QString, QVector<QStringList>> VpnDbusAdaptor::getVirtualList()
+QVector<QStringList> VpnDbusAdaptor::getVirtualList()
 {
-    QMap<QString, QVector<QStringList>> map;
-    parent()->getVirtualList(map);
-    return map;
+    QVector<QStringList> vector;
+    parent()->getVirtualList(vector);
+    return vector;
 }
 
 //删除

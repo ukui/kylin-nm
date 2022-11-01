@@ -52,6 +52,8 @@ KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(pa
     qRegisterMetaType<NetworkManager::Device::Type>("NetworkManager::Device::Type");
     qRegisterMetaType<NetworkManager::Device::State>("NetworkManager::Device::State");
     qRegisterMetaType<NetworkManager::Device::StateChangeReason>("NetworkManager::Device::StateChangeReason");
+    qRegisterMetaType<NetworkManager::VpnConnection::State>("NetworkManager::VpnConnection::State");
+    qRegisterMetaType<NetworkManager::VpnConnection::StateChangeReason>("NetworkManager::VpnConnection::StateChangeReason");
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.DBus"),
                                              QString("/org/freedesktop/DBus"),

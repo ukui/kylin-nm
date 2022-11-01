@@ -43,6 +43,8 @@ public:
     JoinHiddenWiFiPage(QString devName, KDialog *parent = nullptr);
     ~JoinHiddenWiFiPage();
 
+    void setJoinHiddenWiFiShowed(bool state);
+
 protected:
     void closeEvent(QCloseEvent *event);
 
@@ -78,6 +80,7 @@ private:
 
     bool m_isJoinBtnEnable = false;
     bool m_isSecuOk = false;
+    bool m_joinHiddenWiFiShowed = false;
     ConInfo      m_info;
 
 private Q_SLOTS:

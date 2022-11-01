@@ -35,6 +35,8 @@
 #define  TLS_SCRO_HEIGHT  560
 #define  MEDIUM_WEIGHT_VALUE  57
 
+bool LaunchApp(QString desktopFile);
+
 JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
     :m_devName(devName),
       KDialog(parent)
@@ -55,9 +57,19 @@ JoinHiddenWiFiPage::~JoinHiddenWiFiPage()
 
 }
 
+void JoinHiddenWiFiPage::setJoinHiddenWiFiShowed(bool state)
+{
+    m_joinHiddenWiFiShowed = state;
+}
+
 void JoinHiddenWiFiPage::closeEvent(QCloseEvent *event)
 {
     Q_EMIT this->hiddenWiFiPageClose(m_devName);
+
+    if (m_joinHiddenWiFiShowed) {
+        LaunchApp("ukui-control-center.desktop");
+        m_joinHiddenWiFiShowed = false;
+    }
     return QWidget::closeEvent(event);
 }
 

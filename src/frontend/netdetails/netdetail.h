@@ -98,6 +98,8 @@ public:
     void closeEvent(QCloseEvent *event);
     bool eventFilter(QObject *w, QEvent *event);
 
+    void setDetailPageShowed(bool state);
+
 private:
     void initUI();
     void centerToScreen();
@@ -181,7 +183,7 @@ private:
     bool         isIpv6Ok;
     bool         isSecuOk;
     bool         isConfirmBtnEnable;
-
+    bool         m_hasDetailPageShowed = false;
     ConInfo      m_info;
 
     ThreadObject *m_object;

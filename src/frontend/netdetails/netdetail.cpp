@@ -55,8 +55,27 @@
 #define  PEAP_SCRO_HEIGHT  300
 #define  TLS_SCRO_HEIGHT  480
 #define  MAX_TAB_TEXT_LENGTH 44
+#define KYLIN_APP_MANAGER_NAME         "com.kylin.AppManager"
+#define KYLIN_APP_MANAGER_PATH         "/com/kylin/AppManager"
+#define KYLIN_APP_MANAGER_INTERFACE    "com.kylin.AppManager"
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
+
+bool LaunchApp(QString desktopFile)
+{
+    QDBusInterface m_appManagerDbusInterface(KYLIN_APP_MANAGER_NAME,
+                                             KYLIN_APP_MANAGER_PATH,
+                                             KYLIN_APP_MANAGER_INTERFACE,
+                                             QDBusConnection::sessionBus());//局部变量
+
+    if (!m_appManagerDbusInterface.isValid()) {
+        qWarning()<<"m_appManagerDbusInterface init error";
+        return false;
+    } else {
+        QDBusReply<bool> reply =m_appManagerDbusInterface.call("LaunchApp",desktopFile);
+        return reply;
+    }
+}
 
 void NetDetail::showDesktopNotify(const QString &message, QString soundName)
 {
@@ -264,6 +283,11 @@ void NetDetail::closeEvent(QCloseEvent *event)
 {
     Q_EMIT this->detailPageClose(false);
     Q_EMIT this->createPageClose(m_deviceName);
+
+    if (m_hasDetailPageShowed) {
+        LaunchApp("ukui-control-center.desktop");
+        m_hasDetailPageShowed = false;
+    }
     return QWidget::closeEvent(event);
 }
 
@@ -399,6 +423,7 @@ void NetDetail::loadPage()
         pageFrame->hide();
         stackWidget->setCurrentIndex(CREATE_NET_PAGE_NUM);
         this->setWindowTitle(tr("Add Lan Connect"));
+        setDetailPageShowed(true);
     } else {
         stackWidget->setCurrentIndex(DETAIL_PAGE_NUM);
         this->setWindowTitle(m_name);
@@ -1129,6 +1154,11 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        }
    }
    return QWidget::eventFilter(w, event);
+}
+
+void NetDetail::setDetailPageShowed(bool state)
+{
+    m_hasDetailPageShowed = state;
 }
 
 void NetDetail::setNetTabToolTip()

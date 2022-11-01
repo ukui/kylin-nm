@@ -1265,6 +1265,7 @@ void LanPage::showDetailPage(QString devName, QString uuid)
 
     NetDetail *netDetail = new NetDetail(devName, p_item->m_connectName, uuid, isActive, false, false);
     netDetail->show();
+    netDetail->setDetailPageShowed(true);
 
     delete p_item;
     p_item = nullptr;

@@ -450,20 +450,20 @@ void vpnMainWindow::setCentralWidgetType(IconActiveType iconStatus)
 
 void vpnMainWindow::getTabletMode()
 {
-    QDBusInterface interface(QString("com.kylin.statusmanager.interface"),
-                             QString("/"),
-                             QString("com.kylin.statusmanager.interface"),
-                             QDBusConnection::sessionBus());
-    if(!interface.isValid()) {
-        m_isShowInCenter = true;
-        return;
-    }
-    QDBusReply<bool> reply = interface.call("get_current_tabletmode");
-    if (!reply.isValid()) {
-        m_isShowInCenter = true;
-        return;
-    }
-    m_isShowInCenter = reply.value();
+//    QDBusInterface interface(QString("com.kylin.statusmanager.interface"),
+//                             QString("/"),
+//                             QString("com.kylin.statusmanager.interface"),
+//                             QDBusConnection::sessionBus());
+//    if(!interface.isValid()) {
+//        m_isShowInCenter = true;
+//        return;
+//    }
+//    QDBusReply<bool> reply = interface.call("get_current_tabletmode");
+//    if (!reply.isValid()) {
+//        m_isShowInCenter = true;
+//        return;
+//    }
+//    m_isShowInCenter = reply.value();
 }
 
 /**

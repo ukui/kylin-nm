@@ -1167,7 +1167,26 @@ void NetDetail::setNetTabToolTip()
 NetTabBar::NetTabBar(QWidget *parent)
     :KTabBar(KTabBarStyle::SegmentDark, parent)
 {
-
+    //模式切换
+    QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interface"),
+                                         QString("/"),
+                                         QString("com.kylin.statusmanager.interface"),
+                                          QString("mode_change_signal"), this, SLOT(onModeChanged(bool)));
+    //模式获取
+    QDBusInterface interface(QString("com.kylin.statusmanager.interface"),
+                             QString("/"),
+                             QString("com.kylin.statusmanager.interface"),
+                             QDBusConnection::sessionBus());
+    if(!interface.isValid()) {
+        this->setFixedHeight(TAB_HEIGHT);
+        return;
+    }
+    QDBusReply<bool> reply = interface.call("get_current_tabletmode");
+    if (!reply.isValid()) {
+        this->setFixedHeight(TAB_HEIGHT);
+        return;
+    }
+    onModeChanged(reply.value());
 }
 
 NetTabBar::~NetTabBar()
@@ -1188,6 +1207,15 @@ QSize NetTabBar::minimumTabSizeHint(int index) const
     QSize size = KTabBar::minimumTabSizeHint(index);
     size.setWidth(TAB_WIDTH);
     return size;
+}
+
+void NetTabBar::onModeChanged(bool mode)
+{
+    if (mode) {
+        this->setFixedHeight(TAB_HEIGHT_TABLET); // 平板模式
+    } else {
+        this->setFixedHeight(TAB_HEIGHT); // PC模式
+    }
 }
 
 ThreadObject::ThreadObject(QString deviceName, QObject *parent)

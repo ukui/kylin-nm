@@ -49,7 +49,7 @@
 #define FRAME_LAYOUT_MARGINS  16,0,16,0
 #define FRAME_LAYOUT_SPACING  8
 #define LABEL_WIDTH  136
-#define LINE_EDIT_HEIGHT  36
+#define IP_FRAME_MAX_HEIGHT 76
 
 Proxy::Proxy() : mFirstLoad(true)
 {
@@ -233,7 +233,6 @@ void Proxy::initUi(QWidget *widget)
     mUrlLabel->setFixedWidth(136);
 
     mUrlLineEdit = new QLineEdit(mUrlFrame);
-    mUrlLineEdit->setFixedHeight(36);
 
     mUrlLayout->addWidget(mUrlLabel);
     mUrlLayout->addWidget(mUrlLineEdit);
@@ -255,7 +254,6 @@ void Proxy::initUi(QWidget *widget)
     mHTTPLineEdit_1 = new QLineEdit(mHTTPFrame);
     mHTTPLineEdit_1->resize(300, 36);
     mHTTPLineEdit_2 = new QLineEdit(mHTTPFrame);
-    mHTTPLineEdit_2->setFixedHeight(36);
     mHTTPLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
     mHTTPLayout_1->addWidget(mHTTPLabel);
     mHTTPLayout_1->addWidget(mHTTPLineEdit_1);
@@ -278,7 +276,6 @@ void Proxy::initUi(QWidget *widget)
     mHTTPSLineEdit_1 = new QLineEdit(mHTTPSFrame);
     mHTTPSLineEdit_1->resize(300, 36);
     mHTTPSLineEdit_2 = new QLineEdit(mHTTPSFrame);
-    mHTTPSLineEdit_2->setFixedHeight(36);
     mHTTPSLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
     mHTTPSLayout->addWidget(mHTTPSLabel);
     mHTTPSLayout->addWidget(mHTTPSLineEdit_1);
@@ -301,7 +298,6 @@ void Proxy::initUi(QWidget *widget)
     mFTPLineEdit_1 = new QLineEdit(mFTPFrame);
     mFTPLineEdit_1->resize(300, 36);
     mFTPLineEdit_2 = new QLineEdit(mFTPFrame);
-    mFTPLineEdit_2->setFixedHeight(36);
     mFTPLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
     mFTPLayout->addWidget(mFTPLabel);
     mFTPLayout->addWidget(mFTPLineEdit_1);
@@ -324,7 +320,6 @@ void Proxy::initUi(QWidget *widget)
     mSOCKSLineEdit_1 = new QLineEdit(mSOCKSFrame);
     mSOCKSLineEdit_1->resize(300, 36);
     mSOCKSLineEdit_2 = new QLineEdit(mSOCKSFrame);
-    mSOCKSLineEdit_2->setFixedHeight(36);
     mSOCKSLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
     mSOCKSLayout->addWidget(mSOCKSLabel);
     mSOCKSLayout->addWidget(mSOCKSLineEdit_1);
@@ -1008,27 +1003,23 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     //IP地址ui布局
     m_ipAddressFrame = new QFrame(m_appProxyFrame);
     m_ipAddressFrame->setMinimumSize(QSize(550, 60));
-    m_ipAddressFrame->setMaximumSize(QSize(16777215, 88));
+    m_ipAddressFrame->setMaximumSize(QSize(16777215, IP_FRAME_MAX_HEIGHT));
     m_ipAddressFrame->setFrameShape(QFrame::NoFrame);
     m_ipAddressLabel = new QLabel(tr("IP address"), m_ipAddressFrame);
     m_ipAddressLabel->setFixedWidth(LABEL_WIDTH);
     m_ipHintsLabel = new QLabel(m_ipAddressFrame);
+    m_ipHintsLabel->setFixedHeight(20);
     m_ipHintsLabel->setContentsMargins(8, 0, 0, 0);
     m_ipAddressLineEdit = new QLineEdit(m_ipAddressFrame);
-    m_ipAddressLineEdit->setFixedHeight(LINE_EDIT_HEIGHT);
+    m_ipAddressLineEdit->setMinimumHeight(36);
     m_ipAddressLineEdit->setPlaceholderText(tr("Required")); //必填
 
-    QWidget *ipInputWidget = new QWidget(m_ipAddressFrame);
-    QVBoxLayout *ipVLayout = new QVBoxLayout(ipInputWidget);
-    ipVLayout->setContentsMargins(0, 0, 0, 0);
-    ipVLayout->setSpacing(3);
-    ipVLayout->addWidget(m_ipAddressLineEdit);
-    ipVLayout->addWidget(m_ipHintsLabel);
-
-    QFormLayout *ipAddressLayout = new QFormLayout(m_ipAddressFrame);
-    ipAddressLayout->setContentsMargins(16, 12, 16, 12);
-    ipAddressLayout->setSpacing(FRAME_LAYOUT_SPACING);
-    ipAddressLayout->addRow(m_ipAddressLabel, ipInputWidget);
+    QGridLayout *ipAddressLayout = new QGridLayout(m_ipAddressFrame);
+    ipAddressLayout->setContentsMargins(16, 0, 16, 0);
+    ipAddressLayout->setVerticalSpacing(0);
+    ipAddressLayout->addWidget(m_ipAddressLabel, 0, 0);
+    ipAddressLayout->addWidget(m_ipAddressLineEdit, 0, 1);
+    ipAddressLayout->addWidget(m_ipHintsLabel, 1, 1);
 
     // IP的正则格式限制
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
@@ -1228,7 +1219,7 @@ bool Proxy::getipEditState(QString text)
 void Proxy::onipEditStateChanged()
 {
     if (!getipEditState(m_ipAddressLineEdit->text())) {
-        m_ipAddressFrame->setFixedHeight(88);
+        m_ipAddressFrame->setFixedHeight(IP_FRAME_MAX_HEIGHT);
         m_ipHintsLabel->show();
     } else {
         m_ipHintsLabel->hide();

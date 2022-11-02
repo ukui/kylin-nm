@@ -32,6 +32,9 @@
 #define ITEMHEIGH           50
 #define LAN_TYPE           0
 #define CONTROL_CENTER_WIFI              "org.ukui.control-center.wifi.switch"
+#define KYLIN_APP_MANAGER_NAME           "com.kylin.AppManager"
+#define KYLIN_APP_MANAGER_PATH           "/com/kylin/AppManager"
+#define KYLIN_APP_MANAGER_INTERFACE      "com.kylin.AppManager"
 
 const QString KLanSymbolic      = "network-wired-connected-symbolic";
 const QString NoNetSymbolic     = "network-wired-disconnected-symbolic";
@@ -350,9 +353,10 @@ void NetConnect::initNet()
 }
 
 void NetConnect::runExternalApp() {
-    QString cmd = "nm-connection-editor";
-    QProcess process(this);
-    process.startDetached(cmd);
+//    QString cmd = "nm-connection-editor";
+//    QProcess process(this);
+//    process.startDetached(cmd);
+    LaunchApp("nm-connection-editor.desktop");
 }
 
 //刪除
@@ -927,4 +931,20 @@ int NetConnect::getInsertPos(QString connName, QString deviceName)
         }
     }
     return index;
+}
+
+bool NetConnect::LaunchApp(QString desktopFile)
+{
+    QDBusInterface m_appManagerDbusInterface(KYLIN_APP_MANAGER_NAME,
+                                             KYLIN_APP_MANAGER_PATH,
+                                             KYLIN_APP_MANAGER_INTERFACE,
+                                             QDBusConnection::sessionBus());//局部变量
+
+    if (!m_appManagerDbusInterface.isValid()) {
+        qWarning()<<"m_appManagerDbusInterface init error";
+        return false;
+    } else {
+        QDBusReply<bool> reply =m_appManagerDbusInterface.call("LaunchApp",desktopFile);
+        return reply;
+    }
 }

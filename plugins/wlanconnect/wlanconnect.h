@@ -149,6 +149,7 @@ private:
         }
     }
 
+    bool LaunchApp(QString desktopFile);
 
 protected:
     bool eventFilter(QObject *w,QEvent *e);

@@ -99,6 +99,9 @@ const QString KApSymbolic       = "network-wireless-hotspot-symbolic";
 
 const QString IsApConnection    = "1";
 
+#define KYLIN_APP_MANAGER_NAME         "com.kylin.AppManager"
+#define KYLIN_APP_MANAGER_PATH         "/com/kylin/AppManager"
+#define KYLIN_APP_MANAGER_INTERFACE    "com.kylin.AppManager"
 
 #define ACTIVATING   1
 #define ACTIVATED    2
@@ -713,6 +716,22 @@ void WlanConnect::initSwtichState()
     setSwitchBtnState(state);
 }
 
+bool WlanConnect::LaunchApp(QString desktopFile)
+{
+    QDBusInterface m_appManagerDbusInterface(KYLIN_APP_MANAGER_NAME,
+                                             KYLIN_APP_MANAGER_PATH,
+                                             KYLIN_APP_MANAGER_INTERFACE,
+                                             QDBusConnection::sessionBus());//局部变量
+
+    if (!m_appManagerDbusInterface.isValid()) {
+        qWarning()<<"m_appManagerDbusInterface init error";
+        return false;
+    } else {
+        QDBusReply<bool> reply =m_appManagerDbusInterface.call("LaunchApp",desktopFile);
+        return reply;
+    }
+}
+
 //初始化整体列表和单设备列表
 void WlanConnect::initNet() {
 //    int count = 1;
@@ -776,9 +795,10 @@ void WlanConnect::initNetListFromDevice(QString deviceName)
 
 //高级设置
 void WlanConnect::runExternalApp() {
-    QString cmd = "nm-connection-editor";
-    QProcess process(this);
-    process.startDetached(cmd);
+//    QString cmd = "nm-connection-editor";
+//    QProcess process(this);
+//    process.startDetached(cmd);
+    LaunchApp("nm-connection-editor.desktop");
 }
 
 //根据信号强度分级+安全性分图标

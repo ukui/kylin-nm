@@ -1099,7 +1099,7 @@ void WlanPage::requestScan()
 
 void WlanPage::onHiddenWlanClicked()
 {
-//    qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
+    qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
 //    NetDetail *netDetail = new NetDetail(m_currentDevice, "", "", false, true, true);
 //    netDetail->show();
     if(m_hiddenWiFi != nullptr){
@@ -1486,7 +1486,7 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
 
     NetDetail *netDetail = new NetDetail(devName, ssid, wirelessNetItem.m_connectUuid, isActive, true, !wirelessNetItem.m_isConfigured);
     netDetail->show();
-
+    netDetail->setDetailPageShowed(true);
     return;
 }
 

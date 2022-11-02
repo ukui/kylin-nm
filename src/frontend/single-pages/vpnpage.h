@@ -35,6 +35,9 @@
 
 #define VPNPAGE_LAYOUT_MARGINS 0,0,0,0
 
+#define VISIBLE "visible"
+const QByteArray GSETTINGS_VPNICON_VISIBLE = "org.ukui.kylin-nm.vpnicon";
+
 class VpnListItem;
 
 class VpnPage : public SinglePage
@@ -65,7 +68,6 @@ private:
     bool removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
                               QListWidget *lanListWidget, QString path);
 
-    void constructConnectionArea();
     void constructActiveConnectionArea();
 
     void updateConnectionArea(KyConnectItem *p_newItem);
@@ -95,8 +97,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void onConnectionStateChange(QString uuid,
-                                 NetworkManager::VpnConnection::State state,
-                                 NetworkManager::VpnConnection::StateChangeReason reason);
+                                 NetworkManager::ActiveConnection::State state,
+                                 NetworkManager::ActiveConnection::Reason reason);
 
     void onAddConnection(QString uuid);
     void onRemoveConnection(QString path);

@@ -46,7 +46,7 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     titileLabel = new FixLabel(this);
     statusLabel = new QLabel(this);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-//    infoLabel = new GrayInfoButton(this);
+    infoLabel = new GrayInfoButton(this);
 
     m_moreButton = new QToolButton(this);
     m_moreButton->setProperty("useButtonPalette", true);
@@ -66,7 +66,7 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
     mLanLyt->addStretch();
     mLanLyt->addWidget(statusLabel);
-//    mLanLyt->addWidget(infoLabel);
+    mLanLyt->addWidget(infoLabel);
     mLanLyt->addWidget(m_moreButton);
 
     loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));

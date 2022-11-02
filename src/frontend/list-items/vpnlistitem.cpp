@@ -26,7 +26,6 @@
 
 VpnListItem::VpnListItem(const KyConnectItem *lanConnectItem, QWidget *parent):ListItem(parent)
 {
-    m_infoButton->setVisible(false);
     m_connectOperation = new KyWiredConnectOperation(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
 
@@ -182,40 +181,25 @@ void VpnListItem::onMenuTriggered(QAction *action)
     return;
 }
 
+bool VpnListItem::launchApp(QString desktopFile)
+{
+    QDBusInterface appManagerDbusInterface(KYLIN_APP_MANAGER_NAME,
+                                             KYLIN_APP_MANAGER_PATH,
+                                             KYLIN_APP_MANAGER_INTERFACE,
+                                             QDBusConnection::sessionBus());
+
+    if (!appManagerDbusInterface.isValid()) {
+        qWarning()<<"appManagerDbusInterface init error";
+        return false;
+    } else {
+        QDBusReply<bool> reply = appManagerDbusInterface.call("LaunchApp", desktopFile);
+        return reply;
+    }
+}
 
 void VpnListItem::onInfoButtonClicked()
 {
-//    if (m_vpnConnectItem.m_connectUuid.isEmpty()) {
-//        qDebug() << LOG_FLAG << "connect is empty, so can not show detail info.";
-//        return;
-//    }
-
-//    if(netDetail != nullptr){
-//        netDetail->activateWindow();
-//        return;
-//    }
-
-//    qDebug()<< LOG_FLAG << "the info button of lan is clicked! uuid = "
-//            << m_vpnConnectItem.m_connectUuid << "; name = " << m_vpnConnectItem.m_connectName
-//            << "." <<Q_FUNC_INFO << __LINE__;
-
-//    bool isActivated = false;
-//    if (Activated == m_vpnConnectItem.m_connectState) {
-//        isActivated = true;
-//    }
-
-//    netDetail = new NetDetail(m_deviceName, m_vpnConnectItem.m_connectName,
-//                                         m_vpnConnectItem.m_connectUuid, isActivated,false, false);
-
-//    connect(netDetail, &NetDetail::destroyed, [&](){
-//        if (netDetail != nullptr) {
-//            netDetail = nullptr;
-//        }
-//    });
-
-//    netDetail->show();
-//    Q_EMIT this->detailShow(true);
-
+    launchApp("nm-connection-editor.desktop");
     return;
 }
 

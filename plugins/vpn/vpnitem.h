@@ -42,7 +42,7 @@ public:
     VpnItem(bool bAcitve, QWidget *parent = nullptr);
 public:
     QLabel * iconLabel = nullptr;
-//    GrayInfoButton * infoLabel = nullptr;
+    GrayInfoButton * infoLabel = nullptr;
     FixLabel * titileLabel = nullptr;
     QLabel * statusLabel = nullptr;
     QToolButton* m_moreButton = nullptr;

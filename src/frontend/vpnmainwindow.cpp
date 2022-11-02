@@ -73,23 +73,10 @@ void vpnMainWindow::showMainwindow()
             KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
         }
     }
-
     this->showByWaylandHelper();
     this->raise();
     this->activateWindow();
-    Q_EMIT this->mainWindowVisibleChanged(true);
-#ifdef WITHKYSEC
-//    if (!kysec_is_disabled() && kysec_get_3adm_status() && (getuid() || geteuid())){
-//        if (nullptr != m_vpnPage) {
-//            m_vpnPage->hideSetting();
-//        }
-//    } else {
-//        if (nullptr != m_vpnPage) {
-//            m_vpnPage->showSetting();
-//        }
-//    }
-#endif
-
+//    Q_EMIT this->mainWindowVisibleChanged(true);
 }
 
 /**
@@ -98,7 +85,7 @@ void vpnMainWindow::showMainwindow()
 void vpnMainWindow::hideMainwindow()
 {
     this->hide();
-    Q_EMIT this->mainWindowVisibleChanged(false);
+//    Q_EMIT this->mainWindowVisibleChanged(false);
 }
 
 ///**
@@ -258,7 +245,6 @@ void vpnMainWindow::initDbusConnnect()
     connect(m_vpnPage, &VpnPage::vpnRemove, this, &vpnMainWindow::vpnRemove);
     connect(m_vpnPage, &VpnPage::vpnUpdate, this, &vpnMainWindow::vpnUpdate);
     connect(m_vpnPage, &VpnPage::vpnActiveConnectionStateChanged, this, &vpnMainWindow::vpnActiveConnectionStateChanged);
-
     //模式切换
     QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interface"),
                                          QString("/"),
@@ -499,7 +485,7 @@ void vpnMainWindow::initVpnIconVisible()
 {
     if(QGSettings::isSchemaInstalled(GSETTINGS_VPNICON_VISIBLE)) {
         m_vpnGsettings = new QGSettings(GSETTINGS_VPNICON_VISIBLE);
-        if(m_vpnGsettings->keys().contains(QString("visible"))) {
+        if(m_vpnGsettings->keys().contains(QString(VISIBLE))) {
             connect(m_vpnGsettings, &QGSettings::changed, this, &vpnMainWindow::onVpnIconVisibleChanged);
             m_vpnTrayIcon->setVisible(m_vpnGsettings->get("visible").toBool());
         }

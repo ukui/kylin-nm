@@ -22,14 +22,7 @@
 #include <QDebug>
 #include <QScrollBar>
 
-#define MAIN_LAYOUT_MARGINS 0,0,0,0
-#define MAIN_LAYOUT_SPACING 0
-#define TITLE_FRAME_HEIGHT 52
-#define TITLE_LAYOUT_MARGINS 24,0,24,0
-#define LAN_LIST_SPACING 0
-#define TEXT_MARGINS 16,0,0,0
-#define SETTINGS_LAYOUT_MARGINS 24,16,24,16
-#define TRANSPARENT_COLOR QColor(0,0,0,0)
+#define VPN_LIST_SPACING 0
 #define ITEM_HEIGHT 48
 
 
@@ -49,7 +42,7 @@ VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
     initUI();
     initVpnArea();
 
-    connect(m_activeResourse, &KyActiveConnectResourse::vpnConnectChangeReason, this, &VpnPage::onConnectionStateChange);
+    connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &VpnPage::onConnectionStateChange);
     connect(m_activeResourse, &KyActiveConnectResourse::activeConnectRemove, this, [=] (QString activeConnectUuid) {
         sendVpnStateChangeSignal(activeConnectUuid,Deactivated);
     } );
@@ -115,6 +108,7 @@ void VpnPage::constructActiveConnectionArea()
 {
     QList<KyConnectItem *> activedList;
     QList<KyConnectItem *> netList;
+    QGSettings vpnGsettings(GSETTINGS_VPNICON_VISIBLE);
 
     activedList.clear();
     netList.clear();
@@ -136,7 +130,6 @@ void VpnPage::constructActiveConnectionArea()
                 if (m_activeConnectionMap.contains(p_netConnectionItem->m_connectUuid)) {
                     qDebug()<<LOG_FLAG << "has contain uuid" << p_netConnectionItem->m_connectUuid;
                 }
-//                p_netConnectionItem->m_connectState = NetworkManager::ActiveConnection::Activated;
                 QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_vpnListWidget);
                 m_activeConnectionMap.insert(p_netConnectionItem->m_connectUuid, p_listWidgetItem);
             }
@@ -144,21 +137,29 @@ void VpnPage::constructActiveConnectionArea()
             delete p_netConnectionItem;
             p_netConnectionItem = nullptr;
         }
+        if (vpnGsettings.keys().contains(QString(VISIBLE))) {
+            vpnGsettings.set(VISIBLE, true);
+        }
+    } else {
+        if (vpnGsettings.keys().contains(QString(VISIBLE))) {
+            vpnGsettings.set(VISIBLE, false);
+        }
     }
+
     if (m_vpnListWidget->count() <= MAX_ITEMS) {
         m_vpnListWidget->setFixedWidth(MIN_WIDTH);
+        m_netListArea->setFixedHeight(m_vpnListWidget->count() * ITEM_HEIGHT);
     } else {
         m_vpnListWidget->setFixedWidth(MAX_WIDTH);
+        m_netListArea->setFixedHeight(MAX_ITEMS * ITEM_HEIGHT);
     }
-    return;
+    m_netFrame->setFixedHeight(37 + m_netListArea->height());
 }
 
 void VpnPage::initVpnArea()
 {
     m_netFrame->show();
     constructActiveConnectionArea();
-
-    return;
 }
 
 bool VpnPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
@@ -182,6 +183,7 @@ bool VpnPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
             iter = connectMap.erase(iter);
             if (m_vpnListWidget->count() <= MAX_ITEMS) {
                 m_vpnListWidget->setFixedWidth(MIN_WIDTH);
+                m_netListArea->setFixedHeight(m_vpnListWidget->count() * ITEM_HEIGHT);
             }
             return true;
         }
@@ -197,6 +199,7 @@ void VpnPage::onRemoveConnection(QString path)            //删除时后端会�
     Q_EMIT vpnRemove(path);
 
     if (removeConnectionItem(m_netConnectionMap, m_vpnListWidget, path)) {
+        m_netFrame->setFixedHeight(37 + m_netListArea->height());
         return;
     }
 }
@@ -224,9 +227,13 @@ void VpnPage::onAddConnection(QString uuid)               //新增一个有线�
 
     delete p_newItem;
     p_newItem = nullptr;
-    if (m_vpnListWidget->count() > MAX_ITEMS) {
+    if (m_vpnListWidget->count() >= MAX_ITEMS) {
         m_vpnListWidget->setFixedWidth(MAX_WIDTH);
+        m_netListArea->setFixedHeight(MAX_ITEMS * ITEM_HEIGHT);
+    } else {
+        m_netListArea->setFixedHeight(m_vpnListWidget->count() * ITEM_HEIGHT);
     }
+    m_netFrame->setFixedHeight(37 + m_netListArea->height());
     return;
 }
 
@@ -241,13 +248,14 @@ void VpnPage::initUI()
     m_netLabel->setText(tr("VPN Connection"));
     m_vpnListWidget = new QListWidget(m_netListArea);
     m_vpnListWidget->setFrameShape(QFrame::Shape::NoFrame);
-    m_vpnListWidget->setSpacing(LAN_LIST_SPACING);
+    m_vpnListWidget->setSpacing(VPN_LIST_SPACING);
     m_vpnListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_vpnListWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
     m_vpnListWidget->verticalScrollBar()->setProperty("drawScrollBarGroove",false); //去除滚动条的外侧黑框
     m_vpnListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
     m_vpnListWidget->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
     m_netAreaLayout->addWidget(m_vpnListWidget);
+    m_netListArea->setFixedHeight(0);
 
     QPalette pal = m_vpnListWidget->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));        //背景透明
@@ -337,8 +345,6 @@ void VpnPage::updateConnectionArea(KyConnectItem *p_newItem)
     } else {
         m_vpnListWidget->setFixedWidth(MAX_WIDTH);
     }
-
-    return;
 }
 
 void VpnPage::updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap,
@@ -352,12 +358,11 @@ void VpnPage::updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap
         p_lanItem->updateConnectionState(state);
     }
 
-    return;
 }
 
 void VpnPage::onConnectionStateChange(QString uuid,
-                                      NetworkManager::VpnConnection::State state,
-                                      NetworkManager::VpnConnection::StateChangeReason reason)
+                                      NetworkManager::ActiveConnection::State state,
+                                      NetworkManager::ActiveConnection::Reason reason)
 {
     //VpnPage函数内持续监听连接状态的变化并记录供其他函数调用获取状态
     if (!m_connectResourse->isVirtualConncection(uuid)) {
@@ -416,7 +421,6 @@ void VpnPage::onConnectionStateChange(QString uuid,
     return;
 }
 
-
 void VpnPage::getVirtualList(QVector<QStringList> &vector)
 {
     QList<KyConnectItem *> netConnectList;
@@ -424,10 +428,17 @@ void VpnPage::getVirtualList(QVector<QStringList> &vector)
     m_connectResourse->getVpnAndVirtualConnections(netConnectList);      //未激活列表的显示
     if (!netConnectList.isEmpty()) {
         for (int i = 0; i < netConnectList.size(); i++) {
+            KyConnectItem *p_newItem = nullptr;
+            KyConnectItem *p_netConnectionItem = netConnectList.at(i);
+            p_newItem = m_activeResourse->getActiveConnectionByUuid(p_netConnectionItem->m_connectUuid);
+            NetworkManager::ActiveConnection::State state = p_netConnectionItem->m_connectState;
+            if (p_newItem != nullptr) {
+                state = NetworkManager::ActiveConnection::Activated;
+            }
             vector.append(QStringList() << netConnectList.at(i)->m_connectName
                                         << netConnectList.at(i)->m_connectUuid
                                         << netConnectList.at(i)->m_connectPath
-                                        << QString::number(netConnectList.at(i)->m_connectState));
+                                        << QString::number(state));
         }
     }
     return;
@@ -445,10 +456,16 @@ void VpnPage::sendVpnUpdateSignal(KyConnectItem *p_connectItem)
 void VpnPage::sendVpnAddSignal(KyConnectItem *p_connectItem)
 {
     QStringList info;
+    KyConnectItem *p_newItem = nullptr;
+    p_newItem = m_activeResourse->getActiveConnectionByUuid(p_connectItem->m_connectUuid);
+    NetworkManager::ActiveConnection::State state = p_connectItem->m_connectState;
+    if (p_newItem != nullptr) {
+        state = NetworkManager::ActiveConnection::Activated;
+    }
     info << p_connectItem->m_connectName
          << p_connectItem->m_connectUuid
          << p_connectItem->m_connectPath
-         << QString::number(p_connectItem->m_connectState);
+         << QString::number(state);
     qDebug() << "[VpnPage] emit vpnAdd because addConnection ";
     Q_EMIT vpnAdd(info);
 
@@ -521,7 +538,7 @@ void VpnPage::updateActiveConnectionProperty(KyConnectItem *p_connectItem)
 
 void VpnPage::onUpdateConnection(QString uuid)
 {
-    if (!m_connectResourse->isWiredConnection(uuid)) {
+    if (!m_connectResourse->isVirtualConncection(uuid)) {
         return;
     }
 

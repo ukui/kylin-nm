@@ -52,11 +52,19 @@
 
 #define KVpnSymbolic "ukui-vpn-symbolic"
 
+#define KYLIN_APP_MANAGER_NAME "com.kylin.AppManager"
+#define KYLIN_APP_MANAGER_PATH "/com/kylin/AppManager"
+#define KYLIN_APP_MANAGER_INTERFACE "com.kylin.AppManager"
+
 const QString VISIBLE = "visible";
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.vpnicon";
 
 Vpn::Vpn() : mFirstLoad(true)
 {
+    QTranslator* translator = new QTranslator(this);
+    translator->load("/usr/share/kylin-nm/vpn/" + QLocale::system().name());
+    QApplication::installTranslator(translator);
+
     pluginName = tr("Vpn");
     pluginType = NETWORK;
 }
@@ -308,8 +316,6 @@ void Vpn::addOneVirtualItem(QStringList infoList)
     int status = infoList.at(3).toInt(); //1-连接中 2-已连接 3-断开中 4-已断开
     VpnItem * item = new VpnItem(pluginWidget);
 
-    item->statusLabel->setText(tr("not connected"));
-
     QIcon searchIcon = QIcon::fromTheme(KVpnSymbolic);
     item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     item->titileLabel->setText(connName);
@@ -321,18 +327,27 @@ void Vpn::addOneVirtualItem(QStringList infoList)
         item->startLoading();
     }
 
-//    connect(lanItem->infoLabel, &GrayInfoButton::clicked, this, [=]{
-//        // open landetail page
-//        if (!m_interface->isValid()) {
-//            return;
-//        }
-//        qDebug() << "[NetConnect]call showPropertyWidget" << deviceName << connUuid << __LINE__;
-//        m_interface->call(QStringLiteral("showPropertyWidget"), deviceName, connUuid);
-//        qDebug() << "[NetConnect]call showPropertyWidget respond" << __LINE__;
-//    });
+    connect(item->infoLabel, &GrayInfoButton::clicked, this, [=]{
+        QDBusInterface appManagerDbusInterface(KYLIN_APP_MANAGER_NAME,
+                                                 KYLIN_APP_MANAGER_PATH,
+                                                 KYLIN_APP_MANAGER_INTERFACE,
+                                                 QDBusConnection::sessionBus());
+
+        if (!appManagerDbusInterface.isValid()) {
+            qWarning()<<"appManagerDbusInterface init error";
+        } else {
+            QDBusReply<bool> reply = appManagerDbusInterface.call("LaunchApp", "nm-connection-editor.desktop");
+        }
+    });
 
     item->isAcitve = (status == 2);
     item->setConnectActionText(item->isAcitve);
+
+    if (item->isAcitve) {
+        item->statusLabel->setText(tr("connected"));
+    } else {
+        item->statusLabel->setText(tr("not connected"));
+    }
 
     connect(item, &QPushButton::clicked, this, [=] {
         if (item->isAcitve || item->loading) {

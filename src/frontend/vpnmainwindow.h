@@ -33,8 +33,6 @@
 #include "vpnpage.h"
 #include "mainwindow.h"
 
-const QByteArray GSETTINGS_VPNICON_VISIBLE = "org.ukui.kylin-nm.vpnicon";
-
 class VpnPage;
 
 class vpnMainWindow : public QMainWindow

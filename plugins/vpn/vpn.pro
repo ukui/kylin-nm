@@ -19,6 +19,8 @@ PKGCONFIG   += gsettings-qt \
 TARGET = $$qtLibraryTarget(vpn)
 DESTDIR = ../..
 target.path = $$[QT_INSTALL_LIBS]/ukui-control-center
+trans.files = translations/*
+trans.path = /usr/share/kylin-nm/vpn/
 
 INCLUDEPATH   +=  \
                  $$PROJECT_COMPONENTSOURCE \
@@ -41,4 +43,8 @@ HEADERS += \
 FORMS += \
     vpn.ui
 
-INSTALLS += target
+INSTALLS += target \
+            trans
+
+TRANSLATIONS += \
+        translations/zh_CN.ts

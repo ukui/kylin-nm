@@ -25,7 +25,7 @@
 #define  DETAIL_MIN_LABEL_WIDTH  80
 #define  DETAIL_MIN_EDIT_WIDTH  390
 #define  MIN_LABEL_WIDTH  146
-#define  MIN_EDIT_WIDTH  278
+#define  MIN_EDIT_WIDTH  286
 
 SecurityPage::SecurityPage(bool isNetDetailPage, QWidget *parent) : isDetailPage(isNetDetailPage), QFrame(parent)
 {

@@ -456,17 +456,17 @@
     <message>
         <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="107"/>
         <source>Wi-Fi network requires authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Wi-Fi网络要求认证</translation>
     </message>
     <message>
         <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="112"/>
         <source>Access to Wi-Fi network &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>访问Wi-Fi网络</translation>
     </message>
     <message>
         <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="114"/>
         <source>&quot; requires a password or encryption key.</source>
-        <translation type="unfinished"></translation>
+        <translation>需要密码或加密密钥。</translation>
     </message>
     <message>
         <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="143"/>

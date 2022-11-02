@@ -44,10 +44,6 @@ using namespace kdk;
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
 #define TITLE_FRAME_HEIGHT 50     //TabWidget的tab和widget有间隙，和设计稿看起来一致就不能设为设计稿里的高度
-#define TITLE_LAYOUT_MARGINS 24,0,24,0
-#define DEVICE_LAYOUT_MARGINS 24,0,24,8
-#define DEVICE_COMBOBOX_WIDTH 180
-#define ACTIVE_NET_LAYOUT_MARGINS 8,8,8,8
 #define NET_LAYOUT_MARGINS 8,8,0,1
 #define NET_LAYOUT_SPACING 8
 #define NET_LIST_SPACING 0
@@ -57,7 +53,6 @@ using namespace kdk;
 #define SETTINGS_LAYOUT_MARGINS 23,0,24,0
 #define TRANSPARENT_COLOR QColor(0,0,0,0)
 #define INACTIVE_AREA_MIN_HEIGHT 170
-#define ACTIVE_AREA_MAX_HEIGHT 92
 
 #define MAX_ITEMS 4
 #define MAX_WIDTH 412

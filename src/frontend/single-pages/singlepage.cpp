@@ -42,7 +42,7 @@ void SinglePage::initUI()
     this->setLayout(m_mainLayout);
 
     m_netFrame = new QFrame(this);
-    m_netFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT);
+    m_netFrame->setMinimumHeight(TEXT_HEIGHT + 17);
     m_netLayout = new QVBoxLayout(m_netFrame);
     m_netLayout->setContentsMargins(NET_LAYOUT_MARGINS);
     m_netFrame->setLayout(m_netLayout);
@@ -79,7 +79,6 @@ void SinglePage::initUI()
     m_mainLayout->addStretch();
     m_mainLayout->addWidget(m_netDivider);
     m_mainLayout->addWidget(m_settingsFrame);
-
 }
 
 void SinglePage::showDesktopNotify(const QString &message, QString soundName)

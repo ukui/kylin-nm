@@ -26,6 +26,10 @@
 #include <QEvent>
 #include <QAction>
 
+#define KYLIN_APP_MANAGER_NAME "com.kylin.AppManager"
+#define KYLIN_APP_MANAGER_PATH "/com/kylin/AppManager"
+#define KYLIN_APP_MANAGER_INTERFACE "com.kylin.AppManager"
+
 class VpnListItem : public ListItem
 {
     Q_OBJECT
@@ -45,9 +49,12 @@ public:
     QString getConnectionPath();
     void updateConnectionPath(QString connectionPath);
 
+    void activeConnection();
+
 protected:
     void setIcon(bool isOn);
     void onRightButtonClicked();
+    bool launchApp(QString desktopFile);
 
 private:
     void connectItemCopy(const KyConnectItem *lanConnectItem);
@@ -59,6 +66,7 @@ private Q_SLOTS:
 
 private:
     KyConnectItem m_vpnConnectItem;
+//    QDBusInterface m_appManagerDbusInterface;
 
     KyWiredConnectOperation *m_connectOperation = nullptr;
     KyNetworkDeviceResourse *m_deviceResource = nullptr;

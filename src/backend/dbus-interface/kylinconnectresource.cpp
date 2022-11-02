@@ -42,9 +42,34 @@ static bool subLanListSort(const KyConnectItem* info1, const KyConnectItem* info
     return result;
 }
 
+static bool subVpnListSort(const KyConnectItem* info1, const KyConnectItem* info2)
+{
+    if (info1->m_connectState != info2->m_connectState) {
+        if (info1->m_connectState == 2) {
+            return true;
+        }
+
+        if (info2->m_connectState == 2) {
+            return false;
+        }
+    }
+    QString  name1 = info1->m_connectName;
+    QString  name2 = info2->m_connectName;
+    bool result = true;
+    if (QString::compare(name1, name2, Qt::CaseInsensitive) > 0) {
+        result =  false;
+    }
+    return result;
+}
+
 static void lanListSort(QList<KyConnectItem *> &list)
 {
     qSort(list.begin(), list.end(), subLanListSort);
+}
+
+static void vpnListSort(QList<KyConnectItem *> &list)
+{
+    qSort(list.begin(), list.end(), subVpnListSort);
 }
 
 KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
@@ -248,6 +273,10 @@ void KyConnectResourse::getVpnAndVirtualConnections(QList<KyConnectItem *> &conn
         }
 
         connectPtr = nullptr;
+    }
+
+    if (connectItemList.size() > 1) {
+        vpnListSort(connectItemList);
     }
 }
 

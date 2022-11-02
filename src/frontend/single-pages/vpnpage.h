@@ -35,6 +35,9 @@
 
 #define VPNPAGE_LAYOUT_MARGINS 0,0,0,0
 
+#define VISIBLE "visible"
+const QByteArray GSETTINGS_VPNICON_VISIBLE = "org.ukui.kylin-nm.vpnicon";
+
 class VpnListItem;
 
 class VpnPage : public SinglePage
@@ -45,12 +48,11 @@ public:
     ~VpnPage();
 
     //for dbus
-    void getVirtualList(QMap<QString, QVector<QStringList> > &map);
+    void getVirtualList(QVector<QStringList> &vector);
+    void deleteVpn(const QString &connUuid);
     void activateVpn(const QString& connUuid);
     void deactivateVpn(const QString& connUuid);
     void showDetailPage(QString devName, QString uuid);
-
-    bool vpnIsConnected();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -66,7 +68,6 @@ private:
     bool removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
                               QListWidget *lanListWidget, QString path);
 
-    void constructConnectionArea();
     void constructActiveConnectionArea();
 
     void updateConnectionArea(KyConnectItem *p_newItem);
@@ -87,15 +88,16 @@ private:
                                  QListWidget *lanListWidget, QString uuid);
 
 Q_SIGNALS:
-    void vpnAdd(QString devName, QStringList info);
+    void vpnAdd(QStringList info);
     void vpnRemove(QString dbusPath);
-    void vpnUpdate(QString devName, QStringList info);
+    void vpnUpdate(QStringList info);
 
-    void vpnActiveConnectionStateChanged(QString interface, QString uuid, int status);
+    void vpnActiveConnectionStateChanged(QString uuid, int status);
     void vpnConnectChanged(int state);
 
 private Q_SLOTS:
-    void onConnectionStateChange(QString uuid, NetworkManager::ActiveConnection::State state,
+    void onConnectionStateChange(QString uuid,
+                                 NetworkManager::ActiveConnection::State state,
                                  NetworkManager::ActiveConnection::Reason reason);
 
     void onAddConnection(QString uuid);
@@ -110,7 +112,7 @@ private:
     QListWidget * m_vpnListWidget = nullptr;
 
 //    KyNetworkDeviceResourse *m_deviceResource = nullptr;
-//    KyWiredConnectOperation *m_wiredConnectOperation = nullptr;
+    KyWiredConnectOperation *m_wiredConnectOperation = nullptr;
     KyActiveConnectResourse *m_activeResourse = nullptr;     //激活的连接
     KyConnectResourse *m_connectResourse = nullptr;          //未激活的连接
 

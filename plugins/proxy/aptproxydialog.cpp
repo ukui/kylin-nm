@@ -22,14 +22,14 @@ AptProxyDialog::~AptProxyDialog()
 void AptProxyDialog::initUi()
 {
     setWindowTitle(tr("Set Apt Proxy"));
-    this->setFixedSize(480, 200);
+    this->setFixedSize(480, 204);
 
     QVBoxLayout *mAptProxyLyt = new QVBoxLayout(this);
     mAptProxyLyt->setContentsMargins(24, 24, 24, 24);
-    mAptProxyLyt->setSpacing(16);
+    mAptProxyLyt->setSpacing(8);
 
     QFrame *mHostFrame = new QFrame(this);
-    mHostFrame->setFixedSize(432, 36);
+    mHostFrame->setFixedWidth(432);
     mHostFrame->setFrameShape(QFrame::NoFrame);
 
     QHBoxLayout *mLyt_1= new QHBoxLayout(mHostFrame);
@@ -37,19 +37,19 @@ void AptProxyDialog::initUi()
     mLyt_1->setSpacing(8);
 
     FixLabel *mSetHostLabel = new FixLabel(mHostFrame);
-    mSetHostLabel->setFixedSize(92, 36);
+    mSetHostLabel->setFixedWidth(92);
     mSetHostLabel->setText(tr("Server Address"));
 
     mHostEdit = new QLineEdit(mHostFrame);
     mHostEdit->setAttribute(Qt::WA_InputMethodEnabled, false);  //限制中文输入法
-    mHostEdit->setFixedSize(332, 36);
+    mHostEdit->setFixedWidth(332);
     mHostEdit->installEventFilter(this);
 
     mLyt_1->addWidget(mSetHostLabel);
     mLyt_1->addWidget(mHostEdit);
 
     QFrame *mPortFrame = new QFrame(this);
-    mPortFrame->setFixedSize(432, 36);
+    mPortFrame->setFixedWidth(432);
     mPortFrame->setFrameShape(QFrame::NoFrame);
 
     QHBoxLayout *mLyt_2= new QHBoxLayout(mPortFrame);
@@ -57,11 +57,11 @@ void AptProxyDialog::initUi()
     mLyt_2->setSpacing(8);
 
     QLabel *mSetPortLabel = new QLabel(tr("Port") ,mPortFrame);
-    mSetPortLabel->setFixedSize(92, 36);
+    mSetPortLabel->setFixedWidth(92);
 
     mPortEdit = new QLineEdit(mPortFrame);
     mPortEdit->setAttribute(Qt::WA_InputMethodEnabled, false);  //限制中文输入法
-    mPortEdit->setFixedSize(332, 36);
+    mPortEdit->setFixedWidth(332);
     mPortEdit->installEventFilter(this);
 
     mLyt_2->addWidget(mSetPortLabel);
@@ -76,11 +76,9 @@ void AptProxyDialog::initUi()
     mLyt_3->setSpacing(16);
 
     mCancelBtn = new QPushButton(mChooseFrame);
-    mCancelBtn->setMinimumWidth(96);
     mCancelBtn->setText(tr("Cancel"));
 
     mConfirmBtn = new QPushButton(mChooseFrame);
-    mConfirmBtn->setMinimumWidth(96);
     mConfirmBtn->setText(tr("Confirm"));
 
     mLyt_3->addStretch();
@@ -89,7 +87,7 @@ void AptProxyDialog::initUi()
 
     mAptProxyLyt->addWidget(mHostFrame);
     mAptProxyLyt->addWidget(mPortFrame);
-    mAptProxyLyt->addSpacing(16);
+    mAptProxyLyt->addStretch();
     mAptProxyLyt->addWidget(mChooseFrame);
 }
 

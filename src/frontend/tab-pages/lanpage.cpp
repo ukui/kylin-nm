@@ -155,6 +155,13 @@ void LanPage::initNetSwitch()
         m_switchGsettings->set(WIRED_SWITCH, wiredEnable);
     }
 
+    bool oldState;
+    if (getOldWiredSwitchState(oldState)) {
+        if (wiredEnable != oldState) {
+            m_wiredConnectOperation->setWiredEnabled(oldState);
+        }
+    }
+
     if (m_devList.count() == 0) {
         qDebug() << "[wiredSwitch]:init not enable when no device";
         m_netSwitch->setChecked(false);

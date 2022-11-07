@@ -301,3 +301,16 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
     delete kdr;
     kdr = nullptr;
 }
+
+bool getOldWiredSwitchState(bool state)
+{
+    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
+    QVariant value = m_settings->value("lan_switch_opened");
+
+    if (!value.isValid())
+        return false;
+    state = value.toBool();
+    m_settings->remove("lan_switch_opened");
+    delete m_settings;
+    return true;
+}

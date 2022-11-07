@@ -155,10 +155,11 @@ void LanPage::initNetSwitch()
         m_switchGsettings->set(WIRED_SWITCH, wiredEnable);
     }
 
-    bool oldState;
-    if (getOldWiredSwitchState(oldState)) {
-        if (wiredEnable != oldState) {
-            m_wiredConnectOperation->setWiredEnabled(oldState);
+    //从3.0升级上来 先读取老的配置文件来保证和升级前状态一致
+    bool oldVersionState;
+    if (getOldVersionWiredSwitchState(oldVersionState)) {
+        if (wiredEnable != oldVersionState) {
+            m_wiredConnectOperation->setWiredEnabled(oldVersionState);
         }
     }
 

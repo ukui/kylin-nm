@@ -26,6 +26,8 @@
 #define LINE_MAX_SIZE 16777215, 1
 #define LINE_MIN_SIZE 0, 1
 
+#define LOG_HEAD "[ConnectdevPage]"
+
 ConnectdevPage::ConnectdevPage(QWidget *parent) :
     QWidget(parent)
 {
@@ -66,14 +68,14 @@ void ConnectdevPage::getConnectStaDevice(QMap<QString, QString> &staMap)
 {
     staMap.clear();
     if (m_activePathInterface == nullptr || !m_activePathInterface->isValid()) {
-        qDebug() << "dbus interface m_activePathInterface is invaild";
+        qDebug() << LOG_HEAD << "dbus interface m_activePathInterface is invaild";
         return;
     }
 
     QDBusMessage reply = m_activePathInterface->call("Getstainfo");
     if(reply.type() == QDBusMessage::ErrorMessage)
     {
-        qWarning() << "[mobilehotspot]Getstainfo error:" << reply.errorMessage();
+        qWarning() << LOG_HEAD << "Getstainfo error:" << reply.errorMessage();
         return;
     }
 
@@ -81,7 +83,7 @@ void ConnectdevPage::getConnectStaDevice(QMap<QString, QString> &staMap)
         || reply.arguments().at(0).toString() == ""
         || reply.arguments().at(0).toString() == "[Invalid UTF-8]"
         || reply.arguments().at(1).toString() == "") {
-        qDebug() << "Dbus interface call Getstainfo return is empty!";
+        qDebug() << LOG_HEAD << "Dbus interface call Getstainfo return is empty!";
         return;
     }
 
@@ -175,11 +177,15 @@ void ConnectdevPage::refreshStalist()
     resetLayoutHight();
 }
 
-void ConnectdevPage::onDropIntoBlacklistBtnClicked(QString staMac)
+void ConnectdevPage::onDropIntoBlacklistBtnClicked(QString staMac, QString staName)
 {
-    if (staMac.isNull() || staMac.isEmpty()) {
+    if (staMac.isNull()
+        || staMac.isEmpty()
+        || staName.isNull()
+        || staName.isEmpty()) {
+        qDebug() << LOG_HEAD <<"On drop into blacklist button clicked error! sta mac or name is empty!";
         return;
     }
 
-    emit setStaIntoBlacklist(staMac);
+    emit setStaIntoBlacklist(staMac, staName);
 }

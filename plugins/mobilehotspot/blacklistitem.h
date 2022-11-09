@@ -40,10 +40,11 @@ protected:
     KBorderlessButton *m_removeFromBlacklistBtn = nullptr;
 
     QString m_mac;
+    QString m_hostName;
     bool eventFilter(QObject *w, QEvent *e);
 
 signals:
-    void onBtnClicked(QString blacklistMac);
+    void onBtnClicked(QString staMac, QString staName);
 
 
 };

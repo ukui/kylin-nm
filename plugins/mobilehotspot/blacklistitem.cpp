@@ -37,7 +37,8 @@
 
 BlacklistItem::BlacklistItem(QString staMac, QString staName, QWidget *parent) :
     QFrame(parent),
-    m_mac(staMac)
+    m_mac(staMac),
+    m_hostName(staName)
 {
     this->setMinimumHeight(60);
     this->setFixedHeight(60);
@@ -60,7 +61,7 @@ bool BlacklistItem::eventFilter(QObject *w, QEvent *e)
 {
     if (e->type() == QEvent::MouseButtonRelease) {
         if (w == m_removeFromBlacklistBtn) {
-            emit onBtnClicked(m_mac);
+            emit onBtnClicked(m_mac, m_hostName);
             return true;
         }
     }

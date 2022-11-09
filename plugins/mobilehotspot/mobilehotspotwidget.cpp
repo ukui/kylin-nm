@@ -46,6 +46,8 @@
 
 #define REFRESH_MSEC 20*1000
 
+#define LOG_HEAD "[MobileHotspotWidget]"
+
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 const QString    WIRELESS_SWITCH          = "wirelessswitch";
 
@@ -92,7 +94,7 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
                                      "com.kylin.network",
                                      QDBusConnection::sessionBus());
     if(!m_interface->isValid()) {
-        qDebug() << "dbus interface com.kylin.network is invaild";
+        qDebug() << LOG_HEAD << "dbus interface com.kylin.network is invaild";
         m_switchBtn->setChecked(false);
         setUiEnabled(false);
     }
@@ -151,7 +153,7 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
 //                showDesktopNotify(tr("start to close hotspot"));
                 QDBusReply<void> reply = m_interface->call("deactiveWirelessAp", m_apNameLine->text(), m_uuid);
                 if (!reply.isValid()) {
-                    qDebug() << "[MobileHotspotWidget] call deactiveWirelessAp failed ";
+                    qDebug() << LOG_HEAD << "call deactiveWirelessAp failed ";
                     return true;
                 }
 #ifdef HOTSPOT_CONTROL
@@ -178,7 +180,7 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                                                            m_freqBandComboBox->currentText(),
                                                            m_interfaceComboBox->currentText());
                 if (!reply.isValid()) {
-                    qDebug() << "[MobileHotspotWidget] call activeWirelessAp failed ";
+                    qDebug() << LOG_HEAD << "call activeWirelessAp failed ";
                     return true;
                 }
 
@@ -272,7 +274,7 @@ void MobileHotspotWidget::initDbusConnect()
 
     connect(m_apNameLine, &QLineEdit::textEdited, this, &MobileHotspotWidget::onApLineEditTextEdit);
 #ifdef HOTSPOT_CONTROL
-    connect(m_connectDevPage, SIGNAL(setStaIntoBlacklist(QString)), m_blacklistPage, SLOT(onsetStaIntoBlacklist(QString)));
+    connect(m_connectDevPage, SIGNAL(setStaIntoBlacklist(QString, QString)), m_blacklistPage, SLOT(onsetStaIntoBlacklist(QString, QString)));
 #endif
     connect(m_pwdNameLine, SIGNAL(textChanged(QString)), this, SLOT(onPwdTextChanged()));
 }
@@ -320,18 +322,6 @@ void MobileHotspotWidget::onGsettingChanged(const QString &key)
     if (key == WIRELESS_SWITCH) {
         bool status = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
         if (!status) {
-//                        if (m_switchBtn->isChecked()) {
-//                            if(m_interface->isValid()) {
-//                                QDBusReply<void> reply = m_interface->call("deactiveWirelessAp",
-//                                                  m_apNameLine->text(),
-//                                                  m_pwdNameLine->text(),
-//                                                  m_interfaceComboBox->currentText());
-//                                if (!reply.isValid()) {
-//                                    qDebug() << "[MobileHotspotWidget] call deactiveWirelessAp failed ";
-//                                    return true;
-//                                }
-//                            }
-//                        }
             m_switchBtn->setChecked(status);
             m_uuid.clear();
             m_switchBtn->setCheckable(false);
@@ -350,7 +340,7 @@ void MobileHotspotWidget::initInterfaceInfo()
     QDBusReply<QMap<QString, bool> > reply = m_interface->call("getDeviceListAndEnabled",WIRELESS);
 
     if (!reply.isValid()) {
-        qDebug()<<"execute dbus method 'getDeviceListAndEnabled' is invalid in func initInterfaceInfo()";
+        qDebug() << LOG_HEAD <<"execute dbus method 'getDeviceListAndEnabled' is invalid in func initInterfaceInfo()";
         setWidgetHidden(true);
         return;
     }
@@ -358,7 +348,7 @@ void MobileHotspotWidget::initInterfaceInfo()
 
     QDBusReply<QMap<QString, int> > capReply = m_interface->call("getWirelessDeviceCap");
     if (!capReply.isValid()) {
-        qDebug()<<"execute dbus method 'getWirelessDeviceCap' is invalid in func initInterfaceInfo()" <<capReply.error().type() ;
+        qDebug()  << LOG_HEAD <<"execute dbus method 'getWirelessDeviceCap' is invalid in func initInterfaceInfo()" <<capReply.error().type() ;
         setWidgetHidden(true);
         return;
     }
@@ -366,7 +356,7 @@ void MobileHotspotWidget::initInterfaceInfo()
 
 
     if (devMap.isEmpty()) {
-        qDebug() << "no wireless device";
+        qDebug() << LOG_HEAD << "no wireless device";
         setWidgetHidden(true);
         m_switchBtn->setCheckable(false);
     } else {
@@ -385,7 +375,7 @@ void MobileHotspotWidget::initInterfaceInfo()
                 updateBandCombox();
             }
         } else {
-            qDebug() << "no useable wireless device";
+            qDebug() << LOG_HEAD << "no useable wireless device";
             setWidgetHidden(true);
         }
     }
@@ -400,20 +390,20 @@ void MobileHotspotWidget::getApInfo()
     if (m_interfaceComboBox->count() <= 0) {
                 m_switchBtn->setChecked(false);
                 setWidgetHidden(true);
-                qWarning() << "getApInfo but interface is empty";
+                qWarning() << LOG_HEAD << "getApInfo but interface is empty";
                 return;
         }
 
 
     QDBusReply<QStringList> reply = m_interface->call("getStoredApInfo");
     if (!reply.isValid()) {
-        qDebug()<<"execute dbus method 'getStoredApInfo' is invalid in func getObjectPath()";
+        qDebug() << LOG_HEAD <<"execute dbus method 'getStoredApInfo' is invalid in func getObjectPath()";
     }
 
     QStringList apInfo = reply.value();
 
     if (apInfo.isEmpty()) {
-        qDebug() << "no stored hotspot info";
+        qDebug() << LOG_HEAD << "no stored hotspot info";
         m_apNameLine->setText(m_hostName);
         m_pwdNameLine->setText("12345678");
         return;
@@ -434,7 +424,7 @@ void MobileHotspotWidget::getApInfo()
                 m_uuid = apInfo.at(4);
             }
         } else {
-            qDebug() << "no such interface " << apInfo.at(2);
+            qDebug() << LOG_HEAD << "no such interface " << apInfo.at(2);
         }
     }
 }
@@ -625,7 +615,7 @@ void MobileHotspotWidget::onHotspotDeactivated(QString devName, QString ssid)
 //热点连接
 void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath)
 {
-    qDebug() << "onHotspotActivated" <<devName << ssid << uuid;
+    qDebug() << LOG_HEAD << "onHotspotActivated" <<devName << ssid << uuid;
     if (m_switchBtn->isChecked()) {
         return;
     }

@@ -68,14 +68,14 @@ private:
     void resetLayoutHight();
 
 signals:
-    void setStaIntoBlacklist(QString staMac);
+    void setStaIntoBlacklist(QString staMac, QString staName);
 
 public slots:
     void onStaDevAdded(bool istrue, QString staMac, QString staName);
     void onStaDevRemoved(bool istrue, QString staMac, QString staName);
 
 private slots:
-    void onDropIntoBlacklistBtnClicked(QString staMac);
+    void onDropIntoBlacklistBtnClicked(QString staMac, QString staName);
 };
 
 #endif // MOBILEHOTSPOTWIDGET_H

@@ -59,15 +59,15 @@ private:
     QDBusInterface  *m_settingPathInterface = nullptr;
 
     void getBlacklistDevice(QMap<QString, QString> &blacklistMap);
-    bool removeStaFromBlacklist(QString staMac);
+    bool removeStaFromBlacklist(QString staMac, QString staName);
     void initBlacklistDev();
     void addBlacklistDevFrame(QString staMac, QString staName);
     void clearBlacklistLayout();
     void resetLayoutHight();
 
 private slots:
-    void onsetStaIntoBlacklist(QString staMac);
-    void onRemoveFromBlacklistBtnClicked(QString staMac);
+    void onsetStaIntoBlacklist(QString staMac, QString staName);
+    void onRemoveFromBlacklistBtnClicked(QString staMac, QString staName);
 };
 
 #endif // MOBILEHOTSPOTWIDGET_H

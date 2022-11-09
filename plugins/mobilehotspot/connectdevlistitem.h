@@ -40,10 +40,11 @@ protected:
     KBorderlessButton *m_dragIntoBlackListBtn = nullptr;
 
     QString m_mac;
+    QString m_hostName;
     bool eventFilter(QObject *w, QEvent *e);
 
 signals:
-    void onBtnClicked(QString staMac);
+    void onBtnClicked(QString staMac, QString staName);
 
 
 };

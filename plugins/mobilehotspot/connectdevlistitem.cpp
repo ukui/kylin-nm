@@ -37,7 +37,8 @@
 
 ConnectDevListItem::ConnectDevListItem(QString staMac, QString staName, QWidget *parent) :
     QFrame(parent),
-    m_mac(staMac)
+    m_mac(staMac),
+    m_hostName(staName)
 {
     this->setMinimumSize(FRAME_MIN_SIZE);
     this->setFixedHeight(60);
@@ -60,7 +61,7 @@ bool ConnectDevListItem::eventFilter(QObject *w, QEvent *e)
 {
     if (e->type() == QEvent::MouseButtonRelease) {
         if (w == m_dragIntoBlackListBtn) {
-            emit onBtnClicked(m_mac);
+            emit onBtnClicked(m_mac, m_hostName);
             return true;
         }
     }

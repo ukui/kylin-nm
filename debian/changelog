@@ -1,3 +1,13 @@
+kylin-nm (3.20.1.6-ok10) v101; urgency=medium
+
+  * BUG号：
+    -#145498 【设计】【控制面板】【平板】添加快捷键弹窗实现不符合设计规范
+  * 需求号：
+  * 其他改动：无
+  * 影响域：控制面板 代理
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 09 Nov 2022 17:41:17 +0800
+
 kylin-nm (3.20.1.6-ok9) v101; urgency=medium
 
   * BUG号：

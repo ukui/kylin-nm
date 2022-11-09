@@ -199,7 +199,7 @@ void MobileHotspotWidget::resetFrameSize()
     int height = 0;
     for (int i = 0; i < m_hotspotFrame->layout()->count(); i ++) {
         QWidget *w = m_hotspotFrame->layout()->itemAt(i)->widget();
-        if (w != nullptr) {
+        if (w != nullptr && !w->isHidden()) {
             height += w->height();
         }
     }
@@ -732,6 +732,7 @@ void MobileHotspotWidget::setWidgetHidden(bool isHidden)
         m_switchBtn->setCheckable(true);
         onGsettingChanged(WIRELESS_SWITCH);
     }
+    resetFrameSize();
 
 }
 

@@ -34,7 +34,6 @@
 #include <QProcess>
 #include <QDebug>
 #include "kylinnetworkdeviceresource.h"
-#include "firewalldialog.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
 

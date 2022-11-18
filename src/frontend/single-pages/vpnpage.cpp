@@ -18,7 +18,6 @@
  *
  */
 #include "vpnpage.h"
-#include "networkmodeconfig.h"
 #include <QDebug>
 #include <QScrollBar>
 #include "windowmanager/windowmanager.h"
@@ -409,7 +408,6 @@ void VpnPage::onConnectionStateChange(QString uuid,
         ssid = p_newItem->m_connectName;
         updateConnectionArea(p_newItem);
         updateConnectionState(m_netConnectionMap, m_listWidget, uuid, (ConnectState)state);
-        NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, deviceName, ssid);
     } else if (state == NetworkManager::ActiveConnection::State::Activating) {
         updateConnectionState(m_netConnectionMap, m_listWidget, uuid, (ConnectState)state);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivating) {

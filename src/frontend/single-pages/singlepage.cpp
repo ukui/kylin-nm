@@ -24,14 +24,17 @@
 #include <QApplication>
 #include <QDBusReply>
 
+#include <KWindowEffects>
+
 SinglePage::SinglePage(QWidget *parent) : QWidget(parent)
 {
     initUI();
+    initWindowProperties();
+    initTransparency();
 }
 
 SinglePage::~SinglePage()
 {
-    delete m_netDivider;
 }
 
 void SinglePage::initUI()
@@ -41,45 +44,64 @@ void SinglePage::initUI()
     m_mainLayout->setSpacing(MAIN_LAYOUT_SPACING);
     this->setLayout(m_mainLayout);
 
-    m_netFrame = new QFrame(this);
-    m_netFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT);
-    m_netLayout = new QVBoxLayout(m_netFrame);
-    m_netLayout->setContentsMargins(NET_LAYOUT_MARGINS);
-    m_netFrame->setLayout(m_netLayout);
-
-    m_netLabel = new QLabel(m_netFrame);
-    m_netLabel->setContentsMargins(TEXT_MARGINS);
-    m_netLabel->setFixedHeight(TEXT_HEIGHT);
-
-    m_netListArea = new QWidget(m_netFrame);
-    m_netAreaLayout = new QVBoxLayout(m_netListArea);
-    m_netAreaLayout->setSpacing(MAIN_LAYOUT_SPACING);
-    m_netAreaLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
-
-    m_netLayout->addWidget(m_netLabel);
-    m_netLayout->addWidget(m_netListArea);
+    m_titleFrame = new QFrame(this);
+    m_titleFrame->setFixedHeight(TITLE_FRAME_HEIGHT);
+    m_titleLayout = new QHBoxLayout(m_titleFrame);
+    m_titleLayout->setContentsMargins(TITLE_LAYOUT_MARGINS);
+    m_titleFrame->setLayout(m_titleLayout);
+    m_titleLabel = new QLabel(m_titleFrame);
+    m_titleLayout->addWidget(m_titleLabel);
+    m_titleLayout->addStretch();
 
     m_netDivider = new Divider(this);
+
+    m_listFrame = new QFrame(this);
+    m_listLayout = new QVBoxLayout(m_listFrame);
+    m_listLayout->setContentsMargins(NET_LAYOUT_MARGINS);
+    m_listFrame->setLayout(m_listLayout);
+    m_listWidget = new QListWidget(m_listFrame);
+    m_listLayout->addWidget(m_listWidget);
+
+    m_setDivider = new Divider(this);
+
     m_settingsFrame = new QFrame(this);
     m_settingsFrame->setFixedHeight(TITLE_FRAME_HEIGHT);
-
     m_settingsLayout = new QHBoxLayout(m_settingsFrame);
     m_settingsLayout->setContentsMargins(SETTINGS_LAYOUT_MARGINS);
-
     m_settingsLabel = new KyLable(m_settingsFrame);
     m_settingsLabel->setCursor(Qt::PointingHandCursor);
     m_settingsLabel->setText(tr("Settings"));
     m_settingsLabel->setScaledContents(true);
-
     m_settingsLayout->addWidget(m_settingsLabel);
     m_settingsLayout->addStretch();
     m_settingsFrame->setLayout(m_settingsLayout);
 
-    m_mainLayout->addWidget(m_netFrame);
-    m_mainLayout->addStretch();
+    m_mainLayout->addWidget(m_titleFrame);
     m_mainLayout->addWidget(m_netDivider);
+    m_mainLayout->addWidget(m_listFrame);
+    m_mainLayout->addWidget(m_setDivider);
     m_mainLayout->addWidget(m_settingsFrame);
+}
 
+void SinglePage::initWindowProperties()
+{
+    QPalette pal = m_listFrame->palette();
+    pal.setBrush(QPalette::Base, QColor(0,0,0,0));        //背景透明
+    m_listFrame->setPalette(pal);
+
+    this->setFixedWidth(MAX_WIDTH);
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setProperty("useStyleWindowManager", false); //禁用拖动
+    //绘制毛玻璃特效
+    QString platform = QGuiApplication::platformName();
+    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
+    {
+        QPainterPath path;
+        auto rect = this->rect();
+        path.addRoundedRect(rect, 12, 12);
+        path.addRect(rect);
+        KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
+    }
 }
 
 void SinglePage::showDesktopNotify(const QString &message, QString soundName)
@@ -106,4 +128,58 @@ void SinglePage::showDesktopNotify(const QString &message, QString soundName)
        <<(int)-1;
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
+
+void SinglePage::paintEvent(QPaintEvent *event) {
+    Q_UNUSED(event);
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(Qt::transparent);
+    QColor col = qApp->palette().window().color();
+
+    QPainterPath rectPath;
+
+    col.setAlphaF(m_transparency);
+    rectPath.addRoundedRect(this->rect(),12,12);
+
+    painter.setBrush(col);
+    painter.drawPath(rectPath);
+    KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(rectPath.toFillPolygon().toPolygon()));   //背景模糊
+}
+
+void SinglePage::initTransparency()
+{
+    if(QGSettings::isSchemaInstalled(QByteArray(TRANSPARENCY_GSETTINGS))) {
+        m_transGsettings = new QGSettings(QByteArray(TRANSPARENCY_GSETTINGS));
+        if(m_transGsettings->keys().contains(TRANSPARENCY)) {
+            m_transparency = m_transGsettings->get(TRANSPARENCY).toDouble() + 0.15;
+            m_transparency = (m_transparency > 1) ? 1 : m_transparency;
+            connect(m_transGsettings, &QGSettings::changed, this, &SinglePage::onTransChanged);
+        }
+    }
+}
+
+void SinglePage::onTransChanged()
+{
+    m_transparency = m_transGsettings->get("transparency").toDouble() + 0.15;
+    m_transparency = (m_transparency > 1) ? 1 : m_transparency;
+    paintWithTrans();
+}
+
+void SinglePage::paintWithTrans()
+{
+    QPalette pal = this->palette();
+    QColor color = qApp->palette().base().color();
+    color.setAlphaF(m_transparency);
+    pal.setColor(QPalette::Window, color);
+    this->setPalette(pal);
+}
+
+void SinglePage::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape) {
+        this->hide();
+    }
+    return QWidget::keyPressEvent(event);
+}
+
 

@@ -13,11 +13,11 @@ FORMS += \
 HEADERS += \
     $$PWD/customstyle.h \
     $$PWD/mainwindow.h \
-    $$PWD/vpnmainwindow.h \
-    $$PWD/wificonfigdialog.h
+    $$PWD/wificonfigdialog.h \
+    $$PWD/vpnobject.h
 
 SOURCES += \
     $$PWD/customstyle.cpp \
     $$PWD/mainwindow.cpp \
-    $$PWD/vpnmainwindow.cpp \
-    $$PWD/wificonfigdialog.cpp
+    $$PWD/wificonfigdialog.cpp \
+    $$PWD/vpnobject.cpp

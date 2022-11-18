@@ -20,6 +20,7 @@ EnterpriseWlanPage::EnterpriseWlanPage(QString ssid, QString device, bool isLock
     if (isLockScreen) {
         setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
         setWindowFlags(Qt::FramelessWindowHint);   //设置无边框窗口
+        setWindowFlags(Qt::Popup);
     }
 
     centerToScreen();

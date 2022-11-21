@@ -3,4 +3,5 @@ SUBDIRS = \
     netconnect \
     wlanconnect \
     mobilehotspot \
+    proxy \
     vpn \

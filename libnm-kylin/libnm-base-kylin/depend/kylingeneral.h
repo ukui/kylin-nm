@@ -2,7 +2,6 @@
 #define KYLINGENERAL_H
 
 #include <QObject>
-#include <QGSettings/QGSettings>
 #include "kylinnetworkresourcemanager.h"
 
 enum KyConnectStatus {
@@ -25,10 +24,12 @@ public:
     bool getNetworkingEnabled();
     void setNetworkingEnabled(bool enabled);
     void setWiredEnabled(bool enabled);
+    bool getWiredEnabled();
 
 Q_SIGNALS:
     void connectStatusChanged(KyConnectStatus);
     void wifiEnabledChanged(bool);
+    void wiredEnabledChanged(bool);
     void networkingEnabledChanged(bool);
 
 private Q_SLOTS:
@@ -36,7 +37,6 @@ private Q_SLOTS:
 
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
-    QGSettings *gsettings;
     KyConnectStatus m_status = NOT_CONNECTED;
 
     void updateGsetting(bool);

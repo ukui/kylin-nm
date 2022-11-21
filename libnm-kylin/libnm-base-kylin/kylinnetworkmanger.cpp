@@ -44,6 +44,8 @@ void KyNetworkManager::initConnect()
                                         this, &KyNetworkManager::carrierChange);
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceStateChange,
                                         this, &KyNetworkManager::deviceStateChange);
+    connect(m_deviceResource, &KyNetworkDeviceResourse::deviceManagedChange,
+                                        this, &KyNetworkManager::deviceManagedChange);
 
     connect(m_general, &KylinGeneralOpration::connectStatusChanged,
                                         this, &KyNetworkManager::connectStatusChanged);
@@ -51,6 +53,8 @@ void KyNetworkManager::initConnect()
                                         this, &KyNetworkManager::networkingEnabledChanged);
     connect(m_general, &KylinGeneralOpration::wifiEnabledChanged,
                                         this, &KyNetworkManager::wifiEnabledChanged);
+    connect(m_general, &KylinGeneralOpration::wiredEnabledChanged,
+                                        this, &KyNetworkManager::wiredEnabledChanged);
 
     connect(m_apNetResource, &KyApNetResource::wirelessApConnectStateChange,
                                         this, &KyNetworkManager::wirelessApConnectStateChange);
@@ -111,6 +115,11 @@ void KyNetworkManager::getNetworkDeviceList(KyDeviceType deviceType, QStringList
     m_deviceResource->getNetworkDeviceList(deviceType, networkDeviceList);
 }
 
+bool KyNetworkManager::getDeviceManaged(QString devName)
+{
+    return m_deviceResource->getDeviceManaged(devName);
+}
+
 void KyNetworkManager::getConnectStatus(KyConnectStatus &connectType)
 {
     m_general->getConnectStatus(connectType);
@@ -119,6 +128,11 @@ void KyNetworkManager::getConnectStatus(KyConnectStatus &connectType)
 bool KyNetworkManager::getWirelessEnabled()
 {
     return m_general->getWirelessEnabled();
+}
+
+bool KyNetworkManager::getWiredEnabled()
+{
+    return m_general->getWiredEnabled();
 }
 
 bool KyNetworkManager::getNetworkingEnabled()
@@ -219,6 +233,16 @@ void KyNetworkManager::onSetWiredEnabled(bool enabled)
     m_general->setWiredEnabled(enabled);
 }
 
+void KyNetworkManager::onSetDeviceManaged(QString devName, bool managed)
+{
+    m_deviceResource->setDeviceManaged(devName, managed);
+}
+
+void KyNetworkManager::onSetWiredDeviceEnable(QString devName, bool enable)
+{
+    m_deviceResource->setDeviceManaged(devName, enable);
+}
+
 void KyNetworkManager::onDeleteConnect(const QString &connectUuid)
 {
     KyConnectOperation operate;
@@ -235,11 +259,6 @@ void KyNetworkManager::onDeactivateConnection(const QString &activeConnectUuid)
 {
     KyConnectOperation operate;
     operate.deactivateConnection(activeConnectUuid);
-}
-
-void KyNetworkManager::onSetWiredDeviceEnable(const QString &interface, bool enable)
-{
-    m_deviceResource->setWiredDeviceEnable(interface, enable);
 }
 
 void KyNetworkManager::onCreateWiredConnect(KyConnectSetting connectSettingsInfo)

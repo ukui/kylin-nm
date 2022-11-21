@@ -66,7 +66,7 @@ public:
     NetworkManager::Connection::Ptr findConnectByUuid(const QString uuid);
 
     NetworkManager::Device::Ptr findDeviceByUni(QString const &deviceUni);
-    NetworkManager::Device::Ptr findDeviceByName(QString const &interfaceName);
+    NetworkManager::Device::Ptr findDeviceByName(QString interfaceName);
 
     NetworkManager::WirelessNetwork::Ptr findWifiNetwork(QString const &ssid, QString const &deviceUni);
 
@@ -125,6 +125,7 @@ private:
 
 private Q_SLOTS:
     void onServiceAppear(QString, QString, QString);
+    void onPropertiesChanged(QVariantMap qvm);
 
 Q_SIGNALS:
 
@@ -147,6 +148,7 @@ Q_SIGNALS:
     void deviceAdd(QString deviceName, KyDeviceType deviceType);
     void deviceUpdate(QString oldDeviceName, QString newDeviceName);
     void deviceRemove(QString deviceName);
+    void deviceManagedChange(QString deviceName, bool managed);
 
     void deviceActiveChange(QString deviceName, bool deviceActive);
     void deviceCarrierChange(QString deviceName, bool pluged);
@@ -180,6 +182,7 @@ Q_SIGNALS:
     //general
     void connectivityChanged(KyConnectivity connectivity);
     void wifiEnabledChanged(bool);
+    void wiredEnabledChanged(bool);
     void networkingEnabledChanged(bool);
     void primaryConnectionTypeChanged(KyConnectionType type);
 
@@ -213,6 +216,7 @@ public Q_SLOTS:
     void onDeviceAdded(QString const & uni);
     void onDeviceRemoved(QString const & uni);
     void onDeviceUpdated();
+    void onDeviceManagedChange();
 
     //active connection notifier
     void onActiveConnectionAdded(QString const & path);

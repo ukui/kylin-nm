@@ -9,8 +9,10 @@ DEFINES += LIBNMBASEKYLIN_LIBRARY
 CONFIG += c++11 qt warn_on link_pkgconfig no_keywords
 CONFIG += create_pc create_prl no_install_prl
 
-PKGCONFIG +=libnm gsettings-qt
+PKGCONFIG +=libnm gsettings-qt gtk+-3.0
+#PKGCONFIG += gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1  gsettings-qt
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
+INCLUDEPATH += /usr/include/dbus-1.0/dbus
 LIBS    +=  -L/usr/lib/ -lKF5NetworkManagerQt
 
 # The following define makes your compiler emit warnings if you use

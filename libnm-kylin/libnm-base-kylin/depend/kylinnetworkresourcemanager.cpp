@@ -104,6 +104,11 @@ void KyNetworkResourceManager::onInitNetwork()
                                              QString("org.freedesktop.DBus"),
                                              QString("NameOwnerChanged"), this, SLOT(onServiceAppear(QString,QString,QString)));
 
+    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                             QString("/org/freedesktop/NetworkManager"),
+                                             QString("org.freedesktop.NetworkManager"),
+                                             QString("PropertiesChanged"), this, SLOT(onPropertiesChanged(QVariantMap)));
+
     m_initFinished = true;
 }
 
@@ -234,6 +239,7 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
 
     connect(device.data(), &NetworkManager::Device::activeConnectionChanged, this, &KyNetworkResourceManager::onDeviceActiveChange);
     connect(device.data(), &NetworkManager::Device::interfaceNameChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
+    connect(device.data(), &NetworkManager::Device::managedChanged, this, &KyNetworkResourceManager::onDeviceManagedChange);
 
     switch (device->type())
     {
@@ -385,10 +391,9 @@ NetworkManager::Device::Ptr KyNetworkResourceManager::findDeviceByUni(QString co
     return nullptr;
 }
 
-NetworkManager::Device::Ptr KyNetworkResourceManager::findDeviceByName(QString const &interfaceName)
+NetworkManager::Device::Ptr KyNetworkResourceManager::findDeviceByName(QString interfaceName)
 {
     NetworkManager::Device::Ptr devicePtr = nullptr;
-
     if (interfaceName.isEmpty()) {
         return nullptr;
     }
@@ -593,6 +598,19 @@ void KyNetworkResourceManager::requestScan(NetworkManager::WirelessDevice *p_wir
     return;
 }
 
+void KyNetworkResourceManager::onPropertiesChanged(QVariantMap qvm)
+{
+    for(QString keyStr : qvm.keys()) {
+        //收到wifi开关打开或关闭的信号后，进行处理
+        if (keyStr == "WiredEnabled") {
+            bool wiredEnable = qvm.value("WiredEnabled").toBool();
+            qDebug() << "wiredEnabledChanged" << wiredEnable;
+            Q_EMIT wiredEnabledChanged(wiredEnable);
+        }
+    }
+}
+
+
 void KyNetworkResourceManager::onConnectionUpdated()
 {
     NetworkManager::Connection *connectPtr =
@@ -748,6 +766,19 @@ void KyNetworkResourceManager::onDeviceUpdated()
     }
 
     updateDeviceName(p_device);
+}
+
+void KyNetworkResourceManager::onDeviceManagedChange()
+{
+    NetworkManager::Device *p_device = qobject_cast<NetworkManager::Device *>(sender());
+    if (nullptr == p_device) {
+        return;
+    }
+
+    QString deviceName = p_device->interfaceName();
+    bool managed = p_device->managed();
+
+    Q_EMIT deviceManagedChange(deviceName, managed);
 }
 
 void KyNetworkResourceManager::onDeviceCarrierChange(bool pluged)
@@ -941,7 +972,6 @@ void KyNetworkResourceManager::onDeviceAdded(QString const & uni)
         } else if (DEVICE_TYPE_ETHERNET == (KyDeviceType)networkDevicePtr->type()
                    && !networkDevicePtr->udi().startsWith(VIRTURAL_DEVICE_PATH)) {
             Q_EMIT wiredDeviceAdd(networkDevicePtr->interfaceName());
-            saveDeviceEnableState(networkDevicePtr->interfaceName(), true);
         } else {
             Q_EMIT deviceAdd(networkDevicePtr->interfaceName(), (KyDeviceType)networkDevicePtr->type());
         }

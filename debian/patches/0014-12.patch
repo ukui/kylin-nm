@@ -1,0 +1,3293 @@
+From: zhaoshixu <zhaoshixu@kylinos.cn>
+Date: Mon, 21 Nov 2022 07:46:46 +0000
+Subject: =?utf-8?b?ITEyIOS7o+eQhueVjOmdoiBNZXJnZSBwdWxsIHJlcXVlc3QgITEyIGZy?=
+ =?utf-8?b?b20gemhhb3NoaXh1LzExMTI=?=
+
+---
+ plugins/plugin.pro                   |    1 +
+ plugins/proxy/applistwidget.cpp      |  138 ++++
+ plugins/proxy/applistwidget.h        |   60 ++
+ plugins/proxy/aptinfo.h              |   32 +
+ plugins/proxy/aptproxydialog.cpp     |  127 ++++
+ plugins/proxy/aptproxydialog.h       |   38 +
+ plugins/proxy/certificationdialog.h  |   31 +
+ plugins/proxy/certificationdialog.ui |  342 +++++++++
+ plugins/proxy/proxy.cpp              | 1367 ++++++++++++++++++++++++++++++++++
+ plugins/proxy/proxy.h                |  285 +++++++
+ plugins/proxy/proxy.pro              |   52 ++
+ plugins/proxy/translations/bo_CN.qm  |  Bin 0 -> 3755 bytes
+ plugins/proxy/translations/bo_CN.ts  |  227 ++++++
+ plugins/proxy/translations/tr.ts     |  215 ++++++
+ plugins/proxy/translations/zh_CN.qm  |  Bin 0 -> 2357 bytes
+ plugins/proxy/translations/zh_CN.ts  |  215 ++++++
+ 16 files changed, 3130 insertions(+)
+ create mode 100644 plugins/proxy/applistwidget.cpp
+ create mode 100644 plugins/proxy/applistwidget.h
+ create mode 100644 plugins/proxy/aptinfo.h
+ create mode 100644 plugins/proxy/aptproxydialog.cpp
+ create mode 100644 plugins/proxy/aptproxydialog.h
+ create mode 100644 plugins/proxy/certificationdialog.h
+ create mode 100644 plugins/proxy/certificationdialog.ui
+ create mode 100644 plugins/proxy/proxy.cpp
+ create mode 100644 plugins/proxy/proxy.h
+ create mode 100644 plugins/proxy/proxy.pro
+ create mode 100644 plugins/proxy/translations/bo_CN.qm
+ create mode 100644 plugins/proxy/translations/bo_CN.ts
+ create mode 100644 plugins/proxy/translations/tr.ts
+ create mode 100644 plugins/proxy/translations/zh_CN.qm
+ create mode 100644 plugins/proxy/translations/zh_CN.ts
+
+diff --git a/plugins/plugin.pro b/plugins/plugin.pro
+index b393c1f..e2b6db1 100644
+--- a/plugins/plugin.pro
++++ b/plugins/plugin.pro
+@@ -3,4 +3,5 @@ SUBDIRS = \
+     netconnect \
+     wlanconnect \
+     mobilehotspot \
++    proxy \
+     vpn \
+diff --git a/plugins/proxy/applistwidget.cpp b/plugins/proxy/applistwidget.cpp
+new file mode 100644
+index 0000000..c3c8710
+--- /dev/null
++++ b/plugins/proxy/applistwidget.cpp
+@@ -0,0 +1,138 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
++ *
++ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
++ *
++ */
++#include "applistwidget.h"
++#include <QDebug>
++
++AppListWidget::AppListWidget(QString path, QWidget *parent)
++    : m_path(path), QWidget(parent)
++{
++    initUI();
++    initDbus();
++}
++
++AppListWidget::~AppListWidget()
++{
++
++}
++
++/**
++ * @brief AppListWidget::setAppChecked
++ * @param flag 是否使用应用代理配置
++ */
++void AppListWidget::setAppChecked(bool flag)
++{
++    m_checkBox->setChecked(flag);
++}
++
++/**
++ * @brief AppListWidget::setAppIcon
++ * @param icon 应用图标的名称
++ */
++void AppListWidget::setAppIcon(const QPixmap &icon)
++{
++    m_iconLabel->setAlignment(Qt::AlignCenter);
++    m_iconLabel->setPixmap(icon);
++}
++
++/**
++ * @brief AppListWidget::setAppName
++ * @param text 应用名称
++ */
++void AppListWidget::setAppName(const QString &text)
++{
++    m_nameLabel->setText(text);
++}
++
++/**
++ * @brief AppListWidget::onAppCheckStateChanged
++ * checkBox是否选中 关联是否配置应用代理
++ */
++void AppListWidget::onAppCheckStateChanged()
++{
++    if (m_checkBox->isChecked()) {
++        AddAppProxyConfig();
++    } else {
++        RemoveAppProxyConfig();
++    }
++}
++
++/**
++ * @brief AppListWidget::AddAppProxyConfig
++ * 将该路径下的应用加入应用代理
++ */
++void AppListWidget::AddAppProxyConfig()
++{
++    if(!m_dbusInterface->isValid()) {
++        qWarning ()<< "init AppProxy dbus error";
++    }
++
++    qDebug() << "call QDBusInterface addAppIntoProxy";
++    m_dbusInterface->call("addAppIntoProxy", m_path);
++}
++
++/**
++ * @brief AppListWidget::RemoveAppProxyConfig
++ * 将该路径下的应用移出应用代理
++ */
++void AppListWidget::RemoveAppProxyConfig()
++{
++    if(!m_dbusInterface->isValid()) {
++        qWarning ()<< "init AppProxy dbus error";
++    }
++
++    qDebug() << "call QDBusInterface delAppIntoProxy";
++    m_dbusInterface->call("delAppIntoProxy", m_path);
++}
++
++void AppListWidget::mousePressEvent(QMouseEvent *event)
++{
++    if (event->button() == Qt::LeftButton) {
++        m_checkBox->setChecked(!m_checkBox->isChecked());
++        onAppCheckStateChanged();
++    }
++    return QWidget::mousePressEvent(event);
++}
++
++void AppListWidget::initUI()
++{
++    QHBoxLayout *mainLayout = new QHBoxLayout(this);
++    mainLayout->setContentsMargins(17, 0, 17, 0);
++    mainLayout->setSpacing(8);
++    m_checkBox = new QCheckBox(this);
++    m_checkBox->setFixedSize(16, 16);
++    m_checkBox->setAttribute(Qt::WA_TransparentForMouseEvents, true); //m_checkBox不响应鼠标事件,将其传递给父窗口
++    m_iconLabel = new QLabel(this);
++    m_iconLabel->setFixedSize(24, 24);
++    m_nameLabel = new QLabel(this);
++
++    mainLayout->addWidget(m_checkBox);
++    mainLayout->addSpacing(8);
++    mainLayout->addWidget(m_iconLabel);
++    mainLayout->addWidget(m_nameLabel);
++    mainLayout->addStretch();
++}
++
++void AppListWidget::initDbus()
++{
++    m_dbusInterface = new QDBusInterface("org.ukui.SettingsDaemon",
++                       "/org/ukui/SettingsDaemon/AppProxy",
++                       "org.ukui.SettingsDaemon.AppProxy",
++                       QDBusConnection::sessionBus());
++}
+diff --git a/plugins/proxy/applistwidget.h b/plugins/proxy/applistwidget.h
+new file mode 100644
+index 0000000..7c94e12
+--- /dev/null
++++ b/plugins/proxy/applistwidget.h
+@@ -0,0 +1,60 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
++ *
++ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
++ *
++ */
++#ifndef APPLISTWIDGET_H
++#define APPLISTWIDGET_H
++
++#include <QObject>
++#include <QWidget>
++#include <QMouseEvent>
++#include <QCheckBox>
++#include <QLabel>
++#include <QHBoxLayout>
++#include <QDBusInterface>
++#include <QDBusReply>
++
++class AppListWidget : public QWidget
++{
++    Q_OBJECT
++public:
++    explicit AppListWidget(QString path, QWidget *parent = nullptr);
++    ~AppListWidget();
++
++    void setAppChecked(bool flag);
++    void setAppIcon(const QPixmap &icon);
++    void setAppName(const QString &text);
++    void onAppCheckStateChanged();
++    void AddAppProxyConfig();
++    void RemoveAppProxyConfig();
++
++protected:
++    void mousePressEvent(QMouseEvent *event);
++
++private:
++    void initUI();
++    void initDbus();
++
++    QCheckBox *m_checkBox = nullptr;
++    QLabel    *m_iconLabel = nullptr;
++    QLabel    *m_nameLabel = nullptr;
++    QString    m_path = nullptr;
++    QDBusInterface *m_dbusInterface = nullptr;
++};
++
++#endif // APPLISTWIDGET_H
+diff --git a/plugins/proxy/aptinfo.h b/plugins/proxy/aptinfo.h
+new file mode 100644
+index 0000000..6752eb8
+--- /dev/null
++++ b/plugins/proxy/aptinfo.h
+@@ -0,0 +1,32 @@
++#ifndef APTINFO_H
++#define APTINFO_H
++#include <QHash>
++#include <QVariant>
++#include <QString>
++#include <QDBusArgument>
++
++struct AptInfo
++{
++    QString arg;
++    QDBusVariant out;
++};
++
++QDBusArgument &operator<<(QDBusArgument &argument, const AptInfo &mystruct)
++{
++    argument.beginStructure();
++    argument << mystruct.arg << mystruct.out;
++    argument.endStructure();
++    return argument;
++}
++
++const QDBusArgument &operator>>(const QDBusArgument &argument, AptInfo &mystruct)
++{
++    argument.beginStructure();
++    argument >> mystruct.arg >> mystruct.out;
++    argument.endStructure();
++    return argument;
++}
++
++Q_DECLARE_METATYPE(AptInfo)
++
++#endif // APTINFO_H
+diff --git a/plugins/proxy/aptproxydialog.cpp b/plugins/proxy/aptproxydialog.cpp
+new file mode 100644
+index 0000000..2c1cc21
+--- /dev/null
++++ b/plugins/proxy/aptproxydialog.cpp
+@@ -0,0 +1,127 @@
++#include "aptproxydialog.h"
++#include <QDebug>
++#include <QLineEdit>
++#include <QSpacerItem>
++#include <QLabel>
++#include <QPushButton>
++#include "proxy.h"
++
++AptProxyDialog::AptProxyDialog(QWidget *parent ):
++    QDialog(parent)
++{
++    initUi();
++    setupComponent();
++    initConnect();
++}
++
++AptProxyDialog::~AptProxyDialog()
++{
++
++}
++
++void AptProxyDialog::initUi()
++{
++    setWindowTitle(tr("Set Apt Proxy"));
++    this->setFixedSize(480, 200);
++
++    QVBoxLayout *mAptProxyLyt = new QVBoxLayout(this);
++    mAptProxyLyt->setContentsMargins(24, 24, 24, 24);
++    mAptProxyLyt->setSpacing(16);
++
++    QFrame *mHostFrame = new QFrame(this);
++    mHostFrame->setFixedSize(432, 36);
++    mHostFrame->setFrameShape(QFrame::NoFrame);
++
++    QHBoxLayout *mLyt_1= new QHBoxLayout(mHostFrame);
++    mLyt_1->setContentsMargins(0, 0, 0, 0);
++    mLyt_1->setSpacing(8);
++
++    FixLabel *mSetHostLabel = new FixLabel(mHostFrame);
++    mSetHostLabel->setFixedSize(92, 36);
++    mSetHostLabel->setText(tr("Server Address"));
++
++    mHostEdit = new QLineEdit(mHostFrame);
++    mHostEdit->setAttribute(Qt::WA_InputMethodEnabled, false);  //限制中文输入法
++    mHostEdit->setFixedSize(332, 36);
++    mHostEdit->installEventFilter(this);
++
++    mLyt_1->addWidget(mSetHostLabel);
++    mLyt_1->addWidget(mHostEdit);
++
++    QFrame *mPortFrame = new QFrame(this);
++    mPortFrame->setFixedSize(432, 36);
++    mPortFrame->setFrameShape(QFrame::NoFrame);
++
++    QHBoxLayout *mLyt_2= new QHBoxLayout(mPortFrame);
++    mLyt_2->setContentsMargins(0, 0, 0, 0);
++    mLyt_2->setSpacing(8);
++
++    QLabel *mSetPortLabel = new QLabel(tr("Port") ,mPortFrame);
++    mSetPortLabel->setFixedSize(92, 36);
++
++    mPortEdit = new QLineEdit(mPortFrame);
++    mPortEdit->setAttribute(Qt::WA_InputMethodEnabled, false);  //限制中文输入法
++    mPortEdit->setFixedSize(332, 36);
++    mPortEdit->installEventFilter(this);
++
++    mLyt_2->addWidget(mSetPortLabel);
++    mLyt_2->addWidget(mPortEdit);
++
++    QFrame *mChooseFrame = new QFrame(this);
++    mChooseFrame->setFixedWidth(432);
++    mChooseFrame->setFrameShape(QFrame::NoFrame);
++
++    QHBoxLayout *mLyt_3= new QHBoxLayout(mChooseFrame);
++    mLyt_3->setContentsMargins(0, 0, 0, 0);
++    mLyt_3->setSpacing(16);
++
++    mCancelBtn = new QPushButton(mChooseFrame);
++    mCancelBtn->setMinimumWidth(96);
++    mCancelBtn->setText(tr("Cancel"));
++
++    mConfirmBtn = new QPushButton(mChooseFrame);
++    mConfirmBtn->setMinimumWidth(96);
++    mConfirmBtn->setText(tr("Confirm"));
++
++    mLyt_3->addStretch();
++    mLyt_3->addWidget(mCancelBtn);
++    mLyt_3->addWidget(mConfirmBtn);
++
++    mAptProxyLyt->addWidget(mHostFrame);
++    mAptProxyLyt->addWidget(mPortFrame);
++    mAptProxyLyt->addSpacing(16);
++    mAptProxyLyt->addWidget(mChooseFrame);
++}
++
++void AptProxyDialog::initConnect()
++{
++    connect(mHostEdit, &QLineEdit::textEdited, this, [=]() {
++        if (mHostEdit->text().isEmpty()) {
++             mConfirmBtn->setEnabled(false);
++        } else {
++            mConfirmBtn->setEnabled(true);
++        }
++    });
++
++    connect(mCancelBtn, &QPushButton::clicked, this, [=]() {
++        this->close();
++    });
++
++    connect(mConfirmBtn, &QPushButton::clicked, this, [=]() {
++        Proxy::setAptProxy(mHostEdit->text() , mPortEdit->text() , true);
++        this->close();
++    });
++}
++
++void AptProxyDialog::setupComponent()
++{
++    QString host = Proxy::getAptProxy()["ip"].toString();
++    QString port = Proxy::getAptProxy()["port"].toString();;
++
++    mHostEdit->setText(host);
++    mPortEdit->setText(port);
++
++    if (host.isEmpty()) {
++        mConfirmBtn->setEnabled(false);
++    }
++}
+diff --git a/plugins/proxy/aptproxydialog.h b/plugins/proxy/aptproxydialog.h
+new file mode 100644
+index 0000000..ab677eb
+--- /dev/null
++++ b/plugins/proxy/aptproxydialog.h
+@@ -0,0 +1,38 @@
++#ifndef APTPROXYDIALOG_H
++#define APTPROXYDIALOG_H
++
++#include <QObject>
++#include <QWidget>
++#include <QVBoxLayout>
++#include <QGSettings>
++#include <QLabel>
++#include <QLineEdit>
++#include <QDialog>
++#include "fixlabel.h"
++
++#define APT_PROXY_SCHEMA              "org.ukui.control-center.apt.proxy"
++#define APT_PROXY_ENABLED            "enabled"
++#define APT_PROXY_HOST_KEY         "host"
++#define APT_PROXY_PORT_KEY         "port"
++
++class AptProxyDialog : public QDialog
++{
++    Q_OBJECT
++public:
++    AptProxyDialog(QWidget *parent = nullptr);
++    ~AptProxyDialog();
++
++    void initUi();
++private:
++    QLineEdit *mHostEdit;
++    QLineEdit *mPortEdit;
++
++    QPushButton *mCancelBtn;
++    QPushButton *mConfirmBtn;
++
++private:
++    void initConnect();
++     void setupComponent();
++};
++
++#endif // APTPROXYDIALOG_H
+diff --git a/plugins/proxy/certificationdialog.h b/plugins/proxy/certificationdialog.h
+new file mode 100644
+index 0000000..3cffb5e
+--- /dev/null
++++ b/plugins/proxy/certificationdialog.h
+@@ -0,0 +1,31 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
++ *
++ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
++ *
++ */
++#ifndef CERTIFICATIONDIALOG_H
++#define CERTIFICATIONDIALOG_H
++
++#include <QDialog>
++
++#define HTTP_PROXY_SCHEMA         "org.gnome.system.proxy.http"
++#define HTTP_AUTH_KEY         "use-authentication"
++#define HTTP_AUTH_USER_KEY        "authentication-user"
++#define HTTP_AUTH_PASSWD_KEY      "authentication-password"
++
++
++#endif // CERTIFICATIONDIALOG_H
+diff --git a/plugins/proxy/certificationdialog.ui b/plugins/proxy/certificationdialog.ui
+new file mode 100644
+index 0000000..72ca56a
+--- /dev/null
++++ b/plugins/proxy/certificationdialog.ui
+@@ -0,0 +1,342 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<ui version="4.0">
++ <class>CertificationDialog</class>
++ <widget class="QDialog" name="CertificationDialog">
++  <property name="geometry">
++   <rect>
++    <x>0</x>
++    <y>0</y>
++    <width>500</width>
++    <height>246</height>
++   </rect>
++  </property>
++  <property name="minimumSize">
++   <size>
++    <width>500</width>
++    <height>246</height>
++   </size>
++  </property>
++  <property name="maximumSize">
++   <size>
++    <width>500</width>
++    <height>246</height>
++   </size>
++  </property>
++  <property name="windowTitle">
++   <string>UserCertification</string>
++  </property>
++  <layout class="QVBoxLayout" name="verticalLayout_2">
++   <property name="spacing">
++    <number>0</number>
++   </property>
++   <property name="leftMargin">
++    <number>0</number>
++   </property>
++   <property name="topMargin">
++    <number>0</number>
++   </property>
++   <property name="rightMargin">
++    <number>0</number>
++   </property>
++   <property name="bottomMargin">
++    <number>0</number>
++   </property>
++   <item>
++    <layout class="QVBoxLayout" name="verticalLayout">
++     <property name="spacing">
++      <number>20</number>
++     </property>
++     <property name="leftMargin">
++      <number>20</number>
++     </property>
++     <property name="topMargin">
++      <number>25</number>
++     </property>
++     <item>
++      <spacer name="verticalSpacer">
++       <property name="orientation">
++        <enum>Qt::Vertical</enum>
++       </property>
++       <property name="sizeType">
++        <enum>QSizePolicy::Fixed</enum>
++       </property>
++       <property name="sizeHint" stdset="0">
++        <size>
++         <width>20</width>
++         <height>10</height>
++        </size>
++       </property>
++      </spacer>
++     </item>
++     <item>
++      <layout class="QHBoxLayout" name="activeHLayout" stretch="0">
++       <property name="spacing">
++        <number>10</number>
++       </property>
++       <property name="leftMargin">
++        <number>20</number>
++       </property>
++       <item>
++        <widget class="QLabel" name="label_3">
++         <property name="sizePolicy">
++          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
++           <horstretch>0</horstretch>
++           <verstretch>0</verstretch>
++          </sizepolicy>
++         </property>
++         <property name="text">
++          <string>UserCertification</string>
++         </property>
++         <property name="scaledContents">
++          <bool>true</bool>
++         </property>
++        </widget>
++       </item>
++      </layout>
++     </item>
++     <item>
++      <layout class="QHBoxLayout" name="horizontalLayout_2">
++       <property name="bottomMargin">
++        <number>0</number>
++       </property>
++       <item>
++        <widget class="QWidget" name="widget" native="true">
++         <layout class="QVBoxLayout" name="verticalLayout_4">
++          <property name="leftMargin">
++           <number>0</number>
++          </property>
++          <property name="topMargin">
++           <number>0</number>
++          </property>
++          <property name="rightMargin">
++           <number>0</number>
++          </property>
++          <property name="bottomMargin">
++           <number>0</number>
++          </property>
++          <item>
++           <layout class="QVBoxLayout" name="verticalLayout_3">
++            <item>
++             <layout class="QHBoxLayout" name="horizontalLayout_3">
++              <property name="spacing">
++               <number>0</number>
++              </property>
++              <item>
++               <spacer name="horizontalSpacer_2">
++                <property name="orientation">
++                 <enum>Qt::Horizontal</enum>
++                </property>
++                <property name="sizeType">
++                 <enum>QSizePolicy::Fixed</enum>
++                </property>
++                <property name="sizeHint" stdset="0">
++                 <size>
++                  <width>60</width>
++                  <height>20</height>
++                 </size>
++                </property>
++               </spacer>
++              </item>
++              <item>
++               <widget class="QLabel" name="label">
++                <property name="sizePolicy">
++                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
++                  <horstretch>0</horstretch>
++                  <verstretch>0</verstretch>
++                 </sizepolicy>
++                </property>
++                <property name="minimumSize">
++                 <size>
++                  <width>60</width>
++                  <height>0</height>
++                 </size>
++                </property>
++                <property name="maximumSize">
++                 <size>
++                  <width>60</width>
++                  <height>16777215</height>
++                 </size>
++                </property>
++                <property name="text">
++                 <string>User:</string>
++                </property>
++               </widget>
++              </item>
++              <item>
++               <widget class="QLineEdit" name="userLineEdit">
++                <property name="minimumSize">
++                 <size>
++                  <width>180</width>
++                  <height>0</height>
++                 </size>
++                </property>
++                <property name="maximumSize">
++                 <size>
++                  <width>180</width>
++                  <height>16777215</height>
++                 </size>
++                </property>
++               </widget>
++              </item>
++              <item>
++               <spacer name="horizontalSpacer_3">
++                <property name="orientation">
++                 <enum>Qt::Horizontal</enum>
++                </property>
++                <property name="sizeHint" stdset="0">
++                 <size>
++                  <width>40</width>
++                  <height>20</height>
++                 </size>
++                </property>
++               </spacer>
++              </item>
++             </layout>
++            </item>
++            <item>
++             <layout class="QHBoxLayout" name="horizontalLayout_4">
++              <property name="spacing">
++               <number>0</number>
++              </property>
++              <item>
++               <spacer name="horizontalSpacer_4">
++                <property name="orientation">
++                 <enum>Qt::Horizontal</enum>
++                </property>
++                <property name="sizeType">
++                 <enum>QSizePolicy::Fixed</enum>
++                </property>
++                <property name="sizeHint" stdset="0">
++                 <size>
++                  <width>60</width>
++                  <height>20</height>
++                 </size>
++                </property>
++               </spacer>
++              </item>
++              <item>
++               <widget class="QLabel" name="label_2">
++                <property name="sizePolicy">
++                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
++                  <horstretch>0</horstretch>
++                  <verstretch>0</verstretch>
++                 </sizepolicy>
++                </property>
++                <property name="minimumSize">
++                 <size>
++                  <width>60</width>
++                  <height>0</height>
++                 </size>
++                </property>
++                <property name="maximumSize">
++                 <size>
++                  <width>60</width>
++                  <height>16777215</height>
++                 </size>
++                </property>
++                <property name="text">
++                 <string>Passwd:</string>
++                </property>
++               </widget>
++              </item>
++              <item>
++               <widget class="QLineEdit" name="pwdLineEdit">
++                <property name="minimumSize">
++                 <size>
++                  <width>180</width>
++                  <height>0</height>
++                 </size>
++                </property>
++                <property name="maximumSize">
++                 <size>
++                  <width>180</width>
++                  <height>16777215</height>
++                 </size>
++                </property>
++               </widget>
++              </item>
++              <item>
++               <spacer name="horizontalSpacer_5">
++                <property name="orientation">
++                 <enum>Qt::Horizontal</enum>
++                </property>
++                <property name="sizeHint" stdset="0">
++                 <size>
++                  <width>40</width>
++                  <height>20</height>
++                 </size>
++                </property>
++               </spacer>
++              </item>
++             </layout>
++            </item>
++           </layout>
++          </item>
++         </layout>
++        </widget>
++       </item>
++      </layout>
++     </item>
++     <item>
++      <layout class="QHBoxLayout" name="horizontalLayout_6">
++       <item>
++        <spacer name="horizontalSpacer_6">
++         <property name="orientation">
++          <enum>Qt::Horizontal</enum>
++         </property>
++         <property name="sizeHint" stdset="0">
++          <size>
++           <width>40</width>
++           <height>20</height>
++          </size>
++         </property>
++        </spacer>
++       </item>
++       <item>
++        <widget class="QPushButton" name="closePushBtn">
++         <property name="text">
++          <string>Close</string>
++         </property>
++        </widget>
++       </item>
++       <item>
++        <spacer name="horizontalSpacer_7">
++         <property name="orientation">
++          <enum>Qt::Horizontal</enum>
++         </property>
++         <property name="sizeType">
++          <enum>QSizePolicy::Fixed</enum>
++         </property>
++         <property name="sizeHint" stdset="0">
++          <size>
++           <width>40</width>
++           <height>20</height>
++          </size>
++         </property>
++        </spacer>
++       </item>
++      </layout>
++     </item>
++     <item>
++      <spacer name="verticalSpacer_2">
++       <property name="orientation">
++        <enum>Qt::Vertical</enum>
++       </property>
++       <property name="sizeType">
++        <enum>QSizePolicy::Fixed</enum>
++       </property>
++       <property name="sizeHint" stdset="0">
++        <size>
++         <width>20</width>
++         <height>80</height>
++        </size>
++       </property>
++      </spacer>
++     </item>
++    </layout>
++   </item>
++  </layout>
++ </widget>
++ <resources/>
++ <connections/>
++</ui>
+diff --git a/plugins/proxy/proxy.cpp b/plugins/proxy/proxy.cpp
+new file mode 100644
+index 0000000..0e89d9e
+--- /dev/null
++++ b/plugins/proxy/proxy.cpp
+@@ -0,0 +1,1367 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
++ *
++ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
++ *
++ */
++#include "proxy.h"
++#include "aptproxydialog.h"
++#include "aptinfo.h"
++//#include "utils.h"
++
++#include <QDebug>
++#include <QRegExpValidator>
++#include <QApplication>
++#include <QTranslator>
++
++#define PROXY_SCHEMA              "org.gnome.system.proxy"
++#define PROXY_MODE_KEY            "mode"
++#define PROXY_AUTOCONFIG_URL_KEY  "autoconfig-url"
++#define IGNORE_HOSTS_KEY          "ignore-hosts"
++
++#define HTTP_PROXY_SCHEMA         "org.gnome.system.proxy.http"
++#define HTTP_USE_AUTH_KEY         "use-authentication"
++#define HTTP_AUTH_USER_KEY        "authentication-user"
++#define HTTP_AUTH_PASSWD_KEY      "authentication-password"
++
++#define HTTPS_PROXY_SCHEMA        "org.gnome.system.proxy.https"
++
++#define FTP_PROXY_SCHEMA          "org.gnome.system.proxy.ftp"
++
++#define SOCKS_PROXY_SCHEMA        "org.gnome.system.proxy.socks"
++
++#define PROXY_HOST_KEY       "host"
++#define PROXY_PORT_KEY       "port"
++
++#define FRAME_LAYOUT_MARGINS  16,0,16,0
++#define FRAME_LAYOUT_SPACING  8
++#define LABEL_WIDTH  136
++#define LINE_EDIT_HEIGHT  36
++
++Proxy::Proxy() : mFirstLoad(true)
++{
++    qDBusRegisterMetaType<QMap<QString, QStringList>>();
++    qDBusRegisterMetaType<QStringList>();
++
++    QTranslator* translator = new QTranslator(this);
++    translator->load("/usr/share/kylin-nm/proxy/" + QLocale::system().name());
++    QApplication::installTranslator(translator);
++
++    pluginName = tr("Proxy");
++    pluginType = NETWORK;
++}
++
++Proxy::~Proxy()
++{
++    if (!mFirstLoad) {
++            plugin_leave();
++    }
++}
++
++QString Proxy::plugini18nName() {
++    return pluginName;
++}
++
++int Proxy::pluginTypes() {
++    return pluginType;
++}
++
++QWidget *Proxy::pluginUi() {
++    if (mFirstLoad) {
++        mFirstLoad = false;
++        pluginWidget = new QWidget;
++        pluginWidget->setAttribute(Qt::WA_DeleteOnClose);
++        initUi(pluginWidget);
++        retranslateUi();
++
++        mfileWatch_1 = new QFileSystemWatcher(this);
++        mfileWatch_2 = new QFileSystemWatcher(this);
++
++        QString dir_1("/etc/apt/apt.conf.d");
++        QString dir_2("/etc/profile.d");
++        mfileWatch_1->addPath(dir_1);
++        mfileWatch_2->addPath(dir_2);
++
++        const QByteArray id(PROXY_SCHEMA);
++        const QByteArray idd(HTTP_PROXY_SCHEMA);
++        const QByteArray iddd(HTTPS_PROXY_SCHEMA);
++        const QByteArray iid(FTP_PROXY_SCHEMA);
++        const QByteArray iiid(SOCKS_PROXY_SCHEMA);
++         const QByteArray iVd(APT_PROXY_SCHEMA);
++
++        initSearchText();
++        setupComponent();
++
++        if (QGSettings::isSchemaInstalled(id) && QGSettings::isSchemaInstalled(idd) &&
++                QGSettings::isSchemaInstalled(iddd) && QGSettings::isSchemaInstalled(iid) &&
++                QGSettings::isSchemaInstalled(iiid) && QGSettings::isSchemaInstalled(iVd)){
++
++            isExistSettings = true;
++            proxysettings = new QGSettings(id,QByteArray(),this);
++            httpsettings = new QGSettings(idd,QByteArray(),this);
++            securesettings = new QGSettings(iddd,QByteArray(),this);
++            ftpsettings = new QGSettings(iid,QByteArray(),this);
++            sockssettings = new QGSettings(iiid,QByteArray(),this);
++
++            setupConnect();
++            initProxyModeStatus();
++            initAutoProxyStatus();
++            initManualProxyStatus();
++            initIgnoreHostStatus();
++            initDbus();
++            initAppProxyStatus();
++        } else {
++            qCritical() << "Xml needed by Proxy is not installed";
++        }
++    }
++    return pluginWidget;
++}
++
++void Proxy::plugin_leave()
++{
++    if (isExistSettings) {
++        if (proxysettings->get(PROXY_MODE_KEY) == "manual") {
++            if ((httpsettings->get(PROXY_HOST_KEY).toString().isEmpty() || httpsettings->get(PROXY_PORT_KEY).toInt() == 0)
++                && (securesettings->get(PROXY_HOST_KEY).toString().isEmpty() || securesettings->get(PROXY_PORT_KEY).toInt() == 0)
++                && (ftpsettings->get(PROXY_HOST_KEY).toString().isEmpty() || ftpsettings->get(PROXY_PORT_KEY).toInt() == 0)
++                && (sockssettings->get(PROXY_HOST_KEY).toString().isEmpty() || sockssettings->get(PROXY_PORT_KEY).toInt() == 0)) {
++                proxysettings->set(PROXY_MODE_KEY,"auto");
++                mManualBtn->setChecked(false);
++                mAutoBtn->setChecked(true);
++                _setSensitivity();
++            }
++        }
++    }
++}
++
++const QString Proxy::name() const {
++
++    return QStringLiteral("Proxy");
++}
++
++bool Proxy::isShowOnHomePage() const
++{
++    return true;
++}
++
++QIcon Proxy::icon() const
++{
++    return QIcon::fromTheme("ukui-network-agent-symbolic");
++}
++
++bool Proxy::isEnable() const
++{
++    return true;
++}
++
++void Proxy::initUi(QWidget *widget)
++{
++    QVBoxLayout *mverticalLayout = new QVBoxLayout(widget);
++    mverticalLayout->setSpacing(8);
++    mverticalLayout->setContentsMargins(0, 0, 0, 0);
++
++    mProxyBtnGroup = new QButtonGroup(this);
++    mProxyBtnGroup->setExclusive (false); // 防止互斥
++
++    mTitleLabel = new TitleLabel(widget);
++
++    mProxyFrame = new QFrame(widget);
++    mProxyFrame->setMinimumSize(QSize(550, 0));
++    mProxyFrame->setMaximumSize(QSize(16777215, 16777215));
++    mProxyFrame->setFrameShape(QFrame::Box);
++    QVBoxLayout *Lyt = new QVBoxLayout(mProxyFrame);
++    Lyt->setContentsMargins(0, 0, 0, 0);
++    Lyt->setSpacing(0);
++
++    mEnableFrame = new QFrame(mProxyFrame);
++    setFrame_Noframe(mEnableFrame);
++
++    QHBoxLayout *enableLyt = new QHBoxLayout(mEnableFrame);
++    enableLyt->setContentsMargins(16, 0, 16, 0);
++    QLabel *enableLabel = new QLabel(tr("Start using"), mEnableFrame);
++    mEnableBtn = new KSwitchButton(mEnableFrame);
++    enableLyt->addWidget(enableLabel);
++    enableLyt->addStretch();
++    enableLyt->addWidget(mEnableBtn);
++
++    line_8 = setLine(mProxyFrame);
++
++    mSelectFrame = new QFrame(mProxyFrame);
++    setFrame_Noframe(mSelectFrame);
++    QHBoxLayout *selectLyt = new QHBoxLayout(mSelectFrame);
++    selectLyt->setContentsMargins(16, 0, 16, 0);
++    selectLyt->setSpacing(4);
++    QLabel *selectLabel = new QLabel(tr("Proxy mode"), mSelectFrame);
++    selectLabel->setFixedWidth(148);
++    mAutoBtn = new QRadioButton(mSelectFrame);
++    mProxyBtnGroup->addButton(mAutoBtn);
++    QLabel *autoLabel = new QLabel(tr("Auto"), mSelectFrame);
++    mManualBtn = new QRadioButton(mSelectFrame);
++    mProxyBtnGroup->addButton(mManualBtn);
++    QLabel *manualLabel = new QLabel(tr("Manual"), mSelectFrame);
++    selectLyt->addWidget(selectLabel);
++    selectLyt->addWidget(mAutoBtn);
++    selectLyt->addWidget(autoLabel);
++    selectLyt->addSpacing(100);
++    selectLyt->addWidget(mManualBtn);
++    selectLyt->addWidget(manualLabel);
++    selectLyt->addStretch();
++
++    line_1 = setLine(mProxyFrame);
++
++    mUrlFrame = new QFrame(mProxyFrame);
++    setFrame_Noframe(mUrlFrame);
++
++    QHBoxLayout *mUrlLayout = new QHBoxLayout(mUrlFrame);
++    mUrlLayout->setContentsMargins(16, 0, 16, 0);
++    mUrlLayout->setSpacing(8);
++
++    mUrlLabel = new QLabel(mUrlFrame);
++    mUrlLabel->setFixedWidth(136);
++
++    mUrlLineEdit = new QLineEdit(mUrlFrame);
++    mUrlLineEdit->setFixedHeight(36);
++
++    mUrlLayout->addWidget(mUrlLabel);
++    mUrlLayout->addWidget(mUrlLineEdit);
++
++    line_2 = setLine(mProxyFrame);
++
++
++    mHTTPFrame = new QFrame(mProxyFrame);
++    setFrame_Noframe(mHTTPFrame);
++
++    QHBoxLayout *mHTTPLayout_1 = new QHBoxLayout(mHTTPFrame);
++    mHTTPLayout_1->setSpacing(8);
++    mHTTPLayout_1->setContentsMargins(16, 0, 16, 0);
++    mHTTPLabel = new QLabel(mHTTPFrame);
++    mHTTPLabel->setFixedWidth(136);
++    mHTTPPortLabel = new QLabel(mHTTPFrame);
++    mHTTPPortLabel->setFixedWidth(100);
++    mHTTPPortLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
++    mHTTPLineEdit_1 = new QLineEdit(mHTTPFrame);
++    mHTTPLineEdit_1->resize(300, 36);
++    mHTTPLineEdit_2 = new QLineEdit(mHTTPFrame);
++    mHTTPLineEdit_2->setFixedHeight(36);
++    mHTTPLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
++    mHTTPLayout_1->addWidget(mHTTPLabel);
++    mHTTPLayout_1->addWidget(mHTTPLineEdit_1);
++    mHTTPLayout_1->addWidget(mHTTPPortLabel);
++    mHTTPLayout_1->addWidget(mHTTPLineEdit_2);
++
++    line_3 = setLine(mProxyFrame);
++
++    mHTTPSFrame = new QFrame(mProxyFrame);
++   setFrame_Noframe(mHTTPSFrame);
++
++    QHBoxLayout *mHTTPSLayout = new QHBoxLayout(mHTTPSFrame);
++    mHTTPSLayout->setSpacing(8);
++    mHTTPSLayout->setContentsMargins(16, 0, 16, 0);
++    mHTTPSLabel = new QLabel(mHTTPSFrame);
++    mHTTPSLabel->setFixedWidth(136);
++    mHTTPSPortLabel = new QLabel(mHTTPSFrame);
++    mHTTPSPortLabel->setFixedWidth(100);
++    mHTTPSPortLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
++    mHTTPSLineEdit_1 = new QLineEdit(mHTTPSFrame);
++    mHTTPSLineEdit_1->resize(300, 36);
++    mHTTPSLineEdit_2 = new QLineEdit(mHTTPSFrame);
++    mHTTPSLineEdit_2->setFixedHeight(36);
++    mHTTPSLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
++    mHTTPSLayout->addWidget(mHTTPSLabel);
++    mHTTPSLayout->addWidget(mHTTPSLineEdit_1);
++    mHTTPSLayout->addWidget(mHTTPSPortLabel);
++    mHTTPSLayout->addWidget(mHTTPSLineEdit_2);
++
++    line_4 = setLine(mProxyFrame);
++
++    mFTPFrame = new QFrame(mProxyFrame);
++    setFrame_Noframe(mFTPFrame);
++
++    QHBoxLayout *mFTPLayout = new QHBoxLayout(mFTPFrame);
++    mFTPLayout->setSpacing(8);
++    mFTPLayout->setContentsMargins(16, 0, 16, 0);
++    mFTPLabel = new QLabel(mFTPFrame);
++    mFTPLabel->setFixedWidth(136);
++    mFTPPortLabel = new QLabel(mFTPFrame);
++    mFTPPortLabel->setFixedWidth(100);
++    mFTPPortLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
++    mFTPLineEdit_1 = new QLineEdit(mFTPFrame);
++    mFTPLineEdit_1->resize(300, 36);
++    mFTPLineEdit_2 = new QLineEdit(mFTPFrame);
++    mFTPLineEdit_2->setFixedHeight(36);
++    mFTPLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
++    mFTPLayout->addWidget(mFTPLabel);
++    mFTPLayout->addWidget(mFTPLineEdit_1);
++    mFTPLayout->addWidget(mFTPPortLabel);
++    mFTPLayout->addWidget(mFTPLineEdit_2);
++
++    line_5 = setLine(mProxyFrame);
++
++    mSOCKSFrame = new QFrame(mProxyFrame);
++    setFrame_Noframe(mSOCKSFrame);
++
++    QHBoxLayout *mSOCKSLayout = new QHBoxLayout(mSOCKSFrame);
++    mSOCKSLayout->setSpacing(8);
++    mSOCKSLayout->setContentsMargins(16, 0, 16, 0);
++    mSOCKSLabel = new QLabel(mSOCKSFrame);
++    mSOCKSLabel->setFixedWidth(136);
++    mSOCKSPortLabel = new QLabel(mSOCKSFrame);
++    mSOCKSPortLabel->setFixedWidth(100);
++    mSOCKSPortLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
++    mSOCKSLineEdit_1 = new QLineEdit(mSOCKSFrame);
++    mSOCKSLineEdit_1->resize(300, 36);
++    mSOCKSLineEdit_2 = new QLineEdit(mSOCKSFrame);
++    mSOCKSLineEdit_2->setFixedHeight(36);
++    mSOCKSLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
++    mSOCKSLayout->addWidget(mSOCKSLabel);
++    mSOCKSLayout->addWidget(mSOCKSLineEdit_1);
++    mSOCKSLayout->addWidget(mSOCKSPortLabel);
++    mSOCKSLayout->addWidget(mSOCKSLineEdit_2);
++
++    line_6 = setLine(mProxyFrame);
++
++    mIgnoreFrame = new QFrame(mProxyFrame);
++    mIgnoreFrame->setMinimumSize(QSize(550, 0));
++    mIgnoreFrame->setMaximumSize(QSize(16777215, 16777215));
++    mIgnoreFrame->setFrameShape(QFrame::NoFrame);
++    QVBoxLayout *mIgnoreLayout = new QVBoxLayout(mIgnoreFrame);
++    mIgnoreLayout->setSpacing(10);
++    mIgnoreLayout->setContentsMargins(16, 0, 16, 24);
++    mIgnoreLabel = new QLabel(mIgnoreFrame);
++    mIgnoreLabel->setFixedHeight(36);
++    mIgnoreLineEdit = new QTextEdit(mIgnoreFrame);
++    mIgnoreLineEdit->setFixedHeight(120);
++    mIgnoreLineEdit->setStyleSheet("border-radius:6px;background-color: palette(button)");
++    mIgnoreLayout->addWidget(mIgnoreLabel);
++    mIgnoreLayout->addWidget(mIgnoreLineEdit);
++
++    Lyt->addWidget(mEnableFrame);
++    Lyt->addWidget(line_8);
++    Lyt->addWidget(mSelectFrame);
++    Lyt->addWidget(line_1);
++    Lyt->addWidget(mUrlFrame);
++    Lyt->addWidget(line_2);
++    Lyt->addWidget(mHTTPFrame);
++    Lyt->addWidget(line_3);
++    Lyt->addWidget(mHTTPSFrame);
++    Lyt->addWidget(line_4);
++    Lyt->addWidget(mFTPFrame);
++    Lyt->addWidget(line_5);
++    Lyt->addWidget(mSOCKSFrame);
++    Lyt->addWidget(line_6);
++    Lyt->addWidget(mIgnoreFrame);
++
++    //应用代理模块
++    m_appProxyLabel = new TitleLabel(widget);
++    m_appProxyLabel->setText(tr("Application Proxy")); //应用代理
++    setAppProxyFrameUi(widget);
++    setAppListFrameUi(widget);
++
++    //APT代理模块
++    mAptProxyLabel = new TitleLabel(widget);
++    mAPTFrame = new QFrame(widget);
++    mAPTFrame->setMinimumSize(QSize(550, 0));
++    mAPTFrame->setMaximumSize(QSize(16777215, 16777215));
++    mAPTFrame->setFrameShape(QFrame::Box);
++
++    QVBoxLayout *AptLayout = new QVBoxLayout(mAPTFrame);
++    AptLayout->setContentsMargins(0, 0, 0, 0);
++    AptLayout->setSpacing(0);
++
++    mAPTFrame_1 = new QFrame(mAPTFrame);
++    setFrame_Noframe(mAPTFrame_1);
++
++    QHBoxLayout *mAptLayout_1 = new QHBoxLayout(mAPTFrame_1);
++    mAptLayout_1->setContentsMargins(16, 0, 16, 0);
++    mAptLayout_1->setSpacing(8);
++
++    mAptLabel = new QLabel(mAPTFrame_1);
++    mAptLabel->setFixedWidth(200);
++    mAptBtn = new KSwitchButton(mAPTFrame_1);
++    mAptLayout_1->addWidget(mAptLabel);
++    mAptLayout_1->addStretch();
++    mAptLayout_1->addWidget(mAptBtn);
++
++    mAPTFrame_2 = new QFrame(mAPTFrame);
++    setFrame_Noframe(mAPTFrame_2);
++
++    QHBoxLayout *mAptLayout_2 = new QHBoxLayout(mAPTFrame_2);
++    mAptLayout_2->setContentsMargins(16, 0, 16, 0);
++    mAptLayout_2->setSpacing(8);
++
++    mAPTHostLabel_1 = new QLabel(mAPTFrame_2);
++    mAPTHostLabel_2 = new QLabel(mAPTFrame_2);
++    mAPTPortLabel_1 = new QLabel(mAPTFrame_2);
++    mAPTPortLabel_2 = new QLabel(mAPTFrame_2);
++    mEditBtn = new QPushButton(mAPTFrame_2);
++    mEditBtn->setFixedWidth(80);
++    mAptLayout_2->addWidget(mAPTHostLabel_1);
++    mAptLayout_2->addWidget(mAPTHostLabel_2);
++    mAptLayout_2->addSpacing(100);
++    mAptLayout_2->addWidget(mAPTPortLabel_1);
++    mAptLayout_2->addWidget(mAPTPortLabel_2);
++    mAptLayout_2->addStretch();
++    mAptLayout_2->addWidget(mEditBtn,Qt::AlignRight);
++
++    line_7 = setLine(mAPTFrame);
++
++    AptLayout->addWidget(mAPTFrame_1);
++    AptLayout->addWidget(line_7);
++    AptLayout->addWidget(mAPTFrame_2);
++
++    mverticalLayout->addWidget(mTitleLabel);
++    mverticalLayout->addWidget(mProxyFrame);
++    mverticalLayout->addSpacing(32);
++    mverticalLayout->addWidget(m_appProxyLabel);
++    mverticalLayout->addWidget(m_appProxyFrame);
++    mverticalLayout->addSpacing(4);
++    mverticalLayout->addWidget(m_appListFrame);
++    mverticalLayout->addSpacing(32);
++    mverticalLayout->addWidget(mAptProxyLabel);
++    mverticalLayout->addWidget(mAPTFrame);
++    mverticalLayout->addStretch();
++}
++
++void Proxy::initSearchText() {
++
++}
++
++void Proxy::retranslateUi()
++{
++    mTitleLabel->setText(tr("System Proxy"));
++    //~ contents_path /Proxy/Auto url
++    mUrlLabel->setText(tr("Auto url"));
++    //~ contents_path /Proxy/Http Proxy
++    mHTTPLabel->setText(tr("Http Proxy"));
++    //~ contents_path /Proxy/Https Proxy
++    mHTTPSLabel->setText(tr("Https Proxy"));
++    //~ contents_path /Proxy/Ftp Proxy
++    mFTPLabel->setText(tr("Ftp Proxy"));
++    //~ contents_path /Proxy/Socks Proxy
++    mSOCKSLabel->setText(tr("Socks Proxy"));
++    mHTTPPortLabel->setText(tr("Port"));
++    mHTTPSPortLabel->setText(tr("Port"));
++    mFTPPortLabel->setText(tr("Port"));
++    mSOCKSPortLabel->setText(tr("Port"));
++    mIgnoreLabel->setText(tr("List of ignored hosts. more than one entry, please separate with english semicolon(;)"));
++
++    //~ contents_path /Proxy/Apt Proxy
++    mAptProxyLabel->setText(tr("Apt Proxy"));
++    mAptLabel->setText(tr("Open"));
++    mAPTHostLabel_1->setText(tr("Server Address : "));
++    mAPTPortLabel_1->setText(tr("Port : "));
++    mEditBtn->setText(tr("Edit"));
++}
++
++void Proxy::setupComponent(){
++    //QLineEdit 设置数据
++    GSData httpHostData;
++    httpHostData.schema = HTTP_PROXY_SCHEMA;
++    httpHostData.key = PROXY_HOST_KEY;
++    mHTTPLineEdit_1->setProperty("gData", QVariant::fromValue(httpHostData));
++
++    GSData httpsHostData;
++    httpsHostData.schema = HTTPS_PROXY_SCHEMA;
++    httpsHostData.key = PROXY_HOST_KEY;
++    mHTTPSLineEdit_1->setProperty("gData", QVariant::fromValue(httpsHostData));
++
++    GSData ftpHostData;
++    ftpHostData.schema = FTP_PROXY_SCHEMA;
++    ftpHostData.key = PROXY_HOST_KEY;
++    mFTPLineEdit_1->setProperty("gData", QVariant::fromValue(ftpHostData));
++
++    GSData socksHostData;
++    socksHostData.schema = SOCKS_PROXY_SCHEMA;
++    socksHostData.key = PROXY_HOST_KEY;
++    mSOCKSLineEdit_1->setProperty("gData", QVariant::fromValue(socksHostData));
++
++    GSData httpPortData;
++    httpPortData.schema = HTTP_PROXY_SCHEMA;
++    httpPortData.key = PROXY_PORT_KEY;
++    mHTTPLineEdit_2->setProperty("gData", QVariant::fromValue(httpPortData));
++
++    GSData httpsPortData;
++    httpsPortData.schema = HTTPS_PROXY_SCHEMA;
++    httpsPortData.key = PROXY_PORT_KEY;
++    mHTTPSLineEdit_2->setProperty("gData", QVariant::fromValue(httpsPortData));
++
++    GSData ftpPortData;
++    ftpPortData.schema = FTP_PROXY_SCHEMA;
++    ftpPortData.key = PROXY_PORT_KEY;
++    mFTPLineEdit_2->setProperty("gData", QVariant::fromValue(ftpPortData));
++
++    GSData socksPortData;
++    socksPortData.schema = SOCKS_PROXY_SCHEMA;
++    socksPortData.key = PROXY_PORT_KEY;
++    mSOCKSLineEdit_2->setProperty("gData", QVariant::fromValue(socksPortData));
++}
++
++void Proxy::setupConnect(){
++    connect(mEnableBtn, &KSwitchButton::stateChanged, this ,[=](bool checked) {
++        mSelectFrame->setVisible(checked);
++        line_8->setVisible(checked);
++        mAutoBtn->setChecked(checked);
++        mManualBtn->setChecked(false);
++        qDebug()<<mManualBtn->isChecked();
++        proxysettings->set(PROXY_MODE_KEY, checked ? "auto" : "none");
++         _setSensitivity();
++    });
++
++    connect(mEditBtn ,&QPushButton::clicked, this, &Proxy::setAptProxySlot);
++
++    connect(mProxyBtnGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), [=](QAbstractButton * eBtn){
++        if (eBtn == mAutoBtn) {
++            mManualBtn->setChecked(false);
++            proxysettings->set(PROXY_MODE_KEY,"auto");
++        } else if (eBtn == mManualBtn){
++            mAutoBtn->setChecked(false);
++            proxysettings->set(PROXY_MODE_KEY,"manual");
++        }
++        _setSensitivity();
++    });
++
++    connect(mUrlLineEdit, &QLineEdit::textChanged, this, [=](const QString &txt){proxysettings->set(PROXY_AUTOCONFIG_URL_KEY, QVariant(txt));});
++
++    connect(mHTTPLineEdit_1, &QLineEdit::textChanged, this, [=](const QString &txt){manualProxyTextChanged(txt);});
++    connect(mHTTPSLineEdit_1, &QLineEdit::textChanged, this, [=](const QString &txt){manualProxyTextChanged(txt);});
++    connect(mFTPLineEdit_1, &QLineEdit::textChanged, this, [=](const QString &txt){manualProxyTextChanged(txt);});
++    connect(mSOCKSLineEdit_1, &QLineEdit::textChanged, this, [=](const QString &txt){manualProxyTextChanged(txt);});
++    connect(mHTTPLineEdit_2, &QLineEdit::textChanged, this, [=](const QString &txt){manualProxyTextChanged(txt);});
++    connect(mHTTPSLineEdit_2, &QLineEdit::textChanged, this, [=](const QString &txt){manualProxyTextChanged(txt);});
++    connect(mFTPLineEdit_2, &QLineEdit::textChanged, this, [=](const QString &txt){manualProxyTextChanged(txt);});
++    connect(mSOCKSLineEdit_2, &QLineEdit::textChanged, this, [=](const QString &txt){manualProxyTextChanged(txt);});
++
++    connect(mIgnoreLineEdit, &QTextEdit::textChanged, this, [=](){
++        QString text = mIgnoreLineEdit->toPlainText();
++        QStringList hostStringList = text.split(";");
++        proxysettings->set(IGNORE_HOSTS_KEY, QVariant(hostStringList));
++    });
++
++    connect(mAptBtn , &KSwitchButton::stateChanged, this ,[=](bool checked){
++        if (checked) {
++            emit mEditBtn->click();
++        } else {   // 关闭APT代理，删除对应的配置文件
++            if (QString(qgetenv("http_proxy").data()).isEmpty()) {
++                line_7->hide();
++                mAPTFrame_2->hide();
++                setAptProxy("" ,0 ,false);
++            } else {
++                QMessageBox *mReboot = new QMessageBox(pluginWidget->topLevelWidget());
++                mReboot->setIcon(QMessageBox::Warning);
++                mReboot->setText(tr("The apt proxy  has been turned off and needs to be restarted to take effect"));
++                QPushButton *laterbtn =  mReboot->addButton(tr("Reboot Later"), QMessageBox::RejectRole);
++                QPushButton *nowbtn =   mReboot->addButton(tr("Reboot Now"), QMessageBox::AcceptRole);
++                mReboot->exec();
++                if (mReboot->clickedButton() == nowbtn) {  //选择了立即重启，一秒后系统会重启
++                    line_7->hide();
++                    mAPTFrame_2->hide();
++                    setAptProxy("" ,0 ,false);
++                    sleep(1);
++                    reboot();
++                } else {  //选择了稍后重启,删掉对应文件，但删不了已生效的环境变量
++                    line_7->hide();
++                    mAPTFrame_2->hide();
++                    setAptProxy("" ,0 ,false);
++                }
++            }
++        }
++    });
++}
++
++void Proxy::initProxyModeStatus(){
++    int mode = _getCurrentProxyMode();
++    QHash<QString, QVariant> mAptinfo = getAptProxy();
++
++    mAutoBtn->blockSignals(true);
++    mManualBtn->blockSignals(true);
++    mAptBtn->blockSignals(true);
++    mEnableBtn->blockSignals(true);
++
++    if (mode == AUTO){
++        mEnableBtn->setChecked(true);
++        mAutoBtn->setChecked(true);
++    } else if (mode == MANUAL){
++        mEnableBtn->setChecked(true);
++        mManualBtn->setChecked(true);
++    } else{
++        mEnableBtn->setChecked(false);
++        mAutoBtn->setChecked(false);
++        mManualBtn->setChecked(false);
++        mSelectFrame->setVisible(false);
++        line_8->setVisible(false);
++    }
++
++    if (QFile::exists("/etc/apt/ota_version")) {
++        mAPTFrame->hide();
++        mAptProxyLabel->hide();
++    } else {
++        if (mAptinfo["open"].toBool()) {
++            mAptBtn->setChecked(true);
++            mAPTHostLabel_2->setText(mAptinfo["ip"].toString());
++            mAPTPortLabel_2->setText(mAptinfo["port"].toString());
++        } else {
++            mAptBtn->setChecked(false);
++            line_7->setVisible(false);
++            mAPTFrame_2->setVisible(false);
++        }
++    }
++
++
++    mAutoBtn->blockSignals(false);
++    mManualBtn->blockSignals(false);
++    mAptBtn->blockSignals(false);
++    mEnableBtn->blockSignals(false);
++
++    _setSensitivity();
++}
++
++void Proxy::initAutoProxyStatus(){
++
++    mUrlLineEdit->blockSignals(true);
++    //设置当前url
++    QString urlString = proxysettings->get(PROXY_AUTOCONFIG_URL_KEY).toString();
++    mUrlLineEdit->setText(urlString);
++
++    mUrlLineEdit->blockSignals(false);
++}
++
++void Proxy::initManualProxyStatus(){
++    //信号阻塞
++    mHTTPLineEdit_1->blockSignals(true);
++    mHTTPSLineEdit_1->blockSignals(true);
++    mFTPLineEdit_1->blockSignals(true);
++    mSOCKSLineEdit_1->blockSignals(true);
++
++    mHTTPLineEdit_2->blockSignals(true);
++    mHTTPSLineEdit_2->blockSignals(true);
++    mFTPLineEdit_2->blockSignals(true);
++    mSOCKSLineEdit_2->blockSignals(true);
++
++    //HTTP
++    QString httphost = httpsettings->get(PROXY_HOST_KEY).toString();
++    mHTTPLineEdit_1->setText(httphost);
++    int httpport = httpsettings->get(PROXY_PORT_KEY).toInt();
++    mHTTPLineEdit_2->setText(QString::number(httpport));
++
++    //HTTPS
++    QString httpshost = securesettings->get(PROXY_HOST_KEY).toString();
++    mHTTPSLineEdit_1->setText(httpshost);
++    int httpsport = securesettings->get(PROXY_PORT_KEY).toInt();
++    mHTTPSLineEdit_2->setText(QString::number(httpsport));
++
++    //FTP
++    QString ftphost = ftpsettings->get(PROXY_HOST_KEY).toString();
++    mFTPLineEdit_1->setText(ftphost);
++    int ftppost = ftpsettings->get(PROXY_PORT_KEY).toInt();
++    mFTPLineEdit_2->setText(QString::number(ftppost));
++
++    //SOCKS
++    QString sockshost = sockssettings->get(PROXY_HOST_KEY).toString();
++    mSOCKSLineEdit_1->setText(sockshost);
++    int socksport = sockssettings->get(PROXY_PORT_KEY).toInt();
++    mSOCKSLineEdit_2->setText(QString::number(socksport));
++
++    //解除信号阻塞
++    mHTTPLineEdit_1->blockSignals(false);
++    mHTTPSLineEdit_1->blockSignals(false);
++    mFTPLineEdit_1->blockSignals(false);
++    mSOCKSLineEdit_1->blockSignals(false);
++
++    mHTTPLineEdit_2->blockSignals(false);
++    mHTTPSLineEdit_2->blockSignals(false);
++    mFTPLineEdit_2->blockSignals(false);
++    mSOCKSLineEdit_2->blockSignals(false);
++}
++
++void Proxy::initIgnoreHostStatus(){
++    mIgnoreLineEdit->blockSignals(true);
++
++    //设置当前ignore host
++    QStringList ignorehost = proxysettings->get(IGNORE_HOSTS_KEY).toStringList();
++    mIgnoreLineEdit->setPlainText(ignorehost.join(";"));
++
++    mIgnoreLineEdit->blockSignals(false);
++}
++
++void Proxy::initDbus()
++{
++    m_appProxyDbus = new QDBusInterface("org.ukui.SettingsDaemon",
++                       "/org/ukui/SettingsDaemon/AppProxy",
++                       "org.ukui.SettingsDaemon.AppProxy",
++                       QDBusConnection::sessionBus());
++}
++
++void Proxy::initAppProxyStatus()
++{
++    bool state = getAppProxyState();
++    m_appEnableBtn->setChecked(state);
++    onappProxyEnableChanged(state);
++
++    appProxyInfoPadding();
++//    m_cancelBtn->setEnabled(false);
++//    m_saveBtn->setEnabled(false);
++    appListPadding();
++}
++
++int Proxy::_getCurrentProxyMode(){
++    GSettings * proxygsettings;
++    proxygsettings = g_settings_new(PROXY_SCHEMA);
++    int mode = g_settings_get_enum(proxygsettings, PROXY_MODE_KEY);
++    g_object_unref(proxygsettings);
++
++    return mode;
++}
++
++void Proxy::_setSensitivity(){
++    //自动配置代理界面敏感性
++    bool autoChecked = mAutoBtn->isChecked();
++    mUrlFrame->setVisible(autoChecked);
++    line_1->setVisible(autoChecked);
++
++
++    //手动配置代理界面敏感性
++    bool manualChecked = mManualBtn->isChecked();
++    mHTTPFrame->setVisible(manualChecked);
++    mHTTPSFrame->setVisible(manualChecked);
++    mFTPFrame->setVisible(manualChecked);
++    mSOCKSFrame->setVisible(manualChecked);
++    mIgnoreFrame->setVisible(manualChecked);
++    line_2->setVisible(manualChecked);
++    line_3->setVisible(manualChecked);
++    line_4->setVisible(manualChecked);
++    line_5->setVisible(manualChecked);
++    line_6->setVisible(manualChecked);
++}
++
++void Proxy::setAptProxy(QString host, QString port, bool status)
++{
++    QDBusInterface *mAptproxyDbus = new QDBusInterface("com.control.center.qt.systemdbus",
++                                                             "/",
++                                                             "com.control.center.interface",
++                                                             QDBusConnection::systemBus());
++    if (mAptproxyDbus->isValid())
++        QDBusReply<bool> reply = mAptproxyDbus->call("setaptproxy", host, port , status);
++}
++
++QHash<QString, QVariant> Proxy::getAptProxy()
++{
++     QHash<QString, QVariant> mAptInfo;
++     QDBusInterface *mAptproxyDbus = new QDBusInterface("com.control.center.qt.systemdbus",
++                                                              "/",
++                                                              "com.control.center.interface",
++                                                              QDBusConnection::systemBus());
++    if (mAptproxyDbus->isValid()) {
++        QDBusMessage result = mAptproxyDbus->call("getaptproxy");
++
++        QList<QVariant> outArgs = result.arguments();
++        QVariant first = outArgs.at(0);
++        QDBusArgument dbvFirst = first.value<QDBusArgument>();
++        QVariant vFirst = dbvFirst.asVariant();
++        const QDBusArgument &dbusArgs = vFirst.value<QDBusArgument>();
++
++        QVector<AptInfo> aptinfo;
++
++        dbusArgs.beginArray();
++        while (!dbusArgs.atEnd()) {
++            AptInfo info;
++            dbusArgs >> info;
++            aptinfo.push_back(info);
++        }
++        dbusArgs.endArray();
++
++        for (AptInfo it : aptinfo) {
++            mAptInfo.insert(it.arg, it.out.variant());
++        }
++    }
++    return mAptInfo;
++}
++
++void Proxy::setAptInfo()
++{
++    QMessageBox *mReboot = new QMessageBox(pluginWidget->topLevelWidget());
++    mReboot->setIcon(QMessageBox::Warning);
++    mReboot->setText(tr("The system needs to be restarted to set the Apt proxy, whether to reboot"));
++    QPushButton *laterbtn =  mReboot->addButton(tr("Reboot Later"), QMessageBox::RejectRole);
++    QPushButton *nowbtn =   mReboot->addButton(tr("Reboot Now"), QMessageBox::AcceptRole);
++    mReboot->exec();
++    if (mReboot->clickedButton() == nowbtn) {  //选择了立即重启，一秒后系统会重启
++        sleep(1);
++        reboot();
++    } else  {  //选择了稍后重启或点击了关闭按钮，配置文件已写入，但是/etc/profile.d目录下新增的脚本文件未执行
++        line_7->show();
++        mAPTFrame_2->show();
++        mAPTHostLabel_2->setText(getAptProxy()["ip"].toString());
++        mAPTPortLabel_2->setText(getAptProxy()["port"].toString());
++    }
++}
++
++void Proxy::reboot()
++{
++    QDBusInterface *rebootDbus = new QDBusInterface("org.gnome.SessionManager",
++                                                             "/org/gnome/SessionManager",
++                                                             "org.gnome.SessionManager",
++                                                             QDBusConnection::sessionBus());
++
++    rebootDbus->call("reboot");
++    delete rebootDbus;
++    rebootDbus = nullptr;
++}
++
++void Proxy::setFrame_Noframe(QFrame *frame)
++{
++    frame->setMinimumSize(QSize(550, 60));
++    frame->setMaximumSize(QSize(16777215, 60));
++    frame->setFrameShape(QFrame::NoFrame);
++}
++
++QFrame *Proxy::setLine(QFrame *frame)
++{
++    QFrame *line = new QFrame(frame);
++    line->setMinimumSize(QSize(0, 1));
++    line->setMaximumSize(QSize(16777215, 1));
++    line->setLineWidth(0);
++    line->setFrameShape(QFrame::HLine);
++    line->setFrameShadow(QFrame::Sunken);
++    return line;
++}
++
++bool Proxy::getAppProxyState()
++{
++    bool state = true;
++    if(!m_appProxyDbus->isValid()) {
++        qWarning ()<< "init AppProxy dbus error";
++    }
++
++    //获取应用代理开启状态
++    qDebug() << "call QDBusInterface getProxyStateDbus";
++    QDBusReply<bool> reply = m_appProxyDbus->call("getProxyStateDbus");
++
++    if (!reply.isValid()) {
++        return false;
++    }
++    state = reply;
++
++    return state;
++}
++
++void Proxy::setAppProxyState(bool state)
++{
++    if(!m_appProxyDbus->isValid()) {
++        qWarning ()<< "init AppProxy dbus error";
++        return;
++    }
++
++    //设置应用代理开启状态
++    qDebug() << "call QDBusInterface setProxyStateDbus" << state;
++    m_appProxyDbus->call("setProxyStateDbus", state);
++}
++
++QStringList Proxy::getAppProxyConf()
++{
++    QStringList info;
++    info.clear();
++
++    QDBusInterface dbusInterface("org.ukui.SettingsDaemon",
++                       "/org/ukui/SettingsDaemon/AppProxy",
++                       "org.ukui.SettingsDaemon.AppProxy",
++                       QDBusConnection::sessionBus());
++
++    if(!dbusInterface.isValid()) {
++        qWarning ()<< "init AppProxy dbus error";
++    }
++
++    //获取应用代理配置信息
++    qDebug() << "call QDBusInterface getProxyConfig";
++    QDBusReply<QStringList> reply = dbusInterface.call("getProxyConfig");
++
++    if (!reply.isValid()) {
++        qWarning ()<< "Return empty app proxy information, getProxyConfig reply is invalid";
++        return info;
++    }
++
++    info =  reply.value();
++
++    if (info.isEmpty()) {
++        qWarning() << "getAppProxyConf reply is empty";
++    }
++
++    return info;
++}
++
++void Proxy::setAppProxyConf(QStringList list)
++{
++    if (list.count() < 3) {
++        return;
++    }
++
++    if(!m_appProxyDbus->isValid()) {
++        qWarning ()<< "init AppProxy dbus error";
++        return;
++    }
++
++    //写入应用代理配置信息
++    qDebug() << "call QDBusInterface setProxyConfig";
++    m_appProxyDbus->call("setProxyConfig", list);
++}
++
++QMap<QString, QStringList> Proxy::getAppListProxy()
++{
++    QMap<QString, QStringList> appList;
++    appList.clear();
++
++    QDBusInterface dbusInterface("org.ukui.SettingsDaemon",
++                       "/org/ukui/SettingsDaemon/AppProxy",
++                       "org.ukui.SettingsDaemon.AppProxy",
++                       QDBusConnection::sessionBus());
++
++    if(!dbusInterface.isValid()) {
++        qWarning ()<< "init AppProxy dbus error";
++        return appList;
++    }
++
++    //获取可以配置应用代理的应用信息
++    qDebug() << "call QDBusInterface getAppProxy";
++    QDBusReply<QMap<QString, QStringList>> reply = dbusInterface.call("getAppProxy");
++
++    if (!reply.isValid()) {
++        qWarning ()<< "Return empty app list, getAppProxy reply is invalid";
++        return appList;
++    }
++
++    appList =  reply.value();
++    if (appList.isEmpty()) {
++        qWarning() << "getAppProxy reply appList is empty";
++    }
++
++    return appList;
++}
++
++#if 0
++bool Proxy::checkIsChanged(QStringList info)
++{
++    bool isChanged = false;
++    info = getAppProxyConf();
++    if (info.value(0) != m_proxyTypeComboBox->currentText()
++            || info.value(1) != m_ipAddressLineEdit->text()
++            || info.value(2) != m_portLineEdit->text()
++            || info.value(3) != m_userNameLineEdit->text()
++            || info.value(4) != m_pwdLineEdit->text()) {
++
++        isChanged = true; //如果在代理界面相关信息已修改，则返回true
++    }
++    return isChanged;
++}
++#endif
++
++void Proxy::setAppProxyFrameUi(QWidget *widget)
++{
++    //应用代理模块
++    m_appProxyFrame = new QFrame(widget);
++    m_appProxyFrame->setMinimumSize(QSize(550, 0));
++    m_appProxyFrame->setMaximumSize(QSize(16777215, 16777215));
++    m_appProxyFrame->setFrameShape(QFrame::Box);
++
++    QVBoxLayout *appProxyLayout = new QVBoxLayout(m_appProxyFrame);
++    appProxyLayout->setContentsMargins(0, 0, 0, 0);
++    appProxyLayout->setSpacing(0);
++
++    //开启ui布局
++    m_appEnableFrame = new QFrame(m_appProxyFrame);
++    setFrame_Noframe(m_appEnableFrame);
++    m_appEnableLabel = new QLabel(tr("Open"), m_appEnableFrame);
++    m_appEnableBtn = new KSwitchButton(m_appEnableFrame);
++    m_appEnableBtn->setCheckable(true);
++    QHBoxLayout *appEnableLayout = new QHBoxLayout(m_appEnableFrame);
++    appEnableLayout->setContentsMargins(FRAME_LAYOUT_MARGINS);
++    appEnableLayout->addWidget(m_appEnableLabel);
++    appEnableLayout->addStretch();
++    appEnableLayout->addWidget(m_appEnableBtn);
++
++    //代理类型ui布局
++    m_proxyTypeFrame = new QFrame(m_appProxyFrame);
++    setFrame_Noframe(m_proxyTypeFrame);
++    m_proxyTypeLabel = new QLabel(tr("Proxy type"), m_proxyTypeFrame);
++    m_proxyTypeLabel->setFixedWidth(LABEL_WIDTH);
++    m_proxyTypeComboBox = new QComboBox(m_proxyTypeFrame);
++    QHBoxLayout *proxyTypeLayout = new QHBoxLayout(m_proxyTypeFrame);
++    proxyTypeLayout->setContentsMargins(FRAME_LAYOUT_MARGINS);
++    proxyTypeLayout->setSpacing(FRAME_LAYOUT_SPACING);
++    proxyTypeLayout->addWidget(m_proxyTypeLabel);
++    proxyTypeLayout->addWidget(m_proxyTypeComboBox);
++    m_proxyTypeComboBox->addItem("http"); //http
++    m_proxyTypeComboBox->addItem("socks4"); //socks4
++    m_proxyTypeComboBox->addItem("socks5"); //socks4
++
++    //IP地址ui布局
++    m_ipAddressFrame = new QFrame(m_appProxyFrame);
++    m_ipAddressFrame->setMinimumSize(QSize(550, 60));
++    m_ipAddressFrame->setMaximumSize(QSize(16777215, 88));
++    m_ipAddressFrame->setFrameShape(QFrame::NoFrame);
++    m_ipAddressLabel = new QLabel(tr("IP address"), m_ipAddressFrame);
++    m_ipAddressLabel->setFixedWidth(LABEL_WIDTH);
++    m_ipHintsLabel = new QLabel(m_ipAddressFrame);
++    m_ipHintsLabel->setContentsMargins(8, 0, 0, 0);
++    m_ipAddressLineEdit = new QLineEdit(m_ipAddressFrame);
++    m_ipAddressLineEdit->setFixedHeight(LINE_EDIT_HEIGHT);
++    m_ipAddressLineEdit->setPlaceholderText(tr("Required")); //必填
++
++    QWidget *ipInputWidget = new QWidget(m_ipAddressFrame);
++    QVBoxLayout *ipVLayout = new QVBoxLayout(ipInputWidget);
++    ipVLayout->setContentsMargins(0, 0, 0, 0);
++    ipVLayout->setSpacing(3);
++    ipVLayout->addWidget(m_ipAddressLineEdit);
++    ipVLayout->addWidget(m_ipHintsLabel);
++
++    QFormLayout *ipAddressLayout = new QFormLayout(m_ipAddressFrame);
++    ipAddressLayout->setContentsMargins(16, 12, 16, 12);
++    ipAddressLayout->setSpacing(FRAME_LAYOUT_SPACING);
++    ipAddressLayout->addRow(m_ipAddressLabel, ipInputWidget);
++
++    // IP的正则格式限制
++    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
++    m_ipAddressLineEdit->setValidator(new QRegExpValidator(rx, this));
++    //无效的IP地址提示
++    QPalette hintTextColor;
++    hintTextColor.setColor(QPalette::WindowText, Qt::red);
++    m_ipHintsLabel->setPalette(hintTextColor);
++    m_ipHintsLabel->setText(tr("Invalid IP Address"));
++    m_ipHintsLabel->hide();
++
++
++    //端口ui布局
++    m_portFrame = new QFrame(m_appProxyFrame);
++    setFrame_Noframe(m_portFrame);
++    m_portLabel = new QLabel(tr("Port"), m_portFrame);
++    m_portLabel->setFixedWidth(LABEL_WIDTH);
++    m_portLineEdit = new QLineEdit(m_portFrame);
++    m_portLineEdit->setPlaceholderText(tr("Required")); //必填
++    m_portLineEdit->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
++    QHBoxLayout *portLayout = new QHBoxLayout(m_portFrame);
++    portLayout->setContentsMargins(FRAME_LAYOUT_MARGINS);
++    portLayout->setSpacing(FRAME_LAYOUT_SPACING);
++    portLayout->addWidget(m_portLabel);
++    portLayout->addWidget(m_portLineEdit);
++
++    //用户名ui布局
++    m_userNameFrame = new QFrame(m_appProxyFrame);
++    setFrame_Noframe(m_userNameFrame);
++    m_userNameLabel = new QLabel(tr("Username"), m_userNameFrame);
++    m_userNameLabel->setFixedWidth(LABEL_WIDTH);
++    m_userNameLineEdit = new QLineEdit(m_userNameFrame);
++    m_userNameLineEdit->setPlaceholderText(tr("Optional")); //选填
++    QHBoxLayout *userNameLayout = new QHBoxLayout(m_userNameFrame);
++    userNameLayout->setContentsMargins(FRAME_LAYOUT_MARGINS);
++    userNameLayout->setSpacing(FRAME_LAYOUT_SPACING);
++    userNameLayout->addWidget(m_userNameLabel);
++    userNameLayout->addWidget(m_userNameLineEdit);
++
++    //密码ui布局
++    m_pwdFrame = new QFrame(m_appProxyFrame);
++    setFrame_Noframe(m_pwdFrame);
++    m_pwdLabel = new QLabel(tr("Password"), m_pwdFrame);
++    m_pwdLabel->setFixedWidth(LABEL_WIDTH);
++    m_pwdLineEdit = new KPasswordEdit(m_pwdFrame);
++    m_pwdLineEdit->setClearButtonEnabled(false);
++    QString str = tr("Optional");
++    m_pwdLineEdit->setPlaceholderText(str); //选填
++
++    QHBoxLayout *pwdLayout = new QHBoxLayout(m_pwdFrame);
++    pwdLayout->setContentsMargins(FRAME_LAYOUT_MARGINS);
++    pwdLayout->setSpacing(FRAME_LAYOUT_SPACING);
++    pwdLayout->addWidget(m_pwdLabel);
++    pwdLayout->addWidget(m_pwdLineEdit);
++
++    QRegExp rxPwd("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
++    QRegExpValidator *latitude = new QRegExpValidator(rxPwd, this);
++    m_pwdLineEdit->setValidator(latitude);
++
++#if 0
++    //按钮ui布局
++    m_appBtnFrame = new QFrame(m_appProxyFrame);
++    setFrame_Noframe(m_appBtnFrame);
++    m_cancelBtn = new QPushButton(m_appBtnFrame);
++    m_saveBtn = new QPushButton(m_appBtnFrame);
++    m_cancelBtn->setText(tr("Cancel"));
++    m_saveBtn->setText(tr("Save"));
++
++    QHBoxLayout *btnLayout = new QHBoxLayout(m_appBtnFrame);
++    btnLayout->setContentsMargins(FRAME_LAYOUT_MARGINS);
++    btnLayout->setSpacing(16);
++    btnLayout->addStretch();
++    btnLayout->addWidget(m_cancelBtn);
++    btnLayout->addWidget(m_saveBtn);
++#endif
++
++    //分隔线
++    m_appLine1 = setLine(m_appProxyFrame);
++    m_appLine2 = setLine(m_appProxyFrame);
++    m_appLine3 = setLine(m_appProxyFrame);
++    m_appLine4 = setLine(m_appProxyFrame);
++    m_appLine5 = setLine(m_appProxyFrame);
++
++    appProxyLayout->addWidget(m_appEnableFrame);
++    appProxyLayout->addWidget(m_appLine1);
++    appProxyLayout->addWidget(m_proxyTypeFrame);
++    appProxyLayout->addWidget(m_appLine2);
++    appProxyLayout->addWidget(m_ipAddressFrame);
++    appProxyLayout->addWidget(m_appLine3);
++    appProxyLayout->addWidget(m_portFrame);
++    appProxyLayout->addWidget(m_appLine4);
++    appProxyLayout->addWidget(m_userNameFrame);
++    appProxyLayout->addWidget(m_appLine5);
++    appProxyLayout->addWidget(m_pwdFrame);
++//    appProxyLayout->addWidget(line5);
++//    appProxyLayout->addWidget(m_appBtnFrame);
++
++    connect(m_appEnableBtn, &KSwitchButton::stateChanged, this, &Proxy::onappProxyEnableChanged);
++    connect(m_appEnableBtn, &KSwitchButton::stateChanged, this, &Proxy::setAppProxyState);
++    connect(m_proxyTypeComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(onAppProxyConfChanged()));
++    connect(m_ipAddressLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onipEditStateChanged()));
++    connect(m_ipAddressLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onAppProxyConfChanged()));
++    connect(m_portLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onAppProxyConfChanged()));
++    connect(m_userNameLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onAppProxyConfChanged()));
++    connect(m_pwdLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onAppProxyConfChanged()));
++    connect(m_ipAddressLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onAppProxyConfChanged()));
++
++    connect(m_proxyTypeComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(onAppProxyConfEditFinished()));
++    connect(m_ipAddressLineEdit, SIGNAL(editingFinished()), this, SLOT(onAppProxyConfEditFinished()));
++    connect(m_portLineEdit, SIGNAL(editingFinished()), this, SLOT(onAppProxyConfEditFinished()));
++    connect(m_userNameLineEdit, SIGNAL(editingFinished()), this, SLOT(onAppProxyConfEditFinished()));
++    connect(m_pwdLineEdit, SIGNAL(editingFinished()), this, SLOT(onAppProxyConfEditFinished()));
++//    connect(m_cancelBtn, SIGNAL(clicked()), this, SLOT(onCancelBtnClicked()));
++//    connect(m_saveBtn, SIGNAL(clicked()), this, SLOT(onSaveBtnClicked()));
++}
++
++void Proxy::setAppListFrameUi(QWidget *widget)
++{
++    //应用列表
++    m_appListFrame = new QFrame(widget);
++    m_appListFrame->setMinimumSize(QSize(550, 0));
++    m_appListFrame->setMaximumSize(QSize(16777215, 336));
++    m_appListFrame->setFrameShape(QFrame::Box);
++    QVBoxLayout *appListLayout = new QVBoxLayout(m_appListFrame);
++    appListLayout->setContentsMargins(16, 23, 16, 16);
++    appListLayout->setSpacing(16);
++
++    m_allowAppProxyLabel = new QLabel(m_appListFrame);
++    m_allowAppProxyLabel->setText(tr("The following applications are allowed to use this configuration:")); //允许以下应用使用该配置：
++    m_appListWidget = new QListWidget(m_appListFrame);
++    m_appListWidget->setMinimumHeight(240);
++    m_appListWidget->setBackgroundRole(QPalette::Base);
++    m_appListWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
++    m_appListWidget->setFrameShape(QFrame::Shape::Panel);
++
++    appListLayout->addWidget(m_allowAppProxyLabel);
++    appListLayout->addWidget(m_appListWidget);
++
++    QPalette mpal(m_appListWidget->palette());
++    mpal.setColor(QPalette::Base, qApp->palette().base().color());
++    mpal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
++    m_appListWidget->setAlternatingRowColors(true);
++    m_appListWidget->setPalette(mpal);
++}
++
++void Proxy::appProxyInfoPadding()
++{
++    QStringList proxyInfo;
++    proxyInfo.clear();
++    proxyInfo = getAppProxyConf();
++
++    m_proxyTypeComboBox->setCurrentText(proxyInfo.value(0));
++    m_ipAddressLineEdit->setText(proxyInfo.value(1));
++    m_portLineEdit->setText(proxyInfo.value(2));
++    m_userNameLineEdit->setText(proxyInfo.value(3));
++    m_pwdLineEdit->setText(proxyInfo.value(4));
++}
++
++void Proxy::appListPadding()
++{
++    QMap<QString, QStringList> appList ;
++    appList.clear();
++    appList = getAppListProxy(); //获取应用代理配置
++
++    //遍历应用列表
++    for (auto index : appList.keys()) {
++        QStringList appInfo = appList.value(index);
++        QVariant isChecked = appInfo.value(2);
++        bool flag = isChecked.toBool();
++
++        AppListWidget *appWidget = new AppListWidget(index, m_appListWidget);
++        appWidget->setAppName(appInfo.value(0));
++        appWidget->setAppIcon(QIcon::fromTheme(appInfo.value(1)).pixmap(24, 24));
++        appWidget->setAppChecked(flag);
++
++        QListWidgetItem *appListWidgetItem = new QListWidgetItem(m_appListWidget);
++        appListWidgetItem->setSizeHint(QSize(m_appListWidget->width(),36));
++        appListWidgetItem->setFlags(Qt::NoItemFlags);
++        m_appListWidget->addItem(appListWidgetItem);
++        m_appListWidget->setItemWidget(appListWidgetItem, appWidget);
++    }
++}
++
++bool Proxy::getipEditState(QString text)
++{
++    if (text.isEmpty()) {
++        return true;
++    }
++    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
++
++    bool match = false;
++    match = rx.exactMatch(text);
++
++    return match;
++}
++
++void Proxy::onipEditStateChanged()
++{
++    if (!getipEditState(m_ipAddressLineEdit->text())) {
++        m_ipAddressFrame->setFixedHeight(88);
++        m_ipHintsLabel->show();
++    } else {
++        m_ipHintsLabel->hide();
++        m_ipAddressFrame->setFixedHeight(60);
++    }
++}
++
++void Proxy::onAppProxyConfChanged()
++{
++    if (!getipEditState(m_ipAddressLineEdit->text()) || m_portLineEdit->text().isEmpty()) {
++        return;
++        qDebug() << "onAppProxyConfChanged return";
++    }
++
++    if (m_ipAddressLineEdit->text().isEmpty()) {
++        return;
++    } else {
++        m_appProxyInfo.clear();
++        m_appProxyInfo.append(m_proxyTypeComboBox->currentText());
++        m_appProxyInfo.append(m_ipAddressLineEdit->text());
++        m_appProxyInfo.append(m_portLineEdit->text());
++        if (!m_userNameLineEdit->text().isEmpty() && !m_pwdLineEdit->text().isEmpty()) {
++            m_appProxyInfo.append(m_userNameLineEdit->text());
++            m_appProxyInfo.append(m_pwdLineEdit->text());
++        } else {
++            m_appProxyInfo.append("");
++            m_appProxyInfo.append("");
++        }
++
++        qDebug() << m_appProxyInfo << Q_FUNC_INFO << __LINE__;
++    }
++}
++
++void Proxy::onAppProxyConfEditFinished()
++{
++   if (!m_ipAddressLineEdit->hasFocus() && !m_portLineEdit->hasFocus()) {
++       setAppProxyConf(m_appProxyInfo);
++   }
++}
++
++void Proxy::onappProxyEnableChanged(bool enable)
++{
++    m_proxyTypeFrame->setVisible(enable);
++    m_ipAddressFrame->setVisible(enable);
++    m_portFrame->setVisible(enable);
++    m_userNameFrame->setVisible(enable);
++    m_pwdFrame->setVisible(enable);
++    m_appListFrame->setVisible(enable);
++    m_appLine1->setVisible(enable);
++    m_appLine2->setVisible(enable);
++    m_appLine3->setVisible(enable);
++    m_appLine4->setVisible(enable);
++    m_appLine5->setVisible(enable);
++}
++
++#if 0
++void Proxy::onCancelBtnClicked()
++{
++    appProxyInfoPadding();
++}
++
++void Proxy::onSaveBtnClicked()
++{
++    if (!checkIsChanged(m_appProxyInfo)) {
++        return;
++    } else {
++        QStringList conf;
++        conf.clear();
++        conf.append(m_proxyTypeComboBox->currentText());
++        conf.append(m_ipAddressLineEdit->text());
++        conf.append(m_portLineEdit->text());
++        conf.append(m_userNameLineEdit->text());
++        conf.append(m_pwdLineEdit->text());
++        setAppProxyConf(conf);
++    }
++}
++
++void Proxy::setBtnEnable()
++{
++    m_cancelBtn->setEnabled(true);
++
++    if (getipEditState(m_ipAddressLineEdit->text()) && !m_portLineEdit->text().isEmpty()) {
++        if (!m_ipAddressLineEdit->text().isEmpty()) {
++            m_saveBtn->setEnabled(true);
++        }
++    } else {
++        m_saveBtn->setEnabled(false);
++    }
++}
++#endif
++
++void Proxy::setAptProxySlot()
++{
++    mAptBtn->blockSignals(true);
++    QHash<QString, QVariant> preaptinfo = getAptProxy();
++    bool prestatus = preaptinfo["open"].toBool();
++    AptProxyDialog *mwindow = new AptProxyDialog(pluginWidget);
++    mwindow->exec();
++    if (getAptProxy()["open"].toBool() && !prestatus) { // open值为true，用户点击了确定按钮，进行配置文件的写入，提示用户重启系统
++        setAptInfo();
++    }
++    if (getAptProxy()["open"].toBool() && prestatus) {
++        if (getAptProxy()["ip"].toString() == preaptinfo["ip"].toString() && getAptProxy()["port"].toString() == preaptinfo["port"].toString() && prestatus){  //点击了编辑按钮，且在设置IP和端口号的弹窗中，点击了取消或者关闭按钮
++            line_7->show();
++            mAPTFrame_2->show();
++        } else {
++             setAptInfo();
++        }
++    }
++    if(!getAptProxy()["open"].toBool() && !prestatus){ // 点击了APT开关按钮，但是在设置IP和端口号的弹窗中，点击了取消或者关闭按钮
++        mAptBtn->setChecked(false);
++    }
++    mAptBtn->blockSignals(false);
++}
++
++void Proxy::manualProxyTextChanged(QString txt){
++    //获取被修改控件
++    QObject * pobject = this->sender();
++    QLineEdit * who = dynamic_cast<QLineEdit *>(pobject);
++
++    //获取控件保存的用户数据
++    GSData currentData = who->property("gData").value<GSData>();
++    QString schema = currentData.schema;
++    qDebug()<<schema;
++    QString key = currentData.key;
++
++    //构建临时QGSettings
++    const QByteArray id = schema.toUtf8();
++    const QByteArray iidd(id.data());
++    QGSettings * setting = new QGSettings(iidd);
++
++    setting->set(key, QVariant(txt));
++
++    delete setting;
++    setting = nullptr;
++}
+diff --git a/plugins/proxy/proxy.h b/plugins/proxy/proxy.h
+new file mode 100644
+index 0000000..48d9cc3
+--- /dev/null
++++ b/plugins/proxy/proxy.h
+@@ -0,0 +1,285 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
++ *
++ * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
++ *
++ */
++#ifndef PROXY_H
++#define PROXY_H
++
++
++#include <QObject>
++#include <QtPlugin>
++#include <QFileSystemWatcher>
++
++#include <QDialog>
++#include <QLineEdit>
++#include "certificationdialog.h"
++
++#include <QGSettings>
++#include <QRadioButton>
++#include <QLineEdit>
++#include <QCheckBox>
++#include <QTextEdit>
++#include <QButtonGroup>
++#include <QComboBox>
++#include <QListWidget>
++#include <QFormLayout>
++#include <QDBusInterface>
++#include <QDBusConnection>
++#include <QDBusError>
++#include <QDBusReply>
++#include <QMessageBox>
++#include <QtDBus/QDBusMetaType>
++
++#include "interface.h"
++#include "titlelabel.h"
++#include "hoverwidget.h"
++#include "applistwidget.h"
++
++#include "kswitchbutton.h"
++#include "kpasswordedit.h"
++
++using namespace kdk;
++
++/* qt会将glib里的signals成员识别为宏，所以取消该宏
++ * 后面如果用到signals时，使用Q_SIGNALS代替即可
++ **/
++#ifdef signals
++#undef signals
++#endif
++
++#include <glib.h>
++#include <gio/gio.h>
++
++struct GSData
++{
++    QString key;
++    QString schema;
++};
++
++typedef enum{
++    NONE,
++    MANUAL,
++    AUTO
++}ProxyMode;
++
++//自定义类型使用QVariant需要使用 Q_DECLARE_METATYPE 注册
++Q_DECLARE_METATYPE(ProxyMode)
++Q_DECLARE_METATYPE(GSData)
++
++namespace Ui {
++class Proxy;
++}
++
++class Proxy : public QObject, CommonInterface
++{
++    Q_OBJECT
++    Q_PLUGIN_METADATA(IID "org.ukcc.CommonInterface")
++    Q_INTERFACES(CommonInterface)
++
++public:
++    Proxy();
++    ~Proxy();
++
++    QString plugini18nName() Q_DECL_OVERRIDE;
++    int pluginTypes() Q_DECL_OVERRIDE;
++    QWidget * pluginUi() Q_DECL_OVERRIDE;
++    void plugin_leave()Q_DECL_OVERRIDE;
++    const QString name() const  Q_DECL_OVERRIDE;
++    bool isShowOnHomePage() const Q_DECL_OVERRIDE;
++    QIcon icon() const Q_DECL_OVERRIDE;
++    bool isEnable() const Q_DECL_OVERRIDE;
++
++public:
++    void initUi(QWidget *widget);
++    void initSearchText();
++    void retranslateUi();
++    void setupComponent();
++    void setupConnect();
++    void initProxyModeStatus();
++    void initAutoProxyStatus();
++    void initManualProxyStatus();
++    void initIgnoreHostStatus();
++    void initDbus();
++    void initAppProxyStatus();
++
++    void manualProxyTextChanged(QString txt);
++    int _getCurrentProxyMode();
++    void _setSensitivity();
++    bool getAptProxyInfo(bool status);
++    static void setAptProxy(QString host ,QString port ,bool status); //  apt代理对应的配置文件的写入或删除
++    static QHash<QString, QVariant> getAptProxy();
++    void setAptInfo();
++    void reboot(); // 调用重启接口
++
++    void setFrame_Noframe(QFrame *frame);
++    QFrame *setLine(QFrame *frame);
++
++    bool getAppProxyState(); //获取应用代理开启状态--调用Dbus
++    void setAppProxyState(bool state); //设置应用代理开启状态--调用Dbus
++    static QStringList getAppProxyConf(); //获取应用代理配置信息--调用Dbus
++    void setAppProxyConf(QStringList list); //设置应用代理配置信息--调用Dbus
++    static QMap<QString, QStringList> getAppListProxy();
++//    bool checkIsChanged(QStringList info);
++
++private:
++    void setAppProxyFrameUi(QWidget *widget);
++    void setAppListFrameUi(QWidget *widget);
++    void appProxyInfoPadding();
++    void appListPadding();
++    bool getipEditState(QString text);
++
++    QString pluginName;
++    int pluginType;
++    QWidget * pluginWidget;
++
++    TitleLabel *mTitleLabel;
++    TitleLabel *m_appProxyLabel;
++    TitleLabel *mAptProxyLabel;
++    QLabel *mUrlLabel;
++    QLabel *mHTTPLabel;
++    QLabel *mHTTPPortLabel;
++    QLabel *mHTTPSLabel;
++    QLabel *mHTTPSPortLabel;
++    QLabel *mFTPLabel;
++    QLabel *mFTPPortLabel;
++    QLabel *mSOCKSLabel;
++    QLabel *mSOCKSPortLabel;
++    QLabel *mIgnoreLabel;
++    QLabel *mAptLabel;
++    QLabel *mAPTHostLabel_1;
++    QLabel *mAPTHostLabel_2;
++    QLabel *mAPTPortLabel_1;
++    QLabel *mAPTPortLabel_2;
++
++    QLabel *mCertificationLabel;
++    QLabel *mUserNameLabel;
++    QLabel *mPwdLabel;
++
++    QLabel *m_appEnableLabel;
++    QLabel *m_proxyTypeLabel;
++    QLabel *m_ipAddressLabel;
++    QLabel *m_ipHintsLabel;
++    QLabel *m_portLabel;
++    QLabel *m_userNameLabel;
++    QLabel *m_pwdLabel;
++    QLabel *m_allowAppProxyLabel;
++
++    QFrame *mProxyFrame;
++    QFrame *mEnableFrame;
++    QFrame *mSelectFrame;
++    QFrame *mUrlFrame;
++
++    QFrame *mHTTPFrame;
++    QFrame *mHTTPSFrame;
++    QFrame *mFTPFrame;
++    QFrame *mSOCKSFrame;
++    QFrame *mIgnoreFrame;
++    QFrame *mCertificationFrame_1;
++
++    QFrame *m_appEnableFrame;
++    QFrame *m_appProxyFrame;
++    QFrame *m_proxyTypeFrame;
++    QFrame *m_ipAddressFrame;
++    QFrame *m_portFrame;
++    QFrame *m_userNameFrame;
++    QFrame *m_pwdFrame;
++//    QFrame *m_appBtnFrame;
++    QFrame *m_appListFrame;
++
++    QFrame *mAPTFrame;
++    QFrame *mAPTFrame_1;
++    QFrame *mAPTFrame_2;
++
++    QFrame *line_1;
++    QFrame *line_2;
++    QFrame *line_3;
++    QFrame *line_4;
++    QFrame *line_5;
++    QFrame *line_6;
++    QFrame *line_7;
++    QFrame *line_8;
++    QFrame *m_appLine1;
++    QFrame *m_appLine2;
++    QFrame *m_appLine3;
++    QFrame *m_appLine4;
++    QFrame *m_appLine5;
++
++    QRadioButton *mAutoBtn;
++    QRadioButton *mManualBtn;
++    KSwitchButton *mEnableBtn;
++    KSwitchButton *mAptBtn;
++    QPushButton *mEditBtn;
++    QCheckBox *mCertificationBtn;
++
++    QButtonGroup *mProxyBtnGroup;
++
++    QLineEdit *mUrlLineEdit;
++    QLineEdit *mHTTPLineEdit_1;
++    QLineEdit *mHTTPLineEdit_2;
++    QLineEdit *mHTTPSLineEdit_1;
++    QLineEdit *mHTTPSLineEdit_2;
++    QLineEdit *mFTPLineEdit_1;
++    QLineEdit *mFTPLineEdit_2;
++    QLineEdit *mSOCKSLineEdit_1;
++    QLineEdit *mSOCKSLineEdit_2;
++    QLineEdit *mUserNameLineEdit;
++    QLineEdit *mPwdLineEdit;
++    QLineEdit *m_ipAddressLineEdit;
++    QLineEdit *m_portLineEdit;
++    QLineEdit *m_userNameLineEdit;
++
++    KSwitchButton *m_appEnableBtn;
++    QComboBox *m_proxyTypeComboBox;
++    KPasswordEdit *m_pwdLineEdit = nullptr;
++//    QPushButton *m_cancelBtn;
++//    QPushButton *m_saveBtn;
++    QListWidget *m_appListWidget = nullptr;
++
++    QTextEdit *mIgnoreLineEdit;
++
++    QGSettings * proxysettings;
++    QGSettings * httpsettings;
++    QGSettings * securesettings;
++    QGSettings * ftpsettings;
++    QGSettings * sockssettings;
++    QGSettings * aptsettings;
++
++    QFileSystemWatcher *mfileWatch_1;
++    QFileSystemWatcher *mfileWatch_2;
++
++    QDBusInterface *mAptproxyDbus;
++    QDBusInterface *m_appProxyDbus;
++
++    bool isExistSettings = false;
++    bool settingsCreate;
++    bool mFirstLoad;
++    QStringList m_appProxyInfo;
++    QStringList m_appCheckedList;
++
++private slots:
++    void setAptProxySlot();  //处理apt代理前端交互逻辑
++    void onappProxyEnableChanged(bool enable); //IP地址无效提示
++    void onipEditStateChanged(); //IP地址无效提示
++    void onAppProxyConfChanged(); //应用代理配置信息变化
++    void onAppProxyConfEditFinished();
++//    void onCancelBtnClicked();
++//    void onSaveBtnClicked();
++//    void setBtnEnable();
++};
++
++#endif // PROXY_H
+diff --git a/plugins/proxy/proxy.pro b/plugins/proxy/proxy.pro
+new file mode 100644
+index 0000000..2e5ab27
+--- /dev/null
++++ b/plugins/proxy/proxy.pro
+@@ -0,0 +1,52 @@
++#include(../../../env.pri)
++
++QT       += widgets dbus
++
++TEMPLATE = lib
++CONFIG += plugin
++
++TARGET = $$qtLibraryTarget(proxy)
++DESTDIR = ../..
++target.path = $$[QT_INSTALL_LIBS]/ukui-control-center
++trans.files = translations/*
++trans.path = /usr/share/kylin-nm/proxy/
++
++INCLUDEPATH   +=  \
++                 $$PROJECT_COMPONENTSOURCE \
++                 $$PROJECT_ROOTDIR \
++                 /usr/include/ukcc/interface \
++                 /usr/include/ukcc/widgets
++
++LIBS          += -L$$[QT_INSTALL_LIBS] -lgsettings-qt -lukcc
++
++##加载gio库和gio-unix库，用于获取和设置enum类型的gsettings
++CONFIG        += link_pkgconfig \
++                 C++11
++PKGCONFIG     += gio-2.0 \
++                 gio-unix-2.0 \
++                 gsettings-qt \
++                 kysdk-qtwidgets
++
++#DEFINES += QT_DEPRECATED_WARNINGS
++
++SOURCES += \
++    applistwidget.cpp \
++    aptproxydialog.cpp \
++    proxy.cpp
++
++HEADERS += \
++    applistwidget.h \
++    aptinfo.h \
++    aptproxydialog.h \
++    proxy.h \
++    certificationdialog.h
++
++FORMS +=
++
++INSTALLS += target \
++            trans
++
++TRANSLATIONS += \
++        translations/zh_CN.ts \
++        translations/tr.ts \
++        translations/bo_CN.ts
+diff --git a/plugins/proxy/translations/bo_CN.qm b/plugins/proxy/translations/bo_CN.qm
+new file mode 100644
+index 0000000..67dad16
+--- /dev/null
++++ b/plugins/proxy/translations/bo_CN.qm
+@@ -0,0 +1,10 @@
++<�d��!�`���B  0 ��  � �  � f�  � v�   � v�  j ��  � W��  �S�I  0W�I  �@m  
++1��  ��̪  �I�    �I�  ���  ���  	GM�  z8[|  �&8�  	�Wމ  �c��  ic�  �t��  ��n�  ��a  ����  6	�C�  
++��  S
++d��   =
++�<I  	�7Ms   ��4  b�x  5ʦ�  ��oy  a���  ��  H�\�  �i  a   U�rb`PzS       Cancel   AptProxyDialog   "BOS`AzcV�QB|f       Confirm   AptProxyDialog   B�tA       Port   AptProxyDialog   ^Vf^t`rfBSf       Server Address   AptProxyDialog   & A p t  D|ZV  VYtBfT       Set Apt Proxy   AptProxyDialog    Izbf��|QD|ZV       Application Proxy   Proxy   $ A P T  ZVV�zQXrf�       	Apt Proxy   Proxy   $bD`BtcB�rfb�Df       Auto   Proxy   ,b�Df`A|bB�rQ�ZrBf       Auto url   Proxy   U�rb`PzS       Cancel   Proxy   b�|Xf��rB       Edit   Proxy   $ F T P  ZVV�zQXrf�       	Ftp Proxy   Proxy   & H T T P  ZVV�zQXrf�       
++Http Proxy   Proxy   ( H T T P S  ZVV�zQXrf�       Https Proxy   Proxy    I PfBSf       
++IP address   Proxy   ,B|XrF|QT`r I PfBSf       Invalid IP Address   Proxy   �f�DXzQQtV^BT`rVQBT|`rXrDP|  `GtBf�|BErBcfVb�cSQV�rSarBBrU�zQ@QDAB�zfb|Bf   ( ; )       UList of ignored hosts. more than one entry, please separate with english semicolon(;)   Proxy   cBQzV       Manual   Proxy   f�|U�zV       Open   Proxy   ,Vfc`QzXf@�rbDV^rS       Optional   Proxy   BfDB�Df       Password   Proxy   B�tA       Port   Proxy   B�tA         Port :    Proxy   ZVV�zQXrf�       Proxy   Proxy   &ZVV�zQQTzQV�rVf       
++Proxy mode   Proxy   ,D|ZV@�rbrBfQV�rVf       
++Proxy type   Proxy   Fb�zfftaDVf��bPzDfBErBcVf��b       Reboot Later   Proxy   :Qc�Vf��bQtcf@V�zQQB|f       
++Reboot Now   Proxy   V�DV�VO|ST       Required   Proxy   &B�|SFtDV�zQQB|f       Save   Proxy   8^Vf^t`ra|V�Q@�rBSfatc         Server Address :    Proxy   ( S O C K S  ZVV�zQXrf�       Socks Proxy   Proxy   2V@|cf��|QV�zQ`B|ZtBf       Start using   Proxy    XcBBrZVV�zQ       System Proxy   Proxy   rD|ZV@�rf�|Vb��V_rSTfaDVf��bStfTP|STbV�QB|f       KThe apt proxy  has been turned off and needs to be restarted to take effect   Proxy   ~BdXB�rIzbf��|QB|brXA�|QQtV@|Qf��rB`QrV@|cF|BTf�z       AThe following applications are allowed to use this configuration:   Proxy   �XcB`QrVf��bQt`B|ZtBfSf A p tarZVV�zQ`U�tcFfBOS`AzcV�zQQB|fTQD  Vf��bQt`B|`[tBfQB|fXrS       HThe system needs to be restarted to set the Apt proxy, whether to reboot   Proxy   &f��|QXASB�rXrD       Username   Proxy
+\ No newline at end of file
+diff --git a/plugins/proxy/translations/bo_CN.ts b/plugins/proxy/translations/bo_CN.ts
+new file mode 100644
+index 0000000..f806cf2
+--- /dev/null
++++ b/plugins/proxy/translations/bo_CN.ts
+@@ -0,0 +1,227 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!DOCTYPE TS>
++<TS version="2.1" language="bo_CN">
++<context>
++    <name>AptProxyDialog</name>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="24"/>
++        <source>Set Apt Proxy</source>
++        <translation>Apt ངོ་ཚབ་ བཙུགས་པ།</translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="41"/>
++        <source>Server Address</source>
++        <translation>ཞབས་ཞུའི་ས་གནས།</translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="59"/>
++        <source>Port</source>
++        <translation>གྲུ་ཁ།</translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="80"/>
++        <source>Cancel</source>
++        <translation>ཕྱིར་འཐེན།</translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="84"/>
++        <source>Confirm</source>
++        <translation>གཏན་འཁེལ་བྱ་དགོས།</translation>
++    </message>
++</context>
++<context>
++    <name>Proxy</name>
++    <message>
++        <location filename="../proxy.cpp" line="63"/>
++        <source>Proxy</source>
++        <translation>ཚབ་བྱེད་མི་སྣ།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="194"/>
++        <source>Start using</source>
++        <translation>བཀོལ་སྤྱོད་བྱེད་འགོ་ཚུགས།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="207"/>
++        <source>Proxy mode</source>
++        <translation>ཚབ་བྱེད་དཔེ་དབྱིབས།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="211"/>
++        <source>Auto</source>
++        <translation>རང་འགུལ་གྱིས་རླངས་</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="214"/>
++        <source>Manual</source>
++        <translation>ལག་དེབ།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="369"/>
++        <source>Application Proxy</source>
++        <translation>ཉེར་སྤྱོད་ངོ་ཚབ།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="444"/>
++        <source>System Proxy</source>
++        <translation>མ་ལག་གི་ཚབ་བྱེད་</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="446"/>
++        <source>Auto url</source>
++        <translation>རླངས་འཁོར་གྱི་དྲ་ཚིགས།</translation>
++        <extra-contents_path>/Proxy/Auto url</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="448"/>
++        <source>Http Proxy</source>
++        <translation>HTTP ཚབ་བྱེད་མི་སྣ།</translation>
++        <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="450"/>
++        <source>Https Proxy</source>
++        <translation>HTTPS ཚབ་བྱེད་མི་སྣ།</translation>
++        <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="452"/>
++        <source>Ftp Proxy</source>
++        <translation>FTP ཚབ་བྱེད་མི་སྣ།</translation>
++        <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="454"/>
++        <source>Socks Proxy</source>
++        <translation>SOCKS ཚབ་བྱེད་མི་སྣ།</translation>
++        <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="455"/>
++        <location filename="../proxy.cpp" line="456"/>
++        <location filename="../proxy.cpp" line="457"/>
++        <location filename="../proxy.cpp" line="458"/>
++        <location filename="../proxy.cpp" line="1047"/>
++        <source>Port</source>
++        <translation>གྲུ་ཁ།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="459"/>
++        <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
++        <translation>སྣང་མེད་དུ་བཞག་པའི་བདག་པོའི་མིང་ཐོ། འཇུག་སྒོ་གཅིག་ལས་བརྒལ་ན་དབྱིན་ཡིག་གི་ཕྱེད་ཀ་དང་ཁ་གྱེས་རོགས། (;)</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="462"/>
++        <source>Apt Proxy</source>
++        <translation>APT ཚབ་བྱེད་མི་སྣ།</translation>
++        <extra-contents_path>/Proxy/Apt Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="463"/>
++        <location filename="../proxy.cpp" line="984"/>
++        <source>Open</source>
++        <translation>སྒོ་ཕྱེ་བ།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="464"/>
++        <source>Server Address : </source>
++        <translation>ཞབས་ཞུའི་ཡོ་བྱད་ཀྱི་གནས་ཡུལ </translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="465"/>
++        <source>Port : </source>
++        <translation>གྲུ་ཁ། </translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="466"/>
++        <source>Edit</source>
++        <translation>རྩོམ་སྒྲིག</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="564"/>
++        <source>The apt proxy  has been turned off and needs to be restarted to take effect</source>
++        <translation>ངོ་ཚབ་ཀྱི་སྒོ་བརྒྱབ་ཟིན་པས་ཡང་བསྐྱར་ནུས་པ་ཐོན་པར་བྱ་དགོས།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="565"/>
++        <location filename="../proxy.cpp" line="797"/>
++        <source>Reboot Later</source>
++        <translation>རྗེས་སུ་ཡང་བསྐྱར་ཐེངས་གཅིག་ལ་བསྐྱར་</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="566"/>
++        <location filename="../proxy.cpp" line="798"/>
++        <source>Reboot Now</source>
++        <translation>ད་ལྟ་བསྐྱར་དུ་ལས་ཀ་བྱེད་དགོས།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="796"/>
++        <source>The system needs to be restarted to set the Apt proxy, whether to reboot</source>
++        <translation>མ་ལག་འདི་བསྐྱར་དུ་འགོ་ཚུགས་ནས་Aptཡི་ཚབ་བྱེད་འཕྲུལ་ཆས་གཏན་འཁེལ་བྱེད་དགོས་པ་དང་། བསྐྱར་དུ་འགོ་འཛུགས་དགོས་མིན་</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="996"/>
++        <source>Proxy type</source>
++        <translation>ངོ་ཚབ་ཀྱི་རིགས་དབྱིབས།</translation>
++    </message>
++    <message>
++        <source>HTTP</source>
++        <translation type="vanished">HTTP</translation>
++    </message>
++    <message>
++        <source>socks4</source>
++        <translation type="vanished">རྐང་འབོབ་4</translation>
++    </message>
++    <message>
++        <source>socks5</source>
++        <translation type="vanished">རྐང་འབོབ་5</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1013"/>
++        <source>IP address</source>
++        <translation>IPས་གནས།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1019"/>
++        <location filename="../proxy.cpp" line="1050"/>
++        <source>Required</source>
++        <translation>བླང་བྱ་བཏོན་པ།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1040"/>
++        <source>Invalid IP Address</source>
++        <translation>གོ་མི་ཆོད་པའི་IPས་གནས།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1061"/>
++        <source>Username</source>
++        <translation>སྤྱོད་མཁན་གྱི་མིང་།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1064"/>
++        <location filename="../proxy.cpp" line="1078"/>
++        <source>Optional</source>
++        <translation>བསལ་འདེམས་ཀྱི་རང་བཞིན།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1074"/>
++        <source>Password</source>
++        <translation>གསང་གྲངས།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1097"/>
++        <source>Cancel</source>
++        <translation>ཕྱིར་འཐེན།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1098"/>
++        <source>Save</source>
++        <translation>གྲོན་ཆུང་བྱེད་དགོས།</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1160"/>
++        <source>The following applications are allowed to use this configuration:</source>
++        <translation>གཤམ་གྱི་ཉེར་སྤྱོད་གོ་རིམ་ཁྲོད་དུ་བཀོད་སྒྲིག་འདི་བཀོལ་ཆོག་པ་སྟེ།</translation>
++    </message>
++</context>
++</TS>
+diff --git a/plugins/proxy/translations/tr.ts b/plugins/proxy/translations/tr.ts
+new file mode 100644
+index 0000000..9bb7484
+--- /dev/null
++++ b/plugins/proxy/translations/tr.ts
+@@ -0,0 +1,215 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!DOCTYPE TS>
++<TS version="2.1">
++<context>
++    <name>AptProxyDialog</name>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="24"/>
++        <source>Set Apt Proxy</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="41"/>
++        <source>Server Address</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="59"/>
++        <source>Port</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="80"/>
++        <source>Cancel</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="84"/>
++        <source>Confirm</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
++<context>
++    <name>Proxy</name>
++    <message>
++        <location filename="../proxy.cpp" line="63"/>
++        <source>Proxy</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="194"/>
++        <source>Start using</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="207"/>
++        <source>Proxy mode</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="211"/>
++        <source>Auto</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="214"/>
++        <source>Manual</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="369"/>
++        <source>Application Proxy</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="444"/>
++        <source>System Proxy</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="446"/>
++        <source>Auto url</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/Auto url</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="448"/>
++        <source>Http Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="450"/>
++        <source>Https Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="452"/>
++        <source>Ftp Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="454"/>
++        <source>Socks Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="455"/>
++        <location filename="../proxy.cpp" line="456"/>
++        <location filename="../proxy.cpp" line="457"/>
++        <location filename="../proxy.cpp" line="458"/>
++        <location filename="../proxy.cpp" line="1047"/>
++        <source>Port</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="459"/>
++        <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="462"/>
++        <source>Apt Proxy</source>
++        <translation type="unfinished"></translation>
++        <extra-contents_path>/Proxy/Apt Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="463"/>
++        <location filename="../proxy.cpp" line="984"/>
++        <source>Open</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="464"/>
++        <source>Server Address : </source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="465"/>
++        <source>Port : </source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="466"/>
++        <source>Edit</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="564"/>
++        <source>The apt proxy  has been turned off and needs to be restarted to take effect</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="565"/>
++        <location filename="../proxy.cpp" line="797"/>
++        <source>Reboot Later</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="566"/>
++        <location filename="../proxy.cpp" line="798"/>
++        <source>Reboot Now</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="796"/>
++        <source>The system needs to be restarted to set the Apt proxy, whether to reboot</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="996"/>
++        <source>Proxy type</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1013"/>
++        <source>IP address</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1019"/>
++        <location filename="../proxy.cpp" line="1050"/>
++        <source>Required</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1040"/>
++        <source>Invalid IP Address</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1061"/>
++        <source>Username</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1064"/>
++        <location filename="../proxy.cpp" line="1078"/>
++        <source>Optional</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1074"/>
++        <source>Password</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1097"/>
++        <source>Cancel</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1098"/>
++        <source>Save</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1160"/>
++        <source>The following applications are allowed to use this configuration:</source>
++        <translation type="unfinished"></translation>
++    </message>
++</context>
++</TS>
+diff --git a/plugins/proxy/translations/zh_CN.qm b/plugins/proxy/translations/zh_CN.qm
+new file mode 100644
+index 0000000..6154195
+--- /dev/null
++++ b/plugins/proxy/translations/zh_CN.qm
+@@ -0,0 +1,13 @@
++<�d��!�`���B  0 ��  _ �  � f�  � v�   [ v�   ��  T W��  YS�I   W�I  �@m  9��  ��̪  ��I�    �I�  ���  v��  �M�  P8[|  |&8�  �Wމ  2c��  ic�  0t��  3�n�  ��a  ����  �	�C�  �
++��  �
++d��   -
++�<I  7Ms   ��4  .�x  �ʦ�  ��oy   ����   ���  ��\�  |i  �   S�m�       Cancel   AptProxyDialog   xn[�       Confirm   AptProxyDialog   z�S�       Port   AptProxyDialog   
++gR�VhW0W@       Server Address   AptProxyDialog   ��n A P TN�t       Set Apt Proxy   AptProxyDialog   ^�u(N�t       Application Proxy   Proxy   
++ A P TN�t       	Apt Proxy   Proxy   ��R�       Auto   Proxy   
++�Mn U R L       Auto url   Proxy   S�m�       Cancel   Proxy   ��       Edit   Proxy   
++ F T PN�t       	Ftp Proxy   Proxy    H T T PN�t       
++Http Proxy   Proxy    H T T P SN�t       Https Proxy   Proxy    I PW0W@       
++IP address   Proxy   e�eHv� I PW0W@       Invalid IP Address   Proxy   $_�uev�N;g:R�h���Ou(��e�RS�� ;�	       UList of ignored hosts. more than one entry, please separate with english semicolon(;)   Proxy   bKR�       Manual   Proxy   _ T/       Open   Proxy   �	Xk       Optional   Proxy   [�x       Password   Proxy   z�S�       Port   Proxy   z�S��         Port :    Proxy   N�t       Proxy   Proxy   N�t|{W�       
++Proxy mode   Proxy   N�t|{W�       
++Proxy type   Proxy   zT��T/       Reboot Later   Proxy   z�Ss��T/       
++Reboot Now   Proxy   _�Xk       Required   Proxy   O�[X       Save   Proxy   gR�VhW0W@�         Server Address :    Proxy    S O C K SN�t       Socks Proxy   Proxy   T/u(       Start using   Proxy   |�~�N�t       System Proxy   Proxy   " A P TN�t]�Qs���� ����T/bM��ueH       KThe apt proxy  has been turned off and needs to be restarted to take effect   Proxy   QA��N�N^�u(Ou(��Mn�       AThe following applications are allowed to use this configuration:   Proxy   .��n A P TN�t� ����T/|�~�TueH�f/T&��T/|�~�       HThe system needs to be restarted to set the Apt proxy, whether to reboot   Proxy   u(b7T       Username   Proxy
+\ No newline at end of file
+diff --git a/plugins/proxy/translations/zh_CN.ts b/plugins/proxy/translations/zh_CN.ts
+new file mode 100644
+index 0000000..1360a03
+--- /dev/null
++++ b/plugins/proxy/translations/zh_CN.ts
+@@ -0,0 +1,215 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!DOCTYPE TS>
++<TS version="2.1" language="zh_CN">
++<context>
++    <name>AptProxyDialog</name>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="24"/>
++        <source>Set Apt Proxy</source>
++        <translation>设置APT代理</translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="41"/>
++        <source>Server Address</source>
++        <translation>服务器地址</translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="59"/>
++        <source>Port</source>
++        <translation>端口</translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="80"/>
++        <source>Cancel</source>
++        <translation>取消</translation>
++    </message>
++    <message>
++        <location filename="../aptproxydialog.cpp" line="84"/>
++        <source>Confirm</source>
++        <translation>确定</translation>
++    </message>
++</context>
++<context>
++    <name>Proxy</name>
++    <message>
++        <location filename="../proxy.cpp" line="63"/>
++        <source>Proxy</source>
++        <translation>代理</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="194"/>
++        <source>Start using</source>
++        <translation>启用</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="207"/>
++        <source>Proxy mode</source>
++        <translation>代理类型</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="211"/>
++        <source>Auto</source>
++        <translation>自动</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="214"/>
++        <source>Manual</source>
++        <translation>手动</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="369"/>
++        <source>Application Proxy</source>
++        <translation>应用代理</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="444"/>
++        <source>System Proxy</source>
++        <translation>系统代理</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="446"/>
++        <source>Auto url</source>
++        <translation>配置URL</translation>
++        <extra-contents_path>/Proxy/Auto url</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="448"/>
++        <source>Http Proxy</source>
++        <translation>HTTP代理</translation>
++        <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="450"/>
++        <source>Https Proxy</source>
++        <translation>HTTPS代理</translation>
++        <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="452"/>
++        <source>Ftp Proxy</source>
++        <translation>FTP代理</translation>
++        <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="454"/>
++        <source>Socks Proxy</source>
++        <translation>SOCKS代理</translation>
++        <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="455"/>
++        <location filename="../proxy.cpp" line="456"/>
++        <location filename="../proxy.cpp" line="457"/>
++        <location filename="../proxy.cpp" line="458"/>
++        <location filename="../proxy.cpp" line="1047"/>
++        <source>Port</source>
++        <translation>端口</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="459"/>
++        <source>List of ignored hosts. more than one entry, please separate with english semicolon(;)</source>
++        <translation>忽略的主机列表，请使用英文分号（;）</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="462"/>
++        <source>Apt Proxy</source>
++        <translation>APT代理</translation>
++        <extra-contents_path>/Proxy/Apt Proxy</extra-contents_path>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="463"/>
++        <location filename="../proxy.cpp" line="984"/>
++        <source>Open</source>
++        <translation>开启</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="464"/>
++        <source>Server Address : </source>
++        <translation>服务器地址： </translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="465"/>
++        <source>Port : </source>
++        <translation>端口： </translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="466"/>
++        <source>Edit</source>
++        <translation>编辑</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="564"/>
++        <source>The apt proxy  has been turned off and needs to be restarted to take effect</source>
++        <translation>APT代理已关闭，需要重启才能生效</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="565"/>
++        <location filename="../proxy.cpp" line="797"/>
++        <source>Reboot Later</source>
++        <translation>稍后重启</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="566"/>
++        <location filename="../proxy.cpp" line="798"/>
++        <source>Reboot Now</source>
++        <translation>立即重启</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="796"/>
++        <source>The system needs to be restarted to set the Apt proxy, whether to reboot</source>
++        <translation>设置APT代理需要重启系统后生效，是否重启系统</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="996"/>
++        <source>Proxy type</source>
++        <translation>代理类型</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1013"/>
++        <source>IP address</source>
++        <translation>IP地址</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1019"/>
++        <location filename="../proxy.cpp" line="1050"/>
++        <source>Required</source>
++        <translation>必填</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1040"/>
++        <source>Invalid IP Address</source>
++        <translation>无效的IP地址</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1061"/>
++        <source>Username</source>
++        <translation>用户名</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1064"/>
++        <location filename="../proxy.cpp" line="1078"/>
++        <source>Optional</source>
++        <translation>选填</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1074"/>
++        <source>Password</source>
++        <translation>密码</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1097"/>
++        <source>Cancel</source>
++        <translation>取消</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1098"/>
++        <source>Save</source>
++        <translation>保存</translation>
++    </message>
++    <message>
++        <location filename="../proxy.cpp" line="1160"/>
++        <source>The following applications are allowed to use this configuration:</source>
++        <translation>允许以下应用使用该配置：</translation>
++    </message>
++</context>
++</TS>

@@ -30,7 +30,7 @@ void RadioItemButton::setButtonIcon(const QIcon &icon)
         return;
     }
     m_pixmap = icon.pixmap(ICON_SIZE);
-    m_iconLabel->setPixmap(m_pixmap);
+    refreshButtonIcon();
 }
 //显示默认图标
 void RadioItemButton::setDefaultPixmap()

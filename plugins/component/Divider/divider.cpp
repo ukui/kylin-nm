@@ -12,10 +12,10 @@ Divider::Divider(QWidget * parent) : QFrame(parent)
 void Divider::paintEvent(QPaintEvent * e)
 {
     QPainter p(this);
-//    QColor color = qApp->palette().color(QPalette::BrightText);
-//    color.setAlphaF(0.08);
+    QColor color = qApp->palette().color(QPalette::BrightText);
+    color.setAlphaF(0.08);
     p.save();
-    p.setBrush(Qt::black);
+    p.setBrush(color);
     p.setPen(Qt::transparent);
     p.drawRoundedRect(this->rect(), 6, 6);
     p.restore();

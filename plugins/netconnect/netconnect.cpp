@@ -43,24 +43,19 @@ const QString    KEY_WIRED_SWITCH             = "wiredswitch";
 
 const QString CONFIG_FILE_PATH   =  QDir::homePath() + "/.config/ukui/kylin-nm.conf";
 
-//void NetConnect::showDesktopNotify(const QString &message)
-//{
-//    QDBusInterface iface("org.freedesktop.Notifications",
-//                         "/org/freedesktop/Notifications",
-//                         "org.freedesktop.Notifications",
-//                         QDBusConnection::sessionBus());
-//    QList<QVariant> args;
-//    args<<(tr("ukui control center"))
-//       <<((unsigned int) 0)
-//       <<QString("/usr/share/icons/ukui-icon-theme-default/24x24/devices/gnome-dev-ethernet.png")
-//       <<tr("ukui control center desktop message") //显示的是什么类型的信息
-//       <<message //显示的具体信息
-//       <<QStringList()
-//       <<QVariantMap()
-//       <<(int)-1;
-//    iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
-//}
 
+bool checkMapValveContainsTrue(QMap<QString, bool> map) {
+    if (map.isEmpty()) {
+        return false;
+    }
+    QMap<QString, bool>::iterator iter;
+    for (iter = map.begin(); iter != map.end(); iter++) {
+        if (iter.value()) {
+            return true;
+        }
+    }
+    return false;
+}
 
 NetConnect::NetConnect() :  mFirstLoad(true) {
     QLocale local;
@@ -218,39 +213,10 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
 }
 
 void NetConnect::initComponent() {
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA) && m_useSwitch) {
-        m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
-        setSwitchStatus();
-        Q_EMIT setWiredEnabled(!m_wiredSwitch->isChecked());
-        connect(m_switchGsettings, &QGSettings::changed, this, [=] (const QString &key) {
-            if (key == KEY_WIRED_SWITCH) {
-                setSwitchStatus();
-            }
-        });
-    } else {
-        m_wiredSwitch->blockSignals(true);
-        m_wiredSwitch->setChecked(true);
-        qDebug() << "m_wiredSwitch setChecked" << true;
-        m_wiredSwitch->blockSignals(false);
-        m_wiredSwitch->hide();
-        qDebug()<<"[Netconnect] org.ukui.kylin-nm.switch is not installed!";
-    }
 
     getDeviceStatusMap(deviceStatusMap);
-    if (deviceStatusMap.isEmpty()) {
-        qDebug() << "[Netconnect] no device exist when init, set switch disable";
-        m_wiredSwitch->setChecked(false);
-        m_wiredSwitch->setCheckable(false);
-        qDebug() << "m_wiredSwitch  setCheckable setChecked" << false;
-    }
     initNet();
     setSwitchStatus();
-
-    if (!m_wiredSwitch->isChecked() || deviceStatusMap.isEmpty()) {
-        hideLayout(m_scrollAreaLayout);
-        m_titleDivider->show();
-    }
-
 
     connect(m_settingsLabel, &KBorderlessButton::clicked, this, [=](bool checked) {
         Q_UNUSED(checked)
@@ -273,7 +239,8 @@ void NetConnect::initConnect()
     connect(manager, &KyNetworkManager::deviceRemove, this, &NetConnect::onDeviceRemove);
     connect(manager, &KyNetworkManager::wiredDeviceUpdate, this, &NetConnect::onDeviceNameChanged);
 
-
+    connect(manager, &KyNetworkManager::deviceManagedChange, this, &NetConnect::onDeviceManagedChange);
+    connect(manager, &KyNetworkManager::wiredEnabledChanged, this, &NetConnect::onWiredEnabledChanged);
 
 
     connect(this, &NetConnect::setWiredDeviceEnable, manager, &KyNetworkManager::onSetWiredDeviceEnable);
@@ -292,34 +259,14 @@ void NetConnect::getDeviceStatusMap(QMap<QString, bool> &map)
     wiredDevList.clear();
     manager->getNetworkDeviceList(DEVICE_TYPE_ETHERNET, wiredDevList);
 
-    if (!QFile::exists(CONFIG_FILE_PATH)) {
-        if (!wiredDevList.isEmpty()) {
-            for (int i = 0; i < wiredDevList.size(); ++i) {
-                map.insert(wiredDevList.at(i), true);
-            }
-        }
-        qWarning() << "CONFIG_FILE_PATH not exist";
-        return;
-    }
-
-
-
-    QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
-    m_settings->beginGroup("CARDEABLE");
-
+    qDebug() << wiredDevList;
     if (!wiredDevList.isEmpty()) {
         for (int i = 0; i < wiredDevList.size(); ++i) {
-            if (!m_settings->contains(wiredDevList.at(i))) {
-                map.insert(wiredDevList.at(i), true);
-            }
-            bool enable = m_settings->value(wiredDevList.at(i), true).toBool();
-            map.insert(wiredDevList.at(i), enable);
+
+            QString devName = wiredDevList.at(i);qDebug() << devName;
+            map.insert(devName, manager->getDeviceManaged(devName));
         }
     }
-
-    m_settings->endGroup();
-    delete m_settings;
-    m_settings = nullptr;
 }
 
 //lanUpdate
@@ -373,30 +320,31 @@ void NetConnect::updateLanInfo(QString deviceName, QString connectUuid, QString 
 //总开关
 void NetConnect::setSwitchStatus()
 {
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA) && m_useSwitch) {
-        bool status = m_switchGsettings->get(KEY_WIRED_SWITCH).toBool();
-        qDebug() << "setSwitchStatus" << status;
-        m_wiredSwitch->setCheckable(true);
-        m_wiredSwitch->blockSignals(true);
-        m_wiredSwitch->setChecked(status);
-        qDebug() << "m_wiredSwitch setChecked" << status;
-        m_wiredSwitch->blockSignals(false);
-        if (deviceFrameMap.keys().isEmpty()) {
+    getDeviceStatusMap(deviceStatusMap);
+    bool status = checkMapValveContainsTrue(deviceStatusMap);
+
+    if (!status) {
+        if (manager->getWiredEnabled()) {
+            m_wiredSwitch->setCheckable(true);
+            m_wiredSwitch->setChecked(true);
+        } else {
             m_wiredSwitch->setChecked(false);
             m_wiredSwitch->setCheckable(false);
-            status = false;
         }
-        if (!status) {
-            hideLayout(m_scrollAreaLayout);
-            m_titleDivider->show();
-        } else {
+        hideLayout(m_scrollAreaLayout);
+        m_titleDivider->show();
+    } else {
+        m_wiredSwitch->setCheckable(true);
+        if (manager->getWiredEnabled()) {
+            m_wiredSwitch->setChecked(true);
             showLayout(m_scrollAreaLayout);
             m_titleDivider->hide();
+        } else {
+            m_wiredSwitch->setChecked(false);
+            hideLayout(m_scrollAreaLayout);
+            m_titleDivider->show();
         }
-    } else {
-        qDebug()<<"[netconnect] org.ukui.kylin-nm.switch is not installed!";
     }
-
 }
 
 //总体隐藏
@@ -526,9 +474,9 @@ void NetConnect::addDeviceFrame(QString devName, bool isEnable)
     m_scrollAreaLayout->addWidget(itemFrame);
     itemFrame->deviceFrame->deviceLabel->setText(devName);
     if (isEnable) {
-        itemFrame->lanItemFrame->show();
+        itemFrame->show();
     } else {
-        itemFrame->lanItemFrame->hide();
+        itemFrame->hide();
     }
     deviceFrameMap.insert(devName, itemFrame);
     deviceStatusMap.insert(devName, true);
@@ -626,11 +574,9 @@ void NetConnect::onDeviceNameChanged(QString oldName, QString newName)
     removeDeviceFrame(newName);
 
     getDeviceStatusMap(deviceStatusMap);
-    if (deviceStatusMap.contains(newName)) {
-        addDeviceFrame(newName, deviceStatusMap[newName]);
-        initNetListFromDevice(newName);
-        setSwitchStatus();
-    }
+
+    addDeviceFrame(newName, manager->getDeviceManaged(newName));
+    initNetListFromDevice(newName);
 }
 
 //lan add===============================================================
@@ -881,16 +827,36 @@ void NetConnect::onDeviceCarrierChange(QString deviceName, bool pluged)
 
 }
 
+void NetConnect::onDeviceManagedChange(QString deviceName, bool managed)
+{
+    getDeviceStatusMap(deviceStatusMap);
+    if (deviceFrameMap.contains(deviceName)) {
+        if (managed) {
+            deviceFrameMap[deviceName]->show();
+        } else {
+            deviceFrameMap[deviceName]->hide();
+        }
+    }
+}
+
+void NetConnect::onWiredEnabledChanged(bool enabled)
+{
+    qDebug() << "[NetConnect] wiredEnabledChanged" <<enabled;
+    if (m_wiredSwitch->isChecked() == enabled) {
+        return;
+    }
+    setSwitchStatus();
+}
+
 void NetConnect::onDeviceAdd(QString deviceName)
 {
-    addDeviceFrame(deviceName, true);
+    addDeviceFrame(deviceName, manager->getDeviceManaged(deviceName));
     initNetListFromDevice(deviceName);
     setSwitchStatus();
 }
 
 void NetConnect::onDeviceRemove(QString deviceName)
 {
-    qDebug() << "============onWirelessDeviceRemove" << deviceName;
     if (!deviceFrameMap.contains(deviceName) || !deviceStatusMap.contains(deviceName)) {
         return;
     }

@@ -204,9 +204,8 @@
         <translation>记住该网络</translation>
     </message>
     <message>
-        <location filename="../hiddenwifi/hiddenwifipage.cpp" line="176"/>
         <source>Show Network List</source>
-        <translation>显示网络列表</translation>
+        <translation type="vanished">显示网络列表</translation>
     </message>
     <message>
         <location filename="../hiddenwifi/hiddenwifipage.cpp" line="177"/>
@@ -246,12 +245,12 @@
 <context>
     <name>WlanConnect</name>
     <message>
-        <location filename="../wlanconnect.cpp" line="182"/>
+        <location filename="../wlanconnect.cpp" line="186"/>
         <source>WLAN</source>
         <translation>无线局域网</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="230"/>
+        <location filename="../wlanconnect.cpp" line="234"/>
         <source>Settings</source>
         <translation>网络设置</translation>
     </message>
@@ -259,18 +258,18 @@
 <context>
     <name>WlanItem</name>
     <message>
-        <location filename="../wlanitem.cpp" line="72"/>
-        <location filename="../wlanitem.cpp" line="169"/>
+        <location filename="../wlanitem.cpp" line="75"/>
+        <location filename="../wlanitem.cpp" line="173"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../wlanitem.cpp" line="92"/>
+        <location filename="../wlanitem.cpp" line="95"/>
         <source>Auto Connect</source>
         <translation>自动加入该网络</translation>
     </message>
     <message>
-        <location filename="../wlanitem.cpp" line="167"/>
+        <location filename="../wlanitem.cpp" line="171"/>
         <source>Disconnect</source>
         <translation>断开</translation>
     </message>

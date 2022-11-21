@@ -17,38 +17,31 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-#ifndef ADDNETBTN_H
-#define ADDNETBTN_H
+#ifndef ITEMFRAME_H
+#define ITEMFRAME_H
+#include <QFrame>
+#include <QVBoxLayout>
+#include "../component/AddBtn/addnetbtn.h"
+#include "vpnitem.h"
 
-#include <QObject>
-#include <QWidget>
-#include <QPushButton>
-#include <QTranslator>
-#include <QApplication>
-#include <QLabel>
-
-class AddNetBtn : public QPushButton
+class ItemFrame : public QFrame
 {
     Q_OBJECT
 public:
-    AddNetBtn(bool isWlan, QWidget *parent = nullptr);
-    ~AddNetBtn();
-
-    void setTextLabel(QString str) {
-        textLabel->setText(str);
-    }
-
-protected:
-    virtual void leaveEvent(QEvent * event);
-    virtual void enterEvent(QEvent * event);
-    void paintEvent(QPaintEvent *event);
-
-private:
-    QLabel* textLabel;
-
-Q_SIGNALS:
-    void enterWidget();
-    void leaveWidget();
+    ItemFrame(QWidget *parent = nullptr);
+    //单设备整体layout
+    QVBoxLayout * deviceLanLayout = nullptr;
+    //单设备列表Frame
+    QFrame * lanItemFrame = nullptr;
+    //单设备列表layout
+    QVBoxLayout * lanItemLayout = nullptr;
+    //item列表
+    QMap<QString, VpnItem *> itemMap;
+//    //已激活uuid
+//    QString uuid = "";
+    //新建无线连接
+    AddNetBtn * addWlanWidget = nullptr;
+    void filletStyleChange();
 };
 
-#endif // ADDNETBTN_H
+#endif // ITEMFRAME_H

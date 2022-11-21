@@ -4,6 +4,7 @@ include(dbus-interface/dbus-interface.pri)
 
 HEADERS += \
     $$PWD/dbusadaptor.h \
+    $$PWD/vpndbusadaptor.h \
     $$PWD/kylinarping.h \
     $$PWD/kylinipv4arping.h \
     $$PWD/kylinipv6arping.h \
@@ -13,6 +14,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/dbusadaptor.cpp \
+    $$PWD/vpndbusadaptor.cpp \
     $$PWD/kylinipv4arping.cpp \
     $$PWD/kylinipv6arping.cpp \
     $$PWD/sysdbusregister.cpp \

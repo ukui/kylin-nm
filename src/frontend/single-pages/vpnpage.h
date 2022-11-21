@@ -29,11 +29,22 @@
 #include <QMap>
 #include <QGSettings>
 
+#include <KWindowSystem>
+
 #include "list-items/listitem.h"
 #include "list-items/vpnlistitem.h"
 #include "single-pages/singlepage.h"
 
 #define VPNPAGE_LAYOUT_MARGINS 0,0,0,0
+#define VPN_LIST_SPACING 0
+#define ITEM_HEIGHT 50
+#define ITEM_SPACE 16
+#define PAGE_SPACE 22
+
+#define LOG_FLAG "[VpnPage]"
+
+#define VISIBLE "visible"
+const QByteArray GSETTINGS_VPNICON_VISIBLE = "org.ukui.kylin-nm.vpnicon";
 
 class VpnListItem;
 
@@ -45,12 +56,11 @@ public:
     ~VpnPage();
 
     //for dbus
-    void getVirtualList(QMap<QString, QVector<QStringList> > &map);
+    void getVirtualList(QVector<QStringList> &vector);
+    void deleteVpn(const QString &connUuid);
     void activateVpn(const QString& connUuid);
     void deactivateVpn(const QString& connUuid);
     void showDetailPage(QString devName, QString uuid);
-
-    bool vpnIsConnected();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -58,6 +68,7 @@ protected:
 private:
     void initUI();
     void initVpnArea();
+    void resetPageHight();
 
     inline void initDeviceCombox() { return; }
 
@@ -66,7 +77,6 @@ private:
     bool removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
                               QListWidget *lanListWidget, QString path);
 
-    void constructConnectionArea();
     void constructActiveConnectionArea();
 
     void updateConnectionArea(KyConnectItem *p_newItem);
@@ -86,16 +96,20 @@ private:
     void deleteConnectionMapItem(QMap<QString, QListWidgetItem *> &connectMap,
                                  QListWidget *lanListWidget, QString uuid);
 
-Q_SIGNALS:
-    void vpnAdd(QString devName, QStringList info);
-    void vpnRemove(QString dbusPath);
-    void vpnUpdate(QString devName, QStringList info);
+    void resetWindowPosition();
 
-    void vpnActiveConnectionStateChanged(QString interface, QString uuid, int status);
+
+Q_SIGNALS:
+    void vpnAdd(QStringList info);
+    void vpnRemove(QString dbusPath);
+    void vpnUpdate(QStringList info);
+
+    void vpnActiveConnectionStateChanged(QString uuid, int status);
     void vpnConnectChanged(int state);
 
 private Q_SLOTS:
-    void onConnectionStateChange(QString uuid, NetworkManager::ActiveConnection::State state,
+    void onConnectionStateChange(QString uuid,
+                                 NetworkManager::ActiveConnection::State state,
                                  NetworkManager::ActiveConnection::Reason reason);
 
     void onAddConnection(QString uuid);
@@ -104,21 +118,20 @@ private Q_SLOTS:
 
     void onShowControlCenter();
 
-//    void onStateChange();
-
 private:
-    QListWidget * m_vpnListWidget = nullptr;
-
-//    KyNetworkDeviceResourse *m_deviceResource = nullptr;
-//    KyWiredConnectOperation *m_wiredConnectOperation = nullptr;
+    KyWiredConnectOperation *m_wiredConnectOperation = nullptr;
     KyActiveConnectResourse *m_activeResourse = nullptr;     //激活的连接
     KyConnectResourse *m_connectResourse = nullptr;          //未激活的连接
 
     QMap<QString, QListWidgetItem *> m_netConnectionMap;
     QMap<QString, QListWidgetItem *> m_activeConnectionMap;
 
+    QDBusInterface * m_positionInterface = nullptr;
+
+
+
 public Q_SLOTS:
-    inline void onDeviceComboxIndexChanged(int currentIndex) { return; }
+    void showUI();
 };
 
 #endif // LANPAGE_H

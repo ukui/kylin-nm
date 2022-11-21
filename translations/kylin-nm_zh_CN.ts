@@ -595,30 +595,30 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="168"/>
-        <location filename="../src/frontend/mainwindow.cpp" line="289"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="172"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="293"/>
         <source>kylin-nm</source>
         <translation>网络工具</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="251"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="255"/>
         <source>LAN</source>
         <translatorcomment>有线网络</translatorcomment>
         <translation>有线网络</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="253"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="257"/>
         <source>WLAN</source>
         <translatorcomment>无线局域网</translatorcomment>
         <translation>无线局域网</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="286"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="290"/>
         <source>Show MainWindow</source>
         <translation>打开网络工具</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="287"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="291"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
         <translation>设置网络项</translation>
@@ -980,17 +980,17 @@
 <context>
     <name>SinglePage</name>
     <message>
-        <location filename="../src/frontend/single-pages/singlepage.cpp" line="71"/>
+        <location filename="../src/frontend/single-pages/singlepage.cpp" line="73"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../src/frontend/single-pages/singlepage.cpp" line="99"/>
+        <location filename="../src/frontend/single-pages/singlepage.cpp" line="121"/>
         <source>Kylin NM</source>
         <translation>网络工具</translation>
     </message>
     <message>
-        <location filename="../src/frontend/single-pages/singlepage.cpp" line="102"/>
+        <location filename="../src/frontend/single-pages/singlepage.cpp" line="124"/>
         <source>kylin network applet desktop message</source>
         <translation>网络提示消息</translation>
     </message>
@@ -1046,12 +1046,16 @@
 <context>
     <name>VpnPage</name>
     <message>
-        <location filename="../src/frontend/single-pages/vpnpage.cpp" line="276"/>
         <source>VPN Connection</source>
-        <translation>VPN连接</translation>
+        <translation type="vanished">VPN连接</translation>
     </message>
     <message>
-        <location filename="../src/frontend/single-pages/vpnpage.cpp" line="291"/>
+        <location filename="../src/frontend/single-pages/vpnpage.cpp" line="259"/>
+        <source>VPN</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/single-pages/vpnpage.cpp" line="268"/>
         <source>VPN Settings</source>
         <translation>VPN设置</translation>
     </message>
@@ -1239,17 +1243,17 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/main.cpp" line="96"/>
+        <location filename="../src/main.cpp" line="98"/>
         <source>kylinnm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="100"/>
+        <location filename="../src/main.cpp" line="102"/>
         <source>show kylin-nm wifi page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="101"/>
+        <location filename="../src/main.cpp" line="103"/>
         <source>show kylin-nm lan page</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1257,12 +1261,18 @@
 <context>
     <name>vpnMainWindow</name>
     <message>
-        <location filename="../src/frontend/vpnmainwindow.cpp" line="170"/>
         <source>kylin-vpn</source>
-        <translation>VPN工具</translation>
+        <translation type="vanished">VPN工具</translation>
     </message>
     <message>
-        <location filename="../src/frontend/vpnmainwindow.cpp" line="252"/>
+        <source>vpn tool</source>
+        <translation type="vanished">VPN工具</translation>
+    </message>
+</context>
+<context>
+    <name>vpnObject</name>
+    <message>
+        <location filename="../src/frontend/vpnobject.cpp" line="31"/>
         <source>vpn tool</source>
         <translation>VPN工具</translation>
     </message>

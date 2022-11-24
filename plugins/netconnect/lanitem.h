@@ -14,6 +14,9 @@
 #include "../component/RadioItemButton/radioitembutton.h"
 #include "../component/FixLabel/fixlabel.h"
 
+#define MIN_ITEM_WIDTH 396
+#define MAX_ITEM_WIDTH 404
+
 class LanItem : public QFrame
 {
     Q_OBJECT

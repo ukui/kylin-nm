@@ -1,13 +1,16 @@
 #include "itemframe.h"
 #include <QPainter>
 
-#define LAYOUT_MARGINS 2,0,12,0
+#define LAYOUT_MARGINS 8,0,8,0
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define RADIUS 6.0
 
 AddNetItem::AddNetItem(QWidget *parent) : QFrame(parent)
 {
     this->setFixedSize(404, 48);
+    this->setFixedHeight(48);
+    this->setMinimumWidth(MIN_ITEM_WIDTH);
+    this->setMaximumWidth(MAX_ITEM_WIDTH);
     QHBoxLayout *m_mainLayout = new QHBoxLayout(this);
     m_mainLayout->setContentsMargins(0,0,0,0);
 
@@ -67,7 +70,6 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
     deviceLanLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
     lanItemFrame = new QFrame(this);
     lanItemFrame->setFrameShape(QFrame::Shape::NoFrame);
-    lanItemFrame->setContentsMargins(LAYOUT_MARGINS);
 
     lanItemLayout = new QVBoxLayout(this);
     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
@@ -80,10 +82,16 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
     deviceFrame = new DeviceFrame(devName, this);
     m_divider = new Divider(this);
     addNetItem = new AddNetItem(this);
+
+    QWidget *addWidget = new QWidget(this);
+    QHBoxLayout *hLayout = new QHBoxLayout(addWidget);
+    hLayout->setContentsMargins(8,0,8,0);
+    hLayout->addWidget(addNetItem);
+
     deviceLanLayout->addWidget(m_divider);
     deviceLanLayout->addWidget(deviceFrame);
     deviceLanLayout->addWidget(lanItemFrame);
-    deviceLanLayout->addWidget(addNetItem);
+    deviceLanLayout->addWidget(addWidget);
 
     connect(addNetItem, &AddNetItem::itemClick, this, &ItemFrame::addNetItemClick);
 }

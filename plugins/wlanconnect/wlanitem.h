@@ -15,6 +15,10 @@
 #include "../component/FixLabel/fixlabel.h"
 #include "kpasswordedit.h"
 #include "hiddenwifi/enterprisewlanpage.h"
+
+#define MIN_ITEM_WIDTH 396
+#define MAX_ITEM_WIDTH 404
+
 using namespace kdk;
 
 class WlanItem : public QFrame

@@ -7,17 +7,20 @@
 LanItem::LanItem(bool isSimple, QWidget *parent)
     : QFrame(parent),isSimple(isSimple)
 {
-    this->setFixedSize(404, 48);
+    this->setFixedHeight(48);
+    this->setMinimumWidth(MIN_ITEM_WIDTH);
+    this->setMaximumWidth(MAX_ITEM_WIDTH);
     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
     mLanLyt->setContentsMargins(16,0,0,0);
     mLanLyt->setSpacing(0);
     radioBtn = new RadioItemButton(this);
     titileLabel = new FixLabel(this);
-    titileLabel->setMinimumWidth(282);
+    titileLabel->setFixedWidth(282);
 
+    mLanLyt->setAlignment(Qt::AlignLeft);
     mLanLyt->addWidget(radioBtn);
     mLanLyt->addSpacing(10);
-    mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
+    mLanLyt->addWidget(titileLabel);
     if (!isSimple) {
         infoLabel = new InfoButton(this);
         mLanLyt->addSpacing(8);

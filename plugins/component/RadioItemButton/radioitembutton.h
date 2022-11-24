@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QTimer>
 #include <QVariantAnimation>
+#include <QGSettings>
 
 #define MIDDLE_COLOR 178
 
@@ -14,7 +15,7 @@ class RadioItemButton : public QPushButton
 
 public:
     RadioItemButton(QWidget * parent = nullptr);
-//    ~RadioItemButton();
+    ~RadioItemButton();
     void setButtonIcon(const QIcon &icon);
     void setDefaultPixmap();
     void setActive(const bool &isActive);
@@ -26,12 +27,12 @@ public:
     };
     const QPixmap loadSvg(const QPixmap &source, const PixmapColor &color);
 
-protected:
-    void paintEvent(QPaintEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
+//protected:
+//    void paintEvent(QPaintEvent *event);
+//    void mousePressEvent(QMouseEvent *event);
+//    void mouseReleaseEvent(QMouseEvent *event);
+//    void enterEvent(QEvent *event);
+//    void leaveEvent(QEvent *event);
 
 private:
     bool m_isActivated = false;
@@ -39,6 +40,7 @@ private:
     QColor m_backgroundColor;
 
     QPixmap m_pixmap;
+    QGSettings *m_styleGSettings = nullptr;
 
     void refreshButtonIcon();
 

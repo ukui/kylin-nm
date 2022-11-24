@@ -1,6 +1,6 @@
 #include "itemframe.h"
 
-#define LAYOUT_MARGINS 4,0,12,0
+#define LAYOUT_MARGINS 8,0,8,0
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
 {

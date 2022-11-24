@@ -8,20 +8,42 @@
 #define ICON_SIZE 16,16
 #define BACKGROUND_COLOR QColor(0,0,0,0)
 
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME "styleName"
+
 RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
 {
-    this->setAutoFillBackground(false);
-    m_iconLabel = new QLabel(this);
-
     this->setFixedSize(BUTTON_SIZE);
+    this->setProperty("isRoundButton", true);
+    this->setProperty("needTranslucent", true);
+    this->setAutoFillBackground(false);
+
+    m_iconLabel = new QLabel(this);
     m_iconLabel->setFixedSize(BUTTON_SIZE);
     m_iconLabel->setAlignment(Qt::AlignCenter);
 
     setActive(false);
     //JXJ_TODO loading动画
     connect(qApp, &QApplication::paletteChanged, this, &RadioItemButton::onPaletteChanged);
+
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       m_styleGSettings = new QGSettings(style_id);
+       connect(m_styleGSettings, &QGSettings::changed, this, [=](QString key){
+           if ("styleName" == key) {
+               refreshButtonIcon();
+           }
+       });
+    }
 }
 
+RadioItemButton::~RadioItemButton()
+{
+    if (m_styleGSettings != nullptr) {
+        delete m_styleGSettings;
+        m_styleGSettings = nullptr;
+    }
+}
 
 //设置图标
 void RadioItemButton::setButtonIcon(const QIcon &icon)
@@ -49,7 +71,7 @@ void RadioItemButton::onPaletteChanged()
 {
     refreshButtonIcon();
 }
-
+#if 0
 void RadioItemButton::paintEvent(QPaintEvent *event)
 {
     QPalette pal = this->palette();
@@ -120,22 +142,24 @@ void RadioItemButton::leaveEvent(QEvent *event)
     this->update();
     return QPushButton::leaveEvent(event);
 }
-
+#endif
 void RadioItemButton::refreshButtonIcon()
 {
     if (m_isActivated) {
-        m_backgroundColor = qApp->palette().highlight().color();
+//        m_backgroundColor = qApp->palette().highlight().color();
         m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
     } else {
-        m_backgroundColor = qApp->palette().brightText().color();
-        m_backgroundColor.setAlphaF(0.18);
-//        if (qApp->palette().base().color().red() > MIDDLE_COLOR) {
+//        m_backgroundColor = qApp->palette().brightText().color();
+//        m_backgroundColor.setAlphaF(0.18);
+        if (qApp->palette().base().color().red() > MIDDLE_COLOR) {
             m_iconLabel->setPixmap(m_pixmap);
-//        } else {
-//            m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
-//        }
+        } else {
+            m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
+        }
     }
 
+    this->setProperty("isImportant", m_isActivated);
+    this->setProperty("useButtonPalette", !m_isActivated);
     return;
 }
 

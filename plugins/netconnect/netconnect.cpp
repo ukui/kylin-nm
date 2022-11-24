@@ -32,12 +32,11 @@ const QString NoNetSymbolic     = "network-wired-disconnected-symbolic";
 
 
 #define NO_MARGINS 0,0,0,0
-#define TOP_MARGINS 0,8,0,0
-#define MAIN_LAYOUT_MARGINS 0,0,0,0
-#define MAIN_LAYOUT_SPACING 0
+#define NO_SPACING 0
 #define TITLE_FRAME_HEIGHT 50     //TabWidget的tab和widget有间隙，和设计稿看起来一致就不能设为设计稿里的高度
 #define TITLE_LAYOUT_MARGINS 24,0,24,0
-#define SPACING 8
+#define WIDGET_WIDTH 420
+#define WIDGET_HEIGHT 436
 
 const QString    KEY_WIRED_SWITCH             = "wiredswitch";
 
@@ -87,7 +86,7 @@ QWidget *NetConnect::pluginUi() {
 
         pluginWidget = new QWidget;
         pluginWidget->setAttribute(Qt::WA_DeleteOnClose);
-        pluginWidget->setFixedSize(420, 436);
+        pluginWidget->setFixedSize(WIDGET_WIDTH, WIDGET_HEIGHT);
         initUi();
         initComponent();
         initConnect();
@@ -107,6 +106,8 @@ void NetConnect::setPluginType(PluginType type, bool useSwitch)
 
 void NetConnect::initUi()
 {
+    pluginWidget->setFixedSize(WIDGET_WIDTH,WIDGET_HEIGHT);
+
     thread = new QThread;
     manager = new KyNetworkManager();
     manager->moveToThread(thread);
@@ -119,8 +120,8 @@ void NetConnect::initUi()
     }
 
     m_mainLayout = new QVBoxLayout(pluginWidget);
-    m_mainLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    m_mainLayout->setSpacing(MAIN_LAYOUT_SPACING);
+    m_mainLayout->setContentsMargins(NO_MARGINS);
+    m_mainLayout->setSpacing(NO_SPACING);
     pluginWidget->setLayout(m_mainLayout);
 
     m_titleFrame = new QFrame(pluginWidget);
@@ -135,7 +136,6 @@ void NetConnect::initUi()
     m_titleLayout->addStretch();
     m_titleLayout->addWidget(m_wiredSwitch);
     m_titleDivider = new Divider(pluginWidget);
-    m_titleDivider->hide();
 
     m_scrollFrame = new QFrame(pluginWidget);
     if (!m_isSimpleMode) {
@@ -144,8 +144,8 @@ void NetConnect::initUi()
         m_scrollFrame->setMinimumHeight(383);
     }
     m_scrollLayout = new QVBoxLayout(m_scrollFrame);
-    m_scrollLayout->setContentsMargins(0,0,0,0);
-    m_scrollLayout->setSpacing(0);
+    m_scrollLayout->setContentsMargins(NO_MARGINS);
+    m_scrollLayout->setSpacing(NO_SPACING);
     m_scrollFrame->setLayout(m_scrollLayout);
 
     m_scrollArea = new QScrollArea(m_scrollFrame);
@@ -158,13 +158,14 @@ void NetConnect::initUi()
     m_scrollLayout->addWidget(m_scrollArea);
 
     m_listWidget = new QWidget(pluginWidget);
-    m_listWidget->setFixedWidth(420);
+    m_listWidget->setFixedWidth(WIDGET_WIDTH);
     m_scrollAreaLayout = new QVBoxLayout(m_listWidget);
-    m_scrollAreaLayout->setSpacing(MAIN_LAYOUT_SPACING);
-    m_scrollAreaLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
+    m_scrollAreaLayout->setSpacing(NO_SPACING);
+    m_scrollAreaLayout->setContentsMargins(NO_MARGINS);
     m_scrollAreaLayout->setAlignment(Qt::AlignTop);
     m_listWidget->setLayout(m_scrollAreaLayout);
 
+    m_listWidget->setMinimumWidth(MIN_ITEM_WIDTH);
     m_scrollArea->setWidget(m_listWidget);
 
     m_settingsDivider = new Divider(pluginWidget);
@@ -332,17 +333,14 @@ void NetConnect::setSwitchStatus()
             m_wiredSwitch->setCheckable(false);
         }
         hideLayout(m_scrollAreaLayout);
-        m_titleDivider->show();
     } else {
         m_wiredSwitch->setCheckable(true);
         if (manager->getWiredEnabled()) {
             m_wiredSwitch->setChecked(true);
             showLayout(m_scrollAreaLayout);
-            m_titleDivider->hide();
         } else {
             m_wiredSwitch->setChecked(false);
             hideLayout(m_scrollAreaLayout);
-            m_titleDivider->show();
         }
     }
 }
@@ -364,6 +362,12 @@ void NetConnect::showLayout(QVBoxLayout * layout) {
         QLayoutItem *it = layout->layout()->itemAt(i);
         ItemFrame *itemFrame = qobject_cast<ItemFrame *>(it->widget());
         itemFrame->show();
+    }
+
+    if(layout->layout()->count() > 0) {
+        QLayoutItem *firstItem = layout->layout()->itemAt(0);
+        ItemFrame *firstItemFrame = qobject_cast<ItemFrame *>(firstItem->widget());
+        firstItemFrame->m_divider->hide();
     }
 }
 

@@ -8,20 +8,21 @@
 #define ICON_SIZE 16,16
 #define BACKGROUND_COLOR QColor(0,0,0,0)
 #define FOREGROUND_COLOR_NORMAL qApp->palette().text().color()
-#define FOREGROUND_COLOR_HOVER QColor(55,144,250,255)
-#define FOREGROUND_COLOR_PRESS QColor(36,109,212,255)
-#define OUTER_PATH 8,8,16,16
-#define INNER_PATH 9,9,14,14
-#define TEXT_POS 14,5,16,16,0
+#define FOREGROUND_COLOR_BRIGHTTEXT qApp->palette().brightText().color()
+#define FOREGROUND_COLOR_HIGHLIGHT qApp->palette().highlight().color()
+#define OUTER_PATH 10,10,16,16
+#define INNER_PATH 11,11,14,14
+#define TEXT_POS 16,7,16,16,0
 
 #define BUTTON_SIZE 36,36
 
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
+QColor mixColor(const QColor &c1, const QColor &c2, qreal bias);
+
 InfoButton::InfoButton(QWidget *parent) : QPushButton(parent)
 {
-    this->setFixedSize(BUTTON_SIZE);
     initUI();
     const QByteArray style_id(THEME_SCHAME);
     if (QGSettings::isSchemaInstalled(style_id)) {
@@ -80,7 +81,7 @@ void InfoButton::paintEvent(QPaintEvent *event)
 
 void InfoButton::enterEvent(QEvent *event)
 {
-    m_foregroundColor = FOREGROUND_COLOR_HOVER;
+    m_foregroundColor = FOREGROUND_COLOR_HIGHLIGHT;
     this->repaint();
 }
 
@@ -92,14 +93,14 @@ void InfoButton::leaveEvent(QEvent *event)
 
 void InfoButton::mousePressEvent(QMouseEvent *event)
 {
-    m_foregroundColor = FOREGROUND_COLOR_PRESS;
+    m_foregroundColor = mixColor(FOREGROUND_COLOR_HIGHLIGHT, FOREGROUND_COLOR_BRIGHTTEXT, 0.2);
     this->repaint();
     return QPushButton::mousePressEvent(event);
 }
 
 void InfoButton::mouseReleaseEvent(QMouseEvent *event)
 {
-    m_foregroundColor = FOREGROUND_COLOR_HOVER;
+    m_foregroundColor = mixColor(FOREGROUND_COLOR_HIGHLIGHT, FOREGROUND_COLOR_BRIGHTTEXT, 0.2);
     this->repaint();
     return QPushButton::mouseReleaseEvent(event);
 }

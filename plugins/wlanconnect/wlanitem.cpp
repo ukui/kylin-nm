@@ -15,7 +15,9 @@
 WlanItem::WlanItem(bool isSimple, QWidget *parent)
     : isSimple(isSimple), QFrame(parent)
 {
-    this->setFixedSize(404, UNEXPEND_HEIGHT);
+    this->setFixedHeight(UNEXPEND_HEIGHT);
+    this->setMinimumWidth(MIN_ITEM_WIDTH);
+    this->setMaximumWidth(MAX_ITEM_WIDTH);
     QVBoxLayout *m_mainLayout = new QVBoxLayout(this);
     m_mainLayout->setContentsMargins(16,0,0,0);
     m_mainLayout->setSpacing(0);
@@ -23,16 +25,16 @@ WlanItem::WlanItem(bool isSimple, QWidget *parent)
     //icon + name
     m_nameFrame = new QFrame(this);
     QHBoxLayout *lanLyt = new QHBoxLayout(m_nameFrame);
-    lanLyt->setContentsMargins(0,8,16,4);
+    lanLyt->setContentsMargins(0,6,0,6);
     lanLyt->setSpacing(0);
     radioBtn = new RadioItemButton(this);
     titileLabel = new FixLabel(this);
-    titileLabel->setMinimumWidth(282);;
+    titileLabel->setFixedWidth(282);
 
+    lanLyt->setAlignment(Qt::AlignLeft);
     lanLyt->addWidget(radioBtn);
     lanLyt->addSpacing(10);
-    lanLyt->addWidget(titileLabel,Qt::AlignLeft);
-    lanLyt->addStretch();
+    lanLyt->addWidget(titileLabel);
     if (!isSimple) {
         infoLabel = new InfoButton(this);
         lanLyt->addSpacing(8);
@@ -81,15 +83,15 @@ WlanItem::WlanItem(bool isSimple, QWidget *parent)
     m_autoConnectFrame = new QFrame(m_expendFrame);
 
     m_autoConnectFrameLyt = new QHBoxLayout(m_autoConnectFrame);
-    m_autoConnectFrameLyt->setContentsMargins(0,8,150,8);
-    m_autoConnectFrameLyt->setSpacing(0);
+    m_autoConnectFrameLyt->setContentsMargins(0,8,0,8);
+    m_autoConnectFrameLyt->setSpacing(8);
+    m_autoConnectFrameLyt->setAlignment(Qt::AlignLeft);
     m_autoConnectFrame->setLayout(m_autoConnectFrameLyt);
 
     m_autoConnectCheckBox = new QCheckBox(m_autoConnectFrame);
     m_autoConnectCheckBox->setChecked(true);
     m_autoConnectCheckBox->setFixedSize(16, 16);
     m_autoConnectFrameLyt->addWidget(m_autoConnectCheckBox);
-    m_autoConnectFrameLyt->addSpacing(8);
 
     m_autoConnectLabel = new QLabel(m_autoConnectFrame);
     m_autoConnectLabel->setText(tr("Auto Connect"));

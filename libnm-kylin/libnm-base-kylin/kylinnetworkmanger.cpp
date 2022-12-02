@@ -207,6 +207,13 @@ bool KyNetworkManager::getEnterpiseEapMethod(const QString &uuid, KyEapMethodTyp
     return resource.getEnterpiseEapMethod(uuid, type);
 }
 
+//获取无线网配置安全类型
+KySecuType KyNetworkManager::getConnectSecuType(const QString &uuid)
+{
+    KyWirelessConnectOperation operate;
+    return operate.getConnectSecuType(uuid);
+}
+
 bool KyNetworkManager::wiredConnectIsActived()
 {
     return m_activeConnectResource->wiredConnectIsActived();

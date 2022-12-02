@@ -124,6 +124,8 @@ public:
 
     //获取企业网类型
     bool getEnterpiseEapMethod(const QString &uuid, KyEapMethodType &type);
+    //获取无线网配置安全类型
+    KySecuType getConnectSecuType(const QString &uuid);
 
     bool wiredConnectIsActived();
     bool wirelessConnectIsActived();

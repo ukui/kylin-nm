@@ -92,6 +92,7 @@ void SinglePage::initWindowProperties()
     this->setFixedWidth(MAX_WIDTH);
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setProperty("useStyleWindowManager", false); //禁用拖动
+    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     //绘制毛玻璃特效
     QString platform = QGuiApplication::platformName();
     if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))

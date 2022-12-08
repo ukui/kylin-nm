@@ -18,7 +18,6 @@
 
 #include "mainwindow.h"
 #include "dbusadaptor.h"
-#include "vpndbusadaptor.h"
 #include <QTranslator>
 #include <QLocale>
 #include "qt-single-application.h"
@@ -31,6 +30,7 @@
 #endif
 
 #include "vpnobject.h"
+#include "vpndbusadaptor.h"
 
 #define LOG_IDENT "ukui_kylin_nm"
 

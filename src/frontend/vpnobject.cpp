@@ -93,7 +93,7 @@ void vpnObject::deactivateVpn(const QString& connUuid)
 
 void vpnObject::onShowMainWindow()
 {
-    kdk::UkuiStyleHelper::self()->removeHeader(m_vpnPage);
+//    kdk::UkuiStyleHelper::self()->removeHeader(m_vpnPage);
     m_vpnPage->showUI();;
 }
 

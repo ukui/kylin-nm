@@ -1,0 +1,165 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
+#ifndef KYENTERPRICESETTINGINFO_H
+#define KYENTERPRICESETTINGINFO_H
+
+#include <NetworkManagerQt/Ipv4Setting>
+#include <NetworkManagerQt/Ipv6Setting>
+
+#include "kylinnetworkresourcemanager.h"
+#include <QObject>
+
+enum KyEapMethodType {
+    TLS = 0,
+    PEAP,
+    TTLS,
+};
+
+class KyEapMethodTlsInfo
+{
+public:
+    QString identity;
+    QString domain;
+    QString devIfaceName;
+    QString caCertPath;
+    bool    bNeedCa;
+    QString clientCertPath;
+    QString clientPrivateKey;
+    QString clientPrivateKeyPWD;
+    NetworkManager::Setting::SecretFlags m_privateKeyPWDFlag;
+    // only valid when update
+    bool    bChanged;
+
+    inline bool operator == (const KyEapMethodTlsInfo& info) const
+    {
+        if (this->identity == info.identity
+                && this->domain == info.domain
+//                && this->devIfaceName == info.devIfaceName
+                && this->caCertPath == info.caCertPath
+                && this->bNeedCa == info.bNeedCa
+                && this->clientCertPath == info.clientCertPath
+                && this->clientPrivateKey == info.clientPrivateKey
+                && this->clientPrivateKeyPWD == info.clientPrivateKeyPWD
+                && this->m_privateKeyPWDFlag == info.m_privateKeyPWDFlag) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+
+typedef enum {
+    KyAuthEapMethodUnknown = 0,
+    KyAuthEapMethodMd5,
+    KyAuthEapMethodMschapv2,
+    KyAuthEapMethodOtp,
+    KyAuthEapMethodGtc,
+    KyAuthEapMethodTls
+} KyEapMethodAuth;
+
+typedef enum{
+    KyAuthMethodUnknown = 0,
+    KyAuthMethodPap,
+    KyAuthMethodChap,
+    KyAuthMethodMschap,
+    KyAuthMethodMschapv2,
+    KyAuthMethodGtc,
+    KyAuthMethodOtp,
+    KyAuthMethodMd5,
+    KyAuthMethodTls
+} KyNoEapMethodAuth;
+
+
+class KyEapMethodPeapInfo
+{
+public:
+    KyNoEapMethodAuth phase2AuthMethod;
+    QString userName;
+    QString userPWD;
+    NetworkManager::Setting::SecretFlags m_passwdFlag;
+    // only valid when update
+    bool    bChanged;
+
+    inline bool operator == (const KyEapMethodPeapInfo& info) const
+    {
+        if (this->phase2AuthMethod == info.phase2AuthMethod
+                && this->userName == info.userName
+                && this->userPWD == info.userPWD
+                && this->m_passwdFlag == info.m_passwdFlag) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+
+enum KyTtlsAuthMethod
+{
+    AUTH_EAP,
+    AUTH_NO_EAP
+};
+
+class KyEapMethodTtlsInfo
+{
+public:
+    KyTtlsAuthMethod authType;
+    KyEapMethodAuth authEapMethod;
+    KyNoEapMethodAuth authNoEapMethod;
+    QString userName;
+    QString userPWD;
+    NetworkManager::Setting::SecretFlags m_passwdFlag;
+    // only valid when update
+    bool    bChanged;
+
+    inline bool operator == (const KyEapMethodTtlsInfo& info) const
+    {
+        if (this->authType == info.authType) {
+            if (authType == AUTH_EAP) {
+               if (this->authEapMethod == info.authEapMethod
+                && this ->userName == info.userName
+                && this->userPWD == info.userPWD
+                && this->m_passwdFlag == info.m_passwdFlag) {
+                    return true;
+                }
+            } else {
+                if (authType == AUTH_EAP) {
+                   if (this->authNoEapMethod == info.authNoEapMethod
+                    && this ->userName == info.userName
+                    && this->userPWD == info.userPWD
+                    && this->m_passwdFlag == info.m_passwdFlag) {
+                        return true;
+                    }
+                }
+            }
+
+        }
+        return false;
+    }
+};
+
+void assembleEapMethodTlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTlsInfo &tlsInfo);
+void assembleEapMethodPeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPeapInfo &peapInfo);
+void assembleEapMethodTtlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTtlsInfo &ttlsInfo);
+
+void modifyEapMethodTlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTlsInfo &tlsInfo);
+void modifyEapMethodPeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPeapInfo &peapInfo);
+void modifyEapMethodTtlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTtlsInfo &ttlsInfo);
+
+#endif // KYENTERPRICESETTINGINFO_H

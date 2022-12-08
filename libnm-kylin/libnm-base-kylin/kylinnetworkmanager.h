@@ -178,6 +178,7 @@ public Q_SLOTS:
     void onUpdateWirelessEnterPriseTlsConnect(const QString &uuid, const KyEapMethodTlsInfo &tlsinfo);
     void onUpdateWirelessEnterPrisePeapConnect(const QString &uuid, const KyEapMethodPeapInfo &peapInfo);
     void onUpdateWirelessEnterPriseTtlsConnect(const QString &uuid, const KyEapMethodTtlsInfo &ttlsInfo);
+    void onUpdateWirelessAutoConnectState(const QString &uuid, bool bAutoConnect);
 };
 
 #endif // KYLINNETWORKMANAGER_H

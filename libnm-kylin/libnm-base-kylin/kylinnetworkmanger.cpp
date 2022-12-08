@@ -363,3 +363,9 @@ void KyNetworkManager::onUpdateWirelessEnterPriseTtlsConnect(const QString &uuid
     KyWirelessConnectOperation operate;
     operate.updateWirelessEnterPriseTtlsConnect(uuid, ttlsInfo);
 }
+
+void KyNetworkManager::onUpdateWirelessAutoConnectState(const QString &uuid, bool bAutoConnect)
+{
+    KyWirelessConnectOperation operate;
+    operate.setWirelessAutoConnect(uuid, bAutoConnect);
+}

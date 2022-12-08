@@ -363,28 +363,20 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     detailPage->setAutoConnect(m_info.isAutoConnect);
 
     //ipv4页面填充
+    ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
+    ipv4Page->setMulDns(m_info.ipv4DnsList);
     if (m_info.ipv4ConfigType == CONFIG_IP_MANUAL) {
-        ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
         ipv4Page->setIpv4(m_info.strIPV4Address);
         ipv4Page->setNetMask(m_info.strIPV4NetMask);
-//        ipv4Page->setIpv4FirDns(m_info.strIPV4FirDns);
-//        ipv4Page->setIpv4SecDns(m_info.strIPV4SecDns);
-        ipv4Page->setMulDns(m_info.ipv4DnsList);
         ipv4Page->setGateWay(m_info.strIPV4GateWay);
-    } else {
-        ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
     }
     //ipv6页面填充
+    ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
+    ipv6Page->setMulDns(m_info.ipv6DnsList);
     if (m_info.ipv6ConfigType == CONFIG_IP_MANUAL) {
-        ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
         ipv6Page->setIpv6(m_info.strIPV6Address);
         ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
-//        ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
-//        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
-        ipv6Page->setMulDns(m_info.ipv6DnsList);
         ipv6Page->setGateWay(m_info.strIPV6GateWay);
-    } else {
-        ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
     }
 
     //安全页面
@@ -554,14 +546,25 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
             conInfo.iIPV6Prefix = ipv6Page->getPerfixLength(connetSetting.m_ipv6Address.at(0).netmask().toString());
             conInfo.strIPV6GateWay = connetSetting.m_ipv6Address.at(0).gateway().toString();
         }
+    }
 
-        conInfo.ipv6DnsList = connetSetting.m_ipv6Dns;
+    conInfo.ipv4DnsList = connetSetting.m_ipv4Dns;
+    conInfo.ipv6DnsList = connetSetting.m_ipv6Dns;
+    QString dnsList;
+    dnsList.clear();
+    if (!conInfo.ipv4DnsList.isEmpty()) {
+        for (QHostAddress str: conInfo.ipv4DnsList) {
+            dnsList.append(str.toString());
+            dnsList.append("; ");
+        }
+        dnsList.chop(2);
+        conInfo.strDynamicIpv4Dns = dnsList;
     }
 
     if (!bActived) {
         conInfo.strDynamicIpv4 = conInfo.strIPV4Address.isEmpty() ? tr("Auto") : conInfo.strIPV4Address;
         conInfo.strDynamicIpv6 = conInfo.strIPV6Address.isEmpty() ? tr("Auto") : conInfo.strIPV6Address;
-        conInfo.strDynamicIpv4Dns = conInfo.ipv4DnsList.isEmpty() ? tr("Auto") : conInfo.ipv4DnsList.at(0).toString();
+        conInfo.strDynamicIpv4Dns = conInfo.ipv4DnsList.isEmpty() ? tr("Auto") : conInfo.strDynamicIpv4Dns;
     }
 }
 

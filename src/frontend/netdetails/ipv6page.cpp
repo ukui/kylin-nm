@@ -49,6 +49,15 @@ void Ipv6Page::setGateWay(const QString &gateWay)
 bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
 {
     bool isChanged = false;
+    QList<QHostAddress> ipv6DnsList;
+    ipv6DnsList.clear();
+    ipv6DnsList = m_dnsWidget->getDns();
+    if (info.ipv6DnsList != ipv6DnsList) {
+        qDebug() << "ipv6 dns changed";
+        setting.ipv6DnsConstruct(ipv6DnsList);
+        isChanged =  true;
+    }
+
     if (ipv6ConfigCombox->currentIndex() == AUTO_CONFIG) {
         if (info.ipv6ConfigType != CONFIG_IP_DHCP) {
             qDebug() << "ipv6ConfigType change to Auto";
@@ -56,9 +65,7 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
             QString ipv6address("");
             QString prefix("");
             QString gateWay("");
-            QStringList dnsList;
-            dnsList.empty();
-            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay, dnsList);
+            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay);
             isChanged = true;
         }
     } else {
@@ -68,35 +75,16 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
             isChanged =  true;
         }
 
-        QList<QHostAddress> ipv6dnsList;
-        ipv6dnsList.clear();
-        ipv6dnsList = m_dnsWidget->getDns();
-
         if(info.strIPV6Address != ipv6AddressEdit->text()
                 || info.iIPV6Prefix != lengthEdit->text().toInt()
-                || info.strIPV6GateWay != gateWayEdit->text()              
-                //                || info.strIPV6FirDns  != firstDnsEdit->text()
-                //                || info.strIPV6SecDns  != secondDnsEdit->text()
-                || info.ipv6DnsList != ipv6dnsList) {
+                || info.strIPV6GateWay != gateWayEdit->text()) {
 
             qDebug() << "ipv6 info changed";
-            QStringList dnsList;
-            dnsList.clear();
-            for (QHostAddress str: ipv6dnsList) {
-                dnsList << str.toString();
-            }
-#if 0
-            if (!firstDnsEdit->text().isEmpty()) {
-                dnsList << firstDnsEdit->text();
-                if (!secondDnsEdit->text().isEmpty()) {
-                    dnsList << secondDnsEdit->text();
-                }
-            }
-#endif
+
             QString ipv6address =ipv6AddressEdit->text();
             QString prefix = lengthEdit->text();
             QString gateWay = gateWayEdit->text();
-            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay, dnsList);
+            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay);
             setting.dumpInfo();
             isChanged =  true;
         }
@@ -163,14 +151,6 @@ void Ipv6Page::initComponent() {
     connect(ipv6AddressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(lengthEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-//    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-//    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
-        setIpv6PageState(false);
-    });
-    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
-        setIpv6PageState(true);
-    });
 }
 
 void Ipv6Page::configChanged(int index) {
@@ -187,16 +167,12 @@ void Ipv6Page::setControlEnabled(bool check)
     ipv6AddressEdit->setEnabled(check);
     lengthEdit->setEnabled(check);
     gateWayEdit->setEnabled(check);
-    m_dnsWidget->setEditEnabled(check);
-//    firstDnsEdit->setEnabled(check);
-//    secondDnsEdit->setEnabled(check);
+
 
     if (!check) {
         ipv6AddressEdit->clear();
         lengthEdit->clear();
         gateWayEdit->clear();
-//        firstDnsEdit->clear();
-//        secondDnsEdit->clear();
     }
 }
 

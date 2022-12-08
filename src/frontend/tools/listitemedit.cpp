@@ -30,8 +30,6 @@ QWidget *ListItemEdit::createEditor(QWidget *parent, const QStyleOptionViewItem 
 {
     QLineEdit *editor = new QLineEdit(parent);
     editor->setValidator(new QRegExpValidator(m_regExp, parent));
-    connect(editor, SIGNAL(textChanged(QString)), this, SIGNAL(textChanged(QString)));
-    connect(editor, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
     return editor;
 }
 

@@ -44,9 +44,6 @@ public:
 private:
     QRegExp m_regExp;
 
-Q_SIGNALS:
-    void textChanged(const QString &);
-    void editingFinished();
 };
 
 #endif // LISTITEMEDIT_H

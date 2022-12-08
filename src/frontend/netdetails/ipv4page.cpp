@@ -72,14 +72,6 @@ void Ipv4Page::initComponent() {
     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-//    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-//    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
-        setIpv4PageState(false);
-    });
-    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
-        setIpv4PageState(true);
-    });
 }
 
 void Ipv4Page::setIpv4Config(KyIpConfigType ipv4Config)
@@ -124,6 +116,15 @@ void Ipv4Page::setGateWay(const QString &gateWay)
 bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
 {
     bool isChanged = false;
+    QList<QHostAddress> ipv4DnsList;
+    ipv4DnsList.clear();
+    ipv4DnsList = m_dnsWidget->getDns();
+    if (info.ipv4DnsList != ipv4DnsList) {
+        qDebug() << "ipv4 dns changed";
+        setting.ipv4DnsConstruct(ipv4DnsList);
+        isChanged =  true;
+    }
+
     if (ipv4ConfigCombox->currentIndex() == AUTO_CONFIG) {
         if (info.ipv4ConfigType != CONFIG_IP_DHCP) {
             qDebug() << "ipv4ConfigType change to Auto";
@@ -131,10 +132,8 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
             QString ipv4address("");
             QString netMask("");
             QString gateWay("");
-            QStringList dnsList;
-            dnsList.empty();
             qDebug() << ipv4address << netMask << gateWay;
-            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay, dnsList);
+            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay);
             isChanged = true;
         }
     } else {
@@ -145,37 +144,17 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
         }
         qDebug() << "ipv4 netmask " << getNetMaskText(netMaskEdit->text());
 
-        QList<QHostAddress> ipv4dnsList;
-        ipv4dnsList.clear();
-        ipv4dnsList = m_dnsWidget->getDns();
-
         if(info.strIPV4Address != ipv4addressEdit->text()
                 || info.strIPV4NetMask != /*netMaskEdit->text()*/getNetMaskText(netMaskEdit->text())
-                || info.strIPV4GateWay != gateWayEdit->text()
-                //                || info.strIPV4FirDns  != firstDnsEdit->text()
-                //                || info.strIPV4SecDns  != secondDnsEdit->text()
-                || info.ipv4DnsList != ipv4dnsList) {
+                || info.strIPV4GateWay != gateWayEdit->text()) {
 
             qDebug() << "ipv4 info changed";
-            QStringList dnsList;
-            dnsList.clear();
-            for (QHostAddress str: ipv4dnsList) {
-                dnsList << str.toString();
-            }
-#if 0
-            if (!firstDnsEdit->text().isEmpty()) {
-                dnsList << firstDnsEdit->text();
-                if (!secondDnsEdit->text().isEmpty()) {
-                    dnsList << secondDnsEdit->text();
-                }
-            }
 
-#endif
             QString ipv4address =ipv4addressEdit->text();
             QString netMask = getNetMaskText(netMaskEdit->text());
             QString gateWay = gateWayEdit->text();
             qDebug() << ipv4address << netMask << gateWay;
-            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay, dnsList);
+            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay);
             setting.dumpInfo();
             isChanged =  true;
         }
@@ -237,16 +216,11 @@ void Ipv4Page::setLineEnabled(bool check) {
     ipv4addressEdit->setEnabled(check);
     netMaskEdit->setEnabled(check);
     gateWayEdit->setEnabled(check);
-//    firstDnsEdit->setEnabled(check);
-//    secondDnsEdit->setEnabled(check);
-    m_dnsWidget->setEditEnabled(check);
 
     if (!check) {
         ipv4addressEdit->clear();
         netMaskEdit->clear();
         gateWayEdit->clear();
-//        firstDnsEdit->clear();
-//        secondDnsEdit->clear();
     }
 }
 

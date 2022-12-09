@@ -50,6 +50,9 @@ using namespace kdk;
 #include "../component/DeviceFrame/deviceframe.h"
 #include "itemframe.h"
 #include "../component/Divider/divider.h"
+#include "../component/Pages/netdetail.h"
+#include "../component/NetworkMode/networkmodeconfig.h"
+#include "../component/NetworkMode/firewalldialog.h"
 
 enum {
     DISCONNECTED,
@@ -110,6 +113,11 @@ private:
     //单个lan连接状态变化
     void itemActiveConnectionStatusChanged(LanItem *item, KyConnectState status);
 
+    //显示网络属性页
+    void showLanDetailPage(QString deviceName, QString connName, QString connUuid, bool isActivated);
+
+    //初始化已激活网络的网络模式
+    void initActiveNetworkMode(QString deviceName, KyActivateItem activeItem);
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 
@@ -144,6 +152,7 @@ private:
 
     QMap<QString, bool> deviceStatusMap;
     QMap<QString, ItemFrame *> deviceFrameMap;
+    QMap<QString, NetDetail*> m_lanDetailPagePtrMap;
 
 Q_SIGNALS:
 
@@ -159,6 +168,7 @@ Q_SIGNALS:
     void createWiredConnect(KyConnectSetting connectSettingsInfo);
     void updateIpv4AndIpv6SettingInfo(const QString &uuid, const KyConnectSetting &connectSettingsInfo);
 
+    void connectStateChanged(QString uuid, KyConnectState status);
 
 private Q_SLOTS:
     void updateLanInfo(QString deviceName, QString connectUuid, QString connectName, QString connectPath);
@@ -177,6 +187,7 @@ private Q_SLOTS:
 
     void onDeviceAdd(QString deviceName);
     void onDeviceRemove(QString deviceName);
+    void updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status);
 };
 
 #endif // NETCONNECT_H

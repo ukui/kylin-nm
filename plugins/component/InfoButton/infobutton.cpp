@@ -19,8 +19,31 @@
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
-QColor mixColor(const QColor &c1, const QColor &c2, qreal bias);
+static inline qreal mixQreal(qreal a, qreal b, qreal bias)
+{
+    return a + (b - a) * bias;
+}
 
+
+QColor mixColor(const QColor &c1, const QColor &c2, qreal bias)
+{
+    if (bias <= 0.0) {
+        return c1;
+    }
+    if (bias >= 1.0) {
+        return c2;
+    }
+    if (qIsNaN(bias)) {
+        return c1;
+    }
+
+    qreal r = mixQreal(c1.redF(),   c2.redF(),   bias);
+    qreal g = mixQreal(c1.greenF(), c2.greenF(), bias);
+    qreal b = mixQreal(c1.blueF(),  c2.blueF(),  bias);
+    qreal a = mixQreal(c1.alphaF(), c2.alphaF(), bias);
+
+    return QColor::fromRgbF(r, g, b, a);
+}
 InfoButton::InfoButton(QWidget *parent) : QPushButton(parent)
 {
     initUI();

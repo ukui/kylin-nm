@@ -50,6 +50,9 @@ using namespace kdk;
 #include "itemframe.h"
 #include "wlanitem.h"
 #include "hiddenwifi/enterprisewlanpage.h"
+#include "../component/Pages/netdetail.h"
+#include "../component/NetworkMode/networkmodeconfig.h"
+#include "../component/NetworkMode/firewalldialog.h"
 
 class WlanConnect : public QObject, Interface
 {
@@ -112,6 +115,10 @@ private:
     void itemActiveConnectionStatusChanged(WlanItem *item, int status);
 
     void setOtherItemExpandedFalse(QString devName, QString ssid);
+    //显示网络属性页
+    void showWlanDetailPage(QString deviceName, QString connName, QString connUuid, bool isActivated);
+    //初始化已激活网络的网络模式
+    void initActiveNetworkMode(QString deviceName, KyActivateItem activeItem);
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 
@@ -153,6 +160,7 @@ private:
     KBorderlessButton* m_settingsLabel = nullptr;
 
     WlanItem* findItem(QString devName, QString ssid);
+    QMap<QString, NetDetail*> m_wlanDetailPagePtrMap;
 
 Q_SIGNALS:
     void requestWirelessScan();
@@ -171,6 +179,8 @@ Q_SIGNALS:
 //                                                     KyWirelessConnectSetting &connSettingInfo);
 
     void deleteConnect(QString uuid);
+
+    void connectStateChanged(QString uuid, KyConnectState status);
 
 private Q_SLOTS:
     void onNetworkAdd(QString deviceName, KyWirelessNetItem wlanInfo);
@@ -192,5 +202,6 @@ private Q_SLOTS:
     void onWirelessConnectionUpdate(QString deviceName, QString ssid, QString uuid, QString dbusPath, KySecuType connectSecuType);
     void onWirelessDeviceAdd(QString deviceName);
     void onWirelessDeviceRemove(QString deviceName);
+    void updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status);
 };
 #endif // WLANCONNECT_H

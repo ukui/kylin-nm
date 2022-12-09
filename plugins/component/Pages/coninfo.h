@@ -91,16 +91,12 @@ public:
     KyIpConfigType ipv4ConfigType = CONFIG_IP_DHCP;
     QString strIPV4Address;
     QString strIPV4NetMask;
-    QString strIPV4FirDns;
-    QString strIPV4SecDns;
     QString strIPV4GateWay;
     QList<QHostAddress> ipv4DnsList;
 
     KyIpConfigType ipv6ConfigType = CONFIG_IP_DHCP;
     QString strIPV6Address;
     int iIPV6Prefix;
-    QString strIPV6FirDns;
-    QString strIPV6SecDns;
     QString strIPV6GateWay;
     QList<QHostAddress> ipv6DnsList;
 

@@ -18,9 +18,9 @@
  *
  */
 #include "netdetail.h"
-#include "../component/KylinArping/kylinipv4arping.h"
-#include "../component/KylinArping/kylinipv6arping.h"
-//#include "networkmodeconfig.h"
+//#include "../component/KylinArping/kylinipv4arping.h"
+//#include "../component/KylinArping/kylinipv6arping.h"
+#include "../component/NetworkMode/networkmodeconfig.h"
 
 
 #define THEME_SCHAME "org.ukui.style"
@@ -128,19 +128,19 @@ void NetDetail::startObjectThread()
         ipv6Page->startLoading();
     });
 
-    connect(ipv4Page, SIGNAL(ipv4EditFinished(const QString &)), m_object, SLOT(checkIpv4ConflictThread(const QString &)));
-    connect(ipv6Page, SIGNAL(ipv6EditFinished(const QString &)), m_object, SLOT(checkIpv6ConflictThread(const QString &)));
-    connect(this, SIGNAL(checkCurrentIpv4Conflict(const QString &)), m_object, SLOT(checkIpv4ConflictThread(const QString &)));
-    connect(this, SIGNAL(checkCurrentIpv6Conflict(const QString &)), m_object, SLOT(checkIpv6ConflictThread(const QString &)));
+//    connect(ipv4Page, SIGNAL(ipv4EditFinished(const QString &)), m_object, SLOT(checkIpv4ConflictThread(const QString &)));
+//    connect(ipv6Page, SIGNAL(ipv6EditFinished(const QString &)), m_object, SLOT(checkIpv6ConflictThread(const QString &)));
+//    connect(this, SIGNAL(checkCurrentIpv4Conflict(const QString &)), m_object, SLOT(checkIpv4ConflictThread(const QString &)));
+//    connect(this, SIGNAL(checkCurrentIpv6Conflict(const QString &)), m_object, SLOT(checkIpv6ConflictThread(const QString &)));
 
-    connect(m_object, &ThreadObject::ipv4IsConflict, this, [=](bool ipv4IsConf) {
-        ipv4Page->stopLoading();
-        ipv4Page->showIpv4AddressConflict(ipv4IsConf);
-    });
-    connect(m_object, &ThreadObject::ipv6IsConflict, this, [=](bool ipv6IsConf) {
-        ipv6Page->stopLoading();
-        ipv6Page->showIpv6AddressConflict(ipv6IsConf);
-    });
+//    connect(m_object, &ThreadObject::ipv4IsConflict, this, [=](bool ipv4IsConf) {
+//        ipv4Page->stopLoading();
+//        ipv4Page->showIpv4AddressConflict(ipv4IsConf);
+//    });
+//    connect(m_object, &ThreadObject::ipv6IsConflict, this, [=](bool ipv6IsConf) {
+//        ipv6Page->stopLoading();
+//        ipv6Page->showIpv6AddressConflict(ipv6IsConf);
+//    });
 
     m_objectThread->start();
 }
@@ -172,23 +172,35 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
     centerToScreen();
 
+    qRegisterMetaType<KyConnectSetting>("KyConnectSetting");
+    qRegisterMetaType<KyWirelessConnectSetting>("KyWirelessConnectSetting");
+    qRegisterMetaType<KyEapMethodTlsInfo>("KyEapMethodTlsInfo");
+    qRegisterMetaType<KyEapMethodPeapInfo>("KyEapMethodPeapInfo");
+    qRegisterMetaType<KyEapMethodTtlsInfo>("KyEapMethodTtlsInfo");
+
     qDebug() << m_isCreateNet << name;
     if (!m_isCreateNet && name.isEmpty()) {
         m_isCreateNet = true;
     }
     qDebug() << m_isCreateNet;
-    m_netDeviceResource = new KyNetworkDeviceResourse(this);
-    m_wirelessConnOpration = new KyWirelessConnectOperation(this);
-    m_resource = new KyWirelessNetResource(this);
-    m_connectOperation = new KyConnectOperation(this);
-    m_wiredConnOperation = new KyWiredConnectOperation(this);
+
+    m_thread = new QThread;
+    m_manager = new KyNetworkManager();
+    m_manager->moveToThread(m_thread);
+    connect(m_thread, &QThread::started, m_manager, &KyNetworkManager::kylinNetworkManagerInit);
+    connect(m_thread, &QThread::finished, m_manager, &KyNetworkManager::deleteLater);
+    m_thread->start();
+
+    while (!m_manager->isInitFinished()) {
+        ::usleep(1000);
+    }
+
     initUI();
     loadPage();
     initComponent();
     getConInfo(m_info);
     startObjectThread();
     pagePadding(name,isWlan);
-
     connect(qApp, &QApplication::paletteChanged, this, &NetDetail::onPaletteChanged);
 
     isCreateOk = !(m_isCreateNet && !isWlan);
@@ -281,7 +293,7 @@ void NetDetail::paintEvent(QPaintEvent *event)
 
 void NetDetail::closeEvent(QCloseEvent *event)
 {
-    Q_EMIT this->detailPageClose(false);
+    Q_EMIT this->detailPageClose(m_uuid);
     Q_EMIT this->createPageClose(m_deviceName);
 
     if (m_hasDetailPageShowed) {
@@ -450,7 +462,7 @@ void NetDetail::initComponent()
         close();
     });
 
-    connect(confimBtn, SIGNAL(clicked()), this, SLOT(on_btnConfirm_clicked()));
+    connect(confimBtn, SIGNAL(clicked()), this, SLOT(onBtnConfirmClicked()));
     if (!m_uuid.isEmpty()) {
         if (isWlan) {
             forgetBtn->setText(tr("Forget this network"));
@@ -458,7 +470,7 @@ void NetDetail::initComponent()
             forgetBtn->setText(tr("Delete this network"));
         }
         forgetBtn->show();
-        connect(forgetBtn, SIGNAL(clicked()), this, SLOT(on_btnForget_clicked()));
+        connect(forgetBtn, SIGNAL(clicked()), this, SLOT(onBtnForgetClicked()));
     } else {
         forgetBtn->hide();
     }
@@ -497,6 +509,27 @@ void NetDetail::initComponent()
             }
         });
     }
+
+    connect(this, &NetDetail::deleteConnect, m_manager, &KyNetworkManager::onDeleteConnect);
+    connect(this, &NetDetail::sigCreateWiredConnect, m_manager, &KyNetworkManager::onCreateWiredConnect);
+    connect(this, &NetDetail::sigUpdateIpv4AndIpv6SettingInfo, m_manager, &KyNetworkManager::onUpdateIpv4AndIpv6SettingInfo);
+    connect(this, &NetDetail::sigUpdateWirelessPersonalConnect, m_manager, &KyNetworkManager::onUpdateWirelessPersonalConnect);
+    connect(this, &NetDetail::sigUpdateWirelessEnterPriseTlsConnect, m_manager, &KyNetworkManager::onUpdateWirelessEnterPriseTlsConnect);
+    connect(this, &NetDetail::sigUpdateWirelessEnterPrisePeapConnect, m_manager, &KyNetworkManager::onUpdateWirelessEnterPrisePeapConnect);
+    connect(this, &NetDetail::sigUpdateWirelessEnterPriseTtlsConnect, m_manager, &KyNetworkManager::onUpdateWirelessEnterPriseTtlsConnect);
+    connect(this, &NetDetail::sigActivateConnection, m_manager, &KyNetworkManager::onActivateConnection);
+    connect(this, &NetDetail::sigWirelessAutoConnectStateChanged, m_manager, &KyNetworkManager::onUpdateWirelessAutoConnectState);
+}
+
+//获取网路详情信息
+void NetDetail::getConInfo(ConInfo &conInfo)
+{
+    if (m_isCreateNet && !isWlan) {
+        return;
+    }
+
+    getBaseInfo(m_detailInfo, conInfo);
+    getDynamicIpInfo(m_connectSetting, conInfo);
 }
 
 void NetDetail::pagePadding(QString netName, bool isWlan)
@@ -517,7 +550,6 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     detailPage->setMac(m_info.strMac);
     detailPage->setBandWidth(m_info.strBandWidth);
     detailPage->setAutoConnect(m_info.isAutoConnect);
-
     //ipv4页面填充
     ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
     ipv4Page->setMulDns(m_info.ipv4DnsList);
@@ -532,17 +564,22 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     ipv6Page->setMulDns(m_info.ipv6DnsList);
     if (m_info.ipv6ConfigType == CONFIG_IP_MANUAL) {
         Q_EMIT checkCurrentIpv6Conflict(m_info.strIPV6Address);
-        ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
         ipv6Page->setIpv6(m_info.strIPV6Address);
         ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
         ipv6Page->setGateWay(m_info.strIPV6GateWay);
     }
-
     //安全页面
     if (isWlan) {
         securityPage->setSecurity(m_info.secType);
-        qDebug() << "setSecurity" << m_info.secType;
-        if (m_info.secType == WPA_AND_WPA2_ENTERPRISE) {
+        switch (m_info.secType) {
+        case UNKNOWN:
+        case NONE:
+            break;
+        case WPA_AND_WPA2_PERSONAL:
+        case WPA3_PERSONAL:
+            securityPage->setPsk(m_info.strPassword);
+            break;
+        case WPA_AND_WPA2_ENTERPRISE:
             if (m_info.enterpriseType == TLS) {
                 securityPage->setTlsInfo(m_info.tlsInfo);
             } else if (m_info.enterpriseType == PEAP) {
@@ -550,32 +587,49 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
             } else if (m_info.enterpriseType == TTLS) {
                 securityPage->setTtlsInfo(m_info.ttlsInfo);
             }
+            break;
+        default:
+            break;
         }
     }
-#if 0
+
     //配置页面
     if (isActive) {
         configPage->setConfigState(NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid));
     }
-#endif
+
 }
 
-//获取网路详情信息
-void NetDetail::getConInfo(ConInfo &conInfo)
+//点击了保存更改网络设置的按钮
+void NetDetail::onBtnConfirmClicked()
 {
-    if (m_isCreateNet && !isWlan) {
-        return;
+    qDebug() << "on_btnConfirm_clicked";
+    setNetdetailSomeEnable(false);
+    if (m_isCreateNet) {
+        if (!isWlan) {
+            //新建有线连接
+            qDebug() << "Confirm create wired connect";
+            if (!createWiredConnect()) {
+                setNetdetailSomeEnable(true);
+                return;
+            }
+        }
+    } else {
+        //更新连接
+        qDebug() << "Confirm update connect";
+        if (!updateConnect()) {
+            setNetdetailSomeEnable(true);
+            return;
+        }
     }
-    getBaseInfo(conInfo);
-    getDynamicIpInfo(conInfo, isActive);
-    getStaticIpInfo(conInfo,isActive);
+    close();
 }
 
 //点击忘记网络
-void NetDetail::on_btnForget_clicked()
+void NetDetail::onBtnForgetClicked()
 {
     qDebug() << "user choose forget connection uuid = " << m_uuid;
-    m_connectOperation->deleteConnect(m_uuid);
+    Q_EMIT deleteConnect(m_uuid);
     close();
 }
 
@@ -594,8 +648,236 @@ void NetDetail::setConfirmEnable()
             isConfirmBtnEnable = false;
         }
     }
-    qDebug() << "setConfirmEnable "<< isConfirmBtnEnable;
+//    qDebug() << "setConfirmEnable "<< isConfirmBtnEnable;
     confimBtn->setEnabled(isConfirmBtnEnable);
+}
+
+void NetDetail::getBaseInfo(KyDetailInfo &detailInfo, ConInfo &conInfo)
+{
+    if (isWlan) {
+        conInfo.strConType =  "802-11-wireless";
+        m_manager->getWirelessConnectDetail(m_deviceName, m_name, m_uuid, detailInfo);
+        conInfo.strSecType = detailInfo.strSecType;
+
+        //未激活WLAN的m_uuid为空，不能通过m_uuid获取安全类型
+        if (!isActive) {
+            if (conInfo.strSecType.isEmpty()) {
+                conInfo.secType = NONE;
+            } else if (conInfo.strSecType.indexOf("802.1X") != -1) {
+                conInfo.secType = WPA_AND_WPA2_ENTERPRISE;
+            } else {
+                conInfo.secType = WPA_AND_WPA2_PERSONAL;
+            }
+        } else {
+            conInfo.secType = m_manager->getConnectSecuType(m_uuid);
+        }
+
+        switch (conInfo.secType) {
+        case UNKNOWN:
+        case NONE:
+            break;
+        case WPA_AND_WPA2_PERSONAL:
+        case WPA3_PERSONAL:
+            m_manager->getNormalWifiConnectSecuInfo(m_uuid, m_pwdInfo);
+            conInfo.strPassword = m_pwdInfo.pwd;
+            break;
+        case WPA_AND_WPA2_ENTERPRISE:
+            if (!m_manager->getEnterpiseEapMethod(m_uuid, conInfo.enterpriseType)) {
+                qDebug() << m_name << "not enterprise wifi";
+            } else if (conInfo.enterpriseType == TLS) {
+                m_manager->getEnterPriseInfoTls(m_uuid, conInfo.tlsInfo);;
+            } else if (conInfo.enterpriseType == PEAP) {
+                m_manager->getEnterPriseInfoPeap(m_uuid, conInfo.peapInfo);;
+            } else if (conInfo.enterpriseType == TTLS) {
+                m_manager->getEnterPriseInfoTtls(m_uuid, conInfo.ttlsInfo);;
+            }
+            break;
+        default:
+            break;
+        }
+
+    } else {
+        conInfo.strConType =  "802-3-ethernet";
+        m_manager->getWiredConnectDetail(m_deviceName, m_uuid, detailInfo);
+    }
+
+    // 将网络详情信息和IP信息汇总到conInfo
+    conInfo.strChan = detailInfo.strChan;
+    conInfo.strMac = detailInfo.strMac;
+    conInfo.strHz = detailInfo.strHz;
+    conInfo.strBandWidth = detailInfo.strBandWidth;
+    conInfo.strDynamicIpv4 = detailInfo.strDynamicIpv4;
+    conInfo.strDynamicIpv6 = detailInfo.strDynamicIpv6;
+    conInfo.strDynamicIpv4Dns = detailInfo.strDynamicIpv4Dns;
+}
+
+void NetDetail::getDynamicIpInfo(KyConnectSetting &connectSetting, ConInfo &conInfo)
+{
+    m_manager->getConnectIpInfo(m_uuid, connectSetting);
+
+    // 将网络详情信息和IP信息汇总到conInfo
+    conInfo.isAutoConnect = connectSetting.m_isAutoConnect;
+    conInfo.ipv4ConfigType = connectSetting.m_ipv4ConfigIpType;
+    conInfo.ipv4DnsList = connectSetting.m_ipv4Dns;
+    if (connectSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
+        if (connectSetting.m_ipv4Address.size() > 0) {
+    conInfo.strIPV4Address = connectSetting.m_ipv4Address.at(0).ip().toString();
+    conInfo.strIPV4NetMask = connectSetting.m_ipv4Address.at(0).netmask().toString();
+    conInfo.strIPV4GateWay = connectSetting.m_ipv4Address.at(0).gateway().toString();
+        }
+    }
+    conInfo.ipv6ConfigType = connectSetting.m_ipv6ConfigIpType;
+    conInfo.ipv6DnsList = connectSetting.m_ipv6Dns;
+    if (connectSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
+        if (connectSetting.m_ipv6Address.size() > 0) {
+    conInfo.strIPV6Address = connectSetting.m_ipv6Address.at(0).ip().toString();
+    conInfo.iIPV6Prefix = ipv6Page->getPerfixLength(connectSetting.m_ipv6Address.at(0).netmask().toString());
+    conInfo.strIPV6GateWay = connectSetting.m_ipv6Address.at(0).gateway().toString();
+        }
+    }
+
+    QString dnsList;
+    dnsList.clear();
+    if (!conInfo.ipv4DnsList.isEmpty()) {
+        for (QHostAddress str: conInfo.ipv4DnsList) {
+            dnsList.append(str.toString());
+            dnsList.append("; ");
+        }
+        dnsList.chop(2);
+        conInfo.strDynamicIpv4Dns = dnsList;
+    }
+
+    if (!isActive) {
+        conInfo.strDynamicIpv4 = conInfo.strIPV4Address.isEmpty() ? tr("Auto") : conInfo.strIPV4Address;
+        conInfo.strDynamicIpv6 = conInfo.strIPV6Address.isEmpty() ? tr("Auto") : conInfo.strIPV6Address;
+        conInfo.strDynamicIpv4Dns = conInfo.strDynamicIpv4Dns.isEmpty() ? tr("Auto") : conInfo.strDynamicIpv4Dns;
+    }
+}
+
+bool NetDetail::createWiredConnect()
+{
+    KyConnectSetting connetSetting;
+    connetSetting.setIfaceName(m_deviceName);
+    createNetPage->constructIpv4Info(connetSetting);
+    Q_EMIT sigCreateWiredConnect(connetSetting);
+    return true;
+}
+
+bool NetDetail::updateConnect()
+{
+    KyNetResource *kyConnectResourse = new KyNetResource(this);
+    KyConnectSetting  connetSetting;
+    KySecuType secuType;
+    KyEapMethodType enterpriseType;
+    kyConnectResourse->getConnectionSetting(m_uuid, connetSetting);
+
+    //属性页 page1 AutoConnect
+    if(!m_uuid.isEmpty() && detailPage->checkIsChanged(m_info)) {
+        Q_EMIT sigWirelessAutoConnectStateChanged(m_uuid, !m_info.isAutoConnect);
+    }
+
+    //属性页 page2 page3 Ipv4/Ipv6
+    bool ipv4Change = ipv4Page->checkIsChanged(m_info, connetSetting);
+    bool ipv6Change = ipv6Page->checkIsChanged(m_info, connetSetting);
+
+    if (ipv4Change || ipv6Change) {
+        connetSetting.dumpInfo();
+        Q_EMIT sigUpdateIpv4AndIpv6SettingInfo(m_uuid, connetSetting);
+    }
+
+    //属性页 page4 wifi Security
+    bool securityChange = false;
+    if (isWlan) {
+        securityChange = securityPage->checkIsChanged(m_info);
+        if(securityChange) {
+            securityPage->getSecuType(secuType, enterpriseType);
+            if (!checkWirelessSecurity(secuType)) {
+                return false;
+            }
+        }
+    }
+
+    qDebug() << "securityChange" << securityChange;
+    if (securityChange) {
+        if (secuType == WPA_AND_WPA2_ENTERPRISE) {
+            updateWirelessEnterPriseConnect(enterpriseType);
+        } else {
+            updateWirelessPersonalConnect();
+        }
+    }
+
+    if (ipv4Change || ipv6Change || securityChange) {
+        if (isActive) {
+            //信息变化 断开-重连 更新需要時間 不可以立即重連
+//            sleep(1);
+            QEventLoop eventloop;
+            QTimer::singleShot(1000, &eventloop, SLOT(quit()));
+            eventloop.exec();
+            Q_EMIT sigActivateConnection(m_uuid, m_deviceName);
+        }
+    }
+
+    //属性页 page5 config 网络模式配置
+    if (configPage != nullptr) {
+        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
+        bool configPageChange = configPage->checkIsChanged(configType);
+        int currentConfigType = configPage->getConfigState();
+//        qDebug () << Q_FUNC_INFO << __LINE__<< configPageChange;
+
+        if (configPageChange) {
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(m_uuid, m_deviceName, m_name, currentConfigType);
+//            qDebug () <<Q_FUNC_INFO << __LINE__ << m_uuid << m_deviceName << m_name << currentConfigType;
+        }
+    }
+
+    return true;
+}
+
+bool NetDetail::checkWirelessSecurity(KySecuType secuType)
+{
+    if (secuType == WPA_AND_WPA2_ENTERPRISE) {
+        if(m_info.strSecType.indexOf("802.1X") < 0) {
+            showDesktopNotify(tr("this wifi no support enterprise type"), "networkwrong");
+            return false;
+        }
+    } else {
+        if (secuType == NONE && m_info.strSecType != tr("None")) {
+            showDesktopNotify(tr("this wifi no support None type"), "networkwrong");
+            return false;
+        } else if (secuType == WPA_AND_WPA2_PERSONAL
+                   && (m_info.strSecType.indexOf("WPA1") < 0 &&
+                       m_info.strSecType.indexOf("WPA2") < 0)) {
+            showDesktopNotify(tr("this wifi no support WPA2 type"), "networkwrong");
+            return false;
+        } else if (secuType == WPA3_PERSONAL && m_info.strSecType.indexOf("WPA3") < 0) {
+            showDesktopNotify(tr("this wifi no support WPA3 type"), "networkwrong");
+            return false;
+        }
+    }
+    return true;
+}
+
+void NetDetail::updateWirelessPersonalConnect()
+{
+    KyWirelessConnectSetting setting;
+    securityPage->updateSecurityChange(setting);
+    bool isPwdChanged = !(m_info.strPassword == setting.m_psk);
+    Q_EMIT sigUpdateWirelessPersonalConnect(m_uuid, setting, isPwdChanged);
+}
+
+void NetDetail::updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType)
+{
+    if (enterpriseType == TLS) {
+        m_info.tlsInfo.devIfaceName = m_deviceName;
+        securityPage->updateTlsChange(m_info.tlsInfo);
+        Q_EMIT sigUpdateWirelessEnterPriseTlsConnect(m_uuid, m_info.tlsInfo);
+    } else if (enterpriseType == PEAP) {
+        securityPage->updatePeapChange(m_info.peapInfo);
+        Q_EMIT sigUpdateWirelessEnterPrisePeapConnect(m_uuid, m_info.peapInfo);
+    } else if (enterpriseType == TTLS) {
+        securityPage->updateTtlsChange(m_info.ttlsInfo);
+        Q_EMIT sigUpdateWirelessEnterPriseTtlsConnect(m_uuid, m_info.ttlsInfo);
+    }
 }
 
 bool NetDetail::eventFilter(QObject *w, QEvent *event)
@@ -705,39 +987,39 @@ void ThreadObject::stop()
      m_isStop = true;
 }
 
-void ThreadObject::checkIpv4ConflictThread(const QString &ipv4Address)
-{
-    if (m_isStop) {
-        return;
-    }
-    bool isConflict = false;
-    KyIpv4Arping* ipv4Arping = new KyIpv4Arping(m_devName, ipv4Address);
-    if (ipv4Arping->ipv4ConflictCheck() >= 0) {
-        isConflict =  ipv4Arping->ipv4IsConflict();
-    } else {
-        qWarning() << "checkIpv4Conflict internal error";
-    }
+//void ThreadObject::checkIpv4ConflictThread(const QString &ipv4Address)
+//{
+//    if (m_isStop) {
+//        return;
+//    }
+//    bool isConflict = false;
+//    KyIpv4Arping* ipv4Arping = new KyIpv4Arping(m_devName, ipv4Address);
+//    if (ipv4Arping->ipv4ConflictCheck() >= 0) {
+//        isConflict =  ipv4Arping->ipv4IsConflict();
+//    } else {
+//        qWarning() << "checkIpv4Conflict internal error";
+//    }
 
-    delete ipv4Arping;
-    ipv4Arping = nullptr;
-    Q_EMIT ipv4IsConflict(isConflict);
-}
+//    delete ipv4Arping;
+//    ipv4Arping = nullptr;
+//    Q_EMIT ipv4IsConflict(isConflict);
+//}
 
-void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
-{
-    if (m_isStop) {
-        return;
-    }
-    bool isConflict = false;
-    KyIpv6Arping* ipv6rping = new KyIpv6Arping(m_devName, ipv6Address);
+//void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
+//{
+//    if (m_isStop) {
+//        return;
+//    }
+//    bool isConflict = false;
+//    KyIpv6Arping* ipv6rping = new KyIpv6Arping(m_devName, ipv6Address);
 
-    if (ipv6rping->ipv6ConflictCheck() >= 0) {
-        isConflict =  ipv6rping->ipv6IsConflict();
-    } else {
-        qWarning() << "checkIpv6Conflict internal error";
-    }
+//    if (ipv6rping->ipv6ConflictCheck() >= 0) {
+//        isConflict =  ipv6rping->ipv6IsConflict();
+//    } else {
+//        qWarning() << "checkIpv6Conflict internal error";
+//    }
 
-    delete ipv6rping;
-    ipv6rping = nullptr;
-    Q_EMIT ipv6IsConflict(isConflict);
-}
+//    delete ipv6rping;
+//    ipv6rping = nullptr;
+//    Q_EMIT ipv6IsConflict(isConflict);
+//}

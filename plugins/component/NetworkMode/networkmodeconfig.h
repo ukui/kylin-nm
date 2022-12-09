@@ -17,31 +17,35 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-#ifndef DetailWidget_H
-#define DetailWidget_H
+#ifndef NETWORKMODECONFIG_H
+#define NETWORKMODECONFIG_H
 
-#include <QWidget>
-#include <QLabel>
-#include <QHBoxLayout>
-#include <../component/FixLabel/fixlabel.h>
+#include <QObject>
+#include <QDBusInterface>
+#include <QDBusReply>
 
-class DetailWidget : public QWidget
+enum network_mode {
+    KSC_FIREWALL_PUBLIC = 0,
+    KSC_FIREWALL_PRIVATE
+};
+
+class NetworkModeConfig : public QObject
 {
     Q_OBJECT
 public:
-    explicit DetailWidget(QWidget *valueWidget = nullptr, QWidget *parent = nullptr, QWidget *buttonWidget = nullptr);
-    ~DetailWidget();
+    static NetworkModeConfig *getInstance();
+    //安全中心-获取网络模式配置
+    int getNetworkModeConfig(QString uuid);
+    //安全中心-设置网络模式配置
+    void setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode);
+    //安全中心-解除连接（用于防火墙处从正在使用的网络中删除）
+    int breakNetworkConnect(QString uuid, QString cardName, QString ssid);
 
-    void setKey(const QString &keyLabel);
+    static NetworkModeConfig *m_netModeInstance;
 
 private:
-    QHBoxLayout *m_mainLayout = nullptr;
-    FixLabel    *m_keyLabel = nullptr;
-    QWidget     *m_valueWidget = nullptr;
-    QWidget     *m_copyButton;
-
-    void initUI();
-
+    explicit NetworkModeConfig(QObject *parent = nullptr);
+    QDBusInterface *m_dbusInterface = nullptr;
 };
 
-#endif // DetailWidget_H
+#endif // NETWORKMODECONFIG_H

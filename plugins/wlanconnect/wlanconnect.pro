@@ -1,4 +1,4 @@
-QT       += widgets network dbus gui core
+QT       += widgets network dbus gui core KWindowSystem
 TEMPLATE = lib
 CONFIG += plugin
 
@@ -7,6 +7,10 @@ include(../component/divider.pri)
 include(../component/deviceframe.pri)
 include(../component/RadioItemButton.pri)
 include(../component/fixlabel.pri)
+include(../component/listitemedit.pri)
+include(../component/pages.pri)
+include(../component/kylinarping.pri)
+include(../component/networkmode.pri)
 include(hiddenwifi/hiddenwifi.pri)
 
 TARGET = $$qtLibraryTarget(wlanconnect)

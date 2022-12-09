@@ -26,6 +26,8 @@
 #include <QDir>
 #include <QDebug>
 #include <QtAlgorithms>
+#include <kwindowsystem.h>
+#include <kwindowsystem_export.h>
 
 #define SCANTIMER  20 * 1000
 #define UPDATETIMER 10 * 1000
@@ -53,6 +55,7 @@ const QString IsApConnection    = "1";
 #define TITLE_LAYOUT_MARGINS 24,0,24,0
 #define WIDGET_WIDTH 420
 #define WIDGET_HEIGHT 436
+#define LOG_FLAG "[WlanConnect]"
 
 bool intThan(int sign1, int sign2)
 {
@@ -86,6 +89,7 @@ WlanConnect::WlanConnect() :  m_firstLoad(true)
     qRegisterMetaType<QList<KyWirelessNetItem>>("QList<KyWirelessNetItem>");
     qRegisterMetaType<KyEapMethodPeapInfo>("KyEapMethodPeapInfo");
     qRegisterMetaType<KyEapMethodTtlsInfo>("KyEapMethodTtlsInfo");
+    qRegisterMetaType<KyConnectState>("KyConnectState");
 
     QLocale local;
     QString locale = local.name();
@@ -299,6 +303,7 @@ void WlanConnect::initComponent() {
         runExternalApp();
     });
 
+    m_wlanDetailPagePtrMap.clear();
 }
 
 void WlanConnect::initConnect()
@@ -324,6 +329,11 @@ void WlanConnect::initConnect()
     connect(this,&WlanConnect::addAndActivateNormalWifi, manager, &KyNetworkManager::onAddAndActivateNormalWifi);
     connect(this, &WlanConnect::setWirelessNetworkEnabled, manager, &KyNetworkManager::onSetWirelessNetworkEnabled);
     connect(this, &WlanConnect::deleteConnect, manager, &KyNetworkManager::onDeleteConnect);
+
+    connect(manager, &KyNetworkManager::wirelessStateChange, this, &WlanConnect::updateNetworkModeState);
+    connect(manager, &KyNetworkManager::wirelessStateChange, this, [=](QString deviceName, QString ssid, QString uuid, KyConnectState status) {
+        Q_EMIT connectStateChanged(uuid, status);
+    });
 
     //定时20s扫描
     m_scanTimer = new QTimer(this);
@@ -637,6 +647,10 @@ void WlanConnect::initNetListFromDevice(QString deviceName)
     manager->getActiveConnectionList(deviceName, CONNECT_TYPE_WIRELESS, activateList);
     if (activateList.size() != 0) {
         onActiveConnectionChanged(deviceName,activateList.at(0).m_ssid, activateList.at(0).m_uuid, activateList.at(0).m_connStatus);
+
+        for (KyActivateItem item : activateList) {
+            initActiveNetworkMode(deviceName, item);
+        }
     }
 }
 
@@ -782,6 +796,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, KyWirele
 
     connect(wlanItem, &WlanItem::infoButtonClick, this, [=]{
         //todo 详情页
+        showWlanDetailPage(deviceName, wlanInfo.m_NetSsid, wlanInfo.m_connectUuid, wlanItem->getStatus());
     });
 
     connect(wlanItem, &WlanItem::itemClick, this, [=] {
@@ -969,5 +984,78 @@ void WlanConnect::setOtherItemExpandedFalse(QString devName, QString ssid)
                 }
             }
         }
+    }
+}
+
+void WlanConnect::showWlanDetailPage(QString deviceName, QString connName, QString connUuid, bool isActivated)
+{
+    qDebug()<< LOG_FLAG << "the info button of lan is clicked! uuid = "
+            << connUuid << "; name = " << connName
+            << "." <<Q_FUNC_INFO << __LINE__;
+
+    if (m_wlanDetailPagePtrMap.contains(connUuid)) {
+        if (m_wlanDetailPagePtrMap[connUuid] != nullptr) {
+            KWindowSystem::raiseWindow(m_wlanDetailPagePtrMap[connUuid]->winId());
+            return;
+        }
+    }
+    NetDetail *netDetail = new NetDetail(deviceName, connName, connUuid, isActivated, true, false);
+    connect(netDetail, &NetDetail::detailPageClose, [&](QString connUuid){
+        if (m_wlanDetailPagePtrMap.contains(connUuid)) {
+            m_wlanDetailPagePtrMap[connUuid] = nullptr;
+        }
+    });
+    m_wlanDetailPagePtrMap.insert(connUuid, netDetail);
+    netDetail->show();
+}
+
+void WlanConnect::initActiveNetworkMode(QString deviceName, KyActivateItem activeItem)
+{
+    int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(activeItem.m_uuid);
+    if (configType == -1) {
+        NetworkModeConfig::getInstance()->setNetworkModeConfig(activeItem.m_uuid,
+                                                               deviceName,
+                                                               activeItem.m_connName,
+                                                               KSC_FIREWALL_PUBLIC);
+    } else {
+        NetworkModeConfig::getInstance()->setNetworkModeConfig(activeItem.m_uuid,
+                                                               deviceName,
+                                                               activeItem.m_connName,
+                                                               configType);
+    }
+}
+
+void WlanConnect::updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status)
+{
+      if (status == CONNECT_STATE_ACTIVATED) {
+        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
+        if (configType == -1) {
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC); //默认公有配置
+            FirewallDialog *fireWallDialog = new FirewallDialog(); //弹窗 供用户配置
+            fireWallDialog->setUuid(uuid);
+            fireWallDialog->setWindowTitle(ssid);
+
+            connect(fireWallDialog, &FirewallDialog::setPrivateNetMode, this, [=](){
+                fireWallDialog->hide();
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
+            });
+
+            connect(fireWallDialog, &FirewallDialog::setPublicNetMode, this, [=](){
+                fireWallDialog->hide();
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
+            });
+
+            connect(this, &WlanConnect::connectStateChanged, fireWallDialog, &FirewallDialog::closeMyself);
+
+            fireWallDialog->show();
+            fireWallDialog->centerToScreen();
+
+        } else if (configType == KSC_FIREWALL_PUBLIC) {
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
+        } else if (configType == KSC_FIREWALL_PRIVATE) {
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
+        }
+    } else if (status == CONNECT_STATE_DEACTIVATED) {
+        NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, deviceName, ssid);
     }
 }

@@ -310,7 +310,7 @@ void SecurityPage::initConnect()
 
 void SecurityPage::setSecurity(KySecuType index)
 {
-    secuTypeCombox->setCurrentIndex(index);
+    secuTypeCombox->setCurrentIndex(index - 1);
     onSecuTypeComboxIndexChanged();
 }
 

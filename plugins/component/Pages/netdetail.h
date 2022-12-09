@@ -49,6 +49,7 @@
 #include "coninfo.h"
 #include "kwidget.h"
 #include "ktabbar.h"
+#include <kylin-nm/kylinnetworkmanager.h>
 
 using namespace kdk;
 
@@ -83,12 +84,12 @@ private:
     volatile bool m_isStop;
 
 public Q_SLOTS:
-    void checkIpv4ConflictThread(const QString &ipv4Address);
-    void checkIpv6ConflictThread(const QString &ipv6Address);
+//    void checkIpv4ConflictThread(const QString &ipv4Address);
+//    void checkIpv6ConflictThread(const QString &ipv6Address);
 
 Q_SIGNALS:
-    bool ipv4IsConflict(bool isConflict);
-    bool ipv6IsConflict(bool isConflict);
+//    bool ipv4IsConflict(bool isConflict);
+//    bool ipv6IsConflict(bool isConflict);
 };
 
 class NetDetail : public QWidget
@@ -115,6 +116,17 @@ private:
 
     void setConfirmEnable();
 
+    //详情ssid 带宽 物理地址 无线额外(安全性 频带 通道)
+    void getBaseInfo(KyDetailInfo &detailInfo, ConInfo &conInfo);
+    //详情ipv4 ipv6 ipv4Dns
+    void getDynamicIpInfo(KyConnectSetting &connectSetting, ConInfo &conInfo);
+
+    bool createWiredConnect();
+    bool updateConnect();
+    bool checkWirelessSecurity(KySecuType secuType);
+    void updateWirelessPersonalConnect();
+    void updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType);
+
     void showDesktopNotify(const QString &message, QString soundName);
 
     void setNetdetailSomeEnable(bool on);
@@ -122,12 +134,6 @@ private:
     void setNetTabToolTip();
 
 private:
-    KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
-    KyConnectOperation* m_connectOperation = nullptr;
-    KyWirelessConnectOperation *m_wirelessConnOpration = nullptr;
-    KyWiredConnectOperation *m_wiredConnOperation = nullptr;
-    KyWirelessNetResource *m_resource = nullptr;
-
     QStackedWidget * stackWidget;
 
     DetailPage     * detailPage;
@@ -148,7 +154,7 @@ private:
     QPushButton  * confimBtn;
 
     QFrame       * pageFrame;
-    NetTabBar      *m_netTabBar = nullptr;
+    NetTabBar    *m_netTabBar = nullptr;
 
     QString      m_name;
     QString      m_uuid;
@@ -171,20 +177,39 @@ private:
     ThreadObject *m_object;
     QThread *m_objectThread;
 
+    KyNetworkManager* m_manager;
+    QThread*          m_thread;
+    KyDetailInfo      m_detailInfo;
+    KyConnectSetting  m_connectSetting;
+    KyWpaPasswordInfo m_pwdInfo;
+
 private Q_SLOTS:
-    void on_btnConfirm_clicked();
-    void on_btnForget_clicked();
+    void onBtnConfirmClicked();
+    void onBtnForgetClicked();
     void onPaletteChanged();
 
 protected Q_SLOTS:
     void currentRowChangeSlot(int row);
 
 Q_SIGNALS:
-    void detailPageClose(bool on);
+    void detailPageClose(QString);
     void createPageClose(QString);
     void currentChanged(int);
     void checkCurrentIpv4Conflict(const QString &address);
     void checkCurrentIpv6Conflict(const QString &address);
+    void deleteConnect(QString uuid);
+    void sigCreateWiredConnect(KyConnectSetting connectSettingsInfo);
+    //Ipv4/Ipv6修改
+    void sigUpdateIpv4AndIpv6SettingInfo(const QString &uuid, const KyConnectSetting &connectSettingsInfo);
+    //连接修改(安全改为个人/None)
+    void sigUpdateWirelessPersonalConnect(const QString &uuid, const KyWirelessConnectSetting &connSettingInfo, bool bPwdChange);
+    //连接修改(安全改为改为企业)
+    void sigUpdateWirelessEnterPriseTlsConnect(const QString &uuid, const KyEapMethodTlsInfo &tlsinfo);
+    void sigUpdateWirelessEnterPrisePeapConnect(const QString &uuid, const KyEapMethodPeapInfo &peapInfo);
+    void sigUpdateWirelessEnterPriseTtlsConnect(const QString &uuid, const KyEapMethodTtlsInfo &ttlsInfo);
+
+    void sigActivateConnection(const QString connectUuid, const QString deviceName);
+    void sigWirelessAutoConnectStateChanged(const QString &uuid, bool bAutoConnect);
 };
 
 #endif // NETDETAIL_H

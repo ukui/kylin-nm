@@ -65,7 +65,7 @@ void ConfigPage::initUi()
                                "it is suitable for networks in public places, such as airports or coffee shops, etc."));
     m_publicLabel->setWordWrap(true);
     //专用 网络中的设备可发现此电脑。一般情况下适用于家庭或工作单位的网络，您认识并信任网络上的个人和设备。
-    m_privateLabel->setText(tr("Devices on the network can discover this computer. Generally applicable to a network "
+    m_privateLabel->setText(tr("Private Devices on the network can discover this computer. Generally applicable to a network "
                                 "at home or work where you know and trust the individuals and devices on the network."));
     m_privateLabel->setWordWrap(true);
     //配置防火墙和安全设置

@@ -10,7 +10,7 @@
 #include <QLineEdit>
 #include <QDialog>
 
-//#include "coninfo.h"
+#include "../component/Pages/coninfo.h"
 #include "kwidget.h"
 #include "kpasswordedit.h"
 #include "kdialog.h"
@@ -18,7 +18,7 @@
 #include "kylin-nm/depend/kyenterpricesettinginfo.h"
 
 using namespace kdk;
-
+#if 0
 // ------------------------"coninfo.h"------------------------------
 enum PeapInnerType
 {
@@ -56,7 +56,7 @@ protected:
 };
 
 // ------------------------------------------------------
-
+#endif
 class LogHintDialog : public KDialog
 {
     Q_OBJECT

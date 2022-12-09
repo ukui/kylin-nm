@@ -26,6 +26,8 @@
 #include <QDir>
 #include <QDebug>
 #include <QtAlgorithms>
+#include <kwindowsystem.h>
+#include <kwindowsystem_export.h>
 
 const QString KLanSymbolic      = "network-wired-connected-symbolic";
 const QString NoNetSymbolic     = "network-wired-disconnected-symbolic";
@@ -37,6 +39,7 @@ const QString NoNetSymbolic     = "network-wired-disconnected-symbolic";
 #define TITLE_LAYOUT_MARGINS 24,0,24,0
 #define WIDGET_WIDTH 420
 #define WIDGET_HEIGHT 436
+#define LOG_FLAG "[NetConnect]"
 
 const QString    KEY_WIRED_SWITCH             = "wiredswitch";
 
@@ -223,6 +226,8 @@ void NetConnect::initComponent() {
         Q_UNUSED(checked)
         runExternalApp();
     });
+
+    m_lanDetailPagePtrMap.clear();
 }
 
 void NetConnect::initConnect()
@@ -251,6 +256,15 @@ void NetConnect::initConnect()
     connect(this, &NetConnect::deleteConnect, manager, &KyNetworkManager::onDeleteConnect);
     connect(this, &NetConnect::updateIpv4AndIpv6SettingInfo, manager, &KyNetworkManager::onUpdateIpv4AndIpv6SettingInfo);
     connect(this, &NetConnect::createWiredConnect, manager, &KyNetworkManager::onCreateWiredConnect);
+
+    connect(manager, &KyNetworkManager::wiredStateChange, this, [=](QString deviceName, QString uuid, KyConnectState status) {
+        KyConnectSetting connectSetting;
+        manager->getConnectIpInfo(uuid, connectSetting);
+        updateNetworkModeState(deviceName, connectSetting.m_connectName, uuid, status);
+    });
+    connect(manager, &KyNetworkManager::wiredStateChange, this, [=](QString deviceName, QString uuid, KyConnectState status) {
+        Q_EMIT connectStateChanged(uuid, status);
+    });
 }
 //获取网卡列表
 void NetConnect::getDeviceStatusMap(QMap<QString, bool> &map)
@@ -433,6 +447,10 @@ void NetConnect::initNetListFromDevice(QString deviceName)
     manager->getActiveConnectionList(deviceName, CONNECT_TYPE_WIRED, activateList);
     if (activateList.size() != 0) {
         onActiveConnectionChanged(deviceName, activateList.at(0).m_uuid, activateList.at(0).m_connStatus);
+
+        for (KyActivateItem item : activateList) {
+            initActiveNetworkMode(deviceName, item);
+        }
     }
 }
 
@@ -454,6 +472,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, KyWiredItem item)
 
     //todo show detail page
     connect(lanItem, &LanItem::infoButtonClick, this, [=]{
+        showLanDetailPage(devName, item.m_connectName, item.m_connectUuid, lanItem->getStatus());
     });
 
     lanItem->setStatus(false);
@@ -654,6 +673,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     // todo open landetail page
     if (!m_isSimpleMode) {
         connect(lanItem, &LanItem::infoButtonClick, this, [=]{
+            showLanDetailPage(deviceName, connName, connUuid, lanItem->getStatus());
         });
     }
 
@@ -778,6 +798,33 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, KyConnectState
     }
 }
 
+void NetConnect::showLanDetailPage(QString deviceName, QString connName, QString connUuid, bool isActivated)
+{
+    if (connUuid.isEmpty()) {
+        qDebug() << LOG_FLAG << "connect is empty, so can not show detail info.";
+        return;
+    }
+
+    qDebug()<< LOG_FLAG << "the info button of lan is clicked! uuid = "
+            << connUuid << "; name = " << connName
+            << "." <<Q_FUNC_INFO << __LINE__;
+
+    if (m_lanDetailPagePtrMap.contains(connUuid)) {
+        if (m_lanDetailPagePtrMap[connUuid] != nullptr) {
+            KWindowSystem::raiseWindow(m_lanDetailPagePtrMap[connUuid]->winId());
+            return;
+        }
+    }
+    NetDetail *netDetail = new NetDetail(deviceName, connName, connUuid, isActivated, false, false);
+    connect(netDetail, &NetDetail::detailPageClose, [&](QString connUuid){
+        if (m_lanDetailPagePtrMap.contains(connUuid)) {
+            m_lanDetailPagePtrMap[connUuid] = nullptr;
+        }
+    });
+    m_lanDetailPagePtrMap.insert(connUuid, netDetail);
+    netDetail->show();
+}
+
 int NetConnect::getInsertPos(QString connName, QVBoxLayout* layout)
 {
 //    qDebug() << "[NetConnect]getInsertPos" << connName << deviceName;
@@ -866,4 +913,56 @@ void NetConnect::onDeviceRemove(QString deviceName)
     }
     removeDeviceFrame(deviceName);
     setSwitchStatus();
+}
+
+void NetConnect::initActiveNetworkMode(QString deviceName, KyActivateItem activeItem)
+{
+    int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(activeItem.m_uuid);
+    if (configType == -1) {
+        NetworkModeConfig::getInstance()->setNetworkModeConfig(activeItem.m_uuid,
+                                                               deviceName,
+                                                               activeItem.m_connName,
+                                                               KSC_FIREWALL_PUBLIC);
+    } else {
+        NetworkModeConfig::getInstance()->setNetworkModeConfig(activeItem.m_uuid,
+                                                               deviceName,
+                                                               activeItem.m_connName,
+                                                               configType);
+    }
+}
+
+
+void NetConnect::updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status)
+{
+    if (status == CONNECT_STATE_ACTIVATED) {
+      int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
+      if (configType == -1) {
+          NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC); //默认公有配置
+          FirewallDialog *fireWallDialog = new FirewallDialog(); //弹窗 供用户配置
+          fireWallDialog->setUuid(uuid);
+          fireWallDialog->setWindowTitle(ssid);
+
+          connect(fireWallDialog, &FirewallDialog::setPrivateNetMode, this, [=](){
+              fireWallDialog->hide();
+              NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
+          });
+
+          connect(fireWallDialog, &FirewallDialog::setPublicNetMode, this, [=](){
+              fireWallDialog->hide();
+              NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
+          });
+
+          connect(this, &NetConnect::connectStateChanged, fireWallDialog, &FirewallDialog::closeMyself);
+
+          fireWallDialog->show();
+          fireWallDialog->centerToScreen();
+
+      } else if (configType == KSC_FIREWALL_PUBLIC) {
+          NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
+      } else if (configType == KSC_FIREWALL_PRIVATE) {
+          NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
+      }
+  } else if (status == CONNECT_STATE_DEACTIVATED) {
+      NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, deviceName, ssid);
+  }
 }

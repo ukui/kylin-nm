@@ -2,7 +2,7 @@
 #include <QPainter>
 
 #define  WINDOW_WIDTH  480
-#define  MIN_WINDOW_HEIGHT  328
+#define  MIN_WINDOW_HEIGHT  332
 #define  PEAP_WINDOW_HEIGHT  494
 #define  MAX_WINDOW_HEIGHT  540
 #define  PAGE_LAYOUT_MARGINS  0,0,0,0
@@ -14,9 +14,11 @@
 #define  PSK_SCRO_HEIGHT  182
 #define  PEAP_SCRO_HEIGHT  348
 #define  TLS_SCRO_HEIGHT  540
+#define  MEDIUM_WEIGHT_VALUE  57
 
-HiddenWiFiPage::HiddenWiFiPage(QString interface, bool isLockScreen, QWidget *parent)
+HiddenWiFiPage::HiddenWiFiPage(QString interface, bool isSimple, QWidget *parent)
     : m_deviceName(interface),
+      m_isSimple(isSimple),
       QWidget(parent)
 {
     initUI();
@@ -25,10 +27,12 @@ HiddenWiFiPage::HiddenWiFiPage(QString interface, bool isLockScreen, QWidget *pa
     setFixedWidth(WINDOW_WIDTH);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    if (isLockScreen) {
+    if (m_isSimple) {
         setAttribute(Qt::WA_TranslucentBackground);//设置窗口背景透明
         setWindowFlags(Qt::FramelessWindowHint);   //设置无边框窗口
         setWindowFlags(Qt::Popup);
+    } else {
+        setWindowFlag(Qt::Window);
     }
 
     setJoinBtnEnable();
@@ -48,16 +52,21 @@ void HiddenWiFiPage::getSecuType(KySecuType &secuType)
 void HiddenWiFiPage::paintEvent(QPaintEvent *event)
 {
     QPalette pal = qApp->palette();
-    QColor colorPal = pal.color(QPalette::Background);
-
-    //设置窗体为圆角
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing); // 反锯齿;
-    painter.setBrush(colorPal);
-    painter.setPen(Qt::transparent);
-    auto rect = this->rect();
-    painter.drawRoundedRect(rect, 12, 12);      //窗口圆角
 
+    if (m_isSimple) {
+        //设置窗体为圆角
+        QColor colorPal = pal.color(QPalette::Background);
+        painter.setRenderHint(QPainter::Antialiasing); // 反锯齿;
+        painter.setBrush(colorPal);
+        painter.setPen(Qt::transparent);
+        auto rect = this->rect();
+        painter.drawRoundedRect(rect, 12, 12); // 窗口圆角
+    } else {
+        painter.setBrush(pal.color(QPalette::Base));
+        painter.drawRect(this->rect());
+        painter.fillRect(rect(), QBrush(pal.color(QPalette::Base)));
+    }
     return QWidget::paintEvent(event);
 }
 
@@ -80,7 +89,8 @@ void HiddenWiFiPage::initUI()
     m_secuWidget = new EntSecurityWidget(true, this);
 
     m_descriptionLabel = new QLabel(this);
-    m_nameLabel = new QLabel(this);
+    m_nameLabel = new FixLabel(this);
+    m_nameLabel->setFixedWidth(LABEL_MIN_WIDTH);
     m_secuTypeLabel = new QLabel(this);
     m_pwdLabel = new QLabel(this);
     m_emptyLabel = new QLabel(this);
@@ -92,13 +102,11 @@ void HiddenWiFiPage::initUI()
 
     m_rememberCheckBox = new QCheckBox(this);
     m_bottomDivider = new Divider(this);
-//    m_showListBtn = new KBorderlessButton(this);
     m_cancelBtn =new QPushButton(this);
     m_joinBtn =new QPushButton(this);
 
     m_scrollArea = new QScrollArea(this);
     m_scrollArea->setFrameShape(QFrame::NoFrame);
-    m_scrollArea->setWidget(m_centerWidget);
     m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 //    m_scrollArea->setStyleSheet("QWidget{border:1px solid rgba(255,0,0,1);}");//测试用
 
@@ -150,12 +158,19 @@ void HiddenWiFiPage::initUI()
     m_centerVBoxLayout->addWidget(m_secuWidget);
     m_centerVBoxLayout->addWidget(checkWidget);
     m_centerVBoxLayout->addStretch();
+    m_scrollArea->setWidget(m_centerWidget);
+    m_scrollArea->setWidgetResizable(true);
 
     //底部按钮
     m_bottomLayout = new QHBoxLayout(m_bottomWidget);
     m_bottomLayout->setContentsMargins(BOTTOM_LAYOUT_MARGINS);
     m_bottomLayout->setSpacing(LAYOUT_SPACING);
-//    m_bottomLayout->addWidget(m_showListBtn);
+    if (!m_isSimple) {
+        m_showListBtn = new KBorderlessButton(this);
+        m_showListBtn->setText(tr("Show Network List")); //显示网络列表
+        m_bottomLayout->addWidget(m_showListBtn);
+        connect(m_showListBtn, SIGNAL(clicked()), this, SLOT(onBtnShowListClicked()));
+    }
     m_bottomLayout->addStretch();
     m_bottomLayout->addWidget(m_cancelBtn);
     m_bottomLayout->addWidget(m_joinBtn);
@@ -168,13 +183,12 @@ void HiddenWiFiPage::initUI()
      //请输入您想要加入网络的名称和安全类型
     m_descriptionLabel->setText(tr("Please enter the network name and security type"));
     QFont font = m_descriptionLabel->font();
-    font.setWeight(75);
+    font.setWeight(MEDIUM_WEIGHT_VALUE);
     m_descriptionLabel->setFont(font);
     m_nameLabel->setText(tr("Network name(SSID)")); //网络名(SSID)
     m_secuTypeLabel->setText(tr("Security type")); //安全性
     m_pwdLabel->setText(tr("Password")); //密码
     m_checkLabel->setText(tr("Remember the Network")); //记住该网络
-//    m_showListBtn->setText(tr("Show Network List")); //显示网络列表
     m_cancelBtn->setText(tr("Cancel"));
     m_joinBtn->setText(tr("Join"));
 
@@ -235,7 +249,7 @@ void HiddenWiFiPage::initComponent()
 void HiddenWiFiPage::showNone()
 {
     this->setFixedHeight(MIN_WINDOW_HEIGHT);
-    m_centerWidget->setFixedSize(WINDOW_WIDTH, PSK_SCRO_HEIGHT);
+//    m_centerWidget->setFixedSize(WINDOW_WIDTH, PSK_SCRO_HEIGHT);
     m_secuWidget->hide();
     m_pwdLabel->hide();
     m_pwdEdit->hide();
@@ -246,7 +260,6 @@ void HiddenWiFiPage::showNone()
 void HiddenWiFiPage::showPsk()
 {
     this->setFixedHeight(MIN_WINDOW_HEIGHT);
-    m_centerWidget->setFixedSize(WINDOW_WIDTH, PSK_SCRO_HEIGHT);
 
     m_pwdLabel->show();
     m_pwdEdit->show();
@@ -301,10 +314,8 @@ void HiddenWiFiPage::setWindowWidth(KyEapMethodType eapType)
     int type = eapType;
     if (type == TLS) {
         this->setFixedHeight(MAX_WINDOW_HEIGHT);
-        m_centerWidget->setFixedSize(WINDOW_WIDTH, TLS_SCRO_HEIGHT);
     } else if (type == PEAP || type == TTLS) {
         this->setFixedHeight(PEAP_WINDOW_HEIGHT);
-        m_centerWidget->setFixedSize(WINDOW_WIDTH, PEAP_SCRO_HEIGHT);
     }
 }
 
@@ -360,4 +371,9 @@ void HiddenWiFiPage::onSecuTypeComboxIndexChanged()
         showNone();
     }
     centerToScreen();
+}
+
+void HiddenWiFiPage::onBtnShowListClicked()
+{
+    Q_EMIT showWlanList(1); //WLAN_PAGE_INDEX
 }

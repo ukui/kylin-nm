@@ -19,6 +19,7 @@
 #include "kborderlessbutton.h"
 #include "entsecuritywidget.h"
 #include "kylin-nm/depend/kywirelessconnectoperation.h"
+#include <../component/FixLabel/fixlabel.h>
 
 using namespace kdk;
 
@@ -28,7 +29,7 @@ class HiddenWiFiPage : public QWidget
     Q_OBJECT
 
 public:
-    HiddenWiFiPage(QString interface, bool isLockScreen, QWidget *parent = nullptr);
+    HiddenWiFiPage(QString interface, bool isSimple, QWidget *parent = nullptr);
     ~HiddenWiFiPage();
 
     void getSecuType(KySecuType &secuType);
@@ -57,7 +58,7 @@ private:
     EntSecurityWidget *m_secuWidget;
 
     QLabel *m_descriptionLabel;
-    QLabel *m_nameLabel;
+    FixLabel *m_nameLabel;
     QLabel *m_secuTypeLabel;
     QLabel *m_pwdLabel;
     QLabel *m_emptyLabel;
@@ -70,7 +71,7 @@ private:
     QCheckBox *m_rememberCheckBox = nullptr;
 
     Divider *m_bottomDivider = nullptr;
-//    KBorderlessButton *m_showListBtn;
+    KBorderlessButton *m_showListBtn = nullptr;
     QPushButton *m_cancelBtn;
     QPushButton *m_joinBtn;
 
@@ -82,16 +83,19 @@ private:
 
     bool m_isJoinBtnEnable;
     bool m_isSecuOk = false;
+    bool m_isSimple = true;
 
     QString      m_deviceName;
 
 private Q_SLOTS:
     void on_btnJoin_clicked();
     void onSecuTypeComboxIndexChanged();
+    void onBtnShowListClicked();
 
 Q_SIGNALS:
     void connectHidePeapConnect(KyEapMethodPeapInfo info, KyWirelessConnectSetting connSettingInfo);
     void connectHideTtlsConnect(KyEapMethodTtlsInfo info, KyWirelessConnectSetting connSettingInfo);
     void connectHideNormalConnect(KyWirelessConnectSetting connSettingInfo, KySecuType type);
+    void showWlanList(int type);
 };
 #endif // HIDDENWIFIPAGE_H

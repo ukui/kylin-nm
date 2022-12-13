@@ -50,7 +50,7 @@ public:
     //已激活uuid
     QString uuid = "";
 public Q_SLOTS:
-    void showJoinPage(QWidget *);
+    void showJoinPage(bool, QWidget *);
 private:
     HiddenWiFiPage* joinPage = nullptr;
 

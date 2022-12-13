@@ -96,12 +96,12 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
     connect(addNetItem, &AddNetItem::itemClick, this, &ItemFrame::addNetItemClick);
 }
 
-void ItemFrame::showJoinPage(QWidget *widget)
+void ItemFrame::showJoinPage(bool isSimple, QWidget *widget)
 {
     if (nullptr != joinPage) {
         joinPage->show();
     } else {
-        joinPage = new HiddenWiFiPage(deviceFrame->deviceLabel->text(), true, widget);
+        joinPage = new HiddenWiFiPage(deviceFrame->deviceLabel->text(), isSimple, widget);
         connect(joinPage, &HiddenWiFiPage::destroyed, [=](){
             joinPage->disconnect(this);
             joinPage = nullptr;

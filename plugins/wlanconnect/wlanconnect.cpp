@@ -734,7 +734,7 @@ void WlanConnect::addDeviceFrame(QString devName)
 
     connect(itemFrame, &ItemFrame::addNetItemClick , [=](){
         //加入网络
-        itemFrame->showJoinPage(parentWidget);
+        itemFrame->showJoinPage(m_isSimpleMode, parentWidget);
     });
 
     connect(itemFrame, &ItemFrame::connectHideNormalConnect, manager, &KyNetworkManager::onAddAndActivateNormalWifi);

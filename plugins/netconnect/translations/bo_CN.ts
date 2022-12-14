@@ -47,6 +47,11 @@
         <translation>སྐུད་ཡོད་སྦྲེལ་མཐུད།</translation>
     </message>
     <message>
+        <location filename="../netconnect.cpp" line="81"/>
+        <source>LAN</source>
+        <translation>སྐུད་ཡོད་དྲ་བ།</translation>
+    </message>
+    <message>
         <location filename="../netconnect.cpp" line="177"/>
         <source>No ethernet device avaliable</source>
         <translation>ཨེ་ཙི་དྲ་རྒྱའི་སྒྲིག་ཆས་ལ་བཙན་འཛུལ་བྱས་མི་ཆོག།</translation>

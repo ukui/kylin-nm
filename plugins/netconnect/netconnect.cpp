@@ -515,12 +515,14 @@ void NetConnect::addDeviceFrame(QString devName)
             qDebug() << "[NetConnect]set " << devName << "status" << true;
             itemFrame->lanItemFrame->show();
             itemFrame->deviceFrame->dropDownLabel->show();
+            itemFrame->addLanWidget->show();
             itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(true);
             deviceStatusMap[devName] = true;
         } else {
             qDebug() << "[NetConnect]set " << devName << "status" << false;
             itemFrame->lanItemFrame->hide();
             itemFrame->deviceFrame->dropDownLabel->hide();
+            itemFrame->addLanWidget->hide();
             deviceStatusMap[devName] = false;
         }
     });

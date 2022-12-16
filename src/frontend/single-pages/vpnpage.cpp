@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QScrollBar>
 #include "windowmanager/windowmanager.h"
+#include "ukuistylehelper/ukuistylehelper.h"
 
 
 VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
@@ -649,11 +650,15 @@ void VpnPage::showDetailPage(QString devName, QString uuid)
 void VpnPage::showUI()
 {
     //2209中窗管在hide界面时会刷新属性，需要重新设置无图标属性
-    const KWindowInfo info(this->winId(), NET::WMState);
-    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
-        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+    QString platform = QGuiApplication::platformName();
+    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive)) {
+        const KWindowInfo info(this->winId(), NET::WMState);
+        if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
+            KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+        }
     }
 
+    kdk::UkuiStyleHelper::self()->removeHeader(this);
     resetPageHight();
 
     showNormal();

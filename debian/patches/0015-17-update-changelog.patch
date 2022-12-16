@@ -1,0 +1,773 @@
+From: zhaoshixu <zhaoshixu@kylinos.cn>
+Date: Fri, 16 Dec 2022 04:22:07 +0000
+Subject: !17 update changelog Merge pull request !17 from zhaoshixu/1216-1
+
+---
+ .../dbus-interface/kylinconnectresource.cpp        |  2 +
+ src/backend/dbus-interface/kylinconnectsetting.cpp | 25 +++++------
+ src/backend/dbus-interface/kylinconnectsetting.h   |  6 ++-
+ src/frontend/list-items/vpnlistitem.cpp            | 36 ++-------------
+ src/frontend/mainwindow.cpp                        |  2 +-
+ src/frontend/netdetails/creatnetpage.cpp           | 47 ++-----------------
+ src/frontend/netdetails/detailpage.cpp             |  4 +-
+ src/frontend/netdetails/detailpage.h               |  2 +-
+ src/frontend/netdetails/ipv4page.cpp               | 50 +++++----------------
+ src/frontend/netdetails/ipv6page.cpp               | 52 ++++++----------------
+ src/frontend/netdetails/multiplednswidget.cpp      | 22 +++++----
+ src/frontend/netdetails/multiplednswidget.h        |  3 --
+ src/frontend/netdetails/netdetail.cpp              | 31 +++++++------
+ src/frontend/single-pages/singlepage.cpp           |  1 +
+ src/frontend/single-pages/vpnpage.cpp              | 11 +++--
+ src/frontend/tools/listitemedit.cpp                |  2 -
+ src/frontend/tools/listitemedit.h                  |  3 --
+ src/frontend/vpnobject.cpp                         |  2 +-
+ src/main.cpp                                       |  2 +-
+ 19 files changed, 94 insertions(+), 209 deletions(-)
+
+diff --git a/src/backend/dbus-interface/kylinconnectresource.cpp b/src/backend/dbus-interface/kylinconnectresource.cpp
+index a2d02a3..6f52488 100644
+--- a/src/backend/dbus-interface/kylinconnectresource.cpp
++++ b/src/backend/dbus-interface/kylinconnectresource.cpp
+@@ -386,6 +386,7 @@ void KyConnectResourse::getIpv4ConnectSetting(
+ {
+     if (NetworkManager::Ipv4Setting::Automatic == ipv4Setting->method()) {
+         connectSetting.m_ipv4ConfigIpType = CONFIG_IP_DHCP;
++        connectSetting.m_ipv4Dns = ipv4Setting->dns();
+         return;
+     }
+ 
+@@ -404,6 +405,7 @@ void KyConnectResourse::getIpv6ConnectSetting(
+ 
+     if (NetworkManager::Ipv6Setting::Automatic == ipv6Setting->method()) {
+         connectSetting.m_ipv6ConfigIpType = CONFIG_IP_DHCP;
++        connectSetting.m_ipv6Dns = ipv6Setting->dns();
+         return;
+     }
+ 
+diff --git a/src/backend/dbus-interface/kylinconnectsetting.cpp b/src/backend/dbus-interface/kylinconnectsetting.cpp
+index 88aeb57..f77c74a 100644
+--- a/src/backend/dbus-interface/kylinconnectsetting.cpp
++++ b/src/backend/dbus-interface/kylinconnectsetting.cpp
+@@ -69,7 +69,7 @@ int KyConnectSetting::setIpConfigType(KyIpAddressType ipType, KyIpConfigType ipC
+ 
+     return 0;
+ }
+-void KyConnectSetting::ipv4AddressConstruct(QString &ipv4Address, QString &ipv4NetMask, QString &ipv4GateWay, QStringList &ipv4Dns)
++void KyConnectSetting::ipv4AddressConstruct(QString &ipv4Address, QString &ipv4NetMask, QString &ipv4GateWay)
+ {
+     qDebug()<<"ipv4 address"<<ipv4Address << ipv4NetMask << ipv4GateWay;
+     NetworkManager::IpAddress  nmIpv4Address;
+@@ -79,15 +79,9 @@ void KyConnectSetting::ipv4AddressConstruct(QString &ipv4Address, QString &ipv4N
+     m_ipv4Address.clear();
+     m_ipv4Address << nmIpv4Address;
+ 
+-    m_ipv4Dns.clear();
+-    for (int index = 0; index < ipv4Dns.size(); ++index) {
+-        qDebug()<<"dns"<<ipv4Dns[index];
+-        m_ipv4Dns << QHostAddress(ipv4Dns[index]);
+-    }
+-
+     return ;
+ }
+-void KyConnectSetting::ipv6AddressConstruct(QString &ipv6Address, QString &ipv6NetMask, QString &ipv6GateWay, QStringList &ipv6Dns)
++void KyConnectSetting::ipv6AddressConstruct(QString &ipv6Address, QString &ipv6NetMask, QString &ipv6GateWay)
+ {
+     NetworkManager::IpAddress  nmIpv6Address;
+     nmIpv6Address.setIp(QHostAddress(ipv6Address));
+@@ -96,14 +90,19 @@ void KyConnectSetting::ipv6AddressConstruct(QString &ipv6Address, QString &ipv6N
+     m_ipv6Address.clear();
+     m_ipv6Address << nmIpv6Address;
+ 
+-    m_ipv6Dns.clear();
+-    for (int index = 0; index < ipv6Dns.size(); index++) {
+-        m_ipv6Dns << QHostAddress(ipv6Dns[index]);
+-    }
+-
+     return ;
+ }
+ 
++void KyConnectSetting::ipv4DnsConstruct(QList<QHostAddress> &ipv4DnsList)
++{
++    m_ipv4Dns = ipv4DnsList;
++}
++
++void KyConnectSetting::ipv6DnsConstruct(QList<QHostAddress> &ipv6DnsList)
++{
++    m_ipv6Dns = ipv6DnsList;
++}
++
+ void KyConnectSetting::dumpInfo()
+ {
+     qDebug()<<"connect setting info:";
+diff --git a/src/backend/dbus-interface/kylinconnectsetting.h b/src/backend/dbus-interface/kylinconnectsetting.h
+index f2e967e..c8ae8f8 100644
+--- a/src/backend/dbus-interface/kylinconnectsetting.h
++++ b/src/backend/dbus-interface/kylinconnectsetting.h
+@@ -50,8 +50,10 @@ public:
+     void setIfaceName(QString &ifaceName);
+     void setConnectName(QString &connectName);
+     int  setIpConfigType(KyIpAddressType ipType, KyIpConfigType configType);
+-    void ipv4AddressConstruct(QString &ipv4Address, QString &ipv4NetMask, QString &ipv4GateWay, QStringList &ipv4Dns);
+-    void ipv6AddressConstruct(QString &ipv6Address, QString &ipv6NetMask, QString &ipv6GateWay, QStringList &ipv6Dns);
++    void ipv4AddressConstruct(QString &ipv4Address, QString &ipv4NetMask, QString &ipv4GateWay);
++    void ipv6AddressConstruct(QString &ipv6Address, QString &ipv6NetMask, QString &ipv6GateWay);
++    void ipv4DnsConstruct(QList<QHostAddress> &ipv4DnsList);
++    void ipv6DnsConstruct(QList<QHostAddress> &ipv6DnsList);
+     void dumpInfo();
+ 
+ public:
+diff --git a/src/frontend/list-items/vpnlistitem.cpp b/src/frontend/list-items/vpnlistitem.cpp
+index 39de84b..af22639 100644
+--- a/src/frontend/list-items/vpnlistitem.cpp
++++ b/src/frontend/list-items/vpnlistitem.cpp
+@@ -26,7 +26,6 @@
+ 
+ VpnListItem::VpnListItem(const KyConnectItem *lanConnectItem, QWidget *parent):ListItem(parent)
+ {
+-    m_infoButton->setVisible(false);
+     m_connectOperation = new KyWiredConnectOperation(this);
+     m_deviceResource = new KyNetworkDeviceResourse(this);
+ 
+@@ -166,37 +165,10 @@ void VpnListItem::onMenuTriggered(QAction *action)
+ 
+ void VpnListItem::onInfoButtonClicked()
+ {
+-//    if (m_vpnConnectItem.m_connectUuid.isEmpty()) {
+-//        qDebug() << LOG_FLAG << "connect is empty, so can not show detail info.";
+-//        return;
+-//    }
+-
+-//    if(netDetail != nullptr){
+-//        netDetail->activateWindow();
+-//        return;
+-//    }
+-
+-//    qDebug()<< LOG_FLAG << "the info button of lan is clicked! uuid = "
+-//            << m_vpnConnectItem.m_connectUuid << "; name = " << m_vpnConnectItem.m_connectName
+-//            << "." <<Q_FUNC_INFO << __LINE__;
+-
+-//    bool isActivated = false;
+-//    if (Activated == m_vpnConnectItem.m_connectState) {
+-//        isActivated = true;
+-//    }
+-
+-//    netDetail = new NetDetail(m_deviceName, m_vpnConnectItem.m_connectName,
+-//                                         m_vpnConnectItem.m_connectUuid, isActivated,false, false);
+-
+-//    connect(netDetail, &NetDetail::destroyed, [&](){
+-//        if (netDetail != nullptr) {
+-//            netDetail = nullptr;
+-//        }
+-//    });
+-
+-//    netDetail->show();
+-//    Q_EMIT this->detailShow(true);
+-
++    //openKylin 优先做出infoButton功能，等自研详情页面做好后合入
++    QString cmd = "nm-connection-editor";
++    QProcess process(this);
++    process.startDetached(cmd);
+     return;
+ }
+ 
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index ef4e98f..496d26b 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -241,7 +241,7 @@ void MainWindow::initUI()
+     m_centralWidget = new QTabWidget(this);
+     this->setCentralWidget(m_centralWidget);
+     m_centralWidget->tabBar()->setFixedWidth(this->width()+1);
+-//    m_centralWidget->tabBar()->setStyleSheet("QTabBar::tab{min-height:40px}");
++    m_centralWidget->tabBar()->setProperty("setRadius", 12);
+     m_lanWidget = new LanPage(m_centralWidget);
+     m_wlanWidget = new WlanPage(m_centralWidget);
+     connect(this, &MainWindow::mainWindowVisibleChanged, m_wlanWidget, &WlanPage::onMainWindowVisibleChanged);
+diff --git a/src/frontend/netdetails/creatnetpage.cpp b/src/frontend/netdetails/creatnetpage.cpp
+index 89987a6..f8bbb0d 100644
+--- a/src/frontend/netdetails/creatnetpage.cpp
++++ b/src/frontend/netdetails/creatnetpage.cpp
+@@ -17,24 +17,18 @@ void CreatNetPage::initUI()
+     ipv4addressEdit = new LineEdit(this);
+     netMaskEdit = new LineEdit(this);
+     gateWayEdit = new LineEdit(this);
+-//    firstDnsEdit = new LineEdit(this);
+-//    secondDnsEdit = new LineEdit(this);
+ 
+     m_connNameLabel = new QLabel(this);
+     m_configLabel = new QLabel(this);
+     m_addressLabel = new QLabel(this);
+     m_maskLabel = new QLabel(this);
+     m_gateWayLabel = new QLabel(this);
+-//    m_dnsLabel = new QLabel(this);
+-//    m_secDnsLabel = new QLabel(this);
+ 
+     m_connNameLabel->setText(tr("Connection Name"));
+     m_configLabel->setText(tr("Ipv4Config"));
+     m_addressLabel->setText(tr("Address"));
+     m_maskLabel->setText(tr("Netmask"));
+     m_gateWayLabel->setText(tr("Default Gateway"));
+-//    m_dnsLabel->setText(tr("Prefs DNS"));
+-//    m_secDnsLabel->setText(tr("Alternative DNS"));
+ 
+     // IP的正则格式限制
+     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+@@ -48,8 +42,6 @@ void CreatNetPage::initUI()
+     m_detailLayout->addRow(m_addressLabel,ipv4addressEdit);
+     m_detailLayout->addRow(m_maskLabel,netMaskEdit);
+     m_detailLayout->addRow(m_gateWayLabel,gateWayEdit);
+-//    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
+-//    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
+     m_detailLayout->addRow(m_dnsWidget);
+ 
+     ipv4ConfigCombox->addItem(tr("Auto(DHCP)"), AUTO_CONFIG); //"自动(DHCP)"
+@@ -58,8 +50,6 @@ void CreatNetPage::initUI()
+     ipv4addressEdit->setValidator(new QRegExpValidator(rx, this));
+     gateWayEdit->setValidator(new QRegExpValidator(rx, this));
+     netMaskEdit->setValidator(new QRegExpValidator(rx, this));
+-//    firstDnsEdit->setValidator(new QRegExpValidator(rx, this));
+-//    secondDnsEdit->setValidator(new QRegExpValidator(rx, this));
+ }
+ 
+ void CreatNetPage::initComponent() {
+@@ -74,14 +64,6 @@ void CreatNetPage::initComponent() {
+     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
+     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-//    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-//    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
+-        setCreatePageState(false);
+-    });
+-    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
+-        setCreatePageState(true);
+-    });
+ }
+ 
+ bool CreatNetPage::checkConnectBtnIsEnabled()
+@@ -142,16 +124,11 @@ void CreatNetPage::setLineEnabled(bool check) {
+     ipv4addressEdit->setEnabled(check);
+     netMaskEdit->setEnabled(check);
+     gateWayEdit->setEnabled(check);
+-//    firstDnsEdit->setEnabled(check);
+-//    secondDnsEdit->setEnabled(check);
+-    m_dnsWidget->setEditEnabled(check);
+ 
+     if (!check) {
+         ipv4addressEdit->clear();
+         netMaskEdit->clear();
+         gateWayEdit->clear();
+-//        firstDnsEdit->clear();
+-//        secondDnsEdit->clear();
+ 
+         ipv4addressEdit->setPlaceholderText(" ");
+         netMaskEdit->setPlaceholderText(" ");
+@@ -188,31 +165,13 @@ void CreatNetPage::constructIpv4Info(KyConnectSetting &setting)
+              << " netMask " << netMask
+              << " gateWay " << gateWay;
+ 
+-    QStringList dnsList;
+-    dnsList.clear();
+-#if 0
+-    if (!firstDnsEdit->text().isEmpty()) {
+-        dnsList << firstDnsEdit->text();
+-        if (!secondDnsEdit->text().isEmpty()) {
+-            dnsList << secondDnsEdit->text();
+-        }
+-    }
+-#endif
+-
+     QList<QHostAddress> ipv4dnsList;
+     ipv4dnsList.clear();
+     ipv4dnsList = m_dnsWidget->getDns();
+-    for (QHostAddress str: ipv4dnsList) {
+-        dnsList << str.toString();
+-    }
+-
+-    if (ipv4ConfigCombox->currentData() == AUTO_CONFIG) {
+-        setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
+-    } else {
+-        setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
+-        setting.ipv4AddressConstruct(ipv4address, netMask, gateWay, dnsList);
+-    }
+ 
++    setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
++    setting.ipv4AddressConstruct(ipv4address, netMask, gateWay);
++    setting.ipv4DnsConstruct(ipv4dnsList);
+ }
+ 
+ bool CreatNetPage::netMaskIsValide(QString text)
+diff --git a/src/frontend/netdetails/detailpage.cpp b/src/frontend/netdetails/detailpage.cpp
+index 92c0665..0a9c4c9 100644
+--- a/src/frontend/netdetails/detailpage.cpp
++++ b/src/frontend/netdetails/detailpage.cpp
+@@ -222,7 +222,9 @@ void DetailPage::initUI() {
+     m_ipv4Widget = new DetailWidget(qobject_cast<QWidget *>(m_IPV4), m_listWidget);
+     m_ipv4Widget->setKey(tr("IPV4:"));
+ 
+-    m_IPV4Dns = new QLabel(this);
++    m_IPV4Dns = new FixLabel(this);
++    m_IPV4Dns->setFixedWidth(MAX_LABEL_WIDTH);
++    m_IPV4Dns->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+     m_ipv4DnsWidget = new DetailWidget(qobject_cast<QWidget *>(m_IPV4Dns), m_listWidget);
+     m_ipv4DnsWidget->setKey(tr("IPV4 Dns:"));
+ 
+diff --git a/src/frontend/netdetails/detailpage.h b/src/frontend/netdetails/detailpage.h
+index c706262..913e313 100644
+--- a/src/frontend/netdetails/detailpage.h
++++ b/src/frontend/netdetails/detailpage.h
+@@ -72,7 +72,7 @@ public:
+     QLabel       *m_Chan;
+     QLabel       *m_BandWidth;
+     QLabel       *m_IPV4;
+-    QLabel       *m_IPV4Dns;
++    FixLabel     *m_IPV4Dns;
+     FixLabel     *m_IPV6;
+     QLabel       *m_Mac;
+     QLabel       *m_autoConnect;
+diff --git a/src/frontend/netdetails/ipv4page.cpp b/src/frontend/netdetails/ipv4page.cpp
+index 1468e2d..39d3884 100644
+--- a/src/frontend/netdetails/ipv4page.cpp
++++ b/src/frontend/netdetails/ipv4page.cpp
+@@ -72,14 +72,6 @@ void Ipv4Page::initComponent() {
+     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-//    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-//    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
+-        setIpv4PageState(false);
+-    });
+-    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
+-        setIpv4PageState(true);
+-    });
+ }
+ 
+ void Ipv4Page::setIpv4Config(KyIpConfigType ipv4Config)
+@@ -124,6 +116,15 @@ void Ipv4Page::setGateWay(const QString &gateWay)
+ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
+ {
+     bool isChanged = false;
++    QList<QHostAddress> ipv4DnsList;
++    ipv4DnsList.clear();
++    ipv4DnsList = m_dnsWidget->getDns();
++    if (info.ipv4DnsList != ipv4DnsList) {
++        qDebug() << "ipv4 dns changed";
++        setting.ipv4DnsConstruct(ipv4DnsList);
++        isChanged =  true;
++    }
++
+     if (ipv4ConfigCombox->currentIndex() == AUTO_CONFIG) {
+         if (info.ipv4ConfigType != CONFIG_IP_DHCP) {
+             qDebug() << "ipv4ConfigType change to Auto";
+@@ -131,10 +132,8 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
+             QString ipv4address("");
+             QString netMask("");
+             QString gateWay("");
+-            QStringList dnsList;
+-            dnsList.empty();
+             qDebug() << ipv4address << netMask << gateWay;
+-            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay, dnsList);
++            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay);
+             isChanged = true;
+         }
+     } else {
+@@ -145,37 +144,17 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
+         }
+         qDebug() << "ipv4 netmask " << getNetMaskText(netMaskEdit->text());
+ 
+-        QList<QHostAddress> ipv4dnsList;
+-        ipv4dnsList.clear();
+-        ipv4dnsList = m_dnsWidget->getDns();
+-
+         if(info.strIPV4Address != ipv4addressEdit->text()
+                 || info.strIPV4NetMask != /*netMaskEdit->text()*/getNetMaskText(netMaskEdit->text())
+-                || info.strIPV4GateWay != gateWayEdit->text()
+-                //                || info.strIPV4FirDns  != firstDnsEdit->text()
+-                //                || info.strIPV4SecDns  != secondDnsEdit->text()
+-                || info.ipv4DnsList != ipv4dnsList) {
++                || info.strIPV4GateWay != gateWayEdit->text()) {
+ 
+             qDebug() << "ipv4 info changed";
+-            QStringList dnsList;
+-            dnsList.clear();
+-            for (QHostAddress str: ipv4dnsList) {
+-                dnsList << str.toString();
+-            }
+-#if 0
+-            if (!firstDnsEdit->text().isEmpty()) {
+-                dnsList << firstDnsEdit->text();
+-                if (!secondDnsEdit->text().isEmpty()) {
+-                    dnsList << secondDnsEdit->text();
+-                }
+-            }
+ 
+-#endif
+             QString ipv4address =ipv4addressEdit->text();
+             QString netMask = getNetMaskText(netMaskEdit->text());
+             QString gateWay = gateWayEdit->text();
+             qDebug() << ipv4address << netMask << gateWay;
+-            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay, dnsList);
++            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay);
+             setting.dumpInfo();
+             isChanged =  true;
+         }
+@@ -237,16 +216,11 @@ void Ipv4Page::setLineEnabled(bool check) {
+     ipv4addressEdit->setEnabled(check);
+     netMaskEdit->setEnabled(check);
+     gateWayEdit->setEnabled(check);
+-//    firstDnsEdit->setEnabled(check);
+-//    secondDnsEdit->setEnabled(check);
+-    m_dnsWidget->setEditEnabled(check);
+ 
+     if (!check) {
+         ipv4addressEdit->clear();
+         netMaskEdit->clear();
+         gateWayEdit->clear();
+-//        firstDnsEdit->clear();
+-//        secondDnsEdit->clear();
+     }
+ }
+ 
+diff --git a/src/frontend/netdetails/ipv6page.cpp b/src/frontend/netdetails/ipv6page.cpp
+index a29a788..bd6c67e 100644
+--- a/src/frontend/netdetails/ipv6page.cpp
++++ b/src/frontend/netdetails/ipv6page.cpp
+@@ -49,6 +49,15 @@ void Ipv6Page::setGateWay(const QString &gateWay)
+ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
+ {
+     bool isChanged = false;
++    QList<QHostAddress> ipv6DnsList;
++    ipv6DnsList.clear();
++    ipv6DnsList = m_dnsWidget->getDns();
++    if (info.ipv6DnsList != ipv6DnsList) {
++        qDebug() << "ipv6 dns changed";
++        setting.ipv6DnsConstruct(ipv6DnsList);
++        isChanged =  true;
++    }
++
+     if (ipv6ConfigCombox->currentIndex() == AUTO_CONFIG) {
+         if (info.ipv6ConfigType != CONFIG_IP_DHCP) {
+             qDebug() << "ipv6ConfigType change to Auto";
+@@ -56,9 +65,7 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
+             QString ipv6address("");
+             QString prefix("");
+             QString gateWay("");
+-            QStringList dnsList;
+-            dnsList.empty();
+-            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay, dnsList);
++            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay);
+             isChanged = true;
+         }
+     } else {
+@@ -68,35 +75,16 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
+             isChanged =  true;
+         }
+ 
+-        QList<QHostAddress> ipv6dnsList;
+-        ipv6dnsList.clear();
+-        ipv6dnsList = m_dnsWidget->getDns();
+-
+         if(info.strIPV6Address != ipv6AddressEdit->text()
+                 || info.iIPV6Prefix != lengthEdit->text().toInt()
+-                || info.strIPV6GateWay != gateWayEdit->text()              
+-                //                || info.strIPV6FirDns  != firstDnsEdit->text()
+-                //                || info.strIPV6SecDns  != secondDnsEdit->text()
+-                || info.ipv6DnsList != ipv6dnsList) {
++                || info.strIPV6GateWay != gateWayEdit->text()) {
+ 
+             qDebug() << "ipv6 info changed";
+-            QStringList dnsList;
+-            dnsList.clear();
+-            for (QHostAddress str: ipv6dnsList) {
+-                dnsList << str.toString();
+-            }
+-#if 0
+-            if (!firstDnsEdit->text().isEmpty()) {
+-                dnsList << firstDnsEdit->text();
+-                if (!secondDnsEdit->text().isEmpty()) {
+-                    dnsList << secondDnsEdit->text();
+-                }
+-            }
+-#endif
++
+             QString ipv6address =ipv6AddressEdit->text();
+             QString prefix = lengthEdit->text();
+             QString gateWay = gateWayEdit->text();
+-            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay, dnsList);
++            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay);
+             setting.dumpInfo();
+             isChanged =  true;
+         }
+@@ -163,14 +151,6 @@ void Ipv6Page::initComponent() {
+     connect(ipv6AddressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+     connect(lengthEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-//    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-//    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+-    connect(m_dnsWidget, &MultipleDnsWidget::dnsTextChanged, this, [=]() {
+-        setIpv6PageState(false);
+-    });
+-    connect(m_dnsWidget, &MultipleDnsWidget::dnsEditingFinished, this, [=]() {
+-        setIpv6PageState(true);
+-    });
+ }
+ 
+ void Ipv6Page::configChanged(int index) {
+@@ -187,16 +167,12 @@ void Ipv6Page::setControlEnabled(bool check)
+     ipv6AddressEdit->setEnabled(check);
+     lengthEdit->setEnabled(check);
+     gateWayEdit->setEnabled(check);
+-    m_dnsWidget->setEditEnabled(check);
+-//    firstDnsEdit->setEnabled(check);
+-//    secondDnsEdit->setEnabled(check);
++
+ 
+     if (!check) {
+         ipv6AddressEdit->clear();
+         lengthEdit->clear();
+         gateWayEdit->clear();
+-//        firstDnsEdit->clear();
+-//        secondDnsEdit->clear();
+     }
+ }
+ 
+diff --git a/src/frontend/netdetails/multiplednswidget.cpp b/src/frontend/netdetails/multiplednswidget.cpp
+index 55aca59..398838e 100644
+--- a/src/frontend/netdetails/multiplednswidget.cpp
++++ b/src/frontend/netdetails/multiplednswidget.cpp
+@@ -86,8 +86,6 @@ void MultipleDnsWidget::initComponent()
+         item->setFlags(item->flags() | Qt::ItemIsEditable);
+         ListItemEdit *dnsListItemEdit = new ListItemEdit(m_regExp);
+         m_dnsListWidget ->setItemDelegateForRow(m_dnsListWidget->currentIndex().row(), dnsListItemEdit);
+-        connect(dnsListItemEdit, SIGNAL(textChanged(QString)), this, SIGNAL(dnsTextChanged(QString)));
+-        connect(dnsListItemEdit, SIGNAL(editingFinished()), this, SIGNAL(dnsEditingFinished()));
+     });
+ }
+ 
+@@ -110,7 +108,7 @@ QList<QHostAddress> MultipleDnsWidget::getDns() const
+     QString aDns;
+     while (m_dnsListWidget->count() > row) {
+         aDns = m_dnsListWidget->item(row)->text();
+-        if (!dnsList.contains(aDns)) {
++        if (!dnsList.contains(aDns) && !aDns.isEmpty()) {
+             dnsList << aDns;
+             ipv4dnsList << QHostAddress(aDns);
+         }
+@@ -140,9 +138,6 @@ void MultipleDnsWidget::AddOneDnsItem(QListWidget *listWidget)
+     ListItemEdit *dnsListItemEdit = new ListItemEdit(m_regExp);
+     listWidget->setItemDelegateForRow(listWidget->currentIndex().row() , dnsListItemEdit);
+     listWidget->editItem(dnsListWidgetItem);
+-
+-    connect(dnsListItemEdit, SIGNAL(textChanged(QString)), this, SIGNAL(dnsTextChanged(QString)));
+-    connect(dnsListItemEdit, SIGNAL(editingFinished()), this, SIGNAL(dnsEditingFinished()));
+ }
+ 
+ void MultipleDnsWidget::RemoveOneDnsItem(QListWidgetItem *aItem, QListWidget *listWidget)
+@@ -164,15 +159,18 @@ void MultipleDnsWidget::setDnsListWidgetStyle()
+ 
+ void MultipleDnsWidget::onAddBtnClicked()
+ {
++    AddOneDnsItem(m_dnsListWidget);
++
+     //避免重复添加空白项
+-    if (m_dnsListWidget->currentItem()) {
+-        if (m_dnsListWidget->currentItem()->text().isEmpty()) {
+-            m_dnsListWidget->removeItemWidget(m_dnsListWidget->currentItem());
+-            delete m_dnsListWidget->currentItem();
++    int row = m_dnsListWidget->count() - 1;
++    while (row >= 0) {
++        if (!m_dnsListWidget->item(row)->isSelected()
++                && m_dnsListWidget->item(row)->text().isEmpty()) {
++            m_dnsListWidget->removeItemWidget(m_dnsListWidget->item(row));
++            delete m_dnsListWidget->item(row);
+         }
++        row --;
+     }
+-
+-    AddOneDnsItem(m_dnsListWidget);
+     m_removeDnsBtn->setEnabled(true);
+ }
+ 
+diff --git a/src/frontend/netdetails/multiplednswidget.h b/src/frontend/netdetails/multiplednswidget.h
+index 8a4ef1c..92dc9c1 100644
+--- a/src/frontend/netdetails/multiplednswidget.h
++++ b/src/frontend/netdetails/multiplednswidget.h
+@@ -62,9 +62,6 @@ private Q_SLOTS:
+     void onAddBtnClicked();
+     void onRemoveBtnClicked();
+ 
+-Q_SIGNALS:
+-    void dnsTextChanged(const QString &);
+-    void dnsEditingFinished();
+ };
+ 
+ #endif // MULTIPLEDNSWIDGET_H
+diff --git a/src/frontend/netdetails/netdetail.cpp b/src/frontend/netdetails/netdetail.cpp
+index 2622e80..3632a8f 100644
+--- a/src/frontend/netdetails/netdetail.cpp
++++ b/src/frontend/netdetails/netdetail.cpp
+@@ -363,28 +363,20 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
+     detailPage->setAutoConnect(m_info.isAutoConnect);
+ 
+     //ipv4页面填充
++    ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
++    ipv4Page->setMulDns(m_info.ipv4DnsList);
+     if (m_info.ipv4ConfigType == CONFIG_IP_MANUAL) {
+-        ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
+         ipv4Page->setIpv4(m_info.strIPV4Address);
+         ipv4Page->setNetMask(m_info.strIPV4NetMask);
+-//        ipv4Page->setIpv4FirDns(m_info.strIPV4FirDns);
+-//        ipv4Page->setIpv4SecDns(m_info.strIPV4SecDns);
+-        ipv4Page->setMulDns(m_info.ipv4DnsList);
+         ipv4Page->setGateWay(m_info.strIPV4GateWay);
+-    } else {
+-        ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
+     }
+     //ipv6页面填充
++    ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
++    ipv6Page->setMulDns(m_info.ipv6DnsList);
+     if (m_info.ipv6ConfigType == CONFIG_IP_MANUAL) {
+-        ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
+         ipv6Page->setIpv6(m_info.strIPV6Address);
+         ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
+-//        ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
+-//        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
+-        ipv6Page->setMulDns(m_info.ipv6DnsList);
+         ipv6Page->setGateWay(m_info.strIPV6GateWay);
+-    } else {
+-        ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
+     }
+ 
+     //安全页面
+@@ -554,14 +546,25 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
+             conInfo.iIPV6Prefix = ipv6Page->getPerfixLength(connetSetting.m_ipv6Address.at(0).netmask().toString());
+             conInfo.strIPV6GateWay = connetSetting.m_ipv6Address.at(0).gateway().toString();
+         }
++    }
+ 
+-        conInfo.ipv6DnsList = connetSetting.m_ipv6Dns;
++    conInfo.ipv4DnsList = connetSetting.m_ipv4Dns;
++    conInfo.ipv6DnsList = connetSetting.m_ipv6Dns;
++    QString dnsList;
++    dnsList.clear();
++    if (!conInfo.ipv4DnsList.isEmpty()) {
++        for (QHostAddress str: conInfo.ipv4DnsList) {
++            dnsList.append(str.toString());
++            dnsList.append("; ");
++        }
++        dnsList.chop(2);
++        conInfo.strDynamicIpv4Dns = dnsList;
+     }
+ 
+     if (!bActived) {
+         conInfo.strDynamicIpv4 = conInfo.strIPV4Address.isEmpty() ? tr("Auto") : conInfo.strIPV4Address;
+         conInfo.strDynamicIpv6 = conInfo.strIPV6Address.isEmpty() ? tr("Auto") : conInfo.strIPV6Address;
+-        conInfo.strDynamicIpv4Dns = conInfo.ipv4DnsList.isEmpty() ? tr("Auto") : conInfo.ipv4DnsList.at(0).toString();
++        conInfo.strDynamicIpv4Dns = conInfo.ipv4DnsList.isEmpty() ? tr("Auto") : conInfo.strDynamicIpv4Dns;
+     }
+ }
+ 
+diff --git a/src/frontend/single-pages/singlepage.cpp b/src/frontend/single-pages/singlepage.cpp
+index 848adfe..741e5da 100644
+--- a/src/frontend/single-pages/singlepage.cpp
++++ b/src/frontend/single-pages/singlepage.cpp
+@@ -92,6 +92,7 @@ void SinglePage::initWindowProperties()
+     this->setFixedWidth(MAX_WIDTH);
+     this->setAttribute(Qt::WA_TranslucentBackground);
+     this->setProperty("useStyleWindowManager", false); //禁用拖动
++    this->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+     //绘制毛玻璃特效
+     QString platform = QGuiApplication::platformName();
+     if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
+diff --git a/src/frontend/single-pages/vpnpage.cpp b/src/frontend/single-pages/vpnpage.cpp
+index 641aff7..dcc9769 100644
+--- a/src/frontend/single-pages/vpnpage.cpp
++++ b/src/frontend/single-pages/vpnpage.cpp
+@@ -21,6 +21,7 @@
+ #include <QDebug>
+ #include <QScrollBar>
+ #include "windowmanager/windowmanager.h"
++#include "ukuistylehelper/ukuistylehelper.h"
+ 
+ 
+ VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
+@@ -649,11 +650,15 @@ void VpnPage::showDetailPage(QString devName, QString uuid)
+ void VpnPage::showUI()
+ {
+     //2209中窗管在hide界面时会刷新属性，需要重新设置无图标属性
+-    const KWindowInfo info(this->winId(), NET::WMState);
+-    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
+-        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
++    QString platform = QGuiApplication::platformName();
++    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive)) {
++        const KWindowInfo info(this->winId(), NET::WMState);
++        if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
++            KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
++        }
+     }
+ 
++    kdk::UkuiStyleHelper::self()->removeHeader(this);
+     resetPageHight();
+ 
+     showNormal();
+diff --git a/src/frontend/tools/listitemedit.cpp b/src/frontend/tools/listitemedit.cpp
+index af23206..4d47a2d 100644
+--- a/src/frontend/tools/listitemedit.cpp
++++ b/src/frontend/tools/listitemedit.cpp
+@@ -30,8 +30,6 @@ QWidget *ListItemEdit::createEditor(QWidget *parent, const QStyleOptionViewItem
+ {
+     QLineEdit *editor = new QLineEdit(parent);
+     editor->setValidator(new QRegExpValidator(m_regExp, parent));
+-    connect(editor, SIGNAL(textChanged(QString)), this, SIGNAL(textChanged(QString)));
+-    connect(editor, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
+     return editor;
+ }
+ 
+diff --git a/src/frontend/tools/listitemedit.h b/src/frontend/tools/listitemedit.h
+index e661409..901b51a 100644
+--- a/src/frontend/tools/listitemedit.h
++++ b/src/frontend/tools/listitemedit.h
+@@ -44,9 +44,6 @@ public:
+ private:
+     QRegExp m_regExp;
+ 
+-Q_SIGNALS:
+-    void textChanged(const QString &);
+-    void editingFinished();
+ };
+ 
+ #endif // LISTITEMEDIT_H
+diff --git a/src/frontend/vpnobject.cpp b/src/frontend/vpnobject.cpp
+index 62d33bd..eed13f2 100644
+--- a/src/frontend/vpnobject.cpp
++++ b/src/frontend/vpnobject.cpp
+@@ -93,7 +93,7 @@ void vpnObject::deactivateVpn(const QString& connUuid)
+ 
+ void vpnObject::onShowMainWindow()
+ {
+-    kdk::UkuiStyleHelper::self()->removeHeader(m_vpnPage);
++//    kdk::UkuiStyleHelper::self()->removeHeader(m_vpnPage);
+     m_vpnPage->showUI();;
+ }
+ 
+diff --git a/src/main.cpp b/src/main.cpp
+index 33c8f72..ed35761 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -18,7 +18,6 @@
+ 
+ #include "mainwindow.h"
+ #include "dbusadaptor.h"
+-#include "vpndbusadaptor.h"
+ #include <QTranslator>
+ #include <QLocale>
+ #include "qt-single-application.h"
+@@ -31,6 +30,7 @@
+ #endif
+ 
+ #include "vpnobject.h"
++#include "vpndbusadaptor.h"
+ 
+ #define LOG_IDENT "ukui_kylin_nm"
+ 

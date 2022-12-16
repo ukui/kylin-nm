@@ -1,3 +1,11 @@
+kylin-nm (3.14.0.0+0512-3k12) yangtze; urgency=medium
+
+  * vpn页面增加
+  * dns优化
+  * tabBar圆角 
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 16 Dec 2022 12:04:41 +0800
+
 kylin-nm (3.14.0.0+0512-3k11) yangtz; urgency=medium
 
   * 合并3.22需求

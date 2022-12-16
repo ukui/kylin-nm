@@ -62,9 +62,6 @@ private Q_SLOTS:
     void onAddBtnClicked();
     void onRemoveBtnClicked();
 
-Q_SIGNALS:
-    void dnsTextChanged(const QString &);
-    void dnsEditingFinished();
 };
 
 #endif // MULTIPLEDNSWIDGET_H

@@ -72,7 +72,7 @@ public:
     QLabel       *m_Chan;
     QLabel       *m_BandWidth;
     QLabel       *m_IPV4;
-    QLabel       *m_IPV4Dns;
+    FixLabel     *m_IPV4Dns;
     FixLabel     *m_IPV6;
     QLabel       *m_Mac;
     QLabel       *m_autoConnect;

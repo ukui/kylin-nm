@@ -86,8 +86,6 @@ void MultipleDnsWidget::initComponent()
         item->setFlags(item->flags() | Qt::ItemIsEditable);
         ListItemEdit *dnsListItemEdit = new ListItemEdit(m_regExp);
         m_dnsListWidget ->setItemDelegateForRow(m_dnsListWidget->currentIndex().row(), dnsListItemEdit);
-        connect(dnsListItemEdit, SIGNAL(textChanged(QString)), this, SIGNAL(dnsTextChanged(QString)));
-        connect(dnsListItemEdit, SIGNAL(editingFinished()), this, SIGNAL(dnsEditingFinished()));
     });
 }
 
@@ -110,7 +108,7 @@ QList<QHostAddress> MultipleDnsWidget::getDns() const
     QString aDns;
     while (m_dnsListWidget->count() > row) {
         aDns = m_dnsListWidget->item(row)->text();
-        if (!dnsList.contains(aDns)) {
+        if (!dnsList.contains(aDns) && !aDns.isEmpty()) {
             dnsList << aDns;
             ipv4dnsList << QHostAddress(aDns);
         }
@@ -140,9 +138,6 @@ void MultipleDnsWidget::AddOneDnsItem(QListWidget *listWidget)
     ListItemEdit *dnsListItemEdit = new ListItemEdit(m_regExp);
     listWidget->setItemDelegateForRow(listWidget->currentIndex().row() , dnsListItemEdit);
     listWidget->editItem(dnsListWidgetItem);
-
-    connect(dnsListItemEdit, SIGNAL(textChanged(QString)), this, SIGNAL(dnsTextChanged(QString)));
-    connect(dnsListItemEdit, SIGNAL(editingFinished()), this, SIGNAL(dnsEditingFinished()));
 }
 
 void MultipleDnsWidget::RemoveOneDnsItem(QListWidgetItem *aItem, QListWidget *listWidget)
@@ -164,15 +159,18 @@ void MultipleDnsWidget::setDnsListWidgetStyle()
 
 void MultipleDnsWidget::onAddBtnClicked()
 {
-    //避免重复添加空白项
-    if (m_dnsListWidget->currentItem()) {
-        if (m_dnsListWidget->currentItem()->text().isEmpty()) {
-            m_dnsListWidget->removeItemWidget(m_dnsListWidget->currentItem());
-            delete m_dnsListWidget->currentItem();
-        }
-    }
-
     AddOneDnsItem(m_dnsListWidget);
+
+    //避免重复添加空白项
+    int row = m_dnsListWidget->count() - 1;
+    while (row >= 0) {
+        if (!m_dnsListWidget->item(row)->isSelected()
+                && m_dnsListWidget->item(row)->text().isEmpty()) {
+            m_dnsListWidget->removeItemWidget(m_dnsListWidget->item(row));
+            delete m_dnsListWidget->item(row);
+        }
+        row --;
+    }
     m_removeDnsBtn->setEnabled(true);
 }
 

@@ -52,8 +52,8 @@ AddNetBtn::AddNetBtn(bool isWlan, QWidget *parent) : QPushButton(parent)
         textLabel->setText(tr("Add WiredNetork"));
         QIcon mAddIcon = QIcon::fromTheme("list-add-symbolic");
         iconLabel->setPixmap(mAddIcon.pixmap(mAddIcon.actualSize(QSize(24, 24))));
-        iconLabel->setProperty("useIconHighlightEffect", true);
-        iconLabel->setProperty("iconHighlightEffectMode", 1);
+        iconLabel->setProperty("useIconHighlightEffect", 0x2);
+//        iconLabel->setProperty("iconHighlightEffectMode", 1);
 
         addLyt->addStretch();
         addLyt->addWidget(iconLabel);

@@ -137,7 +137,7 @@ WlanConnect::WlanConnect() :  m_firstLoad(true) {
     translator->load("/usr/share/kylin-nm/wlanconnect/" + QLocale::system().name());
     QApplication::installTranslator(translator);
 
-    pluginName = tr("WlanConnect");
+    pluginName = tr("WLAN");
     pluginType = NETWORK;
 }
 

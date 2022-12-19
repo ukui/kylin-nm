@@ -78,7 +78,7 @@ NetConnect::NetConnect() :  mFirstLoad(true) {
     translator->load("/usr/share/kylin-nm/netconnect/" + QLocale::system().name());
     QApplication::installTranslator(translator);
 
-    pluginName = tr("WiredConnect");
+    pluginName = tr("LAN");
     pluginType = NETWORK;
 }
 
@@ -150,7 +150,7 @@ QString NetConnect::translationPath() const
 void NetConnect::initSearchText() {
     //~ contents_path /netconnect/Advanced settings"
     ui->detailBtn->setText(tr("Advanced settings"));
-    ui->titleLabel->setText(tr("Wired Network"));
+    ui->titleLabel->setText(tr("LAN"));
     //~ contents_path /netconnect/open
     ui->openLabel->setText(tr("open"));
 }
@@ -515,12 +515,14 @@ void NetConnect::addDeviceFrame(QString devName)
             qDebug() << "[NetConnect]set " << devName << "status" << true;
             itemFrame->lanItemFrame->show();
             itemFrame->deviceFrame->dropDownLabel->show();
+            itemFrame->addLanWidget->show();
             itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(true);
             deviceStatusMap[devName] = true;
         } else {
             qDebug() << "[NetConnect]set " << devName << "status" << false;
             itemFrame->lanItemFrame->hide();
             itemFrame->deviceFrame->dropDownLabel->hide();
+            itemFrame->addLanWidget->hide();
             deviceStatusMap[devName] = false;
         }
     });

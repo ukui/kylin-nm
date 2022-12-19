@@ -47,6 +47,11 @@
         <translation>有线网络</translation>
     </message>
     <message>
+        <location filename="../netconnect.cpp" line="80"/>
+        <source>LAN</source>
+        <translation>有线网络</translation>
+    </message>
+    <message>
         <location filename="../netconnect.cpp" line="177"/>
         <source>No ethernet device avaliable</source>
         <translation>未检测到有线设备</translation>

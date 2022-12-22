@@ -976,6 +976,46 @@
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
         <translation>CA 证书 (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="271"/>
+        <source>PAC provisioning</source>
+        <translation>PAC 配置</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="272"/>
+        <source>Allow automatic PAC provisioning</source>
+        <translation>允许自动PAC配置</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="273"/>
+        <source>PAC file</source>
+        <translation>PAC 文件</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="274"/>
+        <source>Anonymous</source>
+        <translation>匿名</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="275"/>
+        <source>Authenticated</source>
+        <translation>已认证</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="276"/>
+        <source>Both</source>
+        <translation>两者兼用</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1226"/>
+        <source>Choose a PAC file</source>
+        <translation>选择一个PAC文件</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1227"/>
+        <source>PAC Files (*.pac)</source>
+        <translation>PAC文件(*.pac)</translation>
+    </message>
 </context>
 <context>
     <name>SinglePage</name>

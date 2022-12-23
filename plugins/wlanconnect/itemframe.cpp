@@ -50,8 +50,8 @@ void AddNetItem::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
     if (m_isIn) {
-        QColor color(240, 240, 240);
-        color.setAlphaF(0.39);
+        QColor color = qApp->palette().brightText().color();
+        color.setAlphaF(0.05);
         painter.setBrush(color);
     }
     else

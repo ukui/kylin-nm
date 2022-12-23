@@ -148,7 +148,8 @@ private:
     QHBoxLayout*    m_settingsLayout = nullptr;
     KBorderlessButton* m_settingsLabel = nullptr;
 
-    QGSettings         *m_switchGsettings = nullptr;
+    QGSettings      *m_switchGsettings = nullptr;
+    QGSettings      *m_styleGsettings = nullptr;
 
     QMap<QString, bool> deviceStatusMap;
     QMap<QString, ItemFrame *> deviceFrameMap;
@@ -188,6 +189,7 @@ private Q_SLOTS:
     void onDeviceAdd(QString deviceName);
     void onDeviceRemove(QString deviceName);
     void updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status);
+    void onPaletteChanged();
 };
 
 #endif // NETCONNECT_H

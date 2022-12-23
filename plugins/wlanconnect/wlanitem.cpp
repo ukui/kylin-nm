@@ -76,8 +76,19 @@ WlanItem::WlanItem(bool isSimple, QWidget *parent)
     m_connectButton->setFixedSize(96, 36);
     m_connectButton->setText(tr("Connect"));
     m_connectButton->setEnabled(false);
-    connect(m_connectButton, &QPushButton::clicked, this, &WlanItem::onConnectButtonClicked);
+//    connect(m_connectButton, &QPushButton::clicked, this, &WlanItem::onConnectButtonClicked);
     m_pwdFrameLyt->addWidget(m_connectButton);
+
+    if (!isSimple) {
+        m_pwdLineEdit->setClearButtonEnabled(false); //禁用ClearBtn按钮
+        //适配半透明控件
+        m_pwdLineEdit->setProperty("needTranslucent", true);
+        m_pwdLineEdit->setUseCustomPalette(true);
+        m_connectButton->setProperty("isImportant", true);
+        m_connectButton->setProperty("needTranslucent", true);
+    } else {
+        connect(m_connectButton, &QPushButton::clicked, this, &WlanItem::onConnectButtonClicked);
+    }
 
     //自动连接选择区域UI
     m_autoConnectFrame = new QFrame(m_expendFrame);
@@ -217,17 +228,25 @@ void WlanItem::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
     if (m_isIn) {
-        QColor color(240, 240, 240);
-        color.setAlphaF(0.39);
+        QColor color = qApp->palette().brightText().color();
+        color.setAlphaF(0.05);
         painter.setBrush(color);
-    }
-    else
-        painter.setBrush(pal.color(QPalette::Base));
 
+        if (!isSimple) {
+            QPalette transPal = qApp->palette();
+            if (m_pwdLineEdit != nullptr) {
+                m_pwdLineEdit->setPalette(transPal);
+            }
+        }
+    }
+    else {
+        painter.setBrush(pal.color(QPalette::Base));
+    }
     QRect rect = this->rect();
     QPainterPath path;
     path.addRoundedRect(rect, RADIUS, RADIUS);
     painter.drawPath(path);
+
     return QFrame::paintEvent(event);
 }
 

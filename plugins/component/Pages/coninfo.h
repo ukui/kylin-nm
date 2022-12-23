@@ -20,6 +20,7 @@
 #ifndef CONINFO_H
 #define CONINFO_H
 
+#include <QApplication>
 #include <QString>
 #include <QPalette>
 #include <QComboBox>
@@ -115,7 +116,7 @@ static void setFramePalette(QFrame *widget, QPalette &pal) {
     QList<QComboBox *> comboBoxList = widget->findChildren<QComboBox *>();
     for (int i = 0; i < comboBoxList.count(); ++i) {
         comboBoxList.at(i)->setPalette(pal);
-	if (comboBoxList.at(i)->view()) {
+        if (comboBoxList.at(i)->view()) {
             comboBoxList.at(i)->view()->setPalette(pal);
         }
     }
@@ -123,76 +124,63 @@ static void setFramePalette(QFrame *widget, QPalette &pal) {
 
 static QPalette lightPalette(QWidget *widget)
 {
-    auto palette = widget->palette();
-    //ukui-light palette UKUI3.1
-    QColor windowText_at(38, 38, 38),
-           windowText_iat(38, 38, 38),
-           windowText_dis(166, 166, 166),
-           button_at(230, 230, 230),
-           button_iat(230, 230, 230),
-           button_dis(233, 233, 233),
-           light_at(255, 255, 255),
-           light_iat(255, 255, 255),
-           light_dis(242, 242, 242),
-           midlight_at(218, 218, 218),
-           midlight_iat(218, 218, 218),
-           midlight_dis(230, 230, 230),
-           dark_at(77, 77, 77),
-           dark_iat(77, 77, 77),
-           dark_dis(64, 64, 64),
-           mid_at(115, 115, 115),
-           mid_iat(115, 115, 115),
-           mid_dis(102, 102, 102),
-           text_at(38, 38, 38),
-           text_iat(38, 38, 38),
-           text_dis(140, 140, 140),
-           brightText_at(89, 89, 89),
-           brightText_iat(89, 89, 89),
-           brightText_dis(77, 77, 77),
-           buttonText_at(38, 38, 38),
-           buttonText_iat(38, 38, 38),
-           buttonText_dis(179, 179, 179),
-           base_at(255, 255, 255),
-           base_iat(245, 245, 245),
-           base_dis(237, 237, 237),
-           window_at(245, 245, 245),
-           window_iat(237, 237, 237),
-           window_dis(230, 230, 230),
-           shadow_at(0, 0, 0, 16),
-           shadow_iat(0, 0, 0, 16),
-           shadow_dis(0, 0, 0, 21),
-//           shadow_at(214, 214, 214),
-//           shadow_iat(214, 214, 214),
-//           shadow_dis(201, 201, 201),
-           highLight_at(55, 144, 250),
-           highLight_iat(55, 144, 250),
-           highLight_dis(233, 233, 233),
-           highLightText_at(255, 255, 255),
-           highLightText_iat(255, 255, 255),
-           highLightText_dis(179, 179, 179),
-           link_at(55, 144, 250),
-           link_iat(55, 144, 250),
-           link_dis(55, 144, 250),
-           linkVisited_at(114, 46, 209),
-           linkVisited_iat(114, 46, 209),
-           linkVisited_dis(114, 46, 209),
-           alternateBase_at(245, 245, 245),
-           alternateBase_iat(245, 245, 245),
-           alternateBase_dis(245, 245, 245),
-           noRale_at(240, 240, 240),
-           noRole_iat(240, 240, 240),
-           noRole_dis(217, 217, 217),
-           toolTipBase_at(255, 255, 255),
-           toolTipBase_iat(255, 255, 255),
-           toolTipBase_dis(255, 255, 255),
-           toolTipText_at(38, 38, 38),
-           toolTipText_iat(38, 38, 38),
-           toolTipText_dis(38, 38, 38),
-           placeholderText_at(38, 38, 38),
-           placeholderText_iat(38, 38, 38),
-           placeholderText_dis(38, 38, 38);
+    QPalette palette = qApp->palette();
 
-
+    //ukui-light palette UKUI3.1 亮主题色板
+    QColor  windowText_at(38, 38, 38),
+            windowText_iat(0, 0, 0, 255 * 0.55),
+            windowText_dis(0, 0, 0, 255 * 0.3),
+            button_at(230, 230, 230),
+            button_iat(230, 230, 230),
+            button_dis(233, 233, 233),
+            light_at(255, 255, 255),
+            light_iat(255, 255, 255),
+            light_dis(242, 242, 242),
+            midlight_at(218, 218, 218),
+            midlight_iat(218, 218, 218),
+            midlight_dis(230, 230, 230),
+            dark_at(77, 77, 77),
+            dark_iat(77, 77, 77),
+            dark_dis(64, 64, 64),
+            mid_at(115, 115, 115),
+            mid_iat(115, 115, 115),
+            mid_dis(102, 102, 102),
+            text_at(38, 38, 38),
+            text_iat(38, 38, 38),
+            text_dis(0, 0, 0, 255 * 0.3),
+            brightText_at(0, 0, 0),
+            brightText_iat(0, 0, 0),
+            brightText_dis(0, 0, 0),
+            buttonText_at(38, 38, 38),
+            buttonText_iat(38, 38, 38),
+            buttonText_dis(179, 179, 179),
+            base_at(255, 255, 255),
+            base_iat(245, 245, 245),
+            base_dis(237, 237, 237),
+            window_at(245, 245, 245),
+            window_iat(237, 237, 237),
+            window_dis(230, 230, 230),
+            shadow_at(0, 0, 0, 255 * 0.16),
+            shadow_iat(0, 0, 0, 255 * 0.16),
+            shadow_dis(0, 0, 0, 255 * 0.21),
+            highLightText_at(255, 255, 255),
+            highLightText_iat(255, 255, 255),
+            highLightText_dis(179, 179, 179),
+            alternateBase_at(245, 245, 245),
+            alternateBase_iat(245, 245, 245),
+            alternateBase_dis(245, 245, 245),
+            noRale_at(240, 240, 240),
+            noRole_iat(240, 240, 240),
+            noRole_dis(217, 217, 217),
+            toolTipBase_at(255, 255, 255),
+            toolTipBase_iat(255, 255, 255),
+            toolTipBase_dis(255, 255, 255),
+            toolTipText_at(38, 38, 38),
+            toolTipText_iat(38, 38, 38),
+            toolTipText_dis(38, 38, 38),
+            placeholderText_at(0, 0, 0, 255 * 0.35),
+            placeholderText_iat(0, 0, 0, 255 * 0.35),
+            placeholderText_dis(0, 0, 0, 255 * 0.3);
 
     palette.setColor(QPalette::Active, QPalette::WindowText, windowText_at);
     palette.setColor(QPalette::Inactive, QPalette::WindowText, windowText_iat);
@@ -242,21 +230,9 @@ static QPalette lightPalette(QWidget *widget)
     palette.setColor(QPalette::Inactive, QPalette::Shadow, shadow_iat);
     palette.setColor(QPalette::Disabled, QPalette::Shadow, shadow_dis);
 
-    palette.setColor(QPalette::Active, QPalette::Highlight, highLight_at);
-    palette.setColor(QPalette::Inactive, QPalette::Highlight, highLight_iat);
-    palette.setColor(QPalette::Disabled, QPalette::Highlight, highLight_dis);
-
     palette.setColor(QPalette::Active, QPalette::HighlightedText, highLightText_at);
     palette.setColor(QPalette::Inactive, QPalette::HighlightedText, highLightText_iat);
     palette.setColor(QPalette::Disabled, QPalette::HighlightedText, highLightText_dis);
-
-    palette.setColor(QPalette::Active, QPalette::Link, link_at);
-    palette.setColor(QPalette::Inactive, QPalette::Link, link_iat);
-    palette.setColor(QPalette::Disabled, QPalette::Link, link_dis);
-
-    palette.setColor(QPalette::Active, QPalette::LinkVisited, linkVisited_at);
-    palette.setColor(QPalette::Inactive, QPalette::LinkVisited, linkVisited_iat);
-    palette.setColor(QPalette::Disabled, QPalette::LinkVisited, linkVisited_dis);
 
     palette.setColor(QPalette::Active, QPalette::AlternateBase, alternateBase_at);
     palette.setColor(QPalette::Inactive, QPalette::AlternateBase, alternateBase_iat);

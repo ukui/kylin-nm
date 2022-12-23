@@ -162,6 +162,8 @@ private:
     WlanItem* findItem(QString devName, QString ssid);
     QMap<QString, NetDetail*> m_wlanDetailPagePtrMap;
 
+    QGSettings      *m_styleGsettings = nullptr;
+
 Q_SIGNALS:
     void requestWirelessScan();
     void setWirelessNetworkEnabled(bool enabled);
@@ -203,5 +205,6 @@ private Q_SLOTS:
     void onWirelessDeviceAdd(QString deviceName);
     void onWirelessDeviceRemove(QString deviceName);
     void updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status);
+    void onPaletteChanged();
 };
 #endif // WLANCONNECT_H

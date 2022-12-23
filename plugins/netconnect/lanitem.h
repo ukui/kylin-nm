@@ -8,7 +8,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QMenu>
-
+#include <QApplication>
 
 #include "../component/InfoButton/infobutton.h"
 #include "../component/RadioItemButton/radioitembutton.h"

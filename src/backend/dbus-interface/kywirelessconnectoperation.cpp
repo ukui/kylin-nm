@@ -278,6 +278,110 @@ void KyWirelessConnectOperation::addTtlsConnect(const KyWirelessConnectSetting &
     return;
 }
 
+//leap
+void KyWirelessConnectOperation::addLeapConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodLeapInfo &leapInfo)
+{
+    NetworkManager::WirelessNetwork::Ptr wifiNet =
+                                checkWifiNetExist(connSettingInfo.m_ssid, connSettingInfo.m_ifaceName);
+    if (wifiNet.isNull()) {
+        QString errorMessage = "the ssid " + connSettingInfo.m_ssid
+                                                + " is not exsit in " + connSettingInfo.m_ifaceName;
+        qWarning() << errorMessage;
+        Q_EMIT createConnectionError(errorMessage);
+        return;
+    }
+
+    NetworkManager::AccessPoint::Ptr accessPointPtr = wifiNet->referenceAccessPoint();
+    NetworkManager::ConnectionSettings::Ptr connSetting =
+                                    assembleWirelessSettings(accessPointPtr, connSettingInfo, false);
+    setIpv4AndIpv6Setting(connSetting, connSettingInfo);
+    assembleEapMethodLeapSettings(connSetting, leapInfo);
+
+    QDBusPendingCallWatcher * watcher;
+    watcher = new QDBusPendingCallWatcher{NetworkManager::addConnection(connSetting->toMap()), this};
+    connect(watcher, &QDBusPendingCallWatcher::finished, [this](QDBusPendingCallWatcher * watcher) {
+        if (watcher->isError() || !watcher->isValid()) {
+            QString errorMessage = tr("create wireless leap connection failed: ") + watcher->error().message();
+            qWarning()<<errorMessage;
+            Q_EMIT this->createConnectionError(errorMessage);
+        } else {
+            qDebug()<<"create wireless connect complete";
+        }
+        watcher->deleteLater();
+    });
+
+    return;
+}
+
+//pwd
+void KyWirelessConnectOperation::addPwdConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodPwdInfo &pwdInfo)
+{
+    NetworkManager::WirelessNetwork::Ptr wifiNet =
+                                checkWifiNetExist(connSettingInfo.m_ssid, connSettingInfo.m_ifaceName);
+    if (wifiNet.isNull()) {
+        QString errorMessage = "the ssid " + connSettingInfo.m_ssid
+                                                + " is not exsit in " + connSettingInfo.m_ifaceName;
+        qWarning() << errorMessage;
+        Q_EMIT createConnectionError(errorMessage);
+        return;
+    }
+
+    NetworkManager::AccessPoint::Ptr accessPointPtr = wifiNet->referenceAccessPoint();
+    NetworkManager::ConnectionSettings::Ptr connSetting =
+                                    assembleWirelessSettings(accessPointPtr, connSettingInfo, false);
+    setIpv4AndIpv6Setting(connSetting, connSettingInfo);
+    assembleEapMethodPwdSettings(connSetting, pwdInfo);
+
+    QDBusPendingCallWatcher * watcher;
+    watcher = new QDBusPendingCallWatcher{NetworkManager::addConnection(connSetting->toMap()), this};
+    connect(watcher, &QDBusPendingCallWatcher::finished, [this](QDBusPendingCallWatcher * watcher) {
+        if (watcher->isError() || !watcher->isValid()) {
+            QString errorMessage = tr("create wireless pwd connection failed: ") + watcher->error().message();
+            qWarning()<<errorMessage;
+            Q_EMIT this->createConnectionError(errorMessage);
+        } else {
+            qDebug()<<"create wireless connect complete";
+        }
+        watcher->deleteLater();
+    });
+
+    return;
+}
+
+//fast
+void KyWirelessConnectOperation::addFastConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodFastInfo &fastInfo)
+{
+    NetworkManager::WirelessNetwork::Ptr wifiNet =
+                                checkWifiNetExist(connSettingInfo.m_ssid, connSettingInfo.m_ifaceName);
+    if (wifiNet.isNull()) {
+        QString errorMessage = "the ssid " + connSettingInfo.m_ssid
+                                                + " is not exsit in " + connSettingInfo.m_ifaceName;
+        qWarning() << errorMessage;
+        Q_EMIT createConnectionError(errorMessage);
+        return;
+    }
+
+    NetworkManager::AccessPoint::Ptr accessPointPtr = wifiNet->referenceAccessPoint();
+    NetworkManager::ConnectionSettings::Ptr connSetting =
+                                    assembleWirelessSettings(accessPointPtr, connSettingInfo, false);
+    setIpv4AndIpv6Setting(connSetting, connSettingInfo);
+    assembleEapMethodFastSettings(connSetting, fastInfo);
+
+    QDBusPendingCallWatcher * watcher;
+    watcher = new QDBusPendingCallWatcher{NetworkManager::addConnection(connSetting->toMap()), this};
+    connect(watcher, &QDBusPendingCallWatcher::finished, [this](QDBusPendingCallWatcher * watcher) {
+        if (watcher->isError() || !watcher->isValid()) {
+            QString errorMessage = tr("create wireless fast connection failed: ") + watcher->error().message();
+            qWarning()<<errorMessage;
+            Q_EMIT this->createConnectionError(errorMessage);
+        } else {
+            qDebug()<<"create wireless connect complete";
+        }
+        watcher->deleteLater();
+    });
+
+}
+
 void KyWirelessConnectOperation::setWirelessAutoConnect(const QString &uuid, bool bAutoConnect)
 {
     NetworkManager::Connection::Ptr connectPtr =
@@ -459,6 +563,60 @@ void KyWirelessConnectOperation::updateWirelessEnterPriseTtlsConnect(const QStri
 
     setWirelessSecuWpaXEap(connectionSettings);
     modifyEapMethodTtlsSettings(connectionSettings, ttlsInfo);
+    connectPtr->update(connectionSettings->toMap());
+    return;
+}
+
+void KyWirelessConnectOperation::updateWirelessEnterPriseLeapConnect(const QString &uuid, const KyEapMethodLeapInfo &leapInfo)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            NetworkManager::findConnectionByUuid(uuid);
+    if (nullptr == connectPtr) {
+        QString errorMessage = tr("it can not find connection") + uuid;
+        qWarning()<<errorMessage;
+        Q_EMIT updateConnectionError(errorMessage);
+        return;
+    }
+    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
+
+    setWirelessSecuWpaXEap(connectionSettings);
+    modifyEapMethodLeapSettings(connectionSettings, leapInfo);
+    connectPtr->update(connectionSettings->toMap());
+    return;
+}
+
+void KyWirelessConnectOperation::updateWirelessEnterPrisePwdConnect(const QString &uuid, const KyEapMethodPwdInfo &pwdInfo)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            NetworkManager::findConnectionByUuid(uuid);
+    if (nullptr == connectPtr) {
+        QString errorMessage = tr("it can not find connection") + uuid;
+        qWarning()<<errorMessage;
+        Q_EMIT updateConnectionError(errorMessage);
+        return;
+    }
+    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
+
+    setWirelessSecuWpaXEap(connectionSettings);
+    modifyEapMethodPwdSettings(connectionSettings, pwdInfo);
+    connectPtr->update(connectionSettings->toMap());
+    return;
+}
+
+void KyWirelessConnectOperation::updateWirelessEnterPriseFastConnect(const QString &uuid, const KyEapMethodFastInfo &fastInfo)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            NetworkManager::findConnectionByUuid(uuid);
+    if (nullptr == connectPtr) {
+        QString errorMessage = tr("it can not find connection") + uuid;
+        qWarning()<<errorMessage;
+        Q_EMIT updateConnectionError(errorMessage);
+        return;
+    }
+    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
+
+    setWirelessSecuWpaXEap(connectionSettings);
+    modifyEapMethodFastSettings(connectionSettings, fastInfo);
     connectPtr->update(connectionSettings->toMap());
     return;
 }
@@ -721,6 +879,162 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
             QString errorMessage = watcher->error().message();
             qDebug() << "addAndActiveWirelessEnterPriseTtlsConnect failed " << errorMessage;
             emit addAndActivateConnectionError(errorMessage);
+        }
+        watcher->deleteLater();
+    });
+}
+
+void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseLeapConnect(KyEapMethodLeapInfo &info, KyWirelessConnectSetting &connSettingInfo, QString &devIface, bool isHidden)
+{
+    QString conn_uni;
+    QString dev_uni;
+    QString spec_object;
+    NMVariantMapMap map_settings;
+    NetworkManager::AccessPoint::Ptr accessPointPtr = nullptr;
+
+    if (!isHidden) {
+        NetworkManager::WirelessNetwork::Ptr wifiNet = checkWifiNetExist(connSettingInfo.m_ssid, devIface);
+        if (wifiNet.isNull()) {
+            QString errorMessage = "the ssid " + connSettingInfo.m_ssid + " is not exsit in " + devIface;
+            qWarning()<<errorMessage;
+            Q_EMIT activateConnectionError(errorMessage);
+            return;
+        }
+
+        accessPointPtr = wifiNet->referenceAccessPoint();
+        conn_uni = accessPointPtr->uni();
+        spec_object = conn_uni;
+    }
+
+    auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
+    if (dev.isNull()) {
+        Q_EMIT addAndActivateConnectionError("can not find device");
+        return;
+    }
+    dev_uni = dev->uni();
+
+    NetworkManager::ConnectionSettings::Ptr settings =
+                        assembleWirelessSettings(accessPointPtr, connSettingInfo, isHidden);
+    assembleEapMethodLeapSettings(settings, info);
+
+    if(settings.isNull()) {
+        qDebug() << "assembleEapMethodLeapSettings failed";
+        return;
+    }
+
+    map_settings = settings->toMap();
+
+    QDBusPendingCallWatcher * watcher;
+    watcher = new QDBusPendingCallWatcher{NetworkManager::addAndActivateConnection(map_settings, dev_uni, spec_object), this};
+    connect(watcher, &QDBusPendingCallWatcher::finished, [&] (QDBusPendingCallWatcher * watcher) {
+        if (watcher->isError() || !watcher->isValid()) {
+            QString errorMessage = watcher->error().message();
+            qDebug() << "addAndActiveWirelessEnterPriseLeapConnect failed " << errorMessage;
+            Q_EMIT addAndActivateConnectionError(errorMessage);
+        }
+        watcher->deleteLater();
+    });
+}
+
+void KyWirelessConnectOperation::addAndActiveWirelessEnterPrisePwdConnect(KyEapMethodPwdInfo &info, KyWirelessConnectSetting &connSettingInfo, QString &devIface, bool isHidden)
+{
+    QString conn_uni;
+    QString dev_uni;
+    QString spec_object;
+    NMVariantMapMap map_settings;
+    NetworkManager::AccessPoint::Ptr accessPointPtr = nullptr;
+
+    if (!isHidden) {
+        NetworkManager::WirelessNetwork::Ptr wifiNet = checkWifiNetExist(connSettingInfo.m_ssid, devIface);
+        if (wifiNet.isNull()) {
+            QString errorMessage = "the ssid " + connSettingInfo.m_ssid + " is not exsit in " + devIface;
+            qWarning()<<errorMessage;
+            Q_EMIT activateConnectionError(errorMessage);
+            return;
+        }
+
+        accessPointPtr = wifiNet->referenceAccessPoint();
+        conn_uni = accessPointPtr->uni();
+        spec_object = conn_uni;
+    }
+
+    auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
+    if (dev.isNull()) {
+        Q_EMIT addAndActivateConnectionError("can not find device");
+        return;
+    }
+    dev_uni = dev->uni();
+
+    NetworkManager::ConnectionSettings::Ptr settings =
+                        assembleWirelessSettings(accessPointPtr, connSettingInfo, isHidden);
+    assembleEapMethodPwdSettings(settings, info);
+
+    if(settings.isNull()) {
+        qDebug() << "assembleEapMethodPwdSettings failed";
+        return;
+    }
+
+    map_settings = settings->toMap();
+
+    QDBusPendingCallWatcher * watcher;
+    watcher = new QDBusPendingCallWatcher{NetworkManager::addAndActivateConnection(map_settings, dev_uni, spec_object), this};
+    connect(watcher, &QDBusPendingCallWatcher::finished, [&] (QDBusPendingCallWatcher * watcher) {
+        if (watcher->isError() || !watcher->isValid()) {
+            QString errorMessage = watcher->error().message();
+            qDebug() << "addAndActiveWirelessEnterPrisePwdConnect failed " << errorMessage;
+            Q_EMIT addAndActivateConnectionError(errorMessage);
+        }
+        watcher->deleteLater();
+    });
+}
+
+void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseFastConnect(KyEapMethodFastInfo &info, KyWirelessConnectSetting &connSettingInfo, QString &devIface, bool isHidden)
+{
+    QString conn_uni;
+    QString dev_uni;
+    QString spec_object;
+    NMVariantMapMap map_settings;
+    NetworkManager::AccessPoint::Ptr accessPointPtr = nullptr;
+
+    if (!isHidden) {
+        NetworkManager::WirelessNetwork::Ptr wifiNet = checkWifiNetExist(connSettingInfo.m_ssid, devIface);
+        if (wifiNet.isNull()) {
+            QString errorMessage = "the ssid " + connSettingInfo.m_ssid + " is not exsit in " + devIface;
+            qWarning()<<errorMessage;
+            Q_EMIT activateConnectionError(errorMessage);
+            return;
+        }
+
+        accessPointPtr = wifiNet->referenceAccessPoint();
+        conn_uni = accessPointPtr->uni();
+        spec_object = conn_uni;
+    }
+
+    auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
+    if (dev.isNull()) {
+        Q_EMIT addAndActivateConnectionError("can not find device");
+        return;
+    }
+    dev_uni = dev->uni();
+
+    NetworkManager::ConnectionSettings::Ptr settings =
+                        assembleWirelessSettings(accessPointPtr, connSettingInfo, isHidden);
+    assembleEapMethodFastSettings(settings, info);
+
+    if(settings.isNull()) {
+        qDebug() << "assembleEapMethodFastSettings failed";
+        return;
+    }
+
+    map_settings = settings->toMap();
+
+    QDBusPendingCallWatcher * watcher;
+    watcher = new QDBusPendingCallWatcher{NetworkManager::addAndActivateConnection(map_settings, dev_uni, spec_object), this};
+    connect(watcher, &QDBusPendingCallWatcher::finished, [&] (QDBusPendingCallWatcher * watcher) {
+        if (watcher->isError() || !watcher->isValid()) {
+            QString errorMessage = watcher->error().message();
+            qDebug() << "addAndActiveWirelessEnterPriseFastConnect failed " << errorMessage;
+            Q_EMIT addAndActivateConnectionError(errorMessage);
         }
         watcher->deleteLater();
     });
@@ -1052,6 +1366,12 @@ bool KyWirelessConnectOperation::getEnterpiseEapMethod(const QString &uuid, KyEa
         type = PEAP;
     } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodTtls)) {
         type = TTLS;
+    } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodLeap)) {
+        type = LEAP;
+    } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodPwd)) {
+        type = PWD;
+    } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodFast)) {
+        type = FAST;
     }
 
     return true;

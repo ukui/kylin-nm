@@ -390,6 +390,12 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
                 securityPage->setPeapInfo(m_info.peapInfo);
             } else if (m_info.enterpriseType == TTLS) {
                 securityPage->setTtlsInfo(m_info.ttlsInfo);
+            } else if (m_info.enterpriseType == LEAP) {
+                securityPage->setLeapInfo(m_info.leapInfo);
+            } else if (m_info.enterpriseType == PWD) {
+                securityPage->setPwdInfo(m_info.pwdInfo);
+            } else if (m_info.enterpriseType == FAST) {
+                securityPage->setFastInfo(m_info.fastInfo);
             }
         }
     }
@@ -595,8 +601,14 @@ void NetDetail::initSecuData()
             initTlsInfo(m_info);
         } else if (m_info.enterpriseType == PEAP){
             initPeapInfo(m_info);
-        } else {
+        } else  if (m_info.enterpriseType == TTLS){
             initTtlsInfo(m_info);
+        } else  if (m_info.enterpriseType == LEAP){
+            initLeapInfo(m_info);
+        } else  if (m_info.enterpriseType == PWD){
+            initPwdInfo(m_info);
+        } else  if (m_info.enterpriseType == FAST){
+            initFastInfo(m_info);
         }
         break;
     default:
@@ -617,6 +629,21 @@ void NetDetail::initPeapInfo(ConInfo &conInfo)
 void NetDetail::initTtlsInfo(ConInfo &conInfo)
 {
     m_resource->getEnterPriseInfoTtls(m_uuid, conInfo.ttlsInfo);
+}
+
+void NetDetail::initLeapInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoLeap(m_uuid, conInfo.leapInfo);
+}
+
+void NetDetail::initPwdInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoPwd(m_uuid, conInfo.pwdInfo);
+}
+
+void NetDetail::initFastInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoFast(m_uuid, conInfo.fastInfo);
 }
 
 //点击了保存更改网络设置的按钮
@@ -732,6 +759,15 @@ void NetDetail::updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType)
     } else if (enterpriseType == TTLS) {
         securityPage->updateTtlsChange(m_info.ttlsInfo);
         m_wirelessConnOpration->updateWirelessEnterPriseTtlsConnect(m_uuid, m_info.ttlsInfo);
+    } else if (enterpriseType == LEAP) {
+        securityPage->updateLeapChange(m_info.leapInfo);
+        m_wirelessConnOpration->updateWirelessEnterPriseLeapConnect(m_uuid, m_info.leapInfo);
+    } else if (enterpriseType == PWD) {
+        securityPage->updatePwdChange(m_info.pwdInfo);
+        m_wirelessConnOpration->updateWirelessEnterPrisePwdConnect(m_uuid, m_info.pwdInfo);
+    } else if (enterpriseType == FAST) {
+        securityPage->updateFastChange(m_info.fastInfo);
+        m_wirelessConnOpration->updateWirelessEnterPriseFastConnect(m_uuid, m_info.fastInfo);
     }
 }
 
@@ -836,6 +872,33 @@ bool NetDetail::createWirelessConnect()
             } else {
                 qDebug() << "addAndConnect TTLS connect";
                 m_wirelessConnOpration->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, true);
+            }
+        } else if (enterpriseType == LEAP) {
+            securityPage->updateLeapChange(m_info.leapInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new LEAP connect";
+                m_wirelessConnOpration->addLeapConnect(connetSetting, m_info.leapInfo);
+            } else {
+                qDebug() << "addAndConnect LEAP connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPriseLeapConnect(m_info.leapInfo, connetSetting, m_deviceName, true);
+            }
+        } else if (enterpriseType == PWD) {
+            securityPage->updatePwdChange(m_info.pwdInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new PWD connect";
+                m_wirelessConnOpration->addPwdConnect(connetSetting, m_info.pwdInfo);
+            } else {
+                qDebug() << "addAndConnect PWD connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPrisePwdConnect(m_info.pwdInfo, connetSetting, m_deviceName, true);
+            }
+        } else if (enterpriseType == FAST) {
+            securityPage->updateFastChange(m_info.fastInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new FAST connect";
+                m_wirelessConnOpration->addFastConnect(connetSetting, m_info.fastInfo);
+            } else {
+                qDebug() << "addAndConnect FAST connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connetSetting, m_deviceName, true);
             }
         }
     } else {

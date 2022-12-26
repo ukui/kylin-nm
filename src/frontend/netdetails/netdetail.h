@@ -57,6 +57,9 @@ private:
     void initTlsInfo(ConInfo &conInfo);
     void initPeapInfo(ConInfo &conInfo);
     void initTtlsInfo(ConInfo &conInfo);
+    void initLeapInfo(ConInfo &conInfo);
+    void initPwdInfo(ConInfo &conInfo);
+    void initFastInfo(ConInfo &conInfo);
 
     void updateWirelessPersonalConnect();
     void updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType);

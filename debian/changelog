@@ -1,3 +1,9 @@
+kylin-nm (3.14.0.0+0512-3k13) yangtze; urgency=medium
+
+  * 增加三种企业网加密方式LEAP PWD FAST
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Mon, 26 Dec 2022 16:11:31 +0800
+
 kylin-nm (3.14.0.0+0512-3k12) yangtze; urgency=medium
 
   * vpn页面增加

@@ -1,0 +1,1675 @@
+From: zhaoshixu <zhaoshixu@kylinos.cn>
+Date: Mon, 26 Dec 2022 08:15:24 +0000
+Subject: !19 update changelog Merge pull request !19 from zhaoshixu/1226
+
+---
+ .../dbus-interface/kyenterpricesettinginfo.cpp     | 144 ++++++++
+ .../dbus-interface/kyenterpricesettinginfo.h       |  90 +++++
+ .../dbus-interface/kywirelessconnectoperation.cpp  | 320 ++++++++++++++++++
+ .../dbus-interface/kywirelessconnectoperation.h    |  15 +
+ .../dbus-interface/kywirelessnetresource.cpp       | 113 +++++++
+ src/backend/dbus-interface/kywirelessnetresource.h |   3 +
+ .../enterprise-wlan/enterprisewlandialog.cpp       |  27 ++
+ src/frontend/netdetails/coninfo.h                  |  16 +
+ src/frontend/netdetails/netdetail.cpp              |  65 +++-
+ src/frontend/netdetails/netdetail.h                |   3 +
+ src/frontend/netdetails/securitypage.cpp           | 365 ++++++++++++++++++++-
+ src/frontend/netdetails/securitypage.h             |  23 ++
+ translations/kylin-nm_zh_CN.qm                     | Bin 8016 -> 8562 bytes
+ translations/kylin-nm_zh_CN.ts                     |  40 +++
+ 14 files changed, 1222 insertions(+), 2 deletions(-)
+
+diff --git a/src/backend/dbus-interface/kyenterpricesettinginfo.cpp b/src/backend/dbus-interface/kyenterpricesettinginfo.cpp
+index 8bff206..37a0e95 100644
+--- a/src/backend/dbus-interface/kyenterpricesettinginfo.cpp
++++ b/src/backend/dbus-interface/kyenterpricesettinginfo.cpp
+@@ -174,3 +174,147 @@ void modifyEapMethodTtlsSettings(NetworkManager::ConnectionSettings::Ptr connSet
+     wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
+     return;
+ }
++
++void assembleEapMethodLeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodLeapInfo &leapInfo)
++{
++    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
++            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
++
++    QList<NetworkManager::Security8021xSetting::EapMethod> list;
++    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodLeap);
++    wifi_8021x_sett->setInitialized(true);
++    wifi_8021x_sett->setEapMethods(list);
++    wifi_8021x_sett->setIdentity(leapInfo.m_userName);
++    wifi_8021x_sett->setPassword(leapInfo.m_userPwd);
++    wifi_8021x_sett->setPasswordFlags(leapInfo.m_passwdFlag);
++
++
++    NetworkManager::WirelessSecuritySetting::Ptr security_sett
++            = connSettingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
++    security_sett->setInitialized(true);
++    security_sett->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaEap);
++    return;
++}
++
++void assembleEapMethodPwdSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPwdInfo &pwdInfo)
++{
++    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
++            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
++
++    QList<NetworkManager::Security8021xSetting::EapMethod> list;
++    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodPwd);
++    wifi_8021x_sett->setInitialized(true);
++    wifi_8021x_sett->setEapMethods(list);
++    wifi_8021x_sett->setIdentity(pwdInfo.m_userName);
++    wifi_8021x_sett->setPassword(pwdInfo.m_userPwd);
++    wifi_8021x_sett->setPasswordFlags(pwdInfo.m_passwdFlag);
++
++
++    NetworkManager::WirelessSecuritySetting::Ptr security_sett
++            = connSettingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
++    security_sett->setInitialized(true);
++    security_sett->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaEap);
++    return;
++}
++
++void assembleEapMethodFastSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodFastInfo &fastInfo)
++{
++    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
++            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
++
++    QList<NetworkManager::Security8021xSetting::EapMethod> list;
++    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodFast);
++    wifi_8021x_sett->setInitialized(true);
++    wifi_8021x_sett->setEapMethods(list);
++    wifi_8021x_sett->setAnonymousIdentity(fastInfo.m_anonIdentity);
++    if (fastInfo.m_allowAutoPacFlag) {
++        wifi_8021x_sett->setPhase1FastProvisioning((NetworkManager::Security8021xSetting::FastProvisioning)fastInfo.m_pacProvisioning);
++    } else {
++        wifi_8021x_sett->setPhase1FastProvisioning(NetworkManager::Security8021xSetting::FastProvisioning::FastProvisioningDisabled);
++    }
++    QByteArray pacEndWithNull("file://" + fastInfo.m_pacFilePath.toUtf8() + '\0');
++    wifi_8021x_sett->setPacFile(pacEndWithNull);
++    wifi_8021x_sett->setPhase2AuthMethod((NetworkManager::Security8021xSetting::AuthMethod)fastInfo.m_authMethod);
++    wifi_8021x_sett->setIdentity(fastInfo.m_userName);
++    wifi_8021x_sett->setPassword(fastInfo.m_userPwd);
++    wifi_8021x_sett->setPasswordFlags(fastInfo.m_passwdFlag);
++
++    NetworkManager::WirelessSecuritySetting::Ptr security_sett
++            = connSettingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
++    security_sett->setInitialized(true);
++    security_sett->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaEap);
++
++    return;
++}
++
++void modifyEapMethodLeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodLeapInfo &leapInfo)
++{
++    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
++            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
++    wifi_8021x_sett->setInitialized(true);
++
++    QList<NetworkManager::Security8021xSetting::EapMethod> list;
++    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodLeap);
++    wifi_8021x_sett->setEapMethods(list);
++    wifi_8021x_sett->setIdentity(leapInfo.m_userName);
++    if(leapInfo.bChanged)
++    {
++        wifi_8021x_sett->setPassword(leapInfo.m_userPwd);
++    }
++    wifi_8021x_sett->setPasswordFlags(leapInfo.m_passwdFlag);
++
++    QByteArray caCerEndWithNull("");
++    wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
++
++    return;
++}
++
++void modifyEapMethodPwdSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPwdInfo &pwdInfo)
++{
++    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
++            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
++    wifi_8021x_sett->setInitialized(true);
++
++    QList<NetworkManager::Security8021xSetting::EapMethod> list;
++    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodPwd);
++    wifi_8021x_sett->setEapMethods(list);
++    wifi_8021x_sett->setIdentity(pwdInfo.m_userName);
++    if(pwdInfo.bChanged)
++    {
++        wifi_8021x_sett->setPassword(pwdInfo.m_userPwd);
++    }
++    wifi_8021x_sett->setPasswordFlags(pwdInfo.m_passwdFlag);
++
++    QByteArray caCerEndWithNull("");
++    wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
++
++    return;
++}
++
++void modifyEapMethodFastSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodFastInfo &fastInfo)
++{
++    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
++            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
++    wifi_8021x_sett->setInitialized(true);
++
++    QList<NetworkManager::Security8021xSetting::EapMethod> list;
++    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodFast);
++    wifi_8021x_sett->setEapMethods(list);
++    wifi_8021x_sett->setAnonymousIdentity(fastInfo.m_anonIdentity);
++    if (fastInfo.m_allowAutoPacFlag) {
++        wifi_8021x_sett->setPhase1FastProvisioning((NetworkManager::Security8021xSetting::FastProvisioning)fastInfo.m_pacProvisioning);
++    } else {
++        wifi_8021x_sett->setPhase1FastProvisioning(NetworkManager::Security8021xSetting::FastProvisioning::FastProvisioningDisabled);
++    }
++    QByteArray pacEndWithNull("file://" + fastInfo.m_pacFilePath.toUtf8() + '\0');
++    wifi_8021x_sett->setPacFile(pacEndWithNull);
++
++    wifi_8021x_sett->setPhase2AuthMethod((NetworkManager::Security8021xSetting::AuthMethod)fastInfo.m_authMethod);
++    wifi_8021x_sett->setIdentity(fastInfo.m_userName);
++    if(fastInfo.bChanged)
++    {
++        wifi_8021x_sett->setPassword(fastInfo.m_userPwd);
++    }
++    wifi_8021x_sett->setPasswordFlags(fastInfo.m_passwdFlag);
++    return;
++}
+diff --git a/src/backend/dbus-interface/kyenterpricesettinginfo.h b/src/backend/dbus-interface/kyenterpricesettinginfo.h
+index 01c8b29..1f7d144 100644
+--- a/src/backend/dbus-interface/kyenterpricesettinginfo.h
++++ b/src/backend/dbus-interface/kyenterpricesettinginfo.h
+@@ -11,6 +11,9 @@ enum KyEapMethodType {
+     TLS = 0,
+     PEAP,
+     TTLS,
++    LEAP,
++    PWD,
++    FAST,
+ };
+ 
+ class KyEapMethodTlsInfo
+@@ -135,12 +138,99 @@ public:
+     }
+ };
+ 
++typedef enum {
++    KyFastProvisioningUnknown = -1,
++    KyFastProvisioningDisabled,
++    KyFastProvisioningAllowUnauthenticated,
++    KyFastProvisioningAllowAuthenticated,
++    KyFastProvisioningAllowBoth
++}KyFastProvisioning;
++
++class KyEapMethodLeapInfo
++{
++public:
++    QString m_userName;
++    QString m_userPwd;
++    NetworkManager::Setting::SecretFlags m_passwdFlag;
++    // only valid when update
++    bool    bChanged;
++
++    inline bool operator == (const KyEapMethodLeapInfo& info) const
++    {
++        if (this->m_userName == info.m_userName
++                && this->m_userPwd == info.m_userPwd
++                && this->m_passwdFlag == info.m_passwdFlag) {
++            return true;
++        } else {
++            return false;
++        }
++    }
++};
++
++class KyEapMethodPwdInfo
++{
++public:
++    QString m_userName;
++    QString m_userPwd;
++    NetworkManager::Setting::SecretFlags m_passwdFlag;
++    // only valid when update
++    bool    bChanged;
++
++    inline bool operator == (const KyEapMethodPwdInfo& info) const
++    {
++        if (this->m_userName == info.m_userName
++                && this->m_userPwd == info.m_userPwd
++                && this->m_passwdFlag == info.m_passwdFlag) {
++            return true;
++        } else {
++            return false;
++        }
++    }
++};
++
++class KyEapMethodFastInfo
++{
++public:
++    QString m_anonIdentity;
++    KyFastProvisioning m_pacProvisioning;
++    bool m_allowAutoPacFlag;
++    QString m_pacFilePath;
++    KyNoEapMethodAuth m_authMethod;
++    QString m_userName;
++    QString m_userPwd;
++    NetworkManager::Setting::SecretFlags m_passwdFlag;
++    // only valid when update
++    bool    bChanged;
++
++    inline bool operator == (const KyEapMethodFastInfo& info) const
++    {
++        if (this->m_anonIdentity == info.m_anonIdentity
++                && this->m_pacProvisioning == info.m_pacProvisioning
++                && this->m_allowAutoPacFlag == info.m_allowAutoPacFlag
++                && this->m_pacFilePath == info.m_pacFilePath
++                && this->m_authMethod == info.m_authMethod
++                && this->m_userName == info.m_userName
++                && this->m_userPwd == info.m_userPwd
++                && this->m_passwdFlag == info.m_passwdFlag) {
++            return true;
++        } else {
++            return false;
++        }
++    }
++};
++
+ void assembleEapMethodTlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTlsInfo &tlsInfo);
+ void assembleEapMethodPeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPeapInfo &peapInfo);
+ void assembleEapMethodTtlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTtlsInfo &ttlsInfo);
++void assembleEapMethodLeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodLeapInfo &leapInfo);
++void assembleEapMethodPwdSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPwdInfo &pwdInfo);
++void assembleEapMethodFastSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodFastInfo &fastInfo);
+ 
+ void modifyEapMethodTlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTlsInfo &tlsInfo);
+ void modifyEapMethodPeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPeapInfo &peapInfo);
+ void modifyEapMethodTtlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTtlsInfo &ttlsInfo);
++void modifyEapMethodLeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodLeapInfo &leapInfo);
++void modifyEapMethodPwdSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPwdInfo &pwdInfo);
++void modifyEapMethodFastSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodFastInfo &fastInfo);
+ 
+ #endif // KYENTERPRICESETTINGINFO_H
+diff --git a/src/backend/dbus-interface/kywirelessconnectoperation.cpp b/src/backend/dbus-interface/kywirelessconnectoperation.cpp
+index 7739403..972178c 100644
+--- a/src/backend/dbus-interface/kywirelessconnectoperation.cpp
++++ b/src/backend/dbus-interface/kywirelessconnectoperation.cpp
+@@ -278,6 +278,110 @@ void KyWirelessConnectOperation::addTtlsConnect(const KyWirelessConnectSetting &
+     return;
+ }
+ 
++//leap
++void KyWirelessConnectOperation::addLeapConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodLeapInfo &leapInfo)
++{
++    NetworkManager::WirelessNetwork::Ptr wifiNet =
++                                checkWifiNetExist(connSettingInfo.m_ssid, connSettingInfo.m_ifaceName);
++    if (wifiNet.isNull()) {
++        QString errorMessage = "the ssid " + connSettingInfo.m_ssid
++                                                + " is not exsit in " + connSettingInfo.m_ifaceName;
++        qWarning() << errorMessage;
++        Q_EMIT createConnectionError(errorMessage);
++        return;
++    }
++
++    NetworkManager::AccessPoint::Ptr accessPointPtr = wifiNet->referenceAccessPoint();
++    NetworkManager::ConnectionSettings::Ptr connSetting =
++                                    assembleWirelessSettings(accessPointPtr, connSettingInfo, false);
++    setIpv4AndIpv6Setting(connSetting, connSettingInfo);
++    assembleEapMethodLeapSettings(connSetting, leapInfo);
++
++    QDBusPendingCallWatcher * watcher;
++    watcher = new QDBusPendingCallWatcher{NetworkManager::addConnection(connSetting->toMap()), this};
++    connect(watcher, &QDBusPendingCallWatcher::finished, [this](QDBusPendingCallWatcher * watcher) {
++        if (watcher->isError() || !watcher->isValid()) {
++            QString errorMessage = tr("create wireless leap connection failed: ") + watcher->error().message();
++            qWarning()<<errorMessage;
++            Q_EMIT this->createConnectionError(errorMessage);
++        } else {
++            qDebug()<<"create wireless connect complete";
++        }
++        watcher->deleteLater();
++    });
++
++    return;
++}
++
++//pwd
++void KyWirelessConnectOperation::addPwdConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodPwdInfo &pwdInfo)
++{
++    NetworkManager::WirelessNetwork::Ptr wifiNet =
++                                checkWifiNetExist(connSettingInfo.m_ssid, connSettingInfo.m_ifaceName);
++    if (wifiNet.isNull()) {
++        QString errorMessage = "the ssid " + connSettingInfo.m_ssid
++                                                + " is not exsit in " + connSettingInfo.m_ifaceName;
++        qWarning() << errorMessage;
++        Q_EMIT createConnectionError(errorMessage);
++        return;
++    }
++
++    NetworkManager::AccessPoint::Ptr accessPointPtr = wifiNet->referenceAccessPoint();
++    NetworkManager::ConnectionSettings::Ptr connSetting =
++                                    assembleWirelessSettings(accessPointPtr, connSettingInfo, false);
++    setIpv4AndIpv6Setting(connSetting, connSettingInfo);
++    assembleEapMethodPwdSettings(connSetting, pwdInfo);
++
++    QDBusPendingCallWatcher * watcher;
++    watcher = new QDBusPendingCallWatcher{NetworkManager::addConnection(connSetting->toMap()), this};
++    connect(watcher, &QDBusPendingCallWatcher::finished, [this](QDBusPendingCallWatcher * watcher) {
++        if (watcher->isError() || !watcher->isValid()) {
++            QString errorMessage = tr("create wireless pwd connection failed: ") + watcher->error().message();
++            qWarning()<<errorMessage;
++            Q_EMIT this->createConnectionError(errorMessage);
++        } else {
++            qDebug()<<"create wireless connect complete";
++        }
++        watcher->deleteLater();
++    });
++
++    return;
++}
++
++//fast
++void KyWirelessConnectOperation::addFastConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodFastInfo &fastInfo)
++{
++    NetworkManager::WirelessNetwork::Ptr wifiNet =
++                                checkWifiNetExist(connSettingInfo.m_ssid, connSettingInfo.m_ifaceName);
++    if (wifiNet.isNull()) {
++        QString errorMessage = "the ssid " + connSettingInfo.m_ssid
++                                                + " is not exsit in " + connSettingInfo.m_ifaceName;
++        qWarning() << errorMessage;
++        Q_EMIT createConnectionError(errorMessage);
++        return;
++    }
++
++    NetworkManager::AccessPoint::Ptr accessPointPtr = wifiNet->referenceAccessPoint();
++    NetworkManager::ConnectionSettings::Ptr connSetting =
++                                    assembleWirelessSettings(accessPointPtr, connSettingInfo, false);
++    setIpv4AndIpv6Setting(connSetting, connSettingInfo);
++    assembleEapMethodFastSettings(connSetting, fastInfo);
++
++    QDBusPendingCallWatcher * watcher;
++    watcher = new QDBusPendingCallWatcher{NetworkManager::addConnection(connSetting->toMap()), this};
++    connect(watcher, &QDBusPendingCallWatcher::finished, [this](QDBusPendingCallWatcher * watcher) {
++        if (watcher->isError() || !watcher->isValid()) {
++            QString errorMessage = tr("create wireless fast connection failed: ") + watcher->error().message();
++            qWarning()<<errorMessage;
++            Q_EMIT this->createConnectionError(errorMessage);
++        } else {
++            qDebug()<<"create wireless connect complete";
++        }
++        watcher->deleteLater();
++    });
++
++}
++
+ void KyWirelessConnectOperation::setWirelessAutoConnect(const QString &uuid, bool bAutoConnect)
+ {
+     NetworkManager::Connection::Ptr connectPtr =
+@@ -463,6 +567,60 @@ void KyWirelessConnectOperation::updateWirelessEnterPriseTtlsConnect(const QStri
+     return;
+ }
+ 
++void KyWirelessConnectOperation::updateWirelessEnterPriseLeapConnect(const QString &uuid, const KyEapMethodLeapInfo &leapInfo)
++{
++    NetworkManager::Connection::Ptr connectPtr =
++            NetworkManager::findConnectionByUuid(uuid);
++    if (nullptr == connectPtr) {
++        QString errorMessage = tr("it can not find connection") + uuid;
++        qWarning()<<errorMessage;
++        Q_EMIT updateConnectionError(errorMessage);
++        return;
++    }
++    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
++
++    setWirelessSecuWpaXEap(connectionSettings);
++    modifyEapMethodLeapSettings(connectionSettings, leapInfo);
++    connectPtr->update(connectionSettings->toMap());
++    return;
++}
++
++void KyWirelessConnectOperation::updateWirelessEnterPrisePwdConnect(const QString &uuid, const KyEapMethodPwdInfo &pwdInfo)
++{
++    NetworkManager::Connection::Ptr connectPtr =
++            NetworkManager::findConnectionByUuid(uuid);
++    if (nullptr == connectPtr) {
++        QString errorMessage = tr("it can not find connection") + uuid;
++        qWarning()<<errorMessage;
++        Q_EMIT updateConnectionError(errorMessage);
++        return;
++    }
++    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
++
++    setWirelessSecuWpaXEap(connectionSettings);
++    modifyEapMethodPwdSettings(connectionSettings, pwdInfo);
++    connectPtr->update(connectionSettings->toMap());
++    return;
++}
++
++void KyWirelessConnectOperation::updateWirelessEnterPriseFastConnect(const QString &uuid, const KyEapMethodFastInfo &fastInfo)
++{
++    NetworkManager::Connection::Ptr connectPtr =
++            NetworkManager::findConnectionByUuid(uuid);
++    if (nullptr == connectPtr) {
++        QString errorMessage = tr("it can not find connection") + uuid;
++        qWarning()<<errorMessage;
++        Q_EMIT updateConnectionError(errorMessage);
++        return;
++    }
++    NetworkManager::ConnectionSettings::Ptr connectionSettings = connectPtr->settings();
++
++    setWirelessSecuWpaXEap(connectionSettings);
++    modifyEapMethodFastSettings(connectionSettings, fastInfo);
++    connectPtr->update(connectionSettings->toMap());
++    return;
++}
++
+ void KyWirelessConnectOperation::addAndActiveWirelessConnect(QString & devIface,KyWirelessConnectSetting &connSettingInfo,bool isHidden)
+ {
+     qDebug() << "addAndActiveWirelessConnect" << connSettingInfo.m_ssid << devIface <<connSettingInfo.m_psk;
+@@ -726,6 +884,162 @@ void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseTtlsConnect(KyEap
+     });
+ }
+ 
++void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseLeapConnect(KyEapMethodLeapInfo &info, KyWirelessConnectSetting &connSettingInfo, QString &devIface, bool isHidden)
++{
++    QString conn_uni;
++    QString dev_uni;
++    QString spec_object;
++    NMVariantMapMap map_settings;
++    NetworkManager::AccessPoint::Ptr accessPointPtr = nullptr;
++
++    if (!isHidden) {
++        NetworkManager::WirelessNetwork::Ptr wifiNet = checkWifiNetExist(connSettingInfo.m_ssid, devIface);
++        if (wifiNet.isNull()) {
++            QString errorMessage = "the ssid " + connSettingInfo.m_ssid + " is not exsit in " + devIface;
++            qWarning()<<errorMessage;
++            Q_EMIT activateConnectionError(errorMessage);
++            return;
++        }
++
++        accessPointPtr = wifiNet->referenceAccessPoint();
++        conn_uni = accessPointPtr->uni();
++        spec_object = conn_uni;
++    }
++
++    auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
++    if (dev.isNull()) {
++        Q_EMIT addAndActivateConnectionError("can not find device");
++        return;
++    }
++    dev_uni = dev->uni();
++
++    NetworkManager::ConnectionSettings::Ptr settings =
++                        assembleWirelessSettings(accessPointPtr, connSettingInfo, isHidden);
++    assembleEapMethodLeapSettings(settings, info);
++
++    if(settings.isNull()) {
++        qDebug() << "assembleEapMethodLeapSettings failed";
++        return;
++    }
++
++    map_settings = settings->toMap();
++
++    QDBusPendingCallWatcher * watcher;
++    watcher = new QDBusPendingCallWatcher{NetworkManager::addAndActivateConnection(map_settings, dev_uni, spec_object), this};
++    connect(watcher, &QDBusPendingCallWatcher::finished, [&] (QDBusPendingCallWatcher * watcher) {
++        if (watcher->isError() || !watcher->isValid()) {
++            QString errorMessage = watcher->error().message();
++            qDebug() << "addAndActiveWirelessEnterPriseLeapConnect failed " << errorMessage;
++            Q_EMIT addAndActivateConnectionError(errorMessage);
++        }
++        watcher->deleteLater();
++    });
++}
++
++void KyWirelessConnectOperation::addAndActiveWirelessEnterPrisePwdConnect(KyEapMethodPwdInfo &info, KyWirelessConnectSetting &connSettingInfo, QString &devIface, bool isHidden)
++{
++    QString conn_uni;
++    QString dev_uni;
++    QString spec_object;
++    NMVariantMapMap map_settings;
++    NetworkManager::AccessPoint::Ptr accessPointPtr = nullptr;
++
++    if (!isHidden) {
++        NetworkManager::WirelessNetwork::Ptr wifiNet = checkWifiNetExist(connSettingInfo.m_ssid, devIface);
++        if (wifiNet.isNull()) {
++            QString errorMessage = "the ssid " + connSettingInfo.m_ssid + " is not exsit in " + devIface;
++            qWarning()<<errorMessage;
++            Q_EMIT activateConnectionError(errorMessage);
++            return;
++        }
++
++        accessPointPtr = wifiNet->referenceAccessPoint();
++        conn_uni = accessPointPtr->uni();
++        spec_object = conn_uni;
++    }
++
++    auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
++    if (dev.isNull()) {
++        Q_EMIT addAndActivateConnectionError("can not find device");
++        return;
++    }
++    dev_uni = dev->uni();
++
++    NetworkManager::ConnectionSettings::Ptr settings =
++                        assembleWirelessSettings(accessPointPtr, connSettingInfo, isHidden);
++    assembleEapMethodPwdSettings(settings, info);
++
++    if(settings.isNull()) {
++        qDebug() << "assembleEapMethodPwdSettings failed";
++        return;
++    }
++
++    map_settings = settings->toMap();
++
++    QDBusPendingCallWatcher * watcher;
++    watcher = new QDBusPendingCallWatcher{NetworkManager::addAndActivateConnection(map_settings, dev_uni, spec_object), this};
++    connect(watcher, &QDBusPendingCallWatcher::finished, [&] (QDBusPendingCallWatcher * watcher) {
++        if (watcher->isError() || !watcher->isValid()) {
++            QString errorMessage = watcher->error().message();
++            qDebug() << "addAndActiveWirelessEnterPrisePwdConnect failed " << errorMessage;
++            Q_EMIT addAndActivateConnectionError(errorMessage);
++        }
++        watcher->deleteLater();
++    });
++}
++
++void KyWirelessConnectOperation::addAndActiveWirelessEnterPriseFastConnect(KyEapMethodFastInfo &info, KyWirelessConnectSetting &connSettingInfo, QString &devIface, bool isHidden)
++{
++    QString conn_uni;
++    QString dev_uni;
++    QString spec_object;
++    NMVariantMapMap map_settings;
++    NetworkManager::AccessPoint::Ptr accessPointPtr = nullptr;
++
++    if (!isHidden) {
++        NetworkManager::WirelessNetwork::Ptr wifiNet = checkWifiNetExist(connSettingInfo.m_ssid, devIface);
++        if (wifiNet.isNull()) {
++            QString errorMessage = "the ssid " + connSettingInfo.m_ssid + " is not exsit in " + devIface;
++            qWarning()<<errorMessage;
++            Q_EMIT activateConnectionError(errorMessage);
++            return;
++        }
++
++        accessPointPtr = wifiNet->referenceAccessPoint();
++        conn_uni = accessPointPtr->uni();
++        spec_object = conn_uni;
++    }
++
++    auto dev = m_networkResourceInstance->findDeviceInterface(devIface);
++    if (dev.isNull()) {
++        Q_EMIT addAndActivateConnectionError("can not find device");
++        return;
++    }
++    dev_uni = dev->uni();
++
++    NetworkManager::ConnectionSettings::Ptr settings =
++                        assembleWirelessSettings(accessPointPtr, connSettingInfo, isHidden);
++    assembleEapMethodFastSettings(settings, info);
++
++    if(settings.isNull()) {
++        qDebug() << "assembleEapMethodFastSettings failed";
++        return;
++    }
++
++    map_settings = settings->toMap();
++
++    QDBusPendingCallWatcher * watcher;
++    watcher = new QDBusPendingCallWatcher{NetworkManager::addAndActivateConnection(map_settings, dev_uni, spec_object), this};
++    connect(watcher, &QDBusPendingCallWatcher::finished, [&] (QDBusPendingCallWatcher * watcher) {
++        if (watcher->isError() || !watcher->isValid()) {
++            QString errorMessage = watcher->error().message();
++            qDebug() << "addAndActiveWirelessEnterPriseFastConnect failed " << errorMessage;
++            Q_EMIT addAndActivateConnectionError(errorMessage);
++        }
++        watcher->deleteLater();
++    });
++}
++
+ //Êó†Á∫øÁΩëÁªúÂºÄÂÖ≥ËÆæÁΩÆ
+ void KyWirelessConnectOperation::setWirelessEnabled(bool enabled)
+ {
+@@ -1052,6 +1366,12 @@ bool KyWirelessConnectOperation::getEnterpiseEapMethod(const QString &uuid, KyEa
+         type = PEAP;
+     } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodTtls)) {
+         type = TTLS;
++    } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodLeap)) {
++        type = LEAP;
++    } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodPwd)) {
++        type = PWD;
++    } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodFast)) {
++        type = FAST;
+     }
+ 
+     return true;
+diff --git a/src/backend/dbus-interface/kywirelessconnectoperation.h b/src/backend/dbus-interface/kywirelessconnectoperation.h
+index 8961890..07725a6 100644
+--- a/src/backend/dbus-interface/kywirelessconnectoperation.h
++++ b/src/backend/dbus-interface/kywirelessconnectoperation.h
+@@ -77,6 +77,12 @@ public:
+     void addPeapConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodPeapInfo &peapInfo);
+     //Êñ∞Â¢ûTTLSËøûÊé•
+     void addTtlsConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodTtlsInfo &ttlsInfo);
++    //Êñ∞Â¢ûLEAPËøûÊé•
++    void addLeapConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodLeapInfo &leapInfo);
++    //Êñ∞Â¢ûPWDËøûÊé•
++    void addPwdConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodPwdInfo &pwdInfo);
++    //Êñ∞Â¢ûFASTËøûÊé•
++    void addFastConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodFastInfo &fastInfo);
+     //Êñ∞Â¢ûËøûÊé•Âπ∂ÊøÄÊ¥ª(ÊôÆÈÄöwifi)
+     void addAndActiveWirelessConnect(QString & devIface,KyWirelessConnectSetting &connSettingInfo,bool isHidden);
+ 
+@@ -87,6 +93,12 @@ public:
+                                                    QString & devIface, bool isHidden);
+     void addAndActiveWirelessEnterPriseTtlsConnect(KyEapMethodTtlsInfo &info, KyWirelessConnectSetting &connSettingInfo,
+                                                    QString & devIface, bool isHidden);
++    void addAndActiveWirelessEnterPriseLeapConnect(KyEapMethodLeapInfo &info, KyWirelessConnectSetting &connSettingInfo,
++                                                   QString & devIface, bool isHidden);
++    void addAndActiveWirelessEnterPrisePwdConnect(KyEapMethodPwdInfo &info, KyWirelessConnectSetting &connSettingInfo,
++                                                   QString & devIface, bool isHidden);
++    void addAndActiveWirelessEnterPriseFastConnect(KyEapMethodFastInfo &info, KyWirelessConnectSetting &connSettingInfo,
++                                                   QString & devIface, bool isHidden);
+     //Â±ûÊÄßÈ°µ page1 AutoConnect
+     void setWirelessAutoConnect(const QString &uuid, bool bAutoConnect);
+     //Â±ûÊÄßÈ°µ page2 page3 ipv6
+@@ -98,6 +110,9 @@ public:
+     void updateWirelessEnterPriseTlsConnect(const QString &uuid, const KyEapMethodTlsInfo &tlsinfo);
+     void updateWirelessEnterPrisePeapConnect(const QString &uuid, const KyEapMethodPeapInfo &peapInfo);
+     void updateWirelessEnterPriseTtlsConnect(const QString &uuid, const KyEapMethodTtlsInfo &ttlsInfo);
++    void updateWirelessEnterPriseLeapConnect(const QString &uuid, const KyEapMethodLeapInfo &leapInfo);
++    void updateWirelessEnterPrisePwdConnect(const QString &uuid, const KyEapMethodPwdInfo &pwdInfo);
++    void updateWirelessEnterPriseFastConnect(const QString &uuid, const KyEapMethodFastInfo &fastInfo);
+     //ÂøòËÆ∞
+     void deleteWirelessConnect(const QString &connectUuid);
+     //Ëé∑ÂèñÂØÜÁ†Å
+diff --git a/src/backend/dbus-interface/kywirelessnetresource.cpp b/src/backend/dbus-interface/kywirelessnetresource.cpp
+index 386f863..435269e 100644
+--- a/src/backend/dbus-interface/kywirelessnetresource.cpp
++++ b/src/backend/dbus-interface/kywirelessnetresource.cpp
+@@ -588,6 +588,119 @@ bool KyWirelessNetResource::getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtls
+     return true;
+ }
+ 
++bool KyWirelessNetResource::getEnterPriseInfoLeap(QString &uuid, KyEapMethodLeapInfo &info)
++{
++    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
++    if (conn.isNull()) {
++        qDebug()<< LOG_FLAG << "getEnterPriseInfoLeap connection missing";
++        return false;
++    }
++    NetworkManager::WirelessSecuritySetting::Ptr security_sett
++        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
++    if (security_sett.isNull()) {
++        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
++        return false;
++    }
++
++    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
++        qDebug()<< LOG_FLAG << "keyMgmt not WpaEap " << security_sett->keyMgmt();
++        return false;
++    }
++
++    NetworkManager::Security8021xSetting::Ptr setting =
++            conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
++    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodLeap)) {
++        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
++        return false;
++    }
++
++    info.m_userName = setting->identity();
++    info.m_passwdFlag = setting->passwordFlags();
++    if (!info.m_passwdFlag) {
++        info.m_userPwd = m_operation->get8021xPassword(conn->uuid());
++    }
++
++    return true;
++}
++
++bool KyWirelessNetResource::getEnterPriseInfoPwd(QString &uuid, KyEapMethodPwdInfo &info)
++{
++    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
++    if (conn.isNull()) {
++        qDebug()<< LOG_FLAG << "getEnterPriseInfoPwd connection missing";
++        return false;
++    }
++    NetworkManager::WirelessSecuritySetting::Ptr security_sett
++        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
++    if (security_sett.isNull()) {
++        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
++        return false;
++    }
++
++    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
++        qDebug()<< LOG_FLAG << "keyMgmt not WpaEap " << security_sett->keyMgmt();
++        return false;
++    }
++
++    NetworkManager::Security8021xSetting::Ptr setting =
++            conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
++    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodPwd)) {
++        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
++        return false;
++    }
++
++    info.m_userName = setting->identity();
++    info.m_passwdFlag = setting->passwordFlags();
++    if (!info.m_passwdFlag) {
++        info.m_userPwd = m_operation->get8021xPassword(conn->uuid());
++    }
++
++    return true;
++}
++
++bool KyWirelessNetResource::getEnterPriseInfoFast(QString &uuid, KyEapMethodFastInfo &info)
++{
++    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
++    if (conn.isNull()) {
++        qDebug()<< LOG_FLAG << "getEnterPriseInfoFast connection missing";
++        return false;
++    }
++    NetworkManager::WirelessSecuritySetting::Ptr security_sett
++        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
++    if (security_sett.isNull()) {
++        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
++        return false;
++    }
++
++    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
++        qDebug()<< LOG_FLAG << "keyMgmt not WpaEap " << security_sett->keyMgmt();
++        return false;
++    }
++
++    NetworkManager::Security8021xSetting::Ptr setting =
++            conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
++    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodFast)) {
++        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
++        return false;
++    }
++
++    info.m_anonIdentity = setting->anonymousIdentity();
++    info.m_pacProvisioning = (KyFastProvisioning)setting->phase1FastProvisioning();
++    info.m_pacFilePath = setting->caPath();
++    if (info.m_pacFilePath.left(7) == "file://") {
++        info.m_pacFilePath = info.m_pacFilePath.mid(7);
++    }
++    info.m_authMethod = (KyNoEapMethodAuth)setting->phase2AuthMethod();
++
++    info.m_userName = setting->identity();
++    info.m_passwdFlag = setting->passwordFlags();
++    if (!info.m_passwdFlag) {
++        info.m_userPwd = m_operation->get8021xPassword(conn->uuid());
++    }
++
++    return true;
++}
++
+ void KyWirelessNetResource::onConnectionAdd(QString uuid)
+ {
+     qDebug() << LOG_FLAG << "onConnectionAdd " << uuid;
+diff --git a/src/backend/dbus-interface/kywirelessnetresource.h b/src/backend/dbus-interface/kywirelessnetresource.h
+index c7ed1f0..e663e4c 100644
+--- a/src/backend/dbus-interface/kywirelessnetresource.h
++++ b/src/backend/dbus-interface/kywirelessnetresource.h
+@@ -27,6 +27,9 @@ public:
+     bool getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info);
+     bool getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info);
+     bool getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);
++    bool getEnterPriseInfoLeap(QString &uuid, KyEapMethodLeapInfo &info);
++    bool getEnterPriseInfoPwd(QString &uuid, KyEapMethodPwdInfo &info);
++    bool getEnterPriseInfoFast(QString &uuid, KyEapMethodFastInfo &info);
+ 
+     void getWirelessActiveConnection(NetworkManager::ActiveConnection::State state, QMap<QString, QStringList> &map);
+     bool getActiveWirelessNetItem(QString deviceName, KyWirelessNetItem &wirelessNetItem);
+diff --git a/src/frontend/enterprise-wlan/enterprisewlandialog.cpp b/src/frontend/enterprise-wlan/enterprisewlandialog.cpp
+index 30dd894..8479836 100644
+--- a/src/frontend/enterprise-wlan/enterprisewlandialog.cpp
++++ b/src/frontend/enterprise-wlan/enterprisewlandialog.cpp
+@@ -181,6 +181,15 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
+     } else if (eapType == KyEapMethodType::TTLS) {
+         m_securityPage->updateTtlsChange(m_info.ttlsInfo);
+         m_connectOperation->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, false);
++    } else if (eapType == KyEapMethodType::LEAP) {
++        m_securityPage->updateLeapChange(m_info.leapInfo);
++        m_connectOperation->addAndActiveWirelessEnterPriseLeapConnect(m_info.leapInfo, connetSetting, m_deviceName, false);
++    }  else if (eapType == KyEapMethodType::PWD) {
++        m_securityPage->updatePwdChange(m_info.pwdInfo);
++        m_connectOperation->addAndActiveWirelessEnterPrisePwdConnect(m_info.pwdInfo, connetSetting, m_deviceName, false);
++    }  else if (eapType == KyEapMethodType::FAST) {
++        m_securityPage->updateFastChange(m_info.fastInfo);
++        m_connectOperation->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connetSetting, m_deviceName, false);
+     } else {
+         qWarning() << "Connect enterprise wlan failed!(Unknown eap type)" << Q_FUNC_INFO << __LINE__;
+     }
+@@ -208,6 +217,24 @@ void EnterpriseWlanDialog::onEapTypeChanged(const KyEapMethodType &type)
+         }
+         this->setFixedSize(MAIN_SIZE_NARROW);
+         break;
++    case KyEapMethodType::LEAP:
++        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
++            m_resource->getEnterPriseInfoLeap(m_wirelessNetItem.m_connectUuid, m_info.leapInfo);
++        }
++        this->setFixedSize(MAIN_SIZE_NARROW);
++        break;
++    case KyEapMethodType::PWD:
++        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
++            m_resource->getEnterPriseInfoPwd(m_wirelessNetItem.m_connectUuid, m_info.pwdInfo);
++        }
++        this->setFixedSize(MAIN_SIZE_NARROW);
++        break;
++    case KyEapMethodType::FAST:
++        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
++            m_resource->getEnterPriseInfoFast(m_wirelessNetItem.m_connectUuid, m_info.fastInfo);
++        }
++        this->setFixedSize(MAIN_SIZE_EXPAND);
++        break;
+     default:
+         break;
+     }
+diff --git a/src/frontend/netdetails/coninfo.h b/src/frontend/netdetails/coninfo.h
+index cb8ee55..0daad27 100644
+--- a/src/frontend/netdetails/coninfo.h
++++ b/src/frontend/netdetails/coninfo.h
+@@ -35,6 +35,19 @@ enum TtlsInnerType
+     GTC_EAP
+ };
+ 
++enum FastInnerType
++{
++    GTC_FAST = 0,
++    MSCHAPV2_FAST,
++};
++
++enum PacProvisioningInnerType
++{
++    ANON = 0,
++    AUTHEN,
++    BOTH,
++};
++
+ class LineEdit : public QLineEdit
+ {
+     Q_OBJECT
+@@ -88,6 +101,9 @@ public:
+     KyEapMethodTlsInfo tlsInfo;
+     KyEapMethodPeapInfo peapInfo;
+     KyEapMethodTtlsInfo ttlsInfo;
++    KyEapMethodLeapInfo leapInfo;
++    KyEapMethodPwdInfo  pwdInfo;
++    KyEapMethodFastInfo fastInfo;
+ };
+ 
+ static void setFramePalette(QFrame *widget, QPalette &pal) {
+diff --git a/src/frontend/netdetails/netdetail.cpp b/src/frontend/netdetails/netdetail.cpp
+index 3632a8f..3de2a2b 100644
+--- a/src/frontend/netdetails/netdetail.cpp
++++ b/src/frontend/netdetails/netdetail.cpp
+@@ -390,6 +390,12 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
+                 securityPage->setPeapInfo(m_info.peapInfo);
+             } else if (m_info.enterpriseType == TTLS) {
+                 securityPage->setTtlsInfo(m_info.ttlsInfo);
++            } else if (m_info.enterpriseType == LEAP) {
++                securityPage->setLeapInfo(m_info.leapInfo);
++            } else if (m_info.enterpriseType == PWD) {
++                securityPage->setPwdInfo(m_info.pwdInfo);
++            } else if (m_info.enterpriseType == FAST) {
++                securityPage->setFastInfo(m_info.fastInfo);
+             }
+         }
+     }
+@@ -595,8 +601,14 @@ void NetDetail::initSecuData()
+             initTlsInfo(m_info);
+         } else if (m_info.enterpriseType == PEAP){
+             initPeapInfo(m_info);
+-        } else {
++        } else  if (m_info.enterpriseType == TTLS){
+             initTtlsInfo(m_info);
++        } else  if (m_info.enterpriseType == LEAP){
++            initLeapInfo(m_info);
++        } else  if (m_info.enterpriseType == PWD){
++            initPwdInfo(m_info);
++        } else  if (m_info.enterpriseType == FAST){
++            initFastInfo(m_info);
+         }
+         break;
+     default:
+@@ -619,6 +631,21 @@ void NetDetail::initTtlsInfo(ConInfo &conInfo)
+     m_resource->getEnterPriseInfoTtls(m_uuid, conInfo.ttlsInfo);
+ }
+ 
++void NetDetail::initLeapInfo(ConInfo &conInfo)
++{
++    m_resource->getEnterPriseInfoLeap(m_uuid, conInfo.leapInfo);
++}
++
++void NetDetail::initPwdInfo(ConInfo &conInfo)
++{
++    m_resource->getEnterPriseInfoPwd(m_uuid, conInfo.pwdInfo);
++}
++
++void NetDetail::initFastInfo(ConInfo &conInfo)
++{
++    m_resource->getEnterPriseInfoFast(m_uuid, conInfo.fastInfo);
++}
++
+ //ÁÇπÂáª‰∫Ü‰øùÂ≠òÊõ¥ÊîπÁΩëÁªúËÆæÁΩÆÁöÑÊåâÈíÆ
+ void NetDetail::on_btnConfirm_clicked()
+ {
+@@ -732,6 +759,15 @@ void NetDetail::updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType)
+     } else if (enterpriseType == TTLS) {
+         securityPage->updateTtlsChange(m_info.ttlsInfo);
+         m_wirelessConnOpration->updateWirelessEnterPriseTtlsConnect(m_uuid, m_info.ttlsInfo);
++    } else if (enterpriseType == LEAP) {
++        securityPage->updateLeapChange(m_info.leapInfo);
++        m_wirelessConnOpration->updateWirelessEnterPriseLeapConnect(m_uuid, m_info.leapInfo);
++    } else if (enterpriseType == PWD) {
++        securityPage->updatePwdChange(m_info.pwdInfo);
++        m_wirelessConnOpration->updateWirelessEnterPrisePwdConnect(m_uuid, m_info.pwdInfo);
++    } else if (enterpriseType == FAST) {
++        securityPage->updateFastChange(m_info.fastInfo);
++        m_wirelessConnOpration->updateWirelessEnterPriseFastConnect(m_uuid, m_info.fastInfo);
+     }
+ }
+ 
+@@ -837,6 +873,33 @@ bool NetDetail::createWirelessConnect()
+                 qDebug() << "addAndConnect TTLS connect";
+                 m_wirelessConnOpration->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, true);
+             }
++        } else if (enterpriseType == LEAP) {
++            securityPage->updateLeapChange(m_info.leapInfo);
++            if (!m_name.isEmpty()) {
++                qDebug() << "add new LEAP connect";
++                m_wirelessConnOpration->addLeapConnect(connetSetting, m_info.leapInfo);
++            } else {
++                qDebug() << "addAndConnect LEAP connect";
++                m_wirelessConnOpration->addAndActiveWirelessEnterPriseLeapConnect(m_info.leapInfo, connetSetting, m_deviceName, true);
++            }
++        } else if (enterpriseType == PWD) {
++            securityPage->updatePwdChange(m_info.pwdInfo);
++            if (!m_name.isEmpty()) {
++                qDebug() << "add new PWD connect";
++                m_wirelessConnOpration->addPwdConnect(connetSetting, m_info.pwdInfo);
++            } else {
++                qDebug() << "addAndConnect PWD connect";
++                m_wirelessConnOpration->addAndActiveWirelessEnterPrisePwdConnect(m_info.pwdInfo, connetSetting, m_deviceName, true);
++            }
++        } else if (enterpriseType == FAST) {
++            securityPage->updateFastChange(m_info.fastInfo);
++            if (!m_name.isEmpty()) {
++                qDebug() << "add new FAST connect";
++                m_wirelessConnOpration->addFastConnect(connetSetting, m_info.fastInfo);
++            } else {
++                qDebug() << "addAndConnect FAST connect";
++                m_wirelessConnOpration->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connetSetting, m_deviceName, true);
++            }
+         }
+     } else {
+         securityPage->updateSecurityChange(connetSetting);
+diff --git a/src/frontend/netdetails/netdetail.h b/src/frontend/netdetails/netdetail.h
+index c3262c8..c6dcb19 100644
+--- a/src/frontend/netdetails/netdetail.h
++++ b/src/frontend/netdetails/netdetail.h
+@@ -57,6 +57,9 @@ private:
+     void initTlsInfo(ConInfo &conInfo);
+     void initPeapInfo(ConInfo &conInfo);
+     void initTtlsInfo(ConInfo &conInfo);
++    void initLeapInfo(ConInfo &conInfo);
++    void initPwdInfo(ConInfo &conInfo);
++    void initFastInfo(ConInfo &conInfo);
+ 
+     void updateWirelessPersonalConnect();
+     void updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType);
+diff --git a/src/frontend/netdetails/securitypage.cpp b/src/frontend/netdetails/securitypage.cpp
+index 7be9f4e..daf9555 100644
+--- a/src/frontend/netdetails/securitypage.cpp
++++ b/src/frontend/netdetails/securitypage.cpp
+@@ -50,6 +50,13 @@ void SecurityPage::initUI()
+     userPwdEdit = new KPasswordEdit(this);
+     userPwdFlagBox = new QCheckBox(this);
+ 
++    //FAST
++    m_pacCheckBox = new QCheckBox(this);
++    m_pacProvisionComboBox = new QComboBox(this);
++    m_pacFilePathComboBox = new QComboBox(this);
++    m_pacProvisionLabel = new FixLabel(this);
++    m_pacFlagLabel = new FixLabel(this);
++    m_pacFileLabel = new QLabel(this);
+ 
+     mSecuLayout = new QFormLayout(this);
+     mSecuLayout->addRow(secuTypeLabel, secuTypeCombox);
+@@ -62,6 +69,9 @@ void SecurityPage::initUI()
+     mSecuLayout->addRow(clientCertPathLabel, clientCertPathCombox);
+     mSecuLayout->addRow(clientPrivateKeyLabel, clientPrivateKeyCombox);
+     mSecuLayout->addRow(clientPrivateKeyPwdLabel,clientPrivateKeyPwdEdit);
++    mSecuLayout->addRow(m_pacProvisionLabel,m_pacProvisionComboBox);
++    mSecuLayout->addRow(m_pacCheckBox,m_pacFlagLabel);
++    mSecuLayout->addRow(m_pacFileLabel,m_pacFilePathComboBox);
+     mSecuLayout->addRow(eapMethodLabel, eapMethodCombox);
+     mSecuLayout->addRow(userNameLabel, userNameEdit);
+     mSecuLayout->addRow(userPwdLabel, userPwdEdit);
+@@ -95,6 +105,9 @@ void SecurityPage::initUI()
+     eapTypeCombox->addItem("TLS", TLS);
+     eapTypeCombox->addItem("PEAP", PEAP);
+     eapTypeCombox->addItem("TTLS", TTLS);
++    eapTypeCombox->addItem("LEAP", LEAP);
++    eapTypeCombox->addItem("PWD", PWD);
++    eapTypeCombox->addItem("FAST", FAST);
+     eapTypeCombox->setCurrentIndex(TLS);
+     //TLS
+     caCertPathCombox->addItem(tr("None"), QString(tr("None"))); //Êó†
+@@ -106,6 +119,18 @@ void SecurityPage::initUI()
+     clientPrivateKeyCombox->addItem(tr("None"), QString(tr("None"))); //Êó†
+     clientPrivateKeyCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //‰ªéÊñá‰ª∂‰∏≠ÈÄâÊã©...
+ 
++    //FAST
++    m_pacCheckBox->setChecked(true);
++    m_pacProvisionLabel->setText(tr("PAC provisioning")); //PACÈÖçÁΩÆ
++    m_pacFlagLabel->setText(tr("Allow automatic PAC provisioning")); //ÂÖÅËÆ∏Ëá™Âä®PACÈÖçÁΩÆ
++    m_pacFileLabel->setText(tr("PAC file")); //PACÊñá‰ª∂
++    m_pacProvisionComboBox->addItem(tr("Anonymous"), ANON); //ÂåøÂêç
++    m_pacProvisionComboBox->addItem(tr("Authenticated"), AUTHEN); //Â∑≤ËÆ§ËØÅ
++    m_pacProvisionComboBox->addItem(tr("Both"), BOTH); //‰∏§ËÄÖÂÖºÁî®
++    m_pacProvisionComboBox->setCurrentIndex(ANON);
++    m_pacFilePathComboBox->addItem(tr("None"), QString(tr("None"))); //Êó†
++    m_pacFilePathComboBox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //‰ªéÊñá‰ª∂‰∏≠ÈÄâÊã©...
++
+     //Á¶ÅÁî®ClearBtnÊåâÈíÆ
+     pwdEdit->setClearButtonEnabled(false);
+     clientPrivateKeyPwdEdit->setClearButtonEnabled(false);
+@@ -152,7 +177,13 @@ void SecurityPage::initConnect()
+     connect(eapMethodCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
+     connect(userNameEdit, &LineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
+     connect(userPwdEdit, &LineEdit::textChanged, this, &SecurityPage::setEnableOfSaveBtn);
++    connect(m_pacCheckBox, &QCheckBox::stateChanged, this, &SecurityPage::setEnableOfSaveBtn);
++    connect(m_pacProvisionComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
++    connect(m_pacFilePathComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+ 
++    connect(m_pacCheckBox, &QCheckBox::clicked, this, &SecurityPage::onPacBoxClicked);
++    connect(m_pacFilePathComboBox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
++            this, &SecurityPage::onPacFilePathComboxIndexChanged);
+ }
+ 
+ void SecurityPage::setSecurity(KySecuType index)
+@@ -256,6 +287,71 @@ void SecurityPage::setTtlsInfo(KyEapMethodTtlsInfo &info)
+     }
+ }
+ 
++void SecurityPage::setLeapInfo(KyEapMethodLeapInfo &info)
++{
++    showLeapOrPwd();
++    eapTypeCombox->setCurrentIndex(LEAP);
++    userNameEdit->setText(info.m_userName);
++    userPwdEdit->setText(info.m_userPwd);
++    if (info.m_passwdFlag) {
++        userPwdFlagBox->setChecked(true);
++    } else {
++        userPwdFlagBox->setChecked(false);
++    }
++}
++
++void SecurityPage::setPwdInfo(KyEapMethodPwdInfo &info)
++{
++    showLeapOrPwd();
++    eapTypeCombox->setCurrentIndex(PWD);
++    userNameEdit->setText(info.m_userName);
++    userPwdEdit->setText(info.m_userPwd);
++    if (info.m_passwdFlag) {
++        userPwdFlagBox->setChecked(true);
++    } else {
++        userPwdFlagBox->setChecked(false);
++    }
++}
++
++void SecurityPage::setFastInfo(KyEapMethodFastInfo &info)
++{
++    showFast();
++    eapTypeCombox->setCurrentIndex(FAST);
++    onEapTypeComboxIndexChanged();
++
++    identityEdit->setText(info.m_anonIdentity);
++    if (info.m_pacProvisioning == KyFastProvisioningAllowUnauthenticated) {
++        m_pacProvisionComboBox->setCurrentIndex(ANON);
++    } else if (info.m_pacProvisioning == KyFastProvisioningAllowAuthenticated) {
++        m_pacProvisionComboBox->setCurrentIndex(AUTHEN);
++    } else if (info.m_pacProvisioning == KyFastProvisioningAllowBoth) {
++        m_pacProvisionComboBox->setCurrentIndex(BOTH);
++    }
++
++    if (info.m_pacFilePath.isEmpty()) {
++        m_pacFilePathComboBox->setItemText(0, QString(tr("None")));
++        m_pacCheckBox->setChecked(true);
++        m_pacFilePathComboBox->setEnabled(false);
++    } else {
++        m_pacFilePathComboBox->setItemText(0, info.m_pacFilePath);
++        m_pacCheckBox->setChecked(false);
++        m_pacFilePathComboBox->setEnabled(true);
++    }
++
++    if (info.m_authMethod == KyAuthMethodGtc) {
++        eapMethodCombox->setCurrentIndex(GTC_FAST);
++    } else if (info.m_authMethod == KyAuthMethodMschapv2) {
++        eapMethodCombox->setCurrentIndex(MSCHAPV2_FAST);
++    }
++    userNameEdit->setText(info.m_userName);
++    userPwdEdit->setText(info.m_userPwd);
++    if (info.m_passwdFlag) {
++        userPwdFlagBox->setChecked(true);
++    } else {
++        userPwdFlagBox->setChecked(false);
++    }
++}
++
+ void SecurityPage::setSecurityVisible(const bool &visible)
+ {
+     if (secuTypeLabel) {
+@@ -298,6 +394,33 @@ void SecurityPage::updateTtlsChange(KyEapMethodTtlsInfo &info)
+     info = ttlsInfo;
+ }
+ 
++void SecurityPage::updateLeapChange(KyEapMethodLeapInfo &info)
++{
++    KyEapMethodLeapInfo leapInfo = assembleLeapInfo();
++    if (leapInfo.m_userPwd != info.m_userPwd) {
++        leapInfo.bChanged = true;
++    }
++    info = leapInfo;
++}
++
++void SecurityPage::updatePwdChange(KyEapMethodPwdInfo &info)
++{
++    KyEapMethodPwdInfo pwdInfo = assemblePwdInfo();
++    if (pwdInfo.m_userPwd != info.m_userPwd) {
++        pwdInfo.bChanged = true;
++    }
++    info = pwdInfo;
++}
++
++void SecurityPage::updateFastChange(KyEapMethodFastInfo &info)
++{
++    KyEapMethodFastInfo pwdInfo = assembleFastInfo();
++    if (pwdInfo.m_userPwd != info.m_userPwd) {
++        pwdInfo.bChanged = true;
++    }
++    info = pwdInfo;
++}
++
+ void SecurityPage::getSecuType(KySecuType &secuType, KyEapMethodType &enterpriseType)
+ {
+     secuType = (KySecuType)secuTypeCombox->currentData().toInt();
+@@ -323,6 +446,12 @@ bool SecurityPage::checkIsChanged(const ConInfo info)
+                     return !(info.peapInfo == assemblePeapInfo());
+                 } else if (info.enterpriseType == TTLS) {
+                     return !(info.ttlsInfo == assembleTtlsInfo());
++                } else if (info.enterpriseType == LEAP) {
++                    return !(info.leapInfo == assembleLeapInfo());
++                } else if (info.enterpriseType == PWD) {
++                    return !(info.pwdInfo == assemblePwdInfo());
++                } else if (info.enterpriseType == FAST) {
++                    return !(info.fastInfo == assembleFastInfo());
+                 }
+             }
+         }
+@@ -364,6 +493,14 @@ void SecurityPage::showNone()
+     userNameLabel->hide();
+     userPwdLabel->hide();
+     userPwdFlagLabel->hide();
++
++    //FAST
++    m_pacCheckBox->hide();
++    m_pacProvisionComboBox->hide();
++    m_pacFilePathComboBox->hide();
++    m_pacProvisionLabel->hide();
++    m_pacFlagLabel->hide();
++    m_pacFileLabel->hide();
+ }
+ 
+ void SecurityPage::showPsk()
+@@ -401,6 +538,14 @@ void SecurityPage::showPsk()
+     userNameLabel->hide();
+     userPwdLabel->hide();
+     userPwdFlagLabel->hide();
++
++    //FAST
++    m_pacCheckBox->hide();
++    m_pacProvisionComboBox->hide();
++    m_pacFilePathComboBox->hide();
++    m_pacProvisionLabel->hide();
++    m_pacFlagLabel->hide();
++    m_pacFileLabel->hide();
+ }
+ 
+ void SecurityPage::showTls()
+@@ -438,6 +583,14 @@ void SecurityPage::showTls()
+     userNameLabel->hide();
+     userPwdLabel->hide();
+     userPwdFlagLabel->hide();
++
++    //FAST
++    m_pacCheckBox->hide();
++    m_pacProvisionComboBox->hide();
++    m_pacFilePathComboBox->hide();
++    m_pacProvisionLabel->hide();
++    m_pacFlagLabel->hide();
++    m_pacFileLabel->hide();
+ }
+ 
+ void SecurityPage::showPeapOrTtls()
+@@ -475,6 +628,104 @@ void SecurityPage::showPeapOrTtls()
+     userNameLabel->show();
+     userPwdLabel->show();
+     userPwdFlagLabel->show();
++
++    //FAST
++    m_pacCheckBox->hide();
++    m_pacProvisionComboBox->hide();
++    m_pacFilePathComboBox->hide();
++    m_pacProvisionLabel->hide();
++    m_pacFlagLabel->hide();
++    m_pacFileLabel->hide();
++}
++
++void SecurityPage::showLeapOrPwd()
++{
++    pwdEdit->hide();
++    eapTypeCombox->show();
++
++    identityEdit->hide();
++    domainEdit->hide();
++    caCertPathCombox->hide();
++    caNeedBox->hide();
++    clientCertPathCombox->hide();
++    clientPrivateKeyCombox->hide();
++    clientPrivateKeyPwdEdit->hide();
++
++    eapMethodCombox->hide();
++    userNameEdit->show();
++    userPwdEdit->show();
++    userPwdFlagBox->show();
++
++    pwdLabel->hide();
++    //‰ºÅ‰∏öwifiÂÖ±Êúâ
++    eapTypeLabel->show();
++    //TLS
++    identityLable->hide();
++    domainLable->hide();
++    caCertPathLabel->hide();
++    caNeedFlagLabel->hide();
++    clientCertPathLabel->hide();
++    clientPrivateKeyLabel->hide();
++    clientPrivateKeyPwdLabel->hide();
++
++    //PEAP TTLSÂÖ±Êúâ
++    eapMethodLabel->hide();
++    userNameLabel->show();
++    userPwdLabel->show();
++    userPwdFlagLabel->show();
++
++    //FAST
++    m_pacCheckBox->hide();
++    m_pacProvisionComboBox->hide();
++    m_pacFilePathComboBox->hide();
++    m_pacProvisionLabel->hide();
++    m_pacFlagLabel->hide();
++    m_pacFileLabel->hide();
++}
++
++void SecurityPage::showFast()
++{
++    pwdEdit->hide();
++    eapTypeCombox->show();
++
++    identityEdit->show();
++    domainEdit->hide();
++    caCertPathCombox->hide();
++    caNeedBox->hide();
++    clientCertPathCombox->hide();
++    clientPrivateKeyCombox->hide();
++    clientPrivateKeyPwdEdit->hide();
++
++    eapMethodCombox->show();
++    userNameEdit->show();
++    userPwdEdit->show();
++    userPwdFlagBox->hide();
++
++    pwdLabel->hide();
++    //‰ºÅ‰∏öwifiÂÖ±Êúâ
++    eapTypeLabel->show();
++    //TLS
++    identityLable->show();
++    domainLable->hide();
++    caCertPathLabel->hide();
++    caNeedFlagLabel->hide();
++    clientCertPathLabel->hide();
++    clientPrivateKeyLabel->hide();
++    clientPrivateKeyPwdLabel->hide();
++
++    //PEAP TTLSÂÖ±Êúâ
++    eapMethodLabel->show();
++    userNameLabel->show();
++    userPwdLabel->show();
++    userPwdFlagLabel->hide();
++
++    //FAST
++    m_pacCheckBox->show();
++    m_pacProvisionComboBox->show();
++    m_pacFilePathComboBox->show();
++    m_pacProvisionLabel->show();
++    m_pacFlagLabel->show();
++    m_pacFileLabel->show();
+ }
+ 
+ KyEapMethodTlsInfo SecurityPage::assembleTlsInfo()
+@@ -556,6 +807,60 @@ KyEapMethodTtlsInfo SecurityPage::assembleTtlsInfo()
+     return info;
+ }
+ 
++KyEapMethodLeapInfo SecurityPage::assembleLeapInfo()
++{
++    KyEapMethodLeapInfo info;
++    info.m_userName = userNameEdit->text();
++    info.m_userPwd = userPwdEdit->text();
++    info.m_passwdFlag = (userPwdFlagBox->isChecked() ? NetworkManager::Setting::NotSaved : NetworkManager::Setting::None);
++    return info;
++}
++
++KyEapMethodPwdInfo SecurityPage::assemblePwdInfo()
++{
++    KyEapMethodPwdInfo info;
++    info.m_userName = userNameEdit->text();
++    info.m_userPwd = userPwdEdit->text();
++    info.m_passwdFlag = (userPwdFlagBox->isChecked() ? NetworkManager::Setting::NotSaved : NetworkManager::Setting::None);
++    return info;
++}
++
++KyEapMethodFastInfo SecurityPage::assembleFastInfo()
++{
++    KyEapMethodFastInfo info;
++       info.m_anonIdentity = identityEdit->text();
++       switch (m_pacProvisionComboBox->currentIndex()) {
++       case ANON:
++           info.m_pacProvisioning = KyFastProvisioningAllowUnauthenticated;
++           break;
++       case AUTHEN:
++           info.m_pacProvisioning = KyFastProvisioningAllowAuthenticated;
++           break;
++       case BOTH:
++           info.m_pacProvisioning = KyFastProvisioningAllowBoth;
++           break;
++       default:
++           break;
++       }
++       info.m_allowAutoPacFlag = m_pacCheckBox->isChecked();
++       info.m_pacFilePath = m_pacFilePathComboBox->currentText();
++
++       switch (eapMethodCombox->currentIndex()) {
++       case GTC_FAST:
++           info.m_authMethod = KyAuthMethodGtc;
++           break;
++       case MSCHAPV2_FAST:
++           info.m_authMethod = KyAuthMethodMschapv2;
++           break;
++       default:
++           break;
++       }
++       info.m_userName = userNameEdit->text();
++       info.m_userPwd = userPwdEdit->text();
++       info.m_passwdFlag = (userPwdFlagBox->isChecked() ? NetworkManager::Setting::NotSaved : NetworkManager::Setting::None);
++       return info;
++}
++
+ void SecurityPage::updateSecurityChange(KyWirelessConnectSetting &setting)
+ {
+     qDebug() << "secuTypeCombox->currentData()" << secuTypeCombox->currentData().toInt() << pwdEdit->text();
+@@ -613,7 +918,20 @@ bool SecurityPage::checkConnectBtnIsEnabled()
+                 qDebug() << "client Private Key password is empty";
+                 return false;
+             }
+-        } else if (type == PEAP || type == TTLS) {
++        } else if (type == PEAP || type == TTLS || type == LEAP || type == PWD) {
++            if(userNameEdit->text().isEmpty() || userPwdEdit->text().isEmpty()) {
++                qDebug() << "user name or user password is empty";
++                return false;
++            }
++        } else if (type == FAST) {
++            if (identityEdit->text().isEmpty()) {
++                qDebug() << "fast anonymous identity is empty";
++                return false;
++            }
++            if(!m_pacCheckBox->isChecked()) {
++                qDebug() << "Not allow automatic PAC provisioning ";
++                return false;
++            }
+             if(userNameEdit->text().isEmpty() || userPwdEdit->text().isEmpty()) {
+                 qDebug() << "user name or user password is empty";
+                 return false;
+@@ -665,6 +983,18 @@ void SecurityPage::onEapTypeComboxIndexChanged()
+         eapMethodCombox->addItem("md5(eap)", MD5_EAP);
+         eapMethodCombox->addItem("gtc(eap)", GTC_EAP);
+         emit this->eapTypeChanged(TTLS);
++    }  else if (index == LEAP) {
++        showLeapOrPwd();
++        emit this->eapTypeChanged(LEAP);
++    }  else if (index == PWD) {
++        showLeapOrPwd();
++        emit this->eapTypeChanged(PWD);
++    } else if (index == FAST) {
++        showFast();
++        eapMethodCombox->clear();
++        eapMethodCombox->addItem("GTC", GTC_FAST);
++        eapMethodCombox->addItem("MSCHAPv2", MSCHAPV2_FAST);
++        emit this->eapTypeChanged(FAST);
+     }
+ }
+ 
+@@ -678,6 +1008,16 @@ void SecurityPage::onCaNeedBoxClicked()
+     }
+ }
+ 
++void SecurityPage::onPacBoxClicked()
++{
++    if (!m_pacCheckBox->isChecked()) {
++        m_pacProvisionComboBox->setCurrentIndex(ANON);
++        m_pacProvisionComboBox->setEnabled(false);
++    }  else {
++        m_pacProvisionComboBox->setEnabled(true);
++    }
++}
++
+ void SecurityPage::onCaCertPathComboxIndexChanged(QString str)
+ {
+     if (str.contains("Choose from file...") || str.contains("‰ªéÊñá‰ª∂ÈÄâÊã©..."))
+@@ -745,3 +1085,26 @@ void SecurityPage::onClientPrivateKeyComboxIndexChanged(QString str)
+         qWarning() << "Choose file is null or unvalible";
+     }
+ }
++
++void SecurityPage::onPacFilePathComboxIndexChanged(QString str)
++{
++    if (str.contains("Choose from file...") || str.contains("‰ªéÊñá‰ª∂ÈÄâÊã©..."))
++    {
++        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a PAC file"), "recent:///",
++                                                        tr("PAC Files (*.pac)"));
++        if (!fileName.isNull()) {
++            QStringList nameList = fileName.split("/");
++            m_pacFilePathComboBox->blockSignals(true);
++            m_pacFilePathComboBox->setItemText(0, fileName);
++            m_pacFilePathComboBox->setCurrentIndex(0);
++            m_pacFilePathComboBox->blockSignals(false);
++        } else {
++            m_pacFilePathComboBox->blockSignals(true);
++            m_pacFilePathComboBox->setItemText(0, tr("None"));
++            m_pacFilePathComboBox->setCurrentIndex(0);
++            m_pacFilePathComboBox->blockSignals(false);
++        }
++    } else {
++        qWarning() << "Choose file is null or unvalible";
++    }
++}
+diff --git a/src/frontend/netdetails/securitypage.h b/src/frontend/netdetails/securitypage.h
+index e3aaee4..8214d2a 100644
+--- a/src/frontend/netdetails/securitypage.h
++++ b/src/frontend/netdetails/securitypage.h
+@@ -11,6 +11,7 @@
+ #include "coninfo.h"
+ #include "kwidget.h"
+ #include "kpasswordedit.h"
++#include "detailwidget.h"
+ 
+ using namespace kdk;
+ 
+@@ -25,6 +26,9 @@ public:
+     void setTlsInfo(KyEapMethodTlsInfo &info);
+     void setPeapInfo(KyEapMethodPeapInfo &info);
+     void setTtlsInfo(KyEapMethodTtlsInfo &info);
++    void setLeapInfo(KyEapMethodLeapInfo &info);
++    void setPwdInfo(KyEapMethodPwdInfo &info);
++    void setFastInfo(KyEapMethodFastInfo &info);
+     void setSecurityVisible(const bool &visible);
+ 
+     bool checkIsChanged(const ConInfo info);
+@@ -32,6 +36,9 @@ public:
+     void updateTlsChange(KyEapMethodTlsInfo &info);
+     void updatePeapChange(KyEapMethodPeapInfo &info);
+     void updateTtlsChange(KyEapMethodTtlsInfo &info);
++    void updateLeapChange(KyEapMethodLeapInfo &info);
++    void updatePwdChange(KyEapMethodPwdInfo &info);
++    void updateFastChange(KyEapMethodFastInfo &info);
+ 
+     void getSecuType(KySecuType &secuType, KyEapMethodType &enterpriseType);
+ 
+@@ -77,16 +84,30 @@ private:
+     KPasswordEdit *userPwdEdit = nullptr;
+     QCheckBox *userPwdFlagBox;
+ 
++    //FAST
++    QCheckBox *m_pacCheckBox;
++    QComboBox *m_pacProvisionComboBox;
++    QComboBox *m_pacFilePathComboBox;
++    FixLabel *m_pacProvisionLabel;
++    FixLabel *m_pacFlagLabel;
++    QLabel *m_pacFileLabel;
++    QWidget *m_pacCheckWidget;
++
+     void showNone();
+     void showPsk();
+     void showTls();
+     void showPeapOrTtls();
++    void showLeapOrPwd();
++    void showFast();
+     void initUI();
+     void initConnect();
+ 
+     KyEapMethodTlsInfo assembleTlsInfo();
+     KyEapMethodPeapInfo assemblePeapInfo();
+     KyEapMethodTtlsInfo assembleTtlsInfo();
++    KyEapMethodLeapInfo assembleLeapInfo();
++    KyEapMethodPwdInfo assemblePwdInfo();
++    KyEapMethodFastInfo assembleFastInfo();
+ 
+     bool checkConnectBtnIsEnabled();
+ 
+@@ -97,10 +118,12 @@ private slots:
+     void setEnableOfSaveBtn();
+ 
+     void onCaNeedBoxClicked();
++    void onPacBoxClicked();
+ 
+     void onCaCertPathComboxIndexChanged(QString str);
+     void onClientCertPathComboxIndexChanged(QString str);
+     void onClientPrivateKeyComboxIndexChanged(QString str);
++    void onPacFilePathComboxIndexChanged(QString str);
+ 
+ signals:
+     void setSecuPageState(bool);
+diff --git a/translations/kylin-nm_zh_CN.qm b/translations/kylin-nm_zh_CN.qm
+index 7be7750..7f1110d 100644
+--- a/translations/kylin-nm_zh_CN.qm
++++ b/translations/kylin-nm_zh_CN.qm
+@@ -1,18 +1,19 @@
+-<∏d ÔúïÕ!ø`°Ω›B    O⁄  ù  P^  Ñ  P^  
+->  [N  ı åØ  ß ÷ç  { ÷ç  ü î  Å ñ  ´ 7j  u VE   VE  5 ¿^  
+-” ¿^  \ T  n <1  ‚ 0  	º 0  ’ 0  ≠ 0  Ω 0}    IË   NYz  	 NYö  ; X}z   Çb¨  ‡ ÷óâ  Ô ﬁL  ( ¯ì™  ?±y   ß±y  z±y  áP®ï   oçñ  	Òçñ  çñ  ÃDô   4ÃDô  OÃDô  \’åé  ¨-¿§  ´-¿§  ¬-¿§  8KWµ  (ó‹y  √ÌW^  's  YFí*  ¢ê©%  ñòIº  vòIº  Õ¨ß¸  ØÉW  F∂7˛  kÀ8À  AÀ8À  ÷çƒ  ¡  18[|  8[|  ·8[|  ÓK%w  
+-ôg  ÄäÑ  ﬂôì  ﬂ'ƒı  î{då  nµ“j  „Ô·  à≥å  ã™~  ¯´å„    ´å„  '´å„  4ÄÑ  ∆4U  VP¯N  ›°Kg   ﬂ°Kg  Æ™„‰  \ÏÄÑ  o	s  	5]ÿ  	d˚:  …	oÓ  l	u'  	6	Ä˘*  /	…  	€2˙  ‘	ËØ  «	¯Ø  o
++<∏d ÔúïÕ!ø`°Ω›B  0  O⁄  ù  P^  Ñ  P^  
++>  [N  ◊ åØ  ß ñ®  ∑ ÷ç  { ÷ç  ü î  Å ñ  ´ 7j  u VE   VE  [ ¿^  
++” ¿^  > T  n <1  ‚ 0  	º 0  ’ 0  è 0  ü 0}    IË   NYz  	 NYö  ; X}z   Çb¨  ¬ ÷óâ  Ô ﬁL  
++ ¯ì™  ?±y   ß±y  z±y  áP®ï   oçñ  	Òçñ  Èçñ  ˇÃDô   4ÃDô  OÃDô  \’åé  é-¿§  ´-¿§  §-¿§  3f§  ÉKWµ  (ó‹y  DÌW^  Ms  YFí*  ¢ê©%  xòIº  vòIº  Õ¨ß¸  ØÉW  (∂7˛  ëÀ8À  AÀ8À  ÷çƒ  È¡  18[|  8[|  ·8[|  ÓK%w  
++ôVÀe  Ãg  ‰ÄäÑ  ¡ôì  ¡'ƒı  ∫`éì  {då  nÉ˜9  Çµ“j  „Ô·  j≥å  ¯ã™~  ´å„    ´å„  '´å„  4ÄÑ  ∆4U  8P¯N  ›°Kg   ﬂ°Kg  Æ™„‰  >ÏÄÑ  o	s  ˆ	5]ÿ  	d˚:  …	oÓ  N	u'  	6	Ä˘*  /	…  	€2˙  ‘	ËØ  «	¯Ø  o
+ a˚4  }
+-a˚4  î
+-a˚4  ÿ
++a˚4  v
++a˚4  ∫
+ d–Õ  ı
+ eK‰  ©
+ eK‰  R
+-eK‰  i
+-eK‰  ¨
++eK‰  K
++eK‰  é
+ °Kg  ª
+-≈¥I  «Fóπ  Õd©E  d£ò≈  Ê¨ï)  /¨ï)  â@Íæ  -å4  qúHe  ∏ªs  
+-hªs  ‹ªs  Ò’H…  ],û  Q\û   à2…  ´àk…  á˘u  ß‚  €  F<1  úÈ˙‰  qÆBŒ  û∞≠$  ﬁ∞≠$  	~Î§  i  F    I P V 4W0W@       Address   CreatNetPage   ÅÍR® ( D H C P )       
++≈¥I  ÌFóπ  Ød©E  F£ò≈  »¨ï)  /¨ï)  k@Íæ  i  	å4  qúHe  öªs  
++hªs  æªs  ”’H…  ?,û  Q\û   à2…  ´àk…  i˘u  â‚  €  F<1  úêÃ∑  √úf  È˙‰  SÆBŒ  û∞≠$  ﬁ∞≠$  	~Î§  i  (    I P V 4W0W@       Address   CreatNetPage   ÅÍR® ( D H C P )       
+ Auto(DHCP)   CreatNetPage   Q~‹Ty       Connection Name   CreatNetPage   ûÿã§QQs       Default Gateway   CreatNetPage    I P V 4ëMn       
+ Ipv4Config   CreatNetPage   bKR®       Manual   CreatNetPage   [PQc©x       Netmask   CreatNetPage   _≈Xk       Required   CreatNetPage   ÅÍR®èﬁc•       Auto Connection   
+ DetailPage   ^&[Ωˇ       
+@@ -51,9 +52,9 @@ MainWindow   
+ e‡~ø\@WﬂQ       WLAN   
+ MainWindow   Q~‹]ÂQw       kylin-nm   
+ MainWindow    D N SgR°Vhˇ       DNS server:   MultipleDnsWidget   m˚R†g	~øQ~‹       Add Lan Connect   	NetDetail   ÅÍR®       Auto   	NetDetail   S÷mà       Cancel   	NetDetail   xn[ö       Confirm   	NetDetail   ãÊ`≈       Detail   	NetDetail   
+-_ÿã∞kdQ~‹       Forget this network   	NetDetail    I p v 4       Ipv4   	NetDetail    I p v 6       Ipv6   	NetDetail   ûíûüQ~‹ãæn]ÂQw       Kylin NM   	NetDetail   e‡       None   	NetDetail   [âQh       Security   	NetDetail   èﬁc•R0ñêÖœ W L A N       connect hiddin wlan   	NetDetail    i p v 4W0W@Q≤zÅˇ       ipv4 address conflict!   	NetDetail    i p v 6W0W@Q≤zÅˇ       ipv6 address conflict!   	NetDetail   Q~‹c–y:mà`o       kylin network desktop message   	NetDetail   _ YÀh¿mK i p v 4W0W@Q≤zÅ       !start check ipv4 address conflict   	NetDetail   _ YÀh¿mK i p v 6W0W@Q≤zÅ       !start check ipv6 address conflict   	NetDetail   kd w i f iNe/czz|{Wã       this wifi no support None type   	NetDetail   kd w i f iNe/c W P A 2|{Wã       this wifi no support WPA2 type   	NetDetail   kd w i f iNe/c W P A 3|{Wã       this wifi no support WPA3 type   	NetDetail   kd w i f iNe/cONQ|{Wã       $this wifi no support enterprise type   	NetDetailˇˇˇˇ       Form   OneConnFormˇˇˇˇ       Form   OneLancForm   kœk!ã‚ïÓ[∆x       Ask pwd each query   SecurityPage   V C A  ã¡Nf   ( * . p e m   * . d e r   * . p 1 2   * . c r t   * . c e r   * . p f x )       .CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)   SecurityPage   
+- C A  ã¡Nf       CA certficate   SecurityPage   ê	bÈN N* C Aã¡Nf       Choose a CA certificate   SecurityPage   NŒeáNˆê	bÈ . . .       Choose from file...   SecurityPage   Wﬂ       Domain   SecurityPage   
+- E A Peπl’       EAP type   SecurityPage   S?Té´N˝       Identity   SecurityPage   QÖêËã§ã¡       Ineer authentication   SecurityPage   e‡       None   SecurityPage   [∆î•       Password   SecurityPage   [âQh`'       Security   SecurityPage   u(b7T       Usename   SecurityPage   u(b7ã¡Nf       User certificate   SecurityPage   u(b7[∆î•[∆x       User key password   SecurityPage   u(b7y¡î•       User private key   SecurityPage    W P A & W P A 2  ON       WPA&WPA2 Enterprise   SecurityPage    W P A & W P A 2  N*N∫       WPA&WPA2 Personal   SecurityPage    W P A 3  N*N∫       WPA3 Personal   SecurityPage   Nó âÅ C Aã¡Nf       no need for CA certificate   SecurityPage   Q~‹]ÂQw       Kylin NM   
++_ÿã∞kdQ~‹       Forget this network   	NetDetail    I p v 4       Ipv4   	NetDetail    I p v 6       Ipv6   	NetDetail   ûíûüQ~‹ãæn]ÂQw       Kylin NM   	NetDetail   e‡       None   	NetDetail   [âQh       Security   	NetDetail   èﬁc•R0ñêÖœ W L A N       connect hiddin wlan   	NetDetail    i p v 4W0W@Q≤zÅˇ       ipv4 address conflict!   	NetDetail    i p v 6W0W@Q≤zÅˇ       ipv6 address conflict!   	NetDetail   Q~‹c–y:mà`o       kylin network desktop message   	NetDetail   _ YÀh¿mK i p v 4W0W@Q≤zÅ       !start check ipv4 address conflict   	NetDetail   _ YÀh¿mK i p v 6W0W@Q≤zÅ       !start check ipv6 address conflict   	NetDetail   kd w i f iNe/czz|{Wã       this wifi no support None type   	NetDetail   kd w i f iNe/c W P A 2|{Wã       this wifi no support WPA2 type   	NetDetail   kd w i f iNe/c W P A 3|{Wã       this wifi no support WPA3 type   	NetDetail   kd w i f iNe/cONQ|{Wã       $this wifi no support enterprise type   	NetDetailˇˇˇˇ       Form   OneConnFormˇˇˇˇ       Form   OneLancForm   QAã∏ÅÍR® P A CëMn        Allow automatic PAC provisioning   SecurityPage   S?T       	Anonymous   SecurityPage   kœk!ã‚ïÓ[∆x       Ask pwd each query   SecurityPage   ]Úã§ã¡       Authenticated   SecurityPage   N$ÄQ|u(       Both   SecurityPage   V C A  ã¡Nf   ( * . p e m   * . d e r   * . p 1 2   * . c r t   * . c e r   * . p f x )       .CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)   SecurityPage   
++ C A  ã¡Nf       CA certficate   SecurityPage   ê	bÈN N* C Aã¡Nf       Choose a CA certificate   SecurityPage   ê	bÈN N* P A CeáNˆ       Choose a PAC file   SecurityPage   NŒeáNˆê	bÈ . . .       Choose from file...   SecurityPage   Wﬂ       Domain   SecurityPage   
++ E A Peπl’       EAP type   SecurityPage   S?Té´N˝       Identity   SecurityPage   QÖêËã§ã¡       Ineer authentication   SecurityPage   e‡       None   SecurityPage    P A CeáNˆ ( * . p a c )       PAC Files (*.pac)   SecurityPage    P A C  eáNˆ       PAC file   SecurityPage    P A C  ëMn       PAC provisioning   SecurityPage   [∆î•       Password   SecurityPage   [âQh`'       Security   SecurityPage   u(b7T       Usename   SecurityPage   u(b7ã¡Nf       User certificate   SecurityPage   u(b7[∆î•[∆x       User key password   SecurityPage   u(b7y¡î•       User private key   SecurityPage    W P A & W P A 2  ON       WPA&WPA2 Enterprise   SecurityPage    W P A & W P A 2  N*N∫       WPA&WPA2 Personal   SecurityPage    W P A 3  N*N∫       WPA3 Personal   SecurityPage   Nó âÅ C Aã¡Nf       no need for CA certificate   SecurityPage   Q~‹]ÂQw       Kylin NM   
+ SinglePage   ãæn       Settings   
+ SinglePage   Q~‹c–y:mà`o       $kylin network applet desktop message   
+ SinglePage   _SRMQSa       Current Device   TabPage   
+diff --git a/translations/kylin-nm_zh_CN.ts b/translations/kylin-nm_zh_CN.ts
+index ee7d0d4..08cbf75 100644
+--- a/translations/kylin-nm_zh_CN.ts
++++ b/translations/kylin-nm_zh_CN.ts
+@@ -976,6 +976,46 @@
+         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
+         <translation>CA ËØÅ‰π¶ (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+     </message>
++    <message>
++        <location filename="../src/frontend/netdetails/securitypage.cpp" line="271"/>
++        <source>PAC provisioning</source>
++        <translation>PAC ÈÖçÁΩÆ</translation>
++    </message>
++    <message>
++        <location filename="../src/frontend/netdetails/securitypage.cpp" line="272"/>
++        <source>Allow automatic PAC provisioning</source>
++        <translation>ÂÖÅËÆ∏Ëá™Âä®PACÈÖçÁΩÆ</translation>
++    </message>
++    <message>
++        <location filename="../src/frontend/netdetails/securitypage.cpp" line="273"/>
++        <source>PAC file</source>
++        <translation>PAC Êñá‰ª∂</translation>
++    </message>
++    <message>
++        <location filename="../src/frontend/netdetails/securitypage.cpp" line="274"/>
++        <source>Anonymous</source>
++        <translation>ÂåøÂêç</translation>
++    </message>
++    <message>
++        <location filename="../src/frontend/netdetails/securitypage.cpp" line="275"/>
++        <source>Authenticated</source>
++        <translation>Â∑≤ËÆ§ËØÅ</translation>
++    </message>
++    <message>
++        <location filename="../src/frontend/netdetails/securitypage.cpp" line="276"/>
++        <source>Both</source>
++        <translation>‰∏§ËÄÖÂÖºÁî®</translation>
++    </message>
++    <message>
++        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1226"/>
++        <source>Choose a PAC file</source>
++        <translation>ÈÄâÊã©‰∏Ä‰∏™PACÊñá‰ª∂</translation>
++    </message>
++    <message>
++        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1227"/>
++        <source>PAC Files (*.pac)</source>
++        <translation>PACÊñá‰ª∂(*.pac)</translation>
++    </message>
+ </context>
+ <context>
+     <name>SinglePage</name>

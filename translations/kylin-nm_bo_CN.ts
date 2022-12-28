@@ -125,6 +125,22 @@
         <source>Manual</source>
         <translation>ལག་དེབ།</translation>
     </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="198"/>
+        <source>Invalid address</source>
+        <translation>རྩིས་འགྲོ་མེད་པའི་ས་གནས།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="207"/>
+        <source>Invalid subnet mask</source>
+        <translation>རྩིས་འགྲོ་མེད་པའི་དྲ་བ་འགེབས་སྲུང་བྱེད་པ།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="231"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="232"/>
+        <source>Required</source>
+        <translation>ངེས་པར་དུ་སྐོང་དགོས།</translation>
+    </message>
 </context>
 <context>
     <name>DetailPage</name>

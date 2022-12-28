@@ -125,6 +125,22 @@
         <source>Manual</source>
         <translation>手动</translation>
     </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="198"/>
+        <source>Invalid address</source>
+        <translation>无效地址</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="207"/>
+        <source>Invalid subnet mask</source>
+        <translation>无效子网掩码</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="231"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="232"/>
+        <source>Required</source>
+        <translation>必填</translation>
+    </message>
 </context>
 <context>
     <name>DetailPage</name>

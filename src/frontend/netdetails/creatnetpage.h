@@ -59,6 +59,9 @@ private:
     QLabel *m_gateWayLabel;
     QLabel *m_dnsLabel;
     QLabel *m_secDnsLabel;
+
+    QLabel *m_addressHintLabel;
+    QLabel *m_maskHintLabel;
 private:
     void initUI();
     void initComponent();
@@ -73,6 +76,9 @@ private:
 private Q_SLOTS:
     void setEnableOfSaveBtn();
     void configChanged(int index);
+    void onAddressTextChanged();
+    void onNetMaskTextChanged();
+
 Q_SIGNALS:
     void setCreatePageState(bool);
 

@@ -557,7 +557,7 @@ void WlanConnect::onSwitchBtnChanged(bool state)
     if (getSwitchBtnState() == state) {
         return;
     }
-
+    setSwitchBtnEnable(true);
     setSwitchBtnState(state);
     if (!getSwitchBtnState()) {
         hideLayout(ui->availableLayout);
@@ -716,6 +716,7 @@ void WlanConnect::initSwtichState()
     }
 
     bool state = result.arguments().at(0).toBool();
+    setSwitchBtnEnable(true);
     setSwitchBtnState(state);
 }
 

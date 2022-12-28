@@ -196,12 +196,12 @@ private:
     }
     inline void setSwitchBtnEnable(bool state) {
         if (m_netSwitch != nullptr) {
-            m_netSwitch->setCheckable(state);
+            m_netSwitch->setEnabled(state);
         }
     }
     inline bool getSwitchBtnEnable() {
         if (m_netSwitch != nullptr) {
-            return m_netSwitch->isCheckable();
+            return m_netSwitch->isEnabled();
         }
     }
 

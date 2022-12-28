@@ -78,7 +78,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 
     connect(m_connectResource, &KyConnectResourse::connectivityChanged, this, &WlanPage::connectivityChanged);
     connect(m_netSwitch, &KSwitchButton::clicked, this, [=](bool checked) {
-        //解决switchBtn不支持点击的情况下，点击按钮，有无线网卡后不自动开启的问题
+        //解决 switchBtn不支持点击的情况下，点击按钮，有无线网卡后不自动开启的问题
         if (getSwitchBtnEnable()) {
             setSwitchBtnState(!checked);
             setWirelessEnable(checked);
@@ -803,6 +803,7 @@ void WlanPage::onWlanStateChanged(NetworkManager::Device::State newstate, Networ
     if (getSwitchBtnState() == getWirelessDevieceUseable()) {
         return ;
     }
+    setSwitchBtnEnable(true);
     setSwitchBtnState(getWirelessDevieceUseable());
     initDeviceCombox();
     initWlanArea();

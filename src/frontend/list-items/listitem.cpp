@@ -239,8 +239,8 @@ void ListItem::initUI()
     m_lbLoadDown->setFont(font);
     m_lbLoadUp->setText("0KB/s");
     m_lbLoadDown->setText("0KB/s");
-    m_lbLoadDownImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-down.png);}");
-    m_lbLoadUpImg->setStyleSheet("QLabel{background-image:url(:/res/x/load-up.png);}");
+    m_lbLoadDownImg->setPixmap(QPixmap(":/res/x/load-down.png"));
+    m_lbLoadUpImg->setPixmap(QPixmap(":/res/x/load-up.png"));
 
     m_hItemLayout->addWidget(m_netButton);
     m_hItemLayout->addWidget(m_nameLabel);

@@ -51,7 +51,7 @@ WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, Q
 
 //    connect(this->m_infoButton, &InfoButton::clicked, this, &WlanListItem::onInfoButtonClicked);
     connect(m_menu, &QMenu::triggered, this, &WlanListItem::onMenuTriggered);
-    connect(m_hoverButton, &QPushButton::clicked, this, &WlanListItem::onNetButtonClicked);
+    connect(m_hoverButton, &FixPushButton::clicked, this, &WlanListItem::onNetButtonClicked);
 
     m_wirelessConnectOperation = new KyWirelessConnectOperation(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
@@ -198,11 +198,11 @@ void WlanListItem::enterEvent(QEvent *event)
         if (Deactivated != m_connectState) {
             m_hoverButton->setProperty("useButtonPalette", true);
             m_hoverButton->setProperty("isImportant", false);
-            m_hoverButton->setText(tr("Disconnect"));
+            m_hoverButton->setButtonText(tr("Disconnect"));
         } else {
             m_hoverButton->setProperty("isImportant", true);
             m_hoverButton->setProperty("useButtonPalette", false);
-            m_hoverButton->setText(tr("Connect"));
+            m_hoverButton->setButtonText(tr("Connect"));
         }
         m_hoverButton->show();
         m_lbLoadUp->hide();
@@ -320,11 +320,11 @@ void WlanListItem::initWlanUI()
     m_pwdLineEdit->setFixedHeight(PWD_AREA_HEIGHT);
     m_pwdFrameLyt->addWidget(m_pwdLineEdit);
 
-    m_connectButton = new QPushButton(m_pwdFrame);
+    m_connectButton = new FixPushButton(m_pwdFrame);
     m_connectButton->setProperty("isImportant", true);
     m_connectButton->setProperty("needTranslucent", true);
     m_connectButton->setFixedSize(CONNECT_BUTTON_WIDTH, PWD_AREA_HEIGHT);
-    m_connectButton->setText(tr("Connect"));
+    m_connectButton->setButtonText(tr("Connect"));
     m_connectButton->setEnabled(false);
     connect(m_connectButton, &QPushButton::clicked, this, &WlanListItem::onConnectButtonClicked);
     m_pwdFrameLyt->addWidget(m_connectButton);
@@ -650,20 +650,20 @@ void WlanListItem::updateConnectState(ConnectState state)
         m_netButton->setActive(true);
         m_hoverButton->setProperty("useButtonPalette", true);
         m_hoverButton->setProperty("isImportant", false);
-        m_hoverButton->setText(tr("Disconnect"));
+        m_hoverButton->setButtonText(tr("Disconnect"));
     } else if(Deactivated == state) {
         qDebug() << "[WlanListItem] stop loading connect state:" << state;
         m_netButton->stopLoading();
         m_netButton->setActive(false);
         m_hoverButton->setProperty("isImportant", true);
         m_hoverButton->setProperty("useButtonPalette", false);
-        m_hoverButton->setText(tr("Connect"));
+        m_hoverButton->setButtonText(tr("Connect"));
     } else {
         qDebug() << "[WlanListItem] start loading connect state:" << state;
         m_netButton->startLoading();
         m_hoverButton->setProperty("useButtonPalette", true);
         m_hoverButton->setProperty("isImportant", false);
-        m_hoverButton->setText(tr("Disconnect"));
+        m_hoverButton->setButtonText(tr("Disconnect"));
     }
 
     return;

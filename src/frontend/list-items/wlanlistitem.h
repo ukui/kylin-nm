@@ -114,7 +114,7 @@ private:
     QFrame *m_pwdFrame = nullptr;
     QHBoxLayout *m_pwdFrameLyt = nullptr;
     KPasswordEdit *m_pwdLineEdit = nullptr;
-    QPushButton *m_connectButton = nullptr;
+    FixPushButton *m_connectButton = nullptr;
 
     //自动连接选择区域UI
     QFrame *m_autoConnectFrame = nullptr;

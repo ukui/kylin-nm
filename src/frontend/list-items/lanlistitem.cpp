@@ -53,7 +53,7 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
     m_itemFrame->installEventFilter(this);
 //    connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
     connect(m_menu, &QMenu::triggered, this, &LanListItem::onMenuTriggered);
-    connect(m_hoverButton, &QPushButton::clicked, this, &LanListItem::onNetButtonClicked);
+    connect(m_hoverButton, &FixPushButton::clicked, this, &LanListItem::onNetButtonClicked);
 }
 
 
@@ -253,11 +253,11 @@ void LanListItem::enterEvent(QEvent *event)
         if (Deactivated != m_lanConnectItem.m_connectState) {
             m_hoverButton->setProperty("useButtonPalette", true);
             m_hoverButton->setProperty("isImportant", false);
-            m_hoverButton->setText(tr("Disconnect"));
+            m_hoverButton->setButtonText(tr("Disconnect"));
         } else {
             m_hoverButton->setProperty("isImportant", true);
             m_hoverButton->setProperty("useButtonPalette", false);
-            m_hoverButton->setText(tr("Connect"));
+            m_hoverButton->setButtonText(tr("Connect"));
         }
         m_hoverButton->show();
         m_lbLoadUp->hide();

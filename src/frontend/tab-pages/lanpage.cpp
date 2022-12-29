@@ -19,6 +19,8 @@
  */
 #include "lanpage.h"
 #include "networkmodeconfig.h"
+#include "kwindowsystem.h"
+#include "kwindowsystem_export.h"
 #include <QDebug>
 #include <QScrollBar>
 
@@ -77,6 +79,7 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
         m_netSwitch->setChecked(!checked);
         m_wiredConnectOperation->setWiredEnabled(checked);
     });
+    m_lanPagePtrMap.clear();
 }
 
 LanPage::~LanPage()
@@ -452,6 +455,13 @@ void LanPage::onRemoveConnection(QString path)            //删除时后端会�
     //for dbus
     qDebug() << "[LanPage] Q_EMIT lanRemove because onRemoveConnection " << path;
     Q_EMIT lanRemove(path);
+
+    if (m_lanPagePtrMap.contains(path)) {
+        if (m_lanPagePtrMap[path] != nullptr) {
+            delete m_lanPagePtrMap[path];
+            m_lanPagePtrMap[path] = nullptr;
+        }
+    }
 
     if (removeConnectionItem(m_inactiveConnectionMap, m_inactivatedLanListWidget, path)) {
         return;
@@ -1266,8 +1276,37 @@ void LanPage::showDetailPage(QString devName, QString uuid)
        return;
     }
 
+    if (m_lanPagePtrMap.contains(p_item->m_connectPath)) {
+        if (m_lanPagePtrMap[p_item->m_connectPath] != nullptr) {
+            qDebug() << "[LanPage] ShowLanDetailPage" << uuid << "already create,just raise";
+            KWindowSystem::raiseWindow(m_lanPagePtrMap[p_item->m_connectPath]->winId());
+            return;
+        }
+    }
+
     NetDetail *netDetail = new NetDetail(devName, p_item->m_connectName, uuid, isActive, false, false);
+    m_lanPagePtrMap.insert(p_item->m_connectPath, netDetail);
     netDetail->show();
+
+    connect(netDetail, &NetDetail::detailPageClose, [&](QString deviceName, QString lanName, QString lanUuid){
+        if (lanUuid.isEmpty()) {
+            return;
+        }
+        KyConnectItem *currentItem = nullptr;
+        if (m_connectResourse->isActivatedConnection(lanUuid)) {
+            currentItem = m_activeResourse->getActiveConnectionByUuid(lanUuid);
+        } else {
+            currentItem = m_connectResourse->getConnectionItemByUuid(lanUuid);
+        }
+        if (currentItem == nullptr) {
+            return;
+        }
+        if (m_lanPagePtrMap.contains(currentItem->m_connectPath)) {
+            m_lanPagePtrMap[currentItem->m_connectPath] = nullptr;
+        }
+        delete currentItem;
+        currentItem = nullptr;
+    });
 
     delete p_item;
     p_item = nullptr;

@@ -20,6 +20,8 @@
 #include "wlanpage.h"
 #include "kywirelessnetitem.h"
 #include "networkmodeconfig.h"
+#include "kwindowsystem.h"
+#include "kwindowsystem_export.h"
 #include <QEvent>
 #include <QDateTime>
 #include <QDebug>
@@ -84,6 +86,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
             setWirelessEnable(checked);
         }
     });
+    m_wlanPagePtrMap.clear();
 }
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
@@ -550,6 +553,12 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 void WlanPage::onWlanRemoved(QString interface, QString ssid)
 {
     Q_EMIT wlanRemove(interface, ssid);
+
+    if (m_wlanPagePtrMap.contains(interface) && m_wlanPagePtrMap[interface].contains(ssid)) {
+        if (m_wlanPagePtrMap[interface][ssid] != nullptr) {
+            m_wlanPagePtrMap[interface][ssid]->close();
+        }
+    }
 
     if (interface != m_currentDevice) {
         qDebug()<<"[WlanPage] the device is not current device,"
@@ -1512,7 +1521,23 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
 
     bool isActive = m_connectResource->isActivatedConnection(wirelessNetItem.m_connectUuid);
 
+    if (m_wlanPagePtrMap.contains(devName) && m_wlanPagePtrMap[devName].contains(ssid)) {
+        if (m_wlanPagePtrMap[devName][ssid] != nullptr) {
+            qDebug() << "[WlanPage] ShowWlanDetailPage" << ssid << "already create,just raise";
+            KWindowSystem::raiseWindow(m_wlanPagePtrMap[devName][ssid]->winId());
+            return;
+        }
+    }
+
     NetDetail *netDetail = new NetDetail(devName, ssid, wirelessNetItem.m_connectUuid, isActive, true, !wirelessNetItem.m_isConfigured);
+    QMap<QString, NetDetail*> page;
+    page.insert(ssid, netDetail);
+    m_wlanPagePtrMap.insert(devName, page);
+    connect(netDetail, &NetDetail::detailPageClose, [&](QString deviceName, QString wlanSsid){
+        if (m_wlanPagePtrMap.contains(deviceName) && m_wlanPagePtrMap[deviceName].contains(wlanSsid)) {
+            m_wlanPagePtrMap[deviceName][wlanSsid] = nullptr;
+        }
+    });
     netDetail->show();
 
     return;

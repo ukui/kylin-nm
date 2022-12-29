@@ -152,6 +152,7 @@ private:
     QStringList m_disableDeviceList;
 
     QGSettings *m_switchGsettings = nullptr;
+    QMap<QString, NetDetail*> m_lanPagePtrMap;
 
 };
 

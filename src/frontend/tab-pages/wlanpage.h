@@ -232,6 +232,7 @@ private:
     QTimer *m_refreshIconTimer = nullptr;
 
     JoinHiddenWiFiPage *m_hiddenWiFi = nullptr;
+    QMap<QString, QMap<QString, NetDetail*>> m_wlanPagePtrMap;
 };
 
 #endif // WLANPAGE_H

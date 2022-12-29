@@ -458,7 +458,7 @@ void LanPage::onRemoveConnection(QString path)            //删除时后端会�
 
     if (m_lanPagePtrMap.contains(path)) {
         if (m_lanPagePtrMap[path] != nullptr) {
-            m_lanPagePtrMap[path]->close();
+            delete m_lanPagePtrMap[path];
             m_lanPagePtrMap[path] = nullptr;
         }
     }
@@ -1289,11 +1289,17 @@ void LanPage::showDetailPage(QString devName, QString uuid)
     netDetail->show();
 
     connect(netDetail, &NetDetail::detailPageClose, [&](QString deviceName, QString lanName, QString lanUuid){
+        if (lanUuid.isEmpty()) {
+            return;
+        }
         KyConnectItem *currentItem = nullptr;
         if (m_connectResourse->isActivatedConnection(lanUuid)) {
             currentItem = m_activeResourse->getActiveConnectionByUuid(lanUuid);
         } else {
             currentItem = m_connectResourse->getConnectionItemByUuid(lanUuid);
+        }
+        if (currentItem == nullptr) {
+            return;
         }
         if (m_lanPagePtrMap.contains(currentItem->m_connectPath)) {
             m_lanPagePtrMap[currentItem->m_connectPath] = nullptr;

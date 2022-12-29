@@ -426,9 +426,9 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
         iconamePath = wifiIcon(isLock, sign, category);
     }
     QIcon searchIcon = QIcon::fromTheme(iconamePath);
-    if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
-        item->iconLabel->setProperty("useIconHighlightEffect", 0x10);
-    }
+//    if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
+//        item->iconLabel->setProperty("useIconHighlightEffect", 0x10);
+//    }
     item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     qDebug() << "updateIcon" << item->titileLabel->text() << " finish";
 }
@@ -1017,9 +1017,9 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     } else {
         iconamePath = wifiIcon(isLock, sign, category);
     }
-    if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
-        wlanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
-    }
+//    if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
+//        wlanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
+//    }
     QIcon searchIcon = QIcon::fromTheme(iconamePath);
     wlanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     wlanItem->titileLabel->setText(name);

@@ -75,6 +75,43 @@ void FreqLabel::paintEvent(QPaintEvent *event)
     QLabel::paintEvent(event);
 }
 
+FixPushButton::FixPushButton(QWidget *parent) :
+    QPushButton(parent)
+{
+    const QByteArray id("org.ukui.style");
+    QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+    if(QGSettings::isSchemaInstalled(id)){
+        connect(fontSetting, &QGSettings::changed,[=](QString key) {
+            if ("systemFont" == key || "systemFontSize" ==key) {
+                changedLabelSlot();
+            }
+        });
+    }
+}
+
+
+void FixPushButton::setButtonText(QString text) {
+
+    mStr = text;
+    changedLabelSlot();
+}
+
+QString FixPushButton::getText(){
+    return mStr;
+}
+
+void FixPushButton::changedLabelSlot() {
+    QFontMetrics  fontMetrics(this->font());
+    int fontSize = fontMetrics.width(mStr);
+    if (fontSize > 65) {
+        setText(fontMetrics.elidedText(mStr, Qt::ElideRight, 65));
+        setToolTip(mStr);
+    } else {
+        setText(mStr);
+        setToolTip("");
+    }
+}
+
 ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
     m_connectState = UnknownState;
@@ -213,7 +250,7 @@ void ListItem::initUI()
     m_freq->setFixedHeight(FREQLABLE_HIGHT);
     m_freq->setContentsMargins(FREQLABLE_MARGINS);
     m_nameLabel = new NameLabel(m_itemFrame);
-    m_hoverButton = new QPushButton(m_itemFrame);
+    m_hoverButton = new FixPushButton(m_itemFrame);
     m_hoverButton->setProperty("needTranslucent", true);
     m_hoverButton->setFixedSize(CONNECT_BUTTON_WIDTH, PWD_AREA_HEIGHT);
 //    m_infoButton = new InfoButton(m_itemFrame);

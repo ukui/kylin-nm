@@ -50,6 +50,23 @@ private Q_SLOTS:
     void changedFontSlot();
 };
 
+class FixPushButton : public QPushButton
+{
+    Q_OBJECT
+public:
+    explicit FixPushButton(QWidget *parent = 0);
+
+public:
+    void setButtonText(QString text);
+    QString getText();
+
+private Q_SLOTS:
+    void changedLabelSlot();
+private:
+    QString mStr;
+
+};
+
 class NameLabel : public QLabel
 {
     Q_OBJECT
@@ -109,7 +126,7 @@ public:
 
     NetDetail *netDetail = nullptr;
 
-    QPushButton *m_hoverButton = nullptr;
+    FixPushButton *m_hoverButton = nullptr;
 private:
     void initUI();
     void initConnection();

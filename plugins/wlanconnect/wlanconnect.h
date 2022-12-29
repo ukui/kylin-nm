@@ -127,12 +127,12 @@ private:
     void initSwtichState();
     inline void setSwitchBtnEnable(bool state) {
         if (m_wifiSwitch != nullptr) {
-            m_wifiSwitch->setCheckable(state);
+            m_wifiSwitch->setEnabled(state);
         }
     }
     inline bool getSwitchBtnEnable() {
         if (m_wifiSwitch != nullptr) {
-            return m_wifiSwitch->isCheckable();
+            return m_wifiSwitch->isEnabled();
         }
     }
 

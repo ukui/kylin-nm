@@ -28,7 +28,7 @@
 #include <QCheckBox>
 
 #include "coninfo.h"
-#include "detailwidget.h"
+#include "kylable.h"
 #include "kwidget.h"
 #include "kpasswordedit.h"
 

@@ -182,9 +182,12 @@ void NetConnect::initUi()
 
     m_settingsLayout = new QHBoxLayout(m_settingsFrame);
     m_settingsLayout->setContentsMargins(TITLE_LAYOUT_MARGINS);
-    m_settingsLabel = new KBorderlessButton(m_settingsFrame);
+    m_settingsLabel = new KyLable(m_settingsFrame);
     m_settingsLabel->setCursor(Qt::PointingHandCursor);
     m_settingsLabel->setText(tr("Settings"));
+    m_settingsLabel->setScaledContents(true);
+    m_settingsLabel->installEventFilter(this);
+
 
     m_settingsLayout->addWidget(m_settingsLabel);
     m_settingsLayout->addStretch();
@@ -223,6 +226,11 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
             Q_EMIT setWiredEnabled(!m_wiredSwitch->isChecked());
         }
         return true;
+    }  else if (w == m_settingsLabel) {
+        if (e->type() == QEvent::MouseButtonRelease) {
+            //ZJP_TODO 打开控制面板
+            runExternalApp();
+        }
     }
     return QObject::eventFilter(w,e);
 }
@@ -233,10 +241,10 @@ void NetConnect::initComponent() {
     initNet();
     setSwitchStatus();
 
-    connect(m_settingsLabel, &KBorderlessButton::clicked, this, [=](bool checked) {
-        Q_UNUSED(checked)
-        runExternalApp();
-    });
+//    connect(m_settingsLabel, &KBorderlessButton::clicked, this, [=](bool checked) {
+//        Q_UNUSED(checked)
+//        runExternalApp();
+//    });
 
     m_lanDetailPagePtrMap.clear();
 }

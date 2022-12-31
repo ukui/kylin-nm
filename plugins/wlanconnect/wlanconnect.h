@@ -157,7 +157,7 @@ private:
     Divider*        m_settingsDivider = nullptr;
     QFrame*         m_settingsFrame = nullptr;
     QHBoxLayout*    m_settingsLayout = nullptr;
-    KBorderlessButton* m_settingsLabel = nullptr;
+    KyLable         * m_settingsLabel = nullptr;
 
     WlanItem* findItem(QString devName, QString ssid);
     QMap<QString, QMap<QString, NetDetail*>> m_wlanDetailPagePtrMap;

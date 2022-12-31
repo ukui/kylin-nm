@@ -146,7 +146,7 @@ private:
     Divider*        m_settingsDivider = nullptr;
     QFrame*         m_settingsFrame = nullptr;
     QHBoxLayout*    m_settingsLayout = nullptr;
-    KBorderlessButton* m_settingsLabel = nullptr;
+    KyLable         * m_settingsLabel = nullptr;
 
     QGSettings      *m_switchGsettings = nullptr;
     QGSettings      *m_styleGsettings = nullptr;

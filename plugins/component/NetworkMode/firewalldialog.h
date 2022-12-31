@@ -29,6 +29,7 @@
 #include "kwidget.h"
 #include "kdialog.h"
 #include <kylin-nm/kylinnetworkmanager.h>
+#include "../component/FixLabel/fixlabel.h"
 
 using namespace kdk;
 
@@ -49,8 +50,8 @@ private:
 
     QString m_uuid;
     QLabel * m_iconLabel = nullptr;
-    QLabel * m_contentLabel = nullptr;
-    QLabel * m_suggestLabel = nullptr;
+    FixLabel * m_contentLabel = nullptr;
+    FixLabel * m_suggestLabel = nullptr;
     QVBoxLayout *m_dialogLayout = nullptr;
     QPushButton *m_PublicBtn = nullptr;
     QPushButton *m_PrivateBtn = nullptr;

@@ -54,8 +54,8 @@ private:
     FixLabel * m_contentLabel = nullptr;
     FixLabel * m_suggestLabel = nullptr;
     QVBoxLayout *m_dialogLayout = nullptr;
-    QPushButton *m_YesBtn = nullptr;
-    QPushButton *m_NoBtn = nullptr;
+    QPushButton *m_PublicBtn = nullptr;
+    QPushButton *m_PrivateBtn = nullptr;
 
 Q_SIGNALS:
     void setPublicNetMode();

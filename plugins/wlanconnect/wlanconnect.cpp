@@ -261,29 +261,15 @@ void WlanConnect::initUi()
 
     //适配主题
     if (!m_isSimpleMode) {
-        //主题切换
-        onPaletteChanged();
-        const QByteArray style_id(THEME_SCHAME);
-        if (QGSettings::isSchemaInstalled(style_id)) {
-            m_styleGsettings = new QGSettings(style_id);
-            connect(m_styleGsettings, &QGSettings::changed, this, [=](QString key){
-                if ("styleName" == key) {
-                    onPaletteChanged();
-                }
-            });
-        } else {
-            qDebug() << "Gsettings interface \"org.ukui.style\" is not exist!";
-        }
-
         //适配半透明控件
         m_wirelessSwitch->setTranslucent(true);
         m_scrollArea->setProperty("needTranslucent", true);
 
-    } else {
-        QPalette pal = m_scrollArea->palette();
-        pal.setBrush(QPalette::Base, QColor(0,0,0,0));     //背景透明
-        m_scrollArea->setPalette(pal);
     }
+
+    QPalette pal = m_scrollArea->palette();
+    pal.setBrush(QPalette::Base, QColor(0,0,0,0));     //背景透明
+    m_scrollArea->setPalette(pal);
 }
 
 
@@ -1105,12 +1091,4 @@ void WlanConnect::updateNetworkModeState(QString deviceName, QString ssid, QStri
     } else if (status == CONNECT_STATE_DEACTIVATED) {
         NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, deviceName, ssid);
       }
-}
-
-void WlanConnect::onPaletteChanged()
-{
-    QPalette pal = qApp->palette();
-    pal.setColor(QPalette::Window, pal.base().color());
-    pluginWidget->setAutoFillBackground(true);
-    pluginWidget->setPalette(pal);
 }

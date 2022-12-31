@@ -189,7 +189,6 @@ private Q_SLOTS:
     void onDeviceAdd(QString deviceName);
     void onDeviceRemove(QString deviceName);
     void updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status);
-    void onPaletteChanged();
 };
 
 #endif // NETCONNECT_H

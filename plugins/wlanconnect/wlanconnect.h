@@ -205,6 +205,5 @@ private Q_SLOTS:
     void onWirelessDeviceAdd(QString deviceName);
     void onWirelessDeviceRemove(QString deviceName);
     void updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status);
-    void onPaletteChanged();
 };
 #endif // WLANCONNECT_H

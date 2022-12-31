@@ -114,7 +114,7 @@ private:
     void itemActiveConnectionStatusChanged(LanItem *item, KyConnectState status);
 
     //显示网络属性页
-    void showLanDetailPage(QString deviceName, QString connName, QString connUuid, bool isActivated);
+    void showLanDetailPage(QString deviceName, LanItem *item);
 
     //初始化已激活网络的网络模式
     void initActiveNetworkMode(QString deviceName, KyActivateItem activeItem);

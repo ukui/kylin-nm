@@ -293,7 +293,7 @@ void NetDetail::paintEvent(QPaintEvent *event)
 
 void NetDetail::closeEvent(QCloseEvent *event)
 {
-    Q_EMIT this->detailPageClose(m_uuid);
+    Q_EMIT this->detailPageClose(m_deviceName, m_name, m_uuid);
     Q_EMIT this->createPageClose(m_deviceName);
 
     if (m_hasDetailPageShowed) {

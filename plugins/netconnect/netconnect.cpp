@@ -498,7 +498,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, KyWiredItem item)
 
     //todo show detail page
     connect(lanItem, &LanItem::infoButtonClick, this, [=]{
-        showLanDetailPage(devName, item.m_connectName, item.m_connectUuid, lanItem->getStatus());
+        showLanDetailPage(devName, lanItem);
     });
 
     lanItem->setStatus(false);
@@ -669,6 +669,13 @@ void NetConnect::onLanRemove(QString lanPath)
             }
         }
     }
+    //删除对应的详情页
+    if (m_lanDetailPagePtrMap.contains(lanPath)) {
+        if (m_lanDetailPagePtrMap[lanPath] != nullptr) {
+            delete m_lanDetailPagePtrMap[lanPath];
+            m_lanDetailPagePtrMap[lanPath] = nullptr;
+        }
+    }
 }
 
 //增加一项
@@ -699,7 +706,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     // todo open landetail page
     if (!m_isSimpleMode) {
         connect(lanItem, &LanItem::infoButtonClick, this, [=]{
-            showLanDetailPage(deviceName, connName, connUuid, lanItem->getStatus());
+            showLanDetailPage(deviceName, lanItem);
         });
     }
 
@@ -824,8 +831,16 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, KyConnectState
     }
 }
 
-void NetConnect::showLanDetailPage(QString deviceName, QString connName, QString connUuid, bool isActivated)
+void NetConnect::showLanDetailPage(QString deviceName, LanItem *item)
 {
+    if (item == nullptr) {
+        return;
+    }
+    QString connName = item->getName();
+    QString connUuid = item->getUuid();
+    QString connDbusPath = item->getPath();
+    bool isActivated = item->getStatus();
+
     if (connUuid.isEmpty()) {
         qDebug() << LOG_FLAG << "connect is empty, so can not show detail info.";
         return;
@@ -835,20 +850,28 @@ void NetConnect::showLanDetailPage(QString deviceName, QString connName, QString
             << connUuid << "; name = " << connName
             << "." <<Q_FUNC_INFO << __LINE__;
 
-    if (m_lanDetailPagePtrMap.contains(connUuid)) {
-        if (m_lanDetailPagePtrMap[connUuid] != nullptr) {
-            KWindowSystem::raiseWindow(m_lanDetailPagePtrMap[connUuid]->winId());
+    if (m_lanDetailPagePtrMap.contains(connDbusPath)) {
+        if (m_lanDetailPagePtrMap[connDbusPath] != nullptr) {
+            KWindowSystem::raiseWindow(m_lanDetailPagePtrMap[connDbusPath]->winId());
             return;
         }
     }
     NetDetail *netDetail = new NetDetail(deviceName, connName, connUuid, isActivated, false, false);
-    connect(netDetail, &NetDetail::detailPageClose, [&](QString connUuid){
-        if (m_lanDetailPagePtrMap.contains(connUuid)) {
-            m_lanDetailPagePtrMap[connUuid] = nullptr;
+    m_lanDetailPagePtrMap.insert(connDbusPath, netDetail);
+    netDetail->show();
+
+    connect(netDetail, &NetDetail::detailPageClose, [&](QString devName, QString lanName, QString lanUuid){
+        if (lanUuid.isEmpty()) {
+            return;
+        }
+        QString itemPath;
+        if (deviceFrameMap.contains(devName) && deviceFrameMap[devName]->itemMap.contains(lanUuid)) {
+            itemPath = deviceFrameMap[devName]->itemMap[lanUuid]->getPath();
+        }
+        if (m_lanDetailPagePtrMap.contains(itemPath)) {
+            m_lanDetailPagePtrMap[itemPath] = nullptr;
         }
     });
-    m_lanDetailPagePtrMap.insert(connUuid, netDetail);
-    netDetail->show();
 }
 
 int NetConnect::getInsertPos(QString connName, QVBoxLayout* layout)

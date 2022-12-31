@@ -591,6 +591,14 @@ void WlanConnect::onNetworkRemove(QString deviceName, QString wlannName)
     }
     qDebug()<<"[WlanConnect]Wifi remove device:" << deviceName << ",wlan name:" << wlannName;
     removeOneWlanFrame(deviceFrameMap[deviceName], deviceName, wlannName);
+
+    //删除对应的详情页
+    if (m_wlanDetailPagePtrMap.contains(deviceName) && m_wlanDetailPagePtrMap[deviceName].contains(wlannName)) {
+        if (m_wlanDetailPagePtrMap[deviceName][wlannName] != nullptr) {
+            delete m_wlanDetailPagePtrMap[deviceName][wlannName];
+            m_wlanDetailPagePtrMap[deviceName][wlannName] = nullptr;
+        }
+    }
 }
 
 //wifi secu Update =============================================================
@@ -823,7 +831,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, KyWirele
 
     connect(wlanItem, &WlanItem::infoButtonClick, this, [=]{
         //todo 详情页
-        showWlanDetailPage(deviceName, wlanInfo.m_NetSsid, wlanInfo.m_connectUuid, wlanItem->getStatus());
+        showWlanDetailPage(deviceName, wlanItem);
     });
 
     connect(wlanItem, &WlanItem::itemClick, this, [=] {
@@ -1014,26 +1022,38 @@ void WlanConnect::setOtherItemExpandedFalse(QString devName, QString ssid)
     }
 }
 
-void WlanConnect::showWlanDetailPage(QString deviceName, QString connName, QString connUuid, bool isActivated)
+void WlanConnect::showWlanDetailPage(QString deviceName, WlanItem *item)
 {
+    if (item == nullptr) {
+        return;
+    }
+    QString connName = item->getName();
+    QString connUuid = item->getUuid();
+    bool isActivated = item->getStatus();
+
     qDebug()<< LOG_FLAG << "the info button of lan is clicked! uuid = "
             << connUuid << "; name = " << connName
             << "." <<Q_FUNC_INFO << __LINE__;
 
-    if (m_wlanDetailPagePtrMap.contains(connUuid)) {
-        if (m_wlanDetailPagePtrMap[connUuid] != nullptr) {
-            KWindowSystem::raiseWindow(m_wlanDetailPagePtrMap[connUuid]->winId());
+    if (m_wlanDetailPagePtrMap.contains(deviceName) && m_wlanDetailPagePtrMap[deviceName].contains(connName)) {
+        if (m_wlanDetailPagePtrMap[deviceName][connName] != nullptr) {
+            qDebug() << LOG_FLAG << "ShowWlanDetailPage" << connName << "already create,just raise";
+            KWindowSystem::raiseWindow(m_wlanDetailPagePtrMap[deviceName][connName]->winId());
             return;
         }
     }
+
     NetDetail *netDetail = new NetDetail(deviceName, connName, connUuid, isActivated, true, false);
-    connect(netDetail, &NetDetail::detailPageClose, [&](QString connUuid){
-        if (m_wlanDetailPagePtrMap.contains(connUuid)) {
-            m_wlanDetailPagePtrMap[connUuid] = nullptr;
+    QMap<QString, NetDetail*> page;
+    page.insert(connName, netDetail);
+    m_wlanDetailPagePtrMap.insert(deviceName, page);
+    netDetail->show();
+
+    connect(netDetail, &NetDetail::detailPageClose, [&](QString devName, QString wlanSsid, QString wlanUuid){
+        if (m_wlanDetailPagePtrMap.contains(devName) && m_wlanDetailPagePtrMap[devName].contains(wlanSsid)) {
+            m_wlanDetailPagePtrMap[devName][wlanSsid] = nullptr;
         }
     });
-    m_wlanDetailPagePtrMap.insert(connUuid, netDetail);
-    netDetail->show();
 }
 
 void WlanConnect::initActiveNetworkMode(QString deviceName, KyActivateItem activeItem)

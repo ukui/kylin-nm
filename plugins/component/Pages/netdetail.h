@@ -192,7 +192,7 @@ protected Q_SLOTS:
     void currentRowChangeSlot(int row);
 
 Q_SIGNALS:
-    void detailPageClose(QString);
+    void detailPageClose(QString, QString, QString);
     void createPageClose(QString);
     void currentChanged(int);
     void checkCurrentIpv4Conflict(const QString &address);

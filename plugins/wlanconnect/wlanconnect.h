@@ -116,7 +116,7 @@ private:
 
     void setOtherItemExpandedFalse(QString devName, QString ssid);
     //显示网络属性页
-    void showWlanDetailPage(QString deviceName, QString connName, QString connUuid, bool isActivated);
+    void showWlanDetailPage(QString deviceName, WlanItem *item);
     //初始化已激活网络的网络模式
     void initActiveNetworkMode(QString deviceName, KyActivateItem activeItem);
 protected:
@@ -160,7 +160,7 @@ private:
     KBorderlessButton* m_settingsLabel = nullptr;
 
     WlanItem* findItem(QString devName, QString ssid);
-    QMap<QString, NetDetail*> m_wlanDetailPagePtrMap;
+    QMap<QString, QMap<QString, NetDetail*>> m_wlanDetailPagePtrMap;
 
     QGSettings      *m_styleGsettings = nullptr;
 

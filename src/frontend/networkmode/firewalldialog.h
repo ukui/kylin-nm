@@ -30,6 +30,7 @@
 #include "coninfo.h"
 #include "kwidget.h"
 #include "kdialog.h"
+#include "kylable.h"
 
 using namespace kdk;
 
@@ -50,8 +51,8 @@ private:
 
     QString m_uuid;
     QLabel * m_iconLabel = nullptr;
-    QLabel * m_contentLabel = nullptr;
-    QLabel * m_suggestLabel = nullptr;
+    FixLabel * m_contentLabel = nullptr;
+    FixLabel * m_suggestLabel = nullptr;
     QVBoxLayout *m_dialogLayout = nullptr;
     QPushButton *m_YesBtn = nullptr;
     QPushButton *m_NoBtn = nullptr;

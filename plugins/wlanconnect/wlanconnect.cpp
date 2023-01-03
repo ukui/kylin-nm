@@ -1037,9 +1037,7 @@ void WlanConnect::showWlanDetailPage(QString deviceName, WlanItem *item)
     }
 
     NetDetail *netDetail = new NetDetail(deviceName, connName, connUuid, isActivated, true, false);
-    QMap<QString, NetDetail*> page;
-    page.insert(connName, netDetail);
-    m_wlanDetailPagePtrMap.insert(deviceName, page);
+    m_wlanDetailPagePtrMap[deviceName].insert(connName, netDetail);
     netDetail->show();
 
     connect(netDetail, &NetDetail::detailPageClose, [&](QString devName, QString wlanSsid, QString wlanUuid){

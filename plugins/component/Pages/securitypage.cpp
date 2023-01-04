@@ -220,7 +220,7 @@ void SecurityPage::initUI()
 
     //PEAP TTLS共有
     eapMethodLabel->setLabelText(tr("Ineer authentication"));
-    userNameLabel->setText(tr("Usename"));
+    userNameLabel->setText(tr("Username"));
     userPwdLabel->setText(tr("Password"));
     userPwdFlagLabel->setText(tr("Ask pwd each query"));
     userNameEdit->setPlaceholderText(tr("Required"));

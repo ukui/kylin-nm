@@ -46,16 +46,8 @@
     </message>
     <message>
         <location filename="../src/frontend/netdetails/configpage.cpp" line="68"/>
-        <source>Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
+        <source>Private  Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
         <translation>ཆེད་སྤྱོད།    དྲ་རྒྱའི་སྒྲིག་ཆས་ཀྱིས་གློག་ཀླད་འདི་མཐོང་ཐུབ། སྤྱིར་བཏང་གི་གནས་ཚུལ་འོག་ཁྱིམ་ཚང་ངམ་ལས་དོན་ཚན་པའི་དྲ་བ་དང་འཚམ་པས།ཁྱེད་ཀྱིས་དྲ་ཐོག་གི་མི་སྒེར་དང་སྒྲིག་ཆས་ལ་ངོས་འཛིན་དང་ཡིད་ཆེས་བྱེད་དགོས།.</translation>
-    </message>
-    <message>
-        <source>Public(recommended)  Your device can not be discovered on the network. In most cases, use this feature when connected to a network at home, work, or a public location.</source>
-        <translation type="vanished">སྤྱི་སྤྱོད་(འོས་སྦྱོར་)དྲ་རྒྱའི་ཐོག་ནས་ཁྱོད་ཀྱི་སྒྲིག་ཆས་རྙེད་མི་ཐུབ། གནས་ཚུལ་མང་ཆེ་བའི་འོག་ཏུ་ཁྱིམ་ཚང་དང་བྱ་བ་འམ་ཡང་ན་སྤྱི་པའི་གོ་གནས་སུ་དྲ་རྒྱའི་དུས་སུ་ནུས་པ་འདི་བཀོལ་སྤྱོད་བྱེད་དགོས།.</translation>
-    </message>
-    <message>
-        <source>Private  Your device can be discovered on the network. Select this if you require file sharing or use applications that communicate over this network. You should know and trust the people and devices on the network.</source>
-        <translation type="vanished">ཆེད་སྤྱོད་དྲ་རྒྱའི་སྟེང་ནས་ཁྱོད་ཀྱི་སྒྲིག་ཆས་རྙེད་ཐུབ། གལ་ཏེ་ཡིག་ཆ་མཉམ་སྤྱོད་བྱེད་དགོས་པའམ་ཡང་ན་དྲ་རྒྱའི་འཕྲིན་གཏོང་བཀོལ་སྤྱོད་བྱེད་པར་བརྟེན་ནས་རྣམ་གྲངས་འདི་འདེམས་རོགས་གནང། ཁྱོད་ཀྱིས་དྲ་རྒྱའི་སྟེང་གི་མི་སྣ་དང་སྒྲིག་ཆས་ལ་རྒྱུས་ལོན་དང་ཡིད་ཆེས་བྱེད་དགོས།.</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/configpage.cpp" line="72"/>
@@ -882,12 +874,12 @@
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="403"/>
-        <source>Add Lan Connect</source>
+        <source>Add LAN Connect</source>
         <translation>སྐུད་ཡོད་དྲ་བ་ཁ་སྣོན་བྱ་དགོས།</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="408"/>
-        <source>connect hiddin wlan</source>
+        <source>Connect Hidden WLAN</source>
         <translation>ཧའེ་ཏེན་ཝེ་ལན་དང་འབྲེལ་མཐུད་བྱེད་པ།</translation>
     </message>
     <message>
@@ -1123,13 +1115,8 @@
     </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="223"/>
-        <source>Usename</source>
-        <translation>བཀོལ་སྤྱོད་ཀྱི་མིང་།</translation>
-    </message>
-    <message>
         <source>Username</source>
-        <oldsource>Usename</oldsource>
-        <translation type="vanished">用户名</translation>
+        <translation>བཀོལ་སྤྱོད་ཀྱི་མིང་།</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="225"/>

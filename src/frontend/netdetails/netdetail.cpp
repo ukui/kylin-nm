@@ -393,12 +393,12 @@ void NetDetail::loadPage()
     if (m_isCreateNet && !isWlan) {
         pageFrame->hide();
         stackWidget->setCurrentIndex(CREATE_NET_PAGE_NUM);
-        this->setWindowTitle(tr("Add Lan Connect"));
+        this->setWindowTitle(tr("Add LAN Connect"));
     } else {
         stackWidget->setCurrentIndex(DETAIL_PAGE_NUM);
         this->setWindowTitle(m_name);
         if (isWlan && m_name.isEmpty()) {
-            this->setWindowTitle(tr("connect hiddin wlan"));
+            this->setWindowTitle(tr("Connect Hidden WLAN"));
         }
     }
 }

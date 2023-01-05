@@ -1,3 +1,9 @@
+kylin-nm (3.14.0.0+0512-3k14) yangtze; urgency=medium
+
+  * add include QPainterPath
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 05 Jan 2023 16:27:10 +0800
+
 kylin-nm (3.14.0.0+0512-3k13) yangtze; urgency=medium
 
   * 增加三种企业网加密方式LEAP PWD FAST

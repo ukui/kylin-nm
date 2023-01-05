@@ -23,6 +23,7 @@
 #include <QLabel>
 #include <QApplication>
 #include <QDBusReply>
+#include <QPainterPath>
 
 #include <KWindowEffects>
 

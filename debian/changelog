@@ -1,3 +1,9 @@
+kylin-nm (3.14.0.0+0512-3k15) yangtze; urgency=medium
+
+  * QSystemTrayIcon register
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 06 Jan 2023 16:22:59 +0800
+
 kylin-nm (3.14.0.0+0512-3k14) yangtze; urgency=medium
 
   * add include QPainterPath

@@ -23,23 +23,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QHBoxLayout>
-
-class FixLabel : public QLabel
-{
-    Q_OBJECT
-public:
-    explicit FixLabel(QWidget *parent = 0);
-
-public:
-    void setLabelText(QString text);
-    QString getText();
-
-private Q_SLOTS:
-    void changedLabelSlot();
-private:
-    QString mStr;
-
-};
+#include "kylable.h"
 
 class DetailWidget : public QWidget
 {

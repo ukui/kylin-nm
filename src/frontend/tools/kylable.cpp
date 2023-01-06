@@ -21,6 +21,8 @@
 #include <QEvent>
 #include <QPainter>
 #include <QApplication>
+#include <QFontMetrics>
+#include <QGSettings>
 
 #define FOREGROUND_COLOR_NORMAL qApp->palette().text().color()
 
@@ -49,6 +51,44 @@ QColor mixColor(const QColor &c1, const QColor &c2, qreal bias)
 
     return QColor::fromRgbF(r, g, b, a);
 }
+
+FixLabel::FixLabel(QWidget *parent) :
+    QLabel(parent)
+{
+    const QByteArray id("org.ukui.style");
+    QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+    if(QGSettings::isSchemaInstalled(id)){
+        connect(fontSetting, &QGSettings::changed,[=](QString key) {
+            if ("systemFont" == key || "systemFontSize" ==key) {
+                changedLabelSlot();
+            }
+        });
+    }
+}
+
+
+void FixLabel::setLabelText(QString text) {
+
+    mStr = text;
+    changedLabelSlot();
+}
+
+QString FixLabel::getText(){
+    return mStr;
+}
+
+void FixLabel::changedLabelSlot() {
+    QFontMetrics  fontMetrics(this->font());
+    int fontSize = fontMetrics.width(mStr);
+    if (fontSize > this->width()) {
+        setText(fontMetrics.elidedText(mStr, Qt::ElideRight, this->width()));
+        setToolTip(mStr);
+    } else {
+        setText(mStr);
+        setToolTip("");
+    }
+}
+
 
 KyLable::KyLable(QWidget *parent) : QLabel(parent)
 {

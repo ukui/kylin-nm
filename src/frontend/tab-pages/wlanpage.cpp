@@ -1530,9 +1530,7 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
     }
 
     NetDetail *netDetail = new NetDetail(devName, ssid, wirelessNetItem.m_connectUuid, isActive, true, !wirelessNetItem.m_isConfigured);
-    QMap<QString, NetDetail*> page;
-    page.insert(ssid, netDetail);
-    m_wlanPagePtrMap.insert(devName, page);
+    m_wlanPagePtrMap[devName].insert(ssid, netDetail);
     connect(netDetail, &NetDetail::detailPageClose, [&](QString deviceName, QString wlanSsid){
         if (m_wlanPagePtrMap.contains(deviceName) && m_wlanPagePtrMap[deviceName].contains(wlanSsid)) {
             m_wlanPagePtrMap[deviceName][wlanSsid] = nullptr;

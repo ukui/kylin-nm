@@ -124,6 +124,7 @@ private:
     void paintWithTrans();
     void initUI();
     void initDbusConnnect();
+    void registerTrayIcon();
     void initTrayIcon();
     void resetTrayIconTool();
     void initWindowTheme();
@@ -157,6 +158,8 @@ private:
     QMenu * m_trayIconMenu = nullptr;
     QAction * m_showMainwindowAction = nullptr;
     QAction * m_showSettingsAction = nullptr;
+    uint m_intervalTime = 100;
+    uint m_registerCount = 0;
 
     bool m_lanIsLoading = false;
     bool m_wlanIsLoading = false;

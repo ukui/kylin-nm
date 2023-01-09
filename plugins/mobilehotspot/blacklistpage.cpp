@@ -34,12 +34,12 @@ BlacklistPage::BlacklistPage(QWidget *parent) : QWidget(parent)
     Vlayout->setContentsMargins(CONTENTS_MARGINS);
     Vlayout->setSpacing(0);
 
-    QFrame *blacklistFrame = new QFrame(this);
-    blacklistFrame->setMinimumSize(FRAME_MIN_SIZE);
-    blacklistFrame->setMaximumSize(FRAME_MAX_SIZE);
-    blacklistFrame->setFrameShape(QFrame::Box);
+    m_blacklistFrame = new QFrame(this);
+    m_blacklistFrame->setMinimumSize(FRAME_MIN_SIZE);
+    m_blacklistFrame->setMaximumSize(FRAME_MAX_SIZE);
+    m_blacklistFrame->setFrameShape(QFrame::Box);
 
-    m_blacklistLayout = new QVBoxLayout(blacklistFrame);
+    m_blacklistLayout = new QVBoxLayout(m_blacklistFrame);
     m_blacklistLayout->setContentsMargins(0, 0, 0, 0);
     m_blacklistLayout->setSpacing(0);
 
@@ -48,7 +48,7 @@ BlacklistPage::BlacklistPage(QWidget *parent) : QWidget(parent)
 
     Vlayout->addWidget(m_titleLabel);
     Vlayout->addSpacing(8);
-    Vlayout->addWidget(blacklistFrame);
+    Vlayout->addWidget(m_blacklistFrame);
 }
 
 QFrame* BlacklistPage::myLine()
@@ -87,7 +87,7 @@ void BlacklistPage::getBlacklistDevice(QMap<QString, QString> &blacklistMap)
     for (int index = 0; index < macList.count() && macList.at(index) != nullptr; index ++) {
         QString macTemp = macList.at(index);
         macTemp = macTemp.trimmed();
-        if (!blacklistMap.contains(macTemp)) {
+        if (!blacklistMap.contains(macTemp) && hostNameList.at(index) != nullptr) {
             blacklistMap[macTemp] = hostNameList.at(index);
         }
     }
@@ -166,7 +166,7 @@ void BlacklistPage::resetLayoutHight()
             height += w->height();
         }
     }
-    this->setFixedHeight(height + m_titleLabel->height() + 8);
+    m_blacklistFrame->setFixedHeight(height);
 
     if (m_blacklistMap.isEmpty()) {
         this->hide();

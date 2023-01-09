@@ -959,6 +959,7 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     if (ssid.isEmpty()) {
         qDebug()<< LOG_FLAG << "ssid or devicename is empty"
                 << "devicename"<< devName <<"ssid"<<ssid;
+        NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, devName, ssid);
         return;
     }
 

@@ -45,7 +45,7 @@
 
 #define PROXY_HOST_KEY       "host"
 #define PROXY_PORT_KEY       "port"
-
+#define THEME_SCHAME         "org.ukui.style"
 #define FRAME_LAYOUT_MARGINS  16,0,16,0
 #define FRAME_LAYOUT_SPACING  8
 #define LABEL_WIDTH  136
@@ -1160,18 +1160,22 @@ void Proxy::setAppListFrameUi(QWidget *widget)
     m_allowAppProxyLabel->setText(tr("The following applications are allowed to use this configuration:")); //允许以下应用使用该配置：
     m_appListWidget = new QListWidget(m_appListFrame);
     m_appListWidget->setMinimumHeight(240);
-    m_appListWidget->setBackgroundRole(QPalette::Base);
     m_appListWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     m_appListWidget->setFrameShape(QFrame::Shape::Panel);
 
     appListLayout->addWidget(m_allowAppProxyLabel);
     appListLayout->addWidget(m_appListWidget);
 
-    QPalette mpal(m_appListWidget->palette());
-    mpal.setColor(QPalette::Base, qApp->palette().base().color());
-    mpal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
-    m_appListWidget->setAlternatingRowColors(true);
-    m_appListWidget->setPalette(mpal);
+    onPaletteChanged();
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+        QGSettings * styleGsettings = new QGSettings(style_id, QByteArray(), this);
+        connect(styleGsettings, &QGSettings::changed, this, [=](QString key){
+            if ("styleName" == key) {
+                onPaletteChanged();
+            }
+        });
+    }
 }
 
 void Proxy::appProxyInfoPadding()
@@ -1267,6 +1271,16 @@ void Proxy::onAppProxyConfEditFinished()
    if (!m_ipAddressLineEdit->hasFocus() && !m_portLineEdit->hasFocus()) {
        setAppProxyConf(m_appProxyInfo);
    }
+}
+
+void Proxy::onPaletteChanged()
+{
+    QPalette mpal(m_appListWidget->palette());
+    mpal.setColor(QPalette::Base, qApp->palette().base().color());
+    mpal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
+    m_appListWidget->setBackgroundRole(QPalette::Base);
+    m_appListWidget->setAlternatingRowColors(true);
+    m_appListWidget->setPalette(mpal);
 }
 
 void Proxy::onappProxyEnableChanged(bool enable)

@@ -277,6 +277,7 @@ private slots:
     void onipEditStateChanged(); //IP地址无效提示
     void onAppProxyConfChanged(); //应用代理配置信息变化
     void onAppProxyConfEditFinished();
+    void onPaletteChanged();
 //    void onCancelBtnClicked();
 //    void onSaveBtnClicked();
 //    void setBtnEnable();

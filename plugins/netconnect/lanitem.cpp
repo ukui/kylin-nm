@@ -41,6 +41,7 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     iconLabel->setProperty("useIconHighlightEffect", 0x2);
     titileLabel = new FixLabel(this);
     statusLabel = new QLabel(this);
+    statusLabel->setProperty("useIconHighlightEffect", 0x2);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 //    statusLabel->setMinimumSize(36,36);
     infoLabel = new GrayInfoButton(this);

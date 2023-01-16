@@ -49,14 +49,7 @@ public:
     }
 
 private:
-
     QFrame* myLine();
-
-    TitleLabel *m_titleLabel = nullptr;
-    QVBoxLayout *m_blacklistLayout = nullptr;
-    QMap<QString, QString> m_blacklistMap;
-
-    QDBusInterface  *m_settingPathInterface = nullptr;
 
     void getBlacklistDevice(QMap<QString, QString> &blacklistMap);
     bool removeStaFromBlacklist(QString staMac, QString staName);
@@ -64,6 +57,14 @@ private:
     void addBlacklistDevFrame(QString staMac, QString staName);
     void clearBlacklistLayout();
     void resetLayoutHight();
+
+private:
+    QFrame *m_blacklistFrame = nullptr;
+    TitleLabel *m_titleLabel = nullptr;
+    QVBoxLayout *m_blacklistLayout = nullptr;
+    QMap<QString, QString> m_blacklistMap;
+
+    QDBusInterface  *m_settingPathInterface = nullptr;
 
 private slots:
     void onsetStaIntoBlacklist(QString staMac, QString staName);

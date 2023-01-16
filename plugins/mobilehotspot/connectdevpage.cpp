@@ -35,12 +35,12 @@ ConnectdevPage::ConnectdevPage(QWidget *parent) :
     Vlayout->setContentsMargins(CONTENTS_MARGINS);
     Vlayout->setSpacing(0);
 
-    QFrame *staistFrame = new QFrame(this);
-    staistFrame->setMinimumSize(FRAME_MIN_SIZE);
-    staistFrame->setMaximumSize(FRAME_MAX_SIZE);
-    staistFrame->setFrameShape(QFrame::Box);
+    m_staistFrame = new QFrame(this);
+    m_staistFrame->setMinimumSize(FRAME_MIN_SIZE);
+    m_staistFrame->setMaximumSize(FRAME_MAX_SIZE);
+    m_staistFrame->setFrameShape(QFrame::Box);
 
-    m_staListLayout = new QVBoxLayout(staistFrame);
+    m_staListLayout = new QVBoxLayout(m_staistFrame);
     m_staListLayout->setContentsMargins(0, 0, 0, 0);
     m_staListLayout->setSpacing(0);
 
@@ -49,7 +49,7 @@ ConnectdevPage::ConnectdevPage(QWidget *parent) :
 
     Vlayout->addWidget(m_titleLabel);
     Vlayout->addSpacing(8);
-    Vlayout->addWidget(staistFrame);
+    Vlayout->addWidget(m_staistFrame);
 }
 
 QFrame* ConnectdevPage::myLine()
@@ -90,7 +90,7 @@ void ConnectdevPage::getConnectStaDevice(QMap<QString, QString> &staMap)
     QStringList macList = reply.arguments().at(0).toString().split(";");
     QStringList hostNameList = reply.arguments().at(1).toString().split(";");
     for (int index = 0; index < macList.count() && macList.at(index) != nullptr; index ++) {
-        if (!staMap.contains(macList.at(index))) {
+        if (!staMap.contains(macList.at(index)) && hostNameList.at(index) != nullptr) {
             staMap[macList.at(index)] = hostNameList.at(index);
         }
     }
@@ -158,7 +158,7 @@ void ConnectdevPage::resetLayoutHight()
             height += w->height();
         }
     }
-    this->setFixedHeight(height + m_titleLabel->height() + 8);
+    m_staistFrame->setFixedHeight(height);
 
     if (m_staMap.isEmpty()) {
         this->hide();

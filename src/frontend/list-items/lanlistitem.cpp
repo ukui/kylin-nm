@@ -148,8 +148,7 @@ void LanListItem::onRightButtonClicked()
     m_menu->addAction(new QAction(tr("Property"), this));
     m_menu->addAction(new QAction(tr("Delete"), this));
 
-    m_menu->move(cursor().pos());
-    m_menu->show();
+    m_menu->popup(cursor().pos());
     return;
 }
 

@@ -4,7 +4,12 @@
 <context>
     <name>AddNetBtn</name>
     <message>
-        <location filename="../addnetbtn.cpp" line="22"/>
+        <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+        <source>Add Others</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13,52 +18,52 @@
     <name>NetConnect</name>
     <message>
         <location filename="../netconnect.ui" line="50"/>
-        <location filename="../netconnect.cpp" line="152"/>
         <source>Wired Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
-        <location filename="../netconnect.cpp" line="154"/>
+        <location filename="../netconnect.cpp" line="155"/>
         <source>open</source>
         <translation type="unfinished"></translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
-        <location filename="../netconnect.cpp" line="151"/>
+        <location filename="../netconnect.cpp" line="152"/>
         <source>Advanced settings</source>
         <translation type="unfinished"></translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="63"/>
+        <location filename="../netconnect.cpp" line="64"/>
         <source>ukui control center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="66"/>
+        <location filename="../netconnect.cpp" line="67"/>
         <source>ukui control center desktop message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="80"/>
-        <source>WiredConnect</source>
+        <location filename="../netconnect.cpp" line="81"/>
+        <location filename="../netconnect.cpp" line="153"/>
+        <source>LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="177"/>
+        <location filename="../netconnect.cpp" line="169"/>
         <source>No ethernet device avaliable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="426"/>
-        <location filename="../netconnect.cpp" line="833"/>
+        <location filename="../netconnect.cpp" line="429"/>
+        <location filename="../netconnect.cpp" line="850"/>
         <source>connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="490"/>
+        <location filename="../netconnect.cpp" line="493"/>
         <source>card</source>
         <translation type="unfinished"></translation>
     </message>

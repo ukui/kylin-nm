@@ -4,12 +4,12 @@
 <context>
     <name>AddNetBtn</name>
     <message>
-        <location filename="../../component/AddBtn/addnetbtn.cpp" line="24"/>
+        <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../component/AddBtn/addnetbtn.cpp" line="27"/>
+        <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18,12 +18,12 @@
     <name>WlanConnect</name>
     <message>
         <location filename="../wlanconnect.ui" line="14"/>
-        <location filename="../wlanconnect.cpp" line="140"/>
         <source>WlanConnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
+        <location filename="../wlanconnect.cpp" line="140"/>
         <location filename="../wlanconnect.cpp" line="211"/>
         <source>WLAN</source>
         <translation type="unfinished"></translation>
@@ -58,14 +58,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="374"/>
-        <location filename="../wlanconnect.cpp" line="1022"/>
-        <location filename="../wlanconnect.cpp" line="1084"/>
+        <location filename="../wlanconnect.cpp" line="362"/>
+        <location filename="../wlanconnect.cpp" line="1028"/>
+        <location filename="../wlanconnect.cpp" line="1090"/>
         <source>connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="959"/>
+        <location filename="../wlanconnect.cpp" line="965"/>
         <source>card</source>
         <translation type="unfinished"></translation>
     </message>

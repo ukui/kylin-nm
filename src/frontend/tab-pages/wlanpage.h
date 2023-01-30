@@ -66,6 +66,7 @@ public:
     void deactivateWirelessConnection(const QString& devName, const QString& ssid);
 
     void showDetailPage(QString devName, QString uuid);
+    void showAddOtherPage(QString devName);
 
     bool checkWlanStatus(NetworkManager::ActiveConnection::State state);
 
@@ -144,6 +145,8 @@ private:
     void showNonePwd();
 
     void showRate();
+
+    void showHiddenWlanPage(QString devName);
 
     QListWidgetItem *addEmptyItem(QListWidget *wirelessListWidget);
     QListWidgetItem *addNewItem(KyWirelessNetItem &wirelessNetItem,
@@ -231,8 +234,8 @@ private:
     QTimer *m_scanTimer = nullptr;
     QTimer *m_refreshIconTimer = nullptr;
 
-    JoinHiddenWiFiPage *m_hiddenWiFi = nullptr;
     QMap<QString, QMap<QString, NetDetail*>> m_wlanPagePtrMap;
+    QMap<QString, JoinHiddenWiFiPage*> m_joinHiddenWiFiPagePtrMap;
 };
 
 #endif // WLANPAGE_H

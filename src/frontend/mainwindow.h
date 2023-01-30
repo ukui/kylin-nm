@@ -152,6 +152,7 @@ private:
     void initUI();
     void initDbusConnnect();
     void initTrayIcon();
+
     void resetTrayIconTool();
     void initWindowTheme();
     void resetWindowTheme();
@@ -194,8 +195,6 @@ private:
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
 
     QMap<QString, NetDetail*> m_createPagePtrMap;
-//    QMap<QString, NetDetail*> m_addOtherPagePtrMap;
-    QMap<QString, JoinHiddenWiFiPage*> m_addOtherPagePtrMap;
 
 public Q_SLOTS:
     void onShowMainWindow(int type);

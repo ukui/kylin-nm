@@ -272,6 +272,7 @@ QListWidgetItem *WlanPage::addNewItem(KyWirelessNetItem &wirelessNetItem,
                 m_currentDevice,
                 m_connectResource->isApConnection(wirelessNetItem.m_connectUuid));
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+    connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
@@ -288,6 +289,7 @@ QListWidgetItem *WlanPage::insertNewItem(KyWirelessNetItem &wirelessNetItem,
 {
     WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+    connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
@@ -308,6 +310,7 @@ QListWidgetItem *WlanPage::insertNewItemWithSort(KyWirelessNetItem &wirelessNetI
   //         << "signal strength" << wirelessNetItem.m_signalStrength;
     WlanListItem *p_sortWlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
     connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+    connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
     QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
     p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));
@@ -1248,6 +1251,7 @@ void WlanPage::onRefreshIconTimer()
 
                 WlanListItem *p_sortWlanItem = new WlanListItem(sortItem, m_currentDevice);
                 connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+                connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
                 m_inactivatedNetListWidget->insertItem(sortRow, p_sortListWidgetItem);
                 m_inactivatedNetListWidget->setItemWidget(p_sortListWidgetItem, p_sortWlanItem);
                 updateWlanItemState(m_inactivatedNetListWidget, p_sortListWidgetItem, Deactivated);

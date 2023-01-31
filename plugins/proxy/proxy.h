@@ -262,8 +262,8 @@ private:
     QFileSystemWatcher *mfileWatch_1;
     QFileSystemWatcher *mfileWatch_2;
 
-    QDBusInterface *mAptproxyDbus;
-    QDBusInterface *m_appProxyDbus;
+//    QDBusInterface *mAptproxyDbus;
+    QDBusInterface *m_appProxyDbus = nullptr;
 
     bool isExistSettings = false;
     bool settingsCreate;

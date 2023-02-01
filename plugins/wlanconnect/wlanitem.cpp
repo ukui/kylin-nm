@@ -96,7 +96,7 @@ void WlanItem::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
-    painter.setBrush(pal.color(QPalette::Base));
+    painter.setBrush(this->palette().base().color());
 
     QColor color = pal.color(QPalette::Button);
     color.setAlphaF(0.5);

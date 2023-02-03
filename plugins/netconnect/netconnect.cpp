@@ -168,7 +168,9 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
             if (!wiredSwitch->isCheckable()) {
                 showDesktopNotify(tr("No ethernet device avaliable"));
             } else {
-                m_interface->call(QStringLiteral("setWiredSwitchEnable"), !wiredSwitch->isChecked());
+                if (m_interface != nullptr && m_interface->isValid()) {
+                    m_interface->call(QStringLiteral("setWiredSwitchEnable"), !wiredSwitch->isChecked());
+                }
                 return true;
             }
         }
@@ -242,7 +244,7 @@ void NetConnect::initComponent() {
 //获取网卡列表
 void NetConnect::getDeviceStatusMap(QMap<QString, bool> &map)
 {
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[NetConnect]call getDeviceListAndEnabled"  << __LINE__;
@@ -357,6 +359,9 @@ void NetConnect::runExternalApp() {
 
 //激活
 void NetConnect::activeConnect(QString ssid, QString deviceName, int type) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
     qDebug() << "[NetConnect]call activateConnect" << __LINE__;
     m_interface->call(QStringLiteral("activateConnect"),type, deviceName, ssid);
     qDebug() << "[NetConnect]call activateConnect respond" << __LINE__;
@@ -364,6 +369,9 @@ void NetConnect::activeConnect(QString ssid, QString deviceName, int type) {
 
 //断开
 void NetConnect::deActiveConnect(QString ssid, QString deviceName, int type) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
     qDebug() << "[NetConnect]call deActivateConnect" << __LINE__;
     m_interface->call(QStringLiteral("deActivateConnect"),type, deviceName, ssid);
     qDebug() << "[NetConnect]call deActivateConnect respond" << __LINE__;
@@ -377,7 +385,7 @@ void NetConnect::initNetListFromDevice(QString deviceName)
         qDebug() << "[NetConnect]initNetListFromDevice " << deviceName << " not exist";
         return;
     }
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[NetConnect]call getWiredList"  << __LINE__;
@@ -442,7 +450,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
 
     connect(lanItem->infoLabel, &GrayInfoButton::clicked, this, [=]{
         // open landetail page
-        if (!m_interface->isValid()) {
+        if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
         qDebug() << "[NetConnect]call showPropertyWidget" << __LINE__;
@@ -469,6 +477,9 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
 //增加设备
 void NetConnect::addDeviceFrame(QString devName)
 {
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
     qDebug() << "[NetConnect]addDeviceFrame " << devName;
 
     qDebug() << "[NetConnect]call getDeviceListAndEnabled"  << __LINE__;
@@ -528,7 +539,7 @@ void NetConnect::addDeviceFrame(QString devName)
     });
 
     connect(itemFrame->addLanWidget, &AddNetBtn::clicked, this, [=](){
-        if (m_interface->isValid()) {
+        if (m_interface != nullptr && m_interface->isValid()) {
             qDebug() << "[NetConnect]call showCreateWiredConnectWidget" << devName  << __LINE__;
             m_interface->call(QStringLiteral("showCreateWiredConnectWidget"), devName);
             qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
@@ -725,7 +736,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
 
     connect(lanItem->infoLabel, &GrayInfoButton::clicked, this, [=]{
         // open landetail page
-        if (!m_interface->isValid()) {
+        if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
         qDebug() << "[NetConnect]call showPropertyWidget" << deviceName << connUuid << __LINE__;
@@ -867,7 +878,7 @@ int NetConnect::getInsertPos(QString connName, QString deviceName)
 {
     qDebug() << "[NetConnect]getInsertPos" << connName << deviceName;
     int index = 0;
-    if(!m_interface->isValid()) {
+    if(m_interface == nullptr || !m_interface->isValid()) {
         index = 0;
     } else {
         qDebug() << "[NetConnect]call getWiredList"  << __LINE__;

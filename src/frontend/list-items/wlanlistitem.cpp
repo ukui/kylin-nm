@@ -184,8 +184,8 @@ void WlanListItem::onRightButtonClicked()
         m_menu->addAction(new QAction(tr("Forget"), this));
     }
 
-    m_menu->move(cursor().pos());
-    m_menu->show();
+//    m_menu->move(cursor().pos());
+    m_menu->popup(cursor().pos());
 
     return;
 }

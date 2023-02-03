@@ -104,6 +104,20 @@ bool WlanPage::eventFilter(QObject *w, QEvent *e)
                 //检测不到无线网卡不再触发click信号
             }
         }
+    } else if (w == m_activatedNetListWidget) {
+        //去掉无右键菜单显示时的选中效果
+        if (e->type() ==  QEvent::FocusIn) {
+            if (m_activatedNetListWidget->currentItem() != nullptr) {
+                m_activatedNetListWidget->currentItem()->setSelected(false);
+            }
+        }
+    } else if (w == m_inactivatedNetListWidget) {
+        //去掉无右键菜单显示时的选中效果
+        if (e->type() == QEvent::FocusIn) {
+            if (m_inactivatedNetListWidget->currentItem() != nullptr) {
+                m_inactivatedNetListWidget->currentItem()->setSelected(false);
+            }
+        }
     }
     return QWidget::eventFilter(w,e);
 }
@@ -138,6 +152,12 @@ void WlanPage::initWlanUI()
     addWlanMoreItem();
     m_inactivatedAreaLayout->addWidget(m_inactivatedNetListWidget);
 
+    connect(m_inactivatedNetListWidget, &QListWidget::currentItemChanged, this, [=]() {
+        if (m_inactivatedNetListWidget->currentItem() != nullptr) {
+            m_inactivatedNetListWidget->currentItem()->setSelected(false);
+        }
+    });
+
     QPalette pal = m_activatedNetListWidget->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));       //背景透明
     m_activatedNetListWidget->setPalette(pal);
@@ -145,6 +165,8 @@ void WlanPage::initWlanUI()
 
     m_settingsLabel->installEventFilter(this);
     m_netSwitch->installEventFilter(this);
+    m_activatedNetListWidget->installEventFilter(this);
+    m_inactivatedNetListWidget->installEventFilter(this);
 
     showRate();
 }
@@ -256,7 +278,7 @@ QListWidgetItem *WlanPage::addEmptyItem(QListWidget *wirelessListWidget)
 {
     WlanListItem *p_wlanItem = new WlanListItem();
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
-    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));   //设置不可被选中
+//    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));   //设置不可被选中
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->addItem(p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
@@ -274,7 +296,7 @@ QListWidgetItem *WlanPage::addNewItem(KyWirelessNetItem &wirelessNetItem,
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
-    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
+//    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->addItem(p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
@@ -290,7 +312,7 @@ QListWidgetItem *WlanPage::insertNewItem(KyWirelessNetItem &wirelessNetItem,
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
-    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
+//    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->insertItem(row, p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
@@ -310,7 +332,7 @@ QListWidgetItem *WlanPage::insertNewItemWithSort(KyWirelessNetItem &wirelessNetI
     connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
 
     QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
-    p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));
+//    p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_sortListWidgetItem->setSizeHint(QSize(p_ListWidget->width(), p_sortWlanItem->height()));
 
    // qDebug() << "insertNewItemWithSort, count" << p_ListWidget->count();

@@ -465,17 +465,17 @@ void WlanListItem::refreshIcon(bool isActivated)
 void WlanListItem::onInfoButtonClicked()
 {
     //ZJP_TODO 呼出无线详情页
-    if(netDetail != nullptr){
-        netDetail->activateWindow();
-        return;
-    }
+//    if(netDetail != nullptr){
+//        netDetail->activateWindow();
+//        return;
+//    }
 
     qDebug() << LOG_FLAG << "Net active or not:"<< m_connectState;
     qDebug() << LOG_FLAG << "On wlan info button clicked! ssid = "
              << m_wirelessNetItem.m_NetSsid << "; name = "
              << m_wirelessNetItem.m_connName << "." <<Q_FUNC_INFO << __LINE__;
 
-
+#if 0
     bool isActive = false;
     if (Activated == m_connectState) {
         isActive = true;
@@ -490,7 +490,8 @@ void WlanListItem::onInfoButtonClicked()
         }
     });
     netDetail->show();
-    Q_EMIT this->detailShow(true);
+#endif
+    Q_EMIT this->detailShow(m_wlanDevice, m_wirelessNetItem.m_NetSsid);
 }
 
 void WlanListItem::onNetButtonClicked()

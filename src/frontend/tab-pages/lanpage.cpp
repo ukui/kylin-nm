@@ -811,7 +811,7 @@ QListWidgetItem *LanPage::insertNewItem(KyConnectItem *itemData, QListWidget *li
     LanListItem *p_sortLanItem = nullptr;
     p_sortLanItem = new LanListItem(itemData, m_currentDeviceName);
     listWidget->setItemWidget(p_sortListWidgetItem, p_sortLanItem);
-
+    connect(p_sortLanItem, &LanListItem::detailShow, this, &LanPage::showDetailPage);
     return p_sortListWidgetItem;
 }
 
@@ -832,6 +832,7 @@ QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listW
     }
 
     listWidget->setItemWidget(p_listWidgetItem, p_lanItem);
+    connect(p_lanItem, &LanListItem::detailShow, this, &LanPage::showDetailPage);
     return p_listWidgetItem;
 }
 

@@ -177,15 +177,15 @@ void LanListItem::onInfoButtonClicked()
         return;
     }
 
-    if(netDetail != nullptr){
-        netDetail->activateWindow();
-        return;
-    }
+//    if(netDetail != nullptr){
+//        netDetail->activateWindow();
+//        return;
+//    }
 
     qDebug()<< LOG_FLAG << "the info button of lan is clicked! uuid = "
             << m_lanConnectItem.m_connectUuid << "; name = " << m_lanConnectItem.m_connectName
             << "." <<Q_FUNC_INFO << __LINE__;
-
+#if 0
     bool isActivated = false;
     if (Activated == m_lanConnectItem.m_connectState) {
         isActivated = true;
@@ -201,7 +201,8 @@ void LanListItem::onInfoButtonClicked()
     });
 
     netDetail->show();
-    Q_EMIT this->detailShow(true);
+#endif
+    Q_EMIT this->detailShow(m_deviceName, m_lanConnectItem.m_connectUuid);
 
     return;
 }

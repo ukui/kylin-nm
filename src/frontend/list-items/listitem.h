@@ -137,7 +137,7 @@ public Q_SLOTS:
     virtual void onMenuTriggered(QAction *action)=0;
 
 Q_SIGNALS:
-    void detailShow(bool isShow); 
+    void detailShow(QString, QString);
 };
 
 #endif // LISTITEM_H

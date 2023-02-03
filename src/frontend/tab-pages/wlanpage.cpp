@@ -87,6 +87,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
         }
     });
     m_wlanPagePtrMap.clear();
+    m_joinHiddenWiFiPagePtrMap.clear();
 }
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
@@ -294,6 +295,7 @@ QListWidgetItem *WlanPage::addNewItem(KyWirelessNetItem &wirelessNetItem,
                 m_currentDevice,
                 m_connectResource->isApConnection(wirelessNetItem.m_connectUuid));
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+    connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
 //    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
@@ -310,6 +312,7 @@ QListWidgetItem *WlanPage::insertNewItem(KyWirelessNetItem &wirelessNetItem,
 {
     WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+    connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
 //    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
@@ -330,6 +333,7 @@ QListWidgetItem *WlanPage::insertNewItemWithSort(KyWirelessNetItem &wirelessNetI
   //         << "signal strength" << wirelessNetItem.m_signalStrength;
     WlanListItem *p_sortWlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
     connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+    connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
     QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
 //    p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));
@@ -777,6 +781,12 @@ void WlanPage::onDeviceRemove(QString deviceName)
 
     QString originalDeviceName = m_currentDevice;
 
+    if (m_joinHiddenWiFiPagePtrMap.contains(deviceName)) {
+        if (m_joinHiddenWiFiPagePtrMap[deviceName] != nullptr) {
+            m_joinHiddenWiFiPagePtrMap[deviceName]->close();
+        }
+    }
+
     m_devList.removeOne(deviceName);
     deleteDeviceFromCombox(deviceName);
 
@@ -1144,24 +1154,8 @@ void WlanPage::requestScan()
 
 void WlanPage::onHiddenWlanClicked()
 {
-//    qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
-//    NetDetail *netDetail = new NetDetail(m_currentDevice, "", "", false, true, true);
-//    netDetail->show();
-    if(m_hiddenWiFi != nullptr){
-        m_hiddenWiFi->activateWindow();
-        return;
-    }
-
-    m_hiddenWiFi = new JoinHiddenWiFiPage(m_currentDevice);
-
-    connect(m_hiddenWiFi, &JoinHiddenWiFiPage::showWlanList, this, &WlanPage::showMainWindow);
-    connect(m_hiddenWiFi, &JoinHiddenWiFiPage::destroyed, [&](){
-        if (m_hiddenWiFi != nullptr) {
-            m_hiddenWiFi = nullptr;
-        }
-    });
-
-    m_hiddenWiFi->show();
+    qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
+    showHiddenWlanPage(m_currentDevice);
 }
 
 void WlanPage::showControlCenter()
@@ -1270,6 +1264,7 @@ void WlanPage::onRefreshIconTimer()
 
                 WlanListItem *p_sortWlanItem = new WlanListItem(sortItem, m_currentDevice);
                 connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+                connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
                 m_inactivatedNetListWidget->insertItem(sortRow, p_sortListWidgetItem);
                 m_inactivatedNetListWidget->setItemWidget(p_sortListWidgetItem, p_sortWlanItem);
                 updateWlanItemState(m_inactivatedNetListWidget, p_sortListWidgetItem, Deactivated);
@@ -1534,6 +1529,28 @@ void WlanPage::showRate()
     });
 }
 
+void WlanPage::showHiddenWlanPage(QString devName)
+{
+    if (m_joinHiddenWiFiPagePtrMap.contains(devName)) {
+        if (m_joinHiddenWiFiPagePtrMap[devName] != nullptr) {
+            qDebug() << "[WlanPage] showAddOtherWlanWidget" << devName << "already create,just raise";
+            KWindowSystem::raiseWindow(m_joinHiddenWiFiPagePtrMap[devName]->winId());
+            return;
+        }
+    }
+
+    JoinHiddenWiFiPage *hiddenWiFi =new JoinHiddenWiFiPage(devName);
+    connect(hiddenWiFi, &JoinHiddenWiFiPage::hiddenWiFiPageClose, [&](QString interfaceName){
+        if (m_joinHiddenWiFiPagePtrMap.contains(interfaceName)) {
+            m_joinHiddenWiFiPagePtrMap[interfaceName] = nullptr;
+        }
+    });
+    connect(hiddenWiFi, &JoinHiddenWiFiPage::showWlanList, this, &WlanPage::showMainWindow);
+
+    m_joinHiddenWiFiPagePtrMap.insert(devName, hiddenWiFi);
+    hiddenWiFi->show();
+}
+
 void WlanPage::showDetailPage(QString devName, QString ssid)
 {
     KyWirelessNetItem wirelessNetItem;
@@ -1562,6 +1579,11 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
     netDetail->show();
 
     return;
+}
+
+void WlanPage::showAddOtherPage(QString devName)
+{
+    showHiddenWlanPage(devName);
 }
 
 bool WlanPage::checkWlanStatus(NetworkManager::ActiveConnection::State state)

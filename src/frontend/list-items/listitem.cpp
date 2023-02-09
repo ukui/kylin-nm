@@ -38,8 +38,6 @@
 #define FREQLABLE_MARGINS 4,0,4,0
 #define LOADIMG_SIZE 16,16
 
-#define NAMELABLE_MAX_WIDTH 120
-
 FreqLabel::FreqLabel(QWidget *parent) : QLabel(parent)
 {
     const QByteArray id("org.ukui.style");
@@ -138,7 +136,6 @@ ListItem::~ListItem()
 
 void ListItem::setName(const QString &name)
 {
-//    m_nameLabel->setMaximumWidth(NAMELABLE_MAX_WIDTH);
     m_nameLabel->setLabelText(name);
 }
 
@@ -238,7 +235,7 @@ void ListItem::initUI()
 
     m_hItemLayout = new QHBoxLayout(m_itemFrame);
     m_hItemLayout->setContentsMargins(ITEM_FRAME_MARGINS);
-    m_hItemLayout->setSpacing(ITEM_FRAME_SPACING);
+    m_hItemLayout->setSpacing(0);
     m_hItemLayout->setAlignment(Qt::AlignHCenter);
 
     m_netButton = new RadioItemButton(m_itemFrame);
@@ -280,13 +277,17 @@ void ListItem::initUI()
     m_lbLoadUpImg->setPixmap(QPixmap(":/res/x/load-up.png"));
 
     m_hItemLayout->addWidget(m_netButton);
+    m_hItemLayout->addSpacing(10);
     m_hItemLayout->addWidget(m_nameLabel);
+    m_hItemLayout->addSpacing(8);
     m_hItemLayout->addWidget(m_freq);
     m_hItemLayout->addStretch();
     m_hItemLayout->addWidget(m_lbLoadUpImg);
     m_hItemLayout->addWidget(m_lbLoadUp);
+    m_hItemLayout->addSpacing(2);
     m_hItemLayout->addWidget(m_lbLoadDownImg);
     m_hItemLayout->addWidget(m_lbLoadDown);
+    m_hItemLayout->addSpacing(2);
     m_hItemLayout->addWidget(m_hoverButton);
 //    m_hItemLayout->addWidget(m_infoButton);
 
@@ -336,13 +337,21 @@ void NameLabel::setLabelText(QString text)
     changedLabelSlot();
 }
 
+void NameLabel::setLabelMaximumWidth(int width)
+{
+    m_maximumWidth = width;
+    this->setMaximumWidth(m_maximumWidth);
+    if (m_name != nullptr) {
+        changedLabelSlot();
+    }
+}
+
 void NameLabel::changedLabelSlot()
 {
     QFontMetrics  fontMetrics(this->font());
     int fontSize = fontMetrics.width(m_name);
-    if (fontSize > this->width() && fontSize > NAMELABLE_MAX_WIDTH) {
-        this->setFixedWidth(NAMELABLE_MAX_WIDTH);
-        setText(fontMetrics.elidedText(m_name, Qt::ElideRight, this->width()));
+    if (fontSize > m_maximumWidth) {
+        setText(fontMetrics.elidedText(m_name, Qt::ElideRight, m_maximumWidth));
         setToolTip(m_name);
     } else {
         this->setFixedWidth(fontMetrics.width(m_name));

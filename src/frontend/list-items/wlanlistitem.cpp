@@ -27,6 +27,9 @@
 #define WAIT_US  10*1000
 #define ENABLE_BUTTON_COLOR qApp->palette().highlight().color()
 #define UNABLE_BUTTON_COLOR qApp->palette().button().color()
+#define NAMELABLE_MAX_WIDTH_HOVER 176
+#define NAMELABLE_MAX_WIDTH_ACTIVATED 142
+#define NAMELABLE_MAX_WIDTH_DEACTIVATED 276
 
 const QString ENTERPRICE_TYPE = "802.1X";
 const QString WPA1_AND_WPA2 = "WPA";
@@ -135,6 +138,7 @@ void WlanListItem::setExpanded(const bool &expanded)
         m_pwdLineEdit->setFocus();
         setFixedHeight(EXPANDED_HEIGHT);
         m_hoverButton->hide();
+        m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
     } else {
         setFixedHeight(NORMAL_HEIGHT);
     }
@@ -210,6 +214,7 @@ void WlanListItem::enterEvent(QEvent *event)
         m_lbLoadDownImg->hide();
         m_lbLoadUpImg->hide();
     }
+    m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_HOVER);
     return ListItem::enterEvent(event);
 }
 
@@ -219,10 +224,13 @@ void WlanListItem::leaveEvent(QEvent *event)
     m_mouseIsOut = true;
     m_hoverButton->hide();
     if (m_connectState == Activated) {
+        m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
         m_lbLoadUp->show();
         m_lbLoadDown->show();
         m_lbLoadDownImg->show();
         m_lbLoadUpImg->show();
+    } else if (m_connectState == Deactivated) {
+        m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
     }
     if (m_pwdFrame && m_pwdFrame->isVisible()) {
         if (m_focusIsOut) {
@@ -652,6 +660,7 @@ void WlanListItem::updateConnectState(ConnectState state)
         m_hoverButton->setProperty("useButtonPalette", true);
         m_hoverButton->setProperty("isImportant", false);
         m_hoverButton->setButtonText(tr("Disconnect"));
+        m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
     } else if(Deactivated == state) {
         qDebug() << "[WlanListItem] stop loading connect state:" << state;
         m_netButton->stopLoading();
@@ -659,6 +668,7 @@ void WlanListItem::updateConnectState(ConnectState state)
         m_hoverButton->setProperty("isImportant", true);
         m_hoverButton->setProperty("useButtonPalette", false);
         m_hoverButton->setButtonText(tr("Connect"));
+        m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
     } else {
         qDebug() << "[WlanListItem] start loading connect state:" << state;
         m_netButton->startLoading();

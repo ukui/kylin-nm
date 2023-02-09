@@ -74,9 +74,11 @@ public:
     explicit NameLabel(QWidget *parent = 0);
     ~NameLabel() = default;
     void setLabelText(QString text);
+    void setLabelMaximumWidth(int width);
 
 private:
     QString m_name;
+    int m_maximumWidth = 120;
 
 private Q_SLOTS:
     void changedLabelSlot();

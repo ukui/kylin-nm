@@ -23,6 +23,9 @@
 #include <QDebug>
 
 #define LOG_FLAG "[LanListItem]"
+#define NAMELABLE_MAX_WIDTH_HOVER 220
+#define NAMELABLE_MAX_WIDTH_ACTIVATED 190
+#define NAMELABLE_MAX_WIDTH_DEACTIVATED 326
 
 LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
                          const QString &deviceName, QWidget *parent):ListItem(parent)
@@ -33,7 +36,6 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
     connectItemCopy(lanConnectItem);
     m_deviceName = deviceName;
 
-    m_nameLabel->setMinimumWidth(180);
     m_nameLabel->setLabelText(m_lanConnectItem.m_connectName);
     m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
 
@@ -43,8 +45,10 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
         m_netButton->stopLoading();
         if (m_lanConnectItem.m_connectState == Activated) {
             setIcon(true);
+            m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
         } else {
             setIcon(false);
+            m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
         }
     } else {
         m_netButton->startLoading();
@@ -215,8 +219,10 @@ void LanListItem::updateConnectionState(ConnectState state)
         m_netButton->stopLoading();
         if (state == Activated) {
             setIcon(true);
+            m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
         } else {
             setIcon(false);
+            m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
         }
     } else {
         m_netButton->startLoading();
@@ -249,6 +255,7 @@ void LanListItem::updateConnectionPath(QString connectionPath)
 
 void LanListItem::enterEvent(QEvent *event)
 {
+    m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_HOVER);
     if (m_lanConnectItem.m_connectState != UnknownState) {
         if (Deactivated != m_lanConnectItem.m_connectState) {
             m_hoverButton->setProperty("useButtonPalette", true);
@@ -272,10 +279,13 @@ void LanListItem::leaveEvent(QEvent *event)
 {
     m_hoverButton->hide();
     if (m_lanConnectItem.m_connectState == Activated) {
+        m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
         m_lbLoadUp->show();
         m_lbLoadDown->show();
         m_lbLoadDownImg->show();
         m_lbLoadUpImg->show();
+    } else if (m_lanConnectItem.m_connectState == Deactivated) {
+        m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
     }
     return ListItem::leaveEvent(event);
 }

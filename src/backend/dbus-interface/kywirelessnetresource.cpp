@@ -61,15 +61,15 @@ KyWirelessNetResource::KyWirelessNetResource(QObject *parent)
 
     //TODO:connect device signal
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkAdded,
-                     this, &KyWirelessNetResource::onWifiNetworkAdded, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onWifiNetworkAdded/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkRemoved,
-                     this, &KyWirelessNetResource::onWifiNetworkRemoved, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onWifiNetworkRemoved/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkPropertyChange,
-                     this, &KyWirelessNetResource::onWifiNetworkPropertyChange, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onWifiNetworkPropertyChange/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkSecuChange,
-                     this, &KyWirelessNetResource::onWifiNetworkSecuChange, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onWifiNetworkSecuChange/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkDeviceDisappear,
-                     this, &KyWirelessNetResource::onWifiNetworkDeviceDisappear, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onWifiNetworkDeviceDisappear/*, Qt::ConnectionType::DirectConnection*/);
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionAdd,
                      this, &KyWirelessNetResource::onConnectionAdd);
@@ -457,50 +457,36 @@ void KyWirelessNetResource::onWifiNetworkSecuChange(NetworkManager::AccessPoint 
 
 }
 
-void KyWirelessNetResource::onWifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net)
+void KyWirelessNetResource::onWifiNetworkPropertyChange(QString interface, QString ssid, int signal, QString bssid, QString sec)
 {
-    if (nullptr == net) {
-        return;
-    }
 
-    qDebug() << "onWifiNetworkPropertyChange" << net->ssid();
-    NetworkManager::AccessPoint::Ptr accessPointPtr = net->referenceAccessPoint();
-    QByteArray rawSsid = accessPointPtr->rawSsid();
-    QString wifiSsid = getSsidFromByteArray(rawSsid);
+    if (m_WifiNetworkList.contains(interface)) {
+        QList<KyWirelessNetItem>::iterator iter = m_WifiNetworkList[interface].begin();
+        while (iter != m_WifiNetworkList[interface].end()) {
+            qDebug() << iter->m_NetSsid;
+            if (iter->m_NetSsid == ssid) {
+                //                 qDebug()<< LOG_FLAG <<"recive properity changed signal, sender is" << iter->m_NetSsid;
+                if (iter->m_signalStrength != signal) {
+                    iter->m_signalStrength = signal;
+                    Q_EMIT signalStrengthChange(interface, ssid, iter->m_signalStrength);
+                }
 
-    if (net->device().isEmpty()) {
-        return;
-    }
+                if (iter->m_bssid != bssid) {
+                    qDebug() << "bssid";
+                    iter->m_bssid = bssid;
+                    Q_EMIT bssidChange(interface, ssid, iter->m_bssid);
+                }
 
-    QString devIface = m_networkResourceInstance->findDeviceUni(net->device())->interfaceName();
-    if (m_WifiNetworkList.contains(devIface)) {
-        QList<KyWirelessNetItem>::iterator iter = m_WifiNetworkList[devIface].begin();
-         while (iter != m_WifiNetworkList[devIface].end()) {
-             if (iter->m_NetSsid == wifiSsid) {
-//                 qDebug()<< LOG_FLAG <<"recive properity changed signal, sender is" << iter->m_NetSsid;
-                 if (iter->m_signalStrength != net->signalStrength()) {
-                     iter->m_signalStrength = net->signalStrength();
-                     Q_EMIT signalStrengthChange(devIface, wifiSsid, iter->m_signalStrength);
-                 }
+                if (iter->m_secuType != sec) {
+                    iter->setKySecuType(sec);
+                    Q_EMIT secuTypeChange(interface, ssid, sec);
+                }
 
-                 if (iter->m_bssid != accessPointPtr->hardwareAddress()) {
-                     iter->m_bssid = accessPointPtr->hardwareAddress();
-                     Q_EMIT bssidChange(devIface, wifiSsid, iter->m_bssid);
-                 }
+                break;
+            }
 
-                 QString secuType = enumToQstring(accessPointPtr->capabilities(),
-                                                  accessPointPtr->wpaFlags(),
-                                                  accessPointPtr->rsnFlags());
-                 if (iter->m_secuType != secuType) {
-                     //qDebug() << "!!!!secuTypeChange" << wifiSsid << iter->m_secuType << "change to " << secuType;
-                     iter->setKySecuType(secuType);
-                     Q_EMIT secuTypeChange(devIface, wifiSsid, secuType);
-                 }
-
-                 break;
-             }
-             iter++;
-         }
+            iter++;
+        }
     }
 }
 

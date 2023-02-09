@@ -1,3 +1,13 @@
+kylin-nm (3.20.1.17-0k0.7) v101; urgency=medium
+
+  * BUG号：
+     - #153983 【整机生态-SP1-2209-第二阶段】【特殊机型】【T323】跑reboot过程中出现任务栏网络图标丢失的情况
+  * 需求号：无
+  * 其他改动：
+  * 影响域:无
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 09 Feb 2023 17:52:00 +0800
+
 kylin-nm (3.20.1.17-0k0.6) v101; urgency=medium
 
   * BUG号：

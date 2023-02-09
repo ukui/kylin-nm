@@ -63,7 +63,7 @@ private:
 public Q_SLOTS:
     void onWifiNetworkAdded(QString, QString);
     void onWifiNetworkRemoved(QString, QString);
-    void onWifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net);
+    void onWifiNetworkPropertyChange(QString interface, QString ssid, int signal, QString bssid, QString sec);
     void onWifiNetworkSecuChange(NetworkManager::AccessPoint *accessPointPtr);
     void onWifiNetworkDeviceDisappear();
 

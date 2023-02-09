@@ -387,10 +387,8 @@ void WlanPage::clearWirelessNetItemMap(QMap<QString, QListWidgetItem*> &wireless
         wirelessListWidget->removeItemWidget(p_listWidgetItem);
 
         delete p_wlanItem;
-        p_wlanItem = nullptr;
 
         delete p_listWidgetItem;
-        p_listWidgetItem = nullptr;
 
         iter = wirelessNetItem.erase(iter);
     }
@@ -418,10 +416,8 @@ void WlanPage::deleteWirelessItemFormMap(QMap<QString, QListWidgetItem*> &wirele
     wirelessListWidget->takeItem(wirelessListWidget->row(p_listWidgetItem));
 
     delete p_wlanItem;
-    p_wlanItem = nullptr;
 
     delete p_listWidgetItem;
-    p_listWidgetItem = nullptr;
 
     if (m_inactivatedNetListWidget->count() <= MAX_ITEMS) {
         m_inactivatedNetListWidget->setFixedWidth(MIN_WIDTH);

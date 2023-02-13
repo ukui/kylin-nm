@@ -440,7 +440,7 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
     kdr = nullptr;
 }
 
-bool getOldVersionWiredSwitchState(bool state)
+bool getOldVersionWiredSwitchState(bool &state)
 {
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
     QVariant value = m_settings->value("lan_switch_opened");

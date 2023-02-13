@@ -85,7 +85,7 @@ bool checkDeviceExist(KyDeviceType deviceType, QString deviceName);
 QString getDefaultDeviceName(KyDeviceType deviceType);
 void setDefaultDevice(KyDeviceType deviceType, QString deviceName);
 void getDeviceEnableState(int type, QMap<QString, bool> &map);
-bool getOldVersionWiredSwitchState(bool state);
+bool getOldVersionWiredSwitchState(bool &state);
 
 class TabPage : public QWidget
 {

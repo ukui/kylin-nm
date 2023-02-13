@@ -36,14 +36,14 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
     initDeviceMap();
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceAdd,
-                                       this, &KyNetworkDeviceResourse::onDeviceAdd, Qt::ConnectionType::DirectConnection);
+                                       this, &KyNetworkDeviceResourse::onDeviceAdd/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceRemove,
-                                       this, &KyNetworkDeviceResourse::onDeviceRemove, Qt::ConnectionType::DirectConnection);
+                                       this, &KyNetworkDeviceResourse::onDeviceRemove/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceUpdate,
-                                       this, &KyNetworkDeviceResourse::onDeviceUpdate, Qt::ConnectionType::DirectConnection);
+                                       this, &KyNetworkDeviceResourse::onDeviceUpdate/*, Qt::ConnectionType::DirectConnection*/);
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::stateChanged,
-                                       this, &KyNetworkDeviceResourse::stateChanged, Qt::ConnectionType::DirectConnection);
+                                       this, &KyNetworkDeviceResourse::stateChanged/*, Qt::ConnectionType::DirectConnection*/);
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceCarrierChanage,
                                        this, &KyNetworkDeviceResourse::carrierChanage);

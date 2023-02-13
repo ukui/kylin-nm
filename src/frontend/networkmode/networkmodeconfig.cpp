@@ -37,6 +37,9 @@ NetworkModeConfig::NetworkModeConfig(QObject *parent) : QObject(parent)
                        "/firewall",
                        "com.ksc.defender.firewall",
                        QDBusConnection::systemBus());
+    if(!m_dbusInterface->isValid()) {
+        qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+    }
 }
 
 int NetworkModeConfig::getNetworkModeConfig(QString uuid)
@@ -46,8 +49,9 @@ int NetworkModeConfig::getNetworkModeConfig(QString uuid)
            return -1;
        }
 
-    if(!m_dbusInterface->isValid()) {
-        qWarning ()<< "init com.ksc.defender dbus error";
+    if(m_dbusInterface == nullptr || !m_dbusInterface->isValid()) {
+        qWarning () << "com.ksc.defender dbus is invalid";
+        return -1;
     }
 
     QDBusReply<int> reply = m_dbusInterface->call("get_networkModeConfig", uuid);
@@ -61,8 +65,9 @@ int NetworkModeConfig::getNetworkModeConfig(QString uuid)
 
 void NetworkModeConfig::setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode)
 {
-    if(!m_dbusInterface->isValid()) {
-        qWarning ()<< "init com.ksc.defender dbus error";
+    if(m_dbusInterface == nullptr || !m_dbusInterface->isValid()) {
+        qWarning () << "com.ksc.defender dbus is invalid";
+        return;
     }
 
     QDBusReply<int> reply = m_dbusInterface->call("set_networkModeConfig", uuid, cardName, ssid, mode);
@@ -75,8 +80,9 @@ void NetworkModeConfig::setNetworkModeConfig(QString uuid, QString cardName, QSt
 
 int NetworkModeConfig::breakNetworkConnect(QString uuid, QString cardName, QString ssid)
 {
-    if(!m_dbusInterface->isValid()) {
-        qWarning ()<< "init com.ksc.defender dbus error";
+    if(m_dbusInterface == nullptr || !m_dbusInterface->isValid()) {
+        qWarning () << "com.ksc.defender dbus is invalid";
+        return -1;
     }
 
     QDBusReply<int> reply = m_dbusInterface->call("break_networkConnect", uuid, cardName, ssid);

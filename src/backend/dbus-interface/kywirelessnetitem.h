@@ -25,8 +25,6 @@
 #include "kylinnetworkresourcemanager.h"
 #include "kywirelessconnectoperation.h"
 
-QString enumToQstring(NetworkManager::AccessPoint::Capabilities, NetworkManager::AccessPoint::WpaFlags, NetworkManager::AccessPoint::WpaFlags);
-
 class KyWirelessNetItem
 {
 public:

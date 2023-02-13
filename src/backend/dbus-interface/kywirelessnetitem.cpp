@@ -27,31 +27,6 @@ const QString WPA3 = "WPA3";
 
 #define FREQ_5GHZ 5000
 
-QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags)
-{
-    QString out;
-    if (   (cap & NM_802_11_AP_FLAGS_PRIVACY)
-           && (wpa_flags == NM_802_11_AP_SEC_NONE)
-           && (rsn_flags == NM_802_11_AP_SEC_NONE)) {
-        out += "WEP ";
-    }
-    if (wpa_flags != NM_802_11_AP_SEC_NONE) {
-        out += "WPA1 ";
-    }
-    if ((rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_PSK)
-            || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
-        out += "WPA2 ";
-    }
-    if (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_SAE) {
-        out += "WPA3 ";
-    }
-    if (   (wpa_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)
-           || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
-        out += "802.1X ";
-    }
-    return out;
-}
-
 KyWirelessNetItem::KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net)
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();

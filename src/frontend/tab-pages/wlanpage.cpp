@@ -87,6 +87,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
         }
     });
     m_wlanPagePtrMap.clear();
+    m_joinHiddenWiFiPagePtrMap.clear();
 }
 
 bool WlanPage::eventFilter(QObject *w, QEvent *e)
@@ -102,6 +103,20 @@ bool WlanPage::eventFilter(QObject *w, QEvent *e)
             if (!getSwitchBtnEnable()) {
                 showDesktopNotify(tr("No wireless network card detected"), "networkwrong");
                 //检测不到无线网卡不再触发click信号
+            }
+        }
+    } else if (w == m_activatedNetListWidget) {
+        //去掉无右键菜单显示时的选中效果
+        if (e->type() ==  QEvent::FocusIn) {
+            if (m_activatedNetListWidget->currentItem() != nullptr) {
+                m_activatedNetListWidget->currentItem()->setSelected(false);
+            }
+        }
+    } else if (w == m_inactivatedNetListWidget) {
+        //去掉无右键菜单显示时的选中效果
+        if (e->type() == QEvent::FocusIn) {
+            if (m_inactivatedNetListWidget->currentItem() != nullptr) {
+                m_inactivatedNetListWidget->currentItem()->setSelected(false);
             }
         }
     }
@@ -138,6 +153,12 @@ void WlanPage::initWlanUI()
     addWlanMoreItem();
     m_inactivatedAreaLayout->addWidget(m_inactivatedNetListWidget);
 
+    connect(m_inactivatedNetListWidget, &QListWidget::currentItemChanged, this, [=]() {
+        if (m_inactivatedNetListWidget->currentItem() != nullptr) {
+            m_inactivatedNetListWidget->currentItem()->setSelected(false);
+        }
+    });
+
     QPalette pal = m_activatedNetListWidget->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));       //背景透明
     m_activatedNetListWidget->setPalette(pal);
@@ -145,6 +166,8 @@ void WlanPage::initWlanUI()
 
     m_settingsLabel->installEventFilter(this);
     m_netSwitch->installEventFilter(this);
+    m_activatedNetListWidget->installEventFilter(this);
+    m_inactivatedNetListWidget->installEventFilter(this);
 
     showRate();
 }
@@ -256,7 +279,7 @@ QListWidgetItem *WlanPage::addEmptyItem(QListWidget *wirelessListWidget)
 {
     WlanListItem *p_wlanItem = new WlanListItem();
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
-    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));   //设置不可被选中
+//    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));   //设置不可被选中
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->addItem(p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
@@ -272,9 +295,10 @@ QListWidgetItem *WlanPage::addNewItem(KyWirelessNetItem &wirelessNetItem,
                 m_currentDevice,
                 m_connectResource->isApConnection(wirelessNetItem.m_connectUuid));
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+    connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
-    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
+//    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->addItem(p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
@@ -288,9 +312,10 @@ QListWidgetItem *WlanPage::insertNewItem(KyWirelessNetItem &wirelessNetItem,
 {
     WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+    connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
-    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
+//    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_listWidgetItem->setSizeHint(QSize(wirelessListWidget->width(), p_wlanItem->height()));
     wirelessListWidget->insertItem(row, p_listWidgetItem);
     wirelessListWidget->setItemWidget(p_listWidgetItem, p_wlanItem);
@@ -308,9 +333,10 @@ QListWidgetItem *WlanPage::insertNewItemWithSort(KyWirelessNetItem &wirelessNetI
   //         << "signal strength" << wirelessNetItem.m_signalStrength;
     WlanListItem *p_sortWlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
     connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+    connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
     QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
-    p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));
+//    p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_sortListWidgetItem->setSizeHint(QSize(p_ListWidget->width(), p_sortWlanItem->height()));
 
    // qDebug() << "insertNewItemWithSort, count" << p_ListWidget->count();
@@ -361,10 +387,8 @@ void WlanPage::clearWirelessNetItemMap(QMap<QString, QListWidgetItem*> &wireless
         wirelessListWidget->removeItemWidget(p_listWidgetItem);
 
         delete p_wlanItem;
-        p_wlanItem = nullptr;
 
         delete p_listWidgetItem;
-        p_listWidgetItem = nullptr;
 
         iter = wirelessNetItem.erase(iter);
     }
@@ -392,10 +416,8 @@ void WlanPage::deleteWirelessItemFormMap(QMap<QString, QListWidgetItem*> &wirele
     wirelessListWidget->takeItem(wirelessListWidget->row(p_listWidgetItem));
 
     delete p_wlanItem;
-    p_wlanItem = nullptr;
 
     delete p_listWidgetItem;
-    p_listWidgetItem = nullptr;
 
     if (m_inactivatedNetListWidget->count() <= MAX_ITEMS) {
         m_inactivatedNetListWidget->setFixedWidth(MIN_WIDTH);
@@ -755,6 +777,12 @@ void WlanPage::onDeviceRemove(QString deviceName)
 
     QString originalDeviceName = m_currentDevice;
 
+    if (m_joinHiddenWiFiPagePtrMap.contains(deviceName)) {
+        if (m_joinHiddenWiFiPagePtrMap[deviceName] != nullptr) {
+            m_joinHiddenWiFiPagePtrMap[deviceName]->close();
+        }
+    }
+
     m_devList.removeOne(deviceName);
     deleteDeviceFromCombox(deviceName);
 
@@ -959,6 +987,7 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     if (ssid.isEmpty()) {
         qDebug()<< LOG_FLAG << "ssid or devicename is empty"
                 << "devicename"<< devName <<"ssid"<<ssid;
+        NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, devName, ssid);
         return;
     }
 
@@ -1121,24 +1150,8 @@ void WlanPage::requestScan()
 
 void WlanPage::onHiddenWlanClicked()
 {
-//    qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
-//    NetDetail *netDetail = new NetDetail(m_currentDevice, "", "", false, true, true);
-//    netDetail->show();
-    if(m_hiddenWiFi != nullptr){
-        m_hiddenWiFi->activateWindow();
-        return;
-    }
-
-    m_hiddenWiFi = new JoinHiddenWiFiPage(m_currentDevice);
-
-    connect(m_hiddenWiFi, &JoinHiddenWiFiPage::showWlanList, this, &WlanPage::showMainWindow);
-    connect(m_hiddenWiFi, &JoinHiddenWiFiPage::destroyed, [&](){
-        if (m_hiddenWiFi != nullptr) {
-            m_hiddenWiFi = nullptr;
-        }
-    });
-
-    m_hiddenWiFi->show();
+    qDebug() << "[wlanPage] AddHideWifi Clicked! " << Q_FUNC_INFO << __LINE__ ;
+    showHiddenWlanPage(m_currentDevice);
 }
 
 void WlanPage::showControlCenter()
@@ -1247,6 +1260,7 @@ void WlanPage::onRefreshIconTimer()
 
                 WlanListItem *p_sortWlanItem = new WlanListItem(sortItem, m_currentDevice);
                 connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
+                connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
                 m_inactivatedNetListWidget->insertItem(sortRow, p_sortListWidgetItem);
                 m_inactivatedNetListWidget->setItemWidget(p_sortListWidgetItem, p_sortWlanItem);
                 updateWlanItemState(m_inactivatedNetListWidget, p_sortListWidgetItem, Deactivated);
@@ -1511,6 +1525,28 @@ void WlanPage::showRate()
     });
 }
 
+void WlanPage::showHiddenWlanPage(QString devName)
+{
+    if (m_joinHiddenWiFiPagePtrMap.contains(devName)) {
+        if (m_joinHiddenWiFiPagePtrMap[devName] != nullptr) {
+            qDebug() << "[WlanPage] showAddOtherWlanWidget" << devName << "already create,just raise";
+            KWindowSystem::raiseWindow(m_joinHiddenWiFiPagePtrMap[devName]->winId());
+            return;
+        }
+    }
+
+    JoinHiddenWiFiPage *hiddenWiFi =new JoinHiddenWiFiPage(devName);
+    connect(hiddenWiFi, &JoinHiddenWiFiPage::hiddenWiFiPageClose, [&](QString interfaceName){
+        if (m_joinHiddenWiFiPagePtrMap.contains(interfaceName)) {
+            m_joinHiddenWiFiPagePtrMap[interfaceName] = nullptr;
+        }
+    });
+    connect(hiddenWiFi, &JoinHiddenWiFiPage::showWlanList, this, &WlanPage::showMainWindow);
+
+    m_joinHiddenWiFiPagePtrMap.insert(devName, hiddenWiFi);
+    hiddenWiFi->show();
+}
+
 void WlanPage::showDetailPage(QString devName, QString ssid)
 {
     KyWirelessNetItem wirelessNetItem;
@@ -1539,6 +1575,11 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
     netDetail->show();
 
     return;
+}
+
+void WlanPage::showAddOtherPage(QString devName)
+{
+    showHiddenWlanPage(devName);
 }
 
 bool WlanPage::checkWlanStatus(NetworkManager::ActiveConnection::State state)

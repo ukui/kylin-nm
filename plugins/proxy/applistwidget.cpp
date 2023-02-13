@@ -29,7 +29,7 @@ AppListWidget::AppListWidget(QString path, QWidget *parent)
 
 AppListWidget::~AppListWidget()
 {
-
+    delete m_dbusInterface;
 }
 
 /**
@@ -79,8 +79,9 @@ void AppListWidget::onAppCheckStateChanged()
  */
 void AppListWidget::AddAppProxyConfig()
 {
-    if(!m_dbusInterface->isValid()) {
+    if(m_dbusInterface == nullptr || !m_dbusInterface->isValid()) {
         qWarning ()<< "init AppProxy dbus error";
+        return;
     }
 
     qDebug() << "call QDBusInterface addAppIntoProxy";
@@ -93,8 +94,9 @@ void AppListWidget::AddAppProxyConfig()
  */
 void AppListWidget::RemoveAppProxyConfig()
 {
-    if(!m_dbusInterface->isValid()) {
+    if(m_dbusInterface == nullptr || !m_dbusInterface->isValid()) {
         qWarning ()<< "init AppProxy dbus error";
+        return;
     }
 
     qDebug() << "call QDBusInterface delAppIntoProxy";
@@ -135,4 +137,7 @@ void AppListWidget::initDbus()
                        "/org/ukui/SettingsDaemon/AppProxy",
                        "org.ukui.SettingsDaemon.AppProxy",
                        QDBusConnection::sessionBus());
+    if(!m_dbusInterface->isValid()) {
+        qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+    }
 }

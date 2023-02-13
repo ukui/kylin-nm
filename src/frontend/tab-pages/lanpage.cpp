@@ -769,6 +769,12 @@ void LanPage::initUI()
     m_inactivatedLanListWidget->setProperty("needTranslucent", true);
     m_inactivatedAreaLayout->addWidget(m_inactivatedLanListWidget);
 
+    connect(m_inactivatedLanListWidget, &QListWidget::currentItemChanged, this, [=]() {
+        if (m_inactivatedLanListWidget->currentItem() != nullptr) {
+            m_inactivatedLanListWidget->currentItem()->setSelected(false);
+        }
+    });
+
     QPalette pal = m_activatedLanListWidget->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));        //背景透明
     m_activatedLanListWidget->setPalette(pal);
@@ -776,6 +782,8 @@ void LanPage::initUI()
 
     m_settingsLabel->installEventFilter(this);
     m_netSwitch->installEventFilter(this);
+    m_activatedLanListWidget->installEventFilter(this);
+    m_inactivatedLanListWidget->installEventFilter(this);
 
     showRate();
 }
@@ -795,7 +803,7 @@ QListWidgetItem *LanPage::insertNewItem(KyConnectItem *itemData, QListWidget *li
     }
 
     QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
-    p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));   //设置不可被选中
+//    p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));   //设置不可被选中
     p_sortListWidgetItem->setSizeHint(QSize(listWidget->width(),ITEM_HEIGHT));
 
     listWidget->insertItem(index, p_sortListWidgetItem);
@@ -803,14 +811,14 @@ QListWidgetItem *LanPage::insertNewItem(KyConnectItem *itemData, QListWidget *li
     LanListItem *p_sortLanItem = nullptr;
     p_sortLanItem = new LanListItem(itemData, m_currentDeviceName);
     listWidget->setItemWidget(p_sortListWidgetItem, p_sortLanItem);
-
+    connect(p_sortLanItem, &LanListItem::detailShow, this, &LanPage::showDetailPage);
     return p_sortListWidgetItem;
 }
 
 QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
 {
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
-    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
+//    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_listWidgetItem->setSizeHint(QSize(listWidget->width(), ITEM_HEIGHT));
     listWidget->addItem(p_listWidgetItem);
     LanListItem *p_lanItem = nullptr;
@@ -824,6 +832,7 @@ QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listW
     }
 
     listWidget->setItemWidget(p_listWidgetItem, p_lanItem);
+    connect(p_lanItem, &LanListItem::detailShow, this, &LanPage::showDetailPage);
     return p_listWidgetItem;
 }
 
@@ -1219,6 +1228,20 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
             }
         }
 
+    } else if (watched == m_activatedLanListWidget) {
+        //去掉无右键菜单显示时的选中效果
+        if (event->type() ==  QEvent::FocusIn) {
+            if (m_activatedLanListWidget->currentItem() != nullptr) {
+                m_activatedLanListWidget->currentItem()->setSelected(false);
+            }
+        }
+    } else if (watched == m_inactivatedLanListWidget) {
+        //去掉无右键菜单显示时的选中效果
+        if (event->type() == QEvent::FocusIn) {
+            if (m_inactivatedLanListWidget->currentItem() != nullptr) {
+                m_inactivatedLanListWidget->currentItem()->setSelected(false);
+            }
+        }
     }
 
     return QWidget::eventFilter(watched, event);

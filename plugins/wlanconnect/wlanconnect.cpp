@@ -227,7 +227,9 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
             if (!getSwitchBtnEnable()) {
                 showDesktopNotify(tr("No wireless network card detected"));
             } else {
-                m_interface->call(QStringLiteral("setWirelessSwitchEnable"), !getSwitchBtnState());
+                if (m_interface != nullptr && m_interface->isValid()) {
+                    m_interface->call(QStringLiteral("setWirelessSwitchEnable"), !getSwitchBtnState());
+                }
                 return true;
             }
         }
@@ -298,7 +300,7 @@ void WlanConnect::initComponent() {
 void WlanConnect::reScan()
 {
     qDebug() << "time to rescan wifi";
-    if (m_interface->isValid()) {
+    if (m_interface != nullptr && m_interface->isValid()) {
         qDebug() << "[WlanConnect]call reScan" << __LINE__;
         m_interface->call("reScan");
         qDebug() << "[WlanConnect]call reScan respond" << __LINE__;
@@ -312,7 +314,7 @@ void WlanConnect::updateList()
         return;
     }
     qDebug() << "update list";
-    if(m_interface->isValid()) {
+    if(m_interface != nullptr && m_interface->isValid()) {
         qDebug() << "[WlanConnect]call getWirelessList" << __LINE__;
         QDBusMessage result = m_interface->call(QStringLiteral("getWirelessList"));
         qDebug() << "[WlanConnect]call getWirelessList respond" << __LINE__;
@@ -684,7 +686,7 @@ void WlanConnect::onNetworkRemove(QString deviceName, QString wlannName)
 //获取设备列表=======================================================
 void WlanConnect::getDeviceList(QStringList &list)
 {
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[WlanConnect]call getDeviceListAndEnabled"  << __LINE__;
@@ -703,7 +705,7 @@ void WlanConnect::getDeviceList(QStringList &list)
 
 void WlanConnect::initSwtichState()
 {
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
 
@@ -745,7 +747,7 @@ void WlanConnect::initNetListFromDevice(QString deviceName)
         qDebug() << "[WlanConnect]initNetListFromDevice " << deviceName << " not exist";
         return;
     }
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[WlanConnect]call getWirelessList"  << __LINE__;
@@ -878,6 +880,9 @@ void WlanConnect::showLayout(QVBoxLayout * layout) {
 //获取应该插入哪个位置
 int WlanConnect::sortWlanNet(QString deviceName, QString name, QString signal)
 {
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return 0;
+    }
     qDebug() << "[WlanConnect]call getWirelessList"  << __LINE__;
     QDBusMessage result = m_interface->call(QStringLiteral("getWirelessList"));
     qDebug() << "[WlanConnect]call getWirelessList respond"  << __LINE__;
@@ -904,7 +909,7 @@ int WlanConnect::sortWlanNet(QString deviceName, QString name, QString signal)
 }
 
 void WlanConnect::activeConnect(QString netName, QString deviceName, int type) {
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[WlanConnect]call activateConnect" << __LINE__;
@@ -913,7 +918,7 @@ void WlanConnect::activeConnect(QString netName, QString deviceName, int type) {
 }
 
 void WlanConnect::deActiveConnect(QString netName, QString deviceName, int type) {
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[WlanConnect]call deActivateConnect" << __LINE__;
@@ -966,7 +971,7 @@ void WlanConnect::addDeviceFrame(QString devName)
     deviceFrameMap.insert(devName, itemFrame);
 
     connect(itemFrame->addWlanWidget, &AddNetBtn::clicked, this, [=](){
-        if (m_interface->isValid()) {
+        if (m_interface != nullptr && m_interface->isValid()) {
             qDebug() << "[NetConnect]call showAddOtherWlanWidget" << devName  << __LINE__;
             m_interface->call(QStringLiteral("showAddOtherWlanWidget"), devName);
             qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
@@ -1034,7 +1039,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
 
     connect(wlanItem->infoLabel, &GrayInfoButton::clicked, this, [=]{
         // open detail page
-        if (!m_interface->isValid()) {
+        if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
         qDebug() << "[WlanConnect]call showPropertyWidget" << __LINE__;

@@ -141,28 +141,28 @@ void LanPage::initLanDeviceState()
 
 void LanPage::initNetSwitch()
 {
-    bool wiredSwitch = true;
+    bool wiredGsetting = true;
     bool wiredEnable = m_wiredConnectOperation->getWiredEnabled();
 
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
         m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
         if (m_switchGsettings->keys().contains(WIRED_SWITCH)) {
-            wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
+            wiredGsetting = m_switchGsettings->get(WIRED_SWITCH).toBool();
             connect(m_switchGsettings, &QGSettings::changed, this, &LanPage::onSwithGsettingsChanged);
+            if (wiredEnable != wiredGsetting) {
+                wiredEnable = wiredGsetting;
+                m_wiredConnectOperation->setWiredEnabled(wiredGsetting);
+            }
         }
     } else {
         qDebug()<<"[LanPage] org.ukui.kylin-nm.switch is not installed!";
     }
 
-    if (nullptr != m_switchGsettings
-            && wiredSwitch != wiredEnable) {
-        m_switchGsettings->set(WIRED_SWITCH, wiredEnable);
-    }
-
     //从3.0升级上来 先读取老的配置文件来保证和升级前状态一致
-    bool oldVersionState;
+    bool oldVersionState = true;
     if (getOldVersionWiredSwitchState(oldVersionState)) {
         if (wiredEnable != oldVersionState) {
+            wiredEnable = oldVersionState;
             m_wiredConnectOperation->setWiredEnabled(oldVersionState);
         }
     }

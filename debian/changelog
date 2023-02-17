@@ -1,3 +1,14 @@
+kylin-nm (3.20.1.17-0k0.9) v101; urgency=medium
+
+  * BUG号：
+     -#156386 【网络】【PTOF】双网卡，连接未使用的IP提示IP冲突
+     -#156776 【PTOF】【网络连接】关闭热点后再开启，黑名单消失
+  * 需求号：无
+  * 其他改动：
+  * 影响域:IP冲突 移动热点黑名单
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 17 Feb 2023 16:58:33 +0800
+
 kylin-nm (3.20.1.17-0k0.8) v101; urgency=medium
 
   * BUG号：

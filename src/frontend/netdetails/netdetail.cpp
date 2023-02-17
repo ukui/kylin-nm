@@ -1181,6 +1181,24 @@ void ThreadObject::checkIpv4ConflictThread(const QString &ipv4Address)
     KyIpv4Arping* ipv4Arping = new KyIpv4Arping(m_devName, ipv4Address);
     if (ipv4Arping->ipv4ConflictCheck() >= 0) {
         isConflict =  ipv4Arping->ipv4IsConflict();
+        if (isConflict) {
+            QString mac = ipv4Arping->getMacAddress();
+            qDebug() << "conflict mac" << mac;
+            KyNetworkDeviceResourse resource;
+            QStringList devList,devList1,devList2;
+            resource.getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, devList1);
+            resource.getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList2);
+            devList << devList1 << devList2;
+            for(int i = 0; i < devList.size(); ++i){
+                QString hardAddress;
+                int band;
+                resource.getHardwareInfo(devList.at(i), hardAddress, band);
+                if (hardAddress == mac) {
+                    qDebug() << "conflict local card" << devList.at(i);
+                    isConflict = false;
+                }
+            }
+        }
     } else {
         qWarning() << "checkIpv4Conflict internal error";
     }

@@ -826,6 +826,35 @@ NetworkManager::ConnectionSettings::Ptr
     return connectionSettings;
 }
 
+QStringList KyWirelessConnectOperation::getBlackListHostName(NetworkManager::Connection::Ptr apConnectPtr)
+{
+    QStringList blackList;
+    blackList.clear();
+
+    QDBusInterface dbusInterface("org.freedesktop.NetworkManager",
+                              apConnectPtr->path(),
+                              "org.freedesktop.NetworkManager.Settings.Connection",
+                              QDBusConnection::systemBus());
+
+    QDBusMessage result = dbusInterface.call("GetSettings");
+    const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+    QMap<QString, QMap<QString, QVariant>> map;
+    dbusArg1st >> map;
+    if (map.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << __LINE__ <<"get connection settings failed.";
+        return blackList;
+    }
+
+    QMap<QString,QVariant> wirelessMap = map.value(KEY_802_11_WIRELESS);
+    if (wirelessMap.isEmpty()) {
+        qWarning() << Q_FUNC_INFO << __LINE__ <<"threre is not connection settings";
+        return blackList;
+    }
+
+    blackList = wirelessMap.value(KEY_BLACKLIST_HOSTNAME).toStringList();
+    return blackList;
+}
+
 void KyWirelessConnectOperation::updateWirelessApSetting(
         NetworkManager::Connection::Ptr apConnectPtr,
         const QString apName, const QString apPassword,
@@ -850,7 +879,6 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
         wirelessSetting->setBand(NetworkManager::WirelessSetting::FrequencyBand::Automatic);
     }
 
-
     NetworkManager::WirelessSecuritySetting::Ptr wirelessSecuritySetting
         = apConnectSettingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
     if (apPassword.isEmpty()) {
@@ -861,7 +889,12 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
         wirelessSecuritySetting->setPsk(apPassword);
     }
 
-    apConnectPtr->update(apConnectSettingPtr->toMap());
+    QStringList blackList = getBlackListHostName(apConnectPtr);
+    NMVariantMapMap newMap = apConnectSettingPtr->toMap();
+    if (newMap.contains(KEY_802_11_WIRELESS)) {
+        newMap[KEY_802_11_WIRELESS].insert(KEY_BLACKLIST_HOSTNAME, blackList);
+    }
+    apConnectPtr->update(newMap);
 }
 
 void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QString apName,
@@ -999,7 +1032,7 @@ void KyWirelessConnectOperation::activateApConnectionByUuid(const QString apUuid
     QString connectPath = "";
     QString deviceIdentifier = "";
     QString connectName = "";
-    QString specificObject = "";
+    QString specificObject = "/";
 
     qDebug()<<"it will activate hotspot connect"<<apUuid;
 

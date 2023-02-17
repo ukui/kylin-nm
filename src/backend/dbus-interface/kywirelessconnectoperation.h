@@ -27,6 +27,9 @@
 #include "kylinconnectoperation.h"
 #include "kyenterpricesettinginfo.h"
 
+#define KEY_802_11_WIRELESS "802-11-wireless"
+#define KEY_BLACKLIST_HOSTNAME "blacklist-hostname"
+
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 const QString    WIRELESS_SWITCH  = "wirelessswitch";
 
@@ -142,6 +145,8 @@ private:
                                                                   const QString apPassword,
                                                                   const QString apDevice,
                                                                   const QString wirelessBand);
+    QStringList getBlackListHostName(QString apConnectPath);
+
 
 Q_SIGNALS:
     void wifiEnabledChanged(bool);

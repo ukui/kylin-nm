@@ -145,7 +145,7 @@ private:
                                                                   const QString apPassword,
                                                                   const QString apDevice,
                                                                   const QString wirelessBand);
-    QStringList getBlackListHostName(NetworkManager::Connection::Ptr apConnectPtr);
+    QStringList getBlackListHostName(QString apConnectPath);
 
 
 Q_SIGNALS:

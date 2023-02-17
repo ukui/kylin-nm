@@ -826,13 +826,13 @@ NetworkManager::ConnectionSettings::Ptr
     return connectionSettings;
 }
 
-QStringList KyWirelessConnectOperation::getBlackListHostName(NetworkManager::Connection::Ptr apConnectPtr)
+QStringList KyWirelessConnectOperation::getBlackListHostName(QString apConnectPath)
 {
     QStringList blackList;
     blackList.clear();
 
     QDBusInterface dbusInterface("org.freedesktop.NetworkManager",
-                              apConnectPtr->path(),
+                              apConnectPath,
                               "org.freedesktop.NetworkManager.Settings.Connection",
                               QDBusConnection::systemBus());
 
@@ -841,17 +841,18 @@ QStringList KyWirelessConnectOperation::getBlackListHostName(NetworkManager::Con
     QMap<QString, QMap<QString, QVariant>> map;
     dbusArg1st >> map;
     if (map.isEmpty()) {
-        qWarning() << Q_FUNC_INFO << __LINE__ <<"get connection settings failed.";
+        qWarning() << Q_FUNC_INFO << __LINE__ <<"map is empty!";
         return blackList;
     }
 
     QMap<QString,QVariant> wirelessMap = map.value(KEY_802_11_WIRELESS);
     if (wirelessMap.isEmpty()) {
-        qWarning() << Q_FUNC_INFO << __LINE__ <<"threre is not connection settings";
+        qWarning() << Q_FUNC_INFO << __LINE__ <<"wirelessMap is empty!";
         return blackList;
     }
-
-    blackList = wirelessMap.value(KEY_BLACKLIST_HOSTNAME).toStringList();
+    if (wirelessMap.contains(KEY_BLACKLIST_HOSTNAME)) {
+        blackList = wirelessMap.value(KEY_BLACKLIST_HOSTNAME).toStringList();
+    }
     return blackList;
 }
 
@@ -889,7 +890,7 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
         wirelessSecuritySetting->setPsk(apPassword);
     }
 
-    QStringList blackList = getBlackListHostName(apConnectPtr);
+    QStringList blackList = getBlackListHostName(apConnectPtr->path());
     NMVariantMapMap newMap = apConnectSettingPtr->toMap();
     if (newMap.contains(KEY_802_11_WIRELESS)) {
         newMap[KEY_802_11_WIRELESS].insert(KEY_BLACKLIST_HOSTNAME, blackList);

@@ -36,12 +36,16 @@ public:
 
     void getWirelessConnectDetail(QString interface, QString ssid, QString uuid, KyDetailInfo &connectSetting);
 
+    bool isApConnection(QString uuid);
+
+    void getWirelessConnectInfo(QString devName, QString &secuType, int &cateGory);
+
 private:
     void kyWirelessNetItemListInit();
     void wirelessNetItemInit(KyWirelessNetItem &wirelessItem,
                                                     NetworkManager::WirelessNetwork::Ptr wirelessNetPtr);
     void getUuidBySsid(const QString &ssid, QString &deviceName, QString &uuid, QString &dbusPath);
-
+    int getCategory(QString uni);
 public Q_SLOTS:
     void onWifiNetworkAdded(QString devIfaceName, QString ssid);
     void onWifiNetworkRemoved(QString devIfaceName, QString ssid);

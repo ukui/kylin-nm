@@ -104,8 +104,16 @@ public:
     void getWiredList(QMap<QString,QList<KyWiredItem>> &map);
     //wireless
     void getWifiNetworkList(QString devName, QList<KyWirelessNetItem> &list);
+    void getWirelessConnectInfo(QString deviceName, QString &secuType, int &cateGory);
+
     //移动热点
     void getApConnections(QList<KyApConnectItem> &apConnectItemList);
+    bool isApConnection(QString uuid);
+    int  getWirelessDeviceCapability(const QString deviceName);
+    void activeWirelessAp(const QString apUuid, const QString apName,
+                              const QString apPassword, const QString apDevice,
+                              const QString wirelessBand);
+    void deactiveWirelessAp(const QString apName, const QString apUuid);
 
     //详情页-->ipv4 + ipv6 + autoconnect
     void getConnectIpInfo(QString uuid, KyConnectSetting &connectSetting);

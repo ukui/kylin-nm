@@ -150,10 +150,40 @@ void KyNetworkManager::getWifiNetworkList(QString devName, QList<KyWirelessNetIt
     m_wirelessNetResource->getWifiNetworkList(devName, list);
 }
 
+void KyNetworkManager::getWirelessConnectInfo(QString deviceName, QString &secuType, int &cateGory)
+{
+    m_wirelessNetResource->getWirelessConnectInfo(deviceName, secuType, cateGory);
+}
+
 void KyNetworkManager::getApConnections(QList<KyApConnectItem> &apConnectItemList)
 {
     m_apNetResource->getApConnections(apConnectItemList);
 }
+
+bool KyNetworkManager::isApConnection(QString uuid)
+{
+    return m_wirelessNetResource->isApConnection(uuid);
+}
+
+int KyNetworkManager::getWirelessDeviceCapability(const QString deviceName)
+{
+    return m_deviceResource->getWirelessDeviceCapability(deviceName);
+}
+
+void KyNetworkManager::activeWirelessAp(const QString apUuid, const QString apName,
+                                        const QString apPassword, const QString apDevice,
+                                        const QString wirelessBand)
+{
+    KyWirelessConnectOperation operate;
+    operate.activeWirelessAp(apUuid, apName, apPassword, apDevice, wirelessBand);
+}
+
+void KyNetworkManager::deactiveWirelessAp(const QString apName, const QString apUuid)
+{
+    KyWirelessConnectOperation operate;
+    operate.deactiveWirelessAp(apName, apUuid);
+}
+
 //详情页
 //共有ipv4 ipv6 包括autoconnect
 void KyNetworkManager::getConnectIpInfo(QString uuid, KyConnectSetting &connectSetting)

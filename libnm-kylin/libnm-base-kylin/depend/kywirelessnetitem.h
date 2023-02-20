@@ -14,6 +14,7 @@ public:
     bool m_isApConnection = false;
     QString m_secuType = "";
     int m_signalStrength = 0;
+    int m_category = 0;
 };
 
 #endif // KYWIRELESSNETITEM_H

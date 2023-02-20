@@ -836,7 +836,7 @@ QStringList KyWirelessConnectOperation::getBlackListHostName(QString apConnectPa
                               "org.freedesktop.NetworkManager.Settings.Connection",
                               QDBusConnection::systemBus());
     if (!dbusInterface.isValid()) {
-        qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error! apConnectPath:"<<dbusInterface;
+        qWarning()<<Q_FUNC_INFO<<__LINE__<<"dbusInterface error! apConnectPath:"<<apConnectPath;
         return blackList;
     }
 

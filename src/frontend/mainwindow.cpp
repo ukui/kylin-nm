@@ -149,6 +149,10 @@ void MainWindow::firstlyStart()
 
     m_createPagePtrMap.clear();
 
+    m_networkMode = new NetworkMode(this);
+    m_networkMode->initWiredNetworkMode();
+    m_networkMode->initWirelessNetworkMode();
+
     //加载key ring
     agent_init();
 }

@@ -50,6 +50,7 @@
 #include "tab-pages/tabpage.h"
 #include "kwidget.h"
 #include "ktabbar.h"
+#include "networkmodeconfig.h"
 
 using namespace kdk;
 
@@ -186,6 +187,7 @@ private:
 
     ThreadObject *m_object;
     QThread *m_objectThread;
+    NetworkModeType m_networkMode = DBUS_INVAILD;
 
 private Q_SLOTS:
     void on_btnConfirm_clicked();

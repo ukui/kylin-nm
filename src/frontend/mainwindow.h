@@ -34,6 +34,8 @@
 #include "wlanpage.h"
 #include "netdetails/netdetail.h"
 #include "netdetails/joinhiddenwifipage.h"
+//安全中心-网络防火墙模式配置
+#include "networkmodeconfig.h"
 //删除此头文件，别在添加
 //#include <ukuisdk/kylin-com4cxx.h>
 
@@ -195,6 +197,8 @@ private:
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
 
     QMap<QString, NetDetail*> m_createPagePtrMap;
+
+    NetworkMode *m_networkMode;
 
 public Q_SLOTS:
     void onShowMainWindow(int type);

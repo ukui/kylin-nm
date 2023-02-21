@@ -34,7 +34,6 @@
 #include <QProcess>
 #include <QDebug>
 #include "kylinnetworkdeviceresource.h"
-#include "firewalldialog.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
 //#include "kborderlessbutton.h"
@@ -44,11 +43,6 @@
 #define REFRESH_NETWORKSPEED_TIMER 1000
 
 using namespace kdk;
-
-enum network_mode {
-    KSC_FIREWALL_PUBLIC = 0,
-    KSC_FIREWALL_PRIVATE
-};
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0

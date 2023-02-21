@@ -186,6 +186,7 @@ private:
 
     ThreadObject *m_object;
     QThread *m_objectThread;
+    int m_networkMode = -2;
 
 private Q_SLOTS:
     void on_btnConfirm_clicked();

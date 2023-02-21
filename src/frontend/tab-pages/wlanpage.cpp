@@ -19,7 +19,6 @@
  */
 #include "wlanpage.h"
 #include "kywirelessnetitem.h"
-#include "networkmodeconfig.h"
 #include "kwindowsystem.h"
 #include "kwindowsystem_export.h"
 #include <QEvent>
@@ -450,19 +449,6 @@ void WlanPage::constructActivateConnectionArea()
             QListWidgetItem *p_listWidgetItem = addNewItem(wirelessNetItem, m_activatedNetListWidget);
             m_activateConnectionItemMap.insert(wirelessNetItem.m_NetSsid, p_listWidgetItem);
             updateWlanItemState(m_activatedNetListWidget, p_listWidgetItem, Activated);
-
-            int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(wirelessNetItem.m_connectUuid);
-            if (configType == -1) {
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(wirelessNetItem.m_connectUuid,
-                                                                       m_currentDevice,
-                                                                       wirelessNetItem.m_connName,
-                                                                       KSC_FIREWALL_PUBLIC);
-            } else {
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(wirelessNetItem.m_connectUuid,
-                                                                       m_currentDevice,
-                                                                       wirelessNetItem.m_connName,
-                                                                       configType);
-            }
 
             height += p_listWidgetItem->sizeHint().height();
             setNetSpeed->start(REFRESH_NETWORKSPEED_TIMER);
@@ -983,14 +969,6 @@ void WlanPage::onConnectionStateChanged(QString uuid,
     qDebug()<< LOG_FLAG << "Q_EMIT wlanActiveConnectionStateChanged" << devName << ssid << state;
     Q_EMIT wlanActiveConnectionStateChanged(devName, ssid, uuid, state);
 
-    //解决通过高级设置添加的未指定网卡的无线连接无法断开的问题，去掉设备为空的判断
-    if (ssid.isEmpty()) {
-        qDebug()<< LOG_FLAG << "ssid or devicename is empty"
-                << "devicename"<< devName <<"ssid"<<ssid;
-        NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, devName, ssid);
-        return;
-    }
-
     if (!m_connectResource->isWirelessConnection(uuid)) {
          qDebug()<< LOG_FLAG << "it is not wireless connection" << uuid;
         return;
@@ -1019,37 +997,6 @@ void WlanPage::onConnectionStateChanged(QString uuid,
             << "; state = " << state << "; reason = " << reason << Q_FUNC_INFO <<__LINE__;
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         m_updateStrength = true;
-
-        if (!isApConnection) {
-            int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
-            if (configType == -1) {
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC); //默认公有配置
-                FirewallDialog *fireWallDialog = new FirewallDialog(); //弹窗 供用户配置
-                fireWallDialog->setUuid(uuid);
-                fireWallDialog->setWindowTitle(ssid);
-
-                connect(fireWallDialog, &FirewallDialog::setPrivateNetMode, this, [=](){
-                    fireWallDialog->hide();
-                    NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
-                });
-
-                connect(fireWallDialog, &FirewallDialog::setPublicNetMode, this, [=](){
-                    fireWallDialog->hide();
-                    NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
-                });
-
-                connect(m_activatedConnectResource, &KyActiveConnectResourse::stateChangeReason, fireWallDialog, &FirewallDialog::closeMyself);
-
-                fireWallDialog->show();
-                fireWallDialog->centerToScreen();
-
-            } else if (configType == KSC_FIREWALL_PUBLIC) {
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PUBLIC);
-            } else if (configType == KSC_FIREWALL_PRIVATE) {
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, devName, ssid, KSC_FIREWALL_PRIVATE);
-            }
-        }
-
         updateActivatedArea(uuid, ssid, devName);
         setNetSpeed->start(REFRESH_NETWORKSPEED_TIMER);
         if (m_activateConnectionItemMap.contains(ssid)) {
@@ -1069,7 +1016,6 @@ void WlanPage::onConnectionStateChanged(QString uuid,
             QListWidgetItem *p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
             updateWlanItemState(m_inactivatedNetListWidget, p_listWidgetItem, Deactivated);
         }
-        NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, devName, ssid);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivating){
         m_updateStrength = false;
         if (m_activateConnectionItemMap.contains(ssid)) {

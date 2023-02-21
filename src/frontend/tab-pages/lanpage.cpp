@@ -18,7 +18,6 @@
  *
  */
 #include "lanpage.h"
-#include "networkmodeconfig.h"
 #include "kwindowsystem.h"
 #include "kwindowsystem_export.h"
 #include <QDebug>
@@ -344,19 +343,6 @@ void LanPage::constructActiveConnectionArea()
                      << p_activeConnectionItem->m_connectName;
             QListWidgetItem *p_listWidgetItem = addNewItem(p_activeConnectionItem, m_activatedLanListWidget);
             m_activeConnectionMap.insert(p_activeConnectionItem->m_connectUuid, p_listWidgetItem);
-
-            int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(p_activeConnectionItem->m_connectUuid);
-            if (configType == -1) {
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(p_activeConnectionItem->m_connectUuid,
-                                                                       m_currentDeviceName,
-                                                                       p_activeConnectionItem->m_connectName,
-                                                                       KSC_FIREWALL_PUBLIC);
-            } else {
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(p_activeConnectionItem->m_connectUuid,
-                                                                       m_currentDeviceName,
-                                                                       p_activeConnectionItem->m_connectName,
-                                                                       configType);
-            }
 
             delete p_activeConnectionItem;
             p_activeConnectionItem = nullptr;
@@ -951,39 +937,6 @@ void LanPage::onConnectionStateChange(QString uuid,
             qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;
             return;
         }
-
-        deviceName = p_newItem->m_ifaceName;
-        ssid = p_newItem->m_connectName;
-
-        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
-
-        if (configType == -1) {
-            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC); //默认公有配置
-            FirewallDialog *fireWallDialog = new FirewallDialog();
-            fireWallDialog->setUuid(uuid);
-            fireWallDialog->setWindowTitle(ssid);
-
-            connect(fireWallDialog, &FirewallDialog::setPrivateNetMode, this, [=](){
-                fireWallDialog->hide();
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
-            });
-
-            connect(fireWallDialog, &FirewallDialog::setPublicNetMode, this, [=](){
-                fireWallDialog->hide();
-                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
-            });
-
-            connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, fireWallDialog, &FirewallDialog::closeMyself);
-
-            fireWallDialog->show();
-            fireWallDialog->centerToScreen();
-
-        }  else if (configType == KSC_FIREWALL_PUBLIC) {
-            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
-        } else if (configType == KSC_FIREWALL_PRIVATE) {
-            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
-        }
-
         updateActivatedConnectionArea(p_newItem);
         updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
         setNetSpeed->start(REFRESH_NETWORKSPEED_TIMER);
@@ -999,7 +952,6 @@ void LanPage::onConnectionStateChange(QString uuid,
         ssid = p_newItem->m_connectName;
         updateConnectionArea(p_newItem);
         updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
-        NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, deviceName, ssid);
         setNetSpeed->stop();
     } else if (state == NetworkManager::ActiveConnection::State::Activating) {
         deviceName = getConnectionDevice(uuid);

@@ -18,7 +18,10 @@
  *
  */
 #include "networkmodeconfig.h"
+#include "firewalldialog.h"
 #include <QDebug>
+
+#define LOG_FLAG  "[NetworkMode]"
 
 NetworkModeConfig *NetworkModeConfig::m_netModeInstance = nullptr;
 
@@ -46,12 +49,12 @@ int NetworkModeConfig::getNetworkModeConfig(QString uuid)
 {
     if (uuid.isEmpty()) {
            qWarning()<< /*LOG_FLAG <<*/ "uuid is empty, so can not get network mode config";
-           return -1;
+           return NO_CONFIG;
        }
 
     if(m_dbusInterface == nullptr || !m_dbusInterface->isValid()) {
         qWarning () << "com.ksc.defender dbus is invalid";
-        return -1;
+        return DBUS_INVAILD;
     }
 
     QDBusReply<int> reply = m_dbusInterface->call("get_networkModeConfig", uuid);
@@ -60,7 +63,7 @@ int NetworkModeConfig::getNetworkModeConfig(QString uuid)
     } else {
         qWarning() << "call get_networkModeConfig failed" << reply.error().message();
     }
-    return -1;
+    return NO_CONFIG;
 }
 
 void NetworkModeConfig::setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode)
@@ -92,5 +95,139 @@ int NetworkModeConfig::breakNetworkConnect(QString uuid, QString cardName, QStri
     } else {
         qWarning() << "call break_networkConnect failed" << reply.error().message();
         return -1;
+    }
+}
+
+//安全中心-网络防火墙模式配置
+NetworkMode::NetworkMode(QObject *parent)
+    :QObject(parent)
+{
+    qRegisterMetaType<NetworkManager::Device::State>("NetworkManager::Device::State");
+    qRegisterMetaType<NetworkManager::Device::StateChangeReason>("NetworkManager::Device::StateChangeReason");
+    m_deviceResource = new KyNetworkDeviceResourse(this);
+    m_activatedConnectResource = new KyActiveConnectResourse(this);
+    m_connectResource = new KyConnectResourse(this);
+    m_wirelessNetResource = new KyWirelessNetResource(this);
+    connect(m_activatedConnectResource, &KyActiveConnectResourse::stateChangeReason,
+            this, &NetworkMode::onConnectionStateChanged);
+}
+
+void NetworkMode::initWiredNetworkMode()
+{
+    qDebug()<< LOG_FLAG << "initWiredNetworkMode";
+    QStringList wiredDevList;
+    m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
+    if (!wiredDevList.isEmpty()) {
+        for (auto devName : wiredDevList) {
+            QList<KyConnectItem *> activedList;
+            m_activatedConnectResource->getActiveConnectionList(devName,
+                                                                NetworkManager::ConnectionSettings::Wired,
+                                                                activedList);
+            if (!activedList.isEmpty()) {
+                int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(activedList.at(0)->m_connectUuid);
+                if (configType > -1)  {
+                    NetworkModeConfig::getInstance()->setNetworkModeConfig(activedList.at(0)->m_connectUuid, devName,
+                                                                           activedList.at(0)->m_connectName, configType);
+                }
+            }
+        }
+    }
+}
+
+void NetworkMode::initWirelessNetworkMode()
+{
+    qDebug()<< LOG_FLAG << "initWirelessNetworkMode";
+    QStringList wirelessDevList;
+    m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
+    if (!wirelessDevList.isEmpty()) {
+        for (auto devName : wirelessDevList) {
+            KyWirelessNetItem wirelessNetItem;
+            bool ret = m_wirelessNetResource->getActiveWirelessNetItem(devName, wirelessNetItem);
+            if (ret == true) {
+                int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(wirelessNetItem.m_connectUuid);
+                if (configType > -1) {
+                    NetworkModeConfig::getInstance()->setNetworkModeConfig(wirelessNetItem.m_connectUuid, devName,
+                                                                           wirelessNetItem.m_connName, configType);
+                }
+            }
+        }
+    }
+}
+
+void NetworkMode::setFirstConnectNetworkMode(QString uuid, QString deviceName, QString ssid)
+{
+    NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC); //默认公有配置
+    FirewallDialog *fireWallDialog = new FirewallDialog();
+    fireWallDialog->setUuid(uuid);
+    fireWallDialog->setWindowTitle(ssid);
+
+    connect(fireWallDialog, &FirewallDialog::setPrivateNetMode, this, [=](){
+        fireWallDialog->hide();
+        NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
+    });
+
+    connect(fireWallDialog, &FirewallDialog::setPublicNetMode, this, [=](){
+        fireWallDialog->hide();
+        NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
+    });
+
+    connect(m_activatedConnectResource, &KyActiveConnectResourse::stateChangeReason, fireWallDialog, &FirewallDialog::closeMyself);
+
+    fireWallDialog->show();
+    fireWallDialog->centerToScreen();
+}
+
+void NetworkMode::onConnectionStateChanged(QString uuid,
+                                           NetworkManager::ActiveConnection::State state,
+                                           NetworkManager::ActiveConnection::Reason reason)
+{
+    if (state == NetworkManager::ActiveConnection::State::Activated) {
+        QString deviceName = "";
+        QString ssid = "";
+
+        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
+
+        //有线网络连接
+        if (m_connectResource->isWiredConnection(uuid)) {
+            KyConnectItem *p_newItem = nullptr;
+            p_newItem = m_activatedConnectResource->getActiveConnectionByUuid(uuid);
+            if (nullptr == p_newItem) {
+                //删除此网络
+                qDebug()<< LOG_FLAG << "delete wired connect:" << uuid << ", call break_networkConnect";
+                NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, "", "");
+            }
+
+            deviceName = p_newItem->m_ifaceName;
+            ssid = p_newItem->m_connectName;
+            if (configType == NO_CONFIG) {
+                //首次连接的网络
+                setFirstConnectNetworkMode(uuid, deviceName, ssid);
+            }  else if (configType == KSC_FIREWALL_PUBLIC) {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
+            } else if (configType == KSC_FIREWALL_PRIVATE) {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
+            }
+        }
+        //无线网络连接
+        if (m_connectResource->isWirelessConnection(uuid)) {
+            m_wirelessNetResource->getSsidByUuid(uuid, ssid);
+            m_wirelessNetResource->getDeviceByUuid(uuid, deviceName);
+            if (ssid.isEmpty()) {
+                //忘记此网络
+                qDebug()<< LOG_FLAG << "forgrt wireless connect:" << uuid <<", call break_networkConnect";
+                NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, "", "");
+            }
+
+            if (configType == NO_CONFIG) {
+                setFirstConnectNetworkMode(uuid, deviceName, ssid);
+            }  else if (configType == KSC_FIREWALL_PUBLIC) {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
+            } else if (configType == KSC_FIREWALL_PRIVATE) {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
+            }
+        }
+
+    } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
+        NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, "", "");
     }
 }

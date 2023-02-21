@@ -117,19 +117,29 @@ void NetworkMode::initWiredNetworkMode()
     qDebug()<< LOG_FLAG << "initWiredNetworkMode";
     QStringList wiredDevList;
     m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
-    if (!wiredDevList.isEmpty()) {
-        for (auto devName : wiredDevList) {
-            QList<KyConnectItem *> activedList;
-            m_activatedConnectResource->getActiveConnectionList(devName,
-                                                                NetworkManager::ConnectionSettings::Wired,
-                                                                activedList);
-            if (!activedList.isEmpty()) {
-                int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(activedList.at(0)->m_connectUuid);
-                if (configType > -1)  {
-                    NetworkModeConfig::getInstance()->setNetworkModeConfig(activedList.at(0)->m_connectUuid, devName,
-                                                                           activedList.at(0)->m_connectName, configType);
-                }
-            }
+    if (wiredDevList.isEmpty()) {
+        return;
+    }
+
+    for (auto devName : wiredDevList) {
+        QList<KyConnectItem *> activedList;
+        m_activatedConnectResource->getActiveConnectionList(devName,
+                                                            NetworkManager::ConnectionSettings::Wired,
+                                                            activedList);
+        if (activedList.isEmpty()) {
+            continue;
+        }
+
+        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(activedList.at(0)->m_connectUuid);
+        if (configType == DBUS_INVAILD) {
+            return;
+        } else if (configType == NO_CONFIG) {
+            //已连接网络无配置 默认公有配置
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(activedList.at(0)->m_connectUuid, devName,
+                                                                   activedList.at(0)->m_connectName, KSC_FIREWALL_PUBLIC);
+        } else {
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(activedList.at(0)->m_connectUuid, devName,
+                                                                   activedList.at(0)->m_connectName, configType);
         }
     }
 }
@@ -139,16 +149,25 @@ void NetworkMode::initWirelessNetworkMode()
     qDebug()<< LOG_FLAG << "initWirelessNetworkMode";
     QStringList wirelessDevList;
     m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
-    if (!wirelessDevList.isEmpty()) {
-        for (auto devName : wirelessDevList) {
-            KyWirelessNetItem wirelessNetItem;
-            bool ret = m_wirelessNetResource->getActiveWirelessNetItem(devName, wirelessNetItem);
-            if (ret == true) {
-                int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(wirelessNetItem.m_connectUuid);
-                if (configType > -1) {
-                    NetworkModeConfig::getInstance()->setNetworkModeConfig(wirelessNetItem.m_connectUuid, devName,
-                                                                           wirelessNetItem.m_connName, configType);
-                }
+    if (wirelessDevList.isEmpty()) {
+        return;
+    }
+
+    for (auto devName : wirelessDevList) {
+        KyWirelessNetItem wirelessNetItem;
+        bool ret = m_wirelessNetResource->getActiveWirelessNetItem(devName, wirelessNetItem);
+
+        if (ret == true) {
+            int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(wirelessNetItem.m_connectUuid);
+            if (configType == DBUS_INVAILD) {
+                return;
+            } else if (configType == NO_CONFIG) {
+                //已连接网络无配置 默认公有配置
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(wirelessNetItem.m_connectUuid, devName,
+                                                                       wirelessNetItem.m_connName, KSC_FIREWALL_PUBLIC);
+            } else {
+                NetworkModeConfig::getInstance()->setNetworkModeConfig(wirelessNetItem.m_connectUuid, devName,
+                                                                       wirelessNetItem.m_connName, configType);
             }
         }
     }

@@ -21,8 +21,6 @@
 #include "backend/kylinipv4arping.h"
 #include "backend/kylinipv6arping.h"
 //#include "xatom/xatom-helper.h"
-#include "networkmodeconfig.h"
-
 
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
@@ -331,21 +329,21 @@ void NetDetail::initUI()
 
     // TabBar
     onPaletteChanged();
-    m_networkMode = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
+    m_networkMode = NetworkModeType(NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid));
     m_netTabBar = new NetTabBar(this);
     m_netTabBar->addTab(tr("Detail")); //详情
     m_netTabBar->addTab(tr("IPv4"));//Ipv4
     m_netTabBar->addTab(tr("IPv6"));//Ipv6
     if (isWlan) {
         m_netTabBar->addTab(tr("Security"));//安全
-        if (isActive && m_networkMode > -1) {
+        if (isActive && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
             m_netTabBar->addTab(tr("Config")); //配置
             m_netTabBar->setFixedWidth(WLAN_TAB_WIDTH + TAB_WIDTH);
         } else {
             m_netTabBar->setFixedWidth(WLAN_TAB_WIDTH);
         }
     } else {
-        if (isActive && m_networkMode > -1) {
+        if (isActive && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
             m_netTabBar->addTab(tr("Config")); //配置
             m_netTabBar->setFixedWidth(LAN_TAB_WIDTH + TAB_WIDTH);
         } else {
@@ -528,7 +526,7 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     }
 
     //配置页面
-    if (isActive  && m_networkMode > -1) {
+    if (isActive  && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
         configPage->setConfigState(m_networkMode);
     }
 
@@ -1063,7 +1061,7 @@ bool NetDetail::updateConnect()
         }
     }
 
-    if (m_networkMode > -1) {
+    if (m_networkMode != DBUS_INVAILD) {
         int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
         bool configPageChange = configPage->checkIsChanged(configType);
         int currentConfigType = configPage->getConfigState();

@@ -239,7 +239,7 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
     KyWirelessConnectSetting connetSetting;
     connetSetting.setConnectName(m_wirelessNetItem.m_NetSsid);
     connetSetting.setIfaceName(m_deviceName);
-//    connetSetting.isAutoConnect = true; //ZJP_TODO 自动连接选项
+    connetSetting.isAutoConnect = m_securityPage->getAutoConnectState(); //ZJP_TODO 自动连接选项
     connetSetting.m_type = KyKeyMgmt::WpaEap;
     connetSetting.m_ssid = m_wirelessNetItem.m_NetSsid;
     connetSetting.m_secretFlag = 0;

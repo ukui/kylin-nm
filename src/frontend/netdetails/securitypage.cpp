@@ -467,6 +467,12 @@ void SecurityPage::getSecuType(KySecuType &secuType, KyEapMethodType &enterprise
     enterpriseType = (KyEapMethodType)eapTypeCombox->currentData().toInt();
 }
 
+bool SecurityPage::getAutoConnectState()
+{
+    bool state = m_rememberCheckBox->isChecked();
+    return state;
+}
+
 bool SecurityPage::checkIsChanged(const ConInfo info)
 {
     if (info.secType != secuTypeCombox->currentData().toInt()) {

@@ -54,6 +54,7 @@ public:
     void updateTtlsChange(KyEapMethodTtlsInfo &info);
 
     void getSecuType(KySecuType &secuType, KyEapMethodType &enterpriseType);
+    bool getAutoConnectState();
 
 private:
     bool isDetailPage;

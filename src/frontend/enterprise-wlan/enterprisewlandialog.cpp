@@ -131,6 +131,7 @@ void EnterpriseWlanDialog::initUI()
     QPalette pal = m_enterWlanScrollArea->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));
     m_enterWlanScrollArea->setPalette(pal);
+    m_enterWlanScrollArea->setWidgetResizable(true);
 
     m_bottomDivider = new Divider(this);
 
@@ -239,7 +240,7 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
     KyWirelessConnectSetting connetSetting;
     connetSetting.setConnectName(m_wirelessNetItem.m_NetSsid);
     connetSetting.setIfaceName(m_deviceName);
-//    connetSetting.isAutoConnect = true; //ZJP_TODO 自动连接选项
+    connetSetting.isAutoConnect = m_securityPage->getAutoConnectState(); //ZJP_TODO 自动连接选项
     connetSetting.m_type = KyKeyMgmt::WpaEap;
     connetSetting.m_ssid = m_wirelessNetItem.m_NetSsid;
     connetSetting.m_secretFlag = 0;
@@ -269,21 +270,21 @@ void EnterpriseWlanDialog::onEapTypeChanged(const KyEapMethodType &type)
             m_resource->getEnterPriseInfoTls(m_wirelessNetItem.m_connectUuid, m_info.tlsInfo);
         }
         this->setFixedSize(MAIN_SIZE_EXPAND);
-        m_centerWidget->setFixedHeight(TLS_SCRO_HEIGHT);
+//        m_centerWidget->setFixedHeight(TLS_SCRO_HEIGHT);
         break;
     case KyEapMethodType::PEAP:
         if (m_wirelessNetItem.m_connectUuid.isEmpty()) {
             m_resource->getEnterPriseInfoPeap(m_wirelessNetItem.m_connectUuid, m_info.peapInfo);
             }
         this->setFixedSize(MAIN_SIZE_NARROW);
-        m_centerWidget->setFixedHeight(PEAP_SCRO_HEIGHT);
+//        m_centerWidget->setFixedHeight(PEAP_SCRO_HEIGHT);
         break;
     case KyEapMethodType::TTLS:
         if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
             m_resource->getEnterPriseInfoTtls(m_wirelessNetItem.m_connectUuid, m_info.ttlsInfo);
         }
         this->setFixedSize(MAIN_SIZE_NARROW);
-        m_centerWidget->setFixedHeight(PEAP_SCRO_HEIGHT);
+//        m_centerWidget->setFixedHeight(PEAP_SCRO_HEIGHT);
         break;
     default:
         break;

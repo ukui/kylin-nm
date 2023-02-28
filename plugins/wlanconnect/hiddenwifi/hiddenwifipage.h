@@ -12,7 +12,6 @@
 #include <QPushButton>
 #include <QScrollArea>
 
-//#include "coninfo.h"
 #include "../component/Divider/divider.h"
 #include "kwidget.h"
 #include "kpasswordedit.h"
@@ -22,7 +21,6 @@
 #include <../component/FixLabel/fixlabel.h>
 
 using namespace kdk;
-
 
 class HiddenWiFiPage : public QWidget
 {
@@ -96,6 +94,5 @@ Q_SIGNALS:
     void connectHidePeapConnect(KyEapMethodPeapInfo info, KyWirelessConnectSetting connSettingInfo);
     void connectHideTtlsConnect(KyEapMethodTtlsInfo info, KyWirelessConnectSetting connSettingInfo);
     void connectHideNormalConnect(KyWirelessConnectSetting connSettingInfo, KySecuType type);
-    void showWlanList(int type);
 };
 #endif // HIDDENWIFIPAGE_H

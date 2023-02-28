@@ -44,6 +44,12 @@ using namespace kdk;
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+#include <QtDBus>
+#include <QDBusMessage>
+#include <QDBusObjectPath>
+#include <QDBusInterface>
+#include <QDBusReply>
+
 #include <kylin-nm/kylin-nm-interface.h>
 #include <kylin-nm/kylinnetworkmanager.h>
 #include "lanitem.h"
@@ -77,10 +83,13 @@ public:
 private:
     bool m_isSimpleMode = true;
     bool m_useSwitch = true;
+    QDBusInterface *m_interfaceUi = nullptr;
+    int m_initDbusCount = 0;
 
     void initUi();
     void initComponent();
     void initConnect();
+    void initDbus();
     void runExternalApp();
 
 //    void showDesktopNotify(const QString &message);
@@ -154,6 +163,7 @@ private:
     QMap<QString, bool> deviceStatusMap;
     QMap<QString, ItemFrame *> deviceFrameMap;
     QMap<QString, NetDetail*> m_lanDetailPagePtrMap;
+    QMap<QString, NetDetail*> m_createPagePtrMap;
 
 Q_SIGNALS:
 
@@ -189,6 +199,10 @@ private Q_SLOTS:
     void onDeviceAdd(QString deviceName);
     void onDeviceRemove(QString deviceName);
     void updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status);
+
+    //for dbus
+    void showDetailPage(QString deviceName, QString connName);
+    void showAddNetworkPage(const QString deviceName);
 };
 
 #endif // NETCONNECT_H

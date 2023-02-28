@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
  *
  * Copyright (C) 2019 Tianjin KYLIN Information Technology Co., Ltd.
  *
@@ -43,6 +43,12 @@ using namespace kdk;
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+#include <QtDBus>
+#include <QDBusMessage>
+#include <QDBusObjectPath>
+#include <QDBusInterface>
+#include <QDBusReply>
+
 #include <kylin-nm/kylin-nm-interface.h>
 #include <kylin-nm/kylinnetworkmanager.h>
 #include <kylin-nm/kylin-agent/kylinagent.h>
@@ -70,10 +76,13 @@ public:
 
 private:
     bool m_isSimpleMode = true;
+    QDBusInterface *m_interfaceUi = nullptr;
+    int m_initDbusCount = 0;
 
     void initUi();
     void initComponent();
     void initConnect();
+    void initDbus();
     void runExternalApp();
     void initSearchText();
 
@@ -205,5 +214,10 @@ private Q_SLOTS:
     void onWirelessDeviceAdd(QString deviceName);
     void onWirelessDeviceRemove(QString deviceName);
     void updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status);
+
+    //for dbus
+    void showDetailPage(QString deviceName, QString ssid);
+    void showAddNetworkPage(const QString deviceName);
+    void activateWirelessConnection(QString deviceName, QString ssid);
 };
 #endif // WLANCONNECT_H

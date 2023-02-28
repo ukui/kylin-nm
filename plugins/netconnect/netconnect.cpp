@@ -81,6 +81,11 @@ NetConnect::~NetConnect() {
         m_styleGsettings = nullptr;
     }
 
+    if (m_interfaceUi != nullptr) {
+        delete m_interfaceUi;
+        m_interfaceUi = nullptr;
+    }
+
     thread->quit();
     if (nullptr !=pluginWidget) {
         delete pluginWidget;
@@ -98,6 +103,9 @@ QWidget *NetConnect::pluginUi() {
         initUi();
         initComponent();
         initConnect();
+        if (QApplication::applicationName() == "kylin-nm") {
+            initDbus();
+        }
     }
     return pluginWidget;
 }
@@ -216,7 +224,6 @@ void NetConnect::initUi()
     m_scrollArea->setPalette(pal);
 }
 
-
 bool NetConnect::eventFilter(QObject *w, QEvent *e) {
     if (w == m_wiredSwitch && e->type() == QEvent::MouseButtonRelease) {
         if (!m_wiredSwitch->isCheckable()) {
@@ -235,6 +242,29 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
     return QObject::eventFilter(w,e);
 }
 
+void NetConnect::initDbus()
+{
+    if (m_initDbusCount < 5) {
+        m_interfaceUi = new QDBusInterface("com.kylin.network", "/com/kylin/network/interface",
+                                           "com.kylin.network.interface",
+                                           QDBusConnection::sessionBus());
+        if (m_interfaceUi->isValid()) {
+            qDebug() << QApplication::applicationName() << "[LAN PLUGIN WIDGET]interface dbus valid";
+        } else {
+            m_initDbusCount++;
+            QTimer::singleShot(1000, [this] {
+                initDbus();
+            });
+            qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+            return;
+        }
+        connect(m_interfaceUi, SIGNAL(signalShowPropertyWidget(QString, QString)), this, SLOT(showDetailPage(QString, QString)));
+        connect(m_interfaceUi, SIGNAL(signalShowCreateWiredConnectWidget(QString)), this, SLOT(showAddNetworkPage(QString)));
+    } else {
+        qWarning()<< "com.kylin.network.interface 不可用";
+    }
+}
+
 void NetConnect::initComponent() {
 
     getDeviceStatusMap(deviceStatusMap);
@@ -247,6 +277,7 @@ void NetConnect::initComponent() {
 //    });
 
     m_lanDetailPagePtrMap.clear();
+    m_createPagePtrMap.clear();
 }
 
 void NetConnect::initConnect()
@@ -284,6 +315,8 @@ void NetConnect::initConnect()
     connect(manager, &KyNetworkManager::wiredStateChange, this, [=](QString deviceName, QString uuid, KyConnectState status) {
         Q_EMIT connectStateChanged(uuid, status);
     });
+
+
 }
 //获取网卡列表
 void NetConnect::getDeviceStatusMap(QMap<QString, bool> &map)
@@ -849,7 +882,7 @@ void NetConnect::showLanDetailPage(QString deviceName, LanItem *item)
             return;
         }
     }
-    NetDetail *netDetail = new NetDetail(deviceName, connName, connUuid, isActivated, false, false);
+    NetDetail *netDetail = new NetDetail(deviceName, connName, connUuid, isActivated, false, false, pluginWidget);
     m_lanDetailPagePtrMap.insert(connDbusPath, netDetail);
     netDetail->show();
 
@@ -955,6 +988,14 @@ void NetConnect::onDeviceRemove(QString deviceName)
     }
     removeDeviceFrame(deviceName);
     setSwitchStatus();
+
+    //删除对应的新建网络弹窗
+    if (m_createPagePtrMap.contains(deviceName)) {
+        if (m_createPagePtrMap[deviceName] != nullptr) {
+            delete m_createPagePtrMap[deviceName];
+            m_createPagePtrMap[deviceName] = nullptr;
+        }
+    }
 }
 
 void NetConnect::initActiveNetworkMode(QString deviceName, KyActivateItem activeItem)
@@ -1007,4 +1048,42 @@ void NetConnect::updateNetworkModeState(QString deviceName, QString ssid, QStrin
   } else if (status == CONNECT_STATE_DEACTIVATED) {
       NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, deviceName, ssid);
     }
+}
+
+void NetConnect::showDetailPage(QString deviceName, QString ssid)
+{
+    if (deviceName.isEmpty() || ssid.isEmpty()) {
+        qWarning() << "deviceName or ssid is empty, could not show detail page";
+        return;
+    }
+
+    LanItem *item = nullptr;
+    if (deviceFrameMap.contains(deviceName) &&
+            deviceFrameMap[deviceName]->itemMap.contains(ssid)) {
+        item = deviceFrameMap[deviceName]->itemMap[ssid];
+        showLanDetailPage(deviceName, item);
+    }
+}
+
+void NetConnect::showAddNetworkPage(const QString deviceName)
+{
+    if (!deviceFrameMap.contains(deviceName)) {
+        qWarning() << "Not find lan device " << deviceName << ", could not show add network page";
+        return;
+    }
+    if (m_createPagePtrMap.contains(deviceName)) {
+        if (m_createPagePtrMap[deviceName] != nullptr) {
+            qDebug() << "showCreateWiredConnectWidget" << deviceName << "already create,just raise";
+            KWindowSystem::raiseWindow(m_createPagePtrMap[deviceName]->winId());
+            return;
+        }
+    }
+    NetDetail *netDetail = new NetDetail(deviceName, "", "", false, false, true, pluginWidget);
+    connect(netDetail, &NetDetail::createPageClose, [&](QString interfaceName){
+        if (m_createPagePtrMap.contains(interfaceName)) {
+            m_createPagePtrMap[interfaceName] = nullptr;
+        }
+    });
+    m_createPagePtrMap.insert(deviceName, netDetail);
+    netDetail->show();
 }

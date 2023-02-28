@@ -1,5 +1,7 @@
 #include "itemframe.h"
 #include <QPainter>
+#include <kwindowsystem.h>
+#include <kwindowsystem_export.h>
 
 #define LAYOUT_MARGINS 8,0,8,0
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
@@ -99,7 +101,8 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent) : QFrame(parent)
 void ItemFrame::showJoinPage(bool isSimple, QWidget *widget)
 {
     if (nullptr != joinPage) {
-        joinPage->show();
+//        joinPage->show();
+        KWindowSystem::raiseWindow(joinPage->winId());
     } else {
         joinPage = new HiddenWiFiPage(deviceFrame->deviceLabel->text(), isSimple, widget);
         connect(joinPage, &HiddenWiFiPage::destroyed, [=](){

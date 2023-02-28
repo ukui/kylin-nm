@@ -116,6 +116,11 @@ WlanConnect::~WlanConnect()
         m_styleGsettings = nullptr;
     }
 
+    if (m_interfaceUi != nullptr) {
+        delete m_interfaceUi;
+        m_interfaceUi = nullptr;
+    }
+
     thread->quit();
 
     if (nullptr !=pluginWidget) {
@@ -146,6 +151,9 @@ QWidget *WlanConnect::pluginUi() {
         initUi();
         initComponent();
         initConnect();
+        if (QApplication::applicationName() == "kylin-nm") {
+            initDbus();
+        }
     }
     return pluginWidget;
 }
@@ -366,6 +374,30 @@ void WlanConnect::initConnect()
     //    connect(m_updateTimer, &QTimer::timeout, this, &WlanConnect::updateList);
 
     reScan();
+}
+
+void WlanConnect::initDbus()
+{
+    if (m_initDbusCount < 5) {
+        m_interfaceUi = new QDBusInterface("com.kylin.network", "/com/kylin/network/interface",
+                                           "com.kylin.network.interface",
+                                           QDBusConnection::sessionBus());
+        if (m_interfaceUi->isValid()) {
+            qDebug() << QApplication::applicationName() << "[WLAN PLUGIN WIDGET]interface dbus valid";
+        } else {
+            m_initDbusCount++;
+            QTimer::singleShot(1000, [this] {
+                initDbus();
+            });
+            qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+            return;
+        }
+        connect(m_interfaceUi, SIGNAL(signalShowPropertyWidget(QString, QString)), this, SLOT(showDetailPage(QString, QString)));
+        connect(m_interfaceUi, SIGNAL(signalShowAddOtherWlanWidget(QString)), this, SLOT(showAddNetworkPage(QString)));
+        connect(m_interfaceUi, SIGNAL(signalActivateWireless(QString, QString)), this, SLOT(activateWirelessConnection(QString, QString)));
+    } else {
+        qWarning()<< "com.kylin.network.interface 不可用";
+    }
 }
 
 void WlanConnect::reScan()
@@ -1036,7 +1068,7 @@ void WlanConnect::showWlanDetailPage(QString deviceName, WlanItem *item)
         }
     }
 
-    NetDetail *netDetail = new NetDetail(deviceName, connName, connUuid, isActivated, true, false);
+    NetDetail *netDetail = new NetDetail(deviceName, connName, connUuid, isActivated, true, false, parentWidget);
     m_wlanDetailPagePtrMap[deviceName].insert(connName, netDetail);
     netDetail->show();
 
@@ -1096,4 +1128,48 @@ void WlanConnect::updateNetworkModeState(QString deviceName, QString ssid, QStri
     } else if (status == CONNECT_STATE_DEACTIVATED) {
         NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, deviceName, ssid);
       }
+}
+
+
+void WlanConnect::showDetailPage(QString deviceName, QString ssid)
+{
+    if (deviceName.isEmpty() || ssid.isEmpty()) {
+        qWarning() << "deviceName or ssid is empty, could not show detail page";
+        return;
+    }
+
+    WlanItem *item = nullptr;
+    if (deviceFrameMap.contains(deviceName) &&
+            deviceFrameMap[deviceName]->itemMap.contains(ssid)) {
+        item = deviceFrameMap[deviceName]->itemMap[ssid];
+        showWlanDetailPage(deviceName, item);
+    }
+}
+
+void WlanConnect::showAddNetworkPage(const QString deviceName)
+{
+    if (!deviceFrameMap.contains(deviceName)) {
+        qWarning() << "Not find wlan device " << deviceName << ", could not show add network page";
+        return;
+    }
+
+    deviceFrameMap[deviceName]->showJoinPage(m_isSimpleMode, parentWidget);
+}
+
+void WlanConnect::activateWirelessConnection(QString deviceName, QString ssid)
+{
+    WlanItem *item = findItem(deviceName,ssid);
+    if (nullptr == item) {
+        return;
+    }
+
+    QDBusInterface interface("com.kylin.network",
+                             "/com/kylin/network",
+                             "com.kylin.network",
+                             QDBusConnection::sessionBus());
+    if(interface.isValid()) {
+        interface.call(QStringLiteral("showKylinNM"), 1);
+    }
+
+    Q_EMIT item->itemClick();//todo-20230228
 }

@@ -1,5 +1,6 @@
 #include "hiddenwifipage.h"
 #include <QPainter>
+#include <QDBusInterface>
 
 #define  WINDOW_WIDTH  480
 #define  MIN_WINDOW_HEIGHT  332
@@ -375,5 +376,11 @@ void HiddenWiFiPage::onSecuTypeComboxIndexChanged()
 
 void HiddenWiFiPage::onBtnShowListClicked()
 {
-    Q_EMIT showWlanList(1); //WLAN_PAGE_INDEX
+    QDBusInterface interface("com.kylin.network",
+                             "/com/kylin/network",
+                             "com.kylin.network",
+                             QDBusConnection::sessionBus());
+    if(interface.isValid()) {
+        interface.call(QStringLiteral("showKylinNM"), 1);
+    }
 }

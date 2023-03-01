@@ -207,6 +207,9 @@ Q_SIGNALS:
     void sigUpdateWirelessEnterPriseTlsConnect(const QString &uuid, const KyEapMethodTlsInfo &tlsinfo);
     void sigUpdateWirelessEnterPrisePeapConnect(const QString &uuid, const KyEapMethodPeapInfo &peapInfo);
     void sigUpdateWirelessEnterPriseTtlsConnect(const QString &uuid, const KyEapMethodTtlsInfo &ttlsInfo);
+    void sigUpdateWirelessEnterPriseLeapConnect(const QString &uuid, const KyEapMethodLeapInfo &leapInfo);
+    void sigUpdateWirelessEnterPrisePwdConnect(const QString &uuid, const KyEapMethodPwdInfo &pwdInfo);
+    void sigUpdateWirelessEnterPriseFastConnect(const QString &uuid, const KyEapMethodFastInfo &fastInfo);
 
     void sigActivateConnection(const QString connectUuid, const QString deviceName);
     void sigWirelessAutoConnectStateChanged(const QString &uuid, bool bAutoConnect);

@@ -177,6 +177,9 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     qRegisterMetaType<KyEapMethodTlsInfo>("KyEapMethodTlsInfo");
     qRegisterMetaType<KyEapMethodPeapInfo>("KyEapMethodPeapInfo");
     qRegisterMetaType<KyEapMethodTtlsInfo>("KyEapMethodTtlsInfo");
+    qRegisterMetaType<KyEapMethodLeapInfo>("KyEapMethodLeapInfo");
+    qRegisterMetaType<KyEapMethodPwdInfo>("KyEapMethodPwdInfo");
+    qRegisterMetaType<KyEapMethodFastInfo>("KyEapMethodFastInfo");
 
     qDebug() << m_isCreateNet << name;
     if (!m_isCreateNet && name.isEmpty()) {
@@ -517,6 +520,9 @@ void NetDetail::initComponent()
     connect(this, &NetDetail::sigUpdateWirelessEnterPriseTlsConnect, m_manager, &KyNetworkManager::onUpdateWirelessEnterPriseTlsConnect);
     connect(this, &NetDetail::sigUpdateWirelessEnterPrisePeapConnect, m_manager, &KyNetworkManager::onUpdateWirelessEnterPrisePeapConnect);
     connect(this, &NetDetail::sigUpdateWirelessEnterPriseTtlsConnect, m_manager, &KyNetworkManager::onUpdateWirelessEnterPriseTtlsConnect);
+    connect(this, &NetDetail::sigUpdateWirelessEnterPriseLeapConnect, m_manager, &KyNetworkManager::onUpdateWirelessEnterPriseLeapConnect);
+    connect(this, &NetDetail::sigUpdateWirelessEnterPrisePwdConnect, m_manager, &KyNetworkManager::onUpdateWirelessEnterPrisePwdConnect);
+    connect(this, &NetDetail::sigUpdateWirelessEnterPriseFastConnect, m_manager, &KyNetworkManager::onUpdateWirelessEnterPriseFastConnect);
     connect(this, &NetDetail::sigActivateConnection, m_manager, &KyNetworkManager::onActivateConnection);
     connect(this, &NetDetail::sigWirelessAutoConnectStateChanged, m_manager, &KyNetworkManager::onUpdateWirelessAutoConnectState);
 }
@@ -586,6 +592,12 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
                 securityPage->setPeapInfo(m_info.peapInfo);
             } else if (m_info.enterpriseType == TTLS) {
                 securityPage->setTtlsInfo(m_info.ttlsInfo);
+            } else if (m_info.enterpriseType == LEAP) {
+                securityPage->setLeapInfo(m_info.leapInfo);
+            } else if (m_info.enterpriseType == PWD) {
+                securityPage->setPwdInfo(m_info.pwdInfo);
+            } else if (m_info.enterpriseType == FAST) {
+                securityPage->setFastInfo(m_info.fastInfo);
             }
             break;
         default:
@@ -690,6 +702,12 @@ void NetDetail::getBaseInfo(KyDetailInfo &detailInfo, ConInfo &conInfo)
                 m_manager->getEnterPriseInfoPeap(m_uuid, conInfo.peapInfo);;
             } else if (conInfo.enterpriseType == TTLS) {
                 m_manager->getEnterPriseInfoTtls(m_uuid, conInfo.ttlsInfo);;
+            } else if (conInfo.enterpriseType == LEAP) {
+                m_manager->getEnterPriseInfoLeap(m_uuid, conInfo.leapInfo);;
+            } else if (conInfo.enterpriseType == PWD) {
+                m_manager->getEnterPriseInfoPwd(m_uuid, conInfo.pwdInfo);;
+            } else if (conInfo.enterpriseType == FAST) {
+                m_manager->getEnterPriseInfoFast(m_uuid, conInfo.fastInfo);;
             }
             break;
         default:
@@ -877,6 +895,15 @@ void NetDetail::updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType)
     } else if (enterpriseType == TTLS) {
         securityPage->updateTtlsChange(m_info.ttlsInfo);
         Q_EMIT sigUpdateWirelessEnterPriseTtlsConnect(m_uuid, m_info.ttlsInfo);
+    } else if (enterpriseType == LEAP) {
+        securityPage->updateLeapChange(m_info.leapInfo);
+        Q_EMIT sigUpdateWirelessEnterPriseLeapConnect(m_uuid, m_info.leapInfo);
+    } else if (enterpriseType == PWD) {
+        securityPage->updatePwdChange(m_info.pwdInfo);
+        Q_EMIT sigUpdateWirelessEnterPrisePwdConnect(m_uuid, m_info.pwdInfo);
+    } else if (enterpriseType == FAST) {
+        securityPage->updateFastChange(m_info.fastInfo);
+        Q_EMIT sigUpdateWirelessEnterPriseFastConnect(m_uuid, m_info.fastInfo);
     }
 }
 

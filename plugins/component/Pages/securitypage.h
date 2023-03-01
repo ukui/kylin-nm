@@ -45,6 +45,9 @@ public:
     void setTlsInfo(KyEapMethodTlsInfo &info);
     void setPeapInfo(KyEapMethodPeapInfo &info);
     void setTtlsInfo(KyEapMethodTtlsInfo &info);
+    void setLeapInfo(KyEapMethodLeapInfo &info);
+    void setPwdInfo(KyEapMethodPwdInfo &info);
+    void setFastInfo(KyEapMethodFastInfo &info);
     void setSecurityVisible(const bool &visible);
 
     bool checkIsChanged(const ConInfo info);
@@ -52,6 +55,9 @@ public:
     void updateTlsChange(KyEapMethodTlsInfo &info);
     void updatePeapChange(KyEapMethodPeapInfo &info);
     void updateTtlsChange(KyEapMethodTtlsInfo &info);
+    void updateLeapChange(KyEapMethodLeapInfo &info);
+    void updatePwdChange(KyEapMethodPwdInfo &info);
+    void updateFastChange(KyEapMethodFastInfo &info);
 
     void getSecuType(KySecuType &secuType, KyEapMethodType &enterpriseType);
 
@@ -109,17 +115,31 @@ private:
     QString hintRequired = tr("Required"); //必填
     QString emptyhint = tr(" ");
 
+    //FAST
+    QCheckBox *m_pacCheckBox;
+    QComboBox *m_pacProvisionComboBox;
+    QComboBox *m_pacFilePathComboBox;
+    FixLabel *m_pacProvisionLabel;
+    FixLabel *m_pacFlagLabel;
+    QLabel *m_pacFileLabel;
+    QWidget *m_pacCheckWidget;
+
 private:
     void showNone();
     void showPsk();
     void showTls();
     void showPeapOrTtls();
+    void showLeapOrPwd();
+    void showFast();
     void initUI();
     void initConnect();
 
     KyEapMethodTlsInfo assembleTlsInfo();
     KyEapMethodPeapInfo assemblePeapInfo();
     KyEapMethodTtlsInfo assembleTtlsInfo();
+    KyEapMethodLeapInfo assembleLeapInfo();
+    KyEapMethodPwdInfo assemblePwdInfo();
+    KyEapMethodFastInfo assembleFastInfo();
 
     bool checkConnectBtnIsEnabled();
 
@@ -130,12 +150,13 @@ private Q_SLOTS:
     void setEnableOfSaveBtn();
 
     void onCaNeedBoxClicked();
-
+    void onPacBoxClicked();
     void onCaCertPathComboxIndexChanged(QString str);
     void onClientCertPathComboxIndexChanged(QString str);
     void onClientPrivateKeyComboxIndexChanged(QString str);
     void onPwdOptionComboxIndexChanged(QString str);
     void changeColumnWidthWithSecuType();
+    void onPacFilePathComboxIndexChanged(QString str);
 
 Q_SIGNALS:
     void setSecuPageState(bool);

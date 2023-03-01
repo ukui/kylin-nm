@@ -56,6 +56,19 @@ enum TtlsInnerType
     GTC_EAP
 };
 
+enum FastInnerType
+{
+    GTC_FAST = 0,
+    MSCHAPV2_FAST,
+};
+
+enum PacProvisioningInnerType
+{
+    ANON = 0,
+    AUTHEN,
+    BOTH,
+};
+
 class LineEdit : public QLineEdit
 {
     Q_OBJECT
@@ -105,6 +118,9 @@ public:
     KyEapMethodTlsInfo tlsInfo;
     KyEapMethodPeapInfo peapInfo;
     KyEapMethodTtlsInfo ttlsInfo;
+    KyEapMethodLeapInfo leapInfo;
+    KyEapMethodPwdInfo  pwdInfo;
+    KyEapMethodFastInfo fastInfo;
 };
 
 static void setFramePalette(QFrame *widget, QPalette &pal) {

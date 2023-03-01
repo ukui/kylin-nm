@@ -593,6 +593,9 @@ void KyWirelessNetResource::onDeviceNameUpdate(QString oldName, QString newName)
 
 void KyWirelessNetResource::updateList()
 {
+    QMap<QString, QVector<QStringList> > map;
+    QVector<QStringList> vector;
+
     for (int i = 0; i< m_WifiNetworkList.keys().size(); ++i) {
         QString devName = m_WifiNetworkList.keys().at(i);
         QList<KyActivateItem> connectItemList;
@@ -601,7 +604,39 @@ void KyWirelessNetResource::updateList()
         QList<KyWirelessNetItem> list = m_WifiNetworkList[devName];
         wifiListSort(list);
         Q_EMIT updateWifiList(devName, connectItemList, list);
+
+        QString activeSsid;
+        vector.clear();
+        if (!connectItemList.isEmpty()) {
+            QString secuType = "";
+            int category = 0;
+            activeSsid = connectItemList.at(0).m_ssid;
+            getWirelessConnectInfo(devName, secuType, category);
+            vector.append(QStringList() << activeSsid
+                          << QString::number(actResource.getAcivateWifiSignal())
+                          << secuType
+                          << connectItemList.at(0).m_uuid
+                          << QString::number(isApConnection(connectItemList.at(0).m_uuid))
+                          << QString::number(category));
+        } else {
+            vector.append(QStringList("--"));
+        }
+        if (!list.isEmpty()) {
+            for (const auto itemData : list) {
+                if (itemData.m_NetSsid == activeSsid) {
+                    continue;
+                } else {
+                    vector.append(QStringList()<<itemData.m_NetSsid
+                                  << QString::number(itemData.m_signalStrength)
+                                  << itemData.m_secuType
+                                  << QString::number(itemData.m_isApConnection)
+                                  << QString::number(itemData.m_category));
+                }
+            }
+        }
+        map.insert(devName, vector);
     }
+    Q_EMIT updateWifiListInCtrlCenter(map);
 }
 
 QString KyWirelessNetResource::getDeviceIFace(NetworkManager::WirelessNetwork::Ptr net)

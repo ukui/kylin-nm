@@ -14,7 +14,7 @@ public:
 
     void getApConnections(QList<KyApConnectItem> &apConnectItemList);
 Q_SIGNALS:
-    void wirelessApConnectStateChange();
+    void wirelessApConnectStateChange(QString devName, QString ssid, QString uuid, KyConnectState state);
 private:
     KyApConnectItem getApConnectItem(NetworkManager::Connection::Ptr connectPtr);
     KyApConnectItem getApConnectionByUuid(QString connectUuid);

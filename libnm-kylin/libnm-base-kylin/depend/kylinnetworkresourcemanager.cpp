@@ -27,6 +27,8 @@
 
 #define LOG_FLAG  "[KyNetworkResourceManager]"
 
+const QString WIRED_SWITCH = "wiredswitch";
+
 //单例部分
 KyNetworkResourceManager* KyNetworkResourceManager::m_pInstance = nullptr;
 
@@ -53,6 +55,11 @@ KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(pa
     qRegisterMetaType<KyConnectState>("KyConnectState");
     qRegisterMetaType<KyConnectivity>("KyConnectivity");
     qRegisterMetaType<KyDeviceType>("KyDeviceType");
+    //GSettings
+    const QByteArray id(GSETTINGS_SCHEMA);
+    if (QGSettings::isSchemaInstalled(id)) {
+        m_switchGsettings = new QGSettings(id, QByteArray(), this);
+    }
 }
 
 //start后执行 循环检查m_initFinished 非true阻塞
@@ -87,7 +94,7 @@ void KyNetworkResourceManager::onInitNetwork()
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::networkingEnabledChanged,
                                                             this, &KyNetworkResourceManager::networkingEnabledChanged);
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::wirelessEnabledChanged,
-                                                            this, &KyNetworkResourceManager::wifiEnabledChanged);
+                                                            this, &KyNetworkResourceManager::onWirelessEnabledChanged);
     connect(NetworkManager::notifier(), &NetworkManager::Notifier::primaryConnectionTypeChanged,
                                                             this, &KyNetworkResourceManager::onPrimaryConnectionTypeChanged);
 
@@ -605,9 +612,20 @@ void KyNetworkResourceManager::onPropertiesChanged(QVariantMap qvm)
         if (keyStr == "WiredEnabled") {
             bool wiredEnable = qvm.value("WiredEnabled").toBool();
             qDebug() << "wiredEnabledChanged" << wiredEnable;
+            if (m_switchGsettings != nullptr && m_switchGsettings->get(WIRED_SWITCH).toBool() != wiredEnable) {
+                m_switchGsettings->set(WIRED_SWITCH, wiredEnable);
+            }
             Q_EMIT wiredEnabledChanged(wiredEnable);
         }
     }
+}
+
+void KyNetworkResourceManager::onWirelessEnabledChanged(bool enable)
+{
+    if (m_switchGsettings != nullptr && m_switchGsettings->get(WIRELESS_SWITCH).toBool() != enable) {
+        m_switchGsettings->set(WIRELESS_SWITCH, enable);
+    }
+    Q_EMIT wifiEnabledChanged(enable);
 }
 
 
@@ -675,7 +693,8 @@ void KyNetworkResourceManager::connectActiveStateChange(NetworkManager::Connecti
             = connectSettingsPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
         if (NetworkManager::WirelessSetting::NetworkMode::Ap
                                         == wirelessSetting->mode()) {
-            Q_EMIT wirelessApConnectStateChange();
+            QString ssid = wirelessSetting->ssid();
+            Q_EMIT wirelessApConnectStateChange(deviceName, ssid, uuid, state);
         }
     } else if (connectionType == CONNECT_TYPE_WIRED) {
         wiredActiveStateChange(connectPtr->path(), deviceName, uuid, state);

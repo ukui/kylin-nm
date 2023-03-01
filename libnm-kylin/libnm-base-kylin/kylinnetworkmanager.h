@@ -77,9 +77,10 @@ Q_SIGNALS:
     void wirelessDeviceNameUpdate(QString oldName, QString newName);
 
     void updateWifiList(QString, QList<KyActivateItem>, QList<KyWirelessNetItem>);
+    void updateWifiListInCtrlCenter(QMap<QString, QVector<QStringList>>);
 
     //移动热点
-    void wirelessApConnectStateChange();
+    void wirelessApConnectStateChange(QString devName, QString ssid, QString uuid, KyConnectState state);
 
 
 

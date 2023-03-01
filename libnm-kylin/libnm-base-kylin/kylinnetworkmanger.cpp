@@ -95,6 +95,8 @@ void KyNetworkManager::initConnect()
                                         this, &KyNetworkManager::wirelessDeviceNameUpdate);
     connect(m_wirelessNetResource, &KyWirelessNetResource::updateWifiList,
                                         this, &KyNetworkManager::updateWifiList);
+    connect(m_wirelessNetResource, &KyWirelessNetResource::updateWifiListInCtrlCenter,
+                                        this, &KyNetworkManager::updateWifiListInCtrlCenter);
 }
 
 //同步方法

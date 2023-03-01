@@ -43,6 +43,7 @@
 #include "NetworkManagerQt/Security8021xSetting"
 #include <QDBusPendingCallWatcher>
 #include <QMetaEnum>
+#include <QGSettings/QGSettings>
 
 #include "kylinnetworkresourcetype.h"
 
@@ -126,6 +127,7 @@ private:
 private Q_SLOTS:
     void onServiceAppear(QString, QString, QString);
     void onPropertiesChanged(QVariantMap qvm);
+    void onWirelessEnabledChanged(bool enable);
 
 Q_SIGNALS:
 
@@ -176,7 +178,7 @@ Q_SIGNALS:
 
     void wiredConnectStateChange(QString deviceName, QString uuid, KyConnectState state);
     void wirelessConnectStateChange(QString deviceName, QString ssid, QString uuid, KyConnectState state);
-    void wirelessApConnectStateChange();
+    void wirelessApConnectStateChange(QString devName, QString ssid, QString uuid, KyConnectState state);
 
 
     //general
@@ -239,6 +241,7 @@ private:
     NetworkManager::WirelessNetwork::List m_wifiNetList;
 
     QMap<QString, QString> m_deviceMap;
+    QGSettings *m_switchGsettings;
 };
 
 

@@ -78,6 +78,7 @@ Q_SIGNALS:
     void wirelessDeviceNameUpdate(QString oldName, QString newName);
 
     void updateWifiList(QString, QList<KyActivateItem>, QList<KyWirelessNetItem>);
+    void updateWifiListInCtrlCenter(QMap<QString, QVector<QStringList>>);
 
 private:
     QMap<QString, QList<KyWirelessNetItem>>      m_WifiNetworkList;

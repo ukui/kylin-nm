@@ -232,6 +232,24 @@ bool KyNetworkManager::getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo 
     return resource.getEnterPriseInfoTtls(uuid, info);
 }
 
+bool KyNetworkManager::getEnterPriseInfoLeap(QString &uuid, KyEapMethodLeapInfo &info)
+{
+    KyWirelessNetResource resource;
+    return resource.getEnterPriseInfoLeap(uuid, info);
+}
+
+bool KyNetworkManager::getEnterPriseInfoPwd(QString &uuid, KyEapMethodPwdInfo &info)
+{
+    KyWirelessNetResource resource;
+    return resource.getEnterPriseInfoPwd(uuid, info);
+}
+
+bool KyNetworkManager::getEnterPriseInfoFast(QString &uuid, KyEapMethodFastInfo &info)
+{
+    KyWirelessNetResource resource;
+    return resource.getEnterPriseInfoFast(uuid, info);
+}
+
 //获取企业网类型
 bool KyNetworkManager::getEnterpiseEapMethod(const QString &uuid, KyEapMethodType &type)
 {
@@ -340,6 +358,24 @@ void KyNetworkManager::onAddAndActiveWirelessEnterPriseTtlsConnect(KyEapMethodTt
     operate.addAndActiveWirelessEnterPriseTtlsConnect(info, connSettingInfo);
 }
 
+void KyNetworkManager::onAddAndActiveWirelessEnterPriseLeapConnect(KyEapMethodLeapInfo info, KyWirelessConnectSetting connSettingInfo)
+{
+    KyWirelessConnectOperation operate;
+    operate.addAndActiveWirelessEnterPriseLeapConnect(info, connSettingInfo);
+}
+
+void KyNetworkManager::onAddAndActiveWirelessEnterPrisePwdConnect(KyEapMethodPwdInfo info, KyWirelessConnectSetting connSettingInfo)
+{
+    KyWirelessConnectOperation operate;
+    operate.addAndActiveWirelessEnterPrisePwdConnect(info, connSettingInfo);
+}
+
+void KyNetworkManager::onAddAndActiveWirelessEnterPriseFastConnect(KyEapMethodFastInfo info, KyWirelessConnectSetting connSettingInfo)
+{
+    KyWirelessConnectOperation operate;
+    operate.addAndActiveWirelessEnterPriseFastConnect(info, connSettingInfo);
+}
+
 //=====================新增配置操作====================
 //新增普通连接
 void KyNetworkManager::onAddNormalConnect(const KyWirelessConnectSetting &connSettingInfo, KySecuType &type)
@@ -394,6 +430,24 @@ void KyNetworkManager::onUpdateWirelessEnterPriseTtlsConnect(const QString &uuid
 {
     KyWirelessConnectOperation operate;
     operate.updateWirelessEnterPriseTtlsConnect(uuid, ttlsInfo);
+}
+
+void KyNetworkManager::onUpdateWirelessEnterPriseLeapConnect(const QString &uuid, const KyEapMethodLeapInfo &leapInfo)
+{
+    KyWirelessConnectOperation operate;
+    operate.updateWirelessEnterPriseLeapConnect(uuid, leapInfo);
+}
+
+void KyNetworkManager::onUpdateWirelessEnterPrisePwdConnect(const QString &uuid, const KyEapMethodPwdInfo &pwdInfo)
+{
+    KyWirelessConnectOperation operate;
+    operate.updateWirelessEnterPrisePwdConnect(uuid, pwdInfo);
+}
+
+void KyNetworkManager::onUpdateWirelessEnterPriseFastConnect(const QString &uuid, const KyEapMethodFastInfo &fastInfo)
+{
+    KyWirelessConnectOperation operate;
+    operate.updateWirelessEnterPriseFastConnect(uuid, fastInfo);
 }
 
 void KyNetworkManager::onUpdateWirelessAutoConnectState(const QString &uuid, bool bAutoConnect)

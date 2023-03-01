@@ -308,6 +308,12 @@ bool KyWirelessNetResource::getEnterpiseEapMethod(const QString &uuid, KyEapMeth
         type = PEAP;
     } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodTtls)) {
         type = TTLS;
+    } else  if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodLeap)) {
+        type = LEAP;
+    } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodPwd)) {
+        type = PWD;
+    } else if (list.contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodFast)) {
+        type = FAST;
     }
     return true;
 }
@@ -441,6 +447,122 @@ bool KyWirelessNetResource::getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtls
     if (!info.m_passwdFlag) {
         KyWirelessConnectOperation operation;
         info.userPWD = operation.get8021xPassword(conn->uuid());
+    }
+
+    return true;
+}
+
+bool KyWirelessNetResource::getEnterPriseInfoLeap(QString &uuid, KyEapMethodLeapInfo &info)
+{
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->findConnectByUuid(uuid);
+    if (conn.isNull()) {
+        qDebug()<< LOG_FLAG << "getEnterPriseInfoLeap connection missing";
+        return false;
+    }
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    if (security_sett.isNull()) {
+        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
+        return false;
+    }
+
+    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
+        qDebug()<< LOG_FLAG << "keyMgmt not WpaEap " << security_sett->keyMgmt();
+        return false;
+    }
+
+    NetworkManager::Security8021xSetting::Ptr setting =
+            conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodLeap)) {
+        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
+        return false;
+    }
+
+    info.m_userName = setting->identity();
+    info.m_passwdFlag = setting->passwordFlags();
+    if (!info.m_passwdFlag) {
+        KyWirelessConnectOperation operation;
+        info.m_userPwd = operation.get8021xPassword(conn->uuid());
+    }
+
+    return true;
+}
+
+bool KyWirelessNetResource::getEnterPriseInfoPwd(QString &uuid, KyEapMethodPwdInfo &info)
+{
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->findConnectByUuid(uuid);
+    if (conn.isNull()) {
+        qDebug()<< LOG_FLAG << "getEnterPriseInfoPwd connection missing";
+        return false;
+    }
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    if (security_sett.isNull()) {
+        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
+        return false;
+    }
+
+    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
+        qDebug()<< LOG_FLAG << "keyMgmt not WpaEap " << security_sett->keyMgmt();
+        return false;
+    }
+
+    NetworkManager::Security8021xSetting::Ptr setting =
+            conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodPwd)) {
+        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
+        return false;
+    }
+
+    info.m_userName = setting->identity();
+    info.m_passwdFlag = setting->passwordFlags();
+    if (!info.m_passwdFlag) {
+        KyWirelessConnectOperation operation;
+        info.m_userPwd = operation.get8021xPassword(conn->uuid());
+    }
+
+    return true;
+}
+
+bool KyWirelessNetResource::getEnterPriseInfoFast(QString &uuid, KyEapMethodFastInfo &info)
+{
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->findConnectByUuid(uuid);
+    if (conn.isNull()) {
+        qDebug()<< LOG_FLAG << "getEnterPriseInfoFast connection missing";
+        return false;
+    }
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    if (security_sett.isNull()) {
+        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
+        return false;
+    }
+
+    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
+        qDebug()<< LOG_FLAG << "keyMgmt not WpaEap " << security_sett->keyMgmt();
+        return false;
+    }
+
+    NetworkManager::Security8021xSetting::Ptr setting =
+            conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodFast)) {
+        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
+        return false;
+    }
+
+    info.m_anonIdentity = setting->anonymousIdentity();
+    info.m_pacProvisioning = (KyFastProvisioning)setting->phase1FastProvisioning();
+    info.m_pacFilePath = setting->pacFile();
+    if (info.m_pacFilePath.left(7) == "file://") {
+        info.m_pacFilePath = info.m_pacFilePath.mid(7);
+    }
+    info.m_authMethod = (KyNoEapMethodAuth)setting->phase2AuthMethod();
+
+    info.m_userName = setting->identity();
+    info.m_passwdFlag = setting->passwordFlags();
+    if (!info.m_passwdFlag) {
+        KyWirelessConnectOperation operation;
+        info.m_userPwd = operation.get8021xPassword(conn->uuid());
     }
 
     return true;

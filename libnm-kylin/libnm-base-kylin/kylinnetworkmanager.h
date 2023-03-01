@@ -130,6 +130,9 @@ public:
     bool getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info);
     bool getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info);
     bool getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);
+    bool getEnterPriseInfoLeap(QString &uuid, KyEapMethodLeapInfo &info);
+    bool getEnterPriseInfoPwd(QString &uuid, KyEapMethodPwdInfo &info);
+    bool getEnterPriseInfoFast(QString &uuid, KyEapMethodFastInfo &info);
 
     //获取企业网类型
     bool getEnterpiseEapMethod(const QString &uuid, KyEapMethodType &type);
@@ -168,6 +171,12 @@ public Q_SLOTS:
                                                     KyWirelessConnectSetting connSettingInfo);
     void onAddAndActiveWirelessEnterPriseTtlsConnect(KyEapMethodTtlsInfo info,
                                                      KyWirelessConnectSetting connSettingInfo);
+    void onAddAndActiveWirelessEnterPriseLeapConnect(KyEapMethodLeapInfo info,
+                                                     KyWirelessConnectSetting connSettingInfo);
+    void onAddAndActiveWirelessEnterPrisePwdConnect(KyEapMethodPwdInfo info,
+                                                     KyWirelessConnectSetting connSettingInfo);
+    void onAddAndActiveWirelessEnterPriseFastConnect(KyEapMethodFastInfo info,
+                                                     KyWirelessConnectSetting connSettingInfo);
 
     //=====================新增配置操作====================
     //新增普通连接
@@ -187,6 +196,9 @@ public Q_SLOTS:
     void onUpdateWirelessEnterPriseTlsConnect(const QString &uuid, const KyEapMethodTlsInfo &tlsinfo);
     void onUpdateWirelessEnterPrisePeapConnect(const QString &uuid, const KyEapMethodPeapInfo &peapInfo);
     void onUpdateWirelessEnterPriseTtlsConnect(const QString &uuid, const KyEapMethodTtlsInfo &ttlsInfo);
+    void onUpdateWirelessEnterPriseLeapConnect(const QString &uuid, const KyEapMethodLeapInfo &leapInfo);
+    void onUpdateWirelessEnterPrisePwdConnect(const QString &uuid, const KyEapMethodPwdInfo &pwdInfo);
+    void onUpdateWirelessEnterPriseFastConnect(const QString &uuid, const KyEapMethodFastInfo &fastInfo);
     void onUpdateWirelessAutoConnectState(const QString &uuid, bool bAutoConnect);
 };
 

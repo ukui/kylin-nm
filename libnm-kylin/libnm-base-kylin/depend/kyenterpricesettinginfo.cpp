@@ -169,3 +169,146 @@ void modifyEapMethodTtlsSettings(NetworkManager::ConnectionSettings::Ptr connSet
     wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
     return;
 }
+
+void assembleEapMethodLeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodLeapInfo &leapInfo)
+{
+    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
+            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+
+    QList<NetworkManager::Security8021xSetting::EapMethod> list;
+    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodLeap);
+    wifi_8021x_sett->setInitialized(true);
+    wifi_8021x_sett->setEapMethods(list);
+    wifi_8021x_sett->setIdentity(leapInfo.m_userName);
+    wifi_8021x_sett->setPassword(leapInfo.m_userPwd);
+    wifi_8021x_sett->setPasswordFlags(leapInfo.m_passwdFlag);
+
+
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+            = connSettingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    security_sett->setInitialized(true);
+    security_sett->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaEap);
+    return;
+}
+
+void assembleEapMethodPwdSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPwdInfo &pwdInfo)
+{
+    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
+            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+
+    QList<NetworkManager::Security8021xSetting::EapMethod> list;
+    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodPwd);
+    wifi_8021x_sett->setInitialized(true);
+    wifi_8021x_sett->setEapMethods(list);
+    wifi_8021x_sett->setIdentity(pwdInfo.m_userName);
+    wifi_8021x_sett->setPassword(pwdInfo.m_userPwd);
+    wifi_8021x_sett->setPasswordFlags(pwdInfo.m_passwdFlag);
+
+
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+            = connSettingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    security_sett->setInitialized(true);
+    security_sett->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaEap);
+    return;
+}
+
+void assembleEapMethodFastSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodFastInfo &fastInfo)
+{
+    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
+            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+
+    QList<NetworkManager::Security8021xSetting::EapMethod> list;
+    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodFast);
+    wifi_8021x_sett->setInitialized(true);
+    wifi_8021x_sett->setEapMethods(list);
+    wifi_8021x_sett->setAnonymousIdentity(fastInfo.m_anonIdentity);
+    if (fastInfo.m_allowAutoPacFlag) {
+        wifi_8021x_sett->setPhase1FastProvisioning((NetworkManager::Security8021xSetting::FastProvisioning)fastInfo.m_pacProvisioning);
+    } else {
+        wifi_8021x_sett->setPhase1FastProvisioning(NetworkManager::Security8021xSetting::FastProvisioning::FastProvisioningDisabled);
+    }
+    QByteArray pacEndWithNull("file://" + fastInfo.m_pacFilePath.toUtf8() + '\0');
+    wifi_8021x_sett->setPacFile(pacEndWithNull);
+    wifi_8021x_sett->setPhase2AuthMethod((NetworkManager::Security8021xSetting::AuthMethod)fastInfo.m_authMethod);
+    wifi_8021x_sett->setIdentity(fastInfo.m_userName);
+    wifi_8021x_sett->setPassword(fastInfo.m_userPwd);
+    wifi_8021x_sett->setPasswordFlags(fastInfo.m_passwdFlag);
+
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+            = connSettingPtr->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    security_sett->setInitialized(true);
+    security_sett->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaEap);
+
+    return;
+}
+
+void modifyEapMethodLeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodLeapInfo &leapInfo)
+{
+    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
+            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    wifi_8021x_sett->setInitialized(true);
+
+    QList<NetworkManager::Security8021xSetting::EapMethod> list;
+    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodLeap);
+    wifi_8021x_sett->setEapMethods(list);
+    wifi_8021x_sett->setIdentity(leapInfo.m_userName);
+    if(leapInfo.bChanged)
+    {
+        wifi_8021x_sett->setPassword(leapInfo.m_userPwd);
+    }
+    wifi_8021x_sett->setPasswordFlags(leapInfo.m_passwdFlag);
+
+    QByteArray caCerEndWithNull("");
+    wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
+
+    return;
+}
+
+void modifyEapMethodPwdSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPwdInfo &pwdInfo)
+{
+    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
+            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    wifi_8021x_sett->setInitialized(true);
+
+    QList<NetworkManager::Security8021xSetting::EapMethod> list;
+    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodPwd);
+    wifi_8021x_sett->setEapMethods(list);
+    wifi_8021x_sett->setIdentity(pwdInfo.m_userName);
+    if(pwdInfo.bChanged)
+    {
+        wifi_8021x_sett->setPassword(pwdInfo.m_userPwd);
+    }
+    wifi_8021x_sett->setPasswordFlags(pwdInfo.m_passwdFlag);
+
+    QByteArray caCerEndWithNull("");
+    wifi_8021x_sett->setCaCertificate(caCerEndWithNull);
+
+    return;
+}
+
+void modifyEapMethodFastSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodFastInfo &fastInfo)
+{
+    NetworkManager::Security8021xSetting::Ptr wifi_8021x_sett
+            = connSettingPtr->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    wifi_8021x_sett->setInitialized(true);
+
+    QList<NetworkManager::Security8021xSetting::EapMethod> list;
+    list.append(NetworkManager::Security8021xSetting::EapMethod::EapMethodFast);
+    wifi_8021x_sett->setEapMethods(list);
+    wifi_8021x_sett->setAnonymousIdentity(fastInfo.m_anonIdentity);
+    if (fastInfo.m_allowAutoPacFlag) {
+        wifi_8021x_sett->setPhase1FastProvisioning((NetworkManager::Security8021xSetting::FastProvisioning)fastInfo.m_pacProvisioning);
+    } else {
+        wifi_8021x_sett->setPhase1FastProvisioning(NetworkManager::Security8021xSetting::FastProvisioning::FastProvisioningDisabled);
+    }
+    QByteArray pacEndWithNull("file://" + fastInfo.m_pacFilePath.toUtf8() + '\0');
+    wifi_8021x_sett->setPacFile(pacEndWithNull);
+    wifi_8021x_sett->setPhase2AuthMethod((NetworkManager::Security8021xSetting::AuthMethod)fastInfo.m_authMethod);
+    wifi_8021x_sett->setIdentity(fastInfo.m_userName);
+    if(fastInfo.bChanged)
+    {
+        wifi_8021x_sett->setPassword(fastInfo.m_userPwd);
+    }
+    wifi_8021x_sett->setPasswordFlags(fastInfo.m_passwdFlag);
+    return;
+}

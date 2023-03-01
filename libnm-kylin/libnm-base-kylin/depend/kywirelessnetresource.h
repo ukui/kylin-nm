@@ -30,6 +30,9 @@ public:
     bool getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info);
     bool getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info);
     bool getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);
+    bool getEnterPriseInfoLeap(QString &uuid, KyEapMethodLeapInfo &info);
+    bool getEnterPriseInfoPwd(QString &uuid, KyEapMethodPwdInfo &info);
+    bool getEnterPriseInfoFast(QString &uuid, KyEapMethodFastInfo &info);
 
     //获取企业网类型
     bool getEnterpiseEapMethod(const QString &uuid, KyEapMethodType &type);

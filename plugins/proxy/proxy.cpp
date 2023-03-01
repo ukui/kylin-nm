@@ -163,6 +163,11 @@ QIcon Proxy::icon() const
     return QIcon::fromTheme("ukui-network-agent-symbolic");
 }
 
+QString Proxy::translationPath() const
+{
+    return "/usr/share/kylin-nm/proxy/%1.ts";
+}
+
 bool Proxy::isEnable() const
 {
     return true;

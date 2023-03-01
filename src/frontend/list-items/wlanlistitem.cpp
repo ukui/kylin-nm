@@ -280,6 +280,7 @@ void WlanListItem::paintEvent(QPaintEvent *event)
 {
     QPalette pal = qApp->palette();
     if (m_pwdLineEdit != nullptr) {
+        pal.setColor(QPalette::Base, pal.color(QPalette::Base));
         m_pwdLineEdit->setPalette(pal);
     }
 

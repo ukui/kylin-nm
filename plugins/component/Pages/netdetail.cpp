@@ -20,7 +20,6 @@
 #include "netdetail.h"
 //#include "../component/KylinArping/kylinipv4arping.h"
 //#include "../component/KylinArping/kylinipv6arping.h"
-#include "../component/NetworkMode/networkmodeconfig.h"
 
 
 #define THEME_SCHAME "org.ukui.style"
@@ -383,6 +382,7 @@ void NetDetail::initUI()
     stackWidget->addWidget(configPage);
     stackWidget->addWidget(createNetPage);
 
+    m_networkMode = NetworkModeType(getNetworkModeConfig(m_uuid));
     // TabBar
     m_netTabBar = new NetTabBar(this);
     m_netTabBar->addTab(tr("Detail")); //详情
@@ -390,14 +390,14 @@ void NetDetail::initUI()
     m_netTabBar->addTab(tr("IPv6"));//Ipv6
     if (isWlan) {
         m_netTabBar->addTab(tr("Security"));//安全
-        if (isActive) {
+        if (isActive && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
             m_netTabBar->addTab(tr("Config")); //配置
             m_netTabBar->setFixedWidth(WLAN_TAB_WIDTH + TAB_WIDTH);
         } else {
             m_netTabBar->setFixedWidth(WLAN_TAB_WIDTH);
         }
     } else {
-        if (isActive) {
+        if (isActive && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
             m_netTabBar->addTab(tr("Config")); //配置
             m_netTabBar->setFixedWidth(LAN_TAB_WIDTH + TAB_WIDTH);
         } else {
@@ -606,8 +606,8 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     }
 
     //配置页面
-    if (isActive) {
-        configPage->setConfigState(NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid));
+    if (isActive && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
+        configPage->setConfigState(m_networkMode);
     }
 
 }
@@ -836,14 +836,14 @@ bool NetDetail::updateConnect()
     }
 
     //属性页 page5 config 网络模式配置
-    if (configPage != nullptr) {
-        int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
+    if (m_networkMode != DBUS_INVAILD) {
+        int configType = getNetworkModeConfig(m_uuid);
         bool configPageChange = configPage->checkIsChanged(configType);
         int currentConfigType = configPage->getConfigState();
 //        qDebug () << Q_FUNC_INFO << __LINE__<< configPageChange;
 
         if (configPageChange) {
-            NetworkModeConfig::getInstance()->setNetworkModeConfig(m_uuid, m_deviceName, m_name, currentConfigType);
+            setNetworkModeConfig(m_uuid, m_deviceName, m_name, currentConfigType);
 //            qDebug () <<Q_FUNC_INFO << __LINE__ << m_uuid << m_deviceName << m_name << currentConfigType;
         }
     }
@@ -941,6 +941,52 @@ void NetDetail::setNetTabToolTip()
         } else {
             m_netTabBar->setTabToolTip(i, "");
         }
+    }
+}
+
+int NetDetail::getNetworkModeConfig(QString uuid)
+{
+    if (uuid.isEmpty()) {
+           qWarning()<< "[NetDetail] uuid is empty, so can not get network mode config";
+           return NO_CONFIG;
+       }
+
+    QDBusInterface firewallIface("com.ksc.defender",
+                       "/firewall",
+                       "com.ksc.defender.firewall",
+                       QDBusConnection::systemBus());
+
+    if(!firewallIface.isValid()) {
+        qWarning ()<< "[NetDetail] com.ksc.defender.firewall dbus is invalid";
+        return DBUS_INVAILD;
+    }
+
+    QDBusReply<int> reply = firewallIface.call("get_networkModeConfig", uuid);
+    if (reply.isValid()) {
+        return reply.value();
+    } else {
+        qWarning() << "[NetDetail] call get_networkModeConfig failed" << reply.error().message();
+    }
+    return NO_CONFIG;
+}
+
+void NetDetail::setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode)
+{
+    QDBusInterface firewallIface("com.ksc.defender",
+                       "/firewall",
+                       "com.ksc.defender.firewall",
+                       QDBusConnection::systemBus());
+
+    if(!firewallIface.isValid()) {
+        qWarning () << "[NetDetail] com.ksc.defender.firewall dbus is invalid";
+        return;
+    }
+
+    QDBusReply<int> reply = firewallIface.call("set_networkModeConfig", uuid, cardName, ssid, mode);
+    if (reply.isValid()) {
+        qDebug() << "[NetDetail] set_networkModeConfig" << ssid << uuid << cardName << mode << ",result" << reply.value();
+    } else {
+        qWarning() << "[NetDetail] call set_networkModeConfig" << reply.error().message();
     }
 }
 

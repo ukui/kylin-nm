@@ -10,7 +10,6 @@ include(../component/fixlabel.pri)
 include(../component/listitemedit.pri)
 include(../component/pages.pri)
 include(../component/kylinarping.pri)
-include(../component/networkmode.pri)
 
 TARGET = $$qtLibraryTarget(netconnect)
 DESTDIR = ../..

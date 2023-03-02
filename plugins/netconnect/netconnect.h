@@ -57,8 +57,6 @@ using namespace kdk;
 #include "itemframe.h"
 #include "../component/Divider/divider.h"
 #include "../component/Pages/netdetail.h"
-#include "../component/NetworkMode/networkmodeconfig.h"
-#include "../component/NetworkMode/firewalldialog.h"
 
 enum {
     DISCONNECTED,
@@ -125,8 +123,6 @@ private:
     //显示网络属性页
     void showLanDetailPage(QString deviceName, LanItem *item);
 
-    //初始化已激活网络的网络模式
-    void initActiveNetworkMode(QString deviceName, KyActivateItem activeItem);
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 
@@ -198,7 +194,6 @@ private Q_SLOTS:
 
     void onDeviceAdd(QString deviceName);
     void onDeviceRemove(QString deviceName);
-    void updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status);
 
     //for dbus
     void showDetailPage(QString deviceName, QString connName);

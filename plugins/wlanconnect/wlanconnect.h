@@ -57,8 +57,6 @@ using namespace kdk;
 #include "wlanitem.h"
 #include "hiddenwifi/enterprisewlanpage.h"
 #include "../component/Pages/netdetail.h"
-#include "../component/NetworkMode/networkmodeconfig.h"
-#include "../component/NetworkMode/firewalldialog.h"
 
 class WlanConnect : public QObject, Interface
 {
@@ -126,8 +124,7 @@ private:
     void setOtherItemExpandedFalse(QString devName, QString ssid);
     //显示网络属性页
     void showWlanDetailPage(QString deviceName, WlanItem *item);
-    //初始化已激活网络的网络模式
-    void initActiveNetworkMode(QString deviceName, KyActivateItem activeItem);
+
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 
@@ -213,7 +210,6 @@ private Q_SLOTS:
     void onWirelessConnectionUpdate(QString deviceName, QString ssid, QString uuid, QString dbusPath, KySecuType connectSecuType);
     void onWirelessDeviceAdd(QString deviceName);
     void onWirelessDeviceRemove(QString deviceName);
-    void updateNetworkModeState(QString deviceName, QString ssid, QString uuid, KyConnectState status);
 
     //for dbus
     void showDetailPage(QString deviceName, QString ssid);

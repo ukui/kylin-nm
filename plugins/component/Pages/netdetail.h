@@ -57,6 +57,13 @@ using namespace kdk;
 #define  TAB_HEIGHT 36
 #define  TAB_HEIGHT_TABLET 48
 
+enum NetworkModeType {
+    DBUS_INVAILD = -2,
+    NO_CONFIG = -1,
+    KSC_FIREWALL_PUBLIC = 0,
+    KSC_FIREWALL_PRIVATE
+};
+
 class NetTabBar : public KTabBar
 {
     Q_OBJECT
@@ -133,6 +140,11 @@ private:
     void startObjectThread();
     void setNetTabToolTip();
 
+    //安全中心-获取网络模式配置
+    int getNetworkModeConfig(QString uuid);
+    //安全中心-设置网络模式配置
+    void setNetworkModeConfig(QString uuid, QString cardName, QString ssid, int mode);
+
 private:
     QStackedWidget * stackWidget;
 
@@ -182,6 +194,7 @@ private:
     KyDetailInfo      m_detailInfo;
     KyConnectSetting  m_connectSetting;
     KyWpaPasswordInfo m_pwdInfo;
+    NetworkModeType   m_networkMode = DBUS_INVAILD;
 
 private Q_SLOTS:
     void onBtnConfirmClicked();

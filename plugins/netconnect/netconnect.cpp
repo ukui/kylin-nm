@@ -87,6 +87,7 @@ NetConnect::~NetConnect() {
         delete ui;
         ui = nullptr;
         delete m_interface;
+        delete m_interfaceUi;
         delete m_switchGsettings;
     }
 }
@@ -113,6 +114,13 @@ QWidget *NetConnect::pluginUi() {
                                          "com.kylin.network",
                                          QDBusConnection::sessionBus());
         if(!m_interface->isValid()) {
+            qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+        }
+        m_interfaceUi = new QDBusInterface("com.kylin.network",
+                                         "/com/kylin/network/interface",
+                                         "com.kylin.network.interface",
+                                         QDBusConnection::sessionBus());
+        if(!m_interfaceUi->isValid()) {
             qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
         initSearchText();
@@ -448,11 +456,11 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
 
     connect(lanItem->infoLabel, &InfoButton::clicked, this, [=]{
         // open landetail page
-        if (!m_interface->isValid()) {
+        if (!m_interfaceUi->isValid()) {
             return;
         }
         qDebug() << "[NetConnect]call showPropertyWidget" << __LINE__;
-        m_interface->call(QStringLiteral("showPropertyWidget"), devName, infoList.at(1));
+        m_interfaceUi->call(QStringLiteral("showPropertyWidget"), devName, infoList.at(1));
         qDebug() << "[NetConnect]call showPropertyWidget respond" << __LINE__;
     });
 
@@ -539,10 +547,10 @@ void NetConnect::addDeviceFrame(QString devName)
     });
 
     connect(itemFrame->addLanWidget, &AddNetBtn::clicked, this, [=](){
-        if (m_interface->isValid()) {
+        if (m_interfaceUi !=nullptr && m_interfaceUi->isValid()) {
             qDebug() << "[NetConnect]call showCreateWiredConnectWidget" << devName  << __LINE__;
-            m_interface->call(QStringLiteral("showCreateWiredConnectWidget"), devName);
-            qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
+            m_interfaceUi->call(QStringLiteral("showCreateWiredConnectWidget"), devName);
+            qDebug() << "[NetConnect]call showCreateWiredConnectWidget Respond"  << __LINE__;
         }
     });
 }
@@ -728,11 +736,11 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
 
     connect(lanItem->infoLabel, &InfoButton::clicked, this, [=]{
         // open landetail page
-        if (!m_interface->isValid()) {
+        if (!m_interfaceUi->isValid()) {
             return;
         }
         qDebug() << "[NetConnect]call showPropertyWidget" << deviceName << connUuid << __LINE__;
-        m_interface->call(QStringLiteral("showPropertyWidget"), deviceName, connUuid);
+        m_interfaceUi->call(QStringLiteral("showPropertyWidget"), deviceName, connUuid);
         qDebug() << "[NetConnect]call showPropertyWidget respond" << __LINE__;
     });
 

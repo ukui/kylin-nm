@@ -134,6 +134,7 @@ private:
     QWidget            *pluginWidget;
 
     QDBusInterface     *m_interface = nullptr;
+    QDBusInterface     *m_interfaceUi = nullptr;
     KSwitchButton       *wiredSwitch;
 
     bool               mFirstLoad;

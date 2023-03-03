@@ -148,6 +148,7 @@ WlanConnect::~WlanConnect()
         ui = nullptr;
     }
     delete m_interface;
+    delete m_interfaceUi;
     delete m_switchGsettings;
 }
 
@@ -172,6 +173,13 @@ QWidget *WlanConnect::pluginUi() {
                                          "com.kylin.network",
                                          QDBusConnection::sessionBus());
         if(!m_interface->isValid()) {
+            qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+        }
+
+        m_interfaceUi = new QDBusInterface("com.kylin.network", "/com/kylin/network/interface",
+                                         "com.kylin.network.interface",
+                                         QDBusConnection::sessionBus());
+        if(!m_interfaceUi->isValid()) {
             qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
         initComponent();
@@ -289,7 +297,7 @@ void WlanConnect::initComponent() {
     //网卡name处理
     connect(m_interface, SIGNAL(deviceNameChanged(QString, QString, int)), this, SLOT(onDeviceNameChanged(QString, QString, int)), Qt::QueuedConnection);
     
-    connect(m_interface, SIGNAL(timeToUpdate()), this, SLOT(updateList()), Qt::QueuedConnection);
+    connect(m_interface, SIGNAL(updateList()), this, SLOT(updateList()), Qt::QueuedConnection);
     //高级设置
     connect(ui->detailBtn, &QPushButton::clicked, this, [=](bool checked) {
         Q_UNUSED(checked)
@@ -318,29 +326,29 @@ void WlanConnect::reScan()
 }
 
 //更新列表顺序
-void WlanConnect::updateList()
+void WlanConnect::updateList(QMap<QString, QVector<QStringList> > variantList)
 {
     if (!m_wifiSwitch->isChecked()) {
         return;
     }
     qDebug() << "update list";
-    if(m_interface->isValid()) {
-        qDebug() << "[WlanConnect]call getWirelessList" << __LINE__;
-        QDBusMessage result = m_interface->call(QStringLiteral("getWirelessList"));
-        qDebug() << "[WlanConnect]call getWirelessList respond" << __LINE__;
-        if(result.type() == QDBusMessage::ErrorMessage)
-        {
-            qWarning() << "getWirelessList error:" << result.errorMessage();
-            return;
-        }
-        auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
-        QMap<QString, QVector<QStringList>> variantList;
-        dbusArg >> variantList;
+//    if(m_interface->isValid()) {
+//        qDebug() << "[WlanConnect]call getWirelessList" << __LINE__;
+//        QDBusMessage result = m_interface->call(QStringLiteral("getWirelessList"));
+//        qDebug() << "[WlanConnect]call getWirelessList respond" << __LINE__;
+//        if(result.type() == QDBusMessage::ErrorMessage)
+//        {
+//            qWarning() << "getWirelessList error:" << result.errorMessage();
+//            return;
+//        }
+//        auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
+//        QMap<QString, QVector<QStringList>> variantList;
+//        dbusArg >> variantList;
 
-        if (variantList.size() == 0) {
-            qDebug() << "[WlanConnect]updateList " << " list empty";
-            return;
-        }
+//        if (variantList.size() == 0) {
+//            qDebug() << "[WlanConnect]updateList " << " list empty";
+//            return;
+//        }
 
         QMap<QString, QVector<QStringList>>::iterator iter;
 
@@ -351,7 +359,7 @@ void WlanConnect::updateList()
                 deviceFrameMap[iter.key()]->filletStyleChange();
             }
         }
-    }
+//    }
 }
 
 void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
@@ -898,11 +906,11 @@ int WlanConnect::sortWlanNet(QString deviceName, QString name, QString signal)
 }
 
 void WlanConnect::activeConnect(QString netName, QString deviceName, int type) {
-    if (!m_interface->isValid()) {
+    if (!m_interfaceUi->isValid()) {
         return;
     }
     qDebug() << "[WlanConnect]call activateConnect" << __LINE__;
-    m_interface->call("activateConnect",type, deviceName, netName);
+    m_interfaceUi->call("activateConnect",type, deviceName, netName);
     qDebug() << "[WlanConnect]call activateConnect respond" << __LINE__;
 }
 
@@ -960,10 +968,10 @@ void WlanConnect::addDeviceFrame(QString devName)
     deviceFrameMap.insert(devName, itemFrame);
 
     connect(itemFrame->addWlanWidget, &AddNetBtn::clicked, this, [=](){
-        if (m_interface->isValid()) {
+        if (m_interfaceUi!= nullptr && m_interfaceUi->isValid()) {
             qDebug() << "[NetConnect]call showAddOtherWlanWidget" << devName  << __LINE__;
-            m_interface->call(QStringLiteral("showAddOtherWlanWidget"), devName);
-            qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
+            m_interfaceUi->call(QStringLiteral("showAddOtherWlanWidget"), devName);
+            qDebug() << "[NetConnect]call showAddOtherWlanWidget Respond"  << __LINE__;
         }
     });
 
@@ -1028,11 +1036,11 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
 
     connect(wlanItem->infoLabel, &InfoButton::clicked, this, [=]{
         // open detail page
-        if (!m_interface->isValid()) {
+        if (!m_interfaceUi->isValid()) {
             return;
         }
         qDebug() << "[WlanConnect]call showPropertyWidget" << __LINE__;
-        m_interface->call(QStringLiteral("showPropertyWidget"), deviceName, name);
+        m_interfaceUi->call(QStringLiteral("showPropertyWidget"), deviceName, name);
         qDebug() << "[WlanConnect]call showPropertyWidget respond" << __LINE__;
     });
 

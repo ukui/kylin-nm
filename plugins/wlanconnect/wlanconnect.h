@@ -135,7 +135,7 @@ private:
     QWidget            *pluginWidget;
 
     QDBusInterface     *m_interface = nullptr;
-
+    QDBusInterface     *m_interfaceUi = nullptr;
     QGSettings         *m_switchGsettings = nullptr;
 
     //设备列表
@@ -158,7 +158,7 @@ private slots:
     void onNetworkRemove(QString deviceName, QString wlannName);
     void onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status);
 
-    void updateList();
+    void updateList(QMap<QString, QVector<QStringList>> variantList);
     void onDeviceStatusChanged();
     void onDeviceNameChanged(QString, QString, int);
 

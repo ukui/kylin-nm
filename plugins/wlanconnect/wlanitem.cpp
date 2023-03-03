@@ -76,7 +76,7 @@ WlanItem::WlanItem(bool isSimple, QWidget *parent)
     m_connectButton->setFixedSize(96, 36);
     m_connectButton->setText(tr("Connect"));
     m_connectButton->setEnabled(false);
-//    connect(m_connectButton, &QPushButton::clicked, this, &WlanItem::onConnectButtonClicked);
+    connect(m_connectButton, &QPushButton::clicked, this, &WlanItem::onConnectButtonClicked);
     m_pwdFrameLyt->addWidget(m_connectButton);
 
     if (!isSimple) {
@@ -86,8 +86,6 @@ WlanItem::WlanItem(bool isSimple, QWidget *parent)
         m_pwdLineEdit->setUseCustomPalette(true);
         m_connectButton->setProperty("isImportant", true);
         m_connectButton->setProperty("needTranslucent", true);
-    } else {
-        connect(m_connectButton, &QPushButton::clicked, this, &WlanItem::onConnectButtonClicked);
     }
 
     //自动连接选择区域UI

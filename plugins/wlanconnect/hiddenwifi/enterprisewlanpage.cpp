@@ -4,13 +4,13 @@
 
 #define  MAIN_SIZE_EXPAND  480,550
 #define  MAIN_SIZE_NARROW  480,340
-#define  PAGE_LAYOUT_MARGINS  24,0,24,0
-#define  TOP_LAYOUT_MARGINS  0,14,0,0
-#define  BOTTOM_LAYOUT_MARGINS  0,24,0,24
-#define  LABEL_MIN_WIDTH  150
+#define  PAGE_LAYOUT_MARGINS  24,14,24,24
+#define  TOP_LAYOUT_MARGINS  0,0,0,0
+#define  BOTTOM_LAYOUT_MARGINS  0,0,0,0
+#define  LABEL_MIN_WIDTH  146
 
 EnterpriseWlanPage::EnterpriseWlanPage(QString ssid, QString device, bool isLockScreen, QWidget *parent)
-    : m_ssid(ssid), m_deviceName(device), QWidget(parent)
+    : m_ssid(ssid), m_deviceName(device), m_isLockScreen(isLockScreen), QWidget(parent)
 {
     initUI();
     initConnections();
@@ -47,7 +47,9 @@ void EnterpriseWlanPage::initUI()
     m_ssidTitleLabel = new QLabel(this);
     m_ssidTitleLabel->setMinimumWidth(LABEL_MIN_WIDTH);
     m_ssidLabel = new QLabel(this);
-    m_entSecurityWidget = new EntSecurityWidget(this);
+    m_entSecurityWidget = new SecurityPage(m_isLockScreen, false, this);
+    m_entSecurityWidget->setSecurity(KySecuType::WPA_AND_WPA2_ENTERPRISE);
+    m_entSecurityWidget->setSecurityVisible(false);
     m_cancelBtn = new QPushButton(this);
     m_connectBtn = new QPushButton(this);
     m_connectBtn->setEnabled(false);
@@ -57,7 +59,7 @@ void EnterpriseWlanPage::initUI()
     m_mainLayout = new QVBoxLayout(this);
     this->setLayout(m_mainLayout);
     m_mainLayout->setContentsMargins(PAGE_LAYOUT_MARGINS);
-    m_mainLayout->setSpacing(0);
+    m_mainLayout->setSpacing(8);
     m_mainLayout->addWidget(m_ssidWidget);
     m_mainLayout->addWidget(m_entSecurityWidget);
     m_mainLayout->addStretch();
@@ -90,12 +92,12 @@ void EnterpriseWlanPage::initConnections()
 {
     connect(m_cancelBtn, &QPushButton::clicked, this, &EnterpriseWlanPage::close);
     connect(m_connectBtn, &QPushButton::clicked, this, &EnterpriseWlanPage::onBtnConnectClicked);
-    connect(m_entSecurityWidget, &EntSecurityWidget::eapTypeChanged, this, &EnterpriseWlanPage::onEapTypeChanged);
-    connect(m_entSecurityWidget, &EntSecurityWidget::setSecuPageState, this, [ = ](bool status) {
+    connect(m_entSecurityWidget, &SecurityPage::eapTypeChanged, this, &EnterpriseWlanPage::onEapTypeChanged);
+    connect(m_entSecurityWidget, &SecurityPage::setSecuPageState, this, [ = ](bool status) {
        m_connectBtn->setEnabled(status);
     });
 
-    connect(m_entSecurityWidget, &EntSecurityWidget::setSecuPageState, this, [=](bool status) {
+    connect(m_entSecurityWidget, &SecurityPage::setSecuPageState, this, [=](bool status) {
        m_connectBtn->setEnabled(status);
     });
 }
@@ -118,7 +120,7 @@ void EnterpriseWlanPage::onBtnConnectClicked()
     connSettingInfo.m_ssid = m_ssid;
     connSettingInfo.setConnectName(m_ssid);
     connSettingInfo.setIfaceName(m_deviceName);
-    connSettingInfo.m_isAutoConnect = true;
+    connSettingInfo.m_isAutoConnect = m_entSecurityWidget->getAutoConnectState();
 
     //ipv4 ipv6
     connSettingInfo.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
@@ -152,6 +154,18 @@ void EnterpriseWlanPage::onEapTypeChanged(const KyEapMethodType &type)
         break;
     case KyEapMethodType::TTLS:
         this->setFixedSize(MAIN_SIZE_NARROW);
+        centerToScreen();
+        break;
+    case KyEapMethodType::LEAP:
+        this->setFixedSize(MAIN_SIZE_NARROW);
+        centerToScreen();
+        break;
+    case KyEapMethodType::PWD:
+        this->setFixedSize(MAIN_SIZE_NARROW);
+        centerToScreen();
+        break;
+    case KyEapMethodType::FAST:
+        this->setFixedSize(MAIN_SIZE_EXPAND);
         centerToScreen();
         break;
     default:

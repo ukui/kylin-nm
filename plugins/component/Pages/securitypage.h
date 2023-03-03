@@ -38,7 +38,7 @@ class SecurityPage : public QFrame
 {
     Q_OBJECT
 public:
-    SecurityPage(bool isNetDetailPage, QWidget *parent = nullptr);
+    SecurityPage(bool isLockScreen, bool isNetDetailPage, QWidget *parent = nullptr);
 
     void setSecurity(KySecuType index);
     void setPsk(const QString &psk);
@@ -60,10 +60,20 @@ public:
     void updateFastChange(KyEapMethodFastInfo &info);
 
     void getSecuType(KySecuType &secuType, KyEapMethodType &enterpriseType);
+    void getEnterpriseType(KyEapMethodType &enterpriseType);
+    bool getAutoConnectState();
+
+    KyEapMethodTlsInfo assembleTlsInfo();
+    KyEapMethodPeapInfo assemblePeapInfo();
+    KyEapMethodTtlsInfo assembleTtlsInfo();
+    KyEapMethodLeapInfo assembleLeapInfo();
+    KyEapMethodPwdInfo assemblePwdInfo();
+    KyEapMethodFastInfo assembleFastInfo();
 
 private:
+    bool m_isLockScreen;
     bool isDetailPage;
-//    QFormLayout *mSecuLayout;
+
     QGridLayout *topLayout;
     QGridLayout *bottomLayout;
     QVBoxLayout *mainLayout;
@@ -133,13 +143,6 @@ private:
     void showFast();
     void initUI();
     void initConnect();
-
-    KyEapMethodTlsInfo assembleTlsInfo();
-    KyEapMethodPeapInfo assemblePeapInfo();
-    KyEapMethodTtlsInfo assembleTtlsInfo();
-    KyEapMethodLeapInfo assembleLeapInfo();
-    KyEapMethodPwdInfo assemblePwdInfo();
-    KyEapMethodFastInfo assembleFastInfo();
 
     bool checkConnectBtnIsEnabled();
 

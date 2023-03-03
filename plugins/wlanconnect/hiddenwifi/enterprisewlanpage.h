@@ -6,7 +6,8 @@
 #include <QApplication>
 
 #include <kylin-nm/kylinnetworkmanager.h>
-#include "entsecuritywidget.h"
+//#include "entsecuritywidget.h"
+#include "../component/Pages/securitypage.h"
 
 class EnterpriseWlanPage : public QWidget
 {
@@ -29,13 +30,14 @@ private:
 
     QLabel *m_ssidTitleLabel;
     QLabel *m_ssidLabel;
-    EntSecurityWidget *m_entSecurityWidget = nullptr;
+    SecurityPage *m_entSecurityWidget = nullptr;
     QPushButton *m_cancelBtn;
     QPushButton *m_connectBtn;
     QWidget *m_ssidWidget;
     QWidget *m_btnWidget;
 
     QVBoxLayout  *m_mainLayout;
+    bool m_isLockScreen;
 
 private Q_SLOTS:
     void onBtnConnectClicked();

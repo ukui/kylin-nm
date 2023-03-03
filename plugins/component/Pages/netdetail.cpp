@@ -334,7 +334,7 @@ void NetDetail::initUI()
     detailPage = new DetailPage(isWlan, m_name.isEmpty(), this);
     ipv4Page = new Ipv4Page(this);
     ipv6Page = new Ipv6Page(this);
-    securityPage = new SecurityPage(this);
+    securityPage = new SecurityPage(false, true, this);
     createNetPage = new CreatNetPage(this);
     configPage = new ConfigPage(this);
 

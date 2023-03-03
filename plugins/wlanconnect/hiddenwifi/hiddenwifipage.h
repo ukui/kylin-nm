@@ -16,7 +16,8 @@
 #include "kwidget.h"
 #include "kpasswordedit.h"
 #include "kborderlessbutton.h"
-#include "entsecuritywidget.h"
+//#include "entsecuritywidget.h"
+#include "../component/Pages/securitypage.h"
 #include "kylin-nm/depend/kywirelessconnectoperation.h"
 #include <../component/FixLabel/fixlabel.h>
 
@@ -41,32 +42,32 @@ private:
     void centerToScreen();
     void initComponent();
 
-    void showNone();
-    void showPsk();
-    void showEnt();
+//    void showNone();
+//    void showPsk();
+//    void showEnt();
 
     void setBtnEnable(bool on);
     void setJoinBtnEnable();
-    void setWindowWidth(KyEapMethodType eapType);
+//    void setWindowWidth(KyEapMethodType eapType);
 
 private:
     QWidget *m_topWidget;
     QWidget *m_centerWidget;
     QWidget *m_bottomWidget;
-    EntSecurityWidget *m_secuWidget;
+    SecurityPage *m_secuWidget;
 
     QLabel *m_descriptionLabel;
     FixLabel *m_nameLabel;
-    QLabel *m_secuTypeLabel;
-    QLabel *m_pwdLabel;
-    QLabel *m_emptyLabel;
-    QLabel *m_checkLabel;
+//    QLabel *m_secuTypeLabel;
+//    QLabel *m_pwdLabel;
+//    QLabel *m_emptyLabel;
+//    QLabel *m_checkLabel;
 
     LineEdit *m_nameEdit;
-    QComboBox *m_secuTypeCombox;
-    KPasswordEdit *m_pwdEdit = nullptr;
+//    QComboBox *m_secuTypeCombox;
+//    KPasswordEdit *m_pwdEdit = nullptr;
 
-    QCheckBox *m_rememberCheckBox = nullptr;
+//    QCheckBox *m_rememberCheckBox = nullptr;
 
     Divider *m_bottomDivider = nullptr;
     KBorderlessButton *m_showListBtn = nullptr;
@@ -86,13 +87,18 @@ private:
     QString      m_deviceName;
 
 private Q_SLOTS:
-    void on_btnJoin_clicked();
-    void onSecuTypeComboxIndexChanged();
+//    void on_btnJoin_clicked();
+//    void onSecuTypeComboxIndexChanged();
     void onBtnShowListClicked();
+    void onBtnJoinClicked();
+    void onSecuTypeChanged(const KySecuType &type);
+    void onEapTypeChanged(const KyEapMethodType &type);
 
 Q_SIGNALS:
     void connectHidePeapConnect(KyEapMethodPeapInfo info, KyWirelessConnectSetting connSettingInfo);
     void connectHideTtlsConnect(KyEapMethodTtlsInfo info, KyWirelessConnectSetting connSettingInfo);
+    void connectHideLeapConnect(KyEapMethodLeapInfo info, KyWirelessConnectSetting connSettingInfo);
+    void connectHidePwdConnect(KyEapMethodPwdInfo info, KyWirelessConnectSetting connSettingInfo);
     void connectHideNormalConnect(KyWirelessConnectSetting connSettingInfo, KySecuType type);
 };
 #endif // HIDDENWIFIPAGE_H

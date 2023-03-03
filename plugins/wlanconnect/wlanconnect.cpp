@@ -795,6 +795,8 @@ void WlanConnect::addDeviceFrame(QString devName)
     connect(itemFrame, &ItemFrame::connectHideNormalConnect, manager, &KyNetworkManager::onAddAndActivateNormalWifi);
     connect(itemFrame, &ItemFrame::connectHideTtlsConnect, manager, &KyNetworkManager::onAddAndActiveWirelessEnterPriseTtlsConnect);
     connect(itemFrame, &ItemFrame::connectHidePeapConnect, manager, &KyNetworkManager::onAddAndActiveWirelessEnterPrisePeapConnect);
+    connect(itemFrame, &ItemFrame::connectHideLeapConnect, manager, &KyNetworkManager::onAddAndActiveWirelessEnterPriseLeapConnect);
+    connect(itemFrame, &ItemFrame::connectHidePwdConnect, manager, &KyNetworkManager::onAddAndActiveWirelessEnterPrisePwdConnect);
 }
 
 //减少设备

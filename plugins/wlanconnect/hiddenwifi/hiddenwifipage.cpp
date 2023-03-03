@@ -3,18 +3,19 @@
 #include <QDBusInterface>
 
 #define  WINDOW_WIDTH  480
-#define  MIN_WINDOW_HEIGHT  332
+#define  MIN_WINDOW_HEIGHT  336
 #define  PEAP_WINDOW_HEIGHT  494
 #define  MAX_WINDOW_HEIGHT  540
 #define  PAGE_LAYOUT_MARGINS  0,0,0,0
 #define  TOP_LAYOUT_MARGINS  24,14,24,24
+#define  CENTER_LAYOUT_MARGINS  24, 0, 24, 8
 #define  BOTTOM_LAYOUT_MARGINS  24,24,24,24
 #define  LAYOUT_SPACING  16
-#define  LABEL_MIN_WIDTH  150
+#define  LABEL_MIN_WIDTH  146
 #define  MAX_NAME_LENGTH 32
-#define  PSK_SCRO_HEIGHT  182
-#define  PEAP_SCRO_HEIGHT  348
-#define  TLS_SCRO_HEIGHT  540
+//#define  PSK_SCRO_HEIGHT  182
+//#define  PEAP_SCRO_HEIGHT  348
+//#define  TLS_SCRO_HEIGHT  540
 #define  MEDIUM_WEIGHT_VALUE  57
 
 HiddenWiFiPage::HiddenWiFiPage(QString interface, bool isSimple, QWidget *parent)
@@ -47,7 +48,9 @@ HiddenWiFiPage::~HiddenWiFiPage()
 
 void HiddenWiFiPage::getSecuType(KySecuType &secuType)
 {
-    secuType = (KySecuType)m_secuTypeCombox->currentData().toInt();
+//    secuType = (KySecuType)m_secuTypeCombox->currentData().toInt();
+    KyEapMethodType enterpriseType;
+    m_secuWidget->getSecuType(secuType, enterpriseType);
 }
 
 void HiddenWiFiPage::paintEvent(QPaintEvent *event)
@@ -82,6 +85,212 @@ void HiddenWiFiPage::setBtnEnable(bool on)
     m_joinBtn->setEnabled(on);
 }
 
+void HiddenWiFiPage::initUI()
+{
+    m_topWidget = new QWidget(this);
+    m_centerWidget = new QWidget(this);
+    m_bottomWidget = new QWidget(this);
+    m_secuWidget = new SecurityPage(true, false, this);
+    m_secuWidget->setSecurity(KySecuType::WPA_AND_WPA2_PERSONAL);
+
+    m_descriptionLabel = new QLabel(this);
+    m_nameLabel = new FixLabel(this);
+    m_nameLabel->setFixedWidth(LABEL_MIN_WIDTH);
+    m_nameEdit =new LineEdit(this);
+
+    m_bottomDivider = new Divider(this);
+    m_cancelBtn =new QPushButton(this);
+    m_joinBtn =new QPushButton(this);
+
+    m_scrollArea = new QScrollArea(this);
+    m_scrollArea->setFrameShape(QFrame::NoFrame);
+    m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    QPalette pa = m_scrollArea->palette();
+    pa.setBrush(QPalette::Window, Qt::transparent);
+    m_scrollArea->setPalette(pa);
+
+    m_pageLayout = new QVBoxLayout(this);
+    m_pageLayout->setContentsMargins(0, 0, 0, 0);
+    m_pageLayout->setSpacing(0);
+    m_pageLayout->addWidget(m_topWidget);
+    m_pageLayout->addWidget(m_scrollArea);
+    m_pageLayout->addWidget(m_bottomDivider);
+    m_pageLayout->addWidget(m_bottomWidget);
+
+    m_topLayout = new QHBoxLayout(m_topWidget);
+    m_topLayout->setContentsMargins(TOP_LAYOUT_MARGINS);
+    m_topLayout->setSpacing(0);
+    m_topLayout->addWidget(m_descriptionLabel);
+    m_topLayout->addStretch();
+
+    QWidget *ssidWidget = new QWidget(this);
+    QHBoxLayout *ssidLayout = new QHBoxLayout(ssidWidget);
+    ssidLayout->setContentsMargins(0, 0, 0, 0);
+    ssidLayout->setSpacing(0);
+    m_nameLabel->setMinimumWidth(LABEL_MIN_WIDTH);
+    ssidLayout->addWidget(m_nameLabel);
+    ssidLayout->addWidget(m_nameEdit);
+
+    m_centerVBoxLayout = new QVBoxLayout(m_centerWidget);
+    m_centerVBoxLayout->setContentsMargins(CENTER_LAYOUT_MARGINS);
+    m_centerVBoxLayout->setSpacing(0);
+    m_centerVBoxLayout->addWidget(ssidWidget);
+    m_centerVBoxLayout->addSpacing(LAYOUT_SPACING);
+    m_centerVBoxLayout->addWidget(m_secuWidget);
+
+    m_centerWidget->setFixedWidth(WINDOW_WIDTH);
+    m_scrollArea->setFixedWidth(WINDOW_WIDTH);
+    m_scrollArea->setWidget(m_centerWidget);
+    m_scrollArea->setWidgetResizable(true);
+
+    //底部按钮
+    m_bottomLayout = new QHBoxLayout(m_bottomWidget);
+    m_bottomLayout->setContentsMargins(BOTTOM_LAYOUT_MARGINS);
+    m_bottomLayout->setSpacing(LAYOUT_SPACING);
+    if (!m_isSimple) {
+        m_showListBtn = new KBorderlessButton(this);
+        m_showListBtn->setText(tr("Show Network List")); //显示网络列表
+        m_bottomLayout->addWidget(m_showListBtn);
+        connect(m_showListBtn, SIGNAL(clicked()), this, SLOT(onBtnShowListClicked()));
+    }
+    m_bottomLayout->addStretch();
+    m_bottomLayout->addWidget(m_cancelBtn);
+    m_bottomLayout->addWidget(m_joinBtn);
+
+    //请输入您想要加入网络的名称和安全类型
+   m_descriptionLabel->setText(tr("Please enter the network name and security type"));
+   QFont font = m_descriptionLabel->font();
+   font.setWeight(MEDIUM_WEIGHT_VALUE);
+   m_descriptionLabel->setFont(font);
+
+   m_nameLabel->setLabelText(tr("Network name(SSID)")); //网络名(SSID)
+   m_cancelBtn->setText(tr("Cancel"));
+   m_joinBtn->setText(tr("Join"));
+
+   m_nameEdit->setMaxLength(MAX_NAME_LENGTH);
+   m_nameEdit->setPlaceholderText(tr("Required")); //必填
+
+   this->setWindowTitle(tr("Find and Join Wi-Fi"));
+   this->setWindowIcon(QIcon::fromTheme("kylin-network"));
+   this->setFixedWidth(WINDOW_WIDTH);
+   this->setFixedHeight(MIN_WINDOW_HEIGHT);
+}
+
+void HiddenWiFiPage::initComponent()
+{
+    connect(m_cancelBtn, &QPushButton::clicked, this, [=] {
+        close();
+    });
+
+    connect(m_joinBtn, SIGNAL(clicked()), this, SLOT(onBtnJoinClicked()));
+
+    connect(m_secuWidget, &SecurityPage::secuTypeChanged, this, &HiddenWiFiPage::onSecuTypeChanged);
+    connect(m_secuWidget, &SecurityPage::eapTypeChanged, this, &HiddenWiFiPage::onEapTypeChanged);
+    connect(m_secuWidget, &SecurityPage::setSecuPageState, this, [ = ](bool status) {
+       m_isSecuOk = status;
+       setJoinBtnEnable();
+    });
+    connect(m_nameEdit, &LineEdit::textChanged, this, &HiddenWiFiPage::setJoinBtnEnable);
+}
+
+void HiddenWiFiPage::setJoinBtnEnable()
+{
+    if (!m_nameEdit->text().isEmpty() && m_isSecuOk) {
+        m_isJoinBtnEnable = true;
+    } else {
+        m_isJoinBtnEnable = false;
+    }
+    m_joinBtn->setEnabled(m_isJoinBtnEnable);
+}
+
+void HiddenWiFiPage::onBtnShowListClicked()
+{
+    QDBusInterface interface("com.kylin.network",
+                             "/com/kylin/network",
+                             "com.kylin.network",
+                             QDBusConnection::sessionBus());
+    if(interface.isValid()) {
+        interface.call(QStringLiteral("showKylinNM"), 1);
+    }
+}
+
+void HiddenWiFiPage::onBtnJoinClicked()
+{
+    qDebug() << "on_btnJoin_clicked";
+
+    KyWirelessConnectSetting connSettingInfo;
+    //基本信息
+    connSettingInfo.m_ssid = m_nameEdit->text();
+    connSettingInfo.setConnectName(connSettingInfo.m_ssid);
+    connSettingInfo.setIfaceName(m_deviceName);
+    connSettingInfo.isHidden = true;
+    connSettingInfo.m_isAutoConnect = m_secuWidget->getAutoConnectState();
+    connSettingInfo.m_secretFlag = 0;
+
+    //ipv4 ipv6
+    connSettingInfo.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
+    connSettingInfo.setIpConfigType(IPADDRESS_V6, CONFIG_IP_DHCP);
+
+    KySecuType secuType;
+    KyEapMethodType eapType;
+    m_secuWidget->getSecuType(secuType, eapType);
+
+    if (secuType == NONE) {
+        Q_EMIT connectHideNormalConnect(connSettingInfo, NONE);
+    } else if (secuType == WPA_AND_WPA2_PERSONAL || secuType == WPA3_PERSONAL) {
+        m_secuWidget->updateSecurityChange(connSettingInfo);
+        Q_EMIT connectHideNormalConnect(connSettingInfo, secuType);
+    }else if (secuType == WPA_AND_WPA2_ENTERPRISE) {
+        if (eapType == PEAP) {
+            KyEapMethodPeapInfo info = m_secuWidget->assemblePeapInfo();
+            Q_EMIT connectHidePeapConnect(info, connSettingInfo);
+        } else if (eapType == TTLS) {
+            KyEapMethodTtlsInfo info = m_secuWidget->assembleTtlsInfo();
+            Q_EMIT connectHideTtlsConnect(info, connSettingInfo);
+        } else if (eapType == LEAP) {
+            KyEapMethodLeapInfo info = m_secuWidget->assembleLeapInfo();
+            Q_EMIT connectHideLeapConnect(info, connSettingInfo);
+        }  else if (eapType == PWD) {
+            KyEapMethodPwdInfo info = m_secuWidget->assemblePwdInfo();
+            Q_EMIT connectHidePwdConnect(info, connSettingInfo);
+        } else {
+            qWarning() << "unsupport now!!!";
+        }
+    }
+
+    close();
+}
+
+void HiddenWiFiPage::onSecuTypeChanged(const KySecuType &type)
+{
+    if (type != KySecuType::WPA_AND_WPA2_ENTERPRISE) {
+        this->setFixedHeight(MIN_WINDOW_HEIGHT);
+    }
+}
+
+void HiddenWiFiPage::onEapTypeChanged(const KyEapMethodType &type)
+{
+    if (type == KyEapMethodType::TLS || type == KyEapMethodType::FAST) {
+        this->setFixedHeight(MAX_WINDOW_HEIGHT);
+    } else if (type == KyEapMethodType::PEAP || type == KyEapMethodType::TTLS || type == KyEapMethodType::LEAP || type == KyEapMethodType::PWD) {
+        this->setFixedHeight(PEAP_WINDOW_HEIGHT);
+    }
+}
+
+void HiddenWiFiPage::centerToScreen()
+{
+    QDesktopWidget* m = QApplication::desktop();
+    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
+    int desk_x = desk_rect.width();
+    int desk_y = desk_rect.height();
+    int x = this->width();
+    int y = this->height();
+    this->move((desk_x - x)/ 2 , (desk_y - y)/ 2);
+}
+
+
+
+#if 0
 void HiddenWiFiPage::initUI()
 {
     m_topWidget = new QWidget(this);
@@ -210,17 +419,6 @@ void HiddenWiFiPage::initUI()
     pa.setBrush(QPalette::Window, Qt::transparent);
     m_scrollArea->setPalette(pa);
     showNone();
-}
-
-void HiddenWiFiPage::centerToScreen()
-{
-    QDesktopWidget* m = QApplication::desktop();
-    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
-    int desk_x = desk_rect.width();
-    int desk_y = desk_rect.height();
-    int x = this->width();
-    int y = this->height();
-    this->move((desk_x - x)/ 2 , (desk_y - y)/ 2);
 }
 
 void HiddenWiFiPage::initComponent()
@@ -373,14 +571,4 @@ void HiddenWiFiPage::onSecuTypeComboxIndexChanged()
     }
     centerToScreen();
 }
-
-void HiddenWiFiPage::onBtnShowListClicked()
-{
-    QDBusInterface interface("com.kylin.network",
-                             "/com/kylin/network",
-                             "com.kylin.network",
-                             QDBusConnection::sessionBus());
-    if(interface.isValid()) {
-        interface.call(QStringLiteral("showKylinNM"), 1);
-    }
-}
+#endif

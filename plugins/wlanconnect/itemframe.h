@@ -58,6 +58,8 @@ Q_SIGNALS:
     void addNetItemClick();
     void connectHidePeapConnect(KyEapMethodPeapInfo info, KyWirelessConnectSetting connSettingInfo);
     void connectHideTtlsConnect(KyEapMethodTtlsInfo info, KyWirelessConnectSetting connSettingInfo);
+    void connectHideLeapConnect(KyEapMethodLeapInfo info, KyWirelessConnectSetting connSettingInfo);
+    void connectHidePwdConnect(KyEapMethodPwdInfo info, KyWirelessConnectSetting connSettingInfo);
     void connectHideNormalConnect(KyWirelessConnectSetting connSettingInfo, KySecuType type);
 };
 

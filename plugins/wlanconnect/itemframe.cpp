@@ -112,6 +112,8 @@ void ItemFrame::showJoinPage(bool isSimple, QWidget *widget)
         connect(joinPage, &HiddenWiFiPage::connectHideNormalConnect, this, &ItemFrame::connectHideNormalConnect);
         connect(joinPage, &HiddenWiFiPage::connectHideTtlsConnect, this, &ItemFrame::connectHideTtlsConnect);
         connect(joinPage, &HiddenWiFiPage::connectHidePeapConnect, this, &ItemFrame::connectHidePeapConnect);
+        connect(joinPage, &HiddenWiFiPage::connectHideLeapConnect, this, &ItemFrame::connectHideLeapConnect);
+        connect(joinPage, &HiddenWiFiPage::connectHidePwdConnect, this, &ItemFrame::connectHidePwdConnect);
         joinPage->show();
     }
 }

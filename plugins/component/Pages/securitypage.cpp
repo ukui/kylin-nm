@@ -27,7 +27,8 @@
 #define  MIN_LABEL_WIDTH  146
 #define  MIN_EDIT_WIDTH  286
 
-SecurityPage::SecurityPage(bool isNetDetailPage, QWidget *parent) : isDetailPage(isNetDetailPage), QFrame(parent)
+SecurityPage::SecurityPage(bool isLockScreen, bool isNetDetailPage, QWidget *parent)
+    :  m_isLockScreen(isLockScreen), isDetailPage(isNetDetailPage), QFrame(parent)
 {
     initUI();
     initConnect();
@@ -250,13 +251,18 @@ void SecurityPage::initUI()
     eapTypeCombox->setCurrentIndex(TLS);
     //TLS
     caCertPathCombox->addItem(tr("None"), QString(tr("None"))); //无
-    caCertPathCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
-
     clientCertPathCombox->addItem(tr("None"), QString(tr("None"))); //无
-    clientCertPathCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
-
     clientPrivateKeyCombox->addItem(tr("None"), QString(tr("None"))); //无
-    clientPrivateKeyCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    if (!m_isLockScreen) {
+        caCertPathCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+        clientCertPathCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+        clientPrivateKeyCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    }
+    else {
+        caCertPathCombox->addItem(tr("Please log in to the system first."), QString(tr("Please log in to the system first.")));
+        clientCertPathCombox->addItem(tr("Please log in to the system first."), QString(tr("Please log in to the system first.")));
+        clientPrivateKeyCombox->addItem(tr("Please log in to the system first."), QString(tr("Please log in to the system first.")));
+    }
 
     //仅为该用户存储密码
     pwdOptionCombox->addItem(tr("Store passwords only for this user"), QString(tr("Store password only for this user")));
@@ -276,7 +282,12 @@ void SecurityPage::initUI()
     m_pacProvisionComboBox->addItem(tr("Both"), BOTH); //两者兼用
     m_pacProvisionComboBox->setCurrentIndex(0);
     m_pacFilePathComboBox->addItem(tr("None"), QString(tr("None"))); //无
-    m_pacFilePathComboBox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    if (!m_isLockScreen) {
+        m_pacFilePathComboBox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    }
+    else {
+        m_pacFilePathComboBox->addItem(tr("Please log in to the system first."), QString(tr("Please log in to the system first.")));
+    }
 
     //禁用ClearBtn按钮
     pwdEdit->setClearButtonEnabled(false);
@@ -586,6 +597,17 @@ void SecurityPage::getSecuType(KySecuType &secuType, KyEapMethodType &enterprise
 {
     secuType = (KySecuType)secuTypeCombox->currentData().toInt();
     enterpriseType = (KyEapMethodType)eapTypeCombox->currentData().toInt();
+}
+
+void SecurityPage::getEnterpriseType(KyEapMethodType &enterpriseType)
+{
+    enterpriseType = (KyEapMethodType)eapTypeCombox->currentData().toInt();
+}
+
+bool SecurityPage::getAutoConnectState()
+{
+     bool state = m_rememberCheckBox->isChecked();
+     return state;
 }
 
 bool SecurityPage::checkIsChanged(const ConInfo info)
@@ -1116,6 +1138,9 @@ void SecurityPage::onPacBoxClicked()
 
 void SecurityPage::onCaCertPathComboxIndexChanged(QString str)
 {
+    if (m_isLockScreen) {
+        return;
+    }
     if (str.contains("Choose from file...") || str.contains("从文件选择..."))
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
@@ -1139,6 +1164,9 @@ void SecurityPage::onCaCertPathComboxIndexChanged(QString str)
 
 void SecurityPage::onClientCertPathComboxIndexChanged(QString str)
 {
+    if (m_isLockScreen) {
+        return;
+    }
     if (str.contains("Choose from file...") || str.contains("从文件选择..."))
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
@@ -1161,6 +1189,9 @@ void SecurityPage::onClientCertPathComboxIndexChanged(QString str)
 
 void SecurityPage::onClientPrivateKeyComboxIndexChanged(QString str)
 {
+    if (m_isLockScreen) {
+        return;
+    }
     if (str.contains("Choose from file...") || str.contains("从文件选择..."))
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",

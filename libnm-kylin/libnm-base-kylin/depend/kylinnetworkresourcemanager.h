@@ -122,7 +122,7 @@ private:
     void wiredActiveStateChange(QString connectPath, QString deviceName,
                                             QString uuid, KyConnectState state);
     void connectActiveStateChange(NetworkManager::Connection::Ptr connectPtr,
-                                            QString deviceName, KyConnectState state);
+                                            QString deviceName, KyConnectState state, QString activeConnectUuid);
 
 private Q_SLOTS:
     void onServiceAppear(QString, QString, QString);

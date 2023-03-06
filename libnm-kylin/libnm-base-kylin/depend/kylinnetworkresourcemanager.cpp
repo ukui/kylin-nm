@@ -681,12 +681,19 @@ void KyNetworkResourceManager::wiredActiveStateChange(QString connectPath,
 
 void KyNetworkResourceManager::connectActiveStateChange(NetworkManager::Connection::Ptr connectPtr,
                                                            QString deviceName,
-                                                           KyConnectState state)
+                                                           KyConnectState state, QString activeConnectUuid)
 {
     QString uuid = connectPtr->uuid();
     NetworkManager::ConnectionSettings::Ptr connectSettingsPtr = connectPtr->settings();
-    KyConnectionType connectionType = (KyConnectionType)connectSettingsPtr->connectionType();
+    if (uuid.isEmpty()) {
+        //异常情况处理
+        Q_EMIT wirelessConnectStateChange(deviceName, "", activeConnectUuid, state);
+        Q_EMIT wirelessApConnectStateChange(deviceName, "", activeConnectUuid, state);
+        Q_EMIT wiredConnectStateChange(deviceName, activeConnectUuid, state);
+        return;
+    }
 
+    KyConnectionType connectionType = (KyConnectionType)connectSettingsPtr->connectionType();
     if (connectionType == CONNECT_TYPE_WIRELESS) {
         wirelessActiveStateChange(connectSettingsPtr, deviceName, uuid, state);
         NetworkManager::WirelessSetting::Ptr wirelessSetting
@@ -716,9 +723,10 @@ void KyNetworkResourceManager::onActiveConnectionChanged(
             NetworkManager::Device:: Ptr devicePtr = findDeviceByUni(ifaceUni);
             deviceName = devicePtr->interfaceName();
         }
+        qDebug() << "KyNetworkResourceManager onActiveConnectionChanged" << activeConnect->uuid();
 
         NetworkManager::Connection::Ptr connectPtr = activeConnect->connection();
-        connectActiveStateChange(connectPtr, deviceName, (KyConnectState)state);
+        connectActiveStateChange(connectPtr, deviceName, (KyConnectState)state, activeConnect->uuid());
     } else {
         qWarning() << LOG_FLAG << "onActiveConnectionChanged failed, the connection is invalid.";
     }

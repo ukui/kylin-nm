@@ -514,7 +514,7 @@
     <message>
         <location filename="../src/frontend/networkmode/firewalldialog.cpp" line="81"/>
         <source>Not allowed (recommended)</source>
-        <translation>མི་ཆོག་（འོས་སྦྱོར་）།</translation>
+        <translation>མི་ཆོག་པ་(འོས་སྦྱོར།)</translation>
     </message>
     <message>
         <location filename="../src/frontend/networkmode/firewalldialog.cpp" line="82"/>

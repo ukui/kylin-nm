@@ -219,10 +219,8 @@ void LanListItem::updateConnectionState(ConnectState state)
         m_netButton->stopLoading();
         if (state == Activated) {
             setIcon(true);
-            m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
         } else {
             setIcon(false);
-            m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
         }
     } else {
         m_netButton->startLoading();
@@ -284,7 +282,7 @@ void LanListItem::leaveEvent(QEvent *event)
         m_lbLoadDown->show();
         m_lbLoadDownImg->show();
         m_lbLoadUpImg->show();
-    } else if (m_lanConnectItem.m_connectState == Deactivated) {
+    } else {
         m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
     }
     return ListItem::leaveEvent(event);

@@ -229,7 +229,7 @@ void WlanListItem::leaveEvent(QEvent *event)
         m_lbLoadDown->show();
         m_lbLoadDownImg->show();
         m_lbLoadUpImg->show();
-    } else if (m_connectState == Deactivated) {
+    } else {
         m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
     }
     if (m_pwdFrame && m_pwdFrame->isVisible()) {
@@ -661,7 +661,9 @@ void WlanListItem::updateConnectState(ConnectState state)
         m_hoverButton->setProperty("useButtonPalette", true);
         m_hoverButton->setProperty("isImportant", false);
         m_hoverButton->setButtonText(tr("Disconnect"));
-        m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
+        if (m_hoverButton->isHidden()) {
+            m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
+        }
     } else if(Deactivated == state) {
         qDebug() << "[WlanListItem] stop loading connect state:" << state;
         m_netButton->stopLoading();
@@ -669,7 +671,9 @@ void WlanListItem::updateConnectState(ConnectState state)
         m_hoverButton->setProperty("isImportant", true);
         m_hoverButton->setProperty("useButtonPalette", false);
         m_hoverButton->setButtonText(tr("Connect"));
-        m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
+        if (m_hoverButton->isHidden()) {
+            m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
+        }
     } else {
         qDebug() << "[WlanListItem] start loading connect state:" << state;
         m_netButton->startLoading();

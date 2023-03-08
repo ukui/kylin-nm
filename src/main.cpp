@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     QString locale = QLocale::system().name();
     QTranslator trans_global;
     qDebug() << "QLocale " << QLocale();
-    if (trans_global.load(QLocale(), "kylin-nm", "_", ":/translations/"))
+    if (trans_global.load(QLocale(), "kylin-nm", "_", "/usr/share/kylin-nm/kylin-nm/"))
     {
         a.installTranslator(&trans_global);
         qDebug()<<"Translations load success";
@@ -142,6 +142,15 @@ int main(int argc, char *argv[])
         qDebug()<<"QtBase Translations load success";
     } else {
         qWarning() << "QtBase Translations load fail";
+    }
+
+    QTranslator sdkTranslator;
+    if (sdkTranslator.load(QLocale(), "gui", "_", ":/translations/"))
+    {
+        a.installTranslator(&sdkTranslator);
+        qDebug()<<"SDK Translations load success";
+    } else {
+        qWarning() << "SDK Translations load fail";
     }
 
     while (!p_networkResource->NetworkManagerIsInited()) {

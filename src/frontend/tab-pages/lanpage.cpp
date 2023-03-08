@@ -456,7 +456,7 @@ void LanPage::onRemoveConnection(QString path)            //删除时后端会�
         if (m_activeConnectionMap.count() <= 0) {
             addEmptyConnectItem(m_activeConnectionMap, m_activatedLanListWidget);
         }
-
+        setNetSpeed->stop();
         return;
     }
 }
@@ -929,7 +929,6 @@ void LanPage::onConnectionStateChange(QString uuid,
 
     KyConnectItem *p_newItem = nullptr;
     QString deviceName = "";
-    QString ssid = "";
 
     if (state == NetworkManager::ActiveConnection::State::Activated) {
         p_newItem = m_activeResourse->getActiveConnectionByUuid(uuid);
@@ -939,6 +938,7 @@ void LanPage::onConnectionStateChange(QString uuid,
         }
         updateActivatedConnectionArea(p_newItem);
         updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
+        deviceName = p_newItem->m_ifaceName;
         setNetSpeed->start(REFRESH_NETWORKSPEED_TIMER);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         p_newItem = m_connectResourse->getConnectionItemByUuidWithoutActivateChecking(uuid);
@@ -949,7 +949,6 @@ void LanPage::onConnectionStateChange(QString uuid,
         }
 
         deviceName = p_newItem->m_ifaceName;
-        ssid = p_newItem->m_connectName;
         updateConnectionArea(p_newItem);
         updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
         setNetSpeed->stop();

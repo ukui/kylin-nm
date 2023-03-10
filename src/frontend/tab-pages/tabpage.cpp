@@ -226,6 +226,9 @@ int TabPage::getCurrentLoadRate(QString dev, long *save_rate, long *tx_rate)
         }
     }
 
+    fclose(net_dev_file);
+    net_dev_file = nullptr;
+
     return 0; //返回成功
 }
 

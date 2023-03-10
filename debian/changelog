@@ -1,3 +1,13 @@
+kylin-nm (3.20.1.17-0k0.14) v101; urgency=medium
+
+  * BUG号：
+     -#160890 【网络连接】任务栏点开网络栏，保持点开状态，系统自动睡眠唤醒后各网络图标消失
+  * 需求号：无
+  * 其他改动：无
+  * 影响域：无
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 10 Mar 2023 14:42:54 +0800
+
 kylin-nm (3.20.1.17-0k0.13) v101; urgency=medium
 
   * BUG号：

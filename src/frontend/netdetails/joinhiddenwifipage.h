@@ -61,7 +61,7 @@ private:
     QWidget *m_bottomWidget;
     SecurityPage *m_secuWidget;
 
-    QLabel *m_descriptionLabel;
+    FixLabel *m_descriptionLabel;
     FixLabel *m_nameLabel;
     LineEdit *m_nameEdit;
 

@@ -641,11 +641,13 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
         return nullptr;
     }
 
+#ifdef CHECKDEVICE
     KyNetworkDeviceResourse deviceResource;
     if (!deviceResource.wirelessDeviceIsExist(settingPtr->interfaceName())) {
         qDebug() << "[KyConnectResourse]" <<"get ap item failed, the ap device is not exist yet";
         return nullptr;
     }
+#endif
 
     QByteArray rawSsid = wirelessSetting->ssid();
 

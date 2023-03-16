@@ -160,10 +160,10 @@ bool CreatNetPage::checkConnectBtnIsEnabled()
             return false;
         }
 
-        if (gateWayEdit->text().isEmpty() || !getTextEditState(gateWayEdit->text())) {
-            qDebug() << "create ipv4 gateway empty or invalid";
-            return false;
-        }
+//        if (gateWayEdit->text().isEmpty() || !getTextEditState(gateWayEdit->text())) {
+//            qDebug() << "create ipv4 gateway empty or invalid";
+//            return false;
+//        }
 
         if (firstDnsEdit->text().isEmpty() && !secondDnsEdit->text().isEmpty()) {
             qDebug() << "create ipv4 dns sort invalid";

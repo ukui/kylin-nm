@@ -207,8 +207,8 @@
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="250"/>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="326"/>
-        <source>IPv4 Dns:</source>
-        <translation>IPv4 Dns:</translation>
+        <source>IPv4 DNS:</source>
+        <translation>IPv4 DNS:</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="260"/>
@@ -959,7 +959,7 @@
         <translation type="obsolete">IPv4地址：</translation>
     </message>
     <message>
-        <source>IPv4 Dns:</source>
+        <source>IPv4 DNS:</source>
         <translation type="obsolete">IPv4 DNS服务器：</translation>
     </message>
     <message>

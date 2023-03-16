@@ -22,6 +22,7 @@
 #include <QProcess>
 
 #define VERTICAL_SPACING  24
+#define KSC_FIREWALL_NOCONFIG -1
 #define KSC_FIREWALL_PUBLIC  0
 #define KSC_FIREWALL_PRIVATE  1
 
@@ -111,6 +112,7 @@ int ConfigPage::getConfigState()
     } else if (m_privateButton->isChecked()) {
         return KSC_FIREWALL_PRIVATE;
     }
+    return KSC_FIREWALL_NOCONFIG;
 }
 
 

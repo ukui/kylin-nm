@@ -79,6 +79,8 @@ public:
 
     bool getWirelessSwitchBtnState();
 
+    int getAcivateWifiSignal();
+
 Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);

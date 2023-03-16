@@ -49,6 +49,24 @@ const QString intel = "V10SP1-edu";
 
 #define KEY_PRODUCT_FEATURES "PRODUCT_FEATURES"
 
+#define MW_EXCELLENT_SIGNAL 80
+#define MW_GOOD_SIGNAL 55
+#define MW_OK_SIGNAL 30
+#define MW_LOW_SIGNAL 5
+#define MW_NONE_SIGNAL 0
+
+#define EXCELLENT_SIGNAL_ICON   "network-wireless-signal-excellent-symbolic"
+#define GOOD_SIGNAL_ICON        "network-wireless-signal-good-symbolic"
+#define OK_SIGNAL_ICON          "network-wireless-signal-ok-symbolic"
+#define LOW_SIGNAL_ICON         "network-wireless-signal-weak-symbolic"
+#define NONE_SIGNAL_ICON        "network-wireless-signal-none-symbolic"
+
+#define EXCELLENT_SIGNAL_LIMIT_ICON   "ukui-network-wireless-signal-excellent-error-symbolic"
+#define GOOD_SIGNAL_LIMIT_ICON        "ukui-network-wireless-signal-good-error-symbolic"
+#define OK_SIGNAL_LIMIT_ICON          "ukui-network-wireless-signal-ok-error-symbolic"
+#define LOW_SIGNAL_LIMIT_ICON         "ukui-network-wireless-signal-weak-error-symbolic"
+#define NONE_SIGNAL_LIMIT_ICON        "ukui-network-wireless-signal-none-error-symbolic"
+
 #include <kwindowsystem.h>
 #include <kwindowsystem_export.h>
 
@@ -579,12 +597,14 @@ void MainWindow::onThemeChanged(const QString &key)
 void MainWindow::onRefreshTrayIcon()
 {
     //更新托盘图标显示
+    int signalStrength = 0;
     iconTimer->stop();
     if (m_lanWidget->lanIsConnected()) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
         iconStatus = IconActiveType::LAN_CONNECTED;
     } else if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
-        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
+//        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
+        signalStrength = m_wlanWidget->getAcivateWifiSignal();
         iconStatus = IconActiveType::WLAN_CONNECTED;
     } else {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
@@ -599,8 +619,35 @@ void MainWindow::onRefreshTrayIcon()
             iconStatus = IconActiveType::LAN_CONNECTED_LIMITED;
         } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
             //todo 信号强度
-            m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-error-symbolic"));
+//            m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-error-symbolic"));
             iconStatus = IconActiveType::WLAN_CONNECTED_LIMITED;
+        }
+    }
+
+    if (iconStatus == IconActiveType::WLAN_CONNECTED
+            || iconStatus == IconActiveType::WLAN_CONNECTED_LIMITED) {
+        if (signalStrength > MW_EXCELLENT_SIGNAL){
+            m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_ICON));
+        } else if (signalStrength > MW_GOOD_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_ICON));
+        } else if (signalStrength > MW_OK_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_ICON));
+        } else if (signalStrength > MW_LOW_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_ICON));
+        } else {
+            m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_ICON));
+        }
+    } else if (iconStatus == IconActiveType::WLAN_CONNECTED_LIMITED) {
+        if (signalStrength > MW_EXCELLENT_SIGNAL){
+            m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_LIMIT_ICON));
+        } else if (signalStrength > MW_GOOD_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_LIMIT_ICON));
+        } else if (signalStrength > MW_OK_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_LIMIT_ICON));
+        } else if (signalStrength > MW_LOW_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_LIMIT_ICON));
+        } else {
+            m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_LIMIT_ICON));
         }
     }
 }

@@ -33,6 +33,7 @@
 #define  BOTTOM_LAYOUT_MARGINS  24, 24, 24, 24
 #define  LAYOUT_SPACING  16
 #define  LABEL_MIN_WIDTH  146
+#define  LABEL_MAX_WIDTH  434
 #define  MAX_NAME_LENGTH 32
 #define  PSK_SCRO_HEIGHT  182
 #define  PEAP_SCRO_HEIGHT  340
@@ -73,7 +74,8 @@ void JoinHiddenWiFiPage::initUI()
     m_secuWidget = new SecurityPage(false, this);
     m_secuWidget->setSecurity(KySecuType::WPA_AND_WPA2_PERSONAL);
 
-    m_descriptionLabel = new QLabel(this);
+    m_descriptionLabel = new FixLabel(this);
+    m_descriptionLabel->setFixedWidth(LABEL_MAX_WIDTH);
     m_nameLabel = new FixLabel(this);
     m_nameLabel->setFixedWidth(LABEL_MIN_WIDTH);
     m_nameEdit =new LineEdit(this);
@@ -132,7 +134,7 @@ void JoinHiddenWiFiPage::initUI()
     m_bottomLayout->addWidget(m_joinBtn);
 
     //请输入您想要加入网络的名称和安全类型
-   m_descriptionLabel->setText(tr("Please enter the network name and security type"));
+   m_descriptionLabel->setLabelText(tr("Please enter the network name and security type"));
    QFont font = m_descriptionLabel->font();
    font.setWeight(MEDIUM_WEIGHT_VALUE);
    m_descriptionLabel->setFont(font);

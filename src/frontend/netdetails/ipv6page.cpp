@@ -253,7 +253,6 @@ void Ipv6Page::setControlEnabled(bool check)
     } else {
         ipv6AddressEdit->setPlaceholderText(tr("Required")); //必填
         lengthEdit->setPlaceholderText(tr("Required")); //必填
-        gateWayEdit->setPlaceholderText(tr("Required")); //必填
     }
 
     ipv6AddressEdit->setEnabled(check);
@@ -313,10 +312,10 @@ bool Ipv6Page::checkConnectBtnIsEnabled()
             return false;
         }
 
-        if (gateWayEdit->text().isEmpty() || !getIpv6EditState(gateWayEdit->text())) {
-            qDebug() << "ipv6 gateway empty or invalid";
-            return false;
-        }
+//        if (gateWayEdit->text().isEmpty() || !getIpv6EditState(gateWayEdit->text())) {
+//            qDebug() << "ipv6 gateway empty or invalid";
+//            return false;
+//        }
 
         if (firstDnsEdit->text().isEmpty() && !secondDnsEdit->text().isEmpty()) {
             qDebug() << "ipv6 dns sort invalid";

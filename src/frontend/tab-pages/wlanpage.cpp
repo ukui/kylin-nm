@@ -1476,6 +1476,7 @@ void WlanPage::showHiddenWlanPage(QString devName)
     if (m_joinHiddenWiFiPagePtrMap.contains(devName)) {
         if (m_joinHiddenWiFiPagePtrMap[devName] != nullptr) {
             qDebug() << "[WlanPage] showAddOtherWlanWidget" << devName << "already create,just raise";
+            KWindowSystem::activateWindow(m_joinHiddenWiFiPagePtrMap[devName]->winId());
             KWindowSystem::raiseWindow(m_joinHiddenWiFiPagePtrMap[devName]->winId());
             return;
         }
@@ -1506,6 +1507,7 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
     if (m_wlanPagePtrMap.contains(devName) && m_wlanPagePtrMap[devName].contains(ssid)) {
         if (m_wlanPagePtrMap[devName][ssid] != nullptr) {
             qDebug() << "[WlanPage] ShowWlanDetailPage" << ssid << "already create,just raise";
+            KWindowSystem::activateWindow(m_wlanPagePtrMap[devName][ssid]->winId());
             KWindowSystem::raiseWindow(m_wlanPagePtrMap[devName][ssid]->winId());
             return;
         }

@@ -1589,3 +1589,8 @@ void WlanPage::addWlanMoreItem()
     m_hiddenWlanWidget->m_freq->hide();
     return;
 }
+
+int WlanPage::getAcivateWifiSignal()
+{
+    return m_activatedConnectResource->getAcivateWifiSignal();
+}

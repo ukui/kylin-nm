@@ -214,6 +214,7 @@ void NetworkMode::onConnectionStateChanged(QString uuid,
                 //删除此网络
                 qDebug()<< LOG_FLAG << "delete wired connect:" << uuid << ", call break_networkConnect";
                 NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, "", "");
+                return;
             }
 
             deviceName = p_newItem->m_ifaceName;

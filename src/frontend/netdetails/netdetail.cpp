@@ -1214,7 +1214,6 @@ void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
     }
     bool isConflict = false;
     KyIpv6Arping* ipv6rping = new KyIpv6Arping(m_devName, ipv6Address);
-
     if (ipv6rping->ipv6ConflictCheck() >= 0) {
         isConflict =  ipv6rping->ipv6IsConflict();
     } else {

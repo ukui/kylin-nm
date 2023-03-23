@@ -187,6 +187,18 @@ int KyIpv6Arping::parseIpv6Packet(const uint8_t *buf, size_t len, const struct s
     /* looks for Target Link-layer address option */
     ptr = buf + sizeof (struct nd_neighbor_advert);
 
+    int index;
+    char macAddress[64] = {0};
+    uint8_t hw_addr[6] = {0};
+    getLocalMacAddress(m_ifaceName.toUtf8().constData(), hw_addr);
+    for (index = 0; index < 6; index++) {
+        snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%02X", hw_addr[index]);
+        if (index != 5) {
+            snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%s", ":");
+        }
+    }
+    QString localAddr(macAddress);
+
     while (len >= 8)
     {
         uint16_t optlen;
@@ -212,6 +224,9 @@ int KyIpv6Arping::parseIpv6Packet(const uint8_t *buf, size_t len, const struct s
         optlen -= 2;
 
         saveMacAddress (ptr, optlen);
+        if (!localAddr.isEmpty() && getConflictMacAddress() == localAddr) {
+            break;
+        }
         setIpv6ConflictFlag(true);
         return 0;
     }

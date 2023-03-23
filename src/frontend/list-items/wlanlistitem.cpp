@@ -549,6 +549,7 @@ void WlanListItem::onNetButtonClicked()
         if (m_wirelessNetItem.m_secuType.contains("802.1x", Qt::CaseInsensitive)) {
             if (isEnterpriseWlanDialogShow && enterpriseWlanDialog != nullptr) {
                 qDebug() <<  LOG_FLAG <<"EnterpriseWlanDialog is show do not show again!";
+                KWindowSystem::activateWindow(enterpriseWlanDialog->winId());
                 KWindowSystem::raiseWindow(enterpriseWlanDialog->winId());
                 return;
             } else {

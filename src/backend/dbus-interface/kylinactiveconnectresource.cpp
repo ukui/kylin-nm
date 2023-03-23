@@ -747,3 +747,35 @@ QString KyActiveConnectResourse::getAcitveConnectionPathByUuid(QString connectUu
 
     return activeAonnectPtr->path();
 }
+
+int KyActiveConnectResourse::getAcivateWifiSignal()
+{
+    int signalStrength = 0;
+    KyNetworkDeviceResourse devResource;
+    QStringList devList;
+    devResource.getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList);
+
+    for (int i = 0; i < devList.size(); ++i) {
+
+        NetworkManager::Device::Ptr connectDevice =
+                            m_networkResourceInstance->findDeviceInterface(devList.at(i));
+
+        if (nullptr == connectDevice || !connectDevice->isValid()) {
+            qWarning()<< LOG_FLAG <<"getDeviceActiveAPInfo failed, the device" << devList.at(i) << "is not existed";
+            continue;
+        }
+
+        if (connectDevice->type() == NetworkManager::Device::Wifi) {
+            NetworkManager::WirelessDevice *wirelessDevicePtr =
+                qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
+            NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();
+            if (apPtr.isNull()) {
+                continue;
+            }
+            signalStrength = apPtr->signalStrength();
+            break;
+        }
+    }
+
+    return signalStrength;
+}

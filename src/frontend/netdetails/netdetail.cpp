@@ -1061,7 +1061,7 @@ bool NetDetail::updateConnect()
         }
     }
 
-    if (m_networkMode != DBUS_INVAILD) {
+    if (m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
         int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
         bool configPageChange = configPage->checkIsChanged(configType);
         int currentConfigType = configPage->getConfigState();

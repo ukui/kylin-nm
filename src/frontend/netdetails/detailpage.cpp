@@ -248,7 +248,7 @@ void DetailPage::initUI() {
 
     m_IPV4Dns = new QLabel(this);
     m_ipv4DnsWidget = new DetailWidget(qobject_cast<QWidget *>(m_IPV4Dns), m_listWidget);
-    m_ipv4DnsWidget->setKey(tr("IPv4 Dns:"));
+    m_ipv4DnsWidget->setKey(tr("IPv4 DNS:"));
 
     m_IPV6 = new FixLabel(this);
     m_IPV6->setFixedWidth(MAX_LABEL_WIDTH);
@@ -324,7 +324,7 @@ void DetailPage::on_btnCopyNetDetail_clicked()
     QString      chanCopy= tr ("Chan:");
     QString      bandwithCopy = tr("BandWidth:");
     QString      ipv4Copy = tr("IPv4:");
-    QString      ipv4dnsCopy = tr("IPv4 Dns:");
+    QString      ipv4dnsCopy = tr("IPv4 DNS:");
     QString      ipv6Copy = tr("IPv6:");
     QString      macCopy = tr("Mac:");
     QString      netDetailCopyText;

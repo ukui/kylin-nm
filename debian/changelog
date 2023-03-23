@@ -1,3 +1,13 @@
+kylin-nm (3.20.1.17-0k0.17) v101; urgency=medium
+
+  * BUG号：
+     -#164014 【PTOF】【WiFi】属性界面手动设置任何IPV6地址都提示地址冲突
+  * 需求号：无
+  * 其他改动：无
+  * 影响域：ipv6冲突
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 23 Mar 2023 18:19:10 +0800
+
 kylin-nm (3.20.1.17-0k0.16) v101; urgency=medium
 
   * BUG号：

@@ -1213,12 +1213,7 @@ void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
         return;
     }
     bool isConflict = false;
-    KyNetworkDeviceResourse resource;
-    QString hardAddress;
-    int band;
-    resource.getHardwareInfo(m_devName, hardAddress, band);
-    KyIpv6Arping* ipv6rping = new KyIpv6Arping(m_devName, hardAddress, ipv6Address);
-
+    KyIpv6Arping* ipv6rping = new KyIpv6Arping(m_devName, ipv6Address);
     if (ipv6rping->ipv6ConflictCheck() >= 0) {
         isConflict =  ipv6rping->ipv6IsConflict();
     } else {

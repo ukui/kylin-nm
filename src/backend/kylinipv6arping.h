@@ -84,7 +84,7 @@ class KyIpv6Arping: public QObject
 {
     Q_OBJECT
 public:
-    explicit KyIpv6Arping(QString ifaceName, QString ipAddress, int retryCount=3, int timeout=1000, QObject *parent = nullptr);
+    explicit KyIpv6Arping(QString ifaceName, QString mac, QString ipAddress, int retryCount=3, int timeout=1000, QObject *parent = nullptr);
     ~KyIpv6Arping();
 
 public:
@@ -117,6 +117,7 @@ private:
     int  m_ipv6Socket = 0;
 
     QString m_ifaceName;
+    QString m_mac;
     QString m_ipv6Address;
     int     m_retryCount;
     int     m_timeoutMs;

@@ -24,9 +24,10 @@
 #include <net/if.h>
 #include "kylinarping.h"
 
-KyIpv6Arping::KyIpv6Arping(QString ifaceName, QString ipAddress, int retryCount, int timeout, QObject *parent) : QObject(parent)
+KyIpv6Arping::KyIpv6Arping(QString ifaceName, QString mac, QString ipAddress, int retryCount, int timeout, QObject *parent) : QObject(parent)
 {
     m_ifaceName = ifaceName;
+    m_mac = mac;
     m_ipv6Address = ipAddress;
     m_retryCount = retryCount;
     m_timeoutMs = timeout;
@@ -212,6 +213,10 @@ int KyIpv6Arping::parseIpv6Packet(const uint8_t *buf, size_t len, const struct s
         optlen -= 2;
 
         saveMacAddress (ptr, optlen);
+        if (getConflictMacAddress() == m_mac) {
+            ptr += optlen;
+            continue;
+        }
         setIpv6ConflictFlag(true);
         return 0;
     }

@@ -118,7 +118,6 @@ void AppListWidget::initUI()
     mainLayout->setContentsMargins(17, 0, 17, 0);
     mainLayout->setSpacing(8);
     m_checkBox = new QCheckBox(this);
-    m_checkBox->setFixedSize(16, 16);
     m_checkBox->setAttribute(Qt::WA_TransparentForMouseEvents, true); //m_checkBox不响应鼠标事件,将其传递给父窗口
     m_iconLabel = new QLabel(this);
     m_iconLabel->setFixedSize(24, 24);

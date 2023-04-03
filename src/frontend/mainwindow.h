@@ -11,27 +11,27 @@
 #include <QDBusInterface>
 #include <QMap>
 #include <QScreen>
-#include "lanpage.h"
-#include "wlanpage.h"
-#include "netdetails/netdetail.h"
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QThread>
+#include <QPluginLoader>
+#include <kylin-nm/kylin-nm-interface.h>
+#include <kylin-nm/kylinnetworkmanager.h>
+//安全中心-网络防火墙模式配置
+#include "networkmodeconfig.h"
 
 #ifdef WITHKYSEC
 #include <kysec/libkysec.h>
 #include <kysec/status.h>
 #endif
 
-enum IconActiveType {
-    NOT_CONNECTED = 0,
-    LAN_CONNECTED,
-    WLAN_CONNECTED,
-    LAN_CONNECTED_LIMITED,
-    WLAN_CONNECTED_LIMITED,
-    ACTIVATING,
+enum DeviceType
+{
+    WIRED,
+    WIRELESS
 };
 
 const QByteArray TRANSPARENCY_GSETTINGS = "org.ukui.control-center.personalise";
-
-class LanPage;
 
 class MainWindow : public QMainWindow
 {
@@ -44,7 +44,7 @@ public:
     void setWiredDefaultDevice(QString deviceName);
     void setWirelessDefaultDevice(QString deviceName);
 
-    //for dbus
+#if 0
     void getWirelessList(QMap<QString, QVector<QStringList> > &map);
     void getWiredList(QMap<QString, QVector<QStringList>> &map);
     //开启热点
@@ -54,6 +54,7 @@ public:
     //获取热点
     void getStoredApInfo(QStringList &list);
     void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
+
     //删除有线连接
     void deleteWired(const QString& connUuid);
     //有线连接断开
@@ -63,16 +64,16 @@ public:
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
     //无线总开关
-    void setWirelessSwitchEnable(bool enable);
+//    void setWirelessSwitchEnable(bool enable);
 
     void setWiredDeviceEnable(const QString& devName, bool enable);
 
     //唤起属性页 根据网卡类型 参数2 为ssid/uuid
-    void showPropertyWidget(QString devName, QString ssid);
+//    void showPropertyWidget(QString devName, QString ssid);
     //唤起新建有线连接界面
-    void showCreateWiredConnectWidget(const QString devName);
+//    void showCreateWiredConnectWidget(const QString devName);
     //唤起加入其他无线网络界面
-    void showAddOtherWlanWidget(QString devName);
+//    void showAddOtherWlanWidget(QString devName);
 
     void getWirelessDeviceCap(QMap<QString, int> &map);
 
@@ -80,8 +81,10 @@ public:
 
     void keyRingInit();
     void keyRingClear();
-
+#endif
 signals:
+    void mainWindowVisibleChanged(const bool &visible);
+ #if 0
     //设备插拔
     void deviceStatusChanged();
     //设备名称变化
@@ -96,18 +99,16 @@ signals:
     void lanActiveConnectionStateChanged(QString devName, QString uuid, int status);
     void activateFailed(QString errorMessage);
     void deactivateFailed(QString errorMessage);
-    //热点断开
+    热点断开
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid, QString uuid);
     //信号强度变化
     void signalStrengthChange(QString devName, QString ssid, int strength);
     //安全性变化
     void secuTypeChange(QString devName, QString ssid, QString secuType);
-    void mainWindowVisibleChanged(const bool &visible);
     //列表排序
     void timeToUpdate();
-public slots:
-
+#endif
 protected:
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *watched, QEvent *event) override;
@@ -131,11 +132,13 @@ private:
     void resetWindowTheme();
     void showControlCenter();
     void showByWaylandHelper();
+    void loadLanPlugin(); //加载有线网络插件
+    void loadWlanPlugin(); //加载无线网络插件
+    void startLoading();
+    void stopLoading();
+
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
-    int currentIconIndex=0;
-    QList<QIcon> loadIcons;
-    QTimer *iconTimer = nullptr;
 
     //主窗口的主要构成控件
     QTabWidget * m_centralWidget = nullptr;
@@ -143,8 +146,8 @@ private:
     QLabel * m_lanLabel = nullptr;
     QLabel * m_wlanLabel = nullptr;
 
-    LanPage * m_lanWidget = nullptr;
-    WlanPage * m_wlanWidget = nullptr;
+    QWidget * m_lanWidget = nullptr;
+    QWidget * m_wlanWidget = nullptr;
 
     //监听主题的Gsettings
     QGSettings * m_styleGsettings = nullptr;
@@ -166,10 +169,15 @@ private:
 
     bool m_isShowInCenter = false;
 
-    IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
+    QTimer * m_loadingTimer = nullptr;
+    QTimer * m_refreshTimer = nullptr;
+    QList<QIcon> m_loadIcons;
+    int m_currentIconIndex=0;
+    KyConnectStatus m_iconStatus;
+    KyNetworkManager * m_manager = nullptr;
+    QThread * m_thread = nullptr;
 
-    QMap<QString, NetDetail*> m_createPagePtrMap;
-    QMap<QString, NetDetail*> m_addOtherPagePtrMap;
+    NetworkModeConfig *m_networkMode;
 
 public slots:
     void onShowMainWindow(int type);
@@ -180,11 +188,10 @@ private slots:
     void onShowMainwindowActionTriggled();
     void onShowSettingsActionTriggled();
     void onThemeChanged(const QString &key);
-    void onRefreshTrayIcon();
     void onSetTrayIconLoading();
-    void onLanConnectStatusToChangeTrayIcon(int state);
-    void onWlanConnectStatusToChangeTrayIcon(int state);
-    void onConnectivityChanged(NetworkManager::Connectivity connectivity);
+    void updateIcon();
+    void onWiredStateChange(QString deviceName, QString uuid, KyConnectState state);
+    void onWirelessStateChange(QString deviceName, QString ssid, QString uuid, KyConnectState state);
     void onTabletModeChanged(bool mode);
 };
 

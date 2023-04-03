@@ -15,7 +15,7 @@ CONFIG += c++14 qt warn_on link_pkgconfig
 #CONFIG += release
 
 PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets kysdk-waylandhelper
-PKGCONFIG +=kysdk-sysinfo
+PKGCONFIG +=kysdk-sysinfo kylin-nm-base
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 
@@ -50,8 +50,9 @@ QMAKE_CXXFLAGS *= $(shell dpkg-buildflags --get CXXFLAGS)
 QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 
 include(singleapplication/qt-single-application.pri)
-include(backend/backend.pri)
+#include(backend/backend.pri)
 include(frontend/frontend.pri)
+include(kylin-nm-dbus/kylin-nm-dbus.pri)
 
 RESOURCES += \
     ../nmqrc.qrc

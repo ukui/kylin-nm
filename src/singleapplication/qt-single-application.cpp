@@ -50,7 +50,7 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QMainWindow>
-#include "../mainwindow.h"
+#include "../frontend/mainwindow.h"
 
 
 /*!

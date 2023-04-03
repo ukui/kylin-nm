@@ -17,20 +17,26 @@
  */
 
 #include "mainwindow.h"
-#include "dbusadaptor.h"
+//#include "dbusadaptor.h"
 #include <QTranslator>
 #include <QLocale>
 #include "qt-single-application.h"
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QFile>
+#include <QDateTime>
+#include <QStandardPaths>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 #include <ukui-log4qt.h>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 #include "xatom-helper.h"
 #endif
 
-#include "vpnobject.h"
-#include "vpndbusadaptor.h"
+//#include "vpnobject.h"
+//#include "vpndbusadaptor.h"
+#include "kylinnmdbus.h"
+#include "kylinnmuidbus.h"
 
 #define LOG_IDENT "ukui_kylin_nm"
 
@@ -119,11 +125,11 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    QThread thread;
-    KyNetworkResourceManager *p_networkResource = KyNetworkResourceManager::getInstance();
-    p_networkResource->moveToThread(&thread);
-    QObject::connect(&thread, SIGNAL(started()), p_networkResource, SLOT(onInitNetwork()));
-    thread.start();
+//    QThread thread;
+//    KyNetworkResourceManager *p_networkResource = KyNetworkResourceManager::getInstance();
+//    p_networkResource->moveToThread(&thread);
+//    QObject::connect(&thread, SIGNAL(started()), p_networkResource, SLOT(onInitNetwork()));
+//    thread.start();
 
     // Internationalization
     QString locale = QLocale::system().name();
@@ -146,31 +152,41 @@ int main(int argc, char *argv[])
         qWarning() << "QtBase Translations load fail";
     }
 
-    while (!p_networkResource->NetworkManagerIsInited()) {
-        ::usleep(1000);
-    }
+//    while (!p_networkResource->NetworkManagerIsInited()) {
+//        ::usleep(1000);
+//    }
 
     MainWindow w;
     a.setActivationWindow(&w);
     w.setProperty("useStyleWindowManager", false); //禁用拖动
 
-    vpnObject vnpobject;
+//    vpnObject vnpobject;
 
     w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint/* | Qt::X11BypassWindowManagerHint*/);
 
 
-    DbusAdaptor adaptor(&w);
-    Q_UNUSED(adaptor);
+//    DbusAdaptor adaptor(&w);
+//    Q_UNUSED(adaptor);
 
-    VpnDbusAdaptor vpnAdaptor(&vnpobject);
-    Q_UNUSED(vpnAdaptor);
+//    VpnDbusAdaptor vpnAdaptor(&vnpobject);
+//    Q_UNUSED(vpnAdaptor);
 
     auto connection = QDBusConnection::sessionBus();
-    if (!connection.registerService("com.kylin.network")
-        || !connection.registerObject("/com/kylin/network", &w)
-        || !connection.registerObject("/com/kylin/vpnTool", &vnpobject)) {
+//    if (!connection.registerService("com.kylin.network")
+//        || !connection.registerObject("/com/kylin/network", &w)
+//        || !connection.registerObject("/com/kylin/vpnTool", &vnpobject)) {
+//        qCritical() << "QDbus register service failed reason:" << connection.lastError();
+//    }
+    if (!connection.registerService("com.kylin.network")) {
         qCritical() << "QDbus register service failed reason:" << connection.lastError();
     }
+    KylinNmDbus dbusObject(&w);
+    //注册对象路径，把类KylinNmDbus所有槽函数导出为object的method
+    connection.registerObject("/com/kylin/network", &dbusObject,
+                              QDBusConnection::ExportAllSlots| QDBusConnection :: ExportAllSignals);
+    KylinNmUiDbus uiDbusObject(&w);
+    connection.registerObject("/com/kylin/network/interface", &uiDbusObject,
+                              QDBusConnection::ExportAllSlots| QDBusConnection :: ExportAllSignals);
 
     return a.exec();
 }

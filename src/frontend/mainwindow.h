@@ -34,6 +34,8 @@
 #include "wlanpage.h"
 #include "netdetails/netdetail.h"
 #include "netdetails/joinhiddenwifipage.h"
+//安全中心-网络防火墙模式配置
+#include "networkmodeconfig.h"
 //删除此头文件，别在添加
 //#include <ukuisdk/kylin-com4cxx.h>
 
@@ -81,8 +83,6 @@ public:
     void getApConnectionPath(QString &path, QString uuid);
     //获取热点ActivePath
     void getActiveConnectionPath(QString &path, QString uuid);
-    //删除有线连接
-    void deleteWired(const QString& connUuid);
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
@@ -154,13 +154,13 @@ private:
     void initUI();
     void initDbusConnnect();
     void initTrayIcon();
+
     void resetTrayIconTool();
     void initWindowTheme();
     void resetWindowTheme();
     void showControlCenter();
     void showByWaylandHelper();
     void setCentralWidgetType(IconActiveType iconStatus);
-    void getTabletMode();
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
     int currentIconIndex=0;
@@ -197,8 +197,8 @@ private:
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
 
     QMap<QString, NetDetail*> m_createPagePtrMap;
-//    QMap<QString, NetDetail*> m_addOtherPagePtrMap;
-    QMap<QString, JoinHiddenWiFiPage*> m_addOtherPagePtrMap;
+
+    NetworkMode *m_networkMode;
 
 public Q_SLOTS:
     void onShowMainWindow(int type);

@@ -44,7 +44,6 @@ public:
 
     //for dbus
     void getWiredList(QMap<QString, QVector<QStringList> > &map);
-    void deleteWired(const QString& connUuid);
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
     void showDetailPage(QString devName, QString uuid);
@@ -99,6 +98,7 @@ private:
                                  QListWidget *lanListWidget, QString uuid);
 
     void updateCurrentDevice(QString deviceName);
+    void showRate();
 
 Q_SIGNALS:
     void lanAdd(QString devName, QStringList info);
@@ -107,6 +107,8 @@ Q_SIGNALS:
 
     void lanActiveConnectionStateChanged(QString interface, QString uuid, int status);
     void lanConnectChanged(int state);
+
+    void showLanRate(QListWidget *widget, QMap<QString, QListWidgetItem *> &map, QString dev, bool isLan);
 
 private Q_SLOTS:
     void onConnectionStateChange(QString uuid, NetworkManager::ActiveConnection::State state,
@@ -150,6 +152,7 @@ private:
     QStringList m_disableDeviceList;
 
     QGSettings *m_switchGsettings = nullptr;
+    QMap<QString, NetDetail*> m_lanPagePtrMap;
 
 };
 

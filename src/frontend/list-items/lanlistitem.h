@@ -48,6 +48,8 @@ public:
 protected:
     void setIcon(bool isOn);
     void onRightButtonClicked();
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
 
 private:
     void connectItemCopy(const KyConnectItem *lanConnectItem);

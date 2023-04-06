@@ -48,6 +48,8 @@ using namespace kdk;
 #define LOW_SIGNAL 5
 #define NONE_SIGNAL 0
 
+#define FREQ_5GHZ 5000
+
 class WlanListItem : public ListItem
 {
     Q_OBJECT
@@ -78,6 +80,8 @@ public:
     void updateWirelessNetItem(KyWirelessNetItem &wirelessNetItem);
 
     void forgetPwd();
+
+    void setFrequency();
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -110,7 +114,7 @@ private:
     QFrame *m_pwdFrame = nullptr;
     QHBoxLayout *m_pwdFrameLyt = nullptr;
     KPasswordEdit *m_pwdLineEdit = nullptr;
-    QPushButton *m_connectButton = nullptr;
+    FixPushButton *m_connectButton = nullptr;
 
     //自动连接选择区域UI
     QFrame *m_autoConnectFrame = nullptr;

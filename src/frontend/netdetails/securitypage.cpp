@@ -25,7 +25,7 @@
 #define  DETAIL_MIN_LABEL_WIDTH  80
 #define  DETAIL_MIN_EDIT_WIDTH  390
 #define  MIN_LABEL_WIDTH  146
-#define  MIN_EDIT_WIDTH  286
+#define  MIN_EDIT_WIDTH  278
 
 SecurityPage::SecurityPage(bool isNetDetailPage, QWidget *parent) : isDetailPage(isNetDetailPage), QFrame(parent)
 {
@@ -223,7 +223,7 @@ void SecurityPage::initUI()
 
     //PEAP TTLS共有
     eapMethodLabel->setLabelText(tr("Ineer authentication"));
-    userNameLabel->setText(tr("Usename"));
+    userNameLabel->setText(tr("Username"));
     userPwdLabel->setText(tr("Password"));
     userPwdFlagLabel->setText(tr("Ask pwd each query"));
     userNameEdit->setPlaceholderText(tr("Required"));
@@ -465,6 +465,12 @@ void SecurityPage::getSecuType(KySecuType &secuType, KyEapMethodType &enterprise
 {
     secuType = (KySecuType)secuTypeCombox->currentData().toInt();
     enterpriseType = (KyEapMethodType)eapTypeCombox->currentData().toInt();
+}
+
+bool SecurityPage::getAutoConnectState()
+{
+    bool state = m_rememberCheckBox->isChecked();
+    return state;
 }
 
 bool SecurityPage::checkIsChanged(const ConInfo info)

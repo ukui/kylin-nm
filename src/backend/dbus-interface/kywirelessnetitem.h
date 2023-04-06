@@ -25,8 +25,6 @@
 #include "kylinnetworkresourcemanager.h"
 #include "kywirelessconnectoperation.h"
 
-QString enumToQstring(NetworkManager::AccessPoint::Capabilities, NetworkManager::AccessPoint::WpaFlags, NetworkManager::AccessPoint::WpaFlags);
-
 class KyWirelessNetItem
 {
 public:
@@ -47,6 +45,7 @@ public:
     QString                                 m_secuType;
     KySecuType                              m_kySecuType;
     QString                                 m_uni;
+    bool                                    m_isMix;
 
     //only for m_isConfiged = true
     bool                                    m_isConfigured;

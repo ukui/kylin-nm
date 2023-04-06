@@ -151,7 +151,7 @@ private slots:
     //热点连接
     void onHotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath);
 
-    void onGsettingChanged(const QString &key);
+    void onWirelessBtnChanged(bool state);
 
     void onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status);
 

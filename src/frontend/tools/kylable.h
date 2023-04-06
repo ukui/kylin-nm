@@ -23,6 +23,23 @@
 #include <QObject>
 #include <QLabel>
 
+class FixLabel : public QLabel
+{
+    Q_OBJECT
+public:
+    explicit FixLabel(QWidget *parent = 0);
+
+public:
+    void setLabelText(QString text);
+    QString getText();
+
+private Q_SLOTS:
+    void changedLabelSlot();
+private:
+    QString mStr;
+
+};
+
 class KyLable : public QLabel
 {
     Q_OBJECT

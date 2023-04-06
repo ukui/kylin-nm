@@ -29,7 +29,7 @@ AppListWidget::AppListWidget(QString path, QWidget *parent)
 
 AppListWidget::~AppListWidget()
 {
-
+    delete m_dbusInterface;
 }
 
 /**
@@ -79,8 +79,9 @@ void AppListWidget::onAppCheckStateChanged()
  */
 void AppListWidget::AddAppProxyConfig()
 {
-    if(!m_dbusInterface->isValid()) {
+    if(m_dbusInterface == nullptr || !m_dbusInterface->isValid()) {
         qWarning ()<< "init AppProxy dbus error";
+        return;
     }
 
     qDebug() << "call QDBusInterface addAppIntoProxy";
@@ -93,8 +94,9 @@ void AppListWidget::AddAppProxyConfig()
  */
 void AppListWidget::RemoveAppProxyConfig()
 {
-    if(!m_dbusInterface->isValid()) {
+    if(m_dbusInterface == nullptr || !m_dbusInterface->isValid()) {
         qWarning ()<< "init AppProxy dbus error";
+        return;
     }
 
     qDebug() << "call QDBusInterface delAppIntoProxy";
@@ -116,7 +118,6 @@ void AppListWidget::initUI()
     mainLayout->setContentsMargins(17, 0, 17, 0);
     mainLayout->setSpacing(8);
     m_checkBox = new QCheckBox(this);
-    m_checkBox->setFixedSize(16, 16);
     m_checkBox->setAttribute(Qt::WA_TransparentForMouseEvents, true); //m_checkBox不响应鼠标事件,将其传递给父窗口
     m_iconLabel = new QLabel(this);
     m_iconLabel->setFixedSize(24, 24);
@@ -135,4 +136,7 @@ void AppListWidget::initDbus()
                        "/org/ukui/SettingsDaemon/AppProxy",
                        "org.ukui.SettingsDaemon.AppProxy",
                        QDBusConnection::sessionBus());
+    if(!m_dbusInterface->isValid()) {
+        qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+    }
 }

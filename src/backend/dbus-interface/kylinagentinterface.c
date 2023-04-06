@@ -212,6 +212,14 @@ wifi_get_secrets (SecretsRequest *req, GError **error)
 
     g_return_val_if_fail (!info->dialog, FALSE);
 
+#if GTK_CHECK_VERSION(3,90,0)
+         gtk_init ();
+#else
+         int argc = 0;
+         char ***argv = NULL;
+         gtk_init (&argc, &argv);
+#endif
+
     NMClient *nm_client = nm_client_new (NULL, NULL);
     if (!nm_client) {
         g_set_error (error,
@@ -400,14 +408,6 @@ void agent_init()
     }
     GError *error = NULL;
     kylinAgent = applet_agent_new (&error);
-
-#if GTK_CHECK_VERSION(3,90,0)
-         gtk_init ();
-#else
-         int argc = 0;
-         char ***argv = NULL;
-         gtk_init (&argc, &argv);
-#endif
 
     g_signal_connect (kylinAgent, APPLET_AGENT_GET_SECRETS,
                            G_CALLBACK (applet_agent_get_secrets_cb), NULL);

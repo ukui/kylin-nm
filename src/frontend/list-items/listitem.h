@@ -37,6 +37,54 @@ typedef enum{
     Deactivated /**< The connection is no longer active */
 }ConnectState;
 
+class FreqLabel : public QLabel
+{
+    Q_OBJECT
+public:
+    FreqLabel(QWidget *parent = nullptr);
+    ~FreqLabel() = default;
+protected:
+    void paintEvent(QPaintEvent *event);
+
+private Q_SLOTS:
+    void changedFontSlot();
+};
+
+class FixPushButton : public QPushButton
+{
+    Q_OBJECT
+public:
+    explicit FixPushButton(QWidget *parent = 0);
+
+public:
+    void setButtonText(QString text);
+    QString getText();
+
+private Q_SLOTS:
+    void changedLabelSlot();
+private:
+    QString mStr;
+
+};
+
+class NameLabel : public QLabel
+{
+    Q_OBJECT
+public:
+    explicit NameLabel(QWidget *parent = 0);
+    ~NameLabel() = default;
+    void setLabelText(QString text);
+    void setLabelMaximumWidth(int width);
+
+private:
+    QString m_name;
+    int m_maximumWidth = 120;
+
+private Q_SLOTS:
+    void changedLabelSlot();
+
+};
+
 class ListItem : public QFrame
 {
     Q_OBJECT
@@ -58,19 +106,29 @@ protected:
 protected:
     QFrame * m_itemFrame = nullptr;
 
-    FixLabel * m_nameLabel = nullptr;
+    NameLabel * m_nameLabel = nullptr;
     RadioItemButton * m_netButton = nullptr;
-    InfoButton * m_infoButton = nullptr;
+//    InfoButton * m_infoButton = nullptr;
 
     bool m_isActive = false;
     ConnectState m_connectState;
 
     QMenu *m_menu = nullptr;
+
+
 public:
     QVBoxLayout * m_mainLayout = nullptr;
     QHBoxLayout * m_hItemLayout = nullptr;
 
+    QLabel *m_lbLoadDown = nullptr;
+    QLabel *m_lbLoadUp = nullptr;
+    QLabel *m_lbLoadDownImg = nullptr;
+    QLabel *m_lbLoadUpImg = nullptr;
+    QLabel *m_freq = nullptr;
+
     NetDetail *netDetail = nullptr;
+
+    FixPushButton *m_hoverButton = nullptr;
 private:
     void initUI();
     void initConnection();
@@ -81,7 +139,7 @@ public Q_SLOTS:
     virtual void onMenuTriggered(QAction *action)=0;
 
 Q_SIGNALS:
-    void detailShow(bool isShow); 
+    void detailShow(QString, QString);
 };
 
 #endif // LISTITEM_H

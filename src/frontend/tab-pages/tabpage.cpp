@@ -23,6 +23,12 @@
 #include <QLabel>
 #include <QApplication>
 #include <QDBusReply>
+#include <QListWidget>
+#include <QListWidgetItem>
+
+#include"listitem.h"
+
+#define LOG_FLAG "[tabPage]"
 
 TabPage::TabPage(QWidget *parent) : QWidget(parent)
 {
@@ -167,6 +173,141 @@ void TabPage::onPaletteChanged()
     }
 }
 
+int TabPage::getCurrentLoadRate(QString dev, long *save_rate, long *tx_rate)
+{
+    FILE * net_dev_file; //文件指针
+    char buffer[1024]; //文件中的内容暂存在字符缓冲区里
+    //size_t bytes_read; //实际读取的内容大小
+    char * match; //用以保存所匹配字符串及之后的内容
+    char * device;//将QString转为Char *
+    QByteArray ba = dev.toLatin1(); // must
+    device = ba.data();
+    int counter = 0;
+    //int i = 0;
+    char tmp_value[128];
+
+    if ((NULL == device) || (NULL == save_rate) || (NULL == tx_rate)) {
+        qDebug() << LOG_FLAG << "parameter pass error" ;
+        return -1;
+    }
+
+    if ((net_dev_file = fopen("/proc/net/dev", "r")) == NULL) {
+        //打开文件/pro/net/dev/，从中读取流量数据
+        qDebug() << LOG_FLAG << "error occurred when try to open file /proc/net/dev/";
+        return -1;
+    }
+    memset(buffer, 0, sizeof(buffer));
+
+    while (fgets(buffer, sizeof(buffer), net_dev_file) != NULL) {
+        match = strstr(buffer, device);
+
+        if (NULL == match) {
+            // qDebug()<<"No eth0 keyword to find!";
+            continue;
+        } else {
+            match = match + strlen(device) + strlen(":"); //地址偏移到冒号
+            sscanf(match, "%ld ", save_rate);
+            memset(tmp_value, 0, sizeof(tmp_value));
+            sscanf(match, "%s ", tmp_value);
+            match = match + strlen(tmp_value);
+            for (size_t i=0; i<strlen(buffer); ++i) {
+                if (0x20 == *match) {
+                    match ++;
+                } else {
+                    if (8 == counter) {
+                        sscanf(match, "%ld ", tx_rate);
+                    }
+                    memset(tmp_value, 0, sizeof(tmp_value));
+                    sscanf(match, "%s ", tmp_value);
+                    match = match + strlen(tmp_value);
+                    counter ++;
+                }
+            }
+        }
+    }
+
+    fclose(net_dev_file);
+    net_dev_file = nullptr;
+
+    return 0; //返回成功
+}
+
+void TabPage::onSetNetSpeed(QListWidget* m_activatedNetListWidget, bool isEmpty, QString dev)
+{
+    //未连接不显示网速
+    QListWidgetItem* activeitem = m_activatedNetListWidget->item(0);
+    ListItem *p_item = (ListItem *)m_activatedNetListWidget->itemWidget(activeitem);
+    if (isEmpty) {
+        p_item->m_lbLoadUp->hide();
+        p_item->m_lbLoadDown->hide();
+        p_item->m_lbLoadDownImg->hide();
+        p_item->m_lbLoadUpImg->hide();
+        return;
+    }
+
+    if (this->isVisible()) {
+
+        if (getCurrentLoadRate(dev, &start_rcv_rates, &start_tx_rates) == -1) {
+            start_rcv_rates = end_rcv_rates;
+            return;
+        }
+
+        long int delta_rcv = (start_rcv_rates - end_rcv_rates) / 1024;
+        long int delta_tx = (start_tx_rates - end_tx_rates) / 1024;
+
+        //简易滤波
+        if (delta_rcv < 0 || delta_tx < 0) {
+            delta_rcv = 0;
+            delta_tx = 0;
+        }
+        else if (end_rcv_rates == 0 || end_tx_rates == 0){
+            delta_rcv = 0;
+            delta_tx = 0;
+        }
+
+        end_rcv_rates = start_rcv_rates;
+        end_tx_rates = start_tx_rates;
+
+        int rcv_num = delta_rcv;
+        int tx_num = delta_tx;
+
+        QString str_rcv = 0;
+        QString str_tx = 0;
+
+        if (rcv_num < 1024) {
+            str_rcv = QString::number(rcv_num) + "KB/s";
+        } else {
+            int remainder;
+            if (rcv_num % 1024 < 100) {
+                remainder = 0;
+            } else {
+                remainder = (rcv_num % 1024) / 100;
+            }
+            str_rcv = QString::number(rcv_num / 1024) + "."  + QString::number(remainder) + "MB/s";
+        }
+
+        if (tx_num < 1024) {
+            str_tx = QString::number(tx_num) + "KB/s";
+        } else {
+            int remainder;
+            if (tx_num % 1024 < 100) {
+                remainder = 0;
+            } else {
+                remainder = (tx_num % 1024)/100;
+            }
+            str_tx = QString::number(tx_num / 1024) + "."  + QString::number(remainder) + "MB/s";
+        }
+        p_item->m_lbLoadDown->setText(str_rcv);
+        p_item->m_lbLoadUp->setText(str_tx);
+        if (!p_item->m_hoverButton->isVisible()) {
+            p_item->m_lbLoadDown->show();
+            p_item->m_lbLoadUp->show();
+            p_item->m_lbLoadDownImg->show();
+            p_item->m_lbLoadUpImg->show();
+        }
+    }
+}
+
 void TabPage::showDesktopNotify(const QString &message, QString soundName)
 {
     QDBusInterface iface("org.freedesktop.Notifications",
@@ -302,7 +443,7 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
     kdr = nullptr;
 }
 
-bool getOldVersionWiredSwitchState(bool state)
+bool getOldVersionWiredSwitchState(bool &state)
 {
     QSettings * m_settings = new QSettings(CONFIG_FILE_PATH, QSettings::IniFormat);
     QVariant value = m_settings->value("lan_switch_opened");

@@ -66,6 +66,7 @@ public:
     void deactivateWirelessConnection(const QString& devName, const QString& ssid);
 
     void showDetailPage(QString devName, QString uuid);
+    void showAddOtherPage(QString devName);
 
     bool checkWlanStatus(NetworkManager::ActiveConnection::State state);
 
@@ -77,6 +78,8 @@ public:
     void getConnectivity(NetworkManager::Connectivity &connectivity);
 
     bool getWirelessSwitchBtnState();
+
+    int getAcivateWifiSignal();
 
 Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
@@ -143,6 +146,10 @@ private:
 
     void showNonePwd();
 
+    void showRate();
+
+    void showHiddenWlanPage(QString devName);
+
     QListWidgetItem *addEmptyItem(QListWidget *wirelessListWidget);
     QListWidgetItem *addNewItem(KyWirelessNetItem &wirelessNetItem,
                                           QListWidget *wirelessListWidget);
@@ -194,12 +201,12 @@ private:
     }
     inline void setSwitchBtnEnable(bool state) {
         if (m_netSwitch != nullptr) {
-            m_netSwitch->setCheckable(state);
+            m_netSwitch->setEnabled(state);
         }
     }
     inline bool getSwitchBtnEnable() {
         if (m_netSwitch != nullptr) {
-            return m_netSwitch->isCheckable();
+            return m_netSwitch->isEnabled();
         }
     }
 
@@ -229,7 +236,8 @@ private:
     QTimer *m_scanTimer = nullptr;
     QTimer *m_refreshIconTimer = nullptr;
 
-    JoinHiddenWiFiPage *m_hiddenWiFi = nullptr;
+    QMap<QString, QMap<QString, NetDetail*>> m_wlanPagePtrMap;
+    QMap<QString, JoinHiddenWiFiPage*> m_joinHiddenWiFiPagePtrMap;
 };
 
 #endif // WLANPAGE_H

@@ -32,9 +32,6 @@
 #define ITEMHEIGH           50
 #define LAN_TYPE           0
 #define CONTROL_CENTER_WIFI              "org.ukui.control-center.wifi.switch"
-#define KYLIN_APP_MANAGER_NAME           "com.kylin.AppManager"
-#define KYLIN_APP_MANAGER_PATH           "/com/kylin/AppManager"
-#define KYLIN_APP_MANAGER_INTERFACE      "com.kylin.AppManager"
 
 const QString KLanSymbolic      = "network-wired-connected-symbolic";
 const QString NoNetSymbolic     = "network-wired-disconnected-symbolic";
@@ -81,7 +78,7 @@ NetConnect::NetConnect() :  mFirstLoad(true) {
     translator->load("/usr/share/kylin-nm/netconnect/" + QLocale::system().name());
     QApplication::installTranslator(translator);
 
-    pluginName = tr("WiredConnect");
+    pluginName = tr("LAN");
     pluginType = NETWORK;
 }
 
@@ -153,7 +150,7 @@ QString NetConnect::translationPath() const
 void NetConnect::initSearchText() {
     //~ contents_path /netconnect/Advanced settings"
     ui->detailBtn->setText(tr("Advanced settings"));
-    ui->titleLabel->setText(tr("Wired Network"));
+    ui->titleLabel->setText(tr("LAN"));
     //~ contents_path /netconnect/open
     ui->openLabel->setText(tr("open"));
 }
@@ -171,7 +168,9 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
             if (!wiredSwitch->isCheckable()) {
                 showDesktopNotify(tr("No ethernet device avaliable"));
             } else {
-                m_interface->call(QStringLiteral("setWiredSwitchEnable"), !wiredSwitch->isChecked());
+                if (m_interface != nullptr && m_interface->isValid()) {
+                    m_interface->call(QStringLiteral("setWiredSwitchEnable"), !wiredSwitch->isChecked());
+                }
                 return true;
             }
         }
@@ -245,7 +244,7 @@ void NetConnect::initComponent() {
 //获取网卡列表
 void NetConnect::getDeviceStatusMap(QMap<QString, bool> &map)
 {
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[NetConnect]call getDeviceListAndEnabled"  << __LINE__;
@@ -353,22 +352,16 @@ void NetConnect::initNet()
 }
 
 void NetConnect::runExternalApp() {
-//    QString cmd = "nm-connection-editor";
-//    QProcess process(this);
-//    process.startDetached(cmd);
-    LaunchApp("nm-connection-editor.desktop");
-}
-
-//刪除
-void NetConnect::deleteOneLan(QString ssid, int type)
-{
-    qDebug() << "[NetConnect]call deleteConnect" << __LINE__;
-    m_interface->call(QStringLiteral("deleteConnect"), type, ssid);
-    qDebug() << "[NetConnect]call deleteConnect respond" << __LINE__;
+    QString cmd = "nm-connection-editor";
+    QProcess process(this);
+    process.startDetached(cmd);
 }
 
 //激活
 void NetConnect::activeConnect(QString ssid, QString deviceName, int type) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
     qDebug() << "[NetConnect]call activateConnect" << __LINE__;
     m_interface->call(QStringLiteral("activateConnect"),type, deviceName, ssid);
     qDebug() << "[NetConnect]call activateConnect respond" << __LINE__;
@@ -376,6 +369,9 @@ void NetConnect::activeConnect(QString ssid, QString deviceName, int type) {
 
 //断开
 void NetConnect::deActiveConnect(QString ssid, QString deviceName, int type) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
     qDebug() << "[NetConnect]call deActivateConnect" << __LINE__;
     m_interface->call(QStringLiteral("deActivateConnect"),type, deviceName, ssid);
     qDebug() << "[NetConnect]call deActivateConnect respond" << __LINE__;
@@ -389,7 +385,7 @@ void NetConnect::initNetListFromDevice(QString deviceName)
         qDebug() << "[NetConnect]initNetListFromDevice " << deviceName << " not exist";
         return;
     }
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[NetConnect]call getWiredList"  << __LINE__;
@@ -435,12 +431,12 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
         return;
     }
 
-    LanItem * lanItem = new LanItem(isActived, pluginWidget);
+    LanItem * lanItem = new LanItem(pluginWidget);
     QString iconPath = KLanSymbolic;
     if (isActived) {
         lanItem->statusLabel->setText(tr("connected"));
     } else {
-        lanItem->statusLabel->setText(tr("not connected"));
+        lanItem->statusLabel->setText("");
     }
     QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
@@ -454,7 +450,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
 
     connect(lanItem->infoLabel, &GrayInfoButton::clicked, this, [=]{
         // open landetail page
-        if (!m_interface->isValid()) {
+        if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
         qDebug() << "[NetConnect]call showPropertyWidget" << __LINE__;
@@ -463,7 +459,6 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     });
 
     lanItem->isAcitve = isActived;
-    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
         if (lanItem->isAcitve || lanItem->loading) {
@@ -471,16 +466,6 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
         } else {
             activeConnect(lanItem->uuid, devName, WIRED_TYPE);
         }
-    });
-
-    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
-            activeConnect(lanItem->uuid, devName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
-            deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
-            deleteOneLan(lanItem->uuid, WIRED_TYPE);
     });
 
     //记录到deviceFrame的itemMap中
@@ -492,6 +477,9 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
 //增加设备
 void NetConnect::addDeviceFrame(QString devName)
 {
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
     qDebug() << "[NetConnect]addDeviceFrame " << devName;
 
     qDebug() << "[NetConnect]call getDeviceListAndEnabled"  << __LINE__;
@@ -538,18 +526,20 @@ void NetConnect::addDeviceFrame(QString devName)
             qDebug() << "[NetConnect]set " << devName << "status" << true;
             itemFrame->lanItemFrame->show();
             itemFrame->deviceFrame->dropDownLabel->show();
+            itemFrame->addLanWidget->show();
             itemFrame->deviceFrame->dropDownLabel->setDropDownStatus(true);
             deviceStatusMap[devName] = true;
         } else {
             qDebug() << "[NetConnect]set " << devName << "status" << false;
             itemFrame->lanItemFrame->hide();
             itemFrame->deviceFrame->dropDownLabel->hide();
+            itemFrame->addLanWidget->hide();
             deviceStatusMap[devName] = false;
         }
     });
 
     connect(itemFrame->addLanWidget, &AddNetBtn::clicked, this, [=](){
-        if (m_interface->isValid()) {
+        if (m_interface != nullptr && m_interface->isValid()) {
             qDebug() << "[NetConnect]call showCreateWiredConnectWidget" << devName  << __LINE__;
             m_interface->call(QStringLiteral("showCreateWiredConnectWidget"), devName);
             qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
@@ -732,7 +722,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
 
     QString iconPath;
     iconPath = KLanSymbolic;
-    lanItem->statusLabel->setText(tr("not connected"));
+    lanItem->statusLabel->setText("");
 
     QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
@@ -746,7 +736,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
 
     connect(lanItem->infoLabel, &GrayInfoButton::clicked, this, [=]{
         // open landetail page
-        if (!m_interface->isValid()) {
+        if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
         qDebug() << "[NetConnect]call showPropertyWidget" << deviceName << connUuid << __LINE__;
@@ -755,7 +745,6 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     });
 
     lanItem->isAcitve = false;
-    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
         if (lanItem->isAcitve || lanItem->loading) {
@@ -763,16 +752,6 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
         } else {
             activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
         }
-    });
-
-    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
-            activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
-            deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
-            deleteOneLan(lanItem->uuid, WIRED_TYPE);
     });
 
     //记录到deviceFrame的itemMap中
@@ -889,9 +868,7 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
         item->statusLabel->setMaximumSize(16777215,16777215);
         item->statusLabel->clear();
         item->isAcitve = false;
-        item->statusLabel->setText(tr("not connected"));
     }
-    item->setConnectActionText(item->isAcitve);
 
 //    QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
@@ -901,7 +878,7 @@ int NetConnect::getInsertPos(QString connName, QString deviceName)
 {
     qDebug() << "[NetConnect]getInsertPos" << connName << deviceName;
     int index = 0;
-    if(!m_interface->isValid()) {
+    if(m_interface == nullptr || !m_interface->isValid()) {
         index = 0;
     } else {
         qDebug() << "[NetConnect]call getWiredList"  << __LINE__;
@@ -931,20 +908,4 @@ int NetConnect::getInsertPos(QString connName, QString deviceName)
         }
     }
     return index;
-}
-
-bool NetConnect::LaunchApp(QString desktopFile)
-{
-    QDBusInterface m_appManagerDbusInterface(KYLIN_APP_MANAGER_NAME,
-                                             KYLIN_APP_MANAGER_PATH,
-                                             KYLIN_APP_MANAGER_INTERFACE,
-                                             QDBusConnection::sessionBus());//局部变量
-
-    if (!m_appManagerDbusInterface.isValid()) {
-        qWarning()<<"m_appManagerDbusInterface init error";
-        return false;
-    } else {
-        QDBusReply<bool> reply =m_appManagerDbusInterface.call("LaunchApp",desktopFile);
-        return reply;
-    }
 }

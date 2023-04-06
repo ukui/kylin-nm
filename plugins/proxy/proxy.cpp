@@ -45,11 +45,11 @@
 
 #define PROXY_HOST_KEY       "host"
 #define PROXY_PORT_KEY       "port"
-
+#define THEME_SCHAME         "org.ukui.style"
 #define FRAME_LAYOUT_MARGINS  16,0,16,0
 #define FRAME_LAYOUT_SPACING  8
 #define LABEL_WIDTH  136
-#define IP_FRAME_MAX_HEIGHT 76
+#define LINE_EDIT_HEIGHT  36
 
 Proxy::Proxy() : mFirstLoad(true)
 {
@@ -67,7 +67,8 @@ Proxy::Proxy() : mFirstLoad(true)
 Proxy::~Proxy()
 {
     if (!mFirstLoad) {
-            plugin_leave();
+        plugin_leave();
+        delete m_appProxyDbus;
     }
 }
 
@@ -162,6 +163,11 @@ QIcon Proxy::icon() const
     return QIcon::fromTheme("ukui-network-agent-symbolic");
 }
 
+QString Proxy::translationPath() const
+{
+    return "/usr/share/kylin-nm/proxy/%1.ts";
+}
+
 bool Proxy::isEnable() const
 {
     return true;
@@ -233,6 +239,7 @@ void Proxy::initUi(QWidget *widget)
     mUrlLabel->setFixedWidth(136);
 
     mUrlLineEdit = new QLineEdit(mUrlFrame);
+    mUrlLineEdit->setFixedHeight(36);
 
     mUrlLayout->addWidget(mUrlLabel);
     mUrlLayout->addWidget(mUrlLineEdit);
@@ -254,6 +261,7 @@ void Proxy::initUi(QWidget *widget)
     mHTTPLineEdit_1 = new QLineEdit(mHTTPFrame);
     mHTTPLineEdit_1->resize(300, 36);
     mHTTPLineEdit_2 = new QLineEdit(mHTTPFrame);
+    mHTTPLineEdit_2->setFixedHeight(36);
     mHTTPLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
     mHTTPLayout_1->addWidget(mHTTPLabel);
     mHTTPLayout_1->addWidget(mHTTPLineEdit_1);
@@ -276,6 +284,7 @@ void Proxy::initUi(QWidget *widget)
     mHTTPSLineEdit_1 = new QLineEdit(mHTTPSFrame);
     mHTTPSLineEdit_1->resize(300, 36);
     mHTTPSLineEdit_2 = new QLineEdit(mHTTPSFrame);
+    mHTTPSLineEdit_2->setFixedHeight(36);
     mHTTPSLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
     mHTTPSLayout->addWidget(mHTTPSLabel);
     mHTTPSLayout->addWidget(mHTTPSLineEdit_1);
@@ -298,6 +307,7 @@ void Proxy::initUi(QWidget *widget)
     mFTPLineEdit_1 = new QLineEdit(mFTPFrame);
     mFTPLineEdit_1->resize(300, 36);
     mFTPLineEdit_2 = new QLineEdit(mFTPFrame);
+    mFTPLineEdit_2->setFixedHeight(36);
     mFTPLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
     mFTPLayout->addWidget(mFTPLabel);
     mFTPLayout->addWidget(mFTPLineEdit_1);
@@ -320,6 +330,7 @@ void Proxy::initUi(QWidget *widget)
     mSOCKSLineEdit_1 = new QLineEdit(mSOCKSFrame);
     mSOCKSLineEdit_1->resize(300, 36);
     mSOCKSLineEdit_2 = new QLineEdit(mSOCKSFrame);
+    mSOCKSLineEdit_2->setFixedHeight(36);
     mSOCKSLineEdit_2->setValidator(new QRegExpValidator(QRegExp("[0-9]*") , this));
     mSOCKSLayout->addWidget(mSOCKSLabel);
     mSOCKSLayout->addWidget(mSOCKSLineEdit_1);
@@ -697,6 +708,9 @@ void Proxy::initDbus()
                        "/org/ukui/SettingsDaemon/AppProxy",
                        "org.ukui.SettingsDaemon.AppProxy",
                        QDBusConnection::sessionBus());
+    if(!m_appProxyDbus->isValid()) {
+        qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+    }
 }
 
 void Proxy::initAppProxyStatus()
@@ -747,8 +761,11 @@ void Proxy::setAptProxy(QString host, QString port, bool status)
                                                              "/",
                                                              "com.control.center.interface",
                                                              QDBusConnection::systemBus());
-    if (mAptproxyDbus->isValid())
+    if (mAptproxyDbus->isValid()) {
         QDBusReply<bool> reply = mAptproxyDbus->call("setaptproxy", host, port , status);
+    }
+    delete mAptproxyDbus;
+    mAptproxyDbus = nullptr;
 }
 
 QHash<QString, QVariant> Proxy::getAptProxy()
@@ -781,6 +798,8 @@ QHash<QString, QVariant> Proxy::getAptProxy()
             mAptInfo.insert(it.arg, it.out.variant());
         }
     }
+    delete mAptproxyDbus;
+    mAptproxyDbus = nullptr;
     return mAptInfo;
 }
 
@@ -809,8 +828,9 @@ void Proxy::reboot()
                                                              "/org/gnome/SessionManager",
                                                              "org.gnome.SessionManager",
                                                              QDBusConnection::sessionBus());
-
-    rebootDbus->call("reboot");
+    if (rebootDbus->isValid()) {
+        rebootDbus->call("reboot");
+    }
     delete rebootDbus;
     rebootDbus = nullptr;
 }
@@ -836,8 +856,9 @@ QFrame *Proxy::setLine(QFrame *frame)
 bool Proxy::getAppProxyState()
 {
     bool state = true;
-    if(!m_appProxyDbus->isValid()) {
+    if(m_appProxyDbus == nullptr || !m_appProxyDbus->isValid()) {
         qWarning ()<< "init AppProxy dbus error";
+        return false;
     }
 
     //获取应用代理开启状态
@@ -854,7 +875,7 @@ bool Proxy::getAppProxyState()
 
 void Proxy::setAppProxyState(bool state)
 {
-    if(!m_appProxyDbus->isValid()) {
+    if(m_appProxyDbus == nullptr || !m_appProxyDbus->isValid()) {
         qWarning ()<< "init AppProxy dbus error";
         return;
     }
@@ -876,6 +897,7 @@ QStringList Proxy::getAppProxyConf()
 
     if(!dbusInterface.isValid()) {
         qWarning ()<< "init AppProxy dbus error";
+        return info;
     }
 
     //获取应用代理配置信息
@@ -898,11 +920,12 @@ QStringList Proxy::getAppProxyConf()
 
 void Proxy::setAppProxyConf(QStringList list)
 {
+    //AppProxyConf 必填项数量为3
     if (list.count() < 3) {
         return;
     }
 
-    if(!m_appProxyDbus->isValid()) {
+    if(m_appProxyDbus == nullptr || !m_appProxyDbus->isValid()) {
         qWarning ()<< "init AppProxy dbus error";
         return;
     }
@@ -1003,23 +1026,27 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     //IP地址ui布局
     m_ipAddressFrame = new QFrame(m_appProxyFrame);
     m_ipAddressFrame->setMinimumSize(QSize(550, 60));
-    m_ipAddressFrame->setMaximumSize(QSize(16777215, IP_FRAME_MAX_HEIGHT));
+    m_ipAddressFrame->setMaximumSize(QSize(16777215, 88));
     m_ipAddressFrame->setFrameShape(QFrame::NoFrame);
     m_ipAddressLabel = new QLabel(tr("IP address"), m_ipAddressFrame);
     m_ipAddressLabel->setFixedWidth(LABEL_WIDTH);
     m_ipHintsLabel = new QLabel(m_ipAddressFrame);
-    m_ipHintsLabel->setFixedHeight(20);
     m_ipHintsLabel->setContentsMargins(8, 0, 0, 0);
     m_ipAddressLineEdit = new QLineEdit(m_ipAddressFrame);
-    m_ipAddressLineEdit->setMinimumHeight(36);
+    m_ipAddressLineEdit->setFixedHeight(LINE_EDIT_HEIGHT);
     m_ipAddressLineEdit->setPlaceholderText(tr("Required")); //必填
 
-    QGridLayout *ipAddressLayout = new QGridLayout(m_ipAddressFrame);
-    ipAddressLayout->setContentsMargins(16, 0, 16, 0);
-    ipAddressLayout->setVerticalSpacing(0);
-    ipAddressLayout->addWidget(m_ipAddressLabel, 0, 0);
-    ipAddressLayout->addWidget(m_ipAddressLineEdit, 0, 1);
-    ipAddressLayout->addWidget(m_ipHintsLabel, 1, 1);
+    QWidget *ipInputWidget = new QWidget(m_ipAddressFrame);
+    QVBoxLayout *ipVLayout = new QVBoxLayout(ipInputWidget);
+    ipVLayout->setContentsMargins(0, 0, 0, 0);
+    ipVLayout->setSpacing(3);
+    ipVLayout->addWidget(m_ipAddressLineEdit);
+    ipVLayout->addWidget(m_ipHintsLabel);
+
+    QFormLayout *ipAddressLayout = new QFormLayout(m_ipAddressFrame);
+    ipAddressLayout->setContentsMargins(16, 12, 16, 12);
+    ipAddressLayout->setSpacing(FRAME_LAYOUT_SPACING);
+    ipAddressLayout->addRow(m_ipAddressLabel, ipInputWidget);
 
     // IP的正则格式限制
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
@@ -1151,18 +1178,22 @@ void Proxy::setAppListFrameUi(QWidget *widget)
     m_allowAppProxyLabel->setText(tr("The following applications are allowed to use this configuration:")); //允许以下应用使用该配置：
     m_appListWidget = new QListWidget(m_appListFrame);
     m_appListWidget->setMinimumHeight(240);
-    m_appListWidget->setBackgroundRole(QPalette::Base);
     m_appListWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     m_appListWidget->setFrameShape(QFrame::Shape::Panel);
 
     appListLayout->addWidget(m_allowAppProxyLabel);
     appListLayout->addWidget(m_appListWidget);
 
-    QPalette mpal(m_appListWidget->palette());
-    mpal.setColor(QPalette::Base, qApp->palette().base().color());
-    mpal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
-    m_appListWidget->setAlternatingRowColors(true);
-    m_appListWidget->setPalette(mpal);
+    onPaletteChanged();
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+        QGSettings * styleGsettings = new QGSettings(style_id, QByteArray(), this);
+        connect(styleGsettings, &QGSettings::changed, this, [=](QString key){
+            if ("styleName" == key) {
+                onPaletteChanged();
+            }
+        });
+    }
 }
 
 void Proxy::appProxyInfoPadding()
@@ -1219,7 +1250,7 @@ bool Proxy::getipEditState(QString text)
 void Proxy::onipEditStateChanged()
 {
     if (!getipEditState(m_ipAddressLineEdit->text())) {
-        m_ipAddressFrame->setFixedHeight(IP_FRAME_MAX_HEIGHT);
+        m_ipAddressFrame->setFixedHeight(88);
         m_ipHintsLabel->show();
     } else {
         m_ipHintsLabel->hide();
@@ -1231,7 +1262,6 @@ void Proxy::onAppProxyConfChanged()
 {
     if (!getipEditState(m_ipAddressLineEdit->text()) || m_portLineEdit->text().isEmpty()) {
         return;
-        qDebug() << "onAppProxyConfChanged return";
     }
 
     if (m_ipAddressLineEdit->text().isEmpty()) {
@@ -1248,8 +1278,6 @@ void Proxy::onAppProxyConfChanged()
             m_appProxyInfo.append("");
             m_appProxyInfo.append("");
         }
-
-        qDebug() << m_appProxyInfo << Q_FUNC_INFO << __LINE__;
     }
 }
 
@@ -1258,6 +1286,16 @@ void Proxy::onAppProxyConfEditFinished()
    if (!m_ipAddressLineEdit->hasFocus() && !m_portLineEdit->hasFocus()) {
        setAppProxyConf(m_appProxyInfo);
    }
+}
+
+void Proxy::onPaletteChanged()
+{
+    QPalette mpal(m_appListWidget->palette());
+    mpal.setColor(QPalette::Base, qApp->palette().base().color());
+    mpal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
+    m_appListWidget->setBackgroundRole(QPalette::Base);
+    m_appListWidget->setAlternatingRowColors(true);
+    m_appListWidget->setPalette(mpal);
 }
 
 void Proxy::onappProxyEnableChanged(bool enable)

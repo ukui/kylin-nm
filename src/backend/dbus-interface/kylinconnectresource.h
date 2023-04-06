@@ -40,7 +40,6 @@ public:
     KyConnectItem *getConnectionItemByUuid(QString connectUuid);
     KyConnectItem *getConnectionItemByUuidWithoutActivateChecking(QString connectUuid);
     KyConnectItem *getConnectionItemByUuid(QString connectUuid, QString deviceName);
-    void getVpnAndVirtualConnections(QList<KyConnectItem *> &connectItemList);
     void getConnectionList(QString deviceName,
                            NetworkManager::ConnectionSettings::ConnectionType connectionType,
                            QList<KyConnectItem *> &connectItemList);
@@ -56,7 +55,6 @@ public:
     bool getInterfaceByUuid(QString &deviceName, const QString connUuid);
     void getConnectivity(NetworkManager::Connectivity &connectivity);
 
-    bool isVirtualConncection(QString uuid);
     bool isWiredConnection(QString uuid);
     bool isWirelessConnection(QString uuid);
     bool isActivatedConnection(QString uuid);

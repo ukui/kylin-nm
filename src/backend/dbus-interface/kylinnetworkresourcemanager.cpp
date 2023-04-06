@@ -26,6 +26,32 @@
 
 #define LOG_FLAG  "[KyNetworkResourceManager]"
 
+
+QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags)
+{
+    QString out;
+    if (   (cap & NM_802_11_AP_FLAGS_PRIVACY)
+           && (wpa_flags == NM_802_11_AP_SEC_NONE)
+           && (rsn_flags == NM_802_11_AP_SEC_NONE)) {
+        out += "WEP ";
+   }
+    if (wpa_flags != NM_802_11_AP_SEC_NONE) {
+        out += "WPA1 ";
+    }
+    if ((rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_PSK)
+            || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
+        out += "WPA2 ";
+    }
+    if (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_SAE) {
+        out += "WPA3 ";
+    }
+    if (   (wpa_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)
+           || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
+        out += "802.1X ";
+    }
+    return out;
+}
+
 KyNetworkResourceManager* KyNetworkResourceManager::m_pInstance = nullptr;
 
 KyNetworkResourceManager* KyNetworkResourceManager::getInstance()
@@ -52,8 +78,6 @@ KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(pa
     qRegisterMetaType<NetworkManager::Device::Type>("NetworkManager::Device::Type");
     qRegisterMetaType<NetworkManager::Device::State>("NetworkManager::Device::State");
     qRegisterMetaType<NetworkManager::Device::StateChangeReason>("NetworkManager::Device::StateChangeReason");
-    qRegisterMetaType<NetworkManager::VpnConnection::State>("NetworkManager::VpnConnection::State");
-    qRegisterMetaType<NetworkManager::VpnConnection::StateChangeReason>("NetworkManager::VpnConnection::StateChangeReason");
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.DBus"),
                                              QString("/org/freedesktop/DBus"),
@@ -780,37 +804,46 @@ void KyNetworkResourceManager::onWifiNetworkUpdate(NetworkManager::WirelessNetwo
         return;
     }
 
+    bool bFlag = false;
+    QString devIface;
+    NetworkManager::Device::Ptr dev = findDeviceUni(net->device());
+    if(dev.isNull()) {
+        qDebug()<< LOG_FLAG << "device invalid";
+        bFlag = true;
+    } else {
+        devIface = dev->interfaceName();
+    }
+    if(bFlag) {
+        //device invalid
+        qDebug() << LOG_FLAG << "wifiNetworkDeviceDisappear";
+        Q_EMIT wifiNetworkDeviceDisappear();
+        return;
+    }
+
+
     auto index = std::find(m_wifiNets.cbegin(), m_wifiNets.cend(), net);
     if (m_wifiNets.cend() != index) {
         if (net->accessPoints().isEmpty()) {
-            //Q_EMIT
-            bool bFlag = false;
-            QString devIface;
-            NetworkManager::Device::Ptr dev = findDeviceUni(net->device());
-            if(dev.isNull()) {
-                qDebug()<< LOG_FLAG << "device invalid";
-                bFlag = true;
-            } else {
-                devIface = dev->interfaceName();
-            }
-
             //remove
             auto pos = index - m_wifiNets.cbegin();
             removeWifiNetwork(pos);
-            if(bFlag) {
-                //device invalid
-                qDebug() << LOG_FLAG << "wifiNetworkDeviceDisappear";
-                Q_EMIT wifiNetworkDeviceDisappear();
-            } else {
-                qDebug()<< LOG_FLAG  << "wifiNetwork disappear" << net << net->ssid();
-                NetworkManager::AccessPoint::Ptr accessPoitPtr = net->referenceAccessPoint();
-                QByteArray rawSsid = accessPoitPtr->rawSsid();
-                QString wifiSsid = getSsidFromByteArray(rawSsid);
-                Q_EMIT wifiNetworkRemoved(devIface, wifiSsid);
-            }
+            qDebug()<< LOG_FLAG  << "wifiNetwork disappear" << net << net->ssid();
+            NetworkManager::AccessPoint::Ptr accessPoitPtr = net->referenceAccessPoint();
+            QByteArray rawSsid = accessPoitPtr->rawSsid();
+            QString wifiSsid = getSsidFromByteArray(rawSsid);
+            Q_EMIT wifiNetworkRemoved(devIface, wifiSsid);
         } else {
-            qDebug()<< LOG_FLAG  << "wifiNetworkPropertyChange " << net << net->ssid();
-            Q_EMIT wifiNetworkPropertyChange(net);
+            NetworkManager::AccessPoint::Ptr accessPointPtr = net->referenceAccessPoint();
+            if (accessPointPtr.isNull()) {
+                return;
+            }
+            QByteArray rawSsid = accessPointPtr->rawSsid();
+            QString wifiSsid = getSsidFromByteArray(rawSsid);
+            QString bssid = accessPointPtr->hardwareAddress();
+            QString secuType = enumToQstring(accessPointPtr->capabilities(),
+                                             accessPointPtr->wpaFlags(),
+                                             accessPointPtr->rsnFlags());
+            Q_EMIT wifiNetworkPropertyChange(devIface, wifiSsid, net->signalStrength(), bssid, secuType);
         }
     }
 

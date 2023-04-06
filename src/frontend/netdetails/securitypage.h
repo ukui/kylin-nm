@@ -28,7 +28,7 @@
 #include <QCheckBox>
 
 #include "coninfo.h"
-#include "detailwidget.h"
+#include "kylable.h"
 #include "kwidget.h"
 #include "kpasswordedit.h"
 
@@ -54,6 +54,7 @@ public:
     void updateTtlsChange(KyEapMethodTtlsInfo &info);
 
     void getSecuType(KySecuType &secuType, KyEapMethodType &enterpriseType);
+    bool getAutoConnectState();
 
 private:
     bool isDetailPage;

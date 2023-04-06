@@ -50,13 +50,12 @@
 #include "tab-pages/tabpage.h"
 #include "kwidget.h"
 #include "ktabbar.h"
+#include "networkmodeconfig.h"
 
-#include <arpa/inet.h>
 using namespace kdk;
 
 #define  TAB_WIDTH  60
 #define  TAB_HEIGHT 36
-#define  TAB_HEIGHT_TABLET 48
 
 class NetTabBar : public KTabBar
 {
@@ -64,15 +63,10 @@ class NetTabBar : public KTabBar
 public:
     explicit NetTabBar(QWidget *parent = nullptr);
     ~NetTabBar();
-protected:
+
     QSize sizeHint() const;
     QSize minimumTabSizeHint(int index) const;
-
-private Q_SLOTS:
-    void onModeChanged(bool mode);
-
 };
-
 class ThreadObject : public QObject
 {
     Q_OBJECT
@@ -105,8 +99,6 @@ public:
     void closeEvent(QCloseEvent *event);
     bool eventFilter(QObject *w, QEvent *event);
 
-    void setDetailPageShowed(bool state);
-
 private:
     void initUI();
     void centerToScreen();
@@ -115,6 +107,7 @@ private:
     void loadPage();
     void pagePadding(QString netName, bool isWlan);
     void initSecuData();
+    void setSecuPageHeight();
 
     void initTlsInfo(ConInfo &conInfo);
     void initPeapInfo(ConInfo &conInfo);
@@ -147,7 +140,6 @@ private:
     void startObjectThread();
     void setNetTabToolTip();
 
-    void getIpv4Info(QString objPath, ConInfo &conInfo);
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyConnectOperation* m_connectOperation = nullptr;
@@ -167,8 +159,6 @@ private:
     QWidget      * centerWidget;
     QWidget      * bottomWidget;
     QScrollArea  * m_secuPageScrollArea;
-    QScrollArea  * m_ipv4ScrollArea;
-    QScrollArea  * m_ipv6ScrollArea;
 
     QPushButton  * cancelBtn;
     QPushButton  * forgetBtn;
@@ -192,11 +182,12 @@ private:
     bool         isIpv6Ok;
     bool         isSecuOk;
     bool         isConfirmBtnEnable;
-    bool         m_hasDetailPageShowed = false;
+
     ConInfo      m_info;
 
     ThreadObject *m_object;
     QThread *m_objectThread;
+    NetworkModeType m_networkMode = DBUS_INVAILD;
 
 private Q_SLOTS:
     void on_btnConfirm_clicked();
@@ -207,7 +198,7 @@ protected Q_SLOTS:
     void currentRowChangeSlot(int row);
 
 Q_SIGNALS:
-    void detailPageClose(bool on);
+    void detailPageClose(QString, QString, QString);
     void createPageClose(QString);
     void currentChanged(int);
     void checkCurrentIpv4Conflict(const QString &address);

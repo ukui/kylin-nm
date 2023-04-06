@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation>加入其它网络</translation>
+        <translation>Add Others</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation type="unfinished"></translation>
+        <translation>Add WiredNetork</translation>
     </message>
 </context>
 <context>
@@ -19,55 +19,55 @@
     <message>
         <location filename="../wlanconnect.ui" line="14"/>
         <source>WlanConnect</source>
-        <translation>无线局域网</translation>
+        <translation>WlanConnect</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
         <location filename="../wlanconnect.cpp" line="140"/>
         <location filename="../wlanconnect.cpp" line="211"/>
         <source>WLAN</source>
-        <translation>无线局域网</translation>
+        <translation>WLAN</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
         <location filename="../wlanconnect.cpp" line="213"/>
         <source>open</source>
-        <translation>开启</translation>
+        <translation>open</translation>
         <extra-contents_path>/wlanconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
         <location filename="../wlanconnect.cpp" line="210"/>
         <source>Advanced settings</source>
-        <translation>高级设置</translation>
+        <translation>Advanced settings</translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="123"/>
         <source>ukui control center</source>
-        <translation>控制面板</translation>
+        <translation>ukui control center</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="126"/>
         <source>ukui control center desktop message</source>
-        <translation>控制面板桌面通知</translation>
+        <translation>ukui control center desktop message</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="228"/>
         <source>No wireless network card detected</source>
-        <translation>未检测到无线网卡</translation>
+        <translation>No wireless network card detected</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="362"/>
         <location filename="../wlanconnect.cpp" line="1028"/>
         <location filename="../wlanconnect.cpp" line="1090"/>
         <source>connected</source>
-        <translation>已连接</translation>
+        <translation>connected</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="965"/>
         <source>card</source>
-        <translation>网卡</translation>
+        <translation>card</translation>
     </message>
 </context>
 </TS>

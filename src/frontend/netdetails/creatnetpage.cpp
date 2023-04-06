@@ -21,6 +21,8 @@
 #include "math.h"
 
 #define MAX_NAME_LENGTH 32
+#define  HINT_TEXT_MARGINS 8, 1, 0, 3
+#define  LABEL_HEIGHT 24
 
 CreatNetPage::CreatNetPage(QWidget *parent):QFrame(parent)
 {
@@ -36,39 +38,87 @@ void CreatNetPage::initUI()
     ipv4addressEdit = new LineEdit(this);
     netMaskEdit = new LineEdit(this);
     gateWayEdit = new LineEdit(this);
+    firstDnsEdit = new LineEdit(this);
+    secondDnsEdit = new LineEdit(this);
 
     m_connNameLabel = new QLabel(this);
     m_configLabel = new QLabel(this);
     m_addressLabel = new QLabel(this);
     m_maskLabel = new QLabel(this);
     m_gateWayLabel = new QLabel(this);
+    m_dnsLabel = new QLabel(this);
+    m_secDnsLabel = new QLabel(this);
 
-    // IP的正则格式限制
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
-    m_dnsWidget = new MultipleDnsWidget(rx, this);
+    QLabel *nameEmptyLabel = new QLabel(this);
+    QLabel *configEmptyLabel = new QLabel(this);
+    QLabel *gateWayEmptyLabel = new QLabel(this);
+    QLabel *firstDnsEmptyLabel = new QLabel(this);
+    nameEmptyLabel->setFixedHeight(LABEL_HEIGHT);
+    configEmptyLabel->setFixedHeight(LABEL_HEIGHT);
+    gateWayEmptyLabel->setFixedHeight(LABEL_HEIGHT);
+    firstDnsEmptyLabel->setFixedHeight(LABEL_HEIGHT);
+
+    m_addressHintLabel = new QLabel(this);
+    m_maskHintLabel = new QLabel(this);
+    m_addressHintLabel->setFixedHeight(LABEL_HEIGHT);
+    m_maskHintLabel->setFixedHeight(LABEL_HEIGHT);
+    m_addressHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
+    m_maskHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
+
+    QPalette hintTextColor;
+    hintTextColor.setColor(QPalette::WindowText, Qt::red);
+    m_addressHintLabel->setPalette(hintTextColor);
+    m_maskHintLabel->setPalette(hintTextColor);
+
+    QWidget *addressWidget = new QWidget(this);
+    QVBoxLayout *addressLayout = new QVBoxLayout(addressWidget);
+    addressLayout->setContentsMargins(0, 0, 0, 0);
+    addressLayout->setSpacing(0);
+    addressLayout->addWidget(ipv4addressEdit);
+    addressLayout->addWidget(m_addressHintLabel);
+
+    QWidget *maskWidget = new QWidget(this);
+    QVBoxLayout *maskLayout = new QVBoxLayout(maskWidget);
+    maskLayout->setContentsMargins(0, 0, 0, 0);
+    maskLayout->setSpacing(0);
+    maskLayout->addWidget(netMaskEdit);
+    maskLayout->addWidget(m_maskHintLabel);
 
     m_connNameLabel->setText(tr("Connection Name"));
     m_configLabel->setText(tr("IPv4Config"));
     m_addressLabel->setText(tr("Address"));
     m_maskLabel->setText(tr("Netmask"));
     m_gateWayLabel->setText(tr("Default Gateway"));
+    m_dnsLabel->setText(tr("Prefs DNS"));
+    m_secDnsLabel->setText(tr("Alternative DNS"));
 
     m_detailLayout = new QFormLayout(this);
+    m_detailLayout->setVerticalSpacing(0);
     m_detailLayout->setContentsMargins(0, 0, 0, 0);
-    m_detailLayout->setSpacing(24);
     m_detailLayout->addRow(m_connNameLabel,connNameEdit);
+    m_detailLayout->addRow(nameEmptyLabel);
     m_detailLayout->addRow(m_configLabel,ipv4ConfigCombox);
-    m_detailLayout->addRow(m_addressLabel,ipv4addressEdit);
-    m_detailLayout->addRow(m_maskLabel,netMaskEdit);
+    m_detailLayout->addRow(configEmptyLabel);
+    m_detailLayout->addRow(m_addressLabel, addressWidget);
+    m_detailLayout->addRow(m_maskLabel, maskWidget);
     m_detailLayout->addRow(m_gateWayLabel,gateWayEdit);
-    m_detailLayout->addRow(m_dnsWidget);
+    m_detailLayout->addRow(gateWayEmptyLabel);
+    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
+    m_detailLayout->addRow(firstDnsEmptyLabel);
+    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
 
     ipv4ConfigCombox->addItem(tr("Auto(DHCP)"), AUTO_CONFIG); //"自动(DHCP)"
     ipv4ConfigCombox->addItem(tr("Manual"), MANUAL_CONFIG); //"手动"
 
+
+    // IP的正则格式限制
+    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+
     ipv4addressEdit->setValidator(new QRegExpValidator(rx, this));
     gateWayEdit->setValidator(new QRegExpValidator(rx, this));
     netMaskEdit->setValidator(new QRegExpValidator(rx, this));
+    firstDnsEdit->setValidator(new QRegExpValidator(rx, this));
+    secondDnsEdit->setValidator(new QRegExpValidator(rx, this));
 }
 
 void CreatNetPage::initComponent() {
@@ -83,6 +133,11 @@ void CreatNetPage::initComponent() {
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+
+    connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(onAddressTextChanged()));
+    connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(onNetMaskTextChanged()));
 }
 
 bool CreatNetPage::checkConnectBtnIsEnabled()
@@ -104,6 +159,26 @@ bool CreatNetPage::checkConnectBtnIsEnabled()
             qDebug() << "create ipv4 netMask empty or invalid";
             return false;
         }
+
+//        if (gateWayEdit->text().isEmpty() || !getTextEditState(gateWayEdit->text())) {
+//            qDebug() << "create ipv4 gateway empty or invalid";
+//            return false;
+//        }
+
+        if (firstDnsEdit->text().isEmpty() && !secondDnsEdit->text().isEmpty()) {
+            qDebug() << "create ipv4 dns sort invalid";
+            return false;
+        }
+
+        if (!getTextEditState(firstDnsEdit->text())) {
+            qDebug() << "create ipv4 first dns invalid";
+            return false;
+        }
+
+        if (!getTextEditState(secondDnsEdit->text())) {
+            qDebug() << "create ipv4 second dns invalid";
+            return false;
+        }
     }
     return true;
 }
@@ -117,17 +192,38 @@ void CreatNetPage::configChanged(int index) {
     }
 }
 
+void CreatNetPage::onAddressTextChanged()
+{
+    if (!getTextEditState(ipv4addressEdit->text())) {
+        m_addressHintLabel->setText(tr("Invalid address"));
+    } else {
+        m_addressHintLabel->clear();
+    }
+}
+
+void CreatNetPage::onNetMaskTextChanged()
+{
+    if (!netMaskIsValide(netMaskEdit->text())) {
+        m_maskHintLabel->setText(tr("Invalid subnet mask"));
+    } else {
+        m_maskHintLabel->clear();
+    }
+}
+
 void CreatNetPage::setLineEnabled(bool check) {
 
     ipv4addressEdit->setEnabled(check);
     netMaskEdit->setEnabled(check);
     gateWayEdit->setEnabled(check);
-    m_dnsWidget->setEditEnabled(check);
+    firstDnsEdit->setEnabled(check);
+    secondDnsEdit->setEnabled(check);
 
     if (!check) {
         ipv4addressEdit->clear();
         netMaskEdit->clear();
         gateWayEdit->clear();
+        firstDnsEdit->clear();
+        secondDnsEdit->clear();
 
         ipv4addressEdit->setPlaceholderText(" ");
         netMaskEdit->setPlaceholderText(" ");
@@ -165,17 +261,13 @@ void CreatNetPage::constructIpv4Info(KyConnectSetting &setting)
              << " gateWay " << gateWay;
 
     QStringList dnsList;
-    dnsList.clear();
-
-    QList<QHostAddress> ipv4dnsList;
-    ipv4dnsList.clear();
-    ipv4dnsList = m_dnsWidget->getDns();
-    for (QHostAddress str: ipv4dnsList) {
-        if (!dnsList.contains(str.toString())) {
-            dnsList << str.toString();
+    dnsList.empty();
+    if (!firstDnsEdit->text().isEmpty()) {
+        dnsList << firstDnsEdit->text();
+        if (!secondDnsEdit->text().isEmpty()) {
+            dnsList << secondDnsEdit->text();
         }
     }
-
     if (ipv4ConfigCombox->currentData() == AUTO_CONFIG) {
         setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
     } else {

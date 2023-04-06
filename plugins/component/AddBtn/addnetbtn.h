@@ -25,7 +25,6 @@
 #include <QPushButton>
 #include <QTranslator>
 #include <QApplication>
-#include <QLabel>
 
 class AddNetBtn : public QPushButton
 {
@@ -34,17 +33,10 @@ public:
     AddNetBtn(bool isWlan, QWidget *parent = nullptr);
     ~AddNetBtn();
 
-    void setTextLabel(QString str) {
-        textLabel->setText(str);
-    }
-
 protected:
     virtual void leaveEvent(QEvent * event);
     virtual void enterEvent(QEvent * event);
     void paintEvent(QPaintEvent *event);
-
-private:
-    QLabel* textLabel;
 
 Q_SIGNALS:
     void enterWidget();

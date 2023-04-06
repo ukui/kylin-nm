@@ -34,17 +34,15 @@
 #include <QProcess>
 #include <QDebug>
 #include "kylinnetworkdeviceresource.h"
-#include "firewalldialog.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
 //#include "kborderlessbutton.h"
 
-using namespace kdk;
+#define EMPTY_SSID "emptyssid"
 
-enum network_mode {
-    KSC_FIREWALL_PUBLIC = 0,
-    KSC_FIREWALL_PRIVATE
-};
+#define REFRESH_NETWORKSPEED_TIMER 1000
+
+using namespace kdk;
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
@@ -81,7 +79,7 @@ bool checkDeviceExist(KyDeviceType deviceType, QString deviceName);
 QString getDefaultDeviceName(KyDeviceType deviceType);
 void setDefaultDevice(KyDeviceType deviceType, QString deviceName);
 void getDeviceEnableState(int type, QMap<QString, bool> &map);
-bool getOldVersionWiredSwitchState(bool state);
+bool getOldVersionWiredSwitchState(bool &state);
 
 class TabPage : public QWidget
 {
@@ -117,8 +115,10 @@ Q_SIGNALS:
 
 protected:
     void initUI();
+    int getCurrentLoadRate(QString dev, long *save_rate, long *tx_rate);
 //    virtual void initDevice() = 0;//初始化默认设备
     virtual void initDeviceCombox() = 0;//初始化设备选择下拉框
+    QTimer *setNetSpeed = nullptr;
     QVBoxLayout * m_mainLayout = nullptr;
     QFrame * m_titleFrame = nullptr;
     QHBoxLayout * m_titleLayout = nullptr;
@@ -152,10 +152,17 @@ protected:
     QComboBox * m_deviceComboBox = nullptr;
     QLabel * m_tipsLabel = nullptr;
 
+    long int start_rcv_rates = 0;	//保存开始时的流量计数
+    long int end_rcv_rates = 0;	//保存结束时的流量计数
+    long int start_tx_rates = 0;   //保存开始时的流量计数
+    long int end_tx_rates = 0; //保存结束时的流量计数
+
 public Q_SLOTS:
     virtual void onDeviceComboxIndexChanged(int currentIndex) = 0;
     void onPaletteChanged();
 
+protected Q_SLOTS:
+    void onSetNetSpeed(QListWidget* m_activatedNetListWidget, bool isActive, QString dev);
 };
 
 #endif // TABPAGE_H

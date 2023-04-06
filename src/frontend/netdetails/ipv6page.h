@@ -33,7 +33,6 @@
 
 //#include "kylinconnectsetting.h"
 #include "coninfo.h"
-#include "multiplednswidget.h"
 
 class Ipv6Page : public QFrame
 {
@@ -43,9 +42,8 @@ public:
     void setIpv6Config(KyIpConfigType ipv6Config);
     void setIpv6(const QString &ipv4);
     void setIpv6Perfix(const int &ipv6Perfix);
-//    void setIpv6FirDns(const QString &ipv6FirDns);
-//    void setIpv6SecDns(const QString &ipv6SecDns);
-    void setMulDns(const QList<QHostAddress> &dns);
+    void setIpv6FirDns(const QString &ipv6FirDns);
+    void setIpv6SecDns(const QString &ipv6SecDns);
     void setGateWay(const QString &gateWay);
 
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
@@ -56,28 +54,27 @@ public:
     void stopLoading();
     void showIpv6AddressConflict(bool isConflict);
 
-private:
+public:
     QComboBox *ipv6ConfigCombox;
     LineEdit *ipv6AddressEdit;
     LineEdit *lengthEdit;
     LineEdit *gateWayEdit;
-//    LineEdit *firstDnsEdit;
-//    LineEdit *secondDnsEdit;
-
+    LineEdit *firstDnsEdit;
+    LineEdit *secondDnsEdit;
+private:
     QFormLayout *m_detailLayout;
     QLabel *m_configLabel;
     QLabel *m_addressLabel;
     QLabel *m_subnetLabel;
     QLabel *m_gateWayLabel;
-//    QLabel *m_dnsLabel;
-//    QLabel *m_secDnsLabel;
+    QLabel *m_dnsLabel;
+    QLabel *m_secDnsLabel;
 
     QLabel *m_configEmptyLabel;
     QLabel *m_addressHintLabel;
     QLabel *m_subnetEmptyLabel;
     QLabel *m_gateWayHintLabel;
-
-    MultipleDnsWidget *m_dnsWidget = nullptr;
+    QLabel *m_firstDnsEmptyLabel;
 
     QLabel *m_statusLabel = nullptr;
     QList<QIcon> m_loadIcons;
@@ -86,7 +83,6 @@ private:
 
     QLabel *m_iconLabel;
     QLabel *m_textLabel;
-
 private:
     void initUI();
     void initComponent();

@@ -231,7 +231,7 @@ void RadioItemButton::refreshButtonIcon()
         m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
     } else {
         m_backgroundColor = COLOR_BRIGHT_TEXT;
-        m_backgroundColor.setAlphaF(0.18);
+        m_backgroundColor.setAlphaF(0.12);
         if (qApp->palette().base().color().red() > MIDDLE_COLOR) {
             m_iconLabel->setPixmap(m_pixmap);
         } else {

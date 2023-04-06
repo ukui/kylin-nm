@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<TS version="2.1" language="en">
 <context>
     <name>AddNetBtn</name>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Add Others</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation>添加有线网络</translation>
+        <translation>Add WiredNetork</translation>
     </message>
 </context>
 <context>
@@ -19,57 +19,53 @@
     <message>
         <location filename="../netconnect.ui" line="50"/>
         <source>Wired Network</source>
-        <translation>有线网络</translation>
+        <translation>Wired Network</translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
         <location filename="../netconnect.cpp" line="155"/>
         <source>open</source>
-        <translation>开启</translation>
+        <translation>open</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
         <location filename="../netconnect.cpp" line="152"/>
         <source>Advanced settings</source>
-        <translation>高级设置</translation>
+        <translation>Advanced settings</translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="64"/>
         <source>ukui control center</source>
-        <translation>控制面板</translation>
+        <translation>ukui control center</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="67"/>
         <source>ukui control center desktop message</source>
-        <translation>控制面板桌面通知</translation>
-    </message>
-    <message>
-        <source>WiredConnect</source>
-        <translation type="vanished">有线网络</translation>
+        <translation>ukui control center desktop message</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="81"/>
         <location filename="../netconnect.cpp" line="153"/>
         <source>LAN</source>
-        <translation>有线网络</translation>
+        <translation>LAN</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="169"/>
         <source>No ethernet device avaliable</source>
-        <translation>未检测到有线设备</translation>
+        <translation>No ethernet device avaliable</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="429"/>
         <location filename="../netconnect.cpp" line="850"/>
         <source>connected</source>
-        <translation>已连接</translation>
+        <translation>connected</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="493"/>
         <source>card</source>
-        <translation>网卡</translation>
+        <translation>card</translation>
     </message>
 </context>
 </TS>

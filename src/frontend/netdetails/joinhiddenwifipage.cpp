@@ -33,11 +33,12 @@
 #define  BOTTOM_LAYOUT_MARGINS  24, 24, 24, 24
 #define  LAYOUT_SPACING  16
 #define  LABEL_MIN_WIDTH  146
+#define  LABEL_MAX_WIDTH  434
 #define  MAX_NAME_LENGTH 32
-#define  SCROAREA_WIDTH  480
+#define  PSK_SCRO_HEIGHT  182
+#define  PEAP_SCRO_HEIGHT  340
+#define  TLS_SCRO_HEIGHT  560
 #define  MEDIUM_WEIGHT_VALUE  57
-
-bool LaunchApp(QString desktopFile);
 
 JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
     :m_devName(devName),
@@ -48,6 +49,7 @@ JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
     initUI();
     initComponent();
 
+    setFixedWidth(WINDOW_WIDTH);
     setAttribute(Qt::WA_DeleteOnClose);
 
     setJoinBtnEnable();
@@ -58,19 +60,9 @@ JoinHiddenWiFiPage::~JoinHiddenWiFiPage()
 
 }
 
-void JoinHiddenWiFiPage::setJoinHiddenWiFiShowed(bool state)
-{
-    m_joinHiddenWiFiShowed = state;
-}
-
 void JoinHiddenWiFiPage::closeEvent(QCloseEvent *event)
 {
     Q_EMIT this->hiddenWiFiPageClose(m_devName);
-
-    if (m_joinHiddenWiFiShowed) {
-        LaunchApp("ukui-control-center.desktop");
-        m_joinHiddenWiFiShowed = false;
-    }
     return QWidget::closeEvent(event);
 }
 
@@ -82,7 +74,8 @@ void JoinHiddenWiFiPage::initUI()
     m_secuWidget = new SecurityPage(false, this);
     m_secuWidget->setSecurity(KySecuType::WPA_AND_WPA2_PERSONAL);
 
-    m_descriptionLabel = new QLabel(this);
+    m_descriptionLabel = new FixLabel(this);
+    m_descriptionLabel->setFixedWidth(LABEL_MAX_WIDTH);
     m_nameLabel = new FixLabel(this);
     m_nameLabel->setFixedWidth(LABEL_MIN_WIDTH);
     m_nameEdit =new LineEdit(this);
@@ -128,11 +121,8 @@ void JoinHiddenWiFiPage::initUI()
     m_centerVBoxLayout->addWidget(ssidWidget);
     m_centerVBoxLayout->addSpacing(LAYOUT_SPACING);
     m_centerVBoxLayout->addWidget(m_secuWidget);
-
-    m_centerWidget->setFixedWidth(SCROAREA_WIDTH);
-    m_hiddenWifiScrollArea->setFixedWidth(SCROAREA_WIDTH);
+    m_centerVBoxLayout->addStretch();
     m_hiddenWifiScrollArea->setWidget(m_centerWidget);
-    m_hiddenWifiScrollArea->setWidgetResizable(true);
 
     //底部按钮
     m_bottomLayout = new QHBoxLayout(m_bottomWidget);
@@ -144,7 +134,7 @@ void JoinHiddenWiFiPage::initUI()
     m_bottomLayout->addWidget(m_joinBtn);
 
     //请输入您想要加入网络的名称和安全类型
-   m_descriptionLabel->setText(tr("Please enter the network name and security type"));
+   m_descriptionLabel->setLabelText(tr("Please enter the network name and security type"));
    QFont font = m_descriptionLabel->font();
    font.setWeight(MEDIUM_WEIGHT_VALUE);
    m_descriptionLabel->setFont(font);
@@ -159,8 +149,9 @@ void JoinHiddenWiFiPage::initUI()
 
    this->setWindowTitle(tr("Find and Join Wi-Fi"));
    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
-   this->setFixedWidth(WINDOW_WIDTH);
+
    this->setFixedHeight(MIN_WINDOW_HEIGHT);
+   onPaletteChanged();
 }
 
 void JoinHiddenWiFiPage::initComponent()
@@ -245,6 +236,7 @@ void JoinHiddenWiFiPage::onSecuTypeChanged(const KySecuType &type)
 {
     if (type != KySecuType::WPA_AND_WPA2_ENTERPRISE) {
         this->setFixedHeight(MIN_WINDOW_HEIGHT);
+        m_centerWidget->setFixedSize(WINDOW_WIDTH, PSK_SCRO_HEIGHT);
     }
 }
 
@@ -252,8 +244,10 @@ void JoinHiddenWiFiPage::onEapTypeChanged(const KyEapMethodType &type)
 {
     if (type == KyEapMethodType::TLS) {
         this->setFixedHeight(TLS_WINDOW_HEIGHT);
+        m_centerWidget->setFixedSize(WINDOW_WIDTH, TLS_SCRO_HEIGHT);
     } else if (type == KyEapMethodType::PEAP || type == KyEapMethodType::TTLS) {
         this->setFixedHeight(PEAP_WINDOW_HEIGHT);
+        m_centerWidget->setFixedSize(WINDOW_WIDTH, PEAP_SCRO_HEIGHT);
     }
 }
 
@@ -262,14 +256,14 @@ void JoinHiddenWiFiPage::onPaletteChanged()
     QPalette pal = qApp->palette();
 
     QGSettings * styleGsettings = nullptr;
-//    const QByteArray style_id(THEME_SCHAME);
-//    if (QGSettings::isSchemaInstalled(style_id)) {
-//       styleGsettings = new QGSettings(style_id);
-//       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
-//       if(currentTheme == "ukui-default"){
-//           pal = lightPalette(this);
-//       }
-//    }
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = lightPalette(this);
+       }
+    }
     this->setPalette(pal);
     setFramePalette(m_secuWidget, pal);
     setFramePalette(m_hiddenWifiScrollArea, pal);
@@ -279,3 +273,4 @@ void JoinHiddenWiFiPage::onPaletteChanged()
         styleGsettings = nullptr;
     }
 }
+

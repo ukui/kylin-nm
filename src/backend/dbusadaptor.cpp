@@ -147,18 +147,6 @@ void DbusAdaptor::setDeviceEnable(QString devName, bool enable)
 //    return deviceName;
 //}
 
-//删除
-void DbusAdaptor::deleteConnect(int type, QString ssid)
-{
-    if (type == WIRED) {
-        parent()->deleteWired(ssid);
-    } else if (type == WIRELESS) {
-        //待实现
-    } else {
-        qDebug() << "[DbusAdaptor] deleteConnect type is invalid";
-    }
-}
-
 //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
 void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
 {

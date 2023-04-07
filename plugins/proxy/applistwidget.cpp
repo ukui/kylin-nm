@@ -124,7 +124,6 @@ void AppListWidget::initUI()
     m_nameLabel = new QLabel(this);
 
     mainLayout->addWidget(m_checkBox);
-    mainLayout->addSpacing(8);
     mainLayout->addWidget(m_iconLabel);
     mainLayout->addWidget(m_nameLabel);
     mainLayout->addStretch();

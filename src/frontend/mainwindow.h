@@ -153,6 +153,7 @@ private:
     void paintWithTrans();
     void initUI();
     void initDbusConnnect();
+    void registerTrayIcon();
     void initTrayIcon();
 
     void resetTrayIconTool();
@@ -199,6 +200,9 @@ private:
     QMap<QString, NetDetail*> m_createPagePtrMap;
 
     NetworkMode *m_networkMode;
+
+    uint m_intervalTime = 100;
+    uint m_registerCount = 0;
 
 public Q_SLOTS:
     void onShowMainWindow(int type);

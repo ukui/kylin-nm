@@ -52,6 +52,8 @@ public:
     void stopLoading();
     void showIpv4AddressConflict(bool isConflict);
 
+    QString getNetMaskText(QString text);
+
 private:
     QComboBox *ipv4ConfigCombox;
     LineEdit *ipv4addressEdit;
@@ -90,7 +92,6 @@ private:
     void configSave();
     bool getTextEditState(QString text);
     bool netMaskIsValide(QString text);
-    QString getNetMaskText(QString text);
     bool checkConnectBtnIsEnabled();
     void initConflictHintLable();
     void initLoadingIcon();

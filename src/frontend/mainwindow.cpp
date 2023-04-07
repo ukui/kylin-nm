@@ -153,6 +153,7 @@ void MainWindow::firstlyStart()
 {
     initWindowProperties();
     initTransparency();
+    registerTrayIcon();
     initUI();
     initDbusConnnect();
     initWindowTheme();
@@ -225,6 +226,30 @@ void MainWindow::initWindowProperties()
         //    path.addRoundedRect(rect, 12, 12);
         path.addRect(rect);
         KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
+    }
+}
+
+/**
+ * @brief MainWindow::registerTrayIcon 注册托盘图标
+ */
+void MainWindow::registerTrayIcon()
+{
+    m_registerCount++;
+    if (QSystemTrayIcon::isSystemTrayAvailable() || m_registerCount > 10) {
+        m_trayIcon = new QSystemTrayIcon();
+        if (nullptr == m_trayIcon) {
+            qWarning()<< "分配空间trayIcon失败";
+            return ;
+        }
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+        m_trayIcon->setToolTip(QString(tr("kylin-nm")));
+
+    } else {
+        if (m_registerCount <= 10) {
+            QTimer::singleShot(m_intervalTime,[this] {
+                registerTrayIcon();
+            });
+        }
     }
 }
 
@@ -323,17 +348,14 @@ void MainWindow::initTrayIcon()
     iconTimer = new QTimer(this);
     connect(iconTimer, &QTimer::timeout, this, &MainWindow::onSetTrayIconLoading);
 
-    m_trayIcon = new QSystemTrayIcon();
     m_trayIconMenu = new QMenu();
     m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
     m_showSettingsAction = new QAction(tr("Settings"),this);
 
-    m_trayIcon->setToolTip(QString(tr("Network tool")));
     m_showSettingsAction->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
 //    m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);
     m_trayIcon->setContextMenu(m_trayIconMenu);
-    m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
     iconStatus = IconActiveType::LAN_CONNECTED;
     onRefreshTrayIcon();
 
@@ -875,6 +897,7 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
     });
     m_createPagePtrMap.insert(devName, netDetail);
     netDetail->show();
+    netDetail->centerToScreen();
 }
 
 void MainWindow::showAddOtherWlanWidget(QString devName)

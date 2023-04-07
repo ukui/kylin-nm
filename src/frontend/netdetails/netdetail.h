@@ -57,6 +57,7 @@ using namespace kdk;
 
 #define  TAB_WIDTH  60
 #define  TAB_HEIGHT 36
+#define  TAB_HEIGHT_TABLET 48
 
 class NetTabBar : public KTabBar
 {
@@ -64,7 +65,7 @@ class NetTabBar : public KTabBar
 public:
     explicit NetTabBar(QWidget *parent = nullptr);
     ~NetTabBar();
-
+protected:
     QSize sizeHint() const;
     QSize minimumTabSizeHint(int index) const;
 };
@@ -109,7 +110,6 @@ private:
     void loadPage();
     void pagePadding(QString netName, bool isWlan);
     void initSecuData();
-    void setSecuPageHeight();
 
     void initTlsInfo(ConInfo &conInfo);
     void initPeapInfo(ConInfo &conInfo);
@@ -166,6 +166,8 @@ private:
     QWidget      * centerWidget;
     QWidget      * bottomWidget;
     QScrollArea  * m_secuPageScrollArea;
+    QScrollArea  * m_ipv4ScrollArea;
+    QScrollArea  * m_ipv6ScrollArea;
 
     QPushButton  * cancelBtn;
     QPushButton  * forgetBtn;

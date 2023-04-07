@@ -19,6 +19,7 @@
  */
 #include "wlanitem.h"
 #include <QPainter>
+#include <QPainterPath>
 #include <QApplication>
 #define FRAME_SPEED 150
 #define LIMIT_TIME 60*1000

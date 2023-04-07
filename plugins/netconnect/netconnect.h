@@ -101,7 +101,7 @@ private:
     int getInsertPos(QString connName, QString deviceName);
 
 
-    void deleteOneLan(QString ssid);
+    void deleteOneLan(QString ssid, int type);
     void activeConnect(QString ssid, QString deviceName, int type);
     void deActiveConnect(QString ssid, QString deviceName, int type);
 
@@ -123,6 +123,7 @@ private:
     //单个lan连接状态变化
     void itemActiveConnectionStatusChanged(LanItem *item, int status);
 
+    bool LaunchApp(QString desktopFile);
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 

@@ -46,6 +46,9 @@ public:
     bool getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsInfo &info);
     bool getEnterPriseInfoPeap(QString &uuid, KyEapMethodPeapInfo &info);
     bool getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtlsInfo &info);
+    bool getEnterPriseInfoLeap(QString &uuid, KyEapMethodLeapInfo &info);
+    bool getEnterPriseInfoPwd(QString &uuid, KyEapMethodPwdInfo &info);
+    bool getEnterPriseInfoFast(QString &uuid, KyEapMethodFastInfo &info);
 
     void getWirelessActiveConnection(NetworkManager::ActiveConnection::State state, QMap<QString, QStringList> &map);
     bool getActiveWirelessNetItem(QString deviceName, KyWirelessNetItem &wirelessNetItem);

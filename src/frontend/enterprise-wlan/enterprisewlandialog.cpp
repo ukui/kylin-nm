@@ -256,7 +256,16 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
     } else if (eapType == KyEapMethodType::TTLS) {
         m_securityPage->updateTtlsChange(m_info.ttlsInfo);
         m_connectOperation->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, false);
-    } else {
+    } else if (eapType == KyEapMethodType::LEAP) {
+        m_securityPage->updateLeapChange(m_info.leapInfo);
+        m_connectOperation->addAndActiveWirelessEnterPriseLeapConnect(m_info.leapInfo, connetSetting, m_deviceName, false);
+    }  else if (eapType == KyEapMethodType::PWD) {
+        m_securityPage->updatePwdChange(m_info.pwdInfo);
+        m_connectOperation->addAndActiveWirelessEnterPrisePwdConnect(m_info.pwdInfo, connetSetting, m_deviceName, false);
+    }  else if (eapType == KyEapMethodType::FAST) {
+        m_securityPage->updateFastChange(m_info.fastInfo);
+        m_connectOperation->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connetSetting, m_deviceName, false);
+    }  else {
         qWarning() << "Connect enterprise wlan failed!(Unknown eap type)" << Q_FUNC_INFO << __LINE__;
     }
     close();
@@ -285,6 +294,24 @@ void EnterpriseWlanDialog::onEapTypeChanged(const KyEapMethodType &type)
         }
         this->setFixedSize(MAIN_SIZE_NARROW);
 //        m_centerWidget->setFixedHeight(PEAP_SCRO_HEIGHT);
+        break;
+    case KyEapMethodType::LEAP:
+        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
+            m_resource->getEnterPriseInfoLeap(m_wirelessNetItem.m_connectUuid, m_info.leapInfo);
+        }
+        this->setFixedSize(MAIN_SIZE_NARROW);
+        break;
+    case KyEapMethodType::PWD:
+        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
+            m_resource->getEnterPriseInfoPwd(m_wirelessNetItem.m_connectUuid, m_info.pwdInfo);
+        }
+        this->setFixedSize(MAIN_SIZE_NARROW);
+        break;
+    case KyEapMethodType::FAST:
+        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
+            m_resource->getEnterPriseInfoFast(m_wirelessNetItem.m_connectUuid, m_info.fastInfo);
+        }
+        this->setFixedSize(MAIN_SIZE_EXPAND);
         break;
     default:
         break;

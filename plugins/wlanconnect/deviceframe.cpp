@@ -19,6 +19,7 @@
  */
 #include "deviceframe.h"
 #include <QPainter>
+#include <QPainterPath>
 
 #define LAYOUT_MARGINS 18,0,8,0
 #define FRAME_HEIGHT 58

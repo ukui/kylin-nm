@@ -486,28 +486,22 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     detailPage->setAutoConnect(m_info.isAutoConnect);
 
     //ipv4页面填充
+    ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
+    ipv4Page->setMulDns(m_info.ipv4DnsList);
     if (m_info.ipv4ConfigType == CONFIG_IP_MANUAL) {
         Q_EMIT checkCurrentIpv4Conflict(m_info.strIPV4Address);
-        ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
         ipv4Page->setIpv4(m_info.strIPV4Address);
         ipv4Page->setNetMask(m_info.strIPV4NetMask);
-        ipv4Page->setIpv4FirDns(m_info.strIPV4FirDns);
-        ipv4Page->setIpv4SecDns(m_info.strIPV4SecDns);
         ipv4Page->setGateWay(m_info.strIPV4GateWay);
-    } else {
-        ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
     }
     //ipv6页面填充
+    ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
+    ipv6Page->setMulDns(m_info.ipv6DnsList);
     if (m_info.ipv6ConfigType == CONFIG_IP_MANUAL) {
         Q_EMIT checkCurrentIpv6Conflict(m_info.strIPV6Address);
-        ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
         ipv6Page->setIpv6(m_info.strIPV6Address);
         ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
-        ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
-        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
         ipv6Page->setGateWay(m_info.strIPV6GateWay);
-    } else {
-        ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
     }
 
     //安全页面
@@ -521,6 +515,12 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
                 securityPage->setPeapInfo(m_info.peapInfo);
             } else if (m_info.enterpriseType == TTLS) {
                 securityPage->setTtlsInfo(m_info.ttlsInfo);
+            } else if (m_info.enterpriseType == LEAP) {
+                securityPage->setLeapInfo(m_info.leapInfo);
+            } else if (m_info.enterpriseType == PWD) {
+                securityPage->setPwdInfo(m_info.pwdInfo);
+            } else if (m_info.enterpriseType == FAST) {
+                securityPage->setFastInfo(m_info.fastInfo);
             }
         }
     }
@@ -653,6 +653,8 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
 
 //    conInfo.ipv4ConfigType = connetSetting.m_ipv4ConfigIpType;
     conInfo.ipv6ConfigType = connetSetting.m_ipv6ConfigIpType;
+    conInfo.ipv4DnsList = connetSetting.m_ipv4Dns;
+    conInfo.ipv6DnsList = connetSetting.m_ipv6Dns;
     conInfo.isAutoConnect  = connetSetting.m_isAutoConnect;
 
 //    if (connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
@@ -682,19 +684,23 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
             conInfo.iIPV6Prefix = ipv6Page->getPerfixLength(connetSetting.m_ipv6Address.at(0).netmask().toString());
             conInfo.strIPV6GateWay = connetSetting.m_ipv6Address.at(0).gateway().toString();
         }
+    }
 
-        if (connetSetting.m_ipv6Dns.size() == 1) {
-            conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
-        } else if (connetSetting.m_ipv4Dns.size() > 1) {
-            conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
-            conInfo.strIPV6SecDns = connetSetting.m_ipv6Dns.at(1).toString();
+    QString dnsList;
+    dnsList.clear();
+    if (!conInfo.ipv4DnsList.isEmpty()) {
+        for (QHostAddress str: conInfo.ipv4DnsList) {
+            dnsList.append(str.toString());
+            dnsList.append("; ");
         }
+        dnsList.chop(2);
+        conInfo.strDynamicIpv4Dns = dnsList;
     }
 
     if (!bActived) {
         conInfo.strDynamicIpv4 = conInfo.strIPV4Address.isEmpty() ? tr("Auto") : conInfo.strIPV4Address;
         conInfo.strDynamicIpv6 = conInfo.strIPV6Address.isEmpty() ? tr("Auto") : conInfo.strIPV6Address;
-        conInfo.strDynamicIpv4Dns = conInfo.strIPV4FirDns.isEmpty() ? tr("Auto") : conInfo.strIPV4FirDns;
+        conInfo.strDynamicIpv4Dns = conInfo.ipv4DnsList.isEmpty() ? tr("Auto") : conInfo.strDynamicIpv4Dns;
     }
 }
 
@@ -725,8 +731,14 @@ void NetDetail::initSecuData()
             initTlsInfo(m_info);
         } else if (m_info.enterpriseType == PEAP){
             initPeapInfo(m_info);
-        } else {
+        }  else  if (m_info.enterpriseType == TTLS){
             initTtlsInfo(m_info);
+        } else  if (m_info.enterpriseType == LEAP){
+            initLeapInfo(m_info);
+        } else  if (m_info.enterpriseType == PWD){
+            initPwdInfo(m_info);
+        } else  if (m_info.enterpriseType == FAST){
+            initFastInfo(m_info);
         }
         break;
     default:
@@ -763,6 +775,21 @@ void NetDetail::initPeapInfo(ConInfo &conInfo)
 void NetDetail::initTtlsInfo(ConInfo &conInfo)
 {
     m_resource->getEnterPriseInfoTtls(m_uuid, conInfo.ttlsInfo);
+}
+
+void NetDetail::initLeapInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoLeap(m_uuid, conInfo.leapInfo);
+}
+
+void NetDetail::initPwdInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoPwd(m_uuid, conInfo.pwdInfo);
+}
+
+void NetDetail::initFastInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoFast(m_uuid, conInfo.fastInfo);
 }
 
 //点击了保存更改网络设置的按钮
@@ -880,6 +907,15 @@ void NetDetail::updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType)
     } else if (enterpriseType == TTLS) {
         securityPage->updateTtlsChange(m_info.ttlsInfo);
         m_wirelessConnOpration->updateWirelessEnterPriseTtlsConnect(m_uuid, m_info.ttlsInfo);
+    } else if (enterpriseType == LEAP) {
+        securityPage->updateLeapChange(m_info.leapInfo);
+        m_wirelessConnOpration->updateWirelessEnterPriseLeapConnect(m_uuid, m_info.leapInfo);
+    } else if (enterpriseType == PWD) {
+        securityPage->updatePwdChange(m_info.pwdInfo);
+        m_wirelessConnOpration->updateWirelessEnterPrisePwdConnect(m_uuid, m_info.pwdInfo);
+    } else if (enterpriseType == FAST) {
+        securityPage->updateFastChange(m_info.fastInfo);
+        m_wirelessConnOpration->updateWirelessEnterPriseFastConnect(m_uuid, m_info.fastInfo);
     }
 }
 
@@ -984,6 +1020,33 @@ bool NetDetail::createWirelessConnect()
             } else {
                 qDebug() << "addAndConnect TTLS connect";
                 m_wirelessConnOpration->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, true);
+            }
+        } else if (enterpriseType == LEAP) {
+            securityPage->updateLeapChange(m_info.leapInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new LEAP connect";
+                m_wirelessConnOpration->addLeapConnect(connetSetting, m_info.leapInfo);
+            } else {
+                qDebug() << "addAndConnect LEAP connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPriseLeapConnect(m_info.leapInfo, connetSetting, m_deviceName, true);
+            }
+        } else if (enterpriseType == PWD) {
+            securityPage->updatePwdChange(m_info.pwdInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new PWD connect";
+                m_wirelessConnOpration->addPwdConnect(connetSetting, m_info.pwdInfo);
+            } else {
+                qDebug() << "addAndConnect PWD connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPrisePwdConnect(m_info.pwdInfo, connetSetting, m_deviceName, true);
+            }
+        } else if (enterpriseType == FAST) {
+            securityPage->updateFastChange(m_info.fastInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new FAST connect";
+                m_wirelessConnOpration->addFastConnect(connetSetting, m_info.fastInfo);
+            } else {
+                qDebug() << "addAndConnect FAST connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connetSetting, m_deviceName, true);
             }
         }
     } else {
@@ -1282,19 +1345,10 @@ void NetDetail::getIpv4Info(QString objPath, ConInfo &conInfo)
                     while (!dbusArg2nd.atEnd()) {
                         uint tempMap;
                         dbusArg2nd >> tempMap;
-                        addressVector.append(tempMap);
+                        QString dns(inet_ntoa(*(struct in_addr *)&tempMap));
+                        conInfo.ipv4DnsList << QHostAddress(dns);
                     }
                     dbusArg2nd.endArray();
-                    if (addressVector.size() == 1) {
-                        QString dns(inet_ntoa(*(struct in_addr *)&addressVector.at(0)));
-                        conInfo.strIPV4FirDns = dns;
-                    } else if (addressVector.size() > 1) {
-                        QString dns1(inet_ntoa(*(struct in_addr *)&addressVector.at(0)));
-                        QString dns2(inet_ntoa(*(struct in_addr *)&addressVector.at(1)));
-                        conInfo.strIPV4FirDns = dns1;
-                        conInfo.strIPV4SecDns = dns2;
-                    }
-
                 } else if (inner_key == "gateway") {
                     //gateway
                     conInfo.strIPV4GateWay = innerMap.value(inner_key).toString();

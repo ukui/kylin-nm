@@ -27,6 +27,7 @@
 #include <KWindowEffects>
 
 #include <QtConcurrent>
+#include <QPainterPath>
 
 WiFiConfigDialog::WiFiConfigDialog(QWidget *parent) :
     QDialog(parent),

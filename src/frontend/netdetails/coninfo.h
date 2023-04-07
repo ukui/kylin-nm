@@ -55,6 +55,19 @@ enum TtlsInnerType
     GTC_EAP
 };
 
+enum FastInnerType
+{
+    GTC_FAST = 0,
+    MSCHAPV2_FAST,
+};
+
+enum PacProvisioningInnerType
+{
+    ANON = 0,
+    AUTHEN,
+    BOTH,
+};
+
 class LineEdit : public QLineEdit
 {
     Q_OBJECT
@@ -91,21 +104,22 @@ public:
     KyIpConfigType ipv4ConfigType = CONFIG_IP_DHCP;
     QString strIPV4Address;
     QString strIPV4NetMask;
-    QString strIPV4FirDns;
-    QString strIPV4SecDns;
     QString strIPV4GateWay;
+    QList<QHostAddress> ipv4DnsList;
 
     KyIpConfigType ipv6ConfigType = CONFIG_IP_DHCP;
     QString strIPV6Address;
     int iIPV6Prefix;
-    QString strIPV6FirDns;
-    QString strIPV6SecDns;
     QString strIPV6GateWay;
+    QList<QHostAddress> ipv6DnsList;
 
     KyEapMethodType enterpriseType;
     KyEapMethodTlsInfo tlsInfo;
     KyEapMethodPeapInfo peapInfo;
     KyEapMethodTtlsInfo ttlsInfo;
+    KyEapMethodLeapInfo leapInfo;
+    KyEapMethodPwdInfo  pwdInfo;
+    KyEapMethodFastInfo fastInfo;
 };
 
 static void setFramePalette(QFrame *widget, QPalette &pal) {

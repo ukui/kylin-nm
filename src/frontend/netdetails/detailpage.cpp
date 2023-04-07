@@ -246,9 +246,11 @@ void DetailPage::initUI() {
     m_ipv4Widget = new DetailWidget(qobject_cast<QWidget *>(m_IPV4), m_listWidget);
     m_ipv4Widget->setKey(tr("IPv4:"));
 
-    m_IPV4Dns = new QLabel(this);
+    m_IPV4Dns = new FixLabel(this);
+    m_IPV4Dns->setFixedWidth(MAX_LABEL_WIDTH);
+    m_IPV4Dns->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_ipv4DnsWidget = new DetailWidget(qobject_cast<QWidget *>(m_IPV4Dns), m_listWidget);
-    m_ipv4DnsWidget->setKey(tr("IPv4 DNS:"));
+    m_ipv4DnsWidget->setKey(tr("IPv4 Dns:"));
 
     m_IPV6 = new FixLabel(this);
     m_IPV6->setFixedWidth(MAX_LABEL_WIDTH);

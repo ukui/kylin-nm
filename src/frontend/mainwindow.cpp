@@ -25,6 +25,7 @@
 #include <QDBusReply>
 #include <QKeyEvent>
 #include <QProcess>
+#include <QPainterPath>
 
 #include "kylinnetworkdeviceresource.h"
 #include "../backend/dbus-interface/kylinagentinterface.h"
@@ -191,19 +192,19 @@ void MainWindow::secondaryStart()
  */
 void MainWindow::initPlatform()
 {
-    char* projectName = kdk_system_get_projectName();
-    QString strProjectName(projectName);
-    free(projectName);
-    projectName = NULL;
-    if(v10Sp1.compare(strProjectName,Qt::CaseInsensitive) == 0) {
-        unsigned int feature = kdk_system_get_productFeatures();
-        if (feature == 3) {
-            m_isShowInCenter = true;
-        }
-    } else if (intel.compare(strProjectName,Qt::CaseInsensitive) == 0) {
-        m_isShowInCenter = true;
-    }
-    qDebug() << "projectName" << projectName << m_isShowInCenter;
+//    char* projectName = kdk_system_get_projectName();
+//    QString strProjectName(projectName);
+//    free(projectName);
+//    projectName = NULL;
+//    if(v10Sp1.compare(strProjectName,Qt::CaseInsensitive) == 0) {
+//        unsigned int feature = kdk_system_get_productFeatures();
+//        if (feature == 3) {
+//            m_isShowInCenter = true;
+//        }
+//    } else if (intel.compare(strProjectName,Qt::CaseInsensitive) == 0) {
+//        m_isShowInCenter = true;
+//    }
+//    qDebug() << "projectName" << projectName << m_isShowInCenter;
 }
 
 /**
@@ -909,6 +910,12 @@ void MainWindow::showAddOtherWlanWidget(QString devName)
 void MainWindow::getWirelessDeviceCap(QMap<QString, int> &map)
 {
     m_wlanWidget->getWirelessDeviceCap(map);
+}
+
+//有线连接删除
+void MainWindow::deleteWired(const QString &connUuid)
+{
+    m_lanWidget->deleteWired(connUuid);
 }
 
 //有线连接断开

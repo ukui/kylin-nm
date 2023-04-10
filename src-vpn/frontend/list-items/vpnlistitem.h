@@ -82,7 +82,7 @@ private:
 
     QString m_deviceName = "";
 
-    vpnDetail *m_vpnDetail = nullptr;
+    VpnDetail *m_vpnDetail = nullptr;
 };
 
 #endif // VPNLISTITEM_H

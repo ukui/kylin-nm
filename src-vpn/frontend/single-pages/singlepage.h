@@ -43,7 +43,7 @@ using namespace kdk;
 #define MAIN_LAYOUT_SPACING 0
 #define TITLE_FRAME_HEIGHT 60     //TabWidget的tab和widget有间隙，和设计稿看起来一致就不能设为设计稿里的高度
 #define TITLE_LAYOUT_MARGINS 24,0,24,0
-#define NET_LAYOUT_MARGINS 8,8,8,8
+#define NET_LAYOUT_MARGINS 8,8,0,8
 #define TEXT_HEIGHT 20
 #define SETTINGS_LAYOUT_MARGINS 23,0,24,0
 

@@ -200,14 +200,15 @@ void VpnListItem::onInfoButtonClicked()
         m_vpnDetail->activateWindow();
         return;
     }
-    m_vpnDetail = new vpnDetail(m_vpnConnectItem.m_connectUuid, getConnectionName());
-    connect(m_vpnDetail, &vpnDetail::destroyed, [&](){
+    m_vpnDetail = new VpnDetail(m_vpnConnectItem.m_connectUuid, getConnectionName());
+    connect(m_vpnDetail, &VpnDetail::destroyed, [&](){
         if (m_vpnDetail != nullptr) {
             m_vpnDetail = nullptr;
         }
     });
 
     m_vpnDetail->show();
+    m_vpnDetail->centerToScreen();
 }
 
 void VpnListItem::updateConnectionState(ConnectState state)

@@ -756,6 +756,26 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <source>VPN Server</source>
         <translation>服务器地址</translation>
     </message>
+    <message>
+        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="12"/>
+        <source>VPN</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="41"/>
+        <source>Auto Connection</source>
+        <translation>自动连接</translation>
+    </message>
+    <message>
+        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="53"/>
+        <source>Confirm</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="56"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
 </context>
 <context>
     <name>vpnConfigPage</name>
@@ -765,7 +785,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     </message>
 </context>
 <context>
-    <name>vpnDetail</name>
+    <name>VpnDetail</name>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="61"/>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="145"/>
@@ -802,29 +822,6 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="160"/>
         <source>Confirm</source>
         <translation>确定</translation>
-    </message>
-</context>
-<context>
-    <name>vpnDetailPage</name>
-    <message>
-        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="12"/>
-        <source>VPN</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="41"/>
-        <source>Auto Connection</source>
-        <translation>自动连接</translation>
-    </message>
-    <message>
-        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="53"/>
-        <source>Confirm</source>
-        <translation>确定</translation>
-    </message>
-    <message>
-        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="56"/>
-        <source>Cancel</source>
-        <translation>取消</translation>
     </message>
 </context>
 <context>

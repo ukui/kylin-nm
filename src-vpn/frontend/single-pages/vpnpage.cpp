@@ -147,11 +147,7 @@ void VpnPage::constructItemArea()
         }
     }
 
-    if (m_listWidget->count() <= MAX_ITEMS) {
-        m_listFrame->setFixedWidth(MIN_WIDTH);
-    } else {
-        m_listFrame->setFixedWidth(MAX_WIDTH);
-    }
+    resetListWidgetWidth();
 }
 
 void VpnPage::initVpnArea()
@@ -174,14 +170,6 @@ void VpnPage::resetPageHeight()
         m_listFrame->show();
         m_netDivider->show();
     }
-
-    for (int i = 0; i < m_mainLayout->count(); i ++) {
-        QWidget *w = m_mainLayout->itemAt(i)->widget();
-        if (w != nullptr && w->isHidden() != true) {
-            height += w->height();
-        }
-    }
-    this->setFixedHeight(height + PAGE_SPACE);
 }
 
 bool VpnPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
@@ -203,9 +191,7 @@ bool VpnPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
             p_listWidgetItem = nullptr;
 
             iter = connectMap.erase(iter);
-            if (m_listWidget->count() <= MAX_ITEMS) {
-                m_listFrame->setFixedWidth(MIN_WIDTH);
-            }
+            resetListWidgetWidth();
             return true;
         }
     }
@@ -249,9 +235,7 @@ void VpnPage::onAddConnection(QString uuid)               //新增一个有线�
 
     delete p_newItem;
     p_newItem = nullptr;
-    if (m_listWidget->count() >= MAX_ITEMS) {
-        m_listFrame->setFixedWidth(MAX_WIDTH);
-    }
+    resetListWidgetWidth();
     resetPageHeight();
     resetWindowPosition();
     this->update();
@@ -338,9 +322,8 @@ void VpnPage::updateActivatedConnectionArea(KyConnectItem *p_newItem)
     deleteConnectionMapItem(m_activeItemMap, m_listWidget, p_newItem->m_connectUuid);
     QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_listWidget);
     m_activeItemMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
-    if (m_listWidget->count() <= MAX_ITEMS) {
-        m_listFrame->setFixedWidth(MIN_WIDTH);
-    }
+
+    resetListWidgetWidth();
 
     return;
 }
@@ -356,11 +339,7 @@ void VpnPage::updateConnectionArea(KyConnectItem *p_newItem)
     QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_listWidget);
     m_vpnItemMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
 
-    if (m_listWidget->count() <= MAX_ITEMS) {
-        m_listFrame->setFixedWidth(MIN_WIDTH);
-    } else {
-        m_listFrame->setFixedWidth(MAX_WIDTH);
-    }
+    resetListWidgetWidth();
 }
 
 void VpnPage::updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap,
@@ -699,4 +678,13 @@ void VpnPage::resetWindowPosition()
     }
     kdk::WindowManager::setGeometry(this->windowHandle(), rect);
     qDebug() << " Position of ukui-panel is " << position << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
+}
+
+void VpnPage::resetListWidgetWidth()
+{
+    if (m_listWidget->count() <= MAX_ITEMS) {
+        m_listFrame->setFixedWidth(MIN_WIDTH);
+    } else {
+        m_listFrame->setFixedWidth(MAX_WIDTH);
+    }
 }

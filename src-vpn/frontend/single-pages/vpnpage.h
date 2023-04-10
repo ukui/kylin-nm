@@ -97,7 +97,7 @@ private:
                                  QListWidget *vpnListWidget, QString uuid);
 
     void resetWindowPosition();
-
+    void resetListWidgetWidth();
 
 Q_SIGNALS:
     void vpnAdd(QStringList info);

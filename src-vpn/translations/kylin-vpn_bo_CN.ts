@@ -80,6 +80,26 @@
         <source>VPN Server</source>
         <translation type="unfinished"></translation>
     </message>
+ <message>
+        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="12"/>
+        <source>VPN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="41"/>
+        <source>Auto Connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="53"/>
+        <source>Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="56"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>vpnConfigPage</name>
@@ -90,7 +110,7 @@
     </message>
 </context>
 <context>
-    <name>vpnDetail</name>
+    <name>VpnDetail</name>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="15"/>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="27"/>
@@ -110,29 +130,6 @@
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="32"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>vpnDetailPage</name>
-    <message>
-        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="12"/>
-        <source>VPN</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="41"/>
-        <source>Auto Connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="53"/>
-        <source>Confirm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../frontend/vpndetails/vpndetailpage.cpp" line="56"/>
-        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

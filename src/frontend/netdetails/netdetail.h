@@ -68,6 +68,10 @@ public:
 protected:
     QSize sizeHint() const;
     QSize minimumTabSizeHint(int index) const;
+
+private Q_SLOTS:
+    void onModeChanged(bool mode);
+
 };
 class ThreadObject : public QObject
 {

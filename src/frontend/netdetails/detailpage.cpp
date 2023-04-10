@@ -87,7 +87,7 @@ void DetailPage::setIpv4(const QString &ipv4) {
 }
 
 void DetailPage::setIpv4Dns(const QString &ipv4Dns) {
-    this->m_IPV4Dns->setText(ipv4Dns);
+    this->m_IPV4Dns->setLabelText(ipv4Dns);
 }
 
 void DetailPage::setIpv6(const QString &ipv6) {

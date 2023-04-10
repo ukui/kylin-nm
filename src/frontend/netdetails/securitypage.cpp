@@ -25,7 +25,7 @@
 #define  DETAIL_MIN_LABEL_WIDTH  80
 #define  DETAIL_MIN_EDIT_WIDTH  390
 #define  MIN_LABEL_WIDTH  146
-#define  MIN_EDIT_WIDTH  278
+#define  MIN_EDIT_WIDTH  286
 
 SecurityPage::SecurityPage(bool isNetDetailPage, QWidget *parent) : isDetailPage(isNetDetailPage), QFrame(parent)
 {
@@ -84,20 +84,21 @@ void SecurityPage::initUI()
     userPwdEdit->setUseCustomPalette(true);
     userPwdFlagBox = new QCheckBox(this);
 
-    //FAST
-    m_pacCheckBox = new QCheckBox(this);
-    m_pacProvisionComboBox = new QComboBox(this);
-    m_pacFilePathComboBox = new QComboBox(this);
-    m_pacProvisionLabel = new FixLabel(this);
-    m_pacFlagLabel = new FixLabel(this);
-    m_pacFileLabel = new QLabel(this);
-
     QWidget *queryWidget = new QWidget(this);
     QHBoxLayout *queryLayout = new QHBoxLayout(queryWidget);
     queryLayout->setContentsMargins(0, 0, 0, 0);
     queryLayout->addWidget(userPwdFlagBox);
     queryLayout->addWidget(userPwdFlagLabel);
     queryLayout->addStretch();
+
+    //FAST
+    m_pacCheckBox = new QCheckBox(this);
+    m_pacProvisionComboBox = new QComboBox(this);
+    m_pacFilePathComboBox = new QComboBox(this);
+    m_pacProvisionLabel = new FixLabel(this);
+    m_pacProvisionLabel->setFixedWidth(MIN_LABEL_WIDTH);
+    m_pacFlagLabel = new FixLabel(this);
+    m_pacFileLabel = new QLabel(this);
 
     //记住该网络复选框
     m_emptyLabel = new QLabel(this);
@@ -114,22 +115,15 @@ void SecurityPage::initUI()
     rememberLayout->addWidget(m_checkLabel);
     rememberLayout->addStretch();
 
-    //    mSecuLayout = new QFormLayout(this);
-    //    mSecuLayout->setContentsMargins(0, 0, 0, 0);
-    //    mSecuLayout->addRow(secuTypeLabel, secuTypeCombox);
-    //    mSecuLayout->addRow(pwdLabel, pwdEdit);
-    //    mSecuLayout->addRow(eapTypeLabel, eapTypeCombox);
-    //    mSecuLayout->addRow(identityLable, identityEdit);
-    //    mSecuLayout->addRow(domainLable, domainEdit);
-    //    mSecuLayout->addRow(caCertPathLabel, caCertPathCombox);
-    //    mSecuLayout->addRow(caNeedBox, caNeedFlagLabel);
-    //    mSecuLayout->addRow(clientCertPathLabel, clientCertPathCombox);
-    //    mSecuLayout->addRow(clientPrivateKeyLabel, clientPrivateKeyCombox);
-    //    mSecuLayout->addRow(clientPrivateKeyPwdLabel,clientPrivateKeyPwdEdit);
-    //    mSecuLayout->addRow(eapMethodLabel, eapMethodCombox);
-    //    mSecuLayout->addRow(userNameLabel, userNameEdit);
-    //    mSecuLayout->addRow(userPwdLabel, userPwdEdit);
-    //    mSecuLayout->addRow(userPwdFlagBox, userPwdFlagLabel);
+    //允许自动PAC配置复选框
+    m_pacCheckWidget = new QWidget(this);
+    QGridLayout *pacCheckLayout = new QGridLayout(m_pacCheckWidget);
+    pacCheckLayout->setContentsMargins(0, 0, 0, 0);
+    pacCheckLayout->setVerticalSpacing(0);
+    pacCheckLayout->setColumnMinimumWidth(0, 16);
+    pacCheckLayout->addWidget(m_pacProvisionComboBox, 0, 0, 1, 2);
+    pacCheckLayout->addWidget(m_pacCheckBox, 1, 0);
+    pacCheckLayout->addWidget(m_pacFlagLabel, 1, 1);
 
     topLayout = new QGridLayout();
     topLayout->setContentsMargins(0, 0, 0, 0);
@@ -143,27 +137,24 @@ void SecurityPage::initUI()
     // EAP认证 Label和选项框 第2行，第0列，第1列
     topLayout->addWidget(eapTypeLabel, 2, 0);
     topLayout->addWidget(eapTypeCombox, 2, 1);
-    // EAP认证 Label和选项框 第3行，第0列，第1列
-    topLayout->addWidget(m_pacProvisionLabel, 3, 0);
-    topLayout->addWidget(m_pacProvisionComboBox, 3, 1);
-    // pac CheckBox和Label 第4行，第0列，第1列
-    topLayout->addWidget(m_pacCheckBox, 4, 0);
-    topLayout->addWidget(m_pacFlagLabel, 4, 1);
-    // EAP认证 Label和选项框 第5行，第0列，第1列
-    topLayout->addWidget(m_pacFileLabel, 5, 0);
-    topLayout->addWidget(m_pacFilePathComboBox, 5, 1);
-    //内部认证 Label和选项框 第6行，第0列，第1列
-    topLayout->addWidget(eapMethodLabel, 6, 0);
-    topLayout->addWidget(eapMethodCombox, 6, 1);
-    //用户名 Label和输入框 第7行，第0列，第1列
-    topLayout->addWidget(userNameLabel, 7, 0);
-    topLayout->addWidget(userNameEdit, 7, 1);
-    //密码 Label和密码框 第8行，第0列，第1列
-    topLayout->addWidget(userPwdLabel, 8, 0);
-    topLayout->addWidget(userPwdEdit, 8, 1);
-    // 匿名身份 Label和输入框 第9行，第0列，第1列
-    topLayout->addWidget(identityLable, 9, 0);
-    topLayout->addWidget(identityEdit, 9, 1);
+    // 匿名身份 Label和输入框 第3行，第0列，第1列
+    topLayout->addWidget(identityLable, 3, 0);
+    topLayout->addWidget(identityEdit, 3, 1);
+    //PAC配置 允许自动PAC配置 第4行，第0列；第4行,第1列，占2行1列
+    topLayout->addWidget(m_pacProvisionLabel, 4, 0, Qt::AlignTop);
+    topLayout->addWidget(m_pacCheckWidget, 4, 1);
+    // PAC文件
+    topLayout->addWidget(m_pacFileLabel, 6, 0);
+    topLayout->addWidget(m_pacFilePathComboBox, 6, 1);
+    //内部认证 Label和选项框
+    topLayout->addWidget(eapMethodLabel, 7, 0);
+    topLayout->addWidget(eapMethodCombox, 7, 1);
+    //用户名 Label和输入框
+    topLayout->addWidget(userNameLabel, 8, 0);
+    topLayout->addWidget(userNameEdit, 8, 1);
+    //密码 Label和密码框
+    topLayout->addWidget(userPwdLabel, 9, 0);
+    topLayout->addWidget(userPwdEdit, 9, 1);
 
 
     // CA证书选项框及CheckBox布局
@@ -205,14 +196,16 @@ void SecurityPage::initUI()
         checkWidget->hide();
         topLayout->addWidget(queryWidget, 10, 1);
         changeColumnWidthWithSecuType();
+        m_pacFlagLabel->setMinimumWidth(MIN_EDIT_WIDTH);
     } else {
         queryWidget->hide();
         topLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH);
         topLayout->setColumnMinimumWidth(1, MIN_EDIT_WIDTH);
         bottomLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH - 8);
+        m_pacFlagLabel->setMinimumWidth(MIN_EDIT_WIDTH - 36);
     }
 
-    topLayout->addWidget(tlsWidget, 7, 0, 6, 2);
+    topLayout->addWidget(tlsWidget, 10, 0, 6, 2);
 
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
@@ -268,18 +261,6 @@ void SecurityPage::initUI()
     clientPrivateKeyCombox->addItem(tr("None"), QString(tr("None"))); //无
     clientPrivateKeyCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
 
-    //FAST
-    m_pacCheckBox->setChecked(true);
-    m_pacProvisionLabel->setText(tr("PAC provisioning")); //PAC配置
-    m_pacFlagLabel->setText(tr("Allow automatic PAC provisioning")); //允许自动PAC配置
-    m_pacFileLabel->setText(tr("PAC file")); //PAC文件
-    m_pacProvisionComboBox->addItem(tr("Anonymous"), ANON); //匿名
-    m_pacProvisionComboBox->addItem(tr("Authenticated"), AUTHEN); //已认证
-    m_pacProvisionComboBox->addItem(tr("Both"), BOTH); //两者兼用
-    m_pacProvisionComboBox->setCurrentIndex(ANON);
-    m_pacFilePathComboBox->addItem(tr("None"), QString(tr("None"))); //无
-    m_pacFilePathComboBox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
-
     //仅为该用户存储密码
     pwdOptionCombox->addItem(tr("Store passwords only for this user"), QString(tr("Store password only for this user")));
     //存储所有用户的密码
@@ -287,6 +268,18 @@ void SecurityPage::initUI()
     //每次询问这个密码
     pwdOptionCombox->addItem(tr("Ask this password every time"), QString(tr("Ask password every time")));
     pwdOptionCombox->setCurrentIndex(1);
+
+    //FAST
+    m_pacCheckBox->setChecked(true);
+    m_pacProvisionLabel->setLabelText(tr("PAC provisioning")); //PAC配置
+    m_pacFlagLabel->setLabelText(tr("Allow automatic PAC provisioning")); //允许自动PAC配置
+    m_pacFileLabel->setText(tr("PAC file")); //PAC文件
+    m_pacProvisionComboBox->addItem(tr("Anonymous"), ANON); //匿名
+    m_pacProvisionComboBox->addItem(tr("Authenticated"), AUTHEN); //已认证
+    m_pacProvisionComboBox->addItem(tr("Both"), BOTH); //两者兼用
+    m_pacProvisionComboBox->setCurrentIndex(ANON);
+    m_pacFilePathComboBox->addItem(tr("None"), QString(tr("None"))); //无
+    m_pacFilePathComboBox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
 
     //禁用ClearBtn按钮
     pwdEdit->setClearButtonEnabled(false);
@@ -305,13 +298,13 @@ void SecurityPage::initUI()
 void SecurityPage::initConnect()
 {
     //安全类型变化
-    //    connect(secuTypeCombox, &QComboBox::currentTextChanged, this, &SecurityPage::onSecuTypeComboxIndexChanged);
+//    connect(secuTypeCombox, &QComboBox::currentTextChanged, this, &SecurityPage::onSecuTypeComboxIndexChanged);
     connect(secuTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onSecuTypeComboxIndexChanged);
 
     connect(secuTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::changeColumnWidthWithSecuType);
 
     //EAP方式变化
-    //    connect(eapTypeCombox, &QComboBox::currentTextChanged, this, &SecurityPage::onEapTypeComboxIndexChanged);
+//    connect(eapTypeCombox, &QComboBox::currentTextChanged, this, &SecurityPage::onEapTypeComboxIndexChanged);
     connect(eapTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onEapTypeComboxIndexChanged);
 
     connect(caNeedBox, &QCheckBox::clicked, this, &SecurityPage::onCaNeedBoxClicked);
@@ -490,22 +483,28 @@ void SecurityPage::setFastInfo(KyEapMethodFastInfo &info)
     onEapTypeComboxIndexChanged();
 
     identityEdit->setText(info.m_anonIdentity);
-    if (info.m_pacProvisioning == KyFastProvisioningAllowUnauthenticated) {
+    m_pacCheckBox->setChecked(false);
+    m_pacProvisionComboBox->setCurrentIndex(ANON);
+    if (info.m_pacProvisioning == KyFastProvisioningDisabled) {
+        m_pacCheckBox->setChecked(false);
+        m_pacProvisionComboBox->setCurrentIndex(ANON);
+        m_pacProvisionComboBox->setEnabled(false);
+    } else if (info.m_pacProvisioning == KyFastProvisioningAllowUnauthenticated) {
         m_pacProvisionComboBox->setCurrentIndex(ANON);
     } else if (info.m_pacProvisioning == KyFastProvisioningAllowAuthenticated) {
         m_pacProvisionComboBox->setCurrentIndex(AUTHEN);
     } else if (info.m_pacProvisioning == KyFastProvisioningAllowBoth) {
         m_pacProvisionComboBox->setCurrentIndex(BOTH);
+    } else {
+        qWarning() << "Unknown fastProvisioning type" << Q_FUNC_INFO << __LINE__;
+        m_pacCheckBox->setChecked(false);
+        m_pacProvisionComboBox->setEnabled(false);
     }
 
     if (info.m_pacFilePath.isEmpty()) {
         m_pacFilePathComboBox->setItemText(0, QString(tr("None")));
-        m_pacCheckBox->setChecked(true);
-        m_pacFilePathComboBox->setEnabled(false);
     } else {
         m_pacFilePathComboBox->setItemText(0, info.m_pacFilePath);
-        m_pacCheckBox->setChecked(false);
-        m_pacFilePathComboBox->setEnabled(true);
     }
 
     if (info.m_authMethod == KyAuthMethodGtc) {
@@ -611,7 +610,7 @@ bool SecurityPage::checkIsChanged(const ConInfo info)
         if (info.secType == NONE) {
             return false;
         } else if (info.secType == WPA_AND_WPA2_PERSONAL || info.secType == WPA3_PERSONAL) {
-            return !(info.strPassword == pwdEdit->text());
+                return !(info.strPassword == pwdEdit->text());
         } else {
             if (info.enterpriseType != eapTypeCombox->currentData().toInt()) {
                 return true;
@@ -659,12 +658,10 @@ void SecurityPage::showNone()
     userPwdFlagLabel->hide();
 
     //FAST
-    m_pacCheckBox->hide();
-    m_pacProvisionComboBox->hide();
-    m_pacFilePathComboBox->hide();
     m_pacProvisionLabel->hide();
-    m_pacFlagLabel->hide();
+    m_pacCheckWidget->hide();
     m_pacFileLabel->hide();
+    m_pacFilePathComboBox->hide();
 }
 
 void SecurityPage::showPsk()
@@ -692,12 +689,10 @@ void SecurityPage::showPsk()
     userPwdFlagLabel->hide();
 
     //FAST
-    m_pacCheckBox->hide();
-    m_pacProvisionComboBox->hide();
-    m_pacFilePathComboBox->hide();
     m_pacProvisionLabel->hide();
-    m_pacFlagLabel->hide();
+    m_pacCheckWidget->hide();
     m_pacFileLabel->hide();
+    m_pacFilePathComboBox->hide();
 }
 
 void SecurityPage::showTls()
@@ -724,12 +719,10 @@ void SecurityPage::showTls()
     userPwdFlagLabel->hide();
 
     //FAST
-    m_pacCheckBox->hide();
-    m_pacProvisionComboBox->hide();
-    m_pacFilePathComboBox->hide();
     m_pacProvisionLabel->hide();
-    m_pacFlagLabel->hide();
+    m_pacCheckWidget->hide();
     m_pacFileLabel->hide();
+    m_pacFilePathComboBox->hide();
 }
 
 void SecurityPage::showPeapOrTtls()
@@ -746,14 +739,6 @@ void SecurityPage::showPeapOrTtls()
     identityEdit->hide();
     tlsWidget->hide();
 
-    //FAST
-    m_pacCheckBox->hide();
-    m_pacProvisionComboBox->hide();
-    m_pacFilePathComboBox->hide();
-    m_pacProvisionLabel->hide();
-    m_pacFlagLabel->hide();
-    m_pacFileLabel->hide();
-
     //PEAP TTLS共有
     eapMethodLabel->show();
     userNameLabel->show();
@@ -764,96 +749,74 @@ void SecurityPage::showPeapOrTtls()
     userNameEdit->show();
     userPwdEdit->show();
     userPwdFlagLabel->show();
+
+    //FAST
+    m_pacProvisionLabel->hide();
+    m_pacCheckWidget->hide();
+    m_pacFileLabel->hide();
+    m_pacFilePathComboBox->hide();
 }
 
 void SecurityPage::showLeapOrPwd()
 {
-    pwdEdit->hide();
-    eapTypeCombox->show();
-
-    identityEdit->hide();
-    domainEdit->hide();
-    caCertPathCombox->hide();
-    caNeedBox->hide();
-    clientCertPathCombox->hide();
-    clientPrivateKeyCombox->hide();
-    clientPrivateKeyPwdEdit->hide();
-
-    eapMethodCombox->hide();
-    userNameEdit->show();
-    userPwdEdit->show();
-    userPwdFlagBox->show();
-
     pwdLabel->hide();
+    pwdEdit->hide();
+
     //企业wifi共有
     eapTypeLabel->show();
+    eapTypeCombox->show();
+
     //TLS
     identityLable->hide();
-    domainLable->hide();
-    caCertPathLabel->hide();
-    caNeedFlagLabel->hide();
-    clientCertPathLabel->hide();
-    clientPrivateKeyLabel->hide();
-    clientPrivateKeyPwdLabel->hide();
-
-    //PEAP TTLS共有
-    eapMethodLabel->hide();
-    userNameLabel->show();
-    userPwdLabel->show();
-    userPwdFlagLabel->show();
+    identityEdit->hide();
+    tlsWidget->hide();
 
     //FAST
-    m_pacCheckBox->hide();
-    m_pacProvisionComboBox->hide();
-    m_pacFilePathComboBox->hide();
     m_pacProvisionLabel->hide();
-    m_pacFlagLabel->hide();
+    m_pacCheckWidget->hide();
     m_pacFileLabel->hide();
+    m_pacFilePathComboBox->hide();
+
+    eapMethodLabel->hide();
+    eapMethodCombox->hide();
+    userPwdFlagBox->show();
+    userPwdFlagLabel->show();
+
+    userNameLabel->show();
+    userNameEdit->show();
+    userPwdLabel->show();
+    userPwdEdit->show();
 }
 
 void SecurityPage::showFast()
 {
-    pwdEdit->hide();
-    eapTypeCombox->show();
-
-    identityEdit->show();
-    domainEdit->hide();
-    caCertPathCombox->hide();
-    caNeedBox->hide();
-    clientCertPathCombox->hide();
-    clientPrivateKeyCombox->hide();
-    clientPrivateKeyPwdEdit->hide();
-
-    eapMethodCombox->show();
-    userNameEdit->show();
-    userPwdEdit->show();
-    userPwdFlagBox->hide();
-
     pwdLabel->hide();
+    pwdEdit->hide();
+
     //企业wifi共有
     eapTypeLabel->show();
+    eapTypeCombox->show();
+
     //TLS
     identityLable->show();
-    domainLable->hide();
-    caCertPathLabel->hide();
-    caNeedFlagLabel->hide();
-    clientCertPathLabel->hide();
-    clientPrivateKeyLabel->hide();
-    clientPrivateKeyPwdLabel->hide();
-
-    //PEAP TTLS共有
-    eapMethodLabel->show();
-    userNameLabel->show();
-    userPwdLabel->show();
-    userPwdFlagLabel->hide();
+    identityEdit->show();
+    tlsWidget->hide();
 
     //FAST
-    m_pacCheckBox->show();
-    m_pacProvisionComboBox->show();
-    m_pacFilePathComboBox->show();
     m_pacProvisionLabel->show();
-    m_pacFlagLabel->show();
+    m_pacCheckWidget->show();
     m_pacFileLabel->show();
+    m_pacFilePathComboBox->show();
+
+    eapMethodLabel->show();
+    eapMethodCombox->show();
+    userPwdFlagBox->show();
+    userPwdFlagLabel->show();
+
+    userNameLabel->show();
+    userNameEdit->show();
+    userPwdLabel->show();
+    userPwdEdit->show();
 }
 
 KyEapMethodTlsInfo SecurityPage::assembleTlsInfo()
@@ -885,7 +848,7 @@ KyEapMethodTlsInfo SecurityPage::assembleTlsInfo()
 KyEapMethodPeapInfo SecurityPage::assemblePeapInfo()
 {
     KyEapMethodPeapInfo info;
-    //    info.phase2AuthMethod = (KyNoEapMethodAuth)eapMethodCombox->currentData().toInt();
+//    info.phase2AuthMethod = (KyNoEapMethodAuth)eapMethodCombox->currentData().toInt();
     switch (eapMethodCombox->currentIndex()) {
     case 0:
         info.phase2AuthMethod = KyAuthMethodMschapv2;
@@ -967,37 +930,37 @@ KyEapMethodPwdInfo SecurityPage::assemblePwdInfo()
 KyEapMethodFastInfo SecurityPage::assembleFastInfo()
 {
     KyEapMethodFastInfo info;
-    info.m_anonIdentity = identityEdit->text();
-    switch (m_pacProvisionComboBox->currentIndex()) {
-    case ANON:
-        info.m_pacProvisioning = KyFastProvisioningAllowUnauthenticated;
-        break;
-    case AUTHEN:
-        info.m_pacProvisioning = KyFastProvisioningAllowAuthenticated;
-        break;
-    case BOTH:
-        info.m_pacProvisioning = KyFastProvisioningAllowBoth;
-        break;
-    default:
-        break;
-    }
-    info.m_allowAutoPacFlag = m_pacCheckBox->isChecked();
-    info.m_pacFilePath = m_pacFilePathComboBox->currentText();
+       info.m_anonIdentity = identityEdit->text();
+       switch (m_pacProvisionComboBox->currentIndex()) {
+       case ANON:
+           info.m_pacProvisioning = KyFastProvisioningAllowUnauthenticated;
+           break;
+       case AUTHEN:
+           info.m_pacProvisioning = KyFastProvisioningAllowAuthenticated;
+           break;
+       case BOTH:
+           info.m_pacProvisioning = KyFastProvisioningAllowBoth;
+           break;
+       default:
+           break;
+       }
+       info.m_allowAutoPacFlag = m_pacCheckBox->isChecked();
+       info.m_pacFilePath = m_pacFilePathComboBox->currentText();
 
-    switch (eapMethodCombox->currentIndex()) {
-    case GTC_FAST:
-        info.m_authMethod = KyAuthMethodGtc;
-        break;
-    case MSCHAPV2_FAST:
-        info.m_authMethod = KyAuthMethodMschapv2;
-        break;
-    default:
-        break;
-    }
-    info.m_userName = userNameEdit->text();
-    info.m_userPwd = userPwdEdit->text();
-    info.m_passwdFlag = (userPwdFlagBox->isChecked() ? NetworkManager::Setting::NotSaved : NetworkManager::Setting::None);
-    return info;
+       switch (eapMethodCombox->currentIndex()) {
+       case GTC_FAST:
+           info.m_authMethod = KyAuthMethodGtc;
+           break;
+       case MSCHAPV2_FAST:
+           info.m_authMethod = KyAuthMethodMschapv2;
+           break;
+       default:
+           break;
+       }
+       info.m_userName = userNameEdit->text();
+       info.m_userPwd = userPwdEdit->text();
+       info.m_passwdFlag = (userPwdFlagBox->isChecked() ? NetworkManager::Setting::NotSaved : NetworkManager::Setting::None);
+       return info;
 }
 
 void SecurityPage::updateSecurityChange(KyWirelessConnectSetting &setting)
@@ -1064,13 +1027,11 @@ bool SecurityPage::checkConnectBtnIsEnabled()
                 return false;
             }
         } else if (type == FAST) {
-            if (identityEdit->text().isEmpty()) {
-                qDebug() << "fast anonymous identity is empty";
-                return false;
-            }
             if(!m_pacCheckBox->isChecked()) {
-                qDebug() << "Not allow automatic PAC provisioning ";
-                return false;
+                if (m_pacFilePathComboBox->currentText() == QString(tr("None"))) {
+                    qDebug() << "Not allow automatic PAC provisioning && pac file is empty";
+                    return false;
+                }
             }
             if(userNameEdit->text().isEmpty() || userPwdEdit->text().isEmpty()) {
                 qDebug() << "user name or user password is empty";
@@ -1233,29 +1194,6 @@ void SecurityPage::onClientPrivateKeyComboxIndexChanged(QString str)
     }
 }
 
-void SecurityPage::onPacFilePathComboxIndexChanged(QString str)
-{
-    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
-    {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a PAC file"), "recent:///",
-                                                        tr("PAC Files (*.pac)"));
-        if (!fileName.isNull()) {
-            QStringList nameList = fileName.split("/");
-            m_pacFilePathComboBox->blockSignals(true);
-            m_pacFilePathComboBox->setItemText(0, fileName);
-            m_pacFilePathComboBox->setCurrentIndex(0);
-            m_pacFilePathComboBox->blockSignals(false);
-        } else {
-            m_pacFilePathComboBox->blockSignals(true);
-            m_pacFilePathComboBox->setItemText(0, tr("None"));
-            m_pacFilePathComboBox->setCurrentIndex(0);
-            m_pacFilePathComboBox->blockSignals(false);
-        }
-    } else {
-        qWarning() << "Choose file is null or unvalible";
-    }
-}
-
 void SecurityPage::onPwdOptionComboxIndexChanged(QString str)
 {
     KyEapMethodTlsInfo info;
@@ -1276,15 +1214,39 @@ void SecurityPage::changeColumnWidthWithSecuType()
     if (!isDetailPage) {
         return;
     }
-    if (secuTypeCombox->currentData().toInt() == WPA_AND_WPA2_ENTERPRISE &&
-            eapMethodCombox->currentData().toInt() == TLS) {
-        topLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH);
-        topLayout->setColumnMinimumWidth(1, MIN_EDIT_WIDTH);
-        bottomLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH - 8);
+    if (secuTypeCombox->currentData().toInt() == WPA_AND_WPA2_ENTERPRISE) {
+        if (eapMethodCombox->currentData().toInt() == TLS || eapMethodCombox->currentData().toInt() == FAST) {
+            topLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH);
+            topLayout->setColumnMinimumWidth(1, MIN_EDIT_WIDTH);
+            bottomLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH - 8);
 
-    } else {
+        }
+    }else {
         topLayout->setColumnMinimumWidth(0, DETAIL_MIN_LABEL_WIDTH);
         topLayout->setColumnMinimumWidth(1, DETAIL_MIN_EDIT_WIDTH);
+    }
+}
+
+void SecurityPage::onPacFilePathComboxIndexChanged(QString str)
+{
+    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+    {
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a PAC file"), "recent:///",
+                                                        tr("PAC Files (*.pac)"));
+        if (!fileName.isNull()) {
+            QStringList nameList = fileName.split("/");
+            m_pacFilePathComboBox->blockSignals(true);
+            m_pacFilePathComboBox->setItemText(0, fileName);
+            m_pacFilePathComboBox->setCurrentIndex(0);
+            m_pacFilePathComboBox->blockSignals(false);
+        } else {
+            m_pacFilePathComboBox->blockSignals(true);
+            m_pacFilePathComboBox->setItemText(0, tr("None"));
+            m_pacFilePathComboBox->setCurrentIndex(0);
+            m_pacFilePathComboBox->blockSignals(false);
+        }
+    } else {
+        qWarning() << "Choose file is null or unvalible";
     }
 }
 

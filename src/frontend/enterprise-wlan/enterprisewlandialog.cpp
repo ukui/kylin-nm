@@ -23,8 +23,7 @@
 #include "xatom-helper.h"
 #define MAIN_SIZE_EXPAND 480,580
 #define MAIN_SIZE_NARROW 480,484
-#define PEAP_SCRO_HEIGHT  390
-#define TLS_SCRO_HEIGHT  590
+#define SCROAREA_WIDTH 480
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define CENTER_LAYOUT_MARGINS 24, 16, 24, 8
 #define BUTTON_LAYOUT_MARGINS 24, 24, 24, 24
@@ -127,7 +126,11 @@ void EnterpriseWlanDialog::initUI()
     m_enterWlanScrollArea = new QScrollArea(this);
     m_enterWlanScrollArea->setFrameShape(QFrame::NoFrame);
     m_enterWlanScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_centerWidget->setFixedWidth(SCROAREA_WIDTH);
+    m_enterWlanScrollArea->setFixedWidth(SCROAREA_WIDTH);
     m_enterWlanScrollArea->setWidget(m_centerWidget);
+    m_enterWlanScrollArea->setWidgetResizable(true);
+
     QPalette pal = m_enterWlanScrollArea->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));
     m_enterWlanScrollArea->setPalette(pal);
@@ -279,21 +282,18 @@ void EnterpriseWlanDialog::onEapTypeChanged(const KyEapMethodType &type)
             m_resource->getEnterPriseInfoTls(m_wirelessNetItem.m_connectUuid, m_info.tlsInfo);
         }
         this->setFixedSize(MAIN_SIZE_EXPAND);
-//        m_centerWidget->setFixedHeight(TLS_SCRO_HEIGHT);
         break;
     case KyEapMethodType::PEAP:
         if (m_wirelessNetItem.m_connectUuid.isEmpty()) {
             m_resource->getEnterPriseInfoPeap(m_wirelessNetItem.m_connectUuid, m_info.peapInfo);
             }
         this->setFixedSize(MAIN_SIZE_NARROW);
-//        m_centerWidget->setFixedHeight(PEAP_SCRO_HEIGHT);
         break;
     case KyEapMethodType::TTLS:
         if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
             m_resource->getEnterPriseInfoTtls(m_wirelessNetItem.m_connectUuid, m_info.ttlsInfo);
         }
         this->setFixedSize(MAIN_SIZE_NARROW);
-//        m_centerWidget->setFixedHeight(PEAP_SCRO_HEIGHT);
         break;
     case KyEapMethodType::LEAP:
         if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {

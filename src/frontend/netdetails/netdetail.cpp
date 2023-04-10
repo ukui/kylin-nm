@@ -47,9 +47,11 @@
 #define  CONFIG_PAGE_NUM 4
 #define  CREATE_NET_PAGE_NUM 5
 #define  PAGE_MIN_HEIGHT 40
+#define  PAGE_WIDTH 472
 #define  LAN_TAB_WIDTH 180
 #define  WLAN_TAB_WIDTH 240
-#define  SCRO_WIDTH 472
+#define  SCRO_WIDTH 496
+#define  SCRO_HEIGHT 600
 #define  PEAP_SCRO_HEIGHT  300
 #define  TLS_SCRO_HEIGHT  480
 #define  MAX_TAB_TEXT_LENGTH 44
@@ -167,7 +169,6 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     getConInfo(m_info);
     startObjectThread();
     pagePadding(name,isWlan);
-    setSecuPageHeight();
     connect(qApp, &QApplication::paletteChanged, this, &NetDetail::onPaletteChanged);
 
     isCreateOk = !(m_isCreateNet && !isWlan);
@@ -281,51 +282,63 @@ void NetDetail::initUI()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0,9,0,24);
-    mainLayout->setSpacing(24);
+    mainLayout->setSpacing(22);
+
+    this->installEventFilter(this);
+    pageFrame = new QFrame(this);
+    centerWidget = new QWidget(this);
+    bottomWidget = new QWidget(this);
 
     detailPage = new DetailPage(isWlan, m_name.isEmpty(), this);
-
     ipv4Page = new Ipv4Page(this);
     ipv6Page = new Ipv6Page(this);
     securityPage = new SecurityPage(this);
     createNetPage = new CreatNetPage(this);
     configPage = new ConfigPage(this);
 
-    this->installEventFilter(this);
+    detailPage->setFixedWidth(PAGE_WIDTH);
+    ipv4Page->setFixedWidth(PAGE_WIDTH);
+    ipv6Page->setFixedWidth(PAGE_WIDTH);
+    securityPage->setFixedWidth(PAGE_WIDTH);
+    createNetPage->setFixedWidth(PAGE_WIDTH);
+    configPage->setFixedWidth(PAGE_WIDTH);
 
-    centerWidget = new QWidget(this);
-    bottomWidget = new QWidget(this);
-
-    m_secuPageScrollArea = new QScrollArea(this);
+    m_secuPageScrollArea = new QScrollArea(centerWidget);
+    m_secuPageScrollArea->setFixedWidth(SCRO_WIDTH);
     m_secuPageScrollArea->setFrameShape(QFrame::NoFrame);
     m_secuPageScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_secuPageScrollArea->setWidget(securityPage);
+
+    m_secuPageScrollArea->setWidgetResizable(true);
+
+    m_ipv4ScrollArea = new QScrollArea(centerWidget);
+    m_ipv4ScrollArea->setFixedWidth(SCRO_WIDTH);
+    m_ipv4ScrollArea->setFrameShape(QFrame::NoFrame);
+    m_ipv4ScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_ipv4ScrollArea->setWidget(ipv4Page);
+    m_ipv4ScrollArea->setWidgetResizable(true);
+
+    m_ipv6ScrollArea = new QScrollArea(centerWidget);
+    m_ipv6ScrollArea->setFixedWidth(SCRO_WIDTH);
+    m_ipv6ScrollArea->setFrameShape(QFrame::NoFrame);
+    m_ipv6ScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_ipv6ScrollArea->setWidget(ipv6Page);
+    m_ipv6ScrollArea->setWidgetResizable(true);
+
     QPalette pal = m_secuPageScrollArea->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));
     m_secuPageScrollArea->setPalette(pal);
+    m_ipv4ScrollArea->setPalette(pal);
+    m_ipv6ScrollArea->setPalette(pal);
 
-    detailPage->setFixedWidth(SCRO_WIDTH);
-    ipv4Page->setFixedWidth(SCRO_WIDTH);
-    ipv6Page->setFixedWidth(SCRO_WIDTH);
-    createNetPage->setFixedWidth(SCRO_WIDTH);
-    configPage->setFixedWidth(SCRO_WIDTH);
 
     stackWidget = new QStackedWidget(centerWidget);
     stackWidget->addWidget(detailPage);
-    stackWidget->addWidget(ipv4Page);
-    stackWidget->addWidget(ipv6Page);
+    stackWidget->addWidget(m_ipv4ScrollArea);
+    stackWidget->addWidget(m_ipv6ScrollArea);
     stackWidget->addWidget(m_secuPageScrollArea);
     stackWidget->addWidget(configPage);
     stackWidget->addWidget(createNetPage);
-
-    mainLayout->addWidget(centerWidget);
-    mainLayout->addWidget(bottomWidget);
-
-    bottomWidget->setMinimumHeight(PAGE_MIN_HEIGHT);
-
-    pageFrame = new QFrame(this);
-    QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
-//    pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
 
     // TabBar
     onPaletteChanged();
@@ -351,9 +364,6 @@ void NetDetail::initUI()
         }
     }
 
-    pageLayout->addWidget(m_netTabBar, Qt::AlignCenter);
-    pageLayout->addSpacing(24);
-
     // TabBar关联选项卡页面
     connect(m_netTabBar, SIGNAL(currentChanged(int)), this, SLOT(currentRowChangeSlot(int)));
     setNetTabToolTip();
@@ -366,10 +376,12 @@ void NetDetail::initUI()
 
     forgetBtn = new QPushButton(this);
 
+    QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
+    pageLayout->setContentsMargins(0, 0, 0, 0);
+    pageLayout->addWidget(m_netTabBar, Qt::AlignCenter);
+
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
     centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS); // 右边距为0，为安全页滚动区域留出空间
-    centerlayout->addWidget(pageFrame);
-    centerlayout->addSpacing(4);
     centerlayout->addWidget(stackWidget);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout(bottomWidget);
@@ -379,11 +391,13 @@ void NetDetail::initUI()
     bottomLayout->addStretch();
     bottomLayout->addWidget(cancelBtn);
     bottomLayout->addWidget(confimBtn);
+    bottomWidget->setMinimumHeight(PAGE_MIN_HEIGHT);
 
-//    QPalette pal(this->palette());
-//    pal.setColor(QPalette::Background, qApp->palette().base().color());
+    mainLayout->addWidget(pageFrame);
+    mainLayout->addWidget(centerWidget);
+    mainLayout->addWidget(bottomWidget);
+
     this->setAutoFillBackground(true);
-//    this->setPalette(pal);
 }
 
 void NetDetail::loadPage()
@@ -444,13 +458,6 @@ void NetDetail::initComponent()
     connect(securityPage, &SecurityPage::setSecuPageState, this, [=](bool status) {
        isSecuOk = status;
        setConfirmEnable();
-    });
-
-    connect(securityPage, &SecurityPage::secuTypeChanged, this, [=]() {
-        setSecuPageHeight();
-    });
-    connect(securityPage, &SecurityPage::eapTypeChanged, this, [=]() {
-        setSecuPageHeight();
     });
 
     const QByteArray id(THEME_SCHAME);
@@ -743,22 +750,6 @@ void NetDetail::initSecuData()
         break;
     default:
         break;
-    }
-}
-
-void NetDetail::setSecuPageHeight()
-{
-    KySecuType secuType;
-    KyEapMethodType eapType;
-    securityPage->getSecuType(secuType, eapType);
-    if (secuType == WPA_AND_WPA2_ENTERPRISE) {
-        if (eapType == TLS) {
-            securityPage->setFixedSize(SCRO_WIDTH, TLS_SCRO_HEIGHT);
-        } else {
-            securityPage->setFixedSize(SCRO_WIDTH, PEAP_SCRO_HEIGHT);
-        }
-    } else {
-        securityPage->setFixedSize(SCRO_WIDTH, PEAP_SCRO_HEIGHT);
     }
 }
 
@@ -1215,13 +1206,17 @@ NetTabBar::~NetTabBar()
 
 QSize NetTabBar::sizeHint() const
 {
-    return QSize(TAB_WIDTH, TAB_HEIGHT);
+    QSize size = KTabBar::sizeHint();
+    size.setWidth(TAB_WIDTH);
+    return size;
 }
 
 QSize NetTabBar::minimumTabSizeHint(int index) const
 {
     Q_UNUSED(index)
-    return QSize(TAB_WIDTH, TAB_HEIGHT);
+    QSize size = KTabBar::minimumTabSizeHint(index);
+    size.setWidth(TAB_WIDTH);
+    return size;
 }
 
 

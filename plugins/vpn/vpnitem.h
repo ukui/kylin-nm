@@ -41,37 +41,36 @@ class VpnItem : public QPushButton
 public:
     VpnItem(bool bAcitve, QWidget *parent = nullptr);
 public:
-    QLabel * iconLabel = nullptr;
-    GrayInfoButton * infoLabel = nullptr;
-    FixLabel * titileLabel = nullptr;
-    QLabel * statusLabel = nullptr;
+    QLabel * m_iconLabel = nullptr;
+    GrayInfoButton * m_infoLabel = nullptr;
+    FixLabel * m_titileLabel = nullptr;
+    QLabel * m_statusLabel = nullptr;
     QToolButton* m_moreButton = nullptr;
     QMenu* m_moreMenu = nullptr;
     QAction* m_connectAction = nullptr;
     QAction* m_deleteAction = nullptr;
 
-    QString uuid = "";
-    QString dbusPath = "";
+    QString m_uuid = "";
+    QString m_dbusPath = "";
 
-    void setHalfFillet(bool flag) {useHalfFillet = flag; repaint();}
+    void setHalfFillet(bool flag) {m_useHalfFillet = flag; repaint();}
 public:
     void startLoading();
     void stopLoading();
     void setConnectActionText(bool isAcitve);
 
-    bool isAcitve = false;
-    bool loading = false;
+    bool m_isAcitve = false;
+    bool m_loading = false;
 
 protected:
     void paintEvent(QPaintEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
 
 private:
-    QTimer *waitTimer = nullptr;
-    QGSettings *themeGsettings = nullptr;
-    bool useHalfFillet = false;
-    QList<QIcon> loadIcons;
-    int currentIconIndex=0;
+    QTimer *m_waitTimer = nullptr;
+    bool m_useHalfFillet = false;
+    QList<QIcon> m_loadIcons;
+    int m_currentIconIndex=0;
 
 private slots:
     void updateIcon();

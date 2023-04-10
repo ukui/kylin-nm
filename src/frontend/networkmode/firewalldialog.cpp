@@ -19,6 +19,10 @@
  */
 #include "firewalldialog.h"
 
+#include <QApplication>
+
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME "styleName"
 #define ICON_SIZE 16,16
 
 FirewallDialog::FirewallDialog(QWidget *parent): KDialog(parent)
@@ -28,6 +32,7 @@ FirewallDialog::FirewallDialog(QWidget *parent): KDialog(parent)
     this->setFixedSize(480, 204);
     setAttribute(Qt::WA_DeleteOnClose);
 //    centerToScreen();
+    connect(qApp, &QApplication::paletteChanged, this, &FirewallDialog::onPaletteChanged);
 }
 
 FirewallDialog::~FirewallDialog()
@@ -38,29 +43,33 @@ FirewallDialog::~FirewallDialog()
 void FirewallDialog::initUI()
 {
     m_iconLabel = new QLabel(this);
-    m_contentLabel = new QLabel(this);
-    m_suggestLabel = new QLabel(this);
-    m_YesBtn = new QPushButton(this);
-    m_NoBtn = new QPushButton(this);
+    m_contentLabel = new FixLabel(this);
+    m_suggestLabel = new FixLabel(this);
+    m_PublicBtn = new QPushButton(this);
+    m_PrivateBtn = new QPushButton(this);
     m_dialogLayout = new QVBoxLayout(this);
+
+    m_contentLabel->setFixedWidth(405);
+    m_suggestLabel->setFixedWidth(405);
 
     QWidget *contentWidget = new QWidget(this);
     QGridLayout *contentLayout = new QGridLayout(contentWidget);
+    contentLayout->setHorizontalSpacing(0);
     contentLayout->setContentsMargins(0, 0, 0, 0);
-    contentLayout->addWidget(m_iconLabel, 0, 0, Qt::AlignVCenter);
+    contentLayout->addWidget(m_iconLabel, 0, 0);
     contentLayout->addWidget(m_contentLabel, 0, 1);
     contentLayout->addWidget(m_suggestLabel, 1, 1);
-    m_iconLabel->setFixedWidth(16);
+    m_iconLabel->setFixedWidth(24);
 
     QWidget *btnWidget = new QWidget(this);
     QHBoxLayout *btnLayout = new QHBoxLayout(btnWidget);
     btnLayout->setContentsMargins(0, 0, 0, 0);
     btnLayout->setSpacing(16);
     btnLayout->addStretch();
-    btnLayout->addWidget(m_YesBtn);
-    btnLayout->addWidget(m_NoBtn);
+    btnLayout->addWidget(m_PublicBtn);
+    btnLayout->addWidget(m_PrivateBtn);
 
-    m_dialogLayout->setContentsMargins(24, 16, 24, 24);
+    m_dialogLayout->setContentsMargins(22, 16, 22, 24);
     m_dialogLayout->setSpacing(0);
     m_dialogLayout->addWidget(contentWidget);
     m_dialogLayout->addStretch();
@@ -73,20 +82,19 @@ void FirewallDialog::initUI()
     font.setWeight(57);
     m_contentLabel->setFont(font);
     //是否允许此网络上的其他设备发现这台电脑？
-    m_contentLabel->setText(tr("Allow other devices on this network to discover this computer?"));
-    m_contentLabel->setWordWrap(true);
+    m_contentLabel->setLabelText(tr("Allow other devices on this network to discover this computer?"));
     //不建议在公共网络上开启此功能
-    m_suggestLabel->setText(tr("It is not recommended to enable this feature on public networks"));
-    m_suggestLabel->setWordWrap(true);
+    m_suggestLabel->setLabelText(tr("It is not recommended to enable this feature on public networks"));
 
-    m_YesBtn->setText(tr("Not allowed (recommended)"));
-    m_NoBtn->setText(tr("Allowed"));
+    m_PublicBtn->setText(tr("Not allowed (recommended)"));
+    m_PrivateBtn->setText(tr("Allowed"));
 
     this->closeButton();
     this->mainWidget()->setLayout(m_dialogLayout);
+    onPaletteChanged();
 
-    connect(m_YesBtn, &QPushButton::clicked, this, &FirewallDialog::setPublicNetMode);
-    connect(m_NoBtn, &QPushButton::clicked, this, &FirewallDialog::setPrivateNetMode);
+    connect(m_PublicBtn, &QPushButton::clicked, this, &FirewallDialog::setPublicNetMode);
+    connect(m_PrivateBtn, &QPushButton::clicked, this, &FirewallDialog::setPrivateNetMode);
 }
 
 void FirewallDialog::centerToScreen()
@@ -98,4 +106,25 @@ void FirewallDialog::centerToScreen()
     int x = this->width();
     int y = this->height();
     this->move(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top());
+}
+
+void FirewallDialog::onPaletteChanged()
+{
+    QPalette pal = qApp->palette();
+
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = lightPalette(this);
+       }
+    }
+    this->setPalette(pal);
+
+    if (styleGsettings != nullptr) {
+        delete styleGsettings;
+        styleGsettings = nullptr;
+    }
 }

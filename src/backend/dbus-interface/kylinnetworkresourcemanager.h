@@ -45,6 +45,8 @@
 #include <QInputDialog>
 #include <QMetaEnum>
 
+QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags);
+
 class KyNetworkResourceManager : public QObject
 {
     Q_OBJECT
@@ -122,7 +124,7 @@ Q_SIGNALS:
     //to KyWirelessNetResource
     void wifiNetworkRemoved(QString, QString);
     void wifiNetworkAdded(QString, QString);
-    void wifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net);
+    void wifiNetworkPropertyChange(QString, QString, int, QString, QString);
     void wifiNetworkSecuChange(NetworkManager::AccessPoint *);
     void wifiNetworkDeviceDisappear();
     void wifiEnabledChanged(bool);

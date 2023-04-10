@@ -264,13 +264,10 @@ void MobileHotspotWidget::initDbusConnect()
         connect(m_interface,SIGNAL(hotspotActivated(QString, QString, QString, QString, QString)), this, SLOT(onHotspotActivated(QString, QString, QString, QString, QString)), Qt::QueuedConnection);
 
         connect(m_interface, SIGNAL(wlanactiveConnectionStateChanged(QString, QString, QString, int)), this, SLOT(onActiveConnectionChanged(QString, QString, QString, int)), Qt::QueuedConnection);
+
+        connect(m_interface, SIGNAL(wirelessSwitchBtnChanged(bool)), this, SLOT(onWirelessBtnChanged(bool)), Qt::QueuedConnection);
     }
 
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
-        m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
-        onGsettingChanged(WIRELESS_SWITCH);
-        connect(m_switchGsettings, &QGSettings::changed, this, &MobileHotspotWidget::onGsettingChanged, Qt::QueuedConnection);
-    }
 
     connect(m_apNameLine, &QLineEdit::textEdited, this, &MobileHotspotWidget::onApLineEditTextEdit);
 #ifdef HOTSPOT_CONTROL
@@ -317,17 +314,14 @@ void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString 
     }
 }
 
-void MobileHotspotWidget::onGsettingChanged(const QString &key)
+void MobileHotspotWidget::onWirelessBtnChanged(bool state)
 {
-    if (key == WIRELESS_SWITCH) {
-        bool status = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
-        if (!status) {
-            m_switchBtn->setChecked(status);
-            m_uuid.clear();
-            m_switchBtn->setCheckable(false);
-        } else {
-            m_switchBtn->setCheckable(true);
-        }
+   if (!state) {
+        m_switchBtn->setChecked(state);
+        m_uuid.clear();
+        m_switchBtn->setCheckable(false);
+    } else {
+        m_switchBtn->setCheckable(true);
     }
 }
 
@@ -720,7 +714,9 @@ void MobileHotspotWidget::setWidgetHidden(bool isHidden)
         m_uuid = "";
     } else {
         m_switchBtn->setCheckable(true);
-        onGsettingChanged(WIRELESS_SWITCH);
+        QDBusReply<bool> reply = m_interface->call("getWirelessSwitchBtnState");
+        bool state = reply.value();
+        onWirelessBtnChanged(state);
     }
     resetFrameSize();
 

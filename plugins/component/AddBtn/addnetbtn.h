@@ -34,8 +34,8 @@ public:
     AddNetBtn(bool isWlan, QWidget *parent = nullptr);
     ~AddNetBtn();
 
-    void setTextLabel(QString str) {
-        textLabel->setText(str);
+    void setTextLabel(const QString str) {
+        m_textLabel->setText(str);
     }
 
 protected:
@@ -44,7 +44,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    QLabel* textLabel;
+    QLabel *m_textLabel;
 
 Q_SIGNALS:
     void enterWidget();

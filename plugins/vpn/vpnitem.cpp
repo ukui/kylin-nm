@@ -28,7 +28,7 @@
 #define MODE_QT_KEY      "style-name"
 
 VpnItem::VpnItem(bool bAcitve, QWidget *parent)
-    : isAcitve(bAcitve), QPushButton(parent)
+    : m_isAcitve(bAcitve), QPushButton(parent)
 {
     this->setMinimumSize(550, 58);
     this->setProperty("useButtonPalette", true);
@@ -41,12 +41,12 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
     mLanLyt->setContentsMargins(16,0,16,0);
     mLanLyt->setSpacing(16);
-    iconLabel = new QLabel(this);
-    iconLabel->setProperty("useIconHighlightEffect", 0x2);
-    titileLabel = new FixLabel(this);
-    statusLabel = new QLabel(this);
-    statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    infoLabel = new GrayInfoButton(this);
+    m_iconLabel = new QLabel(this);
+    m_iconLabel->setProperty("useIconHighlightEffect", 0x2);
+    m_titileLabel = new FixLabel(this);
+    m_statusLabel = new QLabel(this);
+    m_statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_infoLabel = new GrayInfoButton(this);
 
     m_moreButton = new QToolButton(this);
     m_moreButton->setProperty("useButtonPalette", true);
@@ -56,29 +56,29 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     m_moreMenu = new QMenu(m_moreButton);
     m_connectAction = new QAction(m_moreMenu);
     m_deleteAction = new QAction(tr("Delete"), m_moreMenu);
-    setConnectActionText(isAcitve);
+    setConnectActionText(m_isAcitve);
 
     m_moreMenu->addAction(m_connectAction);
     m_moreMenu->addAction(m_deleteAction);
     m_moreButton->setMenu(m_moreMenu);
 
-    mLanLyt->addWidget(iconLabel);
-    mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
+    mLanLyt->addWidget(m_iconLabel);
+    mLanLyt->addWidget(m_titileLabel,Qt::AlignLeft);
     mLanLyt->addStretch();
-    mLanLyt->addWidget(statusLabel);
-    mLanLyt->addWidget(infoLabel);
+    mLanLyt->addWidget(m_statusLabel);
+    mLanLyt->addWidget(m_infoLabel);
     mLanLyt->addWidget(m_moreButton);
 
-    loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
-    loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
-    loadIcons.append(QIcon::fromTheme("ukui-loading-3-symbolic"));
-    loadIcons.append(QIcon::fromTheme("ukui-loading-4-symbolic"));
-    loadIcons.append(QIcon::fromTheme("ukui-loading-5-symbolic"));
-    loadIcons.append(QIcon::fromTheme("ukui-loading-6-symbolic"));
-    loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-3-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-4-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-5-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-6-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
 
-    waitTimer = new QTimer(this);
-    connect(waitTimer, &QTimer::timeout, this, &VpnItem::updateIcon);
+    m_waitTimer = new QTimer(this);
+    connect(m_waitTimer, &QTimer::timeout, this, &VpnItem::updateIcon);
 
     connect(m_connectAction, &QAction::triggered, this, &VpnItem::onConnectTriggered);
     connect(m_deleteAction, &QAction::triggered, this, &VpnItem::onDeletetTriggered);
@@ -87,22 +87,22 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
 
 void VpnItem::updateIcon()
 {
-    if (currentIconIndex > 6) {
-        currentIconIndex = 0;
+    if (m_currentIconIndex > 6) {
+        m_currentIconIndex = 0;
     }
-    statusLabel->setPixmap(loadIcons.at(currentIconIndex).pixmap(16,16));
-    currentIconIndex ++;
+    m_statusLabel->setPixmap(m_loadIcons.at(m_currentIconIndex).pixmap(16,16));
+    m_currentIconIndex ++;
 }
 
 void VpnItem::startLoading()
 {
-    waitTimer->start(FRAME_SPEED);
-    loading = true;
+    m_waitTimer->start(FRAME_SPEED);
+    m_loading = true;
 }
 
 void VpnItem::stopLoading(){
-    waitTimer->stop();
-    loading = false;
+    m_waitTimer->stop();
+    m_loading = false;
 }
 
 void VpnItem::setConnectActionText(bool isAcitve)
@@ -146,7 +146,7 @@ void VpnItem::paintEvent(QPaintEvent *event)
     QRect rect = this->rect();
 
 #if 0
-    if (!useHalfFillet) {
+    if (!m_useHalfFillet) {
         painter.drawRect(rect);
     } else {
         QPainterPath path;

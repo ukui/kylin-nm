@@ -69,6 +69,9 @@ public:
     void setDeviceManaged(QString devName, bool managed);
     bool getDeviceManaged(QString devName);
 
+    qulonglong getDeviceRxRefreshRate(QString deviceName);
+    qulonglong getDeviceTxRefreshRate(QString deviceName);
+
 private:
     KyWiredConnectOperation wiredOperation;
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;

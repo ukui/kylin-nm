@@ -21,20 +21,13 @@
  * Implementation of adaptor class VpnDbusAdaptor
  */
 
-VpnDbusAdaptor::VpnDbusAdaptor(vpnMainWindow *parent)
+VpnDbusAdaptor::VpnDbusAdaptor(vpnObject *parent)
     : QDBusAbstractAdaptor(parent)
 {
-    // constructor
     qDBusRegisterMetaType<QMap<QString, bool> >();
     qDBusRegisterMetaType<QMap<QString, int> >();
     qDBusRegisterMetaType<QVector<QStringList> >();
-    //setAutoRelaySignals(true)后会自动转发mainwindow发出的同名信号，因此不必再额外写一个转发
     setAutoRelaySignals(true);
-}
-
-VpnDbusAdaptor::~VpnDbusAdaptor()
-{
-    // destructor
 }
 
 //虚拟连接列表
@@ -70,3 +63,16 @@ void VpnDbusAdaptor::showKylinVpn()
 {
     parent()->onShowMainWindow();
 }
+
+void VpnDbusAdaptor::showVpnAddWidget()
+{
+    qDebug() << "showVpnAddWidget";
+    parent()->showVpnAddWidget();
+}
+
+void VpnDbusAdaptor::showDetailPage(const QString& connUuid)
+{
+    qDebug()  << "showDetailPage vpn" << connUuid;
+    parent()->showDetailPage(connUuid);
+}
+

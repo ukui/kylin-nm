@@ -21,8 +21,6 @@
 #include "backend/kylinipv4arping.h"
 #include "backend/kylinipv6arping.h"
 //#include "xatom/xatom-helper.h"
-#include "networkmodeconfig.h"
-
 
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
@@ -41,6 +39,7 @@
 #define  CENTER_LAYOUT_MARGINS 24,0,0,0
 #define  BOTTOM_LAYOUT_MARGINS 24,0,24,0
 #define  BOTTOM_LAYOUT_SPACING 16
+#define  PAGE_LAYOUT_SPACING 1
 #define  DETAIL_PAGE_NUM 0
 #define  IPV4_PAGE_NUM 1
 #define  IPV6_PAGE_NUM 2
@@ -56,27 +55,8 @@
 #define  PEAP_SCRO_HEIGHT  300
 #define  TLS_SCRO_HEIGHT  480
 #define  MAX_TAB_TEXT_LENGTH 44
-#define KYLIN_APP_MANAGER_NAME         "com.kylin.AppManager"
-#define KYLIN_APP_MANAGER_PATH         "/com/kylin/AppManager"
-#define KYLIN_APP_MANAGER_INTERFACE    "com.kylin.AppManager"
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
-
-bool LaunchApp(QString desktopFile)
-{
-    QDBusInterface m_appManagerDbusInterface(KYLIN_APP_MANAGER_NAME,
-                                             KYLIN_APP_MANAGER_PATH,
-                                             KYLIN_APP_MANAGER_INTERFACE,
-                                             QDBusConnection::sessionBus());//局部变量
-
-    if (!m_appManagerDbusInterface.isValid()) {
-        qWarning()<<"m_appManagerDbusInterface init error";
-        return false;
-    } else {
-        QDBusReply<bool> reply =m_appManagerDbusInterface.call("LaunchApp",desktopFile);
-        return reply;
-    }
-}
 
 void NetDetail::showDesktopNotify(const QString &message, QString soundName)
 {
@@ -189,7 +169,6 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     getConInfo(m_info);
     startObjectThread();
     pagePadding(name,isWlan);
-
     connect(qApp, &QApplication::paletteChanged, this, &NetDetail::onPaletteChanged);
 
     isCreateOk = !(m_isCreateNet && !isWlan);
@@ -218,16 +197,16 @@ void NetDetail::onPaletteChanged()
 {
     QPalette pal = qApp->palette();
 
-//    QGSettings * styleGsettings = nullptr;
-//    const QByteArray style_id(THEME_SCHAME);
-//    if (QGSettings::isSchemaInstalled(style_id)) {
-//       styleGsettings = new QGSettings(style_id);
-//       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
-//       if(currentTheme == "ukui-default"){
-//           pal = lightPalette(this);
-//       }
-//    }
-
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = lightPalette(this);
+       }
+    }
+    pal.setColor(QPalette::Background, pal.base().color());
     this->setPalette(pal);
 
     setFramePalette(detailPage, pal);
@@ -238,18 +217,15 @@ void NetDetail::onPaletteChanged()
     QToolTip::setPalette(pal);
 
     QPalette listwidget_pal(detailPage->m_listWidget->palette());
-    listwidget_pal.setColor(QPalette::Base, this->palette().base().color());
-    listwidget_pal.setColor(QPalette::AlternateBase, this->palette().alternateBase().color());
+    listwidget_pal.setColor(QPalette::Base, pal.base().color());
+    listwidget_pal.setColor(QPalette::AlternateBase, pal.alternateBase().color());
     detailPage->m_listWidget->setAlternatingRowColors(true);
     detailPage->m_listWidget->setPalette(listwidget_pal);
 
-//    if (styleGsettings != nullptr) {
-//        delete styleGsettings;
-//        styleGsettings = nullptr;
-//    }
-
-    QColor colorTabBar = pal.color(QPalette::Disabled, QPalette::Highlight);
-    m_netTabBar->setBackgroundColor(colorTabBar);
+    if (styleGsettings != nullptr) {
+        delete styleGsettings;
+        styleGsettings = nullptr;
+    }
 }
 
 void NetDetail::currentRowChangeSlot(int row)
@@ -271,24 +247,19 @@ void NetDetail::currentRowChangeSlot(int row)
 
 void NetDetail::paintEvent(QPaintEvent *event)
 {
-    QPalette pal = qApp->palette();
-    QPainter painter(this);
-    painter.setBrush(pal.color(QPalette::Base));
-    painter.drawRect(this->rect());
-    painter.fillRect(rect(), QBrush(pal.color(QPalette::Base)));
+//    QPalette pal = qApp->palette();
+//    QPainter painter(this);
+//    painter.setBrush(pal.color(QPalette::Base));
+//    painter.drawRect(this->rect());
+//    painter.fillRect(rect(), QBrush(pal.color(QPalette::Base)));
 
     return QWidget::paintEvent(event);
 }
 
 void NetDetail::closeEvent(QCloseEvent *event)
 {
-    Q_EMIT this->detailPageClose(false);
+    Q_EMIT this->detailPageClose(m_deviceName, m_name, m_uuid);
     Q_EMIT this->createPageClose(m_deviceName);
-
-    if (m_hasDetailPageShowed) {
-        LaunchApp("ukui-control-center.desktop");
-        m_hasDetailPageShowed = false;
-    }
     return QWidget::closeEvent(event);
 }
 
@@ -300,11 +271,11 @@ void NetDetail::centerToScreen()
     int desk_y = desk_rect.height();
     int x = this->width();
     int y = this->height();
-    this->move(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top());
-//    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(desk_x / 2 - x / 2 + desk_rect.left(),
-//                                                                desk_y / 2 - y / 2 + desk_rect.top(),
-//                                                                this->width(),
-//                                                                this->height()));
+//    this->move(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top());
+    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(desk_x / 2 - x / 2 + desk_rect.left(),
+                                                                desk_y / 2 - y / 2 + desk_rect.top(),
+                                                                this->width(),
+                                                                this->height()));
 }
 
 void NetDetail::initUI()
@@ -332,13 +303,12 @@ void NetDetail::initUI()
     createNetPage->setFixedWidth(PAGE_WIDTH);
     configPage->setFixedWidth(PAGE_WIDTH);
 
-
-    // 滚动区域
     m_secuPageScrollArea = new QScrollArea(centerWidget);
     m_secuPageScrollArea->setFixedWidth(SCRO_WIDTH);
     m_secuPageScrollArea->setFrameShape(QFrame::NoFrame);
     m_secuPageScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_secuPageScrollArea->setWidget(securityPage);
+
     m_secuPageScrollArea->setWidgetResizable(true);
 
     m_ipv4ScrollArea = new QScrollArea(centerWidget);
@@ -356,10 +326,11 @@ void NetDetail::initUI()
     m_ipv6ScrollArea->setWidgetResizable(true);
 
     QPalette pal = m_secuPageScrollArea->palette();
-    pal.setBrush(QPalette::Window, Qt::transparent);
+    pal.setBrush(QPalette::Base, QColor(0,0,0,0));
     m_secuPageScrollArea->setPalette(pal);
     m_ipv4ScrollArea->setPalette(pal);
     m_ipv6ScrollArea->setPalette(pal);
+
 
     stackWidget = new QStackedWidget(centerWidget);
     stackWidget->addWidget(detailPage);
@@ -370,20 +341,22 @@ void NetDetail::initUI()
     stackWidget->addWidget(createNetPage);
 
     // TabBar
+    onPaletteChanged();
+    m_networkMode = NetworkModeType(NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid));
     m_netTabBar = new NetTabBar(this);
     m_netTabBar->addTab(tr("Detail")); //详情
     m_netTabBar->addTab(tr("IPv4"));//Ipv4
     m_netTabBar->addTab(tr("IPv6"));//Ipv6
     if (isWlan) {
         m_netTabBar->addTab(tr("Security"));//安全
-        if (isActive) {
+        if (isActive && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
             m_netTabBar->addTab(tr("Config")); //配置
             m_netTabBar->setFixedWidth(WLAN_TAB_WIDTH + TAB_WIDTH);
         } else {
             m_netTabBar->setFixedWidth(WLAN_TAB_WIDTH);
         }
     } else {
-        if (isActive) {
+        if (isActive && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
             m_netTabBar->addTab(tr("Config")); //配置
             m_netTabBar->setFixedWidth(LAN_TAB_WIDTH + TAB_WIDTH);
         } else {
@@ -397,8 +370,10 @@ void NetDetail::initUI()
 
     confimBtn = new QPushButton(this);
     confimBtn->setText(tr("Confirm"));
+
     cancelBtn = new QPushButton(this);
     cancelBtn->setText(tr("Cancel"));
+
     forgetBtn = new QPushButton(this);
 
     QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
@@ -408,8 +383,6 @@ void NetDetail::initUI()
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
     centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS); // 右边距为0，为安全页滚动区域留出空间
     centerlayout->addWidget(stackWidget);
-
-//    centerWidget->setStyleSheet("QWidget{border:1px solid rgba(255,0,0,1);}");//测试用， 画出边界线
 
     QHBoxLayout *bottomLayout = new QHBoxLayout(bottomWidget);
     bottomLayout->setContentsMargins(BOTTOM_LAYOUT_MARGINS);
@@ -425,7 +398,6 @@ void NetDetail::initUI()
     mainLayout->addWidget(bottomWidget);
 
     this->setAutoFillBackground(true);
-    onPaletteChanged();
 }
 
 void NetDetail::loadPage()
@@ -434,13 +406,12 @@ void NetDetail::loadPage()
     if (m_isCreateNet && !isWlan) {
         pageFrame->hide();
         stackWidget->setCurrentIndex(CREATE_NET_PAGE_NUM);
-        this->setWindowTitle(tr("Add Lan Connect"));
-        setDetailPageShowed(true);
+        this->setWindowTitle(tr("Add LAN Connect"));
     } else {
         stackWidget->setCurrentIndex(DETAIL_PAGE_NUM);
         this->setWindowTitle(m_name);
         if (isWlan && m_name.isEmpty()) {
-            this->setWindowTitle(tr("connect hiddin wlan"));
+            this->setWindowTitle(tr("Connect Hidden WLAN"));
         }
     }
 }
@@ -522,30 +493,22 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     detailPage->setAutoConnect(m_info.isAutoConnect);
 
     //ipv4页面填充
+    ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
+    ipv4Page->setMulDns(m_info.ipv4DnsList);
     if (m_info.ipv4ConfigType == CONFIG_IP_MANUAL) {
         Q_EMIT checkCurrentIpv4Conflict(m_info.strIPV4Address);
-        ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
         ipv4Page->setIpv4(m_info.strIPV4Address);
         ipv4Page->setNetMask(m_info.strIPV4NetMask);
-//        ipv4Page->setIpv4FirDns(m_info.strIPV4FirDns);
-//        ipv4Page->setIpv4SecDns(m_info.strIPV4SecDns);
-        ipv4Page->setMulDns(m_info.ipv4DnsList);
         ipv4Page->setGateWay(m_info.strIPV4GateWay);
-    } else {
-        ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
     }
     //ipv6页面填充
+    ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
+    ipv6Page->setMulDns(m_info.ipv6DnsList);
     if (m_info.ipv6ConfigType == CONFIG_IP_MANUAL) {
         Q_EMIT checkCurrentIpv6Conflict(m_info.strIPV6Address);
-        ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
         ipv6Page->setIpv6(m_info.strIPV6Address);
         ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
-//        ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
-//        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
-        ipv6Page->setMulDns(m_info.ipv6DnsList);
         ipv6Page->setGateWay(m_info.strIPV6GateWay);
-    } else {
-        ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
     }
 
     //安全页面
@@ -559,13 +522,19 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
                 securityPage->setPeapInfo(m_info.peapInfo);
             } else if (m_info.enterpriseType == TTLS) {
                 securityPage->setTtlsInfo(m_info.ttlsInfo);
+            } else if (m_info.enterpriseType == LEAP) {
+                securityPage->setLeapInfo(m_info.leapInfo);
+            } else if (m_info.enterpriseType == PWD) {
+                securityPage->setPwdInfo(m_info.pwdInfo);
+            } else if (m_info.enterpriseType == FAST) {
+                securityPage->setFastInfo(m_info.fastInfo);
             }
         }
     }
 
     //配置页面
-    if (isActive) {
-        configPage->setConfigState(NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid));
+    if (isActive  && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
+        configPage->setConfigState(m_networkMode);
     }
 
 }
@@ -691,8 +660,23 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
 
 //    conInfo.ipv4ConfigType = connetSetting.m_ipv4ConfigIpType;
     conInfo.ipv6ConfigType = connetSetting.m_ipv6ConfigIpType;
+//    conInfo.ipv4DnsList = connetSetting.m_ipv4Dns;
+    conInfo.ipv6DnsList = connetSetting.m_ipv6Dns;
     conInfo.isAutoConnect  = connetSetting.m_isAutoConnect;
 
+//    if (connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
+//        if (connetSetting.m_ipv4Address.size() > 0) {
+//            conInfo.strIPV4Address = connetSetting.m_ipv4Address.at(0).ip().toString();
+//            conInfo.strIPV4NetMask = connetSetting.m_ipv4Address.at(0).netmask().toString();
+//            conInfo.strIPV4GateWay = connetSetting.m_ipv4Address.at(0).gateway().toString();
+//        }
+//        if (connetSetting.m_ipv4Dns.size() == 1) {
+//            conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
+//        } else if (connetSetting.m_ipv4Dns.size() > 1) {
+//            conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
+//            conInfo.strIPV4SecDns = connetSetting.m_ipv4Dns.at(1).toString();
+//        }
+//    }
     //openkylin从第三方库读取有问题 改为ipv4信息直接通过dbus获取
     KyConnectItem* item = kyConnectResourse->getConnectionItemByUuidWithoutActivateChecking(m_uuid);
     if (item == nullptr) {
@@ -707,29 +691,23 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
             conInfo.iIPV6Prefix = ipv6Page->getPerfixLength(connetSetting.m_ipv6Address.at(0).netmask().toString());
             conInfo.strIPV6GateWay = connetSetting.m_ipv6Address.at(0).gateway().toString();
         }
-#if 0
-        if (connetSetting.m_ipv6Dns.size() == 1) {
-            conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
-        } else if (connetSetting.m_ipv4Dns.size() > 1) {
-            conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
-            conInfo.strIPV6SecDns = connetSetting.m_ipv6Dns.at(1).toString();
-        }
-#endif
+    }
 
-        conInfo.ipv6DnsList = connetSetting.m_ipv6Dns;
+    QString dnsList;
+    dnsList.clear();
+    if (!conInfo.ipv4DnsList.isEmpty()) {
+        for (QHostAddress str: conInfo.ipv4DnsList) {
+            dnsList.append(str.toString());
+            dnsList.append("; ");
+        }
+        dnsList.chop(2);
+        conInfo.strDynamicIpv4Dns = dnsList;
     }
 
     if (!bActived) {
         conInfo.strDynamicIpv4 = conInfo.strIPV4Address.isEmpty() ? tr("Auto") : conInfo.strIPV4Address;
         conInfo.strDynamicIpv6 = conInfo.strIPV6Address.isEmpty() ? tr("Auto") : conInfo.strIPV6Address;
-        QString dns(" ");
-        for (int i = 0; i < conInfo.ipv4DnsList.size(); ++i) {
-            dns.append(conInfo.ipv4DnsList.at(i).toString());
-            if (i != conInfo.ipv4DnsList.size()-1) {
-                dns.append(" ");
-            }
-        }
-        conInfo.strDynamicIpv4Dns = dns.isEmpty() ? tr("Auto") : dns;
+        conInfo.strDynamicIpv4Dns = conInfo.ipv4DnsList.isEmpty() ? tr("Auto") : conInfo.strDynamicIpv4Dns;
     }
 }
 
@@ -760,8 +738,14 @@ void NetDetail::initSecuData()
             initTlsInfo(m_info);
         } else if (m_info.enterpriseType == PEAP){
             initPeapInfo(m_info);
-        } else {
+        }  else  if (m_info.enterpriseType == TTLS){
             initTtlsInfo(m_info);
+        } else  if (m_info.enterpriseType == LEAP){
+            initLeapInfo(m_info);
+        } else  if (m_info.enterpriseType == PWD){
+            initPwdInfo(m_info);
+        } else  if (m_info.enterpriseType == FAST){
+            initFastInfo(m_info);
         }
         break;
     default:
@@ -782,6 +766,21 @@ void NetDetail::initPeapInfo(ConInfo &conInfo)
 void NetDetail::initTtlsInfo(ConInfo &conInfo)
 {
     m_resource->getEnterPriseInfoTtls(m_uuid, conInfo.ttlsInfo);
+}
+
+void NetDetail::initLeapInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoLeap(m_uuid, conInfo.leapInfo);
+}
+
+void NetDetail::initPwdInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoPwd(m_uuid, conInfo.pwdInfo);
+}
+
+void NetDetail::initFastInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoFast(m_uuid, conInfo.fastInfo);
 }
 
 //点击了保存更改网络设置的按钮
@@ -899,6 +898,15 @@ void NetDetail::updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType)
     } else if (enterpriseType == TTLS) {
         securityPage->updateTtlsChange(m_info.ttlsInfo);
         m_wirelessConnOpration->updateWirelessEnterPriseTtlsConnect(m_uuid, m_info.ttlsInfo);
+    } else if (enterpriseType == LEAP) {
+        securityPage->updateLeapChange(m_info.leapInfo);
+        m_wirelessConnOpration->updateWirelessEnterPriseLeapConnect(m_uuid, m_info.leapInfo);
+    } else if (enterpriseType == PWD) {
+        securityPage->updatePwdChange(m_info.pwdInfo);
+        m_wirelessConnOpration->updateWirelessEnterPrisePwdConnect(m_uuid, m_info.pwdInfo);
+    } else if (enterpriseType == FAST) {
+        securityPage->updateFastChange(m_info.fastInfo);
+        m_wirelessConnOpration->updateWirelessEnterPriseFastConnect(m_uuid, m_info.fastInfo);
     }
 }
 
@@ -1004,6 +1012,33 @@ bool NetDetail::createWirelessConnect()
                 qDebug() << "addAndConnect TTLS connect";
                 m_wirelessConnOpration->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, true);
             }
+        } else if (enterpriseType == LEAP) {
+            securityPage->updateLeapChange(m_info.leapInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new LEAP connect";
+                m_wirelessConnOpration->addLeapConnect(connetSetting, m_info.leapInfo);
+            } else {
+                qDebug() << "addAndConnect LEAP connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPriseLeapConnect(m_info.leapInfo, connetSetting, m_deviceName, true);
+            }
+        } else if (enterpriseType == PWD) {
+            securityPage->updatePwdChange(m_info.pwdInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new PWD connect";
+                m_wirelessConnOpration->addPwdConnect(connetSetting, m_info.pwdInfo);
+            } else {
+                qDebug() << "addAndConnect PWD connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPrisePwdConnect(m_info.pwdInfo, connetSetting, m_deviceName, true);
+            }
+        } else if (enterpriseType == FAST) {
+            securityPage->updateFastChange(m_info.fastInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new FAST connect";
+                m_wirelessConnOpration->addFastConnect(connetSetting, m_info.fastInfo);
+            } else {
+                qDebug() << "addAndConnect FAST connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connetSetting, m_deviceName, true);
+            }
         }
     } else {
         securityPage->updateSecurityChange(connetSetting);
@@ -1087,7 +1122,7 @@ bool NetDetail::updateConnect()
         }
     }
 
-    if (configPage != nullptr) {
+    if (m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
         int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(m_uuid);
         bool configPageChange = configPage->checkIsChanged(configType);
         int currentConfigType = configPage->getConfigState();
@@ -1142,11 +1177,6 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
        }
    }
    return QWidget::eventFilter(w, event);
-}
-
-void NetDetail::setDetailPageShowed(bool state)
-{
-    m_hasDetailPageShowed = state;
 }
 
 void NetDetail::setNetTabToolTip()
@@ -1217,6 +1247,7 @@ void NetTabBar::onModeChanged(bool mode)
     }
 }
 
+
 ThreadObject::ThreadObject(QString deviceName, QObject *parent)
     :m_devName(deviceName), QObject(parent)
 {
@@ -1242,6 +1273,24 @@ void ThreadObject::checkIpv4ConflictThread(const QString &ipv4Address)
     KyIpv4Arping* ipv4Arping = new KyIpv4Arping(m_devName, ipv4Address);
     if (ipv4Arping->ipv4ConflictCheck() >= 0) {
         isConflict =  ipv4Arping->ipv4IsConflict();
+        if (isConflict) {
+            QString mac = ipv4Arping->getMacAddress();
+            qDebug() << "conflict mac" << mac;
+            KyNetworkDeviceResourse resource;
+            QStringList devList,devList1,devList2;
+            resource.getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, devList1);
+            resource.getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList2);
+            devList << devList1 << devList2;
+            for(int i = 0; i < devList.size(); ++i){
+                QString hardAddress;
+                int band;
+                resource.getHardwareInfo(devList.at(i), hardAddress, band);
+                if (hardAddress == mac) {
+                    qDebug() << "conflict local card" << devList.at(i);
+                    isConflict = false;
+                }
+            }
+        }
     } else {
         qWarning() << "checkIpv4Conflict internal error";
     }
@@ -1258,7 +1307,6 @@ void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
     }
     bool isConflict = false;
     KyIpv6Arping* ipv6rping = new KyIpv6Arping(m_devName, ipv6Address);
-
     if (ipv6rping->ipv6ConflictCheck() >= 0) {
         isConflict =  ipv6rping->ipv6IsConflict();
     } else {
@@ -1320,14 +1368,10 @@ void NetDetail::getIpv4Info(QString objPath, ConInfo &conInfo)
                     while (!dbusArg2nd.atEnd()) {
                         uint tempMap;
                         dbusArg2nd >> tempMap;
-                        addressVector.append(tempMap);
-                    }
-                    dbusArg2nd.endArray();
-                    for (int i = 0; i < addressVector.size(); ++i) {
-                        QString dns(inet_ntoa(*(struct in_addr *)&addressVector.at(i)));
+                        QString dns(inet_ntoa(*(struct in_addr *)&tempMap));
                         conInfo.ipv4DnsList << QHostAddress(dns);
                     }
-
+                    dbusArg2nd.endArray();
                 } else if (inner_key == "gateway") {
                     //gateway
                     conInfo.strIPV4GateWay = innerMap.value(inner_key).toString();
@@ -1353,4 +1397,5 @@ void NetDetail::getIpv4Info(QString objPath, ConInfo &conInfo)
         //            }
         //        }
     }
+
 }

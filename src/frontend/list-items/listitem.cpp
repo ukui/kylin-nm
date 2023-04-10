@@ -31,6 +31,85 @@
 #define LIGHT_HOVER_COLOR QColor(240,240,240,255)
 #define DARK_HOVER_COLOR QColor(15,15,15,255)
 
+#define CONNECT_BUTTON_WIDTH 96
+#define PWD_AREA_HEIGHT 36
+
+#define FREQLABLE_HIGHT 18
+#define FREQLABLE_MARGINS 4,0,4,0
+#define LOADIMG_SIZE 16,16
+
+FreqLabel::FreqLabel(QWidget *parent) : QLabel(parent)
+{
+    const QByteArray id("org.ukui.style");
+    QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+    if(QGSettings::isSchemaInstalled(id)){
+        connect(fontSetting, &QGSettings::changed,[=](QString key) {
+            if ("systemFontSize" ==key) {
+                changedFontSlot();
+            }
+        });
+    }
+    changedFontSlot();
+}
+
+void FreqLabel::changedFontSlot()
+{
+    const QByteArray id("org.ukui.style");
+    if(QGSettings::isSchemaInstalled(id)){
+        QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+        QVariant fontVariant =  fontSetting->get("systemFontSize");
+        QFont font;
+        font.setPointSize(fontVariant.toInt()*0.85);
+        this->setFont(font);
+    }
+}
+
+void FreqLabel::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing); //抗锯齿效果
+    auto rect = this->rect();
+    painter.drawRoundedRect(rect, 6, 6);
+    QLabel::paintEvent(event);
+}
+
+FixPushButton::FixPushButton(QWidget *parent) :
+    QPushButton(parent)
+{
+    const QByteArray id("org.ukui.style");
+    QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+    if(QGSettings::isSchemaInstalled(id)){
+        connect(fontSetting, &QGSettings::changed,[=](QString key) {
+            if ("systemFont" == key || "systemFontSize" ==key) {
+                changedLabelSlot();
+            }
+        });
+    }
+}
+
+
+void FixPushButton::setButtonText(QString text) {
+
+    mStr = text;
+    changedLabelSlot();
+}
+
+QString FixPushButton::getText(){
+    return mStr;
+}
+
+void FixPushButton::changedLabelSlot() {
+    QFontMetrics  fontMetrics(this->font());
+    int fontSize = fontMetrics.width(mStr);
+    if (fontSize > 65) {
+        setText(fontMetrics.elidedText(mStr, Qt::ElideRight, 65));
+        setToolTip(mStr);
+    } else {
+        setText(mStr);
+        setToolTip("");
+    }
+}
+
 ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
     m_connectState = UnknownState;
@@ -48,10 +127,10 @@ ListItem::~ListItem()
         m_netButton = nullptr;
     }
 
-    if (nullptr != m_infoButton) {
-        delete m_infoButton;
-        m_infoButton = nullptr;
-    }
+//    if (nullptr != m_infoButton) {
+//        delete m_infoButton;
+//        m_infoButton = nullptr;
+//    }
 
 }
 
@@ -100,12 +179,19 @@ void ListItem::showDesktopNotify(const QString &message, QString soundName)
 void ListItem::mousePressEvent(QMouseEvent *event)
 {
     qDebug()<<"[ListItem]"<<"mousePressEvent";
-    if (event->button() == Qt::LeftButton) {
-        onNetButtonClicked();
-    } else if (event->button() == Qt::RightButton) {
+    if (event->button() == Qt::RightButton) {
         onRightButtonClicked();
     }
     return QFrame::mousePressEvent(event);
+}
+
+void ListItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    qDebug()<<"[ListItem]"<<"mouseReleaseEvent";
+    if (event->button() == Qt::LeftButton) {
+        onNetButtonClicked();
+    }
+    return QFrame::mouseReleaseEvent(event);
 }
 
 void ListItem::enterEvent(QEvent *event)
@@ -156,21 +242,65 @@ void ListItem::initUI()
 
     m_hItemLayout = new QHBoxLayout(m_itemFrame);
     m_hItemLayout->setContentsMargins(ITEM_FRAME_MARGINS);
-    m_hItemLayout->setSpacing(ITEM_FRAME_SPACING);
+    m_hItemLayout->setSpacing(0);
     m_hItemLayout->setAlignment(Qt::AlignHCenter);
 
     m_netButton = new RadioItemButton(m_itemFrame);
-    m_nameLabel = new FixLabel(m_itemFrame);
-    m_nameLabel->setMinimumWidth(262);
-    m_infoButton = new InfoButton(m_itemFrame);
-    m_infoButton->setIconSize(QSize(INFO_ICON_WIDTH,INFO_ICON_HEIGHT));
+    m_freq = new FreqLabel(m_itemFrame);
+    m_freq->setEnabled(false);
+    m_freq->setText("...");
+    m_freq->setAlignment(Qt::AlignCenter);
+    m_freq->hide();
+    m_freq->setFixedHeight(FREQLABLE_HIGHT);
+    m_freq->setContentsMargins(FREQLABLE_MARGINS);
+    m_nameLabel = new NameLabel(m_itemFrame);
+    m_hoverButton = new FixPushButton(m_itemFrame);
+    m_hoverButton->setProperty("needTranslucent", true);
+    m_hoverButton->setFixedSize(CONNECT_BUTTON_WIDTH, PWD_AREA_HEIGHT);
+//    m_infoButton = new InfoButton(m_itemFrame);
+//    m_infoButton->setIconSize(QSize(INFO_ICON_WIDTH,INFO_ICON_HEIGHT));
+
+    m_lbLoadUp = new QLabel(m_itemFrame);
+    m_lbLoadUp->setAlignment(Qt::AlignCenter);
+    m_lbLoadDown = new QLabel(m_itemFrame);
+    m_lbLoadDown->setAlignment(Qt::AlignCenter);
+    m_lbLoadDownImg = new QLabel(m_itemFrame);
+    m_lbLoadUpImg = new QLabel(m_itemFrame);
+    m_lbLoadUp->hide();
+    m_lbLoadDown->hide();
+    m_lbLoadDownImg->hide();
+    m_lbLoadUpImg->hide();
+    m_lbLoadDownImg->setFixedSize(LOADIMG_SIZE);
+    m_lbLoadDownImg->setAlignment(Qt::AlignCenter);
+    m_lbLoadUpImg->setFixedSize(LOADIMG_SIZE);
+    m_lbLoadUpImg->setAlignment(Qt::AlignCenter);
+    QFont font;
+    font.setPointSize(10);
+    m_lbLoadUp->setFont(font);
+    m_lbLoadDown->setFont(font);
+    m_lbLoadUp->setText("0KB/s");
+    m_lbLoadDown->setText("0KB/s");
+    m_lbLoadDownImg->setPixmap(QPixmap(QLatin1String(":/res/x/load-down.png")));
+    m_lbLoadUpImg->setPixmap(QPixmap(QLatin1String(":/res/x/load-up.png")));
 
     m_hItemLayout->addWidget(m_netButton);
+    m_hItemLayout->addSpacing(10);
     m_hItemLayout->addWidget(m_nameLabel);
+    m_hItemLayout->addSpacing(8);
+    m_hItemLayout->addWidget(m_freq);
     m_hItemLayout->addStretch();
-    m_hItemLayout->addWidget(m_infoButton);
+    m_hItemLayout->addWidget(m_lbLoadUpImg);
+    m_hItemLayout->addWidget(m_lbLoadUp);
+    m_hItemLayout->addSpacing(2);
+    m_hItemLayout->addWidget(m_lbLoadDownImg);
+    m_hItemLayout->addWidget(m_lbLoadDown);
+    m_hItemLayout->addSpacing(2);
+    m_hItemLayout->addWidget(m_hoverButton);
+//    m_hItemLayout->addWidget(m_infoButton);
 
     m_mainLayout->addWidget(m_itemFrame);
+
+    m_hoverButton->hide();
 
 //    this->setAutoFillBackground(true);
 //    this->setBackgroundRole(QPalette::Base);
@@ -193,3 +323,46 @@ void ListItem::onPaletteChanged()
 //    this->setPalette(pal);
 }
 
+
+NameLabel::NameLabel(QWidget *parent)
+    :QLabel(parent)
+{
+    const QByteArray id("org.ukui.style");
+    QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
+    if(QGSettings::isSchemaInstalled(id)){
+        connect(fontSetting, &QGSettings::changed,[=](QString key) {
+            if ("systemFont" == key || "systemFontSize" ==key) {
+                changedLabelSlot();
+            }
+        });
+    }
+}
+
+void NameLabel::setLabelText(QString text)
+{
+    m_name = text;
+    changedLabelSlot();
+}
+
+void NameLabel::setLabelMaximumWidth(int width)
+{
+    m_maximumWidth = width;
+    this->setMaximumWidth(m_maximumWidth);
+    if (m_name != nullptr) {
+        changedLabelSlot();
+    }
+}
+
+void NameLabel::changedLabelSlot()
+{
+    QFontMetrics  fontMetrics(this->font());
+    int fontSize = fontMetrics.width(m_name);
+    if (fontSize > m_maximumWidth) {
+        setText(fontMetrics.elidedText(m_name, Qt::ElideRight, m_maximumWidth));
+        setToolTip(m_name);
+    } else {
+        this->setFixedWidth(fontMetrics.width(m_name));
+        setText(m_name);
+        setToolTip("");
+    }
+}

@@ -36,14 +36,14 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
     initDeviceMap();
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceAdd,
-                                       this, &KyNetworkDeviceResourse::onDeviceAdd, Qt::ConnectionType::DirectConnection);
+                                       this, &KyNetworkDeviceResourse::onDeviceAdd/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceRemove,
-                                       this, &KyNetworkDeviceResourse::onDeviceRemove, Qt::ConnectionType::DirectConnection);
+                                       this, &KyNetworkDeviceResourse::onDeviceRemove/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceUpdate,
-                                       this, &KyNetworkDeviceResourse::onDeviceUpdate, Qt::ConnectionType::DirectConnection);
+                                       this, &KyNetworkDeviceResourse::onDeviceUpdate/*, Qt::ConnectionType::DirectConnection*/);
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::stateChanged,
-                                       this, &KyNetworkDeviceResourse::stateChanged, Qt::ConnectionType::DirectConnection);
+                                       this, &KyNetworkDeviceResourse::stateChanged/*, Qt::ConnectionType::DirectConnection*/);
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceCarrierChanage,
                                        this, &KyNetworkDeviceResourse::carrierChanage);
@@ -211,6 +211,42 @@ void KyNetworkDeviceResourse::setDeviceRefreshRate(QString deviceName, int ms)
     }
 
     return;
+}
+
+qulonglong KyNetworkDeviceResourse::getDeviceRxRefreshRate(QString deviceName)
+{
+    NetworkManager::Device::Ptr connectDevice =
+                        m_networkResourceInstance->findDeviceInterface(deviceName);
+    if (connectDevice->isValid()) {
+        NetworkManager::DeviceStatistics::Ptr deviceStatistics = connectDevice->deviceStatistics();
+        qulonglong rx = 0;
+        rx = deviceStatistics->rxBytes();
+        if (rx != 0) {
+            return rx;
+        } else {
+            qDebug() << "connectDevice is invalid we do not get rxrate";
+        }
+    }
+
+    return 0;
+}
+
+qulonglong KyNetworkDeviceResourse::getDeviceTxRefreshRate(QString deviceName)
+{
+    NetworkManager::Device::Ptr connectDevice =
+                        m_networkResourceInstance->findDeviceInterface(deviceName);
+    if (connectDevice->isValid()) {
+        NetworkManager::DeviceStatistics::Ptr deviceStatistics = connectDevice->deviceStatistics();
+        qulonglong tx = 0;
+        tx = deviceStatistics->txBytes();
+        if (tx != 0){
+            return tx;
+        } else {
+        qDebug() << "connectDevice is invalid we do not get txrate";
+        }
+    }
+
+    return 0;
 }
 
 bool KyNetworkDeviceResourse::getActiveConnectionInfo(const QString devName, int &signalStrength, QString &uni, QString &secuType)
@@ -385,7 +421,7 @@ bool KyNetworkDeviceResourse::getDeviceManaged(QString deviceName)
 {
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(deviceName);
-    if (connectDevice->isValid()) {
+    if (connectDevice != nullptr && connectDevice->isValid()) {
        return connectDevice->managed();
     } else {
         qWarning()<<"[KyNetworkDeviceResourse] can not find device " << deviceName;

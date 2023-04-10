@@ -18,29 +18,20 @@
  *
  */
 #include "vpnpage.h"
-#include "networkmodeconfig.h"
 #include <QDebug>
 #include <QScrollBar>
+#include "windowmanager/windowmanager.h"
 
-#define VPN_LIST_SPACING 0
-#define ITEM_HEIGHT 48
-
-
-#define LOG_FLAG "[VpnPage]"
-
-const QString EMPTY_CONNECT_UUID = "emptyconnect";
-
-const QString WIRED_SWITCH = "wiredswitch";
 
 VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
 {
     m_activeResourse = new KyActiveConnectResourse(this);
     m_connectResourse = new KyConnectResourse(this);
-//    m_deviceResource = new KyNetworkDeviceResourse(this);
-    m_wiredConnectOperation = new KyWiredConnectOperation(this);
+    m_vpnConnectOperation = new KyVpnConnectOperation(this);
 
     initUI();
     initVpnArea();
+    installEventFilter(this);
 
     connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &VpnPage::onConnectionStateChange);
     connect(m_activeResourse, &KyActiveConnectResourse::activeConnectRemove, this, [=] (QString activeConnectUuid) {
@@ -51,8 +42,14 @@ VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
     connect(m_connectResourse, &KyConnectResourse::connectionRemove, this, &VpnPage::onRemoveConnection);
     connect(m_connectResourse, &KyConnectResourse::connectionUpdate, this, &VpnPage::onUpdateConnection);
 
-    connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &VpnPage::activateFailed);
-    connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &VpnPage::deactivateFailed);
+    connect(m_vpnConnectOperation, &KyVpnConnectOperation::activateConnectionError, this, &VpnPage::activateFailed);
+    connect(m_vpnConnectOperation, &KyVpnConnectOperation::deactivateConnectionError, this, &VpnPage::deactivateFailed);
+
+    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, [&](WId activeWindowId){
+        if (activeWindowId != this->winId() && activeWindowId != 0) {
+            hide();
+        }
+    });
 }
 
 VpnPage::~VpnPage()
@@ -61,16 +58,16 @@ VpnPage::~VpnPage()
 }
 
 void VpnPage::deleteConnectionMapItem(QMap<QString, QListWidgetItem *> &connectMap,
-                             QListWidget *lanListWidget, QString uuid)
+                             QListWidget *vpnListWidget, QString uuid)
 {
     QListWidgetItem *p_listWidgetItem = connectMap.value(uuid);
     if (p_listWidgetItem) {
         connectMap.remove(uuid);
-        VpnListItem *p_lanItem = (VpnListItem *)lanListWidget->itemWidget(p_listWidgetItem);
-        lanListWidget->removeItemWidget(p_listWidgetItem);
+        VpnListItem *p_vpnItem = (VpnListItem *)vpnListWidget->itemWidget(p_listWidgetItem);
+        vpnListWidget->removeItemWidget(p_listWidgetItem);
 
-        delete p_lanItem;
-        p_lanItem = nullptr;
+        delete p_vpnItem;
+        p_vpnItem = nullptr;
 
         delete p_listWidgetItem;
         p_listWidgetItem = nullptr;
@@ -80,7 +77,7 @@ void VpnPage::deleteConnectionMapItem(QMap<QString, QListWidgetItem *> &connectM
 }
 
 void VpnPage::clearConnectionMap(QMap<QString, QListWidgetItem *> &connectMap,
-                                 QListWidget *lanListWidget)
+                                 QListWidget *vpnListWidget)
 {
     QMap<QString, QListWidgetItem *>::iterator iter;
 
@@ -89,11 +86,11 @@ void VpnPage::clearConnectionMap(QMap<QString, QListWidgetItem *> &connectMap,
         qDebug()<<"[VpnPage] clear connection map item"<< iter.key();
 
         QListWidgetItem *p_widgetItem = iter.value();
-        VpnListItem *p_lanItem = (VpnListItem *)lanListWidget->itemWidget(p_widgetItem);
-        lanListWidget->removeItemWidget(p_widgetItem);
+        VpnListItem *p_vpnItem = (VpnListItem *)vpnListWidget->itemWidget(p_widgetItem);
+        vpnListWidget->removeItemWidget(p_widgetItem);
 
-        delete p_lanItem;
-        p_lanItem = nullptr;
+        delete p_vpnItem;
+        p_vpnItem = nullptr;
 
         delete p_widgetItem;
         p_widgetItem = nullptr;
@@ -104,17 +101,15 @@ void VpnPage::clearConnectionMap(QMap<QString, QListWidgetItem *> &connectMap,
     return;
 }
 
-void VpnPage::constructActiveConnectionArea()
+void VpnPage::constructItemArea()
 {
     QList<KyConnectItem *> activedList;
     QList<KyConnectItem *> netList;
-    QGSettings* vpnGsettings = nullptr;
-    if (QGSettings::isSchemaInstalled(GSETTINGS_VPNICON_VISIBLE)) {
-        vpnGsettings = new QGSettings(GSETTINGS_VPNICON_VISIBLE);
-    }
+
     activedList.clear();
     netList.clear();
-    clearConnectionMap(m_activeConnectionMap, m_vpnListWidget);
+    clearConnectionMap(m_activeItemMap, m_listWidget);
+    clearConnectionMap(m_vpnItemMap, m_listWidget);
 
     m_connectResourse->getVpnAndVirtualConnections(netList);
     KyConnectItem *p_newItem = nullptr;
@@ -123,75 +118,80 @@ void VpnPage::constructActiveConnectionArea()
             KyConnectItem *p_netConnectionItem = netList.at(index);
             p_newItem = m_activeResourse->getActiveConnectionByUuid(p_netConnectionItem->m_connectUuid);
             if (p_newItem == nullptr) {
-                if (m_netConnectionMap.contains(p_netConnectionItem->m_connectUuid)) {
+                if (m_vpnItemMap.contains(p_netConnectionItem->m_connectUuid)) {
                     qDebug()<<LOG_FLAG << "has contain uuid" << p_netConnectionItem->m_connectUuid;
                 }
-                QListWidgetItem *p_listWidgetItem = addNewItem(p_netConnectionItem, m_vpnListWidget);
-                m_netConnectionMap.insert(p_netConnectionItem->m_connectUuid, p_listWidgetItem);
+                QListWidgetItem *p_listWidgetItem = addNewItem(p_netConnectionItem, m_listWidget);
+                m_vpnItemMap.insert(p_netConnectionItem->m_connectUuid, p_listWidgetItem);
             } else {
-                if (m_activeConnectionMap.contains(p_netConnectionItem->m_connectUuid)) {
+                if (m_activeItemMap.contains(p_netConnectionItem->m_connectUuid)) {
                     qDebug()<<LOG_FLAG << "has contain uuid" << p_netConnectionItem->m_connectUuid;
                 }
-                QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_vpnListWidget);
-                m_activeConnectionMap.insert(p_netConnectionItem->m_connectUuid, p_listWidgetItem);
+                QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_listWidget);
+                m_activeItemMap.insert(p_netConnectionItem->m_connectUuid, p_listWidgetItem);
             }
 
             delete p_netConnectionItem;
             p_netConnectionItem = nullptr;
         }
-        if (vpnGsettings != nullptr
-                && vpnGsettings->keys().contains(QString(VISIBLE))) {
-            vpnGsettings->set(VISIBLE, true);
-        }
-    } else {
-        if (vpnGsettings != nullptr
-                && vpnGsettings->keys().contains(QString(VISIBLE))) {
-            vpnGsettings->set(VISIBLE, false);
+    }
+
+    if (QGSettings::isSchemaInstalled(GSETTINGS_VPNICON_VISIBLE)) {
+        QGSettings vpnGsettings(GSETTINGS_VPNICON_VISIBLE);
+        if (vpnGsettings.keys().contains(QString(VISIBLE))) {
+            if (!netList.isEmpty()) {
+                vpnGsettings.set(VISIBLE, true);
+            } else {
+                vpnGsettings.set(VISIBLE, false);
+            }
         }
     }
 
-    if (m_vpnListWidget->count() <= MAX_ITEMS) {
-        m_vpnListWidget->setFixedWidth(MIN_WIDTH);
-        m_netListArea->setFixedHeight(m_vpnListWidget->count() * ITEM_HEIGHT);
-    } else {
-        m_vpnListWidget->setFixedWidth(MAX_WIDTH);
-        m_netListArea->setFixedHeight(MAX_ITEMS * ITEM_HEIGHT);
-    }
-    m_netFrame->setFixedHeight(37 + m_netListArea->height());
-
-    delete vpnGsettings;
-    vpnGsettings = nullptr;
+    resetListWidgetWidth();
 }
 
 void VpnPage::initVpnArea()
 {
-    m_netFrame->show();
-    constructActiveConnectionArea();
+    constructItemArea();
+}
+
+void VpnPage::resetPageHeight()
+{
+    int height = 0;
+    int count = m_listWidget->count();
+    m_listFrame->setFixedHeight((count >= 4) ? (MAX_ITEMS * ITEM_HEIGHT + ITEM_SPACE) : (count * ITEM_HEIGHT + ITEM_SPACE));
+
+    if (count == 0) {
+        m_listWidget->setHidden(true);
+        m_listFrame->setHidden(true);
+        m_netDivider->setHidden(true);
+    } else {
+        m_listWidget->show();
+        m_listFrame->show();
+        m_netDivider->show();
+    }
 }
 
 bool VpnPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
-                          QListWidget *lanListWidget, QString path)
+                          QListWidget *vpnListWidget, QString path)
 {
     QMap<QString, QListWidgetItem *>::iterator iter;
     for (iter = connectMap.begin(); iter != connectMap.end(); ++iter) {
         QListWidgetItem *p_listWidgetItem = iter.value();
-        VpnListItem *p_lanItem = (VpnListItem*)lanListWidget->itemWidget(p_listWidgetItem);
-        if (p_lanItem->getConnectionPath() == path) {
+        VpnListItem *p_vpnItem = (VpnListItem*)vpnListWidget->itemWidget(p_listWidgetItem);
+        if (p_vpnItem->getConnectionPath() == path) {
             qDebug()<<"[VpnPage] Remove a connection from list";
 
-            lanListWidget->removeItemWidget(p_listWidgetItem);
+            vpnListWidget->removeItemWidget(p_listWidgetItem);
 
-            delete p_lanItem;
-            p_lanItem = nullptr;
+            delete p_vpnItem;
+            p_vpnItem = nullptr;
 
             delete p_listWidgetItem;
             p_listWidgetItem = nullptr;
 
             iter = connectMap.erase(iter);
-            if (m_vpnListWidget->count() <= MAX_ITEMS) {
-                m_vpnListWidget->setFixedWidth(MIN_WIDTH);
-                m_netListArea->setFixedHeight(m_vpnListWidget->count() * ITEM_HEIGHT);
-            }
+            resetListWidgetWidth();
             return true;
         }
     }
@@ -205,10 +205,11 @@ void VpnPage::onRemoveConnection(QString path)            //删除时后端会�
     qDebug() << "[VpnPage] emit lanRemove because onRemoveConnection " << path;
     Q_EMIT vpnRemove(path);
 
-    if (removeConnectionItem(m_netConnectionMap, m_vpnListWidget, path)) {
-        m_netFrame->setFixedHeight(37 + m_netListArea->height());
-        return;
-    }
+    removeConnectionItem(m_vpnItemMap, m_listWidget, path);
+    removeConnectionItem(m_activeItemMap, m_listWidget, path);
+    resetPageHeight();
+    resetWindowPosition();
+    this->update();
 }
 
 void VpnPage::onAddConnection(QString uuid)               //新增一个有线连接，将其加入到激活列表
@@ -226,21 +227,18 @@ void VpnPage::onAddConnection(QString uuid)               //新增一个有线�
     sendVpnAddSignal(p_newItem);
 
     qDebug()<<"[VpnPage] Add a new connection, name:"<<p_newItem->m_connectName;
-    QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_vpnListWidget);
-    if (m_netConnectionMap.contains(p_newItem->m_connectUuid)) {
-        qDebug()<<LOG_FLAG << "the connection is exsit" << p_newItem->m_connectUuid;
+    QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_listWidget);
+    if (m_vpnItemMap.contains(p_newItem->m_connectUuid)) {
+        qDebug()<<LOG_FLAG << "the connection is exist" << p_newItem->m_connectUuid;
     }
-    m_netConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
+    m_vpnItemMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
 
     delete p_newItem;
     p_newItem = nullptr;
-    if (m_vpnListWidget->count() >= MAX_ITEMS) {
-        m_vpnListWidget->setFixedWidth(MAX_WIDTH);
-        m_netListArea->setFixedHeight(MAX_ITEMS * ITEM_HEIGHT);
-    } else {
-        m_netListArea->setFixedHeight(m_vpnListWidget->count() * ITEM_HEIGHT);
-    }
-    m_netFrame->setFixedHeight(37 + m_netListArea->height());
+    resetListWidgetWidth();
+    resetPageHeight();
+    resetWindowPosition();
+    this->update();
     return;
 }
 
@@ -252,21 +250,16 @@ void VpnPage::onShowControlCenter()
 
 void VpnPage::initUI()
 {
-    m_netLabel->setText(tr("VPN Connection"));
-    m_vpnListWidget = new QListWidget(m_netListArea);
-    m_vpnListWidget->setFrameShape(QFrame::Shape::NoFrame);
-    m_vpnListWidget->setSpacing(VPN_LIST_SPACING);
-    m_vpnListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_vpnListWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
-    m_vpnListWidget->verticalScrollBar()->setProperty("drawScrollBarGroove",false); //去除滚动条的外侧黑框
-    m_vpnListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
-    m_vpnListWidget->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
-    m_netAreaLayout->addWidget(m_vpnListWidget);
-    m_netListArea->setFixedHeight(0);
+    m_titleLabel->setText(tr("VPN"));
 
-    QPalette pal = m_vpnListWidget->palette();
-    pal.setBrush(QPalette::Base, QColor(0,0,0,0));        //背景透明
-    m_vpnListWidget->setPalette(pal);
+//    m_listFrame->setMaximumHeight(MAX_ITEMS * ITEM_HEIGHT + ITEM_SPACE);
+
+    m_listWidget->setFrameShape(QFrame::Shape::NoFrame);
+    m_listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_listWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+    m_listWidget->verticalScrollBar()->setProperty("drawScrollBarGroove",false); //去除滚动条的外侧黑框
+    m_listWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
+    m_listWidget->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 
     m_settingsLabel->setText(tr("VPN Settings"));
     m_settingsLabel->installEventFilter(this);
@@ -276,10 +269,10 @@ QListWidgetItem *VpnPage::insertNewItem(KyConnectItem *itemData, QListWidget *li
 {
     int index = 0;
 
-    for(index = 0; index < m_vpnListWidget->count(); index++) {
-        QListWidgetItem *p_listWidgetItem = m_vpnListWidget->item(index);
-        VpnListItem *p_lanItem = (VpnListItem *)m_vpnListWidget->itemWidget(p_listWidgetItem);
-        QString name1 = p_lanItem->getConnectionName();
+    for(index = 0; index < m_listWidget->count(); index++) {
+        QListWidgetItem *p_listWidgetItem = m_listWidget->item(index);
+        VpnListItem *p_vpnItem = (VpnListItem *)m_listWidget->itemWidget(p_listWidgetItem);
+        QString name1 = p_vpnItem->getConnectionName();
         QString name2 = itemData->m_connectName;
         if (QString::compare(name1, name2, Qt::CaseInsensitive) > 0) {
             break;
@@ -303,66 +296,61 @@ QListWidgetItem *VpnPage::addNewItem(KyConnectItem *itemData, QListWidget *listW
 {
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
     p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
-    p_listWidgetItem->setSizeHint(QSize(listWidget->width(), ITEM_HEIGHT));
+    p_listWidgetItem->setSizeHint(QSize(listWidget->width() - 16, ITEM_HEIGHT));
     listWidget->addItem(p_listWidgetItem);
-    VpnListItem *p_lanItem = nullptr;
+    VpnListItem *p_vpnItem = nullptr;
     if (itemData != nullptr) {
-        p_lanItem = new VpnListItem(itemData);
+        p_vpnItem = new VpnListItem(itemData);
         qDebug() << "[VpnPage] addNewItem, connection: " << itemData->m_connectName;
     } else {
-        p_lanItem = new VpnListItem();
+        p_vpnItem = new VpnListItem();
         qDebug() << "[VpnPage] Add nullItem!";
     }
 
-    listWidget->setItemWidget(p_listWidgetItem, p_lanItem);
+    listWidget->setItemWidget(p_listWidgetItem, p_vpnItem);
     return p_listWidgetItem;
 }
 
 void VpnPage::updateActivatedConnectionArea(KyConnectItem *p_newItem)
 {
-    if (m_activeConnectionMap.contains(p_newItem->m_connectUuid)) {
+    if (m_activeItemMap.contains(p_newItem->m_connectUuid)) {
         return;
     }
 
-    deleteConnectionMapItem(m_netConnectionMap, m_vpnListWidget, p_newItem->m_connectUuid);
+    deleteConnectionMapItem(m_vpnItemMap, m_listWidget, p_newItem->m_connectUuid);
     qDebug()<<"[VpnPage]update active connection item"<<p_newItem->m_connectName;
-    deleteConnectionMapItem(m_activeConnectionMap, m_vpnListWidget, p_newItem->m_connectUuid);
-    QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_vpnListWidget);
-    m_activeConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
-    if (m_vpnListWidget->count() <= MAX_ITEMS) {
-        m_vpnListWidget->setFixedWidth(MIN_WIDTH);
-    }
+    deleteConnectionMapItem(m_activeItemMap, m_listWidget, p_newItem->m_connectUuid);
+    QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_listWidget);
+    m_activeItemMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
+
+    resetListWidgetWidth();
 
     return;
 }
 
 void VpnPage::updateConnectionArea(KyConnectItem *p_newItem)
 {
-    if (m_netConnectionMap.contains(p_newItem->m_connectUuid)) {
+    if (m_vpnItemMap.contains(p_newItem->m_connectUuid)) {
         return;
     }
 
-    deleteConnectionMapItem(m_activeConnectionMap, m_vpnListWidget, p_newItem->m_connectUuid);
+    deleteConnectionMapItem(m_activeItemMap, m_listWidget, p_newItem->m_connectUuid);
     qDebug()<<"[VpnPage] update connection item"<<p_newItem->m_connectName;
-    QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_vpnListWidget);
-    m_netConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
+    QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_listWidget);
+    m_vpnItemMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
 
-    if (m_vpnListWidget->count() <= MAX_ITEMS) {
-        m_vpnListWidget->setFixedWidth(MIN_WIDTH);
-    } else {
-        m_vpnListWidget->setFixedWidth(MAX_WIDTH);
-    }
+    resetListWidgetWidth();
 }
 
 void VpnPage::updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap,
-                                    QListWidget *lanListWidget, QString uuid, ConnectState state)
+                                    QListWidget *vpnListWidget, QString uuid, ConnectState state)
 {
     qDebug() << LOG_FLAG << "update connection state";
 
     QListWidgetItem *p_listWidgetItem = connectMap.value(uuid);
     if (p_listWidgetItem) {
-        VpnListItem *p_lanItem = (VpnListItem *)lanListWidget->itemWidget(p_listWidgetItem);
-        p_lanItem->updateConnectionState(state);
+        VpnListItem *p_vpnItem = (VpnListItem *)vpnListWidget->itemWidget(p_listWidgetItem);
+        p_vpnItem->updateConnectionState(state);
     }
 
 }
@@ -379,7 +367,7 @@ void VpnPage::onConnectionStateChange(QString uuid,
 
     sendVpnStateChangeSignal(uuid, (ConnectState)state);
 
-    if (m_activeConnectionMap.keys().contains(uuid) && state == NetworkManager::ActiveConnection::State::Activated) {
+    if (m_activeItemMap.keys().contains(uuid) && state == NetworkManager::ActiveConnection::State::Activated) {
         return;
     }
 
@@ -399,7 +387,7 @@ void VpnPage::onConnectionStateChange(QString uuid,
 
         ssid = p_newItem->m_connectName;
         updateActivatedConnectionArea(p_newItem);
-        updateConnectionState(m_activeConnectionMap, m_vpnListWidget, uuid, (ConnectState)state);
+        updateConnectionState(m_activeItemMap, m_listWidget, uuid, (ConnectState)state);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
         p_newItem = m_connectResourse->getConnectionItemByUuid(uuid);
         qDebug() << "[VpnPage] deactivated reason" << reason;
@@ -410,12 +398,11 @@ void VpnPage::onConnectionStateChange(QString uuid,
 
         ssid = p_newItem->m_connectName;
         updateConnectionArea(p_newItem);
-        updateConnectionState(m_netConnectionMap, m_vpnListWidget, uuid, (ConnectState)state);
-        NetworkModeConfig::getInstance()->breakNetworkConnect(uuid, deviceName, ssid);
+        updateConnectionState(m_vpnItemMap, m_listWidget, uuid, (ConnectState)state);
     } else if (state == NetworkManager::ActiveConnection::State::Activating) {
-        updateConnectionState(m_netConnectionMap, m_vpnListWidget, uuid, (ConnectState)state);
+        updateConnectionState(m_vpnItemMap, m_listWidget, uuid, (ConnectState)state);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivating) {
-        updateConnectionState(m_activeConnectionMap, m_vpnListWidget, uuid, (ConnectState)state);
+        updateConnectionState(m_activeItemMap, m_listWidget, uuid, (ConnectState)state);
     }
 
     Q_EMIT vpnActiveConnectionStateChanged(uuid, state);
@@ -496,27 +483,27 @@ void VpnPage::updateConnectionProperty(KyConnectItem *p_connectItem)
 {
     QString newUuid = p_connectItem->m_connectUuid;
 
-    if (m_netConnectionMap.contains(newUuid)) {
-        QListWidgetItem *p_listWidgetItem = m_netConnectionMap.value(newUuid);
-        VpnListItem *p_lanItem = (VpnListItem*)m_vpnListWidget->itemWidget(p_listWidgetItem);
-        if (p_connectItem->m_connectName != p_lanItem->getConnectionName()){
+    if (m_vpnItemMap.contains(newUuid)) {
+        QListWidgetItem *p_listWidgetItem = m_vpnItemMap.value(newUuid);
+        VpnListItem *p_vpnItem = (VpnListItem*)m_listWidget->itemWidget(p_listWidgetItem);
+        if (p_connectItem->m_connectName != p_vpnItem->getConnectionName()){
             //只要名字改变就要删除，重新插入，主要是为了排序
-            deleteConnectionMapItem(m_netConnectionMap, m_vpnListWidget, newUuid);
-            QListWidgetItem *p_sortListWidgetItem = insertNewItem(p_connectItem, m_vpnListWidget);
-            if (m_netConnectionMap.contains(newUuid)) {
+            deleteConnectionMapItem(m_vpnItemMap, m_listWidget, newUuid);
+            QListWidgetItem *p_sortListWidgetItem = insertNewItem(p_connectItem, m_listWidget);
+            if (m_vpnItemMap.contains(newUuid)) {
                 qDebug()<<LOG_FLAG << "has contained connection" << newUuid;
             }
-            m_netConnectionMap.insert(newUuid, p_sortListWidgetItem);
-        } else if (p_connectItem->m_connectPath != p_lanItem->getConnectionPath()) {
-            p_lanItem->updateConnectionPath(p_connectItem->m_connectPath);
+            m_vpnItemMap.insert(newUuid, p_sortListWidgetItem);
+        } else if (p_connectItem->m_connectPath != p_vpnItem->getConnectionPath()) {
+            p_vpnItem->updateConnectionPath(p_connectItem->m_connectPath);
         }
-    } else if (!m_activeConnectionMap.contains(newUuid)){
+    } else if (!m_activeItemMap.contains(newUuid)){
         if (p_connectItem->m_ifaceName.isEmpty()) {
-            QListWidgetItem *p_listWidgetItem = insertNewItem(p_connectItem, m_vpnListWidget);
-            if (m_netConnectionMap.contains(newUuid)) {
+            QListWidgetItem *p_listWidgetItem = insertNewItem(p_connectItem, m_listWidget);
+            if (m_vpnItemMap.contains(newUuid)) {
                 qDebug()<<LOG_FLAG << "has contained connection uuid" << newUuid;
             }
-            m_netConnectionMap.insert(newUuid, p_listWidgetItem);
+            m_vpnItemMap.insert(newUuid, p_listWidgetItem);
         }
     } else {
         qWarning() << LOG_FLAG << newUuid <<" is in activemap, so not process.";
@@ -529,15 +516,15 @@ void VpnPage::updateActiveConnectionProperty(KyConnectItem *p_connectItem)
 {
     QString newUuid = p_connectItem->m_connectUuid;
 
-    if (m_activeConnectionMap.contains(newUuid)) {
-        QListWidgetItem *p_listWidgetItem = m_activeConnectionMap.value(newUuid);
-        VpnListItem *p_lanItem = (VpnListItem *)m_vpnListWidget->itemWidget(p_listWidgetItem);
-        if (p_lanItem->getConnectionName() != p_connectItem->m_connectName) {
-            p_lanItem->updateConnectionName(p_connectItem->m_connectName);
+    if (m_activeItemMap.contains(newUuid)) {
+        QListWidgetItem *p_listWidgetItem = m_activeItemMap.value(newUuid);
+        VpnListItem *p_vpnItem = (VpnListItem *)m_listWidget->itemWidget(p_listWidgetItem);
+        if (p_vpnItem->getConnectionName() != p_connectItem->m_connectName) {
+            p_vpnItem->updateConnectionName(p_connectItem->m_connectName);
         }
 
-        if (p_lanItem->getConnectionName() != p_connectItem->m_connectPath) {
-            p_lanItem->updateConnectionPath(p_connectItem->m_connectPath);
+        if (p_vpnItem->getConnectionName() != p_connectItem->m_connectPath) {
+            p_vpnItem->updateConnectionPath(p_connectItem->m_connectPath);
         }
     }
     return;
@@ -597,14 +584,14 @@ void VpnPage::deleteVpn(const QString &connUuid)
     if (connUuid == nullptr) {
         return;
     }
-    m_wiredConnectOperation->deleteWiredConnect(connUuid);
+    m_vpnConnectOperation->deleteVpnConnect(connUuid);
 }
 
 void VpnPage::activateVpn(const QString& connUuid)
 {
-    if (m_netConnectionMap.contains(connUuid)) {
+    if (m_vpnItemMap.contains(connUuid)) {
         qDebug() << "[VpnPage] activateVpn" << connUuid;
-        m_wiredConnectOperation->activateVpnConnection(connUuid);
+        m_vpnConnectOperation->activateVpnConnection(connUuid);
     }
 }
 
@@ -612,34 +599,92 @@ void VpnPage::deactivateVpn(const QString& connUuid)
 {
     qDebug() << "[VpnPage] deactivateVpn" << connUuid;
     QString name("");
-    m_wiredConnectOperation->deactivateWiredConnection(name, connUuid);
+    m_vpnConnectOperation->deactivateVpnConnection(name, connUuid);
 }
 
-void VpnPage::showDetailPage(QString devName, QString uuid)
+void VpnPage::showDetailPage(QString uuid)
 {
-#ifdef VPN_DETAIL
-    KyConnectItem *p_item = nullptr;
-    bool isActive = true;
+    QListWidgetItem * vpnlistItem = m_vpnItemMap.value(uuid);
+    VpnListItem *vpnItem = (VpnListItem *)m_listWidget->itemWidget(vpnlistItem);
+    vpnItem->onInfoButtonClicked();
+}
 
-    if (m_connectResourse->isActivatedConnection(uuid)) {
-        p_item = m_activeResourse->getActiveConnectionByUuid(uuid);
-        isActive = true;
+void VpnPage::showUI()
+{
+    //2209中窗管在hide界面时会刷新属性，需要重新设置无图标属性
+    const KWindowInfo info(this->winId(), NET::WMState);
+    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
+        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+    }
+
+    resetPageHeight();
+
+    showNormal();
+    raise();
+    activateWindow();
+    resetWindowPosition();
+    return;
+}
+
+void VpnPage::resetWindowPosition()
+{
+
+#define MARGIN 4
+#define PANEL_TOP 1
+#define PANEL_LEFT 2
+#define PANEL_RIGHT 3
+//#define PANEL_BOTTOM 4
+    if (!m_positionInterface) {
+        m_positionInterface = new QDBusInterface("org.ukui.panel",
+                            "/panel/position",
+                            "org.ukui.panel",
+                            QDBusConnection::sessionBus());
+    }
+    QRect rect;
+    QDBusReply<QVariantList> reply = m_positionInterface->call("GetPrimaryScreenGeometry");
+    //reply获取的参数共5个，分别是 主屏可用区域的起点x坐标，主屏可用区域的起点y坐标，主屏可用区域的宽度，主屏可用区域高度，任务栏位置
+    if (!m_positionInterface->isValid() || !reply.isValid() || reply.value().size() < 5) {
+        qCritical() << QDBusConnection::sessionBus().lastError().message();
+        kdk::WindowManager::setGeometry(this->windowHandle(), QRect(0, 0, this->width(), this->height()));
+        return;
+    }
+    QVariantList position_list = reply.value();
+    int position = position_list.at(4).toInt();
+    switch(position){
+    case PANEL_TOP:
+        //任务栏位于上方
+        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
+                     position_list.at(1).toInt() + MARGIN,
+                     this->width(), this->height());
+        break;
+        //任务栏位于左边
+    case PANEL_LEFT:
+        rect = QRect(position_list.at(0).toInt() + MARGIN,
+                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
+                     this->width(), this->height());
+        break;
+        //任务栏位于右边
+    case PANEL_RIGHT:
+        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
+                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
+                     this->width(), this->height());
+        break;
+        //任务栏位于下方
+    default:
+        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
+                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
+                     this->width(), this->height());
+        break;
+    }
+    kdk::WindowManager::setGeometry(this->windowHandle(), rect);
+    qDebug() << " Position of ukui-panel is " << position << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
+}
+
+void VpnPage::resetListWidgetWidth()
+{
+    if (m_listWidget->count() <= MAX_ITEMS) {
+        m_listFrame->setFixedWidth(MIN_WIDTH);
     } else {
-        p_item = m_connectResourse->getConnectionItemByUuid(uuid);
-        isActive = false;
+        m_listFrame->setFixedWidth(MAX_WIDTH);
     }
-
-    if (nullptr == p_item) {
-       qWarning()<<"[VpnPage] GetConnectionItemByUuid is empty when showDetailPage."
-                      <<"device name"<<devName
-                      <<"connect uuid"<<uuid;
-       return;
-    }
-
-    NetDetail *netDetail = new NetDetail(devName, p_item->m_connectName, uuid, isActive, false, false);
-    netDetail->show();
-
-    delete p_item;
-    p_item = nullptr;
-#endif
 }

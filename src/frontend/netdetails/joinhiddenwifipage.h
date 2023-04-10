@@ -24,7 +24,9 @@
 #include <QFormLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QDesktopWidget>
 
+#include "windowmanager/windowmanager.h"
 #include "coninfo.h"
 #include "kywirelessconnectoperation.h"
 #include "securitypage.h"
@@ -43,8 +45,7 @@ public:
     JoinHiddenWiFiPage(QString devName, KDialog *parent = nullptr);
     ~JoinHiddenWiFiPage();
 
-    void setJoinHiddenWiFiShowed(bool state);
-
+    void centerToScreen();
 protected:
     void closeEvent(QCloseEvent *event);
 
@@ -63,7 +64,7 @@ private:
     QWidget *m_bottomWidget;
     SecurityPage *m_secuWidget;
 
-    QLabel *m_descriptionLabel;
+    FixLabel *m_descriptionLabel;
     FixLabel *m_nameLabel;
     LineEdit *m_nameEdit;
 
@@ -80,7 +81,6 @@ private:
 
     bool m_isJoinBtnEnable = false;
     bool m_isSecuOk = false;
-    bool m_joinHiddenWiFiShowed = false;
     ConInfo      m_info;
 
 private Q_SLOTS:

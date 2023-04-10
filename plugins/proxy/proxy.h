@@ -103,6 +103,7 @@ public:
     bool isShowOnHomePage() const Q_DECL_OVERRIDE;
     QIcon icon() const Q_DECL_OVERRIDE;
     bool isEnable() const Q_DECL_OVERRIDE;
+    QString translationPath() const  Q_DECL_OVERRIDE;
 
 public:
     void initUi(QWidget *widget);
@@ -262,8 +263,8 @@ private:
     QFileSystemWatcher *mfileWatch_1;
     QFileSystemWatcher *mfileWatch_2;
 
-    QDBusInterface *mAptproxyDbus;
-    QDBusInterface *m_appProxyDbus;
+//    QDBusInterface *mAptproxyDbus;
+    QDBusInterface *m_appProxyDbus = nullptr;
 
     bool isExistSettings = false;
     bool settingsCreate;
@@ -277,6 +278,7 @@ private slots:
     void onipEditStateChanged(); //IP地址无效提示
     void onAppProxyConfChanged(); //应用代理配置信息变化
     void onAppProxyConfEditFinished();
+    void onPaletteChanged();
 //    void onCancelBtnClicked();
 //    void onSaveBtnClicked();
 //    void setBtnEnable();

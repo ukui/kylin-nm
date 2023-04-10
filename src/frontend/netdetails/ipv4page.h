@@ -46,13 +46,13 @@ public:
     void setMulDns(const QList<QHostAddress> &dns);
     void setGateWay(const QString &gateWay);
 
-    QString getNetMaskText(QString text);
-
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
 
     void startLoading();
     void stopLoading();
     void showIpv4AddressConflict(bool isConflict);
+
+    QString getNetMaskText(QString text);
 
 private:
     QComboBox *ipv4ConfigCombox;
@@ -89,7 +89,6 @@ private:
     void configSave();
     bool getTextEditState(QString text);
     bool netMaskIsValide(QString text);
-
     bool checkConnectBtnIsEnabled();
     void initConflictHintLable();
     void initLoadingIcon();

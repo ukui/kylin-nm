@@ -61,15 +61,15 @@ KyWirelessNetResource::KyWirelessNetResource(QObject *parent)
 
     //TODO:connect device signal
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkAdded,
-                     this, &KyWirelessNetResource::onWifiNetworkAdded, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onWifiNetworkAdded/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkRemoved,
-                     this, &KyWirelessNetResource::onWifiNetworkRemoved, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onWifiNetworkRemoved/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkPropertyChange,
-                     this, &KyWirelessNetResource::onWifiNetworkPropertyChange, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onWifiNetworkPropertyChange/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkSecuChange,
-                     this, &KyWirelessNetResource::onWifiNetworkSecuChange, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onWifiNetworkSecuChange/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::wifiNetworkDeviceDisappear,
-                     this, &KyWirelessNetResource::onWifiNetworkDeviceDisappear, Qt::ConnectionType::DirectConnection);
+                     this, &KyWirelessNetResource::onWifiNetworkDeviceDisappear/*, Qt::ConnectionType::DirectConnection*/);
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionAdd,
                      this, &KyWirelessNetResource::onConnectionAdd);
@@ -457,50 +457,36 @@ void KyWirelessNetResource::onWifiNetworkSecuChange(NetworkManager::AccessPoint 
 
 }
 
-void KyWirelessNetResource::onWifiNetworkPropertyChange(NetworkManager::WirelessNetwork * net)
+void KyWirelessNetResource::onWifiNetworkPropertyChange(QString interface, QString ssid, int signal, QString bssid, QString sec)
 {
-    if (nullptr == net) {
-        return;
-    }
 
-    qDebug() << "onWifiNetworkPropertyChange" << net->ssid();
-    NetworkManager::AccessPoint::Ptr accessPointPtr = net->referenceAccessPoint();
-    QByteArray rawSsid = accessPointPtr->rawSsid();
-    QString wifiSsid = getSsidFromByteArray(rawSsid);
+    if (m_WifiNetworkList.contains(interface)) {
+        QList<KyWirelessNetItem>::iterator iter = m_WifiNetworkList[interface].begin();
+        while (iter != m_WifiNetworkList[interface].end()) {
+            qDebug() << iter->m_NetSsid;
+            if (iter->m_NetSsid == ssid) {
+                //                 qDebug()<< LOG_FLAG <<"recive properity changed signal, sender is" << iter->m_NetSsid;
+                if (iter->m_signalStrength != signal) {
+                    iter->m_signalStrength = signal;
+                    Q_EMIT signalStrengthChange(interface, ssid, iter->m_signalStrength);
+                }
 
-    if (net->device().isEmpty()) {
-        return;
-    }
+                if (iter->m_bssid != bssid) {
+                    qDebug() << "bssid";
+                    iter->m_bssid = bssid;
+                    Q_EMIT bssidChange(interface, ssid, iter->m_bssid);
+                }
 
-    QString devIface = m_networkResourceInstance->findDeviceUni(net->device())->interfaceName();
-    if (m_WifiNetworkList.contains(devIface)) {
-        QList<KyWirelessNetItem>::iterator iter = m_WifiNetworkList[devIface].begin();
-         while (iter != m_WifiNetworkList[devIface].end()) {
-             if (iter->m_NetSsid == wifiSsid) {
-//                 qDebug()<< LOG_FLAG <<"recive properity changed signal, sender is" << iter->m_NetSsid;
-                 if (iter->m_signalStrength != net->signalStrength()) {
-                     iter->m_signalStrength = net->signalStrength();
-                     Q_EMIT signalStrengthChange(devIface, wifiSsid, iter->m_signalStrength);
-                 }
+                if (iter->m_secuType != sec) {
+                    iter->setKySecuType(sec);
+                    Q_EMIT secuTypeChange(interface, ssid, sec);
+                }
 
-                 if (iter->m_bssid != accessPointPtr->hardwareAddress()) {
-                     iter->m_bssid = accessPointPtr->hardwareAddress();
-                     Q_EMIT bssidChange(devIface, wifiSsid, iter->m_bssid);
-                 }
+                break;
+            }
 
-                 QString secuType = enumToQstring(accessPointPtr->capabilities(),
-                                                  accessPointPtr->wpaFlags(),
-                                                  accessPointPtr->rsnFlags());
-                 if (iter->m_secuType != secuType) {
-                     //qDebug() << "!!!!secuTypeChange" << wifiSsid << iter->m_secuType << "change to " << secuType;
-                     iter->setKySecuType(secuType);
-                     Q_EMIT secuTypeChange(devIface, wifiSsid, secuType);
-                 }
-
-                 break;
-             }
-             iter++;
-         }
+            iter++;
+        }
     }
 }
 
@@ -635,6 +621,119 @@ bool KyWirelessNetResource::getEnterPriseInfoTtls(QString &uuid, KyEapMethodTtls
     info.m_passwdFlag = setting->passwordFlags();
     if (!info.m_passwdFlag) {
         info.userPWD = m_operation->get8021xPassword(conn->uuid());
+    }
+
+    return true;
+}
+
+bool KyWirelessNetResource::getEnterPriseInfoLeap(QString &uuid, KyEapMethodLeapInfo &info)
+{
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
+    if (conn.isNull()) {
+        qDebug()<< LOG_FLAG << "getEnterPriseInfoLeap connection missing";
+        return false;
+    }
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    if (security_sett.isNull()) {
+        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
+        return false;
+    }
+
+    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
+        qDebug()<< LOG_FLAG << "keyMgmt not WpaEap " << security_sett->keyMgmt();
+        return false;
+    }
+
+    NetworkManager::Security8021xSetting::Ptr setting =
+            conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodLeap)) {
+        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
+        return false;
+    }
+
+    info.m_userName = setting->identity();
+    info.m_passwdFlag = setting->passwordFlags();
+    if (!info.m_passwdFlag) {
+        info.m_userPwd = m_operation->get8021xPassword(conn->uuid());
+    }
+
+    return true;
+}
+
+bool KyWirelessNetResource::getEnterPriseInfoPwd(QString &uuid, KyEapMethodPwdInfo &info)
+{
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
+    if (conn.isNull()) {
+        qDebug()<< LOG_FLAG << "getEnterPriseInfoPwd connection missing";
+        return false;
+    }
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    if (security_sett.isNull()) {
+        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
+        return false;
+    }
+
+    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
+        qDebug()<< LOG_FLAG << "keyMgmt not WpaEap " << security_sett->keyMgmt();
+        return false;
+    }
+
+    NetworkManager::Security8021xSetting::Ptr setting =
+            conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodPwd)) {
+        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
+        return false;
+    }
+
+    info.m_userName = setting->identity();
+    info.m_passwdFlag = setting->passwordFlags();
+    if (!info.m_passwdFlag) {
+        info.m_userPwd = m_operation->get8021xPassword(conn->uuid());
+    }
+
+    return true;
+}
+
+bool KyWirelessNetResource::getEnterPriseInfoFast(QString &uuid, KyEapMethodFastInfo &info)
+{
+    NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
+    if (conn.isNull()) {
+        qDebug()<< LOG_FLAG << "getEnterPriseInfoFast connection missing";
+        return false;
+    }
+    NetworkManager::WirelessSecuritySetting::Ptr security_sett
+        = conn->settings()->setting(NetworkManager::Setting::WirelessSecurity).dynamicCast<NetworkManager::WirelessSecuritySetting>();
+    if (security_sett.isNull()) {
+        qDebug()<< LOG_FLAG << "don't have WirelessSecurity connection";
+        return false;
+    }
+
+    if (security_sett->keyMgmt() != NetworkManager::WirelessSecuritySetting::WpaEap) {
+        qDebug()<< LOG_FLAG << "keyMgmt not WpaEap " << security_sett->keyMgmt();
+        return false;
+    }
+
+    NetworkManager::Security8021xSetting::Ptr setting =
+            conn->settings()->setting(NetworkManager::Setting::Security8021x).dynamicCast<NetworkManager::Security8021xSetting>();
+    if (setting.isNull() || !setting->eapMethods().contains(NetworkManager::Security8021xSetting::EapMethod::EapMethodFast)) {
+        qDebug()<< LOG_FLAG << "don't have Security8021x connection";
+        return false;
+    }
+
+    info.m_anonIdentity = setting->anonymousIdentity();
+    info.m_pacProvisioning = (KyFastProvisioning)setting->phase1FastProvisioning();
+    info.m_pacFilePath = setting->caPath();
+    if (info.m_pacFilePath.left(7) == "file://") {
+        info.m_pacFilePath = info.m_pacFilePath.mid(7);
+    }
+    info.m_authMethod = (KyNoEapMethodAuth)setting->phase2AuthMethod();
+
+    info.m_userName = setting->identity();
+    info.m_passwdFlag = setting->passwordFlags();
+    if (!info.m_passwdFlag) {
+        info.m_userPwd = m_operation->get8021xPassword(conn->uuid());
     }
 
     return true;

@@ -30,6 +30,9 @@ enum KyEapMethodType {
     TLS = 0,
     PEAP,
     TTLS,
+    LEAP,
+    PWD,
+    FAST,
 };
 
 class KyEapMethodTlsInfo
@@ -154,12 +157,99 @@ public:
     }
 };
 
+typedef enum {
+    KyFastProvisioningUnknown = -1,
+    KyFastProvisioningDisabled,
+    KyFastProvisioningAllowUnauthenticated,
+    KyFastProvisioningAllowAuthenticated,
+    KyFastProvisioningAllowBoth
+}KyFastProvisioning;
+
+class KyEapMethodLeapInfo
+{
+public:
+    QString m_userName;
+    QString m_userPwd;
+    NetworkManager::Setting::SecretFlags m_passwdFlag;
+    // only valid when update
+    bool    bChanged;
+
+    inline bool operator == (const KyEapMethodLeapInfo& info) const
+    {
+        if (this->m_userName == info.m_userName
+                && this->m_userPwd == info.m_userPwd
+                && this->m_passwdFlag == info.m_passwdFlag) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+
+class KyEapMethodPwdInfo
+{
+public:
+    QString m_userName;
+    QString m_userPwd;
+    NetworkManager::Setting::SecretFlags m_passwdFlag;
+    // only valid when update
+    bool    bChanged;
+
+    inline bool operator == (const KyEapMethodPwdInfo& info) const
+    {
+        if (this->m_userName == info.m_userName
+                && this->m_userPwd == info.m_userPwd
+                && this->m_passwdFlag == info.m_passwdFlag) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+
+class KyEapMethodFastInfo
+{
+public:
+    QString m_anonIdentity;
+    KyFastProvisioning m_pacProvisioning;
+    bool m_allowAutoPacFlag;
+    QString m_pacFilePath;
+    KyNoEapMethodAuth m_authMethod;
+    QString m_userName;
+    QString m_userPwd;
+    NetworkManager::Setting::SecretFlags m_passwdFlag;
+    // only valid when update
+    bool    bChanged;
+
+    inline bool operator == (const KyEapMethodFastInfo& info) const
+    {
+        if (this->m_anonIdentity == info.m_anonIdentity
+                && this->m_pacProvisioning == info.m_pacProvisioning
+                && this->m_allowAutoPacFlag == info.m_allowAutoPacFlag
+                && this->m_pacFilePath == info.m_pacFilePath
+                && this->m_authMethod == info.m_authMethod
+                && this->m_userName == info.m_userName
+                && this->m_userPwd == info.m_userPwd
+                && this->m_passwdFlag == info.m_passwdFlag) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+
 void assembleEapMethodTlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTlsInfo &tlsInfo);
 void assembleEapMethodPeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPeapInfo &peapInfo);
 void assembleEapMethodTtlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTtlsInfo &ttlsInfo);
+void assembleEapMethodLeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodLeapInfo &leapInfo);
+void assembleEapMethodPwdSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPwdInfo &pwdInfo);
+void assembleEapMethodFastSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodFastInfo &fastInfo);
 
 void modifyEapMethodTlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTlsInfo &tlsInfo);
 void modifyEapMethodPeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPeapInfo &peapInfo);
 void modifyEapMethodTtlsSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodTtlsInfo &ttlsInfo);
+void modifyEapMethodLeapSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodLeapInfo &leapInfo);
+void modifyEapMethodPwdSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodPwdInfo &pwdInfo);
+void modifyEapMethodFastSettings(NetworkManager::ConnectionSettings::Ptr connSettingPtr, const KyEapMethodFastInfo &fastInfo);
 
 #endif // KYENTERPRICESETTINGINFO_H

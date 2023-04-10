@@ -17,10 +17,11 @@
 #include <QtDBus/QDBusMetaType>
 
 #include "singlepage.h"
-#include "../dbus-interface/kylinnetworkdeviceresource.h"
+#include "kylinnetworkdeviceresource.h"
+#include "kyvpnconnectoperation.h"
+
 QT_BEGIN_NAMESPACE
 class QByteArray;
-//template<class T> class QList;
 template<class Key, class Value> class QMap;
 class QString;
 class QStringList;
@@ -28,37 +29,29 @@ class QVariant;
 template<class T> class QVector;
 QT_END_NAMESPACE
 
-/*
- * Adaptor class for interface com.kylin.weather
- */
-
-#include "vpnmainwindow.h"
+#include "vpnobject.h"
 
 class VpnDbusAdaptor: public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "com.kylin.vpnTool")
+    Q_CLASSINFO("D-Bus Interface", "com.kylin.kylinvpn")
 public:
-    VpnDbusAdaptor(vpnMainWindow *parent);
-    virtual ~VpnDbusAdaptor();
+    VpnDbusAdaptor(vpnObject *parent);
 
-    inline vpnMainWindow *parent() const
-    { return static_cast<vpnMainWindow *>(QObject::parent()); }
+    inline vpnObject *parent() const
+    { return static_cast<vpnObject *>(QObject::parent()); }
 
-public: // PROPERTIES
-public Q_SLOTS: // METHODS
-    //虚拟连接列表
+public Q_SLOTS:
     QVector<QStringList> getVirtualList();
-    //刪除 根据网络名称 参数1 0:lan 1:wlan 参数2 为ssid/uuid
     Q_NOREPLY void deleteVpn(QString uuid);
-    //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void activateVpn(const QString& connUuid);
-    //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void deactivateVpn(const QString& connUuid);
-    //just show
+    Q_NOREPLY void showVpnAddWidget();
+    Q_NOREPLY void showDetailPage(const QString& connUuid);
+
     void showKylinVpn();
 
-Q_SIGNALS: // SIGNALS
+Q_SIGNALS:
     void vpnAdd(QStringList info);
     void vpnRemove(QString dbusPath);
     void vpnUpdate(QStringList info);

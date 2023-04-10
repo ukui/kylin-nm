@@ -23,6 +23,9 @@
 #include <QDebug>
 
 #define LOG_FLAG "[LanListItem]"
+#define NAMELABLE_MAX_WIDTH_HOVER 220
+#define NAMELABLE_MAX_WIDTH_ACTIVATED 190
+#define NAMELABLE_MAX_WIDTH_DEACTIVATED 326
 
 LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
                          const QString &deviceName, QWidget *parent):ListItem(parent)
@@ -42,16 +45,19 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
         m_netButton->stopLoading();
         if (m_lanConnectItem.m_connectState == Activated) {
             setIcon(true);
+            m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
         } else {
             setIcon(false);
+            m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
         }
     } else {
         m_netButton->startLoading();
     }
 
     m_itemFrame->installEventFilter(this);
-    connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
+//    connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
     connect(m_menu, &QMenu::triggered, this, &LanListItem::onMenuTriggered);
+    connect(m_hoverButton, &FixPushButton::clicked, this, &LanListItem::onNetButtonClicked);
 }
 
 
@@ -62,7 +68,7 @@ LanListItem::LanListItem(QWidget *parent) : ListItem(parent)
     setIcon(false);
     const QString str=tr("Not connected");
     m_nameLabel->setLabelText(str);
-    this->m_infoButton->hide();
+//    this->m_infoButton->hide();
 }
 
 LanListItem::~LanListItem()
@@ -120,8 +126,7 @@ void LanListItem::onNetButtonClicked()
             this->showDesktopNotify(tr("Wired Device not carried"), "networkwrong");
         }
     } else {
-        qDebug() << LOG_FLAG <<"the connection" << m_lanConnectItem.m_connectName
-                 << "is not deactived, so it can not be operation.";
+        m_connectOperation->deactivateWiredConnection(m_lanConnectItem.m_connectName, m_lanConnectItem.m_connectUuid);
     }
 
     return;
@@ -144,9 +149,10 @@ void LanListItem::onRightButtonClicked()
     } else {
         return;
     }
+    m_menu->addAction(new QAction(tr("Property"), this));
+    m_menu->addAction(new QAction(tr("Delete"), this));
 
-    m_menu->move(cursor().pos());
-    m_menu->show();
+    m_menu->popup(cursor().pos());
     return;
 }
 
@@ -159,6 +165,10 @@ void LanListItem::onMenuTriggered(QAction *action)
         qDebug() << LOG_FLAG << "it will disconnect connection" << m_lanConnectItem.m_connectName
                  << ". it's device is" << m_deviceName;
         m_netButton->startLoading();
+    } else if (action->text() == tr("Property")) {
+        onInfoButtonClicked();
+    } else if (action->text() == tr("Delete")) {
+        m_connectOperation->deleteConnect(m_lanConnectItem.m_connectUuid);
     }
     return;
 }
@@ -171,15 +181,15 @@ void LanListItem::onInfoButtonClicked()
         return;
     }
 
-    if(netDetail != nullptr){
-        netDetail->activateWindow();
-        return;
-    }
+//    if(netDetail != nullptr){
+//        netDetail->activateWindow();
+//        return;
+//    }
 
     qDebug()<< LOG_FLAG << "the info button of lan is clicked! uuid = "
             << m_lanConnectItem.m_connectUuid << "; name = " << m_lanConnectItem.m_connectName
             << "." <<Q_FUNC_INFO << __LINE__;
-
+#if 0
     bool isActivated = false;
     if (Activated == m_lanConnectItem.m_connectState) {
         isActivated = true;
@@ -195,7 +205,8 @@ void LanListItem::onInfoButtonClicked()
     });
 
     netDetail->show();
-    Q_EMIT this->detailShow(true);
+#endif
+    Q_EMIT this->detailShow(m_deviceName, m_lanConnectItem.m_connectUuid);
 
     return;
 }
@@ -238,4 +249,41 @@ QString LanListItem::getConnectionPath()
 void LanListItem::updateConnectionPath(QString connectionPath)
 {
     m_lanConnectItem.m_connectPath = connectionPath;
+}
+
+void LanListItem::enterEvent(QEvent *event)
+{
+    m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_HOVER);
+    if (m_lanConnectItem.m_connectState != UnknownState) {
+        if (Deactivated != m_lanConnectItem.m_connectState) {
+            m_hoverButton->setProperty("useButtonPalette", true);
+            m_hoverButton->setProperty("isImportant", false);
+            m_hoverButton->setButtonText(tr("Disconnect"));
+        } else {
+            m_hoverButton->setProperty("isImportant", true);
+            m_hoverButton->setProperty("useButtonPalette", false);
+            m_hoverButton->setButtonText(tr("Connect"));
+        }
+        m_hoverButton->show();
+        m_lbLoadUp->hide();
+        m_lbLoadDown->hide();
+        m_lbLoadDownImg->hide();
+        m_lbLoadUpImg->hide();
+    }
+    return ListItem::enterEvent(event);
+}
+
+void LanListItem::leaveEvent(QEvent *event)
+{
+    m_hoverButton->hide();
+    if (m_lanConnectItem.m_connectState == Activated) {
+        m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
+        m_lbLoadUp->show();
+        m_lbLoadDown->show();
+        m_lbLoadDownImg->show();
+        m_lbLoadUpImg->show();
+    } else {
+        m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
+    }
+    return ListItem::leaveEvent(event);
 }

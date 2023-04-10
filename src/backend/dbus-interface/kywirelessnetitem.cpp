@@ -25,30 +25,7 @@ const QString ENTERPRICE_TYPE = "802.1X";
 const QString WPA1_AND_WPA2 = "WPA";
 const QString WPA3 = "WPA3";
 
-QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags)
-{
-    QString out;
-    if (   (cap & NM_802_11_AP_FLAGS_PRIVACY)
-           && (wpa_flags == NM_802_11_AP_SEC_NONE)
-           && (rsn_flags == NM_802_11_AP_SEC_NONE)) {
-        out += "WEP ";
-    }
-    if (wpa_flags != NM_802_11_AP_SEC_NONE) {
-        out += "WPA1 ";
-    }
-    if ((rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_PSK)
-            || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
-        out += "WPA2 ";
-    }
-    if (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_SAE) {
-        out += "WPA3 ";
-    }
-    if (   (wpa_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)
-           || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
-        out += "802.1X ";
-    }
-    return out;
-}
+#define FREQ_5GHZ 5000
 
 KyWirelessNetItem::KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net)
 {
@@ -63,6 +40,7 @@ KyWirelessNetItem::KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net)
     m_kySecuType = NONE;
     m_device = "";
     m_channel = 0;
+    m_isMix = false;
 
     init(net);
 }
@@ -100,6 +78,59 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
     m_bssid = net->referenceAccessPoint()->hardwareAddress();
     m_device = net->device();
     m_uni = net->referenceAccessPoint()->uni();
+
+    NetworkManager::Device::Ptr devicePtr = nullptr;
+    devicePtr = m_networkResourceInstance->findDeviceInterface(m_device);
+    if (!devicePtr.isNull()) {
+        QString devUni = devicePtr->uni();
+        NetworkManager::WirelessNetwork::Ptr wirelessPtr = nullptr;
+        wirelessPtr = m_networkResourceInstance->findWifiNetwork(m_NetSsid, devUni);
+        if (!wirelessPtr.isNull()) {
+            NetworkManager::AccessPoint::List apList = wirelessPtr->accessPoints();
+            bool b2G = false;
+            bool b5G = false;
+            if (!apList.empty()) {
+                for (int i = 0; i < apList.count(); ++i) {
+                    if (apList.at(i)->frequency() < FREQ_5GHZ) {
+                        b2G = true;
+                    }
+                    if (apList.at(i)->frequency() >= FREQ_5GHZ) {
+                        b5G = true;
+                    }
+                    if (b2G && b5G) {
+                        m_isMix = true;
+                        break;
+                    }
+                }
+            }
+            devicePtr = m_networkResourceInstance->findDeviceInterface(m_device);
+            if (!devicePtr.isNull()) {
+                QString devUni = devicePtr->uni();
+                NetworkManager::WirelessNetwork::Ptr wirelessPtr = nullptr;
+                wirelessPtr = m_networkResourceInstance->findWifiNetwork(m_NetSsid, devUni);
+                if (!wirelessPtr.isNull()) {
+                    NetworkManager::AccessPoint::List apList = wirelessPtr->accessPoints();
+                    bool b2G = false;
+                    bool b5G = false;
+                    if (!apList.empty()) {
+                        for (int i = 0; i < apList.count(); ++i) {
+                            if (apList.at(i)->frequency() < FREQ_5GHZ) {
+                                b2G = true;
+                            }
+                            if (apList.at(i)->frequency() >= FREQ_5GHZ) {
+                                b5G = true;
+                            }
+                            if (b2G && b5G) {
+                                m_isMix = true;
+                                break;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
     initInfoBySsid();
 }
 

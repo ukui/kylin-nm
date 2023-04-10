@@ -35,30 +35,22 @@
 <context>
     <name>ConfigPage</name>
     <message>
-        <location filename="../src/frontend/netdetails/configpage.cpp" line="61"/>
+        <location filename="../src/frontend/netdetails/configpage.cpp" line="62"/>
         <source>Network profile type</source>
         <translation>དྲ་རྒྱའི་བཀོད་སྒྲིག་ཡིག་ཆའི་རིགས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/configpage.cpp" line="64"/>
+        <location filename="../src/frontend/netdetails/configpage.cpp" line="65"/>
         <source>Public(recommended)  Devices on the network cannot discover this computer. Generally, it is suitable for networks in public places, such as airports or coffee shops, etc.</source>
         <translation>སྤྱི་སྤྱོད།（འོས་སྦྱོར་བྱས་པ།）དྲ་རྒྱའི་སྒྲིག་ཆས་ཀྱིས་གློག་ཀླད་འདི་མཐོང་མི་ཐུབ། སྤྱིར་བཏང་གི་གནས་ཚུལ་འོག་ཏུ་མི་མང་འདུ་སའི་ནང་གི་དྲ་བ་ལ་འཚམ་པ་སྟེ།དཔེར་ན་གནམ་གྲུ་ཐང་དང་འཚིག་ཇའི་ཁང་སོགས་ལྟ་བུ།.</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/configpage.cpp" line="68"/>
-        <source>Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
+        <location filename="../src/frontend/netdetails/configpage.cpp" line="69"/>
+        <source>Private  Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
         <translation>ཆེད་སྤྱོད།    དྲ་རྒྱའི་སྒྲིག་ཆས་ཀྱིས་གློག་ཀླད་འདི་མཐོང་ཐུབ། སྤྱིར་བཏང་གི་གནས་ཚུལ་འོག་ཁྱིམ་ཚང་ངམ་ལས་དོན་ཚན་པའི་དྲ་བ་དང་འཚམ་པས།ཁྱེད་ཀྱིས་དྲ་ཐོག་གི་མི་སྒེར་དང་སྒྲིག་ཆས་ལ་ངོས་འཛིན་དང་ཡིད་ཆེས་བྱེད་དགོས།.</translation>
     </message>
     <message>
-        <source>Public(recommended)  Your device can not be discovered on the network. In most cases, use this feature when connected to a network at home, work, or a public location.</source>
-        <translation type="vanished">སྤྱི་སྤྱོད་(འོས་སྦྱོར་)དྲ་རྒྱའི་ཐོག་ནས་ཁྱོད་ཀྱི་སྒྲིག་ཆས་རྙེད་མི་ཐུབ། གནས་ཚུལ་མང་ཆེ་བའི་འོག་ཏུ་ཁྱིམ་ཚང་དང་བྱ་བ་འམ་ཡང་ན་སྤྱི་པའི་གོ་གནས་སུ་དྲ་རྒྱའི་དུས་སུ་ནུས་པ་འདི་བཀོལ་སྤྱོད་བྱེད་དགོས།.</translation>
-    </message>
-    <message>
-        <source>Private  Your device can be discovered on the network. Select this if you require file sharing or use applications that communicate over this network. You should know and trust the people and devices on the network.</source>
-        <translation type="vanished">ཆེད་སྤྱོད་དྲ་རྒྱའི་སྟེང་ནས་ཁྱོད་ཀྱི་སྒྲིག་ཆས་རྙེད་ཐུབ། གལ་ཏེ་ཡིག་ཆ་མཉམ་སྤྱོད་བྱེད་དགོས་པའམ་ཡང་ན་དྲ་རྒྱའི་འཕྲིན་གཏོང་བཀོལ་སྤྱོད་བྱེད་པར་བརྟེན་ནས་རྣམ་གྲངས་འདི་འདེམས་རོགས་གནང། ཁྱོད་ཀྱིས་དྲ་རྒྱའི་སྟེང་གི་མི་སྣ་དང་སྒྲིག་ཆས་ལ་རྒྱུས་ལོན་དང་ཡིད་ཆེས་བྱེད་དགོས།.</translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/netdetails/configpage.cpp" line="72"/>
+        <location filename="../src/frontend/netdetails/configpage.cpp" line="73"/>
         <source>Config firewall and security settings</source>
         <translation>མེ་འགོག་གྱང་རྩིག་དང་བདེ་འཇགས་བཀོད་སྒྲིག་བྱ་དགོས།</translation>
     </message>
@@ -81,27 +73,27 @@
 <context>
     <name>CreatNetPage</name>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="54"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="85"/>
         <source>Connection Name</source>
         <translation>འབྲེལ་མཐུད་ཀྱི་མིང་།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="55"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="86"/>
         <source>IPv4Config</source>
         <translation>IPv4ཁུང་ཙི།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="56"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="87"/>
         <source>Address</source>
         <translation>སྡོད་གནས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="57"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="88"/>
         <source>Netmask</source>
         <translation>དྲ་རྒྱའི་མ་ལག</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="58"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="89"/>
         <source>Default Gateway</source>
         <translation>ཁ་ཆད་བཞག་པའི་སྒོ་ཆེན།</translation>
     </message>
@@ -114,18 +106,28 @@
         <translation type="vanished">ཚབ་བྱེད་རང་བཞིན་གྱི་DNS</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="74"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="104"/>
         <source>Auto(DHCP)</source>
         <translation>རང་འགུལ་(DHCP)</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="75"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="105"/>
         <source>Manual</source>
         <translation>ལག་དེབ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="179"/>
-        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="180"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="164"/>
+        <source>Invalid address</source>
+        <translation>རྩིས་འགྲོ་མེད་པའི་ས་གནས།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="173"/>
+        <source>Invalid subnet mask</source>
+        <translation>རྩིས་འགྲོ་མེད་པའི་དྲ་བ་འགེབས་སྲུང་བྱེད་པ།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="193"/>
+        <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="194"/>
         <source>Required</source>
         <translation>ངེས་པར་དུ་སྐོང་དགོས།</translation>
     </message>
@@ -133,13 +135,13 @@
 <context>
     <name>DetailPage</name>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="267"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="269"/>
         <source>Auto Connection</source>
         <translation>རང་འགུལ་གྱིས་འབྲེལ་མཐུད་བྱེད</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="223"/>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="320"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="322"/>
         <source>SSID:</source>
         <translation>SSID:</translation>
     </message>
@@ -160,55 +162,55 @@
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="227"/>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="321"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="323"/>
         <source>Protocol:</source>
         <translation>གྲོས་ཆོད་ནང་དུ།:</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="231"/>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="322"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="324"/>
         <source>Security Type:</source>
         <translation>བདེ་འཇགས་ཀྱི་རིགས་དབྱིབས་ནི།:</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="235"/>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="323"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="325"/>
         <source>Hz:</source>
         <translation>དྲ་རྒྱའི་འཕྲིན་ལམ།:</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="239"/>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="324"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="326"/>
         <source>Chan:</source>
         <translation>དྲ་བའི་བགྲོད་ལམ།:</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="243"/>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="325"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="327"/>
         <source>BandWidth:</source>
         <translation>ཞེང་ཆེ་བ།:</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="257"/>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="328"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="259"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="330"/>
         <source>IPv6:</source>
         <translation>IPv6:</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="247"/>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="326"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="328"/>
         <source>IPv4:</source>
         <translation>IPv4:</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="251"/>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="327"/>
-        <source>IPv4 Dns:</source>
-        <translation>IPv4 Dns:</translation>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="253"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="329"/>
+        <source>IPv4 DNS:</source>
+        <translation>IPv4 DNS:</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="261"/>
-        <location filename="../src/frontend/netdetails/detailpage.cpp" line="329"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="263"/>
+        <location filename="../src/frontend/netdetails/detailpage.cpp" line="331"/>
         <source>Mac:</source>
         <translation>ཨའོ་མོན་ནི།:</translation>
     </message>
@@ -469,12 +471,12 @@
         <translation>གསང་གྲངས་དང་གསང་བའི་ལྡེ་མིག་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="143"/>
+        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="144"/>
         <source>Cancel</source>
         <translation>ཕྱིར་འཐེན།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="144"/>
+        <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="145"/>
         <source>Connect</source>
         <translation>སྦྲེལ་མཐུད་བྱེད་པ</translation>
     </message>
@@ -498,22 +500,22 @@
         <translation type="vanished">དེ་ལྟར་མ་བྱས་</translation>
     </message>
     <message>
-        <location filename="../src/frontend/networkmode/firewalldialog.cpp" line="76"/>
+        <location filename="../src/frontend/networkmode/firewalldialog.cpp" line="85"/>
         <source>Allow other devices on this network to discover this computer?</source>
         <translation>དྲ་རྒྱའི་སྟེང་གི་སྒྲིག་ཆས་གཞན་པས་གློག་ཀླད་འདི་རྙེད་དུ་འཇུག་གམ།?</translation>
     </message>
     <message>
-        <location filename="../src/frontend/networkmode/firewalldialog.cpp" line="79"/>
+        <location filename="../src/frontend/networkmode/firewalldialog.cpp" line="87"/>
         <source>It is not recommended to enable this feature on public networks</source>
         <translation>བསམ་འཆར་མེད་།སྤྱི་པའི་དྲ་རྒྱའི་སྟེང་ནས་ནུས་པ་འདི་མགོ་བརྩམས་།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/networkmode/firewalldialog.cpp" line="82"/>
+        <location filename="../src/frontend/networkmode/firewalldialog.cpp" line="89"/>
         <source>Not allowed (recommended)</source>
-        <translation>མི་ཆོག་（འོས་སྦྱོར་）།</translation>
+        <translation>མི་ཆོག་པ་(འོས་སྦྱོར།)</translation>
     </message>
     <message>
-        <location filename="../src/frontend/networkmode/firewalldialog.cpp" line="83"/>
+        <location filename="../src/frontend/networkmode/firewalldialog.cpp" line="90"/>
         <source>Allowed</source>
         <translation>ཆོག་པ་</translation>
     </message>
@@ -521,22 +523,22 @@
 <context>
     <name>Ipv4Page</name>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="67"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="63"/>
         <source>IPv4Config</source>
         <translation>IPv4ཁུང་ཙི།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="68"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="64"/>
         <source>Address</source>
         <translation>སྡོད་གནས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="69"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="65"/>
         <source>Netmask</source>
         <translation>དྲ་རྒྱའི་མ་ལག</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="70"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="66"/>
         <source>Default Gateway</source>
         <translation>ཁ་ཆད་བཞག་པའི་སྒོ་ཆེན།</translation>
     </message>
@@ -549,33 +551,33 @@
         <translation type="vanished">ཚབ་བྱེད་རང་བཞིན་གྱི་DNS</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="116"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="108"/>
         <source>Auto(DHCP)</source>
         <translation>རང་འགུལ་(DHCP)</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="117"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="109"/>
         <source>Manual</source>
         <translation>ལག་དེབ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="320"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="256"/>
         <source>Invalid address</source>
         <translation>རྩིས་འགྲོ་མེད་པའི་ས་གནས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="329"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="265"/>
         <source>Invalid subnet mask</source>
         <translation>རྩིས་འགྲོ་མེད་པའི་དྲ་བ་འགེབས་སྲུང་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="357"/>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="358"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="291"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="292"/>
         <source>Required</source>
         <translation>ངེས་པར་དུ་སྐོང་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="430"/>
+        <location filename="../src/frontend/netdetails/ipv4page.cpp" line="361"/>
         <source>Address conflict</source>
         <translation>ཤག་གནས་གདོང་གཏུག་</translation>
     </message>
@@ -583,22 +585,22 @@
 <context>
     <name>Ipv6Page</name>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="164"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="141"/>
         <source>IPv6Config</source>
         <translation>IPv6ཁུང་ཙི།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="165"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="142"/>
         <source>Address</source>
         <translation>སྡོད་གནས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="166"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="143"/>
         <source>Subnet prefix Length</source>
         <translation>ཡན་ལག་དྲ་རྒྱའི་སྔོན་སྒྲིག་གི་རིང་ཚད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="167"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="144"/>
         <source>Default Gateway</source>
         <translation>ཁ་ཆད་བཞག་པའི་སྒོ་ཆེན།</translation>
     </message>
@@ -611,34 +613,33 @@
         <translation type="vanished">ཚབ་བྱེད་རང་བཞིན་གྱི་DNS</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="212"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="185"/>
         <source>Auto(DHCP)</source>
         <translation>རང་འགུལ་(DHCP)</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="213"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="186"/>
         <source>Manual</source>
         <translation>ལག་དེབ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="274"/>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="275"/>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="276"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="235"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="236"/>
         <source>Required</source>
         <translation>ངེས་པར་དུ་སྐོང་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="298"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="255"/>
         <source>Invalid address</source>
         <translation>རྩིས་འགྲོ་མེད་པའི་ས་གནས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="307"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="264"/>
         <source>Invalid gateway</source>
         <translation>རྩིས་འགྲོ་མེད་པའི་དྲ་བའི་འགག་སྒོ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="367"/>
+        <location filename="../src/frontend/netdetails/ipv6page.cpp" line="303"/>
         <source>Address conflict</source>
         <translation>ཤག་གནས་གདོང་གཏུག་</translation>
     </message>
@@ -646,12 +647,12 @@
 <context>
     <name>JoinHiddenWiFiPage</name>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="131"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="137"/>
         <source>Please enter the network name and security type</source>
         <translation>ཁྱེད་རང་དྲ་རྒྱའི་ནང་དུ་ཞུགས་འདོད་པའི་མིང་དང་བདེ་འཇགས་རིགས་ནང་འཇུག་བྱེད་རོགས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="136"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="142"/>
         <source>Network name(SSID)</source>
         <translation>དྲ་རྒྱའི་མིང་། (SID)</translation>
     </message>
@@ -660,27 +661,27 @@
         <translation type="vanished">དྲ་རྒྱ་དེ་སེམས་ལ་འཛིན་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="137"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="143"/>
         <source>Show Network List</source>
         <translation>དྲ་རྒྱའི་རེའུ་མིག་གསལ་པོར་མངོན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="138"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="144"/>
         <source>Cancel</source>
         <translation>མེད་པར་བཟོ་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="139"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="145"/>
         <source>Join</source>
         <translation>དེའི་ནང་དུ་ཞུགས་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="142"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="148"/>
         <source>Required</source>
         <translation>ངེས་པར་དུ་སྐོང་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="144"/>
+        <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="150"/>
         <source>Find and Join Wi-Fi</source>
         <translation>འཚོལ་ཞིབ་བྱས་པ་མ་ཟད་WI-FIལ་ཞུགས་པ་རེད།</translation>
     </message>
@@ -688,26 +689,40 @@
 <context>
     <name>LanListItem</name>
     <message>
-        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="63"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="69"/>
         <source>Not connected</source>
         <translation>འབྲེལ་མཐུད་མི་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="120"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="126"/>
         <source>Wired Device not carried</source>
         <translation>སྐུད་ཡོད་སྒྲིག་ཆས་འཁྱེར་མེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="141"/>
-        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="157"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="146"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="163"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="261"/>
         <source>Disconnect</source>
         <translation>འབྲེལ་ཐག་ཆད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="143"/>
-        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="155"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="148"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="161"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="265"/>
         <source>Connect</source>
         <translation>སྦྲེལ་མཐུད་བྱེད་པ</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="152"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="168"/>
+        <source>Property</source>
+        <translation>ངོ་བོ།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="153"/>
+        <location filename="../src/frontend/list-items/lanlistitem.cpp" line="170"/>
+        <source>Delete</source>
+        <translation>དྲ་རྒྱ་དེ་བསུབ་དགོས།</translation>
     </message>
 </context>
 <context>
@@ -718,17 +733,17 @@
         <translation>ཨེ་ཙི་དྲ་རྒྱའི་སྒྲིག་ཆས་ལ་བཙན་འཛུལ་བྱས་མི་ཆོག།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="723"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="733"/>
         <source>LAN</source>
         <translation>སྐུད་ཡོད་དྲ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="725"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="735"/>
         <source>Activated LAN</source>
         <translation>ངའི་དྲ་རྒྱ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="734"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="745"/>
         <source>Inactivated LAN</source>
         <translation>དྲ་བ་གཞན་དག</translation>
     </message>
@@ -737,7 +752,7 @@
         <translation type="vanished">སྐུད་ཡོད་དྲ་བ་ཆད་སོང་།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="1233"/>
+        <location filename="../src/frontend/tab-pages/lanpage.cpp" line="1229"/>
         <source>Wired Device not carried</source>
         <translation>སྐུད་ཡོད་སྒྲིག་ཆས་འཁྱེར་མེད་པ།</translation>
     </message>
@@ -749,12 +764,12 @@
 <context>
     <name>ListItem</name>
     <message>
-        <location filename="../src/frontend/list-items/listitem.cpp" line="89"/>
+        <location filename="../src/frontend/list-items/listitem.cpp" line="168"/>
         <source>Kylin NM</source>
         <translation>དྲ་རྒྱའི་ཡོ་བྱད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/listitem.cpp" line="92"/>
+        <location filename="../src/frontend/list-items/listitem.cpp" line="171"/>
         <source>kylin network applet desktop message</source>
         <translation>དྲ་རྒྱའི་གསལ་འདེབས་གནས་ཚུལ།</translation>
     </message>
@@ -762,37 +777,37 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="191"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="215"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="246"/>
         <source>kylin-nm</source>
         <translation>དྲ་རྒྱའི་ཡོ་བྱད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="275"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="323"/>
         <source>LAN</source>
         <translatorcomment>有线网络</translatorcomment>
         <translation>སྐུད་ཡོད་དྲ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="277"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="325"/>
         <source>WLAN</source>
         <translatorcomment>无线局域网</translatorcomment>
         <translation>སྐུད་མེད་ཅུས་ཁོངས་ཀྱི་དྲ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="310"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="353"/>
         <source>Show MainWindow</source>
         <translation>རླུང་གཙོ་བོ་མངོན་པར་བྱས་ཡོད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="311"/>
+        <location filename="../src/frontend/mainwindow.cpp" line="354"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
         <translation>སྒྲིག་བཀོད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/mainwindow.cpp" line="313"/>
         <source>Network tool</source>
-        <translation>དྲ་རྒྱའི་ལག་ཆ་</translation>
+        <translation type="vanished">དྲ་རྒྱའི་ལག་ཆ་</translation>
     </message>
 </context>
 <context>
@@ -800,38 +815,38 @@
     <message>
         <location filename="../src/frontend/netdetails/multiplednswidget.cpp" line="42"/>
         <source>DNS server:</source>
-        <translation>DNSཞབས་ཞུ་བ།:</translation>
+        <translation>DNSཞབས་ཞུའི་ཡོ་བྱད།:</translation>
     </message>
 </context>
 <context>
     <name>NetDetail</name>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="75"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="73"/>
         <source>Kylin NM</source>
         <translation>ཅིན་ལིན་NM</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="78"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="76"/>
         <source>kylin network desktop message</source>
         <translation>དྲ་རྒྱའི་གསལ་འདེབས་གནས་ཚུལ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="339"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="334"/>
         <source>Detail</source>
         <translation>ཞིབ་ཕྲའི་གནས་ཚུལ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="340"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="335"/>
         <source>IPv4</source>
         <translation>IPv4</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="341"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="336"/>
         <source>IPv6</source>
         <translation>IPv6</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="343"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="338"/>
         <source>Security</source>
         <translation>བདེ་འཇགས།</translation>
     </message>
@@ -840,45 +855,45 @@
         <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="345"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="352"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="340"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="347"/>
         <source>Config</source>
         <translation>བཀོད་སྒྲིག་བཅས་བྱ་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="367"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="362"/>
         <source>Confirm</source>
         <translation>གཏན་འཁེལ་བྱ་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="370"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="365"/>
         <source>Cancel</source>
         <translation>ཕྱིར་འཐེན།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="420"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="414"/>
         <source>Forget this network</source>
         <translation>དྲ་རྒྱ་འདི་བརྗེད་སོང་།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="422"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="416"/>
         <source>Delete this network</source>
         <translation>དྲ་རྒྱ་དེ་བསུབ་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="401"/>
-        <source>Add Lan Connect</source>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="395"/>
+        <source>Add LAN Connect</source>
         <translation>སྐུད་ཡོད་དྲ་བ་ཁ་སྣོན་བྱ་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="406"/>
-        <source>connect hiddin wlan</source>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="400"/>
+        <source>Connect Hidden WLAN</source>
         <translation>ཧའེ་ཏེན་ཝེ་ལན་དང་འབྲེལ་མཐུད་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="583"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="595"/>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1100"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="577"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="589"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1157"/>
         <source>None</source>
         <translation>གཅིག་ཀྱང་མེད།</translation>
     </message>
@@ -890,12 +905,12 @@
         <translation>རང་འགུལ་གྱིས་རླངས་</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="836"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="857"/>
         <source>start check ipv4 address conflict</source>
         <translation>ipv4ས་གནས་ཀྱི་འགལ་བ་ལ་ཞིབ་བཤེར་བྱེད་འགོ་ཚུགས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="853"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="874"/>
         <source>start check ipv6 address conflict</source>
         <translation>ipv6གནས་ཡུལ་དང་འགལ་བར་ཞིབ་བཤེར་བྱེད་འགོ་ཚུགས།</translation>
     </message>
@@ -908,22 +923,22 @@
         <translation type="vanished">ipv6ཐག་གཅོད་གདོང་གཏུག་བྱུང་བ་རེད།!</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1096"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1153"/>
         <source>this wifi no support enterprise type</source>
         <translation>wifiལ་རྒྱབ་སྐྱོར་མེད་པའི་ཁེ་ལས་ཀྱི་རིགས་དབྱིབས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1101"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1158"/>
         <source>this wifi no support None type</source>
         <translation>wifiལ་རྒྱབ་སྐྱོར་མི་བྱེད་པར་རིགས་དབྱིབས་གཅིག་ཀྱང་མེད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1106"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1163"/>
         <source>this wifi no support WPA2 type</source>
         <translation>wifiལ་རྒྱབ་སྐྱོར་མི་བྱེད་པའི་WPA2རིགས་དབྱིབས་</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1109"/>
+        <location filename="../src/frontend/netdetails/netdetail.cpp" line="1166"/>
         <source>this wifi no support WPA3 type</source>
         <translation>wifiལ་རྒྱབ་སྐྱོར་མི་བྱེད་པའི་WPA3རིགས་དབྱིབས་</translation>
     </message>
@@ -952,7 +967,7 @@
         <translation type="obsolete">IPv4地址：</translation>
     </message>
     <message>
-        <source>IPv4 Dns:</source>
+        <source>IPv4 DNS:</source>
         <translation type="obsolete">IPv4 DNS服务器：</translation>
     </message>
     <message>
@@ -1034,242 +1049,243 @@
 <context>
     <name>SecurityPage</name>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="95"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="106"/>
         <source>Remember the Network</source>
         <translation>དྲ་རྒྱ་དེ་སེམས་ལ་འཛིན་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="203"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="223"/>
         <source>Security</source>
         <translation>བདེ་འཇགས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="204"/>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="224"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="244"/>
         <source>Password</source>
         <translation>གསང་གྲངས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="208"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="228"/>
         <source>EAP type</source>
         <translation>EAP རིགས་དབྱིབས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="210"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="230"/>
         <source>Identity</source>
         <translation>ཐོབ་ཐང་།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="211"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="231"/>
         <source>Domain</source>
         <translation>ཁྱབ་ཁོངས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="212"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="232"/>
         <source>CA certficate</source>
         <translation>CA certficate</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="213"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="233"/>
         <source>no need for CA certificate</source>
         <translation>CAཡི་ལག་ཁྱེར་མི་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="214"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="234"/>
         <source>User certificate</source>
         <translation>སྤྱོད་མཁན་གྱི་ལག་ཁྱེར།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="215"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="235"/>
         <source>User private key</source>
         <translation>སྤྱོད་མཁན་གྱི་སྒེར་གྱི་ལྡེ་མིག</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="216"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="236"/>
         <source>User key password</source>
         <translation>སྤྱོད་མཁན་གྱི་ལྡེ་མིག་གི་གསང་</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="217"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="237"/>
         <source>Password options</source>
         <translation>གསང་བའི་ཐོག་ནས་རྣམ་གྲངས་བདམས་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="218"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="226"/>
-        <location filename="../src/frontend/netdetails/securitypage.h" line="109"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="238"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="246"/>
+        <location filename="../src/frontend/netdetails/securitypage.h" line="126"/>
         <source>Required</source>
         <translation>ངེས་པར་དུ་སྐོང་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="222"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="242"/>
         <source>Ineer authentication</source>
         <translation>དབྱིན་ཆས་ཀྱི་བདེན་དཔང་ར་སྤྲོད་</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="223"/>
-        <source>Usename</source>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="243"/>
+        <source>Username</source>
         <translation>བཀོལ་སྤྱོད་ཀྱི་མིང་།</translation>
     </message>
     <message>
-        <source>Username</source>
-        <oldsource>Usename</oldsource>
-        <translation type="vanished">用户名</translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="225"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="245"/>
         <source>Ask pwd each query</source>
         <translation>འདྲི་རྩད་རེ་རེར་འདྲི་རྩད་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="229"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="239"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="242"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="245"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="328"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="805"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="826"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="848"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="871"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="249"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="262"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="265"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="268"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="280"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="369"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="502"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1151"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1182"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1204"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1227"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1250"/>
         <source>None</source>
         <translation>གཅིག་ཀྱང་མེད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="230"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="250"/>
         <source>WPA&amp;WPA2 Personal</source>
         <translation>WPA&amp;WPA2མི་སྒེར་གྱི་ངོས་ནས་བཤད་ན།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="231"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="251"/>
         <source>WPA&amp;WPA2 Enterprise</source>
         <translation>WPA&amp;WPA2 ཁེ་ལས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="232"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="252"/>
         <source>WPA3 Personal</source>
         <translation>WPA3མི་སྒེར་</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="240"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="243"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="246"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="263"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="266"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="269"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="281"/>
         <source>Choose from file...</source>
         <translation>ཡིག་ཆའི་ནང་ནས་གདམ་ག་རྒྱག་དགོས།...</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="249"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="273"/>
+        <source>PAC provisioning</source>
+        <translation>PACབཀོད་སྒྲིག་བྱས་པ།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="274"/>
+        <source>Allow automatic PAC provisioning</source>
+        <translation>རང་འགུལ་PACབཀོད་སྒྲིག་བྱས་ཆོག</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="275"/>
+        <source>PAC file</source>
+        <translation>PACཡི་ཡིག་ཆ།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="276"/>
+        <source>Anonymous</source>
+        <translation>མིང་མི་འགོད་པ།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="277"/>
+        <source>Authenticated</source>
+        <translation>དཔང་དངོས་བདེན་པ་ཡིན་པའི་ར་</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="278"/>
+        <source>Both</source>
+        <translation>དེ་གཉིས་ཀ་མཉམ་དུ་སྤྱོད་དགོས།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="284"/>
         <source>Store passwords only for this user</source>
         <translation>སྤྱོད་མཁན་དེ་ཁོ་ནའི་ཆེད་དུ་གསང་གྲངས་ཉར་ཚགས་བྱས་ཡོད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="249"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="284"/>
         <source>Store password only for this user</source>
         <translation>སྤྱོད་མཁན་དེ་ཁོ་ནའི་ཆེད་དུ་གསང་གྲངས་ཉར་ཚགས་བྱས་ཡོད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="251"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="286"/>
         <source>Store passwords for all users</source>
         <translation>སྤྱོད་མཁན་ཚང་མའི་གསང་བ་གསོག་ཉར་བྱེད་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="251"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="286"/>
         <source>Store password for all users</source>
         <translation>སྤྱོད་མཁན་ཚང་མའི་གསང་བ་གསོག་ཉར་བྱེད་དགོས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="253"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="288"/>
         <source>Ask this password every time</source>
         <translation>ཐེངས་རེར་གསང་བ་འདི་འདྲི་རྩད་བྱེད་ཐེངས་རེ་ཡིན།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="253"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="288"/>
         <source>Ask password every time</source>
         <translation>ཐེངས་རེར་གསང་བ་འདི་འདྲི་རྩད་བྱེད་ཐེངས་རེ་ཡིན།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="816"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="839"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="861"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1172"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1195"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1217"/>
         <source>Choose a CA certificate</source>
         <translation>CAཡི་དཔང་ཡིག་འདེམས་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="817"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="840"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="862"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1173"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1196"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1218"/>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
         <translation>CA དཔང་ཡིག (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.h" line="110"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1240"/>
+        <source>Choose a PAC file</source>
+        <translation>ཡིག་ཆ་PACབདམས་པ་རེད།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1241"/>
+        <source>PAC Files (*.pac)</source>
+        <translation>PACཡི་ཡིག་ཆ། (*.pac)</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.h" line="127"/>
         <source> </source>
         <translation></translation>
     </message>
 </context>
 <context>
-    <name>SinglePage</name>
-    <message>
-        <location filename="../src/frontend/single-pages/singlepage.cpp" line="71"/>
-        <source>Settings</source>
-        <translation type="unfinished">སྒྲིག་བཀོད།</translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/single-pages/singlepage.cpp" line="99"/>
-        <source>Kylin NM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/single-pages/singlepage.cpp" line="102"/>
-        <source>kylin network applet desktop message</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>TabPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="65"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="72"/>
         <source>Current Device</source>
         <translation>མིག་སྔའི་སྒྲིག་ཆས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="70"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="77"/>
         <source>Devices Closed!</source>
         <translation>སྒྲིག་ཆས་སྒོ་རྒྱག་པ།!</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="127"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="134"/>
         <source>Settings</source>
         <translation>སྒྲིག་བཀོད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="183"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="325"/>
         <source>Kylin NM</source>
         <translation>ཅིན་ལིན་NM</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="186"/>
+        <location filename="../src/frontend/tab-pages/tabpage.cpp" line="328"/>
         <source>kylin network applet desktop message</source>
         <translation>kylinདྲ་རྒྱའི་ཀུ་ཤུའི་ཅོག་ཙེའི་ཆ་འཕྲིན།</translation>
-    </message>
-</context>
-<context>
-    <name>VpnListItem</name>
-    <message>
-        <location filename="../src/frontend/list-items/vpnlistitem.cpp" line="62"/>
-        <source>Not connected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/list-items/vpnlistitem.cpp" line="142"/>
-        <location filename="../src/frontend/list-items/vpnlistitem.cpp" line="158"/>
-        <source>Disconnect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/list-items/vpnlistitem.cpp" line="144"/>
-        <location filename="../src/frontend/list-items/vpnlistitem.cpp" line="156"/>
-        <source>Connect</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1277,16 +1293,6 @@
     <message>
         <source>Wired Device not carried</source>
         <translation type="vanished">སྐུད་ཡོད་སྒྲིག་ཆས་འཁྱེར་མེད་པ།</translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/single-pages/vpnpage.cpp" line="276"/>
-        <source>VPN Connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/single-pages/vpnpage.cpp" line="291"/>
-        <source>VPN Settings</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1297,37 +1303,37 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/frontend/wificonfigdialog.cpp" line="40"/>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="41"/>
         <source>WLAN Authentication</source>
         <translation>སྐུད་མེད་བདེན་དཔང་ར་སྤྲོད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/wificonfigdialog.cpp" line="51"/>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="52"/>
         <source>Input WLAN Information Please</source>
         <translation>སྐུད་མེད་ཆ་འཕྲིན་ནང་འཇུག་གནང་རོགས།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/wificonfigdialog.cpp" line="52"/>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="53"/>
         <source>WLAN ID：</source>
         <translation>WLAN ID:</translation>
     </message>
     <message>
-        <location filename="../src/frontend/wificonfigdialog.cpp" line="53"/>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="54"/>
         <source>WLAN Name:</source>
         <translation>སྐུད་མེད་མིང་།:</translation>
     </message>
     <message>
-        <location filename="../src/frontend/wificonfigdialog.cpp" line="54"/>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="55"/>
         <source>Password：</source>
         <translation>གསང་གྲངས་ནི།:</translation>
     </message>
     <message>
-        <location filename="../src/frontend/wificonfigdialog.cpp" line="55"/>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="56"/>
         <source>Cancl</source>
         <translation>ཁན་ཁེ་ལན།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/wificonfigdialog.cpp" line="56"/>
+        <location filename="../src/frontend/wificonfigdialog.cpp" line="57"/>
         <source>Ok</source>
         <translation>འགྲིགས།</translation>
     </message>
@@ -1335,31 +1341,42 @@
 <context>
     <name>WlanListItem</name>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="69"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="72"/>
         <source>Not connected</source>
         <translation>འབྲེལ་མཐུད་མི་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="172"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="626"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="177"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="205"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="664"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="683"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="693"/>
         <source>Disconnect</source>
         <translation>འབྲེལ་ཐག་ཆད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="174"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="287"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="624"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="179"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="209"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="336"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="674"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="691"/>
         <source>Connect</source>
         <translation>སྦྲེལ་མཐུད་བྱེད་པ</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="181"/>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="631"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="188"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="698"/>
         <source>Forget</source>
         <translation>བརྗེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="308"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="187"/>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="703"/>
+        <source>Property</source>
+        <translation>ངོ་བོ།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/list-items/wlanlistitem.cpp" line="357"/>
         <source>Auto Connect</source>
         <translation>རང་འགུལ་གྱིས་སྦྲེལ་མཐུད་</translation>
     </message>
@@ -1371,7 +1388,7 @@
         <translation type="vanished">更多...</translation>
     </message>
     <message>
-        <location filename="../src/frontend/list-items/wlanmoreitem.cpp" line="27"/>
+        <location filename="../src/frontend/list-items/wlanmoreitem.cpp" line="28"/>
         <source>Add Others...</source>
         <translation>གཞན་པ་ཁ་སྣོན་བྱས་ནས་...</translation>
     </message>
@@ -1379,22 +1396,22 @@
 <context>
     <name>WlanPage</name>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="107"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="127"/>
         <source>WLAN</source>
         <translation>སྐུད་མེད་ཅུས་ཁོངས་ཀྱི་དྲ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="94"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="103"/>
         <source>No wireless network card detected</source>
         <translation>སྐུད་མེད་དྲ་རྒྱའི་བྱང་བུ་མ་རྙེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="109"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="129"/>
         <source>Activated WLAN</source>
         <translation>ངའི་དྲ་རྒྱ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="119"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="140"/>
         <source>Other WLAN</source>
         <translation>དྲ་བ་གཞན་དག</translation>
     </message>
@@ -1403,12 +1420,12 @@
         <translation type="vanished">更多...</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="838"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="872"/>
         <source>WLAN Connected Successfully</source>
         <translation>སྐུད་མེད་དྲ་བ་སྦྲེལ་ཡོད།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="834"/>
+        <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="868"/>
         <source>WLAN Disconnected Successfully</source>
         <translation>སྐུད་མེད་དྲ་རྒྱ་ཆད་སོང་།</translation>
     </message>
@@ -1484,19 +1501,6 @@
         <location filename="../src/main.cpp" line="101"/>
         <source>show kylin-nm lan page</source>
         <translation>སྐུད་ཡོད་དྲ་རྒྱའི་ཤོག་ངོས་མངོན་པར་བྱས་ཡོད།</translation>
-    </message>
-</context>
-<context>
-    <name>vpnMainWindow</name>
-    <message>
-        <location filename="../src/frontend/vpnmainwindow.cpp" line="170"/>
-        <source>kylin-vpn</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/frontend/vpnmainwindow.cpp" line="252"/>
-        <source>vpn tool</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -20,6 +20,7 @@
 #include "addnetbtn.h"
 #include <QEvent>
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QVariant>
 #include <QPainter>
 #include <QPainterPath>
@@ -33,35 +34,30 @@ AddNetBtn::AddNetBtn(bool isWlan, QWidget *parent) : QPushButton(parent)
     this->setMaximumSize(QSize(16777215, 60));
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
-    QPalette pal = this->palette();
-    QColor color = pal.color(QPalette::Button);
-    color.setAlphaF(0.5);
-    pal.setColor(QPalette::Button, color);
-    this->setPalette(pal);
-    QHBoxLayout *addLyt = new QHBoxLayout(this);
+
+    QHBoxLayout *addLyt = new QHBoxLayout;
 
     QLabel *iconLabel = new QLabel(this);
-    textLabel = new QLabel(this);
+    m_textLabel = new QLabel(this);
 
     if (isWlan) {
-        textLabel->setText(tr("Add Others"));
+        m_textLabel->setText(tr("Add Others"));
         addLyt->addSpacing(8);
-        addLyt->addWidget(textLabel);
+        addLyt->addWidget(m_textLabel);
     } else {
-        textLabel->setText(tr("Add WiredNetork"));
+        m_textLabel->setText(tr("Add WiredNetork"));
         QIcon mAddIcon = QIcon::fromTheme("list-add-symbolic");
-        iconLabel->setPixmap(mAddIcon.pixmap(mAddIcon.actualSize(QSize(24, 24))));
-        iconLabel->setProperty("useIconHighlightEffect", true);
-        iconLabel->setProperty("iconHighlightEffectMode", 1);
+        iconLabel->setPixmap(mAddIcon.pixmap(mAddIcon.actualSize(QSize(16, 16))));
+        iconLabel->setProperty("useIconHighlightEffect", 0x2);
+//        iconLabel->setProperty("iconHighlightEffectMode", 1);
 
         addLyt->addStretch();
         addLyt->addWidget(iconLabel);
-        addLyt->addWidget(textLabel);
+        addLyt->addWidget(m_textLabel);
     }
 
     addLyt->addStretch();
     this->setLayout(addLyt);
-
 }
 
 AddNetBtn::~AddNetBtn()
@@ -83,12 +79,17 @@ void AddNetBtn::leaveEvent(QEvent *event){
 
 void AddNetBtn::paintEvent(QPaintEvent *event)
 {
-    QPalette pal = this->palette();
+    QPalette pal = qApp->palette();
 
     QPainter painter(this);
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
-    painter.setBrush(pal.color(QPalette::Base));
+    painter.setBrush(this->palette().base().color());
+
+    QColor color = pal.color(QPalette::Button);
+    color.setAlphaF(0.5);
+    pal.setColor(QPalette::Button, color);
+    this->setPalette(pal);
 
     QRect rect = this->rect();
     QPainterPath path;

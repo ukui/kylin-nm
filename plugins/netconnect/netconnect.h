@@ -153,7 +153,6 @@ private slots:
 
     void onDeviceStatusChanged();
     void onDeviceNameChanged(QString, QString, int);
-
 };
 
 Q_DECLARE_METATYPE(QList<QDBusObjectPath>);

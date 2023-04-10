@@ -33,11 +33,10 @@
 #define  BOTTOM_LAYOUT_MARGINS  24, 24, 24, 24
 #define  LAYOUT_SPACING  16
 #define  LABEL_MIN_WIDTH  146
+#define  LABEL_MAX_WIDTH  434
 #define  MAX_NAME_LENGTH 32
 #define  SCROAREA_WIDTH  480
 #define  MEDIUM_WEIGHT_VALUE  57
-
-bool LaunchApp(QString desktopFile);
 
 JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
     :m_devName(devName),
@@ -58,19 +57,9 @@ JoinHiddenWiFiPage::~JoinHiddenWiFiPage()
 
 }
 
-void JoinHiddenWiFiPage::setJoinHiddenWiFiShowed(bool state)
-{
-    m_joinHiddenWiFiShowed = state;
-}
-
 void JoinHiddenWiFiPage::closeEvent(QCloseEvent *event)
 {
     Q_EMIT this->hiddenWiFiPageClose(m_devName);
-
-    if (m_joinHiddenWiFiShowed) {
-        LaunchApp("ukui-control-center.desktop");
-        m_joinHiddenWiFiShowed = false;
-    }
     return QWidget::closeEvent(event);
 }
 
@@ -82,7 +71,8 @@ void JoinHiddenWiFiPage::initUI()
     m_secuWidget = new SecurityPage(false, this);
     m_secuWidget->setSecurity(KySecuType::WPA_AND_WPA2_PERSONAL);
 
-    m_descriptionLabel = new QLabel(this);
+    m_descriptionLabel = new FixLabel(this);
+    m_descriptionLabel->setFixedWidth(LABEL_MAX_WIDTH);
     m_nameLabel = new FixLabel(this);
     m_nameLabel->setFixedWidth(LABEL_MIN_WIDTH);
     m_nameEdit =new LineEdit(this);
@@ -144,7 +134,7 @@ void JoinHiddenWiFiPage::initUI()
     m_bottomLayout->addWidget(m_joinBtn);
 
     //请输入您想要加入网络的名称和安全类型
-   m_descriptionLabel->setText(tr("Please enter the network name and security type"));
+   m_descriptionLabel->setLabelText(tr("Please enter the network name and security type"));
    QFont font = m_descriptionLabel->font();
    font.setWeight(MEDIUM_WEIGHT_VALUE);
    m_descriptionLabel->setFont(font);
@@ -159,8 +149,10 @@ void JoinHiddenWiFiPage::initUI()
 
    this->setWindowTitle(tr("Find and Join Wi-Fi"));
    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
-   this->setFixedWidth(WINDOW_WIDTH);
+
    this->setFixedHeight(MIN_WINDOW_HEIGHT);
+   this->setFixedWidth(WINDOW_WIDTH);
+   onPaletteChanged();
 }
 
 void JoinHiddenWiFiPage::initComponent()
@@ -262,14 +254,14 @@ void JoinHiddenWiFiPage::onPaletteChanged()
     QPalette pal = qApp->palette();
 
     QGSettings * styleGsettings = nullptr;
-//    const QByteArray style_id(THEME_SCHAME);
-//    if (QGSettings::isSchemaInstalled(style_id)) {
-//       styleGsettings = new QGSettings(style_id);
-//       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
-//       if(currentTheme == "ukui-default"){
-//           pal = lightPalette(this);
-//       }
-//    }
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = lightPalette(this);
+       }
+    }
     this->setPalette(pal);
     setFramePalette(m_secuWidget, pal);
     setFramePalette(m_hiddenWifiScrollArea, pal);
@@ -278,4 +270,19 @@ void JoinHiddenWiFiPage::onPaletteChanged()
         delete styleGsettings;
         styleGsettings = nullptr;
     }
+}
+
+void JoinHiddenWiFiPage::centerToScreen()
+{
+    QDesktopWidget* m = QApplication::desktop();
+    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
+    int desk_x = desk_rect.width();
+    int desk_y = desk_rect.height();
+    int x = this->width();
+    int y = this->height();
+//    this->move(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top());
+    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(desk_x / 2 - x / 2 + desk_rect.left(),
+                                                                desk_y / 2 - y / 2 + desk_rect.top(),
+                                                                this->width(),
+                                                                this->height()));
 }

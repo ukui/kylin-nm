@@ -165,61 +165,6 @@ void KyWiredConnectOperation::deactivateWiredConnection(const QString activeConn
     return;
 }
 
-void KyWiredConnectOperation::activateVpnConnection(const QString connectUuid)
-{
-    QString connectPath = "";
-    QString deviceIdentifier = "";
-    QString connectName = "";
-    //QString deviceName = "";
-    QString specificObject = "";
-    NetworkManager::Connection::Ptr connectPtr = nullptr;
-
-    qDebug()<<"it will activate vpn connect"<<connectUuid;
-    connectPtr = NetworkManager::findConnectionByUuid(connectUuid);
-    if (nullptr == connectPtr) {
-        QString errorMessage = "the connect uuid " + connectUuid + "is not exsit";
-        qWarning()<<errorMessage;
-        Q_EMIT activateConnectionError(errorMessage);
-        return;
-    }
-
-    if (NetworkManager::ConnectionSettings::Vpn != connectPtr->settings()->connectionType()) {
-        QString errorMessage = tr("the connect type is")
-                                + connectPtr->settings()->connectionType()
-                                + tr(", but it is not vpn");
-        qWarning()<<errorMessage;
-        Q_EMIT activateConnectionError(errorMessage);
-        return;
-    }
-
-    connectPath = connectPtr->path();
-    connectName = connectPtr->name();
-    //deviceName = connectPtr->settings()->interfaceName();
-    specificObject = deviceIdentifier = QStringLiteral("/");
-
-    qDebug() <<"active wired connect: path "<< connectPath
-             << "device identify " << deviceIdentifier
-             << "connect name " << connectName
-            // << "device name" << deviceName
-             << "specific parameter"<< specificObject;
-
-    QDBusPendingCallWatcher * watcher;
-    watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
-    connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName] (QDBusPendingCallWatcher * watcher) {
-        if (watcher->isError() || !watcher->isValid()) {
-            QString errorMessage = tr("activate vpn connection failed: ") + watcher->error().message();
-            qWarning()<<errorMessage;
-            Q_EMIT this->activateConnectionError(errorMessage);
-         } else {
-            qWarning()<<"active vpn connect complete.";
-         }
-
-         watcher->deleteLater();
-    });
-
-    return;
-}
-
 void KyWiredConnectOperation::saveActiveConnection(QString &deviceName, QString &connectUuid)
 {
     QSettings *p_settings = new QSettings(WIRED_NETWORK_STATE_CONF_FILE, QSettings::IniFormat);

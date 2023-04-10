@@ -184,7 +184,7 @@
   <customwidget>
    <class>TitleLabel</class>
    <extends>QLabel</extends>
-   <header location="global">titlelabel.h</header>
+   <header>titlelabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

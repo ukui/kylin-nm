@@ -50,8 +50,9 @@
 #include "tab-pages/tabpage.h"
 #include "kwidget.h"
 #include "ktabbar.h"
-
+#include "networkmodeconfig.h"
 #include <arpa/inet.h>
+
 using namespace kdk;
 
 #define  TAB_WIDTH  60
@@ -72,7 +73,6 @@ private Q_SLOTS:
     void onModeChanged(bool mode);
 
 };
-
 class ThreadObject : public QObject
 {
     Q_OBJECT
@@ -101,15 +101,14 @@ public:
     NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent = nullptr);
     ~NetDetail();
 
+    void centerToScreen();
+
     void paintEvent(QPaintEvent *event);
     void closeEvent(QCloseEvent *event);
     bool eventFilter(QObject *w, QEvent *event);
 
-    void setDetailPageShowed(bool state);
-
 private:
     void initUI();
-    void centerToScreen();
     void initComponent();
     void getConInfo(ConInfo &conInfo);
     void loadPage();
@@ -119,6 +118,9 @@ private:
     void initTlsInfo(ConInfo &conInfo);
     void initPeapInfo(ConInfo &conInfo);
     void initTtlsInfo(ConInfo &conInfo);
+    void initLeapInfo(ConInfo &conInfo);
+    void initPwdInfo(ConInfo &conInfo);
+    void initFastInfo(ConInfo &conInfo);
 
     void updateWirelessPersonalConnect();
     void updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType);
@@ -148,6 +150,7 @@ private:
     void setNetTabToolTip();
 
     void getIpv4Info(QString objPath, ConInfo &conInfo);
+
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyConnectOperation* m_connectOperation = nullptr;
@@ -192,11 +195,12 @@ private:
     bool         isIpv6Ok;
     bool         isSecuOk;
     bool         isConfirmBtnEnable;
-    bool         m_hasDetailPageShowed = false;
+
     ConInfo      m_info;
 
     ThreadObject *m_object;
     QThread *m_objectThread;
+    NetworkModeType m_networkMode = DBUS_INVAILD;
 
 private Q_SLOTS:
     void on_btnConfirm_clicked();
@@ -207,7 +211,7 @@ protected Q_SLOTS:
     void currentRowChangeSlot(int row);
 
 Q_SIGNALS:
-    void detailPageClose(bool on);
+    void detailPageClose(QString, QString, QString);
     void createPageClose(QString);
     void currentChanged(int);
     void checkCurrentIpv4Conflict(const QString &address);

@@ -34,31 +34,27 @@
 #include <QProcess>
 #include <QDebug>
 #include "kylinnetworkdeviceresource.h"
-#include "firewalldialog.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
-//#include "kborderlessbutton.h"
 
 using namespace kdk;
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
-#define TITLE_FRAME_HEIGHT 50     //TabWidget的tab和widget有间隙，和设计稿看起来一致就不能设为设计稿里的高度
-#define NET_LAYOUT_MARGINS 8,8,0,1
-#define NET_LAYOUT_SPACING 8
-#define NET_LIST_SPACING 0
-#define TEXT_MARGINS 16,0,0,0
+#define TITLE_FRAME_HEIGHT 60     //TabWidget的tab和widget有间隙，和设计稿看起来一致就不能设为设计稿里的高度
+#define TITLE_LAYOUT_MARGINS 24,0,24,0
+#define NET_LAYOUT_MARGINS 8,8,0,8
 #define TEXT_HEIGHT 20
-//#define SCROLL_AREA_HEIGHT 200
 #define SETTINGS_LAYOUT_MARGINS 23,0,24,0
-#define TRANSPARENT_COLOR QColor(0,0,0,0)
-#define INACTIVE_AREA_MIN_HEIGHT 170
 
 #define MAX_ITEMS 4
 #define MAX_WIDTH 412
 #define MIN_WIDTH 404
 
 #define SCROLL_STEP 4
+
+#define TRANSPARENCY "transparency"
+#define TRANSPARENCY_GSETTINGS "org.ukui.control-center.personalise"
 
 class SinglePage : public QWidget
 {
@@ -69,40 +65,47 @@ public:
 
     static void showDesktopNotify(const QString &message, QString soundName);
 
-    void hideSetting() {
-        if (nullptr != m_settingsFrame) {
-            m_settingsFrame->hide();
-            m_netDivider->hide();
-            m_netFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT + 100);
-        }
-    }
-    void showSetting() {
-        if (nullptr != m_settingsFrame) {
-            m_netFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT);
-            m_settingsFrame->show();
-            m_netDivider->show();
-        }
-    }
-
 Q_SIGNALS:
     void activateFailed(QString errorMessage);
     void deactivateFailed(QString errorMessage);
 
+private Q_SLOTS:
+    void onTransChanged();
+
+protected:
+    void paintEvent(QPaintEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+
 protected:
     void initUI();
+    void initTransparency();
+    void paintWithTrans();
+
+
+private:
+    void initWindowProperties();
+
+protected:
     QVBoxLayout * m_mainLayout = nullptr;
 
-    QFrame * m_netFrame = nullptr;
-    QVBoxLayout * m_netLayout = nullptr;
-    QLabel * m_netLabel = nullptr;
-    QWidget * m_netListArea = nullptr;
-    QVBoxLayout * m_netAreaLayout = nullptr;
+    QLabel * m_titleLabel = nullptr;
+    QFrame * m_titleFrame = nullptr;
+    QHBoxLayout * m_titleLayout = nullptr;
 
-    Divider * m_netDivider = nullptr;
+    QFrame * m_listFrame = nullptr;
+    QListWidget * m_listWidget = nullptr;
+    QVBoxLayout * m_listLayout = nullptr;
 
     QFrame * m_settingsFrame = nullptr;
     QHBoxLayout * m_settingsLayout = nullptr;
     KyLable * m_settingsLabel = nullptr;
+
+    Divider * m_netDivider = nullptr;
+    Divider * m_setDivider = nullptr;
+
+
+    QGSettings * m_transGsettings = nullptr;
+    double m_transparency = 1.0;  //透明度
 
 };
 

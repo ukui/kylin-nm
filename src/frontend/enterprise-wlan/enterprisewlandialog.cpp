@@ -81,11 +81,11 @@ void EnterpriseWlanDialog::closeEvent(QCloseEvent *event)
 
 void EnterpriseWlanDialog::paintEvent(QPaintEvent *event)
 {
-    QPalette pal = qApp->palette();
-    QPainter painter(this);
-    painter.setBrush(pal.color(QPalette::Base));
-    painter.drawRect(this->rect());
-    painter.fillRect(rect(), QBrush(pal.color(QPalette::Base)));
+//    QPalette pal = qApp->palette();
+//    QPainter painter(this);
+//    painter.setBrush(pal.color(QPalette::Base));
+//    painter.drawRect(this->rect());
+//    painter.fillRect(rect(), QBrush(pal.color(QPalette::Base)));
 
     return QWidget::paintEvent(event);
 }
@@ -126,15 +126,15 @@ void EnterpriseWlanDialog::initUI()
     m_enterWlanScrollArea = new QScrollArea(this);
     m_enterWlanScrollArea->setFrameShape(QFrame::NoFrame);
     m_enterWlanScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
     m_centerWidget->setFixedWidth(SCROAREA_WIDTH);
     m_enterWlanScrollArea->setFixedWidth(SCROAREA_WIDTH);
     m_enterWlanScrollArea->setWidget(m_centerWidget);
     m_enterWlanScrollArea->setWidgetResizable(true);
 
     QPalette pal = m_enterWlanScrollArea->palette();
-    pal.setBrush(QPalette::Window, Qt::transparent);
+    pal.setBrush(QPalette::Base, QColor(0,0,0,0));
     m_enterWlanScrollArea->setPalette(pal);
+    m_enterWlanScrollArea->setWidgetResizable(true);
 
     m_bottomDivider = new Divider(this);
 
@@ -199,19 +199,24 @@ void EnterpriseWlanDialog::onPaletteChanged()
 {
     QPalette pal = qApp->palette();
 
-//    QGSettings * styleGsettings = nullptr;
-//    const QByteArray style_id(THEME_SCHAME);
-//    if (QGSettings::isSchemaInstalled(style_id)) {
-//       styleGsettings = new QGSettings(style_id);
-//       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
-//       if(currentTheme == "ukui-default"){
-//           pal = lightPalette(this);
-//       }
-//    }
-
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = lightPalette(this);
+       }
+    }
+    pal.setColor(QPalette::Background, pal.base().color());
     this->setPalette(pal);
 
     setFramePalette(m_securityPage, pal);
+
+    if (styleGsettings != nullptr) {
+        delete styleGsettings;
+        styleGsettings = nullptr;
+    }
 }
 
 void EnterpriseWlanDialog::initData()
@@ -238,7 +243,7 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
     KyWirelessConnectSetting connetSetting;
     connetSetting.setConnectName(m_wirelessNetItem.m_NetSsid);
     connetSetting.setIfaceName(m_deviceName);
-//    connetSetting.isAutoConnect = true; //ZJP_TODO 自动连接选项
+    connetSetting.isAutoConnect = m_securityPage->getAutoConnectState(); //ZJP_TODO 自动连接选项
     connetSetting.m_type = KyKeyMgmt::WpaEap;
     connetSetting.m_ssid = m_wirelessNetItem.m_NetSsid;
     connetSetting.m_secretFlag = 0;
@@ -254,7 +259,16 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
     } else if (eapType == KyEapMethodType::TTLS) {
         m_securityPage->updateTtlsChange(m_info.ttlsInfo);
         m_connectOperation->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, false);
-    } else {
+    } else if (eapType == KyEapMethodType::LEAP) {
+        m_securityPage->updateLeapChange(m_info.leapInfo);
+        m_connectOperation->addAndActiveWirelessEnterPriseLeapConnect(m_info.leapInfo, connetSetting, m_deviceName, false);
+    }  else if (eapType == KyEapMethodType::PWD) {
+        m_securityPage->updatePwdChange(m_info.pwdInfo);
+        m_connectOperation->addAndActiveWirelessEnterPrisePwdConnect(m_info.pwdInfo, connetSetting, m_deviceName, false);
+    }  else if (eapType == KyEapMethodType::FAST) {
+        m_securityPage->updateFastChange(m_info.fastInfo);
+        m_connectOperation->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connetSetting, m_deviceName, false);
+    }  else {
         qWarning() << "Connect enterprise wlan failed!(Unknown eap type)" << Q_FUNC_INFO << __LINE__;
     }
     close();
@@ -280,6 +294,24 @@ void EnterpriseWlanDialog::onEapTypeChanged(const KyEapMethodType &type)
             m_resource->getEnterPriseInfoTtls(m_wirelessNetItem.m_connectUuid, m_info.ttlsInfo);
         }
         this->setFixedSize(MAIN_SIZE_NARROW);
+        break;
+    case KyEapMethodType::LEAP:
+        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
+            m_resource->getEnterPriseInfoLeap(m_wirelessNetItem.m_connectUuid, m_info.leapInfo);
+        }
+        this->setFixedSize(MAIN_SIZE_NARROW);
+        break;
+    case KyEapMethodType::PWD:
+        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
+            m_resource->getEnterPriseInfoPwd(m_wirelessNetItem.m_connectUuid, m_info.pwdInfo);
+        }
+        this->setFixedSize(MAIN_SIZE_NARROW);
+        break;
+    case KyEapMethodType::FAST:
+        if (!m_wirelessNetItem.m_connectUuid.isEmpty()) {
+            m_resource->getEnterPriseInfoFast(m_wirelessNetItem.m_connectUuid, m_info.fastInfo);
+        }
+        this->setFixedSize(MAIN_SIZE_EXPAND);
         break;
     default:
         break;

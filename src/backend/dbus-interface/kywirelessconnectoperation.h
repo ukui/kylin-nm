@@ -27,6 +27,9 @@
 #include "kylinconnectoperation.h"
 #include "kyenterpricesettinginfo.h"
 
+#define KEY_802_11_WIRELESS "802-11-wireless"
+#define KEY_BLACKLIST_HOSTNAME "blacklist-hostname"
+
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 const QString    WIRELESS_SWITCH  = "wirelessswitch";
 
@@ -96,6 +99,12 @@ public:
     void addPeapConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodPeapInfo &peapInfo);
     //新增TTLS连接
     void addTtlsConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodTtlsInfo &ttlsInfo);
+    //新增LEAP连接
+    void addLeapConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodLeapInfo &leapInfo);
+    //新增PWD连接
+    void addPwdConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodPwdInfo &pwdInfo);
+    //新增FAST连接
+    void addFastConnect(const KyWirelessConnectSetting &connSettingInfo, const KyEapMethodFastInfo &fastInfo);
     //新增连接并激活(普通wifi)
     void addAndActiveWirelessConnect(QString & devIface,KyWirelessConnectSetting &connSettingInfo,bool isHidden);
 
@@ -105,6 +114,12 @@ public:
     void addAndActiveWirelessEnterPrisePeapConnect(KyEapMethodPeapInfo &info, KyWirelessConnectSetting &connSettingInfo,
                                                    QString & devIface, bool isHidden);
     void addAndActiveWirelessEnterPriseTtlsConnect(KyEapMethodTtlsInfo &info, KyWirelessConnectSetting &connSettingInfo,
+                                                   QString & devIface, bool isHidden);
+    void addAndActiveWirelessEnterPriseLeapConnect(KyEapMethodLeapInfo &info, KyWirelessConnectSetting &connSettingInfo,
+                                                   QString & devIface, bool isHidden);
+    void addAndActiveWirelessEnterPrisePwdConnect(KyEapMethodPwdInfo &info, KyWirelessConnectSetting &connSettingInfo,
+                                                  QString & devIface, bool isHidden);
+    void addAndActiveWirelessEnterPriseFastConnect(KyEapMethodFastInfo &info, KyWirelessConnectSetting &connSettingInfo,
                                                    QString & devIface, bool isHidden);
     //属性页 page1 AutoConnect
     void setWirelessAutoConnect(const QString &uuid, bool bAutoConnect);
@@ -117,6 +132,9 @@ public:
     void updateWirelessEnterPriseTlsConnect(const QString &uuid, const KyEapMethodTlsInfo &tlsinfo);
     void updateWirelessEnterPrisePeapConnect(const QString &uuid, const KyEapMethodPeapInfo &peapInfo);
     void updateWirelessEnterPriseTtlsConnect(const QString &uuid, const KyEapMethodTtlsInfo &ttlsInfo);
+    void updateWirelessEnterPriseLeapConnect(const QString &uuid, const KyEapMethodLeapInfo &leapInfo);
+    void updateWirelessEnterPrisePwdConnect(const QString &uuid, const KyEapMethodPwdInfo &pwdInfo);
+    void updateWirelessEnterPriseFastConnect(const QString &uuid, const KyEapMethodFastInfo &fastInfo);
     //忘记
     void deleteWirelessConnect(const QString &connectUuid);
     //获取密码
@@ -142,6 +160,8 @@ private:
                                                                   const QString apPassword,
                                                                   const QString apDevice,
                                                                   const QString wirelessBand);
+    QStringList getBlackListHostName(QString apConnectPath);
+
 
 Q_SIGNALS:
     void wifiEnabledChanged(bool);

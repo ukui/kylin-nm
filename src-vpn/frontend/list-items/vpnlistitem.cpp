@@ -18,20 +18,20 @@
  *
  */
 #include "vpnlistitem.h"
-#include "backend/dbus-interface/kylinconnectitem.h"
+#include "kylinconnectitem.h"
 
 #include <QDebug>
 
 #define LOG_FLAG "[VpnListItem]"
 
-VpnListItem::VpnListItem(const KyConnectItem *lanConnectItem, QWidget *parent):ListItem(parent)
+VpnListItem::VpnListItem(const KyConnectItem *vpnConnectItem, QWidget *parent):ListItem(parent)
 {
-    m_connectOperation = new KyWiredConnectOperation(this);
+    m_connectOperation = new KyVpnConnectOperation(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
 
-    connectItemCopy(lanConnectItem);
+    connectItemCopy(vpnConnectItem);
 
-    m_nameLabel->setLabelText(m_vpnConnectItem.m_connectName);
+    m_nameLabel->setText(m_vpnConnectItem.m_connectName);
     m_netButton->setButtonIcon(QIcon::fromTheme("ukui-vpn-symbolic"));
 
     qDebug() << "VpnListItem init:" << m_vpnConnectItem.m_connectName << m_vpnConnectItem.m_connectState << m_vpnConnectItem.m_ifaceName;
@@ -59,7 +59,7 @@ VpnListItem::VpnListItem(QWidget *parent) : ListItem(parent)
     m_netButton->setButtonIcon(QIcon::fromTheme("ukui-vpn-symbolic"));
     setIcon(false);
     const QString str=tr("Not connected");
-    m_nameLabel->setLabelText(str);
+    m_nameLabel->setText(str);
     this->m_infoButton->hide();
 }
 
@@ -77,15 +77,15 @@ void VpnListItem::setIcon(bool isOn)
     }
 }
 
-void VpnListItem::connectItemCopy(const KyConnectItem *lanConnectItem)
+void VpnListItem::connectItemCopy(const KyConnectItem *vpnConnectItem)
 {
-    if (lanConnectItem) {
-        m_vpnConnectItem.m_connectName = lanConnectItem->m_connectName;
-        m_vpnConnectItem.m_connectPath = lanConnectItem->m_connectPath;
-        m_vpnConnectItem.m_connectState = lanConnectItem->m_connectState;
-        m_vpnConnectItem.m_connectUuid = lanConnectItem->m_connectUuid;
-        m_vpnConnectItem.m_ifaceName = lanConnectItem->m_ifaceName;
-        m_vpnConnectItem.m_itemType = lanConnectItem->m_itemType;
+    if (vpnConnectItem) {
+        m_vpnConnectItem.m_connectName = vpnConnectItem->m_connectName;
+        m_vpnConnectItem.m_connectPath = vpnConnectItem->m_connectPath;
+        m_vpnConnectItem.m_connectState = vpnConnectItem->m_connectState;
+        m_vpnConnectItem.m_connectUuid = vpnConnectItem->m_connectUuid;
+        m_vpnConnectItem.m_ifaceName = vpnConnectItem->m_ifaceName;
+        m_vpnConnectItem.m_itemType = vpnConnectItem->m_itemType;
     } else {
         qDebug() << LOG_FLAG <<"the connect item is nullptr";
         m_vpnConnectItem.m_connectName = "";
@@ -95,16 +95,7 @@ void VpnListItem::connectItemCopy(const KyConnectItem *lanConnectItem)
         m_vpnConnectItem.m_ifaceName = "";
         m_vpnConnectItem.m_itemType = NetworkManager::ConnectionSettings::ConnectionType::Unknown;
     }
-
-    return;
 }
-
-//void VpnListItem::changeState(QString uuid,
-//                              NetworkManager::ActiveConnection::State state,
-//                              NetworkManager::ActiveConnection::Reason reason)
-//{
-
-//}
 
 void VpnListItem::activeConnection()
 {
@@ -122,8 +113,6 @@ void VpnListItem::activeConnection()
         qDebug() << LOG_FLAG <<"the connection" << m_vpnConnectItem.m_connectName
                  << "is not deactived, so it can not be operation.";
     }
-
-    return;
 }
 
 void VpnListItem::onNetButtonClicked()
@@ -142,9 +131,6 @@ void VpnListItem::onNetButtonClicked()
         qDebug() << LOG_FLAG <<"the connection" << m_vpnConnectItem.m_connectName
                  << "is not deactived, so it can not be operation.";
     }
-
-    return;
-
 }
 
 void VpnListItem::onRightButtonClicked()
@@ -166,7 +152,6 @@ void VpnListItem::onRightButtonClicked()
 
     m_menu->move(cursor().pos());
     m_menu->show();
-    return;
 }
 
 void VpnListItem::onMenuTriggered(QAction *action)
@@ -174,11 +159,10 @@ void VpnListItem::onMenuTriggered(QAction *action)
     if (action->text() == tr("Connect")) {
         this->onNetButtonClicked();
     } else if (action->text() == tr("Disconnect")) {
-        m_connectOperation->deactivateWiredConnection(m_vpnConnectItem.m_connectName, m_vpnConnectItem.m_connectUuid);
+        m_connectOperation->deactivateVpnConnection(m_vpnConnectItem.m_connectName, m_vpnConnectItem.m_connectUuid);
         qDebug() << LOG_FLAG << "it will disconnect connection" << m_vpnConnectItem.m_connectName;
         m_netButton->startLoading();
     }
-    return;
 }
 
 bool VpnListItem::launchApp(QString desktopFile)
@@ -197,10 +181,34 @@ bool VpnListItem::launchApp(QString desktopFile)
     }
 }
 
+void VpnListItem::runExternalApp() {
+    if (!launchApp("nm-connection-editor.desktop")){
+        QString cmd = "nm-connection-editor";
+        QProcess process(this);
+        process.startDetached(cmd);
+    }
+}
+
 void VpnListItem::onInfoButtonClicked()
 {
-    launchApp("nm-connection-editor.desktop");
-    return;
+    if (m_vpnConnectItem.m_itemType != NetworkManager::ConnectionSettings::ConnectionType::Vpn) {
+        runExternalApp();
+        return;
+    }
+
+    if(m_vpnDetail != nullptr){
+        m_vpnDetail->activateWindow();
+        return;
+    }
+    m_vpnDetail = new VpnDetail(m_vpnConnectItem.m_connectUuid, getConnectionName());
+    connect(m_vpnDetail, &VpnDetail::destroyed, [&](){
+        if (m_vpnDetail != nullptr) {
+            m_vpnDetail = nullptr;
+        }
+    });
+
+    m_vpnDetail->show();
+    m_vpnDetail->centerToScreen();
 }
 
 void VpnListItem::updateConnectionState(ConnectState state)
@@ -217,8 +225,6 @@ void VpnListItem::updateConnectionState(ConnectState state)
     } else {
         m_netButton->startLoading();
     }
-
-    return;
 }
 
 QString VpnListItem::getConnectionName()
@@ -229,8 +235,7 @@ QString VpnListItem::getConnectionName()
 void VpnListItem::updateConnectionName(QString connectionName)
 {
     m_vpnConnectItem.m_connectName = connectionName;
-    m_nameLabel->setLabelText(m_vpnConnectItem.m_connectName);
-    return;
+    m_nameLabel->setText(m_vpnConnectItem.m_connectName);
 }
 
 QString VpnListItem::getConnectionPath()

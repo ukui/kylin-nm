@@ -23,6 +23,16 @@
 #include <QObject>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include "kylinactiveconnectresource.h"
+#include "kylinconnectresource.h"
+#include "kywirelessnetresource.h"
+
+enum NetworkModeType {
+    DBUS_INVAILD = -2,
+    NO_CONFIG = -1,
+    KSC_FIREWALL_PUBLIC = 0,
+    KSC_FIREWALL_PRIVATE
+};
 
 class NetworkModeConfig : public QObject
 {
@@ -41,6 +51,29 @@ public:
 private:
     explicit NetworkModeConfig(QObject *parent = nullptr);
     QDBusInterface *m_dbusInterface = nullptr;
+};
+
+
+class NetworkMode : public QObject
+{
+    Q_OBJECT
+public:
+    NetworkMode(QObject *parent = 0);
+    ~NetworkMode() = default;
+    void initWiredNetworkMode();
+    void initWirelessNetworkMode();
+
+private:
+    KyNetworkDeviceResourse *m_deviceResource = nullptr;
+    KyActiveConnectResourse *m_activatedConnectResource = nullptr;
+    KyConnectResourse * m_connectResource = nullptr;
+    KyWirelessNetResource *m_wirelessNetResource = nullptr;
+    void setFirstConnectNetworkMode(QString uuid, QString deviceName, QString ssid);
+
+private Q_SLOTS:
+    void onConnectionStateChanged(QString uuid,
+                                  NetworkManager::ActiveConnection::State state,
+                                  NetworkManager::ActiveConnection::Reason reason);
 };
 
 #endif // NETWORKMODECONFIG_H

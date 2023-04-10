@@ -18,6 +18,8 @@
  *
  */
 #include "lanitem.h"
+#include <QApplication>
+
 #define FRAME_SPEED 150
 #define LIMIT_TIME 60*1000
 #define TOTAL_PAGE 8
@@ -31,11 +33,6 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     this->setMinimumSize(550, 58);
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
-    QPalette pal = this->palette();
-    QColor color = pal.color(QPalette::Button);
-    color.setAlphaF(0.5);
-    pal.setColor(QPalette::Button, color);
-    this->setPalette(pal);
 //    setStyleSheet("QPushButton:!checked{background-color: palette(base)}");
     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
     mLanLyt->setContentsMargins(16,0,16,0);
@@ -44,6 +41,7 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     iconLabel->setProperty("useIconHighlightEffect", 0x2);
     titileLabel = new FixLabel(this);
     statusLabel = new QLabel(this);
+    statusLabel->setProperty("useIconHighlightEffect", 0x2);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 //    statusLabel->setMinimumSize(36,36);
     infoLabel = new GrayInfoButton(this);
@@ -79,7 +77,6 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
     waitTimer = new QTimer(this);
     connect(waitTimer, &QTimer::timeout, this, &LanItem::updateIcon);
-
     connect(m_connectAction, &QAction::triggered, this, &LanItem::onConnectTriggered);
     connect(m_deleteAction, &QAction::triggered, this, &LanItem::onDeletetTriggered);
     m_moreMenu->installEventFilter(this);
@@ -89,6 +86,8 @@ LanItem::~LanItem()
 {
 
 }
+
+
 
 void LanItem::updateIcon()
 {
@@ -146,12 +145,17 @@ void LanItem::onDeletetTriggered()
 
 void LanItem::paintEvent(QPaintEvent *event)
 {
-    QPalette pal = this->palette();
+    QPalette pal = qApp->palette();
 
     QPainter painter(this);
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
-    painter.setBrush(pal.color(QPalette::Base));
+    painter.setBrush(this->palette().base().color());
+
+    QColor color = pal.color(QPalette::Button);
+    color.setAlphaF(0.5);
+    pal.setColor(QPalette::Button, color);
+    this->setPalette(pal);
 
     QRect rect = this->rect();
 

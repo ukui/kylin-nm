@@ -453,6 +453,7 @@ void KyConnectResourse::getIpv4ConnectSetting(
 {
     if (NetworkManager::Ipv4Setting::Automatic == ipv4Setting->method()) {
         connectSetting.m_ipv4ConfigIpType = CONFIG_IP_DHCP;
+        connectSetting.m_ipv4Dns = ipv4Setting->dns();
         return;
     }
 
@@ -471,6 +472,7 @@ void KyConnectResourse::getIpv6ConnectSetting(
 
     if (NetworkManager::Ipv6Setting::Automatic == ipv6Setting->method()) {
         connectSetting.m_ipv6ConfigIpType = CONFIG_IP_DHCP;
+        connectSetting.m_ipv6Dns = ipv6Setting->dns();
         return;
     }
 
@@ -721,11 +723,13 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
         return nullptr;
     }
 
+#ifdef CHECKDEVICE
     KyNetworkDeviceResourse deviceResource;
     if (!deviceResource.wirelessDeviceIsExist(settingPtr->interfaceName())) {
         qDebug() << "[KyConnectResourse]" <<"get ap item failed, the ap device is not exist yet";
         return nullptr;
     }
+#endif
 
     QByteArray rawSsid = wirelessSetting->ssid();
 

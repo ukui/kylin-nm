@@ -25,6 +25,13 @@
 #include <QDBusInterface>
 #include <QEvent>
 #include <QAction>
+#include <QProcess>
+
+#include "vpndetails/vpndetail.h"
+#include "kylinconnectresource.h"
+//#include "kylinwiredconnectoperation.h"
+#include "kyvpnconnectoperation.h"
+
 
 #define KYLIN_APP_MANAGER_NAME "com.kylin.AppManager"
 #define KYLIN_APP_MANAGER_PATH "/com/kylin/AppManager"
@@ -35,7 +42,7 @@ class VpnListItem : public ListItem
     Q_OBJECT
 
 public:
-    VpnListItem(const KyConnectItem *lanConnectItem, QWidget *parent = nullptr);
+    VpnListItem(const KyConnectItem *vpnConnectItem, QWidget *parent = nullptr);
     VpnListItem(QWidget *parent = nullptr);
 
     ~VpnListItem();
@@ -55,23 +62,27 @@ protected:
     void setIcon(bool isOn);
     void onRightButtonClicked();
     bool launchApp(QString desktopFile);
+    void runExternalApp();
 
 private:
-    void connectItemCopy(const KyConnectItem *lanConnectItem);
+    void connectItemCopy(const KyConnectItem *vpnConnectItem);
+
+public Q_SLOTS:
+    void onInfoButtonClicked();
 
 private Q_SLOTS:
-    void onInfoButtonClicked();
     void onNetButtonClicked();
     void onMenuTriggered(QAction *action);
 
 private:
     KyConnectItem m_vpnConnectItem;
-//    QDBusInterface m_appManagerDbusInterface;
 
-    KyWiredConnectOperation *m_connectOperation = nullptr;
+    KyVpnConnectOperation *m_connectOperation = nullptr;
     KyNetworkDeviceResourse *m_deviceResource = nullptr;
 
     QString m_deviceName = "";
+
+    VpnDetail *m_vpnDetail = nullptr;
 };
 
 #endif // VPNLISTITEM_H

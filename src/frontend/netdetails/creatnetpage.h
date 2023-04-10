@@ -47,7 +47,10 @@ private:
     LineEdit *ipv4addressEdit;
     LineEdit *netMaskEdit;
     LineEdit *gateWayEdit;
+    LineEdit *firstDnsEdit;
+    LineEdit *secondDnsEdit;
 
+private:
     QFormLayout *m_detailLayout;
     QVBoxLayout *mvBoxLayout;
     QLabel *m_connNameLabel;
@@ -55,8 +58,11 @@ private:
     QLabel *m_addressLabel;
     QLabel *m_maskLabel;
     QLabel *m_gateWayLabel;
-    MultipleDnsWidget *m_dnsWidget = nullptr;
 
+    QLabel *m_addressHintLabel;
+    QLabel *m_maskHintLabel;
+
+    MultipleDnsWidget *m_dnsWidget = nullptr;
 private:
     void initUI();
     void initComponent();
@@ -71,6 +77,9 @@ private:
 private Q_SLOTS:
     void setEnableOfSaveBtn();
     void configChanged(int index);
+    void onAddressTextChanged();
+    void onNetMaskTextChanged();
+
 Q_SIGNALS:
     void setCreatePageState(bool);
 

@@ -50,12 +50,6 @@ public:
 private:
     QFrame* myLine();
 
-    TitleLabel *m_titleLabel = nullptr;
-    QVBoxLayout *m_staListLayout = nullptr;
-    QMap<QString, QString> m_staMap;
-
-    QDBusInterface  *m_activePathInterface = nullptr;
-
     void getConnectStaDevice(QMap<QString, QString> &blacklistMap);
     bool removeStaFromBlacklist(QString staMac);
     void initStaDev();
@@ -66,6 +60,15 @@ private:
 
     void onStaDevChanged(bool istrue, QString staMac, QString staName);
     void resetLayoutHight();
+
+private:
+    QFrame *m_staistFrame = nullptr;
+
+    TitleLabel *m_titleLabel = nullptr;
+    QVBoxLayout *m_staListLayout = nullptr;
+    QMap<QString, QString> m_staMap;
+
+    QDBusInterface  *m_activePathInterface = nullptr;
 
 signals:
     void setStaIntoBlacklist(QString staMac, QString staName);

@@ -404,6 +404,12 @@ void LanPage::initLanArea()
         constructConnectionArea();
     }
 
+    if (!m_activeConnectionMap.isEmpty() && !m_activeConnectionMap.contains(EMPTY_CONNECT_UUID) && !setNetSpeed->isActive()) {
+        setNetSpeed->start();
+    } else {
+        setNetSpeed->stop();
+    }
+
     return;
 }
 

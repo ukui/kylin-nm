@@ -1163,7 +1163,10 @@ void WlanPage::onRefreshIconTimer()
         QString sortSsid = sortItem.m_NetSsid; //应该在第currentRow行的新的WiFi名称
         //qDebug()<< LOG_FLAG << "sort ssid"<< sortSsid << "active ssid" << activateSsid << "sort row"<< sortRow;
         if (sortSsid == activateSsid) { //排除已连接WiFi
-            refreshActiveConnectionIcon(activateSsid, sortItem.m_signalStrength);
+            int signalStrength = 0;
+            QString uni, secuType;
+            m_netDeviceResource->getActiveConnectionInfo(m_currentDevice, signalStrength, uni, secuType);
+            refreshActiveConnectionIcon(activateSsid, signalStrength);
             continue;
         }
 

@@ -79,17 +79,17 @@ void AddNetBtn::leaveEvent(QEvent *event){
 
 void AddNetBtn::paintEvent(QPaintEvent *event)
 {
-    QPalette pal = qApp->palette();
+//    QPalette pal = qApp->palette();
 
     QPainter painter(this);
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
     painter.setBrush(this->palette().base().color());
 
-    QColor color = pal.color(QPalette::Button);
-    color.setAlphaF(0.5);
-    pal.setColor(QPalette::Button, color);
-    this->setPalette(pal);
+//    QColor color = pal.color(QPalette::Button);
+//    color.setAlphaF(0.5);
+//    pal.setColor(QPalette::Button, color);
+//    this->setPalette(pal);
 
     QRect rect = this->rect();
     QPainterPath path;

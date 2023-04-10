@@ -1,11 +1,13 @@
 TEMPLATE = subdirs
 
-CONFIG += ordered \
-    qt
+CONFIG += \
+        ordered \
+        qt
 
 SUBDIRS = \
-    plugins/plugin.pro \
-        src \
+        plugins/plugin.pro \
+        src-vpn/src-vpn.pro \
+        src
 
 TRANSLATIONS += \
         translations/kylin-nm_zh_CN.ts \

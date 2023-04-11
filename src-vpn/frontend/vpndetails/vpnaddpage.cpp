@@ -21,6 +21,17 @@
 #include <QDebug>
 #include "vpnconfigpage.h"
 
+#define VPNADDPAGE_SIZE  520,272
+#define MAINLAYOUT_MARGINS  24, 16, 24, 24
+#define MAINLAYOUT_SPACE  24
+#define NULL_MARGINS  0,0,0,0
+#define NULL_SPACE  0
+#define VPNADDPAGE_NAME_MAX_LENGTH 32
+#define VPNADDPAGE_LABLE_FIXEDWIDTH 112
+#define VPNADDPAGE_COMBOBOX_FIXEDWIDTH 360
+#define VPNADDPAGE_INPUTBOX_FIXEDWIDTH 360
+
+
 vpnAddPage::vpnAddPage(QWidget *parent) : QWidget(parent)
 {
     m_vpnConnOperation = new KyVpnConnectOperation(this);
@@ -52,8 +63,8 @@ void vpnAddPage::initWindow()
 void vpnAddPage::initUI()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(VPNADDPAGE_MAINLAYOUT_MARGINS);
-    mainLayout->setSpacing(VPNADDPAGE_NULLSPACE);
+    mainLayout->setContentsMargins(MAINLAYOUT_MARGINS);
+    mainLayout->setSpacing(MAINLAYOUT_SPACE);
 
     initVpnTypeFrame();
     initVpnNameFrame();
@@ -73,11 +84,10 @@ void vpnAddPage::initVpnTypeFrame()
 {
     m_vpnTypeFrame = new QFrame(this);
     m_vpnTypeFrame->setFrameShape(QFrame::Shape::NoFrame);
-    m_vpnTypeFrame->setFixedSize(VPNADDPAGE_FRAME_FIXEDSIZE);
 
     QHBoxLayout *typeLayout = new QHBoxLayout(m_vpnTypeFrame);
-    typeLayout->setContentsMargins(VPNADDPAGE_ITEM_MARGINS);
-    typeLayout->setSpacing(VPNADDPAGE_NULLSPACE);
+    typeLayout->setContentsMargins(NULL_MARGINS);
+    typeLayout->setSpacing(NULL_SPACE);
 
     QLabel *vpnTypeLabel = new QLabel(tr("VPN Type"), this);
     vpnTypeLabel->setFixedWidth(VPNADDPAGE_LABLE_FIXEDWIDTH);
@@ -102,11 +112,10 @@ void vpnAddPage::initVpnNameFrame()
 {
     m_vpnNameFrame = new QFrame(this);
     m_vpnNameFrame->setFrameShape(QFrame::Shape::NoFrame);
-    m_vpnNameFrame->setFixedSize(VPNADDPAGE_FRAME_FIXEDSIZE);
 
     QHBoxLayout *nameLayout = new QHBoxLayout(m_vpnNameFrame);
-    nameLayout->setContentsMargins(VPNADDPAGE_ITEM_MARGINS);
-    nameLayout->setSpacing(VPNADDPAGE_NULLSPACE);
+    nameLayout->setContentsMargins(NULL_MARGINS);
+    nameLayout->setSpacing(NULL_SPACE);
 
     QLabel *vpnNameLabel = new QLabel(tr("VPN Name"), this);
     vpnNameLabel->setFixedWidth(VPNADDPAGE_LABLE_FIXEDWIDTH);
@@ -125,11 +134,10 @@ void vpnAddPage::initVpnServerFrame()
 {
     m_vpnServerFrame = new QFrame(this);
     m_vpnServerFrame->setFrameShape(QFrame::Shape::NoFrame);
-    m_vpnServerFrame->setFixedSize(VPNADDPAGE_FRAME_FIXEDSIZE);
 
     QHBoxLayout *serverLayout = new QHBoxLayout(m_vpnServerFrame);
-    serverLayout->setContentsMargins(VPNADDPAGE_ITEM_MARGINS);
-    serverLayout->setSpacing(VPNADDPAGE_NULLSPACE);
+    serverLayout->setContentsMargins(NULL_MARGINS);
+    serverLayout->setSpacing(NULL_SPACE);
 
     QLabel *vpnServerLabel = new QLabel(tr("VPN Server"), this);
     vpnServerLabel->setFixedWidth(VPNADDPAGE_LABLE_FIXEDWIDTH);
@@ -151,35 +159,22 @@ void vpnAddPage::initVpnServerFrame()
 void vpnAddPage::initButtonFrame()
 {
     m_buttonFrame = new QFrame(this);
-    m_buttonFrame->setFixedSize(VPNDETAILPAGE_FRAME_FIXEDSIZE);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout(m_buttonFrame);
-    buttonLayout->setContentsMargins(VPNDETAILPAGE_ITEM_MARGINS);
-    buttonLayout->setSpacing(VPNDETAILPAGE_NULLSPACE);
+    buttonLayout->setContentsMargins(NULL_MARGINS);
+    buttonLayout->setSpacing(NULL_SPACE);
 
-    QLabel *autoConnectLabel = new QLabel(this);
     m_autoConnectBox = new QCheckBox(this);
-    autoConnectLabel->setText(tr("Auto Connection"));
-    QWidget *autoConWidget = new QWidget(this);
-    QHBoxLayout *autoLayout = new QHBoxLayout(autoConWidget);
-
-    autoLayout->setContentsMargins(VPNDETAILPAGE_NULLMAGINS);
-    autoLayout->setSpacing(VPNDETAILPAGE_NULLSPACE);
-    autoLayout->addWidget(m_autoConnectBox);
-    autoLayout->addWidget(autoConnectLabel);
-    autoConWidget->setLayout(autoLayout);
-
+    m_autoConnectBox->setText(tr("Auto Connection"));
     m_confimBtn = new QPushButton(this);
-    m_confimBtn->setFixedSize(VPNDETAILPAGE_BUTTON_FIXEDSIZE);
     m_confimBtn->setText(tr("Confirm"));
     m_cancelBtn = new QPushButton(this);
-    m_cancelBtn->setFixedSize(VPNDETAILPAGE_BUTTON_FIXEDSIZE);
     m_cancelBtn->setText(tr("Cancel"));
 
-    buttonLayout->addWidget(autoConWidget);
+    buttonLayout->addWidget(m_autoConnectBox);
     buttonLayout->addStretch();
     buttonLayout->addWidget(m_cancelBtn);
-    buttonLayout->addSpacing(VPNDETAILPAGE_BUTTON_SPACE);
+    buttonLayout->addSpacing(16);
     buttonLayout->addWidget(m_confimBtn);
     m_buttonFrame->setLayout(buttonLayout);
 }
@@ -250,4 +245,15 @@ bool vpnAddPage::createVpnConnect()
 vpnAddPage::~vpnAddPage()
 {
     Q_EMIT this->closed();
+}
+
+void vpnAddPage::paintEvent(QPaintEvent *event)
+{
+    QPalette pal = qApp->palette();
+    QPainter painter(this);
+    painter.setBrush(pal.color(QPalette::Base));
+    painter.drawRect(this->rect());
+    painter.fillRect(rect(), QBrush(pal.color(QPalette::Base)));
+
+    return QWidget::paintEvent(event);
 }

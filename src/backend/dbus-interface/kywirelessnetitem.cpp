@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #include "kywirelessnetitem.h"
 #include <NetworkManagerQt/Connection>
 #include "kylinutil.h"
@@ -6,30 +25,7 @@ const QString ENTERPRICE_TYPE = "802.1X";
 const QString WPA1_AND_WPA2 = "WPA";
 const QString WPA3 = "WPA3";
 
-QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags)
-{
-    QString out;
-    if (   (cap & NM_802_11_AP_FLAGS_PRIVACY)
-           && (wpa_flags == NM_802_11_AP_SEC_NONE)
-           && (rsn_flags == NM_802_11_AP_SEC_NONE)) {
-        out += "WEP ";
-    }
-    if (wpa_flags != NM_802_11_AP_SEC_NONE) {
-        out += "WPA1 ";
-    }
-    if ((rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_PSK)
-            || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
-        out += "WPA2 ";
-    }
-    if (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_SAE) {
-        out += "WPA3 ";
-    }
-    if (   (wpa_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)
-           || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
-        out += "802.1X ";
-    }
-    return out;
-}
+#define FREQ_5GHZ 5000
 
 KyWirelessNetItem::KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net)
 {
@@ -44,6 +40,7 @@ KyWirelessNetItem::KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net)
     m_kySecuType = NONE;
     m_device = "";
     m_channel = 0;
+    m_isMix = false;
 
     init(net);
 }
@@ -70,16 +67,70 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
     NetworkManager::AccessPoint::WpaFlags wpaFlag = net->referenceAccessPoint()->wpaFlags();
     NetworkManager::AccessPoint::WpaFlags rsnFlag = net->referenceAccessPoint()->rsnFlags();
     m_secuType = enumToQstring(cap, wpaFlag, rsnFlag);
-    if (m_secuType.indexOf(ENTERPRICE_TYPE) >= 0) {
-            m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
-        } else if (m_secuType.indexOf(WPA3) >= 0) {
-            m_kySecuType = WPA3_PERSONAL;
-        } else if ( m_secuType.indexOf(WPA1_AND_WPA2) >= 0) {
-            m_kySecuType = WPA_AND_WPA2_PERSONAL;
-    }
+//    if (m_secuType.indexOf(ENTERPRICE_TYPE) >= 0) {
+//            m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
+//        } else if (m_secuType.indexOf(WPA3) >= 0) {
+//            m_kySecuType = WPA3_PERSONAL;
+//        } else if ( m_secuType.indexOf(WPA1_AND_WPA2) >= 0) {
+//            m_kySecuType = WPA_AND_WPA2_PERSONAL;
+//    }
+    setKySecuType(m_secuType);
     m_bssid = net->referenceAccessPoint()->hardwareAddress();
     m_device = net->device();
     m_uni = net->referenceAccessPoint()->uni();
+
+    NetworkManager::Device::Ptr devicePtr = nullptr;
+    devicePtr = m_networkResourceInstance->findDeviceInterface(m_device);
+    if (!devicePtr.isNull()) {
+        QString devUni = devicePtr->uni();
+        NetworkManager::WirelessNetwork::Ptr wirelessPtr = nullptr;
+        wirelessPtr = m_networkResourceInstance->findWifiNetwork(m_NetSsid, devUni);
+        if (!wirelessPtr.isNull()) {
+            NetworkManager::AccessPoint::List apList = wirelessPtr->accessPoints();
+            bool b2G = false;
+            bool b5G = false;
+            if (!apList.empty()) {
+                for (int i = 0; i < apList.count(); ++i) {
+                    if (apList.at(i)->frequency() < FREQ_5GHZ) {
+                        b2G = true;
+                    }
+                    if (apList.at(i)->frequency() >= FREQ_5GHZ) {
+                        b5G = true;
+                    }
+                    if (b2G && b5G) {
+                        m_isMix = true;
+                        break;
+                    }
+                }
+            }
+            devicePtr = m_networkResourceInstance->findDeviceInterface(m_device);
+            if (!devicePtr.isNull()) {
+                QString devUni = devicePtr->uni();
+                NetworkManager::WirelessNetwork::Ptr wirelessPtr = nullptr;
+                wirelessPtr = m_networkResourceInstance->findWifiNetwork(m_NetSsid, devUni);
+                if (!wirelessPtr.isNull()) {
+                    NetworkManager::AccessPoint::List apList = wirelessPtr->accessPoints();
+                    bool b2G = false;
+                    bool b5G = false;
+                    if (!apList.empty()) {
+                        for (int i = 0; i < apList.count(); ++i) {
+                            if (apList.at(i)->frequency() < FREQ_5GHZ) {
+                                b2G = true;
+                            }
+                            if (apList.at(i)->frequency() >= FREQ_5GHZ) {
+                                b5G = true;
+                            }
+                            if (b2G && b5G) {
+                                m_isMix = true;
+                                break;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
     initInfoBySsid();
 }
 
@@ -131,4 +182,17 @@ int KyWirelessNetItem::getCategory(QString uni)
         return reply.value().toInt();
     }
 
+}
+
+void KyWirelessNetItem::setKySecuType(QString strSecuType)
+{
+    if (strSecuType.indexOf(ENTERPRICE_TYPE) >= 0) {
+        m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
+    } else if (strSecuType.indexOf(WPA3) >= 0) {
+        m_kySecuType = WPA3_PERSONAL;
+    } else if ( strSecuType.indexOf(WPA1_AND_WPA2) >= 0) {
+        m_kySecuType = WPA_AND_WPA2_PERSONAL;
+    } else {
+        m_kySecuType = NONE;
+    }
 }

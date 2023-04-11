@@ -50,6 +50,11 @@ QMap<QString, QVector<QStringList> > DbusAdaptor::getWirelessList()
     return map;
 }
 
+bool DbusAdaptor::getWirelessSwitchBtnState()
+{
+    return parent()->getWirelessSwitchBtnState();
+}
+
 //有线列表
 QMap<QString, QVector<QStringList>> DbusAdaptor::getWiredList()
 {
@@ -95,7 +100,6 @@ void DbusAdaptor::setWirelessSwitchEnable(bool enable)
 void DbusAdaptor::setDeviceEnable(QString devName, bool enable)
 {
     parent()->setWiredDeviceEnable(devName, enable);
-    saveDeviceEnableState(devName, enable);
 }
 
 //设置默认网卡
@@ -237,6 +241,24 @@ QStringList DbusAdaptor::getStoredApInfo()
     list.clear();
     parent()->getStoredApInfo(list);
     return list;
+}
+
+//获取热点path
+QString DbusAdaptor::getApConnectionPath(QString uuid)
+{
+    QString path;
+    path.clear();
+    parent()->getApConnectionPath(path, uuid);
+    return path;
+}
+
+//获取热点path
+QString DbusAdaptor::getActiveConnectionPath(QString uuid)
+{
+    QString path;
+    path.clear();
+    parent()->getActiveConnectionPath(path, uuid);
+    return path;
 }
 
 QStringList DbusAdaptor::getApInfoBySsid(QString devName, QString ssid)

@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #ifndef WLANLISTITEM_H
 #define WLANLISTITEM_H
 #include "listitem.h"
@@ -29,6 +48,8 @@ using namespace kdk;
 #define LOW_SIGNAL 5
 #define NONE_SIGNAL 0
 
+#define FREQ_5GHZ 5000
+
 class WlanListItem : public ListItem
 {
     Q_OBJECT
@@ -40,6 +61,10 @@ public:
 
 public:
     QString getSsid();
+
+    QString getUuid();
+
+    QString getPath();
 
     void setSignalStrength(const int &signal);
     int  getSignalStrength();
@@ -57,6 +82,8 @@ public:
 
     void forgetPwd();
 
+    void setFrequency();
+
 protected:
     void resizeEvent(QResizeEvent *event);
     void onRightButtonClicked();
@@ -64,8 +91,9 @@ protected:
     void leaveEvent(QEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void paintEvent(QPaintEvent *event);
 
-signals:
+Q_SIGNALS:
     void itemHeightChanged(const bool isExpanded, const QString &ssid);
 
 private:
@@ -87,7 +115,7 @@ private:
     QFrame *m_pwdFrame = nullptr;
     QHBoxLayout *m_pwdFrameLyt = nullptr;
     KPasswordEdit *m_pwdLineEdit = nullptr;
-    QPushButton *m_connectButton = nullptr;
+    FixPushButton *m_connectButton = nullptr;
 
     //自动连接选择区域UI
     QFrame *m_autoConnectFrame = nullptr;
@@ -101,10 +129,10 @@ private:
     bool m_forgetConnection = false;
     bool m_isApMode = false;
 
-protected slots:
+protected Q_SLOTS:
     void onInfoButtonClicked();
 
-private slots:
+private Q_SLOTS:
     void onNetButtonClicked();
     void onPwdEditorTextChanged();
     void onConnectButtonClicked();

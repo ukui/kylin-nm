@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #include "mainwindow.h"
 #include "customstyle.h"
 #include <KWindowEffects>
@@ -6,7 +25,6 @@
 #include <QDBusReply>
 #include <QKeyEvent>
 #include <QProcess>
-#include <QPainter>
 #include <QPainterPath>
 
 #include "kylinnetworkdeviceresource.h"
@@ -14,7 +32,7 @@
 
 #include "ukuistylehelper/ukuistylehelper.h"
 #include "windowmanager/windowmanager.h"
-
+#include "kysdk/kysdk-system/libkysysinfo.h"
 
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 476
@@ -26,11 +44,32 @@
 const QString v10Sp1 = "V10SP1";
 const QString intel = "V10SP1-edu";
 
+#define LANPAGE 0
+#define WLANPAGE 1
+#define AUTOSELET 2
+
 #define KEY_PRODUCT_FEATURES "PRODUCT_FEATURES"
+
+#define MW_EXCELLENT_SIGNAL 80
+#define MW_GOOD_SIGNAL 55
+#define MW_OK_SIGNAL 30
+#define MW_LOW_SIGNAL 5
+#define MW_NONE_SIGNAL 0
+
+#define EXCELLENT_SIGNAL_ICON   "network-wireless-signal-excellent-symbolic"
+#define GOOD_SIGNAL_ICON        "network-wireless-signal-good-symbolic"
+#define OK_SIGNAL_ICON          "network-wireless-signal-ok-symbolic"
+#define LOW_SIGNAL_ICON         "network-wireless-signal-weak-symbolic"
+#define NONE_SIGNAL_ICON        "network-wireless-signal-none-symbolic"
+
+#define EXCELLENT_SIGNAL_LIMIT_ICON   "ukui-network-wireless-signal-excellent-error-symbolic"
+#define GOOD_SIGNAL_LIMIT_ICON        "ukui-network-wireless-signal-good-error-symbolic"
+#define OK_SIGNAL_LIMIT_ICON          "ukui-network-wireless-signal-ok-error-symbolic"
+#define LOW_SIGNAL_LIMIT_ICON         "ukui-network-wireless-signal-weak-error-symbolic"
+#define NONE_SIGNAL_LIMIT_ICON        "ukui-network-wireless-signal-none-error-symbolic"
 
 #include <kwindowsystem.h>
 #include <kwindowsystem_export.h>
-#include "kysdk/kysdk-system/libkysysinfo.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -62,7 +101,7 @@ void MainWindow::showMainwindow()
     this->showByWaylandHelper();
     this->raise();
     this->activateWindow();
-    emit this->mainWindowVisibleChanged(true);
+    Q_EMIT this->mainWindowVisibleChanged(true);
 #ifdef WITHKYSEC
     if (!kysec_is_disabled() && kysec_get_3adm_status() && (getuid() || geteuid())){
         if (nullptr != m_wlanWidget) {
@@ -89,7 +128,7 @@ void MainWindow::showMainwindow()
 void MainWindow::hideMainwindow()
 {
     this->hide();
-    emit this->mainWindowVisibleChanged(false);
+    Q_EMIT this->mainWindowVisibleChanged(false);
 }
 
 /**
@@ -121,7 +160,6 @@ void MainWindow::firstlyStart()
     initWindowTheme();
     initTrayIcon();
     initPlatform();
-    installEventFilter(this);
     m_secondaryStartTimer = new QTimer(this);
     connect(m_secondaryStartTimer, &QTimer::timeout, this, [ = ]() {
         m_secondaryStartTimer->stop();
@@ -130,6 +168,10 @@ void MainWindow::firstlyStart()
     m_secondaryStartTimer->start(5 * 1000);
 
     m_createPagePtrMap.clear();
+
+    m_networkMode = new NetworkMode(this);
+    m_networkMode->initWiredNetworkMode();
+    m_networkMode->initWirelessNetworkMode();
 
     //加载key ring
     agent_init();
@@ -150,19 +192,19 @@ void MainWindow::secondaryStart()
  */
 void MainWindow::initPlatform()
 {
-    char* projectName = kdk_system_get_projectName();
-    QString strProjectName(projectName);
-    free(projectName);
-    projectName = NULL;
-    if(v10Sp1.compare(strProjectName,Qt::CaseInsensitive) == 0) {
-        unsigned int feature = kdk_system_get_productFeatures();
-        if (feature == 3) {
-            m_isShowInCenter = true;
-        }
-    } else if (intel.compare(strProjectName,Qt::CaseInsensitive) == 0) {
-        m_isShowInCenter = true;
-    }
-    qDebug() << "projectName" << projectName << m_isShowInCenter;
+//    char* projectName = kdk_system_get_projectName();
+//    QString strProjectName(projectName);
+//    free(projectName);
+//    projectName = NULL;
+//    if(v10Sp1.compare(strProjectName,Qt::CaseInsensitive) == 0) {
+//        unsigned int feature = kdk_system_get_productFeatures();
+//        if (feature == 3) {
+//            m_isShowInCenter = true;
+//        }
+//    } else if (intel.compare(strProjectName,Qt::CaseInsensitive) == 0) {
+//        m_isShowInCenter = true;
+//    }
+//    qDebug() << "projectName" << projectName << m_isShowInCenter;
 }
 
 /**
@@ -185,6 +227,30 @@ void MainWindow::initWindowProperties()
         //    path.addRoundedRect(rect, 12, 12);
         path.addRect(rect);
         KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
+    }
+}
+
+/**
+ * @brief MainWindow::registerTrayIcon 注册托盘图标
+ */
+void MainWindow::registerTrayIcon()
+{
+    m_registerCount++;
+    if (QSystemTrayIcon::isSystemTrayAvailable() || m_registerCount > 10) {
+        m_trayIcon = new QSystemTrayIcon();
+        if (nullptr == m_trayIcon) {
+            qWarning()<< "分配空间trayIcon失败";
+            return ;
+        }
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+        m_trayIcon->setToolTip(QString(tr("kylin-nm")));
+
+    } else {
+        if (m_registerCount <= 10) {
+            QTimer::singleShot(m_intervalTime,[this] {
+                registerTrayIcon();
+            });
+        }
     }
 }
 
@@ -243,6 +309,7 @@ void MainWindow::initUI()
     this->setCentralWidget(m_centralWidget);
     m_centralWidget->tabBar()->setFixedWidth(this->width()+1);
     m_centralWidget->tabBar()->setProperty("setRadius", 12);
+//    m_centralWidget->tabBar()->setStyleSheet("QTabBar::tab{min-height:40px}");
     m_lanWidget = new LanPage(m_centralWidget);
     m_wlanWidget = new WlanPage(m_centralWidget);
     connect(this, &MainWindow::mainWindowVisibleChanged, m_wlanWidget, &WlanPage::onMainWindowVisibleChanged);
@@ -267,56 +334,28 @@ void MainWindow::initUI()
 }
 
 /**
- * @brief MainWindow::registerTrayIcon 注册托盘图标
- */
-void MainWindow::registerTrayIcon()
-{
-    m_registerCount++;
-    if (QSystemTrayIcon::isSystemTrayAvailable() || m_registerCount > 10) {
-        m_trayIcon = new QSystemTrayIcon();
-        if (nullptr == m_trayIcon) {
-            qWarning()<< "分配空间trayIcon失败";
-            return ;
-        }
-        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
-        m_trayIcon->setToolTip(QString(tr("kylin-nm")));
-
-    } else {
-        if (m_registerCount <= 10) {
-            QTimer::singleShot(m_intervalTime,[this] {
-                registerTrayIcon();
-            });
-        }
-    }
-}
-
-/**
  * @brief MainWindow::initTrayIcon 初始化托盘图标和托盘右键菜单
  */
 void MainWindow::initTrayIcon()
 {
-    loadIcons.append(QIcon::fromTheme("kylin-network-1"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-2"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-3"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-4"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-5"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-6"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-7"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-8"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-9"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-10"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-11"));
-    loadIcons.append(QIcon::fromTheme("kylin-network-12"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-0-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-3-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-4-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-5-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-6-symbolic"));
+    loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
     iconTimer = new QTimer(this);
     connect(iconTimer, &QTimer::timeout, this, &MainWindow::onSetTrayIconLoading);
 
     m_trayIconMenu = new QMenu();
     m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
     m_showSettingsAction = new QAction(tr("Settings"),this);
+
     m_showSettingsAction->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
 //    m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);
-
     m_trayIcon->setContextMenu(m_trayIconMenu);
     iconStatus = IconActiveType::LAN_CONNECTED;
     onRefreshTrayIcon();
@@ -333,6 +372,7 @@ void MainWindow::initDbusConnnect()
     connect(m_lanWidget, &LanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
     connect(m_wlanWidget, &WlanPage::deviceStatusChanged, this, &MainWindow::deviceStatusChanged);
     connect(m_wlanWidget, &WlanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
+    connect(m_wlanWidget, &WlanPage::wirelessSwitchBtnChanged, this, &MainWindow::wirelessSwitchBtnChanged);
 
     connect(m_wlanWidget, &WlanPage::activateFailed, this, &MainWindow::activateFailed);
     connect(m_wlanWidget, &WlanPage::deactivateFailed, this, &MainWindow::deactivateFailed);
@@ -363,6 +403,12 @@ void MainWindow::initDbusConnnect()
                                          QString("/"),
                                          QString("com.kylin.statusmanager.interface"),
                                          QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
+
+    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this,[&](WId activeWindowId){
+        if (activeWindowId != this->winId() && activeWindowId != 0) {
+            hideMainwindow();
+        }
+    });
 }
 
 /**
@@ -380,7 +426,7 @@ void MainWindow::resetWindowPosition()
         return;
     }
 
-#define MARGIN 4
+#define MARGIN 8
 #define PANEL_TOP 1
 #define PANEL_LEFT 2
 #define PANEL_RIGHT 3
@@ -482,12 +528,12 @@ void MainWindow::resetWindowTheme()
     if(currentTheme == "ukui-dark" || currentTheme == "ukui-black"){
         app->setStyle(new CustomStyle("ukui-dark"));
         qDebug() << "Has set color theme to ukui-dark." << Q_FUNC_INFO << __LINE__;
-        emit qApp->paletteChanged(qApp->palette());
+        Q_EMIT qApp->paletteChanged(qApp->palette());
         return;
     }
     app->setStyle(new CustomStyle("ukui-light"));
     qDebug() << "Has set color theme to " << currentTheme << Q_FUNC_INFO << __LINE__;
-    emit qApp->paletteChanged(qApp->palette());
+    Q_EMIT qApp->paletteChanged(qApp->palette());
     return;
 }
 
@@ -514,11 +560,27 @@ void MainWindow::showByWaylandHelper()
 
 }
 
+void MainWindow::setCentralWidgetType(IconActiveType iconStatus)
+{
+    if (iconStatus == WLAN_CONNECTED || iconStatus == WLAN_CONNECTED_LIMITED) {
+         m_centralWidget->setCurrentIndex(WLAN_PAGE_INDEX);
+     } else if (iconStatus == ACTIVATING) {
+         if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activating)) {
+             m_centralWidget->setCurrentIndex(WLAN_PAGE_INDEX);
+         } else {
+             m_centralWidget->setCurrentIndex(LAN_PAGE_INDEX);
+         }
+     } else {
+         m_centralWidget->setCurrentIndex(LAN_PAGE_INDEX);
+     }
+}
+
 /**
  * @brief MainWindow::onTrayIconActivated 点击托盘图标的槽函数
  */
 void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
+    setCentralWidgetType(iconStatus);
     if (reason == QSystemTrayIcon::ActivationReason::Context) {
             m_trayIconMenu->popup(QCursor::pos());
     } else {
@@ -548,7 +610,7 @@ void MainWindow::onThemeChanged(const QString &key)
         qDebug() << "Received signal of theme changed, will reset theme." << Q_FUNC_INFO << __LINE__;
 //        resetWindowTheme();
         paintWithTrans();
-        emit qApp->paletteChanged(qApp->palette());
+        Q_EMIT qApp->paletteChanged(qApp->palette());
     } else {
         qDebug() << "Received signal of theme changed, key=" << key << " will do nothing." << Q_FUNC_INFO << __LINE__;
     }
@@ -557,12 +619,14 @@ void MainWindow::onThemeChanged(const QString &key)
 void MainWindow::onRefreshTrayIcon()
 {
     //更新托盘图标显示
+    int signalStrength = 0;
     iconTimer->stop();
     if (m_lanWidget->lanIsConnected()) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
         iconStatus = IconActiveType::LAN_CONNECTED;
     } else if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
-        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
+//        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
+        signalStrength = m_wlanWidget->getAcivateWifiSignal();
         iconStatus = IconActiveType::WLAN_CONNECTED;
     } else {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
@@ -577,15 +641,42 @@ void MainWindow::onRefreshTrayIcon()
             iconStatus = IconActiveType::LAN_CONNECTED_LIMITED;
         } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
             //todo 信号强度
-            m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-error-symbolic"));
+//            m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-signal-excellent-error-symbolic"));
             iconStatus = IconActiveType::WLAN_CONNECTED_LIMITED;
+        }
+    }
+
+    if (iconStatus == IconActiveType::WLAN_CONNECTED
+            || iconStatus == IconActiveType::WLAN_CONNECTED_LIMITED) {
+        if (signalStrength > MW_EXCELLENT_SIGNAL){
+            m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_ICON));
+        } else if (signalStrength > MW_GOOD_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_ICON));
+        } else if (signalStrength > MW_OK_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_ICON));
+        } else if (signalStrength > MW_LOW_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_ICON));
+        } else {
+            m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_ICON));
+        }
+    } else if (iconStatus == IconActiveType::WLAN_CONNECTED_LIMITED) {
+        if (signalStrength > MW_EXCELLENT_SIGNAL){
+            m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_LIMIT_ICON));
+        } else if (signalStrength > MW_GOOD_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_LIMIT_ICON));
+        } else if (signalStrength > MW_OK_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_LIMIT_ICON));
+        } else if (signalStrength > MW_LOW_SIGNAL) {
+            m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_LIMIT_ICON));
+        } else {
+            m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_LIMIT_ICON));
         }
     }
 }
 
 void MainWindow::onSetTrayIconLoading()
 {
-    if (currentIconIndex > 11) {
+    if (currentIconIndex > 7) {
         currentIconIndex = 0;
     }
     m_trayIcon->setIcon(loadIcons.at(currentIconIndex));
@@ -634,10 +725,16 @@ void MainWindow::onTabletModeChanged(bool mode)
 
 void MainWindow::onShowMainWindow(int type)
 {
-    m_centralWidget->setCurrentIndex(type);
+    if (type == LANPAGE || type == WLANPAGE) {
+        m_centralWidget->setCurrentIndex(type);
 
-    if(QApplication::activeWindow() != this) {
-        this->showMainwindow();
+        if(QApplication::activeWindow() != this) {
+            this->showMainwindow();
+        }
+    } else if (type == AUTOSELET) {
+        onTrayIconActivated(QSystemTrayIcon::ActivationReason::Trigger);
+    } else {
+        qWarning() << "unsupport parameter";
     }
 }
 
@@ -667,22 +764,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 }
 
 /**
- * @brief MainWindow::eventFilter 事件过滤器
- * @param watched
- * @param event
- * @return
- */
-bool MainWindow::eventFilter(QObject *watched, QEvent *event)
-{
-    if (event->type() == QEvent::ActivationChange) {
-        if(QApplication::activeWindow() != this) {
-            hideMainwindow();
-        }
-    }
-    return QMainWindow::eventFilter(watched,event);
-}
-
-/**
  * @brief MainWindow::getWirelessList 获取wifi列表，供dbus调用
  * @param map
  */
@@ -691,6 +772,13 @@ void MainWindow::getWirelessList(QMap<QString, QVector<QStringList> > &map)
     map.clear();
     if (nullptr != m_wlanWidget) {
         m_wlanWidget->getWirelessList(map);
+    }
+}
+
+bool MainWindow::getWirelessSwitchBtnState()
+{
+    if (nullptr != m_wlanWidget) {
+        return m_wlanWidget->getWirelessSwitchBtnState();
     }
 }
 
@@ -740,6 +828,16 @@ void MainWindow::getStoredApInfo(QStringList &list)
     m_wlanWidget->getStoredApInfo(list);
 }
 
+void MainWindow::getApConnectionPath(QString &path, QString uuid)
+{
+    m_wlanWidget->getApConnectionPath(path, uuid);
+}
+
+void MainWindow::getActiveConnectionPath(QString &path, QString uuid)
+{
+    m_wlanWidget->getActiveConnectionPath(path, uuid);
+}
+
 //无线开关
 void MainWindow::setWirelessSwitchEnable(bool enable)
 {
@@ -787,6 +885,7 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
         if (m_createPagePtrMap[devName] != nullptr) {
             qDebug() << "showCreateWiredConnectWidget" << devName << "already create,just raise";
 
+            KWindowSystem::activateWindow(m_createPagePtrMap[devName]->winId());
             KWindowSystem::raiseWindow(m_createPagePtrMap[devName]->winId());
             return;
         }
@@ -799,28 +898,13 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
     });
     m_createPagePtrMap.insert(devName, netDetail);
     netDetail->show();
+    netDetail->centerToScreen();
 }
 
 void MainWindow::showAddOtherWlanWidget(QString devName)
 {
     qDebug() << "showAddOtherWlanWidget! devName = " << devName;
-        if (m_addOtherPagePtrMap.contains(devName)) {
-            if (m_addOtherPagePtrMap[devName] != nullptr) {
-                qDebug() << "showAddOtherWlanWidget" << devName << "already create,just raise";
-
-                KWindowSystem::raiseWindow(m_addOtherPagePtrMap[devName]->winId());
-                return;
-            }
-        }
-        NetDetail *netDetail = new NetDetail(devName, "", "", false, true, true, this);
-        connect(netDetail, &NetDetail::createPageClose, [&](QString interfaceName){
-            if (m_addOtherPagePtrMap.contains(interfaceName)) {
-                m_addOtherPagePtrMap[interfaceName] = nullptr;
-            }
-        });
-        m_addOtherPagePtrMap.insert(devName, netDetail);
-        netDetail->show();
-
+    m_wlanWidget->showAddOtherPage(devName);
 }
 
 void MainWindow::getWirelessDeviceCap(QMap<QString, int> &map)

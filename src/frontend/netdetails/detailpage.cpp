@@ -1,16 +1,36 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #include "detailpage.h"
 #include <QPainter>
 #include <QListWidget>
 
 #define MAX_NAME_LENGTH 32
 #define MAX_LABEL_WIDTH 250
+#define MAX_SSID_WIDTH 133
 
 extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
 DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
     : m_IsWlan(isWlan), m_IsCreate(isCreate), QFrame(parent)
 {
-    this->setFrameShape(QFrame::Shape::StyledPanel);
+//    this->setFrameShape(QFrame::Shape::StyledPanel);
     this->setMaximumWidth(960);
     initUI();
     if (isCreate) {
@@ -31,10 +51,10 @@ void DetailPage::setSSID(const QString &ssid) {
         return;
     }
     m_formerSSID = ssid;
-    QFontMetrics fontMetrics(this->font());
+    QFontMetrics fontMetrics(m_SSIDLabel->font());
     int fontSize = fontMetrics.width(ssid);
-    if (fontSize > this->width()) {
-        this->m_SSIDLabel->setText(fontMetrics.elidedText(ssid, Qt::ElideRight, this->width()));
+    if (fontSize > MAX_SSID_WIDTH) {
+        this->m_SSIDLabel->setText(fontMetrics.elidedText(ssid, Qt::ElideRight, MAX_SSID_WIDTH));
         this->setToolTip(ssid);
     } else {
         this->m_SSIDLabel->setText(ssid);
@@ -67,12 +87,12 @@ void DetailPage::setIpv4(const QString &ipv4) {
 }
 
 void DetailPage::setIpv4Dns(const QString &ipv4Dns) {
-    this->m_IPV4Dns->setText(ipv4Dns);
+    this->m_IPV4Dns->setLabelText(ipv4Dns);
 }
 
 void DetailPage::setIpv6(const QString &ipv6) {
     m_formerIPV6 = ipv6;
-    this->m_IPV6->setText(ipv6);
+    this->m_IPV6->setLabelText(ipv6);
 }
 
 void DetailPage::setMac(const QString &mac) {
@@ -122,7 +142,7 @@ void DetailPage::newCopiedTip()
     //设置“复制成功”消息弹窗格式
     m_copiedTip = new KBallonTip();
     m_copiedTip->setTipType(Normal);
-    m_copiedTip->setContentsMargins(16, 0, 16, 0);
+    m_copiedTip->setContentsMargins(16, 14, 16, 14);
     m_copiedTip->setFixedHeight(48);
     m_copiedTip->setWindowFlags(Qt::FramelessWindowHint);
     m_copiedTip->setAttribute(Qt::WA_TranslucentBackground, true);
@@ -133,27 +153,29 @@ QPalette DetailPage::getTheme()
 {
     //获取当前主题的颜色
     QPalette pal = qApp->palette();
-    QGSettings * styleGsettings = nullptr;
-    const QByteArray style_id(THEME_SCHAME);
-    if (QGSettings::isSchemaInstalled(style_id)) {
-       styleGsettings = new QGSettings(style_id);
-       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
-       if(currentTheme == "ukui-default"){
-           pal = lightPalette(this);
-       }
-    }
-    if (styleGsettings != nullptr) {
-        delete styleGsettings;
-        styleGsettings = nullptr;
-    }
+//    QGSettings * styleGsettings = nullptr;
+//    const QByteArray style_id(THEME_SCHAME);
+//    if (QGSettings::isSchemaInstalled(style_id)) {
+//       styleGsettings = new QGSettings(style_id);
+//       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+//       if(currentTheme == "ukui-default"){
+//           pal = lightPalette(this);
+//       }
+//    }
+//    if (styleGsettings != nullptr) {
+//        delete styleGsettings;
+//        styleGsettings = nullptr;
+//    }
     return pal;
 }
 
 void DetailPage::initUI() {
     m_layout = new QVBoxLayout(this);
     m_layout->setContentsMargins(0,0,0,0);
+    m_layout->setSpacing(0);
 
     QWidget *mDetailFrame = new QFrame(this);
+    mDetailFrame->setFixedHeight(362);
     m_DetailLayout = new QVBoxLayout(mDetailFrame);
     m_DetailLayout->setContentsMargins(0,0,0,0);
 
@@ -162,6 +184,8 @@ void DetailPage::initUI() {
     m_listWidget->setBackgroundRole(QPalette::Base);
     m_listWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     m_DetailLayout->addWidget(m_listWidget);
+
+    m_listWidget->setFrameShape(QFrame::Shape::StyledPanel);
 
     if (!m_IsCreate) {
         m_SSIDLabel = new QLabel(this);
@@ -220,19 +244,19 @@ void DetailPage::initUI() {
 
     m_IPV4 = new QLabel(this);
     m_ipv4Widget = new DetailWidget(qobject_cast<QWidget *>(m_IPV4), m_listWidget);
-    m_ipv4Widget->setKey(tr("IPV4:"));
+    m_ipv4Widget->setKey(tr("IPv4:"));
 
     m_IPV4Dns = new FixLabel(this);
     m_IPV4Dns->setFixedWidth(MAX_LABEL_WIDTH);
     m_IPV4Dns->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_ipv4DnsWidget = new DetailWidget(qobject_cast<QWidget *>(m_IPV4Dns), m_listWidget);
-    m_ipv4DnsWidget->setKey(tr("IPV4 Dns:"));
+    m_ipv4DnsWidget->setKey(tr("IPv4 DNS:"));
 
     m_IPV6 = new FixLabel(this);
     m_IPV6->setFixedWidth(MAX_LABEL_WIDTH);
     m_IPV6->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_ipv6Widget = new DetailWidget(qobject_cast<QWidget *>(m_IPV6), m_listWidget);
-    m_ipv6Widget->setKey(tr("IPV6:"));
+    m_ipv6Widget->setKey(tr("IPv6:"));
 
     m_Mac = new QLabel(this);
     m_macWidget = new DetailWidget(qobject_cast<QWidget *>(m_Mac), m_listWidget);
@@ -243,7 +267,9 @@ void DetailPage::initUI() {
         m_forgetNetBox = new QCheckBox(this);
 
         m_autoConnect->setText(tr("Auto Connection"));
-        m_AutoLayout = new QHBoxLayout(this);
+
+        m_autoConWidget = new QWidget(this);
+        m_AutoLayout = new QHBoxLayout(m_autoConWidget);
         QSpacerItem *horizontalSpacer;
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -275,8 +301,10 @@ void DetailPage::initUI() {
 
     m_layout->addWidget(mDetailFrame);
     if (m_IsWlan) {
-        m_layout->addLayout(m_AutoLayout);
+//        m_layout->addLayout(m_AutoLayout);
+        m_layout->addWidget(m_autoConWidget);
     }
+    m_layout->addStretch();
 }
 
 void DetailPage::setEnableOfSaveBtn() {
@@ -284,7 +312,7 @@ void DetailPage::setEnableOfSaveBtn() {
     if (m_IsCreate) {
         saveEnable = !m_SSIDEdit->text().isEmpty();
     }
-    emit setDetailPageState(saveEnable);
+    Q_EMIT setDetailPageState(saveEnable);
 }
 
 //获取列表信息
@@ -297,9 +325,9 @@ void DetailPage::on_btnCopyNetDetail_clicked()
     QString      hzCopy= tr ("Hz:");
     QString      chanCopy= tr ("Chan:");
     QString      bandwithCopy = tr("BandWidth:");
-    QString      ipv4Copy = tr("IPV4:");
-    QString      ipv4dnsCopy = tr("IPV4 Dns:");
-    QString      ipv6Copy = tr("IPV6:");
+    QString      ipv4Copy = tr("IPv4:");
+    QString      ipv4dnsCopy = tr("IPv4 DNS:");
+    QString      ipv6Copy = tr("IPv6:");
     QString      macCopy = tr("Mac:");
     QString      netDetailCopyText;
 

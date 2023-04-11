@@ -69,9 +69,9 @@ protected:
 private:
     Ui::Vpn *ui;
 
-    QString pluginName;
-    int pluginType;
-    QWidget * pluginWidget;
+    QString m_pluginName;
+    int m_pluginType;
+    QWidget * m_pluginWidget;
 
     QDBusInterface  *m_interface = nullptr;
 
@@ -85,7 +85,7 @@ private:
     KSwitchButton *m_timeBtn;
     ItemFrame *m_listFrame;
 
-    bool mFirstLoad;
+    bool m_firstLoad;
     QGSettings  *m_switchGsettings;
 
     QFrame* myLine();
@@ -95,6 +95,7 @@ private:
     void deleteVpn(QString uuid);
     void activeConnect(QString uuid);
     void deActiveConnect(QString uuid);
+    void showDetailPage(QString uuid);
 
     //获取设备列表
     void initNet();

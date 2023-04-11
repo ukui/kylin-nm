@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #ifndef SECURITYWIDGET_H
 #define SECURITYWIDGET_H
 
@@ -9,6 +28,7 @@
 #include <QCheckBox>
 
 #include "coninfo.h"
+#include "kylable.h"
 #include "kwidget.h"
 #include "kpasswordedit.h"
 #include "detailwidget.h"
@@ -19,7 +39,7 @@ class SecurityPage : public QFrame
 {
     Q_OBJECT
 public:
-    SecurityPage(QWidget *parent = nullptr);
+    SecurityPage(bool isNetDetailPage, QWidget *parent = nullptr);
 
     void setSecurity(KySecuType index);
     void setPsk(const QString &psk);
@@ -41,11 +61,14 @@ public:
     void updateFastChange(KyEapMethodFastInfo &info);
 
     void getSecuType(KySecuType &secuType, KyEapMethodType &enterpriseType);
+    bool getAutoConnectState();
 
 private:
-    QFormLayout *mSecuLayout;
-
-private:
+    bool isDetailPage;
+//    QFormLayout *mSecuLayout;
+    QGridLayout *topLayout;
+    QGridLayout *bottomLayout;
+    QVBoxLayout *mainLayout;
 
     QLabel *secuTypeLabel;
     QLabel *pwdLabel;
@@ -56,12 +79,13 @@ private:
     QLabel *domainLable;
     QLabel *caCertPathLabel;
     QLabel *caNeedFlagLabel;
-    QLabel *clientCertPathLabel;
-    QLabel *clientPrivateKeyLabel;
-    QLabel *clientPrivateKeyPwdLabel;
+    FixLabel *clientCertPathLabel;
+    FixLabel *clientPrivateKeyLabel;
+    FixLabel *clientPrivateKeyPwdLabel;
+    FixLabel *pwdOptionLabel;
 
     //PEAP TTLS共有
-    QLabel *eapMethodLabel;
+    FixLabel *eapMethodLabel;
     QLabel *userNameLabel;
     QLabel *userPwdLabel;
     QLabel *userPwdFlagLabel;
@@ -77,6 +101,8 @@ private:
     QComboBox *clientCertPathCombox;
     QComboBox *clientPrivateKeyCombox;
     KPasswordEdit *clientPrivateKeyPwdEdit = nullptr;
+    QComboBox *pwdOptionCombox;
+    QWidget *tlsWidget;
 
     //PEAP && TTLS
     QComboBox *eapMethodCombox;
@@ -93,6 +119,14 @@ private:
     QLabel *m_pacFileLabel;
     QWidget *m_pacCheckWidget;
 
+    QLabel *m_emptyLabel = nullptr;
+    QLabel *m_checkLabel = nullptr;
+    QCheckBox *m_rememberCheckBox = nullptr;
+
+    QString hintRequired = tr("Required"); //必填
+    QString emptyhint = tr(" ");
+
+private:
     void showNone();
     void showPsk();
     void showTls();
@@ -111,8 +145,7 @@ private:
 
     bool checkConnectBtnIsEnabled();
 
-
-private slots:
+private Q_SLOTS:
     void onSecuTypeComboxIndexChanged();
     void onEapTypeComboxIndexChanged();
     void setEnableOfSaveBtn();
@@ -123,10 +156,13 @@ private slots:
     void onCaCertPathComboxIndexChanged(QString str);
     void onClientCertPathComboxIndexChanged(QString str);
     void onClientPrivateKeyComboxIndexChanged(QString str);
+    void onPwdOptionComboxIndexChanged(QString str);
+    void changeColumnWidthWithSecuType();
     void onPacFilePathComboxIndexChanged(QString str);
 
-signals:
+Q_SIGNALS:
     void setSecuPageState(bool);
+    void secuTypeChanged(const KySecuType &type);
     void eapTypeChanged(const KyEapMethodType &type);
 };
 

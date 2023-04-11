@@ -41,11 +41,11 @@ public:
 private:
 //    QString m_name;
 
-signals:
+Q_SIGNALS:
 //    Q_SCRIPTABLE void nameChanged(QString);
 //    Q_SCRIPTABLE void computerinfo(QString);
 
-public slots:
+public Q_SLOTS:
 
     Q_SCRIPTABLE void systemRun(QString cmd);
     Q_SCRIPTABLE QStringList getWifiInfo(QString wifiName);

@@ -61,7 +61,6 @@ private Q_SLOTS:
     void setDnsListWidgetStyle();
     void onAddBtnClicked();
     void onRemoveBtnClicked();
-
 };
 
 #endif // MULTIPLEDNSWIDGET_H

@@ -1,6 +1,26 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #ifndef CONINFO_H
 #define CONINFO_H
 
+#include <QApplication>
 #include <QString>
 #include <QPalette>
 #include <QComboBox>
@@ -84,16 +104,12 @@ public:
     KyIpConfigType ipv4ConfigType = CONFIG_IP_DHCP;
     QString strIPV4Address;
     QString strIPV4NetMask;
-//    QString strIPV4FirDns;
-//    QString strIPV4SecDns;
     QString strIPV4GateWay;
     QList<QHostAddress> ipv4DnsList;
 
     KyIpConfigType ipv6ConfigType = CONFIG_IP_DHCP;
     QString strIPV6Address;
     int iIPV6Prefix;
-//    QString strIPV6FirDns;
-//    QString strIPV6SecDns;
     QString strIPV6GateWay;
     QList<QHostAddress> ipv6DnsList;
 
@@ -123,11 +139,12 @@ static void setFramePalette(QFrame *widget, QPalette &pal) {
 
 static QPalette lightPalette(QWidget *widget)
 {
-    auto palette = widget->palette();
-    //ukui-light palette UKUI3.1
+    QPalette palette = qApp->palette();
+
+    //ukui-light palette UKUI3.1 亮主题色板
     QColor windowText_at(38, 38, 38),
-           windowText_iat(38, 38, 38),
-           windowText_dis(166, 166, 166),
+           windowText_iat(0, 0, 0, 255 * 0.55),
+           windowText_dis(0, 0, 0, 255 * 0.3),
            button_at(230, 230, 230),
            button_iat(230, 230, 230),
            button_dis(233, 233, 233),
@@ -145,10 +162,10 @@ static QPalette lightPalette(QWidget *widget)
            mid_dis(102, 102, 102),
            text_at(38, 38, 38),
            text_iat(38, 38, 38),
-           text_dis(140, 140, 140),
-           brightText_at(89, 89, 89),
-           brightText_iat(89, 89, 89),
-           brightText_dis(77, 77, 77),
+           text_dis(0, 0, 0, 255 * 0.3),
+           brightText_at(0, 0, 0),
+           brightText_iat(0, 0, 0),
+           brightText_dis(0, 0, 0),
            buttonText_at(38, 38, 38),
            buttonText_iat(38, 38, 38),
            buttonText_dis(179, 179, 179),
@@ -158,24 +175,12 @@ static QPalette lightPalette(QWidget *widget)
            window_at(245, 245, 245),
            window_iat(237, 237, 237),
            window_dis(230, 230, 230),
-           shadow_at(0, 0, 0, 16),
-           shadow_iat(0, 0, 0, 16),
-           shadow_dis(0, 0, 0, 21),
-//           shadow_at(214, 214, 214),
-//           shadow_iat(214, 214, 214),
-//           shadow_dis(201, 201, 201),
-           highLight_at(55, 144, 250),
-           highLight_iat(55, 144, 250),
-           highLight_dis(233, 233, 233),
+           shadow_at(0, 0, 0, 255 * 0.16),
+           shadow_iat(0, 0, 0, 255 * 0.16),
+           shadow_dis(0, 0, 0, 255 * 0.21),
            highLightText_at(255, 255, 255),
            highLightText_iat(255, 255, 255),
            highLightText_dis(179, 179, 179),
-           link_at(55, 144, 250),
-           link_iat(55, 144, 250),
-           link_dis(55, 144, 250),
-           linkVisited_at(114, 46, 209),
-           linkVisited_iat(114, 46, 209),
-           linkVisited_dis(114, 46, 209),
            alternateBase_at(245, 245, 245),
            alternateBase_iat(245, 245, 245),
            alternateBase_dis(245, 245, 245),
@@ -188,11 +193,9 @@ static QPalette lightPalette(QWidget *widget)
            toolTipText_at(38, 38, 38),
            toolTipText_iat(38, 38, 38),
            toolTipText_dis(38, 38, 38),
-           placeholderText_at(38, 38, 38),
-           placeholderText_iat(38, 38, 38),
-           placeholderText_dis(38, 38, 38);
-
-
+           placeholderText_at(0, 0, 0, 255 * 0.35),
+           placeholderText_iat(0, 0, 0, 255 * 0.35),
+           placeholderText_dis(0, 0, 0, 255 * 0.3);
 
     palette.setColor(QPalette::Active, QPalette::WindowText, windowText_at);
     palette.setColor(QPalette::Inactive, QPalette::WindowText, windowText_iat);
@@ -242,21 +245,9 @@ static QPalette lightPalette(QWidget *widget)
     palette.setColor(QPalette::Inactive, QPalette::Shadow, shadow_iat);
     palette.setColor(QPalette::Disabled, QPalette::Shadow, shadow_dis);
 
-    palette.setColor(QPalette::Active, QPalette::Highlight, highLight_at);
-    palette.setColor(QPalette::Inactive, QPalette::Highlight, highLight_iat);
-    palette.setColor(QPalette::Disabled, QPalette::Highlight, highLight_dis);
-
     palette.setColor(QPalette::Active, QPalette::HighlightedText, highLightText_at);
     palette.setColor(QPalette::Inactive, QPalette::HighlightedText, highLightText_iat);
     palette.setColor(QPalette::Disabled, QPalette::HighlightedText, highLightText_dis);
-
-    palette.setColor(QPalette::Active, QPalette::Link, link_at);
-    palette.setColor(QPalette::Inactive, QPalette::Link, link_iat);
-    palette.setColor(QPalette::Disabled, QPalette::Link, link_dis);
-
-    palette.setColor(QPalette::Active, QPalette::LinkVisited, linkVisited_at);
-    palette.setColor(QPalette::Inactive, QPalette::LinkVisited, linkVisited_iat);
-    palette.setColor(QPalette::Disabled, QPalette::LinkVisited, linkVisited_dis);
 
     palette.setColor(QPalette::Active, QPalette::AlternateBase, alternateBase_at);
     palette.setColor(QPalette::Inactive, QPalette::AlternateBase, alternateBase_iat);

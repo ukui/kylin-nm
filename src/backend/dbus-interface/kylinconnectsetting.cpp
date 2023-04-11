@@ -89,8 +89,6 @@ void KyConnectSetting::ipv6AddressConstruct(QString &ipv6Address, QString &ipv6N
     nmIpv6Address.setPrefixLength(ipv6NetMask.toInt());
     m_ipv6Address.clear();
     m_ipv6Address << nmIpv6Address;
-
-    return ;
 }
 
 void KyConnectSetting::ipv4DnsConstruct(QList<QHostAddress> &ipv4DnsList)

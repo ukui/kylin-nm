@@ -17,6 +17,7 @@
  */
 
 #include "kylinwiredconnectoperation.h"
+#include "kylinutil.h"
 
 #include <NetworkManagerQt/AdslDevice>
 #include <NetworkManagerQt/WiredDevice>
@@ -26,11 +27,22 @@
 
 KyWiredConnectOperation::KyWiredConnectOperation(QObject *parent) : KyConnectOperation(parent)
 {
-
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::wiredEnabledChanged,
+                                        this, &KyWiredConnectOperation::wiredEnabledChanged);
 }
 
 KyWiredConnectOperation::~KyWiredConnectOperation()
 {
+}
+
+void KyWiredConnectOperation::setWiredEnabled(bool enabled)
+{
+    setWiredEnabledByGDbus(enabled);
+}
+
+bool KyWiredConnectOperation::getWiredEnabled()
+{
+    return getWiredEnabledByGDbus();
 }
 
 void KyWiredConnectOperation::createWiredConnect(KyConnectSetting &connectSettingsInfo)
@@ -56,7 +68,7 @@ void KyWiredConnectOperation::createWiredConnect(KyConnectSetting &connectSettin
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = tr("create wired connection failed: ") + watcher->error().message();
             qWarning()<<errorMessage;
-            emit this->createConnectionError(errorMessage);
+            Q_EMIT this->createConnectionError(errorMessage);
          } else {
             qDebug()<<"create wired connect complete";
          }
@@ -74,7 +86,7 @@ void KyWiredConnectOperation::updateWiredConnect(const QString &connectUuid, con
     if (nullptr == connectPtr) {
         QString errorMessage = tr("it can not find connection") + connectUuid;
         qWarning()<<errorMessage;
-        emit updateConnectionError(errorMessage);
+        Q_EMIT updateConnectionError(errorMessage);
         return;
     }
 
@@ -149,61 +161,6 @@ void KyWiredConnectOperation::deactivateWiredConnection(const QString activeConn
     qDebug()<<"deactivetate connect name"<<activeConnectName<<"uuid"<<activeConnectUuid;
 
     deactivateConnection(activeConnectName, activeConnectUuid);
-
-    return;
-}
-
-void KyWiredConnectOperation::activateVpnConnection(const QString connectUuid)
-{
-    QString connectPath = "";
-    QString deviceIdentifier = "";
-    QString connectName = "";
-    //QString deviceName = "";
-    QString specificObject = "";
-    NetworkManager::Connection::Ptr connectPtr = nullptr;
-
-    qDebug()<<"it will activate vpn connect"<<connectUuid;
-    connectPtr = NetworkManager::findConnectionByUuid(connectUuid);
-    if (nullptr == connectPtr) {
-        QString errorMessage = "the connect uuid " + connectUuid + "is not exsit";
-        qWarning()<<errorMessage;
-        Q_EMIT activateConnectionError(errorMessage);
-        return;
-    }
-
-    if (NetworkManager::ConnectionSettings::Vpn != connectPtr->settings()->connectionType()) {
-        QString errorMessage = tr("the connect type is")
-                                + connectPtr->settings()->connectionType()
-                                + tr(", but it is not vpn");
-        qWarning()<<errorMessage;
-        Q_EMIT activateConnectionError(errorMessage);
-        return;
-    }
-
-    connectPath = connectPtr->path();
-    connectName = connectPtr->name();
-    //deviceName = connectPtr->settings()->interfaceName();
-    specificObject = deviceIdentifier = QStringLiteral("/");
-
-    qDebug() <<"active wired connect: path "<< connectPath
-             << "device identify " << deviceIdentifier
-             << "connect name " << connectName
-            // << "device name" << deviceName
-             << "specific parameter"<< specificObject;
-
-    QDBusPendingCallWatcher * watcher;
-    watcher = new QDBusPendingCallWatcher{NetworkManager::activateConnection(connectPath, deviceIdentifier, specificObject), this};
-    connect(watcher, &QDBusPendingCallWatcher::finished, [this, connectName] (QDBusPendingCallWatcher * watcher) {
-        if (watcher->isError() || !watcher->isValid()) {
-            QString errorMessage = tr("activate vpn connection failed: ") + watcher->error().message();
-            qWarning()<<errorMessage;
-            emit this->activateConnectionError(errorMessage);
-         } else {
-            qWarning()<<"active vpn connect complete.";
-         }
-
-         watcher->deleteLater();
-    });
 
     return;
 }

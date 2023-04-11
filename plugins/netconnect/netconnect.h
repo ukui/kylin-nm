@@ -123,6 +123,7 @@ private:
     //单个lan连接状态变化
     void itemActiveConnectionStatusChanged(LanItem *item, int status);
 
+    bool LaunchApp(QString desktopFile);
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 

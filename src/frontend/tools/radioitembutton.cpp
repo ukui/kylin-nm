@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #include "radioitembutton.h"
 #include <QPainter>
 #include <QPainterPath>
@@ -16,6 +35,11 @@
 #define FOREGROUND_COLOR_PRESS_INACTIVE_DARK QColor(70,70,70,255)
 #define FOREGROUND_COLOR_NORMAL_ACTIVE QColor(55,144,250,255)
 #define FOREGROUND_COLOR_PRESS_ACTIVE QColor(36,109,212,255)
+#define COLOR_BRIGHT_TEXT qApp->palette().brightText().color()
+#define COLOR_HIGH_LIGHT qApp->palette().highlight().color()
+#define THEME_SCHAME  "org.ukui.style"
+
+QColor mixColor(const QColor &c1, const QColor &c2, qreal bias);
 
 RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
 {
@@ -27,6 +51,16 @@ RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
     m_iconLabel->setAlignment(Qt::AlignCenter);
 
     setActive(false);
+
+    const QByteArray id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(id)) {
+        m_styleGSettings = new QGSettings(id);
+        connect(m_styleGSettings, &QGSettings::changed, this, [=](QString key){
+            if ("themeColor" == key) {
+                onPaletteChanged();
+            }
+        });
+    }
     //JXJ_TODO loading动画
     connect(this, &RadioItemButton::requestStartLoading, this, &RadioItemButton::onLoadingStarted);
     connect(this , &RadioItemButton::requestStopLoading, this, &RadioItemButton::onLoadingStopped);
@@ -35,17 +69,20 @@ RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
 
 RadioItemButton::~RadioItemButton()
 {
-
+    if (m_styleGSettings != nullptr) {
+        delete m_styleGSettings;
+        m_styleGSettings = nullptr;
+    }
 }
 
 void RadioItemButton::startLoading()
 {
-    emit this->requestStartLoading();
+    Q_EMIT this->requestStartLoading();
 }
 
 void RadioItemButton::stopLoading()
 {
-    emit this->requestStopLoading();
+    Q_EMIT this->requestStopLoading();
 }
 //设置图标
 void RadioItemButton::setButtonIcon(const QIcon &icon)
@@ -95,7 +132,7 @@ void RadioItemButton::onLoadingStopped()
     } else {
         m_iconLabel->setPixmap(m_pixmap);
         m_animation->stop();
-        emit this->animationStoped();
+        Q_EMIT this->animationStoped();
     }
 
 }
@@ -141,9 +178,10 @@ void RadioItemButton::paintEvent(QPaintEvent *event)
 void RadioItemButton::mousePressEvent(QMouseEvent *event)
 {
     if (m_isActivated) {
-        m_backgroundColor = qApp->palette().highlight().color();
+//        m_backgroundColor = qApp->palette().highlight().color();
+        m_backgroundColor = mixColor(COLOR_HIGH_LIGHT, COLOR_BRIGHT_TEXT, 0.2);
     } else {
-        m_backgroundColor = qApp->palette().brightText().color();
+        m_backgroundColor = COLOR_BRIGHT_TEXT;
         m_backgroundColor.setAlphaF(0.21);
     }
     this->update();
@@ -153,10 +191,10 @@ void RadioItemButton::mousePressEvent(QMouseEvent *event)
 void RadioItemButton::mouseReleaseEvent(QMouseEvent *event)
 {
     if (m_isActivated) {
-        m_backgroundColor = qApp->palette().highlight().color();
+        m_backgroundColor = COLOR_HIGH_LIGHT;
     } else {
-        m_backgroundColor = qApp->palette().brightText().color();
-        m_backgroundColor.setAlphaF(0.18);
+        m_backgroundColor = COLOR_BRIGHT_TEXT;
+        m_backgroundColor.setAlphaF(0.12);
     }
     this->update();
     return QPushButton::mouseReleaseEvent(event);
@@ -165,10 +203,10 @@ void RadioItemButton::mouseReleaseEvent(QMouseEvent *event)
 void RadioItemButton::enterEvent(QEvent *event)
 {
     if (m_isActivated) {
-        m_backgroundColor = qApp->palette().highlight().color();
+        m_backgroundColor = COLOR_HIGH_LIGHT;
     } else {
-        m_backgroundColor = qApp->palette().brightText().color();
-        m_backgroundColor.setAlphaF(0.32);
+        m_backgroundColor = COLOR_BRIGHT_TEXT;
+        m_backgroundColor.setAlphaF(0.15);
     }
     this->update();
     return QPushButton::enterEvent(event);
@@ -177,10 +215,10 @@ void RadioItemButton::enterEvent(QEvent *event)
 void RadioItemButton::leaveEvent(QEvent *event)
 {
     if (m_isActivated) {
-        m_backgroundColor = qApp->palette().highlight().color();
+        m_backgroundColor = COLOR_HIGH_LIGHT;
     } else {
-        m_backgroundColor = qApp->palette().brightText().color();
-        m_backgroundColor.setAlphaF(0.18);
+        m_backgroundColor = COLOR_BRIGHT_TEXT;
+        m_backgroundColor.setAlphaF(0.12);
     }
     this->update();
     return QPushButton::leaveEvent(event);
@@ -189,11 +227,11 @@ void RadioItemButton::leaveEvent(QEvent *event)
 void RadioItemButton::refreshButtonIcon()
 {
     if (m_isActivated) {
-        m_backgroundColor = qApp->palette().highlight().color();
+        m_backgroundColor = COLOR_HIGH_LIGHT;
         m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));
     } else {
-        m_backgroundColor = qApp->palette().brightText().color();
-        m_backgroundColor.setAlphaF(0.18);
+        m_backgroundColor = COLOR_BRIGHT_TEXT;
+        m_backgroundColor.setAlphaF(0.12);
         if (qApp->palette().base().color().red() > MIDDLE_COLOR) {
             m_iconLabel->setPixmap(m_pixmap);
         } else {

@@ -1,3 +1,9 @@
+kylin-nm (4.0.0.0-ok3) yangtze; urgency=medium
+
+  * #include <QPainterPath>
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 12 Apr 2023 19:05:00 +0800
+
 kylin-nm (4.0.0.0-ok2) yangtze; urgency=medium
 
   * remove wired switch

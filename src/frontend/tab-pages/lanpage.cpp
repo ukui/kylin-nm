@@ -1,4 +1,25 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #include "lanpage.h"
+#include "kwindowsystem.h"
+#include "kwindowsystem_export.h"
 #include <QDebug>
 #include <QScrollBar>
 
@@ -27,7 +48,7 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
 
     initUI();
     initLanDevice();
-    initNetSwitch();
+//    initNetSwitch();
     initLanDeviceState();
 
     initDeviceCombox();
@@ -48,10 +69,17 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
 
     connect(m_deviceResource, &KyNetworkDeviceResourse::carrierChanage, this, &LanPage::onDeviceCarriered);
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceActiveChanage, this, &LanPage::onDeviceActiveChanage);
+    connect(m_deviceResource, &KyNetworkDeviceResourse::deviceManagedChange, this, &LanPage::onDeviceManagedChange);
 
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &LanPage::activateFailed);
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &LanPage::deactivateFailed);
-
+    connect(m_wiredConnectOperation, &KyWiredConnectOperation::wiredEnabledChanged, this, &LanPage::onWiredEnabledChanged);
+    m_netSwitch->hide();
+//    connect(m_netSwitch, &KSwitchButton::clicked, this, [=](bool checked) {
+//        m_netSwitch->setChecked(!checked);
+//        m_wiredConnectOperation->setWiredEnabled(checked);
+//    });
+    m_lanPagePtrMap.clear();
 }
 
 LanPage::~LanPage()
@@ -99,143 +127,103 @@ void LanPage::initLanDevice()
 
 void LanPage::initLanDeviceState()
 {
-    QMap<QString, bool> deviceStateMap;
-    getDeviceEnableState(WIRED, deviceStateMap);
-
-    QStringList disableDeviceList;
-    disableDeviceList.clear();
+    m_disableDeviceList.clear();
     m_enableDeviceList.clear();
     for (int index = 0; index < m_devList.count(); ++index) {
         QString deviceName = m_devList.at(index);
-        if (deviceStateMap.contains(deviceName)) {
-            if (deviceStateMap[deviceName]) {
-                m_enableDeviceList<<deviceName;
-            } else {
-                disableDeviceList<<deviceName;
-            }
-        } else {
-            saveDeviceEnableState(deviceName, true);
+        if (m_deviceResource->getDeviceManaged(deviceName)) {
             m_enableDeviceList<<deviceName;
+        } else {
+            m_disableDeviceList<<deviceName;
         }
     }
-
-    KyWiredConnectOperation wiredOperation;
-    if (m_netSwitch->isChecked()) {
-        for (int index = 0; index < disableDeviceList.count(); ++index) {
-            wiredOperation.closeWiredNetworkWithDevice(disableDeviceList.at(index));
-        }
-    } else {
-        for (int index = 0; index < m_devList.count(); ++index) {
-            wiredOperation.closeWiredNetworkWithDevice(m_devList.at(index));
-        }
-    }
-
-    return;
 }
 
 void LanPage::initNetSwitch()
 {
-    bool wiredSwitch = true;
+//    bool wiredGsetting = true;
+//    bool wiredEnable = m_wiredConnectOperation->getWiredEnabled();
 
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
-        m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
-        if (m_switchGsettings->keys().contains(WIRED_SWITCH)) {
-            wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
-            connect(m_switchGsettings, &QGSettings::changed, this, &LanPage::onSwithGsettingsChanged);
-        }
-    } else {
-        qDebug()<<"[LanPage] org.ukui.kylin-nm.switch is not installed!";
-    }
+//    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
+//        m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
+//        if (m_switchGsettings->keys().contains(WIRED_SWITCH)) {
+//            wiredGsetting = m_switchGsettings->get(WIRED_SWITCH).toBool();
+//            connect(m_switchGsettings, &QGSettings::changed, this, &LanPage::onSwithGsettingsChanged);
+//            if (wiredEnable != wiredGsetting) {
+//                wiredEnable = wiredGsetting;
+//                m_wiredConnectOperation->setWiredEnabled(wiredGsetting);
+//            }
+//        }
+//    } else {
+//        qDebug()<<"[LanPage] org.ukui.kylin-nm.switch is not installed!";
+//    }
 
-    if (m_devList.count() == 0) {
-        qDebug() << "[wiredSwitch]:init not enable when no device";
-        m_netSwitch->setChecked(false);
-        m_netSwitch->setCheckable(false);
-    }
+//    //从3.0升级上来 先读取老的配置文件来保证和升级前状态一致
+//    bool oldVersionState = true;
+//    if (getOldVersionWiredSwitchState(oldVersionState)) {
+//        if (wiredEnable != oldVersionState) {
+//            wiredEnable = oldVersionState;
+//            m_wiredConnectOperation->setWiredEnabled(oldVersionState);
+//        }
+//    }
 
-    qDebug() << "[wiredSwitch]:init state:" << wiredSwitch;
+//    if (m_devList.count() == 0) {
+//        qDebug() << "[wiredSwitch]:init not enable when no device";
+//        m_netSwitch->setChecked(false);
+//        m_netSwitch->setCheckable(false);
+//    }
 
-    m_netSwitch->setChecked(wiredSwitch);
+//    qDebug() << "[wiredSwitch]:init state:" << wiredEnable;
 
-    return;
+//    m_netSwitch->setChecked(wiredEnable);
 }
 
 void LanPage::onSwithGsettingsChanged(const QString &key)
 {
-    if (key == WIRED_SWITCH) {
+//    if (key == WIRED_SWITCH) {
 
-        bool wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
-        qDebug()<<"[LanPage] SwitchButton statue changed to:" << wiredSwitch << m_netSwitch->isChecked();
+//        bool wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
+//        qDebug()<<"[LanPage] SwitchButton statue changed to:" << wiredSwitch << m_netSwitch->isChecked();
 
-        if (wiredSwitch == m_netSwitch->isChecked()) {
-            return;
-        }
+//        if (wiredSwitch != m_wiredConnectOperation->getWiredEnabled()) {
+//            m_wiredConnectOperation->setWiredEnabled(wiredSwitch);
+//            return;
+//        }
 
-        KyWiredConnectOperation wiredOperation;
-        if (wiredSwitch) {
-            for (int index = 0; index < m_enableDeviceList.size(); ++index) {
-                qDebug()<<"[LanPage] open wired device "<< m_enableDeviceList.at(index);
-                wiredOperation.openWiredNetworkWithDevice(m_enableDeviceList.at(index));
-            }
-        } else {
-            for (int index = 0; index < m_enableDeviceList.size(); ++index) {
-                qDebug()<<"[LanPage] close wired device "<< m_enableDeviceList.at(index);
-                wiredOperation.closeWiredNetworkWithDevice(m_enableDeviceList.at(index));
-            }
-        }
+//        m_netSwitch->setChecked(wiredSwitch);
 
-        m_netSwitch->setChecked(wiredSwitch);
-
-        initDeviceCombox();
-        initLanArea();
-    }
+//        initLanDeviceState();
+//        initDeviceCombox();
+//        initLanArea();
+//    }
 }
 
 void LanPage::getEnabledDevice(QStringList &enableDeviceList)
 {
-    int index = 0;
-    QMap<QString, bool> deviceMap;
-
     if (m_devList.isEmpty()) {
         qDebug()<<"[LanPage] there is not wired device.";
         return;
     }
 
-    getDeviceEnableState(WIRED, deviceMap);
-    for (index = 0; index < m_devList.size(); ++index) {
-        if (deviceMap.contains(m_devList.at(index))) {
-            if (deviceMap[m_devList.at(index)]) {
-                enableDeviceList << m_devList.at(index);
-            }
-        } else {
-            saveDeviceEnableState(m_devList.at(index), true);
+    for (int index = 0; index < m_devList.size(); ++index) {
+        if (m_deviceResource->getDeviceManaged(m_devList.at(index))) {
             enableDeviceList << m_devList.at(index);
         }
     }
-
-    return;
 }
 
 void LanPage::getDisabledDevices(QStringList &disableDeviceList)
 {
-    int index = 0;
-    QMap<QString, bool> deviceMap;
-
     if (m_devList.isEmpty()) {
         qDebug()<<"[LanPage] there is not wired device.";
         return;
     }
 
-    getDeviceEnableState(WIRED, deviceMap);
-    for (index = 0; index < m_devList.size(); ++index) {
-        if (deviceMap.contains(m_devList.at(index))) {
-            if (!deviceMap[m_devList.at(index)]) {
-                disableDeviceList << m_devList.at(index);
-            }
+    for (int index = 0; index < m_devList.size(); ++index) {
+        if (!m_deviceResource->getDeviceManaged(m_devList.at(index))) {
+            disableDeviceList << m_devList.at(index);
         }
     }
-
-    return;
 }
 
 void LanPage::initDeviceCombox()
@@ -246,7 +234,7 @@ void LanPage::initDeviceCombox()
 
     m_deviceComboBox->clear();
 
-    if (m_netSwitch->isChecked()) {
+    if (!m_devList.isEmpty()) {
         int enableDeviceCount = m_enableDeviceList.count();
         if (enableDeviceCount > 1) {
             for (int index = 0; index < enableDeviceCount; ++index) {
@@ -280,13 +268,11 @@ void LanPage::initDeviceCombox()
     } else {
         m_deviceFrame->hide();
         m_currentDeviceName = "";
-
     }
 
     setDefaultDevice(WIRED, m_currentDeviceName);
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LanPage::onDeviceComboxIndexChanged);
-    return;
 }
 
 void LanPage::addEmptyConnectItem(QMap<QString, QListWidgetItem *> &connectMap,
@@ -294,8 +280,6 @@ void LanPage::addEmptyConnectItem(QMap<QString, QListWidgetItem *> &connectMap,
 {
     QListWidgetItem *p_listWidgetItem = addNewItem(nullptr, lanListWidget);
     connectMap.insert(EMPTY_CONNECT_UUID, p_listWidgetItem);
-
-    return;
 }
 
 
@@ -364,6 +348,7 @@ void LanPage::constructActiveConnectionArea()
             delete p_activeConnectionItem;
             p_activeConnectionItem = nullptr;
         }
+        setNetSpeed->start(REFRESH_NETWORKSPEED_TIMER);
     } else {
         qDebug()<<"[LanPage] there is not active";
         addEmptyConnectItem(m_activeConnectionMap, m_activatedLanListWidget);
@@ -396,7 +381,7 @@ void LanPage::constructConnectionArea()
 
         }
     }
-    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
     } else {
         m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);
@@ -406,7 +391,7 @@ void LanPage::constructConnectionArea()
 
 void LanPage::initLanArea()
 {
-    if (!m_netSwitch->isChecked() || m_currentDeviceName.isEmpty()) {
+    if (/*!m_netSwitch->isChecked() || */m_currentDeviceName.isEmpty()) {
         m_activatedNetDivider->hide();
         m_activatedNetFrame->hide();
 
@@ -442,7 +427,7 @@ bool LanPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
             p_listWidgetItem = nullptr;
 
             iter = connectMap.erase(iter);
-            if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+            if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
                 m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
             }
             return true;
@@ -455,8 +440,15 @@ bool LanPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
 void LanPage::onRemoveConnection(QString path)            //删除时后端会自动断开激活，将其从未激活列表中删除
 {
     //for dbus
-    qDebug() << "[LanPage] emit lanRemove because onRemoveConnection " << path;
-    emit lanRemove(path);
+    qDebug() << "[LanPage] Q_EMIT lanRemove because onRemoveConnection " << path;
+    Q_EMIT lanRemove(path);
+
+    if (m_lanPagePtrMap.contains(path)) {
+        if (m_lanPagePtrMap[path] != nullptr) {
+            delete m_lanPagePtrMap[path];
+            m_lanPagePtrMap[path] = nullptr;
+        }
+    }
 
     if (removeConnectionItem(m_inactiveConnectionMap, m_inactivatedLanListWidget, path)) {
         return;
@@ -465,7 +457,7 @@ void LanPage::onRemoveConnection(QString path)            //删除时后端会�
         if (m_activeConnectionMap.count() <= 0) {
             addEmptyConnectItem(m_activeConnectionMap, m_activatedLanListWidget);
         }
-
+        setNetSpeed->stop();
         return;
     }
 }
@@ -495,10 +487,9 @@ void LanPage::onAddConnection(QString uuid)               //新增一个有线�
 
     delete p_newItem;
     p_newItem = nullptr;
-    if (m_inactivatedLanListWidget->count() >= MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() > MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);
     }
-    return;
 }
 
 void LanPage::addDeviceForCombox(QString deviceName)
@@ -506,7 +497,7 @@ void LanPage::addDeviceForCombox(QString deviceName)
     disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
                         this, &LanPage::onDeviceComboxIndexChanged);
 
-    if (m_netSwitch->isChecked()) {
+//    if (m_netSwitch->isChecked()) {
         if (1 == m_enableDeviceList.count()) {
             //1、从无到有添加第一块有线网卡
             //2、有多快网卡，但是没有使能
@@ -526,11 +517,10 @@ void LanPage::addDeviceForCombox(QString deviceName)
             //5、有多快网卡且使能了多块网卡
             m_deviceComboBox->addItem(deviceName);
         }
-    }
+//    }
 
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LanPage::onDeviceComboxIndexChanged);
-    return;
 }
 
 void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
@@ -543,26 +533,26 @@ void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devic
         return;
     }
 
-    if (m_devList.count() == 0) {// 有线网卡从无到有，打开开关
-        bool wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
-        m_netSwitch->setCheckable(true);
-        m_netSwitch->setChecked(wiredSwitch);
-    }
+//    if (m_devList.count() == 0) {// 有线网卡从无到有，打开开关
+//        bool wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
+//        m_netSwitch->setCheckable(true);
+//        m_netSwitch->setChecked(wiredSwitch);
+//    }
 
     qDebug() << "[LanPage] Begin add device:" << deviceName;
 
     m_devList << deviceName;
-    saveDeviceEnableState(deviceName, true);
-    m_enableDeviceList<<deviceName;
-
-    addDeviceForCombox(deviceName);
-    if (m_currentDeviceName == deviceName) {
-        initLanArea();
+    if (m_deviceResource->getDeviceManaged(deviceName)) {
+        m_enableDeviceList << deviceName;
+        addDeviceForCombox(deviceName);
+        if (m_currentDeviceName == deviceName) {
+            initLanArea();
+        }
+    } else {
+        m_disableDeviceList << deviceName;
     }
 
-    emit deviceStatusChanged();
-
-    return;
+    Q_EMIT deviceStatusChanged();
 }
 
 void LanPage::deleteDeviceFromCombox(QString deviceName)
@@ -570,7 +560,13 @@ void LanPage::deleteDeviceFromCombox(QString deviceName)
     disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
                this, &LanPage::onDeviceComboxIndexChanged);
 
-    if (m_netSwitch->isChecked()) {
+
+    if (m_devList.isEmpty()) {
+        m_tipsLabel->hide();
+        m_deviceFrame->hide();
+        m_deviceComboBox->hide();
+    }
+//    if (m_netSwitch->isChecked()) {
         if (0 == m_enableDeviceList.count()) {
             //1、没有使能任何网卡
             goto l_out;
@@ -610,7 +606,7 @@ void LanPage::deleteDeviceFromCombox(QString deviceName)
                 }
             }
         }
-    }
+//    }
 
 l_out:
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -628,11 +624,11 @@ void LanPage::onDeviceRemove(QString deviceName)
     qDebug() << "[LanPage] deviceRemove:" << deviceName;
 
     m_devList.removeOne(deviceName);
-    if (m_devList.count() == 0) {
-        m_netSwitch->setCheckable(false);
-        m_netSwitch->setChecked(false);
-        qDebug() << "[wiredSwitch]set not enable after device remove";
-    }
+//    if (m_devList.count() == 0) {
+//        m_netSwitch->setChecked(false);
+//        m_netSwitch->setCheckable(false);
+//        qDebug() << "[wiredSwitch]set not enable after device remove";
+//    }
 
     QString nowDevice = m_currentDeviceName;
     deleteDeviceFromCombox(deviceName);
@@ -644,11 +640,11 @@ void LanPage::onDeviceRemove(QString deviceName)
     if (m_enableDeviceList.contains(deviceName)) {
         m_enableDeviceList.removeOne(deviceName);
     }
-    deleteDeviceEnableState(deviceName);
+    if (m_disableDeviceList.contains(deviceName)) {
+        m_disableDeviceList.removeOne(deviceName);
+    }
 
-    emit deviceStatusChanged();
-
-    return;
+    Q_EMIT deviceStatusChanged();
 }
 
 void LanPage::updateDeviceCombox(QString oldDeviceName, QString newDeviceName)
@@ -675,15 +671,18 @@ void LanPage::onDeviceNameUpdate(QString oldName, QString newName)
         if (m_enableDeviceList.contains(oldName)) {
             m_enableDeviceList.removeOne(oldName);
             m_enableDeviceList.append(newName);
+        } else  if (m_disableDeviceList.contains(oldName)) {
+            m_disableDeviceList.removeOne(oldName);
+            m_disableDeviceList.append(newName);
         }
-        qDebug() << "[LanPage] emit deviceNameUpdate "  << oldName << newName;
+        qDebug() << "[LanPage] Q_EMIT deviceNameUpdate "  << oldName << newName;
 
         updateDeviceCombox(oldName, newName);
         if (m_currentDeviceName == newName) {
             initLanArea();
         }
 
-        emit deviceNameChanged(oldName, newName, WIRED);
+        Q_EMIT deviceNameChanged(oldName, newName, WIRED);
     }
 }
 
@@ -693,26 +692,32 @@ void LanPage::onDeviceCarriered(QString deviceName, bool pluged)
         return;
     }
     if (m_enableDeviceList.contains(deviceName)) {
-        m_wiredConnectOperation->openWiredNetworkWithDevice(deviceName);
         updateCurrentDevice(deviceName);
     }
-    return;
 }
 
 void LanPage::onDeviceActiveChanage(QString deviceName, bool deviceActive)
 {
-    if (!m_devList.contains(deviceName)) {
-        return;
-    }
+//    if (!m_devList.contains(deviceName)) {
+//        return;
+//    }
 
-    if (deviceActive) {
-        if (!m_netSwitch->isChecked() || !m_enableDeviceList.contains(deviceName)) {
-            qDebug()<< LOG_FLAG << "close disabled device";
-            m_wiredConnectOperation->closeWiredNetworkWithDevice(deviceName);
-        }
-    }
+//    if (deviceActive) {
+//        if (!m_netSwitch->isChecked() || !m_enableDeviceList.contains(deviceName)) {
+//            qDebug()<< LOG_FLAG << "close disabled device";
+//            m_wiredConnectOperation->closeWiredNetworkWithDevice(deviceName);
+//        }
+//    }
 
-    return;
+//    return;
+}
+
+void LanPage::onDeviceManagedChange(QString deviceName, bool managed)
+{
+    initLanDeviceState();
+    initDeviceCombox();
+    initLanArea();
+    Q_EMIT deviceStatusChanged();
 }
 
 
@@ -741,6 +746,7 @@ void LanPage::initUI()
     m_activatedLanListWidget->setFixedHeight(ITEM_HEIGHT);              //active区域固定高度,只显示一个条目
     m_activatedLanListWidget->setFixedWidth(MIN_WIDTH);
     m_activatedLanListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_activatedLanListWidget->setProperty("needTranslucent", true);
     m_activatedNetLayout->addWidget(m_activatedLanListWidget);
 
     m_inactivatedNetLabel->setText(tr("Inactivated LAN"));
@@ -752,15 +758,27 @@ void LanPage::initUI()
     m_inactivatedLanListWidget->verticalScrollBar()->setProperty("drawScrollBarGroove",false); //去除滚动条的外侧黑框
     m_inactivatedLanListWidget->verticalScrollBar()->setSingleStep(SCROLL_STEP);
     m_inactivatedLanListWidget->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
+    m_inactivatedLanListWidget->verticalScrollBar()->setProperty("needTranslucent", true);
+    m_inactivatedLanListWidget->setProperty("needTranslucent", true);
     m_inactivatedAreaLayout->addWidget(m_inactivatedLanListWidget);
+
+    connect(m_inactivatedLanListWidget, &QListWidget::currentItemChanged, this, [=]() {
+        if (m_inactivatedLanListWidget->currentItem() != nullptr) {
+            m_inactivatedLanListWidget->currentItem()->setSelected(false);
+        }
+    });
 
     QPalette pal = m_activatedLanListWidget->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));        //背景透明
     m_activatedLanListWidget->setPalette(pal);
     m_inactivatedLanListWidget->setPalette(pal);
 
-    m_settingsBtn->installEventFilter(this);
-    m_netSwitch->installEventFilter(this);
+    m_settingsLabel->installEventFilter(this);
+//    m_netSwitch->installEventFilter(this);
+    m_activatedLanListWidget->installEventFilter(this);
+    m_inactivatedLanListWidget->installEventFilter(this);
+
+    showRate();
 }
 
 QListWidgetItem *LanPage::insertNewItem(KyConnectItem *itemData, QListWidget *listWidget)
@@ -778,7 +796,7 @@ QListWidgetItem *LanPage::insertNewItem(KyConnectItem *itemData, QListWidget *li
     }
 
     QListWidgetItem *p_sortListWidgetItem = new QListWidgetItem();
-    p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));   //设置不可被选中
+//    p_sortListWidgetItem->setFlags(p_sortListWidgetItem->flags() & (~Qt::ItemIsSelectable));   //设置不可被选中
     p_sortListWidgetItem->setSizeHint(QSize(listWidget->width(),ITEM_HEIGHT));
 
     listWidget->insertItem(index, p_sortListWidgetItem);
@@ -786,14 +804,14 @@ QListWidgetItem *LanPage::insertNewItem(KyConnectItem *itemData, QListWidget *li
     LanListItem *p_sortLanItem = nullptr;
     p_sortLanItem = new LanListItem(itemData, m_currentDeviceName);
     listWidget->setItemWidget(p_sortListWidgetItem, p_sortLanItem);
-
+    connect(p_sortLanItem, &LanListItem::detailShow, this, &LanPage::showDetailPage);
     return p_sortListWidgetItem;
 }
 
 QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listWidget)
 {
     QListWidgetItem *p_listWidgetItem = new QListWidgetItem();
-    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
+//    p_listWidgetItem->setFlags(p_listWidgetItem->flags() & (~Qt::ItemIsSelectable));
     p_listWidgetItem->setSizeHint(QSize(listWidget->width(), ITEM_HEIGHT));
     listWidget->addItem(p_listWidgetItem);
     LanListItem *p_lanItem = nullptr;
@@ -807,6 +825,7 @@ QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listW
     }
 
     listWidget->setItemWidget(p_listWidgetItem, p_lanItem);
+    connect(p_lanItem, &LanListItem::detailShow, this, &LanPage::showDetailPage);
     return p_listWidgetItem;
 }
 
@@ -822,9 +841,9 @@ void LanPage::updateActivatedConnectionArea(KyConnectItem *p_newItem)
         deleteConnectionMapItem(m_activeConnectionMap, m_activatedLanListWidget, EMPTY_CONNECT_UUID);
         QListWidgetItem *p_listWidgetItem = addNewItem(p_newItem, m_activatedLanListWidget);
         m_activeConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
-        this->showDesktopNotify(tr("LAN Connected Successfully"), "networkconnected");
+//        this->showDesktopNotify(tr("LAN Connected Successfully"), "networkconnected");
     }
-    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
     }
 
@@ -846,9 +865,9 @@ void LanPage::updateConnectionArea(KyConnectItem *p_newItem)
         qDebug()<<"[LanPage] update connection item"<<p_newItem->m_connectName;
         QListWidgetItem *p_listWidgetItem = insertNewItem(p_newItem, m_inactivatedLanListWidget);
         m_inactiveConnectionMap.insert(p_newItem->m_connectUuid, p_listWidgetItem);
-        this->showDesktopNotify(tr("LAN Disconnected Successfully"), "networkdisconnected");
+//        this->showDesktopNotify(tr("LAN Disconnected Successfully"), "networkdisconnected");
     }
-    if (m_inactivatedLanListWidget->count() < MAX_ITEMS) {
+    if (m_inactivatedLanListWidget->count() <= MAX_ITEMS) {
         m_inactivatedLanListWidget->setFixedWidth(MIN_WIDTH);
     } else {
         m_inactivatedLanListWidget->setFixedWidth(MAX_WIDTH);
@@ -908,6 +927,10 @@ void LanPage::onConnectionStateChange(QString uuid,
 
     sendLanStateChangeSignal(uuid, (ConnectState)state);
 
+    if (m_activeConnectionMap.keys().contains(uuid) && state == NetworkManager::ActiveConnection::State::Activated) {
+        return;
+    }
+
     qDebug()<<"[LanPage] connection uuid"<< uuid
             << "state change slot:"<< state;
 
@@ -920,12 +943,12 @@ void LanPage::onConnectionStateChange(QString uuid,
             qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;
             return;
         }
-
-        deviceName = p_newItem->m_ifaceName;
         updateActivatedConnectionArea(p_newItem);
         updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
+        deviceName = p_newItem->m_ifaceName;
+        setNetSpeed->start(REFRESH_NETWORKSPEED_TIMER);
     } else if (state == NetworkManager::ActiveConnection::State::Deactivated) {
-        p_newItem = m_connectResourse->getConnectionItemByUuid(uuid);
+        p_newItem = m_connectResourse->getConnectionItemByUuidWithoutActivateChecking(uuid);
         qDebug() << "[LanPage] deactivated reason" << reason;
         if (nullptr == p_newItem) {
             qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;
@@ -935,6 +958,7 @@ void LanPage::onConnectionStateChange(QString uuid,
         deviceName = p_newItem->m_ifaceName;
         updateConnectionArea(p_newItem);
         updateConnectionState(m_inactiveConnectionMap, m_inactivatedLanListWidget, uuid, (ConnectState)state);
+        setNetSpeed->stop();
     } else if (state == NetworkManager::ActiveConnection::State::Activating) {
         deviceName = getConnectionDevice(uuid);
         if (deviceName == m_currentDeviceName) {
@@ -947,7 +971,7 @@ void LanPage::onConnectionStateChange(QString uuid,
         }
     }
 
-    emit lanActiveConnectionStateChanged(deviceName, uuid, state);
+    Q_EMIT lanActiveConnectionStateChanged(deviceName, uuid, state);
 
     if (p_newItem) {
         delete p_newItem;
@@ -966,7 +990,7 @@ void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
         return;
     }
 
-    foreach (auto deviceName, devlist) {
+    Q_FOREACH (auto deviceName, devlist) {
         QList<KyConnectItem *> activedList;
         QList<KyConnectItem *> deactivedList;
         QVector<QStringList> vector;
@@ -992,7 +1016,7 @@ void LanPage::sendLanUpdateSignal(KyConnectItem *p_connectItem)
 {
     QStringList info;
     info << p_connectItem->m_connectName << p_connectItem->m_connectUuid << p_connectItem->m_connectPath;
-    emit lanUpdate(p_connectItem->m_ifaceName, info);
+    Q_EMIT lanUpdate(p_connectItem->m_ifaceName, info);
 
     return;
 }
@@ -1001,8 +1025,8 @@ void LanPage::sendLanAddSignal(KyConnectItem *p_connectItem)
 {
     QStringList info;
     info << p_connectItem->m_connectName << p_connectItem->m_connectUuid << p_connectItem->m_connectPath;
-    qDebug() << "[LanPage] emit lanAdd because addConnection ";
-    emit lanAdd(p_connectItem->m_ifaceName, info);
+    qDebug() << "[LanPage] Q_EMIT lanAdd because addConnection ";
+    Q_EMIT lanAdd(p_connectItem->m_ifaceName, info);
 
     return;
 }
@@ -1014,8 +1038,7 @@ void LanPage::sendLanStateChangeSignal(QString uuid, ConnectState state)
             return;
         }
     }
-
-    emit this->lanConnectChanged(state);
+    Q_EMIT this->lanConnectChanged(state);
 
     return;
 }
@@ -1141,33 +1164,7 @@ void LanPage::onUpdateConnection(QString uuid)
 
 void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
 {
-    saveDeviceEnableState(devName, enable);
-
-    KyWiredConnectOperation wiredOperation;
-    if (enable) {
-        wiredOperation.openWiredNetworkWithDevice(devName);
-
-        m_enableDeviceList<<devName;
-
-        addDeviceForCombox(devName);
-        if (m_currentDeviceName == devName) {
-            initLanArea();
-        }
-    } else {
-        wiredOperation.closeWiredNetworkWithDevice(devName);
-
-        QString nowDeviceName = m_currentDeviceName;
-        deleteDeviceFromCombox(devName);
-        if (nowDeviceName == devName) {
-            initLanArea();
-        }
-
-        if (m_enableDeviceList.contains(devName)) {
-            m_enableDeviceList.removeOne(devName);
-        }
-    }
-
-    return;
+    m_deviceResource->setDeviceManaged(devName, enable);
 }
 
 void LanPage::deleteWired(const QString &connUuid)
@@ -1181,33 +1178,53 @@ void LanPage::deleteWired(const QString &connUuid)
 
 bool LanPage::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == m_settingsBtn) {
+    if (watched == m_settingsLabel) {
         if (event->type() == QEvent::MouseButtonRelease) {
             onShowControlCenter();
         }
-    } else if(watched == m_netSwitch){
+    }/* else if(watched == m_netSwitch){
         if (event->type() == QEvent::MouseButtonRelease) {
             qDebug()<<"[LanPage] On lan switch button clicked! Status:" <<m_netSwitch->isChecked()
                    <<"devices count:"<<m_devList.count();
 
             if (m_devList.count() == 0) {
                 this->showDesktopNotify(tr("No ethernet device avaliable"), "networkwrong");
-                m_netSwitch->setCheckable(false);
                 m_netSwitch->setChecked(false);
-            } else {
-                m_netSwitch->setCheckable(true);
-                if (m_netSwitch->isChecked()) {
-                    m_switchGsettings->set(WIRED_SWITCH, false);
-                } else {
-                    m_switchGsettings->set(WIRED_SWITCH,true);
-                }
+                m_netSwitch->setCheckable(false);
             }
-            return true;
         }
 
+    }*/ else if (watched == m_activatedLanListWidget) {
+        //去掉无右键菜单显示时的选中效果
+        if (event->type() ==  QEvent::FocusIn) {
+            if (m_activatedLanListWidget->currentItem() != nullptr) {
+                m_activatedLanListWidget->currentItem()->setSelected(false);
+            }
+        }
+    } else if (watched == m_inactivatedLanListWidget) {
+        //去掉无右键菜单显示时的选中效果
+        if (event->type() == QEvent::FocusIn) {
+            if (m_inactivatedLanListWidget->currentItem() != nullptr) {
+                m_inactivatedLanListWidget->currentItem()->setSelected(false);
+            }
+        }
     }
 
     return QWidget::eventFilter(watched, event);
+}
+
+void LanPage::onWiredEnabledChanged(bool enabled)
+{
+//    if (m_devList.isEmpty()) {
+//        qDebug() << "[LanPage] have no device to use "  << Q_FUNC_INFO << __LINE__;
+//        return;
+//    }
+
+//    if (m_netSwitch->isChecked() == enabled) {
+//        return;
+//    } else {
+//        m_switchGsettings->set(WIRED_SWITCH, enabled);
+//    }
 }
 
 void LanPage::activateWired(const QString& devName, const QString& connUuid)
@@ -1248,8 +1265,39 @@ void LanPage::showDetailPage(QString devName, QString uuid)
        return;
     }
 
+    if (m_lanPagePtrMap.contains(p_item->m_connectPath)) {
+        if (m_lanPagePtrMap[p_item->m_connectPath] != nullptr) {
+            qDebug() << "[LanPage] ShowLanDetailPage" << uuid << "already create,just raise";
+            KWindowSystem::activateWindow(m_lanPagePtrMap[p_item->m_connectPath]->winId());
+            KWindowSystem::raiseWindow(m_lanPagePtrMap[p_item->m_connectPath]->winId());
+            return;
+        }
+    }
+
     NetDetail *netDetail = new NetDetail(devName, p_item->m_connectName, uuid, isActive, false, false);
+    m_lanPagePtrMap.insert(p_item->m_connectPath, netDetail);
     netDetail->show();
+    netDetail->centerToScreen();
+
+    connect(netDetail, &NetDetail::detailPageClose, [&](QString deviceName, QString lanName, QString lanUuid){
+        if (lanUuid.isEmpty()) {
+            return;
+        }
+        KyConnectItem *currentItem = nullptr;
+        if (m_connectResourse->isActivatedConnection(lanUuid)) {
+            currentItem = m_activeResourse->getActiveConnectionByUuid(lanUuid);
+        } else {
+            currentItem = m_connectResourse->getConnectionItemByUuid(lanUuid);
+        }
+        if (currentItem == nullptr) {
+            return;
+        }
+        if (m_lanPagePtrMap.contains(currentItem->m_connectPath)) {
+            m_lanPagePtrMap[currentItem->m_connectPath] = nullptr;
+        }
+        delete currentItem;
+        currentItem = nullptr;
+    });
 
     delete p_item;
     p_item = nullptr;
@@ -1264,3 +1312,12 @@ bool LanPage::lanIsConnected()
     }
 }
 
+void LanPage::showRate()
+{
+    //定时获取网速
+    setNetSpeed = new QTimer(this);
+    setNetSpeed->setTimerType(Qt::PreciseTimer);
+    connect(setNetSpeed, &QTimer::timeout,  [&]() {
+        onSetNetSpeed(m_activatedLanListWidget, m_activeConnectionMap.contains(EMPTY_SSID), m_currentDeviceName);
+    });
+}

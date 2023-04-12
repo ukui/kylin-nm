@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #ifndef KYLINNETORKDEVICERESOURCE_H
 #define KYLINNETORKDEVICERESOURCE_H
 
@@ -13,7 +32,7 @@ public:
     explicit KyNetworkDeviceResourse(QObject *parent = nullptr);
     ~KyNetworkDeviceResourse();
 
-signals:
+Q_SIGNALS:
     void deviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void deviceRemove(QString deviceName);
     void deviceUpdate(QString deviceName);
@@ -25,8 +44,10 @@ signals:
     void deviceBitRateChanage(QString deviceName, int bitRate);
     void deviceMacAddressChanage(QString deviceName, const QString &hwAddress);
     void deviceActiveChanage(QString deviceName, bool deivceActive);
+    void deviceManagedChange(QString deviceName, bool managed);
+    void stateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason);
 
-public slots:
+public Q_SLOTS:
     void onDeviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName, QString uni);
     void onDeviceUpdate(QString interface, QString dbusPath);
@@ -44,6 +65,12 @@ public:
     bool deviceIsWired(QString deviceName);
 
     void setDeviceRefreshRate(QString deviceName, int ms);
+
+    void setDeviceManaged(QString devName, bool managed);
+    bool getDeviceManaged(QString devName);
+
+    qulonglong getDeviceRxRefreshRate(QString deviceName);
+    qulonglong getDeviceTxRefreshRate(QString deviceName);
 
 private:
     KyWiredConnectOperation wiredOperation;

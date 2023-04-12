@@ -45,7 +45,7 @@
 
 #define PROXY_HOST_KEY       "host"
 #define PROXY_PORT_KEY       "port"
-
+#define THEME_SCHAME         "org.ukui.style"
 #define FRAME_LAYOUT_MARGINS  16,0,16,0
 #define FRAME_LAYOUT_SPACING  8
 #define LABEL_WIDTH  136
@@ -67,7 +67,8 @@ Proxy::Proxy() : mFirstLoad(true)
 Proxy::~Proxy()
 {
     if (!mFirstLoad) {
-            plugin_leave();
+        plugin_leave();
+        delete m_appProxyDbus;
     }
 }
 
@@ -160,6 +161,11 @@ bool Proxy::isShowOnHomePage() const
 QIcon Proxy::icon() const
 {
     return QIcon::fromTheme("ukui-network-agent-symbolic");
+}
+
+QString Proxy::translationPath() const
+{
+    return "/usr/share/kylin-nm/proxy/%1.ts";
 }
 
 bool Proxy::isEnable() const
@@ -702,6 +708,9 @@ void Proxy::initDbus()
                        "/org/ukui/SettingsDaemon/AppProxy",
                        "org.ukui.SettingsDaemon.AppProxy",
                        QDBusConnection::sessionBus());
+    if(!m_appProxyDbus->isValid()) {
+        qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+    }
 }
 
 void Proxy::initAppProxyStatus()
@@ -752,8 +761,11 @@ void Proxy::setAptProxy(QString host, QString port, bool status)
                                                              "/",
                                                              "com.control.center.interface",
                                                              QDBusConnection::systemBus());
-    if (mAptproxyDbus->isValid())
+    if (mAptproxyDbus->isValid()) {
         QDBusReply<bool> reply = mAptproxyDbus->call("setaptproxy", host, port , status);
+    }
+    delete mAptproxyDbus;
+    mAptproxyDbus = nullptr;
 }
 
 QHash<QString, QVariant> Proxy::getAptProxy()
@@ -786,6 +798,8 @@ QHash<QString, QVariant> Proxy::getAptProxy()
             mAptInfo.insert(it.arg, it.out.variant());
         }
     }
+    delete mAptproxyDbus;
+    mAptproxyDbus = nullptr;
     return mAptInfo;
 }
 
@@ -814,8 +828,9 @@ void Proxy::reboot()
                                                              "/org/gnome/SessionManager",
                                                              "org.gnome.SessionManager",
                                                              QDBusConnection::sessionBus());
-
-    rebootDbus->call("reboot");
+    if (rebootDbus->isValid()) {
+        rebootDbus->call("reboot");
+    }
     delete rebootDbus;
     rebootDbus = nullptr;
 }
@@ -841,8 +856,9 @@ QFrame *Proxy::setLine(QFrame *frame)
 bool Proxy::getAppProxyState()
 {
     bool state = true;
-    if(!m_appProxyDbus->isValid()) {
+    if(m_appProxyDbus == nullptr || !m_appProxyDbus->isValid()) {
         qWarning ()<< "init AppProxy dbus error";
+        return false;
     }
 
     //获取应用代理开启状态
@@ -859,7 +875,7 @@ bool Proxy::getAppProxyState()
 
 void Proxy::setAppProxyState(bool state)
 {
-    if(!m_appProxyDbus->isValid()) {
+    if(m_appProxyDbus == nullptr || !m_appProxyDbus->isValid()) {
         qWarning ()<< "init AppProxy dbus error";
         return;
     }
@@ -881,6 +897,7 @@ QStringList Proxy::getAppProxyConf()
 
     if(!dbusInterface.isValid()) {
         qWarning ()<< "init AppProxy dbus error";
+        return info;
     }
 
     //获取应用代理配置信息
@@ -903,11 +920,12 @@ QStringList Proxy::getAppProxyConf()
 
 void Proxy::setAppProxyConf(QStringList list)
 {
+    //AppProxyConf 必填项数量为3
     if (list.count() < 3) {
         return;
     }
 
-    if(!m_appProxyDbus->isValid()) {
+    if(m_appProxyDbus == nullptr || !m_appProxyDbus->isValid()) {
         qWarning ()<< "init AppProxy dbus error";
         return;
     }
@@ -1160,18 +1178,23 @@ void Proxy::setAppListFrameUi(QWidget *widget)
     m_allowAppProxyLabel->setText(tr("The following applications are allowed to use this configuration:")); //允许以下应用使用该配置：
     m_appListWidget = new QListWidget(m_appListFrame);
     m_appListWidget->setMinimumHeight(240);
-    m_appListWidget->setBackgroundRole(QPalette::Base);
     m_appListWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     m_appListWidget->setFrameShape(QFrame::Shape::Panel);
 
     appListLayout->addWidget(m_allowAppProxyLabel);
     appListLayout->addWidget(m_appListWidget);
 
-    QPalette mpal(m_appListWidget->palette());
-    mpal.setColor(QPalette::Base, qApp->palette().base().color());
-    mpal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
-    m_appListWidget->setAlternatingRowColors(true);
-    m_appListWidget->setPalette(mpal);
+
+    onPaletteChanged();
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+        QGSettings * styleGsettings = new QGSettings(style_id, QByteArray(), this);
+        connect(styleGsettings, &QGSettings::changed, this, [=](QString key){
+            if ("styleName" == key) {
+                onPaletteChanged();
+            }
+        });
+    }
 }
 
 void Proxy::appProxyInfoPadding()
@@ -1240,7 +1263,6 @@ void Proxy::onAppProxyConfChanged()
 {
     if (!getipEditState(m_ipAddressLineEdit->text()) || m_portLineEdit->text().isEmpty()) {
         return;
-        qDebug() << "onAppProxyConfChanged return";
     }
 
     if (m_ipAddressLineEdit->text().isEmpty()) {
@@ -1257,8 +1279,6 @@ void Proxy::onAppProxyConfChanged()
             m_appProxyInfo.append("");
             m_appProxyInfo.append("");
         }
-
-        qDebug() << m_appProxyInfo << Q_FUNC_INFO << __LINE__;
     }
 }
 
@@ -1267,6 +1287,16 @@ void Proxy::onAppProxyConfEditFinished()
    if (!m_ipAddressLineEdit->hasFocus() && !m_portLineEdit->hasFocus()) {
        setAppProxyConf(m_appProxyInfo);
    }
+}
+
+void Proxy::onPaletteChanged()
+{
+    QPalette mpal(m_appListWidget->palette());
+    mpal.setColor(QPalette::Base, qApp->palette().base().color());
+    mpal.setColor(QPalette::AlternateBase, qApp->palette().alternateBase().color());
+    m_appListWidget->setBackgroundRole(QPalette::Base);
+    m_appListWidget->setAlternatingRowColors(true);
+    m_appListWidget->setPalette(mpal);
 }
 
 void Proxy::onappProxyEnableChanged(bool enable)

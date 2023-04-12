@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #ifndef LANPAGE_H
 #define LANPAGE_H
 
@@ -80,8 +99,9 @@ private:
                                  QListWidget *lanListWidget, QString uuid);
 
     void updateCurrentDevice(QString deviceName);
+    void showRate();
 
-signals:
+Q_SIGNALS:
     void lanAdd(QString devName, QStringList info);
     void lanRemove(QString dbusPath);
     void lanUpdate(QString devName, QStringList info);
@@ -89,7 +109,9 @@ signals:
     void lanActiveConnectionStateChanged(QString interface, QString uuid, int status);
     void lanConnectChanged(int state);
 
-private slots:
+    void showLanRate(QListWidget *widget, QMap<QString, QListWidgetItem *> &map, QString dev, bool isLan);
+
+private Q_SLOTS:
     void onConnectionStateChange(QString uuid, NetworkManager::ActiveConnection::State state,
                                  NetworkManager::ActiveConnection::Reason reason);
 
@@ -102,6 +124,7 @@ private slots:
     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName);
     void onDeviceNameUpdate(QString oldName, QString newName);
+    void onDeviceManagedChange(QString deviceName, bool managed);
 
     void onDeviceCarriered(QString deviceName, bool pluged);
     void onDeviceActiveChanage(QString deviceName, bool deviceActive);
@@ -110,6 +133,7 @@ private slots:
 
     void onShowControlCenter();
 
+    void onWiredEnabledChanged(bool);
 private:
     QListWidget * m_activatedLanListWidget = nullptr;
     QListWidget * m_inactivatedLanListWidget = nullptr;
@@ -125,9 +149,10 @@ private:
     QString m_currentDeviceName;
     QStringList m_devList;
     QStringList m_enableDeviceList;
+    QStringList m_disableDeviceList;
 
     QGSettings *m_switchGsettings = nullptr;
-
+    QMap<QString, NetDetail*> m_lanPagePtrMap;
 };
 
 #endif // LANPAGE_H

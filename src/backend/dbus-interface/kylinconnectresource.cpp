@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 
 #include "kylinconnectresource.h"
 #include "kywirelessconnectoperation.h"
@@ -23,9 +42,34 @@ static bool subLanListSort(const KyConnectItem* info1, const KyConnectItem* info
     return result;
 }
 
+static bool subVpnListSort(const KyConnectItem* info1, const KyConnectItem* info2)
+{
+    if (info1->m_connectState != info2->m_connectState) {
+        if (info1->m_connectState == 2) {
+            return true;
+        }
+
+        if (info2->m_connectState == 2) {
+            return false;
+        }
+    }
+    QString  name1 = info1->m_connectName;
+    QString  name2 = info2->m_connectName;
+    bool result = true;
+    if (QString::compare(name1, name2, Qt::CaseInsensitive) > 0) {
+        result =  false;
+    }
+    return result;
+}
+
 static void lanListSort(QList<KyConnectItem *> &list)
 {
     qSort(list.begin(), list.end(), subLanListSort);
+}
+
+static void vpnListSort(QList<KyConnectItem *> &list)
+{
+    qSort(list.begin(), list.end(), subVpnListSort);
 }
 
 KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
@@ -106,7 +150,7 @@ bool KyConnectResourse::isActiveDevice(QString conUuid, QString devName)
     return false;
 }
 
-KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, bool checkActive)
+KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
 {
     NetworkManager::Connection::Ptr connectPtr =
             m_networkResourceInstance->getConnect(connectUuid);
@@ -116,8 +160,27 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, 
         return nullptr;
     }
 
-    if (checkActive && m_networkResourceInstance->isActiveConnection(connectPtr->uuid())) {
+    if (m_networkResourceInstance->isActiveConnection(connectPtr->uuid())) {
         qDebug()<<"[KyConnectResourse]"<<connectPtr->name()<<"is active connection";
+        return nullptr;
+    }
+
+    KyConnectItem *connectItem = getConnectionItem(connectPtr, "");
+    if (nullptr != connectItem) {
+        //connectItem->dumpInfo();
+        return connectItem;
+    }
+
+    return nullptr;
+}
+
+KyConnectItem * KyConnectResourse::getConnectionItemByUuidWithoutActivateChecking(QString connectUuid)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+            m_networkResourceInstance->getConnect(connectUuid);
+
+    if (nullptr == connectPtr) {
+        qWarning()<< "[KyConnectResourse]" <<"get connect failed, connect uuid"<<connectUuid;
         return nullptr;
     }
 
@@ -210,6 +273,10 @@ void KyConnectResourse::getVpnAndVirtualConnections(QList<KyConnectItem *> &conn
         }
 
         connectPtr = nullptr;
+    }
+
+    if (connectItemList.size() > 1) {
+        vpnListSort(connectItemList);
     }
 }
 
@@ -656,11 +723,13 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
         return nullptr;
     }
 
+#ifdef CHECKDEVICE
     KyNetworkDeviceResourse deviceResource;
     if (!deviceResource.wirelessDeviceIsExist(settingPtr->interfaceName())) {
         qDebug() << "[KyConnectResourse]" <<"get ap item failed, the ap device is not exist yet";
         return nullptr;
     }
+#endif
 
     QByteArray rawSsid = wirelessSetting->ssid();
 
@@ -701,6 +770,18 @@ KyApConnectItem *KyConnectResourse::getApConnectionByUuid(QString connectUuid)
     KyApConnectItem *connectItem = getApConnectItem(connectPtr);
 
     return connectItem;
+}
+
+QString KyConnectResourse::getApConnectionPathByUuid(QString connectUuid)
+{
+    NetworkManager::Connection::Ptr connectPtr = nullptr;
+
+    connectPtr = m_networkResourceInstance->getConnect(connectUuid);
+    if (nullptr == connectPtr) {
+        return nullptr;
+    }
+
+    return connectPtr->path();
 }
 
 void KyConnectResourse::getApConnections(QList<KyApConnectItem *> &apConnectItemList)

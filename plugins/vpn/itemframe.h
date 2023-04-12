@@ -29,18 +29,18 @@ class ItemFrame : public QFrame
     Q_OBJECT
 public:
     ItemFrame(QWidget *parent = nullptr);
-    //单设备整体layout
-    QVBoxLayout * deviceLanLayout = nullptr;
-    //单设备列表Frame
-    QFrame * lanItemFrame = nullptr;
+    //VPN整体layout
+    QVBoxLayout * m_mainVLayout = nullptr;
+    //vpn列表Frame
+    QFrame * m_vpnFrame = nullptr;
     //单设备列表layout
-    QVBoxLayout * lanItemLayout = nullptr;
+    QVBoxLayout * m_vpnVLayout = nullptr;
     //item列表
-    QMap<QString, VpnItem *> itemMap;
+    QMap<QString, VpnItem *> m_itemMap;
 //    //已激活uuid
 //    QString uuid = "";
     //新建无线连接
-    AddNetBtn * addWlanWidget = nullptr;
+    AddNetBtn * m_addVpnWidget = nullptr;
     void filletStyleChange();
 };
 

@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = kylin-nm
 TEMPLATE = app
 
-CONFIG += c++14 qt warn_on link_pkgconfig
+CONFIG += c++14 qt warn_on link_pkgconfig no_keywords
 #CONFIG += release
 
 PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets kysdk-waylandhelper

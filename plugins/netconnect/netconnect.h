@@ -123,6 +123,10 @@ private:
     //单个lan连接状态变化
     void itemActiveConnectionStatusChanged(LanItem *item, int status);
 
+    bool LaunchApp(QString desktopFile);
+
+    bool isExitWiredDevice();
+
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 
@@ -141,6 +145,8 @@ private:
 
     QMap<QString, bool> deviceStatusMap;
     QMap<QString, ItemFrame *> deviceFrameMap;
+
+    bool               needLoad;
 
 private slots:
     void updateLanInfo(QString deviceName, QStringList lanInfo);

@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -14,6 +33,11 @@
 #include "lanpage.h"
 #include "wlanpage.h"
 #include "netdetails/netdetail.h"
+#include "netdetails/joinhiddenwifipage.h"
+//安全中心-网络防火墙模式配置
+#include "networkmodeconfig.h"
+//删除此头文件，别在添加
+//#include <ukuisdk/kylin-com4cxx.h>
 
 #ifdef WITHKYSEC
 #include <kysec/libkysec.h>
@@ -54,6 +78,11 @@ public:
     //获取热点
     void getStoredApInfo(QStringList &list);
     void getApInfoBySsid(QString devName, QString ssid, QStringList &list);
+
+    //获取热点path
+    void getApConnectionPath(QString &path, QString uuid);
+    //获取热点ActivePath
+    void getActiveConnectionPath(QString &path, QString uuid);
     //删除有线连接
     void deleteWired(const QString& connUuid);
     //有线连接断开
@@ -81,11 +110,14 @@ public:
     void keyRingInit();
     void keyRingClear();
 
-signals:
+    bool getWirelessSwitchBtnState();
+
+Q_SIGNALS:
     //设备插拔
     void deviceStatusChanged();
     //设备名称变化
     void deviceNameChanged(QString oldName, QString newName, int type);
+    void wirelessSwitchBtnChanged(bool state);
     //有线无线列表更新（有线增删、无线增加减少）
     void lanAdd(QString devName, QStringList info);
     void lanRemove(QString dbusPath);
@@ -98,7 +130,7 @@ signals:
     void deactivateFailed(QString errorMessage);
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
-    void hotspotActivated(QString devName, QString ssid, QString uuid);
+    void hotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath);
     //信号强度变化
     void signalStrengthChange(QString devName, QString ssid, int strength);
     //安全性变化
@@ -106,11 +138,11 @@ signals:
     void mainWindowVisibleChanged(const bool &visible);
     //列表排序
     void timeToUpdate();
-public slots:
+
+public Q_SLOTS:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
-    bool eventFilter(QObject *watched, QEvent *event) override;
     void paintEvent(QPaintEvent *event);
 
 private:
@@ -131,6 +163,8 @@ private:
     void resetWindowTheme();
     void showControlCenter();
     void showByWaylandHelper();
+
+    void setCentralWidgetType(IconActiveType iconStatus);
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
     int currentIconIndex=0;
@@ -158,8 +192,6 @@ private:
     QMenu * m_trayIconMenu = nullptr;
     QAction * m_showMainwindowAction = nullptr;
     QAction * m_showSettingsAction = nullptr;
-    uint m_intervalTime = 100;
-    uint m_registerCount = 0;
 
     bool m_lanIsLoading = false;
     bool m_wlanIsLoading = false;
@@ -169,12 +201,16 @@ private:
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
 
     QMap<QString, NetDetail*> m_createPagePtrMap;
-    QMap<QString, NetDetail*> m_addOtherPagePtrMap;
 
-public slots:
+    NetworkMode *m_networkMode;
+
+    uint m_intervalTime = 100;
+    uint m_registerCount = 0;
+
+public Q_SLOTS:
     void onShowMainWindow(int type);
 
-private slots:
+private Q_SLOTS:
     void onTransChanged();
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void onShowMainwindowActionTriggled();

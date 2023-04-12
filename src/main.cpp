@@ -16,6 +16,7 @@
  *
  */
 
+//#include "mainwindow.h"
 #include "mainwindow.h"
 #include "dbusadaptor.h"
 #include <QTranslator>
@@ -28,9 +29,6 @@
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 #include "xatom-helper.h"
 #endif
-
-#include "vpnobject.h"
-#include "vpndbusadaptor.h"
 
 #define LOG_IDENT "ukui_kylin_nm"
 
@@ -129,7 +127,7 @@ int main(int argc, char *argv[])
     QString locale = QLocale::system().name();
     QTranslator trans_global;
     qDebug() << "QLocale " << QLocale();
-    if (trans_global.load(QLocale(), "kylin-nm", "_", ":/translations/"))
+    if (trans_global.load(QLocale(), "kylin-nm", "_", "/usr/share/kylin-nm/kylin-nm/"))
     {
         a.installTranslator(&trans_global);
         qDebug()<<"Translations load success";
@@ -146,6 +144,15 @@ int main(int argc, char *argv[])
         qWarning() << "QtBase Translations load fail";
     }
 
+    QTranslator sdkTranslator;
+    if (sdkTranslator.load(QLocale(), "gui", "_", ":/translations/"))
+    {
+        a.installTranslator(&sdkTranslator);
+        qDebug()<<"SDK Translations load success";
+    } else {
+        qWarning() << "SDK Translations load fail";
+    }
+
     while (!p_networkResource->NetworkManagerIsInited()) {
         ::usleep(1000);
     }
@@ -153,22 +160,23 @@ int main(int argc, char *argv[])
     MainWindow w;
     a.setActivationWindow(&w);
     w.setProperty("useStyleWindowManager", false); //禁用拖动
+    a.setWindowIcon(QIcon::fromTheme("kylin-network"));
+    //设置窗口无边框，阴影
 
-    vpnObject vnpobject;
+//    MotifWmHints window_hints;
+//    window_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
+//    window_hints.functions = MWM_FUNC_ALL;
+//    window_hints.decorations = MWM_DECOR_BORDER;
+//    XAtomHelper::getInstance()->setWindowMotifHint(w.winId(), window_hints);
 
-    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint/* | Qt::X11BypassWindowManagerHint*/);
+    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint /*| Qt::X11BypassWindowManagerHint*/);
 
 
     DbusAdaptor adaptor(&w);
     Q_UNUSED(adaptor);
 
-    VpnDbusAdaptor vpnAdaptor(&vnpobject);
-    Q_UNUSED(vpnAdaptor);
-
     auto connection = QDBusConnection::sessionBus();
-    if (!connection.registerService("com.kylin.network")
-        || !connection.registerObject("/com/kylin/network", &w)
-        || !connection.registerObject("/com/kylin/vpnTool", &vnpobject)) {
+    if (!connection.registerService("com.kylin.network") || !connection.registerObject("/com/kylin/network", &w)) {
         qCritical() << "QDbus register service failed reason:" << connection.lastError();
     }
 

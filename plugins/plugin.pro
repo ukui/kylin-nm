@@ -4,4 +4,4 @@ SUBDIRS = \
     wlanconnect \
     mobilehotspot \
     proxy \
-    vpn \
+    vpn

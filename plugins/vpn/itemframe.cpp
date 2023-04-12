@@ -25,36 +25,36 @@
 ItemFrame::ItemFrame(QWidget *parent)
     :QFrame(parent)
 {
-    deviceLanLayout = new QVBoxLayout(this);
-    deviceLanLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
-    lanItemFrame = new QFrame(this);
-    lanItemFrame->setFrameShape(QFrame::Shape::NoFrame);
-    lanItemFrame->setContentsMargins(LAYOUT_MARGINS);
+    m_mainVLayout = new QVBoxLayout(this);
+    m_mainVLayout->setContentsMargins(MAIN_LAYOUT_MARGINS);
+    m_vpnFrame = new QFrame(this);
+    m_vpnFrame->setFrameShape(QFrame::Shape::NoFrame);
+    m_vpnFrame->setContentsMargins(LAYOUT_MARGINS);
 
-    lanItemLayout = new QVBoxLayout(this);
-    lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
-    lanItemLayout->setSpacing(1);
-    addWlanWidget = new AddNetBtn(false, this);
-    addWlanWidget->setTextLabel(tr("Add Vpn"));
+    m_vpnVLayout = new QVBoxLayout(this);
+    m_vpnVLayout->setContentsMargins(LAYOUT_MARGINS);
+    m_vpnVLayout->setSpacing(1);
+    m_addVpnWidget = new AddNetBtn(false, this);
+    m_addVpnWidget->setTextLabel(tr("Add Vpn"));
 
-    deviceLanLayout->setSpacing(1);
-    setLayout(deviceLanLayout);
-    lanItemFrame->setLayout(lanItemLayout);
+    m_mainVLayout->setSpacing(1);
+    setLayout(m_mainVLayout);
+    m_vpnFrame->setLayout(m_vpnVLayout);
 
-    deviceLanLayout->addWidget(lanItemFrame);
-    deviceLanLayout->addWidget(addWlanWidget);
+    m_mainVLayout->addWidget(m_vpnFrame);
+    m_mainVLayout->addWidget(m_addVpnWidget);
 }
 
 void ItemFrame::filletStyleChange()
 {
-    if (lanItemLayout->isEmpty()) {
+    if (m_vpnVLayout->isEmpty()) {
         return;
     }
 
-    for (int i = 0; i < lanItemLayout->count(); ++i) {
-        QLayoutItem *it = lanItemLayout->itemAt(i);
+    for (int i = 0; i < m_vpnVLayout->count(); ++i) {
+        QLayoutItem *it = m_vpnVLayout->itemAt(i);
         VpnItem *itemFrame = (VpnItem*)(it->widget());
-        if (i != lanItemLayout->count()-1) {
+        if (i != m_vpnVLayout->count()-1) {
             itemFrame->setHalfFillet(false);
         } else {
             itemFrame->setHalfFillet(true);

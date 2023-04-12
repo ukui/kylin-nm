@@ -56,7 +56,7 @@ void SwitchButton::setSwitchStatus(bool check) {
     } else {
         m_bIsOn = 0;
     }
-    emit this->switchStatusChanged();
+    Q_EMIT this->switchStatusChanged();
 
     m_cTimer->start(); //开始播放动画
 }

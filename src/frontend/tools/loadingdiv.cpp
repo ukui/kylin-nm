@@ -57,7 +57,7 @@ void LoadingDiv::switchAnimStep()
     }
     this->countCurrentTime += FRAMESPEED;
     if (this->countCurrentTime >= ALLTIME) {
-        emit this->toStopLoading(); //发出信号停止主界面和托盘区的等待动画
+        Q_EMIT this->toStopLoading(); //发出信号停止主界面和托盘区的等待动画
     }
 }
 

@@ -48,6 +48,10 @@
 #define SIGNAL_NONE      5
 #define ICON_SIZE 16,16
 
+#define KYLIN_APP_MANAGER_NAME           "com.kylin.AppManager"
+#define KYLIN_APP_MANAGER_PATH           "/com/kylin/AppManager"
+#define KYLIN_APP_MANAGER_INTERFACE      "com.kylin.AppManager"
+
 const QString WIRELESS_SWITCH = "wirelessswitch";
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 
@@ -137,7 +141,7 @@ WlanConnect::WlanConnect() :  m_firstLoad(true) {
     translator->load("/usr/share/kylin-nm/wlanconnect/" + QLocale::system().name());
     QApplication::installTranslator(translator);
 
-    pluginName = tr("WlanConnect");
+    pluginName = tr("WLAN");
     pluginType = NETWORK;
 }
 
@@ -148,7 +152,6 @@ WlanConnect::~WlanConnect()
         ui = nullptr;
     }
     delete m_interface;
-    delete m_switchGsettings;
 }
 
 QString WlanConnect::plugini18nName() {
@@ -174,6 +177,7 @@ QWidget *WlanConnect::pluginUi() {
         if(!m_interface->isValid()) {
             qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
+        initSearchText();
         initComponent();
     }
     return pluginWidget;
@@ -224,10 +228,12 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
 
     if (w == m_wifiSwitch) {
         if (e->type() == QMouseEvent::MouseButtonRelease) {
-            if (!m_wifiSwitch->isCheckable()) {
+            if (!getSwitchBtnEnable()) {
                 showDesktopNotify(tr("No wireless network card detected"));
             } else {
-                m_interface->call(QStringLiteral("setWirelessSwitchEnable"), !m_wifiSwitch->isChecked());
+                if (m_interface != nullptr && m_interface->isValid()) {
+                    m_interface->call(QStringLiteral("setWirelessSwitchEnable"), !getSwitchBtnState());
+                }
                 return true;
             }
         }
@@ -239,40 +245,27 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
 void WlanConnect::initComponent() {
     m_wifiSwitch = new KSwitchButton(pluginWidget);
     ui->openWIifLayout->addWidget(m_wifiSwitch);
+    ui->openWIifLayout->setContentsMargins(0,0,8,0);
     ui->detailLayOut_3->setContentsMargins(MAIN_LAYOUT_MARGINS);
     ui->verticalLayout_3->setContentsMargins(NO_MARGINS);
+    ui->verticalLayout_3->setSpacing(8);
     ui->availableLayout->setSpacing(SPACING);
 
     m_wifiSwitch->installEventFilter(this);
 
     //开关
-    if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA)) {
-        m_switchGsettings = new QGSettings(GSETTINGS_SCHEMA);
-
-        setSwitchStatus();
-
-        connect(m_switchGsettings, &QGSettings::changed, this, [=] (const QString &key) {
-            if (key == WIRELESS_SWITCH) {
-                setSwitchStatus();
-            }
-        });
-    } else {
-        m_wifiSwitch->blockSignals(true);
-        m_wifiSwitch->setChecked(true);
-        m_wifiSwitch->blockSignals(false);
-        qDebug()<<"[netconnect] org.ukui.kylin-nm.switch is not installed!";
-    }
+    initSwtichState();
 
     //获取设备列表
     getDeviceList(deviceList);
     if (deviceList.isEmpty()) {
         qDebug() << "[WlanConnect]no device exist when init, set switch disable";
-        m_wifiSwitch->setCheckable(false);
-        m_wifiSwitch->setChecked(false);
+        setSwitchBtnState(false);
+        setSwitchBtnEnable(false);
     }
     initNet();
 
-    if (!m_wifiSwitch->isChecked() || deviceList.isEmpty() || !m_interface->isValid()) {
+    if (!getSwitchBtnState() || deviceList.isEmpty() || !m_interface->isValid()) {
         hideLayout(ui->availableLayout);
     }
 
@@ -288,7 +281,7 @@ void WlanConnect::initComponent() {
 //    connect(m_interface, SIGNAL(signalStrengthChange(QString, QString, int)), this, SLOT(updateStrengthList(QString, QString, int)));
     //网卡name处理
     connect(m_interface, SIGNAL(deviceNameChanged(QString, QString, int)), this, SLOT(onDeviceNameChanged(QString, QString, int)), Qt::QueuedConnection);
-    
+    connect(m_interface, SIGNAL(wirelessSwitchBtnChanged(bool)), this, SLOT(onSwitchBtnChanged(bool)), Qt::QueuedConnection);
     connect(m_interface, SIGNAL(timeToUpdate()), this, SLOT(updateList()), Qt::QueuedConnection);
     //高级设置
     connect(ui->detailBtn, &QPushButton::clicked, this, [=](bool checked) {
@@ -310,7 +303,7 @@ void WlanConnect::initComponent() {
 void WlanConnect::reScan()
 {
     qDebug() << "time to rescan wifi";
-    if (m_interface->isValid()) {
+    if (m_interface != nullptr && m_interface->isValid()) {
         qDebug() << "[WlanConnect]call reScan" << __LINE__;
         m_interface->call("reScan");
         qDebug() << "[WlanConnect]call reScan respond" << __LINE__;
@@ -320,11 +313,11 @@ void WlanConnect::reScan()
 //更新列表顺序
 void WlanConnect::updateList()
 {
-    if (!m_wifiSwitch->isChecked()) {
+    if (!getSwitchBtnState()) {
         return;
     }
     qDebug() << "update list";
-    if(m_interface->isValid()) {
+    if(m_interface != nullptr && m_interface->isValid()) {
         qDebug() << "[WlanConnect]call getWirelessList" << __LINE__;
         QDBusMessage result = m_interface->call(QStringLiteral("getWirelessList"));
         qDebug() << "[WlanConnect]call getWirelessList respond" << __LINE__;
@@ -438,9 +431,9 @@ void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString sec
         iconamePath = wifiIcon(isLock, sign, category);
     }
     QIcon searchIcon = QIcon::fromTheme(iconamePath);
-    if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
-        item->iconLabel->setProperty("useIconHighlightEffect", 0x10);
-    }
+//    if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
+//        item->iconLabel->setProperty("useIconHighlightEffect", 0x10);
+//    }
     item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     qDebug() << "updateIcon" << item->titileLabel->text() << " finish";
 }
@@ -525,11 +518,17 @@ void WlanConnect::onDeviceStatusChanged()
     }
     deviceList = list;
     if (deviceList.isEmpty()) {
-        m_wifiSwitch->setCheckable(false);
-        m_wifiSwitch->setChecked(false);
+        setSwitchBtnState(false);
+        setSwitchBtnEnable(false);
     } else {
-        m_wifiSwitch->setCheckable(true);
-        setSwitchStatus();
+        setSwitchBtnEnable(true);
+        initSwtichState();
+    }
+
+    if (!getSwitchBtnState()) {
+        hideLayout(ui->availableLayout);
+    } else {
+        showLayout(ui->availableLayout);
     }
 }
 
@@ -558,10 +557,24 @@ void WlanConnect::onDeviceNameChanged(QString oldName, QString newName, int type
     }
 }
 
+void WlanConnect::onSwitchBtnChanged(bool state)
+{
+    if (getSwitchBtnState() == state) {
+        return;
+    }
+    setSwitchBtnEnable(true);
+    setSwitchBtnState(state);
+    if (!getSwitchBtnState()) {
+        hideLayout(ui->availableLayout);
+    } else {
+        showLayout(ui->availableLayout);
+    }
+}
+
 //activeconnect status change
 void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status)
 {
-    if (!m_wifiSwitch->isChecked()) {
+    if (!getSwitchBtnState()) {
         return;
     }
     if (uuid.isEmpty()) {
@@ -623,7 +636,7 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
 void WlanConnect::onNetworkAdd(QString deviceName, QStringList wlanInfo)
 {
     qDebug()<<"[WlanConnect]onNetworkAdd "<< deviceName << " " << wlanInfo;
-    if(!m_wifiSwitch->isChecked() || deviceName.isEmpty()) {
+    if(!getSwitchBtnState() || deviceName.isEmpty()) {
         return;
     }
 
@@ -676,7 +689,7 @@ void WlanConnect::onNetworkRemove(QString deviceName, QString wlannName)
 //获取设备列表=======================================================
 void WlanConnect::getDeviceList(QStringList &list)
 {
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[WlanConnect]call getDeviceListAndEnabled"  << __LINE__;
@@ -693,25 +706,23 @@ void WlanConnect::getDeviceList(QStringList &list)
     list = map.keys();
 }
 
-//设置开关
-void WlanConnect::setSwitchStatus()
+void WlanConnect::initSwtichState()
 {
-//    if (deviceList.size() == 0) {
-//        m_wifiSwitch->blockSignals(true);
-//        m_wifiSwitch->setChecked(false);
-//        m_wifiSwitch->blockSignals(false);
-//        return;
-//    }
-    bool status = m_switchGsettings->get(WIRELESS_SWITCH).toBool();
-    qDebug() << "[WlanConnect]setSwitchStatus" << status;
-    m_wifiSwitch->blockSignals(true);
-    m_wifiSwitch->setChecked(status);
-    m_wifiSwitch->blockSignals(false);
-    if (!m_wifiSwitch->isChecked()) {
-        hideLayout(ui->availableLayout);
-    } else {
-        showLayout(ui->availableLayout);
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
     }
+
+    QDBusMessage result = m_interface->call("getWirelessSwitchBtnState");
+    qDebug() << "[WlanConnect]call getWirelessSwitchBtnState respond" << __LINE__;
+    if(result.type() == QDBusMessage::ErrorMessage)
+    {
+        qWarning() << "[WlanConnect]getWirelessSwitchBtnState error:" << result.errorMessage();
+        return;
+    }
+
+    bool state = result.arguments().at(0).toBool();
+    setSwitchBtnEnable(true);
+    setSwitchBtnState(state);
 }
 
 //初始化整体列表和单设备列表
@@ -731,7 +742,7 @@ void WlanConnect::initNet() {
 void WlanConnect::initNetListFromDevice(QString deviceName)
 {
     qDebug() << "[WlanConnect]initNetListFromDevice " << deviceName;
-    if (!m_wifiSwitch->isChecked()) {
+    if (!getSwitchBtnState()) {
          qDebug() << "[WlanConnect]initNetListFromDevice " << deviceName << " switch off";
         return;
     }
@@ -739,7 +750,7 @@ void WlanConnect::initNetListFromDevice(QString deviceName)
         qDebug() << "[WlanConnect]initNetListFromDevice " << deviceName << " not exist";
         return;
     }
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[WlanConnect]call getWirelessList"  << __LINE__;
@@ -777,9 +788,11 @@ void WlanConnect::initNetListFromDevice(QString deviceName)
 
 //高级设置
 void WlanConnect::runExternalApp() {
-    QString cmd = "nm-connection-editor";
-    QProcess process(this);
-    process.startDetached(cmd);
+    if (!LaunchApp("nm-connection-editor.desktop")){
+        QString cmd = "nm-connection-editor";
+        QProcess process(this);
+        process.startDetached(cmd);
+    }
 }
 
 //根据信号强度分级+安全性分图标
@@ -872,6 +885,9 @@ void WlanConnect::showLayout(QVBoxLayout * layout) {
 //获取应该插入哪个位置
 int WlanConnect::sortWlanNet(QString deviceName, QString name, QString signal)
 {
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return 0;
+    }
     qDebug() << "[WlanConnect]call getWirelessList"  << __LINE__;
     QDBusMessage result = m_interface->call(QStringLiteral("getWirelessList"));
     qDebug() << "[WlanConnect]call getWirelessList respond"  << __LINE__;
@@ -898,7 +914,7 @@ int WlanConnect::sortWlanNet(QString deviceName, QString name, QString signal)
 }
 
 void WlanConnect::activeConnect(QString netName, QString deviceName, int type) {
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[WlanConnect]call activateConnect" << __LINE__;
@@ -907,7 +923,7 @@ void WlanConnect::activeConnect(QString netName, QString deviceName, int type) {
 }
 
 void WlanConnect::deActiveConnect(QString netName, QString deviceName, int type) {
-    if (!m_interface->isValid()) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
     qDebug() << "[WlanConnect]call deActivateConnect" << __LINE__;
@@ -960,7 +976,7 @@ void WlanConnect::addDeviceFrame(QString devName)
     deviceFrameMap.insert(devName, itemFrame);
 
     connect(itemFrame->addWlanWidget, &AddNetBtn::clicked, this, [=](){
-        if (m_interface->isValid()) {
+        if (m_interface != nullptr && m_interface->isValid()) {
             qDebug() << "[NetConnect]call showAddOtherWlanWidget" << devName  << __LINE__;
             m_interface->call(QStringLiteral("showAddOtherWlanWidget"), devName);
             qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
@@ -1012,9 +1028,9 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     } else {
         iconamePath = wifiIcon(isLock, sign, category);
     }
-    if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
-        wlanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
-    }
+//    if (iconamePath != KLanSymbolic && iconamePath != NoNetSymbolic) {
+//        wlanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
+//    }
     QIcon searchIcon = QIcon::fromTheme(iconamePath);
     wlanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     wlanItem->titileLabel->setText(name);
@@ -1026,9 +1042,9 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
         wlanItem->statusLabel->setText("");
     }
 
-    connect(wlanItem->infoLabel, &InfoButton::clicked, this, [=]{
+    connect(wlanItem->infoLabel, &GrayInfoButton::clicked, this, [=]{
         // open detail page
-        if (!m_interface->isValid()) {
+        if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
         qDebug() << "[WlanConnect]call showPropertyWidget" << __LINE__;
@@ -1094,3 +1110,18 @@ void WlanConnect::itemActiveConnectionStatusChanged(WlanItem *item, int status)
     }
 }
 
+bool WlanConnect::LaunchApp(QString desktopFile)
+{
+    QDBusInterface m_appManagerDbusInterface(KYLIN_APP_MANAGER_NAME,
+                                             KYLIN_APP_MANAGER_PATH,
+                                             KYLIN_APP_MANAGER_INTERFACE,
+                                             QDBusConnection::sessionBus());//局部变量
+
+    if (!m_appManagerDbusInterface.isValid()) {
+        qWarning()<<"m_appManagerDbusInterface init error";
+        return false;
+    } else {
+        QDBusReply<bool> reply =m_appManagerDbusInterface.call("LaunchApp",desktopFile);
+        return reply;
+    }
+}

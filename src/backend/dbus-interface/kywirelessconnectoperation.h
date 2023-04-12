@@ -1,3 +1,22 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * Copyright (C) 2022 Tianjin KYLIN Information Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 #ifndef KYWIRELESSCONNECTOPERATION_H
 #define KYWIRELESSCONNECTOPERATION_H
 
@@ -7,6 +26,9 @@
 #include "kyenterpricesettinginfo.h"
 #include "kylinconnectoperation.h"
 #include "kyenterpricesettinginfo.h"
+
+#define KEY_802_11_WIRELESS "802-11-wireless"
+#define KEY_BLACKLIST_HOSTNAME "blacklist-hostname"
 
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 const QString    WIRELESS_SWITCH  = "wirelessswitch";
@@ -96,7 +118,7 @@ public:
     void addAndActiveWirelessEnterPriseLeapConnect(KyEapMethodLeapInfo &info, KyWirelessConnectSetting &connSettingInfo,
                                                    QString & devIface, bool isHidden);
     void addAndActiveWirelessEnterPrisePwdConnect(KyEapMethodPwdInfo &info, KyWirelessConnectSetting &connSettingInfo,
-                                                   QString & devIface, bool isHidden);
+                                                  QString & devIface, bool isHidden);
     void addAndActiveWirelessEnterPriseFastConnect(KyEapMethodFastInfo &info, KyWirelessConnectSetting &connSettingInfo,
                                                    QString & devIface, bool isHidden);
     //属性页 page1 AutoConnect
@@ -138,8 +160,10 @@ private:
                                                                   const QString apPassword,
                                                                   const QString apDevice,
                                                                   const QString wirelessBand);
+    QStringList getBlackListHostName(QString apConnectPath);
 
-signals:
+
+Q_SIGNALS:
     void wifiEnabledChanged(bool);
     void enabledWirelessNetwork(bool enabled);
     void addAndActivateConnectionError(QString errorMessage);

@@ -1,3 +1,9 @@
+kylin-nm (4.0.0.0-ok4) yangtz; urgency=medium
+
+  * remove kysec 
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 12 Apr 2023 19:28:57 +0800
+
 kylin-nm (4.0.0.0-ok3) yangtze; urgency=medium
 
   * #include <QPainterPath>

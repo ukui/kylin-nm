@@ -1,3 +1,9 @@
+kylin-nm (4.0.0.0-ok2) yangtze; urgency=medium
+
+  * remove wired switch
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 12 Apr 2023 18:44:10 +0800
+
 kylin-nm (4.0.0.0-ok1) yangtze; urgency=medium
 
   * merge upstream

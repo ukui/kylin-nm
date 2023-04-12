@@ -1,0 +1,92 @@
+kylin-nm (4.0.0.0-ok1) yangtze; urgency=medium
+
+  * merge upstream
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 12 Apr 2023 17:09:37 +0800
+
+kylin-nm (3.14.0.0+0512-3k15) yangtze; urgency=medium
+
+  * QSystemTrayIcon register
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 06 Jan 2023 16:22:59 +0800
+
+kylin-nm (3.14.0.0+0512-3k14) yangtze; urgency=medium
+
+  * add include QPainterPath
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 05 Jan 2023 16:27:10 +0800
+
+kylin-nm (3.14.0.0+0512-3k13) yangtze; urgency=medium
+
+  * 增加三种企业网加密方式LEAP PWD FAST
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Mon, 26 Dec 2022 16:11:31 +0800
+
+kylin-nm (3.14.0.0+0512-3k12) yangtze; urgency=medium
+
+  * vpn页面增加
+  * dns优化
+  * tabBar圆角 
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 16 Dec 2022 12:04:41 +0800
+
+kylin-nm (3.14.0.0+0512-3k11) yangtz; urgency=medium
+
+  * 合并3.22需求
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Mon, 21 Nov 2022 15:31:28 +0800
+
+kylin-nm (3.14.0.0+0512-2k11) yangtz; urgency=medium
+
+  * 修改因有线连接未指定网卡造成VPN托盘崩溃的问题
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 21 Oct 2022 16:35:19 +0800
+
+kylin-nm (3.14.0.0+0512-2k10) yangtz; urgency=medium
+
+  * 托盘vpn需求
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 20 Oct 2022 20:21:39 +0800
+
+kylin-nm (3.14.0.0+0512-1k10) yangtz; urgency=medium
+
+  * 同步3.22需求
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 19 Oct 2022 10:01:07 +0800
+
+kylin-nm (3.14.0.0+0512-0k10) yangtz; urgency=medium
+
+  * close-cd #131075 【网络】普通用户在详情界面修改网络IP信息时会弹出授权框，如果不进行授权详情界面也会显示修改成功，但是实际未修改
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 18 Aug 2022 17:09:12 +0800
+
+kylin-nm (3.14.0.0+0512-0k9) yangtz; urgency=medium
+
+  * close-cd #131247 登录界面连接wifi后，登录桌面任务栏网络工具显示未连接，wifi依旧关闭状态
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 03 Aug 2022 16:12:40 +0800
+
+kylin-nm (3.14.0.0+0512-0k8) yangtz; urgency=medium
+
+  * close-cd #127890 开启无线局域网后关闭，重新打开控制面板，无线局域网处显示网卡名称
+  * close-cd #128339 连接WIFI过程中点击忘记此WIFI，之后密码仍保留在输入框内
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Mon, 18 Jul 2022 10:54:25 +0800
+
+kylin-nm (3.14.0.0+0512-0k7~0707) yangtz; urgency=medium
+
+  * Fix mobilehotspot segmentation fault and init wlanSwitchEnable status.
+  * close-cd #91326 【控制面板】-首页图标、左侧导航线性图标可以跟随主题切换
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 22 Jun 2022 09:44:33 +0800
+
+kylin-nm (3.14.0.0+0512-0k5) yangtz; urgency=medium
+
+  * set window frameless.
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Mon, 20 Jun 2022 16:01:48 +0800
+
+kylin-nm (3.14.0.0+0512-0k4) yangtze; urgency=medium
+
+  * Initial for openKylin.
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 17 Jun 2022 11:46:09 +0800

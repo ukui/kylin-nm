@@ -1,0 +1,14 @@
+#!/bin/sh
+ 
+set -e
+ 
+PROGRAM=$(dpkg-divert --truename /usr/bin/kylin-nm)
+
+if setcap cap_net_raw+ep $PROGRAM; then
+    chmod u-s $PROGRAM
+fi
+
+echo "kylin nm set cap success"
+
+exit 0
+

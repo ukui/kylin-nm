@@ -210,6 +210,9 @@ private:
         }
     }
 
+    void checkShowWifi6();
+    bool m_showWifi6 = true;
+
 private:
     QMap<QString, QListWidgetItem*> m_wirelessNetItemMap;
     QMap<QString, QListWidgetItem*> m_activateConnectionItemMap;

@@ -560,6 +560,12 @@ void LanPage::deleteDeviceFromCombox(QString deviceName)
     disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
                this, &LanPage::onDeviceComboxIndexChanged);
 
+
+    if (m_devList.isEmpty()) {
+        m_tipsLabel->hide();
+        m_deviceFrame->hide();
+        m_deviceComboBox->hide();
+    }
 //    if (m_netSwitch->isChecked()) {
         if (0 == m_enableDeviceList.count()) {
             //1、没有使能任何网卡

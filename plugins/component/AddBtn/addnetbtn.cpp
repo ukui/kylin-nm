@@ -47,7 +47,7 @@ AddNetBtn::AddNetBtn(bool isWlan, QWidget *parent) : QPushButton(parent)
     } else {
         textLabel->setText(tr("Add WiredNetork"));
         QIcon mAddIcon = QIcon::fromTheme("list-add-symbolic");
-        iconLabel->setPixmap(mAddIcon.pixmap(mAddIcon.actualSize(QSize(24, 24))));
+        iconLabel->setPixmap(mAddIcon.pixmap(mAddIcon.actualSize(QSize(16, 16))));
         iconLabel->setProperty("useIconHighlightEffect", 0x2);
 //        iconLabel->setProperty("iconHighlightEffectMode", 1);
 
@@ -79,17 +79,17 @@ void AddNetBtn::leaveEvent(QEvent *event){
 
 void AddNetBtn::paintEvent(QPaintEvent *event)
 {
-    QPalette pal = qApp->palette();
+//    QPalette pal = qApp->palette();
 
     QPainter painter(this);
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
     painter.setBrush(this->palette().base().color());
 
-    QColor color = pal.color(QPalette::Button);
-    color.setAlphaF(0.5);
-    pal.setColor(QPalette::Button, color);
-    this->setPalette(pal);
+//    QColor color = pal.color(QPalette::Button);
+//    color.setAlphaF(0.5);
+//    pal.setColor(QPalette::Button, color);
+//    this->setPalette(pal);
 
     QRect rect = this->rect();
     QPainterPath path;

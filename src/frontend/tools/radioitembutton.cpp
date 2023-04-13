@@ -19,6 +19,7 @@
  */
 #include "radioitembutton.h"
 #include <QPainter>
+#include <QPainterPath>
 #include <QSvgRenderer>
 #include <QApplication>
 #include <QStyle>

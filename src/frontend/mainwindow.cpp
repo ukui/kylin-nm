@@ -25,6 +25,7 @@
 #include <QDBusReply>
 #include <QKeyEvent>
 #include <QProcess>
+#include <QPainterPath>
 
 #include "kylinnetworkdeviceresource.h"
 #include "../backend/dbus-interface/kylinagentinterface.h"
@@ -383,6 +384,7 @@ void MainWindow::initDbusConnnect()
 
     connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this,[&](WId activeWindowId){
         if (activeWindowId != this->winId() && activeWindowId != 0) {
+            qDebug() << "tray recieve KWindowSystem activeWindowChanged" << activeWindowId << this->winId();
             hideMainwindow();
         }
     });

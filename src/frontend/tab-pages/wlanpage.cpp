@@ -70,6 +70,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceRemove, this, &WlanPage::onDeviceRemove);
     connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceNameUpdate, this, &WlanPage::onDeviceNameUpdate);
 
+    connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceManagedChange, this, &WlanPage::onDeviceManagedChanged);
     connect(m_netDeviceResource, &KyNetworkDeviceResourse::stateChanged, this, &WlanPage::onWlanStateChanged);
 
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::activateConnectionError, this, &WlanPage::activateFailed);
@@ -241,6 +242,17 @@ void WlanPage::initDevice()
     m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, m_devList);
 
     m_currentDevice = getDefaultDeviceName(WIRELESS);
+
+    if (m_devList.count() == 0) {
+        return;
+    }
+    for (int index = m_devList.count() - 1; index >= 0; --index) {
+        if (!m_netDeviceResource->getDeviceManaged(m_devList.at(index))) {
+            //删除未托管网卡
+            qDebug() << LOG_FLAG << "delete unmanaged device" << m_devList.at(index);
+            m_devList.removeOne(m_devList.at(index));
+        }
+    }
     return;
 }
 
@@ -703,7 +715,7 @@ void WlanPage::addDeviceToCombox(QString deviceName)
             m_deviceFrame->hide();
             m_currentDevice = deviceName;
             setDefaultDevice(WIRELESS, m_currentDevice);
-        } else if (m_deviceComboBox->count() == 0) {
+        } else if (m_deviceComboBox->count() == 0 && m_currentDevice != deviceName) {
             m_deviceComboBox->addItem(m_currentDevice);
             m_deviceComboBox->addItem(deviceName);
             m_deviceFrame->show();
@@ -762,7 +774,7 @@ void WlanPage::deleteDeviceFromCombox(QString deviceName)
             m_currentDevice = m_devList.at(0);
             setDefaultDevice(WIRELESS, m_currentDevice);
         } else {
-            int index = m_deviceComboBox->findData(deviceName);
+            int index = m_deviceComboBox->findText(deviceName);
             if (-1 != index) {
                 m_deviceComboBox->removeItem(index);
                 m_currentDevice = m_deviceComboBox->currentText();
@@ -854,6 +866,20 @@ void WlanPage::onWlanStateChanged(NetworkManager::Device::State newstate, Networ
     initDeviceCombox();
     initWlanArea();
     Q_EMIT wirelessSwitchBtnChanged(getSwitchBtnState());
+}
+
+void WlanPage::onDeviceManagedChanged(QString deviceName, bool managed)
+{
+    if (managed && !m_devList.contains(deviceName)) {
+        //添加新增托管网卡
+        onDeviceAdd(deviceName, NetworkManager::Device::Type::Wifi);
+        qDebug() << LOG_FLAG << "add managed device" << deviceName;
+    }
+    if (!managed && m_devList.contains(deviceName)) {
+        //删除未托管网卡
+        onDeviceRemove(deviceName);
+        qDebug() << LOG_FLAG << "delete unmanaged device" << deviceName;
+    }
 }
 
 void WlanPage::sendApStateChangeSignal(QString uuid,

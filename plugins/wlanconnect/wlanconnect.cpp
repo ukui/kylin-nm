@@ -997,7 +997,7 @@ void WlanConnect::removeDeviceFrame(QString devName)
             while ((layoutItem = item->lanItemFrame->layout()->takeAt(0)) != NULL) {
                 delete layoutItem->widget();
                 delete layoutItem;
-                item = nullptr;
+                layoutItem = nullptr;
             }
             item->itemMap.clear();
         }

@@ -434,7 +434,9 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
         if (!wirelessDevList.isEmpty()) {
             for (int i = 0; i < wirelessDevList.size(); ++i) {
                 QString devName = wirelessDevList.at(i);
-                map.insert(devName, kdr->getDeviceManaged(devName));
+                if (kdr->getDeviceManaged(devName)) {
+                    map.insert(devName, kdr->getDeviceManaged(devName));
+                }
             }
         }
     }

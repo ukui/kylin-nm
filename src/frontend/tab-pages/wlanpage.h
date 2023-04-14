@@ -129,6 +129,7 @@ private Q_SLOTS:
     void onRefreshIconTimer();
 
     void onWlanStateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason);
+    void onDeviceManagedChanged(QString deviceName, bool managed);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);

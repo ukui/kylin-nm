@@ -225,7 +225,7 @@ void WlanListItem::leaveEvent(QEvent *event)
     //qDebug()<< LOG_FLAG <<"leaveEvent"<< m_wirelessNetItem.m_NetSsid;
     m_mouseIsOut = true;
     m_hoverButton->hide();
-    if (m_connectState == Activated) {
+    if (m_connectState == Activated || m_connectState == Deactivating) {
         m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
         m_lbLoadUp->show();
         m_lbLoadDown->show();

@@ -282,12 +282,12 @@ void ListItem::initUI()
     m_hItemLayout->addSpacing(8);
     m_hItemLayout->addWidget(m_freq);
     m_hItemLayout->addStretch();
+    m_hItemLayout->addSpacing(8);
     m_hItemLayout->addWidget(m_lbLoadUpImg);
     m_hItemLayout->addWidget(m_lbLoadUp);
     m_hItemLayout->addSpacing(2);
     m_hItemLayout->addWidget(m_lbLoadDownImg);
     m_hItemLayout->addWidget(m_lbLoadDown);
-    m_hItemLayout->addSpacing(2);
     m_hItemLayout->addWidget(m_hoverButton);
 //    m_hItemLayout->addWidget(m_infoButton);
 
@@ -351,6 +351,7 @@ void NameLabel::changedLabelSlot()
     QFontMetrics  fontMetrics(this->font());
     int fontSize = fontMetrics.width(m_name);
     if (fontSize > m_maximumWidth) {
+        this->setFixedWidth(m_maximumWidth - 2);
         setText(fontMetrics.elidedText(m_name, Qt::ElideRight, m_maximumWidth));
         setToolTip(m_name);
     } else {

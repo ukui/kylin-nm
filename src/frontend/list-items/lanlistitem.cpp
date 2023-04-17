@@ -276,7 +276,7 @@ void LanListItem::enterEvent(QEvent *event)
 void LanListItem::leaveEvent(QEvent *event)
 {
     m_hoverButton->hide();
-    if (m_lanConnectItem.m_connectState == Activated) {
+    if (m_lanConnectItem.m_connectState == Activated || m_connectState == Deactivating) {
         m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
         m_lbLoadUp->show();
         m_lbLoadDown->show();

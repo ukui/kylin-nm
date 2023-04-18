@@ -5,6 +5,7 @@ CONFIG += ordered \
 
 SUBDIRS = \
     plugins/plugin.pro \
+    src-vpn/src-vpn.pro \
         src \
 
 TRANSLATIONS += \

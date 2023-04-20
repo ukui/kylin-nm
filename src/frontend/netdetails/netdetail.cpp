@@ -528,6 +528,8 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
                 securityPage->setPwdInfo(m_info.pwdInfo);
             } else if (m_info.enterpriseType == FAST) {
                 securityPage->setFastInfo(m_info.fastInfo);
+            } else {
+                qWarning() << "[NetDetail] unknown enterprise connection type" << m_info.enterpriseType;
             }
         }
     }
@@ -745,6 +747,8 @@ void NetDetail::initSecuData()
             initPwdInfo(m_info);
         } else  if (m_info.enterpriseType == FAST){
             initFastInfo(m_info);
+        } else {
+            qWarning() << "[NetDetail] unknown enterprise connection type" << m_info.enterpriseType;
         }
         break;
     default:
@@ -906,6 +910,8 @@ void NetDetail::updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType)
     } else if (enterpriseType == FAST) {
         securityPage->updateFastChange(m_info.fastInfo);
         m_wirelessConnOpration->updateWirelessEnterPriseFastConnect(m_uuid, m_info.fastInfo);
+    } else {
+        qWarning() << "[NetDetail] unknow enterprise connection type";
     }
 }
 
@@ -1038,6 +1044,8 @@ bool NetDetail::createWirelessConnect()
                 qDebug() << "addAndConnect FAST connect";
                 m_wirelessConnOpration->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connetSetting, m_deviceName, true);
             }
+        } else {
+            qWarning() << "[NetDetail] unknown enterprise connection type" << enterpriseType;
         }
     } else {
         securityPage->updateSecurityChange(connetSetting);

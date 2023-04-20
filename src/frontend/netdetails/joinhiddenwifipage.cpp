@@ -25,7 +25,7 @@
 #define COLOR_THEME "styleName"
 #define  WINDOW_WIDTH  480
 #define  MIN_WINDOW_HEIGHT  368
-#define  PEAP_WINDOW_HEIGHT  524
+#define  EAPMIN_WINDOW_HEIGHT  524
 #define  TLS_WINDOW_HEIGHT  580
 #define  LAYOUT_MARGINS  0, 0, 0, 0
 #define  TOP_LAYOUT_MARGINS  24, 12, 24, 16
@@ -215,9 +215,18 @@ void JoinHiddenWiFiPage::onBtnJoinClicked()
         } else if (eapType == PEAP) {
             m_secuWidget->updatePeapChange(m_info.peapInfo);
             m_wirelessConnOpration->addAndActiveWirelessEnterPrisePeapConnect(m_info.peapInfo, connSettingInfo, m_devName, true);
-        } else if (eapType = TTLS) {
+        } else if (eapType == TTLS) {
             m_secuWidget->updateTtlsChange(m_info.ttlsInfo);
             m_wirelessConnOpration->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connSettingInfo, m_devName, true);
+        } else if (eapType == LEAP) {
+            m_secuWidget->updateLeapChange(m_info.leapInfo);
+            m_wirelessConnOpration->addAndActiveWirelessEnterPriseLeapConnect(m_info.leapInfo, connSettingInfo, m_devName, true);
+        } else if (eapType == PWD) {
+            m_secuWidget->updatePwdChange(m_info.pwdInfo);
+            m_wirelessConnOpration->addAndActiveWirelessEnterPrisePwdConnect(m_info.pwdInfo, connSettingInfo, m_devName, true);
+        } else if (eapType == FAST) {
+            m_secuWidget->updateFastChange(m_info.fastInfo);
+            m_wirelessConnOpration->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connSettingInfo, m_devName, true);
         }
     } else {
         m_secuWidget->updateSecurityChange(connSettingInfo);
@@ -241,10 +250,10 @@ void JoinHiddenWiFiPage::onSecuTypeChanged(const KySecuType &type)
 
 void JoinHiddenWiFiPage::onEapTypeChanged(const KyEapMethodType &type)
 {
-    if (type == KyEapMethodType::TLS) {
+    if (type == KyEapMethodType::TLS || type == KyEapMethodType::FAST) {
         this->setFixedHeight(TLS_WINDOW_HEIGHT);
-    } else if (type == KyEapMethodType::PEAP || type == KyEapMethodType::TTLS) {
-        this->setFixedHeight(PEAP_WINDOW_HEIGHT);
+    } else {
+        this->setFixedHeight(EAPMIN_WINDOW_HEIGHT);
     }
 }
 

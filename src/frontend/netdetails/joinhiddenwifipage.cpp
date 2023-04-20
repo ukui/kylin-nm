@@ -35,9 +35,7 @@
 #define  LABEL_MIN_WIDTH  146
 #define  LABEL_MAX_WIDTH  434
 #define  MAX_NAME_LENGTH 32
-#define  PSK_SCRO_HEIGHT  182
-#define  PEAP_SCRO_HEIGHT  340
-#define  TLS_SCRO_HEIGHT  560
+#define  SCROAREA_WIDTH  480
 #define  MEDIUM_WEIGHT_VALUE  57
 
 JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
@@ -49,7 +47,6 @@ JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
     initUI();
     initComponent();
 
-    setFixedWidth(WINDOW_WIDTH);
     setAttribute(Qt::WA_DeleteOnClose);
 
     setJoinBtnEnable();
@@ -121,8 +118,11 @@ void JoinHiddenWiFiPage::initUI()
     m_centerVBoxLayout->addWidget(ssidWidget);
     m_centerVBoxLayout->addSpacing(LAYOUT_SPACING);
     m_centerVBoxLayout->addWidget(m_secuWidget);
-    m_centerVBoxLayout->addStretch();
+
+    m_centerWidget->setFixedWidth(SCROAREA_WIDTH);
+    m_hiddenWifiScrollArea->setFixedWidth(SCROAREA_WIDTH);
     m_hiddenWifiScrollArea->setWidget(m_centerWidget);
+    m_hiddenWifiScrollArea->setWidgetResizable(true);
 
     //底部按钮
     m_bottomLayout = new QHBoxLayout(m_bottomWidget);
@@ -149,7 +149,7 @@ void JoinHiddenWiFiPage::initUI()
 
    this->setWindowTitle(tr("Find and Join Wi-Fi"));
    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
-
+   this->setFixedWidth(WINDOW_WIDTH);
    this->setFixedHeight(MIN_WINDOW_HEIGHT);
    onPaletteChanged();
 }
@@ -236,7 +236,6 @@ void JoinHiddenWiFiPage::onSecuTypeChanged(const KySecuType &type)
 {
     if (type != KySecuType::WPA_AND_WPA2_ENTERPRISE) {
         this->setFixedHeight(MIN_WINDOW_HEIGHT);
-        m_centerWidget->setFixedSize(WINDOW_WIDTH, PSK_SCRO_HEIGHT);
     }
 }
 
@@ -244,10 +243,8 @@ void JoinHiddenWiFiPage::onEapTypeChanged(const KyEapMethodType &type)
 {
     if (type == KyEapMethodType::TLS) {
         this->setFixedHeight(TLS_WINDOW_HEIGHT);
-        m_centerWidget->setFixedSize(WINDOW_WIDTH, TLS_SCRO_HEIGHT);
     } else if (type == KyEapMethodType::PEAP || type == KyEapMethodType::TTLS) {
         this->setFixedHeight(PEAP_WINDOW_HEIGHT);
-        m_centerWidget->setFixedSize(WINDOW_WIDTH, PEAP_SCRO_HEIGHT);
     }
 }
 

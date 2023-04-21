@@ -609,7 +609,7 @@ void MobileHotspotWidget::setInterFaceFrame()
     hintTextColor.setColor(QPalette::WindowText, Qt::red);
     m_interfaceWarnLabel->setPalette(hintTextColor);
 
-    warnTextHLayout->setSpacing(8);
+    warnTextHLayout->setSpacing(0);
     warnTextHLayout->setContentsMargins(0,0,0,0);
     warnTextHLayout->addWidget(warnIcon);
     warnTextHLayout->addWidget(m_interfaceWarnLabel);

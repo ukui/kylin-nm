@@ -13,34 +13,9 @@
 #include <QFormLayout>
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QPainter>
 
 #include "kyvpnconnectoperation.h"
-
-#define VPNADDPAGE_MAINLAYOUT_MARGINS 0, 12, 0, 12
-#define VPNADDPAGE_ITEM_MARGINS 24, 0, 24, 0
-#define VPNADDPAGE_NULLMAGINS 0, 0, 0, 0
-
-#define VPNADDPAGE_SIZE 520,312
-#define VPNADDPAGE_FRAME_FIXEDSIZE 520, 60
-#define VPNADDPAGE_BUTTON_FIXEDSIZE 96, 36
-
-#define VPNADDPAGE_NULLSPACE 0
-#define VPNADDPAGE_BUTTON_SPACE 16
-#define VPNADDPAGE_NAME_MAX_LENGTH 32
-#define VPNADDPAGE_LABLE_FIXEDWIDTH 112
-#define VPNADDPAGE_COMBOBOX_FIXEDWIDTH 360
-#define VPNADDPAGE_INPUTBOX_FIXEDWIDTH 360
-
-#define VPNDETAILPAGE_ITEM_MARGINS 24, 0, 24, 0
-#define VPNDETAILPAGE_NULLMAGINS 0, 0, 0, 0
-
-#define VPNDETAILPAGE_FRAME_FIXEDSIZE 520, 60
-#define VPNDETAILPAGE_BUTTON_FIXEDSIZE 96, 36
-
-#define VPNDETAILPAGE_NULLSPACE 0
-#define VPNDETAILPAGE_BUTTON_SPACE 16
-
-
 
 class vpnAddPage : public QWidget
 {
@@ -49,6 +24,9 @@ public:
     explicit vpnAddPage(QWidget *parent = nullptr);
     void centerToScreen();
     ~vpnAddPage();
+
+protected:
+    void paintEvent(QPaintEvent *event);
 
 private:
     void initWindow();
@@ -63,7 +41,6 @@ private:
     bool checkConfimBtnIsEnabled();
     bool createVpnConnect();
 
-private:
     QFrame *m_vpnTypeFrame = nullptr;
     QFrame *m_vpnNameFrame = nullptr;
     QFrame *m_vpnServerFrame = nullptr;

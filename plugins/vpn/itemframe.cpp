@@ -35,7 +35,7 @@ ItemFrame::ItemFrame(QWidget *parent)
     m_vpnVLayout->setContentsMargins(LAYOUT_MARGINS);
     m_vpnVLayout->setSpacing(1);
     m_addVpnWidget = new AddNetBtn(false, this);
-    m_addVpnWidget->setTextLabel(tr("Add Vpn"));
+    m_addVpnWidget->setTextLabel(tr("Add VPN"));
 
     m_mainVLayout->setSpacing(1);
     setLayout(m_mainVLayout);

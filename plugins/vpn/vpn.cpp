@@ -65,7 +65,7 @@ Vpn::Vpn() : m_firstLoad(true)
     translator->load("/usr/share/kylin-nm/vpn/" + QLocale::system().name());
     QApplication::installTranslator(translator);
 
-    m_pluginName = tr("Vpn");
+    m_pluginName = tr("VPN");
     m_pluginType = NETWORK;
 }
 

@@ -42,9 +42,34 @@ static bool subLanListSort(const KyConnectItem* info1, const KyConnectItem* info
     return result;
 }
 
+static bool subVpnListSort(const KyConnectItem* info1, const KyConnectItem* info2)
+{
+    if (info1->m_connectState != info2->m_connectState) {
+        if (info1->m_connectState == 2) {
+            return true;
+        }
+
+        if (info2->m_connectState == 2) {
+            return false;
+        }
+    }
+    QString  name1 = info1->m_connectName;
+    QString  name2 = info2->m_connectName;
+    bool result = true;
+    if (QString::compare(name1, name2, Qt::CaseInsensitive) > 0) {
+        result =  false;
+    }
+    return result;
+}
+
 static void lanListSort(QList<KyConnectItem *> &list)
 {
     qSort(list.begin(), list.end(), subLanListSort);
+}
+
+static void vpnListSort(QList<KyConnectItem *> &list)
+{
+    qSort(list.begin(), list.end(), subVpnListSort);
 }
 
 KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
@@ -198,6 +223,61 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, 
     }
 
     return nullptr;
+}
+
+void KyConnectResourse::getVpnAndVirtualConnections(QList<KyConnectItem *> &connectItemList)
+{
+    int index = 0;
+    NetworkManager::Connection::List connectList;
+
+    qDebug()<<"[KyConnectResourse]"<<"get vpn && virtual connections";
+
+    connectList.clear();
+    connectList = m_networkResourceInstance->getConnectList();
+
+    if (connectList.empty()) {
+        qWarning()<<"[KyConnectResourse]"<<"get vpn connections failed, the connect list is empty";
+        return;
+    }
+
+    NetworkManager::Connection::Ptr connectPtr = nullptr;
+    for (index = 0; index < connectList.size(); index++) {
+        connectPtr = connectList.at(index);
+        if (connectPtr.isNull()) {
+            continue;
+        }
+        if (NetworkManager::ConnectionSettings::ConnectionType::Vpn != connectPtr->settings()->connectionType()
+            && NetworkManager::ConnectionSettings::ConnectionType::Bond != connectPtr->settings()->connectionType()
+            && NetworkManager::ConnectionSettings::ConnectionType::Bridge != connectPtr->settings()->connectionType()
+            && NetworkManager::ConnectionSettings::ConnectionType::Vlan != connectPtr->settings()->connectionType()
+            && NetworkManager::ConnectionSettings::ConnectionType::Team != connectPtr->settings()->connectionType()
+            && NetworkManager::ConnectionSettings::ConnectionType::IpTunnel != connectPtr->settings()->connectionType()
+            && NetworkManager::ConnectionSettings::ConnectionType::Wired != connectPtr->settings()->connectionType()) {
+            continue;
+        }
+        NetworkManager::Device::Ptr devicePtr = nullptr;
+        devicePtr = m_networkResourceInstance->findDeviceInterface(connectPtr->settings()->interfaceName());
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wired == connectPtr->settings()->connectionType()) {
+            if (devicePtr == nullptr || !devicePtr->udi().startsWith("/sys/devices/virtual/net")) {
+                continue;
+            }
+        }
+        QString devName = "";
+        if (!devicePtr.isNull()) {
+            devName = devicePtr->interfaceName();
+        }
+
+        KyConnectItem *connectItem = getConnectionItem(connectPtr, devName);
+        if (nullptr != connectItem) {
+            connectItemList << connectItem;
+        }
+
+        connectPtr = nullptr;
+    }
+
+    if (connectItemList.size() > 1) {
+        vpnListSort(connectItemList);
+    }
 }
 
 void KyConnectResourse::getConnectionList(QString deviceName,
@@ -746,6 +826,35 @@ void KyConnectResourse::getApConnections(QList<KyApConnectItem *> &apConnectItem
     return;
 }
 
+bool KyConnectResourse::isVirtualConncection(QString uuid)
+{
+    NetworkManager::Connection::Ptr connectPtr = nullptr;
+
+    connectPtr = m_networkResourceInstance->getConnect(uuid);
+    if (nullptr == connectPtr) {
+        return false;
+    }
+
+    if (NetworkManager::ConnectionSettings::ConnectionType::Vpn == connectPtr->settings()->connectionType()
+      ||NetworkManager::ConnectionSettings::ConnectionType::Bond == connectPtr->settings()->connectionType()
+      ||NetworkManager::ConnectionSettings::ConnectionType::Bridge == connectPtr->settings()->connectionType()
+      ||NetworkManager::ConnectionSettings::ConnectionType::Vlan == connectPtr->settings()->connectionType()
+      ||NetworkManager::ConnectionSettings::ConnectionType::Team == connectPtr->settings()->connectionType()
+      ||NetworkManager::ConnectionSettings::ConnectionType::IpTunnel == connectPtr->settings()->connectionType()) {
+        return true;
+    }
+
+    NetworkManager::Device::Ptr devicePtr = nullptr;
+    devicePtr = m_networkResourceInstance->findDeviceInterface(connectPtr->settings()->interfaceName());
+    if (devicePtr.isNull()) {
+        return false;
+    }
+    if (devicePtr->udi().startsWith("/sys/devices/virtual/net")) {
+        return true;
+    }
+
+    return false;
+}
 
 bool KyConnectResourse::isWiredConnection(QString uuid)
 {

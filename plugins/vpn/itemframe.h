@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -17,38 +17,31 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
-#ifndef ADDNETBTN_H
-#define ADDNETBTN_H
+#ifndef ITEMFRAME_H
+#define ITEMFRAME_H
+#include <QFrame>
+#include <QVBoxLayout>
+#include "../component/AddBtn/addnetbtn.h"
+#include "vpnitem.h"
 
-#include <QObject>
-#include <QWidget>
-#include <QPushButton>
-#include <QTranslator>
-#include <QApplication>
-#include <QLabel>
-
-class AddNetBtn : public QPushButton
+class ItemFrame : public QFrame
 {
     Q_OBJECT
 public:
-    AddNetBtn(bool isWlan, QWidget *parent = nullptr);
-    ~AddNetBtn();
-
-    void setTextLabel(const QString str) {
-        m_textLabel->setText(str);
-    }
-
-protected:
-    virtual void leaveEvent(QEvent * event);
-    virtual void enterEvent(QEvent * event);
-    void paintEvent(QPaintEvent *event);
-
-private:
-    QLabel *m_textLabel;
-
-Q_SIGNALS:
-    void enterWidget();
-    void leaveWidget();
+    ItemFrame(QWidget *parent = nullptr);
+    //VPN整体layout
+    QVBoxLayout * m_mainVLayout = nullptr;
+    //vpn列表Frame
+    QFrame * m_vpnFrame = nullptr;
+    //单设备列表layout
+    QVBoxLayout * m_vpnVLayout = nullptr;
+    //item列表
+    QMap<QString, VpnItem *> m_itemMap;
+//    //已激活uuid
+//    QString uuid = "";
+    //新建无线连接
+    AddNetBtn * m_addVpnWidget = nullptr;
+    void filletStyleChange();
 };
 
-#endif // ADDNETBTN_H
+#endif // ITEMFRAME_H

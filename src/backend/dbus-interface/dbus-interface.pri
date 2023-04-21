@@ -21,6 +21,7 @@ HEADERS += \
     $$PWD/kywirelessconnectoperation.h \
     $$PWD/kywirelessnetitem.h \
     $$PWD/kywirelessnetresource.h \
+    $$PWD/kyvpnconnectoperation.h \
     $$PWD/nm-macros-internal.h
 
 SOURCES += \
@@ -42,5 +43,6 @@ SOURCES += \
     $$PWD/kylinwiredconnectoperation.cpp \
     $$PWD/kywirelessconnectoperation.cpp \
     $$PWD/kywirelessnetitem.cpp \
+    $$PWD/kyvpnconnectoperation.cpp \
     $$PWD/kywirelessnetresource.cpp
 

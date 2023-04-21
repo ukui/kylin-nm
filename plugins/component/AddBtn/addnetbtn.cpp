@@ -37,15 +37,15 @@ AddNetBtn::AddNetBtn(bool isWlan, QWidget *parent) : QPushButton(parent)
 
     QHBoxLayout *addLyt = new QHBoxLayout;
 
-    QLabel *iconLabel = new QLabel();
-    QLabel *textLabel = new QLabel();
+    QLabel *iconLabel = new QLabel(this);
+    m_textLabel = new QLabel(this);
 
     if (isWlan) {
-        textLabel->setText(tr("Add Others"));
+        m_textLabel->setText(tr("Add Others"));
         addLyt->addSpacing(8);
-        addLyt->addWidget(textLabel);
+        addLyt->addWidget(m_textLabel);
     } else {
-        textLabel->setText(tr("Add WiredNetork"));
+        m_textLabel->setText(tr("Add WiredNetork"));
         QIcon mAddIcon = QIcon::fromTheme("list-add-symbolic");
         iconLabel->setPixmap(mAddIcon.pixmap(mAddIcon.actualSize(QSize(16, 16))));
         iconLabel->setProperty("useIconHighlightEffect", 0x2);
@@ -53,7 +53,7 @@ AddNetBtn::AddNetBtn(bool isWlan, QWidget *parent) : QPushButton(parent)
 
         addLyt->addStretch();
         addLyt->addWidget(iconLabel);
-        addLyt->addWidget(textLabel);
+        addLyt->addWidget(m_textLabel);
     }
 
     addLyt->addStretch();

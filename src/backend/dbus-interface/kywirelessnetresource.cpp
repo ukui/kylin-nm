@@ -724,7 +724,7 @@ bool KyWirelessNetResource::getEnterPriseInfoFast(QString &uuid, KyEapMethodFast
 
     info.m_anonIdentity = setting->anonymousIdentity();
     info.m_pacProvisioning = (KyFastProvisioning)setting->phase1FastProvisioning();
-    info.m_pacFilePath = setting->caPath();
+    info.m_pacFilePath = setting->pacFile();
     if (info.m_pacFilePath.left(7) == "file://") {
         info.m_pacFilePath = info.m_pacFilePath.mid(7);
     }

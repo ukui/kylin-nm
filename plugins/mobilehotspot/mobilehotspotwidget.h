@@ -87,6 +87,9 @@ private:
     QComboBox *m_freqBandComboBox;
     QComboBox *m_interfaceComboBox;
 
+    QLabel *m_interfaceWarnLabel;
+    QWidget* m_warnWidget;
+
     QDBusInterface  *m_interface = nullptr;
 
     QString m_interfaceName = "";
@@ -158,6 +161,8 @@ private slots:
     void onApLineEditTextEdit(QString text);
 
     void onPwdTextChanged();
+
+    void onInterfaceChanged();
 };
 
 #endif // MOBILEHOTSPOTWIDGET_H

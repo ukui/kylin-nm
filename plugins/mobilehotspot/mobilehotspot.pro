@@ -4,6 +4,11 @@ CONFIG += plugin
 
 TARGET = $$qtLibraryTarget(mobilehotspot)
 DESTDIR = ../..
+
+CONFIG(release, debug|release) {
+    !system($$PWD/translate_generation.sh): error("Failed to generate translation")
+}
+
 target.path = $$[QT_INSTALL_LIBS]/ukui-control-center
 trans.files = translations/*
 trans.path = /usr/share/kylin-nm/mobilehotspot/

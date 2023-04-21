@@ -66,7 +66,7 @@
         <translation>ukui ཚོད་འཛིན་ལྟེ་གནས་ཀྱི་ཅོག་ངོས་ཆ་འཕྲིན།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="149"/>
+        <location filename="../mobilehotspotwidget.cpp" line="151"/>
         <source>wirless switch is close or no wireless device</source>
         <translation>སྐུད་མེད་གློག་སྒོ་རྒྱག་པའམ་ཡང་ན་སྐུད་མེད་སྒྲིག་ཆས་མེད་པ།</translation>
     </message>
@@ -75,7 +75,7 @@
         <translation type="vanished">སྒོ་རྒྱག་འགོ་བརྩམས།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="169"/>
+        <location filename="../mobilehotspotwidget.cpp" line="171"/>
         <source>hotpots name or device is invalid</source>
         <translation>ཚ་བ་ཆེ་བའི་མིང་ངམ་སྒྲིག་ཆས་ལ་ནུས་པ་མེད།</translation>
     </message>
@@ -88,49 +88,59 @@
         <translation type="vanished">ཀུན་གྱིས་དོ་སྣང་བྱེད་ཡུལ་གསར་སྐྲུན་བྱེད་འགོ་ </translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="490"/>
+        <location filename="../mobilehotspotwidget.cpp" line="536"/>
         <source>Contains at least 8 characters</source>
         <translation>མ་མཐར་ཡང་ཡིག་རྟགས་བརྒྱད་འདུས་ཡོད།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="223"/>
+        <location filename="../mobilehotspotwidget.cpp" line="225"/>
         <source>Hotspot</source>
         <translation>ཚ་བ་ཆེ་བ།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="310"/>
-        <location filename="../mobilehotspotwidget.cpp" line="605"/>
+        <location filename="../mobilehotspotwidget.cpp" line="336"/>
+        <source>use </source>
+        <translation>བེད་སྤྱོད།</translation>
+    </message>
+    <message>
+        <location filename="../mobilehotspotwidget.cpp" line="337"/>
+        <source> share network, will interrupt local wireless connection</source>
+        <translation>གླེང་མང་མཉམ་སྤྱོད་བྱས་ནས་འཕྲུལ་ཆས་ཀྱི་སྐུད་མེད་དྲ་བ་སྦྲེལ་མཐུད་བྱེད་ངེས་རེད།</translation>
+    </message>
+    <message>
+        <location filename="../mobilehotspotwidget.cpp" line="353"/>
+        <location filename="../mobilehotspotwidget.cpp" line="681"/>
         <source>hotspot already close</source>
         <translation>ཚ་བ་ཆེ་བའི་གནད་དོན་ཐག་ཉེ་རུ་སོང་ཡོད།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="436"/>
+        <location filename="../mobilehotspotwidget.cpp" line="482"/>
         <source>Open</source>
         <translation>སྒོ་ཕྱེ་བ།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="457"/>
+        <location filename="../mobilehotspotwidget.cpp" line="503"/>
         <source>Wi-Fi Name</source>
         <translation>Wi-Fiཡི་མིང་།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="478"/>
+        <location filename="../mobilehotspotwidget.cpp" line="524"/>
         <source>Password</source>
         <translation>གསང་གྲངས།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="519"/>
+        <location filename="../mobilehotspotwidget.cpp" line="565"/>
         <source>Frequency band</source>
         <translation>ཐེངས་གྲངས་ཀྱི་རོལ་ཆའི་རུ་ཁག</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="545"/>
+        <location filename="../mobilehotspotwidget.cpp" line="589"/>
         <source>Net card</source>
         <translation>དྲ་རྒྱའི་བྱང་བུ།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="635"/>
-        <location filename="../mobilehotspotwidget.cpp" line="643"/>
+        <location filename="../mobilehotspotwidget.cpp" line="711"/>
+        <location filename="../mobilehotspotwidget.cpp" line="719"/>
         <source>hotspot already open</source>
         <translation>ཚ་བ་ཆེ་བའི་གནད་དོན་དེ་སྒོ་ཕྱེ་ཟིན།</translation>
     </message>

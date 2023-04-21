@@ -1,3 +1,16 @@
+kylin-nm (3.20.1.17-0k0.20) v101; urgency=medium
+
+  * BUG号：
+  * 需求号：
+     -#19030 企业网络新增LEAP PWD FAST类型支持
+     -#16989 作为一名用户希望新建的虚拟类型网络可方便快速的的查看、连接等
+     -#21788 提示连接无线网络时进行热点共享不可用
+     -#21163 VPN连接显示需求
+  * 其他改动：无
+  * 影响域：自身
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 21 Apr 2023 17:56:17 +0800
+
 kylin-nm (3.20.1.17-0k0.19) v101; urgency=medium
 
   * BUG号：

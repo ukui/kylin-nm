@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     QString locale = QLocale::system().name();
     QTranslator trans_global;
     qDebug() << "QLocale " << QLocale();
-    if (trans_global.load(QLocale(), "kylin-vpn", "_", ":/translations/"))
+    if (trans_global.load(QLocale(), "kylin-vpn", "_", "/usr/share/kylin-nm/kylin-vpn/"))
     {
         a.installTranslator(&trans_global);
         qDebug()<<"Translations load success";

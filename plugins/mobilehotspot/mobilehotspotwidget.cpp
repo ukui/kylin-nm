@@ -114,10 +114,12 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
     m_Vlayout->addStretch();
 
     connect(m_switchBtn, &KSwitchButton::stateChanged, this, &MobileHotspotWidget::setUiEnabled);
+    connect(m_interfaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MobileHotspotWidget::onInterfaceChanged);
     connect(m_interfaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=]() {
         m_interfaceName = m_interfaceComboBox->currentText();
         updateBandCombox();
     });
+    onInterfaceChanged();
 
 #ifdef HOTSPOT_CONTROL
     m_connectDevPage->refreshStalist();
@@ -304,6 +306,47 @@ void MobileHotspotWidget::onPwdTextChanged()
     this->update();
 }
 
+void MobileHotspotWidget::onInterfaceChanged()
+{
+    m_interfaceName = m_interfaceComboBox->currentText();
+    if(m_interface->isValid()) {
+        QDBusMessage result = m_interface->call(QStringLiteral("getWirelessList"));
+        if(result.type() == QDBusMessage::ErrorMessage)
+        {
+            qWarning() << "getWirelessList error:" << result.errorMessage();
+            return;
+        }
+        bool flag = false;
+        auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
+        QMap<QString, QVector<QStringList>> variantList;
+        dbusArg >> variantList;
+        if (variantList.size() != 0) {
+            QMap<QString, QVector<QStringList>>::iterator iter;
+            for (iter = variantList.begin(); iter != variantList.end(); iter++) {
+                if (m_interfaceName == iter.key()) {
+                    QVector<QStringList> wlanListInfo = iter.value();
+                    if (!wlanListInfo.isEmpty() && wlanListInfo.at(0).size() > 1) {
+                        flag = true;
+                    }
+                    break;
+                }
+            }
+        }
+        if (flag) {
+            m_interfaceWarnLabel->setText(tr("use ") + m_interfaceName +
+                                    tr(" share network, will interrupt local wireless connection"));
+            m_interfaceFrame->setFixedHeight(PASSWORD_FRAME_FIX_HIGHT);
+            m_warnWidget->show();
+        } else {
+            m_interfaceFrame->setFixedHeight(PASSWORD_FRAME_MIN_HIGHT);
+            m_warnWidget->hide();
+        }
+        resetFrameSize();
+    }
+
+    updateBandCombox();
+}
+
 void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status)
 {
     if(m_uuid == uuid && status == 4) {
@@ -312,11 +355,14 @@ void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString 
         setUiEnabled(false);
         m_uuid.clear();
     }
+    if (m_interfaceComboBox) {
+        onInterfaceChanged();
+    }
 }
 
 void MobileHotspotWidget::onWirelessBtnChanged(bool state)
 {
-   if (!state) {
+    if (!state) {
         m_switchBtn->setChecked(state);
         m_uuid.clear();
         m_switchBtn->setCheckable(false);
@@ -537,25 +583,55 @@ void MobileHotspotWidget::setInterFaceFrame()
     /* key tips */
     m_interfaceFrame = new QFrame(this);
     m_interfaceFrame->setFrameShape(QFrame::Shape::NoFrame);
-    m_interfaceFrame->setMinimumSize(FRAME_MIN_SIZE);
-    m_interfaceFrame->setMaximumSize(CONTECT_FRAME_MAX_SIZE);
-
-    QHBoxLayout *interfaceHLayout = new QHBoxLayout(m_interfaceFrame);
+    m_interfaceFrame->setMinimumSize(PASSWORD_FRAME_MIN_SIZE);
+    m_interfaceFrame->setMaximumSize(PASSWORD_FRAME_MAX_SIZE);
 
     m_interfaceLabel = new QLabel(tr("Net card"), this);
     m_interfaceLabel->setMinimumWidth(LABLE_MIN_WIDTH);
     m_interfaceComboBox = new QComboBox(this);
     m_interfaceComboBox->setInsertPolicy(QComboBox::NoInsert);
     m_interfaceComboBox->setMinimumWidth(COMBOBOX_MIN_WIDTH);
-    m_interfaceComboBox->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    interfaceHLayout->setContentsMargins(ITEM_MARGINS);
-    interfaceHLayout->setSpacing(0);
-    interfaceHLayout->addWidget(m_interfaceLabel);
-    interfaceHLayout->addWidget(m_interfaceComboBox);
 
-    m_interfaceFrame->setLayout(interfaceHLayout);
+    m_warnWidget = new QWidget(this);
+    m_warnWidget->setFixedHeight(20);
+    m_warnWidget->setContentsMargins(8,0,0,0);
+
+    QHBoxLayout *warnTextHLayout = new QHBoxLayout(m_warnWidget);
+    QLabel* warnIcon = new QLabel(this);
+    warnIcon->setContentsMargins(0,0,0,0);
+    warnIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(16,16));
+
+    m_interfaceWarnLabel= new QLabel(this);
+    m_interfaceWarnLabel->setFixedHeight(20);
+    m_interfaceWarnLabel->setContentsMargins(HINT_TEXT_MARGINS);
+
+    QPalette hintTextColor;
+    hintTextColor.setColor(QPalette::WindowText, Qt::red);
+    m_interfaceWarnLabel->setPalette(hintTextColor);
+
+    warnTextHLayout->setSpacing(8);
+    warnTextHLayout->setContentsMargins(0,0,0,0);
+    warnTextHLayout->addWidget(warnIcon);
+    warnTextHLayout->addWidget(m_interfaceWarnLabel);
+    warnTextHLayout->addStretch();
+    m_warnWidget->setLayout(warnTextHLayout);
+
+    QWidget *pwdInputWidget = new QWidget(m_interfaceFrame);
+    QVBoxLayout *pwdInputVLayout = new QVBoxLayout(pwdInputWidget);
+    pwdInputVLayout->setContentsMargins(CONTENTS_MARGINS);
+    pwdInputVLayout->setSpacing(0);
+    pwdInputVLayout->addWidget(m_interfaceComboBox);
+    pwdInputVLayout->addWidget(m_warnWidget);
+
+    QFormLayout *interfaceFLayout = new QFormLayout(m_interfaceFrame);
+    interfaceFLayout->setContentsMargins(PASSWORD_ITEM_MARGINS);
+    interfaceFLayout->setSpacing(0);
+    interfaceFLayout->addRow(m_interfaceLabel, pwdInputWidget);
+
+    m_interfaceFrame->setLayout(interfaceFLayout);
+
+    m_warnWidget->hide();
 }
-
 void MobileHotspotWidget::onActivateFailed(QString errorMessage)
 {
     if (errorMessage.indexOf("hotspot")) {

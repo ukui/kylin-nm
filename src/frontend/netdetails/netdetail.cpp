@@ -39,7 +39,6 @@
 #define  CENTER_LAYOUT_MARGINS 24,0,0,0
 #define  BOTTOM_LAYOUT_MARGINS 24,0,24,0
 #define  BOTTOM_LAYOUT_SPACING 16
-#define  PAGE_LAYOUT_SPACING 1
 #define  DETAIL_PAGE_NUM 0
 #define  IPV4_PAGE_NUM 1
 #define  IPV6_PAGE_NUM 2
@@ -47,9 +46,11 @@
 #define  CONFIG_PAGE_NUM 4
 #define  CREATE_NET_PAGE_NUM 5
 #define  PAGE_MIN_HEIGHT 40
+#define  PAGE_WIDTH 472
 #define  LAN_TAB_WIDTH 180
 #define  WLAN_TAB_WIDTH 240
-#define  SCRO_WIDTH 472
+#define  SCRO_WIDTH 496
+#define  SCRO_HEIGHT 600
 #define  PEAP_SCRO_HEIGHT  300
 #define  TLS_SCRO_HEIGHT  480
 #define  MAX_TAB_TEXT_LENGTH 44
@@ -167,7 +168,7 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     getConInfo(m_info);
     startObjectThread();
     pagePadding(name,isWlan);
-    setSecuPageHeight();
+
     connect(qApp, &QApplication::paletteChanged, this, &NetDetail::onPaletteChanged);
 
     isCreateOk = !(m_isCreateNet && !isWlan);
@@ -283,49 +284,61 @@ void NetDetail::initUI()
     mainLayout->setContentsMargins(0,9,0,24);
     mainLayout->setSpacing(24);
 
-    detailPage = new DetailPage(isWlan, m_name.isEmpty(), this);
+    this->installEventFilter(this);
+    pageFrame = new QFrame(this);
+    centerWidget = new QWidget(this);
+    bottomWidget = new QWidget(this);
 
+    detailPage = new DetailPage(isWlan, m_name.isEmpty(), this);
     ipv4Page = new Ipv4Page(this);
     ipv6Page = new Ipv6Page(this);
     securityPage = new SecurityPage(this);
     createNetPage = new CreatNetPage(this);
     configPage = new ConfigPage(this);
 
-    this->installEventFilter(this);
+    detailPage->setFixedWidth(PAGE_WIDTH);
+    ipv4Page->setFixedWidth(PAGE_WIDTH);
+    ipv6Page->setFixedWidth(PAGE_WIDTH);
+    securityPage->setFixedWidth(PAGE_WIDTH);
+    createNetPage->setFixedWidth(PAGE_WIDTH);
+    configPage->setFixedWidth(PAGE_WIDTH);
 
-    centerWidget = new QWidget(this);
-    bottomWidget = new QWidget(this);
 
-    m_secuPageScrollArea = new QScrollArea(this);
+    // 滚动区域
+    m_secuPageScrollArea = new QScrollArea(centerWidget);
+    m_secuPageScrollArea->setFixedWidth(SCRO_WIDTH);
     m_secuPageScrollArea->setFrameShape(QFrame::NoFrame);
     m_secuPageScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_secuPageScrollArea->setWidget(securityPage);
+    m_secuPageScrollArea->setWidgetResizable(true);
+
+    m_ipv4ScrollArea = new QScrollArea(centerWidget);
+    m_ipv4ScrollArea->setFixedWidth(SCRO_WIDTH);
+    m_ipv4ScrollArea->setFrameShape(QFrame::NoFrame);
+    m_ipv4ScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_ipv4ScrollArea->setWidget(ipv4Page);
+    m_ipv4ScrollArea->setWidgetResizable(true);
+
+    m_ipv6ScrollArea = new QScrollArea(centerWidget);
+    m_ipv6ScrollArea->setFixedWidth(SCRO_WIDTH);
+    m_ipv6ScrollArea->setFrameShape(QFrame::NoFrame);
+    m_ipv6ScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_ipv6ScrollArea->setWidget(ipv6Page);
+    m_ipv6ScrollArea->setWidgetResizable(true);
+
     QPalette pal = m_secuPageScrollArea->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));
     m_secuPageScrollArea->setPalette(pal);
-
-    detailPage->setFixedWidth(SCRO_WIDTH);
-    ipv4Page->setFixedWidth(SCRO_WIDTH);
-    ipv6Page->setFixedWidth(SCRO_WIDTH);
-    createNetPage->setFixedWidth(SCRO_WIDTH);
-    configPage->setFixedWidth(SCRO_WIDTH);
+    m_ipv4ScrollArea->setPalette(pal);
+    m_ipv6ScrollArea->setPalette(pal);
 
     stackWidget = new QStackedWidget(centerWidget);
     stackWidget->addWidget(detailPage);
-    stackWidget->addWidget(ipv4Page);
-    stackWidget->addWidget(ipv6Page);
+    stackWidget->addWidget(m_ipv4ScrollArea);
+    stackWidget->addWidget(m_ipv6ScrollArea);
     stackWidget->addWidget(m_secuPageScrollArea);
     stackWidget->addWidget(configPage);
     stackWidget->addWidget(createNetPage);
-
-    mainLayout->addWidget(centerWidget);
-    mainLayout->addWidget(bottomWidget);
-
-    bottomWidget->setMinimumHeight(PAGE_MIN_HEIGHT);
-
-    pageFrame = new QFrame(this);
-    QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
-//    pageLayout->setSpacing(PAGE_LAYOUT_SPACING);
 
     // TabBar
     onPaletteChanged();
@@ -351,25 +364,22 @@ void NetDetail::initUI()
         }
     }
 
-    pageLayout->addWidget(m_netTabBar, Qt::AlignCenter);
-    pageLayout->addSpacing(24);
-
     // TabBar关联选项卡页面
     connect(m_netTabBar, SIGNAL(currentChanged(int)), this, SLOT(currentRowChangeSlot(int)));
     setNetTabToolTip();
 
     confimBtn = new QPushButton(this);
     confimBtn->setText(tr("Confirm"));
-
     cancelBtn = new QPushButton(this);
     cancelBtn->setText(tr("Cancel"));
-
     forgetBtn = new QPushButton(this);
+
+    QHBoxLayout *pageLayout = new QHBoxLayout(pageFrame);
+    pageLayout->setContentsMargins(0, 0, 0, 0);
+    pageLayout->addWidget(m_netTabBar, Qt::AlignCenter);
 
     QVBoxLayout *centerlayout = new QVBoxLayout(centerWidget);
     centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS); // 右边距为0，为安全页滚动区域留出空间
-    centerlayout->addWidget(pageFrame);
-    centerlayout->addSpacing(4);
     centerlayout->addWidget(stackWidget);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout(bottomWidget);
@@ -379,9 +389,12 @@ void NetDetail::initUI()
     bottomLayout->addStretch();
     bottomLayout->addWidget(cancelBtn);
     bottomLayout->addWidget(confimBtn);
+    bottomWidget->setMinimumHeight(PAGE_MIN_HEIGHT);
 
-//    QPalette pal(this->palette());
-//    pal.setColor(QPalette::Background, qApp->palette().base().color());
+    mainLayout->addWidget(pageFrame);
+    mainLayout->addWidget(centerWidget);
+    mainLayout->addWidget(bottomWidget);
+
     this->setAutoFillBackground(true);
 //    this->setPalette(pal);
 }
@@ -444,13 +457,6 @@ void NetDetail::initComponent()
     connect(securityPage, &SecurityPage::setSecuPageState, this, [=](bool status) {
        isSecuOk = status;
        setConfirmEnable();
-    });
-
-    connect(securityPage, &SecurityPage::secuTypeChanged, this, [=]() {
-        setSecuPageHeight();
-    });
-    connect(securityPage, &SecurityPage::eapTypeChanged, this, [=]() {
-        setSecuPageHeight();
     });
 
     const QByteArray id(THEME_SCHAME);
@@ -521,6 +527,14 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
                 securityPage->setPeapInfo(m_info.peapInfo);
             } else if (m_info.enterpriseType == TTLS) {
                 securityPage->setTtlsInfo(m_info.ttlsInfo);
+            } else if (m_info.enterpriseType == LEAP) {
+                securityPage->setLeapInfo(m_info.leapInfo);
+            } else if (m_info.enterpriseType == PWD) {
+                securityPage->setPwdInfo(m_info.pwdInfo);
+            } else if (m_info.enterpriseType == FAST) {
+                securityPage->setFastInfo(m_info.fastInfo);
+            } else {
+                qWarning() << "[NetDetail] unknown enterprise connection type" << m_info.enterpriseType;
             }
         }
     }
@@ -714,32 +728,24 @@ void NetDetail::initSecuData()
     case WPA_AND_WPA2_ENTERPRISE:
         if (!m_wirelessConnOpration->getEnterpiseEapMethod(m_uuid, m_info.enterpriseType)) {
             qDebug() << m_name << "not enterprise wifi";
-        } else if (m_info.enterpriseType == TLS){
+        } else if (m_info.enterpriseType == TLS) {
             initTlsInfo(m_info);
-        } else if (m_info.enterpriseType == PEAP){
+        } else if (m_info.enterpriseType == PEAP) {
             initPeapInfo(m_info);
-        } else {
+        } else if (m_info.enterpriseType == TTLS) {
             initTtlsInfo(m_info);
+        } else if (m_info.enterpriseType == LEAP) {
+            initLeapInfo(m_info);
+        } else if (m_info.enterpriseType == PWD) {
+            initPwdInfo(m_info);
+        } else if (m_info.enterpriseType == FAST) {
+            initFastInfo(m_info);
+        } else {
+            qWarning() << "[NetDetail] unknown enterprise connection type" << m_info.enterpriseType;
         }
         break;
     default:
         break;
-    }
-}
-
-void NetDetail::setSecuPageHeight()
-{
-    KySecuType secuType;
-    KyEapMethodType eapType;
-    securityPage->getSecuType(secuType, eapType);
-    if (secuType == WPA_AND_WPA2_ENTERPRISE) {
-        if (eapType == TLS) {
-            securityPage->setFixedSize(SCRO_WIDTH, TLS_SCRO_HEIGHT);
-        } else {
-            securityPage->setFixedSize(SCRO_WIDTH, PEAP_SCRO_HEIGHT);
-        }
-    } else {
-        securityPage->setFixedSize(SCRO_WIDTH, PEAP_SCRO_HEIGHT);
     }
 }
 
@@ -756,6 +762,21 @@ void NetDetail::initPeapInfo(ConInfo &conInfo)
 void NetDetail::initTtlsInfo(ConInfo &conInfo)
 {
     m_resource->getEnterPriseInfoTtls(m_uuid, conInfo.ttlsInfo);
+}
+
+void NetDetail::initLeapInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoLeap(m_uuid, conInfo.leapInfo);
+}
+
+void NetDetail::initPwdInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoPwd(m_uuid, conInfo.pwdInfo);
+}
+
+void NetDetail::initFastInfo(ConInfo &conInfo)
+{
+    m_resource->getEnterPriseInfoFast(m_uuid, conInfo.fastInfo);
 }
 
 //点击了保存更改网络设置的按钮
@@ -873,6 +894,17 @@ void NetDetail::updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType)
     } else if (enterpriseType == TTLS) {
         securityPage->updateTtlsChange(m_info.ttlsInfo);
         m_wirelessConnOpration->updateWirelessEnterPriseTtlsConnect(m_uuid, m_info.ttlsInfo);
+    } else if (enterpriseType == LEAP) {
+        securityPage->updateLeapChange(m_info.leapInfo);
+        m_wirelessConnOpration->updateWirelessEnterPriseLeapConnect(m_uuid, m_info.leapInfo);
+    } else if (enterpriseType == PWD) {
+        securityPage->updatePwdChange(m_info.pwdInfo);
+        m_wirelessConnOpration->updateWirelessEnterPrisePwdConnect(m_uuid, m_info.pwdInfo);
+    } else if (enterpriseType == FAST) {
+        securityPage->updateFastChange(m_info.fastInfo);
+        m_wirelessConnOpration->updateWirelessEnterPriseFastConnect(m_uuid, m_info.fastInfo);
+    } else {
+        qWarning() << "[NetDetail] unknown enterprise connection type" << enterpriseType;
     }
 }
 
@@ -978,6 +1010,35 @@ bool NetDetail::createWirelessConnect()
                 qDebug() << "addAndConnect TTLS connect";
                 m_wirelessConnOpration->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, true);
             }
+        } else if (enterpriseType == LEAP) {
+            securityPage->updateLeapChange(m_info.leapInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new LEAP connect";
+                m_wirelessConnOpration->addLeapConnect(connetSetting, m_info.leapInfo);
+            } else {
+                qDebug() << "addAndConnect LEAP connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPriseLeapConnect(m_info.leapInfo, connetSetting, m_deviceName, true);
+            }
+        } else if (enterpriseType == PWD) {
+            securityPage->updatePwdChange(m_info.pwdInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new PWD connect";
+                m_wirelessConnOpration->addPwdConnect(connetSetting, m_info.pwdInfo);
+            } else {
+                qDebug() << "addAndConnect PWD connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPrisePwdConnect(m_info.pwdInfo, connetSetting, m_deviceName, true);
+            }
+        } else if (enterpriseType == FAST) {
+            securityPage->updateFastChange(m_info.fastInfo);
+            if (!m_name.isEmpty()) {
+                qDebug() << "add new FAST connect";
+                m_wirelessConnOpration->addFastConnect(connetSetting, m_info.fastInfo);
+            } else {
+                qDebug() << "addAndConnect FAST connect";
+                m_wirelessConnOpration->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connetSetting, m_deviceName, true);
+            }
+        } else {
+            qWarning() << "[NetDetail] unknown enterprise connection type" << enterpriseType;
         }
     } else {
         securityPage->updateSecurityChange(connetSetting);
@@ -1145,15 +1206,18 @@ NetTabBar::~NetTabBar()
 
 QSize NetTabBar::sizeHint() const
 {
-    return QSize(TAB_WIDTH, TAB_HEIGHT);
+    QSize size = KTabBar::sizeHint();
+    size.setWidth(TAB_WIDTH);
+    return size;
 }
 
 QSize NetTabBar::minimumTabSizeHint(int index) const
 {
     Q_UNUSED(index)
-    return QSize(TAB_WIDTH, TAB_HEIGHT);
+    QSize size = KTabBar::minimumTabSizeHint(index);
+    size.setWidth(TAB_WIDTH);
+    return size;
 }
-
 
 ThreadObject::ThreadObject(QString deviceName, QObject *parent)
     :m_devName(deviceName), QObject(parent)

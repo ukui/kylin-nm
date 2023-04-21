@@ -25,7 +25,7 @@
 #define COLOR_THEME "styleName"
 #define  WINDOW_WIDTH  480
 #define  MIN_WINDOW_HEIGHT  368
-#define  PEAP_WINDOW_HEIGHT  524
+#define  EAPMIN_WINDOW_HEIGHT  524
 #define  TLS_WINDOW_HEIGHT  580
 #define  LAYOUT_MARGINS  0, 0, 0, 0
 #define  TOP_LAYOUT_MARGINS  24, 12, 24, 16
@@ -35,9 +35,7 @@
 #define  LABEL_MIN_WIDTH  146
 #define  LABEL_MAX_WIDTH  434
 #define  MAX_NAME_LENGTH 32
-#define  PSK_SCRO_HEIGHT  182
-#define  PEAP_SCRO_HEIGHT  340
-#define  TLS_SCRO_HEIGHT  560
+#define  SCROAREA_WIDTH  480
 #define  MEDIUM_WEIGHT_VALUE  57
 
 JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
@@ -49,7 +47,6 @@ JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
     initUI();
     initComponent();
 
-    setFixedWidth(WINDOW_WIDTH);
     setAttribute(Qt::WA_DeleteOnClose);
 
     setJoinBtnEnable();
@@ -121,8 +118,11 @@ void JoinHiddenWiFiPage::initUI()
     m_centerVBoxLayout->addWidget(ssidWidget);
     m_centerVBoxLayout->addSpacing(LAYOUT_SPACING);
     m_centerVBoxLayout->addWidget(m_secuWidget);
-    m_centerVBoxLayout->addStretch();
+
+    m_centerWidget->setFixedWidth(SCROAREA_WIDTH);
+    m_hiddenWifiScrollArea->setFixedWidth(SCROAREA_WIDTH);
     m_hiddenWifiScrollArea->setWidget(m_centerWidget);
+    m_hiddenWifiScrollArea->setWidgetResizable(true);
 
     //底部按钮
     m_bottomLayout = new QHBoxLayout(m_bottomWidget);
@@ -149,7 +149,7 @@ void JoinHiddenWiFiPage::initUI()
 
    this->setWindowTitle(tr("Find and Join Wi-Fi"));
    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
-
+   this->setFixedWidth(WINDOW_WIDTH);
    this->setFixedHeight(MIN_WINDOW_HEIGHT);
    onPaletteChanged();
 }
@@ -215,9 +215,18 @@ void JoinHiddenWiFiPage::onBtnJoinClicked()
         } else if (eapType == PEAP) {
             m_secuWidget->updatePeapChange(m_info.peapInfo);
             m_wirelessConnOpration->addAndActiveWirelessEnterPrisePeapConnect(m_info.peapInfo, connSettingInfo, m_devName, true);
-        } else if (eapType = TTLS) {
+        } else if (eapType == TTLS) {
             m_secuWidget->updateTtlsChange(m_info.ttlsInfo);
             m_wirelessConnOpration->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connSettingInfo, m_devName, true);
+        } else if (eapType == LEAP) {
+            m_secuWidget->updateLeapChange(m_info.leapInfo);
+            m_wirelessConnOpration->addAndActiveWirelessEnterPriseLeapConnect(m_info.leapInfo, connSettingInfo, m_devName, true);
+        } else if (eapType == PWD) {
+            m_secuWidget->updatePwdChange(m_info.pwdInfo);
+            m_wirelessConnOpration->addAndActiveWirelessEnterPrisePwdConnect(m_info.pwdInfo, connSettingInfo, m_devName, true);
+        } else if (eapType == FAST) {
+            m_secuWidget->updateFastChange(m_info.fastInfo);
+            m_wirelessConnOpration->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connSettingInfo, m_devName, true);
         }
     } else {
         m_secuWidget->updateSecurityChange(connSettingInfo);
@@ -236,18 +245,15 @@ void JoinHiddenWiFiPage::onSecuTypeChanged(const KySecuType &type)
 {
     if (type != KySecuType::WPA_AND_WPA2_ENTERPRISE) {
         this->setFixedHeight(MIN_WINDOW_HEIGHT);
-        m_centerWidget->setFixedSize(WINDOW_WIDTH, PSK_SCRO_HEIGHT);
     }
 }
 
 void JoinHiddenWiFiPage::onEapTypeChanged(const KyEapMethodType &type)
 {
-    if (type == KyEapMethodType::TLS) {
+    if (type == KyEapMethodType::TLS || type == KyEapMethodType::FAST) {
         this->setFixedHeight(TLS_WINDOW_HEIGHT);
-        m_centerWidget->setFixedSize(WINDOW_WIDTH, TLS_SCRO_HEIGHT);
-    } else if (type == KyEapMethodType::PEAP || type == KyEapMethodType::TTLS) {
-        this->setFixedHeight(PEAP_WINDOW_HEIGHT);
-        m_centerWidget->setFixedSize(WINDOW_WIDTH, PEAP_SCRO_HEIGHT);
+    } else {
+        this->setFixedHeight(EAPMIN_WINDOW_HEIGHT);
     }
 }
 

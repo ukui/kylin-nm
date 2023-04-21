@@ -717,11 +717,11 @@
         <source>Connect</source>
         <translation>སྦྲེལ་མཐུད་བྱེད་པ</translation>
     </message>
-	<message>
+    <message>
         <source>Property</source>
         <translation>ངོ་བོ།</translation>
     </message>
-	<message>
+    <message>
         <source>Delete</source>
         <translation>དྲ་རྒྱ་དེ་བསུབ་དགོས།</translation>
     </message>
@@ -1074,7 +1074,7 @@
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="212"/>
         <source>CA certficate</source>
-        <translation>CA certficate</translation>
+        <translation>CAལག་ཁྱེར།</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="213"/>
@@ -1124,15 +1124,7 @@
         <translation>འདྲི་རྩད་རེ་རེར་འདྲི་རྩད་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="229"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="239"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="242"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="245"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="328"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="805"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="826"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="848"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="871"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="252"/>
         <source>None</source>
         <translation>གཅིག་ཀྱང་མེད།</translation>
     </message>
@@ -1152,9 +1144,7 @@
         <translation>WPA3མི་སྒེར་</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="240"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="243"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="246"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="253"/>
         <source>Choose from file...</source>
         <translation>ཡིག་ཆའི་ནང་ནས་གདམ་ག་རྒྱག་དགོས།...</translation>
     </message>
@@ -1189,18 +1179,62 @@
         <translation>ཐེངས་རེར་གསང་བ་འདི་འདྲི་རྩད་བྱེད་ཐེངས་རེ་ཡིན།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="816"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="839"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="861"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1150"/>
         <source>Choose a CA certificate</source>
         <translation>CAཡི་དཔང་ཡིག་འདེམས་པ།</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="817"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="840"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="862"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1151"/>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
         <translation>CA དཔང་ཡིག (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="290"/>
+        <source>PAC provisioning</source>
+        <translatorcomment>PAC 配置</translatorcomment>
+        <translation>PAC གཏན་འབེབས་བྱས་པ།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="291"/>
+        <source>Allow automatic PAC provisioning</source>
+        <translatorcomment>允许自动PAC配置</translatorcomment>
+        <translation>རང་འགུལ་གྱིས་PACམཚོ་འདོན་བྱས་ཆོག།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="292"/>
+        <source>PAC file</source>
+        <translatorcomment>PAC 文件</translatorcomment>
+        <translation>PACཡིག་ཆ།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="293"/>
+        <source>Anonymous</source>
+        <translatorcomment>匿名</translatorcomment>
+        <translation>མིང་མ་བཀོད་པའི་</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="294"/>
+        <source>Authenticated</source>
+        <translatorcomment>已认证</translatorcomment>
+        <translation>བདེན་དཔང་ར་སྤྲོད་བྱས།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="295"/>
+        <source>Both</source>
+        <translatorcomment>两者兼用</translatorcomment>
+        <translation>དེ་གཉིས་ཀ</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1250"/>
+        <source>Choose a PAC file</source>
+        <translatorcomment>选择一个PAC文件</translatorcomment>
+        <translation>PACཡིག་ཆ་ཞིག་བདམས་པ།</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1251"/>
+        <source>PAC Files (*.pac)</source>
+        <translatorcomment>PAC文件(*.pac)</translatorcomment>
+        <translation>PACཡིག་ཆ།(*.pac)</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.h" line="110"/>
@@ -1323,7 +1357,7 @@
         <source>Forget</source>
         <translation>བརྗེད་པ།</translation>
     </message>
-	<message>
+    <message>
         <source>Property</source>
         <translation>ངོ་བོ།</translation>
     </message>

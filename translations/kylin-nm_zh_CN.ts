@@ -1124,15 +1124,7 @@
         <translation>每次询问密码</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="229"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="239"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="242"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="245"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="328"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="805"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="826"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="848"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="871"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="252"/>
         <source>None</source>
         <translation>无</translation>
     </message>
@@ -1152,9 +1144,7 @@
         <translation>WPA3 个人</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="240"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="243"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="246"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="253"/>
         <source>Choose from file...</source>
         <translation>从文件选择...</translation>
     </message>
@@ -1189,18 +1179,54 @@
         <translation>每次询问这个密码</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="816"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="839"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="861"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1150"/>
         <source>Choose a CA certificate</source>
         <translation>选择一个CA证书</translation>
     </message>
     <message>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="817"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="840"/>
-        <location filename="../src/frontend/netdetails/securitypage.cpp" line="862"/>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1151"/>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
         <translation>CA 证书 (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="290"/>
+        <source>PAC provisioning</source>
+        <translation>PAC 配置</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="291"/>
+        <source>Allow automatic PAC provisioning</source>
+        <translation>允许自动PAC配置</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="292"/>
+        <source>PAC file</source>
+        <translation>PAC 文件</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="293"/>
+        <source>Anonymous</source>
+        <translation>匿名</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="294"/>
+        <source>Authenticated</source>
+        <translation>已认证</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="295"/>
+        <source>Both</source>
+        <translation>两者兼用</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1250"/>
+        <source>Choose a PAC file</source>
+        <translation>选择一个PAC文件</translation>
+    </message>
+    <message>
+        <location filename="../src/frontend/netdetails/securitypage.cpp" line="1251"/>
+        <source>PAC Files (*.pac)</source>
+        <translation>PAC文件(*.pac)</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.h" line="110"/>

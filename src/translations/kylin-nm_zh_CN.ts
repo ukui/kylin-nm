@@ -717,11 +717,11 @@
         <source>Connect</source>
         <translation>连接</translation>
     </message>
-	<message>
+    <message>
         <source>Property</source>
         <translation>属性</translation>
     </message>
-	<message>
+    <message>
         <source>Delete</source>
         <translation>删除此网络</translation>
     </message>
@@ -767,7 +767,7 @@
     <message>
         <location filename="../src/frontend/list-items/listitem.cpp" line="88"/>
         <source>Kylin NM</source>
-        <translation>麒麟网络设置工具</translation>
+        <translation>网络设置工具</translation>
     </message>
     <message>
         <location filename="../src/frontend/list-items/listitem.cpp" line="91"/>
@@ -816,7 +816,7 @@
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="73"/>
         <source>Kylin NM</source>
-        <translation>麒麟网络设置工具</translation>
+        <translation>网络设置工具</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="76"/>
@@ -868,7 +868,7 @@
         <source>Forget this network</source>
         <translation>忘记此网络</translation>
     </message>
-     <message>
+    <message>
         <source>Delete this network</source>
         <translation>删除此网络</translation>
     </message>
@@ -1254,7 +1254,7 @@
     <message>
         <location filename="../src/frontend/tab-pages/tabpage.cpp" line="175"/>
         <source>Kylin NM</source>
-        <translation>麒麟网络设置工具</translation>
+        <translation>网络设置工具</translation>
     </message>
     <message>
         <location filename="../src/frontend/tab-pages/tabpage.cpp" line="178"/>
@@ -1349,7 +1349,7 @@
         <source>Forget</source>
         <translation>忘记此网络</translation>
     </message>
-	<message>
+    <message>
         <source>Property</source>
         <translation>属性</translation>
     </message>

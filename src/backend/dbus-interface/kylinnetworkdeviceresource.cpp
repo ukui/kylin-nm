@@ -385,7 +385,7 @@ bool KyNetworkDeviceResourse::wirelessDeviceIsExist(const QString devName)
     return list.contains(devName);
 }
 
-bool KyNetworkDeviceResourse::deviceIsWired(QString deviceName)
+bool KyNetworkDeviceResourse::checkDeviceType(QString deviceName, NetworkManager::Device::Type deviceType)
 {
     NetworkManager::Device::Ptr devicePtr =
                 m_networkResourceInstance->findDeviceInterface(deviceName);
@@ -395,9 +395,14 @@ bool KyNetworkDeviceResourse::deviceIsWired(QString deviceName)
         return false;
     }
 
-    if (NetworkManager::Device::Type::Ethernet == devicePtr->type()
-            && !devicePtr->udi().startsWith(VIRTURAL_DEVICE_PATH)) {
-        return true;
+    if (deviceType == devicePtr->type()) {
+        if (NetworkManager::Device::Type::Ethernet == deviceType) {
+            if (!devicePtr->udi().startsWith(VIRTURAL_DEVICE_PATH)) {
+                return true;
+            }
+        } else {
+            return true;
+        }
     }
 
     return false;

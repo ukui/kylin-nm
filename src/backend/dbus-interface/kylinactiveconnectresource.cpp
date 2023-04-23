@@ -660,7 +660,7 @@ bool KyActiveConnectResourse::connectionIsVirtual(QString uuid)
         return false;
     }
 
-    return !m_networkdevice->deviceIsWired(devicePtr->interfaceName());
+    return !m_networkdevice->checkDeviceType(devicePtr->interfaceName(), NetworkManager::Device::Type::Ethernet);
 }
 
 bool KyActiveConnectResourse::wiredConnectIsActived()

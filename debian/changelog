@@ -1,3 +1,14 @@
+kylin-nm (3.20.1.17-0k1.2) v101; urgency=medium
+
+  * BUG号：
+     -#132828 【网络连接】控制面板和任务栏网络显示WIFI6图标
+     -#168506 【990】华为w515未外接网卡，使用中出现无线局域网处出现两个网卡显示
+  * 需求号：
+  * 其他改动：无
+  * 影响域：自身
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Sun, 23 Apr 2023 16:14:35 +0800
+
 kylin-nm (3.20.1.17-0k1.1) v101; urgency=medium
 
   * BUG号：

@@ -870,6 +870,10 @@ void WlanPage::onWlanStateChanged(NetworkManager::Device::State newstate, Networ
 
 void WlanPage::onDeviceManagedChanged(QString deviceName, bool managed)
 {
+    if (!m_netDeviceResource->checkDeviceType(deviceName, NetworkManager::Device::Type::Wifi)) {
+        return;
+    }
+
     if (managed && !m_devList.contains(deviceName)) {
         //添加新增托管网卡
         onDeviceAdd(deviceName, NetworkManager::Device::Type::Wifi);

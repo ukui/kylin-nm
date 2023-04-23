@@ -530,7 +530,8 @@ void LanPage::addDeviceForCombox(QString deviceName)
 
 void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType)
 {
-    if (!m_deviceResource->deviceIsWired(deviceName)) {
+    Q_UNUSED(deviceType)
+    if (!m_deviceResource->checkDeviceType(deviceName, NetworkManager::Device::Type::Ethernet)) {
         return;
     }
 

@@ -62,7 +62,7 @@ public:
 
     bool wiredDeviceIsCarriered(QString deviceName);
     bool wirelessDeviceIsExist(const QString devName);
-    bool deviceIsWired(QString deviceName);
+    bool checkDeviceType(QString deviceName, NetworkManager::Device::Type deviceType);
 
     void setDeviceRefreshRate(QString deviceName, int ms);
 

@@ -204,7 +204,7 @@ void WlanPage::checkShowWifi6()
     });
     processCpuinfo->waitForFinished();
     QString ctrCpuinfo = processCpuinfo->readAll();
-    if (ctrCpuinfo.indexOf("HUAWEI Kirin 990") != -1) {
+    if (ctrCpuinfo.indexOf("Kirin", 0, Qt::CaseInsensitive) != -1 && ctrCpuinfo.indexOf("990") != -1) {
         //HW990上不显示wifi6/6+
         m_showWifi6 = false;
     }

@@ -1,4 +1,4 @@
-kylin-nm (3.20.1.17-0k0.21) v101; urgency=medium
+kylin-nm (3.20.1.17-0k1.1) v101; urgency=medium
 
   * BUG号：
      -#162537 通知中心的麒麟网络设置工具弹窗文案未替换
@@ -8,7 +8,7 @@ kylin-nm (3.20.1.17-0k0.21) v101; urgency=medium
 
  -- zhaoshixu <zhaoshixu@kylinos.cn>  Sun, 23 Apr 2023 10:53:35 +0800
 
-kylin-nm (3.20.1.17-0k0.20) v101; urgency=medium
+kylin-nm (3.20.1.17-0k1.0) v101; urgency=medium
 
   * BUG号：
   * 需求号：

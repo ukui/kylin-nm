@@ -81,6 +81,9 @@ public:
 
     int getAcivateWifiSignal();
 
+    //无线网卡连通性
+    void getWirelssDeviceConnectState(QMap<QString, QString> &map);
+
 Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);

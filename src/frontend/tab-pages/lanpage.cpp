@@ -1303,6 +1303,38 @@ bool LanPage::lanIsConnected()
     }
 }
 
+void LanPage::getWiredDeviceConnectState(QMap<QString, QString> &map)
+{
+    map.clear();
+    if (m_enableDeviceList.isEmpty()) {
+        return;
+    }
+
+    for (const auto devname : m_enableDeviceList) {
+        NetworkManager::Connectivity state;
+        QList<KyConnectItem *> activedList;
+        m_deviceResource->getDeviceConnectivity(devname, state);
+
+        if (state < NetworkManager::Connectivity::Full) {
+            m_activeResourse->getActiveConnectionList(devname, NetworkManager::ConnectionSettings::Wired, activedList);
+            if (!activedList.isEmpty()) {
+                map.insert(devname, QString(tr("Connected: ")) + activedList.at(0)->m_connectName + QString(tr("(Limited)")));
+            } else {
+                map.insert(devname, tr("Not Connected"));
+            }
+
+        } else if (state == NetworkManager::Connectivity::Full) {
+            m_activeResourse->getActiveConnectionList(devname, NetworkManager::ConnectionSettings::Wired, activedList);
+            if (!activedList.isEmpty()) {
+                map.insert(devname, QString(tr("Connected: ")) + activedList.at(0)->m_connectName);
+            }
+
+        } else {
+            qDebug() << devname << " Network connectivity is unknown.";
+        }
+    }
+}
+
 void LanPage::showRate()
 {
     //定时获取网速

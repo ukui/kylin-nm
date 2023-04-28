@@ -761,6 +761,18 @@
         <source>LAN Connected Successfully</source>
         <translation type="vanished">有线网络已连接</translation>
     </message>
+    <message>
+        <source>Connected: </source>
+        <translation>已连接: </translation>
+    </message>
+    <message>
+        <source>Not Connected</source>
+        <translation>未连接</translation>
+    </message>
+    <message>
+        <source>(Limited)</source>
+        <translation>(网络受限)</translation>
+    </message>
 </context>
 <context>
     <name>ListItem</name>
@@ -809,6 +821,14 @@
         <location filename="../src/frontend/mainwindow.cpp" line="309"/>
         <source>Network tool</source>
         <translation>网络工具</translation>
+    </message>
+    <message>
+        <source>Network Card</source>
+        <translation>网卡</translation>
+    </message>
+    <message>
+        <source>Not connected to the network</source>
+        <translation>未连接网络</translation>
     </message>
 </context>
 <context>
@@ -1406,6 +1426,18 @@
         <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="834"/>
         <source>WLAN Disconnected Successfully</source>
         <translation>无线网络已断开</translation>
+    </message>
+    <message>
+        <source>Connected: </source>
+        <translation>已连接: </translation>
+    </message>
+    <message>
+        <source>Not Connected</source>
+        <translation>未连接</translation>
+    </message>
+    <message>
+        <source>(Limited)</source>
+        <translation>(网络受限)</translation>
     </message>
 </context>
 <context>

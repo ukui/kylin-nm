@@ -29,6 +29,7 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
 {
     qRegisterMetaType<NetworkManager::Device::State>("NetworkManager::Device::State");
     qRegisterMetaType<NetworkManager::Device::StateChangeReason>("NetworkManager::Device::StateChangeReason");
+    qRegisterMetaType<NetworkManager::Connectivity>("NetworkManager::Connectivity");
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
 
     m_deviceMap.clear();
@@ -247,6 +248,41 @@ qulonglong KyNetworkDeviceResourse::getDeviceTxRefreshRate(QString deviceName)
     }
 
     return 0;
+}
+
+void KyNetworkDeviceResourse::getDeviceConnectivity(const QString &deviceName, NetworkManager::Connectivity &connectivity)
+{
+    connectivity = NetworkManager::Connectivity::UnknownConnectivity;
+    QString dbusPath;
+    NetworkManager::Device::Ptr connectDevice =
+                        m_networkResourceInstance->findDeviceInterface(deviceName);
+    if (connectDevice->isValid()) {
+       dbusPath = connectDevice->uni();
+    } else {
+        qWarning() << "[KyNetworkDeviceResourse] can not find device " << deviceName;
+        return;
+    }
+
+    QDBusInterface *ip4ConnectivityDbus = new QDBusInterface("org.freedesktop.NetworkManager",
+                                                             dbusPath,
+                                                             "org.freedesktop.DBus.Properties",
+                                                             QDBusConnection::systemBus());
+
+    if (ip4ConnectivityDbus == nullptr || !ip4ConnectivityDbus->isValid()) {
+        qWarning() << "[KyNetworkDeviceResourse] get device properties failed";
+        return;
+    }
+
+    QDBusReply<QVariant> reply = ip4ConnectivityDbus->call("Get", "org.freedesktop.NetworkManager.Device", "Ip4Connectivity");
+
+    if (reply.isValid()) {
+        connectivity = (NetworkManager::Connectivity) reply.value().toUInt();
+    } else {
+        qWarning() << "[KyNetworkDeviceResourse] get device properties failed";
+    }
+
+    delete ip4ConnectivityDbus;
+    ip4ConnectivityDbus = nullptr;
 }
 
 bool KyNetworkDeviceResourse::getActiveConnectionInfo(const QString devName, int &signalStrength, QString &uni, QString &secuType)

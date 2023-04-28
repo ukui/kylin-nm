@@ -761,6 +761,18 @@
         <source>LAN Connected Successfully</source>
         <translation type="vanished">སྐུད་ཡོད་དྲ་བ་སྦྲེལ་ཡོད།</translation>
     </message>
+    <message>
+        <source>Connected: </source>
+        <translation>འབྲེལ་མཐུད་བྱུང་ཡོད།: </translation>
+    </message>
+    <message>
+        <source>Not Connected</source>
+        <translation>འབྲེལ་མཐུད་མ་བྱས་པ།</translation>
+    </message>
+    <message>
+        <source>(Limited)</source>
+        <translation>(དྲ་བར་ཚོད་འཛིན་ཐེབས་པ་རེད།)</translation>
+    </message>
 </context>
 <context>
     <name>ListItem</name>
@@ -809,6 +821,14 @@
         <location filename="../src/frontend/mainwindow.cpp" line="309"/>
         <source>Network tool</source>
         <translation>དྲ་རྒྱའི་ལག་ཆ་</translation>
+    </message>
+    <message>
+        <source>Network Card</source>
+        <translation>དྲ་བྱང་།</translation>
+    </message>
+    <message>
+        <source>Not connected to the network</source>
+        <translation>དྲ་རྒྱ་དང་སྦྲེལ་མཐུད་མ་བྱས་པ།</translation>
     </message>
 </context>
 <context>
@@ -1414,6 +1434,18 @@
         <location filename="../src/frontend/tab-pages/wlanpage.cpp" line="834"/>
         <source>WLAN Disconnected Successfully</source>
         <translation>སྐུད་མེད་དྲ་རྒྱ་ཆད་སོང་།</translation>
+    </message>
+    <message>
+        <source>Connected: </source>
+        <translation>འབྲེལ་མཐུད་བྱུང་ཡོད།: </translation>
+    </message>
+    <message>
+        <source>Not Connected</source>
+        <translation>འབྲེལ་མཐུད་མ་བྱས་པ།</translation>
+    </message>
+    <message>
+        <source>(Limited)</source>
+        <translation>(དྲ་བར་ཚོད་འཛིན་ཐེབས་པ་རེད།)</translation>
     </message>
 </context>
 <context>

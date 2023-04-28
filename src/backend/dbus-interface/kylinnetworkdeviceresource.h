@@ -72,6 +72,8 @@ public:
     qulonglong getDeviceRxRefreshRate(QString deviceName);
     qulonglong getDeviceTxRefreshRate(QString deviceName);
 
+    void getDeviceConnectivity(const QString &deviceName, NetworkManager::Connectivity &connectivity);
+
 private:
     KyWiredConnectOperation wiredOperation;
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;

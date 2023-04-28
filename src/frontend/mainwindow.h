@@ -161,6 +161,7 @@ private:
     void showControlCenter();
     void showByWaylandHelper();
     void setCentralWidgetType(IconActiveType iconStatus);
+    void assembleTrayIconTooltip(QMap<QString, QString> &map, QString &tip);
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
     int currentIconIndex=0;
@@ -215,6 +216,7 @@ private Q_SLOTS:
     void onWlanConnectStatusToChangeTrayIcon(int state);
     void onConnectivityChanged(NetworkManager::Connectivity connectivity);
     void onTabletModeChanged(bool mode);
+    void onRefreshTrayIconTooltip();
 };
 
 #endif // MAINWINDOW_H

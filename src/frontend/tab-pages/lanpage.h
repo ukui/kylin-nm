@@ -50,6 +50,7 @@ public:
     void setWiredDeviceEnable(const QString& devName, bool enable);
 
     bool lanIsConnected();
+    void getWiredDeviceConnectState(QMap<QString, QString> &map);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);

@@ -329,7 +329,7 @@ void MainWindow::initTrayIcon()
     m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
     m_showSettingsAction = new QAction(tr("Settings"),this);
 
-    m_trayIcon->setToolTip(QString(tr("Network tool")));
+//    m_trayIcon->setToolTip(QString(tr("Network tool")));
     m_showSettingsAction->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
 //    m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);
@@ -375,6 +375,11 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::timeToUpdate , this, &MainWindow::timeToUpdate);
     connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowMainWindow);
     connect(m_wlanWidget, &WlanPage::connectivityChanged, this, &MainWindow::onConnectivityChanged);
+
+    connect(m_lanWidget, &LanPage::lanConnectChanged, this, &MainWindow::onRefreshTrayIconTooltip);
+    connect(m_lanWidget, &LanPage::deviceStatusChanged, this, &MainWindow::onRefreshTrayIconTooltip);
+    connect(m_wlanWidget, &WlanPage::wlanConnectChanged, this, &MainWindow::onRefreshTrayIconTooltip);
+    connect(m_wlanWidget, &WlanPage::deviceStatusChanged, this, &MainWindow::onRefreshTrayIconTooltip);
 
     //模式切换
     QDBusConnection::sessionBus().connect(QString("com.kylin.statusmanager.interfacer"),
@@ -552,7 +557,36 @@ void MainWindow::setCentralWidgetType(IconActiveType iconStatus)
          }
      } else {
          m_centralWidget->setCurrentIndex(LAN_PAGE_INDEX);
-     }
+    }
+}
+
+/**
+ * @brief MainWindow::assembleTrayIconTooltip 整理托盘图标tooltip内容
+ * @param map <网卡名，网络状态>
+ * @param tip tooltip
+ */
+void MainWindow::assembleTrayIconTooltip(QMap<QString, QString> &map, QString &tip)
+{
+    if (map.isEmpty()) {
+        tip = QString(tr("Network tool"));
+        return;
+    }
+    QMap<QString, QString>::iterator iter = map.begin();
+    if (map.size() == 1) {
+        tip = map.value(iter.key());
+    } else if (map.size() > 1) {
+        tip = "";
+        int count = 0;
+        while (iter != map.end()) {
+            count += 1;
+            tip += QString(tr("Network Card")) + QString("%1").arg(count) + "\n" + map.value(iter.key());
+            ++iter;
+
+            if (iter != map.end()) {
+                tip += "\n";
+            }
+        }
+    }
 }
 
 /**
@@ -652,6 +686,7 @@ void MainWindow::onRefreshTrayIcon()
             m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_LIMIT_ICON));
         }
     }
+    onRefreshTrayIconTooltip();
 }
 
 void MainWindow::onSetTrayIconLoading()
@@ -701,6 +736,44 @@ void MainWindow::onTabletModeChanged(bool mode)
     Q_UNUSED(mode)
     //模式切换时，隐藏主界面
     hideMainwindow();
+}
+
+/**
+ * @brief MainWindow::onRefreshTrayIconTooltip 根据托盘图标调整其tooltip
+ */
+void MainWindow::onRefreshTrayIconTooltip()
+{
+    if (!m_trayIcon) {
+        return;
+    }
+
+    QString trayIconToolTip = "";
+    QMap<QString, QString> lanMap;
+    QMap<QString, QString> wlanMap;
+    switch(iconStatus) {
+    case IconActiveType::NOT_CONNECTED:
+        trayIconToolTip = QString(tr("Not connected to the network"));
+        break;
+
+    case LAN_CONNECTED:
+    case IconActiveType::LAN_CONNECTED_LIMITED:
+        m_lanWidget->getWiredDeviceConnectState(lanMap);
+        assembleTrayIconTooltip(lanMap, trayIconToolTip);
+        break;
+
+    case IconActiveType::WLAN_CONNECTED:
+    case IconActiveType::WLAN_CONNECTED_LIMITED:
+        m_wlanWidget->getWirelssDeviceConnectState(wlanMap);
+        assembleTrayIconTooltip(wlanMap, trayIconToolTip);
+        break;
+
+    case IconActiveType::ACTIVATING:
+    default:
+        trayIconToolTip = QString(tr("Network tool"));
+        break;
+    }
+
+    m_trayIcon->setToolTip(trayIconToolTip);
 }
 
 void MainWindow::onShowMainWindow(int type)

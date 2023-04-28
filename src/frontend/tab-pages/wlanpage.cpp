@@ -1657,3 +1657,35 @@ int WlanPage::getAcivateWifiSignal()
 {
     return m_activatedConnectResource->getAcivateWifiSignal();
 }
+
+void WlanPage::getWirelssDeviceConnectState(QMap<QString, QString> &map)
+{
+    map.clear();
+    if (m_devList.isEmpty()) {
+        return;
+    }
+
+    for (const auto devname : m_devList) {
+        NetworkManager::Connectivity state;
+        KyWirelessNetItem wirelessNetItem;
+        if (!m_netDeviceResource->getDeviceManaged(devname)) {
+            continue;
+        }
+        m_netDeviceResource->getDeviceConnectivity(devname, state);
+        if (state < NetworkManager::Connectivity::Full) {
+            if (m_wirelessNetResource->getActiveWirelessNetItem(devname, wirelessNetItem)) {
+                map.insert(devname, QString(tr("Connected: ")) + wirelessNetItem.m_connName + QString(tr("(Limited)")));
+            } else {
+                map.insert(devname, tr("Not Connected"));
+           }
+
+        } else if (state == NetworkManager::Connectivity::Full) {
+            if (m_wirelessNetResource->getActiveWirelessNetItem(devname, wirelessNetItem)) {
+                map.insert(devname, QString(tr("Connected: ")) + wirelessNetItem.m_connName);
+            }
+
+        } else {
+            qDebug() << devname << " Network connectivity is unknown.";
+        }
+    }
+}

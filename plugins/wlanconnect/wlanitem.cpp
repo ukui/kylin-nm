@@ -35,6 +35,7 @@ WlanItem::WlanItem(bool bAcitve, bool isLock, QWidget *parent)
     this->setMinimumSize(550, 58);
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
+    this->setProperty("needTranslucent", true);
 
     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
     mLanLyt->setContentsMargins(16,0,16,0);

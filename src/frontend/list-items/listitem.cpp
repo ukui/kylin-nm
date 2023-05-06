@@ -279,7 +279,7 @@ void ListItem::initUI()
     m_hItemLayout->addWidget(m_netButton);
     m_hItemLayout->addSpacing(10);
     m_hItemLayout->addWidget(m_nameLabel);
-    m_hItemLayout->addSpacing(8);
+    m_hItemLayout->addSpacing(6); //设计稿间距为8 nameLabel宽度另+2
     m_hItemLayout->addWidget(m_freq);
     m_hItemLayout->addStretch();
     m_hItemLayout->addSpacing(8);
@@ -355,7 +355,7 @@ void NameLabel::changedLabelSlot()
         setText(fontMetrics.elidedText(m_name, Qt::ElideRight, m_maximumWidth));
         setToolTip(m_name);
     } else {
-        this->setFixedWidth(fontMetrics.width(m_name));
+        this->setFixedWidth(fontMetrics.width(m_name) + 2);
         setText(m_name);
         setToolTip("");
     }

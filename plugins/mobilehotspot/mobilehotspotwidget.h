@@ -46,6 +46,7 @@
 #include "connectdevlistitem.h"
 #include "blacklistpage.h"
 #include "connectdevpage.h"
+#include "fixlabel.h"
 
 using namespace kdk;
 
@@ -87,7 +88,7 @@ private:
     QComboBox *m_freqBandComboBox;
     QComboBox *m_interfaceComboBox;
 
-    QLabel *m_interfaceWarnLabel;
+    FixLabel *m_interfaceWarnLabel;
     QWidget* m_warnWidget;
 
     QDBusInterface  *m_interface = nullptr;

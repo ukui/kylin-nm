@@ -35,10 +35,10 @@
 #define LINE_MIN_SIZE 0, 1
 #define ICON_SIZE   24,24
 #define PASSWORD_FRAME_MIN_HIGHT 60
-#define PASSWORD_FRAME_FIX_HIGHT 80
+#define PASSWORD_FRAME_FIX_HIGHT 90
 #define PASSWORD_FRAME_MIN_SIZE 550, 60
 #define PASSWORD_FRAME_MAX_SIZE 16777215, 86
-#define PASSWORD_ITEM_MARGINS 16, 12, 16, 14
+#define PASSWORD_ITEM_MARGINS 16, 10, 16, 10
 
 #define WIRELESS   1
 
@@ -542,10 +542,12 @@ void MobileHotspotWidget::setPasswordFrame()
     pwdInputVLayout->addWidget(m_pwdNameLine);
     pwdInputVLayout->addWidget(m_pwdHintLabel);
 
-    QFormLayout *pwdLayout = new QFormLayout(m_passwordFrame);
+    QGridLayout *pwdLayout = new QGridLayout(m_passwordFrame);
     pwdLayout->setContentsMargins(PASSWORD_ITEM_MARGINS);
     pwdLayout->setSpacing(0);
-    pwdLayout->addRow(m_pwdLabel, pwdInputWidget);
+    pwdLayout->addWidget(m_pwdLabel, 0, 0);
+    pwdLayout->addWidget(m_pwdNameLine, 0, 1);
+    pwdLayout->addWidget(m_pwdHintLabel, 1, 1);
 
     m_passwordFrame->setLayout(pwdLayout);
 
@@ -587,7 +589,7 @@ void MobileHotspotWidget::setInterFaceFrame()
     m_interfaceFrame->setMaximumSize(PASSWORD_FRAME_MAX_SIZE);
 
     m_interfaceLabel = new QLabel(tr("Net card"), this);
-    m_interfaceLabel->setMinimumWidth(LABLE_MIN_WIDTH);
+    m_interfaceLabel->setFixedWidth(LABLE_MIN_WIDTH);
     m_interfaceComboBox = new QComboBox(this);
     m_interfaceComboBox->setInsertPolicy(QComboBox::NoInsert);
     m_interfaceComboBox->setMinimumWidth(COMBOBOX_MIN_WIDTH);
@@ -596,24 +598,21 @@ void MobileHotspotWidget::setInterFaceFrame()
     m_warnWidget->setFixedHeight(20);
     m_warnWidget->setContentsMargins(8,0,0,0);
 
-    QHBoxLayout *warnTextHLayout = new QHBoxLayout(m_warnWidget);
+    QFormLayout *warnTextHLayout = new QFormLayout(m_warnWidget);
     QLabel* warnIcon = new QLabel(this);
     warnIcon->setContentsMargins(0,0,0,0);
     warnIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(16,16));
 
-    m_interfaceWarnLabel= new QLabel(this);
+    m_interfaceWarnLabel= new FixLabel(this);
     m_interfaceWarnLabel->setFixedHeight(20);
-    m_interfaceWarnLabel->setContentsMargins(HINT_TEXT_MARGINS);
 
     QPalette hintTextColor;
     hintTextColor.setColor(QPalette::WindowText, Qt::red);
     m_interfaceWarnLabel->setPalette(hintTextColor);
 
-    warnTextHLayout->setSpacing(0);
+    warnTextHLayout->setSpacing(8);
     warnTextHLayout->setContentsMargins(0,0,0,0);
-    warnTextHLayout->addWidget(warnIcon);
-    warnTextHLayout->addWidget(m_interfaceWarnLabel);
-    warnTextHLayout->addStretch();
+    warnTextHLayout->addRow(warnIcon, m_interfaceWarnLabel);
     m_warnWidget->setLayout(warnTextHLayout);
 
     QWidget *pwdInputWidget = new QWidget(m_interfaceFrame);
@@ -623,10 +622,12 @@ void MobileHotspotWidget::setInterFaceFrame()
     pwdInputVLayout->addWidget(m_interfaceComboBox);
     pwdInputVLayout->addWidget(m_warnWidget);
 
-    QFormLayout *interfaceFLayout = new QFormLayout(m_interfaceFrame);
+    QGridLayout *interfaceFLayout = new QGridLayout(m_interfaceFrame);
     interfaceFLayout->setContentsMargins(PASSWORD_ITEM_MARGINS);
     interfaceFLayout->setSpacing(0);
-    interfaceFLayout->addRow(m_interfaceLabel, pwdInputWidget);
+    interfaceFLayout->addWidget(m_interfaceLabel, 0, 0);
+    interfaceFLayout->addWidget(m_interfaceComboBox, 0, 1);
+    interfaceFLayout->addWidget(m_warnWidget, 1, 1);
 
     m_interfaceFrame->setLayout(interfaceFLayout);
 

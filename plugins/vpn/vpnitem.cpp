@@ -34,11 +34,8 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     this->setMinimumSize(550, 58);
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
-    QPalette pal = this->palette();
-    QColor color = pal.color(QPalette::Button);
-    color.setAlphaF(0.5);
-    pal.setColor(QPalette::Button, color);
-    this->setPalette(pal);
+    this->setProperty("needTranslucent", true);
+
     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
     mLanLyt->setContentsMargins(16,0,16,0);
     mLanLyt->setSpacing(16);

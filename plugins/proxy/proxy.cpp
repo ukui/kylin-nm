@@ -1180,6 +1180,7 @@ void Proxy::setAppListFrameUi(QWidget *widget)
     m_appListWidget->setMinimumHeight(240);
     m_appListWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     m_appListWidget->setFrameShape(QFrame::Shape::Panel);
+    m_appListWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
 
     appListLayout->addWidget(m_allowAppProxyLabel);
     appListLayout->addWidget(m_appListWidget);

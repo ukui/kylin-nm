@@ -574,6 +574,9 @@ void MainWindow::assembleTrayIconTooltip(QMap<QString, QString> &map, QString &t
     QMap<QString, QString>::iterator iter = map.begin();
     if (map.size() == 1) {
         tip = map.value(iter.key());
+        if (tip.indexOf(":")) {
+            tip = tip.mid(tip.indexOf(":") + 2); //单网卡显示时去掉“已连接: ”字样
+        }
     } else if (map.size() > 1) {
         tip = "";
         int count = 0;

@@ -215,6 +215,7 @@ private Q_SLOTS:
     void onLanConnectStatusToChangeTrayIcon(int state);
     void onWlanConnectStatusToChangeTrayIcon(int state);
     void onConnectivityChanged(NetworkManager::Connectivity connectivity);
+    void onTimeUpdateTrayIcon();
     void onTabletModeChanged(bool mode);
     void onRefreshTrayIconTooltip();
 };

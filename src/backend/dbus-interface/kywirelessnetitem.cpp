@@ -189,7 +189,11 @@ void KyWirelessNetItem::setKySecuType(QString strSecuType)
     if (strSecuType.indexOf(ENTERPRICE_TYPE) >= 0) {
         m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
     } else if (strSecuType.indexOf(WPA3) >= 0) {
-        m_kySecuType = WPA3_PERSONAL;
+        if ( strSecuType.indexOf(WPA1_AND_WPA2) >= 0) {
+            m_kySecuType = WPA_AND_WPA3;
+        } else {
+            m_kySecuType = WPA3_PERSONAL;
+        }
     } else if ( strSecuType.indexOf(WPA1_AND_WPA2) >= 0) {
         m_kySecuType = WPA_AND_WPA2_PERSONAL;
     } else {

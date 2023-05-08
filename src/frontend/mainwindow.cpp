@@ -373,6 +373,7 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::secuTypeChange, this, &MainWindow::secuTypeChange);
     connect(m_wlanWidget, &WlanPage::signalStrengthChange, this, &MainWindow::signalStrengthChange);
     connect(m_wlanWidget, &WlanPage::timeToUpdate , this, &MainWindow::timeToUpdate);
+    connect(m_wlanWidget, &WlanPage::timeToUpdate , this, &MainWindow::onTimeUpdateTrayIcon);
     connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowMainWindow);
     connect(m_wlanWidget, &WlanPage::connectivityChanged, this, &MainWindow::onConnectivityChanged);
 
@@ -801,6 +802,19 @@ void MainWindow::onConnectivityChanged(NetworkManager::Connectivity connectivity
     }
 
     if (iconStatus == ACTIVATING) {
+        return;
+    }
+
+    onRefreshTrayIcon();
+}
+
+void MainWindow::onTimeUpdateTrayIcon()
+{
+    if (!m_trayIcon) {
+        return;
+    }
+
+    if (iconStatus == ACTIVATING || (iconStatus != WLAN_CONNECTED && iconStatus != WLAN_CONNECTED_LIMITED)) {
         return;
     }
 

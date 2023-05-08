@@ -463,6 +463,10 @@ void MobileHotspotWidget::getApInfo()
                 setUiEnabled(false);
                 m_uuid = apInfo.at(4);
             }
+            int i = m_freqBandComboBox->findText(apInfo.at(5));
+            if (i >= 0) {
+                m_freqBandComboBox->setCurrentIndex(i);
+            }
         } else {
             qDebug() << LOG_HEAD << "no such interface " << apInfo.at(2);
         }
@@ -801,6 +805,7 @@ void MobileHotspotWidget::setWidgetHidden(bool isHidden)
 
 void MobileHotspotWidget::updateBandCombox()
 {
+    QString tmp = m_freqBandComboBox->currentText();
     m_freqBandComboBox->clear();
     QDBusReply<QMap<QString, int> > capReply = m_interface->call("getWirelessDeviceCap");
     if (!capReply.isValid()) {
@@ -814,6 +819,10 @@ void MobileHotspotWidget::updateBandCombox()
     }
     if (devCapMap[m_interfaceName] & 0x04) {
         m_freqBandComboBox->addItem("5GHz");
+    }
+    int index = m_freqBandComboBox->findText(tmp);
+    if (index >= 0) {
+        m_freqBandComboBox->setCurrentIndex(index);
     }
 }
 

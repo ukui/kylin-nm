@@ -464,6 +464,9 @@ void Proxy::retranslateUi()
     mSOCKSPortLabel->setText(tr("Port"));
     mIgnoreLabel->setText(tr("List of ignored hosts. more than one entry, please separate with english semicolon(;)"));
 
+    //~ contents_path /Proxy/App Proxy
+    tr("App Proxy");
+
     //~ contents_path /Proxy/Apt Proxy
     mAptProxyLabel->setText(tr("Apt Proxy"));
     mAptLabel->setText(tr("Open"));

@@ -692,7 +692,7 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
 
         if (connetSetting.m_ipv6Dns.size() == 1) {
             conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
-        } else if (connetSetting.m_ipv4Dns.size() > 1) {
+        } else if (connetSetting.m_ipv6Dns.size() > 1) {
             conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
             conInfo.strIPV6SecDns = connetSetting.m_ipv6Dns.at(1).toString();
         }

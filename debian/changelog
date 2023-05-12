@@ -1,3 +1,14 @@
+kylin-nm (3.20.1.17-0k1.5) v101; urgency=medium
+
+  * BUG号：
+     -#169387 【市场】【中移在线】kylin-nm组件ipv6 双dns配置与显示问题
+     -#169900 【冒烟2级】【搜索】英文系统下，代理搜索不到
+  * 需求号：
+  * 其他改动：无
+  * 影响域：自身 
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 12 May 2023 15:24:46 +0800
+
 kylin-nm (3.20.1.17-0k1.4) v101; urgency=medium
 
   * BUG号：

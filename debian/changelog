@@ -1,3 +1,9 @@
+kylin-nm (4.0.0.0-ok5) yangtze; urgency=medium
+
+  * Modify plugin name from Vpn to VPN.
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Sat, 13 May 2023 16:52:05 +0800
+
 kylin-nm (4.0.0.0-ok4) yangtz; urgency=medium
 
   * remove kysec 

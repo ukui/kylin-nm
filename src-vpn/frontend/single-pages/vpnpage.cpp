@@ -45,11 +45,11 @@ VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
     connect(m_vpnConnectOperation, &KyVpnConnectOperation::activateConnectionError, this, &VpnPage::activateFailed);
     connect(m_vpnConnectOperation, &KyVpnConnectOperation::deactivateConnectionError, this, &VpnPage::deactivateFailed);
 
-    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, [&](WId activeWindowId){
-        if (activeWindowId != this->winId() && activeWindowId != 0) {
-            hide();
-        }
-    });
+//    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, [&](WId activeWindowId){
+//        if (activeWindowId != this->winId() && activeWindowId != 0) {
+//            hide();
+//        }
+//    });
 }
 
 VpnPage::~VpnPage()
@@ -572,6 +572,16 @@ bool VpnPage::eventFilter(QObject *watched, QEvent *event)
     if (watched == m_settingsLabel) {
         if (event->type() == QEvent::MouseButtonRelease) {
             onShowControlCenter();
+        }
+    }
+
+    if (watched == this) {
+        //失焦退出
+        if (event->type() == QEvent::ActivationChange) {
+            if (QApplication::activeWindow() != this) {
+                hide();
+                return true;
+            }
         }
     }
 

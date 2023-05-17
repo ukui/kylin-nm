@@ -144,6 +144,7 @@ public Q_SLOTS:
 protected:
     void keyPressEvent(QKeyEvent *event);
     void paintEvent(QPaintEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     void firstlyStart(); //一级启动

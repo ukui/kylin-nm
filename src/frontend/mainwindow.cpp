@@ -160,6 +160,7 @@ void MainWindow::firstlyStart()
     initWindowTheme();
     initTrayIcon();
     initPlatform();
+    installEventFilter(this);
     m_secondaryStartTimer = new QTimer(this);
     connect(m_secondaryStartTimer, &QTimer::timeout, this, [ = ]() {
         m_secondaryStartTimer->stop();
@@ -261,6 +262,21 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::transparent);
 //    auto rect = this->rect();
 //    painter.drawRoundedRect(rect, 12, 12);      //窗口圆角
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == this) {
+        //失焦退出
+        if (event->type() == QEvent::ActivationChange) {
+            if (QApplication::activeWindow() != this) {
+                hideMainwindow();
+                return true;
+            }
+        }
+    }
+
+    return QObject::eventFilter(watched, event);
 }
 
 void MainWindow::initTransparency()
@@ -403,12 +419,6 @@ void MainWindow::initDbusConnnect()
                                          QString("/"),
                                          QString("com.kylin.statusmanager.interface"),
                                          QString("mode_change_signal"), this, SLOT(onTabletModeChanged(bool)));
-
-    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this,[&](WId activeWindowId){
-        if (activeWindowId != this->winId() && activeWindowId != 0) {
-            hideMainwindow();
-        }
-    });
 }
 
 /**

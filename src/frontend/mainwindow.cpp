@@ -89,14 +89,9 @@ void MainWindow::showMainwindow()
     /**
      * 设置主界面跳过任务栏和分页器的属性，隐藏再次展示有可能辉冲刷掉该属性，需要展示时重新设置
      */
-    QString platform = QGuiApplication::platformName();
-    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
-    {
-        const KWindowInfo info(this->winId(), NET::WMState);
-        if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
-            KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
-        }
-    }
+
+    kdk::WindowManager::setSkipTaskBar(this->windowHandle(),true);
+    kdk::WindowManager::setSkipSwitcher(this->windowHandle(),true);
 
     this->showByWaylandHelper();
     this->raise();

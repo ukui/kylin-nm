@@ -621,11 +621,8 @@ void VpnPage::showDetailPage(QString uuid)
 
 void VpnPage::showUI()
 {
-    //2209中窗管在hide界面时会刷新属性，需要重新设置无图标属性
-    const KWindowInfo info(this->winId(), NET::WMState);
-    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
-        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
-    }
+    kdk::WindowManager::setSkipTaskBar(this->windowHandle(),true);
+    kdk::WindowManager::setSkipSwitcher(this->windowHandle(),true);
 
     resetPageHeight();
 

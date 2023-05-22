@@ -88,11 +88,25 @@ int main(int argc, char *argv[])
 
     QApplication::setQuitOnLastWindowClosed(false);
 
-    QThread thread;
+    QDBusInterface interface("com.kylin.kylinvpn",
+                                                   "/com/kylin/kylinvpn",
+                                                   "com.kylin.kylinvpn",
+                                                   QDBusConnection::sessionBus());
+    if(interface.isValid()) {
+        return 0;
+    }
+
+    QThread *thread = new QThread();
     KyNetworkResourceManager *p_networkResource = KyNetworkResourceManager::getInstance();
-    p_networkResource->moveToThread(&thread);
-    QObject::connect(&thread, SIGNAL(started()), p_networkResource, SLOT(onInitNetwork()));
-    thread.start();
+    p_networkResource->moveToThread(thread);
+    QObject::connect(thread, &QThread::started, p_networkResource, &KyNetworkResourceManager::onInitNetwork);
+    QObject::connect(&a,&QtSingleApplication::aboutToQuit, thread, &QThread::quit);
+    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+    QObject::connect(thread, &QThread::finished, [=](){
+        qDebug() << "release" ;
+        p_networkResource->Release();
+    });
+    thread->start();
 
     // Internationalization
     QString locale = QLocale::system().name();
@@ -118,6 +132,8 @@ int main(int argc, char *argv[])
     while (!p_networkResource->NetworkManagerIsInited()) {
         ::usleep(1000);
     }
+
+
 
     vpnObject vpnobject;
     a.setActivationWindow(&vpnobject);

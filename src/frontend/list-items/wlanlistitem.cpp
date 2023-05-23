@@ -456,9 +456,7 @@ void WlanListItem::refreshIcon(bool isActivated)
     int signalStrength = 0;
     QString uni = "";
     QString secuType = "";
-    if (m_isShowWifi6) {
-            category = m_wirelessNetItem.getCategory(m_wirelessNetItem.m_uni);
-        }
+    category = m_wirelessNetItem.getCategory(m_wirelessNetItem.m_uni);
     signalStrength = m_wirelessNetItem.m_signalStrength;
 
     if (isActivated) {
@@ -466,6 +464,10 @@ void WlanListItem::refreshIcon(bool isActivated)
             category = m_wirelessNetItem.getCategory(uni);
             m_hasPwd = (secuType.isEmpty() || secuType == "") ? false : true;
         }
+    }
+
+    if (!m_isShowWifi6) {
+        category = 0;
     }
 
     QString iconPath = getIcon(m_hasPwd, signalStrength, category);

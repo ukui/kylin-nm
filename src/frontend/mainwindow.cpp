@@ -908,6 +908,7 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
     });
     m_createPagePtrMap.insert(devName, netDetail);
     netDetail->show();
+    KWindowSystem::raiseWindow(netDetail->winId());
     netDetail->centerToScreen();
 }
 

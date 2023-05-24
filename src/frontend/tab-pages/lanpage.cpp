@@ -1277,6 +1277,7 @@ void LanPage::showDetailPage(QString devName, QString uuid)
     NetDetail *netDetail = new NetDetail(devName, p_item->m_connectName, uuid, isActive, false, false);
     m_lanPagePtrMap.insert(p_item->m_connectPath, netDetail);
     netDetail->show();
+    KWindowSystem::raiseWindow(netDetail->winId());
     netDetail->centerToScreen();
 
     connect(netDetail, &NetDetail::detailPageClose, [&](QString deviceName, QString lanName, QString lanUuid){

@@ -80,8 +80,13 @@ int main(int argc, char *argv[])
 {
     initUkuiLog4qt("kylin-vpn");
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+#endif
 
     QString id = QString("kylin-vpn"+ QLatin1String(getenv("DISPLAY")));
     QtSingleApplication a(id, argc, argv);

@@ -1,3 +1,9 @@
+kylin-nm (4.0.0.0-ok7) yangtze; urgency=medium
+
+  * issue #I73I44 #I71WH5
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 24 May 2023 15:36:21 +0800
+
 kylin-nm (4.0.0.0-ok6) yangtze; urgency=medium
 
   * issue #I7357J

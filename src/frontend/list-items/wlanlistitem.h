@@ -54,8 +54,8 @@ class WlanListItem : public ListItem
 {
     Q_OBJECT
 public:
-    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, bool isShowWifi6, QWidget *parent = nullptr);
-    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isShowWifi6, QWidget *parent = nullptr);
+    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, bool isShowWifi6Plus, QWidget *parent = nullptr);
+    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isShowWifi6Plus, QWidget *parent = nullptr);
     WlanListItem(QWidget *parent = nullptr);
     ~WlanListItem();
 
@@ -127,7 +127,7 @@ private:
 
     bool m_forgetConnection = false;
     bool m_isApMode = false;
-    bool m_isShowWifi6 = true;
+    bool m_isShowWifi6Plus = true;
 
 protected Q_SLOTS:
     void onInfoButtonClicked();

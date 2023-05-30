@@ -35,19 +35,19 @@ const QString ENTERPRICE_TYPE = "802.1X";
 const QString WPA1_AND_WPA2 = "WPA";
 const QString WPA3 = "WPA3";
 
-WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, bool isShowWifi6, QWidget *parent)
+WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, bool isShowWifi6Plus, QWidget *parent)
     : WlanListItem(wirelessNetItem, device, parent)
 {
     m_isApMode = isApMode;
-    m_isShowWifi6 = isShowWifi6;
+    m_isShowWifi6Plus = isShowWifi6Plus;
     refreshIcon(false); // 额外刷新一次图标，因为WlanListItem执行时，m_isApMode尚未赋值
 }
 
-WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isShowWifi6, QWidget *parent) : ListItem(parent)
+WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isShowWifi6Plus, QWidget *parent) : ListItem(parent)
 {
     m_wlanDevice = device;
     m_wirelessNetItem = wirelessNetItem;
-    m_isShowWifi6 = isShowWifi6;
+    m_isShowWifi6Plus = isShowWifi6Plus;
 
     qDebug()<<"[WlanPage] wlan list item is created." << m_wirelessNetItem.m_NetSsid;
 
@@ -466,8 +466,8 @@ void WlanListItem::refreshIcon(bool isActivated)
         }
     }
 
-    if (!m_isShowWifi6) {
-        category = 0;
+    if (!m_isShowWifi6Plus && category == 2) {
+        category = 1;
     }
 
     QString iconPath = getIcon(m_hasPwd, signalStrength, category);

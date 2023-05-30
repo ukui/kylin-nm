@@ -1,3 +1,13 @@
+kylin-nm (3.20.1.17-0k1.7) v101; urgency=medium
+
+  * BUG号：
+     -#172627 【990】【WiFi】连接WIF6或WIFI6+后，任务栏网络显示6或6+图标 
+  * 需求号：
+  * 其他改动：无
+  * 影响域：自身 
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Tue, 30 May 2023 16:44:26 +0800
+
 kylin-nm (3.20.1.17-0k1.6) v101; urgency=medium
 
   * BUG号:

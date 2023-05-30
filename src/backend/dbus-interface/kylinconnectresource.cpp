@@ -28,8 +28,8 @@
 #include <NetworkManagerQt/VpnPlugin>
 #include <NetworkManagerQt/VpnSetting>
 
-const QString str2GBand = "2.4Ghz";
-const QString str5GBand = "5Ghz";
+const QString str2GBand = "2.4GHz";
+const QString str5GBand = "5GHz";
 
 static bool subLanListSort(const KyConnectItem* info1, const KyConnectItem* info2)
 {
@@ -737,9 +737,9 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
     apConnectItem->m_connectName = connectPtr->name();
     apConnectItem->m_connectSsid = getSsidFromByteArray(rawSsid);
     apConnectItem->m_connectUuid = connectPtr->uuid();
-    if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::A) {
+    if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::Bg) {
         apConnectItem->m_band = str2GBand;
-    } else if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::Bg) {
+    } else if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::A) {
         apConnectItem->m_band = str5GBand;
     }
     apConnectItem->m_ifaceName = settingPtr->interfaceName();

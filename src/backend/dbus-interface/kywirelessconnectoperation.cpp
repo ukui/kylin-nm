@@ -1206,6 +1206,7 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
         wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaPsk);
         wirelessSecuritySetting->setPsk(apPassword);
     }
+    apConnectPtr->update(apConnectSettingPtr->toMap());
 
     QStringList blackList = getBlackListHostName(apConnectPtr->path());
     NMVariantMapMap newMap = apConnectSettingPtr->toMap();
@@ -1213,6 +1214,7 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
         newMap[KEY_802_11_WIRELESS].insert(KEY_BLACKLIST_HOSTNAME, blackList);
     }
     apConnectPtr->update(newMap);
+    usleep(100*1000);
 }
 
 void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QString apName,

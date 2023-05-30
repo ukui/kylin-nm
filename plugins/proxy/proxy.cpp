@@ -123,7 +123,7 @@ QWidget *Proxy::pluginUi() {
             initManualProxyStatus();
             initIgnoreHostStatus();
             initDbus();
-            initAppProxyStatus();
+//            initAppProxyStatus();
         } else {
             qCritical() << "Xml needed by Proxy is not installed";
         }
@@ -371,10 +371,10 @@ void Proxy::initUi(QWidget *widget)
     Lyt->addWidget(mIgnoreFrame);
 
     //应用代理模块
-    m_appProxyLabel = new TitleLabel(widget);
-    m_appProxyLabel->setText(tr("Application Proxy")); //应用代理
-    setAppProxyFrameUi(widget);
-    setAppListFrameUi(widget);
+//    m_appProxyLabel = new TitleLabel(widget);
+//    m_appProxyLabel->setText(tr("Application Proxy")); //应用代理
+//    setAppProxyFrameUi(widget);
+//    setAppListFrameUi(widget);
 
     //APT代理模块
     mAptProxyLabel = new TitleLabel(widget);
@@ -431,11 +431,11 @@ void Proxy::initUi(QWidget *widget)
     mverticalLayout->addWidget(mTitleLabel);
     mverticalLayout->addWidget(mProxyFrame);
     mverticalLayout->addSpacing(32);
-    mverticalLayout->addWidget(m_appProxyLabel);
-    mverticalLayout->addWidget(m_appProxyFrame);
+//    mverticalLayout->addWidget(m_appProxyLabel);
+//    mverticalLayout->addWidget(m_appProxyFrame);
     mverticalLayout->addSpacing(4);
-    mverticalLayout->addWidget(m_appListFrame);
-    mverticalLayout->addSpacing(32);
+//    mverticalLayout->addWidget(m_appListFrame);
+//    mverticalLayout->addSpacing(32);
     mverticalLayout->addWidget(mAptProxyLabel);
     mverticalLayout->addWidget(mAPTFrame);
     mverticalLayout->addStretch();

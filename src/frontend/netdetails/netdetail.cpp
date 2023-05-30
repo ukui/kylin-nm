@@ -721,6 +721,7 @@ void NetDetail::initSecuData()
         break;
     case WPA_AND_WPA2_PERSONAL:
     case WPA3_PERSONAL:
+    case WPA_AND_WPA3:
         if (!m_uuid.isEmpty()) {
             NetworkManager::Setting::SecretFlags flag;
             if (m_wirelessConnOpration->getConnSecretFlags(m_uuid, flag)) {

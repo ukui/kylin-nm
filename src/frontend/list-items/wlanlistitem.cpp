@@ -531,7 +531,8 @@ void WlanListItem::onNetButtonClicked()
     //qDebug() << "!!!!" << m_wirelessNetItem.m_kySecuType << kySecuType;
     //有配置或者无密码的wifi直接连接
     if (m_wirelessNetItem.m_isConfigured) {
-        if (m_wirelessNetItem.m_kySecuType == kySecuType) {
+        if (m_wirelessNetItem.m_kySecuType == kySecuType ||
+                (m_wirelessNetItem.m_kySecuType == WPA_AND_WPA3 && (kySecuType == WPA_AND_WPA2_PERSONAL || kySecuType == WPA3_PERSONAL))) {
             //安全类型不变直接连接
             m_wirelessConnectOperation->activeWirelessConnect(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
             qDebug()<<"[WlanListItem] Has configuration, will be activated. ssid = "

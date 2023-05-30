@@ -1491,6 +1491,7 @@ void WlanPage::showHiddenWlanPage(QString devName)
 
     m_joinHiddenWiFiPagePtrMap.insert(devName, hiddenWiFi);
     hiddenWiFi->show();
+    KWindowSystem::raiseWindow(hiddenWiFi->winId());
     hiddenWiFi->centerToScreen();
 }
 
@@ -1521,6 +1522,7 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
         }
     });
     netDetail->show();
+    KWindowSystem::raiseWindow(netDetail->winId());
     netDetail->centerToScreen();
 
     return;

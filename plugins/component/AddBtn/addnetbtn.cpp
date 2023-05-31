@@ -34,7 +34,6 @@ AddNetBtn::AddNetBtn(bool isWlan, QWidget *parent) : QPushButton(parent)
     this->setMaximumSize(QSize(16777215, 60));
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
-    this->setProperty("needTranslucent", true);
 
     QHBoxLayout *addLyt = new QHBoxLayout;
 
@@ -84,6 +83,12 @@ void AddNetBtn::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
     painter.setBrush(this->palette().base().color());
+
+    QPalette pal = qApp->palette();
+    QColor color = pal.color(QPalette::Button);
+    color.setAlphaF(0.5);
+    pal.setColor(QPalette::Button, color);
+    this->setPalette(pal);
 
     QRect rect = this->rect();
     QPainterPath path;

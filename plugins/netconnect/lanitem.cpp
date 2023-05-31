@@ -33,7 +33,6 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     this->setMinimumSize(550, 58);
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
-    this->setProperty("needTranslucent", true);
 //    setStyleSheet("QPushButton:!checked{background-color: palette(base)}");
     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
     mLanLyt->setContentsMargins(16,0,16,0);
@@ -94,6 +93,12 @@ void LanItem::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
     painter.setBrush(this->palette().base().color());
+
+    QPalette pal = qApp->palette();
+    QColor color = pal.color(QPalette::Button);
+    color.setAlphaF(0.5);
+    pal.setColor(QPalette::Button, color);
+    this->setPalette(pal);
 
     QRect rect = this->rect();
 

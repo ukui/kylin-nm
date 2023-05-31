@@ -1,3 +1,14 @@
+kylin-nm (3.20.1.17-0k1.8) v101; urgency=medium
+
+  * BUG号：
+     -#173716 【走查】【移动热点】英文模式下无提示图标
+     -#172489  WIFI】外接USB网卡，在移动热点界面拖动右侧窗口，存在叹号消失的情况
+  * 需求号：
+  * 其他改动：控制面板有线网络及无线网络的悬停点击背景色
+  * 影响域：自身
+
+ -- zhangyuanyuan1 <zhangyuanyuan1@kylinos.cn>  Wed, 31 May 2023 16:23:30 +0800
+
 kylin-nm (3.20.1.17-0k1.7) v101; urgency=medium
 
   * BUG号：

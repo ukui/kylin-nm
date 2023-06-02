@@ -58,10 +58,10 @@ void MobileHotspotWidget::showDesktopNotify(const QString &message)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QList<QVariant> args;
-    args<<(tr("ukui control center"))
+    args<<(tr("Settings"))
        <<((unsigned int) 0)
        <<QString("ukui-control-center")
-       <<tr("ukui control center desktop message") //显示的是什么类型的信息
+       <<tr("Settings desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
        <<QStringList()
        <<QVariantMap()

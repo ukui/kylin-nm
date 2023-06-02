@@ -36,18 +36,26 @@
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="64"/>
         <source>ukui control center</source>
-        <translation>控制面板</translation>
+        <translation type="vanished">控制面板</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="67"/>
         <source>ukui control center desktop message</source>
-        <translation>控制面板桌面通知</translation>
+        <translation type="vanished">控制面板桌面通知</translation>
     </message>
     <message>
         <source>WiredConnect</source>
         <translation type="vanished">有线网络</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="64"/>
+        <source>Settings</source>
+        <translation>设置</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="67"/>
+        <source>Settings desktop message</source>
+        <translation>设置 桌面通知</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="81"/>
@@ -61,13 +69,13 @@
         <translation>未检测到有线设备</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="429"/>
-        <location filename="../netconnect.cpp" line="850"/>
+        <location filename="../netconnect.cpp" line="437"/>
+        <location filename="../netconnect.cpp" line="861"/>
         <source>connected</source>
         <translation>已连接</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="493"/>
+        <location filename="../netconnect.cpp" line="504"/>
         <source>card</source>
         <translation>网卡</translation>
     </message>

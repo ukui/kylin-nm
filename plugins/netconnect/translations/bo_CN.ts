@@ -36,18 +36,26 @@
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="64"/>
         <source>ukui control center</source>
-        <translation>ཝུའུ་ཁི་ལན་གྱི་ཚོད་འཛིན་ལྟེ་གནས།</translation>
+        <translation type="vanished">ཝུའུ་ཁི་ལན་གྱི་ཚོད་འཛིན་ལྟེ་གནས།</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="67"/>
         <source>ukui control center desktop message</source>
-        <translation>ukui ཚོད་འཛིན་ལྟེ་གནས་ཀྱི་ཅོག་ངོས་ཆ་འཕྲིན།</translation>
+        <translation type="vanished">ukui ཚོད་འཛིན་ལྟེ་གནས་ཀྱི་ཅོག་ངོས་ཆ་འཕྲིན།</translation>
     </message>
     <message>
         <source>WiredConnect</source>
         <translation type="vanished">སྐུད་ཡོད་སྦྲེལ་མཐུད།</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="64"/>
+        <source>Settings</source>
+        <translation>བཀོད་སྒྲིག་བཅས་བྱ་དགོས།</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="67"/>
+        <source>Settings desktop message</source>
+        <translation>བཀོད་སྒྲིག་བཅས་བྱ་དགོས།  ཅོག་ངོས་ལ་བརྡ་ཐོ་གཏོང་དགོས།</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="81"/>
@@ -61,13 +69,13 @@
         <translation>ཨེ་ཙི་དྲ་རྒྱའི་སྒྲིག་ཆས་ལ་བཙན་འཛུལ་བྱས་མི་ཆོག།</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="429"/>
-        <location filename="../netconnect.cpp" line="850"/>
+        <location filename="../netconnect.cpp" line="437"/>
+        <location filename="../netconnect.cpp" line="861"/>
         <source>connected</source>
         <translation>འབྲེལ་མཐུད་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="493"/>
+        <location filename="../netconnect.cpp" line="504"/>
         <source>card</source>
         <translation>བྱང་བུ།</translation>
     </message>

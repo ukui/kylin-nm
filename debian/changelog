@@ -1,3 +1,13 @@
+kylin-nm (3.20.1.17-0k1.9) v101; urgency=medium
+
+  * BUG号：
+     -#172410 【通知中心】设置弹窗显示标题为控制面板，与实际不一致
+  * 需求号：
+  * 其他改动：
+  * 影响域：自身
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 02 Jun 2023 14:13:28 +0800
+
 kylin-nm (3.20.1.17-0k1.8) v101; urgency=medium
 
   * BUG号：

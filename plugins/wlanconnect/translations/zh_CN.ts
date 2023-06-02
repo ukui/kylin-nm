@@ -43,14 +43,22 @@
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="123"/>
         <source>ukui control center</source>
-        <translation>控制面板</translation>
+        <translation type="vanished">控制面板</translation>
+    </message>
+    <message>
+        <source>ukui control center desktop message</source>
+        <translation type="vanished">控制面板桌面通知</translation>
+    </message>
+    <message>
+        <location filename="../wlanconnect.cpp" line="123"/>
+        <source>Settings</source>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="126"/>
-        <source>ukui control center desktop message</source>
-        <translation>控制面板桌面通知</translation>
+        <source>Settings desktop message</source>
+        <translation>设置 桌面通知</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="228"/>
@@ -58,14 +66,14 @@
         <translation>未检测到无线网卡</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="362"/>
-        <location filename="../wlanconnect.cpp" line="1028"/>
-        <location filename="../wlanconnect.cpp" line="1090"/>
+        <location filename="../wlanconnect.cpp" line="364"/>
+        <location filename="../wlanconnect.cpp" line="1033"/>
+        <location filename="../wlanconnect.cpp" line="1095"/>
         <source>connected</source>
         <translation>已连接</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="965"/>
+        <location filename="../wlanconnect.cpp" line="970"/>
         <source>card</source>
         <translation>网卡</translation>
     </message>

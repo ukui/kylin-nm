@@ -56,14 +56,12 @@
 <context>
     <name>MobileHotspotWidget</name>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="61"/>
         <source>ukui control center</source>
-        <translation>ཝུའུ་ཁི་ལན་གྱི་ཚོད་འཛིན་ལྟེ་གནས།</translation>
+        <translation type="vanished">ཝུའུ་ཁི་ལན་གྱི་ཚོད་འཛིན་ལྟེ་གནས།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="64"/>
         <source>ukui control center desktop message</source>
-        <translation>ukui ཚོད་འཛིན་ལྟེ་གནས་ཀྱི་ཅོག་ངོས་ཆ་འཕྲིན།</translation>
+        <translation type="vanished">ukui ཚོད་འཛིན་ལྟེ་གནས་ཀྱི་ཅོག་ངོས་ཆ་འཕྲིན།</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="151"/>
@@ -88,7 +86,7 @@
         <translation type="vanished">ཀུན་གྱིས་དོ་སྣང་བྱེད་ཡུལ་གསར་སྐྲུན་བྱེད་འགོ་ </translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="536"/>
+        <location filename="../mobilehotspotwidget.cpp" line="540"/>
         <source>Contains at least 8 characters</source>
         <translation>མ་མཐར་ཡང་ཡིག་རྟགས་བརྒྱད་འདུས་ཡོད།</translation>
     </message>
@@ -96,6 +94,16 @@
         <location filename="../mobilehotspotwidget.cpp" line="225"/>
         <source>Hotspot</source>
         <translation>ཚ་བ་ཆེ་བ།</translation>
+    </message>
+    <message>
+        <location filename="../mobilehotspotwidget.cpp" line="61"/>
+        <source>Settings</source>
+        <translation>བཀོད་སྒྲིག་བཅས་བྱ་དགོས།</translation>
+    </message>
+    <message>
+        <location filename="../mobilehotspotwidget.cpp" line="64"/>
+        <source>Settings desktop message</source>
+        <translation>བཀོད་སྒྲིག་བཅས་བྱ་དགོས།  ཅོག་ངོས་ལ་བརྡ་ཐོ་གཏོང་དགོས།</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="336"/>
@@ -114,27 +122,27 @@
         <translation>ཚ་བ་ཆེ་བའི་གནད་དོན་ཐག་ཉེ་རུ་སོང་ཡོད།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="482"/>
+        <location filename="../mobilehotspotwidget.cpp" line="486"/>
         <source>Open</source>
         <translation>སྒོ་ཕྱེ་བ།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="503"/>
+        <location filename="../mobilehotspotwidget.cpp" line="507"/>
         <source>Wi-Fi Name</source>
         <translation>Wi-Fiཡི་མིང་།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="524"/>
+        <location filename="../mobilehotspotwidget.cpp" line="528"/>
         <source>Password</source>
         <translation>གསང་གྲངས།</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="565"/>
+        <location filename="../mobilehotspotwidget.cpp" line="571"/>
         <source>Frequency band</source>
         <translation>ཐེངས་གྲངས་ཀྱི་རོལ་ཆའི་རུ་ཁག</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="589"/>
+        <location filename="../mobilehotspotwidget.cpp" line="595"/>
         <source>Net card</source>
         <translation>དྲ་རྒྱའི་བྱང་བུ།</translation>
     </message>

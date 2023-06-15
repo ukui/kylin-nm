@@ -1227,7 +1227,7 @@ void Proxy::appListPadding()
 
         AppListWidget *appWidget = new AppListWidget(index, m_appListWidget);
         appWidget->setAppName(appInfo.value(0));
-        appWidget->setAppIcon(QIcon::fromTheme(appInfo.value(1)).pixmap(24, 24));
+        appWidget->setAppIcon(QIcon::fromTheme(appInfo.value(1)));
         appWidget->setAppChecked(flag);
 
         QListWidgetItem *appListWidgetItem = new QListWidgetItem(m_appListWidget);

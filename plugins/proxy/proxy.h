@@ -250,6 +250,7 @@ private:
 //    QPushButton *m_cancelBtn;
 //    QPushButton *m_saveBtn;
     QListWidget *m_appListWidget = nullptr;
+    QWidget *m_appProxyInfoWidget;
 
     QTextEdit *mIgnoreLineEdit;
 

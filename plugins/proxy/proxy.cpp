@@ -722,10 +722,10 @@ void Proxy::initAppProxyStatus()
     m_appEnableBtn->setChecked(state);
     onappProxyEnableChanged(state);
 
-    appProxyInfoPadding();
-//    m_cancelBtn->setEnabled(false);
-//    m_saveBtn->setEnabled(false);
-    appListPadding();
+    if (state) {
+        appProxyInfoPadding();
+        appListPadding();
+    }
 }
 
 int Proxy::_getCurrentProxyMode(){
@@ -1133,17 +1133,24 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     m_appLine4 = setLine(m_appProxyFrame);
     m_appLine5 = setLine(m_appProxyFrame);
 
+    m_appProxyInfoWidget = new QWidget(m_appProxyFrame);
+    QVBoxLayout *widgetHLayout = new QVBoxLayout(m_appProxyInfoWidget);
+    widgetHLayout->setContentsMargins(0, 0, 0, 0);
+    widgetHLayout->setSpacing(0);
+    widgetHLayout->addWidget(m_appLine1);
+    widgetHLayout->addWidget(m_proxyTypeFrame);
+    widgetHLayout->addWidget(m_appLine2);
+    widgetHLayout->addWidget(m_ipAddressFrame);
+    widgetHLayout->addWidget(m_appLine3);
+    widgetHLayout->addWidget(m_portFrame);
+    widgetHLayout->addWidget(m_appLine4);
+    widgetHLayout->addWidget(m_userNameFrame);
+    widgetHLayout->addWidget(m_appLine5);
+    widgetHLayout->addWidget(m_pwdFrame);
+
     appProxyLayout->addWidget(m_appEnableFrame);
-    appProxyLayout->addWidget(m_appLine1);
-    appProxyLayout->addWidget(m_proxyTypeFrame);
-    appProxyLayout->addWidget(m_appLine2);
-    appProxyLayout->addWidget(m_ipAddressFrame);
-    appProxyLayout->addWidget(m_appLine3);
-    appProxyLayout->addWidget(m_portFrame);
-    appProxyLayout->addWidget(m_appLine4);
-    appProxyLayout->addWidget(m_userNameFrame);
-    appProxyLayout->addWidget(m_appLine5);
-    appProxyLayout->addWidget(m_pwdFrame);
+    appProxyLayout->addWidget(m_appProxyInfoWidget);
+
 //    appProxyLayout->addWidget(line5);
 //    appProxyLayout->addWidget(m_appBtnFrame);
 
@@ -1304,17 +1311,13 @@ void Proxy::onPaletteChanged()
 
 void Proxy::onappProxyEnableChanged(bool enable)
 {
-    m_proxyTypeFrame->setVisible(enable);
-    m_ipAddressFrame->setVisible(enable);
-    m_portFrame->setVisible(enable);
-    m_userNameFrame->setVisible(enable);
-    m_pwdFrame->setVisible(enable);
-    m_appListFrame->setVisible(enable);
-    m_appLine1->setVisible(enable);
-    m_appLine2->setVisible(enable);
-    m_appLine3->setVisible(enable);
-    m_appLine4->setVisible(enable);
-    m_appLine5->setVisible(enable);
+    if (enable) {
+        m_appProxyInfoWidget->show();
+        m_appListFrame->show();
+    } else {
+        m_appProxyInfoWidget->hide();
+        m_appListFrame->hide();
+    }
 }
 
 #if 0

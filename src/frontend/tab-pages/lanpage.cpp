@@ -1318,7 +1318,7 @@ void LanPage::getWiredDeviceConnectState(QMap<QString, QString> &map)
         if (state < NetworkManager::Connectivity::Full) {
             m_activeResourse->getActiveConnectionList(devname, NetworkManager::ConnectionSettings::Wired, activedList);
             if (!activedList.isEmpty()) {
-                map.insert(devname, QString(tr("Connected: ")) + activedList.at(0)->m_connectName + QString(tr("(Limited)")));
+                map.insert(devname, QString(tr("Connected: ")) + activedList.at(0)->m_connectName + " " + QString(tr("(Limited)")));
             } else {
                 map.insert(devname, tr("Not Connected"));
             }

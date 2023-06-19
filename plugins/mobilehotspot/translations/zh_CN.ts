@@ -108,12 +108,12 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="336"/>
         <source>use </source>
-        <translation>使用</translation>
+        <translation>使用 </translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="337"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation>进行热点共享，会中断本机无线网络连接</translation>
+        <translation> 进行热点共享，会中断本机无线网络连接</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="353"/>
@@ -129,7 +129,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="507"/>
         <source>Wi-Fi Name</source>
-        <translation>Wi-Fi名称</translation>
+        <translation>Wi-Fi 名称</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="528"/>

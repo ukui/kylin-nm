@@ -6,7 +6,7 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="24"/>
         <source>Set Apt Proxy</source>
-        <translation>设置APT代理</translation>
+        <translation>设置 APT 代理</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="41"/>
@@ -69,31 +69,31 @@
     <message>
         <location filename="../proxy.cpp" line="452"/>
         <source>Auto url</source>
-        <translation>配置URL</translation>
+        <translation>配置 URL</translation>
         <extra-contents_path>/Proxy/Auto url</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="454"/>
         <source>Http Proxy</source>
-        <translation>HTTP代理</translation>
+        <translation>HTTP 代理</translation>
         <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="456"/>
         <source>Https Proxy</source>
-        <translation>HTTPS代理</translation>
+        <translation>HTTPS 代理</translation>
         <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="458"/>
         <source>Ftp Proxy</source>
-        <translation>FTP代理</translation>
+        <translation>FTP 代理</translation>
         <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="460"/>
         <source>Socks Proxy</source>
-        <translation>SOCKS代理</translation>
+        <translation>SOCKS 代理</translation>
         <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
     </message>
     <message>
@@ -119,7 +119,7 @@
     <message>
         <location filename="../proxy.cpp" line="471"/>
         <source>Apt Proxy</source>
-        <translation>APT代理</translation>
+        <translation>APT 代理</translation>
         <extra-contents_path>/Proxy/Apt Proxy</extra-contents_path>
     </message>
     <message>
@@ -146,7 +146,7 @@
     <message>
         <location filename="../proxy.cpp" line="573"/>
         <source>The apt proxy  has been turned off and needs to be restarted to take effect</source>
-        <translation>APT代理已关闭，需要重启才能生效</translation>
+        <translation>APT 代理已关闭，需要重启才能生效</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="574"/>
@@ -163,7 +163,7 @@
     <message>
         <location filename="../proxy.cpp" line="813"/>
         <source>The system needs to be restarted to set the Apt proxy, whether to reboot</source>
-        <translation>设置APT代理需要重启系统后生效，是否重启系统</translation>
+        <translation>设置 APT 代理需要重启系统后生效，是否重启系统</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1017"/>
@@ -173,7 +173,7 @@
     <message>
         <location filename="../proxy.cpp" line="1034"/>
         <source>IP address</source>
-        <translation>IP地址</translation>
+        <translation>IP 地址</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1040"/>
@@ -184,7 +184,7 @@
     <message>
         <location filename="../proxy.cpp" line="1061"/>
         <source>Invalid IP Address</source>
-        <translation>无效的IP地址</translation>
+        <translation>无效的 IP 地址</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1082"/>

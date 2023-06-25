@@ -50,8 +50,10 @@ public:
     void setIfaceName(QString &ifaceName);
     void setConnectName(QString &connectName);
     int  setIpConfigType(KyIpAddressType ipType, KyIpConfigType configType);
-    void ipv4AddressConstruct(QString &ipv4Address, QString &ipv4NetMask, QString &ipv4GateWay, QStringList &ipv4Dns);
-    void ipv6AddressConstruct(QString &ipv6Address, QString &ipv6NetMask, QString &ipv6GateWay, QStringList &ipv6Dns);
+    void ipv4DnsConstruct(QList<QHostAddress> &ipv4Dns);
+    void ipv4AddressConstruct(QString &ipv4Address, QString &ipv4NetMask, QString &ipv4GateWay);
+    void ipv6DnsConstruct(QList<QHostAddress> &ipv6Dns);
+    void ipv6AddressConstruct(QString &ipv6Address, QString &ipv6NetMask, QString &ipv6GateWay);
     void dumpInfo();
 
 public:

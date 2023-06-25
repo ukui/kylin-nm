@@ -451,36 +451,28 @@ void KyConnectResourse::getIpv4ConnectSetting(
                         NetworkManager::Ipv4Setting::Ptr &ipv4Setting,
                         KyConnectSetting &connectSetting)
 {
+    connectSetting.m_ipv4Dns = ipv4Setting->dns();
     if (NetworkManager::Ipv4Setting::Automatic == ipv4Setting->method()) {
         connectSetting.m_ipv4ConfigIpType = CONFIG_IP_DHCP;
         return;
     }
 
     connectSetting.m_ipv4ConfigIpType = CONFIG_IP_MANUAL;
-
     connectSetting.m_ipv4Address = ipv4Setting->addresses();
-    connectSetting.m_ipv4Dns = ipv4Setting->dns();
-
-    return;
 }
 
 void KyConnectResourse::getIpv6ConnectSetting(
                         NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
                         KyConnectSetting &connectSetting)
 {
-
+    connectSetting.m_ipv6Dns = ipv6Setting->dns();
     if (NetworkManager::Ipv6Setting::Automatic == ipv6Setting->method()) {
         connectSetting.m_ipv6ConfigIpType = CONFIG_IP_DHCP;
         return;
     }
 
     connectSetting.m_ipv6ConfigIpType = CONFIG_IP_MANUAL;
-
-    connectSetting.m_ipv6Address = ipv6Setting->addresses();
-
-    connectSetting.m_ipv6Dns = ipv6Setting->dns();
-
-    return;
+    connectSetting.m_ipv6Address = ipv6Setting->addresses();    
 }
 
 void KyConnectResourse::getConnectivity(NetworkManager::Connectivity &connectivity)

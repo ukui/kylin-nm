@@ -39,15 +39,11 @@ void Ipv4Page::initUI() {
     ipv4addressEdit = new LineEdit(this);
     netMaskEdit = new LineEdit(this);
     gateWayEdit = new LineEdit(this);
-    firstDnsEdit = new LineEdit(this);
-    secondDnsEdit = new LineEdit(this);
 
     m_configLabel = new QLabel(this);
     m_addressLabel = new QLabel(this);
     m_maskLabel = new QLabel(this);
     m_gateWayLabel = new QLabel(this);
-    m_dnsLabel = new QLabel(this);
-    m_secDnsLabel = new QLabel(this);
 
     m_configEmptyLabel = new QLabel(this);
     m_configEmptyLabel->setFixedHeight(LABEL_HEIGHT);
@@ -64,16 +60,13 @@ void Ipv4Page::initUI() {
     m_gateWayEmptyLabel = new QLabel(this);
     m_gateWayEmptyLabel->setFixedHeight(LABEL_HEIGHT);
 
-    m_firstDnsEmptyLabel = new QLabel(this);
-    m_firstDnsEmptyLabel->setFixedHeight(LABEL_HEIGHT);
-
+    m_dnsEmptyLabel = new QLabel(this);
+    m_dnsEmptyLabel->setFixedHeight(21);
 
     m_configLabel->setText(tr("IPv4Config"));
     m_addressLabel->setText(tr("Address"));
     m_maskLabel->setText(tr("Netmask"));
     m_gateWayLabel->setText(tr("Default Gateway"));
-    m_dnsLabel->setText(tr("Prefs DNS"));
-    m_secDnsLabel->setText(tr("Alternative DNS"));
 
     m_statusLabel = new QLabel(this);
     m_statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -100,6 +93,12 @@ void Ipv4Page::initUI() {
     maskLayout->addWidget(netMaskEdit);
     maskLayout->addWidget(m_maskHintLabel);
 
+    // IP的正则格式限制
+    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
+
+    Divider* divider = new Divider(true, this);
+    m_dnsWidget = new MultipleDnsWidget(rx, true, this);
+
     m_detailLayout = new QFormLayout(this);
     m_detailLayout->setVerticalSpacing(0);
     m_detailLayout->setContentsMargins(LAYOUT_MARGINS);
@@ -109,9 +108,9 @@ void Ipv4Page::initUI() {
     m_detailLayout->addRow(m_maskLabel,maskWidget);
     m_detailLayout->addRow(m_gateWayLabel,gateWayEdit);
     m_detailLayout->addRow(m_gateWayEmptyLabel);
-    m_detailLayout->addRow(m_dnsLabel,firstDnsEdit);
-    m_detailLayout->addRow(m_firstDnsEmptyLabel);
-    m_detailLayout->addRow(m_secDnsLabel,secondDnsEdit);
+    m_detailLayout->addRow(divider);
+    m_detailLayout->addRow(m_dnsEmptyLabel);
+    m_detailLayout->addRow(m_dnsWidget);
 
     ipv4ConfigCombox->addItem(tr("Auto(DHCP)")); //"自动(DHCP)"
     ipv4ConfigCombox->addItem(tr("Manual")); //"手动"
@@ -124,14 +123,9 @@ void Ipv4Page::initUI() {
 //    netMaskCombox->addItem("255.0.0.0"); //8
 
 
-    // IP的正则格式限制
-    QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
-
     ipv4addressEdit->setValidator(new QRegExpValidator(rx, this));
     gateWayEdit->setValidator(new QRegExpValidator(rx, this));
     netMaskEdit->setValidator(new QRegExpValidator(rx, this));
-    firstDnsEdit->setValidator(new QRegExpValidator(rx, this));
-    secondDnsEdit->setValidator(new QRegExpValidator(rx, this));
 
     initLoadingIcon();
 }
@@ -152,8 +146,8 @@ void Ipv4Page::initComponent() {
     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-    connect(firstDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
-    connect(secondDnsEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+
+    connect(m_dnsWidget, &MultipleDnsWidget::scrollToBottom, this, &Ipv4Page::scrollToBottom);
 }
 
 void Ipv4Page::setIpv4Config(KyIpConfigType ipv4Config)
@@ -175,14 +169,9 @@ void Ipv4Page::setNetMask(const QString &netMask)
     netMaskEdit->setText(netMask);
 }
 
-void Ipv4Page::setIpv4FirDns(const QString &ipv4FirDns)
+void Ipv4Page::setMulDns(const QList<QHostAddress> &dns)
 {
-    firstDnsEdit->setText(ipv4FirDns);
-}
-
-void Ipv4Page::setIpv4SecDns(const QString &ipv4SecDns)
-{
-    secondDnsEdit->setText(ipv4SecDns);
+    m_dnsWidget->setDnsListText(dns);
 }
 
 void Ipv4Page::setGateWay(const QString &gateWay)
@@ -193,52 +182,51 @@ void Ipv4Page::setGateWay(const QString &gateWay)
 bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
 {
     bool isChanged = false;
+    KyIpConfigType type;
     if (ipv4ConfigCombox->currentIndex() == AUTO_CONFIG) {
+        type = CONFIG_IP_DHCP;
         if (info.ipv4ConfigType != CONFIG_IP_DHCP) {
             qDebug() << "ipv4ConfigType change to Auto";
-            setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
-            QString ipv4address("");
-            QString netMask("");
-            QString gateWay("");
-            QStringList dnsList;
-            dnsList.empty();
-            qDebug() << ipv4address << netMask << gateWay;
-            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay, dnsList);
             isChanged = true;
         }
     } else {
+        type = CONFIG_IP_MANUAL;
         if (info.ipv4ConfigType != CONFIG_IP_MANUAL) {
             qDebug() << "ipv4ConfigType change to Manual";
-            setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
             isChanged =  true;
-        }
-        qDebug() << "ipv4 netmask " << getNetMaskText(netMaskEdit->text());
-        if(info.strIPV4Address != ipv4addressEdit->text()
-                || info.strIPV4NetMask != /*netMaskEdit->text()*/getNetMaskText(netMaskEdit->text())
-                || info.strIPV4GateWay != gateWayEdit->text()
-                || info.strIPV4FirDns  != firstDnsEdit->text()
-                || info.strIPV4SecDns  != secondDnsEdit->text()) {
+        } else {
 
-            qDebug() << "ipv4 info changed";
-            QStringList dnsList;
-            dnsList.empty();
-            if (!firstDnsEdit->text().isEmpty()) {
-                dnsList << firstDnsEdit->text();
-                if (!secondDnsEdit->text().isEmpty()) {
-                    dnsList << secondDnsEdit->text();
-                }
+            if(info.strIPV4Address != ipv4addressEdit->text()
+                    || info.strIPV4NetMask != getNetMaskText(netMaskEdit->text())
+                    || info.strIPV4GateWay != gateWayEdit->text()) {
+                qDebug() << "ipv4 info changed";
+                isChanged =  true;
             }
-
-            QString ipv4address =ipv4addressEdit->text();
-            QString netMask = getNetMaskText(netMaskEdit->text());
-            QString gateWay = gateWayEdit->text();
-            qDebug() << ipv4address << netMask << gateWay;
-            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay, dnsList);
-            setting.dumpInfo();
-            isChanged =  true;
         }
     }
+
+    QList<QHostAddress> ipv4dnsList;
+    ipv4dnsList.clear();
+    ipv4dnsList = m_dnsWidget->getDns();
+    if(info.ipv4DnsList != ipv4dnsList) {
+        isChanged = true;
+    }
+
+    if (isChanged) {
+        setting.setIpConfigType(IPADDRESS_V4, type);
+        QString ipv4address = ipv4addressEdit->text();
+        QString netMask = getNetMaskText(netMaskEdit->text());
+        QString gateWay = gateWayEdit->text();
+        setting.ipv4AddressConstruct(ipv4address, netMask, gateWay);
+        setting.ipv4DnsConstruct(ipv4dnsList);
+        setting.dumpInfo();
+    }
+
     return isChanged;
+}
+
+bool Ipv4Page::checkDnsSettingsIsChanged() {
+    return m_dnsWidget->getDnsSettingsChanged();
 }
 
 bool Ipv4Page::checkConnectBtnIsEnabled()
@@ -262,20 +250,6 @@ bool Ipv4Page::checkConnectBtnIsEnabled()
 //            return false;
 //        }
 
-        if (firstDnsEdit->text().isEmpty() && !secondDnsEdit->text().isEmpty()) {
-            qDebug() << "ipv4 dns sort invalid";
-            return false;
-        }
-
-        if (!getTextEditState(firstDnsEdit->text())) {
-            qDebug() << "ipv4 first dns invalid";
-            return false;
-        }
-
-        if (!getTextEditState(secondDnsEdit->text())) {
-            qDebug() << "ipv4 second dns invalid";
-            return false;
-        }
     }
     return true;
 }
@@ -325,8 +299,6 @@ void Ipv4Page::setLineEnabled(bool check) {
         ipv4addressEdit->clear();
         netMaskEdit->clear();
         gateWayEdit->clear();
-        firstDnsEdit->clear();
-        secondDnsEdit->clear();
 
         ipv4addressEdit->setPlaceholderText(" ");
         netMaskEdit->setPlaceholderText(" ");
@@ -339,8 +311,7 @@ void Ipv4Page::setLineEnabled(bool check) {
     ipv4addressEdit->setEnabled(check);
     netMaskEdit->setEnabled(check);
     gateWayEdit->setEnabled(check);
-    firstDnsEdit->setEnabled(check);
-    secondDnsEdit->setEnabled(check);
+//    m_dnsWidget->setEditEnabled(check);
 }
 
 void Ipv4Page::setEnableOfSaveBtn() {

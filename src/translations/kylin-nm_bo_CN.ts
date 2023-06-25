@@ -786,22 +786,27 @@
 <context>
     <name>LanPage</name>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1183"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1187"/>
         <source>No ethernet device avaliable</source>
         <translation>ཨེ་ཙི་དྲ་རྒྱའི་སྒྲིག་ཆས་ལ་བཙན་འཛུལ་བྱས་མི་ཆོག།</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="740"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="744"/>
         <source>LAN</source>
         <translation>སྐུད་ཡོད་དྲ་བ།</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="742"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="67"/>
+        <source>conflict, unable to connect to the network normally!</source>
+        <translation>གདོང་གཏུག་རྒྱུན་ལྡན་ལྟར་དྲ་རྒྱ་དང་འབྲེལ་མཐུད་བྱེད་ཐབས་བྲལ་བ་རེད།！</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="746"/>
         <source>Activated LAN</source>
         <translation>ངའི་དྲ་རྒྱ།</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="752"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="756"/>
         <source>Inactivated LAN</source>
         <translation>དྲ་བ་གཞན་དག</translation>
     </message>
@@ -810,7 +815,7 @@
         <translation type="vanished">སྐུད་ཡོད་དྲ་བ་ཆད་སོང་།</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1227"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1231"/>
         <source>Wired Device not carried</source>
         <translation>སྐུད་ཡོད་སྒྲིག་ཆས་འཁྱེར་མེད་པ།</translation>
     </message>
@@ -819,18 +824,18 @@
         <translation type="vanished">སྐུད་ཡོད་དྲ་བ་སྦྲེལ་ཡོད།</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1321"/>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1329"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1325"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1333"/>
         <source>Connected: </source>
         <translation>འབྲེལ་མཐུད་བྱུང་ཡོད།: </translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1323"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1327"/>
         <source>Not Connected</source>
         <translation>འབྲེལ་མཐུད་མ་བྱས་པ།</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1321"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1325"/>
         <source>(Limited)</source>
         <translation>(དྲ་བར་ཚོད་འཛིན་ཐེབས་པ་རེད།)</translation>
     </message>

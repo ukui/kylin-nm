@@ -786,22 +786,27 @@
 <context>
     <name>LanPage</name>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1183"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1187"/>
         <source>No ethernet device avaliable</source>
         <translation>未检测到有线设备</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="740"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="744"/>
         <source>LAN</source>
         <translation>有线网络</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="742"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="67"/>
+        <source>conflict, unable to connect to the network normally!</source>
+        <translation>冲突，无法正常连接到网络！</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="746"/>
         <source>Activated LAN</source>
         <translation>我的网络</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="752"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="756"/>
         <source>Inactivated LAN</source>
         <translation>其他网络</translation>
     </message>
@@ -810,7 +815,7 @@
         <translation type="vanished">有线网络已断开</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1227"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1231"/>
         <source>Wired Device not carried</source>
         <translation>未插入网线</translation>
     </message>
@@ -819,18 +824,18 @@
         <translation type="vanished">有线网络已连接</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1321"/>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1329"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1325"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1333"/>
         <source>Connected: </source>
         <translation>已连接: </translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1323"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1327"/>
         <source>Not Connected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1321"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1325"/>
         <source>(Limited)</source>
         <translation>(网络受限)</translation>
     </message>

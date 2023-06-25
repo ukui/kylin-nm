@@ -87,6 +87,8 @@ Q_SIGNALS:
     void connectionRemove(QString path);
     void connectivityChanged(NetworkManager::Connectivity connectivity);
 
+    void needShowDesktop(QString);
+
 private:
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
 };

@@ -303,23 +303,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="268"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="272"/>
         <source>Invalid address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="277"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="281"/>
         <source>Invalid subnet mask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="303"/>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="304"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="307"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="308"/>
         <source>Required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/ipv4page.cpp" line="374"/>
+        <location filename="../frontend/netdetails/ipv4page.cpp" line="378"/>
         <source>Address conflict</source>
         <translation type="unfinished"></translation>
     </message>
@@ -587,102 +587,102 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="366"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="359"/>
         <source>Detail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="370"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="363"/>
         <source>Security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="365"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="372"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="379"/>
         <source>Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="391"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="384"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="393"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="386"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="451"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="444"/>
         <source>Forget this network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="367"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="360"/>
         <source>IPv4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="368"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="361"/>
         <source>IPv6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="432"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="425"/>
         <source>Add LAN Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="437"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="430"/>
         <source>Connect Hidden WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="453"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="446"/>
         <source>Delete this network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="618"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="630"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1173"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="611"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="623"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1166"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="742"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="743"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="744"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="735"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="736"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="737"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="885"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="878"/>
         <source>start check ipv4 address conflict</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="902"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="895"/>
         <source>start check ipv6 address conflict</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1169"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1162"/>
         <source>this wifi no support enterprise type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1174"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1167"/>
         <source>this wifi no support None type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1179"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1172"/>
         <source>this wifi no support WPA2 type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1182"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1175"/>
         <source>this wifi no support WPA3 type</source>
         <translation type="unfinished"></translation>
     </message>
@@ -800,8 +800,8 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="1129"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1160"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1182"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1205"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1260"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1211"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1266"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
@@ -891,24 +891,22 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1150"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1173"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1195"/>
         <source>Choose a CA certificate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1151"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1174"/>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1196"/>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1250"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1256"/>
         <source>Choose a PAC file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/securitypage.cpp" line="1251"/>
+        <location filename="../frontend/netdetails/securitypage.cpp" line="1257"/>
         <source>PAC Files (*.pac)</source>
         <translation type="unfinished"></translation>
     </message>

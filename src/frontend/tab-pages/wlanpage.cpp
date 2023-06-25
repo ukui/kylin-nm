@@ -1677,7 +1677,7 @@ void WlanPage::getWirelssDeviceConnectState(QMap<QString, QString> &map)
         m_netDeviceResource->getDeviceConnectivity(devname, state);
         if (state < NetworkManager::Connectivity::Full) {
             if (m_wirelessNetResource->getActiveWirelessNetItem(devname, wirelessNetItem)) {
-                map.insert(devname, QString(tr("Connected: ")) + wirelessNetItem.m_connName + QString(tr("(Limited)")));
+                map.insert(devname, QString(tr("Connected: ")) + wirelessNetItem.m_connName +  " " + QString(tr("(Limited)")));
             } else {
                 map.insert(devname, tr("Not Connected"));
            }

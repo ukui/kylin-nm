@@ -19,7 +19,7 @@
     <message>
         <location filename="../itemframe.cpp" line="38"/>
         <source>Add VPN</source>
-        <translation>添加VPN</translation>
+        <translation>添加 VPN</translation>
     </message>
 </context>
 <context>
@@ -32,11 +32,6 @@
     <message>
         <location filename="../vpn.ui" line="68"/>
         <source>import</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../vpn.cpp" line="68"/>
-        <source>VPN</source>
         <translation></translation>
     </message>
     <message>

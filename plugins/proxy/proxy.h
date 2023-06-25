@@ -136,6 +136,7 @@ public:
     void setAppProxyConf(QStringList list); //设置应用代理配置信息--调用Dbus
     static QMap<QString, QStringList> getAppListProxy();
 //    bool checkIsChanged(QStringList info);
+    void setUkccProxySettings();  // 设置控制面板代理模块显示/隐藏
 
 private:
     void setAppProxyFrameUi(QWidget *widget);
@@ -143,6 +144,13 @@ private:
     void appProxyInfoPadding();
     void appListPadding();
     bool getipEditState(QString text);
+    void setSystemProxyFrameHidden(bool state);
+    void setAppProxyFrameHidden(bool state);
+    void setAPTProxyFrameHidden(bool state);
+
+    QFrame *m_sysSpacerFrame;
+    QFrame *m_appListSpacerFrame;
+    QFrame *m_appSpacerFrame;
 
     QString pluginName;
     int pluginType;

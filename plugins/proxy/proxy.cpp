@@ -127,6 +127,7 @@ QWidget *Proxy::pluginUi() {
         } else {
             qCritical() << "Xml needed by Proxy is not installed";
         }
+        setUkccProxySettings();
     }
     return pluginWidget;
 }
@@ -428,14 +429,21 @@ void Proxy::initUi(QWidget *widget)
     AptLayout->addWidget(line_7);
     AptLayout->addWidget(mAPTFrame_2);
 
+    m_sysSpacerFrame = new QFrame(widget);
+    m_sysSpacerFrame->setFixedHeight(32);
+    m_appListSpacerFrame = new QFrame(widget);
+    m_appListSpacerFrame->setFixedHeight(4);
+    m_appSpacerFrame = new QFrame(widget);;
+    m_appSpacerFrame->setFixedHeight(32);;
+
     mverticalLayout->addWidget(mTitleLabel);
     mverticalLayout->addWidget(mProxyFrame);
-    mverticalLayout->addSpacing(32);
+    mverticalLayout->addWidget(m_sysSpacerFrame);
     mverticalLayout->addWidget(m_appProxyLabel);
     mverticalLayout->addWidget(m_appProxyFrame);
-    mverticalLayout->addSpacing(4);
+    mverticalLayout->addWidget(m_appListSpacerFrame);
     mverticalLayout->addWidget(m_appListFrame);
-    mverticalLayout->addSpacing(32);
+    mverticalLayout->addWidget(m_appSpacerFrame);
     mverticalLayout->addWidget(mAptProxyLabel);
     mverticalLayout->addWidget(mAPTFrame);
     mverticalLayout->addStretch();
@@ -970,6 +978,50 @@ QMap<QString, QStringList> Proxy::getAppListProxy()
     return appList;
 }
 
+void Proxy::setUkccProxySettings()
+{
+    setSystemProxyFrameHidden(false);
+    setAppProxyFrameHidden(false);
+    setAPTProxyFrameHidden(false);
+
+    QDBusInterface ukccDbusInterface("org.ukui.ukcc.session",
+                       "/",
+                       "org.ukui.ukcc.session.interface",
+                       QDBusConnection::sessionBus());
+
+    if(!ukccDbusInterface.isValid()) {
+        qWarning() << "ukccDbusInterface is invalid";
+        return;
+    }
+
+    QDBusReply<QMap<QString, QVariant> > reply = ukccDbusInterface.call("getModuleHideStatus");
+    if (!reply.isValid()) {
+        qWarning() << "reply of getModuleHideStatus is invalid";
+        return;
+    }
+
+    QStringList proxySettingList;
+    if (reply.value().contains("proxySettings")) {
+        QString proxySettings = reply.value()["proxySettings"].toString();
+        qDebug() << "proxySettings" << proxySettings;
+
+        if (proxySettings.isEmpty()) {
+            return;
+        }
+        proxySettingList = proxySettings.split(",");
+    }
+
+    for (const QString setting : proxySettingList) {
+        if (setting.contains("SystemProxyFrame") && setting.contains("false")) {
+            setSystemProxyFrameHidden(true);
+        } else if (setting.contains("AppProxyFrame") && setting.contains("false")) {
+            setAppProxyFrameHidden(true);
+        } else if (setting.contains("APTProxyFrame") && setting.contains("false")) {
+            setAPTProxyFrameHidden(true);
+        }
+    }
+}
+
 #if 0
 bool Proxy::checkIsChanged(QStringList info)
 {
@@ -1256,6 +1308,28 @@ bool Proxy::getipEditState(QString text)
     match = rx.exactMatch(text);
 
     return match;
+}
+
+void Proxy::setSystemProxyFrameHidden(bool state)
+{
+    mTitleLabel->setHidden(state);
+    mProxyFrame->setHidden(state);
+    m_sysSpacerFrame->setHidden(state);
+}
+
+void Proxy::setAppProxyFrameHidden(bool state)
+{
+    m_appProxyLabel->setHidden(state);
+    m_appProxyFrame->setHidden(state);
+    m_appListFrame->setHidden(state);
+    m_appListSpacerFrame->setHidden(state);
+    m_appSpacerFrame->setHidden(state);
+}
+
+void Proxy::setAPTProxyFrameHidden(bool state)
+{
+    mAptProxyLabel->setHidden(state);
+    mAPTFrame->setHidden(state);
 }
 
 void Proxy::onipEditStateChanged()

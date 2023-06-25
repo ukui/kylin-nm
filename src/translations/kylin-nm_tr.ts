@@ -1484,43 +1484,48 @@
 <context>
     <name>LanPage</name>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1183"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1187"/>
         <source>No ethernet device avaliable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="740"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="744"/>
         <source>LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="742"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="67"/>
+        <source>conflict, unable to connect to the network normally!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="746"/>
         <source>Activated LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="752"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="756"/>
         <source>Inactivated LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1227"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1231"/>
         <source>Wired Device not carried</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1321"/>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1329"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1325"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1333"/>
         <source>Connected: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1321"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1325"/>
         <source>(Limited)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1323"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1327"/>
         <source>Not Connected</source>
         <translation type="unfinished"></translation>
     </message>

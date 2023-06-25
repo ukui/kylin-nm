@@ -63,6 +63,10 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_connectResourse, &KyConnectResourse::connectionRemove, this, &LanPage::onRemoveConnection);
     connect(m_connectResourse, &KyConnectResourse::connectionUpdate, this, &LanPage::onUpdateConnection);
 
+    connect(m_connectResourse, &KyConnectResourse::needShowDesktop, this, [=](QString ip) {
+        this->showDesktopNotify(ip + tr("conflict, unable to connect to the network normally!"), QString());
+    });
+
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceAdd, this, &LanPage::onDeviceAdd);
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceRemove, this, &LanPage::onDeviceRemove);
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceNameUpdate, this, &LanPage::onDeviceNameUpdate);

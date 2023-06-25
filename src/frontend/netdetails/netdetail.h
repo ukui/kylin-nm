@@ -165,6 +165,7 @@ private:
     QScrollArea  * m_secuPageScrollArea;
     QScrollArea  * m_ipv4ScrollArea;
     QScrollArea  * m_ipv6ScrollArea;
+    QScrollArea  * m_createNetPageScrollArea;
 
     QPushButton  * cancelBtn;
     QPushButton  * forgetBtn;

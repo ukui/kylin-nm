@@ -47,7 +47,7 @@ void CreatNetPage::initUI()
 
     // IP的正则格式限制
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
-    m_dnsWidget = new MultipleDnsWidget(rx, this);
+    m_dnsWidget = new MultipleDnsWidget(rx, false, this);
 
     QLabel *nameEmptyLabel = new QLabel(this);
     QLabel *configEmptyLabel = new QLabel(this);
@@ -189,7 +189,6 @@ void CreatNetPage::setLineEnabled(bool check) {
     ipv4addressEdit->setEnabled(check);
     netMaskEdit->setEnabled(check);
     gateWayEdit->setEnabled(check);
-    m_dnsWidget->setEditEnabled(check);
 
     if (!check) {
         ipv4addressEdit->clear();
@@ -245,16 +244,14 @@ void CreatNetPage::constructIpv4Info(KyConnectSetting &setting)
     QList<QHostAddress> ipv4dnsList;
     ipv4dnsList.clear();
     ipv4dnsList = m_dnsWidget->getDns();
-    for (QHostAddress str: ipv4dnsList) {
-        dnsList << str.toString();
-    }
 
     if (ipv4ConfigCombox->currentData() == AUTO_CONFIG) {
         setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
     } else {
         setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
-        setting.ipv4AddressConstruct(ipv4address, netMask, gateWay, dnsList);
+        setting.ipv4AddressConstruct(ipv4address, netMask, gateWay);
     }
+    setting.ipv4DnsConstruct(ipv4dnsList);
 
 }
 

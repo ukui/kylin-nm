@@ -34,6 +34,7 @@
 //#include "kylinconnectsetting.h"
 #include "coninfo.h"
 #include "multiplednswidget.h"
+#include "divider.h"
 
 class Ipv4Page : public QFrame
 {
@@ -45,8 +46,14 @@ public:
     void setNetMask(const QString &netMask);
     void setMulDns(const QList<QHostAddress> &dns);
     void setGateWay(const QString &gateWay);
+    void setUuid(QString uuid) {
+        if (m_dnsWidget != nullptr) {
+            m_dnsWidget->setUuid(uuid);
+        }
+    }
 
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
+    bool checkDnsSettingsIsChanged();
 
     void startLoading();
     void stopLoading();
@@ -69,6 +76,7 @@ private:
     QLabel *m_addressHintLabel;
     QLabel *m_maskHintLabel;
     QLabel *m_gateWayEmptyLabel;
+    QLabel *m_dnsEmptyLabel;
 
     MultipleDnsWidget *m_dnsWidget = nullptr;
 
@@ -103,6 +111,7 @@ private Q_SLOTS:
 Q_SIGNALS:
     void setIpv4PageState(bool);
     void ipv4EditFinished(const QString &address);
+    void scrollToBottom();
 };
 
 #endif // IPV4PAGE_H

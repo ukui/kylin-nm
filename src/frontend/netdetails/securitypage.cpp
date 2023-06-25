@@ -1192,8 +1192,14 @@ void SecurityPage::onClientPrivateKeyComboxIndexChanged(QString str)
 {
     if (str.contains("Choose from file...") || str.contains("从文件选择..."))
     {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
-                                                        tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
+        QString fileName;
+//        = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
+//                                                        tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
+        QFileDialog aa;
+        aa.setPalette(lightPalette(this));aa.update();
+        if (aa.exec()) {
+
+        }
         if (!fileName.isNull()) {
             QStringList nameList = fileName.split("/");
             clientPrivateKeyCombox->blockSignals(true);

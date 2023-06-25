@@ -21,20 +21,47 @@
 #include <QPainter>
 #include <QApplication>
 
-Divider::Divider(QWidget * parent) : QFrame(parent)
+#include "../netdetails/coninfo.h"
+
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME "styleName"
+
+Divider::Divider(bool useLightPal, QWidget * parent)
+    :m_useLightPal(useLightPal),
+     QFrame(parent)
 {
     this->setFixedHeight(1);
+    connect(qApp, &QApplication::paletteChanged, this ,&Divider::onPaletteChanged);
+    onPaletteChanged();
 }
 
+void Divider::onPaletteChanged()
+{
+    QPalette pal = qApp->palette();
 
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id) && m_useLightPal) {
+       styleGsettings = new QGSettings(style_id);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = lightPalette(this);
+       }
+    }
+    m_color = pal.color(QPalette::BrightText);
+    m_color.setAlphaF(0.08);
+
+    if (styleGsettings != nullptr) {
+        delete styleGsettings;
+        styleGsettings = nullptr;
+    }
+}
 
 void Divider::paintEvent(QPaintEvent * e)
 {
     QPainter p(this);
-    QColor color = qApp->palette().color(QPalette::BrightText);
-    color.setAlphaF(0.08);
     p.save();
-    p.setBrush(color);
+    p.setBrush(m_color);
     p.setPen(Qt::transparent);
     p.drawRoundedRect(this->rect(), 6, 6);
     p.restore();

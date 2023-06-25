@@ -104,6 +104,7 @@ private Q_SLOTS:
 Q_SIGNALS:
     void setIpv6PageState(bool);
     void ipv6EditFinished(const QString &address);
+    void scrollToBottom();
 };
 
 #endif // IPV6PAGE_H

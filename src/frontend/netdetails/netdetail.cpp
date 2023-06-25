@@ -344,13 +344,6 @@ void NetDetail::initUI()
     m_createNetPageScrollArea->setWidget(createNetPage);
     m_createNetPageScrollArea->setWidgetResizable(true);
 
-    QPalette pal = m_secuPageScrollArea->palette();
-    pal.setBrush(QPalette::Base, QColor(0,0,0,0));
-    m_secuPageScrollArea->setPalette(pal);
-    m_ipv4ScrollArea->setPalette(pal);
-    m_ipv6ScrollArea->setPalette(pal);
-    m_createNetPageScrollArea->setPalette(pal);
-
     stackWidget = new QStackedWidget(centerWidget);
     stackWidget->addWidget(detailPage);
     stackWidget->addWidget(m_ipv4ScrollArea);

@@ -1,3 +1,13 @@
+kylin-nm (3.20.1.17-0k1.10) v101; urgency=medium
+
+  * BUG号：
+     -#175029 【WiFi】企业wifi弹窗下拉菜单显示有问题
+  * 需求号：
+  * 其他改动：
+  * 影响域：自身
+
+ -- zhangyuanyuan1 <zhangyuanyuan1@kylinos.cn>  Wed, 14 Jun 2023 16:15:59 +0800
+
 kylin-nm (3.20.1.17-0k1.9) v101; urgency=medium
 
   * BUG号：

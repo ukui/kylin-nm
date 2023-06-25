@@ -80,12 +80,12 @@
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="51"/>
         <source>IPv4Config</source>
-        <translation>IPv4配置</translation>
+        <translation>IPv4 配置</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="52"/>
         <source>Address</source>
-        <translation>IPv4地址</translation>
+        <translation>IPv4 地址</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="53"/>
@@ -100,17 +100,17 @@
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="55"/>
         <source>Prefs DNS</source>
-        <translation>首选DNS</translation>
+        <translation>首选 DNS</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="56"/>
         <source>Alternative DNS</source>
-        <translation>备选DNS</translation>
+        <translation>备选 DNS</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="67"/>
         <source>Auto(DHCP)</source>
-        <translation>自动(DHCP)</translation>
+        <translation>自动 (DHCP)</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/creatnetpage.cpp" line="68"/>
@@ -160,7 +160,7 @@
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="216"/>
         <source>Please input SSID:</source>
-        <translation>请输入SSID:</translation>
+        <translation>请输入 SSID:</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="226"/>
@@ -196,19 +196,19 @@
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="256"/>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="327"/>
         <source>IPv6:</source>
-        <translation>本地链接IPv6地址：</translation>
+        <translation>本地链接 IPv6 地址：</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="246"/>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="325"/>
         <source>IPv4:</source>
-        <translation>IPv4地址：</translation>
+        <translation>IPv4 地址：</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="250"/>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="326"/>
         <source>IPv4 DNS:</source>
-        <translation>IPv4 DNS服务器：</translation>
+        <translation>IPv4 DNS 服务器：</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/detailpage.cpp" line="260"/>
@@ -460,12 +460,12 @@
     <message>
         <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="107"/>
         <source>Wi-Fi network requires authentication</source>
-        <translation>Wi-Fi网络要求认证</translation>
+        <translation>Wi-Fi 网络要求认证</translation>
     </message>
     <message>
         <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="112"/>
         <source>Access to Wi-Fi network &quot;</source>
-        <translation>访问Wi-Fi网络</translation>
+        <translation>访问 Wi-Fi 网络</translation>
     </message>
     <message>
         <location filename="../src/frontend/enterprise-wlan/enterprisewlandialog.cpp" line="114"/>
@@ -527,7 +527,7 @@
     <message>
         <location filename="../src/frontend/netdetails/ipv4page.cpp" line="71"/>
         <source>IPv4Config</source>
-        <translation>IPv4配置</translation>
+        <translation>IPv4 配置</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/ipv4page.cpp" line="72"/>
@@ -547,12 +547,12 @@
     <message>
         <location filename="../src/frontend/netdetails/ipv4page.cpp" line="75"/>
         <source>Prefs DNS</source>
-        <translation>首选DNS</translation>
+        <translation>首选 DNS</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/ipv4page.cpp" line="76"/>
         <source>Alternative DNS</source>
-        <translation>备选DNS</translation>
+        <translation>备选 DNS</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/ipv4page.cpp" line="116"/>
@@ -591,7 +591,7 @@
     <message>
         <location filename="../src/frontend/netdetails/ipv6page.cpp" line="152"/>
         <source>IPv6Config</source>
-        <translation>IPv6配置</translation>
+        <translation>IPv6 配置</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/ipv6page.cpp" line="153"/>
@@ -611,12 +611,12 @@
     <message>
         <location filename="../src/frontend/netdetails/ipv6page.cpp" line="156"/>
         <source>Prefs DNS</source>
-        <translation>首选DNS</translation>
+        <translation>首选 DNS</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/ipv6page.cpp" line="157"/>
         <source>Alternative DNS</source>
-        <translation>备选DNS</translation>
+        <translation>备选 DNS</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/ipv6page.cpp" line="197"/>
@@ -661,7 +661,7 @@
     <message>
         <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="136"/>
         <source>Network name(SSID)</source>
-        <translation>网络名(SSID)</translation>
+        <translation>网络名 (SSID)</translation>
     </message>
     <message>
         <source>Remember the Network</source>
@@ -690,7 +690,7 @@
     <message>
         <location filename="../src/frontend/netdetails/joinhiddenwifipage.cpp" line="144"/>
         <source>Find and Join Wi-Fi</source>
-        <translation>查找并加入Wi-Fi</translation>
+        <translation>查找并加入 Wi-Fi</translation>
     </message>
 </context>
 <context>
@@ -900,7 +900,7 @@
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="408"/>
         <source>Connect Hidden WLAN</source>
-        <translation>连接到隐藏WLAN</translation>
+        <translation>连接到隐藏 WLAN</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="568"/>
@@ -919,12 +919,12 @@
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="814"/>
         <source>start check ipv4 address conflict</source>
-        <translation>开始检测ipv4地址冲突</translation>
+        <translation>开始检测 ipv4 地址冲突</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="831"/>
         <source>start check ipv6 address conflict</source>
-        <translation>开始检测ipv6地址冲突</translation>
+        <translation>开始检测 ipv6 地址冲突</translation>
     </message>
     <message>
         <source>ipv4 address conflict!</source>
@@ -937,22 +937,22 @@
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="1074"/>
         <source>this wifi no support enterprise type</source>
-        <translation>此wifi不支持企业网类型</translation>
+        <translation>此 wifi 不支持企业网类型</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="1079"/>
         <source>this wifi no support None type</source>
-        <translation>此wifi不支持空类型</translation>
+        <translation>此 wifi 不支持空类型</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="1084"/>
         <source>this wifi no support WPA2 type</source>
-        <translation>此wifi不支持WPA2类型</translation>
+        <translation>此 wifi 不支持 WPA2 类型</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/netdetail.cpp" line="1087"/>
         <source>this wifi no support WPA3 type</source>
-        <translation>此wifi不支持WPA3类型</translation>
+        <translation>此 wifi 不支持 WPA3 类型</translation>
     </message>
     <message>
         <source>SSID:</source>
@@ -1079,7 +1079,7 @@
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="208"/>
         <source>EAP type</source>
-        <translation>EAP方法</translation>
+        <translation>EAP 方法</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="210"/>
@@ -1099,7 +1099,7 @@
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="213"/>
         <source>no need for CA certificate</source>
-        <translation>不需要CA证书</translation>
+        <translation>不需要 CA 证书</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="214"/>
@@ -1201,7 +1201,7 @@
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="1150"/>
         <source>Choose a CA certificate</source>
-        <translation>选择一个CA证书</translation>
+        <translation>选择一个 CA 证书</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="1151"/>
@@ -1216,7 +1216,7 @@
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="291"/>
         <source>Allow automatic PAC provisioning</source>
-        <translation>允许自动PAC配置</translation>
+        <translation>允许自动 PAC 配置</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="292"/>
@@ -1241,12 +1241,12 @@
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="1250"/>
         <source>Choose a PAC file</source>
-        <translation>选择一个PAC文件</translation>
+        <translation>选择一个 PAC 文件</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.cpp" line="1251"/>
         <source>PAC Files (*.pac)</source>
-        <translation>PAC文件(*.pac)</translation>
+        <translation>PAC 文件(*.pac)</translation>
     </message>
     <message>
         <location filename="../src/frontend/netdetails/securitypage.h" line="110"/>

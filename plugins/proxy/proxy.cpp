@@ -727,13 +727,10 @@ void Proxy::initDbus()
 void Proxy::initAppProxyStatus()
 {
     bool state = getAppProxyState();
+    appProxyInfoPadding();
+    appListPadding();
     m_appEnableBtn->setChecked(state);
-    onappProxyEnableChanged(state);
-
-    if (state) {
-        appProxyInfoPadding();
-        appListPadding();
-    }
+    setAppProxyUiEnable(state);
 }
 
 int Proxy::_getCurrentProxyMode(){
@@ -1206,7 +1203,7 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
 //    appProxyLayout->addWidget(line5);
 //    appProxyLayout->addWidget(m_appBtnFrame);
 
-    connect(m_appEnableBtn, &KSwitchButton::stateChanged, this, &Proxy::onappProxyEnableChanged);
+    connect(m_appEnableBtn, &KSwitchButton::stateChanged, this, &Proxy::setAppProxyUiEnable);
     connect(m_appEnableBtn, &KSwitchButton::stateChanged, this, &Proxy::setAppProxyState);
     connect(m_proxyTypeComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(onAppProxyConfChanged()));
     connect(m_ipAddressLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onipEditStateChanged()));
@@ -1321,7 +1318,11 @@ void Proxy::setAppProxyFrameHidden(bool state)
 {
     m_appProxyLabel->setHidden(state);
     m_appProxyFrame->setHidden(state);
-    m_appListFrame->setHidden(state);
+    if (state) {
+        m_appListFrame->setHidden(state);
+    } else {
+        m_appListFrame->setHidden(!m_appEnableBtn->isChecked());
+    }
     m_appListSpacerFrame->setHidden(state);
     m_appSpacerFrame->setHidden(state);
 }
@@ -1383,7 +1384,7 @@ void Proxy::onPaletteChanged()
     m_appListWidget->setPalette(mpal);
 }
 
-void Proxy::onappProxyEnableChanged(bool enable)
+void Proxy::setAppProxyUiEnable(bool enable)
 {
     if (enable) {
         m_appProxyInfoWidget->show();

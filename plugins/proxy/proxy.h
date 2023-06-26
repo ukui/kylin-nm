@@ -283,7 +283,7 @@ private:
 
 private slots:
     void setAptProxySlot();  //处理apt代理前端交互逻辑
-    void onappProxyEnableChanged(bool enable); //IP地址无效提示
+    void setAppProxyUiEnable(bool enable);
     void onipEditStateChanged(); //IP地址无效提示
     void onAppProxyConfChanged(); //应用代理配置信息变化
     void onAppProxyConfEditFinished();

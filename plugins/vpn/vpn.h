@@ -32,8 +32,11 @@
 #include "kwidget.h"
 #include "kswitchbutton.h"
 #include "itemframe.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
+
 
 namespace Ui {
 class Vpn;

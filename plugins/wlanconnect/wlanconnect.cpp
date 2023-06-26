@@ -227,6 +227,7 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
             if (!getSwitchBtnEnable()) {
                 showDesktopNotify(tr("No wireless network card detected"));
             } else {
+                UkccCommon::buriedSettings(QString("wlanconnect"), QString("Open"), QString("settings"),!getSwitchBtnState()?"true":"false");
                 if (m_interface != nullptr && m_interface->isValid()) {
                     m_interface->call(QStringLiteral("setWirelessSwitchEnable"), !getSwitchBtnState());
                 }
@@ -283,6 +284,7 @@ void WlanConnect::initComponent() {
     //高级设置
     connect(ui->detailBtn, &QPushButton::clicked, this, [=](bool checked) {
         Q_UNUSED(checked)
+        UkccCommon::buriedSettings(QString("wlanconnect"), QString("Advanced settings"), QString("clicked"));
         runExternalApp();
     });
 
@@ -971,6 +973,7 @@ void WlanConnect::addDeviceFrame(QString devName)
     deviceFrameMap.insert(devName, itemFrame);
 
     connect(itemFrame->addWlanWidget, &AddNetBtn::clicked, this, [=](){
+        UkccCommon::buriedSettings(QString("wlanconnect"), QString("Add wlan"), QString("clicked"));
         if (m_interface != nullptr && m_interface->isValid()) {
             qDebug() << "[NetConnect]call showAddOtherWlanWidget" << devName  << __LINE__;
             m_interface->call(QStringLiteral("showAddOtherWlanWidget"), devName);
@@ -1042,6 +1045,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
         if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
+        UkccCommon::buriedSettings(QString("wlanconnect"), QString("info"), QString("clicked"));
         qDebug() << "[WlanConnect]call showPropertyWidget" << __LINE__;
         m_interface->call(QStringLiteral("showPropertyWidget"), deviceName, name);
         qDebug() << "[WlanConnect]call showPropertyWidget respond" << __LINE__;

@@ -520,6 +520,7 @@ void Proxy::setupComponent(){
 
 void Proxy::setupConnect(){
     connect(mEnableBtn, &KSwitchButton::stateChanged, this ,[=](bool checked) {
+        UkccCommon::buriedSettings(QString("Proxy"), QString("System Proxy Open"), QString("settings"), checked?"true":"false");
         mSelectFrame->setVisible(checked);
         line_8->setVisible(checked);
         mAutoBtn->setChecked(checked);
@@ -533,9 +534,11 @@ void Proxy::setupConnect(){
 
     connect(mProxyBtnGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), [=](QAbstractButton * eBtn){
         if (eBtn == mAutoBtn) {
+            UkccCommon::buriedSettings(QString("Proxy"), QString("auto"), QString("clicked"));
             mManualBtn->setChecked(false);
             proxysettings->set(PROXY_MODE_KEY,"auto");
         } else if (eBtn == mManualBtn){
+            UkccCommon::buriedSettings(QString("Proxy"), QString("manual"), QString("clicked"));
             mAutoBtn->setChecked(false);
             proxysettings->set(PROXY_MODE_KEY,"manual");
         }
@@ -560,6 +563,7 @@ void Proxy::setupConnect(){
     });
 
     connect(mAptBtn , &KSwitchButton::stateChanged, this ,[=](bool checked){
+        UkccCommon::buriedSettings(QString("Proxy"), QString("Apt Proxy Open"), QString("settings"), checked?"true":"false");
         if (checked) {
             emit mEditBtn->click();
         } else {   // 关闭APT代理，删除对应的配置文件
@@ -1149,6 +1153,9 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
 
     connect(m_appEnableBtn, &KSwitchButton::stateChanged, this, &Proxy::onappProxyEnableChanged);
     connect(m_appEnableBtn, &KSwitchButton::stateChanged, this, &Proxy::setAppProxyState);
+    connect(m_appEnableBtn, &KSwitchButton::stateChanged, [=](bool checked) {
+        UkccCommon::buriedSettings(QString("Proxy"), QString("App Proxy Open"), QString("settings"), checked?"true":"false");
+    });
     connect(m_proxyTypeComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(onAppProxyConfChanged()));
     connect(m_ipAddressLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onipEditStateChanged()));
     connect(m_ipAddressLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onAppProxyConfChanged()));

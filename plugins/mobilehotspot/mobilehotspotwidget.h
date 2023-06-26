@@ -47,8 +47,10 @@
 #include "blacklistpage.h"
 #include "connectdevpage.h"
 #include "fixlabel.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
 
 class MobileHotspotWidget : public QWidget
 {

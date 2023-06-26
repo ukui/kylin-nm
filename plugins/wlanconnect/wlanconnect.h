@@ -47,8 +47,10 @@
 #include "wlanitem.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
 
 namespace Ui {
 class WlanConnect;

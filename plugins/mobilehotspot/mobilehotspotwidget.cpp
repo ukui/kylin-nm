@@ -116,6 +116,7 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
     connect(m_switchBtn, &KSwitchButton::stateChanged, this, &MobileHotspotWidget::setUiEnabled);
     connect(m_interfaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MobileHotspotWidget::onInterfaceChanged);
     connect(m_interfaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=]() {
+        UkccCommon::buriedSettings("MobileHotspot", "select", QString("Net card"));
         m_interfaceName = m_interfaceComboBox->currentText();
         updateBandCombox();
     });
@@ -151,6 +152,7 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                 showDesktopNotify(tr("wirless switch is close or no wireless device"));
                 return true;
             }
+            UkccCommon::buriedSettings("MobileHotspot", "Open", QString("settings"), !m_switchBtn->isChecked() ? "true":"false");
             if (m_switchBtn->isChecked()) {
 //                showDesktopNotify(tr("start to close hotspot"));
                 QDBusReply<void> reply = m_interface->call("deactiveWirelessAp", m_apNameLine->text(), m_uuid);
@@ -465,7 +467,11 @@ void MobileHotspotWidget::getApInfo()
             }
             int i = m_freqBandComboBox->findText(apInfo.at(5));
             if (i >= 0) {
+                disconnect(m_freqBandComboBox);
                 m_freqBandComboBox->setCurrentIndex(i);
+                connect(m_freqBandComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](){
+                    UkccCommon::buriedSettings("MobileHotspot", "Frequency band", QString("select"), m_freqBandComboBox->currentText());
+                });
             }
         } else {
             qDebug() << LOG_HEAD << "no such interface " << apInfo.at(2);
@@ -731,15 +737,17 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
             updateBandCombox();
             index = m_freqBandComboBox->findText(info.at(1));
             if (index >= 0) {
+                disconnect(m_freqBandComboBox);
                 m_freqBandComboBox->setCurrentIndex(index);
+                connect(m_freqBandComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](){
+                    UkccCommon::buriedSettings("MobileHotspot", "Frequency band", QString("select"), m_freqBandComboBox->currentText());
+                });
             }
             m_uuid = uuid;
         } else {
             qDebug() << "no such device in combo box";
         }
     }
-
-
 }
 
 bool MobileHotspotWidget::getApInfoBySsid(QString devName, QString ssid, QStringList &info)
@@ -813,6 +821,7 @@ void MobileHotspotWidget::updateBandCombox()
         setWidgetHidden(true);
         return;
     }
+    disconnect(m_freqBandComboBox);
     QMap<QString, int> devCapMap = capReply.value();
     if (devCapMap[m_interfaceName] & 0x02) {
          m_freqBandComboBox->addItem("2.4GHz");
@@ -824,6 +833,9 @@ void MobileHotspotWidget::updateBandCombox()
     if (index >= 0) {
         m_freqBandComboBox->setCurrentIndex(index);
     }
+    connect(m_freqBandComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](){
+        UkccCommon::buriedSettings("MobileHotspot", "Frequency band", QString("select"), m_freqBandComboBox->currentText());
+    });
 }
 
 QFrame* MobileHotspotWidget::myLine()

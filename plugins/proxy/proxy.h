@@ -52,8 +52,10 @@
 
 #include "kswitchbutton.h"
 #include "kpasswordedit.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
 
 /* qt会将glib里的signals成员识别为宏，所以取消该宏
  * 后面如果用到signals时，使用Q_SIGNALS代替即可

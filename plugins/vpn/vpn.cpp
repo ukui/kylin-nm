@@ -188,6 +188,7 @@ void Vpn::initComponent(){
     ui->verticalLayout_3->addWidget(m_listFrame);
 
     connect(m_listFrame->m_addVpnWidget, &AddNetBtn::clicked, this, [=]() {
+        UkccCommon::buriedSettings(QString("VPN"), QString("Add VPN"), QString("clicked"));
         runExternalApp();
     });
 
@@ -210,6 +211,10 @@ void Vpn::initComponent(){
         if (m_switchGsettings != nullptr) {
             m_switchGsettings->set(VISIBLE, state);
         }
+    });
+
+    connect(m_showBtn, &KSwitchButton::clicked, this, [=](bool checked){
+        UkccCommon::buriedSettings(QString("VPN"), QString("Show on Taskbar"),  QString("settings"), checked ? "true":"false");
     });
 
 //    connect(m_timeBtn, &KSwitchButton::stateChanged, this, [=](bool state){

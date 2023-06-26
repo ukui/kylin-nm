@@ -26,6 +26,7 @@ Build-Depends: debhelper (>=9),
                libkysdk-qtwidgets-dev(>= 1.2.0),
                libkysdk-sysinfo-dev,
                libkysdk-waylandhelper-dev(>= 1.2.0kylin2),
+               libkysdk-diagnostics-dev,
                libkysec-dev,
 Standards-Version: 4.5.0
 Rules-Requires-Root: no

@@ -168,6 +168,7 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
             if (!wiredSwitch->isCheckable()) {
                 showDesktopNotify(tr("No ethernet device avaliable"));
             } else {
+                UkccCommon::buriedSettings(QString("netconnect"), QString("Open"), QString("settings"),wiredSwitch->isChecked()?"false":"true");
                 if (m_interface != nullptr && m_interface->isValid()) {
                     m_interface->call(QStringLiteral("setWiredSwitchEnable"), !wiredSwitch->isChecked());
                 }
@@ -237,6 +238,7 @@ void NetConnect::initComponent() {
 
     connect(ui->detailBtn, &QPushButton::clicked, this, [=](bool checked) {
         Q_UNUSED(checked)
+        UkccCommon::buriedSettings(QString("netconnect"), QString("Advanced settings"), QString("clicked"));
         runExternalApp();
     });
 }
@@ -453,6 +455,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
         if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
+        UkccCommon::buriedSettings(QString("netconnect"), QString("info"), QString("clicked"));
         qDebug() << "[NetConnect]call showPropertyWidget" << __LINE__;
         m_interface->call(QStringLiteral("showPropertyWidget"), devName, infoList.at(1));
         qDebug() << "[NetConnect]call showPropertyWidget respond" << __LINE__;
@@ -515,6 +518,7 @@ void NetConnect::addDeviceFrame(QString devName)
     qDebug() << "[NetConnect]deviceFrameMap insert" << devName;
 
     connect(itemFrame->deviceFrame, &DeviceFrame::deviceSwitchClicked ,this, [=] (bool checked) {
+        UkccCommon::buriedSettings(QString("netconnect"), "device open", QString("settings"), checked?"true":"fasle");
         qDebug() << "[NetConnect]call setDeviceEnable" << devName << checked << __LINE__;
         m_interface->call(QStringLiteral("setDeviceEnable"), devName, checked);
         qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
@@ -539,6 +543,7 @@ void NetConnect::addDeviceFrame(QString devName)
     });
 
     connect(itemFrame->addLanWidget, &AddNetBtn::clicked, this, [=](){
+        UkccCommon::buriedSettings(pluginName, "Add net", QString("clicked"));
         if (m_interface != nullptr && m_interface->isValid()) {
             qDebug() << "[NetConnect]call showCreateWiredConnectWidget" << devName  << __LINE__;
             m_interface->call(QStringLiteral("showCreateWiredConnectWidget"), devName);
@@ -739,6 +744,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
         if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
+        UkccCommon::buriedSettings(QString("netconnect"), QString("info"), QString("clicked"));
         qDebug() << "[NetConnect]call showPropertyWidget" << deviceName << connUuid << __LINE__;
         m_interface->call(QStringLiteral("showPropertyWidget"), deviceName, connUuid);
         qDebug() << "[NetConnect]call showPropertyWidget respond" << __LINE__;

@@ -256,7 +256,7 @@ void KyNetworkDeviceResourse::getDeviceConnectivity(const QString &deviceName, N
     QString dbusPath;
     NetworkManager::Device::Ptr connectDevice =
                         m_networkResourceInstance->findDeviceInterface(deviceName);
-    if (connectDevice->isValid()) {
+    if (connectDevice != nullptr && connectDevice->isValid()) {
        dbusPath = connectDevice->uni();
     } else {
         qWarning() << "[KyNetworkDeviceResourse] can not find device " << deviceName;

@@ -29,6 +29,7 @@
 #include <QMenu>
 #include <QToolTip>
 #include <QFontMetrics>
+#include <QScrollBar>
 
 #include "windowmanager/windowmanager.h"
 
@@ -282,7 +283,7 @@ void NetDetail::initUI()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0,9,0,24);
-    mainLayout->setSpacing(24);
+    mainLayout->setSpacing(0);
 
     this->installEventFilter(this);
     pageFrame = new QFrame(this);
@@ -318,6 +319,11 @@ void NetDetail::initUI()
     m_ipv4ScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_ipv4ScrollArea->setWidget(ipv4Page);
     m_ipv4ScrollArea->setWidgetResizable(true);
+    connect(ipv4Page, &Ipv4Page::scrollToBottom, this, [&](){
+        QTimer::singleShot(50,this,[=]() {
+            m_ipv4ScrollArea->verticalScrollBar()->setValue(m_ipv4ScrollArea->verticalScrollBar()->maximum());
+        });
+    });
 
     m_ipv6ScrollArea = new QScrollArea(centerWidget);
     m_ipv6ScrollArea->setFixedWidth(SCRO_WIDTH);
@@ -325,12 +331,18 @@ void NetDetail::initUI()
     m_ipv6ScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_ipv6ScrollArea->setWidget(ipv6Page);
     m_ipv6ScrollArea->setWidgetResizable(true);
+    connect(ipv6Page, &Ipv6Page::scrollToBottom, this, [&](){
+        QTimer::singleShot(50,this,[=]() {
+            m_ipv6ScrollArea->verticalScrollBar()->setValue(m_ipv6ScrollArea->verticalScrollBar()->maximum());
+        });
+    });
 
-    QPalette pal = m_secuPageScrollArea->palette();
-    pal.setBrush(QPalette::Base, QColor(0,0,0,0));
-    m_secuPageScrollArea->setPalette(pal);
-    m_ipv4ScrollArea->setPalette(pal);
-    m_ipv6ScrollArea->setPalette(pal);
+    m_createNetPageScrollArea = new QScrollArea(centerWidget);
+    m_createNetPageScrollArea->setFixedWidth(SCRO_WIDTH);
+    m_createNetPageScrollArea->setFrameShape(QFrame::NoFrame);
+    m_createNetPageScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_createNetPageScrollArea->setWidget(createNetPage);
+    m_createNetPageScrollArea->setWidgetResizable(true);
 
     stackWidget = new QStackedWidget(centerWidget);
     stackWidget->addWidget(detailPage);
@@ -338,7 +350,7 @@ void NetDetail::initUI()
     stackWidget->addWidget(m_ipv6ScrollArea);
     stackWidget->addWidget(m_secuPageScrollArea);
     stackWidget->addWidget(configPage);
-    stackWidget->addWidget(createNetPage);
+    stackWidget->addWidget(m_createNetPageScrollArea);
 
     // TabBar
     onPaletteChanged();
@@ -382,6 +394,8 @@ void NetDetail::initUI()
     centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS); // 右边距为0，为安全页滚动区域留出空间
     centerlayout->addWidget(stackWidget);
 
+    Divider *divider = new Divider(true, this);
+
     QHBoxLayout *bottomLayout = new QHBoxLayout(bottomWidget);
     bottomLayout->setContentsMargins(BOTTOM_LAYOUT_MARGINS);
     bottomLayout->setSpacing(BOTTOM_LAYOUT_SPACING);
@@ -392,7 +406,10 @@ void NetDetail::initUI()
     bottomWidget->setMinimumHeight(PAGE_MIN_HEIGHT);
 
     mainLayout->addWidget(pageFrame);
+    mainLayout->addSpacing(24);
     mainLayout->addWidget(centerWidget);
+    mainLayout->addWidget(divider);
+    mainLayout->addSpacing(16);
     mainLayout->addWidget(bottomWidget);
 
     this->setAutoFillBackground(true);
@@ -492,25 +509,28 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     detailPage->setAutoConnect(m_info.isAutoConnect);
 
     //ipv4页面填充
+    ipv4Page->setUuid(m_uuid);
+    ipv4Page->setMulDns(m_info.ipv4DnsList);
     if (m_info.ipv4ConfigType == CONFIG_IP_MANUAL) {
         Q_EMIT checkCurrentIpv4Conflict(m_info.strIPV4Address);
         ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
         ipv4Page->setIpv4(m_info.strIPV4Address);
         ipv4Page->setNetMask(m_info.strIPV4NetMask);
-        ipv4Page->setIpv4FirDns(m_info.strIPV4FirDns);
-        ipv4Page->setIpv4SecDns(m_info.strIPV4SecDns);
+//        ipv4Page->setIpv4FirDns(m_info.strIPV4FirDns);
+//        ipv4Page->setIpv4SecDns(m_info.strIPV4SecDns);
         ipv4Page->setGateWay(m_info.strIPV4GateWay);
     } else {
         ipv4Page->setIpv4Config(m_info.ipv4ConfigType);
     }
     //ipv6页面填充
+    ipv6Page->setMulDns(m_info.ipv6DnsList);
     if (m_info.ipv6ConfigType == CONFIG_IP_MANUAL) {
         Q_EMIT checkCurrentIpv6Conflict(m_info.strIPV6Address);
         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
         ipv6Page->setIpv6(m_info.strIPV6Address);
         ipv6Page->setIpv6Perfix(m_info.iIPV6Prefix);
-        ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
-        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
+//        ipv6Page->setIpv6FirDns(m_info.strIPV6FirDns);
+//        ipv6Page->setIpv6SecDns(m_info.strIPV6SecDns);
         ipv6Page->setGateWay(m_info.strIPV6GateWay);
     } else {
         ipv6Page->setIpv6Config(m_info.ipv6ConfigType);
@@ -653,7 +673,15 @@ void NetDetail::getDynamicIpInfo(ConInfo &conInfo, bool bActived)
     }
 
     if (!ipv4Dns.isEmpty()) {
-        conInfo.strDynamicIpv4Dns = ipv4Dns.at(0).toString();
+        //conInfo.strDynamicIpv4Dns = ipv4Dns.at(0).toString();
+        QString dnsList;
+        dnsList.clear();
+        for (QHostAddress str: ipv4Dns) {
+            dnsList.append(str.toString());
+            dnsList.append("; ");
+        }
+        dnsList.chop(2);
+        conInfo.strDynamicIpv4Dns = dnsList;
     }
 }
 
@@ -668,6 +696,8 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
     conInfo.ipv4ConfigType = connetSetting.m_ipv4ConfigIpType;
     conInfo.ipv6ConfigType = connetSetting.m_ipv6ConfigIpType;
     conInfo.isAutoConnect  = connetSetting.m_isAutoConnect;
+    conInfo.ipv4DnsList = connetSetting.m_ipv4Dns;
+    conInfo.ipv6DnsList = connetSetting.m_ipv6Dns;
 
     if (connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
         if (connetSetting.m_ipv4Address.size() > 0) {
@@ -675,12 +705,14 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
             conInfo.strIPV4NetMask = connetSetting.m_ipv4Address.at(0).netmask().toString();
             conInfo.strIPV4GateWay = connetSetting.m_ipv4Address.at(0).gateway().toString();
         }
+        #if 0
         if (connetSetting.m_ipv4Dns.size() == 1) {
             conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
         } else if (connetSetting.m_ipv4Dns.size() > 1) {
             conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
             conInfo.strIPV4SecDns = connetSetting.m_ipv4Dns.at(1).toString();
         }
+        #endif
     }
 
     if (connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
@@ -689,13 +721,14 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
             conInfo.iIPV6Prefix = ipv6Page->getPerfixLength(connetSetting.m_ipv6Address.at(0).netmask().toString());
             conInfo.strIPV6GateWay = connetSetting.m_ipv6Address.at(0).gateway().toString();
         }
-
+#if 0
         if (connetSetting.m_ipv6Dns.size() == 1) {
             conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
         } else if (connetSetting.m_ipv6Dns.size() > 1) {
             conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
             conInfo.strIPV6SecDns = connetSetting.m_ipv6Dns.at(1).toString();
         }
+#endif  
     }
 
     if (!bActived) {
@@ -1082,22 +1115,6 @@ bool NetDetail::updateConnect()
 
     qDebug() << "ipv4Changed" << ipv4Change << "ipv6Change" << ipv6Change;
 
-//    if (ipv4Change && connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
-//        if (checkIpv4Conflict(connetSetting.m_ipv4Address.at(0).ip().toString())) {
-//            qDebug() << "ipv4 conflict";
-//            showDesktopNotify(tr("ipv4 address conflict!"), "networkwrong");
-//            return false;
-//        }
-//    }
-
-//    if (ipv6Change && connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
-//        if (checkIpv6Conflict(connetSetting.m_ipv6Address.at(0).ip().toString())) {
-//            qDebug() << "ipv6 conflict";
-//            showDesktopNotify(tr("ipv6 address conflict!"), "networkwrong");
-//            return false;
-//        }
-//    }
-
     if (ipv4Change || ipv6Change) {
         connetSetting.dumpInfo();
         m_wiredConnOperation->updateWiredConnect(m_uuid, connetSetting);
@@ -1112,7 +1129,7 @@ bool NetDetail::updateConnect()
         }
     }
 
-    if (ipv4Change || ipv6Change || securityChange) {
+    if (ipv4Change || ipv6Change || securityChange || ipv4Page->checkDnsSettingsIsChanged()) {
         if (isActive) {
             //信息变化 断开-重连 更新需要時間 不可以立即重連
 //            sleep(1);

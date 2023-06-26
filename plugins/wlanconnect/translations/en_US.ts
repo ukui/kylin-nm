@@ -43,14 +43,22 @@
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="123"/>
         <source>ukui control center</source>
-        <translation>ukui control center</translation>
+        <translation type="vanished">ukui control center</translation>
+    </message>
+    <message>
+        <source>ukui control center desktop message</source>
+        <translation type="vanished">ukui control center desktop message</translation>
+    </message>
+    <message>
+        <location filename="../wlanconnect.cpp" line="123"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="126"/>
-        <source>ukui control center desktop message</source>
-        <translation>ukui control center desktop message</translation>
+        <source>Settings desktop message</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="228"/>
@@ -58,14 +66,14 @@
         <translation>No wireless network card detected</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="362"/>
-        <location filename="../wlanconnect.cpp" line="1028"/>
-        <location filename="../wlanconnect.cpp" line="1090"/>
+        <location filename="../wlanconnect.cpp" line="364"/>
+        <location filename="../wlanconnect.cpp" line="1033"/>
+        <location filename="../wlanconnect.cpp" line="1095"/>
         <source>connected</source>
         <translation>connected</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="965"/>
+        <location filename="../wlanconnect.cpp" line="970"/>
         <source>card</source>
         <translation>card</translation>
     </message>

@@ -11,12 +11,12 @@
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="121"/>
         <source>Kylin VPN</source>
-        <translation>VPN工具</translation>
+        <translation>VPN 工具</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="124"/>
         <source>kylin vpn applet desktop message</source>
-        <translation>vpn配置桌面提示</translation>
+        <translation>VPN 配置桌面提示</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="791"/>
         <source>MPPE encryption algorithm:</source>
-        <translation>MPPE加密算法：</translation>
+        <translation>MPPE 加密算法：</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="792"/>
@@ -34,7 +34,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="793"/>
         <source>Send PPP echo packets</source>
-        <translation>发送PPP回显包</translation>
+        <translation>发送 PPP 回显包</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="794"/>
@@ -44,27 +44,27 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="795"/>
         <source>PAP authentication</source>
-        <translation>PAP认证</translation>
+        <translation>PAP 认证</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="796"/>
         <source>CHAP authentication</source>
-        <translation>CHAP认证</translation>
+        <translation>CHAP 认证</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="797"/>
         <source>MSCHAP authentication</source>
-        <translation>MSCHAP认证</translation>
+        <translation>MSCHAP 认证</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="798"/>
         <source>MSCHAP2 authentication</source>
-        <translation>MSCHAP2认证</translation>
+        <translation>MSCHAP2 认证</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="799"/>
         <source>EAP authentication</source>
-        <translation>EAP认证</translation>
+        <translation>EAP 认证</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="800"/>
@@ -74,17 +74,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="801"/>
         <source>Allow BSD data compression</source>
-        <translation>允许BSD压缩</translation>
+        <translation>允许 BSD 压缩</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="802"/>
         <source>Allow Default data compression</source>
-        <translation>允许Default压缩</translation>
+        <translation>允许 Default 压缩</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="803"/>
         <source>Allow TCP header compression</source>
-        <translation>允许TCP头压缩</translation>
+        <translation>允许 TCP 头压缩</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="804"/>
@@ -124,7 +124,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1012"/>
         <source>Use a TCP connection</source>
-        <translation>使用TCP连接</translation>
+        <translation>使用 TCP 连接</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1013"/>
@@ -139,7 +139,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1015"/>
         <source>Limit TCP Maximum Segment Size(MSS)</source>
-        <translation>限制TCP最大段尺寸（MSS）</translation>
+        <translation>限制 TCP 最大段尺寸（MSS）</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1016"/>
@@ -149,17 +149,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1017"/>
         <source>IPv6 tun link</source>
-        <translation>IPv6 tun连接</translation>
+        <translation>IPv6 tun 连接</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1018"/>
         <source>Specify ping interval</source>
-        <translation>指定Ping周期</translation>
+        <translation>指定 Ping 周期</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1019"/>
         <source>Specify exit or restart ping</source>
-        <translation>指定退出或重启的Ping</translation>
+        <translation>指定退出或重启的 Ping</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1020"/>
@@ -194,7 +194,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1030"/>
         <source>Use custom UDP fragment size</source>
-        <translation>使用自定义UDP分片大小</translation>
+        <translation>使用自定义 UDP 分片大小</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1032"/>
@@ -244,7 +244,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1044"/>
         <source>TLS settings</source>
-        <translation>TLS设置</translation>
+        <translation>TLS 设置</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1045"/>
@@ -259,7 +259,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1049"/>
         <source>Verify peer (server) certificate nsCertType specification</source>
-        <translation>验证对等点（服务器）证书nsCertType指定</translation>
+        <translation>验证对等点（服务器）证书 nsCertType 指定</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1050"/>
@@ -284,7 +284,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1054"/>
         <source>HMAC Authentication</source>
-        <translation>HMAC认证</translation>
+        <translation>HMAC 认证</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1064"/>
@@ -383,17 +383,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1179"/>
         <source>Request an inner IP address</source>
-        <translation>请求内部IP地址</translation>
+        <translation>请求内部 IP 地址</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1180"/>
         <source>Enforce UDP encapsulation</source>
-        <translation>强制UDP封装</translation>
+        <translation>强制 UDP 封装</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1181"/>
         <source>Use IP compression</source>
-        <translation>使用IP压缩</translation>
+        <translation>使用 IP 压缩</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1182"/>
@@ -421,17 +421,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="315"/>
         <source>Local IP</source>
-        <translation>本地IP地址</translation>
+        <translation>本地 IP 地址</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="316"/>
         <source>Remote IP</source>
-        <translation>远程IP地址</translation>
+        <translation>远程 IP 地址</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="317"/>
         <source>PIN Code</source>
-        <translation>PIN码</translation>
+        <translation>PIN 码</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="318"/>
@@ -443,7 +443,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="319"/>
         <source>NT Domain</source>
-        <translation>NT域</translation>
+        <translation>NT 域</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="321"/>
@@ -458,7 +458,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="323"/>
         <source>CA Certificate</source>
-        <translation>CA证书</translation>
+        <translation>CA 证书</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="324"/>
@@ -564,7 +564,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="808"/>
         <source>Certificate/ssh-agent</source>
-        <translation>证书/ssh-agent</translation>
+        <translation>证书/ ssh-agent</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="809"/>
@@ -580,12 +580,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="866"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="905"/>
         <source>Key Files (*.key *.pem *.der *.p12 *.pfx)</source>
-        <translation>私钥文件(*.key *.pem *.der *.p12 *.pfx)</translation>
+        <translation>私钥文件 (*.key *.pem *.der *.p12 *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="877"/>
         <source>Choose a CA certificate</source>
-        <translation>选择CA证书</translation>
+        <translation>选择 CA 证书</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="879"/>
@@ -609,7 +609,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="152"/>
         <source>IPv4 Config</source>
-        <translation>IPv4配置</translation>
+        <translation>IPv4 配置</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="153"/>
@@ -629,7 +629,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="156"/>
         <source>DNS Server</source>
-        <translation>DNS服务器</translation>
+        <translation>DNS 服务器</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="157"/>
@@ -639,12 +639,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="158"/>
         <source>DHCP Client ID</source>
-        <translation>DHCP客户端ID</translation>
+        <translation>DHCP 客户端 ID</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="160"/>
         <source>Auto(DHCP)</source>
-        <translation>自动(DHCP)</translation>
+        <translation>自动 (DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="161"/>
@@ -657,7 +657,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="141"/>
         <source>IPv6 Config</source>
-        <translation>IPv6配置</translation>
+        <translation>IPv6 配置</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="142"/>
@@ -677,7 +677,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="145"/>
         <source>DNS Server</source>
-        <translation>DNS服务器</translation>
+        <translation>DNS 服务器</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="146"/>
@@ -687,7 +687,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="148"/>
         <source>Auto(DHCP)</source>
-        <translation>自动(DHCP)</translation>
+        <translation>自动 (DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="149"/>
@@ -725,7 +725,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="270"/>
         <source>VPN Settings</source>
-        <translation>VPN设置</translation>
+        <translation>VPN 设置</translation>
     </message>
 </context>
 <context>
@@ -733,17 +733,17 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="15"/>
         <source>create VPN</source>
-        <translation>创建VPN</translation>
+        <translation>创建 VPN</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="47"/>
         <source>VPN Type</source>
-        <translation>VPN类型</translation>
+        <translation>VPN 类型</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="75"/>
         <source>VPN Name</source>
-        <translation>VPN名称</translation>
+        <translation>VPN 名称</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="81"/>
@@ -829,7 +829,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpnobject.cpp" line="31"/>
         <source>vpn tool</source>
-        <translation>VPN工具</translation>
+        <translation>VPN 工具</translation>
     </message>
 </context>
 </TS>

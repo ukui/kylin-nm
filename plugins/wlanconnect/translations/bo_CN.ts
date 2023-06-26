@@ -43,14 +43,22 @@
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="123"/>
         <source>ukui control center</source>
-        <translation>ཝུའུ་ཁི་ལན་གྱི་ཚོད་འཛིན་ལྟེ་གནས།</translation>
+        <translation type="vanished">ཝུའུ་ཁི་ལན་གྱི་ཚོད་འཛིན་ལྟེ་གནས།</translation>
+    </message>
+    <message>
+        <source>ukui control center desktop message</source>
+        <translation type="vanished">ངོས་ལེབ་ངོས་ཀྱི་བརྡ་ཐོ་ཚོད་འཛིན་བྱ་དགོས།</translation>
+    </message>
+    <message>
+        <location filename="../wlanconnect.cpp" line="123"/>
+        <source>Settings</source>
+        <translation>བཀོད་སྒྲིག་བཅས་བྱ་དགོས།</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="126"/>
-        <source>ukui control center desktop message</source>
-        <translation>ངོས་ལེབ་ངོས་ཀྱི་བརྡ་ཐོ་ཚོད་འཛིན་བྱ་དགོས།</translation>
+        <source>Settings desktop message</source>
+        <translation>བཀོད་སྒྲིག་བཅས་བྱ་དགོས།  ཅོག་ངོས་ལ་བརྡ་ཐོ་གཏོང་དགོས།</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="228"/>
@@ -58,14 +66,14 @@
         <translation>སྐུད་མེད་དྲ་རྒྱའི་བྱང་བུ་མ་རྙེད་པ།</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="362"/>
-        <location filename="../wlanconnect.cpp" line="1028"/>
-        <location filename="../wlanconnect.cpp" line="1090"/>
+        <location filename="../wlanconnect.cpp" line="364"/>
+        <location filename="../wlanconnect.cpp" line="1033"/>
+        <location filename="../wlanconnect.cpp" line="1095"/>
         <source>connected</source>
         <translation>འབྲེལ་མཐུད་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="965"/>
+        <location filename="../wlanconnect.cpp" line="970"/>
         <source>card</source>
         <translation>བྱང་བུ།</translation>
     </message>

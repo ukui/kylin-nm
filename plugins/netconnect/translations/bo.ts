@@ -37,12 +37,12 @@
     </message>
     <message>
         <location filename="../netconnect.cpp" line="64"/>
-        <source>ukui control center</source>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="67"/>
-        <source>ukui control center desktop message</source>
+        <source>Settings desktop message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -57,13 +57,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="429"/>
-        <location filename="../netconnect.cpp" line="850"/>
+        <location filename="../netconnect.cpp" line="437"/>
+        <location filename="../netconnect.cpp" line="861"/>
         <source>connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="493"/>
+        <location filename="../netconnect.cpp" line="504"/>
         <source>card</source>
         <translation type="unfinished"></translation>
     </message>

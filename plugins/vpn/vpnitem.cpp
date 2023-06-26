@@ -20,6 +20,7 @@
 #include "vpnitem.h"
 #include <QPainter>
 #include <QPainterPath>
+#include <QApplication>
 #define FRAME_SPEED 150
 #define LIMIT_TIME 60*1000
 #define TOTAL_PAGE 8
@@ -34,7 +35,6 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     this->setMinimumSize(550, 58);
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
-    this->setProperty("needTranslucent", true);
 
     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
     mLanLyt->setContentsMargins(16,0,16,0);
@@ -133,12 +133,16 @@ void VpnItem::onDeletetTriggered()
 
 void VpnItem::paintEvent(QPaintEvent *event)
 {
-    QPalette pal = this->palette();
-
     QPainter painter(this);
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
-    painter.setBrush(pal.color(QPalette::Base));
+    painter.setBrush(this->palette().base().color());
+
+    QPalette pal = qApp->palette();
+    QColor color = pal.color(QPalette::Button);
+    color.setAlphaF(0.5);
+    pal.setColor(QPalette::Button, color);
+    this->setPalette(pal);
 
     QRect rect = this->rect();
 

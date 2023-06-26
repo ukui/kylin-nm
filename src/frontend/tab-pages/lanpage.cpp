@@ -63,6 +63,10 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_connectResourse, &KyConnectResourse::connectionRemove, this, &LanPage::onRemoveConnection);
     connect(m_connectResourse, &KyConnectResourse::connectionUpdate, this, &LanPage::onUpdateConnection);
 
+    connect(m_connectResourse, &KyConnectResourse::needShowDesktop, this, [=](QString ip) {
+        this->showDesktopNotify(ip + tr("conflict, unable to connect to the network normally!"), QString());
+    });
+
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceAdd, this, &LanPage::onDeviceAdd);
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceRemove, this, &LanPage::onDeviceRemove);
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceNameUpdate, this, &LanPage::onDeviceNameUpdate);
@@ -1318,7 +1322,7 @@ void LanPage::getWiredDeviceConnectState(QMap<QString, QString> &map)
         if (state < NetworkManager::Connectivity::Full) {
             m_activeResourse->getActiveConnectionList(devname, NetworkManager::ConnectionSettings::Wired, activedList);
             if (!activedList.isEmpty()) {
-                map.insert(devname, QString(tr("Connected: ")) + activedList.at(0)->m_connectName + QString(tr("(Limited)")));
+                map.insert(devname, QString(tr("Connected: ")) + activedList.at(0)->m_connectName + " " + QString(tr("(Limited)")));
             } else {
                 map.insert(devname, tr("Not Connected"));
             }

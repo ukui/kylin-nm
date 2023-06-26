@@ -58,10 +58,10 @@ void MobileHotspotWidget::showDesktopNotify(const QString &message)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QList<QVariant> args;
-    args<<(tr("ukui control center"))
+    args<<(tr("Settings"))
        <<((unsigned int) 0)
        <<QString("ukui-control-center")
-       <<tr("ukui control center desktop message") //显示的是什么类型的信息
+       <<tr("Settings desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
        <<QStringList()
        <<QVariantMap()
@@ -608,7 +608,7 @@ void MobileHotspotWidget::setInterFaceFrame()
     m_warnWidget->setFixedHeight(20);
     m_warnWidget->setContentsMargins(8,0,0,0);
 
-    QFormLayout *warnTextHLayout = new QFormLayout(m_warnWidget);
+    QHBoxLayout *warnTextHLayout = new QHBoxLayout(m_warnWidget);
     QLabel* warnIcon = new QLabel(this);
     warnIcon->setContentsMargins(0,0,0,0);
     warnIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(16,16));
@@ -622,15 +622,10 @@ void MobileHotspotWidget::setInterFaceFrame()
 
     warnTextHLayout->setSpacing(8);
     warnTextHLayout->setContentsMargins(0,0,0,0);
-    warnTextHLayout->addRow(warnIcon, m_interfaceWarnLabel);
+    warnTextHLayout->addWidget(warnIcon);
+    warnTextHLayout->addWidget(m_interfaceWarnLabel);
+    warnIcon->setFixedWidth(16);
     m_warnWidget->setLayout(warnTextHLayout);
-
-    QWidget *pwdInputWidget = new QWidget(m_interfaceFrame);
-    QVBoxLayout *pwdInputVLayout = new QVBoxLayout(pwdInputWidget);
-    pwdInputVLayout->setContentsMargins(CONTENTS_MARGINS);
-    pwdInputVLayout->setSpacing(0);
-    pwdInputVLayout->addWidget(m_interfaceComboBox);
-    pwdInputVLayout->addWidget(m_warnWidget);
 
     QGridLayout *interfaceFLayout = new QGridLayout(m_interfaceFrame);
     interfaceFLayout->setContentsMargins(PASSWORD_ITEM_MARGINS);

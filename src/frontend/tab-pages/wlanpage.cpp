@@ -45,7 +45,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     m_connectResource = new KyConnectResourse(this);
     m_wirelessConnectOpreation = new KyWirelessConnectOperation(this);
 
-    checkShowWifi6();
+    checkShowWifi6Plus();
     initDevice();
     initWlanUI();
     initWlanSwitchState();
@@ -194,9 +194,9 @@ bool WlanPage::getWirelessEnable()
     return m_wirelessConnectOpreation->getWirelessEnabled();
 }
 
-void WlanPage::checkShowWifi6()
+void WlanPage::checkShowWifi6Plus()
 {
-    //990下不显示wifi6 wifi6+图标
+    //990下不显示wifi6+图标
     QProcess * processCpuinfo = new QProcess(this);
     processCpuinfo->start(QString("cat /proc/cpuinfo"));
     connect(processCpuinfo, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
@@ -205,8 +205,7 @@ void WlanPage::checkShowWifi6()
     processCpuinfo->waitForFinished();
     QString ctrCpuinfo = processCpuinfo->readAll();
     if (ctrCpuinfo.indexOf("Kirin", 0, Qt::CaseInsensitive) != -1 && ctrCpuinfo.indexOf("990") != -1) {
-        //HW990上不显示wifi6/6+
-        m_showWifi6 = false;
+        m_showWifi6Plus = false;
     }
 }
 
@@ -322,7 +321,7 @@ QListWidgetItem *WlanPage::addNewItem(KyWirelessNetItem &wirelessNetItem,
                 wirelessNetItem,
                 m_currentDevice,
                 m_connectResource->isApConnection(wirelessNetItem.m_connectUuid),
-                m_showWifi6);
+                m_showWifi6Plus);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
@@ -339,7 +338,7 @@ QListWidgetItem *WlanPage::insertNewItem(KyWirelessNetItem &wirelessNetItem,
                                          QListWidget *wirelessListWidget,
                                          int row)
 {
-    WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice, m_showWifi6);
+    WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice, m_showWifi6Plus);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
@@ -360,7 +359,7 @@ QListWidgetItem *WlanPage::insertNewItemWithSort(KyWirelessNetItem &wirelessNetI
   //  qDebug()<< "insertNewItemWithSort" << wirelessNetItem.m_NetSsid
   //          <<"sort item config" << wirelessNetItem.m_isConfigured
   //         << "signal strength" << wirelessNetItem.m_signalStrength;
-    WlanListItem *p_sortWlanItem = new WlanListItem(wirelessNetItem, m_currentDevice, m_showWifi6);
+    WlanListItem *p_sortWlanItem = new WlanListItem(wirelessNetItem, m_currentDevice, m_showWifi6Plus);
     connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
@@ -558,8 +557,11 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 {
     //for dbus
     int category = 0;
-    if (m_showWifi6) {
-        category = item.getCategory(item.m_uni);
+    category = item.getCategory(item.m_uni);
+
+    //990 WiFi6+对应图标显示为WiFi6
+    if (!m_showWifi6Plus && category == 2) {
+        category = 1;
     }
 
     QStringList info;
@@ -1260,7 +1262,7 @@ void WlanPage::onRefreshIconTimer()
                 int takeRow = m_inactivatedNetListWidget->row(p_sortListWidgetItem);
                 m_inactivatedNetListWidget->takeItem(takeRow);
 
-                WlanListItem *p_sortWlanItem = new WlanListItem(sortItem, m_currentDevice, m_showWifi6);
+                WlanListItem *p_sortWlanItem = new WlanListItem(sortItem, m_currentDevice, m_showWifi6Plus);
                 connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
                 connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
                 m_inactivatedNetListWidget->insertItem(sortRow, p_sortListWidgetItem);
@@ -1311,10 +1313,10 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
                 QString uni,secuType;
 
                 if (m_netDeviceResource->getActiveConnectionInfo(iter.key(), signalStrength, uni, secuType)) {
-                    if (m_showWifi6) {
-                        category = data.getCategory(uni);
-                    }
-
+                    category = data.getCategory(uni);
+                }
+                if (!m_showWifi6Plus && category == 2) {
+                    category = 1;
                 }
                 vector.append(QStringList() << data.m_NetSsid
                               << QString::number(signalStrength)
@@ -1335,8 +1337,9 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
                 continue;
             }
             int category = 0;
-            if (m_showWifi6) {
-                category = itemData.getCategory(itemData.m_uni);
+            category = itemData.getCategory(itemData.m_uni);
+            if (!m_showWifi6Plus && category == 2) {
+                category = 1;
             }
             vector.append(QStringList()<<itemData.m_NetSsid
                           << QString::number(itemData.m_signalStrength)
@@ -1674,7 +1677,7 @@ void WlanPage::getWirelssDeviceConnectState(QMap<QString, QString> &map)
         m_netDeviceResource->getDeviceConnectivity(devname, state);
         if (state < NetworkManager::Connectivity::Full) {
             if (m_wirelessNetResource->getActiveWirelessNetItem(devname, wirelessNetItem)) {
-                map.insert(devname, QString(tr("Connected: ")) + wirelessNetItem.m_connName + QString(tr("(Limited)")));
+                map.insert(devname, QString(tr("Connected: ")) + wirelessNetItem.m_connName +  " " + QString(tr("(Limited)")));
             } else {
                 map.insert(devname, tr("Not Connected"));
            }

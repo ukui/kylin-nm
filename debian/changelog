@@ -1,3 +1,67 @@
+kylin-nm (3.24.0.0-0k1.1) v101; urgency=medium
+
+  * BUG号：
+     -#172221 设计走查 界面中英文之间增加空格（半角）
+     -#176216 【9006c】【设置全局】打开设置第一次点击代理后要等大概5秒才可以点击其他模块标题
+     -#165498 【HWE】【网络】【控制面板】控制面板-网络-代理界面，开关应用代理按钮时会有撕裂态横细线出现
+  * 需求号：
+     -#21408 海关总署选型：策略管理-对于域管理员下发给终端的可见策略，如对控制面板的策略，在终端主机上预览且不可修改，对配置项隐藏
+     -#22635 dns高级配置选项
+     -20962 【台州银行】IP地址冲突弹窗提示
+  * 其他改动：
+  * 影响域：自身
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Sun, 25 Jun 2023 18:25:38 +0800
+
+kylin-nm (3.20.1.17-0k1.10) v101; urgency=medium
+
+  * BUG号：
+     -#175029 【WiFi】企业wifi弹窗下拉菜单显示有问题
+  * 需求号：
+  * 其他改动：
+  * 影响域：自身
+
+ -- zhangyuanyuan1 <zhangyuanyuan1@kylinos.cn>  Wed, 14 Jun 2023 16:15:59 +0800
+
+kylin-nm (3.20.1.17-0k1.9) v101; urgency=medium
+
+  * BUG号：
+     -#172410 【通知中心】设置弹窗显示标题为控制面板，与实际不一致
+  * 需求号：
+  * 其他改动：
+  * 影响域：自身
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 02 Jun 2023 14:13:28 +0800
+
+kylin-nm (3.20.1.17-0k1.8) v101; urgency=medium
+
+  * BUG号：
+     -#173716 【走查】【移动热点】英文模式下无提示图标
+     -#172489  WIFI】外接USB网卡，在移动热点界面拖动右侧窗口，存在叹号消失的情况
+  * 需求号：
+  * 其他改动：控制面板有线网络及无线网络的悬停点击背景色
+  * 影响域：自身
+
+ -- zhangyuanyuan1 <zhangyuanyuan1@kylinos.cn>  Wed, 31 May 2023 16:23:30 +0800
+
+kylin-nm (3.20.1.17-0k1.7) v101; urgency=medium
+
+  * BUG号：
+     -#172627 【990】【WiFi】连接WIF6或WIFI6+后，任务栏网络显示6或6+图标 
+  * 需求号：
+  * 其他改动：无
+  * 影响域：自身 
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Tue, 30 May 2023 16:44:26 +0800
+
+kylin-nm (3.20.1.17-0k1.6) v101; urgency=medium
+
+  * BUG号:
+     -#172627 【990】【WiFi】连接WIF6或WIFI6+后，任务栏网络显示6或6+图标
+     -#172210 【HWE】【VPN】注销后再登录，会生成vpn的core文件 
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 26 May 2023 14:06:49 +0800
+
 kylin-nm (3.20.1.17-0k1.5) v101; urgency=medium
 
   * BUG号：

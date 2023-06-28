@@ -75,11 +75,13 @@ public:
     void getDeviceConnectivity(const QString &deviceName, NetworkManager::Connectivity &connectivity);
 
 private:
+    void initDeviceMap();
+    uint kyFindChannel(uint freq);
+
+private:
     KyWiredConnectOperation wiredOperation;
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     QStringList m_activeConnectUuidList;
     QMap<QString, QString> m_deviceMap;
-
-    void initDeviceMap();
 };
 #endif // KYLINNETORKDEVICERESOURCE_H

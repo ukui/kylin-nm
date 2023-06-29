@@ -57,4 +57,5 @@ TRANSLATIONS += \
         translations/tr.ts \
         translations/bo.ts \
         translations/bo_CN.ts \
-        translations/en_US.ts
+        translations/en_US.ts \
+        translations/mn.ts

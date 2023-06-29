@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="mn">
 <context>
     <name>AddNetBtn</name>
     <message>
@@ -19,28 +19,36 @@
     <message>
         <location filename="../wlanconnect.ui" line="14"/>
         <source>WlanConnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠤᠳᠠᠰᠤ ᠦᠬᠡᠢ ᠬᠡᠰᠡᠭ ᠰᠦᠯᠵᠢᠶ᠎ᠡ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
         <location filename="../wlanconnect.cpp" line="140"/>
         <location filename="../wlanconnect.cpp" line="211"/>
         <source>WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠤᠳᠠᠰᠤ ᠦᠬᠡᠢ ᠬᠡᠰᠡᠭ ᠰᠦᠯᠵᠢᠶ᠎ᠡ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
         <location filename="../wlanconnect.cpp" line="213"/>
         <source>open</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠨᠡᠭᠡᠭᠡᠬᠦ</translation>
         <extra-contents_path>/wlanconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
         <location filename="../wlanconnect.cpp" line="210"/>
         <source>Advanced settings</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠦᠨᠳᠦᠷ ᠵᠡᠷᠬᠡ ᠵᠢᠨ ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠤᠯᠳᠠ</translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
+    </message>
+    <message>
+        <source>ukui control center</source>
+        <translation type="vanished">ᠡᠵᠡᠮᠰᠢᠯ ᠤ᠋ᠨ ᠬᠠᠪᠳᠠᠰᠤ</translation>
+    </message>
+    <message>
+        <source>ukui control center desktop message</source>
+        <translation type="vanished">ᠡᠵᠡᠮᠰᠢᠯ ᠤ᠋ᠨ ᠬᠠᠪᠳᠠᠰᠤᠨ ᠤ᠋ ᠰᠢᠷᠡᠭᠡᠨ ᠨᠢᠭᠤᠷ ᠤ᠋ᠨ ᠮᠡᠳᠡᠭᠳᠡᠯ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="123"/>
@@ -55,19 +63,19 @@
     <message>
         <location filename="../wlanconnect.cpp" line="228"/>
         <source>No wireless network card detected</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠤᠳᠠᠰᠤ ᠦᠬᠡᠢ ᠨᠧᠲ ᠺᠠᠷᠲ᠎ᠢ ᠬᠢᠨᠠᠨ ᠬᠡᠮᠵᠢᠵᠤ ᠤᠯᠤᠭᠰᠠᠨ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="364"/>
         <location filename="../wlanconnect.cpp" line="1033"/>
         <location filename="../wlanconnect.cpp" line="1095"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠨᠢᠬᠡᠨᠳᠡ ᠴᠦᠷᠬᠡᠯᠡᠪᠡ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="970"/>
         <source>card</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠨᠧᠲ ᠺᠠᠷᠲ</translation>
     </message>
 </context>
 </TS>

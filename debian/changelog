@@ -1,3 +1,14 @@
+kylin-nm (3.24.0.0-0k2.3) v101; urgency=medium
+
+  * BUG号：
+     -#178136 【整机-联想开天】【M70Z-G1TS】路由器设置5G 20MHz 频道:165，连接Wifi后，检查网路通道为196，而非165
+  * 需求号：
+  * 其他改动：
+     -#159303 【蒙古文版本】蒙古文版本翻译未生效问题 / kylin-nm 蒙古文版本翻译未生效问题
+  * 影响域：自身
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 29 Jun 2023 09:14:25 +0800
+
 kylin-nm (3.24.0.0-0k2.2) v101; urgency=medium
 
   * BUG号：

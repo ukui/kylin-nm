@@ -450,31 +450,33 @@ void MobileHotspotWidget::getApInfo()
         m_pwdNameLine->setText("12345678");
         return;
     } else {
+        m_apNameLine->setText(apInfo.at(0));
+        m_pwdNameLine->setText(apInfo.at(1));
+
         int index = m_interfaceComboBox->findText(apInfo.at(2));
         if (index >= 0) {
-            m_apNameLine->setText(apInfo.at(0));
-            m_pwdNameLine->setText(apInfo.at(1));
             m_interfaceComboBox->setCurrentIndex(index);
             m_interfaceName = apInfo.at(2);
-            if (apInfo.at(3) == "true") {
-                m_switchBtn->setChecked(true);
-                setUiEnabled(true);
-                m_uuid = apInfo.at(4);
-            } else {
-                m_switchBtn->setChecked(false);
-                setUiEnabled(false);
-                m_uuid = apInfo.at(4);
-            }
-            int i = m_freqBandComboBox->findText(apInfo.at(5));
-            if (i >= 0) {
-                disconnect(m_freqBandComboBox);
-                m_freqBandComboBox->setCurrentIndex(i);
-                connect(m_freqBandComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](){
-                    UkccCommon::buriedSettings("MobileHotspot", "Frequency band", QString("select"), m_freqBandComboBox->currentText());
-                });
-            }
         } else {
             qDebug() << LOG_HEAD << "no such interface " << apInfo.at(2);
+        }
+
+        if (apInfo.at(3) == "true") {
+            m_switchBtn->setChecked(true);
+            setUiEnabled(true);
+            m_uuid = apInfo.at(4);
+        } else {
+            m_switchBtn->setChecked(false);
+            setUiEnabled(false);
+            m_uuid = apInfo.at(4);
+        }
+        int i = m_freqBandComboBox->findText(apInfo.at(5));
+        if (i >= 0) {
+            disconnect(m_freqBandComboBox);
+            m_freqBandComboBox->setCurrentIndex(i);
+            connect(m_freqBandComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](){
+                UkccCommon::buriedSettings("MobileHotspot", "Frequency band", QString("select"), m_freqBandComboBox->currentText());
+            });
         }
     }
 }

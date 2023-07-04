@@ -71,6 +71,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void onTransChanged();
+    void onThemeChanged(const QString &key);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -84,6 +85,7 @@ protected:
 
 private:
     void initWindowProperties();
+    void initWindowTheme();
 
 protected:
     QVBoxLayout * m_mainLayout = nullptr;
@@ -106,6 +108,8 @@ protected:
 
     QGSettings * m_transGsettings = nullptr;
     double m_transparency = 1.0;  //透明度
+    //监听主题的Gsettings
+    QGSettings * m_styleGsettings = nullptr;
 
 };
 

@@ -174,6 +174,8 @@ void Ipv6Page::initUI() {
     m_detailLayout->addRow(m_subnetEmptyLabel);
     m_detailLayout->addRow(m_gateWayLabel,gateWayWidget);
     m_detailLayout->addRow(m_dnsWidget);
+    m_addressLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);  //解决布局错位问题
+    m_gateWayLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);
 
     ipv6ConfigCombox->addItem(tr("Auto(DHCP)")); //"自动(DHCP)"
     ipv6ConfigCombox->addItem(tr("Manual")); //"手动"

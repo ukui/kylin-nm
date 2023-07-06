@@ -158,8 +158,8 @@ void ListItem::showDesktopNotify(const QString &message, QString soundName)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QStringList actions;  //跳转动作
-    actions.append("kylin-nm");
-    actions.append("default");          //默认动作：点击消息体时打开麒麟录音
+    actions.append("default");
+    actions.append("kylin-nm");          //默认动作：点击消息体时打开麒麟录音
     QMap<QString, QVariant> hints;
     if (!soundName.isEmpty()) {
         hints.insert("sound-name",soundName); //添加声音

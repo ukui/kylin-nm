@@ -26,11 +26,15 @@
 #include <QPainterPath>
 #include <KWindowEffects>
 
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME  "styleName"
+
 SinglePage::SinglePage(QWidget *parent) : QWidget(parent)
 {
     initUI();
     initWindowProperties();
     initTransparency();
+    initWindowTheme();
 }
 
 SinglePage::~SinglePage()
@@ -104,6 +108,20 @@ void SinglePage::initWindowProperties()
     }
 }
 
+/**
+ * @brief SinglePage::initWindowTheme 初始化窗口主题并创建信号槽
+ */
+void SinglePage::initWindowTheme()
+{
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+        m_styleGsettings = new QGSettings(style_id, QByteArray(), this);
+        connect(m_styleGsettings, &QGSettings::changed, this, &SinglePage::onThemeChanged);
+    } else {
+        qWarning() << "Gsettings interface \"org.ukui.style\" is not exist!" << Q_FUNC_INFO << __LINE__;
+    }
+}
+
 void SinglePage::showDesktopNotify(const QString &message, QString soundName)
 {
     QDBusInterface iface("org.freedesktop.Notifications",
@@ -163,6 +181,14 @@ void SinglePage::onTransChanged()
     m_transparency = m_transGsettings->get("transparency").toDouble() + 0.15;
     m_transparency = (m_transparency > 1) ? 1 : m_transparency;
     paintWithTrans();
+}
+
+void SinglePage::onThemeChanged(const QString &key)
+{
+    if (key == COLOR_THEME) {
+        paintWithTrans();
+        Q_EMIT qApp->paletteChanged(qApp->palette());
+    }
 }
 
 void SinglePage::paintWithTrans()

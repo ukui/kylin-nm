@@ -1447,6 +1447,7 @@ void WlanPage::activateWirelessConnection(const QString& devName, const QString&
     WlanListItem *p_wlanItem = nullptr;
 
     if (m_wirelessNetItemMap.contains(ssid)) {
+        Q_EMIT showMainWindow(WLAN_PAGE_INDEX);
         p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
         p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
 
@@ -1455,7 +1456,6 @@ void WlanPage::activateWirelessConnection(const QString& devName, const QString&
 
         QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
         QApplication::postEvent(p_wlanItem, event);
-        Q_EMIT showMainWindow(WLAN_PAGE_INDEX);
     } else {
         qDebug() << "[WlanPage]activateWirelessConnection no such " << ssid << "in" << devName;
     }

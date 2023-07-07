@@ -118,12 +118,12 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="172"/>
         <source>Invalid address</source>
-        <translation>无效地址</translation>
+        <translation>无效的IP地址</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="181"/>
         <source>Invalid subnet mask</source>
-        <translation>无效子网掩码</translation>
+        <translation>无效的子网掩码</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="201"/>
@@ -621,12 +621,12 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="272"/>
         <source>Invalid address</source>
-        <translation>无效地址</translation>
+        <translation>无效的IP地址</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="281"/>
         <source>Invalid subnet mask</source>
-        <translation>无效子网掩码</translation>
+        <translation>无效的子网掩码</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="307"/>
@@ -689,12 +689,12 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="250"/>
         <source>Invalid address</source>
-        <translation>无效地址</translation>
+        <translation>无效的IP地址</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="259"/>
         <source>Invalid gateway</source>
-        <translation>无效网关</translation>
+        <translation>无效的网关地址</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="303"/>

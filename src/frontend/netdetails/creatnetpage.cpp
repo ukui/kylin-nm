@@ -101,6 +101,8 @@ void CreatNetPage::initUI()
     m_detailLayout->addRow(m_maskLabel, maskWidget);
     m_detailLayout->addRow(m_gateWayLabel,gateWayEdit);
     m_detailLayout->addRow(gateWayEmptyLabel);
+    m_addressLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);  //解决布局错位问题
+    m_maskLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);
 
     m_detailLayout->addRow(m_dnsWidget);
 

@@ -111,6 +111,8 @@ void Ipv4Page::initUI() {
     m_detailLayout->addRow(divider);
     m_detailLayout->addRow(m_dnsEmptyLabel);
     m_detailLayout->addRow(m_dnsWidget);
+    m_addressLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);  //解决布局错位问题
+    m_maskLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);
 
     ipv4ConfigCombox->addItem(tr("Auto(DHCP)")); //"自动(DHCP)"
     ipv4ConfigCombox->addItem(tr("Manual")); //"手动"

@@ -481,12 +481,14 @@ void WlanPage::constructActivateConnectionArea()
 
             height += p_listWidgetItem->sizeHint().height();
             setNetSpeed->start(REFRESH_NETWORKSPEED_TIMER);
+            m_activatedNetListWidget->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
         }
     }
 
     if (height == 0) {  
         QListWidgetItem *p_listWidgetItem = addEmptyItem(m_activatedNetListWidget);
         m_activateConnectionItemMap.insert(EMPTY_SSID, p_listWidgetItem);
+        m_activatedNetListWidget->setSelectionMode(QAbstractItemView::SelectionMode::NoSelection);
 
         height += p_listWidgetItem->sizeHint().height();
     }
@@ -933,6 +935,8 @@ void WlanPage::wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::St
 
 void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
 {
+    m_activatedNetListWidget->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+
     if (m_activateConnectionItemMap.contains(ssid)) {
         return;
     }
@@ -987,6 +991,7 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
             deleteWirelessItemFormMap(m_activateConnectionItemMap, m_activatedNetListWidget, ssid);
             QListWidgetItem *p_activeListWidgetItem = addEmptyItem(m_activatedNetListWidget);
             m_activateConnectionItemMap.insert(EMPTY_SSID, p_activeListWidgetItem);
+            m_activatedNetListWidget->setSelectionMode(QAbstractItemView::SelectionMode::NoSelection);
             m_activatedNetListWidget->setFixedHeight(p_activeListWidgetItem->sizeHint().height());
         }
     } else {

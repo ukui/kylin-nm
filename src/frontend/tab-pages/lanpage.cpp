@@ -352,9 +352,11 @@ void LanPage::constructActiveConnectionArea()
             p_activeConnectionItem = nullptr;
         }
         setNetSpeed->start(REFRESH_NETWORKSPEED_TIMER);
+        m_activatedLanListWidget->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
     } else {
         qDebug()<<"[LanPage] there is not active";
         addEmptyConnectItem(m_activeConnectionMap, m_activatedLanListWidget);
+        m_activatedLanListWidget->setSelectionMode(QAbstractItemView::SelectionMode::NoSelection);
     }
 
     return;
@@ -835,6 +837,8 @@ QListWidgetItem *LanPage::addNewItem(KyConnectItem *itemData, QListWidget *listW
 
 void LanPage::updateActivatedConnectionArea(KyConnectItem *p_newItem)
 {
+    m_activatedLanListWidget->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+
     if (m_activeConnectionMap.contains(p_newItem->m_connectUuid)) {
         return;
     }
@@ -863,6 +867,7 @@ void LanPage::updateConnectionArea(KyConnectItem *p_newItem)
     deleteConnectionMapItem(m_activeConnectionMap, m_activatedLanListWidget, p_newItem->m_connectUuid);
     if (m_activeConnectionMap.count() <= 0) {
         addEmptyConnectItem(m_activeConnectionMap, m_activatedLanListWidget);
+        m_activatedLanListWidget->setSelectionMode(QAbstractItemView::SelectionMode::NoSelection);
     }
 
     if (p_newItem->m_ifaceName == m_currentDeviceName || p_newItem->m_ifaceName == "") {

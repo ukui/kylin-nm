@@ -1053,6 +1053,25 @@ void WlanPage::onConnectionStateChanged(QString uuid,
         return;
     }
 
+    if (state == NetworkManager::ActiveConnection::State::Deactivating ||
+            state == NetworkManager::ActiveConnection::State::Deactivated) {
+        if (!m_activateConnectionItemMap.contains(ssid)) {
+            //check uuid
+            QMap<QString, QListWidgetItem*>::iterator iter;
+            for(iter = m_activateConnectionItemMap.begin(); iter!= m_activateConnectionItemMap.end(); iter++)
+            {
+                if(iter.value() != nullptr) {
+                    QListWidgetItem *p_listWidgetItem = iter.value();
+                    WlanListItem *p_wlanItem = (WlanListItem*)m_activatedNetListWidget->itemWidget(p_listWidgetItem);
+                    if (p_wlanItem->getUuid() == uuid) {
+                        ssid = p_wlanItem->getSsid();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     qDebug()<< "[WlanPage] wlan state changed, ssid = " << ssid
             << "; state = " << state << "; reason = " << reason << Q_FUNC_INFO <<__LINE__;
     if (state == NetworkManager::ActiveConnection::State::Activated) {

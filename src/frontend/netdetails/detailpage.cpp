@@ -349,11 +349,7 @@ void DetailPage::on_btnCopyNetDetail_clicked()
     bandwithCopy += this->m_BandWidth->text();
     ipv6Copy += m_formerIPV6;
     ipv4Copy += this->m_IPV4->text();
-    if (m_IPV4Dns->toolTip().isEmpty()) {
-        ipv4dnsCopy += this->m_IPV4Dns->text();
-    } else {
-        ipv4dnsCopy += this->m_IPV4Dns->toolTip();
-    }
+    ipv4dnsCopy += this->m_IPV4Dns->getText();
     macCopy += this->m_Mac->text();
     netDetailList.append(bandwithCopy);
     netDetailList.append(ipv4Copy);

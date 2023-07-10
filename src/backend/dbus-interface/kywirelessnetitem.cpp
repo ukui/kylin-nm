@@ -22,7 +22,9 @@
 #include "kylinutil.h"
 
 const QString ENTERPRICE_TYPE = "802.1X";
-const QString WPA1_AND_WPA2 = "WPA";
+//const QString WPA1_AND_WPA2 = "WPA";
+const QString WPA1 = "WPA1";
+const QString WPA2 = "WPA2";
 const QString WPA3 = "WPA3";
 
 #define FREQ_5GHZ 5000
@@ -189,12 +191,12 @@ void KyWirelessNetItem::setKySecuType(QString strSecuType)
     if (strSecuType.indexOf(ENTERPRICE_TYPE) >= 0) {
         m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
     } else if (strSecuType.indexOf(WPA3) >= 0) {
-        if ( strSecuType.indexOf(WPA1_AND_WPA2) >= 0) {
+        if ( strSecuType.indexOf(WPA1) >= 0 || strSecuType.indexOf(WPA2) >= 0) {
             m_kySecuType = WPA_AND_WPA3;
         } else {
             m_kySecuType = WPA3_PERSONAL;
         }
-    } else if ( strSecuType.indexOf(WPA1_AND_WPA2) >= 0) {
+    } else if ( strSecuType.indexOf(WPA1) >= 0 || strSecuType.indexOf(WPA2) >= 0) {
         m_kySecuType = WPA_AND_WPA2_PERSONAL;
     } else {
         m_kySecuType = NONE;

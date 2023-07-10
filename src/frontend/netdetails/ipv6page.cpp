@@ -73,7 +73,7 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
             isChanged = true;
         }
     } else {
-        type = CONFIG_IP_DHCP;
+        type = CONFIG_IP_MANUAL;
         if (info.ipv6ConfigType != CONFIG_IP_MANUAL) {
             qDebug() << "ipv6ConfigType change to Manual";
             isChanged =  true;

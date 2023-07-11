@@ -107,6 +107,7 @@ QWidget *Vpn::pluginUi(){
         initComponent();
         initConnect();
         initNet();
+        initSearchText();
     }
     return m_pluginWidget;
 }
@@ -129,6 +130,11 @@ QIcon Vpn::icon() const
 bool Vpn::isEnable() const
 {
     return true;
+}
+
+QString Vpn::translationPath() const
+{
+    return "/usr/share/kylin-nm/vpn/%1.ts";
 }
 
 void Vpn::initComponent(){
@@ -270,6 +276,14 @@ void Vpn::setShowSwitchStatus()
     } else {
         qDebug()<<"[Vpn] org.ukui.kylin-nm.switch is not installed!";
     }
+}
+
+void Vpn::initSearchText()
+{
+    //~ contents_path /Vpn/Show on Taskbar
+    tr("Show on Taskbar");
+    //~ contents_path /Vpn/Add VPN
+    tr("Add VPN");
 }
 
 void Vpn::runExternalApp(){

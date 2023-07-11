@@ -109,6 +109,7 @@ public:
 
 Q_SIGNALS:
     void deviceStatusChanged();
+    void wirelessDeviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName, int type);
     void activateFailed(QString errorMessage);
     void deactivateFailed(QString errorMessage);

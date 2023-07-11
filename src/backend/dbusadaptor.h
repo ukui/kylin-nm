@@ -110,6 +110,7 @@ Q_SIGNALS: // SIGNALS
     void deactivateFailed(QString errorMessage);
     //设备插拔
     void deviceStatusChanged();
+    void wirelessDeviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName, int type);
     void wirelessSwitchBtnChanged(bool state);
     //热点断开

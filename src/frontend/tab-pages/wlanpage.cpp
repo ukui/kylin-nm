@@ -755,7 +755,7 @@ void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devi
         initWlanArea();
     }
 
-    Q_EMIT deviceStatusChanged();
+    Q_EMIT wirelessDeviceStatusChanged();
 
     return;
 }
@@ -820,7 +820,7 @@ void WlanPage::onDeviceRemove(QString deviceName)
         initWlanArea();
     }
 
-    Q_EMIT deviceStatusChanged();
+    Q_EMIT wirelessDeviceStatusChanged();
 }
 
 void WlanPage::updateDeviceForCombox(QString oldDeviceName, QString newDeviceName)

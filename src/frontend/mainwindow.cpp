@@ -644,7 +644,10 @@ void MainWindow::onRefreshTrayIcon()
         iconStatus = IconActiveType::LAN_CONNECTED;
     } else if (m_wlanWidget->checkWlanStatus(NetworkManager::ActiveConnection::State::Activated)){
 //        m_trayIcon->setIcon(QIcon::fromTheme("network-wireless-connected-symbolic"));
-        signalStrength = m_wlanWidget->getAcivateWifiSignal();
+        signalStrength = m_wlanWidget->getActivateWifiSignal(m_wlanWidget->getCurrentDisplayDevice());
+        if (signalStrength == -1) {
+            signalStrength = m_wlanWidget->getActivateWifiSignal();
+        }
         iconStatus = IconActiveType::WLAN_CONNECTED;
     } else {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
@@ -689,6 +692,10 @@ void MainWindow::onRefreshTrayIcon()
         } else {
             m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_LIMIT_ICON));
         }
+    }
+
+    if (signalStrength == -1) {
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
     }
     onRefreshTrayIconTooltip();
 }

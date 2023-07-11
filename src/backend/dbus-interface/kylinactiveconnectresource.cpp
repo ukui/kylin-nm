@@ -748,9 +748,9 @@ QString KyActiveConnectResourse::getAcitveConnectionPathByUuid(QString connectUu
     return activeAonnectPtr->path();
 }
 
-int KyActiveConnectResourse::getAcivateWifiSignal()
+int KyActiveConnectResourse::getActivateWifiSignal(QString devName)
 {
-    int signalStrength = 0;
+    int signalStrength = -1;
     KyNetworkDeviceResourse devResource;
     QStringList devList;
     devResource.getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList);
@@ -766,14 +766,17 @@ int KyActiveConnectResourse::getAcivateWifiSignal()
         }
 
         if (connectDevice->type() == NetworkManager::Device::Wifi) {
-            NetworkManager::WirelessDevice *wirelessDevicePtr =
-                qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
-            NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();
-            if (apPtr.isNull()) {
-                continue;
+            if ((!devName.isEmpty() && connectDevice->interfaceName() == devName)
+                    || devName.isEmpty()) {
+                NetworkManager::WirelessDevice *wirelessDevicePtr =
+                    qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
+                NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();
+                if (apPtr.isNull()) {
+                    continue;
+                }
+                signalStrength = apPtr->signalStrength();
+                break;
             }
-            signalStrength = apPtr->signalStrength();
-            break;
         }
     }
 

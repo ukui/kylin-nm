@@ -1138,6 +1138,8 @@ void WlanPage::onDeviceComboxIndexChanged(int currentIndex)
 
     initWlanArea();
 
+    Q_EMIT timeToUpdate();
+
     return;
 }
 
@@ -1661,9 +1663,9 @@ void WlanPage::addWlanMoreItem()
     return;
 }
 
-int WlanPage::getAcivateWifiSignal()
+int WlanPage::getActivateWifiSignal(QString devName)
 {
-    return m_activatedConnectResource->getAcivateWifiSignal();
+    return m_activatedConnectResource->getActivateWifiSignal(devName);
 }
 
 void WlanPage::getWirelssDeviceConnectState(QMap<QString, QString> &map)
@@ -1674,26 +1676,14 @@ void WlanPage::getWirelssDeviceConnectState(QMap<QString, QString> &map)
     }
 
     for (const auto devname : m_devList) {
-        NetworkManager::Connectivity state;
         KyWirelessNetItem wirelessNetItem;
         if (!m_netDeviceResource->getDeviceManaged(devname)) {
             continue;
         }
-        m_netDeviceResource->getDeviceConnectivity(devname, state);
-        if (state < NetworkManager::Connectivity::Full) {
-            if (m_wirelessNetResource->getActiveWirelessNetItem(devname, wirelessNetItem)) {
-                map.insert(devname, QString(tr("Connected: ")) + wirelessNetItem.m_connName +  " " + QString(tr("(Limited)")));
-            } else {
-                map.insert(devname, tr("Not Connected"));
-           }
-
-        } else if (state == NetworkManager::Connectivity::Full) {
-            if (m_wirelessNetResource->getActiveWirelessNetItem(devname, wirelessNetItem)) {
-                map.insert(devname, QString(tr("Connected: ")) + wirelessNetItem.m_connName);
-            }
-
+        if (m_wirelessNetResource->getActiveWirelessNetItem(devname, wirelessNetItem)) {
+            map.insert(devname, QString(tr("Connected: ")) + wirelessNetItem.m_NetSsid);
         } else {
-            qDebug() << devname << " Network connectivity is unknown.";
+            map.insert(devname, tr("Not Connected"));
         }
     }
 }

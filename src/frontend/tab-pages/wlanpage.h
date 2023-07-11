@@ -79,10 +79,14 @@ public:
 
     bool getWirelessSwitchBtnState();
 
-    int getAcivateWifiSignal();
+    int getActivateWifiSignal(QString devName = "");
 
     //无线网卡连通性
     void getWirelssDeviceConnectState(QMap<QString, QString> &map);
+
+    QString getCurrentDisplayDevice() {
+        return m_currentDevice;
+    }
 
 Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);

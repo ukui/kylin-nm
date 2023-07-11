@@ -262,7 +262,7 @@ void MobileHotspotWidget::initDbusConnect()
     if(m_interface->isValid()) {
         connect(m_interface,SIGNAL(activateFailed(QString)), this, SLOT(onActivateFailed(QString)), Qt::QueuedConnection);
         connect(m_interface,SIGNAL(deactivateFailed(QString)), this, SLOT(onDeactivateFailed(QString)), Qt::QueuedConnection);
-        connect(m_interface,SIGNAL(deviceStatusChanged()), this, SLOT(onDeviceStatusChanged()), Qt::QueuedConnection);
+        connect(m_interface,SIGNAL(wirelessDeviceStatusChanged()), this, SLOT(onDeviceStatusChanged()), Qt::QueuedConnection);
         connect(m_interface,SIGNAL(deviceNameChanged(QString, QString, int)), this, SLOT(onDeviceNameChanged(QString, QString, int)), Qt::QueuedConnection);
         connect(m_interface,SIGNAL(hotspotDeactivated(QString, QString)), this, SLOT(onHotspotDeactivated(QString, QString)), Qt::QueuedConnection);
         connect(m_interface,SIGNAL(hotspotActivated(QString, QString, QString, QString, QString)), this, SLOT(onHotspotActivated(QString, QString, QString, QString, QString)), Qt::QueuedConnection);
@@ -271,7 +271,6 @@ void MobileHotspotWidget::initDbusConnect()
 
         connect(m_interface, SIGNAL(wirelessSwitchBtnChanged(bool)), this, SLOT(onWirelessBtnChanged(bool)), Qt::QueuedConnection);
     }
-
 
     connect(m_apNameLine, &QLineEdit::textEdited, this, &MobileHotspotWidget::onApLineEditTextEdit);
 #ifdef HOTSPOT_CONTROL
@@ -395,7 +394,6 @@ void MobileHotspotWidget::initInterfaceInfo()
         return;
     }
     QMap<QString, int> devCapMap = capReply.value();
-
 
     if (devMap.isEmpty()) {
         qDebug() << LOG_HEAD << "no wireless device";

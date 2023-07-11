@@ -273,7 +273,7 @@ void WlanConnect::initComponent() {
     //删除无线网络
     connect(m_interface, SIGNAL(wlanRemove(QString, QString)), this, SLOT(onNetworkRemove(QString, QString)), Qt::QueuedConnection);
     //网卡插拔处理
-    connect(m_interface, SIGNAL(deviceStatusChanged()), this, SLOT(onDeviceStatusChanged()), Qt::QueuedConnection);
+    connect(m_interface, SIGNAL(wirelessDeviceStatusChanged()), this, SLOT(onDeviceStatusChanged()), Qt::QueuedConnection);
     //信号更新处理 改为每过固定时间 主动获取
 //    connect(m_interface, SIGNAL(signalStrengthChange(QString, QString, int)), this, SLOT(updateStrengthList(QString, QString, int)));
     //网卡name处理

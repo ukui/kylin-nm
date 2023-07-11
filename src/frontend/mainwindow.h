@@ -113,6 +113,7 @@ public:
 Q_SIGNALS:
     //设备插拔
     void deviceStatusChanged();
+    void wirelessDeviceStatusChanged();
     //设备名称变化
     void deviceNameChanged(QString oldName, QString newName, int type);
     void wirelessSwitchBtnChanged(bool state);

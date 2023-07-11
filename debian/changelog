@@ -1,3 +1,13 @@
+kylin-nm (3.24.0.0-0k2.6) v101; urgency=medium
+
+  * BUG号：
+     -#180430 【wifi】开启移动热点后，手动睡眠机器，然后再唤醒，控制面板卡死
+  * 需求号：
+  * 其他改动：
+  * 影响域：自身
+
+ -- cxc <chenxuechao@kylinos.cn>  Tue, 11 Jul 2023 18:20:41 +0800
+
 kylin-nm (3.24.0.0-0k2.5) v101; urgency=medium
 
   * BUG号：

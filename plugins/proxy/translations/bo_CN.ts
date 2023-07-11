@@ -5,8 +5,8 @@
     <name>AptProxyDialog</name>
     <message>
         <location filename="../aptproxydialog.cpp" line="24"/>
-        <source>Set Apt Proxy</source>
-        <translation>Apt ངོ་ཚབ་ བཙུགས་པ།</translation>
+        <source>Set APT Proxy</source>
+        <translation>APT ངོ་ཚབ་ བཙུགས་པ།</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="41"/>
@@ -118,9 +118,9 @@
     </message>
     <message>
         <location filename="../proxy.cpp" line="471"/>
-        <source>Apt Proxy</source>
+        <source>APT Proxy</source>
         <translation>APT ཚབ་བྱེད་མི་སྣ།</translation>
-        <extra-contents_path>/Proxy/Apt Proxy</extra-contents_path>
+        <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="472"/>
@@ -162,8 +162,8 @@
     </message>
     <message>
         <location filename="../proxy.cpp" line="813"/>
-        <source>The system needs to be restarted to set the Apt proxy, whether to reboot</source>
-        <translation>མ་ལག་འདི་བསྐྱར་དུ་འགོ་ཚུགས་ནས་Aptཡི་ཚབ་བྱེད་འཕྲུལ་ཆས་གཏན་འཁེལ་བྱེད་དགོས་པ་དང་། བསྐྱར་དུ་འགོ་འཛུགས་དགོས་མིན་</translation>
+        <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
+        <translation>མ་ལག་འདི་བསྐྱར་དུ་འགོ་ཚུགས་ནས་APT ཡི་ཚབ་བྱེད་འཕྲུལ་ཆས་གཏན་འཁེལ་བྱེད་དགོས་པ་དང་། བསྐྱར་དུ་འགོ་འཛུགས་དགོས་མིན་</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1017"/>

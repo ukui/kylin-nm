@@ -21,7 +21,7 @@ AptProxyDialog::~AptProxyDialog()
 
 void AptProxyDialog::initUi()
 {
-    setWindowTitle(tr("Set Apt Proxy"));
+    setWindowTitle(tr("Set APT Proxy"));
     this->setFixedSize(480, 200);
 
     QVBoxLayout *mAptProxyLyt = new QVBoxLayout(this);

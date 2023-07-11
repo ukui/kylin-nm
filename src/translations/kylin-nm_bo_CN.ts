@@ -909,7 +909,7 @@
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="57"/>
         <source>DNS server(Drag to sort)</source>
-        <translation>DNS ཞབས་ཞུའི་ཡོ་བྱད། (འདྲུད་འཐེན་曳་གོ་རིམ། )</translation>
+        <translation>DNS ཞབས་ཞུའི་ཡོ་བྱད། (འཐེན་འགུལ་ལ་བརྟེན་ནས་རིམ་སྒྲིག་།)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="64"/>

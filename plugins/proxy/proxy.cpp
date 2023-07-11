@@ -475,8 +475,8 @@ void Proxy::retranslateUi()
     //~ contents_path /Proxy/App Proxy
     tr("App Proxy");
 
-    //~ contents_path /Proxy/Apt Proxy
-    mAptProxyLabel->setText(tr("Apt Proxy"));
+    //~ contents_path /Proxy/APT Proxy
+    mAptProxyLabel->setText(tr("APT Proxy"));
     mAptLabel->setText(tr("Open"));
     mAPTHostLabel_1->setText(tr("Server Address : "));
     mAPTPortLabel_1->setText(tr("Port : "));

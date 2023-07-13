@@ -72,6 +72,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void onTransChanged();
     void onThemeChanged(const QString &key);
+    void setThemePalette();
 
 protected:
     void paintEvent(QPaintEvent *event);

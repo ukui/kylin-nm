@@ -37,24 +37,9 @@ Divider::Divider(bool useLightPal, QWidget * parent)
 
 void Divider::onPaletteChanged()
 {
-    QPalette pal = qApp->palette();
-
-    QGSettings * styleGsettings = nullptr;
-    const QByteArray style_id(THEME_SCHAME);
-    if (QGSettings::isSchemaInstalled(style_id) && m_useLightPal) {
-       styleGsettings = new QGSettings(style_id);
-       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
-       if(currentTheme == "ukui-default"){
-           pal = lightPalette(this);
-       }
-    }
+    QPalette pal = this->palette();
     m_color = pal.color(QPalette::BrightText);
     m_color.setAlphaF(0.08);
-
-    if (styleGsettings != nullptr) {
-        delete styleGsettings;
-        styleGsettings = nullptr;
-    }
 }
 
 void Divider::paintEvent(QPaintEvent * e)

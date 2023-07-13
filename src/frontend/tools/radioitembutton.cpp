@@ -24,6 +24,8 @@
 #include <QApplication>
 #include <QStyle>
 #include <QDebug>
+#include "themepalette.h"
+
 #define FLASH_SPEED 100
 #define TIMEOUT_TIMER 90*1000
 #define BUTTON_SIZE 36,36
@@ -35,9 +37,10 @@
 #define FOREGROUND_COLOR_PRESS_INACTIVE_DARK QColor(70,70,70,255)
 #define FOREGROUND_COLOR_NORMAL_ACTIVE QColor(55,144,250,255)
 #define FOREGROUND_COLOR_PRESS_ACTIVE QColor(36,109,212,255)
-#define COLOR_BRIGHT_TEXT qApp->palette().brightText().color()
-#define COLOR_HIGH_LIGHT qApp->palette().highlight().color()
+#define COLOR_BRIGHT_TEXT this->palette().brightText().color()
+#define COLOR_HIGH_LIGHT this->palette().highlight().color()
 #define THEME_SCHAME  "org.ukui.style"
+#define COLOR_THEME   "styleName"
 
 QColor mixColor(const QColor &c1, const QColor &c2, qreal bias);
 
@@ -61,6 +64,7 @@ RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
             }
         });
     }
+    onPaletteChanged();
 
     //JXJ_TODO loading动画
     connect(this, &RadioItemButton::requestStartLoading, this, &RadioItemButton::onLoadingStarted);
@@ -140,6 +144,18 @@ void RadioItemButton::onLoadingStopped()
 
 void RadioItemButton::onPaletteChanged()
 {
+    QPalette pal = qApp->palette();
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray styleId(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(styleId)) {
+       styleGsettings = new QGSettings(styleId, QByteArray(), this);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = themePalette(true, this);
+       }
+    }
+    this->setPalette(pal);
+
     refreshButtonIcon();
 }
 
@@ -233,7 +249,7 @@ void RadioItemButton::refreshButtonIcon()
     } else {
         m_backgroundColor = COLOR_BRIGHT_TEXT;
         m_backgroundColor.setAlphaF(0.12);
-        if (qApp->palette().base().color().red() > MIDDLE_COLOR) {
+        if (this->palette().base().color().red() > MIDDLE_COLOR) {
             m_iconLabel->setPixmap(m_pixmap);
         } else {
             m_iconLabel->setPixmap(loadSvg(m_pixmap, PixmapColor::WHITE));

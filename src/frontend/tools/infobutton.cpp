@@ -22,20 +22,22 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QApplication>
+#include <QGSettings>
+#include "themepalette.h"
 
 #define BUTTON_SIZE 36,36
 #define ICON_SIZE 16,16
 #define BACKGROUND_COLOR QColor(0,0,0,0)
-#define FOREGROUND_COLOR_NORMAL qApp->palette().text().color()
-//#define FOREGROUND_COLOR_HOVER QColor(55,144,250,255)
-//#define FOREGROUND_COLOR_PRESS QColor(36,109,212,255)
-#define FOREGROUND_COLOR_BRIGHTTEXT qApp->palette().brightText().color()
-#define FOREGROUND_COLOR_HIGHLIGHT qApp->palette().highlight().color()
+#define FOREGROUND_COLOR_NORMAL this->palette().text().color()
+#define FOREGROUND_COLOR_BRIGHTTEXT this->palette().brightText().color()
+#define FOREGROUND_COLOR_HIGHLIGHT this->palette().highlight().color()
 #define OUTER_PATH 8,10,16,16
 #define INNER_PATH 9,11,14,14
 #define TEXT_POS 14,7,16,16,0
 
 #define BUTTON_SIZE 36,36
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME "styleName"
 
 QColor mixColor(const QColor &c1, const QColor &c2, qreal bias);
 
@@ -44,6 +46,17 @@ InfoButton::InfoButton(QWidget *parent) : QPushButton(parent)
     this->setFixedSize(BUTTON_SIZE);
     initUI();
     connect(qApp, &QApplication::paletteChanged, this, &InfoButton::onPaletteChanged);
+
+    const QByteArray id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(id)) {
+        QGSettings * styleGsettings = new QGSettings(id, QByteArray(), this);
+        connect(styleGsettings, &QGSettings::changed, this, [=](QString key){
+            if ("themeColor" == key) {
+                onPaletteChanged();
+            }
+        });
+    }
+    onPaletteChanged();
 }
 
 void InfoButton::initUI()
@@ -55,6 +68,18 @@ void InfoButton::initUI()
 
 void InfoButton::onPaletteChanged()
 {
+    QPalette pal = qApp->palette();
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray styleId(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(styleId)) {
+       styleGsettings = new QGSettings(styleId, QByteArray(), this);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = themePalette(true, this);
+       }
+    }
+    this->setPalette(pal);
+
     m_foregroundColor = FOREGROUND_COLOR_NORMAL;
     this->repaint();
 }

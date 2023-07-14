@@ -68,6 +68,7 @@ private:
     void addDetailItem(QListWidget *listWidget, QWidget *detailWidget);
     void newCopiedTip();
     QPalette getTheme();
+    void setInteractionFlag();
 
 public:
     QListWidget  *m_listWidget = nullptr;

@@ -706,8 +706,8 @@
     <name>JoinHiddenWiFiPage</name>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="137"/>
-        <source>Please enter the network name and security type</source>
-        <translation>请输入您想要加入网络的名称和安全类型</translation>
+        <source>Please enter the network information</source>
+        <translation>请输入您想要加入的网络信息</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="142"/>
@@ -740,8 +740,8 @@
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="150"/>
-        <source>Find and Join Wi-Fi</source>
-        <translation>查找并加入 Wi-Fi</translation>
+        <source>Find and Join WLAN</source>
+        <translation>查找并加入无线局域网络</translation>
     </message>
 </context>
 <context>

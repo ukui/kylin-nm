@@ -690,7 +690,7 @@
     <name>JoinHiddenWiFiPage</name>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="137"/>
-        <source>Please enter the network name and security type</source>
+        <source>Please enter the network information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -720,7 +720,7 @@
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="150"/>
-        <source>Find and Join Wi-Fi</source>
+        <source>Find and Join WLAN</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

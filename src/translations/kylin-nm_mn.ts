@@ -495,7 +495,7 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="72"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ᠦᠭᠡᠢᠰᠬᠡᠬᠦ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="75"/>

@@ -133,8 +133,8 @@ void JoinHiddenWiFiPage::initUI()
     m_bottomLayout->addWidget(m_cancelBtn);
     m_bottomLayout->addWidget(m_joinBtn);
 
-    //请输入您想要加入网络的名称和安全类型
-   m_descriptionLabel->setLabelText(tr("Please enter the network name and security type"));
+    //请输入您想要加入的网络信息
+   m_descriptionLabel->setLabelText(tr("Please enter the network information"));
    QFont font = m_descriptionLabel->font();
    font.setWeight(MEDIUM_WEIGHT_VALUE);
    m_descriptionLabel->setFont(font);
@@ -147,7 +147,7 @@ void JoinHiddenWiFiPage::initUI()
    m_nameEdit->setMaxLength(MAX_NAME_LENGTH);
    m_nameEdit->setPlaceholderText(tr("Required")); //必填
 
-   this->setWindowTitle(tr("Find and Join Wi-Fi"));
+   this->setWindowTitle(tr("Find and Join WLAN"));
    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
    this->setFixedWidth(WINDOW_WIDTH);
    this->setFixedHeight(MIN_WINDOW_HEIGHT);

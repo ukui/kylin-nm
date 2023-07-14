@@ -98,22 +98,22 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="61"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>settings</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="64"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>settings desktop message</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="336"/>
         <source>use </source>
-        <translation type="unfinished"></translation>
+        <translation>Use </translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="337"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation type="unfinished"></translation>
+        <translation> Share network, will interrupt local wireless connection</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="353"/>

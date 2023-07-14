@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>translations/kylin-vpn_zh_CN.qm</file>
-        <file>translations/kylin-vpn_bo_CN.qm</file>
-    </qresource>
-</RCC>

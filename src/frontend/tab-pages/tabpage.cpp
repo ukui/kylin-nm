@@ -71,7 +71,9 @@ void TabPage::initUI()
     m_deviceLabel = new QLabel(m_deviceFrame);
     m_deviceLabel->setText(tr("Current Device"));
     m_deviceComboBox = new QComboBox(m_deviceFrame);
-    m_deviceComboBox->setFixedWidth(DEVICE_COMBOBOX_WIDTH);
+    m_deviceComboBox->setMinimumWidth(DEVICE_COMBOBOX_WIDTH);
+    m_deviceComboBox->setMaximumWidth(DEVICE_COMBOBOX_WIDTH_MAX);
+    m_deviceComboBox->setSizeAdjustPolicy(QComboBox::SizeAdjustPolicy::AdjustToContents);
 
     m_tipsLabel = new QLabel(m_deviceFrame);
     m_tipsLabel->setText(tr("Devices Closed!"));

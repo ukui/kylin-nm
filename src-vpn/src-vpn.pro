@@ -71,7 +71,8 @@ DISTFILES += \
 
 TRANSLATIONS += \
         translations/kylin-vpn_zh_CN.ts \
-        translations/kylin-vpn_bo_CN.ts
+        translations/kylin-vpn_bo_CN.ts \
+        translations/kylin-vpn_mn.ts
 
 CONFIG(release, debug|release) {
     !system($$PWD/translate_generation.sh): error("Failed to generate translation")

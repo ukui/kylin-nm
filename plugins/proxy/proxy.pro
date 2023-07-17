@@ -55,7 +55,8 @@ TRANSLATIONS += \
         translations/zh_CN.ts \
         translations/tr.ts \
         translations/bo_CN.ts \
-        translations/en_US.ts
+        translations/en_US.ts \
+        translations/mn.ts
 
 DISTFILES += \
     translations/en_US.ts

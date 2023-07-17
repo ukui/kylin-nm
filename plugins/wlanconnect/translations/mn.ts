@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation type="unfinished"></translation>
+        <translation>add Others</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation type="unfinished"></translation>
+        <translation>add WiredNetork</translation>
     </message>
 </context>
 <context>
@@ -53,12 +53,12 @@
     <message>
         <location filename="../wlanconnect.cpp" line="123"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>settings</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="126"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>settings desktop message</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="228"/>

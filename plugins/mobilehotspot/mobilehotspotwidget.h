@@ -144,6 +144,8 @@ private:
     void initConnectDevPage();
     void initBlackListPage();
 
+    bool m_isUserSelect = true;  //是否用户操作
+
 signals:
 
 private slots:

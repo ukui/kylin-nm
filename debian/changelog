@@ -1,3 +1,16 @@
+kylin-nm (3.24.0.0-0k2.8) v101; urgency=medium
+
+  * BUG号：
+     -#181605 【网络】最大字体下，任务栏有线网络名称有遮挡
+     -#181614 【WiFi】最大字体下无线名称有遮挡
+     -#182329 【需求22601】设置共享网卡端口没有埋点数据
+     -#182738 【需求22601】移动热点开启/关闭操作会出现很多埋点save info
+  * 需求号：
+  * 其他改动：
+  * 影响域：自身
+
+ -- zhangyuanyuan1 <zhangyuanyuan1@kylinos.cn>  Mon, 17 Jul 2023 17:08:36 +0800
+
 kylin-nm (3.24.0.0-0k2.7) v101; urgency=medium
 
   * BUG号：

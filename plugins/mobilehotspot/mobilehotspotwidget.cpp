@@ -116,7 +116,7 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
     connect(m_switchBtn, &KSwitchButton::stateChanged, this, &MobileHotspotWidget::setUiEnabled);
     connect(m_interfaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MobileHotspotWidget::onInterfaceChanged);
     connect(m_interfaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=]() {
-        UkccCommon::buriedSettings("MobileHotspot", "select", QString("Net card"));
+        UkccCommon::buriedSettings("MobileHotspot", "Net card", QString("select"), m_interfaceComboBox->currentText());
         m_interfaceName = m_interfaceComboBox->currentText();
         updateBandCombox();
     });

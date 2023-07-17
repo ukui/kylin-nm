@@ -120,6 +120,11 @@ MobileHotspotWidget::MobileHotspotWidget(QWidget *parent) : QWidget(parent)
         m_interfaceName = m_interfaceComboBox->currentText();
         updateBandCombox();
     });
+    connect(m_freqBandComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](){
+        if (m_isUserSelect && !m_freqBandComboBox->currentText().isEmpty()) {
+            UkccCommon::buriedSettings("MobileHotspot", "Frequency band", QString("select"), m_freqBandComboBox->currentText());
+        }
+    });
     onInterfaceChanged();
 
 #ifdef HOTSPOT_CONTROL
@@ -470,11 +475,9 @@ void MobileHotspotWidget::getApInfo()
         }
         int i = m_freqBandComboBox->findText(apInfo.at(5));
         if (i >= 0) {
-            disconnect(m_freqBandComboBox);
+            m_isUserSelect = false;
             m_freqBandComboBox->setCurrentIndex(i);
-            connect(m_freqBandComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](){
-                UkccCommon::buriedSettings("MobileHotspot", "Frequency band", QString("select"), m_freqBandComboBox->currentText());
-            });
+            m_isUserSelect = true;
         }
     }
 }
@@ -732,11 +735,9 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
             updateBandCombox();
             index = m_freqBandComboBox->findText(info.at(1));
             if (index >= 0) {
-                disconnect(m_freqBandComboBox);
+                m_isUserSelect = false;
                 m_freqBandComboBox->setCurrentIndex(index);
-                connect(m_freqBandComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](){
-                    UkccCommon::buriedSettings("MobileHotspot", "Frequency band", QString("select"), m_freqBandComboBox->currentText());
-                });
+                m_isUserSelect = true;
             }
             m_uuid = uuid;
         } else {
@@ -816,7 +817,7 @@ void MobileHotspotWidget::updateBandCombox()
         setWidgetHidden(true);
         return;
     }
-    disconnect(m_freqBandComboBox);
+    m_isUserSelect = false;
     QMap<QString, int> devCapMap = capReply.value();
     if (devCapMap[m_interfaceName] & 0x02) {
          m_freqBandComboBox->addItem("2.4GHz");
@@ -828,9 +829,7 @@ void MobileHotspotWidget::updateBandCombox()
     if (index >= 0) {
         m_freqBandComboBox->setCurrentIndex(index);
     }
-    connect(m_freqBandComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](){
-        UkccCommon::buriedSettings("MobileHotspot", "Frequency band", QString("select"), m_freqBandComboBox->currentText());
-    });
+    m_isUserSelect = true;
 }
 
 QFrame* MobileHotspotWidget::myLine()

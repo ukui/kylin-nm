@@ -36,6 +36,7 @@ DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
     if (isCreate) {
      connect(m_SSIDEdit, &LineEdit::textEdited, this, &DetailPage::setEnableOfSaveBtn);
     }
+    setInteractionFlag();
 }
 
 DetailPage::~DetailPage()
@@ -167,6 +168,35 @@ QPalette DetailPage::getTheme()
 //        styleGsettings = nullptr;
 //    }
     return pal;
+}
+
+void DetailPage::setInteractionFlag()
+{
+    if (m_SSIDLabel != nullptr) {
+        m_SSIDLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        m_SSIDLabel->setCursor(Qt::IBeamCursor);
+    }
+    //文字部分响应鼠标的可选择状态
+    m_Protocol->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_SecType->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_Hz->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_Chan->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_BandWidth->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_IPV6->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_IPV4->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_IPV4Dns->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_Mac->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    //鼠标移入指针变成光标
+    m_Protocol->setCursor(Qt::IBeamCursor);
+    m_SecType->setCursor(Qt::IBeamCursor);
+    m_Hz->setCursor(Qt::IBeamCursor);
+    m_Chan->setCursor(Qt::IBeamCursor);
+    m_BandWidth->setCursor(Qt::IBeamCursor);
+    m_IPV6->setCursor(Qt::IBeamCursor);
+    m_IPV4->setCursor(Qt::IBeamCursor);
+    m_IPV4Dns->setCursor(Qt::IBeamCursor);
+    m_Mac->setCursor(Qt::IBeamCursor);
+    m_IPV4Dns->setScaledContents(true);
 }
 
 void DetailPage::initUI() {

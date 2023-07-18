@@ -1,3 +1,14 @@
+kylin-nm (3.24.0.0-0k2.9) v101; urgency=medium
+
+  * BUG号：
+     -#176581 【VPN】设置-网络-VPN界面，点击“。。。”，弹出的选项窗口有偏移
+     -#180890 【整机-联想开天】【M70Z-G1TS】移动热点开启显示异常【5.4.18-93-generic】
+  * 需求号：
+  * 其他改动：
+  * 影响域：自身
+
+ -- zhangyuanyuan1 <zhangyuanyuan1@kylinos.cn>  Tue, 20 Jul 2023 10:14:25 +0800
+
 kylin-nm (3.24.0.0-0k2.8) v101; urgency=medium
 
   * BUG号：

@@ -127,8 +127,8 @@ int main(int argc, char *argv[])
 
     auto connection = QDBusConnection::sessionBus();
     KylinVpnDbus dbusObject(&vpnobject);
-    if (!connection.registerService("com.kylin.kylinvpntest")
-            || !connection.registerObject("/com/kylin/kylinvpntest", &dbusObject,
+    if (!connection.registerService("com.kylin.kylinvpn")
+            || !connection.registerObject("/com/kylin/kylinvpn", &dbusObject,
                                           QDBusConnection::ExportAllSlots | QDBusConnection :: ExportAllSignals)) {
         qCritical() << "QDbus register service failed reason:" << connection.lastError();
     }

@@ -65,7 +65,7 @@ Vpn::Vpn() : mFirstLoad(true)
     translator->load("/usr/share/kylin-nm/vpn/" + QLocale::system().name());
     QApplication::installTranslator(translator);
 
-    pluginName = tr("Vpn");
+    pluginName = tr("VPN");
     pluginType = NETWORK;
 }
 
@@ -96,9 +96,9 @@ QWidget *Vpn::pluginUi(){
         ui->setupUi(pluginWidget);
 
         qDBusRegisterMetaType<QVector<QStringList>>();
-        m_interface = new QDBusInterface("com.kylin.network",
-                                         "/com/kylin/vpnTool",
-                                         "com.kylin.vpnTool",
+        m_interface = new QDBusInterface("com.kylin.kylinvpn",
+                                         "/com/kylin/kylinvpn",
+                                         "com.kylin.kylinvpn",
                                          QDBusConnection::sessionBus());
         if(!m_interface->isValid()) {
             qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
@@ -328,16 +328,12 @@ void Vpn::addOneVirtualItem(QStringList infoList)
     }
 
     connect(item->infoLabel, &InfoButton::clicked, this, [=]{
-        QDBusInterface appManagerDbusInterface(KYLIN_APP_MANAGER_NAME,
-                                                 KYLIN_APP_MANAGER_PATH,
-                                                 KYLIN_APP_MANAGER_INTERFACE,
-                                                 QDBusConnection::sessionBus());
-
-        if (!appManagerDbusInterface.isValid()) {
-            qWarning()<<"appManagerDbusInterface init error";
-        } else {
-            QDBusReply<bool> reply = appManagerDbusInterface.call("LaunchApp", "nm-connection-editor.desktop");
+        // open vpn detail page
+        if (!m_interface->isValid()) {
+            return;
         }
+        m_interface->call(QStringLiteral("showDetailPage"), item->uuid);
+        qDebug() << "[Vpn]call showDetailPage respond" << __LINE__;
     });
 
     item->isAcitve = (status == 2);

@@ -35,7 +35,7 @@ ItemFrame::ItemFrame(QWidget *parent)
     lanItemLayout->setContentsMargins(LAYOUT_MARGINS);
     lanItemLayout->setSpacing(1);
     addWlanWidget = new AddNetBtn(false, this);
-    addWlanWidget->setTextLabel(tr("Add Vpn"));
+    addWlanWidget->setTextLabel(tr("Add VPN"));
 
     deviceLanLayout->setSpacing(1);
     setLayout(deviceLanLayout);

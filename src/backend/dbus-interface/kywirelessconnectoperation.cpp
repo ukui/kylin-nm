@@ -1211,6 +1211,9 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
     NMVariantMapMap newMap = apConnectSettingPtr->toMap();
     if (newMap.contains(KEY_802_11_WIRELESS)) {
         newMap[KEY_802_11_WIRELESS].insert(KEY_BLACKLIST_HOSTNAME, blackList);
+        if (wirelessBand == WIFI_BAND_2_4GHZ) {
+            newMap[KEY_802_11_WIRELESS].remove("channel");
+        }
     }
     apConnectPtr->update(newMap);
 }

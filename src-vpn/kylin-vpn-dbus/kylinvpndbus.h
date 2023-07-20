@@ -18,8 +18,8 @@ class KylinVpnDbus : public QObject
 public:
     explicit KylinVpnDbus(QObject *parent = nullptr);
     ~KylinVpnDbus() = default;
-    inline vpnObject *parent() const
-    { return static_cast<vpnObject *>(QObject::parent()); }
+    inline VpnObject *parent() const
+    { return static_cast<VpnObject *>(QObject::parent()); }
 
 private:
     KyNetworkManager* m_manager;

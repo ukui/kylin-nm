@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 //        ::usleep(1000);
 //    }
 
-    vpnObject vpnobject;
+    VpnObject vpnobject;
     a.setActivationWindow(&vpnobject);
     vpnobject.setProperty("useStyleWindowManager", false); //禁用拖动
     a.setWindowIcon(QIcon::fromTheme("ukui-vpn-symbolic"));

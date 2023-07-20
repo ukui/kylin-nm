@@ -176,11 +176,11 @@ bool VpnItem::eventFilter(QObject *watched, QEvent *event)
 {
     //菜单右边界与按钮右边界对齐
     if (event->type() == QEvent::Show && watched == m_moreMenu) {
-        int menuXPos = m_moreMenu->pos().x();
         int menuWidth = m_moreMenu->size().width();
         int btnWidth = m_moreButton->size().width();
+        int btnGlobalXPos = mapToGlobal(m_moreButton->pos()).x();
 
-        QPoint pos = QPoint (menuXPos - menuWidth + btnWidth, m_moreMenu->pos().y());
+        QPoint pos = QPoint (btnGlobalXPos - menuWidth + btnWidth, m_moreMenu->pos().y());
         m_moreMenu->move(pos);
         return true;
     }

@@ -85,7 +85,7 @@ public:
 
     QPushButton  *m_netCopyButton;
     LineEdit     *m_SSIDEdit;
-    QLabel       *m_SSIDLabel;
+    QLabel       *m_SSIDLabel = nullptr;
     QLabel       *m_Protocol;
     QLabel       *m_SecType;
     QLabel       *m_Hz;

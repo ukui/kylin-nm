@@ -83,34 +83,34 @@ public:
     DetailWidget *m_ipv6Widget = nullptr;
     DetailWidget *m_macWidget = nullptr;
 
-    QPushButton  *m_netCopyButton;
-    LineEdit     *m_SSIDEdit;
+    QPushButton  *m_netCopyButton = nullptr;
+    LineEdit     *m_SSIDEdit = nullptr;
     QLabel       *m_SSIDLabel = nullptr;
-    QLabel       *m_Protocol;
-    QLabel       *m_SecType;
-    QLabel       *m_Hz;
-    QLabel       *m_Chan;
-    QLabel       *m_BandWidth;
-    QLabel       *m_IPV4;
-    FixLabel     *m_IPV4Dns;
-    FixLabel     *m_IPV6;
-    QLabel       *m_Mac;
-    QLabel       *m_autoConnect;
+    QLabel       *m_Protocol = nullptr;
+    QLabel       *m_SecType = nullptr;
+    QLabel       *m_Hz = nullptr;
+    QLabel       *m_Chan = nullptr;
+    QLabel       *m_BandWidth = nullptr;
+    QLabel       *m_IPV4 = nullptr;
+    FixLabel     *m_IPV4Dns = nullptr;
+    FixLabel     *m_IPV6 = nullptr;
+    QLabel       *m_Mac = nullptr;
+    QLabel       *m_autoConnect = nullptr;
     KBallonTip   *m_copiedTip = nullptr;
 
 //    QWidget *autoFrame;
 private:
-    QVBoxLayout  *m_layout;
-    QVBoxLayout  *m_DetailLayout;
-    QHBoxLayout  *m_AutoLayout;
-    QCheckBox    *m_forgetNetBox;
-    bool         m_IsWlan;
-    bool         m_IsCreate;
+    QVBoxLayout  *m_layout = nullptr;
+    QVBoxLayout  *m_DetailLayout = nullptr;
+    QHBoxLayout  *m_AutoLayout = nullptr;
+    QCheckBox    *m_forgetNetBox = nullptr;
+    bool         m_IsWlan = false;
+    bool         m_IsCreate = false;
 
-    QWidget *m_autoConWidget;
+    QWidget *m_autoConWidget = nullptr;
 
-    QString      m_formerSSID;
-    QString      m_formerIPV6;
+    QString      m_formerSSID = nullptr;
+    QString      m_formerIPV6 = nullptr;
 
 private Q_SLOTS:
     void setEnableOfSaveBtn();

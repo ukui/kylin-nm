@@ -154,11 +154,12 @@ void WlanPage::initWlanUI()
     addWlanMoreItem();
     m_inactivatedAreaLayout->addWidget(m_inactivatedNetListWidget);
 
-    connect(m_inactivatedNetListWidget, &QListWidget::currentItemChanged, this, [=]() {
-        if (m_inactivatedNetListWidget->currentItem() != nullptr) {
-            m_inactivatedNetListWidget->currentItem()->setSelected(false);
-        }
-    });
+    connect(m_inactivatedNetListWidget, &QListWidget::currentItemChanged,
+            this, &WlanPage::onInactivateListWidgetItemChanged);
+
+    //点击【已连接】网络区域 去掉其他网络的选中效果
+    connect(m_activatedNetListWidget, &QListWidget::clicked, this, &WlanPage::setInactivateListItemNoSelect);
+    connect(m_activatedNetListWidget, &QListWidget::currentItemChanged, this, &WlanPage::setInactivateListItemNoSelect);
 
     QPalette pal = m_activatedNetListWidget->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));       //背景透明
@@ -890,6 +891,28 @@ void WlanPage::onDeviceManagedChanged(QString deviceName, bool managed)
     }
 }
 
+void WlanPage::onInactivateListWidgetItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    if (previous != nullptr) {
+        QSize normalSize(previous->sizeHint().width(), NORMAL_HEIGHT);
+        previous->setSizeHint(normalSize);
+        WlanListItem *p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(previous);
+        p_wlanItem->setExpanded(false);
+    }
+    if (current != nullptr) {
+        current->setSelected(false);
+    }
+}
+
+void WlanPage::setInactivateListItemNoSelect()
+{
+    if (m_inactivatedNetListWidget->currentItem() != nullptr) {
+        WlanListItem *p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(m_inactivatedNetListWidget->currentItem());
+        p_wlanItem->setExpanded(false);
+        m_inactivatedNetListWidget->currentItem()->setSelected(false);
+    }
+}
+
 void WlanPage::sendApStateChangeSignal(QString uuid,
                                        QString ssid,
                                        QString deviceName,
@@ -1535,6 +1558,7 @@ void WlanPage::onWlanPageVisibleChanged(int index)
         qDebug() << "wlanpage not visible";
         showNonePwd();
     }
+    m_inactivatedNetListWidget->setCurrentIndex(QModelIndex());  // 去除item选中效果
 }
 
 void WlanPage::showNonePwd()

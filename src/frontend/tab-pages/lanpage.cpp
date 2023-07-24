@@ -467,6 +467,7 @@ void LanPage::onRemoveConnection(QString path)            //删除时后端会�
         removeConnectionItem(m_activeConnectionMap, m_activatedLanListWidget, path);
         if (m_activeConnectionMap.count() <= 0) {
             addEmptyConnectItem(m_activeConnectionMap, m_activatedLanListWidget);
+            m_activatedLanListWidget->setSelectionMode(QAbstractItemView::SelectionMode::NoSelection);
         }
         setNetSpeed->stop();
         return;

@@ -122,8 +122,8 @@ private:
     QCheckBox *m_autoConnectCheckBox = nullptr;
     QLabel *m_autoConnectLabel = nullptr;
 
-    bool m_focusIsOut = true;
-    bool m_mouseIsOut = true;
+    //bool m_focusIsOut = true;
+    //bool m_mouseIsOut = true;
 
     bool m_forgetConnection = false;
     bool m_isApMode = false;

@@ -199,7 +199,7 @@ void WlanListItem::onRightButtonClicked()
 void WlanListItem::enterEvent(QEvent *event)
 {
     //qDebug()<< LOG_FLAG <<"enterEvent" << m_wirelessNetItem.m_NetSsid;
-    m_mouseIsOut = false;
+//    m_mouseIsOut = false;
     if (m_pwdFrame != nullptr && !m_pwdFrame->isVisible()) {
         if (Deactivated != m_connectState) {
             m_hoverButton->setProperty("useButtonPalette", true);
@@ -223,7 +223,7 @@ void WlanListItem::enterEvent(QEvent *event)
 void WlanListItem::leaveEvent(QEvent *event)
 {
     //qDebug()<< LOG_FLAG <<"leaveEvent"<< m_wirelessNetItem.m_NetSsid;
-    m_mouseIsOut = true;
+//    m_mouseIsOut = true;
     m_hoverButton->hide();
     if (m_connectState == Activated || m_connectState == Deactivating) {
         m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
@@ -234,12 +234,12 @@ void WlanListItem::leaveEvent(QEvent *event)
     } else {
         m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_DEACTIVATED);
     }
-    if (m_pwdFrame && m_pwdFrame->isVisible()) {
-        if (m_focusIsOut) {
-            setExpanded(false);
-        }
-        return QFrame::leaveEvent(event);
-    }
+//    if (m_pwdFrame && m_pwdFrame->isVisible()) {
+//        if (m_focusIsOut) {
+//            setExpanded(false);
+//        }
+//        return QFrame::leaveEvent(event);
+//    }
 
     return ListItem::leaveEvent(event);
 }
@@ -252,18 +252,18 @@ bool WlanListItem::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-    if (watched == m_pwdLineEdit) {
-        if (event->type() == QEvent::FocusOut) {
-            m_focusIsOut = true;
-            //qDebug()<< LOG_FLAG <<"focusOutEvent" << m_wirelessNetItem.m_NetSsid;
-            if (m_mouseIsOut) {
-                setExpanded(false);
-            }
-        } else if (event->type() == QEvent::FocusIn) {
-            //qDebug()<< LOG_FLAG <<"focusInEvent" << m_wirelessNetItem.m_NetSsid;
-            m_focusIsOut = false;
-        }
-    }
+//    if (watched == m_pwdLineEdit) {
+//        if (event->type() == QEvent::FocusOut) {
+//            m_focusIsOut = true;
+//            //qDebug()<< LOG_FLAG <<"focusOutEvent" << m_wirelessNetItem.m_NetSsid;
+//            if (m_mouseIsOut) {
+//                setExpanded(false);
+//            }
+//        } else if (event->type() == QEvent::FocusIn) {
+//            //qDebug()<< LOG_FLAG <<"focusInEvent" << m_wirelessNetItem.m_NetSsid;
+//            m_focusIsOut = false;
+//        }
+//    }
 
     return QFrame::eventFilter(watched, event);
 }

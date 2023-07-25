@@ -151,7 +151,7 @@ void JoinHiddenWiFiPage::initUI()
    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
    this->setFixedWidth(WINDOW_WIDTH);
    this->setFixedHeight(MIN_WINDOW_HEIGHT);
-   onPaletteChanged();
+//   onPaletteChanged();
 }
 
 void JoinHiddenWiFiPage::initComponent()
@@ -171,6 +171,7 @@ void JoinHiddenWiFiPage::initComponent()
     });
     connect(m_nameEdit, &LineEdit::textChanged, this, &JoinHiddenWiFiPage::setJoinBtnEnable);
 
+#if 0
     connect(qApp, &QApplication::paletteChanged, this, &JoinHiddenWiFiPage::onPaletteChanged);
 
     const QByteArray id(THEME_SCHAME);
@@ -182,6 +183,7 @@ void JoinHiddenWiFiPage::initComponent()
             }
         });
     }
+#endif
 }
 
 void JoinHiddenWiFiPage::setJoinBtnEnable()
@@ -256,7 +258,7 @@ void JoinHiddenWiFiPage::onEapTypeChanged(const KyEapMethodType &type)
         this->setFixedHeight(EAPMIN_WINDOW_HEIGHT);
     }
 }
-
+#if 0
 void JoinHiddenWiFiPage::onPaletteChanged()
 {
     QPalette pal = qApp->palette();
@@ -279,4 +281,4 @@ void JoinHiddenWiFiPage::onPaletteChanged()
         styleGsettings = nullptr;
     }
 }
-
+#endif

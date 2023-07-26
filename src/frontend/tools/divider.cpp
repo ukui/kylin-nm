@@ -22,6 +22,7 @@
 #include <QApplication>
 
 #include "../netdetails/coninfo.h"
+#include "themepalette.h"
 
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
@@ -31,8 +32,24 @@ Divider::Divider(bool useLightPal, QWidget * parent)
      QFrame(parent)
 {
     this->setFixedHeight(1);
+    initPalette();
     connect(qApp, &QApplication::paletteChanged, this ,&Divider::onPaletteChanged);
     onPaletteChanged();
+}
+
+void Divider::initPalette()
+{
+    QPalette pal = qApp->palette();
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray styleId(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(styleId)) {
+       styleGsettings = new QGSettings(styleId, QByteArray(), this);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = themePalette(true, this);
+       }
+    }
+    this->setPalette(pal);
 }
 
 void Divider::onPaletteChanged()

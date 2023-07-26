@@ -5,8 +5,8 @@
     <name>AptProxyDialog</name>
     <message>
         <location filename="../aptproxydialog.cpp" line="24"/>
-        <source>Set Apt Proxy</source>
-        <translation>Apt ᠤᠷᠤᠯᠠᠭᠴᠢ ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠬᠤ</translation>
+        <source>Set APT Proxy</source>
+        <translation>APT ᠤᠷᠤᠯᠠᠭᠴᠢ ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠬᠤ</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="41"/>
@@ -69,31 +69,31 @@
     <message>
         <location filename="../proxy.cpp" line="452"/>
         <source>Auto url</source>
-        <translation>url ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ</translation>
+        <translation>URL ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ</translation>
         <extra-contents_path>/Proxy/Auto url</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="454"/>
         <source>Http Proxy</source>
-        <translation>Http ᠤᠷᠤᠯᠠᠭᠴᠢ</translation>
+        <translation>HTTP ᠤᠷᠤᠯᠠᠭᠴᠢ</translation>
         <extra-contents_path>/Proxy/Http Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="456"/>
         <source>Https Proxy</source>
-        <translation>Https ᠤᠷᠤᠯᠠᠭᠴᠢ</translation>
+        <translation>HTTPS ᠤᠷᠤᠯᠠᠭᠴᠢ</translation>
         <extra-contents_path>/Proxy/Https Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="458"/>
         <source>Ftp Proxy</source>
-        <translation>Ftp ᠤᠷᠤᠯᠠᠭᠴᠢ</translation>
+        <translation>FTP ᠤᠷᠤᠯᠠᠭᠴᠢ</translation>
         <extra-contents_path>/Proxy/Ftp Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="460"/>
         <source>Socks Proxy</source>
-        <translation>Socks ᠤᠷᠤᠯᠠᠭᠴᠢ</translation>
+        <translation>SOCKS ᠤᠷᠤᠯᠠᠭᠴᠢ</translation>
         <extra-contents_path>/Proxy/Socks Proxy</extra-contents_path>
     </message>
     <message>
@@ -118,9 +118,9 @@
     </message>
     <message>
         <location filename="../proxy.cpp" line="471"/>
-        <source>Apt Proxy</source>
-        <translation>Apt ᠤᠷᠤᠯᠠᠭᠴᠢ</translation>
-        <extra-contents_path>/Proxy/Apt Proxy</extra-contents_path>
+        <source>APT Proxy</source>
+        <translation>APT ᠤᠷᠤᠯᠠᠭᠴᠢ</translation>
+        <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
     </message>
     <message>
         <location filename="../proxy.cpp" line="472"/>
@@ -146,7 +146,7 @@
     <message>
         <location filename="../proxy.cpp" line="573"/>
         <source>The apt proxy  has been turned off and needs to be restarted to take effect</source>
-        <translation>apt ᠤᠷᠤᠯᠠᠭᠴᠢ ᠬᠠᠭᠠᠭᠳᠠᠪᠠ᠂ ᠳᠠᠬᠢᠵᠤ ᠨᠡᠬᠡᠬᠡᠭᠰᠡᠨ ᠤ᠋ ᠳᠠᠷᠠᠭ᠎ᠠ ᠰᠠᠶᠢ ᠬᠦᠴᠦᠨ ᠲᠠᠢ ᠪᠤᠯᠤᠨ᠎ᠠ</translation>
+        <translation>APT ᠤᠷᠤᠯᠠᠭᠴᠢ ᠬᠠᠭᠠᠭᠳᠠᠪᠠ᠂ ᠳᠠᠬᠢᠵᠤ ᠨᠡᠬᠡᠬᠡᠭᠰᠡᠨ ᠤ᠋ ᠳᠠᠷᠠᠭ᠎ᠠ ᠰᠠᠶᠢ ᠬᠦᠴᠦᠨ ᠲᠠᠢ ᠪᠤᠯᠤᠨ᠎ᠠ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="574"/>
@@ -162,8 +162,8 @@
     </message>
     <message>
         <location filename="../proxy.cpp" line="813"/>
-        <source>The system needs to be restarted to set the Apt proxy, whether to reboot</source>
-        <translation>ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠤᠭᠰᠠᠨ Apt ᠤᠷᠤᠯᠠᠭᠴᠢ ᠰᠢᠰᠲ᠋ᠧᠮ ᠢ᠋ ᠳᠠᠬᠢᠨ ᠡᠬᠢᠯᠡᠬᠦᠯᠦᠭᠰᠡᠨ ᠤ᠋ ᠳᠠᠷᠠᠭ᠎ᠠ ᠰᠠᠶᠢ ᠬᠦᠴᠦᠨ ᠲᠠᠢ ᠪᠤᠯᠤᠨ᠎ᠠ᠂ ᠰᠢᠰᠲ᠋ᠧᠮ ᠢ᠋ ᠳᠠᠬᠢᠨ ᠡᠬᠢᠯᠡᠬᠦᠯᠬᠦ ᠤᠤ</translation>
+        <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
+        <translation>ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠤᠭᠰᠠᠨ APT ᠤᠷᠤᠯᠠᠭᠴᠢ ᠰᠢᠰᠲ᠋ᠧᠮ ᠢ᠋ ᠳᠠᠬᠢᠨ ᠡᠬᠢᠯᠡᠬᠦᠯᠦᠭᠰᠡᠨ ᠤ᠋ ᠳᠠᠷᠠᠭ᠎ᠠ ᠰᠠᠶᠢ ᠬᠦᠴᠦᠨ ᠲᠠᠢ ᠪᠤᠯᠤᠨ᠎ᠠ᠂ ᠰᠢᠰᠲ᠋ᠧᠮ ᠢ᠋ ᠳᠠᠬᠢᠨ ᠡᠬᠢᠯᠡᠬᠦᠯᠬᠦ ᠤᠤ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1017"/>

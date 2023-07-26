@@ -98,22 +98,22 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="61"/>
         <source>Settings</source>
-        <translation>settings</translation>
+        <translation>ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="64"/>
         <source>Settings desktop message</source>
-        <translation>settings desktop message</translation>
+        <translation>ᠰᠢᠷᠡᠭᠡᠨ ᠨᠢᠭᠤᠷ᠎ᠤ᠋ᠨ ᠵᠠᠩᠭᠢ᠎ᠶ᠋ᠢ ᠵᠣᠬᠢᠷᠠᠭᠤᠯᠬᠤ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="336"/>
         <source>use </source>
-        <translation>Use </translation>
+        <translation>ᠬᠡᠷᠡᠭᠯᠡᠬᠦ </translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="337"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation> Share network, will interrupt local wireless connection</translation>
+        <translation> ᠬᠠᠮᠲᠤ ᠡᠳ᠋ᠯᠡᠬᠦ ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠂ ᠲᠤᠰ ᠭᠠᠵᠠᠷ᠎ᠤ᠋ᠨ ᠤᠲᠠᠰᠤᠭᠤᠢ ᠵᠠᠯᠭᠠᠯᠲᠠ᠎ᠶ᠋ᠢ ᠲᠠᠰᠤᠯᠠᠬᠤ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="353"/>

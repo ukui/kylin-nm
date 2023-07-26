@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="47"/>
         <source>Add Others</source>
-        <translation>add Others</translation>
+        <translation>ᠪᠤᠰᠤᠳ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳ᠋ᠤ᠌ ᠵᠠᠯᠭᠠᠬᠤ</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="51"/>
         <source>Add WiredNetork</source>
-        <translation>add WiredNetork</translation>
+        <translation>ᠤᠲᠠᠰᠤᠲᠤ ᠨᠧᠲ ᠨᠡᠮᠡᠬᠦ</translation>
     </message>
 </context>
 <context>

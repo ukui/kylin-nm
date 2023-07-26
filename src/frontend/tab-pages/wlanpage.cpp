@@ -893,12 +893,16 @@ void WlanPage::onDeviceManagedChanged(QString deviceName, bool managed)
 
 void WlanPage::onInactivateListWidgetItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
-    if (previous != nullptr) {
+    if (previous != nullptr && previous->sizeHint().height() > NORMAL_HEIGHT) {
+
         QSize normalSize(previous->sizeHint().width(), NORMAL_HEIGHT);
         previous->setSizeHint(normalSize);
         WlanListItem *p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(previous);
-        p_wlanItem->setExpanded(false);
+        if (p_wlanItem != nullptr) {
+            p_wlanItem->setExpanded(false);
+        }
     }
+
     if (current != nullptr) {
         current->setSelected(false);
     }
@@ -906,9 +910,13 @@ void WlanPage::onInactivateListWidgetItemChanged(QListWidgetItem *current, QList
 
 void WlanPage::setInactivateListItemNoSelect()
 {
-    if (m_inactivatedNetListWidget->currentItem() != nullptr) {
+    if (m_inactivatedNetListWidget->currentItem() != nullptr
+            && m_inactivatedNetListWidget->currentItem()->sizeHint().height() > NORMAL_HEIGHT) {
+
         WlanListItem *p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(m_inactivatedNetListWidget->currentItem());
-        p_wlanItem->setExpanded(false);
+        if (p_wlanItem != nullptr) {
+            p_wlanItem->setExpanded(false);
+        }
         m_inactivatedNetListWidget->currentItem()->setSelected(false);
     }
 }
@@ -1149,6 +1157,7 @@ void WlanPage::onItemHeightChanged(const bool isExpanded, const QString &ssid)
 
     if (isExpanded) {
         if (m_expandedItem != p_listWidgetItem) {
+            onInactivateListWidgetItemChanged(p_listWidgetItem, m_expandedItem);
             qDebug()<<LOG_FLAG << "expanded wlan item";
             m_expandedItem = p_listWidgetItem;
             QSize expandedSize(width, EXPANDED_HEIGHT);

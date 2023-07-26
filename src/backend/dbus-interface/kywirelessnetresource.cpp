@@ -523,7 +523,7 @@ bool KyWirelessNetResource::getEnterPriseInfoTls(QString &uuid, KyEapMethodTlsIn
 
     info.identity = setting->identity();
     info.domain = setting->domainSuffixMatch();
-    info.caCertPath = setting->caPath();
+    info.caCertPath = setting->caCertificate();
     if (info.caCertPath.left(7) == "file://") {
         info.caCertPath = info.caCertPath.mid(7);
     }

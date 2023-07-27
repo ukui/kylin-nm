@@ -60,7 +60,7 @@ void DnsSettingWidget::initUi()
     }
     m_retryComboBox->setCurrentIndex(m_retryComboBox->findData(m_retry.toInt()));
 
-    m_bottomDivider = new Divider(true, this);
+    m_bottomDivider = new Divider(false, this);
 
     m_closeBtn = new QPushButton(this);
     m_closeBtn->setFixedSize(32,32);

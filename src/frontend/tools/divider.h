@@ -24,12 +24,11 @@
 class Divider : public QFrame
 {
 public:
-    Divider(bool useLightPal = false, QWidget * parent = nullptr);
+    Divider(bool useDarkPal = false, QWidget * parent = nullptr);
     ~Divider() = default;
 private:
-    bool m_useLightPal;
+    bool m_useDarkPal;
     QColor m_color;
-    void initPalette();
 private Q_SLOTS:
     void onPaletteChanged();
 protected:

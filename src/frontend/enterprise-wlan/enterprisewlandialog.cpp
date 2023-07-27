@@ -139,7 +139,7 @@ void EnterpriseWlanDialog::initUI()
     m_enterWlanScrollArea->setWidgetResizable(true);
     m_enterWlanScrollArea->setBackgroundRole(QPalette::Base);
 
-    m_bottomDivider = new Divider(this);
+    m_bottomDivider = new Divider(false, this);
 
     QWidget *bottomWidget = new QWidget(this);
     QHBoxLayout *btnLayout = new QHBoxLayout(bottomWidget);

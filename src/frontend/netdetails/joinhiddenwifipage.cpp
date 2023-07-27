@@ -77,7 +77,7 @@ void JoinHiddenWiFiPage::initUI()
     m_nameLabel->setFixedWidth(LABEL_MIN_WIDTH);
     m_nameEdit =new LineEdit(this);
 
-    m_bottomDivider = new Divider(this);
+    m_bottomDivider = new Divider(false, this);
     m_showListBtn = new KBorderlessButton(this);
     m_cancelBtn =new QPushButton(this);
     m_joinBtn =new QPushButton(this);

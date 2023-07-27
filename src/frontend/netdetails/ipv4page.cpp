@@ -96,7 +96,7 @@ void Ipv4Page::initUI() {
     // IP的正则格式限制
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
 
-    Divider* divider = new Divider(true, this);
+    Divider* divider = new Divider(false, this);
     m_dnsWidget = new MultipleDnsWidget(rx, true, this);
 
     m_detailLayout = new QFormLayout(this);

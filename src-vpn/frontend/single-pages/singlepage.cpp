@@ -58,7 +58,7 @@ void SinglePage::initUI()
     m_titleLayout->addWidget(m_titleLabel);
     m_titleLayout->addStretch();
 
-    m_netDivider = new Divider(this);
+    m_netDivider = new Divider(true, this);
 
     m_listFrame = new QFrame(this);
     m_listLayout = new QVBoxLayout(m_listFrame);
@@ -68,7 +68,7 @@ void SinglePage::initUI()
     m_listLayout->addWidget(m_listWidget);
     m_listWidget->setProperty("needTranslucent", true);
 
-    m_setDivider = new Divider(this);
+    m_setDivider = new Divider(true, this);
 
     m_settingsFrame = new QFrame(this);
     m_settingsFrame->setFixedHeight(TITLE_FRAME_HEIGHT);

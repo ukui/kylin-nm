@@ -161,14 +161,14 @@ void TabPage::initUI()
 void TabPage::onPaletteChanged()
 {
     QPalette labPal = m_activatedNetLabel->palette();
-    QColor color = qApp->palette().color(QPalette::PlaceholderText);
+    QColor color = this->palette().color(QPalette::PlaceholderText);
     labPal.setColor(QPalette::WindowText, color);
     m_activatedNetLabel->setPalette(labPal);
     m_inactivatedNetLabel->setPalette(labPal);
 
     if (m_deviceComboBox->view()) {
         QPalette view_pal = m_deviceComboBox->view()->palette();
-        QColor view_color = qApp->palette().color(QPalette::Active, QPalette::Button);
+        QColor view_color = this->palette().color(QPalette::Active, QPalette::Button);
         view_pal.setColor(QPalette::Base, view_color);
         m_deviceComboBox->setPalette(view_pal);
         m_deviceComboBox->view()->setPalette(view_pal);

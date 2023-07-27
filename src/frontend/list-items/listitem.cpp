@@ -118,6 +118,16 @@ ListItem::ListItem(QWidget *parent) : QFrame(parent)
     initConnection();
     connect(qApp, &QApplication::paletteChanged, this, &ListItem::onPaletteChanged);
 //    m_itemFrame->installEventFilter(this);
+    const QByteArray id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(id)) {
+        QGSettings * styleGsettings = new QGSettings(id, QByteArray(), this);
+        connect(styleGsettings, &QGSettings::changed, this, [=](QString key){
+            if ("themeColor" == key) {
+                onPaletteChanged();
+            }
+        });
+    }
+    onPaletteChanged();
 }
 
 ListItem::~ListItem()
@@ -314,6 +324,23 @@ void ListItem::onPaletteChanged()
 //    QPalette pal = qApp->palette();
 //    pal.setColor(QPalette::Window, qApp->palette().base().color());
 //    this->setPalette(pal);
+    QPalette pal = qApp->palette();
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id, QByteArray(), this);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = themePalette(true, this);
+       }
+    }
+    this->setPalette(pal);
+
+    if (m_menu != nullptr) {
+        pal.setColor(QPalette::Base, pal.color(QPalette::Base));
+        pal.setColor(QPalette::Text, pal.color(QPalette::Text));
+        m_menu->setPalette(pal);
+    }
 }
 
 

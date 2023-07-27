@@ -83,7 +83,7 @@ private:
 private Q_SLOTS:
     void onBtnConnectClicked();
     void onEapTypeChanged(const KyEapMethodType &type);
-    void onPaletteChanged();
+    //void onPaletteChanged();
 
 Q_SIGNALS:
     void enterpriseWlanDialogClose(bool);

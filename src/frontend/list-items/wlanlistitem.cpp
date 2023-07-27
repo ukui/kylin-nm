@@ -25,8 +25,6 @@
 #define EMPTY_SSID "EMPTY_SSID"
 #define LOG_FLAG "[WlanListItem]"
 #define WAIT_US  10*1000
-#define ENABLE_BUTTON_COLOR qApp->palette().highlight().color()
-#define UNABLE_BUTTON_COLOR qApp->palette().button().color()
 #define NAMELABLE_MAX_WIDTH_HOVER 176
 #define NAMELABLE_MAX_WIDTH_ACTIVATED 142
 #define NAMELABLE_MAX_WIDTH_DEACTIVATED 276
@@ -259,12 +257,11 @@ void WlanListItem::keyPressEvent(QKeyEvent *event)
 
 void WlanListItem::paintEvent(QPaintEvent *event)
 {
-    QPalette pal = qApp->palette();
-    if (m_pwdLineEdit != nullptr) {
-        pal.setColor(QPalette::Base, pal.color(QPalette::Base));
-        m_pwdLineEdit->setPalette(pal);
-    }
-
+//    QPalette pal = qApp->palette();
+//    if (m_pwdLineEdit != nullptr) {
+//        pal.setColor(QPalette::Base, pal.color(QPalette::Base));
+//        m_pwdLineEdit->setPalette(pal);
+//    }
     return QWidget::paintEvent(event);
 }
 
@@ -276,7 +273,7 @@ void WlanListItem::initWlanUI()
     this->setName(m_wirelessNetItem.m_NetSsid);
     //刷新左侧按钮图标
     refreshIcon(false);
-
+    this->onPaletteChanged();
 #define PWD_AREA_HEIGHT 36
 #define CONNECT_BUTTON_WIDTH 96
 #define FRAME_CONTENT_MARGINS 56,0,16,4
@@ -295,7 +292,7 @@ void WlanListItem::initWlanUI()
     m_pwdLineEdit  = new KPasswordEdit(m_pwdFrame);
     m_pwdLineEdit->setFixedWidth(LINEEDIT_WIDTH);
     m_pwdLineEdit->setProperty("needTranslucent", true);
-    m_pwdLineEdit->setUseCustomPalette(true);
+//    m_pwdLineEdit->setUseCustomPalette(true);
     m_pwdLineEdit->setClearButtonEnabled(false); //禁用ClearBtn按钮
     m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, true);   //打开输入法
 //    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);

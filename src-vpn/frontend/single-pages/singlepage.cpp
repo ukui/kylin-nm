@@ -31,6 +31,7 @@
 
 SinglePage::SinglePage(QWidget *parent) : QWidget(parent)
 {
+    setThemePalette();
     initUI();
     initWindowProperties();
     initTransparency();
@@ -65,6 +66,7 @@ void SinglePage::initUI()
     m_listFrame->setLayout(m_listLayout);
     m_listWidget = new QListWidget(m_listFrame);
     m_listLayout->addWidget(m_listWidget);
+    m_listWidget->setProperty("needTranslucent", true);
 
     m_setDivider = new Divider(this);
 
@@ -152,7 +154,7 @@ void SinglePage::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::transparent);
-    QColor col = qApp->palette().window().color();
+    QColor col = this->palette().window().color();
 
     QPainterPath rectPath;
 
@@ -186,15 +188,34 @@ void SinglePage::onTransChanged()
 void SinglePage::onThemeChanged(const QString &key)
 {
     if (key == COLOR_THEME) {
+        setThemePalette();
         paintWithTrans();
         Q_EMIT qApp->paletteChanged(qApp->palette());
+    }  else if ("themeColor" == key) {
+        setThemePalette();
     }
+}
+
+void SinglePage::setThemePalette()
+{
+    QPalette pal = qApp->palette();
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id, QByteArray(), this);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = themePalette(true, this);
+       }
+    }
+    pal.setColor(QPalette::Background, pal.base().color());
+    this->setPalette(pal);
 }
 
 void SinglePage::paintWithTrans()
 {
     QPalette pal = this->palette();
-    QColor color = qApp->palette().base().color();
+    QColor color = this->palette().base().color();
     color.setAlphaF(m_transparency);
     pal.setColor(QPalette::Window, color);
     this->setPalette(pal);
@@ -207,5 +228,3 @@ void SinglePage::keyPressEvent(QKeyEvent *event)
     }
     return QWidget::keyPressEvent(event);
 }
-
-

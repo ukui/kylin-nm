@@ -197,7 +197,10 @@ NetDetail::~NetDetail()
 void NetDetail::onPaletteChanged()
 {
     QPalette pal = qApp->palette();
+    pal.setColor(QPalette::Background, pal.base().color());
+    this->setPalette(pal);
 
+#if 0
     QGSettings * styleGsettings = nullptr;
     const QByteArray style_id(THEME_SCHAME);
     if (QGSettings::isSchemaInstalled(style_id)) {
@@ -216,6 +219,7 @@ void NetDetail::onPaletteChanged()
     setFramePalette(securityPage, pal);
     setFramePalette(createNetPage, pal);
     QToolTip::setPalette(pal);
+#endif
 
     QPalette listwidget_pal(detailPage->m_listWidget->palette());
     listwidget_pal.setColor(QPalette::Base, pal.base().color());
@@ -223,10 +227,12 @@ void NetDetail::onPaletteChanged()
     detailPage->m_listWidget->setAlternatingRowColors(true);
     detailPage->m_listWidget->setPalette(listwidget_pal);
 
+#if 0
     if (styleGsettings != nullptr) {
         delete styleGsettings;
         styleGsettings = nullptr;
     }
+#endif
 }
 
 void NetDetail::currentRowChangeSlot(int row)

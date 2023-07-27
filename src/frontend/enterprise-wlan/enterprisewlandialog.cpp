@@ -81,11 +81,17 @@ void EnterpriseWlanDialog::closeEvent(QCloseEvent *event)
 
 void EnterpriseWlanDialog::paintEvent(QPaintEvent *event)
 {
-//    QPalette pal = qApp->palette();
-//    QPainter painter(this);
-//    painter.setBrush(pal.color(QPalette::Base));
-//    painter.drawRect(this->rect());
-//    painter.fillRect(rect(), QBrush(pal.color(QPalette::Base)));
+    QPalette pal = qApp->palette();
+    QPainter painter(this);
+    QColor color;
+    if (this->isActiveWindow()) {
+        color = pal.color(QPalette::Base);
+    } else {
+        color = pal.color(QPalette::Background);
+    }
+    painter.setBrush(color);
+    painter.drawRect(this->rect());
+    painter.fillRect(rect(), QBrush(color));
 
     return QWidget::paintEvent(event);
 }
@@ -131,11 +137,7 @@ void EnterpriseWlanDialog::initUI()
     m_enterWlanScrollArea->setFixedWidth(SCROAREA_WIDTH);
     m_enterWlanScrollArea->setWidget(m_centerWidget);
     m_enterWlanScrollArea->setWidgetResizable(true);
-
-    QPalette pal = m_enterWlanScrollArea->palette();
-    pal.setBrush(QPalette::Base, QColor(0,0,0,0));
-    m_enterWlanScrollArea->setPalette(pal);
-    m_enterWlanScrollArea->setWidgetResizable(true);
+    m_enterWlanScrollArea->setBackgroundRole(QPalette::Base);
 
     m_bottomDivider = new Divider(this);
 
@@ -159,7 +161,7 @@ void EnterpriseWlanDialog::initUI()
     this->setFixedSize(MAIN_SIZE_EXPAND);
     this->setWindowTitle(m_wirelessNetItem.m_NetSsid);
     initConnections();
-    onPaletteChanged();
+//    onPaletteChanged();
 }
 
 void EnterpriseWlanDialog::centerToScreen()
@@ -183,6 +185,7 @@ void EnterpriseWlanDialog::initConnections()
        m_connectBtn->setEnabled(status);
     });
 
+#if 0
     connect(qApp, &QApplication::paletteChanged, this, &EnterpriseWlanDialog::onPaletteChanged);
 
     const QByteArray id(THEME_SCHAME);
@@ -194,8 +197,9 @@ void EnterpriseWlanDialog::initConnections()
             }
         });
     }
+#endif
 }
-
+#if 0
 void EnterpriseWlanDialog::onPaletteChanged()
 {
     QPalette pal = qApp->palette();
@@ -219,6 +223,7 @@ void EnterpriseWlanDialog::onPaletteChanged()
         styleGsettings = nullptr;
     }
 }
+#endif
 
 void EnterpriseWlanDialog::initData()
 {

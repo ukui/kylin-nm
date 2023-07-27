@@ -29,6 +29,7 @@ public:
 private:
     bool m_useLightPal;
     QColor m_color;
+    void initPalette();
 private Q_SLOTS:
     void onPaletteChanged();
 protected:

@@ -260,7 +260,7 @@ void MainWindow::onTransChanged()
 void MainWindow::paintWithTrans()
 {
     QPalette pal = m_centralWidget->palette();
-    QColor color = qApp->palette().base().color();
+    QColor color = this->palette().base().color();
     color.setAlphaF(m_transparency);
     pal.setColor(QPalette::Base, color);
     m_centralWidget->setPalette(pal);
@@ -268,7 +268,7 @@ void MainWindow::paintWithTrans()
     QPalette tabPal = m_centralWidget->tabBar()->palette();
     tabPal.setColor(QPalette::Base, color);
 
-    QColor inactiveColor = qApp->palette().window().color();
+    QColor inactiveColor = this->palette().window().color();
     inactiveColor.setAlphaF(0.86 *m_transparency);
     tabPal.setColor(QPalette::Window, inactiveColor);
 
@@ -280,6 +280,7 @@ void MainWindow::paintWithTrans()
  */
 void MainWindow::initUI()
 {
+    setThemePalette();
     m_centralWidget = new QTabWidget(this);
     this->setCentralWidget(m_centralWidget);
     m_centralWidget->tabBar()->setFixedWidth(this->width()+1);
@@ -593,6 +594,21 @@ void MainWindow::assembleTrayIconTooltip(QMap<QString, QString> &map, QString &t
     }
 }
 
+void MainWindow::setThemePalette()
+{
+    QPalette pal = qApp->palette();
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id, QByteArray(), this);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = themePalette(true, this);
+       }
+    }
+    this->setPalette(pal);
+}
+
 /**
  * @brief MainWindow::onTrayIconActivated 点击托盘图标的槽函数
  */
@@ -627,8 +643,11 @@ void MainWindow::onThemeChanged(const QString &key)
     if (key == COLOR_THEME) {
         qDebug() << "Received signal of theme changed, will reset theme." << Q_FUNC_INFO << __LINE__;
 //        resetWindowTheme();
+        setThemePalette();
         paintWithTrans();
         Q_EMIT qApp->paletteChanged(qApp->palette());
+    } else if ("themeColor" == key) {
+        setThemePalette();
     } else {
         qDebug() << "Received signal of theme changed, key=" << key << " will do nothing." << Q_FUNC_INFO << __LINE__;
     }

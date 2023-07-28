@@ -400,7 +400,7 @@ void NetDetail::initUI()
     centerlayout->setContentsMargins(CENTER_LAYOUT_MARGINS); // 右边距为0，为安全页滚动区域留出空间
     centerlayout->addWidget(stackWidget);
 
-    Divider *divider = new Divider(true, this);
+    Divider *divider = new Divider(false, this);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout(bottomWidget);
     bottomLayout->setContentsMargins(BOTTOM_LAYOUT_MARGINS);

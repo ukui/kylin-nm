@@ -60,7 +60,7 @@ void TabPage::initUI()
     m_titleLayout->addWidget(m_titleLabel);
     m_titleLayout->addStretch();
     m_titleLayout->addWidget(m_netSwitch);
-    m_titleDivider = new Divider(this);
+    m_titleDivider = new Divider(true, this);
 
     //临时增加的下拉框选择网卡区域
     m_deviceFrame = new QFrame(this);
@@ -92,7 +92,7 @@ void TabPage::initUI()
     m_activatedNetLabel->setContentsMargins(TEXT_MARGINS);
     m_activatedNetLabel->setFixedHeight(TEXT_HEIGHT);
     m_activatedNetLayout->addWidget(m_activatedNetLabel);
-    m_activatedNetDivider = new Divider(this);
+    m_activatedNetDivider = new Divider(true, this);
 
     m_inactivatedNetFrame = new QFrame(this);
     m_inactivatedNetFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT);
@@ -120,7 +120,7 @@ void TabPage::initUI()
     m_inactivatedNetLayout->addWidget(m_inactivatedNetLabel);
     m_inactivatedNetLayout->addWidget(m_inactivatedNetListArea);
 
-    m_inactivatedNetDivider = new Divider(this);
+    m_inactivatedNetDivider = new Divider(true, this);
     m_settingsFrame = new QFrame(this);
     m_settingsFrame->setFixedHeight(TITLE_FRAME_HEIGHT);
 

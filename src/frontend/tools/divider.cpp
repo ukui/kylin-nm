@@ -27,34 +27,28 @@
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
-Divider::Divider(bool useLightPal, QWidget * parent)
-    :m_useLightPal(useLightPal),
+Divider::Divider(bool useDarkPal, QWidget * parent)
+    :m_useDarkPal(useDarkPal),
      QFrame(parent)
 {
     this->setFixedHeight(1);
-    initPalette();
     connect(qApp, &QApplication::paletteChanged, this ,&Divider::onPaletteChanged);
     onPaletteChanged();
 }
 
-void Divider::initPalette()
+void Divider::onPaletteChanged()
 {
     QPalette pal = qApp->palette();
     QGSettings * styleGsettings = nullptr;
     const QByteArray styleId(THEME_SCHAME);
-    if (QGSettings::isSchemaInstalled(styleId)) {
+    if (QGSettings::isSchemaInstalled(styleId) && m_useDarkPal) {
        styleGsettings = new QGSettings(styleId, QByteArray(), this);
        QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
        if(currentTheme == "ukui-default"){
            pal = themePalette(true, this);
        }
     }
-    this->setPalette(pal);
-}
 
-void Divider::onPaletteChanged()
-{
-    QPalette pal = this->palette();
     m_color = pal.color(QPalette::BrightText);
     m_color.setAlphaF(0.08);
 }

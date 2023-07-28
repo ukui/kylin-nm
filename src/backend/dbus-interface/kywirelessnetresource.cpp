@@ -416,18 +416,20 @@ void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssi
 
 void KyWirelessNetResource::onWifiNetworkRemoved(QString devIfaceName, QString ssid)
 {
-    if (m_WifiNetworkList.contains(devIfaceName)) {
-        int index = 0;
-        for ( ; index < m_WifiNetworkList.value(devIfaceName).size(); index++) {
-            if ( m_WifiNetworkList[devIfaceName].at(index).m_NetSsid == ssid) {
-                m_WifiNetworkList[devIfaceName].removeAt(index);
+    if (!m_WifiNetworkList.contains(devIfaceName)) {
+        return;
+    }
+
+    for (int index = 0; index < m_WifiNetworkList.value(devIfaceName).size(); ++index) {
+        if (m_WifiNetworkList[devIfaceName].at(index).m_NetSsid == ssid) {
+            m_WifiNetworkList[devIfaceName].removeAt(index);
+            //remove后为空则删除
+            if (m_WifiNetworkList.value(devIfaceName).isEmpty()) {
+                m_WifiNetworkList.remove(devIfaceName);
             }
+            Q_EMIT wifiNetworkRemove(devIfaceName,ssid);
+            break;
         }
-        //remove后为空则删除
-        if (m_WifiNetworkList.value(devIfaceName).isEmpty()) {
-            m_WifiNetworkList.remove(devIfaceName);
-        }
-        Q_EMIT wifiNetworkRemove(devIfaceName,ssid);
     }
 }
 
@@ -846,8 +848,31 @@ void KyWirelessNetResource::onConnectionUpdate(QString uuid)
         return;
     }
 
-    m_WifiNetworkList.clear();
-    kyWirelessNetItemListInit();
+
+    QString ssid, dev;
+    getSsidByUuid(uuid, ssid);
+    getDeviceByUuid(uuid, dev);
+
+    NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceInterface(dev);
+    if (devicePtr.isNull() || !m_WifiNetworkList.contains(dev)) {
+        return;
+    }
+
+    NetworkManager::WirelessNetwork::Ptr netPtr = m_networkResourceInstance->findWifiNetwork(ssid, devicePtr->uni());
+    if (netPtr.isNull()) {
+        return;
+    }
+
+    QList<KyWirelessNetItem> list = m_WifiNetworkList.value(dev);
+    for (int i = 0; i < list.count(); ++i) {
+        if (uuid == list.at(i).m_connectUuid) {
+            list.removeAt(i);
+            break;
+        }
+    }
+    list.append(KyWirelessNetItem(netPtr));
+    m_WifiNetworkList.insert(dev, list);
+
     Q_EMIT wifiNetworkUpdate();
 }
 

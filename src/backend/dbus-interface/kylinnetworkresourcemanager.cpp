@@ -457,8 +457,8 @@ NetworkManager::Connection::Ptr KyNetworkResourceManager::getConnect(const QStri
     int index = 0;
     NetworkManager::Connection::Ptr connectPtr = nullptr;
 
-    qDebug() <<"[KyNetworkResourceManager]" << "get connect with uuid" << connectUuid;
     if (connectUuid.isEmpty()) {
+        qWarning() << "[KyNetworkResourceManager]" << "get connect with uuid is empty";
         return nullptr;
     }
 
@@ -473,7 +473,7 @@ NetworkManager::Connection::Ptr KyNetworkResourceManager::getConnect(const QStri
         }
     }
 
-    qWarning()<<"[KyNetworkResourceManager]"<<"it can not find connect with uuid"<<connectUuid;
+    qWarning() << "[KyNetworkResourceManager]" << "it can not find connect with uuid" << connectUuid;
 
     return nullptr;
 }

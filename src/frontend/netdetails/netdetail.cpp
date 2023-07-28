@@ -32,6 +32,8 @@
 #include <QScrollBar>
 
 #include "windowmanager/windowmanager.h"
+#include "kwindowsystem.h"
+#include "kwindowsystem_export.h"
 
 #define  WINDOW_WIDTH  520
 #define  WINDOW_HEIGHT 602
@@ -145,6 +147,7 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
 //#else
 //    this->setWindowFlags(Qt::Dialog /*| Qt::FramelessWindowHint*/);
     this->setWindowFlag(Qt::Window);
+    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
 //#endif
 //    this->setProperty("useStyleWindowManager", false); //禁用拖动
 //    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint );

@@ -20,6 +20,8 @@
 #include "joinhiddenwifipage.h"
 
 #include <QApplication>
+#include "kwindowsystem.h"
+#include "kwindowsystem_export.h"
 
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
@@ -48,6 +50,7 @@ JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
     initComponent();
 
     setAttribute(Qt::WA_DeleteOnClose);
+    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
 
     setJoinBtnEnable();
 }

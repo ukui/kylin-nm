@@ -21,6 +21,9 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include "xatom-helper.h"
+#include "kwindowsystem.h"
+#include "kwindowsystem_export.h"
+
 #define MAIN_SIZE_EXPAND 480,580
 #define MAIN_SIZE_NARROW 480,484
 #define SCROAREA_WIDTH 480
@@ -51,6 +54,7 @@ EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, Q
     this->setWindowFlag(Qt::Window);
 //    this->setWindowTitle(tr("Connect Enterprise WLAN"));
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
+    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
 
     m_wirelessNetItem = wirelessNetItem;
     m_deviceName = device;

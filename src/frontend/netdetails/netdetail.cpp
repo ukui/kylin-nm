@@ -18,8 +18,6 @@
  *
  */
 #include "netdetail.h"
-#include "backend/kylinipv4arping.h"
-#include "backend/kylinipv6arping.h"
 //#include "xatom/xatom-helper.h"
 
 #define THEME_SCHAME "org.ukui.style"
@@ -57,6 +55,9 @@
 #define  PEAP_SCRO_HEIGHT  300
 #define  TLS_SCRO_HEIGHT  480
 #define  MAX_TAB_TEXT_LENGTH 44
+#define  SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
+#define  SYSTEM_DBUS_PATH  "/"
+#define  SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
 
 //extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
@@ -1268,33 +1269,37 @@ void ThreadObject::checkIpv4ConflictThread(const QString &ipv4Address)
         return;
     }
     bool isConflict = false;
-    KyIpv4Arping* ipv4Arping = new KyIpv4Arping(m_devName, ipv4Address);
-    if (ipv4Arping->ipv4ConflictCheck() >= 0) {
-        isConflict =  ipv4Arping->ipv4IsConflict();
-        if (isConflict) {
-            QString mac = ipv4Arping->getMacAddress();
-            qDebug() << "conflict mac" << mac;
-            KyNetworkDeviceResourse resource;
-            QStringList devList,devList1,devList2;
-            resource.getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, devList1);
-            resource.getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList2);
-            devList << devList1 << devList2;
-            for(int i = 0; i < devList.size(); ++i){
-                QString hardAddress;
-                int band;
-                resource.getHardwareInfo(devList.at(i), hardAddress, band);
-                if (hardAddress == mac) {
-                    qDebug() << "conflict local card" << devList.at(i);
-                    isConflict = false;
-                }
-            }
-        }
-    } else {
-        qWarning() << "checkIpv4Conflict internal error";
+
+    QDBusInterface dbusInterface(SYSTEM_DBUS_SERVICE,
+                                 SYSTEM_DBUS_PATH,
+                                 SYSTEM_DBUS_INTERFACE,
+                                 QDBusConnection::systemBus());
+
+    if(!dbusInterface.isValid()) {
+        qWarning ()<< "check IPv4 conflict failed, init kylin.network.qt.systemdbus error";
+        Q_EMIT ipv4IsConflict(isConflict);
+        return;
     }
 
-    delete ipv4Arping;
-    ipv4Arping = nullptr;
+    KyNetworkDeviceResourse resource;
+    QStringList devList, devList1, devList2, macList;
+    resource.getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, devList1);
+    resource.getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList2);
+    devList << devList1 << devList2;
+    for (int i = 0; i < devList.size(); ++i) {
+        QString hardAddress;
+        int band;
+        resource.getHardwareInfo(devList.at(i), hardAddress, band);
+        macList << hardAddress;
+    }
+
+    QDBusReply <bool> reply = dbusInterface.call("checkIpv4IsConflict", m_devName, ipv4Address, macList);
+    if (reply.isValid()) {
+        isConflict = reply.value();
+    } else {
+        qWarning () << "check IPv4 conflict failed, dbus reply invalid";
+    }
+
     Q_EMIT ipv4IsConflict(isConflict);
 }
 
@@ -1304,14 +1309,21 @@ void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
         return;
     }
     bool isConflict = false;
-    KyIpv6Arping* ipv6rping = new KyIpv6Arping(m_devName, ipv6Address);
-    if (ipv6rping->ipv6ConflictCheck() >= 0) {
-        isConflict =  ipv6rping->ipv6IsConflict();
+    QDBusInterface dbusInterface(SYSTEM_DBUS_SERVICE,
+                                 SYSTEM_DBUS_PATH,
+                                 SYSTEM_DBUS_INTERFACE,
+                                 QDBusConnection::systemBus());
+
+    if(!dbusInterface.isValid()) {
+        qWarning () << "check IPv6 conflict failed, init kylin.network.qt.systemdbus error";
     } else {
-        qWarning() << "checkIpv6Conflict internal error";
+        QDBusReply <bool> reply = dbusInterface.call("checkIpv6IsConflict", m_devName, ipv6Address);
+        if (reply.isValid()) {
+            isConflict = reply.value();
+        } else {
+            qWarning () << "check IPv6 conflict failed, dbus reply invalid";
+        }
     }
 
-    delete ipv6rping;
-    ipv6rping = nullptr;
     Q_EMIT ipv6IsConflict(isConflict);
 }

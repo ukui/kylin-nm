@@ -38,7 +38,7 @@
 #define VPNPAGE_LAYOUT_MARGINS 0,0,0,0
 #define VPN_LIST_SPACING 0
 #define ITEM_HEIGHT 50
-#define ITEM_SPACE 16
+#define ITEM_SPACE 8
 #define PAGE_SPACE 22
 
 #define LOG_FLAG "[VpnPage]"

@@ -145,7 +145,7 @@
     </message>
     <message>
         <location filename="../proxy.cpp" line="573"/>
-        <source>The apt proxy  has been turned off and needs to be restarted to take effect</source>
+        <source>The APT proxy has been turned off and needs to be restarted to take effect</source>
         <translation>APT 代理已关闭，需要重启才能生效</translation>
     </message>
     <message>

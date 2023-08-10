@@ -170,6 +170,8 @@ void TabPage::onPaletteChanged()
         QPalette view_pal = m_deviceComboBox->view()->palette();
         QColor view_color = this->palette().color(QPalette::Active, QPalette::Button);
         view_pal.setColor(QPalette::Base, view_color);
+        view_pal.setColor(QPalette::Text, this->palette().color(QPalette::Text));
+        view_pal.setColor(QPalette::Foreground, this->palette().color(QPalette::Foreground));
         m_deviceComboBox->setPalette(view_pal);
         m_deviceComboBox->view()->setPalette(view_pal);
     }

@@ -245,7 +245,10 @@ void DetailPage::initUI() {
         m_SSIDEdit->setAlignment(Qt::AlignRight);
         m_SSIDEdit->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;background:transparent");
         m_SSIDEdit->setPlaceholderText(tr("Please input SSID:"));
-        m_SSIDEdit->setMaxLength(MAX_NAME_LENGTH);
+        QRegExp nameRx("^.{0,32}$");
+        QValidator *validator = new QRegExpValidator(nameRx, this);
+
+        m_SSIDEdit->setValidator(validator);
         m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(m_SSIDEdit), m_listWidget);
     }
 

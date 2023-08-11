@@ -33,7 +33,6 @@ CreatNetPage::CreatNetPage(QWidget *parent):QFrame(parent)
 void CreatNetPage::initUI()
 {
     connNameEdit = new LineEdit(this);
-    connNameEdit->setMaxLength(MAX_NAME_LENGTH);
     ipv4ConfigCombox = new QComboBox(this);
     ipv4addressEdit = new LineEdit(this);
     netMaskEdit = new LineEdit(this);
@@ -109,6 +108,10 @@ void CreatNetPage::initUI()
     ipv4ConfigCombox->addItem(tr("Auto(DHCP)"), AUTO_CONFIG); //"自动(DHCP)"
     ipv4ConfigCombox->addItem(tr("Manual"), MANUAL_CONFIG); //"手动"
 
+    QRegExp nameRx("^.{0,32}$");
+    QValidator *validator = new QRegExpValidator(nameRx, this);
+
+    connNameEdit->setValidator(validator);
     ipv4addressEdit->setValidator(new QRegExpValidator(rx, this));
     gateWayEdit->setValidator(new QRegExpValidator(rx, this));
     netMaskEdit->setValidator(new QRegExpValidator(rx, this));

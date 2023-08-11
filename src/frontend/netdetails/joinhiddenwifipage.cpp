@@ -147,7 +147,9 @@ void JoinHiddenWiFiPage::initUI()
    m_cancelBtn->setText(tr("Cancel"));
    m_joinBtn->setText(tr("Join"));
 
-   m_nameEdit->setMaxLength(MAX_NAME_LENGTH);
+   QRegExp nameRx("^.{0,32}$");
+   QValidator *validator = new QRegExpValidator(nameRx, this);
+   m_nameEdit->setValidator(validator);
    m_nameEdit->setPlaceholderText(tr("Required")); //必填
 
    this->setWindowTitle(tr("Find and Join WLAN"));

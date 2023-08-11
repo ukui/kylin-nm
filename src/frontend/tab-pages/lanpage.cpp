@@ -153,8 +153,7 @@ void LanPage::initNetSwitch()
             wiredGsetting = m_switchGsettings->get(WIRED_SWITCH).toBool();
             connect(m_switchGsettings, &QGSettings::changed, this, &LanPage::onSwithGsettingsChanged);
             if (wiredEnable != wiredGsetting) {
-                wiredEnable = wiredGsetting;
-                m_wiredConnectOperation->setWiredEnabled(wiredGsetting);
+                m_switchGsettings->set(WIRED_SWITCH, wiredEnable);
             }
         }
     } else {

@@ -507,6 +507,10 @@ int Vpn::getInsertPos(QString connName)
         auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
         QVector<QStringList> variantList;
         dbusArg >> variantList;
+        if (variantList.isEmpty()) {
+            qDebug() << "[Vpn] virtualList is empty, getInsertPos return 0";
+            return 0;
+        }
         for (int i = 0; i < variantList.size(); ++i ) {
             if (variantList.at(i).at(0) == connName) {
                 qDebug() << "pos in kylin-nm is " << i;

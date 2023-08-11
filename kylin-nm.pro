@@ -8,6 +8,7 @@ CONFIG += \
 SUBDIRS = \
         plugins/plugin.pro \
         src-vpn/src-vpn.pro \
-        src
+        src \
+        sys-dbus-register \
 
 QT += widgets

@@ -582,7 +582,7 @@ void Proxy::setupConnect(){
             } else {
                 QMessageBox *mReboot = new QMessageBox(pluginWidget->topLevelWidget());
                 mReboot->setIcon(QMessageBox::Warning);
-                mReboot->setText(tr("The apt proxy  has been turned off and needs to be restarted to take effect"));
+                mReboot->setText(tr("The APT proxy has been turned off and needs to be restarted to take effect"));
                 QPushButton *laterbtn =  mReboot->addButton(tr("Reboot Later"), QMessageBox::RejectRole);
                 QPushButton *nowbtn =   mReboot->addButton(tr("Reboot Now"), QMessageBox::AcceptRole);
                 mReboot->exec();
@@ -819,7 +819,7 @@ void Proxy::setAptInfo()
 {
     QMessageBox *mReboot = new QMessageBox(pluginWidget->topLevelWidget());
     mReboot->setIcon(QMessageBox::Warning);
-    mReboot->setText(tr("The system needs to be restarted to set the Apt proxy, whether to reboot"));
+    mReboot->setText(tr("The system needs to be restarted to set the APT proxy, whether to reboot"));
     QPushButton *laterbtn =  mReboot->addButton(tr("Reboot Later"), QMessageBox::RejectRole);
     QPushButton *nowbtn =   mReboot->addButton(tr("Reboot Now"), QMessageBox::AcceptRole);
     mReboot->exec();

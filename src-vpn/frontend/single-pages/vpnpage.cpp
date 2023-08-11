@@ -629,7 +629,7 @@ void VpnPage::showUI()
 void VpnPage::resetWindowPosition()
 {
 
-#define MARGIN 4
+#define MARGIN 8
 #define PANEL_TOP 1
 #define PANEL_LEFT 2
 #define PANEL_RIGHT 3

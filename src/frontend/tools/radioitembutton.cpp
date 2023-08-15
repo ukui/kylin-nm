@@ -154,6 +154,10 @@ void RadioItemButton::onPaletteChanged()
            pal = themePalette(true, this);
        }
     }
+    pal.setColor(QPalette::Base, pal.color(QPalette::Base)); //解决Wayland环境this->setPalette(pal)不生效问题
+    pal.setColor(QPalette::BrightText, pal.color(QPalette::BrightText));
+    pal.setColor(QPalette::Highlight, pal.color(QPalette::Highlight));
+
     this->setPalette(pal);
 
     refreshButtonIcon();

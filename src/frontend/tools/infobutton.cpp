@@ -78,6 +78,11 @@ void InfoButton::onPaletteChanged()
            pal = themePalette(true, this);
        }
     }
+    pal.setColor(QPalette::Base, pal.color(QPalette::Base));//解决Wayland环境this->setPalette(pal)不生效问题
+    pal.setColor(QPalette::Text, pal.color(QPalette::Text));
+    pal.setColor(QPalette::Highlight, pal.color(QPalette::Highlight));
+    pal.setColor(QPalette::BrightText, pal.color(QPalette::BrightText));
+
     this->setPalette(pal);
 
     m_foregroundColor = FOREGROUND_COLOR_NORMAL;

@@ -1,3 +1,13 @@
+kylin-nm (3.24.0.0-0k2.14) v101; urgency=medium
+
+  * BUG号:
+     -#187464 【wifi】浅色主题下，首次打开任务栏WiFi界面图标显示不清楚
+  * 需求号：
+  * 其他改动：WiFi连接界面密码框背景色
+  * 影响域：自身
+
+ -- zhangyuanyuan1 <zhangyuanyuan1@kylinos.cn>  Mon, 14 Aug 2023 16:56:33 +0800
+
 kylin-nm (3.24.0.0-0k2.13) v101; urgency=medium
 
   * BUG号:

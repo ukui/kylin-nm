@@ -334,10 +334,11 @@ void ListItem::onPaletteChanged()
            pal = themePalette(true, this);
        }
     }
+    pal.setColor(QPalette::Base, pal.color(QPalette::Base)); //解决Wayland环境this->setPalette(pal)不生效问题
+
     this->setPalette(pal);
 
     if (m_menu != nullptr) {
-        pal.setColor(QPalette::Base, pal.color(QPalette::Base));
         pal.setColor(QPalette::Text, pal.color(QPalette::Text));
         m_menu->setPalette(pal);
     }

@@ -382,6 +382,10 @@ void MobileHotspotWidget::initInterfaceInfo()
     if(!m_interface->isValid()) {
         return;
     }
+
+    if (m_interfaceComboBox->isVisible()) {
+        m_interfaceComboBox->hidePopup();
+    }
     m_interfaceComboBox->clear();
     QDBusReply<QMap<QString, bool> > reply = m_interface->call("getDeviceListAndEnabled",WIRELESS);
 

@@ -358,6 +358,9 @@ void KyWirelessNetResource::kyWirelessNetItemListInit()
         }
 
         KyWirelessNetItem item(net);
+        if (item.m_NetSsid.isEmpty()) {
+            continue;
+        }
         if (!m_WifiNetworkList.contains(devIface)){
             QList<KyWirelessNetItem> list;
             list.append(item);

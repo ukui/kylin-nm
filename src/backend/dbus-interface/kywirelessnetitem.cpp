@@ -59,15 +59,31 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
    // m_NetSsid = net->ssid();
 
     NetworkManager::AccessPoint::Ptr accessPointPtr = net->referenceAccessPoint();
+    if (accessPointPtr->ssid().isEmpty()) {
+        qDebug() << accessPointPtr->uni() << "ssid isEmpty";
+        NetworkManager::AccessPoint::List list = net->accessPoints();
+        if (list.size() > 1) {
+            for (int i = 0; i < list.size(); ++i) {
+                if (!list.at(i)->ssid().isEmpty()) {
+                    qDebug() << "use" << accessPointPtr->uni();
+                    accessPointPtr = list.at(i);
+                    break;
+                }
+            }
+        }
+    }
+    if (accessPointPtr->ssid().isEmpty()) {
+        return;
+    }
     QByteArray rawSsid = accessPointPtr->rawSsid();
     m_NetSsid = getSsidFromByteArray(rawSsid);
 
-    m_signalStrength = net->signalStrength();
-    m_frequency = net->referenceAccessPoint()->frequency();
+    m_signalStrength = accessPointPtr->signalStrength();
+    m_frequency = accessPointPtr->frequency();
     m_channel = NetworkManager::findChannel(m_frequency);
-    NetworkManager::AccessPoint::Capabilities cap = net->referenceAccessPoint()->capabilities();
-    NetworkManager::AccessPoint::WpaFlags wpaFlag = net->referenceAccessPoint()->wpaFlags();
-    NetworkManager::AccessPoint::WpaFlags rsnFlag = net->referenceAccessPoint()->rsnFlags();
+    NetworkManager::AccessPoint::Capabilities cap = accessPointPtr->capabilities();
+    NetworkManager::AccessPoint::WpaFlags wpaFlag = accessPointPtr->wpaFlags();
+    NetworkManager::AccessPoint::WpaFlags rsnFlag = accessPointPtr->rsnFlags();
     m_secuType = enumToQstring(cap, wpaFlag, rsnFlag);
 //    if (m_secuType.indexOf(ENTERPRICE_TYPE) >= 0) {
 //            m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
@@ -77,9 +93,9 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
 //            m_kySecuType = WPA_AND_WPA2_PERSONAL;
 //    }
     setKySecuType(m_secuType);
-    m_bssid = net->referenceAccessPoint()->hardwareAddress();
+    m_bssid = accessPointPtr->hardwareAddress();
     m_device = net->device();
-    m_uni = net->referenceAccessPoint()->uni();
+    m_uni = accessPointPtr->uni();
 
     NetworkManager::Device::Ptr devicePtr = nullptr;
     devicePtr = m_networkResourceInstance->findDeviceInterface(m_device);

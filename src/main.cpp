@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QFile>
+#include <KWindowSystem>
 #include <ukui-log4qt.h>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 #include "xatom-helper.h"
@@ -78,6 +79,27 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
         fclose(log_file);
 }
 
+QString displayFromPid(uint pid)
+{
+    QFile environFile(QStringLiteral("/proc/%1/environ").arg(QString::number(pid)));
+    if (environFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        const QByteArray DISPLAY  = KWindowSystem::isPlatformWayland() ? QByteArrayLiteral("WAYLAND_DISPLAY") : QByteArrayLiteral("DISPLAY");
+        const auto lines = environFile.readAll().split('\0');
+        for (const QByteArray &line : lines) {
+            const int equalsIdx = line.indexOf('=');
+            if (equalsIdx <= 0) {
+                continue;
+            }
+            const QByteArray key = line.left(equalsIdx);
+            if (key == DISPLAY) {
+                const QByteArray value = line.mid(equalsIdx + 1);
+                return value;
+            }
+        }
+    }
+    return {};
+}
+
 int main(int argc, char *argv[])
 {
     initUkuiLog4qt("kylin-nm");
@@ -104,17 +126,25 @@ int main(int argc, char *argv[])
     parser.process(a);
 
     QDBusInterface interface("com.kylin.network",
-                                                   "/com/kylin/network",
-                                                   "com.kylin.network",
-                                                   QDBusConnection::sessionBus());
+                             "/com/kylin/network",
+                             "com.kylin.network",
+                             QDBusConnection::sessionBus());
     if(interface.isValid()) {
         if (parser.isSet(swOption))
         {
-            interface.call(QStringLiteral("showKylinNM"),1);
+            interface.call(QStringLiteral("showKylinNM"), 1);
+        } else if (parser.isSet(snOption)){
+            interface.call(QStringLiteral("showKylinNM"), 0);
         } else {
-            interface.call(QStringLiteral("showKylinNM"),0);
+            const QString serviceName = "com.kylin.network";
+            QDBusConnectionInterface *interface1 = QDBusConnection::sessionBus().interface();
+            QDBusReply<uint> pid = interface1->servicePid(serviceName);
+            qDebug() << "current display " << getenv("DISPLAY") << QApplication::applicationPid()
+                     << "exist kylin-nm display" << displayFromPid(pid.value());
+            if (getenv("DISPLAY") != displayFromPid(pid.value())) {
+                return 0;
+            }
         }
-        return 0;
     }
 
     QThread thread;

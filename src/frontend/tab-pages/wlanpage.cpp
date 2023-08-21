@@ -747,6 +747,11 @@ void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devi
         return;
     }
 
+    if (!m_netDeviceResource->getDeviceManaged(deviceName)) {
+        qWarning() << LOG_FLAG << "couldn not add device" << deviceName << ", it is unmanaged";
+        return;
+    }
+
     m_devList << deviceName;
     setSwitchBtnEnable(true);
     setSwitchBtnState(getWirelessDevieceUseable());

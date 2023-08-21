@@ -702,7 +702,15 @@ void WlanConnect::getDeviceList(QStringList &list)
     auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
     QMap<QString,bool> map;
     dbusArg >> map;
-    list = map.keys();
+
+    //筛选已托管(managed)网卡
+    QMap<QString, bool>::iterator iters;
+    for (iters = map.begin(); iters != map.end(); ++iters) {
+        if (iters.value() == true) {
+            list << iters.key();
+        }
+    }
+
 }
 
 void WlanConnect::initSwtichState()

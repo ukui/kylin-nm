@@ -404,6 +404,12 @@ void KyWirelessNetResource::onWifiNetworkAdded(QString devIfaceName, QString ssi
     KyWirelessNetItem item(wifi);
 
     if (m_WifiNetworkList.contains(devIfaceName)) {
+        for (int index = 0; index < m_WifiNetworkList[devIfaceName].size(); ++index) {
+            if (m_WifiNetworkList[devIfaceName].at(index).m_NetSsid == item.m_NetSsid) {
+                m_WifiNetworkList[devIfaceName].removeAt(index);
+                index--;
+            }
+        }
         m_WifiNetworkList[devIfaceName].append(item);
     } else {
         QList<KyWirelessNetItem> list;

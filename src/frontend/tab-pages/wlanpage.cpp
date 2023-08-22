@@ -637,6 +637,7 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
 
         QListWidgetItem *p_listWidgetItem = addEmptyItem(m_activatedNetListWidget);
         m_activateConnectionItemMap.insert(EMPTY_SSID, p_listWidgetItem);
+        m_activatedNetListWidget->setSelectionMode(QAbstractItemView::SelectionMode::NoSelection);
     }
 
     return;

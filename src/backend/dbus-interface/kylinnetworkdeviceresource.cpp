@@ -452,22 +452,27 @@ int KyNetworkDeviceResourse::getWirelessDeviceCapability(const QString deviceNam
         NetworkManager::WirelessDevice *wirelessDevicePtr =
             qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
 
-        int cap = 0;
-        if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::ApCap) {
-            cap = cap | 0x01;
+        int cap = 0x01;
+        if (!wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::AdhocCap) {
+            return cap;
         }
-        if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::Freq2Ghz) {
-            cap = cap | 0x02;
-        }
-        if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::Freq5Ghz) {
-            cap = cap | 0x04;
+        cap = cap | 0x02;
+        QDBusInterface dbusInterface("org.freedesktop.NetworkManager",
+                                     connectDevice->uni(),
+                                     "org.freedesktop.NetworkManager.Device.Wireless",
+                                     QDBusConnection::systemBus());
+
+        QDBusReply<uint> reply = dbusInterface.call("GetHotspotCapabilities");
+        if (reply.isValid()) {
+            if (reply.value() == 1) {
+                cap = cap | 0x04;
+            }
         }
         return cap;
     } else {
         qWarning()<<"[KyNetworkDeviceResourse]"<<deviceName<<" is not valid or not wireless.";
     }
-
-    return 0;
+    return 0x01;
 }
 
 void KyNetworkDeviceResourse::onDeviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType)

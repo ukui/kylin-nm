@@ -147,7 +147,6 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
         return true;
     }
 
-
     if (watched == m_switchBtn) {
         if (event->type() == QEvent::MouseButtonRelease) {
             if (!m_interface->isValid()) {
@@ -679,6 +678,11 @@ void MobileHotspotWidget::onDeviceNameChanged(QString oldName, QString newName, 
             m_interfaceName = newName;
         }
     }
+    QTimer::singleShot(100, this, [=]() {
+        if (m_interfaceComboBox->currentText() == newName) {
+            updateBandCombox();
+        }
+    });
 }
 
 //热点断开

@@ -147,11 +147,13 @@ int main(int argc, char *argv[])
         }
     }
 
-    QThread thread;
+    QThread *thread = new QThread();
     KyNetworkResourceManager *p_networkResource = KyNetworkResourceManager::getInstance();
-    p_networkResource->moveToThread(&thread);
-    QObject::connect(&thread, SIGNAL(started()), p_networkResource, SLOT(onInitNetwork()));
-    thread.start();
+    p_networkResource->moveToThread(thread);
+    QObject::connect(thread, &QThread::started, p_networkResource, &KyNetworkResourceManager::onInitNetwork);
+    QObject::connect(&a,&QtSingleApplication::aboutToQuit, thread, &QThread::quit);
+    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+    thread->start();
 
     // Internationalization
     QString locale = QLocale::system().name();

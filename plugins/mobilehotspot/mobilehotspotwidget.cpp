@@ -360,7 +360,12 @@ void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString 
         setUiEnabled(false);
         m_uuid.clear();
     }
-    if (m_interfaceComboBox) {
+
+    if (deviceName != m_interfaceName) {
+        return;
+    }
+
+    if (m_interfaceComboBox && status == 2) {
         onInterfaceChanged();
     }
 }

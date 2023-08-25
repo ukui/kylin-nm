@@ -1,3 +1,12 @@
+kylin-nm (3.24.0.0-0k2.16) v101; urgency=medium
+
+  * BUG号:
+  * 需求号：
+  * 其他改动: 解决注销会产生kylin-nm core文件问题
+  * 影响域：自身
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Fri, 25 Aug 2023 17:34:36 +0800
+
 kylin-nm (3.24.0.0-0k2.15) v101; urgency=medium
 
   * BUG号:

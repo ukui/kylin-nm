@@ -252,6 +252,7 @@ bool KyWirelessNetResource::getActiveWirelessNetItem(QString deviceName, KyWirel
     for (int index = 0; index < m_WifiNetworkList[deviceName].size(); index ++) {
         if (m_WifiNetworkList[deviceName].at(index).m_NetSsid  == ssid) {
             wirelessNetItem = m_WifiNetworkList[deviceName].at(index);
+            updatewirelessItemConnectInfo(wirelessNetItem);
             qDebug()<< LOG_FLAG << "getWifiNetwork success";
             return true;
         }

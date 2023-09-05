@@ -985,7 +985,7 @@ void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
                                       m_inactivatedNetListWidget, ssid);
 
     KyWirelessNetItem wirelessNetItem;
-    bool ret = m_wirelessNetResource->getWifiNetwork(devName, ssid, wirelessNetItem);
+    bool ret = m_wirelessNetResource->getActiveWirelessNetItem(devName, wirelessNetItem);
     if (!ret) {
         qWarning()<<"[WlanPage] get wireless item failed, when update activated connection area.";
         return;

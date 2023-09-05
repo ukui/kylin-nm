@@ -501,7 +501,7 @@ void WlanListItem::onNetButtonClicked()
     } else {
         qDebug() << "KeyMgmt not support now " << type;
     }
-    //qDebug() << "!!!!" << m_wirelessNetItem.m_kySecuType << kySecuType;
+
     //有配置或者无密码的wifi直接连接
     if (m_wirelessNetItem.m_isConfigured) {
         if (m_wirelessNetItem.m_kySecuType == kySecuType ||

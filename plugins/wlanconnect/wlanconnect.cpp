@@ -605,7 +605,6 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
         if (!deviceFrameMap.contains(deviceName)) {
             return;
         }
-        for (int i = 0; i < deviceFrameMap[deviceName]->itemMap.size(); ++i) {
             if (deviceFrameMap[deviceName]->itemMap.contains(ssid)) {
                 item = deviceFrameMap[deviceName]->itemMap[ssid];
                 if (status == ACTIVATED || status == ACTIVATING) {
@@ -621,9 +620,20 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
                     deviceFrameMap[deviceName]->uuid.clear();
                     //todo 断开后排序 现在等下次更新列表 自动排序
                 }
-                break;
+            } else {
+                if (uuid == deviceFrameMap[deviceName]->uuid) {
+                    QMap<QString, WlanItem*>::iterator itemIter;
+                    for (itemIter = deviceFrameMap[deviceName]->itemMap.begin(); itemIter != deviceFrameMap[deviceName]->itemMap.end(); itemIter++) {
+                        if (itemIter.value()->uuid == uuid ) {
+                            item = itemIter.value();
+                            if (status == DEACTIVATED) {
+                                itemIter.value()->uuid.clear();
+                            }
+                            break;
+                        }
+                    }
+                }
             }
-        }
     }
 
     if (nullptr != item) {

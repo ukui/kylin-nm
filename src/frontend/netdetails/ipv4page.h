@@ -105,7 +105,7 @@ private Q_SLOTS:
     void configChanged(int index);
     void onAddressTextChanged();
     void onNetMaskTextChanged();
-    void onAddressEidtFinished();
+    void onAddressEditFinished();
     void updateIcon();
 
 Q_SIGNALS:

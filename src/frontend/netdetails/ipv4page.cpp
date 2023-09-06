@@ -141,7 +141,7 @@ void Ipv4Page::initComponent() {
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(configChanged(int)));
 
     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(onAddressTextChanged()));
-    connect(ipv4addressEdit, SIGNAL(editingFinished()), this, SLOT(onAddressEidtFinished()));
+    connect(ipv4addressEdit, SIGNAL(editingFinished()), this, SLOT(onAddressEditFinished()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(onNetMaskTextChanged()));
 
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
@@ -286,7 +286,7 @@ void Ipv4Page::onNetMaskTextChanged()
     }
 }
 
-void Ipv4Page::onAddressEidtFinished()
+void Ipv4Page::onAddressEditFinished()
 {
     if (ipv4addressEdit->isModified()) {
         if (!ipv4addressEdit->text().isEmpty() && getTextEditState(ipv4addressEdit->text())) {

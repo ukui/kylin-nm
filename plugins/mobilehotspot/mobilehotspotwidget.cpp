@@ -291,11 +291,10 @@ void MobileHotspotWidget::onApLineEditTextEdit(QString text)
     for ( ; i < text.length(); ++i) {
         count += text.mid(i,1).toLocal8Bit().length();
         if (count > AP_NAME_MAX_LENGTH) {
-            break;
+            m_apNameLine->setText(text.left(i));
+            return;
         }
     }
-
-    m_apNameLine->setText(text.left(i));
 }
 
 void MobileHotspotWidget::onPwdTextChanged()

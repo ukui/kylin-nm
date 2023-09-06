@@ -67,6 +67,7 @@ void DnsSettingWidget::initUi()
     m_closeBtn->setIcon(QIcon::fromTheme("application-exit-symbolic"));
     m_closeBtn->setProperty("useButtonPalette", true);
     m_closeBtn->setFlat(true);
+    m_closeBtn->setToolTip(tr("Close"));
 
     m_cancelBtn = new QPushButton(this);
     m_cancelBtn->setText(tr("Cancel"));

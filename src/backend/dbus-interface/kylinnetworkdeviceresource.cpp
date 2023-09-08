@@ -452,11 +452,12 @@ int KyNetworkDeviceResourse::getWirelessDeviceCapability(const QString deviceNam
         NetworkManager::WirelessDevice *wirelessDevicePtr =
             qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
 
-        int cap = 0x01;
-        if (!wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::AdhocCap) {
-            return cap;
+        int cap = 0x00;
+        if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::AdhocCap) {
+            cap = cap | 0x02;
+        } else {
+            return 0x01;
         }
-        cap = cap | 0x02;
         QDBusInterface dbusInterface("org.freedesktop.NetworkManager",
                                      connectDevice->uni(),
                                      "org.freedesktop.NetworkManager.Device.Wireless",

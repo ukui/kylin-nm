@@ -416,7 +416,7 @@ void MobileHotspotWidget::initInterfaceInfo()
         QMap<QString, bool>::Iterator iter = devMap.begin();
         while (iter != devMap.end()) {
             QString interfaceName = iter.key();
-            if (devCapMap[interfaceName] & 0x01) {
+            if (!(devCapMap[interfaceName] & 0x01)) {
                 m_interfaceComboBox->addItem(interfaceName);
             }
             iter++;

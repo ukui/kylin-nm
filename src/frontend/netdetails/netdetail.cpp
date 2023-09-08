@@ -105,27 +105,37 @@ void NetDetail::startObjectThread()
     m_object->moveToThread(m_objectThread);
     connect(m_objectThread, &QThread::finished, m_objectThread, &QObject::deleteLater);
     connect(m_objectThread, &QThread::finished, m_object, &QObject::deleteLater);
-    connect(ipv4Page, &Ipv4Page::ipv4EditFinished, this, [=](){
-        ipv4Page->startLoading();
-    });
-    connect(ipv6Page, &Ipv6Page::ipv6EditFinished, this, [=](){
-        ipv6Page->startLoading();
-    });
+    if (m_isCreateNet && !isWlan) {
+        connect(createNetPage, &CreatNetPage::ipv4EditFinished, this, [=](){
+            createNetPage->startLoading();
+        });
+        connect(createNetPage, SIGNAL(ipv4EditFinished(const QString &)), m_object, SLOT(checkIpv4ConflictThread(const QString &)));
+        connect(m_object, &ThreadObject::ipv4IsConflict, this, [=](bool ipv4IsConf) {
+            createNetPage->stopLoading();
+            createNetPage->showIpv4AddressConflict(ipv4IsConf);
+        });
+    } else {
+        connect(ipv4Page, &Ipv4Page::ipv4EditFinished, this, [=](){
+            ipv4Page->startLoading();
+        });
+        connect(ipv6Page, &Ipv6Page::ipv6EditFinished, this, [=](){
+            ipv6Page->startLoading();
+        });
 
-    connect(ipv4Page, SIGNAL(ipv4EditFinished(const QString &)), m_object, SLOT(checkIpv4ConflictThread(const QString &)));
-    connect(ipv6Page, SIGNAL(ipv6EditFinished(const QString &)), m_object, SLOT(checkIpv6ConflictThread(const QString &)));
-    connect(this, SIGNAL(checkCurrentIpv4Conflict(const QString &)), m_object, SLOT(checkIpv4ConflictThread(const QString &)));
-    connect(this, SIGNAL(checkCurrentIpv6Conflict(const QString &)), m_object, SLOT(checkIpv6ConflictThread(const QString &)));
+        connect(ipv4Page, SIGNAL(ipv4EditFinished(const QString &)), m_object, SLOT(checkIpv4ConflictThread(const QString &)));
+        connect(ipv6Page, SIGNAL(ipv6EditFinished(const QString &)), m_object, SLOT(checkIpv6ConflictThread(const QString &)));
+        connect(this, SIGNAL(checkCurrentIpv4Conflict(const QString &)), m_object, SLOT(checkIpv4ConflictThread(const QString &)));
+        connect(this, SIGNAL(checkCurrentIpv6Conflict(const QString &)), m_object, SLOT(checkIpv6ConflictThread(const QString &)));
 
-    connect(m_object, &ThreadObject::ipv4IsConflict, this, [=](bool ipv4IsConf) {
-        ipv4Page->stopLoading();
-        ipv4Page->showIpv4AddressConflict(ipv4IsConf);
-    });
-    connect(m_object, &ThreadObject::ipv6IsConflict, this, [=](bool ipv6IsConf) {
-        ipv6Page->stopLoading();
-        ipv6Page->showIpv6AddressConflict(ipv6IsConf);
-    });
-
+        connect(m_object, &ThreadObject::ipv4IsConflict, this, [=](bool ipv4IsConf) {
+            ipv4Page->stopLoading();
+            ipv4Page->showIpv4AddressConflict(ipv4IsConf);
+        });
+        connect(m_object, &ThreadObject::ipv6IsConflict, this, [=](bool ipv6IsConf) {
+            ipv6Page->stopLoading();
+            ipv6Page->showIpv6AddressConflict(ipv6IsConf);
+        });
+    }
     m_objectThread->start();
 }
 
@@ -157,11 +167,9 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
     setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
     centerToScreen();
 
-    qDebug() << m_isCreateNet << name;
     if (!m_isCreateNet && name.isEmpty()) {
         m_isCreateNet = true;
     }
-    qDebug() << m_isCreateNet;
     m_netDeviceResource = new KyNetworkDeviceResourse(this);
     m_wirelessConnOpration = new KyWirelessConnectOperation(this);
     m_resource = new KyWirelessNetResource(this);

@@ -584,8 +584,9 @@ void MobileHotspotWidget::setFreqBandFrame()
 
     QHBoxLayout *freqBandHLayout = new QHBoxLayout(m_freqBandFrame);
 
-    m_freqBandLabel = new QLabel(tr("Frequency band"), this);
-    m_freqBandLabel->setMinimumWidth(LABLE_MIN_WIDTH);
+    m_freqBandLabel = new FixLabel(this);
+    m_freqBandLabel->setText(tr("Frequency band"));
+    m_freqBandLabel->setFixedWidth(LABLE_MIN_WIDTH - 8);
     m_freqBandComboBox = new QComboBox(this);
     m_freqBandComboBox->setInsertPolicy(QComboBox::NoInsert);
     m_freqBandComboBox->setMinimumWidth(COMBOBOX_MIN_WIDTH);
@@ -593,7 +594,7 @@ void MobileHotspotWidget::setFreqBandFrame()
     m_freqBandComboBox->addItem("2.4GHz");
     m_freqBandComboBox->addItem("5GHz");
     freqBandHLayout->setContentsMargins(ITEM_MARGINS);
-    freqBandHLayout->setSpacing(0);
+    freqBandHLayout->setSpacing(8);
     freqBandHLayout->addWidget(m_freqBandLabel);
     freqBandHLayout->addWidget(m_freqBandComboBox);
 

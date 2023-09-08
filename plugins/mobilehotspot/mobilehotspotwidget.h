@@ -74,7 +74,7 @@ private:
     QLabel *m_apNameLabel;
     QLabel *m_pwdLabel;
     QLabel *m_pwdHintLabel;
-    QLabel *m_freqBandLabel;
+    FixLabel *m_freqBandLabel;
     QLabel *m_interfaceLabel;
 
     QFrame *switchAndApNameLine;

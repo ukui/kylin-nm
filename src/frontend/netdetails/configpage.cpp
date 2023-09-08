@@ -42,13 +42,11 @@ void ConfigPage::initUi()
     m_congigBtn = new KBorderlessButton(this);
 
     QWidget *centerWidget = new QWidget(this);
-    QGridLayout *gridLayout = new QGridLayout(centerWidget);
-    gridLayout->setContentsMargins(0, 0, 0, 0);
-    gridLayout->setVerticalSpacing(VERTICAL_SPACING);
-    gridLayout->addWidget(m_publicButton, 0, 0, Qt::AlignTop);
-    gridLayout->addWidget(m_publicLabel, 0, 1);
-    gridLayout->addWidget(m_privateButton, 1, 0, Qt::AlignTop);
-    gridLayout->addWidget(m_privateLabel, 1, 1);
+    QFormLayout *formLayout = new QFormLayout(centerWidget);
+    formLayout->setContentsMargins(0, 0, 0, 0);
+    formLayout->setVerticalSpacing(VERTICAL_SPACING);
+    formLayout->addRow(m_publicButton, m_publicLabel);
+    formLayout->addRow(m_privateButton, m_privateLabel);
 
     m_vBoxLayout = new QVBoxLayout(this);
     m_vBoxLayout->setContentsMargins(0, 0, 0, 0);

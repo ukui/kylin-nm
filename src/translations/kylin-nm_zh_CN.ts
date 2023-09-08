@@ -73,29 +73,34 @@
 <context>
     <name>CreatNetPage</name>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="86"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="95"/>
         <source>Connection Name</source>
         <translation>网络名称</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="87"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="96"/>
         <source>IPv4Config</source>
         <translation>IPv4 配置</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="88"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="97"/>
         <source>Address</source>
         <translation>IPv4 地址</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="89"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
         <source>Netmask</source>
         <translation>子网掩码</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="90"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
         <source>Default Gateway</source>
         <translation>默认网关</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="330"/>
+        <source>Address conflict</source>
+        <translation>地址冲突</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -106,28 +111,28 @@
         <translation type="vanished">备选 DNS</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="108"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="117"/>
         <source>Auto(DHCP)</source>
         <translation>自动 (DHCP)</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="109"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="118"/>
         <source>Manual</source>
         <translation>手动</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="177"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="192"/>
         <source>Invalid address</source>
         <translation>无效的IP地址</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="186"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="210"/>
         <source>Invalid subnet mask</source>
         <translation>无效的子网掩码</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="206"/>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="207"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="230"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="231"/>
         <source>Required</source>
         <translation>必填</translation>
     </message>
@@ -936,22 +941,22 @@
         <translation>网络提示消息</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="369"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="377"/>
         <source>Detail</source>
         <translation>详情</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="370"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="378"/>
         <source>IPv4</source>
         <translation>IPv4</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="371"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="379"/>
         <source>IPv6</source>
         <translation>IPv6</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="373"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="381"/>
         <source>Security</source>
         <translation>安全</translation>
     </message>
@@ -960,62 +965,62 @@
         <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="375"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="382"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="383"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="390"/>
         <source>Config</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="394"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="402"/>
         <source>Confirm</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="396"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="404"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="454"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="462"/>
         <source>Forget this network</source>
         <translation>忘记此网络</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="456"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="464"/>
         <source>Delete this network</source>
         <translation>删除此网络</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="435"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="443"/>
         <source>Add LAN Connect</source>
         <translation>添加有线网络</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="448"/>
         <source>Connect Hidden WLAN</source>
         <translation>连接到隐藏 WLAN</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="621"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="633"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1176"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="629"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="641"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1184"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="745"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="746"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="747"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="753"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="754"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="755"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="888"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="896"/>
         <source>start check ipv4 address conflict</source>
         <translation>开始检测 ipv4 地址冲突</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="905"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="913"/>
         <source>start check ipv6 address conflict</source>
         <translation>开始检测 ipv6 地址冲突</translation>
     </message>
@@ -1028,22 +1033,22 @@
         <translation type="vanished">ipv6地址冲突！</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1172"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1180"/>
         <source>this wifi no support enterprise type</source>
         <translation>此 wifi 不支持企业网类型</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1177"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1185"/>
         <source>this wifi no support None type</source>
         <translation>此 wifi 不支持空类型</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1182"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1190"/>
         <source>this wifi no support WPA2 type</source>
         <translation>此 wifi 不支持 WPA2 类型</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1185"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1193"/>
         <source>this wifi no support WPA3 type</source>
         <translation>此 wifi 不支持 WPA3 类型</translation>
     </message>
@@ -1502,22 +1507,22 @@
 <context>
     <name>WlanPage</name>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="129"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="130"/>
         <source>WLAN</source>
         <translation>无线局域网</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="105"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="106"/>
         <source>No wireless network card detected</source>
         <translation>未检测到无线网卡</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="131"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="132"/>
         <source>Activated WLAN</source>
         <translation>我的网络</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="142"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="143"/>
         <source>Other WLAN</source>
         <translation>其他网络</translation>
     </message>
@@ -1526,22 +1531,22 @@
         <translation type="vanished">更多...</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="966"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="974"/>
         <source>WLAN Connected Successfully</source>
         <translation>无线网络已连接</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="962"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="970"/>
         <source>WLAN Disconnected Successfully</source>
         <translation>无线网络已断开</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1742"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1750"/>
         <source>Connected: </source>
         <translation>已连接: </translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1744"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1752"/>
         <source>Not Connected</source>
         <translation>未连接</translation>
     </message>

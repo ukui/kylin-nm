@@ -73,29 +73,34 @@
 <context>
     <name>CreatNetPage</name>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="86"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="95"/>
         <source>Connection Name</source>
         <translation>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠨᠡᠷᠡᠢᠳᠦᠯ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="87"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="96"/>
         <source>IPv4Config</source>
         <translation>IPv4 ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="88"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="97"/>
         <source>Address</source>
         <translation>IPv4 ᠬᠠᠶᠢᠭ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="89"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
         <source>Netmask</source>
         <translation>ᠬᠤᠪᠢᠶᠠᠷᠢ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠬᠠᠯᠬᠠᠪᠴᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="90"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
         <source>Default Gateway</source>
         <translation>ᠠᠶᠠᠳᠠᠯ ᠨᠧᠲ ᠪᠤᠭᠤᠮᠳᠠ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="330"/>
+        <source>Address conflict</source>
+        <translation>ᠬᠠᠶᠢᠭ ᠤ᠋ᠨ ᠮᠦᠷᠬᠦᠯᠳᠦᠬᠡᠨ</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -106,28 +111,28 @@
         <translation type="vanished">ᠪᠡᠯᠡᠳᠬᠡᠯ ᠰᠤᠩᠭᠤᠯᠳᠠ DNS</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="108"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="117"/>
         <source>Auto(DHCP)</source>
         <translation>ᠠᠦ᠋ᠲ᠋ᠤ᠋ (DHCP)</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="109"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="118"/>
         <source>Manual</source>
         <translation>ᠭᠠᠷ᠎ᠢᠶᠠᠷ ᠬᠦᠳᠡᠯᠭᠡᠬᠦ᠌</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="177"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="192"/>
         <source>Invalid address</source>
         <translation>ᠬᠦᠴᠦᠨ ᠦᠬᠡᠢ ᠬᠠᠶᠢᠭ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="186"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="210"/>
         <source>Invalid subnet mask</source>
         <translation>ᠬᠦᠴᠦᠨ ᠦᠬᠡᠢ ᠬᠤᠪᠢᠶᠠᠷᠢ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠬᠠᠯᠬᠠᠪᠴᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="206"/>
-        <location filename="../frontend/netdetails/creatnetpage.cpp" line="207"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="230"/>
+        <location filename="../frontend/netdetails/creatnetpage.cpp" line="231"/>
         <source>Required</source>
         <translation>ᠡᠷᠬᠡᠪᠰᠢ ᠳᠠᠭᠯᠠᠬᠤ</translation>
     </message>
@@ -916,22 +921,22 @@
         <translation>ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠰᠠᠨᠠᠭᠤᠯᠤᠮᠵᠢ ᠵᠢᠨ ᠮᠡᠳᠡᠭᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="369"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="377"/>
         <source>Detail</source>
         <translation>ᠳᠡᠯᠭᠡᠷᠡᠩᠭᠦᠢ ᠠᠭᠤᠯᠭ᠎ᠠ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="370"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="378"/>
         <source>IPv4</source>
         <translation>IPv4</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="371"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="379"/>
         <source>IPv6</source>
         <translation>IPv6</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="373"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="381"/>
         <source>Security</source>
         <translation>ᠠᠮᠤᠷ ᠳᠦᠪᠰᠢᠨ</translation>
     </message>
@@ -940,62 +945,62 @@
         <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="375"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="382"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="383"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="390"/>
         <source>Config</source>
         <translation>ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="394"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="402"/>
         <source>Confirm</source>
         <translation>ᠪᠠᠳᠤᠯᠠᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="396"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="404"/>
         <source>Cancel</source>
         <translation>ᠦᠬᠡᠢᠰᠬᠡᠬᠦ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="454"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="462"/>
         <source>Forget this network</source>
         <translation>ᠲᠤᠰ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠮᠠᠷᠳᠠᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="456"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="464"/>
         <source>Delete this network</source>
         <translation>ᠲᠤᠰ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠬᠠᠰᠤᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="435"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="443"/>
         <source>Add LAN Connect</source>
         <translation>ᠤᠳᠠᠰᠤᠳᠤ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠨᠡᠮᠡᠬᠦ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="440"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="448"/>
         <source>Connect Hidden WLAN</source>
         <translation>ᠨᠢᠭᠤᠴᠠᠯᠠᠭᠰᠠᠨ WLAN ᠲᠤ᠌/ ᠳ᠋ᠤ᠌ ᠴᠦᠷᠬᠡᠯᠡᠬᠦ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="621"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="633"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1176"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="629"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="641"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1184"/>
         <source>None</source>
         <translation>ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="745"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="746"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="747"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="753"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="754"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="755"/>
         <source>Auto</source>
         <translation>ᠠᠦ᠋ᠲ᠋ᠤ᠋</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="888"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="896"/>
         <source>start check ipv4 address conflict</source>
         <translation>ipv4 ᠬᠠᠶᠢᠭ ᠤ᠋ᠨ ᠮᠦᠷᠬᠦᠯᠳᠦᠬᠡᠨ ᠢ᠋ ᠪᠠᠢᠴᠠᠭᠠᠵᠤ ᠡᠬᠢᠯᠡᠪᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="905"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="913"/>
         <source>start check ipv6 address conflict</source>
         <translation>ipv6 ᠬᠠᠶᠢᠭ ᠤ᠋ᠨ ᠮᠦᠷᠬᠦᠯᠳᠦᠬᠡᠨ ᠢ᠋ ᠪᠠᠢᠴᠠᠭᠠᠵᠤ ᠡᠬᠢᠯᠡᠪᠡ</translation>
     </message>
@@ -1008,22 +1013,22 @@
         <translation type="vanished">ipv6 ᠬᠠᠶᠢᠭ ᠮᠦᠷᠬᠦᠯᠳᠦᠬᠡᠨ ᠲᠠᠢ!</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1172"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1180"/>
         <source>this wifi no support enterprise type</source>
         <translation>ᠲᠤᠰ wifi ᠠᠵᠤ ᠠᠬᠤᠢᠯᠠᠯ ᠤ᠋ᠨ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠲᠦᠷᠦᠯ ᠢ᠋ ᠳᠡᠮᠵᠢᠬᠦ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1177"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1185"/>
         <source>this wifi no support None type</source>
         <translation>ᠲᠤᠰ wifi ᠬᠤᠭᠤᠰᠤᠨ ᠬᠡᠯᠪᠡᠷᠢ ᠵᠢ ᠳᠡᠮᠵᠢᠬᠦ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1182"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1190"/>
         <source>this wifi no support WPA2 type</source>
         <translation>ᠲᠤᠰ wifiWPA2 ᠳᠦᠷᠦᠯ ᠢ᠋ ᠳᠡᠮᠵᠢᠬᠦ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1185"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1193"/>
         <source>this wifi no support WPA3 type</source>
         <translation>ᠲᠤᠰ wifiWPA3 ᠳᠦᠷᠦᠯ ᠢ᠋ ᠳᠡᠮᠵᠢᠬᠦ ᠦᠬᠡᠢ</translation>
     </message>
@@ -1475,22 +1480,22 @@
 <context>
     <name>WlanPage</name>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="129"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="130"/>
         <source>WLAN</source>
         <translation>ᠤᠳᠠᠰᠤ ᠦᠬᠡᠢ ᠬᠡᠰᠡᠭ ᠰᠦᠯᠵᠢᠶ᠎ᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="105"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="106"/>
         <source>No wireless network card detected</source>
         <translation>ᠤᠳᠠᠰᠤ ᠦᠬᠡᠢ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠺᠠᠷᠲ᠎ᠢ ᠬᠢᠨᠠᠨ ᠬᠡᠮᠵᠢᠵᠤ ᠤᠯᠤᠭᠰᠠᠨ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="131"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="132"/>
         <source>Activated WLAN</source>
         <translation>ᠮᠢᠨᠤ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="142"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="143"/>
         <source>Other WLAN</source>
         <translation>ᠪᠤᠰᠤᠳ ᠰᠦᠯᠵᠢᠶ᠎ᠡ</translation>
     </message>
@@ -1499,22 +1504,22 @@
         <translation type="vanished">更多...</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="966"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="974"/>
         <source>WLAN Connected Successfully</source>
         <translation>ᠤᠳᠠᠰᠤ ᠦᠬᠡᠢ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠴᠦᠷᠬᠡᠯᠡᠪᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="962"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="970"/>
         <source>WLAN Disconnected Successfully</source>
         <translation>ᠤᠳᠠᠰᠤ ᠦᠬᠡᠢ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠳᠠᠰᠤᠯᠪᠠ</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1742"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1750"/>
         <source>Connected: </source>
         <translation>ᠴᠥᠷᠬᠡᠯᠡᠪᠡ: </translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1744"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1752"/>
         <source>Not Connected</source>
         <translation>ᠴᠥᠷᠬᠡᠯᠡᠭᠡ ᠥᠬᠡᠢ</translation>
     </message>

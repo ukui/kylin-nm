@@ -119,6 +119,7 @@ private Q_SLOTS:
 
     void onConnectionAdd(QString deviceName, QString ssid);
     void onConnectionRemove(QString deviceName, QString ssid, QString path);
+    void onConnectionUpdate(QString deviceName, QString ssid);
 
     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName);

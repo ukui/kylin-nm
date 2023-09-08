@@ -62,6 +62,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 
     connect(m_wirelessNetResource, &KyWirelessNetResource::connectionAdd, this, &WlanPage::onConnectionAdd);
     connect(m_wirelessNetResource, &KyWirelessNetResource::connectionRemove, this, &WlanPage::onConnectionRemove);
+    connect(m_wirelessNetResource, &KyWirelessNetResource::connectionUpdate, this, &WlanPage::onConnectionUpdate);
 
     connect(m_activatedConnectResource, &KyActiveConnectResourse::stateChangeReason,
                                                     this, &WlanPage::onConnectionStateChanged);
@@ -687,6 +688,13 @@ void WlanPage::onConnectionRemove(QString deviceName, QString ssid, QString path
     return;
 }
 
+void WlanPage::onConnectionUpdate(QString deviceName, QString ssid)
+{
+    if (deviceName == m_currentDevice || deviceName.isEmpty()) {
+        updateWlanListItem(ssid);
+    }
+}
+
 void WlanPage::onSecurityTypeChange(QString devName, QString ssid, QString secuType)
 {
     QListWidgetItem *p_listWidgetItem = nullptr;
@@ -985,7 +993,7 @@ void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
                                       m_inactivatedNetListWidget, ssid);
 
     KyWirelessNetItem wirelessNetItem;
-    bool ret = m_wirelessNetResource->getWifiNetwork(devName, ssid, wirelessNetItem);
+    bool ret = m_wirelessNetResource->getActiveWirelessNetItem(devName, wirelessNetItem);
     if (!ret) {
         qWarning()<<"[WlanPage] get wireless item failed, when update activated connection area.";
         return;

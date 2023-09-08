@@ -252,6 +252,7 @@ bool KyWirelessNetResource::getActiveWirelessNetItem(QString deviceName, KyWirel
     for (int index = 0; index < m_WifiNetworkList[deviceName].size(); index ++) {
         if (m_WifiNetworkList[deviceName].at(index).m_NetSsid  == ssid) {
             wirelessNetItem = m_WifiNetworkList[deviceName].at(index);
+            updatewirelessItemConnectInfo(wirelessNetItem);
             qDebug()<< LOG_FLAG << "getWifiNetwork success";
             return true;
         }
@@ -862,25 +863,44 @@ void KyWirelessNetResource::onConnectionUpdate(QString uuid)
     getSsidByUuid(uuid, ssid);
     getDeviceByUuid(uuid, dev);
 
-    NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceInterface(dev);
-    if (devicePtr.isNull() || !m_WifiNetworkList.contains(dev)) {
-        return;
+    if (!dev.isEmpty()) {
+        NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceInterface(dev);
+        if (devicePtr.isNull() || !m_WifiNetworkList.contains(dev)) {
+            return;
+        }
     }
 
-    NetworkManager::WirelessNetwork::Ptr netPtr = m_networkResourceInstance->findWifiNetwork(ssid, devicePtr->uni());
-    if (netPtr.isNull()) {
-        return;
-    }
+    QMap<QString, QList<KyWirelessNetItem> >::iterator iter;
+    for (iter = m_WifiNetworkList.begin(); iter != m_WifiNetworkList.end(); ++iter) {
+        QList<KyWirelessNetItem>::iterator itemIter;
+        for (itemIter = iter.value().begin(); itemIter != iter.value().end(); ++itemIter) {
+            //判断是否有其他wifi配置 更新WIFI-bd 的connect相关变量 emit update
+            if (uuid == itemIter->m_connectUuid) {
+                if (itemIter->m_NetSsid != ssid ||
+                        (iter.key() != dev && !dev.isEmpty())) {
+                    updatewirelessItemConnectInfo(*itemIter);
+                    Q_EMIT connectionUpdate(iter.key(), itemIter->m_NetSsid);
 
-    QList<KyWirelessNetItem> list = m_WifiNetworkList.value(dev);
-    for (int i = 0; i < list.count(); ++i) {
-        if (uuid == list.at(i).m_connectUuid) {
-            list.removeAt(i);
+                    //判断netptr是否为空 空返回
+                    //否则 更新ssid 的connect相关变量 emit update ssid
+                    NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceInterface(dev);
+                    NetworkManager::WirelessNetwork::Ptr netPtr = m_networkResourceInstance->findWifiNetwork(ssid, devicePtr->uni());
+                    if (netPtr.isNull()) {
+                        qDebug() << LOG_FLAG << ssid << "netPtr is Null";
+                        return;
+                    }
+                }
+            }
+            //更新WIFI 的connect相关变量 emit update to ui
+            if (ssid == itemIter->m_NetSsid) {
+                if (iter.key() == dev || dev.isEmpty()) {
+                    updatewirelessItemConnectInfo(*itemIter);
+                    Q_EMIT connectionUpdate(dev, itemIter->m_NetSsid);
+                }
+            }
             break;
         }
     }
-    list.append(KyWirelessNetItem(netPtr));
-    m_WifiNetworkList.insert(dev, list);
 
     Q_EMIT wifiNetworkUpdate();
 }

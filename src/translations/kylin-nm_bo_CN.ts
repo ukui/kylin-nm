@@ -722,7 +722,7 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="145"/>
         <source>Network name(SSID)</source>
-        <translation>དྲ་རྒྱའི་མིང་། (SID)</translation>
+        <translation>དྲ་རྒྱའི་མིང་། (SSID)</translation>
     </message>
     <message>
         <source>Remember the Network</source>

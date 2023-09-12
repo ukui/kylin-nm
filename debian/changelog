@@ -1,3 +1,15 @@
+kylin-nm (3.24.0.0-0k2.18) v101; urgency=medium
+
+  * BUG号:
+       - #191241 【WiFi】连接TLS企业WiFi，输入错误的密码后，点击属性卡顿
+       - #191904 【网络连接】修改DNS时可以输入非数字内容 
+       - #191906 【网络连接】修改DNS时输入非IP格式数字，可以保存成功
+  * 需求号：
+  * 其他改动:
+  * 影响域：自身
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Tue, 12 Sep 2023 14:30:53 +0800
+
 kylin-nm (3.24.0.0-0k2.17) v101; urgency=medium
 
   * BUG号:

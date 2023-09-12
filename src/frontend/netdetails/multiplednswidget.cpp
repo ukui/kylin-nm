@@ -179,10 +179,14 @@ void MultipleDnsWidget::setDnsListText(const QList<QHostAddress> &dns)
         m_emptyWidget->hide();
         m_dnsListWidget->show();
     }
-    for (QHostAddress str: dns) {
+    for (int i = 0; i < dns.size(); ++i) {
+        QString str = dns.at(i).toString();
         QListWidgetItem *dnsListWidgetItem = new QListWidgetItem(m_dnsListWidget);
         dnsListWidgetItem->setSizeHint(QSize(0,ITEM_HEIGHT));
-        dnsListWidgetItem->setText(str.toString());
+
+        ListItemEdit *dnsListItemEdit = new ListItemEdit(m_regExp, m_dnsListWidget);
+        m_dnsListWidget->setItemDelegateForRow(i, dnsListItemEdit);
+        dnsListWidgetItem->setText(str);
     }
 }
 
@@ -200,7 +204,7 @@ void MultipleDnsWidget::AddOneDnsItem(QListWidget *listWidget)
     listWidget->addItem(dnsListWidgetItem);
     listWidget->setCurrentItem(dnsListWidgetItem);
 
-    ListItemEdit *dnsListItemEdit = new ListItemEdit(m_regExp);
+    ListItemEdit *dnsListItemEdit = new ListItemEdit(m_regExp, listWidget);
     listWidget->setItemDelegateForRow(listWidget->currentIndex().row() , dnsListItemEdit);
     listWidget->editItem(dnsListWidgetItem);
 }

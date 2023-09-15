@@ -56,7 +56,6 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
 
     m_itemFrame->installEventFilter(this);
 //    connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
-    connect(m_menu, &QMenu::triggered, this, &LanListItem::onMenuTriggered);
     connect(m_hoverButton, &FixPushButton::clicked, this, &LanListItem::onNetButtonClicked);
 }
 

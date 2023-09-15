@@ -157,12 +157,13 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
 //    XAtomHelper::getInstance()->setWindowMotifHint(this->winId(), window_hints);
 //#else
 //    this->setWindowFlags(Qt::Dialog /*| Qt::FramelessWindowHint*/);
-    this->setWindowFlag(Qt::Window);
+//    this->setWindowFlag(Qt::Window);
     KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
 //#endif
 //    this->setProperty("useStyleWindowManager", false); //禁用拖动
 //    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint );
 //    setAttribute(Qt::WA_TranslucentBackground);
+    setWindowFlags(Qt::Dialog);
     setAttribute(Qt::WA_DeleteOnClose);
     setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
     centerToScreen();

@@ -51,7 +51,8 @@ EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, Q
 //    this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
 //#endif
     this->setAttribute(Qt::WA_DeleteOnClose);
-    this->setWindowFlag(Qt::Window);
+//    this->setWindowFlag(Qt::Window);
+    this->setWindowFlags(Qt::Dialog);
 //    this->setWindowTitle(tr("Connect Enterprise WLAN"));
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
     KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);

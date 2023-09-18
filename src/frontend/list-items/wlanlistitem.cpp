@@ -53,7 +53,6 @@ WlanListItem::WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, b
     setExpanded(false);
 
 //    connect(this->m_infoButton, &InfoButton::clicked, this, &WlanListItem::onInfoButtonClicked);
-    connect(m_menu, &QMenu::triggered, this, &WlanListItem::onMenuTriggered);
     connect(m_hoverButton, &FixPushButton::clicked, this, &WlanListItem::onNetButtonClicked);
 
     m_wirelessConnectOperation = new KyWirelessConnectOperation(this);

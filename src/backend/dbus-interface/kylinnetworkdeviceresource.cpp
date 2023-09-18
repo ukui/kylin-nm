@@ -546,7 +546,24 @@ void KyNetworkDeviceResourse::setDeviceManaged(QString devName, bool managed)
         qWarning()<<"[KyNetworkDeviceResourse] can not find device " << devName;
         return;
     }
-    setDeviceManagedByGDbus(dbusPath, managed);
+
+    QDBusInterface dbusInterface("org.freedesktop.NetworkManager",
+                              dbusPath,
+                              "org.freedesktop.NetworkManager.Device",
+                              QDBusConnection::systemBus());
+
+    if (!dbusInterface.isValid()) {
+        qWarning() << dbusPath << "invalid";
+        setDeviceManagedByGDbus(dbusPath, managed);
+        return;
+    }
+
+    QDBusReply<void> reply = dbusInterface.call("SetStateDevice", "", managed);
+    if (!reply.isValid()) {
+        qWarning() << "SetStateDevice error" << reply.error().message();
+        setDeviceManagedByGDbus(dbusPath, managed);
+        return;
+    }
 }
 
 bool KyNetworkDeviceResourse::getDeviceManaged(QString deviceName)

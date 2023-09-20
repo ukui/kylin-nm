@@ -21,16 +21,23 @@ INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 
 LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt -lkysec
 
+CONFIG(release, debug|release) {
+    !system($$PWD/translate_generation.sh): error("Failed to generate translation")
+}
+
 target.path = /usr/bin
 target.source += $$TARGET
 desktop.path = /etc/xdg/autostart/
 desktop.files = kylin-nm.desktop
 gschema.files = org.ukui.kylin-nm.switch.gschema.xml
 gschema.path = /usr/share/glib-2.0/schemas/
+qm_files.path = $${PREFIX}/share/kylin-nm/kylin-nm/
+qm_files.files = translations/*.qm
 
 INSTALLS += target \
         desktop \
         gschema \
+        qm_files \
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -67,3 +74,10 @@ unix {
 
 DISTFILES += \
     org.ukui.kylin-nm.switch.gschema.xml
+
+TRANSLATIONS += \
+        translations/kylin-nm_zh_CN.ts \
+        translations/kylin-nm_tr.ts \
+        translations/kylin-nm_bo.ts \
+        translations/kylin-nm_bo_CN.ts \
+        translations/kylin-nm_mn.ts

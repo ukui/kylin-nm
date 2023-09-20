@@ -41,16 +41,16 @@ public:
     CreatNetPage(QWidget *parent = nullptr);
 
     void constructIpv4Info(KyConnectSetting &setting);
+    void startLoading();
+    void stopLoading();
+    void showIpv4AddressConflict(bool isConflict);
 private:
     LineEdit *connNameEdit;
     QComboBox *ipv4ConfigCombox;
     LineEdit *ipv4addressEdit;
     LineEdit *netMaskEdit;
     LineEdit *gateWayEdit;
-    LineEdit *firstDnsEdit;
-    LineEdit *secondDnsEdit;
 
-private:
     QFormLayout *m_detailLayout;
     QVBoxLayout *mvBoxLayout;
     QLabel *m_connNameLabel;
@@ -63,6 +63,15 @@ private:
     QLabel *m_maskHintLabel;
 
     MultipleDnsWidget *m_dnsWidget = nullptr;
+
+    QLabel *m_statusLabel = nullptr;
+    QList<QIcon> m_loadIcons;
+    QTimer *m_iconTimer = nullptr;
+    int m_currentIconIndex =0;
+
+    QLabel *m_iconLabel;
+    QLabel *m_textLabel;
+
 private:
     void initUI();
     void initComponent();
@@ -70,6 +79,9 @@ private:
     void configSave();
     bool getTextEditState(QString text);
     bool checkConnectBtnIsEnabled();
+
+    void initConflictHintLable();
+    void initLoadingIcon();
 
     bool netMaskIsValide(QString text);
     QString getNetMaskText(QString text);
@@ -79,9 +91,14 @@ private Q_SLOTS:
     void configChanged(int index);
     void onAddressTextChanged();
     void onNetMaskTextChanged();
+    void onAddressEditFinished();
+
+public Q_SLOTS:
+    void updateIcon();
 
 Q_SIGNALS:
     void setCreatePageState(bool);
+    void ipv4EditFinished(QString);
 
 };
 

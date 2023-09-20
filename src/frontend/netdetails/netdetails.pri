@@ -12,7 +12,8 @@ HEADERS += \
     $$PWD/joinhiddenwifipage.h \
     $$PWD/multiplednswidget.h \
     $$PWD/netdetail.h \
-    $$PWD/securitypage.h
+    $$PWD/securitypage.h \
+    $$PWD/dnssettingwidget.h
 
 SOURCES += \
     $$PWD/configpage.cpp \
@@ -25,4 +26,5 @@ SOURCES += \
     $$PWD/joinhiddenwifipage.cpp \
     $$PWD/multiplednswidget.cpp \
     $$PWD/netdetail.cpp \
-    $$PWD/securitypage.cpp
+    $$PWD/securitypage.cpp \
+    $$PWD/dnssettingwidget.cpp

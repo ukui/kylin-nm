@@ -46,8 +46,11 @@
 #include "connectdevlistitem.h"
 #include "blacklistpage.h"
 #include "connectdevpage.h"
+#include "fixlabel.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
 
 class MobileHotspotWidget : public QWidget
 {
@@ -71,7 +74,7 @@ private:
     QLabel *m_apNameLabel;
     QLabel *m_pwdLabel;
     QLabel *m_pwdHintLabel;
-    QLabel *m_freqBandLabel;
+    FixLabel *m_freqBandLabel;
     QLabel *m_interfaceLabel;
 
     QFrame *switchAndApNameLine;
@@ -86,6 +89,9 @@ private:
 
     QComboBox *m_freqBandComboBox;
     QComboBox *m_interfaceComboBox;
+
+    FixLabel *m_interfaceWarnLabel;
+    QWidget* m_warnWidget;
 
     QDBusInterface  *m_interface = nullptr;
 
@@ -138,6 +144,8 @@ private:
     void initConnectDevPage();
     void initBlackListPage();
 
+    bool m_isUserSelect = true;  //是否用户操作
+
 signals:
 
 private slots:
@@ -158,6 +166,8 @@ private slots:
     void onApLineEditTextEdit(QString text);
 
     void onPwdTextChanged();
+
+    void onInterfaceChanged();
 };
 
 #endif // MOBILEHOTSPOTWIDGET_H

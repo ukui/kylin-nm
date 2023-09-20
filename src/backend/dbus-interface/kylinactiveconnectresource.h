@@ -60,7 +60,8 @@ public:
     bool wiredConnectIsActived();
     bool checkWirelessStatus(NetworkManager::ActiveConnection::State state);
     QString getAcitveConnectionPathByUuid(QString uuid);
-    int getAcivateWifiSignal();
+
+    int getActivateWifiSignal(QString devName = "");
 
 private:
     void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,

@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QLabel>
+#include "themepalette.h"
 
 class FixLabel : public QLabel
 {

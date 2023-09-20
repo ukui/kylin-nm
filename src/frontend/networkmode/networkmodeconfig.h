@@ -64,10 +64,7 @@ public:
     void initWirelessNetworkMode();
 
 private:
-    KyNetworkDeviceResourse *m_deviceResource = nullptr;
     KyActiveConnectResourse *m_activatedConnectResource = nullptr;
-    KyConnectResourse * m_connectResource = nullptr;
-    KyWirelessNetResource *m_wirelessNetResource = nullptr;
     void setFirstConnectNetworkMode(QString uuid, QString deviceName, QString ssid);
 
 private Q_SLOTS:

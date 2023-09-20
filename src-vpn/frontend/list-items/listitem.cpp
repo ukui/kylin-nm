@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -19,6 +19,7 @@
  */
 #include "listitem.h"
 #include <QDebug>
+#include "themepalette.h"
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
@@ -28,8 +29,9 @@
 #define FRAME_WIDTH 404
 #define INFO_ICON_WIDTH 16
 #define INFO_ICON_HEIGHT 16
-#define LIGHT_HOVER_COLOR QColor(240,240,240,255)
-#define DARK_HOVER_COLOR QColor(15,15,15,255)
+
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME "styleName"
 
 ListItem::ListItem(QWidget *parent) : QFrame(parent)
 {
@@ -39,6 +41,7 @@ ListItem::ListItem(QWidget *parent) : QFrame(parent)
     initConnection();
     connect(qApp, &QApplication::paletteChanged, this, &ListItem::onPaletteChanged);
 //    m_itemFrame->installEventFilter(this);
+    onPaletteChanged();
 }
 
 ListItem::~ListItem()
@@ -144,8 +147,22 @@ void ListItem::initConnection()
 
 void ListItem::onPaletteChanged()
 {
-//    QPalette pal = qApp->palette();
-//    pal.setColor(QPalette::Window, qApp->palette().base().color());
-//    this->setPalette(pal);
+    QPalette pal = qApp->palette();
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id, QByteArray(), this);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = themePalette(true, this);
+       }
+    }
+    this->setPalette(pal);
+
+    if (m_menu != nullptr) {
+        pal.setColor(QPalette::Base, pal.color(QPalette::Base));
+        pal.setColor(QPalette::Text, pal.color(QPalette::Text));
+        m_menu->setPalette(pal);
+    }
 }
 

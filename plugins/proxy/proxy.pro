@@ -7,6 +7,11 @@ CONFIG += plugin
 
 TARGET = $$qtLibraryTarget(proxy)
 DESTDIR = ../..
+
+CONFIG(release, debug|release) {
+    !system($$PWD/translate_generation.sh): error("Failed to generate translation")
+}
+
 target.path = $$[QT_INSTALL_LIBS]/ukui-control-center
 trans.files = translations/*
 trans.path = /usr/share/kylin-nm/proxy/
@@ -49,4 +54,9 @@ INSTALLS += target \
 TRANSLATIONS += \
         translations/zh_CN.ts \
         translations/tr.ts \
-        translations/bo_CN.ts
+        translations/bo_CN.ts \
+        translations/en_US.ts \
+        translations/mn.ts
+
+DISTFILES += \
+    translations/en_US.ts

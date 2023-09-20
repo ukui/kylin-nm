@@ -65,49 +65,42 @@ void Ipv6Page::setGateWay(const QString &gateWay)
 bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
 {
     bool isChanged = false;
-
-    QList<QHostAddress> ipv6DnsList;
-    ipv6DnsList.clear();
-    ipv6DnsList = m_dnsWidget->getDns();
-    if (info.ipv6DnsList != ipv6DnsList) {
-        qDebug() << "ipv6 dns changed";
-        setting.ipv6DnsConstruct(ipv6DnsList);
-        isChanged =  true;
-    }
-
+    KyIpConfigType type;
     if (ipv6ConfigCombox->currentIndex() == AUTO_CONFIG) {
+        type = CONFIG_IP_DHCP;
         if (info.ipv6ConfigType != CONFIG_IP_DHCP) {
             qDebug() << "ipv6ConfigType change to Auto";
-            setting.setIpConfigType(IPADDRESS_V6, CONFIG_IP_DHCP);
-            QString ipv6address("");
-            QString prefix("");
-            QString gateWay("");
-            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay);
             isChanged = true;
         }
     } else {
+        type = CONFIG_IP_MANUAL;
         if (info.ipv6ConfigType != CONFIG_IP_MANUAL) {
             qDebug() << "ipv6ConfigType change to Manual";
-            setting.setIpConfigType(IPADDRESS_V6, CONFIG_IP_MANUAL);
             isChanged =  true;
         }
 
-        QList<QHostAddress> ipv6dnsList;
-        ipv6dnsList.clear();
-        ipv6dnsList = m_dnsWidget->getDns();
         if(info.strIPV6Address != ipv6AddressEdit->text()
                 || info.iIPV6Prefix != lengthEdit->text().toInt()
                 || info.strIPV6GateWay != gateWayEdit->text()) {
 
-            qDebug() << "ipv6 info changed";
-
-            QString ipv6address =ipv6AddressEdit->text();
-            QString prefix = lengthEdit->text();
-            QString gateWay = gateWayEdit->text();
-            setting.ipv6AddressConstruct(ipv6address, prefix, gateWay);
-            setting.dumpInfo();
             isChanged =  true;
         }
+    }
+    QList<QHostAddress> ipv6dnsList;
+    ipv6dnsList.clear();
+    ipv6dnsList = m_dnsWidget->getDns();
+    if (info.ipv6DnsList != ipv6dnsList) {
+        isChanged = true;
+    }
+
+    if (isChanged) {
+        setting.setIpConfigType(IPADDRESS_V6, type);
+        QString ipv6address =ipv6AddressEdit->text();
+        QString prefix = lengthEdit->text();
+        QString gateWay = gateWayEdit->text();
+        setting.ipv6AddressConstruct(ipv6address, prefix, gateWay);
+        setting.ipv6DnsConstruct(ipv6dnsList);
+        setting.dumpInfo();
     }
     return isChanged;
 }
@@ -169,7 +162,7 @@ void Ipv6Page::initUI() {
     gateWayLayout->addWidget(m_gateWayHintLabel);
 
     QRegExp ipv6_rx("^\\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?\\s*$");
-    m_dnsWidget = new MultipleDnsWidget(ipv6_rx, this);
+    m_dnsWidget = new MultipleDnsWidget(ipv6_rx, false, this);
 
     m_detailLayout = new QFormLayout(this);
     m_detailLayout->setContentsMargins(0, 0, 0, 0);
@@ -181,6 +174,9 @@ void Ipv6Page::initUI() {
     m_detailLayout->addRow(m_subnetEmptyLabel);
     m_detailLayout->addRow(m_gateWayLabel,gateWayWidget);
     m_detailLayout->addRow(m_dnsWidget);
+
+    m_addressLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);  //解决布局错位问题
+    m_gateWayLabel->setContentsMargins(0, 0, 0, LABEL_HEIGHT);
 
     ipv6ConfigCombox->addItem(tr("Auto(DHCP)")); //"自动(DHCP)"
     ipv6ConfigCombox->addItem(tr("Manual")); //"手动"
@@ -210,6 +206,8 @@ void Ipv6Page::initComponent() {
     connect(ipv6AddressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(lengthEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
+
+    connect(m_dnsWidget, &MultipleDnsWidget::scrollToBottom, this, &Ipv6Page::scrollToBottom);
 }
 
 void Ipv6Page::configChanged(int index) {

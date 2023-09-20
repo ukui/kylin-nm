@@ -124,10 +124,10 @@ void WlanConnect::showDesktopNotify(const QString &message)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QList<QVariant> args;
-    args<<(tr("ukui control center"))
+    args<<(tr("Settings"))
        <<((unsigned int) 0)
        <<QString("gnome-dev-ethernet")
-       <<tr("ukui control center desktop message") //显示的是什么类型的信息
+       <<tr("Settings desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
        <<QStringList()
        <<QVariantMap()
@@ -231,6 +231,7 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
             if (!getSwitchBtnEnable()) {
                 showDesktopNotify(tr("No wireless network card detected"));
             } else {
+                UkccCommon::buriedSettings(QString("wlanconnect"), QString("Open"), QString("settings"),!getSwitchBtnState()?"true":"false");
                 if (m_interface != nullptr && m_interface->isValid()) {
                     m_interface->call(QStringLiteral("setWirelessSwitchEnable"), !getSwitchBtnState());
                 }
@@ -276,7 +277,7 @@ void WlanConnect::initComponent() {
     //删除无线网络
     connect(m_interface, SIGNAL(wlanRemove(QString, QString)), this, SLOT(onNetworkRemove(QString, QString)), Qt::QueuedConnection);
     //网卡插拔处理
-    connect(m_interface, SIGNAL(deviceStatusChanged()), this, SLOT(onDeviceStatusChanged()), Qt::QueuedConnection);
+    connect(m_interface, SIGNAL(wirelessDeviceStatusChanged()), this, SLOT(onDeviceStatusChanged()), Qt::QueuedConnection);
     //信号更新处理 改为每过固定时间 主动获取
 //    connect(m_interface, SIGNAL(signalStrengthChange(QString, QString, int)), this, SLOT(updateStrengthList(QString, QString, int)));
     //网卡name处理
@@ -287,6 +288,7 @@ void WlanConnect::initComponent() {
     //高级设置
     connect(ui->detailBtn, &QPushButton::clicked, this, [=](bool checked) {
         Q_UNUSED(checked)
+        UkccCommon::buriedSettings(QString("wlanconnect"), QString("Advanced settings"), QString("clicked"));
         runExternalApp();
     });
 
@@ -607,23 +609,33 @@ void WlanConnect::onActiveConnectionChanged(QString deviceName, QString ssid, QS
         if (!deviceFrameMap.contains(deviceName)) {
             return;
         }
-        for (int i = 0; i < deviceFrameMap[deviceName]->itemMap.size(); ++i) {
-            if (deviceFrameMap[deviceName]->itemMap.contains(ssid)) {
-                item = deviceFrameMap[deviceName]->itemMap[ssid];
-                if (status == ACTIVATED || status == ACTIVATING) {
-                    deviceFrameMap[deviceName]->itemMap[ssid]->uuid = uuid;
-                    deviceFrameMap[deviceName]->uuid = uuid;
-                    if (status == ACTIVATED) {
-                        deviceFrameMap[deviceName]->lanItemLayout->removeWidget(item);
-                        deviceFrameMap[deviceName]->lanItemLayout->insertWidget(0,item);
-                        deviceFrameMap[deviceName]->filletStyleChange();
-                    }
-                } else if (status == DEACTIVATED) {
-                    deviceFrameMap[deviceName]->itemMap[ssid]->uuid.clear();
-                    deviceFrameMap[deviceName]->uuid.clear();
-                    //todo 断开后排序 现在等下次更新列表 自动排序
+        if (deviceFrameMap[deviceName]->itemMap.contains(ssid)) {
+            item = deviceFrameMap[deviceName]->itemMap[ssid];
+            if (status == ACTIVATED || status == ACTIVATING) {
+                deviceFrameMap[deviceName]->itemMap[ssid]->uuid = uuid;
+                deviceFrameMap[deviceName]->uuid = uuid;
+                if (status == ACTIVATED) {
+                    deviceFrameMap[deviceName]->lanItemLayout->removeWidget(item);
+                    deviceFrameMap[deviceName]->lanItemLayout->insertWidget(0,item);
+                    deviceFrameMap[deviceName]->filletStyleChange();
                 }
-                break;
+            } else if (status == DEACTIVATED) {
+                deviceFrameMap[deviceName]->itemMap[ssid]->uuid.clear();
+                deviceFrameMap[deviceName]->uuid.clear();
+                //todo 断开后排序 现在等下次更新列表 自动排序
+            }
+        } else {
+            if (uuid == deviceFrameMap[deviceName]->uuid) {
+                QMap<QString, WlanItem*>::iterator itemIter;
+                for (itemIter = deviceFrameMap[deviceName]->itemMap.begin(); itemIter != deviceFrameMap[deviceName]->itemMap.end(); itemIter++) {
+                    if (itemIter.value()->uuid == uuid ) {
+                        item = itemIter.value();
+                        if (status == DEACTIVATED) {
+                            itemIter.value()->uuid.clear();
+                        }
+                        break;
+                    }
+                }
             }
         }
     }
@@ -704,7 +716,14 @@ void WlanConnect::getDeviceList(QStringList &list)
     auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
     QMap<QString,bool> map;
     dbusArg >> map;
-    list = map.keys();
+
+    //筛选已托管(managed)网卡
+    QMap<QString, bool>::iterator iters;
+    for (iters = map.begin(); iters != map.end(); ++iters) {
+        if (iters.value() == true) {
+            list << iters.key();
+        }
+    }
 }
 
 void WlanConnect::initSwtichState()
@@ -977,6 +996,7 @@ void WlanConnect::addDeviceFrame(QString devName)
     deviceFrameMap.insert(devName, itemFrame);
 
     connect(itemFrame->addWlanWidget, &AddNetBtn::clicked, this, [=](){
+        UkccCommon::buriedSettings(QString("wlanconnect"), QString("Add wlan"), QString("clicked"));
         if (m_interface != nullptr && m_interface->isValid()) {
             qDebug() << "[NetConnect]call showAddOtherWlanWidget" << devName  << __LINE__;
             m_interface->call(QStringLiteral("showAddOtherWlanWidget"), devName);
@@ -1048,6 +1068,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
         if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
+        UkccCommon::buriedSettings(QString("wlanconnect"), QString("info"), QString("clicked"));
         qDebug() << "[WlanConnect]call showPropertyWidget" << __LINE__;
         m_interface->call(QStringLiteral("showPropertyWidget"), deviceName, name);
         qDebug() << "[WlanConnect]call showPropertyWidget respond" << __LINE__;

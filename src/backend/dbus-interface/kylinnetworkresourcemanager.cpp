@@ -228,6 +228,11 @@ void KyNetworkResourceManager::removeDevice(int pos)
 {
     //connections signals
     NetworkManager::Device::Ptr device = m_devices.takeAt(pos);
+
+    QDBusConnection::systemBus().disconnect(QString("org.freedesktop.NetworkManager"),
+                                            device.data()->uni(),
+                                            QString("org.freedesktop.NetworkManager.Device"),
+                                            QString("AcdIpProbed"), this, SIGNAL(needShowDesktop(QString)));
     device->disconnect(this);
 }
 
@@ -303,6 +308,10 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
             //TODO: other device types!
             break;
     }
+    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                         device.data()->uni(),
+                                         QString("org.freedesktop.NetworkManager.Device"),
+                                         QString("AcdIpProbed"), this, SIGNAL(needShowDesktop(QString)));
 }
 
 void KyNetworkResourceManager::insertDevices()
@@ -449,8 +458,8 @@ NetworkManager::Connection::Ptr KyNetworkResourceManager::getConnect(const QStri
     int index = 0;
     NetworkManager::Connection::Ptr connectPtr = nullptr;
 
-    qDebug() <<"[KyNetworkResourceManager]" << "get connect with uuid" << connectUuid;
     if (connectUuid.isEmpty()) {
+        qWarning() << "[KyNetworkResourceManager]" << "get connect with uuid is empty";
         return nullptr;
     }
 
@@ -464,8 +473,7 @@ NetworkManager::Connection::Ptr KyNetworkResourceManager::getConnect(const QStri
             return connectPtr;
         }
     }
-
-    qWarning()<<"[KyNetworkResourceManager]"<<"it can not find connect with uuid"<<connectUuid;
+    qWarning() << "[KyNetworkResourceManager]" << "it can not find connect with uuid" << connectUuid;
 
     return nullptr;
 }

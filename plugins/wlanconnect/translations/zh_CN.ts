@@ -23,49 +23,57 @@
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
-        <location filename="../wlanconnect.cpp" line="144"/>
-        <location filename="../wlanconnect.cpp" line="215"/>
+        <location filename="../wlanconnect.cpp" line="140"/>
+        <location filename="../wlanconnect.cpp" line="211"/>
         <source>WLAN</source>
         <translation>无线局域网</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
-        <location filename="../wlanconnect.cpp" line="217"/>
+        <location filename="../wlanconnect.cpp" line="213"/>
         <source>open</source>
         <translation>开启</translation>
         <extra-contents_path>/wlanconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
-        <location filename="../wlanconnect.cpp" line="214"/>
+        <location filename="../wlanconnect.cpp" line="210"/>
         <source>Advanced settings</source>
         <translation>高级设置</translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="127"/>
         <source>ukui control center</source>
-        <translation>控制面板</translation>
+        <translation type="vanished">控制面板</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="130"/>
         <source>ukui control center desktop message</source>
-        <translation>控制面板桌面通知</translation>
+        <translation type="vanished">控制面板桌面通知</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="232"/>
+        <location filename="../wlanconnect.cpp" line="123"/>
+        <source>Settings</source>
+        <translation>设置</translation>
+    </message>
+    <message>
+        <location filename="../wlanconnect.cpp" line="126"/>
+        <source>Settings desktop message</source>
+        <translation>设置 桌面通知</translation>
+    </message>
+    <message>
+        <location filename="../wlanconnect.cpp" line="228"/>
         <source>No wireless network card detected</source>
         <translation>未检测到无线网卡</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="368"/>
-        <location filename="../wlanconnect.cpp" line="1039"/>
-        <location filename="../wlanconnect.cpp" line="1101"/>
+        <location filename="../wlanconnect.cpp" line="364"/>
+        <location filename="../wlanconnect.cpp" line="1033"/>
+        <location filename="../wlanconnect.cpp" line="1095"/>
         <source>connected</source>
         <translation>已连接</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="976"/>
+        <location filename="../wlanconnect.cpp" line="970"/>
         <source>card</source>
         <translation>网卡</translation>
     </message>

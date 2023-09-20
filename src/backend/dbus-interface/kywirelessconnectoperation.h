@@ -33,14 +33,15 @@
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 const QString    WIRELESS_SWITCH  = "wirelessswitch";
 
-const QString    WIFI_BAND_2_4GHZ = "2.4Ghz";
-const QString    WIFI_BAND_5GHZ   = "5Ghz";
+const QString    WIFI_BAND_2_4GHZ = "2.4GHz";
+const QString    WIFI_BAND_5GHZ   = "5GHz";
 
 enum KySecuType {
     NONE = 0,
     WPA_AND_WPA2_PERSONAL,
     WPA_AND_WPA2_ENTERPRISE,
     WPA3_PERSONAL,
+    WPA_AND_WPA3,
 };
 
 enum KyKeyMgmt {

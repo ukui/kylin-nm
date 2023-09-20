@@ -84,13 +84,6 @@ void SecurityPage::initUI()
     userPwdEdit->setUseCustomPalette(true);
     userPwdFlagBox = new QCheckBox(this);
 
-    QWidget *queryWidget = new QWidget(this);
-    QHBoxLayout *queryLayout = new QHBoxLayout(queryWidget);
-    queryLayout->setContentsMargins(0, 0, 0, 0);
-    queryLayout->addWidget(userPwdFlagBox);
-    queryLayout->addWidget(userPwdFlagLabel);
-    queryLayout->addStretch();
-
     //FAST
     m_pacCheckBox = new QCheckBox(this);
     m_pacProvisionComboBox = new QComboBox(this);
@@ -99,6 +92,13 @@ void SecurityPage::initUI()
     m_pacProvisionLabel->setFixedWidth(MIN_LABEL_WIDTH);
     m_pacFlagLabel = new FixLabel(this);
     m_pacFileLabel = new QLabel(this);
+
+    QWidget *queryWidget = new QWidget(this);
+    QHBoxLayout *queryLayout = new QHBoxLayout(queryWidget);
+    queryLayout->setContentsMargins(0, 0, 0, 0);
+    queryLayout->addWidget(userPwdFlagBox);
+    queryLayout->addWidget(userPwdFlagLabel);
+    queryLayout->addStretch();
 
     //记住该网络复选框
     m_emptyLabel = new QLabel(this);
@@ -155,7 +155,6 @@ void SecurityPage::initUI()
     //密码 Label和密码框
     topLayout->addWidget(userPwdLabel, 9, 0);
     topLayout->addWidget(userPwdEdit, 9, 1);
-
 
     // CA证书选项框及CheckBox布局
     QWidget *caWidget = new QWidget(this);
@@ -1214,14 +1213,13 @@ void SecurityPage::changeColumnWidthWithSecuType()
     if (!isDetailPage) {
         return;
     }
-    if (secuTypeCombox->currentData().toInt() == WPA_AND_WPA2_ENTERPRISE) {
-        if (eapMethodCombox->currentData().toInt() == TLS || eapMethodCombox->currentData().toInt() == FAST) {
-            topLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH);
-            topLayout->setColumnMinimumWidth(1, MIN_EDIT_WIDTH);
-            bottomLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH - 8);
+    if (secuTypeCombox->currentData().toInt() == WPA_AND_WPA2_ENTERPRISE &&
+            eapMethodCombox->currentData().toInt() == TLS) {
+        topLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH);
+        topLayout->setColumnMinimumWidth(1, MIN_EDIT_WIDTH);
+        bottomLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH - 8);
 
-        }
-    }else {
+    } else {
         topLayout->setColumnMinimumWidth(0, DETAIL_MIN_LABEL_WIDTH);
         topLayout->setColumnMinimumWidth(1, DETAIL_MIN_EDIT_WIDTH);
     }

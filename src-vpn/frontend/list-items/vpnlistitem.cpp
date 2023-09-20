@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -191,11 +191,16 @@ void VpnListItem::runExternalApp() {
 
 void VpnListItem::onInfoButtonClicked()
 {
+#ifdef VPNDETAIL
     if (m_vpnConnectItem.m_itemType != NetworkManager::ConnectionSettings::ConnectionType::Vpn) {
+#else
+    if (true) {
+#endif
         runExternalApp();
         return;
     }
 
+#ifdef VPNDETAIL
     if(m_vpnDetail != nullptr){
         m_vpnDetail->activateWindow();
         return;
@@ -209,6 +214,7 @@ void VpnListItem::onInfoButtonClicked()
 
     m_vpnDetail->show();
     m_vpnDetail->centerToScreen();
+#endif
 }
 
 void VpnListItem::updateConnectionState(ConnectState state)

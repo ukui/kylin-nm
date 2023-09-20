@@ -32,7 +32,7 @@ enum KyEapMethodType {
     TTLS,
     LEAP,
     PWD,
-    FAST,
+    FAST
 };
 
 class KyEapMethodTlsInfo

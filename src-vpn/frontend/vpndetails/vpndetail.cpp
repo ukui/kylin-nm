@@ -1,3 +1,22 @@
+/*
+ *
+ * Copyright (C) 2023, KylinSoft Co., Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ *
+ */
 #include "vpndetail.h"
 
 #define  WINDOW_WIDTH  520
@@ -83,7 +102,7 @@ void VpnDetail::initUI()
     m_topWidget = new QWidget(this);
     m_centerWidget = new QWidget(this);
     m_bottomWidget = new QWidget(this);
-    m_divider = new Divider(this);
+    m_divider = new Divider(false, this);
     m_vpnTabBar = new VpnTabBar(this);
     m_autoConnectBox = new QCheckBox(this);
     m_autoConnectLabel = new QLabel(this);

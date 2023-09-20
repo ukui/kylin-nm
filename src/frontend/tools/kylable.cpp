@@ -24,7 +24,7 @@
 #include <QFontMetrics>
 #include <QGSettings>
 
-#define FOREGROUND_COLOR_NORMAL qApp->palette().text().color()
+#define FOREGROUND_COLOR_NORMAL this->palette().text().color()
 
 static inline qreal mixQreal(qreal a, qreal b, qreal bias)
 {

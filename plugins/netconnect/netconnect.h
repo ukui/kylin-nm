@@ -54,8 +54,10 @@
 #include "itemframe.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
 
 enum {
     DISCONNECTED,
@@ -99,7 +101,6 @@ private:
     void showLayout(QVBoxLayout * layout);
 
     int getInsertPos(QString connName, QString deviceName);
-
 
     void deleteOneLan(QString ssid, int type);
     void activeConnect(QString ssid, QString deviceName, int type);

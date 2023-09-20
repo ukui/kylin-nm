@@ -47,8 +47,10 @@
 #include "wlanitem.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
 
 namespace Ui {
 class WlanConnect;
@@ -148,8 +150,8 @@ private:
             return m_wifiSwitch->isChecked();
         }
     }
-
     bool LaunchApp(QString desktopFile);
+
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 

@@ -127,6 +127,7 @@ QWidget *Proxy::pluginUi() {
         } else {
             qCritical() << "Xml needed by Proxy is not installed";
         }
+        setUkccProxySettings();
     }
     return pluginWidget;
 }
@@ -428,14 +429,21 @@ void Proxy::initUi(QWidget *widget)
     AptLayout->addWidget(line_7);
     AptLayout->addWidget(mAPTFrame_2);
 
+    m_sysSpacerFrame = new QFrame(widget);
+    m_sysSpacerFrame->setFixedHeight(32);
+    m_appListSpacerFrame = new QFrame(widget);
+    m_appListSpacerFrame->setFixedHeight(4);
+    m_appSpacerFrame = new QFrame(widget);;
+    m_appSpacerFrame->setFixedHeight(32);;
+
     mverticalLayout->addWidget(mTitleLabel);
     mverticalLayout->addWidget(mProxyFrame);
-    mverticalLayout->addSpacing(32);
+    mverticalLayout->addWidget(m_sysSpacerFrame);
     mverticalLayout->addWidget(m_appProxyLabel);
     mverticalLayout->addWidget(m_appProxyFrame);
-    mverticalLayout->addSpacing(4);
+    mverticalLayout->addWidget(m_appListSpacerFrame);
     mverticalLayout->addWidget(m_appListFrame);
-    mverticalLayout->addSpacing(32);
+    mverticalLayout->addWidget(m_appSpacerFrame);
     mverticalLayout->addWidget(mAptProxyLabel);
     mverticalLayout->addWidget(mAPTFrame);
     mverticalLayout->addStretch();
@@ -464,8 +472,11 @@ void Proxy::retranslateUi()
     mSOCKSPortLabel->setText(tr("Port"));
     mIgnoreLabel->setText(tr("List of ignored hosts. more than one entry, please separate with english semicolon(;)"));
 
-    //~ contents_path /Proxy/Apt Proxy
-    mAptProxyLabel->setText(tr("Apt Proxy"));
+    //~ contents_path /Proxy/App Proxy
+    tr("App Proxy");
+
+    //~ contents_path /Proxy/APT Proxy
+    mAptProxyLabel->setText(tr("APT Proxy"));
     mAptLabel->setText(tr("Open"));
     mAPTHostLabel_1->setText(tr("Server Address : "));
     mAPTPortLabel_1->setText(tr("Port : "));
@@ -517,6 +528,7 @@ void Proxy::setupComponent(){
 
 void Proxy::setupConnect(){
     connect(mEnableBtn, &KSwitchButton::stateChanged, this ,[=](bool checked) {
+        UkccCommon::buriedSettings(QString("Proxy"), QString("System Proxy Open"), QString("settings"), checked?"true":"false");
         mSelectFrame->setVisible(checked);
         line_8->setVisible(checked);
         mAutoBtn->setChecked(checked);
@@ -530,9 +542,11 @@ void Proxy::setupConnect(){
 
     connect(mProxyBtnGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), [=](QAbstractButton * eBtn){
         if (eBtn == mAutoBtn) {
+            UkccCommon::buriedSettings(QString("Proxy"), QString("auto"), QString("clicked"));
             mManualBtn->setChecked(false);
             proxysettings->set(PROXY_MODE_KEY,"auto");
         } else if (eBtn == mManualBtn){
+            UkccCommon::buriedSettings(QString("Proxy"), QString("manual"), QString("clicked"));
             mAutoBtn->setChecked(false);
             proxysettings->set(PROXY_MODE_KEY,"manual");
         }
@@ -557,6 +571,7 @@ void Proxy::setupConnect(){
     });
 
     connect(mAptBtn , &KSwitchButton::stateChanged, this ,[=](bool checked){
+        UkccCommon::buriedSettings(QString("Proxy"), QString("Apt Proxy Open"), QString("settings"), checked?"true":"false");
         if (checked) {
             emit mEditBtn->click();
         } else {   // 关闭APT代理，删除对应的配置文件
@@ -567,7 +582,7 @@ void Proxy::setupConnect(){
             } else {
                 QMessageBox *mReboot = new QMessageBox(pluginWidget->topLevelWidget());
                 mReboot->setIcon(QMessageBox::Warning);
-                mReboot->setText(tr("The apt proxy  has been turned off and needs to be restarted to take effect"));
+                mReboot->setText(tr("The APT proxy has been turned off and needs to be restarted to take effect"));
                 QPushButton *laterbtn =  mReboot->addButton(tr("Reboot Later"), QMessageBox::RejectRole);
                 QPushButton *nowbtn =   mReboot->addButton(tr("Reboot Now"), QMessageBox::AcceptRole);
                 mReboot->exec();
@@ -716,13 +731,10 @@ void Proxy::initDbus()
 void Proxy::initAppProxyStatus()
 {
     bool state = getAppProxyState();
-    m_appEnableBtn->setChecked(state);
-    onappProxyEnableChanged(state);
-
     appProxyInfoPadding();
-//    m_cancelBtn->setEnabled(false);
-//    m_saveBtn->setEnabled(false);
     appListPadding();
+    m_appEnableBtn->setChecked(state);
+    setAppProxyUiEnable(state);
 }
 
 int Proxy::_getCurrentProxyMode(){
@@ -807,7 +819,7 @@ void Proxy::setAptInfo()
 {
     QMessageBox *mReboot = new QMessageBox(pluginWidget->topLevelWidget());
     mReboot->setIcon(QMessageBox::Warning);
-    mReboot->setText(tr("The system needs to be restarted to set the Apt proxy, whether to reboot"));
+    mReboot->setText(tr("The system needs to be restarted to set the APT proxy, whether to reboot"));
     QPushButton *laterbtn =  mReboot->addButton(tr("Reboot Later"), QMessageBox::RejectRole);
     QPushButton *nowbtn =   mReboot->addButton(tr("Reboot Now"), QMessageBox::AcceptRole);
     mReboot->exec();
@@ -965,6 +977,50 @@ QMap<QString, QStringList> Proxy::getAppListProxy()
     }
 
     return appList;
+}
+
+void Proxy::setUkccProxySettings()
+{
+    setSystemProxyFrameHidden(false);
+    setAppProxyFrameHidden(false);
+    setAPTProxyFrameHidden(false);
+
+    QDBusInterface ukccDbusInterface("org.ukui.ukcc.session",
+                       "/",
+                       "org.ukui.ukcc.session.interface",
+                       QDBusConnection::sessionBus());
+
+    if(!ukccDbusInterface.isValid()) {
+        qWarning() << "ukccDbusInterface is invalid";
+        return;
+    }
+
+    QDBusReply<QMap<QString, QVariant> > reply = ukccDbusInterface.call("getModuleHideStatus");
+    if (!reply.isValid()) {
+        qWarning() << "reply of getModuleHideStatus is invalid";
+        return;
+    }
+
+    QStringList proxySettingList;
+    if (reply.value().contains("proxySettings")) {
+        QString proxySettings = reply.value()["proxySettings"].toString();
+        qDebug() << "proxySettings" << proxySettings;
+
+        if (proxySettings.isEmpty()) {
+            return;
+        }
+        proxySettingList = proxySettings.split(",");
+    }
+
+    for (const QString setting : proxySettingList) {
+        if (setting.contains("SystemProxyFrame") && setting.contains("false")) {
+            setSystemProxyFrameHidden(true);
+        } else if (setting.contains("AppProxyFrame") && setting.contains("false")) {
+            setAppProxyFrameHidden(true);
+        } else if (setting.contains("APTProxyFrame") && setting.contains("false")) {
+            setAPTProxyFrameHidden(true);
+        }
+    }
 }
 
 #if 0
@@ -1130,22 +1186,32 @@ void Proxy::setAppProxyFrameUi(QWidget *widget)
     m_appLine4 = setLine(m_appProxyFrame);
     m_appLine5 = setLine(m_appProxyFrame);
 
+    m_appProxyInfoWidget = new QWidget(m_appProxyFrame);
+    QVBoxLayout *widgetHLayout = new QVBoxLayout(m_appProxyInfoWidget);
+    widgetHLayout->setContentsMargins(0, 0, 0, 0);
+    widgetHLayout->setSpacing(0);
+    widgetHLayout->addWidget(m_appLine1);
+    widgetHLayout->addWidget(m_proxyTypeFrame);
+    widgetHLayout->addWidget(m_appLine2);
+    widgetHLayout->addWidget(m_ipAddressFrame);
+    widgetHLayout->addWidget(m_appLine3);
+    widgetHLayout->addWidget(m_portFrame);
+    widgetHLayout->addWidget(m_appLine4);
+    widgetHLayout->addWidget(m_userNameFrame);
+    widgetHLayout->addWidget(m_appLine5);
+    widgetHLayout->addWidget(m_pwdFrame);
+
     appProxyLayout->addWidget(m_appEnableFrame);
-    appProxyLayout->addWidget(m_appLine1);
-    appProxyLayout->addWidget(m_proxyTypeFrame);
-    appProxyLayout->addWidget(m_appLine2);
-    appProxyLayout->addWidget(m_ipAddressFrame);
-    appProxyLayout->addWidget(m_appLine3);
-    appProxyLayout->addWidget(m_portFrame);
-    appProxyLayout->addWidget(m_appLine4);
-    appProxyLayout->addWidget(m_userNameFrame);
-    appProxyLayout->addWidget(m_appLine5);
-    appProxyLayout->addWidget(m_pwdFrame);
+    appProxyLayout->addWidget(m_appProxyInfoWidget);
+
 //    appProxyLayout->addWidget(line5);
 //    appProxyLayout->addWidget(m_appBtnFrame);
 
-    connect(m_appEnableBtn, &KSwitchButton::stateChanged, this, &Proxy::onappProxyEnableChanged);
+    connect(m_appEnableBtn, &KSwitchButton::stateChanged, this, &Proxy::setAppProxyUiEnable);
     connect(m_appEnableBtn, &KSwitchButton::stateChanged, this, &Proxy::setAppProxyState);
+    connect(m_appEnableBtn, &KSwitchButton::stateChanged, [=](bool checked) {
+        UkccCommon::buriedSettings(QString("Proxy"), QString("App Proxy Open"), QString("settings"), checked?"true":"false");
+    });
     connect(m_proxyTypeComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(onAppProxyConfChanged()));
     connect(m_ipAddressLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onipEditStateChanged()));
     connect(m_ipAddressLineEdit, SIGNAL(textChanged(QString)), this, SLOT(onAppProxyConfChanged()));
@@ -1180,6 +1246,7 @@ void Proxy::setAppListFrameUi(QWidget *widget)
     m_appListWidget->setMinimumHeight(240);
     m_appListWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     m_appListWidget->setFrameShape(QFrame::Shape::Panel);
+    m_appListWidget->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
 
     appListLayout->addWidget(m_allowAppProxyLabel);
     appListLayout->addWidget(m_appListWidget);
@@ -1223,7 +1290,7 @@ void Proxy::appListPadding()
 
         AppListWidget *appWidget = new AppListWidget(index, m_appListWidget);
         appWidget->setAppName(appInfo.value(0));
-        appWidget->setAppIcon(QIcon::fromTheme(appInfo.value(1)).pixmap(24, 24));
+        appWidget->setAppIcon(QIcon::fromTheme(appInfo.value(1)));
         appWidget->setAppChecked(flag);
 
         QListWidgetItem *appListWidgetItem = new QListWidgetItem(m_appListWidget);
@@ -1245,6 +1312,32 @@ bool Proxy::getipEditState(QString text)
     match = rx.exactMatch(text);
 
     return match;
+}
+
+void Proxy::setSystemProxyFrameHidden(bool state)
+{
+    mTitleLabel->setHidden(state);
+    mProxyFrame->setHidden(state);
+    m_sysSpacerFrame->setHidden(state);
+}
+
+void Proxy::setAppProxyFrameHidden(bool state)
+{
+    m_appProxyLabel->setHidden(state);
+    m_appProxyFrame->setHidden(state);
+    if (state) {
+        m_appListFrame->setHidden(state);
+    } else {
+        m_appListFrame->setHidden(!m_appEnableBtn->isChecked());
+    }
+    m_appListSpacerFrame->setHidden(state);
+    m_appSpacerFrame->setHidden(state);
+}
+
+void Proxy::setAPTProxyFrameHidden(bool state)
+{
+    mAptProxyLabel->setHidden(state);
+    mAPTFrame->setHidden(state);
 }
 
 void Proxy::onipEditStateChanged()
@@ -1298,19 +1391,15 @@ void Proxy::onPaletteChanged()
     m_appListWidget->setPalette(mpal);
 }
 
-void Proxy::onappProxyEnableChanged(bool enable)
+void Proxy::setAppProxyUiEnable(bool enable)
 {
-    m_proxyTypeFrame->setVisible(enable);
-    m_ipAddressFrame->setVisible(enable);
-    m_portFrame->setVisible(enable);
-    m_userNameFrame->setVisible(enable);
-    m_pwdFrame->setVisible(enable);
-    m_appListFrame->setVisible(enable);
-    m_appLine1->setVisible(enable);
-    m_appLine2->setVisible(enable);
-    m_appLine3->setVisible(enable);
-    m_appLine4->setVisible(enable);
-    m_appLine5->setVisible(enable);
+    if (enable) {
+        m_appProxyInfoWidget->show();
+        m_appListFrame->show();
+    } else {
+        m_appProxyInfoWidget->hide();
+        m_appListFrame->hide();
+    }
 }
 
 #if 0

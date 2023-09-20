@@ -24,9 +24,7 @@
 #include <QFormLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QDesktopWidget>
 
-#include "windowmanager/windowmanager.h"
 #include "coninfo.h"
 #include "kywirelessconnectoperation.h"
 #include "securitypage.h"
@@ -45,7 +43,6 @@ public:
     JoinHiddenWiFiPage(QString devName, KDialog *parent = nullptr);
     ~JoinHiddenWiFiPage();
 
-    void centerToScreen();
 protected:
     void closeEvent(QCloseEvent *event);
 
@@ -88,7 +85,6 @@ private Q_SLOTS:
     void onBtnShowListClicked();
     void onSecuTypeChanged(const KySecuType &type);
     void onEapTypeChanged(const KyEapMethodType &type);
-    void onPaletteChanged();
 
 Q_SIGNALS:
     void hiddenWiFiPageClose(QString);

@@ -97,13 +97,14 @@ public:
     NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent = nullptr);
     ~NetDetail();
 
+    void centerToScreen();
+
     void paintEvent(QPaintEvent *event);
     void closeEvent(QCloseEvent *event);
     bool eventFilter(QObject *w, QEvent *event);
 
 private:
     void initUI();
-    void centerToScreen();
     void initComponent();
     void getConInfo(ConInfo &conInfo);
     void loadPage();

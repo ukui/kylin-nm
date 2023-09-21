@@ -24,7 +24,9 @@
 #include <QFormLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QDesktopWidget>
 
+#include "windowmanager/windowmanager.h"
 #include "coninfo.h"
 #include "kywirelessconnectoperation.h"
 #include "securitypage.h"
@@ -43,6 +45,7 @@ public:
     JoinHiddenWiFiPage(QString devName, KDialog *parent = nullptr);
     ~JoinHiddenWiFiPage();
 
+    void centerToScreen();
 protected:
     void closeEvent(QCloseEvent *event);
 

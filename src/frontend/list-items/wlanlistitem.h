@@ -90,6 +90,7 @@ protected:
     void leaveEvent(QEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void paintEvent(QPaintEvent *event);
 
 Q_SIGNALS:
     void itemHeightChanged(const bool isExpanded, const QString &ssid);

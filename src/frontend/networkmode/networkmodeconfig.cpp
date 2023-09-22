@@ -104,10 +104,7 @@ NetworkMode::NetworkMode(QObject *parent)
 {
     qRegisterMetaType<NetworkManager::Device::State>("NetworkManager::Device::State");
     qRegisterMetaType<NetworkManager::Device::StateChangeReason>("NetworkManager::Device::StateChangeReason");
-    m_deviceResource = new KyNetworkDeviceResourse(this);
     m_activatedConnectResource = new KyActiveConnectResourse(this);
-    m_connectResource = new KyConnectResourse(this);
-    m_wirelessNetResource = new KyWirelessNetResource(this);
     connect(m_activatedConnectResource, &KyActiveConnectResourse::stateChangeReason,
             this, &NetworkMode::onConnectionStateChanged);
 }
@@ -116,7 +113,8 @@ void NetworkMode::initWiredNetworkMode()
 {
     qDebug()<< LOG_FLAG << "initWiredNetworkMode";
     QStringList wiredDevList;
-    m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
+    KyNetworkDeviceResourse deviceResource;
+    deviceResource.getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, wiredDevList);
     if (wiredDevList.isEmpty()) {
         return;
     }
@@ -148,14 +146,16 @@ void NetworkMode::initWirelessNetworkMode()
 {
     qDebug()<< LOG_FLAG << "initWirelessNetworkMode";
     QStringList wirelessDevList;
-    m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
+    KyNetworkDeviceResourse deviceResource;
+    deviceResource.getNetworkDeviceList(NetworkManager::Device::Type::Wifi, wirelessDevList);
     if (wirelessDevList.isEmpty()) {
         return;
     }
 
     for (auto devName : wirelessDevList) {
         KyWirelessNetItem wirelessNetItem;
-        bool ret = m_wirelessNetResource->getActiveWirelessNetItem(devName, wirelessNetItem);
+        KyWirelessNetResource wirelessNetResource;
+        bool ret = wirelessNetResource.getActiveWirelessNetItem(devName, wirelessNetItem);
 
         if (ret == true) {
             int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(wirelessNetItem.m_connectUuid);
@@ -205,9 +205,10 @@ void NetworkMode::onConnectionStateChanged(QString uuid,
         QString ssid = "";
 
         int configType = NetworkModeConfig::getInstance()->getNetworkModeConfig(uuid);
+        KyConnectResourse connectResource;
 
         //有线网络连接
-        if (m_connectResource->isWiredConnection(uuid)) {
+        if (connectResource.isWiredConnection(uuid)) {
             KyConnectItem *p_newItem = nullptr;
             p_newItem = m_activatedConnectResource->getActiveConnectionByUuid(uuid);
             if (nullptr == p_newItem) {
@@ -229,9 +230,10 @@ void NetworkMode::onConnectionStateChanged(QString uuid,
             }
         }
         //无线网络连接
-        if (m_connectResource->isWirelessConnection(uuid)) {
-            m_wirelessNetResource->getSsidByUuid(uuid, ssid);
-            m_wirelessNetResource->getDeviceByUuid(uuid, deviceName);
+        if (connectResource.isWirelessConnection(uuid)) {
+            KyWirelessNetResource wirelessNetResource;
+            wirelessNetResource.getSsidByUuid(uuid, ssid);
+            wirelessNetResource.getDeviceByUuid(uuid, deviceName);
             if (ssid.isEmpty()) {
                 //忘记此网络
                 qDebug()<< LOG_FLAG << "forgrt wireless connect:" << uuid <<", call break_networkConnect";

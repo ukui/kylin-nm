@@ -102,7 +102,6 @@ void VpnIpv6Page::updateVpnIpv6Info(KyVpnConfig &vpnInfo)
         QString netMask("");
         QString gateWay("");
         vpnInfo.setIpConfigType(IPADDRESS_V6, CONFIG_IP_DHCP);
-        vpnInfo.ipv6AddressConstruct(ipv6address, netMask, gateWay);
         qDebug() << LOG_FLAG << "IPv6 method" << vpnInfo.m_ipv6ConfigIpType;
         qDebug() << LOG_FLAG <<  "Update IPv6 info finished";
     } else {
@@ -111,7 +110,6 @@ void VpnIpv6Page::updateVpnIpv6Info(KyVpnConfig &vpnInfo)
         QString gateWay = m_gateWayEdit->text();
         qDebug() << ipv6address << netMask << gateWay;
         vpnInfo.setIpConfigType(IPADDRESS_V6, CONFIG_IP_MANUAL);
-        vpnInfo.ipv6AddressConstruct(ipv6address, netMask, gateWay);
         vpnInfo.dumpInfo();
         qDebug() << LOG_FLAG <<  "Update IPv6 info finished";
     }
@@ -121,7 +119,6 @@ void VpnIpv6Page::updateVpnIpv6Info(KyVpnConfig &vpnInfo)
     if (!m_dnsServerEdit->text().isEmpty()) {
         ipv6DnsList.append(QHostAddress(m_dnsServerEdit->text()));
     }
-    vpnInfo.ipv6DnsConstruct(ipv6DnsList);
 
     vpnInfo.m_ipv6DnsSearch.clear();
     vpnInfo.m_ipv6DnsSearch.append(m_searchDomainEdit->text());

@@ -191,11 +191,16 @@ void VpnListItem::runExternalApp() {
 
 void VpnListItem::onInfoButtonClicked()
 {
+#ifdef VPNDETAIL
     if (m_vpnConnectItem.m_itemType != NetworkManager::ConnectionSettings::ConnectionType::Vpn) {
+#else
+    if (true) {
+#endif
         runExternalApp();
         return;
     }
 
+#ifdef VPNDETAIL
     if(m_vpnDetail != nullptr){
         m_vpnDetail->activateWindow();
         return;
@@ -209,6 +214,7 @@ void VpnListItem::onInfoButtonClicked()
 
     m_vpnDetail->show();
     m_vpnDetail->centerToScreen();
+#endif
 }
 
 void VpnListItem::updateConnectionState(ConnectState state)

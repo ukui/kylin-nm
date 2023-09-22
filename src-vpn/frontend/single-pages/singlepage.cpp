@@ -26,11 +26,16 @@
 #include <QPainterPath>
 #include <KWindowEffects>
 
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME  "styleName"
+
 SinglePage::SinglePage(QWidget *parent) : QWidget(parent)
 {
+    setThemePalette();
     initUI();
     initWindowProperties();
     initTransparency();
+    initWindowTheme();
 }
 
 SinglePage::~SinglePage()
@@ -53,7 +58,7 @@ void SinglePage::initUI()
     m_titleLayout->addWidget(m_titleLabel);
     m_titleLayout->addStretch();
 
-    m_netDivider = new Divider(this);
+    m_netDivider = new Divider(true, this);
 
     m_listFrame = new QFrame(this);
     m_listLayout = new QVBoxLayout(m_listFrame);
@@ -61,8 +66,9 @@ void SinglePage::initUI()
     m_listFrame->setLayout(m_listLayout);
     m_listWidget = new QListWidget(m_listFrame);
     m_listLayout->addWidget(m_listWidget);
+    m_listWidget->setProperty("needTranslucent", true);
 
-    m_setDivider = new Divider(this);
+    m_setDivider = new Divider(true, this);
 
     m_settingsFrame = new QFrame(this);
     m_settingsFrame->setFixedHeight(TITLE_FRAME_HEIGHT);
@@ -104,6 +110,20 @@ void SinglePage::initWindowProperties()
     }
 }
 
+/**
+ * @brief SinglePage::initWindowTheme 初始化窗口主题并创建信号槽
+ */
+void SinglePage::initWindowTheme()
+{
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+        m_styleGsettings = new QGSettings(style_id, QByteArray(), this);
+        connect(m_styleGsettings, &QGSettings::changed, this, &SinglePage::onThemeChanged);
+    } else {
+        qWarning() << "Gsettings interface \"org.ukui.style\" is not exist!" << Q_FUNC_INFO << __LINE__;
+    }
+}
+
 void SinglePage::showDesktopNotify(const QString &message, QString soundName)
 {
     QDBusInterface iface("org.freedesktop.Notifications",
@@ -111,8 +131,8 @@ void SinglePage::showDesktopNotify(const QString &message, QString soundName)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QStringList actions;  //跳转动作
-    actions.append("kylin-vpn");
-    actions.append("default");          //默认动作：点击消息体时打开麒麟录音
+    actions.append("default");
+    actions.append("kylin-vpn");          //默认动作：点击消息体时打开麒麟录音
     QMap<QString, QVariant> hints;
     if (!soundName.isEmpty()) {
         hints.insert("sound-name",soundName); //添加声音
@@ -134,7 +154,7 @@ void SinglePage::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::transparent);
-    QColor col = qApp->palette().window().color();
+    QColor col = this->palette().window().color();
 
     QPainterPath rectPath;
 
@@ -165,10 +185,37 @@ void SinglePage::onTransChanged()
     paintWithTrans();
 }
 
+void SinglePage::onThemeChanged(const QString &key)
+{
+    if (key == COLOR_THEME) {
+        setThemePalette();
+        paintWithTrans();
+        Q_EMIT qApp->paletteChanged(qApp->palette());
+    }  else if ("themeColor" == key) {
+        setThemePalette();
+    }
+}
+
+void SinglePage::setThemePalette()
+{
+    QPalette pal = qApp->palette();
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id, QByteArray(), this);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = themePalette(true, this);
+       }
+    }
+    pal.setColor(QPalette::Background, pal.base().color());
+    this->setPalette(pal);
+}
+
 void SinglePage::paintWithTrans()
 {
     QPalette pal = this->palette();
-    QColor color = qApp->palette().base().color();
+    QColor color = this->palette().base().color();
     color.setAlphaF(m_transparency);
     pal.setColor(QPalette::Window, color);
     this->setPalette(pal);
@@ -181,5 +228,3 @@ void SinglePage::keyPressEvent(QKeyEvent *event)
     }
     return QWidget::keyPressEvent(event);
 }
-
-

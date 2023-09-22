@@ -17,7 +17,8 @@
  *
  *
  */
-    #ifndef VPNIPV6PAGE_H
+
+#ifndef VPNIPV6PAGE_H
 #define VPNIPV6PAGE_H
 
 #include <QWidget>

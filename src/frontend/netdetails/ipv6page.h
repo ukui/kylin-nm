@@ -54,13 +54,12 @@ public:
     void stopLoading();
     void showIpv6AddressConflict(bool isConflict);
 
-public:
+private:
     QComboBox *ipv6ConfigCombox;
     LineEdit *ipv6AddressEdit;
     LineEdit *lengthEdit;
     LineEdit *gateWayEdit;
 
-private:
     QFormLayout *m_detailLayout;
     QLabel *m_configLabel;
     QLabel *m_addressLabel;
@@ -81,6 +80,7 @@ private:
 
     QLabel *m_iconLabel;
     QLabel *m_textLabel;
+
 private:
     void initUI();
     void initComponent();
@@ -104,6 +104,7 @@ private Q_SLOTS:
 Q_SIGNALS:
     void setIpv6PageState(bool);
     void ipv6EditFinished(const QString &address);
+    void scrollToBottom();
 };
 
 #endif // IPV6PAGE_H

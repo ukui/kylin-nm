@@ -146,8 +146,33 @@ void vpnObject::onTabletModeChanged(bool mode)
     m_vpnPage->hide();
 }
 
+bool vpnObject::launchApp(QString desktopFile)
+{
+    QDBusInterface appManagerDbusInterface(KYLIN_APP_MANAGER_NAME,
+                                             KYLIN_APP_MANAGER_PATH,
+                                             KYLIN_APP_MANAGER_INTERFACE,
+                                             QDBusConnection::sessionBus());
+
+    if (!appManagerDbusInterface.isValid()) {
+        qWarning()<<"appManagerDbusInterface init error";
+        return false;
+    } else {
+        QDBusReply<bool> reply = appManagerDbusInterface.call("LaunchApp", desktopFile);
+        return reply;
+    }
+}
+
+void vpnObject::runExternalApp() {
+    if (!launchApp("nm-connection-editor.desktop")){
+        QString cmd = "nm-connection-editor";
+        QProcess process(this);
+        process.startDetached(cmd);
+    }
+}
+
 void vpnObject::showVpnAddWidget()
 {
+#ifdef VPNDETAIL
     if (m_vpnAddPage == nullptr) {
         m_vpnAddPage = new vpnAddPage();
         connect(m_vpnAddPage, &vpnAddPage::closed, [&] () {m_vpnAddPage = nullptr;});
@@ -155,4 +180,8 @@ void vpnObject::showVpnAddWidget()
         m_vpnAddPage->centerToScreen();
     }
     m_vpnAddPage->raise();
+#else
+    runExternalApp();
+    return;
+#endif
 }

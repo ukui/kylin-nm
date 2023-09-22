@@ -83,8 +83,7 @@ public:
     void getApConnectionPath(QString &path, QString uuid);
     //获取热点ActivePath
     void getActiveConnectionPath(QString &path, QString uuid);
-    //删除有线连接
-    void deleteWired(const QString& connUuid);
+
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
@@ -115,6 +114,7 @@ public:
 Q_SIGNALS:
     //设备插拔
     void deviceStatusChanged();
+    void wirelessDeviceStatusChanged();
     //设备名称变化
     void deviceNameChanged(QString oldName, QString newName, int type);
     void wirelessSwitchBtnChanged(bool state);
@@ -166,6 +166,9 @@ private:
     void showByWaylandHelper();
 
     void setCentralWidgetType(IconActiveType iconStatus);
+    void assembleTrayIconTooltip(QMap<QString, QString> &map, QString &tip);
+    void setThemePalette();
+
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
     int currentIconIndex=0;
@@ -222,7 +225,9 @@ private Q_SLOTS:
     void onLanConnectStatusToChangeTrayIcon(int state);
     void onWlanConnectStatusToChangeTrayIcon(int state);
     void onConnectivityChanged(NetworkManager::Connectivity connectivity);
+    void onTimeUpdateTrayIcon();
     void onTabletModeChanged(bool mode);
+    void onRefreshTrayIconTooltip();
 };
 
 #endif // MAINWINDOW_H

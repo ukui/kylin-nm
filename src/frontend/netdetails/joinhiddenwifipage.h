@@ -88,7 +88,6 @@ private Q_SLOTS:
     void onBtnShowListClicked();
     void onSecuTypeChanged(const KySecuType &type);
     void onEapTypeChanged(const KyEapMethodType &type);
-    void onPaletteChanged();
 
 Q_SIGNALS:
     void hiddenWiFiPageClose(QString);

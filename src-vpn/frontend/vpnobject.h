@@ -59,6 +59,8 @@ private:
     void initVpnIconVisible();
     void initDbusConnnect();
 
+    bool launchApp(QString desktopFile);
+    void runExternalApp();
 
 private:
     VpnPage *m_vpnPage = nullptr;

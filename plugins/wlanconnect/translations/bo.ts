@@ -44,12 +44,12 @@
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="127"/>
-        <source>ukui control center</source>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="130"/>
-        <source>ukui control center desktop message</source>
+        <source>Settings desktop message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -58,14 +58,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="368"/>
-        <location filename="../wlanconnect.cpp" line="1039"/>
-        <location filename="../wlanconnect.cpp" line="1101"/>
+        <location filename="../wlanconnect.cpp" line="369"/>
+        <location filename="../wlanconnect.cpp" line="1058"/>
+        <location filename="../wlanconnect.cpp" line="1121"/>
         <source>connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="976"/>
+        <location filename="../wlanconnect.cpp" line="994"/>
         <source>card</source>
         <translation type="unfinished"></translation>
     </message>

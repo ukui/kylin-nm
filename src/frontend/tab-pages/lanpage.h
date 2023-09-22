@@ -44,13 +44,13 @@ public:
 
     //for dbus
     void getWiredList(QMap<QString, QVector<QStringList> > &map);
-    void deleteWired(const QString& connUuid);
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
     void showDetailPage(QString devName, QString uuid);
     void setWiredDeviceEnable(const QString& devName, bool enable);
 
     bool lanIsConnected();
+    void getWiredDeviceConnectState(QMap<QString, QString> &map);
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);

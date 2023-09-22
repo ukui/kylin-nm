@@ -20,12 +20,14 @@
 #include "joinhiddenwifipage.h"
 
 #include <QApplication>
+#include "kwindowsystem.h"
+#include "kwindowsystem_export.h"
 
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 #define  WINDOW_WIDTH  480
 #define  MIN_WINDOW_HEIGHT  368
-#define  PEAP_WINDOW_HEIGHT  524
+#define  EAPMIN_WINDOW_HEIGHT  524
 #define  TLS_WINDOW_HEIGHT  580
 #define  LAYOUT_MARGINS  0, 0, 0, 0
 #define  TOP_LAYOUT_MARGINS  24, 12, 24, 16
@@ -48,6 +50,7 @@ JoinHiddenWiFiPage::JoinHiddenWiFiPage(QString devName, KDialog *parent)
     initComponent();
 
     setAttribute(Qt::WA_DeleteOnClose);
+    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
 
     setJoinBtnEnable();
 }
@@ -77,7 +80,7 @@ void JoinHiddenWiFiPage::initUI()
     m_nameLabel->setFixedWidth(LABEL_MIN_WIDTH);
     m_nameEdit =new LineEdit(this);
 
-    m_bottomDivider = new Divider(this);
+    m_bottomDivider = new Divider(false, this);
     m_showListBtn = new KBorderlessButton(this);
     m_cancelBtn =new QPushButton(this);
     m_joinBtn =new QPushButton(this);
@@ -133,8 +136,8 @@ void JoinHiddenWiFiPage::initUI()
     m_bottomLayout->addWidget(m_cancelBtn);
     m_bottomLayout->addWidget(m_joinBtn);
 
-    //请输入您想要加入网络的名称和安全类型
-   m_descriptionLabel->setLabelText(tr("Please enter the network name and security type"));
+    //请输入您想要加入的网络信息
+   m_descriptionLabel->setLabelText(tr("Please enter the network information"));
    QFont font = m_descriptionLabel->font();
    font.setWeight(MEDIUM_WEIGHT_VALUE);
    m_descriptionLabel->setFont(font);
@@ -144,15 +147,16 @@ void JoinHiddenWiFiPage::initUI()
    m_cancelBtn->setText(tr("Cancel"));
    m_joinBtn->setText(tr("Join"));
 
-   m_nameEdit->setMaxLength(MAX_NAME_LENGTH);
+   QRegExp nameRx("^.{0,32}$");
+   QValidator *validator = new QRegExpValidator(nameRx, this);
+   m_nameEdit->setValidator(validator);
    m_nameEdit->setPlaceholderText(tr("Required")); //必填
 
-   this->setWindowTitle(tr("Find and Join Wi-Fi"));
+   this->setWindowTitle(tr("Find and Join WLAN"));
    this->setWindowIcon(QIcon::fromTheme("kylin-network"));
-
-   this->setFixedHeight(MIN_WINDOW_HEIGHT);
    this->setFixedWidth(WINDOW_WIDTH);
-   onPaletteChanged();
+   this->setFixedHeight(MIN_WINDOW_HEIGHT);
+//   onPaletteChanged();
 }
 
 void JoinHiddenWiFiPage::initComponent()
@@ -172,6 +176,7 @@ void JoinHiddenWiFiPage::initComponent()
     });
     connect(m_nameEdit, &LineEdit::textChanged, this, &JoinHiddenWiFiPage::setJoinBtnEnable);
 
+#if 0
     connect(qApp, &QApplication::paletteChanged, this, &JoinHiddenWiFiPage::onPaletteChanged);
 
     const QByteArray id(THEME_SCHAME);
@@ -183,6 +188,7 @@ void JoinHiddenWiFiPage::initComponent()
             }
         });
     }
+#endif
 }
 
 void JoinHiddenWiFiPage::setJoinBtnEnable()
@@ -254,10 +260,11 @@ void JoinHiddenWiFiPage::onEapTypeChanged(const KyEapMethodType &type)
     if (type == KyEapMethodType::TLS || type == KyEapMethodType::FAST) {
         this->setFixedHeight(TLS_WINDOW_HEIGHT);
     } else {
-        this->setFixedHeight(PEAP_WINDOW_HEIGHT);
+        this->setFixedHeight(EAPMIN_WINDOW_HEIGHT);
     }
 }
 
+#if 0
 void JoinHiddenWiFiPage::onPaletteChanged()
 {
     QPalette pal = qApp->palette();
@@ -280,6 +287,7 @@ void JoinHiddenWiFiPage::onPaletteChanged()
         styleGsettings = nullptr;
     }
 }
+#endif
 
 void JoinHiddenWiFiPage::centerToScreen()
 {

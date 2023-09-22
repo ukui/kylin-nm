@@ -7,18 +7,15 @@ include(netdetails/netdetails.pri)
 include(enterprise-wlan/enterprise-wlan.pri)
 include(networkmode/networkmode.pri)
 
-FORMS += \
-    $$PWD/wificonfigdialog.ui
+FORMS +=
 
 HEADERS += \
     $$PWD/customstyle.h \
-    $$PWD/mainwindow.h \
-    $$PWD/wificonfigdialog.h
+    $$PWD/mainwindow.h
 
 SOURCES += \
     $$PWD/customstyle.cpp \
-    $$PWD/mainwindow.cpp \
-    $$PWD/wificonfigdialog.cpp
+    $$PWD/mainwindow.cpp
 
 DISTFILES += \
     $$PWD/networkmode/networkmode.pri

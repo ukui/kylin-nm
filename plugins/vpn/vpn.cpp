@@ -114,7 +114,7 @@ QWidget *Vpn::pluginUi(){
 
 const QString Vpn::name() const {
 
-    return QStringLiteral("Vpn");
+    return QStringLiteral("VPN");
 }
 
 bool Vpn::isShowOnHomePage() const
@@ -187,6 +187,7 @@ void Vpn::initComponent(){
     hotspotLyt->setSpacing(0);
 
     //列表
+
     m_listFrame = new ItemFrame(m_pluginWidget);
 
     ui->verticalLayout_4->addWidget(m_topFrame);

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -177,7 +177,7 @@ void KyWirelessNetItem::setKySecuType(QString strSecuType)
     if (strSecuType.indexOf(ENTERPRICE_TYPE) >= 0) {
         m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
     } else if (strSecuType.indexOf(WPA3) >= 0) {
-        if ( strSecuType.indexOf(WPA1) >= 0 || strSecuType.indexOf(WPA2) >= 0) {
+        if (strSecuType.indexOf(WPA1) >= 0 || strSecuType.indexOf(WPA2) >= 0) {
             m_kySecuType = WPA_AND_WPA3;
         } else {
             m_kySecuType = WPA3_PERSONAL;

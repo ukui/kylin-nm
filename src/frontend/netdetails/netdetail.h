@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -96,6 +96,7 @@ class NetDetail : public QWidget
 public:
     NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent = nullptr);
     ~NetDetail();
+    void centerToScreen();
 
     void paintEvent(QPaintEvent *event);
     void closeEvent(QCloseEvent *event);
@@ -103,7 +104,6 @@ public:
 
 private:
     void initUI();
-    void centerToScreen();
     void initComponent();
     void getConInfo(ConInfo &conInfo);
     void loadPage();
@@ -211,5 +211,4 @@ Q_SIGNALS:
     void checkCurrentIpv4Conflict(const QString &address);
     void checkCurrentIpv6Conflict(const QString &address);
 };
-
 #endif // NETDETAIL_H

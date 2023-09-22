@@ -58,7 +58,6 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     m_moreMenu->addAction(m_connectAction);
     m_moreMenu->addAction(m_deleteAction);
     m_moreButton->setMenu(m_moreMenu);
-
     mLanLyt->addWidget(m_iconLabel);
     mLanLyt->addWidget(m_titileLabel,Qt::AlignLeft);
     mLanLyt->addStretch();

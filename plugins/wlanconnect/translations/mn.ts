@@ -23,21 +23,21 @@
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
-        <location filename="../wlanconnect.cpp" line="140"/>
-        <location filename="../wlanconnect.cpp" line="211"/>
+        <location filename="../wlanconnect.cpp" line="144"/>
+        <location filename="../wlanconnect.cpp" line="215"/>
         <source>WLAN</source>
         <translation>ᠤᠳᠠᠰᠤ ᠦᠬᠡᠢ ᠬᠡᠰᠡᠭ ᠰᠦᠯᠵᠢᠶ᠎ᠡ</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
-        <location filename="../wlanconnect.cpp" line="213"/>
+        <location filename="../wlanconnect.cpp" line="217"/>
         <source>open</source>
         <translation>ᠨᠡᠭᠡᠭᠡᠬᠦ</translation>
         <extra-contents_path>/wlanconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
-        <location filename="../wlanconnect.cpp" line="210"/>
+        <location filename="../wlanconnect.cpp" line="214"/>
         <source>Advanced settings</source>
         <translation>ᠦᠨᠳᠦᠷ ᠵᠡᠷᠬᠡ ᠵᠢᠨ ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠤᠯᠳᠠ</translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
@@ -51,29 +51,29 @@
         <translation type="vanished">ᠡᠵᠡᠮᠰᠢᠯ ᠤ᠋ᠨ ᠬᠠᠪᠳᠠᠰᠤᠨ ᠤ᠋ ᠰᠢᠷᠡᠭᠡᠨ ᠨᠢᠭᠤᠷ ᠤ᠋ᠨ ᠮᠡᠳᠡᠭᠳᠡᠯ</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="123"/>
+        <location filename="../wlanconnect.cpp" line="127"/>
         <source>Settings</source>
         <translation>ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="126"/>
+        <location filename="../wlanconnect.cpp" line="130"/>
         <source>Settings desktop message</source>
         <translation>ᠰᠢᠷᠡᠭᠡᠨ ᠨᠢᠭᠤᠷ᠎ᠤ᠋ᠨ ᠵᠠᠩᠭᠢ᠎ᠶ᠋ᠢ ᠵᠣᠬᠢᠷᠠᠭᠤᠯᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="228"/>
+        <location filename="../wlanconnect.cpp" line="232"/>
         <source>No wireless network card detected</source>
         <translation>ᠤᠳᠠᠰᠤ ᠦᠬᠡᠢ ᠨᠧᠲ ᠺᠠᠷᠲ᠎ᠢ ᠬᠢᠨᠠᠨ ᠬᠡᠮᠵᠢᠵᠤ ᠤᠯᠤᠭᠰᠠᠨ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="364"/>
-        <location filename="../wlanconnect.cpp" line="1033"/>
-        <location filename="../wlanconnect.cpp" line="1095"/>
+        <location filename="../wlanconnect.cpp" line="369"/>
+        <location filename="../wlanconnect.cpp" line="1058"/>
+        <location filename="../wlanconnect.cpp" line="1121"/>
         <source>connected</source>
         <translation>ᠨᠢᠬᠡᠨᠳᠡ ᠴᠦᠷᠬᠡᠯᠡᠪᠡ</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="970"/>
+        <location filename="../wlanconnect.cpp" line="994"/>
         <source>card</source>
         <translation>ᠨᠧᠲ ᠺᠠᠷᠲ</translation>
     </message>

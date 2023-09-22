@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -27,13 +27,16 @@
 #define FRAME_MIN_SIZE 550, 60
 #define FRAME_MAX_SIZE 16777215, 16777215
 #define CONTECT_FRAME_MAX_SIZE 16777215, 60
+
 #define HINT_TEXT_MARGINS 8, 0, 0, 0
 #define FRAME_MIN_SIZE 550, 60
+
 #define LABLE_MIN_WIDTH 188
 #define COMBOBOX_MIN_WIDTH 200
 #define LINE_MAX_SIZE 16777215, 1
 #define LINE_MIN_SIZE 0, 1
 #define ICON_SIZE   24,24
+
 #define PASSWORD_FRAME_MIN_HIGHT 60
 #define PASSWORD_FRAME_FIX_HIGHT 90
 #define PASSWORD_FRAME_MIN_SIZE 550, 60
@@ -191,7 +194,6 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                     qDebug() << LOG_HEAD << "call activeWirelessAp failed ";
                     return true;
                 }
-
             }
             return true;
         }
@@ -260,7 +262,6 @@ void MobileHotspotWidget::initUI()
 
 }
 
-
 void MobileHotspotWidget::initDbusConnect()
 {
     if(m_interface->isValid()) {
@@ -269,6 +270,7 @@ void MobileHotspotWidget::initDbusConnect()
         connect(m_interface,SIGNAL(wirelessDeviceStatusChanged()), this, SLOT(onDeviceStatusChanged()), Qt::QueuedConnection);
         connect(m_interface,SIGNAL(deviceNameChanged(QString, QString, int)), this, SLOT(onDeviceNameChanged(QString, QString, int)), Qt::QueuedConnection);
         connect(m_interface,SIGNAL(hotspotDeactivated(QString, QString)), this, SLOT(onHotspotDeactivated(QString, QString)), Qt::QueuedConnection);
+
         connect(m_interface,SIGNAL(hotspotActivated(QString, QString, QString, QString, QString)), this, SLOT(onHotspotActivated(QString, QString, QString, QString, QString)), Qt::QueuedConnection);
 
         connect(m_interface, SIGNAL(wlanactiveConnectionStateChanged(QString, QString, QString, int)), this, SLOT(onActiveConnectionChanged(QString, QString, QString, int)), Qt::QueuedConnection);
@@ -440,11 +442,11 @@ void MobileHotspotWidget::getApInfo()
     }
 
     if (m_interfaceComboBox->count() <= 0) {
-                m_switchBtn->setChecked(false);
-                setWidgetHidden(true);
-                qWarning() << LOG_HEAD << "getApInfo but interface is empty";
-                return;
-        }
+        m_switchBtn->setChecked(false);
+        setWidgetHidden(true);
+        qWarning() << LOG_HEAD << "getApInfo but interface is empty";
+        return;
+    }
 
 
     QDBusReply<QStringList> reply = m_interface->call("getStoredApInfo");
@@ -819,7 +821,6 @@ void MobileHotspotWidget::setWidgetHidden(bool isHidden)
         onWirelessBtnChanged(state);
     }
     resetFrameSize();
-
 }
 
 void MobileHotspotWidget::updateBandCombox()
@@ -846,6 +847,7 @@ void MobileHotspotWidget::updateBandCombox()
     if (index >= 0) {
         m_freqBandComboBox->setCurrentIndex(index);
     }
+
     m_isUserSelect = true;
 }
 
@@ -994,4 +996,3 @@ void MobileHotspotWidget::initBlackListPage()
     m_Vlayout->addSpacing(32);
     m_Vlayout->addWidget(m_blacklistPage);
 }
-

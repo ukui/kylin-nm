@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -1224,6 +1224,7 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
         wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaPsk);
         wirelessSecuritySetting->setPsk(apPassword);
     }
+    apConnectPtr->update(apConnectSettingPtr->toMap());
 
     QStringList blackList = getBlackListHostName(apConnectPtr->path());
     NMVariantMapMap newMap = apConnectSettingPtr->toMap();
@@ -1234,6 +1235,7 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
         }
     }
     apConnectPtr->update(newMap);
+    usleep(100*1000);
 }
 
 void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QString apName,

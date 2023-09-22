@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -304,7 +304,6 @@ void ListItem::initUI()
     m_mainLayout->addWidget(m_itemFrame);
 
     m_hoverButton->hide();
-
 //    this->setAutoFillBackground(true);
 //    this->setBackgroundRole(QPalette::Base);
 //    QPalette pal = qApp->palette();
@@ -343,7 +342,6 @@ void ListItem::onPaletteChanged()
         m_menu->setPalette(pal);
     }
 }
-
 
 NameLabel::NameLabel(QWidget *parent)
     :QLabel(parent)

@@ -15,6 +15,26 @@
     </message>
 </context>
 <context>
+    <name>LanItem</name>
+    <message>
+        <location filename="../lanitem.cpp" line="57"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lanitem.cpp" line="118"/>
+        <location filename="../lanitem.cpp" line="131"/>
+        <source>Disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lanitem.cpp" line="120"/>
+        <location filename="../lanitem.cpp" line="129"/>
+        <source>Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NetConnect</name>
     <message>
         <location filename="../netconnect.ui" line="50"/>
@@ -23,47 +43,49 @@
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
-        <location filename="../netconnect.cpp" line="155"/>
+        <location filename="../netconnect.cpp" line="159"/>
         <source>open</source>
         <translation type="unfinished"></translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
-        <location filename="../netconnect.cpp" line="152"/>
+        <location filename="../netconnect.cpp" line="156"/>
         <source>Advanced settings</source>
         <translation type="unfinished"></translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="64"/>
+        <location filename="../netconnect.cpp" line="66"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="67"/>
+        <location filename="../netconnect.cpp" line="69"/>
         <source>Settings desktop message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="81"/>
-        <location filename="../netconnect.cpp" line="153"/>
+        <location filename="../netconnect.cpp" line="83"/>
+        <location filename="../netconnect.cpp" line="157"/>
         <source>LAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="169"/>
-        <source>No ethernet device avaliable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../netconnect.cpp" line="437"/>
-        <location filename="../netconnect.cpp" line="861"/>
+        <location filename="../netconnect.cpp" line="455"/>
+        <location filename="../netconnect.cpp" line="905"/>
         <source>connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="504"/>
+        <location filename="../netconnect.cpp" line="457"/>
+        <location filename="../netconnect.cpp" line="757"/>
+        <location filename="../netconnect.cpp" line="915"/>
+        <source>not connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="534"/>
         <source>card</source>
         <translation type="unfinished"></translation>
     </message>

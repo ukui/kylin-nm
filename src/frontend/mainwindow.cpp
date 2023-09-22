@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -154,11 +154,13 @@ void MainWindow::firstlyStart()
 {
     initWindowProperties();
     initTransparency();
+    registerTrayIcon();
     initUI();
     initDbusConnnect();
     initWindowTheme();
     initTrayIcon();
     initPlatform();
+    installEventFilter(this);
     m_secondaryStartTimer = new QTimer(this);
     connect(m_secondaryStartTimer, &QTimer::timeout, this, [ = ]() {
         m_secondaryStartTimer->stop();
@@ -229,6 +231,30 @@ void MainWindow::initWindowProperties()
     }
 }
 
+/**
+ * @brief MainWindow::registerTrayIcon 注册托盘图标
+ */
+void MainWindow::registerTrayIcon()
+{
+    m_registerCount++;
+    if (QSystemTrayIcon::isSystemTrayAvailable() || m_registerCount > 10) {
+        m_trayIcon = new QSystemTrayIcon();
+        if (nullptr == m_trayIcon) {
+            qWarning()<< "分配空间trayIcon失败";
+            return ;
+        }
+        m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
+        m_trayIcon->setToolTip(QString(tr("kylin-nm")));
+
+    } else {
+        if (m_registerCount <= 10) {
+            QTimer::singleShot(m_intervalTime,[this] {
+                registerTrayIcon();
+            });
+        }
+    }
+}
+
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
@@ -236,6 +262,21 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::transparent);
 //    auto rect = this->rect();
 //    painter.drawRoundedRect(rect, 12, 12);      //窗口圆角
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == this) {
+        //失焦退出
+        if (event->type() == QEvent::ActivationChange) {
+            if (QApplication::activeWindow() != this) {
+                hideMainwindow();
+                return true;
+            }
+        }
+    }
+
+    return QObject::eventFilter(watched, event);
 }
 
 void MainWindow::initTransparency()
@@ -325,7 +366,6 @@ void MainWindow::initTrayIcon()
     iconTimer = new QTimer(this);
     connect(iconTimer, &QTimer::timeout, this, &MainWindow::onSetTrayIconLoading);
 
-    m_trayIcon = new QSystemTrayIcon();
     m_trayIconMenu = new QMenu();
     m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
     m_showSettingsAction = new QAction(tr("Settings"),this);
@@ -334,7 +374,6 @@ void MainWindow::initTrayIcon()
 //    m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);
     m_trayIcon->setContextMenu(m_trayIconMenu);
-    m_trayIcon->setIcon(QIcon::fromTheme("network-wired-signal-excellent-symbolic"));
     iconStatus = IconActiveType::LAN_CONNECTED;
     onRefreshTrayIcon();
 
@@ -396,7 +435,6 @@ void MainWindow::initDbusConnnect()
             hideMainwindow();
         }
     });
-
 }
 
 /**
@@ -981,6 +1019,7 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
     if (m_createPagePtrMap.contains(devName)) {
         if (m_createPagePtrMap[devName] != nullptr) {
             qDebug() << "showCreateWiredConnectWidget" << devName << "already create,just raise";
+
             KWindowSystem::activateWindow(m_createPagePtrMap[devName]->winId());
             KWindowSystem::raiseWindow(m_createPagePtrMap[devName]->winId());
             return;
@@ -994,6 +1033,8 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
     });
     m_createPagePtrMap.insert(devName, netDetail);
     netDetail->show();
+    KWindowSystem::raiseWindow(netDetail->winId());
+    netDetail->centerToScreen();
 }
 
 void MainWindow::showAddOtherWlanWidget(QString devName)

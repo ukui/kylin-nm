@@ -64,19 +64,19 @@
 <context>
     <name>VpnItem</name>
     <message>
-        <location filename="../vpnitem.cpp" line="56"/>
+        <location filename="../vpnitem.cpp" line="55"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../vpnitem.cpp" line="108"/>
-        <location filename="../vpnitem.cpp" line="121"/>
+        <location filename="../vpnitem.cpp" line="107"/>
+        <location filename="../vpnitem.cpp" line="120"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../vpnitem.cpp" line="110"/>
-        <location filename="../vpnitem.cpp" line="119"/>
+        <location filename="../vpnitem.cpp" line="109"/>
+        <location filename="../vpnitem.cpp" line="118"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>

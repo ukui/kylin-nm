@@ -6,12 +6,32 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation type="unfinished"></translation>
+        <translation>སྐུད་ཡོད་བརྙན་འཕྲིན་ཁ་སྣོན་བྱས་ཡོད།</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
         <translation>སྐུད་ཡོད་བརྙན་འཕྲིན་ཁ་སྣོན་བྱས་ཡོད།</translation>
+    </message>
+</context>
+<context>
+    <name>LanItem</name>
+    <message>
+        <location filename="../lanitem.cpp" line="57"/>
+        <source>Delete</source>
+        <translation>བསུབ་པ།</translation>
+    </message>
+    <message>
+        <location filename="../lanitem.cpp" line="118"/>
+        <location filename="../lanitem.cpp" line="131"/>
+        <source>Disconnect</source>
+        <translation>འབྲེལ་ཐག་ཆད་པ།</translation>
+    </message>
+    <message>
+        <location filename="../lanitem.cpp" line="120"/>
+        <location filename="../lanitem.cpp" line="129"/>
+        <source>Connect</source>
+        <translation>སྦྲེལ་མཐུད་བྱེད་པ།</translation>
     </message>
 </context>
 <context>
@@ -23,14 +43,14 @@
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
-        <location filename="../netconnect.cpp" line="155"/>
+        <location filename="../netconnect.cpp" line="159"/>
         <source>open</source>
         <translation>སྒོ་ཕྱེ་བ།</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
-        <location filename="../netconnect.cpp" line="152"/>
+        <location filename="../netconnect.cpp" line="156"/>
         <source>Advanced settings</source>
         <translation>སྔོན་ཐོན་གྱི་སྒྲིག་བཀོད།</translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
@@ -48,34 +68,40 @@
         <translation type="vanished">སྐུད་ཡོད་སྦྲེལ་མཐུད།</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="64"/>
+        <location filename="../netconnect.cpp" line="66"/>
         <source>Settings</source>
         <translation>བཀོད་སྒྲིག་བཅས་བྱ་དགོས།</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="67"/>
+        <location filename="../netconnect.cpp" line="69"/>
         <source>Settings desktop message</source>
         <translation>བཀོད་སྒྲིག་བཅས་བྱ་དགོས།  ཅོག་ངོས་ལ་བརྡ་ཐོ་གཏོང་དགོས།</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="81"/>
-        <location filename="../netconnect.cpp" line="153"/>
+        <location filename="../netconnect.cpp" line="83"/>
+        <location filename="../netconnect.cpp" line="157"/>
         <source>LAN</source>
         <translation>སྐུད་ཡོད་དྲ་བ།</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="169"/>
         <source>No ethernet device avaliable</source>
-        <translation>ཨེ་ཙི་དྲ་རྒྱའི་སྒྲིག་ཆས་ལ་བཙན་འཛུལ་བྱས་མི་ཆོག།</translation>
+        <translation type="vanished">ཨེ་ཙི་དྲ་རྒྱའི་སྒྲིག་ཆས་ལ་བཙན་འཛུལ་བྱས་མི་ཆོག།</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="437"/>
-        <location filename="../netconnect.cpp" line="861"/>
+        <location filename="../netconnect.cpp" line="455"/>
+        <location filename="../netconnect.cpp" line="905"/>
         <source>connected</source>
         <translation>འབྲེལ་མཐུད་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="504"/>
+        <location filename="../netconnect.cpp" line="457"/>
+        <location filename="../netconnect.cpp" line="757"/>
+        <location filename="../netconnect.cpp" line="915"/>
+        <source>not connected</source>
+        <translation>འབྲེལ་མཐུད་མི་བྱེད་པ།</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="534"/>
         <source>card</source>
         <translation>བྱང་བུ།</translation>
     </message>

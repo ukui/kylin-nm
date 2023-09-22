@@ -32,6 +32,7 @@
 #include <QFormLayout>
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QPainter>
 
 #include "kyvpnconnectoperation.h"
 
@@ -67,6 +68,9 @@ public:
     void centerToScreen();
     ~vpnAddPage();
 
+protected:
+    void paintEvent(QPaintEvent *event);
+
 private:
     void initWindow();
     void initUI();
@@ -80,7 +84,6 @@ private:
     bool checkConfimBtnIsEnabled();
     bool createVpnConnect();
 
-private:
     QFrame *m_vpnTypeFrame = nullptr;
     QFrame *m_vpnNameFrame = nullptr;
     QFrame *m_vpnServerFrame = nullptr;

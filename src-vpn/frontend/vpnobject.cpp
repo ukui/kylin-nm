@@ -177,6 +177,7 @@ void vpnObject::showVpnAddWidget()
         m_vpnAddPage = new vpnAddPage();
         connect(m_vpnAddPage, &vpnAddPage::closed, [&] () {m_vpnAddPage = nullptr;});
         m_vpnAddPage->show();
+        m_vpnAddPage->centerToScreen();
     }
     m_vpnAddPage->raise();
 #else

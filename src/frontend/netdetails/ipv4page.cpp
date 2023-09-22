@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -97,7 +97,7 @@ void Ipv4Page::initUI() {
     QRegExp rx("\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b");
 
     Divider* divider = new Divider(false, this);
-    m_dnsWidget = new MultipleDnsWidget(rx, true, this);
+    m_dnsWidget = new MultipleDnsWidget(rx, false, this);
 
     m_detailLayout = new QFormLayout(this);
     m_detailLayout->setVerticalSpacing(0);
@@ -142,7 +142,6 @@ void Ipv4Page::initComponent() {
     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(onAddressTextChanged()));
     connect(ipv4addressEdit, SIGNAL(editingFinished()), this, SLOT(onAddressEditFinished()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(onNetMaskTextChanged()));
-
     connect(ipv4ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(setEnableOfSaveBtn()));
     connect(ipv4addressEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
     connect(netMaskEdit, SIGNAL(textChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
@@ -288,7 +287,6 @@ void Ipv4Page::onAddressEditFinished()
 }
 
 void Ipv4Page::setLineEnabled(bool check) {
-
     if (!check) {
         ipv4addressEdit->clear();
         netMaskEdit->clear();
@@ -360,7 +358,6 @@ QString Ipv4Page::getNetMaskText(QString text)
     }
     return QString("%1.%2.%3.%4").arg(list[0],list[1],list[2],list[3]);
 }
-
 
 void Ipv4Page::initConflictHintLable()
 {

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -78,7 +78,6 @@ bool Ipv6Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
             qDebug() << "ipv6ConfigType change to Manual";
             isChanged =  true;
         }
-
         if(info.strIPV6Address != ipv6AddressEdit->text()
                 || info.iIPV6Prefix != lengthEdit->text().toInt()
                 || info.strIPV6GateWay != gateWayEdit->text()) {
@@ -197,7 +196,6 @@ void Ipv6Page::initComponent() {
         setControlEnabled(true);
     }
     connect(ipv6ConfigCombox, SIGNAL(currentIndexChanged(int)), this, SLOT(configChanged(int)));
-
     connect(ipv6AddressEdit, SIGNAL(textChanged(QString)), this, SLOT(onAddressTextChanged()));
     connect(ipv6AddressEdit, SIGNAL(editingFinished()), this, SLOT(onAddressEidtFinished()));
     connect(gateWayEdit, SIGNAL(textChanged(QString)), this, SLOT(onGatewayTextChanged()));
@@ -388,4 +386,3 @@ void Ipv6Page::showIpv6AddressConflict(bool isConflict)
         m_textLabel->hide();
     }
 }
-

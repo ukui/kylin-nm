@@ -23,21 +23,21 @@
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
-        <location filename="../wlanconnect.cpp" line="140"/>
-        <location filename="../wlanconnect.cpp" line="211"/>
+        <location filename="../wlanconnect.cpp" line="144"/>
+        <location filename="../wlanconnect.cpp" line="215"/>
         <source>WLAN</source>
         <translation>སྐུད་མེད་ཅུས་ཁོངས་ཀྱི་དྲ་བ།</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
-        <location filename="../wlanconnect.cpp" line="213"/>
+        <location filename="../wlanconnect.cpp" line="217"/>
         <source>open</source>
         <translation>སྒོ་ཕྱེ་བ།</translation>
         <extra-contents_path>/wlanconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
-        <location filename="../wlanconnect.cpp" line="210"/>
+        <location filename="../wlanconnect.cpp" line="214"/>
         <source>Advanced settings</source>
         <translation>སྔོན་ཐོན་གྱི་སྒྲིག་བཀོད།</translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
@@ -51,29 +51,29 @@
         <translation type="vanished">ངོས་ལེབ་ངོས་ཀྱི་བརྡ་ཐོ་ཚོད་འཛིན་བྱ་དགོས།</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="123"/>
+        <location filename="../wlanconnect.cpp" line="127"/>
         <source>Settings</source>
         <translation>བཀོད་སྒྲིག་བཅས་བྱ་དགོས།</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="126"/>
+        <location filename="../wlanconnect.cpp" line="130"/>
         <source>Settings desktop message</source>
         <translation>བཀོད་སྒྲིག་བཅས་བྱ་དགོས།  ཅོག་ངོས་ལ་བརྡ་ཐོ་གཏོང་དགོས།</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="228"/>
+        <location filename="../wlanconnect.cpp" line="232"/>
         <source>No wireless network card detected</source>
         <translation>སྐུད་མེད་དྲ་རྒྱའི་བྱང་བུ་མ་རྙེད་པ།</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="364"/>
-        <location filename="../wlanconnect.cpp" line="1033"/>
-        <location filename="../wlanconnect.cpp" line="1095"/>
+        <location filename="../wlanconnect.cpp" line="369"/>
+        <location filename="../wlanconnect.cpp" line="1058"/>
+        <location filename="../wlanconnect.cpp" line="1121"/>
         <source>connected</source>
         <translation>འབྲེལ་མཐུད་བྱེད་པ།</translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="970"/>
+        <location filename="../wlanconnect.cpp" line="994"/>
         <source>card</source>
         <translation>བྱང་བུ།</translation>
     </message>

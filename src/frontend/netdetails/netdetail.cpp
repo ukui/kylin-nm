@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -274,7 +274,6 @@ void NetDetail::paintEvent(QPaintEvent *event)
 //    painter.setBrush(pal.color(QPalette::Base));
 //    painter.drawRect(this->rect());
 //    painter.fillRect(rect(), QBrush(pal.color(QPalette::Base)));
-
     return QWidget::paintEvent(event);
 }
 
@@ -293,11 +292,10 @@ void NetDetail::centerToScreen()
     int desk_y = desk_rect.height();
     int x = this->width();
     int y = this->height();
-    this->move(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top());
-//    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(desk_x / 2 - x / 2 + desk_rect.left(),
-//                                                                desk_y / 2 - y / 2 + desk_rect.top(),
-//                                                                this->width(),
-//                                                                this->height()));
+    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(desk_x / 2 - x / 2 + desk_rect.left(),
+                                                                desk_y / 2 - y / 2 + desk_rect.top(),
+                                                                this->width(),
+                                                                this->height()));
 }
 
 void NetDetail::initUI()
@@ -316,6 +314,7 @@ void NetDetail::initUI()
     ipv6Page = new Ipv6Page(this);
     securityPage = new SecurityPage(this);
     createNetPage = new CreatNetPage(this);
+
     configPage = new ConfigPage(this);
 
     detailPage->setFixedWidth(PAGE_WIDTH);
@@ -587,7 +586,6 @@ void NetDetail::pagePadding(QString netName, bool isWlan)
     if (isActive  && m_networkMode != DBUS_INVAILD && m_networkMode != NO_CONFIG) {
         configPage->setConfigState(m_networkMode);
     }
-
 }
 
 //获取网路详情信息
@@ -1174,7 +1172,6 @@ bool NetDetail::updateConnect()
 //            qDebug () <<Q_FUNC_INFO << __LINE__ << m_uuid << m_deviceName << m_name << currentConfigType;
         }
     }
-
     return true;
 }
 

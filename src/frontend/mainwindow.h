@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -138,11 +138,13 @@ Q_SIGNALS:
     void mainWindowVisibleChanged(const bool &visible);
     //列表排序
     void timeToUpdate();
+
 public Q_SLOTS:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
     void paintEvent(QPaintEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     void firstlyStart(); //一级启动
@@ -155,13 +157,14 @@ private:
     void paintWithTrans();
     void initUI();
     void initDbusConnnect();
+    void registerTrayIcon();
     void initTrayIcon();
-
     void resetTrayIconTool();
     void initWindowTheme();
     void resetWindowTheme();
     void showControlCenter();
     void showByWaylandHelper();
+
     void setCentralWidgetType(IconActiveType iconStatus);
     void assembleTrayIconTooltip(QMap<QString, QString> &map, QString &tip);
     void setThemePalette();
@@ -204,6 +207,9 @@ private:
     QMap<QString, NetDetail*> m_createPagePtrMap;
 
     NetworkMode *m_networkMode;
+
+    uint m_intervalTime = 100;
+    uint m_registerCount = 0;
 
 public Q_SLOTS:
     void onShowMainWindow(int type);

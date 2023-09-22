@@ -26,7 +26,6 @@
 
 #define LOG_FLAG  "[KyNetworkResourceManager]"
 
-
 QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags)
 {
     QString out;

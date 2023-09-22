@@ -64,7 +64,7 @@
         <translation type="vanished">ᠡᠵᠡᠮᠰᠢᠯ ᠤ᠋ᠨ ᠬᠠᠪᠳᠠᠰᠤᠨ ᠤ᠋ ᠰᠢᠷᠡᠭᠡᠨ ᠨᠢᠭᠤᠷ ᠤ᠋ᠨ ᠮᠡᠳᠡᠭᠳᠡᠯ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="156"/>
+        <location filename="../mobilehotspotwidget.cpp" line="159"/>
         <source>wirless switch is close or no wireless device</source>
         <translation>ᠤᠲᠠᠰᠤ ᠦᠭᠡᠢ ᠨᠡᠭᠡᠭᠡᠯᠭᠡ ᠨᠢᠭᠡᠨᠲᠡ ᠬᠠᠭᠠᠭᠰᠠᠨ ᠪᠤᠶᠤ ᠬᠠᠯᠠᠭᠤᠨ ᠴᠡᠭ ᠤ᠋ᠨ ᠴᠢᠳᠠᠮᠵᠢ ᠲᠠᠢ ᠤᠲᠠᠰᠤ ᠦᠭᠡᠢ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠺᠠᠷᠲ ᠪᠠᠢᠬᠤ ᠦᠭᠡᠢ</translation>
     </message>
@@ -73,7 +73,7 @@
         <translation type="vanished">ᠬᠠᠯᠠᠭᠤᠨ ᠴᠡᠭ ᠢ᠋ ᠡᠬᠢᠯᠡᠵᠤ ᠬᠠᠭᠠᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="177"/>
+        <location filename="../mobilehotspotwidget.cpp" line="180"/>
         <source>hotpots name or device is invalid</source>
         <translation>ᠬᠠᠯᠠᠭᠤᠨ ᠴᠡᠭ ᠤ᠋ᠨ ᠨᠡᠷᠡᠢᠳᠦᠯ ᠪᠤᠶᠤ ᠳᠦᠬᠦᠬᠡᠷᠦᠮᠵᠢ ᠪᠤᠷᠤᠭᠤ</translation>
     </message>
@@ -86,69 +86,69 @@
         <translation type="vanished">ᠬᠠᠯᠠᠭᠤᠨ ᠴᠡᠭ ᠢ᠋ ᠡᠬᠢᠯᠡᠵᠤ ᠪᠠᠢᠭᠤᠯᠬᠤ </translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="556"/>
+        <location filename="../mobilehotspotwidget.cpp" line="558"/>
         <source>Contains at least 8 characters</source>
         <translation>ᠠᠳᠠᠭ ᠲᠤ᠌ ᠪᠡᠨ 8 ᠦᠰᠦᠭ ᠳᠡᠮᠳᠡᠭ ᠠᠭᠤᠯᠠᠭᠳᠠᠵᠤ ᠪᠠᠢᠨ᠎ᠠ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="231"/>
+        <location filename="../mobilehotspotwidget.cpp" line="233"/>
         <source>Hotspot</source>
         <translation>ᠰᠢᠯᠵᠢᠮᠡᠯ ᠬᠠᠯᠠᠭᠤᠨ ᠴᠡᠭ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="61"/>
+        <location filename="../mobilehotspotwidget.cpp" line="64"/>
         <source>Settings</source>
         <translation>ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="64"/>
+        <location filename="../mobilehotspotwidget.cpp" line="67"/>
         <source>Settings desktop message</source>
         <translation>ᠰᠢᠷᠡᠭᠡᠨ ᠨᠢᠭᠤᠷ᠎ᠤ᠋ᠨ ᠵᠠᠩᠭᠢ᠎ᠶ᠋ᠢ ᠵᠣᠬᠢᠷᠠᠭᠤᠯᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="340"/>
+        <location filename="../mobilehotspotwidget.cpp" line="342"/>
         <source>use </source>
         <translation>ᠬᠡᠷᠡᠭᠯᠡᠬᠦ </translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="341"/>
+        <location filename="../mobilehotspotwidget.cpp" line="343"/>
         <source> share network, will interrupt local wireless connection</source>
         <translation> ᠬᠠᠮᠲᠤ ᠡᠳ᠋ᠯᠡᠬᠦ ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠂ ᠲᠤᠰ ᠭᠠᠵᠠᠷ᠎ᠤ᠋ᠨ ᠤᠲᠠᠰᠤᠭᠤᠢ ᠵᠠᠯᠭᠠᠯᠲᠠ᠎ᠶ᠋ᠢ ᠲᠠᠰᠤᠯᠠᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="357"/>
-        <location filename="../mobilehotspotwidget.cpp" line="705"/>
+        <location filename="../mobilehotspotwidget.cpp" line="359"/>
+        <location filename="../mobilehotspotwidget.cpp" line="707"/>
         <source>hotspot already close</source>
         <translation>ᠬᠠᠯᠠᠭᠤᠨ ᠴᠡᠭ ᠢ᠋ ᠬᠠᠭᠠᠪᠠ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="502"/>
+        <location filename="../mobilehotspotwidget.cpp" line="504"/>
         <source>Open</source>
         <translation>ᠨᠡᠭᠡᠭᠡᠭᠦ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="523"/>
+        <location filename="../mobilehotspotwidget.cpp" line="525"/>
         <source>Wi-Fi Name</source>
         <translation>Wi-Fi ᠨᠡᠷᠡᠢᠳᠦᠯ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="544"/>
+        <location filename="../mobilehotspotwidget.cpp" line="546"/>
         <source>Password</source>
         <translation>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠨᠢᠭᠤᠴᠠ ᠺᠤᠳ᠋</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="588"/>
+        <location filename="../mobilehotspotwidget.cpp" line="590"/>
         <source>Frequency band</source>
         <translation>ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠳᠠᠪᠳᠠᠮᠵᠢ ᠵᠢᠨ ᠪᠦᠰᠡ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="612"/>
+        <location filename="../mobilehotspotwidget.cpp" line="614"/>
         <source>Net card</source>
         <translation>ᠬᠠᠮᠳᠤᠪᠠᠷ ᠡᠳ᠋ᠯᠡᠬᠦ ᠨᠧᠲ ᠤ᠋ᠨ ᠦᠵᠦᠬᠦᠷ</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="735"/>
-        <location filename="../mobilehotspotwidget.cpp" line="743"/>
+        <location filename="../mobilehotspotwidget.cpp" line="737"/>
+        <location filename="../mobilehotspotwidget.cpp" line="745"/>
         <source>hotspot already open</source>
         <translation>ᠬᠠᠯᠠᠭᠤᠨ ᠴᠡᠭ ᠢ᠋ ᠨᠡᠬᠡᠬᠡᠪᠡ</translation>
     </message>

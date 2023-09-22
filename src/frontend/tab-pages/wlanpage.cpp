@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -29,6 +29,7 @@
 
 #define AP_SCAN_INTERVAL (20*1000)
 #define ICON_REFRESH_INTERVAL (5*1000)
+
 #define LOG_FLAG  "[WlanPage]"
 #define LAN_PAGE_INDEX 0
 
@@ -942,7 +943,6 @@ void WlanPage::sendApStateChangeSignal(QString uuid,
 {
     bool ret = false;
     ret = m_connectResource->isApConnection(uuid);
-
     if (!ret) {
         return;
     }
@@ -1600,7 +1600,6 @@ void WlanPage::showNonePwd()
     return;
 }
 
-
 void WlanPage::showRate()
 {
     //定时获取网速
@@ -1632,6 +1631,8 @@ void WlanPage::showHiddenWlanPage(QString devName)
 
     m_joinHiddenWiFiPagePtrMap.insert(devName, hiddenWiFi);
     hiddenWiFi->show();
+    KWindowSystem::raiseWindow(hiddenWiFi->winId());
+    hiddenWiFi->centerToScreen();
 }
 
 void WlanPage::showDetailPage(QString devName, QString ssid)
@@ -1661,6 +1662,8 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
         }
     });
     netDetail->show();
+    KWindowSystem::raiseWindow(netDetail->winId());
+    netDetail->centerToScreen();
 
     return;
 }

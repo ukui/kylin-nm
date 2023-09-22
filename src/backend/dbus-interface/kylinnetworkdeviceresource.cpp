@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -56,7 +56,6 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
                                        this, &KyNetworkDeviceResourse::deviceActiveChanage);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceManagedChange,
                                        this, &KyNetworkDeviceResourse::deviceManagedChange);
-
 }
 
 KyNetworkDeviceResourse::~KyNetworkDeviceResourse()
@@ -480,7 +479,6 @@ void KyNetworkDeviceResourse::onDeviceAdd(QString deviceName, QString uni, Netwo
 {
     m_deviceMap.insert(uni, deviceName);
     Q_EMIT deviceAdd(deviceName, deviceType);
-
     return;
 }
 
@@ -488,7 +486,6 @@ void KyNetworkDeviceResourse::onDeviceRemove(QString deviceName, QString uni)
 {
     m_deviceMap.remove(uni);
     Q_EMIT deviceRemove(deviceName);
-
     return;
 }
 

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -123,7 +123,7 @@ QWidget *Proxy::pluginUi() {
             initManualProxyStatus();
             initIgnoreHostStatus();
             initDbus();
-            initAppProxyStatus();
+//            initAppProxyStatus();
         } else {
             qCritical() << "Xml needed by Proxy is not installed";
         }
@@ -372,10 +372,10 @@ void Proxy::initUi(QWidget *widget)
     Lyt->addWidget(mIgnoreFrame);
 
     //应用代理模块
-    m_appProxyLabel = new TitleLabel(widget);
-    m_appProxyLabel->setText(tr("Application Proxy")); //应用代理
-    setAppProxyFrameUi(widget);
-    setAppListFrameUi(widget);
+//    m_appProxyLabel = new TitleLabel(widget);
+//    m_appProxyLabel->setText(tr("Application Proxy")); //应用代理
+//    setAppProxyFrameUi(widget);
+//    setAppListFrameUi(widget);
 
     //APT代理模块
     mAptProxyLabel = new TitleLabel(widget);
@@ -438,12 +438,13 @@ void Proxy::initUi(QWidget *widget)
 
     mverticalLayout->addWidget(mTitleLabel);
     mverticalLayout->addWidget(mProxyFrame);
+
     mverticalLayout->addWidget(m_sysSpacerFrame);
-    mverticalLayout->addWidget(m_appProxyLabel);
-    mverticalLayout->addWidget(m_appProxyFrame);
+//    mverticalLayout->addWidget(m_appProxyLabel);
+//    mverticalLayout->addWidget(m_appProxyFrame);
     mverticalLayout->addWidget(m_appListSpacerFrame);
-    mverticalLayout->addWidget(m_appListFrame);
-    mverticalLayout->addWidget(m_appSpacerFrame);
+//    mverticalLayout->addWidget(m_appListFrame);
+//    mverticalLayout->addWidget(m_appSpacerFrame);
     mverticalLayout->addWidget(mAptProxyLabel);
     mverticalLayout->addWidget(mAPTFrame);
     mverticalLayout->addStretch();
@@ -982,7 +983,7 @@ QMap<QString, QStringList> Proxy::getAppListProxy()
 void Proxy::setUkccProxySettings()
 {
     setSystemProxyFrameHidden(false);
-    setAppProxyFrameHidden(false);
+//    setAppProxyFrameHidden(false);
     setAPTProxyFrameHidden(false);
 
     QDBusInterface ukccDbusInterface("org.ukui.ukcc.session",
@@ -1016,7 +1017,7 @@ void Proxy::setUkccProxySettings()
         if (setting.contains("SystemProxyFrame") && setting.contains("false")) {
             setSystemProxyFrameHidden(true);
         } else if (setting.contains("AppProxyFrame") && setting.contains("false")) {
-            setAppProxyFrameHidden(true);
+//            setAppProxyFrameHidden(true);
         } else if (setting.contains("APTProxyFrame") && setting.contains("false")) {
             setAPTProxyFrameHidden(true);
         }
@@ -1250,6 +1251,7 @@ void Proxy::setAppListFrameUi(QWidget *widget)
 
     appListLayout->addWidget(m_allowAppProxyLabel);
     appListLayout->addWidget(m_appListWidget);
+
 
     onPaletteChanged();
     const QByteArray style_id(THEME_SCHAME);

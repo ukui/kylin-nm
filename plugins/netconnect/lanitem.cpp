@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -164,7 +164,7 @@ bool LanItem::eventFilter(QObject *watched, QEvent *event)
 {
     //菜单右边界与按钮右边界对齐
     if (event->type() == QEvent::Show && watched == m_moreMenu) {
-        int menuXPos = m_moreMenu->pos().x();
+        int menuXPos = mapToGlobal(m_moreButton->pos()).x();
         int menuWidth = m_moreMenu->size().width();
         int btnWidth = m_moreButton->size().width();
 
@@ -174,4 +174,3 @@ bool LanItem::eventFilter(QObject *watched, QEvent *event)
     }
     return false;
 }
-

@@ -453,7 +453,7 @@ int KyNetworkDeviceResourse::getWirelessDeviceCapability(const QString deviceNam
             qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
 
         int cap = 0x00;
-        if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::AdhocCap) {
+        if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::ApCap) {
             cap = cap | 0x02;
         } else {
             return 0x01;

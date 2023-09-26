@@ -189,12 +189,19 @@ void ListItem::showDesktopNotify(const QString &message, QString soundName)
 void ListItem::mousePressEvent(QMouseEvent *event)
 {
     qDebug()<<"[ListItem]"<<"mousePressEvent";
-    if (event->button() == Qt::LeftButton) {
-        onNetButtonClicked();
-    } else if (event->button() == Qt::RightButton) {
+    if (event->button() == Qt::RightButton) {
         onRightButtonClicked();
     }
     return QFrame::mousePressEvent(event);
+}
+
+void ListItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    qDebug()<<"[ListItem]"<<"mouseReleaseEvent";
+    if (event->button() == Qt::LeftButton) {
+        onNetButtonClicked();
+    }
+    return QFrame::mouseReleaseEvent(event);
 }
 
 void ListItem::enterEvent(QEvent *event)

@@ -1181,6 +1181,15 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
     m_deviceResource->setDeviceManaged(devName, enable);
 }
 
+void LanPage::deleteWired(const QString &connUuid)
+{
+    qDebug() << "[LanPage] deleteWired" << connUuid;
+    if (connUuid == nullptr) {
+        return;
+    }
+    m_wiredConnectOperation->deleteWiredConnect(connUuid);
+}
+
 bool LanPage::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_settingsLabel) {

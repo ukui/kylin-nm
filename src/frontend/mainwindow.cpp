@@ -159,7 +159,7 @@ void MainWindow::firstlyStart()
     initDbusConnnect();
     initWindowTheme();
     initTrayIcon();
-    initPlatform();
+//    initPlatform();
     installEventFilter(this);
     m_secondaryStartTimer = new QTimer(this);
     connect(m_secondaryStartTimer, &QTimer::timeout, this, [ = ]() {
@@ -442,7 +442,6 @@ void MainWindow::initDbusConnnect()
  */
 void MainWindow::resetWindowPosition()
 {
-
     if (m_isShowInCenter) {
         QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
         QRect rect((availableGeometry.width() - this->width())/2, (availableGeometry.height() - this->height())/2,
@@ -1046,6 +1045,12 @@ void MainWindow::showAddOtherWlanWidget(QString devName)
 void MainWindow::getWirelessDeviceCap(QMap<QString, int> &map)
 {
     m_wlanWidget->getWirelessDeviceCap(map);
+}
+
+//有线连接删除
+void MainWindow::deleteWired(const QString &connUuid)
+{
+    m_lanWidget->deleteWired(connUuid);
 }
 
 //有线连接断开

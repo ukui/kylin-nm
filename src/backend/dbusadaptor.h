@@ -62,6 +62,8 @@ public Q_SLOTS: // METHODS
 //    QString getDefaultWiredDevice();
 //    Q_NOREPLY void setDefaultWirelessDevice(QString deviceName);
 //    QString  getDefaultWirelessDevice();
+    //刪除 根据网络名称 参数1 0:lan 1:wlan 参数2 为ssid/uuid
+    void deleteConnect(int type, QString ssid);
     //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void activateConnect(int type, QString devName, QString ssid);
     //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid

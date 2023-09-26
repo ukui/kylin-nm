@@ -84,6 +84,8 @@ public:
     //获取热点ActivePath
     void getActiveConnectionPath(QString &path, QString uuid);
 
+    //有线连接删除
+    void deleteWired(const QString &connUuid);
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);

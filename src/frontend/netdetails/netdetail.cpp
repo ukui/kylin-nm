@@ -1150,7 +1150,7 @@ bool NetDetail::updateConnect()
         }
     }
 
-    if (ipv4Change || ipv6Change || securityChange || ipv4Page->checkDnsSettingsIsChanged()) {
+    if (ipv4Change || ipv6Change || securityChange/* || ipv4Page->checkDnsSettingsIsChanged()*/) {
         if (isActive) {
             //信息变化 断开-重连 更新需要時間 不可以立即重連
 //            sleep(1);

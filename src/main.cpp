@@ -146,10 +146,11 @@ int main(int argc, char *argv[])
             QDBusReply<uint> pid = interface1->servicePid(serviceName);
             qDebug() << "current display " << getenv("DISPLAY") << QApplication::applicationPid()
                      << "exist kylin-nm display" << displayFromPid(pid.value());
-            if (getenv("DISPLAY") != displayFromPid(pid.value())) {
-                return 0;
+            if (getenv("DISPLAY") == displayFromPid(pid.value())) {
+                interface.call(QStringLiteral("showKylinNM"), 2);
             }
         }
+        return 0;
     }
 
     QThread *thread = new QThread();

@@ -28,6 +28,7 @@
 #include <QHBoxLayout>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include <QToolButton>
 
 class AppListWidget : public QWidget
 {
@@ -37,7 +38,7 @@ public:
     ~AppListWidget();
 
     void setAppChecked(bool flag);
-    void setAppIcon(const QPixmap &icon);
+    void setAppIcon(const QIcon &icon);
     void setAppName(const QString &text);
     void onAppCheckStateChanged();
     void AddAppProxyConfig();
@@ -51,7 +52,7 @@ private:
     void initDbus();
 
     QCheckBox *m_checkBox = nullptr;
-    QLabel    *m_iconLabel = nullptr;
+    QToolButton *m_iconBtn = nullptr;
     QLabel    *m_nameLabel = nullptr;
     QString    m_path = nullptr;
     QDBusInterface *m_dbusInterface = nullptr;

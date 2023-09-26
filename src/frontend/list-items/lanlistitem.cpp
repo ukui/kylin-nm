@@ -55,7 +55,6 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
 
     m_itemFrame->installEventFilter(this);
 //    connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
-    connect(m_menu, &QMenu::triggered, this, &LanListItem::onMenuTriggered);
     connect(m_hoverButton, &FixPushButton::clicked, this, &LanListItem::onNetButtonClicked);
 }
 
@@ -275,7 +274,7 @@ void LanListItem::enterEvent(QEvent *event)
 void LanListItem::leaveEvent(QEvent *event)
 {
     m_hoverButton->hide();
-    if (m_lanConnectItem.m_connectState == Activated) {
+    if (m_lanConnectItem.m_connectState == Activated || m_connectState == Deactivating) {
         m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
         m_lbLoadUp->show();
         m_lbLoadDown->show();

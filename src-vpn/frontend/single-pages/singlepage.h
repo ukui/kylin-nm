@@ -41,9 +41,9 @@ using namespace kdk;
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
-#define TITLE_FRAME_HEIGHT 60     //TabWidget的tab和widget有间隙，和设计稿看起来一致就不能设为设计稿里的高度
+#define TITLE_FRAME_HEIGHT 50
 #define TITLE_LAYOUT_MARGINS 24,0,24,0
-#define NET_LAYOUT_MARGINS 8,8,0,8
+#define NET_LAYOUT_MARGINS 8,4,0,4
 #define TEXT_HEIGHT 20
 #define SETTINGS_LAYOUT_MARGINS 23,0,24,0
 
@@ -71,6 +71,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void onTransChanged();
+    void onThemeChanged(const QString &key);
+    void setThemePalette();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -84,6 +86,7 @@ protected:
 
 private:
     void initWindowProperties();
+    void initWindowTheme();
 
 protected:
     QVBoxLayout * m_mainLayout = nullptr;
@@ -106,6 +109,8 @@ protected:
 
     QGSettings * m_transGsettings = nullptr;
     double m_transparency = 1.0;  //透明度
+    //监听主题的Gsettings
+    QGSettings * m_styleGsettings = nullptr;
 
 };
 

@@ -107,6 +107,7 @@ QWidget *Vpn::pluginUi(){
         initComponent();
         initConnect();
         initNet();
+        initSearchText();
     }
     return m_pluginWidget;
 }
@@ -129,6 +130,11 @@ QIcon Vpn::icon() const
 bool Vpn::isEnable() const
 {
     return true;
+}
+
+QString Vpn::translationPath() const
+{
+    return "/usr/share/kylin-nm/vpn/%1.ts";
 }
 
 void Vpn::initComponent(){
@@ -188,6 +194,7 @@ void Vpn::initComponent(){
     ui->verticalLayout_3->addWidget(m_listFrame);
 
     connect(m_listFrame->m_addVpnWidget, &AddNetBtn::clicked, this, [=]() {
+        UkccCommon::buriedSettings(QString("VPN"), QString("Add VPN"), QString("clicked"));
         runExternalApp();
     });
 
@@ -210,6 +217,10 @@ void Vpn::initComponent(){
         if (m_switchGsettings != nullptr) {
             m_switchGsettings->set(VISIBLE, state);
         }
+    });
+
+    connect(m_showBtn, &KSwitchButton::clicked, this, [=](bool checked){
+        UkccCommon::buriedSettings(QString("VPN"), QString("Show on Taskbar"),  QString("settings"), checked ? "true":"false");
     });
 
 //    connect(m_timeBtn, &KSwitchButton::stateChanged, this, [=](bool state){
@@ -265,6 +276,14 @@ void Vpn::setShowSwitchStatus()
     } else {
         qDebug()<<"[Vpn] org.ukui.kylin-nm.switch is not installed!";
     }
+}
+
+void Vpn::initSearchText()
+{
+    //~ contents_path /Vpn/Show on Taskbar
+    tr("Show on Taskbar");
+    //~ contents_path /Vpn/Add VPN
+    tr("Add VPN");
 }
 
 void Vpn::runExternalApp(){
@@ -488,6 +507,10 @@ int Vpn::getInsertPos(QString connName)
         auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
         QVector<QStringList> variantList;
         dbusArg >> variantList;
+        if (variantList.isEmpty()) {
+            qDebug() << "[Vpn] virtualList is empty, getInsertPos return 0";
+            return 0;
+        }
         for (int i = 0; i < variantList.size(); ++i ) {
             if (variantList.at(i).at(0) == connName) {
                 qDebug() << "pos in kylin-nm is " << i;

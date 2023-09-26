@@ -29,6 +29,7 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
 {
     qRegisterMetaType<NetworkManager::Device::State>("NetworkManager::Device::State");
     qRegisterMetaType<NetworkManager::Device::StateChangeReason>("NetworkManager::Device::StateChangeReason");
+    qRegisterMetaType<NetworkManager::Connectivity>("NetworkManager::Connectivity");
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
 
     m_deviceMap.clear();
@@ -248,6 +249,41 @@ qulonglong KyNetworkDeviceResourse::getDeviceTxRefreshRate(QString deviceName)
     return 0;
 }
 
+void KyNetworkDeviceResourse::getDeviceConnectivity(const QString &deviceName, NetworkManager::Connectivity &connectivity)
+{
+    connectivity = NetworkManager::Connectivity::UnknownConnectivity;
+    QString dbusPath;
+    NetworkManager::Device::Ptr connectDevice =
+                        m_networkResourceInstance->findDeviceInterface(deviceName);
+    if (connectDevice != nullptr && connectDevice->isValid()) {
+       dbusPath = connectDevice->uni();
+    } else {
+        qWarning() << "[KyNetworkDeviceResourse] can not find device " << deviceName;
+        return;
+    }
+
+    QDBusInterface *ip4ConnectivityDbus = new QDBusInterface("org.freedesktop.NetworkManager",
+                                                             dbusPath,
+                                                             "org.freedesktop.DBus.Properties",
+                                                             QDBusConnection::systemBus());
+
+    if (ip4ConnectivityDbus == nullptr || !ip4ConnectivityDbus->isValid()) {
+        qWarning() << "[KyNetworkDeviceResourse] get device properties failed";
+        return;
+    }
+
+    QDBusReply<QVariant> reply = ip4ConnectivityDbus->call("Get", "org.freedesktop.NetworkManager.Device", "Ip4Connectivity");
+
+    if (reply.isValid()) {
+        connectivity = (NetworkManager::Connectivity) reply.value().toUInt();
+    } else {
+        qWarning() << "[KyNetworkDeviceResourse] get device properties failed";
+    }
+
+    delete ip4ConnectivityDbus;
+    ip4ConnectivityDbus = nullptr;
+}
+
 bool KyNetworkDeviceResourse::getActiveConnectionInfo(const QString devName, int &signalStrength, QString &uni, QString &secuType)
 {
     signalStrength = 0;
@@ -279,6 +315,91 @@ bool KyNetworkDeviceResourse::getActiveConnectionInfo(const QString devName, int
     }
 }
 
+const QMap<uint, uint> g_bFreqs = {
+    {2412, 1},
+    {2417, 2},
+    {2422, 3},
+    {2427, 4},
+    {2432, 5},
+    {2437, 6},
+    {2442, 7},
+    {2447, 8},
+    {2452, 9},
+    {2457, 10},
+    {2462, 11},
+    {2467, 12},
+    {2472, 13},
+    {2484, 14}
+};
+
+const QMap<uint, uint> g_aFreqs = {
+    {5035, 7},
+    {5040, 8},
+    {5045, 9},
+    {5055, 11},
+    {5060, 12},
+    {5080, 16},
+    {5170, 34},
+    {5180, 36},
+    {5190, 38},
+    {5200, 40},
+    {5210, 42},
+    {5220, 44},
+    {5230, 46},
+    {5240, 48},
+    {5260, 52},
+    {5280, 56},
+    {5300, 60},
+    {5320, 64},
+    {5500, 100},
+    {5520, 104},
+    {5540, 108},
+    {5560, 112},
+    {5580, 116},
+    {5600, 120},
+    {5620, 124},
+    {5640, 128},
+    {5660, 132},
+    {5680, 136},
+    {5700, 140},
+    {5745, 149},
+    {5765, 153},
+    {5785, 157},
+    {5805, 161},
+    {5825, 165},
+    {4915, 183},
+    {4920, 184},
+    {4925, 185},
+    {4935, 187},
+    {4940, 188},
+    {4945, 189},
+    {4960, 192},
+    {4980, 196}
+};
+
+uint KyNetworkDeviceResourse::kyFindChannel(uint freq)
+{
+    uint channel = 0;
+    QMap<uint, uint> freqMap;
+    if (freq < 2500) {
+        freqMap = g_bFreqs;
+    } else {
+        freqMap = g_aFreqs;
+    }
+    for (auto freqKey : freqMap.keys()) {
+        if (freqKey <= freq) {
+            channel = freqMap.value(freqKey);
+            if (freqKey == freq) {
+                break;
+            }
+        } else {
+            break;
+        }
+    }
+
+    return channel;
+}
+
 void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QString &strMac, uint &iHz, uint &iChan, QString &secuType)
 {
     strMac.clear();
@@ -305,7 +426,7 @@ void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QStri
             }
             strMac = apPtr->hardwareAddress();
             iHz = apPtr->frequency();
-            iChan = NetworkManager::findChannel(iHz);
+            iChan = kyFindChannel(iHz);
             NetworkManager::AccessPoint::Capabilities cap = apPtr->capabilities();
             NetworkManager::AccessPoint::WpaFlags wpaFlag = apPtr->wpaFlags();
             NetworkManager::AccessPoint::WpaFlags rsnFlag = apPtr->rsnFlags();
@@ -330,22 +451,28 @@ int KyNetworkDeviceResourse::getWirelessDeviceCapability(const QString deviceNam
         NetworkManager::WirelessDevice *wirelessDevicePtr =
             qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
 
-        int cap = 0;
+        int cap = 0x00;
         if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::ApCap) {
-            cap = cap | 0x01;
-        }
-        if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::Freq2Ghz) {
             cap = cap | 0x02;
+        } else {
+            return 0x01;
         }
-        if (wirelessDevicePtr->wirelessCapabilities() & NetworkManager::WirelessDevice::Freq5Ghz) {
-            cap = cap | 0x04;
+        QDBusInterface dbusInterface("org.freedesktop.NetworkManager",
+                                     connectDevice->uni(),
+                                     "org.freedesktop.NetworkManager.Device.Wireless",
+                                     QDBusConnection::systemBus());
+
+        QDBusReply<uint> reply = dbusInterface.call("GetHotspotCapabilities");
+        if (reply.isValid()) {
+            if (reply.value() == 1) {
+                cap = cap | 0x04;
+            }
         }
         return cap;
     } else {
         qWarning()<<"[KyNetworkDeviceResourse]"<<deviceName<<" is not valid or not wireless.";
     }
-
-    return 0;
+    return 0x01;
 }
 
 void KyNetworkDeviceResourse::onDeviceAdd(QString deviceName, QString uni, NetworkManager::Device::Type deviceType)
@@ -382,7 +509,7 @@ bool KyNetworkDeviceResourse::wirelessDeviceIsExist(const QString devName)
     return list.contains(devName);
 }
 
-bool KyNetworkDeviceResourse::deviceIsWired(QString deviceName)
+bool KyNetworkDeviceResourse::checkDeviceType(QString deviceName, NetworkManager::Device::Type deviceType)
 {
     NetworkManager::Device::Ptr devicePtr =
                 m_networkResourceInstance->findDeviceInterface(deviceName);
@@ -392,9 +519,14 @@ bool KyNetworkDeviceResourse::deviceIsWired(QString deviceName)
         return false;
     }
 
-    if (NetworkManager::Device::Type::Ethernet == devicePtr->type()
-            && !devicePtr->udi().startsWith(VIRTURAL_DEVICE_PATH)) {
-        return true;
+    if (deviceType == devicePtr->type()) {
+        if (NetworkManager::Device::Type::Ethernet == deviceType) {
+            if (!devicePtr->udi().startsWith(VIRTURAL_DEVICE_PATH)) {
+                return true;
+            }
+        } else {
+            return true;
+        }
     }
 
     return false;
@@ -412,6 +544,25 @@ void KyNetworkDeviceResourse::setDeviceManaged(QString devName, bool managed)
         return;
     }
     setDeviceManagedByGDbus(dbusPath, managed);
+#if 0
+    QDBusInterface dbusInterface("org.freedesktop.NetworkManager",
+                              dbusPath,
+                              "org.freedesktop.NetworkManager.Device",
+                              QDBusConnection::systemBus());
+
+    if (!dbusInterface.isValid()) {
+        qWarning() << dbusPath << "invalid";
+        setDeviceManagedByGDbus(dbusPath, managed);
+        return;
+    }
+
+    QDBusReply<void> reply = dbusInterface.call("SetStateDevice", "", managed);
+    if (!reply.isValid()) {
+        qWarning() << "SetStateDevice error" << reply.error().message();
+        setDeviceManagedByGDbus(dbusPath, managed);
+        return;
+    }
+#endif
 }
 
 bool KyNetworkDeviceResourse::getDeviceManaged(QString deviceName)

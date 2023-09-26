@@ -32,8 +32,10 @@
 #include "kwidget.h"
 #include "kswitchbutton.h"
 #include "itemframe.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
 
 namespace Ui {
 class Vpn;
@@ -56,6 +58,7 @@ public:
     bool isShowOnHomePage() const Q_DECL_OVERRIDE;
     QIcon icon() const Q_DECL_OVERRIDE;
     bool isEnable() const Q_DECL_OVERRIDE;
+    QString translationPath() const  Q_DECL_OVERRIDE;
 
 public:
     void initComponent();
@@ -106,8 +109,9 @@ private:
     //单个lan连接状态变化
     void itemActiveConnectionStatusChanged(VpnItem *item, int status);
 
-
     void setShowSwitchStatus();
+    // 搜索词条
+    void initSearchText();
 
 private slots:
     void onVpnAdd(QStringList);

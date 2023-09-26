@@ -54,8 +54,8 @@ class WlanListItem : public ListItem
 {
     Q_OBJECT
 public:
-    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, QWidget *parent = nullptr);
-    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, QWidget *parent = nullptr);
+    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, bool isShowWifi6Plus, QWidget *parent = nullptr);
+    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isShowWifi6Plus, QWidget *parent = nullptr);
     WlanListItem(QWidget *parent = nullptr);
     ~WlanListItem();
 
@@ -91,7 +91,6 @@ protected:
     void leaveEvent(QEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
-    void paintEvent(QPaintEvent *event);
 
 Q_SIGNALS:
     void itemHeightChanged(const bool isExpanded, const QString &ssid);
@@ -123,11 +122,9 @@ private:
     QCheckBox *m_autoConnectCheckBox = nullptr;
     QLabel *m_autoConnectLabel = nullptr;
 
-    bool m_focusIsOut = true;
-    bool m_mouseIsOut = true;
-
     bool m_forgetConnection = false;
     bool m_isApMode = false;
+    bool m_isShowWifi6Plus = true;
 
 protected Q_SLOTS:
     void onInfoButtonClicked();

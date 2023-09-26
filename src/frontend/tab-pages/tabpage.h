@@ -50,6 +50,7 @@ using namespace kdk;
 #define TITLE_LAYOUT_MARGINS 24,0,24,0
 #define DEVICE_LAYOUT_MARGINS 24,0,24,8
 #define DEVICE_COMBOBOX_WIDTH 180
+#define DEVICE_COMBOBOX_WIDTH_MAX 230
 #define ACTIVE_NET_LAYOUT_MARGINS 8,8,8,8
 #define NET_LAYOUT_MARGINS 8,8,0,1
 #define NET_LAYOUT_SPACING 8
@@ -109,6 +110,7 @@ public:
 
 Q_SIGNALS:
     void deviceStatusChanged();
+    void wirelessDeviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName, int type);
     void activateFailed(QString errorMessage);
     void deactivateFailed(QString errorMessage);

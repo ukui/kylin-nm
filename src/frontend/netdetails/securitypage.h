@@ -31,7 +31,6 @@
 #include "kylable.h"
 #include "kwidget.h"
 #include "kpasswordedit.h"
-#include "detailwidget.h"
 
 using namespace kdk;
 

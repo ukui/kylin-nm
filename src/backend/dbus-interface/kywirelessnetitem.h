@@ -32,9 +32,12 @@ public:
     KyWirelessNetItem() {;}
     ~KyWirelessNetItem();
 
+    QString getDevice() {
+        return m_device;
+    }
+
 private:
     void init(NetworkManager::WirelessNetwork::Ptr net);
-    void initInfoBySsid();
 
 public:
     QString                                 m_NetSsid;
@@ -61,5 +64,7 @@ private:
     QString                                 m_device;
 
 };
+
+void updatewirelessItemConnectInfo(KyWirelessNetItem& item);
 
 #endif // KYWIRELESSNETITEM_H

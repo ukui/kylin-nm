@@ -22,7 +22,6 @@
 #include <QPainter>
 #include <QApplication>
 #include <QDebug>
-#include <QPainterPath>
 
 #define BUTTON_SIZE 36,36
 #define ICON_SIZE 16,16

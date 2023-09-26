@@ -6,7 +6,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
@@ -22,14 +22,14 @@
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../lanitem.cpp" line="120"/>
-        <location filename="../lanitem.cpp" line="133"/>
+        <location filename="../lanitem.cpp" line="118"/>
+        <location filename="../lanitem.cpp" line="131"/>
         <source>Disconnect</source>
         <translation>断开</translation>
     </message>
     <message>
-        <location filename="../lanitem.cpp" line="122"/>
-        <location filename="../lanitem.cpp" line="131"/>
+        <location filename="../lanitem.cpp" line="120"/>
+        <location filename="../lanitem.cpp" line="129"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
@@ -43,58 +43,65 @@
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
-        <location filename="../netconnect.cpp" line="158"/>
+        <location filename="../netconnect.cpp" line="159"/>
         <source>open</source>
         <translation>开启</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
-        <location filename="../netconnect.cpp" line="155"/>
+        <location filename="../netconnect.cpp" line="156"/>
         <source>Advanced settings</source>
         <translation>高级设置</translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="67"/>
         <source>ukui control center</source>
-        <translation>控制面板</translation>
+        <translation type="vanished">控制面板</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="70"/>
         <source>ukui control center desktop message</source>
-        <translation>控制面板桌面通知</translation>
+        <translation type="vanished">控制面板桌面通知</translation>
     </message>
     <message>
         <source>WiredConnect</source>
         <translation type="vanished">有线网络</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="84"/>
-        <location filename="../netconnect.cpp" line="156"/>
+        <location filename="../netconnect.cpp" line="66"/>
+        <source>Settings</source>
+        <translation>设置</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="69"/>
+        <source>Settings desktop message</source>
+        <translation>设置 桌面通知</translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="83"/>
+        <location filename="../netconnect.cpp" line="157"/>
         <source>LAN</source>
         <translation>有线网络</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="172"/>
         <source>No ethernet device avaliable</source>
-        <translation>未检测到有线设备</translation>
+        <translation type="vanished">未检测到有线设备</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="450"/>
-        <location filename="../netconnect.cpp" line="896"/>
+        <location filename="../netconnect.cpp" line="455"/>
+        <location filename="../netconnect.cpp" line="905"/>
         <source>connected</source>
         <translation>已连接</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="452"/>
-        <location filename="../netconnect.cpp" line="749"/>
-        <location filename="../netconnect.cpp" line="906"/>
+        <location filename="../netconnect.cpp" line="457"/>
+        <location filename="../netconnect.cpp" line="757"/>
+        <location filename="../netconnect.cpp" line="915"/>
         <source>not connected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="528"/>
+        <location filename="../netconnect.cpp" line="534"/>
         <source>card</source>
         <translation>网卡</translation>
     </message>

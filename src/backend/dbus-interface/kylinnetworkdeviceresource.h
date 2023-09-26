@@ -62,7 +62,7 @@ public:
 
     bool wiredDeviceIsCarriered(QString deviceName);
     bool wirelessDeviceIsExist(const QString devName);
-    bool deviceIsWired(QString deviceName);
+    bool checkDeviceType(QString deviceName, NetworkManager::Device::Type deviceType);
 
     void setDeviceRefreshRate(QString deviceName, int ms);
 
@@ -72,12 +72,16 @@ public:
     qulonglong getDeviceRxRefreshRate(QString deviceName);
     qulonglong getDeviceTxRefreshRate(QString deviceName);
 
+    void getDeviceConnectivity(const QString &deviceName, NetworkManager::Connectivity &connectivity);
+
+private:
+    void initDeviceMap();
+    uint kyFindChannel(uint freq);
+
 private:
     KyWiredConnectOperation wiredOperation;
     KyNetworkResourceManager *m_networkResourceInstance = nullptr;
     QStringList m_activeConnectUuidList;
     QMap<QString, QString> m_deviceMap;
-
-    void initDeviceMap();
 };
 #endif // KYLINNETORKDEVICERESOURCE_H

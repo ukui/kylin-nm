@@ -74,10 +74,10 @@ public:
 private:
     void initUI();
     void initConnection();
+    void onPaletteChanged();
 
 public Q_SLOTS:
     virtual void onNetButtonClicked() = 0;
-    void onPaletteChanged();
     virtual void onMenuTriggered(QAction *action)=0;
 
 Q_SIGNALS:

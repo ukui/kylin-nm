@@ -46,6 +46,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     m_connectResource = new KyConnectResourse(this);
     m_wirelessConnectOpreation = new KyWirelessConnectOperation(this);
 
+    checkShowWifi6Plus();
     initDevice();
     initWlanUI();
     initWlanSwitchState();
@@ -62,6 +63,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
 
     connect(m_wirelessNetResource, &KyWirelessNetResource::connectionAdd, this, &WlanPage::onConnectionAdd);
     connect(m_wirelessNetResource, &KyWirelessNetResource::connectionRemove, this, &WlanPage::onConnectionRemove);
+    connect(m_wirelessNetResource, &KyWirelessNetResource::connectionUpdate, this, &WlanPage::onConnectionUpdate);
 
     connect(m_activatedConnectResource, &KyActiveConnectResourse::stateChangeReason,
                                                     this, &WlanPage::onConnectionStateChanged);
@@ -70,6 +72,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceRemove, this, &WlanPage::onDeviceRemove);
     connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceNameUpdate, this, &WlanPage::onDeviceNameUpdate);
 
+    connect(m_netDeviceResource, &KyNetworkDeviceResourse::deviceManagedChange, this, &WlanPage::onDeviceManagedChanged);
     connect(m_netDeviceResource, &KyNetworkDeviceResourse::stateChanged, this, &WlanPage::onWlanStateChanged);
 
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::activateConnectionError, this, &WlanPage::activateFailed);
@@ -153,11 +156,12 @@ void WlanPage::initWlanUI()
     addWlanMoreItem();
     m_inactivatedAreaLayout->addWidget(m_inactivatedNetListWidget);
 
-    connect(m_inactivatedNetListWidget, &QListWidget::currentItemChanged, this, [=]() {
-        if (m_inactivatedNetListWidget->currentItem() != nullptr) {
-            m_inactivatedNetListWidget->currentItem()->setSelected(false);
-        }
-    });
+    connect(m_inactivatedNetListWidget, &QListWidget::currentItemChanged,
+            this, &WlanPage::onInactivateListWidgetItemChanged);
+
+    //点击【已连接】网络区域 去掉其他网络的选中效果
+    connect(m_activatedNetListWidget, &QListWidget::clicked, this, &WlanPage::setInactivateListItemNoSelect);
+    connect(m_activatedNetListWidget, &QListWidget::currentItemChanged, this, &WlanPage::setInactivateListItemNoSelect);
 
     QPalette pal = m_activatedNetListWidget->palette();
     pal.setBrush(QPalette::Base, QColor(0,0,0,0));       //背景透明
@@ -193,6 +197,21 @@ bool WlanPage::getWirelessEnable()
     return m_wirelessConnectOpreation->getWirelessEnabled();
 }
 
+void WlanPage::checkShowWifi6Plus()
+{
+    //990下不显示wifi6+图标
+    QProcess * processCpuinfo = new QProcess(this);
+    processCpuinfo->start(QString("cat /proc/cpuinfo"));
+    connect(processCpuinfo, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [ = ]() {
+        processCpuinfo->deleteLater();
+    });
+    processCpuinfo->waitForFinished();
+    QString ctrCpuinfo = processCpuinfo->readAll();
+    if (ctrCpuinfo.indexOf("Kirin", 0, Qt::CaseInsensitive) != -1 && ctrCpuinfo.indexOf("990") != -1) {
+        m_showWifi6Plus = false;
+    }
+}
+
 void WlanPage::initWlanSwitchState()
 {
     if (m_devList.isEmpty()) {
@@ -225,6 +244,17 @@ void WlanPage::initDevice()
     m_netDeviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Wifi, m_devList);
 
     m_currentDevice = getDefaultDeviceName(WIRELESS);
+
+    if (m_devList.count() == 0) {
+        return;
+    }
+    for (int index = m_devList.count() - 1; index >= 0; --index) {
+        if (!m_netDeviceResource->getDeviceManaged(m_devList.at(index))) {
+            //删除未托管网卡
+            qDebug() << LOG_FLAG << "delete unmanaged device" << m_devList.at(index);
+            m_devList.removeOne(m_devList.at(index));
+        }
+    }
     return;
 }
 
@@ -293,7 +323,8 @@ QListWidgetItem *WlanPage::addNewItem(KyWirelessNetItem &wirelessNetItem,
     WlanListItem *p_wlanItem = new WlanListItem(
                 wirelessNetItem,
                 m_currentDevice,
-                m_connectResource->isApConnection(wirelessNetItem.m_connectUuid));
+                m_connectResource->isApConnection(wirelessNetItem.m_connectUuid),
+                m_showWifi6Plus);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
@@ -310,7 +341,7 @@ QListWidgetItem *WlanPage::insertNewItem(KyWirelessNetItem &wirelessNetItem,
                                          QListWidget *wirelessListWidget,
                                          int row)
 {
-    WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
+    WlanListItem *p_wlanItem = new WlanListItem(wirelessNetItem, m_currentDevice, m_showWifi6Plus);
     connect(p_wlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_wlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
@@ -331,7 +362,7 @@ QListWidgetItem *WlanPage::insertNewItemWithSort(KyWirelessNetItem &wirelessNetI
   //  qDebug()<< "insertNewItemWithSort" << wirelessNetItem.m_NetSsid
   //          <<"sort item config" << wirelessNetItem.m_isConfigured
   //         << "signal strength" << wirelessNetItem.m_signalStrength;
-    WlanListItem *p_sortWlanItem = new WlanListItem(wirelessNetItem, m_currentDevice);
+    WlanListItem *p_sortWlanItem = new WlanListItem(wirelessNetItem, m_currentDevice, m_showWifi6Plus);
     connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
     connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
 
@@ -453,12 +484,14 @@ void WlanPage::constructActivateConnectionArea()
 
             height += p_listWidgetItem->sizeHint().height();
             setNetSpeed->start(REFRESH_NETWORKSPEED_TIMER);
+            m_activatedNetListWidget->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
         }
     }
 
     if (height == 0) {  
         QListWidgetItem *p_listWidgetItem = addEmptyItem(m_activatedNetListWidget);
         m_activateConnectionItemMap.insert(EMPTY_SSID, p_listWidgetItem);
+        m_activatedNetListWidget->setSelectionMode(QAbstractItemView::SelectionMode::NoSelection);
 
         height += p_listWidgetItem->sizeHint().height();
     }
@@ -528,12 +561,20 @@ void WlanPage::initWlanArea()
 void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
 {
     //for dbus
+    int category = 0;
+    category = item.getCategory(item.m_uni);
+
+    //990 WiFi6+对应图标显示为WiFi6
+    if (!m_showWifi6Plus && category == 2) {
+        category = 1;
+    }
+
     QStringList info;
     info << item.m_NetSsid
          << QString::number(item.m_signalStrength)
          << item.m_secuType
          << (m_connectResource->isApConnection(item.m_connectUuid) ? IsApConnection : NotApConnection)
-         << QString::number(item.getCategory(item.m_uni));
+         << QString::number(category);
     Q_EMIT wlanAdd(interface, info);
 
     if (interface != m_currentDevice) {
@@ -598,6 +639,7 @@ void WlanPage::onWlanRemoved(QString interface, QString ssid)
 
         QListWidgetItem *p_listWidgetItem = addEmptyItem(m_activatedNetListWidget);
         m_activateConnectionItemMap.insert(EMPTY_SSID, p_listWidgetItem);
+        m_activatedNetListWidget->setSelectionMode(QAbstractItemView::SelectionMode::NoSelection);
     }
 
     return;
@@ -647,6 +689,13 @@ void WlanPage::onConnectionRemove(QString deviceName, QString ssid, QString path
     return;
 }
 
+void WlanPage::onConnectionUpdate(QString deviceName, QString ssid)
+{
+    if (deviceName == m_currentDevice || deviceName.isEmpty()) {
+        updateWlanListItem(ssid);
+    }
+}
+
 void WlanPage::onSecurityTypeChange(QString devName, QString ssid, QString secuType)
 {
     QListWidgetItem *p_listWidgetItem = nullptr;
@@ -681,7 +730,7 @@ void WlanPage::addDeviceToCombox(QString deviceName)
             m_deviceFrame->hide();
             m_currentDevice = deviceName;
             setDefaultDevice(WIRELESS, m_currentDevice);
-        } else if (m_deviceComboBox->count() == 0) {
+        } else if (m_deviceComboBox->count() == 0 && m_currentDevice != deviceName) {
             m_deviceComboBox->addItem(m_currentDevice);
             m_deviceComboBox->addItem(deviceName);
             m_deviceFrame->show();
@@ -708,6 +757,11 @@ void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devi
         return;
     }
 
+    if (!m_netDeviceResource->getDeviceManaged(deviceName)) {
+        qWarning() << LOG_FLAG << "couldn not add device" << deviceName << ", it is unmanaged";
+        return;
+    }
+
     m_devList << deviceName;
     setSwitchBtnEnable(true);
     setSwitchBtnState(getWirelessDevieceUseable());
@@ -717,7 +771,7 @@ void WlanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devi
         initWlanArea();
     }
 
-    Q_EMIT deviceStatusChanged();
+    Q_EMIT wirelessDeviceStatusChanged();
 
     return;
 }
@@ -740,7 +794,7 @@ void WlanPage::deleteDeviceFromCombox(QString deviceName)
             m_currentDevice = m_devList.at(0);
             setDefaultDevice(WIRELESS, m_currentDevice);
         } else {
-            int index = m_deviceComboBox->findData(deviceName);
+            int index = m_deviceComboBox->findText(deviceName);
             if (-1 != index) {
                 m_deviceComboBox->removeItem(index);
                 m_currentDevice = m_deviceComboBox->currentText();
@@ -782,7 +836,7 @@ void WlanPage::onDeviceRemove(QString deviceName)
         initWlanArea();
     }
 
-    Q_EMIT deviceStatusChanged();
+    Q_EMIT wirelessDeviceStatusChanged();
 }
 
 void WlanPage::updateDeviceForCombox(QString oldDeviceName, QString newDeviceName)
@@ -834,6 +888,54 @@ void WlanPage::onWlanStateChanged(NetworkManager::Device::State newstate, Networ
     Q_EMIT wirelessSwitchBtnChanged(getSwitchBtnState());
 }
 
+void WlanPage::onDeviceManagedChanged(QString deviceName, bool managed)
+{
+    if (!m_netDeviceResource->checkDeviceType(deviceName, NetworkManager::Device::Type::Wifi)) {
+        return;
+    }
+
+    if (managed && !m_devList.contains(deviceName)) {
+        //添加新增托管网卡
+        onDeviceAdd(deviceName, NetworkManager::Device::Type::Wifi);
+        qDebug() << LOG_FLAG << "add managed device" << deviceName;
+    }
+    if (!managed && m_devList.contains(deviceName)) {
+        //删除未托管网卡
+        onDeviceRemove(deviceName);
+        qDebug() << LOG_FLAG << "delete unmanaged device" << deviceName;
+    }
+}
+
+void WlanPage::onInactivateListWidgetItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    if (previous != nullptr && previous->sizeHint().height() > NORMAL_HEIGHT) {
+
+        QSize normalSize(previous->sizeHint().width(), NORMAL_HEIGHT);
+        previous->setSizeHint(normalSize);
+        WlanListItem *p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(previous);
+        if (p_wlanItem != nullptr) {
+            p_wlanItem->setExpanded(false);
+        }
+    }
+
+    if (current != nullptr) {
+        current->setSelected(false);
+    }
+}
+
+void WlanPage::setInactivateListItemNoSelect()
+{
+    if (m_inactivatedNetListWidget->currentItem() != nullptr
+            && m_inactivatedNetListWidget->currentItem()->sizeHint().height() > NORMAL_HEIGHT) {
+
+        WlanListItem *p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(m_inactivatedNetListWidget->currentItem());
+        if (p_wlanItem != nullptr) {
+            p_wlanItem->setExpanded(false);
+        }
+        m_inactivatedNetListWidget->currentItem()->setSelected(false);
+    }
+}
+
 void WlanPage::sendApStateChangeSignal(QString uuid,
                                        QString ssid,
                                        QString deviceName,
@@ -878,6 +980,8 @@ void WlanPage::wlanShowNotify(QString ssid, NetworkManager::ActiveConnection::St
 
 void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
 {
+    m_activatedNetListWidget->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+
     if (m_activateConnectionItemMap.contains(ssid)) {
         return;
     }
@@ -889,7 +993,7 @@ void WlanPage::updateActivatedArea(QString uuid, QString ssid, QString devName)
                                       m_inactivatedNetListWidget, ssid);
 
     KyWirelessNetItem wirelessNetItem;
-    bool ret = m_wirelessNetResource->getWifiNetwork(devName, ssid, wirelessNetItem);
+    bool ret = m_wirelessNetResource->getActiveWirelessNetItem(devName, wirelessNetItem);
     if (!ret) {
         qWarning()<<"[WlanPage] get wireless item failed, when update activated connection area.";
         return;
@@ -932,6 +1036,7 @@ void WlanPage::updateWirelessNetArea(QString uuid, QString ssid, QString devName
             deleteWirelessItemFormMap(m_activateConnectionItemMap, m_activatedNetListWidget, ssid);
             QListWidgetItem *p_activeListWidgetItem = addEmptyItem(m_activatedNetListWidget);
             m_activateConnectionItemMap.insert(EMPTY_SSID, p_activeListWidgetItem);
+            m_activatedNetListWidget->setSelectionMode(QAbstractItemView::SelectionMode::NoSelection);
             m_activatedNetListWidget->setFixedHeight(p_activeListWidgetItem->sizeHint().height());
         }
     } else {
@@ -993,6 +1098,25 @@ void WlanPage::onConnectionStateChanged(QString uuid,
         return;
     }
 
+    if (state == NetworkManager::ActiveConnection::State::Deactivating ||
+            state == NetworkManager::ActiveConnection::State::Deactivated) {
+        if (!m_activateConnectionItemMap.contains(ssid)) {
+            //check uuid
+            QMap<QString, QListWidgetItem*>::iterator iter;
+            for(iter = m_activateConnectionItemMap.begin(); iter!= m_activateConnectionItemMap.end(); iter++)
+            {
+                if(iter.value() != nullptr) {
+                    QListWidgetItem *p_listWidgetItem = iter.value();
+                    WlanListItem *p_wlanItem = (WlanListItem*)m_activatedNetListWidget->itemWidget(p_listWidgetItem);
+                    if (p_wlanItem->getUuid() == uuid) {
+                        ssid = p_wlanItem->getSsid();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     qDebug()<< "[WlanPage] wlan state changed, ssid = " << ssid
             << "; state = " << state << "; reason = " << reason << Q_FUNC_INFO <<__LINE__;
     if (state == NetworkManager::ActiveConnection::State::Activated) {
@@ -1047,6 +1171,7 @@ void WlanPage::onItemHeightChanged(const bool isExpanded, const QString &ssid)
 
     if (isExpanded) {
         if (m_expandedItem != p_listWidgetItem) {
+            onInactivateListWidgetItemChanged(p_listWidgetItem, m_expandedItem);
             qDebug()<<LOG_FLAG << "expanded wlan item";
             m_expandedItem = p_listWidgetItem;
             QSize expandedSize(width, EXPANDED_HEIGHT);
@@ -1077,6 +1202,8 @@ void WlanPage::onDeviceComboxIndexChanged(int currentIndex)
     setDefaultDevice(WIRELESS, m_currentDevice);
 
     initWlanArea();
+
+    Q_EMIT timeToUpdate();
 
     return;
 }
@@ -1163,7 +1290,10 @@ void WlanPage::onRefreshIconTimer()
         QString sortSsid = sortItem.m_NetSsid; //应该在第currentRow行的新的WiFi名称
         //qDebug()<< LOG_FLAG << "sort ssid"<< sortSsid << "active ssid" << activateSsid << "sort row"<< sortRow;
         if (sortSsid == activateSsid) { //排除已连接WiFi
-            refreshActiveConnectionIcon(activateSsid, sortItem.m_signalStrength);
+            int signalStrength = 0;
+            QString uni, secuType;
+            m_netDeviceResource->getActiveConnectionInfo(m_currentDevice, signalStrength, uni, secuType);
+            refreshActiveConnectionIcon(activateSsid, signalStrength);
             continue;
         }
 
@@ -1204,7 +1334,7 @@ void WlanPage::onRefreshIconTimer()
                 int takeRow = m_inactivatedNetListWidget->row(p_sortListWidgetItem);
                 m_inactivatedNetListWidget->takeItem(takeRow);
 
-                WlanListItem *p_sortWlanItem = new WlanListItem(sortItem, m_currentDevice);
+                WlanListItem *p_sortWlanItem = new WlanListItem(sortItem, m_currentDevice, m_showWifi6Plus);
                 connect(p_sortWlanItem, &WlanListItem::itemHeightChanged, this, &WlanPage::onItemHeightChanged);
                 connect(p_sortWlanItem, &WlanListItem::detailShow, this, &WlanPage::showDetailPage);
                 m_inactivatedNetListWidget->insertItem(sortRow, p_sortListWidgetItem);
@@ -1257,6 +1387,9 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
                 if (m_netDeviceResource->getActiveConnectionInfo(iter.key(), signalStrength, uni, secuType)) {
                     category = data.getCategory(uni);
                 }
+                if (!m_showWifi6Plus && category == 2) {
+                    category = 1;
+                }
                 vector.append(QStringList() << data.m_NetSsid
                               << QString::number(signalStrength)
                               << secuType
@@ -1275,11 +1408,16 @@ void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
             if (itemData.m_NetSsid == activeSsid) {
                 continue;
             }
+            int category = 0;
+            category = itemData.getCategory(itemData.m_uni);
+            if (!m_showWifi6Plus && category == 2) {
+                category = 1;
+            }
             vector.append(QStringList()<<itemData.m_NetSsid
                           << QString::number(itemData.m_signalStrength)
                           << itemData.m_secuType
                           << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection)
-                          << QString::number(itemData.getCategory(itemData.m_uni)));
+                          << QString::number(category));
         }
 
         map.insert(iter.key(), vector);
@@ -1381,6 +1519,7 @@ void WlanPage::activateWirelessConnection(const QString& devName, const QString&
     WlanListItem *p_wlanItem = nullptr;
 
     if (m_wirelessNetItemMap.contains(ssid)) {
+        Q_EMIT showMainWindow(WLAN_PAGE_INDEX);
         p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
         p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
 
@@ -1389,7 +1528,6 @@ void WlanPage::activateWirelessConnection(const QString& devName, const QString&
 
         QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
         QApplication::postEvent(p_wlanItem, event);
-        Q_EMIT showMainWindow(WLAN_PAGE_INDEX);
     } else {
         qDebug() << "[WlanPage]activateWirelessConnection no such " << ssid << "in" << devName;
     }
@@ -1443,6 +1581,8 @@ void WlanPage::onWlanPageVisibleChanged(int index)
         qDebug() << "wlanpage not visible";
         showNonePwd();
     }
+
+    m_inactivatedNetListWidget->setCurrentIndex(QModelIndex());  // 去除item选中效果
 }
 
 void WlanPage::showNonePwd()
@@ -1593,7 +1733,27 @@ void WlanPage::addWlanMoreItem()
     return;
 }
 
-int WlanPage::getAcivateWifiSignal()
+int WlanPage::getActivateWifiSignal(QString devName)
 {
-    return m_activatedConnectResource->getAcivateWifiSignal();
+    return m_activatedConnectResource->getActivateWifiSignal(devName);
+}
+
+void WlanPage::getWirelssDeviceConnectState(QMap<QString, QString> &map)
+{
+    map.clear();
+    if (m_devList.isEmpty()) {
+        return;
+    }
+
+    for (const auto devname : m_devList) {
+        KyWirelessNetItem wirelessNetItem;
+        if (!m_netDeviceResource->getDeviceManaged(devname)) {
+            continue;
+        }
+        if (m_wirelessNetResource->getActiveWirelessNetItem(devname, wirelessNetItem)) {
+            map.insert(devname, QString(tr("Connected: ")) + wirelessNetItem.m_NetSsid);
+        } else {
+            map.insert(devname, tr("Not Connected"));
+        }
+    }
 }

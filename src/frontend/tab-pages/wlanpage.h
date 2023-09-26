@@ -79,7 +79,14 @@ public:
 
     bool getWirelessSwitchBtnState();
 
-    int getAcivateWifiSignal();
+    int getActivateWifiSignal(QString devName = "");
+
+    //无线网卡连通性
+    void getWirelssDeviceConnectState(QMap<QString, QString> &map);
+
+    QString getCurrentDisplayDevice() {
+        return m_currentDevice;
+    }
 
 Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
@@ -112,6 +119,7 @@ private Q_SLOTS:
 
     void onConnectionAdd(QString deviceName, QString ssid);
     void onConnectionRemove(QString deviceName, QString ssid, QString path);
+    void onConnectionUpdate(QString deviceName, QString ssid);
 
     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName);
@@ -129,6 +137,10 @@ private Q_SLOTS:
     void onRefreshIconTimer();
 
     void onWlanStateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason);
+    void onDeviceManagedChanged(QString deviceName, bool managed);
+
+    void onInactivateListWidgetItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+    void setInactivateListItemNoSelect();
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -209,6 +221,9 @@ private:
             return m_netSwitch->isEnabled();
         }
     }
+
+    void checkShowWifi6Plus();
+    bool m_showWifi6Plus = true;
 
 private:
     QMap<QString, QListWidgetItem*> m_wirelessNetItemMap;

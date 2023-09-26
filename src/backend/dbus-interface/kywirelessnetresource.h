@@ -84,6 +84,7 @@ Q_SIGNALS:
     void secuTypeChange(QString, QString, QString);
     void connectionRemove(QString, QString, QString);
     void connectionAdd(QString, QString);
+    void connectionUpdate(QString, QString);
     void wifiNetworkUpdate();
     void wifiNetworkAdd(QString, KyWirelessNetItem&);
     void wifiNetworkRemove(QString, QString);

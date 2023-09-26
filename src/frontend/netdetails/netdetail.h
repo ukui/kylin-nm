@@ -51,7 +51,6 @@
 #include "kwidget.h"
 #include "ktabbar.h"
 #include "networkmodeconfig.h"
-#include <arpa/inet.h>
 
 using namespace kdk;
 
@@ -68,9 +67,6 @@ public:
 protected:
     QSize sizeHint() const;
     QSize minimumTabSizeHint(int index) const;
-
-private Q_SLOTS:
-    void onModeChanged(bool mode);
 
 };
 class ThreadObject : public QObject
@@ -148,7 +144,6 @@ private:
     void startObjectThread();
     void setNetTabToolTip();
 
-    void getIpv4Info(QString objPath, ConInfo &conInfo);
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyConnectOperation* m_connectOperation = nullptr;
@@ -170,6 +165,7 @@ private:
     QScrollArea  * m_secuPageScrollArea;
     QScrollArea  * m_ipv4ScrollArea;
     QScrollArea  * m_ipv6ScrollArea;
+    QScrollArea  * m_createNetPageScrollArea;
 
     QPushButton  * cancelBtn;
     QPushButton  * forgetBtn;

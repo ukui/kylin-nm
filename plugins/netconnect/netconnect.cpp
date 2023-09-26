@@ -63,10 +63,10 @@ void NetConnect::showDesktopNotify(const QString &message)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QList<QVariant> args;
-    args<<(tr("ukui control center"))
+    args<<(tr("Settings"))
        <<((unsigned int) 0)
        <<QString("gnome-dev-ethernet")
-       <<tr("ukui control center desktop message") //显示的是什么类型的信息
+       <<tr("Settings desktop message") //显示的是什么类型的信息
        <<message //显示的具体信息
        <<QStringList()
        <<QVariantMap()
@@ -167,11 +167,13 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
         if (w->findChild<QWidget*>())
             w->findChild<QWidget*>()->setStyleSheet("QWidget{background: palette(base);border-radius:4px;}");
     }
+
 //    if (w == wiredSwitch) {
 //        if (e->type() == QMouseEvent::MouseButtonRelease) {
 //            if (!wiredSwitch->isCheckable()) {
 //                showDesktopNotify(tr("No ethernet device avaliable"));
 //            } else {
+//                UkccCommon::buriedSettings(QString("netconnect"), QString("Open"), QString("settings"),wiredSwitch->isChecked()?"false":"true");
 //                if (m_interface != nullptr && m_interface->isValid()) {
 //                    m_interface->call(QStringLiteral("setWiredSwitchEnable"), !wiredSwitch->isChecked());
 //                }
@@ -242,6 +244,7 @@ void NetConnect::initComponent() {
 
     connect(ui->detailBtn, &QPushButton::clicked, this, [=](bool checked) {
         Q_UNUSED(checked)
+        UkccCommon::buriedSettings(QString("netconnect"), QString("Advanced settings"), QString("clicked"));
         runExternalApp();
     });
 }
@@ -468,6 +471,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
         if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
+        UkccCommon::buriedSettings(QString("netconnect"), QString("info"), QString("clicked"));
         qDebug() << "[NetConnect]call showPropertyWidget" << __LINE__;
         m_interface->call(QStringLiteral("showPropertyWidget"), devName, infoList.at(1));
         qDebug() << "[NetConnect]call showPropertyWidget respond" << __LINE__;
@@ -541,6 +545,7 @@ void NetConnect::addDeviceFrame(QString devName)
     qDebug() << "[NetConnect]deviceFrameMap insert" << devName;
 
 //    connect(itemFrame->deviceFrame, &DeviceFrame::deviceSwitchClicked ,this, [=] (bool checked) {
+//        UkccCommon::buriedSettings(QString("netconnect"), "device open", QString("settings"), checked?"true":"fasle");
 //        qDebug() << "[NetConnect]call setDeviceEnable" << devName << checked << __LINE__;
 //        m_interface->call(QStringLiteral("setDeviceEnable"), devName, checked);
 //        qDebug() << "[NetConnect]call setDeviceEnable Respond"  << __LINE__;
@@ -565,6 +570,7 @@ void NetConnect::addDeviceFrame(QString devName)
 //    });
 
     connect(itemFrame->addLanWidget, &AddNetBtn::clicked, this, [=](){
+        UkccCommon::buriedSettings(pluginName, "Add net", QString("clicked"));
         if (m_interface != nullptr && m_interface->isValid()) {
             qDebug() << "[NetConnect]call showCreateWiredConnectWidget" << devName  << __LINE__;
             m_interface->call(QStringLiteral("showCreateWiredConnectWidget"), devName);
@@ -765,6 +771,7 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
         if (m_interface == nullptr || !m_interface->isValid()) {
             return;
         }
+        UkccCommon::buriedSettings(QString("netconnect"), QString("info"), QString("clicked"));
         qDebug() << "[NetConnect]call showPropertyWidget" << deviceName << connUuid << __LINE__;
         m_interface->call(QStringLiteral("showPropertyWidget"), deviceName, connUuid);
         qDebug() << "[NetConnect]call showPropertyWidget respond" << __LINE__;
@@ -908,7 +915,6 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
         item->statusLabel->setText(tr("not connected"));
     }
     item->setConnectActionText(item->isAcitve);
-
 //    QIcon searchIcon = QIcon::fromTheme(iconPath);
 //    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
 }

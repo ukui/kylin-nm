@@ -66,8 +66,14 @@ void KyVpnConnectOperation::getConnectionSetting(QString connectUuid, KyVpnConfi
     connectSetting.m_ifaceName = connectionSettings->interfaceName();
     connectSetting.m_isAutoConnect = connectionSettings->autoconnect();
 
-    if (connectionSettings->connectionType() != NetworkManager::ConnectionSettings::Vpn) {
-        return ;
+    if (NetworkManager::ConnectionSettings::ConnectionType::Vpn != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::Bond != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::Bridge != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::Vlan != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::Team != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::IpTunnel != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::Wired != connectPtr->settings()->connectionType()) {
+        return;
     }
 
     QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(KYVPN_VPN_KEY);
@@ -1481,7 +1487,13 @@ void KyVpnConnectOperation::activateVpnConnection(const QString connectUuid)
         return;
     }
 
-    if (NetworkManager::ConnectionSettings::Vpn != connectPtr->settings()->connectionType()) {
+    if (NetworkManager::ConnectionSettings::ConnectionType::Vpn != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::Bond != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::Bridge != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::Vlan != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::Team != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::IpTunnel != connectPtr->settings()->connectionType()
+        && NetworkManager::ConnectionSettings::ConnectionType::Wired != connectPtr->settings()->connectionType()) {
         QString errorMessage = tr("the connect type is")
                                 + connectPtr->settings()->connectionType()
                                 + tr(", but it is not vpn");

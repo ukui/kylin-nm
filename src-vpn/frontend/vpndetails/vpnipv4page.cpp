@@ -109,7 +109,6 @@ void VpnIpv4Page::updateVpnIpv4Info(KyVpnConfig &vpnInfo)
         QString netMask("");
         QString gateWay("");
         vpnInfo.setIpConfigType(IPADDRESS_V4, CONFIG_IP_DHCP);
-        vpnInfo.ipv4AddressConstruct(ipv4address, netMask, gateWay);
         qDebug() << LOG_FLAG << "IPv4 method" << vpnInfo.m_ipv4ConfigIpType;
         qDebug() << LOG_FLAG <<  "Update IPv4 info finished";
     } else {
@@ -118,7 +117,6 @@ void VpnIpv4Page::updateVpnIpv4Info(KyVpnConfig &vpnInfo)
         QString gateWay = m_gateWayEdit->text();
         qDebug() << ipv4address << netMask << gateWay;
         vpnInfo.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
-        vpnInfo.ipv4AddressConstruct(ipv4address, netMask, gateWay);
         vpnInfo.dumpInfo();
         qDebug() << LOG_FLAG <<  "Update IPv4 info finished";
     }
@@ -128,7 +126,6 @@ void VpnIpv4Page::updateVpnIpv4Info(KyVpnConfig &vpnInfo)
     if (!m_dnsServerEdit->text().isEmpty()) {
         ipv4DnsList.append(QHostAddress(m_dnsServerEdit->text()));
     }
-    vpnInfo.ipv4DnsConstruct(ipv4DnsList);
 
     vpnInfo.m_ipv4DnsSearch.clear();
     vpnInfo.m_ipv4DnsSearch.append(m_searchDomainEdit->text());

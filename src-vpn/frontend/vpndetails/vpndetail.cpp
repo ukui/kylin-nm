@@ -102,7 +102,7 @@ void VpnDetail::initUI()
     m_topWidget = new QWidget(this);
     m_centerWidget = new QWidget(this);
     m_bottomWidget = new QWidget(this);
-    m_divider = new Divider(this);
+    m_divider = new Divider(false, this);
     m_vpnTabBar = new VpnTabBar(this);
     m_autoConnectBox = new QCheckBox(this);
     m_autoConnectLabel = new QLabel(this);

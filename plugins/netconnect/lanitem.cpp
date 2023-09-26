@@ -143,13 +143,12 @@ void LanItem::onDeletetTriggered()
 
 void LanItem::paintEvent(QPaintEvent *event)
 {
-    QPalette pal = qApp->palette();
-
     QPainter painter(this);
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
     painter.setBrush(this->palette().base().color());
 
+    QPalette pal = qApp->palette();
     QColor color = pal.color(QPalette::Button);
     color.setAlphaF(0.5);
     pal.setColor(QPalette::Button, color);
@@ -165,7 +164,7 @@ bool LanItem::eventFilter(QObject *watched, QEvent *event)
 {
     //菜单右边界与按钮右边界对齐
     if (event->type() == QEvent::Show && watched == m_moreMenu) {
-        int menuXPos = m_moreMenu->pos().x();
+        int menuXPos = mapToGlobal(m_moreButton->pos()).x();
         int menuWidth = m_moreMenu->size().width();
         int btnWidth = m_moreButton->size().width();
 

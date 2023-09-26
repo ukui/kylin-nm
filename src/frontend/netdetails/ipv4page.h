@@ -34,6 +34,7 @@
 //#include "kylinconnectsetting.h"
 #include "coninfo.h"
 #include "multiplednswidget.h"
+#include "divider.h"
 
 class Ipv4Page : public QFrame
 {
@@ -45,14 +46,18 @@ public:
     void setNetMask(const QString &netMask);
     void setMulDns(const QList<QHostAddress> &dns);
     void setGateWay(const QString &gateWay);
+    void setUuid(QString uuid) {
+        if (m_dnsWidget != nullptr) {
+            m_dnsWidget->setUuid(uuid);
+        }
+    }
 
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
+    bool checkDnsSettingsIsChanged();
 
     void startLoading();
     void stopLoading();
     void showIpv4AddressConflict(bool isConflict);
-
-    QString getNetMaskText(QString text);
 private:
     QComboBox *ipv4ConfigCombox;
     LineEdit *ipv4addressEdit;
@@ -70,6 +75,7 @@ private:
     QLabel *m_addressHintLabel;
     QLabel *m_maskHintLabel;
     QLabel *m_gateWayEmptyLabel;
+    QLabel *m_dnsEmptyLabel;
 
     MultipleDnsWidget *m_dnsWidget = nullptr;
 
@@ -88,6 +94,7 @@ private:
     void configSave();
     bool getTextEditState(QString text);
     bool netMaskIsValide(QString text);
+    QString getNetMaskText(QString text);
     bool checkConnectBtnIsEnabled();
     void initConflictHintLable();
     void initLoadingIcon();
@@ -97,12 +104,13 @@ private Q_SLOTS:
     void configChanged(int index);
     void onAddressTextChanged();
     void onNetMaskTextChanged();
-    void onAddressEidtFinished();
+    void onAddressEditFinished();
     void updateIcon();
 
 Q_SIGNALS:
     void setIpv4PageState(bool);
     void ipv4EditFinished(const QString &address);
+    void scrollToBottom();
 };
 
 #endif // IPV4PAGE_H

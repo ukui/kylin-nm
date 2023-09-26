@@ -7,7 +7,8 @@ HEADERS += \
     $$PWD/loadingdiv.h \
     $$PWD/radioitembutton.h \
     $$PWD/switchbutton.h \
-    $$PWD/kylable.h
+    $$PWD/kylable.h \
+    $$PWD/themepalette.h
 
 
 SOURCES += \

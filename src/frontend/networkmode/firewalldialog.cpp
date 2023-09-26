@@ -20,6 +20,9 @@
 #include "firewalldialog.h"
 
 #include <QApplication>
+#include "windowmanager/windowmanager.h"
+#include "kwindowsystem.h"
+#include "kwindowsystem_export.h"
 
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
@@ -30,6 +33,7 @@ FirewallDialog::FirewallDialog(QWidget *parent): KDialog(parent)
     initUI();
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
     this->setFixedSize(480, 204);
+    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
     setAttribute(Qt::WA_DeleteOnClose);
 //    centerToScreen();
     connect(qApp, &QApplication::paletteChanged, this, &FirewallDialog::onPaletteChanged);

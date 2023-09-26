@@ -192,27 +192,8 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
         type = CONFIG_IP_MANUAL;
         if (info.ipv4ConfigType != CONFIG_IP_MANUAL) {
             qDebug() << "ipv4ConfigType change to Manual";
-<<<<<<< HEAD
-            setting.setIpConfigType(IPADDRESS_V4, CONFIG_IP_MANUAL);
-            isChanged =  true;
-        }
-        qDebug() << "ipv4 netmask " << getNetMaskText(netMaskEdit->text());
-
-        if(info.strIPV4Address != ipv4addressEdit->text()
-                || info.strIPV4NetMask != /*netMaskEdit->text()*/getNetMaskText(netMaskEdit->text())
-                || info.strIPV4GateWay != gateWayEdit->text()) {
-
-            qDebug() << "ipv4 info changed";
-
-            QString ipv4address =ipv4addressEdit->text();
-            QString netMask = getNetMaskText(netMaskEdit->text());
-            QString gateWay = gateWayEdit->text();
-            qDebug() << ipv4address << netMask << gateWay;
-            setting.ipv4AddressConstruct(ipv4address, netMask, gateWay);
-            setting.dumpInfo();
             isChanged =  true;
         } else {
-
             if(info.strIPV4Address != ipv4addressEdit->text()
                     || info.strIPV4NetMask != getNetMaskText(netMaskEdit->text())
                     || info.strIPV4GateWay != gateWayEdit->text()) {
@@ -224,7 +205,7 @@ bool Ipv4Page::checkIsChanged(const ConInfo info, KyConnectSetting &setting)
 
     QList<QHostAddress> ipv4dnsList;
     ipv4dnsList.clear();
-    ipv4dnsList = m_dnsWidget->getDns();
+        ipv4dnsList = m_dnsWidget->getDns();
     if(info.ipv4DnsList != ipv4dnsList) {
         isChanged = true;
     }

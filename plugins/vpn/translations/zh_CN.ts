@@ -36,17 +36,8 @@
         <translation></translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../vpn.cpp" line="68"/>
-        <source>VPN</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../vpn.cpp" line="151"/>
-=======
         <location filename="../vpn.cpp" line="157"/>
         <location filename="../vpn.cpp" line="284"/>
->>>>>>> a7566033f9be861633342d27c57493da3250193c
         <source>Show on Taskbar</source>
         <translation>在任务栏显示图标</translation>
         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>

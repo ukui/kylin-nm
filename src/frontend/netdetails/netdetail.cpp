@@ -788,11 +788,7 @@ void NetDetail::initSecuData()
             initTlsInfo(m_info);
         } else if (m_info.enterpriseType == PEAP) {
             initPeapInfo(m_info);
-<<<<<<< HEAD
-        } else  if (m_info.enterpriseType == TTLS){
-=======
         } else if (m_info.enterpriseType == TTLS) {
->>>>>>> a7566033f9be861633342d27c57493da3250193c
             initTtlsInfo(m_info);
         } else if (m_info.enterpriseType == LEAP) {
             initLeapInfo(m_info);
@@ -964,11 +960,7 @@ void NetDetail::updateWirelessEnterPriseConnect(KyEapMethodType enterpriseType)
         securityPage->updateFastChange(m_info.fastInfo);
         m_wirelessConnOpration->updateWirelessEnterPriseFastConnect(m_uuid, m_info.fastInfo);
     } else {
-<<<<<<< HEAD
-        qWarning() << "[NetDetail] unknow enterprise connection type";
-=======
         qWarning() << "[NetDetail] unknown enterprise connection type" << enterpriseType;
->>>>>>> a7566033f9be861633342d27c57493da3250193c
     }
 }
 

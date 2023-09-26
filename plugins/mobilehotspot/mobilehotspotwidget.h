@@ -143,12 +143,8 @@ private:
     void deleteSettingPathInterface();
     void initConnectDevPage();
     void initBlackListPage();
-<<<<<<< HEAD
-=======
 
     bool m_isUserSelect = true;  //是否用户操作
-
->>>>>>> a7566033f9be861633342d27c57493da3250193c
 signals:
 
 private slots:

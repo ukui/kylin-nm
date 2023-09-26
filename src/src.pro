@@ -21,14 +21,11 @@ INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 
 LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt
 #LIBS  +=  -lkysec
-<<<<<<< HEAD
-=======
 
 CONFIG(release, debug|release) {
     !system($$PWD/translate_generation.sh): error("Failed to generate translation")
 }
 
->>>>>>> a7566033f9be861633342d27c57493da3250193c
 target.path = /usr/bin
 target.source += $$TARGET
 desktop.path = /etc/xdg/autostart/

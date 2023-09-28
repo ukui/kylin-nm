@@ -1,3 +1,13 @@
+kylin-nm (3.24.0.0-0k2.22) v101; urgency=medium
+
+  * BUG:
+      - #194718 【网络连接】麒麟网络设置工具可固定到任务栏
+  * 需求号：无
+  * 其他改动说明: 
+  * 其他改动影响域：多display场景 
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Thu, 28 Sep 2023 14:11:38 +0800
+
 kylin-nm (3.24.0.0-0k2.21) v101; urgency=medium
 
   * BUG:

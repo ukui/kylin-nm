@@ -314,31 +314,26 @@ void MobileHotspotWidget::onInterfaceChanged()
 {
     m_interfaceName = m_interfaceComboBox->currentText();
     if(m_interface->isValid()) {
-        QDBusMessage result = m_interface->call(QStringLiteral("getWirelessList"));
-        if(result.type() == QDBusMessage::ErrorMessage)
+        QDBusReply<QVariantList> reply = m_interface->call(QStringLiteral("getWirelessList"), m_interfaceName);
+        if(!reply.isValid())
         {
-            qWarning() << "getWirelessList error:" << result.errorMessage();
+            qWarning() << "getWirelessList error:" << reply.error().message();
             return;
         }
         bool flag = false;
-        auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
-        QMap<QString, QVector<QStringList>> variantList;
-        dbusArg >> variantList;
-        if (variantList.size() != 0) {
-            QMap<QString, QVector<QStringList>>::iterator iter;
-            for (iter = variantList.begin(); iter != variantList.end(); iter++) {
-                if (m_interfaceName == iter.key()) {
-                    QVector<QStringList> wlanListInfo = iter.value();
-                    if (!wlanListInfo.isEmpty() && wlanListInfo.at(0).size() > 1) {
-                        flag = true;
-                    }
-                    break;
-                }
-            }
+
+        QList<QStringList> variantList;
+        for (int j = 0; j < reply.value().size(); ++j) {
+            variantList << reply.value().at(j).toStringList();
         }
+
+        if (!variantList.isEmpty() && variantList.at(0).size() > 1) {
+            flag = true;
+        }
+
         if (flag) {
             m_interfaceWarnLabel->setText(tr("use ") + m_interfaceName +
-                                    tr(" share network, will interrupt local wireless connection"));
+                                          tr(" share network, will interrupt local wireless connection"));
             m_interfaceFrame->setFixedHeight(PASSWORD_FRAME_FIX_HIGHT);
             m_warnWidget->show();
         } else {
@@ -390,22 +385,32 @@ void MobileHotspotWidget::initInterfaceInfo()
         m_interfaceComboBox->hidePopup();
     }
     m_interfaceComboBox->clear();
-    QDBusReply<QMap<QString, bool> > reply = m_interface->call("getDeviceListAndEnabled",WIRELESS);
-
-    if (!reply.isValid()) {
-        qDebug() << LOG_HEAD <<"execute dbus method 'getDeviceListAndEnabled' is invalid in func initInterfaceInfo()";
-        setWidgetHidden(true);
+    QDBusReply<QVariantMap> reply = m_interface->call(QStringLiteral("getDeviceListAndEnabled"),WIRELESS);
+    if(!reply.isValid())  {
+        qWarning() << "[WlanConnect]getWirelessDeviceList error:" << reply.error().message();
         return;
     }
-    QMap<QString, bool> devMap = reply.value();
 
-    QDBusReply<QMap<QString, int> > capReply = m_interface->call("getWirelessDeviceCap");
+    QMap<QString, bool> devMap;
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        devMap.insert(item.key(), item.value().toBool());
+        item ++;
+    }
+
+
+    QDBusReply<QVariantMap> capReply = m_interface->call("getWirelessDeviceCap");
     if (!capReply.isValid()) {
         qDebug()  << LOG_HEAD <<"execute dbus method 'getWirelessDeviceCap' is invalid in func initInterfaceInfo()" <<capReply.error().type() ;
         setWidgetHidden(true);
         return;
     }
-    QMap<QString, int> devCapMap = capReply.value();
+    QMap<QString, int> devCapMap;
+    QVariantMap::const_iterator itemIter = capReply.value().cbegin();
+    while (itemIter != capReply.value().cend()) {
+        devCapMap.insert(itemIter.key(), itemIter.value().toInt());
+        itemIter ++;
+    }
 
     if (devMap.isEmpty()) {
         qDebug() << LOG_HEAD << "no wireless device";
@@ -824,14 +829,21 @@ void MobileHotspotWidget::updateBandCombox()
 {
     QString tmp = m_freqBandComboBox->currentText();
     m_freqBandComboBox->clear();
-    QDBusReply<QMap<QString, int> > capReply = m_interface->call("getWirelessDeviceCap");
+    QDBusReply<QVariantMap> capReply = m_interface->call("getWirelessDeviceCap");
     if (!capReply.isValid()) {
         qDebug()<<"execute dbus method 'getWirelessDeviceCap' is invalid in func initInterfaceInfo()" << capReply.error().message();
         setWidgetHidden(true);
         return;
     }
     m_isUserSelect = false;
-    QMap<QString, int> devCapMap = capReply.value();
+
+    QMap<QString, int> devCapMap;
+    QVariantMap::const_iterator itemIter = capReply.value().cbegin();
+    while (itemIter != capReply.value().cend()) {
+        devCapMap.insert(itemIter.key(), itemIter.value().toInt());
+        itemIter ++;
+    }
+
     if (devCapMap[m_interfaceName] & 0x02) {
          m_freqBandComboBox->addItem("2.4GHz");
     }

@@ -144,6 +144,8 @@ private:
     QMap<QString, bool> deviceStatusMap;
     QMap<QString, ItemFrame *> deviceFrameMap;
 
+    QMap<QString, QList<QStringList>> getWiredList();
+
 private slots:
     void updateLanInfo(QString deviceName, QStringList lanInfo);
 

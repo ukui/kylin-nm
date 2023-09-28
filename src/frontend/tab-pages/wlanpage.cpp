@@ -1359,72 +1359,61 @@ void WlanPage::onRefreshIconTimer()
 }
 
 //for dbus
-void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
+void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
 {
-    QMap<QString,QStringList> actMap;
-    m_wirelessNetResource->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activated, actMap);
+    KyWirelessNetItem data;
 
-    QMap<QString, QList<KyWirelessNetItem> > wlanMap;
-    if (!m_wirelessNetResource->getAllDeviceWifiNetwork(wlanMap)) {
+    QList<KyWirelessNetItem> wlanList;
+    if (!m_wirelessNetResource->getDeviceWifiNetwork(devName, wlanList)) {
         return;
     }
 
-    QMap<QString, QList<KyWirelessNetItem> >::iterator iter = wlanMap.begin();
-    while (iter != wlanMap.end()) {
-        QVector<QStringList> vector;
-        QString activeSsid ;
-        //先是已连接
-        if (actMap.contains(iter.key())) {
-            qDebug() << "find " <<iter.key();
-            KyWirelessNetItem data;
-            QString ssid ="";
-            m_wirelessNetResource->getSsidByUuid(actMap[iter.key()].at(0), ssid);
-            if (m_wirelessNetResource->getWifiNetwork(iter.key(), ssid, data)) {
-                int category = 0;
-                int signalStrength;
-                QString uni,secuType;
-
-                if (m_netDeviceResource->getActiveConnectionInfo(iter.key(), signalStrength, uni, secuType)) {
-                    category = data.getCategory(uni);
-                }
-                if (!m_showWifi6Plus && category == 2) {
-                    category = 1;
-                }
-                vector.append(QStringList() << data.m_NetSsid
-                              << QString::number(signalStrength)
-                              << secuType
-                              << data.m_connectUuid
-                              << (m_connectResource->isApConnection(data.m_connectUuid) ? IsApConnection : NotApConnection)
-                              << QString::number(category));
-                activeSsid = data.m_NetSsid;
-            } else {
-                vector.append(QStringList("--"));
-            }
-        } else {
-            vector.append(QStringList("--"));
-        }
-        //未连接
-        Q_FOREACH (auto itemData, iter.value()) {
-            if (itemData.m_NetSsid == activeSsid) {
-                continue;
-            }
+    QString activeSsid ;
+    //先是已连接
+    if (m_wirelessNetResource->getActiveWirelessNetItem(devName, data)) {
+        qDebug() << "find " << devName;
+        QString ssid ="";
+        m_wirelessNetResource->getSsidByUuid(data.m_connectUuid, ssid);
+        if (m_wirelessNetResource->getWifiNetwork(devName, ssid, data)) {
             int category = 0;
-            category = itemData.getCategory(itemData.m_uni);
+            int signalStrength;
+            QString uni,secuType;
+
+            if (m_netDeviceResource->getActiveConnectionInfo(devName, signalStrength, uni, secuType)) {
+                category = data.getCategory(uni);
+            }
             if (!m_showWifi6Plus && category == 2) {
                 category = 1;
             }
-            vector.append(QStringList()<<itemData.m_NetSsid
-                          << QString::number(itemData.m_signalStrength)
-                          << itemData.m_secuType
-                          << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection)
+            list.append(QStringList() << data.m_NetSsid
+                          << QString::number(signalStrength)
+                          << secuType
+                          << data.m_connectUuid
+                          << (m_connectResource->isApConnection(data.m_connectUuid) ? IsApConnection : NotApConnection)
                           << QString::number(category));
+            activeSsid = data.m_NetSsid;
+        } else {
+            list.append(QStringList("--"));
         }
-
-        map.insert(iter.key(), vector);
-        iter++;
+    } else {
+        list.append(QStringList("--"));
     }
-
-    return;
+    //未连接
+    Q_FOREACH (auto itemData, wlanList) {
+        if (itemData.m_NetSsid == activeSsid) {
+            continue;
+        }
+        int category = 0;
+        category = itemData.getCategory(itemData.m_uni);
+        if (!m_showWifi6Plus && category == 2) {
+            category = 1;
+        }
+        list.append(QStringList()<<itemData.m_NetSsid
+                      << QString::number(itemData.m_signalStrength)
+                      << itemData.m_secuType
+                      << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection)
+                      << QString::number(category));
+    }
 }
 
 //for dbus

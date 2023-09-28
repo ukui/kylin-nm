@@ -52,7 +52,7 @@ public:
     ~WlanPage() = default;
 
     //for dbus
-    void getWirelessList(QMap<QString, QVector<QStringList> > &map);
+    void getWirelessList(QString devName, QList<QStringList> &list);
     //开启热点
     void activeWirelessAp(const QString apName, const QString apPassword, const QString wirelessBand, const QString apDevice);
     //断开热点

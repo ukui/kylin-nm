@@ -71,7 +71,7 @@ const QString intel = "V10SP1-edu";
 #include <kwindowsystem.h>
 #include <kwindowsystem_export.h>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+MainWindow::MainWindow(QString display, QWidget *parent) : QMainWindow(parent), m_display(display)
 {
     firstlyStart();
 }
@@ -395,6 +395,26 @@ void MainWindow::initDbusConnnect()
             hideMainwindow();
         }
     });
+
+    QDBusConnection::sessionBus().connect(QString("com.kylin.network"),
+                                         QString("/com/kylin/network"),
+                                         QString("com.kylin.network"),
+                                          QString("showKylinNMSignal"), this, SLOT(onShowKylinNMSlot(QString,int)));
+
+    QDBusConnection::sessionBus().connect(QString("com.kylin.network"),
+                                         QString("/com/kylin/network"),
+                                         QString("com.kylin.network"),
+                                          QString("showPropertyWidgetSignal"), this, SLOT(onShowPropertyWidgetSlot(QString,QString,QString)));
+
+    QDBusConnection::sessionBus().connect(QString("com.kylin.network"),
+                                         QString("/com/kylin/network"),
+                                         QString("com.kylin.network"),
+                                          QString("showCreateWiredConnectWidgetSignal"), this, SLOT(onShowCreateWiredConnectWidgetSlot(QString,QString)));
+
+    QDBusConnection::sessionBus().connect(QString("com.kylin.network"),
+                                         QString("/com/kylin/network"),
+                                         QString("com.kylin.network"),
+                                          QString("showAddOtherWlanWidgetSignal"), this, SLOT(onShowAddOtherWlanWidgetSlot(QString,QString)));
 
 }
 
@@ -861,13 +881,14 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 /**
  * @brief MainWindow::getWirelessList 获取wifi列表，供dbus调用
- * @param map
+ * @param devName
+ * @param list
  */
-void MainWindow::getWirelessList(QMap<QString, QVector<QStringList> > &map)
+void MainWindow::getWirelessList(QString devName, QList<QStringList> &list)
 {
-    map.clear();
+    list.clear();
     if (nullptr != m_wlanWidget) {
-        m_wlanWidget->getWirelessList(map);
+        m_wlanWidget->getWirelessList(devName, list);
     }
 }
 
@@ -882,11 +903,11 @@ bool MainWindow::getWirelessSwitchBtnState()
  * @brief MainWindow::getWiredList 获取lan列表，供dbus调用
  * @param map
  */
-void MainWindow::getWiredList(QMap<QString, QVector<QStringList>> &map)
+void MainWindow::getWiredList(QString devName, QList<QStringList> &list)
 {
-    map.clear();
+    list.clear();
     if (nullptr != m_lanWidget) {
-        m_lanWidget->getWiredList(map);
+        m_lanWidget->getWiredList(devName, list);
     }
 }
 
@@ -1040,4 +1061,33 @@ void MainWindow::keyRingInit()
 void MainWindow::keyRingClear()
 {
     agent_clear();
+}
+
+void MainWindow::onShowKylinNMSlot(QString display, int type)
+{
+    if (display == m_display) {
+        onShowMainWindow(type);
+    }
+}
+
+//唤起属性页 根据网卡类型 参数2 为ssid/uuid
+void MainWindow::onShowPropertyWidgetSlot(QString display, QString devName, QString ssid)
+{
+    if (display == m_display) {
+        showPropertyWidget(devName, ssid);
+    }
+}
+//唤起新建有线连接界面
+void MainWindow::onShowCreateWiredConnectWidgetSlot(QString display, QString devName)
+{
+    if (display == m_display) {
+        showCreateWiredConnectWidget(devName);
+    }
+}
+//唤起加入其他无线网络界面
+void MainWindow::onShowAddOtherWlanWidgetSlot(QString display, QString devName)
+{
+    if (display == m_display) {
+        showAddOtherWlanWidget(devName);
+    }
 }

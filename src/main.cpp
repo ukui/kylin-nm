@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
             interface.call(QStringLiteral("showKylinNM"), 1);
         } else if (parser.isSet(snOption)){
             interface.call(QStringLiteral("showKylinNM"), 0);
-        } else {
+        } /*else {
             const QString serviceName = "com.kylin.network";
             QDBusConnectionInterface *interface1 = QDBusConnection::sessionBus().interface();
             QDBusReply<uint> pid = interface1->servicePid(serviceName);
@@ -145,6 +145,10 @@ int main(int argc, char *argv[])
                 interface.call(QStringLiteral("showKylinNM"), 2);
             }
         }
+        return 0;*/
+    }
+
+    if (a.isRunning()) {
         return 0;
     }
 

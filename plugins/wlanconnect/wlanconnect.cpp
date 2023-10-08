@@ -167,6 +167,7 @@ QWidget *WlanConnect::pluginUi() {
         pluginWidget->setAttribute(Qt::WA_DeleteOnClose);
         ui->setupUi(pluginWidget);
         qDBusRegisterMetaType<QVector<QStringList>>();
+                qDBusRegisterMetaType<QStringList>();
         m_interface = new QDBusInterface("com.kylin.network", "/com/kylin/network",
                                          "com.kylin.network",
                                          QDBusConnection::sessionBus());
@@ -317,28 +318,18 @@ void WlanConnect::updateList()
     }
     qDebug() << "update list";
     if(m_interface != nullptr && m_interface->isValid()) {
-        qDebug() << "[WlanConnect]call getWirelessList" << __LINE__;
-        QDBusMessage result = m_interface->call(QStringLiteral("getWirelessList"));
-        qDebug() << "[WlanConnect]call getWirelessList respond" << __LINE__;
-        if(result.type() == QDBusMessage::ErrorMessage)
-        {
-            qWarning() << "getWirelessList error:" << result.errorMessage();
-            return;
-        }
-        auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
-        QMap<QString, QVector<QStringList>> variantList;
-        dbusArg >> variantList;
+        QMap<QString, QList<QStringList>> variantList = getWirelessList();
 
         if (variantList.size() == 0) {
             qDebug() << "[WlanConnect]updateList " << " list empty";
             return;
         }
 
-        QMap<QString, QVector<QStringList>>::iterator iter;
+        QMap<QString, QList<QStringList>>::iterator iter;
 
         for (iter = variantList.begin(); iter != variantList.end(); iter++) {
             if (deviceFrameMap.contains(iter.key())) {
-                QVector<QStringList> wifiList = iter.value();
+                QList<QStringList> wifiList = iter.value();
                 resortWifiList(deviceFrameMap[iter.key()], wifiList);
                 deviceFrameMap[iter.key()]->filletStyleChange();
             }
@@ -346,7 +337,7 @@ void WlanConnect::updateList()
     }
 }
 
-void WlanConnect::resortWifiList(ItemFrame *frame, QVector<QStringList> list)
+void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
 {
     if(nullptr == frame || frame->lanItemLayout->count() <= 0 || list.isEmpty()) {
         return;
@@ -702,16 +693,20 @@ void WlanConnect::getDeviceList(QStringList &list)
         return;
     }
     qDebug() << "[WlanConnect]call getDeviceListAndEnabled"  << __LINE__;
-    QDBusMessage result = m_interface->call(QStringLiteral("getDeviceListAndEnabled"),1);
+    QDBusReply<QVariantMap> reply = m_interface->call(QStringLiteral("getDeviceListAndEnabled"),1);
     qDebug() << "[WlanConnect]call getDeviceListAndEnabled respond"  << __LINE__;
-    if(result.type() == QDBusMessage::ErrorMessage)
+    if(!reply.isValid())
     {
-        qWarning() << "[WlanConnect]getWirelessDeviceList error:" << result.errorMessage();
+        qWarning() << "[WlanConnect]getWirelessDeviceList error:" << reply.error().message();
         return;
     }
-    auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
+
     QMap<QString,bool> map;
-    dbusArg >> map;
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        map.insert(item.key(), item.value().toBool());
+        item ++;
+    }
 
     //筛选已托管(managed)网卡
     QMap<QString, bool>::iterator iters;
@@ -770,26 +765,20 @@ void WlanConnect::initNetListFromDevice(QString deviceName)
     if (m_interface == nullptr || !m_interface->isValid()) {
         return;
     }
-    qDebug() << "[WlanConnect]call getWirelessList"  << __LINE__;
-    QDBusMessage result = m_interface->call(QStringLiteral("getWirelessList"));
-    qDebug() << "[WlanConnect]call getWirelessList respond"  << __LINE__;
-    if(result.type() == QDBusMessage::ErrorMessage)
-    {
-        qWarning() << "getWirelessList error:" << result.errorMessage();
-        return;
-    }
-    auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
-    QMap<QString, QVector<QStringList>> variantList;
-    dbusArg >> variantList;
+
+    QMap<QString, QList<QStringList>> variantList = getWirelessList();
     if (variantList.size() == 0) {
         qDebug() << "[WlanConnect]initNetListFromDevice " << deviceName << " list empty";
         return;
     }
-    QMap<QString, QVector<QStringList>>::iterator iter;
 
+    QMap<QString, QList<QStringList>>::iterator iter;
     for (iter = variantList.begin(); iter != variantList.end(); iter++) {
         if (deviceName == iter.key()) {
-            QVector<QStringList> wlanListInfo = iter.value();
+            QList<QStringList> wlanListInfo = iter.value();
+            if (wlanListInfo.size() <= 0) {
+                break;
+            }
             //处理列表 已连接
             qDebug() << "[WlanConnect]initNetListFromDevice " << deviceName << " acitved wifi " << wlanListInfo.at(0);
             addActiveItem(deviceFrameMap[deviceName], deviceName,  wlanListInfo.at(0));
@@ -903,21 +892,13 @@ int WlanConnect::sortWlanNet(QString deviceName, QString name, QString signal)
     if (m_interface == nullptr || !m_interface->isValid()) {
         return 0;
     }
-    qDebug() << "[WlanConnect]call getWirelessList"  << __LINE__;
-    QDBusMessage result = m_interface->call(QStringLiteral("getWirelessList"));
-    qDebug() << "[WlanConnect]call getWirelessList respond"  << __LINE__;
-    if(result.type() == QDBusMessage::ErrorMessage)
-    {
-        qWarning() << "getWirelessList error:" << result.errorMessage();
-        return 0;
-    }
-    auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
-    QMap<QString, QVector<QStringList>> variantList;
-    dbusArg >> variantList;
-    QMap<QString, QVector<QStringList>>::iterator iter;
+
+    QMap<QString, QList<QStringList>> variantList = getWirelessList();
+
+    QMap<QString, QList<QStringList>>::iterator iter;
     for (iter = variantList.begin(); iter != variantList.end(); iter++) {
         if (deviceName == iter.key()) {
-            QVector<QStringList> wlanListInfo = iter.value();
+            QList<QStringList> wlanListInfo = iter.value();
             for (int i = 0; i < wlanListInfo.size(); i++) {
                 if (name == wlanListInfo.at(i).at(0)) {
                     return i;
@@ -1125,5 +1106,30 @@ void WlanConnect::itemActiveConnectionStatusChanged(WlanItem *item, int status)
         item->statusLabel->setMaximumSize(16777215,16777215);
         item->isAcitve = false;
     }
+}
+
+QMap<QString, QList<QStringList>> WlanConnect::getWirelessList()
+{
+    QMap<QString, QList<QStringList>> map;
+    QStringList list;
+    getDeviceList(list);
+
+    for (int i = 0; i < list.size(); ++i) {
+        qDebug() << "[NetConnect]call getWirelessList"  << __LINE__;
+        QDBusReply<QVariantList> reply = m_interface->call(QStringLiteral("getWirelessList"), list.at(i));
+        qDebug() << "[NetConnect]call getWirelessList respond"  << __LINE__;
+        if(!reply.isValid())
+        {
+            qWarning() << "getWirelessList error:" << reply.error().message();
+            break;
+        }
+
+        QList<QStringList> llist;
+        for (int j = 0; j < reply.value().size(); ++j) {
+            llist << reply.value().at(j).toStringList();
+        }
+        map.insert(list.at(i), llist);
+    }
+    return map;
 }
 

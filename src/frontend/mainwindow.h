@@ -61,7 +61,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QString display, QWidget *parent = nullptr);
     void showMainwindow();
     void hideMainwindow();
 
@@ -69,8 +69,8 @@ public:
     void setWirelessDefaultDevice(QString deviceName);
 
     //for dbus
-    void getWirelessList(QMap<QString, QVector<QStringList> > &map);
-    void getWiredList(QMap<QString, QVector<QStringList>> &map);
+    void getWirelessList(QString devName, QList<QStringList> &list);
+    void getWiredList(QString devName, QList<QStringList> &list);
     //开启热点
     void activeWirelessAp(const QString apName, const QString apPassword, const QString wirelessBand, const QString apDevice);
     //断开热点
@@ -204,6 +204,8 @@ private:
 
     NetworkMode *m_networkMode;
 
+    QString m_display;
+
 public Q_SLOTS:
     void onShowMainWindow(int type);
 
@@ -221,6 +223,14 @@ private Q_SLOTS:
     void onTimeUpdateTrayIcon();
     void onTabletModeChanged(bool mode);
     void onRefreshTrayIconTooltip();
+
+    void onShowKylinNMSlot(QString display, int type);
+    //唤起属性页 根据网卡类型 参数2 为ssid/uuid
+    void onShowPropertyWidgetSlot(QString display, QString devName, QString ssid);
+    //唤起新建有线连接界面
+    void onShowCreateWiredConnectWidgetSlot(QString display, QString devName);
+    //唤起加入其他无线网络界面
+    void onShowAddOtherWlanWidgetSlot(QString display, QString devName);
 };
 
 #endif // MAINWINDOW_H

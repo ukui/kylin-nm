@@ -294,9 +294,8 @@ void WlanPage::initDeviceCombox()
         }
     } else {
         m_deviceFrame->hide();
-        //解决因m_currentDevice被置空，安全中心网络显示BUG
-//        m_currentDevice = "";
-//        setDefaultDevice(WIRELESS, m_currentDevice);
+        m_currentDevice = "";
+        setDefaultDevice(WIRELESS, m_currentDevice);
     }
 
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -780,25 +779,23 @@ void WlanPage::deleteDeviceFromCombox(QString deviceName)
     disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
                                 this, &WlanPage::onDeviceComboxIndexChanged);
 
-    if (getSwitchBtnState()) {
-        if (0 == m_devList.count()) {
-            m_deviceFrame->hide();
-            //m_tipsLabel->show();
-            //m_deviceComboBox->hide();
-            m_currentDevice = "";
+    if (0 == m_devList.count()) {
+        m_deviceFrame->hide();
+        //m_tipsLabel->show();
+        //m_deviceComboBox->hide();
+        m_currentDevice = "";
+        setDefaultDevice(WIRELESS, m_currentDevice);
+    } else if (1 == m_devList.count()) {
+        m_deviceFrame->hide();
+        m_deviceComboBox->clear();
+        m_currentDevice = m_devList.at(0);
+        setDefaultDevice(WIRELESS, m_currentDevice);
+    } else {
+        int index = m_deviceComboBox->findText(deviceName);
+        if (-1 != index) {
+            m_deviceComboBox->removeItem(index);
+            m_currentDevice = m_deviceComboBox->currentText();
             setDefaultDevice(WIRELESS, m_currentDevice);
-        } else if (1 == m_devList.count()) {
-            m_deviceFrame->hide();
-            m_deviceComboBox->clear();
-            m_currentDevice = m_devList.at(0);
-            setDefaultDevice(WIRELESS, m_currentDevice);
-        } else {
-            int index = m_deviceComboBox->findText(deviceName);
-            if (-1 != index) {
-                m_deviceComboBox->removeItem(index);
-                m_currentDevice = m_deviceComboBox->currentText();
-                setDefaultDevice(WIRELESS, m_currentDevice);
-            }
         }
     }
 

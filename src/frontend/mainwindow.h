@@ -34,6 +34,7 @@
 #include "wlanpage.h"
 #include "netdetails/netdetail.h"
 #include "netdetails/joinhiddenwifipage.h"
+#include "connectivity/connectivitypage.h"
 //安全中心-网络防火墙模式配置
 #include "networkmodeconfig.h"
 //删除此头文件，别在添加
@@ -47,7 +48,9 @@
 enum IconActiveType {
     NOT_CONNECTED = 0,
     LAN_CONNECTED,
+    LAN_CONNECTED_INTRANET,
     WLAN_CONNECTED,
+    WLAN_CONNECTED_INTRANET,
     LAN_CONNECTED_LIMITED,
     WLAN_CONNECTED_LIMITED,
     ACTIVATING,
@@ -180,6 +183,8 @@ private:
     LanPage * m_lanWidget = nullptr;
     WlanPage * m_wlanWidget = nullptr;
 
+    ConnectivityPage* m_connectivityPage = nullptr;
+
     //监听主题的Gsettings
     QGSettings * m_styleGsettings = nullptr;
 
@@ -192,6 +197,7 @@ private:
     QMenu * m_trayIconMenu = nullptr;
     QAction * m_showMainwindowAction = nullptr;
     QAction * m_showSettingsAction = nullptr;
+    QAction * m_showConnectivityPageAction = nullptr;
 
     bool m_lanIsLoading = false;
     bool m_wlanIsLoading = false;

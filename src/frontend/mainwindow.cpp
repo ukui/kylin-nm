@@ -33,6 +33,7 @@
 #include "ukuistylehelper/ukuistylehelper.h"
 #include "windowmanager/windowmanager.h"
 #include "kysdk/kysdk-system/libkysysinfo.h"
+#include "kylinutil.h"
 
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 476
@@ -67,6 +68,12 @@ const QString intel = "V10SP1-edu";
 #define OK_SIGNAL_LIMIT_ICON          "ukui-network-wireless-signal-ok-error-symbolic"
 #define LOW_SIGNAL_LIMIT_ICON         "ukui-network-wireless-signal-weak-error-symbolic"
 #define NONE_SIGNAL_LIMIT_ICON        "ukui-network-wireless-signal-none-error-symbolic"
+
+#define EXCELLENT_SIGNAL_INTRANET_ICON   "ukui-network-wireless-signal-excellent-intranet-symbolic"
+#define GOOD_SIGNAL_INTRANET_ICON        "ukui-network-wireless-signal-good-intranet-symbolic"
+#define OK_SIGNAL_INTRANET_ICON          "ukui-network-wireless-signal-ok-intranet-symbolic"
+#define LOW_SIGNAL_INTRANET_ICON         "ukui-network-wireless-signal-weak-intranet-symbolic"
+#define NONE_SIGNAL_INTRANET_ICON        "ukui-network-wireless-signal-none-intranet-symbolic"
 
 #include <kwindowsystem.h>
 #include <kwindowsystem_export.h>
@@ -327,11 +334,13 @@ void MainWindow::initTrayIcon()
 
     m_trayIcon = new QSystemTrayIcon();
     m_trayIconMenu = new QMenu();
-    m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
+//    m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
     m_showSettingsAction = new QAction(tr("Settings"),this);
+    m_showConnectivityPageAction = new QAction(tr("Network Connectivity Detection"), this);
 
 //    m_trayIcon->setToolTip(QString(tr("Network tool")));
     m_showSettingsAction->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
+    m_showConnectivityPageAction->setIcon(QIcon::fromTheme("gnome-netstatus-txrx"));
 //    m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);
     m_trayIcon->setContextMenu(m_trayIconMenu);
@@ -342,6 +351,20 @@ void MainWindow::initTrayIcon()
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
 //    connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
     connect(m_showSettingsAction, &QAction::triggered, this, &MainWindow::onShowSettingsActionTriggled);
+    connect(m_showConnectivityPageAction, &QAction::triggered, [=]() {
+        if (m_connectivityPage != nullptr) {
+            KWindowSystem::activateWindow(m_connectivityPage->winId());
+            KWindowSystem::raiseWindow(m_connectivityPage->winId());
+            return;
+        }
+        QString uri = getConnectivityCheckSpareUriByGDbus();
+        m_connectivityPage = new ConnectivityPage(uri, this);
+        connect(m_connectivityPage, &ConnectivityPage::pageClose, [&](){
+            m_connectivityPage = nullptr;
+        });
+        m_connectivityPage->show();
+    });
+
     m_trayIcon->show();
 }
 
@@ -733,10 +756,34 @@ void MainWindow::onRefreshTrayIcon()
         }
     }
 
+    if(!getConnectivityCheckSpareUriByGDbus().isEmpty()) {
+        if (iconStatus == IconActiveType::LAN_CONNECTED) {
+            m_trayIcon->setIcon(QIcon::fromTheme("network-intranet-symbolic"));
+        } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
+            if (signalStrength > MW_EXCELLENT_SIGNAL){
+                m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_INTRANET_ICON));
+            } else if (signalStrength > MW_GOOD_SIGNAL) {
+                m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_INTRANET_ICON));
+            } else if (signalStrength > MW_OK_SIGNAL) {
+                m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_INTRANET_ICON));
+            } else if (signalStrength > MW_LOW_SIGNAL) {
+                m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_INTRANET_ICON));
+            } else {
+                m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_INTRANET_ICON));
+            }
+        }
+    }
+
     if (signalStrength == -1) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
     }
     onRefreshTrayIconTooltip();
+
+    if (iconStatus > IconActiveType::NOT_CONNECTED) {
+        m_trayIconMenu->addAction(m_showConnectivityPageAction);
+    } else {
+        m_trayIconMenu->removeAction(m_showConnectivityPageAction);
+    }
 }
 
 void MainWindow::onSetTrayIconLoading()

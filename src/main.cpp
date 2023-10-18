@@ -134,7 +134,8 @@ int main(int argc, char *argv[])
         sessionType = "x11";
         display = getenv("DISPLAY");
     }
-    qDebug() << display;
+    qDebug() << sessionType << display;
+    qApp->setProperty("sessionType", sessionType);
 
     QDBusInterface interface("com.kylin.network",
                              "/com/kylin/network",

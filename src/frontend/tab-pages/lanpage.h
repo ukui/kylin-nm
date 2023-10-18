@@ -52,6 +52,10 @@ public:
     bool lanIsConnected();
     void getWiredDeviceConnectState(QMap<QString, QString> &map);
 
+    bool isWiredDeviceUsable() {
+        return !m_devList.isEmpty();
+    }
+
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
 

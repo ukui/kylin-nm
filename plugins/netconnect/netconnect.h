@@ -156,6 +156,9 @@ private slots:
 
     void onDeviceStatusChanged();
     void onDeviceNameChanged(QString, QString, int);
+
+    //更新控制面板插件Gsetting show
+    void updatePluginShowSettings();
 };
 
 Q_DECLARE_METATYPE(QList<QDBusObjectPath>);

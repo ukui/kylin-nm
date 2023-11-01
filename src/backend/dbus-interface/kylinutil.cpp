@@ -217,3 +217,89 @@ out:
     g_object_unref (props_proxy);
 }
 
+QString getConnectivityCheckSpareUriByGDbus()
+{
+    GDBusProxy *props_proxy;
+    GVariant *ret = NULL, *path_value = NULL;
+    GError *error = NULL;
+    QString str;
+
+    /* Create a D-Bus object proxy for the active connection object's properties */
+    props_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
+                                                 G_DBUS_PROXY_FLAGS_NONE,
+                                                 NULL,
+                                                 "org.freedesktop.NetworkManager",
+                                                 "/org/freedesktop/NetworkManager",
+                                                 "org.freedesktop.DBus.Properties",
+                                                 NULL, NULL);
+    g_assert (props_proxy);
+
+    /* Get the object path of the Connection details */
+    ret = g_dbus_proxy_call_sync (props_proxy,
+                                  "Get",
+                                  g_variant_new ("(ss)",
+                                                 "org.freedesktop.NetworkManager",
+                                                 "ConnectivityCheckSpareUri"),
+                                  G_DBUS_CALL_FLAGS_NONE, -1,
+                                  NULL, &error);
+    if (!ret) {
+        g_dbus_error_strip_remote_error (error);
+        qDebug() << "failed to getConnectivityCheckSpareUri";
+        g_error_free (error);
+    }
+
+    g_variant_get (ret, "(v)", &path_value);
+//    if (!g_variant_is_of_type (path_value, G_VARIANT_TYPE_VARIANT)) {
+//        g_warning ("Unexpected type returned getting Connection property: %s",
+//                   g_variant_get_type_string (path_value));
+//        goto out;
+//    }
+
+    str = QString(g_variant_get_string(path_value, NULL));
+
+out:
+    if (path_value)
+        g_variant_unref (path_value);
+    if (ret)
+        g_variant_unref (ret);
+    g_object_unref (props_proxy);
+
+    return str;
+}
+
+void setConnectivityCheckSpareUriByGDbus(QString uri)
+{
+    GDBusProxy *props_proxy;
+    GVariant *ret = NULL;
+    GError *error = NULL;
+
+    /* Create a D-Bus object proxy for the active connection object's properties */
+    props_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
+                                                 G_DBUS_PROXY_FLAGS_NONE,
+                                                 NULL,
+                                                 "org.freedesktop.NetworkManager",
+                                                 "/org/freedesktop/NetworkManager",
+                                                 "org.freedesktop.DBus.Properties",
+                                                 NULL, NULL);
+    g_assert (props_proxy);
+
+    /* Get the object path of the Connection details */
+    ret = g_dbus_proxy_call_sync (props_proxy,
+                                  "Set",
+                                  g_variant_new ("(ssv)",
+                                                 "org.freedesktop.NetworkManager",
+                                                 "ConnectivityCheckSpareUri",
+                                                 g_variant_new_string(uri.toStdString().c_str())),
+                                  G_DBUS_CALL_FLAGS_NONE, -1,
+                                  NULL, &error);
+    if (!ret) {
+        g_dbus_error_strip_remote_error (error);
+        qDebug() << "failed to setConnectivityCheckSpareUri";
+        g_error_free (error);
+    }
+
+out:
+    if (ret)
+        g_variant_unref (ret);
+    g_object_unref (props_proxy);
+}

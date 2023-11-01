@@ -35,24 +35,72 @@
 <context>
     <name>ConfigPage</name>
     <message>
-        <location filename="../frontend/netdetails/configpage.cpp" line="62"/>
+        <location filename="../frontend/netdetails/configpage.cpp" line="60"/>
         <source>Network profile type</source>
         <translation>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ ᠹᠠᠢᠯ ᠤ᠋ᠨ ᠳᠦᠷᠦᠯ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/configpage.cpp" line="65"/>
+        <location filename="../frontend/netdetails/configpage.cpp" line="63"/>
         <source>Public(recommended)  Devices on the network cannot discover this computer. Generally, it is suitable for networks in public places, such as airports or coffee shops, etc.</source>
         <translation>ᠨᠡᠢᠳᠡ ᠵᠢᠨ ᠰᠦᠯᠵᠢᠶᠡᠨ ( ᠳᠠᠨᠢᠯᠴᠠᠭᠤᠯᠬᠤ) ᠳ᠋ᠤ᠌ ᠬᠢ ᠳᠦᠬᠦᠬᠡᠷᠦᠮᠵᠢ ᠲᠤᠰ ᠺᠣᠮᠫᠢᠦ᠋ᠲ᠋ᠧᠷ ᠢ᠋ ᠣᠯᠵᠤ ᠮᠡᠳᠡᠵᠤ ᠪᠣᠯᠬᠤ ᠥᠬᠡᠢ᠂ ᠶᠡᠷᠦᠳᠡ ᠵᠢᠨ ᠪᠠᠢᠳᠠᠯ ᠳ᠋ᠤ᠌ ᠣᠯᠠᠨ ᠨᠡᠢᠳᠡ ᠵᠢᠨ ᠳᠠᠯᠠᠪᠠᠢ ᠳ᠋ᠤ᠌ ᠬᠢ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠬᠡᠷᠡᠭᠯᠡᠨ᠎ᠡ᠂ ᠵᠢᠰᠢᠶᠡᠯᠡᠪᠡᠯ ᠨᠢᠰᠬᠡᠯ ᠤ᠋ᠨ ᠪᠠᠭᠤᠳᠠᠯ ᠤ᠋ᠨ ᠺᠤᠹᠸ ᠵᠢᠨ ᠦᠷᠦᠬᠡ ᠵᠡᠷᠭᠡ.</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/configpage.cpp" line="69"/>
+        <location filename="../frontend/netdetails/configpage.cpp" line="67"/>
         <source>Private  Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
         <translation>ᠳᠤᠰᠬᠠᠢ ᠬᠡᠷᠡᠭᠯᠡᠬᠦ᠂ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠳᠦᠬᠦᠬᠡᠷᠦᠮᠵᠢ ᠲᠤᠰ ᠺᠣᠮᠫᠢᠦ᠋ᠲ᠋ᠧᠷ ᠢ᠋ ᠣᠯᠵᠤ ᠮᠡᠳᠡᠪᠡ᠂ ᠶᠡᠷᠦᠳᠡ ᠵᠢᠨ ᠪᠠᠢᠳᠠᠯ ᠳ᠋ᠤ᠌ ᠬᠡᠷᠦᠢ ᠤ᠋ᠨ ᠪᠤᠶᠤ ᠠᠯᠪᠠᠨ ᠪᠠᠢᠭᠤᠯᠭ᠎ᠠ ᠵᠢᠨ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳ᠋ᠤ᠌ ᠬᠡᠷᠡᠭᠯᠡᠨ᠎ᠡ᠂ ᠲᠠ ᠳᠠᠨᠢᠬᠤ ᠮᠦᠷᠳᠡᠭᠡᠨ ᠨᠠᠢᠳᠠᠪᠤᠷᠢᠳᠠᠢ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳᠡᠬᠡᠷᠡᠬᠢ ᠬᠤᠪᠢ ᠬᠥᠮᠦᠨ ᠪᠤᠶᠤ ᠳᠦᠬᠦᠬᠡᠷᠦᠮᠵᠢ.</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/configpage.cpp" line="73"/>
+        <location filename="../frontend/netdetails/configpage.cpp" line="71"/>
         <source>Config firewall and security settings</source>
         <translation>ᠭᠠᠯ ᠰᠡᠷᠬᠡᠢᠯᠡᠬᠦ ᠬᠡᠷᠡᠮ ᠪᠤᠯᠤᠨ ᠠᠮᠤᠷ ᠳᠦᠪᠰᠢᠨ ᠤ᠋ ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ</translation>
+    </message>
+</context>
+<context>
+    <name>ConnectivityPage</name>
+    <message>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="25"/>
+        <source>Network connectivity detection</source>
+        <translation>ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠶᠢ ᠵᠠᠯᠭᠠᠵᠤ ᠪᠠᠶᠢᠴᠠᠭᠠᠨ ᠬᠡᠮᠵᠢᠨ᠎ᠡ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="55"/>
+        <source>If access to the Internet is restricted, please switch the network IP connectivity detection method and try again.</source>
+        <translation>ᠬᠡᠷᠪᠡ ᠢᠨᠲ᠋ᠸᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠠ ᠳᠤ ᠰᠤᠷᠪᠤᠯᠵᠢᠯᠠᠬᠤ ᠳᠤ ᠬᠦᠷᠪᠡᠯ ᠂ ᠰᠦᠯᠵᠢᠶ᠎ᠠ ᠶᠢᠨ IP ᠶᠢ ᠬᠤᠯᠪᠤᠵᠤ ᠪᠠᠶᠢᠴᠠᠭᠠᠨ ᠬᠡᠮᠵᠢᠭᠦ ᠠᠷᠭ᠎ᠠ ᠶᠢ ᠰᠤᠯᠢᠵᠤ ᠂ ᠲᠠᠷᠠᠭ᠎ᠠ ᠨᠢ ᠲᠠᠭᠢᠨ ᠰᠢᠯᠭᠠᠯᠲᠠ ᠬᠢᠨ᠎ᠡ.</translation>
+    </message>
+    <message>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="61"/>
+        <source>Public network (default)</source>
+        <translation>ᠨᠡᠶᠢᠲᠡ ᠶᠢᠨ ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ( ᠳᠤᠪ ᠳᠤᠭᠤᠢ ᠲᠠᠨᠢᠯᠴᠠᠨ᠎ᠠ )</translation>
+    </message>
+    <message>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="63"/>
+        <source>Local area network (intranet)</source>
+        <translation>ᠬᠡᠰᠡᠭ ᠬᠡᠪᠴᠢᠶᠡᠨ ᠦ ᠲᠣᠤᠷ ( ᠳᠣᠲᠣᠭᠠᠳᠤ ᠰᠦᠯᠵᠢᠶ᠎ᠡ )</translation>
+    </message>
+    <message>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="74"/>
+        <source>Confirm</source>
+        <translation>ᠪᠠᠳᠤᠯᠠᠬᠤ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="161"/>
+        <source>The network is connected and can access the Internet normally.</source>
+        <translation>ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠤ ᠂ ᠢᠨᠲ᠋ᠧᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠶᠢ ᠬᠡᠪ ᠦᠨ ᠶᠣᠰᠣᠭᠠᠷ ᠰᠤᠷᠪᠤᠯᠵᠢᠯᠠᠵᠤ ᠪᠣᠯᠣᠨ᠎ᠠ.</translation>
+    </message>
+    <message>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="166"/>
+        <source>The network is connected and access to the Internet is restricted.</source>
+        <translation>ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠨᠢᠭᠡᠨᠲᠡ ᠬᠣᠯᠪᠣᠭᠳᠠᠵᠤ ᠂ ᠢᠨᠲ᠋ᠧᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠦ ᠠᠶᠢᠯᠴᠢᠯᠠᠯᠲᠠ ᠳᠤ ᠬᠢᠵᠠᠭᠠᠷᠯᠠᠭᠳᠠᠵᠠᠶ.</translation>
+    </message>
+    <message>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="177"/>
+        <source>Please enter the local area network (intranet) detection address</source>
+        <translation>ᠬᠡᠰᠡᠭ ᠬᠡᠪᠴᠢᠶᠡᠨ ᠦ ᠲᠣᠤᠷ (ᠳᠣᠲᠣᠭᠠᠳᠤ ᠲᠣᠤᠷ) ᠢ ᠪᠠᠶᠢᠴᠠᠭᠠᠨ ᠬᠡᠮᠵᠢᠬᠦ ᠬᠠᠶᠢᠭ ᠢ ᠣᠷᠣᠭᠤᠯᠵᠤ ᠢᠷᠡᠭᠡᠷᠡᠢ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/connectivity/connectivitypage.cpp" line="196"/>
+        <source>Format error</source>
+        <translation>ᠬᠡᠯᠪᠡᠷᠢ ᠨᠢ ᠪᠤᠷᠤᠭᠤ</translation>
     </message>
 </context>
 <context>
@@ -524,27 +572,27 @@
         <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="116"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="117"/>
         <source>Wi-Fi network requires authentication</source>
         <translation>Wi-Fi ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠬᠡᠷᠡᠴᠢᠯᠡᠯ ᠢ᠋ ᠱᠠᠭᠠᠷᠳᠠᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="121"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="122"/>
         <source>Access to Wi-Fi network &quot;</source>
         <translation>Wi-Fi ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳ᠋ᠤ᠌ ᠠᠢᠯᠴᠢᠯᠠᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="123"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="124"/>
         <source>&quot; requires a password or encryption key.</source>
         <translation>ᠨᠢᠭᠤᠴᠠ ᠺᠣᠳ᠋ ᠱᠠᠭᠠᠷᠳᠠᠬᠤ ᠪᠤᠶᠤ ᠨᠢᠭᠤᠴᠠ ᠳᠦᠯᠬᠢᠬᠦᠷ ᠨᠢᠭᠤᠴᠠᠯᠠᠬᠤ.</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="154"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="155"/>
         <source>Cancel</source>
         <translation>ᠦᠬᠡᠢᠰᠬᠡᠬᠦ</translation>
     </message>
     <message>
-        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="155"/>
+        <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="156"/>
         <source>Connect</source>
         <translation>ᠴᠦᠷᠬᠡᠯᠡᠬᠡ</translation>
     </message>
@@ -552,22 +600,22 @@
 <context>
     <name>FirewallDialog</name>
     <message>
-        <location filename="../frontend/networkmode/firewalldialog.cpp" line="85"/>
+        <location filename="../frontend/networkmode/firewalldialog.cpp" line="89"/>
         <source>Allow other devices on this network to discover this computer?</source>
         <translation>ᠲᠤᠰ ᠳᠦᠯᠵᠢᠶᠡᠨ ᠳᠡᠭᠡᠷᠡᠬᠢ ᠪᠤᠰᠤᠳ ᠳᠦᠬᠦᠬᠡᠷᠦᠮᠵᠢ ᠡᠨᠡ ᠺᠣᠮᠫᠢᠦ᠋ᠲ᠋ᠧᠷ ᠢ᠋ ᠣᠯᠵᠤ ᠮᠡᠳᠡᠬᠦ ᠵᠢ ᠵᠥᠪᠰᠢᠶᠡᠷᠡᠬᠦ ᠤᠤ?</translation>
     </message>
     <message>
-        <location filename="../frontend/networkmode/firewalldialog.cpp" line="87"/>
+        <location filename="../frontend/networkmode/firewalldialog.cpp" line="91"/>
         <source>It is not recommended to enable this feature on public networks</source>
         <translation>ᠨᠡᠢᠳᠡ ᠵᠢᠨ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳᠡᠭᠡᠷ᠎ᠡ ᠲᠤᠰ ᠴᠢᠳᠠᠪᠬᠢ ᠵᠢ ᠨᠡᠬᠡᠬᠡᠬᠦ ᠥᠬᠡᠢ ᠪᠠᠢᠬᠤ ᠵᠢ ᠰᠠᠨᠠᠭᠤᠯᠵᠤ ᠪᠠᠢᠨ᠎ᠠ</translation>
     </message>
     <message>
-        <location filename="../frontend/networkmode/firewalldialog.cpp" line="89"/>
+        <location filename="../frontend/networkmode/firewalldialog.cpp" line="93"/>
         <source>Not allowed (recommended)</source>
         <translation>ᠵᠥᠪᠰᠢᠶᠡᠷᠡᠬᠦ ᠥᠬᠡᠢ ( ᠳᠠᠨᠢᠯᠴᠠᠭᠤᠯᠬᠤ)</translation>
     </message>
     <message>
-        <location filename="../frontend/networkmode/firewalldialog.cpp" line="90"/>
+        <location filename="../frontend/networkmode/firewalldialog.cpp" line="94"/>
         <source>Allowed</source>
         <translation>ᠵᠥᠪᠰᠢᠶᠡᠷᠡᠬᠦ</translation>
     </message>
@@ -737,38 +785,38 @@
 <context>
     <name>LanListItem</name>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="69"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="68"/>
         <source>Not connected</source>
         <translation>ᠴᠦᠷᠬᠡᠯᠡᠭᠡ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="126"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="125"/>
         <source>Wired Device not carried</source>
         <translation>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠤᠳᠠᠰᠤ ᠵᠠᠯᠭᠠᠭ᠎ᠠ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="146"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="163"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="261"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="145"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="162"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="260"/>
         <source>Disconnect</source>
         <translation>ᠳᠠᠰᠤᠯᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="148"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="161"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="265"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="147"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="160"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="264"/>
         <source>Connect</source>
         <translation>ᠴᠦᠷᠬᠡᠯᠡᠬᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="152"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="168"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="151"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="167"/>
         <source>Property</source>
         <translation>ᠬᠠᠷᠢᠶᠠᠯᠠᠯ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="153"/>
-        <location filename="../frontend/list-items/lanlistitem.cpp" line="170"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="152"/>
+        <location filename="../frontend/list-items/lanlistitem.cpp" line="169"/>
         <source>Delete</source>
         <translation>ᠲᠤᠰ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠬᠠᠰᠤᠬᠤ</translation>
     </message>
@@ -776,7 +824,7 @@
 <context>
     <name>LanPage</name>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1192"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1187"/>
         <source>No ethernet device avaliable</source>
         <translation>ᠤᠳᠠᠰᠤᠳᠤ ᠳᠦᠬᠦᠬᠡᠷᠦᠮᠵᠢ ᠵᠢ ᠪᠠᠢᠴᠠᠭᠠᠵᠤ ᠤᠯᠤᠭᠰᠠᠨ ᠦᠬᠡᠢ</translation>
     </message>
@@ -805,7 +853,7 @@
         <translation type="vanished">ᠤᠳᠠᠰᠤᠳᠤ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠨᠢᠭᠡᠨᠳᠡ ᠳᠠᠰᠤᠯᠪᠠ</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1236"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1231"/>
         <source>Wired Device not carried</source>
         <translation>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠤᠳᠠᠰᠤ ᠵᠠᠯᠭᠠᠭ᠎ᠠ ᠦᠬᠡᠢ</translation>
     </message>
@@ -814,18 +862,18 @@
         <translation type="vanished">ᠤᠳᠠᠰᠤᠳᠤ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠨᠢᠭᠡᠨᠳᠡ ᠴᠦᠷᠬᠡᠯᠡᠪᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1330"/>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1338"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1325"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1333"/>
         <source>Connected: </source>
         <translation>ᠴᠥᠷᠬᠡᠯᠡᠪᠡ: </translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1332"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1327"/>
         <source>Not Connected</source>
         <translation>ᠴᠥᠷᠬᠡᠯᠡᠭᠡ ᠥᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/lanpage.cpp" line="1330"/>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1325"/>
         <source>(Limited)</source>
         <translation>( ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠬᠢᠵᠠᠭᠠᠷᠯᠠᠭᠳᠠᠪᠠ)</translation>
     </message>
@@ -846,46 +894,50 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="214"/>
+        <location filename="../frontend/mainwindow.cpp" line="221"/>
         <source>kylin-nm</source>
         <translation>ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠪᠠᠭᠠᠵᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="299"/>
+        <location filename="../frontend/mainwindow.cpp" line="306"/>
         <source>LAN</source>
         <translatorcomment>有线网络</translatorcomment>
         <translation>ᠤᠳᠠᠰᠤᠳᠤ ᠰᠦᠯᠵᠢᠶ᠎ᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="301"/>
+        <location filename="../frontend/mainwindow.cpp" line="308"/>
         <source>WLAN</source>
         <translatorcomment>无线局域网</translatorcomment>
         <translation>ᠤᠳᠠᠰᠤ ᠦᠬᠡᠢ ᠬᠡᠰᠡᠭ ᠰᠦᠯᠵᠢᠶ᠎ᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="330"/>
         <source>Show MainWindow</source>
-        <translation>ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠪᠠᠭᠠᠵᠢ ᠵᠢ ᠨᠡᠬᠡᠬᠡᠬᠦ</translation>
+        <translation type="vanished">ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠪᠠᠭᠠᠵᠢ ᠵᠢ ᠨᠡᠬᠡᠬᠡᠬᠦ</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="331"/>
+        <location filename="../frontend/mainwindow.cpp" line="338"/>
         <source>Settings</source>
         <translatorcomment>ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠲᠦᠷᠦᠯ ᠢ᠋ ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠬᠤ</translatorcomment>
         <translation>ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠲᠦᠷᠦᠯ ᠢ᠋ ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="573"/>
-        <location filename="../frontend/mainwindow.cpp" line="802"/>
+        <location filename="../frontend/mainwindow.cpp" line="339"/>
+        <source>Network Connectivity Detection</source>
+        <translation>ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠶᠢ ᠵᠠᠯᠭᠠᠵᠤ ᠪᠠᠶᠢᠴᠠᠭᠠᠨ ᠬᠡᠮᠵᠢᠨ᠎ᠡ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/mainwindow.cpp" line="616"/>
+        <location filename="../frontend/mainwindow.cpp" line="869"/>
         <source>Network tool</source>
         <translation>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠪᠠᠭᠠᠵᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="587"/>
+        <location filename="../frontend/mainwindow.cpp" line="630"/>
         <source>Network Card</source>
         <translation>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠺᠠᠷᠲ</translation>
     </message>
     <message>
-        <location filename="../frontend/mainwindow.cpp" line="785"/>
+        <location filename="../frontend/mainwindow.cpp" line="852"/>
         <source>Not connected to the network</source>
         <translation>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳ᠋ᠤ᠌ ᠴᠥᠷᠬᠡᠯᠡᠭᠡ ᠥᠬᠡᠢ</translation>
     </message>
@@ -921,22 +973,22 @@
         <translation>ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠰᠠᠨᠠᠭᠤᠯᠤᠮᠵᠢ ᠵᠢᠨ ᠮᠡᠳᠡᠭᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="377"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="378"/>
         <source>Detail</source>
         <translation>ᠳᠡᠯᠭᠡᠷᠡᠩᠭᠦᠢ ᠠᠭᠤᠯᠭ᠎ᠠ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="378"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="379"/>
         <source>IPv4</source>
         <translation>IPv4</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="379"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="380"/>
         <source>IPv6</source>
         <translation>IPv6</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="381"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="382"/>
         <source>Security</source>
         <translation>ᠠᠮᠤᠷ ᠳᠦᠪᠰᠢᠨ</translation>
     </message>
@@ -945,62 +997,62 @@
         <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="383"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="390"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="384"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="391"/>
         <source>Config</source>
         <translation>ᠳᠤᠬᠢᠷᠠᠭᠤᠯᠭ᠎ᠠ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="402"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="403"/>
         <source>Confirm</source>
         <translation>ᠪᠠᠳᠤᠯᠠᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="404"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="405"/>
         <source>Cancel</source>
         <translation>ᠦᠬᠡᠢᠰᠬᠡᠬᠦ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="462"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="463"/>
         <source>Forget this network</source>
         <translation>ᠲᠤᠰ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠮᠠᠷᠳᠠᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="464"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="465"/>
         <source>Delete this network</source>
         <translation>ᠲᠤᠰ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠬᠠᠰᠤᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="443"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="444"/>
         <source>Add LAN Connect</source>
         <translation>ᠤᠳᠠᠰᠤᠳᠤ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠨᠡᠮᠡᠬᠦ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="448"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="449"/>
         <source>Connect Hidden WLAN</source>
         <translation>ᠨᠢᠭᠤᠴᠠᠯᠠᠭᠰᠠᠨ WLAN ᠲᠤ᠌/ ᠳ᠋ᠤ᠌ ᠴᠦᠷᠬᠡᠯᠡᠬᠦ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="629"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="641"/>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1184"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="630"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="642"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1185"/>
         <source>None</source>
         <translation>ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="753"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="754"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="755"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="756"/>
         <source>Auto</source>
         <translation>ᠠᠦ᠋ᠲ᠋ᠤ᠋</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="896"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="897"/>
         <source>start check ipv4 address conflict</source>
         <translation>ipv4 ᠬᠠᠶᠢᠭ ᠤ᠋ᠨ ᠮᠦᠷᠬᠦᠯᠳᠦᠬᠡᠨ ᠢ᠋ ᠪᠠᠢᠴᠠᠭᠠᠵᠤ ᠡᠬᠢᠯᠡᠪᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="913"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="914"/>
         <source>start check ipv6 address conflict</source>
         <translation>ipv6 ᠬᠠᠶᠢᠭ ᠤ᠋ᠨ ᠮᠦᠷᠬᠦᠯᠳᠦᠬᠡᠨ ᠢ᠋ ᠪᠠᠢᠴᠠᠭᠠᠵᠤ ᠡᠬᠢᠯᠡᠪᠡ</translation>
     </message>
@@ -1013,22 +1065,22 @@
         <translation type="vanished">ipv6 ᠬᠠᠶᠢᠭ ᠮᠦᠷᠬᠦᠯᠳᠦᠬᠡᠨ ᠲᠠᠢ!</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1180"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1181"/>
         <source>this wifi no support enterprise type</source>
         <translation>ᠲᠤᠰ wifi ᠠᠵᠤ ᠠᠬᠤᠢᠯᠠᠯ ᠤ᠋ᠨ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠤ᠋ ᠲᠦᠷᠦᠯ ᠢ᠋ ᠳᠡᠮᠵᠢᠬᠦ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1185"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1186"/>
         <source>this wifi no support None type</source>
         <translation>ᠲᠤᠰ wifi ᠬᠤᠭᠤᠰᠤᠨ ᠬᠡᠯᠪᠡᠷᠢ ᠵᠢ ᠳᠡᠮᠵᠢᠬᠦ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1190"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1191"/>
         <source>this wifi no support WPA2 type</source>
         <translation>ᠲᠤᠰ wifiWPA2 ᠳᠦᠷᠦᠯ ᠢ᠋ ᠳᠡᠮᠵᠢᠬᠦ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/netdetails/netdetail.cpp" line="1193"/>
+        <location filename="../frontend/netdetails/netdetail.cpp" line="1194"/>
         <source>this wifi no support WPA3 type</source>
         <translation>ᠲᠤᠰ wifiWPA3 ᠳᠦᠷᠦᠯ ᠢ᠋ ᠳᠡᠮᠵᠢᠬᠦ ᠦᠬᠡᠢ</translation>
     </message>
@@ -1425,42 +1477,42 @@
 <context>
     <name>WlanListItem</name>
     <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="72"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="71"/>
         <source>Not connected</source>
         <translation>ᠴᠦᠷᠬᠡᠯᠡᠭᠡ ᠦᠬᠡᠢ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="177"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="204"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="637"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="656"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="176"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="203"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="647"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="666"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="676"/>
         <source>Disconnect</source>
         <translation>ᠳᠠᠰᠤᠯᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="179"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="208"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="304"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="647"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="664"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="178"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="207"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="314"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="657"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="674"/>
         <source>Connect</source>
         <translation>ᠴᠦᠷᠬᠡᠯᠡᠬᠡ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="188"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="671"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="187"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="681"/>
         <source>Forget</source>
         <translation>ᠲᠤᠰ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠮᠠᠷᠳᠠᠬᠤ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="187"/>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="676"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="186"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="686"/>
         <source>Property</source>
         <translation>ᠬᠠᠷᠢᠶᠠᠯᠠᠯ</translation>
     </message>
     <message>
-        <location filename="../frontend/list-items/wlanlistitem.cpp" line="325"/>
+        <location filename="../frontend/list-items/wlanlistitem.cpp" line="335"/>
         <source>Auto Connect</source>
         <translation>ᠲᠤᠰ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳ᠋ᠤ᠌ ᠠᠦ᠋ᠲ᠋ᠤ᠋ ᠪᠡᠷ ᠵᠠᠯᠭᠠᠬᠤ</translation>
     </message>
@@ -1514,12 +1566,12 @@
         <translation>ᠤᠳᠠᠰᠤ ᠦᠬᠡᠢ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠳᠠᠰᠤᠯᠪᠠ</translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1750"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1739"/>
         <source>Connected: </source>
         <translation>ᠴᠥᠷᠬᠡᠯᠡᠪᠡ: </translation>
     </message>
     <message>
-        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1752"/>
+        <location filename="../frontend/tab-pages/wlanpage.cpp" line="1741"/>
         <source>Not Connected</source>
         <translation>ᠴᠥᠷᠬᠡᠯᠡᠭᠡ ᠥᠬᠡᠢ</translation>
     </message>

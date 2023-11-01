@@ -86,6 +86,7 @@ Q_SIGNALS:
     void connectionUpdate(QString uuid);
     void connectionRemove(QString path);
     void connectivityChanged(NetworkManager::Connectivity connectivity);
+    void connectivityCheckSpareUriChanged();
 
     void needShowDesktop(QString);
 

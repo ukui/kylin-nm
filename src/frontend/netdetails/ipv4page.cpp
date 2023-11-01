@@ -154,7 +154,7 @@ void Ipv4Page::initComponent() {
 
 void Ipv4Page::setIpv4Config(KyIpConfigType ipv4Config)
 {
-    if (ipv4Config ==  CONFIG_IP_MANUAL) {
+    if (ipv4Config == CONFIG_IP_MANUAL) {
         ipv4ConfigCombox->setCurrentIndex(MANUAL_CONFIG);
     } else {
         ipv4ConfigCombox->setCurrentIndex(AUTO_CONFIG);

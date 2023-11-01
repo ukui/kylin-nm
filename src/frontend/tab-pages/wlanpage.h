@@ -104,6 +104,7 @@ Q_SIGNALS:
     void showMainWindow(int type);
 
     void connectivityChanged(NetworkManager::Connectivity connectivity);
+    void connectivityCheckSpareUriChanged();
 
     void wirelessSwitchBtnChanged(bool state);
 

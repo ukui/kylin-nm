@@ -81,6 +81,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::wifiEnabledChanged, this, &WlanPage::onWifiEnabledChanged);
 
     connect(m_connectResource, &KyConnectResourse::connectivityChanged, this, &WlanPage::connectivityChanged);
+    connect(m_connectResource, &KyConnectResourse::connectivityCheckSpareUriChanged, this, &WlanPage::connectivityCheckSpareUriChanged);
     connect(m_netSwitch, &KSwitchButton::clicked, this, [=](bool checked) {
         //解决 switchBtn不支持点击的情况下，点击按钮，有无线网卡后不自动开启的问题
         if (getSwitchBtnEnable()) {

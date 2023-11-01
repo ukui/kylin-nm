@@ -129,6 +129,7 @@ Q_SIGNALS:
     void wifiNetworkDeviceDisappear();
     void wifiEnabledChanged(bool);
     void wiredEnabledChanged(bool);
+    void connectivityCheckSpareUriChanged();
 
     void activeConnectionsReset();
     void activeConnectionAdd(QString uuid);

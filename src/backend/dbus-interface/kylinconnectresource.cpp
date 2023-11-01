@@ -81,6 +81,7 @@ KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionUpdate, this, &KyConnectResourse::connectionUpdate);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectivityChanged, this, &KyConnectResourse::connectivityChanged);
 
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectivityCheckSpareUriChanged, this, &KyConnectResourse::connectivityCheckSpareUriChanged);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::needShowDesktop, this, &KyConnectResourse::needShowDesktop);
 }
 

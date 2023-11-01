@@ -598,6 +598,12 @@ void KyNetworkResourceManager::onPropertiesChanged(QVariantMap qvm)
             Q_EMIT wiredEnabledChanged(wiredEnable);
         }
     }
+    for(QString keyStr : qvm.keys()) {
+        //内网检测地址变化
+        if (keyStr == "ConnectivityCheckSpareUri") {
+            Q_EMIT connectivityCheckSpareUriChanged();
+        }
+    }
 }
 
 void KyNetworkResourceManager::onConnectionUpdated()

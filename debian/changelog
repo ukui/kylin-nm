@@ -1,3 +1,13 @@
+kylin-nm (3.25.0.0-0k1.1) v101; urgency=medium
+
+  * BUG：无
+  * 需求号：
+      - #23680 网络连通性检测地址调整+内网连通性检测功能
+  * 其他改动说明：
+  *其他改动影响域：自身
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 01 Nov 2023 15:29:41 +0800
+
 kylin-nm (3.25.0.0-0k0.1) v101; urgency=medium
 
   * BUG:

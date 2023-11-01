@@ -212,6 +212,9 @@ private:
 
     QString m_display;
 
+    bool m_isWiredUsable = true;
+    bool m_isWirelessUsable = true;
+
 public Q_SLOTS:
     void onShowMainWindow(int type);
 
@@ -238,6 +241,8 @@ private Q_SLOTS:
     void onShowCreateWiredConnectWidgetSlot(QString display, QString devName);
     //唤起加入其他无线网络界面
     void onShowAddOtherWlanWidgetSlot(QString display, QString devName);
+    //设置界面显示 单网卡/多网卡
+    void setCentralWidgetPages();
 };
 
 #endif // MAINWINDOW_H

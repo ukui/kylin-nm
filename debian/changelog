@@ -1,3 +1,23 @@
+kylin-nm (3.25.0.0-0k0.1) v101; urgency=medium
+
+  * BUG:
+  * 需求号：
+      - #23928 仅支持单一网络功能、单网卡时界面显示优化
+  * 其他改动说明:
+  * 其他改动影响域：控制面板 托盘tab页
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Wed, 18 Oct 2023 14:47:09 +0800
+
+kylin-nm (3.24.0.0-0k2.23) v101; urgency=medium
+
+  * BUG:
+      - #197411 【网络连接】点击控制面板-有线网络界面内"添加有线网络"和属性按钮无反应
+  * 需求号：无
+  * 其他改动说明:
+  * 其他改动影响域：wayland环境下控制面板唤出网络界面
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Tue, 17 Oct 2023 17:26:48 +0800
+
 kylin-nm (3.24.0.0-0k2.22) v101; urgency=medium
 
   * BUG:

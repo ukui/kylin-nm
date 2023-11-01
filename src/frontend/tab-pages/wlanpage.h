@@ -88,6 +88,10 @@ public:
         return m_currentDevice;
     }
 
+    bool isWirelessDeviceUsable() {
+        return !m_devList.isEmpty();
+    }
+
 Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);

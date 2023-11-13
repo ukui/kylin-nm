@@ -395,19 +395,19 @@ void MainWindow::initTrayIcon()
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
 //    connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
     connect(m_showSettingsAction, &QAction::triggered, this, &MainWindow::onShowSettingsActionTriggled);
-    connect(m_showConnectivityPageAction, &QAction::triggered, [=]() {
-        if (m_connectivityPage != nullptr) {
-            KWindowSystem::activateWindow(m_connectivityPage->winId());
-            KWindowSystem::raiseWindow(m_connectivityPage->winId());
-            return;
-        }
-        QString uri = getConnectivityCheckSpareUriByGDbus();
-        m_connectivityPage = new ConnectivityPage(uri, this);
-        connect(m_connectivityPage, &ConnectivityPage::pageClose, [&](){
-            m_connectivityPage = nullptr;
-        });
-        m_connectivityPage->show();
-    });
+//    connect(m_showConnectivityPageAction, &QAction::triggered, [=]() {
+//        if (m_connectivityPage != nullptr) {
+//            KWindowSystem::activateWindow(m_connectivityPage->winId());
+//            KWindowSystem::raiseWindow(m_connectivityPage->winId());
+//            return;
+//        }
+//        QString uri = getConnectivityCheckSpareUriByGDbus();
+//        m_connectivityPage = new ConnectivityPage(uri, this);
+//        connect(m_connectivityPage, &ConnectivityPage::pageClose, [&](){
+//            m_connectivityPage = nullptr;
+//        });
+//        m_connectivityPage->show();
+//    });
 
     m_trayIcon->show();
 }
@@ -802,23 +802,23 @@ void MainWindow::onRefreshTrayIcon()
         }
     }
 
-    if(!getConnectivityCheckSpareUriByGDbus().isEmpty()) {
-        if (iconStatus == IconActiveType::LAN_CONNECTED) {
-            m_trayIcon->setIcon(QIcon::fromTheme("network-intranet-symbolic"));
-        } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
-            if (signalStrength > MW_EXCELLENT_SIGNAL){
-                m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_INTRANET_ICON));
-            } else if (signalStrength > MW_GOOD_SIGNAL) {
-                m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_INTRANET_ICON));
-            } else if (signalStrength > MW_OK_SIGNAL) {
-                m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_INTRANET_ICON));
-            } else if (signalStrength > MW_LOW_SIGNAL) {
-                m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_INTRANET_ICON));
-            } else {
-                m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_INTRANET_ICON));
-            }
-        }
-    }
+//    if(!getConnectivityCheckSpareUriByGDbus().isEmpty()) {
+//        if (iconStatus == IconActiveType::LAN_CONNECTED) {
+//            m_trayIcon->setIcon(QIcon::fromTheme("network-intranet-symbolic"));
+//        } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
+//            if (signalStrength > MW_EXCELLENT_SIGNAL){
+//                m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_INTRANET_ICON));
+//            } else if (signalStrength > MW_GOOD_SIGNAL) {
+//                m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_INTRANET_ICON));
+//            } else if (signalStrength > MW_OK_SIGNAL) {
+//                m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_INTRANET_ICON));
+//            } else if (signalStrength > MW_LOW_SIGNAL) {
+//                m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_INTRANET_ICON));
+//            } else {
+//                m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_INTRANET_ICON));
+//            }
+//        }
+//    }
 
     if (signalStrength == -1) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));

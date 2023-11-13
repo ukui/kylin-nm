@@ -43,7 +43,7 @@ public:
     ~LanPage();
 
     //for dbus
-    void getWiredList(QMap<QString, QVector<QStringList> > &map);
+    void getWiredList(QString devName, QList<QStringList> &list);
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
     void showDetailPage(QString devName, QString uuid);
@@ -52,6 +52,10 @@ public:
 
     bool lanIsConnected();
     void getWiredDeviceConnectState(QMap<QString, QString> &map);
+
+    bool isWiredDeviceUsable() {
+        return !m_devList.isEmpty();
+    }
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);

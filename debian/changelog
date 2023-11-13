@@ -1,3 +1,9 @@
+kylin-nm (4.0.0.0-ok8.2) yangtze; urgency=medium
+
+  * issue #I7GT8M #I7GST6 #I7YPFI #I73HNK #I72PU4
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Tue, 26 Sep 2023 14:58:15 +0800
+
 kylin-nm (4.0.0.0-ok8.1) yangtze; urgency=medium
 
   * rebuild with no changes.

@@ -147,7 +147,7 @@ private:
     QMap<QString, bool> deviceStatusMap;
     QMap<QString, ItemFrame *> deviceFrameMap;
 
-    bool               needLoad;
+    QMap<QString, QList<QStringList>> getWiredList();
 
 private slots:
     void updateLanInfo(QString deviceName, QStringList lanInfo);
@@ -159,6 +159,9 @@ private slots:
 
     void onDeviceStatusChanged();
     void onDeviceNameChanged(QString, QString, int);
+
+    //更新控制面板插件Gsetting show
+    void updatePluginShowSettings();
 };
 
 Q_DECLARE_METATYPE(QList<QDBusObjectPath>);

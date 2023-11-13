@@ -348,7 +348,7 @@ void Proxy::initUi(QWidget *widget)
     mIgnoreLayout->setSpacing(10);
     mIgnoreLayout->setContentsMargins(16, 0, 16, 24);
     mIgnoreLabel = new QLabel(mIgnoreFrame);
-    mIgnoreLabel->setFixedHeight(36);
+    mIgnoreLabel->setWordWrap(true);
     mIgnoreLineEdit = new QTextEdit(mIgnoreFrame);
     mIgnoreLineEdit->setFixedHeight(120);
     mIgnoreLineEdit->setStyleSheet("border-radius:6px;background-color: palette(button)");

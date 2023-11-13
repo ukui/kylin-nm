@@ -91,7 +91,7 @@ private:
 
     int  sortWlanNet(QString deviceName, QString name, QString signal);
     void updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection, int category);
-    void resortWifiList(ItemFrame *frame, QVector<QStringList> list);
+    void resortWifiList(ItemFrame *frame, QList<QStringList> list);
 
 
     //单wifi图标
@@ -174,6 +174,8 @@ private:
 
     QTimer * m_scanTimer = nullptr;
 //    QTimer * m_updateTimer = nullptr;
+
+    QMap<QString, QList<QStringList>> getWirelessList();
 private:
     KSwitchButton      *m_wifiSwitch;
     bool               m_firstLoad;
@@ -192,6 +194,7 @@ private slots:
 
     void reScan();
 
-
+    //更新控制面板插件Gsetting show
+    void updatePluginShowSettings();
 };
 #endif // WLANCONNECT_H

@@ -15,6 +15,8 @@
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
 #include <QtDBus/QDBusMetaType>
+#include "dbus_adaptor.h"
+#include "dbus_interface.h"
 
 #include "tabpage.h"
 #include "../dbus-interface/kylinnetworkdeviceresource.h"
@@ -34,23 +36,19 @@ QT_END_NAMESPACE
 
 #include "mainwindow.h"
 
-class DbusAdaptor: public QDBusAbstractAdaptor
+class DbusAdaptor: public QObject, protected QDBusContext
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.kylin.network")
 public:
-    DbusAdaptor(MainWindow *parent);
-    virtual ~DbusAdaptor();
-
-    inline MainWindow *parent() const
-    { return static_cast<MainWindow *>(QObject::parent()); }
+    explicit DbusAdaptor(QString display, MainWindow *m, QObject *parent = nullptr);
 
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
     //无线列表
-    QMap<QString, QVector<QStringList> > getWirelessList();
+    QVariantList getWirelessList(QString devName);
     //有线列表
-    QMap<QString, QVector<QStringList>> getWiredList();
+    QVariantList getWiredList(QString devName);
     //有线总开关
     Q_NOREPLY void setWiredSwitchEnable(bool enable);
     //无线总开关
@@ -69,9 +67,9 @@ public Q_SLOTS: // METHODS
     //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void deActivateConnect(int type, QString devName, QString ssid);
     //获取设备列表和启用/禁用状态
-    QMap<QString, bool> getDeviceListAndEnabled(int devType);
+    QVariantMap getDeviceListAndEnabled(int devType);
     //获取无线设备能力
-    QMap<QString, int> getWirelessDeviceCap();
+    QVariantMap getWirelessDeviceCap();
     //唤起属性页 根据网卡类型 参数2 为ssid/uuid
     Q_NOREPLY void showPropertyWidget(QString devName, QString ssid);
     //唤起新建有线连接界面
@@ -125,6 +123,29 @@ Q_SIGNALS: // SIGNALS
     void secuTypeChange(QString devName, QString ssid, QString secuType);
     //列表排序
     void timeToUpdate();
+
+
+
+    void showKylinNMSignal(QString display, int type);
+
+    //唤起属性页 根据网卡类型 参数2 为ssid/uuid
+    void showPropertyWidgetSignal(QString display, QString devName, QString ssid);
+    //唤起新建有线连接界面
+    void showCreateWiredConnectWidgetSignal(QString display, QString devName);
+    //唤起加入其他无线网络界面
+    void showAddOtherWlanWidgetSignal(QString display, QString devName);
+
+private:
+    MainWindow *m_mainWindow;
+    QString m_display;
+    QDBusServiceWatcher *m_watcher = nullptr;
+
+    QString checkDisplay();
+    QString displayFromPid(uint pid);
+    void connectToMainwindow();
+    bool registerService();
+private Q_SLOT:
+    void onServiceOwnerChanged(const QString &service, const QString &oldOwner, const QString &newOwner);
 };
 
 #endif

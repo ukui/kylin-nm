@@ -295,6 +295,10 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::
     NetworkManager::Device:: Ptr devicePtr =
                 m_networkResourceInstance->findDeviceUni(ifaceUni);
 
+    if (devicePtr.isNull()) {
+        return QString();
+    }
+
     return devicePtr->interfaceName();
 }
 

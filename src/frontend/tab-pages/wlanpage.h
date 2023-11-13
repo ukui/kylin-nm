@@ -52,7 +52,7 @@ public:
     ~WlanPage() = default;
 
     //for dbus
-    void getWirelessList(QMap<QString, QVector<QStringList> > &map);
+    void getWirelessList(QString devName, QList<QStringList> &list);
     //开启热点
     void activeWirelessAp(const QString apName, const QString apPassword, const QString wirelessBand, const QString apDevice);
     //断开热点
@@ -88,6 +88,10 @@ public:
         return m_currentDevice;
     }
 
+    bool isWirelessDeviceUsable() {
+        return !m_devList.isEmpty();
+    }
+
 Q_SIGNALS:
     void oneItemExpanded(const QString &ssid);
     void wlanAdd(QString devName, QStringList info);
@@ -104,6 +108,7 @@ Q_SIGNALS:
     void showMainWindow(int type);
 
     void connectivityChanged(NetworkManager::Connectivity connectivity);
+    void connectivityCheckSpareUriChanged();
 
     void wirelessSwitchBtnChanged(bool state);
 

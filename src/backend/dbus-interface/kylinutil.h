@@ -37,6 +37,8 @@ QString getConnectTypeByDbus(QString &connectPath);
 QString getSsidFromByteArray(QByteArray &rawSsid);
 void setWiredEnabledByGDbus(bool enabled);
 void setDeviceManagedByGDbus(QString dbusPath, bool managed);
+QString getConnectivityCheckSpareUriByGDbus();
+void setConnectivityCheckSpareUriByGDbus(QString str);
 bool getWiredEnabledByGDbus();
 
 #endif // KYLINUTIL_H

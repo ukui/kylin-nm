@@ -253,6 +253,18 @@ void WlanListItem::keyPressEvent(QKeyEvent *event)
     return QFrame::keyPressEvent(event);
 }
 
+void WlanListItem::paintEvent(QPaintEvent *event)
+{
+    QPalette pal = this->palette();
+    if (m_pwdLineEdit != nullptr) {
+        pal.setColor(QPalette::Base, pal.color(QPalette::Base));
+        pal.setColor(QPalette::Text, pal.color(QPalette::Text));
+        m_pwdLineEdit->setPalette(pal);
+    }
+
+    return QWidget::paintEvent(event);
+}
+
 void WlanListItem::initWlanUI()
 {
     m_hasPwd = (m_wirelessNetItem.m_secuType.isEmpty() || m_wirelessNetItem.m_secuType == "") ? false : true;

@@ -82,6 +82,7 @@ WlanPage::WlanPage(QWidget *parent) : TabPage(parent)
     connect(m_wirelessConnectOpreation, &KyWirelessConnectOperation::wifiEnabledChanged, this, &WlanPage::onWifiEnabledChanged);
 
     connect(m_connectResource, &KyConnectResourse::connectivityChanged, this, &WlanPage::connectivityChanged);
+    connect(m_connectResource, &KyConnectResourse::connectivityCheckSpareUriChanged, this, &WlanPage::connectivityCheckSpareUriChanged);
     connect(m_netSwitch, &KSwitchButton::clicked, this, [=](bool checked) {
         //解决 switchBtn不支持点击的情况下，点击按钮，有无线网卡后不自动开启的问题
         if (getSwitchBtnEnable()) {
@@ -295,9 +296,8 @@ void WlanPage::initDeviceCombox()
         }
     } else {
         m_deviceFrame->hide();
-        //解决因m_currentDevice被置空，安全中心网络显示BUG
-//        m_currentDevice = "";
-//        setDefaultDevice(WIRELESS, m_currentDevice);
+        m_currentDevice = "";
+        setDefaultDevice(WIRELESS, m_currentDevice);
     }
 
     connect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -781,25 +781,23 @@ void WlanPage::deleteDeviceFromCombox(QString deviceName)
     disconnect(m_deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
                                 this, &WlanPage::onDeviceComboxIndexChanged);
 
-    if (getSwitchBtnState()) {
-        if (0 == m_devList.count()) {
-            m_deviceFrame->hide();
-            //m_tipsLabel->show();
-            //m_deviceComboBox->hide();
-            m_currentDevice = "";
+    if (0 == m_devList.count()) {
+        m_deviceFrame->hide();
+        //m_tipsLabel->show();
+        //m_deviceComboBox->hide();
+        m_currentDevice = "";
+        setDefaultDevice(WIRELESS, m_currentDevice);
+    } else if (1 == m_devList.count()) {
+        m_deviceFrame->hide();
+        m_deviceComboBox->clear();
+        m_currentDevice = m_devList.at(0);
+        setDefaultDevice(WIRELESS, m_currentDevice);
+    } else {
+        int index = m_deviceComboBox->findText(deviceName);
+        if (-1 != index) {
+            m_deviceComboBox->removeItem(index);
+            m_currentDevice = m_deviceComboBox->currentText();
             setDefaultDevice(WIRELESS, m_currentDevice);
-        } else if (1 == m_devList.count()) {
-            m_deviceFrame->hide();
-            m_deviceComboBox->clear();
-            m_currentDevice = m_devList.at(0);
-            setDefaultDevice(WIRELESS, m_currentDevice);
-        } else {
-            int index = m_deviceComboBox->findText(deviceName);
-            if (-1 != index) {
-                m_deviceComboBox->removeItem(index);
-                m_currentDevice = m_deviceComboBox->currentText();
-                setDefaultDevice(WIRELESS, m_currentDevice);
-            }
         }
     }
 
@@ -1359,72 +1357,61 @@ void WlanPage::onRefreshIconTimer()
 }
 
 //for dbus
-void WlanPage::getWirelessList(QMap<QString, QVector<QStringList> > &map)
+void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
 {
-    QMap<QString,QStringList> actMap;
-    m_wirelessNetResource->getWirelessActiveConnection(NetworkManager::ActiveConnection::State::Activated, actMap);
+    KyWirelessNetItem data;
 
-    QMap<QString, QList<KyWirelessNetItem> > wlanMap;
-    if (!m_wirelessNetResource->getAllDeviceWifiNetwork(wlanMap)) {
+    QList<KyWirelessNetItem> wlanList;
+    if (!m_wirelessNetResource->getDeviceWifiNetwork(devName, wlanList)) {
         return;
     }
 
-    QMap<QString, QList<KyWirelessNetItem> >::iterator iter = wlanMap.begin();
-    while (iter != wlanMap.end()) {
-        QVector<QStringList> vector;
-        QString activeSsid ;
-        //先是已连接
-        if (actMap.contains(iter.key())) {
-            qDebug() << "find " <<iter.key();
-            KyWirelessNetItem data;
-            QString ssid ="";
-            m_wirelessNetResource->getSsidByUuid(actMap[iter.key()].at(0), ssid);
-            if (m_wirelessNetResource->getWifiNetwork(iter.key(), ssid, data)) {
-                int category = 0;
-                int signalStrength;
-                QString uni,secuType;
-
-                if (m_netDeviceResource->getActiveConnectionInfo(iter.key(), signalStrength, uni, secuType)) {
-                    category = data.getCategory(uni);
-                }
-                if (!m_showWifi6Plus && category == 2) {
-                    category = 1;
-                }
-                vector.append(QStringList() << data.m_NetSsid
-                              << QString::number(signalStrength)
-                              << secuType
-                              << data.m_connectUuid
-                              << (m_connectResource->isApConnection(data.m_connectUuid) ? IsApConnection : NotApConnection)
-                              << QString::number(category));
-                activeSsid = data.m_NetSsid;
-            } else {
-                vector.append(QStringList("--"));
-            }
-        } else {
-            vector.append(QStringList("--"));
-        }
-        //未连接
-        Q_FOREACH (auto itemData, iter.value()) {
-            if (itemData.m_NetSsid == activeSsid) {
-                continue;
-            }
+    QString activeSsid ;
+    //先是已连接
+    if (m_wirelessNetResource->getActiveWirelessNetItem(devName, data)) {
+        qDebug() << "find " << devName;
+        QString ssid ="";
+        m_wirelessNetResource->getSsidByUuid(data.m_connectUuid, ssid);
+        if (m_wirelessNetResource->getWifiNetwork(devName, ssid, data)) {
             int category = 0;
-            category = itemData.getCategory(itemData.m_uni);
+            int signalStrength;
+            QString uni,secuType;
+
+            if (m_netDeviceResource->getActiveConnectionInfo(devName, signalStrength, uni, secuType)) {
+                category = data.getCategory(uni);
+            }
             if (!m_showWifi6Plus && category == 2) {
                 category = 1;
             }
-            vector.append(QStringList()<<itemData.m_NetSsid
-                          << QString::number(itemData.m_signalStrength)
-                          << itemData.m_secuType
-                          << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection)
+            list.append(QStringList() << data.m_NetSsid
+                          << QString::number(signalStrength)
+                          << secuType
+                          << data.m_connectUuid
+                          << (m_connectResource->isApConnection(data.m_connectUuid) ? IsApConnection : NotApConnection)
                           << QString::number(category));
+            activeSsid = data.m_NetSsid;
+        } else {
+            list.append(QStringList("--"));
         }
-
-        map.insert(iter.key(), vector);
-        iter++;
+    } else {
+        list.append(QStringList("--"));
     }
-
-    return;
+    //未连接
+    Q_FOREACH (auto itemData, wlanList) {
+        if (itemData.m_NetSsid == activeSsid) {
+            continue;
+        }
+        int category = 0;
+        category = itemData.getCategory(itemData.m_uni);
+        if (!m_showWifi6Plus && category == 2) {
+            category = 1;
+        }
+        list.append(QStringList()<<itemData.m_NetSsid
+                      << QString::number(itemData.m_signalStrength)
+                      << itemData.m_secuType
+                      << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection)
+                      << QString::number(category));
+    }
 }
 
 //for dbus
@@ -1526,7 +1513,7 @@ void WlanPage::activateWirelessConnection(const QString& devName, const QString&
         m_inactivatedNetListWidget->scrollToItem(p_listWidgetItem, QAbstractItemView::EnsureVisible);
 
 
-        QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+        QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPoint(0,0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
         QApplication::postEvent(p_wlanItem, event);
     } else {
         qDebug() << "[WlanPage]activateWirelessConnection no such " << ssid << "in" << devName;

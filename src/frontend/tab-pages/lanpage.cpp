@@ -996,34 +996,29 @@ void LanPage::onConnectionStateChange(QString uuid,
 }
 
 
-void LanPage::getWiredList(QMap<QString, QVector<QStringList> > &map)
+void LanPage::getWiredList(QString devName, QList<QStringList> &list)
 {
     QStringList devlist;
     m_deviceResource->getNetworkDeviceList(NetworkManager::Device::Type::Ethernet, devlist);
-    if (devlist.isEmpty()) {
+    if (!devlist.contains(devName)) {
         return;
     }
 
-    Q_FOREACH (auto deviceName, devlist) {
-        QList<KyConnectItem *> activedList;
-        QList<KyConnectItem *> deactivedList;
-        QVector<QStringList> vector;
-        m_activeResourse->getActiveConnectionList(deviceName,NetworkManager::ConnectionSettings::Wired,activedList);
-        if (!activedList.isEmpty()) {
-            vector.append(QStringList() << activedList.at(0)->m_connectName << activedList.at(0)->m_connectUuid << activedList.at(0)->m_connectPath);
-        } else {
-            vector.append(QStringList()<<("--"));
-        }
-
-        m_connectResourse->getConnectionList(deviceName, NetworkManager::ConnectionSettings::Wired, deactivedList);      //未激活列表的显示
-        if (!deactivedList.isEmpty()) {
-            for (int i = 0; i < deactivedList.size(); i++) {
-                vector.append(QStringList()<<deactivedList.at(i)->m_connectName<<deactivedList.at(i)->m_connectUuid << deactivedList.at(i)->m_connectPath);
-            }
-        }
-        map.insert(deviceName, vector);
+    QList<KyConnectItem *> activedList;
+    QList<KyConnectItem *> deactivedList;
+    m_activeResourse->getActiveConnectionList(devName,NetworkManager::ConnectionSettings::Wired,activedList);
+    if (!activedList.isEmpty()) {
+        list.append(QStringList() << activedList.at(0)->m_connectName << activedList.at(0)->m_connectUuid << activedList.at(0)->m_connectPath);
+    } else {
+        list.append(QStringList()<<("--"));
     }
-    return;
+
+    m_connectResourse->getConnectionList(devName, NetworkManager::ConnectionSettings::Wired, deactivedList);      //未激活列表的显示
+    if (!deactivedList.isEmpty()) {
+        for (int i = 0; i < deactivedList.size(); i++) {
+            list.append(QStringList()<<deactivedList.at(i)->m_connectName<<deactivedList.at(i)->m_connectUuid << deactivedList.at(i)->m_connectPath);
+        }
+    }
 }
 
 void LanPage::sendLanUpdateSignal(KyConnectItem *p_connectItem)

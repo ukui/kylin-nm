@@ -33,11 +33,13 @@
 #include "ukuistylehelper/ukuistylehelper.h"
 #include "windowmanager/windowmanager.h"
 #include "kysdk/kysdk-system/libkysysinfo.h"
+#include "kylinutil.h"
 
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 476
 #define LAYOUT_MARGINS 0,0,0,0
 #define LOADING_TRAYICON_TIMER_MS 60
+#define TABBAR_HEIGHT 30
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
@@ -68,10 +70,16 @@ const QString intel = "V10SP1-edu";
 #define LOW_SIGNAL_LIMIT_ICON         "ukui-network-wireless-signal-weak-error-symbolic"
 #define NONE_SIGNAL_LIMIT_ICON        "ukui-network-wireless-signal-none-error-symbolic"
 
+#define EXCELLENT_SIGNAL_INTRANET_ICON   "ukui-network-wireless-signal-excellent-intranet-symbolic"
+#define GOOD_SIGNAL_INTRANET_ICON        "ukui-network-wireless-signal-good-intranet-symbolic"
+#define OK_SIGNAL_INTRANET_ICON          "ukui-network-wireless-signal-ok-intranet-symbolic"
+#define LOW_SIGNAL_INTRANET_ICON         "ukui-network-wireless-signal-weak-intranet-symbolic"
+#define NONE_SIGNAL_INTRANET_ICON        "ukui-network-wireless-signal-none-intranet-symbolic"
+
 #include <kwindowsystem.h>
 #include <kwindowsystem_export.h>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+MainWindow::MainWindow(QString display, QWidget *parent) : QMainWindow(parent), m_display(display)
 {
     firstlyStart();
 }
@@ -176,6 +184,11 @@ void MainWindow::firstlyStart()
 
     //加载key ring
     agent_init();
+
+    //单网卡显示
+    setCentralWidgetPages();
+    connect(m_lanWidget, &LanPage::deviceStatusChanged, this, &MainWindow::setCentralWidgetPages);
+    connect(m_wlanWidget, &LanPage::wirelessDeviceStatusChanged, this, &MainWindow::setCentralWidgetPages);
 }
 
 /**
@@ -367,10 +380,12 @@ void MainWindow::initTrayIcon()
     connect(iconTimer, &QTimer::timeout, this, &MainWindow::onSetTrayIconLoading);
 
     m_trayIconMenu = new QMenu();
-    m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
+//    m_showMainwindowAction = new QAction(tr("Show MainWindow"),this);
     m_showSettingsAction = new QAction(tr("Settings"),this);
+    m_showConnectivityPageAction = new QAction(tr("Network Connectivity Detection"), this);
 
     m_showSettingsAction->setIcon(QIcon::fromTheme("document-page-setup-symbolic", QIcon(":/res/x/setup.png")) );
+    m_showConnectivityPageAction->setIcon(QIcon::fromTheme("gnome-netstatus-txrx"));
 //    m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);
     m_trayIcon->setContextMenu(m_trayIconMenu);
@@ -380,6 +395,20 @@ void MainWindow::initTrayIcon()
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
 //    connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
     connect(m_showSettingsAction, &QAction::triggered, this, &MainWindow::onShowSettingsActionTriggled);
+    connect(m_showConnectivityPageAction, &QAction::triggered, [=]() {
+        if (m_connectivityPage != nullptr) {
+            KWindowSystem::activateWindow(m_connectivityPage->winId());
+            KWindowSystem::raiseWindow(m_connectivityPage->winId());
+            return;
+        }
+        QString uri = getConnectivityCheckSpareUriByGDbus();
+        m_connectivityPage = new ConnectivityPage(uri, this);
+        connect(m_connectivityPage, &ConnectivityPage::pageClose, [&](){
+            m_connectivityPage = nullptr;
+        });
+        m_connectivityPage->show();
+    });
+
     m_trayIcon->show();
 }
 
@@ -417,6 +446,7 @@ void MainWindow::initDbusConnnect()
     connect(m_wlanWidget, &WlanPage::timeToUpdate , this, &MainWindow::onTimeUpdateTrayIcon);
     connect(m_wlanWidget, &WlanPage::showMainWindow, this, &MainWindow::onShowMainWindow);
     connect(m_wlanWidget, &WlanPage::connectivityChanged, this, &MainWindow::onConnectivityChanged);
+    connect(m_wlanWidget, &WlanPage::connectivityCheckSpareUriChanged, this, &MainWindow::onConnectivityCheckSpareUriChanged);
 
     connect(m_lanWidget, &LanPage::lanConnectChanged, this, &MainWindow::onRefreshTrayIconTooltip);
     connect(m_lanWidget, &LanPage::deviceStatusChanged, this, &MainWindow::onRefreshTrayIconTooltip);
@@ -435,6 +465,27 @@ void MainWindow::initDbusConnnect()
             hideMainwindow();
         }
     });
+
+    QDBusConnection::sessionBus().connect(QString("com.kylin.network"),
+                                         QString("/com/kylin/network"),
+                                         QString("com.kylin.network"),
+                                          QString("showKylinNMSignal"), this, SLOT(onShowKylinNMSlot(QString,int)));
+
+    QDBusConnection::sessionBus().connect(QString("com.kylin.network"),
+                                         QString("/com/kylin/network"),
+                                         QString("com.kylin.network"),
+                                          QString("showPropertyWidgetSignal"), this, SLOT(onShowPropertyWidgetSlot(QString,QString,QString)));
+
+    QDBusConnection::sessionBus().connect(QString("com.kylin.network"),
+                                         QString("/com/kylin/network"),
+                                         QString("com.kylin.network"),
+                                          QString("showCreateWiredConnectWidgetSignal"), this, SLOT(onShowCreateWiredConnectWidgetSlot(QString,QString)));
+
+    QDBusConnection::sessionBus().connect(QString("com.kylin.network"),
+                                         QString("/com/kylin/network"),
+                                         QString("com.kylin.network"),
+                                          QString("showAddOtherWlanWidgetSignal"), this, SLOT(onShowAddOtherWlanWidgetSlot(QString,QString)));
+
 }
 
 /**
@@ -751,10 +802,34 @@ void MainWindow::onRefreshTrayIcon()
         }
     }
 
+    if(!getConnectivityCheckSpareUriByGDbus().isEmpty()) {
+        if (iconStatus == IconActiveType::LAN_CONNECTED) {
+            m_trayIcon->setIcon(QIcon::fromTheme("network-intranet-symbolic"));
+        } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
+            if (signalStrength > MW_EXCELLENT_SIGNAL){
+                m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_INTRANET_ICON));
+            } else if (signalStrength > MW_GOOD_SIGNAL) {
+                m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_INTRANET_ICON));
+            } else if (signalStrength > MW_OK_SIGNAL) {
+                m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_INTRANET_ICON));
+            } else if (signalStrength > MW_LOW_SIGNAL) {
+                m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_INTRANET_ICON));
+            } else {
+                m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_INTRANET_ICON));
+            }
+        }
+    }
+
     if (signalStrength == -1) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
     }
     onRefreshTrayIconTooltip();
+
+//    if (iconStatus > IconActiveType::NOT_CONNECTED) {
+//        m_trayIconMenu->addAction(m_showConnectivityPageAction);
+//    } else {
+//        m_trayIconMenu->removeAction(m_showConnectivityPageAction);
+//    }
 }
 
 void MainWindow::onSetTrayIconLoading()
@@ -844,8 +919,56 @@ void MainWindow::onRefreshTrayIconTooltip()
     m_trayIcon->setToolTip(trayIconToolTip);
 }
 
+void MainWindow::setCentralWidgetPages()
+{
+    bool isChanged = false;
+    if (m_isWiredUsable != m_lanWidget->isWiredDeviceUsable()) {
+        if (m_lanWidget->isWiredDeviceUsable()) {
+            m_centralWidget->insertTab(LANPAGE, m_lanWidget, "");
+            m_isWiredUsable = true;
+        } else {
+            m_centralWidget->removeTab(LANPAGE);
+            m_isWiredUsable = false;
+        }
+        isChanged = true;
+    }
+
+    if (m_isWirelessUsable != m_wlanWidget->isWirelessDeviceUsable()) {
+        if (m_wlanWidget->isWirelessDeviceUsable()) {
+            m_centralWidget->insertTab(WLANPAGE, m_wlanWidget, "");
+            m_isWirelessUsable = true;
+        } else {
+            m_centralWidget->removeTab(WLANPAGE);
+            m_isWirelessUsable = false;
+        }
+        isChanged = true;
+    }
+
+    if (!isChanged) {
+        return;
+    }
+
+    if (m_isWiredUsable && m_isWirelessUsable) {
+        m_centralWidget->tabBar()->show();
+        this->setFixedHeight(MAINWINDOW_HEIGHT);
+        resetWindowPosition();
+    } else {
+        m_centralWidget->tabBar()->hide();
+        this->setFixedHeight(MAINWINDOW_HEIGHT - TABBAR_HEIGHT);
+        resetWindowPosition();
+    }
+
+    if (m_trayIcon) {
+        m_trayIcon->setVisible(m_isWiredUsable || m_isWirelessUsable);
+    }
+}
+
 void MainWindow::onShowMainWindow(int type)
 {
+    if (!m_trayIcon->isVisible()) {
+        qWarning() << "no valid network card, do not show kylin-nm mainwindow";
+        return;
+    }
     if (type == LANPAGE || type == WLANPAGE) {
         m_centralWidget->setCurrentIndex(type);
 
@@ -860,6 +983,19 @@ void MainWindow::onShowMainWindow(int type)
 }
 
 void MainWindow::onConnectivityChanged(NetworkManager::Connectivity connectivity)
+{
+    if (!m_trayIcon) {
+        return;
+    }
+
+    if (iconStatus == ACTIVATING) {
+        return;
+    }
+
+    onRefreshTrayIcon();
+}
+
+void MainWindow::onConnectivityCheckSpareUriChanged()
 {
     if (!m_trayIcon) {
         return;
@@ -899,13 +1035,14 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 /**
  * @brief MainWindow::getWirelessList 获取wifi列表，供dbus调用
- * @param map
+ * @param devName
+ * @param list
  */
-void MainWindow::getWirelessList(QMap<QString, QVector<QStringList> > &map)
+void MainWindow::getWirelessList(QString devName, QList<QStringList> &list)
 {
-    map.clear();
+    list.clear();
     if (nullptr != m_wlanWidget) {
-        m_wlanWidget->getWirelessList(map);
+        m_wlanWidget->getWirelessList(devName, list);
     }
 }
 
@@ -920,11 +1057,11 @@ bool MainWindow::getWirelessSwitchBtnState()
  * @brief MainWindow::getWiredList 获取lan列表，供dbus调用
  * @param map
  */
-void MainWindow::getWiredList(QMap<QString, QVector<QStringList>> &map)
+void MainWindow::getWiredList(QString devName, QList<QStringList> &list)
 {
-    map.clear();
+    list.clear();
     if (nullptr != m_lanWidget) {
-        m_lanWidget->getWiredList(map);
+        m_lanWidget->getWiredList(devName, list);
     }
 }
 
@@ -1087,4 +1224,33 @@ void MainWindow::keyRingInit()
 void MainWindow::keyRingClear()
 {
     agent_clear();
+}
+
+void MainWindow::onShowKylinNMSlot(QString display, int type)
+{
+    if (display == m_display) {
+        onShowMainWindow(type);
+    }
+}
+
+//唤起属性页 根据网卡类型 参数2 为ssid/uuid
+void MainWindow::onShowPropertyWidgetSlot(QString display, QString devName, QString ssid)
+{
+    if (display == m_display) {
+        showPropertyWidget(devName, ssid);
+    }
+}
+//唤起新建有线连接界面
+void MainWindow::onShowCreateWiredConnectWidgetSlot(QString display, QString devName)
+{
+    if (display == m_display) {
+        showCreateWiredConnectWidget(devName);
+    }
+}
+//唤起加入其他无线网络界面
+void MainWindow::onShowAddOtherWlanWidgetSlot(QString display, QString devName)
+{
+    if (display == m_display) {
+        showAddOtherWlanWidget(devName);
+    }
 }

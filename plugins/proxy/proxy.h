@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -52,8 +52,10 @@
 
 #include "kswitchbutton.h"
 #include "kpasswordedit.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
 
 /* qt会将glib里的signals成员识别为宏，所以取消该宏
  * 后面如果用到signals时，使用Q_SIGNALS代替即可
@@ -136,13 +138,20 @@ public:
     void setAppProxyConf(QStringList list); //设置应用代理配置信息--调用Dbus
     static QMap<QString, QStringList> getAppListProxy();
 //    bool checkIsChanged(QStringList info);
-
+    void setUkccProxySettings();  // 设置控制面板代理模块显示/隐藏
 private:
     void setAppProxyFrameUi(QWidget *widget);
     void setAppListFrameUi(QWidget *widget);
     void appProxyInfoPadding();
     void appListPadding();
     bool getipEditState(QString text);
+    void setSystemProxyFrameHidden(bool state);
+    void setAppProxyFrameHidden(bool state);
+    void setAPTProxyFrameHidden(bool state);
+
+    QFrame *m_sysSpacerFrame;
+    QFrame *m_appListSpacerFrame;
+    QFrame *m_appSpacerFrame;
 
     QString pluginName;
     int pluginType;
@@ -250,6 +259,7 @@ private:
 //    QPushButton *m_cancelBtn;
 //    QPushButton *m_saveBtn;
     QListWidget *m_appListWidget = nullptr;
+    QWidget *m_appProxyInfoWidget;
 
     QTextEdit *mIgnoreLineEdit;
 
@@ -274,7 +284,7 @@ private:
 
 private slots:
     void setAptProxySlot();  //处理apt代理前端交互逻辑
-    void onappProxyEnableChanged(bool enable); //IP地址无效提示
+    void setAppProxyUiEnable(bool enable);
     void onipEditStateChanged(); //IP地址无效提示
     void onAppProxyConfChanged(); //应用代理配置信息变化
     void onAppProxyConfEditFinished();

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -21,20 +21,43 @@
 #include <QPainter>
 #include <QApplication>
 
-Divider::Divider(QWidget * parent) : QFrame(parent)
+#include "../netdetails/coninfo.h"
+#include "themepalette.h"
+
+#define THEME_SCHAME "org.ukui.style"
+#define COLOR_THEME "styleName"
+
+Divider::Divider(bool useDarkPal, QWidget * parent)
+    :m_useDarkPal(useDarkPal),
+     QFrame(parent)
 {
     this->setFixedHeight(1);
+    connect(qApp, &QApplication::paletteChanged, this ,&Divider::onPaletteChanged);
+    onPaletteChanged();
 }
 
+void Divider::onPaletteChanged()
+{
+    QPalette pal = qApp->palette();
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray styleId(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(styleId) && m_useDarkPal) {
+       styleGsettings = new QGSettings(styleId, QByteArray(), this);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = themePalette(true, this);
+       }
+    }
 
+    m_color = pal.color(QPalette::BrightText);
+    m_color.setAlphaF(0.08);
+}
 
 void Divider::paintEvent(QPaintEvent * e)
 {
     QPainter p(this);
-    QColor color = qApp->palette().color(QPalette::BrightText);
-    color.setAlphaF(0.08);
     p.save();
-    p.setBrush(color);
+    p.setBrush(m_color);
     p.setPen(Qt::transparent);
     p.drawRoundedRect(this->rect(), 6, 6);
     p.restore();

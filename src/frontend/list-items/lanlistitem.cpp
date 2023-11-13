@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -35,7 +35,6 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
 
     connectItemCopy(lanConnectItem);
     m_deviceName = deviceName;
-
     m_nameLabel->setLabelText(m_lanConnectItem.m_connectName);
     m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
 
@@ -56,7 +55,6 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
 
     m_itemFrame->installEventFilter(this);
 //    connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
-    connect(m_menu, &QMenu::triggered, this, &LanListItem::onMenuTriggered);
     connect(m_hoverButton, &FixPushButton::clicked, this, &LanListItem::onNetButtonClicked);
 }
 
@@ -190,7 +188,7 @@ void LanListItem::onInfoButtonClicked()
             << m_lanConnectItem.m_connectUuid << "; name = " << m_lanConnectItem.m_connectName
             << "." <<Q_FUNC_INFO << __LINE__;
 #if 0
-    bool isActivated = false;
+   bool isActivated = false;
     if (Activated == m_lanConnectItem.m_connectState) {
         isActivated = true;
     }

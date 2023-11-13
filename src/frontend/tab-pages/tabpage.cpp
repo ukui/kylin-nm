@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -60,7 +60,7 @@ void TabPage::initUI()
     m_titleLayout->addWidget(m_titleLabel);
     m_titleLayout->addStretch();
     m_titleLayout->addWidget(m_netSwitch);
-    m_titleDivider = new Divider(this);
+    m_titleDivider = new Divider(true, this);
 
     //临时增加的下拉框选择网卡区域
     m_deviceFrame = new QFrame(this);
@@ -71,7 +71,9 @@ void TabPage::initUI()
     m_deviceLabel = new QLabel(m_deviceFrame);
     m_deviceLabel->setText(tr("Current Device"));
     m_deviceComboBox = new QComboBox(m_deviceFrame);
-    m_deviceComboBox->setFixedWidth(DEVICE_COMBOBOX_WIDTH);
+    m_deviceComboBox->setMinimumWidth(DEVICE_COMBOBOX_WIDTH);
+    m_deviceComboBox->setMaximumWidth(DEVICE_COMBOBOX_WIDTH_MAX);
+    m_deviceComboBox->setSizeAdjustPolicy(QComboBox::SizeAdjustPolicy::AdjustToContents);
 
     m_tipsLabel = new QLabel(m_deviceFrame);
     m_tipsLabel->setText(tr("Devices Closed!"));
@@ -90,7 +92,7 @@ void TabPage::initUI()
     m_activatedNetLabel->setContentsMargins(TEXT_MARGINS);
     m_activatedNetLabel->setFixedHeight(TEXT_HEIGHT);
     m_activatedNetLayout->addWidget(m_activatedNetLabel);
-    m_activatedNetDivider = new Divider(this);
+    m_activatedNetDivider = new Divider(true, this);
 
     m_inactivatedNetFrame = new QFrame(this);
     m_inactivatedNetFrame->setMinimumHeight(INACTIVE_AREA_MIN_HEIGHT);
@@ -118,7 +120,7 @@ void TabPage::initUI()
     m_inactivatedNetLayout->addWidget(m_inactivatedNetLabel);
     m_inactivatedNetLayout->addWidget(m_inactivatedNetListArea);
 
-    m_inactivatedNetDivider = new Divider(this);
+    m_inactivatedNetDivider = new Divider(true, this);
     m_settingsFrame = new QFrame(this);
     m_settingsFrame->setFixedHeight(TITLE_FRAME_HEIGHT);
 
@@ -159,15 +161,17 @@ void TabPage::initUI()
 void TabPage::onPaletteChanged()
 {
     QPalette labPal = m_activatedNetLabel->palette();
-    QColor color = qApp->palette().color(QPalette::PlaceholderText);
+    QColor color = this->palette().color(QPalette::PlaceholderText);
     labPal.setColor(QPalette::WindowText, color);
     m_activatedNetLabel->setPalette(labPal);
     m_inactivatedNetLabel->setPalette(labPal);
 
     if (m_deviceComboBox->view()) {
         QPalette view_pal = m_deviceComboBox->view()->palette();
-        QColor view_color = qApp->palette().color(QPalette::Active, QPalette::Button);
+        QColor view_color = this->palette().color(QPalette::Active, QPalette::Button);
         view_pal.setColor(QPalette::Base, view_color);
+        view_pal.setColor(QPalette::Text, this->palette().color(QPalette::Text));
+        view_pal.setColor(QPalette::Foreground, this->palette().color(QPalette::Foreground));
         m_deviceComboBox->setPalette(view_pal);
         m_deviceComboBox->view()->setPalette(view_pal);
     }
@@ -315,8 +319,8 @@ void TabPage::showDesktopNotify(const QString &message, QString soundName)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QStringList actions;  //跳转动作
-    actions.append("kylin-nm");
-    actions.append("default");          //默认动作：点击消息体时打开麒麟录音
+    actions.append("default");
+    actions.append("kylin-nm");          //默认动作：点击消息体时打开麒麟录音
     QMap<QString, QVariant> hints;
     if (!soundName.isEmpty()) {
         hints.insert("sound-name",soundName); //添加声音
@@ -434,9 +438,7 @@ void getDeviceEnableState(int type, QMap<QString, bool> &map)
         if (!wirelessDevList.isEmpty()) {
             for (int i = 0; i < wirelessDevList.size(); ++i) {
                 QString devName = wirelessDevList.at(i);
-                if (kdr->getDeviceManaged(devName)) {
-                    map.insert(devName, kdr->getDeviceManaged(devName));
-                }
+                map.insert(devName, kdr->getDeviceManaged(devName));
             }
         }
     }

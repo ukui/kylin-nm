@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -51,7 +51,6 @@
 #include "kwidget.h"
 #include "ktabbar.h"
 #include "networkmodeconfig.h"
-#include <arpa/inet.h>
 
 using namespace kdk;
 
@@ -68,9 +67,6 @@ public:
 protected:
     QSize sizeHint() const;
     QSize minimumTabSizeHint(int index) const;
-
-private Q_SLOTS:
-    void onModeChanged(bool mode);
 
 };
 class ThreadObject : public QObject
@@ -100,7 +96,6 @@ class NetDetail : public QWidget
 public:
     NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent = nullptr);
     ~NetDetail();
-
     void centerToScreen();
 
     void paintEvent(QPaintEvent *event);
@@ -149,8 +144,6 @@ private:
     void startObjectThread();
     void setNetTabToolTip();
 
-    void getIpv4Info(QString objPath, ConInfo &conInfo);
-
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
     KyConnectOperation* m_connectOperation = nullptr;
@@ -172,6 +165,7 @@ private:
     QScrollArea  * m_secuPageScrollArea;
     QScrollArea  * m_ipv4ScrollArea;
     QScrollArea  * m_ipv6ScrollArea;
+    QScrollArea  * m_createNetPageScrollArea;
 
     QPushButton  * cancelBtn;
     QPushButton  * forgetBtn;
@@ -217,5 +211,4 @@ Q_SIGNALS:
     void checkCurrentIpv4Conflict(const QString &address);
     void checkCurrentIpv6Conflict(const QString &address);
 };
-
 #endif // NETDETAIL_H

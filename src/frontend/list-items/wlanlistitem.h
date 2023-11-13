@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -54,13 +54,14 @@ class WlanListItem : public ListItem
 {
     Q_OBJECT
 public:
-    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, bool isShowWifi6, QWidget *parent = nullptr);
-    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isShowWifi6, QWidget *parent = nullptr);
+    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isApMode, bool isShowWifi6Plus, QWidget *parent = nullptr);
+    WlanListItem(KyWirelessNetItem &wirelessNetItem, QString device, bool isShowWifi6Plus, QWidget *parent = nullptr);
     WlanListItem(QWidget *parent = nullptr);
     ~WlanListItem();
 
 public:
     QString getSsid();
+
     QString getUuid();
 
     QString getPath();
@@ -122,12 +123,9 @@ private:
     QCheckBox *m_autoConnectCheckBox = nullptr;
     QLabel *m_autoConnectLabel = nullptr;
 
-    bool m_focusIsOut = true;
-    bool m_mouseIsOut = true;
-
     bool m_forgetConnection = false;
     bool m_isApMode = false;
-    bool m_isShowWifi6 = true;
+    bool m_isShowWifi6Plus = true;
 
 protected Q_SLOTS:
     void onInfoButtonClicked();

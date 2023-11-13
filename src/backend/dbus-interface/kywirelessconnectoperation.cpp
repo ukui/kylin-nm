@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -455,8 +455,15 @@ QString KyWirelessConnectOperation::getPrivateKeyPassword(const QString &connect
         qWarning()<<errorMessage;
         return "";
     }
-    QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PRIVATE_PSK_SETTING_NAME);
-    QMap<QString,QVariantMap> map(reply.value());
+    QDBusInterface dbusInterface("org.freedesktop.NetworkManager",
+                              connectPtr->path(),
+                              "org.freedesktop.NetworkManager.Settings.Connection",
+                              QDBusConnection::systemBus());
+    dbusInterface.setTimeout(500);
+    QDBusMessage result = dbusInterface.call("GetSecrets", PRIVATE_PSK_SETTING_NAME);
+    const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+    QMap<QString,QVariantMap> map;
+    dbusArg1st >> map;
     if (map.contains("802-1x")
             && map.value("802-1x").contains("private-key-password")) {
         QString psk = map.value("802-1x").value("private-key-password").toString();
@@ -475,8 +482,19 @@ QString KyWirelessConnectOperation::get8021xPassword(const QString &connectUuid)
         qWarning()<<errorMessage;
         return "";
     }
-    QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PRIVATE_PSK_SETTING_NAME);
-    QMap<QString,QVariantMap> map(reply.value());
+
+    QDBusInterface dbusInterface("org.freedesktop.NetworkManager",
+                              connectPtr->path(),
+                              "org.freedesktop.NetworkManager.Settings.Connection",
+                              QDBusConnection::systemBus());
+    dbusInterface.setTimeout(500);
+    QDBusMessage result = dbusInterface.call("GetSecrets", PRIVATE_PSK_SETTING_NAME);
+    const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+    QMap<QString,QVariantMap> map;
+    dbusArg1st >> map;
+
+//    QDBusPendingReply<NMVariantMapMap> reply = connectPtr->secrets(PRIVATE_PSK_SETTING_NAME);
+//    QMap<QString,QVariantMap> map(reply.value());
     if (map.contains("802-1x") && map.value("802-1x").contains("password"))
     {
         QString psk = map.value("802-1x").value("password").toString();
@@ -1206,13 +1224,18 @@ void KyWirelessConnectOperation::updateWirelessApSetting(
         wirelessSecuritySetting->setKeyMgmt(NetworkManager::WirelessSecuritySetting::WpaPsk);
         wirelessSecuritySetting->setPsk(apPassword);
     }
+    apConnectPtr->update(apConnectSettingPtr->toMap());
 
     QStringList blackList = getBlackListHostName(apConnectPtr->path());
     NMVariantMapMap newMap = apConnectSettingPtr->toMap();
     if (newMap.contains(KEY_802_11_WIRELESS)) {
         newMap[KEY_802_11_WIRELESS].insert(KEY_BLACKLIST_HOSTNAME, blackList);
+        if (wirelessBand == WIFI_BAND_2_4GHZ) {
+            newMap[KEY_802_11_WIRELESS].remove("channel");
+        }
     }
     apConnectPtr->update(newMap);
+    usleep(100*1000);
 }
 
 void KyWirelessConnectOperation::activeWirelessAp(const QString apUuid, const QString apName,

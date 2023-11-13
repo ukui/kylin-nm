@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -31,6 +31,7 @@ class ItemFrame : public QFrame
     Q_OBJECT
 public:
     ItemFrame(QString devName, QWidget *parent = nullptr);
+
     //单设备整体layout
     QVBoxLayout * deviceLanLayout = nullptr;
     //单设备名称+下拉按钮Frame+d单设备开关

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -21,6 +21,9 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include "xatom-helper.h"
+#include "kwindowsystem.h"
+#include "kwindowsystem_export.h"
+
 #define MAIN_SIZE_EXPAND 480,580
 #define MAIN_SIZE_NARROW 480,484
 #define SCROAREA_WIDTH 480
@@ -48,9 +51,11 @@ EnterpriseWlanDialog::EnterpriseWlanDialog(KyWirelessNetItem &wirelessNetItem, Q
 //    this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
 //#endif
     this->setAttribute(Qt::WA_DeleteOnClose);
-    this->setWindowFlag(Qt::Window);
+//    this->setWindowFlag(Qt::Window);
+    this->setWindowFlags(Qt::Dialog);
 //    this->setWindowTitle(tr("Connect Enterprise WLAN"));
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
+    KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
 
     m_wirelessNetItem = wirelessNetItem;
     m_deviceName = device;
@@ -81,11 +86,17 @@ void EnterpriseWlanDialog::closeEvent(QCloseEvent *event)
 
 void EnterpriseWlanDialog::paintEvent(QPaintEvent *event)
 {
-//    QPalette pal = qApp->palette();
-//    QPainter painter(this);
-//    painter.setBrush(pal.color(QPalette::Base));
-//    painter.drawRect(this->rect());
-//    painter.fillRect(rect(), QBrush(pal.color(QPalette::Base)));
+    QPalette pal = qApp->palette();
+    QPainter painter(this);
+    QColor color;
+    if (this->isActiveWindow()) {
+        color = pal.color(QPalette::Base);
+    } else {
+        color = pal.color(QPalette::Background);
+    }
+    painter.setBrush(color);
+    painter.drawRect(this->rect());
+    painter.fillRect(rect(), QBrush(color));
 
     return QWidget::paintEvent(event);
 }
@@ -126,17 +137,14 @@ void EnterpriseWlanDialog::initUI()
     m_enterWlanScrollArea = new QScrollArea(this);
     m_enterWlanScrollArea->setFrameShape(QFrame::NoFrame);
     m_enterWlanScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     m_centerWidget->setFixedWidth(SCROAREA_WIDTH);
     m_enterWlanScrollArea->setFixedWidth(SCROAREA_WIDTH);
     m_enterWlanScrollArea->setWidget(m_centerWidget);
     m_enterWlanScrollArea->setWidgetResizable(true);
+    m_enterWlanScrollArea->setBackgroundRole(QPalette::Base);
 
-    QPalette pal = m_enterWlanScrollArea->palette();
-    pal.setBrush(QPalette::Base, QColor(0,0,0,0));
-    m_enterWlanScrollArea->setPalette(pal);
-    m_enterWlanScrollArea->setWidgetResizable(true);
-
-    m_bottomDivider = new Divider(this);
+    m_bottomDivider = new Divider(false, this);
 
     QWidget *bottomWidget = new QWidget(this);
     QHBoxLayout *btnLayout = new QHBoxLayout(bottomWidget);
@@ -158,7 +166,6 @@ void EnterpriseWlanDialog::initUI()
     this->setFixedSize(MAIN_SIZE_EXPAND);
     this->setWindowTitle(m_wirelessNetItem.m_NetSsid);
     initConnections();
-    onPaletteChanged();
 }
 
 void EnterpriseWlanDialog::centerToScreen()
@@ -182,6 +189,7 @@ void EnterpriseWlanDialog::initConnections()
        m_connectBtn->setEnabled(status);
     });
 
+#if 0
     connect(qApp, &QApplication::paletteChanged, this, &EnterpriseWlanDialog::onPaletteChanged);
 
     const QByteArray id(THEME_SCHAME);
@@ -193,8 +201,10 @@ void EnterpriseWlanDialog::initConnections()
             }
         });
     }
+#endif
 }
 
+#if 0
 void EnterpriseWlanDialog::onPaletteChanged()
 {
     QPalette pal = qApp->palette();
@@ -218,6 +228,7 @@ void EnterpriseWlanDialog::onPaletteChanged()
         styleGsettings = nullptr;
     }
 }
+#endif
 
 void EnterpriseWlanDialog::initData()
 {
@@ -259,7 +270,7 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
     } else if (eapType == KyEapMethodType::TTLS) {
         m_securityPage->updateTtlsChange(m_info.ttlsInfo);
         m_connectOperation->addAndActiveWirelessEnterPriseTtlsConnect(m_info.ttlsInfo, connetSetting, m_deviceName, false);
-    } else if (eapType == KyEapMethodType::LEAP) {
+    }  else if (eapType == KyEapMethodType::LEAP) {
         m_securityPage->updateLeapChange(m_info.leapInfo);
         m_connectOperation->addAndActiveWirelessEnterPriseLeapConnect(m_info.leapInfo, connetSetting, m_deviceName, false);
     }  else if (eapType == KyEapMethodType::PWD) {
@@ -268,7 +279,7 @@ void EnterpriseWlanDialog::onBtnConnectClicked()
     }  else if (eapType == KyEapMethodType::FAST) {
         m_securityPage->updateFastChange(m_info.fastInfo);
         m_connectOperation->addAndActiveWirelessEnterPriseFastConnect(m_info.fastInfo, connetSetting, m_deviceName, false);
-    }  else {
+    } else {
         qWarning() << "Connect enterprise wlan failed!(Unknown eap type)" << Q_FUNC_INFO << __LINE__;
     }
     close();

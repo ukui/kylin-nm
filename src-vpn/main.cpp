@@ -80,25 +80,44 @@ int main(int argc, char *argv[])
 {
     initUkuiLog4qt("kylin-vpn");
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+#endif
 
     QString id = QString("kylin-vpn"+ QLatin1String(getenv("DISPLAY")));
     QtSingleApplication a(id, argc, argv);
 
     QApplication::setQuitOnLastWindowClosed(false);
 
-    QThread thread;
+    QDBusInterface interface("com.kylin.kylinvpn",
+                                                   "/com/kylin/kylinvpn",
+                                                   "com.kylin.kylinvpn",
+                                                   QDBusConnection::sessionBus());
+    if(interface.isValid()) {
+        return 0;
+    }
+
+    QThread *thread = new QThread();
     KyNetworkResourceManager *p_networkResource = KyNetworkResourceManager::getInstance();
-    p_networkResource->moveToThread(&thread);
-    QObject::connect(&thread, SIGNAL(started()), p_networkResource, SLOT(onInitNetwork()));
-    thread.start();
+    p_networkResource->moveToThread(thread);
+    QObject::connect(thread, &QThread::started, p_networkResource, &KyNetworkResourceManager::onInitNetwork);
+    QObject::connect(&a,&QtSingleApplication::aboutToQuit, thread, &QThread::quit);
+    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+    QObject::connect(thread, &QThread::finished, [=](){
+        qDebug() << "release" ;
+        p_networkResource->Release();
+    });
+    thread->start();
 
     // Internationalization
     QString locale = QLocale::system().name();
     QTranslator trans_global;
     qDebug() << "QLocale " << QLocale();
-    if (trans_global.load(QLocale(), "kylin-vpn", "_", ":/translations/"))
+    if (trans_global.load(QLocale(), "kylin-vpn", "_", "/usr/share/kylin-nm/kylin-vpn/"))
     {
         a.installTranslator(&trans_global);
         qDebug()<<"Translations load success";

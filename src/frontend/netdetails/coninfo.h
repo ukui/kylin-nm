@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -104,12 +104,16 @@ public:
     KyIpConfigType ipv4ConfigType = CONFIG_IP_DHCP;
     QString strIPV4Address;
     QString strIPV4NetMask;
+    QString strIPV4FirDns;
+    QString strIPV4SecDns;
     QString strIPV4GateWay;
     QList<QHostAddress> ipv4DnsList;
 
     KyIpConfigType ipv6ConfigType = CONFIG_IP_DHCP;
     QString strIPV6Address;
     int iIPV6Prefix;
+    QString strIPV6FirDns;
+    QString strIPV6SecDns;
     QString strIPV6GateWay;
     QList<QHostAddress> ipv6DnsList;
 

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -45,11 +45,11 @@ VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
     connect(m_vpnConnectOperation, &KyVpnConnectOperation::activateConnectionError, this, &VpnPage::activateFailed);
     connect(m_vpnConnectOperation, &KyVpnConnectOperation::deactivateConnectionError, this, &VpnPage::deactivateFailed);
 
-    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, [&](WId activeWindowId){
-        if (activeWindowId != this->winId() && activeWindowId != 0) {
-            hide();
-        }
-    });
+//    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, [&](WId activeWindowId){
+//        if (activeWindowId != this->winId() && activeWindowId != 0) {
+//            hide();
+//        }
+//    });
 }
 
 VpnPage::~VpnPage()
@@ -575,6 +575,16 @@ bool VpnPage::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
+    if (watched == this) {
+        //失焦退出
+        if (event->type() == QEvent::ActivationChange) {
+            if (QApplication::activeWindow() != this) {
+                hide();
+                return true;
+            }
+        }
+    }
+
     return QWidget::eventFilter(watched, event);
 }
 
@@ -628,8 +638,7 @@ void VpnPage::showUI()
 
 void VpnPage::resetWindowPosition()
 {
-
-#define MARGIN 4
+#define MARGIN 8
 #define PANEL_TOP 1
 #define PANEL_LEFT 2
 #define PANEL_RIGHT 3

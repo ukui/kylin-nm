@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -18,11 +18,14 @@
  *
  */
 #include "kywirelessnetitem.h"
+#include "kylinactiveconnectresource.h"
 #include <NetworkManagerQt/Connection>
 #include "kylinutil.h"
 
 const QString ENTERPRICE_TYPE = "802.1X";
-const QString WPA1_AND_WPA2 = "WPA";
+//const QString WPA1_AND_WPA2 = "WPA";
+const QString WPA1 = "WPA1";
+const QString WPA2 = "WPA2";
 const QString WPA3 = "WPA3";
 
 #define FREQ_5GHZ 5000
@@ -57,15 +60,31 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
    // m_NetSsid = net->ssid();
 
     NetworkManager::AccessPoint::Ptr accessPointPtr = net->referenceAccessPoint();
+    if (accessPointPtr->ssid().isEmpty()) {
+        qDebug() << accessPointPtr->uni() << "ssid isEmpty";
+        NetworkManager::AccessPoint::List list = net->accessPoints();
+        if (list.size() > 1) {
+            for (int i = 0; i < list.size(); ++i) {
+                if (!list.at(i)->ssid().isEmpty()) {
+                    qDebug() << "use" << accessPointPtr->uni();
+                    accessPointPtr = list.at(i);
+                    break;
+                }
+            }
+        }
+    }
+    if (accessPointPtr->ssid().isEmpty()) {
+        return;
+    }
     QByteArray rawSsid = accessPointPtr->rawSsid();
     m_NetSsid = getSsidFromByteArray(rawSsid);
 
-    m_signalStrength = net->signalStrength();
-    m_frequency = net->referenceAccessPoint()->frequency();
+    m_signalStrength = accessPointPtr->signalStrength();
+    m_frequency = accessPointPtr->frequency();
     m_channel = NetworkManager::findChannel(m_frequency);
-    NetworkManager::AccessPoint::Capabilities cap = net->referenceAccessPoint()->capabilities();
-    NetworkManager::AccessPoint::WpaFlags wpaFlag = net->referenceAccessPoint()->wpaFlags();
-    NetworkManager::AccessPoint::WpaFlags rsnFlag = net->referenceAccessPoint()->rsnFlags();
+    NetworkManager::AccessPoint::Capabilities cap = accessPointPtr->capabilities();
+    NetworkManager::AccessPoint::WpaFlags wpaFlag = accessPointPtr->wpaFlags();
+    NetworkManager::AccessPoint::WpaFlags rsnFlag = accessPointPtr->rsnFlags();
     m_secuType = enumToQstring(cap, wpaFlag, rsnFlag);
 //    if (m_secuType.indexOf(ENTERPRICE_TYPE) >= 0) {
 //            m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
@@ -75,9 +94,9 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
 //            m_kySecuType = WPA_AND_WPA2_PERSONAL;
 //    }
     setKySecuType(m_secuType);
-    m_bssid = net->referenceAccessPoint()->hardwareAddress();
+    m_bssid = accessPointPtr->hardwareAddress();
     m_device = net->device();
-    m_uni = net->referenceAccessPoint()->uni();
+    m_uni = accessPointPtr->uni();
 
     NetworkManager::Device::Ptr devicePtr = nullptr;
     devicePtr = m_networkResourceInstance->findDeviceInterface(m_device);
@@ -131,38 +150,7 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
             }
         }
     }
-    initInfoBySsid();
-}
-
-void KyWirelessNetItem::initInfoBySsid()
-{
-    for (auto const & conn : m_networkResourceInstance->m_connections) {
-        NetworkManager::ConnectionSettings::Ptr settings = conn->settings();
-        if (settings->connectionType() != NetworkManager::ConnectionSettings::Wireless) {
-            continue;
-        }
-
-        NetworkManager::WirelessSetting::Ptr wifi_sett
-            = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
-        QString devName = m_networkResourceInstance->findDeviceUni(m_device)->interfaceName();
-        QByteArray rawSsid = wifi_sett->ssid();
-        QString wifiSsid = getSsidFromByteArray(rawSsid);
-        if (wifiSsid == m_NetSsid
-                && (settings->interfaceName().compare(devName) == 0 || settings->interfaceName().isEmpty())) {
-            m_connectUuid = settings->uuid();
-            m_connName    = conn->name();
-            m_connDbusPath = conn->path();
-            m_isConfigured = true;
-            /*
-            * 如果有激活的链接，则取激活的链接，没有则取最后一个，因为一个热点可以创建多个链接
-            */
-            if (nullptr != m_networkResourceInstance->getActiveConnect(m_connectUuid)) {
-                break;
-            }
-        }
-    }
-
-    return;
+    updatewirelessItemConnectInfo(*this);
 }
 
 int KyWirelessNetItem::getCategory(QString uni)
@@ -189,10 +177,84 @@ void KyWirelessNetItem::setKySecuType(QString strSecuType)
     if (strSecuType.indexOf(ENTERPRICE_TYPE) >= 0) {
         m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
     } else if (strSecuType.indexOf(WPA3) >= 0) {
-        m_kySecuType = WPA3_PERSONAL;
-    } else if ( strSecuType.indexOf(WPA1_AND_WPA2) >= 0) {
+        if (strSecuType.indexOf(WPA1) >= 0 || strSecuType.indexOf(WPA2) >= 0) {
+            m_kySecuType = WPA_AND_WPA3;
+        } else {
+            m_kySecuType = WPA3_PERSONAL;
+        }
+    } else if ( strSecuType.indexOf(WPA1) >= 0 || strSecuType.indexOf(WPA2) >= 0) {
         m_kySecuType = WPA_AND_WPA2_PERSONAL;
     } else {
         m_kySecuType = NONE;
+    }
+}
+
+void updatewirelessItemConnectInfo(KyWirelessNetItem& item)
+{
+    KyNetworkResourceManager *networkResourceInstance = KyNetworkResourceManager::getInstance();
+
+    bool findHotspot = false;
+    bool findInfrastructure = false;
+
+    KyWirelessNetItem hotspotItem;
+    KyWirelessNetItem connectItem;
+
+    for (auto const & conn : networkResourceInstance->m_connections) {
+        NetworkManager::ConnectionSettings::Ptr settings = conn->settings();
+        if (settings->connectionType() != NetworkManager::ConnectionSettings::Wireless) {
+            continue;
+        }
+
+        NetworkManager::WirelessSetting::Ptr wifi_sett
+            = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+        QString devName = networkResourceInstance->findDeviceUni(item.getDevice())->interfaceName();
+        QByteArray rawSsid = wifi_sett->ssid();
+        QString wifiSsid = getSsidFromByteArray(rawSsid);
+        if (wifiSsid == item.m_NetSsid
+                && (settings->interfaceName().compare(devName) == 0 || settings->interfaceName().isEmpty())) {
+            /*
+            * 如果有激活的链接，则取激活的链接，没有则取最后一个，因为一个热点可以创建多个链接, 有WIFI的则用WIFI，否则用adhoc
+            */
+            KyActiveConnectResourse actResource;
+            KyConnectItem * kyItem = actResource.getActiveConnectionByUuid(settings->uuid(), devName);
+            if (nullptr != kyItem) {
+                item.m_connectUuid = settings->uuid();
+                item.m_connName    = conn->name();
+                item.m_connDbusPath = conn->path();
+                item.m_isConfigured = true;
+                return;
+            }
+
+            if (wifi_sett->mode() != NetworkManager::WirelessSetting::NetworkMode::Infrastructure) {
+                hotspotItem.m_connectUuid = settings->uuid();
+                hotspotItem.m_connName    = conn->name();
+                hotspotItem.m_connDbusPath = conn->path();
+                hotspotItem.m_isConfigured = true;
+                findHotspot = true;
+            } else {
+                connectItem.m_connectUuid = settings->uuid();
+                connectItem.m_connName    = conn->name();
+                connectItem.m_connDbusPath = conn->path();
+                connectItem.m_isConfigured = true;
+                findInfrastructure = true;
+            }
+        }
+    }
+
+    if (findInfrastructure) {
+        item.m_connectUuid = connectItem.m_connectUuid;
+        item.m_connName = connectItem.m_connName;
+        item.m_connDbusPath = connectItem.m_connDbusPath;
+        item.m_isConfigured = connectItem.m_isConfigured;
+    } else if (findHotspot) {
+        item.m_connectUuid = hotspotItem.m_connectUuid;
+        item.m_connName = hotspotItem.m_connName;
+        item.m_connDbusPath = hotspotItem.m_connDbusPath;
+        item.m_isConfigured = hotspotItem.m_isConfigured;
+    } else {
+        item.m_connectUuid.clear();
+        item.m_connName.clear();
+        item.m_connDbusPath.clear();
+        item.m_isConfigured = false;
     }
 }

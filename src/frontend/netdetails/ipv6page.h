@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -54,12 +54,12 @@ public:
     void stopLoading();
     void showIpv6AddressConflict(bool isConflict);
 
-public:
+private:
     QComboBox *ipv6ConfigCombox;
     LineEdit *ipv6AddressEdit;
     LineEdit *lengthEdit;
     LineEdit *gateWayEdit;
-private:
+
     QFormLayout *m_detailLayout;
     QLabel *m_configLabel;
     QLabel *m_addressLabel;
@@ -80,6 +80,7 @@ private:
 
     QLabel *m_iconLabel;
     QLabel *m_textLabel;
+
 private:
     void initUI();
     void initComponent();
@@ -103,6 +104,7 @@ private Q_SLOTS:
 Q_SIGNALS:
     void setIpv6PageState(bool);
     void ipv6EditFinished(const QString &address);
+    void scrollToBottom();
 };
 
 #endif // IPV6PAGE_H

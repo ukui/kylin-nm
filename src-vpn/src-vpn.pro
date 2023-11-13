@@ -19,7 +19,8 @@ PKGCONFIG +=kysdk-sysinfo
 
 INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
 
-LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt -lkysec
+LIBS    +=  -L/usr/lib/ -lgsettings-qt -lX11 -lKF5NetworkManagerQt -lukui-log4qt
+#LIBS    += -lkysec
 
 target.path = /usr/bin
 target.source += $$TARGET
@@ -27,10 +28,13 @@ desktop.path = /etc/xdg/autostart/
 desktop.files = kylin-vpn.desktop
 gschema.files = org.ukui.kylin-vpn.switch.gschema.xml
 gschema.path = /usr/share/glib-2.0/schemas/
+qm_files.path = $${PREFIX}/share/kylin-nm/kylin-vpn/
+qm_files.files = translations/*.qm
 
 INSTALLS += target \
         desktop \
         gschema \
+        qm_files \
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -53,9 +57,6 @@ include(singleapplication/qt-single-application.pri)
 include(backend/backend.pri)
 include(frontend/frontend.pri)
 
-RESOURCES += \
-    vpnqrc.qrc
-
 SOURCES += \
     main.cpp
 
@@ -70,4 +71,9 @@ DISTFILES += \
 
 TRANSLATIONS += \
         translations/kylin-vpn_zh_CN.ts \
-        translations/kylin-vpn_bo_CN.ts
+        translations/kylin-vpn_bo_CN.ts \
+        translations/kylin-vpn_mn.ts
+
+CONFIG(release, debug|release) {
+    !system($$PWD/translate_generation.sh): error("Failed to generate translation")
+}

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -43,14 +43,19 @@ public:
     ~LanPage();
 
     //for dbus
-    void getWiredList(QMap<QString, QVector<QStringList> > &map);
-    void deleteWired(const QString& connUuid);
+    void getWiredList(QString devName, QList<QStringList> &list);
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
     void showDetailPage(QString devName, QString uuid);
     void setWiredDeviceEnable(const QString& devName, bool enable);
+    void deleteWired(const QString &connUuid);
 
     bool lanIsConnected();
+    void getWiredDeviceConnectState(QMap<QString, QString> &map);
+
+    bool isWiredDeviceUsable() {
+        return !m_devList.isEmpty();
+    }
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
@@ -134,7 +139,6 @@ private Q_SLOTS:
     void onShowControlCenter();
 
     void onWiredEnabledChanged(bool);
-
 private:
     QListWidget * m_activatedLanListWidget = nullptr;
     QListWidget * m_inactivatedLanListWidget = nullptr;
@@ -154,7 +158,6 @@ private:
 
     QGSettings *m_switchGsettings = nullptr;
     QMap<QString, NetDetail*> m_lanPagePtrMap;
-
 };
 
 #endif // LANPAGE_H

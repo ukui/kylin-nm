@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -41,9 +41,9 @@ using namespace kdk;
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
-#define TITLE_FRAME_HEIGHT 60     //TabWidget的tab和widget有间隙，和设计稿看起来一致就不能设为设计稿里的高度
+#define TITLE_FRAME_HEIGHT 50
 #define TITLE_LAYOUT_MARGINS 24,0,24,0
-#define NET_LAYOUT_MARGINS 8,8,0,8
+#define NET_LAYOUT_MARGINS 8,4,0,4
 #define TEXT_HEIGHT 20
 #define SETTINGS_LAYOUT_MARGINS 23,0,24,0
 
@@ -71,6 +71,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void onTransChanged();
+    void onThemeChanged(const QString &key);
+    void setThemePalette();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -84,6 +86,7 @@ protected:
 
 private:
     void initWindowProperties();
+    void initWindowTheme();
 
 protected:
     QVBoxLayout * m_mainLayout = nullptr;
@@ -106,6 +109,8 @@ protected:
 
     QGSettings * m_transGsettings = nullptr;
     double m_transparency = 1.0;  //透明度
+    //监听主题的Gsettings
+    QGSettings * m_styleGsettings = nullptr;
 
 };
 

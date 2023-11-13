@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -33,14 +33,15 @@
 const QByteArray GSETTINGS_SCHEMA = "org.ukui.kylin-nm.switch";
 const QString    WIRELESS_SWITCH  = "wirelessswitch";
 
-const QString    WIFI_BAND_2_4GHZ = "2.4Ghz";
-const QString    WIFI_BAND_5GHZ   = "5Ghz";
+const QString    WIFI_BAND_2_4GHZ = "2.4GHz";
+const QString    WIFI_BAND_5GHZ   = "5GHz";
 
 enum KySecuType {
     NONE = 0,
     WPA_AND_WPA2_PERSONAL,
     WPA_AND_WPA2_ENTERPRISE,
     WPA3_PERSONAL,
+    WPA_AND_WPA3,
 };
 
 enum KyKeyMgmt {

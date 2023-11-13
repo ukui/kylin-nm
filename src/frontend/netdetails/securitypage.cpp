@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -84,13 +84,6 @@ void SecurityPage::initUI()
     userPwdEdit->setUseCustomPalette(true);
     userPwdFlagBox = new QCheckBox(this);
 
-    QWidget *queryWidget = new QWidget(this);
-    QHBoxLayout *queryLayout = new QHBoxLayout(queryWidget);
-    queryLayout->setContentsMargins(0, 0, 0, 0);
-    queryLayout->addWidget(userPwdFlagBox);
-    queryLayout->addWidget(userPwdFlagLabel);
-    queryLayout->addStretch();
-
     //FAST
     m_pacCheckBox = new QCheckBox(this);
     m_pacProvisionComboBox = new QComboBox(this);
@@ -99,6 +92,13 @@ void SecurityPage::initUI()
     m_pacProvisionLabel->setFixedWidth(MIN_LABEL_WIDTH);
     m_pacFlagLabel = new FixLabel(this);
     m_pacFileLabel = new QLabel(this);
+
+    QWidget *queryWidget = new QWidget(this);
+    QHBoxLayout *queryLayout = new QHBoxLayout(queryWidget);
+    queryLayout->setContentsMargins(0, 0, 0, 0);
+    queryLayout->addWidget(userPwdFlagBox);
+    queryLayout->addWidget(userPwdFlagLabel);
+    queryLayout->addStretch();
 
     //记住该网络复选框
     m_emptyLabel = new QLabel(this);
@@ -155,7 +155,6 @@ void SecurityPage::initUI()
     //密码 Label和密码框
     topLayout->addWidget(userPwdLabel, 9, 0);
     topLayout->addWidget(userPwdEdit, 9, 1);
-
 
     // CA证书选项框及CheckBox布局
     QWidget *caWidget = new QWidget(this);
@@ -302,7 +301,6 @@ void SecurityPage::initConnect()
     connect(secuTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onSecuTypeComboxIndexChanged);
 
     connect(secuTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::changeColumnWidthWithSecuType);
-
     //EAP方式变化
 //    connect(eapTypeCombox, &QComboBox::currentTextChanged, this, &SecurityPage::onEapTypeComboxIndexChanged);
     connect(eapTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onEapTypeComboxIndexChanged);
@@ -1214,14 +1212,13 @@ void SecurityPage::changeColumnWidthWithSecuType()
     if (!isDetailPage) {
         return;
     }
-    if (secuTypeCombox->currentData().toInt() == WPA_AND_WPA2_ENTERPRISE) {
-        if (eapMethodCombox->currentData().toInt() == TLS || eapMethodCombox->currentData().toInt() == FAST) {
-            topLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH);
-            topLayout->setColumnMinimumWidth(1, MIN_EDIT_WIDTH);
-            bottomLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH - 8);
+    if (secuTypeCombox->currentData().toInt() == WPA_AND_WPA2_ENTERPRISE &&
+            eapMethodCombox->currentData().toInt() == TLS) {
+        topLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH);
+        topLayout->setColumnMinimumWidth(1, MIN_EDIT_WIDTH);
+        bottomLayout->setColumnMinimumWidth(0, MIN_LABEL_WIDTH - 8);
 
-        }
-    }else {
+    } else {
         topLayout->setColumnMinimumWidth(0, DETAIL_MIN_LABEL_WIDTH);
         topLayout->setColumnMinimumWidth(1, DETAIL_MIN_EDIT_WIDTH);
     }
@@ -1249,4 +1246,3 @@ void SecurityPage::onPacFilePathComboxIndexChanged(QString str)
         qWarning() << "Choose file is null or unvalible";
     }
 }
-

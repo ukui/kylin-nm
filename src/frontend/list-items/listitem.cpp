@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -118,6 +118,16 @@ ListItem::ListItem(QWidget *parent) : QFrame(parent)
     initConnection();
     connect(qApp, &QApplication::paletteChanged, this, &ListItem::onPaletteChanged);
 //    m_itemFrame->installEventFilter(this);
+    const QByteArray id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(id)) {
+        QGSettings * styleGsettings = new QGSettings(id, QByteArray(), this);
+        connect(styleGsettings, &QGSettings::changed, this, [=](QString key){
+            if ("themeColor" == key) {
+                onPaletteChanged();
+            }
+        });
+    }
+    onPaletteChanged();
 }
 
 ListItem::~ListItem()
@@ -158,8 +168,8 @@ void ListItem::showDesktopNotify(const QString &message, QString soundName)
                          "org.freedesktop.Notifications",
                          QDBusConnection::sessionBus());
     QStringList actions;  //跳转动作
-    actions.append("kylin-nm");
-    actions.append("default");          //默认动作：点击消息体时打开麒麟录音
+    actions.append("default");
+    actions.append("kylin-nm");          //默认动作：点击消息体时打开麒麟录音
     QMap<QString, QVariant> hints;
     if (!soundName.isEmpty()) {
         hints.insert("sound-name",soundName); //添加声音
@@ -286,7 +296,7 @@ void ListItem::initUI()
     m_hItemLayout->addWidget(m_netButton);
     m_hItemLayout->addSpacing(10);
     m_hItemLayout->addWidget(m_nameLabel);
-    m_hItemLayout->addSpacing(8);
+    m_hItemLayout->addSpacing(6); //设计稿间距为8 nameLabel宽度另+2
     m_hItemLayout->addWidget(m_freq);
     m_hItemLayout->addStretch();
     m_hItemLayout->addSpacing(8);
@@ -301,7 +311,6 @@ void ListItem::initUI()
     m_mainLayout->addWidget(m_itemFrame);
 
     m_hoverButton->hide();
-
 //    this->setAutoFillBackground(true);
 //    this->setBackgroundRole(QPalette::Base);
 //    QPalette pal = qApp->palette();
@@ -321,8 +330,25 @@ void ListItem::onPaletteChanged()
 //    QPalette pal = qApp->palette();
 //    pal.setColor(QPalette::Window, qApp->palette().base().color());
 //    this->setPalette(pal);
-}
+    QPalette pal = qApp->palette();
+    QGSettings * styleGsettings = nullptr;
+    const QByteArray style_id(THEME_SCHAME);
+    if (QGSettings::isSchemaInstalled(style_id)) {
+       styleGsettings = new QGSettings(style_id, QByteArray(), this);
+       QString currentTheme = styleGsettings->get(COLOR_THEME).toString();
+       if(currentTheme == "ukui-default"){
+           pal = themePalette(true, this);
+       }
+    }
+    pal.setColor(QPalette::Base, pal.color(QPalette::Base)); //解决Wayland环境this->setPalette(pal)不生效问题
 
+    this->setPalette(pal);
+
+    if (m_menu != nullptr) {
+        pal.setColor(QPalette::Text, pal.color(QPalette::Text));
+        m_menu->setPalette(pal);
+    }
+}
 
 NameLabel::NameLabel(QWidget *parent)
     :QLabel(parent)
@@ -362,7 +388,7 @@ void NameLabel::changedLabelSlot()
         setText(fontMetrics.elidedText(m_name, Qt::ElideRight, m_maximumWidth));
         setToolTip(m_name);
     } else {
-        this->setFixedWidth(fontMetrics.width(m_name));
+        this->setFixedWidth(fontMetrics.width(m_name) + 2);
         setText(m_name);
         setToolTip("");
     }

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -32,8 +32,10 @@
 #include "kwidget.h"
 #include "kswitchbutton.h"
 #include "itemframe.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
 
 namespace Ui {
 class Vpn;
@@ -56,6 +58,7 @@ public:
     bool isShowOnHomePage() const Q_DECL_OVERRIDE;
     QIcon icon() const Q_DECL_OVERRIDE;
     bool isEnable() const Q_DECL_OVERRIDE;
+    QString translationPath() const  Q_DECL_OVERRIDE;
 
 public:
     void initComponent();
@@ -106,8 +109,9 @@ private:
     //单个lan连接状态变化
     void itemActiveConnectionStatusChanged(VpnItem *item, int status);
 
-
     void setShowSwitchStatus();
+    // 搜索词条
+    void initSearchText();
 
 private slots:
     void onVpnAdd(QStringList);

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -79,17 +79,17 @@ void AddNetBtn::leaveEvent(QEvent *event){
 
 void AddNetBtn::paintEvent(QPaintEvent *event)
 {
-//    QPalette pal = qApp->palette();
-
     QPainter painter(this);
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
+
     painter.setBrush(this->palette().base().color());
 
-//    QColor color = pal.color(QPalette::Button);
-//    color.setAlphaF(0.5);
-//    pal.setColor(QPalette::Button, color);
-//    this->setPalette(pal);
+    QPalette pal = qApp->palette();
+    QColor color = pal.color(QPalette::Button);
+    color.setAlphaF(0.5);
+    pal.setColor(QPalette::Button, color);
+    this->setPalette(pal);
 
     QRect rect = this->rect();
     QPainterPath path;

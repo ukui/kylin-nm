@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -21,7 +21,7 @@
 
 
 #include <QDebug>
-
+#include <QVariant>
 
 MobileHotspot::MobileHotspot() :  mFirstLoad(true) {
 
@@ -113,23 +113,31 @@ bool MobileHotspot::isExitWirelessDevice()
         return false;
     }
 
-    QDBusMessage result = interface->call(QStringLiteral("getDeviceListAndEnabled"),1);
-    if(result.type() == QDBusMessage::ErrorMessage) {
-        qWarning() << "getWirelessDeviceList error:" << result.errorMessage();
+    QDBusReply<QVariantMap> reply = interface->call(QStringLiteral("getDeviceListAndEnabled"),1);
+    if(!reply.isValid()) {
+        qWarning() << "getWirelessDeviceList error:" << reply.error().message();
         return false;
     }
 
-    auto dbusArg =  result.arguments().at(0).value<QDBusArgument>();
     QMap<QString, bool> deviceListMap;
-    dbusArg >> deviceListMap;
+    QVariantMap::const_iterator itemIter = reply.value().cbegin();
+    while (itemIter != reply.value().cend()) {
+        deviceListMap.insert(itemIter.key(), itemIter.value().toBool());
+        itemIter ++;
+    }
 
-    QDBusReply<QMap<QString, int> > capReply = interface->call("getWirelessDeviceCap");
+    QDBusReply<QVariantMap> capReply = interface->call("getWirelessDeviceCap");
     if (!capReply.isValid()) {
         qDebug()<<"execute dbus method 'getWirelessDeviceCap' is invalid in func initInterfaceInfo()" <<capReply.error().type() ;
         return false;
     }
-    QMap<QString, int> devCapMap = capReply.value();
 
+    QMap<QString, int> devCapMap;
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        devCapMap.insert(item.key(), item.value().toInt());
+        item ++;
+    }
 
     if (deviceListMap.isEmpty()) {
         qDebug() << "no wireless device";

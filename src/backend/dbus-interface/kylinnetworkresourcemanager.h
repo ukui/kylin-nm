@@ -129,6 +129,7 @@ Q_SIGNALS:
     void wifiNetworkDeviceDisappear();
     void wifiEnabledChanged(bool);
     void wiredEnabledChanged(bool);
+    void connectivityCheckSpareUriChanged();
 
     void activeConnectionsReset();
     void activeConnectionAdd(QString uuid);
@@ -144,6 +145,7 @@ Q_SIGNALS:
     void connectivityChanged(NetworkManager::Connectivity connectivity);
     void stateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason);
 
+    void needShowDesktop(QString);
 
 public Q_SLOTS:
     void onInitNetwork();

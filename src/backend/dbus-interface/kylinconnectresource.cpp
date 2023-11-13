@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -28,8 +28,8 @@
 #include <NetworkManagerQt/VpnPlugin>
 #include <NetworkManagerQt/VpnSetting>
 
-const QString str2GBand = "2.4Ghz";
-const QString str5GBand = "5Ghz";
+const QString str2GBand = "2.4GHz";
+const QString str5GBand = "5GHz";
 
 static bool subLanListSort(const KyConnectItem* info1, const KyConnectItem* info2)
 {
@@ -80,6 +80,9 @@ KyConnectResourse::KyConnectResourse(QObject *parent) : QObject(parent)
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionRemove, this, &KyConnectResourse::connectionRemove);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectionUpdate, this, &KyConnectResourse::connectionUpdate);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::connectivityChanged, this, &KyConnectResourse::connectivityChanged);
+
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::connectivityCheckSpareUriChanged, this, &KyConnectResourse::connectivityCheckSpareUriChanged);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::needShowDesktop, this, &KyConnectResourse::needShowDesktop);
 }
 
 KyConnectResourse::~KyConnectResourse()
@@ -451,38 +454,28 @@ void KyConnectResourse::getIpv4ConnectSetting(
                         NetworkManager::Ipv4Setting::Ptr &ipv4Setting,
                         KyConnectSetting &connectSetting)
 {
+    connectSetting.m_ipv4Dns = ipv4Setting->dns();
     if (NetworkManager::Ipv4Setting::Automatic == ipv4Setting->method()) {
         connectSetting.m_ipv4ConfigIpType = CONFIG_IP_DHCP;
-        connectSetting.m_ipv4Dns = ipv4Setting->dns();
         return;
     }
 
     connectSetting.m_ipv4ConfigIpType = CONFIG_IP_MANUAL;
-
     connectSetting.m_ipv4Address = ipv4Setting->addresses();
-    connectSetting.m_ipv4Dns = ipv4Setting->dns();
-
-    return;
 }
 
 void KyConnectResourse::getIpv6ConnectSetting(
                         NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
                         KyConnectSetting &connectSetting)
 {
-
+    connectSetting.m_ipv6Dns = ipv6Setting->dns();
     if (NetworkManager::Ipv6Setting::Automatic == ipv6Setting->method()) {
         connectSetting.m_ipv6ConfigIpType = CONFIG_IP_DHCP;
-        connectSetting.m_ipv6Dns = ipv6Setting->dns();
         return;
     }
 
     connectSetting.m_ipv6ConfigIpType = CONFIG_IP_MANUAL;
-
     connectSetting.m_ipv6Address = ipv6Setting->addresses();
-
-    connectSetting.m_ipv6Dns = ipv6Setting->dns();
-
-    return;
 }
 
 void KyConnectResourse::getConnectivity(NetworkManager::Connectivity &connectivity)
@@ -737,10 +730,11 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
     apConnectItem->m_connectName = connectPtr->name();
     apConnectItem->m_connectSsid = getSsidFromByteArray(rawSsid);
     apConnectItem->m_connectUuid = connectPtr->uuid();
+
     if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::A) {
-        apConnectItem->m_band = str2GBand;
-    } else if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::Bg) {
         apConnectItem->m_band = str5GBand;
+    } else if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::Bg) {
+        apConnectItem->m_band = str2GBand;
     }
     apConnectItem->m_ifaceName = settingPtr->interfaceName();
     apConnectItem->m_isActivated = m_networkResourceInstance->isActiveConnection(connectPtr->uuid());

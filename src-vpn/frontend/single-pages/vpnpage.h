@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -38,7 +38,7 @@
 #define VPNPAGE_LAYOUT_MARGINS 0,0,0,0
 #define VPN_LIST_SPACING 0
 #define ITEM_HEIGHT 50
-#define ITEM_SPACE 16
+#define ITEM_SPACE 8
 #define PAGE_SPACE 22
 
 #define LOG_FLAG "[VpnPage]"

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -47,8 +47,10 @@
 #include "wlanitem.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
 
 namespace Ui {
 class WlanConnect;
@@ -89,7 +91,7 @@ private:
 
     int  sortWlanNet(QString deviceName, QString name, QString signal);
     void updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection, int category);
-    void resortWifiList(ItemFrame *frame, QVector<QStringList> list);
+    void resortWifiList(ItemFrame *frame, QList<QStringList> list);
 
 
     //单wifi图标
@@ -148,8 +150,8 @@ private:
             return m_wifiSwitch->isChecked();
         }
     }
-
     bool LaunchApp(QString desktopFile);
+
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 
@@ -172,6 +174,8 @@ private:
 
     QTimer * m_scanTimer = nullptr;
 //    QTimer * m_updateTimer = nullptr;
+
+    QMap<QString, QList<QStringList>> getWirelessList();
 private:
     KSwitchButton      *m_wifiSwitch;
     bool               m_firstLoad;
@@ -190,6 +194,7 @@ private slots:
 
     void reScan();
 
-
+    //更新控制面板插件Gsetting show
+    void updatePluginShowSettings();
 };
 #endif // WLANCONNECT_H

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -36,6 +36,8 @@ DetailPage::DetailPage(bool isWlan, bool isCreate, QWidget *parent)
     if (isCreate) {
      connect(m_SSIDEdit, &LineEdit::textEdited, this, &DetailPage::setEnableOfSaveBtn);
     }
+
+    setInteractionFlag();
 }
 
 DetailPage::~DetailPage()
@@ -169,6 +171,35 @@ QPalette DetailPage::getTheme()
     return pal;
 }
 
+void DetailPage::setInteractionFlag()
+{
+    if (m_SSIDLabel != nullptr) {
+        m_SSIDLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        m_SSIDLabel->setCursor(Qt::IBeamCursor);
+    }
+    //文字部分响应鼠标的可选择状态
+    m_Protocol->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_SecType->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_Hz->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_Chan->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_BandWidth->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_IPV6->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_IPV4->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_IPV4Dns->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    m_Mac->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    //鼠标移入指针变成光标
+    m_Protocol->setCursor(Qt::IBeamCursor);
+    m_SecType->setCursor(Qt::IBeamCursor);
+    m_Hz->setCursor(Qt::IBeamCursor);
+    m_Chan->setCursor(Qt::IBeamCursor);
+    m_BandWidth->setCursor(Qt::IBeamCursor);
+    m_IPV6->setCursor(Qt::IBeamCursor);
+    m_IPV4->setCursor(Qt::IBeamCursor);
+    m_IPV4Dns->setCursor(Qt::IBeamCursor);
+    m_Mac->setCursor(Qt::IBeamCursor);
+    m_IPV4Dns->setScaledContents(true);
+}
+
 void DetailPage::initUI() {
     m_layout = new QVBoxLayout(this);
     m_layout->setContentsMargins(0,0,0,0);
@@ -215,7 +246,10 @@ void DetailPage::initUI() {
         m_SSIDEdit->setAlignment(Qt::AlignRight);
         m_SSIDEdit->setStyleSheet("border-top:0px  solid;border-bottom:1px  solid;border-left:0px  solid;border-right: 0px  solid;background:transparent");
         m_SSIDEdit->setPlaceholderText(tr("Please input SSID:"));
-        m_SSIDEdit->setMaxLength(MAX_NAME_LENGTH);
+        QRegExp nameRx("^.{0,32}$");
+        QValidator *validator = new QRegExpValidator(nameRx, this);
+
+        m_SSIDEdit->setValidator(validator);
         m_ssidWidget = new DetailWidget(qobject_cast<QWidget *>(m_SSIDEdit), m_listWidget);
     }
 
@@ -349,7 +383,7 @@ void DetailPage::on_btnCopyNetDetail_clicked()
     bandwithCopy += this->m_BandWidth->text();
     ipv6Copy += m_formerIPV6;
     ipv4Copy += this->m_IPV4->text();
-    ipv4dnsCopy += this->m_IPV4Dns->text();
+    ipv4dnsCopy += this->m_IPV4Dns->getText();
     macCopy += this->m_Mac->text();
     netDetailList.append(bandwithCopy);
     netDetailList.append(ipv4Copy);

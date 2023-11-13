@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -19,6 +19,8 @@
  */
 #include "vpnitem.h"
 #include <QPainter>
+#include <QPainterPath>
+#include <QApplication>
 #define FRAME_SPEED 150
 #define LIMIT_TIME 60*1000
 #define TOTAL_PAGE 8
@@ -33,11 +35,6 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     this->setMinimumSize(550, 58);
     this->setProperty("useButtonPalette", true);
     this->setFlat(true);
-    QPalette pal = this->palette();
-    QColor color = pal.color(QPalette::Button);
-    color.setAlphaF(0.5);
-    pal.setColor(QPalette::Button, color);
-    this->setPalette(pal);
     QHBoxLayout *mLanLyt = new QHBoxLayout(this);
     mLanLyt->setContentsMargins(16,0,16,0);
     mLanLyt->setSpacing(16);
@@ -61,7 +58,6 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     m_moreMenu->addAction(m_connectAction);
     m_moreMenu->addAction(m_deleteAction);
     m_moreButton->setMenu(m_moreMenu);
-
     mLanLyt->addWidget(m_iconLabel);
     mLanLyt->addWidget(m_titileLabel,Qt::AlignLeft);
     mLanLyt->addStretch();
@@ -136,12 +132,16 @@ void VpnItem::onDeletetTriggered()
 
 void VpnItem::paintEvent(QPaintEvent *event)
 {
-    QPalette pal = this->palette();
-
     QPainter painter(this);
     painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
-    painter.setBrush(pal.color(QPalette::Base));
+    painter.setBrush(this->palette().base().color());
+
+    QPalette pal = qApp->palette();
+    QColor color = pal.color(QPalette::Button);
+    color.setAlphaF(0.5);
+    pal.setColor(QPalette::Button, color);
+    this->setPalette(pal);
 
     QRect rect = this->rect();
 
@@ -175,11 +175,11 @@ bool VpnItem::eventFilter(QObject *watched, QEvent *event)
 {
     //菜单右边界与按钮右边界对齐
     if (event->type() == QEvent::Show && watched == m_moreMenu) {
-        int menuXPos = m_moreMenu->pos().x();
         int menuWidth = m_moreMenu->size().width();
         int btnWidth = m_moreButton->size().width();
+        int btnGlobalXPos = mapToGlobal(m_moreButton->pos()).x();
 
-        QPoint pos = QPoint (menuXPos - menuWidth + btnWidth, m_moreMenu->pos().y());
+        QPoint pos = QPoint (btnGlobalXPos - menuWidth + btnWidth, m_moreMenu->pos().y());
         m_moreMenu->move(pos);
         return true;
     }

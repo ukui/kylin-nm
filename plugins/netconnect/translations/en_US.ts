@@ -22,14 +22,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lanitem.cpp" line="120"/>
-        <location filename="../lanitem.cpp" line="133"/>
+        <location filename="../lanitem.cpp" line="118"/>
+        <location filename="../lanitem.cpp" line="131"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lanitem.cpp" line="122"/>
-        <location filename="../lanitem.cpp" line="131"/>
+        <location filename="../lanitem.cpp" line="120"/>
+        <location filename="../lanitem.cpp" line="129"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -43,54 +43,61 @@
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
-        <location filename="../netconnect.cpp" line="158"/>
+        <location filename="../netconnect.cpp" line="159"/>
         <source>open</source>
         <translation>open</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
-        <location filename="../netconnect.cpp" line="155"/>
+        <location filename="../netconnect.cpp" line="156"/>
         <source>Advanced settings</source>
         <translation>Advanced settings</translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="67"/>
         <source>ukui control center</source>
-        <translation>ukui control center</translation>
+        <translation type="vanished">ukui control center</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="70"/>
         <source>ukui control center desktop message</source>
-        <translation>ukui control center desktop message</translation>
+        <translation type="vanished">ukui control center desktop message</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="84"/>
-        <location filename="../netconnect.cpp" line="156"/>
+        <location filename="../netconnect.cpp" line="66"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="69"/>
+        <source>Settings desktop message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../netconnect.cpp" line="83"/>
+        <location filename="../netconnect.cpp" line="157"/>
         <source>LAN</source>
         <translation>LAN</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="172"/>
         <source>No ethernet device avaliable</source>
-        <translation>No ethernet device avaliable</translation>
+        <translation type="vanished">No ethernet device avaliable</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="450"/>
-        <location filename="../netconnect.cpp" line="896"/>
+        <location filename="../netconnect.cpp" line="455"/>
+        <location filename="../netconnect.cpp" line="905"/>
         <source>connected</source>
         <translation>connected</translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="452"/>
-        <location filename="../netconnect.cpp" line="749"/>
-        <location filename="../netconnect.cpp" line="906"/>
+        <location filename="../netconnect.cpp" line="457"/>
+        <location filename="../netconnect.cpp" line="757"/>
+        <location filename="../netconnect.cpp" line="915"/>
         <source>not connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../netconnect.cpp" line="528"/>
+        <location filename="../netconnect.cpp" line="534"/>
         <source>card</source>
         <translation>card</translation>
     </message>

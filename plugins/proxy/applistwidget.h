@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -28,6 +28,7 @@
 #include <QHBoxLayout>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include <QToolButton>
 
 class AppListWidget : public QWidget
 {
@@ -37,7 +38,7 @@ public:
     ~AppListWidget();
 
     void setAppChecked(bool flag);
-    void setAppIcon(const QPixmap &icon);
+    void setAppIcon(const QIcon &icon);
     void setAppName(const QString &text);
     void onAppCheckStateChanged();
     void AddAppProxyConfig();
@@ -51,7 +52,7 @@ private:
     void initDbus();
 
     QCheckBox *m_checkBox = nullptr;
-    QLabel    *m_iconLabel = nullptr;
+    QToolButton *m_iconBtn = nullptr;
     QLabel    *m_nameLabel = nullptr;
     QString    m_path = nullptr;
     QDBusInterface *m_dbusInterface = nullptr;

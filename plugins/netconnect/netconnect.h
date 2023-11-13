@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -54,8 +54,10 @@
 #include "itemframe.h"
 #include "kwidget.h"
 #include "kswitchbutton.h"
+#include "ukcccommon.h"
 
 using namespace kdk;
+using namespace ukcc;
 
 enum {
     DISCONNECTED,
@@ -100,7 +102,6 @@ private:
 
     int getInsertPos(QString connName, QString deviceName);
 
-
     void deleteOneLan(QString ssid, int type);
     void activeConnect(QString ssid, QString deviceName, int type);
     void deActiveConnect(QString ssid, QString deviceName, int type);
@@ -124,6 +125,9 @@ private:
     void itemActiveConnectionStatusChanged(LanItem *item, int status);
 
     bool LaunchApp(QString desktopFile);
+
+    bool isExitWiredDevice();
+
 protected:
     bool eventFilter(QObject *w,QEvent *e);
 
@@ -143,6 +147,8 @@ private:
     QMap<QString, bool> deviceStatusMap;
     QMap<QString, ItemFrame *> deviceFrameMap;
 
+    QMap<QString, QList<QStringList>> getWiredList();
+
 private slots:
     void updateLanInfo(QString deviceName, QStringList lanInfo);
 
@@ -153,6 +159,9 @@ private slots:
 
     void onDeviceStatusChanged();
     void onDeviceNameChanged(QString, QString, int);
+
+    //更新控制面板插件Gsetting show
+    void updatePluginShowSettings();
 };
 
 Q_DECLARE_METATYPE(QList<QDBusObjectPath>);

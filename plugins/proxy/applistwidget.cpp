@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -43,12 +43,11 @@ void AppListWidget::setAppChecked(bool flag)
 
 /**
  * @brief AppListWidget::setAppIcon
- * @param icon 应用图标的名称
+ * @param icon 应用图标
  */
-void AppListWidget::setAppIcon(const QPixmap &icon)
+void AppListWidget::setAppIcon(const QIcon &icon)
 {
-    m_iconLabel->setAlignment(Qt::AlignCenter);
-    m_iconLabel->setPixmap(icon);
+    m_iconBtn->setIcon(icon);
 }
 
 /**
@@ -119,12 +118,19 @@ void AppListWidget::initUI()
     mainLayout->setSpacing(8);
     m_checkBox = new QCheckBox(this);
     m_checkBox->setAttribute(Qt::WA_TransparentForMouseEvents, true); //m_checkBox不响应鼠标事件,将其传递给父窗口
-    m_iconLabel = new QLabel(this);
-    m_iconLabel->setFixedSize(24, 24);
+
+    m_iconBtn = new QToolButton(this);
+    m_iconBtn->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonIconOnly);
+    m_iconBtn->setAttribute(Qt::WA_TranslucentBackground, true); //透明
+    m_iconBtn->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    m_iconBtn->setAutoRaise(true);
+    m_iconBtn->setFixedSize(24, 24);
+    m_iconBtn->setIconSize(QSize(24, 24));
+
     m_nameLabel = new QLabel(this);
 
     mainLayout->addWidget(m_checkBox);
-    mainLayout->addWidget(m_iconLabel);
+    mainLayout->addWidget(m_iconBtn);
     mainLayout->addWidget(m_nameLabel);
     mainLayout->addStretch();
 }

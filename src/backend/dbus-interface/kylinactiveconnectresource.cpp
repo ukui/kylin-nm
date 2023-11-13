@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -748,9 +748,9 @@ QString KyActiveConnectResourse::getAcitveConnectionPathByUuid(QString connectUu
     return activeAonnectPtr->path();
 }
 
-int KyActiveConnectResourse::getAcivateWifiSignal()
+int KyActiveConnectResourse::getActivateWifiSignal(QString devName)
 {
-    int signalStrength = 0;
+    int signalStrength = -1;
     KyNetworkDeviceResourse devResource;
     QStringList devList;
     devResource.getNetworkDeviceList(NetworkManager::Device::Type::Wifi, devList);
@@ -766,14 +766,17 @@ int KyActiveConnectResourse::getAcivateWifiSignal()
         }
 
         if (connectDevice->type() == NetworkManager::Device::Wifi) {
-            NetworkManager::WirelessDevice *wirelessDevicePtr =
-                qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
-            NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();
-            if (apPtr.isNull()) {
-                continue;
+            if ((!devName.isEmpty() && connectDevice->interfaceName() == devName)
+                    || devName.isEmpty()) {
+                NetworkManager::WirelessDevice *wirelessDevicePtr =
+                    qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
+                NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();
+                if (apPtr.isNull()) {
+                    continue;
+                }
+                signalStrength = apPtr->signalStrength();
+                break;
             }
-            signalStrength = apPtr->signalStrength();
-            break;
         }
     }
 

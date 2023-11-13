@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -34,23 +34,23 @@ DeviceFrame::DeviceFrame(QString devName, QWidget *parent) : QFrame(parent)
 
     deviceLabel = new QLabel(this);
     dropDownLabel = new DrownLabel(devName, this);
-    deviceSwitch = new KSwitchButton(this);
-    deviceSwitch->installEventFilter(this);
+//    deviceSwitch = new KSwitchButton(this);
+//    deviceSwitch->installEventFilter(this);
 
     deviceLayout->addWidget(deviceLabel);
     deviceLayout->addStretch();
-    deviceLayout->addWidget(dropDownLabel);
-    deviceLayout->addWidget(deviceSwitch);
+    deviceLayout->addWidget(dropDownLabel);/*
+    deviceLayout->addWidget(deviceSwitch);*/
 }
 
 bool DeviceFrame::eventFilter(QObject *w,QEvent *e)
 {
-    if (w == deviceSwitch) {
-        if (e->type() == QEvent::MouseButtonPress) {
-            emit deviceSwitchClicked(!deviceSwitch->isChecked());
-            return true;
-        }
-    }
+//    if (w == deviceSwitch) {
+//        if (e->type() == QEvent::MouseButtonPress) {
+//            emit deviceSwitchClicked(!deviceSwitch->isChecked());
+//            return true;
+//        }
+//    }
     return QFrame::eventFilter(w, e);
 }
 

@@ -18,13 +18,14 @@
 
 //#include "mainwindow.h"
 #include "mainwindow.h"
-#include "dbusadaptor.h"
+#include "dbus.h"
 #include <QTranslator>
 #include <QLocale>
 #include "qt-single-application.h"
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QFile>
+#include <KWindowSystem>
 #include <ukui-log4qt.h>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 #include "xatom-helper.h"
@@ -78,12 +79,38 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
         fclose(log_file);
 }
 
+QString displayFromPid(uint pid)
+{
+    QFile environFile(QStringLiteral("/proc/%1/environ").arg(QString::number(pid)));
+    if (environFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        const QByteArray DISPLAY  = KWindowSystem::isPlatformWayland() ? QByteArrayLiteral("WAYLAND_DISPLAY") : QByteArrayLiteral("DISPLAY");
+        const auto lines = environFile.readAll().split('\0');
+        for (const QByteArray &line : lines) {
+            const int equalsIdx = line.indexOf('=');
+            if (equalsIdx <= 0) {
+                continue;
+            }
+            const QByteArray key = line.left(equalsIdx);
+            if (key == DISPLAY) {
+                const QByteArray value = line.mid(equalsIdx + 1);
+                return value;
+            }
+        }
+    }
+    return {};
+}
+
 int main(int argc, char *argv[])
 {
     initUkuiLog4qt("kylin-nm");
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+#endif
 
 //    QApplication a(argc, argv);
     QString id = QString("kylin-nm"+ QLatin1String(getenv("DISPLAY")));
@@ -103,25 +130,43 @@ int main(int argc, char *argv[])
     parser.addOptions({swOption,snOption});
     parser.process(a);
 
+    QString display;
+    QString sessionType;
+    if(QString(getenv("XDG_SESSION_TYPE")) == "wayland") {
+        sessionType = "wayland";
+        display = getenv("WAYLAND_DISPLAY");
+    } else {
+        sessionType = "x11";
+        display = getenv("DISPLAY");
+    }
+    qDebug() << sessionType << display;
+    qApp->setProperty("sessionType", sessionType);
+
     QDBusInterface interface("com.kylin.network",
-                                                   "/com/kylin/network",
-                                                   "com.kylin.network",
-                                                   QDBusConnection::sessionBus());
-    if(interface.isValid()) {
-        if (parser.isSet(swOption))
-        {
-            interface.call(QStringLiteral("showKylinNM"),1);
-        } else {
-            interface.call(QStringLiteral("showKylinNM"),0);
+                             "/com/kylin/network",
+                             "com.kylin.network",
+                             QDBusConnection::sessionBus());
+
+    if (a.isRunning()) {
+        if(interface.isValid()) {
+            if (parser.isSet(swOption)) {
+                interface.call(QStringLiteral("showKylinNM"), 1);
+            } else if (parser.isSet(snOption)) {
+                interface.call(QStringLiteral("showKylinNM"), 0);
+            } else {
+                interface.call(QStringLiteral("showKylinNM"), 2);
+            }
         }
         return 0;
     }
 
-    QThread thread;
+    QThread *thread = new QThread();
     KyNetworkResourceManager *p_networkResource = KyNetworkResourceManager::getInstance();
-    p_networkResource->moveToThread(&thread);
-    QObject::connect(&thread, SIGNAL(started()), p_networkResource, SLOT(onInitNetwork()));
-    thread.start();
+    p_networkResource->moveToThread(thread);
+    QObject::connect(thread, &QThread::started, p_networkResource, &KyNetworkResourceManager::onInitNetwork);
+    QObject::connect(&a,&QtSingleApplication::aboutToQuit, thread, &QThread::quit);
+    QObject::connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+    thread->start();
 
     // Internationalization
     QString locale = QLocale::system().name();
@@ -157,7 +202,7 @@ int main(int argc, char *argv[])
         ::usleep(1000);
     }
 
-    MainWindow w;
+    MainWindow w(display, nullptr);
     a.setActivationWindow(&w);
     w.setProperty("useStyleWindowManager", false); //禁用拖动
     a.setWindowIcon(QIcon::fromTheme("kylin-network"));
@@ -169,16 +214,11 @@ int main(int argc, char *argv[])
 //    window_hints.decorations = MWM_DECOR_BORDER;
 //    XAtomHelper::getInstance()->setWindowMotifHint(w.winId(), window_hints);
 
-    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint /*| Qt::X11BypassWindowManagerHint*/);
+//    w.setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint /*| Qt::X11BypassWindowManagerHint*/);
 
 
-    DbusAdaptor adaptor(&w);
+    DbusAdaptor adaptor(display, &w);
     Q_UNUSED(adaptor);
-
-    auto connection = QDBusConnection::sessionBus();
-    if (!connection.registerService("com.kylin.network") || !connection.registerObject("/com/kylin/network", &w)) {
-        qCritical() << "QDbus register service failed reason:" << connection.lastError();
-    }
 
     return a.exec();
 }

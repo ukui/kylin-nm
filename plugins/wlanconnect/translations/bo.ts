@@ -24,20 +24,21 @@
     <message>
         <location filename="../wlanconnect.ui" line="35"/>
         <location filename="../wlanconnect.cpp" line="144"/>
-        <location filename="../wlanconnect.cpp" line="215"/>
+        <location filename="../wlanconnect.cpp" line="280"/>
+        <location filename="../wlanconnect.cpp" line="283"/>
         <source>WLAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
-        <location filename="../wlanconnect.cpp" line="217"/>
+        <location filename="../wlanconnect.cpp" line="282"/>
         <source>open</source>
         <translation type="unfinished"></translation>
         <extra-contents_path>/wlanconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="147"/>
-        <location filename="../wlanconnect.cpp" line="214"/>
+        <location filename="../wlanconnect.cpp" line="279"/>
         <source>Advanced settings</source>
         <translation type="unfinished"></translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
@@ -53,19 +54,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="232"/>
+        <location filename="../wlanconnect.cpp" line="298"/>
         <source>No wireless network card detected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="369"/>
-        <location filename="../wlanconnect.cpp" line="1058"/>
-        <location filename="../wlanconnect.cpp" line="1121"/>
+        <location filename="../wlanconnect.cpp" line="425"/>
+        <location filename="../wlanconnect.cpp" line="1104"/>
+        <location filename="../wlanconnect.cpp" line="1167"/>
         <source>connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../wlanconnect.cpp" line="994"/>
+        <location filename="../wlanconnect.cpp" line="1040"/>
         <source>card</source>
         <translation type="unfinished"></translation>
     </message>

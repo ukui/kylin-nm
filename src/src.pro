@@ -77,8 +77,15 @@ DISTFILES += \
     org.ukui.kylin-nm.switch.gschema.xml
 
 TRANSLATIONS += \
+        translations/kylin-nm_zh_Hant.ts \
         translations/kylin-nm_zh_CN.ts \
+        translations/kylin-nm_ug.ts \
         translations/kylin-nm_tr.ts \
-        translations/kylin-nm_bo.ts \
-        translations/kylin-nm_bo_CN.ts \
-        translations/kylin-nm_mn.ts
+        translations/kylin-nm_mn.ts \
+        translations/kylin-nm_ky.ts \
+        translations/kylin-nm_kk.ts \
+        translations/kylin-nm_fr.ts \
+        translations/kylin-nm_es.ts \
+        translations/kylin-nm_de.ts \
+        translations/kylin-nm_bo.ts\
+        translations/kylin-nm_bo_CN.ts

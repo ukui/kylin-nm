@@ -1,0 +1,5 @@
+usr/share/*
+usr/lib/x86_64-linux-gnu/*
+usr/bin/*
+etc/xdg/autostart/*
+etc/dbus-1/system.d/com.kylin.network.qt.systemdbus.conf

@@ -1,4 +1,3 @@
-usr/lib/liblibnm-icon-kylin.so*
 usr/lib/kylin-nm/libnetconnect.so
 usr/lib/kylin-nm/libwlanconnect.so
-usr/include/kylin-nm/kynetworkicon.h
+usr/lib/liblibnm-icon-kylin.so.*

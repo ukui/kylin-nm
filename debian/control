@@ -2,16 +2,16 @@ Source: kylin-nm
 Section: utils
 Priority: optional
 Maintainer: Kylin Team <team+kylin@tracker.debian.org>
-Uploaders: handsome_feng <jianfengli@ubuntukylin.com>
-Build-Depends: debhelper (>=9),
+Uploaders: handsome_feng <jianfengli@ubuntukylin.com>,
+           xibowen <xibowen@kylinos.cn>
+Build-Depends: debhelper-compat (=13),
                libcap-dev,
+               libdbus-glib-1-dev,
                libgsettings-qt-dev,
                libgtk-3-dev,
                libkf5networkmanagerqt-dev (>= 5.36.0),
                libkf5windowsystem-dev,
-               libkysdk-qtwidgets-dev(>= 1.2.0),
-               libkysdk-sysinfo-dev,
-               libkysdk-waylandhelper-dev(>= 1.2.0kylin2),
+               libkysdk-applications-dev(>= 1.2.0),
                libnm-dev,
                libnma-dev,
                libqt5svg5-dev,
@@ -26,24 +26,16 @@ Build-Depends: debhelper (>=9),
                qtbase5-dev-tools,
                qtchooser,
                qtscript5-dev,
-               qttools5-dev-tools,
-               libkylin-nm-base
-Standards-Version: 4.5.0
+               qttools5-dev-tools
+Standards-Version: 4.6.1.0
 Rules-Requires-Root: no
-Homepage: https://github.com/ukui/kylin-nm
-Vcs-Git: https://github.com/ukui/kylin-nm.git
-Vcs-Browser: https://github.com/ukui/kylin-nm
+Homepage: https://gitee.com/openkylin/kylin-nm
+Vcs-Git: https://gitee.com/openkylin/kylin-nm.git
+Vcs-Browser: https://gitee.com/openkylin/kylin-nm
 
 Package: kylin-nm
 Architecture: any
-Depends: libkysdk-qtwidgets,
-         libkysdk-waylandhelper,
-         network-manager (>=1.2.6),
-         ukui-control-center (>= 3.1.1+1217),
-         dpkg-dev,
-         libkysdk-sysinfo,
-         ${shlibs:Depends},
-         ${misc:Depends}
+Depends: network-manager (>=1.2.6), ${misc:Depends}, ${shlibs:Depends}
 Description: Gui Applet tool for display and edit network simply
  Kylin NM is a Applet tool for managing network settings simply.
  It has beautiful UI and very comfortable to use.
@@ -52,10 +44,36 @@ Description: Gui Applet tool for display and edit network simply
 Package: kylin-nm-plugin
 Architecture: any
 Depends: libkylin-nm-base,
-         libkysdk-qtwidgets,
          network-manager (>=1.2.6),
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Gui Applet plugin for display and edit network simply
  It has beautiful UI and very comfortable to use.
  It's better work together with UKUI.
+
+Package: kylin-nm-plugin-dev
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Gui Applet plugin for display and edit network simply
+ It has beautiful UI and very comfortable to use.
+ It's better work together with UKUI.This is kylin-nm-plugin
+ development file.
+
+Package: libkylin-nm-base
+Section: libs
+Architecture: any
+Depends: network-manager (>=1.2.6), ${misc:Depends}, ${shlibs:Depends}
+Description: Gui Applet tool for display and edit network simply
+ Kylin NM is a Applet tool for managing network settings simply.
+ It has beautiful UI and very comfortable to use.
+ It's better work together with UKUI.
+
+Package: libkylin-nm-base-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Gui Applet tool for display and edit network simply
+ Kylin NM is a Applet tool for managing network settings simply.
+ It has beautiful UI and very comfortable to use.
+ It's better work together with UKUI.This is libkylin-nm-base
+ development file.

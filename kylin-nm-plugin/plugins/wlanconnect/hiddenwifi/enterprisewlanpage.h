@@ -5,7 +5,7 @@
 #include <QDesktopWidget>
 #include <QApplication>
 
-#include <kylin-nm/kylinnetworkmanager.h>
+#include <kylinnetworkmanager.h>
 #include "entsecuritywidget.h"
 
 class EnterpriseWlanPage : public QWidget

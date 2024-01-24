@@ -15,7 +15,7 @@
 #include "kpasswordedit.h"
 #include "kdialog.h"
 #include "kballontip.h"
-#include "kylin-nm/depend/kyenterpricesettinginfo.h"
+#include "depend/kyenterpricesettinginfo.h"
 
 using namespace kdk;
 

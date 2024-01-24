@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     QString locale = QLocale::system().name();
     QTranslator trans_global;
     qDebug() << "QLocale " << QLocale();
-    if (trans_global.load(QLocale(), "kylin-nm", "_", "/usr/share/kylin-nm/kylin-nm/"))
+    if (trans_global.load(QLocale(), "kylin-nm", "_", "/usr/share/kylin-nm/"))
     {
         a.installTranslator(&trans_global);
         qDebug()<<"Translations load success";

@@ -32,7 +32,10 @@
 
 #include "ukuistylehelper/ukuistylehelper.h"
 #include "windowmanager/windowmanager.h"
+
+#ifdef KY_SDK_SYSINFO
 #include "kysdk/kysdk-system/libkysysinfo.h"
+#endif
 
 #define MAINWINDOW_WIDTH 420
 #define MAINWINDOW_HEIGHT 476
@@ -193,6 +196,8 @@ void MainWindow::secondaryStart()
  */
 void MainWindow::initPlatform()
 {
+#ifdef KY_SDK_SYSINFO
+
     char* projectName = kdk_system_get_projectName();
     QString strProjectName(projectName);
     free(projectName);
@@ -206,6 +211,7 @@ void MainWindow::initPlatform()
         m_isShowInCenter = true;
     }
     qDebug() << "projectName" << projectName << m_isShowInCenter;
+#endif
 }
 
 /**

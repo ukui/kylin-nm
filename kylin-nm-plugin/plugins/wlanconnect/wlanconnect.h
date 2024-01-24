@@ -43,9 +43,9 @@ using namespace kdk;
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#include <kylin-nm/kylin-nm-interface.h>
-#include <kylin-nm/kylinnetworkmanager.h>
-#include <kylin-nm/kylin-agent/kylinagent.h>
+#include <kylin-nm-interface.h>
+#include <kylinnetworkmanager.h>
+#include <kylin-agent/kylinagent.h>
 #include "../component/DeviceFrame/deviceframe.h"
 #include "itemframe.h"
 #include "wlanitem.h"

@@ -3,7 +3,7 @@
 
 #include "libnm-base-kylin_global.h"
 
-#include <kylin-nm/kylinnetworkmanager.h>
+#include <kylinnetworkmanager.h>
 
 #include <QObject>
 #include <QWidget>

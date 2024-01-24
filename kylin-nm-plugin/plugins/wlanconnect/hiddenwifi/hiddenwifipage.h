@@ -18,7 +18,7 @@
 #include "kpasswordedit.h"
 #include "kborderlessbutton.h"
 #include "entsecuritywidget.h"
-#include "kylin-nm/depend/kywirelessconnectoperation.h"
+#include "depend/kywirelessconnectoperation.h"
 
 using namespace kdk;
 

@@ -11,7 +11,14 @@ CONFIG += c++14 qt link_pkgconfig no_keywords
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-PKGCONFIG += kylin-nm-base
+PKGCONFIG += gio-2.0 libnm
+
+INCLUDEPATH += /usr/include/KF5/NetworkManagerQt
+LIBS    +=  -L/usr/lib/ -lKF5NetworkManagerQt
+
+#PKGCONFIG += kylin-nm-base
+INCLUDEPATH += $$PWD/../../libkylin-nm-base/libnm-kylin/libnm-base-kylin
+LIBS += -L$$PWD/../../libkylin-nm-base/libnm-kylin/libnm-base-kylin/ -lkylin-nm-base
 
 #INCLUDEPATH += $$PWD/../libnm-base-kylin/
 #INCLUDEPATH += /usr/include/KF5/NetworkManagerQt

@@ -1,3 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0+
+/*
+ * Dan Williams <dcbw@redhat.com>
+ *
+ * Copyright 2011 - 2014 Red Hat, Inc.
+ */
+
 #ifndef __KYLINNMANGENT_H__
 #define __KYLINNMANGENT_H__
 

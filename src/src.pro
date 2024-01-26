@@ -17,7 +17,6 @@ CONFIG += c++14 qt warn_on link_pkgconfig no_keywords
 PKGCONFIG +=gio-2.0 glib-2.0 gio-unix-2.0 libnm libnma libsecret-1 gtk+-3.0 gsettings-qt libcap kysdk-qtwidgets kysdk-waylandhelper
 
 exists(/usr/include/kysdk/kysdk-system/libkysysinfo.h) {
-#    message("kysysinfo find")
     DEFINES += KY_SDK_SYSINFO
     PKGCONFIG += kysdk-sysinfo
 }

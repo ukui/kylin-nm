@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0+
+/* NetworkManager Applet -- allow user control over networking
+ *
+ * Dan Williams <dcbw@redhat.com>
+ *
+ * Copyright 2004 - 2019 Red Hat, Inc.
+ * (C) Copyright 2018 Lubomir Rintel
+ */
+
 #include "kylinvpnrequest.h"
 
 #include <stdio.h>

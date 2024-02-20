@@ -27,7 +27,7 @@ Build-Depends: debhelper-compat (=13),
                qtchooser,
                qtscript5-dev,
                qttools5-dev-tools
-Standards-Version: 4.6.1.0
+Standards-Version: 4.6.2
 Rules-Requires-Root: no
 Homepage: https://gitee.com/openkylin/kylin-nm
 Vcs-Git: https://gitee.com/openkylin/kylin-nm.git
@@ -52,9 +52,9 @@ Description: Gui Applet plugin for display and edit network simply
  It's better work together with UKUI.
 
 Package: kylin-nm-plugin-dev
-Architecture: any
+Architecture: all
 Depends: kylin-nm-plugin, ${misc:Depends}, ${shlibs:Depends}
-Description: Gui Applet plugin for display and edit network simply
+Description: Gui Applet development for display and edit network simply
  It has beautiful UI and very comfortable to use.
  It's better work together with UKUI.This is kylin-nm-plugin
  development file.
@@ -63,17 +63,17 @@ Package: libkylin-nm-base
 Section: libs
 Architecture: any
 Depends: network-manager (>=1.2.6), ${misc:Depends}, ${shlibs:Depends}
-Description: Gui Applet tool for display and edit network simply
- Kylin NM is a Applet tool for managing network settings simply.
- It has beautiful UI and very comfortable to use.
- It's better work together with UKUI.
+Description: Gui lib for display and edit network simply
+ Lib of kylin NM is provide network interface for ukui.Such as
+ ukui-greeter, ukui-screensaver, etc.That they can use network
+ service on own graohical interface like the kylin-nm.
 
 Package: libkylin-nm-base-dev
 Section: libdevel
 Architecture: any
 Depends: libkylin-nm-base, ${misc:Depends}, ${shlibs:Depends}
-Description: Gui Applet tool for display and edit network simply
- Kylin NM is a Applet tool for managing network settings simply.
- It has beautiful UI and very comfortable to use.
- It's better work together with UKUI.This is libkylin-nm-base
- development file.
+Description: Gui lib development for display and edit network simply
+ Lib of kylin NM is provide network interface for ukui.Such as
+ ukui-greeter, ukui-screensaver, etc.That they can use network
+ service on own graohical interface like the kylin-nm.This is
+ libkylin-nm-base development file.

@@ -1,3 +1,17 @@
+kylin-nm (4.10.0.0-ok0.2) nile; urgency=medium
+
+  * BUG：
+         #I7X240 【设计走查】启典主题下tab样式被二次修改
+         #I8L01K 【网络连接】连续右键无线网络后连接框不消失
+         #I8YC8C 【次要】【搜索栏】英文下无法搜索到VPN
+         #I8X2JL 【控制面板】【搜索】中文下搜索不到VPN
+         #I94LFC 【设计走查】托盘区网络弹窗“有线网络”与“无线局域网”切换入口缺失
+  * 需求：#23928 仅支持单一网络功能、单网卡时界面显示优化
+  * 其他改动说明：修改托盘弹窗跳过任务栏属性
+  * 其他改动影响域：自身
+
+ -- zhangyuanyuan1 <zhangyuanyuan1@kylinos.cn>  Fri, 01 Mar 2024 13:52:35 +0800
+
 kylin-nm (4.10.0.0-ok0.1) nile; urgency=medium
 
   * BUG:无

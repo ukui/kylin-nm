@@ -1,0 +1,73 @@
+From: =?utf-8?b?6LW15LiW5pet?= <zhaoshixu@kylinos.cn>
+Date: Fri, 1 Mar 2024 03:43:38 +0000
+Subject: =?utf-8?b?ITY4IGZpeCh1aSk6IOiuvue9ruaJmOebmOe9kee7nOeql+WPo+i3sw==?=
+ =?utf-8?b?6L+H5Lu75Yqh5qCP5ZKM5YiG6aG15ZmoIE1lcmdlIHB1bGwgcmVxdWVzdCAhNjgg?=
+ =?utf-8?b?ZnJvbSB6eS15dWFuMS9uaWxlMDIyMg==?=
+
+---
+ src-vpn/frontend/single-pages/vpnpage.cpp | 14 ++++++++++----
+ src/frontend/mainwindow.cpp               |  8 ++++++++
+ 2 files changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/src-vpn/frontend/single-pages/vpnpage.cpp b/src-vpn/frontend/single-pages/vpnpage.cpp
+index 9d2053f..25c02d2 100644
+--- a/src-vpn/frontend/single-pages/vpnpage.cpp
++++ b/src-vpn/frontend/single-pages/vpnpage.cpp
+@@ -622,14 +622,20 @@ void VpnPage::showDetailPage(QString uuid)
+ void VpnPage::showUI()
+ {
+     //2209中窗管在hide界面时会刷新属性，需要重新设置无图标属性
+-    const KWindowInfo info(this->winId(), NET::WMState);
+-    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
+-        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+-    }
++//    const KWindowInfo info(this->winId(), NET::WMState);
++//    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
++//        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
++//    }
+ 
+     resetPageHeight();
+ 
+     showNormal();
++    QWindow* window = this->windowHandle();
++    if (window) {
++        //跳过任务栏和分页器的属性
++        kdk::WindowManager::setSkipSwitcher(window, true);
++        kdk::WindowManager::setSkipTaskBar(window, true);
++    }
+     raise();
+     activateWindow();
+     resetWindowPosition();
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index 31fc203..aae7c2e 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -96,6 +96,7 @@ void MainWindow::showMainwindow()
+     /**
+      * 设置主界面跳过任务栏和分页器的属性，隐藏再次展示有可能辉冲刷掉该属性，需要展示时重新设置
+      */
++#if 0
+     QString platform = QGuiApplication::platformName();
+     if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
+     {
+@@ -104,6 +105,7 @@ void MainWindow::showMainwindow()
+             KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+         }
+     }
++#endif
+ 
+     this->showByWaylandHelper();
+     this->raise();
+@@ -625,6 +627,12 @@ void MainWindow::showByWaylandHelper()
+     //去除窗管标题栏，传入参数为QWidget*
+     kdk::UkuiStyleHelper::self()->removeHeader(this);
+     this->show();
++    QWindow* window = this->windowHandle();
++    if (window) {
++        //跳过任务栏和分页器的属性
++        kdk::WindowManager::setSkipSwitcher(window, true);
++        kdk::WindowManager::setSkipTaskBar(window, true);
++    }
+     resetWindowPosition();
+     //设置窗体位置，传入参数为QWindow*，QRect
+ 

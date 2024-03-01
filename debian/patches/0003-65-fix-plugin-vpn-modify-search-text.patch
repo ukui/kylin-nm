@@ -1,0 +1,22 @@
+From: =?utf-8?b?6LW15LiW5pet?= <zhaoshixu@kylinos.cn>
+Date: Fri, 1 Mar 2024 03:30:47 +0000
+Subject: !65 fix(plugin-vpn): modify search text Merge pull request !65 from
+ zy-yuan1/nile0130
+
+---
+ plugins/vpn/vpn.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/vpn/vpn.cpp b/plugins/vpn/vpn.cpp
+index 5efd3e4..ccd2c12 100644
+--- a/plugins/vpn/vpn.cpp
++++ b/plugins/vpn/vpn.cpp
+@@ -114,7 +114,7 @@ QWidget *Vpn::pluginUi(){
+ 
+ const QString Vpn::name() const {
+ 
+-    return QStringLiteral("VPN");
++    return QStringLiteral("Vpn");
+ }
+ 
+ bool Vpn::isShowOnHomePage() const

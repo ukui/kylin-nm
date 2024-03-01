@@ -1,0 +1,25 @@
+From: =?utf-8?b?6LW15LiW5pet?= <zhaoshixu@kylinos.cn>
+Date: Fri, 1 Mar 2024 03:32:29 +0000
+Subject: =?utf-8?b?ITY3IGZpeCh1aSk6IOino+WGs+i/nue7reWPs+mUruaXoOe6v+e9kQ==?=
+ =?utf-8?b?57uc5ZCO6L+e5o6l5qGG5LiN5raI5aSx6Zeu6aKYIE1lcmdlIHB1bGwgcmVxdWVz?=
+ =?utf-8?b?dCAhNjcgZnJvbSB6eS15dWFuMS9uaWxlMDIyMQ==?=
+
+---
+ src/frontend/list-items/wlanlistitem.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/frontend/list-items/wlanlistitem.cpp b/src/frontend/list-items/wlanlistitem.cpp
+index f4eaac9..8256559 100644
+--- a/src/frontend/list-items/wlanlistitem.cpp
++++ b/src/frontend/list-items/wlanlistitem.cpp
+@@ -166,6 +166,10 @@ void WlanListItem::onRightButtonClicked()
+ {
+     qDebug()<< LOG_FLAG <<"onRightButtonClicked";
+ 
++    if (m_hoverButton->isVisible()) {
++        m_hoverButton->hide();
++    }
++
+     if (!m_menu) {
+         return;
+     }

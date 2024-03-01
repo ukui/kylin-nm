@@ -39,7 +39,6 @@
 #define MAINWINDOW_HEIGHT 476
 #define LAYOUT_MARGINS 0,0,0,0
 #define LOADING_TRAYICON_TIMER_MS 60
-#define TABBAR_HEIGHT 30
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
 
@@ -184,11 +183,6 @@ void MainWindow::firstlyStart()
 
     //加载key ring
     agent_init();
-
-    //单网卡显示
-    setCentralWidgetPages();
-    connect(m_lanWidget, &LanPage::deviceStatusChanged, this, &MainWindow::setCentralWidgetPages);
-    connect(m_wlanWidget, &LanPage::wirelessDeviceStatusChanged, this, &MainWindow::setCentralWidgetPages);
 }
 
 /**
@@ -919,56 +913,8 @@ void MainWindow::onRefreshTrayIconTooltip()
     m_trayIcon->setToolTip(trayIconToolTip);
 }
 
-void MainWindow::setCentralWidgetPages()
-{
-    bool isChanged = false;
-    if (m_isWiredUsable != m_lanWidget->isWiredDeviceUsable()) {
-        if (m_lanWidget->isWiredDeviceUsable()) {
-            m_centralWidget->insertTab(LANPAGE, m_lanWidget, "");
-            m_isWiredUsable = true;
-        } else {
-            m_centralWidget->removeTab(LANPAGE);
-            m_isWiredUsable = false;
-        }
-        isChanged = true;
-    }
-
-    if (m_isWirelessUsable != m_wlanWidget->isWirelessDeviceUsable()) {
-        if (m_wlanWidget->isWirelessDeviceUsable()) {
-            m_centralWidget->insertTab(WLANPAGE, m_wlanWidget, "");
-            m_isWirelessUsable = true;
-        } else {
-            m_centralWidget->removeTab(WLANPAGE);
-            m_isWirelessUsable = false;
-        }
-        isChanged = true;
-    }
-
-    if (!isChanged) {
-        return;
-    }
-
-    if (m_isWiredUsable && m_isWirelessUsable) {
-        m_centralWidget->tabBar()->show();
-        this->setFixedHeight(MAINWINDOW_HEIGHT);
-        resetWindowPosition();
-    } else {
-        m_centralWidget->tabBar()->hide();
-        this->setFixedHeight(MAINWINDOW_HEIGHT - TABBAR_HEIGHT);
-        resetWindowPosition();
-    }
-
-    if (m_trayIcon) {
-        m_trayIcon->setVisible(m_isWiredUsable || m_isWirelessUsable);
-    }
-}
-
 void MainWindow::onShowMainWindow(int type)
 {
-    if (!m_trayIcon->isVisible()) {
-        qWarning() << "no valid network card, do not show kylin-nm mainwindow";
-        return;
-    }
     if (type == LANPAGE || type == WLANPAGE) {
         m_centralWidget->setCurrentIndex(type);
 

@@ -166,6 +166,10 @@ void WlanListItem::onRightButtonClicked()
 {
     qDebug()<< LOG_FLAG <<"onRightButtonClicked";
 
+    if (m_hoverButton->isVisible()) {
+        m_hoverButton->hide();
+    }
+
     if (!m_menu) {
         return;
     }

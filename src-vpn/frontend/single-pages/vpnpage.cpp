@@ -622,14 +622,20 @@ void VpnPage::showDetailPage(QString uuid)
 void VpnPage::showUI()
 {
     //2209中窗管在hide界面时会刷新属性，需要重新设置无图标属性
-    const KWindowInfo info(this->winId(), NET::WMState);
-    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
-        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
-    }
+//    const KWindowInfo info(this->winId(), NET::WMState);
+//    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager)) {
+//        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+//    }
 
     resetPageHeight();
 
     showNormal();
+    QWindow* window = this->windowHandle();
+    if (window) {
+        //跳过任务栏和分页器的属性
+        kdk::WindowManager::setSkipSwitcher(window, true);
+        kdk::WindowManager::setSkipTaskBar(window, true);
+    }
     raise();
     activateWindow();
     resetWindowPosition();

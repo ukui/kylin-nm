@@ -96,6 +96,7 @@ void MainWindow::showMainwindow()
     /**
      * 设置主界面跳过任务栏和分页器的属性，隐藏再次展示有可能辉冲刷掉该属性，需要展示时重新设置
      */
+#if 0
     QString platform = QGuiApplication::platformName();
     if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
     {
@@ -104,6 +105,7 @@ void MainWindow::showMainwindow()
             KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
         }
     }
+#endif
 
     this->showByWaylandHelper();
     this->raise();
@@ -625,6 +627,12 @@ void MainWindow::showByWaylandHelper()
     //去除窗管标题栏，传入参数为QWidget*
     kdk::UkuiStyleHelper::self()->removeHeader(this);
     this->show();
+    QWindow* window = this->windowHandle();
+    if (window) {
+        //跳过任务栏和分页器的属性
+        kdk::WindowManager::setSkipSwitcher(window, true);
+        kdk::WindowManager::setSkipTaskBar(window, true);
+    }
     resetWindowPosition();
     //设置窗体位置，传入参数为QWindow*，QRect
 

@@ -1,0 +1,372 @@
+From: =?utf-8?b?6LW15LiW5pet?= <zhaoshixu@kylinos.cn>
+Date: Fri, 1 Mar 2024 03:28:54 +0000
+Subject: =?utf-8?b?ITYzIHJldmVydCDljZXnvZHljaHmmL7npLrkvJjljJYgc3RvcnkgIzIz?=
+ =?utf-8?b?OTI4KCMxODE0OCkgTWVyZ2UgcHVsbCByZXF1ZXN0ICE2MyBmcm9tIHp5LXl1YW4x?=
+ =?utf-8?b?L25pbGUxMjE1?=
+
+---
+ plugins/netconnect/netconnect.cpp   | 65 +--------------------------------
+ plugins/netconnect/netconnect.h     |  3 --
+ plugins/wlanconnect/wlanconnect.cpp | 71 +------------------------------------
+ plugins/wlanconnect/wlanconnect.h   |  3 +-
+ src/frontend/mainwindow.cpp         | 54 ----------------------------
+ src/frontend/mainwindow.h           |  5 ---
+ src/frontend/tab-pages/lanpage.h    |  4 ---
+ src/frontend/tab-pages/wlanpage.h   |  4 ---
+ 8 files changed, 3 insertions(+), 206 deletions(-)
+
+diff --git a/plugins/netconnect/netconnect.cpp b/plugins/netconnect/netconnect.cpp
+index 16180f8..258e57e 100644
+--- a/plugins/netconnect/netconnect.cpp
++++ b/plugins/netconnect/netconnect.cpp
+@@ -85,16 +85,6 @@ NetConnect::NetConnect() :  mFirstLoad(true) {
+ 
+     pluginName = tr("LAN");
+     pluginType = NETWORK;
+-
+-    m_interface = new QDBusInterface("com.kylin.network",
+-                                     "/com/kylin/network",
+-                                     "com.kylin.network",
+-                                     QDBusConnection::sessionBus());
+-    if(!m_interface->isValid()) {
+-        qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+-    }
+-    updatePluginShowSettings();
+-    connect(m_interface, SIGNAL(deviceStatusChanged()), this, SLOT(updatePluginShowSettings()),Qt::QueuedConnection);
+ }
+ 
+ NetConnect::~NetConnect() {
+@@ -122,7 +112,6 @@ QWidget *NetConnect::pluginUi() {
+         pluginWidget = new QWidget;
+         pluginWidget->setAttribute(Qt::WA_DeleteOnClose);
+         ui->setupUi(pluginWidget);
+-
+         m_interface = new QDBusInterface("com.kylin.network",
+                                          "/com/kylin/network",
+                                          "com.kylin.network",
+@@ -146,54 +135,7 @@ const QString NetConnect::name() const {
+ 
+ bool NetConnect::isEnable() const
+ {
+-    //get isEnable
+-    QDBusInterface dbus("com.kylin.network", "/com/kylin/network",
+-                        "com.kylin.network",
+-                        QDBusConnection::sessionBus());
+-    if (!dbus.isValid()) {
+-        return false;
+-    }
+-
+-    QMap<QString,bool> map;
+-    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"),0);
+-    if(!reply.isValid())
+-    {
+-        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
+-        return false;
+-    }
+-
+-    QVariantMap::const_iterator item = reply.value().cbegin();
+-    while (item != reply.value().cend()) {
+-        map.insert(item.key(), item.value().toBool());
+-        item ++;
+-    }
+-
+-    bool isEnabled = !map.isEmpty();
+-
+-    const QByteArray schema("org.ukui.control-center.plugins");
+-    if (QGSettings::isSchemaInstalled(schema)) {
+-        return isEnabled;
+-    }
+-
+-    //get gsettings
+-    QGSettings *showSettings;
+-    QString path("/org/ukui/control-center/plugins/netconnect/");
+-    showSettings = new QGSettings(schema, path.toUtf8());
+-
+-    QVariant enabledState = showSettings->get("show");
+-
+-    //set gsettings
+-    if (!enabledState.isValid() || enabledState.isNull()) {
+-        qWarning() << "QGSettins get plugin show status error";
+-    } else {
+-        if (enabledState.toBool() != isEnabled) {
+-            showSettings->set("show", isEnabled);
+-        }
+-    }
+-    delete showSettings;
+-    showSettings = nullptr;
+-
+-    return isEnabled;
++    return true;
+ }
+ 
+ 
+@@ -1049,8 +991,3 @@ QMap<QString, QList<QStringList>> NetConnect::getWiredList()
+     }
+     return map;
+ }
+-
+-void NetConnect::updatePluginShowSettings()
+-{
+-    isEnable();
+-}
+diff --git a/plugins/netconnect/netconnect.h b/plugins/netconnect/netconnect.h
+index 7b9ff6a..fa1e8e2 100644
+--- a/plugins/netconnect/netconnect.h
++++ b/plugins/netconnect/netconnect.h
+@@ -159,9 +159,6 @@ private slots:
+ 
+     void onDeviceStatusChanged();
+     void onDeviceNameChanged(QString, QString, int);
+-
+-    //更新控制面板插件Gsetting show
+-    void updatePluginShowSettings();
+ };
+ 
+ Q_DECLARE_METATYPE(QList<QDBusObjectPath>);
+diff --git a/plugins/wlanconnect/wlanconnect.cpp b/plugins/wlanconnect/wlanconnect.cpp
+index 09f2bee..cd21d23 100644
+--- a/plugins/wlanconnect/wlanconnect.cpp
++++ b/plugins/wlanconnect/wlanconnect.cpp
+@@ -143,15 +143,6 @@ WlanConnect::WlanConnect() :  m_firstLoad(true) {
+ 
+     pluginName = tr("WLAN");
+     pluginType = NETWORK;
+-
+-    m_interface = new QDBusInterface("com.kylin.network", "/com/kylin/network",
+-                                     "com.kylin.network",
+-                                     QDBusConnection::sessionBus());
+-    if(!m_interface->isValid()) {
+-        qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+-    }
+-    updatePluginShowSettings();
+-    connect(m_interface, SIGNAL(wirelessDeviceStatusChanged()), this, SLOT(updatePluginShowSettings()), Qt::QueuedConnection);
+ }
+ 
+ WlanConnect::~WlanConnect()
+@@ -187,7 +178,6 @@ QWidget *WlanConnect::pluginUi() {
+         if(!m_interface->isValid()) {
+             qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+         }
+-
+         initSearchText();
+         initComponent();
+     }
+@@ -201,61 +191,7 @@ const QString WlanConnect::name() const {
+ 
+ bool WlanConnect::isEnable() const
+ {
+-    //get isEnable
+-    QDBusInterface dbus("com.kylin.network", "/com/kylin/network",
+-                        "com.kylin.network",
+-                        QDBusConnection::sessionBus());
+-    if (!dbus.isValid()) {
+-        return false;
+-    }
+-    QMap<QString,bool> map;
+-    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"), 1);
+-    if(!reply.isValid())
+-    {
+-        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
+-        return false;
+-    }
+-
+-    QVariantMap::const_iterator item = reply.value().cbegin();
+-    while (item != reply.value().cend()) {
+-        map.insert(item.key(), item.value().toBool());
+-        item ++;
+-    }
+-    //筛选已托管(managed)网卡
+-    QStringList list;
+-    QMap<QString, bool>::iterator iters;
+-    for (iters = map.begin(); iters != map.end(); ++iters) {
+-        if (iters.value() == true) {
+-            list << iters.key();
+-        }
+-    }
+-
+-    bool isEnabled = !list.isEmpty();
+-
+-    const QByteArray schema("org.ukui.control-center.plugins");
+-    if (QGSettings::isSchemaInstalled(schema)) {
+-        return isEnabled;
+-    }
+-
+-    //get gsettings
+-    QGSettings *showSettings;
+-    QString path("/org/ukui/control-center/plugins/wlanconnect/");
+-    showSettings = new QGSettings(schema, path.toUtf8());
+-
+-    QVariant enabledState = showSettings->get("show");
+-
+-    //set gsettings
+-    if (!enabledState.isValid() || enabledState.isNull()) {
+-        qWarning() << "QGSettins get plugin show status error";
+-    } else {
+-        if (enabledState.toBool() != isEnabled) {
+-            showSettings->set("show", isEnabled);
+-        }
+-    }
+-    delete showSettings;
+-    showSettings = nullptr;
+-
+-    return isEnabled;
++    return true;
+ }
+ 
+ 
+@@ -1217,8 +1153,3 @@ QMap<QString, QList<QStringList>> WlanConnect::getWirelessList()
+     }
+     return map;
+ }
+-
+-void WlanConnect::updatePluginShowSettings()
+-{
+-    isEnable();
+-}
+diff --git a/plugins/wlanconnect/wlanconnect.h b/plugins/wlanconnect/wlanconnect.h
+index 5c316ae..3772b89 100644
+--- a/plugins/wlanconnect/wlanconnect.h
++++ b/plugins/wlanconnect/wlanconnect.h
+@@ -194,7 +194,6 @@ private slots:
+ 
+     void reScan();
+ 
+-    //更新控制面板插件Gsetting show
+-    void updatePluginShowSettings();
++
+ };
+ #endif // WLANCONNECT_H
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index 4f352a0..ae258c4 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -39,7 +39,6 @@
+ #define MAINWINDOW_HEIGHT 476
+ #define LAYOUT_MARGINS 0,0,0,0
+ #define LOADING_TRAYICON_TIMER_MS 60
+-#define TABBAR_HEIGHT 30
+ #define THEME_SCHAME "org.ukui.style"
+ #define COLOR_THEME "styleName"
+ 
+@@ -184,11 +183,6 @@ void MainWindow::firstlyStart()
+ 
+     //加载key ring
+     agent_init();
+-
+-    //单网卡显示
+-    setCentralWidgetPages();
+-    connect(m_lanWidget, &LanPage::deviceStatusChanged, this, &MainWindow::setCentralWidgetPages);
+-    connect(m_wlanWidget, &LanPage::wirelessDeviceStatusChanged, this, &MainWindow::setCentralWidgetPages);
+ }
+ 
+ /**
+@@ -919,56 +913,8 @@ void MainWindow::onRefreshTrayIconTooltip()
+     m_trayIcon->setToolTip(trayIconToolTip);
+ }
+ 
+-void MainWindow::setCentralWidgetPages()
+-{
+-    bool isChanged = false;
+-    if (m_isWiredUsable != m_lanWidget->isWiredDeviceUsable()) {
+-        if (m_lanWidget->isWiredDeviceUsable()) {
+-            m_centralWidget->insertTab(LANPAGE, m_lanWidget, "");
+-            m_isWiredUsable = true;
+-        } else {
+-            m_centralWidget->removeTab(LANPAGE);
+-            m_isWiredUsable = false;
+-        }
+-        isChanged = true;
+-    }
+-
+-    if (m_isWirelessUsable != m_wlanWidget->isWirelessDeviceUsable()) {
+-        if (m_wlanWidget->isWirelessDeviceUsable()) {
+-            m_centralWidget->insertTab(WLANPAGE, m_wlanWidget, "");
+-            m_isWirelessUsable = true;
+-        } else {
+-            m_centralWidget->removeTab(WLANPAGE);
+-            m_isWirelessUsable = false;
+-        }
+-        isChanged = true;
+-    }
+-
+-    if (!isChanged) {
+-        return;
+-    }
+-
+-    if (m_isWiredUsable && m_isWirelessUsable) {
+-        m_centralWidget->tabBar()->show();
+-        this->setFixedHeight(MAINWINDOW_HEIGHT);
+-        resetWindowPosition();
+-    } else {
+-        m_centralWidget->tabBar()->hide();
+-        this->setFixedHeight(MAINWINDOW_HEIGHT - TABBAR_HEIGHT);
+-        resetWindowPosition();
+-    }
+-
+-    if (m_trayIcon) {
+-        m_trayIcon->setVisible(m_isWiredUsable || m_isWirelessUsable);
+-    }
+-}
+-
+ void MainWindow::onShowMainWindow(int type)
+ {
+-    if (!m_trayIcon->isVisible()) {
+-        qWarning() << "no valid network card, do not show kylin-nm mainwindow";
+-        return;
+-    }
+     if (type == LANPAGE || type == WLANPAGE) {
+         m_centralWidget->setCurrentIndex(type);
+ 
+diff --git a/src/frontend/mainwindow.h b/src/frontend/mainwindow.h
+index 832688e..2f344f3 100644
+--- a/src/frontend/mainwindow.h
++++ b/src/frontend/mainwindow.h
+@@ -221,9 +221,6 @@ private:
+ 
+     QString m_display;
+ 
+-    bool m_isWiredUsable = true;
+-    bool m_isWirelessUsable = true;
+-
+ public Q_SLOTS:
+     void onShowMainWindow(int type);
+ 
+@@ -250,8 +247,6 @@ private Q_SLOTS:
+     void onShowCreateWiredConnectWidgetSlot(QString display, QString devName);
+     //唤起加入其他无线网络界面
+     void onShowAddOtherWlanWidgetSlot(QString display, QString devName);
+-    //设置界面显示 单网卡/多网卡
+-    void setCentralWidgetPages();
+ };
+ 
+ #endif // MAINWINDOW_H
+diff --git a/src/frontend/tab-pages/lanpage.h b/src/frontend/tab-pages/lanpage.h
+index c0e1260..8ab8bac 100644
+--- a/src/frontend/tab-pages/lanpage.h
++++ b/src/frontend/tab-pages/lanpage.h
+@@ -53,10 +53,6 @@ public:
+     bool lanIsConnected();
+     void getWiredDeviceConnectState(QMap<QString, QString> &map);
+ 
+-    bool isWiredDeviceUsable() {
+-        return !m_devList.isEmpty();
+-    }
+-
+ protected:
+     bool eventFilter(QObject *watched, QEvent *event);
+ 
+diff --git a/src/frontend/tab-pages/wlanpage.h b/src/frontend/tab-pages/wlanpage.h
+index bdc43ea..b7015a2 100644
+--- a/src/frontend/tab-pages/wlanpage.h
++++ b/src/frontend/tab-pages/wlanpage.h
+@@ -88,10 +88,6 @@ public:
+         return m_currentDevice;
+     }
+ 
+-    bool isWirelessDeviceUsable() {
+-        return !m_devList.isEmpty();
+-    }
+-
+ Q_SIGNALS:
+     void oneItemExpanded(const QString &ssid);
+     void wlanAdd(QString devName, QStringList info);

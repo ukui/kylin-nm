@@ -715,26 +715,33 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
     kyConnectResourse->getConnectionSetting(m_uuid,connetSetting);
     connetSetting.dumpInfo();
 
-    conInfo.ipv4ConfigType = connetSetting.m_ipv4ConfigIpType;
-    conInfo.ipv6ConfigType = connetSetting.m_ipv6ConfigIpType;
+    //conInfo.ipv4ConfigType = connetSetting.m_ipv4ConfigIpType;
+    //conInfo.ipv6ConfigType = connetSetting.m_ipv6ConfigIpType;
     conInfo.isAutoConnect  = connetSetting.m_isAutoConnect;
     conInfo.ipv4DnsList = connetSetting.m_ipv4Dns;
     conInfo.ipv6DnsList = connetSetting.m_ipv6Dns;
 
+    //openkylin从第三方库读取有问题 改为ipv4/ipv6信息直接通过dbus获取
+    KyConnectItem* item = kyConnectResourse->getConnectionItemByUuidWithoutActivateChecking(m_uuid);
+    if (item == nullptr) {
+        conInfo.ipv4ConfigType = CONFIG_IP_DHCP;
+        conInfo.ipv6ConfigType = CONFIG_IP_DHCP;
+    } else {
+        getIpv4Ipv6Info(item->m_connectPath, conInfo);
+    }
+#if 0
     if (connetSetting.m_ipv4ConfigIpType == CONFIG_IP_MANUAL) {
         if (connetSetting.m_ipv4Address.size() > 0) {
             conInfo.strIPV4Address = connetSetting.m_ipv4Address.at(0).ip().toString();
             conInfo.strIPV4NetMask = connetSetting.m_ipv4Address.at(0).netmask().toString();
             conInfo.strIPV4GateWay = connetSetting.m_ipv4Address.at(0).gateway().toString();
         }
-        #if 0
         if (connetSetting.m_ipv4Dns.size() == 1) {
             conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
         } else if (connetSetting.m_ipv4Dns.size() > 1) {
             conInfo.strIPV4FirDns = connetSetting.m_ipv4Dns.at(0).toString();
             conInfo.strIPV4SecDns = connetSetting.m_ipv4Dns.at(1).toString();
         }
-        #endif
     }
 
     if (connetSetting.m_ipv6ConfigIpType == CONFIG_IP_MANUAL) {
@@ -743,16 +750,14 @@ void NetDetail::getStaticIpInfo(ConInfo &conInfo, bool bActived)
             conInfo.iIPV6Prefix = ipv6Page->getPerfixLength(connetSetting.m_ipv6Address.at(0).netmask().toString());
             conInfo.strIPV6GateWay = connetSetting.m_ipv6Address.at(0).gateway().toString();
         }
-#if 0
         if (connetSetting.m_ipv6Dns.size() == 1) {
             conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
         } else if (connetSetting.m_ipv6Dns.size() > 1) {
             conInfo.strIPV6FirDns = connetSetting.m_ipv6Dns.at(0).toString();
             conInfo.strIPV6SecDns = connetSetting.m_ipv6Dns.at(1).toString();
         }
-#endif
     }
-
+#endif
     if (!bActived) {
         conInfo.strDynamicIpv4 = conInfo.strIPV4Address.isEmpty() ? tr("Auto") : conInfo.strIPV4Address;
         conInfo.strDynamicIpv6 = conInfo.strIPV6Address.isEmpty() ? tr("Auto") : conInfo.strIPV6Address;
@@ -1336,4 +1341,133 @@ void ThreadObject::checkIpv6ConflictThread(const QString &ipv6Address)
     }
 
     Q_EMIT ipv6IsConflict(isConflict);
+}
+
+void NetDetail::getIpv4Ipv6Info(QString objPath, ConInfo &conInfo)
+{
+    QDBusInterface m_interface("org.freedesktop.NetworkManager",
+                               objPath,
+                               "org.freedesktop.NetworkManager.Settings.Connection",
+                               QDBusConnection::systemBus());
+    QDBusMessage result = m_interface.call("GetSettings");
+
+    if (result.arguments().isEmpty()) { return; }
+    const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
+    QMap<QString,QMap<QString,QVariant>> map;
+    dbusArg1st >> map;
+
+    for (QString key : map.keys() ) {
+        QMap<QString,QVariant> innerMap = map.value(key);
+        if (key == "ipv4") {
+            for (QString innerKey : innerMap.keys()) {
+                if (innerKey == "address-data") {
+                    //ipv4地址 ipv4子网掩码
+                    QMap<QString,QVariant> ipv4Map = getAddressDataFromMap(innerMap, innerKey);
+                    if (!ipv4Map.isEmpty()) {
+                        conInfo.strIPV4Address = ipv4Map.value("address").toString();
+                        conInfo.strIPV4NetMask = ipv4Page->getNetMaskText(ipv4Map.value("prefix").toString());
+                    }
+                } else if (innerKey == "method") {
+                    conInfo.ipv4ConfigType = getIpConfigTypeFromMap(innerMap, innerKey);
+
+                } else if (innerKey == "dns") {
+                    conInfo.ipv4DnsList = getIpv4DnsFromMap(innerMap, innerKey);
+
+                } else if (innerKey == "gateway") {
+                    conInfo.strIPV4GateWay = innerMap.value(innerKey).toString();
+                }
+            }
+        }
+        if (key == "ipv6") {
+            for (QString innerKey : innerMap.keys()) {
+                if (innerKey == "address-data"){
+                    QMap<QString,QVariant> ipv6Map = getAddressDataFromMap(innerMap, innerKey);
+                    if (!ipv6Map.isEmpty()) {
+                        conInfo.strIPV6Address = ipv6Map.value("address").toString();
+                        conInfo.iIPV6Prefix = ipv6Map.value("prefix").toString().toInt();
+                    }
+
+                } else if (innerKey == "method") {
+                     conInfo.ipv6ConfigType = getIpConfigTypeFromMap(innerMap, innerKey);
+
+                } else if (innerKey == "dns") {
+                    conInfo.ipv6DnsList = getIpv6DnsFromMap(innerMap, innerKey);
+
+                } else if (innerKey == "gateway") {
+                    conInfo.strIPV6GateWay = innerMap.value(innerKey).toString();
+                }
+            }
+        }
+    }
+}
+
+QMap<QString, QVariant> NetDetail::getAddressDataFromMap(QMap<QString, QVariant> &innerMap, QString innerKey)
+{
+    //get address-data: {'address', 'prefix'}
+    const QDBusArgument &dbusArg2nd = innerMap.value(innerKey).value<QDBusArgument>();
+    QVector<QMap<QString,QVariant>> addressVector;
+
+    dbusArg2nd.beginArray();
+    while (!dbusArg2nd.atEnd()) {
+        QMap<QString,QVariant> tempMap;
+        dbusArg2nd >> tempMap;// append map to a vector here if you want to keep it
+        addressVector.append(tempMap);
+    }
+    dbusArg2nd.endArray();
+
+    return addressVector.size() >= 1 ? addressVector.at(0) : QMap<QString, QVariant>();
+}
+
+KyIpConfigType NetDetail::getIpConfigTypeFromMap(QMap<QString, QVariant> &innerMap, QString innerKey)
+{
+    // get 'method'
+    QString strMethod = innerMap.value(innerKey).toString();
+    if (strMethod == "auto") {
+        return CONFIG_IP_DHCP;
+    } else if (strMethod == "manual") {
+        return CONFIG_IP_MANUAL;
+    } else {
+        //TODO: match other types
+        return CONFIG_IP_DHCP;
+    }
+}
+
+QList<QHostAddress> NetDetail::getIpv4DnsFromMap(QMap<QString, QVariant> &innerMap, QString innerKey)
+{
+    // get ipv4 'dns'
+    const QDBusArgument &dbusArg2nd = innerMap.value(innerKey).value<QDBusArgument>();
+    QList<QHostAddress> addressVector;
+
+    dbusArg2nd.beginArray();
+    while (!dbusArg2nd.atEnd()) {
+        uint tmpVar;
+        dbusArg2nd >> tmpVar;
+        QString dnsi(inet_ntoa(*(struct in_addr *)&tmpVar));
+        addressVector.append(QHostAddress(tmpVar));
+    }
+    dbusArg2nd.endArray();
+
+    return addressVector;
+}
+
+QList<QHostAddress> NetDetail::getIpv6DnsFromMap(QMap<QString, QVariant> &innerMap, QString innerKey)
+{
+    // get ipv6 'dns'
+    const QDBusArgument &dbusArg2nd = innerMap.value(innerKey).value<QDBusArgument>();
+    QList<QHostAddress> addressVector;
+
+    dbusArg2nd.beginArray();
+    while (!dbusArg2nd.atEnd()) {
+        QByteArray temArray;
+        quint8 tmpVar[16];
+
+        dbusArg2nd >> temArray;
+        for (int i = 0; i< 16; ++i) {
+            tmpVar[i] = temArray[i];
+        }
+        addressVector.append(QHostAddress(tmpVar));
+    }
+    dbusArg2nd.endArray();
+
+    return addressVector;
 }

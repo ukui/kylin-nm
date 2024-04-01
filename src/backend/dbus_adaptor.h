@@ -215,6 +215,7 @@ public:
 
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
+    Q_NOREPLY void deleteConnect(int type, QString ssid);
     Q_NOREPLY void activateConnect(int type, const QString &devName, const QString &ssid);
     void activeWirelessAp(const QString &apName, const QString &apPassword, const QString &band, const QString &apDevice);
     Q_NOREPLY void deActivateConnect(int type, const QString &devName, const QString &ssid);

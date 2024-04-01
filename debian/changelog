@@ -1,3 +1,14 @@
+kylin-nm (4.10.0.0-ok0.3) nile; urgency=medium
+
+  * BUG：
+         #I8YTVM:【主要】【有线网络】控制面板中有线网络列表存在的有线网，无法右键删除
+         #I8ZOMD:【主要】【有线网络】手动配置ipv6,属性界面显示不正确，不显示配置ip地址
+  * 需求：无
+  * 其他改动说明：无
+  * 其他改动影响域：无
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Mon, 01 Apr 2024 17:29:50 +0800
+
 kylin-nm (4.10.0.0-ok0.2) nile; urgency=medium
 
   * BUG：

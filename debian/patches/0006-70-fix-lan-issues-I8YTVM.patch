@@ -1,0 +1,59 @@
+From: =?utf-8?b?6LW15LiW5pet?= <zhaoshixu@kylinos.cn>
+Date: Mon, 1 Apr 2024 09:22:02 +0000
+Subject: =?utf-8?b?ITcwIGZpeChsYW4pOiDkv67lpI3mjqfliLbpnaLmnb/mnInnur/nvZE=?=
+ =?utf-8?b?57uc5pu05aSa6I+c5Y2V5Yig6Zmk5LiN55Sf5pWI6Zeu6aKYKGlzc3VlcyNJOFlU?=
+ =?utf-8?b?Vk0pIE1lcmdlIHB1bGwgcmVxdWVzdCAhNzAgZnJvbSB6eS15dWFuMS9uaWxlMDMx?=
+ =?utf-8?b?Mi11aQ==?=
+
+---
+ src/backend/dbus_adaptor.cpp | 6 ++++++
+ src/backend/dbus_adaptor.h   | 1 +
+ src/backend/dbus_interface.h | 6 ++++++
+ 3 files changed, 13 insertions(+)
+
+diff --git a/src/backend/dbus_adaptor.cpp b/src/backend/dbus_adaptor.cpp
+index 56e9901..b483672 100644
+--- a/src/backend/dbus_adaptor.cpp
++++ b/src/backend/dbus_adaptor.cpp
+@@ -33,6 +33,12 @@ NetworkAdaptor::~NetworkAdaptor()
+     // destructor
+ }
+ 
++void NetworkAdaptor::deleteConnect(int type, QString ssid)
++{
++    // handle method call com.kylin.network.deleteConnect
++    QMetaObject::invokeMethod(parent(), "deleteConnect", Q_ARG(int, type), Q_ARG(QString, ssid));
++}
++
+ void NetworkAdaptor::activateConnect(int type, const QString &devName, const QString &ssid)
+ {
+     // handle method call com.kylin.network.activateConnect
+diff --git a/src/backend/dbus_adaptor.h b/src/backend/dbus_adaptor.h
+index e562a2d..f457b85 100644
+--- a/src/backend/dbus_adaptor.h
++++ b/src/backend/dbus_adaptor.h
+@@ -215,6 +215,7 @@ public:
+ 
+ public: // PROPERTIES
+ public Q_SLOTS: // METHODS
++    Q_NOREPLY void deleteConnect(int type, QString ssid);
+     Q_NOREPLY void activateConnect(int type, const QString &devName, const QString &ssid);
+     void activeWirelessAp(const QString &apName, const QString &apPassword, const QString &band, const QString &apDevice);
+     Q_NOREPLY void deActivateConnect(int type, const QString &devName, const QString &ssid);
+diff --git a/src/backend/dbus_interface.h b/src/backend/dbus_interface.h
+index f8a73c6..ce2da86 100644
+--- a/src/backend/dbus_interface.h
++++ b/src/backend/dbus_interface.h
+@@ -36,6 +36,12 @@ public:
+     ~ComKylinNetworkInterface();
+ 
+ public Q_SLOTS: // METHODS
++    inline Q_NOREPLY void deleteConnect(int type, const QString ssid)
++    {
++        QList<QVariant> argumentList;
++        argumentList << QVariant::fromValue(type) << QVariant::fromValue(ssid);
++        callWithArgumentList(QDBus::NoBlock, QStringLiteral("deleteConnect"), argumentList);
++    }
+     inline Q_NOREPLY void activateConnect(int type, const QString &devName, const QString &ssid)
+     {
+         QList<QVariant> argumentList;

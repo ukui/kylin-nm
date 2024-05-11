@@ -66,6 +66,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
 private:
+    void initPanelGSettings();
     void initUI();
     void initVpnArea();
     void resetPageHeight();
@@ -126,8 +127,11 @@ private:
     QMap<QString, QListWidgetItem *> m_vpnItemMap;
     QMap<QString, QListWidgetItem *> m_activeItemMap;
 
-    QDBusInterface * m_positionInterface = nullptr;
 
+    //获取任务栏位置和大小
+    QGSettings *m_panelGSettings = nullptr;
+    int m_panelPosition;
+    int m_panelSize;
 
 
 public Q_SLOTS:

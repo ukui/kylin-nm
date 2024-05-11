@@ -160,6 +160,7 @@ private:
     void initWindowProperties();
     void initTransparency();
     void paintWithTrans();
+    void initPanelGSettings();
     void initUI();
     void initDbusConnnect();
     void registerTrayIcon();
@@ -194,9 +195,15 @@ private:
     //监听主题的Gsettings
     QGSettings * m_styleGsettings = nullptr;
 
+
+    //获取任务栏位置和大小
+    QGSettings *m_panelGSettings = nullptr;
+    int m_panelPosition;
+    int m_panelSize;
+
     //获取和重置窗口位置
     void resetWindowPosition();
-    QDBusInterface * m_positionInterface = nullptr;
+    //QDBusInterface * m_positionInterface = nullptr;
 
     //托盘图标，托盘图标右键菜单
     QSystemTrayIcon * m_trayIcon = nullptr;

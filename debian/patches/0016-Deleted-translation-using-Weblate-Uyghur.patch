@@ -1,0 +1,243 @@
+From: KevinDuan <duankaiwen@kylinos.com>
+Date: Fri, 17 May 2024 16:24:26 +0800
+Subject: Deleted translation using Weblate (Uyghur)
+
+---
+ plugins/netconnect/translations/ky.ts | 110 ----------------------------------
+ plugins/netconnect/translations/ug.ts | 110 ----------------------------------
+ 2 files changed, 220 deletions(-)
+ delete mode 100644 plugins/netconnect/translations/ky.ts
+ delete mode 100644 plugins/netconnect/translations/ug.ts
+
+diff --git a/plugins/netconnect/translations/ky.ts b/plugins/netconnect/translations/ky.ts
+deleted file mode 100644
+index 785e5d0..0000000
+--- a/plugins/netconnect/translations/ky.ts
++++ /dev/null
+@@ -1,110 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<!DOCTYPE TS>
+-<TS version="2.1" language="ky">
+-<context>
+-    <name>AddNetBtn</name>
+-    <message>
+-        <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+-        <source>Add Others</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+-        <source>Add WiredNetork</source>
+-        <translation>WiredNetork кошуу</translation>
+-    </message>
+-</context>
+-<context>
+-    <name>LanItem</name>
+-    <message>
+-        <location filename="../lanitem.cpp" line="57"/>
+-        <source>Delete</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../lanitem.cpp" line="118"/>
+-        <location filename="../lanitem.cpp" line="131"/>
+-        <source>Disconnect</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../lanitem.cpp" line="120"/>
+-        <location filename="../lanitem.cpp" line="129"/>
+-        <source>Connect</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-</context>
+-<context>
+-    <name>NetConnect</name>
+-    <message>
+-        <location filename="../netconnect.ui" line="50"/>
+-        <source>Wired Network</source>
+-        <translation>Зымдуу тармак</translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.ui" line="112"/>
+-        <location filename="../netconnect.cpp" line="220"/>
+-        <source>open</source>
+-        <translation>ачык</translation>
+-        <extra-contents_path>/netconnect/open</extra-contents_path>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.ui" line="198"/>
+-        <location filename="../netconnect.cpp" line="217"/>
+-        <source>Advanced settings</source>
+-        <translation>Өнүккөн параметрлер</translation>
+-        <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+-    </message>
+-    <message>
+-        <source>ukui control center</source>
+-        <translation type="vanished">укуи башкаруу борбору</translation>
+-    </message>
+-    <message>
+-        <source>ukui control center desktop message</source>
+-        <translation type="vanished">укуи башкаруу борбору иш столунун билдирүүсү</translation>
+-    </message>
+-    <message>
+-        <source>WiredConnect</source>
+-        <translation type="vanished">WiredConnect</translation>
+-    </message>
+-    <message>
+-        <source>No ethernet device avaliable</source>
+-        <translation type="vanished">Эч кандай ethernet орнотмо баа жеткис</translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="66"/>
+-        <source>Settings</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="69"/>
+-        <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="86"/>
+-        <location filename="../netconnect.cpp" line="218"/>
+-        <location filename="../netconnect.cpp" line="221"/>
+-        <source>LAN</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="513"/>
+-        <location filename="../netconnect.cpp" line="966"/>
+-        <source>connected</source>
+-        <translation>туташтырылган</translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="515"/>
+-        <location filename="../netconnect.cpp" line="818"/>
+-        <location filename="../netconnect.cpp" line="976"/>
+-        <source>not connected</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="595"/>
+-        <source>card</source>
+-        <translation>карта</translation>
+-    </message>
+-</context>
+-</TS>
+diff --git a/plugins/netconnect/translations/ug.ts b/plugins/netconnect/translations/ug.ts
+deleted file mode 100644
+index 64375b9..0000000
+--- a/plugins/netconnect/translations/ug.ts
++++ /dev/null
+@@ -1,110 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<!DOCTYPE TS>
+-<TS version="2.1" language="ug">
+-<context>
+-    <name>AddNetBtn</name>
+-    <message>
+-        <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+-        <source>Add Others</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+-        <source>Add WiredNetork</source>
+-        <translation>WiredNetork قوشۇش</translation>
+-    </message>
+-</context>
+-<context>
+-    <name>LanItem</name>
+-    <message>
+-        <location filename="../lanitem.cpp" line="57"/>
+-        <source>Delete</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../lanitem.cpp" line="118"/>
+-        <location filename="../lanitem.cpp" line="131"/>
+-        <source>Disconnect</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../lanitem.cpp" line="120"/>
+-        <location filename="../lanitem.cpp" line="129"/>
+-        <source>Connect</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-</context>
+-<context>
+-    <name>NetConnect</name>
+-    <message>
+-        <location filename="../netconnect.ui" line="50"/>
+-        <source>Wired Network</source>
+-        <translation>سىملىق تور</translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.ui" line="112"/>
+-        <location filename="../netconnect.cpp" line="220"/>
+-        <source>open</source>
+-        <translation>ئېچىش</translation>
+-        <extra-contents_path>/netconnect/open</extra-contents_path>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.ui" line="198"/>
+-        <location filename="../netconnect.cpp" line="217"/>
+-        <source>Advanced settings</source>
+-        <translation>ئىلغار تەڭشەكلەر</translation>
+-        <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
+-    </message>
+-    <message>
+-        <source>ukui control center</source>
+-        <translation type="vanished">كۇكۇي كونترول مەركىزى</translation>
+-    </message>
+-    <message>
+-        <source>ukui control center desktop message</source>
+-        <translation type="vanished">ukui كونترول مەركىزى ئۈستەل يۈزى ئۇچۇرى</translation>
+-    </message>
+-    <message>
+-        <source>WiredConnect</source>
+-        <translation type="vanished">WiredConnect</translation>
+-    </message>
+-    <message>
+-        <source>No ethernet device avaliable</source>
+-        <translation type="vanished">ethernet ئۈسكۈنىسى ئىناۋەتسىز</translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="66"/>
+-        <source>Settings</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="69"/>
+-        <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="86"/>
+-        <location filename="../netconnect.cpp" line="218"/>
+-        <location filename="../netconnect.cpp" line="221"/>
+-        <source>LAN</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="513"/>
+-        <location filename="../netconnect.cpp" line="966"/>
+-        <source>connected</source>
+-        <translation>ئۇلانغان</translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="515"/>
+-        <location filename="../netconnect.cpp" line="818"/>
+-        <location filename="../netconnect.cpp" line="976"/>
+-        <source>not connected</source>
+-        <translation type="unfinished"></translation>
+-    </message>
+-    <message>
+-        <location filename="../netconnect.cpp" line="595"/>
+-        <source>card</source>
+-        <translation>كارتا</translation>
+-    </message>
+-</context>
+-</TS>

@@ -1,3 +1,12 @@
+kylin-nm (4.10.0.0-ok0.4) nile; urgency=medium
+
+  * BUG：无
+  * 需求：无
+  * 其他改动说明：同步替换任务栏弹窗位置重置接口
+  * 其他改动影响域：无
+
+ -- zhaoshixu <zhaoshixu@kylinos.cn>  Mon, 20 May 2024 14:17:14 +0800
+
 kylin-nm (4.10.0.0-ok0.3) nile; urgency=medium
 
   * BUG：

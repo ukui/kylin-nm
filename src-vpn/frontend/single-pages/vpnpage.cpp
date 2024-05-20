@@ -20,8 +20,12 @@
 #include "vpnpage.h"
 #include <QDebug>
 #include <QScrollBar>
+#include <QScreen>
 #include "windowmanager/windowmanager.h"
 
+#define PANEL_SETTINGS "org.ukui.panel.settings"
+#define PANEL_SIZE_KEY "panelsize"
+#define PANEL_POSITION_KEY "panelposition"
 
 VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
 {
@@ -29,6 +33,7 @@ VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
     m_connectResourse = new KyConnectResourse(this);
     m_vpnConnectOperation = new KyVpnConnectOperation(this);
 
+    initPanelGSettings();
     initUI();
     initVpnArea();
     installEventFilter(this);
@@ -588,6 +593,33 @@ bool VpnPage::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
+void VpnPage::initPanelGSettings()
+{
+    const QByteArray id(PANEL_SETTINGS);
+    if (QGSettings::isSchemaInstalled(id)) {
+        if (m_panelGSettings == nullptr) {
+            m_panelGSettings = new QGSettings(id, QByteArray(), this);
+        }
+        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY)) {
+            m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+        }
+        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY)) {
+            m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+        }
+        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key) {
+            if (key == PANEL_POSITION_KEY) {
+                m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+            }
+            if (key == PANEL_SIZE_KEY) {
+                m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+            }
+            if (this->isVisible()) {
+                resetWindowPosition();
+            }
+        });
+    }
+}
+
 void VpnPage::deleteVpn(const QString &connUuid)
 {
     qDebug() << "[VpnPage] deleteVpn" << connUuid;
@@ -649,50 +681,33 @@ void VpnPage::resetWindowPosition()
 #define PANEL_LEFT 2
 #define PANEL_RIGHT 3
 //#define PANEL_BOTTOM 4
-    if (!m_positionInterface) {
-        m_positionInterface = new QDBusInterface("org.ukui.panel",
-                            "/panel/position",
-                            "org.ukui.panel",
-                            QDBusConnection::sessionBus());
-    }
-    QRect rect;
-    QDBusReply<QVariantList> reply = m_positionInterface->call("GetPrimaryScreenGeometry");
-    //reply获取的参数共5个，分别是 主屏可用区域的起点x坐标，主屏可用区域的起点y坐标，主屏可用区域的宽度，主屏可用区域高度，任务栏位置
-    if (!m_positionInterface->isValid() || !reply.isValid() || reply.value().size() < 5) {
-        qCritical() << QDBusConnection::sessionBus().lastError().message();
-        kdk::WindowManager::setGeometry(this->windowHandle(), QRect(0, 0, this->width(), this->height()));
-        return;
-    }
-    QVariantList position_list = reply.value();
-    int position = position_list.at(4).toInt();
-    switch(position){
+
+    QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
+    int x, y;
+    switch(m_panelPosition){
     case PANEL_TOP:
         //任务栏位于上方
-        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
-                     position_list.at(1).toInt() + MARGIN,
-                     this->width(), this->height());
+        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+        y = availableGeo.y() + m_panelSize + MARGIN;
         break;
         //任务栏位于左边
     case PANEL_LEFT:
-        rect = QRect(position_list.at(0).toInt() + MARGIN,
-                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
-                     this->width(), this->height());
+        x = availableGeo.x() + m_panelSize + MARGIN;
+        y = availableGeo.y() + availableGeo.height() - this->height() - MARGIN;
         break;
         //任务栏位于右边
     case PANEL_RIGHT:
-        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
-                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
-                     this->width(), this->height());
+        x = availableGeo.x() + availableGeo.width() - m_panelSize - this->width() - MARGIN;
+        y = availableGeo.y() + availableGeo.height() - this->height() - MARGIN;
         break;
         //任务栏位于下方
     default:
-        rect = QRect(position_list.at(0).toInt() + position_list.at(2).toInt() - this->width() - MARGIN,
-                     position_list.at(1).toInt() + reply.value().at(3).toInt() - this->height() - MARGIN,
-                     this->width(), this->height());
+        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+        y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
         break;
     }
-    kdk::WindowManager::setGeometry(this->windowHandle(), rect);
-    qDebug() << " Position of ukui-panel is " << position << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
+    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(x, y, this->width(), this->height()));
+    qDebug() << " Position of ukui-panel is " << m_panelPosition << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
 }
 
 void VpnPage::resetListWidgetWidth()

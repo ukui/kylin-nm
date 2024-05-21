@@ -1,0 +1,85 @@
+Index: kylin-nm/src/kylin-network-interface.c
+===================================================================
+--- kylin-nm.orig/src/kylin-network-interface.c
++++ kylin-nm/src/kylin-network-interface.c
+@@ -32,6 +32,8 @@
+ #include <fcntl.h>
+ #include <sys/syslog.h>
+ #include <pwd.h>
++#include <sys/wait.h>
++#include <errno.h>
+ 
+ //获取网络接口名
+ ifname *kylin_network_get_ifacename()
+@@ -194,19 +196,43 @@ activecon *kylin_network_get_activecon_i
+     struct passwd *pwd;
+     pwd = getpwuid(getuid());
+     char *name = pwd->pw_name;
+-    char *tmpPrefix = "/tmp/kylin-nm-activecon-";
+-    char *chr = "nmcli connection show -active > ";
++    char tmpTemplate[] = "/tmp/kylin-nm-activecon-XXXXXX";
++    int fd = mkstemp(tmpTemplate);
++    if (fd == -1) {
++        syslog(LOG_ERR, "mkstemp() failed in kylin_network_get_activecon_info: %s", strerror(errno));
++        return NULL;
++    }
+ 
+-    char *cmd;
+-    asprintf(&cmd, "%s%s%s", chr, tmpPrefix, name);
+-    char *path;
+-    asprintf(&path, "%s%s", tmpPrefix, name);
+-    int status = system(cmd);
+-    if (status != 0)
+-        syslog(LOG_ERR, "execute 'nmcli connection show -active' in function 'kylin_network_get_activecon_info' failed");
+-    free(cmd);
++    pid_t pid = fork();
++    if (pid == -1) {
++        syslog(LOG_ERR, "fork() in kylin_network_get_activecon_info failed");
++        close(fd);
++        unlink(tmpTemplate);
++        return NULL;
++    } else if (pid == 0) {
++        //Child process
++        dup2(fd, STDOUT_FILENO);
++        close(fd);
++
++        execlp("nmcli", "nmcli", "connection", "show", "--active",(char *)NULL);
++
++        // If execlp() fails
++        syslog(LOG_ERR, "execlp() failed");
++        _exit(EXIT_FAILURE);
++    } else {
++        // Parent process
++        int status;
++        waitpid(pid, &status, 0);
++        if (status !=0 ) {
++            syslog(LOG_ERR, "execute 'nmcli connection show --active' in 'kylin_network_get_activecon_info' failed");
++            close(fd);
++            unlink(tmpTemplate);
++            return NULL;
++        }
++        close(fd);
++    }
+ 
+-    char *filename = path;
++    char *filename = strdup(tmpTemplate);
+ 
+     FILE *activefp;
+     int activenum=0;
+@@ -233,7 +259,6 @@ activecon *kylin_network_get_activecon_i
+         printf("error!");
+ 
+     }
+-    free(path);
+ 
+     fgets(StrLine,1024,fp);
+     while(!feof(fp))
+@@ -325,6 +350,8 @@ activecon *kylin_network_get_activecon_i
+     }
+     fclose(fp);
+ 
++    unlink(tmpTemplate);
++
+     activelist[count].con_name=NULL;
+     activelist[count].type=NULL;
+     activelist[count].dev=NULL;

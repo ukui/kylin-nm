@@ -1,3 +1,10 @@
+kylin-nm (3.0.3.1-2) unstable; urgency=medium
+
+  * Add patch: fix-security-issue-predictable-filenames-with-system.
+    (Closes: #1070113)
+
+ -- handsome_feng <jianfengli@ubuntukylin.com>  Tue, 21 May 2024 16:53:40 +0800
+
 kylin-nm (3.0.3.1-1) unstable; urgency=medium
 
   * Fix implicit declaration of function. (Closes: #1066555)

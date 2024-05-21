@@ -11,7 +11,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation type="unfinished"></translation>
+        <translation>Add WiredNetork</translation>
     </message>
 </context>
 <context>
@@ -19,19 +19,19 @@
     <message>
         <location filename="../lanitem.cpp" line="57"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۆچۈر</translation>
     </message>
     <message>
         <location filename="../lanitem.cpp" line="118"/>
         <location filename="../lanitem.cpp" line="131"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۈزۈۋېتىش</translation>
     </message>
     <message>
         <location filename="../lanitem.cpp" line="120"/>
         <location filename="../lanitem.cpp" line="129"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۇلىنىش</translation>
     </message>
 </context>
 <context>
@@ -39,20 +39,20 @@
     <message>
         <location filename="../netconnect.ui" line="50"/>
         <source>Wired Network</source>
-        <translation type="unfinished"></translation>
+        <translation>سىملىق تور</translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
         <location filename="../netconnect.cpp" line="220"/>
         <source>open</source>
-        <translation type="unfinished"></translation>
+        <translation>ئېچىش</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
         <location filename="../netconnect.cpp" line="217"/>
         <source>Advanced settings</source>
-        <translation type="unfinished"></translation>
+        <translation>يۇقىرى تەڭشەكلەر</translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
@@ -70,7 +70,7 @@
     <message>
         <location filename="../netconnect.cpp" line="66"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>تور تەڭشىكى</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="69"/>
@@ -82,7 +82,7 @@
         <location filename="../netconnect.cpp" line="218"/>
         <location filename="../netconnect.cpp" line="221"/>
         <source>LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>سىملىق تور</translation>
     </message>
     <message>
         <source>No ethernet device avaliable</source>
@@ -92,19 +92,19 @@
         <location filename="../netconnect.cpp" line="513"/>
         <location filename="../netconnect.cpp" line="966"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۇلانغان</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="515"/>
         <location filename="../netconnect.cpp" line="818"/>
         <location filename="../netconnect.cpp" line="976"/>
         <source>not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۇلانمىغان</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="595"/>
         <source>card</source>
-        <translation type="unfinished"></translation>
+        <translation>تور كارتىسى</translation>
     </message>
 </context>
 </TS>

@@ -889,7 +889,7 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1342"/>
         <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۇلانمىدى</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1340"/>
@@ -1557,7 +1557,7 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1743"/>
         <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۇلانمىدى</translation>
     </message>
     <message>
         <source>(Limited)</source>

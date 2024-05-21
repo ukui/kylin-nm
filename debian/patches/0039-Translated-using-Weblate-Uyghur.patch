@@ -1,0 +1,34 @@
+From: KevinDuan <duankaiwen@kylinos.com>
+Date: Tue, 21 May 2024 05:55:02 +0000
+Subject: Translated using Weblate (Uyghur)
+
+Currently translated at 67.5% (133 of 197 strings)
+
+Translation: openkylin-nile-new/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/kylin-nm/ug/
+---
+ src/translations/kylin-nm_ug.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/translations/kylin-nm_ug.ts b/src/translations/kylin-nm_ug.ts
+index 812d638..c39e040 100644
+--- a/src/translations/kylin-nm_ug.ts
++++ b/src/translations/kylin-nm_ug.ts
+@@ -889,7 +889,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1342"/>
+         <source>Not Connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ئۇلانمىدى</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1340"/>
+@@ -1557,7 +1557,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1743"/>
+         <source>Not Connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>ئۇلانمىدى</translation>
+     </message>
+     <message>
+         <source>(Limited)</source>

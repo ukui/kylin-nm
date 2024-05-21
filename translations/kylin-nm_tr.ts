@@ -1564,7 +1564,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="1471"/>
         <location filename="../src/mainwindow.cpp" line="1702"/>
-        <source>NetOn,</source>
+        <source>NetOn</source>
         <translation></translation>
     </message>
     <message>

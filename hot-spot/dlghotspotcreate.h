@@ -54,9 +54,9 @@ private:
 
     QString wirelessCardName;
 
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+//    void mousePressEvent(QMouseEvent *event);
+//    void mouseReleaseEvent(QMouseEvent *event);
+//    void mouseMoveEvent(QMouseEvent *event);
     bool isPress;
     QPoint winPos;
     QPoint dragPos;

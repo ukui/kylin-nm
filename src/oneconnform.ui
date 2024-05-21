@@ -177,9 +177,15 @@
      <rect>
       <x>63</x>
       <y>62</y>
-      <width>230</width>
+      <width>245</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
     </property>
     <property name="text">
      <string/>

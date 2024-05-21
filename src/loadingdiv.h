@@ -25,6 +25,7 @@
 #include <QTimer>
 #include <QList>
 #include <QDebug>
+#include <QVariantAnimation>
 
 class LoadingDiv : public QWidget
 {
@@ -36,16 +37,17 @@ signals:
     void toStopLoading();
 
 public slots:
-    void switchAnimStep();
+    void switchAnimStep(const QVariant& value);
     void startLoading();
     void stopLoading();
 
 private:
     QLabel *loadingGif = nullptr;
-    QTimer *switchTimer = nullptr;
+    QVariantAnimation * m_animation = nullptr;
+//    QTimer *switchTimer = nullptr;
 
-    int currentPage;
-    int countCurrentTime;
+//    int currentPage;
+//    int countCurrentTime;
 };
 
 #endif // LOADINGDIV_H

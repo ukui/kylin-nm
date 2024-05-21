@@ -15,4 +15,4 @@ Type=Application
 OnlyShowIn=UKUI
 X-UKUI-AutoRestart=true
 NoDisplay=true
-X-UKUI-Autostart-Phase=Desktop
+X-UKUI-Autostart-Phase=Application

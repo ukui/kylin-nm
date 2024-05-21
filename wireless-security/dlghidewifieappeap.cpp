@@ -164,23 +164,23 @@ DlgHideWifiEapPeap::~DlgHideWifiEapPeap()
     delete ui;
 }
 
-void DlgHideWifiEapPeap::mousePressEvent(QMouseEvent *event){
-    if (event->button() == Qt::LeftButton) {
-        this->isPress = true;
-        this->winPos = this->pos();
-        this->dragPos = event->globalPos();
-        event->accept();
-    }
-}
-void DlgHideWifiEapPeap::mouseReleaseEvent(QMouseEvent *event){
-    this->isPress = false;
-}
-void DlgHideWifiEapPeap::mouseMoveEvent(QMouseEvent *event){
-    if (this->isPress) {
-        this->move(this->winPos - (this->dragPos - event->globalPos()));
-        event->accept();
-    }
-}
+//void DlgHideWifiEapPeap::mousePressEvent(QMouseEvent *event){
+//    if (event->button() == Qt::LeftButton) {
+//        this->isPress = true;
+//        this->winPos = this->pos();
+//        this->dragPos = event->globalPos();
+//        event->accept();
+//    }
+//}
+//void DlgHideWifiEapPeap::mouseReleaseEvent(QMouseEvent *event){
+//    this->isPress = false;
+//}
+//void DlgHideWifiEapPeap::mouseMoveEvent(QMouseEvent *event){
+//    if (this->isPress) {
+//        this->move(this->winPos - (this->dragPos - event->globalPos()));
+//        event->accept();
+//    }
+//}
 
 //切换到其他Wi-Fi安全类型
 void DlgHideWifiEapPeap::changeDialogSecu()
@@ -194,7 +194,7 @@ void DlgHideWifiEapPeap::changeDialogSecu()
     } else if(ui->cbxSecurity->currentIndex()==1) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0);
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(1, 0);
         connHidWifiWpa->show();
         connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     } else if(ui->cbxSecurity->currentIndex()==2) {
@@ -282,7 +282,7 @@ void DlgHideWifiEapPeap::changeWindow(){
             if (txt.indexOf("wpa-psk") != -1) {
                 QApplication::setQuitOnLastWindowClosed(false);
                 this->hide();
-                DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(ui->cbxConn->currentIndex(), mw);
+                DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(1, ui->cbxConn->currentIndex(), mw);
                 connHidWifiWpa->show();
                 connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
             }

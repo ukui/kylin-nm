@@ -37,6 +37,15 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
     QByteArray localMsg = msg.toLocal8Bit();
     QByteArray currentTime = QTime::currentTime().toString().toLocal8Bit();
 
+    QDateTime dateTime = QDateTime::currentDateTime();
+    //QLocale locale = QLocale::Chinese;//指定中文显示
+    QLocale locale = QLocale::English;//指定英文显示
+    //QLocale locale = QLocale::Japanese;//指定日文显示
+    //QString strFormat = "当前时间为：yyyy-MM-dd hh:mm:ss dddd";
+    QString strFormat = "Now : yyyy-MM-dd";
+    QString strDateTime = locale.toString(dateTime, strFormat);
+    //qDebug() << "当前时间为 : " << strDateTime;
+
     bool showDebug = true;
     QString logFilePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.config/ukui/kylin-nm.log";
     //若不需要自动创建日志文件，请放开此注释
@@ -56,19 +65,19 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
         if (!log_file) {
             break;
         }
-        fprintf(log_file, "Debug: %s: %s (%s:%u, %s)\n", currentTime.constData(), localMsg.constData(), file, context.line, function);
+        fprintf(log_file, "Debug: %s %s: %s (%s:%u, %s)\n", strDateTime.toUtf8().data(), currentTime.constData(), localMsg.constData(), file, context.line, function);
         break;
     case QtInfoMsg:
-        fprintf(log_file? log_file: stdout, "Info: %s: %s (%s:%u, %s)\n", currentTime.constData(), localMsg.constData(), file, context.line, function);
+        fprintf(log_file? log_file: stdout, "Info: %s %s %s: %s (%s:%u, %s)\n", strDateTime.toUtf8().data(),currentTime.constData(), localMsg.constData(), file, context.line, function);
         break;
     case QtWarningMsg:
-        fprintf(log_file? log_file: stderr, "Warning: %s: %s (%s:%u, %s)\n", currentTime.constData(), localMsg.constData(), file, context.line, function);
+        fprintf(log_file? log_file: stderr, "Warning: %s %s: %s (%s:%u, %s)\n", strDateTime.toUtf8().data(),currentTime.constData(), localMsg.constData(), file, context.line, function);
         break;
     case QtCriticalMsg:
-        fprintf(log_file? log_file: stderr, "Critical: %s: %s (%s:%u, %s)\n", currentTime.constData(), localMsg.constData(), file, context.line, function);
+        fprintf(log_file? log_file: stderr, "Critical: %s %s: %s (%s:%u, %s)\n", strDateTime.toUtf8().data(),currentTime.constData(), localMsg.constData(), file, context.line, function);
         break;
     case QtFatalMsg:
-        fprintf(log_file? log_file: stderr, "Fatal: %s: %s (%s:%u, %s)\n", currentTime.constData(), localMsg.constData(), file, context.line, function);
+        fprintf(log_file? log_file: stderr, "Fatal: %s %s: %s (%s:%u, %s)\n", strDateTime.toUtf8().data(),currentTime.constData(), localMsg.constData(), file, context.line, function);
         break;
     }
 
@@ -81,7 +90,7 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-//    QApplication a(argc, argv);
+    //QApplication a(argc, argv);
     QString id = QString("kylin-nm"+ QLatin1String(getenv("DISPLAY")));
     QtSingleApplication a(id, argc, argv);
     qInstallMessageHandler(messageOutput);
@@ -97,13 +106,13 @@ int main(int argc, char *argv[])
 
     qDebug()<<"Kylin Network Manager Is Already Launched";
 
-    int loopNum = 0;
-    while (!QSystemTrayIcon::isSystemTrayAvailable()) {
-        if (loopNum == 15) return 1;
-        qDebug()<<"I couldn't detect any system tray on this system now";
-        loopNum += 1;
-        sleep(1);
-    }
+//    int loopNum = 0;
+//    while (!QSystemTrayIcon::isSystemTrayAvailable()) {
+//        if (loopNum == 15) return 1;
+//        qDebug()<<"I couldn't detect any system tray on this system now";
+//        loopNum += 1;
+//        sleep(1);
+//    }
     QApplication::setQuitOnLastWindowClosed(false);
 
     // Internationalization

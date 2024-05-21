@@ -62,25 +62,25 @@ DlgHotspotCreate::~DlgHotspotCreate()
     delete ui;
 }
 
-void DlgHotspotCreate::mousePressEvent(QMouseEvent *event){
-    if(event->button() == Qt::LeftButton){
-        this->isPress = true;
-        this->winPos = this->pos();
-        this->dragPos = event->globalPos();
-        event->accept();
-    }
-}
-void DlgHotspotCreate::mouseReleaseEvent(QMouseEvent *event){
-    this->isPress = false;
-    this->setWindowOpacity(1);
-}
-void DlgHotspotCreate::mouseMoveEvent(QMouseEvent *event){
-    if(this->isPress){
-        this->move(this->winPos - (this->dragPos - event->globalPos()));
-        this->setWindowOpacity(0.9);
-        event->accept();
-    }
-}
+//void DlgHotspotCreate::mousePressEvent(QMouseEvent *event){
+//    if(event->button() == Qt::LeftButton){
+//        this->isPress = true;
+//        this->winPos = this->pos();
+//        this->dragPos = event->globalPos();
+//        event->accept();
+//    }
+//}
+//void DlgHotspotCreate::mouseReleaseEvent(QMouseEvent *event){
+//    this->isPress = false;
+//    this->setWindowOpacity(1);
+//}
+//void DlgHotspotCreate::mouseMoveEvent(QMouseEvent *event){
+//    if(this->isPress){
+//        this->move(this->winPos - (this->dragPos - event->globalPos()));
+//        this->setWindowOpacity(0.9);
+//        event->accept();
+//    }
+//}
 
 void DlgHotspotCreate::on_btnCancel_clicked()
 {

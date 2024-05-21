@@ -62,9 +62,9 @@ private:
     Ui::DlgHideWifiEapFast *ui;
     int WepOrWpa = 0;//0 WEP;1WPA
 
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+//    void mousePressEvent(QMouseEvent *event);
+//    void mouseReleaseEvent(QMouseEvent *event);
+//    void mouseMoveEvent(QMouseEvent *event);
 
 //    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss;
 

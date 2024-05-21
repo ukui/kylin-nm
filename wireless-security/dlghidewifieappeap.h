@@ -76,9 +76,9 @@ private:
     int isUsed;//=0 current wifi not used before; >=1 used
     MainWindow *mw;
 
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+//    void mousePressEvent(QMouseEvent *event);
+//    void mouseReleaseEvent(QMouseEvent *event);
+//    void mouseMoveEvent(QMouseEvent *event);
 
 //    QString labelQss, cbxQss, leQss, btnConnQss, btnCancelQss, lineQss, checkBoxQss, checkBoxCAQss;
 

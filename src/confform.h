@@ -28,16 +28,24 @@
 #include <QDialog>
 #include <QListView>
 #include "kylin-dbus-interface.h"
-#include "kylinnetworkconnect.h"
-#include "kylinconnectinfo.h"
 
 namespace Ui {
 class ConfForm;
 }
 
-enum{
-    DHCP_IP = 0,
-    MANUAL_IP = 1,
+struct ConnProperties
+{
+    QString connName;
+    QString uuidName;
+    QString v4method;
+    QString v4addr;
+    QString v6method;
+    QString v6addr;
+    QString mask;
+    QString gateway;
+    QString dns;
+    bool isActConf;
+    QString type;
 };
 
 class ConfForm : public QDialog
@@ -48,7 +56,7 @@ public:
     explicit ConfForm(QWidget *parent = 0);
     ~ConfForm();
 
-    void setProp(QString connName, QString uuidName, QString v4method, QString v4addr, QString v6method, QString v6addr, QString mask, QString gateway, QString dns, bool isActConf, bool isWiFi);
+    void setProp(ConnProperties connection);
     QString actLanIpv6Addr;
     QString actWifiIpv6Addr;
     QString lcard, wcard;
@@ -89,15 +97,14 @@ private slots:
 private:
     Ui::ConfForm *ui;
 
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+//    void mousePressEvent(QMouseEvent *event);
+//    void mouseReleaseEvent(QMouseEvent *event);
+//    void mouseMoveEvent(QMouseEvent *event);
 
     void showNotify(QString message);
     bool check_ip_conflict(QString ifname);
     void onConfformHide();
     bool isEditingAlready();    //连接按钮是否可被按
-    void connectInfoConstruct(KyConnectInfo &connectInfo);
 
     bool isPress;
     QPoint winPos;
@@ -112,9 +119,6 @@ private:
     bool isIpv6Conflict = false; //ipv6地址是否冲突
 
     QString labelQss, cbxQss, leQss, lineQss, btnOnQss, btnOffQss;
-
-    KyNetworkConnect m_networkConnect;
-    QString m_ifaceName;
 
 signals:
     void requestRefreshLanList(int updateType);

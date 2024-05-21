@@ -55,6 +55,7 @@ public:
     void showDesktopNotify(QString message);
     void initConnectionInfo();
     QList<QString> getAtiveLanSsidUuidState();
+    void disConnectWiredConnect();
     QString getActiveWifiUuid();
     QList<QString> getAtiveWifiBSsidUuid(QStringList wifilist);
     void reConnectWiredNet(QString netUuid);
@@ -78,10 +79,11 @@ public:
     double getTransparentData();
     int checkWifiConnectivity();
     bool checkNetworkConnectivity();
-    int getActiveWifiSignal();
+    QStringList getActiveWifiSignal();
     QString getWifiSsid(QString accessPointPath);
-
     void toGetWifiList();
+
+    int getNetworkConectivity();
 
     QDBusObjectPath wirelessPath; //无线设备的路径
     QList<QDBusObjectPath> multiWirelessPaths; //Wireless Device的对象路径列表
@@ -110,6 +112,7 @@ public:
     QString dbusIfName;
     QString dbusMacDefault;
     int dbusActLanDNS;
+    bool oldWifiSwitchState; //上一次获取到的wifi开关状态
 
 public slots:
     void onNewConnection(QDBusObjectPath objPath);
@@ -122,7 +125,7 @@ public slots:
     void onLanPropertyChanged(QVariantMap qvm);
     void onLanIpPropertiesChanged();
     void onWifiIpPropertiesChanged();
-    void getPhysicalCarrierState(int n);
+    void getPhysicalCarrierState();
     void getLanHwAddressState();
     void getWiredCardName();
     void getWirelessCardName();
@@ -130,7 +133,6 @@ public slots:
     void getWifiIp(QString uuid);
     QString getLanMAC(QString ifname);
     void getWifiMac(QString netName);
-    void slot_timeout();
     void requestScanWifi();
 
 private:
@@ -138,13 +140,9 @@ private:
     Utils *mUtils;
     QThread *mUtilsThread;
 
-    int a = 0;
-    bool isRunningFunction = false;
-    QTimer *time = nullptr;
     QList<QDBusObjectPath> oldPaths; //已连接网络的对象路径列表
     QList<QDBusObjectPath> oldSettingPaths; //保存之前的路径
     QStringList oldPathInfo; //某个已连接网络对象路径对应的网络类型(ethernet or wifi)
-    bool oldWifiSwitchState; //上一次获取到的wifi开关状态
 
     QGSettings *m_tastbar_gsettings = nullptr;
     QGSettings *m_gsettings = nullptr;

@@ -15,6 +15,10 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
  *
  */
+
+#define _GNU_SOURCE
+#include <stdio.h>
+
 #include "kylin-network-interface.h"
 
 #include <netinet/in.h>
@@ -358,13 +362,23 @@ void kylin_network_del_ethernet_con(char *con_name)
 }
 
 //设置动态分配ip
-void kylin_network_set_automethod(char *con_name)
+void kylin_network_set_automethod(char *con_uuid,char *con_name)
 {
     char str[256];
     char *automethod="auto";
-    sprintf(str,"nmcli connection modify '%s' ipv4.method %s ipv4.address '' ipv4.gateway ''",con_name,automethod);
+    if (con_name && *con_name!='\0') {
+        sprintf(str,"nmcli connection modify '%s' connection.id %s ipv4.method %s ipv6.method %s",con_uuid,con_name,automethod,automethod);
+    }
+    else {
+        sprintf(str,"nmcli connection modify '%s' ipv4.method %s ipv6.method %s",con_uuid,automethod,automethod);
+    }
+
     int status = system(str);
-    if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_automethod' failed");}
+    if (status != 0) {
+        syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_automethod' failed");
+    } else {
+        syslog(LOG_ERR, "AUTO success: %s", str);
+    }
 }
 
 //设置动态分配ipv6地址
@@ -406,6 +420,61 @@ void kylin_network_set_manualall(char *con_name, char *addr, char *mask, char *g
     int status = system(str);
     if (status != 0){ syslog(LOG_ERR, "execute 'nmcli connection modify' in function 'kylin_network_set_manualall' failed");}
 }
+
+void kylin_network_set(char *con_uuid ,char *con_name, char *ipv4_addr, char *mask, char *gateway, char *dns,char *ipv6_ip)
+{
+    char str[500] = {0};
+    char *head = "nmcli connection modify ";
+    strcpy(str, head);
+    strcat(str, con_uuid);
+    if (con_name && *con_name!='\0') {
+        char *name = " connection.id ";
+        strcat(str, name);
+        strcat(str, "'");
+        strcat(str, con_name);
+        strcat(str, "'");
+    }
+    if (ipv4_addr && *ipv4_addr!='\0') {
+        char *method = " ipv4.method manual";
+        strcat(str, method);
+        char *addr = " ipv4.address ";
+        strcat(str, addr);
+        strcat(str, ipv4_addr);
+        char *m = "/";
+        strcat(str, m);
+        strcat(str, mask);
+        if (gateway && *gateway!='\0') {
+            char *g = " ipv4.gateway ";
+            strcat(str, g);
+            strcat(str, gateway);
+        }
+        if (dns && *dns!='\0') {
+            char *d = " ipv4.dns ";
+            strcat(str, d);
+            strcat(str, dns);
+        }
+    } else {
+        char *method = " ipv4.method auto";
+        strcat(str, method);
+    }
+    if (ipv6_ip && *ipv6_ip!='\0') {
+        char *ip = " ipv6.method manual ipv6.address ";
+        strcat(str, ip);
+        strcat(str, ipv6_ip);
+        syslog(LOG_DEBUG, "[kylin-nm interface5] %s",str);
+    } else {
+        char *ip = " ipv6.method auto";
+        strcat(str, ip);
+        syslog(LOG_DEBUG, "[kylin-nm interface5] %s",str);
+    }
+    int status = system(str);
+    if (status != 0) {
+        syslog(LOG_ERR, "MANUALALL FAIL!");
+    } else {
+        syslog(LOG_DEBUG, "MANUALALL success: '%s'", str);
+    }
+}
+
 
 //设置是否自动连接
 void kylin_network_set_autoconnect(char *con_name,bool autocon)

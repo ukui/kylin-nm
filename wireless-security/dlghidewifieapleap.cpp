@@ -131,23 +131,23 @@ DlgHideWifiEapLeap::~DlgHideWifiEapLeap()
     delete ui;
 }
 
-void DlgHideWifiEapLeap::mousePressEvent(QMouseEvent *event){
-    if(event->button() == Qt::LeftButton){
-        this->isPress = true;
-        this->winPos = this->pos();
-        this->dragPos = event->globalPos();
-        event->accept();
-    }
-}
-void DlgHideWifiEapLeap::mouseReleaseEvent(QMouseEvent *event){
-    this->isPress = false;
-}
-void DlgHideWifiEapLeap::mouseMoveEvent(QMouseEvent *event){
-    if(this->isPress){
-        this->move(this->winPos - (this->dragPos - event->globalPos()));
-        event->accept();
-    }
-}
+//void DlgHideWifiEapLeap::mousePressEvent(QMouseEvent *event){
+//    if(event->button() == Qt::LeftButton){
+//        this->isPress = true;
+//        this->winPos = this->pos();
+//        this->dragPos = event->globalPos();
+//        event->accept();
+//    }
+//}
+//void DlgHideWifiEapLeap::mouseReleaseEvent(QMouseEvent *event){
+//    this->isPress = false;
+//}
+//void DlgHideWifiEapLeap::mouseMoveEvent(QMouseEvent *event){
+//    if(this->isPress){
+//        this->move(this->winPos - (this->dragPos - event->globalPos()));
+//        event->accept();
+//    }
+//}
 
 void DlgHideWifiEapLeap::changeDialogSecu()
 {
@@ -159,7 +159,7 @@ void DlgHideWifiEapLeap::changeDialogSecu()
     } else if(ui->cbxSecurity->currentIndex()==1) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0);
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(1, 0);
         connHidWifiWpa->show();
     } else if(ui->cbxSecurity->currentIndex()==2) {
         QApplication::setQuitOnLastWindowClosed(false);

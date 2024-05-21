@@ -99,7 +99,7 @@ void kylin_network_del_ethernet_con(char *con_name);
  * Set up dynamic IP allocation.
  * @con_name is the connection name.
  */
-void kylin_network_set_automethod(char *con_name);
+void kylin_network_set_automethod(char *con_uuid,char *con_name);
 
 void kylin_network_set_ipv6_automethod(char *con_name);
 /*
@@ -115,6 +115,12 @@ void kylin_network_set_ipv6_manualmethod(char *con_name,char *ip);
  * Set up manual all prop.
  */
 void kylin_network_set_manualall(char *con_name, char *addr, char *mask, char *gateway, char *dns);
+
+/*
+ * ksn.
+ */
+void kylin_network_set(char *con_uuid, char *con_name, char *ipv4_addr, char *mask, char *gateway, char *dns,char *ipv6_ip);
+
 
 /*
  * Sets whether the connection is automatic.

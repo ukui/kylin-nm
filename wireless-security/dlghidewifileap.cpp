@@ -112,23 +112,23 @@ DlgHideWifiLeap::~DlgHideWifiLeap()
     delete ui;
 }
 
-void DlgHideWifiLeap::mousePressEvent(QMouseEvent *event){
-    if(event->button() == Qt::LeftButton){
-        this->isPress = true;
-        this->winPos = this->pos();
-        this->dragPos = event->globalPos();
-        event->accept();
-    }
-}
-void DlgHideWifiLeap::mouseReleaseEvent(QMouseEvent *event){
-    this->isPress = false;
-}
-void DlgHideWifiLeap::mouseMoveEvent(QMouseEvent *event){
-    if(this->isPress){
-        this->move(this->winPos - (this->dragPos - event->globalPos()));
-        event->accept();
-    }
-}
+//void DlgHideWifiLeap::mousePressEvent(QMouseEvent *event){
+//    if(event->button() == Qt::LeftButton){
+//        this->isPress = true;
+//        this->winPos = this->pos();
+//        this->dragPos = event->globalPos();
+//        event->accept();
+//    }
+//}
+//void DlgHideWifiLeap::mouseReleaseEvent(QMouseEvent *event){
+//    this->isPress = false;
+//}
+//void DlgHideWifiLeap::mouseMoveEvent(QMouseEvent *event){
+//    if(this->isPress){
+//        this->move(this->winPos - (this->dragPos - event->globalPos()));
+//        event->accept();
+//    }
+//}
 
 //切换到其他Wi-Fi安全类型
 void DlgHideWifiLeap::changeDialog()
@@ -141,7 +141,7 @@ void DlgHideWifiLeap::changeDialog()
     } else if(ui->cbxSecurity->currentIndex()==1) {
         QApplication::setQuitOnLastWindowClosed(false);
         this->hide();
-        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0);
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(1, 0);
         connHidWifiWpa->show();
     } else if(ui->cbxSecurity->currentIndex()==2) {
         QApplication::setQuitOnLastWindowClosed(false);

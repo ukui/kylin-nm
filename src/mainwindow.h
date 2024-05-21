@@ -26,7 +26,6 @@
 #include "kylin-network-interface.h"
 #include "utils.h"
 #include "switchbutton.h"
-#include "kylinnetworkresourcemanager.h"
 
 #include <fcntl.h>
 #include <sys/types.h>
@@ -114,6 +113,12 @@
 #define RECONNECT_WIFI 2
 #define REFRESH_WIFI 3
 
+#define UnknownConnectivity 0 // Network connectivity is unknown.
+#define NoConnectivity 1 // The host is not connected to any network.
+#define Portal 2 // The host is behind a captive portal and cannot reach the full Internet.
+#define Limited 3 // The host is connected to a network, but does not appear to be able to reach the full Internet.
+#define Full 4 // The host is connected to a network, and appears to be able to reach the full Internet.
+
 class OneConnForm;
 class ConfForm;
 
@@ -155,16 +160,16 @@ public:
     int  getScreenGeometry(QString methodName);
     void showPb(QString type, QString name);
 
-    QIcon iconLanOnline, iconLanOffline;
+    QIcon iconLanOnline, iconLanOffline, iconLanOnlineNoInternet;
     QIcon iconWifiFull, iconWifiHigh, iconWifiMedium, iconWifiLow;
     QIcon iconConnecting;
     QList<QIcon> loadIcons;
-    QString mwBandWidth;
+//    QString mwBandWidth;
     KylinDBus *objKyDBus = nullptr;
     NetworkSpeed *objNetSpeed = nullptr;
     SwitchButton *btnWireless = nullptr;
     SwitchButton *btnWired = nullptr;
-    KyNetworkResourceManager *m_networkResourceInstance = nullptr;
+
     //状态设置,0为假，1为真
     int current_wifi_list_state = LOAD_WIFI_LIST;
     int is_init_wifi_list = 0; //是否在启动软件时正在获取wifi的列表
@@ -212,7 +217,7 @@ public:
     QStringList m_wifi_list_pwd_changed; //WiFi密码以改变的WiFi列表（990/9a0自动回连失败）
 
 public slots:
-    void onPhysicalCarrierChanged(bool flag);
+    void onPhysicalCarrierChanged(bool isCarrierLineOn);
     void onCarrierUpHandle();
     void onCarrierDownHandle();
     void onDeleteLan();
@@ -220,6 +225,8 @@ public slots:
     void onNetworkDeviceRemoved(QDBusObjectPath objPath);
     void getLanBandWidth();
     void checkIfWiredNetExist();
+    void onBtnNetListClicked(int flag=0);
+    void onNewConnAdded(int type);
 
     void onExternalConnectionChange(QString type, bool isConnUp);
     void onExternalLanChange();
@@ -260,6 +267,8 @@ public slots:
     void rfkillDisableWifiDone();
     void rfkillEnableWifiDone();
 
+    void setTrayIconAfterGetConnectivity();
+
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
     void paintEvent(QPaintEvent *event);
@@ -279,6 +288,7 @@ private:
     bool checkWlOn();
     void getLanList();
     void getWifiList();
+    void setBtnWirelessStatus();
     void initLanSlistAndGetReconnectNetList();
     QPixmap drawSymbolicColoredPixmap(const QPixmap &source);
     QPixmap drawSymbolicBlackColoredPixmap(const QPixmap &source);
@@ -376,16 +386,17 @@ private:
 
     bool hasWifiConnected;//当前是否有wifi连接
     bool m_connected_by_self = false; //是否在本进程执行的连接操作
+    bool isLanSwitchOpend = true;
     QDBusInterface *mDbusXrandInter;
     QDBusInterface *kdsDbus;
+
+    QString currActWifiBssid;
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
     void onBtnNetClicked();
 //    void on_btnWifiList_clicked();
-    void onBtnNetListClicked(int flag=0);
-    void onNewConnAdded(int type);
 
     void onRequestRevalueUpdateWifi();
     void getLanListDone(QStringList slist);
@@ -393,6 +404,7 @@ private slots:
     void getConnListDone(QStringList slist);
     void loadWifiListDone(QStringList slist);
     void updateWifiListDone(QStringList slist);
+    void onlyRefreshWifiList(QStringList slist);
     QString TranslateLanName(QString lanName);
     QString getMacByUuid(QString uuidName);
 

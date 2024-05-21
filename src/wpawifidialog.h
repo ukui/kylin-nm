@@ -119,10 +119,10 @@ private:
     int pwd_flag = 2; //是否每次询问密码，0保存密码，2询问，默认不保存密码
 
     QString connectionName;
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void keyPressEvent(QKeyEvent *event);
+//    void mousePressEvent(QMouseEvent *event);
+//    void mouseReleaseEvent(QMouseEvent *event);
+//    void mouseMoveEvent(QMouseEvent *event);
+//    void keyPressEvent(QKeyEvent *event);
 
     bool isPress;
     QPoint winPos;

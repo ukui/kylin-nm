@@ -49,7 +49,7 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
     this->mw = mainWindow;
 
     getObjectPath(); //获取dbus中 lan 与 WiFi 的device路径
-    getPhysicalCarrierState(0); //初始化获取网线插入状态
+    getPhysicalCarrierState(); //初始化获取网线插入状态
     getLanHwAddressState(); //获取有线网Mac地址
     getWiredCardName(); //获取有线网卡名称
     //initTaskbarGsetting(); //初始化taskbar的GSetting方法
@@ -104,14 +104,13 @@ KylinDBus::KylinDBus(MainWindow *mainWindow, QObject *parent) :QObject(parent)
         qDebug()<<"Can not find wireless device object path when using dbus.";
     }
 
-    time = new QTimer(this);
-    time->setTimerType(Qt::PreciseTimer);
-    QObject::connect(time, SIGNAL(timeout()), this, SLOT(slot_timeout()));
-
     if (mw) {
-        QObject::connect(this, SIGNAL(updateWiredList(int)), mw, SLOT(onBtnNetListClicked(int)));
-        QObject::connect(this, SIGNAL(newConnAdded(int)), mw, SLOT(onNewConnAdded(int)));
-        QObject::connect(this, SIGNAL(updateWirelessList()), mw, SLOT(on_wifi_changed()));
+//        QObject::connect(this, SIGNAL(updateWiredList(int)), mw, SLOT(onBtnNetListClicked(int)));
+//        QObject::connect(this, SIGNAL(newConnAdded(int)), mw, SLOT(onNewConnAdded(int)));
+//        QObject::connect(this, SIGNAL(updateWirelessList()), mw, SLOT(on_wifi_changed()));
+        connect(this, &KylinDBus::updateWiredList, mw, &MainWindow::onBtnNetListClicked);
+        connect(this, &KylinDBus::newConnAdded, mw, &MainWindow::onNewConnAdded);
+        connect(this, &KylinDBus::updateWirelessList, mw, &MainWindow::on_wifi_changed);
     }
 
     mUtils = new Utils();
@@ -137,12 +136,16 @@ KylinDBus::~KylinDBus()
 void KylinDBus::getObjectPath()
 {
     foreach (QDBusObjectPath mPath, multiWiredPaths) {
+        qDebug()<<"[PropertiesChanged] PropertiesChanged is disconnected "<<mPath.path();
         QDBusConnection::systemBus().disconnect(QString("org.freedesktop.NetworkManager"),
                                              QString(mPath.path()),
                                              QString("org.freedesktop.NetworkManager.Device.Wired"),
                                              QString("PropertiesChanged"), this, SLOT(onLanPropertyChanged(QVariantMap) ) );
         multiWiredPaths.removeOne(mPath);
     }
+
+    multiWirelessPaths.clear();
+
 
     QDBusInterface m_interface( "org.freedesktop.NetworkManager",
                               "/org/freedesktop/NetworkManager",
@@ -179,45 +182,29 @@ void KylinDBus::getObjectPath()
            isWirelessCardOn = true;
        }
    }
-}
 
-//获取是否连接有线网网线
-void KylinDBus::getPhysicalCarrierState(int n)
-{
-    foreach (QString mStr, multiWiredCableState) {
-        multiWiredCableState.removeOne(mStr);
-    }
+   if (multiWiredPaths.size() > 0) {
+       foreach (QDBusObjectPath mWiredPath, multiWiredPaths) {
+           qDebug()<<"[PropertiesChanged] PropertiesChanged is reconnected "<<mWiredPath.path();
+           QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
+                                                QString(mWiredPath.path()),
+                                                QString("org.freedesktop.NetworkManager.Device.Wired"),
+                                                QString("PropertiesChanged"), this, SLOT(onLanPropertyChanged(QVariantMap) ) );
+       }
+   } else {
+       qDebug()<<"Can not find wired device object path when using dbus in getObjectPath()";
+   }
 
-    foreach (QDBusObjectPath localPath, multiWiredPaths) {
-        QDBusInterface interface( "org.freedesktop.NetworkManager",
-                                  localPath.path(),
-                                  "org.freedesktop.DBus.Properties",
-                                  QDBusConnection::systemBus() );
+   if (!multiWirelessPaths.isEmpty()) {
+       getWirelessCardName();//获取无线网卡名称
+   } else {
+       qDebug()<<"Can not find wireless device object path when using dbus in getObjectPath()";
+   }
 
-        //Carrier值为true，插了网线；为false，未插网线
-        QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Device.Wired", "Carrier");
-
-        try {
-            if (reply.value().toString() == "true") {
-                multiWiredCableState.append("true");
-            } else if (reply.value().toString() == "false") {
-                multiWiredCableState.append("false");
-            } else {
-                throw -1; //出现异常
-            }
-        } catch(...) {
-            qDebug()<<"Error occurred when get the property 'Carrier' of Wired";
-        }
-    }
-
-    isWiredCableOn = false;
-    foreach (QString state, multiWiredCableState) {
-        if (state == "true") {
-            isWiredCableOn = true;
-        }
-    }
-
-    if (n == 1) { this->mw->onPhysicalCarrierChanged(isWiredCableOn);}
+   for(int i = 0 ; i< multiWirelessPaths.size();i++)
+   {
+       qDebug() << "exist WirelessPaths:" << multiWirelessPaths.at(i).path();
+   }
 }
 
 //获取有线网Mac地址
@@ -311,6 +298,7 @@ void KylinDBus::getLanIpDNS(QString uuidName, bool isActNet)
                                   QDBusConnection::systemBus());
         QDBusMessage result = m_interface.call("GetSettings"); //get information of this network
 
+        if (result.arguments().isEmpty()) { continue; }
         const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg1st >> map;
@@ -409,6 +397,7 @@ void KylinDBus::getWifiIp(QString uuid)
                                   QDBusConnection::systemBus());
         QDBusMessage result = m_interface.call("GetSettings");
 
+        if (result.arguments().isEmpty()) { continue; }
         const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg1st >> map;
@@ -477,6 +466,7 @@ QString KylinDBus::getLanMAC(QString ifname)
                               QDBusConnection::systemBus() );
 
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "AllDevices");
+    if (result.arguments().isEmpty()) { return macAddress; }
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -523,6 +513,7 @@ void KylinDBus::getConnectNetIp(QString netUuid)
 
     //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    if (result.arguments().isEmpty()) { return; }
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -550,7 +541,7 @@ void KylinDBus::getConnectNetIp(QString netUuid)
                                           QDBusConnection::systemBus() );
                 QDBusMessage replyIp4 = interfaceIp4.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Ip4Config");
                 QList<QVariant> outArgsIp4 = replyIp4.arguments();
-                if(false == outArgsIp4.isEmpty())
+                if(!outArgsIp4.isEmpty())
                 {
                     QVariant firstIp4 = outArgsIp4.at(0);
                     QDBusVariant dbvFirstIp4 = firstIp4.value<QDBusVariant>();
@@ -564,7 +555,7 @@ void KylinDBus::getConnectNetIp(QString netUuid)
                     QDBusMessage replyIpv4 = interfaceIpv4.call("Get", "org.freedesktop.NetworkManager.IP4Config", "AddressData");
 
                     QList<QVariant> outArgsIpv4 = replyIpv4.arguments();
-                    if(false == outArgsIpv4.isEmpty())
+                    if(!outArgsIpv4.isEmpty())
                     {
                         QVariant firstIpv4 = outArgsIpv4.at(0);
                         QDBusVariant dbvFirstIpv4 = firstIpv4.value<QDBusVariant>();
@@ -633,7 +624,7 @@ void KylinDBus::getConnectNetIp(QString netUuid)
                                           QDBusConnection::systemBus() );
                 QDBusMessage replyIp4 = interfaceIp4.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Ip4Config");
                 QList<QVariant> outArgsIp4 = replyIp4.arguments();
-                if(false == outArgsIp4.isEmpty())
+                if(!outArgsIp4.isEmpty())
                 {
                     QVariant firstIp4 = outArgsIp4.at(0);
                     QDBusVariant dbvFirstIp4 = firstIp4.value<QDBusVariant>();
@@ -647,7 +638,7 @@ void KylinDBus::getConnectNetIp(QString netUuid)
                     QDBusMessage replyIpv4 = interfaceIpv4.call("Get", "org.freedesktop.NetworkManager.IP4Config", "AddressData");
 
                     QList<QVariant> outArgsIpv4 = replyIpv4.arguments();
-                    if(false == outArgsIpv4.isEmpty())
+                    if(!outArgsIpv4.isEmpty())
                     {
                         QVariant firstIpv4 = outArgsIpv4.at(0);
                         QDBusVariant dbvFirstIpv4 = firstIpv4.value<QDBusVariant>();
@@ -723,7 +714,7 @@ void KylinDBus::getLanIpChanged()
                                   "org.freedesktop.NetworkManager.Settings.Connection",
                                   QDBusConnection::systemBus());
         QDBusMessage result = m_interface.call("GetSettings");
-
+        if (result.arguments().isEmpty()) { continue; }
         const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg1st >> map;
@@ -750,6 +741,8 @@ void KylinDBus::getLanIpChanged()
 void KylinDBus::getWifiMac(QString netName)
 {
     dbusWifiMac = "";
+
+    if (multiWirelessPaths.isEmpty()) { return; }
 
     QDBusInterface interface( "org.freedesktop.NetworkManager",
                               multiWirelessPaths.at(0).path(),
@@ -784,6 +777,7 @@ void KylinDBus::getWifiMac(QString netName)
 //获取当前能获取到的wifi的数量， 每个accesspoint 代表一个wifi
 int KylinDBus::getAccessPointsNumber()
 {
+    if (multiWirelessPaths.isEmpty()) { return 0; }
     QDBusInterface interface( "org.freedesktop.NetworkManager",
                               multiWirelessPaths.at(0).path(),
                               "org.freedesktop.NetworkManager.Device.Wireless",
@@ -812,7 +806,7 @@ int KylinDBus::getWiredNetworkNumber()
                                   "org.freedesktop.NetworkManager.Settings.Connection",
                                   QDBusConnection::systemBus());
         QDBusMessage result = m_interface.call("GetSettings");
-
+        if (result.arguments().isEmpty()) { continue; }
         const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg1st >> map;
@@ -847,7 +841,7 @@ QStringList KylinDBus::getWifiSsidList()
                                   "org.freedesktop.NetworkManager.Settings.Connection",
                                   QDBusConnection::systemBus());
         QDBusMessage result = m_interface.call("GetSettings");
-
+        if (result.arguments().isEmpty()) { continue; }
         const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg1st >> map;
@@ -880,7 +874,7 @@ QString KylinDBus::checkHasWifiConfigFile(QString wifiName)
                                   "org.freedesktop.NetworkManager.Settings.Connection",
                                   QDBusConnection::systemBus());
         QDBusMessage result = m_interface.call("GetSettings");
-
+        if (result.arguments().isEmpty()) { continue; }
         const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg1st >> map;
@@ -919,6 +913,7 @@ bool KylinDBus::getWiredCableStateByIfname(QString ifname)
                               QDBusConnection::systemBus() );
 
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "AllDevices");
+    if (result.arguments().isEmpty()) { return false; }
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -963,6 +958,7 @@ QString KylinDBus::getConnLanNameByIfname(QString ifname)
                               QDBusConnection::systemBus() );
 
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    if (result.arguments().isEmpty()) { return uuidName; }
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -980,6 +976,7 @@ QString KylinDBus::getConnLanNameByIfname(QString ifname)
                                   QDBusConnection::systemBus() );
 
         QDBusMessage replyDevices = interfaceDevice.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Devices");
+        if (replyDevices.arguments().isEmpty()) { continue; }
         QList<QVariant> outArgsDevices = replyDevices.arguments();
         QVariant firstDevices = outArgsDevices.at(0);
         QDBusVariant dbvFirstDevices = firstDevices.value<QDBusVariant>();
@@ -1021,14 +1018,17 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
                               "org.freedesktop.NetworkManager.Settings.Connection",
                               QDBusConnection::systemBus());
     QDBusMessage result = m_interface.call("GetSettings");
-
+    if (result.arguments().isEmpty()) {
+        onWiredSettingNumChanged();
+        return;
+    }
     const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
     QMap<QString,QMap<QString,QVariant>> map;
     dbusArg1st >> map;
 
     for(QString key : map.keys() ) {
         if (key == "802-3-ethernet") {
-            emit this->updateWiredList(0); //send this signal to update wired network list
+            emit this->updateWiredList(1); //send this signal to update wired network list
             emit this->newConnAdded(0);
             m_lanPathList.append(objPath.path());
             emit mw->wiredConnectionAdded();
@@ -1044,6 +1044,7 @@ void KylinDBus::onNewConnection(QDBusObjectPath objPath)
                                       "org.freedesktop.NetworkManager.Settings.Connection",
                                       QDBusConnection::systemBus());
             QDBusMessage resultSet = interfaceSet.call("GetSettings");
+            if (resultSet.arguments().isEmpty()) { continue; }
             const QDBusArgument &dbusArg1stSet = resultSet.arguments().at( 0 ).value<QDBusArgument>();
             QMap<QString,QMap<QString,QVariant>> mapSet;
             dbusArg1stSet >> mapSet;
@@ -1098,7 +1099,7 @@ void KylinDBus::onConnectionRemoved(QDBusObjectPath objPath)
         m_lanPathList.removeOne(objPath.path());
         qDebug()<<"An old network was removed from configure directory.";
         if (mw->is_btnLanList_clicked == 1) {
-            emit this->updateWiredList(0); //send this signal to update wired network list
+            emit this->updateWiredList(1); //send this signal to update wired network list
         }
         emit mw->wiredConnectionRemoved();
     }
@@ -1131,6 +1132,13 @@ void KylinDBus::initConnectionInfo()
 
     //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    if (result.arguments().isEmpty()) {
+        //获取当前wifi的开关状态
+        QDBusReply<QVariant> m_result = interface.call("Get", "org.freedesktop.NetworkManager", "WirelessEnabled");
+        qDebug()<<"debug: *****初始的无线网络开关状态是: "<<m_result.value().toBool();
+        oldWifiSwitchState = m_result.value().toBool();
+        return;
+    }
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -1170,6 +1178,7 @@ QList<QString> KylinDBus::getAtiveLanSsidUuidState()
                               QDBusConnection::systemBus() );
     //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    if (result.arguments().isEmpty()) { return strSsidUuidState; }
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -1187,7 +1196,7 @@ QList<QString> KylinDBus::getAtiveLanSsidUuidState()
                                   QDBusConnection::systemBus() );
         QDBusReply<QVariant> reply = interfaceType.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
 
-        if (reply.value().toString() == "ethernet" || reply.value().toString() == "802-3-ethernet" || reply.value().toString() == "bluetooth") {
+        if (reply.value().toString() == "ethernet" || reply.value().toString() == "802-3-ethernet" || reply.value().toString() == "bluetooth" || reply.value().toString() == "vpn") {
             QDBusInterface interfaceInfo( "org.freedesktop.NetworkManager",
                                       objPath.path(),
                                       "org.freedesktop.DBus.Properties",
@@ -1210,6 +1219,44 @@ QList<QString> KylinDBus::getAtiveLanSsidUuidState()
     return strSsidUuidState;
 }
 
+//断开所有有线连接
+void KylinDBus::disConnectWiredConnect()
+{
+    QDBusInterface interface( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+    //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
+    QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    QList<QVariant> outArgs = result.arguments();
+    QVariant first = outArgs.at(0);
+    QDBusVariant dbvFirst = first.value<QDBusVariant>();
+    QVariant vFirst = dbvFirst.variant();
+    QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
+
+    QDBusObjectPath objPath;
+    dbusArgs.beginArray();
+    while (!dbusArgs.atEnd()) {
+        dbusArgs >> objPath;
+
+        QDBusInterface interfaceType( "org.freedesktop.NetworkManager",
+                                  objPath.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+        QDBusReply<QVariant> reply = interfaceType.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
+
+        if (reply.value().toString() == "ethernet" || reply.value().toString() == "802-3-ethernet") {
+            QDBusInterface connInterface("org.freedesktop.NetworkManager",
+                                       "/org/freedesktop/NetworkManager",
+                                       "org.freedesktop.NetworkManager",
+                                       QDBusConnection::systemBus() );
+            connInterface.call("DeactivateConnection", QVariant::fromValue(objPath));
+        }
+    }
+    dbusArgs.endArray();
+
+}
+
 //获取已连接wifi的uuid
 QString KylinDBus::getActiveWifiUuid()
 {
@@ -1221,6 +1268,7 @@ QString KylinDBus::getActiveWifiUuid()
                               QDBusConnection::systemBus() );
     //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    if (result.arguments().isEmpty()) { return ssid; }
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -1253,9 +1301,10 @@ QString KylinDBus::getActiveWifiUuid()
 }
 
 //获取已连接wifi的信息
-int KylinDBus::getActiveWifiSignal()
+QStringList KylinDBus::getActiveWifiSignal()
 {
-    int wifistrength = 0;
+    QStringList connNetworkInfo;
+    //int wifistrength = 0;
 
     QDBusInterface interface( "org.freedesktop.NetworkManager",
                               "/org/freedesktop/NetworkManager",
@@ -1263,6 +1312,7 @@ int KylinDBus::getActiveWifiSignal()
                               QDBusConnection::systemBus() );
     //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    if (result.arguments().isEmpty()) { return connNetworkInfo; }
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -1280,13 +1330,20 @@ int KylinDBus::getActiveWifiSignal()
                                   QDBusConnection::systemBus() );
         QDBusReply<QVariant> reply = interfaceType.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Type");
 
+        if (reply.value().toString() == "ethernet" || reply.value().toString() == "802-3-ethernet") {
+            connNetworkInfo.append("802-3-ethernet");
+        }
+
         if (reply.value().toString() == "wifi" || reply.value().toString() == "802-11-wireless") {
+            connNetworkInfo.append("802-11-wireless");
+
             QDBusInterface interfaceSpecificObject( "org.freedesktop.NetworkManager",
                                       objPath.path(),
                                       "org.freedesktop.DBus.Properties",
                                       QDBusConnection::systemBus() );
 
             QDBusMessage resultSpecificObject = interfaceSpecificObject.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "SpecificObject");
+            if (resultSpecificObject.arguments().isEmpty()) { continue; }
             QList<QVariant> outArgsSpecificObject = resultSpecificObject.arguments();
             QVariant firstSpecificObject = outArgsSpecificObject.at(0);
             QDBusVariant dbvFirstSpecificObject = firstSpecificObject.value<QDBusVariant>();
@@ -1300,19 +1357,21 @@ int KylinDBus::getActiveWifiSignal()
 
             QDBusReply<QVariant> replyStrength = interfaceAP.call("Get", "org.freedesktop.NetworkManager.AccessPoint", "Strength"); //signal
 
-            //QString strStrength;
+            QString strStrength;
             QByteArray sesultStrength = replyStrength.value().toByteArray();
             int wifiSignal = sesultStrength[0] & 0x000000FF;
             wifiSignal |= ((sesultStrength[1] << 8) & 0x0000FF00);
             wifiSignal |= ((sesultStrength[2] << 16) & 0x00FF0000);
             wifiSignal |= ((sesultStrength[3] << 24) & 0xFF000000);
-            //strStrength = QString::number(addr);
-            wifistrength = wifiSignal;
+            strStrength = QString::number(wifiSignal);
+            connNetworkInfo.append(strStrength);
+            //wifistrength = wifiSignal;
         }
     }
     dbusArgs.endArray();
 
-    return wifistrength;
+    //return wifistrength;
+    return connNetworkInfo;
 }
 
 //根据Dbus路径获取wifi的ssid（排除空格干扰）
@@ -1338,6 +1397,7 @@ int KylinDBus::checkWifiConnectivity()
                               QDBusConnection::systemBus() );
 
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    if (result.arguments().isEmpty()) { return wifiState; }
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -1375,6 +1435,7 @@ bool KylinDBus::checkNetworkConnectivity()
                               QDBusConnection::systemBus() );
 
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    if (result.arguments().isEmpty()) { return hasNetworkConnecting; }
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -1415,6 +1476,7 @@ QList<QString> KylinDBus::getAtiveWifiBSsidUuid(QStringList wifilist)
                               QDBusConnection::systemBus() );
     //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
     QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+    if (result.arguments().isEmpty()) { return strBSsidUuid; }
     QList<QVariant> outArgs = result.arguments();
     QVariant first = outArgs.at(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -1548,6 +1610,7 @@ void KylinDBus::toGetWifiList()
                                   QDBusConnection::systemBus() );
 
         QDBusMessage resultAccessPoints = interfacePro.call("Get", "org.freedesktop.NetworkManager.Device.Wireless", "AccessPoints");
+        if (resultAccessPoints.arguments().isEmpty()) { continue; }
         QList<QVariant> outArgsAccessPoints = resultAccessPoints.arguments();
         QVariant firstAccessPoints = outArgsAccessPoints.at(0);
         QDBusVariant dbvFirstAccessPoints = firstAccessPoints.value<QDBusVariant>();
@@ -1687,21 +1750,47 @@ void KylinDBus::onPropertiesChanged(QVariantMap qvm)
             oldPaths = newPaths;
         }
 
-        //收到wifi开关打开或关闭的信号后，进行处理
-//        if (keyStr == "WirelessEnabled") {
-//            bool newWifiSwitchState = qvm.value("WirelessEnabled").toBool();
-//            if (oldWifiSwitchState == false && newWifiSwitchState == true) {
-//                qDebug()<<"debug: wifi开关已经打开";
-//                mw->onExternalWifiSwitchChange(true);
-//            }
-//            if (oldWifiSwitchState == true && newWifiSwitchState == false) {
-//                qDebug()<<"debug: wifi开关已经关闭";
-//                mw->onExternalWifiSwitchChange(false);
-//            }
+        //网络连接connectivity属性的变化
+        if (keyStr == "Connectivity") {
+            qDebug() << "Connectivity property changed";
+            mw->getActiveInfoAndSetTrayIcon();
+        }
 
-//            oldWifiSwitchState = newWifiSwitchState; //更新状态用于下一次
-//        }
+        //收到wifi开关打开或关闭的信号后，进行处理
+        if (keyStr == "WirelessEnabled") {
+            qDebug() << "WirelessEnabled property changed";
+            bool newWifiSwitchState = qvm.value("WirelessEnabled").toBool();
+            if (oldWifiSwitchState == false && newWifiSwitchState == true) {
+                qDebug()<<"wifi开关已经打开";
+                mw->onExternalWifiSwitchChange(true);
+            }
+            if (oldWifiSwitchState == true && newWifiSwitchState == false) {
+                qDebug()<<"wifi开关已经关闭";
+                mw->onExternalWifiSwitchChange(false);
+            }
+
+            //oldWifiSwitchState = newWifiSwitchState; //更新状态用于下一次
+        }
     }
+}
+
+//检查网络状态获取Connectivity的值
+int KylinDBus::getNetworkConectivity()
+{
+    int connectivityState = 0;
+    QDBusInterface interfacePro( "org.freedesktop.NetworkManager",
+                              "/org/freedesktop/NetworkManager",
+                              "org.freedesktop.DBus.Properties",
+                              QDBusConnection::systemBus() );
+
+    QDBusReply<QVariant> reply = interfacePro.call("Get", "org.freedesktop.NetworkManager", "Connectivity");
+    if (!reply.isValid()) {
+        qDebug() << Q_FUNC_INFO<<" can not get the attribute 'Connectivity' ";
+    } else {
+        connectivityState = reply.value().toInt();
+    }
+
+    return connectivityState;
 }
 
 //接收到自动连接的信号过后执行自动连接wifi
@@ -1716,30 +1805,69 @@ void KylinDBus::onAutoConnect()
     }
 }
 
+//获取是否连接有线网网线
+void KylinDBus::getPhysicalCarrierState()
+{
+    qDebug()<<"Enter function to get physical carrier state.";
+    multiWiredCableState.clear();
+
+    foreach (QDBusObjectPath localPath, multiWiredPaths) {
+        QDBusInterface interface( "org.freedesktop.NetworkManager",
+                                  localPath.path(),
+                                  "org.freedesktop.DBus.Properties",
+                                  QDBusConnection::systemBus() );
+
+        //Carrier值为true，插了网线；为false，未插网线
+        QDBusReply<QVariant> reply = interface.call("Get", "org.freedesktop.NetworkManager.Device.Wired", "Carrier");
+
+        try {
+            if (reply.value().toString() == "true") {
+                qDebug()<<"multiWiredCableState.append(true)";
+                multiWiredCableState.append("true");
+            } else if (reply.value().toString() == "false") {
+                qDebug()<<"multiWiredCableState.append(false)";
+                multiWiredCableState.append("false");
+            } else {
+                throw -1; //出现异常
+            }
+        } catch(...) {
+            qDebug()<<"Error occurred when get the property 'Carrier' of Wired";
+        }
+    }
+
+    isWiredCableOn = false;
+    foreach (QString state, multiWiredCableState) {
+        if (state == "true") {
+            isWiredCableOn = true;
+        }
+    }
+}
+
 //有线网属性变化时，执行该函数。由于可能在短时间收到几条相同属性变化信息，所以在短时间内，执行一次
 void KylinDBus::onLanPropertyChanged(QVariantMap qvm)
 {
-    if (!isRunningFunction) {
-        qDebug()<<"kylin-nm receive a signal 'Device.Wired PropertiesChanged' about interface.";
-        isRunningFunction = true;  //function onLanPropertyChanged is running
-        time->start(3000);
-        QString str = qvm.value("Carrier").toString();
-        if (str == "false" || str == "true") {
-            getPhysicalCarrierState(1);
+    for(QString keyStr : qvm.keys()) {
+        if (keyStr == "Carrier") {
+            qDebug()<<"[PropertiesChanged] kylin-nm receive a signal PropertiesChanged about Carrier state.";
+            QString carrierStateString = qvm.value("Carrier").toString();
+            if (carrierStateString == "true") {
+                this->mw->onPhysicalCarrierChanged(true);
+            } else if(carrierStateString == "false") {
+                this->mw->onPhysicalCarrierChanged(false);
+            }
         }
-    } else { a = 0; }
-}
-void KylinDBus::slot_timeout()
-{
-    isRunningFunction = false;
-    time->stop();
+    }
 }
 
 //有线网的Ip属性变化时的响应函数
 void KylinDBus::onLanIpPropertiesChanged()
 {
     if (!mw->isHandlingWiredCableOn) {
-        emit this->updateWiredList(0);
+        QTimer::singleShot(0.5 * 1000, this, [ = ]() {
+            //防止卡顿，延时一小段时间后再发信号
+            emit this->updateWiredList(0);
+        });
+//        emit this->updateWiredList(0);
     }
 }
 
@@ -1770,7 +1898,7 @@ void KylinDBus::reConnectWiredNet(QString netUuid)
                                   "org.freedesktop.NetworkManager.Settings.Connection",
                                   QDBusConnection::systemBus());
         QDBusMessage result = m_interface.call("GetSettings");
-
+        if (result.arguments().isEmpty()) { continue; }
         const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg1st >> map;
@@ -1794,6 +1922,7 @@ void KylinDBus::reConnectWiredNet(QString netUuid)
 
                             //获取已经连接了那些网络，及这些网络对应的网络类型(ethernet or wifi)
                             QDBusMessage result = interface.call("Get", "org.freedesktop.NetworkManager", "ActiveConnections");
+                            if (result.arguments().isEmpty()) { continue; }
                             QList<QVariant> outArgs = result.arguments();
                             QVariant first = outArgs.at(0);
                             QDBusVariant dbvFirst = first.value<QDBusVariant>();
@@ -1819,6 +1948,7 @@ void KylinDBus::reConnectWiredNet(QString netUuid)
                                                               "org.freedesktop.DBus.Properties",
                                                               QDBusConnection::systemBus() );
                                     QDBusMessage replyConn = interfaceConn.call("Get", "org.freedesktop.NetworkManager.Connection.Active", "Devices");
+                                    if (replyConn.arguments().isEmpty()) { continue; }
                                     QList<QVariant> outArgsIp4 = replyConn.arguments();
                                     QVariant firstIp4 = outArgsIp4.at(0);
                                     QDBusVariant dbvFirstIp4 = firstIp4.value<QDBusVariant>();
@@ -1873,7 +2003,7 @@ bool KylinDBus::toConnectWiredNet(QString netUuid, QString netIfName)
                                   "org.freedesktop.NetworkManager.Settings.Connection",
                                   QDBusConnection::systemBus());
         QDBusMessage result = m_interface.call("GetSettings");
-
+        if (result.arguments().isEmpty()) { continue; }
         const QDBusArgument &dbusArg1st = result.arguments().at( 0 ).value<QDBusArgument>();
         QMap<QString,QMap<QString,QVariant>> map;
         dbusArg1st >> map;
@@ -1898,6 +2028,7 @@ bool KylinDBus::toConnectWiredNet(QString netUuid, QString netIfName)
                                                       QDBusConnection::systemBus() );
 
                             QDBusMessage resultDevice = interfaceDevice.call("Get", "org.freedesktop.NetworkManager", "AllDevices");
+                            if (resultDevice.arguments().isEmpty()) { continue; }
                             QList<QVariant> outArgsDevice = resultDevice.arguments();
                             QVariant firstDevice = outArgsDevice.at(0);
                             QDBusVariant dbvFirstDevice = firstDevice.value<QDBusVariant>();

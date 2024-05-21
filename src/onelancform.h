@@ -26,7 +26,6 @@
 
 #include "confform.h"
 #include "kylin-network-interface.h"
-#include "kylinnetworkconnect.h"
 #include "backthread.h"
 #include "ksimplenm.h"
 
@@ -116,7 +115,6 @@ private:
     MainWindow *mw = nullptr;
     ConfForm *cf = nullptr;
     KSimpleNM *ks = nullptr;
-    KyNetworkConnect *m_networkConnect = nullptr;
 
     QString leQssLow, leQssHigh;
 

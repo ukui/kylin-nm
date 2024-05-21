@@ -314,6 +314,8 @@ void WpaWifiDialog::initCombox() {
     securityCombox->addItem(tr("None")); //无
     securityCombox->addItem(tr("WPA and WPA2 Personal")); //WPA 及 WPA2 个人
     securityCombox->addItem(tr("WPA and WPA2 Enterprise")); //WPA 及 WPA2 企业
+    securityCombox->addItem(tr("WPA2 and WPA3 Personal")); //WPA2 及 WPA3 个人
+    securityCombox->addItem(tr("WPA3 Personal")); //WPA3 个人
     //ui->cbxSecurity->addItem(tr("WEP 40/128-bit Key (Hex or ASCII)")); //WEP 40/128 位密钥(十六进制或ASCII)
     //ui->cbxSecurity->addItem(tr("WEP 128-bit Passphrase")); //WEP 128 位密码句
     //ui->cbxSecurity->addItem("LEAP");
@@ -465,7 +467,25 @@ void WpaWifiDialog::changeDialog()
         //WPA 及 WPA2 个人
         QApplication::setQuitOnLastWindowClosed(false);
         this->close();
-        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(0, mw);
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(1, 0, mw);
+        connHidWifiWpa->show();
+        connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+    }
+
+    if (securityCombox->currentIndex() == 3) {
+        // WPA2 及 WPA3 个人
+        QApplication::setQuitOnLastWindowClosed(false);
+        this->close();
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(3, 0, mw);
+        connHidWifiWpa->show();
+        connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
+    }
+
+    if (securityCombox->currentIndex() == 4) {
+        //WPA3 个人
+        QApplication::setQuitOnLastWindowClosed(false);
+        this->close();
+        DlgHideWifiWpa *connHidWifiWpa = new DlgHideWifiWpa(4, 0, mw);
         connHidWifiWpa->show();
         connect(connHidWifiWpa, SIGNAL(reSetWifiList() ), mw, SLOT(on_btnWifiList_clicked()) );
     }
@@ -573,6 +593,21 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
     //this->mw->is_stop_check_net_state = 1;
     //this->mw->setTrayLoading(true);
     //写/tmp/wpaconfig.ini配置文件
+
+    QProcess shellProcess;
+    shellProcess.start("nmcli -f ssid device wifi");
+    shellProcess.waitForFinished(3000); // 等待最多3s
+    bool is_hidden  = true;
+    if (shellProcess.exitCode() == 0) {
+        QString shellOutput = shellProcess.readAllStandardOutput();
+        QStringList wlist = shellOutput.split("\n");
+        foreach (QString wifi, wlist) {
+            if (wifi.trimmed() == nameEditor->text()) {
+                is_hidden = false;
+            }
+        }
+    }
+
     if (eapCombox->currentIndex() == EapType::TTLS) {
         //Todo
     }
@@ -624,6 +659,12 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
                     + innerCombox->currentData().toString() + " 802-1x.identity " + userEditor->text() + " 802-1x.password " + pwdEditor->text();
         }
 
+        if (is_hidden) {
+            cmdStr_1 += " 802-11-wireless.hidden yes";
+        } else {
+            cmdStr_1 += " 802-11-wireless.hidden no";
+        }
+
         Utils::m_system(cmdStr_1.toUtf8().data());
         if (askPwdBtn->isChecked() && eapCombox->currentIndex() == EapType::PEAP) setPwdFlag(2);
         else setPwdFlag(0);
@@ -664,6 +705,9 @@ void WpaWifiDialog::slot_on_connectBtn_clicked() {
                     " wifi-sec.key-mgmt wpa-eap autoconnect no";
         }
 //        qDebug() << create_cmd;
+        if (is_hidden) {
+            create_cmd += " 802-11-wireless.hidden yes";
+        }
         int res = Utils::m_system(create_cmd.toUtf8().data());
         if (res == 0) {
             qDebug() << "qDebug: created a wifi config successfully in function slot_on_connectBtn_clicked";
@@ -719,7 +763,9 @@ void WpaWifiDialog::activateConnection() {
             QString cmdStr_2 = "nmcli connection down '" + nameEditor->text() + "'";
             Utils::m_system(cmdStr_2.toUtf8().data());
             this->mw->is_stop_check_net_state = 0;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             this->mw->setTrayLoading(false);
+            mw->getActiveInfoAndSetTrayIcon();
             qDebug() << "qDebug: activate time out in function activateConnection";
             qDebug() << "qDebug: 连接超时（30秒超时时间）";
         });
@@ -731,9 +777,14 @@ void WpaWifiDialog::activateConnection() {
         if (res != 0) {
             //连接错误或连接超时
             setEditorEnable(true);
-            emit conn_failed();
+            mw->on_btnWifiList_clicked();
+            //emit conn_failed();
             this->mw->is_stop_check_net_state = 0;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             this->mw->setTrayLoading(false);
+            mw->getActiveInfoAndSetTrayIcon();
+            QString notifyMsg(tr("password may be error, so activeate connection failed"));
+            mw->objKyDBus->showDesktopNotify(notifyMsg);
         } else {
             //连接成功
             timeout->stop();
@@ -741,15 +792,21 @@ void WpaWifiDialog::activateConnection() {
             upThread->quit();
             upThread->wait();
             upThread->deleteLater();
-            emit conn_done();
+            mw->on_btnWifiList_clicked();
+            //emit conn_done();
             this->mw->is_stop_check_net_state = 0;
+            qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
             this->mw->setTrayLoading(false);
+            mw->getActiveInfoAndSetTrayIcon();
+            QString notifyMsg(tr("activeate connection successfully"));
+            mw->objKyDBus->showDesktopNotify(notifyMsg);
             qDebug() << "qDebug: activated wpa security wifi successfully";
             this->close();
         }
     });
     upThread->start();
     this->mw->is_stop_check_net_state = 1;
+    qDebug()<< Q_FUNC_INFO << __LINE__ <<":set is_stop_check_net_state to"<<mw->is_stop_check_net_state;
     this->mw->setTrayLoading(true);
 }
 
@@ -829,33 +886,33 @@ bool WpaWifiDialog::appendWifiUser(QString name, QString user) {
     return true;
 }
 
-void WpaWifiDialog::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton) {
-        this->isPress = true;
-        this->winPos = this->pos();
-        this->dragPos = event->globalPos();
-        event->accept();
-    }
-    return QDialog::mousePressEvent(event);
-}
-void WpaWifiDialog::mouseReleaseEvent(QMouseEvent *event)
-{
-    this->isPress = false;
-}
-void WpaWifiDialog::mouseMoveEvent(QMouseEvent *event)
-{
-    if (this->isPress) {
-        this->move(this->winPos - (this->dragPos - event->globalPos()));
-        event->accept();
-    }
-    return QDialog::mouseMoveEvent(event);
-}
+//void WpaWifiDialog::mousePressEvent(QMouseEvent *event)
+//{
+//    if (event->button() == Qt::LeftButton) {
+//        this->isPress = true;
+//        this->winPos = this->pos();
+//        this->dragPos = event->globalPos();
+//        event->accept();
+//    }
+//    return QDialog::mousePressEvent(event);
+//}
+//void WpaWifiDialog::mouseReleaseEvent(QMouseEvent *event)
+//{
+//    this->isPress = false;
+//}
+//void WpaWifiDialog::mouseMoveEvent(QMouseEvent *event)
+//{
+//    if (this->isPress) {
+//        this->move(this->winPos - (this->dragPos - event->globalPos()));
+//        event->accept();
+//    }
+//    return QDialog::mouseMoveEvent(event);
+//}
 
-void WpaWifiDialog::keyPressEvent(QKeyEvent *event)
-{
-    //return QDialog::keyPressEvent(event);
-}
+//void WpaWifiDialog::keyPressEvent(QKeyEvent *event)
+//{
+//    //return QDialog::keyPressEvent(event);
+//}
 
 void WpaWifiDialog::paintEvent(QPaintEvent *event)
 {

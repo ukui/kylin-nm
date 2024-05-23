@@ -1,0 +1,176 @@
+From: KevinDuan <duankaiwen@kylinos.com>
+Date: Thu, 23 May 2024 03:21:48 +0000
+Subject: Translated using Weblate (Uyghur)
+
+Currently translated at 67.5% (133 of 197 strings)
+
+Translation: openkylin-nile-new/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/kylin-nm/ug/
+---
+ src/translations/kylin-nm_ug.ts | 36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/src/translations/kylin-nm_ug.ts b/src/translations/kylin-nm_ug.ts
+index c39e040..e245644 100644
+--- a/src/translations/kylin-nm_ug.ts
++++ b/src/translations/kylin-nm_ug.ts
+@@ -80,7 +80,7 @@
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="74"/>
+         <source>Confirm</source>
+-        <translation>جەزىملەشتۈرۈش</translation>
++        <translation>جەزملەشتۈرۈش</translation>
+     </message>
+     <message>
+         <location filename="../frontend/connectivity/connectivitypage.cpp" line="161"/>
+@@ -182,7 +182,7 @@
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="227"/>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="228"/>
+         <source>Required</source>
+-        <translation>مۇقەررەر تولدۇرۇش</translation>
++        <translation>زۆرۈر</translation>
+     </message>
+ </context>
+ <context>
+@@ -548,7 +548,7 @@
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
+         <source>Close</source>
+-        <translation>تاقاش</translation>
++        <translation>ئىتىش</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="73"/>
+@@ -558,7 +558,7 @@
+     <message>
+         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="76"/>
+         <source>Confirm</source>
+-        <translation>جەزىملەشتۈرۈش</translation>
++        <translation>جەزملەشتۈرۈش</translation>
+     </message>
+ </context>
+ <context>
+@@ -690,7 +690,7 @@
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="298"/>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="299"/>
+         <source>Required</source>
+-        <translation>مۇقەررەر تولدۇرۇش</translation>
++        <translation>زۆرۈر</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="367"/>
+@@ -742,7 +742,7 @@
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="231"/>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="232"/>
+         <source>Required</source>
+-        <translation>مۇقەررەر تولدۇرۇش</translation>
++        <translation>زۆرۈر</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="251"/>
+@@ -794,7 +794,7 @@
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="153"/>
+         <source>Required</source>
+-        <translation>مۇقەررەر تولدۇرۇش</translation>
++        <translation>زۆرۈر</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="155"/>
+@@ -838,7 +838,7 @@
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="151"/>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="168"/>
+         <source>Delete</source>
+-        <translation>ئۆچۈر</translation>
++        <translation>ئۆچۈرۈش</translation>
+     </message>
+ </context>
+ <context>
+@@ -938,7 +938,7 @@
+         <location filename="../frontend/mainwindow.cpp" line="384"/>
+         <source>Settings</source>
+         <translatorcomment>设置网络项</translatorcomment>
+-        <translation>تور تەڭشىكى</translation>
++        <translation>تەڭشەكلەر</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="385"/>
+@@ -977,7 +977,7 @@
+     <message>
+         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="101"/>
+         <source>Settings</source>
+-        <translation>تور تەڭشىكى</translation>
++        <translation>تەڭشەكلەر</translation>
+     </message>
+ </context>
+ <context>
+@@ -1010,7 +1010,7 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="385"/>
+         <source>Security</source>
+-        <translation>بىخەتەرلىك</translation>
++        <translation>بىخەتەر</translation>
+     </message>
+     <message>
+         <source>Close</source>
+@@ -1025,7 +1025,7 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="406"/>
+         <source>Confirm</source>
+-        <translation>جەزىملەشتۈرۈش</translation>
++        <translation>جەزملەشتۈرۈش</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="409"/>
+@@ -1161,7 +1161,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation>جەدۋەل</translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1189,7 +1189,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation>جەدۋەل</translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1218,13 +1218,13 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="215"/>
+         <source>Security</source>
+-        <translation>بىخەتەرلىك</translation>
++        <translation>بىخەتەر</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="216"/>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="236"/>
+         <source>Password</source>
+-        <translation>مەخپىي ئاچقۇچ</translation>
++        <translation>مەخپىي نومۇرنى ئۆزگەرتىش</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="220"/>
+@@ -1276,7 +1276,7 @@
+         <location filename="../frontend/netdetails/securitypage.cpp" line="238"/>
+         <location filename="../frontend/netdetails/securitypage.h" line="125"/>
+         <source>Required</source>
+-        <translation>مۇقەررەر تولدۇرۇش</translation>
++        <translation>زۆرۈر</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="234"/>
+@@ -1438,7 +1438,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="136"/>
+         <source>Settings</source>
+-        <translation>تور تەڭشىكى</translation>
++        <translation>تەڭشەكلەر</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/tabpage.cpp" line="329"/>

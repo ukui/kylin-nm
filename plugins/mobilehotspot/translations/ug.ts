@@ -78,7 +78,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="64"/>
         <source>Settings</source>
-        <translation>تور تەڭشىكى</translation>
+        <translation>تەڭشەكلەر</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="67"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="551"/>
         <source>Password</source>
-        <translation>مەخپىي ئاچقۇچ</translation>
+        <translation>مەخپىي نومۇر</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="595"/>

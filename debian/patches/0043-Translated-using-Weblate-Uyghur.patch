@@ -1,0 +1,34 @@
+From: KevinDuan <duankaiwen@kylinos.com>
+Date: Thu, 30 May 2024 02:15:30 +0000
+Subject: Translated using Weblate (Uyghur)
+
+Currently translated at 86.3% (19 of 22 strings)
+
+Translation: openkylin-nile-new/mobilehotspot
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/mobilehotspot/ug/
+---
+ plugins/mobilehotspot/translations/ug.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/mobilehotspot/translations/ug.ts b/plugins/mobilehotspot/translations/ug.ts
+index fec5715..70f9024 100644
+--- a/plugins/mobilehotspot/translations/ug.ts
++++ b/plugins/mobilehotspot/translations/ug.ts
+@@ -78,7 +78,7 @@
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="64"/>
+         <source>Settings</source>
+-        <translation>تور تەڭشىكى</translation>
++        <translation>تەڭشەكلەر</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="67"/>
+@@ -114,7 +114,7 @@
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="551"/>
+         <source>Password</source>
+-        <translation>مەخپىي ئاچقۇچ</translation>
++        <translation>ئىم</translation>
+     </message>
+     <message>
+         <location filename="../mobilehotspotwidget.cpp" line="595"/>

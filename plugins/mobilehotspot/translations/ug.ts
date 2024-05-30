@@ -114,7 +114,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="551"/>
         <source>Password</source>
-        <translation>مەخپىي نومۇر</translation>
+        <translation>ئىم</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="595"/>

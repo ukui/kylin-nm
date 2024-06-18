@@ -6,7 +6,7 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="43"/>
         <source>Set APT Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>APT ۋاكالەتچىسىنى تەسىس قىلىش</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="60"/>
@@ -118,7 +118,7 @@
     <message>
         <location filename="../proxy.cpp" line="480"/>
         <source>APT Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>APT ۋاكالەتچىسى</translation>
         <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
     </message>
     <message>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../proxy.cpp" line="586"/>
         <source>The APT proxy has been turned off and needs to be restarted to take effect</source>
-        <translation type="unfinished"></translation>
+        <translation>APT ۋاكالەتچىلىكى تاقالدى، قايتا قوزغىتىشقا توغرا كەلسە ئاندىن كۈچكە ئىگە بولىدۇ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="587"/>
@@ -162,7 +162,7 @@
     <message>
         <location filename="../proxy.cpp" line="823"/>
         <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>APT ۋاكالەتچىسىنى تەسىس قىلىش ئۈچۈن سىستېمىنى قايتا قوزغىتىش كېرەك، قايتا قوزغىتىلامدۇ يوق</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1071"/>

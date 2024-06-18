@@ -83,17 +83,17 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="67"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۈستەل يۈزى ئۇچۇرى تەڭشىكى</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="337"/>
         <source>use </source>
-        <translation type="unfinished"></translation>
+        <translation>ئىشلىتىش </translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="338"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation type="unfinished"></translation>
+        <translation> ئورتاق بەھرىمەن بولىدىغان تور، يەرلىك سىمسىز ئۇلىنىش ئۈزۈلۈپ قالىدۇ</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="354"/>

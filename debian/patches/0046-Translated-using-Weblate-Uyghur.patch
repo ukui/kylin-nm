@@ -1,0 +1,25 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Mon, 24 Jun 2024 06:13:07 +0000
+Subject: Translated using Weblate (Uyghur)
+
+Currently translated at 100.0% (14 of 14 strings)
+
+Translation: openkylin-nile-new/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/netconnect/ug/
+---
+ plugins/netconnect/translations/ug.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/netconnect/translations/ug.ts b/plugins/netconnect/translations/ug.ts
+index 64fa20e..ebe5d75 100644
+--- a/plugins/netconnect/translations/ug.ts
++++ b/plugins/netconnect/translations/ug.ts
+@@ -75,7 +75,7 @@
+     <message>
+         <location filename="../netconnect.cpp" line="69"/>
+         <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>ئۈستەل يۈزى ئۇچۇرى تەڭشىكى</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="86"/>

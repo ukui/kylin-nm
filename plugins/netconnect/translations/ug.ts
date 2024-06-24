@@ -75,7 +75,7 @@
     <message>
         <location filename="../netconnect.cpp" line="69"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۈستەل يۈزى ئۇچۇرى تەڭشىكى</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="86"/>

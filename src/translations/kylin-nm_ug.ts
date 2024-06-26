@@ -52,7 +52,7 @@
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="71"/>
         <source>Config firewall and security settings</source>
-        <translation>ئوتتام ۋە بىخەتەرلىك تەڭشىكىنى سەپلەش.</translation>
+        <translation>ئوتتام ۋە بىخەتەرلىك تەڭشىكىنى سەپلەش</translation>
     </message>
 </context>
 <context>
@@ -90,7 +90,7 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="166"/>
         <source>The network is connected and access to the Internet is restricted.</source>
-        <translation>تور ئۇلاندى،  ئىنتېرنېت تورىغا بولغان زىيارەت چەكلىمىگە ئۇچرىدى.</translation>
+        <translation>تور ئۇلاندى، ئىنتېرنېت تورىغا بولغان زىيارەت چەكلىمىگە ئۇچرىدى.</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="177"/>
@@ -241,7 +241,7 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="361"/>
         <source>BandWidth:</source>
-        <translation>كەڭ بەلۋاغ</translation>
+        <translation>كەڭ بەلۋاغ:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="293"/>
@@ -513,7 +513,7 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="40"/>
         <source>Timeout</source>
-        <translation>ۋاقىت ئېشىپ كەتتى</translation>
+        <translation>ۋاقىت ئۇزىتى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="43"/>
@@ -855,7 +855,7 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="67"/>
         <source>conflict, unable to connect to the network normally!</source>
-        <translation>توقۇنۇش،  تورغا نورمال ئۇلىغىلى بولمىدى!</translation>
+        <translation>توقۇنۇش، تورغا نورمال ئۇلىغىلى بولمىدى!</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="753"/>
@@ -1336,7 +1336,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
         <source>Store passwords only for this user</source>
-        <translation>پەقەت بۇ ئىشلەتكۈچىنىڭ مەخپىي نومۇرىنى ساقلايدۇ.</translation>
+        <translation>پەقەت بۇ ئىشلەتكۈچىنىڭ مەخپىي نومۇرىنى ساقلايدۇ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>

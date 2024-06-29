@@ -37,22 +37,22 @@
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="60"/>
         <source>Network profile type</source>
-        <translation type="unfinished"></translation>
+        <translation>تور تولىقتاما حۇجات تيپى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="63"/>
         <source>Public(recommended)  Devices on the network cannot discover this computer. Generally, it is suitable for networks in public places, such as airports or coffee shops, etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>تورداعٸ الەۋمەتتٸك (ۇسٸنٸس بەرۋ) جابدىقتار نۇ كومپيۋتەردى بايقىيالمايدۇ. ادەتتەگٸندەي ورىنداپ ايتقاندا،  ول، الەۋمەتتٸك سورۇنلارنىڭ تورعا بۇرشاق كەلەدى ماسەلەن، ئايرودروم ياكي قەھۋەخانا قاتارلىلار.</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="67"/>
         <source>Private  Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
-        <translation type="unfinished"></translation>
+        <translation>تورداعٸ ارناۋلى جابدىقتار نۇ كومپيۋتەردى بايقىيالايدۇ. ادەتتە  تورداعٸ ٴسىز تۇسىنەتىن ۋا ىستەتىلەتىن شەخس ۋا جابدىقتار، وتباسى ياكي قىزىمەت تورعا بۇرشاق كەلەدى.</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="71"/>
         <source>Config firewall and security settings</source>
-        <translation type="unfinished"></translation>
+        <translation>ئوتتام ۋا حاۋىپسىزدىك تەڭگەرگٸشتٸ تولىقتاۋ.</translation>
     </message>
 </context>
 <context>
@@ -60,22 +60,22 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="25"/>
         <source>Network connectivity detection</source>
-        <translation type="unfinished"></translation>
+        <translation>تور جالعانۋدٸ تەكسەرۋ</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="55"/>
         <source>If access to the Internet is restricted, please switch the network IP connectivity detection method and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>قيسٸق تورعا كىرۋ ولشەمگە ۇشٸراسا، تور IP جالعانۋدٸ تەكسەرۋ تاسٸلدٸ الماستٸر، سونان قاتە سىناڭ.</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="61"/>
         <source>Public network (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>الەۋمەتتٸك تور (كوڭىلدەگى)</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="63"/>
         <source>Local area network (intranet)</source>
-        <translation type="unfinished"></translation>
+        <translation>سۇيىر كولەمدىك تور (intranet)</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="74"/>
@@ -85,22 +85,22 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="161"/>
         <source>The network is connected and can access the Internet normally.</source>
-        <translation type="unfinished"></translation>
+        <translation>تور جالعاندٸ، ينتٸرت توردى نورمال ۇسىنس قىلعالى بولادٸ.</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="166"/>
         <source>The network is connected and access to the Internet is restricted.</source>
-        <translation type="unfinished"></translation>
+        <translation>تور جالعاندٸ،  ينتٸرت تورعا بولعان ۇسىنس ولشەمگە كەزٸكتٸ.</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="177"/>
         <source>Please enter the local area network (intranet) detection address</source>
-        <translation type="unfinished"></translation>
+        <translation>سۇيىر كولەمدىك تور (intranet) تەكسەرۋ ٵدٸرىستٸ كىرگىزىڭىز</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="196"/>
         <source>Format error</source>
-        <translation type="unfinished"></translation>
+        <translation>ٴپىشىم قاتەلىگى</translation>
     </message>
 </context>
 <context>
@@ -128,7 +128,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
         <source>IPv4Config</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4Config اتقار بۇيرٸعٸ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
@@ -148,7 +148,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="327"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>سوقتٸعٸۋٸ شەشىم ەتۋ ەتۋ</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -247,19 +247,19 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="293"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="364"/>
         <source>IPv6:</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="281"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="362"/>
         <source>IPv4:</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="287"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="363"/>
         <source>IPv4 DNS:</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4 DNS:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="297"/>
@@ -503,42 +503,42 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="34"/>
         <source>DNS Server Advanced Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>DNS قىزىمەت وتەۋ تۇرلەرى جوعارى دارەجەلىك تەڭگەرگٸش</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="37"/>
         <source>Tactic</source>
-        <translation type="unfinished"></translation>
+        <translation>تاكتيكا</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="40"/>
         <source>Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>ۋاقىت ٸشٸپ كەتتى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="43"/>
         <source>Retry Count</source>
-        <translation type="unfinished"></translation>
+        <translation>قاتە ساناۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="46"/>
         <source>order</source>
-        <translation type="unfinished"></translation>
+        <translation>رەت جاعٸ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="47"/>
         <source>rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>شيراتىلىۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="48"/>
         <source>concurrency</source>
-        <translation type="unfinished"></translation>
+        <translation>جانداس تارقاتۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="53"/>
         <source> s</source>
-        <translation type="unfinished"></translation>
+        <translation> s</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="59"/>
@@ -574,17 +574,17 @@
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="117"/>
         <source>Wi-Fi network requires authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Wi-Fi تورى ازاماتتىق دالەلدەۋگە مۇقتاج</translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="122"/>
         <source>Access to Wi-Fi network &quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Wi-Fi تورعا اۋلاۋ</translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="124"/>
         <source>&quot; requires a password or encryption key.</source>
-        <translation type="unfinished"></translation>
+        <translation>قۇپيا نومەر ياكي سيفىرلاستىرىلعان كىلت قاجەت.</translation>
     </message>
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="155"/>
@@ -618,22 +618,22 @@
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="89"/>
         <source>Allow other devices on this network to discover this computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>نۇ تورداعٸ باسقا اسباپتاردىڭ نۇ كومپيۋتەردى بايقىشىغا جول قۇياما؟</translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="91"/>
         <source>It is not recommended to enable this feature on public networks</source>
-        <translation type="unfinished"></translation>
+        <translation>الەۋمەتتٸك توردا نۇ قىزىمەتىن قوزعالتۋ ۇسٸنٸس بەرۋ ورىندالمايدى</translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="93"/>
         <source>Not allowed (recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>جول قويىلمايدى (ۇسٸنٸس بەرۋ قىلىندى)</translation>
     </message>
     <message>
         <location filename="../frontend/networkmode/firewalldialog.cpp" line="94"/>
         <source>Allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>جول قويىلادى</translation>
     </message>
 </context>
 <context>
@@ -641,7 +641,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="66"/>
         <source>IPv4Config</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv4Config اتقار بۇيرٸعٸ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="67"/>
@@ -695,7 +695,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="367"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>سوقتٸعٸۋٸ شەشىم ەتۋ ەتۋ</translation>
     </message>
 </context>
 <context>
@@ -757,7 +757,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="299"/>
         <source>Address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>سوقتٸعٸۋٸ شەشىم ەتۋ ەتۋ</translation>
     </message>
 </context>
 <context>
@@ -765,12 +765,12 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="140"/>
         <source>Please enter the network information</source>
-        <translation type="unfinished"></translation>
+        <translation>تور حاباردٸ كىرگىزىڭىز</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="145"/>
         <source>Network name(SSID)</source>
-        <translation type="unfinished"></translation>
+        <translation>تور مى (SSID)</translation>
     </message>
     <message>
         <source>Remember the Network</source>
@@ -779,7 +779,7 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="146"/>
         <source>Show Network List</source>
-        <translation type="unfinished"></translation>
+        <translation>تور تٸزٸمدٸكدٸ كورسەتۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="147"/>
@@ -789,7 +789,7 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="148"/>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>قوسىلۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="153"/>
@@ -799,7 +799,7 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="155"/>
         <source>Find and Join WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>WLAN نى تابۋ ۋا قوسۋ</translation>
     </message>
 </context>
 <context>
@@ -855,7 +855,7 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="67"/>
         <source>conflict, unable to connect to the network normally!</source>
-        <translation type="unfinished"></translation>
+        <translation>سوقتٸعٸۋ،  تورعا نورمال جالعاعالٸ بولمادى!</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="753"/>
@@ -884,7 +884,7 @@
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1340"/>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1348"/>
         <source>Connected: </source>
-        <translation type="unfinished"></translation>
+        <translation>ئۇلانغانلىرى: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1342"/>
@@ -894,7 +894,7 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1340"/>
         <source>(Limited)</source>
-        <translation type="unfinished"></translation>
+        <translation>(شەكتەلگەن)</translation>
     </message>
 </context>
 <context>
@@ -943,13 +943,13 @@
     <message>
         <location filename="../frontend/mainwindow.cpp" line="385"/>
         <source>Network Connectivity Detection</source>
-        <translation type="unfinished"></translation>
+        <translation>تور جالعانۋدٸ تەكسەرۋ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="662"/>
         <location filename="../frontend/mainwindow.cpp" line="915"/>
         <source>Network tool</source>
-        <translation type="unfinished"></translation>
+        <translation>تور قۇرالى</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="676"/>
@@ -959,7 +959,7 @@
     <message>
         <location filename="../frontend/mainwindow.cpp" line="898"/>
         <source>Not connected to the network</source>
-        <translation type="unfinished"></translation>
+        <translation>تورعا جالعانباعان</translation>
     </message>
 </context>
 <context>
@@ -967,12 +967,12 @@
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="57"/>
         <source>DNS server(Drag to sort)</source>
-        <translation type="unfinished"></translation>
+        <translation>DNS قىزىمەت وتەۋ تۇرلەرى (سوزىلمالى تارتىپ بويىنشا تٸزٸلدٸ)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="64"/>
         <source>Click &quot;+&quot; to configure DNS</source>
-        <translation type="unfinished"></translation>
+        <translation>+ نى تۇرتىپ DNS نى ورنالاستىر</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="101"/>
@@ -1040,17 +1040,17 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="469"/>
         <source>Delete this network</source>
-        <translation type="unfinished"></translation>
+        <translation>نۇ توردى ٴوشىرۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="448"/>
         <source>Add LAN Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>LAN جالعانۋدٸ قوسۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="453"/>
         <source>Connect Hidden WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>جاسىرىن WLAN عا اۋلاۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="633"/>
@@ -1213,7 +1213,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="107"/>
         <source>Remember the Network</source>
-        <translation type="unfinished"></translation>
+        <translation>وسى توردى ەستە ساقتاۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="215"/>
@@ -1269,7 +1269,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="229"/>
         <source>Password options</source>
-        <translation type="unfinished"></translation>
+        <translation>قۇپيا نومەر تالدانباسٸ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="230"/>
@@ -1336,27 +1336,27 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
         <source>Store passwords only for this user</source>
-        <translation type="unfinished"></translation>
+        <translation>تەك نۇ ٸستەتۋشٸنٸڭ قۇپيا نۇمىردى ساقتايدى.</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
         <source>Store password only for this user</source>
-        <translation type="unfinished"></translation>
+        <translation>تەك نۇ ٸستەتۋشٸنٸڭ قۇپيا نۇمىردى ساقتاۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="266"/>
         <source>Store passwords for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>بارلٸق ٸستەتۋشٸنٸڭ قۇپيا نۇمىردى ساقتاۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="266"/>
         <source>Store password for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>بارلٸق ٸستەتۋشٸنٸڭ قۇپيا نۇمىردى ساقتاۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="268"/>
         <source>Ask this password every time</source>
-        <translation type="unfinished"></translation>
+        <translation>ٵر رەت نۇ قۇپيا نۇمىردى سۇراۋ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="268"/>
@@ -1380,12 +1380,12 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="273"/>
         <source>PAC provisioning</source>
-        <translation type="unfinished"></translation>
+        <translation>PAC مەنەن قامداعٸش</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="274"/>
         <source>Allow automatic PAC provisioning</source>
-        <translation type="unfinished"></translation>
+        <translation>PAC نى اۆتوماتتى تەڭشەۋگە جول قويادى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="275"/>
@@ -1410,12 +1410,12 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1231"/>
         <source>Choose a PAC file</source>
-        <translation type="unfinished"></translation>
+        <translation>PAC مەنەن قامداعٸش</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1232"/>
         <source>PAC Files (*.pac)</source>
-        <translation type="unfinished"></translation>
+        <translation>PAC حۇجاتى (* PAC)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.h" line="126"/>
@@ -1552,7 +1552,7 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1741"/>
         <source>Connected: </source>
-        <translation type="unfinished"></translation>
+        <translation>جالعاندٸ: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1743"/>

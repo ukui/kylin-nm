@@ -103,17 +103,17 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="67"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>شىرە  بەتى ۇچۇرۇ  تەڭشەگى</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="337"/>
         <source>use </source>
-        <translation type="unfinished"></translation>
+        <translation>ىشتەتىش </translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="338"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation type="unfinished"></translation>
+        <translation> ورتوق باارلانۇۇ بولوتۇرعان تور ، جەردىك سەمىز ۇلانۇۇ ۉزۉلۉپ قالات</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="354"/>

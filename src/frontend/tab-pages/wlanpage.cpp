@@ -1651,6 +1651,9 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
     netDetail->show();
     KWindowSystem::raiseWindow(netDetail->winId());
     netDetail->centerToScreen();
+    kdk::WindowManager::setSkipSwitcher(netDetail->windowHandle(), true);
+    kdk::WindowManager::setSkipTaskBar(netDetail->windowHandle(), true);
+    kdk::WindowManager::setIconName(netDetail->windowHandle(), "kylin-network");
 
     return;
 }

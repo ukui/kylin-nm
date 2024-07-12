@@ -34,7 +34,8 @@
 #define ITEM_HEIGHT 48
 
 #define LOG_FLAG "[LanPage]"
-
+#include "windowmanager/windowmanager.h"
+using namespace kdk;
 const QString EMPTY_CONNECT_UUID = "emptyconnect";
 
 const QString WIRED_SWITCH = "wiredswitch";
@@ -1288,6 +1289,9 @@ void LanPage::showDetailPage(QString devName, QString uuid)
     netDetail->show();
     KWindowSystem::raiseWindow(netDetail->winId());
     netDetail->centerToScreen();
+    kdk::WindowManager::setSkipSwitcher(netDetail->windowHandle(), true);
+    kdk::WindowManager::setSkipTaskBar(netDetail->windowHandle(), true);
+    kdk::WindowManager::setIconName(netDetail->windowHandle(), "kylin-network");
 
     connect(netDetail, &NetDetail::detailPageClose, [&](QString deviceName, QString lanName, QString lanUuid){
         if (lanUuid.isEmpty()) {

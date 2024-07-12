@@ -128,7 +128,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
         <source>IPv4Config</source>
-        <translation>IPv4Config ئىجرا بۇيرۇقى</translation>
+        <translation>IPv4 ئىجرا بۇيرۇقى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
@@ -641,7 +641,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="66"/>
         <source>IPv4Config</source>
-        <translation>IPv4Config ئىجرا بۇيرۇقى</translation>
+        <translation>IPv4 ئىجرا بۇيرۇقى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="67"/>
@@ -703,7 +703,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="133"/>
         <source>IPv6Config</source>
-        <translation>IPv6Config</translation>
+        <translation>IPv6 ئىجرا بۇيرۇقى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="134"/>

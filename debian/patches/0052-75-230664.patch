@@ -1,0 +1,64 @@
+From: =?utf-8?b?6YKT5omY?= <dengtuo@kylinos.cn>
+Date: Fri, 12 Jul 2024 06:28:05 +0000
+Subject: =?utf-8?b?ITc1IDIzMDY2NCDjgJDnvZHnu5zjgJHnvZHnu5zoj5zljZXkuoznuqc=?=
+ =?utf-8?b?56qX5Y+j5peg5Zu+5qCHIOmHjeeOsCBNZXJnZSBwdWxsIHJlcXVlc3QgITc1IGZy?=
+ =?utf-8?b?b20g5p2O5LqrL29wZW5reWxpbi9uaWxl?=
+
+---
+ src/frontend/mainwindow.cpp         | 3 +++
+ src/frontend/tab-pages/lanpage.cpp  | 6 +++++-
+ src/frontend/tab-pages/wlanpage.cpp | 3 +++
+ 3 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index 739d585..a72ea88 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -1141,6 +1141,9 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
+     netDetail->show();
+     KWindowSystem::raiseWindow(netDetail->winId());
+     netDetail->centerToScreen();
++    kdk::WindowManager::setSkipSwitcher(netDetail->windowHandle(), true);
++    kdk::WindowManager::setSkipTaskBar(netDetail->windowHandle(), true);
++    kdk::WindowManager::setIconName(netDetail->windowHandle(), "kylin-network");
+ }
+ 
+ void MainWindow::showAddOtherWlanWidget(QString devName)
+diff --git a/src/frontend/tab-pages/lanpage.cpp b/src/frontend/tab-pages/lanpage.cpp
+index 38919fa..7aa7104 100644
+--- a/src/frontend/tab-pages/lanpage.cpp
++++ b/src/frontend/tab-pages/lanpage.cpp
+@@ -34,7 +34,8 @@
+ #define ITEM_HEIGHT 48
+ 
+ #define LOG_FLAG "[LanPage]"
+-
++#include "windowmanager/windowmanager.h"
++using namespace kdk;
+ const QString EMPTY_CONNECT_UUID = "emptyconnect";
+ 
+ const QString WIRED_SWITCH = "wiredswitch";
+@@ -1288,6 +1289,9 @@ void LanPage::showDetailPage(QString devName, QString uuid)
+     netDetail->show();
+     KWindowSystem::raiseWindow(netDetail->winId());
+     netDetail->centerToScreen();
++    kdk::WindowManager::setSkipSwitcher(netDetail->windowHandle(), true);
++    kdk::WindowManager::setSkipTaskBar(netDetail->windowHandle(), true);
++    kdk::WindowManager::setIconName(netDetail->windowHandle(), "kylin-network");
+ 
+     connect(netDetail, &NetDetail::detailPageClose, [&](QString deviceName, QString lanName, QString lanUuid){
+         if (lanUuid.isEmpty()) {
+diff --git a/src/frontend/tab-pages/wlanpage.cpp b/src/frontend/tab-pages/wlanpage.cpp
+index cc07d3e..07a88c1 100644
+--- a/src/frontend/tab-pages/wlanpage.cpp
++++ b/src/frontend/tab-pages/wlanpage.cpp
+@@ -1651,6 +1651,9 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
+     netDetail->show();
+     KWindowSystem::raiseWindow(netDetail->winId());
+     netDetail->centerToScreen();
++    kdk::WindowManager::setSkipSwitcher(netDetail->windowHandle(), true);
++    kdk::WindowManager::setSkipTaskBar(netDetail->windowHandle(), true);
++    kdk::WindowManager::setIconName(netDetail->windowHandle(), "kylin-network");
+ 
+     return;
+ }

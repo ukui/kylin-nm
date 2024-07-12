@@ -1,0 +1,83 @@
+From: =?utf-8?b?6JSh5rab?= <caitao@kylinos.cn>
+Date: Fri, 12 Jul 2024 07:01:18 +0000
+Subject: =?utf-8?b?ITc2IOe7tOivree/u+ivkSBNZXJnZSBwdWxsIHJlcXVlc3QgITc2IGZy?=
+ =?utf-8?b?b20g6YKT5omYL29wZW5reWxpbi9uaWxl?=
+
+---
+ plugins/wlanconnect/translations/ug.ts | 10 +++++-----
+ src/translations/kylin-nm_ug.ts        |  6 +++---
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/plugins/wlanconnect/translations/ug.ts b/plugins/wlanconnect/translations/ug.ts
+index 6bdf794..a0a1351 100644
+--- a/plugins/wlanconnect/translations/ug.ts
++++ b/plugins/wlanconnect/translations/ug.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation>Add Others</translation>
++        <translation>باشقىلار قوشۇش</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation>Add WiredNetork</translation>
++        <translation>سىملىق تور قوشۇش</translation>
+     </message>
+ </context>
+ <context>
+@@ -45,11 +45,11 @@
+     </message>
+     <message>
+         <source>ukui control center</source>
+-        <translation type="vanished">控制面板</translation>
++        <translation type="vanished">كونترول قىلىش ئېكرانى </translation>
+     </message>
+     <message>
+         <source>ukui control center desktop message</source>
+-        <translation type="vanished">控制面板桌面通知</translation>
++        <translation type="vanished">كونترول قىلىش ئېكرانى ئۈستەل ئۈستىدە ئۇقتۇرۇش قىلىنىدۇ </translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="127"/>
+@@ -59,7 +59,7 @@
+     <message>
+         <location filename="../wlanconnect.cpp" line="130"/>
+         <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>ئۈستەل يۈزى ئۇچۇرى تەڭشىكى</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="298"/>
+diff --git a/src/translations/kylin-nm_ug.ts b/src/translations/kylin-nm_ug.ts
+index d674bc3..d7ccdc9 100644
+--- a/src/translations/kylin-nm_ug.ts
++++ b/src/translations/kylin-nm_ug.ts
+@@ -128,7 +128,7 @@
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
+         <source>IPv4Config</source>
+-        <translation>IPv4Config ئىجرا بۇيرۇقى</translation>
++        <translation>IPv4 ئىجرا بۇيرۇقى</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
+@@ -641,7 +641,7 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="66"/>
+         <source>IPv4Config</source>
+-        <translation>IPv4Config ئىجرا بۇيرۇقى</translation>
++        <translation>IPv4 ئىجرا بۇيرۇقى</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv4page.cpp" line="67"/>
+@@ -703,7 +703,7 @@
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="133"/>
+         <source>IPv6Config</source>
+-        <translation>IPv6Config</translation>
++        <translation>IPv6 ئىجرا بۇيرۇقى</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/ipv6page.cpp" line="134"/>

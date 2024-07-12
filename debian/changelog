@@ -1,3 +1,12 @@
+kylin-nm (4.10.0.0-ok0.7) nile; urgency=medium
+
+  * BUG：无
+  * 需求：无
+  * 其他改动说明：更新维文翻译
+  * 其他改动影响域：无 
+
+ -- dengtuo <dengtuo@kylinos.cn>  Fri, 12 Jul 2024 14:57:19 +0800
+
 kylin-nm (4.10.0.0-ok0.6) nile; urgency=medium
 
   * BUG：#230664 【网络】网络菜单二级窗口无图标

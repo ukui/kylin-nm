@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation>Add Others</translation>
+        <translation>باشقىلار قوشۇش</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation>Add WiredNetork</translation>
+        <translation>سىملىق تور قوشۇش</translation>
     </message>
 </context>
 <context>
@@ -45,11 +45,11 @@
     </message>
     <message>
         <source>ukui control center</source>
-        <translation type="vanished">控制面板</translation>
+        <translation type="vanished">كونترول قىلىش ئېكرانى </translation>
     </message>
     <message>
         <source>ukui control center desktop message</source>
-        <translation type="vanished">控制面板桌面通知</translation>
+        <translation type="vanished">كونترول قىلىش ئېكرانى ئۈستەل ئۈستىدە ئۇقتۇرۇش قىلىنىدۇ </translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="127"/>
@@ -59,7 +59,7 @@
     <message>
         <location filename="../wlanconnect.cpp" line="130"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>ئۈستەل يۈزى ئۇچۇرى تەڭشىكى</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="298"/>

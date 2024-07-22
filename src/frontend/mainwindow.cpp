@@ -643,6 +643,7 @@ void MainWindow::showByWaylandHelper()
     //去除窗管标题栏，传入参数为QWidget*
     kdk::UkuiStyleHelper::self()->removeHeader(this);
     this->show();
+    this->setFocus();
     QWindow* window = this->windowHandle();
     if (window) {
         //跳过任务栏和分页器的属性

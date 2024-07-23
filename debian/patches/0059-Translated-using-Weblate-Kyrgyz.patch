@@ -1,0 +1,51 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Tue, 23 Jul 2024 11:28:25 +0000
+Subject: Translated using Weblate (Kyrgyz)
+
+Currently translated at 14.2% (2 of 14 strings)
+
+Translation: openkylin-nile-new/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/netconnect/ky/
+---
+ plugins/netconnect/translations/kk.ts | 4 ++--
+ plugins/netconnect/translations/ky.ts | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/plugins/netconnect/translations/kk.ts b/plugins/netconnect/translations/kk.ts
+index 5cc7346..e743ba6 100644
+--- a/plugins/netconnect/translations/kk.ts
++++ b/plugins/netconnect/translations/kk.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>باسقانٸ قوسۋ</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation type="unfinished"></translation>
++        <translation>سىمدى تور قوسۋ</translation>
+     </message>
+ </context>
+ <context>
+diff --git a/plugins/netconnect/translations/ky.ts b/plugins/netconnect/translations/ky.ts
+index 51197a5..9854a04 100644
+--- a/plugins/netconnect/translations/ky.ts
++++ b/plugins/netconnect/translations/ky.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>باشقانى قوشۇۇ</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation type="unfinished"></translation>
++        <translation>سىمدۇۇ تور  قوشۇۇ</translation>
+     </message>
+ </context>
+ <context>

@@ -1,0 +1,187 @@
+From: KevinDuan <duankaiwen@kylinos.cn>
+Date: Tue, 23 Jul 2024 11:28:38 +0000
+Subject: Translated using Weblate (Kyrgyz)
+
+Currently translated at 100.0% (11 of 11 strings)
+
+Translation: openkylin-nile-new/wlanconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/wlanconnect/ky/
+---
+ plugins/wlanconnect/translations/kk.ts | 22 +++++++++++-----------
+ plugins/wlanconnect/translations/ky.ts | 22 +++++++++++-----------
+ 2 files changed, 22 insertions(+), 22 deletions(-)
+
+diff --git a/plugins/wlanconnect/translations/kk.ts b/plugins/wlanconnect/translations/kk.ts
+index 2306e9d..1d55689 100644
+--- a/plugins/wlanconnect/translations/kk.ts
++++ b/plugins/wlanconnect/translations/kk.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation type="unfinished"></translation>
++        <translation>باسقانٸ قوسۋ</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation type="unfinished"></translation>
++        <translation>سىمدى تور قوسۋ</translation>
+     </message>
+ </context>
+ <context>
+@@ -19,7 +19,7 @@
+     <message>
+         <location filename="../wlanconnect.ui" line="14"/>
+         <source>WlanConnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>سۇيىر كولەمدىك سىمسىز تور</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="35"/>
+@@ -27,20 +27,20 @@
+         <location filename="../wlanconnect.cpp" line="280"/>
+         <location filename="../wlanconnect.cpp" line="283"/>
+         <source>WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>سۇيىر كولەمدىك سىمسىز تور</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="94"/>
+         <location filename="../wlanconnect.cpp" line="282"/>
+         <source>open</source>
+-        <translation type="unfinished"></translation>
++        <translation>ٸشٸۋ</translation>
+         <extra-contents_path>/wlanconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="147"/>
+         <location filename="../wlanconnect.cpp" line="279"/>
+         <source>Advanced settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>جوعارعى تەڭشەۋلەر</translation>
+         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+@@ -54,29 +54,29 @@
+     <message>
+         <location filename="../wlanconnect.cpp" line="127"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>تەڭشەۋلەر</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="130"/>
+         <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>ۇستەل بەتى حابارى تەڭگەرگٸش</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="298"/>
+         <source>No wireless network card detected</source>
+-        <translation type="unfinished"></translation>
++        <translation>سىمسىز تور كارتاسى بايقالمادٸ</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="425"/>
+         <location filename="../wlanconnect.cpp" line="1104"/>
+         <location filename="../wlanconnect.cpp" line="1167"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>جالعانعان</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="1040"/>
+         <source>card</source>
+-        <translation type="unfinished"></translation>
++        <translation>تور كارتاسى</translation>
+     </message>
+ </context>
+ </TS>
+diff --git a/plugins/wlanconnect/translations/ky.ts b/plugins/wlanconnect/translations/ky.ts
+index da96089..eb16f72 100644
+--- a/plugins/wlanconnect/translations/ky.ts
++++ b/plugins/wlanconnect/translations/ky.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation type="unfinished"></translation>
++        <translation>باشقانى قوشۇۇ</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation type="unfinished"></translation>
++        <translation>سىمدۇۇ تور  قوشۇۇ</translation>
+     </message>
+ </context>
+ <context>
+@@ -19,7 +19,7 @@
+     <message>
+         <location filename="../wlanconnect.ui" line="14"/>
+         <source>WlanConnect</source>
+-        <translation type="unfinished"></translation>
++        <translation>تار گۅۅلۅمدۉ سەمىز تور</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="35"/>
+@@ -27,20 +27,20 @@
+         <location filename="../wlanconnect.cpp" line="280"/>
+         <location filename="../wlanconnect.cpp" line="283"/>
+         <source>WLAN</source>
+-        <translation type="unfinished"></translation>
++        <translation>تار گۅۅلۅمدۉ سەمىز تور</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="94"/>
+         <location filename="../wlanconnect.cpp" line="282"/>
+         <source>open</source>
+-        <translation type="unfinished"></translation>
++        <translation>اچۇۇ</translation>
+         <extra-contents_path>/wlanconnect/open</extra-contents_path>
+     </message>
+     <message>
+         <location filename="../wlanconnect.ui" line="147"/>
+         <location filename="../wlanconnect.cpp" line="279"/>
+         <source>Advanced settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>جوعورۇ  تەڭشەكتەر</translation>
+         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
+     </message>
+     <message>
+@@ -54,29 +54,29 @@
+     <message>
+         <location filename="../wlanconnect.cpp" line="127"/>
+         <source>Settings</source>
+-        <translation type="unfinished"></translation>
++        <translation>تەڭشەكتەر</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="130"/>
+         <source>Settings desktop message</source>
+-        <translation type="unfinished"></translation>
++        <translation>شىرە  بەتى ۇچۇرۇ  تەڭشەگى</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="298"/>
+         <source>No wireless network card detected</source>
+-        <translation type="unfinished"></translation>
++        <translation>سەمىز تور  كارتوچكاسى  بايقالبادى</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="425"/>
+         <location filename="../wlanconnect.cpp" line="1104"/>
+         <location filename="../wlanconnect.cpp" line="1167"/>
+         <source>connected</source>
+-        <translation type="unfinished"></translation>
++        <translation>جالعانعان</translation>
+     </message>
+     <message>
+         <location filename="../wlanconnect.cpp" line="1040"/>
+         <source>card</source>
+-        <translation type="unfinished"></translation>
++        <translation>تور  كارتوچكاسى</translation>
+     </message>
+ </context>
+ </TS>

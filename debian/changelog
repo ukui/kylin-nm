@@ -1,3 +1,12 @@
+kylin-nm (4.10.0.0-ok0.9) nile; urgency=medium
+
+  * BUG：#240566 【兆芯KX6000】【冒烟1级】【WiFi】控制面板多次点击未连接的WiFi，高概率出现密码输入框不显示输入光标
+  * 需求：无
+  * 其他改动说明：更新翻译
+  * 其他改动影响域：无
+
+ -- lixiang1 <lixiang1@kylinos.cn>  Thu, 25 Jul 2024 09:31:57 +0800
+
 kylin-nm (4.10.0.0-ok0.8) nile; urgency=medium
 
   * BUG：无

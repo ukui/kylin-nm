@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>باشقانى قوشۇۇ</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation type="unfinished"></translation>
+        <translation>سىمدۇۇ تور  قوشۇۇ</translation>
     </message>
 </context>
 <context>

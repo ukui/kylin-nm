@@ -537,31 +537,41 @@ void MainWindow::resetWindowPosition()
 #define PANEL_LEFT 2
 #define PANEL_RIGHT 3
 //#define PANEL_BOTTOM 4
-    QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
-    int x, y;
-    switch(m_panelPosition){
-    //任务栏位于上方
-    case PANEL_TOP:
-        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
-        y = availableGeo.y() + m_panelSize + MARGIN;
+#define MARGIN 8
+    QDBusInterface iface("org.ukui.panel",
+                         "/panel/position",
+                         "org.ukui.panel",
+                         QDBusConnection::sessionBus());
+    QDBusReply<QVariantList> reply=iface.call("GetPrimaryScreenGeometry");
+    QVariantList position_list=reply.value();
+
+    /*
+     * 通过这个dbus接口获取到的6个参数分别为 ：可用屏幕大小的x坐标、y坐标、宽度、高度，任务栏位置
+    */
+     QRect rect;
+    switch(reply.value().at(4).toInt()){
+    case 1:
+        rect = QRect(position_list.at(0).toInt()+position_list.at(2).toInt()-this->width()-MARGIN,
+                    position_list.at(1).toInt()+MARGIN,
+                    this->width(),this->height());
         break;
-    //任务栏位于左边
-    case PANEL_LEFT:
-        x = availableGeo.x() + m_panelSize + MARGIN;
-        y = availableGeo.y() + availableGeo.height() - this->height() - MARGIN;
+    case 2:
+        rect = QRect(position_list.at(0).toInt()+MARGIN,
+                     position_list.at(1).toInt()+reply.value().at(3).toInt()-this->height()-MARGIN,
+                     this->width(),this->height());
         break;
-    //任务栏位于右边
-    case PANEL_RIGHT:
-        x = availableGeo.x() + availableGeo.width() - m_panelSize - this->width() - MARGIN;
-        y = availableGeo.y() + availableGeo.height() - this->height() - MARGIN;
+    case 3:
+        rect = QRect(position_list.at(0).toInt()+position_list.at(2).toInt()-this->width()-MARGIN,
+                     position_list.at(1).toInt()+reply.value().at(3).toInt()-this->height()-MARGIN,
+                     this->width(),this->height());
         break;
-    //任务栏位于下方
     default:
-        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
-        y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
+        rect = QRect(position_list.at(0).toInt()+position_list.at(2).toInt()-this->width()-MARGIN,
+                     position_list.at(1).toInt()+reply.value().at(3).toInt()-this->height()-MARGIN,
+                     this->width(),this->height());
         break;
     }
-    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(x, y, this->width(), this->height()));
+    kdk::WindowManager::setGeometry(this->windowHandle(), rect);
     qDebug() << " Position of ukui-panel is " << m_panelPosition << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
 }
 

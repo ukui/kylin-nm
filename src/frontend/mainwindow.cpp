@@ -536,42 +536,60 @@ void MainWindow::resetWindowPosition()
 #define PANEL_TOP 1
 #define PANEL_LEFT 2
 #define PANEL_RIGHT 3
+#define PANEL_Bottom 0
 //#define PANEL_BOTTOM 4
-#define MARGIN 8
-    QDBusInterface iface("org.ukui.panel",
-                         "/panel/position",
-                         "org.ukui.panel",
-                         QDBusConnection::sessionBus());
-    QDBusReply<QVariantList> reply=iface.call("GetPrimaryScreenGeometry");
-    QVariantList position_list=reply.value();
 
-    /*
-     * 通过这个dbus接口获取到的6个参数分别为 ：可用屏幕大小的x坐标、y坐标、宽度、高度，任务栏位置
-    */
-     QRect rect;
-    switch(reply.value().at(4).toInt()){
-    case 1:
-        rect = QRect(position_list.at(0).toInt()+position_list.at(2).toInt()-this->width()-MARGIN,
-                    position_list.at(1).toInt()+MARGIN,
-                    this->width(),this->height());
+    QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
+    int x, y;
+
+    switch (m_panelPosition)
+    {
+    case PANEL_TOP:
+    {
+        char *envStr = getenv("LANGUAGE");
+        /* 维吾尔语 ug_CN
+         * 哈萨克语 kk_KZ
+         * 柯尔克孜语 ky_KG */
+        if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
+            x = MARGIN;
+            y = availableGeo.y() + m_panelSize + MARGIN;
+        }
+        else {
+            x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+            y = availableGeo.y() + m_panelSize + MARGIN;
+        }
+
+    }
         break;
-    case 2:
-        rect = QRect(position_list.at(0).toInt()+MARGIN,
-                     position_list.at(1).toInt()+reply.value().at(3).toInt()-this->height()-MARGIN,
-                     this->width(),this->height());
+    case PANEL_Bottom:
+    {
+        char *envStr = getenv("LANGUAGE");
+        if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
+            x = MARGIN;
+            y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
+        }
+        else {
+            x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+            y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
+        }
+
+    }
         break;
-    case 3:
-        rect = QRect(position_list.at(0).toInt()+position_list.at(2).toInt()-this->width()-MARGIN,
-                     position_list.at(1).toInt()+reply.value().at(3).toInt()-this->height()-MARGIN,
-                     this->width(),this->height());
+    case PANEL_LEFT:
+    {
+        x = availableGeo.x() + m_panelSize + MARGIN;
+        y = availableGeo.y() + availableGeo.height() - this->height() - MARGIN;
+    }
         break;
-    default:
-        rect = QRect(position_list.at(0).toInt()+position_list.at(2).toInt()-this->width()-MARGIN,
-                     position_list.at(1).toInt()+reply.value().at(3).toInt()-this->height()-MARGIN,
-                     this->width(),this->height());
+    case PANEL_RIGHT:
+    {
+        x = availableGeo.x() + availableGeo.width() - m_panelSize - this->width() - MARGIN;
+        y = availableGeo.y() + availableGeo.height() - this->height() - MARGIN;
+    }
         break;
     }
-    kdk::WindowManager::setGeometry(this->windowHandle(), rect);
+
+    kdk::WindowManager::setGeometry(this->windowHandle(), QRect(x, y, this->width(), this->height()));
     qDebug() << " Position of ukui-panel is " << m_panelPosition << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
 }
 

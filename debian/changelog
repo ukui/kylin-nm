@@ -1,3 +1,12 @@
+kylin-nm (4.10.0.0-ok0.11) nile; urgency=medium
+
+  * BUG：#IAPTDF 【gg-维哈柯】【VPN】点击托盘VPN按钮，窗口布局不正确 
+  * 需求：无
+  * 其他改动说明：更新翻译
+  * 其他改动影响域：无
+
+ -- jiahua xie <xiejiahua@kylinos.cn>  Fri, 30 Aug 2024 09:33:01 +0800
+
 kylin-nm (4.10.0.0-ok0.10) nile; urgency=medium
 
   * BUG：#I9IYPM 任务栏网络模块，切换哈维柯语言时从右往左布局出现混乱

@@ -684,11 +684,20 @@ void VpnPage::resetWindowPosition()
 
     QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
     int x, y;
+    char *envStr = getenv("LANGUAGE");
     switch(m_panelPosition){
     case PANEL_TOP:
         //任务栏位于上方
-        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
-        y = availableGeo.y() + m_panelSize + MARGIN;
+        /* 维吾尔语 ug_CN
+         * 哈萨克语 kk_KZ
+         * 柯尔克孜语 ky_KG */
+        if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
+            x = MARGIN;
+            y = availableGeo.y() + m_panelSize + MARGIN;
+        } else {
+            x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+            y = availableGeo.y() + m_panelSize + MARGIN;
+        }
         break;
         //任务栏位于左边
     case PANEL_LEFT:
@@ -702,8 +711,13 @@ void VpnPage::resetWindowPosition()
         break;
         //任务栏位于下方
     default:
-        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
-        y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
+        if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
+            x = MARGIN;
+            y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
+        } else {
+            x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+            y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
+        }
         break;
     }
     kdk::WindowManager::setGeometry(this->windowHandle(), QRect(x, y, this->width(), this->height()));

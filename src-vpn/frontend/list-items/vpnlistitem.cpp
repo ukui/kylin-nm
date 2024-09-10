@@ -30,6 +30,10 @@ VpnListItem::VpnListItem(const KyConnectItem *vpnConnectItem, QWidget *parent):L
     m_deviceResource = new KyNetworkDeviceResourse(this);
 
     connectItemCopy(vpnConnectItem);
+    char *envStr = getenv("LANGUAGE");
+    if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
+        this->setFixedWidth(390);
+    }
 
     m_nameLabel->setText(m_vpnConnectItem.m_connectName);
     m_netButton->setButtonIcon(QIcon::fromTheme("ukui-vpn-symbolic"));

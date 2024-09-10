@@ -1,0 +1,132 @@
+From: =?utf-8?b?6YKT5omY?= <dengtuo@kylinos.cn>
+Date: Tue, 10 Sep 2024 11:11:09 +0000
+Subject: !80 fix bug Merge pull request !80 from xie_klve/openkylin/nile
+
+---
+ src-vpn/frontend/list-items/vpnlistitem.cpp |  4 ++++
+ src-vpn/frontend/single-pages/vpnpage.cpp   | 22 +++++++++++++++----
+ src/frontend/tools/infobutton.cpp           | 33 +++--------------------------
+ src/frontend/tools/infobutton.h             |  1 -
+ 4 files changed, 25 insertions(+), 35 deletions(-)
+
+diff --git a/src-vpn/frontend/list-items/vpnlistitem.cpp b/src-vpn/frontend/list-items/vpnlistitem.cpp
+index ce02cd1..2cd3620 100644
+--- a/src-vpn/frontend/list-items/vpnlistitem.cpp
++++ b/src-vpn/frontend/list-items/vpnlistitem.cpp
+@@ -30,6 +30,10 @@ VpnListItem::VpnListItem(const KyConnectItem *vpnConnectItem, QWidget *parent):L
+     m_deviceResource = new KyNetworkDeviceResourse(this);
+ 
+     connectItemCopy(vpnConnectItem);
++    char *envStr = getenv("LANGUAGE");
++    if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
++        this->setFixedWidth(390);
++    }
+ 
+     m_nameLabel->setText(m_vpnConnectItem.m_connectName);
+     m_netButton->setButtonIcon(QIcon::fromTheme("ukui-vpn-symbolic"));
+diff --git a/src-vpn/frontend/single-pages/vpnpage.cpp b/src-vpn/frontend/single-pages/vpnpage.cpp
+index 03f27ae..c7e9e41 100644
+--- a/src-vpn/frontend/single-pages/vpnpage.cpp
++++ b/src-vpn/frontend/single-pages/vpnpage.cpp
+@@ -684,11 +684,20 @@ void VpnPage::resetWindowPosition()
+ 
+     QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
+     int x, y;
++    char *envStr = getenv("LANGUAGE");
+     switch(m_panelPosition){
+     case PANEL_TOP:
+         //任务栏位于上方
+-        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+-        y = availableGeo.y() + m_panelSize + MARGIN;
++        /* 维吾尔语 ug_CN
++         * 哈萨克语 kk_KZ
++         * 柯尔克孜语 ky_KG */
++        if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
++            x = MARGIN;
++            y = availableGeo.y() + m_panelSize + MARGIN;
++        } else {
++            x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
++            y = availableGeo.y() + m_panelSize + MARGIN;
++        }
+         break;
+         //任务栏位于左边
+     case PANEL_LEFT:
+@@ -702,8 +711,13 @@ void VpnPage::resetWindowPosition()
+         break;
+         //任务栏位于下方
+     default:
+-        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+-        y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
++        if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
++            x = MARGIN;
++            y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
++        } else {
++            x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
++            y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
++        }
+         break;
+     }
+     kdk::WindowManager::setGeometry(this->windowHandle(), QRect(x, y, this->width(), this->height()));
+diff --git a/src/frontend/tools/infobutton.cpp b/src/frontend/tools/infobutton.cpp
+index 3c1902c..9738e24 100644
+--- a/src/frontend/tools/infobutton.cpp
++++ b/src/frontend/tools/infobutton.cpp
+@@ -62,6 +62,9 @@ InfoButton::InfoButton(QWidget *parent) : QPushButton(parent)
+ void InfoButton::initUI()
+ {
+     this->setFixedSize(BUTTON_SIZE);
++    this->setIcon(QIcon::fromTheme("preferences-system-details-symbolic"));
++    this->setProperty("useButtonPalette", true);
++    this->setFlat(true);
+     m_backgroundColor = BACKGROUND_COLOR;
+     m_foregroundColor = FOREGROUND_COLOR_NORMAL;
+ }
+@@ -89,36 +92,6 @@ void InfoButton::onPaletteChanged()
+     this->repaint();
+ }
+ 
+-void InfoButton::paintEvent(QPaintEvent *event)
+-{
+-    QPalette pal = this->palette();
+-    pal.setColor(QPalette::Base, m_backgroundColor);
+-    pal.setColor(QPalette::Text, m_foregroundColor);
+-
+-    QPainterPath cPath;
+-    cPath.addRect(0, 0, ICON_SIZE);
+-    cPath.addEllipse(0, 0, ICON_SIZE);
+-
+-    QPainterPath outerPath;
+-    outerPath.addEllipse(OUTER_PATH);
+-
+-    QPainterPath innerPath;
+-    innerPath.addEllipse(INNER_PATH);
+-    outerPath -= innerPath;
+-
+-    QPainter painter(this);
+-    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
+-    painter.setPen(Qt::NoPen);
+-
+-    painter.setBrush(pal.color(QPalette::Base));
+-    painter.drawPath(cPath);
+-
+-    painter.fillPath(outerPath, pal.color(QPalette::Text));
+-    painter.setPen(m_foregroundColor);
+-    QFont font("Noto Sans CJK SC", 11, QFont::Normal, false);
+-    painter.setFont(font);
+-    painter.drawText(TEXT_POS, "i");
+-}
+ 
+ void InfoButton::enterEvent(QEvent *event)
+ {
+diff --git a/src/frontend/tools/infobutton.h b/src/frontend/tools/infobutton.h
+index 308d70a..a9843da 100644
+--- a/src/frontend/tools/infobutton.h
++++ b/src/frontend/tools/infobutton.h
+@@ -30,7 +30,6 @@ public:
+     ~InfoButton() = default;
+ 
+ protected:
+-    void paintEvent(QPaintEvent *event);
+     void enterEvent(QEvent *event);
+     void leaveEvent(QEvent *event);
+     void mousePressEvent(QMouseEvent *event);

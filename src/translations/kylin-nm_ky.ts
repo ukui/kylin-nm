@@ -52,7 +52,7 @@
     <message>
         <location filename="../frontend/netdetails/configpage.cpp" line="71"/>
         <source>Config firewall and security settings</source>
-        <translation>وتتام جانا قووپسۇزدۇق  تەڭشەگىن سەپتەش .</translation>
+        <translation>وتتام جانا قووپسۇزدۇق  تەڭشەگىن سەپتەش</translation>
     </message>
 </context>
 <context>
@@ -90,7 +90,7 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="166"/>
         <source>The network is connected and access to the Internet is restricted.</source>
-        <translation>تور  ۇلاندى،  ئنتىرنەت  تور ىغا بولعون زىيارات چەكتەمەگە ۇچۇرادى.</translation>
+        <translation>تور  ۇلاندى، ئنتىرنەت  تور ىغا بولعون زىيارات چەكتەمەگە ۇچۇرادى.</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="177"/>
@@ -128,7 +128,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="98"/>
         <source>IPv4Config</source>
-        <translation>IPv4Config اتقارماق  بۇيرۇعۇ</translation>
+        <translation>IPv4 اتقارماق  بۇيرۇعۇ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
@@ -241,7 +241,7 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="361"/>
         <source>BandWidth:</source>
-        <translation>كەڭ قۇر</translation>
+        <translation>كەڭ قۇر:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="293"/>
@@ -513,7 +513,7 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="40"/>
         <source>Timeout</source>
-        <translation>ۇباقىت اشىپ  كەتتى</translation>
+        <translation>ۇباقىت ئۇزىتى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="43"/>
@@ -548,7 +548,7 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
         <source>Close</source>
-        <translation>بەكىتىش</translation>
+        <translation>جابۇۇ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="73"/>
@@ -641,7 +641,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="66"/>
         <source>IPv4Config</source>
-        <translation>IPv4Config اتقارماق  بۇيرۇعۇ</translation>
+        <translation>IPv4 اتقارماق  بۇيرۇعۇ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="67"/>
@@ -703,7 +703,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="133"/>
         <source>IPv6Config</source>
-        <translation type="unfinished"></translation>
+        <translation>IPv6 اتقارماق  بۇيرۇعۇ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="134"/>
@@ -855,7 +855,7 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="67"/>
         <source>conflict, unable to connect to the network normally!</source>
-        <translation>توقۇنۇسۇ،  تورعو نورماال  ۇلاعالى بولبودۇ!</translation>
+        <translation>توقۇنۇسۇ، تورعو نورماال  ۇلاعالى بولبودۇ!</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="753"/>
@@ -907,7 +907,7 @@
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="181"/>
         <source>kylin network applet desktop message</source>
-        <translation>بوبرا كېيىك تور  قۇرالى ۇچۇر جولجورۇعۇ</translation>
+        <translation>0 تور  قۇرالى ۇچۇر جولجورۇعۇ</translation>
     </message>
 </context>
 <context>
@@ -938,7 +938,7 @@
         <location filename="../frontend/mainwindow.cpp" line="384"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
-        <translation>تەڭشەكتەر</translation>
+        <translation>قۇرۇۇ ، اچۇۇ ، باشتوو  جاسوو ،اتقارۇۇ</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="385"/>
@@ -977,7 +977,7 @@
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="101"/>
         <source>Settings</source>
-        <translation>تەڭشەكتەر</translation>
+        <translation>قۇرۇۇ ، اچۇۇ ، باشتوو  جاسوو ،اتقارۇۇ</translation>
     </message>
 </context>
 <context>
@@ -995,7 +995,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="381"/>
         <source>Detail</source>
-        <translation>جان جاقتىلۇۇ مازمۇنۇ</translation>
+        <translation>ىچكەلەي ، قۇنت قويۇپ  مازمۇنۇ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="382"/>
@@ -1010,7 +1010,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="385"/>
         <source>Security</source>
-        <translation>قووپسۇز</translation>
+        <translation>قووپسۇزدۇق</translation>
     </message>
     <message>
         <source>Close</source>
@@ -1161,7 +1161,7 @@
     <message>
         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
         <source>Form</source>
-        <translation>كەبەتەسى ، تۇرپاتى</translation>
+        <translation>جادىبال</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -1189,7 +1189,7 @@
     <message>
         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
         <source>Form</source>
-        <translation>كەبەتەسى ، تۇرپاتى</translation>
+        <translation>جادىبال</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -1218,7 +1218,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="215"/>
         <source>Security</source>
-        <translation>قووپسۇز</translation>
+        <translation>قووپسۇزدۇق</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="216"/>
@@ -1336,7 +1336,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
         <source>Store passwords only for this user</source>
-        <translation>جالاڭ عانا  بۇل ىشتەتكۉۉچۉنۉن  جاشىرۇۇن  نومۇرۇن ساقتايت .</translation>
+        <translation>جالاڭ عانا  بۇل ىشتەتكۉۉچۉنۉن  جاشىرۇۇن  نومۇرۇن ساقتايت</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
@@ -1438,7 +1438,7 @@
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="136"/>
         <source>Settings</source>
-        <translation>تەڭشەكتەر</translation>
+        <translation>قۇرۇۇ ، اچۇۇ ، باشتوو  جاسوو ،اتقارۇۇ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="329"/>
@@ -1448,7 +1448,7 @@
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="332"/>
         <source>kylin network applet desktop message</source>
-        <translation>بوبرا كېيىك تور  قۇرالى ۇچۇر جولجورۇعۇ</translation>
+        <translation>0 تور  قۇرالى ۇچۇر جولجورۇعۇ</translation>
     </message>
 </context>
 <context>
@@ -1528,7 +1528,7 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="134"/>
         <source>Activated WLAN</source>
-        <translation>قورغىتىلدى</translation>
+        <translation>قوزعوتۇلدۇ</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="145"/>

@@ -548,7 +548,7 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
         <source>Close</source>
-        <translation>ئىتىش</translation>
+        <translation>ئېتىش</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="73"/>
@@ -907,7 +907,7 @@
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="181"/>
         <source>kylin network applet desktop message</source>
-        <translation>بوبرا كېيىك تور قورالى ئۇچۇر كۆرسەتمىسى</translation>
+        <translation>چىلىن تور قورالى ئۇچۇر كۆرسەتمىسى</translation>
     </message>
 </context>
 <context>
@@ -995,7 +995,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="381"/>
         <source>Detail</source>
-        <translation>تەپسىلى مەزمۇنى</translation>
+        <translation>تەپسىلىي مەزمۇنى</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="382"/>
@@ -1448,7 +1448,7 @@
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="332"/>
         <source>kylin network applet desktop message</source>
-        <translation>بوبرا كېيىك تور قورالى ئۇچۇر كۆرسەتمىسى</translation>
+        <translation>چىلىن تور قورالى ئۇچۇر كۆرسەتمىسى</translation>
     </message>
 </context>
 <context>
@@ -1528,7 +1528,7 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="134"/>
         <source>Activated WLAN</source>
-        <translation>قورغىتىلدى</translation>
+        <translation>قوزغىتىلدى</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="145"/>
@@ -1552,7 +1552,7 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1741"/>
         <source>Connected: </source>
-        <translation>ئۇلاندى: </translation>
+        <translation>ئۇلانغانلىرى: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1743"/>

@@ -1,3 +1,9 @@
+kylin-nm (4.10.0.0-ok0.12) nile; urgency=medium
+
+  * 更新0920维哈克翻译
+
+ -- Kevin Duan <duankaiwen@kylinos.cn>  Fri, 30 Aug 2024 09:33:01 +0800
+
 kylin-nm (4.10.0.0-ok0.11) nile; urgency=medium
 
   * BUG：#IAPTDF 【gg-维哈柯】【VPN】点击托盘VPN按钮，窗口布局不正确 

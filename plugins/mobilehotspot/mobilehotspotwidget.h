@@ -72,10 +72,10 @@ private:
     TitleLabel *m_hotspotTitleLabel;
     QLabel *m_switchLabel;
     QLabel *m_apNameLabel;
-    QLabel *m_pwdLabel;
+    FixLabel *m_pwdLabel;
     QLabel *m_pwdHintLabel;
     FixLabel *m_freqBandLabel;
-    QLabel *m_interfaceLabel;
+    FixLabel *m_interfaceLabel;
 
     QFrame *switchAndApNameLine;
     QFrame *apNameAndPwdLine;
@@ -101,6 +101,13 @@ private:
 
     QString m_uuid = "";
     QString m_hostName = "";
+
+
+    QLabel *m_statusLabel;
+    QTimer *m_waitTimer = nullptr;
+    QList<QIcon> m_loadIcons;
+    int m_currentIconIndex=0;
+    void updateLoadingIcon();
 
     void resetFrameSize();
     void initUI();
@@ -145,6 +152,7 @@ private:
     void initBlackListPage();
 
     bool m_isUserSelect = true;  //是否用户操作
+
 signals:
 
 private slots:
@@ -167,6 +175,9 @@ private slots:
     void onPwdTextChanged();
 
     void onInterfaceChanged();
+
+    void startLoading();
+    void stopLoading();
 };
 
 #endif // MOBILEHOTSPOTWIDGET_H

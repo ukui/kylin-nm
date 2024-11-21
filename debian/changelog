@@ -1,3 +1,12 @@
+kylin-nm (4.10.0.0-ok0.14) huanghe; urgency=medium
+
+  * BUG：无
+  * 需求：#369469 【交互动效】【网络】托盘面板交互动效调整
+  * 其他改动说明：更新翻译
+  * 其他改动影响域：无
+
+ -- lixiang1 <lixiang1@kylinos.cn>  Thu, 21 Nov 2024 09:18:31 +0800
+
 kylin-nm (4.10.0.0-ok0.13) nile; urgency=medium
 
   * BUG：#I9W15H【移动热点】移动热点界面进行搜索，下拉列表内容显示不全

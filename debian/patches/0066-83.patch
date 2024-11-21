@@ -1,0 +1,74 @@
+From: =?utf-8?b?5p2O5Lqr?= <lixiang1@kylinos.cn>
+Date: Thu, 21 Nov 2024 05:56:46 +0000
+Subject: =?utf-8?b?ITgzIOe9kee7nOaJmOebmOmdouadv+S6pOS6kuWKqOaViOiwg+aVtCBN?=
+ =?utf-8?b?ZXJnZSBwdWxsIHJlcXVlc3QgITgzIGZyb20g5p2O5LqrL29wZW5reWxpbi9odWFu?=
+ =?utf-8?b?Z2hl?=
+
+---
+ src/frontend/mainwindow.cpp | 31 +++++++++++++++++++++++++------
+ src/frontend/mainwindow.h   |  1 +
+ 2 files changed, 26 insertions(+), 6 deletions(-)
+
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index 4139ca5..98b358b 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -666,21 +666,40 @@ void MainWindow::showControlCenter()
+     }
+ }
+ 
++void MainWindow::slideWindowByPanelPosition()
++{
++    if(m_panelPosition == 0)
++    {
++        KWindowEffects::slideWindow(this->winId(), KWindowEffects::BottomEdge);
++    }
++    else if (m_panelPosition == 1)
++    {
++        KWindowEffects::slideWindow(this->winId(), KWindowEffects::TopEdge);
++    }
++    else if(m_panelPosition == 2)
++    {
++        KWindowEffects::slideWindow(this->winId(), KWindowEffects::LeftEdge);
++    }
++    else
++    {
++        KWindowEffects::slideWindow(this->winId(), KWindowEffects::RightEdge);     }
++}
++
+ void MainWindow::showByWaylandHelper()
+ {
+-    //去除窗管标题栏，传入参数为QWidget*
+-    kdk::UkuiStyleHelper::self()->removeHeader(this);
+-    this->show();
+-    this->setFocus();
+     QWindow* window = this->windowHandle();
++    //设置窗体位置，传入参数为QWindow*，QRect
+     if (window) {
+         //跳过任务栏和分页器的属性
+         kdk::WindowManager::setSkipSwitcher(window, true);
+         kdk::WindowManager::setSkipTaskBar(window, true);
+     }
+     resetWindowPosition();
+-    //设置窗体位置，传入参数为QWindow*，QRect
+-
++    //去除窗管标题栏，传入参数为QWidget*
++    kdk::UkuiStyleHelper::self()->removeHeader(this);
++    this->show();
++    this->setFocus();
++    slideWindowByPanelPosition();
+ }
+ 
+ void MainWindow::setCentralWidgetType(IconActiveType iconStatus)
+diff --git a/src/frontend/mainwindow.h b/src/frontend/mainwindow.h
+index 336e190..daf7671 100644
+--- a/src/frontend/mainwindow.h
++++ b/src/frontend/mainwindow.h
+@@ -170,6 +170,7 @@ private:
+     void resetWindowTheme();
+     void showControlCenter();
+     void showByWaylandHelper();
++    void slideWindowByPanelPosition();
+ 
+     void setCentralWidgetType(IconActiveType iconStatus);
+     void assembleTrayIconTooltip(QMap<QString, QString> &map, QString &tip);

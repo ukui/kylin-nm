@@ -1,0 +1,647 @@
+From: =?utf-8?b?5p2O5Lqr?= <lixiang1@kylinos.cn>
+Date: Mon, 16 Dec 2024 02:18:38 +0000
+Subject: =?utf-8?b?ITg5IOe9kee7nCZ2cG7pnaLmnb/kvY3nva7pgILphY3kuInlspvku7s=?=
+ =?utf-8?b?5Yqh5qCPIE1lcmdlIHB1bGwgcmVxdWVzdCAhODkgZnJvbSDmnY7kuqsvb3Blbmt5?=
+ =?utf-8?b?bGluL2h1YW5naGU=?=
+
+---
+ src-vpn/frontend/single-pages/vpnpage.cpp | 121 +++++++++++++++++++++++---
+ src-vpn/frontend/single-pages/vpnpage.h   |   5 +-
+ src-vpn/frontend/vpnobject.cpp            |   2 +-
+ src/frontend/mainwindow.cpp               | 140 ++++++++++++++++++++++++------
+ src/frontend/mainwindow.h                 |   3 +
+ src/frontend/tools/panelgsettings.cpp     | 108 +++++++++++++++++++++++
+ src/frontend/tools/panelgsettings.h       |  24 +++++
+ src/frontend/tools/tools.pri              |   2 +
+ 8 files changed, 363 insertions(+), 42 deletions(-)
+ create mode 100644 src/frontend/tools/panelgsettings.cpp
+ create mode 100644 src/frontend/tools/panelgsettings.h
+
+diff --git a/src-vpn/frontend/single-pages/vpnpage.cpp b/src-vpn/frontend/single-pages/vpnpage.cpp
+index c7e9e41..3437b20 100644
+--- a/src-vpn/frontend/single-pages/vpnpage.cpp
++++ b/src-vpn/frontend/single-pages/vpnpage.cpp
+@@ -21,11 +21,17 @@
+ #include <QDebug>
+ #include <QScrollBar>
+ #include <QScreen>
++#include <KWindowEffects>
++#include "../tools/panelgsettings.h"
+ #include "windowmanager/windowmanager.h"
+ 
+ #define PANEL_SETTINGS "org.ukui.panel.settings"
+ #define PANEL_SIZE_KEY "panelsize"
+ #define PANEL_POSITION_KEY "panelposition"
++#define PANEL_TYPE_KEY "paneltype"
++#define UKUI_DATA_ISLAND_POSITION_KEY "settingsislandposition"
++#define UKUI_TOPBAR_SIZE_KEY "topbarsize"
++#define UKUI_PANEL_LENGTH_KEY "panellength"
+ 
+ VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
+ {
+@@ -596,25 +602,68 @@ bool VpnPage::eventFilter(QObject *watched, QEvent *event)
+ void VpnPage::initPanelGSettings()
+ {
+     const QByteArray id(PANEL_SETTINGS);
+-    if (QGSettings::isSchemaInstalled(id)) {
+-        if (m_panelGSettings == nullptr) {
+-            m_panelGSettings = new QGSettings(id, QByteArray(), this);
++    if (QGSettings::isSchemaInstalled(id))
++    {
++        if (m_panelGSettings == nullptr)
++        {
++            m_panelGSettings = new QGSettings(id);
+         }
+-        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY)) {
++        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY))
++        {
+             m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+         }
+-        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY)) {
++        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY))
++        {
+             m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+         }
+-        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key) {
+-            if (key == PANEL_POSITION_KEY) {
+-                m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+-            }
+-            if (key == PANEL_SIZE_KEY) {
++        if (m_panelGSettings->keys().contains(PANEL_TYPE_KEY))
++        {
++            m_panelType  = m_panelGSettings->get(PANEL_TYPE_KEY).toInt();
++        }
++        else
++        {
++            m_panelType = 0;
++        }
++
++        if (m_panelGSettings->keys().contains(UKUI_DATA_ISLAND_POSITION_KEY))
++        {
++            m_dataIslandPosition = m_panelGSettings->get(UKUI_DATA_ISLAND_POSITION_KEY).toInt();
++        }
++
++        if (m_panelGSettings->keys().contains(UKUI_TOPBAR_SIZE_KEY))
++        {
++            m_topbarSize = m_panelGSettings->get(UKUI_TOPBAR_SIZE_KEY).toInt();
++        }
++        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key)
++        {
++            if (key == PANEL_SIZE_KEY)
++            {
+                 m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+             }
+-            if (this->isVisible()) {
+-                resetWindowPosition();
++            else if(key == PANEL_POSITION_KEY)
++            {
++                m_panelPosition = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
++            }
++            else if (key == PANEL_TYPE_KEY)
++            {
++                m_panelType = m_panelGSettings->get(PANEL_TYPE_KEY).toInt();
++                qDebug() << "切换任务栏类型";
++                //                updateGeometry();
++            }
++            else if (key == UKUI_DATA_ISLAND_POSITION_KEY)
++            {
++                m_dataIslandPosition = m_panelGSettings->get(UKUI_DATA_ISLAND_POSITION_KEY).toInt();
++                qDebug() << "任务栏宽度切换" << m_dataIslandPosition;
++                //                updateGeometry();
++            }
++            else if (key == UKUI_TOPBAR_SIZE_KEY)
++            {
++                m_topbarSize = m_panelGSettings->get(UKUI_TOPBAR_SIZE_KEY).toInt();
++                //                updateGeometry();
++            }
++            else if (key == UKUI_PANEL_LENGTH_KEY)
++            {
++                //                updateGeometry();
+             }
+         });
+     }
+@@ -670,19 +719,65 @@ void VpnPage::showUI()
+     }
+     raise();
+     activateWindow();
++    slideWindowByPanelPosition();
+     resetWindowPosition();
+     return;
+ }
+ 
++void VpnPage::slideWindowByPanelPosition()
++{
++    if(m_panelPosition == 0)
++    {
++        KWindowEffects::slideWindow(this->winId(), KWindowEffects::BottomEdge);
++    }
++    else if (m_panelPosition == 1)
++    {
++        KWindowEffects::slideWindow(this->winId(), KWindowEffects::TopEdge);
++    }
++    else if(m_panelPosition == 2)
++    {
++        KWindowEffects::slideWindow(this->winId(), KWindowEffects::LeftEdge);
++    }
++    else
++    {
++        KWindowEffects::slideWindow(this->winId(), KWindowEffects::RightEdge);     }
++}
++
+ void VpnPage::resetWindowPosition()
+ {
+ #define MARGIN 8
+ #define PANEL_TOP 1
+ #define PANEL_LEFT 2
+ #define PANEL_RIGHT 3
+-//#define PANEL_BOTTOM 4
++#define PANEL_BOTTOM 0
++
+ 
+     QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
++
++
++    if (m_panelType == 1) {
++        QRect rect;
++
++        int totalHeight = qApp->screenAt(QCursor::pos())->size().height() + qApp->screenAt(QCursor::pos())->geometry().y();//屏幕高度
++        int totalWidth = qApp->screenAt(QCursor::pos())->size().width() + qApp->screenAt(QCursor::pos())->geometry().x();
++
++        switch (m_panelPosition) {
++        case PANEL_BOTTOM:
++            rect.setRect(totalWidth - PanelGSettings::instance()->getPanelLength(qApp->screenAt(QCursor::pos())->name()) / 2 - this->width() / 2,
++                         totalHeight - m_panelSize - this->height() - MARGIN,
++                         this->width(), this->height());
++            break;
++        default:
++            rect.setRect(qApp->screenAt(QCursor::pos())->geometry().x(),
++                         qApp->screenAt(QCursor::pos())->geometry().y() + m_topbarSize - MARGIN,
++                         this->width(), this->height());
++            break;
++        }
++        kdk::WindowManager::setGeometry(this->windowHandle(), rect);
++
++        return;
++    }
++
+     int x, y;
+     char *envStr = getenv("LANGUAGE");
+     switch(m_panelPosition){
+diff --git a/src-vpn/frontend/single-pages/vpnpage.h b/src-vpn/frontend/single-pages/vpnpage.h
+index 9028c4b..97345ef 100644
+--- a/src-vpn/frontend/single-pages/vpnpage.h
++++ b/src-vpn/frontend/single-pages/vpnpage.h
+@@ -96,7 +96,7 @@ private:
+                             QListWidget *vpnListWidget);
+     void deleteConnectionMapItem(QMap<QString, QListWidgetItem *> &connectMap,
+                                  QListWidget *vpnListWidget, QString uuid);
+-
++    void slideWindowByPanelPosition();
+     void resetWindowPosition();
+     void resetListWidgetWidth();
+ 
+@@ -132,6 +132,9 @@ private:
+     QGSettings *m_panelGSettings = nullptr;
+     int m_panelPosition;
+     int m_panelSize;
++    int m_panelType;
++    int m_dataIslandPosition;
++    int m_topbarSize;
+ 
+ 
+ public Q_SLOTS:
+diff --git a/src-vpn/frontend/vpnobject.cpp b/src-vpn/frontend/vpnobject.cpp
+index edcc12d..a045736 100644
+--- a/src-vpn/frontend/vpnobject.cpp
++++ b/src-vpn/frontend/vpnobject.cpp
+@@ -40,6 +40,7 @@ vpnObject::~vpnObject()
+ void vpnObject::initUI()
+ {
+     m_vpnPage = new VpnPage(nullptr);
++    kdk::UkuiStyleHelper::self()->removeHeader(m_vpnPage);
+     m_vpnPage->update();
+ 
+ }
+@@ -118,7 +119,6 @@ void vpnObject::showDetailPage(const QString& connUuid)
+ 
+ void vpnObject::onShowMainWindow()
+ {
+-    kdk::UkuiStyleHelper::self()->removeHeader(m_vpnPage);
+     m_vpnPage->showUI();
+ }
+ 
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index 98b358b..93ed782 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -19,6 +19,7 @@
+  */
+ #include "mainwindow.h"
+ #include "customstyle.h"
++#include "../tools/panelgsettings.h"
+ #include <KWindowEffects>
+ #include <QApplication>
+ #include <QDebug>
+@@ -44,6 +45,10 @@
+ #define PANEL_SETTINGS "org.ukui.panel.settings"
+ #define PANEL_SIZE_KEY "panelsize"
+ #define PANEL_POSITION_KEY "panelposition"
++#define PANEL_TYPE_KEY "paneltype"
++#define UKUI_DATA_ISLAND_POSITION_KEY "settingsislandposition"
++#define UKUI_TOPBAR_SIZE_KEY "topbarsize"
++#define UKUI_PANEL_LENGTH_KEY "panellength"
+ 
+ const QString v10Sp1 = "V10SP1";
+ const QString intel = "V10SP1-edu";
+@@ -84,6 +89,10 @@ const QString intel = "V10SP1-edu";
+ MainWindow::MainWindow(QString display, QWidget *parent) : QMainWindow(parent), m_display(display)
+ {
+     firstlyStart();
++
++    //去除窗管标题栏，传入参数为QWidget*
++    //此方法只需要调用一次，多次调用时，除首次调用窗口正常外，其余次数调用窗口setGeometry接口失效
++    kdk::UkuiStyleHelper::self()->removeHeader(this);
+ }
+ 
+ /**
+@@ -111,8 +120,8 @@ void MainWindow::showMainwindow()
+ #endif
+ 
+     this->showByWaylandHelper();
+-    this->raise();
+-    this->activateWindow();
++//    this->raise();
++//    this->activateWindow();
+     Q_EMIT this->mainWindowVisibleChanged(true);
+ #ifdef WITHKYSEC
+     if (!kysec_is_disabled() && kysec_get_3adm_status() && (getuid() || geteuid())){
+@@ -164,6 +173,7 @@ void MainWindow::setWirelessDefaultDevice(QString deviceName)
+  */
+ void MainWindow::firstlyStart()
+ {
++    this->setAttribute(Qt::WA_NativeWindow);
+     initWindowProperties();
+     initTransparency();
+     registerTrayIcon();
+@@ -226,6 +236,7 @@ void MainWindow::initPlatform()
+  */
+ void MainWindow::initWindowProperties()
+ {
++    this->windowHandle();
+     this->setWindowTitle(tr("kylin-nm"));
+     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")));
+     this->setFixedSize(MAINWINDOW_WIDTH, MAINWINDOW_HEIGHT);
+@@ -335,25 +346,68 @@ void MainWindow::paintWithTrans()
+ void MainWindow::initPanelGSettings()
+ {
+     const QByteArray id(PANEL_SETTINGS);
+-    if (QGSettings::isSchemaInstalled(id)) {
+-        if (m_panelGSettings == nullptr) {
+-            m_panelGSettings = new QGSettings(id, QByteArray(), this);
++    if (QGSettings::isSchemaInstalled(id))
++    {
++        if (m_panelGSettings == nullptr)
++        {
++            m_panelGSettings = new QGSettings(id);
+         }
+-        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY)) {
++        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY))
++        {
+             m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+         }
+-        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY)) {
++        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY))
++        {
+             m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+         }
+-        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key) {
+-            if (key == PANEL_POSITION_KEY) {
+-                m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+-            }
+-            if (key == PANEL_SIZE_KEY) {
++        if (m_panelGSettings->keys().contains(PANEL_TYPE_KEY))
++        {
++            m_panelType  = m_panelGSettings->get(PANEL_TYPE_KEY).toInt();
++        }
++        else
++        {
++            m_panelType = 0;
++        }
++
++        if (m_panelGSettings->keys().contains(UKUI_DATA_ISLAND_POSITION_KEY))
++        {
++            m_dataIslandPosition = m_panelGSettings->get(UKUI_DATA_ISLAND_POSITION_KEY).toInt();
++        }
++
++        if (m_panelGSettings->keys().contains(UKUI_TOPBAR_SIZE_KEY))
++        {
++            m_topbarSize = m_panelGSettings->get(UKUI_TOPBAR_SIZE_KEY).toInt();
++        }
++        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key)
++        {
++            if (key == PANEL_SIZE_KEY)
++            {
+                 m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+             }
+-            if (this->isVisible()) {
+-                resetWindowPosition();
++            else if(key == PANEL_POSITION_KEY)
++            {
++                m_panelPosition = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
++            }
++            else if (key == PANEL_TYPE_KEY)
++            {
++                m_panelType = m_panelGSettings->get(PANEL_TYPE_KEY).toInt();
++                qDebug() << "切换任务栏类型";
++                //                updateGeometry();
++            }
++            else if (key == UKUI_DATA_ISLAND_POSITION_KEY)
++            {
++                m_dataIslandPosition = m_panelGSettings->get(UKUI_DATA_ISLAND_POSITION_KEY).toInt();
++                qDebug() << "任务栏宽度切换" << m_dataIslandPosition;
++                //                updateGeometry();
++            }
++            else if (key == UKUI_TOPBAR_SIZE_KEY)
++            {
++                m_topbarSize = m_panelGSettings->get(UKUI_TOPBAR_SIZE_KEY).toInt();
++                //                updateGeometry();
++            }
++            else if (key == UKUI_PANEL_LENGTH_KEY)
++            {
++                //                updateGeometry();
+             }
+         });
+     }
+@@ -536,11 +590,32 @@ void MainWindow::resetWindowPosition()
+ #define PANEL_TOP 1
+ #define PANEL_LEFT 2
+ #define PANEL_RIGHT 3
+-#define PANEL_Bottom 0
+-//#define PANEL_BOTTOM 4
++#define PANEL_BOTTOM 0
+ 
+     QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
++    int totalHeight = qApp->screenAt(QCursor::pos())->size().height() + qApp->screenAt(QCursor::pos())->geometry().y();//屏幕高度
++    int totalWidth = qApp->screenAt(QCursor::pos())->size().width() + qApp->screenAt(QCursor::pos())->geometry().x();
++
+     int x, y;
++    QRect rect;
++
++    if (m_panelType == 1) {
++        switch (m_panelPosition) {
++        case PANEL_BOTTOM:
++            rect.setRect(totalWidth - PanelGSettings::instance()->getPanelLength(qApp->screenAt(QCursor::pos())->name()) / 2 - this->width() / 2,
++                         totalHeight - m_panelSize - this->height() - MARGIN,
++                         this->width(), this->height());
++            break;
++        default:
++            rect.setRect(qApp->screenAt(QCursor::pos())->geometry().x(),
++                         qApp->screenAt(QCursor::pos())->geometry().y() + m_topbarSize - MARGIN,
++                         this->width(), this->height());
++            break;
++        }
++        kdk::WindowManager::setGeometry(this->windowHandle(), rect);
++
++        return;
++    }
+ 
+     switch (m_panelPosition)
+     {
+@@ -561,7 +636,7 @@ void MainWindow::resetWindowPosition()
+ 
+     }
+         break;
+-    case PANEL_Bottom:
++    case PANEL_BOTTOM:
+     {
+         char *envStr = getenv("LANGUAGE");
+         if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
+@@ -588,9 +663,10 @@ void MainWindow::resetWindowPosition()
+     }
+         break;
+     }
+-
+     kdk::WindowManager::setGeometry(this->windowHandle(), QRect(x, y, this->width(), this->height()));
+     qDebug() << " Position of ukui-panel is " << m_panelPosition << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
++
++
+ }
+ 
+ /**
+@@ -687,19 +763,29 @@ void MainWindow::slideWindowByPanelPosition()
+ 
+ void MainWindow::showByWaylandHelper()
+ {
+-    QWindow* window = this->windowHandle();
+     //设置窗体位置，传入参数为QWindow*，QRect
+-    if (window) {
+-        //跳过任务栏和分页器的属性
+-        kdk::WindowManager::setSkipSwitcher(window, true);
+-        kdk::WindowManager::setSkipTaskBar(window, true);
+-    }
+-    resetWindowPosition();
+-    //去除窗管标题栏，传入参数为QWidget*
+-    kdk::UkuiStyleHelper::self()->removeHeader(this);
++
++
++    //跳过任务栏和分页器的属性
++    kdk::WindowManager::setSkipSwitcher(this->windowHandle(), true);
++    kdk::WindowManager::setSkipTaskBar(this->windowHandle(), true);
++    const KWindowInfo info(this->winId(), NET::WMState);
++    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager) || !info.hasState(NET::SkipSwitcher))
++        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
++
+     this->show();
+     this->setFocus();
++
++    //跳过任务栏和分页器的属性
++    kdk::WindowManager::setSkipSwitcher(this->windowHandle(), true);
++    kdk::WindowManager::setSkipTaskBar(this->windowHandle(), true);
++    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager) || !info.hasState(NET::SkipSwitcher))
++        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
++
++    //滑动弹出和窗口位置需在show函数之后调用才可正常处理窗口位置
+     slideWindowByPanelPosition();
++    resetWindowPosition();
++
+ }
+ 
+ void MainWindow::setCentralWidgetType(IconActiveType iconStatus)
+diff --git a/src/frontend/mainwindow.h b/src/frontend/mainwindow.h
+index daf7671..b364cf4 100644
+--- a/src/frontend/mainwindow.h
++++ b/src/frontend/mainwindow.h
+@@ -201,6 +201,9 @@ private:
+     QGSettings *m_panelGSettings = nullptr;
+     int m_panelPosition;
+     int m_panelSize;
++    int m_panelType;
++    int m_dataIslandPosition;
++    int m_topbarSize;
+ 
+     //获取和重置窗口位置
+     void resetWindowPosition();
+diff --git a/src/frontend/tools/panelgsettings.cpp b/src/frontend/tools/panelgsettings.cpp
+new file mode 100644
+index 0000000..7b706f4
+--- /dev/null
++++ b/src/frontend/tools/panelgsettings.cpp
+@@ -0,0 +1,108 @@
++#include <glib.h>
++#include <gio/gio.h>
++#include "gobject/gobject.h"
++#include <mutex>
++#include <QDebug>
++
++#include "panelgsettings.h"
++
++static std::once_flag onceFlag;
++static PanelGSettings* g_instance = nullptr;
++static GSettings * m_settings = nullptr;
++static GSettingsSchema * m_schema = nullptr;
++static const char *m_panelLengthKey = "panellength";
++PanelGSettings *PanelGSettings::instance()
++{
++    std::call_once(onceFlag, [ & ]
++    {
++        g_instance = new PanelGSettings();
++    });
++    return g_instance;
++}
++
++int PanelGSettings::getPanelLength(QString screenName)
++{
++    if (!m_settings || !m_schema) return -1;
++    if (!isKeysContain(m_panelLengthKey)) return -1;
++
++    QMap<QString, QVariant> map = getPanelLengthMap();
++    if (!map.contains(screenName))
++    {
++        return -1;
++    }
++    return map.value(screenName).toInt();
++}
++
++PanelGSettings::~PanelGSettings()
++{
++    if (m_settings)
++    {
++        g_object_unref(m_settings);
++    }
++    if (m_schema)
++    {
++        g_settings_schema_unref(m_schema);
++    }
++    g_instance = nullptr;
++}
++
++PanelGSettings::PanelGSettings(QObject *parent) : QObject(parent)
++{
++    GSettingsSchemaSource *source;
++
++    source = g_settings_schema_source_get_default();
++    m_schema = g_settings_schema_source_lookup(source, "org.ukui.panel.settings", true);
++    g_settings_schema_source_unref(source);
++
++    if (!m_schema)
++    {
++        m_settings = nullptr;
++        return;
++    }
++
++    m_settings = g_settings_new_with_path("org.ukui.panel.settings", "/org/ukui/panel/settings/");
++}
++
++bool PanelGSettings::isKeysContain(const char *key)
++{
++    if (!m_settings || !m_schema) return false;
++
++    gchar **keys = g_settings_schema_list_keys(m_schema);
++    if (g_strv_contains(keys, key))
++    {
++        g_strfreev(keys);
++        return true;
++    }
++    else
++    {
++        g_strfreev(keys);
++        return false;
++    }
++}
++
++QMap<QString, QVariant> PanelGSettings::getPanelLengthMap()
++{
++    GVariant *gvalue = g_settings_get_value(m_settings, m_panelLengthKey);
++
++    GVariantIter iter;
++    QMap<QString, QVariant> map;
++    const gchar *key;
++    size_t str_len;
++    GVariant *val = NULL;
++    g_variant_iter_init (&iter, gvalue);
++    QVariant qvar;
++
++    while (g_variant_iter_next (&iter, "{&sv}", &key, &val))
++    {
++        if (g_variant_is_of_type(val, G_VARIANT_TYPE_UINT32))
++        {
++            qvar = QVariant::fromValue(static_cast<quint32>(g_variant_get_uint32(val)));
++            map.insert(key, qvar);
++        }
++    }
++
++    g_variant_unref(gvalue);
++
++    return map;
++}
++
+diff --git a/src/frontend/tools/panelgsettings.h b/src/frontend/tools/panelgsettings.h
+new file mode 100644
+index 0000000..1c5ab9b
+--- /dev/null
++++ b/src/frontend/tools/panelgsettings.h
+@@ -0,0 +1,24 @@
++#ifndef PANELGSETTINGS_H
++#define PANELGSETTINGS_H
++
++#include <QObject>
++
++class PanelGSettings : public QObject
++{
++    Q_OBJECT
++public:
++    static PanelGSettings *instance();
++
++    int getPanelLength(QString screenName);
++
++    ~PanelGSettings();
++
++private:
++    PanelGSettings(QObject *parent = nullptr);
++
++    bool isKeysContain(const char* key);
++
++    QMap<QString, QVariant> getPanelLengthMap();
++};
++
++#endif // PANELGSETTINGS_H
+diff --git a/src/frontend/tools/tools.pri b/src/frontend/tools/tools.pri
+index a1c11e6..a6bc714 100644
+--- a/src/frontend/tools/tools.pri
++++ b/src/frontend/tools/tools.pri
+@@ -5,6 +5,7 @@ HEADERS += \
+     $$PWD/infobutton.h \
+     $$PWD/listitemedit.h \
+     $$PWD/loadingdiv.h \
++    $$PWD/panelgsettings.h \
+     $$PWD/radioitembutton.h \
+     $$PWD/switchbutton.h \
+     $$PWD/kylable.h \
+@@ -16,6 +17,7 @@ SOURCES += \
+     $$PWD/infobutton.cpp \
+     $$PWD/listitemedit.cpp \
+     $$PWD/loadingdiv.cpp \
++    $$PWD/panelgsettings.cpp \
+     $$PWD/radioitembutton.cpp \
+     $$PWD/switchbutton.cpp \
+     $$PWD/kylable.cpp

@@ -1,3 +1,12 @@
+kylin-nm (5.0.0.0-ok0.2) huanghe; urgency=medium
+
+  * BUG：无
+  * 需求：无
+  * 其他改动说明：网络&vpn面板位置适配三岛任务栏
+  * 其他改动影响域：无
+
+ -- lixiang1 <lixiang1@kylinos.cn>  Mon, 16 Dec 2024 10:22:34 +0800
+
 kylin-nm (5.0.0.0-ok0.1) huanghe; urgency=medium
 
   * BUG：无

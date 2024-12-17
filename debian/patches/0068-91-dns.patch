@@ -1,0 +1,22 @@
+From: =?utf-8?b?6YKT5omY?= <dengtuo@kylinos.cn>
+Date: Tue, 17 Dec 2024 08:54:27 +0000
+Subject: =?utf-8?b?ITkxIGRuc+iuvue9ruWQjuWGjeaJk+W8gOaYvuekuuW8guW4uCBNZXJn?=
+ =?utf-8?b?ZSBwdWxsIHJlcXVlc3QgITkxIGZyb20g5p2O5LqrL29wZW5reWxpbi9odWFuZ2hl?=
+
+---
+ src/frontend/netdetails/netdetail.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/frontend/netdetails/netdetail.cpp b/src/frontend/netdetails/netdetail.cpp
+index 5c4b807..2eb57bd 100644
+--- a/src/frontend/netdetails/netdetail.cpp
++++ b/src/frontend/netdetails/netdetail.cpp
+@@ -1443,7 +1443,7 @@ QList<QHostAddress> NetDetail::getIpv4DnsFromMap(QMap<QString, QVariant> &innerM
+         uint tmpVar;
+         dbusArg2nd >> tmpVar;
+         QString dnsi(inet_ntoa(*(struct in_addr *)&tmpVar));
+-        addressVector.append(QHostAddress(tmpVar));
++        addressVector.append(QHostAddress(dnsi));
+     }
+     dbusArg2nd.endArray();
+ 

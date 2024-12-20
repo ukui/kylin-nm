@@ -1,0 +1,53 @@
+From: =?utf-8?b?5p2O5Lqr?= <lixiang1@kylinos.cn>
+Date: Fri, 20 Dec 2024 06:32:57 +0000
+Subject: =?utf-8?b?ITkzIOS/ruWkjeS4ieWym+S7u+WKoeagj3ZwbuaJmOebmOWSjOe9kQ==?=
+ =?utf-8?b?57uc5omY55uY5by55Ye65L2N572uIE1lcmdlIHB1bGwgcmVxdWVzdCAhOTMgZnJv?=
+ =?utf-8?b?bSDmnY7kuqsvb3Blbmt5bGluL2h1YW5naGU=?=
+
+---
+ src-vpn/frontend/single-pages/vpnpage.cpp | 3 ++-
+ src/frontend/mainwindow.cpp               | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src-vpn/frontend/single-pages/vpnpage.cpp b/src-vpn/frontend/single-pages/vpnpage.cpp
+index 3437b20..5b73a0e 100644
+--- a/src-vpn/frontend/single-pages/vpnpage.cpp
++++ b/src-vpn/frontend/single-pages/vpnpage.cpp
+@@ -665,6 +665,7 @@ void VpnPage::initPanelGSettings()
+             {
+                 //                updateGeometry();
+             }
++            resetWindowPosition();
+         });
+     }
+ }
+@@ -763,7 +764,7 @@ void VpnPage::resetWindowPosition()
+ 
+         switch (m_panelPosition) {
+         case PANEL_BOTTOM:
+-            rect.setRect(totalWidth - PanelGSettings::instance()->getPanelLength(qApp->screenAt(QCursor::pos())->name()) / 2 - this->width() / 2,
++            rect.setRect(qApp->screenAt(QCursor::pos())->geometry().right() - (totalWidth - PanelGSettings::instance()->getPanelLength(qApp->screenAt(QCursor::pos())->name())) / 2 - this->width(),
+                          totalHeight - m_panelSize - this->height() - MARGIN,
+                          this->width(), this->height());
+             break;
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index 93ed782..cd1fb54 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -409,6 +409,7 @@ void MainWindow::initPanelGSettings()
+             {
+                 //                updateGeometry();
+             }
++            resetWindowPosition();
+         });
+     }
+ }
+@@ -602,7 +603,7 @@ void MainWindow::resetWindowPosition()
+     if (m_panelType == 1) {
+         switch (m_panelPosition) {
+         case PANEL_BOTTOM:
+-            rect.setRect(totalWidth - PanelGSettings::instance()->getPanelLength(qApp->screenAt(QCursor::pos())->name()) / 2 - this->width() / 2,
++            rect.setRect(qApp->screenAt(QCursor::pos())->geometry().right() - (totalWidth - PanelGSettings::instance()->getPanelLength(qApp->screenAt(QCursor::pos())->name())) / 2 - this->width(),
+                          totalHeight - m_panelSize - this->height() - MARGIN,
+                          this->width(), this->height());
+             break;

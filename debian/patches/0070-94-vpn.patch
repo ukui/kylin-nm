@@ -1,0 +1,324 @@
+From: =?utf-8?b?5p2O5Lqr?= <lixiang1@kylinos.cn>
+Date: Mon, 23 Dec 2024 08:30:23 +0000
+Subject: =?utf-8?b?ITk0IOS8mOWMluS4ieWym+S7u+WKoeagj3ZwbuaJmOebmOWSjOe9kQ==?=
+ =?utf-8?b?57uc5omY55uY5by55Ye65L2N572uIE1lcmdlIHB1bGwgcmVxdWVzdCAhOTQgZnJv?=
+ =?utf-8?b?bSDmnY7kuqsvb3Blbmt5bGluL2h1YW5naGU=?=
+
+---
+ src-vpn/frontend/single-pages/vpnpage.cpp | 83 ++++++++++++++++++-------------
+ src-vpn/frontend/single-pages/vpnpage.h   |  2 +-
+ src/frontend/mainwindow.cpp               | 67 +++++++++++++------------
+ src/frontend/mainwindow.h                 |  2 +-
+ 4 files changed, 85 insertions(+), 69 deletions(-)
+
+diff --git a/src-vpn/frontend/single-pages/vpnpage.cpp b/src-vpn/frontend/single-pages/vpnpage.cpp
+index 5b73a0e..99f471b 100644
+--- a/src-vpn/frontend/single-pages/vpnpage.cpp
++++ b/src-vpn/frontend/single-pages/vpnpage.cpp
+@@ -25,11 +25,17 @@
+ #include "../tools/panelgsettings.h"
+ #include "windowmanager/windowmanager.h"
+ 
++#define MARGIN 8
++#define PANEL_TOP 1
++#define PANEL_LEFT 2
++#define PANEL_RIGHT 3
++#define PANEL_BOTTOM 0
++
+ #define PANEL_SETTINGS "org.ukui.panel.settings"
+ #define PANEL_SIZE_KEY "panelsize"
+ #define PANEL_POSITION_KEY "panelposition"
+ #define PANEL_TYPE_KEY "paneltype"
+-#define UKUI_DATA_ISLAND_POSITION_KEY "settingsislandposition"
++#define UKUI_SETTINGS_ISLAND_POSITION_KEY "settingsislandposition"
+ #define UKUI_TOPBAR_SIZE_KEY "topbarsize"
+ #define UKUI_PANEL_LENGTH_KEY "panellength"
+ 
+@@ -625,9 +631,9 @@ void VpnPage::initPanelGSettings()
+             m_panelType = 0;
+         }
+ 
+-        if (m_panelGSettings->keys().contains(UKUI_DATA_ISLAND_POSITION_KEY))
++        if (m_panelGSettings->keys().contains(UKUI_SETTINGS_ISLAND_POSITION_KEY))
+         {
+-            m_dataIslandPosition = m_panelGSettings->get(UKUI_DATA_ISLAND_POSITION_KEY).toInt();
++            m_settingsIslandPosition = m_panelGSettings->get(UKUI_SETTINGS_ISLAND_POSITION_KEY).toInt();
+         }
+ 
+         if (m_panelGSettings->keys().contains(UKUI_TOPBAR_SIZE_KEY))
+@@ -650,10 +656,10 @@ void VpnPage::initPanelGSettings()
+                 qDebug() << "切换任务栏类型";
+                 //                updateGeometry();
+             }
+-            else if (key == UKUI_DATA_ISLAND_POSITION_KEY)
++            else if (key == UKUI_SETTINGS_ISLAND_POSITION_KEY)
+             {
+-                m_dataIslandPosition = m_panelGSettings->get(UKUI_DATA_ISLAND_POSITION_KEY).toInt();
+-                qDebug() << "任务栏宽度切换" << m_dataIslandPosition;
++                m_settingsIslandPosition = m_panelGSettings->get(UKUI_SETTINGS_ISLAND_POSITION_KEY).toInt();
++                qDebug() << "任务栏宽度切换" << m_settingsIslandPosition;
+                 //                updateGeometry();
+             }
+             else if (key == UKUI_TOPBAR_SIZE_KEY)
+@@ -711,15 +717,22 @@ void VpnPage::showUI()
+ 
+     resetPageHeight();
+ 
++    //跳过任务栏和分页器的属性
++    const KWindowInfo info(this->winId(), NET::WMState);
++    kdk::WindowManager::setSkipSwitcher(this->windowHandle(), true);
++    kdk::WindowManager::setSkipTaskBar(this->windowHandle(), true);
++    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager) || !info.hasState(NET::SkipSwitcher))
++        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
+     showNormal();
+-    QWindow* window = this->windowHandle();
+-    if (window) {
+-        //跳过任务栏和分页器的属性
+-        kdk::WindowManager::setSkipSwitcher(window, true);
+-        kdk::WindowManager::setSkipTaskBar(window, true);
+-    }
+     raise();
+     activateWindow();
++
++    //跳过任务栏和分页器的属性
++    kdk::WindowManager::setSkipSwitcher(this->windowHandle(), true);
++    kdk::WindowManager::setSkipTaskBar(this->windowHandle(), true);
++    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager) || !info.hasState(NET::SkipSwitcher))
++        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
++
+     slideWindowByPanelPosition();
+     resetWindowPosition();
+     return;
+@@ -727,32 +740,32 @@ void VpnPage::showUI()
+ 
+ void VpnPage::slideWindowByPanelPosition()
+ {
+-    if(m_panelPosition == 0)
+-    {
+-        KWindowEffects::slideWindow(this->winId(), KWindowEffects::BottomEdge);
+-    }
+-    else if (m_panelPosition == 1)
+-    {
+-        KWindowEffects::slideWindow(this->winId(), KWindowEffects::TopEdge);
+-    }
+-    else if(m_panelPosition == 2)
+-    {
+-        KWindowEffects::slideWindow(this->winId(), KWindowEffects::LeftEdge);
++    if (m_panelType == 1) {
++        if (m_settingsIslandPosition) {
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::TopEdge);
++        } else {
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::BottomEdge);
++        }
++    } else {
++        switch(m_panelPosition) {
++        case PANEL_TOP:
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::TopEdge);
++            break;
++        case PANEL_LEFT:
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::LeftEdge);
++            break;
++        case PANEL_RIGHT:
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::RightEdge);
++            break;
++        case PANEL_BOTTOM:
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::BottomEdge);
++            break;
++        }
+     }
+-    else
+-    {
+-        KWindowEffects::slideWindow(this->winId(), KWindowEffects::RightEdge);     }
+ }
+ 
+ void VpnPage::resetWindowPosition()
+ {
+-#define MARGIN 8
+-#define PANEL_TOP 1
+-#define PANEL_LEFT 2
+-#define PANEL_RIGHT 3
+-#define PANEL_BOTTOM 0
+-
+-
+     QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
+ 
+ 
+@@ -762,14 +775,14 @@ void VpnPage::resetWindowPosition()
+         int totalHeight = qApp->screenAt(QCursor::pos())->size().height() + qApp->screenAt(QCursor::pos())->geometry().y();//屏幕高度
+         int totalWidth = qApp->screenAt(QCursor::pos())->size().width() + qApp->screenAt(QCursor::pos())->geometry().x();
+ 
+-        switch (m_panelPosition) {
++        switch (m_settingsIslandPosition) {
+         case PANEL_BOTTOM:
+             rect.setRect(qApp->screenAt(QCursor::pos())->geometry().right() - (totalWidth - PanelGSettings::instance()->getPanelLength(qApp->screenAt(QCursor::pos())->name())) / 2 - this->width(),
+                          totalHeight - m_panelSize - this->height() - MARGIN,
+                          this->width(), this->height());
+             break;
+         default:
+-            rect.setRect(qApp->screenAt(QCursor::pos())->geometry().x(),
++            rect.setRect(qApp->screenAt(QCursor::pos())->geometry().right(),
+                          qApp->screenAt(QCursor::pos())->geometry().y() + m_topbarSize - MARGIN,
+                          this->width(), this->height());
+             break;
+diff --git a/src-vpn/frontend/single-pages/vpnpage.h b/src-vpn/frontend/single-pages/vpnpage.h
+index 97345ef..6bf7259 100644
+--- a/src-vpn/frontend/single-pages/vpnpage.h
++++ b/src-vpn/frontend/single-pages/vpnpage.h
+@@ -133,7 +133,7 @@ private:
+     int m_panelPosition;
+     int m_panelSize;
+     int m_panelType;
+-    int m_dataIslandPosition;
++    int m_settingsIslandPosition;
+     int m_topbarSize;
+ 
+ 
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index cd1fb54..9a2f2b9 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -46,7 +46,7 @@
+ #define PANEL_SIZE_KEY "panelsize"
+ #define PANEL_POSITION_KEY "panelposition"
+ #define PANEL_TYPE_KEY "paneltype"
+-#define UKUI_DATA_ISLAND_POSITION_KEY "settingsislandposition"
++#define UKUI_SETTINGS_ISLAND_POSITION_KEY "settingsislandposition"
+ #define UKUI_TOPBAR_SIZE_KEY "topbarsize"
+ #define UKUI_PANEL_LENGTH_KEY "panellength"
+ 
+@@ -57,6 +57,12 @@ const QString intel = "V10SP1-edu";
+ #define WLANPAGE 1
+ #define AUTOSELET 2
+ 
++#define MARGIN 8
++#define PANEL_TOP 1
++#define PANEL_LEFT 2
++#define PANEL_RIGHT 3
++#define PANEL_BOTTOM 0
++
+ #define KEY_PRODUCT_FEATURES "PRODUCT_FEATURES"
+ 
+ #define MW_EXCELLENT_SIGNAL 80
+@@ -369,9 +375,9 @@ void MainWindow::initPanelGSettings()
+             m_panelType = 0;
+         }
+ 
+-        if (m_panelGSettings->keys().contains(UKUI_DATA_ISLAND_POSITION_KEY))
++        if (m_panelGSettings->keys().contains(UKUI_SETTINGS_ISLAND_POSITION_KEY))
+         {
+-            m_dataIslandPosition = m_panelGSettings->get(UKUI_DATA_ISLAND_POSITION_KEY).toInt();
++            m_settingsIslandPosition = m_panelGSettings->get(UKUI_SETTINGS_ISLAND_POSITION_KEY).toInt();
+         }
+ 
+         if (m_panelGSettings->keys().contains(UKUI_TOPBAR_SIZE_KEY))
+@@ -394,10 +400,10 @@ void MainWindow::initPanelGSettings()
+                 qDebug() << "切换任务栏类型";
+                 //                updateGeometry();
+             }
+-            else if (key == UKUI_DATA_ISLAND_POSITION_KEY)
++            else if (key == UKUI_SETTINGS_ISLAND_POSITION_KEY)
+             {
+-                m_dataIslandPosition = m_panelGSettings->get(UKUI_DATA_ISLAND_POSITION_KEY).toInt();
+-                qDebug() << "任务栏宽度切换" << m_dataIslandPosition;
++                m_settingsIslandPosition = m_panelGSettings->get(UKUI_SETTINGS_ISLAND_POSITION_KEY).toInt();
++                qDebug() << "任务栏宽度切换" << m_settingsIslandPosition;
+                 //                updateGeometry();
+             }
+             else if (key == UKUI_TOPBAR_SIZE_KEY)
+@@ -405,10 +411,6 @@ void MainWindow::initPanelGSettings()
+                 m_topbarSize = m_panelGSettings->get(UKUI_TOPBAR_SIZE_KEY).toInt();
+                 //                updateGeometry();
+             }
+-            else if (key == UKUI_PANEL_LENGTH_KEY)
+-            {
+-                //                updateGeometry();
+-            }
+             resetWindowPosition();
+         });
+     }
+@@ -587,12 +589,6 @@ void MainWindow::resetWindowPosition()
+         return;
+     }
+ 
+-#define MARGIN 8
+-#define PANEL_TOP 1
+-#define PANEL_LEFT 2
+-#define PANEL_RIGHT 3
+-#define PANEL_BOTTOM 0
+-
+     QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
+     int totalHeight = qApp->screenAt(QCursor::pos())->size().height() + qApp->screenAt(QCursor::pos())->geometry().y();//屏幕高度
+     int totalWidth = qApp->screenAt(QCursor::pos())->size().width() + qApp->screenAt(QCursor::pos())->geometry().x();
+@@ -601,14 +597,14 @@ void MainWindow::resetWindowPosition()
+     QRect rect;
+ 
+     if (m_panelType == 1) {
+-        switch (m_panelPosition) {
++        switch (m_settingsIslandPosition) {
+         case PANEL_BOTTOM:
+             rect.setRect(qApp->screenAt(QCursor::pos())->geometry().right() - (totalWidth - PanelGSettings::instance()->getPanelLength(qApp->screenAt(QCursor::pos())->name())) / 2 - this->width(),
+                          totalHeight - m_panelSize - this->height() - MARGIN,
+                          this->width(), this->height());
+             break;
+         default:
+-            rect.setRect(qApp->screenAt(QCursor::pos())->geometry().x(),
++            rect.setRect(qApp->screenAt(QCursor::pos())->geometry().right() - this->width(),
+                          qApp->screenAt(QCursor::pos())->geometry().y() + m_topbarSize - MARGIN,
+                          this->width(), this->height());
+             break;
+@@ -745,21 +741,28 @@ void MainWindow::showControlCenter()
+ 
+ void MainWindow::slideWindowByPanelPosition()
+ {
+-    if(m_panelPosition == 0)
+-    {
+-        KWindowEffects::slideWindow(this->winId(), KWindowEffects::BottomEdge);
+-    }
+-    else if (m_panelPosition == 1)
+-    {
+-        KWindowEffects::slideWindow(this->winId(), KWindowEffects::TopEdge);
+-    }
+-    else if(m_panelPosition == 2)
+-    {
+-        KWindowEffects::slideWindow(this->winId(), KWindowEffects::LeftEdge);
++    if (m_panelType == 1) {
++        if (m_settingsIslandPosition) {
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::TopEdge);
++        } else {
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::BottomEdge);
++        }
++    } else {
++        switch(m_panelPosition) {
++        case PANEL_TOP:
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::TopEdge);
++            break;
++        case PANEL_LEFT:
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::LeftEdge);
++            break;
++        case PANEL_RIGHT:
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::RightEdge);
++            break;
++        case PANEL_BOTTOM:
++            KWindowEffects::slideWindow(this->winId(), KWindowEffects::BottomEdge);
++            break;
++        }
+     }
+-    else
+-    {
+-        KWindowEffects::slideWindow(this->winId(), KWindowEffects::RightEdge);     }
+ }
+ 
+ void MainWindow::showByWaylandHelper()
+diff --git a/src/frontend/mainwindow.h b/src/frontend/mainwindow.h
+index b364cf4..e730971 100644
+--- a/src/frontend/mainwindow.h
++++ b/src/frontend/mainwindow.h
+@@ -202,7 +202,7 @@ private:
+     int m_panelPosition;
+     int m_panelSize;
+     int m_panelType;
+-    int m_dataIslandPosition;
++    int m_settingsIslandPosition;
+     int m_topbarSize;
+ 
+     //获取和重置窗口位置

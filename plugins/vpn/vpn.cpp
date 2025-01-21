@@ -114,7 +114,7 @@ QWidget *Vpn::pluginUi(){
 
 const QString Vpn::name() const {
 
-    return QStringLiteral("Vpn");
+    return QStringLiteral("VPN");
 }
 
 bool Vpn::isShowOnHomePage() const

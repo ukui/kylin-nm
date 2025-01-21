@@ -41,7 +41,7 @@ WlanItem::WlanItem(bool bAcitve, bool isLock, QWidget *parent)
     mLanLyt->setSpacing(16);
     iconLabel = new QLabel(this);
     iconLabel->setProperty("useIconHighlightEffect", 0x2);
-    titileLabel = new FixLabel(this);
+    titileLabel = new KLabel(this);
     statusLabel = new QLabel(this);
     statusLabel->setProperty("useIconHighlightEffect", 0x2);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);

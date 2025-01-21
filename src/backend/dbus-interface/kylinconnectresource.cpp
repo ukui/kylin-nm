@@ -143,11 +143,12 @@ bool KyConnectResourse::isActiveDevice(QString conUuid, QString devName)
     QString ifaceUni = "";
     for (int index=0; index < interfaces.size(); index++) {
         ifaceUni = interfaces.at(index);
-        NetworkManager::Device:: Ptr devicePtr =
-              m_networkResourceInstance->findDeviceUni(ifaceUni);
-        deviceName = devicePtr->interfaceName();
-        if (deviceName == devName) {
-            return true;
+        NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+        if (!devicePtr.isNull()) {
+            deviceName = devicePtr->interfaceName();
+            if (deviceName == devName) {
+                return true;
+            }
         }
     }
     return false;

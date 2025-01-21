@@ -104,6 +104,7 @@ void SinglePage::initWindowProperties()
     {
         QPainterPath path;
         auto rect = this->rect();
+        path.addRoundedRect(rect, 12, 12);
         path.addRect(rect);
         KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
     }
@@ -158,7 +159,7 @@ void SinglePage::paintEvent(QPaintEvent *event) {
     QPainterPath rectPath;
 
     col.setAlphaF(m_transparency);
-    rectPath.addRect(this->rect());
+    rectPath.addRoundedRect(this->rect(),12,12);
 
     painter.setBrush(col);
     painter.drawPath(rectPath);

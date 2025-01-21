@@ -166,10 +166,6 @@ void WlanListItem::onRightButtonClicked()
 {
     qDebug()<< LOG_FLAG <<"onRightButtonClicked";
 
-    if (m_hoverButton->isVisible()) {
-        m_hoverButton->hide();
-    }
-
     if (!m_menu) {
         return;
     }
@@ -504,15 +500,15 @@ void WlanListItem::onNetButtonClicked()
 
     //获取有配置网络的安全类型
     KyKeyMgmt type = m_wirelessConnectOperation->getConnectKeyMgmt(m_wirelessNetItem.m_connectUuid);
-    KySecuType kySecuType = NONE;
+    KySecuType kySecuType = KYLIN_NM::NONE;
     if (type == WpaNone || type == Unknown) {
-        kySecuType = NONE;
+        kySecuType = KYLIN_NM::NONE;
     } else if (type == WpaPsk) {
-        kySecuType = WPA_AND_WPA2_PERSONAL;
+        kySecuType = KYLIN_NM::WPA_AND_WPA2_PERSONAL;
     } else if (type == SAE) {
-        kySecuType = WPA3_PERSONAL;
+        kySecuType = KYLIN_NM::WPA3_PERSONAL;
     } else if (type == WpaEap) {
-        kySecuType = WPA_AND_WPA2_ENTERPRISE;
+        kySecuType = KYLIN_NM::WPA_AND_WPA2_ENTERPRISE;
     } else {
         qDebug() << "KeyMgmt not support now " << type;
     }

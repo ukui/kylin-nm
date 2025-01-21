@@ -127,11 +127,12 @@ private:
     QMap<QString, QListWidgetItem *> m_vpnItemMap;
     QMap<QString, QListWidgetItem *> m_activeItemMap;
 
-
     //获取任务栏位置和大小
     QGSettings *m_panelGSettings = nullptr;
     int m_panelPosition;
     int m_panelSize;
+    QDBusInterface * m_positionInterface = nullptr;
+
 
 
 public Q_SLOTS:

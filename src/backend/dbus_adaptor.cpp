@@ -33,12 +33,6 @@ NetworkAdaptor::~NetworkAdaptor()
     // destructor
 }
 
-void NetworkAdaptor::deleteConnect(int type, QString ssid)
-{
-    // handle method call com.kylin.network.deleteConnect
-    QMetaObject::invokeMethod(parent(), "deleteConnect", Q_ARG(int, type), Q_ARG(QString, ssid));
-}
-
 void NetworkAdaptor::activateConnect(int type, const QString &devName, const QString &ssid)
 {
     // handle method call com.kylin.network.activateConnect
@@ -55,6 +49,12 @@ void NetworkAdaptor::deActivateConnect(int type, const QString &devName, const Q
 {
     // handle method call com.kylin.network.deActivateConnect
     QMetaObject::invokeMethod(parent(), "deActivateConnect", Q_ARG(int, type), Q_ARG(QString, devName), Q_ARG(QString, ssid));
+}
+
+void NetworkAdaptor::deleteConnect(int type, const QString &ssid)
+{
+    // handle method call com.kylin.network.deActivateConnect
+    QMetaObject::invokeMethod(parent(), "deleteConnect", Q_ARG(int, type), Q_ARG(QString, ssid));
 }
 
 void NetworkAdaptor::deactiveWirelessAp(const QString &apName, const QString &uuid)

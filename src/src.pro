@@ -60,6 +60,7 @@ QMAKE_LFLAGS   *= $(shell dpkg-buildflags --get LDFLAGS)
 include(singleapplication/qt-single-application.pri)
 include(backend/backend.pri)
 include(frontend/frontend.pri)
+include(common/common.pri)
 
 RESOURCES += \
     ../nmqrc.qrc

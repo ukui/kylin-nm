@@ -47,7 +47,7 @@
 
 #include "interface.h"
 #include "addbtn.h"
-#include "fixlabel.h"
+#include "klabel.h"
 #include "hoverbtn.h"
 #include "lanitem.h"
 #include "deviceframe.h"
@@ -148,6 +148,7 @@ private:
     QMap<QString, ItemFrame *> deviceFrameMap;
 
     QMap<QString, QList<QStringList>> getWiredList();
+    QDBusInterface *m_pSysBusIntfs;
 
 private slots:
     void updateLanInfo(QString deviceName, QStringList lanInfo);
@@ -159,6 +160,11 @@ private slots:
 
     void onDeviceStatusChanged();
     void onDeviceNameChanged(QString, QString, int);
+
+    //更新控制面板插件Gsetting show
+    void updatePluginShowSettings();
+    void renewSwitchLayout(bool enable);
+    void wiredSwitchSLot(bool checked);
 };
 
 Q_DECLARE_METATYPE(QList<QDBusObjectPath>);

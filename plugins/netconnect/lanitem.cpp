@@ -39,7 +39,7 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     mLanLyt->setSpacing(16);
     iconLabel = new QLabel(this);
     iconLabel->setProperty("useIconHighlightEffect", 0x2);
-    titileLabel = new FixLabel(this);
+    titileLabel = new KLabel(this);
     statusLabel = new QLabel(this);
     statusLabel->setProperty("useIconHighlightEffect", 0x2);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -79,6 +79,9 @@ LanItem::LanItem(bool isAcitve, QWidget *parent)
     connect(waitTimer, &QTimer::timeout, this, &LanItem::updateIcon);
     connect(m_connectAction, &QAction::triggered, this, &LanItem::onConnectTriggered);
     connect(m_deleteAction, &QAction::triggered, this, &LanItem::onDeletetTriggered);
+    connect(m_moreMenu, &QMenu::aboutToHide, this, [=]() {
+        this->repaint();
+    });
     m_moreMenu->installEventFilter(this);
 }
 

@@ -144,6 +144,11 @@ class NetworkAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
 "      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
 "    </method>\n"
+"    <method name=\"deleteConnect\">\n"
+"      <arg direction=\"in\" type=\"i\" name=\"type\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
 "    <method name=\"deActivateConnect\">\n"
 "      <arg direction=\"in\" type=\"i\" name=\"type\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
@@ -215,10 +220,10 @@ public:
 
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
-    Q_NOREPLY void deleteConnect(int type, QString ssid);
     Q_NOREPLY void activateConnect(int type, const QString &devName, const QString &ssid);
     void activeWirelessAp(const QString &apName, const QString &apPassword, const QString &band, const QString &apDevice);
     Q_NOREPLY void deActivateConnect(int type, const QString &devName, const QString &ssid);
+    Q_NOREPLY void deleteConnect(int type, const QString &ssid);
     void deactiveWirelessAp(const QString &apName, const QString &uuid);
     QString getActiveConnectionPath(const QString &uuid);
     QString getApConnectionPath(const QString &uuid);

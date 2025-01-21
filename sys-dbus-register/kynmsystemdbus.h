@@ -20,6 +20,7 @@
 #define KYNMSYSTEMDBUS_H
 
 #include <QObject>
+#include <QSettings>
 
 class KynmSystemDbus : public QObject
 {
@@ -33,6 +34,14 @@ public:
 public Q_SLOTS:
     Q_SCRIPTABLE bool checkIpv4IsConflict(const QString devName, const QString ipv4Address, QStringList macList);
     Q_SCRIPTABLE bool checkIpv6IsConflict(const QString devName, const QString ipv6Address);
+    Q_SCRIPTABLE bool getSwitch();
+    Q_SCRIPTABLE void setSwitch(bool enable);
+    Q_SCRIPTABLE void setDeviceSwitch(QString devName, bool enable);
+Q_SIGNALS:
+    Q_SCRIPTABLE void switchChanged(bool enbale);
+    Q_SCRIPTABLE void devSwitchChanged(QString devName, bool enbale);
+private:
+    QSettings *switchSetting;
 };
 
 #endif // KYNMSYSTEMDBUS_H

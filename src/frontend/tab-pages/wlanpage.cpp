@@ -21,6 +21,7 @@
 #include "kywirelessnetitem.h"
 #include "kwindowsystem.h"
 #include "kwindowsystem_export.h"
+#include "windowmanager/windowmanager.h"
 #include <QEvent>
 #include <QDateTime>
 #include <QDebug>
@@ -1651,9 +1652,8 @@ void WlanPage::showDetailPage(QString devName, QString ssid)
     netDetail->show();
     KWindowSystem::raiseWindow(netDetail->winId());
     netDetail->centerToScreen();
-    kdk::WindowManager::setSkipSwitcher(netDetail->windowHandle(), true);
-    kdk::WindowManager::setSkipTaskBar(netDetail->windowHandle(), true);
-    kdk::WindowManager::setIconName(netDetail->windowHandle(), "kylin-network");
+    kdk::WindowManager::setSkipTaskBar(netDetail->windowHandle(),true);
+    kdk::WindowManager::setSkipSwitcher(netDetail->windowHandle(),true);
 
     return;
 }

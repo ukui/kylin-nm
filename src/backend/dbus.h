@@ -42,6 +42,7 @@ class DbusAdaptor: public QObject, protected QDBusContext
     Q_CLASSINFO("D-Bus Interface", "com.kylin.network")
 public:
     explicit DbusAdaptor(QString display, MainWindow *m, QObject *parent = nullptr);
+    ~DbusAdaptor();
 
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
@@ -139,7 +140,7 @@ private:
     MainWindow *m_mainWindow;
     QString m_display;
     QDBusServiceWatcher *m_watcher = nullptr;
-
+    NetworkAdaptor* mNetworkAdaptor=nullptr;
     QString checkDisplay();
     QString displayFromPid(uint pid);
     void connectToMainwindow();

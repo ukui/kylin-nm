@@ -44,8 +44,9 @@ ConnectdevPage::ConnectdevPage(QWidget *parent) :
     m_staListLayout->setContentsMargins(0, 0, 0, 0);
     m_staListLayout->setSpacing(0);
 
-    m_titleLabel = new TitleLabel(this);
+    m_titleLabel = new KLabel(this);
     m_titleLabel->setText(tr("Connect device"));
+    m_titleLabel->setContentsMargins(16, 0, 0, 0);
 
     Vlayout->addWidget(m_titleLabel);
     Vlayout->addSpacing(8);

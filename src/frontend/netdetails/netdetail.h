@@ -52,7 +52,6 @@
 #include "ktabbar.h"
 #include "networkmodeconfig.h"
 
-#include <arpa/inet.h>
 using namespace kdk;
 
 #define  TAB_WIDTH  60
@@ -142,15 +141,8 @@ private:
     void showDesktopNotify(const QString &message, QString soundName);
 
     void setNetdetailSomeEnable(bool on);
-
     void startObjectThread();
     void setNetTabToolTip();
-
-    void getIpv4Ipv6Info(QString objPath, ConInfo &conInfo);
-    QMap<QString, QVariant> getAddressDataFromMap(QMap<QString,QVariant> &innerMap, QString innerKey);
-    KyIpConfigType getIpConfigTypeFromMap(QMap<QString,QVariant> &innerMap, QString innerKey);
-    QList<QHostAddress> getIpv4DnsFromMap(QMap<QString,QVariant> &innerMap, QString innerKey);
-    QList<QHostAddress> getIpv6DnsFromMap(QMap<QString,QVariant> &innerMap, QString innerKey);
 
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;

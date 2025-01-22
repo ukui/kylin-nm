@@ -217,8 +217,12 @@ QString KyWirelessNetResource::getActiveConnectSsidByDevice(QString deviceName)
         }
 
         QString ifaceUni = interfaces.at(0);
-        NetworkManager::Device:: Ptr devicePtr =
-                    m_networkResourceInstance->findDeviceUni(ifaceUni);
+        NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+
+        if (deviceName.isNull()) {
+            continue;
+        }
+
         if (deviceName != devicePtr->interfaceName()) {
             continue;
         }
@@ -292,9 +296,7 @@ QString KyWirelessNetResource::getDeviceIFace(NetworkManager::ActiveConnection::
     }
 
     QString ifaceUni = interfaces.at(0);
-    NetworkManager::Device:: Ptr devicePtr =
-                m_networkResourceInstance->findDeviceUni(ifaceUni);
-
+    NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
     if (devicePtr.isNull()) {
         return QString();
     }
@@ -334,10 +336,11 @@ void KyWirelessNetResource::getDeviceByUuid(const QString uuid, QString &deviceN
         QStringList interfaces = activeConnectionPtr->devices();
         if (interfaces.size() > 0) {
             QString ifaceUni = interfaces.at(0);
-            NetworkManager::Device:: Ptr devicePtr =
-                    m_networkResourceInstance->findDeviceUni(ifaceUni);
-            deviceName = devicePtr->interfaceName();
-            return;
+            NetworkManager::Device::Ptr devicePtr = m_networkResourceInstance->findDeviceUni(ifaceUni);
+            if (!devicePtr.isNull()) {
+                deviceName = devicePtr->interfaceName();
+                return;
+            }
         } else {
             qDebug() << LOG_FLAG << "get device of active connection failed.";
         }

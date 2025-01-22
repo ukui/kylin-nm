@@ -194,6 +194,7 @@ private slots:
 
     void reScan();
 
-
+    //更新控制面板插件Gsetting show
+    void updatePluginShowSettings();
 };
 #endif // WLANCONNECT_H

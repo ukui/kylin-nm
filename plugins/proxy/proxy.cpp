@@ -183,7 +183,8 @@ void Proxy::initUi(QWidget *widget)
     mProxyBtnGroup = new QButtonGroup(this);
     mProxyBtnGroup->setExclusive (false); // 防止互斥
 
-    mTitleLabel = new TitleLabel(widget);
+    mTitleLabel = new KLabel(widget);
+    mTitleLabel->setContentsMargins(16, 0, 0, 0);
 
     mProxyFrame = new QFrame(widget);
     mProxyFrame->setMinimumSize(QSize(550, 0));
@@ -378,7 +379,9 @@ void Proxy::initUi(QWidget *widget)
 //    setAppListFrameUi(widget);
 
     //APT代理模块
-    mAptProxyLabel = new TitleLabel(widget);
+    mAptProxyLabel = new KLabel(widget);
+    mAptProxyLabel->setContentsMargins(16, 0, 0, 0);
+
     mAPTFrame = new QFrame(widget);
     mAPTFrame->setMinimumSize(QSize(550, 0));
     mAPTFrame->setMaximumSize(QSize(16777215, 16777215));

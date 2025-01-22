@@ -47,6 +47,12 @@ DbusAdaptor::DbusAdaptor(QString display, MainWindow *m, QObject *parent)
     connectToMainwindow();
 }
 
+DbusAdaptor::~DbusAdaptor()
+{
+    if(mNetworkAdaptor) delete mNetworkAdaptor;
+
+}
+
 void DbusAdaptor::onServiceOwnerChanged(const QString &service, const QString &oldOwner, const QString &newOwner)
 {
     if (newOwner.isEmpty()) {
@@ -64,7 +70,7 @@ void DbusAdaptor::onServiceOwnerChanged(const QString &service, const QString &o
 
 bool DbusAdaptor::registerService()
 {
-    new NetworkAdaptor(this);
+    mNetworkAdaptor=new NetworkAdaptor(this);
 
     QDBusConnection conn = QDBusConnection::sessionBus();
     auto reply = conn.interface()->registerService(QStringLiteral("com.kylin.network"),
@@ -241,8 +247,13 @@ QVariantMap DbusAdaptor::getDeviceListAndEnabled(int devType)
     getDeviceEnableState(devType, map);
     QVariantMap vMap;
     QMap<QString, bool>::const_iterator item = map.cbegin();
+    QString switchSettingFile = "/etc/kylin-nm/switch.conf";
+    QSettings switchSetting(switchSettingFile, QSettings::IniFormat, this);
     while (item != map.cend()) {
-        vMap.insert(item.key(), QVariant::fromValue(item.value()));
+        if (switchSetting.contains(item.key()))
+            vMap.insert(item.key(), QVariant::fromValue(switchSetting.value(item.key())));
+        else
+            vMap.insert(item.key(), QVariant::fromValue(item.value()));
         item ++;
     }
     return vMap;

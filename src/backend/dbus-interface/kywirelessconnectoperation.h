@@ -26,6 +26,7 @@
 #include "kyenterpricesettinginfo.h"
 #include "kylinconnectoperation.h"
 #include "kyenterpricesettinginfo.h"
+#include "../../common/common.h"
 
 #define KEY_802_11_WIRELESS "802-11-wireless"
 #define KEY_BLACKLIST_HOSTNAME "blacklist-hostname"
@@ -36,22 +37,22 @@ const QString    WIRELESS_SWITCH  = "wirelessswitch";
 const QString    WIFI_BAND_2_4GHZ = "2.4GHz";
 const QString    WIFI_BAND_5GHZ   = "5GHz";
 
-enum KySecuType {
-    NONE = 0,
-    WPA_AND_WPA2_PERSONAL,
-    WPA_AND_WPA2_ENTERPRISE,
-    WPA3_PERSONAL,
-    WPA_AND_WPA3,
-};
+// enum KySecuType {
+//     NONE = 0,
+//     WPA_AND_WPA2_PERSONAL,
+//     WPA_AND_WPA2_ENTERPRISE,
+//     WPA3_PERSONAL,
+//     WPA_AND_WPA3,
+// };
 
-enum KyKeyMgmt {
-    Unknown = -1,
-    Wep, Ieee8021x,
-    WpaNone,
-    WpaPsk,
-    WpaEap,
-    SAE
-};
+// enum KyKeyMgmt {
+//     Unknown = -1,
+//     Wep, Ieee8021x,
+//     WpaNone,
+//     WpaPsk,
+//     WpaEap,
+//     SAE
+// };
 
 class KyWirelessConnectSetting : public KyConnectSetting
 {

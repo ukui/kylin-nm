@@ -30,7 +30,7 @@
 #include <QDBusReply>
 #include <QDBusMetaType>
 
-#include "titlelabel.h"
+#include "klabel.h"
 #include "blacklistitem.h"
 
 using namespace kdk;
@@ -60,7 +60,7 @@ private:
 
 private:
     QFrame *m_blacklistFrame = nullptr;
-    TitleLabel *m_titleLabel = nullptr;
+    KLabel *m_titleLabel = nullptr;
     QVBoxLayout *m_blacklistLayout = nullptr;
     QMap<QString, QString> m_blacklistMap;
 

@@ -40,7 +40,7 @@ KyWirelessNetItem::KyWirelessNetItem(NetworkManager::WirelessNetwork::Ptr net)
     m_connName = "";
     m_connDbusPath = "";
     m_secuType = "";
-    m_kySecuType = NONE;
+    m_kySecuType = KYLIN_NM::NONE;
     m_device = "";
     m_channel = 0;
     m_isMix = false;
@@ -185,7 +185,7 @@ void KyWirelessNetItem::setKySecuType(QString strSecuType)
     } else if ( strSecuType.indexOf(WPA1) >= 0 || strSecuType.indexOf(WPA2) >= 0) {
         m_kySecuType = WPA_AND_WPA2_PERSONAL;
     } else {
-        m_kySecuType = NONE;
+        m_kySecuType = KYLIN_NM::NONE;
     }
 }
 

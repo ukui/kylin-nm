@@ -46,7 +46,7 @@
 #include <QtDBus/QDBusMetaType>
 
 #include "interface.h"
-#include "titlelabel.h"
+#include "klabel.h"
 #include "hoverwidget.h"
 #include "applistwidget.h"
 
@@ -157,9 +157,9 @@ private:
     int pluginType;
     QWidget * pluginWidget;
 
-    TitleLabel *mTitleLabel;
-    TitleLabel *m_appProxyLabel;
-    TitleLabel *mAptProxyLabel;
+    KLabel *mTitleLabel;
+    KLabel *m_appProxyLabel;
+    KLabel *mAptProxyLabel;
     QLabel *mUrlLabel;
     QLabel *mHTTPLabel;
     QLabel *mHTTPPortLabel;

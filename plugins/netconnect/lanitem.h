@@ -32,9 +32,11 @@
 #include <QToolButton>
 #include <QMenu>
 #include <QEvent>
-#include "fixlabel.h"
+#include "klabel.h"
 //#include "infobutton.h"
 #include "../component/AddBtn/grayinfobutton.h"
+
+using namespace kdk;
 
 class LanItem : public QPushButton
 {
@@ -45,7 +47,7 @@ public:
 public:
     QLabel * iconLabel = nullptr;
     GrayInfoButton * infoLabel = nullptr;
-    FixLabel * titileLabel = nullptr;
+    KLabel * titileLabel = nullptr;
     QLabel * statusLabel = nullptr;
     QToolButton* m_moreButton = nullptr;
     QMenu* m_moreMenu = nullptr;

@@ -53,6 +53,10 @@ public:
     bool lanIsConnected();
     void getWiredDeviceConnectState(QMap<QString, QString> &map);
 
+    bool isWiredDeviceUsable() {
+        return !m_devList.isEmpty();
+    }
+
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
@@ -112,6 +116,8 @@ Q_SIGNALS:
 
     void showLanRate(QListWidget *widget, QMap<QString, QListWidgetItem *> &map, QString dev, bool isLan);
 
+    void activeConnNameChanged();
+
 private Q_SLOTS:
     void onConnectionStateChange(QString uuid, NetworkManager::ActiveConnection::State state,
                                  NetworkManager::ActiveConnection::Reason reason);
@@ -120,7 +126,7 @@ private Q_SLOTS:
     void onRemoveConnection(QString path);
     void onUpdateConnection(QString uuid);
 
-    void onSwithGsettingsChanged(const QString &key);
+    void onSwithChanged(bool enable);
 
     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName);
@@ -151,9 +157,11 @@ private:
     QStringList m_devList;
     QStringList m_enableDeviceList;
     QStringList m_disableDeviceList;
+    QStringList m_devSwitchList;
 
     QGSettings *m_switchGsettings = nullptr;
     QMap<QString, NetDetail*> m_lanPagePtrMap;
+    QDBusInterface *m_pSysBusIntfs;
 };
 
 #endif // LANPAGE_H

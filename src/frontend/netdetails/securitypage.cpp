@@ -238,10 +238,10 @@ void SecurityPage::initUI()
     userNameEdit->setPlaceholderText(tr("Required"));
     userPwdEdit->setPlaceholderText(hintRequired);
 
-    secuTypeCombox->addItem(tr("None"),NONE);
-    secuTypeCombox->addItem(tr("WPA&WPA2 Personal"),WPA_AND_WPA2_PERSONAL);
-    secuTypeCombox->addItem(tr("WPA&WPA2 Enterprise"), WPA_AND_WPA2_ENTERPRISE);
-    secuTypeCombox->addItem(tr("WPA3 Personal"), WPA3_PERSONAL);
+    secuTypeCombox->addItem(tr("None"),KYLIN_NM::NONE);
+    secuTypeCombox->addItem(tr("WPA&WPA2 Personal"),KYLIN_NM::WPA_AND_WPA2_PERSONAL);
+    secuTypeCombox->addItem(tr("WPA&WPA2 Enterprise"), KYLIN_NM::WPA_AND_WPA2_ENTERPRISE);
+    secuTypeCombox->addItem(tr("WPA3 Personal"), KYLIN_NM::WPA3_PERSONAL);
 
     eapTypeCombox->addItem("TLS", TLS);
     eapTypeCombox->addItem("PEAP", PEAP);
@@ -605,9 +605,9 @@ bool SecurityPage::checkIsChanged(const ConInfo info)
     if (info.secType != secuTypeCombox->currentData().toInt()) {
         return true;
     } else {
-        if (info.secType == NONE) {
+        if (info.secType == KYLIN_NM::NONE) {
             return false;
-        } else if (info.secType == WPA_AND_WPA2_PERSONAL || info.secType == WPA3_PERSONAL) {
+        } else if (info.secType == KYLIN_NM::WPA_AND_WPA2_PERSONAL || info.secType == KYLIN_NM::WPA3_PERSONAL) {
                 return !(info.strPassword == pwdEdit->text());
         } else {
             if (info.enterpriseType != eapTypeCombox->currentData().toInt()) {
@@ -964,17 +964,17 @@ KyEapMethodFastInfo SecurityPage::assembleFastInfo()
 void SecurityPage::updateSecurityChange(KyWirelessConnectSetting &setting)
 {
     qDebug() << "secuTypeCombox->currentData()" << secuTypeCombox->currentData().toInt() << pwdEdit->text();
-    if (secuTypeCombox->currentData().toInt() == NONE) {
+    if (secuTypeCombox->currentData().toInt() == KYLIN_NM::NONE) {
         setting.m_psk = "";
     } else {
         setting.m_psk = pwdEdit->text();
     }
 
-    if (secuTypeCombox->currentData().toInt() == NONE) {
+    if (secuTypeCombox->currentData().toInt() == KYLIN_NM::NONE) {
         setting.m_type = WpaNone;
-    } else if (secuTypeCombox->currentData().toInt() == WPA_AND_WPA2_PERSONAL) {
+    } else if (secuTypeCombox->currentData().toInt() == KYLIN_NM::WPA_AND_WPA2_PERSONAL) {
         setting.m_type = WpaPsk;
-    } else if (secuTypeCombox->currentData().toInt() == WPA3_PERSONAL) {
+    } else if (secuTypeCombox->currentData().toInt() == KYLIN_NM::WPA3_PERSONAL) {
         setting.m_type = SAE;
     }
     setting.isAutoConnect = m_rememberCheckBox->isChecked();
@@ -983,14 +983,14 @@ void SecurityPage::updateSecurityChange(KyWirelessConnectSetting &setting)
 bool SecurityPage::checkConnectBtnIsEnabled()
 {
     int index = secuTypeCombox->currentData().toInt();
-    if (index == NONE) {
+    if (index == KYLIN_NM::NONE) {
 
-    } else if (index == WPA_AND_WPA2_PERSONAL || index == WPA3_PERSONAL) {
+    } else if (index == KYLIN_NM::WPA_AND_WPA2_PERSONAL || index == KYLIN_NM::WPA3_PERSONAL) {
         if (pwdEdit->text().isEmpty() || pwdEdit->text().length() < 8 ) {
             qDebug() << "password is empty or length < 8";
             return false;
         }
-    }  else if (index == WPA_AND_WPA2_ENTERPRISE) {
+    }  else if (index == KYLIN_NM::WPA_AND_WPA2_ENTERPRISE) {
         int type = eapTypeCombox->currentData().toInt();
         if (type == TLS) {
             if (identityEdit->text().isEmpty()) {
@@ -1048,19 +1048,19 @@ void SecurityPage::setEnableOfSaveBtn()
 void SecurityPage::onSecuTypeComboxIndexChanged()
 {
     int index = secuTypeCombox->currentData().toInt();
-    if (index == WPA_AND_WPA2_PERSONAL) {
+    if (index == KYLIN_NM::WPA_AND_WPA2_PERSONAL) {
         showPsk();
-        Q_EMIT this->secuTypeChanged(WPA_AND_WPA2_PERSONAL);
+        Q_EMIT this->secuTypeChanged(KYLIN_NM::WPA_AND_WPA2_PERSONAL);
     }
-    else if (index == WPA3_PERSONAL) {
+    else if (index == KYLIN_NM::WPA3_PERSONAL) {
         showPsk();
-        Q_EMIT this->secuTypeChanged(WPA3_PERSONAL);
-    } else if (index == WPA_AND_WPA2_ENTERPRISE) {
+        Q_EMIT this->secuTypeChanged(KYLIN_NM::WPA3_PERSONAL);
+    } else if (index == KYLIN_NM::WPA_AND_WPA2_ENTERPRISE) {
         onEapTypeComboxIndexChanged();
-        Q_EMIT this->secuTypeChanged(WPA_AND_WPA2_ENTERPRISE);
-    } else if (index == NONE) {
+        Q_EMIT this->secuTypeChanged(KYLIN_NM::WPA_AND_WPA2_ENTERPRISE);
+    } else if (index == KYLIN_NM::NONE) {
         showNone();
-        Q_EMIT this->secuTypeChanged(NONE);
+        Q_EMIT this->secuTypeChanged(KYLIN_NM::NONE);
     }
 }
 
@@ -1126,7 +1126,8 @@ void SecurityPage::onPacBoxClicked()
 
 void SecurityPage::onCaCertPathComboxIndexChanged(QString str)
 {
-    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+    Q_UNUSED(str)
+    if (caCertPathCombox->currentIndex() == 1)
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
                                                         tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
@@ -1149,7 +1150,8 @@ void SecurityPage::onCaCertPathComboxIndexChanged(QString str)
 
 void SecurityPage::onClientCertPathComboxIndexChanged(QString str)
 {
-    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+    Q_UNUSED(str)
+    if (clientCertPathCombox->currentIndex() == 1)
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
                                                         tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
@@ -1171,7 +1173,8 @@ void SecurityPage::onClientCertPathComboxIndexChanged(QString str)
 
 void SecurityPage::onClientPrivateKeyComboxIndexChanged(QString str)
 {
-    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+    Q_UNUSED(str)
+    if (clientPrivateKeyCombox->currentIndex() == 1)
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
                                                         tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));

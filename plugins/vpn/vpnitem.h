@@ -32,8 +32,10 @@
 #include <QToolButton>
 #include <QMenu>
 #include <QEvent>
-#include "fixlabel.h"
+#include "klabel.h"
 #include "../component/AddBtn/grayinfobutton.h"
+
+using namespace kdk;
 
 class VpnItem : public QPushButton
 {
@@ -43,7 +45,7 @@ public:
 public:
     QLabel * m_iconLabel = nullptr;
     GrayInfoButton * m_infoLabel = nullptr;
-    FixLabel * m_titileLabel = nullptr;
+    KLabel * m_titileLabel = nullptr;
     QLabel * m_statusLabel = nullptr;
     QToolButton* m_moreButton = nullptr;
     QMenu* m_moreMenu = nullptr;

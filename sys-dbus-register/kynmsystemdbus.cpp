@@ -24,7 +24,10 @@
 
 KynmSystemDbus::KynmSystemDbus(QObject *parent) : QObject(parent)
 {
-
+    QString switchSettingFile = "/etc/kylin-nm/switch.conf";
+    switchSetting = new QSettings(switchSettingFile, QSettings::IniFormat, this);
+    if (!switchSetting->contains("switch"))
+        switchSetting->setValue("switch", false);
 }
 
 KynmSystemDbus::~KynmSystemDbus()
@@ -72,4 +75,21 @@ bool KynmSystemDbus::checkIpv6IsConflict(const QString devName, const QString ip
     ipv6rping = nullptr;
 
     return isConflict;
+}
+
+void KynmSystemDbus::setSwitch(bool enable)
+{
+    switchSetting->setValue("switch", enable);
+    Q_EMIT switchChanged(enable);
+}
+
+void KynmSystemDbus::setDeviceSwitch(QString devName, bool enable)
+{
+    switchSetting->setValue(devName, enable);
+    Q_EMIT devSwitchChanged(devName, enable);
+}
+
+bool KynmSystemDbus::getSwitch()
+{
+    return switchSetting->value("switch").toBool();
 }

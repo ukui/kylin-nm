@@ -30,7 +30,7 @@
 #include <QDBusReply>
 #include <QDBusMetaType>
 
-#include "titlelabel.h"
+#include "klabel.h"
 #include "connectdevlistitem.h"
 
 using namespace kdk;
@@ -64,7 +64,7 @@ private:
 private:
     QFrame *m_staistFrame = nullptr;
 
-    TitleLabel *m_titleLabel = nullptr;
+    KLabel *m_titleLabel = nullptr;
     QVBoxLayout *m_staListLayout = nullptr;
     QMap<QString, QString> m_staMap;
 

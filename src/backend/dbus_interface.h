@@ -36,12 +36,6 @@ public:
     ~ComKylinNetworkInterface();
 
 public Q_SLOTS: // METHODS
-    inline Q_NOREPLY void deleteConnect(int type, const QString ssid)
-    {
-        QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(type) << QVariant::fromValue(ssid);
-        callWithArgumentList(QDBus::NoBlock, QStringLiteral("deleteConnect"), argumentList);
-    }
     inline Q_NOREPLY void activateConnect(int type, const QString &devName, const QString &ssid)
     {
         QList<QVariant> argumentList;

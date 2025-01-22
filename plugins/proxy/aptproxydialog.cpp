@@ -55,7 +55,7 @@ void AptProxyDialog::initUi()
     mLyt_1->setContentsMargins(0, 0, 0, 0);
     mLyt_1->setSpacing(8);
 
-    FixLabel *mSetHostLabel = new FixLabel(mHostFrame);
+    KLabel *mSetHostLabel = new KLabel(mHostFrame);
     mSetHostLabel->setFixedSize(92, 36);
     mSetHostLabel->setText(tr("Server Address"));
 

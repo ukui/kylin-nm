@@ -43,8 +43,9 @@ BlacklistPage::BlacklistPage(QWidget *parent) : QWidget(parent)
     m_blacklistLayout->setContentsMargins(0, 0, 0, 0);
     m_blacklistLayout->setSpacing(0);
 
-    m_titleLabel = new TitleLabel(this);
+    m_titleLabel = new KLabel(this);
     m_titleLabel->setText(tr("Blacklist"));
+    m_titleLabel->setContentsMargins(16, 0, 0, 0);
 
     Vlayout->addWidget(m_titleLabel);
     Vlayout->addSpacing(8);

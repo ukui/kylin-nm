@@ -1,0 +1,662 @@
+From: =?utf-8?b?5p2O5Lqr?= <lixiang1@kylinos.cn>
+Date: Thu, 27 Feb 2025 06:55:05 +0000
+Subject: =?utf-8?b?ITk4IGZpeChhbGwpOiB2MTHku6PnoIHlkIzmupDlkIzmraUgTWVyZ2Ug?=
+ =?utf-8?b?cHVsbCByZXF1ZXN0ICE5OCBmcm9tIOadjuS6qy9vcGVua3lsaW4vbmlsZQ==?=
+
+---
+ src-vpn/frontend/single-pages/vpnpage.cpp       |   9 +-
+ src/backend/dbus-interface/kylinagent.c         |   4 +-
+ src/backend/dbus-interface/kylinvpnrequest.c    |   2 +-
+ src/backend/dbus-interface/nm-macros-internal.h |  20 ++--
+ src/backend/utils.cpp                           |   8 +-
+ src/frontend/list-items/wlanlistitem.cpp        |   2 +-
+ src/frontend/mainwindow.cpp                     |  77 +++++++------
+ src/frontend/netdetails/securitypage.cpp        |   2 +-
+ src/frontend/tab-pages/lanpage.cpp              | 145 +++++++++++++++++++++++-
+ src/frontend/tab-pages/lanpage.h                |  15 +++
+ src/frontend/tab-pages/tabpage.cpp              |   8 +-
+ sys-dbus-register/kyarping/kylinipv4arping.cpp  |   4 +-
+ sys-dbus-register/kyarping/kylinipv6arping.cpp  |  12 +-
+ sys-dbus-register/kynmsystemdbus.cpp            |   2 +-
+ 14 files changed, 241 insertions(+), 69 deletions(-)
+
+diff --git a/src-vpn/frontend/single-pages/vpnpage.cpp b/src-vpn/frontend/single-pages/vpnpage.cpp
+index b332d7f..1cc7c71 100644
+--- a/src-vpn/frontend/single-pages/vpnpage.cpp
++++ b/src-vpn/frontend/single-pages/vpnpage.cpp
+@@ -666,7 +666,8 @@ void VpnPage::showUI()
+     raise();
+     activateWindow();
+     resetWindowPosition();
+-    return;
++    kdk::WindowManager::setSkipTaskBar(this->windowHandle(),true);
++    kdk::WindowManager::setSkipSwitcher(this->windowHandle(),true);
+ }
+ 
+ void VpnPage::resetWindowPosition()
+@@ -678,6 +679,12 @@ void VpnPage::resetWindowPosition()
+ //#define PANEL_BOTTOM 4
+ 
+     QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
++    QString currentScreen = WindowManager::currentOutputName();
++    for (auto screen : QApplication::screens()) {
++        if (screen && screen->name() == currentScreen) {
++            availableGeo = screen->geometry();
++        }
++    }
+     int x, y;
+     switch(m_panelPosition){
+     case PANEL_TOP:
+diff --git a/src/backend/dbus-interface/kylinagent.c b/src/backend/dbus-interface/kylinagent.c
+index 393d9fc..55599f9 100644
+--- a/src/backend/dbus-interface/kylinagent.c
++++ b/src/backend/dbus-interface/kylinagent.c
+@@ -600,7 +600,7 @@ vpn_secret_iter_cb (const char *key, const char *secret, gpointer user_data)
+     const char *service_name, *id;
+     char *display_name;
+ 
+-    if (secret && strlen (secret)) {
++    if (secret && strnlen (secret, sizeof(secret))) {
+         setting = nm_connection_get_setting (r->connection, NM_TYPE_SETTING_VPN);
+         g_assert (setting);
+         service_name = nm_setting_vpn_get_service_type (NM_SETTING_VPN (setting));
+@@ -643,7 +643,7 @@ write_one_secret_to_keyring (NMSetting *setting,
+             return;
+         g_return_if_fail (type == G_TYPE_STRING);
+         secret = g_value_get_string (value);
+-        if (secret && strlen (secret))
++        if (secret && strnlen (secret, sizeof(secret)))
+             save_one_secret (r, setting, key, secret, NULL);
+     }
+ }
+diff --git a/src/backend/dbus-interface/kylinvpnrequest.c b/src/backend/dbus-interface/kylinvpnrequest.c
+index c294bd6..859d1cb 100644
+--- a/src/backend/dbus-interface/kylinvpnrequest.c
++++ b/src/backend/dbus-interface/kylinvpnrequest.c
+@@ -65,7 +65,7 @@ _nm_utils_ascii_str_to_bool (const char *str,
+      if (!str[0])
+          return default_value;
+ 
+-     len = strlen (str);
++     len = strnlen (str, sizeof(str));
+      if (g_ascii_isspace (str[len - 1])) {
+          s = g_strdup (str);
+          g_strchomp (s);
+diff --git a/src/backend/dbus-interface/nm-macros-internal.h b/src/backend/dbus-interface/nm-macros-internal.h
+index fb76caf..edc426d 100644
+--- a/src/backend/dbus-interface/nm-macros-internal.h
++++ b/src/backend/dbus-interface/nm-macros-internal.h
+@@ -260,7 +260,7 @@ NM_G_ERROR_MSG (GError *error)
+ /*****************************************************************************/
+ 
+ /* macro to return strlen() of a compile time string. */
+-#define NM_STRLEN(str)     ( sizeof ("" str) - 1 )
++#define NM_qstrlen(str)     ( sizeof ("" str) - 1 )
+ 
+ /* returns the length of a NULL terminated array of pointers,
+  * like g_strv_length() does. The difference is:
+@@ -993,7 +993,7 @@ nm_strstrip_avoid_copy (const char *str, char **str_free)
+         return NULL;
+ 
+     str = nm_str_skip_leading_spaces (str);
+-    l = strlen (str);
++    l = strnlen (str, sizeof(strnlen));
+     if (   l == 0
+         || !g_ascii_isspace (str[l - 1]))
+         return str;
+@@ -1141,14 +1141,14 @@ nm_decode_version (guint version, guint *major, guint *minor, guint *micro)
+         (_str \
+             ? ({ \
+                 const gsize _trunc_at = (trunc_at); \
+-                const gsize _strlen_trunc = NM_MIN (strlen (_str), _trunc_at); \
++                const gsize _qstrlen_trunc = NM_MIN (qstrlen (_str), _trunc_at); \
+                 char *_buf; \
+                 \
+-                _buf = g_alloca (_strlen_trunc + 3); \
++                _buf = g_alloca (_qstrlen_trunc + 3); \
+                 _buf[0] = '"'; \
+-                memcpy (&_buf[1], _str, _strlen_trunc); \
+-                _buf[_strlen_trunc + 1] = _str[_strlen_trunc] ? '^' : '"'; \
+-                _buf[_strlen_trunc + 2] = '\0'; \
++                memcpy (&_buf[1], _str, _qstrlen_trunc); \
++                _buf[_qstrlen_trunc + 1] = _str[_qstrlen_trunc] ? '^' : '"'; \
++                _buf[_qstrlen_trunc + 2] = '\0'; \
+                 _buf; \
+             }) \
+             : "(null)"); \
+@@ -1190,12 +1190,12 @@ nm_decode_version (guint version, guint *major, guint *minor, guint *micro)
+     ({ \
+         const char *const _name = (name); \
+         char **const _p_val_to_free = (p_val_to_free); \
+-        const gsize _name_len = strlen (_name); \
++        const gsize _name_len = strnlen (_name, sizeof(_name)); \
+         char *_buf2; \
+         \
+         nm_assert (_p_val_to_free && !*_p_val_to_free); \
+-        if (NM_STRLEN (format) + _name_len < 200) \
+-            _buf2 = nm_sprintf_bufa (NM_STRLEN (format) + _name_len, format, _name); \
++        if (NM_qstrlen (format) + _name_len < 200) \
++            _buf2 = nm_sprintf_bufa (NM_qstrlen (format) + _name_len, format, _name); \
+         else { \
+             _buf2 = g_strdup_printf (format, _name); \
+             *_p_val_to_free = _buf2; \
+diff --git a/src/backend/utils.cpp b/src/backend/utils.cpp
+index 8c2959b..525168e 100644
+--- a/src/backend/utils.cpp
++++ b/src/backend/utils.cpp
+@@ -126,12 +126,12 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
+             // qDebug()<<"No eth0 keyword to find!";
+             continue;
+         } else {
+-            match = match + strlen(netname) + strlen(":"); //地址偏移到冒号
++            match = match + qstrlen(netname) + qstrlen(":"); //地址偏移到冒号
+             sscanf(match,"%ld ",save_rate);
+             memset(tmp_value,0,sizeof(tmp_value));
+             sscanf(match,"%s ",tmp_value);
+-            match = match + strlen(tmp_value);
+-            for (size_t i=0;i<strlen(buffer);i++) {
++            match = match + qstrlen(tmp_value);
++            for (size_t i=0;i<qstrlen(buffer);i++) {
+                 if (0x20 == *match) {
+                     match ++;
+                 } else {
+@@ -140,7 +140,7 @@ int NetworkSpeed::getCurrentDownloadRates(char *netname, long *save_rate, long *
+                     }
+                     memset(tmp_value,0,sizeof(tmp_value));
+                     sscanf(match,"%s ",tmp_value);
+-                    match = match + strlen(tmp_value);
++                    match = match + qstrlen(tmp_value);
+                     counter ++;
+                 }
+             }
+diff --git a/src/frontend/list-items/wlanlistitem.cpp b/src/frontend/list-items/wlanlistitem.cpp
+index d69d959..7d2b4b8 100644
+--- a/src/frontend/list-items/wlanlistitem.cpp
++++ b/src/frontend/list-items/wlanlistitem.cpp
+@@ -299,7 +299,7 @@ void WlanListItem::initWlanUI()
+ //    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
+ //    m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
+ 
+-    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
++    QRegExp rx("^[\\x20-\\x7E]+$");
+     QRegExpValidator *latitude = new QRegExpValidator(rx, this);
+     m_pwdLineEdit->setValidator(latitude);
+ 
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index fbf7d26..908ba97 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -392,6 +392,7 @@ void MainWindow::initTrayIcon()
+     m_showConnectivityPageAction->setIcon(QIcon::fromTheme("gnome-netstatus-txrx"));
+ //    m_trayIconMenu->addAction(m_showMainwindowAction);
+     m_trayIconMenu->addAction(m_showSettingsAction);
++    m_trayIconMenu->addAction(m_showConnectivityPageAction);
+     m_trayIcon->setContextMenu(m_trayIconMenu);
+     iconStatus = IconActiveType::LAN_CONNECTED;
+     onRefreshTrayIcon();
+@@ -399,19 +400,19 @@ void MainWindow::initTrayIcon()
+     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
+ //    connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
+     connect(m_showSettingsAction, &QAction::triggered, this, &MainWindow::onShowSettingsActionTriggled);
+-//    connect(m_showConnectivityPageAction, &QAction::triggered, [=]() {
+-//        if (m_connectivityPage != nullptr) {
+-//            KWindowSystem::activateWindow(m_connectivityPage->winId());
+-//            KWindowSystem::raiseWindow(m_connectivityPage->winId());
+-//            return;
+-//        }
+-//        QString uri = getConnectivityCheckSpareUriByGDbus();
+-//        m_connectivityPage = new ConnectivityPage(uri, this);
+-//        connect(m_connectivityPage, &ConnectivityPage::pageClose, [&](){
+-//            m_connectivityPage = nullptr;
+-//        });
+-//        m_connectivityPage->show();
+-//    });
++    connect(m_showConnectivityPageAction, &QAction::triggered, [=]() {
++        if (m_connectivityPage != nullptr) {
++            KWindowSystem::activateWindow(m_connectivityPage->winId());
++            KWindowSystem::raiseWindow(m_connectivityPage->winId());
++            return;
++        }
++        QString uri = getConnectivityCheckSpareUriByGDbus();
++        m_connectivityPage = new ConnectivityPage(uri, this);
++        connect(m_connectivityPage, &ConnectivityPage::pageClose, [&](){
++            m_connectivityPage = nullptr;
++        });
++        m_connectivityPage->show();
++    });
+ 
+     m_trayIcon->show();
+ }
+@@ -550,6 +551,12 @@ void MainWindow::resetWindowPosition()
+     }
+ 
+     QRect availableGeo = qscreen->geometry();
++    QString currentScreen = WindowManager::currentOutputName();
++    for (auto screen : QApplication::screens()) {
++        if (screen && screen->name() == currentScreen) {
++            availableGeo = screen->geometry();
++        }
++    }
+     int x, y;
+     switch (m_panelPosition)
+     {
+@@ -828,34 +835,34 @@ void MainWindow::onRefreshTrayIcon()
+         }
+     }
+ 
+-//    if(!getConnectivityCheckSpareUriByGDbus().isEmpty()) {
+-//        if (iconStatus == IconActiveType::LAN_CONNECTED) {
+-//            m_trayIcon->setIcon(QIcon::fromTheme("network-intranet-symbolic"));
+-//        } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
+-//            if (signalStrength > MW_EXCELLENT_SIGNAL){
+-//                m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_INTRANET_ICON));
+-//            } else if (signalStrength > MW_GOOD_SIGNAL) {
+-//                m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_INTRANET_ICON));
+-//            } else if (signalStrength > MW_OK_SIGNAL) {
+-//                m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_INTRANET_ICON));
+-//            } else if (signalStrength > MW_LOW_SIGNAL) {
+-//                m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_INTRANET_ICON));
+-//            } else {
+-//                m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_INTRANET_ICON));
+-//            }
+-//        }
+-//    }
++    if(!getConnectivityCheckSpareUriByGDbus().isEmpty()) {
++        if (iconStatus == IconActiveType::LAN_CONNECTED) {
++            m_trayIcon->setIcon(QIcon::fromTheme("network-intranet-symbolic"));
++        } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
++            if (signalStrength > MW_EXCELLENT_SIGNAL){
++                m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_INTRANET_ICON));
++            } else if (signalStrength > MW_GOOD_SIGNAL) {
++                m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_INTRANET_ICON));
++            } else if (signalStrength > MW_OK_SIGNAL) {
++                m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_INTRANET_ICON));
++            } else if (signalStrength > MW_LOW_SIGNAL) {
++                m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_INTRANET_ICON));
++            } else {
++                m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_INTRANET_ICON));
++            }
++        }
++    }
+ 
+     if (signalStrength == -1) {
+         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
+     }
+     onRefreshTrayIconTooltip();
+ 
+-//    if (iconStatus > IconActiveType::NOT_CONNECTED) {
+-//        m_trayIconMenu->addAction(m_showConnectivityPageAction);
+-//    } else {
+-//        m_trayIconMenu->removeAction(m_showConnectivityPageAction);
+-//    }
++    if (iconStatus > IconActiveType::NOT_CONNECTED) {
++        m_trayIconMenu->addAction(m_showConnectivityPageAction);
++    } else {
++        m_trayIconMenu->removeAction(m_showConnectivityPageAction);
++    }
+ }
+ 
+ void MainWindow::onSetTrayIconLoading()
+diff --git a/src/frontend/netdetails/securitypage.cpp b/src/frontend/netdetails/securitypage.cpp
+index b40052c..61e27fc 100644
+--- a/src/frontend/netdetails/securitypage.cpp
++++ b/src/frontend/netdetails/securitypage.cpp
+@@ -285,7 +285,7 @@ void SecurityPage::initUI()
+     clientPrivateKeyPwdEdit->setClearButtonEnabled(false);
+     userPwdEdit->setClearButtonEnabled(false);
+ 
+-    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
++    QRegExp rx("^[\\x20-\\x7E]+$");
+     QRegExpValidator *latitude = new QRegExpValidator(rx, this);
+     pwdEdit->setValidator(latitude);
+     clientPrivateKeyPwdEdit->setValidator(latitude);
+diff --git a/src/frontend/tab-pages/lanpage.cpp b/src/frontend/tab-pages/lanpage.cpp
+index 0b2ab8a..94053f9 100644
+--- a/src/frontend/tab-pages/lanpage.cpp
++++ b/src/frontend/tab-pages/lanpage.cpp
+@@ -34,6 +34,16 @@
+ #define TRANSPARENT_COLOR QColor(0,0,0,0)
+ #define ITEM_HEIGHT 48
+ 
++#define MARGIN 8
++#define PANEL_TOP 1
++#define PANEL_LEFT 2
++#define PANEL_RIGHT 3
++#define PANEL_BOTTOM 0
++
++#define PANEL_SETTINGS                      "org.ukui.panel.settings"
++#define PANEL_SIZE_KEY                      "panelsize"
++#define PANEL_POSITION_KEY                  "panelposition"
++
+ #define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
+ #define SYSTEM_DBUS_PATH  "/"
+ #define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
+@@ -50,11 +60,13 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
+     m_connectResourse = new KyConnectResourse(this);
+     m_deviceResource = new KyNetworkDeviceResourse(this);
+     m_wiredConnectOperation = new KyWiredConnectOperation(this);
++    m_pNetTip = new KBallonTip();
+ 
+     initUI();
+     initLanDevice();
+     initNetSwitch();
+     initLanDeviceState();
++    initPanelGSettings();
+ 
+     initDeviceCombox();
+     initLanArea();
+@@ -79,6 +91,7 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
+     connect(m_deviceResource, &KyNetworkDeviceResourse::carrierChanage, this, &LanPage::onDeviceCarriered);
+     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceActiveChanage, this, &LanPage::onDeviceActiveChanage);
+     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceManagedChange, this, &LanPage::onDeviceManagedChange);
++    connect(m_deviceResource, &KyNetworkDeviceResourse::stateChanged, this, &LanPage::onLanStateChanged);
+ 
+     connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &LanPage::activateFailed);
+     connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &LanPage::deactivateFailed);
+@@ -122,7 +135,10 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
+ 
+ LanPage::~LanPage()
+ {
+-
++    if (m_pNetTip != nullptr) {
++        delete m_pNetTip;
++        m_pNetTip = nullptr;
++    }
+ }
+ 
+ void LanPage::initLanDevice()
+@@ -241,6 +257,31 @@ void LanPage::initNetSwitch()
+     }
+ }
+ 
++void LanPage::initPanelGSettings()
++{
++    const QByteArray id(PANEL_SETTINGS);
++    if (QGSettings::isSchemaInstalled(id)) {
++        if (m_panelGSettings == nullptr) {
++            m_panelGSettings = new QGSettings(id);
++        }
++        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY)) {
++            m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
++        }
++        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY)) {
++            m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
++        }
++        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key) {
++            if (key == PANEL_POSITION_KEY) {
++                m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
++
++            }
++            if (key == PANEL_SIZE_KEY) {
++                m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
++            }
++        });
++    }
++}
++
+ void LanPage::onSwithChanged(bool enable)
+ {
+     qDebug()<<"[LanPage] SwitchButton statue changed to:" << enable << m_netSwitch->isChecked();
+@@ -792,6 +833,7 @@ void LanPage::onDeviceManagedChange(QString deviceName, bool managed)
+     initLanDeviceState();
+     initDeviceCombox();
+     initLanArea();
++    m_showedNetTipFlag = false;
+     Q_EMIT deviceStatusChanged();
+ }
+ 
+@@ -1430,3 +1472,104 @@ void LanPage::showRate()
+         onSetNetSpeed(m_activatedLanListWidget, m_activeConnectionMap.contains(EMPTY_SSID), m_currentDeviceName);
+     });
+ }
++
++void LanPage::onLanStateChanged(NetworkManager::Device::State newstate,
++                                NetworkManager::Device::State oldstate,
++                                NetworkManager::Device::StateChangeReason reason)
++{
++    if (newstate == NetworkManager::Device::Failed
++        && reason == NetworkManager::Device::StateChangeReason::ConfigUnavailableReason)
++    {
++        if (!m_showedNetTipFlag)
++        {
++            showBallonTip();
++            m_showedNetTipFlag = true;
++        }
++    }
++}
++
++void LanPage::onShowKylinNetworkCheck()
++{
++    QProcess process;
++    process.startDetached("kylin-os-manager --diagnosis --mode=Network");
++}
++
++void LanPage::showBallonTip()
++{
++    QString warnInfo = tr("No internet access. Please click Network Check to specific reason.");
++
++    if (m_pNetTip != nullptr) {
++        delete m_pNetTip;
++        m_pNetTip = nullptr;
++    }
++    m_pNetTip = new KBallonTip();
++    QPushButton *btn = new QPushButton(m_pNetTip);
++    btn->setText(tr("Network Check"));
++    connect(btn, &QPushButton::clicked, m_pNetTip, [=]{
++        m_pNetTip->close();
++        onShowKylinNetworkCheck();
++    });
++
++    m_pNetTip->setAttribute(Qt::WA_TranslucentBackground, true);
++    m_pNetTip->setTipType(TipType::Warning);
++    m_pNetTip->hBoxLayout()->setContentsMargins(16, 6, 10, 6);
++    m_pNetTip->hBoxLayout()->setSpacing(4);
++    m_pNetTip->hBoxLayout()->addSpacing(4);
++    m_pNetTip->hBoxLayout()->addWidget(btn);
++    m_pNetTip->setTipTime(9 * 1000);
++    m_pNetTip->setText(warnInfo);
++
++    QPalette pal = m_pNetTip->palette();
++    pal.setColor(QPalette::Window, this->palette().window().color());
++    pal.setColor(QPalette::WindowText, this->palette().windowText().color());
++    m_pNetTip->setPalette(pal);
++
++    QPalette btnPal = btn->palette();
++    btnPal.setColor(QPalette::Text, this->palette().text().color());
++    btnPal.setColor(QPalette::Button, this->palette().button().color());
++    btn->setPalette(btnPal);
++
++    m_pNetTip->adjustSize();
++    KWindowSystem::setState(m_pNetTip->winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
++    QRect rect = caculatePositionWithPanel(m_pNetTip->width() - 8, m_pNetTip->height() - 4);
++    m_pNetTip->setGeometry(rect);
++    m_pNetTip->showInfo();
++}
++
++QRect LanPage::caculatePositionWithPanel(const int windowWidth, const int windowHeight)
++{
++    int x,y;
++    QScreen * qscreen = QGuiApplication::screenAt(QCursor::pos());
++    QRect availableGeo = qscreen->geometry();
++    QString currentScreen = WindowManager::currentOutputName();
++    for (auto screen : QApplication::screens()) {
++        if (screen && screen->name() == currentScreen) {
++            availableGeo = screen->geometry();
++        }
++    }
++    switch (m_panelPosition)
++    {
++    case PANEL_TOP:
++        x = availableGeo.x() + availableGeo.width() - windowWidth - MARGIN;
++        y = availableGeo.y() + m_panelSize + MARGIN;
++        break;
++    case PANEL_BOTTOM:
++        x = availableGeo.x() + availableGeo.width() - windowWidth - MARGIN;
++        y = availableGeo.y() + availableGeo.height() - m_panelSize - windowHeight - MARGIN;
++        break;
++    case PANEL_LEFT:
++        x = availableGeo.x() + m_panelSize + MARGIN;
++        y = availableGeo.y() + availableGeo.height() - windowHeight - MARGIN;
++        break;
++    case PANEL_RIGHT:
++        x = availableGeo.x() + availableGeo.width() - m_panelSize - windowWidth - MARGIN;
++        y = availableGeo.y() + availableGeo.height() - windowHeight - MARGIN;
++        break;
++    default:
++        x = availableGeo.x() + availableGeo.width() - windowWidth - MARGIN;
++        y = availableGeo.y() + availableGeo.height() - m_panelSize - windowHeight - MARGIN;
++        break;
++    }
++
++    return QRect(x, y, windowWidth, windowHeight);
++}
+diff --git a/src/frontend/tab-pages/lanpage.h b/src/frontend/tab-pages/lanpage.h
+index 14057df..fac67ff 100644
+--- a/src/frontend/tab-pages/lanpage.h
++++ b/src/frontend/tab-pages/lanpage.h
+@@ -28,6 +28,8 @@
+ #include <QListWidget>
+ #include <QMap>
+ #include <QGSettings>
++#include <QApplication>
++#include <QScreen>
+ 
+ #include "list-items/listitem.h"
+ #include "list-items/lanlistitem.h"
+@@ -66,6 +68,7 @@ private:
+     void initLanArea();
+     void initNetSwitch();
+     void initLanDeviceState();
++    void initPanelGSettings();
+ 
+     void initDeviceCombox();
+     void updateDeviceCombox(QString oldDeviceName, QString newDeviceName);
+@@ -105,6 +108,12 @@ private:
+ 
+     void updateCurrentDevice(QString deviceName);
+     void showRate();
++    void onShowKylinNetworkCheck();
++    void showBallonTip();
++    QRect caculatePositionWithPanel(const int windowWidth, const int windowHeight);
++    void onLanStateChanged(NetworkManager::Device::State newstate,
++                           NetworkManager::Device::State oldstate,
++                           NetworkManager::Device::StateChangeReason reason);
+ 
+ Q_SIGNALS:
+     void lanAdd(QString devName, QStringList info);
+@@ -159,9 +168,15 @@ private:
+     QStringList m_disableDeviceList;
+     QStringList m_devSwitchList;
+ 
++    QGSettings *m_panelGSettings = nullptr;
+     QGSettings *m_switchGsettings = nullptr;
+     QMap<QString, NetDetail*> m_lanPagePtrMap;
+     QDBusInterface *m_pSysBusIntfs;
++
++    KBallonTip *m_pNetTip;
++    int m_panelPosition;
++    int m_panelSize;
++    bool m_showedNetTipFlag = false;
+ };
+ 
+ #endif // LANPAGE_H
+diff --git a/src/frontend/tab-pages/tabpage.cpp b/src/frontend/tab-pages/tabpage.cpp
+index 4644d39..1e87de2 100644
+--- a/src/frontend/tab-pages/tabpage.cpp
++++ b/src/frontend/tab-pages/tabpage.cpp
+@@ -209,12 +209,12 @@ int TabPage::getCurrentLoadRate(QString dev, long *save_rate, long *tx_rate)
+             // qDebug()<<"No eth0 keyword to find!";
+             continue;
+         } else {
+-            match = match + strlen(device) + strlen(":"); //地址偏移到冒号
++            match = match + qstrlen(device) + qstrlen(":"); //地址偏移到冒号
+             sscanf(match, "%ld ", save_rate);
+             memset(tmp_value, 0, sizeof(tmp_value));
+             sscanf(match, "%s ", tmp_value);
+-            match = match + strlen(tmp_value);
+-            for (size_t i=0; i<strlen(buffer); ++i) {
++            match = match + qstrlen(tmp_value);
++            for (size_t i=0; i<qstrlen(buffer); ++i) {
+                 if (0x20 == *match) {
+                     match ++;
+                 } else {
+@@ -223,7 +223,7 @@ int TabPage::getCurrentLoadRate(QString dev, long *save_rate, long *tx_rate)
+                     }
+                     memset(tmp_value, 0, sizeof(tmp_value));
+                     sscanf(match, "%s ", tmp_value);
+-                    match = match + strlen(tmp_value);
++                    match = match + qstrlen(tmp_value);
+                     counter ++;
+                 }
+             }
+diff --git a/sys-dbus-register/kyarping/kylinipv4arping.cpp b/sys-dbus-register/kyarping/kylinipv4arping.cpp
+index 2cbdefb..eaa5241 100644
+--- a/sys-dbus-register/kyarping/kylinipv4arping.cpp
++++ b/sys-dbus-register/kyarping/kylinipv4arping.cpp
+@@ -75,9 +75,9 @@ void KyIpv4Arping::saveMacAddress(const uint8_t *ptr, size_t len)
+     char macAddress[64] = {0};
+ 
+     for (index = 0; index < len; index++) {
+-        snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%02X", ptr[index]);
++        snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%02X", ptr[index]);
+         if (index != len - 1) {
+-            snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%s", ":");
++            snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%s", ":");
+         }
+     }
+ 
+diff --git a/sys-dbus-register/kyarping/kylinipv6arping.cpp b/sys-dbus-register/kyarping/kylinipv6arping.cpp
+index a6969a6..40f63b2 100644
+--- a/sys-dbus-register/kyarping/kylinipv6arping.cpp
++++ b/sys-dbus-register/kyarping/kylinipv6arping.cpp
+@@ -62,11 +62,11 @@ int KyIpv6Arping::getLocalMacAddress(const char *ifname, unsigned char *addr)
+     struct ifreq req;
+     memset (&req, 0, sizeof (req));
+ 
+-    if (((unsigned)strlen (ifname)) >= (unsigned)IFNAMSIZ) {
++    if (((unsigned)qstrlen (ifname)) >= (unsigned)IFNAMSIZ) {
+         return -1; /* buffer overflow = local root */
+     }
+ 
+-    strcpy (req.ifr_name, ifname);
++    strncpy (req.ifr_name, ifname, qstrlen (ifname));
+ 
+     int fd = socket (AF_INET6, SOCK_DGRAM, 0);
+     if (fd == -1) {
+@@ -158,9 +158,9 @@ void KyIpv6Arping::saveMacAddress (const uint8_t *ptr, size_t len)
+     char macAddress[64] = {0};
+ 
+     for (index = 0; index < len; index++) {
+-        snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%02X", ptr[index]);
++        snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%02X", ptr[index]);
+         if (index != len - 1) {
+-            snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%s", ":");
++            snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%s", ":");
+         }
+     }
+ 
+@@ -192,9 +192,9 @@ int KyIpv6Arping::parseIpv6Packet(const uint8_t *buf, size_t len, const struct s
+     uint8_t hw_addr[6] = {0};
+     getLocalMacAddress(m_ifaceName.toUtf8().constData(), hw_addr);
+     for (index = 0; index < 6; index++) {
+-        snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%02X", hw_addr[index]);
++        snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%02X", hw_addr[index]);
+         if (index != 5) {
+-            snprintf(&macAddress[strlen(macAddress)], sizeof(macAddress) - strlen(macAddress), "%s", ":");
++            snprintf(&macAddress[qstrlen(macAddress)], sizeof(macAddress) - qstrlen(macAddress), "%s", ":");
+         }
+     }
+     QString localAddr(macAddress);
+diff --git a/sys-dbus-register/kynmsystemdbus.cpp b/sys-dbus-register/kynmsystemdbus.cpp
+index 235ddf6..6700afa 100644
+--- a/sys-dbus-register/kynmsystemdbus.cpp
++++ b/sys-dbus-register/kynmsystemdbus.cpp
+@@ -27,7 +27,7 @@ KynmSystemDbus::KynmSystemDbus(QObject *parent) : QObject(parent)
+     QString switchSettingFile = "/etc/kylin-nm/switch.conf";
+     switchSetting = new QSettings(switchSettingFile, QSettings::IniFormat, this);
+     if (!switchSetting->contains("switch"))
+-        switchSetting->setValue("switch", false);
++        switchSetting->setValue("switch", true);
+ }
+ 
+ KynmSystemDbus::~KynmSystemDbus()

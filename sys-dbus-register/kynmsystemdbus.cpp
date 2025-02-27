@@ -27,7 +27,7 @@ KynmSystemDbus::KynmSystemDbus(QObject *parent) : QObject(parent)
     QString switchSettingFile = "/etc/kylin-nm/switch.conf";
     switchSetting = new QSettings(switchSettingFile, QSettings::IniFormat, this);
     if (!switchSetting->contains("switch"))
-        switchSetting->setValue("switch", false);
+        switchSetting->setValue("switch", true);
 }
 
 KynmSystemDbus::~KynmSystemDbus()

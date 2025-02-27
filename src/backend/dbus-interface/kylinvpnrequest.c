@@ -65,7 +65,7 @@ _nm_utils_ascii_str_to_bool (const char *str,
      if (!str[0])
          return default_value;
 
-     len = strlen (str);
+     len = strnlen (str, sizeof(str));
      if (g_ascii_isspace (str[len - 1])) {
          s = g_strdup (str);
          g_strchomp (s);

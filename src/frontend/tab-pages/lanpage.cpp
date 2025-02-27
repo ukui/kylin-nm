@@ -34,6 +34,16 @@
 #define TRANSPARENT_COLOR QColor(0,0,0,0)
 #define ITEM_HEIGHT 48
 
+#define MARGIN 8
+#define PANEL_TOP 1
+#define PANEL_LEFT 2
+#define PANEL_RIGHT 3
+#define PANEL_BOTTOM 0
+
+#define PANEL_SETTINGS                      "org.ukui.panel.settings"
+#define PANEL_SIZE_KEY                      "panelsize"
+#define PANEL_POSITION_KEY                  "panelposition"
+
 #define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
 #define SYSTEM_DBUS_PATH  "/"
 #define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
@@ -50,11 +60,13 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     m_connectResourse = new KyConnectResourse(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
     m_wiredConnectOperation = new KyWiredConnectOperation(this);
+    m_pNetTip = new KBallonTip();
 
     initUI();
     initLanDevice();
     initNetSwitch();
     initLanDeviceState();
+    initPanelGSettings();
 
     initDeviceCombox();
     initLanArea();
@@ -79,6 +91,7 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_deviceResource, &KyNetworkDeviceResourse::carrierChanage, this, &LanPage::onDeviceCarriered);
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceActiveChanage, this, &LanPage::onDeviceActiveChanage);
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceManagedChange, this, &LanPage::onDeviceManagedChange);
+    connect(m_deviceResource, &KyNetworkDeviceResourse::stateChanged, this, &LanPage::onLanStateChanged);
 
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &LanPage::activateFailed);
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &LanPage::deactivateFailed);
@@ -122,7 +135,10 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
 
 LanPage::~LanPage()
 {
-
+    if (m_pNetTip != nullptr) {
+        delete m_pNetTip;
+        m_pNetTip = nullptr;
+    }
 }
 
 void LanPage::initLanDevice()
@@ -238,6 +254,31 @@ void LanPage::initNetSwitch()
     } else {
         qWarning () << "switch init dbus reply invalid";
         m_netSwitch->setChecked(false);
+    }
+}
+
+void LanPage::initPanelGSettings()
+{
+    const QByteArray id(PANEL_SETTINGS);
+    if (QGSettings::isSchemaInstalled(id)) {
+        if (m_panelGSettings == nullptr) {
+            m_panelGSettings = new QGSettings(id);
+        }
+        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY)) {
+            m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+        }
+        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY)) {
+            m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+        }
+        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key) {
+            if (key == PANEL_POSITION_KEY) {
+                m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+
+            }
+            if (key == PANEL_SIZE_KEY) {
+                m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+            }
+        });
     }
 }
 
@@ -792,6 +833,7 @@ void LanPage::onDeviceManagedChange(QString deviceName, bool managed)
     initLanDeviceState();
     initDeviceCombox();
     initLanArea();
+    m_showedNetTipFlag = false;
     Q_EMIT deviceStatusChanged();
 }
 
@@ -1429,4 +1471,105 @@ void LanPage::showRate()
     connect(setNetSpeed, &QTimer::timeout,  [&]() {
         onSetNetSpeed(m_activatedLanListWidget, m_activeConnectionMap.contains(EMPTY_SSID), m_currentDeviceName);
     });
+}
+
+void LanPage::onLanStateChanged(NetworkManager::Device::State newstate,
+                                NetworkManager::Device::State oldstate,
+                                NetworkManager::Device::StateChangeReason reason)
+{
+    if (newstate == NetworkManager::Device::Failed
+        && reason == NetworkManager::Device::StateChangeReason::ConfigUnavailableReason)
+    {
+        if (!m_showedNetTipFlag)
+        {
+            showBallonTip();
+            m_showedNetTipFlag = true;
+        }
+    }
+}
+
+void LanPage::onShowKylinNetworkCheck()
+{
+    QProcess process;
+    process.startDetached("kylin-os-manager --diagnosis --mode=Network");
+}
+
+void LanPage::showBallonTip()
+{
+    QString warnInfo = tr("No internet access. Please click Network Check to specific reason.");
+
+    if (m_pNetTip != nullptr) {
+        delete m_pNetTip;
+        m_pNetTip = nullptr;
+    }
+    m_pNetTip = new KBallonTip();
+    QPushButton *btn = new QPushButton(m_pNetTip);
+    btn->setText(tr("Network Check"));
+    connect(btn, &QPushButton::clicked, m_pNetTip, [=]{
+        m_pNetTip->close();
+        onShowKylinNetworkCheck();
+    });
+
+    m_pNetTip->setAttribute(Qt::WA_TranslucentBackground, true);
+    m_pNetTip->setTipType(TipType::Warning);
+    m_pNetTip->hBoxLayout()->setContentsMargins(16, 6, 10, 6);
+    m_pNetTip->hBoxLayout()->setSpacing(4);
+    m_pNetTip->hBoxLayout()->addSpacing(4);
+    m_pNetTip->hBoxLayout()->addWidget(btn);
+    m_pNetTip->setTipTime(9 * 1000);
+    m_pNetTip->setText(warnInfo);
+
+    QPalette pal = m_pNetTip->palette();
+    pal.setColor(QPalette::Window, this->palette().window().color());
+    pal.setColor(QPalette::WindowText, this->palette().windowText().color());
+    m_pNetTip->setPalette(pal);
+
+    QPalette btnPal = btn->palette();
+    btnPal.setColor(QPalette::Text, this->palette().text().color());
+    btnPal.setColor(QPalette::Button, this->palette().button().color());
+    btn->setPalette(btnPal);
+
+    m_pNetTip->adjustSize();
+    KWindowSystem::setState(m_pNetTip->winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
+    QRect rect = caculatePositionWithPanel(m_pNetTip->width() - 8, m_pNetTip->height() - 4);
+    m_pNetTip->setGeometry(rect);
+    m_pNetTip->showInfo();
+}
+
+QRect LanPage::caculatePositionWithPanel(const int windowWidth, const int windowHeight)
+{
+    int x,y;
+    QScreen * qscreen = QGuiApplication::screenAt(QCursor::pos());
+    QRect availableGeo = qscreen->geometry();
+    QString currentScreen = WindowManager::currentOutputName();
+    for (auto screen : QApplication::screens()) {
+        if (screen && screen->name() == currentScreen) {
+            availableGeo = screen->geometry();
+        }
+    }
+    switch (m_panelPosition)
+    {
+    case PANEL_TOP:
+        x = availableGeo.x() + availableGeo.width() - windowWidth - MARGIN;
+        y = availableGeo.y() + m_panelSize + MARGIN;
+        break;
+    case PANEL_BOTTOM:
+        x = availableGeo.x() + availableGeo.width() - windowWidth - MARGIN;
+        y = availableGeo.y() + availableGeo.height() - m_panelSize - windowHeight - MARGIN;
+        break;
+    case PANEL_LEFT:
+        x = availableGeo.x() + m_panelSize + MARGIN;
+        y = availableGeo.y() + availableGeo.height() - windowHeight - MARGIN;
+        break;
+    case PANEL_RIGHT:
+        x = availableGeo.x() + availableGeo.width() - m_panelSize - windowWidth - MARGIN;
+        y = availableGeo.y() + availableGeo.height() - windowHeight - MARGIN;
+        break;
+    default:
+        x = availableGeo.x() + availableGeo.width() - windowWidth - MARGIN;
+        y = availableGeo.y() + availableGeo.height() - m_panelSize - windowHeight - MARGIN;
+        break;
+    }
+
+    return QRect(x, y, windowWidth, windowHeight);
 }

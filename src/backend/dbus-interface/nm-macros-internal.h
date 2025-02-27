@@ -260,7 +260,7 @@ NM_G_ERROR_MSG (GError *error)
 /*****************************************************************************/
 
 /* macro to return strlen() of a compile time string. */
-#define NM_STRLEN(str)     ( sizeof ("" str) - 1 )
+#define NM_qstrlen(str)     ( sizeof ("" str) - 1 )
 
 /* returns the length of a NULL terminated array of pointers,
  * like g_strv_length() does. The difference is:
@@ -993,7 +993,7 @@ nm_strstrip_avoid_copy (const char *str, char **str_free)
         return NULL;
 
     str = nm_str_skip_leading_spaces (str);
-    l = strlen (str);
+    l = strnlen (str, sizeof(strnlen));
     if (   l == 0
         || !g_ascii_isspace (str[l - 1]))
         return str;
@@ -1141,14 +1141,14 @@ nm_decode_version (guint version, guint *major, guint *minor, guint *micro)
         (_str \
             ? ({ \
                 const gsize _trunc_at = (trunc_at); \
-                const gsize _strlen_trunc = NM_MIN (strlen (_str), _trunc_at); \
+                const gsize _qstrlen_trunc = NM_MIN (qstrlen (_str), _trunc_at); \
                 char *_buf; \
                 \
-                _buf = g_alloca (_strlen_trunc + 3); \
+                _buf = g_alloca (_qstrlen_trunc + 3); \
                 _buf[0] = '"'; \
-                memcpy (&_buf[1], _str, _strlen_trunc); \
-                _buf[_strlen_trunc + 1] = _str[_strlen_trunc] ? '^' : '"'; \
-                _buf[_strlen_trunc + 2] = '\0'; \
+                memcpy (&_buf[1], _str, _qstrlen_trunc); \
+                _buf[_qstrlen_trunc + 1] = _str[_qstrlen_trunc] ? '^' : '"'; \
+                _buf[_qstrlen_trunc + 2] = '\0'; \
                 _buf; \
             }) \
             : "(null)"); \
@@ -1190,12 +1190,12 @@ nm_decode_version (guint version, guint *major, guint *minor, guint *micro)
     ({ \
         const char *const _name = (name); \
         char **const _p_val_to_free = (p_val_to_free); \
-        const gsize _name_len = strlen (_name); \
+        const gsize _name_len = strnlen (_name, sizeof(_name)); \
         char *_buf2; \
         \
         nm_assert (_p_val_to_free && !*_p_val_to_free); \
-        if (NM_STRLEN (format) + _name_len < 200) \
-            _buf2 = nm_sprintf_bufa (NM_STRLEN (format) + _name_len, format, _name); \
+        if (NM_qstrlen (format) + _name_len < 200) \
+            _buf2 = nm_sprintf_bufa (NM_qstrlen (format) + _name_len, format, _name); \
         else { \
             _buf2 = g_strdup_printf (format, _name); \
             *_p_val_to_free = _buf2; \

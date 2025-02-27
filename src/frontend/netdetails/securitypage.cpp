@@ -285,7 +285,7 @@ void SecurityPage::initUI()
     clientPrivateKeyPwdEdit->setClearButtonEnabled(false);
     userPwdEdit->setClearButtonEnabled(false);
 
-    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
+    QRegExp rx("^[\\x20-\\x7E]+$");
     QRegExpValidator *latitude = new QRegExpValidator(rx, this);
     pwdEdit->setValidator(latitude);
     clientPrivateKeyPwdEdit->setValidator(latitude);

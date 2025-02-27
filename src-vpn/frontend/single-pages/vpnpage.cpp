@@ -666,7 +666,8 @@ void VpnPage::showUI()
     raise();
     activateWindow();
     resetWindowPosition();
-    return;
+    kdk::WindowManager::setSkipTaskBar(this->windowHandle(),true);
+    kdk::WindowManager::setSkipSwitcher(this->windowHandle(),true);
 }
 
 void VpnPage::resetWindowPosition()
@@ -678,6 +679,12 @@ void VpnPage::resetWindowPosition()
 //#define PANEL_BOTTOM 4
 
     QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
+    QString currentScreen = WindowManager::currentOutputName();
+    for (auto screen : QApplication::screens()) {
+        if (screen && screen->name() == currentScreen) {
+            availableGeo = screen->geometry();
+        }
+    }
     int x, y;
     switch(m_panelPosition){
     case PANEL_TOP:

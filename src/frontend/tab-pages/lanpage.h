@@ -28,6 +28,8 @@
 #include <QListWidget>
 #include <QMap>
 #include <QGSettings>
+#include <QApplication>
+#include <QScreen>
 
 #include "list-items/listitem.h"
 #include "list-items/lanlistitem.h"
@@ -66,6 +68,7 @@ private:
     void initLanArea();
     void initNetSwitch();
     void initLanDeviceState();
+    void initPanelGSettings();
 
     void initDeviceCombox();
     void updateDeviceCombox(QString oldDeviceName, QString newDeviceName);
@@ -105,6 +108,12 @@ private:
 
     void updateCurrentDevice(QString deviceName);
     void showRate();
+    void onShowKylinNetworkCheck();
+    void showBallonTip();
+    QRect caculatePositionWithPanel(const int windowWidth, const int windowHeight);
+    void onLanStateChanged(NetworkManager::Device::State newstate,
+                           NetworkManager::Device::State oldstate,
+                           NetworkManager::Device::StateChangeReason reason);
 
 Q_SIGNALS:
     void lanAdd(QString devName, QStringList info);
@@ -159,9 +168,15 @@ private:
     QStringList m_disableDeviceList;
     QStringList m_devSwitchList;
 
+    QGSettings *m_panelGSettings = nullptr;
     QGSettings *m_switchGsettings = nullptr;
     QMap<QString, NetDetail*> m_lanPagePtrMap;
     QDBusInterface *m_pSysBusIntfs;
+
+    KBallonTip *m_pNetTip;
+    int m_panelPosition;
+    int m_panelSize;
+    bool m_showedNetTipFlag = false;
 };
 
 #endif // LANPAGE_H

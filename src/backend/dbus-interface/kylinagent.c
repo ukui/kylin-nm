@@ -600,7 +600,7 @@ vpn_secret_iter_cb (const char *key, const char *secret, gpointer user_data)
     const char *service_name, *id;
     char *display_name;
 
-    if (secret && strlen (secret)) {
+    if (secret && strnlen (secret, sizeof(secret))) {
         setting = nm_connection_get_setting (r->connection, NM_TYPE_SETTING_VPN);
         g_assert (setting);
         service_name = nm_setting_vpn_get_service_type (NM_SETTING_VPN (setting));
@@ -643,7 +643,7 @@ write_one_secret_to_keyring (NMSetting *setting,
             return;
         g_return_if_fail (type == G_TYPE_STRING);
         secret = g_value_get_string (value);
-        if (secret && strlen (secret))
+        if (secret && strnlen (secret, sizeof(secret)))
             save_one_secret (r, setting, key, secret, NULL);
     }
 }

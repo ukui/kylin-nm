@@ -237,16 +237,16 @@ void MainWindow::initWindowProperties()
     this->setAttribute(Qt::WA_TranslucentBackground, true);  //透明
     this->setFocusPolicy(Qt::NoFocus);
 
-    QString platform = QGuiApplication::platformName();
-    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
-    {
+//    QString platform = QGuiApplication::platformName();
+//    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
+//    {
         QPainterPath path;
         auto rect = this->rect();
         //    path.addRoundedRect(rect, 12, 12);
         path.addRect(rect);
         KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
     }
-}
+//}
 
 /**
  * @brief MainWindow::registerTrayIcon 注册托盘图标

@@ -1,3 +1,12 @@
+kylin-nm (4.10.0.0-ok0.14) nile; urgency=medium
+
+  * BUG：无
+  * 需求：无
+  * 其他改动说明：v11代码同源
+  * 其他改动影响域：无
+
+ -- lixiang1 <lixiang1@kylinos.cn>  Fri, 28 Feb 2025 15:53:07 +0800
+
 kylin-nm (4.10.0.0-ok0.13) nile; urgency=medium
 
   * BUG：#I9W15H【移动热点】移动热点界面进行搜索，下拉列表内容显示不全

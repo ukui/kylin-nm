@@ -1,0 +1,36 @@
+From: =?utf-8?b?5p2O5Lqr?= <lixiang1@kylinos.cn>
+Date: Fri, 28 Feb 2025 08:22:09 +0000
+Subject: =?utf-8?b?ITk5IGZpeChtYWlud2luZG93KTog6LCD6IqC6YCP5piO5bqm6L6D5L2O?=
+ =?utf-8?b?5pe277yM5Lu75Yqh5qCPLee9kee7nOW8ueeql+aXoOavm+eOu+eSg+eJueaViA==?=
+ =?utf-8?b?5Y+v5Lul55yL5Yiw5LiL5pa557uE5Lu2IE1lcmdlIHB1bGwgcmVxdWVzdCAhOTkg?=
+ =?utf-8?b?ZnJvbSDmnY7kuqsvb3Blbmt5bGluL25pbGU=?=
+
+---
+ src/frontend/mainwindow.cpp | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/frontend/mainwindow.cpp b/src/frontend/mainwindow.cpp
+index 908ba97..010db72 100644
+--- a/src/frontend/mainwindow.cpp
++++ b/src/frontend/mainwindow.cpp
+@@ -237,16 +237,16 @@ void MainWindow::initWindowProperties()
+     this->setAttribute(Qt::WA_TranslucentBackground, true);  //透明
+     this->setFocusPolicy(Qt::NoFocus);
+ 
+-    QString platform = QGuiApplication::platformName();
+-    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
+-    {
++//    QString platform = QGuiApplication::platformName();
++//    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
++//    {
+         QPainterPath path;
+         auto rect = this->rect();
+         //    path.addRoundedRect(rect, 12, 12);
+         path.addRect(rect);
+         KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
+     }
+-}
++//}
+ 
+ /**
+  * @brief MainWindow::registerTrayIcon 注册托盘图标

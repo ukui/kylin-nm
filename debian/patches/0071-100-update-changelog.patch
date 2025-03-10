@@ -1,0 +1,190 @@
+From: =?utf-8?b?6YKT5omY?= <dengtuo@kylinos.cn>
+Date: Mon, 10 Mar 2025 06:17:14 +0000
+Subject: !100 update changelog Merge pull request !100 from
+ xie_klve/openkylin/huanghe
+
+---
+ src-vpn/frontend/vpnobject.cpp            | 2 +-
+ src-vpn/translations/kylin-vpn_bo.ts      | 2 +-
+ src-vpn/translations/kylin-vpn_bo_CN.ts   | 2 +-
+ src-vpn/translations/kylin-vpn_de.ts      | 2 +-
+ src-vpn/translations/kylin-vpn_es.ts      | 2 +-
+ src-vpn/translations/kylin-vpn_fr.ts      | 2 +-
+ src-vpn/translations/kylin-vpn_kk.ts      | 2 +-
+ src-vpn/translations/kylin-vpn_ky.ts      | 2 +-
+ src-vpn/translations/kylin-vpn_mn.ts      | 2 +-
+ src-vpn/translations/kylin-vpn_tr.ts      | 2 +-
+ src-vpn/translations/kylin-vpn_ug.ts      | 2 +-
+ src-vpn/translations/kylin-vpn_zh_CN.ts   | 2 +-
+ src-vpn/translations/kylin-vpn_zh_Hant.ts | 2 +-
+ 13 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/src-vpn/frontend/vpnobject.cpp b/src-vpn/frontend/vpnobject.cpp
+index a045736..37def61 100644
+--- a/src-vpn/frontend/vpnobject.cpp
++++ b/src-vpn/frontend/vpnobject.cpp
+@@ -48,7 +48,7 @@ void vpnObject::initUI()
+ void vpnObject::initTrayIcon()
+ {
+     m_vpnTrayIcon = new QSystemTrayIcon(this);
+-    m_vpnTrayIcon->setToolTip(QString(tr("vpn tool")));
++    m_vpnTrayIcon->setToolTip(QString(tr("VPN Tool")));
+     m_vpnTrayIcon->setIcon(QIcon::fromTheme("ukui-vpn-symbolic"));
+     m_vpnTrayIcon->setVisible(true);
+     initVpnIconVisible();
+diff --git a/src-vpn/translations/kylin-vpn_bo.ts b/src-vpn/translations/kylin-vpn_bo.ts
+index f988f55..6c87fec 100644
+--- a/src-vpn/translations/kylin-vpn_bo.ts
++++ b/src-vpn/translations/kylin-vpn_bo.ts
+@@ -832,7 +832,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation type="unfinished"></translation>
+     </message>
+ </context>
+diff --git a/src-vpn/translations/kylin-vpn_bo_CN.ts b/src-vpn/translations/kylin-vpn_bo_CN.ts
+index 9d77821..fb6585b 100644
+--- a/src-vpn/translations/kylin-vpn_bo_CN.ts
++++ b/src-vpn/translations/kylin-vpn_bo_CN.ts
+@@ -833,7 +833,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation>VPNཡོ་བྱད།</translation>
+     </message>
+ </context>
+diff --git a/src-vpn/translations/kylin-vpn_de.ts b/src-vpn/translations/kylin-vpn_de.ts
+index 7cdbd70..321edab 100644
+--- a/src-vpn/translations/kylin-vpn_de.ts
++++ b/src-vpn/translations/kylin-vpn_de.ts
+@@ -833,7 +833,7 @@ Wenn die Schlüsselrichtung verwendet wird, muss sie der verwendeten VPN-Seite e
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation>VPN-Tool</translation>
+     </message>
+ </context>
+diff --git a/src-vpn/translations/kylin-vpn_es.ts b/src-vpn/translations/kylin-vpn_es.ts
+index e213e9a..ec407ed 100644
+--- a/src-vpn/translations/kylin-vpn_es.ts
++++ b/src-vpn/translations/kylin-vpn_es.ts
+@@ -833,7 +833,7 @@ Si se utiliza la dirección de la clave, debe ser opuesta al lado de la VPN util
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation>Herramienta VPN</translation>
+     </message>
+ </context>
+diff --git a/src-vpn/translations/kylin-vpn_fr.ts b/src-vpn/translations/kylin-vpn_fr.ts
+index 369ca61..1ecee54 100644
+--- a/src-vpn/translations/kylin-vpn_fr.ts
++++ b/src-vpn/translations/kylin-vpn_fr.ts
+@@ -833,7 +833,7 @@ Si la direction de la clé est utilisée, elle doit être opposée au côté VPN
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation>Outil VPN</translation>
+     </message>
+ </context>
+diff --git a/src-vpn/translations/kylin-vpn_kk.ts b/src-vpn/translations/kylin-vpn_kk.ts
+index 1f01693..f4b65c2 100644
+--- a/src-vpn/translations/kylin-vpn_kk.ts
++++ b/src-vpn/translations/kylin-vpn_kk.ts
+@@ -832,7 +832,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation>vpn قۇرالى</translation>
+     </message>
+ </context>
+diff --git a/src-vpn/translations/kylin-vpn_ky.ts b/src-vpn/translations/kylin-vpn_ky.ts
+index fcc8ec0..60ce61b 100644
+--- a/src-vpn/translations/kylin-vpn_ky.ts
++++ b/src-vpn/translations/kylin-vpn_ky.ts
+@@ -832,7 +832,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation>vpn قۇرالى</translation>
+     </message>
+ </context>
+diff --git a/src-vpn/translations/kylin-vpn_mn.ts b/src-vpn/translations/kylin-vpn_mn.ts
+index d50b800..e87b3a1 100644
+--- a/src-vpn/translations/kylin-vpn_mn.ts
++++ b/src-vpn/translations/kylin-vpn_mn.ts
+@@ -837,7 +837,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation>vpn ᠪᠠᠭᠠᠵᠢ</translation>
+     </message>
+ </context>
+diff --git a/src-vpn/translations/kylin-vpn_tr.ts b/src-vpn/translations/kylin-vpn_tr.ts
+index 33be526..c7eb858 100644
+--- a/src-vpn/translations/kylin-vpn_tr.ts
++++ b/src-vpn/translations/kylin-vpn_tr.ts
+@@ -832,7 +832,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation type="unfinished"></translation>
+     </message>
+ </context>
+diff --git a/src-vpn/translations/kylin-vpn_ug.ts b/src-vpn/translations/kylin-vpn_ug.ts
+index b97e24d..ba73fc6 100644
+--- a/src-vpn/translations/kylin-vpn_ug.ts
++++ b/src-vpn/translations/kylin-vpn_ug.ts
+@@ -832,7 +832,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation>vpn قورالى</translation>
+     </message>
+ </context>
+diff --git a/src-vpn/translations/kylin-vpn_zh_CN.ts b/src-vpn/translations/kylin-vpn_zh_CN.ts
+index 3875ac5..3759295 100644
+--- a/src-vpn/translations/kylin-vpn_zh_CN.ts
++++ b/src-vpn/translations/kylin-vpn_zh_CN.ts
+@@ -833,7 +833,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation>VPN 工具</translation>
+     </message>
+ </context>
+diff --git a/src-vpn/translations/kylin-vpn_zh_Hant.ts b/src-vpn/translations/kylin-vpn_zh_Hant.ts
+index eb619c1..0cad388 100644
+--- a/src-vpn/translations/kylin-vpn_zh_Hant.ts
++++ b/src-vpn/translations/kylin-vpn_zh_Hant.ts
+@@ -833,7 +833,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
+     <name>vpnObject</name>
+     <message>
+         <location filename="../frontend/vpnobject.cpp" line="50"/>
+-        <source>vpn tool</source>
++        <source>VPN Tool</source>
+         <translation>VPN 工具</translation>
+     </message>
+ </context>

@@ -1,0 +1,46 @@
+From: 18978327006 <1907810139@qq.com>
+Date: Sun, 13 Apr 2025 11:39:42 +0000
+Subject: Translated using Weblate (Vietnamese)
+
+Currently translated at 100.0% (197 of 197 strings)
+
+Translation: openkylin-nile-new/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/kylin-nm/vi/
+---
+ src/translations/kylin-nm_vi.ts | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/translations/kylin-nm_vi.ts b/src/translations/kylin-nm_vi.ts
+index 8172c7b..4c63e82 100644
+--- a/src/translations/kylin-nm_vi.ts
++++ b/src/translations/kylin-nm_vi.ts
+@@ -42,17 +42,17 @@
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="63"/>
+         <source>Public(recommended)  Devices on the network cannot discover this computer. Generally, it is suitable for networks in public places, such as airports or coffee shops, etc.</source>
+-        <translation>Thiết bị trong mạng công cộng (được đề xuất)không thể phát hiện máy tính này.Trường hợp này thường áp dụng cho mạng tại địa điểm công cộng ,như sân bay hoặc quán cà phê v.v.</translation>
++        <translation>Thiết bị trên mạng công cộng (được đề xuất)không thể phát hiện máy tính này.Trường hợp này thường áp dụng cho mạng ở những nơi công cộng, như sân bay hoặc quán cà phê v.v.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="67"/>
+         <source>Private  Devices on the network can discover this computer. Generally applicable to a network at home or work where you know and trust the individuals and devices on the network.</source>
+-        <translation>Chuyên dụng Thiết bị trong mạng có thể phát hiện máy tính này.Trường hợp này thường áp dụng cho mạng gia đình hoặc cơ quan,nơi bạn quen biết và tin tưởng các cá nhân và thiết bị trên mạng.</translation>
++        <translation>Chuyên dụng Thiết bị trên mạng có thể phát hiện ra máy tính này.Trường hợp này thường áp dụng cho mạng gia đình hoặc nơi làm việc,nơi bạn quen biết và tin tưởng những người và thiết bị trên mạng.</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/configpage.cpp" line="71"/>
+         <source>Config firewall and security settings</source>
+-        <translation>Cấu hình tường lửa và thiết lập an ninh</translation>
++        <translation>Cấu hình tường lửa và cài đặt bảo mật</translation>
+     </message>
+ </context>
+ <context>
+@@ -618,7 +618,7 @@
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="89"/>
+         <source>Allow other devices on this network to discover this computer?</source>
+-        <translation>Cho phép các thiết bị khác trong mạng này phát hiện máy tính này không？</translation>
++        <translation>Có cho phép các thiết bị khác trên mạng này phát hiện ra máy tính này không？</translation>
+     </message>
+     <message>
+         <location filename="../frontend/networkmode/firewalldialog.cpp" line="91"/>

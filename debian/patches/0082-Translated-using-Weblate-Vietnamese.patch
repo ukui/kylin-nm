@@ -1,0 +1,115 @@
+From: 18978327006 <1907810139@qq.com>
+Date: Mon, 14 Apr 2025 02:45:58 +0000
+Subject: Translated using Weblate (Vietnamese)
+
+Currently translated at 100.0% (197 of 197 strings)
+
+Translation: openkylin-nile-new/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/kylin-nm/vi/
+---
+ src/translations/kylin-nm_vi.ts | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/src/translations/kylin-nm_vi.ts b/src/translations/kylin-nm_vi.ts
+index 4c63e82..050c652 100644
+--- a/src/translations/kylin-nm_vi.ts
++++ b/src/translations/kylin-nm_vi.ts
+@@ -812,7 +812,7 @@
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="124"/>
+         <source>Wired Device not carried</source>
+-        <translation>Chưa cắm cáp mạng</translation>
++        <translation>Cáp mạng chưa được cắm vào</translation>
+     </message>
+     <message>
+         <location filename="../frontend/list-items/lanlistitem.cpp" line="144"/>
+@@ -855,7 +855,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="67"/>
+         <source>conflict, unable to connect to the network normally!</source>
+-        <translation>Xung đột,không thể kết nối mạng bình thường！</translation>
++        <translation>Xung đột, không thể kết nối mạng bình thường！</translation>
+     </message>
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="753"/>
+@@ -874,7 +874,7 @@
+     <message>
+         <location filename="../frontend/tab-pages/lanpage.cpp" line="1244"/>
+         <source>Wired Device not carried</source>
+-        <translation>Chưa cắm cáp mạng</translation>
++        <translation>Cáp mạng chưa được cắm vào</translation>
+     </message>
+     <message>
+         <source>LAN Connected Successfully</source>
+@@ -938,7 +938,7 @@
+         <location filename="../frontend/mainwindow.cpp" line="384"/>
+         <source>Settings</source>
+         <translatorcomment>设置网络项</translatorcomment>
+-        <translation>Thiết lập mục mạng</translation>
++        <translation>Thiết lập các mục mạng</translation>
+     </message>
+     <message>
+         <location filename="../frontend/mainwindow.cpp" line="385"/>
+@@ -972,7 +972,7 @@
+     <message>
+         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="64"/>
+         <source>Click &quot;+&quot; to configure DNS</source>
+-        <translation>Nhấp chuột &quot;+&quot;cấu hình DNS</translation>
++        <translation>Nhấp chuột vào &quot;+&quot; để cấu hình DNS</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="101"/>
+@@ -1092,7 +1092,7 @@
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1187"/>
+         <source>this wifi no support None type</source>
+-        <translation>wifi này không hỗ trợ kiểu xác thực trống</translation>
++        <translation>wifi này không hỗ trợ loại xác thực trống</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/netdetail.cpp" line="1192"/>
+@@ -1336,12 +1336,12 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
+         <source>Store passwords only for this user</source>
+-        <translation>Chỉ lưu mật khẩu cho người dùng này</translation>
++        <translation>Chỉ lưu trữ mật khẩu cho người dùng này</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
+         <source>Store password only for this user</source>
+-        <translation>Chỉ lưu mật khẩu cho người dùng này</translation>
++        <translation>Chỉ lưu trữ mật khẩu cho người dùng này</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="266"/>
+@@ -1405,7 +1405,7 @@
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="278"/>
+         <source>Both</source>
+-        <translation>Sử dụng kết hợp hai cả</translation>
++        <translation>Sử dụng cả hai</translation>
+     </message>
+     <message>
+         <location filename="../frontend/netdetails/securitypage.cpp" line="1231"/>
+@@ -1624,17 +1624,17 @@
+     <message>
+         <location filename="../main.cpp" line="123"/>
+         <source>kylinnm</source>
+-        <translation>Công cụ mạng Kỳ Lân</translation>
++        <translation>Công cụ mạng Kỳ Lân（kylin）</translation>
+     </message>
+     <message>
+         <location filename="../main.cpp" line="127"/>
+         <source>show kylin-nm wifi page</source>
+-        <translation>Hiển thị trang wifi công cụ mạng Kỳ Lân</translation>
++        <translation>Hiển thị trang wifi công cụ mạng Kỳ Lân（kylin）</translation>
+     </message>
+     <message>
+         <location filename="../main.cpp" line="128"/>
+         <source>show kylin-nm lan page</source>
+-        <translation>Hiển thị trang mạng cục bộ Kỳ Lân</translation>
++        <translation>Hiển thị trang mạng cục bộ Kỳ Lân（kylin）</translation>
+     </message>
+ </context>
+ </TS>

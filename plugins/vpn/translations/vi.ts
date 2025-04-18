@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>Thêm tùy chọn khác</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation></translation>
+        <translation>Thêm mạng có dây</translation>
     </message>
 </context>
 <context>

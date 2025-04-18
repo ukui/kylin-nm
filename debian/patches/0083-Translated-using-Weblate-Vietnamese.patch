@@ -1,0 +1,31 @@
+From: 13977028965 <1592941704@qq.com>
+Date: Fri, 18 Apr 2025 14:26:31 +0000
+Subject: Translated using Weblate (Vietnamese)
+
+Currently translated at 33.3% (4 of 12 strings)
+
+Translation: openkylin-nile-new/vpn
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/vpn/vi/
+---
+ plugins/vpn/translations/vi.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/vpn/translations/vi.ts b/plugins/vpn/translations/vi.ts
+index 19dbc06..661944d 100644
+--- a/plugins/vpn/translations/vi.ts
++++ b/plugins/vpn/translations/vi.ts
+@@ -6,12 +6,12 @@
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
+         <source>Add Others</source>
+-        <translation></translation>
++        <translation>Thêm tùy chọn khác</translation>
+     </message>
+     <message>
+         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
+         <source>Add WiredNetork</source>
+-        <translation></translation>
++        <translation>Thêm mạng có dây</translation>
+     </message>
+ </context>
+ <context>

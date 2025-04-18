@@ -6,12 +6,12 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation></translation>
+        <translation>Thêm tùy chọn khác</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>
         <source>Add WiredNetork</source>
-        <translation type="unfinished"></translation>
+        <translation>Thêm mạng có dây</translation>
     </message>
 </context>
 <context>
@@ -19,19 +19,19 @@
     <message>
         <location filename="../lanitem.cpp" line="57"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Xóa</translation>
     </message>
     <message>
         <location filename="../lanitem.cpp" line="118"/>
         <location filename="../lanitem.cpp" line="131"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Ngắt kết nối</translation>
     </message>
     <message>
         <location filename="../lanitem.cpp" line="120"/>
         <location filename="../lanitem.cpp" line="129"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Kết nối</translation>
     </message>
 </context>
 <context>
@@ -39,20 +39,20 @@
     <message>
         <location filename="../netconnect.ui" line="50"/>
         <source>Wired Network</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng có dây</translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
         <location filename="../netconnect.cpp" line="220"/>
         <source>open</source>
-        <translation type="unfinished"></translation>
+        <translation>Mở</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
         <location filename="../netconnect.ui" line="198"/>
         <location filename="../netconnect.cpp" line="217"/>
         <source>Advanced settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Tùy chọn nâng cao</translation>
         <extra-contents_path>/netconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
@@ -70,19 +70,19 @@
     <message>
         <location filename="../netconnect.cpp" line="66"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Thiết lập</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="69"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>Thông báo desktop cài đặt</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="86"/>
         <location filename="../netconnect.cpp" line="218"/>
         <location filename="../netconnect.cpp" line="221"/>
         <source>LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng cục bộ</translation>
     </message>
     <message>
         <source>No ethernet device avaliable</source>
@@ -92,19 +92,19 @@
         <location filename="../netconnect.cpp" line="513"/>
         <location filename="../netconnect.cpp" line="966"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Đã kết nối</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="515"/>
         <location filename="../netconnect.cpp" line="818"/>
         <location filename="../netconnect.cpp" line="976"/>
         <source>not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Không kết nối</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="595"/>
         <source>card</source>
-        <translation type="unfinished"></translation>
+        <translation>Card mạng</translation>
     </message>
 </context>
 </TS>

@@ -6,7 +6,7 @@
     <message>
         <location filename="../blacklistitem.cpp" line="50"/>
         <source>Remove</source>
-        <translation>Xóa bỏ</translation>
+        <translation>di chuyển ra</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../connectdevlistitem.cpp" line="50"/>
         <source>drag into blacklist</source>
-        <translation>Kéo vào danh sách đen</translation>
+        <translation>thêm vào danh sách đen</translation>
     </message>
 </context>
 <context>
@@ -43,13 +43,13 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="101"/>
         <source>Mobile Hotspot</source>
-        <translation>Điểm phát Wi-Fi di động</translation>
+        <translation>Điểm phát sóng di động</translation>
         <extra-contents_path>/mobilehotspot/Mobile Hotspot</extra-contents_path>
     </message>
     <message>
         <location filename="../mobilehotspot.cpp" line="103"/>
         <source>Open mobile hotspot</source>
-        <translation>Bật điểm phát Wi-Fi di động</translation>
+        <translation>Bật điểm phát sóng di động</translation>
         <extra-contents_path>/mobilehotspot/Open mobile hotspot</extra-contents_path>
     </message>
     <message>
@@ -73,7 +73,7 @@
     <message>
         <location filename="../mobilehotspot.cpp" line="111"/>
         <source>Shared NIC port</source>
-        <translation>Cổng NIC dùng chung</translation>
+        <translation>Chia sẻ cổng mạng</translation>
         <extra-contents_path>/mobilehotspot/Shared NIC port</extra-contents_path>
     </message>
     <message>
@@ -109,7 +109,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="157"/>
         <source>wirless switch is close or no wireless device</source>
-        <translation>Công tắc không dây đã tắt hoặc không có thiết bị không dây</translation>
+        <translation>Công tắc không dây đã tắt hoặc không có card mạng không dây hỗ trợ chức năng điểm phát sóng</translation>
     </message>
     <message>
         <source>start to close hotspot</source>
@@ -136,7 +136,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="232"/>
         <source>Hotspot</source>
-        <translation>Điểm phát sóng</translation>
+        <translation>Điểm phát sóng di động</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="62"/>
@@ -156,7 +156,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="359"/>
         <source> share network, will interrupt local wireless connection</source>
-        <translation> Chia sẻ mạng sẽ ngắt kết nối không dây hiện tại</translation>
+        <translation> Khi chia sẻ điểm phát sóng, kết nối mạng không dây của thiết bị này sẽ bị gián đoạn</translation>
     </message>
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="376"/>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../mobilehotspotwidget.cpp" line="689"/>
         <source>Shared NIC port</source>
-        <translation>Cổng NIC dùng chung</translation>
+        <translation>Chia sẻ cổng mạng</translation>
     </message>
     <message>
         <source>Open</source>

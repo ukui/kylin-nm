@@ -45,7 +45,7 @@
         <location filename="../netconnect.ui" line="112"/>
         <location filename="../netconnect.cpp" line="220"/>
         <source>open</source>
-        <translation>Mở</translation>
+        <translation>Bật</translation>
         <extra-contents_path>/netconnect/open</extra-contents_path>
     </message>
     <message>
@@ -75,14 +75,14 @@
     <message>
         <location filename="../netconnect.cpp" line="69"/>
         <source>Settings desktop message</source>
-        <translation>Thông báo desktop cài đặt</translation>
+        <translation>Cài đặt thông báo desktop</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="86"/>
         <location filename="../netconnect.cpp" line="218"/>
         <location filename="../netconnect.cpp" line="221"/>
         <source>LAN</source>
-        <translation>Mạng cục bộ</translation>
+        <translation>mạng LAN</translation>
     </message>
     <message>
         <source>No ethernet device avaliable</source>
@@ -99,7 +99,7 @@
         <location filename="../netconnect.cpp" line="818"/>
         <location filename="../netconnect.cpp" line="976"/>
         <source>not connected</source>
-        <translation>Không kết nối</translation>
+        <translation>Chưa kết nối</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="595"/>

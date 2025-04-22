@@ -1,3 +1,13 @@
+kylin-nm (4.10.0.0-ok0.16) nile; urgency=medium
+
+  * BUG：#IA4HV6【无线局域网】繁体下，设置界面高级设置按钮与加入其他按钮为英文
+         #IA4HXX【无线局域网】繁体下，设置界面无线局域网与已连接为英文
+  * 需求：无
+  * 其他改动说明：v11代码同源
+  * 其他改动影响域：无
+
+ -- lixiang1 <lixiang1@kylinos.cn>  Thu, 17 Apr 2025 14:15:13 +0800
+
 kylin-nm (4.10.0.0-ok0.15) nile; urgency=medium
 
   * BUG：无

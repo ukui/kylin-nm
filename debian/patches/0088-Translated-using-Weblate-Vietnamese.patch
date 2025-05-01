@@ -1,0 +1,34 @@
+From: 18978327006 <1907810139@qq.com>
+Date: Thu, 1 May 2025 16:30:36 +0000
+Subject: Translated using Weblate (Vietnamese)
+
+Currently translated at 100.0% (197 of 197 strings)
+
+Translation: openkylin-nile-new/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/kylin-nm/vi/
+---
+ src/translations/kylin-nm_vi.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/translations/kylin-nm_vi.ts b/src/translations/kylin-nm_vi.ts
+index 050c652..8600f3d 100644
+--- a/src/translations/kylin-nm_vi.ts
++++ b/src/translations/kylin-nm_vi.ts
+@@ -1161,7 +1161,7 @@
+     <message>
+         <location filename="../frontend/list-items/oneconnform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>
+@@ -1189,7 +1189,7 @@
+     <message>
+         <location filename="../frontend/list-items/onelancform.ui" line="14"/>
+         <source>Form</source>
+-        <translation></translation>
++        <translation>Form</translation>
+     </message>
+     <message>
+         <source>Connect</source>

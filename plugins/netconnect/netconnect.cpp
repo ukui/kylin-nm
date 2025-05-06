@@ -158,60 +158,13 @@ const QString NetConnect::name() const {
 
 bool NetConnect::isEnable() const
 {
-    //get isEnable
-    QDBusInterface dbus("com.kylin.network", "/com/kylin/network",
-                        "com.kylin.network",
-                        QDBusConnection::sessionBus());
-    if (!dbus.isValid()) {
-        return false;
-    }
-
-    QMap<QString,bool> map;
-    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"),0);
-    if(!reply.isValid())
-    {
-        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
-        return false;
-    }
-
-    QVariantMap::const_iterator item = reply.value().cbegin();
-    while (item != reply.value().cend()) {
-        map.insert(item.key(), item.value().toBool());
-        item ++;
-    }
-
-    bool isEnabled = !map.isEmpty();
-
-    const QByteArray schema("org.ukui.control-center.plugins");
-    if (QGSettings::isSchemaInstalled(schema)) {
-        return isEnabled;
-    }
-
-    //get gsettings
-    QGSettings *showSettings;
-    QString path("/org/ukui/control-center/plugins/netconnect/");
-    showSettings = new QGSettings(schema, path.toUtf8());
-
-    QVariant enabledState = showSettings->get("show");
-
-    //set gsettings
-    if (!enabledState.isValid() || enabledState.isNull()) {
-        qWarning() << "QGSettins get plugin show status error";
-    } else {
-        if (enabledState.toBool() != isEnabled) {
-            showSettings->set("show", isEnabled);
-        }
-    }
-    delete showSettings;
-    showSettings = nullptr;
-
-    return isEnabled;
+    return true;
 }
 
 
 bool NetConnect::isShowOnHomePage() const
 {
-    return false;
+    return true;
 }
 
 QIcon NetConnect::icon() const
@@ -225,11 +178,12 @@ QString NetConnect::translationPath() const
 }
 
 void NetConnect::initSearchText() {
+    //~ contents_path /netconnect/Add WiredNetwork"
+    tr("Add WiredNetwork");
     //~ contents_path /netconnect/Advanced settings"
     ui->detailBtn->setText(tr("Advanced settings"));
     ui->titleLabel->setText(tr("LAN"));
-    //~ contents_path /netconnect/open
-    tr("open");
+    //~ contents_path /netconnect/LAN
     ui->openLabel->setText(tr("LAN"));
 }
 

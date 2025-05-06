@@ -1,0 +1,188 @@
+From: dengtuo <dengtuo@kylinos.cn>
+Date: Tue, 6 May 2025 14:05:16 +0800
+Subject: =?utf-8?b?Zml4KGt5bGluLW5tKTog5o6n5Yi26Z2i5p2/5rKh5pyJ572R57uc55qE?=
+ =?utf-8?b?6Zeu6aKY?=
+
+Description: none
+
+Log: none
+---
+ plugins/netconnect/netconnect.cpp   | 56 +++-----------------------------
+ plugins/wlanconnect/wlanconnect.cpp | 64 ++++---------------------------------
+ 2 files changed, 11 insertions(+), 109 deletions(-)
+
+diff --git a/plugins/netconnect/netconnect.cpp b/plugins/netconnect/netconnect.cpp
+index 8da42ac..c20ba72 100644
+--- a/plugins/netconnect/netconnect.cpp
++++ b/plugins/netconnect/netconnect.cpp
+@@ -158,60 +158,13 @@ const QString NetConnect::name() const {
+ 
+ bool NetConnect::isEnable() const
+ {
+-    //get isEnable
+-    QDBusInterface dbus("com.kylin.network", "/com/kylin/network",
+-                        "com.kylin.network",
+-                        QDBusConnection::sessionBus());
+-    if (!dbus.isValid()) {
+-        return false;
+-    }
+-
+-    QMap<QString,bool> map;
+-    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"),0);
+-    if(!reply.isValid())
+-    {
+-        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
+-        return false;
+-    }
+-
+-    QVariantMap::const_iterator item = reply.value().cbegin();
+-    while (item != reply.value().cend()) {
+-        map.insert(item.key(), item.value().toBool());
+-        item ++;
+-    }
+-
+-    bool isEnabled = !map.isEmpty();
+-
+-    const QByteArray schema("org.ukui.control-center.plugins");
+-    if (QGSettings::isSchemaInstalled(schema)) {
+-        return isEnabled;
+-    }
+-
+-    //get gsettings
+-    QGSettings *showSettings;
+-    QString path("/org/ukui/control-center/plugins/netconnect/");
+-    showSettings = new QGSettings(schema, path.toUtf8());
+-
+-    QVariant enabledState = showSettings->get("show");
+-
+-    //set gsettings
+-    if (!enabledState.isValid() || enabledState.isNull()) {
+-        qWarning() << "QGSettins get plugin show status error";
+-    } else {
+-        if (enabledState.toBool() != isEnabled) {
+-            showSettings->set("show", isEnabled);
+-        }
+-    }
+-    delete showSettings;
+-    showSettings = nullptr;
+-
+-    return isEnabled;
++    return true;
+ }
+ 
+ 
+ bool NetConnect::isShowOnHomePage() const
+ {
+-    return false;
++    return true;
+ }
+ 
+ QIcon NetConnect::icon() const
+@@ -225,11 +178,12 @@ QString NetConnect::translationPath() const
+ }
+ 
+ void NetConnect::initSearchText() {
++    //~ contents_path /netconnect/Add WiredNetwork"
++    tr("Add WiredNetwork");
+     //~ contents_path /netconnect/Advanced settings"
+     ui->detailBtn->setText(tr("Advanced settings"));
+     ui->titleLabel->setText(tr("LAN"));
+-    //~ contents_path /netconnect/open
+-    tr("open");
++    //~ contents_path /netconnect/LAN
+     ui->openLabel->setText(tr("LAN"));
+ }
+ 
+diff --git a/plugins/wlanconnect/wlanconnect.cpp b/plugins/wlanconnect/wlanconnect.cpp
+index 09f2bee..83daff2 100644
+--- a/plugins/wlanconnect/wlanconnect.cpp
++++ b/plugins/wlanconnect/wlanconnect.cpp
+@@ -201,61 +201,7 @@ const QString WlanConnect::name() const {
+ 
+ bool WlanConnect::isEnable() const
+ {
+-    //get isEnable
+-    QDBusInterface dbus("com.kylin.network", "/com/kylin/network",
+-                        "com.kylin.network",
+-                        QDBusConnection::sessionBus());
+-    if (!dbus.isValid()) {
+-        return false;
+-    }
+-    QMap<QString,bool> map;
+-    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"), 1);
+-    if(!reply.isValid())
+-    {
+-        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
+-        return false;
+-    }
+-
+-    QVariantMap::const_iterator item = reply.value().cbegin();
+-    while (item != reply.value().cend()) {
+-        map.insert(item.key(), item.value().toBool());
+-        item ++;
+-    }
+-    //筛选已托管(managed)网卡
+-    QStringList list;
+-    QMap<QString, bool>::iterator iters;
+-    for (iters = map.begin(); iters != map.end(); ++iters) {
+-        if (iters.value() == true) {
+-            list << iters.key();
+-        }
+-    }
+-
+-    bool isEnabled = !list.isEmpty();
+-
+-    const QByteArray schema("org.ukui.control-center.plugins");
+-    if (QGSettings::isSchemaInstalled(schema)) {
+-        return isEnabled;
+-    }
+-
+-    //get gsettings
+-    QGSettings *showSettings;
+-    QString path("/org/ukui/control-center/plugins/wlanconnect/");
+-    showSettings = new QGSettings(schema, path.toUtf8());
+-
+-    QVariant enabledState = showSettings->get("show");
+-
+-    //set gsettings
+-    if (!enabledState.isValid() || enabledState.isNull()) {
+-        qWarning() << "QGSettins get plugin show status error";
+-    } else {
+-        if (enabledState.toBool() != isEnabled) {
+-            showSettings->set("show", isEnabled);
+-        }
+-    }
+-    delete showSettings;
+-    showSettings = nullptr;
+-
+-    return isEnabled;
++    return true;
+ }
+ 
+ 
+@@ -275,11 +221,12 @@ QString WlanConnect::translationPath() const
+ }
+ 
+ void WlanConnect::initSearchText() {
++    //~ contents_path /wlanconnect/Add Others"
++    tr("Add Others");
+     //~ contents_path /wlanconnect/Advanced settings"
+     ui->detailBtn->setText(tr("Advanced settings"));
+     ui->titleLabel->setText(tr("WLAN"));
+-    //~ contents_path /wlanconnect/open
+-    tr("open");
++    //~ contents_path /wlanconnect/WLAN
+     ui->openLabel->setText(tr("WLAN"));
+ }
+ 
+@@ -292,8 +239,9 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
+             w->findChild<QWidget*>()->setStyleSheet("QWidget{background: palette(base);border-radius:4px;}");
+     }
+ 
+-    if (w == m_wifiSwitch) {
++    if (w == m_wifiSwitch && m_wifiSwitch->isEnabled()) {
+         if (e->type() == QMouseEvent::MouseButtonRelease) {
++            m_wifiSwitch->clearFocus();//放if外会崩溃，如果按住鼠标不松，按空格依旧存在问题
+             if (!getSwitchBtnEnable()) {
+                 showDesktopNotify(tr("No wireless network card detected"));
+             } else {

@@ -1,3 +1,21 @@
+kylin-nm (4.20.0.0-ok0.2) huanghe; urgency=medium
+
+  * BUG：无
+  * 需求：无
+  * 其他改动说明：修改版本号，4.20tag
+  * 其他改动影响域：无
+
+ -- xiejiahua <xiejiahua@kylinos.cn>  Fri, 16 May 2025 16:25:06 +0800
+
+kylin-nm (4.20.0.0-ok0.1) huanghe; urgency=medium
+
+  * BUG：无
+  * 需求：无
+  * 其他改动说明：修改版本号
+  * 其他改动影响域：无
+
+ -- xiejiahua <xiejiahua@kylinos.cn>  Fri, 16 May 2025 15:55:06 +0800
+
 kylin-nm (5.0.0.0-ok0.6) huanghe; urgency=medium
 
   * BUG：#IBQTO0【次要】【 英文】 【 托盘】 VPN和显示桌面的悬浮名称首字母未大写

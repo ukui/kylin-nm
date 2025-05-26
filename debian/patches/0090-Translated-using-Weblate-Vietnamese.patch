@@ -1,0 +1,34 @@
+From: 13737698565 <2778130856@qq.com>
+Date: Mon, 26 May 2025 13:21:16 +0000
+Subject: Translated using Weblate (Vietnamese)
+
+Currently translated at 100.0% (14 of 14 strings)
+
+Translation: openkylin-nile-new/netconnect
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/netconnect/vi/
+---
+ plugins/netconnect/translations/vi.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/netconnect/translations/vi.ts b/plugins/netconnect/translations/vi.ts
+index 7c62c27..90c7c6c 100644
+--- a/plugins/netconnect/translations/vi.ts
++++ b/plugins/netconnect/translations/vi.ts
+@@ -70,7 +70,7 @@
+     <message>
+         <location filename="../netconnect.cpp" line="66"/>
+         <source>Settings</source>
+-        <translation>Thiết lập</translation>
++        <translation>Thiết lập mạng</translation>
+     </message>
+     <message>
+         <location filename="../netconnect.cpp" line="69"/>
+@@ -82,7 +82,7 @@
+         <location filename="../netconnect.cpp" line="218"/>
+         <location filename="../netconnect.cpp" line="221"/>
+         <source>LAN</source>
+-        <translation>mạng LAN</translation>
++        <translation>Mạng có dây</translation>
+     </message>
+     <message>
+         <source>No ethernet device avaliable</source>

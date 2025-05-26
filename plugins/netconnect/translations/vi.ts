@@ -70,7 +70,7 @@
     <message>
         <location filename="../netconnect.cpp" line="66"/>
         <source>Settings</source>
-        <translation>Thiết lập</translation>
+        <translation>Thiết lập mạng</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="69"/>
@@ -82,7 +82,7 @@
         <location filename="../netconnect.cpp" line="218"/>
         <location filename="../netconnect.cpp" line="221"/>
         <source>LAN</source>
-        <translation>mạng LAN</translation>
+        <translation>Mạng có dây</translation>
     </message>
     <message>
         <source>No ethernet device avaliable</source>

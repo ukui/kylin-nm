@@ -25,5 +25,4 @@ void agent_init();
 void agent_clear();
 }
 #endif
-
 #endif // NMAGENT_H

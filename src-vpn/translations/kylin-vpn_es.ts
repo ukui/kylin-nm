@@ -833,7 +833,7 @@ Si se utiliza la dirección de la clave, debe ser opuesta al lado de la VPN util
     <name>vpnObject</name>
     <message>
         <location filename="../frontend/vpnobject.cpp" line="50"/>
-        <source>vpn tool</source>
+        <source>VPN Tool</source>
         <translation>Herramienta VPN</translation>
     </message>
 </context>

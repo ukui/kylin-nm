@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ui/main.qml</file>
+        <file>ui/WlanComponent.qml</file>
+        <file>ui/NetScrollViewArea.qml</file>
+        <file>ui/LanComponent.qml</file>
+        <file>ui/DeviceComboBox.qml</file>
+    </qresource>
+</RCC>

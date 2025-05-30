@@ -833,7 +833,7 @@ Si la direction de la clé est utilisée, elle doit être opposée au côté VPN
     <name>vpnObject</name>
     <message>
         <location filename="../frontend/vpnobject.cpp" line="50"/>
-        <source>vpn tool</source>
+        <source>VPN Tool</source>
         <translation>Outil VPN</translation>
     </message>
 </context>

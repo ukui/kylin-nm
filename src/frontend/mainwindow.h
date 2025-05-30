@@ -45,10 +45,6 @@
 #include <kysec/status.h>
 #endif
 
-#define PANEL_SETTINGS                      "org.ukui.panel.settings"
-#define PANEL_SIZE_KEY                      "panelsize"
-#define PANEL_POSITION_KEY                  "panelposition"
-
 enum IconActiveType {
     NOT_CONNECTED = 0,
     LAN_CONNECTED,
@@ -113,6 +109,7 @@ public:
 
     void getWirelessDeviceCap(QMap<QString, int> &map);
 
+    void passwordConnect(QString devName, QString ssid, QString type, QString psk, bool autoConnect);
     void rescan();
 
     void keyRingInit();
@@ -164,6 +161,7 @@ private:
     void initWindowProperties();
     void initTransparency();
     void paintWithTrans();
+    void initPanelGSettings();
     void initUI();
     void initDbusConnnect();
     void registerTrayIcon();
@@ -173,7 +171,7 @@ private:
     void resetWindowTheme();
     void showControlCenter();
     void showByWaylandHelper();
-    void initPanelGSettings();
+    void slideWindowByPanelPosition();
 
     void setCentralWidgetType(IconActiveType iconStatus);
     void assembleTrayIconTooltip(QMap<QString, QString> &map, QString &tip);
@@ -181,12 +179,9 @@ private:
 
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
-    QGSettings * m_panelGSettings = nullptr;
     int currentIconIndex=0;
     QList<QIcon> loadIcons;
     QTimer *iconTimer = nullptr;
-    int m_panelPosition = 0;
-    int m_panelSize = 46;
 
     //主窗口的主要构成控件
     QTabWidget * m_centralWidget = nullptr;
@@ -202,9 +197,18 @@ private:
     //监听主题的Gsettings
     QGSettings * m_styleGsettings = nullptr;
 
+
+    //获取任务栏位置和大小
+    QGSettings *m_panelGSettings = nullptr;
+    int m_panelPosition;
+    int m_panelSize;
+    int m_panelType;
+    int m_settingsIslandPosition;
+    int m_topbarSize;
+
     //获取和重置窗口位置
     void resetWindowPosition();
-    QDBusInterface * m_positionInterface = nullptr;
+    //QDBusInterface * m_positionInterface = nullptr;
 
     //托盘图标，托盘图标右键菜单
     QSystemTrayIcon * m_trayIcon = nullptr;
@@ -228,9 +232,6 @@ private:
     uint m_registerCount = 0;
 
     QString m_display;
-
-    bool m_isWiredUsable = true;
-    bool m_isWirelessUsable = true;
 
 public Q_SLOTS:
     void onShowMainWindow(int type);
@@ -258,8 +259,6 @@ private Q_SLOTS:
     void onShowCreateWiredConnectWidgetSlot(QString display, QString devName);
     //唤起加入其他无线网络界面
     void onShowAddOtherWlanWidgetSlot(QString display, QString devName);
-    //设置界面显示 单网卡/多网卡
-    void setCentralWidgetPages();
 };
 
 #endif // MAINWINDOW_H

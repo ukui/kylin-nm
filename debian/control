@@ -26,7 +26,9 @@ Build-Depends: debhelper (>=9),
                qtbase5-dev-tools,
                qtchooser,
                qtscript5-dev,
-               qttools5-dev-tools
+               qttools5-dev-tools,
+               qtdeclarative5-dev,
+               libukui-quick-dev
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: https://github.com/ukui/kylin-nm
@@ -39,7 +41,6 @@ Depends: libkysdk-qtwidgets(>= 1.2.0),
          libkysdk-waylandhelper(>= 1.2.0kylin2),
          network-manager (>=1.2.6),
          ukui-control-center (>= 3.1.1+1217),
-         dpkg-dev,
          libkysdk-sysinfo,
          network-manager-gnome,
          ${shlibs:Depends},

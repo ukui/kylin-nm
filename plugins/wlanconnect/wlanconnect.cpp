@@ -201,7 +201,61 @@ const QString WlanConnect::name() const {
 
 bool WlanConnect::isEnable() const
 {
-    return true;
+    //get isEnable
+    QDBusInterface dbus("com.kylin.network", "/com/kylin/network",
+                        "com.kylin.network",
+                        QDBusConnection::sessionBus());
+    if (!dbus.isValid()) {
+        return false;
+    }
+    QMap<QString,bool> map;
+    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"), 1);
+    if(!reply.isValid())
+    {
+        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
+        return false;
+    }
+
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        map.insert(item.key(), item.value().toBool());
+        item ++;
+    }
+    //筛选已托管(managed)网卡
+    QStringList list;
+    QMap<QString, bool>::iterator iters;
+    for (iters = map.begin(); iters != map.end(); ++iters) {
+        if (iters.value() == true) {
+            list << iters.key();
+        }
+    }
+
+    bool isEnabled = !list.isEmpty();
+
+    const QByteArray schema("org.ukui.control-center.plugins");
+    if (QGSettings::isSchemaInstalled(schema)) {
+        return isEnabled;
+    }
+
+    //get gsettings
+    QGSettings *showSettings;
+    QString path("/org/ukui/control-center/plugins/wlanconnect/");
+    showSettings = new QGSettings(schema, path.toUtf8());
+
+    QVariant enabledState = showSettings->get("show");
+
+    //set gsettings
+    if (!enabledState.isValid() || enabledState.isNull()) {
+        qWarning() << "QGSettins get plugin show status error";
+    } else {
+        if (enabledState.toBool() != isEnabled) {
+            showSettings->set("show", isEnabled);
+        }
+    }
+    delete showSettings;
+    showSettings = nullptr;
+
+    return isEnabled;
 }
 
 
@@ -221,12 +275,11 @@ QString WlanConnect::translationPath() const
 }
 
 void WlanConnect::initSearchText() {
-    //~ contents_path /wlanconnect/Add Others"
-    tr("Add Others");
     //~ contents_path /wlanconnect/Advanced settings"
     ui->detailBtn->setText(tr("Advanced settings"));
     ui->titleLabel->setText(tr("WLAN"));
-    //~ contents_path /wlanconnect/WLAN
+    //~ contents_path /wlanconnect/open
+    tr("open");
     ui->openLabel->setText(tr("WLAN"));
 }
 
@@ -239,9 +292,8 @@ bool WlanConnect::eventFilter(QObject *w, QEvent *e) {
             w->findChild<QWidget*>()->setStyleSheet("QWidget{background: palette(base);border-radius:4px;}");
     }
 
-    if (w == m_wifiSwitch && m_wifiSwitch->isEnabled()) {
+    if (w == m_wifiSwitch) {
         if (e->type() == QMouseEvent::MouseButtonRelease) {
-            m_wifiSwitch->clearFocus();//放if外会崩溃，如果按住鼠标不松，按空格依旧存在问题
             if (!getSwitchBtnEnable()) {
                 showDesktopNotify(tr("No wireless network card detected"));
             } else {

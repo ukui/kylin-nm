@@ -19,6 +19,7 @@
  */
 #include "mainwindow.h"
 #include "customstyle.h"
+#include "../tools/panelgsettings.h"
 #include <KWindowEffects>
 #include <QApplication>
 #include <QDebug>
@@ -39,9 +40,15 @@
 #define MAINWINDOW_HEIGHT 476
 #define LAYOUT_MARGINS 0,0,0,0
 #define LOADING_TRAYICON_TIMER_MS 60
-#define TABBAR_HEIGHT 30
 #define THEME_SCHAME "org.ukui.style"
 #define COLOR_THEME "styleName"
+#define PANEL_SETTINGS "org.ukui.panel.settings"
+#define PANEL_SIZE_KEY "panelsize"
+#define PANEL_POSITION_KEY "panelposition"
+#define PANEL_TYPE_KEY "paneltype"
+#define UKUI_SETTINGS_ISLAND_POSITION_KEY "settingsislandposition"
+#define UKUI_TOPBAR_SIZE_KEY "topbarsize"
+#define UKUI_PANEL_LENGTH_KEY "panellength"
 
 const QString v10Sp1 = "V10SP1";
 const QString intel = "V10SP1-edu";
@@ -49,6 +56,12 @@ const QString intel = "V10SP1-edu";
 #define LANPAGE 0
 #define WLANPAGE 1
 #define AUTOSELET 2
+
+#define MARGIN 8
+#define PANEL_TOP 1
+#define PANEL_LEFT 2
+#define PANEL_RIGHT 3
+#define PANEL_BOTTOM 0
 
 #define KEY_PRODUCT_FEATURES "PRODUCT_FEATURES"
 
@@ -82,6 +95,10 @@ const QString intel = "V10SP1-edu";
 MainWindow::MainWindow(QString display, QWidget *parent) : QMainWindow(parent), m_display(display)
 {
     firstlyStart();
+
+    //去除窗管标题栏，传入参数为QWidget*
+    //此方法只需要调用一次，多次调用时，除首次调用窗口正常外，其余次数调用窗口setGeometry接口失效
+    kdk::UkuiStyleHelper::self()->removeHeader(this);
 }
 
 /**
@@ -97,6 +114,7 @@ void MainWindow::showMainwindow()
     /**
      * 设置主界面跳过任务栏和分页器的属性，隐藏再次展示有可能辉冲刷掉该属性，需要展示时重新设置
      */
+#if 0
     QString platform = QGuiApplication::platformName();
     if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
     {
@@ -105,13 +123,11 @@ void MainWindow::showMainwindow()
             KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
         }
     }
+#endif
 
     this->showByWaylandHelper();
-    this->raise();
-    this->activateWindow();
-    kdk::WindowManager::setSkipTaskBar(this->windowHandle(),true);
-    kdk::WindowManager::setSkipSwitcher(this->windowHandle(),true);
-
+//    this->raise();
+//    this->activateWindow();
     Q_EMIT this->mainWindowVisibleChanged(true);
 #ifdef WITHKYSEC
     if (!kysec_is_disabled() && kysec_get_3adm_status() && (getuid() || geteuid())){
@@ -163,12 +179,13 @@ void MainWindow::setWirelessDefaultDevice(QString deviceName)
  */
 void MainWindow::firstlyStart()
 {
+    this->setAttribute(Qt::WA_NativeWindow);
     initWindowProperties();
     initTransparency();
     registerTrayIcon();
+    initPanelGSettings();
     initUI();
     initDbusConnnect();
-    initPanelGSettings();
     initWindowTheme();
     initTrayIcon();
 //    initPlatform();
@@ -188,11 +205,6 @@ void MainWindow::firstlyStart()
 
     //加载key ring
     agent_init();
-
-    //单网卡显示
-    setCentralWidgetPages();
-    connect(m_lanWidget, &LanPage::deviceStatusChanged, this, &MainWindow::setCentralWidgetPages);
-    connect(m_wlanWidget, &LanPage::wirelessDeviceStatusChanged, this, &MainWindow::setCentralWidgetPages);
 }
 
 /**
@@ -230,6 +242,7 @@ void MainWindow::initPlatform()
  */
 void MainWindow::initWindowProperties()
 {
+    this->windowHandle();
     this->setWindowTitle(tr("kylin-nm"));
     this->setWindowIcon(QIcon::fromTheme("kylin-network", QIcon(":/res/x/setup.png")));
     this->setFixedSize(MAINWINDOW_WIDTH, MAINWINDOW_HEIGHT);
@@ -237,16 +250,16 @@ void MainWindow::initWindowProperties()
     this->setAttribute(Qt::WA_TranslucentBackground, true);  //透明
     this->setFocusPolicy(Qt::NoFocus);
 
-//    QString platform = QGuiApplication::platformName();
-//    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
-//    {
+    QString platform = QGuiApplication::platformName();
+    if(!platform.startsWith(QLatin1String("wayland"),Qt::CaseInsensitive))
+    {
         QPainterPath path;
         auto rect = this->rect();
         //    path.addRoundedRect(rect, 12, 12);
         path.addRect(rect);
         KWindowEffects::enableBlurBehind(this->winId(), true, QRegion(path.toFillPolygon().toPolygon()));   //背景模糊
     }
-//}
+}
 
 /**
  * @brief MainWindow::registerTrayIcon 注册托盘图标
@@ -334,6 +347,76 @@ void MainWindow::paintWithTrans()
 }
 
 /**
+ * @brief MainWindow::initPanelGSettings 获取任务栏位置和大小
+ */
+void MainWindow::initPanelGSettings()
+{
+    const QByteArray id(PANEL_SETTINGS);
+    if (QGSettings::isSchemaInstalled(id))
+    {
+        if (m_panelGSettings == nullptr)
+        {
+            m_panelGSettings = new QGSettings(id);
+        }
+        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY))
+        {
+            m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+        }
+        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY))
+        {
+            m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+        }
+        if (m_panelGSettings->keys().contains(PANEL_TYPE_KEY))
+        {
+            m_panelType  = m_panelGSettings->get(PANEL_TYPE_KEY).toInt();
+        }
+        else
+        {
+            m_panelType = 0;
+        }
+
+        if (m_panelGSettings->keys().contains(UKUI_SETTINGS_ISLAND_POSITION_KEY))
+        {
+            m_settingsIslandPosition = m_panelGSettings->get(UKUI_SETTINGS_ISLAND_POSITION_KEY).toInt();
+        }
+
+        if (m_panelGSettings->keys().contains(UKUI_TOPBAR_SIZE_KEY))
+        {
+            m_topbarSize = m_panelGSettings->get(UKUI_TOPBAR_SIZE_KEY).toInt();
+        }
+        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key)
+        {
+            if (key == PANEL_SIZE_KEY)
+            {
+                m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+            }
+            else if(key == PANEL_POSITION_KEY)
+            {
+                m_panelPosition = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+            }
+            else if (key == PANEL_TYPE_KEY)
+            {
+                m_panelType = m_panelGSettings->get(PANEL_TYPE_KEY).toInt();
+                qDebug() << "切换任务栏类型";
+                //                updateGeometry();
+            }
+            else if (key == UKUI_SETTINGS_ISLAND_POSITION_KEY)
+            {
+                m_settingsIslandPosition = m_panelGSettings->get(UKUI_SETTINGS_ISLAND_POSITION_KEY).toInt();
+                qDebug() << "任务栏宽度切换" << m_settingsIslandPosition;
+                //                updateGeometry();
+            }
+            else if (key == UKUI_TOPBAR_SIZE_KEY)
+            {
+                m_topbarSize = m_panelGSettings->get(UKUI_TOPBAR_SIZE_KEY).toInt();
+                //                updateGeometry();
+            }
+            resetWindowPosition();
+        });
+    }
+}
+
+/**
  * @brief MainWindow::initUI 初始化窗口内控件
  */
 void MainWindow::initUI()
@@ -342,7 +425,7 @@ void MainWindow::initUI()
     m_centralWidget = new QTabWidget(this);
     this->setCentralWidget(m_centralWidget);
     m_centralWidget->tabBar()->setFixedWidth(this->width()+1);
-    m_centralWidget->tabBar()->setProperty("setRadius", 12);
+//    m_centralWidget->tabBar()->setProperty("setRadius", 12);
 //    m_centralWidget->tabBar()->setStyleSheet("QTabBar::tab{min-height:40px}");
     m_lanWidget = new LanPage(m_centralWidget);
     m_wlanWidget = new WlanPage(m_centralWidget);
@@ -392,7 +475,6 @@ void MainWindow::initTrayIcon()
     m_showConnectivityPageAction->setIcon(QIcon::fromTheme("gnome-netstatus-txrx"));
 //    m_trayIconMenu->addAction(m_showMainwindowAction);
     m_trayIconMenu->addAction(m_showSettingsAction);
-    m_trayIconMenu->addAction(m_showConnectivityPageAction);
     m_trayIcon->setContextMenu(m_trayIconMenu);
     iconStatus = IconActiveType::LAN_CONNECTED;
     onRefreshTrayIcon();
@@ -400,19 +482,19 @@ void MainWindow::initTrayIcon()
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::onTrayIconActivated);
 //    connect(m_showMainwindowAction, &QAction::triggered, this, &MainWindow::onShowMainwindowActionTriggled);
     connect(m_showSettingsAction, &QAction::triggered, this, &MainWindow::onShowSettingsActionTriggled);
-    connect(m_showConnectivityPageAction, &QAction::triggered, [=]() {
-        if (m_connectivityPage != nullptr) {
-            KWindowSystem::activateWindow(m_connectivityPage->winId());
-            KWindowSystem::raiseWindow(m_connectivityPage->winId());
-            return;
-        }
-        QString uri = getConnectivityCheckSpareUriByGDbus();
-        m_connectivityPage = new ConnectivityPage(uri, this);
-        connect(m_connectivityPage, &ConnectivityPage::pageClose, [&](){
-            m_connectivityPage = nullptr;
-        });
-        m_connectivityPage->show();
-    });
+//    connect(m_showConnectivityPageAction, &QAction::triggered, [=]() {
+//        if (m_connectivityPage != nullptr) {
+//            KWindowSystem::activateWindow(m_connectivityPage->winId());
+//            KWindowSystem::raiseWindow(m_connectivityPage->winId());
+//            return;
+//        }
+//        QString uri = getConnectivityCheckSpareUriByGDbus();
+//        m_connectivityPage = new ConnectivityPage(uri, this);
+//        connect(m_connectivityPage, &ConnectivityPage::pageClose, [&](){
+//            m_connectivityPage = nullptr;
+//        });
+//        m_connectivityPage->show();
+//    });
 
     m_trayIcon->show();
 }
@@ -421,7 +503,6 @@ void MainWindow::initDbusConnnect()
 {
     connect(m_lanWidget, &LanPage::deviceStatusChanged, this, &MainWindow::deviceStatusChanged);
     connect(m_lanWidget, &LanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
-connect(m_lanWidget, &LanPage::activeConnNameChanged, this, &MainWindow::onRefreshTrayIconTooltip);
 
     connect(m_wlanWidget, &WlanPage::wirelessDeviceStatusChanged, this, &MainWindow::wirelessDeviceStatusChanged);
     connect(m_wlanWidget, &WlanPage::deviceNameChanged, this, &MainWindow::deviceNameChanged);
@@ -494,43 +575,13 @@ connect(m_lanWidget, &LanPage::activeConnNameChanged, this, &MainWindow::onRefre
 
 }
 
-void MainWindow::initPanelGSettings() {
-    const QByteArray id(PANEL_SETTINGS);
-    if (QGSettings::isSchemaInstalled(id)) {
-        if (m_panelGSettings == nullptr) {
-            m_panelGSettings = new QGSettings(id);
-        }
-        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY)) {
-            m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
-        }
-        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY)) {
-            m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
-        }
-        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key) {
-            bool changed = false;
-            if (key == PANEL_POSITION_KEY) {
-                changed = true;
-                m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
-
-            }
-            if (key == PANEL_SIZE_KEY) {
-                changed = true;
-                m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
-            }
-            if (changed) {
-                resetWindowPosition();
-            }
-        });
-    }
-}
-
 /**
  * @brief MainWindow::resetWindowPosition 重新计算窗口位置
  */
 void MainWindow::resetWindowPosition()
 {
     if (m_isShowInCenter) {
-        QRect availableGeometry = QGuiApplication::screenAt(QCursor::pos())->geometry();
+        QRect availableGeometry = qApp->primaryScreen()->availableGeometry();
         QRect rect((availableGeometry.width() - this->width())/2, (availableGeometry.height() - this->height())/2,
                    this->width(), this->height());
         kdk::WindowManager::setGeometry(this->windowHandle(), rect);
@@ -538,52 +589,81 @@ void MainWindow::resetWindowPosition()
         return;
     }
 
-#define MARGIN 8
-#define PANEL_TOP 1
-#define PANEL_LEFT 2
-#define PANEL_RIGHT 3
-#define PANEL_BOTTOM 0
+    QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
+    int totalHeight = qApp->screenAt(QCursor::pos())->size().height() + qApp->screenAt(QCursor::pos())->geometry().y();//屏幕高度
+    int totalWidth = qApp->screenAt(QCursor::pos())->size().width() + qApp->screenAt(QCursor::pos())->geometry().x();
 
-    QScreen * qscreen = QGuiApplication::screenAt(QCursor::pos());
+    int x, y;
+    QRect rect;
 
-    if (nullptr == qscreen) {
+    if (m_panelType == 1) {
+        switch (m_settingsIslandPosition) {
+        case PANEL_BOTTOM:
+            rect.setRect(qApp->screenAt(QCursor::pos())->geometry().right() - (totalWidth - PanelGSettings::instance()->getPanelLength(qApp->screenAt(QCursor::pos())->name())) / 2 - this->width(),
+                         totalHeight - m_panelSize - this->height() - MARGIN,
+                         this->width(), this->height());
+            break;
+        default:
+            rect.setRect(qApp->screenAt(QCursor::pos())->geometry().right() - this->width(),
+                         qApp->screenAt(QCursor::pos())->geometry().y() + m_topbarSize - MARGIN,
+                         this->width(), this->height());
+            break;
+        }
+        kdk::WindowManager::setGeometry(this->windowHandle(), rect);
+
         return;
     }
 
-    QRect availableGeo = qscreen->geometry();
-    QString currentScreen = WindowManager::currentOutputName();
-    for (auto screen : QApplication::screens()) {
-        if (screen && screen->name() == currentScreen) {
-            availableGeo = screen->geometry();
-        }
-    }
-    int x, y;
     switch (m_panelPosition)
     {
     case PANEL_TOP:
-        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
-        y = availableGeo.y() + m_panelSize + MARGIN;
+    {
+        char *envStr = getenv("LANGUAGE");
+        /* 维吾尔语 ug_CN
+         * 哈萨克语 kk_KZ
+         * 柯尔克孜语 ky_KG */
+        if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
+            x = MARGIN;
+            y = availableGeo.y() + m_panelSize + MARGIN;
+        }
+        else {
+            x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+            y = availableGeo.y() + m_panelSize + MARGIN;
+        }
+
+    }
         break;
     case PANEL_BOTTOM:
-        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
-        y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
+    {
+        char *envStr = getenv("LANGUAGE");
+        if (strcmp(envStr, "ug_CN") == 0 || strcmp(envStr, "kk_KZ") == 0 || strcmp(envStr, "ky_KG") == 0) {
+            x = MARGIN;
+            y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
+        }
+        else {
+            x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
+            y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
+        }
+
+    }
         break;
     case PANEL_LEFT:
+    {
         x = availableGeo.x() + m_panelSize + MARGIN;
         y = availableGeo.y() + availableGeo.height() - this->height() - MARGIN;
+    }
         break;
     case PANEL_RIGHT:
+    {
         x = availableGeo.x() + availableGeo.width() - m_panelSize - this->width() - MARGIN;
         y = availableGeo.y() + availableGeo.height() - this->height() - MARGIN;
-        break;
-    default:
-        x = availableGeo.x() + availableGeo.width() - this->width() - MARGIN;
-        y = availableGeo.y() + availableGeo.height() - m_panelSize - this->height() - MARGIN;
+    }
         break;
     }
-    
     kdk::WindowManager::setGeometry(this->windowHandle(), QRect(x, y, this->width(), this->height()));
     qDebug() << " Position of ukui-panel is " << m_panelPosition << "; Position of mainwindow is " << this->geometry() << "." << Q_FUNC_INFO << __LINE__;
+
+
 }
 
 /**
@@ -659,13 +739,56 @@ void MainWindow::showControlCenter()
     }
 }
 
+void MainWindow::slideWindowByPanelPosition()
+{
+    if (m_panelType == 1) {
+        if (m_settingsIslandPosition) {
+            KWindowEffects::slideWindow(this->winId(), KWindowEffects::TopEdge);
+        } else {
+            KWindowEffects::slideWindow(this->winId(), KWindowEffects::BottomEdge);
+        }
+    } else {
+        switch(m_panelPosition) {
+        case PANEL_TOP:
+            KWindowEffects::slideWindow(this->winId(), KWindowEffects::TopEdge);
+            break;
+        case PANEL_LEFT:
+            KWindowEffects::slideWindow(this->winId(), KWindowEffects::LeftEdge);
+            break;
+        case PANEL_RIGHT:
+            KWindowEffects::slideWindow(this->winId(), KWindowEffects::RightEdge);
+            break;
+        case PANEL_BOTTOM:
+            KWindowEffects::slideWindow(this->winId(), KWindowEffects::BottomEdge);
+            break;
+        }
+    }
+}
+
 void MainWindow::showByWaylandHelper()
 {
-    //去除窗管标题栏，传入参数为QWidget*
-    kdk::UkuiStyleHelper::self()->removeHeader(this);
-    this->show();
-    resetWindowPosition();
     //设置窗体位置，传入参数为QWindow*，QRect
+
+
+    //跳过任务栏和分页器的属性
+    kdk::WindowManager::setSkipSwitcher(this->windowHandle(), true);
+    kdk::WindowManager::setSkipTaskBar(this->windowHandle(), true);
+    const KWindowInfo info(this->winId(), NET::WMState);
+    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager) || !info.hasState(NET::SkipSwitcher))
+        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
+
+    this->show();
+    this->setFocus();
+
+    //跳过任务栏和分页器的属性
+    kdk::WindowManager::setSkipSwitcher(this->windowHandle(), true);
+    kdk::WindowManager::setSkipTaskBar(this->windowHandle(), true);
+    if (!info.hasState(NET::SkipTaskbar) || !info.hasState(NET::SkipPager) || !info.hasState(NET::SkipSwitcher))
+        KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
+
+    //滑动弹出和窗口位置需在show函数之后调用才可正常处理窗口位置
+    slideWindowByPanelPosition();
+    resetWindowPosition();
 
 }
 
@@ -746,7 +869,9 @@ void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
             return;
         }
         qDebug() << "Received signal of tray icon activated, will show mainwindow." << Q_FUNC_INFO << __LINE__;
-        this->showMainwindow();
+//        this->showMainwindow();
+        QDBusInterface iface("org.ukui.Sidebar", "/org/ukui/Sidebar", "org.ukui.Sidebar", QDBusConnection::sessionBus());
+        iface.asyncCall("shortcutWidgetActive", "org.ukui.shortcut.network", false);
     }
 }
 
@@ -835,34 +960,34 @@ void MainWindow::onRefreshTrayIcon()
         }
     }
 
-    if(!getConnectivityCheckSpareUriByGDbus().isEmpty()) {
-        if (iconStatus == IconActiveType::LAN_CONNECTED) {
-            m_trayIcon->setIcon(QIcon::fromTheme("network-intranet-symbolic"));
-        } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
-            if (signalStrength > MW_EXCELLENT_SIGNAL){
-                m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_INTRANET_ICON));
-            } else if (signalStrength > MW_GOOD_SIGNAL) {
-                m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_INTRANET_ICON));
-            } else if (signalStrength > MW_OK_SIGNAL) {
-                m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_INTRANET_ICON));
-            } else if (signalStrength > MW_LOW_SIGNAL) {
-                m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_INTRANET_ICON));
-            } else {
-                m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_INTRANET_ICON));
-            }
-        }
-    }
+//    if(!getConnectivityCheckSpareUriByGDbus().isEmpty()) {
+//        if (iconStatus == IconActiveType::LAN_CONNECTED) {
+//            m_trayIcon->setIcon(QIcon::fromTheme("network-intranet-symbolic"));
+//        } else if (iconStatus == IconActiveType::WLAN_CONNECTED) {
+//            if (signalStrength > MW_EXCELLENT_SIGNAL){
+//                m_trayIcon->setIcon(QIcon::fromTheme(EXCELLENT_SIGNAL_INTRANET_ICON));
+//            } else if (signalStrength > MW_GOOD_SIGNAL) {
+//                m_trayIcon->setIcon(QIcon::fromTheme(GOOD_SIGNAL_INTRANET_ICON));
+//            } else if (signalStrength > MW_OK_SIGNAL) {
+//                m_trayIcon->setIcon(QIcon::fromTheme(OK_SIGNAL_INTRANET_ICON));
+//            } else if (signalStrength > MW_LOW_SIGNAL) {
+//                m_trayIcon->setIcon(QIcon::fromTheme(LOW_SIGNAL_INTRANET_ICON));
+//            } else {
+//                m_trayIcon->setIcon(QIcon::fromTheme(NONE_SIGNAL_INTRANET_ICON));
+//            }
+//        }
+//    }
 
     if (signalStrength == -1) {
         m_trayIcon->setIcon(QIcon::fromTheme("network-wired-disconnected-symbolic"));
     }
     onRefreshTrayIconTooltip();
 
-    if (iconStatus > IconActiveType::NOT_CONNECTED) {
-        m_trayIconMenu->addAction(m_showConnectivityPageAction);
-    } else {
-        m_trayIconMenu->removeAction(m_showConnectivityPageAction);
-    }
+//    if (iconStatus > IconActiveType::NOT_CONNECTED) {
+//        m_trayIconMenu->addAction(m_showConnectivityPageAction);
+//    } else {
+//        m_trayIconMenu->removeAction(m_showConnectivityPageAction);
+//    }
 }
 
 void MainWindow::onSetTrayIconLoading()
@@ -952,56 +1077,8 @@ void MainWindow::onRefreshTrayIconTooltip()
     m_trayIcon->setToolTip(trayIconToolTip);
 }
 
-void MainWindow::setCentralWidgetPages()
-{
-    bool isChanged = false;
-    if (m_isWiredUsable != m_lanWidget->isWiredDeviceUsable()) {
-        if (m_lanWidget->isWiredDeviceUsable()) {
-            m_centralWidget->insertTab(LANPAGE, m_lanWidget, "");
-            m_isWiredUsable = true;
-        } else {
-            m_centralWidget->removeTab(LANPAGE);
-            m_isWiredUsable = false;
-        }
-        isChanged = true;
-    }
-
-    if (m_isWirelessUsable != m_wlanWidget->isWirelessDeviceUsable()) {
-        if (m_wlanWidget->isWirelessDeviceUsable()) {
-            m_centralWidget->insertTab(WLANPAGE, m_wlanWidget, "");
-            m_isWirelessUsable = true;
-        } else {
-            m_centralWidget->removeTab(WLANPAGE);
-            m_isWirelessUsable = false;
-        }
-        isChanged = true;
-    }
-
-    if (!isChanged) {
-        return;
-    }
-
-    if (m_isWiredUsable && m_isWirelessUsable) {
-        m_centralWidget->tabBar()->show();
-        this->setFixedHeight(MAINWINDOW_HEIGHT);
-        resetWindowPosition();
-    } else {
-        m_centralWidget->tabBar()->hide();
-        this->setFixedHeight(MAINWINDOW_HEIGHT - TABBAR_HEIGHT);
-        resetWindowPosition();
-    }
-
-    if (m_trayIcon) {
-        m_trayIcon->setVisible(m_isWiredUsable || m_isWirelessUsable);
-    }
-}
-
 void MainWindow::onShowMainWindow(int type)
 {
-    if (!m_trayIcon->isVisible()) {
-        qWarning() << "no valid network card, do not show kylin-nm mainwindow";
-        return;
-    }
     if (type == LANPAGE || type == WLANPAGE) {
         m_centralWidget->setCurrentIndex(type);
 
@@ -1204,6 +1281,9 @@ void MainWindow::showCreateWiredConnectWidget(const QString devName)
     netDetail->show();
     KWindowSystem::raiseWindow(netDetail->winId());
     netDetail->centerToScreen();
+    kdk::WindowManager::setSkipSwitcher(netDetail->windowHandle(), true);
+    kdk::WindowManager::setSkipTaskBar(netDetail->windowHandle(), true);
+    kdk::WindowManager::setIconName(netDetail->windowHandle(), "kylin-network");
 }
 
 void MainWindow::showAddOtherWlanWidget(QString devName)
@@ -1247,6 +1327,25 @@ void MainWindow::deactivateWireless(const QString& devName, const QString& ssid)
 void MainWindow::rescan()
 {
     m_wlanWidget->requestScan();
+}
+
+void MainWindow::passwordConnect(QString devName, QString ssid, QString type, QString psk, bool autoConnect) {
+
+    KyWirelessConnectOperation m_wirelessConnectOperation;
+    KyWirelessConnectSetting settings;
+    settings.m_connectName = ssid;
+    settings.m_ssid = ssid;
+    settings.isAutoConnect = autoConnect;
+    settings.m_psk = psk;
+    if (type.isEmpty() || type == "") {
+        settings.m_type = WpaNone;
+    } else if (type.contains("WPA1") || type.contains("WPA2")) {
+        settings.m_type = WpaPsk;
+    } else if (type.contains("WPA3")) {
+        settings.m_type = SAE;
+    }
+
+    m_wirelessConnectOperation.addAndActiveWirelessConnect(devName, settings, false);
 }
 
 void MainWindow::keyRingInit()

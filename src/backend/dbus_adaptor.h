@@ -195,6 +195,14 @@ class NetworkAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
 "    </method>\n"
+"    <method name=\"passwordConnect\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"type\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"psk\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"autoConnect\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
 "    <method name=\"getApConnectionPath\">\n"
 "      <arg direction=\"out\" type=\"s\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"uuid\"/>\n"
@@ -210,6 +218,9 @@ class NetworkAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"i\" name=\"type\"/>\n"
 "    </method>\n"
 "    <method name=\"getWirelessSwitchBtnState\">\n"
+"      <arg direction=\"out\" type=\"b\"/>\n"
+"    </method>\n"
+"    <method name=\"getWiredMainSwitchBtnState\">\n"
 "      <arg direction=\"out\" type=\"b\"/>\n"
 "    </method>\n"
 "  </interface>\n"
@@ -234,9 +245,11 @@ public Q_SLOTS: // METHODS
     QVariantMap getWirelessDeviceCap();
     QVariantList getWirelessList(const QString &devName);
     bool getWirelessSwitchBtnState();
+    bool getWiredMainSwitchBtnState();
     void keyRingClear();
     void keyRingInit();
     void reScan();
+    Q_NOREPLY void passwordConnect(QString devName, QString ssid, QString type, QString psk, bool autoConnect);
     Q_NOREPLY void setDeviceEnable(const QString &devName, bool enable);
     Q_NOREPLY void setWiredSwitchEnable(bool enable);
     Q_NOREPLY void setWirelessSwitchEnable(bool enable);

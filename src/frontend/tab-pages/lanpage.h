@@ -28,8 +28,6 @@
 #include <QListWidget>
 #include <QMap>
 #include <QGSettings>
-#include <QApplication>
-#include <QScreen>
 
 #include "list-items/listitem.h"
 #include "list-items/lanlistitem.h"
@@ -55,10 +53,6 @@ public:
     bool lanIsConnected();
     void getWiredDeviceConnectState(QMap<QString, QString> &map);
 
-    bool isWiredDeviceUsable() {
-        return !m_devList.isEmpty();
-    }
-
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
@@ -68,7 +62,6 @@ private:
     void initLanArea();
     void initNetSwitch();
     void initLanDeviceState();
-    void initPanelGSettings();
 
     void initDeviceCombox();
     void updateDeviceCombox(QString oldDeviceName, QString newDeviceName);
@@ -108,12 +101,6 @@ private:
 
     void updateCurrentDevice(QString deviceName);
     void showRate();
-    void onShowKylinNetworkCheck();
-    void showBallonTip();
-    QRect caculatePositionWithPanel(const int windowWidth, const int windowHeight);
-    void onLanStateChanged(NetworkManager::Device::State newstate,
-                           NetworkManager::Device::State oldstate,
-                           NetworkManager::Device::StateChangeReason reason);
 
 Q_SIGNALS:
     void lanAdd(QString devName, QStringList info);
@@ -125,8 +112,6 @@ Q_SIGNALS:
 
     void showLanRate(QListWidget *widget, QMap<QString, QListWidgetItem *> &map, QString dev, bool isLan);
 
-    void activeConnNameChanged();
-
 private Q_SLOTS:
     void onConnectionStateChange(QString uuid, NetworkManager::ActiveConnection::State state,
                                  NetworkManager::ActiveConnection::Reason reason);
@@ -135,7 +120,7 @@ private Q_SLOTS:
     void onRemoveConnection(QString path);
     void onUpdateConnection(QString uuid);
 
-    void onSwithChanged(bool enable);
+    void onSwithGsettingsChanged(const QString &key);
 
     void onDeviceAdd(QString deviceName, NetworkManager::Device::Type deviceType);
     void onDeviceRemove(QString deviceName);
@@ -166,17 +151,9 @@ private:
     QStringList m_devList;
     QStringList m_enableDeviceList;
     QStringList m_disableDeviceList;
-    QStringList m_devSwitchList;
 
-    QGSettings *m_panelGSettings = nullptr;
     QGSettings *m_switchGsettings = nullptr;
     QMap<QString, NetDetail*> m_lanPagePtrMap;
-    QDBusInterface *m_pSysBusIntfs;
-
-    KBallonTip *m_pNetTip;
-    int m_panelPosition;
-    int m_panelSize;
-    bool m_showedNetTipFlag = false;
 };
 
 #endif // LANPAGE_H

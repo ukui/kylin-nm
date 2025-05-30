@@ -48,6 +48,7 @@
 #define AP_NAME_MAX_LENGTH 32
 
 #define REFRESH_MSEC 20*1000
+#define FRAME_SPEED 150
 
 #define LOG_HEAD "[MobileHotspotWidget]"
 
@@ -194,6 +195,7 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
                     qDebug() << LOG_HEAD << "call activeWirelessAp failed ";
                     return true;
                 }
+
             }
             return true;
         }
@@ -271,8 +273,9 @@ void MobileHotspotWidget::initDbusConnect()
         connect(m_interface,SIGNAL(wirelessDeviceStatusChanged()), this, SLOT(onDeviceStatusChanged()), Qt::QueuedConnection);
         connect(m_interface,SIGNAL(deviceNameChanged(QString, QString, int)), this, SLOT(onDeviceNameChanged(QString, QString, int)), Qt::QueuedConnection);
         connect(m_interface,SIGNAL(hotspotDeactivated(QString, QString)), this, SLOT(onHotspotDeactivated(QString, QString)), Qt::QueuedConnection);
-
         connect(m_interface,SIGNAL(hotspotActivated(QString, QString, QString, QString, QString)), this, SLOT(onHotspotActivated(QString, QString, QString, QString, QString)), Qt::QueuedConnection);
+        connect(m_interface,SIGNAL(hotspotDeactivating(QString, QString)), this, SLOT(startLoading()), Qt::QueuedConnection);
+        connect(m_interface,SIGNAL(hotspotActivating(QString, QString)), this, SLOT(startLoading()), Qt::QueuedConnection);
 
         connect(m_interface, SIGNAL(wlanactiveConnectionStateChanged(QString, QString, QString, int)), this, SLOT(onActiveConnectionChanged(QString, QString, QString, int)), Qt::QueuedConnection);
 
@@ -290,12 +293,32 @@ void MobileHotspotWidget::onApLineEditTextEdit(QString text)
 {
     int count = 0;
     int i = 0;
+    if (text.toLocal8Bit().length() <= AP_NAME_MAX_LENGTH) {
+        return;
+    }
 
-    for ( ; i < text.length(); ++i) {
-        count += text.mid(i,1).toLocal8Bit().length();
-        if (count > AP_NAME_MAX_LENGTH) {
-            m_apNameLine->setText(text.left(i));
-            return;
+    int index = m_apNameLine->cursorPosition();
+
+    QString leftStr = text.left(index);
+    QString rightStr = text.mid(index);
+
+    if (rightStr.isEmpty()) {
+        for ( ; i < text.length(); ++i) {
+            count += text.mid(i,1).toLocal8Bit().length();
+            if (count > AP_NAME_MAX_LENGTH) {
+                m_apNameLine->setText(text.left(i));
+                return;
+            }
+        }
+    } else {
+        count = rightStr.toLocal8Bit().length();
+        for ( ; i < leftStr.length(); ++i) {
+            count += leftStr.mid(i,1).toLocal8Bit().length();
+            if (count > AP_NAME_MAX_LENGTH) {
+                m_apNameLine->setText(leftStr.left(i) + rightStr);
+                m_apNameLine->setCursorPosition(i);
+                return;
+            }
         }
     }
 }
@@ -352,7 +375,8 @@ void MobileHotspotWidget::onInterfaceChanged()
 void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status)
 {
     if(m_uuid == uuid && status == 4) {
-        showDesktopNotify(tr("hotspot already close"));
+        if(m_switchBtn->isChecked())
+            showDesktopNotify(tr("hotspot already close"));
         m_switchBtn->setChecked(false);
         setUiEnabled(false);
         m_uuid.clear();
@@ -369,7 +393,10 @@ void MobileHotspotWidget::onActiveConnectionChanged(QString deviceName, QString 
 
 void MobileHotspotWidget::onWirelessBtnChanged(bool state)
 {
+    stopLoading();
     if (!state) {
+        if(m_switchBtn->isChecked())
+            showDesktopNotify(tr("hotspot already close"));
         m_switchBtn->setChecked(state);
         m_uuid.clear();
         m_switchBtn->setCheckable(false);
@@ -422,6 +449,10 @@ void MobileHotspotWidget::initInterfaceInfo()
     } else {
         QMap<QString, bool>::Iterator iter = devMap.begin();
         while (iter != devMap.end()) {
+            if (!iter.value()) {
+                iter++;
+                continue;
+            }
             QString interfaceName = iter.key();
             if (!(devCapMap[interfaceName] & 0x01)) {
                 m_interfaceComboBox->addItem(interfaceName);
@@ -448,6 +479,8 @@ void MobileHotspotWidget::getApInfo()
     }
 
     if (m_interfaceComboBox->count() <= 0) {
+        if(m_switchBtn->isChecked())
+            showDesktopNotify(tr("hotspot already close"));
         m_switchBtn->setChecked(false);
         setWidgetHidden(true);
         qWarning() << LOG_HEAD << "getApInfo but interface is empty";
@@ -480,10 +513,14 @@ void MobileHotspotWidget::getApInfo()
         }
 
         if (apInfo.at(3) == "true") {
+            if(!m_switchBtn->isChecked())
+                showDesktopNotify(tr("hotspot already open"));
             m_switchBtn->setChecked(true);
             setUiEnabled(true);
             m_uuid = apInfo.at(4);
         } else {
+            if(m_switchBtn->isChecked())
+                showDesktopNotify(tr("hotspot already close"));
             m_switchBtn->setChecked(false);
             setUiEnabled(false);
             m_uuid = apInfo.at(4);
@@ -507,15 +544,54 @@ void MobileHotspotWidget::setSwitchFrame()
 
     QHBoxLayout *switchLayout = new QHBoxLayout(m_switchFrame);
 
-    m_switchLabel = new QLabel(tr("Open"), this);
+    m_switchLabel = new QLabel(tr("Open mobile hotspot"), this);
     m_switchLabel->setMinimumWidth(LABLE_MIN_WIDTH);
     m_switchBtn = new KSwitchButton(this);
+    m_statusLabel= new QLabel(this);
+    m_statusLabel->hide();
     switchLayout->setContentsMargins(ITEM_MARGINS);
     switchLayout->addWidget(m_switchLabel);
     switchLayout->addStretch();
+    switchLayout->addWidget(m_statusLabel);
+    switchLayout->addSpacing(4);
     switchLayout->addWidget(m_switchBtn);
 
     m_switchFrame->setLayout(switchLayout);
+
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-3-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-4-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-5-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-6-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
+    m_waitTimer = new QTimer(this);
+    connect(m_waitTimer, &QTimer::timeout, this, &MobileHotspotWidget::updateLoadingIcon);
+}
+
+void MobileHotspotWidget::updateLoadingIcon()
+{
+    if (m_currentIconIndex > 6) {
+        m_currentIconIndex = 0;
+    }
+    m_statusLabel->setPixmap(m_loadIcons.at(m_currentIconIndex).pixmap(16,16));
+    m_currentIconIndex ++;
+}
+
+void MobileHotspotWidget::startLoading()
+{
+    m_waitTimer->start(FRAME_SPEED);
+    m_switchBtn->hide();
+    m_statusLabel->setFocus();
+    m_statusLabel->show();
+}
+
+void MobileHotspotWidget::stopLoading()
+{
+    m_waitTimer->stop();
+    m_statusLabel->clearFocus();
+    m_statusLabel->hide();
+    m_switchBtn->show();
 }
 
 void MobileHotspotWidget::setApNameFrame()
@@ -563,13 +639,6 @@ void MobileHotspotWidget::setPasswordFrame()
     m_pwdHintLabel->setPalette(hintTextColor);
     m_pwdHintLabel->setText(tr("Contains at least 8 characters")); //至少包含8个字符
 
-    QWidget *pwdInputWidget = new QWidget(m_passwordFrame);
-    QVBoxLayout *pwdInputVLayout = new QVBoxLayout(pwdInputWidget);
-    pwdInputVLayout->setContentsMargins(CONTENTS_MARGINS);
-    pwdInputVLayout->setSpacing(0);
-    pwdInputVLayout->addWidget(m_pwdNameLine);
-    pwdInputVLayout->addWidget(m_pwdHintLabel);
-
     QGridLayout *pwdLayout = new QGridLayout(m_passwordFrame);
     pwdLayout->setContentsMargins(PASSWORD_ITEM_MARGINS);
     pwdLayout->setSpacing(0);
@@ -578,6 +647,9 @@ void MobileHotspotWidget::setPasswordFrame()
     pwdLayout->addWidget(m_pwdHintLabel, 1, 1);
 
     m_passwordFrame->setLayout(pwdLayout);
+    //init
+    m_passwordFrame->setFixedHeight(PASSWORD_FRAME_FIX_HIGHT);
+    m_pwdHintLabel->show();
 
     m_pwdNameLine->installEventFilter(this);
 }
@@ -703,14 +775,16 @@ void MobileHotspotWidget::onDeviceNameChanged(QString oldName, QString newName, 
 //热点断开
 void MobileHotspotWidget::onHotspotDeactivated(QString devName, QString ssid)
 {
+    stopLoading();
     if (!m_switchBtn->isChecked()) {
         return;
     }
     if (devName == m_interfaceComboBox->currentText() && ssid == m_apNameLine->text()) {
+        if(m_switchBtn->isChecked())
+            showDesktopNotify(tr("hotspot already close"));
         m_switchBtn->setChecked(false);
         m_uuid.clear();
 //        setUiEnabled(true);
-        showDesktopNotify(tr("hotspot already close"));
     }
 }
 
@@ -718,6 +792,7 @@ void MobileHotspotWidget::onHotspotDeactivated(QString devName, QString ssid)
 void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath)
 {
     qDebug() << LOG_HEAD << "onHotspotActivated" <<devName << ssid << uuid;
+    stopLoading();
     if (m_switchBtn->isChecked()) {
         return;
     }
@@ -737,10 +812,11 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
     this->update();
 
     if (devName == m_interfaceComboBox->currentText() && ssid == m_apNameLine->text()) {
+        if(!m_switchBtn->isChecked())
+            showDesktopNotify(tr("hotspot already open"));
         m_switchBtn->setChecked(true);
         m_uuid = uuid;
 //        setUiEnabled(false);
-        showDesktopNotify(tr("hotspot already open"));
     } else {
         QStringList info;
         if (!getApInfoBySsid(devName, ssid, info)) {
@@ -748,7 +824,8 @@ void MobileHotspotWidget::onHotspotActivated(QString devName, QString ssid, QStr
         }
         int index = m_interfaceComboBox->findText(devName);
         if (index >= 0) {
-            showDesktopNotify(tr("hotspot already open"));
+            if(!m_switchBtn->isChecked())
+                showDesktopNotify(tr("hotspot already open"));
             m_apNameLine->setText(ssid);
             m_interfaceComboBox->setCurrentIndex(index);
             m_switchBtn->setChecked(true);
@@ -999,6 +1076,7 @@ void MobileHotspotWidget::initConnectDevPage()
     m_connectDevPage = new ConnectdevPage(this);
     m_Vlayout->addSpacing(32);
     m_Vlayout->addWidget(m_connectDevPage);
+    connect(m_switchBtn, &KSwitchButton::stateChanged, m_connectDevPage, &ConnectdevPage::refreshStalist);
 }
 
 void MobileHotspotWidget::initBlackListPage()

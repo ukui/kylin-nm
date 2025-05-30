@@ -128,6 +128,7 @@ void ListItem::initUI()
     m_hItemLayout->addWidget(m_nameLabel);
     m_hItemLayout->addStretch();
     m_hItemLayout->addWidget(m_infoButton);
+    m_infoButton->hide();
 
     m_mainLayout->addWidget(m_itemFrame);
 

@@ -52,6 +52,8 @@ public:
         }
     }
 
+    QString getNetMaskText(QString text);
+
     bool checkIsChanged(const ConInfo info, KyConnectSetting &setting);
     bool checkDnsSettingsIsChanged();
 
@@ -94,7 +96,7 @@ private:
     void configSave();
     bool getTextEditState(QString text);
     bool netMaskIsValide(QString text);
-    QString getNetMaskText(QString text);
+
     bool checkConnectBtnIsEnabled();
     void initConflictHintLable();
     void initLoadingIcon();

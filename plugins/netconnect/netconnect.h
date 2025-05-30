@@ -139,7 +139,7 @@ private:
     QWidget            *pluginWidget;
 
     QDBusInterface     *m_interface = nullptr;
-    KSwitchButton       *wiredSwitch;
+    KSwitchButton      *wiredSwitch;
 
     bool               mFirstLoad;
     QGSettings         *m_switchGsettings;

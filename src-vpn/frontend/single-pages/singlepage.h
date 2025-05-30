@@ -48,8 +48,8 @@ using namespace kdk;
 #define SETTINGS_LAYOUT_MARGINS 23,0,24,0
 
 #define MAX_ITEMS 4
-#define MAX_WIDTH 412
-#define MIN_WIDTH 404
+#define MAX_WIDTH 400
+#define MIN_WIDTH 400
 
 #define SCROLL_STEP 4
 

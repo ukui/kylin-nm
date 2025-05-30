@@ -209,12 +209,12 @@ int TabPage::getCurrentLoadRate(QString dev, long *save_rate, long *tx_rate)
             // qDebug()<<"No eth0 keyword to find!";
             continue;
         } else {
-            match = match + qstrlen(device) + qstrlen(":"); //地址偏移到冒号
+            match = match + strlen(device) + strlen(":"); //地址偏移到冒号
             sscanf(match, "%ld ", save_rate);
             memset(tmp_value, 0, sizeof(tmp_value));
             sscanf(match, "%s ", tmp_value);
-            match = match + qstrlen(tmp_value);
-            for (size_t i=0; i<qstrlen(buffer); ++i) {
+            match = match + strlen(tmp_value);
+            for (size_t i=0; i<strlen(buffer); ++i) {
                 if (0x20 == *match) {
                     match ++;
                 } else {
@@ -223,7 +223,7 @@ int TabPage::getCurrentLoadRate(QString dev, long *save_rate, long *tx_rate)
                     }
                     memset(tmp_value, 0, sizeof(tmp_value));
                     sscanf(match, "%s ", tmp_value);
-                    match = match + qstrlen(tmp_value);
+                    match = match + strlen(tmp_value);
                     counter ++;
                 }
             }

@@ -158,7 +158,54 @@ const QString NetConnect::name() const {
 
 bool NetConnect::isEnable() const
 {
-    return true;
+    //get isEnable
+    QDBusInterface dbus("com.kylin.network", "/com/kylin/network",
+                        "com.kylin.network",
+                        QDBusConnection::sessionBus());
+    if (!dbus.isValid()) {
+        return false;
+    }
+
+    QMap<QString,bool> map;
+    QDBusReply<QVariantMap> reply = dbus.call(QStringLiteral("getDeviceListAndEnabled"),0);
+    if(!reply.isValid())
+    {
+        qWarning() << "[NetConnect]getWiredDeviceList error:" << reply.error().message();
+        return false;
+    }
+
+    QVariantMap::const_iterator item = reply.value().cbegin();
+    while (item != reply.value().cend()) {
+        map.insert(item.key(), item.value().toBool());
+        item ++;
+    }
+
+    bool isEnabled = !map.isEmpty();
+
+    const QByteArray schema("org.ukui.control-center.plugins");
+    if (QGSettings::isSchemaInstalled(schema)) {
+        return isEnabled;
+    }
+
+    //get gsettings
+    QGSettings *showSettings;
+    QString path("/org/ukui/control-center/plugins/netconnect/");
+    showSettings = new QGSettings(schema, path.toUtf8());
+
+    QVariant enabledState = showSettings->get("show");
+
+    //set gsettings
+    if (!enabledState.isValid() || enabledState.isNull()) {
+        qWarning() << "QGSettins get plugin show status error";
+    } else {
+        if (enabledState.toBool() != isEnabled) {
+            showSettings->set("show", isEnabled);
+        }
+    }
+    delete showSettings;
+    showSettings = nullptr;
+
+    return isEnabled;
 }
 
 
@@ -178,12 +225,11 @@ QString NetConnect::translationPath() const
 }
 
 void NetConnect::initSearchText() {
-    //~ contents_path /netconnect/Add WiredNetwork"
-    tr("Add WiredNetwork");
     //~ contents_path /netconnect/Advanced settings"
     ui->detailBtn->setText(tr("Advanced settings"));
     ui->titleLabel->setText(tr("LAN"));
-    //~ contents_path /netconnect/LAN
+    //~ contents_path /netconnect/open
+    tr("open");
     ui->openLabel->setText(tr("LAN"));
 }
 
@@ -196,9 +242,22 @@ bool NetConnect::eventFilter(QObject *w, QEvent *e) {
             w->findChild<QWidget*>()->setStyleSheet("QWidget{background: palette(base);border-radius:4px;}");
     }
 
+//    if (w == wiredSwitch) {
+//        if (e->type() == QMouseEvent::MouseButtonRelease) {
+//            if (!wiredSwitch->isCheckable()) {
+//                showDesktopNotify(tr("No ethernet device avaliable"));
+//            } else {
+//                UkccCommon::buriedSettings(QString("netconnect"), QString("Open"), QString("settings"),wiredSwitch->isChecked()?"false":"true");
+//                if (m_interface != nullptr && m_interface->isValid()) {
+//                    m_interface->call(QStringLiteral("setWiredSwitchEnable"), !wiredSwitch->isChecked());
+//                }
+//                return true;
+//            }
+//        }
+//    }
+
     return QObject::eventFilter(w,e);
 }
-
 void NetConnect::initComponent() {
     wiredSwitch = new KSwitchButton(pluginWidget);
     ui->openWIifLayout->addWidget(wiredSwitch);
@@ -222,7 +281,7 @@ void NetConnect::initComponent() {
         QDBusConnection::systemBus().connect(SYSTEM_DBUS_SERVICE,
                                              SYSTEM_DBUS_PATH,
                                              SYSTEM_DBUS_INTERFACE,
-                                             "switchChanged",
+                                             "sysWiredMainSwitchChanged",
                                              this,
                                              SLOT(renewSwitchLayout(bool)));
     } else {
@@ -293,7 +352,7 @@ void NetConnect::wiredSwitchSLot(bool checked)
     if (m_pSysBusIntfs == nullptr || !m_pSysBusIntfs->isValid())
         return;
 
-    m_pSysBusIntfs->call(QStringLiteral("setSwitch"), checked);
+    m_pSysBusIntfs->call(QStringLiteral("setWiredMainSwitch"), checked);
     if (checked) {
         showLayout(ui->availableLayout);
         return;
@@ -317,6 +376,7 @@ void NetConnect::wiredSwitchSLot(bool checked)
 
 void NetConnect::renewSwitchLayout(bool enable)
 {
+    qDebug() << Q_FUNC_INFO << __LINE__ << enable;
 //    wiredSwitch->blockSignals(true);
     wiredSwitch->setChecked(enable);
 //    wiredSwitch->blockSignals(false);
@@ -406,7 +466,7 @@ void NetConnect::updateLanInfo(QString deviceName, QStringList lanInfo)
 //总开关
 void NetConnect::setSwitchStatus()
 {
-    QDBusReply <bool> reply = m_pSysBusIntfs->call("getSwitch");
+    QDBusReply <bool> reply = m_pSysBusIntfs->call("getWiredMainSwitch");
     if (reply.isValid()) {
         bool status = reply.value();
         renewSwitchLayout(status);

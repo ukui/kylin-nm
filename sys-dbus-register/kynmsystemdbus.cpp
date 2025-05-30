@@ -19,15 +19,28 @@
 #include "kynmsystemdbus.h"
 #include "kylinipv4arping.h"
 #include "kylinipv6arping.h"
+#include "authority-base.h"
 
 #define LOG_FLAG "[KynmSystemDbus]"
 
+#define KYLIN_NM_WIRED_MAIN_SWITCH "wired_main_switch"
+
 KynmSystemDbus::KynmSystemDbus(QObject *parent) : QObject(parent)
 {
-    QString switchSettingFile = "/etc/kylin-nm/switch.conf";
-    switchSetting = new QSettings(switchSettingFile, QSettings::IniFormat, this);
-    if (!switchSetting->contains("switch"))
-        switchSetting->setValue("switch", true);
+    QString switchSettingFile = "/etc/kylin-nm/netSwitch.conf";
+    m_kylinNmSettings = new QSettings(switchSettingFile, QSettings::IniFormat);
+    QStringList groups = m_kylinNmSettings->childGroups();
+    if (groups.indexOf("conf") == -1)
+    {
+        qDebug() << Q_FUNC_INFO << __LINE__;
+        m_kylinNmSettings->beginGroup("conf");
+        init_conf();
+    }
+    else
+    {
+        m_kylinNmSettings->beginGroup("conf");
+        init_conf();
+    }
 }
 
 KynmSystemDbus::~KynmSystemDbus()
@@ -35,15 +48,23 @@ KynmSystemDbus::~KynmSystemDbus()
 
 }
 
+
+void KynmSystemDbus::init_conf()
+{
+    if (!m_kylinNmSettings->contains(KYLIN_NM_WIRED_MAIN_SWITCH))
+        m_kylinNmSettings->setValue(KYLIN_NM_WIRED_MAIN_SWITCH, true);
+}
+
 bool KynmSystemDbus::checkIpv4IsConflict(const QString devName, const QString ipv4Address, QStringList macList)
 {
+    PEEK_LIMIT_RET(false);
     bool isConflict = false;
     KyIpv4Arping* ipv4Arping = new KyIpv4Arping(devName, ipv4Address);
     if (ipv4Arping->ipv4ConflictCheck() >= 0) {
         isConflict =  ipv4Arping->ipv4IsConflict();
         if (isConflict && !macList.isEmpty()) {
             QString macAddress = ipv4Arping->getMacAddress();
-            for (const auto mac : macList) {
+            for (const auto &mac : macList) {
                 if (macAddress == mac) {
                     qDebug() << LOG_FLAG << "IPv4 conflict mac" << mac;
                     isConflict = false;
@@ -63,6 +84,7 @@ bool KynmSystemDbus::checkIpv4IsConflict(const QString devName, const QString ip
 
 bool KynmSystemDbus::checkIpv6IsConflict(const QString devName, const QString ipv6Address)
 {
+    PEEK_LIMIT_RET(false);
     bool isConflict = false;
     KyIpv6Arping* ipv6rping = new KyIpv6Arping(devName, ipv6Address);
     if (ipv6rping->ipv6ConflictCheck() >= 0) {
@@ -77,19 +99,46 @@ bool KynmSystemDbus::checkIpv6IsConflict(const QString devName, const QString ip
     return isConflict;
 }
 
-void KynmSystemDbus::setSwitch(bool enable)
+void KynmSystemDbus::setWiredMainSwitch(bool enable)
 {
-    switchSetting->setValue("switch", enable);
-    Q_EMIT switchChanged(enable);
+    qDebug() << Q_FUNC_INFO << __LINE__ << enable;
+
+    message().service();
+    PEEK_LIMIT();
+    if (enable != getWiredMainSwitch())
+    {
+        m_kylinNmSettings->setValue(KYLIN_NM_WIRED_MAIN_SWITCH, enable);
+        Q_EMIT sysWiredMainSwitchChanged(enable);
+    }
 }
 
-void KynmSystemDbus::setDeviceSwitch(QString devName, bool enable)
+bool KynmSystemDbus::getWiredMainSwitch()
 {
-    switchSetting->setValue(devName, enable);
-    Q_EMIT devSwitchChanged(devName, enable);
+    qDebug() << Q_FUNC_INFO << __LINE__ ;
+
+    PEEK_LIMIT_RET(false);
+    return m_kylinNmSettings->value(KYLIN_NM_WIRED_MAIN_SWITCH).toBool();
+}
+void KynmSystemDbus::setWiredDeviceSwitch(QString devName, bool enable)
+{
+    qDebug() << Q_FUNC_INFO << __LINE__<< devName << enable;
+
+    PEEK_LIMIT();
+    QString conf_name = devName+"-switch";
+    if (m_kylinNmSettings->contains(conf_name) && enable != getWiredDeviceSwitch(conf_name))
+    {
+        m_kylinNmSettings->setValue(conf_name, enable);
+        Q_EMIT sysWiredDevSwitchChanged(conf_name, enable);
+    }
+}
+bool KynmSystemDbus::getWiredDeviceSwitch(QString devName)
+{
+    qDebug() << Q_FUNC_INFO << __LINE__<< devName;
+    PEEK_LIMIT_RET(false);
+    QString conf_name = devName+"-switch";
+    if (m_kylinNmSettings->contains(conf_name))
+        return m_kylinNmSettings->value(conf_name).toBool();
+    else
+        return true;//111
 }
 
-bool KynmSystemDbus::getSwitch()
-{
-    return switchSetting->value("switch").toBool();
-}

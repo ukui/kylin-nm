@@ -96,7 +96,7 @@ private:
                             QListWidget *vpnListWidget);
     void deleteConnectionMapItem(QMap<QString, QListWidgetItem *> &connectMap,
                                  QListWidget *vpnListWidget, QString uuid);
-
+    void slideWindowByPanelPosition();
     void resetWindowPosition();
     void resetListWidgetWidth();
 
@@ -127,12 +127,14 @@ private:
     QMap<QString, QListWidgetItem *> m_vpnItemMap;
     QMap<QString, QListWidgetItem *> m_activeItemMap;
 
+
     //获取任务栏位置和大小
     QGSettings *m_panelGSettings = nullptr;
     int m_panelPosition;
     int m_panelSize;
-    QDBusInterface * m_positionInterface = nullptr;
-
+    int m_panelType;
+    int m_settingsIslandPosition;
+    int m_topbarSize;
 
 
 public Q_SLOTS:

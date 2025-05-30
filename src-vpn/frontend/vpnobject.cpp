@@ -40,6 +40,7 @@ vpnObject::~vpnObject()
 void vpnObject::initUI()
 {
     m_vpnPage = new VpnPage(nullptr);
+    kdk::UkuiStyleHelper::self()->removeHeader(m_vpnPage);
     m_vpnPage->update();
 
 }
@@ -47,8 +48,8 @@ void vpnObject::initUI()
 void vpnObject::initTrayIcon()
 {
     m_vpnTrayIcon = new QSystemTrayIcon(this);
-    m_vpnTrayIcon->setToolTip(QString(tr("vpn tool")));
-    m_vpnTrayIcon->setIcon(QIcon::fromTheme("ukui-vpn-symbolic"));
+    m_vpnTrayIcon->setToolTip(QString(tr("VPN Tool")));
+    m_vpnTrayIcon->setIcon(QIcon::fromTheme("network-vpn-symbolic"));
     m_vpnTrayIcon->setVisible(true);
     initVpnIconVisible();
     connect(m_vpnTrayIcon, &QSystemTrayIcon::activated, this, &vpnObject::onTrayIconActivated);
@@ -118,7 +119,6 @@ void vpnObject::showDetailPage(const QString& connUuid)
 
 void vpnObject::onShowMainWindow()
 {
-    kdk::UkuiStyleHelper::self()->removeHeader(m_vpnPage);
     m_vpnPage->showUI();
 }
 

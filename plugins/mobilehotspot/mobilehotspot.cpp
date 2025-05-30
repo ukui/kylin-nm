@@ -101,6 +101,18 @@ void MobileHotspot::initSearchText()
     tr("mobilehotspot");
     //~ contents_path /mobilehotspot/mobilehotspot open
     tr("mobilehotspot open");
+    //~ contents_path /mobilehotspot/Mobile Hotspot
+    tr("Mobile Hotspot");
+    //~ contents_path /mobilehotspot/Open mobile hotspot
+    tr("Open mobile hotspot");
+    //~ contents_path /mobilehotspot/Wi-Fi Name
+    tr("Wi-Fi Name");
+    //~ contents_path /mobilehotspot/Network Password
+    tr("Network Password");
+    //~ contents_path /mobilehotspot/Network Frequency band
+    tr("Network Frequency band");
+    //~ contents_path /mobilehotspot/Shared NIC port
+    tr("Shared NIC port");
 }
 
 bool MobileHotspot::isExitWirelessDevice()

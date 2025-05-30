@@ -993,7 +993,7 @@ nm_strstrip_avoid_copy (const char *str, char **str_free)
         return NULL;
 
     str = nm_str_skip_leading_spaces (str);
-    l = strnlen (str, sizeof(strnlen));
+    l = strnlen (str, sizeof(str));
     if (   l == 0
         || !g_ascii_isspace (str[l - 1]))
         return str;

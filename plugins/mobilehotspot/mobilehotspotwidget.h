@@ -101,6 +101,13 @@ private:
     QString m_uuid = "";
     QString m_hostName = "";
 
+
+    QLabel *m_statusLabel;
+    QTimer *m_waitTimer = nullptr;
+    QList<QIcon> m_loadIcons;
+    int m_currentIconIndex=0;
+    void updateLoadingIcon();
+
     void resetFrameSize();
     void initUI();
     void initDbusConnect();
@@ -166,6 +173,9 @@ private slots:
     void onPwdTextChanged();
 
     void onInterfaceChanged();
+
+    void startLoading();
+    void stopLoading();
 };
 
 #endif // MOBILEHOTSPOTWIDGET_H

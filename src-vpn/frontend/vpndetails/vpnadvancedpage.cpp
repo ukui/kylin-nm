@@ -1123,7 +1123,7 @@ void VpnAdvancedPage::initOpenVpnAdiaFrame()
     m_verifyPeerCertCombox->addItem(tr("Server"), KYVPNCERT_SERVER);
     m_verifyPeerCertCombox->addItem(tr("Client"), KYVPNCERT_CLIENT);
 
-    m_tlsModeCombox->addItem(tr("None"), NONE); //无
+    m_tlsModeCombox->addItem(tr("None"), TlsMode::NONE); //无
     m_tlsModeCombox->addItem(tr("TLS-Certification"), TLS_CERT); //TLS-认证
     m_tlsModeCombox->addItem(tr("TLS-Encryption"), TLS_ENCRYPTION); //TLS-加密
 
@@ -1345,7 +1345,7 @@ void VpnAdvancedPage::onProxyTypeComboxIndexChanged()
 void VpnAdvancedPage::onTlsModeComboxIndexChanged()
 {
     switch (m_tlsModeCombox->currentData().toInt()) {
-    case NONE:
+    case TlsMode::NONE:
         m_keyPathLabel->setEnabled(false);
         m_keyPathEdit->setEnabled(false);
         m_keyPathChooseBtn->setEnabled(false);

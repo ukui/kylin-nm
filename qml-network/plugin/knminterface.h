@@ -1,0 +1,125 @@
+#ifndef KNMINTERFACE_H
+#define KNMINTERFACE_H
+
+#include <QObject>
+#include <QList>
+#include <QMap>
+#include <QString>
+#include <QVariantList>
+#include <QIcon>
+#include <QtDBus/QtDBus>
+#include <QTimer>
+
+#include "CSingleton.h"
+
+//前端接口类，用于调取keeper数据并展示在前端
+class KnmInterface : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QVariantList wiredDevList READ wiredDeviceList NOTIFY updateWiredDeviceList)
+    Q_PROPERTY(QVariantList wirelessDevList READ wirelessDeviceList NOTIFY updateWirelessDeviceList)
+    Q_PROPERTY(QVariantList wiredConList READ wiredDevConnList NOTIFY updateWiredDevConnList)
+    Q_PROPERTY(QVariantList wirelessConList READ wirelessDevConnList NOTIFY updateWirelessDevConnList)
+    Q_PROPERTY(bool wirelessSwitch READ wirelessSwitchState WRITE setWirelessSwitch  NOTIFY updateWirelessSwitch)
+    Q_PROPERTY(bool wiredMainSwitch READ wiredMainSwitchState WRITE setWiredMainSwitch  NOTIFY updateWiredMainSwitch)
+
+public:
+    KnmInterface();
+
+    ~KnmInterface();
+
+public slots:
+    QVariantList wiredDeviceList();
+
+    QVariantList wirelessDeviceList();
+
+    QVariantList wiredDevConnList();
+
+    QVariantList wirelessDevConnList();
+
+    bool wirelessSwitchState();
+
+    bool wiredMainSwitchState();
+
+    QVariant getLoadingIcon();
+
+    void setWiredMainSwitch(bool switched);
+
+    void setWirelessSwitch(bool switched);
+
+    void rescanWirelessConn();
+
+    void openNetworkSetting();
+
+    //用于切换网卡设备时显示的连接列表更新
+    void getWiredDevConnList(QString devName);
+
+    void getWiredDevConnList();
+
+    void getWirelessDevConnList(QString devName);
+
+    void getWirelessDevConnList();
+
+    QString getIconData(QString name, int size = 16);
+
+    void activateConnect(QString devName, QString conUid, int type);
+
+    void deActivateConnect(QString devName, QString conUid, int type);
+
+    void passwordConnect(QString devName,
+                         QString ssid,
+                         QString type,
+                         QString psk,
+                         bool autoConnect);
+
+    QVariant getWiFiIcon(QString signalStrength,
+                        QString security,
+                        QString isApConnection,
+                        int category);
+
+
+
+signals:
+    void updateWiredDeviceList();
+
+    void updateWirelessDeviceList();
+
+    void updateWiredDevConnList();
+
+    void updateWirelessDevConnList();
+
+    void updateWiredMainSwitch();
+
+    void updateWirelessSwitch();
+
+    void updateLoadingIcon(QVariant icon);
+
+    void updateUpLoadWiredStr(QString str);
+
+    void updateUpLoadWirelessStr(QString str);
+
+    void updateDownLoadWiredStr(QString str);
+
+    void updateDownLoadWirelessStr(QString str);
+
+private:
+    QVariantList m_wiredDevConnList;
+
+    QVariantList m_wirelessDevConnList;
+
+    QString m_currentWiredDevice;
+
+    QString m_currentWirelessDevice;
+
+    int loadCount = 0;
+
+    QTimer *loadTimer = nullptr;
+
+    QProcess * m_pProcess = nullptr;
+
+    friend class SingleTon<KnmInterface>;
+};
+
+typedef SingleTon<KnmInterface>  KInterface;
+
+#endif // KNMINTERFACE_H

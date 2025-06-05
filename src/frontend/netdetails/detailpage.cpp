@@ -146,7 +146,7 @@ void DetailPage::newCopiedTip()
     m_copiedTip->setTipType(Normal);
     m_copiedTip->setContentsMargins(16, 14, 16, 14);
     m_copiedTip->setFixedHeight(48);
-    m_copiedTip->setWindowFlag(Qt::FramelessWindowHint);
+    m_copiedTip->setWindowFlags(Qt::FramelessWindowHint);
     m_copiedTip->setAttribute(Qt::WA_TranslucentBackground, true);
     m_copiedTip->setText(tr("Copied successfully!"));
 }

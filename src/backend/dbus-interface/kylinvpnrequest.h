@@ -43,7 +43,12 @@ struct _SecretsRequest {
 
 
 size_t applet_vpn_request_get_secrets_size(void);
-
+void applet_secrets_request_complete (SecretsRequest *req,
+                                      GVariant *settings,
+                                      GError *error);
+void applet_secrets_request_free (SecretsRequest *req);
+void applet_secrets_request_set_free_func (SecretsRequest *req,
+                                           SecretsRequestFreeFunc free_func);
 gboolean applet_vpn_request_get_secrets(SecretsRequest *req, GError **error);
 
 #endif  /* APPLET_VPN_REQUEST_H */

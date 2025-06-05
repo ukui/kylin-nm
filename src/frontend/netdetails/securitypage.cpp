@@ -285,7 +285,7 @@ void SecurityPage::initUI()
     clientPrivateKeyPwdEdit->setClearButtonEnabled(false);
     userPwdEdit->setClearButtonEnabled(false);
 
-    QRegExp rx("^[\\x20-\\x7E]+$");
+    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
     QRegExpValidator *latitude = new QRegExpValidator(rx, this);
     pwdEdit->setValidator(latitude);
     clientPrivateKeyPwdEdit->setValidator(latitude);
@@ -1126,8 +1126,7 @@ void SecurityPage::onPacBoxClicked()
 
 void SecurityPage::onCaCertPathComboxIndexChanged(QString str)
 {
-    Q_UNUSED(str)
-    if (caCertPathCombox->currentIndex() == 1)
+    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
                                                         tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
@@ -1150,8 +1149,7 @@ void SecurityPage::onCaCertPathComboxIndexChanged(QString str)
 
 void SecurityPage::onClientCertPathComboxIndexChanged(QString str)
 {
-    Q_UNUSED(str)
-    if (clientCertPathCombox->currentIndex() == 1)
+    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
                                                         tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
@@ -1173,8 +1171,7 @@ void SecurityPage::onClientCertPathComboxIndexChanged(QString str)
 
 void SecurityPage::onClientPrivateKeyComboxIndexChanged(QString str)
 {
-    Q_UNUSED(str)
-    if (clientPrivateKeyCombox->currentIndex() == 1)
+    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
                                                         tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));

@@ -33,6 +33,9 @@ QT_END_NAMESPACE
 /*
  * Adaptor class for interface com.kylin.weather
  */
+#define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
+#define SYSTEM_DBUS_PATH  "/"
+#define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
 
 #include "mainwindow.h"
 
@@ -81,6 +84,8 @@ public Q_SLOTS: // METHODS
     void activeWirelessAp(const QString apName, const QString apPassword, const QString band, const QString apDevice);
     //断开热点
     void deactiveWirelessAp(const QString apName, const QString uuid);
+    //连接新wifi
+    void passwordConnect(QString devName, QString ssid, QString type, QString psk, bool autoConnect);
     //获取热点
     QStringList getStoredApInfo();
     QStringList getApInfoBySsid(QString devName, QString ssid);
@@ -95,7 +100,7 @@ public Q_SLOTS: // METHODS
     void showKylinNM(int type);
 
     bool getWirelessSwitchBtnState();
-
+    bool getWiredMainSwitchBtnState();
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);
 //    void wiredActivating(QString devName, QString ssid);
@@ -114,6 +119,7 @@ Q_SIGNALS: // SIGNALS
     void wirelessDeviceStatusChanged();
     void deviceNameChanged(QString oldName, QString newName, int type);
     void wirelessSwitchBtnChanged(bool state);
+    void wiredMainSwitchBtnChanged(bool state);
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
     //热点连接
@@ -124,8 +130,6 @@ Q_SIGNALS: // SIGNALS
     void secuTypeChange(QString devName, QString ssid, QString secuType);
     //列表排序
     void timeToUpdate();
-
-
 
     void showKylinNMSignal(QString display, int type);
 
@@ -141,6 +145,8 @@ private:
     QString m_display;
     QDBusServiceWatcher *m_watcher = nullptr;
     NetworkAdaptor* mNetworkAdaptor=nullptr;
+    QDBusInterface *m_pSysBusInterfaces;
+
     QString checkDisplay();
     QString displayFromPid(uint pid);
     void connectToMainwindow();

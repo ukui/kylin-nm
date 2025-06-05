@@ -166,6 +166,10 @@ void WlanListItem::onRightButtonClicked()
 {
     qDebug()<< LOG_FLAG <<"onRightButtonClicked";
 
+    if (m_hoverButton->isVisible()) {
+        m_hoverButton->hide();
+    }
+
     if (!m_menu) {
         return;
     }
@@ -299,7 +303,7 @@ void WlanListItem::initWlanUI()
 //    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
 //    m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
-    QRegExp rx("^[\\x20-\\x7E]+$");
+    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
     QRegExpValidator *latitude = new QRegExpValidator(rx, this);
     m_pwdLineEdit->setValidator(latitude);
 

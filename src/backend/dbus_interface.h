@@ -36,6 +36,12 @@ public:
     ~ComKylinNetworkInterface();
 
 public Q_SLOTS: // METHODS
+    inline Q_NOREPLY void deleteConnect(int type, const QString ssid)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(type) << QVariant::fromValue(ssid);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("deleteConnect"), argumentList);
+    }
     inline Q_NOREPLY void activateConnect(int type, const QString &devName, const QString &ssid)
     {
         QList<QVariant> argumentList;
@@ -123,7 +129,11 @@ public Q_SLOTS: // METHODS
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QStringLiteral("getWirelessSwitchBtnState"), argumentList);
     }
-
+    inline QDBusPendingReply<bool> getWiredMainSwitchBtnState()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QStringLiteral("getWiredMainSwitchBtnState"), argumentList);
+    }
     inline QDBusPendingReply<> keyRingClear()
     {
         QList<QVariant> argumentList;
@@ -140,6 +150,17 @@ public Q_SLOTS: // METHODS
     {
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QStringLiteral("reScan"), argumentList);
+    }
+
+    inline Q_NOREPLY void passwordConnect(QString devName, QString ssid, QString type, QString psk, bool autoConnect)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(devName)
+                     << QVariant::fromValue(ssid)
+                     << QVariant::fromValue(type)
+                     << QVariant::fromValue(psk)
+                     << QVariant::fromValue(autoConnect);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("passwordConnect"), argumentList);
     }
 
     inline Q_NOREPLY void setDeviceEnable(const QString &devName, bool enable)

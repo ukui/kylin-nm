@@ -19,7 +19,6 @@
  */
 #include "lanpage.h"
 #include "kwindowsystem.h"
-#include "windowmanager/windowmanager.h"
 #include "kwindowsystem_export.h"
 #include <QDebug>
 #include <QScrollBar>
@@ -34,22 +33,9 @@
 #define TRANSPARENT_COLOR QColor(0,0,0,0)
 #define ITEM_HEIGHT 48
 
-#define MARGIN 8
-#define PANEL_TOP 1
-#define PANEL_LEFT 2
-#define PANEL_RIGHT 3
-#define PANEL_BOTTOM 0
-
-#define PANEL_SETTINGS                      "org.ukui.panel.settings"
-#define PANEL_SIZE_KEY                      "panelsize"
-#define PANEL_POSITION_KEY                  "panelposition"
-
-#define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
-#define SYSTEM_DBUS_PATH  "/"
-#define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
-
 #define LOG_FLAG "[LanPage]"
-
+#include "windowmanager/windowmanager.h"
+using namespace kdk;
 const QString EMPTY_CONNECT_UUID = "emptyconnect";
 
 const QString WIRED_SWITCH = "wiredswitch";
@@ -60,13 +46,11 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     m_connectResourse = new KyConnectResourse(this);
     m_deviceResource = new KyNetworkDeviceResourse(this);
     m_wiredConnectOperation = new KyWiredConnectOperation(this);
-    m_pNetTip = new KBallonTip();
 
     initUI();
     initLanDevice();
-    initNetSwitch();
+//    initNetSwitch();
     initLanDeviceState();
-    initPanelGSettings();
 
     initDeviceCombox();
     initLanArea();
@@ -91,54 +75,21 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     connect(m_deviceResource, &KyNetworkDeviceResourse::carrierChanage, this, &LanPage::onDeviceCarriered);
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceActiveChanage, this, &LanPage::onDeviceActiveChanage);
     connect(m_deviceResource, &KyNetworkDeviceResourse::deviceManagedChange, this, &LanPage::onDeviceManagedChange);
-    connect(m_deviceResource, &KyNetworkDeviceResourse::stateChanged, this, &LanPage::onLanStateChanged);
 
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::activateConnectionError, this, &LanPage::activateFailed);
     connect(m_wiredConnectOperation, &KyWiredConnectOperation::deactivateConnectionError, this, &LanPage::deactivateFailed);
-    connect(m_wiredConnectOperation, &KyWiredConnectOperation::wiredEnabledChanged, this, &LanPage::onWiredEnabledChanged);\
-    connect(m_netSwitch, &KSwitchButton::clicked, this, [=](bool checked) {
-        if (!m_pSysBusIntfs->isValid())
-        {
-            m_pSysBusIntfs = new QDBusInterface(SYSTEM_DBUS_SERVICE,
-                                                SYSTEM_DBUS_PATH,
-                                                SYSTEM_DBUS_INTERFACE,
-                                                QDBusConnection::systemBus());
-
-            if (m_devList.count() == 0 || !m_pSysBusIntfs->isValid()) {
-                this->showDesktopNotify(tr("No ethernet device avaliable"), "networkwrong");
-                m_netSwitch->setChecked(false);
-                m_netSwitch->setCheckable(false);
-                return;
-            }
-        }
-
-        m_pSysBusIntfs->call("setSwitch", checked);
-        m_netSwitch->setChecked(checked);
-        if (!checked && !m_activeConnectionMap.contains(EMPTY_CONNECT_UUID))
-        {
-            QStringList keys = m_activeConnectionMap.keys();
-            for(int i = 0; i < keys.count(); i++)
-            {
-                QListWidgetItem *p_listWidgetItem = m_activeConnectionMap.value(keys.at(i));
-                LanListItem *p_lanItem = (LanListItem *)m_activatedLanListWidget->itemWidget(p_listWidgetItem);
-                m_wiredConnectOperation->deactivateConnection(p_lanItem->getConnectionName(), keys.at(i));
-            }
-        }
-
-        initLanDeviceState();
-        initDeviceCombox();
-        initLanArea();
+    connect(m_wiredConnectOperation, &KyWiredConnectOperation::wiredEnabledChanged, this, &LanPage::onWiredEnabledChanged);
+    m_netSwitch->hide();
+//    connect(m_netSwitch, &KSwitchButton::clicked, this, [=](bool checked) {
+//        m_netSwitch->setChecked(!checked);
 //        m_wiredConnectOperation->setWiredEnabled(checked);
-    });
+//    });
     m_lanPagePtrMap.clear();
 }
 
 LanPage::~LanPage()
 {
-    if (m_pNetTip != nullptr) {
-        delete m_pNetTip;
-        m_pNetTip = nullptr;
-    }
+
 }
 
 void LanPage::initLanDevice()
@@ -229,79 +180,26 @@ void LanPage::initNetSwitch()
 //    qDebug() << "[wiredSwitch]:init state:" << wiredEnable;
 
 //    m_netSwitch->setChecked(wiredEnable);
-    m_pSysBusIntfs = new QDBusInterface(SYSTEM_DBUS_SERVICE,
-                                        SYSTEM_DBUS_PATH,
-                                        SYSTEM_DBUS_INTERFACE,
-                                        QDBusConnection::systemBus());
-
-    if (m_devList.count() == 0 || !m_pSysBusIntfs->isValid()) {
-        this->showDesktopNotify(tr("No ethernet device avaliable"), "networkwrong");
-        m_netSwitch->setChecked(false);
-        m_netSwitch->setCheckable(false);
-        return;
-    }
-    QDBusConnection::systemBus().connect(SYSTEM_DBUS_SERVICE,
-                                         SYSTEM_DBUS_PATH,
-                                         SYSTEM_DBUS_INTERFACE,
-                                         "switchChanged",
-                                         this,
-                                         SLOT(onSwithChanged(bool)));
-
-    QDBusReply <bool> reply = m_pSysBusIntfs->call("getSwitch");
-    if (reply.isValid()) {
-        bool enabled = reply.value();
-        m_netSwitch->setChecked(enabled);
-    } else {
-        qWarning () << "switch init dbus reply invalid";
-        m_netSwitch->setChecked(false);
-    }
 }
 
-void LanPage::initPanelGSettings()
+void LanPage::onSwithGsettingsChanged(const QString &key)
 {
-    const QByteArray id(PANEL_SETTINGS);
-    if (QGSettings::isSchemaInstalled(id)) {
-        if (m_panelGSettings == nullptr) {
-            m_panelGSettings = new QGSettings(id);
-        }
-        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY)) {
-            m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
-        }
-        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY)) {
-            m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
-        }
-        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key) {
-            if (key == PANEL_POSITION_KEY) {
-                m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+//    if (key == WIRED_SWITCH) {
 
-            }
-            if (key == PANEL_SIZE_KEY) {
-                m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
-            }
-        });
-    }
-}
+//        bool wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
+//        qDebug()<<"[LanPage] SwitchButton statue changed to:" << wiredSwitch << m_netSwitch->isChecked();
 
-void LanPage::onSwithChanged(bool enable)
-{
-    qDebug()<<"[LanPage] SwitchButton statue changed to:" << enable << m_netSwitch->isChecked();
-    if (m_netSwitch->isChecked() == enable)
-        return;
-    m_netSwitch->setChecked(enable);
-    if (!enable && !m_activeConnectionMap.contains(EMPTY_CONNECT_UUID))
-    {
-        QStringList keys = m_activeConnectionMap.keys();
-        for(int i = 0; i = keys.count(); i++)
-        {
-            QListWidgetItem *p_listWidgetItem = m_activeConnectionMap.value(keys.at(i));
-            LanListItem *p_lanItem = (LanListItem *)m_activatedLanListWidget->itemWidget(p_listWidgetItem);
-            m_wiredConnectOperation->deactivateConnection(p_lanItem->getConnectionName(), keys.at(i));
-        }
-    }
+//        if (wiredSwitch != m_wiredConnectOperation->getWiredEnabled()) {
+//            m_wiredConnectOperation->setWiredEnabled(wiredSwitch);
+//            return;
+//        }
 
-    initLanDeviceState();
-    initDeviceCombox();
-    initLanArea();
+//        m_netSwitch->setChecked(wiredSwitch);
+
+//        initLanDeviceState();
+//        initDeviceCombox();
+//        initLanArea();
+//    }
 }
 
 void LanPage::getEnabledDevice(QStringList &enableDeviceList)
@@ -499,7 +397,7 @@ void LanPage::constructConnectionArea()
 
 void LanPage::initLanArea()
 {
-    if (!m_netSwitch->isChecked() || m_currentDeviceName.isEmpty()) {
+    if (/*!m_netSwitch->isChecked() || */m_currentDeviceName.isEmpty()) {
         m_activatedNetDivider->hide();
         m_activatedNetFrame->hide();
 
@@ -513,13 +411,11 @@ void LanPage::initLanArea()
         constructConnectionArea();
     }
 
-/* 冗余代码，版本差异造成切换网卡时stop了速度显示的定时器
     if (!m_activeConnectionMap.isEmpty() && !m_activeConnectionMap.contains(EMPTY_CONNECT_UUID) && !setNetSpeed->isActive()) {
         setNetSpeed->start();
     } else {
         setNetSpeed->stop();
     }
-*/
 }
 
 bool LanPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
@@ -649,11 +545,11 @@ void LanPage::onDeviceAdd(QString deviceName, NetworkManager::Device::Type devic
         return;
     }
 
-    if (m_devList.count() == 0) {// 有线网卡从无到有，打开开关
-        bool wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
-        m_netSwitch->setCheckable(true);
-        m_netSwitch->setChecked(wiredSwitch);
-    }
+//    if (m_devList.count() == 0) {// 有线网卡从无到有，打开开关
+//        bool wiredSwitch = m_switchGsettings->get(WIRED_SWITCH).toBool();
+//        m_netSwitch->setCheckable(true);
+//        m_netSwitch->setChecked(wiredSwitch);
+//    }
 
     qDebug() << "[LanPage] Begin add device:" << deviceName;
 
@@ -740,11 +636,11 @@ void LanPage::onDeviceRemove(QString deviceName)
     qDebug() << "[LanPage] deviceRemove:" << deviceName;
 
     m_devList.removeOne(deviceName);
-    if (m_devList.count() == 0) {
-        m_netSwitch->setChecked(false);
-        m_netSwitch->setCheckable(false);
-        qDebug() << "[wiredSwitch]set not enable after device remove";
-    }
+//    if (m_devList.count() == 0) {
+//        m_netSwitch->setChecked(false);
+//        m_netSwitch->setCheckable(false);
+//        qDebug() << "[wiredSwitch]set not enable after device remove";
+//    }
 
     QString nowDevice = m_currentDeviceName;
     deleteDeviceFromCombox(deviceName);
@@ -833,7 +729,6 @@ void LanPage::onDeviceManagedChange(QString deviceName, bool managed)
     initLanDeviceState();
     initDeviceCombox();
     initLanArea();
-    m_showedNetTipFlag = false;
     Q_EMIT deviceStatusChanged();
 }
 
@@ -891,7 +786,7 @@ void LanPage::initUI()
     m_inactivatedLanListWidget->setPalette(pal);
 
     m_settingsLabel->installEventFilter(this);
-    m_netSwitch->installEventFilter(this);
+//    m_netSwitch->installEventFilter(this);
     m_activatedLanListWidget->installEventFilter(this);
     m_inactivatedLanListWidget->installEventFilter(this);
 
@@ -1228,7 +1123,6 @@ void LanPage::updateActiveConnectionProperty(KyConnectItem *p_connectItem)
         } else {
             if (p_lanItem->getConnectionName() != p_connectItem->m_connectName) {
                 p_lanItem->updateConnectionName(p_connectItem->m_connectName);
-                Q_EMIT activeConnNameChanged();
             }
 
             if (p_lanItem->getConnectionName() != p_connectItem->m_connectPath) {
@@ -1298,7 +1192,7 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
         if (event->type() == QEvent::MouseButtonRelease) {
             onShowControlCenter();
         }
-    } else if(watched == m_netSwitch){
+    }/* else if(watched == m_netSwitch){
         if (event->type() == QEvent::MouseButtonRelease) {
             qDebug()<<"[LanPage] On lan switch button clicked! Status:" <<m_netSwitch->isChecked()
                    <<"devices count:"<<m_devList.count();
@@ -1310,7 +1204,7 @@ bool LanPage::eventFilter(QObject *watched, QEvent *event)
             }
         }
 
-    } else if (watched == m_activatedLanListWidget) {
+    }*/ else if (watched == m_activatedLanListWidget) {
         //去掉无右键菜单显示时的选中效果
         if (event->type() ==  QEvent::FocusIn) {
             if (m_activatedLanListWidget->currentItem() != nullptr) {
@@ -1395,8 +1289,9 @@ void LanPage::showDetailPage(QString devName, QString uuid)
     netDetail->show();
     KWindowSystem::raiseWindow(netDetail->winId());
     netDetail->centerToScreen();
-    kdk::WindowManager::setSkipTaskBar(netDetail->windowHandle(),true);
-    kdk::WindowManager::setSkipSwitcher(netDetail->windowHandle(),true);
+    kdk::WindowManager::setSkipSwitcher(netDetail->windowHandle(), true);
+    kdk::WindowManager::setSkipTaskBar(netDetail->windowHandle(), true);
+    kdk::WindowManager::setIconName(netDetail->windowHandle(), "kylin-network");
 
     connect(netDetail, &NetDetail::detailPageClose, [&](QString deviceName, QString lanName, QString lanUuid){
         if (lanUuid.isEmpty()) {
@@ -1471,105 +1366,4 @@ void LanPage::showRate()
     connect(setNetSpeed, &QTimer::timeout,  [&]() {
         onSetNetSpeed(m_activatedLanListWidget, m_activeConnectionMap.contains(EMPTY_SSID), m_currentDeviceName);
     });
-}
-
-void LanPage::onLanStateChanged(NetworkManager::Device::State newstate,
-                                NetworkManager::Device::State oldstate,
-                                NetworkManager::Device::StateChangeReason reason)
-{
-    if (newstate == NetworkManager::Device::Failed
-        && reason == NetworkManager::Device::StateChangeReason::ConfigUnavailableReason)
-    {
-        if (!m_showedNetTipFlag)
-        {
-            showBallonTip();
-            m_showedNetTipFlag = true;
-        }
-    }
-}
-
-void LanPage::onShowKylinNetworkCheck()
-{
-    QProcess process;
-    process.startDetached("kylin-os-manager --diagnosis --mode=Network");
-}
-
-void LanPage::showBallonTip()
-{
-    QString warnInfo = tr("No internet access. Please click Network Check to specific reason.");
-
-    if (m_pNetTip != nullptr) {
-        delete m_pNetTip;
-        m_pNetTip = nullptr;
-    }
-    m_pNetTip = new KBallonTip();
-    QPushButton *btn = new QPushButton(m_pNetTip);
-    btn->setText(tr("Network Check"));
-    connect(btn, &QPushButton::clicked, m_pNetTip, [=]{
-        m_pNetTip->close();
-        onShowKylinNetworkCheck();
-    });
-
-    m_pNetTip->setAttribute(Qt::WA_TranslucentBackground, true);
-    m_pNetTip->setTipType(TipType::Warning);
-    m_pNetTip->hBoxLayout()->setContentsMargins(16, 6, 10, 6);
-    m_pNetTip->hBoxLayout()->setSpacing(4);
-    m_pNetTip->hBoxLayout()->addSpacing(4);
-    m_pNetTip->hBoxLayout()->addWidget(btn);
-    m_pNetTip->setTipTime(9 * 1000);
-    m_pNetTip->setText(warnInfo);
-
-    QPalette pal = m_pNetTip->palette();
-    pal.setColor(QPalette::Window, this->palette().window().color());
-    pal.setColor(QPalette::WindowText, this->palette().windowText().color());
-    m_pNetTip->setPalette(pal);
-
-    QPalette btnPal = btn->palette();
-    btnPal.setColor(QPalette::Text, this->palette().text().color());
-    btnPal.setColor(QPalette::Button, this->palette().button().color());
-    btn->setPalette(btnPal);
-
-    m_pNetTip->adjustSize();
-    KWindowSystem::setState(m_pNetTip->winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
-    QRect rect = caculatePositionWithPanel(m_pNetTip->width() - 8, m_pNetTip->height() - 4);
-    m_pNetTip->setGeometry(rect);
-    m_pNetTip->showInfo();
-}
-
-QRect LanPage::caculatePositionWithPanel(const int windowWidth, const int windowHeight)
-{
-    int x,y;
-    QScreen * qscreen = QGuiApplication::screenAt(QCursor::pos());
-    QRect availableGeo = qscreen->geometry();
-    QString currentScreen = WindowManager::currentOutputName();
-    for (auto screen : QApplication::screens()) {
-        if (screen && screen->name() == currentScreen) {
-            availableGeo = screen->geometry();
-        }
-    }
-    switch (m_panelPosition)
-    {
-    case PANEL_TOP:
-        x = availableGeo.x() + availableGeo.width() - windowWidth - MARGIN;
-        y = availableGeo.y() + m_panelSize + MARGIN;
-        break;
-    case PANEL_BOTTOM:
-        x = availableGeo.x() + availableGeo.width() - windowWidth - MARGIN;
-        y = availableGeo.y() + availableGeo.height() - m_panelSize - windowHeight - MARGIN;
-        break;
-    case PANEL_LEFT:
-        x = availableGeo.x() + m_panelSize + MARGIN;
-        y = availableGeo.y() + availableGeo.height() - windowHeight - MARGIN;
-        break;
-    case PANEL_RIGHT:
-        x = availableGeo.x() + availableGeo.width() - m_panelSize - windowWidth - MARGIN;
-        y = availableGeo.y() + availableGeo.height() - windowHeight - MARGIN;
-        break;
-    default:
-        x = availableGeo.x() + availableGeo.width() - windowWidth - MARGIN;
-        y = availableGeo.y() + availableGeo.height() - m_panelSize - windowHeight - MARGIN;
-        break;
-    }
-
-    return QRect(x, y, windowWidth, windowHeight);
 }

@@ -66,7 +66,7 @@ int KyIpv6Arping::getLocalMacAddress(const char *ifname, unsigned char *addr)
         return -1; /* buffer overflow = local root */
     }
 
-    strncpy (req.ifr_name, ifname, qstrlen (ifname));
+    memcpy(req.ifr_name, ifname, sizeof(ifname));
 
     int fd = socket (AF_INET6, SOCK_DGRAM, 0);
     if (fd == -1) {

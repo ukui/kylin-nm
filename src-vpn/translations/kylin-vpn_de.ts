@@ -833,7 +833,7 @@ Wenn die Schlüsselrichtung verwendet wird, muss sie der verwendeten VPN-Seite e
     <name>vpnObject</name>
     <message>
         <location filename="../frontend/vpnobject.cpp" line="50"/>
-        <source>vpn tool</source>
+        <source>VPN Tool</source>
         <translation>VPN-Tool</translation>
     </message>
 </context>

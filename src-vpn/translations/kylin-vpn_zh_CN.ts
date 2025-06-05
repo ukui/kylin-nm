@@ -775,7 +775,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/single-pages/vpnpage.cpp" line="264"/>
         <source>VPN Settings</source>
-        <translation>VPN 设置</translation>
+        <translation>更多 VPN 设置</translation>
     </message>
 </context>
 <context>
@@ -833,7 +833,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <name>vpnObject</name>
     <message>
         <location filename="../frontend/vpnobject.cpp" line="50"/>
-        <source>vpn tool</source>
+        <source>VPN Tool</source>
         <translation>VPN 工具</translation>
     </message>
 </context>

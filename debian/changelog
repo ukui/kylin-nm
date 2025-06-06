@@ -1,3 +1,12 @@
+kylin-nm (4.20.0.0-ok0.3) nile; urgency=medium
+
+  * Bug号:无
+  * 需求号:无
+  * 其他改动说明:构建 nile-sp2 版本
+  * 其他改动影响域:无
+
+ -- yusq77 <yushuoqi@kylinos.cn>  Thu, 05 Jan 2025 16:53:32 +0800
+
 kylin-nm (4.10.0.0-ok0.18) nile; urgency=medium
 
   * Bug号:无

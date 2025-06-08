@@ -6,7 +6,7 @@
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="44"/>
         <source>Add Others</source>
-        <translation>Thêm tùy chọn khác</translation>
+        <translation>Tham gia vào mạng khác</translation>
     </message>
     <message>
         <location filename="../../component/AddBtn/addnetbtn.cpp" line="48"/>

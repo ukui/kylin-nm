@@ -1629,7 +1629,7 @@
     <message>
         <location filename="../main.cpp" line="127"/>
         <source>show kylin-nm wifi page</source>
-        <translation type="unfinished"></translation>
+        <translation>显示麒麟网络管理器的 Wi-Fi 页面</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="128"/>

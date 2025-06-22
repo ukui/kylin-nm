@@ -1,0 +1,25 @@
+From: liu-7xin <19567271858@163.com>
+Date: Sun, 22 Jun 2025 00:52:09 +0000
+Subject: Translated using Weblate (Chinese (Simplified))
+
+Currently translated at 98.9% (195 of 197 strings)
+
+Translation: openkylin-nile-new/kylin-nm
+Translate-URL: http://weblate.openkylin.top/projects/openkylin-nile-new/kylin-nm/zh_Hans/
+---
+ src/translations/kylin-nm_zh_CN.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/translations/kylin-nm_zh_CN.ts b/src/translations/kylin-nm_zh_CN.ts
+index 93e985a..261e77e 100644
+--- a/src/translations/kylin-nm_zh_CN.ts
++++ b/src/translations/kylin-nm_zh_CN.ts
+@@ -1629,7 +1629,7 @@
+     <message>
+         <location filename="../main.cpp" line="127"/>
+         <source>show kylin-nm wifi page</source>
+-        <translation type="unfinished"></translation>
++        <translation>显示麒麟网络管理器的 Wi-Fi 页面</translation>
+     </message>
+     <message>
+         <location filename="../main.cpp" line="128"/>

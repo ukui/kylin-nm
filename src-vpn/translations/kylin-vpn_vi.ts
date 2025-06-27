@@ -6,17 +6,17 @@
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="79"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Cài đặt</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="141"/>
         <source>Kylin VPN</source>
-        <translation type="unfinished"></translation>
+        <translation>Công cụ VPN</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="144"/>
         <source>kylin vpn applet desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>Nhắc cấu hình VPN trên màn hình</translation>
     </message>
 </context>
 <context>
@@ -24,117 +24,117 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="827"/>
         <source>MPPE encryption algorithm:</source>
-        <translation type="unfinished"></translation>
+        <translation>Thuật toán mã hóa MPPE:</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="828"/>
         <source>Use Stateful encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng mã hóa có trạng thái</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="829"/>
         <source>Send PPP echo packets</source>
-        <translation type="unfinished"></translation>
+        <translation>Gửi gói PPP echo</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="830"/>
         <source>Authentication Mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Phương thức xác thực:</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="831"/>
         <source>PAP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác thực PAP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="832"/>
         <source>CHAP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác thực CHAP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="833"/>
         <source>MSCHAP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác thực MSCHAP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="834"/>
         <source>MSCHAP2 authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác thực MSCHAP2</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="835"/>
         <source>EAP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác thực EAP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="836"/>
         <source>Compression Mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Phương thức nén:</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="837"/>
         <source>Allow BSD data compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Cho phép nén BSD</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="838"/>
         <source>Allow Default data compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Cho phép nén mặc định</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="839"/>
         <source>Allow TCP header compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Cho phép nén tiêu đề TCP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="840"/>
         <source>Use protocol field compression negotiation</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng thương lượng nén trường giao thức</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="841"/>
         <source>Use Address/Control compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng nén địa chỉ/điều khiển</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="847"/>
         <source>All Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Tùy ý</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="848"/>
         <source>128-bit</source>
-        <translation type="unfinished"></translation>
+        <translation>128-bit</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="849"/>
         <source>40-bit</source>
-        <translation type="unfinished"></translation>
+        <translation>40-bit</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1046"/>
         <source>Use custom gateway port</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng cổng gateway tùy chỉnh</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1047"/>
         <source>Use compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng nén</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1048"/>
         <source>Use a TCP connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng kết nối TCP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1049"/>
         <source>Set virtual device type</source>
-        <translation type="unfinished"></translation>
+        <translation>Đặt loại thiết bị ảo</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1050"/>
         <source>Set virtual device name</source>
-        <translation type="unfinished"></translation>
+        <translation>Đặt tên thiết bị ảo</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1051"/>

@@ -139,67 +139,67 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1051"/>
         <source>Limit TCP Maximum Segment Size(MSS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Giới hạn kích thước phân đoạn TCP tối đa (MSS)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1052"/>
         <source>Randomize remote hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Ngẫu nhiên hóa máy chủ từ xa</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1053"/>
         <source>IPv6 tun link</source>
-        <translation type="unfinished"></translation>
+        <translation>Kết nối IPv6 tun</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1054"/>
         <source>Specify ping interval</source>
-        <translation type="unfinished"></translation>
+        <translation>Chỉ định chu kỳ Ping</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1055"/>
         <source>Specify exit or restart ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Chỉ định Ping thoát hoặc khởi động lại</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1056"/>
         <source>Specify max routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Chỉ định giới hạn tuyến đường</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1057"/>
         <source>Infinite retry on error</source>
-        <translation type="unfinished"></translation>
+        <translation>Thử lại vô hạn khi lỗi</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1058"/>
         <source>Use custom key size</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng kích thước khóa tùy chỉnh</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1059"/>
         <source>Choose</source>
-        <translation type="unfinished"></translation>
+        <translation>Chọn</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1062"/>
         <source>Use custom renegotiation interval</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng khoảng thời gian đàm phán lại tùy chỉnh</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1064"/>
         <source>Use custom tunnel Maximum Transmission Umit(MTU)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng đơn vị truyền tối đa (MTU) đường hầm tùy chỉnh</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1066"/>
         <source>Use custom UDP fragment size</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng kích thước phân mảnh UDP tùy chỉnh</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1068"/>
         <source>Accept authenticated packets from any address (Float)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chấp nhận gói tin đã xác thực từ mọi địa chỉ (Float)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1070"/>

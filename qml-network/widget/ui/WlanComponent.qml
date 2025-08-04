@@ -207,20 +207,21 @@ ListView {
                     onEntered: {
                         if (textEditLayout.visible)
                             return
-                        //console.log("index: " , index)
                         enteritem = true
                         connectBtn.visible = true
-//                                connectBtn.color = (modelData.State === 2) ? "#0f000000" : "#3676F5"
                         speedLabel.visible = false
                     }
                     onExited: {
-                        //console.log("index: " , index)
                         wlanlistView.currentIndex = -1
                         enteritem = false
                         connectBtn.visible = false
                         speedLabel.visible = (modelData.State === 2)
                         nameLabel.visible = true
                         nameStateLabel.visible = false
+                    }
+                    // 点击Item时候焦点聚焦
+                    onClicked: {
+                        textField.forceActiveFocus()
                     }
                 }
             }
@@ -236,7 +237,7 @@ ListView {
                     Layout.leftMargin: 68
                     echoMode: TextInput.Password
                     color:"black"
-//                                focus:true
+                    focus:true
                 }
                 Rectangle {
                     id: pwdConnectBtn

@@ -38,7 +38,7 @@
 #define UKUI_SETTINGS_ISLAND_POSITION_KEY "settingsislandposition"
 #define UKUI_TOPBAR_SIZE_KEY "topbarsize"
 #define UKUI_PANEL_LENGTH_KEY "panellength"
-#define VPN_PAGE_HEIGHT 376
+#define VPN_PAGE_HEIGHT 370
 
 VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
 {
@@ -180,15 +180,9 @@ void VpnPage::resetPageHeight()
 //    m_listFrame->setFixedHeight((count >= 4) ? (MAX_ITEMS * ITEM_HEIGHT + ITEM_SPACE) : (count * ITEM_HEIGHT + ITEM_SPACE));
     m_listFrame->setFixedHeight(VPN_PAGE_HEIGHT);
 
-    if (count == 0) {
-        m_listWidget->setHidden(true);
-        m_listFrame->setHidden(true);
-        m_netDivider->setHidden(true);
-    } else {
-        m_listWidget->show();
-        m_listFrame->show();
-        m_netDivider->show();
-    }
+    m_listWidget->show();
+    m_listFrame->show();
+    m_netDivider->show();
 }
 
 bool VpnPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,

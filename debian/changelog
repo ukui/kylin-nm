@@ -1,12 +1,3 @@
-kylin-nm (4.10.0.0-ok0.17) nile; urgency=medium
-
-  * BUG：无
-  * 需求：无
-  * 其他改动说明：回退被拒绝文件修改
-  * 其他改动影响域：无
-
- -- liweinan <liwenan@kylinos.cn>  Tue, 06 May 2025 14:03:04 +0800
-
 kylin-nm (4.20.0.0-ok0.3) nile; urgency=medium
 
   * Bug号:无

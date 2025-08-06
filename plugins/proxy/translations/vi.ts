@@ -6,7 +6,7 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="43"/>
         <source>Set APT Proxy</source>
-        <translation>Đặt proxy APT</translation>
+        <translation>Thiết lập proxy cho APT</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="60"/>
@@ -16,7 +16,7 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="78"/>
         <source>Port</source>
-        <translation>Cổng</translation>
+        <translation>Cổng máy chủ</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="99"/>
@@ -34,7 +34,7 @@
     <message>
         <location filename="../proxy.cpp" line="63"/>
         <source>Proxy</source>
-        <translation>Proxy</translation>
+        <translation>Đại lý</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="201"/>
@@ -49,7 +49,7 @@
     <message>
         <location filename="../proxy.cpp" line="218"/>
         <source>Auto</source>
-        <translation>Xe ô tô</translation>
+        <translation>Theo hệ thống</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="221"/>
@@ -125,12 +125,12 @@
         <location filename="../proxy.cpp" line="481"/>
         <location filename="../proxy.cpp" line="1059"/>
         <source>Open</source>
-        <translation>Mở</translation>
+        <translation>Bật</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="482"/>
         <source>Server Address : </source>
-        <translation>Địa chỉ máy chủ: </translation>
+        <translation>Địa chỉ máy chủ： </translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="483"/>
@@ -140,7 +140,7 @@
     <message>
         <location filename="../proxy.cpp" line="484"/>
         <source>Edit</source>
-        <translation>Biên tập</translation>
+        <translation>biên soạn</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="586"/>
@@ -209,7 +209,7 @@
     <message>
         <location filename="../proxy.cpp" line="1173"/>
         <source>Save</source>
-        <translation>Cứu</translation>
+        <translation>Lưu</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1245"/>

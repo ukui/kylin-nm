@@ -27,7 +27,7 @@
         <location filename="../wlanconnect.cpp" line="280"/>
         <location filename="../wlanconnect.cpp" line="283"/>
         <source>WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng cục bộ không dây</translation>
     </message>
     <message>
         <location filename="../wlanconnect.ui" line="94"/>
@@ -40,7 +40,7 @@
         <location filename="../wlanconnect.ui" line="147"/>
         <location filename="../wlanconnect.cpp" line="279"/>
         <source>Advanced settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Cài đặt cao cấp</translation>
         <extra-contents_path>/wlanconnect/Advanced settings&quot;</extra-contents_path>
     </message>
     <message>
@@ -54,12 +54,12 @@
     <message>
         <location filename="../wlanconnect.cpp" line="127"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Mục cài đặt</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="130"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>Cài đặt thông báo trên màn hình</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="298"/>
@@ -71,7 +71,7 @@
         <location filename="../wlanconnect.cpp" line="1104"/>
         <location filename="../wlanconnect.cpp" line="1167"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Đã kết nối</translation>
     </message>
     <message>
         <location filename="../wlanconnect.cpp" line="1040"/>

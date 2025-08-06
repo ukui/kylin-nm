@@ -79,6 +79,8 @@ protected slots:
 
     void updateWirelessDeviceMap();
 
+    void updateWirelessDevice();
+
     void updateWiredDeviceMapFinished(QDBusPendingCallWatcher *watcher);
 
     void updateWirelessDeviceMapFinished(QDBusPendingCallWatcher *watcher);

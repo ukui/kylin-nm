@@ -186,16 +186,8 @@ void KnmDataKeeper::netSpeedHandler(QString dev, QString& upLoad, QString& downL
     downLoad = str_rcv;
 }
 
-void KnmDataKeeper::netSpeedInit()
+void KnmDataKeeper::slotSpeedTimeout()
 {
-
-    //定时获取网速
-    m_pSpeedTimer = new QTimer(this);
-    m_pSpeedTimer->setTimerType(Qt::PreciseTimer);
-    m_pSpeedTimer->start(1000);
-
-
-    connect(m_pSpeedTimer, &QTimer::timeout,  [&]() {
     QString upLoad, downLoad;
     netSpeedHandler(m_currentDev, upLoad, downLoad);
     setUpwardRate(upLoad);
@@ -211,9 +203,18 @@ void KnmDataKeeper::netSpeedInit()
         emit KInterface::getInstance()->updateUpLoadWirelessStr(upLoad);
         emit KInterface::getInstance()->updateDownLoadWirelessStr(downLoad);
     }
+}
 
-});
+void KnmDataKeeper::netSpeedInit()
+{
 
+    //定时获取网速
+    m_pSpeedTimer = new QTimer(this);
+    m_pSpeedTimer->setTimerType(Qt::PreciseTimer);
+    m_pSpeedTimer->start(1000);
+
+
+    connect(m_pSpeedTimer, &QTimer::timeout, this,&KnmDataKeeper::slotSpeedTimeout);
 
     // //定时获取网速
     // m_pSpeedTimer = new QTimer(this);

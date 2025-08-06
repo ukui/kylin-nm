@@ -83,7 +83,8 @@ public:
     void forgetPwd();
 
     void setFrequency();
-
+    void onConnectButtonClicked();
+    void onNetButtonClicked();
 protected:
     void resizeEvent(QResizeEvent *event);
     void onRightButtonClicked();
@@ -131,9 +132,9 @@ protected Q_SLOTS:
     void onInfoButtonClicked();
 
 private Q_SLOTS:
-    void onNetButtonClicked();
+
     void onPwdEditorTextChanged();
-    void onConnectButtonClicked();
+
     void onMenuTriggered(QAction *action);
     void onEnterpriseWlanDialogClose(bool isShow);
 };

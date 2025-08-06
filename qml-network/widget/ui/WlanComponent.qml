@@ -212,12 +212,13 @@ ListView {
                             nameLabel.visible = false
                             nameStateLabel.visible = true
                         }
-                        if (model.status !== 2) {
-                            if (listItem.height == 145)
+                        if (model.status !== 2 ) {
+                            if (listItem.height == 145 ||  model.Configured || model.security.includes("802.1X"))
                                 listItem.height = 56
                             else
                                 listItem.height = 145
-                            textEditLayout.visible = !textEditLayout.visible
+                            //textEditLayout.visible = !textEditLayout.visible
+                            textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X"))
                             autoConnectCheckBox.visible = textEditLayout.visible
                             connectBtn.visible = !textEditLayout.visible
                         }

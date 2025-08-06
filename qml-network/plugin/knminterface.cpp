@@ -75,13 +75,11 @@ bool KnmInterface::wiredMainSwitchState()
 
 QString KnmInterface::upwareRateDate()
 {
-    qWarning()<< Q_FUNC_INFO << __LINE__;
     return KNMDC::getInstance()->upwardRateDate();
 }
 
 QString KnmInterface::downwareRateDate()
 {
-    qWarning()<< Q_FUNC_INFO << __LINE__;
     return KNMDC::getInstance()->downwardRateDate();
 }
 

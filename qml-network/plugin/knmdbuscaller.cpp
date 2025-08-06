@@ -19,12 +19,13 @@ KnmDBusCaller::KnmDBusCaller(QObject *parent)
     qDBusRegisterMetaType<QVector<QStringList>>();
 
     this->connect(lanDataKeeper.data(), &KnmLanDataKeeper::onDeviceStatusChanged, this, &KnmDBusCaller::updateWiredDeviceMap);
-    this->connect(wlanDataKeeper.data(), &KnmWlanDataKeeper::onDeviceStatusChanged, this, &KnmDBusCaller::updateWirelessDeviceMap);
+    this->connect(wlanDataKeeper.data(), &KnmWlanDataKeeper::onDeviceStatusChanged, this, &KnmDBusCaller::updateWirelessDevice);
 
     getWiredDeviceMap();
     getWiredMainSwitchState();
     getWirelessSwitchState();
     getWirelessDeviceMap();
+
 }
 
 KnmDBusCaller::~KnmDBusCaller()
@@ -66,15 +67,11 @@ bool KnmDBusCaller::wiredMainSwitchState()
 
 QString KnmDBusCaller::upwardRateDate()
 {
-    qWarning()<< Q_FUNC_INFO << __LINE__;
-
     return lanDataKeeper->getUpwardRate();
 }
 
 QString KnmDBusCaller::downwardRateDate()
 {
-    qWarning()<< Q_FUNC_INFO << __LINE__;
-
     return lanDataKeeper->getDownwardRate();
 }
 
@@ -232,6 +229,14 @@ void KnmDBusCaller::updateWirelessDeviceMap()
     }
 }
 
+void KnmDBusCaller::updateWirelessDevice()
+{
+    getWirelessSwitchState();
+    updateWirelessDeviceMap();
+
+   // qWarning() << "mqtets updateWirelessDevice";
+}
+
 void KnmDBusCaller::rescanWirelessConn()
 {
     QList<QVariant> list;
@@ -330,7 +335,7 @@ void KnmDBusCaller::updateWirelessDeviceMapFinished(QDBusPendingCallWatcher *wat
                 getWirelessConList(item.key());
                 item++;
             }
-            KInterface::getInstance()->updateWirelessDeviceList();
+            KInterface::getInstance()->rebuildCurrentWirelessList();//设备状态变更应该全量更新合理点
         }
     } else {
         qWarning() << reply.errorMessage();
@@ -351,7 +356,7 @@ void KnmDBusCaller::getWirelessDeviceMapFinished(QDBusPendingCallWatcher *watche
                 getWirelessConList(item.key());
                 item++;
             }
-            KInterface::getInstance()->updateWirelessDeviceList();
+            KInterface::getInstance()->rebuildCurrentWirelessList();//设备状态变更应该全量更新合理点
         }
     } else {
         qWarning() << reply.errorMessage();
@@ -434,7 +439,7 @@ void KnmDBusCaller::setWirelessSwitchEnableFinished(QDBusPendingCallWatcher *wat
     m_pendingCount--;
     QDBusMessage reply = watcher->reply();
     if(reply.type() == QDBusMessage::ReplyMessage) {
-        updateWiredDeviceMap();
+        updateWirelessDeviceMap();
     } else {
         qWarning() << reply.errorMessage();
     }

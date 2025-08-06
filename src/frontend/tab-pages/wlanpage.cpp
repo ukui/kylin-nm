@@ -574,7 +574,7 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
          << QString::number(item.m_signalStrength)
          << item.m_secuType
          << (m_connectResource->isApConnection(item.m_connectUuid) ? IsApConnection : NotApConnection)
-         << QString::number(category);
+         << QString::number(category)<< QString::number(item.m_isConfigured);
     Q_EMIT wlanAdd(interface, info);
 
     if (interface != m_currentDevice) {
@@ -1388,7 +1388,7 @@ void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
                           << secuType
                           << data.m_connectUuid
                           << (m_connectResource->isApConnection(data.m_connectUuid) ? IsApConnection : NotApConnection)
-                          << QString::number(category));
+                                      << QString::number(category) << QString::number(data.m_isConfigured));
             activeSsid = data.m_NetSsid;
         } else {
             list.append(QStringList("--"));
@@ -1410,7 +1410,7 @@ void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
                       << QString::number(itemData.m_signalStrength)
                       << itemData.m_secuType
                       << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection)
-                      << QString::number(category));
+                      << QString::number(category) << QString::number(itemData.m_isConfigured));
     }
 }
 
@@ -1506,15 +1506,16 @@ void WlanPage::activateWirelessConnection(const QString& devName, const QString&
     WlanListItem *p_wlanItem = nullptr;
 
     if (m_wirelessNetItemMap.contains(ssid)) {
-        Q_EMIT showMainWindow(WLAN_PAGE_INDEX);
+        //Q_EMIT showMainWindow(WLAN_PAGE_INDEX);//mqtest
         p_listWidgetItem = m_wirelessNetItemMap.value(ssid);
         p_wlanItem = (WlanListItem*)m_inactivatedNetListWidget->itemWidget(p_listWidgetItem);
 
+        p_wlanItem->onNetButtonClicked();
+        /*
         m_inactivatedNetListWidget->scrollToItem(p_listWidgetItem, QAbstractItemView::EnsureVisible);
-
-
         QMouseEvent *event = new QMouseEvent(QEvent::MouseButtonRelease, QPoint(0,0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
         QApplication::postEvent(p_wlanItem, event);
+        */
     } else {
         qDebug() << "[WlanPage]activateWirelessConnection no such " << ssid << "in" << devName;
     }

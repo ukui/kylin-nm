@@ -67,6 +67,7 @@ protected:
     //获取当前网卡负载率
     int getCurrentLoadRate(QString dev, long *save_rate, long *tx_rate);
 
+    void slotSpeedTimeout();
 protected:
     bool m_connected = false;
 

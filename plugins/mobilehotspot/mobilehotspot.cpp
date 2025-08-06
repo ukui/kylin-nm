@@ -76,7 +76,7 @@ const QString MobileHotspot::name() const {
 bool MobileHotspot::isEnable() const
 {
     qDebug() << needLoad;
-    return needLoad;
+    return false;
 }
 
 

@@ -102,7 +102,7 @@
         <location filename="../proxy.cpp" line="473"/>
         <location filename="../proxy.cpp" line="1122"/>
         <source>Port</source>
-        <translation>Cổng</translation>
+        <translation>Cổng máy chủ</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="474"/>

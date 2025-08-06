@@ -80,7 +80,7 @@
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="74"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>Lưu sửa đổi</translation>
     </message>
     <message>
         <location filename="../frontend/connectivity/connectivitypage.cpp" line="161"/>
@@ -133,7 +133,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="99"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Địa chỉ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="100"/>
@@ -143,7 +143,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="101"/>
         <source>Default Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Gateway mặc định</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="327"/>
@@ -161,12 +161,12 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="120"/>
         <source>Auto(DHCP)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tự động (DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="121"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Sách hướng dẫn</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="189"/>
@@ -211,7 +211,7 @@
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="248"/>
         <source>Please input SSID:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vui lòng nhập SSID:</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="261"/>
@@ -235,13 +235,13 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="273"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="360"/>
         <source>Chan:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kênh mạng：</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="277"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="361"/>
         <source>BandWidth:</source>
-        <translation type="unfinished"></translation>
+        <translation>Băng thông：</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="293"/>
@@ -253,13 +253,13 @@
         <location filename="../frontend/netdetails/detailpage.cpp" line="281"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="362"/>
         <source>IPv4:</source>
-        <translation type="unfinished"></translation>
+        <translation>Địa chỉ IPv4：</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="287"/>
         <location filename="../frontend/netdetails/detailpage.cpp" line="363"/>
         <source>IPv4 DNS:</source>
-        <translation type="unfinished"></translation>
+        <translation>Máy chủ DNS IPv4：</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/detailpage.cpp" line="297"/>
@@ -513,7 +513,7 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="40"/>
         <source>Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Thời gian chờ</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="43"/>
@@ -523,7 +523,7 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="46"/>
         <source>order</source>
-        <translation type="unfinished"></translation>
+        <translation>Thứ tự phát</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="47"/>
@@ -548,7 +548,7 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="70"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Thoát</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="73"/>
@@ -558,7 +558,7 @@
     <message>
         <location filename="../frontend/netdetails/dnssettingwidget.cpp" line="76"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>Lưu sửa đổi</translation>
     </message>
 </context>
 <context>
@@ -594,7 +594,7 @@
     <message>
         <location filename="../frontend/enterprise-wlan/enterprisewlandialog.cpp" line="156"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Kết nối</translation>
     </message>
 </context>
 <context>
@@ -656,7 +656,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="69"/>
         <source>Default Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Gateway mặc định</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -669,12 +669,12 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="117"/>
         <source>Auto(DHCP)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tự động (DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="118"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Sách hướng dẫn</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="264"/>
@@ -690,7 +690,7 @@
         <location filename="../frontend/netdetails/ipv4page.cpp" line="298"/>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="299"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Bắt buộc điền</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="367"/>
@@ -718,7 +718,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="136"/>
         <source>Default Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Gateway mặc định</translation>
     </message>
     <message>
         <source>Prefs DNS</source>
@@ -731,7 +731,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="180"/>
         <source>Auto(DHCP)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tự động (DHCP)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv6page.cpp" line="181"/>
@@ -765,7 +765,7 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="140"/>
         <source>Please enter the network information</source>
-        <translation type="unfinished"></translation>
+        <translation>Nhập thông tin mạng cần kết nối</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="145"/>
@@ -794,7 +794,7 @@
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="153"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Bắt buộc điền</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/joinhiddenwifipage.cpp" line="155"/>
@@ -807,7 +807,7 @@
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="67"/>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Chưa kết nối</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="124"/>
@@ -826,19 +826,19 @@
         <location filename="../frontend/list-items/lanlistitem.cpp" line="159"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="263"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Kết nối</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="150"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="166"/>
         <source>Property</source>
-        <translation type="unfinished"></translation>
+        <translation>Thuộc tính</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="151"/>
         <location filename="../frontend/list-items/lanlistitem.cpp" line="168"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Xóa bản sao lưu</translation>
     </message>
 </context>
 <context>
@@ -850,7 +850,7 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="751"/>
         <source>LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng có dây</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="67"/>
@@ -860,12 +860,12 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="753"/>
         <source>Activated LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng của tôi</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="763"/>
         <source>Inactivated LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng khác</translation>
     </message>
     <message>
         <source>LAN Disconnected Successfully</source>
@@ -874,7 +874,7 @@
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1244"/>
         <source>Wired Device not carried</source>
-        <translation type="unfinished"></translation>
+        <translation>Chưa cắm cáp mạng</translation>
     </message>
     <message>
         <source>LAN Connected Successfully</source>
@@ -884,17 +884,17 @@
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1340"/>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1348"/>
         <source>Connected: </source>
-        <translation type="unfinished"></translation>
+        <translation>Đã kết nối: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1342"/>
         <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Chưa kết nối</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/lanpage.cpp" line="1340"/>
         <source>(Limited)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Mạng bị hạn chế)</translation>
     </message>
 </context>
 <context>
@@ -902,7 +902,7 @@
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="178"/>
         <source>Kylin NM</source>
-        <translation type="unfinished"></translation>
+        <translation>Công cụ cài đặt mạng Kylin</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/listitem.cpp" line="181"/>
@@ -916,7 +916,7 @@
         <location filename="../frontend/mainwindow.cpp" line="229"/>
         <location filename="../frontend/mainwindow.cpp" line="260"/>
         <source>kylin-nm</source>
-        <translation type="unfinished"></translation>
+        <translation>Công cụ mạng</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="353"/>
@@ -938,7 +938,7 @@
         <location filename="../frontend/mainwindow.cpp" line="384"/>
         <source>Settings</source>
         <translatorcomment>设置网络项</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>Mục cài đặt</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="385"/>
@@ -949,7 +949,7 @@
         <location filename="../frontend/mainwindow.cpp" line="662"/>
         <location filename="../frontend/mainwindow.cpp" line="915"/>
         <source>Network tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Công cụ mạng</translation>
     </message>
     <message>
         <location filename="../frontend/mainwindow.cpp" line="676"/>
@@ -959,7 +959,7 @@
     <message>
         <location filename="../frontend/mainwindow.cpp" line="898"/>
         <source>Not connected to the network</source>
-        <translation type="unfinished"></translation>
+        <translation>Chưa kết nối mạng</translation>
     </message>
 </context>
 <context>
@@ -977,7 +977,7 @@
     <message>
         <location filename="../frontend/netdetails/multiplednswidget.cpp" line="101"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Mục cài đặt</translation>
     </message>
 </context>
 <context>
@@ -985,7 +985,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="80"/>
         <source>Kylin NM</source>
-        <translation type="unfinished"></translation>
+        <translation>Công cụ cài đặt mạng Kylin</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="83"/>
@@ -995,7 +995,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="381"/>
         <source>Detail</source>
-        <translation type="unfinished"></translation>
+        <translation>Chi tiết</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="382"/>
@@ -1025,17 +1025,17 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="406"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>Lưu sửa đổi</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="409"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Hủy</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="467"/>
         <source>Forget this network</source>
-        <translation type="unfinished"></translation>
+        <translation>Quên mạng này</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="469"/>
@@ -1045,7 +1045,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="448"/>
         <source>Add LAN Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Thêm mạng có dây</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="453"/>
@@ -1057,7 +1057,7 @@
         <location filename="../frontend/netdetails/netdetail.cpp" line="645"/>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1186"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dùng settings hiện tại của máy in</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="757"/>
@@ -1069,7 +1069,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="900"/>
         <source>start check ipv4 address conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>Bắt đầu kiểm tra xung đột địa chỉ IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="917"/>
@@ -1087,7 +1087,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1182"/>
         <source>this wifi no support enterprise type</source>
-        <translation type="unfinished"></translation>
+        <translation>WiFi này không hỗ trợ mạng doanh nghiệp</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1187"/>
@@ -1097,7 +1097,7 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1192"/>
         <source>this wifi no support WPA2 type</source>
-        <translation type="unfinished"></translation>
+        <translation>Wifi này không hỗ trợ loại WPA2</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="1195"/>
@@ -1218,7 +1218,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="215"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>Đảm bảo an toàn</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="216"/>
@@ -1229,17 +1229,17 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="220"/>
         <source>EAP type</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác thực EAP</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="222"/>
         <source>Identity</source>
-        <translation type="unfinished"></translation>
+        <translation>Danh tính ẩn danh</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="223"/>
         <source>Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>Miền</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="224"/>
@@ -1254,7 +1254,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="226"/>
         <source>User certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Chứng chỉ người dùng</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="227"/>
@@ -1264,12 +1264,12 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="228"/>
         <source>User key password</source>
-        <translation type="unfinished"></translation>
+        <translation>Mật khẩu khóa riêng tư</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="229"/>
         <source>Password options</source>
-        <translation type="unfinished"></translation>
+        <translation>Tùy chọn mật khẩu</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="230"/>
@@ -1308,7 +1308,7 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="1186"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1241"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dùng settings hiện tại của máy in</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="242"/>
@@ -1323,7 +1323,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="244"/>
         <source>WPA3 Personal</source>
-        <translation type="unfinished"></translation>
+        <translation>WPA3 Cá nhân</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="255"/>
@@ -1336,7 +1336,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
         <source>Store passwords only for this user</source>
-        <translation type="unfinished"></translation>
+        <translation>Chỉ lưu mật khẩu cho người dùng này</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="264"/>
@@ -1346,7 +1346,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="266"/>
         <source>Store passwords for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>Lưu trữ mật khẩu của tất cả người dùng</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="266"/>
@@ -1356,7 +1356,7 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="268"/>
         <source>Ask this password every time</source>
-        <translation type="unfinished"></translation>
+        <translation>Hỏi mật khẩu này mỗi lần</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="268"/>
@@ -1368,24 +1368,24 @@
         <location filename="../frontend/netdetails/securitypage.cpp" line="1154"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1176"/>
         <source>Choose a CA certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Chọn chứng chỉ CA</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1132"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1155"/>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1177"/>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tệp CA (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="273"/>
         <source>PAC provisioning</source>
-        <translation type="unfinished"></translation>
+        <translation>Cấu hình PAC</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="274"/>
         <source>Allow automatic PAC provisioning</source>
-        <translation type="unfinished"></translation>
+        <translation>Cho phép cấu hình PAC tự động</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="275"/>
@@ -1395,22 +1395,22 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="276"/>
         <source>Anonymous</source>
-        <translation type="unfinished"></translation>
+        <translation>Ẩn danh</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="277"/>
         <source>Authenticated</source>
-        <translation type="unfinished"></translation>
+        <translation>Đã xác thực</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="278"/>
         <source>Both</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng đồng thời cả hai</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1231"/>
         <source>Choose a PAC file</source>
-        <translation type="unfinished"></translation>
+        <translation>Chọn một tệp PAC</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1232"/>
@@ -1428,7 +1428,7 @@
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="72"/>
         <source>Current Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Thiết bị hiện tại</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="79"/>
@@ -1443,12 +1443,12 @@
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="329"/>
         <source>Kylin NM</source>
-        <translation type="unfinished"></translation>
+        <translation>Công cụ cài đặt mạng Kylin</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/tabpage.cpp" line="332"/>
         <source>kylin network applet desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>Thông báo nhắc nhở mạng</translation>
     </message>
 </context>
 <context>
@@ -1463,7 +1463,7 @@
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="71"/>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Chưa kết nối</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="176"/>
@@ -1472,7 +1472,7 @@
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="667"/>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="677"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Ngắt</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="178"/>
@@ -1498,7 +1498,7 @@
     <message>
         <location filename="../frontend/list-items/wlanlistitem.cpp" line="336"/>
         <source>Auto Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Tự động kết nối mạng này</translation>
     </message>
 </context>
 <context>
@@ -1518,7 +1518,7 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="132"/>
         <source>WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng cục bộ không dây</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="108"/>
@@ -1528,12 +1528,12 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="134"/>
         <source>Activated WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng của tôi</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="145"/>
         <source>Other WLAN</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng khác</translation>
     </message>
     <message>
         <source>More...</source>
@@ -1547,17 +1547,17 @@
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="968"/>
         <source>WLAN Disconnected Successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng không dây đã ngắt kết nối</translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1741"/>
         <source>Connected: </source>
-        <translation type="unfinished"></translation>
+        <translation>Đã kết nối: </translation>
     </message>
     <message>
         <location filename="../frontend/tab-pages/wlanpage.cpp" line="1743"/>
         <source>Not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Chưa kết nối</translation>
     </message>
     <message>
         <source>(Limited)</source>

@@ -30,6 +30,18 @@ ListView {
             RowLayout {
                 id: itemRowLayout
 
+                Menu {
+                    id: propertyMenu
+                    MenuItem {
+                        text: qsTr("网络配置")
+                        onTriggered:
+                        {
+                            console.log("网络配置")
+                            KInterface.openwLanNetworkSetting()
+                        }
+                    }
+                }
+
                 Item {
                     Layout.alignment: Qt.AlignLeft
                     Layout.leftMargin: 16
@@ -187,6 +199,7 @@ ListView {
 
                 MouseArea {
                     anchors.fill: itemRowLayout
+                    acceptedButtons: Qt.AllButtons
                     hoverEnabled: true
                     propagateComposedEvents: true
                     onReleased: {
@@ -221,7 +234,12 @@ ListView {
                     }
                     // 点击Item时候焦点聚焦
                     onClicked: {
-                        textEdit.forceActiveFocus()
+                        mouse.accepted = false
+                        if (mouse.button == Qt.LeftButton) {
+                            textEdit.forceActiveFocus()
+                        } else if (mouse.button == Qt.RightButton) {
+                            propertyMenu.popup()
+                        }
                     }
                 }
             }
@@ -271,69 +289,6 @@ ListView {
                 Layout.leftMargin: 68
                 text: "自动连接"
                 checked: true
-            }
-    }
-
-
-
-//                RowLayout {
-//                    id: autoConnectLayout
-//                    anchors.fill: parent
-//                    visible: false
-//                }
-
-        Connections {
-            target: KInterface
-//                    onUpdatePairedDevice : {
-//                        if(device === modelData.Addr) {
-//                            if(attrs.hasOwnProperty("Connecting")) {
-//                                typeicon.visible = !attrs.Connecting;
-//                                loadingicon.visible = attrs.Connecting;
-//                            }
-//                            if(attrs.hasOwnProperty("Battery")) {
-//                                batteryicon.source = KInterface.getBluetoothBatteryIcon(attrs.Battery);
-//                                batterytext.text = attrs.Battery + "%"
-//                            }
-//                        }
-//                    }
-        }
-    }
-
-    Menu {
-        id: propertyMenu
-
-        // MenuItem {
-        //     text: (modelData.State === 2) ? qsTr("Disconnect") : qsTr("Connect")
-        //     onTriggered:
-        //     {
-        //         console.log("connect 操作")
-        //         KInterface.openNetworkSetting()
-        //     }
-        // }
-
-        MenuItem {
-            text: qsTr("网络配置")
-            onTriggered:
-            {
-                console.log("网络配置")
-                KInterface.openwLanNetworkSetting()
-            }
-        }
-
-        // MenuSeparator {}
-
-        // MenuItem {
-        //     text: qsTr("Delete the network")
-        //     onTriggered: console.log("Delete the network 操作")
-        // }
-    }
-    MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.AllButtons
-        onReleased: {
-            if (mouse.button === Qt.RightButton) {
-                console.log("右键释放")
-                propertyMenu.popup()
             }
         }
     }

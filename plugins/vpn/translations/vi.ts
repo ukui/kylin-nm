@@ -19,7 +19,7 @@
     <message>
         <location filename="../itemframe.cpp" line="38"/>
         <source>Add VPN</source>
-        <translation type="unfinished"></translation>
+        <translation>Thêm VPN</translation>
     </message>
 </context>
 <context>
@@ -39,26 +39,26 @@
         <location filename="../vpn.cpp" line="157"/>
         <location filename="../vpn.cpp" line="284"/>
         <source>Show on Taskbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Các biểu tượng được hiển thị trên thanh tác vụ</translation>
         <extra-contents_path>/Vpn/Show on Taskbar</extra-contents_path>
     </message>
     <message>
         <location filename="../vpn.cpp" line="286"/>
         <source>Add VPN</source>
-        <translation type="unfinished"></translation>
+        <translation>Thêm kết nối VPN</translation>
         <extra-contents_path>/Vpn/Add VPN</extra-contents_path>
     </message>
     <message>
         <location filename="../vpn.cpp" line="372"/>
         <location filename="../vpn.cpp" line="479"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Kết nối</translation>
     </message>
     <message>
         <location filename="../vpn.cpp" line="374"/>
         <location filename="../vpn.cpp" line="489"/>
         <source>not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Không kết nối</translation>
     </message>
 </context>
 <context>
@@ -66,19 +66,19 @@
     <message>
         <location filename="../vpnitem.cpp" line="55"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Xóa</translation>
     </message>
     <message>
         <location filename="../vpnitem.cpp" line="107"/>
         <location filename="../vpnitem.cpp" line="120"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Ngắt kết nối</translation>
     </message>
     <message>
         <location filename="../vpnitem.cpp" line="109"/>
         <location filename="../vpnitem.cpp" line="118"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>kết nối</translation>
     </message>
 </context>
 </TS>

@@ -306,31 +306,63 @@ UkuiItems.DtThemeBackground {
         Rectangle {
             Layout.alignment: Qt.AlignBottom
             Layout.fillWidth: true
-            Layout.bottomMargin: 8
+            Layout.bottomMargin: 1
             height: 1
             color: Qt.rgba(0, 0, 0, 0.06)
         }
-
-        UkuiItems.DtThemeBackground {
+       Item {
             Layout.fillWidth: true
             Layout.preferredHeight: 56
             Layout.alignment: Qt.AlignBottom
-            backgroundColor: Platform.GlobalTheme.baseActive
-            alpha: 0.6
-            Label {
-                anchors.left: parent.left
-                anchors.leftMargin: 20
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("更多网络设置")
-            }
+            opacity: Theme.windowOpacity
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    KInterface.openNetworkSetting()
+            Rectangle {
+                id: networkSettingRec
+                width: parent.width
+                height: parent.height
+                color: "#00000000"
+                opacity: Theme.windowOpacity
+
+                Label {
+                    id: networkSettingText
+                    height: 22
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 24
+                    text: qsTr("更多网络设置")
+                    font.pixelSize: 14
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                            console.log("NetworkSettingArea.qml onClicked")
+                            KInterface.openNetworkSetting()
+                        }
+                    }
                 }
             }
-        }
+		}
+        //UkuiItems.DtThemeBackground {
+        //    Layout.fillWidth: true
+        //    Layout.preferredHeight: 56
+        //    Layout.alignment: Qt.AlignBottom
+        //    backgroundColor: Platform.GlobalTheme.baseActive
+        //    alpha: 0.6
+        //    Label {
+        //        anchors.left: parent.left
+        //        anchors.leftMargin: 20
+        //        anchors.verticalCenter: parent.verticalCenter
+        //        text: qsTr("更多网络设置")
+        //    }
+
+        //    MouseArea {
+        //        anchors.fill: parent
+        //        onClicked: {
+        //            KInterface.openNetworkSetting()
+        //        }
+        //    }
+        // }
 
 //        focus: true
 

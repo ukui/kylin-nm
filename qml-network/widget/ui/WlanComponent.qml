@@ -221,7 +221,7 @@ ListView {
                     }
                     // 点击Item时候焦点聚焦
                     onClicked: {
-                        textField.forceActiveFocus()
+                        textEdit.forceActiveFocus()
                     }
                 }
             }

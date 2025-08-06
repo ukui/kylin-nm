@@ -19,13 +19,13 @@
     <message>
         <location filename="../lanitem.cpp" line="57"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Xóa bản sao lưu</translation>
     </message>
     <message>
         <location filename="../lanitem.cpp" line="118"/>
         <location filename="../lanitem.cpp" line="131"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Ngắt</translation>
     </message>
     <message>
         <location filename="../lanitem.cpp" line="120"/>
@@ -39,7 +39,7 @@
     <message>
         <location filename="../netconnect.ui" line="50"/>
         <source>Wired Network</source>
-        <translation type="unfinished"></translation>
+        <translation>Mạng dây</translation>
     </message>
     <message>
         <location filename="../netconnect.ui" line="112"/>
@@ -75,7 +75,7 @@
     <message>
         <location filename="../netconnect.cpp" line="69"/>
         <source>Settings desktop message</source>
-        <translation type="unfinished"></translation>
+        <translation>Cài đặt thông báo trên màn hình</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="86"/>
@@ -92,7 +92,7 @@
         <location filename="../netconnect.cpp" line="513"/>
         <location filename="../netconnect.cpp" line="966"/>
         <source>connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Đã kết nối</translation>
     </message>
     <message>
         <location filename="../netconnect.cpp" line="515"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../netconnect.cpp" line="595"/>
         <source>card</source>
-        <translation type="unfinished"></translation>
+        <translation>Card âm thanh</translation>
     </message>
 </context>
 </TS>

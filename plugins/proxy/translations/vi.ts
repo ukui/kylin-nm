@@ -16,17 +16,17 @@
     <message>
         <location filename="../aptproxydialog.cpp" line="78"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Cổng</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="99"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Hủy</translation>
     </message>
     <message>
         <location filename="../aptproxydialog.cpp" line="103"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>Lưu sửa đổi</translation>
     </message>
 </context>
 <context>
@@ -54,7 +54,7 @@
     <message>
         <location filename="../proxy.cpp" line="221"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Sách hướng dẫn</translation>
     </message>
     <message>
         <source>Application Proxy</source>
@@ -102,7 +102,7 @@
         <location filename="../proxy.cpp" line="473"/>
         <location filename="../proxy.cpp" line="1122"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Cổng</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="474"/>
@@ -118,7 +118,7 @@
     <message>
         <location filename="../proxy.cpp" line="480"/>
         <source>APT Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>Proxy Apt</translation>
         <extra-contents_path>/Proxy/APT Proxy</extra-contents_path>
     </message>
     <message>
@@ -135,7 +135,7 @@
     <message>
         <location filename="../proxy.cpp" line="483"/>
         <source>Port : </source>
-        <translation type="unfinished"></translation>
+        <translation>Cổng： </translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="484"/>
@@ -151,23 +151,23 @@
         <location filename="../proxy.cpp" line="587"/>
         <location filename="../proxy.cpp" line="824"/>
         <source>Reboot Later</source>
-        <translation type="unfinished"></translation>
+        <translation>Khởi động lại sau</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="588"/>
         <location filename="../proxy.cpp" line="825"/>
         <source>Reboot Now</source>
-        <translation type="unfinished"></translation>
+        <translation>Khởi động lại ngay</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="823"/>
         <source>The system needs to be restarted to set the APT proxy, whether to reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>Việc thiết lập proxy APT cần khởi động lại hệ thống để có hiệu lực, có muốn khởi động lại hệ thống không</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1071"/>
         <source>Proxy type</source>
-        <translation type="unfinished"></translation>
+        <translation>Loại Proxy</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1088"/>
@@ -178,7 +178,7 @@
         <location filename="../proxy.cpp" line="1094"/>
         <location filename="../proxy.cpp" line="1125"/>
         <source>Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Bắt buộc điền</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1115"/>
@@ -188,18 +188,18 @@
     <message>
         <location filename="../proxy.cpp" line="1136"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Tên người dùng</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1139"/>
         <location filename="../proxy.cpp" line="1153"/>
         <source>Optional</source>
-        <translation type="unfinished"></translation>
+        <translation>Tùy chọn</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1149"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Mật khẩu</translation>
     </message>
     <message>
         <location filename="../proxy.cpp" line="1172"/>
@@ -214,7 +214,7 @@
     <message>
         <location filename="../proxy.cpp" line="1245"/>
         <source>The following applications are allowed to use this configuration:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cho phép ứng dụng sau sử dụng cấu hình này:</translation>
     </message>
 </context>
 </TS>

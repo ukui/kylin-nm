@@ -194,8 +194,9 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
             //连接不属于任何设备,且修改属性
             NetDevicePtr dev = m_deviceList.take(devList.at(i));
             bool status = false;
-            if(dev->getConnections().at(0).value("State").toInt()
-                    && dev->getConnections().at(0).value("Uuid").toString() == lanInfo.at(1))
+            QMap<QString, QVariant>valueMap=dev->getConnections().at(0).toMap();
+            if(valueMap.value("State").toInt()
+                    && valueMap.value("Uuid").toString() == lanInfo.at(1))
             {
                 status = true;
             }
@@ -228,8 +229,10 @@ void KnmLanDataKeeper::updateLanInfo(QString deviceName, QStringList lanInfo)
         //连接被修改了名称
         NetDevicePtr dev = m_deviceList.take(devList.at(i));
         bool status = false;
-        if(dev->getConnections().at(0).value("State").toInt()
-                && dev->getConnections().at(0).value("Uuid").toString() == lanInfo.at(1))
+        QMap<QString, QVariant>valueMap=dev->getConnections().at(0).toMap();
+
+        if(valueMap.value("State").toInt()
+                && valueMap.value("Uuid").toString() == lanInfo.at(1))
         {
             status = true;
         }

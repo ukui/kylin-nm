@@ -18,7 +18,8 @@ HEADERS += \
         plugin/knmlandatakeeper.h \
         plugin/knmwlandatakeeper.h \
         plugin/netdevice.h \
-        plugin/networkqml_plugin.h
+        plugin/networkqml_plugin.h \
+        plugin/wirelessconnectionmodel.h
 
 SOURCES += \
         plugin/knmdatakeeper.cpp \
@@ -27,7 +28,8 @@ SOURCES += \
         plugin/knmlandatakeeper.cpp \
         plugin/knmwlandatakeeper.cpp \
         plugin/netdevice.cpp \
-        plugin/networkqml_plugin.cpp
+        plugin/networkqml_plugin.cpp \
+        plugin/wirelessconnectionmodel.cpp
 
 RESOURCES += widget/qml.qrc
 

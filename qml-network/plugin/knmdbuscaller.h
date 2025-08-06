@@ -27,9 +27,9 @@ public:
 
     QMap<QString, NetDevicePtr> wirelessDeviceList();
 
-    QList<QMap<QString, QVariant>> wiredDeviceConnList(QString devName);
+    QVariantList wiredDeviceConnList(QString devName);
 
-    QList<QMap<QString, QVariant>> wirelessDeviceConnList(QString devName);
+    QVariantList wirelessDeviceConnList(QString devName);
 
     QString getWiFiIcon(QString signalStrength, QString security, QString isApConnection, int category);
 

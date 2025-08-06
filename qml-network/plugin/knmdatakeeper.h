@@ -39,7 +39,7 @@ public:
     QMap<QString, NetDevicePtr> getDeviceList();
 
     //获取单个网卡设备的连接列表
-    QList<QMap<QString, QVariant>> getDevConnections(QString devName);
+    QVariantList getDevConnections(QString devName);
 
     void setSwitchState(bool switched);
 

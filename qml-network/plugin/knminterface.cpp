@@ -36,7 +36,7 @@ QVariantList KnmInterface::wiredDeviceList()
 
     auto dev = KNMDC::getInstance()->wiredDeviceList();
     for(auto iter : dev){
-        list.append(iter->devName());
+        if(!iter.isNull()) list.append(iter->devName());
     }
     return list;
 }
@@ -47,7 +47,7 @@ QVariantList KnmInterface::wirelessDeviceList()
 
     auto dev = KNMDC::getInstance()->wirelessDeviceList();
     for(auto iter : dev){
-        list.append(iter->devName());
+        if(!iter.isNull()) list.append(iter->devName());
     }
     return list;
 }
@@ -118,15 +118,8 @@ void KnmInterface::openwLanNetworkSetting()
 
 void KnmInterface::getWiredDevConnList(QString devName)
 {
-    QVariantList list;
-
     m_currentWiredDevice = devName;
-    auto conList = KNMDC::getInstance()->wiredDeviceConnList(devName);
-
-    for (int i = 0; i < conList.count(); i++) {
-        list << conList.at(i);
-    }
-    m_wiredDevConnList = list;
+    m_wiredDevConnList = KNMDC::getInstance()->wiredDeviceConnList(devName);
     emit updateWiredDevConnList();
 }
 
@@ -140,17 +133,62 @@ void KnmInterface::getWirelessDevConnList()
     getWirelessDevConnList(m_currentWirelessDevice);
 }
 
+/*全量更新*/
+void KnmInterface::rebuildCurrentWirelessList()
+{
+    m_wirelessDevConnList.clear();
+    m_wirelessDevConnList=KNMDC::getInstance()->wirelessDeviceConnList(m_currentWirelessDevice);
+    mWirelessConnecModel.refreshConnections(m_wirelessDevConnList);
+    emit wirelessConListChanged();
+}
+
+/*增量更新*/
 void KnmInterface::getWirelessDevConnList(QString devName)
 {
-    QVariantList list;
-
+    QVariantList conList;
     m_currentWirelessDevice = devName;
-    auto conList = KNMDC::getInstance()->wirelessDeviceConnList(devName);
-
-    for (int i = 0; i < conList.count(); i++) {
-        list << conList.at(i);
+    if(m_wirelessDevConnList.isEmpty())
+    {
+        m_wirelessDevConnList=KNMDC::getInstance()->wirelessDeviceConnList(devName);
+        mWirelessConnecModel.refreshConnections(m_wirelessDevConnList);
+        emit updateWirelessDevConnList();
+        emit wirelessConListChanged();
+        return;
     }
-    m_wirelessDevConnList = list;
+
+    conList = KNMDC::getInstance()->wirelessDeviceConnList(devName);
+
+    for(int i=0;i<m_wirelessDevConnList.count();i++)
+    {
+        if(conList.contains(m_wirelessDevConnList.at(i)))
+        {
+            continue;
+        }
+
+        mWirelessConnecModel.removeConnection(m_wirelessDevConnList.at(i).toMap().value("Name").toString());
+        m_wirelessDevConnList.removeAt(i);
+    }
+
+    for(int i=0;i<conList.count();i++)
+    {
+        if(m_wirelessDevConnList.contains(conList.at(i)))
+        {
+            continue;
+        }
+
+        if (conList.at(i).toMap().value("State").toInt() == ACTIVATED
+            || conList.at(i).toMap().value("State").toInt() == ACTIVATING)
+        {
+            m_wirelessDevConnList.push_front(conList.at(i));
+        }
+        else
+        {
+            m_wirelessDevConnList.append(conList.at(i));
+        }
+        WirelessConnectionModel::ST_ConnectionInfo con;
+        con=mWirelessConnecModel.mapToConnectionInfo(conList.at(i).toMap());
+        mWirelessConnecModel.addConnection(&con);
+    }
     emit updateWirelessDevConnList();
 }
 

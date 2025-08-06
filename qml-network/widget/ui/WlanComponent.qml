@@ -10,9 +10,10 @@ import org.ukui.quick.platform 1.0 as Platform
 ListView {
     id: wlanlistView
     visible: true
-    model: KInterface.wirelessConList
+    model: KInterface.wirelessConLists
+    //model: KInterface.wirelessConList
     spacing: 0
-
+    //reuseItems: true
     // 定义每个项的显示方式
     delegate: ItemDelegate {
         id: listItem
@@ -22,6 +23,9 @@ ListView {
         Layout.leftMargin: 8
         property bool enteritem : false
 
+        // Binding{
+        //  when:!textEdit.activeFocus
+        // }
 
         ColumnLayout {
             anchors.fill: parent
@@ -50,29 +54,29 @@ ListView {
 
                     UkuiItems.IconButton {
                         id: typeicon
-                        visible: modelData.State === 2 || modelData.State === 4
-                        iconSource: KInterface.getWiFiIcon(modelData.Signal, modelData.Security, modelData.isApConn, modelData.Type)
+                        visible: model.status === 2 || model.status === 4
+                        iconSource: KInterface.getWiFiIcon(model.signal, model.security, model.isApConn, model.category)
                         anchors.fill: parent
                         radius: 19
-                        isHighLight: modelData.State === 2
+                        isHighLight: model.status === 2
                         width: parent.width
                         height: parent.height
                     }
 
                     UkuiItems.IconButton {
                         id: loadingicon
-                        visible: modelData.State === 1 || modelData.State === 3
+                        visible: model.status === 1 || model.status === 3
                         iconSource: "ukui-loading-" + String(loadingicon.loading_num % 8) + "-symbolic"
                         anchors.fill: parent
                         radius: 19
-                        isHighLight: modelData.State === 3
+                        isHighLight: model.status === 3
                         width: parent.width
                         height: parent.height
                         property int  loading_num : 0
                     }
                     Timer {
                         interval: 100
-                        running: modelData.State === 1 || modelData.State === 3
+                        running: model.status === 1 || model.status === 3
                         repeat: true
                         onTriggered:{
                             loadingicon.loading_num += 1;
@@ -86,7 +90,7 @@ ListView {
                     Layout.alignment: Qt.AlignLeft
                     Layout.leftMargin: 8
                     Layout.preferredWidth: 150
-                    text: modelData.Name
+                    text: model.ssid
                     font.pixelSize: 14
                     MouseArea {
                         onClicked: {
@@ -103,7 +107,7 @@ ListView {
                     Layout.leftMargin: 8
                     Layout.topMargin: 8
                     Layout.preferredWidth: 150
-                    text: modelData.Name
+                    text: model.ssid
                     font.pixelSize: 14
                     Label {
                         id: stateLabel
@@ -111,7 +115,7 @@ ListView {
                         Layout.leftMargin: 8
                         Layout.bottomMargin: 8
                         anchors.top: nameStateLabel.bottom
-                        text: (modelData.State === 2) ? "已连接" : "未连接"
+                        text: (model.status === 2) ? "已连接" : "未连接"
                         font.pixelSize: 12
                     }
                 }
@@ -129,7 +133,7 @@ ListView {
 
                     Image {
                         id: upLoadicon
-                        visible: modelData.State === 2
+                        visible: model.status === 2
                         anchors.right: upLoadWirelessText.left
                         anchors.verticalCenter: parent.verticalCenter
                         source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/load-up.png"
@@ -137,14 +141,14 @@ ListView {
 
                     Label {
                         id: upLoadWirelessText
-                        visible: modelData.State === 2
+                        visible: model.status === 2
                         anchors.right: downLoadIcon.left
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: 12
                         text: "0KB/s"
                         Connections {
                             target: KInterface
-                            onUpdateUpLoadWirelessStr : {
+                           function onUpdateUpLoadWirelessStr(str) {
                                 upLoadWirelessText.text = str
                             }
                         }
@@ -152,7 +156,7 @@ ListView {
 
                     Image {
                         id: downLoadIcon
-                        visible: modelData.State === 2
+                        visible: model.status === 2
                         anchors.right: downLoadWirelessText.left
                         anchors.verticalCenter: parent.verticalCenter
                         source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/load-down.png"
@@ -160,7 +164,7 @@ ListView {
 
                     Label {
                         id: downLoadWirelessText
-                        visible: modelData.State === 2
+                        visible: model.status === 2
                         anchors.rightMargin: 24
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
@@ -168,7 +172,7 @@ ListView {
                         text: "0KB/s"
                         Connections {
                             target: KInterface
-                            onUpdateDownLoadWirelessStr : {
+                            function onUpdateDownLoadWirelessStr(str)  {
                                 downLoadWirelessText.text = str
                             }
                         }
@@ -181,16 +185,16 @@ ListView {
                     height: 36
                     Layout.rightMargin: 24
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    text: (modelData.State === 2) ? "断开" : "连接"
-                    highlighted: (modelData.State === 2) ? 0 : 1
+                    text: (model.status === 2) ? "断开" : "连接"
+                    highlighted: (model.status === 2) ? 0 : 1
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
                             // // 设置当前选中项
-                            if (modelData.State === 2)
-                                KInterface.deActivateConnect(wlanDeviceComboBox.currentText, modelData.Name, 1);
-                            else if (modelData.State === 4)
-                                KInterface.activateConnect(wlanDeviceComboBox.currentText, modelData.Name, 1);
+                            if (model.status === 2)
+                                KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                            else if (model.status === 4)
+                                KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
                             typeicon.visible = false;
                             loadingicon.visible = true;
                         }
@@ -198,16 +202,17 @@ ListView {
                 }
 
                 MouseArea {
-                    anchors.fill: itemRowLayout
+                    anchors.fill: itemRowLayout //anchors与Layout不能联用，qml会报错但是实际好像对界面没影响，待解
                     acceptedButtons: Qt.AllButtons
                     hoverEnabled: true
                     propagateComposedEvents: true
                     onReleased: {
+
                         if (!textEditLayout.visible) {
                             nameLabel.visible = false
                             nameStateLabel.visible = true
                         }
-                        if (modelData.State !== 2) {
+                        if (model.status !== 2) {
                             if (listItem.height == 145)
                                 listItem.height = 56
                             else
@@ -216,6 +221,7 @@ ListView {
                             autoConnectCheckBox.visible = textEditLayout.visible
                             connectBtn.visible = !textEditLayout.visible
                         }
+
                     }
                     onEntered: {
                         if (textEditLayout.visible)
@@ -228,7 +234,7 @@ ListView {
                         wlanlistView.currentIndex = -1
                         enteritem = false
                         connectBtn.visible = false
-                        speedLabel.visible = (modelData.State === 2)
+                        speedLabel.visible = (model.status === 2)
                         nameLabel.visible = true
                         nameStateLabel.visible = false
                     }
@@ -255,7 +261,7 @@ ListView {
                     Layout.leftMargin: 68
                     echoMode: TextInput.Password
                     color:"black"
-                    focus:true
+                    focus:false //必须是false，界面重建时会导致崩溃，焦点丢失。编辑时切换窗口也会导致焦点丢失崩溃老问题待解，可能是qt bug
                 }
                 Rectangle {
                     id: pwdConnectBtn
@@ -276,7 +282,7 @@ ListView {
                     MouseArea {
                         anchors.fill: pwdConnectBtn
                         onClicked: {
-                            KInterface.passwordConnect(wlanDeviceComboBox.currentText, modelData.Name, modelData.Security, textEdit.text, autoConnectCheckBox.checkState)
+                            KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security, textEdit.text, autoConnectCheckBox.checkState)
                         }
                     }
                 }

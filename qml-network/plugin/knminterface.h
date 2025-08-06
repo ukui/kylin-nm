@@ -11,7 +11,7 @@
 #include <QTimer>
 
 #include "CSingleton.h"
-
+#include "wirelessconnectionmodel.h"
 //前端接口类，用于调取keeper数据并展示在前端
 class KnmInterface : public QObject
 {
@@ -24,10 +24,14 @@ class KnmInterface : public QObject
     Q_PROPERTY(bool wiredMainSwitch READ wiredMainSwitchState WRITE setWiredMainSwitch  NOTIFY updateWiredMainSwitch)
     Q_PROPERTY(QString upwareRate READ upwareRateDate WRITE setUpwareRateData  NOTIFY updateUpLoadWiredStr)
     Q_PROPERTY(QString downwareRate READ downwareRateDate WRITE setDownwareRateData  NOTIFY updateDownLoadWiredStr)
+    Q_PROPERTY(WirelessConnectionModel* wirelessConLists READ wirelessConLists NOTIFY wirelessConListChanged)
+
+
 
 public:
     KnmInterface();
 
+    WirelessConnectionModel* wirelessConLists() { return &mWirelessConnecModel; }
     ~KnmInterface();
 
 public slots:
@@ -66,6 +70,8 @@ public slots:
     void getWirelessDevConnList(QString devName);
 
     void getWirelessDevConnList();
+
+    void rebuildCurrentWirelessList();
 
     QString getIconData(QString name, int size = 16);
 
@@ -111,6 +117,8 @@ signals:
 
     void updateDownLoadWirelessStr(QString str);
 
+    void wirelessConListChanged();
+
 private:
     QVariantList m_wiredDevConnList;
 
@@ -125,7 +133,7 @@ private:
     QTimer *loadTimer = nullptr;
 
     QProcess * m_pProcess = nullptr;
-
+    WirelessConnectionModel mWirelessConnecModel;//显示模型使用QAbstractListModel 可控制显示区域与数据变化。基于object的qvariantlist数据变化或项变化都会引起界面的全量更新
     friend class SingleTon<KnmInterface>;
 };
 

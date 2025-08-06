@@ -121,7 +121,7 @@ QMap<QString, QVariant> KnmWlanDataKeeper::makeConnectionMap(int status, QString
         index = 1;
     }
     connectionMap.insert("isApConn", conPath.at(3 + index));
-    connectionMap.insert("Type", conPath.at(4 + index));
+    connectionMap.insert("category", conPath.at(4 + index).toInt());
     connectionMap.insert("State", status);
     connectionMap.insert("Loading", false);
     return connectionMap;
@@ -242,6 +242,7 @@ void KnmWlanDataKeeper::addDevConnection(QString devName, QList<QStringList> con
     m_deviceList.insert(devName, dev);
 }
 
+/*连接状态变化全量更新*/
 void KnmWlanDataKeeper::onActiveConnectionChanged(QString deviceName, QString ssid, QString uuid, int status)
 {
     qDebug() << Q_FUNC_INFO << __LINE__
@@ -249,7 +250,7 @@ void KnmWlanDataKeeper::onActiveConnectionChanged(QString deviceName, QString ss
              << "ssid:" << ssid
              << "uuid:" << uuid
              << "status:" << status;
-
+    QMap<QString, QVariant>valueMap;
     if (!m_switchState)
         return;
 
@@ -262,10 +263,11 @@ void KnmWlanDataKeeper::onActiveConnectionChanged(QString deviceName, QString ss
         }
         QStringList devList = m_deviceList.keys();
         for (int i = 0; i < devList.count(); i++) {
-            QList<QMap<QString, QVariant>> connList = m_deviceList.value(devList.at(i))->getConnections();
-            if (!connList.at(0).contains("Uuid"))
+            QVariantList connList = m_deviceList.value(devList.at(i))->getConnections();
+            valueMap=connList.at(0).toMap();
+            if (!valueMap.contains("Uuid"))
                 continue;
-            if (connList.at(0).value("Uuid").toString() != uuid)
+            if (valueMap.value("Uuid").toString() != uuid)
                 continue;
             NetDevicePtr dev = m_deviceList.value(devList.at(i));
             QMap<QString, QVariant> conn = dev->updateConnection(uuid, status);
@@ -276,7 +278,8 @@ void KnmWlanDataKeeper::onActiveConnectionChanged(QString deviceName, QString ss
                 dev->addConnection(conn);
             }
         }
-        KInterface::getInstance()->getWirelessDevConnList();
+
+        KInterface::getInstance()->rebuildCurrentWirelessList();
         return;
     }
 
@@ -295,7 +298,8 @@ void KnmWlanDataKeeper::onActiveConnectionChanged(QString deviceName, QString ss
             conn.remove("State");
             conn.insert("State", status);
             dev->addConnection(conn);
-            KInterface::getInstance()->getWirelessDevConnList();
+
+            KInterface::getInstance()->rebuildCurrentWirelessList();
             return;
         }
 
@@ -307,14 +311,15 @@ void KnmWlanDataKeeper::onActiveConnectionChanged(QString deviceName, QString ss
             conn.remove("State");
             conn.insert("State", status);
             dev->addConnection(conn);
-            KInterface::getInstance()->getWirelessDevConnList();
+ 
+            KInterface::getInstance()->rebuildCurrentWirelessList();
             return;
         }
     }
-
-    if (uuid == m_deviceList.value(deviceName)->getConnections().at(0).value("Uuid").toString()) {
+    valueMap=m_deviceList.value(deviceName)->getConnections().at(0).toMap();
+    if (uuid == valueMap.value("Uuid").toString()) {
         NetDevicePtr dev = m_deviceList.value(deviceName);
-        QMap<QString, QVariant> conn = dev->getConnections().at(0);
+        QMap<QString, QVariant> conn = dev->getConnections().at(0).toMap();
         dev->removeConnection(conn);
         conn.remove("State");
         conn.insert("State", status);
@@ -323,7 +328,7 @@ void KnmWlanDataKeeper::onActiveConnectionChanged(QString deviceName, QString ss
         if (status != DEACTIVATED)
             conn.insert("Uuid", uuid);
         dev->addConnection(conn);
-        KInterface::getInstance()->getWirelessDevConnList();
+        KInterface::getInstance()->rebuildCurrentWirelessList();
     }
 }
 

@@ -42,12 +42,12 @@ QMap<QString, NetDevicePtr> KnmDBusCaller::wirelessDeviceList()
     return wlanDataKeeper->getDeviceList();
 }
 
-QList<QMap<QString, QVariant>> KnmDBusCaller::wiredDeviceConnList(QString devName)
+QVariantList KnmDBusCaller::wiredDeviceConnList(QString devName)
 {
     return lanDataKeeper->getDevConnections(devName);
 }
 
-QList<QMap<QString, QVariant>> KnmDBusCaller::wirelessDeviceConnList(QString devName)
+QVariantList KnmDBusCaller::wirelessDeviceConnList(QString devName)
 {
     return wlanDataKeeper->getDevConnections(devName);
 }

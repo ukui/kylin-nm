@@ -52,9 +52,9 @@ void KnmDataKeeper::setSwitchState(bool switched)
     m_switchState = switched;
 }
 
-QList<QMap<QString, QVariant>> KnmDataKeeper::getDevConnections(QString devName)
+QVariantList KnmDataKeeper::getDevConnections(QString devName)
 {
-    QList<QMap<QString, QVariant>> ret;
+    QVariantList ret;
     if (m_deviceList.isEmpty() || !m_deviceList.contains(devName))
         return ret;
     m_currentDev = devName;
@@ -188,17 +188,32 @@ void KnmDataKeeper::netSpeedHandler(QString dev, QString& upLoad, QString& downL
 
 void KnmDataKeeper::netSpeedInit()
 {
+
     //定时获取网速
     m_pSpeedTimer = new QTimer(this);
     m_pSpeedTimer->setTimerType(Qt::PreciseTimer);
+    m_pSpeedTimer->start(1000);
+
+
     connect(m_pSpeedTimer, &QTimer::timeout,  [&]() {
-        QString upLoad, downLoad;
-        netSpeedHandler(m_currentDev, upLoad, downLoad);
-        setUpwardRate(upLoad);
-        setDownwardRate(downLoad);
-        KInterface::getInstance()->updateUpLoadWiredStr(upLoad);
-        KInterface::getInstance()->updateDownLoadWiredStr(downLoad);
-    });
+    QString upLoad, downLoad;
+    netSpeedHandler(m_currentDev, upLoad, downLoad);
+    setUpwardRate(upLoad);
+    setDownwardRate(downLoad);
+    NetDevicePtr dev=m_deviceList[m_currentDev];
+    if(!dev.isNull() && dev->getDevType()==WIRED_DEVICE)
+    {
+        emit KInterface::getInstance()->updateUpLoadWiredStr(upLoad);
+        emit KInterface::getInstance()->updateDownLoadWiredStr(downLoad);
+    }
+    else
+    {
+        emit KInterface::getInstance()->updateUpLoadWirelessStr(upLoad);
+        emit KInterface::getInstance()->updateDownLoadWirelessStr(downLoad);
+    }
+
+});
+
 
     // //定时获取网速
     // m_pSpeedTimer = new QTimer(this);

@@ -100,6 +100,22 @@ void KnmInterface::openNetworkSetting()
     m_pProcess->startDetached(cmd,arg);
 }
 
+
+void KnmInterface::openwLanNetworkSetting()
+{
+    if(m_pProcess) {
+        m_pProcess->deleteLater();
+    }
+
+    m_pProcess = new QProcess();
+    QString cmd = "ukui-control-center";
+    QStringList arg;
+    arg.clear();
+    arg << "-m";
+    arg << "wlanconnect";
+    m_pProcess->startDetached(cmd,arg);
+}
+
 void KnmInterface::getWiredDevConnList(QString devName)
 {
     QVariantList list;

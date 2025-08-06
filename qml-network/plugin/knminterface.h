@@ -57,6 +57,7 @@ public slots:
 
     void openNetworkSetting();
 
+    void openwLanNetworkSetting();
     //用于切换网卡设备时显示的连接列表更新
     void getWiredDevConnList(QString devName);
 

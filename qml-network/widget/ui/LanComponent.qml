@@ -227,4 +227,42 @@ ListView {
 //                    }
         }
     }
+    Menu {
+        id: propertyMenu
+
+        // MenuItem {
+        //     text: (modelData.State === 2) ? qsTr("Disconnect") : qsTr("Connect")
+        //     onTriggered:
+        //     {
+        //         console.log("connect 操作")
+        //         KInterface.openNetworkSetting()
+        //     }
+        // }
+
+        MenuItem {
+            text: qsTr("网络配置")
+            onTriggered:
+            {
+                console.log("网络配置")
+                KInterface.openNetworkSetting()
+            }
+        }
+
+        // MenuSeparator {}
+
+        // MenuItem {
+        //     text: qsTr("Delete the network")
+        //     onTriggered: console.log("Delete the network 操作")
+        // }
+    }
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.AllButtons
+        onReleased: {
+            if (mouse.button === Qt.RightButton) {
+                console.log("右键释放")
+                propertyMenu.popup()
+            }
+        }
+    }
 }

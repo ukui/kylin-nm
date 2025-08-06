@@ -310,65 +310,39 @@ UkuiItems.DtThemeBackground {
             height: 1
             color: Qt.rgba(0, 0, 0, 0.06)
         }
-       Item {
+
+        Item {
             Layout.fillWidth: true
             Layout.preferredHeight: 56
             Layout.alignment: Qt.AlignBottom
             opacity: Theme.windowOpacity
 
-            Rectangle {
-                id: networkSettingRec
-                width: parent.width
-                height: parent.height
-                color: "#00000000"
-                opacity: Theme.windowOpacity
+            UkuiItems.DtThemeText {
+                id: networkSettingText
+                height: 22
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 24
+                text: qsTr("更多网络设置")
+                font.pixelSize: 14
+                textColor: Platform.GlobalTheme.kFontStrong
 
-                Label {
-                    id: networkSettingText
-                    height: 22
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.leftMargin: 24
-                    text: qsTr("更多网络设置")
-                    font.pixelSize: 14
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            console.log("NetworkSettingArea.qml onClicked")
-                            KInterface.openNetworkSetting()
-                        }
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onClicked: {
+                        console.log("NetworkSettingArea.qml onClicked")
+                        KInterface.openNetworkSetting()
+                    }
+                    onEntered: {
+                        networkSettingText.textColor = Platform.GlobalTheme.highlightActive
+                    }
+                    onExited: {
+                        networkSettingText.textColor = Platform.GlobalTheme.kFontStrong
                     }
                 }
             }
 		}
-        //UkuiItems.DtThemeBackground {
-        //    Layout.fillWidth: true
-        //    Layout.preferredHeight: 56
-        //    Layout.alignment: Qt.AlignBottom
-        //    backgroundColor: Platform.GlobalTheme.baseActive
-        //    alpha: 0.6
-        //    Label {
-        //        anchors.left: parent.left
-        //        anchors.leftMargin: 20
-        //        anchors.verticalCenter: parent.verticalCenter
-        //        text: qsTr("更多网络设置")
-        //    }
-
-        //    MouseArea {
-        //        anchors.fill: parent
-        //        onClicked: {
-        //            KInterface.openNetworkSetting()
-        //        }
-        //    }
-        // }
-
-//        focus: true
-
-//        Keys.onEscapePressed: {
-//            close() // 按下Escape键时关闭
-//        }
     }
 }
 

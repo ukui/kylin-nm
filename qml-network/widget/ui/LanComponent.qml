@@ -109,7 +109,7 @@ ListView {
 
             Rectangle {
                 id: speedLabel
-                visible: true
+                visible: false
                 Layout.preferredWidth: 140
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
@@ -132,7 +132,7 @@ ListView {
                     Connections {
                         target: KInterface
                         onUpdateUpLoadWiredStr : {
-                            upLoadWiredText.text = str
+                            upLoadWiredText.text = KInterface.upwareRate
                         }
                     }
                 }
@@ -156,7 +156,7 @@ ListView {
                     Connections {
                         target: KInterface
                         onUpdateDownLoadWiredStr : {
-                            downLoadWiredText.text = str
+                            downLoadWiredText.text = KInterface.downwareRate
                         }
                     }
                 }
@@ -190,15 +190,14 @@ ListView {
             anchors.fill: parent
             hoverEnabled: true
             propagateComposedEvents: true
-                onReleased: {
-                    nameLabel.visible = false
-                    nameStateLabel.visible = true
-                }
+            onReleased: {
+                nameLabel.visible = false
+                nameStateLabel.visible = true
+            }
             onEntered: {
                 //console.log("index: " , index)
                 enteritem = true
                 connectBtn.visible = true
-                connectBtn.color = (modelData.State === 2) ? "#0f000000" : "#3676F5"
                 speedLabel.visible = false
             }
             onExited: {

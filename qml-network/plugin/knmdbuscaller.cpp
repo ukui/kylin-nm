@@ -64,6 +64,20 @@ bool KnmDBusCaller::wiredMainSwitchState()
     return lanDataKeeper->getWiredMainSwitchState();
 }
 
+QString KnmDBusCaller::upwardRateDate()
+{
+    qWarning()<< Q_FUNC_INFO << __LINE__;
+
+    return lanDataKeeper->getUpwardRate();
+}
+
+QString KnmDBusCaller::downwardRateDate()
+{
+    qWarning()<< Q_FUNC_INFO << __LINE__;
+
+    return lanDataKeeper->getDownwardRate();
+}
+
 QString KnmDBusCaller::getWiFiIcon(QString signalStrength, QString security, QString isApConnection, int category)
 {
     return wlanDataKeeper->getWiFiIcon(signalStrength, security, isApConnection, category);
@@ -178,6 +192,16 @@ void KnmDBusCaller::setWirelessSwitchEnable(bool enable)
     else {
         qWarning() << "null pending";
     }
+}
+
+void KnmDBusCaller::setUpwareRateData(QString str)
+{
+
+}
+
+void KnmDBusCaller::setDownwareRateData(QString str)
+{
+
 }
 
 void KnmDBusCaller::updateWiredDeviceMap()

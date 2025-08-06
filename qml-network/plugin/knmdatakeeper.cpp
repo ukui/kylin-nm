@@ -194,6 +194,8 @@ void KnmDataKeeper::netSpeedInit()
     connect(m_pSpeedTimer, &QTimer::timeout,  [&]() {
         QString upLoad, downLoad;
         netSpeedHandler(m_currentDev, upLoad, downLoad);
+        setUpwardRate(upLoad);
+        setDownwardRate(downLoad);
         KInterface::getInstance()->updateUpLoadWiredStr(upLoad);
         KInterface::getInstance()->updateDownLoadWiredStr(downLoad);
     });
@@ -218,3 +220,26 @@ void KnmDataKeeper::netSpeedInit()
     //     KInterface::getInstance()->updateDownLoadWirelessStr(downLoad);
     // });
 }
+
+void KnmDataKeeper::setUpwardRate(QString str)
+{
+    m_upward_rate = str;
+}
+
+QString KnmDataKeeper::getUpwardRate()
+{
+    return m_upward_rate;
+}
+
+void KnmDataKeeper::setDownwardRate(QString str)
+{
+    m_downward_rate = str;
+}
+
+QString KnmDataKeeper::getDownwardRate()
+{
+    return m_downward_rate;
+}
+
+
+

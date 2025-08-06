@@ -206,6 +206,8 @@ UkuiItems.DtThemeBackground {
                             width: 16
                             height: 16
                             mode: UkuiItems.Icon.AutoHighlight
+                            visible: wlanswitchBtn.checked && (wlanDeviceComboBox.count >= 1)
+
                             MouseArea {
                                 anchors.fill: parent
                                 hoverEnabled: true
@@ -242,7 +244,7 @@ UkuiItems.DtThemeBackground {
                         SwitchDelegate {
                             id: wlanswitchBtn
                             checked: KInterface.wirelessSwitch
-                            enabled: (wlanDeviceComboBox.count>0)
+                            enabled: (wlanDeviceComboBox.count >= 1)
                             onClicked: {
                                 if(!enabled)
                                 {

@@ -22,6 +22,8 @@ class KnmInterface : public QObject
     Q_PROPERTY(QVariantList wirelessConList READ wirelessDevConnList NOTIFY updateWirelessDevConnList)
     Q_PROPERTY(bool wirelessSwitch READ wirelessSwitchState WRITE setWirelessSwitch  NOTIFY updateWirelessSwitch)
     Q_PROPERTY(bool wiredMainSwitch READ wiredMainSwitchState WRITE setWiredMainSwitch  NOTIFY updateWiredMainSwitch)
+    Q_PROPERTY(QString upwareRate READ upwareRateDate WRITE setUpwareRateData  NOTIFY updateUpLoadWiredStr)
+    Q_PROPERTY(QString downwareRate READ downwareRateDate WRITE setDownwareRateData  NOTIFY updateDownLoadWiredStr)
 
 public:
     KnmInterface();
@@ -46,6 +48,10 @@ public slots:
     void setWiredMainSwitch(bool switched);
 
     void setWirelessSwitch(bool switched);
+
+    void setUpwareRateData(QString str);
+
+    void setDownwareRateData(QString str);
 
     void rescanWirelessConn();
 
@@ -77,7 +83,9 @@ public slots:
                         QString isApConnection,
                         int category);
 
+    QString upwareRateDate();
 
+    QString downwareRateDate();
 
 signals:
     void updateWiredDeviceList();

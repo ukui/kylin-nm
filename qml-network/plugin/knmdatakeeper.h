@@ -49,6 +49,14 @@ public:
 
     bool getWiredMainSwitchState();
 
+    QString getUpwardRate();
+
+    QString getDownwardRate();
+
+    void setUpwardRate(QString);
+
+    void setDownwardRate(QString);
+
 protected:
     //网速计时器初始化
     void netSpeedInit();
@@ -78,6 +86,12 @@ protected:
     long int start_tx_rates = 0;
     //保存结束时的流量计数
     long int end_tx_rates = 0;
+
+    //
+    QString m_upward_rate;
+
+    QString m_downward_rate;
+
 
     //设备列表,QString为网卡名,NetDevicePtr为网卡数据类
     QMap<QString, NetDevicePtr> m_deviceList;

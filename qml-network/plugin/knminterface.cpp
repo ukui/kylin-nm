@@ -73,6 +73,18 @@ bool KnmInterface::wiredMainSwitchState()
     return KNMDC::getInstance()->wiredMainSwitchState();
 }
 
+QString KnmInterface::upwareRateDate()
+{
+    qWarning()<< Q_FUNC_INFO << __LINE__;
+    return KNMDC::getInstance()->upwardRateDate();
+}
+
+QString KnmInterface::downwareRateDate()
+{
+    qWarning()<< Q_FUNC_INFO << __LINE__;
+    return KNMDC::getInstance()->downwardRateDate();
+}
+
 void KnmInterface::openNetworkSetting()
 {
     if(m_pProcess) {
@@ -162,6 +174,18 @@ void KnmInterface::setWiredMainSwitch(bool switched)
 void KnmInterface::setWirelessSwitch(bool switched)
 {
     KNMDC::getInstance()->setWirelessSwitchEnable(switched);
+}
+
+void KnmInterface::setUpwareRateData(QString str)
+{
+    qDebug() << Q_FUNC_INFO <<__LINE__ << str;
+    KNMDC::getInstance()->setUpwareRateData(str);
+}
+
+void KnmInterface::setDownwareRateData(QString str)
+{
+    qDebug() << Q_FUNC_INFO <<__LINE__ << str;
+    //KNMDC::getInstance()->setDownwareRateData(str);
 }
 
 void KnmInterface::rescanWirelessConn()

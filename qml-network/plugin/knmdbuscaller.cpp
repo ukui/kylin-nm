@@ -330,7 +330,7 @@ void KnmDBusCaller::updateWirelessDeviceMapFinished(QDBusPendingCallWatcher *wat
                 getWirelessConList(item.key());
                 item++;
             }
-            KInterface::getInstance()->updateWiredDeviceList();
+            KInterface::getInstance()->updateWirelessDeviceList();
         }
     } else {
         qWarning() << reply.errorMessage();

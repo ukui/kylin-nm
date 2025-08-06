@@ -64,6 +64,7 @@ UkuiItems.DtThemeBackground {
 
                         UkuiItems.Icon {
                             id: lanVisibleButton
+                            visible: KInterface.wiredMainSwitch
                             source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/ukui-up-symbolic.svg"
                             width: 16
                             height: 16

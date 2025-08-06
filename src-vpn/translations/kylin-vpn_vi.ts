@@ -11,7 +11,7 @@
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="141"/>
         <source>Kylin VPN</source>
-        <translation type="unfinished"></translation>
+        <translation>Kylin VPN</translation>
     </message>
     <message>
         <location filename="../frontend/single-pages/singlepage.cpp" line="144"/>
@@ -29,7 +29,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="828"/>
         <source>Use Stateful encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng mã hóa trạng thái</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="829"/>
@@ -39,7 +39,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="830"/>
         <source>Authentication Mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Chế độ xác thực:</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="831"/>
@@ -49,22 +49,22 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="832"/>
         <source>CHAP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác thực CHAP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="833"/>
         <source>MSCHAP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác thực MSCHAP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="834"/>
         <source>MSCHAP2 authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác thực MSCHAP2</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="835"/>
         <source>EAP authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác thực EAP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="836"/>
@@ -74,12 +74,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="837"/>
         <source>Allow BSD data compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Cho phép nén dữ liệu BSD</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="838"/>
         <source>Allow Default data compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Cho phép nén dữ liệu mặc định</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="839"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="840"/>
         <source>Use protocol field compression negotiation</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng đàm phán nén trường giao thức</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="841"/>
@@ -104,12 +104,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="848"/>
         <source>128-bit</source>
-        <translation type="unfinished"></translation>
+        <translation>128 bit</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="849"/>
         <source>40-bit</source>
-        <translation type="unfinished"></translation>
+        <translation>40 bit</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1046"/>
@@ -119,7 +119,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1047"/>
         <source>Use compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng nén</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1048"/>
@@ -129,12 +129,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1049"/>
         <source>Set virtual device type</source>
-        <translation type="unfinished"></translation>
+        <translation>Đặt loại thiết bị ảo</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1050"/>
         <source>Set virtual device name</source>
-        <translation type="unfinished"></translation>
+        <translation>Đặt tên thiết bị ảo</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1051"/>
@@ -144,7 +144,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1052"/>
         <source>Randomize remote hosts</source>
-        <translation type="unfinished"></translation>
+        <translation>Ngẫu nhiên hóa máy chủ từ xa</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1053"/>
@@ -154,12 +154,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1054"/>
         <source>Specify ping interval</source>
-        <translation type="unfinished"></translation>
+        <translation>Chỉ định khoảng thời gian ping</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1055"/>
         <source>Specify exit or restart ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Chỉ định ping thoát hoặc khởi động lại</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1056"/>
@@ -199,7 +199,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1068"/>
         <source>Accept authenticated packets from any address (Float)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chấp nhận các gói được xác thực từ bất kỳ địa chỉ nào (Float)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1070"/>
@@ -209,12 +209,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1071"/>
         <source>Key File</source>
-        <translation type="unfinished"></translation>
+        <translation>Tập tin chính</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1072"/>
         <source>Key Direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Hướng chính</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1074"/>
@@ -229,7 +229,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1076"/>
         <source>Proxy USername</source>
-        <translation type="unfinished"></translation>
+        <translation>Proxy USername</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1077"/>
@@ -239,12 +239,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1079"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Tổng quát</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1080"/>
         <source>TLS settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Cài đặt TLS</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1081"/>
@@ -254,7 +254,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1083"/>
         <source>Use the previous authentication end (server) certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng chứng chỉ kết thúc xác thực (máy chủ) trước đó</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1085"/>
@@ -269,22 +269,22 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1087"/>
         <source>Proxies</source>
-        <translation type="unfinished"></translation>
+        <translation>Proxy</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1088"/>
         <source>Proxy Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Loại proxy</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1089"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>An ninh</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1090"/>
         <source>HMAC Authentication</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác thực HMAC</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1100"/>
@@ -294,12 +294,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1102"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Không</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1106"/>
         <source>Self-adaption</source>
-        <translation type="unfinished"></translation>
+        <translation>Tự thích nghi</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1107"/>
@@ -309,12 +309,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1112"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Thoát</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1113"/>
         <source>Restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Khởi động lại</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1115"/>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1117"/>
         <source>Verify name exactly</source>
-        <translation type="unfinished"></translation>
+        <translation>Xác minh tên chính xác</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1118"/>
@@ -346,19 +346,19 @@
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1121"/>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1124"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Khách hàng</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1126"/>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1130"/>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1139"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Không ai</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1127"/>
         <source>TLS-Certification</source>
-        <translation type="unfinished"></translation>
+        <translation>Chứng nhận TLS</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1128"/>
@@ -378,12 +378,12 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1216"/>
         <source>Options:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tùy chọn:</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1219"/>
         <source>Request an inner IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>Yêu cầu địa chỉ IP bên trong</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1220"/>
@@ -393,17 +393,17 @@
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1221"/>
         <source>Use IP compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng nén IP</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1222"/>
         <source>Enable custom password suggestions</source>
-        <translation type="unfinished"></translation>
+        <translation>Bật đề xuất mật khẩu tùy chỉnh</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1382"/>
         <source>Choose a private key</source>
-        <translation type="unfinished"></translation>
+        <translation>Chọn khóa riêng tư</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnadvancedpage.cpp" line="1384"/>
@@ -416,7 +416,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="331"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Kiểu</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="332"/>
@@ -426,22 +426,22 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="333"/>
         <source>Static Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Phím tĩnh</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="334"/>
         <source>Local IP</source>
-        <translation type="unfinished"></translation>
+        <translation>IP cục bộ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="335"/>
         <source>Remote IP</source>
-        <translation type="unfinished"></translation>
+        <translation>IP từ xa</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="336"/>
         <source>PIN Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Mã PIN</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="337"/>
@@ -458,7 +458,7 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="340"/>
         <source>Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Địa chỉ máy chủ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="341"/>
@@ -488,13 +488,13 @@
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="346"/>
         <source>Private Key Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Mật khẩu khóa riêng tư</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="347"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="349"/>
         <source>Password Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Tùy chọn mật khẩu</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="348"/>
@@ -505,7 +505,8 @@
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="352"/>
         <source>Notice:
 If key direction is used, it must be opposite to the VPN side used. If &apos;1&apos; is used, the connection must use &apos;0&apos;. If you are not sure which value to use, please contact your system administrator.</source>
-        <translation type="unfinished"></translation>
+        <translation>Thông báo:
+Nếu hướng phím được sử dụng, nó phải ngược lại với phía VPN được sử dụng. Nếu &apos;1&apos; được sử dụng, kết nối phải sử dụng &apos;0&apos;. Nếu bạn không chắc chắn nên sử dụng giá trị nào, vui lòng liên hệ với quản trị viên hệ thống của bạn.</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="359"/>
@@ -518,7 +519,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="369"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Không ai</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="373"/>
@@ -530,7 +531,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="374"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="380"/>
         <source>Save password for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>Lưu mật khẩu cho tất cả người dùng</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="375"/>
@@ -542,7 +543,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="376"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="382"/>
         <source>Don&apos;t require a password</source>
-        <translation type="unfinished"></translation>
+        <translation>Không yêu cầu mật khẩu</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="385"/>
@@ -553,17 +554,17 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="854"/>
         <source>Certificate(TLS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chứng chỉ (TLS)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="855"/>
         <source>Static key</source>
-        <translation type="unfinished"></translation>
+        <translation>Phím tĩnh</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="857"/>
         <source>Password and certificate(TLS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mật khẩu và chứng chỉ (TLS)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="866"/>
@@ -573,23 +574,23 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="867"/>
         <source>Certificate/ssh-agent</source>
-        <translation type="unfinished"></translation>
+        <translation>Chứng chỉ/ssh-agent</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="868"/>
         <source>Smart card</source>
-        <translation type="unfinished"></translation>
+        <translation>Thẻ thông minh</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="923"/>
         <source>Choose a private key</source>
-        <translation type="unfinished"></translation>
+        <translation>Chọn khóa riêng tư</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="925"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="964"/>
         <source>Key Files (*.key *.pem *.der *.p12 *.pfx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Các tệp chính (*.key *.pem *.der *.p12 *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="936"/>
@@ -600,7 +601,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="938"/>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="951"/>
         <source>CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tệp CA (*.pem *.der *.p12 *.crt *.cer *.pfx)</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnconfigpage.cpp" line="949"/>
@@ -645,7 +646,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="178"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Hủy</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpndetail.cpp" line="179"/>
@@ -658,7 +659,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="170"/>
         <source>IPv4 Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Cấu hình IPv4</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="171"/>
@@ -668,12 +669,12 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="172"/>
         <source>Netmask</source>
-        <translation type="unfinished"></translation>
+        <translation>Mặt nạ mạng</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="173"/>
         <source>Default Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Cổng mặc định</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv4page.cpp" line="174"/>
@@ -706,22 +707,22 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="159"/>
         <source>IPv6 Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Cấu hình IPv6</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="160"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Địa chỉ</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="161"/>
         <source>Netmask</source>
-        <translation type="unfinished"></translation>
+        <translation>Mặt nạ mạng</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="162"/>
         <source>Default Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Cổng mặc định</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="163"/>
@@ -731,7 +732,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="164"/>
         <source>Search Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>Tên miền tìm kiếm</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="166"/>
@@ -741,7 +742,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnipv6page.cpp" line="167"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Cẩm nang</translation>
     </message>
 </context>
 <context>
@@ -755,7 +756,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="146"/>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="161"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Ngắt kết nối</translation>
     </message>
     <message>
         <location filename="../frontend/list-items/vpnlistitem.cpp" line="148"/>
@@ -792,7 +793,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="120"/>
         <source>VPN Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Tên VPN</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="126"/>
@@ -808,7 +809,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="168"/>
         <source>Auto Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Kết nối tự động</translation>
     </message>
     <message>
         <location filename="../frontend/vpndetails/vpnaddpage.cpp" line="170"/>
@@ -833,7 +834,7 @@ If key direction is used, it must be opposite to the VPN side used. If &apos;1&a
     <message>
         <location filename="../frontend/vpnobject.cpp" line="50"/>
         <source>VPN Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Công cụ VPN</translation>
     </message>
 </context>
 </TS>

@@ -2,22 +2,18 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
-    <name>BluetoothArea</name>
+    <name>DeviceComboBox</name>
     <message>
-        <source>My Devices</source>
-        <translation> 我的设备 </translation>
+        <source>(Connected)</source>
+        <translation>(已连接)</translation>
     </message>
     <message>
-        <source>More Bluetooth Settings</source>
-        <translation> 更多蓝牙设置 </translation>
+        <source>(Not Connected)</source>
+        <translation>(未连接)</translation>
     </message>
     <message>
-        <source>New Devices</source>
-        <translation> 新设备 </translation>
-    </message>
-    <message>
-        <source>Bluetooth is disabled</source>
-        <translation> 蓝牙功能已关闭 </translation>
+        <source>Current Network Card</source>
+        <translation>当前网卡</translation>
     </message>
 </context>
 </TS>

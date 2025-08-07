@@ -33,6 +33,10 @@ SOURCES += \
 
 RESOURCES += widget/qml.qrc
 
+CONFIG(release, debug|release) {
+    !system($$PWD/translate_generation.sh): error("Failed to generate translation")
+}
+
 inst1.files += widget/**
 inst1.path = /usr/share/ukui/widgets/org.ukui.shortcut.network
 

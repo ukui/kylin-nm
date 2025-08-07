@@ -144,14 +144,6 @@ WlanConnect::WlanConnect() :  m_firstLoad(true) {
     pluginName = tr("WLAN");
     pluginType = NETWORK;
 
-    m_interface = new QDBusInterface("com.kylin.network", "/com/kylin/network",
-                                     "com.kylin.network",
-                                     QDBusConnection::sessionBus());
-    if(!m_interface->isValid()) {
-        qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
-    }
-    updatePluginShowSettings();
-    connect(m_interface, SIGNAL(wirelessDeviceStatusChanged()), this, SLOT(updatePluginShowSettings()), Qt::QueuedConnection);
 }
 
 WlanConnect::~WlanConnect()
@@ -184,10 +176,12 @@ QWidget *WlanConnect::pluginUi() {
         m_interface = new QDBusInterface("com.kylin.network", "/com/kylin/network",
                                          "com.kylin.network",
                                          QDBusConnection::sessionBus());
+
         if(!m_interface->isValid()) {
             qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
 
+        connect(m_interface, SIGNAL(wirelessDeviceStatusChanged()), this, SLOT(updatePluginShowSettings()), Qt::QueuedConnection);
         initSearchText();
         initComponent();
     }
@@ -804,6 +798,15 @@ void WlanConnect::initSwtichState()
     setSwitchBtnState(state);
 }
 
+void WlanConnect::openKylinm()
+{
+    QDBusInterface sidebarIfc("org.ukui.Sidebar",
+                              "/org/ukui/Sidebar",
+                              "org.ukui.Sidebar",
+                              QDBusConnection::sessionBus());
+    sidebarIfc.call("shortcutWidgetActive", "org.ukui.shortcut.network", false);
+}
+
 //初始化整体列表和单设备列表
 void WlanConnect::initNet() {
 //    int count = 1;
@@ -1120,11 +1123,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     });
 
     connect(wlanItem, &QPushButton::clicked, this, [=] {
-        if (wlanItem->isAcitve) {
-            deActiveConnect(name, deviceName, type);
-        } else {
-            activeConnect(name, deviceName, type);
-        }
+        // 后续需要优化，跳转到控制台进行输入
     });
     //记录到deviceFrame的itemMap中
     deviceFrameMap[deviceName]->itemMap.insert(name, wlanItem);

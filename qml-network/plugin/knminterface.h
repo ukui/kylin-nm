@@ -94,6 +94,8 @@ public slots:
 
     QString downwareRateDate();
 
+    bool getNetMacConnectStatus(QString devmac);
+
 signals:
     void updateWiredDeviceList();
 

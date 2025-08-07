@@ -12,6 +12,12 @@ ListView {
     visible: lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
     model: KInterface.wiredConList
     spacing: 0
+    property bool connectMac : false
+
+    function updateMacConnAttr(ipos, status) {
+        if(0 === ipos)
+            connectMac = status
+    }
 
     // 定义每个项的显示方式
     delegate: ItemDelegate {
@@ -20,6 +26,14 @@ ListView {
         height: 56
         Layout.leftMargin: 8
         property bool enteritem : false
+        property bool conConnected:   modelData.State === 2
+        onConConnectedChanged: {
+            updateMacConnAttr(index, conConnected)
+        }
+
+        Component.onCompleted: {
+            updateMacConnAttr(index, conConnected)
+        }
 
         RowLayout {
             anchors.fill: parent
@@ -37,7 +51,7 @@ ListView {
 
             Item {
                 Layout.alignment: Qt.AlignLeft
-                Layout.leftMargin: 16
+                Layout.leftMargin: 26
                 width: 36
                 height: 36
 

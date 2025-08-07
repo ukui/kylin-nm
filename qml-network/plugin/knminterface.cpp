@@ -83,6 +83,33 @@ QString KnmInterface::downwareRateDate()
     return KNMDC::getInstance()->downwardRateDate();
 }
 
+bool KnmInterface::getNetMacConnectStatus(QString devmac)
+{
+    qWarning() << devmac;
+    int status = 0;
+    auto conList = KNMDC::getInstance()->wiredDeviceConnList(devmac);
+    qWarning() << conList;
+    if(conList.count() != 0) {
+        for (auto iter : conList) {
+            status = iter.toMap().value("State").toInt();
+            if(2 == status)
+                return true;
+        }
+    }
+
+    conList = KNMDC::getInstance()->wirelessDeviceConnList(devmac);
+    qWarning() << conList;
+    if(conList.count() != 0) {
+        for (auto iter : conList) {
+            status = iter.toMap().value("State").toInt();
+            if(2 == status)
+                return true;
+        }
+    }
+
+    return false;
+}
+
 void KnmInterface::openNetworkSetting()
 {
     if(m_pProcess) {

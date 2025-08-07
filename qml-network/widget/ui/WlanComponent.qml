@@ -13,7 +13,13 @@ ListView {
     model: KInterface.wirelessConLists
     //model: KInterface.wirelessConList
     spacing: 0
-    //reuseItems: true
+    property bool connectMac : false
+
+    function updateMacConnAttr(ipos, status) {
+        if(0 === ipos)
+            connectMac = status
+    }
+
     // 定义每个项的显示方式
     delegate: ItemDelegate {
         id: listItem
@@ -22,6 +28,14 @@ ListView {
         height: 56
         Layout.leftMargin: 8
         property bool enteritem : false
+        property bool conConnected:   model.status === 2
+        onConConnectedChanged: {
+            updateMacConnAttr(index, conConnected)
+        }
+
+        Component.onCompleted: {
+            updateMacConnAttr(index, conConnected)
+        }
 
         // Binding{
         //  when:!textEdit.activeFocus
@@ -48,7 +62,7 @@ ListView {
 
                 Item {
                     Layout.alignment: Qt.AlignLeft
-                    Layout.leftMargin: 16
+                    Layout.leftMargin: 26
                     width: 36
                     height: 36
 
@@ -253,14 +267,13 @@ ListView {
             RowLayout {
                 visible: false
                 id: textEditLayout
-
-
                 TextField {
                     id: textEdit
                     width: 208
                     height: 36
                     Layout.leftMargin: 68
                     echoMode: TextInput.Password
+                    property bool passMode: true
                     color:"black"
                     focus:false //必须是false，界面重建时会导致崩溃，焦点丢失。编辑时切换窗口也会导致焦点丢失崩溃老问题待解，可能是qt bug
                 }

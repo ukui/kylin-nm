@@ -84,7 +84,7 @@ UkuiItems.DtThemeBackground {
                                         return
                                     lanContentArea.visible = lanVisibleButton.visibleState
                                     lanDeviceComboBox.visible = lanVisibleButton.visibleState && !lanDeviceComboBox.ishide && (lanDeviceComboBox.count >= 2)
-                                    lanNoWiredItem.visible = lanVisibleButton.visibleState && (lanDeviceComboBox.count === 0)
+                                    //lanNoWiredItem.visible = lanVisibleButton.visibleState && (lanDeviceComboBox.count === 0)
                                 }
                             }
                         }
@@ -120,7 +120,7 @@ UkuiItems.DtThemeBackground {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 60
                         Layout.alignment: Qt.AlignTop
-                        visible: lanDeviceComboBox.count === 0
+                        visible: false
                         Image {
                             width: 16
                             height: 16
@@ -145,6 +145,7 @@ UkuiItems.DtThemeBackground {
                         model: KInterface.wiredDevList
                         visible: lanswitchBtn.checked && lanVisibleButton.visibleState && !lanNoWiredItem.visible && (lanDeviceComboBox.count>=2)
                         property bool ishide : false
+                        currentConnect: lanContentArea.connectMac
                         onCurrentTextChanged: {
                             KInterface.getWiredDevConnList(lanDeviceComboBox.currentText);
                         }
@@ -154,10 +155,10 @@ UkuiItems.DtThemeBackground {
                                 if (lanDeviceComboBox.count <= 0) {
                                     lanDeviceComboBox.ishide = true
                                     lanContentArea.visible = false
-                                    lanNoWiredItem.visible = true
+                                    //lanNoWiredItem.visible = true
                                     lanDeviceComboBox.enabled = false;
                                 } else {
-                                    lanNoWiredItem.visible = false
+                                    //lanNoWiredItem.visible = false
                                     lanDeviceComboBox.enabled = true;
                                 }
                                 if (lanDeviceComboBox.count <= 1) {
@@ -270,8 +271,11 @@ UkuiItems.DtThemeBackground {
                         visible: wlanswitchBtn.checked && wlanDeviceComboBox.count > 1
                         model: KInterface.wirelessDevList
                         property bool ishide : wlanDeviceComboBox.count > 1
+                        currentConnect: wlanContentArea.connectMac
                         onCurrentTextChanged: {
                             KInterface.getWirelessDevConnList(wlanDeviceComboBox.currentText);
+                            KInterface.rebuildCurrentWirelessList()
+
                         }
                         Connections {
                             target: KInterface

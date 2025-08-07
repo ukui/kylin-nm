@@ -634,24 +634,9 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     });
 
     lanItem->isAcitve = isActived;
-    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
-        if (lanItem->isAcitve || lanItem->loading) {
-            deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
-        } else {
-            activeConnect(lanItem->uuid, devName, WIRED_TYPE);
-        }
-    });
-
-    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
-        activeConnect(lanItem->uuid, devName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
-        deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
-        deleteOneLan(lanItem->uuid, WIRED_TYPE);
+        openKylinm();
     });
 
     //记录到deviceFrame的itemMap中
@@ -948,24 +933,9 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     });
 
     lanItem->isAcitve = false;
-    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
-        if (lanItem->isAcitve || lanItem->loading) {
-            deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-        } else {
-            activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-        }
-    });
-
-    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
-        activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
-        deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
-        deleteOneLan(lanItem->uuid, WIRED_TYPE);
+        openKylinm();
     });
 
     //记录到deviceFrame的itemMap中
@@ -1084,9 +1054,15 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
         item->isAcitve = false;
         item->statusLabel->setText(tr("not connected"));
     }
-    item->setConnectActionText(item->isAcitve);
-//    QIcon searchIcon = QIcon::fromTheme(iconPath);
-//    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
+}
+
+void NetConnect::openKylinm()
+{
+    QDBusInterface sidebarIfc("org.ukui.Sidebar",
+                            "/org/ukui/Sidebar",
+                            "org.ukui.Sidebar",
+                            QDBusConnection::sessionBus());
+    sidebarIfc.call("shortcutWidgetActive", "org.ukui.shortcut.network", false);
 }
 
 int NetConnect::getInsertPos(QString connName, QString deviceName)

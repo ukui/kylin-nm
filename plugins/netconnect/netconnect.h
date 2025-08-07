@@ -94,7 +94,6 @@ private:
 
     void showDesktopNotify(const QString &message);
 
-
     //开关相关
     void setSwitchStatus();
     void hideLayout(QVBoxLayout * layout);
@@ -123,6 +122,9 @@ private:
 
     //单个lan连接状态变化
     void itemActiveConnectionStatusChanged(LanItem *item, int status);
+
+    // 打卡托盘网络窗口，后续需要跳转到指定密码框
+    void openKylinm();
 
     bool LaunchApp(QString desktopFile);
 

@@ -87,22 +87,17 @@ private:
     void activeConnect(QString netName, QString deviceName, int type);
     void deActiveConnect(QString netName, QString deviceName, int type);
 
-
-
     int  sortWlanNet(QString deviceName, QString name, QString signal);
     void updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection, int category);
     void resortWifiList(ItemFrame *frame, QList<QStringList> list);
-
 
     //单wifi图标
     int  setSignal(QString lv);
     QString wifiIcon(bool isLock, int strength, int category);
 
-
     //开关相关
     void hideLayout(QVBoxLayout * layout);
     void showLayout(QVBoxLayout * layout);
-
 
     //获取设备列表
     void getDeviceList(QStringList &list);
@@ -127,29 +122,15 @@ private:
     void itemActiveConnectionStatusChanged(WlanItem *item, int status);
 
     void initSwtichState();
-    inline void setSwitchBtnEnable(bool state) {
-        if (m_wifiSwitch != nullptr) {
-            m_wifiSwitch->setEnabled(state);
-        }
-    }
-    inline bool getSwitchBtnEnable() {
-        if (m_wifiSwitch != nullptr) {
-            return m_wifiSwitch->isEnabled();
-        }
-    }
 
-    inline void setSwitchBtnState(bool state) {
-        if (m_wifiSwitch != nullptr) {
-            m_wifiSwitch->blockSignals(true);
-            m_wifiSwitch->setChecked(state);
-            m_wifiSwitch->blockSignals(false);
-        }
-    }
-    inline bool getSwitchBtnState() {
-        if (m_wifiSwitch != nullptr) {
-            return m_wifiSwitch->isChecked();
-        }
-    }
+    // 打卡托盘网络窗口，后续需要跳转到指定密码框
+    void openKylinm();
+
+    void setSwitchBtnEnable(bool state);
+    bool getSwitchBtnEnable();
+
+    void setSwitchBtnState(bool state);
+    bool getSwitchBtnState();
     bool LaunchApp(QString desktopFile);
 
 protected:
@@ -197,4 +178,30 @@ private slots:
     //更新控制面板插件Gsetting show
     void updatePluginShowSettings();
 };
+
+inline void WlanConnect::setSwitchBtnEnable(bool state) {
+    if (m_wifiSwitch != nullptr) {
+        m_wifiSwitch->setEnabled(state);
+    }
+}
+
+inline bool WlanConnect::getSwitchBtnEnable() {
+    if (m_wifiSwitch != nullptr) {
+        return m_wifiSwitch->isEnabled();
+    }
+}
+
+inline void WlanConnect::setSwitchBtnState(bool state) {
+    if (m_wifiSwitch != nullptr) {
+        m_wifiSwitch->blockSignals(true);
+        m_wifiSwitch->setChecked(state);
+        m_wifiSwitch->blockSignals(false);
+    }
+}
+
+inline bool WlanConnect::getSwitchBtnState() {
+    if (m_wifiSwitch != nullptr) {
+        return m_wifiSwitch->isChecked();
+    }
+}
 #endif // WLANCONNECT_H

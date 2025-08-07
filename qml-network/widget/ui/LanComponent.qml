@@ -117,13 +117,12 @@ ListView {
                     }
                 }
             }
-            Label {
+            UkuiItems.DtThemeText {
                 id: nameLabel
                 Layout.alignment: Qt.AlignLeft
                 Layout.leftMargin: 8
                 Layout.preferredWidth: 150
                 text: modelData.Name
-                font.pixelSize: 14
                 MouseArea {
                     onClicked: {
                         nameLabel.visible = false
@@ -132,7 +131,7 @@ ListView {
                 }
             }
 
-            Label {
+            UkuiItems.DtThemeText {
                 id: nameStateLabel
                 visible: false
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
@@ -140,15 +139,13 @@ ListView {
                 Layout.topMargin: 8
                 Layout.preferredWidth: 150
                 text: modelData.Name
-                font.pixelSize: 14
-                Label {
+                UkuiItems.DtThemeText {
                     id: stateLabel
                     Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                     Layout.leftMargin: 8
                     Layout.bottomMargin: 8
                     anchors.top: nameStateLabel.bottom
                     text: (modelData.State === 2) ? qsTr("connected") : qsTr("Not connected")
-                    font.pixelSize: 12
                 }
             }
 
@@ -171,12 +168,11 @@ ListView {
                     source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/load-up.png"
                 }
 
-                Label {
+                UkuiItems.DtThemeText {
                     id: upLoadWiredText
                     visible: modelData.State === 2
                     anchors.right: downLoadIcon.left
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: 12
                     text: "0KB/s"
                     Connections {
                         target: KInterface
@@ -194,13 +190,12 @@ ListView {
                     source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/load-down.png"
                 }
 
-                Label {
+                UkuiItems.DtThemeText {
                     id: downLoadWiredText
                     visible: modelData.State === 2
                     anchors.rightMargin: 32
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: 12
                     text: "0KB/s"
                     Connections {
                         target: KInterface

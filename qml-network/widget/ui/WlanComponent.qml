@@ -111,6 +111,8 @@ ListView {
                         textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X"))
                         connectBtn.visible = !textEditLayout.visible
                     }
+                } else if (model.status === 2) {
+                    KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
                 }
 
                 if(connectBtnHandler.containsMouse) {
@@ -227,14 +229,40 @@ ListView {
 
                 ColumnLayout {
                     spacing: 0
-                    Label {
-                        id: nameLabel
-                        Layout.alignment: Qt.AlignLeft
-                        Layout.leftMargin: 8
-                        Layout.preferredWidth: 150
-                        Layout.bottomMargin: 0
-                        text: model.ssid
-                        font.pixelSize: 14
+
+                    RowLayout {
+                        Label {
+                            id: nameLabel
+                            Layout.alignment: Qt.AlignLeft
+                            Layout.leftMargin: 8
+                            Layout.bottomMargin: 0
+                            text: model.ssid
+                        }
+
+                        Rectangle {
+                            id: roundedRect
+                            Layout.bottomMargin: 0
+
+                            // 0 = 2.4G/5G, 1 = 5G, 2 = 2.4G
+                            property int wlan_type : model.isMix ? 0 : model.m_freq > 5000 ? 1 : 2;
+
+                            color: "transparent"
+                            width: wlan_type === 0 ? 56 : wlan_type === 1 ? 24 : 34;
+                            height: 16
+                            radius: 4
+
+                            border {
+                                color: Platform.GlobalTheme.kFontPlaceholderText.pureColor
+                                width: 1
+                            }
+
+                            UkuiItems.DtThemeText {
+                                anchors.centerIn: parent
+                                property int wlan_type : model.isMix ? 0 : model.m_freq > 5000 ? 1 : 2;
+                                text: wlan_type === 0 ? "2.4G/5G" : wlan_type === 1 ? "5G" : "2.4G"
+                                textColor: Platform.GlobalTheme.kFontPlaceholderText
+                            }
+                        }
                     }
 
                     RowLayout {
@@ -326,12 +354,11 @@ ListView {
                         source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/load-up.png"
                     }
 
-                    Label {
+                    UkuiItems.DtThemeText {
                         id: upLoadWirelessText
                         visible: model.status === 2
                         anchors.right: downLoadIcon.left
                         anchors.verticalCenter: parent.verticalCenter
-                        font.pixelSize: 12
                         text: "0KB/s"
                         Connections {
                             target: KInterface
@@ -349,13 +376,12 @@ ListView {
                         source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/load-down.png"
                     }
 
-                    Label {
+                    UkuiItems.DtThemeText {
                         id: downLoadWirelessText
                         visible: model.status === 2
                         anchors.rightMargin: 32
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        font.pixelSize: 12
                         text: "0KB/s"
                         Connections {
                             target: KInterface
@@ -407,31 +433,31 @@ ListView {
         }
     }
     footer: Button {
-                id: addOtherBtn
-                visible: true
-                width: parent.width
-                height: 40
-                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                hoverEnabled: true
+        id: addOtherBtn
+        visible: true
+        width: parent.width
+        height: 40
+        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+        hoverEnabled: true
 
-                Text {
-                        text: qsTr("Add Others...")
-                        anchors.top: parent.top
-                        anchors.topMargin: (parent.height-height)/2   //垂直居中设置不生效使用边距控制居中
-                        anchors.left: parent.left
-                        anchors.leftMargin: 26
-                    }
+        Text {
+            text: qsTr("Add Others...")
+            anchors.top: parent.top
+            anchors.topMargin: (parent.height-height)/2   //垂直居中设置不生效使用边距控制居中
+            anchors.left: parent.left
+            anchors.leftMargin: 26
+        }
 
-                onClicked: {
-                     console.log("addOtherBtn onClicked ",parent.verticalCenter,anchors.verticalCenter)
-                     KInterface.showAddOtherWlanPage(wlanDeviceComboBox.currentText);
-                      mouse.accepted = true
-                    }
-
-           }
-
+        onClicked: {
+            console.log("addOtherBtn onClicked ",parent.verticalCenter,anchors.verticalCenter)
+            KInterface.showAddOtherWlanPage(wlanDeviceComboBox.currentText);
+            mouse.accepted = true
+        }
 
     }
+
+
+}
 
 
 

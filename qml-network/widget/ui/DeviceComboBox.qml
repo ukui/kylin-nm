@@ -40,16 +40,20 @@ ComboBox {
 
         RowLayout {
             anchors.fill: parent 
-        	Label { 
+            UkuiItems.DtThemeText {
                 Layout.leftMargin: 16
                 Layout.alignment: Qt.AlignLeft
+                Layout.maximumWidth: parent.width * 0.6
                 text: modelData
+                elide: Text.ElideMiddle
             }
             UkuiItems.DtThemeText {
                 Layout.alignment: Qt.AlignLeft
                 Layout.leftMargin: 1
+                Layout.rightMargin: 15
                 text:  connect ? qsTr("(Connected)") : qsTr("(Not Connected)")
                 textColor: connect ? Platform.GlobalTheme.kGreen1 : Platform.GlobalTheme.kFontSecondary
+                elide: Text.ElideRight
             }
             Item {
                 Layout.fillWidth: true
@@ -67,19 +71,22 @@ ComboBox {
                 Layout.leftMargin: 10
                 text: qsTr("Current Network Card")
                 textColor: Platform.GlobalTheme.kFontSecondary
+                elide: Text.ElideRight
             }
 
             UkuiItems.DtThemeText {
                 Layout.alignment: Qt.AlignLeft
-                Layout.leftMargin: 24
+                Layout.maximumWidth: parent.width * 0.4
                 text: comboBoxOrigin.currentText
+                elide: Text.ElideMiddle
             }
 
             UkuiItems.DtThemeText {
                 Layout.alignment: Qt.AlignLeft
-                Layout.leftMargin: 1
+                Layout.rightMargin: 15
                 text: currentConnect ? qsTr("(Connected)") : qsTr("(Not Connected)")
                 textColor: currentConnect ? Platform.GlobalTheme.kGreen1 : Platform.GlobalTheme.kFontSecondary
+                elide: Text.ElideRight
             }
             
             Item {

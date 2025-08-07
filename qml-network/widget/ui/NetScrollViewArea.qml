@@ -54,9 +54,8 @@ UkuiItems.DtThemeBackground {
                         Layout.alignment: Qt.AlignTop
                         visible: lanDeviceComboBox.count >= 1
 
-                        Label {
+                        UkuiItems.DtThemeText {
                             text: qsTr("Wired network")
-                            font.pixelSize: 14
                             Layout.alignment: Qt.AlignLeft
                             Layout.leftMargin: 24
                         }
@@ -132,7 +131,7 @@ UkuiItems.DtThemeBackground {
                             anchors.verticalCenter: parent.verticalCenter
                             source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/dialog-warning.svg"
                         }
-                        Label {
+                        UkuiItems.DtThemeText {
                             id: lanNoWiredText
                             anchors.leftMargin: 20
                             anchors.verticalCenter: parent.verticalCenter
@@ -198,9 +197,8 @@ UkuiItems.DtThemeBackground {
                         width: parent.width
                         Layout.alignment: Qt.AlignTop
 
-                        Label {
+                        UkuiItems.DtThemeText {
                             text: qsTr("Wireless network")
-                            font.pixelSize: 14
                             Layout.alignment: Qt.AlignLeft
                             Layout.leftMargin: 24
                             visible: wlanDeviceComboBox.count >= 1
@@ -338,7 +336,6 @@ UkuiItems.DtThemeBackground {
                 anchors.left: parent.left
                 anchors.leftMargin: 24
                 text: qsTr("More network Settings")
-                font.pixelSize: 14
                 textColor: Platform.GlobalTheme.kFontStrong
 
                 MouseArea {

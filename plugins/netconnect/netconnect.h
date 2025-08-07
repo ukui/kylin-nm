@@ -104,6 +104,7 @@ private:
     void deleteOneLan(QString ssid, int type);
     void activeConnect(QString ssid, QString deviceName, int type);
     void deActiveConnect(QString ssid, QString deviceName, int type);
+    void setDeviceAutoConnectState(QString deviceName, bool state);
 
     //获取设备列表
     void getDeviceStatusMap(QMap<QString, bool> &map);

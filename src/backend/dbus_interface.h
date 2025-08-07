@@ -48,7 +48,12 @@ public Q_SLOTS: // METHODS
         argumentList << QVariant::fromValue(type) << QVariant::fromValue(devName) << QVariant::fromValue(ssid);
         callWithArgumentList(QDBus::NoBlock, QStringLiteral("activateConnect"), argumentList);
     }
-
+    inline Q_NOREPLY void setDeviceAutoConnectState(const QString &devName,bool stated)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(devName) << QVariant::fromValue(stated) ;
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("setDeviceAutoConnectState"), argumentList);
+    }
     inline QDBusPendingReply<> activeWirelessAp(const QString &apName, const QString &apPassword, const QString &band, const QString &apDevice)
     {
         QList<QVariant> argumentList;

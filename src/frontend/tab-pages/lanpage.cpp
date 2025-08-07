@@ -1330,6 +1330,12 @@ void LanPage::deactivateWired(const QString& devName, const QString& connUuid)
     m_wiredConnectOperation->deactivateWiredConnection(name, connUuid);
 }
 
+void LanPage::setWiredDeviceAutoconnect(const QString&  devName,bool state)
+{
+    qDebug() << Q_FUNC_INFO << __LINE__ <<devName << state;
+    m_wiredConnectOperation->setWiredDeviceAutoconnect(devName, state);
+}
+
 void LanPage::deleteWiredConnect(const QString& connUuid)
 {
     qDebug() << "[LanPage] deactivateWired" << connUuid;

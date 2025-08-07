@@ -70,6 +70,8 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void deActivateConnect(int type, QString devName, QString ssid);
     //delete network connect
     Q_NOREPLY void deleteConnect(int type,QString Uuid);
+    //dev autoconnect
+    Q_NOREPLY void setDeviceAutoConnectState(QString devName, bool state);
 
     //获取设备列表和启用/禁用状态
     QVariantMap getDeviceListAndEnabled(int devType);

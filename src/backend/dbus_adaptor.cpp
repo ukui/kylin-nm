@@ -66,6 +66,11 @@ void NetworkAdaptor::deleteConnect(int type, const QString &ssid)
     // handle method call com.kylin.network.deleteConnect
     QMetaObject::invokeMethod(parent(), "deleteConnect", Q_ARG(int, type), Q_ARG(QString, ssid));
 }
+void NetworkAdaptor::setDeviceAutoConnectState(const QString &deviceName, bool state)
+{
+    // handle method call com.kylin.network.setDeviceAutoConnectState
+    QMetaObject::invokeMethod(parent(), "setDeviceAutoConnectState", Q_ARG(QString, deviceName), Q_ARG(bool, state));
+}
 
 void NetworkAdaptor::deactiveWirelessAp(const QString &apName, const QString &uuid)
 {

@@ -348,11 +348,19 @@ void NetConnect::wiredSwitchSLot(bool checked)
     m_pSysBusIntfs->call(QStringLiteral("setWiredMainSwitch"), checked);
     if (checked) {
         showLayout(ui->availableLayout);
+        //后续切换到sessiondbus上，进行处理
+        QMap<QString, ItemFrame *>::iterator iter1;
+        for (iter1 = deviceFrameMap.begin(); iter1 != deviceFrameMap.end(); iter1++) {
+            //set device autoconnect
+            qWarning() << Q_FUNC_INFO << __LINE__ << iter1.key() <<  checked;
+            setDeviceAutoConnectState(iter1.key(),checked);
+        }
+        //后续切换到sessiondbus上，进行处理
         return;
     }
 
     hideLayout(ui->availableLayout);
-
+    //后续切换到sessiondbus上，进行处理
     QMap<QString, ItemFrame *>::iterator iter1;
     for (iter1 = deviceFrameMap.begin(); iter1 != deviceFrameMap.end(); iter1++) {
         QMap<QString, LanItem *>::iterator iter2;
@@ -364,7 +372,12 @@ void NetConnect::wiredSwitchSLot(bool checked)
                 deActiveConnect(iter2.value()->uuid, iter1.value()->deviceFrame->dropDownLabel->m_devName, WIRED_TYPE);
             }
         }
+        //set device autoconnect
+        qWarning() << Q_FUNC_INFO << __LINE__ << iter1.key() <<  checked;
+
+        setDeviceAutoConnectState(iter1.key(),checked);
     }
+    //后续切换到sessiondbus上，进行处理
 }
 
 void NetConnect::renewSwitchLayout(bool enable)
@@ -552,6 +565,16 @@ void NetConnect::deActiveConnect(QString ssid, QString deviceName, int type) {
     qDebug() << "[NetConnect]call deActivateConnect" << __LINE__;
     m_interface->call(QStringLiteral("deActivateConnect"),type, deviceName, ssid);
     qDebug() << "[NetConnect]call deActivateConnect respond" << __LINE__;
+}
+
+//set
+void NetConnect::setDeviceAutoConnectState(QString deviceName, bool state) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
+    qDebug() << "[NetConnect]call setDeviceAutoConnectState" << __LINE__;
+    m_interface->call(QStringLiteral("setDeviceAutoConnectState"),deviceName, state);
+    qDebug() << "[NetConnect]call setDeviceAutoConnectState respond" << __LINE__;
 }
 
 //初始化设备列表 网卡标号问题？

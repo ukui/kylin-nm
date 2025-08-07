@@ -173,12 +173,9 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
 {
     //todo
 
-    if (m_pSysBusInterfaces->isValid())
-    {
+    if (m_pSysBusInterfaces->isValid()) {
         m_pSysBusInterfaces->call(QStringLiteral("setWiredMainSwitch"), enable);
-    }
-    else
-    {
+    } else {
         qWarning()<< Q_FUNC_INFO << __LINE__ <<"m_pSysBusInterfaces is isValid!";
     }
 
@@ -196,6 +193,14 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
                     deActivateConnect(0, devName, connInfo.at(1).toString());
                 }
             }
+            setDeviceAutoConnectState(devName,false);
+        }
+    } else {
+        int devType = 0;
+        const auto devList = mNetworkAdaptor->getDeviceListAndEnabled(devType);
+        for (auto it = devList.cbegin(); it != devList.cend(); ++it) {
+            const QString &devName = it.key();
+            setDeviceAutoConnectState(devName,true);
         }
     }
 
@@ -292,6 +297,11 @@ void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
     } else {
         qDebug() << "[DbusAdaptor] activateConnect type is invalid";
     }
+}
+
+void DbusAdaptor::setDeviceAutoConnectState(QString devName, bool state)
+{
+    m_mainWindow->setWiredDeviceAutoconnect(devName,state);
 }
 
 //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid

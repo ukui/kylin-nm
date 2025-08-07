@@ -90,6 +90,7 @@ public:
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
     void deleteWiredConnect(int type, const QString& connUuid);
+    void setWiredDeviceAutoconnect(const QString& devName, bool state);
     //无线连接断开
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);

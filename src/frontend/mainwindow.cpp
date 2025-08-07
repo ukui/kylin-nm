@@ -101,6 +101,21 @@ const QString intel = "V10SP1-edu";
 
 MainWindow::MainWindow(QString display, QWidget *parent) : QMainWindow(parent), m_display(display)
 {
+    QDir dir(CONFIG_FILE_DIR);
+    if (!dir.exists()) {
+        dir.mkdir(CONFIG_FILE_DIR);
+    }
+
+    QString filename = CONFIG_FILE_PATH;
+    QSettings m_pConfSetting(filename, QSettings::IniFormat);
+    if (!m_pConfSetting.contains(AUTO_FIRE_WALL_PERMIITTED)) {
+        m_pConfSetting.setValue(AUTO_FIRE_WALL_PERMIITTED, true);
+    }
+
+    if (!m_pConfSetting.contains(FIRE_WALL_PERMISSION_SHOW)) {
+        m_pConfSetting.setValue(FIRE_WALL_PERMISSION_SHOW, true);
+    }
+
     firstlyStart();
 
     //去除窗管标题栏，传入参数为QWidget*
@@ -1530,6 +1545,11 @@ void MainWindow::activateWired(const QString& devName, const QString& connUuid)
 void MainWindow::deactivateWired(const QString& devName, const QString& connUuid)
 {
     m_lanWidget->deactivateWired(devName, connUuid);
+}
+
+void MainWindow::setWiredDeviceAutoconnect(const QString& devName, bool state)
+{
+    m_lanWidget->setWiredDeviceAutoconnect(devName, state);
 }
 
 void MainWindow::deleteWiredConnect(int type, const QString& connUuid)

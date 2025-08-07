@@ -49,7 +49,7 @@ public:
 
     int closeWiredNetworkWithDevice(QString deviceName);
     int openWiredNetworkWithDevice(QString deviceName);
-
+    int setWiredDeviceAutoconnect(QString deviceName,bool autoconnectstate);
 Q_SIGNALS:
     void wiredEnabledChanged(bool);
 private:

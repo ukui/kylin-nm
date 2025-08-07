@@ -38,22 +38,30 @@ ComboBox {
             delegates[index] = delegateItem
         }
 
-        RowLayout { 
+        RowLayout {
+            anchors.fill: parent 
         	Label { 
                 Layout.leftMargin: 16
+                Layout.alignment: Qt.AlignLeft
                 text: modelData
             }
             UkuiItems.DtThemeText {
+                Layout.alignment: Qt.AlignLeft
                 Layout.leftMargin: 1
                 text:  connect ? qsTr("(Connected)") : qsTr("(Not Connected)")
                 textColor: connect ? Platform.GlobalTheme.kGreen1 : Platform.GlobalTheme.kFontSecondary
+            }
+            Item {
+                Layout.fillWidth: true
             }     
         }
     }
 
     contentItem: ItemDelegate {
+        highlighted: false
+        hoverEnabled: false
         RowLayout {
-            anchors.fill: parent 
+            anchors.fill: parent
             UkuiItems.DtThemeText {
                 Layout.alignment: Qt.AlignLeft
                 Layout.leftMargin: 10
@@ -61,10 +69,10 @@ ComboBox {
                 textColor: Platform.GlobalTheme.kFontSecondary
             }
 
-            Label {
+            UkuiItems.DtThemeText {
                 Layout.alignment: Qt.AlignLeft
                 Layout.leftMargin: 24
-                text: currentText
+                text: comboBoxOrigin.currentText
             }
 
             UkuiItems.DtThemeText {
@@ -77,6 +85,13 @@ ComboBox {
             Item {
                 Layout.fillWidth: true
             }
+        }
+        background: Rectangle{
+            color: "transparent"
+        }
+
+        onClicked: {
+            comboBoxOrigin.popup.visible ? comboBoxOrigin.popup.close() : comboBoxOrigin.popup.open();
         }
     }
 }

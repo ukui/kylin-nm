@@ -32,7 +32,7 @@ desktop.path = /etc/xdg/autostart/
 desktop.files = kylin-nm.desktop
 # gschema.files = org.ukui.kylin-nm.switch.gschema.xml
 # gschema.path = /usr/share/glib-2.0/schemas/
-qm_files.path = $${PREFIX}/share/kylin-nm/kylin-nm/
+qm_files.path = /usr/share/kylin-nm/kylin-nm/
 qm_files.files = translations/*.qm
 
 INSTALLS += target \

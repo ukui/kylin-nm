@@ -99,6 +99,9 @@ public slots:
     void showPropertyWidget(QString devname, QString ssid);
 
     void deleteConnect(int type,QString ssid);
+
+    void showAddOtherWlanPage(QString devName);
+
 signals:
     void updateWiredDeviceList();
 

@@ -489,6 +489,13 @@ void KnmDBusCaller::setWiredMainSwitchEnableFinished(QDBusPendingCallWatcher *wa
     }
 }
 
+void KnmDBusCaller::showAddOtherWlanPage(QString devName)
+{
+    QList<QVariant> list;
+    list.append(devName);
+    this->asyncCall("showAddOtherWlanWidget",list);
+}
+
 // void KnmDBusCaller::getWiredMainSwitchState()
 // {
 //     QList<QVariant> list;

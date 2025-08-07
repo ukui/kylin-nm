@@ -135,5 +135,9 @@
         <source>AutoConnect</source>
         <translation>自動連接</translation>
     </message>
+    <message>
+        <source>Add Others...</source>
+        <translation>加入其他網路...</translation>
+    </message>
 </context>
 </TS>

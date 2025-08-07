@@ -1354,8 +1354,7 @@ void LanPage::showDetailPage(QString devName, QString uuid)
     if (m_lanPagePtrMap.contains(p_item->m_connectPath)) {
         if (m_lanPagePtrMap[p_item->m_connectPath] != nullptr) {
             qDebug() << "[LanPage] ShowLanDetailPage" << uuid << "already create,just raise";
-            KWindowSystem::forceActiveWindow(m_lanPagePtrMap[p_item->m_connectPath]->winId());
-            KWindowSystem::raiseWindow(m_lanPagePtrMap[p_item->m_connectPath]->winId());
+            m_lanPagePtrMap[p_item->m_connectPath]->activateWindow();
             return;
         }
     }

@@ -39,9 +39,28 @@ QVariantList KnmInterface::wiredDeviceList()
     QVariantList list;
 
     auto dev = KNMDC::getInstance()->wiredDeviceList();
-    for(auto iter : dev){
-        if(!iter.isNull()) list.append(iter->devName());
+
+    // fixbug=377873 已经连接的网卡需要在第一个显示
+    int connect_id = -1;
+    for (auto iter : dev) {
+        if (!iter.isNull()) {
+            if (connect_id == -1) {
+                for (auto devices : iter->getConnections()) {
+                    int status = devices.toMap().value("State").toInt();
+                    if (2 == status) {    //2==已连接
+                        connect_id = list.size();
+                        break;
+                    }
+                }
+            }
+            list.append(iter->devName());
+        }
     }
+
+    if (connect_id != -1) {
+        list.swap(0, connect_id);
+    }
+
     return list;
 }
 
@@ -291,5 +310,11 @@ void KnmInterface::deleteConnect(int type, QString ssid)
 {
     qDebug() << Q_FUNC_INFO <<__LINE__ << type << ssid;
     KNMDC::getInstance()->deleteConnect(type, ssid);
+}
+
+void KnmInterface::showAddOtherWlanPage(QString devName)
+{
+    qDebug() << Q_FUNC_INFO <<__LINE__ << devName;
+    KNMDC::getInstance()->showAddOtherWlanPage(devName);
 }
 

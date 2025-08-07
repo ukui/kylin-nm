@@ -24,7 +24,6 @@ ListView {
         highlighted: enteritem && lanlistView.currentIndex === index
         width: lanlistView.width
         height: 56
-        Layout.leftMargin: 8
         property bool enteritem : false
         property bool conConnected:   modelData.State === 2
         onConConnectedChanged: {

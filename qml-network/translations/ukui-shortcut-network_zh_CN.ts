@@ -132,5 +132,9 @@
         <source>Forget the network</source>
         <translation>忘记此网络</translation>
     </message>
+    <message>
+        <source>Add Others...</source>
+        <translation>加入其他网络...</translation>
+    </message>
 </context>
 </TS>

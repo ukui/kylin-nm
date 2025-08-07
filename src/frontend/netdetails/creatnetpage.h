@@ -33,6 +33,7 @@
 
 #include "coninfo.h"
 #include "multiplednswidget.h"
+#include "klabel.h"
 
 class CreatNetPage : public QFrame
 {
@@ -62,8 +63,8 @@ private:
     QLabel *m_maskLabel;
     QLabel *m_gateWayLabel;
 
-    QLabel *m_addressHintLabel;
-    QLabel *m_maskHintLabel;
+    KLabel *m_addressHintLabel;
+    KLabel *m_maskHintLabel;
 
     MultipleDnsWidget *m_dnsWidget = nullptr;
 

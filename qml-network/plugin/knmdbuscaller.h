@@ -60,6 +60,8 @@ public:
     void showPropertyWidget(QString devName, QString ssid);
 
     void deleteConnect(int type, QString ssid);
+
+    void showAddOtherWlanPage(QString devName);
 //用于调用kylin-nm的dbus
 protected:
     QDBusPendingCallWatcher * asyncCall(const QString & methed, const QList<QVariant> & params);

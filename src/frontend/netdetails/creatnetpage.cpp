@@ -59,8 +59,8 @@ void CreatNetPage::initUI()
     gateWayEmptyLabel->setFixedHeight(LABEL_HEIGHT);
     firstDnsEmptyLabel->setFixedHeight(LABEL_HEIGHT);
 
-    m_addressHintLabel = new QLabel(this);
-    m_maskHintLabel = new QLabel(this);
+    m_addressHintLabel = new KLabel(this);
+    m_maskHintLabel = new KLabel(this);
     m_addressHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_maskHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_addressHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
@@ -72,10 +72,10 @@ void CreatNetPage::initUI()
     pPwdLayout->addStretch();
     pPwdLayout->addWidget(m_statusLabel);
 
-    QPalette hintTextColor;
-    hintTextColor.setColor(QPalette::WindowText, Qt::red);
-    m_addressHintLabel->setPalette(hintTextColor);
-    m_maskHintLabel->setPalette(hintTextColor);
+    m_addressHintLabel->setFontColorRole(QPalette::WindowText);
+    m_addressHintLabel->setFontColor(Qt::red);
+    m_maskHintLabel->setFontColorRole(QPalette::WindowText);
+    m_maskHintLabel->setFontColor(Qt::red);
 
     QWidget *addressWidget = new QWidget(this);
     QVBoxLayout *addressLayout = new QVBoxLayout(addressWidget);

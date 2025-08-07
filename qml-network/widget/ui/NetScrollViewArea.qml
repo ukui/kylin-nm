@@ -52,6 +52,7 @@ UkuiItems.DtThemeBackground {
                         id : lanTop
                         width: parent.width
                         Layout.alignment: Qt.AlignTop
+                        visible: lanDeviceComboBox.count >= 1
 
                         Label {
                             text: qsTr("Wired network")
@@ -85,6 +86,7 @@ UkuiItems.DtThemeBackground {
                                     //lanNoWiredItem.visible = lanVisibleButton.visibleState && (lanDeviceComboBox.count === 0)
                                 }
                             }
+                            Layout.preferredWidth: 16
                         }
 
                         Item {
@@ -107,7 +109,10 @@ UkuiItems.DtThemeBackground {
                                 }
                             }
                             Layout.alignment: Qt.AlignRight
-                            Layout.rightMargin: 10
+                            Layout.rightMargin: 24
+                            spacing:0
+                            rightPadding: 0
+                            Layout.preferredWidth: 60
                         }
                     }
 
@@ -185,6 +190,7 @@ UkuiItems.DtThemeBackground {
                         Layout.leftMargin: 16
                         Layout.rightMargin: 16
                         height: 1
+                        visible: (wlanDeviceComboBox.count >= 1 && lanDeviceComboBox.count >= 1)
                     }
 
                     RowLayout {
@@ -197,6 +203,7 @@ UkuiItems.DtThemeBackground {
                             font.pixelSize: 14
                             Layout.alignment: Qt.AlignLeft
                             Layout.leftMargin: 24
+                            visible: wlanDeviceComboBox.count >= 1
                         }
 
                         UkuiItems.Icon {
@@ -216,6 +223,7 @@ UkuiItems.DtThemeBackground {
                                     KInterface.rescanWirelessConn()
                                 }
                             }
+                            Layout.preferredWidth: 16
                         }
 
                         RotationAnimator {
@@ -256,7 +264,11 @@ UkuiItems.DtThemeBackground {
                                 wlanContentArea.visible = wlanswitchBtn.checked
                             }
                             Layout.alignment: Qt.AlignRight
-                            Layout.rightMargin: 10
+                            Layout.rightMargin: 24
+                            spacing:0
+                            rightPadding: 0
+                            visible: wlanDeviceComboBox.count >= 1
+                            Layout.preferredWidth: 60
                         }
                     }
 
@@ -267,6 +279,7 @@ UkuiItems.DtThemeBackground {
                         spacing: 0
                         visible: wlanswitchBtn.checked && wlanDeviceComboBox.count > 1
                         model: KInterface.wirelessDevList
+                        width: parent.width
                         property bool ishide : wlanDeviceComboBox.count > 1
                         currentConnect: wlanContentArea.connectMac
                         onCurrentTextChanged: {

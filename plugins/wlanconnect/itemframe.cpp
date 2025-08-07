@@ -35,13 +35,14 @@ ItemFrame::ItemFrame(QString devName, QWidget *parent)
     lanItemLayout->setSpacing(1);
     addWlanWidget = new AddNetBtn(true, this);
 
-    deviceLanLayout->setSpacing(1);
+    deviceLanLayout->setSpacing(0);
     setLayout(deviceLanLayout);
     lanItemFrame->setLayout(lanItemLayout);
 
     deviceFrame = new DeviceFrame(devName, this);
     deviceLanLayout->addWidget(deviceFrame);
     deviceLanLayout->addWidget(lanItemFrame);
+    deviceLanLayout->addSpacing(1);
     deviceLanLayout->addWidget(addWlanWidget);
 
     //下拉按钮

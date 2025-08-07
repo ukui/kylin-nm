@@ -352,6 +352,7 @@ void KnmDBusCaller::updateWirelessDeviceMapFinished(QDBusPendingCallWatcher *wat
                 item++;
             }
             KInterface::getInstance()->rebuildCurrentWirelessList();//设备状态变更应该全量更新合理点
+            emit KInterface::getInstance()->updateWirelessDeviceList();
         }
     } else {
         qWarning() << reply.errorMessage();

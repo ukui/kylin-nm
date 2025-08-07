@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -38,8 +38,6 @@
 #include "kylable.h"
 //安全中心-网络防火墙模式配置
 #include "networkmodeconfig.h"
-//删除此头文件，别在添加
-//#include <ukuisdk/kylin-com4cxx.h>
 
 #ifdef WITHKYSEC
 #include <kysec/libkysec.h>
@@ -87,6 +85,7 @@ public:
     void getApConnectionPath(QString &path, QString uuid);
     //获取热点ActivePath
     void getActiveConnectionPath(QString &path, QString uuid);
+
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
@@ -127,6 +126,7 @@ Q_SIGNALS:
     void deviceNameChanged(QString oldName, QString newName, int type);
     void wirelessSwitchBtnChanged(bool state);
     void wiredEnabledChanged(bool state);
+    void wiredMainSwitchBtnChanged(bool state);
     //有线无线列表更新（有线增删、无线增加减少）
     void lanAdd(QString devName, QStringList info);
     void lanRemove(QString dbusPath);
@@ -154,9 +154,9 @@ Q_SIGNALS:
 public Q_SLOTS:
 
 protected:
-    bool eventFilter(QObject *watched, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void paintEvent(QPaintEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     void firstlyStart(); //一级启动
@@ -170,14 +170,15 @@ private:
     void initPanelGSettings();
     void initUI();
     void initDbusConnnect();
+    void registerTrayIcon();
     void initTrayIcon();
-
     void resetTrayIconTool();
     void initWindowTheme();
     void resetWindowTheme();
     void showByWaylandHelper();
-    void setCentralWidgetType(IconActiveType iconStatus);
+    void slideWindowByPanelPosition();
 
+    void setCentralWidgetType(IconActiveType iconStatus);
     void assembleTrayIconTooltip(QMap<QString, QString> &map, QString &tip);
     void setThemePalette();
 
@@ -193,8 +194,8 @@ private:
     //主窗口的主要构成控件
     QTabWidget * m_centralWidget = nullptr;
     QHBoxLayout * m_tabBarLayout = nullptr;
-    FixLabel * m_lanLabel = nullptr;
-    FixLabel * m_wlanLabel = nullptr;
+    QLabel * m_lanLabel = nullptr;
+    QLabel * m_wlanLabel = nullptr;
 
     LanPage * m_lanWidget = nullptr;
     WlanPage * m_wlanWidget = nullptr;
@@ -204,10 +205,14 @@ private:
     //监听主题的Gsettings
     QGSettings * m_styleGsettings = nullptr;
 
+
     //获取任务栏位置和大小
     QGSettings *m_panelGSettings = nullptr;
     int m_panelPosition;
     int m_panelSize;
+    int m_panelType;
+    int m_settingsIslandPosition;
+    int m_topbarSize;
 
     //获取和重置窗口位置
     void resetWindowPosition();
@@ -220,6 +225,9 @@ private:
     QAction * m_showSettingsAction = nullptr;
     QAction * m_showConnectivityPageAction = nullptr;
 
+    bool m_lanIsLoading = false;
+    bool m_wlanIsLoading = false;
+
     bool m_isShowInCenter = false;
 
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
@@ -229,6 +237,8 @@ private:
     NetworkMode *m_networkMode;
 
     QString m_display;
+    uint m_intervalTime = 100;
+    uint m_registerCount = 0;
 
     inline void updateTrayiconMenuStyle() {
         QPalette pal = this->palette();
@@ -248,17 +258,19 @@ private:
 
 public Q_SLOTS:
     void onShowMainWindow(int type);
-    void onShowSettingsActionTriggled();
     void updateNetCtrl(QString modName,QVariantMap value);
 
 private Q_SLOTS:
     void onTransChanged();
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void onShowMainwindowActionTriggled();
+    void onShowSettingsActionTriggled();
     void onThemeChanged(const QString &key);
     void onRefreshTrayIcon();
     void onSetTrayIconLoading();
     void onConnectStatusToChangeTrayIcon(int state);
+    void onLanConnectStatusToChangeTrayIcon(int state);
+    void onWlanConnectStatusToChangeTrayIcon(int state);
     void onConnectivityChanged(NetworkManager::Connectivity connectivity);
     void onConnectivityCheckSpareUriChanged();
     void onTimeUpdateTrayIcon();

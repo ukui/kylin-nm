@@ -33,6 +33,11 @@
 #include "list-items/lanlistitem.h"
 #include "tab-pages/tabpage.h"
 
+
+#define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
+#define SYSTEM_DBUS_PATH  "/"
+#define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
+
 class LanListItem;
 
 class LanPage : public TabPage
@@ -130,7 +135,7 @@ Q_SIGNALS:
     void showLanRate(QListWidget *widget, QMap<QString, QListWidgetItem *> &map, QString dev, bool isLan);
 
     void wiredEnabledChanged(bool status);
-
+    void wiredMainSwitchBtnChanged(bool);
 private Q_SLOTS:
     void onConnectionStateChange(QString uuid, NetworkManager::ActiveConnection::State state,
                                  NetworkManager::ActiveConnection::Reason reason);
@@ -155,6 +160,7 @@ private Q_SLOTS:
     void onShowKylinNetworkCheck();
     void onLanStateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason);
 
+    void onSysWiredMainSwitchChanged(bool);
 private:
     QListWidget * m_activatedLanListWidget = nullptr;
     QListWidget * m_inactivatedLanListWidget = nullptr;
@@ -198,6 +204,7 @@ private:
             return m_netSwitch->isEnabled();
         }
     }
+    QDBusInterface *m_pSysBusIntfs;
 Q_SIGNALS:
     void deviceConnectivityChanged(QString devName, int connectivityType);
 };

@@ -119,7 +119,7 @@ QMap<QString, QVariant> KnmWlanDataKeeper::makeConnectionMap(int status, QString
     connectionMap.insert("Signal", conPath.at(1));
     connectionMap.insert("Security", conPath.at(2));
 
-    /*这个7根据后端链表每个项添加的参数来的，改了后端需要改这里，这里补充判断是否大>=7起保护作用*/
+    /*这个9根据后端链表每个项添加的参数来的，改了后端需要改这里，这里补充判断是否大>=9起保护作用*/
     if (status == ACTIVATED || conPath.count()>=9) {
         connectionMap.insert("Uuid", conPath.at(3));
         index = 1;
@@ -353,9 +353,9 @@ void KnmWlanDataKeeper::onNetworkAdd(QString deviceName, QStringList wlanInfo)
     qDebug() << deviceName << wlanInfo << wlanInfo.count();
     NetDevicePtr dev = m_deviceList.value(deviceName);
     /*根据后端链表每个项添加的参数来的，改了后端需要改这里，只有6项表示未连接，7项表示已连接；后面需要优化可一样的项数通过赋特定空值区分，不然维护,容易改漏且容易歧义*/
-    if (wlanInfo.count() == 6)
+    if (wlanInfo.count() == 8)
         dev->addConnection(makeConnectionMap(DEACTIVATED, wlanInfo));
-    if (wlanInfo.count() == 7)
+    if (wlanInfo.count() == 9)
         dev->addConnection(makeConnectionMap(ACTIVATED, wlanInfo));
     KInterface::getInstance()->getWirelessDevConnList();
 }

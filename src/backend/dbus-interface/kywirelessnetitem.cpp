@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -57,6 +57,8 @@ KyWirelessNetItem::~KyWirelessNetItem()
 
 void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
 {
+   // m_NetSsid = net->ssid();
+
     NetworkManager::AccessPoint::Ptr accessPointPtr = net->referenceAccessPoint();
     if (accessPointPtr->ssid().isEmpty()) {
         qDebug() << accessPointPtr->uni() << "ssid isEmpty";
@@ -84,6 +86,13 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
     NetworkManager::AccessPoint::WpaFlags wpaFlag = accessPointPtr->wpaFlags();
     NetworkManager::AccessPoint::WpaFlags rsnFlag = accessPointPtr->rsnFlags();
     m_secuType = enumToQstring(cap, wpaFlag, rsnFlag);
+//    if (m_secuType.indexOf(ENTERPRICE_TYPE) >= 0) {
+//            m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
+//        } else if (m_secuType.indexOf(WPA3) >= 0) {
+//            m_kySecuType = WPA3_PERSONAL;
+//        } else if ( m_secuType.indexOf(WPA1_AND_WPA2) >= 0) {
+//            m_kySecuType = WPA_AND_WPA2_PERSONAL;
+//    }
     setKySecuType(m_secuType);
     m_bssid = accessPointPtr->hardwareAddress();
     m_device = net->device();
@@ -141,7 +150,7 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
             }
         }
     }
-    updatewirelessItemConnectInfo(*this);
+    updatewirelessItemConnectInfoEx(this);
 }
 
 int KyWirelessNetItem::getCategory(QString uni)
@@ -168,7 +177,7 @@ void KyWirelessNetItem::setKySecuType(QString strSecuType)
     if (strSecuType.indexOf(ENTERPRICE_TYPE) >= 0) {
         m_kySecuType = WPA_AND_WPA2_ENTERPRISE;
     } else if (strSecuType.indexOf(WPA3) >= 0) {
-        if ( strSecuType.indexOf(WPA1) >= 0 || strSecuType.indexOf(WPA2) >= 0) {
+        if (strSecuType.indexOf(WPA1) >= 0 || strSecuType.indexOf(WPA2) >= 0) {
             m_kySecuType = WPA_AND_WPA3;
         } else {
             m_kySecuType = WPA3_PERSONAL;
@@ -327,4 +336,3 @@ void updatewirelessItemConnectInfoEx(KyWirelessNetItem* item)
         item->m_isConfigured = false;
     }
 }
-

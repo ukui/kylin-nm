@@ -139,8 +139,8 @@ Q_SIGNALS:
     void activeConnectionUpdate(QString uuid);
     void activeConnectionRemove(QString uuid);
     void activeConnectStateChangeReason(QString uuid,
-                                        NetworkManager::ActiveConnection::State state,
-                                        NetworkManager::ActiveConnection::Reason reason);
+                                    NetworkManager::ActiveConnection::State state,
+                                    NetworkManager::ActiveConnection::Reason reason);
     void vpnActiveConnectStateChangeReason(QString uuid,
                                            NetworkManager::VpnConnection::State state,
                                            NetworkManager::VpnConnection::StateChangeReason reason);
@@ -165,7 +165,7 @@ private Q_SLOTS:
     //active connection
     void onActiveConnectionUpdated();
     void onActiveConnectionChangedReason(NetworkManager::ActiveConnection::State state,
-                                         NetworkManager::ActiveConnection::Reason reason);
+                                          NetworkManager::ActiveConnection::Reason reason);
 
     void onActiveConnectionChanged(NetworkManager::ActiveConnection::State state);
     void onVpnActiveConnectChanagedReason(NetworkManager::VpnConnection::State state,
@@ -181,8 +181,8 @@ private Q_SLOTS:
     void onDeviceBitRateChanage(int bitRate);
     void onDeviceMacAddressChanage(const QString &hwAddress);
     void onDeviceStateChanged(NetworkManager::Device::State newstate,
-                              NetworkManager::Device::State oldstate,
-                              NetworkManager::Device::StateChangeReason reason);
+                      NetworkManager::Device::State oldstate,
+                      NetworkManager::Device::StateChangeReason reason);
 
     void onWifiNetworkAppeared(QString const & ssid);
     void onWifiNetworkDisappeared(QString const & ssid);

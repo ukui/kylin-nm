@@ -26,27 +26,26 @@
 
 #define LOG_FLAG  "[KyNetworkResourceManager]"
 
-
 QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags)
 {
     QString out;
     if (   (cap & NM_802_11_AP_FLAGS_PRIVACY)
-        && (wpa_flags == NM_802_11_AP_SEC_NONE)
-        && (rsn_flags == NM_802_11_AP_SEC_NONE)) {
+           && (wpa_flags == NM_802_11_AP_SEC_NONE)
+           && (rsn_flags == NM_802_11_AP_SEC_NONE)) {
         out += "WEP ";
-    }
+   }
     if (wpa_flags != NM_802_11_AP_SEC_NONE) {
         out += "WPA1 ";
     }
     if ((rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_PSK)
-        || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
+            || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
         out += "WPA2 ";
     }
     if (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_SAE) {
         out += "WPA3 ";
     }
     if (   (wpa_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)
-        || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
+           || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
         out += "802.1X ";
     }
     return out;
@@ -230,6 +229,7 @@ void KyNetworkResourceManager::removeDevice(int pos)
 {
     //connections signals
     NetworkManager::Device::Ptr device = m_devices.takeAt(pos);
+
     QDBusConnection::systemBus().disconnect(QString("org.freedesktop.NetworkManager"),
                                             device.data()->uni(),
                                             QString("org.freedesktop.NetworkManager.Device"),
@@ -282,15 +282,14 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
 #endif
     switch (device->type())
     {
-    case NetworkManager::Device::Ethernet:
-        connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::bitRateChanged, this, &KyNetworkResourceManager::onDeviceBitRateChanage);
-        connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::carrierChanged, this, &KyNetworkResourceManager::onDeviceCarrierChanage);
-        connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::hardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceMacAddressChanage);
-        // connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::permanentHardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
-        connect(device.data(), &NetworkManager::Device::stateChanged, this, &KyNetworkResourceManager::stateChanged);
-        break;
+        case NetworkManager::Device::Ethernet:
+            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::bitRateChanged, this, &KyNetworkResourceManager::onDeviceBitRateChanage);
+            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::carrierChanged, this, &KyNetworkResourceManager::onDeviceCarrierChanage);
+            connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::hardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceMacAddressChanage);
+           // connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::permanentHardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
+            break;
 
-    case NetworkManager::Device::Wifi:
+        case NetworkManager::Device::Wifi:
 #if 0
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::bitRateChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::activeAccessPointChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
@@ -302,22 +301,18 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::accessPointAppeared, this, &KyNetworkResourceManager::onDeviceUpdated);
             connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::accessPointDisappeared, this, &KyNetworkResourceManager::onDeviceUpdated);
 #endif
-        connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::networkAppeared, this, &KyNetworkResourceManager::onWifiNetworkAppeared);
-        connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::networkDisappeared, this, &KyNetworkResourceManager::onWifiNetworkDisappeared);
-        connect(device.data(), &NetworkManager::Device::stateChanged, this, &KyNetworkResourceManager::stateChanged);
-        break;
-    default:
-        //TODO: other device types!
-        break;
+            connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::networkAppeared, this, &KyNetworkResourceManager::onWifiNetworkAppeared);
+            connect(qobject_cast<NetworkManager::WirelessDevice *>(device.data()), &NetworkManager::WirelessDevice::networkDisappeared, this, &KyNetworkResourceManager::onWifiNetworkDisappeared);
+            connect(device.data(), &NetworkManager::Device::stateChanged, this, &KyNetworkResourceManager::stateChanged);
+            break;
+        default:
+            //TODO: other device types!
+            break;
     }
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          device.data()->uni(),
                                          QString("org.freedesktop.NetworkManager.Device"),
                                          QString("AcdIpProbed"), this, SIGNAL(needShowDesktop(QString)));
-    QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
-                                         device.data()->uni(),
-                                         QString("org.freedesktop.DBus.Properties"),
-                                         QString("PropertiesChanged"), this, SLOT(onDevicePropertiesChanged(QString,QVariantMap)));
 }
 
 void KyNetworkResourceManager::insertDevices()
@@ -479,7 +474,6 @@ NetworkManager::Connection::Ptr KyNetworkResourceManager::getConnect(const QStri
             return connectPtr;
         }
     }
-
     qWarning() << "[KyNetworkResourceManager]" << "it can not find connect with uuid" << connectUuid;
 
     return nullptr;
@@ -522,7 +516,7 @@ bool KyNetworkResourceManager::isActiveConnection(QString uuid)
         }
 
         if (activateConnectPtr->uuid() == uuid
-            && NetworkManager::ActiveConnection::State::Activated == activateConnectPtr->state()) {
+             && NetworkManager::ActiveConnection::State::Activated == activateConnectPtr->state()) {
             return true;
         }
     }
@@ -546,7 +540,7 @@ bool KyNetworkResourceManager::isActivatingConnection(QString uuid)
         }
 
         if (activateConnectPtr->uuid() == uuid
-            && NetworkManager::ActiveConnection::State::Activating == activateConnectPtr->state()) {
+             && NetworkManager::ActiveConnection::State::Activating == activateConnectPtr->state()) {
             return true;
         }
     }
@@ -602,7 +596,7 @@ void KyNetworkResourceManager::requestScan(NetworkManager::WirelessDevice * dev)
         {
             //TODO: in what form should we output the warning messages
             qWarning() << QStringLiteral("requestScan on device '%1' failed: %3").arg(dev->interfaceName())
-                              .arg(watcher->error().message());
+                    .arg(watcher->error().message());
         }
         watcher->deleteLater();
     });
@@ -613,7 +607,7 @@ void KyNetworkResourceManager::requestScan(NetworkManager::WirelessDevice * dev)
 void KyNetworkResourceManager::onServiceAppear(QString interface, QString oldOwner, QString newOwner)
 {
     if (interface == "org.freedesktop.NetworkManager"
-        && oldOwner.isEmpty() && !newOwner.isEmpty()) {
+            && oldOwner.isEmpty() && !newOwner.isEmpty()) {
         qDebug() << LOG_FLAG << "org.freedesktop.NetworkManager start";
         QTimer::singleShot(500,this,&KyNetworkResourceManager::insertWifiNetworks);
     }
@@ -639,14 +633,14 @@ void KyNetworkResourceManager::onPropertiesChanged(QVariantMap qvm)
 void KyNetworkResourceManager::onConnectionUpdated()
 {
     NetworkManager::Connection *connectPtr =
-        qobject_cast<NetworkManager::Connection *>(sender());
+            qobject_cast<NetworkManager::Connection *>(sender());
     if (nullptr != connectPtr && connectPtr->isValid()) {
         qDebug()<< LOG_FLAG <<"connection will Update, connection name"<<connectPtr->name()
-                 << "connection uuid" << connectPtr->uuid();
+                << "connection uuid" << connectPtr->uuid();
         Q_EMIT connectionUpdate(connectPtr->uuid());
     } else {
         qWarning()<< LOG_FLAG
-                   <<"onConnectionUpdate failed, the connect is invalid";
+                  <<"onConnectionUpdate failed, the connect is invalid";
     }
 
     return;
@@ -658,14 +652,14 @@ void KyNetworkResourceManager::onActiveConnectionUpdated()
 }
 
 void KyNetworkResourceManager::onActiveConnectionChangedReason(
-    NetworkManager::ActiveConnection::State state,
-    NetworkManager::ActiveConnection::Reason reason)
+                                      NetworkManager::ActiveConnection::State state,
+                                      NetworkManager::ActiveConnection::Reason reason)
 {
     NetworkManager::ActiveConnection * activeConnect =
         qobject_cast<NetworkManager::ActiveConnection *>(sender());
     if (nullptr != activeConnect && activeConnect->isValid()) {
         qDebug()<< LOG_FLAG <<"connect uuid"<<activeConnect->uuid()
-                 <<"state change"<<state << "chanage reason:"<<reason;
+                <<"state change"<<state << "chanage reason:"<<reason;
         Q_EMIT activeConnectStateChangeReason(activeConnect->uuid(), state, reason);
     } else {
         qWarning() << LOG_FLAG << "onActiveConnectionChangedReason failed, the connection is invalid.";
@@ -675,13 +669,13 @@ void KyNetworkResourceManager::onActiveConnectionChangedReason(
 }
 
 void KyNetworkResourceManager::onActiveConnectionChanged(
-    NetworkManager::ActiveConnection::State state)
+                                      NetworkManager::ActiveConnection::State state)
 {
     NetworkManager::ActiveConnection * activeConnect =
         qobject_cast<NetworkManager::ActiveConnection *>(sender());
     if (nullptr != activeConnect && activeConnect->isValid()) {
         qDebug()<< LOG_FLAG << "connection uuid" << activeConnect->uuid()
-                 <<"state change "<<state;
+                <<"state change "<<state;
         while(activeConnect->state() != state) {
             qDebug() << "[KyNetworkResourceManager]"
                      <<"connect real state"<<activeConnect->state() <<"change state"<<state;
@@ -689,7 +683,7 @@ void KyNetworkResourceManager::onActiveConnectionChanged(
         }
 
         Q_EMIT activeConnectStateChangeReason(activeConnect->uuid(), state,
-                                              NetworkManager::ActiveConnection::Reason::UknownReason);
+                                            NetworkManager::ActiveConnection::Reason::UknownReason);
     } else {
         qWarning() << LOG_FLAG << "onActiveConnectionChanged failed, the connection is invalid.";
     }
@@ -698,14 +692,14 @@ void KyNetworkResourceManager::onActiveConnectionChanged(
 }
 
 void KyNetworkResourceManager::onVpnActiveConnectChanagedReason(NetworkManager::VpnConnection::State state,
-                                                                NetworkManager::VpnConnection::StateChangeReason reason)
+                                      NetworkManager::VpnConnection::StateChangeReason reason)
 {
     NetworkManager::ActiveConnection *activeConnect =
         qobject_cast<NetworkManager::ActiveConnection *>(sender());
 
     if (nullptr != activeConnect && activeConnect->isValid()) {
         qDebug()<<"vpn connect uuid" << activeConnect->uuid()
-                 <<"state change " <<state <<"reason " << reason;
+                <<"state change " <<state <<"reason " << reason;
         Q_EMIT vpnActiveConnectStateChangeReason(activeConnect->uuid(), state, reason);
     } else {
         qWarning() << LOG_FLAG << "onVpnActiveConnectChanagedReason failed, the connection is invalid.";
@@ -726,7 +720,7 @@ void KyNetworkResourceManager::onDeviceActiveChanage()
     bool isActive = !p_device->isActive();
 
     qDebug()<< LOG_FLAG << "device active change, device name " << deviceName
-             << "active state" << isActive;
+            << "active state" << isActive;
 
     Q_EMIT deviceActiveChanage(deviceName, isActive);
 
@@ -764,7 +758,7 @@ void KyNetworkResourceManager::onDeviceManagedChange()
 void KyNetworkResourceManager::onDeviceCarrierChanage(bool pluged)
 {
     NetworkManager::WiredDevice * networkDevice
-        = qobject_cast<NetworkManager::WiredDevice *>(sender());
+            = qobject_cast<NetworkManager::WiredDevice *>(sender());
 
     qDebug()<< LOG_FLAG<<"device carrier chanage"<< pluged;
     if (nullptr !=networkDevice && networkDevice->isValid()) {
@@ -779,10 +773,10 @@ void KyNetworkResourceManager::onDeviceCarrierChanage(bool pluged)
 void KyNetworkResourceManager::onDeviceBitRateChanage(int bitRate)
 {
     NetworkManager::WiredDevice * networkDevice
-        = qobject_cast<NetworkManager::WiredDevice *>(sender());
+            = qobject_cast<NetworkManager::WiredDevice *>(sender());
 
     if (nullptr != networkDevice
-        && networkDevice->isValid()) {
+            && networkDevice->isValid()) {
         Q_EMIT deviceBitRateChanage(networkDevice->interfaceName(), bitRate);
     } else {
         qWarning()<< LOG_FLAG <<"the device is not invalid with bitrate" << bitRate;
@@ -794,7 +788,7 @@ void KyNetworkResourceManager::onDeviceBitRateChanage(int bitRate)
 void KyNetworkResourceManager::onDeviceMacAddressChanage(const QString &hwAddress)
 {
     NetworkManager::WiredDevice * networkDevice
-        = qobject_cast<NetworkManager::WiredDevice *>(sender());
+            = qobject_cast<NetworkManager::WiredDevice *>(sender());
 
     if (nullptr !=networkDevice && networkDevice->isValid()) {
         Q_EMIT deviceMacAddressChanage(networkDevice->interfaceName(), hwAddress);
@@ -806,9 +800,9 @@ void KyNetworkResourceManager::onDeviceMacAddressChanage(const QString &hwAddres
 }
 
 void KyNetworkResourceManager::onDeviceStateChanged(
-    NetworkManager::Device::State newstate,
-    NetworkManager::Device::State oldstate,
-    NetworkManager::Device::StateChangeReason reason)
+                    NetworkManager::Device::State newstate,
+                    NetworkManager::Device::State oldstate,
+                    NetworkManager::Device::StateChangeReason reason)
 {
     qWarning() << LOG_FLAG <<"the device state "<<oldstate << "to" <<newstate << "reason"<< reason;
     return;
@@ -977,7 +971,7 @@ void KyNetworkResourceManager::onDevicePropertiesChanged(QString interface, QVar
 void KyNetworkResourceManager::onReferenceAccessPointChanged()
 {
     NetworkManager::WirelessNetwork *p_wirelessNet =
-        qobject_cast<NetworkManager::WirelessNetwork *>(sender());
+                    qobject_cast<NetworkManager::WirelessNetwork *>(sender());
     if (nullptr != p_wirelessNet) {
         onAccessPointUpdate(p_wirelessNet);
     }
@@ -1002,7 +996,7 @@ void KyNetworkResourceManager::onAccessPointUpdate(NetworkManager::WirelessNetwo
 void KyNetworkResourceManager::onUpdateWirelessNet()
 {
     NetworkManager::WirelessNetwork *p_wirelessNet =
-        qobject_cast<NetworkManager::WirelessNetwork *>(sender());
+                    qobject_cast<NetworkManager::WirelessNetwork *>(sender());
     if (nullptr != p_wirelessNet) {
         onWifiNetworkUpdate(p_wirelessNet);
     }
@@ -1013,7 +1007,7 @@ void KyNetworkResourceManager::onUpdateWirelessNet()
 void KyNetworkResourceManager::onWifiNetworkSecuChang()
 {
     NetworkManager::AccessPoint *p_wirelessNet =
-        qobject_cast<NetworkManager::AccessPoint *>(sender());
+                    qobject_cast<NetworkManager::AccessPoint *>(sender());
     Q_EMIT wifiNetworkSecuChange(p_wirelessNet);
 }
 
@@ -1094,7 +1088,7 @@ void KyNetworkResourceManager::onActiveConnectionRemoved(QString const & path)
     NetworkManager::ActiveConnection::Ptr activeConnectPtr = findActiveConnection(path);//XXX: const QString &uni
     if (activeConnectPtr.isNull()) {
         qWarning() <<"[KyNetworkResourceManager]"
-                   <<"the active connect is null, so do not remove it. "<< path;
+                  <<"the active connect is null, so do not remove it. "<< path;
         return;
     }
 

@@ -458,6 +458,7 @@ void DbusAdaptor::connectToMainwindow()
     connect(m_mainWindow, &MainWindow::wirelessDeviceStatusChanged, this, &DbusAdaptor::wirelessDeviceStatusChanged);
     connect(m_mainWindow, &MainWindow::deviceNameChanged, this, &DbusAdaptor::deviceNameChanged);
     connect(m_mainWindow, &MainWindow::wirelessSwitchBtnChanged, this, &DbusAdaptor::wirelessSwitchBtnChanged);
+    connect(m_mainWindow, &MainWindow::wiredMainSwitchBtnChanged, this, &DbusAdaptor::wiredMainSwitchBtnChanged);
     connect(m_mainWindow, &MainWindow::hotspotDeactivated, this, &DbusAdaptor::hotspotDeactivated);
     connect(m_mainWindow, &MainWindow::hotspotActivated, this, &DbusAdaptor::hotspotActivated);
     connect(m_mainWindow, &MainWindow::signalStrengthChange, this, &DbusAdaptor::signalStrengthChange);

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -44,6 +44,7 @@ public:
     void getConnectionList(QString deviceName,
                            NetworkManager::ConnectionSettings::ConnectionType connectionType,
                            QList<KyConnectItem *> &connectItemList);
+ //   void getWiredConnections(QList<KyWiredConnectItem *> &wiredConnectItemList);
     void getVpnConnections(QList<KyVpnConnectItem *> &vpnConnectItemList);
     void getBluetoothConnections(QList<KyBluetoothConnectItem *> &bluetoothConnectItemList);
     void getApConnections(QList<KyApConnectItem *> &apConnectItemList);
@@ -69,6 +70,7 @@ private:
     void getConnectIp(NetworkManager::ConnectionSettings::Ptr settingPtr,
                       QString &ipv4Address,
                       QString &ipv6Address);
+//    KyWiredConnectItem *getWiredConnectItem(NetworkManager::Connection::Ptr connectPtr);
 
     void getVpnConnectData(NetworkManager::ConnectionSettings::Ptr settingPtr,
                            KyVpnConnectItem *vpnItem);
@@ -77,9 +79,9 @@ private:
     KyApConnectItem *getApConnectItem(NetworkManager::Connection::Ptr connectPtr);
 
     void getIpv4ConnectSetting(NetworkManager::Ipv4Setting::Ptr &ipv4Setting,
-                               KyConnectSetting &connectSetting);
+                            KyConnectSetting &connectSetting);
     void getIpv6ConnectSetting(NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
-                               KyConnectSetting &connectSetting);
+                            KyConnectSetting &connectSetting);
 
 Q_SIGNALS:
     void connectionAdd(QString uuid);

@@ -57,6 +57,20 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     initDeviceCombox();
     initLanArea();
 
+    m_pSysBusIntfs = new QDBusInterface(SYSTEM_DBUS_SERVICE,
+                                        SYSTEM_DBUS_PATH,
+                                        SYSTEM_DBUS_INTERFACE,
+                                        QDBusConnection::systemBus());
+
+    if (m_pSysBusIntfs->isValid()) {
+        QDBusConnection::systemBus().connect(SYSTEM_DBUS_SERVICE,
+                                             SYSTEM_DBUS_PATH,
+                                             SYSTEM_DBUS_INTERFACE,
+                                             "sysWiredMainSwitchChanged",
+                                             this,
+                                             SLOT(onSysWiredMainSwitchChanged(bool)));
+    }
+
     connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &LanPage::onConnectionStateChange);
     connect(m_activeResourse, &KyActiveConnectResourse::activeConnectRemove, this, [=] (QString activeConnectUuid) {
         sendLanStateChangeSignal(activeConnectUuid,Deactivated);
@@ -104,6 +118,12 @@ LanPage::~LanPage()
         delete m_netTip;
         m_netTip = nullptr;
     }
+
+    if (m_pSysBusIntfs != nullptr) {
+        delete m_pSysBusIntfs;
+        m_pSysBusIntfs = nullptr;
+    }
+
 }
 
 void LanPage::initLanDevice()
@@ -1580,5 +1600,11 @@ void LanPage::getWiredDeviceConnect(QMap<QString, QString> &map)
             }
         }
     }
+}
+
+void LanPage::onSysWiredMainSwitchChanged(bool state)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__ << state;
+    Q_EMIT wiredMainSwitchBtnChanged(state);
 }
 

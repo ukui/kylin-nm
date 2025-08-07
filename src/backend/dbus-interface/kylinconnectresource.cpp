@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -127,7 +127,7 @@ bool KyConnectResourse::isActiveDevice(QString conUuid, QString devName)
     QString deviceName = "";
 
     NetworkManager::ActiveConnection::Ptr activeConnectPtr =
-        m_networkResourceInstance->getActiveConnect(conUuid);
+                                    m_networkResourceInstance->getActiveConnect(conUuid);
 
     if (nullptr == activeConnectPtr) {
         qWarning()<< "[KyConnectResourse]" <<"it can not find activating connect "<< conUuid;
@@ -157,7 +157,7 @@ bool KyConnectResourse::isActiveDevice(QString conUuid, QString devName)
 KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
 {
     NetworkManager::Connection::Ptr connectPtr =
-        m_networkResourceInstance->getConnect(connectUuid);
+            m_networkResourceInstance->getConnect(connectUuid);
 
     if (nullptr == connectPtr) {
         qWarning()<< "[KyConnectResourse]" <<"get connect failed, connect uuid"<<connectUuid;
@@ -181,7 +181,7 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid)
 KyConnectItem * KyConnectResourse::getConnectionItemByUuidWithoutActivateChecking(QString connectUuid)
 {
     NetworkManager::Connection::Ptr connectPtr =
-        m_networkResourceInstance->getConnect(connectUuid);
+            m_networkResourceInstance->getConnect(connectUuid);
 
     if (nullptr == connectPtr) {
         qWarning()<< "[KyConnectResourse]" <<"get connect failed, connect uuid"<<connectUuid;
@@ -200,7 +200,7 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuidWithoutActivateCheckin
 KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, QString deviceName)
 {
     NetworkManager::Connection::Ptr connectPtr =
-        m_networkResourceInstance->getConnect(connectUuid);
+            m_networkResourceInstance->getConnect(connectUuid);
 
     if (nullptr == connectPtr) {
         qWarning()<< "[KyConnectResourse]" <<"get connect failed, connect uuid"<<connectUuid;
@@ -209,9 +209,9 @@ KyConnectItem * KyConnectResourse::getConnectionItemByUuid(QString connectUuid, 
 
     QString connectInterface = connectPtr->settings()->interfaceName();
     if (!connectInterface.isEmpty()
-        && deviceName != connectInterface) {
+           && deviceName != connectInterface) {
         qDebug()<<"[KyConnectResourse]" << "connect name:"<< connectPtr->name()
-                 << "connect device name" << connectInterface;
+               << "connect device name" << connectInterface;
         return nullptr;
     }
 
@@ -285,13 +285,13 @@ void KyConnectResourse::getVpnAndVirtualConnections(QList<KyConnectItem *> &conn
 }
 
 void KyConnectResourse::getConnectionList(QString deviceName,
-                                          NetworkManager::ConnectionSettings::ConnectionType connectionType,
-                                          QList<KyConnectItem *> &connectItemList)
+                       NetworkManager::ConnectionSettings::ConnectionType connectionType,
+                       QList<KyConnectItem *> &connectItemList)
 {
     NetworkManager::Connection::List connectList;
 
     qDebug()<<"[KyConnectResourse]"<<"get connections item, device"
-             <<deviceName << "connect type" << connectionType;
+           <<deviceName << "connect type" << connectionType;
 
     connectList.clear();
     connectList = m_networkResourceInstance->getConnectList();
@@ -310,15 +310,15 @@ void KyConnectResourse::getConnectionList(QString deviceName,
 
         if (connectionType != connectPtr->settings()->connectionType()) {
             qDebug()<<"[KyConnectResourse]"<<"connect name:" << connectPtr->name()
-                     <<"connect type:"<<connectPtr->settings()->connectionType();
+                   <<"connect type:"<<connectPtr->settings()->connectionType();
             continue;
         }
-
+        
         QString connectInterface = connectPtr->settings()->interfaceName();
         if (!connectInterface.isEmpty()
-            && deviceName != connectInterface) {
+               && deviceName != connectInterface) {
             qDebug() << "[KyConnectResourse]" << "connect name:"<< connectPtr->name()
-                     << "connect device name" << connectInterface;
+                   << "connect device name" << connectInterface;
             continue;
         }
 
@@ -329,6 +329,7 @@ void KyConnectResourse::getConnectionList(QString deviceName,
 
         KyConnectItem *connectItem = getConnectionItem(connectPtr, deviceName);
         if (nullptr != connectItem) {
+           // connectItem->m_itemType = connectionType;
             connectItemList << connectItem;
             //connectItem->dumpInfo();
         }
@@ -339,7 +340,7 @@ void KyConnectResourse::getConnectionList(QString deviceName,
     if (connectItemList.size() > 1) {
         lanListSort(connectItemList);
     }
-    return;
+    return;    
 }
 
 #if 0
@@ -414,34 +415,34 @@ KyWiredConnectItem *KyConnectResourse::getWiredConnectItem(NetworkManager::Conne
 #endif
 
 void KyConnectResourse::getConnectIp(
-    NetworkManager::ConnectionSettings::Ptr settingPtr,
-    QString &ipv4Address,
-    QString &ipv6Address)
+                        NetworkManager::ConnectionSettings::Ptr settingPtr,
+                        QString &ipv4Address,
+                        QString &ipv6Address)
 {
     NetworkManager::Ipv4Setting::Ptr ipv4Setting =
-        settingPtr->setting(NetworkManager::Setting::Ipv4).dynamicCast<NetworkManager::Ipv4Setting>();
+            settingPtr->setting(NetworkManager::Setting::Ipv4).dynamicCast<NetworkManager::Ipv4Setting>();
     if (NetworkManager::Ipv4Setting::Manual == ipv4Setting->method()) {
-        QList<NetworkManager::IpAddress> ipv4AddressList = ipv4Setting->addresses();
-        NetworkManager::IpAddress settingIpv4Address = ipv4AddressList.at(0);
-        if (settingIpv4Address.isValid()) {
-            ipv4Address = settingIpv4Address.ip().toString();
-        } else {
-            qWarning()<<"[KyConnectResourse]"<<"get connect ipv4 failed, ipv4Address is not valid";
-        }
+       QList<NetworkManager::IpAddress> ipv4AddressList = ipv4Setting->addresses();
+       NetworkManager::IpAddress settingIpv4Address = ipv4AddressList.at(0);
+       if (settingIpv4Address.isValid()) {
+           ipv4Address = settingIpv4Address.ip().toString();
+       } else {
+           qWarning()<<"[KyConnectResourse]"<<"get connect ipv4 failed, ipv4Address is not valid";
+       }
     } else {
         qWarning()<<"[KyConnectResourse]"<<"get connect ipv4 failed, ipv4 config with dhcp";
     }
 
     NetworkManager::Ipv6Setting::Ptr ipv6Setting = settingPtr->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
     if (nullptr !=ipv6Setting
-        && NetworkManager::Ipv4Setting::Manual == ipv6Setting->method()) {
-        QList<NetworkManager::IpAddress> ipv6AddressList = ipv6Setting->addresses();
-        NetworkManager::IpAddress settingIpv6Address = ipv6AddressList.at(0);
-        if (settingIpv6Address.isValid()) {
-            ipv6Address = settingIpv6Address.ip().toString();
-        } else {
-            qWarning()<<"[KyConnectResourse]"<<"get connect ipv6 failed, ipv6Address is not valid";
-        }
+            && NetworkManager::Ipv4Setting::Manual == ipv6Setting->method()) {
+       QList<NetworkManager::IpAddress> ipv6AddressList = ipv6Setting->addresses();
+       NetworkManager::IpAddress settingIpv6Address = ipv6AddressList.at(0);
+       if (settingIpv6Address.isValid()) {
+           ipv6Address = settingIpv6Address.ip().toString();
+       } else {
+           qWarning()<<"[KyConnectResourse]"<<"get connect ipv6 failed, ipv6Address is not valid";
+       }
     } else {
         qWarning()<<"[KyConnectResourse]"<<"get connect ipv6 failed, ipv6 config with dhcp";
     }
@@ -451,8 +452,8 @@ void KyConnectResourse::getConnectIp(
 
 
 void KyConnectResourse::getIpv4ConnectSetting(
-    NetworkManager::Ipv4Setting::Ptr &ipv4Setting,
-    KyConnectSetting &connectSetting)
+                        NetworkManager::Ipv4Setting::Ptr &ipv4Setting,
+                        KyConnectSetting &connectSetting)
 {
     connectSetting.m_ipv4Dns = ipv4Setting->dns();
     if (NetworkManager::Ipv4Setting::Automatic == ipv4Setting->method()) {
@@ -465,8 +466,8 @@ void KyConnectResourse::getIpv4ConnectSetting(
 }
 
 void KyConnectResourse::getIpv6ConnectSetting(
-    NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
-    KyConnectSetting &connectSetting)
+                        NetworkManager::Ipv6Setting::Ptr &ipv6Setting,
+                        KyConnectSetting &connectSetting)
 {
     connectSetting.m_ipv6Dns = ipv6Setting->dns();
     if (NetworkManager::Ipv6Setting::Automatic == ipv6Setting->method()) {
@@ -493,10 +494,10 @@ void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetti
     qDebug() <<"[KyConnectResourse]" << connectUuid <<"get connect setting info, connect uuid";
 
     NetworkManager::Connection::Ptr connectPtr =
-        m_networkResourceInstance->getConnect(connectUuid);
+                            m_networkResourceInstance->getConnect(connectUuid);
 
     if (nullptr == connectPtr
-        || !connectPtr->isValid()) {
+               || !connectPtr->isValid()) {
         qWarning() <<"[KyConnectResourse]" << "it can not find valid connection" << connectUuid;
         return;
     }
@@ -510,10 +511,8 @@ void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetti
     NetworkManager::Ipv4Setting::Ptr ipv4Setting = connectionSettings->setting(NetworkManager::Setting::Ipv4).dynamicCast<NetworkManager::Ipv4Setting>();
     getIpv4ConnectSetting(ipv4Setting, connectSetting);
 
-    if (!isPppoeConnection(connectUuid)) {
-        NetworkManager::Ipv6Setting::Ptr ipv6Setting = connectionSettings->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
-        getIpv6ConnectSetting(ipv6Setting, connectSetting);
-    }
+    NetworkManager::Ipv6Setting::Ptr ipv6Setting = connectionSettings->setting(NetworkManager::Setting::Ipv6).dynamicCast<NetworkManager::Ipv6Setting>();
+    getIpv6ConnectSetting(ipv6Setting, connectSetting);
 
     return;
 }
@@ -522,7 +521,7 @@ bool KyConnectResourse::getInterfaceByUuid(QString &deviceName, const QString co
 {
     deviceName.clear();
     NetworkManager::Connection::Ptr connectPtr =
-        m_networkResourceInstance->getConnect(connUuid);
+            m_networkResourceInstance->getConnect(connUuid);
 
     if (nullptr == connectPtr) {
         qWarning()<<"getInterfaceByUuid failed, connect uuid"<<connUuid;
@@ -541,7 +540,7 @@ bool KyConnectResourse::getInterfaceByUuid(QString &deviceName, const QString co
 }
 
 void KyConnectResourse::getVpnConnectData(NetworkManager::ConnectionSettings::Ptr settingsPtr,
-                                          KyVpnConnectItem *vpnItem)
+                       KyVpnConnectItem *vpnItem)
 {
     NetworkManager::VpnSetting::Ptr vpnSetting = settingsPtr->setting(NetworkManager::Setting::Vpn).dynamicCast<NetworkManager::VpnSetting>();
     NMStringMap vpnDataMap = vpnSetting->data();
@@ -605,9 +604,9 @@ void KyConnectResourse::getVpnConnections(QList<KyVpnConnectItem *> &vpnConnectI
         }
 
         if (NetworkManager::ConnectionSettings::ConnectionType::Vpn
-            != connectPtr->settings()->connectionType()) {
+                != connectPtr->settings()->connectionType()) {
             qDebug()<<"[KyConnectResourse]"<<"connect name:" << connectPtr->name()
-                     <<"connect type:"<<connectPtr->settings()->connectionType();
+                   <<"connect type:"<<connectPtr->settings()->connectionType();
             continue;
         }
 
@@ -645,15 +644,15 @@ KyBluetoothConnectItem *KyConnectResourse::getBluetoothConnectItem(NetworkManage
     getConnectIp(settingPtr, bluetoothItem->m_ipv4Address, bluetoothItem->m_ipv6Address);
 
     NetworkManager::BluetoothSetting::Ptr bluetoothSetting =
-        settingPtr->setting(NetworkManager::Setting::Bluetooth).dynamicCast<NetworkManager::BluetoothSetting>();
+            settingPtr->setting(NetworkManager::Setting::Bluetooth).dynamicCast<NetworkManager::BluetoothSetting>();
     bluetoothItem->m_deviceAddress = bluetoothSetting->bluetoothAddress();
     QByteArray btAddrArray = bluetoothSetting->bluetoothAddress();
     for (int index = 0; index < btAddrArray.size(); ++index) {
         qDebug("bt address %d %s", index, btAddrArray[index]);
     }
-    // qDebug()<<"bt address 0:"<< btAddrArray[0];
-    // qDebug()<<"bt address 1:"<< btAddrArray[1];
-    // qDebug()<<"array size:"<<btAddrArray.size();
+   // qDebug()<<"bt address 0:"<< btAddrArray[0];
+   // qDebug()<<"bt address 1:"<< btAddrArray[1];
+   // qDebug()<<"array size:"<<btAddrArray.size();
     qDebug()<<"bluetooth device address:"<<bluetoothItem->m_deviceAddress.toInt(nullptr, 16);
 
     return bluetoothItem;
@@ -682,9 +681,9 @@ void KyConnectResourse::getBluetoothConnections(QList<KyBluetoothConnectItem *> 
         }
 
         if (NetworkManager::ConnectionSettings::ConnectionType::Bluetooth
-            != connectPtr->settings()->connectionType()) {
+                != connectPtr->settings()->connectionType()) {
             qDebug()<<"[KyConnectResourse]"<<"connect name:" << connectPtr->name()
-                     <<"connect type:"<<connectPtr->settings()->connectionType();
+                   <<"connect type:"<<connectPtr->settings()->connectionType();
             continue;
         }
 
@@ -718,7 +717,7 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
         = settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
 
     if (NetworkManager::WirelessSetting::NetworkMode::Ap
-        != wirelessSetting->mode()) {
+                                    != wirelessSetting->mode()) {
         qDebug() << "[KyConnectResourse]" <<"get ap item failed, the active connect mode is not ap.";
         return nullptr;
     }
@@ -737,6 +736,7 @@ KyApConnectItem *KyConnectResourse::getApConnectItem(NetworkManager::Connection:
     apConnectItem->m_connectName = connectPtr->name();
     apConnectItem->m_connectSsid = getSsidFromByteArray(rawSsid);
     apConnectItem->m_connectUuid = connectPtr->uuid();
+
     if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::A) {
         apConnectItem->m_band = str5GBand;
     } else if (wirelessSetting->band() == NetworkManager::WirelessSetting::FrequencyBand::Bg) {
@@ -763,7 +763,7 @@ KyApConnectItem *KyConnectResourse::getApConnectionByUuid(QString connectUuid)
     }
 
     if (NetworkManager::ConnectionSettings::ConnectionType::Wireless
-        != connectPtr->settings()->connectionType()) {
+            != connectPtr->settings()->connectionType()) {
         return nullptr;
     }
 
@@ -805,9 +805,9 @@ void KyConnectResourse::getApConnections(QList<KyApConnectItem *> &apConnectItem
     for (index = 0; index < connectList.size(); index++) {
         connectPtr = connectList.at(index);
         if (NetworkManager::ConnectionSettings::ConnectionType::Wireless
-            != connectPtr->settings()->connectionType()) {
+                != connectPtr->settings()->connectionType()) {
             qDebug()<<"[KyConnectResourse]"<<"connect name:" << connectPtr->name()
-                     <<"connect type:"<<connectPtr->settings()->connectionType();
+                   <<"connect type:"<<connectPtr->settings()->connectionType();
             continue;
         }
 
@@ -838,11 +838,11 @@ bool KyConnectResourse::isVirtualConncection(QString uuid)
     }
 
     if (NetworkManager::ConnectionSettings::ConnectionType::Vpn == connectPtr->settings()->connectionType()
-        ||NetworkManager::ConnectionSettings::ConnectionType::Bond == connectPtr->settings()->connectionType()
-        ||NetworkManager::ConnectionSettings::ConnectionType::Bridge == connectPtr->settings()->connectionType()
-        ||NetworkManager::ConnectionSettings::ConnectionType::Vlan == connectPtr->settings()->connectionType()
-        ||NetworkManager::ConnectionSettings::ConnectionType::Team == connectPtr->settings()->connectionType()
-        ||NetworkManager::ConnectionSettings::ConnectionType::IpTunnel == connectPtr->settings()->connectionType()) {
+      ||NetworkManager::ConnectionSettings::ConnectionType::Bond == connectPtr->settings()->connectionType()
+      ||NetworkManager::ConnectionSettings::ConnectionType::Bridge == connectPtr->settings()->connectionType()
+      ||NetworkManager::ConnectionSettings::ConnectionType::Vlan == connectPtr->settings()->connectionType()
+      ||NetworkManager::ConnectionSettings::ConnectionType::Team == connectPtr->settings()->connectionType()
+      ||NetworkManager::ConnectionSettings::ConnectionType::IpTunnel == connectPtr->settings()->connectionType()) {
         return true;
     }
 
@@ -851,7 +851,7 @@ bool KyConnectResourse::isVirtualConncection(QString uuid)
     if (devicePtr.isNull()) {
         return false;
     }
-    if (devicePtr->udi().startsWith("/sys/devices/virtual/net") && (devicePtr->capabilities() & 0x04)) { //	NM_DEVICE_CAP_IS_SOFTWARE    = 0x00000004
+    if (devicePtr->udi().startsWith("/sys/devices/virtual/net")) {
         return true;
     }
 
@@ -861,7 +861,7 @@ bool KyConnectResourse::isVirtualConncection(QString uuid)
 bool KyConnectResourse::isWiredConnection(QString uuid)
 {
     NetworkManager::Connection::Ptr connectPtr =
-        m_networkResourceInstance->getConnect(uuid);
+                      m_networkResourceInstance->getConnect(uuid);
     if (connectPtr.isNull()) {
         qWarning()<<"[KyConnectResourse]"<<"can not find wired connection"<<uuid;
         return false;
@@ -885,7 +885,7 @@ bool KyConnectResourse::isWiredConnection(QString uuid)
 bool KyConnectResourse::isWirelessConnection(QString uuid)
 {
     NetworkManager::Connection::Ptr connectPtr =
-        m_networkResourceInstance->getConnect(uuid);
+                        m_networkResourceInstance->getConnect(uuid);
     if (connectPtr.isNull()) {
         qWarning()<<"[KyConnectResourse]"<<"can not find wireless connection"<<uuid;
         return false;
@@ -901,13 +901,14 @@ bool KyConnectResourse::isWirelessConnection(QString uuid)
         }
 
         if (NetworkManager::ConnectionSettings::ConnectionType::Wireless ==
-            connectPtr->settings()->connectionType()) {
+                connectPtr->settings()->connectionType()) {
             return true;
         }
     }
 
     return false;
 }
+
 bool KyConnectResourse::isPppoeConnection(QString uuid)
 {
     NetworkManager::Connection::Ptr connectPtr =
@@ -950,7 +951,7 @@ bool KyConnectResourse::isApConnection(QString uuid)
     }
 
     if (NetworkManager::ConnectionSettings::ConnectionType::Wireless
-        != connectPtr->settings()->connectionType()) {
+            != connectPtr->settings()->connectionType()) {
         return false;
     }
 
@@ -958,7 +959,7 @@ bool KyConnectResourse::isApConnection(QString uuid)
     NetworkManager::WirelessSetting::Ptr wirelessSetting
         = settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
     if (NetworkManager::WirelessSetting::NetworkMode::Ap
-        != wirelessSetting->mode()) {
+                                    != wirelessSetting->mode()) {
         return false;
     }
 

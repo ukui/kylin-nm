@@ -31,6 +31,8 @@
 #define PANEL_TOP 1
 #define PANEL_LEFT 2
 #define PANEL_RIGHT 3
+#define VPN_PAGE_HEIGHT 370
+
 
 VpnPage::VpnPage(QWidget *parent) : SinglePage(parent)
 {
@@ -158,18 +160,11 @@ void VpnPage::resetPageHeight()
 {
     int height = 0;
     int count = m_listWidget->count();
-    m_listFrame->setFixedHeight((count >= 4) ? (MAX_ITEMS * ITEM_HEIGHT + ITEM_SPACE) : (count * ITEM_HEIGHT + ITEM_SPACE));
-    this->setFixedHeight(m_listFrame->height() + TITLE_FRAME_HEIGHT * 2 + 2);
+    m_listFrame->setFixedHeight(VPN_PAGE_HEIGHT);
 
-    if (count == 0) {
-        m_listWidget->setHidden(true);
-        m_listFrame->setHidden(true);
-        m_netDivider->setHidden(true);
-    } else {
-        m_listWidget->show();
-        m_listFrame->show();
-        m_netDivider->show();
-    }
+    m_listWidget->show();
+    m_listFrame->show();
+    m_netDivider->show();
 }
 
 bool VpnPage::removeConnectionItem(QMap<QString, QListWidgetItem *> &connectMap,
@@ -589,6 +584,16 @@ bool VpnPage::eventFilter(QObject *watched, QEvent *event)
     if (watched == m_settingsLabel) {
         if (event->type() == QEvent::MouseButtonRelease) {
             onShowControlCenter();
+        }
+    }
+    
+    if (watched == this) {
+        //失焦退出
+        if (event->type() == QEvent::ActivationChange) {
+            if (QApplication::activeWindow() != this) {
+                hide();
+                return true;
+            }
         }
     }
 

@@ -106,7 +106,7 @@ Q_SIGNALS:
     bool ipv6IsConflict(bool isConflict);
 };
 
-class NetDetail : public QWidget
+class NetDetail : public KDialog
 {
     Q_OBJECT
 
@@ -114,7 +114,6 @@ public:
     NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet,int category, QWidget *parent = nullptr);
     ~NetDetail();
 
-    void paintEvent(QPaintEvent *event);
     void closeEvent(QCloseEvent *event);
     bool eventFilter(QObject *w, QEvent *event);
 

@@ -1325,6 +1325,12 @@ void LanPage::deactivateWired(const QString& devName, const QString& connUuid)
     m_wiredConnectOperation->deactivateWiredConnection(name, connUuid);
 }
 
+void LanPage::deleteWiredConnect(const QString& connUuid)
+{
+    qDebug() << "[LanPage] deactivateWired" << connUuid;
+    m_wiredConnectOperation->deleteWiredConnect(connUuid);
+}
+
 void LanPage::showDetailPage(QString devName, QString uuid)
 {
     KyConnectItem *p_item = nullptr;

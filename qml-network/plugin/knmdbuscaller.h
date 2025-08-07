@@ -38,6 +38,7 @@ public:
     bool wiredMainSwitchState();
 
     QString upwardRateDate();
+
     QString downwardRateDate();
 
     void rescanWirelessConn();
@@ -51,8 +52,14 @@ public:
     void passwordConnect(QString devName, QString ssid, QString type, QString psk, bool autoConnect);
 
     void setWiredMainSwitchEnable(bool enable);
+
     void setUpwareRateData(QString str);
+
     void setDownwareRateData(QString str);
+
+    void showPropertyWidget(QString devName, QString ssid);
+
+    void deleteConnect(int type, QString ssid);
 //用于调用kylin-nm的dbus
 protected:
     QDBusPendingCallWatcher * asyncCall(const QString & methed, const QList<QVariant> & params);

@@ -68,6 +68,9 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void activateConnect(int type, QString devName, QString ssid);
     //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void deActivateConnect(int type, QString devName, QString ssid);
+    //delete network connect
+    Q_NOREPLY void deleteConnect(int type,QString Uuid);
+
     //获取设备列表和启用/禁用状态
     QVariantMap getDeviceListAndEnabled(int devType);
     //获取无线设备能力

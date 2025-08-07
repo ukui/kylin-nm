@@ -96,6 +96,9 @@ public slots:
 
     bool getNetMacConnectStatus(QString devmac);
 
+    void showPropertyWidget(QString devname, QString ssid);
+
+    void deleteConnect(int type,QString ssid);
 signals:
     void updateWiredDeviceList();
 

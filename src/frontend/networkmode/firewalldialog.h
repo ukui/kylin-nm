@@ -31,6 +31,7 @@
 #include "kwidget.h"
 #include "kdialog.h"
 #include "kylable.h"
+#include "ukuiwindowhelper/ukuiwindowhelper.h"
 
 using namespace kdk;
 
@@ -56,6 +57,7 @@ private:
     QVBoxLayout *m_dialogLayout = nullptr;
     QPushButton *m_PublicBtn = nullptr;
     QPushButton *m_PrivateBtn = nullptr;
+    UkuiWindowHelper *m_uwin;
 
 Q_SIGNALS:
     void setPublicNetMode();

@@ -121,6 +121,22 @@ void KnmDBusCaller::passwordConnect(QString devName, QString ssid, QString type,
     this->asyncCall("passwordConnect", list);
 }
 
+void KnmDBusCaller::showPropertyWidget(QString devName, QString ssid)
+{
+    QList<QVariant> list;
+    list.append(devName);
+    list.append(ssid);
+    this->asyncCall("showPropertyWidget", list);
+}
+
+void KnmDBusCaller::deleteConnect(int type, QString ssid)
+{
+    QList<QVariant> list;
+    list.append(type);
+    list.append(ssid);
+    this->asyncCall("deleteConnect", list);
+}
+
 void KnmDBusCaller::getWirelessSwitchState()
 {
     QList<QVariant> list;

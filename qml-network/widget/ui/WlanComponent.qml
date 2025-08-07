@@ -7,6 +7,7 @@ import org.ukui.shortcut.network 1.0
 import org.ukui.quick.items 1.0 as UkuiItems
 import org.ukui.quick.platform 1.0 as Platform
 
+
 ListView {
     id: wlanlistView
     visible: true
@@ -69,15 +70,42 @@ ListView {
 
                 Menu {
                     id: propertyMenu
+
+                    MenuItem {//connect/disconnect
+                        text:(model.status === 2)?qsTr("Disconnect network"):qsTr("Connect network")
+                        onTriggered: {
+                            console.log("connect/disconnect network")
+
+                            if (model.status === 2)
+                                KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                            else if (model.status === 4)
+                                KInterface.activateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
+                            typeicon.visible = false;
+                            loadingicon.visible = true;
+                        }
+                    }
+
+                    MenuItem {//property
+                        text:qsTr("Network property")
+                        visible: model.status === 2
+                        onTriggered: {
+                            console.log("network property")
+                            console.log("network property",wlanDeviceComboBox.currentText,model.Name,model.ssid)
+
+                            KInterface.showPropertyWidget(wlanDeviceComboBox.currentText, model.ssid)
+                        }
+                    }
+
                     MenuItem {
-                        text: qsTr("Network settings")
-                        onTriggered:
-                        {
-                            console.log("Network settings")
-                            KInterface.openwLanNetworkSetting()
+                        text:qsTr("Forget the network")
+                        visible: model.status === 2
+                        onTriggered: {
+                            console.log("Forget the network",model.uuid)
+                            KInterface.deleteConnect(1,model.uuid)
                         }
                     }
                 }
+
 
                 Item {
                     Layout.alignment: Qt.AlignLeft

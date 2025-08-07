@@ -20,7 +20,7 @@
     <name>LanComponent</name>
     <message>
         <source>network settings</source>
-        <translation>网络配置</translation>
+        <translation type="vanished">网络配置</translation>
     </message>
     <message>
         <source>connected</source>
@@ -37,6 +37,38 @@
     <message>
         <source>connect</source>
         <translation>连接</translation>
+    </message>
+    <message>
+        <source>disconnect network</source>
+        <translation type="vanished">断开网络</translation>
+    </message>
+    <message>
+        <source>connect network</source>
+        <translation type="vanished">连接网络</translation>
+    </message>
+    <message>
+        <source>network property</source>
+        <translation type="vanished">网络属性</translation>
+    </message>
+    <message>
+        <source>delete this network</source>
+        <translation type="vanished">删除此网络</translation>
+    </message>
+    <message>
+        <source>Disconnect network</source>
+        <translation>断开网络</translation>
+    </message>
+    <message>
+        <source>Connect network</source>
+        <translation>连接网络</translation>
+    </message>
+    <message>
+        <source>Network property</source>
+        <translation>网络属性</translation>
+    </message>
+    <message>
+        <source>Delete this network</source>
+        <translation>删除此网络</translation>
     </message>
 </context>
 <context>
@@ -62,7 +94,7 @@
     <name>WlanComponent</name>
     <message>
         <source>Network settings</source>
-        <translation>网络配置</translation>
+        <translation type="vanished">网络配置</translation>
     </message>
     <message>
         <source>connected</source>
@@ -83,6 +115,22 @@
     <message>
         <source>AutoConnect</source>
         <translation>自动连接</translation>
+    </message>
+    <message>
+        <source>Disconnect network</source>
+        <translation>断开网络</translation>
+    </message>
+    <message>
+        <source>Connect network</source>
+        <translation>连接网络</translation>
+    </message>
+    <message>
+        <source>Network property</source>
+        <translation>网络属性</translation>
+    </message>
+    <message>
+        <source>Forget the network</source>
+        <translation>忘记此网络</translation>
     </message>
 </context>
 </TS>

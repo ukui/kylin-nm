@@ -89,9 +89,11 @@ public:
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
+    void deleteWiredConnect(int type, const QString& connUuid);
     //无线连接断开
     void activateWireless(const QString& devName, const QString& ssid);
     void deactivateWireless(const QString& devName, const QString& ssid);
+    void deleteWireleeConnect(int type, const QString& connUuid);
     //无线总开关
     void setWirelessSwitchEnable(bool enable);
 

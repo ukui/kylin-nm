@@ -29,7 +29,7 @@
 #define COLOR_THEME "styleName"
 #define ICON_SIZE 16,16
 
-FirewallDialog::FirewallDialog(QWidget *parent): KDialog(parent)
+FirewallDialog::FirewallDialog(QWidget *parent): KDialog(parent), m_uwin(nullptr)
 {
     initUI();
     this->setWindowIcon(QIcon::fromTheme("kylin-network"));
@@ -38,11 +38,16 @@ FirewallDialog::FirewallDialog(QWidget *parent): KDialog(parent)
     setAttribute(Qt::WA_DeleteOnClose);
 //    centerToScreen();
     connect(qApp, &QApplication::paletteChanged, this, &FirewallDialog::onPaletteChanged);
+    m_uwin = new UkuiWindowHelper(this);
+    m_uwin->setSkipTaskBar(true);
 }
 
 FirewallDialog::~FirewallDialog()
 {
-
+    if (m_uwin)
+    {
+        delete m_uwin;
+    }
 }
 
 void FirewallDialog::initUI()

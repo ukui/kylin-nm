@@ -17,6 +17,10 @@ KnmInterface::KnmInterface()
 
 KnmInterface::~KnmInterface()
 {
+    if (nullptr != loadTimer) {
+        delete loadTimer ;
+        loadTimer = nullptr;
+    }
 }
 
 QString KnmInterface::getIconData(QString name, int size /*= 24*/)
@@ -277,5 +281,15 @@ void KnmInterface::passwordConnect(QString devName, QString ssid, QString type, 
     KNMDC::getInstance()->passwordConnect(devName, ssid, type, psk, autoConnect);
 }
 
+void KnmInterface::showPropertyWidget(QString devName, QString ssid)
+{
+    qDebug() << Q_FUNC_INFO <<__LINE__ << devName << ssid;
+    KNMDC::getInstance()->showPropertyWidget(devName, ssid);
+}
 
+void KnmInterface::deleteConnect(int type, QString ssid)
+{
+    qDebug() << Q_FUNC_INFO <<__LINE__ << type << ssid;
+    KNMDC::getInstance()->deleteConnect(type, ssid);
+}
 

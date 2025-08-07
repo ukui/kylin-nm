@@ -1519,9 +1519,18 @@ void MainWindow::activateWired(const QString& devName, const QString& connUuid)
 {
     m_lanWidget->activateWired(devName, connUuid);
 }
+
 void MainWindow::deactivateWired(const QString& devName, const QString& connUuid)
 {
     m_lanWidget->deactivateWired(devName, connUuid);
+}
+
+void MainWindow::deleteWiredConnect(int type, const QString& connUuid)
+{
+    qDebug() << Q_FUNC_INFO << __LINE__ << type << connUuid;
+    if (type == 0)
+        m_lanWidget->deleteWiredConnect(connUuid);
+
 }
 
 //无线连接断开
@@ -1533,6 +1542,13 @@ void MainWindow::activateWireless(const QString& devName, const QString& ssid)
 void MainWindow::deactivateWireless(const QString& devName, const QString& ssid)
 {
     m_wlanWidget->deactivateWirelessConnection(devName, ssid);
+}
+
+void MainWindow::deleteWireleeConnect(int type, const QString& connUuid)
+{
+    qDebug() << Q_FUNC_INFO << __LINE__ << type << connUuid;
+    if (type == 1)
+        m_wlanWidget->deleteWirelessConnect(connUuid);
 }
 
 void MainWindow::rescan()

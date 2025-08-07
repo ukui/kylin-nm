@@ -40,11 +40,36 @@ ListView {
 
             Menu {
                 id: propertyMenu
+
                 MenuItem {
-                    text: qsTr("network settings")
+                    text:(modelData.State === 2)?qsTr("Disconnect network"):qsTr("Connect network")
                     onTriggered: {
-                        console.log("network settings")
-                        KInterface.openNetworkSetting()
+                        console.log("connect/disconnect network")
+
+                        if (modelData.State === 2)
+                            KInterface.deActivateConnect(lanDeviceComboBox.currentText, modelData.Uuid, 0);
+                        else if (modelData.State === 4)
+                            KInterface.activateConnect(lanDeviceComboBox.currentText, modelData.Uuid, 0);
+                        typeicon.visible = false;
+                        loadingicon.visible = true;
+                    }
+                }
+
+                MenuItem {
+                    text:qsTr("Network property")
+                    onTriggered: {
+                        console.log("network property")
+                        console.log("network property",lanDeviceComboBox.currentText,modelData.Name,modelData.Uuid)
+
+                        KInterface.showPropertyWidget(lanDeviceComboBox.currentText, modelData.Uuid)
+                    }
+                }
+
+                MenuItem {
+                    text:qsTr("Delete this network")
+                    onTriggered: {
+                        console.log("delete this network",modelData.Uuid)
+                        KInterface.deleteConnect(0,modelData.Uuid)
                     }
                 }
             }

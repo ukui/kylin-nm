@@ -60,7 +60,6 @@
 #define  SYSTEM_DBUS_PATH  "/com/kylin/network"
 #define  SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
 
-//extern void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed);
 
 WarningDialog::WarningDialog(QWidget *parent)
     :KDialog(parent)
@@ -200,13 +199,12 @@ NetDetail::NetDetail(QString interface, QString name, QString uuid, bool isActiv
      isWlan(isWlan),
      m_isCreateNet(isCreateNet),
      mCategory(category),
-     QWidget(parent)
+     KDialog(parent)
 {
     KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
-    setWindowFlags(Qt::Dialog);
-    setAttribute(Qt::WA_DeleteOnClose);
     setFixedSize(WINDOW_WIDTH,WINDOW_HEIGHT);
     centerToScreen();
+    setWindowIcon("kylin-network");
 
     if (!m_isCreateNet && name.isEmpty()) {
         m_isCreateNet = true;
@@ -306,22 +304,11 @@ void NetDetail::currentRowChangeSlot(int row)
     }
 }
 
-void NetDetail::paintEvent(QPaintEvent *event)
-{
-//    QPalette pal = qApp->palette();
-//    QPainter painter(this);
-//    painter.setBrush(pal.color(QPalette::Base));
-//    painter.drawRect(this->rect());
-//    painter.fillRect(rect(), QBrush(pal.color(QPalette::Base)));
-
-    return QWidget::paintEvent(event);
-}
-
 void NetDetail::closeEvent(QCloseEvent *event)
 {
     Q_EMIT this->detailPageClose(m_deviceName, m_name, m_uuid);
     Q_EMIT this->createPageClose(m_deviceName);
-    return QWidget::closeEvent(event);
+    return KDialog::closeEvent(event);
 }
 
 void NetDetail::centerToScreen()
@@ -482,8 +469,8 @@ void NetDetail::initUI()
     mainLayout->addSpacing(16);
     mainLayout->addWidget(bottomWidget);
 
+    mainWidget()->setLayout(mainLayout);
     this->setAutoFillBackground(true);
-//    this->setPalette(pal);
 }
 
 void NetDetail::loadPage()
@@ -1276,7 +1263,7 @@ bool NetDetail::eventFilter(QObject *w, QEvent *event)
             return true;
        }
    }
-   return QWidget::eventFilter(w, event);
+   return KDialog::eventFilter(w, event);
 }
 
 void NetDetail::setNetTabToolTip()

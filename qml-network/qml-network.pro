@@ -49,12 +49,15 @@ qm_files.path = /usr/share/ukui/widgets/org.ukui.shortcut.network/translations
 target.path = $$[QT_INSTALL_LIBS]/qt5/qml/org/ukui/shortcut/network
 
 TRANSLATIONS += \
-    translations/ukui-shortcut-network_zh_CN.ts
+    translations/ukui-shortcut-network_zh_CN.ts \
+    translations/ukui-shortcut-network_zh_Hant.ts \
+    translations/ukui-shortcut-network_zh_HK.ts
+
 
 INSTALLS += inst1 \
-    inst2 \
-    qm_files \
-    target
+            inst2 \
+            qm_files \
+            target
 
 OBJECTS_DIR = ./obj/
 MOC_DIR = ./moc/

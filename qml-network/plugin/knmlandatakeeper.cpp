@@ -34,7 +34,10 @@ KnmLanDataKeeper::KnmLanDataKeeper(QObject *parent) : KnmDataKeeper(parent)
 
 KnmLanDataKeeper::~KnmLanDataKeeper()
 {
-
+    if (nullptr != m_pInterface) {
+        delete m_pInterface;
+        m_pInterface = nullptr;
+    }
 }
 
 QMap<QString, QVariant> KnmLanDataKeeper::makeConnectionMap(int status, QStringList conPath)

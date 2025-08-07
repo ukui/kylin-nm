@@ -51,6 +51,7 @@ public:
     void getWiredList(QString devName, QList<QStringList> &list);
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
+    void deleteWiredConnect(const QString& connUuid);
     void showDetailPage(QString devName, QString uuid);
     void setWiredDeviceEnable(const QString& devName, bool enable);
     int getDeviceConnectivity(const QString deviceName);

@@ -68,6 +68,7 @@ public:
     void activateWirelessConnection(const QString& devName, const QString& ssid);
     void deactivateWirelessConnection(const QString& devName, const QString& ssid);
     void deactivateWirelessConnectionWithUuid(const QString devName, const QString uuid);
+    void deleteWirelessConnect(const QString &connectUuid);
     void showDetailPage(QString devName, QString uuid);
     void showAddOtherPage(QString devName);
 

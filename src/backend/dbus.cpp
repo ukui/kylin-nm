@@ -301,6 +301,21 @@ void DbusAdaptor::deActivateConnect(int type, QString devName, QString ssid)
         qDebug() << "[DbusAdaptor] deactivateConnect type is invalid";
     }
 }
+//delete连接
+void DbusAdaptor::deleteConnect(int type,QString Uuid)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__  << type << Uuid;
+    if (type == WIRED) {
+        qWarning() << Q_FUNC_INFO << __LINE__;
+        m_mainWindow->deleteWiredConnect(type,Uuid);
+    } else if (type == WIRELESS) {
+        qWarning() << Q_FUNC_INFO << __LINE__;
+
+        m_mainWindow->deleteWireleeConnect(type,Uuid);
+    } else {
+        qWarning() << Q_FUNC_INFO << __LINE__  << "deleteConnect type is invalid";
+    }
+}
 
 //获取设备列表和启用/禁用状态
 QVariantMap DbusAdaptor::getDeviceListAndEnabled(int devType)

@@ -1893,3 +1893,8 @@ void WlanPage::deactivateWirelessConnectionWithUuid(const QString devName, const
 
     return;
 }
+
+void WlanPage::deleteWirelessConnect(const QString &connectUuid)
+{
+    m_wirelessConnectOpreation->deleteWirelessConnect(connectUuid);
+}

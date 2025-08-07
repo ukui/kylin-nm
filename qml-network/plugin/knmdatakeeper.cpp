@@ -8,7 +8,10 @@ KnmDataKeeper::KnmDataKeeper(QObject *parent)
 
 KnmDataKeeper::~KnmDataKeeper()
 {
-
+    if (nullptr != m_pSpeedTimer) {
+        delete m_pSpeedTimer;
+        m_pSpeedTimer = nullptr;
+    }
 }
 
 void KnmDataKeeper::addDevice(QString devName, bool isAvailable, DeviceType type)

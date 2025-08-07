@@ -30,6 +30,7 @@
 #include <QSpacerItem>
 #include <QComboBox>
 #include <QLineEdit>
+#include "klabel.h"
 
 //#include "kylinconnectsetting.h"
 #include "coninfo.h"
@@ -69,9 +70,9 @@ private:
     QLabel *m_gateWayLabel;
 
     QLabel *m_configEmptyLabel;
-    QLabel *m_addressHintLabel;
+    KLabel *m_addressHintLabel;
     QLabel *m_subnetEmptyLabel;
-    QLabel *m_gateWayHintLabel;
+    KLabel *m_gateWayHintLabel;
 
     MultipleDnsWidget *m_dnsWidget = nullptr;
 

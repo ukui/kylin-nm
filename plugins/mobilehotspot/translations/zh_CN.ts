@@ -77,21 +77,6 @@
         <extra-contents_path>/mobilehotspot/Shared NIC port</extra-contents_path>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="vanished">网络密码</translation>
-        <extra-contents_path>/mobilehotspot/Password</extra-contents_path>
-    </message>
-    <message>
-        <source>Frequency band</source>
-        <translation type="vanished">网络频带</translation>
-        <extra-contents_path>/mobilehotspot/Frequency band</extra-contents_path>
-    </message>
-    <message>
-        <source>Net card</source>
-        <translation type="vanished">共享网卡端口</translation>
-        <extra-contents_path>/mobilehotspot/Net card</extra-contents_path>
-    </message>
-    <message>
         <source>mobilehotspot</source>
         <translation type="vanished">移动热点</translation>
     </message>
@@ -129,7 +114,7 @@
         <translation type="vanished">开始创建热点</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="637"/>
+        <location filename="../mobilehotspotwidget.cpp" line="628"/>
         <source>Contains at least 8 characters</source>
         <translation>至少包含8个字符</translation>
     </message>
@@ -159,31 +144,28 @@
         <translation> 进行热点共享，会中断本机无线网络连接</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="376"/>
-        <location filename="../mobilehotspotwidget.cpp" line="396"/>
-        <location filename="../mobilehotspotwidget.cpp" line="480"/>
-        <location filename="../mobilehotspotwidget.cpp" line="520"/>
-        <location filename="../mobilehotspotwidget.cpp" line="779"/>
+        <location filename="../mobilehotspotwidget.cpp" line="375"/>
+        <location filename="../mobilehotspotwidget.cpp" line="772"/>
         <source>hotspot already close</source>
         <translation>热点已关闭</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="544"/>
+        <location filename="../mobilehotspotwidget.cpp" line="535"/>
         <source>Open mobile hotspot</source>
         <translation>开启移动热点</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="625"/>
+        <location filename="../mobilehotspotwidget.cpp" line="630"/>
         <source>Network Password</source>
         <translation>网络密码</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="665"/>
+        <location filename="../mobilehotspotwidget.cpp" line="656"/>
         <source>Network Frequency band</source>
         <translation>网络频带</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="689"/>
+        <location filename="../mobilehotspotwidget.cpp" line="680"/>
         <source>Shared NIC port</source>
         <translation>共享网卡端口</translation>
     </message>
@@ -192,7 +174,7 @@
         <translation type="vanished">开启</translation>
     </message>
     <message>
-        <location filename="../mobilehotspotwidget.cpp" line="604"/>
+        <location filename="../mobilehotspotwidget.cpp" line="595"/>
         <source>Wi-Fi Name</source>
         <translation>Wi-Fi 名称</translation>
     </message>
@@ -205,13 +187,8 @@
         <translation type="vanished">网络频带</translation>
     </message>
     <message>
-        <source>Net card</source>
-        <translation type="vanished">共享网卡端口</translation>
-    </message>
-    <message>
-        <location filename="../mobilehotspotwidget.cpp" line="514"/>
+        <location filename="../mobilehotspotwidget.cpp" line="803"/>
         <location filename="../mobilehotspotwidget.cpp" line="811"/>
-        <location filename="../mobilehotspotwidget.cpp" line="823"/>
         <source>hotspot already open</source>
         <translation>热点已开启</translation>
     </message>

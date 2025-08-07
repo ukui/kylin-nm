@@ -76,7 +76,7 @@ const QString MobileHotspot::name() const {
 bool MobileHotspot::isEnable() const
 {
     qDebug() << needLoad;
-    return false;
+    return needLoad;
 }
 
 
@@ -162,7 +162,7 @@ bool MobileHotspot::isExitWirelessDevice()
                 iter++;
                 continue;
             }
-            if (deviceListMap[interfaceName] & 0x01) {
+            if (devCapMap[interfaceName] & 0x01) {
                 qDebug() << "wireless device" <<  interfaceName << "support hotspot";
                 return true;
             }

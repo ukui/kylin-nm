@@ -32,6 +32,7 @@
 #include <QDebug>
 
 //#include "kylinconnectsetting.h"
+#include "klabel.h"
 #include "coninfo.h"
 #include "multiplednswidget.h"
 #include "divider.h"
@@ -75,8 +76,8 @@ private:
     QLabel *m_gateWayLabel;
 
     QLabel *m_configEmptyLabel;
-    QLabel *m_addressHintLabel;
-    QLabel *m_maskHintLabel;
+    KLabel *m_addressHintLabel;
+    KLabel *m_maskHintLabel;
     QLabel *m_gateWayEmptyLabel;
     QLabel *m_dnsEmptyLabel;
 

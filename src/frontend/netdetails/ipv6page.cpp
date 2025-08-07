@@ -120,12 +120,12 @@ void Ipv6Page::initUI() {
     m_configEmptyLabel = new QLabel(this);
     m_configEmptyLabel->setFixedHeight(LABEL_HEIGHT);
 
-    m_addressHintLabel = new QLabel(this);
+    m_addressHintLabel = new KLabel(this);
     m_addressHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_addressHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
     initConflictHintLable();
 
-    m_gateWayHintLabel = new QLabel(this);
+    m_gateWayHintLabel = new KLabel(this);
     m_gateWayHintLabel->setFixedHeight(LABEL_HEIGHT);
     m_gateWayHintLabel->setContentsMargins(HINT_TEXT_MARGINS);
 
@@ -143,10 +143,11 @@ void Ipv6Page::initUI() {
     pPwdLayout->addStretch();
     pPwdLayout->addWidget(m_statusLabel);
 
-    QPalette hintTextColor;
-    hintTextColor.setColor(QPalette::WindowText, Qt::red);
-    m_addressHintLabel->setPalette(hintTextColor);
-    m_gateWayHintLabel->setPalette(hintTextColor);
+    //V11 qlabel 使用调色板颜色显示有问题
+    m_addressHintLabel->setFontColorRole(QPalette::WindowText);
+    m_addressHintLabel->setFontColor(Qt::red);
+    m_gateWayHintLabel->setFontColorRole(QPalette::WindowText);
+    m_gateWayHintLabel->setFontColor(Qt::red);
 
     QWidget *addressWidget = new QWidget(this);
     QVBoxLayout *addressLayout = new QVBoxLayout(addressWidget);

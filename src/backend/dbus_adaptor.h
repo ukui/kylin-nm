@@ -226,6 +226,11 @@ class NetworkAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"getWiredMainSwitchBtnState\">\n"
 "      <arg direction=\"out\" type=\"b\"/>\n"
 "    </method>\n"
+"    <method name=\"getDeviceConnectivity\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
+"      <arg direction=\"out\" type=\"i\"/>\n"
+"    </method>\n"
+
 "  </interface>\n"
         "")
 public:
@@ -260,6 +265,7 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void showCreateWiredConnectWidget(const QString &devName);
     void showKylinNM(int type);
     Q_NOREPLY void showPropertyWidget(const QString &devName, const QString &ssid);
+    int getDeviceConnectivity(const QString deviceName);
 Q_SIGNALS: // SIGNALS
     void activateFailed(const QString &errorMessage);
     void deactivateFailed(const QString &errorMessage);

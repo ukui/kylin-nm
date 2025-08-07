@@ -99,6 +99,8 @@ public Q_SLOTS: // METHODS
 
     bool getWirelessSwitchBtnState();
     bool getWiredMainSwitchBtnState();
+
+    int getDeviceConnectivity(const QString deviceName);
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);
 //    void wiredActivating(QString devName, QString ssid);

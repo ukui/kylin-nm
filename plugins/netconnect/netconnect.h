@@ -109,6 +109,8 @@ private:
     void getDeviceStatusMap(QMap<QString, bool> &map);
     void initNet();
     void initNetListFromDevice(QString deviceName);
+    void initDeviceConnectivity(QString deviceName);
+    void updateDeviceFrameFromConnectivity(ItemFrame *frame, ConnectivityType type);
     //处理列表增加
     void addLanItem(ItemFrame *frame, QString devName, QStringList infoList, bool isActived);
     //增加设备

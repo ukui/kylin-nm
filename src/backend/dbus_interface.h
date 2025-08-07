@@ -212,6 +212,13 @@ public Q_SLOTS: // METHODS
         callWithArgumentList(QDBus::NoBlock, QStringLiteral("showPropertyWidget"), argumentList);
     }
 
+    inline QDBusPendingReply<int> getDeviceConnectivity(const QString deviceName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(deviceName);
+        return callWithArgumentList(QDBus::NoBlock, QStringLiteral("getDeviceConnectivity"), argumentList);
+}
+
 Q_SIGNALS: // SIGNALS
     void activateFailed(const QString &errorMessage);
     void deactivateFailed(const QString &errorMessage);

@@ -514,6 +514,7 @@ void NetConnect::initNet()
     //再填充每个设备的列表
     for (int i = 0; i < deviceList.size(); ++i) {
         initNetListFromDevice(deviceList.at(i));
+        initDeviceConnectivity(deviceList.at(i));
     }
 }
 
@@ -976,6 +977,9 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int
             if (iters.value()->itemMap.contains(uuid)) {
                 item = iters.value()->itemMap[uuid];
                 infoList << item->titileLabel->text() << item->uuid << item->dbusPath;
+                //若断开连接，需要把网卡下的item全部赋为未连接
+                item->setConnectivityWarn(ConnectivityType::NoConnectivity);
+                
                 //为断开则重新插入
                 int index = getInsertPos(item->titileLabel->text(), iters.key());
                 qDebug() << "[NetConnect]reinsert" << item->titileLabel->text() << "pos" << index << "in" << iters.key() << "because status changes to deactive";
@@ -1020,6 +1024,43 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int
                      }
                 }
             }
+        }
+    }
+    qDebug() << "onActiveConnectionChanged deviceName = " << deviceName;
+    initDeviceConnectivity(deviceName);
+}
+
+void NetConnect::initDeviceConnectivity(QString deviceName)
+{
+    if (!deviceFrameMap.contains(deviceName)) {
+        return;
+    }
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
+
+    QDBusReply<int> reply = m_interface->call(QStringLiteral("getDeviceConnectivity"), deviceName);
+    if (!reply.isValid())
+    {
+        return;
+    }
+    updateDeviceFrameFromConnectivity(deviceFrameMap[deviceName], (ConnectivityType)reply.value());
+}
+
+void NetConnect::updateDeviceFrameFromConnectivity(ItemFrame *frame, ConnectivityType type)
+{
+    if (frame->itemMap.isEmpty()) {
+        return;
+    }
+
+    //modify ui
+    QMap<QString, LanItem *> ::iterator iter;
+    for (iter = frame->itemMap.begin(); iter != frame->itemMap.end(); iter++) {
+        if (iter.value()->isAcitve) {
+            iter.value()->setNetworkCheckFrameHidden(false);
+            iter.value()->setConnectivityWarn(type);
+        } else {
+            iter.value()->setNetworkCheckFrameHidden(true);
         }
     }
 }

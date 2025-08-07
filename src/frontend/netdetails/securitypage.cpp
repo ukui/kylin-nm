@@ -1139,8 +1139,11 @@ void SecurityPage::onCaCertPathComboxIndexChanged()
 {
     if (caCertPathCombox->currentData().toInt() == CHOOSE_FILE_INDEX)
     {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
+        //fix bug 367425
+        QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Choose a CA certificate"), "recent:///",
                                                         tr("CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)"));
+        qDebug() << "onCaCertPathComboxIndexChanged  fileName" << fileName;
+
         if (!fileName.isNull()) {
             QStringList nameList = fileName.split("/");
             caCertPathCombox->blockSignals(true);
@@ -1162,7 +1165,7 @@ void SecurityPage::onClientCertPathComboxIndexChanged()
 {
     if (clientCertPathCombox->currentData().toInt() == CHOOSE_FILE_INDEX)
     {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
+        QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Choose a CA certificate"), "recent:///",
                                                         tr("CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)"));
         if (!fileName.isNull()) {
             clientCertPathCombox->blockSignals(true);
@@ -1184,7 +1187,7 @@ void SecurityPage::onClientPrivateKeyComboxIndexChanged()
 {
     if (clientPrivateKeyCombox->currentData().toInt() == CHOOSE_FILE_INDEX)
     {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
+        QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Choose a CA certificate"), "recent:///",
                                                         tr("CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)"));
         if (!fileName.isNull()) {
             QStringList nameList = fileName.split("/");
@@ -1239,7 +1242,7 @@ void SecurityPage::onPacFilePathComboxIndexChanged()
 {
     if (m_pacFilePathComboBox->currentData().toInt() == CHOOSE_FILE_INDEX)
     {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a PAC file"), "recent:///",
+        QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Choose a PAC file"), "recent:///",
                                                         tr("PAC Files ( *.pac)"));
         if (!fileName.isNull()) {
             QStringList nameList = fileName.split("/");

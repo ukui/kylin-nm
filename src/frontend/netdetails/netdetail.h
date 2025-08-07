@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -50,14 +50,30 @@
 #include "tab-pages/tabpage.h"
 #include "kwidget.h"
 #include "ktabbar.h"
+#include "kdialog.h"
 #include "networkmodeconfig.h"
 
-#include <arpa/inet.h>
 using namespace kdk;
 
 #define  TAB_WIDTH  60
 #define  TAB_HEIGHT 36
 #define  TAB_HEIGHT_TABLET 48
+
+class WarningDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    explicit WarningDialog(QWidget *parent = nullptr);
+    void setWarningMessage(QString);
+
+private:
+    void initUI();
+
+    QLabel* warningLabel = nullptr;
+    QLabel* warningTitle = nullptr;
+    QLabel* warningText = nullptr;
+    QPushButton* confirmButton = nullptr;
+};
 
 class NetTabBar : public KTabBar
 {
@@ -95,9 +111,8 @@ class NetDetail : public QWidget
     Q_OBJECT
 
 public:
-    NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet, QWidget *parent = nullptr);
+    NetDetail(QString interface, QString name, QString uuid, bool isActive, bool isWlan, bool isCreateNet,int category, QWidget *parent = nullptr);
     ~NetDetail();
-    void centerToScreen();
 
     void paintEvent(QPaintEvent *event);
     void closeEvent(QCloseEvent *event);
@@ -105,6 +120,7 @@ public:
 
 private:
     void initUI();
+    void centerToScreen();
     void initComponent();
     void getConInfo(ConInfo &conInfo);
     void loadPage();
@@ -128,7 +144,7 @@ private:
     //ipv4+ipv6页面
     void getStaticIpInfo(ConInfo &conInfo, bool bActived);
 
-    void setConfirmEnable();
+    bool checkErrorMessage(QString&);
 
 //    bool checkIpv4Conflict(QString ipv4Address);
 //    bool checkIpv6Conflict(QString ipv6Address);
@@ -142,15 +158,8 @@ private:
     void showDesktopNotify(const QString &message, QString soundName);
 
     void setNetdetailSomeEnable(bool on);
-
     void startObjectThread();
     void setNetTabToolTip();
-
-    void getIpv4Ipv6Info(QString objPath, ConInfo &conInfo);
-    QMap<QString, QVariant> getAddressDataFromMap(QMap<QString,QVariant> &innerMap, QString innerKey);
-    KyIpConfigType getIpConfigTypeFromMap(QMap<QString,QVariant> &innerMap, QString innerKey);
-    QList<QHostAddress> getIpv4DnsFromMap(QMap<QString,QVariant> &innerMap, QString innerKey);
-    QList<QHostAddress> getIpv6DnsFromMap(QMap<QString,QVariant> &innerMap, QString innerKey);
 
 private:
     KyNetworkDeviceResourse *m_netDeviceResource = nullptr;
@@ -173,6 +182,7 @@ private:
     QScrollArea  * m_secuPageScrollArea;
     QScrollArea  * m_ipv4ScrollArea;
     QScrollArea  * m_ipv6ScrollArea;
+    QScrollArea  * m_configScrollArea;
     QScrollArea  * m_createNetPageScrollArea;
 
     QPushButton  * cancelBtn;
@@ -190,6 +200,7 @@ private:
     bool         m_isCreateNet;
     bool         isActive;
     bool         isHideWlan;
+    bool         m_isPppoe = false;
 
     bool         isCreateOk;
     bool         isDetailOk;
@@ -197,7 +208,7 @@ private:
     bool         isIpv6Ok;
     bool         isSecuOk;
     bool         isConfirmBtnEnable;
-
+    int mCategory;
     ConInfo      m_info;
 
     ThreadObject *m_object;
@@ -219,4 +230,5 @@ Q_SIGNALS:
     void checkCurrentIpv4Conflict(const QString &address);
     void checkCurrentIpv6Conflict(const QString &address);
 };
+
 #endif // NETDETAIL_H

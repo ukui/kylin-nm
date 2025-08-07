@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -54,6 +54,8 @@ public:
     void stopLoading();
     void showIpv6AddressConflict(bool isConflict);
 
+    QString getErrorMessage();
+
 private:
     QComboBox *ipv6ConfigCombox;
     LineEdit *ipv6AddressEdit;
@@ -81,6 +83,14 @@ private:
     QLabel *m_iconLabel;
     QLabel *m_textLabel;
 
+    QString m_errorMessage;
+
+    //kylin 网络设置控制接口
+    bool m_ipaddressCtrl = false;
+    bool m_netMaskCtrl     = false;
+    bool m_gateWayCtrl     = false;
+    bool m_dnsWayCtrl      = false;
+
 private:
     void initUI();
     void initComponent();
@@ -92,6 +102,8 @@ private:
 
     void initConflictHintLable();
     void initLoadingIcon();
+    void initNetCtrl();
+    void updateUi();
 
 private Q_SLOTS:
     void configChanged(int index);
@@ -100,6 +112,7 @@ private Q_SLOTS:
     void onGatewayTextChanged();
     void onAddressEidtFinished();
     void updateIcon();
+    void updateNetCtrl(QString modName,QVariantMap value);
 
 Q_SIGNALS:
     void setIpv6PageState(bool);

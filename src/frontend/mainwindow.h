@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -35,6 +35,7 @@
 #include "netdetails/netdetail.h"
 #include "netdetails/joinhiddenwifipage.h"
 #include "connectivity/connectivitypage.h"
+#include "kylable.h"
 //安全中心-网络防火墙模式配置
 #include "networkmodeconfig.h"
 //删除此头文件，别在添加
@@ -86,9 +87,6 @@ public:
     void getApConnectionPath(QString &path, QString uuid);
     //获取热点ActivePath
     void getActiveConnectionPath(QString &path, QString uuid);
-
-    //有线连接删除
-    void deleteWired(const QString &connUuid);
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
     void deactivateWired(const QString& devName, const QString& connUuid);
@@ -97,6 +95,8 @@ public:
     void deactivateWireless(const QString& devName, const QString& ssid);
     //无线总开关
     void setWirelessSwitchEnable(bool enable);
+
+    void setWiredEnableStatus(bool enable);
 
     void setWiredDeviceEnable(const QString& devName, bool enable);
 
@@ -116,6 +116,8 @@ public:
     void keyRingClear();
 
     bool getWirelessSwitchBtnState();
+    bool getWiredEnabledState();
+    int getDeviceConnectivity(const QString deviceName);
 
 Q_SIGNALS:
     //设备插拔
@@ -124,6 +126,7 @@ Q_SIGNALS:
     //设备名称变化
     void deviceNameChanged(QString oldName, QString newName, int type);
     void wirelessSwitchBtnChanged(bool state);
+    void wiredEnabledChanged(bool state);
     //有线无线列表更新（有线增删、无线增加减少）
     void lanAdd(QString devName, QStringList info);
     void lanRemove(QString dbusPath);
@@ -137,6 +140,8 @@ Q_SIGNALS:
     //热点断开
     void hotspotDeactivated(QString devName, QString ssid);
     void hotspotActivated(QString devName, QString ssid, QString uuid, QString activePath, QString settingPath);
+    void hotspotDeactivating(QString devName, QString ssid);
+    void hotspotActivating(QString devName, QString ssid);
     //信号强度变化
     void signalStrengthChange(QString devName, QString ssid, int strength);
     //安全性变化
@@ -144,13 +149,14 @@ Q_SIGNALS:
     void mainWindowVisibleChanged(const bool &visible);
     //列表排序
     void timeToUpdate();
+    void deviceConnectivityChanged(QString devName, int connectivity);
 
 public Q_SLOTS:
 
 protected:
+    bool eventFilter(QObject *watched, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void paintEvent(QPaintEvent *event);
-    bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     void firstlyStart(); //一级启动
@@ -164,18 +170,19 @@ private:
     void initPanelGSettings();
     void initUI();
     void initDbusConnnect();
-    void registerTrayIcon();
     void initTrayIcon();
+
     void resetTrayIconTool();
     void initWindowTheme();
     void resetWindowTheme();
-    void showControlCenter();
     void showByWaylandHelper();
-    void slideWindowByPanelPosition();
-
     void setCentralWidgetType(IconActiveType iconStatus);
+
     void assembleTrayIconTooltip(QMap<QString, QString> &map, QString &tip);
     void setThemePalette();
+
+    void initNetCtrl();
+    void netCtrlDiscon(QMap<QString, QString> lanMap,QMap<QString, QString> wlanMap);
 
     double m_transparency=1.0;  //透明度
     QGSettings * m_transGsettings;   //透明度配置文件
@@ -186,8 +193,8 @@ private:
     //主窗口的主要构成控件
     QTabWidget * m_centralWidget = nullptr;
     QHBoxLayout * m_tabBarLayout = nullptr;
-    QLabel * m_lanLabel = nullptr;
-    QLabel * m_wlanLabel = nullptr;
+    FixLabel * m_lanLabel = nullptr;
+    FixLabel * m_wlanLabel = nullptr;
 
     LanPage * m_lanWidget = nullptr;
     WlanPage * m_wlanWidget = nullptr;
@@ -197,14 +204,10 @@ private:
     //监听主题的Gsettings
     QGSettings * m_styleGsettings = nullptr;
 
-
     //获取任务栏位置和大小
     QGSettings *m_panelGSettings = nullptr;
     int m_panelPosition;
     int m_panelSize;
-    int m_panelType;
-    int m_settingsIslandPosition;
-    int m_topbarSize;
 
     //获取和重置窗口位置
     void resetWindowPosition();
@@ -217,9 +220,6 @@ private:
     QAction * m_showSettingsAction = nullptr;
     QAction * m_showConnectivityPageAction = nullptr;
 
-    bool m_lanIsLoading = false;
-    bool m_wlanIsLoading = false;
-
     bool m_isShowInCenter = false;
 
     IconActiveType iconStatus = IconActiveType::NOT_CONNECTED;
@@ -228,29 +228,43 @@ private:
 
     NetworkMode *m_networkMode;
 
-    uint m_intervalTime = 100;
-    uint m_registerCount = 0;
-
     QString m_display;
+
+    inline void updateTrayiconMenuStyle() {
+        QPalette pal = this->palette();
+        //托盘watcher异常时的规避方案 bug#214664
+        if (m_trayIconMenu != nullptr) {
+            pal.setColor(QPalette::Base, pal.color(QPalette::Base)); //处理Wayland环境setPalette(pal)不生效问题
+            pal.setColor(QPalette::Text, pal.color(QPalette::Text));
+            m_trayIconMenu->setPalette(pal);
+        }
+    }
+
+    //网络界面配置
+    QMap<QString, QVariant> getModuleHideStatus();
+    void initDisplayConfig();
+    bool m_lan_display_flag = true;
+    bool m_wlan_display_flag = true;
 
 public Q_SLOTS:
     void onShowMainWindow(int type);
+    void onShowSettingsActionTriggled();
+    void updateNetCtrl(QString modName,QVariantMap value);
 
 private Q_SLOTS:
     void onTransChanged();
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void onShowMainwindowActionTriggled();
-    void onShowSettingsActionTriggled();
     void onThemeChanged(const QString &key);
     void onRefreshTrayIcon();
     void onSetTrayIconLoading();
-    void onLanConnectStatusToChangeTrayIcon(int state);
-    void onWlanConnectStatusToChangeTrayIcon(int state);
+    void onConnectStatusToChangeTrayIcon(int state);
     void onConnectivityChanged(NetworkManager::Connectivity connectivity);
     void onConnectivityCheckSpareUriChanged();
     void onTimeUpdateTrayIcon();
     void onTabletModeChanged(bool mode);
     void onRefreshTrayIconTooltip();
+    void onPrimaryScreenChanged();
 
     void onShowKylinNMSlot(QString display, int type);
     //唤起属性页 根据网卡类型 参数2 为ssid/uuid
@@ -259,6 +273,7 @@ private Q_SLOTS:
     void onShowCreateWiredConnectWidgetSlot(QString display, QString devName);
     //唤起加入其他无线网络界面
     void onShowAddOtherWlanWidgetSlot(QString display, QString devName);
+    void showControlCenter();
 };
 
 #endif // MAINWINDOW_H

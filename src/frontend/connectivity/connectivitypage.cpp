@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  */
+
 #include "connectivitypage.h"
 #include <QLayout>
 #include <QFormLayout>
@@ -24,6 +25,7 @@
 #include <QGSettings>
 #include <QDebug>
 #include <QRegExpValidator>
+#include <QDesktopWidget>
 
 #include "windowmanager/windowmanager.h"
 #include "kwindowsystem.h"
@@ -44,6 +46,7 @@ ConnectivityPage::ConnectivityPage(QString uri, QWidget *parent)
     this->setWindowTitle(tr("Network connectivity detection"));
     setAttribute(Qt::WA_DeleteOnClose, false);
     KWindowSystem::setState(this->winId(), NET::SkipTaskbar | NET::SkipPager);
+    centerToScreen();
     m_connectResource = new KyConnectResourse(this);
     initUi();
     initConnect();
@@ -76,10 +79,21 @@ void ConnectivityPage::initUi()
     m_text->adjustSize();
 //    m_text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
+    m_publicTextLabel = new QLabel(this);
+    m_intranetTextLabel = new QLabel(this);
     m_publicNetworkButton = new QRadioButton(this);
-    m_publicNetworkButton->setText(tr("Public network (default)"));
     m_intranetButton = new QRadioButton(this);
-    m_intranetButton->setText(tr("Local area network (intranet)"));
+    m_publicTextLabel->setText(tr("Public network (default)"));
+    m_publicTextLabel->setWordWrap(true);
+    m_intranetTextLabel->setText(tr("Local area network (intranet)"));
+    m_intranetTextLabel->setWordWrap(true);
+    QWidget *radioBtnWidget = new QWidget(this);
+    QFormLayout *formLayout = new QFormLayout(radioBtnWidget);
+    formLayout->setContentsMargins(0, 0, 0, 0);
+    formLayout->setVerticalSpacing(12);
+    formLayout->addRow(m_publicNetworkButton, m_publicTextLabel);
+    formLayout->addRow(m_intranetButton, m_intranetTextLabel);
+
 
     m_uriEdit = new QLineEdit(this);
     m_uriEdit->setText(m_uri);
@@ -126,9 +140,7 @@ void ConnectivityPage::initUi()
     vLayout->addWidget(m_warningWidget);
     vLayout->addWidget(m_text);
     vLayout->addSpacing(10);
-    vLayout->addWidget(m_publicNetworkButton);
-    vLayout->addSpacing(12);
-    vLayout->addWidget(m_intranetButton);
+    vLayout->addWidget(radioBtnWidget);
     vLayout->addWidget(m_editWidget);
 
     //底部按钮
@@ -159,6 +171,10 @@ void ConnectivityPage::initConnect()
             m_uriEdit->clear();
             m_uriEdit->setDisabled(true);
             m_confirmBtn->setEnabled(true);
+            if (m_warningLabel) {
+                m_warningLabel->clear();
+                m_warningLabel->hide();
+            }
         }
     });
     connect(m_intranetButton, &QRadioButton::toggled, [&](bool checked){
@@ -170,6 +186,17 @@ void ConnectivityPage::initConnect()
     });
     connect(m_uriEdit, &QLineEdit::textChanged, this ,&ConnectivityPage::checkUri);
     connect(m_connectResource, &KyConnectResourse::connectivityChanged, this, &ConnectivityPage::setWarning);
+}
+
+void ConnectivityPage::centerToScreen()
+{
+    QDesktopWidget* m = QApplication::desktop();
+    QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
+    int desk_x = desk_rect.width();
+    int desk_y = desk_rect.height();
+    int x = this->width();
+    int y = this->height();
+    this->move(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top());
 }
 
 void ConnectivityPage::setWarning(NetworkManager::Connectivity connectivity)

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -41,6 +41,7 @@ using namespace kdk;
 #define NORMAL_HEIGHT 48
 #define EXPANDED_HEIGHT 120
 #define PWD_LENGTH_LIMIT 8
+#define PWD_LENGTH_MAX 63
 
 #define EXCELLENT_SIGNAL 80
 #define GOOD_SIGNAL 55
@@ -61,7 +62,6 @@ public:
 
 public:
     QString getSsid();
-
     QString getUuid();
 
     QString getPath();
@@ -83,8 +83,7 @@ public:
     void forgetPwd();
 
     void setFrequency();
-    void onConnectButtonClicked();
-    void onNetButtonClicked();
+
 protected:
     void resizeEvent(QResizeEvent *event);
     void onRightButtonClicked();
@@ -132,9 +131,10 @@ protected Q_SLOTS:
     void onInfoButtonClicked();
 
 private Q_SLOTS:
-
+    void onNetButtonClicked();
+    void onNetButtonReleased();
     void onPwdEditorTextChanged();
-
+    void onConnectButtonClicked();
     void onMenuTriggered(QAction *action);
     void onEnterpriseWlanDialogClose(bool isShow);
 };

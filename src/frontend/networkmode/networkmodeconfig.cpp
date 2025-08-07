@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -19,9 +19,33 @@
  */
 #include "networkmodeconfig.h"
 #include "firewalldialog.h"
+#include "utils.h"
 #include <QDebug>
 
 #define LOG_FLAG  "[NetworkMode]"
+
+bool checkLiveMode()
+{
+    QFile file("/proc/cmdline");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug()<<"Can't open the file /proc/cmdline!";
+        file.close();
+        file.remove();
+        return false;
+    }
+
+    QString result_info = file.readAll();
+    file.close();
+    file.remove();
+    int index = result_info.indexOf("security");
+    if (index >= 0) {
+        QString str = result_info.mid(index);
+        if (str.contains("live")) {
+            return true;
+        }
+    }
+    return false;
+}
 
 NetworkModeConfig *NetworkModeConfig::m_netModeInstance = nullptr;
 
@@ -176,6 +200,18 @@ void NetworkMode::initWirelessNetworkMode()
 void NetworkMode::setFirstConnectNetworkMode(QString uuid, QString deviceName, QString ssid)
 {
     NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC); //默认公有配置
+    if (checkLiveMode()) {
+        return;
+    }
+    QSettings setting(CONFIG_FILE_PATH, QSettings::IniFormat);
+    if (!setting.value(FIRE_WALL_PERMISSION_SHOW).toBool()) {
+        if (setting.value(AUTO_FIRE_WALL_PERMIITTED).toBool()) {
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PRIVATE);
+        } else {
+            NetworkModeConfig::getInstance()->setNetworkModeConfig(uuid, deviceName, ssid, KSC_FIREWALL_PUBLIC);
+        }
+        return;
+    }
     FirewallDialog *fireWallDialog = new FirewallDialog();
     fireWallDialog->setUuid(uuid);
     fireWallDialog->setWindowTitle(ssid);

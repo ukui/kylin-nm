@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -37,25 +37,27 @@ KyNetworkDeviceResourse::KyNetworkDeviceResourse(QObject *parent) : QObject(pare
     initDeviceMap();
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceAdd,
-                                       this, &KyNetworkDeviceResourse::onDeviceAdd/*, Qt::ConnectionType::DirectConnection*/);
+            this, &KyNetworkDeviceResourse::onDeviceAdd/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceRemove,
-                                       this, &KyNetworkDeviceResourse::onDeviceRemove/*, Qt::ConnectionType::DirectConnection*/);
+            this, &KyNetworkDeviceResourse::onDeviceRemove/*, Qt::ConnectionType::DirectConnection*/);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceUpdate,
-                                       this, &KyNetworkDeviceResourse::onDeviceUpdate/*, Qt::ConnectionType::DirectConnection*/);
+            this, &KyNetworkDeviceResourse::onDeviceUpdate/*, Qt::ConnectionType::DirectConnection*/);
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::stateChanged,
-                                       this, &KyNetworkDeviceResourse::stateChanged/*, Qt::ConnectionType::DirectConnection*/);
+            this, &KyNetworkDeviceResourse::stateChanged/*, Qt::ConnectionType::DirectConnection*/);
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceCarrierChanage,
-                                       this, &KyNetworkDeviceResourse::carrierChanage);
+            this, &KyNetworkDeviceResourse::carrierChanage);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceBitRateChanage,
-                                       this, &KyNetworkDeviceResourse::deviceBitRateChanage);
+            this, &KyNetworkDeviceResourse::deviceBitRateChanage);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceMacAddressChanage,
-                                       this, &KyNetworkDeviceResourse::deviceMacAddressChanage);
+            this, &KyNetworkDeviceResourse::deviceMacAddressChanage);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceActiveChanage,
-                                       this, &KyNetworkDeviceResourse::deviceActiveChanage);
+            this, &KyNetworkDeviceResourse::deviceActiveChanage);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceManagedChange,
-                                       this, &KyNetworkDeviceResourse::deviceManagedChange);
+            this, &KyNetworkDeviceResourse::deviceManagedChange);
+    connect(m_networkResourceInstance, &KyNetworkResourceManager::deviceConnectivityChanged,
+            this, &KyNetworkDeviceResourse::deviceConnectivityChanged);
 }
 
 KyNetworkDeviceResourse::~KyNetworkDeviceResourse()
@@ -66,7 +68,7 @@ KyNetworkDeviceResourse::~KyNetworkDeviceResourse()
 void KyNetworkDeviceResourse::initDeviceMap()
 {
     NetworkManager::Device::List deviceList
-            = m_networkResourceInstance->getNetworkDeviceList();
+        = m_networkResourceInstance->getNetworkDeviceList();
 
     if (deviceList.isEmpty()) {
         qDebug() << LOG_FLAG << "there is not interface in computer.";
@@ -87,11 +89,11 @@ void KyNetworkDeviceResourse::initDeviceMap()
 }
 
 void KyNetworkDeviceResourse::getNetworkDeviceList(
-                NetworkManager::Device::Type deviceType,
-                QStringList &networkDeviceList)
+    NetworkManager::Device::Type deviceType,
+    QStringList &networkDeviceList)
 {
     NetworkManager::Device::List deviceList
-            = m_networkResourceInstance->getNetworkDeviceList();
+        = m_networkResourceInstance->getNetworkDeviceList();
 
     if (deviceList.isEmpty()) {
         qDebug() << LOG_FLAG <<"network device is not exist. device type" << deviceType;
@@ -124,7 +126,7 @@ void KyNetworkDeviceResourse::getNetworkDeviceList(
 void KyNetworkDeviceResourse::getHardwareInfo(QString ifaceName, QString &hardAddress, int &bandWith)
 {
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->getNetworkDevice(ifaceName);
+        m_networkResourceInstance->getNetworkDevice(ifaceName);
 
     if (nullptr == connectDevice || !connectDevice->isValid()) {
         qWarning()<< LOG_FLAG <<"get hardware info failed, the device" << ifaceName << "is not existed";
@@ -134,29 +136,29 @@ void KyNetworkDeviceResourse::getHardwareInfo(QString ifaceName, QString &hardAd
     }
 
     switch (connectDevice->type()) {
-        case NetworkManager::Device::Ethernet:
-        {
-            NetworkManager::WiredDevice *wiredDevicePtr =
-                qobject_cast<NetworkManager::WiredDevice *>(connectDevice.data());
-            hardAddress = wiredDevicePtr->hardwareAddress();
-            bandWith = wiredDevicePtr->bitRate();
-            break;
-        }
-        case NetworkManager::Device::Wifi:
-        {
-            NetworkManager::WirelessDevice *wirelessDevicePtr =
-                qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
-            hardAddress = wirelessDevicePtr->hardwareAddress();
-            bandWith = wirelessDevicePtr->bitRate();
-            break;
-        }
-        default:
-        {
-            hardAddress = "";
-            bandWith = 0;
-            qWarning()<< LOG_FLAG << "the network device type is undefined" << connectDevice->type();
-            break;
-        }
+    case NetworkManager::Device::Ethernet:
+    {
+        NetworkManager::WiredDevice *wiredDevicePtr =
+            qobject_cast<NetworkManager::WiredDevice *>(connectDevice.data());
+        hardAddress = wiredDevicePtr->hardwareAddress();
+        bandWith = wiredDevicePtr->bitRate();
+        break;
+    }
+    case NetworkManager::Device::Wifi:
+    {
+        NetworkManager::WirelessDevice *wirelessDevicePtr =
+            qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
+        hardAddress = wirelessDevicePtr->hardwareAddress();
+        bandWith = wirelessDevicePtr->bitRate();
+        break;
+    }
+    default:
+    {
+        hardAddress = "";
+        bandWith = 0;
+        qWarning()<< LOG_FLAG << "the network device type is undefined" << connectDevice->type();
+        break;
+    }
     }
 
     return;
@@ -165,7 +167,7 @@ void KyNetworkDeviceResourse::getHardwareInfo(QString ifaceName, QString &hardAd
 NetworkManager::Device::State KyNetworkDeviceResourse::getDeviceState(QString deviceName)
 {
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->findDeviceInterface(deviceName);
+        m_networkResourceInstance->findDeviceInterface(deviceName);
     if (!connectDevice.isNull() && connectDevice->isValid()) {
         return connectDevice->state();
     }
@@ -178,7 +180,7 @@ NetworkManager::Device::State KyNetworkDeviceResourse::getDeviceState(QString de
 bool KyNetworkDeviceResourse::wiredDeviceIsCarriered(QString deviceName)
 {
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->findDeviceInterface(deviceName);
+        m_networkResourceInstance->findDeviceInterface(deviceName);
     if (connectDevice.isNull()) {
         qDebug()<< LOG_FLAG << "check device carriered failed.";
         return false;
@@ -186,7 +188,7 @@ bool KyNetworkDeviceResourse::wiredDeviceIsCarriered(QString deviceName)
 
 
     if (connectDevice->isValid()
-            && NetworkManager::Device::Type::Ethernet == connectDevice->type()) {
+        && NetworkManager::Device::Type::Ethernet == connectDevice->type()) {
         NetworkManager::WiredDevice *wiredDevicePtr =
             qobject_cast<NetworkManager::WiredDevice *>(connectDevice.data());
         return wiredDevicePtr->carrier();
@@ -200,7 +202,7 @@ bool KyNetworkDeviceResourse::wiredDeviceIsCarriered(QString deviceName)
 void KyNetworkDeviceResourse::setDeviceRefreshRate(QString deviceName, int ms)
 {
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->findDeviceInterface(deviceName);
+        m_networkResourceInstance->findDeviceInterface(deviceName);
     if (connectDevice.isNull()) {
         return;
     }
@@ -216,7 +218,7 @@ void KyNetworkDeviceResourse::setDeviceRefreshRate(QString deviceName, int ms)
 qulonglong KyNetworkDeviceResourse::getDeviceRxRefreshRate(QString deviceName)
 {
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->findDeviceInterface(deviceName);
+        m_networkResourceInstance->findDeviceInterface(deviceName);
     if (connectDevice->isValid()) {
         NetworkManager::DeviceStatistics::Ptr deviceStatistics = connectDevice->deviceStatistics();
         qulonglong rx = 0;
@@ -234,7 +236,7 @@ qulonglong KyNetworkDeviceResourse::getDeviceRxRefreshRate(QString deviceName)
 qulonglong KyNetworkDeviceResourse::getDeviceTxRefreshRate(QString deviceName)
 {
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->findDeviceInterface(deviceName);
+        m_networkResourceInstance->findDeviceInterface(deviceName);
     if (connectDevice->isValid()) {
         NetworkManager::DeviceStatistics::Ptr deviceStatistics = connectDevice->deviceStatistics();
         qulonglong tx = 0;
@@ -242,7 +244,7 @@ qulonglong KyNetworkDeviceResourse::getDeviceTxRefreshRate(QString deviceName)
         if (tx != 0){
             return tx;
         } else {
-        qDebug() << "connectDevice is invalid we do not get txrate";
+            qDebug() << "connectDevice is invalid we do not get txrate";
         }
     }
 
@@ -254,9 +256,9 @@ void KyNetworkDeviceResourse::getDeviceConnectivity(const QString &deviceName, N
     connectivity = NetworkManager::Connectivity::UnknownConnectivity;
     QString dbusPath;
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->findDeviceInterface(deviceName);
+        m_networkResourceInstance->findDeviceInterface(deviceName);
     if (connectDevice != nullptr && connectDevice->isValid()) {
-       dbusPath = connectDevice->uni();
+        dbusPath = connectDevice->uni();
     } else {
         qWarning() << "[KyNetworkDeviceResourse] can not find device " << deviceName;
         return;
@@ -289,7 +291,7 @@ bool KyNetworkDeviceResourse::getActiveConnectionInfo(const QString devName, int
     signalStrength = 0;
     uni = "";
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->getNetworkDevice(devName);
+        m_networkResourceInstance->getNetworkDevice(devName);
 
     if (nullptr == connectDevice || !connectDevice->isValid()) {
         qWarning()<< LOG_FLAG <<"getDeviceActiveAPInfo failed, the device" << devName << "is not existed";
@@ -408,7 +410,7 @@ void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QStri
     secuType.clear();
 
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->getNetworkDevice(devName);
+        m_networkResourceInstance->getNetworkDevice(devName);
 
     if (nullptr == connectDevice || !connectDevice->isValid()) {
         qWarning()<< LOG_FLAG <<"getDeviceActiveAPInfo failed, the device" << devName << "is not existed";
@@ -416,27 +418,27 @@ void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QStri
     }
 
     switch (connectDevice->type()) {
-        case NetworkManager::Device::Wifi:
-        {
-            NetworkManager::WirelessDevice *wirelessDevicePtr =
-                qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
-            NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();
-            if (apPtr.isNull()) {
-                break;
-            }
-            strMac = apPtr->hardwareAddress();
-            iHz = apPtr->frequency();
-            iChan = kyFindChannel(iHz);
-            NetworkManager::AccessPoint::Capabilities cap = apPtr->capabilities();
-            NetworkManager::AccessPoint::WpaFlags wpaFlag = apPtr->wpaFlags();
-            NetworkManager::AccessPoint::WpaFlags rsnFlag = apPtr->rsnFlags();
-            secuType = enumToQstring(cap, wpaFlag, rsnFlag);
+    case NetworkManager::Device::Wifi:
+    {
+        NetworkManager::WirelessDevice *wirelessDevicePtr =
+            qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
+        NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();
+        if (apPtr.isNull()) {
             break;
         }
-        case NetworkManager::Device::Ethernet:
-            break;
-        default:
-            break;
+        strMac = apPtr->hardwareAddress();
+        iHz = apPtr->frequency();
+        iChan = kyFindChannel(iHz);
+        NetworkManager::AccessPoint::Capabilities cap = apPtr->capabilities();
+        NetworkManager::AccessPoint::WpaFlags wpaFlag = apPtr->wpaFlags();
+        NetworkManager::AccessPoint::WpaFlags rsnFlag = apPtr->rsnFlags();
+        secuType = enumToQstring(cap, wpaFlag, rsnFlag);
+        break;
+    }
+    case NetworkManager::Device::Ethernet:
+        break;
+    default:
+        break;
     }
 
     return;
@@ -445,9 +447,9 @@ void KyNetworkDeviceResourse::getDeviceActiveAPInfo(const QString devName, QStri
 int KyNetworkDeviceResourse::getWirelessDeviceCapability(const QString deviceName)
 {
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->findDeviceInterface(deviceName);
+        m_networkResourceInstance->findDeviceInterface(deviceName);
     if (connectDevice->isValid()
-            && NetworkManager::Device::Type::Wifi == connectDevice->type()) {
+        && NetworkManager::Device::Type::Wifi == connectDevice->type()) {
         NetworkManager::WirelessDevice *wirelessDevicePtr =
             qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
 
@@ -479,6 +481,7 @@ void KyNetworkDeviceResourse::onDeviceAdd(QString deviceName, QString uni, Netwo
 {
     m_deviceMap.insert(uni, deviceName);
     Q_EMIT deviceAdd(deviceName, deviceType);
+
     return;
 }
 
@@ -486,6 +489,7 @@ void KyNetworkDeviceResourse::onDeviceRemove(QString deviceName, QString uni)
 {
     m_deviceMap.remove(uni);
     Q_EMIT deviceRemove(deviceName);
+
     return;
 }
 
@@ -512,7 +516,7 @@ bool KyNetworkDeviceResourse::wirelessDeviceIsExist(const QString devName)
 bool KyNetworkDeviceResourse::checkDeviceType(QString deviceName, NetworkManager::Device::Type deviceType)
 {
     NetworkManager::Device::Ptr devicePtr =
-                m_networkResourceInstance->findDeviceInterface(deviceName);
+        m_networkResourceInstance->findDeviceInterface(deviceName);
 
     if (devicePtr.isNull()) {
         qDebug() << LOG_FLAG << "check device type failed, it is not exist";
@@ -536,19 +540,18 @@ void KyNetworkDeviceResourse::setDeviceManaged(QString devName, bool managed)
 {
     QString dbusPath;
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->findDeviceInterface(devName);
+        m_networkResourceInstance->findDeviceInterface(devName);
     if (connectDevice->isValid()) {
-       dbusPath = connectDevice->uni();
+        dbusPath = connectDevice->uni();
     } else {
         qWarning()<<"[KyNetworkDeviceResourse] can not find device " << devName;
         return;
     }
-    setDeviceManagedByGDbus(dbusPath, managed);
-#if 0
+
     QDBusInterface dbusInterface("org.freedesktop.NetworkManager",
-                              dbusPath,
-                              "org.freedesktop.NetworkManager.Device",
-                              QDBusConnection::systemBus());
+                                 dbusPath,
+                                 "org.freedesktop.NetworkManager.Device",
+                                 QDBusConnection::systemBus());
 
     if (!dbusInterface.isValid()) {
         qWarning() << dbusPath << "invalid";
@@ -562,15 +565,14 @@ void KyNetworkDeviceResourse::setDeviceManaged(QString devName, bool managed)
         setDeviceManagedByGDbus(dbusPath, managed);
         return;
     }
-#endif
 }
 
 bool KyNetworkDeviceResourse::getDeviceManaged(QString deviceName)
 {
     NetworkManager::Device::Ptr connectDevice =
-                        m_networkResourceInstance->findDeviceInterface(deviceName);
+        m_networkResourceInstance->findDeviceInterface(deviceName);
     if (connectDevice != nullptr && connectDevice->isValid()) {
-       return connectDevice->managed();
+        return connectDevice->managed();
     } else {
         qWarning()<<"[KyNetworkDeviceResourse] can not find device " << deviceName;
         return false;

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -26,6 +26,11 @@
 #define  DETAIL_MIN_EDIT_WIDTH  390
 #define  MIN_LABEL_WIDTH  146
 #define  MIN_EDIT_WIDTH  286
+
+enum ComboxFileIndex {
+    NONE_INDEX = 0,
+    CHOOSE_FILE_INDEX = 1
+};
 
 SecurityPage::SecurityPage(bool isNetDetailPage, QWidget *parent) : isDetailPage(isNetDetailPage), QFrame(parent)
 {
@@ -63,7 +68,7 @@ void SecurityPage::initUI()
 
     secuTypeCombox = new QComboBox(this);
     pwdEdit = new KPasswordEdit(this);
-    pwdEdit->setUseCustomPalette(true);
+    pwdEdit->setMaxLength(63);
     eapTypeCombox = new QComboBox(this);
     //TLS
     identityEdit = new LineEdit(this);
@@ -73,7 +78,6 @@ void SecurityPage::initUI()
     clientCertPathCombox = new QComboBox(this);
     clientPrivateKeyCombox = new QComboBox(this);
     clientPrivateKeyPwdEdit = new KPasswordEdit(this);
-    clientPrivateKeyPwdEdit->setUseCustomPalette(true);
     pwdOptionCombox = new QComboBox(this);
     tlsWidget = new QWidget(this);
 
@@ -81,7 +85,6 @@ void SecurityPage::initUI()
     eapMethodCombox = new QComboBox(this);
     userNameEdit = new LineEdit(this);
     userPwdEdit = new KPasswordEdit(this);
-    userPwdEdit->setUseCustomPalette(true);
     userPwdFlagBox = new QCheckBox(this);
 
     //FAST
@@ -251,14 +254,14 @@ void SecurityPage::initUI()
     eapTypeCombox->addItem("FAST", FAST);
     eapTypeCombox->setCurrentIndex(TLS);
     //TLS
-    caCertPathCombox->addItem(tr("None"), QString(tr("None"))); //无
-    caCertPathCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    caCertPathCombox->addItem(tr("None"), NONE_INDEX); //无
+    caCertPathCombox->addItem(tr("Choose from file..."), CHOOSE_FILE_INDEX); //从文件中选择...
 
-    clientCertPathCombox->addItem(tr("None"), QString(tr("None"))); //无
-    clientCertPathCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    clientCertPathCombox->addItem(tr("None"), NONE_INDEX); //无
+    clientCertPathCombox->addItem(tr("Choose from file..."), CHOOSE_FILE_INDEX); //从文件中选择...
 
-    clientPrivateKeyCombox->addItem(tr("None"), QString(tr("None"))); //无
-    clientPrivateKeyCombox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    clientPrivateKeyCombox->addItem(tr("None"), NONE_INDEX); //无
+    clientPrivateKeyCombox->addItem(tr("Choose from file..."), CHOOSE_FILE_INDEX); //从文件中选择...
 
     //仅为该用户存储密码
     pwdOptionCombox->addItem(tr("Store passwords only for this user"), QString(tr("Store password only for this user")));
@@ -277,15 +280,15 @@ void SecurityPage::initUI()
     m_pacProvisionComboBox->addItem(tr("Authenticated"), AUTHEN); //已认证
     m_pacProvisionComboBox->addItem(tr("Both"), BOTH); //两者兼用
     m_pacProvisionComboBox->setCurrentIndex(ANON);
-    m_pacFilePathComboBox->addItem(tr("None"), QString(tr("None"))); //无
-    m_pacFilePathComboBox->addItem(tr("Choose from file..."), QString(tr("Choose from file..."))); //从文件中选择...
+    m_pacFilePathComboBox->addItem(tr("None"), NONE_INDEX); //无
+    m_pacFilePathComboBox->addItem(tr("Choose from file..."), CHOOSE_FILE_INDEX); //从文件中选择...
 
     //禁用ClearBtn按钮
     pwdEdit->setClearButtonEnabled(false);
     clientPrivateKeyPwdEdit->setClearButtonEnabled(false);
     userPwdEdit->setClearButtonEnabled(false);
 
-    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
+    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/ ]+$");
     QRegExpValidator *latitude = new QRegExpValidator(rx, this);
     pwdEdit->setValidator(latitude);
     clientPrivateKeyPwdEdit->setValidator(latitude);
@@ -301,20 +304,18 @@ void SecurityPage::initConnect()
     connect(secuTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onSecuTypeComboxIndexChanged);
 
     connect(secuTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::changeColumnWidthWithSecuType);
+
     //EAP方式变化
 //    connect(eapTypeCombox, &QComboBox::currentTextChanged, this, &SecurityPage::onEapTypeComboxIndexChanged);
     connect(eapTypeCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onEapTypeComboxIndexChanged);
 
     connect(caNeedBox, &QCheckBox::clicked, this, &SecurityPage::onCaNeedBoxClicked);
 
-    connect(caCertPathCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
-            this, &SecurityPage::onCaCertPathComboxIndexChanged);
+    connect(caCertPathCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onCaCertPathComboxIndexChanged);
 
-    connect(clientCertPathCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
-            this, &SecurityPage::onClientCertPathComboxIndexChanged);
+    connect(clientCertPathCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onClientCertPathComboxIndexChanged);
 
-    connect(clientPrivateKeyCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
-            this, &SecurityPage::onClientPrivateKeyComboxIndexChanged);
+    connect(clientPrivateKeyCombox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onClientPrivateKeyComboxIndexChanged);
 
     connect(pwdOptionCombox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
             this, &SecurityPage::onPwdOptionComboxIndexChanged);
@@ -336,8 +337,8 @@ void SecurityPage::initConnect()
     connect(m_pacFilePathComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(setEnableOfSaveBtn()));
 
     connect(m_pacCheckBox, &QCheckBox::clicked, this, &SecurityPage::onPacBoxClicked);
-    connect(m_pacFilePathComboBox, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
-            this, &SecurityPage::onPacFilePathComboxIndexChanged);
+    connect(m_pacFilePathComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SecurityPage::onPacFilePathComboxIndexChanged);
+
 }
 
 void SecurityPage::setSecurity(KySecuType index)
@@ -988,6 +989,7 @@ bool SecurityPage::checkConnectBtnIsEnabled()
     } else if (index == KYLIN_NM::WPA_AND_WPA2_PERSONAL || index == KYLIN_NM::WPA3_PERSONAL) {
         if (pwdEdit->text().isEmpty() || pwdEdit->text().length() < 8 ) {
             qDebug() << "password is empty or length < 8";
+            m_errorMessage = tr("Wifi password length less than 8");
             return false;
         }
     }  else if (index == KYLIN_NM::WPA_AND_WPA2_ENTERPRISE) {
@@ -995,48 +997,57 @@ bool SecurityPage::checkConnectBtnIsEnabled()
         if (type == TLS) {
             if (identityEdit->text().isEmpty()) {
                 qDebug() << "tls identity is empty";
+                m_errorMessage = tr("TLS identity is empty");
                 return false;
             }
             QFile cafile(caCertPathCombox->currentText());
             if(!caNeedBox->isChecked() && !cafile.exists()) {
                 qDebug() << "ca cert filepath " << caCertPathCombox->currentText() << " is invalid";
+                m_errorMessage = tr("CA cert filepath is invalid");
                 return false;
             }
 
             QFile cliCafile(clientCertPathCombox->currentText());
             if(!cliCafile.exists()) {
                 qDebug() << "client cert filepath " << clientCertPathCombox->currentText() << " is invalid";
+                m_errorMessage = tr("Client cert filepath is invalid");
                 return false;
             }
 
             QFile cliKeyfile(clientPrivateKeyCombox->currentText());
             if(!cliKeyfile.exists()) {
                 qDebug() << "client private key filepath " << clientPrivateKeyCombox->currentText() << " is invalid";
+                m_errorMessage = tr("Client private key filepath is invalid");
                 return false;
             }
 
             if(clientPrivateKeyPwdEdit->text().isEmpty()) {
                 qDebug() << "client Private Key password is empty";
+                m_errorMessage = tr("Client private key password is empty");
                 return false;
             }
         } else if (type == PEAP || type == TTLS || type == LEAP || type == PWD) {
             if(userNameEdit->text().isEmpty() || userPwdEdit->text().isEmpty()) {
                 qDebug() << "user name or user password is empty";
+                m_errorMessage = tr("User name or user password is empty");
                 return false;
             }
         } else if (type == FAST) {
             if(!m_pacCheckBox->isChecked()) {
                 if (m_pacFilePathComboBox->currentText() == QString(tr("None"))) {
                     qDebug() << "Not allow automatic PAC provisioning && pac file is empty";
+                    m_errorMessage = tr("No PAC file is selected ");
                     return false;
                 }
             }
             if(userNameEdit->text().isEmpty() || userPwdEdit->text().isEmpty()) {
                 qDebug() << "user name or user password is empty";
+                m_errorMessage = tr("User name or user password is empty");
                 return false;
             }
         }
     }
+    m_errorMessage.clear();
     return true;
 }
 
@@ -1124,22 +1135,22 @@ void SecurityPage::onPacBoxClicked()
     }
 }
 
-void SecurityPage::onCaCertPathComboxIndexChanged(QString str)
+void SecurityPage::onCaCertPathComboxIndexChanged()
 {
-    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+    if (caCertPathCombox->currentData().toInt() == CHOOSE_FILE_INDEX)
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
-                                                        tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
+                                                        tr("CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)"));
         if (!fileName.isNull()) {
             QStringList nameList = fileName.split("/");
             caCertPathCombox->blockSignals(true);
-            caCertPathCombox->setItemText(0, fileName);
-            caCertPathCombox->setCurrentIndex(0);
+            caCertPathCombox->setItemText(CHOOSE_FILE_INDEX, fileName);
+            caCertPathCombox->setCurrentIndex(CHOOSE_FILE_INDEX);
             caCertPathCombox->blockSignals(false);
         } else {
             caCertPathCombox->blockSignals(true);
-            caCertPathCombox->setItemText(0, tr("None"));
-            caCertPathCombox->setCurrentIndex(0);
+            caCertPathCombox->setItemText(NONE_INDEX, tr("None"));
+            caCertPathCombox->setCurrentIndex(NONE_INDEX);
             caCertPathCombox->blockSignals(false);
         }
     } else {
@@ -1147,21 +1158,21 @@ void SecurityPage::onCaCertPathComboxIndexChanged(QString str)
     }
 }
 
-void SecurityPage::onClientCertPathComboxIndexChanged(QString str)
+void SecurityPage::onClientCertPathComboxIndexChanged()
 {
-    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+    if (clientCertPathCombox->currentData().toInt() == CHOOSE_FILE_INDEX)
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
-                                                        tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
+                                                        tr("CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)"));
         if (!fileName.isNull()) {
             clientCertPathCombox->blockSignals(true);
-            clientCertPathCombox->setItemText(0, fileName);
-            clientCertPathCombox->setCurrentIndex(0);
+            clientCertPathCombox->setItemText(CHOOSE_FILE_INDEX, fileName);
+            clientCertPathCombox->setCurrentIndex(CHOOSE_FILE_INDEX);
             clientCertPathCombox->blockSignals(false);
         } else {
             clientCertPathCombox->blockSignals(true);
-            clientCertPathCombox->setItemText(0, tr("None"));
-            clientCertPathCombox->setCurrentIndex(0);
+            clientCertPathCombox->setItemText(NONE_INDEX, tr("None"));
+            clientCertPathCombox->setCurrentIndex(NONE_INDEX);
             clientCertPathCombox->blockSignals(false);
         }
     } else {
@@ -1169,22 +1180,22 @@ void SecurityPage::onClientCertPathComboxIndexChanged(QString str)
     }
 }
 
-void SecurityPage::onClientPrivateKeyComboxIndexChanged(QString str)
+void SecurityPage::onClientPrivateKeyComboxIndexChanged()
 {
-    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+    if (clientPrivateKeyCombox->currentData().toInt() == CHOOSE_FILE_INDEX)
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CA certificate"), "recent:///",
-                                                        tr("CA Files (*.pem *.der *.p12 *.crt *.cer *.pfx)"));
+                                                        tr("CA Files ( *.pem *.der *.p12 *.crt *.cer *.pfx)"));
         if (!fileName.isNull()) {
             QStringList nameList = fileName.split("/");
             clientPrivateKeyCombox->blockSignals(true);
-            clientPrivateKeyCombox->setItemText(0, fileName);
-            clientPrivateKeyCombox->setCurrentIndex(0);
+            clientPrivateKeyCombox->setItemText(CHOOSE_FILE_INDEX, fileName);
+            clientPrivateKeyCombox->setCurrentIndex(CHOOSE_FILE_INDEX);
             clientPrivateKeyCombox->blockSignals(false);
         } else {
             clientPrivateKeyCombox->blockSignals(true);
-            clientPrivateKeyCombox->setItemText(0, tr("None"));
-            clientPrivateKeyCombox->setCurrentIndex(0);
+            clientPrivateKeyCombox->setItemText(NONE_INDEX, tr("None"));
+            clientPrivateKeyCombox->setCurrentIndex(NONE_INDEX);
             clientPrivateKeyCombox->blockSignals(false);
         }
     } else {
@@ -1224,25 +1235,31 @@ void SecurityPage::changeColumnWidthWithSecuType()
     }
 }
 
-void SecurityPage::onPacFilePathComboxIndexChanged(QString str)
+void SecurityPage::onPacFilePathComboxIndexChanged()
 {
-    if (str.contains("Choose from file...") || str.contains("从文件选择..."))
+    if (m_pacFilePathComboBox->currentData().toInt() == CHOOSE_FILE_INDEX)
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a PAC file"), "recent:///",
-                                                        tr("PAC Files (*.pac)"));
+                                                        tr("PAC Files ( *.pac)"));
         if (!fileName.isNull()) {
             QStringList nameList = fileName.split("/");
             m_pacFilePathComboBox->blockSignals(true);
-            m_pacFilePathComboBox->setItemText(0, fileName);
-            m_pacFilePathComboBox->setCurrentIndex(0);
+            m_pacFilePathComboBox->setItemText(CHOOSE_FILE_INDEX, fileName);
+            m_pacFilePathComboBox->setCurrentIndex(CHOOSE_FILE_INDEX);
             m_pacFilePathComboBox->blockSignals(false);
         } else {
             m_pacFilePathComboBox->blockSignals(true);
-            m_pacFilePathComboBox->setItemText(0, tr("None"));
-            m_pacFilePathComboBox->setCurrentIndex(0);
+            m_pacFilePathComboBox->setItemText(NONE_INDEX, tr("None"));
+            m_pacFilePathComboBox->setCurrentIndex(NONE_INDEX);
             m_pacFilePathComboBox->blockSignals(false);
         }
     } else {
         qWarning() << "Choose file is null or unvalible";
     }
+}
+
+QString SecurityPage::getErrorMessage()
+{
+    checkConnectBtnIsEnabled();
+    return m_errorMessage;
 }

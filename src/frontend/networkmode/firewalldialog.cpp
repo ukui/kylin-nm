@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -20,6 +20,7 @@
 #include "firewalldialog.h"
 
 #include <QApplication>
+#include <QToolTip>
 #include "windowmanager/windowmanager.h"
 #include "kwindowsystem.h"
 #include "kwindowsystem_export.h"
@@ -131,4 +132,15 @@ void FirewallDialog::onPaletteChanged()
         delete styleGsettings;
         styleGsettings = nullptr;
     }
+}
+
+bool FirewallDialog::event(QEvent *event)
+{
+    if (event->type() == QEvent::Enter || event->type() == QEvent::Paint || event->type() == QEvent::MouseButtonPress) {
+        QPalette tooltipPal = this->palette();
+        tooltipPal.setColor(QPalette::ToolTipBase, this->palette().toolTipBase().color());
+        tooltipPal.setColor(QPalette::ToolTipText, this->palette().toolTipText().color());
+        QToolTip::setPalette(tooltipPal);
+    }
+    return QWidget::event(event);
 }

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -25,7 +25,7 @@
 #define EMPTY_SSID "EMPTY_SSID"
 #define LOG_FLAG "[WlanListItem]"
 #define WAIT_US  10*1000
-#define NAMELABLE_MAX_WIDTH_HOVER 176
+#define NAMELABLE_MAX_WIDTH_HOVER 166
 #define NAMELABLE_MAX_WIDTH_ACTIVATED 142
 #define NAMELABLE_MAX_WIDTH_DEACTIVATED 276
 
@@ -67,7 +67,6 @@ WlanListItem::WlanListItem(QWidget *parent) : ListItem(parent)
 
     m_netButton->setButtonIcon(QIcon::fromTheme("network-wireless-offline-symbolic"));
     m_netButton->setActive(false);
-//    m_netButton->setDefaultPixmap();
     const QString name = tr("Not connected");
     setExpanded(false);
     this->setName(name);
@@ -103,8 +102,6 @@ void WlanListItem::setSignalStrength(const int &signal)
     } else if (Deactivated == m_connectState) {
         refreshIcon(false);
     }
-
-    return;
 }
 
 int WlanListItem::getSignalStrength()
@@ -143,8 +140,6 @@ void WlanListItem::setExpanded(const bool &expanded)
     }
 
     Q_EMIT this->itemHeightChanged(expanded, m_wirelessNetItem.m_NetSsid);
-
-    return;
 }
 
 void WlanListItem::resizeEvent(QResizeEvent *event)
@@ -166,10 +161,6 @@ void WlanListItem::onRightButtonClicked()
 {
     qDebug()<< LOG_FLAG <<"onRightButtonClicked";
 
-    if (m_hoverButton->isVisible()) {
-        m_hoverButton->hide();
-    }
-
     if (!m_menu) {
         return;
     }
@@ -185,15 +176,13 @@ void WlanListItem::onRightButtonClicked()
         return;
     }
 
+
     if (m_wirelessNetItem.m_isConfigured) {
         m_menu->addAction(new QAction(tr("Property"), this));
         m_menu->addAction(new QAction(tr("Forget"), this));
     }
 
-//    m_menu->move(cursor().pos());
     m_menu->popup(cursor().pos());
-
-    return;
 }
 
 void WlanListItem::enterEvent(QEvent *event)
@@ -277,7 +266,6 @@ void WlanListItem::initWlanUI()
     this->setName(m_wirelessNetItem.m_NetSsid);
     //刷新左侧按钮图标
     refreshIcon(false);
-
     this->onPaletteChanged();
 #define PWD_AREA_HEIGHT 36
 #define CONNECT_BUTTON_WIDTH 96
@@ -297,15 +285,15 @@ void WlanListItem::initWlanUI()
     m_pwdLineEdit  = new KPasswordEdit(m_pwdFrame);
     m_pwdLineEdit->setFixedWidth(LINEEDIT_WIDTH);
     m_pwdLineEdit->setProperty("needTranslucent", true);
-
     m_pwdLineEdit->setClearButtonEnabled(false); //禁用ClearBtn按钮
     m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, true);   //打开输入法
 //    m_pwdLineEdit->setAttribute(Qt::WA_InputMethodEnabled, false);
 //    m_pwdLineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
-    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/]+$");
+    QRegExp rx("^[A-Za-z0-9`~!@#$%^&*()_-+=<>,.\\\/ ]+$");
     QRegExpValidator *latitude = new QRegExpValidator(rx, this);
     m_pwdLineEdit->setValidator(latitude);
+    m_pwdLineEdit->setMaxLength(PWD_LENGTH_MAX);
 
     m_pwdLineEdit->installEventFilter(this);
     connect(m_pwdLineEdit, &QLineEdit::textChanged, this, &WlanListItem::onPwdEditorTextChanged);
@@ -358,6 +346,8 @@ QString getIcon(bool isEncrypted, int signalStrength, int category) {
         iconNameFirst = "network-wireless-signal-";
     } else if (category == 1) {
         iconNameFirst = "ukui-wifi6-";
+    } else if (category == 3) {
+        iconNameFirst = "ukui-wifi7-";
     } else {
         iconNameFirst = "ukui-wifi6+-";
     }
@@ -455,6 +445,7 @@ void WlanListItem::refreshIcon(bool isActivated)
     m_netButton->setButtonIcon(QIcon::fromTheme(iconPath));
 
     m_netButton->setActive(isActivated);
+    this->setFrequency();
     qDebug() << "refreshIcon" << m_wirelessNetItem.m_NetSsid << "isActivated" << isActivated << "path" << iconPath;
 }
 
@@ -518,14 +509,13 @@ void WlanListItem::onNetButtonClicked()
     }
 
     //有配置或者无密码的wifi直接连接
-    if (m_wirelessNetItem.m_isConfigured) {
+    if (m_wirelessNetItem.m_isConfigured && updatewirelessItemConnectInfo(m_wirelessNetItem)) {
         if (m_wirelessNetItem.m_kySecuType == kySecuType ||
                 (m_wirelessNetItem.m_kySecuType == WPA_AND_WPA3 && (kySecuType == WPA_AND_WPA2_PERSONAL || kySecuType == WPA3_PERSONAL))) {
             //安全类型不变直接连接
             m_wirelessConnectOperation->activeWirelessConnect(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
             qDebug()<<"[WlanListItem] Has configuration, will be activated. ssid = "
                    << m_wirelessNetItem.m_NetSsid << Q_FUNC_INFO << __LINE__;
-            m_netButton->startLoading();
             return;
         } else {
             //安全类型改变则删除连接
@@ -552,8 +542,13 @@ void WlanListItem::onNetButtonClicked()
     } else {
         onConnectButtonClicked();
     }
+}
 
-    return;
+
+
+void WlanListItem::onNetButtonReleased()
+{
+    qDebug() << "net button released";
 }
 
 void WlanListItem::updateWirelessNetSecurity(QString ssid, QString securityType)
@@ -573,15 +568,12 @@ void WlanListItem::updateWirelessNetSecurity(QString ssid, QString securityType)
     }
 
     m_wirelessNetItem.setKySecuType(securityType);
-
-    return;
 }
 
 
 void WlanListItem::updateWirelessNetItem(KyWirelessNetItem &wirelessNetItem)
 {
     m_wirelessNetItem = wirelessNetItem;
-    return;
 }
 
 void WlanListItem::onPwdEditorTextChanged()
@@ -595,8 +587,6 @@ void WlanListItem::onPwdEditorTextChanged()
     } else {
         m_connectButton->setEnabled(true);
     }
-
-    return;
 }
 
 void WlanListItem::onConnectButtonClicked()
@@ -631,8 +621,6 @@ void WlanListItem::onConnectButtonClicked()
 
     m_wirelessConnectOperation->addAndActiveWirelessConnect(m_wlanDevice, settings, false);
     setExpanded(false);
-    m_netButton->startLoading();
-    return;
 }
 
 ConnectState WlanListItem::getConnectionState()
@@ -654,7 +642,6 @@ void WlanListItem::updateConnectState(ConnectState state)
             m_nameLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
         }
     } else if(Deactivated == state) {
-        qDebug() << "[WlanListItem] stop loading connect state:" << state;
         m_netButton->stopLoading();
         m_netButton->setActive(false);
         m_hoverButton->setProperty("isImportant", true);
@@ -670,8 +657,7 @@ void WlanListItem::updateConnectState(ConnectState state)
         m_hoverButton->setProperty("isImportant", false);
         m_hoverButton->setButtonText(tr("Disconnect"));
     }
-
-    return;
+    this->setFrequency();
 }
 
 void WlanListItem::onMenuTriggered(QAction *action)
@@ -682,7 +668,6 @@ void WlanListItem::onMenuTriggered(QAction *action)
         m_wirelessConnectOperation->deActivateWirelessConnection(m_wlanDevice, m_wirelessNetItem.m_connectUuid);
         qDebug()<<"[WlanListItem] Clicked on connected wifi, it will be inactivated. ssid = "
                         << m_wirelessNetItem.m_NetSsid << Q_FUNC_INFO << __LINE__;
-        m_netButton->startLoading();
     } else if (action->text() == tr("Forget")) {
         if (m_pwdLineEdit != nullptr) {
             m_pwdLineEdit->clear();
@@ -691,29 +676,66 @@ void WlanListItem::onMenuTriggered(QAction *action)
     } else if (action->text() == tr("Property")) {
         onInfoButtonClicked();
     }
-
-    return;
 }
 
 void WlanListItem::onEnterpriseWlanDialogClose(bool isShow)
 {
     isEnterpriseWlanDialogShow = isShow;
-
-    return;
 }
 
 void WlanListItem::forgetPwd()
 {
     if (!this->isConfigured()) {
         m_pwdLineEdit->setText("");
-        return;
     }
 }
 
+
 void WlanListItem::setFrequency()
 {
-    uint freq = m_wirelessNetItem.m_frequency;
-    bool isMix = m_wirelessNetItem.m_isMix;
+    bool isMix = false;
+
+    uint freq,iChan;
+    QString strMac, strSecu;
+    if (m_connectState == Activated) {
+        m_deviceResource->getDeviceActiveAPInfo(m_wlanDevice, strMac, freq, iChan, strSecu);
+    } else {
+        NetworkManager::Device::Ptr devicePtr = nullptr;
+        KyNetworkResourceManager* networkResourceInstance = KyNetworkResourceManager::getInstance();
+        devicePtr = networkResourceInstance->findDeviceInterface(m_wlanDevice);
+        if (!devicePtr.isNull()) {
+            QString devUni = devicePtr->uni();
+            NetworkManager::WirelessNetwork::Ptr wirelessPtr = nullptr;
+            wirelessPtr = networkResourceInstance->findWifiNetwork(m_wirelessNetItem.m_NetSsid, devUni);
+            if (!wirelessPtr.isNull()) {
+                NetworkManager::AccessPoint::List apList = wirelessPtr->accessPoints();
+                bool b2G = false;
+                bool b5G = false;
+                if (!apList.empty()) {
+                    for (int i = 0; i < apList.count(); ++i) {
+                        if (apList.at(i)->frequency() < FREQ_5GHZ) {
+                            b2G = true;
+                        }
+                        if (apList.at(i)->frequency() >= FREQ_5GHZ) {
+                            b5G = true;
+                        }
+                        if (b2G && b5G) {
+                            isMix = true;
+                            break;
+                        }
+                    }
+                }
+                if (!isMix) {
+                    if (b2G) {
+                        freq = 0;
+                    } else {
+                        freq = FREQ_5GHZ;
+                    }
+                }
+            }
+        }
+    }
+
 
     if (isMix) {
         this->m_freq->setText("2.4/5G");
@@ -724,6 +746,4 @@ void WlanListItem::setFrequency()
     } else {
         this->m_freq->setText("5G");
     }
-
-    return;
 }

@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -33,11 +33,11 @@ KyActiveConnectResourse::KyActiveConnectResourse(QObject *parent) : QObject(pare
     m_networkdevice = new KyNetworkDeviceResourse();
 
     connect(m_networkResourceInstance, &KyNetworkResourceManager::activeConnectionRemove,
-                                       this, &KyActiveConnectResourse::activeConnectRemove);
+            this, &KyActiveConnectResourse::activeConnectRemove);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::activeConnectStateChangeReason,
-                                       this, &KyActiveConnectResourse::stateChangeReason);
+            this, &KyActiveConnectResourse::stateChangeReason);
     connect(m_networkResourceInstance, &KyNetworkResourceManager::vpnActiveConnectStateChangeReason,
-                                       this, &KyActiveConnectResourse::vpnConnectChangeReason);
+            this, &KyActiveConnectResourse::vpnConnectChangeReason);
 }
 
 KyActiveConnectResourse::~KyActiveConnectResourse()
@@ -60,8 +60,8 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionItem(NetworkManager::
 
     if (NetworkManager::ActiveConnection::State::Activated != activeConnectPtr->state()) {
         qWarning()<<"[KyActiveConnectResourse]"<<"the active connect is not activated"
-                 <<"connect name:"<<activeConnectPtr->connection()->name()
-                 <<"connect state"<< activeConnectPtr->state();
+                   <<"connect name:"<<activeConnectPtr->connection()->name()
+                   <<"connect state"<< activeConnectPtr->state();
         return nullptr;
     }
 
@@ -106,8 +106,8 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
         if (nullptr == activeConnectItem || activeConnectPtr->devices().isEmpty()) {
             continue;
         } else {
-           isFind = true;
-           break;
+            isFind = true;
+            break;
         }
     }
 
@@ -130,7 +130,7 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
                                                                   QString deviceName)
 {
     NetworkManager::ActiveConnection::Ptr activeConnectPtr =
-            m_networkResourceInstance->getActiveConnect(connectUuid);
+        m_networkResourceInstance->getActiveConnect(connectUuid);
 
     if (nullptr == activeConnectPtr) {
         qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< connectUuid;
@@ -147,7 +147,7 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
 
         if (devicePtr->interfaceName() == deviceName) {
             KyConnectItem *activeConnectItem =
-                   getActiveConnectionItem(activeConnectPtr);
+                getActiveConnectionItem(activeConnectPtr);
             if (nullptr == activeConnectItem) {
                 return nullptr;
             }
@@ -161,11 +161,11 @@ KyConnectItem *KyActiveConnectResourse::getActiveConnectionByUuid(QString connec
 }
 
 void KyActiveConnectResourse::getActiveConnectionList(QString deviceName,
-                             NetworkManager::ConnectionSettings::ConnectionType connectionType,
-                             QList<KyConnectItem *> &activeConnectItemList)
+                                                      NetworkManager::ConnectionSettings::ConnectionType connectionType,
+                                                      QList<KyConnectItem *> &activeConnectItemList)
 {
     qDebug()<<"[KyActiveConnectResourse]"<<"get activate connect for device"
-                    << deviceName <<"connect type:"<<connectionType;
+             << deviceName <<"connect type:"<<connectionType;
 
     NetworkManager::ActiveConnection::List activeConnectList;
     activeConnectList.clear();
@@ -185,7 +185,7 @@ void KyActiveConnectResourse::getActiveConnectionList(QString deviceName,
 
         if (connectionType != activeConnectPtr->type()) {
             qDebug()<<"[KyActiveConnectResourse]" <<"the connect type " << activeConnectPtr->type()
-                   <<"connect name" << activeConnectPtr->connection()->name();
+                     <<"connect name" << activeConnectPtr->connection()->name();
             continue;
         }
 
@@ -286,12 +286,12 @@ KyWiredConnectItem *KyActiveConnectResourse::getWiredActiveConnectItem(NetworkMa
 #endif
 
 void KyActiveConnectResourse::getActiveConnectIpInfo(
-                        const QString &connectUuid,
-                        QString &ipv4Address,
-                        QString &ipv6Address)
+    const QString &connectUuid,
+    QString &ipv4Address,
+    QString &ipv6Address)
 {
     NetworkManager::ActiveConnection::Ptr activeConnectPtr =
-            m_networkResourceInstance->getActiveConnect(connectUuid);
+        m_networkResourceInstance->getActiveConnect(connectUuid);
 
     if (activeConnectPtr.isNull()) {
         qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< connectUuid;
@@ -304,29 +304,38 @@ void KyActiveConnectResourse::getActiveConnectIpInfo(
 }
 
 void KyActiveConnectResourse::getActiveConnectIp(
-                        NetworkManager::ActiveConnection::Ptr activeConnectPtr,
-                        QString &ipv4Address,
-                        QString &ipv6Address)
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr,
+    QString &ipv4Address,
+    QString &ipv6Address)
 {
     qDebug()<<"[KyActiveConnectResourse]"<<"get active connect ip info";
 
-    NetworkManager::IpConfig ipv4Config =activeConnectPtr->ipV4Config();
-    if (ipv4Config.isValid()) {
-        if (!ipv4Config.addresses().isEmpty()) {
-            NetworkManager::IpAddress address = ipv4Config.addresses().at(0);
-            ipv4Address = address.ip().toString();
-        } else {
-            qWarning()<<"[KyActiveConnectResourse]"<<"the ipv4 address is empty.";
-        }
+    NetworkManager::Dhcp4Config::Ptr dhcpIpv4Config = activeConnectPtr->dhcp4Config();
+    if (!dhcpIpv4Config.isNull() && dhcpIpv4Config->path() != "/") {
+        ipv4Address = dhcpIpv4Config->optionValue("ip_address");
     } else {
-        qWarning()<<"[KyActiveConnectResourse]"<<"ipv4 config is not valid";
+        NetworkManager::IpConfig ipv4Config = activeConnectPtr->ipV4Config();
+        if (ipv4Config.isValid()) {
+            if (!ipv4Config.addresses().isEmpty()) {
+                // 处理配置多ip的情况下，接口返回的顺序为字典序，所以不能直接取第一个
+                QStringList ipv4Addresses;
+                for (const NetworkManager::IpAddress &address : ipv4Config.addresses()) {
+                    ipv4Addresses << address.ip().toString();
+                }
+                ipv4Address = ipv4Addresses.join(";");
+            } else {
+                qWarning()<<"[KyActiveConnectResourse]"<<"the ipv4 address is empty.";
+            }
+        } else {
+            qWarning()<<"[KyActiveConnectResourse]"<<"ipv4 config is not valid";
+        }
     }
 
     NetworkManager::IpConfig ipv6Config =activeConnectPtr->ipV6Config();
     if (ipv6Config.isValid()) {
         if (!ipv6Config.addresses().isEmpty()) {
-             NetworkManager::IpAddress address = ipv6Config.addresses().at(0);
-             ipv6Address = address.ip().toString();
+            NetworkManager::IpAddress address = ipv6Config.addresses().at(0);
+            ipv6Address = address.ip().toString();
         } else {
             qWarning()<<"[KyActiveConnectResourse]"<<"ipv6 address is empty";
         }
@@ -338,26 +347,38 @@ void KyActiveConnectResourse::getActiveConnectIp(
 }
 
 void KyActiveConnectResourse::getActiveConnectDnsInfo(
-                        const QString &connectUuid,
-                        QList<QHostAddress> &ipv4Dns,
-                        QList<QHostAddress> &ipv6Dns)
+    const QString &connectUuid,
+    QList<QHostAddress> &ipv4Dns,
+    QList<QHostAddress> &ipv6Dns)
 {
     NetworkManager::ActiveConnection::Ptr activeConnectPtr =
-            m_networkResourceInstance->getActiveConnect(connectUuid);
+        m_networkResourceInstance->getActiveConnect(connectUuid);
     if (activeConnectPtr.isNull()) {
         qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< connectUuid;
         return;
     }
 
-    getActiveConnectDns(activeConnectPtr, ipv4Dns, ipv6Dns);
+    /*dhcp存在时使用dhcp的dns配置，不存在时使用配置文件配置 更合理点，不用操作2次 原逻辑dhcp存在但是有问题情况下会导致丢失*/
+    NetworkManager::Dhcp4Config::Ptr dhcpIpv4Config = activeConnectPtr->dhcp4Config();
+    if (!dhcpIpv4Config.isNull() && dhcpIpv4Config->path() != "/") {
+        ipv4Dns.clear();
+        /*修复多个dns服务器地址时使用QHostAddress无法转换的问题*/
+        QStringList dnsStr=dhcpIpv4Config->optionValue("domain_name_servers").split(" ");
+        for (int index = 0; index < dnsStr.count() && dnsStr.at(index) != nullptr; index ++) {
+            ipv4Dns << QHostAddress(dnsStr.at(index));
+        }
+    }
+
+    if(ipv4Dns.isEmpty()) getActiveConnectDns(activeConnectPtr, ipv4Dns, ipv6Dns);
+    qDebug()<<"getActiveConnectDnsInfo dns is"<<ipv4Dns;
 
     return;
 }
 
 void KyActiveConnectResourse::getActiveConnectDns(
-                         NetworkManager::ActiveConnection::Ptr activeConnectPtr,
-                         QList<QHostAddress> &ipv4Dns,
-                         QList<QHostAddress> &ipv6Dns)
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr,
+    QList<QHostAddress> &ipv4Dns,
+    QList<QHostAddress> &ipv6Dns)
 {
     qDebug()<<"[KyActiveConnectResourse]"<<"get active connect nameservice info";
 
@@ -389,7 +410,7 @@ KyVpnConnectItem *KyActiveConnectResourse::getVpnActiveConnectItem(NetworkManage
 
     if (NetworkManager::ActiveConnection::State::Activated != activeConnectPtr->state()) {
         qWarning()<<"[KyActiveConnectResourse]"<<"the active connect is not activated"
-                 <<activeConnectPtr->connection()->name() << activeConnectPtr->state();
+                   <<activeConnectPtr->connection()->name() << activeConnectPtr->state();
         return nullptr;
     }
 
@@ -448,7 +469,7 @@ void KyActiveConnectResourse::getVpnActivateConnect(QList<KyVpnConnectItem *> &v
         }
 
         KyVpnConnectItem *activeConnectItem =
-                getVpnActiveConnectItem(activeConnectPtr);
+            getVpnActiveConnectItem(activeConnectPtr);
         if (nullptr != activeConnectItem) {
             vpnActiveConnectItemList << activeConnectItem;
         }
@@ -470,7 +491,7 @@ KyBluetoothConnectItem *KyActiveConnectResourse::getBtActiveConnectItem(NetworkM
 
     if (NetworkManager::ActiveConnection::State::Activated != activeConnectPtr->state()) {
         qWarning()<<"[KyActiveConnectResourse]"<<"get bluetooth item failed, the active connect is not activated"
-                 <<activeConnectPtr->connection()->name() << activeConnectPtr->state();
+                   <<activeConnectPtr->connection()->name() << activeConnectPtr->state();
         return nullptr;
     }
 
@@ -485,7 +506,7 @@ KyBluetoothConnectItem *KyActiveConnectResourse::getBtActiveConnectItem(NetworkM
 
     NetworkManager::ConnectionSettings::Ptr settingPtr = connectPtr->settings();
     NetworkManager::BluetoothSetting::Ptr bluetoothSetting =
-            settingPtr->setting(NetworkManager::Setting::Bluetooth).dynamicCast<NetworkManager::BluetoothSetting>();
+        settingPtr->setting(NetworkManager::Setting::Bluetooth).dynamicCast<NetworkManager::BluetoothSetting>();
     bluetoothItem->m_deviceAddress = bluetoothSetting->bluetoothAddress();
     QByteArray btAddrArray = bluetoothSetting->bluetoothAddress();
     for (int index = 0; index < btAddrArray.size(); ++index) {
@@ -518,7 +539,7 @@ void KyActiveConnectResourse::getBtActivateConnect(QList<KyBluetoothConnectItem 
         }
 
         if (NetworkManager::ConnectionSettings::ConnectionType::Bluetooth
-                != activeConnectPtr->type()) {
+            != activeConnectPtr->type()) {
             continue;
         }
 
@@ -544,7 +565,7 @@ KyApConnectItem *KyActiveConnectResourse::getApActiveConnectItem(NetworkManager:
 
     if (NetworkManager::ActiveConnection::State::Activated != activeConnectPtr->state()) {
         qWarning()<<"[KyActiveConnectResourse]"<<"get ap item failed, the active connect is not activated"
-                 <<activeConnectPtr->connection()->name() << activeConnectPtr->state();
+                   <<activeConnectPtr->connection()->name() << activeConnectPtr->state();
         return nullptr;
     }
 
@@ -553,7 +574,7 @@ KyApConnectItem *KyActiveConnectResourse::getApActiveConnectItem(NetworkManager:
     NetworkManager::WirelessSetting::Ptr wirelessSetting
         = settingPtr->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
     if (NetworkManager::WirelessSetting::NetworkMode::Ap
-                                    != wirelessSetting->mode()) {
+        != wirelessSetting->mode()) {
         qDebug() << "[KyActiveConnectResourse]" <<"get ap item failed, the active connect mode is not ap.";
         return nullptr;
     }
@@ -583,7 +604,7 @@ void KyActiveConnectResourse::getApActivateConnect(QList<KyApConnectItem *> &apC
 
     if (activeConnectList.empty()) {
         qWarning()<<"[KyActiveConnectResourse]"
-                 <<"get ap active connect failed, the active connect list is empty";
+                   <<"get ap active connect failed, the active connect list is empty";
         return;
     }
 
@@ -595,7 +616,7 @@ void KyActiveConnectResourse::getApActivateConnect(QList<KyApConnectItem *> &apC
         }
 
         if (NetworkManager::ConnectionSettings::ConnectionType::Wireless
-                != activeConnectPtr->type()) {
+            != activeConnectPtr->type()) {
             continue;
         }
 
@@ -615,7 +636,7 @@ QString KyActiveConnectResourse::getDeviceOfActivateConnect(QString conUuid)
     QString deviceName = "";
 
     NetworkManager::ActiveConnection::Ptr activeConnectPtr =
-                                    m_networkResourceInstance->getActiveConnect(conUuid);
+        m_networkResourceInstance->getActiveConnect(conUuid);
 
     if (nullptr == activeConnectPtr) {
         qWarning()<< "[KyActiveConnectResourse]" <<"it can not find connect "<< conUuid;
@@ -640,7 +661,7 @@ QString KyActiveConnectResourse::getDeviceOfActivateConnect(QString conUuid)
 bool KyActiveConnectResourse::connectionIsVirtual(QString uuid)
 {
     NetworkManager::ActiveConnection::Ptr activeConnectPtr =
-                    m_networkResourceInstance->getActiveConnect(uuid);
+        m_networkResourceInstance->getActiveConnect(uuid);
 
     if (activeConnectPtr.isNull()) {
         qWarning()<< LOG_FLAG << "check connection virtual is failed.";
@@ -672,7 +693,7 @@ bool KyActiveConnectResourse::wiredConnectIsActived()
 
     if (activeConnectList.empty()) {
         qWarning()<<"[KyActiveConnectResourse]"
-                 <<"get active connect failed, the active connect list is empty";
+                   <<"get active connect failed, the active connect list is empty";
         return false;
     }
 
@@ -683,8 +704,8 @@ bool KyActiveConnectResourse::wiredConnectIsActived()
             continue;
         }
 
-        if (NetworkManager::ConnectionSettings::ConnectionType::Wired
-                != activeConnectPtr->type()) {
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wired != activeConnectPtr->type()
+            && NetworkManager::ConnectionSettings::ConnectionType::Pppoe != activeConnectPtr->type()) {
             continue;
         }
 
@@ -710,7 +731,7 @@ bool KyActiveConnectResourse::checkWirelessStatus(NetworkManager::ActiveConnecti
 
     if (activeConnectList.empty()) {
         qWarning()<<"[KyActiveConnectResourse]"
-                 <<"get active connect failed, the active connect list is empty";
+                   <<"get active connect failed, the active connect list is empty";
         return false;
     }
 
@@ -722,7 +743,7 @@ bool KyActiveConnectResourse::checkWirelessStatus(NetworkManager::ActiveConnecti
         }
 
         if (NetworkManager::ConnectionSettings::ConnectionType::Wireless
-                != activeConnectPtr->type()) {
+            != activeConnectPtr->type()) {
             continue;
         }
 
@@ -733,6 +754,41 @@ bool KyActiveConnectResourse::checkWirelessStatus(NetworkManager::ActiveConnecti
 
     return false;
 
+}
+
+bool KyActiveConnectResourse::checkInternetLoading()
+{
+    int index = 0;
+    NetworkManager::ActiveConnection::List activeConnectList;
+
+    activeConnectList.clear();
+    activeConnectList = m_networkResourceInstance->getActiveConnectList();
+
+    if (activeConnectList.empty()) {
+        qWarning()<<"[KyActiveConnectResourse]"
+                   <<"get active connect failed, the active connect list is empty";
+        return false;
+    }
+
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr = nullptr;
+    for (index = 0; index < activeConnectList.size(); index++) {
+        activeConnectPtr = activeConnectList.at(index);
+        if (activeConnectPtr.isNull()) {
+            continue;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wireless != activeConnectPtr->type() &&
+            NetworkManager::ConnectionSettings::ConnectionType::Wired != activeConnectPtr->type() &&
+            NetworkManager::ConnectionSettings::ConnectionType::Pppoe != activeConnectPtr->type()) {
+            continue;
+        }
+
+        if (activeConnectPtr->state() == NetworkManager::ActiveConnection::State::Activating
+            || activeConnectPtr->state() == NetworkManager::ActiveConnection::State::Deactivating) {
+            return true;
+        }
+    }
+    return false;
 }
 
 QString KyActiveConnectResourse::getAcitveConnectionPathByUuid(QString connectUuid)
@@ -757,7 +813,7 @@ int KyActiveConnectResourse::getActivateWifiSignal(QString devName)
     for (int i = 0; i < devList.size(); ++i) {
 
         NetworkManager::Device::Ptr connectDevice =
-                            m_networkResourceInstance->findDeviceInterface(devList.at(i));
+            m_networkResourceInstance->findDeviceInterface(devList.at(i));
 
         if (nullptr == connectDevice || !connectDevice->isValid()) {
             qWarning()<< LOG_FLAG <<"getDeviceActiveAPInfo failed, the device" << devList.at(i) << "is not existed";
@@ -766,7 +822,7 @@ int KyActiveConnectResourse::getActivateWifiSignal(QString devName)
 
         if (connectDevice->type() == NetworkManager::Device::Wifi) {
             if ((!devName.isEmpty() && connectDevice->interfaceName() == devName)
-                    || devName.isEmpty()) {
+                || devName.isEmpty()) {
                 NetworkManager::WirelessDevice *wirelessDevicePtr =
                     qobject_cast<NetworkManager::WirelessDevice *>(connectDevice.data());
                 NetworkManager::AccessPoint::Ptr apPtr = wirelessDevicePtr->activeAccessPoint();

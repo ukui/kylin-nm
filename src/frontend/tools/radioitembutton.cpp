@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -37,7 +37,6 @@
 #define FOREGROUND_COLOR_PRESS_INACTIVE_DARK QColor(70,70,70,255)
 #define FOREGROUND_COLOR_NORMAL_ACTIVE QColor(55,144,250,255)
 #define FOREGROUND_COLOR_PRESS_ACTIVE QColor(36,109,212,255)
-
 #define COLOR_BRIGHT_TEXT this->palette().brightText().color()
 #define COLOR_HIGH_LIGHT this->palette().highlight().color()
 #define THEME_SCHAME  "org.ukui.style"
@@ -53,6 +52,7 @@ RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
     this->setFixedSize(BUTTON_SIZE);
     m_iconLabel->setFixedSize(BUTTON_SIZE);
     m_iconLabel->setAlignment(Qt::AlignCenter);
+    m_iconLabel->setProperty("useIconHighlightEffect", 0x2);
 
     setActive(false);
 
@@ -65,7 +65,6 @@ RadioItemButton::RadioItemButton(QWidget *parent) : QPushButton(parent)
             }
         });
     }
-
     onPaletteChanged();
 
     //JXJ_TODO loading动画
@@ -161,6 +160,7 @@ void RadioItemButton::onPaletteChanged()
     pal.setColor(QPalette::Highlight, pal.color(QPalette::Highlight));
 
     this->setPalette(pal);
+
     refreshButtonIcon();
 }
 
@@ -171,7 +171,7 @@ void RadioItemButton::onAnimationValueChanged(const QVariant& value)
     }
     QTransform t;
     t.rotate(value.toReal());
-    m_iconLabel->setPixmap(QIcon(":/res/s/conning-a/1.png").pixmap(ICON_SIZE).transformed(t));
+    m_iconLabel->setPixmap(QIcon::fromTheme("ukui-loading-0-symbolic").pixmap(ICON_SIZE).transformed(t));
 }
 
 void RadioItemButton::paintEvent(QPaintEvent *event)

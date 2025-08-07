@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -42,11 +42,11 @@ public:
                                  NetworkManager::ConnectionSettings::ConnectionType connectionType,
                                  QList<KyConnectItem *> &connectItemList);
     void getActiveConnectIpInfo(const QString &uuid,
-                            QString &ipv4Address,
-                            QString &ipv6Address);
+                                QString &ipv4Address,
+                                QString &ipv6Address);
     void getActiveConnectDnsInfo(const QString &uuid,
-                             QList<QHostAddress> &ipv4Dns,
-                             QList<QHostAddress> &ipv6Dns);
+                                 QList<QHostAddress> &ipv4Dns,
+                                 QList<QHostAddress> &ipv6Dns);
 
     //void getWiredActivateConnect(QList<KyWiredConnectItem *> &wiredActiveConnectItemList);
     void getVpnActivateConnect(QList<KyVpnConnectItem *> &vpnActiveConnectItemList);
@@ -60,8 +60,9 @@ public:
     bool wiredConnectIsActived();
     bool checkWirelessStatus(NetworkManager::ActiveConnection::State state);
     QString getAcitveConnectionPathByUuid(QString uuid);
-
     int getActivateWifiSignal(QString devName = "");
+
+    bool checkInternetLoading();
 
 private:
     void getActiveConnectIp(NetworkManager::ActiveConnection::Ptr activeConnectPtr,
@@ -73,7 +74,6 @@ private:
 
     KyConnectItem *getActiveConnectionItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
 
-   // KyWiredConnectItem *getWiredActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
     KyVpnConnectItem *getVpnActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
     KyBluetoothConnectItem *getBtActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
     KyApConnectItem *getApActiveConnectItem(NetworkManager::ActiveConnection::Ptr activeConnectPtr);
@@ -83,8 +83,8 @@ Q_SIGNALS:
     void updateActiveConnect(QString activeConnectUuid);
     void activeConnectRemove(QString activeConnectUuid);
     void stateChangeReason(QString uuid,
-                                    NetworkManager::ActiveConnection::State state,
-                                    NetworkManager::ActiveConnection::Reason reason);
+                           NetworkManager::ActiveConnection::State state,
+                           NetworkManager::ActiveConnection::Reason reason);
     void vpnConnectChangeReason(QString uuid,
                                 NetworkManager::VpnConnection::State state,
                                 NetworkManager::VpnConnection::StateChangeReason reason);

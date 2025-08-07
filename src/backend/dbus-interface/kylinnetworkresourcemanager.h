@@ -44,10 +44,11 @@
 #include <QDBusPendingCallWatcher>
 #include <QInputDialog>
 #include <QMetaEnum>
+#include <QDBusContext>
 
 QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkManager::AccessPoint::WpaFlags wpa_flags,NetworkManager::AccessPoint::WpaFlags rsn_flags);
 
-class KyNetworkResourceManager : public QObject
+class KyNetworkResourceManager : public QObject, public QDBusContext
 {
     Q_OBJECT
 public:
@@ -101,6 +102,7 @@ public:
     NetworkManager::Device::List getNetworkDeviceList();
     bool isActiveConnection(QString uuid);
     bool isActivatingConnection(QString uuid);
+    NetworkManager::ActiveConnection::State getActiveConnectionState(const QString uuid);
 
     void getConnectivity(NetworkManager::Connectivity &connectivity);
 
@@ -120,6 +122,7 @@ Q_SIGNALS:
     void deviceCarrierChanage(QString deviceName, bool pluged);
     void deviceBitRateChanage(QString deviceName, int bitRate);
     void deviceMacAddressChanage(QString deviceName, const QString &hwAddress);
+    void deviceConnectivityChanged(QString deviceName, const NetworkManager::Connectivity connectivity);
 
     //to KyWirelessNetResource
     void wifiNetworkRemoved(QString, QString);
@@ -136,8 +139,8 @@ Q_SIGNALS:
     void activeConnectionUpdate(QString uuid);
     void activeConnectionRemove(QString uuid);
     void activeConnectStateChangeReason(QString uuid,
-                                    NetworkManager::ActiveConnection::State state,
-                                    NetworkManager::ActiveConnection::Reason reason);
+                                        NetworkManager::ActiveConnection::State state,
+                                        NetworkManager::ActiveConnection::Reason reason);
     void vpnActiveConnectStateChangeReason(QString uuid,
                                            NetworkManager::VpnConnection::State state,
                                            NetworkManager::VpnConnection::StateChangeReason reason);
@@ -162,7 +165,7 @@ private Q_SLOTS:
     //active connection
     void onActiveConnectionUpdated();
     void onActiveConnectionChangedReason(NetworkManager::ActiveConnection::State state,
-                                          NetworkManager::ActiveConnection::Reason reason);
+                                         NetworkManager::ActiveConnection::Reason reason);
 
     void onActiveConnectionChanged(NetworkManager::ActiveConnection::State state);
     void onVpnActiveConnectChanagedReason(NetworkManager::VpnConnection::State state,
@@ -178,11 +181,12 @@ private Q_SLOTS:
     void onDeviceBitRateChanage(int bitRate);
     void onDeviceMacAddressChanage(const QString &hwAddress);
     void onDeviceStateChanged(NetworkManager::Device::State newstate,
-                      NetworkManager::Device::State oldstate,
-                      NetworkManager::Device::StateChangeReason reason);
+                              NetworkManager::Device::State oldstate,
+                              NetworkManager::Device::StateChangeReason reason);
 
     void onWifiNetworkAppeared(QString const & ssid);
     void onWifiNetworkDisappeared(QString const & ssid);
+    void onDevicePropertiesChanged(QString interface, QVariantMap qvm);
 
     //wifi network
     void onUpdateWirelessNet();

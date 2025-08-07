@@ -173,7 +173,7 @@ ListView {
                 Label {
                     id: downLoadWiredText
                     visible: modelData.State === 2
-                    anchors.rightMargin: 24
+                    anchors.rightMargin: 32
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: 12

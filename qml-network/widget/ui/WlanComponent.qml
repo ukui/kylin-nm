@@ -14,10 +14,25 @@ ListView {
     //model: KInterface.wirelessConList
     spacing: 0
     property bool connectMac : false
+    property int detailShowIndex : -1
 
     function updateMacConnAttr(ipos, status) {
         if(0 === ipos)
             connectMac = status
+    }
+
+    function updateShowDetailIndex(ipos) {
+        console.log("detail index: ", ipos)
+        detailShowIndex = ipos
+        for(var i=0; i<wlanlistView.count; i++) {
+            if(i !== detailShowIndex) {
+                var d = wlanlistView.itemAtIndex(i);
+                    if (d) {
+                         d.hideDetail()
+                    }
+                       
+            }
+        }        
     }
 
     // 定义每个项的显示方式
@@ -37,9 +52,13 @@ ListView {
             updateMacConnAttr(index, conConnected)
         }
 
-        // Binding{
-        //  when:!textEdit.activeFocus
-        // }
+        function hideDetail() {
+            if (textEditLayout.visible) {
+                listItem.height = 56
+                textEditLayout.visible = false
+                autoConnectCheckBox.visible = false
+            }
+        }
 
         ColumnLayout {
             anchors.fill: parent
@@ -179,7 +198,7 @@ ListView {
                     Label {
                         id: downLoadWirelessText
                         visible: model.status === 2
-                        anchors.rightMargin: 24
+                        anchors.rightMargin: 32
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: 12
@@ -231,10 +250,17 @@ ListView {
                                 listItem.height = 56
                             else
                                 listItem.height = 145
-                            //textEditLayout.visible = !textEditLayout.visible
-                            textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X"))
-                            autoConnectCheckBox.visible = textEditLayout.visible
-                            connectBtn.visible = !textEditLayout.visible
+
+                            if(textEditLayout.visible) {
+                                listItem.height = 56
+                                textEditLayout.visible = false
+                                autoConnectCheckBox.visible = false
+                                connectBtn.visible = true
+                            } else {
+                                textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X"))
+                                autoConnectCheckBox.visible = textEditLayout.visible
+                                connectBtn.visible = !textEditLayout.visible
+                            }
                         }
 
                     }
@@ -267,6 +293,12 @@ ListView {
             RowLayout {
                 visible: false
                 id: textEditLayout
+
+                onVisibleChanged: {
+                    if (visible)
+                        updateShowDetailIndex(index)
+                }
+
                 TextField {
                     id: textEdit
                     width: 208
@@ -274,30 +306,30 @@ ListView {
                     Layout.leftMargin: 68
                     echoMode: TextInput.Password
                     property bool passMode: true
-                    color:"black"
-                    focus:false //必须是false，界面重建时会导致崩溃，焦点丢失。编辑时切换窗口也会导致焦点丢失崩溃老问题待解，可能是qt bug
+                    property int textLength: textEdit.text.length
+                    onTextLengthChanged: {
+                        if(textLength>=8) {
+                            pwdConnectBtn.enabled = true
+                        } else {
+                            pwdConnectBtn.enabled = false
+                        }
+                    }
                 }
-                Rectangle {
+                Button {
                     id: pwdConnectBtn
+                    highlighted: true
+                    //enabled: true
                     width: 88
                     height: 36
                     Layout.rightMargin: 24
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    radius: 6
-                    color: "#3676F5"
-                    Label {
-                        Layout.alignment: Qt.AlignCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        color: "white"
-                        text: qsTr("connect")
+                    text: qsTr("connect")
+                    onClicked: {
+                        KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security, textEdit.text, autoConnectCheckBox.checkState)
                     }
 
-                    MouseArea {
-                        anchors.fill: pwdConnectBtn
-                        onClicked: {
-                            KInterface.passwordConnect(wlanDeviceComboBox.currentText, model.ssid, model.security, textEdit.text, autoConnectCheckBox.checkState)
-                        }
+                    Component.onCompleted: {
+                        pwdConnectBtn.enabled = (textEdit.textLength>=8 ? true : false)
                     }
                 }
             }

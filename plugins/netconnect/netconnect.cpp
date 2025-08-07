@@ -90,16 +90,6 @@ NetConnect::NetConnect() :  mFirstLoad(true) {
 
     pluginName = tr("LAN");
     pluginType = NETWORK;
-
-    m_interface = new QDBusInterface("com.kylin.network",
-                                     "/com/kylin/network",
-                                     "com.kylin.network",
-                                     QDBusConnection::sessionBus());
-    if(!m_interface->isValid()) {
-        qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
-    }
-    updatePluginShowSettings();
-    connect(m_interface, SIGNAL(deviceStatusChanged()), this, SLOT(updatePluginShowSettings()),Qt::QueuedConnection);
 }
 
 /*fortify扫描报错，需要显示删除一下*/
@@ -142,6 +132,9 @@ QWidget *NetConnect::pluginUi() {
         if(!m_interface->isValid()) {
             qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
+
+        updatePluginShowSettings();
+        connect(m_interface, SIGNAL(deviceStatusChanged()), this, SLOT(updatePluginShowSettings()),Qt::QueuedConnection);
 
         qDBusRegisterMetaType<QVector<QStringList>>();
 

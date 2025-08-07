@@ -51,10 +51,10 @@ ListView {
                 Menu {
                     id: propertyMenu
                     MenuItem {
-                        text: qsTr("网络配置")
+                        text: qsTr("Network settings")
                         onTriggered:
                         {
-                            console.log("网络配置")
+                            console.log("Network settings")
                             KInterface.openwLanNetworkSetting()
                         }
                     }
@@ -129,7 +129,7 @@ ListView {
                         Layout.leftMargin: 8
                         Layout.bottomMargin: 8
                         anchors.top: nameStateLabel.bottom
-                        text: (model.status === 2) ? "已连接" : "未连接"
+                        text: (model.status === 2) ? qsTr("connected") : qsTr("Not connected")
                         font.pixelSize: 12
                     }
                 }
@@ -199,7 +199,7 @@ ListView {
                     height: 36
                     Layout.rightMargin: 24
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    text: (model.status === 2) ? "断开" : "连接"
+                    text: (model.status === 2) ? qsTr("disconnect") : qsTr("connect")
                     highlighted: (model.status === 2) ? 0 : 1
                     MouseArea {
                         anchors.fill: parent
@@ -290,7 +290,7 @@ ListView {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: "white"
-                        text: "连接"
+                        text: qsTr("connect")
                     }
 
                     MouseArea {
@@ -307,7 +307,7 @@ ListView {
                 height: 16
                 visible: false
                 Layout.leftMargin: 68
-                text: "自动连接"
+                text: qsTr("AutoConnect")
                 checked: true
             }
         }

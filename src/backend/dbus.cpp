@@ -65,7 +65,7 @@ DbusAdaptor::DbusAdaptor(QString display, MainWindow *m, QObject *parent)
                                              SYSTEM_DBUS_INTERFACE,
                                              "sysWiredMainSwitchChanged",
                                              this,
-                                             SIGNAL(wiredMainSwitchBtnChanged(bool)));
+                                             SLOT(onWiredMainSwitchBtnChanged(bool)));
     }
     else
     {
@@ -170,6 +170,24 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
     {
         qWarning()<< Q_FUNC_INFO << __LINE__ <<"m_pSysBusInterfaces is isValid!";
     }
+
+    if (!enable) {
+        // int devType 0:lan 1:wlan  
+        int devType = 0;
+        const auto devList = mNetworkAdaptor->getDeviceListAndEnabled(devType);
+        for (auto it = devList.cbegin(); it != devList.cend(); ++it) {
+            const QString &devName = it.key();
+            const auto connections = getWiredList(devName);
+            for (const QVariant &conn : connections) {
+                // 网卡名称,uuid,对应DBUS路径
+                const auto connInfo = conn.toList();
+                if (connInfo.size() >= 2) {  // 只需确保有UUID即可
+                    deActivateConnect(0, devName, connInfo.at(1).toString());
+                }
+            }
+        }
+    }
+
 #if 0
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
         QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
@@ -492,5 +510,11 @@ QString DbusAdaptor::displayFromPid(uint pid)
         }
     }
     return {};
+}
+
+void DbusAdaptor::onWiredMainSwitchBtnChanged(bool state)
+{
+    qDebug() << Q_FUNC_INFO << __LINE__  << state;
+    Q_EMIT DbusAdaptor::wiredMainSwitchBtnChanged(state);
 }
 

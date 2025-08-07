@@ -259,6 +259,7 @@ void KnmLanDataKeeper::onDeviceNameChanged(QString oldName, QString newName, int
 
 void KnmLanDataKeeper::onSwitchBtnChanged(bool status)
 {
+    m_wiredMainSwitchState = status;
     m_switchState = status;
     KInterface::getInstance()->updateWiredMainSwitch();
 }

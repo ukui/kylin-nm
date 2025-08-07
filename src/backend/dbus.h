@@ -33,8 +33,8 @@ QT_END_NAMESPACE
 /*
  * Adaptor class for interface com.kylin.weather
  */
-#define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
-#define SYSTEM_DBUS_PATH  "/"
+#define SYSTEM_DBUS_SERVICE   "com.kylin.network.qt.systemdbus"
+#define SYSTEM_DBUS_PATH      "/"
 #define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
 
 #include "mainwindow.h"
@@ -153,6 +153,7 @@ private:
     bool registerService();
 private Q_SLOT:
     void onServiceOwnerChanged(const QString &service, const QString &oldOwner, const QString &newOwner);
+    void onWiredMainSwitchBtnChanged(bool);
 };
 
 #endif

@@ -78,6 +78,9 @@ class NetworkAdaptor: public QDBusAbstractAdaptor
 "    <signal name=\"wirelessSwitchBtnChanged\">\n"
 "      <arg direction=\"out\" type=\"b\" name=\"state\"/>\n"
 "    </signal>\n"
+"    <signal name=\"wiredMainSwitchBtnChanged\">\n"
+"      <arg direction=\"out\" type=\"b\" name=\"state\"/>\n"
+"    </signal>\n"
 "    <signal name=\"hotspotDeactivated\">\n"
 "      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
 "      <arg direction=\"out\" type=\"s\" name=\"ssid\"/>\n"
@@ -277,6 +280,7 @@ Q_SIGNALS: // SIGNALS
     void timeToUpdate();
     void wirelessDeviceStatusChanged();
     void wirelessSwitchBtnChanged(bool state);
+    void wiredMainSwitchBtnChanged(bool state);
     void wlanAdd(const QString &devName, const QStringList &info);
     void wlanRemove(const QString &devName, const QString &ssid);
     void wlanactiveConnectionStateChanged(const QString &devName, const QString &ssid, const QString &uuid, int status);

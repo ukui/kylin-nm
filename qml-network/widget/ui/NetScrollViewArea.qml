@@ -56,7 +56,7 @@ UkuiItems.DtThemeBackground {
                         Layout.alignment: Qt.AlignTop
 
                         Label {
-                            text: qsTr("有线网络")
+                            text: qsTr("Wired network")
                             font.pixelSize: 14
                             Layout.alignment: Qt.AlignLeft
                             Layout.leftMargin: 24
@@ -134,7 +134,7 @@ UkuiItems.DtThemeBackground {
                             anchors.leftMargin: 20
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
-                            text: qsTr("未检测到有线网卡")
+                            text: qsTr("No wired network card was detected")
                         }
                     }
 
@@ -196,7 +196,7 @@ UkuiItems.DtThemeBackground {
                         Layout.alignment: Qt.AlignTop
 
                         Label {
-                            text: qsTr("无线网络")
+                            text: qsTr("Wireless network")
                             font.pixelSize: 14
                             Layout.alignment: Qt.AlignLeft
                             Layout.leftMargin: 24
@@ -328,7 +328,7 @@ UkuiItems.DtThemeBackground {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: 24
-                text: qsTr("更多网络设置")
+                text: qsTr("More network Settings")
                 font.pixelSize: 14
                 textColor: Platform.GlobalTheme.kFontStrong
 

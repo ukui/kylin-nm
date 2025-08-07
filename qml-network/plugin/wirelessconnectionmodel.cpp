@@ -52,6 +52,9 @@ QVariant WirelessConnectionModel::data(const QModelIndex &index, int role) const
     case UUIDRole: return connection.uuid;
     case IsLoadingRole: return connection.Loading;
     case ConfiguredRole: return connection.Configured;
+    case FrequencyRole: return connection.frequency;
+    case IsMixRole: return connection.isMix;
+
     default: return QVariant();
     }
 }
@@ -80,7 +83,7 @@ bool WirelessConnectionModel::setData(const QModelIndex &index, const QVariant &
         connection.uuid = value.toString();
         break;
     case CategoryRole:
-        connection.category = value.toInt();
+        connection.category = value.toUInt();
         break;
     case ConnectStatusRole:
         connection.status = value.toInt();
@@ -90,6 +93,12 @@ bool WirelessConnectionModel::setData(const QModelIndex &index, const QVariant &
         break;
     case ConfiguredRole:
         connection.Configured = value.toBool();
+        break;
+    case FrequencyRole:
+        connection.frequency = value.toUInt();
+        break;
+    case IsMixRole:
+        connection.isMix = value.toBool();
         break;
     default:
         return false;
@@ -105,12 +114,15 @@ QHash<int, QByteArray> WirelessConnectionModel::roleNames() const
         {SSIDRole, "ssid"},
         {StrengthRole, "signal"},
         {SecurityTypeRole, "security"},
-         {UUIDRole, "uuid"},
+        {UUIDRole, "uuid"},
         {IsAPRole, "isApConn"},
         {CategoryRole, "category"},
         {ConnectStatusRole,"status"},
-         {IsLoadingRole,"Loading"},
-        {ConfiguredRole,"Configured"}
+        {IsLoadingRole,"Loading"},
+        {ConfiguredRole,"Configured"},
+        {FrequencyRole, "frequency"},
+        {IsMixRole, "isMix"}
+
     };
 }
 
@@ -177,9 +189,12 @@ WirelessConnectionModel::ST_ConnectionInfo WirelessConnectionModel::mapToConnect
     connect.uuid=value.value("Uuid").toString();
     connect.isApConn=value.value("isApConn").toString();
     connect.category=value.value("category").toString();
+    connect.frequency=value.value("frequency").toUInt();
+
     connect.status=value.value("State").toInt();
     connect.Loading=value.value("Loading").toBool();
     connect.Configured=value.value("Configured").toInt();
+    connect.isMix=value.value("isMix").toBool();
 
     return connect;
 }

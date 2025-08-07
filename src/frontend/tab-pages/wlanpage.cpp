@@ -574,7 +574,12 @@ void WlanPage::onWlanAdded(QString interface, KyWirelessNetItem &item)
          << QString::number(item.m_signalStrength)
          << item.m_secuType
          << (m_connectResource->isApConnection(item.m_connectUuid) ? IsApConnection : NotApConnection)
-         << QString::number(category)<< QString::number(item.m_isConfigured);
+         << QString::number(category)
+         << QString::number(item.m_isConfigured)
+         << QString::number(item.m_frequency)
+         << (item.m_isMix?IsApConnection : NotApConnection)
+            ;
+
     Q_EMIT wlanAdd(interface, info);
 
     if (interface != m_currentDevice) {
@@ -1383,12 +1388,19 @@ void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
             if (!m_showWifi6Plus && category == 2) {
                 category = 1;
             }
-            list.append(QStringList() << data.m_NetSsid
-                          << QString::number(signalStrength)
-                          << secuType
-                          << data.m_connectUuid
-                          << (m_connectResource->isApConnection(data.m_connectUuid) ? IsApConnection : NotApConnection)
-                                      << QString::number(category) << QString::number(data.m_isConfigured));
+            list.append(QStringList()
+                          << data.m_NetSsid //1
+                          << QString::number(signalStrength) //2
+                          << secuType //3
+                          << data.m_connectUuid //4
+                          << (m_connectResource->isApConnection(data.m_connectUuid) ? IsApConnection : NotApConnection) //5
+                          << QString::number(category) //6
+                          << QString::number(data.m_isConfigured) //7
+                          << QString::number(data.m_frequency) //8
+                          << (data.m_isMix ? IsApConnection : NotApConnection) //9
+                        );
+
+            //
             activeSsid = data.m_NetSsid;
         } else {
             list.append(QStringList("--"));
@@ -1410,7 +1422,11 @@ void WlanPage::getWirelessList(QString devName, QList<QStringList> &list)
                       << QString::number(itemData.m_signalStrength)
                       << itemData.m_secuType
                       << (m_connectResource->isApConnection(itemData.m_connectUuid) ? IsApConnection : NotApConnection)
-                      << QString::number(category) << QString::number(itemData.m_isConfigured));
+                      << QString::number(category)
+                      << QString::number(itemData.m_isConfigured)
+                      << QString::number(data.m_frequency)
+                      << (data.m_isMix ? IsApConnection : NotApConnection)
+                    );
     }
 }
 

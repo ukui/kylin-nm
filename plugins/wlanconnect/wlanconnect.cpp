@@ -1123,7 +1123,7 @@ void WlanConnect::addOneWlanFrame(ItemFrame *frame, QString deviceName, QString 
     });
 
     connect(wlanItem, &QPushButton::clicked, this, [=] {
-        // 后续需要优化，跳转到控制台进行输入
+        openKylinm();
     });
     //记录到deviceFrame的itemMap中
     deviceFrameMap[deviceName]->itemMap.insert(name, wlanItem);

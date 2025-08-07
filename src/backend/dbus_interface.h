@@ -232,6 +232,7 @@ Q_SIGNALS: // SIGNALS
     void timeToUpdate();
     void wirelessDeviceStatusChanged();
     void wirelessSwitchBtnChanged(bool state);
+    void wiredMainSwitchBtnChanged(bool state);
     void wlanAdd(const QString &devName, const QStringList &info);
     void wlanRemove(const QString &devName, const QString &ssid);
     void wlanactiveConnectionStateChanged(const QString &devName, const QString &ssid, const QString &uuid, int status);

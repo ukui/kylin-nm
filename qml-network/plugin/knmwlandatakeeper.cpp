@@ -110,6 +110,8 @@ KnmWlanDataKeeper::~KnmWlanDataKeeper()
 QMap<QString, QVariant> KnmWlanDataKeeper::makeConnectionMap(int status, QStringList conPath)
 {
     //属性个数偏移量,已连接的WiFi比未连接的WiFi属性多一个uuid
+
+    qWarning() << Q_FUNC_INFO << __LINE__ << "status:" << status << "conPath:" << conPath;
     int index = 0;
 
     QMap<QString, QVariant> connectionMap;
@@ -118,7 +120,7 @@ QMap<QString, QVariant> KnmWlanDataKeeper::makeConnectionMap(int status, QString
     connectionMap.insert("Security", conPath.at(2));
 
     /*这个7根据后端链表每个项添加的参数来的，改了后端需要改这里，这里补充判断是否大>=7起保护作用*/
-    if (status == ACTIVATED || conPath.count()>=7) {
+    if (status == ACTIVATED || conPath.count()>=9) {
         connectionMap.insert("Uuid", conPath.at(3));
         index = 1;
     }
@@ -128,6 +130,9 @@ QMap<QString, QVariant> KnmWlanDataKeeper::makeConnectionMap(int status, QString
     connectionMap.insert("State", status);
     connectionMap.insert("Loading", false);
     connectionMap.insert("Configured", conPath.at(5 + index).toInt());
+    connectionMap.insert("frequency", conPath.at(6 + index).toUInt());
+    connectionMap.insert("isMix", conPath.at(7 + index).toInt());
+
     return connectionMap;
 }
 

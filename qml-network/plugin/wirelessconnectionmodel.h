@@ -39,19 +39,26 @@ public:
         ConnectStatusRole,
         IsLoadingRole,
         ConfiguredRole,
+        FrequencyRole,
+        IsMixRole,
     };
 
 
     struct ST_ConnectionInfo {
-        QString ssid;        // 网络名称
-        QString signal;       // 信号强度
+        QString ssid;       // 网络名称
+        QString signal;     // 信号强度
         QString security;   // 安全类型
-        QString uuid;        // 网络名称
+        QString uuid;       // 网络名称
         QString isApConn;
         QString category;
+        uint frequency;  //
+
         int status;     //
         bool Loading;
         int Configured;
+
+        bool isMix;
+
     };
     explicit WirelessConnectionModel(QObject *parent = nullptr);
     ST_ConnectionInfo mapToConnectionInfo(QMap<QString, QVariant> value);

@@ -119,6 +119,7 @@ public:
     bool getWirelessSwitchBtnState();
     bool getWiredEnabledState();
     int getDeviceConnectivity(const QString deviceName);
+    bool getCableStateByDevice(const QString &deviceName);
 
 Q_SIGNALS:
     //设备插拔

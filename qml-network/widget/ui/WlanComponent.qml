@@ -130,7 +130,7 @@ ListView {
 
                 if(autoConnectCheckBox.visible) {
                     autoConnectCheckBox.visible = false
-                } else {
+                } else if (model.status !== 2){
                     autoConnectCheckBox.visible=(textEditLayout.visible || model.Configured)
                 }
 
@@ -313,23 +313,43 @@ ListView {
                             }
                         }
                     }
-                    CheckBox {
-                        id: autoConnectCheckBox
-                        Layout.alignment: Qt.AlignLeft
-                        width: 16
-                        height: 16
-                        visible: false
-                        Layout.leftMargin: 8
-                        Layout.topMargin: 0
-                        text: qsTr("AutoConnect")
-                        checked: true
-                        onClicked: {
-                            mouse.accepted = true
-                        }
+                    RowLayout {
+                        UkuiItems.DtThemeText {
+                            visible: model.status === 2
+                            anchors.centerIn: parent
+                            Layout.topMargin: 0
+                            Layout.leftMargin: 12
 
-                        onVisibleChanged: {
-                            if (visible) {
-                                updateShowDetailIndex(index)
+                            text: {
+                                const signal = parseInt(model.signal);
+                                return signal > 80 ? qsTr("Connected,network is very good") :
+                                    signal > 55 ? qsTr("Connected,network is good") :
+                                    signal > 30 ? qsTr("Connected,network is average") :
+                                    signal > 5  ? qsTr("Connected,network weak") :
+                                                    qsTr("Connected,network is weak");
+                            }
+
+                            textColor: Platform.GlobalTheme.kFontPlaceholderText
+                            height: 16
+                        }
+                        CheckBox {
+                            id: autoConnectCheckBox
+                            Layout.alignment: Qt.AlignLeft
+                            width: 16
+                            height: 16
+                            visible: false
+                            Layout.leftMargin: 8
+                            Layout.topMargin: 0
+                            text: qsTr("AutoConnect")
+                            checked: true
+                            onClicked: {
+                                mouse.accepted = true
+                            }
+
+                            onVisibleChanged: {
+                                if (visible) {
+                                    updateShowDetailIndex(index)
+                                }
                             }
                         }
                     }
@@ -434,7 +454,7 @@ ListView {
     }
     footer: Button {
         id: addOtherBtn
-        visible: true
+        visible: wlanDeviceComboBox.count >= 1
         width: parent.width
         height: 40
         Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter

@@ -62,6 +62,11 @@ QVariantList KnmDataKeeper::getDevConnections(QString devName)
         return ret;
     m_currentDev = devName;
 //    m_pSpeedTimer->start();
+    NetDevicePtr dev = m_deviceList.value(devName);
+    if(dev.isNull()) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << devName << "no device";
+        return ret;
+    }
     return m_deviceList.value(devName)->getConnections();
 }
 

@@ -12,6 +12,14 @@
 
 #include "CSingleton.h"
 #include "wirelessconnectionmodel.h"
+
+enum ConnectStatus{
+    All,        // 有线无线都连接
+    Wire,       // 仅有有线连接
+    Wireless,   // 仅有无线连接
+    NoConnect   // 都没连接
+};
+
 //前端接口类，用于调取keeper数据并展示在前端
 class KnmInterface : public QObject
 {
@@ -25,8 +33,7 @@ class KnmInterface : public QObject
     Q_PROPERTY(QString upwareRate READ upwareRateDate WRITE setUpwareRateData  NOTIFY updateUpLoadWiredStr)
     Q_PROPERTY(QString downwareRate READ downwareRateDate WRITE setDownwareRateData  NOTIFY updateDownLoadWiredStr)
     Q_PROPERTY(WirelessConnectionModel* wirelessConLists READ wirelessConLists NOTIFY wirelessConListChanged)
-
-
+    Q_PROPERTY(bool cableStatus READ getCableStatus NOTIFY updateCable)
 
 public:
     KnmInterface();
@@ -102,6 +109,15 @@ public slots:
 
     void showAddOtherWlanPage(QString devName);
 
+private slots:
+
+    void slotRefreshTimeout();
+	
+public:
+    ConnectStatus getConnectionStatus();
+    bool getCableStatusByDev(const QString &devName);
+    bool getCableStatus();
+
 signals:
     void updateWiredDeviceList();
 
@@ -127,6 +143,8 @@ signals:
 
     void wirelessConListChanged();
 
+    void updateCable(bool status);
+
 private:
     QVariantList m_wiredDevConnList;
 
@@ -139,6 +157,7 @@ private:
     int loadCount = 0;
 
     QTimer *loadTimer = nullptr;
+    QTimer *m_pRefreshTimer = nullptr;
 
     QProcess * m_pProcess = nullptr;
     WirelessConnectionModel mWirelessConnecModel;//显示模型使用QAbstractListModel 可控制显示区域与数据变化。基于object的qvariantlist数据变化或项变化都会引起界面的全量更新

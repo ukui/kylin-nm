@@ -222,6 +222,15 @@ void NetworkAdaptor::showPropertyWidget(const QString &devName, const QString &s
     QMetaObject::invokeMethod(parent(), "showPropertyWidget", Q_ARG(QString, devName), Q_ARG(QString, ssid));
 }
 
+bool NetworkAdaptor::getCableStateByDevice(const QString deviceName)
+{
+    // handle method call com.kylin.network.getCableStateByDevice
+    bool out0;
+    QMetaObject::invokeMethod(parent(), "getCableStateByDevice", Q_RETURN_ARG(bool, out0), Q_ARG(QString, deviceName));
+    return out0;
+}
+
+
 int NetworkAdaptor::getDeviceConnectivity(const QString deviceName)
 {
     // handle method call com.kylin.network.getDeviceConnectivity

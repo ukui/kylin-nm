@@ -111,7 +111,7 @@ UkuiItems.DtThemeBackground {
                             Layout.rightMargin: 24
                             spacing:0
                             rightPadding: 0
-                            Layout.preferredWidth: 60
+                            Layout.preferredWidth: 44
                         }
                     }
 
@@ -266,7 +266,7 @@ UkuiItems.DtThemeBackground {
                             spacing:0
                             rightPadding: 0
                             visible: wlanDeviceComboBox.count >= 1
-                            Layout.preferredWidth: 60
+                            Layout.preferredWidth: 44
                         }
                     }
 

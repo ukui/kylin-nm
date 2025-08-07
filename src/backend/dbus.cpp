@@ -151,6 +151,11 @@ int DbusAdaptor::getDeviceConnectivity(const QString deviceName)
     return m_mainWindow->getDeviceConnectivity(deviceName);
 }
 
+//获取网卡是否插入了网线
+bool DbusAdaptor::getCableStateByDevice(const QString deviceName)
+{
+    return m_mainWindow->getCableStateByDevice(deviceName);
+}
 //有线列表
 QVariantList DbusAdaptor::getWiredList(QString devName)
 {

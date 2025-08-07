@@ -1212,6 +1212,11 @@ void LanPage::setWiredDeviceEnable(const QString& devName, bool enable)
     m_deviceResource->setDeviceManaged(devName, enable);
 }
 
+bool LanPage::getCableStateByDevice(const QString &deviceName)
+{
+    return m_deviceResource->wiredDeviceIsCarriered(deviceName);
+}
+
 int LanPage::getDeviceConnectivity(const QString deviceName)
 {
     NetworkManager::Connectivity connectivity;
@@ -1300,7 +1305,7 @@ void LanPage::onLanStateChanged(NetworkManager::Device::State newstate, NetworkM
     if (newstate == NetworkManager::Device::Failed) {
         if (reason == NetworkManager::Device::StateChangeReason::ConfigUnavailableReason) {
             if (!m_showedNetTipFlag) {
-                showBallonTip();
+                //showBallonTip();//暂时屏蔽这里，热点第一次打开时会触发这个弹窗。轻量级弹窗需要同步后端的reason code所以可以暂时屏蔽不影响
                 m_showedNetTipFlag = true;
             }
         }

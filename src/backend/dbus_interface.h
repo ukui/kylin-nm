@@ -217,7 +217,14 @@ public Q_SLOTS: // METHODS
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(deviceName);
         return callWithArgumentList(QDBus::NoBlock, QStringLiteral("getDeviceConnectivity"), argumentList);
-}
+    }
+
+    inline QDBusPendingReply<bool> getCableStateByDevice(const QString deviceName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(deviceName);
+        return callWithArgumentList(QDBus::NoBlock, QStringLiteral("getCableStateByDevice"), argumentList);
+    }
 
 Q_SIGNALS: // SIGNALS
     void activateFailed(const QString &errorMessage);

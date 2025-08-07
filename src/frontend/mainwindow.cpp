@@ -1374,6 +1374,13 @@ bool MainWindow::getWiredEnabledState()
     }
 }
 
+bool MainWindow::getCableStateByDevice(const QString &deviceName)
+{
+    if (nullptr != m_lanWidget) {
+        return m_lanWidget->getCableStateByDevice(deviceName);
+    }
+}
+
 int MainWindow::getDeviceConnectivity(const QString deviceName)
 {
     if (nullptr != m_lanWidget) {

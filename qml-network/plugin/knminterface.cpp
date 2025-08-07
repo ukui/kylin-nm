@@ -13,6 +13,9 @@ KnmInterface::KnmInterface()
             loadCount = 0;
         emit updateLoadingIcon(QVariant(icon));
     });
+    m_pRefreshTimer = new QTimer(this);
+    m_pRefreshTimer->start(20000);
+    connect(m_pRefreshTimer, &QTimer::timeout, this,&KnmInterface::slotRefreshTimeout);
 }
 
 KnmInterface::~KnmInterface()
@@ -139,13 +142,14 @@ void KnmInterface::openNetworkSetting()
          m_pProcess->deleteLater();
     }
 
-    m_pProcess = new QProcess();
-    QString cmd = "ukui-control-center";
-    QStringList arg;
-    arg.clear();
-    arg << "-m";
-    arg << "netconnect";
-    m_pProcess->startDetached(cmd,arg);
+    ConnectStatus connect_status = getConnectionStatus();
+
+    QProcess process;
+    if (connect_status == ConnectStatus::Wireless){
+        process.startDetached("ukui-control-center -m wlanconnect");
+    } else {
+        process.startDetached("ukui-control-center -m netconnect");
+    }
 }
 
 
@@ -184,6 +188,11 @@ void KnmInterface::getWirelessDevConnList()
 /*全量更新*/
 void KnmInterface::rebuildCurrentWirelessList()
 {
+    if(m_currentWirelessDevice.isEmpty()) {
+        QMap<QString, NetDevicePtr>devMap=KNMDC::getInstance()->wirelessDeviceList();
+        if(!devMap.isEmpty()) m_currentWirelessDevice=devMap.first()->devName();
+        qWarning() << Q_FUNC_INFO <<__LINE__ << "set currentdevice"<<m_currentWirelessDevice;
+     }
     m_wirelessDevConnList.clear();
     m_wirelessDevConnList=KNMDC::getInstance()->wirelessDeviceConnList(m_currentWirelessDevice);
     mWirelessConnecModel.refreshConnections(m_wirelessDevConnList);
@@ -194,9 +203,13 @@ void KnmInterface::rebuildCurrentWirelessList()
 void KnmInterface::getWirelessDevConnList(QString devName)
 {
     QVariantList conList;
+    /*后端add与remove信号可能先于qml的设备名传递，造成崩溃，先做保护,后边要重新优化下，规避方案不影响实际效果，设备变化会重建列表不影响*/
+    if(devName.isEmpty()) {
+        qWarning() << Q_FUNC_INFO <<__LINE__ << devName<<"devname is empty";
+        return;
+     }
     m_currentWirelessDevice = devName;
-    if(m_wirelessDevConnList.isEmpty())
-    {
+    if(m_wirelessDevConnList.isEmpty()) {
         m_wirelessDevConnList=KNMDC::getInstance()->wirelessDeviceConnList(devName);
         mWirelessConnecModel.refreshConnections(m_wirelessDevConnList);
         emit updateWirelessDevConnList();
@@ -318,3 +331,80 @@ void KnmInterface::showAddOtherWlanPage(QString devName)
     KNMDC::getInstance()->showAddOtherWlanPage(devName);
 }
 
+/*
+*   获取有线和无线的连接状态
+*   1、无线有线都有连接
+*   2、仅有有线连接
+*   3、仅有无线连接
+*   3、都未连接
+*/
+ConnectStatus KnmInterface::getConnectionStatus()
+{
+    auto wiredDev = KNMDC::getInstance()->wiredDeviceList();
+
+    bool wiredConnect = false;
+    for (auto iter : wiredDev) {
+        if (!iter.isNull()) {
+            if (!wiredConnect) {
+                for (auto devices : iter->getConnections()) {
+                    int status = devices.toMap().value("State").toInt();
+                    if (2 == status) {    //2==已连接
+                        wiredConnect = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (wiredConnect) {
+            break;
+        }
+    }
+
+
+    auto wirelessDev = KNMDC::getInstance()->wirelessDeviceList();
+    bool wirelessConnect = false;
+
+    for (auto iter : wirelessDev) {
+        if (!iter.isNull()) {
+            if (!wirelessConnect) {
+                for (auto devices : iter->getConnections()) {
+                    int status = devices.toMap().value("State").toInt();
+                    if (2 == status) {    //2==已连接
+                        wirelessConnect = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (wirelessConnect) {
+            break;
+        }
+    }
+
+    if (wiredConnect && wirelessConnect){
+        return ConnectStatus::All;
+    } else if (wiredConnect) {
+        return ConnectStatus::Wire;
+    } else if (wirelessConnect) {
+        return ConnectStatus::Wireless;
+    } else {
+        return ConnectStatus::NoConnect;
+    }
+}
+
+void KnmInterface::slotRefreshTimeout()
+{
+    rescanWirelessConn();
+}
+
+bool KnmInterface::getCableStatus()
+{
+    KNMDC::getInstance()->getCableStateByDevice("");
+    return false;
+}
+
+bool KnmInterface::getCableStatusByDev(const QString &devName)
+{
+    KNMDC::getInstance()->getCableStateByDevice(devName);
+    return false;
+}

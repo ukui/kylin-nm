@@ -223,8 +223,9 @@ ListView {
                             KInterface.deActivateConnect(lanDeviceComboBox.currentText, modelData.Uuid, 0);
                         else if (modelData.State === 4)
                             KInterface.activateConnect(lanDeviceComboBox.currentText, modelData.Uuid, 0);
-                        typeicon.visible = false;
-                        loadingicon.visible = true;
+
+                        //typeicon.visible = false;
+                        //loadingicon.visible = true;
                     }
                 }
             }

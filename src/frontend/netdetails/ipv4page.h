@@ -89,7 +89,7 @@ private:
     int m_currentIconIndex =0;
 
     QLabel *m_iconLabel;
-    QLabel *m_textLabel;
+    KLabel *m_textLabel;
 
     QString m_errorMessage;
 

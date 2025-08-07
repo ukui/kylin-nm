@@ -108,7 +108,10 @@ void KynmSystemDbus::setWiredMainSwitch(bool enable)
     qDebug() << Q_FUNC_INFO << __LINE__ << enable;
 
     message().service();
+#if 0
+    //这里会让Dbus异常退出，先注释
     PEEK_LIMIT();
+#endif
     if (enable != getWiredMainSwitch())
     {
         m_kylinNmSettings->setValue(KYLIN_NM_WIRED_MAIN_SWITCH, enable);
@@ -120,7 +123,10 @@ bool KynmSystemDbus::getWiredMainSwitch()
 {
     qDebug() << Q_FUNC_INFO << __LINE__ ;
 
+#if 0
+    //这里会让Dbus异常退出，先注释
     PEEK_LIMIT_RET(false);
+#endif
     return m_kylinNmSettings->value(KYLIN_NM_WIRED_MAIN_SWITCH).toBool();
 }
 void KynmSystemDbus::setWiredDeviceSwitch(QString devName, bool enable)

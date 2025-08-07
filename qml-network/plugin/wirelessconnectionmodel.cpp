@@ -208,7 +208,7 @@ void WirelessConnectionModel::refreshConnections(const QVariantList newList)
     {
         ST_ConnectionInfo connect=mapToConnectionInfo(newList.at(i).toMap());
 
-        qWarning()<<"mqtest refreshConnections append "<<newList.at(i).toMap();
+        //qWarning()<<"mqtest refreshConnections append "<<newList.at(i).toMap();
         m_connections.append(connect);
     }
     endResetModel();

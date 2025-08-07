@@ -230,6 +230,10 @@ class NetworkAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
 "      <arg direction=\"out\" type=\"i\"/>\n"
 "    </method>\n"
+"    <method name=\"getCableStateByDevice\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
+"      <arg direction=\"out\" type=\"b\"/>\n"
+"    </method>\n"
 
 "  </interface>\n"
         "")
@@ -266,6 +270,9 @@ public Q_SLOTS: // METHODS
     void showKylinNM(int type);
     Q_NOREPLY void showPropertyWidget(const QString &devName, const QString &ssid);
     int getDeviceConnectivity(const QString deviceName);
+
+    //获取网卡是否插入了网线
+    bool getCableStateByDevice(const QString deviceName);
 Q_SIGNALS: // SIGNALS
     void activateFailed(const QString &errorMessage);
     void deactivateFailed(const QString &errorMessage);

@@ -55,6 +55,7 @@ public:
     void showDetailPage(QString devName, QString uuid);
     void setWiredDeviceEnable(const QString& devName, bool enable);
     int getDeviceConnectivity(const QString deviceName);
+    bool getCableStateByDevice(const QString &deviceName);
 
     bool lanIsConnected();
     void getWiredDeviceConnectState(QMap<QString, QString> &map);

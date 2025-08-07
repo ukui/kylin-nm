@@ -98,11 +98,11 @@
     </message>
     <message>
         <source>connected</source>
-        <translation>已连接</translation>
+        <translation type="vanished">已连接</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation>未连接</translation>
+        <translation type="vanished">未连接</translation>
     </message>
     <message>
         <source>disconnect</source>
@@ -135,6 +135,26 @@
     <message>
         <source>Add Others...</source>
         <translation>加入其他网络...</translation>
+    </message>
+    <message>
+        <source>Connected,network is very good</source>
+        <translation type="unfinished">已连接，网络很好</translation>
+    </message>
+    <message>
+        <source>Connected,network is good</source>
+        <translation type="unfinished">已连接，网络好</translation>
+    </message>
+    <message>
+        <source>Connected,network is average</source>
+        <translation type="unfinished">已连接，网络一般</translation>
+    </message>
+    <message>
+        <source>Connected,network weak</source>
+        <translation type="unfinished">已连接，网络弱</translation>
+    </message>
+    <message>
+        <source>Connected,network is weak</source>
+        <translation type="unfinished">已连接，网络很弱</translation>
     </message>
 </context>
 </TS>

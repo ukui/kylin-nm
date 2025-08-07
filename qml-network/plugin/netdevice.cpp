@@ -70,6 +70,10 @@ void NetDevice::removeConnectionByName(QString devName)
 
 QVariantList NetDevice::getConnections()
 {
+    QVariantList list;
+    if(m_connectionsList.isEmpty()) {
+        return list;
+    }
     return m_connectionsList;
 }
 

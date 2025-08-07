@@ -51,7 +51,12 @@ target.path = $$[QT_INSTALL_LIBS]/qt5/qml/org/ukui/shortcut/network
 TRANSLATIONS += \
     translations/ukui-shortcut-network_zh_CN.ts \
     translations/ukui-shortcut-network_zh_Hant.ts \
-    translations/ukui-shortcut-network_zh_HK.ts
+    translations/ukui-shortcut-network_zh_HK.ts \
+    translations/ukui-shortcut-network_ug.ts \
+    translations/ukui-shortcut-network_mn.ts \
+    translations/ukui-shortcut-network_ky.ts \
+    translations/ukui-shortcut-network_kk.ts \
+    translations/ukui-shortcut-network_bo_CN.ts
 
 
 INSTALLS += inst1 \

@@ -699,7 +699,6 @@ void MobileHotspotWidget::setInterFaceFrame()
     m_interfaceComboBox->setMinimumWidth(COMBOBOX_MIN_WIDTH);
 
     m_warnWidget = new QWidget(this);
-    m_warnWidget->setFixedHeight(20);
     m_warnWidget->setContentsMargins(8,0,0,0);
 
     QHBoxLayout *warnTextHLayout = new QHBoxLayout(m_warnWidget);

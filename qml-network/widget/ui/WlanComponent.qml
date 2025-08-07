@@ -291,6 +291,11 @@ ListView {
                             }
                         }
 
+                        if (mouse.button == Qt.LeftButton) {
+                            textEdit.forceActiveFocus()
+                        } else if (mouse.button == Qt.RightButton) {
+                            propertyMenu.popup()
+                        }
                     }
                     onEntered: {
                         if (textEditLayout.visible)
@@ -306,15 +311,6 @@ ListView {
                         speedLabel.visible = (model.status === 2)
                         nameLabel.visible = true
                         nameStateLabel.visible = false
-                    }
-                    // 点击Item时候焦点聚焦
-                    onClicked: {
-                        mouse.accepted = false
-                        if (mouse.button == Qt.LeftButton) {
-                            textEdit.forceActiveFocus()
-                        } else if (mouse.button == Qt.RightButton) {
-                            propertyMenu.popup()
-                        }
                     }
                 }
             }

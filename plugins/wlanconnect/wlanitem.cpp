@@ -45,8 +45,12 @@ WlanItem::WlanItem(bool bAcitve, bool isLock, QWidget *parent)
     statusLabel = new QLabel(this);
     statusLabel->setProperty("useIconHighlightEffect", 0x2);
     statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-//    statusLabel->setMinimumSize(36,36);
     infoLabel = new GrayInfoButton(this);
+
+    iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    titileLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    statusLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
     mLanLyt->addWidget(iconLabel);
     mLanLyt->addWidget(titileLabel,Qt::AlignLeft);
     mLanLyt->addStretch();
@@ -104,29 +108,6 @@ void WlanItem::paintEvent(QPaintEvent *event)
     this->setPalette(pal);
 
     QRect rect = this->rect();
-
-#if 0
-    if (!useHalfFillet) {
-        painter.drawRect(rect);
-    } else {
-        QPainterPath path;
-//        path.addRoundedRect (rect, RADIUS, RADIUS);
-//        QRect temp_rect(rect.left(), rect.top(), rect.width(), rect.height()/2);
-//        path.addRect(temp_rect);
-        //设置起点
-        path.moveTo(rect.topLeft().x(), rect.topLeft().y());
-        path.lineTo(rect.bottomLeft().x(), rect.bottomLeft().y() - RADIUS);
-        //绘制圆角 圆弧以外切圆的270度位置为起点，逆时针画圆弧运行90度结束
-        path.arcTo(QRect(QPoint(rect.bottomLeft().x(), rect.bottomLeft().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 180, 90);
-        path.lineTo(rect.bottomRight().x()  - RADIUS, rect.bottomRight().y());
-        //画圆弧
-        path.arcTo(QRect(QPoint(rect.bottomRight().x() - (RADIUS * 2), rect.bottomRight().y() - (RADIUS * 2)), QSize(RADIUS * 2, RADIUS * 2)), 270, 90);
-        path.lineTo(rect.topRight());
-        path.lineTo(rect.topLeft());
-        painter.drawPath(path);
-    }
-#endif
-
     painter.drawRect(rect);
-    QPushButton::paintEvent(event);
+    return QPushButton::paintEvent(event);
 }

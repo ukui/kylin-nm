@@ -26,12 +26,10 @@ UkuiItems.DtThemeBackground {
             Item { Layout.fillWidth: true }
         }
 
-        Rectangle {
+        MenuSeparator {
             Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
-            Layout.preferredHeight: 1
             height: 1
-            color: Qt.rgba(0, 0, 0, 0.06)
         }
         ScrollView {
             visible: true
@@ -182,12 +180,11 @@ UkuiItems.DtThemeBackground {
                         width: 396
                     }
 
-                    Rectangle {
+                    MenuSeparator {
                         Layout.fillWidth: true
                         Layout.leftMargin: 16
                         Layout.rightMargin: 16
                         height: 1
-                        color: Qt.rgba(0, 0, 0, 0.06)
                     }
 
                     RowLayout {
@@ -308,12 +305,11 @@ UkuiItems.DtThemeBackground {
             }
         }
 
-        Rectangle {
+        MenuSeparator {
             Layout.alignment: Qt.AlignBottom
             Layout.fillWidth: true
             Layout.bottomMargin: 1
             height: 1
-            color: Qt.rgba(0, 0, 0, 0.06)
         }
 
         Item {

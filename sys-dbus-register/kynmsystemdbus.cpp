@@ -57,7 +57,10 @@ void KynmSystemDbus::init_conf()
 
 bool KynmSystemDbus::checkIpv4IsConflict(const QString devName, const QString ipv4Address, QStringList macList)
 {
+#if 0
+    //这里会让Dbus异常退出，先注释
     PEEK_LIMIT_RET(false);
+#endif
     bool isConflict = false;
     KyIpv4Arping* ipv4Arping = new KyIpv4Arping(devName, ipv4Address);
     if (ipv4Arping->ipv4ConflictCheck() >= 0) {
@@ -79,6 +82,7 @@ bool KynmSystemDbus::checkIpv4IsConflict(const QString devName, const QString ip
     delete ipv4Arping;
     ipv4Arping = nullptr;
 
+    qDebug() << "checkIpv4IsConflict : devName = " <<  devName << "ip = " << ipv4Address << "result = " << isConflict;
     return isConflict;
 }
 

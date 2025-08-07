@@ -57,7 +57,7 @@
 #define  TLS_SCRO_HEIGHT  480
 #define  MAX_TAB_TEXT_LENGTH 44
 #define  SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
-#define  SYSTEM_DBUS_PATH  "/com/kylin/network"
+#define  SYSTEM_DBUS_PATH  "/"  //systemdbus的路径是"/"
 #define  SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
 
 

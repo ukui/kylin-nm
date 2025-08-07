@@ -158,7 +158,7 @@ ListView {
 
             Rectangle {
                 id: speedLabel
-                visible: false
+                visible: true
                 Layout.preferredWidth: 140
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 

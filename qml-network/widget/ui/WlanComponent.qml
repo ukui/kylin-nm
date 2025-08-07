@@ -97,7 +97,7 @@ ListView {
                 mouse.accepted = false
 
                 if (model.status !== 2 ) {
-                    if (listItem.height == 145 ||  model.Configured || model.security.includes("802.1X")) {
+                    if (listItem.height == 145 ||  model.Configured || model.security.includes("802.1X") || model.security.includes("NONE") ) {
                         listItem.height = 56
                     } else {
                         listItem.height = 145
@@ -108,10 +108,11 @@ ListView {
                         textEditLayout.visible = false
                         connectBtn.visible = true
                     } else {
-                        textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X"))
+                        textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X") && !model.security.includes("NONE"))
                         connectBtn.visible = !textEditLayout.visible
                     }
-                } else if (model.status === 2) {
+                } else if ((model.status === 2) && (mouse.button == Qt.LeftButton) ) {
+                    console.log("onClicked return")
                     KInterface.deActivateConnect(wlanDeviceComboBox.currentText, model.ssid, 1);
                 }
 
@@ -460,7 +461,7 @@ ListView {
         Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
         hoverEnabled: true
 
-        Text {
+        UkuiItems.DtThemeText {
             text: qsTr("Add Others...")
             anchors.top: parent.top
             anchors.topMargin: (parent.height-height)/2   //垂直居中设置不生效使用边距控制居中

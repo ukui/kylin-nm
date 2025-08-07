@@ -48,6 +48,9 @@ QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkMana
            || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
         out += "802.1X ";
     }
+    if (out.isEmpty()) {
+        out += "NONE ";
+    }
     return out;
 }
 

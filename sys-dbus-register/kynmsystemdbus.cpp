@@ -132,8 +132,11 @@ bool KynmSystemDbus::getWiredMainSwitch()
 void KynmSystemDbus::setWiredDeviceSwitch(QString devName, bool enable)
 {
     qDebug() << Q_FUNC_INFO << __LINE__<< devName << enable;
-
+#if 0
+    //这里会让Dbus异常退出，先注释
     PEEK_LIMIT();
+#endif
+
     QString conf_name = devName+"-switch";
     if (m_kylinNmSettings->contains(conf_name) && enable != getWiredDeviceSwitch(conf_name))
     {
@@ -144,7 +147,11 @@ void KynmSystemDbus::setWiredDeviceSwitch(QString devName, bool enable)
 bool KynmSystemDbus::getWiredDeviceSwitch(QString devName)
 {
     qDebug() << Q_FUNC_INFO << __LINE__<< devName;
+#if 0
+    //这里会让Dbus异常退出，先注释
     PEEK_LIMIT_RET(false);
+#endif
+
     QString conf_name = devName+"-switch";
     if (m_kylinNmSettings->contains(conf_name))
         return m_kylinNmSettings->value(conf_name).toBool();

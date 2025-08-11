@@ -47,7 +47,7 @@ public:
 
     QMap<QString, QVariant> getConnectionByName(QString connName);
 
-    QList<QMap<QString, QVariant>> getConnections();
+    QVariantList getConnections();
 
     void clearConnections();
 
@@ -55,7 +55,7 @@ private:
     QString     m_Name;
     bool        m_Available;
     DeviceType  m_DevType;
-    QList<QMap<QString, QVariant>> m_connectionsList;
+    QVariantList m_connectionsList;
 };
 
 #endif // NETDEVICE_H

@@ -10,6 +10,9 @@ static const QStringList programWhiteList={
     "/usr/bin/kylin-nm",
     "/usr/bin/ukui-control-center",
     "/usr/bin/kylin-nm-plugin",
+    "/usr/bin/ukui-sidebar",
+    "/usr/bin/ukui-screensaver-dialog",
+    "/usr/bin/ukui-greeter"
 };
 
 #define  checkEnviron(ret,pid)    \

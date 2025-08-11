@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -19,6 +19,7 @@
  */
 #include "listitem.h"
 #include <QDebug>
+#include <QToolTip>
 
 #define MAIN_LAYOUT_MARGINS 0,0,0,0
 #define MAIN_LAYOUT_SPACING 0
@@ -37,6 +38,8 @@
 #define FREQLABLE_HIGHT 18
 #define FREQLABLE_MARGINS 4,0,4,0
 #define LOADIMG_SIZE 16,16
+#define NAME_LABEL_MIN_HEIGHT 16
+#define NAME_LABEL_MAX_HEIGHT 36
 
 FreqLabel::FreqLabel(QWidget *parent) : QLabel(parent)
 {
@@ -68,8 +71,8 @@ void FreqLabel::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing); //抗锯齿效果
-    auto rect = this->rect();
-    painter.drawRoundedRect(rect, 6, 6);
+    QRect rect(this->rect().left() + 1, this->rect().top() + 1, this->rect().width() - 2, this->rect().height() - 2);
+    painter.drawRoundedRect(rect, 4, 4);
     QLabel::paintEvent(event);
 }
 
@@ -186,10 +189,17 @@ void ListItem::showDesktopNotify(const QString &message, QString soundName)
     iface.callWithArgumentList(QDBus::AutoDetect,"Notify",args);
 }
 
+void ListItem::setConnectivityText(const QString connectivityText)
+{
+    m_connectivityLabel->setLabelText(connectivityText);
+}
+
 void ListItem::mousePressEvent(QMouseEvent *event)
 {
     qDebug()<<"[ListItem]"<<"mousePressEvent";
-    if (event->button() == Qt::RightButton) {
+    if (event->button() == Qt::LeftButton) {
+        onNetButtonClicked();
+    } else if (event->button() == Qt::RightButton) {
         onRightButtonClicked();
     }
     return QFrame::mousePressEvent(event);
@@ -197,11 +207,13 @@ void ListItem::mousePressEvent(QMouseEvent *event)
 
 void ListItem::mouseReleaseEvent(QMouseEvent *event)
 {
-    qDebug()<<"[ListItem]"<<"mouseReleaseEvent";
+    qDebug()<<"[ListItem]"<<"mousePressEvent";
     if (event->button() == Qt::LeftButton) {
-        onNetButtonClicked();
+        onNetButtonReleased();
+    } else if (event->button() == Qt::RightButton) {
+        onNetButtonReleased();
     }
-    return QFrame::mouseReleaseEvent(event);
+    return QFrame::mousePressEvent(event);
 }
 
 void ListItem::enterEvent(QEvent *event)
@@ -264,6 +276,17 @@ void ListItem::initUI()
     m_freq->setFixedHeight(FREQLABLE_HIGHT);
     m_freq->setContentsMargins(FREQLABLE_MARGINS);
     m_nameLabel = new NameLabel(m_itemFrame);
+
+    m_nameFrame = new QFrame(m_itemFrame);
+    m_connectivityLabel = new NameLabel(m_itemFrame);
+    m_connectivityLabel->setPointSizeOffset(-2);
+    QVBoxLayout *hLabelsLayout = new QVBoxLayout(m_nameFrame);
+    hLabelsLayout->setContentsMargins(0, 0, 0, 0);
+    hLabelsLayout->setSpacing(2);
+    hLabelsLayout->addWidget(m_nameLabel);
+    hLabelsLayout->addWidget(m_connectivityLabel);
+    m_connectivityLabel->hide();
+
     m_hoverButton = new FixPushButton(m_itemFrame);
     m_hoverButton->setProperty("needTranslucent", true);
     m_hoverButton->setFixedSize(CONNECT_BUTTON_WIDTH, PWD_AREA_HEIGHT);
@@ -295,7 +318,7 @@ void ListItem::initUI()
 
     m_hItemLayout->addWidget(m_netButton);
     m_hItemLayout->addSpacing(10);
-    m_hItemLayout->addWidget(m_nameLabel);
+    m_hItemLayout->addWidget(m_nameFrame);
     m_hItemLayout->addSpacing(6); //设计稿间距为8 nameLabel宽度另+2
     m_hItemLayout->addWidget(m_freq);
     m_hItemLayout->addStretch();
@@ -311,6 +334,7 @@ void ListItem::initUI()
     m_mainLayout->addWidget(m_itemFrame);
 
     m_hoverButton->hide();
+
 //    this->setAutoFillBackground(true);
 //    this->setBackgroundRole(QPalette::Base);
 //    QPalette pal = qApp->palette();
@@ -348,16 +372,29 @@ void ListItem::onPaletteChanged()
         pal.setColor(QPalette::Text, pal.color(QPalette::Text));
         m_menu->setPalette(pal);
     }
+
+    if (m_connectivityLabel != nullptr) {
+        QColor PlaceColor = this->palette().color(QPalette::PlaceholderText);
+        pal.setColor(QPalette::Text, PlaceColor);
+        m_connectivityLabel->setPalette(pal);
+    }
 }
+
 
 NameLabel::NameLabel(QWidget *parent)
     :QLabel(parent)
 {
+    this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
     const QByteArray id("org.ukui.style");
     QGSettings * fontSetting = new QGSettings(id, QByteArray(), this);
     if(QGSettings::isSchemaInstalled(id)){
+        m_systemPointSize = fontSetting->get("systemFontSize").toFloat();
         connect(fontSetting, &QGSettings::changed,[=](QString key) {
             if ("systemFont" == key || "systemFontSize" ==key) {
+                m_systemPointSize = fontSetting->get("systemFontSize").toFloat();
+                QFont font;
+                font.setPointSize(m_systemPointSize + m_pointSizeOffset);
+                this->setFont(font);
                 changedLabelSlot();
             }
         });
@@ -379,12 +416,22 @@ void NameLabel::setLabelMaximumWidth(int width)
     }
 }
 
+void NameLabel::setPointSizeOffset(int offset)
+{
+    m_pointSizeOffset = offset;
+    QFont font;
+    font.setPointSize(m_systemPointSize + m_pointSizeOffset);
+    this->setFont(font);
+}
+
 void NameLabel::changedLabelSlot()
 {
+    this->setMinimumHeight(NAME_LABEL_MIN_HEIGHT);
+    this->setMaximumHeight(NAME_LABEL_MAX_HEIGHT);
     QFontMetrics  fontMetrics(this->font());
     int fontSize = fontMetrics.width(m_name);
     if (fontSize > m_maximumWidth) {
-        this->setFixedWidth(m_maximumWidth - 2);
+        this->setFixedWidth(m_maximumWidth);
         setText(fontMetrics.elidedText(m_name, Qt::ElideRight, m_maximumWidth));
         setToolTip(m_name);
     } else {
@@ -392,4 +439,17 @@ void NameLabel::changedLabelSlot()
         setText(m_name);
         setToolTip("");
     }
+    this->adjustSize();
+    this->setFixedHeight(this->height());
+}
+
+bool NameLabel::event(QEvent *event)
+{
+    if (event->type() == QEvent::Paint) {
+        QPalette tooltipPal = QToolTip::palette();
+        tooltipPal.setColor(QPalette::ToolTipBase, this->palette().toolTipBase().color());
+        tooltipPal.setColor(QPalette::ToolTipText, this->palette().toolTipText().color());
+        QToolTip::setPalette(tooltipPal);
+    }
+    return QWidget::event(event);
 }

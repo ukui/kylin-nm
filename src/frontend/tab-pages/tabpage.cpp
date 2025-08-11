@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -25,14 +25,20 @@
 #include <QDBusReply>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QScreen>
 
 #include"listitem.h"
 
 #define LOG_FLAG "[tabPage]"
+#define PANEL_SETTINGS "org.ukui.panel.settings"
+#define PANEL_SIZE_KEY "panelsize"
+#define PANEL_POSITION_KEY "panelposition"
+#define ICONSIZE 16,16
 
 TabPage::TabPage(QWidget *parent) : QWidget(parent)
 {
     initUI();
+    initPanelGSettings();
     connect(qApp, &QApplication::paletteChanged, this, &TabPage::onPaletteChanged);
 }
 
@@ -41,6 +47,20 @@ TabPage::~TabPage()
     delete m_titleDivider;
     delete m_activatedNetDivider;
     delete m_inactivatedNetDivider;
+}
+
+bool TabPage::checkTimeIsOut(qint64 msTimeOut) {
+    static qint64 lastTime=0;
+    static QElapsedTimer systemUptime;
+    if(!systemUptime.isValid()) {
+        systemUptime.start();
+        return true;
+    }
+    if ((systemUptime.elapsed()-lastTime)>=msTimeOut) {
+        lastTime=systemUptime.elapsed();
+        return true;
+    }
+    return false;
 }
 
 void TabPage::initUI()
@@ -61,6 +81,21 @@ void TabPage::initUI()
     m_titleLayout->addStretch();
     m_titleLayout->addWidget(m_netSwitch);
     m_titleDivider = new Divider(true, this);
+
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-1-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-2-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-3-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-4-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-5-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-6-symbolic"));
+    m_loadIcons.append(QIcon::fromTheme("ukui-loading-7-symbolic"));
+    m_waitTimer = new QTimer(this);
+    connect(m_waitTimer, &QTimer::timeout, this, &TabPage::updateLoadingIcon);
+
+    m_statusLabel = new QLabel(this);
+    m_statusLabel->setProperty("useIconHighlightEffect", 0x2);
+    m_statusLabel->hide();
+    m_titleLayout->addWidget(m_statusLabel);
 
     //临时增加的下拉框选择网卡区域
     m_deviceFrame = new QFrame(this);
@@ -140,6 +175,10 @@ void TabPage::initUI()
     m_settingsLayout->addStretch();
     m_settingsFrame->setLayout(m_settingsLayout);
 
+    m_NoDeviceLabel = new KyLable(this);
+    m_NoDeviceLabel->hide();
+    m_NoDeviceLabel->setText(tr(""));
+    m_NoDeviceLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
     m_mainLayout->addWidget(m_titleFrame);
     //临时增加的设备选择区域
     m_mainLayout->addWidget(m_deviceFrame);
@@ -148,14 +187,39 @@ void TabPage::initUI()
     m_mainLayout->addWidget(m_activatedNetDivider);
     m_mainLayout->addWidget(m_inactivatedNetFrame);
     m_mainLayout->addStretch();
+    m_mainLayout->addWidget(m_NoDeviceLabel);
+    m_mainLayout->addStretch();
     m_mainLayout->addWidget(m_inactivatedNetDivider);
     m_mainLayout->addWidget(m_settingsFrame);
 
 //    QPalette pal = m_inactivatedNetListArea->palette();
 //    pal.setBrush(QPalette::Base, QColor(0,0,0,0));     //背景透明
 //    m_inactivatedNetListArea->setPalette(pal);
-
     onPaletteChanged();
+}
+
+void TabPage::initPanelGSettings()
+{
+    const QByteArray id(PANEL_SETTINGS);
+    if (QGSettings::isSchemaInstalled(id)) {
+        if (m_panelGSettings == nullptr) {
+            m_panelGSettings = new QGSettings(id, QByteArray(), this);
+        }
+        if (m_panelGSettings->keys().contains(PANEL_POSITION_KEY)) {
+            m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+        }
+        if (m_panelGSettings->keys().contains(PANEL_SIZE_KEY)) {
+            m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+        }
+        connect(m_panelGSettings, &QGSettings::changed, this, [&] (const QString &key) {
+            if (key == PANEL_POSITION_KEY) {
+                m_panelPosition = m_panelGSettings->get(PANEL_POSITION_KEY).toInt();
+            }
+            if (key == PANEL_SIZE_KEY) {
+                m_panelSize = m_panelGSettings->get(PANEL_SIZE_KEY).toInt();
+            }
+        });
+    }
 }
 
 void TabPage::onPaletteChanged()
@@ -234,6 +298,34 @@ int TabPage::getCurrentLoadRate(QString dev, long *save_rate, long *tx_rate)
     net_dev_file = nullptr;
 
     return 0; //返回成功
+}
+
+QRect TabPage::caculatePositionWithPanel(const int windowWidth, const int windowHeight)
+{
+    QRect availableGeo = QGuiApplication::screenAt(QCursor::pos())->geometry();
+    int x, y;
+    int margin = 8;
+
+    switch (m_panelPosition)
+    {
+    case PanelPosition::Top:
+        x = availableGeo.x() + availableGeo.width() - windowWidth - margin;
+        y = availableGeo.y() + m_panelSize + margin;
+        break;
+    case PanelPosition::Bottom:
+        x = availableGeo.x() + availableGeo.width() - windowWidth - margin;
+        y = availableGeo.y() + availableGeo.height() - m_panelSize - windowHeight - margin;
+        break;
+    case PanelPosition::Left:
+        x = availableGeo.x() + m_panelSize + margin;
+        y = availableGeo.y() + availableGeo.height() - windowHeight - margin;
+        break;
+    case PanelPosition::Right:
+        x = availableGeo.x() + availableGeo.width() - m_panelSize - windowWidth - margin;
+        y = availableGeo.y() + availableGeo.height() - windowHeight - margin;
+        break;
+    }
+    return QRect(x, y, windowWidth, windowHeight);
 }
 
 void TabPage::onSetNetSpeed(QListWidget* m_activatedNetListWidget, bool isEmpty, QString dev)
@@ -462,4 +554,104 @@ bool getOldVersionWiredSwitchState(bool &state)
     delete m_settings;
     m_settings = nullptr;
     return true;
+}
+
+void TabPage::showNoDeiceInfo(bool visible,QString text)
+{
+    m_NoDeviceLabel->setText(text);
+    if(visible) {
+        m_inactivatedNetFrame->hide();
+        m_activatedNetFrame->hide();
+        //m_deviceFrame->hide();
+        m_activatedNetDivider->hide();
+        m_inactivatedNetDivider->hide();
+        m_settingsFrame->hide();
+
+        m_NoDeviceLabel->resize(m_NoDeviceLabel->sizeHint()); // 设置标签大小以适应内容
+        m_NoDeviceLabel->show();
+        m_NoDeviceFlag=true;
+    } else {
+        m_NoDeviceLabel->hide();
+        m_inactivatedNetFrame->show();
+        m_activatedNetFrame->show();
+        m_activatedNetDivider->show();
+        m_inactivatedNetDivider->show();
+        //m_deviceFrame->show();
+        m_settingsFrame->show();
+        m_NoDeviceFlag=false;
+    }
+}
+
+bool TabPage::isNoDevice()
+{
+    return m_NoDeviceFlag;
+}
+
+void TabPage::updateLoadingIcon()
+{
+    if (m_currentIconIndex > 6) {
+        m_currentIconIndex = 0;
+    }
+    m_statusLabel->setPixmap(m_loadIcons.at(m_currentIconIndex).pixmap(ICONSIZE));
+    m_currentIconIndex ++;
+}
+
+void TabPage::startLoading()
+{
+    m_waitTimer->start(FRAME_SPEED);
+    m_netSwitch->hide();
+    m_statusLabel->setFocus();
+    m_statusLabel->show();
+}
+
+void TabPage::stopLoading()
+{
+    m_waitTimer->stop();
+    m_statusLabel->clearFocus();
+    m_statusLabel->hide();
+    m_netSwitch->show();
+}
+
+QString TabPage::changeDeviceStateText(QString deviceName,int state)
+{
+    QString finalShow="";
+    finalShow=deviceName+"  "+(state==2? tr("connected"):tr(""));
+    return finalShow;
+}
+
+void TabPage::updateDeviceConnectState(QString deviceName,int flag)
+{
+    int index=0;
+    int oldState=0;
+    QString devStrState;
+    if (!deviceName.isEmpty() && m_deviceState.contains(deviceName)) {
+        oldState=m_deviceState[deviceName];
+        if(oldState!=flag) {
+            m_deviceState[deviceName]=flag;
+            index=m_deviceComboBox->findData(deviceName);
+            if(index<0) {
+                qDebug() << "cannt find  " << deviceName;
+            }
+            devStrState=changeDeviceStateText(deviceName,flag);
+            QFontMetrics fm(m_deviceComboBox->font());
+            int textWidth = fm.horizontalAdvance(devStrState);
+            if (textWidth > DEVICE_COMBOBOX_WIDTH) {
+                QString completeStr = devStrState;
+                devStrState = fm.elidedText(devStrState, Qt::ElideRight, DEVICE_COMBOBOX_WIDTH);
+                m_deviceComboBox->setToolTip(completeStr);
+            }
+            m_deviceComboBox->setItemText(index,devStrState);
+            m_deviceComboBox->setItemData(index,deviceName);
+        }
+    }
+}
+
+void TabPage::replaceDeviceConnectState(QString oldName, QString newName)
+{
+    int flag = 0;
+    if (!newName.isEmpty() && m_deviceState.contains(oldName) && oldName!=newName) {
+        flag=m_deviceState[oldName];
+        m_deviceState.remove(oldName);
+        m_deviceState[newName]=flag;//不存在即创建
+    }
 }

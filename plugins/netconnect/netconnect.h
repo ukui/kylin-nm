@@ -94,7 +94,6 @@ private:
 
     void showDesktopNotify(const QString &message);
 
-
     //开关相关
     void setSwitchStatus();
     void hideLayout(QVBoxLayout * layout);
@@ -105,11 +104,14 @@ private:
     void deleteOneLan(QString ssid, int type);
     void activeConnect(QString ssid, QString deviceName, int type);
     void deActiveConnect(QString ssid, QString deviceName, int type);
+    void setDeviceAutoConnectState(QString deviceName, bool state);
 
     //获取设备列表
     void getDeviceStatusMap(QMap<QString, bool> &map);
     void initNet();
     void initNetListFromDevice(QString deviceName);
+    void initDeviceConnectivity(QString deviceName);
+    void updateDeviceFrameFromConnectivity(ItemFrame *frame, ConnectivityType type);
     //处理列表增加
     void addLanItem(ItemFrame *frame, QString devName, QStringList infoList, bool isActived);
     //增加设备
@@ -123,6 +125,9 @@ private:
 
     //单个lan连接状态变化
     void itemActiveConnectionStatusChanged(LanItem *item, int status);
+
+    // 打卡托盘网络窗口，后续需要跳转到指定密码框
+    void openKylinm();
 
     bool LaunchApp(QString desktopFile);
 

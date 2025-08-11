@@ -4,7 +4,7 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -26,6 +26,7 @@
 #define NAMELABLE_MAX_WIDTH_HOVER 220
 #define NAMELABLE_MAX_WIDTH_ACTIVATED 190
 #define NAMELABLE_MAX_WIDTH_DEACTIVATED 326
+#define V_MARGINS_SUM 14
 
 LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
                          const QString &deviceName, QWidget *parent):ListItem(parent)
@@ -35,10 +36,16 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
 
     connectItemCopy(lanConnectItem);
     m_deviceName = deviceName;
+
     m_nameLabel->setLabelText(m_lanConnectItem.m_connectName);
     m_netButton->setButtonIcon(QIcon::fromTheme("network-wired-connected-symbolic"));
 
     qDebug() << "LanListItem init:" << m_lanConnectItem.m_connectName << m_lanConnectItem.m_connectState << m_lanConnectItem.m_ifaceName;
+
+    KyConnectResourse resource;
+    if (resource.isPppoeConnection(m_lanConnectItem.m_connectUuid)) {
+       m_netButton->setButtonIcon(QIcon::fromTheme("ukui-dial-up-symbolic"));
+    }
 
     if (Deactivated == m_lanConnectItem.m_connectState || Activated == m_lanConnectItem.m_connectState) {
         m_netButton->stopLoading();
@@ -53,9 +60,13 @@ LanListItem::LanListItem(const KyConnectItem *lanConnectItem,
         m_netButton->startLoading();
     }
 
+    m_connectivityLabel->setLabelMaximumWidth(NAMELABLE_MAX_WIDTH_ACTIVATED);
+    m_connectivityLabel->hide();
+
     m_itemFrame->installEventFilter(this);
 //    connect(this->m_infoButton, &InfoButton::clicked, this, &LanListItem::onInfoButtonClicked);
     connect(m_hoverButton, &FixPushButton::clicked, this, &LanListItem::onNetButtonClicked);
+    connect(m_hoverButton, &FixPushButton::released, this, &LanListItem::onNetButtonReleased);
 }
 
 
@@ -113,12 +124,10 @@ void LanListItem::onNetButtonClicked()
     }
 
     if (Deactivated == m_lanConnectItem.m_connectState) {
-        //断开的连接，点击激活连接
         if (m_deviceResource->wiredDeviceIsCarriered(m_deviceName)) {
             m_connectOperation->activateWiredConnection(m_lanConnectItem.m_connectUuid, m_deviceName);
             qDebug() << LOG_FLAG << "it will activate connection" << m_lanConnectItem.m_connectName
                      << ". it's device is" << m_deviceName;
-            m_netButton->startLoading();
         } else {
             qDebug() << LOG_FLAG << m_deviceName << "is not carried, so can not activate connection";
             this->showDesktopNotify(tr("Wired Device not carried"), "networkwrong");
@@ -129,6 +138,24 @@ void LanListItem::onNetButtonClicked()
 
     return;
 
+}
+
+void LanListItem::onNetButtonReleased()
+{
+    if (Deactivated == m_lanConnectItem.m_connectState) {
+        m_hoverButton->setProperty("isImportant", true);
+        m_hoverButton->setProperty("useButtonPalette", false);
+        m_hoverButton->setButtonText(tr("Connect"));
+    } else {
+        m_hoverButton->setProperty("useButtonPalette", true);
+        m_hoverButton->setProperty("isImportant", false);
+        m_hoverButton->setButtonText(tr("Disconnect"));
+    }
+    if (Activating == m_lanConnectItem.m_connectState) {
+        m_netButton->startLoading();
+    } else {
+        m_netButton->stopLoading();
+    }
 }
 
 void LanListItem::onRightButtonClicked()
@@ -188,7 +215,7 @@ void LanListItem::onInfoButtonClicked()
             << m_lanConnectItem.m_connectUuid << "; name = " << m_lanConnectItem.m_connectName
             << "." <<Q_FUNC_INFO << __LINE__;
 #if 0
-   bool isActivated = false;
+    bool isActivated = false;
     if (Activated == m_lanConnectItem.m_connectState) {
         isActivated = true;
     }
@@ -214,16 +241,13 @@ void LanListItem::updateConnectionState(ConnectState state)
     m_lanConnectItem.m_connectState = (NetworkManager::ActiveConnection::State)state;
 
     if (Deactivated == state || Activated == state) {
-        m_netButton->stopLoading();
         if (state == Activated) {
             setIcon(true);
         } else {
             setIcon(false);
         }
-    } else {
-        m_netButton->startLoading();
     }
-
+    onNetButtonReleased();
     return;
 }
 
@@ -247,6 +271,22 @@ QString LanListItem::getConnectionPath()
 void LanListItem::updateConnectionPath(QString connectionPath)
 {
     m_lanConnectItem.m_connectPath = connectionPath;
+}
+
+void LanListItem::updateConnectivityText(QString connectivityText)
+{
+    if (!connectivityText.isEmpty()) {
+        m_connectivityLabel->setLabelText(connectivityText);
+        m_connectivityLabel->show();
+    } else {
+        m_connectivityLabel->setLabelText("");
+        m_connectivityLabel->hide();
+    }
+}
+
+int LanListItem::itemHeight()
+{
+    return m_nameLabel->height() + m_connectivityLabel->height() + V_MARGINS_SUM;
 }
 
 void LanListItem::enterEvent(QEvent *event)

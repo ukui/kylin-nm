@@ -27,15 +27,19 @@ public:
 
     QMap<QString, NetDevicePtr> wirelessDeviceList();
 
-    QList<QMap<QString, QVariant>> wiredDeviceConnList(QString devName);
+    QVariantList wiredDeviceConnList(QString devName);
 
-    QList<QMap<QString, QVariant>> wirelessDeviceConnList(QString devName);
+    QVariantList wirelessDeviceConnList(QString devName);
 
     QString getWiFiIcon(QString signalStrength, QString security, QString isApConnection, int category);
 
     bool wirelessSwitchState();
 
     bool wiredMainSwitchState();
+
+    QString upwardRateDate();
+
+    QString downwardRateDate();
 
     void rescanWirelessConn();
 
@@ -49,6 +53,20 @@ public:
 
     void setWiredMainSwitchEnable(bool enable);
 
+    void setUpwareRateData(QString str);
+
+    void setDownwareRateData(QString str);
+
+    void showPropertyWidget(QString devName, QString ssid);
+
+    void deleteConnect(int type, QString ssid);
+
+    void showAddOtherWlanPage(QString devName);
+
+    void getWirelessConList(QString dev);
+
+    void updateWirelessConListSync(QString dev);
+    void getCableStateByDevice(const QString &dev);
 //用于调用kylin-nm的dbus
 protected:
     QDBusPendingCallWatcher * asyncCall(const QString & methed, const QList<QVariant> & params);
@@ -59,7 +77,6 @@ protected:
 
     void getWiredConList(QString dev);
 
-    void getWirelessConList(QString dev);
 
     void getWirelessSwitchState();
 
@@ -74,6 +91,8 @@ protected slots:
     void updateWiredDeviceMap();
 
     void updateWirelessDeviceMap();
+
+    void updateWirelessDevice();
 
     void updateWiredDeviceMapFinished(QDBusPendingCallWatcher *watcher);
 
@@ -90,6 +109,8 @@ protected slots:
     void getWiredMainSwitchStateFinished(QDBusPendingCallWatcher *watcher);
 
     void setWiredMainSwitchEnableFinished(QDBusPendingCallWatcher *watcher);
+
+    void updateCableState(QDBusPendingCallWatcher *watcher);
 
 protected:
     QDBusInterface      *m_pInterface = nullptr;

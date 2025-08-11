@@ -57,7 +57,10 @@ void KynmSystemDbus::init_conf()
 
 bool KynmSystemDbus::checkIpv4IsConflict(const QString devName, const QString ipv4Address, QStringList macList)
 {
+#if 0
+    //这里会让Dbus异常退出，先注释
     PEEK_LIMIT_RET(false);
+#endif
     bool isConflict = false;
     KyIpv4Arping* ipv4Arping = new KyIpv4Arping(devName, ipv4Address);
     if (ipv4Arping->ipv4ConflictCheck() >= 0) {
@@ -79,6 +82,7 @@ bool KynmSystemDbus::checkIpv4IsConflict(const QString devName, const QString ip
     delete ipv4Arping;
     ipv4Arping = nullptr;
 
+    qDebug() << "checkIpv4IsConflict : devName = " <<  devName << "ip = " << ipv4Address << "result = " << isConflict;
     return isConflict;
 }
 
@@ -104,7 +108,10 @@ void KynmSystemDbus::setWiredMainSwitch(bool enable)
     qDebug() << Q_FUNC_INFO << __LINE__ << enable;
 
     message().service();
+#if 0
+    //这里会让Dbus异常退出，先注释
     PEEK_LIMIT();
+#endif
     if (enable != getWiredMainSwitch())
     {
         m_kylinNmSettings->setValue(KYLIN_NM_WIRED_MAIN_SWITCH, enable);
@@ -116,14 +123,20 @@ bool KynmSystemDbus::getWiredMainSwitch()
 {
     qDebug() << Q_FUNC_INFO << __LINE__ ;
 
+#if 0
+    //这里会让Dbus异常退出，先注释
     PEEK_LIMIT_RET(false);
+#endif
     return m_kylinNmSettings->value(KYLIN_NM_WIRED_MAIN_SWITCH).toBool();
 }
 void KynmSystemDbus::setWiredDeviceSwitch(QString devName, bool enable)
 {
     qDebug() << Q_FUNC_INFO << __LINE__<< devName << enable;
-
+#if 0
+    //这里会让Dbus异常退出，先注释
     PEEK_LIMIT();
+#endif
+
     QString conf_name = devName+"-switch";
     if (m_kylinNmSettings->contains(conf_name) && enable != getWiredDeviceSwitch(conf_name))
     {
@@ -134,7 +147,11 @@ void KynmSystemDbus::setWiredDeviceSwitch(QString devName, bool enable)
 bool KynmSystemDbus::getWiredDeviceSwitch(QString devName)
 {
     qDebug() << Q_FUNC_INFO << __LINE__<< devName;
+#if 0
+    //这里会让Dbus异常退出，先注释
     PEEK_LIMIT_RET(false);
+#endif
+
     QString conf_name = devName+"-switch";
     if (m_kylinNmSettings->contains(conf_name))
         return m_kylinNmSettings->value(conf_name).toBool();

@@ -51,7 +51,8 @@ void NetDevice::removeConnection(QMap<QString, QVariant> connections)
 void NetDevice::removeConnection(QString path)
 {
     for (int i = 0; i < m_connectionsList.count(); i++) {
-        if (m_connectionsList.at(i).value("Path").toString() == path) {
+        QMap<QString, QVariant>valueMap=m_connectionsList.at(i).toMap();
+        if (valueMap.value("Path").toString() == path) {
             m_connectionsList.removeAt(i);
         }
     }
@@ -60,14 +61,19 @@ void NetDevice::removeConnection(QString path)
 void NetDevice::removeConnectionByName(QString devName)
 {
     for (int i = 0; i < m_connectionsList.count(); i++) {
-        if (m_connectionsList.at(i).value("Name").toString() == devName) {
+        QMap<QString, QVariant>valueMap=m_connectionsList.at(i).toMap();
+        if (valueMap.value("Name").toString() == devName) {
             m_connectionsList.removeAt(i);
         }
     }
 }
 
-QList<QMap<QString, QVariant>> NetDevice::getConnections()
+QVariantList NetDevice::getConnections()
 {
+    QVariantList list;
+    if(m_connectionsList.isEmpty()) {
+        return list;
+    }
     return m_connectionsList;
 }
 
@@ -76,8 +82,9 @@ QMap<QString, QVariant> NetDevice::updateConnection(QString uuid, int status)
     int i = 0;
     QMap<QString, QVariant> conn;
     while (i < m_connectionsList.count()) {
-        if (m_connectionsList.at(i).value("Uuid").toString() == uuid) {
-            conn = m_connectionsList.takeAt(i);
+        QMap<QString, QVariant>valueMap=m_connectionsList.at(i).toMap();
+        if (valueMap.value("Uuid").toString() == uuid) {
+            conn = m_connectionsList.takeAt(i).toMap();
             conn.remove("State");
             conn.insert("State", status);
             if (status == ACTIVATED) {
@@ -94,12 +101,13 @@ QMap<QString, QVariant> NetDevice::updateConnection(QString uuid, int status)
 bool NetDevice::containsConnection(QString uuidOrPath)
 {
     for (int i = 0; i < m_connectionsList.count(); i++) {
-        if (m_connectionsList.at(i).value("Uuid").toString() == uuidOrPath) {
+        QMap<QString, QVariant>valueMap=m_connectionsList.at(i).toMap();
+        if (valueMap.value("Uuid").toString() == uuidOrPath) {
             return true;
         }
         if (m_DevType == WIRELESS_DEVICE)
             continue;
-        if (m_connectionsList.at(i).value("Path").toString() == uuidOrPath) {
+        if (valueMap.value("Path").toString() == uuidOrPath) {
             return true;
         }
     }
@@ -109,7 +117,8 @@ bool NetDevice::containsConnection(QString uuidOrPath)
 bool NetDevice::containsConnectionName(QString connName)
 {
     for (int i = 0; i < m_connectionsList.count(); i++) {
-        if (m_connectionsList.at(i).value("Name").toString() == connName) {
+        QMap<QString, QVariant>valueMap=m_connectionsList.at(i).toMap();
+        if (valueMap.value("Name").toString() == connName) {
             return true;
         }
     }
@@ -125,8 +134,9 @@ QMap<QString, QVariant> NetDevice::getConnectionByName(QString connName)
 {
     QMap<QString, QVariant> ret;
     for (int i = 0; i < m_connectionsList.count(); i++) {
-        if (m_connectionsList.at(i).value("Name").toString() == connName) {
-            return m_connectionsList.at(i);
+         QMap<QString, QVariant>valueMap=m_connectionsList.at(i).toMap();
+        if (valueMap.value("Name").toString() == connName) {
+            return m_connectionsList.at(i).toMap();
         }
     }
     return ret;

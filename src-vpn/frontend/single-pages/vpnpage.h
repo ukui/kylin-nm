@@ -43,9 +43,6 @@
 
 #define LOG_FLAG "[VpnPage]"
 
-#define VISIBLE "visible"
-const QByteArray GSETTINGS_VPNICON_VISIBLE = "org.ukui.kylin-nm.vpnicon";
-
 class VpnListItem;
 
 class VpnPage : public SinglePage
@@ -83,7 +80,7 @@ private:
     void updateConnectionArea(KyConnectItem *p_newItem);
     void updateActivatedConnectionArea(KyConnectItem *p_newItem);
     void updateConnectionState(QMap<QString, QListWidgetItem *> &connectMap,
-                                        QListWidget *vpnListWidget, QString uuid, ConnectState state);
+                               QListWidget *vpnListWidget, QString uuid, ConnectState state);
 
     void updateActiveConnectionProperty(KyConnectItem *p_connectItem);
     void updateConnectionProperty(KyConnectItem *p_connectItem);
@@ -96,7 +93,7 @@ private:
                             QListWidget *vpnListWidget);
     void deleteConnectionMapItem(QMap<QString, QListWidgetItem *> &connectMap,
                                  QListWidget *vpnListWidget, QString uuid);
-    void slideWindowByPanelPosition();
+
     void resetWindowPosition();
     void resetListWidgetWidth();
 
@@ -127,14 +124,10 @@ private:
     QMap<QString, QListWidgetItem *> m_vpnItemMap;
     QMap<QString, QListWidgetItem *> m_activeItemMap;
 
-
     //获取任务栏位置和大小
     QGSettings *m_panelGSettings = nullptr;
     int m_panelPosition;
     int m_panelSize;
-    int m_panelType;
-    int m_settingsIslandPosition;
-    int m_topbarSize;
 
 
 public Q_SLOTS:

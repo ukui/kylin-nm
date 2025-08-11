@@ -162,7 +162,7 @@ bool MobileHotspot::isExitWirelessDevice()
                 iter++;
                 continue;
             }
-            if (deviceListMap[interfaceName] & 0x01) {
+            if (devCapMap[interfaceName] & 0x01) {
                 qDebug() << "wireless device" <<  interfaceName << "support hotspot";
                 return true;
             }

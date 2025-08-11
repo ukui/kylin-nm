@@ -8,7 +8,10 @@ KnmDataKeeper::KnmDataKeeper(QObject *parent)
 
 KnmDataKeeper::~KnmDataKeeper()
 {
-
+    if (nullptr != m_pSpeedTimer) {
+        delete m_pSpeedTimer;
+        m_pSpeedTimer = nullptr;
+    }
 }
 
 void KnmDataKeeper::addDevice(QString devName, bool isAvailable, DeviceType type)
@@ -52,13 +55,18 @@ void KnmDataKeeper::setSwitchState(bool switched)
     m_switchState = switched;
 }
 
-QList<QMap<QString, QVariant>> KnmDataKeeper::getDevConnections(QString devName)
+QVariantList KnmDataKeeper::getDevConnections(QString devName)
 {
-    QList<QMap<QString, QVariant>> ret;
+    QVariantList ret;
     if (m_deviceList.isEmpty() || !m_deviceList.contains(devName))
         return ret;
     m_currentDev = devName;
 //    m_pSpeedTimer->start();
+    NetDevicePtr dev = m_deviceList.value(devName);
+    if(dev.isNull()) {
+        qWarning() << Q_FUNC_INFO << __LINE__ << devName << "no device";
+        return ret;
+    }
     return m_deviceList.value(devName)->getConnections();
 }
 
@@ -186,17 +194,35 @@ void KnmDataKeeper::netSpeedHandler(QString dev, QString& upLoad, QString& downL
     downLoad = str_rcv;
 }
 
+void KnmDataKeeper::slotSpeedTimeout()
+{
+    QString upLoad, downLoad;
+    netSpeedHandler(m_currentDev, upLoad, downLoad);
+    setUpwardRate(upLoad);
+    setDownwardRate(downLoad);
+    NetDevicePtr dev=m_deviceList[m_currentDev];
+    if(!dev.isNull() && dev->getDevType()==WIRED_DEVICE)
+    {
+        emit KInterface::getInstance()->updateUpLoadWiredStr(upLoad);
+        emit KInterface::getInstance()->updateDownLoadWiredStr(downLoad);
+    }
+    else
+    {
+        emit KInterface::getInstance()->updateUpLoadWirelessStr(upLoad);
+        emit KInterface::getInstance()->updateDownLoadWirelessStr(downLoad);
+    }
+}
+
 void KnmDataKeeper::netSpeedInit()
 {
+
     //定时获取网速
     m_pSpeedTimer = new QTimer(this);
     m_pSpeedTimer->setTimerType(Qt::PreciseTimer);
-    connect(m_pSpeedTimer, &QTimer::timeout,  [&]() {
-        QString upLoad, downLoad;
-        netSpeedHandler(m_currentDev, upLoad, downLoad);
-        KInterface::getInstance()->updateUpLoadWiredStr(upLoad);
-        KInterface::getInstance()->updateDownLoadWiredStr(downLoad);
-    });
+    m_pSpeedTimer->start(1000);
+
+
+    connect(m_pSpeedTimer, &QTimer::timeout, this,&KnmDataKeeper::slotSpeedTimeout);
 
     // //定时获取网速
     // m_pSpeedTimer = new QTimer(this);
@@ -218,3 +244,26 @@ void KnmDataKeeper::netSpeedInit()
     //     KInterface::getInstance()->updateDownLoadWirelessStr(downLoad);
     // });
 }
+
+void KnmDataKeeper::setUpwardRate(QString str)
+{
+    m_upward_rate = str;
+}
+
+QString KnmDataKeeper::getUpwardRate()
+{
+    return m_upward_rate;
+}
+
+void KnmDataKeeper::setDownwardRate(QString str)
+{
+    m_downward_rate = str;
+}
+
+QString KnmDataKeeper::getDownwardRate()
+{
+    return m_downward_rate;
+}
+
+
+

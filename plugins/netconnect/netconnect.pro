@@ -54,6 +54,7 @@ INSTALLS += target \
 
 TRANSLATIONS += \
         translations/zh_Hant.ts \
+        translations/zh_HK.ts \
         translations/zh_CN.ts \
         translations/ug.ts \
         translations/tr.ts \

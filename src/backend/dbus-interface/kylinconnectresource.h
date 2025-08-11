@@ -55,10 +55,12 @@ public:
     void getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting);
     bool getInterfaceByUuid(QString &deviceName, const QString connUuid);
     void getConnectivity(NetworkManager::Connectivity &connectivity);
+    NetworkManager::ActiveConnection::State getActiveConnectionState(const QString uuid);
 
     bool isVirtualConncection(QString uuid);
     bool isWiredConnection(QString uuid);
     bool isWirelessConnection(QString uuid);
+    bool isPppoeConnection(QString uuid);
     bool isActivatedConnection(QString uuid);
     bool isApConnection(QString uuid);
 

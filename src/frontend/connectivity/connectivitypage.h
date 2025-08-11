@@ -34,6 +34,8 @@ private:
     QLabel *m_icon;
     QLabel *m_statusText;
     QLabel *m_text;
+    QLabel *m_publicTextLabel;
+    QLabel *m_intranetTextLabel;
     QRadioButton *m_publicNetworkButton;
     QRadioButton *m_intranetButton;
     QLineEdit *m_uriEdit;
@@ -43,6 +45,7 @@ private:
 
     void initUi();
     void initConnect();
+    void centerToScreen();
 
 private Q_SLOTS:
     void setWarning(NetworkManager::Connectivity connectivity);

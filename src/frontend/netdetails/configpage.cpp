@@ -119,6 +119,6 @@ void ConfigPage::onConfigButtonClicked()
     qDebug() << "show ksc defender net protect";
 
     QProcess process;
-    process.startDetached("/usr/sbin/ksc-defender --net-protect");
+    process.startDetached("/usr/sbin/ksc-defender --firewall");
 
 }

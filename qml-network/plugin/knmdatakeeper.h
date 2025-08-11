@@ -39,7 +39,7 @@ public:
     QMap<QString, NetDevicePtr> getDeviceList();
 
     //获取单个网卡设备的连接列表
-    QList<QMap<QString, QVariant>> getDevConnections(QString devName);
+    QVariantList getDevConnections(QString devName);
 
     void setSwitchState(bool switched);
 
@@ -48,6 +48,14 @@ public:
     void setWiredMainSwitchState(bool switched);
 
     bool getWiredMainSwitchState();
+
+    QString getUpwardRate();
+
+    QString getDownwardRate();
+
+    void setUpwardRate(QString);
+
+    void setDownwardRate(QString);
 
 protected:
     //网速计时器初始化
@@ -59,6 +67,7 @@ protected:
     //获取当前网卡负载率
     int getCurrentLoadRate(QString dev, long *save_rate, long *tx_rate);
 
+    void slotSpeedTimeout();
 protected:
     bool m_connected = false;
 
@@ -78,6 +87,12 @@ protected:
     long int start_tx_rates = 0;
     //保存结束时的流量计数
     long int end_tx_rates = 0;
+
+    //
+    QString m_upward_rate;
+
+    QString m_downward_rate;
+
 
     //设备列表,QString为网卡名,NetDevicePtr为网卡数据类
     QMap<QString, NetDevicePtr> m_deviceList;

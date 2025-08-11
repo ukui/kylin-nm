@@ -48,6 +48,9 @@ QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkMana
            || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
         out += "802.1X ";
     }
+    if (out.isEmpty()) {
+        out += "NONE ";
+    }
     return out;
 }
 
@@ -77,11 +80,13 @@ KyNetworkResourceManager::KyNetworkResourceManager(QObject *parent) : QObject(pa
     qRegisterMetaType<NetworkManager::Device::Type>("NetworkManager::Device::Type");
     qRegisterMetaType<NetworkManager::Device::State>("NetworkManager::Device::State");
     qRegisterMetaType<NetworkManager::Device::StateChangeReason>("NetworkManager::Device::StateChangeReason");
+    qRegisterMetaType<NetworkManager::VpnConnection::State>("NetworkManager::VpnConnection::State");
+    qRegisterMetaType<NetworkManager::VpnConnection::StateChangeReason>("NetworkManager::VpnConnection::StateChangeReason");
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.DBus"),
-                                             QString("/org/freedesktop/DBus"),
-                                             QString("org.freedesktop.DBus"),
-                                             QString("NameOwnerChanged"), this, SLOT(onServiceAppear(QString,QString,QString)));
+                                         QString("/org/freedesktop/DBus"),
+                                         QString("org.freedesktop.DBus"),
+                                         QString("NameOwnerChanged"), this, SLOT(onServiceAppear(QString,QString,QString)));
 
     QDBusConnection::systemBus().connect(QString("org.freedesktop.NetworkManager"),
                                          QString("/org/freedesktop/NetworkManager"),
@@ -546,6 +551,29 @@ bool KyNetworkResourceManager::isActivatingConnection(QString uuid)
     return false;
 }
 
+NetworkManager::ActiveConnection::State KyNetworkResourceManager::getActiveConnectionState(const QString uuid)
+{
+    int index = 0;
+    NetworkManager::ActiveConnection::Ptr activateConnectPtr = nullptr;
+
+    if (uuid.isEmpty()) {
+        return NetworkManager::ActiveConnection::State::Unknown;
+    }
+
+    for (index = 0; index < m_activeConns.size(); ++index) {
+        activateConnectPtr = m_activeConns.at(index);
+        if (activateConnectPtr.isNull()) {
+            continue;
+        }
+
+        if (activateConnectPtr->uuid() == uuid) {
+            return activateConnectPtr->state();
+        }
+    }
+
+    return NetworkManager::ActiveConnection::State::Unknown;
+}
+
 void KyNetworkResourceManager::getConnectivity(NetworkManager::Connectivity &connectivity)
 {
     connectivity = NetworkManager::connectivity();
@@ -918,6 +946,29 @@ void KyNetworkResourceManager::onWifiNetworkDisappeared(QString const & ssid)
     }
 
     return;
+}
+
+void KyNetworkResourceManager::onDevicePropertiesChanged(QString interface, QVariantMap qvm)
+{
+    if (interface.compare(QString("org.freedesktop.NetworkManager.Device"), Qt::CaseSensitive)) {
+        return;
+    }
+
+    for(QString keyStr : qvm.keys()) {
+        //连通性变化
+        if (keyStr == "Ip4Connectivity") {
+            NetworkManager::Connectivity connectivity = NetworkManager::Connectivity::UnknownConnectivity;
+            connectivity = (NetworkManager::Connectivity)qvm.value(keyStr).toUInt();
+
+            QString uni = message().path();
+            NetworkManager::Device::Ptr devicePtr = findDeviceUni(uni);
+            if(devicePtr.isNull()) {
+                qWarning()<< LOG_FLAG << "device invalid" << Q_FUNC_INFO;
+                break;
+            }
+            Q_EMIT deviceConnectivityChanged(devicePtr->interfaceName(), connectivity);
+        }
+    }
 }
 
 void KyNetworkResourceManager::onReferenceAccessPointChanged()

@@ -33,8 +33,8 @@ QT_END_NAMESPACE
 /*
  * Adaptor class for interface com.kylin.weather
  */
-#define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
-#define SYSTEM_DBUS_PATH  "/"
+#define SYSTEM_DBUS_SERVICE   "com.kylin.network.qt.systemdbus"
+#define SYSTEM_DBUS_PATH      "/"
 #define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
 
 #include "mainwindow.h"
@@ -64,12 +64,15 @@ public Q_SLOTS: // METHODS
 //    QString getDefaultWiredDevice();
 //    Q_NOREPLY void setDefaultWirelessDevice(QString deviceName);
 //    QString  getDefaultWirelessDevice();
-    //刪除 根据网络名称 参数1 0:lan 1:wlan 参数2 为ssid/uuid
-    void deleteConnect(int type, QString ssid);
     //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void activateConnect(int type, QString devName, QString ssid);
     //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void deActivateConnect(int type, QString devName, QString ssid);
+    //delete network connect
+    Q_NOREPLY void deleteConnect(int type,QString Uuid);
+    //dev autoconnect
+    Q_NOREPLY void setDeviceAutoConnectState(QString devName, bool state);
+
     //获取设备列表和启用/禁用状态
     QVariantMap getDeviceListAndEnabled(int devType);
     //获取无线设备能力
@@ -101,6 +104,11 @@ public Q_SLOTS: // METHODS
 
     bool getWirelessSwitchBtnState();
     bool getWiredMainSwitchBtnState();
+
+    int getDeviceConnectivity(const QString deviceName);
+
+    //获取网卡是否插入了网线
+    bool getCableStateByDevice(const QString deviceName);
 Q_SIGNALS: // SIGNALS
 //    void wirelessActivating(QString devName, QString ssid);
 //    void wiredActivating(QString devName, QString ssid);
@@ -153,6 +161,7 @@ private:
     bool registerService();
 private Q_SLOT:
     void onServiceOwnerChanged(const QString &service, const QString &oldOwner, const QString &newOwner);
+    void onWiredMainSwitchBtnChanged(bool);
 };
 
 #endif

@@ -45,8 +45,8 @@
 #include "connectdevlistitem.h"
 #include "blacklistpage.h"
 #include "connectdevpage.h"
-#include "klabel.h"
 #include "ukcccommon.h"
+#include "klabel.h"
 
 using namespace kdk;
 using namespace ukcc;
@@ -71,10 +71,10 @@ private:
     KLabel *m_hotspotTitleLabel;
     QLabel *m_switchLabel;
     QLabel *m_apNameLabel;
-    QLabel *m_pwdLabel;
+    KLabel *m_pwdLabel;
     QLabel *m_pwdHintLabel;
     KLabel *m_freqBandLabel;
-    QLabel *m_interfaceLabel;
+    KLabel *m_interfaceLabel;
 
     QFrame *switchAndApNameLine;
     QFrame *apNameAndPwdLine;
@@ -151,6 +151,7 @@ private:
     void initBlackListPage();
 
     bool m_isUserSelect = true;  //是否用户操作
+
 signals:
 
 private slots:

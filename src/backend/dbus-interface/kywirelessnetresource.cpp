@@ -257,6 +257,7 @@ bool KyWirelessNetResource::getActiveWirelessNetItem(QString deviceName, KyWirel
         if (m_WifiNetworkList[deviceName].at(index).m_NetSsid  == ssid) {
             wirelessNetItem = m_WifiNetworkList[deviceName].at(index);
             updatewirelessItemConnectInfo(wirelessNetItem);
+            m_WifiNetworkList[deviceName].replace(index,wirelessNetItem);
             qDebug()<< LOG_FLAG << "getWifiNetwork success";
             return true;
         }
@@ -854,6 +855,7 @@ void KyWirelessNetResource::onConnectionRemove(QString path)
 void KyWirelessNetResource::onConnectionUpdate(QString uuid)
 {
     qDebug()<< LOG_FLAG << "onConnectionUpdate " << uuid;
+    KyWirelessNetItem temp;
     NetworkManager::Connection::Ptr conn = m_networkResourceInstance->getConnect(uuid);
     if (conn.isNull()) {
         qDebug()<< LOG_FLAG  << "onConnectionAdd can not find connection" << uuid;
@@ -884,7 +886,9 @@ void KyWirelessNetResource::onConnectionUpdate(QString uuid)
             if (uuid == itemIter->m_connectUuid) {
                 if (itemIter->m_NetSsid != ssid ||
                         (iter.key() != dev && !dev.isEmpty())) {
-                    updatewirelessItemConnectInfo(*itemIter);
+                    temp=*itemIter;
+                    updatewirelessItemConnectInfoEx(&temp);
+                    *itemIter=temp;
                     Q_EMIT connectionUpdate(iter.key(), itemIter->m_NetSsid);
 
                     //判断netptr是否为空 空返回
@@ -900,7 +904,9 @@ void KyWirelessNetResource::onConnectionUpdate(QString uuid)
             //更新WIFI 的connect相关变量 emit update to ui
             if (ssid == itemIter->m_NetSsid) {
                 if (iter.key() == dev || dev.isEmpty()) {
-                    updatewirelessItemConnectInfo(*itemIter);
+                    temp=*itemIter;
+                    updatewirelessItemConnectInfoEx(&temp);
+                    *itemIter=temp;
                     Q_EMIT connectionUpdate(dev, itemIter->m_NetSsid);
                 }
             }

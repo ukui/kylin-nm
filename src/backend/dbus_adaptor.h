@@ -78,6 +78,9 @@ class NetworkAdaptor: public QDBusAbstractAdaptor
 "    <signal name=\"wirelessSwitchBtnChanged\">\n"
 "      <arg direction=\"out\" type=\"b\" name=\"state\"/>\n"
 "    </signal>\n"
+"    <signal name=\"wiredMainSwitchBtnChanged\">\n"
+"      <arg direction=\"out\" type=\"b\" name=\"state\"/>\n"
+"    </signal>\n"
 "    <signal name=\"hotspotDeactivated\">\n"
 "      <arg direction=\"out\" type=\"s\" name=\"devName\"/>\n"
 "      <arg direction=\"out\" type=\"s\" name=\"ssid\"/>\n"
@@ -155,6 +158,11 @@ class NetworkAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"s\" name=\"ssid\"/>\n"
 "      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
 "    </method>\n"
+"    <method name=\"setDeviceAutoConnectState\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"devName\"/>\n"
+"      <arg direction=\"in\" type=\"b\" name=\"state\"/>\n"
+"      <annotation value=\"true\" name=\"org.freedesktop.DBus.Method.NoReply\"/>\n"
+"    </method>\n"
 "    <method name=\"getDeviceListAndEnabled\">\n"
 "      <arg direction=\"out\" type=\"a{sv}\"/>\n"
 "      <annotation value=\"QVariantMap\" name=\"org.qtproject.QtDBus.QtTypeName.Out0\"/>\n"
@@ -223,6 +231,15 @@ class NetworkAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"getWiredMainSwitchBtnState\">\n"
 "      <arg direction=\"out\" type=\"b\"/>\n"
 "    </method>\n"
+"    <method name=\"getDeviceConnectivity\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
+"      <arg direction=\"out\" type=\"i\"/>\n"
+"    </method>\n"
+"    <method name=\"getCableStateByDevice\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"deviceName\"/>\n"
+"      <arg direction=\"out\" type=\"b\"/>\n"
+"    </method>\n"
+
 "  </interface>\n"
         "")
 public:
@@ -235,6 +252,7 @@ public Q_SLOTS: // METHODS
     void activeWirelessAp(const QString &apName, const QString &apPassword, const QString &band, const QString &apDevice);
     Q_NOREPLY void deActivateConnect(int type, const QString &devName, const QString &ssid);
     Q_NOREPLY void deleteConnect(int type, const QString &ssid);
+    Q_NOREPLY void setDeviceAutoConnectState(const QString &deviceName, bool state);
     void deactiveWirelessAp(const QString &apName, const QString &uuid);
     QString getActiveConnectionPath(const QString &uuid);
     QString getApConnectionPath(const QString &uuid);
@@ -257,6 +275,10 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void showCreateWiredConnectWidget(const QString &devName);
     void showKylinNM(int type);
     Q_NOREPLY void showPropertyWidget(const QString &devName, const QString &ssid);
+    int getDeviceConnectivity(const QString deviceName);
+
+    //获取网卡是否插入了网线
+    bool getCableStateByDevice(const QString deviceName);
 Q_SIGNALS: // SIGNALS
     void activateFailed(const QString &errorMessage);
     void deactivateFailed(const QString &errorMessage);
@@ -277,6 +299,7 @@ Q_SIGNALS: // SIGNALS
     void timeToUpdate();
     void wirelessDeviceStatusChanged();
     void wirelessSwitchBtnChanged(bool state);
+    void wiredMainSwitchBtnChanged(bool state);
     void wlanAdd(const QString &devName, const QStringList &info);
     void wlanRemove(const QString &devName, const QString &ssid);
     void wlanactiveConnectionStateChanged(const QString &devName, const QString &ssid, const QString &uuid, int status);

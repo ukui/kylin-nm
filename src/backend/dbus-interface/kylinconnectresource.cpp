@@ -484,6 +484,11 @@ void KyConnectResourse::getConnectivity(NetworkManager::Connectivity &connectivi
     m_networkResourceInstance->getConnectivity(connectivity);
 }
 
+NetworkManager::ActiveConnection::State KyConnectResourse::getActiveConnectionState(const QString uuid)
+{
+    return m_networkResourceInstance->getActiveConnectionState(uuid);
+}
+
 void KyConnectResourse::getConnectionSetting(QString connectUuid, KyConnectSetting &connectSetting)
 {
     qDebug() <<"[KyConnectResourse]" << connectUuid <<"get connect setting info, connect uuid";
@@ -897,6 +902,33 @@ bool KyConnectResourse::isWirelessConnection(QString uuid)
 
         if (NetworkManager::ConnectionSettings::ConnectionType::Wireless ==
                 connectPtr->settings()->connectionType()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool KyConnectResourse::isPppoeConnection(QString uuid)
+{
+    NetworkManager::Connection::Ptr connectPtr =
+        m_networkResourceInstance->getConnect(uuid);
+    if (connectPtr.isNull()) {
+        qWarning()<<"[KyConnectResourse]"<<"can not find wireless connection"<<uuid;
+        return false;
+    }
+
+
+    if (connectPtr->isValid()) {
+        NetworkManager::ConnectionSettings::Ptr connectSettingPtr = connectPtr->settings();
+
+        if (connectSettingPtr.isNull()) {
+            qWarning()<<"[KyConnectResourse]"<<"get connect setting failed, connect uuid"<<uuid;
+            return false;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Pppoe ==
+            connectPtr->settings()->connectionType()) {
             return true;
         }
     }

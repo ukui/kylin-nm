@@ -12,21 +12,70 @@ ListView {
     visible: lanswitchBtn.checked && lanVisibleButton.visibleState  && !lanNoWiredItem.visible
     model: KInterface.wiredConList
     spacing: 0
+    property bool connectMac : false
+
+    function updateMacConnAttr(ipos, status) {
+        if(0 === ipos)
+            connectMac = status
+    }
 
     // 定义每个项的显示方式
     delegate: ItemDelegate {
         highlighted: enteritem && lanlistView.currentIndex === index
         width: lanlistView.width
         height: 56
-        Layout.leftMargin: 8
         property bool enteritem : false
+        property bool conConnected:   modelData.State === 2
+        onConConnectedChanged: {
+            updateMacConnAttr(index, conConnected)
+        }
+
+        Component.onCompleted: {
+            updateMacConnAttr(index, conConnected)
+        }
 
         RowLayout {
             anchors.fill: parent
 
+            Menu {
+                id: propertyMenu
+
+                MenuItem {
+                    text:(modelData.State === 2)?qsTr("Disconnect network"):qsTr("Connect network")
+                    onTriggered: {
+                        console.log("connect/disconnect network")
+
+                        if (modelData.State === 2)
+                            KInterface.deActivateConnect(lanDeviceComboBox.currentText, modelData.Uuid, 0);
+                        else if (modelData.State === 4)
+                            KInterface.activateConnect(lanDeviceComboBox.currentText, modelData.Uuid, 0);
+                        typeicon.visible = false;
+                        loadingicon.visible = true;
+                    }
+                }
+
+                MenuItem {
+                    text:qsTr("Network property")
+                    onTriggered: {
+                        console.log("network property")
+                        console.log("network property",lanDeviceComboBox.currentText,modelData.Name,modelData.Uuid)
+
+                        KInterface.showPropertyWidget(lanDeviceComboBox.currentText, modelData.Uuid)
+                    }
+                }
+
+                MenuItem {
+                    text:qsTr("Delete this network")
+                    onTriggered: {
+                        console.log("delete this network",modelData.Uuid)
+                        KInterface.deleteConnect(0,modelData.Uuid)
+                    }
+                }
+            }
+
             Item {
                 Layout.alignment: Qt.AlignLeft
-                Layout.leftMargin: 16
+                Layout.leftMargin: 26
                 width: 36
                 height: 36
 
@@ -68,13 +117,12 @@ ListView {
                     }
                 }
             }
-            Label {
+            UkuiItems.DtThemeText {
                 id: nameLabel
                 Layout.alignment: Qt.AlignLeft
                 Layout.leftMargin: 8
                 Layout.preferredWidth: 150
                 text: modelData.Name
-                font.pixelSize: 14
                 MouseArea {
                     onClicked: {
                         nameLabel.visible = false
@@ -83,7 +131,7 @@ ListView {
                 }
             }
 
-            Label {
+            UkuiItems.DtThemeText {
                 id: nameStateLabel
                 visible: false
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
@@ -91,15 +139,13 @@ ListView {
                 Layout.topMargin: 8
                 Layout.preferredWidth: 150
                 text: modelData.Name
-                font.pixelSize: 14
-                Label {
+                UkuiItems.DtThemeText {
                     id: stateLabel
                     Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                     Layout.leftMargin: 8
                     Layout.bottomMargin: 8
                     anchors.top: nameStateLabel.bottom
-                    text: (modelData.State === 2) ? qsTr("已连接") : qsTr("未连接")
-                    font.pixelSize: 12
+                    text: (modelData.State === 2) ? qsTr("connected") : qsTr("Not connected")
                 }
             }
 
@@ -122,17 +168,16 @@ ListView {
                     source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/load-up.png"
                 }
 
-                Label {
+                UkuiItems.DtThemeText {
                     id: upLoadWiredText
                     visible: modelData.State === 2
                     anchors.right: downLoadIcon.left
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: 12
                     text: "0KB/s"
                     Connections {
                         target: KInterface
                         onUpdateUpLoadWiredStr : {
-                            upLoadWiredText.text = str
+                            upLoadWiredText.text = KInterface.upwareRate
                         }
                     }
                 }
@@ -145,18 +190,17 @@ ListView {
                     source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/load-down.png"
                 }
 
-                Label {
+                UkuiItems.DtThemeText {
                     id: downLoadWiredText
                     visible: modelData.State === 2
-                    anchors.rightMargin: 24
+                    anchors.rightMargin: 32
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: 12
                     text: "0KB/s"
                     Connections {
                         target: KInterface
                         onUpdateDownLoadWiredStr : {
-                            downLoadWiredText.text = str
+                            downLoadWiredText.text = KInterface.downwareRate
                         }
                     }
                 }
@@ -169,7 +213,7 @@ ListView {
                 height: 36
                 Layout.rightMargin: 24
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                text: (modelData.State === 2) ? "断开" : "连接"
+                text: (modelData.State === 2) ? qsTr("disconnect") : qsTr("connect")
                 highlighted: (modelData.State === 2) ? 0 : 1
                 MouseArea {
                     anchors.fill: parent
@@ -179,8 +223,9 @@ ListView {
                             KInterface.deActivateConnect(lanDeviceComboBox.currentText, modelData.Uuid, 0);
                         else if (modelData.State === 4)
                             KInterface.activateConnect(lanDeviceComboBox.currentText, modelData.Uuid, 0);
-                        typeicon.visible = false;
-                        loadingicon.visible = true;
+
+                        //typeicon.visible = false;
+                        //loadingicon.visible = true;
                     }
                 }
             }
@@ -189,16 +234,16 @@ ListView {
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
+            acceptedButtons: Qt.AllButtons
             propagateComposedEvents: true
-                onReleased: {
-                    nameLabel.visible = false
-                    nameStateLabel.visible = true
-                }
+            onReleased: {
+                nameLabel.visible = false
+                nameStateLabel.visible = true
+            }
             onEntered: {
                 //console.log("index: " , index)
                 enteritem = true
                 connectBtn.visible = true
-                connectBtn.color = (modelData.State === 2) ? "#0f000000" : "#3676F5"
                 speedLabel.visible = false
             }
             onExited: {
@@ -209,6 +254,13 @@ ListView {
                 speedLabel.visible = (modelData.State === 2)
                 nameLabel.visible = true
                 nameStateLabel.visible = false
+            }
+
+            onClicked: {
+                mouse.accepted = false
+                if (mouse.button == Qt.RightButton) {
+                    propertyMenu.popup()
+                }
             }
         }
 
@@ -228,4 +280,5 @@ ListView {
 //                    }
         }
     }
+
 }

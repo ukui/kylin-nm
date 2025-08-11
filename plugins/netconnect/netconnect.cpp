@@ -90,16 +90,6 @@ NetConnect::NetConnect() :  mFirstLoad(true) {
 
     pluginName = tr("LAN");
     pluginType = NETWORK;
-
-    m_interface = new QDBusInterface("com.kylin.network",
-                                     "/com/kylin/network",
-                                     "com.kylin.network",
-                                     QDBusConnection::sessionBus());
-    if(!m_interface->isValid()) {
-        qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
-    }
-    updatePluginShowSettings();
-    connect(m_interface, SIGNAL(deviceStatusChanged()), this, SLOT(updatePluginShowSettings()),Qt::QueuedConnection);
 }
 
 /*fortify扫描报错，需要显示删除一下*/
@@ -142,6 +132,9 @@ QWidget *NetConnect::pluginUi() {
         if(!m_interface->isValid()) {
             qWarning() << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
+
+        updatePluginShowSettings();
+        connect(m_interface, SIGNAL(deviceStatusChanged()), this, SLOT(updatePluginShowSettings()),Qt::QueuedConnection);
 
         qDBusRegisterMetaType<QVector<QStringList>>();
 
@@ -355,11 +348,19 @@ void NetConnect::wiredSwitchSLot(bool checked)
     m_pSysBusIntfs->call(QStringLiteral("setWiredMainSwitch"), checked);
     if (checked) {
         showLayout(ui->availableLayout);
+        //后续切换到sessiondbus上，进行处理
+        QMap<QString, ItemFrame *>::iterator iter1;
+        for (iter1 = deviceFrameMap.begin(); iter1 != deviceFrameMap.end(); iter1++) {
+            //set device autoconnect
+            qWarning() << Q_FUNC_INFO << __LINE__ << iter1.key() <<  checked;
+            setDeviceAutoConnectState(iter1.key(),checked);
+        }
+        //后续切换到sessiondbus上，进行处理
         return;
     }
 
     hideLayout(ui->availableLayout);
-
+    //后续切换到sessiondbus上，进行处理
     QMap<QString, ItemFrame *>::iterator iter1;
     for (iter1 = deviceFrameMap.begin(); iter1 != deviceFrameMap.end(); iter1++) {
         QMap<QString, LanItem *>::iterator iter2;
@@ -371,7 +372,12 @@ void NetConnect::wiredSwitchSLot(bool checked)
                 deActiveConnect(iter2.value()->uuid, iter1.value()->deviceFrame->dropDownLabel->m_devName, WIRED_TYPE);
             }
         }
+        //set device autoconnect
+        qWarning() << Q_FUNC_INFO << __LINE__ << iter1.key() <<  checked;
+
+        setDeviceAutoConnectState(iter1.key(),checked);
     }
+    //后续切换到sessiondbus上，进行处理
 }
 
 void NetConnect::renewSwitchLayout(bool enable)
@@ -521,6 +527,7 @@ void NetConnect::initNet()
     //再填充每个设备的列表
     for (int i = 0; i < deviceList.size(); ++i) {
         initNetListFromDevice(deviceList.at(i));
+        initDeviceConnectivity(deviceList.at(i));
     }
 }
 
@@ -558,6 +565,16 @@ void NetConnect::deActiveConnect(QString ssid, QString deviceName, int type) {
     qDebug() << "[NetConnect]call deActivateConnect" << __LINE__;
     m_interface->call(QStringLiteral("deActivateConnect"),type, deviceName, ssid);
     qDebug() << "[NetConnect]call deActivateConnect respond" << __LINE__;
+}
+
+//set
+void NetConnect::setDeviceAutoConnectState(QString deviceName, bool state) {
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
+    qDebug() << "[NetConnect]call setDeviceAutoConnectState" << __LINE__;
+    m_interface->call(QStringLiteral("setDeviceAutoConnectState"),deviceName, state);
+    qDebug() << "[NetConnect]call setDeviceAutoConnectState respond" << __LINE__;
 }
 
 //初始化设备列表 网卡标号问题？
@@ -634,24 +651,9 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
     });
 
     lanItem->isAcitve = isActived;
-    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
-        if (lanItem->isAcitve || lanItem->loading) {
-            deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
-        } else {
-            activeConnect(lanItem->uuid, devName, WIRED_TYPE);
-        }
-    });
-
-    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
-        activeConnect(lanItem->uuid, devName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
-        deActiveConnect(lanItem->uuid, devName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
-        deleteOneLan(lanItem->uuid, WIRED_TYPE);
+        openKylinm();
     });
 
     //记录到deviceFrame的itemMap中
@@ -948,24 +950,9 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
     });
 
     lanItem->isAcitve = false;
-    lanItem->setConnectActionText(lanItem->isAcitve);
 
     connect(lanItem, &QPushButton::clicked, this, [=] {
-        if (lanItem->isAcitve || lanItem->loading) {
-            deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-        } else {
-            activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-        }
-    });
-
-    connect(lanItem, &LanItem::connectActionTriggered, this, [=] {
-        activeConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::disconnectActionTriggered, this, [=] {
-        deActiveConnect(lanItem->uuid, deviceName, WIRED_TYPE);
-    });
-    connect(lanItem, &LanItem::deleteActionTriggered, this, [=] {
-        deleteOneLan(lanItem->uuid, WIRED_TYPE);
+        openKylinm();
     });
 
     //记录到deviceFrame的itemMap中
@@ -1013,6 +1000,9 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int
             if (iters.value()->itemMap.contains(uuid)) {
                 item = iters.value()->itemMap[uuid];
                 infoList << item->titileLabel->text() << item->uuid << item->dbusPath;
+                //若断开连接，需要把网卡下的item全部赋为未连接
+                item->setConnectivityWarn(ConnectivityType::NoConnectivity);
+                
                 //为断开则重新插入
                 int index = getInsertPos(item->titileLabel->text(), iters.key());
                 qDebug() << "[NetConnect]reinsert" << item->titileLabel->text() << "pos" << index << "in" << iters.key() << "because status changes to deactive";
@@ -1059,6 +1049,43 @@ void NetConnect::onActiveConnectionChanged(QString deviceName, QString uuid, int
             }
         }
     }
+    qDebug() << "onActiveConnectionChanged deviceName = " << deviceName;
+    initDeviceConnectivity(deviceName);
+}
+
+void NetConnect::initDeviceConnectivity(QString deviceName)
+{
+    if (!deviceFrameMap.contains(deviceName)) {
+        return;
+    }
+    if (m_interface == nullptr || !m_interface->isValid()) {
+        return;
+    }
+
+    QDBusReply<int> reply = m_interface->call(QStringLiteral("getDeviceConnectivity"), deviceName);
+    if (!reply.isValid())
+    {
+        return;
+    }
+    updateDeviceFrameFromConnectivity(deviceFrameMap[deviceName], (ConnectivityType)reply.value());
+}
+
+void NetConnect::updateDeviceFrameFromConnectivity(ItemFrame *frame, ConnectivityType type)
+{
+    if (frame->itemMap.isEmpty()) {
+        return;
+    }
+
+    //modify ui
+    QMap<QString, LanItem *> ::iterator iter;
+    for (iter = frame->itemMap.begin(); iter != frame->itemMap.end(); iter++) {
+        if (iter.value()->isAcitve) {
+            iter.value()->setNetworkCheckFrameHidden(false);
+            iter.value()->setConnectivityWarn(type);
+        } else {
+            iter.value()->setNetworkCheckFrameHidden(true);
+        }
+    }
 }
 
 void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
@@ -1084,9 +1111,15 @@ void NetConnect::itemActiveConnectionStatusChanged(LanItem *item, int status)
         item->isAcitve = false;
         item->statusLabel->setText(tr("not connected"));
     }
-    item->setConnectActionText(item->isAcitve);
-//    QIcon searchIcon = QIcon::fromTheme(iconPath);
-//    item->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(24, 24))));
+}
+
+void NetConnect::openKylinm()
+{
+    QDBusInterface sidebarIfc("org.ukui.Sidebar",
+                            "/org/ukui/Sidebar",
+                            "org.ukui.Sidebar",
+                            QDBusConnection::sessionBus());
+    sidebarIfc.call("shortcutWidgetActive", "org.ukui.shortcut.network", false);
 }
 
 int NetConnect::getInsertPos(QString connName, QString deviceName)

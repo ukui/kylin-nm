@@ -18,7 +18,8 @@ HEADERS += \
         plugin/knmlandatakeeper.h \
         plugin/knmwlandatakeeper.h \
         plugin/netdevice.h \
-        plugin/networkqml_plugin.h
+        plugin/networkqml_plugin.h \
+        plugin/wirelessconnectionmodel.h
 
 SOURCES += \
         plugin/knmdatakeeper.cpp \
@@ -27,9 +28,14 @@ SOURCES += \
         plugin/knmlandatakeeper.cpp \
         plugin/knmwlandatakeeper.cpp \
         plugin/netdevice.cpp \
-        plugin/networkqml_plugin.cpp
+        plugin/networkqml_plugin.cpp \
+        plugin/wirelessconnectionmodel.cpp
 
 RESOURCES += widget/qml.qrc
+
+CONFIG(release, debug|release) {
+    !system($$PWD/translate_generation.sh): error("Failed to generate translation")
+}
 
 inst1.files += widget/**
 inst1.path = /usr/share/ukui/widgets/org.ukui.shortcut.network
@@ -43,12 +49,20 @@ qm_files.path = /usr/share/ukui/widgets/org.ukui.shortcut.network/translations
 target.path = $$[QT_INSTALL_LIBS]/qt5/qml/org/ukui/shortcut/network
 
 TRANSLATIONS += \
-    translations/ukui-shortcut-network_zh_CN.ts
+    translations/ukui-shortcut-network_zh_CN.ts \
+    translations/ukui-shortcut-network_zh_Hant.ts \
+    translations/ukui-shortcut-network_zh_HK.ts \
+    translations/ukui-shortcut-network_ug.ts \
+    translations/ukui-shortcut-network_mn.ts \
+    translations/ukui-shortcut-network_ky.ts \
+    translations/ukui-shortcut-network_kk.ts \
+    translations/ukui-shortcut-network_bo_CN.ts
+
 
 INSTALLS += inst1 \
-    inst2 \
-    qm_files \
-    target
+            inst2 \
+            qm_files \
+            target
 
 OBJECTS_DIR = ./obj/
 MOC_DIR = ./moc/

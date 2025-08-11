@@ -27,20 +27,17 @@
 #define FRAME_MIN_SIZE 550, 60
 #define FRAME_MAX_SIZE 16777215, 16777215
 #define CONTECT_FRAME_MAX_SIZE 16777215, 60
-
 #define HINT_TEXT_MARGINS 8, 0, 0, 0
 #define FRAME_MIN_SIZE 550, 60
-
 #define LABLE_MIN_WIDTH 188
 #define COMBOBOX_MIN_WIDTH 200
 #define LINE_MAX_SIZE 16777215, 1
 #define LINE_MIN_SIZE 0, 1
 #define ICON_SIZE   24,24
-
 #define PASSWORD_FRAME_MIN_HIGHT 60
 #define PASSWORD_FRAME_FIX_HIGHT 90
 #define PASSWORD_FRAME_MIN_SIZE 550, 60
-#define PASSWORD_FRAME_MAX_SIZE 16777215, 86
+#define PASSWORD_FRAME_MAX_SIZE 16777215, 90
 #define PASSWORD_ITEM_MARGINS 16, 10, 16, 10
 
 #define WIRELESS   1
@@ -151,7 +148,7 @@ bool MobileHotspotWidget::eventFilter(QObject *watched, QEvent *event)
         return true;
     }
 
-    if (watched == m_switchBtn) {
+    if (watched == m_switchBtn && m_switchBtn->isEnabled()) {
         if (event->type() == QEvent::MouseButtonRelease) {
             if (!m_interface->isValid()) {
                 return true;
@@ -264,6 +261,7 @@ void MobileHotspotWidget::initUI()
     m_Vlayout->addWidget(m_hotspotFrame);
 
 }
+
 
 void MobileHotspotWidget::initDbusConnect()
 {
@@ -513,8 +511,10 @@ void MobileHotspotWidget::getApInfo()
         }
 
         if (apInfo.at(3) == "true") {
+            /* //fix306895 【移动热点】控制面板开启热点后，右上角弹窗通知，此时关闭控制面板，重新进入移动热点界面，会再弹一次弹窗
             if(!m_switchBtn->isChecked())
                 showDesktopNotify(tr("hotspot already open"));
+                */
             m_switchBtn->setChecked(true);
             setUiEnabled(true);
             m_uuid = apInfo.at(4);
@@ -575,6 +575,7 @@ void MobileHotspotWidget::updateLoadingIcon()
         m_currentIconIndex = 0;
     }
     m_statusLabel->setPixmap(m_loadIcons.at(m_currentIconIndex).pixmap(16,16));
+    m_statusLabel->setProperty("useIconHighlightEffect", 0x2);
     m_currentIconIndex ++;
 }
 
@@ -625,8 +626,9 @@ void MobileHotspotWidget::setPasswordFrame()
     m_passwordFrame->setMinimumSize(PASSWORD_FRAME_MIN_SIZE);
     m_passwordFrame->setMaximumSize(PASSWORD_FRAME_MAX_SIZE);
 
-    m_pwdLabel = new QLabel(tr("Password"), this);
-    m_pwdLabel->setMinimumWidth(LABLE_MIN_WIDTH);
+    m_pwdLabel = new KLabel(this);
+    m_pwdLabel->setText(tr("Network Password"));
+    m_pwdLabel->setFixedWidth(LABLE_MIN_WIDTH);
     m_pwdNameLine = new KPasswordEdit(this);
     m_pwdNameLine->setClearButtonEnabled(false);//禁用ClearBtn按钮X
     m_pwdNameLine->setMinimumWidth(COMBOBOX_MIN_WIDTH);
@@ -665,7 +667,7 @@ void MobileHotspotWidget::setFreqBandFrame()
     QHBoxLayout *freqBandHLayout = new QHBoxLayout(m_freqBandFrame);
 
     m_freqBandLabel = new KLabel(this);
-    m_freqBandLabel->setText(tr("Frequency band"));
+    m_freqBandLabel->setText(tr("Network Frequency band"));
     m_freqBandLabel->setFixedWidth(LABLE_MIN_WIDTH - 8);
     m_freqBandComboBox = new QComboBox(this);
     m_freqBandComboBox->setInsertPolicy(QComboBox::NoInsert);
@@ -689,14 +691,14 @@ void MobileHotspotWidget::setInterFaceFrame()
     m_interfaceFrame->setMinimumSize(PASSWORD_FRAME_MIN_SIZE);
     m_interfaceFrame->setMaximumSize(PASSWORD_FRAME_MAX_SIZE);
 
-    m_interfaceLabel = new QLabel(tr("Net card"), this);
+    m_interfaceLabel = new KLabel( this);
+    m_interfaceLabel->setText(tr("Shared NIC port"));
     m_interfaceLabel->setFixedWidth(LABLE_MIN_WIDTH);
     m_interfaceComboBox = new QComboBox(this);
     m_interfaceComboBox->setInsertPolicy(QComboBox::NoInsert);
     m_interfaceComboBox->setMinimumWidth(COMBOBOX_MIN_WIDTH);
 
     m_warnWidget = new QWidget(this);
-    m_warnWidget->setFixedHeight(20);
     m_warnWidget->setContentsMargins(8,0,0,0);
 
     QHBoxLayout *warnTextHLayout = new QHBoxLayout(m_warnWidget);
@@ -705,11 +707,13 @@ void MobileHotspotWidget::setInterFaceFrame()
     warnIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(16,16));
 
     m_interfaceWarnLabel= new KLabel(this);
-    m_interfaceWarnLabel->setFixedHeight(20);
+//    m_interfaceWarnLabel->setFixedHeight(20);
 
     QPalette hintTextColor;
-    hintTextColor.setColor(QPalette::WindowText, Qt::red);
-    m_interfaceWarnLabel->setPalette(hintTextColor);
+    //hintTextColor.setColor(QPalette::WindowText, Qt::red);
+    //m_interfaceWarnLabel->setPalette(hintTextColor);
+    m_interfaceWarnLabel->setFontColorRole(QPalette::WindowText);
+    m_interfaceWarnLabel->setFontColor(Qt::red);
 
     warnTextHLayout->setSpacing(8);
     warnTextHLayout->setContentsMargins(0,0,0,0);
@@ -729,7 +733,6 @@ void MobileHotspotWidget::setInterFaceFrame()
 
     m_warnWidget->hide();
 }
-
 void MobileHotspotWidget::onActivateFailed(QString errorMessage)
 {
     if (errorMessage.indexOf("hotspot")) {
@@ -764,7 +767,6 @@ void MobileHotspotWidget::onDeviceNameChanged(QString oldName, QString newName, 
             m_interfaceName = newName;
         }
     }
-
     QTimer::singleShot(100, this, [=]() {
         if (m_interfaceComboBox->currentText() == newName) {
             updateBandCombox();
@@ -775,7 +777,10 @@ void MobileHotspotWidget::onDeviceNameChanged(QString oldName, QString newName, 
 //热点断开
 void MobileHotspotWidget::onHotspotDeactivated(QString devName, QString ssid)
 {
-    stopLoading();
+    QTimer::singleShot(7000,this,[=](){
+        stopLoading();
+    });
+
     if (!m_switchBtn->isChecked()) {
         return;
     }
@@ -904,6 +909,7 @@ void MobileHotspotWidget::setWidgetHidden(bool isHidden)
         onWirelessBtnChanged(state);
     }
     resetFrameSize();
+
 }
 
 void MobileHotspotWidget::updateBandCombox()
@@ -916,7 +922,6 @@ void MobileHotspotWidget::updateBandCombox()
         setWidgetHidden(true);
         return;
     }
-
     m_isUserSelect = false;
 
     QMap<QString, int> devCapMap;
@@ -1085,3 +1090,4 @@ void MobileHotspotWidget::initBlackListPage()
     m_Vlayout->addSpacing(32);
     m_Vlayout->addWidget(m_blacklistPage);
 }
+

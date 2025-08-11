@@ -63,8 +63,13 @@ void NetworkAdaptor::deActivateConnect(int type, const QString &devName, const Q
 
 void NetworkAdaptor::deleteConnect(int type, const QString &ssid)
 {
-    // handle method call com.kylin.network.deActivateConnect
+    // handle method call com.kylin.network.deleteConnect
     QMetaObject::invokeMethod(parent(), "deleteConnect", Q_ARG(int, type), Q_ARG(QString, ssid));
+}
+void NetworkAdaptor::setDeviceAutoConnectState(const QString &deviceName, bool state)
+{
+    // handle method call com.kylin.network.setDeviceAutoConnectState
+    QMetaObject::invokeMethod(parent(), "setDeviceAutoConnectState", Q_ARG(QString, deviceName), Q_ARG(bool, state));
 }
 
 void NetworkAdaptor::deactiveWirelessAp(const QString &apName, const QString &uuid)
@@ -222,3 +227,19 @@ void NetworkAdaptor::showPropertyWidget(const QString &devName, const QString &s
     QMetaObject::invokeMethod(parent(), "showPropertyWidget", Q_ARG(QString, devName), Q_ARG(QString, ssid));
 }
 
+bool NetworkAdaptor::getCableStateByDevice(const QString deviceName)
+{
+    // handle method call com.kylin.network.getCableStateByDevice
+    bool out0;
+    QMetaObject::invokeMethod(parent(), "getCableStateByDevice", Q_RETURN_ARG(bool, out0), Q_ARG(QString, deviceName));
+    return out0;
+}
+
+
+int NetworkAdaptor::getDeviceConnectivity(const QString deviceName)
+{
+    // handle method call com.kylin.network.getDeviceConnectivity
+    int out0;
+    QMetaObject::invokeMethod(parent(), "getDeviceConnectivity", Q_RETURN_ARG(int, out0), Q_ARG(QString, deviceName));
+    return out0;
+}

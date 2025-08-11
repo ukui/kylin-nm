@@ -781,3 +781,38 @@ int KyActiveConnectResourse::getActivateWifiSignal(QString devName)
 
     return signalStrength;
 }
+
+bool KyActiveConnectResourse::checkInternetLoading()
+{
+    int index = 0;
+    NetworkManager::ActiveConnection::List activeConnectList;
+
+    activeConnectList.clear();
+    activeConnectList = m_networkResourceInstance->getActiveConnectList();
+
+    if (activeConnectList.empty()) {
+        qWarning()<<"[KyActiveConnectResourse]"
+                   <<"get active connect failed, the active connect list is empty";
+        return false;
+    }
+
+    NetworkManager::ActiveConnection::Ptr activeConnectPtr = nullptr;
+    for (index = 0; index < activeConnectList.size(); index++) {
+        activeConnectPtr = activeConnectList.at(index);
+        if (activeConnectPtr.isNull()) {
+            continue;
+        }
+
+        if (NetworkManager::ConnectionSettings::ConnectionType::Wireless != activeConnectPtr->type() &&
+            NetworkManager::ConnectionSettings::ConnectionType::Wired != activeConnectPtr->type() &&
+            NetworkManager::ConnectionSettings::ConnectionType::Pppoe != activeConnectPtr->type()) {
+            continue;
+        }
+
+        if (activeConnectPtr->state() == NetworkManager::ActiveConnection::State::Activating
+            || activeConnectPtr->state() == NetworkManager::ActiveConnection::State::Deactivating) {
+            return true;
+        }
+    }
+    return false;
+}

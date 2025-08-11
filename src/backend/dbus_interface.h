@@ -48,7 +48,12 @@ public Q_SLOTS: // METHODS
         argumentList << QVariant::fromValue(type) << QVariant::fromValue(devName) << QVariant::fromValue(ssid);
         callWithArgumentList(QDBus::NoBlock, QStringLiteral("activateConnect"), argumentList);
     }
-
+    inline Q_NOREPLY void setDeviceAutoConnectState(const QString &devName,bool stated)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(devName) << QVariant::fromValue(stated) ;
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("setDeviceAutoConnectState"), argumentList);
+    }
     inline QDBusPendingReply<> activeWirelessAp(const QString &apName, const QString &apPassword, const QString &band, const QString &apDevice)
     {
         QList<QVariant> argumentList;
@@ -212,6 +217,20 @@ public Q_SLOTS: // METHODS
         callWithArgumentList(QDBus::NoBlock, QStringLiteral("showPropertyWidget"), argumentList);
     }
 
+    inline QDBusPendingReply<int> getDeviceConnectivity(const QString deviceName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(deviceName);
+        return callWithArgumentList(QDBus::NoBlock, QStringLiteral("getDeviceConnectivity"), argumentList);
+    }
+
+    inline QDBusPendingReply<bool> getCableStateByDevice(const QString deviceName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(deviceName);
+        return callWithArgumentList(QDBus::NoBlock, QStringLiteral("getCableStateByDevice"), argumentList);
+    }
+
 Q_SIGNALS: // SIGNALS
     void activateFailed(const QString &errorMessage);
     void deactivateFailed(const QString &errorMessage);
@@ -232,6 +251,7 @@ Q_SIGNALS: // SIGNALS
     void timeToUpdate();
     void wirelessDeviceStatusChanged();
     void wirelessSwitchBtnChanged(bool state);
+    void wiredMainSwitchBtnChanged(bool state);
     void wlanAdd(const QString &devName, const QStringList &info);
     void wlanRemove(const QString &devName, const QString &ssid);
     void wlanactiveConnectionStateChanged(const QString &devName, const QString &ssid, const QString &uuid, int status);

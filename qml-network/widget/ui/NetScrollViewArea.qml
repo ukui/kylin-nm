@@ -26,12 +26,10 @@ UkuiItems.DtThemeBackground {
             Item { Layout.fillWidth: true }
         }
 
-        Rectangle {
+        MenuSeparator {
             Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
-            Layout.preferredHeight: 1
             height: 1
-            color: Qt.rgba(0, 0, 0, 0.06)
         }
         ScrollView {
             visible: true
@@ -54,16 +52,17 @@ UkuiItems.DtThemeBackground {
                         id : lanTop
                         width: parent.width
                         Layout.alignment: Qt.AlignTop
+                        visible: lanDeviceComboBox.count >= 1
 
-                        Label {
-                            text: qsTr("有线网络")
-                            font.pixelSize: 14
+                        UkuiItems.DtThemeText {
+                            text: qsTr("Wired network")
                             Layout.alignment: Qt.AlignLeft
                             Layout.leftMargin: 24
                         }
 
                         UkuiItems.Icon {
                             id: lanVisibleButton
+                            visible: KInterface.wiredMainSwitch
                             source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/ukui-up-symbolic.svg"
                             width: 16
                             height: 16
@@ -83,9 +82,10 @@ UkuiItems.DtThemeBackground {
                                         return
                                     lanContentArea.visible = lanVisibleButton.visibleState
                                     lanDeviceComboBox.visible = lanVisibleButton.visibleState && !lanDeviceComboBox.ishide && (lanDeviceComboBox.count >= 2)
-                                    lanNoWiredItem.visible = lanVisibleButton.visibleState && (lanDeviceComboBox.count === 0)
+                                    //lanNoWiredItem.visible = lanVisibleButton.visibleState && (lanDeviceComboBox.count === 0)
                                 }
                             }
+                            Layout.preferredWidth: 16
                         }
 
                         Item {
@@ -108,7 +108,10 @@ UkuiItems.DtThemeBackground {
                                 }
                             }
                             Layout.alignment: Qt.AlignRight
-                            Layout.rightMargin: 10
+                            Layout.rightMargin: 24
+                            spacing:0
+                            rightPadding: 0
+                            Layout.preferredWidth: 44
                         }
                     }
 
@@ -119,7 +122,7 @@ UkuiItems.DtThemeBackground {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 60
                         Layout.alignment: Qt.AlignTop
-                        visible: lanDeviceComboBox.count === 0
+                        visible: false
                         Image {
                             width: 16
                             height: 16
@@ -128,12 +131,12 @@ UkuiItems.DtThemeBackground {
                             anchors.verticalCenter: parent.verticalCenter
                             source: "file:///usr/share/ukui/widgets/org.ukui.shortcut.network/dialog-warning.svg"
                         }
-                        Label {
+                        UkuiItems.DtThemeText {
                             id: lanNoWiredText
                             anchors.leftMargin: 20
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
-                            text: qsTr("未检测到有线网卡")
+                            text: qsTr("No wired network card was detected")
                         }
                     }
 
@@ -144,6 +147,7 @@ UkuiItems.DtThemeBackground {
                         model: KInterface.wiredDevList
                         visible: lanswitchBtn.checked && lanVisibleButton.visibleState && !lanNoWiredItem.visible && (lanDeviceComboBox.count>=2)
                         property bool ishide : false
+                        currentConnect: lanContentArea.connectMac
                         onCurrentTextChanged: {
                             KInterface.getWiredDevConnList(lanDeviceComboBox.currentText);
                         }
@@ -153,10 +157,10 @@ UkuiItems.DtThemeBackground {
                                 if (lanDeviceComboBox.count <= 0) {
                                     lanDeviceComboBox.ishide = true
                                     lanContentArea.visible = false
-                                    lanNoWiredItem.visible = true
+                                    //lanNoWiredItem.visible = true
                                     lanDeviceComboBox.enabled = false;
                                 } else {
-                                    lanNoWiredItem.visible = false
+                                    //lanNoWiredItem.visible = false
                                     lanDeviceComboBox.enabled = true;
                                 }
                                 if (lanDeviceComboBox.count <= 1) {
@@ -180,12 +184,12 @@ UkuiItems.DtThemeBackground {
                         width: 396
                     }
 
-                    Rectangle {
+                    MenuSeparator {
                         Layout.fillWidth: true
                         Layout.leftMargin: 16
                         Layout.rightMargin: 16
                         height: 1
-                        color: Qt.rgba(0, 0, 0, 0.06)
+                        visible: (wlanDeviceComboBox.count >= 1 && lanDeviceComboBox.count >= 1)
                     }
 
                     RowLayout {
@@ -193,11 +197,11 @@ UkuiItems.DtThemeBackground {
                         width: parent.width
                         Layout.alignment: Qt.AlignTop
 
-                        Label {
-                            text: qsTr("无线网络")
-                            font.pixelSize: 14
+                        UkuiItems.DtThemeText {
+                            text: qsTr("Wireless network")
                             Layout.alignment: Qt.AlignLeft
                             Layout.leftMargin: 24
+                            visible: wlanDeviceComboBox.count >= 1
                         }
 
                         UkuiItems.Icon {
@@ -206,6 +210,8 @@ UkuiItems.DtThemeBackground {
                             width: 16
                             height: 16
                             mode: UkuiItems.Icon.AutoHighlight
+                            visible: wlanswitchBtn.checked && (wlanDeviceComboBox.count >= 1)
+
                             MouseArea {
                                 anchors.fill: parent
                                 hoverEnabled: true
@@ -215,6 +221,7 @@ UkuiItems.DtThemeBackground {
                                     KInterface.rescanWirelessConn()
                                 }
                             }
+                            Layout.preferredWidth: 16
                         }
 
                         RotationAnimator {
@@ -242,7 +249,7 @@ UkuiItems.DtThemeBackground {
                         SwitchDelegate {
                             id: wlanswitchBtn
                             checked: KInterface.wirelessSwitch
-                            enabled: (wlanDeviceComboBox.count>0)
+                            enabled: (wlanDeviceComboBox.count >= 1)
                             onClicked: {
                                 if(!enabled)
                                 {
@@ -255,7 +262,11 @@ UkuiItems.DtThemeBackground {
                                 wlanContentArea.visible = wlanswitchBtn.checked
                             }
                             Layout.alignment: Qt.AlignRight
-                            Layout.rightMargin: 10
+                            Layout.rightMargin: 24
+                            spacing:0
+                            rightPadding: 0
+                            visible: wlanDeviceComboBox.count >= 1
+                            Layout.preferredWidth: 44
                         }
                     }
 
@@ -266,9 +277,13 @@ UkuiItems.DtThemeBackground {
                         spacing: 0
                         visible: wlanswitchBtn.checked && wlanDeviceComboBox.count > 1
                         model: KInterface.wirelessDevList
+                        width: parent.width
                         property bool ishide : wlanDeviceComboBox.count > 1
+                        currentConnect: wlanContentArea.connectMac
                         onCurrentTextChanged: {
                             KInterface.getWirelessDevConnList(wlanDeviceComboBox.currentText);
+                            KInterface.rebuildCurrentWirelessList()
+
                         }
                         Connections {
                             target: KInterface
@@ -301,40 +316,44 @@ UkuiItems.DtThemeBackground {
             }
         }
 
-        Rectangle {
+        MenuSeparator {
             Layout.alignment: Qt.AlignBottom
             Layout.fillWidth: true
-            Layout.bottomMargin: 8
+            Layout.bottomMargin: 1
             height: 1
-            color: Qt.rgba(0, 0, 0, 0.06)
         }
 
-        UkuiItems.DtThemeBackground {
+        Item {
             Layout.fillWidth: true
             Layout.preferredHeight: 56
             Layout.alignment: Qt.AlignBottom
-            backgroundColor: Platform.GlobalTheme.baseActive
-            alpha: 0.6
-            Label {
-                anchors.left: parent.left
-                anchors.leftMargin: 20
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("更多网络设置")
-            }
+            opacity: Theme.windowOpacity
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    KInterface.openNetworkSetting()
+            UkuiItems.DtThemeText {
+                id: networkSettingText
+                height: 22
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 24
+                text: qsTr("More network Settings")
+                textColor: Platform.GlobalTheme.kFontStrong
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onClicked: {
+                        console.log("NetworkSettingArea.qml onClicked")
+                        KInterface.openNetworkSetting()
+                    }
+                    onEntered: {
+                        networkSettingText.textColor = Platform.GlobalTheme.highlightActive
+                    }
+                    onExited: {
+                        networkSettingText.textColor = Platform.GlobalTheme.kFontStrong
+                    }
                 }
             }
-        }
-
-//        focus: true
-
-//        Keys.onEscapePressed: {
-//            close() // 按下Escape键时关闭
-//        }
+		}
     }
 }
 

@@ -150,7 +150,7 @@ void KyWirelessNetItem::init(NetworkManager::WirelessNetwork::Ptr net)
             }
         }
     }
-    updatewirelessItemConnectInfo(*this);
+    updatewirelessItemConnectInfoEx(this);
 }
 
 int KyWirelessNetItem::getCategory(QString uni)
@@ -189,7 +189,7 @@ void KyWirelessNetItem::setKySecuType(QString strSecuType)
     }
 }
 
-void updatewirelessItemConnectInfo(KyWirelessNetItem& item)
+bool updatewirelessItemConnectInfo(KyWirelessNetItem& item)
 {
     KyNetworkResourceManager *networkResourceInstance = KyNetworkResourceManager::getInstance();
 
@@ -207,11 +207,15 @@ void updatewirelessItemConnectInfo(KyWirelessNetItem& item)
 
         NetworkManager::WirelessSetting::Ptr wifi_sett
             = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
-        QString devName = networkResourceInstance->findDeviceUni(item.getDevice())->interfaceName();
+        QString devName("");
+        NetworkManager::Device::Ptr devicePtr = networkResourceInstance->findDeviceUni(item.getDevice());
+        if (devicePtr != nullptr) {
+            devName = devicePtr->interfaceName();
+        }
         QByteArray rawSsid = wifi_sett->ssid();
         QString wifiSsid = getSsidFromByteArray(rawSsid);
         if (wifiSsid == item.m_NetSsid
-                && (settings->interfaceName().compare(devName) == 0 || settings->interfaceName().isEmpty())) {
+            && (settings->interfaceName().compare(devName) == 0 || settings->interfaceName().isEmpty())) {
             /*
             * 如果有激活的链接，则取激活的链接，没有则取最后一个，因为一个热点可以创建多个链接, 有WIFI的则用WIFI，否则用adhoc
             */
@@ -222,7 +226,7 @@ void updatewirelessItemConnectInfo(KyWirelessNetItem& item)
                 item.m_connName    = conn->name();
                 item.m_connDbusPath = conn->path();
                 item.m_isConfigured = true;
-                return;
+                return (wifi_sett->mode() == NetworkManager::WirelessSetting::NetworkMode::Infrastructure);
             }
 
             if (wifi_sett->mode() != NetworkManager::WirelessSetting::NetworkMode::Infrastructure) {
@@ -246,6 +250,7 @@ void updatewirelessItemConnectInfo(KyWirelessNetItem& item)
         item.m_connName = connectItem.m_connName;
         item.m_connDbusPath = connectItem.m_connDbusPath;
         item.m_isConfigured = connectItem.m_isConfigured;
+        return true;
     } else if (findHotspot) {
         item.m_connectUuid = hotspotItem.m_connectUuid;
         item.m_connName = hotspotItem.m_connName;
@@ -256,5 +261,78 @@ void updatewirelessItemConnectInfo(KyWirelessNetItem& item)
         item.m_connName.clear();
         item.m_connDbusPath.clear();
         item.m_isConfigured = false;
+    }
+    return false;
+}
+
+void updatewirelessItemConnectInfoEx(KyWirelessNetItem* item)
+{
+    KyNetworkResourceManager *networkResourceInstance = KyNetworkResourceManager::getInstance();
+
+    bool findHotspot = false;
+    bool findInfrastructure = false;
+
+    KyWirelessNetItem hotspotItem;
+    KyWirelessNetItem connectItem;
+
+    for (auto const & conn : networkResourceInstance->m_connections) {
+        NetworkManager::ConnectionSettings::Ptr settings = conn->settings();
+        if (settings->connectionType() != NetworkManager::ConnectionSettings::Wireless) {
+            continue;
+        }
+
+        NetworkManager::WirelessSetting::Ptr wifi_sett
+            = settings->setting(NetworkManager::Setting::Wireless).dynamicCast<NetworkManager::WirelessSetting>();
+        QString devName = networkResourceInstance->findDeviceUni(item->getDevice())->interfaceName();
+        QByteArray rawSsid = wifi_sett->ssid();
+        QString wifiSsid = getSsidFromByteArray(rawSsid);
+        if (wifiSsid == item->m_NetSsid
+            && (settings->interfaceName().compare(devName) == 0 || settings->interfaceName().isEmpty())) {
+            /*
+            * 如果有激活的链接，则取激活的链接，没有则取最后一个，因为一个热点可以创建多个链接, 有WIFI的则用WIFI，否则用adhoc
+            */
+            //qDebug()<<"mqtest updatewirelessItemConnectInfo uuid"<<settings->uuid()<<conn->name()<<item.m_connectUuid;//mqtest
+            KyActiveConnectResourse actResource;
+            KyConnectItem * kyItem = actResource.getActiveConnectionByUuid(settings->uuid(), devName);
+            if (nullptr != kyItem) {
+                item->m_connectUuid = settings->uuid();
+                item->m_connName    = conn->name();
+                item->m_connDbusPath = conn->path();
+                item->m_isConfigured = true;
+                //qDebug()<<"mqtest updatewirelessItemConnectInfo come in update"<<item->m_connName<<item->m_connectUuid;//mqtest
+                return;
+            }
+
+            if (wifi_sett->mode() != NetworkManager::WirelessSetting::NetworkMode::Infrastructure) {
+                hotspotItem.m_connectUuid = settings->uuid();
+                hotspotItem.m_connName    = conn->name();
+                hotspotItem.m_connDbusPath = conn->path();
+                hotspotItem.m_isConfigured = true;
+                findHotspot = true;
+            } else {
+                connectItem.m_connectUuid = settings->uuid();
+                connectItem.m_connName    = conn->name();
+                connectItem.m_connDbusPath = conn->path();
+                connectItem.m_isConfigured = true;
+                findInfrastructure = true;
+            }
+        }
+    }
+    //qDebug()<<"mqtest updatewirelessItemConnectInfo findInfrastructure"<<findInfrastructure<<findHotspot;//mqtest
+    if (findInfrastructure) {
+        item->m_connectUuid = connectItem.m_connectUuid;
+        item->m_connName = connectItem.m_connName;
+        item->m_connDbusPath = connectItem.m_connDbusPath;
+        item->m_isConfigured = connectItem.m_isConfigured;
+    } else if (findHotspot) {
+        item->m_connectUuid = hotspotItem.m_connectUuid;
+        item->m_connName = hotspotItem.m_connName;
+        item->m_connDbusPath = hotspotItem.m_connDbusPath;
+        item->m_isConfigured = hotspotItem.m_isConfigured;
+    } else {
+        item->m_connectUuid.clear();
+        item->m_connName.clear();
+        item->m_connDbusPath.clear();
+        item->m_isConfigured = false;
     }
 }

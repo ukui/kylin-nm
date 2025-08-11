@@ -65,7 +65,7 @@ DbusAdaptor::DbusAdaptor(QString display, MainWindow *m, QObject *parent)
                                              SYSTEM_DBUS_INTERFACE,
                                              "sysWiredMainSwitchChanged",
                                              this,
-                                             SIGNAL(wiredMainSwitchBtnChanged(bool)));
+                                             SLOT(onWiredMainSwitchBtnChanged(bool)));
     }
     else
     {
@@ -145,6 +145,17 @@ bool DbusAdaptor::getWiredMainSwitchBtnState()
     }
     return false;
 }
+
+int DbusAdaptor::getDeviceConnectivity(const QString deviceName)
+{
+    return m_mainWindow->getDeviceConnectivity(deviceName);
+}
+
+//获取网卡是否插入了网线
+bool DbusAdaptor::getCableStateByDevice(const QString deviceName)
+{
+    return m_mainWindow->getCableStateByDevice(deviceName);
+}
 //有线列表
 QVariantList DbusAdaptor::getWiredList(QString devName)
 {
@@ -162,14 +173,37 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
 {
     //todo
 
-    if (m_pSysBusInterfaces->isValid())
-    {
+    if (m_pSysBusInterfaces->isValid()) {
         m_pSysBusInterfaces->call(QStringLiteral("setWiredMainSwitch"), enable);
-    }
-    else
-    {
+    } else {
         qWarning()<< Q_FUNC_INFO << __LINE__ <<"m_pSysBusInterfaces is isValid!";
     }
+
+    if (!enable) {
+        // int devType 0:lan 1:wlan  
+        int devType = 0;
+        const auto devList = mNetworkAdaptor->getDeviceListAndEnabled(devType);
+        for (auto it = devList.cbegin(); it != devList.cend(); ++it) {
+            const QString &devName = it.key();
+            const auto connections = getWiredList(devName);
+            for (const QVariant &conn : connections) {
+                // 网卡名称,uuid,对应DBUS路径
+                const auto connInfo = conn.toList();
+                if (connInfo.size() >= 2) {  // 只需确保有UUID即可
+                    deActivateConnect(0, devName, connInfo.at(1).toString());
+                }
+            }
+            setDeviceAutoConnectState(devName,false);
+        }
+    } else {
+        int devType = 0;
+        const auto devList = mNetworkAdaptor->getDeviceListAndEnabled(devType);
+        for (auto it = devList.cbegin(); it != devList.cend(); ++it) {
+            const QString &devName = it.key();
+            setDeviceAutoConnectState(devName,true);
+        }
+    }
+
 #if 0
     if (QGSettings::isSchemaInstalled(GSETTINGS_SCHEMA_KYLIN_NM)) {
         QGSettings *gsetting = new QGSettings(GSETTINGS_SCHEMA_KYLIN_NM);
@@ -253,18 +287,6 @@ void DbusAdaptor::setDeviceEnable(QString devName, bool enable)
 //    return deviceName;
 //}
 
-//删除
-void DbusAdaptor::deleteConnect(int type, QString ssid)
-{
-    if (type == WIRED) {
-        m_mainWindow->deleteWired(ssid);
-    } else if (type == WIRELESS) {
-        //待实现
-    } else {
-        qDebug() << "[DbusAdaptor] deleteConnect type is invalid";
-    }
-}
-
 //连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
 void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
 {
@@ -277,6 +299,11 @@ void DbusAdaptor::activateConnect(int type, QString devName, QString ssid)
     }
 }
 
+void DbusAdaptor::setDeviceAutoConnectState(QString devName, bool state)
+{
+    m_mainWindow->setWiredDeviceAutoconnect(devName,state);
+}
+
 //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
 void DbusAdaptor::deActivateConnect(int type, QString devName, QString ssid)
 {
@@ -287,6 +314,21 @@ void DbusAdaptor::deActivateConnect(int type, QString devName, QString ssid)
         m_mainWindow->deactivateWireless(devName,ssid);
     } else {
         qDebug() << "[DbusAdaptor] deactivateConnect type is invalid";
+    }
+}
+//delete连接
+void DbusAdaptor::deleteConnect(int type,QString Uuid)
+{
+    qWarning() << Q_FUNC_INFO << __LINE__  << type << Uuid;
+    if (type == WIRED) {
+        qWarning() << Q_FUNC_INFO << __LINE__;
+        m_mainWindow->deleteWiredConnect(type,Uuid);
+    } else if (type == WIRELESS) {
+        qWarning() << Q_FUNC_INFO << __LINE__;
+
+        m_mainWindow->deleteWireleeConnect(type,Uuid);
+    } else {
+        qWarning() << Q_FUNC_INFO << __LINE__  << "deleteConnect type is invalid";
     }
 }
 
@@ -452,6 +494,7 @@ void DbusAdaptor::connectToMainwindow()
     connect(m_mainWindow, &MainWindow::wirelessDeviceStatusChanged, this, &DbusAdaptor::wirelessDeviceStatusChanged);
     connect(m_mainWindow, &MainWindow::deviceNameChanged, this, &DbusAdaptor::deviceNameChanged);
     connect(m_mainWindow, &MainWindow::wirelessSwitchBtnChanged, this, &DbusAdaptor::wirelessSwitchBtnChanged);
+    connect(m_mainWindow, &MainWindow::wiredMainSwitchBtnChanged, this, &DbusAdaptor::wiredMainSwitchBtnChanged);
     connect(m_mainWindow, &MainWindow::hotspotDeactivated, this, &DbusAdaptor::hotspotDeactivated);
     connect(m_mainWindow, &MainWindow::hotspotActivated, this, &DbusAdaptor::hotspotActivated);
     connect(m_mainWindow, &MainWindow::signalStrengthChange, this, &DbusAdaptor::signalStrengthChange);
@@ -492,5 +535,11 @@ QString DbusAdaptor::displayFromPid(uint pid)
         }
     }
     return {};
+}
+
+void DbusAdaptor::onWiredMainSwitchBtnChanged(bool state)
+{
+    qDebug() << Q_FUNC_INFO << __LINE__  << state;
+    Q_EMIT DbusAdaptor::wiredMainSwitchBtnChanged(state);
 }
 

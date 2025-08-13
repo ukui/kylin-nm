@@ -1,0 +1,7 @@
+projectKey=desktop_kylin-nm
+serverUrl=https://codescan.kylinos.cn
+serverVersion=10.8.1.101195
+branch=yhkylin/v11-2503
+dashboardUrl=https://codescan.kylinos.cn/dashboard?id=desktop_kylin-nm&branch=yhkylin%2Fv11-2503
+ceTaskId=ab900b3b-96be-47b8-bdb4-5a6f7b62421a
+ceTaskUrl=https://codescan.kylinos.cn/api/ce/task?id=ab900b3b-96be-47b8-bdb4-5a6f7b62421a

@@ -42,7 +42,8 @@ public Q_SLOTS:
     Q_SCRIPTABLE bool getWiredMainSwitch();
     Q_SCRIPTABLE void setWiredDeviceSwitch(QString devName, bool enable);
     Q_SCRIPTABLE bool getWiredDeviceSwitch(QString devName);
-
+    Q_SCRIPTABLE bool setOptionsEnhance(const QString&, const QString&, const QString&, const QString&);
+    Q_SCRIPTABLE QVariantMap getExtraDnsEnhance(const QString&); 
 Q_SIGNALS:
     Q_SCRIPTABLE void sysWiredMainSwitchChanged(bool enbale);
     Q_SCRIPTABLE void sysWiredDevSwitchChanged(QString devName, bool enbale);

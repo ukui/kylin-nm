@@ -24,6 +24,11 @@
 #define LOG_FLAG "[KynmSystemDbus]"
 
 #define KYLIN_NM_WIRED_MAIN_SWITCH "wired_main_switch"
+#define EXTRA_DNS_CONF_FILE "/etc/nm_enhance/"
+#define NM_ENHANCE_DNS "-nm_enhance_dns.conf"
+#define STR_ATTEMPTS "attempts"
+#define STR_TIMEOUT "timeout"
+#define STR_TYPE "type"
 
 KynmSystemDbus::KynmSystemDbus(QObject *parent) : QObject(parent)
 {
@@ -159,3 +164,35 @@ bool KynmSystemDbus::getWiredDeviceSwitch(QString devName)
         return true;//111
 }
 
+bool KynmSystemDbus::setOptionsEnhance(const QString& name, const QString& timeout, const QString& attempts, const QString& type)
+{
+    QString filePath = EXTRA_DNS_CONF_FILE + name + NM_ENHANCE_DNS;
+    
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadWrite))
+    {
+        return false;
+    }
+
+    QSettings settings(filePath, QSettings::IniFormat);
+    settings.setValue("/options/timeout", timeout);
+    settings.setValue("/options/attempts", attempts);
+    settings.setValue("/options/type", type);
+    settings.sync();
+
+    file.close();
+    return true;
+}
+
+QVariantMap KynmSystemDbus::getExtraDnsEnhance(const QString& name)
+{
+    QString filePath = EXTRA_DNS_CONF_FILE + name + NM_ENHANCE_DNS;
+    QSettings settings(filePath, QSettings::IniFormat);
+
+    QVariantMap map;
+    map[STR_ATTEMPTS] = settings.value("/options/attempts").toString();
+    map[STR_TIMEOUT] = settings.value("/options/timeout").toString();
+    map[STR_TYPE] = settings.value("/options/type").toString();
+
+    return map;
+}

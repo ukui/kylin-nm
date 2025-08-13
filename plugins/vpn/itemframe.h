@@ -42,6 +42,7 @@ public:
     //新建无线连接
     AddNetBtn * m_addVpnWidget = nullptr;
     void filletStyleChange();
+    void updateCornerStyle();
 };
 
 #endif // ITEMFRAME_H

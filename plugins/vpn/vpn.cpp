@@ -265,6 +265,10 @@ void Vpn::initNet()
         QStringList vpnInfo = variantList.at(i);
         addOneVirtualItem(vpnInfo);
     }
+    
+    // 初始化完成后更新圆角样式
+    m_listFrame->filletStyleChange();
+    m_listFrame->updateCornerStyle();
     return;
 }
 
@@ -397,6 +401,11 @@ void Vpn::addOneVirtualItem(QStringList infoList)
     int index = getInsertPos(connName);
     qDebug()<<"[Vpn]addOneVirtualItem " << connName << " at pos:" << index;
     m_listFrame->m_vpnVLayout->insertWidget(index, item);
+
+    // 只在这里调用filletStyleChange
+    m_listFrame->filletStyleChange();
+    // 每次都调用updateCornerStyle，确保圆角正确
+    m_listFrame->updateCornerStyle();
 }
 
 void Vpn::removeOneVirtualItem(QString dbusPath)
@@ -414,6 +423,10 @@ void Vpn::removeOneVirtualItem(QString dbusPath)
            break;
        }
    }
+   // 只在这里调用filletStyleChange
+   m_listFrame->filletStyleChange();
+   // 每次都调用updateCornerStyle，确保圆角正确
+   m_listFrame->updateCornerStyle();
 }
 
 //增加

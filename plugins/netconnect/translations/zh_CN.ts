@@ -31,7 +31,7 @@
     <message>
         <location filename="../lanitem.cpp" line="134"/>
         <source>Connected, restricting access.</source>
-        <translation type="unfinished">已连接，网络受限。</translation>
+        <translation>已连接，网络受限。</translation>
     </message>
 </context>
 <context>

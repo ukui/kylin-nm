@@ -316,6 +316,20 @@ void DbusAdaptor::deActivateConnect(int type, QString devName, QString ssid)
         qDebug() << "[DbusAdaptor] deactivateConnect type is invalid";
     }
 }
+
+//断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
+void DbusAdaptor::deActivateConnectConcise(int type, bool concise, const QString &devName, const QString &ssid)
+{
+    if (type == WIRED) {
+        qDebug()  << "deactivateWired";
+        m_mainWindow->deactivateWired(devName, ssid, concise);
+    } else if (type == WIRELESS) {
+        m_mainWindow->deactivateWireless(devName,ssid);
+    } else {
+        qDebug() << "[DbusAdaptor] deactivateConnect type is invalid ";
+    }
+}
+
 //delete连接
 void DbusAdaptor::deleteConnect(int type,QString Uuid)
 {

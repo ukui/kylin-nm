@@ -1542,9 +1542,9 @@ void MainWindow::activateWired(const QString& devName, const QString& connUuid)
     m_lanWidget->activateWired(devName, connUuid);
 }
 
-void MainWindow::deactivateWired(const QString& devName, const QString& connUuid)
+void MainWindow::deactivateWired(const QString& devName, const QString& connUuid, bool concise)
 {
-    m_lanWidget->deactivateWired(devName, connUuid);
+    m_lanWidget->deactivateWired(devName, connUuid, concise);
 }
 
 void MainWindow::setWiredDeviceAutoconnect(const QString& devName, bool state)

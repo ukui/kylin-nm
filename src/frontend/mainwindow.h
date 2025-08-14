@@ -88,7 +88,7 @@ public:
 
     //有线连接断开
     void activateWired(const QString& devName, const QString& connUuid);
-    void deactivateWired(const QString& devName, const QString& connUuid);
+    void deactivateWired(const QString& devName, const QString& connUuid, bool concise = false);
     void deleteWiredConnect(int type, const QString& connUuid);
     void setWiredDeviceAutoconnect(const QString& devName, bool state);
     //无线连接断开

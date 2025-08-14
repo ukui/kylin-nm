@@ -563,7 +563,7 @@ void NetConnect::deActiveConnect(QString ssid, QString deviceName, int type) {
         return;
     }
     qDebug() << "[NetConnect]call deActivateConnect" << __LINE__;
-    m_interface->call(QStringLiteral("deActivateConnect"),type, deviceName, ssid);
+    m_interface->call(QStringLiteral("deActivateConnectConcise"),type, true, deviceName, ssid);
     qDebug() << "[NetConnect]call deActivateConnect respond" << __LINE__;
 }
 

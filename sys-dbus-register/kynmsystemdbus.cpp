@@ -46,6 +46,7 @@ KynmSystemDbus::KynmSystemDbus(QObject *parent) : QObject(parent)
         m_kylinNmSettings->beginGroup("conf");
         init_conf();
     }
+    qDBusRegisterMetaType<QMap<QString, QString>>();
 }
 
 KynmSystemDbus::~KynmSystemDbus()
@@ -195,4 +196,60 @@ QVariantMap KynmSystemDbus::getExtraDnsEnhance(const QString& name)
     map[STR_TYPE] = settings.value("/options/type").toString();
 
     return map;
+}
+
+/*
+ * 【较为通用的写配置文件接口】:
+ *
+ *  filePath：文件路径
+ *  feature：节点名
+ *  key:键
+ *  value:值
+ */
+bool KynmSystemDbus::writeNmConfig(const QString& filePath, const QString& feature, const QString &key, const QString& value)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadWrite)){
+        return false;
+    }
+
+    QSettings settings(filePath, QSettings::IniFormat);
+    QString jointKey = "/" + feature + "/" + key;
+    settings.setValue(jointKey, value);
+
+    settings.sync();
+    file.close();
+    return true;
+}
+
+/*
+ * 【较为通用的读配置文件接口】:
+ *
+ *  filePath：文件路径
+ *  feature：节点名
+ */
+QMap<QString, QString> KynmSystemDbus::getNmConfig(const QString& filePath, const QString& feature)
+{
+    QSettings settings(filePath, QSettings::IniFormat);
+    QMap<QString, QString> configMap;
+
+    settings.beginGroup(feature);
+
+    QStringList keys = settings.childKeys();
+    for (const QString &key : keys) {
+        QString value = settings.value(key).toString();
+        configMap.insert(key, value);
+    }
+    settings.endGroup();
+    
+    return configMap;
+}
+
+
+void KynmSystemDbus::setDeviceSwitch(const QString& devName, bool checked)
+{
+    if (checked && !devName.isEmpty())
+    {
+        Q_EMIT sysDeviceSwitchChanged(devName);
+    }
 }

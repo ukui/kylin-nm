@@ -122,6 +122,13 @@
       <arg name="ssid" type="s" direction="in"/>
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
     </method>
+    <method name="deActivateConnectConcise">
+      <arg name="type" type="i" direction="in"/>
+      <arg name="concise" type="b" direction="in"/>
+      <arg name="devName" type="s" direction="in"/>
+      <arg name="ssid" type="s" direction="in"/>
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+    </method>
     <method name="getDeviceListAndEnabled">
       <arg type="a{sv}" direction="out"/>
       <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>

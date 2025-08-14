@@ -69,6 +69,15 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
                                              "sysWiredMainSwitchChanged",
                                              this,
                                              SLOT(onSysWiredMainSwitchChanged(bool)));
+
+        QDBusConnection::systemBus().connect(SYSTEM_DBUS_SERVICE,
+                                             SYSTEM_DBUS_PATH,
+                                             SYSTEM_DBUS_INTERFACE,
+                                             "sysDeviceSwitchChanged",
+                                             this,
+                                             SLOT(onSysDeviceSwitchChanged(const QString&)));
+
+                                             
     }
 
     connect(m_activeResourse, &KyActiveConnectResourse::stateChangeReason, this, &LanPage::onConnectionStateChange);
@@ -110,6 +119,8 @@ LanPage::LanPage(QWidget *parent) : TabPage(parent)
     });
     connectFontGsetting();
     m_lanPagePtrMap.clear();
+
+    qDBusRegisterMetaType<QMap<QString, QString>>();
 }
 
 LanPage::~LanPage()
@@ -976,9 +987,17 @@ void LanPage::onConnectionStateChange(QString uuid,
             qWarning()<<"[LanPage] get active connection failed, connection uuid" << uuid;
             return;
         }
+        deviceName = p_newItem->m_ifaceName;
+        // add by cyf
+        //连接后将信息写入配置文件
+        QDBusInterface iface(SYSTEM_DBUS_SERVICE, SYSTEM_DBUS_PATH, SYSTEM_DBUS_INTERFACE, QDBusConnection::systemBus());
+        if (iface.isValid()) {
+            iface.call("writeNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect", deviceName, uuid);
+        }
+    
         updateActivatedConnectionArea(p_newItem);
         updateConnectionState(m_activeConnectionMap, m_activatedLanListWidget, uuid, (ConnectState)state);
-        deviceName = p_newItem->m_ifaceName;
+        
         if (deviceName == m_currentDeviceName) {
             updateActivatedNetFrame(deviceName);
             setNetSpeed->start(REFRESH_NETWORKSPEED_TIMER);
@@ -1323,11 +1342,11 @@ void LanPage::activateWired(const QString& devName, const QString& connUuid)
     }
 }
 
-void LanPage::deactivateWired(const QString& devName, const QString& connUuid)
+void LanPage::deactivateWired(const QString& devName, const QString& connUuid, bool concise)
 {
     qDebug() << "[LanPage] deactivateWired" << devName << connUuid;
     QString name("");
-    m_wiredConnectOperation->deactivateWiredConnection(name, connUuid);
+    m_wiredConnectOperation->deactivateWiredConnection(name, connUuid, concise, devName);
 }
 
 void LanPage::setWiredDeviceAutoconnect(const QString&  devName,bool state)
@@ -1618,9 +1637,68 @@ void LanPage::getWiredDeviceConnect(QMap<QString, QString> &map)
     }
 }
 
+//自动连接有线网络
+void LanPage::onSysDeviceSwitchChanged(const QString& devName)
+{
+    QDBusInterface interface ("com.kylin.network",
+                              "/com/kylin/network",
+                              "com.kylin.network",
+                              QDBusConnection::sessionBus());
+
+    if (interface.isValid())
+    {
+        QDBusReply<QMap<QString, QString>> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
+
+        QMap<QString, QString> connectMap = reply.value();
+
+        QString connectUuid = connectMap[devName];
+
+        if (connectUuid == "")
+        {
+            return;
+        }
+
+        interface.call(QStringLiteral("activateConnect"), 0, devName, connectUuid);
+    }
+    else
+    {
+        qDebug() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+    }
+}
+
 void LanPage::onSysWiredMainSwitchChanged(bool state)
 {
     qWarning() << Q_FUNC_INFO << __LINE__ << state;
     Q_EMIT wiredMainSwitchBtnChanged(state);
-}
 
+    if (state)
+    {
+        QDBusInterface interface ("com.kylin.network",
+                                  "/com/kylin/network",
+                                  "com.kylin.network",
+                                  QDBusConnection::sessionBus());
+
+        if (interface.isValid())
+        {
+            QDBusReply<QMap<QString, QString>> reply = m_pSysBusIntfs->call("getNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect");
+
+            QMap<QString, QString> connectMap = reply.value();
+
+            for (auto iter = connectMap.begin(); iter != connectMap.end(); ++iter) {
+                QString deviceName = iter.key();
+                QString connectUuid = iter.value();
+                
+                if (deviceName == "" || connectUuid == "")
+                {
+                    continue;
+                }
+                interface.call(QStringLiteral("activateConnect"), 0, deviceName, connectUuid);
+            }
+        }
+        else
+        {
+            qDebug() << qPrintable(QDBusConnection::sessionBus().lastError().message());
+        }
+    }
+}
+ 

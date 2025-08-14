@@ -33,6 +33,8 @@
 #include "list-items/lanlistitem.h"
 #include "tab-pages/tabpage.h"
 
+#include <QDBusMetaType>
+
 
 #define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
 #define SYSTEM_DBUS_PATH  "/"
@@ -50,7 +52,7 @@ public:
     //for dbus
     void getWiredList(QString devName, QList<QStringList> &list);
     void activateWired(const QString& devName, const QString& connUuid);
-    void deactivateWired(const QString& devName, const QString& connUuid);
+    void deactivateWired(const QString& devName, const QString& connUuid, bool concise = false);
     void deleteWiredConnect(const QString& connUuid);
     void showDetailPage(QString devName, QString uuid);
     void setWiredDeviceEnable(const QString& devName, bool enable);
@@ -164,6 +166,7 @@ private Q_SLOTS:
     void onLanStateChanged(NetworkManager::Device::State newstate, NetworkManager::Device::State oldstate, NetworkManager::Device::StateChangeReason reason);
 
     void onSysWiredMainSwitchChanged(bool);
+    void onSysDeviceSwitchChanged(const QString&);
 private:
     QListWidget * m_activatedLanListWidget = nullptr;
     QListWidget * m_inactivatedLanListWidget = nullptr;

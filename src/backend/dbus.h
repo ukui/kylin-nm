@@ -68,6 +68,10 @@ public Q_SLOTS: // METHODS
     Q_NOREPLY void activateConnect(int type, QString devName, QString ssid);
     //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
     Q_NOREPLY void deActivateConnect(int type, QString devName, QString ssid);
+
+    //断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
+    Q_NOREPLY void deActivateConnectConcise(int type, bool concise, const QString &devName, const QString &ssid);
+
     //delete network connect
     Q_NOREPLY void deleteConnect(int type,QString Uuid);
     //dev autoconnect

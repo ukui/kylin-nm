@@ -24,6 +24,10 @@
 #include <NetworkManagerQt/Ipv6Setting>
 #include <NetworkManagerQt/WiredSetting>
 
+#define SYSTEM_DBUS_SERVICE  "com.kylin.network.qt.systemdbus"
+#define SYSTEM_DBUS_PATH  "/"
+#define SYSTEM_DBUS_INTERFACE "com.kylin.network.interface"
+
 KyConnectOperation::KyConnectOperation(QObject *parent) : QObject(parent)
 {
     m_networkResourceInstance = KyNetworkResourceManager::getInstance();
@@ -212,7 +216,7 @@ void KyConnectOperation::activateConnection(const QString connectUuid, const QSt
     return ;
 }
 
-void KyConnectOperation::deactivateConnection(const QString activeConnectName, const QString &activeConnectUuid)
+void KyConnectOperation::deactivateConnection(const QString activeConnectName, const QString &activeConnectUuid, bool concise, QString devName)
 {
     NetworkManager::ActiveConnection::Ptr activateConnectPtr = nullptr;
 
@@ -230,7 +234,7 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
     qDebug() <<"dead active connection path:"<< activateConnectPtr->path();
     QDBusPendingReply<> reply = NetworkManager::deactivateConnection(activateConnectPtr->path());
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
-    connect(watcher, &QDBusPendingCallWatcher::finished, [this, activateConnectPtr] (QDBusPendingCallWatcher * watcher) {
+    connect(watcher, &QDBusPendingCallWatcher::finished, [this, activateConnectPtr, concise, devName] (QDBusPendingCallWatcher * watcher) {
         if (watcher->isError() || !watcher->isValid()) {
             QString errorMessage = tr("deactivation of connection")
                         + activateConnectPtr->connection()->name() + tr("failed:")
@@ -240,6 +244,14 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
             Q_EMIT this->deactivateConnectionError(errorMessage);
         } else {
             qWarning() << "deactive connect operation finished" << activateConnectPtr->connection()->name();
+
+            //断开连接后删除网卡和连接信息
+            QDBusInterface iface(SYSTEM_DBUS_SERVICE, SYSTEM_DBUS_PATH, SYSTEM_DBUS_INTERFACE, QDBusConnection::systemBus());
+            if (iface.isValid() && !concise) {
+                iface.call("writeNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect", devName, "");
+            }
+
+
         }
          watcher->deleteLater();
     });

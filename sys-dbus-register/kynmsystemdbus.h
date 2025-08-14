@@ -25,6 +25,8 @@
 #include <QDBusContext>
 #include <QDBusMessage>
 
+#include <QDBusMetaType>
+
 class KynmSystemDbus : public QObject,protected QDBusContext
 {
     Q_OBJECT
@@ -44,9 +46,15 @@ public Q_SLOTS:
     Q_SCRIPTABLE bool getWiredDeviceSwitch(QString devName);
     Q_SCRIPTABLE bool setOptionsEnhance(const QString&, const QString&, const QString&, const QString&);
     Q_SCRIPTABLE QVariantMap getExtraDnsEnhance(const QString&); 
+    Q_SCRIPTABLE bool writeNmConfig(const QString& filePath, const QString& feature, const QString &key, const QString& value);
+    Q_SCRIPTABLE QMap<QString, QString> getNmConfig(const QString& filePath, const QString& feature);
+
+    Q_SCRIPTABLE void setDeviceSwitch(const QString& devName, bool checked);
+
 Q_SIGNALS:
     Q_SCRIPTABLE void sysWiredMainSwitchChanged(bool enbale);
     Q_SCRIPTABLE void sysWiredDevSwitchChanged(QString devName, bool enbale);
+    Q_SCRIPTABLE void sysDeviceSwitchChanged(const QString &devName);
 private:
     QSettings *m_kylinNmSettings;
 

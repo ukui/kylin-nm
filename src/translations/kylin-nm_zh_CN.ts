@@ -153,7 +153,7 @@
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="159"/>
         <source>IPv4 address is empty or invalid</source>
-        <translation type="unfinished">Ipv4地址为空或非法</translation>
+        <translation>Ipv4地址为空或非法</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/creatnetpage.cpp" line="165"/>
@@ -704,7 +704,7 @@
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="243"/>
         <source>IPv4 address is empty or invalid</source>
-        <translation type="unfinished">Ipv4地址为空或非法</translation>
+        <translation>Ipv4地址为空或非法</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/ipv4page.cpp" line="249"/>
@@ -1451,12 +1451,12 @@
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1000"/>
         <source>TLS identity is empty</source>
-        <translation type="unfinished">TLS匿名身份为空</translation>
+        <translation>TLS匿名身份为空</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1006"/>
         <source>CA cert filepath is invalid</source>
-        <translation type="unfinished">CA证书文件路径非法</translation>
+        <translation>CA证书文件路径非法</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/securitypage.cpp" line="1013"/>
@@ -1597,12 +1597,12 @@
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="81"/>
         <source>Unable to save modifications</source>
-        <translation type="unfinished">无法保存修改</translation>
+        <translation>无法保存修改</translation>
     </message>
     <message>
         <location filename="../frontend/netdetails/netdetail.cpp" line="84"/>
         <source>Confirm</source>
-        <translation type="unfinished">确定</translation>
+        <translation>确定</translation>
     </message>
 </context>
 <context>

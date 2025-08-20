@@ -48,6 +48,14 @@ QMap<QString, QVariant> KnmLanDataKeeper::makeConnectionMap(int status, QStringL
     connectionMap.insert("Path", conPath.at(2));
     connectionMap.insert("State", status);
     connectionMap.insert("Loading", false);
+    
+    // Add DSL detection logic
+    bool isDSL = false;
+   if (isDslConnection(conPath.at(1))) {
+        isDSL = true;
+    }
+    connectionMap.insert("IsDSL", isDSL);
+
     return connectionMap;
 }
 
@@ -265,4 +273,14 @@ void KnmLanDataKeeper::onSwitchBtnChanged(bool status)
     m_wiredMainSwitchState = status;
     m_switchState = status;
     KInterface::getInstance()->updateWiredMainSwitch();
+}
+
+bool KnmLanDataKeeper::isDslConnection(const QString &uuid)
+{
+    QProcess process;
+    process.start("nmcli", {"-g", "connection.type", "con", "show", uuid});
+    process.waitForFinished();
+    
+    QString output = process.readAllStandardOutput().trimmed();
+    return (output == "pppoe");  // 如果是pppoe类型则返回true
 }

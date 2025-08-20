@@ -1638,6 +1638,9 @@ void LanPage::getWiredDeviceConnect(QMap<QString, QString> &map)
 }
 
 //自动连接有线网络
+//连接有线网络时，将连接信息写入/etc/kylin-nm/netSwitch.conf文件的Lan_Connect节点中
+//断开有线网络时，清除对应连接的信息
+//检查到网卡打开时，传入网卡信息，寻找该网卡信息是否需要重连（网络信息还存在说明没有断开网络，而是直接关闭的网卡。需要自动连接）
 void LanPage::onSysDeviceSwitchChanged(const QString& devName)
 {
     QDBusInterface interface ("com.kylin.network",
@@ -1666,6 +1669,10 @@ void LanPage::onSysDeviceSwitchChanged(const QString& devName)
     }
 }
 
+//自动连接有线网络
+//连接有线网络时，将连接信息写入/etc/kylin-nm/netSwitch.conf文件的Lan_Connect节点中
+//断开有线网络时，清除对应连接的信息
+//检查到有线开关打开时，自动连接所有还存在的网络信息（网络信息还存在说明没有断开网络，而是直接关闭的开关。需要自动连接）
 void LanPage::onSysWiredMainSwitchChanged(bool state)
 {
     qWarning() << Q_FUNC_INFO << __LINE__ << state;

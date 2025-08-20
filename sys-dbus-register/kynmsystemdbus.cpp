@@ -165,6 +165,8 @@ bool KynmSystemDbus::getWiredDeviceSwitch(QString devName)
         return true;//111
 }
 
+//移植kylin-network-manager-enhance-dameon包内的dbus内容
+//将 策略、超时时间、重试次数 写入nm_enhance_dns.conf文件
 bool KynmSystemDbus::setOptionsEnhance(const QString& name, const QString& timeout, const QString& attempts, const QString& type)
 {
     QString filePath = EXTRA_DNS_CONF_FILE + name + NM_ENHANCE_DNS;
@@ -185,6 +187,8 @@ bool KynmSystemDbus::setOptionsEnhance(const QString& name, const QString& timeo
     return true;
 }
 
+//移植kylin-network-manager-enhance-dameon包内的dbus内容
+//读取nm_enhance_dns.conf文件的 策略、超时时间、重试次数
 QVariantMap KynmSystemDbus::getExtraDnsEnhance(const QString& name)
 {
     QString filePath = EXTRA_DNS_CONF_FILE + name + NM_ENHANCE_DNS;
@@ -245,7 +249,10 @@ QMap<QString, QString> KynmSystemDbus::getNmConfig(const QString& filePath, cons
     return configMap;
 }
 
-
+/*
+ * devName = 网卡名
+ * checked = 打开或关闭
+*/
 void KynmSystemDbus::setDeviceSwitch(const QString& devName, bool checked)
 {
     if (checked && !devName.isEmpty())

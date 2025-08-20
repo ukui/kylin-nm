@@ -190,7 +190,7 @@ void DbusAdaptor::setWiredSwitchEnable(bool enable)
                 // 网卡名称,uuid,对应DBUS路径
                 const auto connInfo = conn.toList();
                 if (connInfo.size() >= 2) {  // 只需确保有UUID即可
-                    deActivateConnect(0, devName, connInfo.at(1).toString());
+                    deActivateConnectConcise(0, true, devName, connInfo.at(1).toString());  //关闭有线开关触发的断开连接不清除连接信息
                 }
             }
             setDeviceAutoConnectState(devName,false);
@@ -317,7 +317,7 @@ void DbusAdaptor::deActivateConnect(int type, QString devName, QString ssid)
     }
 }
 
-//断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数3 为ssid/uuid
+//断开连接 根据网卡类型 参数1 0:lan 1:wlan 参数2 true:只断开 false:断开并清除连接的网络信息 参数3 为ssid/uuid
 void DbusAdaptor::deActivateConnectConcise(int type, bool concise, const QString &devName, const QString &ssid)
 {
     if (type == WIRED) {

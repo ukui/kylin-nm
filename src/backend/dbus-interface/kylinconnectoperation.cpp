@@ -246,6 +246,7 @@ void KyConnectOperation::deactivateConnection(const QString activeConnectName, c
             qWarning() << "deactive connect operation finished" << activateConnectPtr->connection()->name();
 
             //断开连接后删除网卡和连接信息
+            //只有当concise=false的时候即主动断开网络时需要清除网络信息，否则直接关闭网络或网卡，下次需要自动连接
             QDBusInterface iface(SYSTEM_DBUS_SERVICE, SYSTEM_DBUS_PATH, SYSTEM_DBUS_INTERFACE, QDBusConnection::systemBus());
             if (iface.isValid() && !concise) {
                 iface.call("writeNmConfig", "/etc/kylin-nm/netSwitch.conf", "Lan_Connect", devName, "");

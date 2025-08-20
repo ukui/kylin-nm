@@ -83,6 +83,12 @@
     返回值：无  
     功能：断开一个网络连接  
 
+  deActivateConnectConcise(int type, bool concise, const QString &devName, const QString &ssid)
+    参数：根据网卡类型 参数1 0:lan 1:wlan 参数2：是否只断开网络，不删除网络信息 参数3：网卡名称 参数4：uuid/ssid  
+    返回值：无  
+    功能：断开一个网络连接
+    concise: 当concise=true时，说明是关闭有线网卡或关闭有线开关导致的断开网络，不删除网络信息。否则主动断开连接删除网络信息
+
   getDeviceListAndEnabled(int devType)  
     参数：int devType 0:lan 1:wlan  
     返回值：QMap<QString, bool>  

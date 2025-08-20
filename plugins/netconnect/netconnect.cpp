@@ -624,6 +624,7 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
 
     LanItem * lanItem = new LanItem(isActived, pluginWidget);
     QString iconPath = KLanSymbolic;
+    // 判断是否为pppoe
     if (isActived) {
         lanItem->statusLabel->setText(tr("connected"));
     } else {
@@ -633,6 +634,11 @@ void NetConnect::addLanItem(ItemFrame *frame, QString devName, QStringList infoL
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
 //        lanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
 //    }
+
+    if(isDslConnection(infoList.at(1))){
+        searchIcon = QIcon::fromTheme("ukui-dial-up-symbolic");
+    }
+
     lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     lanItem->titileLabel->setText(infoList.at(0));
 
@@ -932,6 +938,11 @@ void NetConnect::addOneLanFrame(ItemFrame *frame, QString deviceName, QStringLis
 //    if (iconPath != KLanSymbolic && iconPath != NoNetSymbolic) {
 //        lanItem->iconLabel->setProperty("useIconHighlightEffect", 0x10);
 //    }
+
+    if(isDslConnection(connUuid)){
+        searchIcon = QIcon::fromTheme("ukui-dial-up-symbolic");
+    }
+
     lanItem->iconLabel->setPixmap(searchIcon.pixmap(searchIcon.actualSize(QSize(ICON_SIZE))));
     lanItem->titileLabel->setText(connName);
 
@@ -1195,4 +1206,14 @@ QMap<QString, QList<QStringList>> NetConnect::getWiredList()
 void NetConnect::updatePluginShowSettings()
 {
     isEnable();
+}
+
+bool NetConnect::isDslConnection(const QString &uuid)
+{
+    QProcess process;
+    process.start("nmcli", {"-g", "connection.type", "con", "show", uuid});
+    process.waitForFinished();
+    
+    QString output = process.readAllStandardOutput().trimmed();
+    return (output == "pppoe");  // 如果是pppoe类型则返回true
 }

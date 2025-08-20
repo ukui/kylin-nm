@@ -49,11 +49,14 @@ public Q_SLOTS:
     Q_SCRIPTABLE bool writeNmConfig(const QString& filePath, const QString& feature, const QString &key, const QString& value);
     Q_SCRIPTABLE QMap<QString, QString> getNmConfig(const QString& filePath, const QString& feature);
 
+    //开关网卡会被调用
     Q_SCRIPTABLE void setDeviceSwitch(const QString& devName, bool checked);
 
 Q_SIGNALS:
     Q_SCRIPTABLE void sysWiredMainSwitchChanged(bool enbale);
     Q_SCRIPTABLE void sysWiredDevSwitchChanged(QString devName, bool enbale);
+
+    //网卡打开触发的信号，调用槽函数尝试重连
     Q_SCRIPTABLE void sysDeviceSwitchChanged(const QString &devName);
 private:
     QSettings *m_kylinNmSettings;

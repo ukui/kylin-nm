@@ -23,6 +23,8 @@
 #include "kylinnetworkresourcemanager.h"
 #include "kylinconnectsetting.h"
 
+#include <QDBusInterface>
+
 class KyConnectOperation : public QObject
 {
     Q_OBJECT
@@ -35,7 +37,7 @@ public:
     void  updateConnect(NetworkManager::ConnectionSettings::Ptr connectionSettings, const KyConnectSetting &connectSettingsInfo);
     void  deleteConnect(const QString &connectUuid);
     void  activateConnection(const QString connectUuid, const QString deviceName);
-    void  deactivateConnection(const QString activeConnectName, const QString &activeConnectUuid);
+    void  deactivateConnection(const QString activeConnectName, const QString &activeConnectUuid, bool concise = false, QString devName = "");
 
 public:
     void connectSettingSet(

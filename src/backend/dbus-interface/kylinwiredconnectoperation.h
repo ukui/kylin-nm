@@ -45,7 +45,7 @@ public:
     void  updateWiredConnect(const QString &connectUuid, const KyConnectSetting &connectSettingsInfo);
     void  deleteWiredConnect(const QString &connectUuid);
     void  activateWiredConnection(const QString connectUuid, const QString devName);
-    void  deactivateWiredConnection(const QString activeConnectName, const QString &activeConnectUuid);
+    void  deactivateWiredConnection(const QString activeConnectName, const QString &activeConnectUuid, bool concise = false, QString devName = "");
 
     int closeWiredNetworkWithDevice(QString deviceName);
     int openWiredNetworkWithDevice(QString deviceName);

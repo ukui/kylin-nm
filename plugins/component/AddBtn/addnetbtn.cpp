@@ -80,21 +80,42 @@ void AddNetBtn::leaveEvent(QEvent *event){
 void AddNetBtn::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-    painter.setRenderHint(QPainter:: Antialiasing, true);  //设置渲染,启动反锯齿
+    painter.setRenderHint(QPainter::Antialiasing, true);  //设置渲染,启动反锯齿
     painter.setPen(Qt::NoPen);
-
     painter.setBrush(this->palette().base().color());
-
-    QPalette pal = qApp->palette();
-    QColor color = pal.color(QPalette::Button);
-    color.setAlphaF(0.5);
-    pal.setColor(QPalette::Button, color);
-    this->setPalette(pal);
 
     QRect rect = this->rect();
     QPainterPath path;
+    const qreal radius = 6.0;
 
-    path.addRoundedRect(rect, RADIUS, RADIUS); // 统一设置四个角的半径
+    if (m_cornerType == All) {
+        path.addRoundedRect(rect, radius, radius);
+    } else if (m_cornerType == BottomRight) {
+        // 只绘制右下两个圆角
+        path.moveTo(rect.topLeft());
+        path.lineTo(rect.topRight());
+        path.lineTo(rect.bottomRight() - QPointF(0, radius));
+        path.quadTo(rect.bottomRight(), rect.bottomRight() - QPointF(radius, 0));
+        path.lineTo(rect.bottomLeft() + QPointF(radius, 0));
+        path.quadTo(rect.bottomLeft(), rect.bottomLeft() - QPointF(0, radius));
+        path.lineTo(rect.topLeft());
+    } else {
+        path.addRect(rect);
+    }
+
     painter.fillPath(path, this->palette().base().color());
     QPushButton::paintEvent(event);
+}
+
+void AddNetBtn::setUseRoundedCorners(bool useRounded) {
+    m_useRoundedCorners = useRounded;
+    update();
+}
+
+void AddNetBtn::setCornerType(CornerType type) { 
+    m_cornerType = type; update(); 
+}
+
+void AddNetBtn::setTextLabel(const QString str) {
+    m_textLabel->setText(str);
 }

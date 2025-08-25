@@ -68,6 +68,13 @@ public Q_SLOTS: // METHODS
         callWithArgumentList(QDBus::NoBlock, QStringLiteral("deActivateConnect"), argumentList);
     }
 
+    inline Q_NOREPLY void deActivateConnectConcise(int type, bool concise, const QString &devName, const QString &ssid)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(type) << QVariant::fromValue(concise) << QVariant::fromValue(devName) << QVariant::fromValue(ssid);
+        callWithArgumentList(QDBus::NoBlock, QStringLiteral("deActivateConnectConcise"), argumentList);
+    }
+
     inline QDBusPendingReply<> deactiveWirelessAp(const QString &apName, const QString &uuid)
     {
         QList<QVariant> argumentList;

@@ -868,6 +868,26 @@
         <translation>དྲ་བ་གཞན་དག</translation>
     </message>
     <message>
+
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1513"/>
+        <source>Connected, restricting access</source>
+        <translation>ཚོད་འཛིན་ཐེབས་པའི་དྲ་བ།</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1523"/>
+        <source>No internet access. Please click Network Check to specific reasons.</source>
+        <translation>འཕྲིན་སྦྲེལ་དྲ་བ་འབྲེལ་མཐུད་བྱེད་ཐུབ་མེད། དྲ་རྒྱར་ཞིབ་བཤེར་བྱས་ནས་ཞིབ་ཕྲའི་རྒྱུ་རྐྱེན་ཤེས་རྟོགས་གནང་རོགས.</translation>
+    </message>
+    <message>
+        <source>Restricting access. Please click Network Check to specific reasons.</source>
+        <translation>འཚམས་འདྲིར་ཚོད་འཛིན་བྱ། དྲ་རྒྱར་ཞིབ་བཤེར་བྱས་ནས་ཞིབ་ཕྲའི་རྒྱུ་རྐྱེན་ཤེས་རྟོགས་གནང་རོགས.</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1531"/>
+        <source>Network Check</source>
+        <translation>དྲ་རྒྱའི་ཞིབ་བཤེར།</translation>
+    </message>
+    <message>
         <source>LAN Disconnected Successfully</source>
         <translation type="vanished">སྐུད་ཡོད་དྲ་བ་ཆད་སོང་།</translation>
     </message>

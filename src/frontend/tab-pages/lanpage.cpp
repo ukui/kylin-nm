@@ -1324,7 +1324,7 @@ void LanPage::onLanStateChanged(NetworkManager::Device::State newstate, NetworkM
     if (newstate == NetworkManager::Device::Failed) {
         if (reason == NetworkManager::Device::StateChangeReason::ConfigUnavailableReason) {
             if (!m_showedNetTipFlag) {
-                //showBallonTip();//暂时屏蔽这里，热点第一次打开时会触发这个弹窗。轻量级弹窗需要同步后端的reason code所以可以暂时屏蔽不影响
+                showBallonTip();
                 m_showedNetTipFlag = true;
             }
         }

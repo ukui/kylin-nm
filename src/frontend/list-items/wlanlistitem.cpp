@@ -524,7 +524,7 @@ void WlanListItem::onNetButtonClicked()
     }
 
     qWarning() << Q_FUNC_INFO << __LINE__ << m_wirelessNetItem.m_secuType;
-    if (!this->m_connectButton->isVisible() && !m_wirelessNetItem.m_secuType.contains("NONE")) {
+    if (!this->m_connectButton->isVisible() && !m_wirelessNetItem.m_secuType.isEmpty()) {
         if (m_wirelessNetItem.m_secuType.contains("802.1x", Qt::CaseInsensitive)) {
             if (isEnterpriseWlanDialogShow && enterpriseWlanDialog != nullptr) {
                 qDebug() <<  LOG_FLAG <<"EnterpriseWlanDialog is show do not show again!";

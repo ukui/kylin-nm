@@ -58,6 +58,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>(network restricted)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Not connected</source>
         <translation type="unfinished"></translation>
     </message>

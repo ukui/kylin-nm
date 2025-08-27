@@ -97,7 +97,8 @@ ListView {
                 mouse.accepted = false
 
                 if (model.status !== 2 ) {
-                    if (listItem.height == 145 ||  model.Configured || model.security.includes("802.1X") || model.security.includes("NONE") ) {
+                    console.log("model.security:", model.security, model.security.length)
+                    if (listItem.height == 145 ||  model.Configured || model.security.includes("802.1X") || !model.security) {
                         listItem.height = 56
                     } else {
                         listItem.height = 145
@@ -108,7 +109,7 @@ ListView {
                         textEditLayout.visible = false
                         connectBtn.visible = true
                     } else {
-                        textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X") && !model.security.includes("NONE"))
+                        textEditLayout.visible = (!model.Configured && !model.security.includes("802.1X") && model.security)
                         connectBtn.visible = !textEditLayout.visible
                     }
                 } else if ((model.status === 2) && (mouse.button == Qt.LeftButton) ) {

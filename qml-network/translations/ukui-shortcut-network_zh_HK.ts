@@ -44,22 +44,28 @@
         <translation>刪除此網絡</translation>
     </message>
     <message>
-        <location filename="../widget/ui/LanComponent.qml" line="148"/>
+        <location filename="../widget/ui/LanComponent.qml" line="157"/>
+        <location filename="../widget/ui/LanComponent.qml" line="158"/>
         <source>connected</source>
         <translation>已連接</translation>
     </message>
     <message>
-        <location filename="../widget/ui/LanComponent.qml" line="148"/>
+        <location filename="../widget/ui/LanComponent.qml" line="157"/>
+        <source>(network restricted)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widget/ui/LanComponent.qml" line="159"/>
         <source>Not connected</source>
         <translation>未連接</translation>
     </message>
     <message>
-        <location filename="../widget/ui/LanComponent.qml" line="216"/>
+        <location filename="../widget/ui/LanComponent.qml" line="227"/>
         <source>disconnect</source>
         <translation>斷開</translation>
     </message>
     <message>
-        <location filename="../widget/ui/LanComponent.qml" line="216"/>
+        <location filename="../widget/ui/LanComponent.qml" line="227"/>
         <source>connect</source>
         <translation>連接</translation>
     </message>
@@ -90,22 +96,22 @@
 <context>
     <name>WlanComponent</name>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="156"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="157"/>
         <source>Disconnect network</source>
         <translation>斷開網絡</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="156"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="157"/>
         <source>Connect network</source>
         <translation>連接網絡</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="170"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="171"/>
         <source>Network property</source>
         <translation>網絡屬性</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="181"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="182"/>
         <source>Forget the network</source>
         <translation>忘記網絡</translation>
     </message>
@@ -118,48 +124,48 @@
         <translation type="vanished">未連接</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="422"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="423"/>
         <source>disconnect</source>
         <translation>斷開</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="303"/>
-        <location filename="../widget/ui/WlanComponent.qml" line="422"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="304"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="423"/>
         <source>connect</source>
         <translation>連接</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="325"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="326"/>
         <source>Connected,network is very good</source>
         <translation type="unfinished">已連接，網絡很好</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="326"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="327"/>
         <source>Connected,network is good</source>
         <translation type="unfinished">已連接，網絡好</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="327"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="328"/>
         <source>Connected,network is average</source>
         <translation type="unfinished">已連接，網絡一般</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="328"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="329"/>
         <source>Connected,network weak</source>
         <translation type="unfinished">已連接，網絡弱</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="329"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="330"/>
         <source>Connected,network is weak</source>
         <translation type="unfinished">已連接，網絡很弱</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="343"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="344"/>
         <source>AutoConnect</source>
         <translation>自動連接</translation>
     </message>
     <message>
-        <location filename="../widget/ui/WlanComponent.qml" line="464"/>
+        <location filename="../widget/ui/WlanComponent.qml" line="465"/>
         <source>Add Others...</source>
         <translation>加入其他網路...</translation>
     </message>

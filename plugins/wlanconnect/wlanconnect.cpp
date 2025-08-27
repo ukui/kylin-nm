@@ -426,7 +426,7 @@ void WlanConnect::resortWifiList(ItemFrame *frame, QList<QStringList> list)
 
 void WlanConnect::updateIcon(WlanItem *item, QString signalStrength, QString security, QString isApConnection, int category)
 {
-    qDebug() << "updateIcon" << item->titileLabel->text();
+    qDebug() << "updateIcon" << item->titileLabel->text()<<" security:"<<security;
 
     int sign = setSignal(signalStrength);
     bool isLock = true;

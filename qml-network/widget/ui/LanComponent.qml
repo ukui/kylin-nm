@@ -137,7 +137,7 @@ ListView {
                     }
                 }
             }
-
+                
             UkuiItems.DtThemeText {
                 id: nameStateLabel
                 visible: false
@@ -152,7 +152,11 @@ ListView {
                     Layout.leftMargin: 8
                     Layout.bottomMargin: 8
                     anchors.top: nameStateLabel.bottom
-                    text: (modelData.State === 2) ? qsTr("connected") : qsTr("Not connected")
+                    text: modelData.State === 2 
+                            ? (modelData.Connectivity === 3 
+                                ? qsTr("connected") + "，" + qsTr("(network restricted)") 
+                                : qsTr("connected"))
+                            : qsTr("Not connected")
                 }
             }
 

@@ -848,6 +848,25 @@
         <translation>ᠪᠤᠰᠤᠳ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ</translation>
     </message>
     <message>
+        <source>Connected, no internet access</source>
+        <translation>ᠰᠦᠯᠵᠢᠶᠡᠨ ᠳᠦ ᠭᠠᠷᠬᠤ ᠶᠢᠨ ᠠᠷᠭ᠎ᠠ ᠦᠭᠡᠢ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1513"/>
+        <source>Connected, restricting access</source>
+        <translation>ᠬᠢᠵᠠᠭᠠᠷᠯᠠᠭᠳᠠᠬᠤ ᠲᠣᠣᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1523"/>
+        <source>No internet access. Please click Network Check to specific reasons.</source>
+        <translation>ᠢᠨᠲ᠋ᠧᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠠᠯᠭᠠᠵᠤ ᠣᠷᠣᠭᠤᠯᠤᠭᠰᠠᠨ ᠦᠭᠡᠢ ᠃ ᠰᠦᠯᠵᠢᠶᠡᠨ ᠦ ᠪᠠᠶᠢᠴᠠᠭᠠᠯᠲᠠ ᠶᠢ ᠳᠠᠷᠤᠵᠤ ᠪᠣᠳᠠᠲᠠᠶ ᠰᠢᠯᠲᠠᠭᠠᠨ ᠢ ᠨᠢ ᠣᠶᠢᠯᠠᠭᠠᠭᠠᠷᠠᠢ.</translation>
+    </message>
+    <message>
+        <location filename="../frontend/tab-pages/lanpage.cpp" line="1531"/>
+        <source>Network Check</source>
+        <translation>ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠶᠢ ᠪᠠᠢ᠌ᠴᠠᠭᠠᠬᠤ</translation>
+    </message>
+    <message>
         <source>LAN Disconnected Successfully</source>
         <translation type="vanished">ᠤᠳᠠᠰᠤᠳᠤ ᠲᠤᠤᠷ ᠰᠦᠯᠵᠢᠶ᠎ᠡ ᠵᠢ ᠨᠢᠭᠡᠨᠳᠡ ᠳᠠᠰᠤᠯᠪᠠ</translation>
     </message>

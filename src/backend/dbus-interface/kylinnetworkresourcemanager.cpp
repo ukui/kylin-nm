@@ -48,9 +48,6 @@ QString enumToQstring(NetworkManager::AccessPoint::Capabilities cap, NetworkMana
            || (rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) {
         out += "802.1X ";
     }
-    if (out.isEmpty()) {
-        out += "NONE ";
-    }
     return out;
 }
 
@@ -289,7 +286,9 @@ void KyNetworkResourceManager::addDevice(NetworkManager::Device::Ptr device)
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::bitRateChanged, this, &KyNetworkResourceManager::onDeviceBitRateChanage);
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::carrierChanged, this, &KyNetworkResourceManager::onDeviceCarrierChanage);
             connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::hardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceMacAddressChanage);
-           // connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::permanentHardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
+            connect(device.data(), &NetworkManager::Device::stateChanged, this, &KyNetworkResourceManager::stateChanged);
+
+            // connect(qobject_cast<NetworkManager::WiredDevice *>(device.data()), &NetworkManager::WiredDevice::permanentHardwareAddressChanged, this, &KyNetworkResourceManager::onDeviceUpdated);
             break;
 
         case NetworkManager::Device::Wifi:

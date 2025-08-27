@@ -70,6 +70,10 @@
         <source>Delete this network</source>
         <translation>删除此网络</translation>
     </message>
+    <message>
+        <source>(network restricted)</source>
+        <translation>网络受限</translation>
+    </message>
 </context>
 <context>
     <name>NetScrollViewArea</name>

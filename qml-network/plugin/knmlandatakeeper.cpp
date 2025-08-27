@@ -55,6 +55,8 @@ QMap<QString, QVariant> KnmLanDataKeeper::makeConnectionMap(int status, QStringL
         isDSL = true;
     }
     connectionMap.insert("IsDSL", isDSL);
+    // 默认设置为完全连通
+    connectionMap.insert("Connectivity", 4);
 
     return connectionMap;
 }
@@ -94,14 +96,25 @@ void KnmLanDataKeeper::onActiveConnectionChanged(QString deviceName, QString uui
     if (deviceName.isEmpty() && status != DEACTIVATED)
         return;
 
-    //断开时，若此连接未指定有线网卡设备，则在所有的设备列表中添加该连接
+    // 获取设备连通性状态
+    int connectivity = 4; // 默认为完全连通
+    if (status == ACTIVATED) {
+        QDBusReply<int> reply = m_pInterface->call(QStringLiteral("getDeviceConnectivity"), deviceName);
+        if (reply.isValid()) {
+            connectivity = reply.value();
+            qDebug() << "Device connectivity:" << deviceName << connectivity;
+        }
+    }
+
+    // 断开时处理
     if (deviceName.isEmpty()) {
         QMap<QString, QVariant> conn;
         QStringList devList = m_deviceList.keys();
 
         for (int i = 0; i < devList.count(); i++) {
             NetDevicePtr dev = m_deviceList.value(devList.at(i));
-            conn = dev->updateConnection(uuid, status);
+            QMap<QString, QVariant> conn = dev->updateConnection(uuid, status);
+            dev->updateConnectivity(uuid, status, connectivity);
             if (!conn.isEmpty()) {
                 m_deviceList.remove(devList.at(i));
                 m_deviceList.insert(devList.at(i), dev);
@@ -124,6 +137,7 @@ void KnmLanDataKeeper::onActiveConnectionChanged(QString deviceName, QString uui
             return;
         NetDevicePtr dev = m_deviceList.value(deviceName);
         QMap<QString, QVariant> conn = dev->updateConnection(uuid, status);
+        dev->updateConnectivity(uuid, status, connectivity);
         if (!conn.isEmpty()) {
             m_deviceList.remove(deviceName);
             m_deviceList.insert(deviceName, dev);

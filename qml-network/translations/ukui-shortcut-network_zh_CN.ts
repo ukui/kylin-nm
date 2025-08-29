@@ -142,23 +142,23 @@
     </message>
     <message>
         <source>Connected,network is very good</source>
-        <translation type="unfinished">已连接，网络很好</translation>
+        <translation>已连接，网络很好</translation>
     </message>
     <message>
         <source>Connected,network is good</source>
-        <translation type="unfinished">已连接，网络好</translation>
+        <translation>已连接，网络好</translation>
     </message>
     <message>
         <source>Connected,network is average</source>
-        <translation type="unfinished">已连接，网络一般</translation>
+        <translation>已连接，网络一般</translation>
     </message>
     <message>
         <source>Connected,network weak</source>
-        <translation type="unfinished">已连接，网络弱</translation>
+        <translation>已连接，网络弱</translation>
     </message>
     <message>
         <source>Connected,network is weak</source>
-        <translation type="unfinished">已连接，网络很弱</translation>
+        <translation>已连接，网络很弱</translation>
     </message>
 </context>
 </TS>

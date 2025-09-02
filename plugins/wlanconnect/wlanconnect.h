@@ -141,7 +141,7 @@ private:
     void setSwitchStatus();
 
     QMap<QString,QVariant> getModuleHideStatus();
-    bool wlanAdvancedSettings();
+    void wlanComponnetSettings();
 
 protected:
     bool eventFilter(QObject *w,QEvent *e);

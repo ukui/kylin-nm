@@ -27,6 +27,10 @@
 
 #include <QDBusMetaType>
 
+#include <NetworkManagerQt/Manager>
+#include <NetworkManagerQt/WiredDevice>
+#include <NetworkManagerQt/Device>
+
 class KynmSystemDbus : public QObject,protected QDBusContext
 {
     Q_OBJECT
@@ -61,7 +65,10 @@ Q_SIGNALS:
 private:
     QSettings *m_kylinNmSettings;
 
-    void init_conf();
+    void initConf();
+
+    // 关闭有线开关保存后断开有线设备
+    void disconnectWiredDevices();
 };
 
 #endif // KYNMSYSTEMDBUS_H

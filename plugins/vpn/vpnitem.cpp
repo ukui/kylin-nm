@@ -48,10 +48,10 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
     m_statusLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_infoLabel = new GrayInfoButton(this);
 
-    m_moreButton = new QToolButton(this);
+    m_moreButton = new QPushButton(this);
     m_moreButton->setProperty("useButtonPalette", true);
-    m_moreButton->setPopupMode(QToolButton::InstantPopup);
-    m_moreButton->setAutoRaise(true);
+    m_moreButton->setFlat(true);
+    m_moreButton->setFixedSize(36, 36);
     m_moreButton->setIcon(QIcon::fromTheme("view-more-horizontal-symbolic"));
     m_moreMenu = new QMenu(m_moreButton);
     m_connectAction = new QAction(m_moreMenu);
@@ -60,7 +60,7 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
 
     m_moreMenu->addAction(m_connectAction);
     m_moreMenu->addAction(m_deleteAction);
-    m_moreButton->setMenu(m_moreMenu);
+
     mLanLyt->addWidget(m_iconLabel);
     mLanLyt->addWidget(m_titileLabel,Qt::AlignLeft);
     mLanLyt->addStretch();
@@ -81,6 +81,7 @@ VpnItem::VpnItem(bool bAcitve, QWidget *parent)
 
     connect(m_connectAction, &QAction::triggered, this, &VpnItem::onConnectTriggered);
     connect(m_deleteAction, &QAction::triggered, this, &VpnItem::onDeletetTriggered);
+    connect(m_moreButton, &QPushButton::clicked, this, &VpnItem::onMoreButtonClicked);
     m_moreMenu->installEventFilter(this);
 }
 
@@ -133,6 +134,22 @@ void VpnItem::onDeletetTriggered()
     Q_EMIT deleteActionTriggered();
 }
 
+void VpnItem::onMoreButtonClicked()
+{
+    if (!m_moreMenu || !m_moreButton) {
+        return;
+    }
+    
+    // 计算菜单显示位置，使菜单右边界与按钮右边界对齐
+    QPoint buttonPos = m_moreButton->mapToGlobal(QPoint(0, 0));
+    int menuWidth = m_moreMenu->sizeHint().width();
+    int buttonWidth = m_moreButton->width();
+    int buttonHeight = m_moreButton->height();
+    
+    QPoint menuPos = QPoint(buttonPos.x() + buttonWidth - menuWidth, buttonPos.y() + buttonHeight);
+    m_moreMenu->popup(menuPos);
+}
+
 void VpnItem::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
@@ -169,16 +186,8 @@ void VpnItem::paintEvent(QPaintEvent *event)
 
 bool VpnItem::eventFilter(QObject *watched, QEvent *event)
 {
-    //菜单右边界与按钮右边界对齐
-    if (event->type() == QEvent::Show && watched == m_moreMenu) {
-        int menuWidth = m_moreMenu->size().width();
-        int btnWidth = m_moreButton->size().width();
-        int btnGlobalXPos = mapToGlobal(m_moreButton->pos()).x();
-
-        QPoint pos = QPoint (btnGlobalXPos - menuWidth + btnWidth, m_moreMenu->pos().y());
-        m_moreMenu->move(pos);
-        return true;
-    }
+    Q_UNUSED(watched)
+    Q_UNUSED(event)
     return false;
 }
 
